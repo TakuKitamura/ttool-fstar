@@ -51,11 +51,23 @@ import ui.avatarsmd.AvatarSMDPanel;
 import ui.util.IconManager;
 import ui.window.JDialogAvatarBlock;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.Iterator;
 import java.util.LinkedList;
-
+import java.util.HashMap;
+import proverifspec.ProVerifResultTrace;
+import proverifspec.ProVerifResultTraceStep;
+import ui.interactivesimulation.JFrameSimulationSDPanel;
 
 /**
  * Class AvatarBDBlock
@@ -96,7 +108,9 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
     protected LinkedList<AvatarSignal> mySignals;
     protected String[] globalCode;
 
-
+	protected HashMap<TAttribute, ProVerifResultTrace> attrTraceMap = new HashMap<TAttribute, ProVerifResultTrace>();
+	protected HashMap<TAttribute, Integer> attrLocMap = new HashMap<TAttribute, Integer>();
+	
     public String oldValue;
 
     public AvatarBDBlock(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
@@ -160,6 +174,10 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         this.internalDrawingAux(graph);
         graph.setFont(font);
     }
+    
+    public void addProVerifTrace(TAttribute attr, ProVerifResultTrace trace){
+    	attrTraceMap.put(attr,trace);
+    }	
 
     public void setSignalsAsNonAttached() {
         for (AvatarSignal mySig : mySignals) mySig.attachedToARelation = false;
@@ -332,6 +350,8 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
             // Try to draw it
             w = graph.getFontMetrics().stringWidth(attrString);
+            
+            attrLocMap.put(attr,this.y+h);
             if (w + 2 * textX < this.width) {
                 graph.drawString(attrString, this.x + textX, this.y + h);
                 this.drawConfidentialityVerification(attr.getConfidentialityVerification(), graph, this.x, this.y + h);
@@ -498,6 +518,45 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         g.setColor(c);
     }
 
+	public void showTrace(int y){
+
+		if (y< limitAttr){
+			for (TAttribute attr: attrLocMap.keySet()){
+    		if (attrLocMap.get(attr) < y && y < attrLocMap.get(attr) +currentFontSize && attrTraceMap.get(attr)!=null){
+    			PipedOutputStream pos = new PipedOutputStream();
+       			try {
+        			PipedInputStream pis = new PipedInputStream(pos, 4096);
+            		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(pos));
+
+		            JFrameSimulationSDPanel jfssdp = new JFrameSimulationSDPanel(null, tdp.getMGUI(), "Confidentiality " + attr.toString());
+		            jfssdp.setIconImage(IconManager.img8);
+    		        GraphicLib.centerOnParent(jfssdp, 600, 600);
+   			        jfssdp.setFileReference(new BufferedReader(new InputStreamReader(pis)));
+            		jfssdp.setVisible(true);
+                        //jfssdp.setModalExclusionType(ModalExclusionType
+                          //      .APPLICATION_EXCLUDE);
+            		jfssdp.toFront();
+
+                        // TraceManager.addDev("\n--- Trace ---");
+            		int i = 0;
+            		for (ProVerifResultTraceStep step : attrTraceMap.get(attr).getTrace()) {
+		            	step.describeAsTMLSDTransaction(bw, i);
+    	        	    i++;
+           			}
+            		bw.close();
+        		} catch (IOException e) {
+        			TraceManager.addDev("Error when writing trace step SD transaction");
+        		} finally {
+        			try {
+        				pos.close();
+        	    	} catch (IOException ignored) {
+        			}
+        		}
+
+    		}
+    	}
+		}
+	}
 
     private void drawConfidentialityVerification(int confidentialityVerification, Graphics g, int _x, int _y) {
         Color c = g.getColor();
