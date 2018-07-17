@@ -71,7 +71,7 @@ public class AvatarCrossbar extends AvatarComponent{
     public int getNbOfAttachedInitiators(){
 	return nbOfAttachedInitiators;
     }
-
+    
     public int getNbOfAttachedTargets(){
 	return nbOfAttachedTargets;
     }

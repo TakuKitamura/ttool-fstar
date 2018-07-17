@@ -513,7 +513,11 @@ public class ADDCoproMWMRNode extends ADDCommunicationNode implements WithAttrib
 		return coprocType;
 	}
 
-    //DG 19.09.
+        public int getClusterAddress() {
+	    return 2;//ToDo find crossbar to which coproc is attached
+	}
+
+     
     public Vector<ADDBlockArtifact> getArtifactList() {
         Vector<ADDBlockArtifact> v = new Vector<ADDBlockArtifact>();
         

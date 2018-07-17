@@ -70,6 +70,7 @@ public class Platforminfo
 	    + "Uses('caba:vci_heterogeneous_rom')," + CR
 	    + "Uses('caba:vci_multi_tty')," + CR
 	    + "Uses('caba:vci_xicu')," + CR
+	    + "Uses('caba:vci_dma')," + CR
 	    + "Uses('caba:vci_block_device')," + CR
 	    + "Uses('caba:vci_ethernet')," + CR
 	    + "Uses('caba:vci_rttimer')," + CR

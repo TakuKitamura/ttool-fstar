@@ -42,7 +42,6 @@
 
 /* authors: v1.0 Daniela GENIUS, Julien HENON 2015 */
 
-
 package ddtranslatorSoclib.toTopCell;
 import avatartranslator.AvatarRelation;//DG 23.06.
 import avatartranslator.AvatarSpecification;//DG 23.06.
@@ -62,10 +61,9 @@ public static AvatarSpecification avspec;
     }
 
 	public static String  getLoader(AvatarSpecification _avspec) {//DG 23.06.
-	    avspec =_avspec;//DG 23.06.
+	    avspec =_avspec;
 	    int nb_clusters=TopCellGenerator.avatardd.getAllCrossbar().size();		
-	    //nb_clusters=2;
-
+	   
 		loader = CR2 + "//-------------------------Call Loader---------------------------------" + CR2 ;
 		loader = loader + "std::cerr << \"caba-vgmn-mutekh_kernel_tutorial SoCLib simulator for MutekH\" << std::endl;"
 				+ CR2 ;
@@ -92,13 +90,11 @@ public static AvatarSpecification avspec;
 		loader = loader + "	 data_ldr.load_file(std::string(kernel_p) + \";.rodata;.boot;.excep\");" + CR ;
 		loader = loader + "	 if (i == 0)" + CR ;
 		loader = loader + "	    data_ldr.load_file(std::string(kernel_p) + \";.data;";	
-      // We generated so far until arriving at first channel segment, if any
-		//current hypothesis : one segment per channel
+	
 		int j=0;
-		//for (AvatarChannel channel : TopCellGenerator.avatardd.getAllMappedChannels()) {    	
-		//DG 23.06. per signal!!hack pour l'instant
+	
 		int i=0;
-		//for (i=0;i<30;i++){ 
+	
 
 		for(AvatarRelation ar: avspec.getRelations()) {
 
@@ -132,13 +128,14 @@ public static AvatarSpecification avspec;
 		loader = loader + "	cpus.push_back(e);" + CR ;
 		loader = loader + "      }" + CR ;
 		loader = loader + "    }" + CR2 ;
-		int nb_tty =1; //DG currently only one (multi) tty
+		int nb_tty =1; 
 
 if(nb_clusters==0){
-    loader = loader + "  const size_t xicu_n_irq = "+(1+nb_tty+3)+";" + CR2 ;
+    loader = loader + "  const size_t xicu_n_irq = "+(1+nb_tty+3+1)+";" + CR2 ;
 }else{
-    loader = loader + "  const size_t xicu_n_irq = "+(5*nb_clusters)+";" + CR2 ;
+    loader = loader + "  const size_t xicu_n_irq = "+(1+nb_tty+3+1)+";" + CR2 ;//DG ToDo
 }
+
         return loader;
 	}
 

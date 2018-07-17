@@ -76,6 +76,7 @@ public class ADDCPUNode extends ADDNode implements SwallowTGComponent, WithAttri
     private int dCacheWords = 0;
 
     protected int index = 0;
+    protected int cluster_index = 0;
     protected int monitored = 0;
 
 
@@ -346,6 +347,22 @@ public class ADDCPUNode extends ADDNode implements SwallowTGComponent, WithAttri
             }
         }
 
+	if (dialog.getIndex().length() != 0) {
+            try {
+                tmp = cluster_index;
+                cluster_index = Integer.decode(dialog.getIndex()).intValue();
+                if (cluster_index < 0) {
+                    cluster_index = tmp;
+                    error = true;
+                    errors += "cluster index ";
+                }
+            } catch (Exception e) {
+                error = true;
+                errors += "cluster index  ";
+            }
+        }
+
+	
 
 	if (dialog.getMonitored() != 0) {
             try {
@@ -545,6 +562,10 @@ public class ADDCPUNode extends ADDNode implements SwallowTGComponent, WithAttri
 
     public int getIndex() {
         return index;
+    }
+
+     public int getClusterIndex() {
+        return cluster_index;
     }
 
     public int getMonitored() {

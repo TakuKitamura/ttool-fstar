@@ -181,11 +181,11 @@ public class TopCellGenerator
 		VCIparameters +
 		config +				
 		Code.getCode() +
-		MappingTable.getMappingTable() +
-		Loader.getLoader(avspec) + //DG 23.06.
-		Declaration.getDeclarations(avspec) +  //DG 27.06.
-		Signal.getSignal() +
-		NetList.getNetlist(icn,tracing) +
+		MappingTable.getMappingTable(avatardd) +
+		Loader.getLoader(avspec) +
+		Declaration.getDeclarations(avatardd,avspec) + 
+		Signal.getSignal(avatardd) +
+		NetList.getNetlist(avatardd,icn,tracing) +
 		Simulation.getSimulation();
 	    return (top);
     }	

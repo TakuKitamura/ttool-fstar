@@ -78,7 +78,7 @@ public class AvatarChannel extends AvatarMappedObject{
       return channelName;
       } 
 
-    public int getNo_cluster(){
+    public int getClusterIndex(){
       return no_cluster;
     } 
 

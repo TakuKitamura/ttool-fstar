@@ -66,6 +66,7 @@ public abstract class ADDMemoryNode extends ADDCommunicationNode implements With
     protected String stereotype = "RAM";
 
     protected int index = 0;
+    protected int cluster_index = 0;
     protected int monitored = 0;
     protected int byteDataSize = HwMemory.DEFAULT_BYTE_DATA_SIZE;
 
@@ -137,6 +138,10 @@ public abstract class ADDMemoryNode extends ADDCommunicationNode implements With
         return index;
     }
 
+    public int getClusterIndex() {
+        return cluster_index;
+    }
+    
     public int getDataSize() {
         return byteDataSize;
     }
@@ -185,6 +190,23 @@ public abstract class ADDMemoryNode extends ADDCommunicationNode implements With
                 errors += "index  ";
             }
         }
+
+	if (dialog.getClusterIndex().length() != 0) {
+            try {
+                tmp = cluster_index;
+                index = Integer.decode(dialog.getClusterIndex()).intValue();
+                if (index < 0) {
+                    index = tmp;
+                    error = true;
+                    errors += "cluster index ";
+                }
+            } catch (Exception e) {
+                error = true;
+                errors += "cluster index  ";
+            }
+        }
+
+	
 
         if (dialog.getDataSize().length() != 0) {
             try {
