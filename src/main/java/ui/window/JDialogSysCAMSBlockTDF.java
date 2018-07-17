@@ -40,14 +40,12 @@ package ui.window;
 
 import ui.syscams.*;
 import ui.util.*;
-import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
 import javax.swing.*;
-import javax.swing.event.*;
 import javax.swing.border.*;
-
-import org.apache.derby.tools.sysinfo;
+import javax.swing.event.*;
 
 /**
  * Class JDialogSystemCAMSBlockTDF 
@@ -61,7 +59,6 @@ import org.apache.derby.tools.sysinfo;
 
 public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, ListSelectionListener {
 
-	/** Access to ActionPerformed **/
 	private JTextField nameTextField;
 	private JTextField periodTextField;
 	private String listPeriodString[];
@@ -76,12 +73,9 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 	private JList<String> structList;
 	private DefaultListModel<String> structListModel;
 	private boolean structBool = false;
-	private int structSelectedIndex;
-
 	private JTextField nameTemplateTextField;
 	private String listTypeTemplateString[];
 	private JComboBox<String> typeTemplateComboBoxString;
-
 	private JTextField nameTypedefTextField;
 	private String listTypeTypedefString[];
 	private JComboBox<String> typeTypedefComboBoxString;
@@ -90,26 +84,21 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 	private JList<String> typedefList;
 	private DefaultListModel<String> typedefListModel;
 	private boolean typedefBool = false;
-	private int typedefSelectedIndex;
 
 	private JButton upButton, downButton, removeButton;
 
 	private JTextArea processCodeTextArea;
 	private String finalString;
 
-	/** Parameters **/
 	private SysCAMSBlockTDF block;
 
-	/** Constructor **/
 	public JDialogSysCAMSBlockTDF(SysCAMSBlockTDF block) {
-		/** Set JDialog **/
 		this.setTitle("Setting TDF Block Attributes");
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 		this.setAlwaysOnTop(true);
 		this.setResizable(false);
 
-		/** Parameters **/
 		this.block = block;
 
 		getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "close");
@@ -194,11 +183,9 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 	}
 
 	public void dialog() {
-		/** JPanel **/
 		JPanel mainPanel = new JPanel(new BorderLayout());
 		this.add(mainPanel);
 
-		/** JTabbedPane **/
 		JTabbedPane tabbedPane = new JTabbedPane();
 		JPanel attributesMainPanel = new JPanel();
 		JPanel parametersMainPanel = new JPanel();
@@ -237,7 +224,7 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 		gridBag.setConstraints(nameTextField, constraints);
 		attributesBoxPanel.add(nameTextField);
 
-		JLabel periodLabel = new JLabel("Period Tp : ");
+		JLabel periodLabel = new JLabel("Period Tm : ");
 		constraints = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 				new Insets(5, 10, 15, 10), 0, 0);
 		gridBag.setConstraints(periodLabel, constraints);
@@ -637,8 +624,8 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 		downPanel.add(cancelButton);
 
 		mainPanel.add(downPanel, BorderLayout.CENTER);
-		this.getRootPane().setDefaultButton(saveCloseButton);
 		pack();
+		this.getRootPane().setDefaultButton(saveCloseButton);
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -852,21 +839,23 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 				nameEmpty = true;
 			}
 
-			for (int i = 0; i < typedefListModel.getSize(); i++) {
-				if (nameTypedefTextField.getText().equals(typedefListModel.elementAt(i).split("\\s")[0])) {
-					alreadyExist = true;
-					alreadyExistId = i;
+			if (nameEmpty == false) {
+				for (int i = 0; i < typedefListModel.getSize(); i++) {
+					if (nameTypedefTextField.getText().equals(typedefListModel.elementAt(i).split("\\s")[0])) {
+						alreadyExist = true;
+						alreadyExistId = i;
+					}
 				}
-			}
 
-			if (alreadyExist == false) {
-				s = nameTypedefTextField.getText() + " : " + type;
-				typedefListModel.addElement(s);
-				listTmpTypedef.add(s);
-			} else {
-				s = nameTypedefTextField.getText() + " : " + type;
-				typedefListModel.setElementAt(s, alreadyExistId);
-				listTmpTypedef.add(s);
+				if (alreadyExist == false) {
+					s = nameTypedefTextField.getText() + " : " + type;
+					typedefListModel.addElement(s);
+					listTmpTypedef.add(s);
+				} else {
+					s = nameTypedefTextField.getText() + " : " + type;
+					typedefListModel.setElementAt(s, alreadyExistId);
+					listTmpTypedef.add(s);
+				}
 			}
 		}
 

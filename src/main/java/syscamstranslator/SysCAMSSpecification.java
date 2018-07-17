@@ -126,11 +126,14 @@ public class SysCAMSSpecification{
     	return portsDE;
     }
     
-    public LinkedList<SysCAMSTConnector> getAllConnector(){
+    public LinkedList<SysCAMSTConnector> getAllConnectorCluster(){
     	LinkedList<SysCAMSTConnector> cons = new LinkedList<SysCAMSTConnector>();
     	for (SysCAMSTConnector con : connectors) {
     		if (con instanceof SysCAMSTConnector) {
+    			if (!((con.get_p1().getComponent() instanceof SysCAMSTPortConverter && con.get_p2().getComponent() instanceof SysCAMSTPortDE)
+    					|| (con.get_p2().getComponent() instanceof SysCAMSTPortConverter && con.get_p1().getComponent() instanceof SysCAMSTPortDE))) {
     			cons.add(con);
+    			}
     		}
     	}
     	return cons;
@@ -161,6 +164,6 @@ public class SysCAMSSpecification{
     }
     
     public int getNbConnector(){
-    	return (getAllConnector()).size();
+    	return (getAllConnectorCluster()).size();
     }
 }

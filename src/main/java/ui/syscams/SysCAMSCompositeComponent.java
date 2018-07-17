@@ -58,20 +58,16 @@ import java.util.ListIterator;
  * @author Irina Kit Yan LEE
  */
 
-public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent implements SwallowTGComponent, HiddenInternalComponents {
+public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent implements SwallowTGComponent {
 	private int maxFontSize = 20;
 	private int minFontSize = 4;
 	private int currentFontSize = -1;
 	private Color myColor;
 	private int iconSize = 17;
 
-	private int textX = 15; // border for ports
+	private int textX = 15;
 	private double dtextX = 0.0;	
 	
-	private boolean hiddeni;
-	
-	private int compositePortNb = 0;
-    
     public SysCAMSCompositeComponent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
@@ -115,10 +111,6 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
 		
 		if (this.rescaled && !this.tdp.isScaled()) {
             this.rescaled = false;
-            // Must set the font size...
-            // Incrementally find the biggest font not greater than max_font size
-            // If font is less than min_font, no text is displayed
-
             int maxCurrentFontSize = Math.max(0, Math.min(this.height, (int) (this.maxFontSize * this.tdp.getZoom())));
             f = f.deriveFont((float) maxCurrentFontSize);
 
@@ -140,7 +132,6 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
             f = f.deriveFont(this.currentFontSize);
     	}
 		
-		// Zoom is assumed to be computed
 		Color col = g.getColor();
 		g.drawRect(x, y, width, height);
 		if ((width > 2) && (height > 2)) {
@@ -149,7 +140,6 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
 			g.setColor(col);
 		}
        
-		// Set font size
         int attributeFontSize = this.currentFontSize * 5 / 6;
         g.setFont(f.deriveFont((float) attributeFontSize));
         g.setFont(f);
@@ -238,21 +228,15 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
 		if (!acceptSwallowedTGComponent(tgc)) {
 			return false;
 		}
-        // Choose its position
-        
-        // Make it an internal component
-        // It's one of my son
         tgc.setFather(this);
         tgc.setDrawingZone(true);
         
-        //Set its coordinates
 		if (tgc instanceof SysCAMSBlockTDF) {
             tgc.resizeWithFather();
         }
 		if (tgc instanceof SysCAMSBlockDE) {
 			tgc.resizeWithFather();
 		}
-        //add it
         addInternalComponent(tgc, 0);
 		return true;
     }
@@ -300,6 +284,19 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
 			}
 			if (tgcomponent[i] instanceof SysCAMSBlockTDF) {
 				ll.add(((SysCAMSBlockTDF)(tgcomponent[i])));
+			}
+		}
+		return ll;
+	}
+	
+	public java.util.List<SysCAMSBlockDE> getAllBlockDEComponents() {
+		ArrayList<SysCAMSBlockDE> ll = new ArrayList<SysCAMSBlockDE>();
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof SysCAMSCompositeComponent) {
+				ll.addAll(((SysCAMSCompositeComponent)tgcomponent[i]).getAllBlockDEComponents());
+			}
+			if (tgcomponent[i] instanceof SysCAMSBlockDE) {
+				ll.add(((SysCAMSBlockDE)(tgcomponent[i])));
 			}
 		}
 		return ll;
@@ -364,55 +361,6 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
 		return null;
 	}
 	
-	public void setInternalsHidden(boolean hide) {
-		hiddeni = hide;
-		
-		if (tdp instanceof SysCAMSComponentTaskDiagramPanel) {
-			((SysCAMSComponentTaskDiagramPanel)tdp).hideConnectors();
-		}
-	}
-	
-	public boolean areInternalsHidden() {
-		return hiddeni;
-	}
-	
-    protected String translateExtraParam() {
-        StringBuffer sb = new StringBuffer("<extraparam>\n");
-        sb.append("<info hiddeni=\"" + hiddeni + "\" "); 
-        sb.append("/>\n");
-        sb.append("</extraparam>\n");
-        return new String(sb);
-    }
-    
-    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-        try {
-            NodeList nli;
-            Node n1, n2;
-            Element elt;
-            
-            for(int i=0; i<nl.getLength(); i++) {
-                n1 = nl.item(i);
-                if (n1.getNodeType() == Node.ELEMENT_NODE) {
-                    nli = n1.getChildNodes();
-                    for(int j=0; j<nli.getLength(); j++) {
-                        n2 = nli.item(j);
-                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
-                            elt = (Element) n2;
-                            if (elt.getTagName().equals("info")) {
-								if (elt.getAttribute("hiddeni").equals("true")) {
-									setInternalsHidden(true);
-								}
-							}
-							
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            throw new MalformedModelingException();
-        }
-    }
-	
 	public void drawTGConnectingPoint(Graphics g, int type) {
         for (int i=0; i<nbConnectingPoint; i++) {
             if (connectingPoint[i].isCompatibleWith(type)) {
@@ -421,10 +369,7 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
         }
 		
         for(int i=0; i<nbInternalTGComponent; i++) {
-			if (hiddeni) {
-			} else {
-				tgcomponent[i].drawTGConnectingPoint(g, type);
-			}
+			tgcomponent[i].drawTGConnectingPoint(g, type);
         }
     }
 	
@@ -455,14 +400,6 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
 				((SysCAMSCompositeComponent)tgcomponent[i]).delayedLoad();
 			}
 		}
-	}
-	
-	public int getCompositePortNb() {
-		return compositePortNb;
-	}
-	
-	public void portRemoved() {
-		compositePortNb --;
 	}
 	
 	public boolean hasRefencesTo(SysCAMSCompositeComponent syscamscc) {

@@ -599,7 +599,7 @@ public class JDialogInvariantAnalysis extends JDialog implements ActionListener,
             			tmp = names[valLine];
             			elts[j] = tmp;
             		} catch (Exception e) {
-            			TraceManager.addDev("Line baldy formatted:" + tmp);
+            			TraceManager.addDev("Line badly formatted:" + tmp);
             		}
             		
             		
@@ -752,7 +752,7 @@ public class JDialogInvariantAnalysis extends JDialog implements ActionListener,
       //  hasError = false;
 		
         
-		TraceManager.addDev("Thread started");
+		TraceManager.addDev("Invariants Thread started");
 		
 
         

@@ -45,6 +45,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import ui.*;
 import ui.eln.ELNConnectingPoint;
+import ui.eln.ELNModule;
 import ui.window.JDialogELNComponentNodeRef;
 import javax.swing.*;
 import java.awt.*;
@@ -52,14 +53,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Class ELNComponentNodeRef 
- * Reference node to be used in ELN diagrams 
- * Creation: 27/06/2018
+ * Class ELNComponentNodeRef Reference node to be used in ELN diagrams Creation:
+ * 27/06/2018
+ * 
  * @version 1.0 27/06/2018
  * @author Irina Kit Yan LEE
  */
 
-public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implements ActionListener {
+public class ELNComponentNodeRef extends TGCScalableWithInternalComponent
+		implements ActionListener, SwallowedTGComponent {
 	protected Color myColor;
 	protected int orientation;
 	private int maxFontSize = 14;
@@ -71,11 +73,13 @@ public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implem
 	protected int decPoint = 3;
 
 	private int position = 0;
-	private boolean fv_0_2 = false, fv_1_3 = false, fh_0_2 = false, fh_1_3 = false;
+	private boolean fv_0_2 = false, fv_1_3 = false, fh_0_2 = false,
+			fh_1_3 = false;
 	private int old;
 	private boolean first;
 
-	public ELNComponentNodeRef(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
+	public ELNComponentNodeRef(int _x, int _y, int _minX, int _maxX, int _minY,
+			int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
 		initScaling(40, 40);
@@ -105,7 +109,8 @@ public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implem
 	public void initConnectingPoint(int nb) {
 		nbConnectingPoint = nb;
 		connectingPoint = new TGConnectingPoint[nb];
-		connectingPoint[0] = new ELNConnectingPoint(this, 0, 0, true, true, 0.5, 0.0);
+		connectingPoint[0] = new ELNConnectingPoint(this, 0, 0, true, true,
+				0.0, 0.0);
 	}
 
 	public Color getMyColor() {
@@ -115,10 +120,14 @@ public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implem
 	public void internalDrawing(Graphics g) {
 		Font f = g.getFont();
 		Font fold = f;
+		MainGUI mgui = getTDiagramPanel().getMainGUI();
 
 		if (this.rescaled && !this.tdp.isScaled()) {
 			this.rescaled = false;
-			int maxCurrentFontSize = Math.max(0, Math.min(this.height, (int) (this.maxFontSize * this.tdp.getZoom())));
+			int maxCurrentFontSize = Math.max(
+					0,
+					Math.min(this.height,
+							(int) (this.maxFontSize * this.tdp.getZoom())));
 			f = f.deriveFont((float) maxCurrentFontSize);
 
 			while (maxCurrentFontSize > (this.minFontSize * this.tdp.getZoom() - 1)) {
@@ -154,8 +163,9 @@ public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implem
 			g.setFont(f.deriveFont((float) attributeFontSize));
 			g.setFont(f);
 			g.setFont(f.deriveFont(Font.BOLD));
-			g.drawString(value, x + (width - w) / 2, y - height / 2);
-			g.setFont(f.deriveFont(Font.PLAIN));
+			if (mgui.getHidden() == false) {
+				g.drawString(value, x + (width - w) / 2, y - height / 2);
+			}
 
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
@@ -202,8 +212,9 @@ public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implem
 			g.setFont(f.deriveFont((float) attributeFontSize));
 			g.setFont(f);
 			g.setFont(f.deriveFont(Font.BOLD));
-			g.drawString(value, x + (width - w) / 2, y - height / 2);
-			g.setFont(f.deriveFont(Font.PLAIN));
+			if (mgui.getHidden() == false) {
+				g.drawString(value, x + (width - w) / 2, y - height / 2);
+			}
 
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
@@ -251,8 +262,9 @@ public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implem
 			g.setFont(f.deriveFont((float) attributeFontSize));
 			g.setFont(f);
 			g.setFont(f.deriveFont(Font.BOLD));
-			g.drawString(value, x + (width - w) / 2, y - height / 2);
-			g.setFont(f.deriveFont(Font.PLAIN));
+			if (mgui.getHidden() == false) {
+				g.drawString(value, x + (width - w) / 2, y - height / 2);
+			}
 
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
@@ -299,8 +311,9 @@ public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implem
 			g.setFont(f.deriveFont((float) attributeFontSize));
 			g.setFont(f);
 			g.setFont(f.deriveFont(Font.BOLD));
-			g.drawString(value, x + (width - w) / 2, y - height / 2);
-			g.setFont(f.deriveFont(Font.PLAIN));
+			if (mgui.getHidden() == false) {
+				g.drawString(value, x + (width - w) / 2, y - height / 2);
+			}
 
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
@@ -341,29 +354,37 @@ public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implem
 	}
 
 	private void rotateTop(Graphics g) {
-		int[] ptx = { x + width / 2, x + width / 2, x, x, x + width, x + width, x + width / 2 };
-		int[] pty = { y, y + height / 2, y + height / 2, y + height, y + height, y + height / 2, y + height / 2 };
+		int[] ptx = { x + width / 2, x + width / 2, x, x, x + width, x + width,
+				x + width / 2 };
+		int[] pty = { y, y + height / 2, y + height / 2, y + height,
+				y + height, y + height / 2, y + height / 2 };
 		g.drawPolygon(ptx, pty, 7);
 		g.fillPolygon(ptx, pty, 7);
 	}
 
 	private void rotateBottom(Graphics g) {
-		int[] ptx = { x + width / 2, x + width / 2, x, x, x + width, x + width, x + width / 2 };
-		int[] pty = { y + height, y + height / 2, y + height / 2, y, y, y + height / 2, y + height / 2 };
+		int[] ptx = { x + width / 2, x + width / 2, x, x, x + width, x + width,
+				x + width / 2 };
+		int[] pty = { y + height, y + height / 2, y + height / 2, y, y,
+				y + height / 2, y + height / 2 };
 		g.drawPolygon(ptx, pty, 7);
 		g.fillPolygon(ptx, pty, 7);
 	}
 
 	private void rotateRight(Graphics g) {
-		int[] ptx = { x + width, x + width / 2, x + width / 2, x, x, x + width / 2, x + width / 2 };
-		int[] pty = { y + height / 2, y + height / 2, y, y, y + height, y + height, y + height / 2 };
+		int[] ptx = { x + width, x + width / 2, x + width / 2, x, x,
+				x + width / 2, x + width / 2 };
+		int[] pty = { y + height / 2, y + height / 2, y, y, y + height,
+				y + height, y + height / 2 };
 		g.drawPolygon(ptx, pty, 7);
 		g.fillPolygon(ptx, pty, 7);
 	}
 
 	private void rotateLeft(Graphics g) {
-		int[] ptx = { x, x + width / 2, x + width / 2, x + width, x + width, x + width / 2, x + width / 2 };
-		int[] pty = { y + height / 2, y + height / 2, y, y, y + height, y + height, y + height / 2 };
+		int[] ptx = { x, x + width / 2, x + width / 2, x + width, x + width,
+				x + width / 2, x + width / 2 };
+		int[] pty = { y + height / 2, y + height / 2, y, y, y + height,
+				y + height, y + height / 2 };
 		g.drawPolygon(ptx, pty, 7);
 		g.fillPolygon(ptx, pty, 7);
 	}
@@ -388,8 +409,6 @@ public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implem
 	protected String translateExtraParam() {
 		StringBuffer sb = new StringBuffer("<extraparam>\n");
 		sb.append("<attributes position=\"" + position);
-		sb.append("\" width=\"" + width);
-		sb.append("\" height=\"" + height);
 		sb.append("\" fv_0_2=\"" + fv_0_2);
 		sb.append("\" fv_1_3=\"" + fv_1_3);
 		sb.append("\" fh_0_2=\"" + fh_0_2);
@@ -400,13 +419,14 @@ public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implem
 		return new String(sb);
 	}
 
-	public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
+	public void loadExtraParam(NodeList nl, int decX, int decY, int decId)
+			throws MalformedModelingException {
 		try {
 			NodeList nli;
 			Node n1, n2;
 			Element elt;
 
-			int position, width, height;
+			int position;
 			boolean fv_0_2, fv_1_3, fh_0_2, fh_1_3, first;
 
 			for (int i = 0; i < nl.getLength(); i++) {
@@ -418,17 +438,19 @@ public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implem
 						if (n2.getNodeType() == Node.ELEMENT_NODE) {
 							elt = (Element) n2;
 							if (elt.getTagName().equals("attributes")) {
-								position = Integer.parseInt(elt.getAttribute("position"));
-								width = Integer.parseInt(elt.getAttribute("width"));
-								height = Integer.parseInt(elt.getAttribute("height"));
-								fv_0_2 = Boolean.parseBoolean(elt.getAttribute("fv_0_2"));
-								fv_1_3 = Boolean.parseBoolean(elt.getAttribute("fv_1_3"));
-								fh_0_2 = Boolean.parseBoolean(elt.getAttribute("fh_0_2"));
-								fh_1_3 = Boolean.parseBoolean(elt.getAttribute("fh_1_3"));
-								first = Boolean.parseBoolean(elt.getAttribute("first"));
+								position = Integer.parseInt(elt
+										.getAttribute("position"));
+								fv_0_2 = Boolean.parseBoolean(elt
+										.getAttribute("fv_0_2"));
+								fv_1_3 = Boolean.parseBoolean(elt
+										.getAttribute("fv_1_3"));
+								fh_0_2 = Boolean.parseBoolean(elt
+										.getAttribute("fh_0_2"));
+								fh_1_3 = Boolean.parseBoolean(elt
+										.getAttribute("fh_1_3"));
+								first = Boolean.parseBoolean(elt
+										.getAttribute("first"));
 								setPosition(position);
-								this.width = width;
-								this.height = height;
 								setFv_0_2(fv_0_2);
 								setFv_1_3(fv_1_3);
 								setFh_0_2(fh_0_2);
@@ -444,7 +466,8 @@ public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implem
 		}
 	}
 
-	public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
+	public void addActionToPopupMenu(JPopupMenu componentMenu,
+			ActionListener menuAL, int x, int y) {
 		componentMenu.addSeparator();
 
 		JMenuItem rotateright = new JMenuItem("Rotate right 90\u00b0");
@@ -561,5 +584,27 @@ public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implem
 
 	public void setFirst(boolean _first) {
 		first = _first;
+	}
+
+	public void resizeWithFather() {
+		if ((father != null) && (father instanceof ELNModule)) {
+			resizeToFatherSize();
+
+			setCdRectangle(0, father.getWidth() - getWidth(), 0,
+					father.getHeight() - getHeight());
+			setMoveCd(x, y);
+		}
+	}
+
+	public void wasSwallowed() {
+		myColor = null;
+	}
+
+	public void wasUnswallowed() {
+		myColor = null;
+		setFather(null);
+		TDiagramPanel tdp = getTDiagramPanel();
+		setCdRectangle(tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(),
+				tdp.getMaxY());
 	}
 }

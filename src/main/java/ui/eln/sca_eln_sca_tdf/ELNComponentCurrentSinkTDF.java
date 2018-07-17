@@ -46,8 +46,6 @@ import org.w3c.dom.NodeList;
 import ui.*;
 import ui.eln.ELNConnectingPoint;
 import ui.window.JDialogELNComponentCurrentSinkTDF;
-import ui.window.JDialogELNComponentVoltageSinkTDF;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;

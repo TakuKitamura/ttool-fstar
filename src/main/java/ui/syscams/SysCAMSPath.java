@@ -170,26 +170,4 @@ public class SysCAMSPath  {
             errorNumber = 5;
         }
     }
-
-    public void setColor() {
-        // For each channel facility,
-        // set the inp and outp primitive ports if possible (otherwise, null)
-        // if no error: set conflict to false
-        // If error -> set the conflict to true
-
-        for (SysCAMSPrimitivePort pport: producerPorts) {
-            if (hasError()) {
-                pport.setConflict(hasError(), errors[errorNumber]);
-            } else {
-                pport.setConflict(false, "");
-            }
-        }
-        for (SysCAMSPrimitivePort cport: consumerPorts) {
-            if (hasError()) {
-                cport.setConflict(hasError(), errors[errorNumber]);
-            } else {
-                cport.setConflict(false, "");
-            }
-        }
-    }
 }

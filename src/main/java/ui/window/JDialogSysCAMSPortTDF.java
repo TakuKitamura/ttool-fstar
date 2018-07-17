@@ -56,8 +56,6 @@ import javax.swing.*;
 @SuppressWarnings("serial")
 
 public class JDialogSysCAMSPortTDF extends JDialog implements ActionListener {
-
-	/** Access to ActionPerformed **/
 	private JTextField nameTextField;
 	private JTextField periodTextField;
 	private String listPeriodString[];
@@ -69,19 +67,15 @@ public class JDialogSysCAMSPortTDF extends JDialog implements ActionListener {
 	private String listOriginString[];
 	private JComboBox<String> originComboBoxString;
 
-	/** Parameters **/
 	private SysCAMSPortTDF port;
 
-	/** Constructor **/
 	public JDialogSysCAMSPortTDF(SysCAMSPortTDF port) {
-		/** Set JDialog **/
 		this.setTitle("Setting TDF Ports");
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 		this.setAlwaysOnTop(true);
 		this.setResizable(false);
 
-		/** Parameters **/
 		this.port = port;
 
 		getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "close");
@@ -95,7 +89,6 @@ public class JDialogSysCAMSPortTDF extends JDialog implements ActionListener {
 	}
 
 	public void dialog() {
-		/** JPanel **/
 		JPanel mainPanel = new JPanel(new BorderLayout());
 		this.add(mainPanel);
 
@@ -232,6 +225,10 @@ public class JDialogSysCAMSPortTDF extends JDialog implements ActionListener {
 						String[] split = select.split(" : ");
 						listArrayTypeString.add(split[0]);
 					}
+				}
+				if ((!((SysCAMSBlockTDF) port.getFather()).getNameTemplate().equals("")) && (!((SysCAMSBlockTDF) port.getFather()).getTypeTemplate().equals("")) 
+						&& ((SysCAMSBlockTDF) port.getFather()).getListTypedef().isEmpty()) {
+					listArrayTypeString.add("sc_dt::sc_int<"+((SysCAMSBlockTDF) port.getFather()).getNameTemplate()+">");
 				}
 			}
 		}

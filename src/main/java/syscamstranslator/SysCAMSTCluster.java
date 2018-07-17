@@ -42,22 +42,22 @@ import java.util.LinkedList;
 
 /**
  * Class SysCAMSTCluster
- * Paramters of a SystemC-AMS cluster
+ * Parameters of a SystemC-AMS cluster
  * Creation: 19/05/2018
  * @version 1.0 19/05/2018
  * @author Irina Kit Yan LEE
 */
 
 public class SysCAMSTCluster extends SysCAMSTComponent {
-
 	private String clusterName;
 	
-	private LinkedList<SysCAMSTBlockTDF> blocks;
+	private LinkedList<SysCAMSTBlockTDF> blockTDF;
+	private LinkedList<SysCAMSTBlockDE> blockDE;
 	
 	public SysCAMSTCluster(String _clusterName) {
-		super();
 		clusterName = _clusterName;
-		blocks = new LinkedList<SysCAMSTBlockTDF>();
+		blockTDF = new LinkedList<SysCAMSTBlockTDF>();
+		blockDE = new LinkedList<SysCAMSTBlockDE>();
 	}
 
 	public String getClusterName() {
@@ -65,10 +65,18 @@ public class SysCAMSTCluster extends SysCAMSTComponent {
 	}
 
 	public LinkedList<SysCAMSTBlockTDF> getBlockTDF(){
-		return blocks;
+		return blockTDF;
 	}
 
-	public void addBlockTDF(SysCAMSTBlockTDF tdf){
-		blocks.add(tdf);
+	public void addBlockTDF(SysCAMSTBlockTDF _blockTDF){
+		blockTDF.add(_blockTDF);
+	}
+	
+	public LinkedList<SysCAMSTBlockDE> getBlockDE(){
+		return blockDE;
+	}
+
+	public void addBlockDE(SysCAMSTBlockDE _blockDE){
+		blockDE.add(_blockDE);
 	}
 }
