@@ -52,16 +52,15 @@ import java.awt.event.ActionListener;
 import java.awt.geom.RoundRectangle2D;
 
 /**
- * Class ELNComponentCurrentSinkTDF Converts current to a TDF output signal to
- * be used in ELN diagrams Creation: 17/07/2018
- * 
+ * Class ELNComponentCurrentSinkTDF 
+ * Converts current to a TDF output signal to be used in ELN diagrams 
+ * Creation: 17/07/2018
  * @version 1.0 17/07/2018
  * @author Irina Kit Yan LEE
  */
 
-public class ELNComponentCurrentSinkTDF extends
-		TGCScalableWithInternalComponent implements ActionListener,
-		SwallowedTGComponent, ELNComponent {
+public class ELNComponentCurrentSinkTDF extends TGCScalableWithInternalComponent
+		implements ActionListener, SwallowedTGComponent, ELNComponent {
 	protected Color myColor;
 	protected int orientation;
 	private int maxFontSize = 14;
@@ -75,14 +74,12 @@ public class ELNComponentCurrentSinkTDF extends
 	private double scale;
 
 	private int position = 0;
-	private boolean fv_0_2 = false, fv_1_3 = false, fh_0_2 = false,
-			fh_1_3 = false;
+	private boolean fv_0_2 = false, fv_1_3 = false, fh_0_2 = false, fh_1_3 = false;
 	private int old;
 	private boolean first;
 
-	public ELNComponentCurrentSinkTDF(int _x, int _y, int _minX, int _maxX,
-			int _minY, int _maxY, boolean _pos, TGComponent _father,
-			TDiagramPanel _tdp) {
+	public ELNComponentCurrentSinkTDF(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
+			TGComponent _father, TDiagramPanel _tdp) {
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
 		initScaling(100, 100);
@@ -114,12 +111,9 @@ public class ELNComponentCurrentSinkTDF extends
 	public void initPortTerminal(int nb) {
 		nbConnectingPoint = nb;
 		connectingPoint = new TGConnectingPoint[nb];
-		connectingPoint[0] = new ELNPortTerminal(this, 0, 0, true, true, 0.0,
-				0.0, "p");
-		connectingPoint[1] = new ELNPortTerminal(this, 0, 0, true, true, 0.0,
-				0.0, "n");
-		connectingPoint[2] = new ELNPortTerminal(this, 0, 0, true, true, 0.0,
-				0.0, "");
+		connectingPoint[0] = new ELNPortTerminal(this, 0, 0, true, true, 0.0, 0.0, "p");
+		connectingPoint[1] = new ELNPortTerminal(this, 0, 0, true, true, 0.0, 0.0, "n");
+		connectingPoint[2] = new ELNPortTerminal(this, 0, 0, true, true, 0.0, 0.0, "outp");
 	}
 
 	public Color getMyColor() {
@@ -133,10 +127,7 @@ public class ELNComponentCurrentSinkTDF extends
 
 		if (this.rescaled && !this.tdp.isScaled()) {
 			this.rescaled = false;
-			int maxCurrentFontSize = Math.max(
-					0,
-					Math.min(this.height,
-							(int) (this.maxFontSize * this.tdp.getZoom())));
+			int maxCurrentFontSize = Math.max(0, Math.min(this.height, (int) (this.maxFontSize * this.tdp.getZoom())));
 			f = f.deriveFont((float) maxCurrentFontSize);
 
 			while (maxCurrentFontSize > (this.minFontSize * this.tdp.getZoom() - 1)) {
@@ -195,15 +186,11 @@ public class ELNComponentCurrentSinkTDF extends
 				((ELNPortTerminal) connectingPoint[2]).setW(1.0);
 				((ELNPortTerminal) connectingPoint[2]).setH(0.5);
 				if (mgui.getHidden() == false) {
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[0]).getName(), x
-									- sw0, y - height / 20);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[1]).getName(), x
-									- sw1, y + height + height / 20 + sh1);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[2]).getName(), x
-									+ width, y + height / 2 + height / 5 + sh2);
+					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x - sw0, y - height / 20);
+					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x - sw1,
+							y + height + height / 20 + sh1);
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width,
+							y + height / 2 + height / 5 + sh2);
 				}
 			}
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
@@ -218,15 +205,11 @@ public class ELNComponentCurrentSinkTDF extends
 				((ELNPortTerminal) connectingPoint[2]).setW(0.0);
 				((ELNPortTerminal) connectingPoint[2]).setH(0.5);
 				if (mgui.getHidden() == false) {
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[0]).getName(), x
-									+ width, y - height / 20);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[1]).getName(), x
-									+ width, y + height + height / 20 + sh1);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[2]).getName(), x
-									- sw2, y + height / 2 + height / 5 + sh2);
+					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width, y - height / 20);
+					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width,
+							y + height + height / 20 + sh1);
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x - sw2,
+							y + height / 2 + height / 5 + sh2);
 				}
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
@@ -241,15 +224,11 @@ public class ELNComponentCurrentSinkTDF extends
 				((ELNPortTerminal) connectingPoint[2]).setW(1.0);
 				((ELNPortTerminal) connectingPoint[2]).setH(0.5);
 				if (mgui.getHidden() == false) {
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[1]).getName(), x
-									- sw1, y - height / 20);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[0]).getName(), x
-									- sw0, y + height + height / 20 + sh0);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[2]).getName(), x
-									+ width, y + height / 2 + height / 5 + sh2);
+					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x - sw1, y - height / 20);
+					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x - sw0,
+							y + height + height / 20 + sh0);
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width,
+							y + height / 2 + height / 5 + sh2);
 				}
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
@@ -264,15 +243,11 @@ public class ELNComponentCurrentSinkTDF extends
 				((ELNPortTerminal) connectingPoint[2]).setW(0.0);
 				((ELNPortTerminal) connectingPoint[2]).setH(0.5);
 				if (mgui.getHidden() == false) {
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[1]).getName(), x
-									+ width, y - height / 20);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[0]).getName(), x
-									+ width, y + height + height / 20 + sh0);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[2]).getName(), x
-									- sw2, y + height / 2 + height / 5 + sh2);
+					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width, y - height / 20);
+					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width,
+							y + height + height / 20 + sh0);
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x - sw2,
+							y + height / 2 + height / 5 + sh2);
 				}
 			}
 		} else if (position == 1) {
@@ -310,15 +285,10 @@ public class ELNComponentCurrentSinkTDF extends
 				((ELNPortTerminal) connectingPoint[2]).setW(0.5);
 				((ELNPortTerminal) connectingPoint[2]).setH(1.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[1]).getName(), x
-									- width / 20 - sw1, y);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[0]).getName(), x
-									+ width + width / 20, y);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[2]).getName(), x
-									+ width / 2 + width / 5, y + height + sh2);
+					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x - width / 20 - sw1, y);
+					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width + width / 20, y);
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width / 2 + width / 5,
+							y + height + sh2);
 				}
 			}
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
@@ -333,15 +303,11 @@ public class ELNComponentCurrentSinkTDF extends
 				((ELNPortTerminal) connectingPoint[2]).setW(0.5);
 				((ELNPortTerminal) connectingPoint[2]).setH(0.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[1]).getName(), x
-									- width / 16 - sw1, y + height + sh1);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[0]).getName(), x
-									+ width + width / 16, y + height + sh0);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[2]).getName(), x
-									+ width / 2 + width / 5, y);
+					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x - width / 16 - sw1,
+							y + height + sh1);
+					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width + width / 16,
+							y + height + sh0);
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width / 2 + width / 5, y);
 				}
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
@@ -356,15 +322,10 @@ public class ELNComponentCurrentSinkTDF extends
 				((ELNPortTerminal) connectingPoint[2]).setW(0.5);
 				((ELNPortTerminal) connectingPoint[2]).setH(1.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[0]).getName(), x
-									- width / 20 - sw0, y);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[1]).getName(), x
-									+ width + width / 20, y);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[2]).getName(), x
-									+ width / 2 + width / 5, y + height + sh2);
+					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x - width / 20 - sw0, y);
+					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width + width / 20, y);
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width / 2 + width / 5,
+							y + height + sh2);
 				}
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
@@ -379,15 +340,11 @@ public class ELNComponentCurrentSinkTDF extends
 				((ELNPortTerminal) connectingPoint[2]).setW(0.5);
 				((ELNPortTerminal) connectingPoint[2]).setH(0.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[0]).getName(), x
-									- width / 20 - sw0, y + height + sh0);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[1]).getName(), x
-									+ width + width / 20, y + height + sh1);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[2]).getName(), x
-									+ width / 2 + width / 5, y);
+					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x - width / 20 - sw0,
+							y + height + sh0);
+					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width + width / 20,
+							y + height + sh1);
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width / 2 + width / 5, y);
 				}
 			}
 		} else if (position == 2) {
@@ -426,15 +383,11 @@ public class ELNComponentCurrentSinkTDF extends
 				((ELNPortTerminal) connectingPoint[2]).setW(0.0);
 				((ELNPortTerminal) connectingPoint[2]).setH(0.5);
 				if (mgui.getHidden() == false) {
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[1]).getName(), x
-									+ width, y - height / 20);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[0]).getName(), x
-									+ width, y + height + height / 20 + sh0);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[2]).getName(), x
-									- sw2, y + height / 2 + height / 5 + sh2);
+					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width, y - height / 20);
+					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width,
+							y + height + height / 20 + sh0);
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x - sw2,
+							y + height / 2 + height / 5 + sh2);
 				}
 			}
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
@@ -449,15 +402,11 @@ public class ELNComponentCurrentSinkTDF extends
 				((ELNPortTerminal) connectingPoint[2]).setW(1.0);
 				((ELNPortTerminal) connectingPoint[2]).setH(0.5);
 				if (mgui.getHidden() == false) {
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[1]).getName(), x
-									- sw1, y - height / 20);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[0]).getName(), x
-									- sw0, y + height + height / 20 + sh0);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[2]).getName(), x
-									+ width, y + height / 2 + height / 5 + sh2);
+					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x - sw1, y - height / 20);
+					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x - sw0,
+							y + height + height / 20 + sh0);
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width,
+							y + height / 2 + height / 5 + sh2);
 				}
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
@@ -472,15 +421,11 @@ public class ELNComponentCurrentSinkTDF extends
 				((ELNPortTerminal) connectingPoint[2]).setW(0.0);
 				((ELNPortTerminal) connectingPoint[2]).setH(0.5);
 				if (mgui.getHidden() == false) {
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[0]).getName(), x
-									+ width, y - height / 20);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[1]).getName(), x
-									+ width, y + height + height / 20 + sh1);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[2]).getName(), x
-									- sw2, y + height / 2 + height / 5 + sh2);
+					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width, y - height / 20);
+					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width,
+							y + height + height / 20 + sh1);
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x - sw2,
+							y + height / 2 + height / 5 + sh2);
 				}
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
@@ -495,15 +440,11 @@ public class ELNComponentCurrentSinkTDF extends
 				((ELNPortTerminal) connectingPoint[2]).setW(1.0);
 				((ELNPortTerminal) connectingPoint[2]).setH(0.5);
 				if (mgui.getHidden() == false) {
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[0]).getName(), x
-									- sw0, y - height / 20);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[1]).getName(), x
-									- sw1, y + height + height / 20 + sh1);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[2]).getName(), x
-									+ width, y + height / 2 + height / 5 + sh2);
+					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x - sw0, y - height / 20);
+					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x - sw1,
+							y + height + height / 20 + sh1);
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width,
+							y + height / 2 + height / 5 + sh2);
 				}
 			}
 		} else if (position == 3) {
@@ -541,15 +482,11 @@ public class ELNComponentCurrentSinkTDF extends
 				((ELNPortTerminal) connectingPoint[2]).setW(0.5);
 				((ELNPortTerminal) connectingPoint[2]).setH(0.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[0]).getName(), x
-									- width / 20 - sw0, y + height + sh0);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[1]).getName(), x
-									+ width + width / 20, y + height + sh1);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[2]).getName(), x
-									+ width / 2 + width / 5, y);
+					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x - width / 20 - sw0,
+							y + height + sh0);
+					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width + width / 20,
+							y + height + sh1);
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width / 2 + width / 5, y);
 				}
 			}
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
@@ -564,15 +501,10 @@ public class ELNComponentCurrentSinkTDF extends
 				((ELNPortTerminal) connectingPoint[2]).setW(0.5);
 				((ELNPortTerminal) connectingPoint[2]).setH(1.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[0]).getName(), x
-									- width / 20 - sw0, y);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[1]).getName(), x
-									+ width + width / 20, y);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[2]).getName(), x
-									+ width / 2 + width / 5, y + height + sh2);
+					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x - width / 20 - sw0, y);
+					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width + width / 20, y);
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width / 2 + width / 5,
+							y + height + sh2);
 				}
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
@@ -587,15 +519,11 @@ public class ELNComponentCurrentSinkTDF extends
 				((ELNPortTerminal) connectingPoint[2]).setW(0.5);
 				((ELNPortTerminal) connectingPoint[2]).setH(0.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[1]).getName(), x
-									- width / 16 - sw1, y + height + sh1);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[0]).getName(), x
-									+ width + width / 16, y + height + sh0);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[2]).getName(), x
-									+ width / 2 + width / 5, y);
+					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x - width / 16 - sw1,
+							y + height + sh1);
+					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width + width / 16,
+							y + height + sh0);
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width / 2 + width / 5, y);
 				}
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
@@ -610,15 +538,10 @@ public class ELNComponentCurrentSinkTDF extends
 				((ELNPortTerminal) connectingPoint[2]).setW(0.5);
 				((ELNPortTerminal) connectingPoint[2]).setH(1.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[1]).getName(), x
-									- width / 20 - sw1, y);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[0]).getName(), x
-									+ width + width / 20, y);
-					g.drawString(
-							((ELNPortTerminal) connectingPoint[2]).getName(), x
-									+ width / 2 + width / 5, y + height + sh2);
+					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x - width / 20 - sw1, y);
+					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width + width / 20, y);
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width / 2 + width / 5,
+							y + height + sh2);
 				}
 			}
 		}
@@ -628,27 +551,21 @@ public class ELNComponentCurrentSinkTDF extends
 
 	private void rotateTop(Graphics g) {
 		Color c = g.getColor();
-		int[] ptx0 = { x, x + 2 * width / 5, x + 2 * width / 5, x,
-				x + 2 * width / 5, x + 2 * width / 5 };
-		int[] pty0 = { y + height / 20, y + height / 20,
-				y + height - height / 20, y + height - height / 20,
+		int[] ptx0 = { x, x + 2 * width / 5, x + 2 * width / 5, x, x + 2 * width / 5, x + 2 * width / 5 };
+		int[] pty0 = { y + height / 20, y + height / 20, y + height - height / 20, y + height - height / 20,
 				y + height - height / 20, y + height / 20 };
 		g.drawPolygon(ptx0, pty0, 6);
-		int[] ptx1 = { x + 2 * width / 5 - width / 20, x + 2 * width / 5,
-				x + 2 * width / 5 + width / 20 };
-		int[] pty1 = { y + height / 2, y + height / 2 + height / 20,
-				y + height / 2 };
+		int[] ptx1 = { x + 2 * width / 5 - width / 20, x + 2 * width / 5, x + 2 * width / 5 + width / 20 };
+		int[] pty1 = { y + height / 2, y + height / 2 + height / 20, y + height / 2 };
 		g.drawPolygon(ptx1, pty1, 3);
 		g.fillPolygon(ptx1, pty1, 3);
 		g.fillRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
-		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT,
-				BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
+		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
 		g2d.setStroke(dashed);
-		g2d.draw(new RoundRectangle2D.Double(x + width / 20, y - height / 20, 4
-				* width / 5 + width / 10 - width / 20, height + height / 10,
-				10, 10));
+		g2d.draw(new RoundRectangle2D.Double(x + width / 20, y - height / 20, 4 * width / 5 + width / 10 - width / 20,
+				height + height / 10, 10, 10));
 		g2d.dispose();
 
 		g.drawOval(x, y, width / 10, height / 10);
@@ -663,27 +580,21 @@ public class ELNComponentCurrentSinkTDF extends
 
 	private void rotateTopFlip(Graphics g) {
 		Color c = g.getColor();
-		int[] ptx0 = { x, x + 2 * width / 5, x + 2 * width / 5, x,
-				x + 2 * width / 5, x + 2 * width / 5 };
-		int[] pty0 = { y + height / 20, y + height / 20,
-				y + height - height / 20, y + height - height / 20,
+		int[] ptx0 = { x, x + 2 * width / 5, x + 2 * width / 5, x, x + 2 * width / 5, x + 2 * width / 5 };
+		int[] pty0 = { y + height / 20, y + height / 20, y + height - height / 20, y + height - height / 20,
 				y + height - height / 20, y + height / 20 };
 		g.drawPolygon(ptx0, pty0, 6);
-		int[] ptx1 = { x + 2 * width / 5 - width / 20, x + 2 * width / 5,
-				x + 2 * width / 5 + width / 20 };
-		int[] pty1 = { y + height / 2, y + height / 2 - height / 20,
-				y + height / 2 };
+		int[] ptx1 = { x + 2 * width / 5 - width / 20, x + 2 * width / 5, x + 2 * width / 5 + width / 20 };
+		int[] pty1 = { y + height / 2, y + height / 2 - height / 20, y + height / 2 };
 		g.drawPolygon(ptx1, pty1, 3);
 		g.fillPolygon(ptx1, pty1, 3);
 		g.fillRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
-		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT,
-				BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
+		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
 		g2d.setStroke(dashed);
-		g2d.draw(new RoundRectangle2D.Double(x + width / 20, y - height / 20, 4
-				* width / 5 + width / 10 - width / 20, height + height / 10,
-				10, 10));
+		g2d.draw(new RoundRectangle2D.Double(x + width / 20, y - height / 20, 4 * width / 5 + width / 10 - width / 20,
+				height + height / 10, 10, 10));
 		g2d.dispose();
 
 		g.drawOval(x, y, width / 10, height / 10);
@@ -698,99 +609,81 @@ public class ELNComponentCurrentSinkTDF extends
 
 	private void rotateBottom(Graphics g) {
 		Color c = g.getColor();
-		int[] ptx0 = { x + width, x + 3 * width / 5, x + 3 * width / 5,
-				x + width, x + 3 * width / 5, x + 3 * width / 5 };
-		int[] pty0 = { y + height / 20, y + height / 20,
-				y + height - height / 20, y + height - height / 20,
+		int[] ptx0 = { x + width, x + 3 * width / 5, x + 3 * width / 5, x + width, x + 3 * width / 5,
+				x + 3 * width / 5 };
+		int[] pty0 = { y + height / 20, y + height / 20, y + height - height / 20, y + height - height / 20,
 				y + height - height / 20, y + height / 20 };
 		g.drawPolygon(ptx0, pty0, 6);
-		int[] ptx1 = { x + 3 * width / 5 - width / 20, x + 3 * width / 5,
-				x + 3 * width / 5 + width / 20 };
-		int[] pty1 = { y + height / 2, y + height / 2 - height / 20,
-				y + height / 2 };
+		int[] ptx1 = { x + 3 * width / 5 - width / 20, x + 3 * width / 5, x + 3 * width / 5 + width / 20 };
+		int[] pty1 = { y + height / 2, y + height / 2 - height / 20, y + height / 2 };
 		g.drawPolygon(ptx1, pty1, 3);
 		g.fillPolygon(ptx1, pty1, 3);
 		g.fillRect(x, y + 2 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
-		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT,
-				BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
+		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
 		g2d.setStroke(dashed);
-		g2d.draw(new RoundRectangle2D.Double(x + width / 10, y - height / 20, 4
-				* width / 5 + width / 10 - width / 20, height + height / 10,
-				10, 10));
+		g2d.draw(new RoundRectangle2D.Double(x + width / 10, y - height / 20, 4 * width / 5 + width / 10 - width / 20,
+				height + height / 10, 10, 10));
 		g2d.dispose();
 
 		g.drawOval(x + width - width / 10, y, width / 10, height / 10);
 		g.setColor(Color.WHITE);
 		g.fillOval(x + width - width / 10, y, width / 10, height / 10);
 		g.setColor(c);
-		g.drawOval(x + width - width / 10, y + height - height / 10,
-				width / 10, height / 10);
+		g.drawOval(x + width - width / 10, y + height - height / 10, width / 10, height / 10);
 		g.setColor(Color.WHITE);
-		g.fillOval(x + width - width / 10, y + height - height / 10,
-				width / 10, height / 10);
+		g.fillOval(x + width - width / 10, y + height - height / 10, width / 10, height / 10);
 		g.setColor(c);
 	}
 
 	private void rotateBottomFlip(Graphics g) {
 		Color c = g.getColor();
-		int[] ptx0 = { x + width, x + 3 * width / 5, x + 3 * width / 5,
-				x + width, x + 3 * width / 5, x + 3 * width / 5 };
-		int[] pty0 = { y + height / 20, y + height / 20,
-				y + height - height / 20, y + height - height / 20,
+		int[] ptx0 = { x + width, x + 3 * width / 5, x + 3 * width / 5, x + width, x + 3 * width / 5,
+				x + 3 * width / 5 };
+		int[] pty0 = { y + height / 20, y + height / 20, y + height - height / 20, y + height - height / 20,
 				y + height - height / 20, y + height / 20 };
 		g.drawPolygon(ptx0, pty0, 6);
-		int[] ptx1 = { x + 3 * width / 5 - width / 20, x + 3 * width / 5,
-				x + 3 * width / 5 + width / 20 };
-		int[] pty1 = { y + height / 2, y + height / 2 + height / 20,
-				y + height / 2 };
+		int[] ptx1 = { x + 3 * width / 5 - width / 20, x + 3 * width / 5, x + 3 * width / 5 + width / 20 };
+		int[] pty1 = { y + height / 2, y + height / 2 + height / 20, y + height / 2 };
 		g.drawPolygon(ptx1, pty1, 3);
 		g.fillPolygon(ptx1, pty1, 3);
 		g.fillRect(x, y + 2 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
-		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT,
-				BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
+		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
 		g2d.setStroke(dashed);
-		g2d.draw(new RoundRectangle2D.Double(x + width / 10, y - height / 20, 4
-				* width / 5 + width / 10 - width / 20, height + height / 10,
-				10, 10));
+		g2d.draw(new RoundRectangle2D.Double(x + width / 10, y - height / 20, 4 * width / 5 + width / 10 - width / 20,
+				height + height / 10, 10, 10));
 		g2d.dispose();
 
 		g.drawOval(x + width - width / 10, y, width / 10, height / 10);
 		g.setColor(Color.WHITE);
 		g.fillOval(x + width - width / 10, y, width / 10, height / 10);
 		g.setColor(c);
-		g.drawOval(x + width - width / 10, y + height - height / 10,
-				width / 10, height / 10);
+		g.drawOval(x + width - width / 10, y + height - height / 10, width / 10, height / 10);
 		g.setColor(Color.WHITE);
-		g.fillOval(x + width - width / 10, y + height - height / 10,
-				width / 10, height / 10);
+		g.fillOval(x + width - width / 10, y + height - height / 10, width / 10, height / 10);
 		g.setColor(c);
 	}
 
 	private void rotateRight(Graphics g) {
 		Color c = g.getColor();
-		int[] ptx0 = { x + width / 20, x + width / 20 };
-		int[] pty0 = { y, y + 2 * height / 5 - height / 10 };
-		g.drawPolygon(ptx0, pty0, 2);
-		int[] ptx1 = { x + width - width / 20, x + width / 20, x + width / 10,
-				x + width / 10, x + width / 20 };
-		int[] pty1 = { y + 2 * height / 5, y + 2 * height / 5,
-				y + 2 * height / 5 - height / 20,
-				y + 2 * height / 5 + height / 20, y + 2 * height / 5 };
-		g.drawPolygon(ptx1, pty1, 5);
-		g.fillPolygon(ptx1, pty1, 5);
+		int[] ptx0 = { x + width / 20, x + width / 20, x + width - width / 20, x + width - width / 20,
+				x + width - width / 20, x + width / 20 };
+		int[] pty0 = { y, y + 2 * height / 5, y + 2 * height / 5, y, y + 2 * height / 5, y + 2 * height / 5 };
+		g.drawPolygon(ptx0, pty0, 6);
+		int[] ptx1 = { x + width / 2, x + width / 2 - width / 20, x + width / 2 };
+		int[] pty1 = { y + 2 * height / 5 - height / 20, y + 2 * height / 5, y + 2 * height / 5 + height / 20 };
+		g.drawPolygon(ptx1, pty1, 3);
+		g.fillPolygon(ptx1, pty1, 3);
 		g.fillRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
-		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT,
-				BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
+		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
 		g2d.setStroke(dashed);
-		g2d.draw(new RoundRectangle2D.Double(x - width / 20, y + height / 20,
-				width + width / 10, 4 * height / 5 + height / 10 - height / 20,
-				10, 10));
+		g2d.draw(new RoundRectangle2D.Double(x - width / 20, y + height / 20, width + width / 10,
+				4 * height / 5 + height / 10 - height / 20, 10, 10));
 		g2d.dispose();
 
 		g.drawOval(x, y, width / 10, height / 10);
@@ -805,97 +698,81 @@ public class ELNComponentCurrentSinkTDF extends
 
 	private void rotateRightFlip(Graphics g) {
 		Color c = g.getColor();
-		int[] ptx0 = { x + width / 20, x + width / 20 };
-		int[] pty0 = { y + height, y + 3 * height / 5 + height / 10 };
-		g.drawPolygon(ptx0, pty0, 2);
-		int[] ptx1 = { x + width - width / 20, x + width / 20, x + width / 10,
-				x + width / 10, x + width / 20 };
-		int[] pty1 = { y + 3 * height / 5, y + 3 * height / 5,
-				y + 3 * height / 5 + height / 20,
-				y + 3 * height / 5 - height / 20, y + 3 * height / 5 };
-		g.drawPolygon(ptx1, pty1, 5);
-		g.fillPolygon(ptx1, pty1, 5);
+		int[] ptx0 = { x + width / 20, x + width / 20, x + width - width / 20, x + width - width / 20,
+				x + width - width / 20, x + width / 20 };
+		int[] pty0 = { y + height, y + 3 * height / 5, y + 3 * height / 5, y + height, y + 3 * height / 5,
+				y + 3 * height / 5 };
+		g.drawPolygon(ptx0, pty0, 6);
+		int[] ptx1 = { x + width / 2, x + width / 2 - width / 20, x + width / 2 };
+		int[] pty1 = { y + 3 * height / 5 - height / 20, y + 3 * height / 5, y + 3 * height / 5 + height / 20 };
+		g.drawPolygon(ptx1, pty1, 3);
+		g.fillPolygon(ptx1, pty1, 3);
 		g.fillRect(x + 2 * width / 5, y, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
-		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT,
-				BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
+		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
 		g2d.setStroke(dashed);
-		g2d.draw(new RoundRectangle2D.Double(x - width / 20, y + height / 10,
-				width + width / 10, 4 * height / 5 + height / 10 - height / 20,
-				10, 10));
+		g2d.draw(new RoundRectangle2D.Double(x - width / 20, y + height / 10, width + width / 10,
+				4 * height / 5 + height / 10 - height / 20, 10, 10));
 		g2d.dispose();
 
 		g.drawOval(x, y + height - height / 10, width / 10, height / 10);
 		g.setColor(Color.WHITE);
 		g.fillOval(x, y + height - height / 10, width / 10, height / 10);
 		g.setColor(c);
-		g.drawOval(x + width - width / 10, y + height - height / 10,
-				width / 10, height / 10);
+		g.drawOval(x + width - width / 10, y + height - height / 10, width / 10, height / 10);
 		g.setColor(Color.WHITE);
-		g.fillOval(x + width - width / 10, y + height - height / 10,
-				width / 10, height / 10);
+		g.fillOval(x + width - width / 10, y + height - height / 10, width / 10, height / 10);
 		g.setColor(c);
 	}
 
 	private void rotateLeft(Graphics g) {
 		Color c = g.getColor();
-		int[] ptx0 = { x + width / 20, x + width / 20 };
-		int[] pty0 = { y + height, y + 3 * height / 5 + height / 10 };
-		g.drawPolygon(ptx0, pty0, 2);
-		int[] ptx1 = { x + width / 20, x + width - width / 20,
-				x + width - width / 10, x + width - width / 10,
-				x + width - width / 20 };
-		int[] pty1 = { y + 3 * height / 5, y + 3 * height / 5,
-				y + 3 * height / 5 + height / 20,
-				y + 3 * height / 5 - height / 20, y + 3 * height / 5 };
-		g.drawPolygon(ptx1, pty1, 5);
-		g.fillPolygon(ptx1, pty1, 5);
+		int[] ptx0 = { x + width / 20, x + width / 20, x + width - width / 20, x + width - width / 20,
+				x + width - width / 20, x + width / 20 };
+		int[] pty0 = { y + height, y + 3 * height / 5, y + 3 * height / 5, y + height, y + 3 * height / 5,
+				y + 3 * height / 5 };
+		g.drawPolygon(ptx0, pty0, 6);
+		int[] ptx1 = { x + width / 2, x + width / 2 + width / 20, x + width / 2 };
+		int[] pty1 = { y + 3 * height / 5 - height / 20, y + 3 * height / 5, y + 3 * height / 5 + height / 20 };
+		g.drawPolygon(ptx1, pty1, 3);
+		g.fillPolygon(ptx1, pty1, 3);
 		g.fillRect(x + 2 * width / 5, y, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
-		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT,
-				BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
+		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
 		g2d.setStroke(dashed);
-		g2d.draw(new RoundRectangle2D.Double(x - width / 20, y + height / 10,
-				width + width / 10, 4 * height / 5 + height / 10 - height / 20,
-				10, 10));
+		g2d.draw(new RoundRectangle2D.Double(x - width / 20, y + height / 10, width + width / 10,
+				4 * height / 5 + height / 10 - height / 20, 10, 10));
 		g2d.dispose();
 
 		g.drawOval(x, y + height - height / 10, width / 10, height / 10);
 		g.setColor(Color.WHITE);
 		g.fillOval(x, y + height - height / 10, width / 10, height / 10);
 		g.setColor(c);
-		g.drawOval(x + width - width / 10, y + height - height / 10,
-				width / 10, height / 10);
+		g.drawOval(x + width - width / 10, y + height - height / 10, width / 10, height / 10);
 		g.setColor(Color.WHITE);
-		g.fillOval(x + width - width / 10, y + height - height / 10,
-				width / 10, height / 10);
+		g.fillOval(x + width - width / 10, y + height - height / 10, width / 10, height / 10);
 		g.setColor(c);
 	}
 
 	private void rotateLeftFlip(Graphics g) {
 		Color c = g.getColor();
-		int[] ptx0 = { x + width / 20, x + width / 20 };
-		int[] pty0 = { y, y + 2 * height / 5 - height / 10 };
-		g.drawPolygon(ptx0, pty0, 2);
-		int[] ptx1 = { x + width / 20, x + width - width / 20,
-				x + width - width / 10, x + width - width / 10,
-				x + width - width / 20 };
-		int[] pty1 = { y + 2 * height / 5, y + 2 * height / 5,
-				y + 2 * height / 5 - height / 20,
-				y + 2 * height / 5 + height / 20, y + 2 * height / 5 };
-		g.drawPolygon(ptx1, pty1, 5);
-		g.fillPolygon(ptx1, pty1, 5);
+		int[] ptx0 = { x + width / 20, x + width / 20, x + width - width / 20, x + width - width / 20,
+				x + width - width / 20, x + width / 20 };
+		int[] pty0 = { y, y + 2 * height / 5, y + 2 * height / 5, y, y + 2 * height / 5, y + 2 * height / 5 };
+		g.drawPolygon(ptx0, pty0, 6);
+		int[] ptx1 = { x + width / 2, x + width / 2 + width / 20, x + width / 2 };
+		int[] pty1 = { y + 2 * height / 5 - height / 20, y + 2 * height / 5, y + 2 * height / 5 + height / 20 };
+		g.drawPolygon(ptx1, pty1, 3);
+		g.fillPolygon(ptx1, pty1, 3);
 		g.fillRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
-		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT,
-				BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
+		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
 		g2d.setStroke(dashed);
-		g2d.draw(new RoundRectangle2D.Double(x - width / 20, y + height / 20,
-				width + width / 10, 4 * height / 5 + height / 10 - height / 20,
-				10, 10));
+		g2d.draw(new RoundRectangle2D.Double(x - width / 20, y + height / 20, width + width / 10,
+				4 * height / 5 + height / 10 - height / 20, 10, 10));
 		g2d.dispose();
 
 		g.drawOval(x, y, width / 10, height / 10);
@@ -920,8 +797,7 @@ public class ELNComponentCurrentSinkTDF extends
 	}
 
 	public boolean editOndoubleClick(JFrame frame) {
-		JDialogELNComponentCurrentSinkTDF jde = new JDialogELNComponentCurrentSinkTDF(
-				this);
+		JDialogELNComponentCurrentSinkTDF jde = new JDialogELNComponentCurrentSinkTDF(this);
 		jde.setVisible(true);
 		return true;
 	}
@@ -940,8 +816,7 @@ public class ELNComponentCurrentSinkTDF extends
 		return new String(sb);
 	}
 
-	public void loadExtraParam(NodeList nl, int decX, int decY, int decId)
-			throws MalformedModelingException {
+	public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
 		try {
 			NodeList nli;
 			Node n1, n2;
@@ -960,20 +835,13 @@ public class ELNComponentCurrentSinkTDF extends
 						if (n2.getNodeType() == Node.ELEMENT_NODE) {
 							elt = (Element) n2;
 							if (elt.getTagName().equals("attributes")) {
-								scale = Double.parseDouble(elt
-										.getAttribute("scale"));
-								position = Integer.parseInt(elt
-										.getAttribute("position"));
-								fv_0_2 = Boolean.parseBoolean(elt
-										.getAttribute("fv_0_2"));
-								fv_1_3 = Boolean.parseBoolean(elt
-										.getAttribute("fv_1_3"));
-								fh_0_2 = Boolean.parseBoolean(elt
-										.getAttribute("fh_0_2"));
-								fh_1_3 = Boolean.parseBoolean(elt
-										.getAttribute("fh_1_3"));
-								first = Boolean.parseBoolean(elt
-										.getAttribute("first"));
+								scale = Double.parseDouble(elt.getAttribute("scale"));
+								position = Integer.parseInt(elt.getAttribute("position"));
+								fv_0_2 = Boolean.parseBoolean(elt.getAttribute("fv_0_2"));
+								fv_1_3 = Boolean.parseBoolean(elt.getAttribute("fv_1_3"));
+								fh_0_2 = Boolean.parseBoolean(elt.getAttribute("fh_0_2"));
+								fh_1_3 = Boolean.parseBoolean(elt.getAttribute("fh_1_3"));
+								first = Boolean.parseBoolean(elt.getAttribute("first"));
 								setScale(scale);
 								setPosition(position);
 								setFv_0_2(fv_0_2);
@@ -991,8 +859,7 @@ public class ELNComponentCurrentSinkTDF extends
 		}
 	}
 
-	public void addActionToPopupMenu(JPopupMenu componentMenu,
-			ActionListener menuAL, int x, int y) {
+	public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
 		componentMenu.addSeparator();
 
 		JMenuItem rotateright = new JMenuItem("Rotate right 90\u00b0");
@@ -1123,8 +990,7 @@ public class ELNComponentCurrentSinkTDF extends
 		if ((father != null) && (father instanceof ELNModule)) {
 			resizeToFatherSize();
 
-			setCdRectangle(0, father.getWidth() - getWidth(), 0,
-					father.getHeight() - getHeight());
+			setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
 			setMoveCd(x, y);
 		}
 	}
@@ -1137,7 +1003,6 @@ public class ELNComponentCurrentSinkTDF extends
 		myColor = null;
 		setFather(null);
 		TDiagramPanel tdp = getTDiagramPanel();
-		setCdRectangle(tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(),
-				tdp.getMaxY());
+		setCdRectangle(tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY());
 	}
 }
