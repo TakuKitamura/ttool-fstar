@@ -76,7 +76,8 @@ public class MappingTable {
 	    AvatarComponent comp1 = my_p1.getComponent();
 	    AvatarComponent comp2 = my_p2.getComponent(); 
 	    if (comp1 instanceof AvatarRAM){ 
-		AvatarRAM comp1cpu = (AvatarRAM)comp1;
+		AvatarRAM comp1ram = (AvatarRAM)comp1;
+		if(comp1ram.getClusterIndex()==cluster_no)
 		rams++;			
 	    }		    		
 	    
@@ -282,9 +283,9 @@ public class MappingTable {
       //we want to identify the RAMS on this cluster (not RAMs in total)
 
       for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) {						      	
-	  mapping += "maptab.add(Segment(\"cram" + ram.getNo_ram() + "\", 0x"+Integer.toHexString(SEG_RAM_BASE+ ram.getNo_cluster()*CLUSTER_SIZE)+",  0x"+Integer.toHexString(ram.getDataSize()/2)+", IntTab("+ram.getNo_cluster()+","+(ram.getNo_target())+"), true));" + CR;
+	  mapping += "maptab.add(Segment(\"cram" + ram.getNo_ram() + "\", 0x"+Integer.toHexString(SEG_RAM_BASE+ ram.getClusterIndex()*CLUSTER_SIZE)+",  0x"+Integer.toHexString(ram.getDataSize()/2)+", IntTab("+ram.getClusterIndex()+","+(ram.getNo_target())+"), true));" + CR;
 	  
-	  mapping += "maptab.add(Segment(\"uram" + ram.getNo_ram() + "\",  0x"+Integer.toHexString(SEG_RAM_BASE + ram.getNo_cluster()*CLUSTER_SIZE+cacheability_bit)+",  0x"+Integer.toHexString(ram.getDataSize()/2)+", IntTab("+ram.getNo_cluster()+","+(ram.getNo_target())+"), false));" + CR;	  
+	  mapping += "maptab.add(Segment(\"uram" + ram.getNo_ram() + "\",  0x"+Integer.toHexString(SEG_RAM_BASE + ram.getClusterIndex()*CLUSTER_SIZE+cacheability_bit)+",  0x"+Integer.toHexString(ram.getDataSize()/2)+", IntTab("+ram.getClusterIndex()+","+(ram.getNo_target())+"), false));" + CR;	  
       }                     
          
       //we want to identify the TTYS on this cluster (not TTYs in total)
@@ -293,17 +294,17 @@ public class MappingTable {
       for (AvatarTTY tty : TopCellGenerator.avatardd.getAllTTY()) {	   
       /* the number of fixed targets varies depending on if we are on cluster 0 or on other clusters */
 	  int tty_no;
-	  int cluster_no=tty.getNo_cluster();
+	  int cluster_no=tty.getClusterIndex();
 	  int cluster_rams=rams_in_cluster(avatardd,cluster_no);
 	  
-	  if(tty.getNo_cluster()==0){	  
+	  if(tty.getClusterIndex()==0){	  
 	      tty_no=6+cluster_rams;
 	  }
 	  else{	     
 	      tty_no=cluster_rams;	      
 	  }
 	  
-	  mapping += "maptab.add(Segment(\"vci_multi_tty"+tty.getIndex()+"\" , 0x"+Integer.toHexString(SEG_TTY_BASE +  tty.getNo_cluster()* CLUSTER_SIZE)+", 0x00000010, IntTab("+tty.getNo_cluster()+","+tty_no+"), false));" + CR; 	  
+	  mapping += "maptab.add(Segment(\"vci_multi_tty"+tty.getIndex()+"\" , 0x"+Integer.toHexString(SEG_TTY_BASE +  tty.getClusterIndex()* CLUSTER_SIZE)+", 0x00000010, IntTab("+tty.getClusterIndex()+","+tty_no+"), false));" + CR; 	  
       }
       /* Add as many mwmr controllers as there are hardware accelerators */
       

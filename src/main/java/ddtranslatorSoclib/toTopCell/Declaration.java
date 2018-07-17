@@ -84,6 +84,7 @@ public class Declaration
 	    AvatarComponent comp2 = my_p2.getComponent(); 
 	    if (comp1 instanceof AvatarCPU){ 
 		AvatarCPU comp1cpu = (AvatarCPU)comp1;
+		if(comp1cpu.getClusterIndex()==cluster_no)
 		cpus++;
 	    }		    		
 	    
@@ -101,7 +102,8 @@ public static int rams_in_cluster(AvatarddSpecification dd,int cluster_no){
 	    AvatarComponent comp1 = my_p1.getComponent();
 	    AvatarComponent comp2 = my_p2.getComponent(); 
 	    if (comp1 instanceof AvatarRAM){ 
-		AvatarRAM comp1cpu = (AvatarRAM)comp1;
+		AvatarRAM comp1ram = (AvatarRAM)comp1;
+		if(comp1ram.getClusterIndex()==cluster_no)
 		rams++;			
 	    }		    		
 	    
@@ -250,7 +252,7 @@ public static int rams_in_cluster(AvatarddSpecification dd,int cluster_no){
 	      
 	    for (AvatarTTY tty:TopCellGenerator.avatardd.getAllTTY ())
 		
-		{   int cluster_no=tty.getNo_cluster();
+		{   int cluster_no=tty.getClusterIndex();
 		    int nb_ram =
 			rams_in_cluster(avatardd, cluster_no);
 
@@ -258,14 +260,14 @@ public static int rams_in_cluster(AvatarddSpecification dd,int cluster_no){
 			 declaration +=
 			"caba::VciMultiTty<vci_param> " + tty.getTTYName () +
 			"(\"" + tty.getTTYName () + "\", IntTab(" +
-			     tty.getNo_cluster () + "," +  (nb_ram+10)  +
+			     tty.getClusterIndex () + "," +  (nb_ram+10)  +
 			"), maptab, \"vci_multi_tty" + cluster_no + "\", NULL);" + CR;
 		    }
 		    else{
 		    declaration +=
 			"caba::VciMultiTty<vci_param> " + tty.getTTYName () +
 			"(\"" + tty.getTTYName () + "\", IntTab(" +
-			tty.getNo_cluster () + "," +  nb_ram  +
+			tty.getClusterIndex () + "," +  nb_ram  +
 			"), maptab, \"vci_multi_tty" + cluster_no + "\", NULL);" + CR;
 		    }
 		
@@ -276,7 +278,7 @@ public static int rams_in_cluster(AvatarddSpecification dd,int cluster_no){
 		  declaration +=
 		      "soclib::caba::VciRam<vci_param>" +
 		      ram.getMemoryName () + "(\"" + ram.getMemoryName () +
-		      "\"" + ", IntTab(" + ram.getNo_cluster () + "," +
+		      "\"" + ", IntTab(" + ram.getClusterIndex () + "," +
 		      ram.getNo_target () + "), maptab);" + CR2;
 	  }
 	if (nb_clusters == 0)
@@ -320,8 +322,8 @@ public static int rams_in_cluster(AvatarddSpecification dd,int cluster_no){
 			"caba::VciMwmrController<vci_param> " +
 			copro.getCoprocName () + "_wrapper(\"" +
 			copro.getCoprocName () +
-			"_wrapper\", IntTab(" + copro.getNo_cluster () + "," +
-			  (init_no - 1) +" ,IntTab(" + copro.getNo_cluster () + "," +
+			"_wrapper\", IntTab(" + copro.getClusterIndex () + "," +
+			  (init_no - 1) +" ,IntTab(" + copro.getClusterIndex () + "," +
 			 target_no + ")," + copro.getPlaps () +
 			"," + copro.getFifoToCoprocDepth () + "," +
 			copro.getFifoFromCoprocDepth () + "," +
@@ -555,7 +557,7 @@ public static int rams_in_cluster(AvatarddSpecification dd,int cluster_no){
 			" , maptab, " + crossbar.getClusterIndex () +
 			"," + crossbar.getClusterIndex () + ", " +
 			cpus_in_cluster(avatardd, cluster_no) + ", " +
-			rams_in_cluster(avatardd, cluster_no) + ");" + CR2;
+			(rams_in_cluster(avatardd, cluster_no)+1) + ");" + CR2;
 		    //if CROSSBAR was not last in input file, update here
 		 
 		}

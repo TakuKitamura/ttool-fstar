@@ -73,6 +73,7 @@ public static int cpus_in_cluster(AvatarddSpecification dd,int cluster_no){
 	    AvatarComponent comp2 = my_p2.getComponent(); 
 	    if (comp1 instanceof AvatarCPU){ 
 		AvatarCPU comp1cpu = (AvatarCPU)comp1;
+		if(comp1cpu.getClusterIndex()==cluster_no)
 		cpus++;			
 	    }		    		
 	    
@@ -116,9 +117,9 @@ public static int cpus_in_cluster(AvatarddSpecification dd,int cluster_no){
 	signal = signal + "sc_clock signal_clk(\"signal_clk\");" + CR;
 	signal = signal + "sc_signal<bool>  signal_resetn(\"" + NAME_RST + "\");" + CR2;	
 		
-	
+	i=0;
 	for (AvatarCoproMWMR copro : TopCellGenerator.avatardd.getAllCoproMWMR()) {
-	    i=0;
+	    
 	    if(copro.getCoprocType()==0){
 		signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_IE(\"signal_vci_IE\");"+CR;
 		signal = signal +"caba::VciSignals<vci_param> signal_mwmr_"+i+"_initiator;"+ CR;
@@ -146,9 +147,8 @@ public static int cpus_in_cluster(AvatarddSpecification dd,int cluster_no){
 		    signal = signal +"caba::VciSignals<vci_param> signal_mwmr_"+i+"_target;"+ CR;	
 		    signal = signal +" soclib::caba::FifoSignals<uint32_t> signal_fifo_"+i+"_from_ctrl;"+ CR;
 		    signal = signal +" soclib::caba::FifoSignals<uint32_t> signal_fifo_"+i+"_to_ctrl;"+ CR;	       
-		}
-	  
-	    }
+		}		
+	    }	    
 	    i++;
       
 	    /*   signal = signal + "	soclib::caba::VciSignals<vci_param> signal_mwmr"+p+"_target(\"signal_mwmr"+p+"_target\""+CR;
@@ -161,22 +161,24 @@ public static int cpus_in_cluster(AvatarddSpecification dd,int cluster_no){
       
 	i = 0;
 	if(TopCellGenerator.avatardd.getAllCrossbar().size()==0){
+	   int j = 0;
 	    for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()){
 		//	signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_vciram" + ram.getIndex()
 		//		    + "(\"signal_vci_vciram" + ram.getIndex() + "\");" + CR2;
 		signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_vciram" + i
-		    + "(\"signal_vci_vciram" + i + "\");" + CR2;	  
-		i++;
+		    + "(\"signal_vci_vciram" + i +"_"+ j + "\");" + CR2;	  
+		j++;
 	    }							
-	    i = 0;
-								
+	    int k = 0;
+	    	  							
 	    for (AvatarTTY  tty :  TopCellGenerator.avatardd.getAllTTY()){
 		//signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_tty"+tty.getNo_tty()+"(\"signal_vci_tty"+tty.getNo_tty()+"\");" + CR2;		
-		signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_tty"+i+"(\"signal_vci_tty"+i+"\");" + CR2; 
-		i++;		
+		signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_tty"+i+"(\"signal_vci_tty"+ i +"_"+k+"\");" + CR2; 
+		k++;		
 	    }			
 	    //	signal = signal + " sc_core::sc_signal<bool> signal_xicu_irq[xicu_n_irq];" + CR2;
 	    //	System.out.print("number of processors : " + TopCellGenerator.avatardd.getNbCPU()+"\n");
+	    i++;
 	}
 
   

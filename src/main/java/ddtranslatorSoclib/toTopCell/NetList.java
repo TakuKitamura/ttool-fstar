@@ -75,6 +75,7 @@ public class NetList
 		AvatarComponent comp2 = my_p2.getComponent(); 
 		if (comp1 instanceof AvatarCPU){ 
 			AvatarCPU comp1cpu = (AvatarCPU)comp1;
+			if(comp1cpu.getClusterIndex()==cluster_no)
 			cpus++;			
 		    }		    			
 	}
@@ -223,7 +224,7 @@ public class NetList
 		    "  cpus[i]->connect(cpus[i], signal_clk, signal_resetn, signal_vci_m"+crossbar.getClusterIndex()+"[j]);"+ CR;
 		netlist =
 		    netlist +"}" + CR;
-		netlist = netlist + "// connected cluster" + +crossbar.getClusterIndex()+"."+CR2;
+		netlist = netlist + "// connected cluster" +crossbar.getClusterIndex()+"."+CR2;
 		i++;
 	    }
 	}
@@ -429,7 +430,7 @@ public class NetList
 			    CR2;
 			//target number for local cluster: this is set at avatardd creation                         
 			netlist =
-			    netlist + "crossbar" + ram.getNo_cluster () +
+			    netlist + "crossbar" + ram.getClusterIndex () +
 			    ".p_to_target[" + ram.getNo_target () +
 			    "](signal_vci_vciram" + ram.getIndex () + ");" + CR2;
 		    }
@@ -587,7 +588,7 @@ public class NetList
 				netlist =
 				    netlist + tty.getTTYName () +
 				    ".p_irq[0](signal_xicu_irq[" +
-				    (tty.getNo_cluster () * 5) + "]);" + CR2;
+				    (tty.getClusterIndex () * 5) + "]);" + CR2;
 			    }
 		    }
 		i++;
@@ -825,7 +826,7 @@ public class NetList
 
 	
 	//If there is a spy, add logger or stats to vci interface
-
+	if(nb_clusters==0){
 	i = 0;
 	for (AvatarCPU cpu:TopCellGenerator.avatardd.getAllCPU ())
 	    {
@@ -842,7 +843,62 @@ public class NetList
 
 	    }
 	j = 0;
+	}
+	else{
+	i = 0;
+	for (AvatarCPU cpu:TopCellGenerator.avatardd.getAllCPU ())
+	    {
+		int number = cpu.getNo_proc ();
+		if (cpu.getMonitored () == 1)
+		    {
+			netlist = netlist + CR +
+			    "logger" + i + ".p_clk(signal_clk);" + CR +
+			    "logger" + i + ".p_resetn(signal_resetn);" + CR +
+			    "logger" + i + ".p_vci(signal_vci_m"+cpu.getClusterIndex()+"[" + number +
+			    "]);" + CR2;
+			i++;
+		    }
 
+	    }
+	j = 0;
+	}
+
+	if(nb_clusters==0){
+	i = 0;
+	for (AvatarRAM ram:TopCellGenerator.avatardd.getAllRAM ())
+	    {
+		if (ram.getMonitored () == 1)
+		    {
+			int number = number = ram.getIndex ();
+			netlist += "logger" + i + ".p_clk(signal_clk);" + CR;
+			netlist +=
+			    "logger" + i + ".p_resetn(signal_resetn);" + CR;
+			netlist +=
+			    "logger" + i + ".p_vci(signal_vci_vciram"+ ram.getClusterIndex() +"_" + number +
+			    ");" + CR2;
+			i++;
+		    }
+		else
+		    {
+
+			if (ram.getMonitored () == 2)
+			    {
+				int number = number = ram.getIndex ();
+				netlist +=
+				    "mwmr_stats" + j + ".p_clk(signal_clk);" + CR;
+				netlist +=
+				    "mwmr_stats" + j + ".p_resetn(signal_resetn);" +
+				    CR;
+				netlist +=
+				    "mwmr_stats" + j + ".p_vci(signal_vci_vciram"+ ram.getClusterIndex() +"_" +
+				    number + ");" + CR2;
+				j++;
+			    }
+		    }
+	    }
+	}
+	else{
+	   i = 0;
 	for (AvatarRAM ram:TopCellGenerator.avatardd.getAllRAM ())
 	    {
 		if (ram.getMonitored () == 1)
@@ -873,8 +929,8 @@ public class NetList
 				j++;
 			    }
 		    }
-	    }
-
+	    } 
+	}
 
 	int p = 0;
 

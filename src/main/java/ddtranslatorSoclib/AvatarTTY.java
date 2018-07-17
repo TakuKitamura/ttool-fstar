@@ -80,7 +80,7 @@ public class AvatarTTY extends AvatarComponent {
       return no_target;
     }
 
-    public int getNo_cluster(){
+    public int getClusterIndex(){
       return no_cluster;
     } 
 

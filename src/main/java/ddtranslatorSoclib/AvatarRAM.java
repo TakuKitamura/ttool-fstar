@@ -85,9 +85,9 @@ public class AvatarRAM extends AvatarComponent{
       return no_target;
     }
 
-    public int getNo_cluster(){
+    public int getClusterIndex(){	
       return no_cluster;
-    }
+    } 
 
     public void setNo_ram(int _no_ram){
       no_ram = _no_ram;

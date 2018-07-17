@@ -61,14 +61,14 @@ public class AvatarCoproMWMR extends AvatarComponent{
     private int nStatus;
     private boolean useLLSC; 
     private int coprocType;
-    private int cluster_address;
+    private int cluster_index;
 
     private AvatarConnectingPoint[] connectingsPoints;
     private int nbConnectingPoint = 16 ;
 
-    private LinkedList<AvatarTask> tasksMapped;// DG 21.09.
+    private LinkedList<AvatarTask> tasksMapped;
 
-    public AvatarCoproMWMR(String _coprocName,int srcid, int _srcid, int _tgtid, int _plaps, int _fifoToCoprocDepth,int _fifoFromCoprocDepth, int _nToCopro, int _nFromCopro, int _nConfig, int _nStatus, boolean _useLLSC, int _coprocType, int _cluster_address)
+    public AvatarCoproMWMR(String _coprocName,int srcid, int _srcid, int _tgtid, int _plaps, int _fifoToCoprocDepth,int _fifoFromCoprocDepth, int _nToCopro, int _nFromCopro, int _nConfig, int _nStatus, boolean _useLLSC, int _coprocType, int _cluster_index)
     {
       coprocName = _coprocName;
       srcid =  _srcid;
@@ -82,7 +82,7 @@ public class AvatarCoproMWMR extends AvatarComponent{
       nStatus = _nStatus;
       useLLSC = _useLLSC;
       coprocType = _coprocType;
-      cluster_address = _cluster_address ;
+      cluster_index = _cluster_index;
 	
       connectingsPoints = new AvatarConnectingPoint[nbConnectingPoint] ;
       tasksMapped = new LinkedList<AvatarTask>(); //DG 21.09.
@@ -114,8 +114,8 @@ public class AvatarCoproMWMR extends AvatarComponent{
 	}
 
 
-        public int getNo_cluster(){
-	    return cluster_address;
+        public int getClusterIndex(){
+	    return cluster_index;
 	}
     
 	public int getTgtid(){
@@ -156,7 +156,7 @@ public class AvatarCoproMWMR extends AvatarComponent{
     public int getCoprocType(){
 	return coprocType;
 	}
-    //DG 21.09.
+   
     public LinkedList<AvatarTask> getAllTasks(){
       return tasksMapped;
     }
