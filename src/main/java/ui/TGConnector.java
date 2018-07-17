@@ -45,6 +45,10 @@ package ui;
 import myutil.*;
 
 import javax.swing.*;
+
+import ui.eln.ELNMidConnectingPoint;
+import ui.eln.ELNModuleTerminal;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -626,12 +630,43 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
         return;
     }
 
-
+    public void pointHasBeenRemoved(ELNMidConnectingPoint tgc) {
+        return;
+    }
+    
     // indexCon indicates from which points the potential connecitng point is the closer
     public void pointHasBeenAdded(TGCPointOfConnector tgc, int index, int indexCon) {
         return;
     }
 
+    public void pointHasBeenAdded(ELNMidConnectingPoint tgc, int index, int indexCon) {
+        return;
+    }
+    
+    private boolean addTGConnectingPoint(int x, int y) {
+        CDElement [] pt = getPointedSegment(x, y);
+        if (pt != null) {
+            Point p = new Point((pt[0].getX() + pt[1].getX()) / 2, (pt[0].getY() + pt[1].getY()) / 2);
+            int distance1 = (int)(new Point(x, y).distance(pt[0].getX(), pt[0].getY()));
+            int distance2 = (int)(new Point(x, y).distance(pt[1].getX(), pt[1].getY()));
+            int index = indexPointedSegment(x, y);
+            int indexCon;
+
+            if (distance1 < distance2) {
+                indexCon = 0;
+            } else {
+                indexCon = 1;
+            }
+
+            ELNMidConnectingPoint t = new ELNMidConnectingPoint(p.x, p.y, minX, maxX, minY, maxY, false, this, tdp);
+            if (addInternalComponent(t, index) ) {
+                pointHasBeenAdded(t, index, indexCon);
+                return true;
+            }
+        }
+        return false;
+    }
+    
     private boolean addTGCPointOfConnector(int x, int y) {
         //TraceManager.addDev("Adding point of connector at "+  x + "," + y);
         CDElement [] pt = getPointedSegment(x, y);
@@ -759,6 +794,9 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
         JMenuItem addPoint = new JMenuItem("Add Point");
         addPoint.addActionListener(menuAL);
         componentMenu.add(addPoint);
+        JMenuItem CPPoint = new JMenuItem("Add connecting point");
+        CPPoint.addActionListener(menuAL);
+        componentMenu.add(CPPoint);
         JMenuItem align = new JMenuItem("Align");
         align.addActionListener(menuAL);
         componentMenu.add(align);
@@ -787,7 +825,9 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
     public boolean eventOnPopup(ActionEvent e) {
         if (e.getActionCommand().equals("Add Point")) {
             return addTGCPointOfConnector(popupx, popupy);
-        } else if (e.getActionCommand().equals("Add Point")){
+        } else if (e.getActionCommand().equals("Add connecting point")) {
+            return addTGConnectingPoint(popupx, popupy);
+        } else if (e.getActionCommand().equals("Align")){
             return alignTGComponents();
         } else if (e.getActionCommand().equals("NO automatic drawing")){
             automaticDrawing = false;
