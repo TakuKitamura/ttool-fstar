@@ -111,9 +111,39 @@ public class ELNModuleTerminal extends TGCScalableWithInternalComponent implemen
         Font fold = f;
         
     	if ((x != oldx) | (oldy != y)) {
-            manageMove();
+            manageMove(g, f);
             oldx = x;
             oldy = y;
+        } else {
+        	MainGUI mgui = getTDiagramPanel().getMainGUI();
+        	int attributeFontSize = this.currentFontSize * 5 / 6;
+        	int w = g.getFontMetrics().stringWidth(value);
+			int h = g.getFontMetrics().getAscent();
+			g.setFont(f.deriveFont((float) attributeFontSize));
+			g.setFont(f);
+			g.setFont(f.deriveFont(Font.PLAIN));
+        	switch (currentOrientation) {
+			case GraphicLib.NORTH:
+				if (mgui.getHidden() == false) {
+					g.drawString(value, x+2*width, y-height/2);
+				}
+				break;
+			case GraphicLib.WEST:
+				if (mgui.getHidden() == false) {
+					g.drawString(value, x-width/2-w, y+2*height+h);
+				}
+				break;
+			case GraphicLib.SOUTH:
+				if (mgui.getHidden() == false) {
+					g.drawString(value, x+2*width, y+height+height/2+h);
+				}
+				break;
+			case GraphicLib.EAST:
+			default: 
+				if (mgui.getHidden() == false) {
+					g.drawString(value, x+width+width/2, y+2*height+h);
+				}
+			}
         }
 
     	if (this.rescaled && !this.tdp.isScaled()) {
@@ -147,23 +177,57 @@ public class ELNModuleTerminal extends TGCScalableWithInternalComponent implemen
     	g.setFont(fold);
     }
 
-    public void manageMove() {
-        if (father != null) {
-            Point p = GraphicLib.putPointOnRectangle(x+(width/2), y+(height/2), father.getX(), father.getY(), father.getWidth(), father.getHeight());
+    public void manageMove(Graphics g, Font f) {
+		MainGUI mgui = getTDiagramPanel().getMainGUI();
 
-            x = p.x - width/2;
-            y = p.y - height/2;
+		if (father != null) {
+			Point p = GraphicLib.putPointOnRectangle(x + (width / 2), y + (height / 2), father.getX(), father.getY(),
+					father.getWidth(), father.getHeight());
 
-            setMoveCd(x, y);
+			x = p.x - width / 2;
+			y = p.y - height / 2;
 
-            int orientation = GraphicLib.getCloserOrientation(x+(width/2), y+(height/2), father.getX(), father.getY(), father.getWidth(), father.getHeight());
-            if (orientation != currentOrientation) {
-                setOrientation(orientation);
-            }
-        }
-    }
+			setMoveCd(x, y);
 
-    public void setOrientation(int orientation) {
+			int orientation = GraphicLib.getCloserOrientation(x + (width / 2), y + (height / 2), father.getX(), father.getY(), father.getWidth(), father.getHeight());
+
+			int attributeFontSize = this.currentFontSize * 5 / 6;
+			int w = g.getFontMetrics().stringWidth(value);
+			int h = g.getFontMetrics().getAscent();
+			g.setFont(f.deriveFont((float) attributeFontSize));
+			g.setFont(f);
+			g.setFont(f.deriveFont(Font.PLAIN));
+
+			switch (orientation) {
+			case GraphicLib.NORTH:
+				if (mgui.getHidden() == false) {
+					g.drawString(value, x+2*width, y-height/2);
+				}
+				break;
+			case GraphicLib.WEST:
+				if (mgui.getHidden() == false) {
+					g.drawString(value, x-width/2-w, y+2*height+h);
+				}
+				break;
+			case GraphicLib.SOUTH:
+				if (mgui.getHidden() == false) {
+					g.drawString(value, x+2*width, y+height+height/2+h);
+				}
+				break;
+			case GraphicLib.EAST:
+			default: 
+				if (mgui.getHidden() == false) {
+					g.drawString(value, x+width+width/2, y+2*height+h);
+				}
+			}
+
+			if (orientation != currentOrientation) {
+				setOrientation(orientation, g, f, x, y);
+			}
+		}
+	}
+
+    public void setOrientation(int orientation, Graphics g, Font f, int x, int y) {
         currentOrientation = orientation;
         double w0, h0;
 
