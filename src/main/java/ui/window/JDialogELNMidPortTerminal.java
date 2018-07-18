@@ -38,15 +38,15 @@
 
 package ui.window;
 
-import ui.eln.ELNMidConnectingPoint;
+import ui.eln.ELNMidPortTerminal;
 import ui.util.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
 /**
- * Class JDialogELNMidConnectingPoint 
- * Dialog for managing of ELN mid connecting point
+ * Class JDialogELNMidPortTerminal 
+ * Dialog for managing of ELN mid port terminal
  * Creation: 17/07/2018
  * @version 1.0 17/07/2018
  * @author Irina Kit Yan LEE
@@ -54,14 +54,14 @@ import javax.swing.*;
 
 @SuppressWarnings("serial")
 
-public class JDialogELNMidConnectingPoint extends JDialog implements ActionListener {
+public class JDialogELNMidPortTerminal extends JDialog implements ActionListener {
 
 	private JTextField nameTextField;
 
-	private ELNMidConnectingPoint term;
+	private ELNMidPortTerminal term;
 
-	public JDialogELNMidConnectingPoint(ELNMidConnectingPoint term) {
-		this.setTitle("Setting Mid Connecting Point Attributes");
+	public JDialogELNMidPortTerminal(ELNMidPortTerminal term) {
+		this.setTitle("Setting Mid Port Terminal Attributes");
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 		this.setAlwaysOnTop(true);
@@ -89,7 +89,7 @@ public class JDialogELNMidConnectingPoint extends JDialog implements ActionListe
 		attributesMainPanel.setLayout(new BorderLayout());
 
 		Box attributesBox = Box.createVerticalBox();
-		attributesBox.setBorder(BorderFactory.createTitledBorder("Setting mid connecting point attributes"));
+		attributesBox.setBorder(BorderFactory.createTitledBorder("Setting mid port terminal attributes"));
 
 		GridBagLayout gridBag = new GridBagLayout();
 		GridBagConstraints constraints = new GridBagConstraints();
