@@ -44,6 +44,7 @@ import ui.atd.ATDAttack;
 import ui.atd.ATDBlock;
 import ui.avatarad.AvatarADActivity;
 import ui.avatarbd.AvatarBDBlock;
+import ui.avatarbd.AvatarBDPragma;
 import ui.avatarbd.AvatarBDDataType;
 import ui.avatarbd.AvatarBDLibraryFunction;
 import ui.avatarcd.AvatarCDBlock;
@@ -1859,6 +1860,12 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         	if (componentPopup instanceof TMLCPrimitivePort){
         		((TMLCPrimitivePort) componentPopup).showTrace();
         	}
+        	else if (componentPopup instanceof AvatarBDBlock){
+        		((AvatarBDBlock) componentPopup).showTrace(currentY);
+        	}
+        	else if (componentPopup instanceof AvatarBDPragma){
+        		((AvatarBDPragma) componentPopup).showTrace(currentY);
+        	}
         }
         
         if (e.getSource() == checkMasterMutex) {
@@ -2114,11 +2121,12 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
         }
         
-        if (componentPointed instanceof TMLCPrimitivePort){
+        if (componentPointed instanceof TMLCPrimitivePort || componentPointed instanceof AvatarBDBlock || componentPointed instanceof AvatarBDPragma){
         	showProVerifTrace.setEnabled(true);
         } else {
         	showProVerifTrace.setEnabled(false);
         }
+
         
 
         if (componentPointed instanceof CheckableInvariant) {

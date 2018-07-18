@@ -94,7 +94,7 @@ public class TML2Avatar {
         this.tmlmap = tmlmap;
 
         this.tmlmodel = tmlmap.getTMLModeling();
-        
+
      
         allStates = new ArrayList<String>();
         attrsToCheck = new ArrayList<String>();
@@ -1482,6 +1482,30 @@ public class TML2Avatar {
         }
         attrsToCheck.clear();
         tmlmodel.removeForksAndJoins();
+        
+        System.out.println("MODIFIED model " + tmlmodel);
+        
+        for (TMLChannel chan: tmlmodel.getChannels()){
+        	System.out.println("chan " + chan);
+        	TMLTask task = chan.getOriginTask();
+        	
+        	TMLTask task2 = chan.getDestinationTask();
+        	HwExecutionNode node = (HwExecutionNode) tmlmap.getHwNodeOf(task);
+        	HwExecutionNode node2 = (HwExecutionNode) tmlmap.getHwNodeOf(task2);
+        	if (node==null){
+        		tmlmap.addTaskToHwExecutionNode(task, node2);
+        	}
+        	
+        	if (node2==null){
+        		tmlmap.addTaskToHwExecutionNode(task2, node);
+        	}
+        	
+        	if (chan.getName().contains("fork__") || chan.getName().contains("FORKCHANNEL")){
+        		chan.setName(chan.getName().replaceAll("__",""));
+        	}
+        	
+        }
+        
         //Only set the loop limit if it's a number
         String pattern = "^[0-9]{1,2}$";
         Pattern r = Pattern.compile(pattern);
