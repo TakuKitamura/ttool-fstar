@@ -48,136 +48,136 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Class ELNModuleTerminal
- * Primitive port. To be used in ELN diagrams
+ * Class ELNModuleTerminal 
+ * Primitive port. To be used in ELN diagrams 
  * Creation: 13/07/2018
  * @version 1.0 13/07/2018
  * @author Irina Kit Yan LEE
  */
 
 public class ELNModuleTerminal extends TGCScalableWithInternalComponent implements SwallowedTGComponent, LinkedReference {
-    protected Color myColor;
-    protected int orientation;
+	protected Color myColor;
+	protected int orientation;
 	private int maxFontSize = 14;
-    private int minFontSize = 4;
-    private int currentFontSize = -1;
-    protected int oldx, oldy;
-    protected int currentOrientation = GraphicLib.NORTH;
+	private int minFontSize = 4;
+	private int currentFontSize = -1;
+	protected int oldx, oldy;
+	protected int currentOrientation = GraphicLib.NORTH;
 
-    private int isOrigin = -1;
+	private int isOrigin = -1;
 
-    private int textX = 15;
-    private double dtextX = 0.0;
-    protected int decPoint = 3;
+	private int textX = 15;
+	private double dtextX = 0.0;
+	protected int decPoint = 3;
 
-    public ELNModuleTerminal(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+	public ELNModuleTerminal(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
+		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        initScaling(10, 10);
+		initScaling(10, 10);
 
-        dtextX = textX * oldScaleFactor;
-        textX = (int)dtextX;
-        dtextX = dtextX - textX;
-        
-        minWidth = 1;
-        minHeight = 1;
+		dtextX = textX * oldScaleFactor;
+		textX = (int) dtextX;
+		dtextX = dtextX - textX;
 
-        initConnectingPoint(1);
-                
-        addTGConnectingPointsComment();
+		minWidth = 1;
+		minHeight = 1;
 
-        nbInternalTGComponent = 0;
+		initConnectingPoint(1);
 
-        moveable = true;
-        editable = true;
-        removable = true;
-        userResizable = false;
-       
-        value = "";
-    }
+		addTGConnectingPointsComment();
 
-    public void initConnectingPoint(int nb) {
-        nbConnectingPoint = nb;
-        connectingPoint = new TGConnectingPoint[nb];
-        connectingPoint[0] = new ELNConnectingPoint(this, 0, 0, true, true, 0.5, 1.0);
-    }
+		nbInternalTGComponent = 0;
 
-    public Color getMyColor() {
-        return myColor;
-    }
+		moveable = true;
+		editable = true;
+		removable = true;
+		userResizable = false;
 
-    public void internalDrawing(Graphics g) {
-        Font f = g.getFont();
-        Font fold = f;
-        
-    	if ((x != oldx) | (oldy != y)) {
-            manageMove(g, f);
-            oldx = x;
-            oldy = y;
-        } else {
-        	MainGUI mgui = getTDiagramPanel().getMainGUI();
-        	int attributeFontSize = this.currentFontSize * 5 / 6;
-        	int w = g.getFontMetrics().stringWidth(value);
+		value = "";
+	}
+
+	public void initConnectingPoint(int nb) {
+		nbConnectingPoint = nb;
+		connectingPoint = new TGConnectingPoint[nb];
+		connectingPoint[0] = new ELNConnectingPoint(this, 0, 0, true, true, 0.5, 1.0);
+	}
+
+	public Color getMyColor() {
+		return myColor;
+	}
+
+	public void internalDrawing(Graphics g) {
+		Font f = g.getFont();
+		Font fold = f;
+
+		if ((x != oldx) | (oldy != y)) {
+			manageMove(g, f);
+			oldx = x;
+			oldy = y;
+		} else {
+			MainGUI mgui = getTDiagramPanel().getMainGUI();
+			int attributeFontSize = this.currentFontSize * 5 / 6;
+			int w = g.getFontMetrics().stringWidth(value);
 			int h = g.getFontMetrics().getAscent();
 			g.setFont(f.deriveFont((float) attributeFontSize));
 			g.setFont(f);
 			g.setFont(f.deriveFont(Font.PLAIN));
-        	switch (currentOrientation) {
+			switch (currentOrientation) {
 			case GraphicLib.NORTH:
 				if (mgui.getHidden() == false) {
-					g.drawString(value, x+2*width, y-height/2);
+					g.drawString(value, x + 2 * width, y - height / 2);
 				}
 				break;
 			case GraphicLib.WEST:
 				if (mgui.getHidden() == false) {
-					g.drawString(value, x-width/2-w, y+2*height+h);
+					g.drawString(value, x - width / 2 - w, y + 2 * height + h);
 				}
 				break;
 			case GraphicLib.SOUTH:
 				if (mgui.getHidden() == false) {
-					g.drawString(value, x+2*width, y+height+height/2+h);
+					g.drawString(value, x + 2 * width, y + height + height / 2 + h);
 				}
 				break;
 			case GraphicLib.EAST:
-			default: 
+			default:
 				if (mgui.getHidden() == false) {
-					g.drawString(value, x+width+width/2, y+2*height+h);
+					g.drawString(value, x + width + width / 2, y + 2 * height + h);
 				}
 			}
-        }
+		}
 
-    	if (this.rescaled && !this.tdp.isScaled()) {
-            this.rescaled = false;
-            int maxCurrentFontSize = Math.max(0, Math.min(this.height, (int) (this.maxFontSize * this.tdp.getZoom())));
-            f = f.deriveFont((float) maxCurrentFontSize);
+		if (this.rescaled && !this.tdp.isScaled()) {
+			this.rescaled = false;
+			int maxCurrentFontSize = Math.max(0, Math.min(this.height, (int) (this.maxFontSize * this.tdp.getZoom())));
+			f = f.deriveFont((float) maxCurrentFontSize);
 
-            while (maxCurrentFontSize > (this.minFontSize * this.tdp.getZoom() - 1)) {
-            	if (g.getFontMetrics().stringWidth(value) < (width - (2 * textX))) {
-            		break;
-            	}
-                maxCurrentFontSize--;
-                f = f.deriveFont((float) maxCurrentFontSize);
-            }
+			while (maxCurrentFontSize > (this.minFontSize * this.tdp.getZoom() - 1)) {
+				if (g.getFontMetrics().stringWidth(value) < (width - (2 * textX))) {
+					break;
+				}
+				maxCurrentFontSize--;
+				f = f.deriveFont((float) maxCurrentFontSize);
+			}
 
-            if (this.currentFontSize < this.minFontSize * this.tdp.getZoom()) {
-                maxCurrentFontSize++;
-                f = f.deriveFont((float) maxCurrentFontSize);
-            }
-            g.setFont(f);
-            this.currentFontSize = maxCurrentFontSize;
-        } else {
-            f = f.deriveFont(this.currentFontSize);
-    	}
+			if (this.currentFontSize < this.minFontSize * this.tdp.getZoom()) {
+				maxCurrentFontSize++;
+				f = f.deriveFont((float) maxCurrentFontSize);
+			}
+			g.setFont(f);
+			this.currentFontSize = maxCurrentFontSize;
+		} else {
+			f = f.deriveFont(this.currentFontSize);
+		}
 
-    	Color c = g.getColor();
-    	g.drawOval(x, y, width, height);
-    	g.setColor(Color.WHITE);
-    	g.fillOval(x, y, width, height);
-    	g.setColor(c);
-    	g.setFont(fold);
-    }
+		Color c = g.getColor();
+		g.drawOval(x, y, width, height);
+		g.setColor(Color.WHITE);
+		g.fillOval(x, y, width, height);
+		g.setColor(c);
+		g.setFont(fold);
+	}
 
-    public void manageMove(Graphics g, Font f) {
+	public void manageMove(Graphics g, Font f) {
 		MainGUI mgui = getTDiagramPanel().getMainGUI();
 
 		if (father != null) {
@@ -189,7 +189,8 @@ public class ELNModuleTerminal extends TGCScalableWithInternalComponent implemen
 
 			setMoveCd(x, y);
 
-			int orientation = GraphicLib.getCloserOrientation(x + (width / 2), y + (height / 2), father.getX(), father.getY(), father.getWidth(), father.getHeight());
+			int orientation = GraphicLib.getCloserOrientation(x + (width / 2), y + (height / 2), father.getX(),
+					father.getY(), father.getWidth(), father.getHeight());
 
 			int attributeFontSize = this.currentFontSize * 5 / 6;
 			int w = g.getFontMetrics().stringWidth(value);
@@ -201,23 +202,23 @@ public class ELNModuleTerminal extends TGCScalableWithInternalComponent implemen
 			switch (orientation) {
 			case GraphicLib.NORTH:
 				if (mgui.getHidden() == false) {
-					g.drawString(value, x+2*width, y-height/2);
+					g.drawString(value, x + 2 * width, y - height / 2);
 				}
 				break;
 			case GraphicLib.WEST:
 				if (mgui.getHidden() == false) {
-					g.drawString(value, x-width/2-w, y+2*height+h);
+					g.drawString(value, x - width / 2 - w, y + 2 * height + h);
 				}
 				break;
 			case GraphicLib.SOUTH:
 				if (mgui.getHidden() == false) {
-					g.drawString(value, x+2*width, y+height+height/2+h);
+					g.drawString(value, x + 2 * width, y + height + height / 2 + h);
 				}
 				break;
 			case GraphicLib.EAST:
-			default: 
+			default:
 				if (mgui.getHidden() == false) {
-					g.drawString(value, x+width+width/2, y+2*height+h);
+					g.drawString(value, x + width + width / 2, y + 2 * height + h);
 				}
 			}
 
@@ -227,73 +228,74 @@ public class ELNModuleTerminal extends TGCScalableWithInternalComponent implemen
 		}
 	}
 
-    public void setOrientation(int orientation, Graphics g, Font f, int x, int y) {
-        currentOrientation = orientation;
-        double w0, h0;
+	public void setOrientation(int orientation, Graphics g, Font f, int x, int y) {
+		currentOrientation = orientation;
+		double w0, h0;
 
-        switch(orientation) {
-        case GraphicLib.NORTH:
-            w0 = 0.5;
-            h0 = 1.0;
-            break;
-        case GraphicLib.WEST:
-            w0 = 1.0;
-            h0 = 0.5;
-            break;
-        case GraphicLib.SOUTH:
-            w0 = 0.5;
-            h0 = 0.0;
-            break;
-        case GraphicLib.EAST:
-        default:
-            w0 = 0.0;
-            h0 = 0.5;
-        }
+		switch (orientation) {
+		case GraphicLib.NORTH:
+			w0 = 0.5;
+			h0 = 1.0;
+			break;
+		case GraphicLib.WEST:
+			w0 = 1.0;
+			h0 = 0.5;
+			break;
+		case GraphicLib.SOUTH:
+			w0 = 0.5;
+			h0 = 0.0;
+			break;
+		case GraphicLib.EAST:
+		default:
+			w0 = 0.0;
+			h0 = 0.5;
+		}
 
-        for (int i=0; i<1; i++) {
-            ((ELNConnectingPoint) connectingPoint[i]).setW(w0);
-            ((ELNConnectingPoint) connectingPoint[i]).setH(h0);
-        }
-    }
+		for (int i = 0; i < 1; i++) {
+			((ELNConnectingPoint) connectingPoint[i]).setW(w0);
+			((ELNConnectingPoint) connectingPoint[i]).setH(h0);
+		}
+	}
 
-    public TGComponent isOnOnlyMe(int _x, int _y) {
-        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-            return this;
-        }
-        return null;
-    }
-    
+	public TGComponent isOnOnlyMe(int _x, int _y) {
+		if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+			return this;
+		}
+		return null;
+	}
+
 	public int getType() {
 		return TGComponentManager.ELN_MODULE_TERMINAL;
 	}
 
-    public void wasSwallowed() {
-        myColor = null;
-    }
+	public void wasSwallowed() {
+		myColor = null;
+	}
 
-    public void wasUnswallowed() {
-        myColor = null;
-        setFather(null);
-        TDiagramPanel tdp = getTDiagramPanel();
-        setCdRectangle(tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY());
-    }
+	public void wasUnswallowed() {
+		myColor = null;
+		setFather(null);
+		TDiagramPanel tdp = getTDiagramPanel();
+		setCdRectangle(tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY());
+	}
 
-    public void resizeWithFather() {
-        if ((father != null) && (father instanceof ELNModule)) {
-        	setCdRectangle(0-getWidth()/2, father.getWidth() - (getWidth()/2), 0-getHeight()/2, father.getHeight() - (getHeight()/2));
-        	setMoveCd(x, y);
-        	oldx = -1;
-        	oldy = -1;
-        }
-    }
+	public void resizeWithFather() {
+		if ((father != null) && (father instanceof ELNModule)) {
+			setCdRectangle(0 - getWidth() / 2, father.getWidth() - (getWidth() / 2), 0 - getHeight() / 2,
+					father.getHeight() - (getHeight() / 2));
+			setMoveCd(x, y);
+			oldx = -1;
+			oldy = -1;
+		}
+	}
 
-    public boolean editOndoubleClick(JFrame frame) {
+	public boolean editOndoubleClick(JFrame frame) {
 		JDialogELNModuleTerminal jde = new JDialogELNModuleTerminal(this);
 		jde.setVisible(true);
 		return true;
 	}
 
-    protected String translateExtraParam() {
+	protected String translateExtraParam() {
 		StringBuffer sb = new StringBuffer("<extraparam>\n");
 		sb.append("<attributes name=\"" + getValue() + "\"");
 		sb.append("/>\n");
@@ -330,15 +332,15 @@ public class ELNModuleTerminal extends TGCScalableWithInternalComponent implemen
 		}
 	}
 
-    public int getOrigin() {
-    	return isOrigin;
-    }
-    
-    public void setOrigin(int orig) {
-    	isOrigin = orig;
-    }
-    
-    public int getDefaultConnector() {
-        return TGComponentManager.ELN_CONNECTOR;
-    }
+	public int getOrigin() {
+		return isOrigin;
+	}
+
+	public void setOrigin(int orig) {
+		isOrigin = orig;
+	}
+
+	public int getDefaultConnector() {
+		return TGComponentManager.ELN_CONNECTOR;
+	}
 }
