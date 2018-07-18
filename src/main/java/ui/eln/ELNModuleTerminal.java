@@ -223,12 +223,12 @@ public class ELNModuleTerminal extends TGCScalableWithInternalComponent implemen
 			}
 
 			if (orientation != currentOrientation) {
-				setOrientation(orientation, g, f, x, y);
+				setOrientation(orientation);
 			}
 		}
 	}
 
-	public void setOrientation(int orientation, Graphics g, Font f, int x, int y) {
+	public void setOrientation(int orientation) {
 		currentOrientation = orientation;
 		double w0, h0;
 
