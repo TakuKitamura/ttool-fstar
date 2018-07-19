@@ -88,6 +88,10 @@ public class ELNMidPortTerminal extends TGCPointOfConnector {
         return null;
     }
     
+    public int getType() {
+		return TGComponentManager.ELN_MID_PORT_TERMINAL;
+	}
+    
     public boolean editOndoubleClick(JFrame frame) {
     	JDialogELNMidPortTerminal jde = new JDialogELNMidPortTerminal(this);
 		jde.setVisible(true);
