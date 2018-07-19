@@ -105,6 +105,7 @@ public class Signal {
 	signal = signal +" caba::VciSignals<vci_param> signal_vci_vcisimhelper(\"signal_vci_vcisimhelper\");"+ CR;
 	signal = signal +"caba::VciSignals<vci_param> signal_vci_vcirttimer(\"signal_vci_vcirttimer\");"+ CR;
 	signal = signal +"caba::VciSignals<vci_param> signal_vci_dma(\"signal_vci_dma\");"+ CR;
+		signal = signal +"caba::VciSignals<vci_param> signal_vci_dmai(\"signal_vci_dmai\");"+ CR;
 	//signal = signal +"caba::VciSignals<vci_param> signal_vci_mwmr_ram(\"signal_vci_mwmr_ram\");"+ CR;
 	//signal = signal +"caba::VciSignals<vci_param> signal_vci_mwmrd_ram(\"signal_vci_mwmrd_ram\");"+ CR;
 	signal = signal +"caba::VciSignals<vci_param> signal_vci_vcifdaccessi;"+ CR;
