@@ -73,12 +73,7 @@ MEMORY
     mem_rom (RXAL): ORIGIN = CONFIG_ROM_ADDR, LENGTH = CONFIG_ROM_SIZE
 #endif
     mem_ram (RWAL): ORIGIN = CONFIG_RAM_ADDR, LENGTH = CONFIG_RAM_SIZE
-//ajoute DG provisiore
-//mwmr_ram (RWAL): ORIGIN = 0xA0200000, LENGTH = 0x00001000
-//mwmrd_ram (RWAL): ORIGIN = 0xB0200000, LENGTH = 0x00003000
-//19.05. une seule RAMLOCKS en cas de besoin (actually unused)
-vci_locks (RWAL): ORIGIN = 0xC0200000, LENGTH = 0x100
-//ajoute DG
+
 #if defined(DEPLOY_RAM0_NAME)
     DEPLOY_RAM0_NAME (RWAL): ORIGIN = DEPLOY_RAM0_ADDR, LENGTH = DEPLOY_RAM0_SIZE
 #endif

@@ -198,9 +198,9 @@ public class Declaration
 
 	//No DMA yet; planned to make it optional depending on deployment diagram
 		if (nb_clusters == 0)
-	    {
-		declaration +=
-		    "caba::VciDma<vci_param> vcidma(\"vci_dma\", maptab,6,6,8);"
+	    {	
+		    //"caba::VciDma<vci_param> vcidma(\"vci_dma\", maptab,6,6,8);"
+		   	declaration += "caba::VciDma<vci_param> vcidma(\"vci_dma\", maptab,cpus.size()+3,6,8);"
 		    + CR;
 	    }
 	else
@@ -495,7 +495,7 @@ public class Declaration
 
 			declaration +=
 			    "soclib::caba::VciVgsb<vci_param> vgsb(\"" +
-			    bus.getBusName () + "\"" + " , maptab," + (3 +
+			    bus.getBusName () + "\"" + " , maptab," + (4 +
 								       TopCellGenerator.
 								       avatardd.getNbCPU()) + "," +
 			    (TopCellGenerator.avatardd.getNbRAM() + TopCellGenerator.avatardd.getNbTTY()
@@ -534,7 +534,7 @@ public class Declaration
 			
 			declaration +=
 			    "soclib::caba::VciVgmn<vci_param> vgmn(\"" +
-			    vgmn.getVgmnName () + "\"" + " , maptab, " + (3 +
+			    vgmn.getVgmnName () + "\"" + " , maptab, " + (4 +
 									  TopCellGenerator.
 									  avatardd.
 									  getNbCPU

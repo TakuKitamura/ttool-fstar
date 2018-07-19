@@ -184,7 +184,7 @@ public class NetList
 	    netlist =
 		netlist + "  vcifdtrom.add_property(\"freq\", 1000000);" + CR;
 	    netlist = netlist + "  vcifdtrom.end_node();" + CR2;
-
+            netlist = netlist + "cpus[i]->connect(cpus[i], signal_clk, signal_resetn, signal_vci_m[i]);" + CR2;
 	    netlist = netlist + "// connect cpu" + CR;
 	    //   netlist =netlist + " }"+ CR;
 	  
@@ -294,13 +294,15 @@ public class NetList
 		    netlist =
 			netlist +
 			"  vgmn.p_to_target[3](signal_vci_vcisimhelper);" + CR2;
+		    
 		    netlist =
-			netlist + "  vgmn.p_to_target[4](signal_vci_xicu);" + CR;
+			netlist + "  vgmn.p_to_target[4](signal_vci_vcirttimer);" + CR2;
 		    netlist =
-			netlist + "  vgmn.p_to_target[5](signal_vci_vcirttimer);" +
-			CR2;
+			netlist + "  vgmn.p_to_target[5](signal_vci_xicu);" + CR;
 		    netlist =
-			netlist + "  vgmn.p_to_target[6](signal_vci_vcifdtrom);" +
+			netlist + "  vgmn.p_to_target[6](signal_vci_dma);" + CR;
+		    netlist =
+			netlist + "  vgmn.p_to_target[7](signal_vci_vcifdtrom);" +
 			CR2;
 		    netlist =
 			netlist +
@@ -312,6 +314,10 @@ public class NetList
 		    netlist =
 			netlist +
 			"  vgmn.p_to_initiator[cpus.size()+2](signal_vci_etherneti);"
+			+ CR2;
+		    netlist =
+			netlist +
+			"  vgmn.p_to_initiator[cpus.size()+3](signal_vci_dmai);"
 			+ CR2;
 		}
 	    else
@@ -597,13 +603,13 @@ public class NetList
 	    }
 
 	//////////////// DMA access
-	//currently short circuited as unused
+
 	netlist = netlist + "vcidma.p_clk(signal_clk);" + CR;
 	netlist = netlist + "vcidma.p_resetn(signal_resetn);" + CR;
 	netlist = netlist + "vcidma.p_vci_target(signal_vci_dma);" + CR;
-        netlist = netlist + "vcidma.p_vci_initiator(signal_vci_dma);" + CR;
-	netlist = netlist + "vcidma.p_irq(signal_xicu_irq[6]);" + CR;
-	
+        netlist = netlist + "vcidma.p_vci_initiator(signal_vci_dmai);" + CR;
+	netlist = netlist + "vcidma.p_irq(signal_xicu_irq[5]);" + CR;
+	//	netlist = netlist + "vgmn.p_to_initiator[cpus.size()+3](signal_vci_dmai);;" + CR;
 	//////////////// fdrom
 
 	netlist = netlist + "{" + CR2;
