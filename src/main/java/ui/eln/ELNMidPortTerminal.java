@@ -81,8 +81,8 @@ public class ELNMidPortTerminal extends TGCPointOfConnector {
     	g.fillOval(x - width/2, y - height /2, width, height);
     }
     
-    public TGComponent isOnMe(int _x, int _y) {
-        if (GraphicLib.isInRectangle(_x, _y, x - width/2, y - height/2, width, height)) {
+    public TGComponent isOnOnlyMe(int x1, int y1) {
+        if (GraphicLib.isInRectangle(x1, y1, x - width/2, y - height/2, width, height)) {
             return this;
         }
         return null;
