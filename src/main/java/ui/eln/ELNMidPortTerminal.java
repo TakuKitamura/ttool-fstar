@@ -53,13 +53,10 @@ import javax.swing.JFrame;
  */
 
 public class ELNMidPortTerminal extends TGCPointOfConnector {
-    private int width = 10;
-    private int height = 10;
-    
     public ELNMidPortTerminal(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y,  _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-        initScaling(width, height);
+        initScaling(10, 10);
         
         initConnectingPoint(1);
         
