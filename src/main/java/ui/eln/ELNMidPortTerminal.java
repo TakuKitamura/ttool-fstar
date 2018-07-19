@@ -53,13 +53,10 @@ import javax.swing.JFrame;
  */
 
 public class ELNMidPortTerminal extends TGCPointOfConnector {
-    private int width = 10;
-    private int height = 10;
-    
     public ELNMidPortTerminal(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y,  _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-        initScaling(width, height);
+        initScaling(10, 10);
         
         initConnectingPoint(1);
         
@@ -84,12 +81,16 @@ public class ELNMidPortTerminal extends TGCPointOfConnector {
     	g.fillOval(x - width/2, y - height /2, width, height);
     }
     
-    public TGComponent isOnMe(int _x, int _y) {
-        if (GraphicLib.isInRectangle(_x, _y, x - width/2, y - height/2, width, height)) {
+    public TGComponent isOnOnlyMe(int x1, int y1) {
+        if (GraphicLib.isInRectangle(x1, y1, x - width/2, y - height/2, width, height)) {
             return this;
         }
         return null;
     }
+    
+    public int getType() {
+		return TGComponentManager.ELN_MID_PORT_TERMINAL;
+	}
     
     public boolean editOndoubleClick(JFrame frame) {
     	JDialogELNMidPortTerminal jde = new JDialogELNMidPortTerminal(this);
