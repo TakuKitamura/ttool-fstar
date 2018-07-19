@@ -67,7 +67,6 @@ public class ELNDiagramToolBar extends TToolBar {
 
 		mgui.actions[TGUIAction.ELN_EDIT].setEnabled(b);
 		mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
-		mgui.actions[TGUIAction.ELN_CONNECTOR].setEnabled(b);
 		mgui.actions[TGUIAction.ELN_RESISTOR].setEnabled(b);
 		mgui.actions[TGUIAction.ELN_CAPACITOR].setEnabled(b);
 		mgui.actions[TGUIAction.ELN_INDUCTOR].setEnabled(b);
@@ -147,11 +146,6 @@ public class ELNDiagramToolBar extends TToolBar {
 		button.addMouseListener(mgui.mouseHandler);
 		
 		button = this.add(mgui.actions[TGUIAction.ELN_TDF_CURRENT_SINK]);
-		button.addMouseListener(mgui.mouseHandler);
-		
-		this.addSeparator();
-		
-		button = this.add(mgui.actions[TGUIAction.ELN_CONNECTOR]);
 		button.addMouseListener(mgui.mouseHandler);
 		
 		this.addSeparator();

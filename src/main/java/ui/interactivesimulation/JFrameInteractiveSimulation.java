@@ -146,10 +146,17 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
     protected JTextField stateFileName;
     protected JTextField benchmarkFileName;
     protected JComboBox<String> cpus, busses, mems, tasks, chans;
-    private Map<String, List<Integer>> channelIDMap= new HashMap<String, List<Integer>>();
+    private Map<String, List<Integer>> origChannelIDMap= new HashMap<String, List<Integer>>();
+    private Map<String, List<Integer>> destChannelIDMap= new HashMap<String, List<Integer>>();
 
     private String[] cpuIDs, busIDs, memIDs, taskIDs, chanIDs;
 	private List<String> simtraces= new ArrayList<String>();
+	
+	//Find matching channels
+	public Map<String, List<Integer>> channelMsgIdMap = new HashMap<String, List<Integer>>();
+	public Map<Integer, String> msgIdStartTimeMap = new HashMap<Integer, String>();
+	public Map<Integer, String> msgIdEndTimeMap = new HashMap<Integer, String>();
+		
     // Status elements
 	private JLabel status, time, info;
 
@@ -1383,7 +1390,11 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	public void resetSimTrace(){
 		msgTimes.clear();
 		chanId=0;
-		channelIDMap.clear();
+		channelMsgIdMap.clear();
+		msgIdStartTimeMap.clear();
+		msgIdEndTimeMap.clear();
+		origChannelIDMap.clear();
+		destChannelIDMap.clear();	
 		simtraces.clear();
 		simIndex=0;
 	}
@@ -1563,21 +1574,31 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 							msgTimes.put(tran.channelName, new ArrayList<String>());
 						} 
 						if (!msgTimes.get(tran.channelName).contains(tran.endTime)){
-							if (channelIDMap.containsKey(tran.channelName) && channelIDMap.get(tran.channelName).size()>0){
-								msgId=channelIDMap.get(tran.channelName).remove(0);
-							}
-							else {
-								if (!channelIDMap.containsKey(tran.channelName)){
-									channelIDMap.put(tran.channelName, new ArrayList<Integer>());
-								}
-								channelIDMap.get(tran.channelName).add(msgId);
-								chanId++;
-							}
 							String trace="";
 							if (command.equals("Write")){
+								if (destChannelIDMap.containsKey(tran.channelName) && destChannelIDMap.get(tran.channelName).size()>0){
+									msgId=destChannelIDMap.get(tran.channelName).remove(0);
+								}
+								else {
+									if (!origChannelIDMap.containsKey(tran.channelName)){
+										origChannelIDMap.put(tran.channelName, new ArrayList<Integer>());
+									}
+									origChannelIDMap.get(tran.channelName).add(msgId);
+									chanId++;
+								}
 								trace = "time=" + tran.endTime+ " block="+ originTask.getName() + " type="+asynchType+ " blockdestination="+ destTask.getName() + " channel="+tran.channelName+" msgid="+ msgId + " params=\"" +chan.getSize()+"\"";	
 							}
 							else {
+								if (origChannelIDMap.containsKey(tran.channelName) && origChannelIDMap.get(tran.channelName).size()>0){
+									msgId=origChannelIDMap.get(tran.channelName).remove(0);
+								}
+								else {
+									if (!destChannelIDMap.containsKey(tran.channelName)){
+										destChannelIDMap.put(tran.channelName, new ArrayList<Integer>());
+									}
+									destChannelIDMap.get(tran.channelName).add(msgId);
+									chanId++;
+								}
 								trace = "time=" + tran.endTime+ " block="+ destTask.getName() + " type="+asynchType+ " blockdestination="+ destTask.getName() + " channel="+tran.channelName+" msgid="+ msgId + " params=\"" +chan.getSize()+"\"";	
 							}
 							//	
@@ -1611,21 +1632,31 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 							msgTimes.put(tran.channelName, new ArrayList<String>());
 						} 
 						if (!msgTimes.get(tran.channelName).contains(tran.endTime)){
-							if (channelIDMap.containsKey(tran.channelName) && channelIDMap.get(tran.channelName).size()>0){
-								msgId=channelIDMap.get(tran.channelName).remove(0);
-							}
-							else {
-								if (!channelIDMap.containsKey(tran.channelName)){
-									channelIDMap.put(tran.channelName, new ArrayList<Integer>());
-								}
-								channelIDMap.get(tran.channelName).add(msgId);
-								chanId++;
-							}
 							String trace="";
 							if (command.equals("Send")){
+								if (destChannelIDMap.containsKey(tran.channelName) && destChannelIDMap.get(tran.channelName).size()>0){
+									msgId=destChannelIDMap.get(tran.channelName).remove(0);
+								}
+								else {
+									if (!origChannelIDMap.containsKey(tran.channelName)){
+										origChannelIDMap.put(tran.channelName, new ArrayList<Integer>());
+									}
+									origChannelIDMap.get(tran.channelName).add(msgId);
+									chanId++;
+								}
 								trace = "time=" + tran.endTime+ " block="+ originTask.getName() + " type="+asynchType+ " blockdestination="+ destTask.getName() + " channel="+tran.channelName+" msgid="+ msgId + " params=\"";	
 							}
 							else {
+								if (origChannelIDMap.containsKey(tran.channelName) && origChannelIDMap.get(tran.channelName).size()>0){
+									msgId=origChannelIDMap.get(tran.channelName).remove(0);
+								}
+								else {
+									if (!destChannelIDMap.containsKey(tran.channelName)){
+										destChannelIDMap.put(tran.channelName, new ArrayList<Integer>());
+									}
+									destChannelIDMap.get(tran.channelName).add(msgId);
+									chanId++;
+								}
 								trace = "time=" + tran.endTime+ " block="+ destTask.getName() + " type="+asynchType+ " blockdestination="+ destTask.getName() + " channel="+tran.channelName+" msgid="+ msgId + " params=\"";
 							}
 							//	
@@ -1666,25 +1697,47 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 						int msgId=chanId;
 						if (!msgTimes.containsKey(tran.channelName)){
 							msgTimes.put(tran.channelName, new ArrayList<String>());
+						}
+						if (!channelMsgIdMap.containsKey(tran.channelName)){
+							channelMsgIdMap.put(tran.channelName, new ArrayList<Integer>());
 						} 
+						
+
+
 						if (!msgTimes.get(tran.channelName).contains(tran.endTime)){
-							if (channelIDMap.containsKey(tran.channelName) && channelIDMap.get(tran.channelName).size()>0){
-								msgId=channelIDMap.get(tran.channelName).remove(0);
-							}
-							else {
-								if (!channelIDMap.containsKey(tran.channelName)){
-									channelIDMap.put(tran.channelName, new ArrayList<Integer>());
-								}
-								channelIDMap.get(tran.channelName).add(msgId);
-								chanId++;
-							}
+							
+							
 							String trace="";
 							if (command.equals("Request")){
+								if (destChannelIDMap.containsKey(tran.channelName) && destChannelIDMap.get(tran.channelName).size()>0){
+									msgId=destChannelIDMap.get(tran.channelName).remove(0);
+								}
+								else {
+									if (!origChannelIDMap.containsKey(tran.channelName)){
+										origChannelIDMap.put(tran.channelName, new ArrayList<Integer>());
+									}
+									origChannelIDMap.get(tran.channelName).add(msgId);
+									chanId++;
+								}				
 								trace = "time=" + tran.endTime+ " block="+ tran.taskName + " type="+asynchType+ " blockdestination="+ destTask.getName() + " channel="+tran.channelName+" msgid="+ msgId + " params=\"";	
+								msgIdStartTimeMap.put(msgId, tran.endTime);
 							}
 							else {
+								if (origChannelIDMap.containsKey(tran.channelName) && origChannelIDMap.get(tran.channelName).size()>0){
+									msgId=origChannelIDMap.get(tran.channelName).remove(0);
+								}
+								else {
+									if (!destChannelIDMap.containsKey(tran.channelName)){
+										destChannelIDMap.put(tran.channelName, new ArrayList<Integer>());
+									}
+									destChannelIDMap.get(tran.channelName).add(msgId);
+									chanId++;
+								}
 								trace = "time=" + tran.endTime+ " block="+ destTask.getName() + " type="+asynchType+ " blockdestination="+ destTask.getName() + " channel="+tran.channelName+" msgid="+ msgId + " params=\"";	
+								msgIdEndTimeMap.put(msgId, tran.endTime);
 							}
+							
+							channelMsgIdMap.get(tran.channelName).add(msgId);
 							//	
 							if (!simtraces.contains(trace)){
 								simtraces.add(trace);
@@ -1726,6 +1779,73 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 			}
 		}
 	}
+    
+    public void calculateCorrespondingTimes(){
+	    for (String channel: channelMsgIdMap.keySet()){
+	    	List<Integer> minTimes = new ArrayList<Integer>();
+	    	for (int msgId: channelMsgIdMap.get(channel)){
+	    		String startTime = msgIdStartTimeMap.get(msgId);
+	    		String endTime = msgIdEndTimeMap.get(msgId);
+	    		if (startTime!=null && endTime !=null){
+	    			int diff = Integer.valueOf(endTime) - Integer.valueOf(startTime); 
+	    			minTimes.add(diff);
+	    		}
+	    	}  
+	    	SimulationLatency sl = new SimulationLatency();
+        	sl.setTransaction1("Send Req: " + channel);
+        	sl.setTransaction2("Corresponding Wait Req " + channel);
+        	
+        	
+        	
+        	
+       		sl.setMinTime("??");
+       		sl.setMaxTime("??");
+        	sl.setAverageTime("??");
+        	sl.setStDev("??");
+        	boolean found=false;
+        	for (Object o:latencies){
+        	    SimulationLatency s = (SimulationLatency) o;
+        	    if (s.getTransaction1().equals(sl.getTransaction1()) && s.getTransaction2().equals(sl.getTransaction2())){
+        	    	sl = s;
+        	        found=true;
+        	    }
+        	}
+        	if (!found){
+        	    latencies.add(sl);
+        	}
+        	if (minTimes.size()>0){
+            	int sum=0;
+                sl.setMinTime(Integer.toString(Collections.min(minTimes)));
+                sl.setMaxTime(Integer.toString(Collections.max(minTimes)));
+                for (int time: minTimes){
+                	sum+=time;
+                }
+                double average = (double) sum/ (double) minTimes.size();
+                double stdev =0.0;
+                for (int time:minTimes){
+                	stdev +=(time - average)*(time-average);
+                }
+                stdev= stdev/minTimes.size();
+                stdev = Math.sqrt(stdev);
+                sl.setAverageTime(String.format("%.1f",average));
+                sl.setStDev(String.format("%.1f",stdev)); 
+            }
+        	
+        	
+        	//updateLatency();
+        //	if (latm !=null && latencies.size()>0){
+        	 //   latm.setData(latencies);
+        //	}
+        	
+	    	
+	    }
+	    
+	    
+	    
+    	//System.out.println(channelMsgIdMap);
+    	//System.out.println(msgIdStartTimeMap);
+    	//System.out.println(msgIdEndTimeMap);
+    }
     
     protected void addStatusToNode(String status, String task){
         mgui.addStatus(task,status);
@@ -2681,10 +2801,12 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             //calcuate response + checkpoint 1 id + checkpoint 2 id
             List<String> id1List = nameIdMap.get(sl.getTransaction1());
             List<String> id2List = nameIdMap.get(sl.getTransaction2());            
-            for (String id1: id1List){
-            	for (String id2: id2List){
-        	    	sendCommand("cl " + id1 + " " + id2);
-        	    }
+            if (id1List!=null && id2List!=null){
+	            for (String id1: id1List){
+    	        	for (String id2: id2List){
+    	    	    	sendCommand("cl " + id1 + " " + id2);
+    	    	    }
+    	    	}
         	}
         }
     }
@@ -2704,21 +2826,23 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             List<String> ids2 = nameIdMap.get(sl.getTransaction2());
             List<Integer> times1 = new ArrayList<Integer>();
             List<Integer> times2 = new ArrayList<Integer>();
-			for (String id1: ids1){
-				if (transTimes.containsKey(id1)){
-					for(String time1: transTimes.get(id1)){
-	                	times1.add(Integer.valueOf(time1));
-	                }
+            if (ids1!=null && ids2!=null){
+				for (String id1: ids1){
+					if (transTimes.containsKey(id1)){
+						for(String time1: transTimes.get(id1)){
+		                	times1.add(Integer.valueOf(time1));
+		                }
+					}
 				}
-			}
-			for (String id2: ids2){
-				if (transTimes.containsKey(id2)){			
-                	ArrayList<Integer> minTimes = new ArrayList<Integer>();
-                    for (String time2: transTimes.get(id2)){
-	                	times2.add(Integer.valueOf(time2));
-	                }
-	            }
-	        }
+				for (String id2: ids2){
+					if (transTimes.containsKey(id2)){			
+    	            	ArrayList<Integer> minTimes = new ArrayList<Integer>();
+    	                for (String time2: transTimes.get(id2)){
+		                	times2.add(Integer.valueOf(time2));
+		                }
+		            }
+		        }
+		    }
 	       // 
 	       //
 	        List<Integer> minTimes = new ArrayList<Integer>();
@@ -2756,6 +2880,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 				} 
             }
         }
+        calculateCorrespondingTimes();
         if (latm!=null && latencies.size()>0){
             latm.setData(latencies);
         }
@@ -3449,7 +3574,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 			checkedTransactions.add(compName+" (ID: " + tgc.getDIPLOID() + ")");
 			if (!nameIdMap.containsKey(compName)){
 				nameIdMap.put(compName,new ArrayList<String>());
-				checkedTransactions.add(compName);
+				checkedTransactions.add(compName + " (all instances)");
 			}
 			nameIdMap.get(compName).add(Integer.toString(tgc.getDIPLOID()));
 			nameIdMap.put(compName+" (ID: " + tgc.getDIPLOID() + ")",new ArrayList<String>());
