@@ -195,6 +195,7 @@ public class AvatarRDRequirementReference extends TGCScalableWithInternalCompone
                     if (req.getTDiagramPanel().getName().compareTo(tdpName) == 0) {
                         if (req.getRequirementName().compareTo(reqName) == 0) {
                             reference = req;
+                            req.addReference(this);
                             break;
                         }
                     }
@@ -383,6 +384,9 @@ public class AvatarRDRequirementReference extends TGCScalableWithInternalCompone
 
         currentIndex = jdcs.getIndexOfSelectedElement();
         value = tabAllRequirements[currentIndex];
+        if (reference != null) {
+            reference.removeReference(this);
+        }
         reference = realComps.get(currentIndex);
 
         return true;
@@ -455,7 +459,9 @@ public class AvatarRDRequirementReference extends TGCScalableWithInternalCompone
         return value.substring(index+2, value.length());
     }
 
-
+    public AvatarRDRequirement getReference() {
+        return reference;
+    }
 
     public int getType() {
         return TGComponentManager.AVATARRD_REQUIREMENT_REFERENCE;

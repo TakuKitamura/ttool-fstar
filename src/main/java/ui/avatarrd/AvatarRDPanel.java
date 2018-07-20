@@ -43,7 +43,6 @@ package ui.avatarrd;
 
 import myutil.TraceManager;
 import ui.*;
-import ui.req.TGConnectorVerify;
 
 import java.util.*;
 
@@ -184,7 +183,11 @@ public class AvatarRDPanel extends TDiagramPanel implements TDPWithAttributes {
         autoAdjust();
     }
 
-    public ArrayList<AvatarRDProperty> getAllPropertiesVerify(AvatarRDRequirement req) {
+    //
+    // For requirement table defined in RequirementsTableModel
+    //
+
+    public ArrayList<AvatarRDProperty> getAllPropertiesVerify(TGComponent req) {
         ArrayList<AvatarRDProperty> listOfProps = new ArrayList<>();
 
         // We parse all AvatarRDVerifyConnector
@@ -217,7 +220,7 @@ public class AvatarRDPanel extends TDiagramPanel implements TDPWithAttributes {
                     //TraceManager.addDev("FoundC=" + foundC);
                     if (foundC instanceof AvatarRDProperty) {
                         //TraceManager.addDev("Adding foundC");
-                        listOfProps.add((AvatarRDProperty)foundC);
+                        listOfProps.add((AvatarRDProperty) foundC);
                     }
                 }
             }
@@ -227,7 +230,7 @@ public class AvatarRDPanel extends TDiagramPanel implements TDPWithAttributes {
 
     }
 
-    public ArrayList<AvatarRDElementReference> getAllElementsSatified(AvatarRDRequirement req) {
+    public ArrayList<AvatarRDElementReference> getAllElementsSatified(TGComponent req) {
         ArrayList<AvatarRDElementReference> listOfProps = new ArrayList<>();
 
         // We parse all AvatarRDVerifyConnector
@@ -260,7 +263,7 @@ public class AvatarRDPanel extends TDiagramPanel implements TDPWithAttributes {
                     //TraceManager.addDev("FoundC=" + foundC);
                     if (foundC instanceof AvatarRDElementReference) {
                         //TraceManager.addDev("Adding foundC");
-                        listOfProps.add((AvatarRDElementReference)foundC);
+                        listOfProps.add((AvatarRDElementReference) foundC);
                     }
                 }
             }
@@ -270,7 +273,7 @@ public class AvatarRDPanel extends TDiagramPanel implements TDPWithAttributes {
 
     }
 
-    public ArrayList<AvatarRDRequirement> getAllImmediateSons(AvatarRDRequirement req) {
+    public ArrayList<AvatarRDRequirement> getAllImmediateSons(TGComponent req) {
         ArrayList<AvatarRDRequirement> listOfProps = new ArrayList<>();
 
         // We parse all AvatarRDVerifyConnector
@@ -300,7 +303,13 @@ public class AvatarRDPanel extends TDiagramPanel implements TDPWithAttributes {
                     //TraceManager.addDev("FoundC=" + foundC);
                     if (foundC instanceof AvatarRDRequirement) {
                         //TraceManager.addDev("Adding foundC");
-                        listOfProps.add((AvatarRDRequirement)foundC);
+                        listOfProps.add((AvatarRDRequirement) foundC);
+                    }
+                    if (foundC instanceof AvatarRDRequirementReference) {
+                        AvatarRDRequirement refReq = ((AvatarRDRequirementReference)foundC).getReference();
+                        if (refReq != null) {
+                            listOfProps.add(refReq);
+                        }
                     }
                 }
             }
@@ -312,6 +321,7 @@ public class AvatarRDPanel extends TDiagramPanel implements TDPWithAttributes {
 
 
     public ArrayList<AvatarRDRequirement> getAllSons(AvatarRDRequirement req) {
+        TraceManager.addDev("\nGet all sons of: " + req);
         HashSet<AvatarRDRequirement> met = new HashSet<>();
         met.add(req);
 
@@ -320,20 +330,36 @@ public class AvatarRDPanel extends TDiagramPanel implements TDPWithAttributes {
         ArrayList<AvatarRDRequirement> tmpNew = new ArrayList<>();
         tmpList.add(req);
 
-        for(;;) {
+        for (; ; ) {
             tmpNew.clear();
-            for(AvatarRDRequirement rq: tmpList) {
-                tmpNew.addAll(getAllImmediateSons(rq));
+            for (AvatarRDRequirement rq : tmpList) {
+                tmpNew.addAll(rq.getAllImmediateSons());
             }
             tmpList.clear();
-            for(AvatarRDRequirement rq: tmpNew) {
+            for (AvatarRDRequirement rq : tmpNew) {
                 if (!(met.contains(rq))) {
+                    TraceManager.addDev("Adding req:" + rq);
                     met.add(rq);
                     listOfSons.add(rq);
                     tmpList.add(rq);
+                    if (rq.getAllReferences().size() > 0) {
+                        TraceManager.addDev("Adding references of " + rq);
+                    }
+                    for (AvatarRDRequirementReference ref : rq.getAllReferences()) {
+                        AvatarRDRequirement newReq = ref.getReference();
+                        TraceManager.addDev("Adding son of references = " + newReq);
+                        if (newReq != null) {
+                            if (!(met.contains(newReq))) {
+                                listOfSons.add(newReq);
+                                tmpList.add(newReq);
+                            }
+                        }
+                    }
+
+
                 }
             }
-            if(tmpList.size() == 0) {
+            if (tmpList.size() == 0) {
                 break;
             }
         }
@@ -371,7 +397,7 @@ public class AvatarRDPanel extends TDiagramPanel implements TDPWithAttributes {
                     //TraceManager.addDev("FoundC=" + foundC);
                     if (foundC instanceof AvatarRDRequirement) {
                         //TraceManager.addDev("Adding foundC");
-                        listOfProps.add((AvatarRDRequirement)foundC);
+                        listOfProps.add((AvatarRDRequirement) foundC);
                     }
                 }
             }
@@ -390,20 +416,20 @@ public class AvatarRDPanel extends TDiagramPanel implements TDPWithAttributes {
         ArrayList<AvatarRDRequirement> tmpNew = new ArrayList<>();
         tmpList.add(req);
 
-        for(;;) {
+        for (; ; ) {
             tmpNew.clear();
-            for(AvatarRDRequirement rq: tmpList) {
+            for (AvatarRDRequirement rq : tmpList) {
                 tmpNew.addAll(getAllImmediateFathers(rq));
             }
             tmpList.clear();
-            for(AvatarRDRequirement rq: tmpNew) {
+            for (AvatarRDRequirement rq : tmpNew) {
                 if (!(met.contains(rq))) {
                     met.add(rq);
                     listOfSons.add(rq);
                     tmpList.add(rq);
                 }
             }
-            if(tmpList.size() == 0) {
+            if (tmpList.size() == 0) {
                 break;
             }
         }
@@ -429,12 +455,12 @@ public class AvatarRDPanel extends TDiagramPanel implements TDPWithAttributes {
                 p2 = ((AvatarRDRefineConnector) (tgc)).getTGConnectingPointP2();
                 pother = null;
 
-                if (origin ==0) {
+                if (origin == 0) {
                     if (req.belongsToMe(p1)) {
                         pother = p2;
                         //TraceManager.addDev("pother = p1");
                     }
-                } else  {
+                } else {
                     if (req.belongsToMe(p2)) {
                         pother = p1;
                         //TraceManager.addDev("pother = p1");
@@ -449,7 +475,7 @@ public class AvatarRDPanel extends TDiagramPanel implements TDPWithAttributes {
                     //TraceManager.addDev("FoundC=" + foundC);
                     if (foundC instanceof AvatarRDRequirement) {
                         //TraceManager.addDev("Adding foundC");
-                        listOfProps.add((AvatarRDRequirement)foundC);
+                        listOfProps.add((AvatarRDRequirement) foundC);
                     }
                 }
             }
@@ -476,12 +502,12 @@ public class AvatarRDPanel extends TDiagramPanel implements TDPWithAttributes {
                 p2 = ((AvatarRDDeriveConnector) (tgc)).getTGConnectingPointP2();
                 pother = null;
 
-                if (origin ==0) {
+                if (origin == 0) {
                     if (req.belongsToMe(p1)) {
                         pother = p2;
                         //TraceManager.addDev("pother = p1");
                     }
-                } else  {
+                } else {
                     if (req.belongsToMe(p2)) {
                         pother = p1;
                         //TraceManager.addDev("pother = p1");
@@ -496,7 +522,7 @@ public class AvatarRDPanel extends TDiagramPanel implements TDPWithAttributes {
                     //TraceManager.addDev("FoundC=" + foundC);
                     if (foundC instanceof AvatarRDRequirement) {
                         //TraceManager.addDev("Adding foundC");
-                        listOfProps.add((AvatarRDRequirement)foundC);
+                        listOfProps.add((AvatarRDRequirement) foundC);
                     }
                 }
             }
