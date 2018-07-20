@@ -362,9 +362,8 @@ public class TGComponentManager {
     public static final int ELN_TDF_CURRENT_SINK = 1622;
     public static final int ELN_MODULE = 1623;
     public static final int ELN_MODULE_TERMINAL = 1624;
-    public static final int ELN_MID_PORT_TERMINAL = 1625;
-    public static final int ELN_TDF_VOLTAGE_SOURCE = 1626;
-    public static final int ELN_TDF_CURRENT_SOURCE = 1627;
+    public static final int ELN_TDF_VOLTAGE_SOURCE = 1625;
+    public static final int ELN_TDF_CURRENT_SOURCE = 1626;
     
     // SMD diagram
     public static final int PROSMD_START_STATE = 2000;
@@ -1334,9 +1333,6 @@ public class TGComponentManager {
             case ELN_MODULE_TERMINAL: 
             	tgc = new ELNModuleTerminal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             	break;
-            case ELN_MID_PORT_TERMINAL: 
-            	tgc = new ELNMidPortTerminal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;
             case ELN_TDF_VOLTAGE_SOURCE: 
             	tgc = new ELNComponentVoltageSourceTDF(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             	break;
@@ -1775,8 +1771,6 @@ public class TGComponentManager {
         	return ELN_MODULE;
         } else if (tgc instanceof ELNModuleTerminal) {
         	return ELN_MODULE_TERMINAL;
-        } else if (tgc instanceof ELNMidPortTerminal) {
-        	return ELN_MID_PORT_TERMINAL;
         } else if (tgc instanceof ELNComponentVoltageSourceTDF) {
         	return ELN_TDF_VOLTAGE_SOURCE;
         } else if (tgc instanceof ELNComponentCurrentSourceTDF) {
