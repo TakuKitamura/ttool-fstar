@@ -92,6 +92,8 @@ public class MappingTable {
   
 	int nb_clusters=TopCellGenerator.avatardd.getAllCrossbar().size();
 	int nb_rams=TopCellGenerator.avatardd.getAllRAM().size();
+	int nb_ttys=TopCellGenerator.avatardd.getAllTTY().size();
+	int nb_hwa=TopCellGenerator.avatardd.getAllCoproMWMR().size();
 	avatardd = dd;
     
 	if(nb_clusters == 0){
@@ -133,14 +135,14 @@ public class MappingTable {
 	    mapping += "maptab.add(Segment(\"data\", 0x7f000000, 0x01000000, IntTab(2), false)); " + CR2;
 
 	    mapping = mapping + "maptab.add(Segment(\"simhelper\", 0xd3200000, 0x00000100, IntTab(3), false));" + CR;	    
-	    mapping = mapping + "maptab.add(Segment(\"vci_rttimer\", 0xd6000000, 0x00000100, IntTab(4), false));" + CR2;
+	    mapping = mapping + "maptab.add(Segment(\"vci_rttimer\", 0xd6200000, 0x00000100, IntTab(4), false));" + CR2;
 	    mapping = mapping + " maptab.add(Segment(\"vci_xicu\", 0xd2200000, 0x00001000, IntTab(5), false));" + CR;
-	    mapping = mapping + "maptab.add(Segment(\"vci_dma\", 0xf0000000, 0x00001000, IntTab(6), false));" + CR2;
-
-	    mapping = mapping + "maptab.add(Segment(\"vci_fdt_rom\", 0xe0000000, 0x00001000, IntTab(7), false));" + CR2;
+	    // mapping = mapping + "maptab.add(Segment(\"vci_dma\", 0xf2000000, 0x00001000, IntTab(6), false));" + CR2;
+	    mapping = mapping + "maptab.add(Segment(\"vci_dma\", 0xf0200000, 0x00001000, IntTab(6), false));" + CR2;
+	    mapping = mapping + "maptab.add(Segment(\"vci_fdt_rom\", 0xe0200000, 0x00001000, IntTab(7), false));" + CR2;
 	    
 	    mapping = mapping + "maptab.add(Segment(\"vci_fd_access\", 0xd4200000, 0x00000100, IntTab(8), false));" + CR;
-	    mapping = mapping + "maptab.add(Segment(\"vci_ethernet\",  0xd5000000, 0x00000020, IntTab(9), false));" + CR;
+	    mapping = mapping + "maptab.add(Segment(\"vci_ethernet\",  0xd5200000, 0x00000020, IntTab(9), false));" + CR;
 	    mapping = mapping + "maptab.add(Segment(\"vci_block_device\", 0xd1200000, 0x00000020, IntTab(10), false));" + CR2;   
     
 	    int address_start = 268435456;
@@ -187,33 +189,39 @@ public class MappingTable {
 		}
 	    }
 	
-	    j=0;
+	    int tty_count=0;   
 	    for (AvatarTTY tty : TopCellGenerator.avatardd.getAllTTY()) {
 	 
-		tty.setNo_target(10+nb_rams+j);  //count only addtional RAMs     
+		tty.setNo_target(10+nb_rams+tty_count);  //count only addtional RAMs     
 		/* attention this will not work for more than 16 TTYs */
-		mapping += "maptab.add(Segment(\"vci_multi_tty"+j+"\" , 0xa"+(tty.getNo_tty()+1)+"200000, 0x00000010, IntTab(" +(tty.getNo_target()) +"), false));" + CR;
-		j++; 
+		/* TTY0 = console has a fixed address */
+
+		if (tty.getNo_tty()==0){
+		    mapping += "maptab.add(Segment(\"vci_multi_tty"+tty.getNo_tty()+"\" , 0xd"+(tty.getNo_tty())+"200000, 0x00000010, IntTab(" +(tty.getNo_target()) +"), false));" + CR;
+		    }
+		else{
+		    String adr_tty = Integer.toHexString(tty.getNo_tty()-1);
+		    mapping += "maptab.add(Segment(\"vci_multi_tty"+tty.getNo_tty()+"\" , 0xa"+adr_tty+"200000, 0x00000010, IntTab(" +(tty.getNo_target()) +"), false));" + CR;
+		}
+		tty_count++;
 	    }	    
 
 	    /* Instantiation of the MWMR wrappers for hardware accellerators */
 	    /* The accelerators themselves are specifies on DIPLODOCUS level */
-      
-	    int count = 7+nb_rams+1;
-	    int hwa_count=0;
-	    int nb_hwa=0;
+
+	    /* There are 10 segments but 3 of them, 0, 1, 2 belong to the boot RAM */
+		int segment_count = (10-3)+(nb_rams-1)+nb_ttys;
+	    int hwa_count=0;	    
 	    int MWMR_SIZE=4096;
 	    int MWMRd_SIZE=12288;
      
-	    i=0;
-	    for (AvatarCoproMWMR MWMRwrapper : TopCellGenerator.avatardd.getAllCoproMWMR()) {nb_hwa++;
-	    }
-      
+	    // i=0;
+	   
 	    for (AvatarCoproMWMR MWMRwrapper : TopCellGenerator.avatardd.getAllCoproMWMR()) {   
-		mapping += "maptab.add(Segment(\"mwmr_ram"+hwa_count+"\", 0xA0"+  Integer.toHexString(2097152+MWMR_SIZE*i)+",  0x00001000, IntTab("+count+"), false));" + CR; 
-		mapping += "maptab.add(Segment(\"mwmrd_ram"+hwa_count+"\", 0x20"+  Integer.toHexString(2097152+MWMRd_SIZE*i)+",  0x00003000, IntTab("+(count+nb_hwa)+"), false));" + CR; 	 
+		mapping += "maptab.add(Segment(\"mwmr_ram"+hwa_count+"\", 0xA0"+  Integer.toHexString(2097152+MWMR_SIZE*i)+",  0x00001000, IntTab("+segment_count+"), false));" + CR; 
+		mapping += "maptab.add(Segment(\"mwmrd_ram"+hwa_count+"\", 0x20"+  Integer.toHexString(2097152+MWMRd_SIZE*i)+",  0x00003000, IntTab("+(segment_count+nb_hwa)+"), false));" + CR; 	 
 		hwa_count++;
-		count+=1;
+		segment_count++;
 	    } 
 	    hwa_count=0;  
 
@@ -284,9 +292,8 @@ public class MappingTable {
 		mapping += "maptab.add(Segment(\"uram" + ram.getNo_ram() + "\",  0x"+Integer.toHexString(SEG_RAM_BASE + ram.getClusterIndex()*CLUSTER_SIZE+cacheability_bit)+",  0x"+Integer.toHexString(ram.getDataSize()/2)+", IntTab("+ram.getClusterIndex()+","+(ram.getNo_target())+"), false));" + CR;	  
 	    }                     
          
-	    //Identify the TTYS on this cluster (not TTYs in total)
-	    //Currently one tty per cluster
- 
+	    //Identify the TTYS in current cluster (as opposed to TTYs in total)
+	   
 	    for (AvatarTTY tty : TopCellGenerator.avatardd.getAllTTY()) {	   
 		/* the number of fixed targets varies depending on if on cluster 0 or other clusters */
 		
