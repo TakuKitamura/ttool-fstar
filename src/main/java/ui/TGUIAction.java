@@ -304,6 +304,8 @@ public class TGUIAction extends AbstractAction {
     public static final int ELN_MODULE = 499; 
     public static final int ELN_MODULE_TERMINAL = 500;
     public static final int ELN_TOGGLE_ATTR = 501;
+    public static final int ELN_TDF_VOLTAGE_SOURCE = 502;
+    public static final int ELN_TDF_CURRENT_SOURCE = 503;
     
     public static final int EBRDD_EDIT = 271;
     public static final int EBRDD_CONNECTOR = 272;
@@ -659,7 +661,7 @@ public class TGUIAction extends AbstractAction {
     public static final int MOVE_ENABLED = 463;
     public static final int FIRST_DIAGRAM = 464;
     
-    public static final int NB_ACTION = 502;
+    public static final int NB_ACTION = 504;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -1183,7 +1185,9 @@ public class TGUIAction extends AbstractAction {
         actions[ELN_MODULE] = new TAction("eln-module", "Add a SystemC module", IconManager.imgic8006, IconManager.imgic8006, "SystemC module", "Add a SystemC module to the currently opened ELN Diagram", 0);
         actions[ELN_MODULE_TERMINAL] = new TAction("eln-module-terminal", "Add a module terminal", IconManager.imgic8032, IconManager.imgic8032, "Module terminal", "Add a module terminal to the currently opened ELN Diagram", 0);
         actions[ELN_TOGGLE_ATTR] = new TAction("eln-toggle-attr-command", "Show / hide attributes in ELN", IconManager.imgic138, IconManager.imgic138, "Show / hide element attributes in ELN", "Show / hide attributes to the currently opened ELN Diagram", 0);
-
+        actions[ELN_TDF_VOLTAGE_SOURCE] = new TAction("eln-tdf-vsource", "Add a voltage source driven by a TDF input signal", IconManager.imgic8033, IconManager.imgic8033, "Voltage source driven by a TDF input signal", "Add a voltage source driven by a TDF input signal to the currently opened ELN Diagram", 0);
+        actions[ELN_TDF_CURRENT_SOURCE] = new TAction("eln-tdf-isource", "Add a current source driven by a TDF input signal", IconManager.imgic8034, IconManager.imgic8034, "Current source driven by a TDF input signal", "Add a current source driven by a TDF input signal to the currently opened ELN Diagram", 0);
+       
         //ProActive State Machine Diagram
         actions[PROSMD_EDIT] = new TAction("edit-prosmd-diagram", "Edit ProActive state machine diagram", IconManager.imgic100, IconManager.imgic101, "Edit ProActive state machine diagram", "Make it possible to edit the currently opened ProActive state machine diagram", 0);
         actions[PROSMD_START] = new TAction("add-prosmd-start", "Add Start state", IconManager.imgic222, IconManager.imgic222, "Start", "Add a start state to the currently opened ProActive state machine diagram", 0);
