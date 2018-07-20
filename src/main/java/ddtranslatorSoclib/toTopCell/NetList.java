@@ -532,8 +532,11 @@ public class NetList
 
 	netlist = netlist + "// TTY netlist" + CR2;
 	i=0;
+	int no_irq_tty = 0; //first TTY has interrupt number 0
 	for (AvatarTTY tty:TopCellGenerator.avatardd.getAllTTY ())
 	    {
+		if (no_irq_tty == 1){no_irq_tty+=5;}//all other TTYs have higher interrupt numbers; provisional; will later have to count DMAs if several; take into account clusters with one DMA each
+	
 		netlist =
 		    netlist + tty.getTTYName () + ".p_clk(signal_clk);" + CR;
 		netlist =
@@ -542,7 +545,7 @@ public class NetList
 		netlist =
 		    netlist + tty.getTTYName () + ".p_vci(signal_vci_tty" + i +
 		    ");" + CR2;
-		int no_irq_tty = 0;
+		
 		if (nb_clusters == 0)
 		    {
 
@@ -599,7 +602,7 @@ public class NetList
 		    }
 		i++;
 		//One ICU per cluster per default
-		no_irq_tty += 6;	//if there is more than one tty, irq >5
+		no_irq_tty ++;	//if there is more than one tty, irq >5
 	    }
 
 	//////////////// DMA access
