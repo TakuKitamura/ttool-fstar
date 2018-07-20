@@ -47,20 +47,27 @@ import javax.swing.JFrame;
 /**
  * Class ELNMidPortTerminal
  * Implements the intermediate points of connectors, when the connector is made of several lines.
- * Creation: 18/07/2018
- * @version 1.0 18/07/2003
+ * Creation: 19/07/2018
+ * @version 1.0 19/07/2018
  * @author Irina Kit Yan LEE
  */
 
-public class ELNMidPortTerminal extends TGCPointOfConnector {
+public class ELNMidPortTerminal extends ui.TGCPointOfConnector {
+    private int width = 10;
+    private int height = 10;
+    private int oldwidth, oldheight;
+    
     public ELNMidPortTerminal(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y,  _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-        initScaling(10, 10);
+        initScaling(width, height);
         
         initConnectingPoint(1);
         
         nbInternalTGComponent = 0;
+        
+        oldwidth = width;
+        oldheight = height;
         
         moveable = true;
         editable = false;
@@ -70,27 +77,25 @@ public class ELNMidPortTerminal extends TGCPointOfConnector {
         value = "";
     }
     
-	public void initConnectingPoint(int nb) {
+    public void initConnectingPoint(int nb) {
 		nbConnectingPoint = nb;
 		connectingPoint = new TGConnectingPoint[nb];
 		connectingPoint[0] = new ELNPortTerminal(this, -width/2, -height/2, true, true, 0.5, 0.5, "");
 	}
     
     public void internalDrawing(Graphics g) {
+    	width = (int) (oldwidth*tdp.getZoom());
+    	height = (int) (oldheight*tdp.getZoom());
     	g.drawOval(x - width/2, y - height /2, width, height);
     	g.fillOval(x - width/2, y - height /2, width, height);
     }
     
-    public TGComponent isOnOnlyMe(int x1, int y1) {
-        if (GraphicLib.isInRectangle(x1, y1, x - width/2, y - height/2, width, height)) {
+    public TGComponent isOnMe(int _x, int _y) {
+        if (GraphicLib.isInRectangle(_x, _y, x - width/2, y - height/2, width, height)) {
             return this;
         }
         return null;
     }
-    
-    public int getType() {
-		return TGComponentManager.ELN_MID_PORT_TERMINAL;
-	}
     
     public boolean editOndoubleClick(JFrame frame) {
     	JDialogELNMidPortTerminal jde = new JDialogELNMidPortTerminal(this);

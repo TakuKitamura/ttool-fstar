@@ -50,13 +50,16 @@ import java.awt.*;
  * @version 1.0 22/12/2003
  * @author Ludovic APVRILLE
  */
-public class TGCPointOfConnector extends TGCScalableWithInternalComponent {
+public class TGCPointOfConnector extends TGCScalableWithoutInternalComponent {
+    private int width = 8;
+    private int height = 8;
+    
     public TGCPointOfConnector(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y,  _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
         nbConnectingPoint = 0;
 
-        initScaling(8, 8);
+        initScaling(0, 0);
         
         nbInternalTGComponent = 0;
         
@@ -79,8 +82,8 @@ public class TGCPointOfConnector extends TGCScalableWithInternalComponent {
     }
     
     @Override
-    public TGComponent isOnOnlyMe(int x1, int y1) {
-        if (GraphicLib.isInRectangle(x1, y1, x - width/2, y - height/2, width, height)) {
+    public TGComponent isOnMe(int _x, int _y) {
+        if (GraphicLib.isInRectangle(_x, _y, x - width/2, y - height/2, width, height)) {
             return this;
         }
         return null;
