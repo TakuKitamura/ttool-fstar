@@ -74,7 +74,7 @@ public class PrimitiveCode {
 			int cpt = 0;
 			int cpt2 = 0;
 
-			if ((!tdf.getTypeTemplate().equals("")) || (!tdf.getNameTemplate().equals("")))  {
+			if ((!tdf.getTypeTemplate().equals("")) && (!tdf.getNameTemplate().equals("")))  {
 				corpsPrimitiveTDF = corpsPrimitiveTDF + "template<" + tdf.getTypeTemplate() + " " + tdf.getNameTemplate() + ">" + CR;
 			}
 			//corpsPrimitive = "SCA_TDF_MODULE(" + tdf.getName() + ") {" + CR2;
@@ -385,7 +385,7 @@ public class PrimitiveCode {
 			int cpt = 0;
 			int cpt2 = 0;
 
-			if ((!de.getTypeTemplate().equals("")) || (!de.getNameTemplate().equals("")))  {
+			if ((!de.getTypeTemplate().equals("")) && (!de.getNameTemplate().equals("")))  {
 				corpsPrimitiveDE = corpsPrimitiveDE + "template<" + de.getTypeTemplate() + " " + de.getNameTemplate() + ">" + CR;
 			}
 			//corpsPrimitive = "SCA_TDF_MODULE(" + de.getName() + ") {" + CR2;

@@ -130,9 +130,20 @@ public class SysCAMSSpecification{
     	LinkedList<SysCAMSTConnector> cons = new LinkedList<SysCAMSTConnector>();
     	for (SysCAMSTConnector con : connectors) {
     		if (con instanceof SysCAMSTConnector) {
-    			if (!((con.get_p1().getComponent() instanceof SysCAMSTPortConverter && con.get_p2().getComponent() instanceof SysCAMSTPortDE)
-    					|| (con.get_p2().getComponent() instanceof SysCAMSTPortConverter && con.get_p1().getComponent() instanceof SysCAMSTPortDE))) {
-    			cons.add(con);
+    			if (con.get_p1().getComponent() instanceof SysCAMSTPortTDF && con.get_p2().getComponent() instanceof SysCAMSTPortTDF) {
+    				cons.add(con);
+    			} else if (con.get_p1().getComponent() instanceof SysCAMSTPortConverter && con.get_p2().getComponent() instanceof SysCAMSTPortDE) {
+    				if (((SysCAMSTPortDE) con.get_p2().getComponent()).getBlockDE() != null) {
+    					if ((((SysCAMSTPortDE) con.get_p2().getComponent()).getBlockDE()).getCluster() != null ) {
+    						cons.add(con);
+    					}
+    				}
+    			} else if (con.get_p2().getComponent() instanceof SysCAMSTPortConverter && con.get_p1().getComponent() instanceof SysCAMSTPortDE) {
+    				if (((SysCAMSTPortDE) con.get_p1().getComponent()).getBlockDE() != null) {
+    					if ((((SysCAMSTPortDE) con.get_p2().getComponent()).getBlockDE()).getCluster() != null ) {
+    						cons.add(con);
+    					}
+    				}
     			}
     		}
     	}
