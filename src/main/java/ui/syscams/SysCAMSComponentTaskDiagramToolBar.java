@@ -38,10 +38,7 @@
 
 package ui.syscams;
 
-import ui.MainGUI;
-import ui.TGUIAction;
-import ui.TToolBar;
-
+import ui.*;
 import javax.swing.*;
 
 /**
@@ -75,6 +72,7 @@ public class SysCAMSComponentTaskDiagramToolBar extends TToolBar {
 		mgui.actions[TGUIAction.CAMS_CLUSTER].setEnabled(b);
 		mgui.actions[TGUIAction.CAMS_GENCODE].setEnabled(b);
 		mgui.actions[TGUIAction.CAMS_BLOCK_GPIO2VCI].setEnabled(b);
+		mgui.actions[TGUIAction.CAMS_CONNECTOR].setEnabled(b);
 		
 		mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
 		mgui.actions[TGUIAction.ACT_ONECLICK_LOTOS_RG].setEnabled(b);
@@ -93,6 +91,11 @@ public class SysCAMSComponentTaskDiagramToolBar extends TToolBar {
 		button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
 		button.addMouseListener(mgui.mouseHandler);
 
+		this.addSeparator();
+		
+		button = this.add(mgui.actions[TGUIAction.CAMS_CONNECTOR]);
+		button.addMouseListener(mgui.mouseHandler);
+		
 		this.addSeparator();
 
 		button = this.add(mgui.actions[TGUIAction.CAMS_CLUSTER]);
