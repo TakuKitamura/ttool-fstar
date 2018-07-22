@@ -116,7 +116,6 @@ public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implem
 	public void internalDrawing(Graphics g) {
 		Font f = g.getFont();
 		Font fold = f;
-		MainGUI mgui = getTDiagramPanel().getMainGUI();
 
 		if (this.rescaled && !this.tdp.isScaled()) {
 			this.rescaled = false;
@@ -152,13 +151,11 @@ public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implem
 			}
 
 			int attributeFontSize = this.currentFontSize * 5 / 6;
-			int w = g.getFontMetrics().stringWidth(value);
 			g.setFont(f.deriveFont((float) attributeFontSize));
 			g.setFont(f);
 			g.setFont(f.deriveFont(Font.BOLD));
-			if (mgui.getHidden() == false) {
-				g.drawString(value, x + (width - w) / 2, y - height / 2);
-			}
+			int h = g.getFontMetrics().getAscent();
+			g.drawString(value, x + width + width / 2, y + (height + h) / 2);
 
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
@@ -201,13 +198,11 @@ public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implem
 			}
 
 			int attributeFontSize = this.currentFontSize * 5 / 6;
-			int w = g.getFontMetrics().stringWidth(value);
 			g.setFont(f.deriveFont((float) attributeFontSize));
 			g.setFont(f);
 			g.setFont(f.deriveFont(Font.BOLD));
-			if (mgui.getHidden() == false) {
-				g.drawString(value, x + (width - w) / 2, y - height / 2);
-			}
+			int w = g.getFontMetrics().stringWidth(value);
+			g.drawString(value, x + (width - w) / 2, y - height / 2);
 
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
@@ -251,13 +246,12 @@ public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implem
 			}
 
 			int attributeFontSize = this.currentFontSize * 5 / 6;
-			int w = g.getFontMetrics().stringWidth(value);
 			g.setFont(f.deriveFont((float) attributeFontSize));
 			g.setFont(f);
 			g.setFont(f.deriveFont(Font.BOLD));
-			if (mgui.getHidden() == false) {
-				g.drawString(value, x + (width - w) / 2, y - height / 2);
-			}
+			int h = g.getFontMetrics().getAscent();
+			g.drawString(value, x + width + width / 2, y + (height + h) / 2);
+
 
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
@@ -300,13 +294,11 @@ public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implem
 			}
 
 			int attributeFontSize = this.currentFontSize * 5 / 6;
-			int w = g.getFontMetrics().stringWidth(value);
 			g.setFont(f.deriveFont((float) attributeFontSize));
 			g.setFont(f);
 			g.setFont(f.deriveFont(Font.BOLD));
-			if (mgui.getHidden() == false) {
-				g.drawString(value, x + (width - w) / 2, y - height / 2);
-			}
+			int w = g.getFontMetrics().stringWidth(value);
+			g.drawString(value, x + (width - w) / 2, y - height / 2);
 
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)

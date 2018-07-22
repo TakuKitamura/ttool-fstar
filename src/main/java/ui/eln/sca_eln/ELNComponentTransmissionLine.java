@@ -174,13 +174,11 @@ public class ELNComponentTransmissionLine extends TGCScalableWithInternalCompone
 			int sh2 = g.getFontMetrics().getAscent();
 			int sw3 = g.getFontMetrics().stringWidth("b2");
 			int sh3 = g.getFontMetrics().getAscent();
-			int w = g.getFontMetrics().stringWidth(value);
 			g.setFont(f.deriveFont((float) attributeFontSize));
 			g.setFont(f);
 			g.setFont(f.deriveFont(Font.BOLD));
-			if (mgui.getHidden() == false) {
-				g.drawString(value, x + (width - w) / 2, y - height / 4);
-			}
+			int w = g.getFontMetrics().stringWidth(value);
+			g.drawString(value, x + (width - w) / 2, y - height / 4 - height / 16);
 			g.setFont(f.deriveFont(Font.PLAIN));
 
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
@@ -286,13 +284,11 @@ public class ELNComponentTransmissionLine extends TGCScalableWithInternalCompone
 			int sh2 = g.getFontMetrics().getAscent();
 			int sw3 = g.getFontMetrics().stringWidth("b2");
 			int sh3 = g.getFontMetrics().getAscent();
-			int w = g.getFontMetrics().stringWidth(value);
 			g.setFont(f.deriveFont((float) attributeFontSize));
 			g.setFont(f);
 			g.setFont(f.deriveFont(Font.BOLD));
-			if (mgui.getHidden() == false) {
-				g.drawString(value, x + (width - w) / 2, y - height / 6);
-			}
+			int h = g.getFontMetrics().getAscent();
+			g.drawString(value, x + width + width / 4 + width / 16, y + (height + h) / 2);
 			g.setFont(f.deriveFont(Font.PLAIN));
 
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
@@ -398,13 +394,11 @@ public class ELNComponentTransmissionLine extends TGCScalableWithInternalCompone
 			int sh2 = g.getFontMetrics().getAscent();
 			int sw3 = g.getFontMetrics().stringWidth("b2");
 			int sh3 = g.getFontMetrics().getAscent();
-			int w = g.getFontMetrics().stringWidth(value);
 			g.setFont(f.deriveFont((float) attributeFontSize));
 			g.setFont(f);
 			g.setFont(f.deriveFont(Font.BOLD));
-			if (mgui.getHidden() == false) {
-				g.drawString(value, x + (width - w) / 2, y - height / 4);
-			}
+			int w = g.getFontMetrics().stringWidth(value);
+			g.drawString(value, x + (width - w) / 2, y - height / 4 - height / 16);
 			g.setFont(f.deriveFont(Font.PLAIN));
 
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
@@ -510,13 +504,11 @@ public class ELNComponentTransmissionLine extends TGCScalableWithInternalCompone
 			int sh2 = g.getFontMetrics().getAscent();
 			int sw3 = g.getFontMetrics().stringWidth("b2");
 			int sh3 = g.getFontMetrics().getAscent();
-			int w = g.getFontMetrics().stringWidth(value);
 			g.setFont(f.deriveFont((float) attributeFontSize));
 			g.setFont(f);
 			g.setFont(f.deriveFont(Font.BOLD));
-			if (mgui.getHidden() == false) {
-				g.drawString(value, x + (width - w) / 2, y - height / 6);
-			}
+			int h = g.getFontMetrics().getAscent();
+			g.drawString(value, x + width + width / 4 + width / 16, y + (height + h) / 2);
 			g.setFont(f.deriveFont(Font.PLAIN));
 
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)

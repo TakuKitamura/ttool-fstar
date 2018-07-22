@@ -164,13 +164,11 @@ public class ELNComponentVoltageSourceTDF extends TGCScalableWithInternalCompone
 			int sh1 = g.getFontMetrics().getAscent();
 			int sw2 = g.getFontMetrics().stringWidth("inp");
 			int sh2 = g.getFontMetrics().getAscent();
-			int w = g.getFontMetrics().stringWidth(value);
 			g.setFont(f.deriveFont((float) attributeFontSize));
 			g.setFont(f);
 			g.setFont(f.deriveFont(Font.BOLD));
-			if (mgui.getHidden() == false) {
-				g.drawString(value, x + (width - w) / 2, y - height / 5);
-			}
+			int w = g.getFontMetrics().stringWidth(value);
+			g.drawString(value, x + (width - w) / 2, y - height / 5 - height / 20);
 			g.setFont(f.deriveFont(Font.PLAIN));
 
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
@@ -189,7 +187,7 @@ public class ELNComponentVoltageSourceTDF extends TGCScalableWithInternalCompone
 					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width,
 							y + height + height / 20 + sh1);
 					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x - sw2,
-							y + height / 2 + height / 5 + sh2);
+							y + height / 2 + height / 10 + height / 20 + sh2);
 				}
 			}
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
@@ -208,7 +206,7 @@ public class ELNComponentVoltageSourceTDF extends TGCScalableWithInternalCompone
 					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x - sw1,
 							y + height + height / 20 + sh1);
 					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width,
-							y + height / 2 + height / 5 + sh2);
+							y + height / 2 + height / 10 + height / 20 + sh2);
 				}
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
@@ -227,7 +225,7 @@ public class ELNComponentVoltageSourceTDF extends TGCScalableWithInternalCompone
 					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width,
 							y + height + height / 20 + sh0);
 					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x - sw2,
-							y + height / 2 + height / 5 + sh2);
+							y + height / 2 + height / 10 + height / 20 + sh2);
 				}
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
@@ -246,7 +244,7 @@ public class ELNComponentVoltageSourceTDF extends TGCScalableWithInternalCompone
 					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x - sw0,
 							y + height + height / 20 + sh0);
 					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width,
-							y + height / 2 + height / 5 + sh2);
+							y + height / 2 + height / 10 + height / 20 + sh2);
 				}
 			}
 		} else if (position == 1) {
@@ -263,13 +261,11 @@ public class ELNComponentVoltageSourceTDF extends TGCScalableWithInternalCompone
 			int sw1 = g.getFontMetrics().stringWidth("n");
 			int sh1 = g.getFontMetrics().getAscent();
 			int sh2 = g.getFontMetrics().getAscent();
-			int w = g.getFontMetrics().stringWidth(value);
 			g.setFont(f.deriveFont((float) attributeFontSize));
 			g.setFont(f);
 			g.setFont(f.deriveFont(Font.BOLD));
-			if (mgui.getHidden() == false) {
-				g.drawString(value, x + (width - w) / 2, y - height / 5);
-			}
+			int h = g.getFontMetrics().getAscent();
+			g.drawString(value, x + width + width / 5 + width / 20, y + (height + h) / 2);
 			g.setFont(f.deriveFont(Font.PLAIN));
 
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
@@ -288,7 +284,7 @@ public class ELNComponentVoltageSourceTDF extends TGCScalableWithInternalCompone
 							y + height + sh1);
 					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width + width / 16,
 							y + height + sh0);
-					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width / 2 + width / 5, y);
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width / 2 + width / 10 + width / 20, y);
 				}
 			}
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
@@ -305,7 +301,7 @@ public class ELNComponentVoltageSourceTDF extends TGCScalableWithInternalCompone
 				if (mgui.getHidden() == false) {
 					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x - width / 20 - sw1, y);
 					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width + width / 20, y);
-					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width / 2 + width / 5,
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width / 2 + width / 10 + width / 20,
 							y + height + sh2);
 				}
 			}
@@ -325,7 +321,7 @@ public class ELNComponentVoltageSourceTDF extends TGCScalableWithInternalCompone
 							y + height + sh0);
 					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width + width / 20,
 							y + height + sh1);
-					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width / 2 + width / 5, y);
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width / 2 + width / 10 + width / 20, y);
 				}
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
@@ -342,7 +338,7 @@ public class ELNComponentVoltageSourceTDF extends TGCScalableWithInternalCompone
 				if (mgui.getHidden() == false) {
 					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x - width / 20 - sw0, y);
 					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width + width / 20, y);
-					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width / 2 + width / 5,
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width / 2 + width / 10 + width / 20,
 							y + height + sh2);
 				}
 			}
@@ -361,13 +357,11 @@ public class ELNComponentVoltageSourceTDF extends TGCScalableWithInternalCompone
 			int sh1 = g.getFontMetrics().getAscent();
 			int sw2 = g.getFontMetrics().stringWidth("inp");
 			int sh2 = g.getFontMetrics().getAscent();
-			int w = g.getFontMetrics().stringWidth(value);
 			g.setFont(f.deriveFont((float) attributeFontSize));
 			g.setFont(f);
 			g.setFont(f.deriveFont(Font.BOLD));
-			if (mgui.getHidden() == false) {
-				g.drawString(value, x + (width - w) / 2, y - height / 5);
-			}
+			int w = g.getFontMetrics().stringWidth(value);
+			g.drawString(value, x + (width - w) / 2, y - height / 5 - height / 20);
 			g.setFont(f.deriveFont(Font.PLAIN));
 
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
@@ -386,7 +380,7 @@ public class ELNComponentVoltageSourceTDF extends TGCScalableWithInternalCompone
 					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x - sw0,
 							y + height + height / 20 + sh0);
 					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width,
-							y + height / 2 + height / 5 + sh2);
+							y + height / 2 + height / 10 + height / 20 + sh2);
 				}
 			}
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
@@ -405,7 +399,7 @@ public class ELNComponentVoltageSourceTDF extends TGCScalableWithInternalCompone
 					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width,
 							y + height + height / 20 + sh0);
 					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x - sw2,
-							y + height / 2 + height / 5 + sh2);
+							y + height / 2 + height / 10 + height / 20 + sh2);
 				}
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
@@ -424,7 +418,7 @@ public class ELNComponentVoltageSourceTDF extends TGCScalableWithInternalCompone
 					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x - sw1,
 							y + height + height / 20 + sh1);
 					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width,
-							y + height / 2 + height / 5 + sh2);
+							y + height / 2 + height / 10 + height / 20 + sh2);
 				}
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == false)
@@ -443,7 +437,7 @@ public class ELNComponentVoltageSourceTDF extends TGCScalableWithInternalCompone
 					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width,
 							y + height + height / 20 + sh1);
 					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x - sw2,
-							y + height / 2 + height / 5 + sh2);
+							y + height / 2 + height / 10 + height / 20 + sh2);
 				}
 			}
 		} else if (position == 3) {
@@ -460,13 +454,11 @@ public class ELNComponentVoltageSourceTDF extends TGCScalableWithInternalCompone
 			int sw1 = g.getFontMetrics().stringWidth("n");
 			int sh1 = g.getFontMetrics().getAscent();
 			int sh2 = g.getFontMetrics().getAscent();
-			int w = g.getFontMetrics().stringWidth(value);
 			g.setFont(f.deriveFont((float) attributeFontSize));
 			g.setFont(f);
 			g.setFont(f.deriveFont(Font.BOLD));
-			if (mgui.getHidden() == false) {
-				g.drawString(value, x + (width - w) / 2, y - height / 5);
-			}
+			int h = g.getFontMetrics().getAscent();
+			g.drawString(value, x + width + width / 5 + width / 20, y + (height + h) / 2);
 			g.setFont(f.deriveFont(Font.PLAIN));
 
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
@@ -483,7 +475,7 @@ public class ELNComponentVoltageSourceTDF extends TGCScalableWithInternalCompone
 				if (mgui.getHidden() == false) {
 					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x - width / 20 - sw0, y);
 					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width + width / 20, y);
-					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width / 2 + width / 5,
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width / 2 + width / 10 + width / 20,
 							y + height + sh2);
 				}
 			}
@@ -503,7 +495,7 @@ public class ELNComponentVoltageSourceTDF extends TGCScalableWithInternalCompone
 							y + height + sh0);
 					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width + width / 20,
 							y + height + sh1);
-					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width / 2 + width / 5, y);
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width / 2 + width / 10 + width / 20, y);
 				}
 			}
 			if ((fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
@@ -520,7 +512,7 @@ public class ELNComponentVoltageSourceTDF extends TGCScalableWithInternalCompone
 				if (mgui.getHidden() == false) {
 					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x - width / 20 - sw1, y);
 					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width + width / 20, y);
-					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width / 2 + width / 5,
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width / 2 + width / 10 + width / 20,
 							y + height + sh2);
 				}
 			}
@@ -540,7 +532,7 @@ public class ELNComponentVoltageSourceTDF extends TGCScalableWithInternalCompone
 							y + height + sh1);
 					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width + width / 16,
 							y + height + sh0);
-					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width / 2 + width / 5, y);
+					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width / 2 + width / 10 + width / 20, y);
 				}
 			}
 		}
