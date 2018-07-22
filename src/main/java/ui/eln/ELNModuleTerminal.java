@@ -82,7 +82,7 @@ public class ELNModuleTerminal extends TGCScalableWithInternalComponent implemen
 		minWidth = 1;
 		minHeight = 1;
 
-		initConnectingPoint(1);
+		initConnectingPoint(2);
 
 		addTGConnectingPointsComment();
 
@@ -100,6 +100,7 @@ public class ELNModuleTerminal extends TGCScalableWithInternalComponent implemen
 		nbConnectingPoint = nb;
 		connectingPoint = new TGConnectingPoint[nb];
 		connectingPoint[0] = new ELNConnectingPoint(this, 0, 0, true, true, 0.5, 1.0);
+		connectingPoint[1] = new ELNConnectingPoint(this, 0, 0, true, true, 0.5, 0.0);
 	}
 
 	public Color getMyColor() {
@@ -115,7 +116,6 @@ public class ELNModuleTerminal extends TGCScalableWithInternalComponent implemen
 			oldx = x;
 			oldy = y;
 		} else {
-			MainGUI mgui = getTDiagramPanel().getMainGUI();
 			int attributeFontSize = this.currentFontSize * 5 / 6;
 			int w = g.getFontMetrics().stringWidth(value);
 			int h = g.getFontMetrics().getAscent();
@@ -124,25 +124,17 @@ public class ELNModuleTerminal extends TGCScalableWithInternalComponent implemen
 			g.setFont(f.deriveFont(Font.PLAIN));
 			switch (currentOrientation) {
 			case GraphicLib.NORTH:
-				if (mgui.getHidden() == false) {
-					g.drawString(value, x + 2 * width, y - height / 2);
-				}
+				g.drawString(value, x + width + width / 2, y);
 				break;
 			case GraphicLib.WEST:
-				if (mgui.getHidden() == false) {
-					g.drawString(value, x - width / 2 - w, y + 2 * height + h);
-				}
+				g.drawString(value, x - w, y + height + height / 2 + h);
 				break;
 			case GraphicLib.SOUTH:
-				if (mgui.getHidden() == false) {
-					g.drawString(value, x + 2 * width, y + height + height / 2 + h);
-				}
+				g.drawString(value, x + width + width / 2, y + height + h);
 				break;
 			case GraphicLib.EAST:
 			default:
-				if (mgui.getHidden() == false) {
-					g.drawString(value, x + width + width / 2, y + 2 * height + h);
-				}
+				g.drawString(value, x + width, y + height + height / 2 + h);
 			}
 		}
 
@@ -178,8 +170,6 @@ public class ELNModuleTerminal extends TGCScalableWithInternalComponent implemen
 	}
 
 	public void manageMove(Graphics g, Font f) {
-		MainGUI mgui = getTDiagramPanel().getMainGUI();
-
 		if (father != null) {
 			Point p = GraphicLib.putPointOnRectangle(x + (width / 2), y + (height / 2), father.getX(), father.getY(),
 					father.getWidth(), father.getHeight());
@@ -201,27 +191,19 @@ public class ELNModuleTerminal extends TGCScalableWithInternalComponent implemen
 
 			switch (orientation) {
 			case GraphicLib.NORTH:
-				if (mgui.getHidden() == false) {
-					g.drawString(value, x + 2 * width, y - height / 2);
-				}
+				g.drawString(value, x + width + width / 2, y);
 				break;
 			case GraphicLib.WEST:
-				if (mgui.getHidden() == false) {
-					g.drawString(value, x - width / 2 - w, y + 2 * height + h);
-				}
+				g.drawString(value, x - w, y + height + height / 2 + h);
 				break;
 			case GraphicLib.SOUTH:
-				if (mgui.getHidden() == false) {
-					g.drawString(value, x + 2 * width, y + height + height / 2 + h);
-				}
+				g.drawString(value, x + width + width / 2, y + height + h);
 				break;
 			case GraphicLib.EAST:
 			default:
-				if (mgui.getHidden() == false) {
-					g.drawString(value, x + width + width / 2, y + 2 * height + h);
-				}
+				g.drawString(value, x + width, y + height + height / 2 + h);
 			}
-
+			
 			if (orientation != currentOrientation) {
 				setOrientation(orientation);
 			}
@@ -230,31 +212,39 @@ public class ELNModuleTerminal extends TGCScalableWithInternalComponent implemen
 
 	public void setOrientation(int orientation) {
 		currentOrientation = orientation;
-		double w0, h0;
+		double w0, h0, w1, h1;
 
 		switch (orientation) {
 		case GraphicLib.NORTH:
 			w0 = 0.5;
 			h0 = 1.0;
+			w1 = 0.5;
+			h1 = 0.0;
 			break;
 		case GraphicLib.WEST:
 			w0 = 1.0;
 			h0 = 0.5;
+			w1 = 0.0;
+			h1 = 0.5;
 			break;
 		case GraphicLib.SOUTH:
 			w0 = 0.5;
 			h0 = 0.0;
+			w1 = 0.5;
+			h1 = 1.0;
 			break;
 		case GraphicLib.EAST:
 		default:
 			w0 = 0.0;
 			h0 = 0.5;
+			w1 = 1.0;
+			h1 = 0.5;
 		}
 
-		for (int i = 0; i < 1; i++) {
-			((ELNConnectingPoint) connectingPoint[i]).setW(w0);
-			((ELNConnectingPoint) connectingPoint[i]).setH(h0);
-		}
+		((ELNConnectingPoint) connectingPoint[0]).setW(w0);
+		((ELNConnectingPoint) connectingPoint[0]).setH(h0);
+		((ELNConnectingPoint) connectingPoint[1]).setW(w1);
+		((ELNConnectingPoint) connectingPoint[1]).setH(h1);
 	}
 
 	public TGComponent isOnOnlyMe(int _x, int _y) {
