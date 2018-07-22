@@ -55,6 +55,7 @@ import ui.cd.*;
 import ui.ftd.FTDFault;
 import ui.eln.*;
 import ui.eln.sca_eln.*;
+import ui.eln.sca_eln_sca_tdf.*;
 import ui.syscams.*;
 import ui.ncdd.NCEqNode;
 import ui.ncdd.NCRouteArtifact;
@@ -2642,6 +2643,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                     || (o instanceof ELNComponentTransmissionLine && this.checkELNComponentTransmissionLine ((ELNComponentTransmissionLine) o, name))
                     || (o instanceof ELNComponentIndependentVoltageSource && this.checkELNComponentIndependentVoltageSource((ELNComponentIndependentVoltageSource) o, name))
                     || (o instanceof ELNComponentIndependentCurrentSource && this.checkELNComponentIndependentCurrentSource((ELNComponentIndependentCurrentSource) o, name))
+                    || (o instanceof ELNComponentCurrentSinkTDF && this.checkELNComponentCurrentSinkTDF((ELNComponentCurrentSinkTDF) o, name))
+                    || (o instanceof ELNComponentCurrentSourceTDF && this.checkELNComponentCurrentSourceTDF((ELNComponentCurrentSourceTDF) o, name))
+                    || (o instanceof ELNComponentVoltageSinkTDF && this.checkELNComponentVoltageSinkTDF((ELNComponentVoltageSinkTDF) o, name))
+                    || (o instanceof ELNComponentVoltageSourceTDF && this.checkELNComponentVoltageSourceTDF((ELNComponentVoltageSourceTDF) o, name))
                     || (o instanceof ATDBlock && this.checkATDBlock((ATDBlock) o, name))
                     || (o instanceof ATDAttack && this.checkATDAttack((ATDAttack) o, name))
                     || (o instanceof FTDFault && this.checkFTDFault((FTDFault) o, name))
@@ -2746,6 +2751,22 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
         
         public boolean checkELNComponentIndependentCurrentSource(ELNComponentIndependentCurrentSource o, String name) {
+        	return false;
+        }
+        
+        public boolean checkELNComponentCurrentSinkTDF(ELNComponentCurrentSinkTDF o, String name) {
+        	return false;
+        }
+        
+        public boolean checkELNComponentCurrentSourceTDF(ELNComponentCurrentSourceTDF o, String name) {
+        	return false;
+        }
+        
+        public boolean checkELNComponentVoltageSinkTDF(ELNComponentVoltageSinkTDF o, String name) {
+        	return false;
+        }
+        
+        public boolean checkELNComponentVoltageSourceTDF(ELNComponentVoltageSourceTDF o, String name) {
         	return false;
         }
 
@@ -2931,6 +2952,18 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     			return o.getValue().equals(name);
     		}
     		public boolean checkELNComponentIndependentCurrentSource(ELNComponentIndependentCurrentSource o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		public boolean checkELNComponentCurrentSinkTDF(ELNComponentCurrentSinkTDF o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		public boolean checkELNComponentCurrentSourceTDF(ELNComponentCurrentSourceTDF o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		public boolean checkELNComponentVoltageSinkTDF(ELNComponentVoltageSinkTDF o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		public boolean checkELNComponentVoltageSourceTDF(ELNComponentVoltageSourceTDF o, String name) {
     			return o.getValue().equals(name);
     		}
     	});
