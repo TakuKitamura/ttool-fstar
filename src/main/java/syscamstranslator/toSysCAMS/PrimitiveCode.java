@@ -132,6 +132,8 @@ public class PrimitiveCode {
 					} 
 					if (i == tdf.getListStruct().getSize()-1 && i != 0) {
 						corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t, " + identifier + "(" + value + ")" + CR + "\t\t{}" + CR;
+					} else {
+						corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t{}" + CR;
 					}
 				}
 				corpsPrimitiveTDF = corpsPrimitiveTDF + "\t};" + CR;
@@ -443,6 +445,8 @@ public class PrimitiveCode {
 					} 
 					if (i == de.getListStruct().getSize()-1 && i != 0) {
 						corpsPrimitiveDE = corpsPrimitiveDE + "\t\t, " + identifier + "(" + value + ")" + CR + "\t\t{}" + CR;
+					} else {
+						corpsPrimitiveDE = corpsPrimitiveDE + "\t\t{}" + CR;
 					}
 				}
 				corpsPrimitiveDE = corpsPrimitiveDE + "\t};" + CR;
@@ -590,7 +594,7 @@ public class PrimitiveCode {
 			}
 
 			String pc = buffer.toString();
-			corpsPrimitiveDE = corpsPrimitiveDE + CR + "\t" + pc + CR;
+			corpsPrimitiveDE = corpsPrimitiveDE + CR + "\t" + pc;
 			
 			corpsPrimitiveDE = corpsPrimitiveDE + CR + "};" + CR2 + "#endif" + " // " + de.getName().toUpperCase() + "_H";
 		} else {
