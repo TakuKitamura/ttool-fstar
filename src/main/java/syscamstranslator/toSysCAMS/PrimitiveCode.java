@@ -136,11 +136,10 @@ public class PrimitiveCode {
 						corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t{}" + CR;
 					}
 				}
-				corpsPrimitiveTDF = corpsPrimitiveTDF + "\t};" + CR;
+				corpsPrimitiveTDF = corpsPrimitiveTDF + "\t};" + CR2;
 			}
 
 			if (!tdfports.isEmpty()) {
-				corpsPrimitiveTDF = corpsPrimitiveTDF + CR;
 				for (SysCAMSTPortTDF t : tdfports) {
 					if (t.getOrigin() == 0) {
 						corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_in<" + t.getTDFType() + "> " + t.getName() + ";" + CR;
@@ -150,7 +149,6 @@ public class PrimitiveCode {
 				}
 			}
 			if (!convports.isEmpty()) {
-				corpsPrimitiveTDF = corpsPrimitiveTDF + CR;
 				for (SysCAMSTPortConverter conv : convports) {
 					if (conv.getOrigin() == 0) {
 						corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_de::sca_in<" + conv.getConvType() + "> " + conv.getName() + ";" + CR;
@@ -449,11 +447,10 @@ public class PrimitiveCode {
 						corpsPrimitiveDE = corpsPrimitiveDE + "\t\t{}" + CR;
 					}
 				}
-				corpsPrimitiveDE = corpsPrimitiveDE + "\t};" + CR;
+				corpsPrimitiveDE = corpsPrimitiveDE + "\t};" + CR2;
 			}
 
 			if (!deports.isEmpty()) {
-				corpsPrimitiveDE = corpsPrimitiveDE + CR;
 				for (SysCAMSTPortDE t : deports) {
 					if (t.getOrigin() == 0) {
 						corpsPrimitiveDE = corpsPrimitiveDE + "\tsca_core::sca_in<" + t.getDEType() + "> " + t.getName() + ";" + CR;
