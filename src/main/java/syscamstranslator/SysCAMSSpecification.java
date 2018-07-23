@@ -86,6 +86,16 @@ public class SysCAMSSpecification{
     	return blocksDE;
     }
     
+    public LinkedList<SysCAMSTBlockGPIO2VCI> getAllBlockGPIO2VCI(){
+    	LinkedList<SysCAMSTBlockGPIO2VCI> blocksGPIO2VCI = new LinkedList<SysCAMSTBlockGPIO2VCI>();
+    	for (SysCAMSTComponent blockGPIO2VCI : components) {
+    		if (blockGPIO2VCI instanceof SysCAMSTBlockGPIO2VCI) {
+    			blocksGPIO2VCI.add((SysCAMSTBlockGPIO2VCI) blockGPIO2VCI);
+    		}
+    	}
+    	return blocksGPIO2VCI;
+    }
+    
     public LinkedList<SysCAMSTCluster> getAllCluster(){
     	LinkedList<SysCAMSTCluster> clusters = new LinkedList<SysCAMSTCluster>();
     	for (SysCAMSTComponent cluster : components) {
@@ -157,6 +167,10 @@ public class SysCAMSSpecification{
     public int getNbBlockDE(){
       return (getAllBlockDE()).size();
     }
+    
+    public int getNbBlockGPIO2VCI(){
+        return (getAllBlockGPIO2VCI()).size();
+      }
 
     public int getNbCluster(){
       return (getAllCluster()).size();
@@ -174,7 +188,7 @@ public class SysCAMSSpecification{
       return (getAllPortDE()).size();
     }
     
-    public int getNbConnector(){
+    public int getNbConnectorCluster(){
     	return (getAllConnectorCluster()).size();
     }
 }
