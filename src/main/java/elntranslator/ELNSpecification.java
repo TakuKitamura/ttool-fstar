@@ -43,7 +43,7 @@ import java.util.List;
 
 /**
  * Class ELNSpecification
- * List and number of all the elements in a ELN diagram
+ * List of all the elements in a ELN diagram
  * Creation: 23/07/2018
  * @version 1.0 23/07/2018
  * @author Irina Kit Yan LEE
