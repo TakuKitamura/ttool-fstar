@@ -67,6 +67,7 @@ public class MakefileCode {
 	public static String getMakefileCode(SysCAMSTCluster cluster) {
 		if (cluster != null) {
 			LinkedList<SysCAMSTBlockTDF> tdf = cluster.getBlockTDF();
+			LinkedList<SysCAMSTBlockDE> de = cluster.getBlockDE();
 			
 			corpsMakefile = "# Compiler and linker flags" + CR + "CXXFLAGS = -g -Wall -I. $(SYSTEMC_INCLUDE_DIRS)" + CR 
 					+ "LDFLAGS = $(SYSTEMC_LIBRARY_DIRS)" + CR2 + "# List of all ecutables to be compiled" + CR
@@ -76,6 +77,10 @@ public class MakefileCode {
 			corpsMakefile = corpsMakefile + cluster.getClusterName() + "_tb: " +  cluster.getClusterName() + "_tb.cpp";
 			
 			for (SysCAMSTBlockTDF t : tdf) {
+				corpsMakefile = corpsMakefile + " " + t.getName() + ".h";
+			}
+			
+			for (SysCAMSTBlockDE t : de) {
 				corpsMakefile = corpsMakefile + " " + t.getName() + ".h";
 			}
 			
