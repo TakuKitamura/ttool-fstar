@@ -64,8 +64,6 @@ public class ELNModuleTerminal extends TGCScalableWithInternalComponent implemen
 	protected int oldx, oldy;
 	protected int currentOrientation = GraphicLib.NORTH;
 
-	private int isOrigin = -1;
-
 	private int textX = 15;
 	private double dtextX = 0.0;
 	protected int decPoint = 3;
@@ -320,14 +318,6 @@ public class ELNModuleTerminal extends TGCScalableWithInternalComponent implemen
 		} catch (Exception e) {
 			throw new MalformedModelingException();
 		}
-	}
-
-	public int getOrigin() {
-		return isOrigin;
-	}
-
-	public void setOrigin(int orig) {
-		isOrigin = orig;
 	}
 
 	public int getDefaultConnector() {
