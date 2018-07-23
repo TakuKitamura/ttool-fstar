@@ -73,8 +73,6 @@ public class ELNMidPortTerminal extends ui.TGCPointOfConnector {
         editable = false;
         removable = true;
         canBeCloned = false;
-        
-        value = "";
     }
     
     public void initConnectingPoint(int nb) {
@@ -96,12 +94,6 @@ public class ELNMidPortTerminal extends ui.TGCPointOfConnector {
         }
         return null;
     }
-    
-    public boolean editOndoubleClick(JFrame frame) {
-    	JDialogELNMidPortTerminal jde = new JDialogELNMidPortTerminal(this);
-		jde.setVisible(true);
-		return true;
-	}
     
     public void myActionWhenRemoved() {
         if (father != null) {
