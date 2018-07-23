@@ -145,7 +145,7 @@ Open your configuration file, and set the following lines accordingly with your 
 <AVATARExecutableCodeDirectory data="../executablecode/" />
 \end{verbatim}
 \begin{itemize}
-This configuration works only for models. For TTool project, the default directory is "AVATAR_executablecode" which is automatically created in the sub folder of the project.
+\item This configuration works only for models. For TTool projects, the default directory is "AVATAR\_executablecode" which is automatically created in the sub folder of the project.
 \item Host that is intended to perform the code compilation and execution. Default value is "localhost".
 \begin{verbatim}
 <AVATARExecutableCodeHost data="localhost"/>
@@ -212,7 +212,7 @@ Once the code has been generated, the dialog window should automatically switch 
 \item Compile the code for your localhost (\textbf{You should select this option}).
 \item Compile the code for the SoCLib platform. This option is not addressed in this document.
 \end{itemize}
-If the compilation fails, you can try to remove all old .o files using the first tab of the dialog window: "Generate Code", "Remove .o files". If the compilation still fails, it could be due to a bad installation of a C compiler. We strongly recommend to use the GNU C Compiler (\textit{gcc}). You could also edit the Makefile you have selected (see section \ref{sec:conf}) to adapt it to your localhost particularities.  Note that the compilation process also compiles the Avatar runtime C sources\footnote{These sources are located in: TTool/executablecode/src or in your project directory: AVATAR_executablecode}, and links all resulting object files together.
+If the compilation fails, you can try to remove all old .o files using the first tab of the dialog window: "Generate Code", "Remove .o files". If the compilation still fails, it could be due to a bad installation of a C compiler. We strongly recommend to use the GNU C Compiler (\textit{gcc}). You could also edit the Makefile you have selected (see section \ref{sec:conf}) to adapt it to your localhost particularities.  Note that the compilation process also compiles the Avatar runtime C sources\footnote{These sources are located in: TTool/executablecode/src or in your project directory: AVATAR\_executablecode}, and links all resulting object files together.
 
 \begin{figure}[htbp]
 \centering
