@@ -122,12 +122,14 @@ public class SysCAMSPrimitivePort extends TGCScalableWithInternalComponent imple
         	((SysCAMSPortTDF) this).setRate(-1);
         	((SysCAMSPortTDF) this).setDelay(-1);
         	((SysCAMSPortTDF) this).setTDFType("int");
+        	((SysCAMSPortTDF) this).setOrigin(0);
         } else if (this instanceof SysCAMSPortDE) {
 //        	((SysCAMSPortDE) this).setPeriod(-1);
 //        	((SysCAMSPortDE) this).setTime("");
 //        	((SysCAMSPortDE) this).setRate(-1);
 //        	((SysCAMSPortDE) this).setDelay(-1);
         	((SysCAMSPortDE) this).setDEType("int");
+        	((SysCAMSPortDE) this).setOrigin(0);
         	((SysCAMSPortDE) this).setSensitive(false);
         	((SysCAMSPortDE) this).setSensitiveMethod("");
         } else if (this instanceof SysCAMSPortConverter) {
@@ -136,6 +138,7 @@ public class SysCAMSPrimitivePort extends TGCScalableWithInternalComponent imple
         	((SysCAMSPortConverter) this).setDelay(-1);
         	((SysCAMSPortConverter) this).setRate(-1);
         	((SysCAMSPortConverter) this).setConvType("int");
+        	((SysCAMSPortConverter) this).setOrigin(0);
         }
     }
 
