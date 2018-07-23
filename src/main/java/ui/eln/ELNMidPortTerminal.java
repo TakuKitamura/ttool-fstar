@@ -40,9 +40,7 @@ package ui.eln;
 
 import myutil.GraphicLib;
 import ui.*;
-import ui.window.JDialogELNMidPortTerminal;
 import java.awt.*;
-import javax.swing.JFrame;
 
 /**
  * Class ELNMidPortTerminal
@@ -78,7 +76,7 @@ public class ELNMidPortTerminal extends ui.TGCPointOfConnector {
     public void initConnectingPoint(int nb) {
 		nbConnectingPoint = nb;
 		connectingPoint = new TGConnectingPoint[nb];
-		connectingPoint[0] = new ELNPortTerminal(this, -width/2, -height/2, true, true, 0.5, 0.5, "");
+		connectingPoint[0] = new ELNConnectingPoint(this, -width/2, -height/2, true, true, 0.5, 0.5, "");
 	}
     
     public void internalDrawing(Graphics g) {

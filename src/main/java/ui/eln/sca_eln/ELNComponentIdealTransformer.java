@@ -109,10 +109,10 @@ public class ELNComponentIdealTransformer extends TGCScalableWithInternalCompone
 	public void initPortTerminal(int nb) {
 		nbConnectingPoint = nb;
 		connectingPoint = new TGConnectingPoint[nb];
-		connectingPoint[0] = new ELNPortTerminal(this, 0, 0, true, true, 0.0, 0.0, "p1");
-		connectingPoint[1] = new ELNPortTerminal(this, 0, 0, true, true, 0.0, 0.0, "p2");
-		connectingPoint[2] = new ELNPortTerminal(this, 0, 0, true, true, 0.0, 0.0, "n1");
-		connectingPoint[3] = new ELNPortTerminal(this, 0, 0, true, true, 0.0, 0.0, "n2");
+		connectingPoint[0] = new ELNConnectingPoint(this, 0, 0, true, true, 0.0, 0.0, "p1");
+		connectingPoint[1] = new ELNConnectingPoint(this, 0, 0, true, true, 0.0, 0.0, "p2");
+		connectingPoint[2] = new ELNConnectingPoint(this, 0, 0, true, true, 0.0, 0.0, "n1");
+		connectingPoint[3] = new ELNConnectingPoint(this, 0, 0, true, true, 0.0, 0.0, "n2");
 	}
 
 	public Color getMyColor() {
@@ -178,20 +178,20 @@ public class ELNComponentIdealTransformer extends TGCScalableWithInternalCompone
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)) {
 				rotateTop(g);
-				((ELNPortTerminal) connectingPoint[0]).setW(0.0);
-				((ELNPortTerminal) connectingPoint[0]).setH(1.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[1]).setW(1.0);
-				((ELNPortTerminal) connectingPoint[1]).setH(1.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[2]).setW(0.0);
-				((ELNPortTerminal) connectingPoint[2]).setH(19.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[3]).setW(1.0);
-				((ELNPortTerminal) connectingPoint[3]).setH(19.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[0]).setW(0.0);
+				((ELNConnectingPoint) connectingPoint[0]).setH(1.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[1]).setW(1.0);
+				((ELNConnectingPoint) connectingPoint[1]).setH(1.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[2]).setW(0.0);
+				((ELNConnectingPoint) connectingPoint[2]).setH(19.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[3]).setW(1.0);
+				((ELNConnectingPoint) connectingPoint[3]).setH(19.0 / 20.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x - sw0, y - height / 20);
-					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width, y - height / 20);
-					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x - sw2,
+					g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x - sw0, y - height / 20);
+					g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width, y - height / 20);
+					g.drawString(((ELNConnectingPoint) connectingPoint[2]).getName(), x - sw2,
 							y + height + height / 20 + sh2);
-					g.drawString(((ELNPortTerminal) connectingPoint[3]).getName(), x + width,
+					g.drawString(((ELNConnectingPoint) connectingPoint[3]).getName(), x + width,
 							y + height + height / 20 + sh3);
 				}
 			}
@@ -200,20 +200,20 @@ public class ELNComponentIdealTransformer extends TGCScalableWithInternalCompone
 					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)) {
 				rotateTop(g);
-				((ELNPortTerminal) connectingPoint[1]).setW(0.0);
-				((ELNPortTerminal) connectingPoint[1]).setH(1.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[0]).setW(1.0);
-				((ELNPortTerminal) connectingPoint[0]).setH(1.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[3]).setW(0.0);
-				((ELNPortTerminal) connectingPoint[3]).setH(19.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[2]).setW(1.0);
-				((ELNPortTerminal) connectingPoint[2]).setH(19.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[1]).setW(0.0);
+				((ELNConnectingPoint) connectingPoint[1]).setH(1.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[0]).setW(1.0);
+				((ELNConnectingPoint) connectingPoint[0]).setH(1.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[3]).setW(0.0);
+				((ELNConnectingPoint) connectingPoint[3]).setH(19.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[2]).setW(1.0);
+				((ELNConnectingPoint) connectingPoint[2]).setH(19.0 / 20.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x - sw1, y - height / 20);
-					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width, y - height / 20);
-					g.drawString(((ELNPortTerminal) connectingPoint[3]).getName(), x - sw3,
+					g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x - sw1, y - height / 20);
+					g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width, y - height / 20);
+					g.drawString(((ELNConnectingPoint) connectingPoint[3]).getName(), x - sw3,
 							y + height + height / 20 + sh3);
-					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width,
+					g.drawString(((ELNConnectingPoint) connectingPoint[2]).getName(), x + width,
 							y + height + height / 20 + sh2);
 				}
 			}
@@ -222,20 +222,20 @@ public class ELNComponentIdealTransformer extends TGCScalableWithInternalCompone
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)) {
 				rotateBottom(g);
-				((ELNPortTerminal) connectingPoint[2]).setW(0.0);
-				((ELNPortTerminal) connectingPoint[2]).setH(1.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[3]).setW(1.0);
-				((ELNPortTerminal) connectingPoint[3]).setH(1.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[0]).setW(0.0);
-				((ELNPortTerminal) connectingPoint[0]).setH(19.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[1]).setW(1.0);
-				((ELNPortTerminal) connectingPoint[1]).setH(19.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[2]).setW(0.0);
+				((ELNConnectingPoint) connectingPoint[2]).setH(1.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[3]).setW(1.0);
+				((ELNConnectingPoint) connectingPoint[3]).setH(1.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[0]).setW(0.0);
+				((ELNConnectingPoint) connectingPoint[0]).setH(19.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[1]).setW(1.0);
+				((ELNConnectingPoint) connectingPoint[1]).setH(19.0 / 20.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x - sw2, y - height / 20);
-					g.drawString(((ELNPortTerminal) connectingPoint[3]).getName(), x + width, y - height / 20);
-					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x - sw0,
+					g.drawString(((ELNConnectingPoint) connectingPoint[2]).getName(), x - sw2, y - height / 20);
+					g.drawString(((ELNConnectingPoint) connectingPoint[3]).getName(), x + width, y - height / 20);
+					g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x - sw0,
 							y + height + height / 20 + sh0);
-					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width,
+					g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width,
 							y + height + height / 20 + sh1);
 				}
 			}
@@ -244,20 +244,20 @@ public class ELNComponentIdealTransformer extends TGCScalableWithInternalCompone
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)) {
 				rotateBottom(g);
-				((ELNPortTerminal) connectingPoint[3]).setW(0.0);
-				((ELNPortTerminal) connectingPoint[3]).setH(1.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[2]).setW(1.0);
-				((ELNPortTerminal) connectingPoint[2]).setH(1.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[1]).setW(0.0);
-				((ELNPortTerminal) connectingPoint[1]).setH(19.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[0]).setW(1.0);
-				((ELNPortTerminal) connectingPoint[0]).setH(19.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[3]).setW(0.0);
+				((ELNConnectingPoint) connectingPoint[3]).setH(1.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[2]).setW(1.0);
+				((ELNConnectingPoint) connectingPoint[2]).setH(1.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[1]).setW(0.0);
+				((ELNConnectingPoint) connectingPoint[1]).setH(19.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[0]).setW(1.0);
+				((ELNConnectingPoint) connectingPoint[0]).setH(19.0 / 20.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(((ELNPortTerminal) connectingPoint[3]).getName(), x - sw3, y - height / 20);
-					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width, y - height / 20);
-					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x - sw1,
+					g.drawString(((ELNConnectingPoint) connectingPoint[3]).getName(), x - sw3, y - height / 20);
+					g.drawString(((ELNConnectingPoint) connectingPoint[2]).getName(), x + width, y - height / 20);
+					g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x - sw1,
 							y + height + height / 20 + sh1);
-					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width,
+					g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width,
 							y + height + height / 20 + sh0);
 				}
 			}
@@ -290,20 +290,20 @@ public class ELNComponentIdealTransformer extends TGCScalableWithInternalCompone
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)) {
 				rotateRight(g);
-				((ELNPortTerminal) connectingPoint[2]).setW(1.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[2]).setH(0.0);
-				((ELNPortTerminal) connectingPoint[0]).setW(19.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[0]).setH(0.0);
-				((ELNPortTerminal) connectingPoint[3]).setW(1.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[3]).setH(1.0);
-				((ELNPortTerminal) connectingPoint[1]).setW(19.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[1]).setH(1.0);
+				((ELNConnectingPoint) connectingPoint[2]).setW(1.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[2]).setH(0.0);
+				((ELNConnectingPoint) connectingPoint[0]).setW(19.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[0]).setH(0.0);
+				((ELNConnectingPoint) connectingPoint[3]).setW(1.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[3]).setH(1.0);
+				((ELNConnectingPoint) connectingPoint[1]).setW(19.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[1]).setH(1.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x - width / 20 - sw2, y);
-					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width + width / 20, y);
-					g.drawString(((ELNPortTerminal) connectingPoint[3]).getName(), x - width / 20 - sw3,
+					g.drawString(((ELNConnectingPoint) connectingPoint[2]).getName(), x - width / 20 - sw2, y);
+					g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width + width / 20, y);
+					g.drawString(((ELNConnectingPoint) connectingPoint[3]).getName(), x - width / 20 - sw3,
 							y + height + sh3);
-					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width + width / 20,
+					g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width + width / 20,
 							y + height + sh1);
 				}
 			}
@@ -312,20 +312,20 @@ public class ELNComponentIdealTransformer extends TGCScalableWithInternalCompone
 					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)) {
 				rotateRight(g);
-				((ELNPortTerminal) connectingPoint[3]).setW(1.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[3]).setH(0.0);
-				((ELNPortTerminal) connectingPoint[1]).setW(19.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[1]).setH(0.0);
-				((ELNPortTerminal) connectingPoint[2]).setW(1.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[2]).setH(1.0);
-				((ELNPortTerminal) connectingPoint[0]).setW(19.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[0]).setH(1.0);
+				((ELNConnectingPoint) connectingPoint[3]).setW(1.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[3]).setH(0.0);
+				((ELNConnectingPoint) connectingPoint[1]).setW(19.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[1]).setH(0.0);
+				((ELNConnectingPoint) connectingPoint[2]).setW(1.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[2]).setH(1.0);
+				((ELNConnectingPoint) connectingPoint[0]).setW(19.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[0]).setH(1.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(((ELNPortTerminal) connectingPoint[3]).getName(), x - width / 20 - sw3, y);
-					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width + width / 20, y);
-					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x - width / 20 - sw2,
+					g.drawString(((ELNConnectingPoint) connectingPoint[3]).getName(), x - width / 20 - sw3, y);
+					g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width + width / 20, y);
+					g.drawString(((ELNConnectingPoint) connectingPoint[2]).getName(), x - width / 20 - sw2,
 							y + height + sh2);
-					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width + width / 20,
+					g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width + width / 20,
 							y + height + sh0);
 				}
 			}
@@ -334,20 +334,20 @@ public class ELNComponentIdealTransformer extends TGCScalableWithInternalCompone
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)) {
 				rotateLeft(g);
-				((ELNPortTerminal) connectingPoint[0]).setW(1.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[0]).setH(0.0);
-				((ELNPortTerminal) connectingPoint[2]).setW(19.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[2]).setH(0.0);
-				((ELNPortTerminal) connectingPoint[1]).setW(1.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[1]).setH(1.0);
-				((ELNPortTerminal) connectingPoint[3]).setW(19.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[3]).setH(1.0);
+				((ELNConnectingPoint) connectingPoint[0]).setW(1.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[0]).setH(0.0);
+				((ELNConnectingPoint) connectingPoint[2]).setW(19.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[2]).setH(0.0);
+				((ELNConnectingPoint) connectingPoint[1]).setW(1.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[1]).setH(1.0);
+				((ELNConnectingPoint) connectingPoint[3]).setW(19.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[3]).setH(1.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x - width / 20 - sw0, y);
-					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width + width / 20, y);
-					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x - width / 20 - sw1,
+					g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x - width / 20 - sw0, y);
+					g.drawString(((ELNConnectingPoint) connectingPoint[2]).getName(), x + width + width / 20, y);
+					g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x - width / 20 - sw1,
 							y + height + sh1);
-					g.drawString(((ELNPortTerminal) connectingPoint[3]).getName(), x + width + width / 20,
+					g.drawString(((ELNConnectingPoint) connectingPoint[3]).getName(), x + width + width / 20,
 							y + height + sh3);
 				}
 			}
@@ -356,20 +356,20 @@ public class ELNComponentIdealTransformer extends TGCScalableWithInternalCompone
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)) {
 				rotateLeft(g);
-				((ELNPortTerminal) connectingPoint[1]).setW(1.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[1]).setH(0.0);
-				((ELNPortTerminal) connectingPoint[3]).setW(19.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[3]).setH(0.0);
-				((ELNPortTerminal) connectingPoint[0]).setW(1.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[0]).setH(1.0);
-				((ELNPortTerminal) connectingPoint[2]).setW(19.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[2]).setH(1.0);
+				((ELNConnectingPoint) connectingPoint[1]).setW(1.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[1]).setH(0.0);
+				((ELNConnectingPoint) connectingPoint[3]).setW(19.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[3]).setH(0.0);
+				((ELNConnectingPoint) connectingPoint[0]).setW(1.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[0]).setH(1.0);
+				((ELNConnectingPoint) connectingPoint[2]).setW(19.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[2]).setH(1.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x - width / 20 - sw1, y);
-					g.drawString(((ELNPortTerminal) connectingPoint[3]).getName(), x + width + width / 20, y);
-					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x - width / 20 - sw0,
+					g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x - width / 20 - sw1, y);
+					g.drawString(((ELNConnectingPoint) connectingPoint[3]).getName(), x + width + width / 20, y);
+					g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x - width / 20 - sw0,
 							y + height + sh0);
-					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width + width / 20,
+					g.drawString(((ELNConnectingPoint) connectingPoint[2]).getName(), x + width + width / 20,
 							y + height + sh2);
 				}
 			}
@@ -402,20 +402,20 @@ public class ELNComponentIdealTransformer extends TGCScalableWithInternalCompone
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)) {
 				rotateBottom(g);
-				((ELNPortTerminal) connectingPoint[3]).setW(0.0);
-				((ELNPortTerminal) connectingPoint[3]).setH(1.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[2]).setW(1.0);
-				((ELNPortTerminal) connectingPoint[2]).setH(1.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[1]).setW(0.0);
-				((ELNPortTerminal) connectingPoint[1]).setH(19.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[0]).setW(1.0);
-				((ELNPortTerminal) connectingPoint[0]).setH(19.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[3]).setW(0.0);
+				((ELNConnectingPoint) connectingPoint[3]).setH(1.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[2]).setW(1.0);
+				((ELNConnectingPoint) connectingPoint[2]).setH(1.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[1]).setW(0.0);
+				((ELNConnectingPoint) connectingPoint[1]).setH(19.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[0]).setW(1.0);
+				((ELNConnectingPoint) connectingPoint[0]).setH(19.0 / 20.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(((ELNPortTerminal) connectingPoint[3]).getName(), x - sw3, y - height / 20);
-					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width, y - height / 20);
-					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x - sw1,
+					g.drawString(((ELNConnectingPoint) connectingPoint[3]).getName(), x - sw3, y - height / 20);
+					g.drawString(((ELNConnectingPoint) connectingPoint[2]).getName(), x + width, y - height / 20);
+					g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x - sw1,
 							y + height + height / 20 + sh1);
-					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width,
+					g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width,
 							y + height + height / 20 + sh0);
 				}
 			}
@@ -424,20 +424,20 @@ public class ELNComponentIdealTransformer extends TGCScalableWithInternalCompone
 					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)) {
 				rotateBottom(g);
-				((ELNPortTerminal) connectingPoint[2]).setW(0.0);
-				((ELNPortTerminal) connectingPoint[2]).setH(1.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[3]).setW(1.0);
-				((ELNPortTerminal) connectingPoint[3]).setH(1.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[0]).setW(0.0);
-				((ELNPortTerminal) connectingPoint[0]).setH(19.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[1]).setW(1.0);
-				((ELNPortTerminal) connectingPoint[1]).setH(19.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[2]).setW(0.0);
+				((ELNConnectingPoint) connectingPoint[2]).setH(1.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[3]).setW(1.0);
+				((ELNConnectingPoint) connectingPoint[3]).setH(1.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[0]).setW(0.0);
+				((ELNConnectingPoint) connectingPoint[0]).setH(19.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[1]).setW(1.0);
+				((ELNConnectingPoint) connectingPoint[1]).setH(19.0 / 20.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x - sw2, y - height / 20);
-					g.drawString(((ELNPortTerminal) connectingPoint[3]).getName(), x + width, y - height / 20);
-					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x - sw0,
+					g.drawString(((ELNConnectingPoint) connectingPoint[2]).getName(), x - sw2, y - height / 20);
+					g.drawString(((ELNConnectingPoint) connectingPoint[3]).getName(), x + width, y - height / 20);
+					g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x - sw0,
 							y + height + height / 20 + sh0);
-					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width,
+					g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width,
 							y + height + height / 20 + sh1);
 				}
 			}
@@ -446,20 +446,20 @@ public class ELNComponentIdealTransformer extends TGCScalableWithInternalCompone
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)) {
 				rotateTop(g);
-				((ELNPortTerminal) connectingPoint[1]).setW(0.0);
-				((ELNPortTerminal) connectingPoint[1]).setH(1.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[0]).setW(1.0);
-				((ELNPortTerminal) connectingPoint[0]).setH(1.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[3]).setW(0.0);
-				((ELNPortTerminal) connectingPoint[3]).setH(19.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[2]).setW(1.0);
-				((ELNPortTerminal) connectingPoint[2]).setH(19.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[1]).setW(0.0);
+				((ELNConnectingPoint) connectingPoint[1]).setH(1.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[0]).setW(1.0);
+				((ELNConnectingPoint) connectingPoint[0]).setH(1.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[3]).setW(0.0);
+				((ELNConnectingPoint) connectingPoint[3]).setH(19.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[2]).setW(1.0);
+				((ELNConnectingPoint) connectingPoint[2]).setH(19.0 / 20.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x - sw1, y - height / 20);
-					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width, y - height / 20);
-					g.drawString(((ELNPortTerminal) connectingPoint[3]).getName(), x - sw3,
+					g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x - sw1, y - height / 20);
+					g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width, y - height / 20);
+					g.drawString(((ELNConnectingPoint) connectingPoint[3]).getName(), x - sw3,
 							y + height + height / 20 + sh3);
-					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width,
+					g.drawString(((ELNConnectingPoint) connectingPoint[2]).getName(), x + width,
 							y + height + height / 20 + sh2);
 				}
 			}
@@ -468,20 +468,20 @@ public class ELNComponentIdealTransformer extends TGCScalableWithInternalCompone
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)) {
 				rotateTop(g);
-				((ELNPortTerminal) connectingPoint[0]).setW(0.0);
-				((ELNPortTerminal) connectingPoint[0]).setH(1.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[1]).setW(1.0);
-				((ELNPortTerminal) connectingPoint[1]).setH(1.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[2]).setW(0.0);
-				((ELNPortTerminal) connectingPoint[2]).setH(19.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[3]).setW(1.0);
-				((ELNPortTerminal) connectingPoint[3]).setH(19.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[0]).setW(0.0);
+				((ELNConnectingPoint) connectingPoint[0]).setH(1.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[1]).setW(1.0);
+				((ELNConnectingPoint) connectingPoint[1]).setH(1.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[2]).setW(0.0);
+				((ELNConnectingPoint) connectingPoint[2]).setH(19.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[3]).setW(1.0);
+				((ELNConnectingPoint) connectingPoint[3]).setH(19.0 / 20.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x - sw0, y - height / 20);
-					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width, y - height / 20);
-					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x - sw2,
+					g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x - sw0, y - height / 20);
+					g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width, y - height / 20);
+					g.drawString(((ELNConnectingPoint) connectingPoint[2]).getName(), x - sw2,
 							y + height + height / 20 + sh2);
-					g.drawString(((ELNPortTerminal) connectingPoint[3]).getName(), x + width,
+					g.drawString(((ELNConnectingPoint) connectingPoint[3]).getName(), x + width,
 							y + height + height / 20 + sh3);
 				}
 			}
@@ -514,20 +514,20 @@ public class ELNComponentIdealTransformer extends TGCScalableWithInternalCompone
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)) {
 				rotateLeft(g);
-				((ELNPortTerminal) connectingPoint[1]).setW(1.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[1]).setH(0.0);
-				((ELNPortTerminal) connectingPoint[3]).setW(19.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[3]).setH(0.0);
-				((ELNPortTerminal) connectingPoint[0]).setW(1.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[0]).setH(1.0);
-				((ELNPortTerminal) connectingPoint[2]).setW(19.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[2]).setH(1.0);
+				((ELNConnectingPoint) connectingPoint[1]).setW(1.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[1]).setH(0.0);
+				((ELNConnectingPoint) connectingPoint[3]).setW(19.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[3]).setH(0.0);
+				((ELNConnectingPoint) connectingPoint[0]).setW(1.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[0]).setH(1.0);
+				((ELNConnectingPoint) connectingPoint[2]).setW(19.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[2]).setH(1.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x - width / 20 - sw1, y);
-					g.drawString(((ELNPortTerminal) connectingPoint[3]).getName(), x + width + width / 20, y);
-					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x - width / 20 - sw0,
+					g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x - width / 20 - sw1, y);
+					g.drawString(((ELNConnectingPoint) connectingPoint[3]).getName(), x + width + width / 20, y);
+					g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x - width / 20 - sw0,
 							y + height + sh0);
-					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width + width / 20,
+					g.drawString(((ELNConnectingPoint) connectingPoint[2]).getName(), x + width + width / 20,
 							y + height + sh2);
 				}
 			}
@@ -536,20 +536,20 @@ public class ELNComponentIdealTransformer extends TGCScalableWithInternalCompone
 					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == true)) {
 				rotateLeft(g);
-				((ELNPortTerminal) connectingPoint[0]).setW(1.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[0]).setH(0.0);
-				((ELNPortTerminal) connectingPoint[2]).setW(19.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[2]).setH(0.0);
-				((ELNPortTerminal) connectingPoint[1]).setW(1.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[1]).setH(1.0);
-				((ELNPortTerminal) connectingPoint[3]).setW(19.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[3]).setH(1.0);
+				((ELNConnectingPoint) connectingPoint[0]).setW(1.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[0]).setH(0.0);
+				((ELNConnectingPoint) connectingPoint[2]).setW(19.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[2]).setH(0.0);
+				((ELNConnectingPoint) connectingPoint[1]).setW(1.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[1]).setH(1.0);
+				((ELNConnectingPoint) connectingPoint[3]).setW(19.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[3]).setH(1.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x - width / 20 - sw0, y);
-					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x + width + width / 20, y);
-					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x - width / 20 - sw1,
+					g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x - width / 20 - sw0, y);
+					g.drawString(((ELNConnectingPoint) connectingPoint[2]).getName(), x + width + width / 20, y);
+					g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x - width / 20 - sw1,
 							y + height + sh1);
-					g.drawString(((ELNPortTerminal) connectingPoint[3]).getName(), x + width + width / 20,
+					g.drawString(((ELNConnectingPoint) connectingPoint[3]).getName(), x + width + width / 20,
 							y + height + sh3);
 				}
 			}
@@ -558,20 +558,20 @@ public class ELNComponentIdealTransformer extends TGCScalableWithInternalCompone
 					|| (fv_0_2 == false && fv_1_3 == true && fh_0_2 == true && fh_1_3 == true)
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == true && fh_1_3 == false)) {
 				rotateRight(g);
-				((ELNPortTerminal) connectingPoint[3]).setW(1.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[3]).setH(0.0);
-				((ELNPortTerminal) connectingPoint[1]).setW(19.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[1]).setH(0.0);
-				((ELNPortTerminal) connectingPoint[2]).setW(1.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[2]).setH(1.0);
-				((ELNPortTerminal) connectingPoint[0]).setW(19.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[0]).setH(1.0);
+				((ELNConnectingPoint) connectingPoint[3]).setW(1.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[3]).setH(0.0);
+				((ELNConnectingPoint) connectingPoint[1]).setW(19.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[1]).setH(0.0);
+				((ELNConnectingPoint) connectingPoint[2]).setW(1.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[2]).setH(1.0);
+				((ELNConnectingPoint) connectingPoint[0]).setW(19.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[0]).setH(1.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(((ELNPortTerminal) connectingPoint[3]).getName(), x - width / 20 - sw3, y);
-					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width + width / 20, y);
-					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x - width / 20 - sw2,
+					g.drawString(((ELNConnectingPoint) connectingPoint[3]).getName(), x - width / 20 - sw3, y);
+					g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width + width / 20, y);
+					g.drawString(((ELNConnectingPoint) connectingPoint[2]).getName(), x - width / 20 - sw2,
 							y + height + sh2);
-					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width + width / 20,
+					g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width + width / 20,
 							y + height + sh0);
 				}
 			}
@@ -580,20 +580,20 @@ public class ELNComponentIdealTransformer extends TGCScalableWithInternalCompone
 					|| (fv_0_2 == true && fv_1_3 == true && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == false && fv_1_3 == false && fh_0_2 == true && fh_1_3 == true)) {
 				rotateRight(g);
-				((ELNPortTerminal) connectingPoint[2]).setW(1.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[2]).setH(0.0);
-				((ELNPortTerminal) connectingPoint[0]).setW(19.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[0]).setH(0.0);
-				((ELNPortTerminal) connectingPoint[3]).setW(1.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[3]).setH(1.0);
-				((ELNPortTerminal) connectingPoint[1]).setW(19.0 / 20.0);
-				((ELNPortTerminal) connectingPoint[1]).setH(1.0);
+				((ELNConnectingPoint) connectingPoint[2]).setW(1.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[2]).setH(0.0);
+				((ELNConnectingPoint) connectingPoint[0]).setW(19.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[0]).setH(0.0);
+				((ELNConnectingPoint) connectingPoint[3]).setW(1.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[3]).setH(1.0);
+				((ELNConnectingPoint) connectingPoint[1]).setW(19.0 / 20.0);
+				((ELNConnectingPoint) connectingPoint[1]).setH(1.0);
 				if (mgui.getHidden() == false) {
-					g.drawString(((ELNPortTerminal) connectingPoint[2]).getName(), x - width / 20 - sw2, y);
-					g.drawString(((ELNPortTerminal) connectingPoint[0]).getName(), x + width + width / 20, y);
-					g.drawString(((ELNPortTerminal) connectingPoint[3]).getName(), x - width / 20 - sw3,
+					g.drawString(((ELNConnectingPoint) connectingPoint[2]).getName(), x - width / 20 - sw2, y);
+					g.drawString(((ELNConnectingPoint) connectingPoint[0]).getName(), x + width + width / 20, y);
+					g.drawString(((ELNConnectingPoint) connectingPoint[3]).getName(), x - width / 20 - sw3,
 							y + height + sh3);
-					g.drawString(((ELNPortTerminal) connectingPoint[1]).getName(), x + width + width / 20,
+					g.drawString(((ELNConnectingPoint) connectingPoint[1]).getName(), x + width + width / 20,
 							y + height + sh1);
 				}
 			}

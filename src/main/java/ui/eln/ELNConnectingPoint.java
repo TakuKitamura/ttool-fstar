@@ -52,12 +52,23 @@ import ui.TGConnectingPointWidthHeight;
 
 public class ELNConnectingPoint extends TGConnectingPointWidthHeight {
 	public boolean positionned;
+	private String name;
 
-	public ELNConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
+	public ELNConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h, String _name) {
 		super(_container, _x, _y, _in, _out, _w, _h);
+		
+		name = _name;
 	}
 
 	public boolean isCompatibleWith(int type) {
 		return type == TGComponentManager.ELN_CONNECTOR;
+	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String _name) {
+		name = _name;
 	}
 }

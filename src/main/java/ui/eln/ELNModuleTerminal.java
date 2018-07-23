@@ -97,8 +97,8 @@ public class ELNModuleTerminal extends TGCScalableWithInternalComponent implemen
 	public void initConnectingPoint(int nb) {
 		nbConnectingPoint = nb;
 		connectingPoint = new TGConnectingPoint[nb];
-		connectingPoint[0] = new ELNConnectingPoint(this, 0, 0, true, true, 0.5, 1.0);
-		connectingPoint[1] = new ELNConnectingPoint(this, 0, 0, true, true, 0.5, 0.0);
+		connectingPoint[0] = new ELNConnectingPoint(this, 0, 0, true, true, 0.5, 1.0, "");
+		connectingPoint[1] = new ELNConnectingPoint(this, 0, 0, true, true, 0.5, 0.0, "");
 	}
 
 	public Color getMyColor() {
