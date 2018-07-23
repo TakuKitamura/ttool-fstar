@@ -532,6 +532,31 @@ public class PrimitiveCode {
 				corpsPrimitiveDE = corpsPrimitiveDE + "\t{}" + CR2;
 			}
 			
+			if (de.getListStruct().getSize() != 0) {
+				corpsPrimitiveDE = corpsPrimitiveDE + "private:" + CR;
+
+				String identifier, type, constant;
+				for (int i = 0; i < de.getListStruct().size(); i++) {
+					String select = de.getListStruct().get(i);
+					String[] splita = select.split(" = ");
+					identifier = splita[0];
+					String[] splitb = splita[1].split(" : ");
+					String[] splitc = splitb[1].split(" ");
+					if (splitc[0].equals("const")) {
+						constant = splitc[0];
+						type = splitc[1];
+					} else {
+						constant = "";
+						type = splitc[0];
+					}
+					if (constant.equals("")) {
+						corpsPrimitiveDE = corpsPrimitiveDE + "\t" + type + " " + identifier + ";" + CR;
+					} else {
+						corpsPrimitiveDE = corpsPrimitiveDE + "\t" + constant + " " + type + " " + identifier + ";" + CR;
+					}
+				}
+			}
+			
 			StringBuffer pcbuf = new StringBuffer(de.getCode());
 			StringBuffer buffer = new StringBuffer("");
 			int tab = 0;
@@ -565,33 +590,9 @@ public class PrimitiveCode {
 			}
 
 			String pc = buffer.toString();
-			corpsPrimitiveDE = corpsPrimitiveDE + "protected:" + CR + "\t" + pc + CR;
-
-			if (de.getListStruct().getSize() != 0) {
-				corpsPrimitiveDE = corpsPrimitiveDE + "private:" + CR;
-
-				String identifier, type, constant;
-				for (int i = 0; i < de.getListStruct().size(); i++) {
-					String select = de.getListStruct().get(i);
-					String[] splita = select.split(" = ");
-					identifier = splita[0];
-					String[] splitb = splita[1].split(" : ");
-					String[] splitc = splitb[1].split(" ");
-					if (splitc[0].equals("const")) {
-						constant = splitc[0];
-						type = splitc[1];
-					} else {
-						constant = "";
-						type = splitc[0];
-					}
-					if (constant.equals("")) {
-						corpsPrimitiveDE = corpsPrimitiveDE + "\t" + type + " " + identifier + ";" + CR;
-					} else {
-						corpsPrimitiveDE = corpsPrimitiveDE + "\t" + constant + " " + type + " " + identifier + ";" + CR;
-					}
-				}
-			}
-			corpsPrimitiveDE = corpsPrimitiveDE + "};" + CR2 + "#endif" + " // " + de.getName().toUpperCase() + "_H";
+			corpsPrimitiveDE = corpsPrimitiveDE + CR + "\t" + pc + CR;
+			
+			corpsPrimitiveDE = corpsPrimitiveDE + CR + "};" + CR2 + "#endif" + " // " + de.getName().toUpperCase() + "_H";
 		} else {
 			corpsPrimitiveDE = "";
 		}
