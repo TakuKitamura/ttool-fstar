@@ -71,6 +71,8 @@ Ludovic Apvrille, Renaud Pacalet
 #include <sys/resource.h>
 #include <unistd.h>
 
+#include "penalties.h"
+
 #define WRITE_STREAM(s,v) s.write((char*) &v,sizeof(v)); 
 //std::cout << sizeof(v) << " bytes written" << std::endl;
 #define READ_STREAM(s,v) s.read((char*) &v,sizeof(v)); 
@@ -89,7 +91,7 @@ using std::max;
 //cost of a send/wait command
 #define WAIT_SEND_VLEN 1
 //activate tis flag to take penalties (energy mode, branch prediction, context switch) into account
-#undef PENALTIES_ENABLED
+//#undef PENALTIES_ENABLED
 //enables the state hash feature
 #undef STATE_HASH_ENABLED
 //enables listerns for interactive simulation, switch off for fast simulation in command line mode
