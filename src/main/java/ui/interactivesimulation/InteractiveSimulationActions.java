@@ -109,8 +109,8 @@ public class InteractiveSimulationActions extends AbstractAction {
     public static final int ACT_QUIT_SD_WINDOW = 37;
     public static final int ACT_SAVE_SD_SVG = 38;
 
-
-    public static final int NB_ACTION = 39;
+    public static final int ACT_SAVE_SD_PNG = 39;
+    public static final int NB_ACTION = 40;
 
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
@@ -198,7 +198,7 @@ public class InteractiveSimulationActions extends AbstractAction {
 
         actions[ACT_QUIT_SD_WINDOW] = new TAction("close-sdpanel", "Close Window", IconManager.imgic27, IconManager.imgic27, "Close window", "Close this window", 'Q');
         actions[ACT_SAVE_SD_SVG] = new TAction("svg-sdpanel", "Save in SVG Format", IconManager.imgic1310, IconManager.imgic1310, "Save in SVG Format", "Save as SVG file", 'S');
-
+        actions[ACT_SAVE_SD_PNG] = new TAction("png-sdpanel", "Save in PNG Format", IconManager.imgic1310, IconManager.imgic1310, "Save in PNG Format", "Save as PNG file", 'S');
     }
 
 

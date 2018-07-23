@@ -37,47 +37,82 @@
  */
 
 
-package ui.util;
+package tmltranslator.tomappingsystemc2;
 
+
+import myutil.FileException;
+import myutil.FileUtils;
+
+import java.io.File;
 
 /**
- * Class DefaultText
- * Text of some windows
- * Creation: 01/12/2003
+ * Class Penalties
+ * Management of penalty file
+ * Creation: 23/07/2018
  *
  * @author Ludovic APVRILLE
- * @version 1.2 21/06/2018
+ * @version 1.0 23/07/2018
  */
-public class DefaultText {
+public class Penalties {
+    public static final String FILE_NAME = "penalties.h";
+    private static final String NOT_ACTIVATED = "#undef PENALTIES_ENABLED";
+    private static final String ACTIVATED = "#define PENALTIES_ENABLED";
+    private static final String FILE_HEADER = "// DO NOT EDIT: AUTOMATICALLY GENERATED";
 
-    public static String BUILD = "12707";
-    public static String DATE = "2018/07/23 16:51:06 CET";
+    private String pathToFile;
 
-    public static StringBuffer sbAbout = makeAbout();
-
-    public static String getAboutText() {
-        return new String(sbAbout);
+    public Penalties(String pathToFile) {
+        this.pathToFile = pathToFile;
     }
 
-    public static String getVersion() {
-        return "1.0beta"; /* Set new release Nov. 16th, 2017 */
-    }
+    // Return 0 in case no change, 1 if changes were made
+    // -1 in case of error
+    public int handlePenalties(boolean mustHandlePenalties)  {
+        // Load file and check for current status
+        String fullPath = pathToFile + File.separator + FILE_NAME;
+        String data = "";
+        try {
+            data = FileUtils.loadFile(fullPath);
+        } catch (FileException e) {
+            return -1;
+        }
 
-    public static String getFullVersion() {
-        return getVersion() + " -- build: " + DefaultText.BUILD + " date: " + DefaultText.DATE;
-    }
+        int indexU = data.indexOf(NOT_ACTIVATED);
+        int indexD = data.indexOf(ACTIVATED);
+        boolean mustChange = false;
 
-    private static StringBuffer makeAbout() {
-        StringBuffer sb = new StringBuffer();
-        sb.append("TTool version " + getFullVersion() + "\n");
-        sb.append("Copyright IMT - Telecom ParisTech / Ludovic Apvrille \n");
-        sb.append("\nContact: ludovic.apvrille@telecom-paristech.fr\n");
-        sb.append("\nProgrammers\n\tTelecom ParisTech: Ludovic Apvrille, Dominique Blouin, Fabien Tessier, \n\tDaniel Knorreck, Florian Lugou, Letitia Li\n");
-        sb.append("\n\tNokia: Andrea Enrici\n");
-        sb.append("\n\tLIP6: Daniela Genius\n");
-        sb.append("\nFor more information:\n");
-        sb.append("http://ttool.telecom-paristech.fr/\n\n");
-        return sb;
+        //  No penalty
+        if ((indexD == -1) && (indexD == -1)) {
+            mustChange = true;
+        } else if ((indexD > -1) && (indexD > -1)) {
+            mustChange = true;
+        } else {
+            if (indexD > -1) {
+                mustChange = mustHandlePenalties == false;
+            } else {
+                mustChange = mustHandlePenalties == true;
+            }
+        }
+
+        // Set new value if necessary
+        if (!mustChange) {
+            return 0;
+        }
+
+        data = FILE_HEADER + "\n";
+        if (mustHandlePenalties) {
+            data += ACTIVATED;
+        } else {
+            data += NOT_ACTIVATED;
+        }
+
+        try {
+            FileUtils.saveFile(fullPath, data);
+        } catch (FileException e) {
+            return -1;
+        }
+
+        return 1;
     }
 
 }

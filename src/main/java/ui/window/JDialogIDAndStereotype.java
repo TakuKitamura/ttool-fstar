@@ -70,7 +70,7 @@ public class JDialogIDAndStereotype extends JDialogBase implements ActionListene
     private Color defaultColor;
 
 
-    private JPanel panel1;
+    private JPanel panel1, panel2;
 
     // Panel1
     private JComboBox<String> listStereotypes;
@@ -111,8 +111,10 @@ public class JDialogIDAndStereotype extends JDialogBase implements ActionListene
         Container c = getContentPane();
         //GridBagLayout gridbag0 = new GridBagLayout();
         GridBagLayout gridbag1 = new GridBagLayout();
+        GridBagLayout gridbag2 = new GridBagLayout();
         //GridBagConstraints c0 = new GridBagConstraints();
         GridBagConstraints c1 = new GridBagConstraints();
+        GridBagConstraints c2 = new GridBagConstraints();
 
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         c.setLayout(new BorderLayout());
@@ -121,8 +123,11 @@ public class JDialogIDAndStereotype extends JDialogBase implements ActionListene
 
         panel1 = new JPanel();
         panel1.setLayout(gridbag1);
+        panel1.setBorder(new javax.swing.border.TitledBorder("Stereotype"));
 
-        panel1.setBorder(new javax.swing.border.TitledBorder("Requirement"));
+        panel2 = new JPanel();
+        panel2.setLayout(gridbag2);
+        panel2.setBorder(new javax.swing.border.TitledBorder("Name"));
 
         //panel1.setPreferredSize(new Dimension(500, 250));
 
@@ -166,13 +171,35 @@ public class JDialogIDAndStereotype extends JDialogBase implements ActionListene
         //panel1.setEditable(true);
 
         // ID
-        c1.fill = GridBagConstraints.HORIZONTAL;
+
+
+        c2.weighty = 1.0;
+        c2.weightx = 1.0;
+        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        c2.gridheight = 1;
+        c2.fill = GridBagConstraints.HORIZONTAL;
+        c2.anchor = GridBagConstraints.CENTER;
         name = new JTextField(currentName, 30);
-        panel1.add(name, c1);
+        panel2.add(name, c2);
         //panel1.setEditable(true);
 
+        JPanel mainPanel = new JPanel();
+        GridBagLayout gridbag = new GridBagLayout();
+        GridBagConstraints co = new GridBagConstraints();
+        mainPanel.setLayout(gridbag);
+        co.weighty = 1.0;
+        co.weightx = 1.0;
+        co.gridwidth = GridBagConstraints.REMAINDER; //end row
+        co.gridheight = 1;
+        co.fill = GridBagConstraints.HORIZONTAL;
+        co.anchor = GridBagConstraints.CENTER;
+        mainPanel.add(panel1, co);
+        mainPanel.add(panel2, co);
 
-        c.add(panel1, BorderLayout.CENTER);
+        c.add(mainPanel, BorderLayout.CENTER);
+
+        //c.add(panel1, BorderLayout.NORTH);
+        //c.add(panel2, BorderLayout.CENTER);
 
         JPanel buttons = initBasicButtons(this);
         c.add(buttons, BorderLayout.SOUTH);

@@ -78,29 +78,14 @@ public class JFrameRequirementTable extends JFrame implements ActionListener /*,
     private java.util.List<TableSorter> tss;
     private java.util.List<String> titles;
 
-    //private StatisticsTableModel tm;
-
-    //private JStatisticsPanel jstat;
-
-    //private java.util.List<JScrollPane> panes;
     private JButton refresh, buttonGenerate, buttonGenerateCSV;
     private JTable jtableRTM;
 
-    //private JTextField eq, sw, tr, li, pa;
-
     // tab pane
-    JTabbedPane mainTabbedPane;
+    private JTabbedPane mainTabbedPane;
+    private JTabbedPane main; // from MGUI
+    private Point[] pts; // storing column data, see JDialogRequirementTable
 
-    JTabbedPane main; // from MGUI
-
-    Point[] pts; // storing column data, see JDialogRequirementTable
-
-
-    //shortest paths
-    //JComboBox combo1, combo2, combo3, combo4;
-    //JTextField combo1, combo2, combo3, combo4;
-    //JTextField text1, text2;
-    //JButton goPath, goPathL, savePath, savePathL;
 
 
     public JFrameRequirementTable(String title, Vector<TURTLEPanel> _tabs, JTabbedPane _main, Point[] _pts) {

@@ -6082,6 +6082,16 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
     public void generateDocumentationReq() {
         TraceManager.addDev("Frame Req");
+
+        // Repaint all requirement diags
+        TURTLEPanel tp;
+        for (int i = 0; i < tabs.size(); i++) {
+            tp = tabs.elementAt(i);
+            if (tp instanceof AvatarRequirementPanel) {
+                ((AvatarRequirementPanel)(tp)).updateReferences();
+            }
+        }
+
         JDialogRequirementTable jdrt = new JDialogRequirementTable(frame, "Selecting table columns");
         GraphicLib.centerOnParent(jdrt);
         jdrt.setVisible(true);

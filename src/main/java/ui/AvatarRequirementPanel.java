@@ -226,5 +226,14 @@ public class AvatarRequirementPanel extends TURTLEPanel {
         }
     }
 
+    public void updateReferences() {
+        for (int i = 0; i < panels.size(); i++) {
+            TDiagramPanel tdp = panelAt(i);
+            if (tdp instanceof AvatarRDPanel) {
+                ((AvatarRDPanel)(tdp)).updateReferences();
+            }
+        }
+    }
+
 
 }

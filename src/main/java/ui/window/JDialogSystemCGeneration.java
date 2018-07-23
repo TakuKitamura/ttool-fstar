@@ -47,6 +47,7 @@ import req.ebrdd.EBRDD;
 import tepe.TEPE;
 import tmltranslator.tomappingsystemc2.DiploSimulatorFactory;
 import tmltranslator.tomappingsystemc2.IDiploSimulatorCodeGenerator;
+import tmltranslator.tomappingsystemc2.Penalties;
 import ui.AvatarRequirementPanelTranslator;
 import ui.JTextAreaWriter;
 import ui.MainGUI;
@@ -98,6 +99,7 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
 
     protected static boolean interactiveSimulationSelected = true;
     protected static boolean optimizeModeSelected = true;
+    protected static boolean activatePenaltiesSelected = true;
 
     protected final static int NOT_STARTED = 1;
     protected final static int STARTED = 2;
@@ -118,10 +120,10 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
     protected JTextField code1, code2, unitcycle, compiler1, exe1, exe2, exe3, exe2int, exe2formal;
     protected JTabbedPane tabbedPane;
     protected JScrollPane jsp;
-    protected JCheckBox removeCppFiles, removeXFiles, debugmode, optimizemode;
+    protected JCheckBox removeCppFiles, removeXFiles, debugmode, optimizemode, activatePenalties;
     protected JComboBox<String> versionSimulator;
 
-    //TEPED
+    //TEPE Diagram
     private static Vector<AvatarPDPanel> validatedTepe, ignoredTepe;
     private Vector<AvatarPDPanel> valTepe, ignTepe;
     private JList<AvatarPDPanel> listIgnoredTepe;
@@ -137,6 +139,7 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
     //    private boolean hasError = false;
     private int errorTabIndex = -1;
     protected boolean startProcess = false;
+    private boolean mustRecompileAll;
 
     private String simulatorHost;
 
@@ -308,6 +311,10 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
         optimizemode = new JCheckBox("Optimize code");
         optimizemode.setSelected(optimizeModeSelected);
         jp01.add(optimizemode, c01);
+
+        activatePenalties = new JCheckBox("Activate penalties");
+        activatePenalties.setSelected(activatePenaltiesSelected);
+        jp01.add(activatePenalties, c01);
 
         jp01.add(new JLabel("Simulator used:"), c01);
 
@@ -559,6 +566,7 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
 
         updateStaticList();
         optimizeModeSelected = optimizemode.isSelected();
+        activatePenaltiesSelected = activatePenalties.isSelected();
         // wasClosed = true;
         dispose();
     }
@@ -725,7 +733,7 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
 
         selectedItem = versionSimulator.getSelectedIndex();
 
-        switch (selectedItem) {        //Old SystemC generator
+        switch (selectedItem) {
             case 0: {       //Simulator without CPs (Daniel's version)
                 // Making EBRDDs
                 List<EBRDD> al = new ArrayList<EBRDD>();
@@ -785,10 +793,30 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
                     TraceManager.addError(message, th);
                     setError();
                 }
+                // Update the penalty file if necessary
+                // Must read the penalty file first
+
+                Penalties penalty = new Penalties(pathCode + File.separator + "src_simulator");
+                int changed = penalty.handlePenalties(activatePenalties.isSelected());
+
+                if (changed == -1) {
+                    final String message = "Could not generate penalty code";
+                    jta.append(System.lineSeparator() + message + System.lineSeparator());
+                    setError();
+                }
+
+                if (changed == 1) {
+                    mustRecompileAll = true;
+                } else {
+                    mustRecompileAll = false;
+                }
 
                 break;
             }
         }
+
+
+
     }   //End of method generateCode()
 
     private boolean validateData() {
@@ -818,6 +846,27 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
 
     private void compileCode()
             throws InterruptedException {
+
+        if (mustRecompileAll) {
+            jta.append("\"make clean\" must be performed\n");
+            rshc = new RshClient(simulatorHost);
+            String cmdClean = compiler1.getText() + " clean";
+            try {
+                if (!processCmd(cmdClean, jta, 0)) {
+                    setError();
+                    return;
+                }
+
+                jta.append("Make clean done.\n");
+            } catch (final Throwable th) {
+                jta.append("Error: " + th.getMessage() + ".\n");
+                TraceManager.addError(th);
+                setError();
+                return;
+            }
+        }
+
+
         String cmd = compiler1.getText();
 
         jta.append("Compiling simulator code with command: \n" + cmd + "\n");
