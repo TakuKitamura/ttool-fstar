@@ -88,7 +88,7 @@ public class TopCellGenerator {
 		if (TopCellGenerator.syscams.getNbPortConverter() == 0) {
 			System.out.println("***Warning: require at least one converter port***");
 		}
-		if (TopCellGenerator.syscams.getNbConnector() == 0) {
+		if (TopCellGenerator.syscams.getNbConnectorCluster() == 0) {
 			System.out.println("***Warning: require at least one connector***");
 		}
 		String top = Header.getClusterHeader(c) + ClusterCode.getClusterCode(c, connectors);
