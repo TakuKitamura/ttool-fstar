@@ -381,6 +381,12 @@ public abstract class TURTLEPanel implements GenericTree {
         }
     }
 
+    public void repaintAll() {
+        for (int i = 0; i < panels.size(); i++) {
+            panelAt(i).repaint();
+        }
+    }
+
     public void resetLiveness() {
         for (int i = 0; i < panels.size(); i++) {
             panelAt(i).resetLiveness();

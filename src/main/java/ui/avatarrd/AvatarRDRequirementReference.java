@@ -186,21 +186,8 @@ public class AvatarRDRequirementReference extends TGCScalableWithInternalCompone
 
 
         if ((reference == null) && (value.compareTo(DEFAULT_REF) != 0)) {
-            ArrayList<TGComponent> comps = tdp.getMainGUI().getAllRequirements();
-            String tdpName = getTDPName();
-            String reqName = getRequirementName();
-            for(TGComponent tgc: comps) {
-                if (tgc instanceof AvatarRDRequirement) {
-                    AvatarRDRequirement req = (AvatarRDRequirement)tgc;
-                    if (req.getTDiagramPanel().getName().compareTo(tdpName) == 0) {
-                        if (req.getRequirementName().compareTo(reqName) == 0) {
-                            reference = req;
-                            req.addReference(this);
-                            break;
-                        }
-                    }
-                }
-            }
+            updateReference();
+
         }
 
         if (!tdp.isScaled()) {
@@ -412,6 +399,24 @@ public class AvatarRDRequirementReference extends TGCScalableWithInternalCompone
             return this;
         }
         return null;
+    }
+
+    public void updateReference() {
+        ArrayList<TGComponent> comps = tdp.getMainGUI().getAllRequirements();
+        String tdpName = getTDPName();
+        String reqName = getRequirementName();
+        for(TGComponent tgc: comps) {
+            if (tgc instanceof AvatarRDRequirement) {
+                AvatarRDRequirement req = (AvatarRDRequirement) tgc;
+                if (req.getTDiagramPanel().getName().compareTo(tdpName) == 0) {
+                    if (req.getRequirementName().compareTo(reqName) == 0) {
+                        reference = req;
+                        req.addReference(this);
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     public String getRequirementReference() {

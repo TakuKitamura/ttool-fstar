@@ -1055,10 +1055,10 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
         AvatarRDPanel myPanel = (AvatarRDPanel)(getTDiagramPanel());
         sons.addAll(myPanel.getAllImmediateSons(this));
 
-        for (AvatarRDRequirementReference ref: references) {
+        /*for (AvatarRDRequirementReference ref: references) {
             myPanel = (AvatarRDPanel)(ref.getTDiagramPanel());
             sons.addAll(myPanel.getAllImmediateSons(ref));
-        }
+        }*/
         return sons;
     }
 
@@ -1097,8 +1097,17 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
     }
 
     public ArrayList<AvatarRDRequirement> getAllImmediateFathers() {
+
+        ArrayList<AvatarRDRequirement> fathers = new ArrayList<>();
         AvatarRDPanel myPanel = (AvatarRDPanel)(getTDiagramPanel());
-        return myPanel.getAllImmediateFathers(this);
+        fathers.addAll(myPanel.getAllImmediateFathers(this));
+
+        /*for (AvatarRDRequirementReference ref: references) {
+            myPanel = (AvatarRDPanel)(ref.getTDiagramPanel());
+            fathers.addAll(myPanel.getAllImmediateFathers(ref));
+        }*/
+        return fathers;
+
     }
 
     public String getStringOfAllImmediateFathers() {
