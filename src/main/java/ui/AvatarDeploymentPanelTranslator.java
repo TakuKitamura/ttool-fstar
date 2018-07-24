@@ -359,10 +359,7 @@ public class AvatarDeploymentPanelTranslator
 					     cluster_index,
 					     index,
 					     addRamNode.getMonitored ());
-			  avram.setNo_ram (index);
-			
-
-
+			  
 			  nb_target++;
 
 			  Vector < ADDChannelArtifact > channels =

@@ -44,4 +44,4 @@ runsoclib:
 	echo "running soclib"
 	cd soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial; make; SOCLIB_GDB=S ./system.x $(SOCLIB_CPU):$(SOCLIB_CPU_COUNT) ../../../../../mutekh/avatar-soclib-$(MUTEKH_CPU).out
 	
-allsoclib: updateruntime updategeneratedcode compilesoclib runsoclib
+allsoclib: updategeneratedcode compilesoclib runsoclib

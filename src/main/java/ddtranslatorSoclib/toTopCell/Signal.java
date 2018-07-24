@@ -171,31 +171,27 @@ public class Signal {
 		signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_tty"+i+"(\"signal_vci_tty"+i+"\");" + CR2;
 		i++;
 	    }
-	    int p=0;    
-
+	    //int p=0;    
 	  
 	}
 	else{	     
-	    int j = 0;
-	    for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()){
-		//	signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_vciram" + ram.getIndex()
-		//		    + "(\"signal_vci_vciram" + ram.getIndex() + "\");" + CR2;
-		signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_vciram" + i
-		    + "(\"signal_vci_vciram" + i +"_"+ j + "\");" + CR2;	  
-		j++;
+	  
+	    for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()){	
+		signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_vciram" +ram.getClusterIndex() +"_"+ram.getIndex() 
+		    + "(\"signal_vci_vciram" + ram.getClusterIndex() +"_"+ ram.getIndex() + "\");" + CR2;	  
+	
 	    }							
-	    int k = 0;
+	   
 	    	  							
 	    for (AvatarTTY  tty :  TopCellGenerator.avatardd.getAllTTY()){	
-		signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_tty"+i+"_"+k+"(\"signal_vci_tty"+ i +"_"+k+"\");" + CR2; 
-		k++;		
+		signal = signal + "soclib::caba::VciSignals<vci_param> signal_vci_tty"+tty.getClusterIndex()+"_"+tty.getNo_tty()+"(\"signal_vci_tty"+ tty.getClusterIndex() +"_"+tty.getNo_tty()+"\");" + CR2; 
+			
 	    }			
 	    //	signal = signal + " sc_core::sc_signal<bool> signal_xicu_irq[xicu_n_irq];" + CR2;	   
-	    i++;
+	   
 	}
 
 	for (AvatarCrossbar crossbar:TopCellGenerator.avatardd.getAllCrossbar()){
-
 	    signal = signal + "soclib::caba::VciSignals<vci_param> signal_up"+crossbar.getClusterIndex()+"(\"signal_up"+crossbar.getClusterIndex()+"\");"+CR;
 	    signal = signal + "soclib::caba::VciSignals<vci_param> signal_down"+crossbar.getClusterIndex()+"(\"signal_down"+crossbar.getClusterIndex()+"\");"+CR;
 	}	
