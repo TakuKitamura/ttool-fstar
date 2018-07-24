@@ -36,13 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package avatartranslator;
 
-import java.util.LinkedList;
-
+import java.util.List;
 
 /**
  *
@@ -66,7 +62,10 @@ public interface AvatarStateMachineOwner {
     AvatarAttribute getAvatarAttributeWithName(String attributeName);
 
     AvatarSpecification getAvatarSpecification();
-    LinkedList<AvatarAttribute> getAttributes();
+    
+    List<AvatarAttribute> getAttributes();
+    
     void addAttribute(AvatarAttribute attribute);
+    
     AvatarStateMachineOwner advancedClone(AvatarSpecification avspec);
 }

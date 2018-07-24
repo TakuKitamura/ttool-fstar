@@ -36,17 +36,13 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package avatartranslator.modelchecker;
+
+import java.util.Arrays;
+import java.util.List;
 
 import avatartranslator.AvatarAttribute;
 import avatartranslator.AvatarBlock;
-
-import java.util.Arrays;
-import java.util.LinkedList;
 
 /**
    * Class SpecificationBlock
@@ -78,49 +74,49 @@ public class SpecificationBlock  {
     }
 
     public void init(AvatarBlock _block, boolean _ignoreEmptyTransitions) {
-	
-	LinkedList<AvatarAttribute> attrs = _block.getAttributes();
-	//TraceManager.addDev("Nb of attributes:" + attrs.size());
-	//TraceManager.addDev("in block=" + _block.toString());
-	values = new int[HEADER_VALUES+attrs.size()];
+    	List<AvatarAttribute> attrs = _block.getAttributes();
+    	//TraceManager.addDev("Nb of attributes:" + attrs.size());
+    	//TraceManager.addDev("in block=" + _block.toString());
+    	values = new int[HEADER_VALUES+attrs.size()];
 
-	// Initial state
-	if (_ignoreEmptyTransitions) {
-	    values[STATE_INDEX] = _block.getIndexOfRealStartState();
-	} else {
-	    values[STATE_INDEX] = _block.getIndexOfStartState();
-	}
-	
-	// Clock
-	values[CLOCKMIN_INDEX] = 0;
-	values[CLOCKMAX_INDEX] = 0;
+    	// Initial state
+    	if (_ignoreEmptyTransitions) {
+    		values[STATE_INDEX] = _block.getIndexOfRealStartState();
+    	} else {
+    		values[STATE_INDEX] = _block.getIndexOfStartState();
+    	}
 
-	// Attributes
-	int cpt = HEADER_VALUES;
-	String initial;
-	for(AvatarAttribute attr: attrs) {
-	    values[cpt++] = attr.getInitialValueInInt();
-	}	
+    	// Clock
+    	values[CLOCKMIN_INDEX] = 0;
+    	values[CLOCKMAX_INDEX] = 0;
+
+    	// Attributes
+    	int cpt = HEADER_VALUES;
+    	//String initial;
+    	for(AvatarAttribute attr: attrs) {
+    		values[cpt++] = attr.getInitialValueInInt();
+    	}	
     }
 
+    @Override
     public String toString() {
-	StringBuffer sb = new StringBuffer("Hash=");
-	//sb.append(getHash());
-	for (int i=0; i<values.length; i++) {
-	    sb.append(" ");
-	    sb.append(values[i]);
-	}
-	return sb.toString();
+    	StringBuffer sb = new StringBuffer("Hash=");
+    	//sb.append(getHash());
+    	for (int i=0; i<values.length; i++) {
+    		sb.append(" ");
+    		sb.append(values[i]);
+    	}
+    	return sb.toString();
     }
 
     public SpecificationBlock advancedClone() {
-	SpecificationBlock sb = new SpecificationBlock();
-	sb.values = values.clone();
-	sb.maxClock = maxClock;
-	return sb;
+    	SpecificationBlock sb = new SpecificationBlock();
+    	sb.values = values.clone();
+    	sb.maxClock = maxClock;
+    	return sb;
     }
 
     public boolean hasTimedTransition() {
-	return true;
+    	return true;
     }
 }

@@ -67,14 +67,14 @@ public class AvatarElement {
     }
 
     public void addReferenceObjectFrom(AvatarElement _elt) {
-	addReferenceObject(_elt.getReferenceObject());
-	Vector<Object> others = _elt.getReferenceObjects();
-	if (others != null) {
-	    for(Object o: others) {
-		addReferenceObject(o);
-	    }
-	}
-	
+    	addReferenceObject(_elt.getReferenceObject());
+    	Vector<Object> others = _elt.getReferenceObjects();
+    	if (others != null) {
+    		for(Object o: others) {
+    			addReferenceObject(o);
+    		}
+    	}
+
     }
 
     public void addReferenceObject(Object _ref) {
@@ -125,16 +125,17 @@ public class AvatarElement {
         ID = 0;
     }
 
+    @Override
     public String toString() {
-	return getName();
+    	return getName();
     }
 
     public void cloneLinkToReferenceObjects(AvatarElement ae) {
-	if (otherReferenceObjects == null) {
-	    return;
-	}
-	for(Object o: otherReferenceObjects) {
-	    ae.addReferenceObject(o);
-	}
+    	if (otherReferenceObjects == null) {
+    		return;
+    	}
+    	for(Object o: otherReferenceObjects) {
+    		ae.addReferenceObject(o);
+    	}
     }
 }
