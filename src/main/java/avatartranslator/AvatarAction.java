@@ -36,12 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package avatartranslator;
 
-import java.util.HashMap;
+import java.util.Map;
 
 /**
    * Class AvatarAction
@@ -75,5 +72,5 @@ public interface AvatarAction {
      * @param attributesMapping
      *      The mapping used to replace the attributes of the action. All the attributes of the block should be present as keys.
      */
-    void replaceAttributes(HashMap<AvatarAttribute, AvatarAttribute> attributesMapping);
+    void replaceAttributes(Map<AvatarAttribute, AvatarAttribute> attributesMapping);
 }

@@ -36,13 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package avatartranslator;
 
-import java.util.HashMap;
+import java.util.Map;
 
 /**
    * Class AvatarTerm
@@ -74,19 +70,20 @@ public class AvatarConstant extends AvatarTerm {
     }
 
     @Override
-    public void replaceAttributes (HashMap<AvatarAttribute, AvatarAttribute> attributesMapping) { }
+    public void replaceAttributes( Map<AvatarAttribute, AvatarAttribute> attributesMapping) { }
 
     @Override
     public String toString() {
-	return getName();
+    	return getName();
     }
 
     public AvatarConstant advancedClone() {
         if (this == AvatarConstant.TRUE || this == AvatarConstant.FALSE)
             return this;
 
-	AvatarConstant ac = new AvatarConstant(getName(), getReferenceObject());
-	cloneLinkToReferenceObjects(ac);
-	return ac;
+        AvatarConstant ac = new AvatarConstant(getName(), getReferenceObject());
+        cloneLinkToReferenceObjects(ac);
+	
+        return ac;
     }
 }

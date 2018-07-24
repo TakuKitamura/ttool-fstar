@@ -36,12 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package avatartranslator;
 
-import java.util.HashMap;
+import java.util.Map;
 
 /**
    * Class AvatarTermFunction
@@ -126,7 +123,7 @@ public class AvatarTermFunction extends AvatarTerm implements AvatarAction {
     }
 
     @Override
-    public void replaceAttributes (HashMap<AvatarAttribute, AvatarAttribute> attributesMapping) {
+    public void replaceAttributes( Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
         this.args.replaceAttributes (attributesMapping);
     }
 }

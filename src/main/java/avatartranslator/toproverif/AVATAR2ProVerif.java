@@ -1200,7 +1200,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                 if (rightHand instanceof AvatarTermFunction) {
                     // If it's a function call
                     String name = ((AvatarTermFunction) rightHand).getMethod ().getName ();
-                    LinkedList<AvatarTerm> args = ((AvatarTermFunction) rightHand).getArgs ().getComponents ();
+                    List<AvatarTerm> args = ((AvatarTermFunction) rightHand).getArgs ().getComponents ();
 
                     if (name.equals ("concat2") || name.equals ("concat3") || name.equals ("concat4")) {
                         // If it's a concat function, just use tuples
@@ -1279,7 +1279,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
 
                 if (name.equals ("get2") || name.equals ("get3") || name.equals ("get4")) {
                     // If the function called is get[234]
-                    LinkedList<AvatarTerm> args = action.getArgs ().getComponents ();
+                    List<AvatarTerm> args = action.getArgs ().getComponents ();
                     int index = (int) name.charAt (3) - 48;
 
                     boolean ok = true;

@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package avatartranslator.touppaal;
 
 import avatartranslator.*;
@@ -53,10 +50,12 @@ import uppaaldesc.UPPAALSpec;
 import uppaaldesc.UPPAALTemplate;
 import uppaaldesc.UPPAALTransition;
 
-import java.awt.*;
+import java.awt.Point;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Class AVATAR2UPPAAL
@@ -74,15 +73,15 @@ public class AVATAR2UPPAAL {
     private UPPAALSpec spec;
     private AvatarSpecification avspec;
 
-    private LinkedList<CheckingError> warnings;
+    private List<CheckingError> warnings;
 
     private int currentX, currentY;
 
-    private java.util.List<String> gatesNotSynchronized; // String
-    private java.util.List<String> gatesSynchronized;
-    private java.util.List<AvatarRelation> gatesSynchronizedRelations;
-    private java.util.List<String> gatesAsynchronized;
-    private java.util.List<String> unoptStates;
+    private List<String> gatesNotSynchronized; // String
+    private List<String> gatesSynchronized;
+    private List<AvatarRelation> gatesSynchronizedRelations;
+    private List<String> gatesAsynchronized;
+    private List<String> unoptStates;
     private int nbOfIntParameters, nbOfBooleanParameters;
 
     private Hashtable <AvatarStateMachineElement, UPPAALLocation> hash;
@@ -150,22 +149,22 @@ public class AVATAR2UPPAAL {
         //
     }
 
-
-    public LinkedList<CheckingError> getWarnings() {
+    public List<CheckingError> getWarnings() {
         return warnings;
     }
 
     /*public RelationTIFUPPAAL getRelationTIFUPPAAL () {
       return table;
       }*/
-    public Hashtable <String, String> getHash(){
-	return translateString;
+    public Map<String, String> getHash(){
+    	return translateString;
     }
+    
     public UPPAALSpec generateUPPAAL(boolean _debug, boolean _optimize) {
         warnings = new LinkedList<CheckingError>();
         hash = new Hashtable<AvatarStateMachineElement, UPPAALLocation>();
         hashChecking = new Hashtable<AvatarStateMachineElement, UPPAALLocation>();
-	translateString = new Hashtable<String, String>();
+        translateString = new Hashtable<String, String>();
         spec = new UPPAALSpec();
 
         avspec.removeCompositeStates();
@@ -173,16 +172,17 @@ public class AVATAR2UPPAAL {
         avspec.removeTimers();
 	//avspec.removeFIFOs(2);
         avspec.makeRobustness();
-	java.util.List<String> uppaalPragmas = avspec.getSafetyPragmas();
-	unoptStates= new LinkedList<String>();
-	for (String s: uppaalPragmas){
-	    String[] split = s.split("[^a-zA-Z0-9\\.]");
-	    for (String t:split){
-		if (t.contains(".")){
-		    unoptStates.add(t);
-		}
-	    }
-	}
+        List<String> uppaalPragmas = avspec.getSafetyPragmas();
+        unoptStates= new LinkedList<String>();
+        
+        for (String s: uppaalPragmas){
+        	String[] split = s.split("[^a-zA-Z0-9\\.]");
+        	for (String t:split){
+        		if (t.contains(".")){
+        			unoptStates.add(t);
+        		}
+        	}
+        }
 
         //TraceManager.addDev("->   Spec:" + avspec.toString());
 
@@ -582,7 +582,7 @@ public class AVATAR2UPPAAL {
                 TraceManager.addDev("************************* NULL PREVIOUS !!!!!!!*****************");
             }
             //TraceManager.addDev("Linking myself = " + _elt + " to " + loc);
-            UPPAALLocation locc = hashChecking.get(_elt);
+            //UPPAALLocation locc = hashChecking.get(_elt);
             if (_elt != null) {
                 //TraceManager.addDev("In hash:" + _elt + " in location:" + locc);
             }
@@ -1059,7 +1059,7 @@ public class AVATAR2UPPAAL {
         //TraceManager.addDev("Method name:" + mc);
 
         setSynchronization(_tr, mc);
-        LinkedList<AvatarTerm> arguments = action.getArgs ().getComponents ();
+        List<AvatarTerm> arguments = action.getArgs ().getComponents ();
         for(AvatarTerm arg: arguments) {
             if (!(arg instanceof AvatarAttribute))
                 continue;

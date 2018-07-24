@@ -36,17 +36,13 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package avatartranslator;
 
-import myutil.TraceManager;
-import translator.RTLOTOSKeyword;
-import translator.JKeyword;
+import java.util.Map;
 
-import java.util.HashMap;
+import myutil.TraceManager;
+import translator.JKeyword;
+import translator.RTLOTOSKeyword;
 
 /**
    * Class AvatarTerm
@@ -176,5 +172,5 @@ public abstract class AvatarTerm extends AvatarElement {
      * @param attributesMapping
      *      The mapping used to replace the attributes of the term. All the attributes of the block should be present as keys.
      */
-    public abstract void replaceAttributes (HashMap<AvatarAttribute, AvatarAttribute> attributesMapping);
+    public abstract void replaceAttributes( Map<AvatarAttribute, AvatarAttribute> attributesMapping);
 }

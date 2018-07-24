@@ -39,9 +39,9 @@
 
 package avatartranslator;
 
-import myutil.TraceManager;
+import java.util.Map;
 
-import java.util.HashMap;
+import myutil.TraceManager;
 
 /**
  * Class AvatarAttribute
@@ -189,7 +189,7 @@ public class AvatarAttribute extends AvatarLeftHand {
     }
 
     @Override
-    public void replaceAttributes(HashMap<AvatarAttribute, AvatarAttribute> attributesMapping) {
+    public void replaceAttributes( Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
         TraceManager.addDev("!!! ERROR !!! (replaceAttributes in AvatarAttribute)");
         /* !!! We should never arrive here !!! */
     }
