@@ -262,8 +262,148 @@ public class ELNModule extends TGCScalableWithInternalComponent implements Swall
 	public int getCurrentFontSize() {
 		return currentFontSize;
 	}
-
-	public java.util.List<ELNModuleTerminal> getAllPorts() {
+	
+	public java.util.List<ELNComponentCapacitor> getAllComponentCapacitor() {
+		java.util.List<ELNComponentCapacitor> list = new ArrayList<ELNComponentCapacitor>();
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof ELNComponentCapacitor) {
+				list.add((ELNComponentCapacitor)(tgcomponent[i]));
+			}
+		}
+		return list;
+	}
+	
+	public java.util.List<ELNComponentCurrentSinkTDF> getAllComponentCurrentSinkTDF() {
+		java.util.List<ELNComponentCurrentSinkTDF> list = new ArrayList<ELNComponentCurrentSinkTDF>();
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof ELNComponentCurrentSinkTDF) {
+				list.add((ELNComponentCurrentSinkTDF)(tgcomponent[i]));
+			}
+		}
+		return list;
+	}
+	
+	public java.util.List<ELNComponentCurrentSourceTDF> getAllComponentCurrentSourceTDF() {
+		java.util.List<ELNComponentCurrentSourceTDF> list = new ArrayList<ELNComponentCurrentSourceTDF>();
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof ELNComponentCurrentSourceTDF) {
+				list.add((ELNComponentCurrentSourceTDF)(tgcomponent[i]));
+			}
+		}
+		return list;
+	}
+	
+	public java.util.List<ELNComponentIdealTransformer> getAllComponentIdealTransformer() {
+		java.util.List<ELNComponentIdealTransformer> list = new ArrayList<ELNComponentIdealTransformer>();
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof ELNComponentIdealTransformer) {
+				list.add((ELNComponentIdealTransformer)(tgcomponent[i]));
+			}
+		}
+		return list;
+	}
+	
+	public java.util.List<ELNComponentIndependentCurrentSource> getAllComponentIndependentCurrentSource() {
+		java.util.List<ELNComponentIndependentCurrentSource> list = new ArrayList<ELNComponentIndependentCurrentSource>();
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof ELNComponentIndependentCurrentSource) {
+				list.add((ELNComponentIndependentCurrentSource)(tgcomponent[i]));
+			}
+		}
+		return list;
+	}
+	
+	public java.util.List<ELNComponentIndependentVoltageSource> getAllComponentIndependentVoltageSource() {
+		java.util.List<ELNComponentIndependentVoltageSource> list = new ArrayList<ELNComponentIndependentVoltageSource>();
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof ELNComponentIndependentVoltageSource) {
+				list.add((ELNComponentIndependentVoltageSource)(tgcomponent[i]));
+			}
+		}
+		return list;
+	}
+	
+	public java.util.List<ELNComponentInductor> getAllComponentInductor() {
+		java.util.List<ELNComponentInductor> list = new ArrayList<ELNComponentInductor>();
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof ELNComponentInductor) {
+				list.add((ELNComponentInductor)(tgcomponent[i]));
+			}
+		}
+		return list;
+	}
+	
+	public java.util.List<ELNComponentNodeRef> getAllComponentNodeRef() {
+		java.util.List<ELNComponentNodeRef> list = new ArrayList<ELNComponentNodeRef>();
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof ELNComponentNodeRef) {
+				list.add((ELNComponentNodeRef)(tgcomponent[i]));
+			}
+		}
+		return list;
+	}
+	
+	public java.util.List<ELNComponentResistor> getAllComponentResistor() {
+		java.util.List<ELNComponentResistor> list = new ArrayList<ELNComponentResistor>();
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof ELNComponentResistor) {
+				list.add((ELNComponentResistor)(tgcomponent[i]));
+			}
+		}
+		return list;
+	}
+	
+	public java.util.List<ELNComponentTransmissionLine> getAllComponentTransmissionLine() {
+		java.util.List<ELNComponentTransmissionLine> list = new ArrayList<ELNComponentTransmissionLine>();
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof ELNComponentTransmissionLine) {
+				list.add((ELNComponentTransmissionLine)(tgcomponent[i]));
+			}
+		}
+		return list;
+	}
+	
+	public java.util.List<ELNComponentVoltageControlledCurrentSource> getAllComponentVoltageControlledCurrentSource() {
+		java.util.List<ELNComponentVoltageControlledCurrentSource> list = new ArrayList<ELNComponentVoltageControlledCurrentSource>();
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof ELNComponentVoltageControlledCurrentSource) {
+				list.add((ELNComponentVoltageControlledCurrentSource)(tgcomponent[i]));
+			}
+		}
+		return list;
+	}
+	
+	public java.util.List<ELNComponentVoltageControlledVoltageSource> getAllComponentVoltageControlledVoltageSource() {
+		java.util.List<ELNComponentVoltageControlledVoltageSource> list = new ArrayList<ELNComponentVoltageControlledVoltageSource>();
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof ELNComponentVoltageControlledVoltageSource) {
+				list.add((ELNComponentVoltageControlledVoltageSource)(tgcomponent[i]));
+			}
+		}
+		return list;
+	}
+	
+	public java.util.List<ELNComponentVoltageSinkTDF> getAllComponentVoltageSinkTDF() {
+		java.util.List<ELNComponentVoltageSinkTDF> list = new ArrayList<ELNComponentVoltageSinkTDF>();
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof ELNComponentVoltageSinkTDF) {
+				list.add((ELNComponentVoltageSinkTDF)(tgcomponent[i]));
+			}
+		}
+		return list;
+	}
+	
+	public java.util.List<ELNComponentVoltageSourceTDF> getAllComponentVoltageSourceTDF() {
+		java.util.List<ELNComponentVoltageSourceTDF> list = new ArrayList<ELNComponentVoltageSourceTDF>();
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof ELNComponentVoltageSourceTDF) {
+				list.add((ELNComponentVoltageSourceTDF)(tgcomponent[i]));
+			}
+		}
+		return list;
+	}
+	
+	public java.util.List<ELNModuleTerminal> getAllModuleTerminal() {
 		java.util.List<ELNModuleTerminal> list = new ArrayList<ELNModuleTerminal>();
 		for(int i=0; i<nbInternalTGComponent; i++) {
 			if (tgcomponent[i] instanceof ELNModuleTerminal) {

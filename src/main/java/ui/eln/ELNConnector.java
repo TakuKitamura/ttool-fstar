@@ -39,9 +39,11 @@
 package ui.eln;
 
 import ui.*;
+import ui.eln.sca_eln.ELNComponentIndependentVoltageSource;
 import ui.util.IconManager;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Vector;
 
 /**
@@ -99,4 +101,14 @@ public  class ELNConnector extends TGConnector implements ScalableTGComponent {
     public int getType() {
         return TGComponentManager.ELN_CONNECTOR;
     }
+    
+	public java.util.List<ELNMidPortTerminal> getAllMidPortTerminal() {
+		java.util.List<ELNMidPortTerminal> list = new ArrayList<ELNMidPortTerminal>();
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof ELNMidPortTerminal) {
+				list.add((ELNMidPortTerminal)(tgcomponent[i]));
+			}
+		}
+		return list;
+	}
 }
