@@ -2395,7 +2395,6 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     public void updateLastOpenFile(File file) {
         if (ConfigurationTTool.LastOpenFileDefined) {
 
-
             ConfigurationTTool.LastOpenFile = file.getPath();
             if (ConfigurationTTool.LastOpenFile.contains(".ttool" + File.separator)) {
                 int last = 0;
@@ -2465,28 +2464,8 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             // open the new TURTLE modeling
             newTurtleModeling();
 
-            //TraceManager.addDev("Loading");
-            // load the new TURTLE modeling
-            // Issue #41: Moved to common method
             loadModels(gtm.mergeTURTLEGModeling(oldmodeling, s), "merged");
-            //            try {
-            //                //TraceManager.addDev("Merging");
-            //                gtm.enableUndo(false);
-            //                gtm.loadModelingFromXML(gtm.mergeTURTLEGModeling(oldmodeling, s));
-            //                gtm.enableUndo(true);
-            //                gtm.saveOperation(getCurrentSelectedPoint());
-            //                //gtm.saveOperation(tcdp);
-            //                frame.setTitle("TTool: " + file.getAbsolutePath());
-            //                makeLotosFile();
-            //
-            //                if (gtm.getCheckingErrors().size() > 0) {
-            //                    JOptionPane.showMessageDialog(frame, "Modeling could not be correctly merged", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
-            //                }
-            //
-            //            } catch (MalformedModelingException mme) {
-            //                JOptionPane.showMessageDialog(frame, "Modeling could not be correctly merged", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
-            //            }
-            //            dtree.forceUpdate();
+
         }
     }
 
@@ -2531,91 +2510,12 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             jfc.setAcceptAllFileFilterUsed(false);
             FileNameExtensionFilter filter = new FileNameExtensionFilter("TTool project", "ttool");
             jfc.setFileFilter(filter);
-            /*jfc.addMouseListener(new MouseListener() {
-
-        	    @Override
-        	    public void mouseClicked(MouseEvent arg0) {
-
-        	        if(arg0.getClickCount() == 2) {
-        	            File file = jfc.getSelectedFile();
-        	            if(!FileUtils.getExtension(file).equals("ttool")) {
-        	                jfc.setCurrentDirectory(file);
-        	                jfc.rescanCurrentDirectory();
-        	            }
-        	            else {
-        	                jfc.approveSelection();
-        	            }
-        	        }
-        	    }
-
-				@Override
-				public void mouseEntered(MouseEvent e) {
-					// TODO Auto-generated method stub
-					return;
-				}
-
-				@Override
-				public void mouseExited(MouseEvent e) {
-					// TODO Auto-generated method stub
-					return;
-				}
-
-				@Override
-				public void mousePressed(MouseEvent e) {
-					// TODO Auto-generated method stub
-					return;
-				}
-
-				@Override
-				public void mouseReleased(MouseEvent e) {
-					// TODO Auto-generated method stub
-					return;
-				}		
-        	});*/
         } else {
             jfc.resetChoosableFileFilters();
             jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
             jfc.setAcceptAllFileFilterUsed(false);
             FileNameExtensionFilter filter = new FileNameExtensionFilter("XML files", "xml");
             jfc.setFileFilter(filter);
-            /*jfc.addMouseListener(new MouseListener() {
-
-        	    @Override
-        	    public void mouseClicked(MouseEvent arg0) {
-
-        	        if(arg0.getClickCount() == 2) {
-        	            File file = jfc.getSelectedFile();
-        	            if(!FileUtils.getExtension(file).equals("ttool")) {
-        	                jfc.setCurrentDirectory(file);
-        	                jfc.rescanCurrentDirectory();
-        	            }
-        	        }
-        	    }
-
-				@Override
-				public void mouseEntered(MouseEvent e) {
-					// TODO Auto-generated method stub
-					return;
-				}
-
-				@Override
-				public void mouseExited(MouseEvent e) {
-					// TODO Auto-generated method stub
-					return;
-				}
-
-				@Override
-				public void mousePressed(MouseEvent e) {
-					// TODO Auto-generated method stub
-					return;
-				}
-
-				@Override
-				public void mouseReleased(MouseEvent e) {
-					// TODO Auto-generated method stub
-					return;
-				}		
-        	});*/
         }
         int returnVal = jfc.showOpenDialog(frame);
 
@@ -2720,6 +2620,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     }
 
     public void openLastProject(int id) {
+
         // Check if a current modeling is opened
         boolean b = actions[TGUIAction.ACT_SAVE].isEnabled();
         if (b) {
@@ -2729,11 +2630,15 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         }
 
         file = new File(ConfigurationTTool.LastOpenFiles[id]);
+        //TraceManager.addDev("Opening project #" + id + " for file=" + file.getAbsolutePath());
 
         if (checkFileForOpen(file)) {
             String s = null;
 
             if (FileUtils.getExtension(file).equals("ttool")) {
+                openProjectFromFile(file);
+                return;
+                /*TraceManager.addDev("this is a ttool project");
                 int last = 0;
                 for (int i = 0; i < ConfigurationTTool.LastOpenFile.length(); i++) {
                     if (ConfigurationTTool.LastOpenFile.charAt(i) == '/')
@@ -2748,26 +2653,27 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                     SpecConfigTTool.loadConfigFile(config);
                 } catch (MalformedConfigurationException e) {
                     System.err.println(e.getMessage() + " : Can't load config file.");
-                }
+                }*/
             } else {
                 dir = null;
                 config = null;
                 SpecConfigTTool.setBasicConfig(systemcOn);
+                try {
+                    FileInputStream fis = new FileInputStream(file);
+                    int nb = fis.available();
+
+                    byte[] ba = new byte[nb];
+                    fis.read(ba);
+                    fis.close();
+                    s = new String(ba, "UTF-8");
+                    //TraceManager.addDev("Model:" + s);
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(frame, "File could not be opened because " + e.getMessage(), "File Error", JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                }
             }
 
-            try {
-                FileInputStream fis = new FileInputStream(file);
-                int nb = fis.available();
 
-                byte[] ba = new byte[nb];
-                fis.read(ba);
-                fis.close();
-                s = new String(ba, "UTF-8");
-                //TraceManager.addDev("Model:" + s);
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(frame, "File could not be opened because " + e.getMessage(), "File Error", JOptionPane.INFORMATION_MESSAGE);
-                return;
-            }
 
             // close current modeling
             closeTurtleModeling();
@@ -2780,32 +2686,9 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             // Issue #41: Moved to common method
             updateLastOpenFile(file);
             loadModels(s, "loaded");
-            //TraceManager.addDev("Loading");
-            // load the new TURTLE modeling
-            //            try {
-            //                gtm.loadModelingFromXML(s);
-            //                //gtm.saveOperation(tcdp);
-            //                frame.setTitle("TTool: " + file.getAbsolutePath());
-            //                makeLotosFile();
-            //
-            //                if (gtm.getCheckingErrors().size() > 0) {
-            //                    JOptionPane.showMessageDialog(frame, "Modeling could not be correctly loaded", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
-            //                }
-            //            }
-            //            catch (MalformedModelingException mme) {
-            //                JOptionPane.showMessageDialog(frame, "Modeling could not be correctly loaded ", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
-            //                frame.setTitle("TTool: unamed project");
-            //            }
-            //
-            //            dtree.forceUpdate();
-            //            gtm.enableUndo(true);
-            //            gtm.saveOperation(getCurrentSelectedPoint());
+
         }
 
-        //Added by Solange
-        //TURTLEPanel tp = getCurrentTURTLEPanel();
-        //gtm.generateLists((ProactiveDesignPanel)tp);
-        //
     }
 
     private void loadModels(final String xmlModel,
