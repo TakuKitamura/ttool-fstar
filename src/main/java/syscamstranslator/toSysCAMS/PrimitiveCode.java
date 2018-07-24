@@ -205,7 +205,7 @@ public class PrimitiveCode {
 						String select = tdf.getListStruct().get(i);
 						String[] splita = select.split(" = ");
 						identifier = splita[0];
-						if (tdf.getListStruct().getSize() > 1) {
+						if (tdf.getListStruct().getSize() >= 1) {
 							if (cpt == 0) {
 								corpsPrimitiveTDF = corpsPrimitiveTDF + identifier + "(p." + identifier + ")" + CR;
 								cpt++;
@@ -533,9 +533,9 @@ public class PrimitiveCode {
 				corpsPrimitiveDE = corpsPrimitiveDE + "\t{}" + CR2;
 			}
 			
+			corpsPrimitiveDE = corpsPrimitiveDE + "private:" + CR;
+			
 			if (de.getListStruct().getSize() != 0) {
-				corpsPrimitiveDE = corpsPrimitiveDE + "private:" + CR;
-
 				String identifier, type, constant;
 				for (int i = 0; i < de.getListStruct().size(); i++) {
 					String select = de.getListStruct().get(i);
@@ -554,6 +554,9 @@ public class PrimitiveCode {
 						corpsPrimitiveDE = corpsPrimitiveDE + "\t" + type + " " + identifier + ";" + CR;
 					} else {
 						corpsPrimitiveDE = corpsPrimitiveDE + "\t" + constant + " " + type + " " + identifier + ";" + CR;
+					}
+					if (i == de.getListStruct().size()-1) {
+						corpsPrimitiveDE = corpsPrimitiveDE + CR;
 					}
 				}
 			}
@@ -591,7 +594,7 @@ public class PrimitiveCode {
 			}
 
 			String pc = buffer.toString();
-			corpsPrimitiveDE = corpsPrimitiveDE + CR + "\t" + pc;
+			corpsPrimitiveDE = corpsPrimitiveDE + "\t" + pc;
 			
 			corpsPrimitiveDE = corpsPrimitiveDE + CR + "};" + CR2 + "#endif" + " // " + de.getName().toUpperCase() + "_H";
 		} else {
