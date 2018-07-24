@@ -1,3 +1,6 @@
+
+
+
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
  * Daniela Genius, Lip6, UMR 7606 
  * 
@@ -196,7 +199,7 @@ public class Declaration
 		    + CR2;
 	    }
 
-	//No DMA yet; planned to make it optional depending on deployment diagram
+	
 		if (nb_clusters == 0)
 	    {	
 		    //"caba::VciDma<vci_param> vcidma(\"vci_dma\", maptab,6,6,8);"
@@ -205,8 +208,7 @@ public class Declaration
 	    }
 	else
 	    {
-		declaration +=
-		    "caba::VciDma<vci_param> vcifdma(\"vci_dma\", IntTab(0,6), maptab);"
+		declaration +="caba::VciDma<vci_param> vcidma(\"vci_dma\", maptab,IntTab(0,cpus.size()+3),IntTab(0,6),8);"		  
 		    + CR;
 	    }
 	
