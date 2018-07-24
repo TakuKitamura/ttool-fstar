@@ -226,7 +226,7 @@ public class ELNSpecification{
 		return modules;
     }
     
-    public LinkedList<ELNTModuleTerminal> getAllModuleTermina(){
+    public LinkedList<ELNTModuleTerminal> getAllModuleTerminal(){
 		LinkedList<ELNTModuleTerminal> moduleTerminals = new LinkedList<ELNTModuleTerminal>();
 		for (ELNTComponent moduleTerminal : components) {
 			if (moduleTerminal instanceof ELNTModuleTerminal) {
@@ -234,5 +234,73 @@ public class ELNSpecification{
 			}
 		}
 		return moduleTerminals;
+    }
+    
+    public int getNbComponentCapacitor(){
+    	return (getAllComponentCapacitor()).size();
+    }
+    
+    public int getNbComponentCurrentSinkTDF(){
+    	return (getAllComponentCurrentSinkTDF()).size();
+    }
+    
+    public int getNbComponentCurrentSourceTDF(){
+    	return (getAllComponentCurrentSourceTDF()).size();
+    }
+    
+    public int getNbComponentIdealTransformer(){
+    	return (getAllComponentIdealTransformer()).size();
+    }
+    
+    public int getNbComponentIndependentCurrentSource(){
+    	return (getAllComponentIndependentCurrentSource()).size();
+    }
+    
+    public int getNbComponentIndependentVoltageSource(){
+    	return (getAllComponentIndependentVoltageSource()).size();
+    }
+    
+    public int getNbComponentInductor(){
+    	return (getAllComponentInductor()).size();
+    }
+    
+    public int getNbComponentNodeRef(){
+    	return (getAllComponentNodeRef()).size();
+    }
+    
+    public int getNbComponentResistor(){
+    	return (getAllComponentResistor()).size();
+    }
+    
+    public int getNbComponentTransmissionLine(){
+    	return (getAllComponentTransmissionLine()).size();
+    }
+    
+    public int getNbComponentVoltageControlledCurrentSource(){
+    	return (getAllComponentVoltageControlledCurrentSource()).size();
+    }
+    
+    public int getNbComponentVoltageControlledVoltageSource(){
+    	return (getAllComponentVoltageControlledVoltageSource()).size();
+    }
+    
+    public int getNbComponentVoltageSinkTDF(){
+    	return (getAllComponentVoltageSinkTDF()).size();
+    }
+    
+    public int getNbComponentVoltageSourceTDF(){
+    	return (getAllComponentVoltageSourceTDF()).size();
+    }
+    
+    public int getNbMidPortTerminal(){
+    	return (getAllMidPortTerminal()).size();
+    }
+    
+    public int getNbModule(){
+    	return (getAllModule()).size();
+    }
+    
+    public int getNbModuleTerminal(){
+    	return (getAllModuleTerminal()).size();
     }
 }
