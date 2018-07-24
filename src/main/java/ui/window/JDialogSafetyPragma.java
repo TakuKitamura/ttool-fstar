@@ -284,7 +284,7 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
         textarea.setTabSize(3);
         textarea.append(text);
         textarea.setFont(new Font("times", Font.PLAIN, 12));
-        JMenuBar menuBar = new JMenuBar();
+        menuBar = new JMenuBar();
         menuBar.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
         help = new JMenu("?");
         menuBar.add(help);
