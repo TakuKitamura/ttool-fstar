@@ -36,14 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package avatartranslator;
 
-import java.util.HashMap;
-
+import java.util.Map;
 
 /**
  * An AvatarGuardElse is an {@link AvatarGuard} that is of the form:
@@ -100,5 +95,5 @@ public class AvatarGuardElse extends AvatarGuard {
     }
 
     @Override
-    public void replaceAttributes (HashMap<AvatarAttribute, AvatarAttribute> attributesMapping) { }
+    public void replaceAttributes( Map<AvatarAttribute, AvatarAttribute> attributesMapping) { }
 }

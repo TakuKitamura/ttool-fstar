@@ -36,16 +36,12 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package avatartranslator;
+
+import java.util.Map;
 
 import myutil.Conversion;
 import myutil.TraceManager;
-
-import java.util.HashMap;
 
 /**
  * Class AvatarGuard
@@ -250,5 +246,5 @@ public abstract class AvatarGuard {
      * @param attributesMapping
      *      The mapping used to replace the attributes of the guard. All the attributes of the block should be present as keys.
      */
-    public abstract void replaceAttributes (HashMap<AvatarAttribute, AvatarAttribute> attributesMapping);
+    public abstract void replaceAttributes( Map<AvatarAttribute, AvatarAttribute> attributesMapping);
 }

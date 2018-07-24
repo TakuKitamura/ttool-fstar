@@ -41,10 +41,9 @@
    * Class AvatarSimpleGuardMono
  */
 
-
 package avatartranslator;
 
-import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -75,10 +74,11 @@ public class AvatarSimpleGuardMono extends AvatarSimpleGuard {
     }
 
     @Override
-    public void replaceAttributes (HashMap<AvatarAttribute, AvatarAttribute> attributesMapping) {
-        for (AvatarAttribute attr: attributesMapping.keySet())
-        {
-        }
+    public void replaceAttributes( Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
+//        for (AvatarAttribute attr: attributesMapping.keySet())
+//        {
+//        }
+        
         if (this.term instanceof AvatarAttribute)
         {
             this.term = attributesMapping.get(this.term);
