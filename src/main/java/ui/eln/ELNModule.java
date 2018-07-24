@@ -41,6 +41,7 @@ package ui.eln;
 import myutil.GraphicLib;
 import ui.*;
 import ui.eln.sca_eln.*;
+import ui.eln.sca_eln_sca_tdf.*;
 import ui.util.IconManager;
 import ui.window.*;
 import java.awt.*;
