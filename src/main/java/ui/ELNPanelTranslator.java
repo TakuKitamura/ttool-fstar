@@ -345,7 +345,7 @@ public class ELNPanelTranslator {
 					ELNTMidPortTerminal elnMidPortTerminal = new ELNTMidPortTerminal(avconnector);
 
 					elnMap.put(midPortTerminal, elnMidPortTerminal);
-					avconnector.addModuleTerminal(elnMidPortTerminal);
+					avconnector.addMidPortTerminal(elnMidPortTerminal);
 					elnComponents.add(elnMidPortTerminal);
 				}	
 
