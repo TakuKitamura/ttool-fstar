@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package avatartranslator;
 
 import myutil.TraceManager;
@@ -53,7 +50,7 @@ import java.util.Vector;
  */
 public class AvatarElement {
 
-    protected static int ID=0;
+    private static int ID=0;
 
     protected String name;
     protected Object referenceObject;
@@ -113,7 +110,7 @@ public class AvatarElement {
     }
 
     public Vector<Object> getReferenceObjects() {
-	return otherReferenceObjects;
+    	return otherReferenceObjects;
     }
 
     public int getID(){

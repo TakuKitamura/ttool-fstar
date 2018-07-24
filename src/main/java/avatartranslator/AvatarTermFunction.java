@@ -108,6 +108,7 @@ public class AvatarTermFunction extends AvatarTerm implements AvatarAction {
         return false;
     }
 
+    @Override
     public String toString () {
         return this.method.getName () + " " + this.args.toString ();
     }

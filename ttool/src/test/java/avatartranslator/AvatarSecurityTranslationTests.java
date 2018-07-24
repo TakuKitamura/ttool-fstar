@@ -48,7 +48,7 @@ package avatartranslator;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -92,7 +92,7 @@ public class AvatarSecurityTranslationTests {
  		mgui.dtree = new JDiagramTree(mgui);
         mgui.dtree.setCellRenderer(new DiagramTreeRenderer());
         ToolTipManager.sharedInstance().registerComponent(mgui.dtree);
-        JScrollPane scrollPane = new JScrollPane(mgui.dtree);
+        /*JScrollPane scrollPane =*/ new JScrollPane(mgui.dtree);
 		mgui.newTurtleModeling();
 //		mgui.tabs = new Vector<TURTLEPanel>();
 		TMLComponentDesignPanel tmlcdp = new TMLComponentDesignPanel(mgui);
@@ -151,7 +151,7 @@ public class AvatarSecurityTranslationTests {
 		assertTrue(avspec!=null);
 		AvatarBlock block1 = avspec.getBlockWithName("task1");
 		AvatarStateMachine sm =	block1.getStateMachine();
-		LinkedList<AvatarStateMachineElement> elems=  sm.getListOfElements();
+		List<AvatarStateMachineElement> elems=  sm.getListOfElements();
 		//First state is start state
 		assertTrue(elems.get(0) instanceof AvatarStartState);
 		//state is avatartransition
@@ -186,7 +186,7 @@ public class AvatarSecurityTranslationTests {
 		assertTrue(avspec!=null);
 		AvatarBlock block1 = avspec.getBlockWithName("task1");
 		AvatarStateMachine sm =	block1.getStateMachine();
-		LinkedList<AvatarStateMachineElement> elems=  sm.getListOfElements();
+		List<AvatarStateMachineElement> elems=  sm.getListOfElements();
 		
 		AvatarTransition at = (AvatarTransition) elems.get(3);
 		//Check that action is encryption
@@ -212,7 +212,7 @@ public class AvatarSecurityTranslationTests {
 		assertTrue(avspec!=null);
 		AvatarBlock block1 = avspec.getBlockWithName("task1");
 		AvatarStateMachine sm =	block1.getStateMachine();
-		LinkedList<AvatarStateMachineElement> elems=  sm.getListOfElements();
+		List<AvatarStateMachineElement> elems=  sm.getListOfElements();
 		
 		AvatarTransition at = (AvatarTransition) elems.get(3);
 		//Check that action is empty
@@ -242,14 +242,12 @@ public class AvatarSecurityTranslationTests {
 		assertTrue(avspec!=null);
 		AvatarBlock block1 = avspec.getBlockWithName("task1");
 		AvatarStateMachine sm =	block1.getStateMachine();
-		LinkedList<AvatarStateMachineElement> elems=  sm.getListOfElements();
+		List<AvatarStateMachineElement> elems=  sm.getListOfElements();
 		
 		AvatarTransition at = (AvatarTransition) elems.get(3);
 		//Check that action is encryption
 		assertEquals(at.getActions().get(0).getName().replaceAll(" ",""),"mac_mac=MAC(mac,key_mac)");
 	}
-
-
 
     public static void main(String[] args){
         AvatarSecurityTranslationTests apt = new AvatarSecurityTranslationTests ();

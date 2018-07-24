@@ -36,14 +36,31 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ddtranslatorSoclib.toSoclib;
 
-import avatartranslator.*;
-import ddtranslatorSoclib.AvatarRAM;
+import java.io.File;
+import java.util.List;
+import java.util.Vector;
+
+import avatartranslator.AvatarAction;
+import avatartranslator.AvatarActionAssignment;
+import avatartranslator.AvatarActionOnSignal;
+import avatartranslator.AvatarAttribute;
+import avatartranslator.AvatarBlock;
+import avatartranslator.AvatarMethod;
+import avatartranslator.AvatarRandom;
+import avatartranslator.AvatarRelation;
+import avatartranslator.AvatarSignal;
+import avatartranslator.AvatarSpecification;
+import avatartranslator.AvatarStartState;
+import avatartranslator.AvatarState;
+import avatartranslator.AvatarStateMachine;
+import avatartranslator.AvatarStateMachineElement;
+import avatartranslator.AvatarStopState;
+import avatartranslator.AvatarTransition;
+import avatartranslator.AvatarType;
 import ddtranslatorSoclib.AvatarCoproMWMR;
+import ddtranslatorSoclib.AvatarRAM;
 import ddtranslatorSoclib.AvatarTask;
 import ddtranslatorSoclib.AvatarddSpecification;
 import ddtranslatorSoclib.toTopCell.TopCellGenerator;
@@ -51,11 +68,6 @@ import myutil.Conversion;
 import myutil.FileException;
 import myutil.FileUtils;
 import myutil.TraceManager;
-
-import java.io.File;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Vector;
 
 /**
  * Class AVATAR2CSOCLIB
@@ -185,17 +197,17 @@ public class TasksAndMainGenerator {
 
     	//for(AvatarRelation ar: avspec.getRelations()) {
     	for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) { 
-    		
-	    for(AvatarRelation ar: avspec.getRelations()) {
 
-       		for(int i=0; i<ar.nbOfSignals() ; i++) {
-		   
-    			mainFile.appendToBeforeMainCode("#define CHANNEL"+d+" __attribute__((section(\"section_channel"+d+"\")))" + CR ); 	
-    			mainFile.appendToBeforeMainCode("#define LOCK"+d+" __attribute__((section(\"section_lock"+d+"\")))" + CR );//one lock per channel
-    			d++;		      			
-		    }
-		    }
-	}
+    		for(AvatarRelation ar: avspec.getRelations()) {
+
+    			for(int i=0; i<ar.nbOfSignals() ; i++) {
+
+    				mainFile.appendToBeforeMainCode("#define CHANNEL"+d+" __attribute__((section(\"section_channel"+d+"\")))" + CR ); 	
+    				mainFile.appendToBeforeMainCode("#define LOCK"+d+" __attribute__((section(\"section_lock"+d+"\")))" + CR );//one lock per channel
+    				d++;		      			
+    			}
+    		}
+    	}
     	mainFile.appendToBeforeMainCode("#define base(arg) arg" + CR2 );
     	mainFile.appendToBeforeMainCode("typedef struct mwmr_s mwmr_t;" + CR2);
 
@@ -208,139 +220,138 @@ public class TasksAndMainGenerator {
     }
   
     public void makeSynchronousChannels() {
-	int i=0;   int j=0;  
+    	int i=0;   //int j=0;  
         // Create synchronous channel signals
         mainFile.appendToHCode("/* Synchronous channels */" + CR);
         mainFile.appendToBeforeMainCode("/* Synchronous channels */" + CR);
         mainFile.appendToMainCode("/* Synchronous channels */" + CR);
- k=0;
+        k=0;
         for(AvatarRelation ar: avspec.getRelations()) {
-	  
-	if (!ar.isAsynchronous()) {
-	   
-	   		    
-	    for(i=0; i<ar.nbOfSignals() ; i++) {
-		ar.setId(i);
 
-		mainFile.appendToHCode("extern syncchannel __" + getChannelName(ar, i) + ";" + CR);
+        	if (!ar.isAsynchronous()) {
 
-		mainFile.appendToBeforeMainCode("syncchannel __" +getChannelName(ar, i) + ";" + CR);
+        		for(i=0; i<ar.nbOfSignals() ; i++) {
+        			ar.setId(i);
 
-		mainFile.appendToMainCode(getChannelName(ar, i) + "_status.rptr = 0;" + CR);		
-		mainFile.appendToMainCode(getChannelName(ar, i) + "_status.wptr = 0;" + CR);
-		mainFile.appendToMainCode(getChannelName(ar, i) + "_status.usage = 0;" + CR);
-		mainFile.appendToMainCode(getChannelName(ar, i) + "_status.lock = 0;" + CR2);
-	
+        			mainFile.appendToHCode("extern syncchannel __" + getChannelName(ar, i) + ";" + CR);
 
-	AvatarSignal sig = ar.getSignal1(i);
-        int nbParams= sig.getNbParams();
-	
-	int sizeParams = 0;
-		
-	if (nbParams>0)
-	    mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ (nbParams*4)+";" + CR);
-	
-	else mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ 4 +";" + CR);
-	mainFile.appendToMainCode(getChannelName(ar, i) + ".depth = 100;" + CR);
-	
-	mainFile.appendToMainCode(getChannelName(ar, i) + ".gdepth = " +getChannelName(ar, i)+".depth;" + CR);
-	mainFile.appendToMainCode(getChannelName(ar, i) + ".buffer = "+getChannelName(ar, i)+"_data;" + CR);
-	mainFile.appendToMainCode(getChannelName(ar, i) + ".status = &"+getChannelName(ar, i)+"_status;" + CR2);
+        			mainFile.appendToBeforeMainCode("syncchannel __" +getChannelName(ar, i) + ";" + CR);
 
-	mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".inname =\"" + ar.getInSignal(i).getName() + "\";" + CR);
-	mainFile.appendToMainCode("__" +getChannelName(ar, i) + ".outname =\"" + ar.getOutSignal(i).getName() + "\";" + CR);		
-	mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".mwmr_fifo = &" + getChannelName(ar, i) + ";" + CR);
-	
-	if(sig.isIn()){
-	    mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".ok_send = 0;" + CR);	mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".ok_receive = 1;" + CR);
-	}
+        			mainFile.appendToMainCode(getChannelName(ar, i) + "_status.rptr = 0;" + CR);		
+        			mainFile.appendToMainCode(getChannelName(ar, i) + "_status.wptr = 0;" + CR);
+        			mainFile.appendToMainCode(getChannelName(ar, i) + "_status.usage = 0;" + CR);
+        			mainFile.appendToMainCode(getChannelName(ar, i) + "_status.lock = 0;" + CR2);
 
-	if(sig.isOut()){
-	    mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".ok_send = 1;" + CR);	mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".ok_receive = 0;" + CR);
-	}
 
-	/* init because mutekh initializer does not work for this */		
-	mainFile.appendToMainCode(getChannelName(ar, i) + ".status =&"+ getChannelName(ar, i)+"_status;" + CR);
+        			AvatarSignal sig = ar.getSignal1(i);
+        			int nbParams= sig.getNbParams();
 
-	mainFile.appendToMainCode(getChannelName(ar, i)+".status->lock=0;" + CR);
-	mainFile.appendToMainCode(getChannelName(ar, i)+".status->rptr=0;" + CR);
-	mainFile.appendToMainCode(getChannelName(ar, i)+".status->usage=0;" + CR);
-	mainFile.appendToMainCode(getChannelName(ar, i) + ".status->wptr =0;" + CR);
-				     		
-	mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+k+";" + CR); 
-	mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+k+";" + CR); 		
-	       
-	mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32] CHANNEL"+k+";" + CR);
-		
-	mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+k+";" + CR2);
-	k++;			
-	
-	}
-	}
-	}
+        			//int sizeParams = 0;
+
+        			if (nbParams>0)
+        				mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ (nbParams*4)+";" + CR);
+
+        			else mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ 4 +";" + CR);
+        			mainFile.appendToMainCode(getChannelName(ar, i) + ".depth = 100;" + CR);
+
+        			mainFile.appendToMainCode(getChannelName(ar, i) + ".gdepth = " +getChannelName(ar, i)+".depth;" + CR);
+        			mainFile.appendToMainCode(getChannelName(ar, i) + ".buffer = "+getChannelName(ar, i)+"_data;" + CR);
+        			mainFile.appendToMainCode(getChannelName(ar, i) + ".status = &"+getChannelName(ar, i)+"_status;" + CR2);
+
+        			mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".inname =\"" + ar.getInSignal(i).getName() + "\";" + CR);
+        			mainFile.appendToMainCode("__" +getChannelName(ar, i) + ".outname =\"" + ar.getOutSignal(i).getName() + "\";" + CR);		
+        			mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".mwmr_fifo = &" + getChannelName(ar, i) + ";" + CR);
+
+        			if(sig.isIn()){
+        				mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".ok_send = 0;" + CR);	mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".ok_receive = 1;" + CR);
+        			}
+
+        			if(sig.isOut()){
+        				mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".ok_send = 1;" + CR);	mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".ok_receive = 0;" + CR);
+        			}
+
+        			/* init because mutekh initializer does not work for this */		
+        			mainFile.appendToMainCode(getChannelName(ar, i) + ".status =&"+ getChannelName(ar, i)+"_status;" + CR);
+
+        			mainFile.appendToMainCode(getChannelName(ar, i)+".status->lock=0;" + CR);
+        			mainFile.appendToMainCode(getChannelName(ar, i)+".status->rptr=0;" + CR);
+        			mainFile.appendToMainCode(getChannelName(ar, i)+".status->usage=0;" + CR);
+        			mainFile.appendToMainCode(getChannelName(ar, i) + ".status->wptr =0;" + CR);
+
+        			mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+k+";" + CR); 
+        			mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+k+";" + CR); 		
+
+        			mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32] CHANNEL"+k+";" + CR);
+
+        			mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+k+";" + CR2);
+        			k++;			
+
+        		}
+        	}
+        }
     }
 
     public void makeAsynchronousChannels() {
-	if (avspec.ASynchronousExist()){
-	    // Create an asynchronous channel per relation/signal
-	    mainFile.appendToHCode("/* Asynchronous channels */" + CR);
-	    mainFile.appendToBeforeMainCode("/* Asynchronous channels */" + CR);
-	    mainFile.appendToMainCode("/* Asynchronous channels */" + CR);
-            int j=0;
-	    for(AvatarRelation ar: avspec.getRelations()) {
-	
-		if (ar.isAsynchronous()) {
-		    for(int i=0; i<ar.nbOfSignals() ; i++) {
+    	if (avspec.ASynchronousExist()){
+    		// Create an asynchronous channel per relation/signal
+    		mainFile.appendToHCode("/* Asynchronous channels */" + CR);
+    		mainFile.appendToBeforeMainCode("/* Asynchronous channels */" + CR);
+    		mainFile.appendToMainCode("/* Asynchronous channels */" + CR);
+    		//int j=0;
+    		for(AvatarRelation ar: avspec.getRelations()) {
 
-			ar.setId(i);
-			mainFile.appendToHCode("extern asyncchannel __" + getChannelName(ar, i) + ";" + CR);
+    			if (ar.isAsynchronous()) {
+    				for(int i=0; i<ar.nbOfSignals() ; i++) {
 
-			mainFile.appendToBeforeMainCode("asyncchannel __" +getChannelName(ar, i) + ";" + CR);
-		
-			mainFile.appendToMainCode(getChannelName(ar, i) + "_status.rptr = 0;" + CR);		
-			mainFile.appendToMainCode(getChannelName(ar, i) + "_status.wptr = 0;" + CR);
-			mainFile.appendToMainCode(getChannelName(ar, i) + "_status.usage = 0;" + CR);
-			mainFile.appendToMainCode(getChannelName(ar, i) + "_status.lock = 0;" + CR2);
+    					ar.setId(i);
+    					mainFile.appendToHCode("extern asyncchannel __" + getChannelName(ar, i) + ";" + CR);
 
-		
-			AvatarSignal sig = ar.getSignal1(i);
-			int nbParams= sig.getNbParams();			
-		
-			if (nbParams>0)
-			    mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ (nbParams*4)+";" + CR);			    
-			else mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ 4 +";" + CR);
+    					mainFile.appendToBeforeMainCode("asyncchannel __" +getChannelName(ar, i) + ";" + CR);
 
-			mainFile.appendToMainCode(getChannelName(ar, i) + ".depth = "+ ar.getSizeOfFIFO()+";" + CR);
-			mainFile.appendToMainCode(getChannelName(ar, i) + ".gdepth = "+getChannelName(ar, i)+".depth;" + CR); 
-			mainFile.appendToMainCode(getChannelName(ar, i) + ".buffer = "+getChannelName(ar, i)+"_data;" + CR);
-			mainFile.appendToMainCode(getChannelName(ar, i) + ".status = &"+getChannelName(ar, i)+"_status;" + CR);
+    					mainFile.appendToMainCode(getChannelName(ar, i) + "_status.rptr = 0;" + CR);		
+    					mainFile.appendToMainCode(getChannelName(ar, i) + "_status.wptr = 0;" + CR);
+    					mainFile.appendToMainCode(getChannelName(ar, i) + "_status.usage = 0;" + CR);
+    					mainFile.appendToMainCode(getChannelName(ar, i) + "_status.lock = 0;" + CR2);
 
-			mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".inname =\"" + ar.getInSignal(i).getName() + "\";" + CR);
-			mainFile.appendToMainCode("__" +getChannelName(ar, i) + ".outname =\"" + ar.getOutSignal(i).getName() + "\";" + CR);
-			if (ar.isBlocking()) {
-			    mainFile.appendToMainCode("__" +getChannelName(ar, i) + ".isBlocking = 1;" + CR);
-			} else {
-			    mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".isBlocking = 0;" + CR);
-			}
-			mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".maxNbOfMessages = " + ar.getSizeOfFIFO() + ";" + CR);
-			
-			mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".mwmr_fifo = &" + getChannelName(ar, i) + ";" + CR);
-				
-			/* force init because mutekh initializer does not work her */		
-			mainFile.appendToMainCode(getChannelName(ar, i) + ".status =&"+ getChannelName(ar, i)+"_status;" + CR);
-			mainFile.appendToMainCode(getChannelName(ar, i) +".status->lock=0;" + CR);
-			mainFile.appendToMainCode(getChannelName(ar, i)+".status->rptr=0;" + CR);
-			mainFile.appendToMainCode(getChannelName(ar, i)+".status->usage=0;" + CR);
-			mainFile.appendToMainCode(getChannelName(ar, i)+".status->wptr=0;" + CR);	    	    	
-			mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+k+";" + CR); 
-			mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+k+";" + CR); 			       
-			mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32] CHANNEL"+k+";" + CR);		
-			mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+k+";" + CR2);	 
-			k++;
-		    }
-		}
-	    }
-	}
+
+    					AvatarSignal sig = ar.getSignal1(i);
+    					int nbParams= sig.getNbParams();			
+
+    					if (nbParams>0)
+    						mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ (nbParams*4)+";" + CR);			    
+    					else mainFile.appendToMainCode(getChannelName(ar, i) + ".width = "+ 4 +";" + CR);
+
+    					mainFile.appendToMainCode(getChannelName(ar, i) + ".depth = "+ ar.getSizeOfFIFO()+";" + CR);
+    					mainFile.appendToMainCode(getChannelName(ar, i) + ".gdepth = "+getChannelName(ar, i)+".depth;" + CR); 
+    					mainFile.appendToMainCode(getChannelName(ar, i) + ".buffer = "+getChannelName(ar, i)+"_data;" + CR);
+    					mainFile.appendToMainCode(getChannelName(ar, i) + ".status = &"+getChannelName(ar, i)+"_status;" + CR);
+
+    					mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".inname =\"" + ar.getInSignal(i).getName() + "\";" + CR);
+    					mainFile.appendToMainCode("__" +getChannelName(ar, i) + ".outname =\"" + ar.getOutSignal(i).getName() + "\";" + CR);
+    					if (ar.isBlocking()) {
+    						mainFile.appendToMainCode("__" +getChannelName(ar, i) + ".isBlocking = 1;" + CR);
+    					} else {
+    						mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".isBlocking = 0;" + CR);
+    					}
+    					mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".maxNbOfMessages = " + ar.getSizeOfFIFO() + ";" + CR);
+
+    					mainFile.appendToMainCode("__" + getChannelName(ar, i) + ".mwmr_fifo = &" + getChannelName(ar, i) + ";" + CR);
+
+    					/* force init because mutekh initializer does not work her */		
+    					mainFile.appendToMainCode(getChannelName(ar, i) + ".status =&"+ getChannelName(ar, i)+"_status;" + CR);
+    					mainFile.appendToMainCode(getChannelName(ar, i) +".status->lock=0;" + CR);
+    					mainFile.appendToMainCode(getChannelName(ar, i)+".status->rptr=0;" + CR);
+    					mainFile.appendToMainCode(getChannelName(ar, i)+".status->usage=0;" + CR);
+    					mainFile.appendToMainCode(getChannelName(ar, i)+".status->wptr=0;" + CR);	    	    	
+    					mainFile.appendToBeforeMainCode("uint32_t const "+ getChannelName(ar, i)+"_lock LOCK"+k+";" + CR); 
+    					mainFile.appendToBeforeMainCode("struct mwmr_status_s "+ getChannelName(ar, i) +"_status CHANNEL"+k+";" + CR); 			       
+    					mainFile.appendToBeforeMainCode("uint8_t "+getChannelName(ar, i) +"_data[32] CHANNEL"+k+";" + CR);		
+    					mainFile.appendToBeforeMainCode("struct mwmr_s "+getChannelName(ar, i) +" CHANNEL"+k+";" + CR2);	 
+    					k++;
+    				}
+    			}
+    		}
+    	}
     }
  
     //DG 19.09. need this for main program generation
@@ -356,7 +367,7 @@ public class TasksAndMainGenerator {
     	return -1;
 	}*/
    
-    public int FindCPUidFromTask(AvatarBlock block){
+    public int findCPUidFromTask(AvatarBlock block){
     	List<AvatarTask> tasks = avddspec.getAllMappedTask();
 	
     	for (AvatarTask task : tasks){
@@ -370,41 +381,40 @@ public class TasksAndMainGenerator {
 
     /* DG 7.7. give CPUid of outer block to block created e.g. for a timer */
     public void makeTasks() {
-        for(AvatarBlock block: avspec.getListOfBlocks()) {
-	    if (FindCPUidFromTask(block)!=-1) 
-	      makeTask(block,FindCPUidFromTask(block));
-	    else {
-		//AvatarBlock father = block.getFather();
-		//if(father!=null){ //DG bug: donne null pointer
-		//makeTask(block,FindCPUidFromTask(father));
-		makeTask(block,0);
-	
-		
-		}
-	    //DG 19.09. found coproc do not make task
-	   
-	    }
-        }
+    	for(AvatarBlock block: avspec.getListOfBlocks()) {
+    		if (findCPUidFromTask(block)!=-1) 
+    			makeTask(block,findCPUidFromTask(block));
+    		else {
+    			//AvatarBlock father = block.getFather();
+    			//if(father!=null){ //DG bug: donne null pointer
+    			//makeTask(block,FindCPUidFromTask(father));
+    			makeTask(block,0);
 
+
+    		}
+    		//DG 19.09. found coproc do not make task
+
+    	}
+    }
 
     public void makeTask(AvatarBlock block , int cpuId) {
-	TaskFileSoclib taskFile = new TaskFileSoclib(block.getName(),cpuId);
-        
-        if (includeUserCode) {
-            String tmp = block.getGlobalCode();
-            if (tmp != null) {
-                taskFile.addToMainCode(CR + "// Header code defined in the model" + CR + tmp + CR + "// End of header code defined in the model" + CR + CR);
-            }
-        }
-        defineAllSignal(block,taskFile);
+    	TaskFileSoclib taskFile = new TaskFileSoclib(block.getName(),cpuId);
 
-        defineAllStates(block, taskFile);
+    	if (includeUserCode) {
+    		String tmp = block.getGlobalCode();
+    		if (tmp != null) {
+    			taskFile.addToMainCode(CR + "// Header code defined in the model" + CR + tmp + CR + "// End of header code defined in the model" + CR + CR);
+    		}
+    	}
+    	defineAllSignal(block,taskFile);
 
-        defineAllMethods(block, taskFile);
+    	defineAllStates(block, taskFile);
 
-        makeMainFunction(block, taskFile);
+    	defineAllMethods(block, taskFile);
 
-        taskFiles.add(taskFile);
+    	makeMainFunction(block, taskFile);
+
+    	taskFiles.add(taskFile);
     }
 
     // ---------------------------------------------------------
@@ -457,8 +467,8 @@ public class TasksAndMainGenerator {
 
     private void makeMethod(AvatarBlock _block, AvatarMethod _am, Vector<String> _allNames, TaskFileSoclib _taskFile) {
         String ret = "";
-        LinkedList<AvatarAttribute> list;
-        LinkedList<AvatarAttribute> listA;
+        List<AvatarAttribute> list;
+        List<AvatarAttribute> listA;
 
         String nameMethod = _block.getName() + "__" +_am.getName();
 

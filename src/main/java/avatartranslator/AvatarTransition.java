@@ -36,12 +36,11 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package avatartranslator;
 
 import java.util.Iterator;
 import java.util.LinkedList;
-
+import java.util.List;
 
 /**
  * Class AvatarTransition
@@ -73,7 +72,7 @@ public class AvatarTransition extends AvatarStateMachineElement {
     private String minCompute = "", maxCompute = "";
     private AvatarStateMachineOwner block;
 
-    private LinkedList<AvatarAction> actions; // actions on variable, or method call
+    private List<AvatarAction> actions; // actions on variable, or method call
 
     public AvatarTransition(AvatarStateMachineOwner _block, String _name, Object _referenceObject) {
         super(_name, _referenceObject);
@@ -135,7 +134,7 @@ public class AvatarTransition extends AvatarStateMachineElement {
         return false;
     }
 
-    public LinkedList<AvatarAction> getActions() {
+    public List<AvatarAction> getActions() {
         return this.actions;
     }
 

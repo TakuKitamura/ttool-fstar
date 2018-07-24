@@ -36,13 +36,10 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package avatartranslator;
 
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Class AvatarMethod
@@ -55,8 +52,8 @@ public class AvatarMethod extends AvatarElement {
 
     protected boolean implementationProvided;
 
-    protected LinkedList<AvatarAttribute> parameters;
-    protected LinkedList<AvatarAttribute> returnParameters;
+    protected List<AvatarAttribute> parameters;
+    protected List<AvatarAttribute> returnParameters;
 
 
     public AvatarMethod(String _name, Object _referenceObject) {
@@ -81,11 +78,11 @@ public class AvatarMethod extends AvatarElement {
         returnParameters.add(_attribute);
     }
 
-    public LinkedList<AvatarAttribute> getListOfAttributes() {
+    public List<AvatarAttribute> getListOfAttributes() {
         return parameters;
     }
 
-    public LinkedList<AvatarAttribute> getListOfReturnAttributes() {
+    public List<AvatarAttribute> getListOfReturnAttributes() {
         return returnParameters;
     }
 
@@ -93,6 +90,7 @@ public class AvatarMethod extends AvatarElement {
         return AvatarTerm.isValidName (_method);
     }
 
+    @Override
     public String toString() {
         int cpt = 0;
         String ret = "";
@@ -196,20 +194,18 @@ public class AvatarMethod extends AvatarElement {
     }
 
     protected void setAdvancedClone(AvatarMethod am, AvatarStateMachineOwner _block) {
-	am.setImplementationProvided(isImplementationProvided());
-	for(AvatarAttribute param: parameters) {
-	    am.addParameter(param.advancedClone(_block));
-	}
-	for(AvatarAttribute ret: returnParameters) {
-	    am.addReturnParameter(ret.advancedClone(_block));
-	}
+    	am.setImplementationProvided(isImplementationProvided());
+    	for(AvatarAttribute param: parameters) {
+    		am.addParameter(param.advancedClone(_block));
+    	}
+    	for(AvatarAttribute ret: returnParameters) {
+    		am.addReturnParameter(ret.advancedClone(_block));
+    	}
     }
 
     public AvatarMethod advancedClone(AvatarStateMachineOwner _block) {
-	AvatarMethod am = new AvatarMethod(getName(), getReferenceObject());
-	setAdvancedClone(am, _block);	
-	return am;
+    	AvatarMethod am = new AvatarMethod(getName(), getReferenceObject());
+    	setAdvancedClone(am, _block);	
+    	return am;
     }
-
-
 }

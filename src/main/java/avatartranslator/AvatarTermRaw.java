@@ -58,6 +58,7 @@ public class AvatarTermRaw extends AvatarTerm {
         return false;
     }
 
+    @Override
     public String toString () {
         return this.raw;
     }

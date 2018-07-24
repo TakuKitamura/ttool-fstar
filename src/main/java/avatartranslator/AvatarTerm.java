@@ -90,7 +90,7 @@ public abstract class AvatarTerm extends AvatarElement {
 
         try {
             // TODO: replace that by a true AvatarNumeric
-            int i = Integer.parseInt (toParse);
+            //int i = Integer.parseInt (toParse);
             result = new AvatarConstant (toParse, block);
             block.getAvatarSpecification ().addConstant ((AvatarConstant) result);
             return result;

@@ -433,8 +433,7 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
         return (asme != null);
     }
 
-
-    public void removeTimers(AvatarSpecification _spec, LinkedList<AvatarBlock> _addedBlocks) {
+    public void removeTimers(AvatarSpecification _spec, List<AvatarBlock> _addedBlocks) {
         AvatarSignal as;
         AvatarAttribute value;
 

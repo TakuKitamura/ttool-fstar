@@ -46,10 +46,14 @@ import java.util.List;
  * @author Florian LUGOU
  */
 public interface AvatarStateMachineOwner {
-    String getName();
-    AvatarStateMachine getStateMachine();
-    AvatarSignal getAvatarSignalWithName(String signalName);
-    AvatarMethod getAvatarMethodWithName(String methodName);
+    
+	String getName();
+   
+	AvatarStateMachine getStateMachine();
+    
+	AvatarSignal getAvatarSignalWithName(String signalName);
+    
+	AvatarMethod getAvatarMethodWithName(String methodName);
 
     /**
      * Look for an attribute in the list of local attributes, parameters and return values.

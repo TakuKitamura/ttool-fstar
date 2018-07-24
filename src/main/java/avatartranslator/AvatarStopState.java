@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package avatartranslator;
 
 /**
@@ -55,8 +52,9 @@ public class AvatarStopState extends AvatarStateElement {
 
     public AvatarStateMachineElement basicCloneMe(AvatarStateMachineOwner _block) {
         AvatarStopState astop = new AvatarStopState(getName(), getReferenceObject());
-	astop.setAsVerifiable(canBeVerified());
-	return astop;
+        astop.setAsVerifiable(canBeVerified());
+	
+        return astop;
 	//return null;
     }
 
@@ -64,7 +62,7 @@ public class AvatarStopState extends AvatarStateElement {
         return "Stop state";
     }
 
-    public void translate (AvatarTranslator translator, Object arg) {
+    public void translate(AvatarTranslator translator, Object arg) {
         translator.translateStopState (this, arg);
     }
 }

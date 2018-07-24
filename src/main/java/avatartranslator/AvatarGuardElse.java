@@ -85,6 +85,7 @@ public class AvatarGuardElse extends AvatarGuard {
         return "else";
     }
 
+    @Override
     public boolean isElseGuard () {
         return true;
     }

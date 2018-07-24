@@ -229,6 +229,7 @@ public abstract class AvatarGuard {
 
     public abstract String getAsString (AvatarSyntaxTranslator translator);
 
+    @Override
     public String toString () {
         return this.getAsString (new AvatarSyntaxTranslator ());
     }

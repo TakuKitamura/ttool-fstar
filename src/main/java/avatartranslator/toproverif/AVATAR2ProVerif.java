@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package avatartranslator.toproverif;
 
 import avatartranslator.*;
@@ -62,6 +59,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Class AVATAR2ProVerif
@@ -228,7 +226,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         return result;
     }
 
-    protected static String translateTerm (AvatarTerm term, HashMap<AvatarAttribute, Integer> attributeCmp) {
+    protected static String translateTerm (AvatarTerm term, Map<AvatarAttribute, Integer> attributeCmp) {
         if (term instanceof AvatarAttribute) {
             AvatarAttribute attr = (AvatarAttribute) term;
             if (attributeCmp != null) {
@@ -341,7 +339,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
     // Supported guards: a == b, not(a == b), g1 and g2, g1 or g2
     // -> transformed into a = b, a <> b, g1 && g2, g1 || g2
     // Returns nulls otherwise
-    private static String translateGuard (AvatarGuard _guard, HashMap<AvatarAttribute, Integer> attributeCmp) {
+    private static String translateGuard (AvatarGuard _guard, Map<AvatarAttribute, Integer> attributeCmp) {
         TraceManager.addDev(_guard.toString());
         if (_guard == null || _guard instanceof AvatarGuardEmpty)
             return null;
@@ -501,7 +499,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         List<AvatarBlock> blocks = this.avspec.getListOfBlocks();
       //  String action = "(";
         for(AvatarBlock block: blocks) {
-            HashMap<AvatarStateMachineElement, Integer> simplifiedElements = block.getStateMachine ().getSimplifiedElements ();
+            Map<AvatarStateMachineElement, Integer> simplifiedElements = block.getStateMachine ().getSimplifiedElements ();
             if (simplifiedElements.get (block.getStateMachine ().getStartState ()) == null)
                 simplifiedElements.put (block.getStateMachine ().getStartState (), new Integer (0));
 
@@ -734,7 +732,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         lastInstr = lastInstr.setNextInstr (paral);
 
         for(AvatarBlock block: blocks) {
-            HashMap<AvatarStateMachineElement, Integer> simplifiedElements = block.getStateMachine ().getSimplifiedElements ();
+            Map<AvatarStateMachineElement, Integer> simplifiedElements = block.getStateMachine ().getSimplifiedElements ();
 
             if (simplifiedElements.get (block.getStateMachine ().getStartState ()) == null)
                 paral.addInstr (new ProVerifProcCall (block.getName () + ATTR_DELIM + "0", new ProVerifVar[] {new ProVerifVar ("sessionID", "bitstring")}));
@@ -944,7 +942,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         lastInstr = lastInstr.setNextInstr (new ProVerifProcRaw (tmp + ")))"));
 
         // Generate a new process for every simplified element of the block's state machine
-        HashMap<AvatarStateMachineElement, Integer> simplifiedElements = ab.getStateMachine ().getSimplifiedElements ();
+        Map<AvatarStateMachineElement, Integer> simplifiedElements = ab.getStateMachine ().getSimplifiedElements ();
         if (simplifiedElements.get (ab.getStateMachine ().getStartState ()) == null)
             simplifiedElements.put (ab.getStateMachine ().getStartState (), new Integer (0));
 
@@ -993,8 +991,8 @@ public class AVATAR2ProVerif implements AvatarTranslator {
     class ProVerifTranslatorParameter {
         AvatarBlock block;
         ProVerifProcInstr lastInstr;
-        HashMap<AvatarStateMachineElement, Integer> simplifiedElements;
-        HashMap<AvatarAttribute, Integer> attributeCmp;
+        Map<AvatarStateMachineElement, Integer> simplifiedElements;
+        Map<AvatarAttribute, Integer> attributeCmp;
         AvatarStateMachineElement lastASME;
     }
 
@@ -1393,7 +1391,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
             }
             _lastInstr = _lastInstr.setNextInstr (new ProVerifProcIn (CH_MAINCH, new ProVerifVar[] {new ProVerifVar ("choice" + ATTR_DELIM + _asme.getName (), "bitstring")}));
 
-            HashMap<AvatarAttribute, Integer> attributeCmp = arg.attributeCmp;
+            Map<AvatarAttribute, Integer> attributeCmp = arg.attributeCmp;
             for (int i=0; i<nbOfNexts-1; i++) {
                 String choice = "choice" + ATTR_DELIM + _asme.getName () + ATTR_DELIM + i;
                 ProVerifProcITE ite = new ProVerifProcITE ("choice" + ATTR_DELIM + _asme.getName () + " = " + choice);
