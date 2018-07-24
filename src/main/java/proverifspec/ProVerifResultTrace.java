@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package proverifspec;
 
 import avatartranslator.toproverif.AVATAR2ProVerif;
@@ -51,6 +48,8 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -66,10 +65,10 @@ public class ProVerifResultTrace {
     private static Pattern blockNamePattern;
     private static Pattern attrPattern;
 
-    private LinkedList<ProVerifResultTraceStep> trace;
+    private List<ProVerifResultTraceStep> trace;
     private StringBuilder buffer;
-    private LinkedList<String> proverifProcess;
-    private HashMap<String, Integer> attackerNamesMap;
+    private List<String> proverifProcess;
+    private Map<String, Integer> attackerNamesMap;
 
 
     static
@@ -200,7 +199,7 @@ public class ProVerifResultTrace {
         this.buffer = null;
     }
 
-    public LinkedList<ProVerifResultTraceStep> getTrace()
+    public List<ProVerifResultTraceStep> getTrace()
     {
         return this.trace;
     }

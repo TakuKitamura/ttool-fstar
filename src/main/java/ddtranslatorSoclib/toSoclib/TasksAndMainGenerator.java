@@ -126,8 +126,7 @@ public class TasksAndMainGenerator {
     }
 
     public void saveInFiles(String path) throws FileException {
-
-	System.err.println("ok");
+    	System.err.println("ok");
         TraceManager.addDev("Generating files");
 
         if (mainFile != null) {
@@ -137,8 +136,8 @@ public class TasksAndMainGenerator {
         }
 
         for(TaskFileSoclib taskFile: taskFiles) {
-	    FileUtils.saveFile(path + GENERATED_PATH + taskFile.getName() + ".h", Conversion.indentString(taskFile.getFullHeaderCode/*Soclib*/(), 2));
-	    FileUtils.saveFile(path + GENERATED_PATH + taskFile.getName() + ".c", Conversion.indentString(taskFile.getMainCode(), 2));
+		    FileUtils.saveFile(path + GENERATED_PATH + taskFile.getName() + ".h", Conversion.indentString(taskFile.getFullHeaderCode/*Soclib*/(), 2));
+		    FileUtils.saveFile(path + GENERATED_PATH + taskFile.getName() + ".c", Conversion.indentString(taskFile.getMainCode(), 2));
         }
 
         // Standard Makefile
@@ -176,11 +175,11 @@ public class TasksAndMainGenerator {
 
         makeMainMutex();
 
-	makeSynchronousChannels();
+        makeSynchronousChannels();
 
         makeAsynchronousChannels();  
 
-	makeThreadsInMain(debug);
+        makeThreadsInMain(debug);
     }
 
     public void makeMainMutex() {
@@ -216,7 +215,7 @@ public class TasksAndMainGenerator {
     	mainFile.appendToMainCode("pthread_attr_t *attr_t = malloc(sizeof(pthread_attr_t));" +CR);
     	mainFile.appendToMainCode("pthread_attr_init(attr_t);" + CR );
     	mainFile.appendToMainCode("pthread_mutex_init(&__mainMutex, NULL);" +CR2);       
-	mainFile.appendToMainCode("int sizeParams;" +CR2);   //DG 13.06.
+    	mainFile.appendToMainCode("int sizeParams;" +CR2);   //DG 13.06.
     }
   
     public void makeSynchronousChannels() {

@@ -84,9 +84,9 @@ public class AVATAR2UPPAAL {
     private List<String> unoptStates;
     private int nbOfIntParameters, nbOfBooleanParameters;
 
-    private Hashtable <AvatarStateMachineElement, UPPAALLocation> hash;
-    private Hashtable <AvatarStateMachineElement, UPPAALLocation> hashChecking;
-    private Hashtable <String, String> translateString;
+    private Map<AvatarStateMachineElement, UPPAALLocation> hash;
+    private Map<AvatarStateMachineElement, UPPAALLocation> hashChecking;
+    private Map<String, String> translateString;
     public final static int STEP_X = 5;
     public final static int STEP_Y = 70;
     public final static int STEP_LOOP_X = 150;
