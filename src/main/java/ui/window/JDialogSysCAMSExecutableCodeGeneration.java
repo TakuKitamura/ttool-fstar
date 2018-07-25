@@ -524,14 +524,14 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
 
                 		TopCellGenerator topCellGenerator = new TopCellGenerator(syscalsspec);
                 		testGo();
-                		jta.append("Generation of TopCell executable code: done\n");
+                		jta.append("Generation of TopCell \"" + syscalsspec.getCluster().getClusterName() + "\" executable code: done\n");
 
                 		try {
-                			jta.append("Saving  SysCAMS code in files\n");
+                			jta.append("Saving SysCAMS code in files\n");
                 			System.err.println("Saving SysCAMS code in files\n");
                 			pathCode = code2.getText();
 
-                			System.err.println("SYSCAMS TOPCELL saved in " + code2.getText());
+                			System.err.println("SYSCAMS TOPCELL : " + syscalsspec.getCluster().getClusterName() + "saved in " + code2.getText());
                 			topCellGenerator.saveFile(pathCode);
 
                 			jta.append("Code saved\n");
