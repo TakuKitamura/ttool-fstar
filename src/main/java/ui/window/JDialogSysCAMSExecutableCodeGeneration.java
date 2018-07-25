@@ -38,11 +38,13 @@
 
 package ui.window;
 
+import syscamstranslator.toSysCAMS.MakefileCode;
 import syscamstranslator.toSysCAMS.TopCellGenerator;
 import launcher.LauncherException;
 import launcher.RshClient;
 import myutil.*;
 import syscamstranslator.SysCAMSSpecification;
+import syscamstranslator.SysCAMSTCluster;
 import ui.util.IconManager;
 import ui.MainGUI;
 import ui.SysCAMSPanelTranslator;
@@ -52,8 +54,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileWriter;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.LinkedList;
 import java.util.Vector;
 
 /**
@@ -502,6 +506,12 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
                 jta.append("Generating executable code (SystemC-AMS version)\n");
 
                 Vector<SysCAMSComponentTaskDiagramPanel> syscamsDiagramPanels = mgui.getListSysCAMSPanel();
+                LinkedList<SysCAMSTCluster> clusters = new LinkedList<SysCAMSTCluster>();
+                for (SysCAMSComponentTaskDiagramPanel syscamsDiagramPanel : syscamsDiagramPanels) {
+                	SysCAMSPanelTranslator syscamspaneltranslator = new SysCAMSPanelTranslator(syscamsDiagramPanel);
+                	SysCAMSSpecification syscalsspec = syscamspaneltranslator.getSysCAMSSpecification();
+                	clusters.add(syscalsspec.getCluster());
+                }
                 for (SysCAMSComponentTaskDiagramPanel syscamsDiagramPanel : syscamsDiagramPanels) {
                 	SysCAMSPanelTranslator syscamspaneltranslator = new SysCAMSPanelTranslator(syscamsDiagramPanel);
                 	SysCAMSSpecification syscalsspec = syscamspaneltranslator.getSysCAMSSpecification();
@@ -531,9 +541,19 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
                 			e.printStackTrace();
                 		}
                 	}
-
                 	testGo();
                 }
+                try {
+        			String makefile;
+        			System.err.println(pathCode + "Makefile");
+        			FileWriter fw = new FileWriter(pathCode + "/" + "Makefile");
+        			makefile = MakefileCode.getMakefileCode(clusters);
+        			fw.write(makefile);
+        			fw.close();
+        		} catch (Exception ex) {
+        			ex.printStackTrace();
+        		}
+                testGo();
             }
 //                if (removeCFiles.isSelected()) {
 //
