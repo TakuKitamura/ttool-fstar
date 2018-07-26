@@ -64,11 +64,10 @@ public class AvatarRAM extends AvatarComponent{
 
     LinkedList<AvatarChannel> channelMapped ;
     
-    public AvatarRAM(String _memoryName, int _dataSize, int _cluster_index, int _index, int _monitored)  {
+    public AvatarRAM(String _memoryName, int _dataSize, int _index, int _monitored)  {
       memoryName = _memoryName;
       dataSize = _dataSize;
-      index = _index;
-      cluster_index= _cluster_index;
+      index = _index;   
       monitored=_monitored;
       channelMapped =  new LinkedList<AvatarChannel>();
     }
@@ -84,12 +83,7 @@ public class AvatarRAM extends AvatarComponent{
     public int getIndex(){
 	return index;
 	}
-    
-    public int getClusterIndex(){	
-      return cluster_index;
-    } 
-
-    /* the target number is set by the topcell generator*/
+   
     public void setNo_target(int _no_target){
       no_target = _no_target;
     }

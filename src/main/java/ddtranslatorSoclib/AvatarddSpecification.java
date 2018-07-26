@@ -109,8 +109,7 @@ There always is at least one RAM0, TTY and interconnect (Bus or VGMN or crossbar
     		if (task instanceof AvatarTask) {
     			tasks.add((AvatarTask)task);
     		}
-        }
-      
+        }     
     	return tasks;
     }
     
@@ -125,7 +124,7 @@ There always is at least one RAM0, TTY and interconnect (Bus or VGMN or crossbar
     }
       
     public LinkedList<AvatarTTY> getAllTTY(){
-	//int i=0;
+	
       LinkedList<AvatarTTY> ttys = new LinkedList<AvatarTTY>();
       for (AvatarComponent tty : components )
         {
@@ -133,8 +132,7 @@ There always is at least one RAM0, TTY and interconnect (Bus or VGMN or crossbar
 		ttys.add((AvatarTTY)tty);
 		nb_target++;
 	    }
-        }
-     
+        }     
       return ttys;
     }
 

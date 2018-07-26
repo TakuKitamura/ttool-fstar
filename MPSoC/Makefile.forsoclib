@@ -1,8 +1,8 @@
-SOCLIB_CPU=ppc
-MUTEKH_CPU=ppc
+#SOCLIB_CPU=ppc
+#MUTEKH_CPU=ppc
 
-#SOCLIB_CPU=mips32el
-#MUTEKH_CPU=mips32el
+SOCLIB_CPU=mips32el
+MUTEKH_CPU=mips32el
 
 include generated_topcell/procinfo.mk
 

@@ -56,6 +56,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import myutil.TraceManager;
+
 public class TopCellGenerator
 {
 	private static final String MAPPING_TXT = "mapping.txt"; //$NON-NLS-1$	
@@ -97,6 +99,66 @@ public class TopCellGenerator
 		avspec =_avspec;
 	}
 
+     public static int getCrossbarIndex(AvatarComponent comp){
+	int  cluster_index=0;
+	for  (AvatarConnector connector : avatardd.getConnectors()){
+	
+		AvatarConnectingPoint my_p1= connector.get_p1(); 
+		AvatarConnectingPoint my_p2= connector.get_p2(); 
+				
+		AvatarComponent comp1 = my_p1.getComponent();
+		AvatarComponent comp2 = my_p2.getComponent(); 
+		if (comp2==comp){
+		//comp2 is a crossbar
+		  AvatarCrossbar comp3=  (AvatarCrossbar)comp2;
+		     cluster_index=comp3.getClusterIndex();
+		}   		  
+	}
+	return cluster_index;
+     }
+
+ public static int cpus_in_cluster(AvatarddSpecification dd,int cluster_no){
+	avatardd = dd;
+	int cpus=0;
+	for  (AvatarConnector connector : avatardd.getConnectors()){		
+	    AvatarConnectingPoint my_p1= connector.get_p1(); 
+	    AvatarConnectingPoint my_p2= connector.get_p2(); 
+				
+	    AvatarComponent comp1 = my_p1.getComponent();
+	    AvatarComponent comp2 = my_p2.getComponent(); 
+	    if (comp1 instanceof AvatarCPU){ 
+		AvatarCPU comp1cpu = (AvatarCPU)comp1;
+		//	if(comp1cpu.getCrossbarIndex(comp2)==cluster_no)
+		if(getCrossbarIndex(comp2)==cluster_no)
+		    cpus++;			
+	    }		    			    
+	}
+	return cpus; 
+    }
+
+	
+	public static int rams_in_cluster(AvatarddSpecification dd,int cluster_no){
+	avatardd = dd;
+	int rams=0;
+	for  (AvatarConnector connector : avatardd.getConnectors()){		
+	    AvatarConnectingPoint my_p1= connector.get_p1(); 
+	    AvatarConnectingPoint my_p2= connector.get_p2(); 
+				
+	    AvatarComponent comp1 = my_p1.getComponent();
+	    AvatarComponent comp2 = my_p2.getComponent(); 
+	    if (comp1 instanceof AvatarRAM){ 
+		AvatarRAM comp1ram = (AvatarRAM)comp1;
+		//if(comp1ram.getCrossbarIndex(comp2)==cluster_no)
+		if(getCrossbarIndex(comp2)==cluster_no)
+		    rams++;			
+	    }		    		
+	    
+	}
+	TraceManager.addDev (cluster_no+" RAMs in cluster "+cluster_no+":"+rams);
+	return rams; 
+    }
+    	
+    
     public String generateTopCell() {
 	String icn;
 	
@@ -172,9 +234,9 @@ public class TopCellGenerator
 	    
 	    /* Central interconnect or local crossbars */
 	    
-	    if(TopCellGenerator.avatardd.getNbCrossbar()>0){
+	    /* if(TopCellGenerator.avatardd.getNbCrossbar()>0){
 		
-	    }
+	       }*/
 	    makeVCIparameters();
 	    makeConfig();
 	    String top = Header.getHeader() + 

@@ -162,7 +162,7 @@ public class AvatarDeploymentPanelTranslator
 		    int index = tty.getIndex ();
 		    String ttyName = tty.getNodeName ();
 
-		    AvatarTTY avtty = new AvatarTTY (ttyName, index, index, index);
+		    AvatarTTY avtty = new AvatarTTY (ttyName, index);
 		    nb_target++;
 
 		    avatarMap.put (dp, avtty);
@@ -299,15 +299,13 @@ public class AvatarDeploymentPanelTranslator
 		    nb_init++;
 		    nb_target += 2;	
 		    AvatarCoproMWMR acpMWMR;
-
-		    //DG 19.09. map tasks to coproc
+		   
 		    acpMWMR =
 			new AvatarCoproMWMR (timerName, srcid, srcid, tgtid,
 					     plaps, fifoToCoprocDepth,
 					     fifoFromCoprocDepth, nToCopro,
 					     nFromCopro, nConfig, nStatus,
-					     useLLSC, coprocType, cluster_address);
-		    // DG 27.04. : pourquoi deux fois new coproc? Bien: on peut mapper les tasks :)
+					     useLLSC, coprocType, cluster_address);		    
 
 		    Vector < ADDBlockArtifact > tasks =
 			addCoproMWMRNode.getArtifactList ();
@@ -350,17 +348,11 @@ public class AvatarDeploymentPanelTranslator
 			  ADDRAMNode addRamNode = (ADDRAMNode) dp;
 			  String name = addRamNode.getNodeName ();
 			  int index = addRamNode.getIndex ();
-			  int cluster_index = addRamNode.getClusterIndex ();
+			  
 			  int byteDataSize = addRamNode.getDataSize ();
 
-			  //int monitored = addRamNode.getMonitored();
-
 			  AvatarRAM avram =
-			      new AvatarRAM (name, byteDataSize,
-					     cluster_index,
-					     index,
-					     addRamNode.getMonitored ());
-			  
+			      new AvatarRAM (name, byteDataSize,					      index,addRamNode.getMonitored ());
 			  nb_target++;
 
 			  Vector < ADDChannelArtifact > channels =
@@ -376,9 +368,7 @@ public class AvatarDeploymentPanelTranslator
 				AvatarChannel avcl =
 				    new AvatarChannel (referenceDiagram,
 						       channelName, avram,
-						       cluster_index,
-						       addRamNode.
-						       getMonitored ());
+						       addRamNode.getMonitored ());
 				avram.addChannel (avcl);
 				avatarMappedObject.add (avcl);
 			    }

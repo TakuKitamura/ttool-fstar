@@ -74,7 +74,7 @@ public class JDialogADDTTYNode extends JDialogBase implements ActionListener  {
 	
 	// Panel2
     protected JTextField index;
-    protected JTextField cluster_index;
+    // protected JTextField cluster_index;
     
     /** Creates new form  */
     public JDialogADDTTYNode(Frame _frame, String _title, ADDTTYNode _node) {
@@ -136,11 +136,11 @@ public class JDialogADDTTYNode extends JDialogBase implements ActionListener  {
         index = new JTextField(""+node.getIndex(), 15);
         panel2.add(index, c2);
         
-	c2.gridwidth = 1;
+	/*	c2.gridwidth = 1;
         panel2.add(new JLabel("Cluster Index:"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         cluster_index = new JTextField(""+node.getIndex(), 15);
-        panel2.add(cluster_index, c2);
+        panel2.add(cluster_index, c2);*/
 
 	
         // main panel;
@@ -194,9 +194,5 @@ public class JDialogADDTTYNode extends JDialogBase implements ActionListener  {
     
     public String getIndex() {
         return index.getText();
-    }
-    
-    public String getClusterIndex() {
-        return cluster_index.getText();
     }
 }

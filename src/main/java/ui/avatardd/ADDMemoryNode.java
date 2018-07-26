@@ -66,7 +66,7 @@ public abstract class ADDMemoryNode extends ADDCommunicationNode implements With
     protected String stereotype = "RAM";
 
     protected int index = 0;
-    protected int cluster_index = 0;
+    //protected int cluster_index = 0;
     protected int monitored = 0;
     protected int byteDataSize = HwMemory.DEFAULT_BYTE_DATA_SIZE;
 
@@ -138,9 +138,9 @@ public abstract class ADDMemoryNode extends ADDCommunicationNode implements With
         return index;
     }
 
-    public int getClusterIndex() {
+    /* public int getClusterIndex() {
         return cluster_index;
-    }
+	}*/
     
     public int getDataSize() {
         return byteDataSize;
@@ -191,7 +191,7 @@ public abstract class ADDMemoryNode extends ADDCommunicationNode implements With
             }
         }
 
-	if (dialog.getClusterIndex().length() != 0) {
+	/*	if (dialog.getClusterIndex().length() != 0) {
             try {
                 tmp = cluster_index;
                 index = Integer.decode(dialog.getClusterIndex()).intValue();
@@ -204,7 +204,7 @@ public abstract class ADDMemoryNode extends ADDCommunicationNode implements With
                 error = true;
                 errors += "cluster index  ";
             }
-        }
+	    }*/
 
 	
 
@@ -255,7 +255,7 @@ public abstract class ADDMemoryNode extends ADDCommunicationNode implements With
         sb.append("\" />\n");
         sb.append("<attributes byteDataSize=\"" + byteDataSize + "\" ");
         sb.append(" index=\"" + index + "\" ");
-	 sb.append(" cluster_index=\"" + cluster_index + "\" ");
+	// sb.append(" cluster_index=\"" + cluster_index + "\" ");
         if (stereotype.equals("RAM")) {
         	sb.append(" processCode=\"" + getProcessCode() + "\" ");
         }
