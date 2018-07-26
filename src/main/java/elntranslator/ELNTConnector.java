@@ -38,6 +38,8 @@
 
 package elntranslator;
 
+import java.util.LinkedList;
+
 /** 
  * Class ELNTConnector 
  * Parameters of a ELN connector
@@ -49,10 +51,13 @@ package elntranslator;
 public class ELNTConnector{
     private ELNTConnectingPoint connectingPoint1;
     private ELNTConnectingPoint connectingPoint2;
+    
+    private LinkedList<ELNTMidPortTerminal> term;
 
     public ELNTConnector(ELNTConnectingPoint _connectingPoint1, ELNTConnectingPoint _connectingPoint2) {
     	connectingPoint1 = _connectingPoint1;
     	connectingPoint2 = _connectingPoint2; 
+    	term = new LinkedList<ELNTMidPortTerminal>();
     }
 
     public ELNTConnectingPoint get_p1() {
@@ -62,4 +67,12 @@ public class ELNTConnector{
     public ELNTConnectingPoint get_p2() {
     	return connectingPoint2;
     }
+    
+    public LinkedList<ELNTMidPortTerminal> getMidPortTerminal() {
+		return term;
+	}
+	
+	public void addMidPortTerminal(ELNTMidPortTerminal _term){
+		term.add(_term);
+	}
 }

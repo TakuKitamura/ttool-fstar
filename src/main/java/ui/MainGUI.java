@@ -8582,18 +8582,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     		return null;
     	}
     }
-    
-    public SysCAMSComponentTaskDiagramPanel getFirstSysCAMSPanelFound() {
-    	SysCAMSComponentTaskDiagramPanel syscamsdp = null;
-        for (int i = 0; i < tabs.size(); i++)
-            if (tabs.get(i) instanceof SysCAMSComponentDesignPanel) {
-                syscamsdp = ((SysCAMSComponentDesignPanel) tabs.get(i)).syscamsctdp;
-            }
-        if (syscamsdp == null)
-            System.err.println("No SysCAMS Panel Found : MainGUI.getFirstSysCAMSPanelFound()");
-        return syscamsdp;
-    }
-    
+        
     public void syscamsExecutableCodeGeneration() {
         JDialogSysCAMSExecutableCodeGeneration jgen = new JDialogSysCAMSExecutableCodeGeneration(frame, this, "Executable Code generation, compilation and execution",
                 "../SysCAMSGenerationCode/");
