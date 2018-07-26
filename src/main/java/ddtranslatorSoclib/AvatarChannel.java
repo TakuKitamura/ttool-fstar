@@ -54,11 +54,10 @@ public class AvatarChannel extends AvatarMappedObject{
     private int cluster_index;
     private int  monitored;
 
-    public AvatarChannel(String _referenceDiagram,  String _channelName, AvatarRAM _avatarRAMReference, int _cluster_index, int _monitored){
+    public AvatarChannel(String _referenceDiagram,  String _channelName, AvatarRAM _avatarRAMReference, int _monitored){
       referenceDiagram =  _referenceDiagram;
       channelName = _channelName;
       avatarRAMReference = _avatarRAMReference;
-      cluster_index = _cluster_index;
       monitored = _monitored;
     }
 
@@ -73,10 +72,6 @@ public class AvatarChannel extends AvatarMappedObject{
     public String  getChannelName(){      
       return channelName;
       } 
-
-    public int getClusterIndex(){
-      return cluster_index;
-    } 
 
     public int getMonitored(){
       return monitored;

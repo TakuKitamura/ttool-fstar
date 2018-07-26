@@ -55,7 +55,7 @@ public class ADDRAMNode extends ADDMemoryNode implements SwallowTGComponent, Wit
 
     protected int monitored = 0;
     protected int index = 0;
-    protected int cluster_index = 0;
+    //protected int cluster_index = 0;
     
     public ADDRAMNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -153,9 +153,9 @@ public class ADDRAMNode extends ADDMemoryNode implements SwallowTGComponent, Wit
 	return index;
 	}
 
-    public int getClusterIndex() {
+    /* public int getClusterIndex() {
         return cluster_index;
-       }
+	}*/
     
     public int getMonitored() {
         return monitored;
