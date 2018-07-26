@@ -52,11 +52,13 @@ public class ELNTConnector{
     private ELNTConnectingPoint connectingPoint1;
     private ELNTConnectingPoint connectingPoint2;
     
+    private String name;
     private LinkedList<ELNTMidPortTerminal> term;
 
-    public ELNTConnector(ELNTConnectingPoint _connectingPoint1, ELNTConnectingPoint _connectingPoint2) {
+    public ELNTConnector(ELNTConnectingPoint _connectingPoint1, ELNTConnectingPoint _connectingPoint2, String _name) {
     	connectingPoint1 = _connectingPoint1;
     	connectingPoint2 = _connectingPoint2; 
+    	name = _name;
     	term = new LinkedList<ELNTMidPortTerminal>();
     }
 
@@ -68,7 +70,11 @@ public class ELNTConnector{
     	return connectingPoint2;
     }
     
-    public LinkedList<ELNTMidPortTerminal> getMidPortTerminal() {
+    public String getName() {
+		return name;
+	}
+
+	public LinkedList<ELNTMidPortTerminal> getMidPortTerminal() {
 		return term;
 	}
 	

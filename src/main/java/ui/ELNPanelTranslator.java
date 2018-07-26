@@ -325,7 +325,9 @@ public class ELNPanelTranslator {
 				ELNConnector connector = (ELNConnector) dp;
 
 				TGConnectingPoint connectingPoint1 = connector.get_p1();
-				TGConnectingPoint connectingPoint2 = connector.get_p2();	
+				TGConnectingPoint connectingPoint2 = connector.get_p2();
+				
+				String name = connector.getValue();
 
 				TGComponent owner_p1 = elnDiagramPanel.getComponentToWhichBelongs(connectingPoint1);
 				TGComponent owner_p2 = elnDiagramPanel.getComponentToWhichBelongs(connectingPoint2);
@@ -336,7 +338,7 @@ public class ELNPanelTranslator {
 				ELNTConnectingPoint avConnectingPoint1 = new ELNTConnectingPoint(avowner_p1);
 				ELNTConnectingPoint avConnectingPoint2 = new ELNTConnectingPoint(avowner_p2);
 
-				ELNTConnector avconnector = new ELNTConnector(avConnectingPoint1, avConnectingPoint2);	
+				ELNTConnector avconnector = new ELNTConnector(avConnectingPoint1, avConnectingPoint2, name);	
 				
 				List<ELNMidPortTerminal> midPortTerminals = connector.getAllMidPortTerminal();
 				for (int i = 0; i < midPortTerminals.size(); i++) {
