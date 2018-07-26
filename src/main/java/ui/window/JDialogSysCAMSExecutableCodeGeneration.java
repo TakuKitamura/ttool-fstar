@@ -38,11 +38,13 @@
 
 package ui.window;
 
+import syscamstranslator.toSysCAMS.MakefileCode;
 import syscamstranslator.toSysCAMS.TopCellGenerator;
 import launcher.LauncherException;
 import launcher.RshClient;
 import myutil.*;
 import syscamstranslator.SysCAMSSpecification;
+import syscamstranslator.SysCAMSTCluster;
 import ui.util.IconManager;
 import ui.MainGUI;
 import ui.SysCAMSPanelTranslator;
@@ -52,8 +54,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileWriter;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.LinkedList;
+import java.util.Vector;
 
 /**
  * Class JDialogSysCAMSExecutableCodeGeneration
@@ -500,38 +505,56 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
             if (jp1.getSelectedIndex() == 0) {
                 jta.append("Generating executable code (SystemC-AMS version)\n");
 
-                SysCAMSComponentTaskDiagramPanel syscamsDiagramPanel = mgui.getFirstSysCAMSPanelFound();
-                SysCAMSPanelTranslator syscamspaneltranslator = new SysCAMSPanelTranslator(syscamsDiagramPanel);
-                SysCAMSSpecification syscalsspec = syscamspaneltranslator.getSysCAMSSpecification();
-
-                // Generating code
-                if (syscalsspec == null) {
-                    jta.append("Error: No SYSCAMS specification\n");
-                } else {
-                    System.err.println("**SYSCAMS TOPCELL found");
-
-                    TopCellGenerator topCellGenerator = new TopCellGenerator(syscalsspec);
-                    testGo();
-                    jta.append("Generation of TopCell executable code: done\n");
-
-                    try {
-                        jta.append("Saving  SysCAMS code in files\n");
-                        System.err.println("Saving SysCAMS code in files\n");
-                        pathCode = code2.getText();
-
-                        System.err.println("SYSCAMS TOPCELL saved in " + code2.getText());
-                        topCellGenerator.saveFile(pathCode);
-
-                        jta.append("Code saved\n");
-                    } catch (Exception e) {
-                        jta.append("Could not generate files\n");
-                        System.err.println("Could not generate SysCAMS files\n");
-                        e.printStackTrace();
-                    }
+                Vector<SysCAMSComponentTaskDiagramPanel> syscamsDiagramPanels = mgui.getListSysCAMSPanel();
+                LinkedList<SysCAMSTCluster> clusters = new LinkedList<SysCAMSTCluster>();
+                for (SysCAMSComponentTaskDiagramPanel syscamsDiagramPanel : syscamsDiagramPanels) {
+                	SysCAMSPanelTranslator syscamspaneltranslator = new SysCAMSPanelTranslator(syscamsDiagramPanel);
+                	SysCAMSSpecification syscalsspec = syscamspaneltranslator.getSysCAMSSpecification();
+                	clusters.add(syscalsspec.getCluster());
                 }
+                for (SysCAMSComponentTaskDiagramPanel syscamsDiagramPanel : syscamsDiagramPanels) {
+                	SysCAMSPanelTranslator syscamspaneltranslator = new SysCAMSPanelTranslator(syscamsDiagramPanel);
+                	SysCAMSSpecification syscalsspec = syscamspaneltranslator.getSysCAMSSpecification();
 
+                	// Generating code
+                	if (syscalsspec == null) {
+                		jta.append("Error: No SYSCAMS specification\n");
+                	} else {
+                		System.err.println("**SYSCAMS TOPCELL found");
+
+                		TopCellGenerator topCellGenerator = new TopCellGenerator(syscalsspec);
+                		testGo();
+                		jta.append("Generation of TopCell \"" + syscalsspec.getCluster().getClusterName() + "\" executable code: done\n");
+
+                		try {
+                			jta.append("Saving SysCAMS code in files\n");
+                			System.err.println("Saving SysCAMS code in files\n");
+                			pathCode = code2.getText();
+
+                			System.err.println("SYSCAMS TOPCELL : " + syscalsspec.getCluster().getClusterName() + "saved in " + code2.getText());
+                			topCellGenerator.saveFile(pathCode);
+
+                			jta.append("Code saved\n");
+                		} catch (Exception e) {
+                			jta.append("Could not generate files\n");
+                			System.err.println("Could not generate SysCAMS files\n");
+                			e.printStackTrace();
+                		}
+                	}
+                	testGo();
+                }
+                try {
+        			String makefile;
+        			System.err.println(pathCode + "Makefile");
+        			FileWriter fw = new FileWriter(pathCode + "/" + "Makefile");
+        			makefile = MakefileCode.getMakefileCode(clusters);
+        			fw.write(makefile);
+        			fw.close();
+        		} catch (Exception ex) {
+        			ex.printStackTrace();
+        		}
                 testGo();
-
+            }
 //                if (removeCFiles.isSelected()) {
 //
 //                    jta.append("Removing all .h files\n");
@@ -652,7 +675,7 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
 //            if ((hasError == false) && (jp1.getSelectedIndex() < 2)) {
 //                jp1.setSelectedIndex(jp1.getSelectedIndex() + 1);
 //            }
-        }} catch (InterruptedException ie) {
+        } catch (InterruptedException ie) {
             jta.append("Interrupted\n");
         }
 

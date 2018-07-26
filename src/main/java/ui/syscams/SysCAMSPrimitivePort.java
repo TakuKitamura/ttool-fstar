@@ -401,6 +401,9 @@ public class SysCAMSPrimitivePort extends TGCScalableWithInternalComponent imple
 			case '>' :  
 				buffer.append("&gt;");        
 				break;
+			case '\u03BC':
+				buffer.append("&#x3BC;");
+				break;
 			default :   
 				buffer.append(databuf.charAt(pos)); 
 				break;

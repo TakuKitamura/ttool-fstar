@@ -39,74 +39,86 @@
 package ui.eln;
 
 import ui.*;
-import ui.eln.sca_eln.ELNComponentIndependentVoltageSource;
 import ui.util.IconManager;
-
+import ui.window.JDialogELNConnector;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Vector;
+import java.util.*;
+import javax.swing.JFrame;
 
 /**
- * Class ELNConnector
- * Connector used in ELN diagrams
+ * Class ELNConnector 
+ * Connector used in ELN diagrams 
  * Creation: 11/06/2018
  * @version 1.0 11/06/2018
  * @author Irina Kit Yan LEE
  */
 
-public  class ELNConnector extends TGConnector implements ScalableTGComponent {
-   
+public class ELNConnector extends TGConnector implements ScalableTGComponent {
 	protected double oldScaleFactor;
-    protected int c = 10; //square length
 
-    public ELNConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
-        super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
-        myImageIcon = IconManager.imgic202;
-        value = "Connector between ports";
-        editable = false;
-        oldScaleFactor = tdp.getZoom();
-        p1 = _p1;	
-        p2 = _p2;
-    }
+	public ELNConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
+		super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
 
-    public TGConnectingPoint get_p1(){
-    	return p1;
+		myImageIcon = IconManager.imgic202;
+		value = "";
+		editable = true;
+		oldScaleFactor = tdp.getZoom();
+
+		p1 = _p1;
+		p2 = _p2;
 	}
 
-    public TGConnectingPoint get_p2(){
-    	return p2;
+	public TGConnectingPoint get_p1() {
+		return p1;
 	}
 
-    protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
-        g.drawLine(x1, y1, x2, y2);
-    }
+	public TGConnectingPoint get_p2() {
+		return p2;
+	}
 
-    public void rescale(double scaleFactor){
-        int xx, yy;
+	public boolean editOndoubleClick(JFrame frame) {
+		JDialogELNConnector jde = new JDialogELNConnector(this);
+		jde.setVisible(true);
+		return true;
+	}
 
-        for(int i=0; i<nbInternalTGComponent; i++) {
-            xx = tgcomponent[i].getX();
-            yy = tgcomponent[i].getY();
-            tgcomponent[i].dx = (tgcomponent[i].dx + xx) / oldScaleFactor * scaleFactor;
-            tgcomponent[i].dy = (tgcomponent[i].dy + yy) / oldScaleFactor * scaleFactor;
-            xx = (int)(tgcomponent[i].dx);
-            tgcomponent[i].dx = tgcomponent[i].dx - xx;
-            yy = (int)(tgcomponent[i].dy);
-            tgcomponent[i].dy = tgcomponent[i].dy - yy;
-            tgcomponent[i].setCd(xx, yy);
-        }
-        oldScaleFactor = scaleFactor;
-    }
+	protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
+		int w = g.getFontMetrics().stringWidth(value);
+		Font fold = g.getFont();
+		Font f = fold.deriveFont(Font.ITALIC, (float) (tdp.getFontSize()));
+		g.setFont(f);
+		g.drawString(value, (x1 + x2 - w) / 2, (y1 + y2) / 2);
+		g.setFont(fold);
 
-    public int getType() {
-        return TGComponentManager.ELN_CONNECTOR;
-    }
-    
+		g.drawLine(x1, y1, x2, y2);
+	}
+
+	public void rescale(double scaleFactor) {
+		int xx, yy;
+
+		for (int i = 0; i < nbInternalTGComponent; i++) {
+			xx = tgcomponent[i].getX();
+			yy = tgcomponent[i].getY();
+			tgcomponent[i].dx = (tgcomponent[i].dx + xx) / oldScaleFactor * scaleFactor;
+			tgcomponent[i].dy = (tgcomponent[i].dy + yy) / oldScaleFactor * scaleFactor;
+			xx = (int) (tgcomponent[i].dx);
+			tgcomponent[i].dx = tgcomponent[i].dx - xx;
+			yy = (int) (tgcomponent[i].dy);
+			tgcomponent[i].dy = tgcomponent[i].dy - yy;
+			tgcomponent[i].setCd(xx, yy);
+		}
+		oldScaleFactor = scaleFactor;
+	}
+
+	public int getType() {
+		return TGComponentManager.ELN_CONNECTOR;
+	}
+
 	public java.util.List<ELNMidPortTerminal> getAllMidPortTerminal() {
 		java.util.List<ELNMidPortTerminal> list = new ArrayList<ELNMidPortTerminal>();
-		for(int i=0; i<nbInternalTGComponent; i++) {
+		for (int i = 0; i < nbInternalTGComponent; i++) {
 			if (tgcomponent[i] instanceof ELNMidPortTerminal) {
-				list.add((ELNMidPortTerminal)(tgcomponent[i]));
+				list.add((ELNMidPortTerminal) (tgcomponent[i]));
 			}
 		}
 		return list;
