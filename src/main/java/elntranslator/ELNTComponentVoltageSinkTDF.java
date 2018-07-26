@@ -38,6 +38,8 @@
 
 package elntranslator;
 
+import ui.eln.ELNConnectingPoint;
+
 /**
  * Class ELNTComponentVoltageSinkTDF
  * Parameters of a ELN primitive component : TDF voltage sink
@@ -49,12 +51,14 @@ package elntranslator;
 public class ELNTComponentVoltageSinkTDF extends ELNTComponent {
 	private String name;
 	private double scale;
+	private ELNConnectingPoint[] cp;
 	
 	private ELNTModule module;
 	
-	public ELNTComponentVoltageSinkTDF(String _name, double _scale, ELNTModule _module) {
+	public ELNTComponentVoltageSinkTDF(String _name, double _scale, ELNConnectingPoint[] _cp, ELNTModule _module) {
 		name = _name;
 		scale = _scale;
+		cp = _cp;
 		module = _module;
 	}
 
@@ -66,6 +70,10 @@ public class ELNTComponentVoltageSinkTDF extends ELNTComponent {
 		return scale;
 	}
 
+	public ELNConnectingPoint[] getCp() {
+		return cp;
+	}
+	
 	public ELNTModule getModule() {
 		return module;
 	}

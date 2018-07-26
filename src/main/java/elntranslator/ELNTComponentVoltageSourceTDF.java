@@ -38,6 +38,8 @@
 
 package elntranslator;
 
+import ui.eln.ELNConnectingPoint;
+
 /**
  * Class ELNTComponentVoltageSourceTDF
  * Parameters of a ELN primitive component : TDF voltage source
@@ -49,12 +51,14 @@ package elntranslator;
 public class ELNTComponentVoltageSourceTDF extends ELNTComponent {
 	private String name;
 	private double scale;
+	private ELNConnectingPoint[] cp;
 	
 	private ELNTModule module;
 	
-	public ELNTComponentVoltageSourceTDF(String _name, double _scale, ELNTModule _module) {
+	public ELNTComponentVoltageSourceTDF(String _name, double _scale, ELNConnectingPoint[] _cp, ELNTModule _module) {
 		name = _name;
 		scale = _scale;
+		cp = _cp;
 		module = _module;
 	}
 
@@ -64,6 +68,10 @@ public class ELNTComponentVoltageSourceTDF extends ELNTComponent {
 
 	public double getScale() {
 		return scale;
+	}
+	
+	public ELNConnectingPoint[] getCp() {
+		return cp;
 	}
 
 	public ELNTModule getModule() {

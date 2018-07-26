@@ -38,6 +38,8 @@
 
 package elntranslator;
 
+import ui.eln.ELNConnectingPoint;
+
 /**
  * Class ELNTComponentVoltageControlledVoltageSource
  * Parameters of a ELN primitive component : voltage controlled voltage source
@@ -49,12 +51,14 @@ package elntranslator;
 public class ELNTComponentVoltageControlledVoltageSource extends ELNTComponent {
 	private String name;
 	private double val;
+	private ELNConnectingPoint[] cp;
 	
 	private ELNTModule module;
 	
-	public ELNTComponentVoltageControlledVoltageSource(String _name, double _val, ELNTModule _module) {
+	public ELNTComponentVoltageControlledVoltageSource(String _name, double _val, ELNConnectingPoint[] _cp, ELNTModule _module) {
 		name = _name;
 		val = _val;
+		cp = _cp;
 		module = _module;
 	}
 
@@ -64,6 +68,10 @@ public class ELNTComponentVoltageControlledVoltageSource extends ELNTComponent {
 
 	public double getVal() {
 		return val;
+	}
+	
+	public ELNConnectingPoint[] getCp() {
+		return cp;
 	}
 
 	public ELNTModule getModule() {

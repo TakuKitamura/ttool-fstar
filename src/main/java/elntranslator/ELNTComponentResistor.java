@@ -38,6 +38,8 @@
 
 package elntranslator;
 
+import ui.eln.ELNConnectingPoint;
+
 /**
  * Class ELNTComponentResistor
  * Parameters of a ELN primitive component : resistor
@@ -50,13 +52,15 @@ public class ELNTComponentResistor extends ELNTComponent {
 	private String name;
 	private double val;
 	private String unit;
+	private ELNConnectingPoint[] cp;
 	
 	private ELNTModule module;
 	
-	public ELNTComponentResistor(String _name, double _val, String _unit, ELNTModule _module) {
+	public ELNTComponentResistor(String _name, double _val, String _unit, ELNConnectingPoint[] _cp, ELNTModule _module) {
 		name = _name;
 		val = _val;
 		unit = _unit;
+		cp = _cp;
 		module = _module;
 	}
 
@@ -70,6 +74,10 @@ public class ELNTComponentResistor extends ELNTComponent {
 
 	public String getUnit() {
 		return unit;
+	}
+	
+	public ELNConnectingPoint[] getCp() {
+		return cp;
 	}
 
 	public ELNTModule getModule() {

@@ -38,6 +38,8 @@
 
 package elntranslator;
 
+import ui.eln.ELNConnectingPoint;
+
 /**
  * Class ELNTComponentCapacitor
  * Parameters of a ELN primitive component : capacitor
@@ -53,7 +55,7 @@ public class ELNTComponentCapacitor extends ELNTComponent {
 	
 	private ELNTModule module;
 	
-	public ELNTComponentCapacitor(String _name, double _val, double _q0, String _unit0, String _unit1, ELNTModule _module) {
+	public ELNTComponentCapacitor(String _name, double _val, double _q0, String _unit0, String _unit1, ELNConnectingPoint[] _cp, ELNTModule _module) {
 		name = _name;
 		val = _val;
 		q0 = _q0;
