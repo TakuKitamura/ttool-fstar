@@ -52,6 +52,7 @@ public class ELNTComponentCapacitor extends ELNTComponent {
 	private String name;
 	private double val, q0;
 	private String unit0, unit1;
+	private ELNConnectingPoint[] cp;
 	
 	private ELNTModule module;
 	
@@ -61,6 +62,7 @@ public class ELNTComponentCapacitor extends ELNTComponent {
 		q0 = _q0;
 		unit0 = _unit0;
 		unit1 = _unit1;
+		cp = _cp;
 		module = _module;
 	}
 
@@ -82,6 +84,10 @@ public class ELNTComponentCapacitor extends ELNTComponent {
 
 	public String getUnit1() {
 		return unit1;
+	}
+	
+	public ELNConnectingPoint[] getCp() {
+		return cp;
 	}
 
 	public ELNTModule getModule() {
