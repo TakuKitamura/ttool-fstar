@@ -49,15 +49,15 @@ package ddtranslatorSoclib;
 
 import java.util.LinkedList;
 import java.util.List;
-import ui.tmldd.TMLArchiHWANode;//DG 23.08.
+import ui.tmldd.TMLArchiHWANode;
 public class AvatarddSpecification{
     private List<AvatarComponent> components;
     private List<AvatarConnector> connectors;
     private List<AvatarMappedObject> mappedObjects;
 		
-    private int nb_init = 0;
+    //private int nb_init;
 
-/*there are seven targets which are fixed but invisible to the user of the TTool deployment diagram) :
+/*there are 11 targets which are fixed but invisible to the user of the TTool deployment diagram) :
 
 Targets on RAM0 :
 the text segment (target 0)
@@ -66,15 +66,20 @@ the data segment (target 2)
 
 Other targets :
 the simhelper segment (target 3)
-the icu segment (target 4)
-the timer segment (target 5)
-the fdt segment (target 6)
+the timer segment (target 4)
+the icu segment (target 5)
+the dma segment (target 6)
+the fdt (flattened device tree) segment (target 7)
+the fd segment (target 8)
+the ethernet segment (target 9)
+the block device segment (target 10)
 
-There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) otherwise an error message is printed
+There always is at least one RAM0, TTY and interconnect (Bus or VGMN or crossbar)
 */
 
-/* initialization of counters, there are at least 6 targets */
-    int nb_target = 6; 
+/* initialization of counters */
+    int nb_init;
+    int nb_target;
     int nb_mwmr_segments = 0;
 	
     public AvatarddSpecification( List<AvatarComponent> _components, List<AvatarConnector> _connectors, List<AvatarMappedObject> _mappedObjects, int _nb_target, int _nb_init){
@@ -126,8 +131,10 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
         {
 	    if (tty instanceof AvatarTTY){ 		
 		ttys.add((AvatarTTY)tty);
+		nb_target++;
 	    }
         }
+     
       return ttys;
     }
 
@@ -136,19 +143,21 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
       for (AvatarComponent cpu : components )
         {
 	    if (cpu instanceof AvatarCPU){
-		cpus.add((AvatarCPU)cpu);		
+		cpus.add((AvatarCPU)cpu);
+		nb_init++;		
 	    }
         }     
       return cpus;
     }
    
     public List<AvatarRAM> getAllRAM(){
-	//int i=0;
+	
     	List<AvatarRAM> rams = new LinkedList<AvatarRAM>();
       
     	for (AvatarComponent ram : components ) {
     		if (ram instanceof AvatarRAM){  
-    			rams.add((AvatarRAM)ram);	
+		    rams.add((AvatarRAM)ram);
+		    nb_target++;	
     		}
     	}    
       
@@ -170,8 +179,7 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
       for (AvatarComponent vgmn : components )
         {
 	    if (vgmn instanceof AvatarVgmn){		
-            vgmns.add((AvatarVgmn)vgmn);
-	   
+            vgmns.add((AvatarVgmn)vgmn);	   
 	    }
         }
       return vgmns;
@@ -179,15 +187,15 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
 
     public LinkedList<AvatarCrossbar> getAllCrossbar(){
       LinkedList<AvatarCrossbar> crossbars = new LinkedList<AvatarCrossbar>();
-      //int i=0;
+    
       for (AvatarComponent crossbar : components )
         {
-	    //Currently, at least one crossbar -> clustered
+	    
 	    if (crossbar instanceof AvatarCrossbar){
 		
 		crossbars.add((AvatarCrossbar)crossbar);
-		//crossbar.setClusterIndex(i); 
-		//i++;
+		nb_target++;
+		nb_init++;
 	    }
 
         }
@@ -205,54 +213,34 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
       return bridges;
       }*/
 
-  
-   //Currently, we define 1 crossbar = 1 cluster
    public int getNbClusters(){      
        return getAllCrossbar().size();
     }
 
-    /* DG 23.08. les hardware accelerators proviennent en fait de la specification DIPLODOCUS */
 
-    //	    copro= new AvatarCoproMWMR("test",0,0,0,10,8,8,1,1,1,1,false);
-     
       public List<AvatarCoproMWMR> getAllCoproMWMR(){
       List<AvatarCoproMWMR> copros = new LinkedList<AvatarCoproMWMR>();
       for (AvatarComponent copro : components )
         {
 	    if (copro instanceof AvatarCoproMWMR){
-			
-			//DG 19.09. associate HW task name 
-			//copro.putName(blockname);
+		
             copros.add((AvatarCoproMWMR)copro);
+	    nb_init++;
+	    nb_target++;
 	    }
         }
       return copros;
       }
 
-    /* to do, actuellement c'est un hwa generique */
-    /* the hardware accelerators must be taken from DIPLODOCUS specification */
-    /* public List<DiploHWA> getAllHWA(){
-      List<DiploHWA> hwas = new LinkedList<DiploHWA>();
-      for (DiploComponent hwa : diplocomponents )
-        {
-	    if (hwa instanceof DiploHWA){
-			
-
-            hwas.add((DiploHWA)hwa);
-	    }
-        }
-      return hwas;
-      }*/
-
     public LinkedList<AvatarAmsCluster> getAllAmsCluster(){
-    //int i=0;
       LinkedList<AvatarAmsCluster> amsClusters = new LinkedList<AvatarAmsCluster>();
       for (AvatarComponent amsCluster : components )
-        {
+      {
         if (amsCluster instanceof AvatarAmsCluster){      
-        amsClusters.add((AvatarAmsCluster)amsCluster);
+            amsClusters.add((AvatarAmsCluster)amsCluster);
+            nb_target++;
         }
-        }
+      }
       return amsClusters;
     }
 
@@ -297,7 +285,5 @@ There always is a RAM0, a TTY and an interconnect (Bus or VGMN or crossbar) othe
     public int getNb_target(){
     return nb_target;
     }
-
-  // etc .....
 
 }

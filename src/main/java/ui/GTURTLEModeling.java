@@ -741,7 +741,7 @@ outerloop:
 	}
 
 	public boolean pathExists(TMLMapping<TGComponent> map, HwBridge firewallNode, TMLTask t1){
-		System.out.println("Checking path " + firewallNode.getName() + t1.getName());
+		//System.out.println("Checking path " + firewallNode.getName() + t1.getName());
 		List<HwLink> links = map.getTMLArchitecture().getHwLinks();
 		List<HwNode> found = new ArrayList<HwNode>();
 		List<HwNode> done = new ArrayList<HwNode>();
@@ -756,7 +756,6 @@ outerloop:
 			}
 		}
 		while (found.size() > 0) {
-			System.out.println("found " + found);
 			HwNode curr = found.remove(0);
 			for (HwLink link : links) {
 				//System.out.println("LINK " + link.hwnode.getName() + " " + link.bus.getName());
@@ -776,7 +775,7 @@ outerloop:
 			}
 			done.add(curr);
 		}
-		System.out.println("!pathExists " + t1.getName() + " " + firewallNode);
+
 		return false;
 	}
 
@@ -817,7 +816,7 @@ outerloop:
 
 		}
 		for (HwBridge firewallNode : map.getTMLArchitecture().getFirewalls()) {
-			
+			List<String> chansToRemove= new ArrayList<String>();
 			TraceManager.addDev("Found firewall " + firewallNode.getName());
 			TMLCPrimitiveComponent firewallComp = null;
 			TMLADStartState adStart = null;
@@ -834,6 +833,8 @@ outerloop:
 
 			//Add a single connection to update rules 
 			boolean updateRulesAdded=false;
+			
+			
 			
 
 			int links = map.getArch().getLinkByHwNode(firewallNode).size();
@@ -910,7 +911,6 @@ outerloop:
 
 			//Build requests between every connected task and firewall task
 			for (TMLTask task: map.getTMLModeling().getTasks()){
-				
 				TMLCPrimitiveComponent taskcomp =null;
 				for (TGComponent tg : tcdp.getComponentList()) {
 					if (tg instanceof TMLCPrimitiveComponent) {
@@ -918,6 +918,7 @@ outerloop:
 							taskcomp =((TMLCPrimitiveComponent) tg);
 							break;
 						}
+
 					}
 					else if (tg instanceof TMLCCompositeComponent) {
 						TMLCCompositeComponent cc = (TMLCCompositeComponent) tg;
@@ -929,12 +930,15 @@ outerloop:
 							}
 						}
 					}
+					
 				}
+
 
 				if (taskcomp==null){
 					continue;
 				}
 
+				
 
 				if (pathExists(map, firewallNode, task)){
 					//Add Request Ports
@@ -978,6 +982,8 @@ outerloop:
 						newtcdp.addComponent(originPort, taskcomp.getX(), taskcomp.getY(), true, true);
 						newtcdp.addComponent(destPort, firewallComp.getX(), firewallComp.getY(), true, true);
 						updateRulesAdded=true;
+						
+						
 					}
 
 				}
@@ -997,12 +1003,12 @@ outerloop:
 					toAdd.add(chan);
 					continue;
 				}
-
-				channelIndexMap.put(chan.getName(), index);
+				chansToRemove.add(chan.getName().split("__")[1]);
+				channelIndexMap.put(chan.getName().split("__")[1], index);
 				index++;
 				TMLPort origPort = chan.getOriginPort();
 				TMLPort destPort = chan.getDestinationPort();
-				TMLChannel wr = new TMLChannel(chan.getName() + "_firewallIn", chan.getReferenceObject());
+				TMLChannel wr = new TMLChannel(chan.getName().split("__")[1] + "_firewallIn", chan.getReferenceObject());
 				//Specify new channel attributes
 				wr.setSize(chan.getSize());
 				wr.setMax(chan.getMax());
@@ -1010,7 +1016,7 @@ outerloop:
 				wr.setType(TMLChannel.BRBW);
 				wr.setPriority(chan.getPriority());
 				wr.setTasks(orig, firewall);
-				TMLChannel rd = new TMLChannel(chan.getName() + "_firewallOut", chan.getReferenceObject());
+				TMLChannel rd = new TMLChannel(chan.getName().split("__")[1] + "_firewallOut", chan.getReferenceObject());
 				rd.setTasks(firewall, dest);
 				rd.setSize(chan.getSize());
 				rd.setMax(chan.getMax());
@@ -1028,12 +1034,29 @@ outerloop:
 				
 			
 			}
-			tmlm.removeAllChannels();
-			for (TMLChannel c : toAdd) {
-				tmlm.addChannel(c);
+			List<TGComponent> tmpRemove = new ArrayList<TGComponent>();
+
+			for (TGComponent tg : newtcdp.getComponentList()) {
+				if (tg instanceof TMLCPrimitiveComponent) {
+					TMLCPrimitiveComponent taskcomp =(TMLCPrimitiveComponent) tg;
+					for (TMLCPrimitivePort port: taskcomp.getAllChannelsOriginPorts()){
+						//System.out.println("chantoremove " + chansToRemove + " " + port.getPortName());
+						if (chansToRemove.contains(port.getPortName())){
+							//System.out.println("Removing " + port);
+							tmpRemove.add(port);
+						}
+					}
+					for (TMLCPrimitivePort port: taskcomp.getAllChannelsDestinationPorts()){
+						if (chansToRemove.contains(port.getPortName())){
+							tmpRemove.add(port);
+						}
+					}
+				}
 			}
 
-
+			for (TGComponent tg: tmpRemove){
+				newtcdp.removeComponent(tg);
+			}
 
 			//Build activity diagram
 			//Get start state
@@ -1135,7 +1158,7 @@ outerloop:
 		
 				firewallADP.addComponent(tmp, action.getX(), action.getY(), false, true);
 			
-				adChoiceRules.setGuard("[channelIndex=="+ channelIndexMap.get(chan.getName())+"]",i-1);
+				adChoiceRules.setGuard("[channelIndex=="+ channelIndexMap.get(chan.getName().split("__")[1])+"]",i-1);
 				//add stop state
 				
 				adStop = new TMLADStopState(100*i, 600, firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null, firewallADP);
@@ -1148,7 +1171,7 @@ outerloop:
 			
 				
 				
-				index++;
+				i++;
 			}
 			
 			for (TMLChannel chan : inChans.keySet()) {
@@ -1204,28 +1227,29 @@ outerloop:
 				tcp.tmlctdp.addComponent(conn, 0, 0, false, true);
 				i++;
 			}
-			int xpos = 500;
+			int xpos = 700;
+			int ypos= 100;
 			i = 1;
 			for (TMLChannel chan : inChans.keySet()) {
 				if (i>3){
 					break;
 				}
-				adChoice.setGuard("[index=="+channelIndexMap.get(chan.getName())+"]",i-1);
+				adChoice.setGuard("[index=="+channelIndexMap.get(chan.getName().split("__")[1])+"]",i-1);
 				TMLChannel newChan = inChans.get(chan);
-				adRC = new TMLADReadChannel(xpos, 350, firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null, firewallADP);
+				adRC = new TMLADReadChannel(xpos, 450, firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null, firewallADP);
 				adRC.setChannelName(newChan.getName());
 				adRC.setSamples("1");
 
 				tmp = new TGConnectorTMLAD(adRC.getX(), adRC.getY(), firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null, firewallADP, adChoice.getTGConnectingPointAtIndex(i), adRC.getTGConnectingPointAtIndex(0), new Vector<Point>());
 				firewallADP.addComponent(tmp, adRC.getX(), adRC.getY(), false, true);
 
-				firewallADP.addComponent(adRC, xpos, 350, false, true);
+				firewallADP.addComponent(adRC, xpos, 450, false, true);
 
 				//Execute for latency value
-				exec = new TMLADExecI(xpos, 400, firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null, firewallADP);
+				exec = new TMLADExecI(xpos, 500, firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null, firewallADP);
 
 				exec.setDelayValue(Integer.toString(firewallNode.latency));
-				firewallADP.addComponent(exec, xpos, 400, false, true);
+				firewallADP.addComponent(exec, xpos, 500, false, true);
 
 				tmp = new TGConnectorTMLAD(exec.getX(), exec.getY(), firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null, firewallADP, adRC.getTGConnectingPointAtIndex(1), exec.getTGConnectingPointAtIndex(0), new Vector<Point>());
 				firewallADP.addComponent(tmp, exec.getX(), exec.getY(), false, true);
@@ -1233,37 +1257,36 @@ outerloop:
 
 
 
-				adChoice2 = new TMLADChoice(xpos, 500, firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null, firewallADP);
-				firewallADP.addComponent(adChoice2, 500, 300, false, true);
+				adChoice2 = new TMLADChoice(xpos, 550, firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null, firewallADP);
+				firewallADP.addComponent(adChoice2, 550, 300, false, true);
 
 				tmp = new TGConnectorTMLAD(exec.getX(), exec.getY(), firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null, firewallADP, exec.getTGConnectingPointAtIndex(1), adChoice2.getTGConnectingPointAtIndex(0), new Vector<Point>());
 				firewallADP.addComponent(tmp, exec.getX(), exec.getY(), false, true);
 
 
-				//                      if (channelAllowed(map, chan)) {
 				TMLChannel wrChan = outChans.get(chan);
 
-				adWC = new TMLADWriteChannel(xpos, 600, firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null, firewallADP);
+				adWC = new TMLADWriteChannel(xpos-50, 600, firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null, firewallADP);
 				adWC.setChannelName(wrChan.getName());
 				adWC.setSamples("1");                                              
-				firewallADP.addComponent(adWC, xpos, 600, false, true);
+				firewallADP.addComponent(adWC, xpos-50, 600, false, true);
 
 
 				tmp = new TGConnectorTMLAD(exec.getX(), exec.getY(), firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null, firewallADP, adChoice2.getTGConnectingPointAtIndex(1), adWC.getTGConnectingPointAtIndex(0), new Vector<Point>());
 				firewallADP.addComponent(tmp, exec.getX(), exec.getY(), false, true);
 
-				adStop = new TMLADStopState(xpos, 650, firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null, firewallADP);
-				firewallADP.addComponent(adStop, xpos, 650, false, true);
+				adStop = new TMLADStopState(xpos-50, 650, firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null, firewallADP);
+				firewallADP.addComponent(adStop, xpos-50, 650, false, true);
 				tmp = new TGConnectorTMLAD(adStop.getX(), adStop.getY(), firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null, firewallADP, adWC.getTGConnectingPointAtIndex(1), adStop.getTGConnectingPointAtIndex(0), new Vector<Point>());
 				firewallADP.addComponent(tmp, adStop.getX(), adStop.getY(), false, true);
 				//    } else {
-				adStop2 = new TMLADStopState(xpos, 650, firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null, firewallADP);
-				firewallADP.addComponent(adStop2, xpos, 650, false, true);
+				adStop2 = new TMLADStopState(xpos+50, 650, firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null, firewallADP);
+				firewallADP.addComponent(adStop2, xpos+50, 650, false, true);
 
 				tmp = new TGConnectorTMLAD(adStop.getX(), adStop.getY(), firewallADP.getMinX(), firewallADP.getMaxX(), firewallADP.getMinY(), firewallADP.getMaxY(), false, null, firewallADP, adChoice2.getTGConnectingPointAtIndex(2), adStop2.getTGConnectingPointAtIndex(0), new Vector<Point>());
 				firewallADP.addComponent(tmp, adStop.getX(), adStop.getY(), false, true);
 				//   }
-				xpos += 100;
+				xpos += 200;
 				i++;
 
 			}
@@ -1273,44 +1296,85 @@ outerloop:
 			map.getCorrespondanceList().addCor(start, adStart);
 
 
-
-
-
-
-
-		}
-
-		//Replace channel operator with new firewallIn and firewallOut operators
-		for (TMLTask task: map.getTMLModeling().getTasks()){
-			//Get activity diagram
-			TMLActivityDiagramPanel tad = tcp.getTMLActivityDiagramPanel(task.getName());		
-			TGConnector fromStart = new TGConnectorTMLAD(0, 0, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
+			//Replace channel operator with new firewallIn and firewallOut operators
+			for (TMLTask task: map.getTMLModeling().getTasks()){
+				if (!pathExists(map, firewallNode, task)){
+					continue;
+				}
+				//Get activity diagram
+				TMLActivityDiagramPanel tad = tcp.getTMLActivityDiagramPanel(task.getName());		
+				TGConnector fromStart = new TGConnectorTMLAD(0, 0, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, null, null, new Vector<Point>());
 			
-			List<TGComponent> wrChans = new ArrayList<TGComponent>();
+				List<TMLADWriteChannel> wrChans = new ArrayList<TMLADWriteChannel>();
 			
-			List<TGComponent> rdChans = new ArrayList<TGComponent>();
+				List<TMLADReadChannel> rdChans = new ArrayList<TMLADReadChannel>();
 			
 			
-			for (TGComponent tg : tad.getComponentList()) {
-                if (tg instanceof TMLADWriteChannel) {
-					TMLADWriteChannel writeChannel = (TMLADWriteChannel) tg;
-                    if (fromStart != null) {
-                    	wrChans.add(tg);
+				for (TGComponent tg : tad.getComponentList()) {
+            	    if (tg instanceof TMLADWriteChannel) {
+						TMLADWriteChannel writeChannel = (TMLADWriteChannel) tg;
+            	        if (fromStart != null) {
+            	        	wrChans.add(writeChannel);
+            	        }
+            	    }
+            	    if (tg instanceof TMLADReadChannel) {
+						TMLADReadChannel readChannel = (TMLADReadChannel) tg;
+            	        if (fromStart != null) {
+            	        	rdChans.add(readChannel);
+            	        }
+            	    }
+        		}
+        		//For each writeChannel, add request operator, rename channel 
+        		
+        		
+
+        		for (TMLADWriteChannel wr: wrChans){
+        		
+	        		String chanName = wr.getChannelName();
+	        		
+        			xpos = wr.getX();
+            	    ypos = wr.getY();
+            	    fromStart = tad.findTGConnectorEndingAt(wr.getTGConnectingPointAtIndex(0));
+            	    TGConnectingPoint point = fromStart.getTGConnectingPointP2();
+					int yShift = 50;
+            	        
+					TMLADSendRequest sendreq = new TMLADSendRequest(xpos, ypos, tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad);
+            	    sendreq.setRequestName("req" + firewallNode.getName());
+                
+  		            sendreq.setParam(0, Integer.toString(channelIndexMap.get(chanName)));
+                    sendreq.makeValue();
+                    
+                    tad.addComponent(sendreq, xpos, ypos, false, true);
+                    //Re-route connector to sendreq
+                    fromStart.setP2(sendreq.getTGConnectingPointAtIndex(0));
+                    
+                    
+                    //Add connector between sendreq and writechannel
+                    fromStart = new TGConnectorTMLAD(wr.getX(), wr.getY(), tad.getMinX(), tad.getMaxX(), tad.getMinY(), tad.getMaxY(), false, null, tad, sendreq.getTGConnectingPointAtIndex(1), wr.getTGConnectingPointAtIndex(0), new Vector<Point>());
+                    tad.addComponent(fromStart, xpos, ypos, false, true);
+                    
+                    wr.setChannelName(chanName + "_firewallIn");
+                	wr.makeValue();
+                	
+                	//Shift everything below sendreq down
+                	for (TGComponent tg : tad.getComponentList()) {
+                        if (tg.getY() >= ypos && tg!=sendreq) {
+                            tg.setCd(tg.getX(), tg.getY() + yShift);
+                        }
                     }
-                }
-                if (tg instanceof TMLADReadChannel) {
-					TMLADReadChannel readChannel = (TMLADReadChannel) tg;
-                    if (fromStart != null) {
-                    	rdChans.add(tg);
-                    }
-                }
-        	}
-        	//For each writeChannel, add request operator, rename channel 
+        		}
         	
+        		//for each readchannel, rename channel
         	
-        	//for each readchannel, rename channel
-        	
-        	
+        		for (TMLADReadChannel rd: rdChans){
+	        		String chanName = rd.getChannelName();
+        			rd.setChannelName(chanName + "_firewallOut");
+                	rd.makeValue();
+        		}
+
+			}
+			//Remove old channel ports
+
         	
 		}
 
@@ -1649,7 +1713,7 @@ memloop:
 			} else if (tmap != null) {
 				t2a = new TML2Avatar(tmap, false, true);
 				avatarspec = t2a.generateAvatarSpec(loopLimit);
-				// drawPanel(avatarspec, mgui.getFirstAvatarDesignPanelFound());
+			//	drawPanel(avatarspec, mgui.getFirstAvatarDesignPanelFound());
 
 			} else if (tmlm != null) {
 				//Generate default mapping
@@ -6126,7 +6190,7 @@ memloop:
 			String name;
 
 			name = elt.getAttribute("name");
-			//TraceManager.addDev("Loading SMD of:" + name);
+			TraceManager.addDev("Loading SMD of:" + name);
 			AvatarSMDPanel asmdp = mgui.getAvatarSMDPanel(indexDesign, name);
 
 			if (asmdp == null) {

@@ -56,7 +56,7 @@ import java.awt.event.ComponentEvent;
 import java.io.BufferedReader;
 import java.io.File;
 
-
+import java.awt.image.BufferedImage;
 /**
  * Class JFrameSimulationSDPanel
  * Creation: 26/05/2011
@@ -113,6 +113,8 @@ public	class JFrameTMLSimulationPanel extends JFrame implements ActionListener {
         topPanel.add(buttonClose);
         JButton buttonSVG = new JButton(actions[InteractiveSimulationActions.ACT_SAVE_SD_SVG]);
         topPanel.add(buttonSVG);
+        JButton buttonPNG = new JButton(actions[InteractiveSimulationActions.ACT_SAVE_SD_PNG]);
+        topPanel.add(buttonPNG);
         /*topPanel.add(new JLabel(" time unit:"));
         units = new JComboBox<>(unitTab);
         units.setSelectedIndex(1);
@@ -187,6 +189,32 @@ public	class JFrameTMLSimulationPanel extends JFrame implements ActionListener {
         gen.saveInSVG(sdpanel, file.getAbsolutePath());
         //newSVGSave(fileName);
     }
+    
+    private void savePNG() {
+        TraceManager.addDev("Saving in png format");
+        File file = mgui.selectFileForCapture();
+
+        BufferedImage bi;
+        bi = sdpanel.performCapture();
+        boolean ok = true;
+
+        try {
+            ok = FileUtils.checkFileForSave(file);
+        } catch (Exception e) {
+            ok = false;
+        }
+
+        if (!ok) {
+            JOptionPane.showMessageDialog(this,
+                    "The capture could not be performed: the specified file is not valid",
+                    "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+		
+        mgui.writeImageCapture(bi, file, true);
+        //newSVGSave(fileName);
+    }
 
 	public void	actionPerformed(ActionEvent evt)  {
 		String command = evt.getActionCommand();
@@ -196,6 +224,8 @@ public	class JFrameTMLSimulationPanel extends JFrame implements ActionListener {
 			close();
 		} else if (command.equals(actions[InteractiveSimulationActions.ACT_SAVE_SD_SVG].getActionCommand())) {
             saveSVG();
+        } else if (command.equals(actions[InteractiveSimulationActions.ACT_SAVE_SD_PNG].getActionCommand())) {
+            savePNG();
         }
 	}
 

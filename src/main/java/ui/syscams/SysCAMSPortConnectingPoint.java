@@ -50,7 +50,7 @@ import ui.TGConnectingPointWidthHeight;
  * @author Irina Kit Yan LEE
  */
 
-public class SysCAMSPortConnectingPoint extends TGConnectingPointWidthHeight{
+public class SysCAMSPortConnectingPoint extends TGConnectingPointWidthHeight {
     public SysCAMSPrimitivePort port;
 	public boolean positionned;
 	

@@ -45,6 +45,9 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.Vector;
 
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+
 import myutil.GraphicLib;
 
 /**
@@ -97,23 +100,25 @@ public class SysCAMSPortConnector extends TGConnector implements ScalableTGCompo
 				}
 			}
 			if ((pt1.port != null) && (pt2.port != null)) {
-				if ((pt1.port.getFather() instanceof SysCAMSBlockTDF) && (pt2.port.getFather() instanceof SysCAMSBlockGPIO2VCI)
-				 || (pt2.port.getFather() instanceof SysCAMSBlockTDF) && (pt1.port.getFather() instanceof SysCAMSBlockGPIO2VCI)) {
-					if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
-						Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0,	new float[] { 9 }, 0);
-						g.setStroke(dashed);
-						g.drawLine(x1, y1, x2, y2);
+				if ((pt1.port instanceof SysCAMSPortConverter) && (pt2.port instanceof SysCAMSPortDE)) {
+					if (pt2.port.getFather().getFather() instanceof SysCAMSCompositeComponent) {
+						GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
 					} else {
 						Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0,	new float[] { 9 }, 0);
 						g.setStroke(dashed);
 						GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
 					}
-				} else {
-					if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
-						g.drawLine(x1, y1, x2, y2);
+				} else if ((pt2.port instanceof SysCAMSPortConverter) && (pt1.port instanceof SysCAMSPortDE)) {
+					if (pt1.port.getFather().getFather() instanceof SysCAMSCompositeComponent) {
+						GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
 					} else {
+						Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0,	new float[] { 9 }, 0);
+						g.setStroke(dashed);
 						GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
 					}
+				} else if ((pt1.port instanceof SysCAMSPortTDF) && (pt2.port instanceof SysCAMSPortTDF)
+						 || (pt2.port instanceof SysCAMSPortTDF) && (pt1.port instanceof SysCAMSPortTDF)) {
+					GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
 				}
 			}
 			return;

@@ -45,11 +45,14 @@ import avatartranslator.AvatarAttribute;
 import avatartranslator.AvatarPragmaAuthenticity;
 import avatartranslator.AvatarPragmaReachability;
 import avatartranslator.AvatarPragmaSecret;
+import avatartranslator.AvatarPragma;
 import avatartranslator.AvatarPragmaLatency;
 import myutil.GraphicLib;
 import proverifspec.ProVerifOutputAnalyzer;
 import proverifspec.ProVerifQueryAuthResult;
 import proverifspec.ProVerifQueryResult;
+import proverifspec.ProVerifResultTrace;
+
 import ui.avatarbd.*;
 import ui.avatardd.ADDDiagramPanel;
 import ui.avatarsmd.AvatarSMDPanel;
@@ -453,17 +456,17 @@ public class AvatarDesignPanel extends TURTLEPanel {
 
         // Confidential attributes
         Map<AvatarPragmaSecret, ProVerifQueryResult> confResults = pvoa.getConfidentialityResults();
-        List<AvatarAttribute> secretAttributes = new LinkedList<AvatarAttribute> ();
-        List<AvatarAttribute> nonSecretAttributes = new LinkedList<AvatarAttribute> ();
+        HashMap<AvatarAttribute, AvatarPragma> secretAttributes = new HashMap<AvatarAttribute, AvatarPragma> ();
+        HashMap<AvatarAttribute, AvatarPragma> nonSecretAttributes = new HashMap<AvatarAttribute, AvatarPragma> ();
         for (AvatarPragmaSecret pragma: confResults.keySet())
         {
             ProVerifQueryResult result = confResults.get(pragma);
             if (result.isProved())
             {
                 if (result.isSatisfied())
-                    secretAttributes.add(pragma.getArg());
+                    secretAttributes.put(pragma.getArg(), pragma);
                 else
-                    nonSecretAttributes.add(pragma.getArg());
+                    nonSecretAttributes.put(pragma.getArg(),pragma);
             }
         }
 
@@ -474,15 +477,23 @@ public class AvatarDesignPanel extends TURTLEPanel {
                     int toBeFound = types.size ();
                     boolean ko = false;
                     for (TAttribute type: types) {
-                        for(AvatarAttribute attribute: secretAttributes)
+                        for(AvatarAttribute attribute: secretAttributes.keySet())
                             if (attribute.getBlock ().getName ().equals (bdBlock.getBlockName ()) && attribute.getName ().equals (tattr.getId () + "__" + type.getId ())) {
                                 toBeFound --;
+                                ProVerifResultTrace trace = confResults.get(secretAttributes.get(attribute)).getTrace();
+								if (trace!=null){
+									bdBlock.addProVerifTrace(tattr, trace);
+								}
                                 break;
                             }
 
-                        for(AvatarAttribute attribute: nonSecretAttributes)
+                        for(AvatarAttribute attribute: nonSecretAttributes.keySet())
                             if (attribute.getBlock ().getName ().equals (bdBlock.getBlockName ()) && attribute.getName ().equals (tattr.getId () + "__" + type.getId ())) {
                                 ko = true;
+                                ProVerifResultTrace trace = confResults.get(nonSecretAttributes.get(attribute)).getTrace();
+								if (trace!=null){
+									bdBlock.addProVerifTrace(tattr, trace);
+								}
                                 break;
                             }
 
@@ -490,17 +501,31 @@ public class AvatarDesignPanel extends TURTLEPanel {
                             break;
                     }
 
-                    if (ko)
+                    if (ko){
                         tattr.setConfidentialityVerification(TAttribute.CONFIDENTIALITY_KO);
-                    else if (toBeFound == 0)
+                      
+                    }
+                    else if (toBeFound == 0) {
                         tattr.setConfidentialityVerification(TAttribute.CONFIDENTIALITY_OK);
+                        
+                    }
                 } else {
-                    for(AvatarAttribute attribute: secretAttributes)
-                        if (attribute.getBlock ().getName ().equals (bdBlock.getBlockName ()) && attribute.getName ().equals (tattr.getId ()))
+                    for(AvatarAttribute attribute: secretAttributes.keySet())
+                        if (attribute.getBlock ().getName ().equals (bdBlock.getBlockName ()) && attribute.getName ().equals (tattr.getId ())){
                             tattr.setConfidentialityVerification(TAttribute.CONFIDENTIALITY_OK);
-                    for(AvatarAttribute attribute: nonSecretAttributes)
-                        if (attribute.getBlock ().getName ().equals (bdBlock.getBlockName ()) && attribute.getName ().equals (tattr.getId ()))
+                            ProVerifResultTrace trace = confResults.get(secretAttributes.get(attribute)).getTrace();
+							if (trace!=null){
+								bdBlock.addProVerifTrace(tattr, trace);
+							}
+                        }
+                    for(AvatarAttribute attribute: nonSecretAttributes.keySet())
+                        if (attribute.getBlock ().getName ().equals (bdBlock.getBlockName ()) && attribute.getName ().equals (tattr.getId ())){
                             tattr.setConfidentialityVerification(TAttribute.CONFIDENTIALITY_KO);
+                            ProVerifResultTrace trace = confResults.get(nonSecretAttributes.get(attribute)).getTrace();
+							if (trace!=null){
+								bdBlock.addProVerifTrace(tattr, trace);
+							}
+                        }
                 }
             }
 
@@ -565,7 +590,7 @@ public class AvatarDesignPanel extends TURTLEPanel {
                             boolean weakKo = false;
                             boolean isNotProved = false;
                             boolean weakIsNotProved = false;
-
+							ProVerifQueryAuthResult result= new ProVerifQueryAuthResult(false, false);
                             for (TAttribute type: types) {
                                 for (AvatarPragmaAuthenticity pragmaAuth: authResults.keySet())
                                 {
@@ -577,7 +602,7 @@ public class AvatarDesignPanel extends TURTLEPanel {
                                             || !pragmaAuth.getAttrB().getState().getName().equals(argB[1].replaceAll("\\.", "__")))
                                         continue;
 
-                                    ProVerifQueryAuthResult result = authResults.get(pragmaAuth);
+                                    result = authResults.get(pragmaAuth);
                                     toBeFound --;
 
                                     if (result.isProved())
@@ -625,7 +650,10 @@ public class AvatarDesignPanel extends TURTLEPanel {
                                 else
                                     pragma.authWeakMap.put(prop, 1);
                             }
-
+							ProVerifResultTrace trace = result.getTrace();
+							if (trace!=null){
+								pragma.pragmaTraceMap.put(prop, trace);
+							}
                         } else {
                             for (AvatarPragmaAuthenticity pragmaAuth: authResults.keySet())
                             {
@@ -670,7 +698,11 @@ public class AvatarDesignPanel extends TURTLEPanel {
                                 {
                                     pragma.authWeakMap.put(prop, 3);
                                 }
-
+								//Add ProVerif Result Trace to pragma
+								ProVerifResultTrace trace = pvoa.getResults().get(pragmaAuth).getTrace();
+								if (trace!=null){
+									pragma.pragmaTraceMap.put(prop, trace);
+								}
                                 break;
                             }
                         }

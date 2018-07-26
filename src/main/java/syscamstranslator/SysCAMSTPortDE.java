@@ -59,6 +59,7 @@ public class SysCAMSTPortDE extends SysCAMSTComponent {
 	private String sensitiveMethod;
 	
 	private SysCAMSTBlockDE blockDE;
+	private SysCAMSTBlockGPIO2VCI blockGPIO2VCI;
 	
 	public SysCAMSTPortDE(String _name, int _origin, String _DEType, boolean _sensitive, String _sensitiveMethod, SysCAMSTBlockDE _blockDE) {
 		name = _name;
@@ -71,6 +72,19 @@ public class SysCAMSTPortDE extends SysCAMSTComponent {
 		sensitive = _sensitive;
 		sensitiveMethod = _sensitiveMethod;
 		blockDE = _blockDE;
+	}
+	
+	public SysCAMSTPortDE(String _name, int _origin, String _DEType, boolean _sensitive, String _sensitiveMethod, SysCAMSTBlockGPIO2VCI _blockGPIO2VCI) {
+		name = _name;
+//		period = _period;
+//		time = _time;
+//		rate = _rate;
+//		delay = _delay;
+		origin = _origin;
+		DEType = _DEType;
+		sensitive = _sensitive;
+		sensitiveMethod = _sensitiveMethod;
+		blockGPIO2VCI = _blockGPIO2VCI;
 	}
 
 	public String getName() {
@@ -109,7 +123,11 @@ public class SysCAMSTPortDE extends SysCAMSTComponent {
 		return sensitiveMethod;
 	}
 
-	public SysCAMSTBlockDE getBlockTDF() {
+	public SysCAMSTBlockDE getBlockDE() {
 		return blockDE;
+	}
+	
+	public SysCAMSTBlockGPIO2VCI getBlockGPIO2VCI() {
+		return blockGPIO2VCI;
 	}
 }

@@ -60,7 +60,7 @@ import java.awt.event.ActionListener;
  * @author Irina Kit Yan LEE
  */
 
-public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implements SwallowedTGComponent, ActionListener {
+public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implements ActionListener, SwallowedTGComponent {
 	protected Color myColor;
 	protected int orientation;
 	private int maxFontSize = 14;
@@ -106,7 +106,7 @@ public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implem
 	public void initConnectingPoint(int nb) {
 		nbConnectingPoint = nb;
 		connectingPoint = new TGConnectingPoint[nb];
-		connectingPoint[0] = new ELNConnectingPoint(this, 0, 0, true, true, 0.5, 0.0);
+		connectingPoint[0] = new ELNConnectingPoint(this, 0, 0, true, true, 0.0, 0.0, "");
 	}
 
 	public Color getMyColor() {
@@ -151,12 +151,11 @@ public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implem
 			}
 
 			int attributeFontSize = this.currentFontSize * 5 / 6;
-			int w = g.getFontMetrics().stringWidth(value);
 			g.setFont(f.deriveFont((float) attributeFontSize));
 			g.setFont(f);
 			g.setFont(f.deriveFont(Font.BOLD));
-			g.drawString(value, x + (width - w) / 2, y - height / 2);
-			g.setFont(f.deriveFont(Font.PLAIN));
+			int h = g.getFontMetrics().getAscent();
+			g.drawString(value, x + width + width / 2, y + (height + h) / 2);
 
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
@@ -199,12 +198,11 @@ public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implem
 			}
 
 			int attributeFontSize = this.currentFontSize * 5 / 6;
-			int w = g.getFontMetrics().stringWidth(value);
 			g.setFont(f.deriveFont((float) attributeFontSize));
 			g.setFont(f);
 			g.setFont(f.deriveFont(Font.BOLD));
+			int w = g.getFontMetrics().stringWidth(value);
 			g.drawString(value, x + (width - w) / 2, y - height / 2);
-			g.setFont(f.deriveFont(Font.PLAIN));
 
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
@@ -248,12 +246,12 @@ public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implem
 			}
 
 			int attributeFontSize = this.currentFontSize * 5 / 6;
-			int w = g.getFontMetrics().stringWidth(value);
 			g.setFont(f.deriveFont((float) attributeFontSize));
 			g.setFont(f);
 			g.setFont(f.deriveFont(Font.BOLD));
-			g.drawString(value, x + (width - w) / 2, y - height / 2);
-			g.setFont(f.deriveFont(Font.PLAIN));
+			int h = g.getFontMetrics().getAscent();
+			g.drawString(value, x + width + width / 2, y + (height + h) / 2);
+
 
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
@@ -296,12 +294,11 @@ public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implem
 			}
 
 			int attributeFontSize = this.currentFontSize * 5 / 6;
-			int w = g.getFontMetrics().stringWidth(value);
 			g.setFont(f.deriveFont((float) attributeFontSize));
 			g.setFont(f);
 			g.setFont(f.deriveFont(Font.BOLD));
+			int w = g.getFontMetrics().stringWidth(value);
 			g.drawString(value, x + (width - w) / 2, y - height / 2);
-			g.setFont(f.deriveFont(Font.PLAIN));
 
 			if ((fv_0_2 == false && fv_1_3 == false && fh_0_2 == false && fh_1_3 == false)
 					|| (fv_0_2 == true && fv_1_3 == false && fh_0_2 == false && fh_1_3 == true)
@@ -389,8 +386,6 @@ public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implem
 	protected String translateExtraParam() {
 		StringBuffer sb = new StringBuffer("<extraparam>\n");
 		sb.append("<attributes position=\"" + position);
-		sb.append("\" width=\"" + width);
-		sb.append("\" height=\"" + height);
 		sb.append("\" fv_0_2=\"" + fv_0_2);
 		sb.append("\" fv_1_3=\"" + fv_1_3);
 		sb.append("\" fh_0_2=\"" + fh_0_2);
@@ -407,7 +402,7 @@ public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implem
 			Node n1, n2;
 			Element elt;
 
-			int position, width, height;
+			int position;
 			boolean fv_0_2, fv_1_3, fh_0_2, fh_1_3, first;
 
 			for (int i = 0; i < nl.getLength(); i++) {
@@ -420,16 +415,12 @@ public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implem
 							elt = (Element) n2;
 							if (elt.getTagName().equals("attributes")) {
 								position = Integer.parseInt(elt.getAttribute("position"));
-								width = Integer.parseInt(elt.getAttribute("width"));
-								height = Integer.parseInt(elt.getAttribute("height"));
 								fv_0_2 = Boolean.parseBoolean(elt.getAttribute("fv_0_2"));
 								fv_1_3 = Boolean.parseBoolean(elt.getAttribute("fv_1_3"));
 								fh_0_2 = Boolean.parseBoolean(elt.getAttribute("fh_0_2"));
 								fh_1_3 = Boolean.parseBoolean(elt.getAttribute("fh_1_3"));
 								first = Boolean.parseBoolean(elt.getAttribute("first"));
 								setPosition(position);
-								this.width = width;
-								this.height = height;
 								setFv_0_2(fv_0_2);
 								setFv_1_3(fv_1_3);
 								setFh_0_2(fh_0_2);
@@ -563,7 +554,7 @@ public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implem
 	public void setFirst(boolean _first) {
 		first = _first;
 	}
-	
+
 	public void resizeWithFather() {
 		if ((father != null) && (father instanceof ELNModule)) {
 			resizeToFatherSize();
@@ -572,7 +563,7 @@ public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implem
 			setMoveCd(x, y);
 		}
 	}
-	
+
 	public void wasSwallowed() {
 		myColor = null;
 	}

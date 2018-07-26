@@ -53,23 +53,22 @@ import java.util.LinkedList;
 public class AvatarRAM extends AvatarComponent{
     
     private String memoryName ;
-    private int index;
+   
     private int dataSize; 
 
-    public int no_ram;
+    public int index;
+    public int cluster_index;
     public int no_target;
     public int no_target_local;
-    public int no_cluster;
     public int monitored;
 
     LinkedList<AvatarChannel> channelMapped ;
     
-    public AvatarRAM(String _memoryName, int _index, int _dataSize, int _no_ram, int _no_cluster, int _monitored)  {
+    public AvatarRAM(String _memoryName, int _dataSize, int _cluster_index, int _index, int _monitored)  {
       memoryName = _memoryName;
-      index = _index;
       dataSize = _dataSize;
-      no_ram = _no_ram;
-      no_cluster=_no_cluster;
+      index = _index;
+      cluster_index= _cluster_index;
       monitored=_monitored;
       channelMapped =  new LinkedList<AvatarChannel>();
     }
@@ -78,32 +77,21 @@ public class AvatarRAM extends AvatarComponent{
 	return memoryName;
     }
 
-    public int getNo_ram(){
-      return no_ram;
-    }
-
     public int getNo_target(){
       return no_target;
     }
 
-    public int getNo_cluster(){
-      return no_cluster;
+    public int getIndex(){
+	return index;
+	}
+    
+    public int getClusterIndex(){	
+      return cluster_index;
     } 
 
-    public void setNo_ram(int _no_ram){
-      no_ram = _no_ram;
-    }
     /* the target number is set by the topcell generator*/
     public void setNo_target(int _no_target){
       no_target = _no_target;
-    }
-
-    public void setNo_cluster(int _no_cluster){
-      no_cluster = _no_cluster;
-    }
-
-    public int getIndex(){
-	return index;
     }
 
     public int getDataSize(){

@@ -44,6 +44,7 @@ import ui.atd.ATDAttack;
 import ui.atd.ATDBlock;
 import ui.avatarad.AvatarADActivity;
 import ui.avatarbd.AvatarBDBlock;
+import ui.avatarbd.AvatarBDPragma;
 import ui.avatarbd.AvatarBDDataType;
 import ui.avatarbd.AvatarBDLibraryFunction;
 import ui.avatarcd.AvatarCDBlock;
@@ -52,7 +53,9 @@ import ui.avatarrd.AvatarRDRequirement;
 import ui.avatarsmd.AvatarSMDState;
 import ui.cd.*;
 import ui.ftd.FTDFault;
+import ui.eln.*;
 import ui.eln.sca_eln.*;
+import ui.eln.sca_eln_sca_tdf.*;
 import ui.syscams.*;
 import ui.ncdd.NCEqNode;
 import ui.ncdd.NCRouteArtifact;
@@ -63,6 +66,7 @@ import ui.req.Requirement;
 import ui.tmlcd.TMLTaskOperator;
 import ui.tmlcompd.TMLCCompositeComponent;
 import ui.tmlcompd.TMLCPrimitiveComponent;
+import ui.tmlcompd.TMLCPrimitivePort;
 import ui.tmlcompd.TMLCRecordComponent;
 import ui.window.JDialogCode;
 import ui.window.JDialogNote;
@@ -129,6 +133,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     protected JMenuItem remove, edit, clone, bringFront, bringBack, makeSquare, setJavaCode, removeJavaCode, setInternalComment, removeInternalComment, attach, detach, hide, unhide, search, enableDisable, setAsCryptoBlock, setAsRegularBlock;
     protected JMenuItem checkAccessibility, checkInvariant, checkMasterMutex, checkLatency;
     protected JMenuItem gotoReference;
+    protected JMenuItem showProVerifTrace;
     protected JMenuItem breakpoint;
     protected JMenuItem paste, insertLibrary, upX, upY, downX, downY, fitToContent, backToMainDiagram;
     protected JMenuItem cut, copy, saveAsLibrary, captureSelected;
@@ -1452,6 +1457,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         componentMenu.add(checkInvariant);
         componentMenu.add(checkLatency);
         componentMenu.add(gotoReference);
+        componentMenu.add(showProVerifTrace);
         componentMenu.add(checkMasterMutex);
         componentMenu.add(breakpoint);
 
@@ -1567,6 +1573,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
         gotoReference = new JMenuItem("Go to reference");
         gotoReference.addActionListener(menuAL);
+        
+        showProVerifTrace= new JMenuItem("Show ProVerif Trace");
+        showProVerifTrace.addActionListener(menuAL);
 
         search = new JMenuItem("External Search");
         search.addActionListener(menuAL);
@@ -1846,7 +1855,19 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
             }
         }
-
+        
+        if (e.getSource() == showProVerifTrace) {
+        	if (componentPopup instanceof TMLCPrimitivePort){
+        		((TMLCPrimitivePort) componentPopup).showTrace();
+        	}
+        	else if (componentPopup instanceof AvatarBDBlock){
+        		((AvatarBDBlock) componentPopup).showTrace(currentY);
+        	}
+        	else if (componentPopup instanceof AvatarBDPragma){
+        		((AvatarBDPragma) componentPopup).showTrace(currentY);
+        	}
+        }
+        
         if (e.getSource() == checkMasterMutex) {
 
             if (componentPopup instanceof CheckableInvariant) {
@@ -2099,6 +2120,14 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             gotoReference.setEnabled(false);
 
         }
+        
+        if (componentPointed instanceof TMLCPrimitivePort || componentPointed instanceof AvatarBDBlock || componentPointed instanceof AvatarBDPragma){
+        	showProVerifTrace.setEnabled(true);
+        } else {
+        	showProVerifTrace.setEnabled(false);
+        }
+
+        
 
         if (componentPointed instanceof CheckableInvariant) {
             checkInvariant.setEnabled(true);
@@ -2603,6 +2632,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                     || (o instanceof SysCAMSBlockTDF && this.checkSysCAMSBlockTDFComponent((SysCAMSBlockTDF) o, name))
                     || (o instanceof SysCAMSBlockDE && this.checkSysCAMSBlockDEComponent((SysCAMSBlockDE) o, name))
                     || (o instanceof SysCAMSCompositeComponent && this.checkSysCAMSCompositeComponent((SysCAMSCompositeComponent) o, name))
+                    || (o instanceof ELNModule && this.checkELNModule((ELNModule) o, name))
                     || (o instanceof ELNComponentNodeRef && this.checkELNComponentNodeRef((ELNComponentNodeRef) o, name))
                     || (o instanceof ELNComponentResistor && this.checkELNComponentResistor((ELNComponentResistor) o, name))
                     || (o instanceof ELNComponentCapacitor && this.checkELNComponentCapacitor((ELNComponentCapacitor) o, name))
@@ -2613,6 +2643,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                     || (o instanceof ELNComponentTransmissionLine && this.checkELNComponentTransmissionLine ((ELNComponentTransmissionLine) o, name))
                     || (o instanceof ELNComponentIndependentVoltageSource && this.checkELNComponentIndependentVoltageSource((ELNComponentIndependentVoltageSource) o, name))
                     || (o instanceof ELNComponentIndependentCurrentSource && this.checkELNComponentIndependentCurrentSource((ELNComponentIndependentCurrentSource) o, name))
+                    || (o instanceof ELNComponentCurrentSinkTDF && this.checkELNComponentCurrentSinkTDF((ELNComponentCurrentSinkTDF) o, name))
+                    || (o instanceof ELNComponentCurrentSourceTDF && this.checkELNComponentCurrentSourceTDF((ELNComponentCurrentSourceTDF) o, name))
+                    || (o instanceof ELNComponentVoltageSinkTDF && this.checkELNComponentVoltageSinkTDF((ELNComponentVoltageSinkTDF) o, name))
+                    || (o instanceof ELNComponentVoltageSourceTDF && this.checkELNComponentVoltageSourceTDF((ELNComponentVoltageSourceTDF) o, name))
                     || (o instanceof ATDBlock && this.checkATDBlock((ATDBlock) o, name))
                     || (o instanceof ATDAttack && this.checkATDAttack((ATDAttack) o, name))
                     || (o instanceof FTDFault && this.checkFTDFault((FTDFault) o, name))
@@ -2676,6 +2710,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         	return false;
         }
 
+        public boolean checkELNModule(ELNModule o, String name) {
+        	return false;
+        }
+        
         public boolean checkELNComponentNodeRef(ELNComponentNodeRef o, String name) {
         	return false;
         }
@@ -2713,6 +2751,22 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
         
         public boolean checkELNComponentIndependentCurrentSource(ELNComponentIndependentCurrentSource o, String name) {
+        	return false;
+        }
+        
+        public boolean checkELNComponentCurrentSinkTDF(ELNComponentCurrentSinkTDF o, String name) {
+        	return false;
+        }
+        
+        public boolean checkELNComponentCurrentSourceTDF(ELNComponentCurrentSourceTDF o, String name) {
+        	return false;
+        }
+        
+        public boolean checkELNComponentVoltageSinkTDF(ELNComponentVoltageSinkTDF o, String name) {
+        	return false;
+        }
+        
+        public boolean checkELNComponentVoltageSourceTDF(ELNComponentVoltageSourceTDF o, String name) {
         	return false;
         }
 
@@ -2867,6 +2921,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     public String findELNComponentName(String name) {
     	return this.findGoodName(name, new NameChecker() {
+    		public boolean checkELNModule(ELNModule o, String name) {
+    			return o.getValue().equals(name);
+    		}
     		public boolean checkELNComponentNodeRef(ELNComponentNodeRef o, String name) {
     			return o.getValue().equals(name);
     		}
@@ -2895,6 +2952,18 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     			return o.getValue().equals(name);
     		}
     		public boolean checkELNComponentIndependentCurrentSource(ELNComponentIndependentCurrentSource o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		public boolean checkELNComponentCurrentSinkTDF(ELNComponentCurrentSinkTDF o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		public boolean checkELNComponentCurrentSourceTDF(ELNComponentCurrentSourceTDF o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		public boolean checkELNComponentVoltageSinkTDF(ELNComponentVoltageSinkTDF o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		public boolean checkELNComponentVoltageSourceTDF(ELNComponentVoltageSourceTDF o, String name) {
     			return o.getValue().equals(name);
     		}
     	});

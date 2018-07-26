@@ -88,7 +88,7 @@ public class Header
 	    "#include \"vci_ram.h\"" + CR +
 	    "#include \"vci_heterogeneous_rom.h\"" + CR +
 	    "#include \"vci_multi_tty.h\"" + CR
-	    //+ "#include \"vci_locks.h\"" + CR
+	    + "#include \"vci_dma.h\"" + CR
 	    + "#include \"vci_xicu.h\"" + CR + "#include \"vci_mwmr_stats.h\"" + CR;	//DG 20.09.
 	if (with_vgsb > 0)
 	  {
@@ -154,10 +154,14 @@ public class Header
 	    CR + "#include \"vci_local_crossbar.h\"" + CR2;
 
     if (with_amsCluster > 0) {
-        header += "#include \"gpio2vci.h\"" + CR2;
+        header += "#include \"gpio2vci.h\"" + CR;
+        for (AvatarAmsCluster amsCluster:TopCellGenerator.avatardd.getAllAmsCluster ())
+        {
+            header += "#include \"" + amsCluster.getAmsClusterName () + ".h\"" + CR;
+        }
     }
 
-	header = header + "namespace {" + CR
+	header = header + CR + "namespace {" + CR
 	    + "std::vector<std::string> stringArray(" + CR
 	    + "	const char *first, ... )" + CR
 	    + "{" + CR
@@ -216,6 +220,7 @@ public class Header
 		  header + CR2 +
 		  "static common::MappingTable maptab(32, IntTab(8,4), IntTab(8,4), 0xfff00000);";
 	  }
+
 	return header;
     }
 }

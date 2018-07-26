@@ -47,7 +47,6 @@
 package syscamstranslator.toSysCAMS;
 
 import syscamstranslator.*;
-
 import java.io.*;
 import java.util.LinkedList;
 
@@ -70,7 +69,7 @@ public class TopCellGenerator {
 	}
 
 	public String generateTopCell(SysCAMSTCluster c, LinkedList<SysCAMSTConnector> connectors) {
-		if (TopCellGenerator.syscams.getNbCluster() == 0) {
+		if (c == null) {
 			System.out.println("***Warning: require at least one cluster***");
 		}
 		if (TopCellGenerator.syscams.getNbBlockTDF() == 0) {
@@ -88,7 +87,7 @@ public class TopCellGenerator {
 		if (TopCellGenerator.syscams.getNbPortConverter() == 0) {
 			System.out.println("***Warning: require at least one converter port***");
 		}
-		if (TopCellGenerator.syscams.getNbConnector() == 0) {
+		if (TopCellGenerator.syscams.getNbConnectorCluster() == 0) {
 			System.out.println("***Warning: require at least one connector***");
 		}
 		String top = Header.getClusterHeader(c) + ClusterCode.getClusterCode(c, connectors);
@@ -96,35 +95,23 @@ public class TopCellGenerator {
 	}
 
 	public void saveFile(String path) {
-		LinkedList<SysCAMSTCluster> clusters = TopCellGenerator.syscams.getAllCluster();
-		LinkedList<SysCAMSTConnector> connectors = TopCellGenerator.syscams.getAllConnector();
-		
-		String top, makefile;
-		
-		for (SysCAMSTCluster c : clusters) {
-			try {
-				// Save file .cpp
-				System.err.println(path + GENERATED_PATH1 + c.getClusterName() + ".cpp");
-				FileWriter fw = new FileWriter(path + GENERATED_PATH1 + "/" + c.getClusterName() + "_tb.cpp");
-				top = generateTopCell(c, connectors);
-				fw.write(top);
-				fw.close();
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-			try {
-				// Save Makefile
-				System.err.println(path + "Makefile");
-				FileWriter fw = new FileWriter(path + "/" + "Makefile");
-				makefile = MakefileCode.getMakefileCode(c);
-				fw.write(makefile);
-				fw.close();
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-			// Save files .h
-			saveFileBlock(path, c);
+		SysCAMSTCluster cluster = TopCellGenerator.syscams.getCluster();
+		LinkedList<SysCAMSTConnector> connectors = TopCellGenerator.syscams.getAllConnectorCluster();
+
+		String top;
+
+		try {
+			// Save file .cpp
+			System.err.println(path + GENERATED_PATH1 + cluster.getClusterName() + ".cpp");
+			FileWriter fw = new FileWriter(path + GENERATED_PATH1 + "/" + cluster.getClusterName() + "_tb.cpp");
+			top = generateTopCell(cluster, connectors);
+			fw.write(top);
+			fw.close();
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
+		// Save files .h
+		saveFileBlock(path, cluster);
 	}
 
 	public void saveFileBlock(String path, SysCAMSTCluster c) {

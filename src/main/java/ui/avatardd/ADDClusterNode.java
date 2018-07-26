@@ -175,7 +175,7 @@ public class ADDClusterNode extends ADDNode implements WithAttributes {
 		MainGUI mgui = getTDiagramPanel().getMainGUI();
 
 		// On the name ?
-		if (_y <= (y + currentFontSize + textX)) {
+		if (_y <= y + textY2) {
 			String s = (String)JOptionPane.showInputDialog(frame, "Name:", "Setting component name",
 					JOptionPane.PLAIN_MESSAGE, IconManager.imgic100,
 					null,

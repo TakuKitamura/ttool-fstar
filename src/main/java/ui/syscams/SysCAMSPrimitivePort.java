@@ -122,12 +122,14 @@ public class SysCAMSPrimitivePort extends TGCScalableWithInternalComponent imple
         	((SysCAMSPortTDF) this).setRate(-1);
         	((SysCAMSPortTDF) this).setDelay(-1);
         	((SysCAMSPortTDF) this).setTDFType("int");
+        	((SysCAMSPortTDF) this).setOrigin(0);
         } else if (this instanceof SysCAMSPortDE) {
 //        	((SysCAMSPortDE) this).setPeriod(-1);
 //        	((SysCAMSPortDE) this).setTime("");
 //        	((SysCAMSPortDE) this).setRate(-1);
 //        	((SysCAMSPortDE) this).setDelay(-1);
         	((SysCAMSPortDE) this).setDEType("int");
+        	((SysCAMSPortDE) this).setOrigin(0);
         	((SysCAMSPortDE) this).setSensitive(false);
         	((SysCAMSPortDE) this).setSensitiveMethod("");
         } else if (this instanceof SysCAMSPortConverter) {
@@ -136,6 +138,7 @@ public class SysCAMSPrimitivePort extends TGCScalableWithInternalComponent imple
         	((SysCAMSPortConverter) this).setDelay(-1);
         	((SysCAMSPortConverter) this).setRate(-1);
         	((SysCAMSPortConverter) this).setConvType("int");
+        	((SysCAMSPortConverter) this).setOrigin(0);
         }
     }
 
@@ -376,6 +379,38 @@ public class SysCAMSPrimitivePort extends TGCScalableWithInternalComponent imple
         ((SysCAMSComponentTaskDiagramPanel)tdp).updatePorts();
         return true;
     }
+    
+	public StringBuffer encode(String data) {
+		StringBuffer databuf = new StringBuffer(data);
+		StringBuffer buffer = new StringBuffer("");
+		for(int pos = 0; pos != data.length(); pos++) {
+			char c = databuf.charAt(pos);
+			switch(c) {
+			case '&' :  
+				buffer.append("&amp;");       
+				break;
+			case '\"' : 
+				buffer.append("&quot;");      
+				break;
+			case '\'' : 
+				buffer.append("&apos;");      
+				break;
+			case '<' :  
+				buffer.append("&lt;");        
+				break;
+			case '>' :  
+				buffer.append("&gt;");        
+				break;
+			case '\u03BC':
+				buffer.append("&#x3BC;");
+				break;
+			default :   
+				buffer.append(databuf.charAt(pos)); 
+				break;
+			}
+		}
+		return buffer;
+	}
 
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
@@ -390,14 +425,14 @@ public class SysCAMSPrimitivePort extends TGCScalableWithInternalComponent imple
         	sb.append("\" time=\"" + ((SysCAMSPortTDF) this).getTime());
         	sb.append("\" rate=\"" + ((SysCAMSPortTDF) this).getRate());
         	sb.append("\" delay=\"" + ((SysCAMSPortTDF) this).getDelay());
-        	sb.append("\" type=\"" + ((SysCAMSPortTDF) this).getTDFType());
+        	sb.append("\" type=\"" + encode(((SysCAMSPortTDF) this).getTDFType()));
         }
         if (this instanceof SysCAMSPortDE) {
 //        	sb.append("\" period=\"" + ((SysCAMSPortDE) this).getPeriod());
 //        	sb.append("\" time=\"" + ((SysCAMSPortDE) this).getTime());
 //        	sb.append("\" rate=\"" + ((SysCAMSPortDE) this).getRate());
 //        	sb.append("\" delay=\"" + ((SysCAMSPortDE) this).getDelay());
-        	sb.append("\" type=\"" + ((SysCAMSPortDE) this).getDEType());
+        	sb.append("\" type=\"" + encode(((SysCAMSPortDE) this).getDEType()));
         	sb.append("\" sensitive=\"" + ((SysCAMSPortDE) this).getSensitive());
         	sb.append("\" sensitive_method=\"" + ((SysCAMSPortDE) this).getSensitiveMethod());
         }
@@ -406,7 +441,7 @@ public class SysCAMSPrimitivePort extends TGCScalableWithInternalComponent imple
         	sb.append("\" time=\"" + ((SysCAMSPortConverter) this).getTime());
         	sb.append("\" rate=\"" + ((SysCAMSPortConverter) this).getRate());
         	sb.append("\" delay=\"" + ((SysCAMSPortConverter) this).getDelay());
-        	sb.append("\" type=\"" + ((SysCAMSPortConverter) this).getConvType());
+        	sb.append("\" type=\"" + encode(((SysCAMSPortConverter) this).getConvType()));
         }
         sb.append("\" />\n");
         sb.append("</extraparam>\n");

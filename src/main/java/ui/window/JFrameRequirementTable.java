@@ -78,28 +78,14 @@ public class JFrameRequirementTable extends JFrame implements ActionListener /*,
     private java.util.List<TableSorter> tss;
     private java.util.List<String> titles;
 
-    //private StatisticsTableModel tm;
-
-    //private JStatisticsPanel jstat;
-
-    //private java.util.List<JScrollPane> panes;
-    private JButton buttonGenerate, buttonGenerateCSV;
-
-    //private JTextField eq, sw, tr, li, pa;
+    private JButton refresh, buttonGenerate, buttonGenerateCSV;
+    private JTable jtableRTM;
 
     // tab pane
-    JTabbedPane mainTabbedPane;
+    private JTabbedPane mainTabbedPane;
+    private JTabbedPane main; // from MGUI
+    private Point[] pts; // storing column data, see JDialogRequirementTable
 
-    JTabbedPane main; // from MGUI
-
-    Point[] pts; // storing column data, see JDialogRequirementTable
-
-
-    //shortest paths
-    //JComboBox combo1, combo2, combo3, combo4;
-    //JTextField combo1, combo2, combo3, combo4;
-    //JTextField text1, text2;
-    //JButton goPath, goPathL, savePath, savePathL;
 
 
     public JFrameRequirementTable(String title, Vector<TURTLEPanel> _tabs, JTabbedPane _main, Point[] _pts) {
@@ -124,12 +110,15 @@ public class JFrameRequirementTable extends JFrame implements ActionListener /*,
 
         JButton button1 = new JButton("Close", IconManager.imgic27);
         button1.addActionListener(this);
+        JButton refresh = new JButton("Refresh", IconManager.imgic16_1);
+        refresh.addActionListener(this);
         buttonGenerate = new JButton("Generate HTML doc.", IconManager.imgic29);
         buttonGenerate.addActionListener(this);
         buttonGenerateCSV = new JButton("Generate CSV doc.", IconManager.imgic29);
         buttonGenerateCSV.addActionListener(this);
         JPanel jp = new JPanel();
         jp.add(button1);
+        jp.add(refresh);
         jp.add(buttonGenerate);
         jp.add(buttonGenerateCSV);
 
@@ -192,7 +181,7 @@ public class JFrameRequirementTable extends JFrame implements ActionListener /*,
     private void makeJScrollPane(LinkedList<TGComponent> list, JTabbedPane tab, String title) {
         RequirementsTableModel rtm = new RequirementsTableModel(list, pts);
         TableSorter sorterRTM = new TableSorter(rtm);
-        JTable jtableRTM = new JTable(sorterRTM);
+        jtableRTM = new JTable(sorterRTM);
         sorterRTM.setTableHeader(jtableRTM.getTableHeader());
 
         for (int i = 0; i < pts.length; i++) {
@@ -236,6 +225,9 @@ public class JFrameRequirementTable extends JFrame implements ActionListener /*,
         if (command.equals("Close")) {
             dispose();
             return;
+        } else if (evt.getSource() == refresh) {
+            repaint();
+            jtableRTM.repaint();
         } else if (evt.getSource() == buttonGenerate) {
 
             // Compute path

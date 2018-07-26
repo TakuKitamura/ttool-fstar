@@ -84,6 +84,8 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
 
     private final NamesGenerationHelper namesGen;
 
+
+
     DiploSimulatorCodeGenerator(TMLModeling<?> _tmlm) {
         this(_tmlm.getDefaultMapping());
 

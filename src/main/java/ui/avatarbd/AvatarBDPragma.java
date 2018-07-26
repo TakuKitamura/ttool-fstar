@@ -41,12 +41,30 @@ package ui.avatarbd;
 
 import myutil.Conversion;
 import myutil.GraphicLib;
+import myutil.TraceManager;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+
 import ui.*;
+
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+
 import ui.util.IconManager;
 import ui.window.JDialogPragma;
+
+import proverifspec.ProVerifResultTrace;
+import proverifspec.ProVerifResultTraceStep;
+
+import ui.interactivesimulation.JFrameSimulationSDPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -93,6 +111,10 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
     public final static int NOT_PROVED = 3;
     public HashMap<String, Integer> authStrongMap = new HashMap<String, Integer>();
     public HashMap<String, Integer> authWeakMap = new HashMap<String, Integer>();
+    
+    protected HashMap<String, Integer> pragmaLocMap = new HashMap<String, Integer>();
+    
+    public HashMap<String, ProVerifResultTrace> pragmaTraceMap = new HashMap<String, ProVerifResultTrace>();
 
     public AvatarBDPragma(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -232,6 +254,7 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
         g.drawString("Security features", x + textX, y + textY + currentFontSize);
         g.setFont(fold);
         for (String s : models) {
+        	pragmaLocMap.put(s,y + textY + (i + 1) * currentFontSize);
             g.drawString(s, x + textX, y + textY + (i + 1) * currentFontSize);
             if (syntaxErrors.contains(s)) {
                 Color ctmp = g.getColor();
@@ -259,7 +282,7 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
                 g.setFont(fold);
             }
             g.drawString(s, x + textX, y + textY + (i + 1) * currentFontSize);
-
+        	pragmaLocMap.put(s,y + textY + i * currentFontSize);
             if (syntaxErrors.contains(s)) {
                 Color ctmp = g.getColor();
                 g.setColor(Color.red);
@@ -481,4 +504,46 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
             throw new MalformedModelingException();
         }
     }
+    
+    public void showTrace(int y){
+    	
+    	//TraceManager.addDev(pragmaTraceMap + " " + pragmaLocMap + " " + y);
+    	//On right click, display verification trace
+    	for (String pragma: pragmaLocMap.keySet()){
+    		if (pragmaLocMap.get(pragma) < y && y <pragmaLocMap.get(pragma) +currentFontSize && pragmaTraceMap.get(pragma)!=null){
+    			PipedOutputStream pos = new PipedOutputStream();
+       			try {
+        			PipedInputStream pis = new PipedInputStream(pos, 4096);
+            		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(pos));
+
+		            JFrameSimulationSDPanel jfssdp = new JFrameSimulationSDPanel(null, tdp.getMGUI(), pragma);
+		            jfssdp.setIconImage(IconManager.img8);
+    		        GraphicLib.centerOnParent(jfssdp, 600, 600);
+   			        jfssdp.setFileReference(new BufferedReader(new InputStreamReader(pis)));
+            		jfssdp.setVisible(true);
+                        //jfssdp.setModalExclusionType(ModalExclusionType
+                          //      .APPLICATION_EXCLUDE);
+            		jfssdp.toFront();
+
+                        // TraceManager.addDev("\n--- Trace ---");
+            		int i = 0;
+            		for (ProVerifResultTraceStep step : pragmaTraceMap.get(pragma).getTrace()) {
+		            	step.describeAsTMLSDTransaction(bw, i);
+    	        	    i++;
+           			}
+            		bw.close();
+        		} catch (IOException e) {
+        			TraceManager.addDev("Error when writing trace step SD transaction");
+        		} finally {
+        			try {
+        				pos.close();
+        	    	} catch (IOException ignored) {
+        			}
+        		}
+        		break;
+
+    		}
+    	}
+		//
+	}
 }

@@ -348,20 +348,22 @@ public class TGComponentManager {
 
     // ELN
     public static final int ELN_CONNECTOR = 1610;
-    public static final int ELN_PORT_TERMINAL = 1611;
-    public static final int ELN_RESISTOR = 1612;
-    public static final int ELN_CAPACITOR = 1613;
-    public static final int ELN_INDUCTOR = 1614;
-    public static final int ELN_VOLTAGE_CONTROLLED_VOLTAGE_SOURCE = 1615;
-    public static final int ELN_VOLTAGE_CONTROLLED_CURRENT_SOURCE = 1616;
-    public static final int ELN_IDEAL_TRANSFORMER = 1617;
-    public static final int ELN_TRANSMISSION_LINE = 1618;
-    public static final int ELN_INDEPENDENT_VOLTAGE_SOURCE = 1619;
-    public static final int ELN_INDEPENDENT_CURRENT_SOURCE = 1620;
-    public static final int ELN_NODE_REF = 1621;
-    public static final int ELN_TDF_VOLTAGE_SINK = 1622;
-    public static final int ELN_TDF_CURRENT_SINK = 1623;
-    public static final int ELN_MODULE = 1624;
+    public static final int ELN_RESISTOR = 1611;
+    public static final int ELN_CAPACITOR = 1612;
+    public static final int ELN_INDUCTOR = 1613;
+    public static final int ELN_VOLTAGE_CONTROLLED_VOLTAGE_SOURCE = 1614;
+    public static final int ELN_VOLTAGE_CONTROLLED_CURRENT_SOURCE = 1615;
+    public static final int ELN_IDEAL_TRANSFORMER = 1616;
+    public static final int ELN_TRANSMISSION_LINE = 1617;
+    public static final int ELN_INDEPENDENT_VOLTAGE_SOURCE = 1618;
+    public static final int ELN_INDEPENDENT_CURRENT_SOURCE = 1619;
+    public static final int ELN_NODE_REF = 1620;
+    public static final int ELN_TDF_VOLTAGE_SINK = 1621;
+    public static final int ELN_TDF_CURRENT_SINK = 1622;
+    public static final int ELN_MODULE = 1623;
+    public static final int ELN_MODULE_TERMINAL = 1624;
+    public static final int ELN_TDF_VOLTAGE_SOURCE = 1625;
+    public static final int ELN_TDF_CURRENT_SOURCE = 1626;
     
     // SMD diagram
     public static final int PROSMD_START_STATE = 2000;
@@ -431,6 +433,7 @@ public class TGComponentManager {
 
     // AVATAR RD -> starts at 5200
     public static final int AVATARRD_REQUIREMENT = 5200;
+    public static final int AVATARRD_REQUIREMENT_REFERENCE = 5208;
     public static final int AVATARRD_PROPERTY = 5201;
     public static final int AVATARRD_ELEMENT_REFERENCE = 5207;
     public static final int AVATARRD_DERIVE_CONNECTOR = 5202;
@@ -439,6 +442,7 @@ public class TGComponentManager {
     public static final int AVATARRD_VERIFY_CONNECTOR = 5203;
     public static final int AVATARRD_COPY_CONNECTOR = 5204;
     public static final int AVATARRD_COMPOSITION_CONNECTOR = 5205;
+
 
     // AVATAR AMD -> starts at 5250
     public static final int AVATARMAD_ASSUMPTION = 5250;
@@ -611,6 +615,9 @@ public class TGComponentManager {
 
             case AVATARRD_REQUIREMENT:
                 tgc = new AvatarRDRequirement(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AVATARRD_REQUIREMENT_REFERENCE:
+                tgc = new AvatarRDRequirementReference(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
             case AVATARRD_PROPERTY:
                 tgc = new AvatarRDProperty(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -1284,9 +1291,6 @@ public class TGComponentManager {
             	tgc = new SysCAMSBlockGPIO2VCI(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             	break;
             // ELN
-            case ELN_PORT_TERMINAL:
-            	tgc = new ELNPortTerminal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;
             case ELN_RESISTOR:
             	tgc = new ELNComponentResistor(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             	break;	
@@ -1325,6 +1329,15 @@ public class TGComponentManager {
             	break;
             case ELN_MODULE: 
             	tgc = new ELNModule(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;
+            case ELN_MODULE_TERMINAL: 
+            	tgc = new ELNModuleTerminal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;
+            case ELN_TDF_VOLTAGE_SOURCE: 
+            	tgc = new ELNComponentVoltageSourceTDF(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;
+            case ELN_TDF_CURRENT_SOURCE: 
+            	tgc = new ELNComponentCurrentSourceTDF(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             	break;
             // Communication patterns + SD
             case TMLCP_CHOICE:
@@ -1622,6 +1635,8 @@ public class TGComponentManager {
             // AVATAR RD
         } else if (tgc instanceof AvatarRDRequirement) {
             return AVATARRD_REQUIREMENT;
+        } else if (tgc instanceof AvatarRDRequirementReference) {
+            return AVATARRD_REQUIREMENT_REFERENCE;
         } else if (tgc instanceof AvatarRDProperty) {
             return AVATARRD_PROPERTY;
         } else if (tgc instanceof AvatarRDElementReference) {
@@ -1728,8 +1743,6 @@ public class TGComponentManager {
         	// ELN
         } else if (tgc instanceof ELNConnector) {
         	return ELN_CONNECTOR;	
-        } else if (tgc instanceof ELNPortTerminal) {
-        	return ELN_PORT_TERMINAL;	
         } else if (tgc instanceof ELNComponentResistor) {
         	return ELN_RESISTOR;
         } else if (tgc instanceof ELNComponentCapacitor) {
@@ -1756,6 +1769,12 @@ public class TGComponentManager {
         	return ELN_TDF_CURRENT_SINK;
         } else if (tgc instanceof ELNModule) {
         	return ELN_MODULE;
+        } else if (tgc instanceof ELNModuleTerminal) {
+        	return ELN_MODULE_TERMINAL;
+        } else if (tgc instanceof ELNComponentVoltageSourceTDF) {
+        	return ELN_TDF_VOLTAGE_SOURCE;
+        } else if (tgc instanceof ELNComponentCurrentSourceTDF) {
+        	return ELN_TDF_CURRENT_SOURCE;
         	
         	// Others
         } else if (tgc instanceof TADDeterministicDelay) {

@@ -38,9 +38,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
  
 /**
  * Class AvatarAmsCluster
@@ -85,7 +82,7 @@ public class AvatarAmsCluster extends AvatarComponent {
     }
     
     public void setNo_target(int _no_target) {
-	no_target = _no_target;
+    no_target = _no_target;
     }
 }
 

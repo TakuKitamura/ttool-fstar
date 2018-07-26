@@ -61,7 +61,7 @@ public class IconManager {
     //Added by Solange
     public static Image img0, img1;
 
-    public static ImageIcon imgic13, imgic14, imgic15, imgic16, imgic17, imgic18, imgic19;
+    public static ImageIcon imgic13, imgic14, imgic15, imgic16, imgic16_1, imgic17, imgic18, imgic19;
     public static ImageIcon imgic20, imgic21, imgic22, imgic23, imgic24, imgic25, imgic26, imgic27, imgic28, imgic29;
     public static ImageIcon imgic20_proj, imgic21_proj, imgic22_proj, imgic23_proj, imgic22_net, imgic23_net;
 
@@ -157,7 +157,7 @@ public class IconManager {
     public static ImageIcon imgic5040, imgic5042, imgic5044, imgic5046, imgic5048;
     public static ImageIcon imgic5050, imgic5052, imgic5054, imgic5056, imgic5058;
     public static ImageIcon imgic5060, imgic5062, imgic5064, imgic5066, imgic5068;
-    public static ImageIcon imgic5070, imgic5072;
+    public static ImageIcon imgic5070, imgic5072, imgic5074;
 
     public static ImageIcon imgic5100, imgic5102, imgic5104, imgic5106, imgic5108;
     public static ImageIcon imgic5110, imgic5112, imgic5113, imgic5114;
@@ -187,7 +187,7 @@ public class IconManager {
 
     // ELN
     public static ImageIcon imgic8020, imgic8021, imgic8022, imgic8023, imgic8024, imgic8025, imgic8026, imgic8027, imgic8028, imgic8029, 
-    						imgic8030, imgic8031;
+    						imgic8030, imgic8031, imgic8032, imgic8033, imgic8034;
     
     //private static String icon7 = "turtle_large.gif";
     private static String ttoolStringIcon = "starting_logo.gif";
@@ -212,6 +212,7 @@ public class IconManager {
     private static String icon15 = "activitydiagram.gif";
 
     private static String icon16 = "toolbarButtonGraphics/general/Refresh16.gif";
+    private static String icon16_1 = "toolbarButtonGraphics/general/Refresh24.gif";
 
     private static String icon17 = "iod.gif";
     private static String icon18 = "sd.gif";
@@ -624,6 +625,7 @@ public class IconManager {
     private static String icon5068 = "avatarrdref.gif";
     private static String icon5070 = "avatarlibfunction.gif";
     private static String icon5072 = "scissors.png";
+    private static String icon5074 = "avatarrdreqref.gif";
 
     private static String icon5100 = "avatarhead16.gif";
     private static String icon5102 = "avatarhead32.gif";
@@ -689,6 +691,9 @@ public class IconManager {
     private static String icon8029 = "elnground.gif";
     private static String icon8030 = "elntdfvsink.gif";
     private static String icon8031 = "elntdfisink.gif";
+    private static String icon8032 = "elnportterminal.gif";
+    private static String icon8033 = "elntdfvsource.gif";
+    private static String icon8034 = "elntdfisource.gif";
     
     public IconManager() {
 
@@ -749,6 +754,7 @@ public class IconManager {
         imgic14 = getIcon(icon14);
         imgic15 = getIcon(icon15);
         imgic16 = getIcon(icon16);
+        imgic16_1 = getIcon(icon16_1);
         imgic17 = getIcon(icon17);
         imgic18 = getIcon(icon18);
         imgic19 = getIcon(icon19);
@@ -1135,6 +1141,7 @@ public class IconManager {
         if (imgic5072 != null) {
             img5072 = imgic5072.getImage();
         }
+        imgic5074 = getIcon(icon5074);
 
         imgic5100 = getIcon(icon5100);
         imgic5102 = getIcon(icon5102);
@@ -1200,6 +1207,9 @@ public class IconManager {
         imgic8029 = getIcon(icon8029);
         imgic8030 = getIcon(icon8030);
         imgic8031 = getIcon(icon8031);
+        imgic8032 = getIcon(icon8032);
+        imgic8033 = getIcon(icon8033);
+        imgic8034 = getIcon(icon8034);
     }
 
 } // Class

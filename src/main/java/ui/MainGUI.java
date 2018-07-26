@@ -340,6 +340,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     // Plugin management
     //public static PluginManager pluginManager;
 
+    private boolean hidden = false;
 
     public MainGUI(boolean _openLast, boolean _turtleOn, boolean _systemcOn, boolean _lotosOn, boolean _proactiveOn, boolean _tpnOn, boolean _osOn,
                    boolean
@@ -3078,7 +3079,13 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
         createFileDialog();
 
-        return mainSave();
+        boolean b = mainSave();
+
+        if (b) {
+            updateLastOpenFile(file);
+        }
+
+        return b;
 
     }
 
@@ -3099,6 +3106,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             dir = null;
             config = null;
             SpecConfigTTool.setBasicConfig(systemcOn);
+            updateLastOpenFile(file);
         }
         return b;
     }
@@ -4541,12 +4549,12 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             gtm.getTMLMapping().getTMLModeling().clearBacktracing();
             gtm.getTMLMapping().getTMLModeling().backtrace(pvoa, getTabName(tp));
             gtm.getTML2Avatar().backtraceReachability(pvoa.getReachabilityResults());
-            gtm.getTMLMapping().getTMLModeling().backtraceAuthenticity(pvoa.getAuthenticityResults(), getTabName(tp));
+            gtm.getTMLMapping().getTMLModeling().backtraceAuthenticity(pvoa, getTabName(tp));
         } else if (tp instanceof TMLComponentDesignPanel) {
             gtm.getTMLMapping().getTMLModeling().clearBacktracing();
             gtm.getTMLMapping().getTMLModeling().backtrace(pvoa, "Default Mapping");
             gtm.getTML2Avatar().backtraceReachability(pvoa.getReachabilityResults());
-            gtm.getTMLMapping().getTMLModeling().backtraceAuthenticity(pvoa.getAuthenticityResults(), "Default Mapping");
+            gtm.getTMLMapping().getTMLModeling().backtraceAuthenticity(pvoa, "Default Mapping");
         }
         return;
     }
@@ -6074,6 +6082,16 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
     public void generateDocumentationReq() {
         TraceManager.addDev("Frame Req");
+
+        // Repaint all requirement diags
+        TURTLEPanel tp;
+        for (int i = 0; i < tabs.size(); i++) {
+            tp = tabs.elementAt(i);
+            if (tp instanceof AvatarRequirementPanel) {
+                ((AvatarRequirementPanel)(tp)).updateReferences();
+            }
+        }
+
         JDialogRequirementTable jdrt = new JDialogRequirementTable(frame, "Selecting table columns");
         GraphicLib.centerOnParent(jdrt);
         jdrt.setVisible(true);
@@ -8564,18 +8582,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     		return null;
     	}
     }
-    
-    public SysCAMSComponentTaskDiagramPanel getFirstSysCAMSPanelFound() {
-    	SysCAMSComponentTaskDiagramPanel syscamsdp = null;
-        for (int i = 0; i < tabs.size(); i++)
-            if (tabs.get(i) instanceof SysCAMSComponentDesignPanel) {
-                syscamsdp = ((SysCAMSComponentDesignPanel) tabs.get(i)).syscamsctdp;
-            }
-        if (syscamsdp == null)
-            System.err.println("No SysCAMS Panel Found : MainGUI.getFirstSysCAMSPanelFound()");
-        return syscamsdp;
-    }
-    
+        
     public void syscamsExecutableCodeGeneration() {
         JDialogSysCAMSExecutableCodeGeneration jgen = new JDialogSysCAMSExecutableCodeGeneration(frame, this, "Executable Code generation, compilation and execution",
                 "../SysCAMSGenerationCode/");
@@ -9062,7 +9069,19 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             changeMade(tmltdp, TDiagramPanel.CHANGE_VALUE_COMPONENT);
         }
     }
+    
+    public void toggleELN() {
+       if (hidden == false) {
+    	   hidden = true;
+       } else {
+    	   hidden = false;
+       }
+    }
 
+    public boolean getHidden() {
+    	return hidden;
+    }
+    
     public boolean isAValidTabName(String name) {
         return name.matches("((\\w)*(\\s)*)*");
     }

@@ -144,17 +144,20 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 		gridBag.setConstraints(periodTextField, constraints);
 		boxPanel.add(periodTextField);
 
-		listPeriodString = new String[3];
-		listPeriodString[0] = "us";
+		listPeriodString = new String[4];
+		listPeriodString[0] = "s";
 		listPeriodString[1] = "ms";
-		listPeriodString[2] = "s";
+		listPeriodString[2] = "\u03BCs";
+		listPeriodString[3] = "ns";
 		periodComboBoxString = new JComboBox<String>(listPeriodString);
-		if (port.getTime().equals("") || port.getTime().equals("us")) {
+		if (port.getTime().equals("") || port.getTime().equals("s")) {
 			periodComboBoxString.setSelectedIndex(0);
 		} else if (port.getTime().equals("ms")){
 			periodComboBoxString.setSelectedIndex(1);
-		} else {
+		} else if (port.getTime().equals("\u03BCs")){
 			periodComboBoxString.setSelectedIndex(2);
+		} else if (port.getTime().equals("ns")){
+			periodComboBoxString.setSelectedIndex(3);
 		}
 		periodComboBoxString.setActionCommand("time");
 		periodComboBoxString.addActionListener(this);

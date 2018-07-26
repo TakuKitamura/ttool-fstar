@@ -38,36 +38,36 @@
 
 package ui.window;
 
-import ui.eln.ELNPortTerminal;
+import ui.eln.ELNConnector;
 import ui.util.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
 /**
- * Class JDialogELNPortTerminal 
- * Dialog for managing of ELN port terminal
- * Creation: 06/07/2018
- * @version 1.0 06/07/2018
+ * Class JDialogELNConnector 
+ * Dialog for managing of ELN connector
+ * Creation: 24/07/2018
+ * @version 1.0 24/07/2018
  * @author Irina Kit Yan LEE
  */
 
 @SuppressWarnings("serial")
 
-public class JDialogELNPortTerminal extends JDialog implements ActionListener {
+public class JDialogELNConnector extends JDialog implements ActionListener {
 
 	private JTextField nameTextField;
 
-	private ELNPortTerminal term;
+	private ELNConnector con;
 
-	public JDialogELNPortTerminal(ELNPortTerminal term) {
-		this.setTitle("Setting Port Terminal Attributes");
+	public JDialogELNConnector(ELNConnector con) {
+		this.setTitle("Setting Connector Attributes");
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 		this.setAlwaysOnTop(true);
 		this.setResizable(false);
 
-		this.term = term;
+		this.con = con;
 
 		getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "close");
 		getRootPane().getActionMap().put("close", new AbstractAction() {
@@ -89,7 +89,7 @@ public class JDialogELNPortTerminal extends JDialog implements ActionListener {
 		attributesMainPanel.setLayout(new BorderLayout());
 
 		Box attributesBox = Box.createVerticalBox();
-		attributesBox.setBorder(BorderFactory.createTitledBorder("Setting port terminal attributes"));
+		attributesBox.setBorder(BorderFactory.createTitledBorder("Setting connector attributes"));
 
 		GridBagLayout gridBag = new GridBagLayout();
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -103,10 +103,10 @@ public class JDialogELNPortTerminal extends JDialog implements ActionListener {
 		gridBag.setConstraints(labelName, constraints);
 		attributesBoxPanel.add(labelName);
 
-		if (term.getValue().toString().equals("")) {
+		if (con.getValue().toString().equals("")) {
 			nameTextField = new JTextField(10);
 		} else {
-			nameTextField = new JTextField(term.getValue().toString(), 10); 
+			nameTextField = new JTextField(con.getValue().toString(), 10); 
 		}
 		constraints = new GridBagConstraints(1, 0, 2, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 				new Insets(15, 10, 5, 10), 0, 0);
@@ -140,7 +140,7 @@ public class JDialogELNPortTerminal extends JDialog implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		if ("Save_Close".equals(e.getActionCommand())) {
-			term.setValue(new String(nameTextField.getText()));
+			con.setValue(new String(nameTextField.getText()));
 			this.dispose();
 		}
 
