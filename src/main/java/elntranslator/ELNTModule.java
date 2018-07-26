@@ -204,11 +204,11 @@ public class ELNTModule extends ELNTComponent {
 		TDF_vsource.add(_TDF_vsource);
 	}
 	
-	public LinkedList<ELNTComponentModuleTerminal> getModuleTerminal() {
+	public LinkedList<ELNTModuleTerminal> getModuleTerminal() {
 		return moduleTerminal;
 	}
 
-	public void addModuleTerminal(ELNTComponentModuleTerminal _moduleTerminal){
+	public void addModuleTerminal(ELNTModuleTerminal _moduleTerminal){
 		moduleTerminal.add(_moduleTerminal);
 	}
 }
