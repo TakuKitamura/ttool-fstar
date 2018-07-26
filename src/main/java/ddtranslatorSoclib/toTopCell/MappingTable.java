@@ -65,28 +65,6 @@ public class MappingTable {
     private final static String CR2 = "\n\n"; 
     private static String mapping;
     public static AvatarddSpecification avatardd;
-
-    public static int rams_in_cluster(AvatarddSpecification dd,int cluster_no){
-	avatardd = dd;
-	int rams=0;
-	for  (AvatarConnector connector : avatardd.getConnectors()){		
-	    AvatarConnectingPoint my_p1= connector.get_p1(); 
-	    AvatarConnectingPoint my_p2= connector.get_p2(); 
-				
-	    AvatarComponent comp1 = my_p1.getComponent();
-	    AvatarComponent comp2 = my_p2.getComponent(); 
-	    if (comp1 instanceof AvatarRAM){ 
-		AvatarRAM comp1ram = (AvatarRAM)comp1;
-		if(comp1ram.getClusterIndex()==cluster_no)
-		    rams++;			
-	    }		    		
-	    
-	}
-	TraceManager.addDev (cluster_no+" RAMs in this cluster " +rams);
-	return rams; 
-    }
-    
-
     
     public static String getMappingTable(AvatarddSpecification dd) {
   
@@ -196,12 +174,12 @@ public class MappingTable {
 		/* attention this will not work for more than 16 TTYs */
 		/* TTY0 = console has a fixed address */
 
-		if (tty.getNo_tty()==0){
-		    mapping += "maptab.add(Segment(\"vci_multi_tty"+tty.getNo_tty()+"\" , 0xd"+(tty.getNo_tty())+"200000, 0x00000010, IntTab(" +(tty.getNo_target()) +"), false));" + CR;
+		if (tty.getIndex()==0){
+		    mapping += "maptab.add(Segment(\"vci_multi_tty"+tty.getIndex()+"\" , 0xd"+(tty.getIndex())+"200000, 0x00000010, IntTab(" +(tty.getNo_target()) +"), false));" + CR;
 		    }
 		else{
-		    String adr_tty = Integer.toHexString(tty.getNo_tty()-1);
-		    mapping += "maptab.add(Segment(\"vci_multi_tty"+tty.getNo_tty()+"\" , 0xa"+adr_tty+"200000, 0x00000010, IntTab(" +(tty.getNo_target()) +"), false));" + CR;
+		    String adr_tty = Integer.toHexString(tty.getIndex()-1);
+		    mapping += "maptab.add(Segment(\"vci_multi_tty"+tty.getIndex()+"\" , 0xa"+adr_tty+"200000, 0x00000010, IntTab(" +(tty.getNo_target()) +"), false));" + CR;
 		}
 		tty_count++;
 	    }	    
@@ -287,9 +265,9 @@ public class MappingTable {
 	       this is the memory space covered by the RAMs of a cluster */
     
 	    for (AvatarRAM ram : TopCellGenerator.avatardd.getAllRAM()) {						      	
-		mapping += "maptab.add(Segment(\"cram"+ram.getClusterIndex()+"_" + ram.getIndex() + "\", 0x"+Integer.toHexString(SEG_RAM_BASE+ ram.getClusterIndex()*CLUSTER_SIZE)+",  0x"+Integer.toHexString(ram.getDataSize()/2)+", IntTab("+ram.getClusterIndex()+","+(ram.getNo_target())+"), true));" + CR;
+		mapping += "maptab.add(Segment(\"cram"+TopCellGenerator.getCrossbarIndex(ram)+"_" + ram.getIndex() + "\", 0x"+Integer.toHexString(SEG_RAM_BASE+ TopCellGenerator.getCrossbarIndex(ram)*CLUSTER_SIZE)+",  0x"+Integer.toHexString(ram.getDataSize()/2)+", IntTab("+TopCellGenerator.getCrossbarIndex(ram)+","+(ram.getNo_target())+"), true));" + CR;
 	  
-		mapping += "maptab.add(Segment(\"uram" + ram.getClusterIndex()+"_" +ram.getIndex() + "\",  0x"+Integer.toHexString(SEG_RAM_BASE + ram.getClusterIndex()*CLUSTER_SIZE+cacheability_bit)+",  0x"+Integer.toHexString(ram.getDataSize()/2)+", IntTab("+ram.getClusterIndex()+","+(ram.getNo_target())+"), false));" + CR;	  
+		mapping += "maptab.add(Segment(\"uram" + TopCellGenerator.getCrossbarIndex(ram)+"_" +ram.getIndex() + "\",  0x"+Integer.toHexString(SEG_RAM_BASE + TopCellGenerator.getCrossbarIndex(ram)*CLUSTER_SIZE+cacheability_bit)+",  0x"+Integer.toHexString(ram.getDataSize()/2)+", IntTab("+TopCellGenerator.getCrossbarIndex(ram)+","+(ram.getNo_target())+"), false));" + CR;	  
 	    }                     
          
 	    //Identify the TTYS in current cluster (as opposed to TTYs in total)
@@ -298,17 +276,17 @@ public class MappingTable {
 		/* the number of fixed targets varies depending on if on cluster 0 or other clusters */
 		
 		int tty_no;
-		int cluster_no=tty.getClusterIndex();
-		int cluster_rams=rams_in_cluster(avatardd,cluster_no);
+		int cluster_no=TopCellGenerator.getCrossbarIndex(tty);
+		int cluster_rams=TopCellGenerator.rams_in_cluster(avatardd,cluster_no);
 	  
-		if(tty.getClusterIndex()==0){	  
+		if(cluster_no==0){	  
 		    tty_no=10+cluster_rams;
 		}
 		else{	     
 		    tty_no=cluster_rams;	      
 		}
 	  
-		mapping += "maptab.add(Segment(\"vci_multi_tty"+tty.getIndex()+"\" , 0x"+Integer.toHexString(SEG_TTY_BASE +  tty.getClusterIndex()* CLUSTER_SIZE+(16*tty_no))+", 0x00000010, IntTab("+tty.getClusterIndex()+","+tty_no+"), false));" + CR; 	                tty_no++;
+		mapping += "maptab.add(Segment(\"vci_multi_tty"+tty.getIndex()+"\" , 0x"+Integer.toHexString(SEG_TTY_BASE +  cluster_no* CLUSTER_SIZE+(16*tty_no))+", 0x00000010, IntTab("+cluster_no+","+tty_no+"), false));" + CR; 	                tty_no++;
 	    }	  
 	}
     

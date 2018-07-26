@@ -76,7 +76,6 @@ public class JDialogADDMemoryNode extends JDialogBase implements ActionListener 
 	
 	// Panel2
     protected JTextField index;
-    protected JTextField cluster_index;
     protected JTextField dataSize;
     protected JTextField monitored;	
     
@@ -223,29 +222,15 @@ public class JDialogADDMemoryNode extends JDialogBase implements ActionListener 
         index = new JTextField(""+node.getIndex(), 15);
         panel2.add(index, c2);
 
-	c2.gridwidth = 1;
-        panel2.add(new JLabel("Cluster Index:"), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        cluster_index = new JTextField(""+node.getIndex(), 15);
-        panel2.add(cluster_index, c2);
-        
-	
         c2.gridwidth = 1;
         panel2.add(new JLabel("Data size (in byte):"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         dataSize = new JTextField(""+node.getDataSize(), 15);
         panel2.add(dataSize, c2);
         
-        /*c2.gridwidth = 1;
-        panel2.add(new JLabel("Monitored:"), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        monitored = new JTextField(""+node.getMonitored(), 15);
-        panel2.add(monitored, c2);*/
 
         c2.gridwidth = 1;
         panel2.add(new JLabel("Monitored:"), c2);
-        //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        //monitored = new JTextField(""+node.getMonitored(), 15);//DG 19.04.
         tracemode = new JComboBox<>(tracemodeTab);
         tracemode.setSelectedIndex(selectedTracemode);
         tracemode.addActionListener(this);
@@ -336,11 +321,7 @@ public class JDialogADDMemoryNode extends JDialogBase implements ActionListener 
     public String getIndex() {
         return index.getText();
     }
-
-    public String getClusterIndex() {
-        return cluster_index.getText();
-    }
-    
+  
     public String getDataSize() {
         return dataSize.getText();
     }
