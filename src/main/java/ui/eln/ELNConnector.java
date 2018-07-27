@@ -39,6 +39,7 @@
 package ui.eln;
 
 import ui.*;
+import ui.eln.sca_eln.ELNComponentNodeRef;
 import ui.util.IconManager;
 import ui.window.JDialogELNConnector;
 import java.awt.*;
@@ -61,7 +62,7 @@ public class ELNConnector extends TGConnector implements ScalableTGComponent {
 
 		myImageIcon = IconManager.imgic202;
 		value = "";
-		editable = true;
+		editable = false;
 		oldScaleFactor = tdp.getZoom();
 
 		p1 = _p1;
@@ -87,12 +88,71 @@ public class ELNConnector extends TGConnector implements ScalableTGComponent {
 		Font fold = g.getFont();
 		Font f = fold.deriveFont(Font.ITALIC, (float) (tdp.getFontSize()));
 		g.setFont(f);
-		g.drawString(value, (x1 + x2 - w) / 2, (y1 + y2) / 2);
+		if (get_p1().getFather() instanceof ELNComponent) {
+			if (get_p2().getFather() instanceof ELNComponent) {
+				editable = true;
+				g.drawString(value, (x1 + x2 - w) / 2, (y1 + y2) / 2);
+			}
+			if (get_p2().getFather() instanceof ELNMidPortTerminal) {
+				ELNConnector connector = (ELNConnector) ((ELNMidPortTerminal) get_p2().getFather()).getFather();
+				if (!connector.getValue().equals("")) {
+					value = connector.getValue();
+				} else {
+					value = searchName(connector);
+				}
+			}
+		}
+		if (get_p1().getFather() instanceof ELNMidPortTerminal) {
+			if (get_p2().getFather() instanceof ELNComponent) {
+				ELNConnector connector = (ELNConnector) ((ELNMidPortTerminal) get_p1().getFather()).getFather();
+				if (!connector.getValue().equals("")) {
+					value = connector.getValue();
+				} else {
+					value = searchName(connector);
+				}
+			}
+		}
 		g.setFont(fold);
-
+		
 		g.drawLine(x1, y1, x2, y2);
 	}
-
+	
+	private String searchName(ELNConnector c) {
+		if (c.get_p1().getFather() instanceof ELNComponent) {
+			if (c.get_p2().getFather() instanceof ELNComponent) {
+				return c.getValue();
+			}
+			if (c.get_p2().getFather() instanceof ELNComponentNodeRef || c.get_p2().getFather() instanceof ELNModuleTerminal) {
+				return "";
+			}
+			if (c.get_p2().getFather() instanceof ELNMidPortTerminal) {
+				ELNConnector connector = (ELNConnector) ((ELNMidPortTerminal) c.get_p2().getFather()).getFather();
+				if (!connector.getValue().equals("")) {
+					return connector.getValue();
+				} else {
+					return searchName(connector);
+				}
+			}
+		}
+		if (c.get_p1().getFather() instanceof ELNComponentNodeRef || c.get_p1().getFather() instanceof ELNModuleTerminal) {
+			return "";
+		}
+		if (c.get_p1().getFather() instanceof ELNMidPortTerminal) {
+			if (c.get_p2().getFather() instanceof ELNComponentNodeRef || c.get_p2().getFather() instanceof ELNModuleTerminal) {
+				return "";
+			}
+			if (c.get_p2().getFather() instanceof ELNComponent) {
+				ELNConnector connector = (ELNConnector) ((ELNMidPortTerminal) c.get_p1().getFather()).getFather();
+				if (!connector.getValue().equals("")) {
+					return connector.getValue();
+				} else {
+					return searchName(connector);
+				}
+			}
+		}
+		return "";
+	}
+	
 	public void rescale(double scaleFactor) {
 		int xx, yy;
 

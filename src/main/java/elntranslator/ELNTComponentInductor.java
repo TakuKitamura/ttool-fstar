@@ -38,6 +38,8 @@
 
 package elntranslator;
 
+import ui.eln.ELNConnectingPoint;
+
 /**
  * Class ELNTComponentInductor
  * Parameters of a ELN primitive component : inductor
@@ -50,15 +52,17 @@ public class ELNTComponentInductor extends ELNTComponent {
 	private String name;
 	private double val, phi0;
 	private String unit0, unit1;
+	private ELNConnectingPoint[] cp;
 	
 	private ELNTModule module;
 	
-	public ELNTComponentInductor(String _name, double _val, double _phi0, String _unit0, String _unit1, ELNTModule _module) {
+	public ELNTComponentInductor(String _name, double _val, double _phi0, String _unit0, String _unit1, ELNConnectingPoint[] _cp, ELNTModule _module) {
 		name = _name;
 		val = _val;
 		phi0 = _phi0;
 		unit0 = _unit0;
 		unit1 = _unit1;
+		cp = _cp;
 		module = _module;
 	}
 
@@ -82,6 +86,10 @@ public class ELNTComponentInductor extends ELNTComponent {
 		return unit1;
 	}
 
+	public ELNConnectingPoint[] getCp() {
+		return cp;
+	}
+	
 	public ELNTModule getModule() {
 		return module;
 	}

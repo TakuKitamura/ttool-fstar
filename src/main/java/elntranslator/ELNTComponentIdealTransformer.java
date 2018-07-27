@@ -38,6 +38,8 @@
 
 package elntranslator;
 
+import ui.eln.ELNConnectingPoint;
+
 /**
  * Class ELNTComponentIdealTransformer
  * Parameters of a ELN primitive component : ideal transformer
@@ -49,12 +51,14 @@ package elntranslator;
 public class ELNTComponentIdealTransformer extends ELNTComponent {
 	private String name;
 	private double ratio;
+	private ELNConnectingPoint[] cp;
 	
 	private ELNTModule module;
 	
-	public ELNTComponentIdealTransformer(String _name, double _ratio, ELNTModule _module) {
+	public ELNTComponentIdealTransformer(String _name, double _ratio, ELNConnectingPoint[] _cp, ELNTModule _module) {
 		name = _name;
 		ratio = _ratio;
+		cp = _cp;
 		module = _module;
 	}
 
@@ -64,6 +68,10 @@ public class ELNTComponentIdealTransformer extends ELNTComponent {
 
 	public double getRatio() {
 		return ratio;
+	}
+	
+	public ELNConnectingPoint[] getCp() {
+		return cp;
 	}
 
 	public ELNTModule getModule() {

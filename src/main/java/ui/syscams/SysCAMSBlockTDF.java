@@ -359,6 +359,9 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 			case '>' :  
 				buffer.append("&gt;");        
 				break;
+			case '\u03BC':
+				buffer.append("&#x3BC;");
+				break;
 			default :   
 				buffer.append(databuf.charAt(pos)); 
 				break;

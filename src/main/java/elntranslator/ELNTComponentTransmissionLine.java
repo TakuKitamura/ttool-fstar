@@ -38,6 +38,8 @@
 
 package elntranslator;
 
+import ui.eln.ELNConnectingPoint;
+
 /**
  * Class ELNTComponentTransmissionLine
  * Parameters of a ELN primitive component : transmission line
@@ -51,16 +53,18 @@ public class ELNTComponentTransmissionLine extends ELNTComponent {
 	private double z0, delta0;
 	private String delay;
 	private String unit0, unit2;
+	private ELNConnectingPoint[] cp;
 	
 	private ELNTModule module;
 	
-	public ELNTComponentTransmissionLine(String _name, double _z0, double _delta0, String _delay, String _unit0, String _unit2, ELNTModule _module) {
+	public ELNTComponentTransmissionLine(String _name, double _z0, double _delta0, String _delay, String _unit0, String _unit2, ELNConnectingPoint[] _cp, ELNTModule _module) {
 		name = _name;
 		z0 = _z0;
 		delta0 = _delta0;
 		delay = _delay;
 		unit0 = _unit0;
 		unit2 = _unit2;
+		cp = _cp;
 		module = _module;
 	}
 
@@ -88,6 +92,10 @@ public class ELNTComponentTransmissionLine extends ELNTComponent {
 		return unit2;
 	}
 
+	public ELNConnectingPoint[] getCp() {
+		return cp;
+	}
+	
 	public ELNTModule getModule() {
 		return module;
 	}

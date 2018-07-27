@@ -38,6 +38,8 @@
 
 package elntranslator;
 
+import ui.eln.ELNConnectingPoint;
+
 /**
  * Class ELNTComponentIndependentVoltageSource
  * Parameters of a ELN primitive component : independent voltage source
@@ -51,11 +53,12 @@ public class ELNTComponentIndependentVoltageSource extends ELNTComponent {
 	private double initValue, offset, amplitude, frequency, phase, acAmplitude, acPhase, acNoiseAmplitude;
 	private String delay;
 	private String unit0;
+	private ELNConnectingPoint[] cp;
 	
 	private ELNTModule module;
 	
 	public ELNTComponentIndependentVoltageSource(String _name, double _initValue, double _offset, double _amplitude, double _frequency, double _phase, 
-			double _acAmplitude, double _acPhase, double _acNoiseAmplitude, String _delay, String _unit0, ELNTModule _module) {
+			double _acAmplitude, double _acPhase, double _acNoiseAmplitude, String _delay, String _unit0, ELNConnectingPoint[] _cp, ELNTModule _module) {
 		name = _name;
 		initValue = _initValue;
 		offset = _offset;
@@ -67,6 +70,7 @@ public class ELNTComponentIndependentVoltageSource extends ELNTComponent {
 		acNoiseAmplitude = _acNoiseAmplitude;
 		delay = _delay;
 		unit0 = _unit0;
+		cp = _cp;
 		module = _module;
 	}
 
@@ -114,6 +118,10 @@ public class ELNTComponentIndependentVoltageSource extends ELNTComponent {
 		return unit0;
 	}
 
+	public ELNConnectingPoint[] getCp() {
+		return cp;
+	}
+	
 	public ELNTModule getModule() {
 		return module;
 	}
