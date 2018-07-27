@@ -40,13 +40,13 @@ package ui.syscams;
 
 import ui.*;
 import ui.util.IconManager;
+import ui.window.JDialogELNConnector;
+import ui.window.JDialogSysCAMSConnector;
 
 import java.awt.*;
-import java.awt.geom.Point2D;
 import java.util.Vector;
 
-import javax.swing.JDialog;
-import javax.swing.JOptionPane;
+import javax.swing.JFrame;
 
 import myutil.GraphicLib;
 
@@ -65,8 +65,8 @@ public class SysCAMSPortConnector extends TGConnector implements ScalableTGCompo
 		super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
 		
 		myImageIcon = IconManager.imgic202;
-		value = "Connector between ports";
-		editable = false;
+		value = "";
+		editable = true;
 		oldScaleFactor = tdp.getZoom();
 		
 		p1 = _p1;
@@ -81,8 +81,21 @@ public class SysCAMSPortConnector extends TGConnector implements ScalableTGCompo
 		return p2;
 	}
 
+	public boolean editOndoubleClick(JFrame frame) {
+		JDialogSysCAMSConnector jde = new JDialogSysCAMSConnector(this);
+		jde.setVisible(true);
+		return true;
+	}
+	
 	protected void drawLastSegment(Graphics gr, int x1, int y1, int x2, int y2) {
 		Graphics2D g = (Graphics2D) gr;
+		
+		int w = g.getFontMetrics().stringWidth(value);
+		Font fold = g.getFont();
+		Font f = fold.deriveFont(Font.ITALIC, (float) (tdp.getFontSize()));
+		g.setFont(f);
+		g.drawString(value, (x1 + x2 - w) / 2, (y1 + y2) / 2);
+		g.setFont(fold);
 
 		try {
 			SysCAMSPortConnectingPoint pt1 = (SysCAMSPortConnectingPoint) p1;
