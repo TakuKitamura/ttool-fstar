@@ -50,58 +50,64 @@ import java.util.LinkedList;
 import syscamstranslator.*;
 
 /**
- * Class Header
- * Header of files .h and .cpp
- * Creation: 14/05/2018
- * @version 1.0 14/05/2018
+ * Class MakefileCode Principal code of a makefile Creation: 02/06/2018
+ * 
+ * @version 1.0 02/06/2018
  * @author Irina Kit Yan LEE
-*/
+ */
 
-public class Header {
-	static private String headerPrimitiveTDF;
-	static private String headerPrimitiveDE;
-	static private String headerCluster;
-	
+public class MakefileCode {
+	static private String corpsMakefile;
 	private final static String CR = "\n";
 	private final static String CR2 = "\n\n";
 
-	Header() {}
+	MakefileCode() {
+	}
 
-	public static String getPrimitiveHeaderTDF(SysCAMSTBlockTDF tdf) {
-		if (tdf != null) {
-			headerPrimitiveTDF = "#ifndef " + tdf.getName().toUpperCase() + "_H"+ CR 
-					+ "#define " + tdf.getName().toUpperCase() + "_H" + CR2
-					+ "#include <cmath>" + CR + "#include <iostream>" + CR + "#include <systemc-ams>" + CR2;
+	public static String getMakefileCode(LinkedList<SysCAMSTCluster> clusters) {
+		if (clusters != null) {
+			corpsMakefile = "# Compiler and linker flags" + CR + "CXXFLAGS = -g -Wall -I. $(SYSTEMC_INCLUDE_DIRS)" + CR
+					+ "LDFLAGS = $(SYSTEMC_LIBRARY_DIRS)" + CR2 + "# List of all ecutables to be compiled" + CR
+					+ "EXECUTABLES = ";
+
+			for (int i = 0; i < clusters.size(); i++) {
+				if (i == 0) {
+					corpsMakefile = corpsMakefile + clusters.get(i).getClusterName() + "_tb";
+				}
+				if (i > 0) {
+					corpsMakefile = corpsMakefile + " " + clusters.get(i).getClusterName() + "_tb";
+				}
+				if (i == clusters.size() - 1) {
+					corpsMakefile = corpsMakefile + CR2;
+				}
+			}
+
+			corpsMakefile = corpsMakefile + "# .PHONY targets don't generate files" + CR + ".PHONY:	all clean" + CR2
+					+ "# Default targets" + CR + "all:	$(EXECUTABLES)" + CR2;
+
+			for (int i = 0; i < clusters.size(); i++) {
+				LinkedList<SysCAMSTBlockTDF> tdf = clusters.get(i).getBlockTDF();
+				LinkedList<SysCAMSTBlockDE> de = clusters.get(i).getBlockDE();
+
+				corpsMakefile = corpsMakefile + clusters.get(i).getClusterName() + "_tb: "
+						+ clusters.get(i).getClusterName() + "_tb.cpp";
+
+				for (SysCAMSTBlockTDF t : tdf) {
+					corpsMakefile = corpsMakefile + " " + t.getName() + ".h";
+				}
+
+				for (SysCAMSTBlockDE t : de) {
+					corpsMakefile = corpsMakefile + " " + t.getName() + ".h";
+				}
+				corpsMakefile = corpsMakefile + CR
+						+ "\t$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $< -lsystemc-ams -lsystemc | c++filt" + CR2;
+			}
+
+			corpsMakefile = corpsMakefile + "# Clean rule to delete temporary and generated files" + CR + "clean:" + CR
+					+ "\trm -rf *~ *.o *.dat *.vcd *.dSYM $(EXECUTABLES)" + CR;
 		} else {
-			headerPrimitiveTDF = "";
+			corpsMakefile = "";
 		}
-		return headerPrimitiveTDF;
+		return corpsMakefile;
 	}
-	
-	public static String getPrimitiveHeaderDE(SysCAMSTBlockDE de) {
-		if (de != null) {
-			headerPrimitiveDE = "#ifndef " + de.getName().toUpperCase() + "_H"+ CR 
-					+ "#define " + de.getName().toUpperCase() + "_H" + CR2
-					+ "#include <cmath>" + CR + "#include <iostream>" + CR + "#include <systemc>" + CR2;
-		} else {
-			headerPrimitiveDE = "";
-		}
-		return headerPrimitiveDE;
-	}
-	
-	public static String getClusterHeader(SysCAMSTCluster cluster) {
-		 if (cluster != null) {
-			 LinkedList<SysCAMSTBlockTDF> blocks = cluster.getBlockTDF();
-			 
-			 headerCluster = "#include <systemc-ams>" + CR;
-			 
-			 for (SysCAMSTBlockTDF b : blocks) {
-				 headerCluster = headerCluster + "#include \"" + b.getName() + ".h\"" + CR;
-			 }
-			 headerCluster = headerCluster + CR;
-		 } else {
-			 headerCluster = "";
-		 }
-		 return headerCluster;
-	} 
 }

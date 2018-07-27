@@ -157,7 +157,7 @@ public class Header
         header += "#include \"gpio2vci.h\"" + CR;
         for (AvatarAmsCluster amsCluster:TopCellGenerator.avatardd.getAllAmsCluster ())
         {
-            header += "#include \"" + amsCluster.getAmsClusterName () + ".h\"" + CR;
+            header += "#include \"" + amsCluster.getAmsClusterName () + "_tdf.h\"" + CR;
         }
     }
 

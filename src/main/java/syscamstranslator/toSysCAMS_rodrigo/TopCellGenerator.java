@@ -102,8 +102,8 @@ public class TopCellGenerator {
 
 		try {
 			// Save file .cpp
-			System.err.println(path + GENERATED_PATH1 + cluster.getClusterName() + ".cpp");
-			FileWriter fw = new FileWriter(path + GENERATED_PATH1 + "/" + cluster.getClusterName() + "_tb.cpp");
+			System.err.println(path + GENERATED_PATH1 + cluster.getClusterName() + "_tdf.h");
+			FileWriter fw = new FileWriter(path + GENERATED_PATH1 + "/" + cluster.getClusterName() + "_tdf.h");
 			top = generateTopCell(cluster, connectors);
 			fw.write(top);
 			fw.close();
@@ -121,8 +121,8 @@ public class TopCellGenerator {
 		
 		for (SysCAMSTBlockTDF t : tdf) {
 			try {
-				System.err.println(path + GENERATED_PATH2 + t.getName() + ".h");
-				FileWriter fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + ".h");
+				System.err.println(path + GENERATED_PATH2 + t.getName() + "_tdf.h");
+				FileWriter fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + "_tdf.h");
 				headerTDF = Header.getPrimitiveHeaderTDF(t);
 				fw.write(headerTDF);
 				codeTDF = PrimitiveCode.getPrimitiveCodeTDF(t);
@@ -134,8 +134,8 @@ public class TopCellGenerator {
 		}
 		for (SysCAMSTBlockDE t : de) {
 			try {
-				System.err.println(path + GENERATED_PATH2 + t.getName() + ".h");
-				FileWriter fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + ".h");
+				System.err.println(path + GENERATED_PATH2 + t.getName() + "_tdf.h");
+				FileWriter fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + "_tdf.h");
 				headerDE = Header.getPrimitiveHeaderDE(t);
 				fw.write(headerDE);
 				codeDE = PrimitiveCode.getPrimitiveCodeDE(t);

@@ -142,18 +142,18 @@ public class PrimitiveCode {
 			if (!tdfports.isEmpty()) {
 				for (SysCAMSTPortTDF t : tdfports) {
 					if (t.getOrigin() == 0) {
-						corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_in<" + t.getTDFType() + "> " + t.getName() + ";" + CR;
+						corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_in< " + t.getTDFType() + " > " + t.getName() + ";" + CR;
 					} else if (t.getOrigin() == 1) {
-						corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_out<" + t.getTDFType() + "> " + t.getName() + ";" + CR;
+						corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_out< " + t.getTDFType() + " > " + t.getName() + ";" + CR;
 					}
 				}
 			}
 			if (!convports.isEmpty()) {
 				for (SysCAMSTPortConverter conv : convports) {
 					if (conv.getOrigin() == 0) {
-						corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_de::sca_in<" + conv.getConvType() + "> " + conv.getName() + ";" + CR;
+						corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_de::sca_in< " + conv.getConvType() + " > " + conv.getName() + ";" + CR;
 					} else if (conv.getOrigin() == 1) {
-						corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_de::sca_out<" + conv.getConvType() + "> " + conv.getName() + ";" + CR;
+						corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_de::sca_out< " + conv.getConvType() + " > " + conv.getName() + ";" + CR;
 					}
 				}
 			}
@@ -222,7 +222,7 @@ public class PrimitiveCode {
 			}
 
 			if (tdf.getPeriod() != -1) {
-				corpsPrimitiveTDF = corpsPrimitiveTDF + "\tvoid set_attributes() {" + CR + "\t\t" + "set_timestep(" + tdf.getPeriod() + ", sc_core::SC_" + tdf.getTime().toUpperCase() + CR;
+				corpsPrimitiveTDF = corpsPrimitiveTDF + "\tvoid set_attributes() {" + CR + "\t\t" + "set_timestep(" + tdf.getPeriod() + ", sc_core::SC_" + tdf.getTime().toUpperCase() + ");" + CR;
 				cpt2++;
 			}	
 			if (cpt2 > 0) {
@@ -596,7 +596,7 @@ public class PrimitiveCode {
 			String pc = buffer.toString();
 			corpsPrimitiveDE = corpsPrimitiveDE + "\t" + pc;
 			
-			corpsPrimitiveDE = corpsPrimitiveDE + CR + "};" + CR2 + "#endif" + " // " + de.getName().toUpperCase() + "_H";
+			corpsPrimitiveDE = corpsPrimitiveDE + CR + "};" + CR2 + "#endif" + " // " + de.getName().toUpperCase() + "_TDF_H";
 		} else {
 			corpsPrimitiveDE = "";
 		}
