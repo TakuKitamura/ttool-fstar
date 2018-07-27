@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui;
 
 import avatartranslator.AvatarAttribute;
@@ -65,8 +62,12 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Vector;
 
 /**
    * Class AvatarDesignPanel
@@ -77,8 +78,8 @@ import java.util.List;
    * @see MainGUI
  */
 public class AvatarDesignPanel extends TURTLEPanel {
-    public AvatarBDPanel abdp;
-
+    
+	public AvatarBDPanel abdp;
 
     public AvatarDesignPanel(MainGUI _mgui) {
         super(_mgui);
@@ -103,13 +104,13 @@ public class AvatarDesignPanel extends TURTLEPanel {
     }
 
 
-    public void setValidated(LinkedList<AvatarBDStateMachineOwner> _validated) {
+    public void setValidated( List<AvatarBDStateMachineOwner> _validated) {
         if (abdp != null) {
             abdp.setValidated(_validated);
         }
     }
 
-    public void setIgnored(LinkedList<AvatarBDStateMachineOwner> _ignored) {
+    public void setIgnored( List<AvatarBDStateMachineOwner> _ignored) {
         if (abdp != null) {
             abdp.setIgnored(_ignored);
         }
@@ -121,14 +122,14 @@ public class AvatarDesignPanel extends TURTLEPanel {
         }
     }
 
-    public LinkedList<AvatarBDStateMachineOwner> getValidated() {
+    public List<AvatarBDStateMachineOwner> getValidated() {
         if (abdp != null) {
             return abdp.getValidated();
         }
         return null;
     }
 
-    public LinkedList<AvatarBDStateMachineOwner> getIgnored() {
+    public List<AvatarBDStateMachineOwner> getIgnored() {
         if (abdp != null) {
             return abdp.getIgnored();
         }
@@ -179,6 +180,7 @@ public class AvatarDesignPanel extends TURTLEPanel {
         return;
     }
 
+    @Override
     public void init() {
 
         //  Class Diagram toolbar
@@ -209,37 +211,41 @@ public class AvatarDesignPanel extends TURTLEPanel {
 
     }
 
-    public LinkedList<AvatarBDLibraryFunction> getAllLibraryFunctions(String _name) {
+    public List<AvatarBDLibraryFunction> getAllLibraryFunctions(String _name) {
         return abdp.getAllLibraryFunctionsForBlock (_name);
     }
 
-    public LinkedList<TAttribute> getAllAttributes(String _name) {
+    public List<TAttribute> getAllAttributes(String _name) {
         return abdp.getAllAttributesOfBlock(_name);
     }
 
-    public LinkedList<AvatarMethod> getAllMethods(String _name) {
+    public List<AvatarMethod> getAllMethods(String _name) {
         return abdp.getAllMethodsOfBlock(_name);
     }
 
-    public LinkedList<AvatarSignal> getAllSignals(String _name) {
+    public List<AvatarSignal> getAllSignals(String _name) {
         return abdp.getAllSignalsOfBlock(_name);
     }
 
-    public LinkedList<String> getAllTimers(String _name) {
+    public List<String> getAllTimers(String _name) {
         return abdp.getAllTimersOfBlock(_name);
     }
     
+    @Override
     public String saveHeaderInXml(String extensionToName) {
-	if (extensionToName == null) {
-	    return "<Modeling type=\"AVATAR Design\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
-	}
-	return "<Modeling type=\"AVATAR Design\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
+		if (extensionToName == null) {
+		    return "<Modeling type=\"AVATAR Design\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
+		}
+
+		return "<Modeling type=\"AVATAR Design\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
     }
 
+    @Override
     public String saveTailInXml() {
         return "</Modeling>\n\n\n";
     }
 
+    @Override
     public String toString() {
         return mgui.getTitleAt(this) + " (Design)";
     }
@@ -260,13 +266,11 @@ public class AvatarDesignPanel extends TURTLEPanel {
 
     }
 
-
-
-    public LinkedList<TGComponent> getListOfComponentsInMutex() {
+    public List<TGComponent> getListOfComponentsInMutex() {
         TGComponent tgc;
         TDiagramPanel tdp;
 
-        LinkedList<TGComponent> list = new LinkedList<TGComponent>();
+        List<TGComponent> list = new LinkedList<TGComponent>();
 
         for(int i=0; i<panels.size(); i++) {
             tdp = panels.get(i);
@@ -337,8 +341,8 @@ public class AvatarDesignPanel extends TURTLEPanel {
 
     }
 
-    public LinkedList<String> getPropertyPragmas() {
-        LinkedList<String> result = new LinkedList<String> ();
+    public List<String> getPropertyPragmas() {
+        List<String> result = new LinkedList<String> ();
         for (Object tgc: abdp.getComponentList()) {
             if (tgc instanceof AvatarBDPragma) {
                 result.addAll(((AvatarBDPragma) tgc).getProperties());
@@ -348,8 +352,8 @@ public class AvatarDesignPanel extends TURTLEPanel {
         return result;
     }
 
-    public LinkedList<String> getModelPragmas() {
-        LinkedList<String> result = new LinkedList<String> ();
+    public List<String> getModelPragmas() {
+        List<String> result = new LinkedList<String> ();
         for (Object tgc: abdp.getComponentList()) {
             if (tgc instanceof AvatarBDPragma) {
                 result.addAll(((AvatarBDPragma) tgc).getModels());
@@ -358,7 +362,6 @@ public class AvatarDesignPanel extends TURTLEPanel {
 
         return result;
     }
-
 
     public void resetModelBacktracingProVerif() {
         if (abdp == null) {
@@ -445,7 +448,6 @@ public class AvatarDesignPanel extends TURTLEPanel {
 		}
 	}
 
-
     public void modelBacktracingProVerif(ProVerifOutputAnalyzer pvoa) {
 
         if (abdp == null) {
@@ -456,8 +458,8 @@ public class AvatarDesignPanel extends TURTLEPanel {
 
         // Confidential attributes
         Map<AvatarPragmaSecret, ProVerifQueryResult> confResults = pvoa.getConfidentialityResults();
-        HashMap<AvatarAttribute, AvatarPragma> secretAttributes = new HashMap<AvatarAttribute, AvatarPragma> ();
-        HashMap<AvatarAttribute, AvatarPragma> nonSecretAttributes = new HashMap<AvatarAttribute, AvatarPragma> ();
+        Map<AvatarAttribute, AvatarPragma> secretAttributes = new HashMap<AvatarAttribute, AvatarPragma> ();
+        Map<AvatarAttribute, AvatarPragma> nonSecretAttributes = new HashMap<AvatarAttribute, AvatarPragma> ();
         for (AvatarPragmaSecret pragma: confResults.keySet())
         {
             ProVerifQueryResult result = confResults.get(pragma);
@@ -473,7 +475,7 @@ public class AvatarDesignPanel extends TURTLEPanel {
         for (AvatarBDBlock bdBlock: abdp.getFullBlockList ())
             for (TAttribute tattr: bdBlock.getAttributeList ()) {
                 if (tattr.getType () == TAttribute.OTHER) {
-                    LinkedList<TAttribute> types = abdp.getAttributesOfDataType (tattr.getTypeOther ());
+                    List<TAttribute> types = abdp.getAttributesOfDataType (tattr.getTypeOther ());
                     int toBeFound = types.size ();
                     boolean ko = false;
                     for (TAttribute type: types) {
@@ -584,7 +586,7 @@ public class AvatarDesignPanel extends TURTLEPanel {
                             if (! tattrA.getTypeOther ().equals (tattrB.getTypeOther ()))
                                 continue;
 
-                            LinkedList<TAttribute> types = abdp.getAttributesOfDataType (tattrA.getTypeOther ());
+                            List<TAttribute> types = abdp.getAttributesOfDataType (tattrA.getTypeOther ());
                             int toBeFound = types.size ();
                             boolean ko = false;
                             boolean weakKo = false;
@@ -711,13 +713,11 @@ public class AvatarDesignPanel extends TURTLEPanel {
             }
     }
 
-    public ArrayList<String> getAllNonMappedAvatarBlockNames(String _name, ADDDiagramPanel _tadp, boolean ref, String name) {
+    public List<String> getAllNonMappedAvatarBlockNames(String _name, ADDDiagramPanel _tadp, boolean ref, String name) {
         return abdp.getAllNonMappedAvatarBlockNames(_name, _tadp, ref, name);
     }
 
-    public ArrayList<String> getAllNonMappedAvatarChannelNames(String _name, ADDDiagramPanel _tadp, boolean ref, String name) {
+    public List<String> getAllNonMappedAvatarChannelNames(String _name, ADDDiagramPanel _tadp, boolean ref, String name) {
         return abdp.getAllNonMappedAvatarChannelNames(_name, _tadp);
     }
-
-
 }

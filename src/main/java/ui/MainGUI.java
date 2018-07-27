@@ -110,8 +110,6 @@ import java.util.*;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static myutil.FileUtils.checkFileForOpen;
-
 // AVATAR
 
 /**
@@ -172,7 +170,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     public KeyListener keyHandler;
 
     // Validation
-    public LinkedList<TClassInterface> tclassesToValidate = new LinkedList<TClassInterface>();
+    public List<TClassInterface> tclassesToValidate = new LinkedList<TClassInterface>();
 
     // Status bar
     private JLabel status;
@@ -3458,7 +3456,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             DesignPanel dp = (DesignPanel) tp;
             JDialogModelChecking.validated = dp.validated;
             JDialogModelChecking.ignored = dp.ignored;
-            LinkedList<TClassInterface> tclassesToValidate = new LinkedList<TClassInterface>();
+            List<TClassInterface> tclassesToValidate = new LinkedList<TClassInterface>();
             JDialogModelChecking jdmc = new JDialogModelChecking(frame, tclassesToValidate, dp.tcdp.getComponentList(), "Choosing Tclasses to validate");
             if (!automatic) {
                 GraphicLib.centerOnParent(jdmc);
@@ -3570,7 +3568,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             AvatarDesignPanel adp = (AvatarDesignPanel) tp;
             //JDialogModelChecking.validated = adp.validated;
             //JDialogModelChecking.ignored = adp.ignored;
-            LinkedList<AvatarBDStateMachineOwner> blocksToValidate = new LinkedList<AvatarBDStateMachineOwner>();
+            List<AvatarBDStateMachineOwner> blocksToValidate = new LinkedList<AvatarBDStateMachineOwner>();
             JDialogSelectAvatarBlock jdmc = new JDialogSelectAvatarBlock(frame, blocksToValidate, adp.getAvatarBDPanel().getFullStateMachineOwnerList(), "Choosing blocks to validate", adp.getValidated(), adp.getIgnored(), adp.getOptimized());
             if (!automatic) {
                 GraphicLib.centerOnParent(jdmc);
@@ -3630,7 +3628,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
             //JDialogModelChecking.validated = adp.validated;
             //JDialogModelChecking.ignored = adp.ignored;
-            LinkedList<AvatarBDStateMachineOwner> blocksToValidate = new LinkedList<AvatarBDStateMachineOwner>();
+            List<AvatarBDStateMachineOwner> blocksToValidate = new LinkedList<AvatarBDStateMachineOwner>();
             JDialogSelectAvatarBlock jdmc = new JDialogSelectAvatarBlock(frame, blocksToValidate, adp.getAvatarBDPanel().getFullStateMachineOwnerList(), "Choosing blocks to validate", adp.getValidated(), adp.getIgnored(), adp.getOptimized());
             if (!automatic) {
                 GraphicLib.centerOnParent(jdmc);
@@ -4018,14 +4016,14 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return ret;
     }
 
-    public LinkedList<TAttribute> getAllAttributes() {
+    public List<TAttribute> getAllAttributes() {
         TURTLEPanel tp = getCurrentTURTLEPanel();
         String name = getCurrentTDiagramPanel().getName();
 
         return this.getAllAttributes(tp, name);
     }
 
-    public LinkedList<TAttribute> getAllAttributes(TURTLEPanel tp, String name) {
+    public List<TAttribute> getAllAttributes(TURTLEPanel tp, String name) {
         if (tp == null) {
             return null;
         }
@@ -4038,8 +4036,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return adp.getAllAttributes(name);
     }
 
-
-    public LinkedList<AvatarMethod> getAllMethods() {
+    public List<AvatarMethod> getAllMethods() {
         TURTLEPanel tp = getCurrentTURTLEPanel();
         if (tp == null) {
             return null;
@@ -4055,13 +4052,13 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return adp.getAllMethods(name);
     }
 
-    public LinkedList<AvatarSignal> getAllSignals() {
+    public List<AvatarSignal> getAllSignals() {
         TURTLEPanel tp = getCurrentTURTLEPanel();
         String name = getCurrentTDiagramPanel().getName();
         return this.getAllSignals(tp, name);
     }
 
-    public LinkedList<AvatarSignal> getAllSignals(TURTLEPanel tp, String name) {
+    public List<AvatarSignal> getAllSignals(TURTLEPanel tp, String name) {
         if (tp == null) {
             return null;
         }
@@ -4315,7 +4312,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return tmlcomp.getAllOutRequests(name);
     }
 
-    public LinkedList<String> getAllTimers() {
+    public List<String> getAllTimers() {
         TURTLEPanel tp = getCurrentTURTLEPanel();
         if (tp == null) {
             return null;
@@ -8329,7 +8326,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
         AvatarDesignPanelTranslator avdesigntranslator = new AvatarDesignPanelTranslator(designDiagramPanel);
 
-        LinkedList<AvatarBDStateMachineOwner> adp = designDiagramPanel.getAvatarBDPanel().getFullStateMachineOwnerList();
+        List<AvatarBDStateMachineOwner> adp = designDiagramPanel.getAvatarBDPanel().getFullStateMachineOwnerList();
         AvatarSpecification avaspec = avdesigntranslator.generateAvatarSpecification(adp);
 
         // Generator for block tasks and application main file

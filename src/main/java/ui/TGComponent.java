@@ -59,12 +59,17 @@ import ui.tmldd.TMLArchiFirewallNode;
 import ui.util.IconManager;
 
 import javax.swing.*;
-import java.awt.*;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -482,13 +487,14 @@ public abstract class TGComponent implements CDElement, GenericTree {
         latencyCheck = b;
     }
 
-    public LinkedList<TGComponent> getAllCheckableInvariant() {
-        LinkedList<TGComponent> list = new LinkedList<TGComponent>();
+    public List<TGComponent> getAllCheckableInvariant() {
+        List<TGComponent> list = new LinkedList<TGComponent>();
         getAllCheckableInvariant(list);
+        
         return list;
     }
 
-    public void getAllCheckableInvariant(LinkedList<TGComponent> _list) {
+    public void getAllCheckableInvariant( List<TGComponent> _list) {
         if (invariant) {
             _list.add(this);
         }
@@ -605,7 +611,6 @@ public abstract class TGComponent implements CDElement, GenericTree {
         int h = p1.y - y + s3;
         GraphicLib.dashedRect(g, x + width + s2 + s3, y + s3, w + 15, h - 12);
     }
-
 
     public void drawAttributes(Graphics g, String attr) {
         if (attr == null) {

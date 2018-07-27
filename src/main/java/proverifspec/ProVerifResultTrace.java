@@ -191,7 +191,7 @@ public class ProVerifResultTrace {
         }
     }
 
-    public ProVerifResultTrace(LinkedList<String> proverifProcess)
+    public ProVerifResultTrace(List<String> proverifProcess)
     {
         this.proverifProcess = proverifProcess;
         this.trace = new LinkedList<ProVerifResultTraceStep> ();
@@ -271,7 +271,7 @@ public class ProVerifResultTrace {
                     else
                     {
                         // TODO: is it possible that subtype is itself composed ?
-                        LinkedList<TAttribute> types = adp.getAvatarBDPanel().getAttributesOfDataType(attr.getTypeOther());
+                        List<TAttribute> types = adp.getAvatarBDPanel().getAttributesOfDataType(attr.getTypeOther());
                         if (types.size() > 1)
                             attrPart = attrName[0] + "." + attrName[1];
                         else

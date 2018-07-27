@@ -43,10 +43,21 @@ import ui.util.IconManager;
 
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
-import java.awt.*;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.ComponentOrientation;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Frame;
+import java.awt.Insets;
+import java.awt.Point;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Class JDialogPragma
@@ -67,7 +78,7 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
     protected JMenuBar menuBar;
     protected JMenu help;
     protected JPopupMenu helpPopup;
-    public HashMap<String, java.util.List<String>> blockAttributeMap = new HashMap<String, java.util.List<String>>();
+    public Map<String, List<String>> blockAttributeMap = new HashMap<String, java.util.List<String>>();
 
     /**
      * Creates new form
@@ -86,7 +97,7 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
         //Form list of all blocks
         //For each block, create a list of all attribute strings and states
 
-        private JList list;
+        private JList<String> list;
         private JPopupMenu popupMenu;
         private String subWord;
         private final int insertionPosition;
@@ -113,8 +124,8 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
             }
         }
 
-        private JList createSuggestionList(int linePosition, final int position, final String subWord) {
-            ArrayList<String> matches = new ArrayList<String>();
+        private JList<String> createSuggestionList(int linePosition, final int position, final String subWord) {
+            List<String> matches = new ArrayList<String>();
             if (linePosition < 3) {
                 for (String p : pragma) {
                     if (p.startsWith(subWord)) {
@@ -264,8 +275,6 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
     }
 
     protected void initComponents() {
-
-
         Container c = getContentPane();
         Font f = new Font("Helvetica", Font.PLAIN, 14);
         setFont(f);
@@ -364,6 +373,7 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
         c.add(jp, BorderLayout.SOUTH);
     }
 
+    @Override
     public void actionPerformed(ActionEvent evt) {
         String command = evt.getActionCommand();
 
@@ -373,7 +383,6 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
         } else if (command.equals("Ok")) {
             close();
         }
-
     }
 
     public void cancel() {
@@ -396,6 +405,4 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
     public String getText() {
         return text;
     }
-
-
 }

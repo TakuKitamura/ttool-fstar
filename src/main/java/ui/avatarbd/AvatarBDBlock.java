@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package ui.avatarbd;
 
 import myutil.Conversion;
@@ -57,16 +56,20 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.HashMap;
 import proverifspec.ProVerifResultTrace;
 import proverifspec.ProVerifResultTraceStep;
@@ -89,8 +92,8 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
     private static String stereotype = "block";
     private static String stereotypeCrypto = "cryptoblock";
 
-    protected static ArrayList<String> BLOCK_TYPE_STR = new ArrayList<String>(Arrays.asList("block", "cryptoblock"));
-    protected static ArrayList<Color> BLOCK_TYPE_COLOR = new ArrayList<Color>(Arrays.asList(ColorManager.AVATAR_BLOCK, ColorManager.AVATAR_BLOCK));
+    protected static List<String> BLOCK_TYPE_STR = new ArrayList<String>(Arrays.asList("block", "cryptoblock"));
+    protected static List<Color> BLOCK_TYPE_COLOR = new ArrayList<Color>(Arrays.asList(ColorManager.AVATAR_BLOCK, ColorManager.AVATAR_BLOCK));
     private int typeStereotype = 0; // <<block>> by default
 
     private int maxFontSize = 12;
@@ -111,13 +114,13 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
 
     // TAttribute, AvatarMethod, AvatarSignal
-    protected LinkedList<TAttribute> myAttributes;
-    protected LinkedList<AvatarMethod> myMethods;
-    protected LinkedList<AvatarSignal> mySignals;
+    protected List<TAttribute> myAttributes;
+    protected List<AvatarMethod> myMethods;
+    protected List<AvatarSignal> mySignals;
     protected String[] globalCode;
 
-	protected HashMap<TAttribute, ProVerifResultTrace> attrTraceMap = new HashMap<TAttribute, ProVerifResultTrace>();
-	protected HashMap<TAttribute, Integer> attrLocMap = new HashMap<TAttribute, Integer>();
+	protected Map<TAttribute, ProVerifResultTrace> attrTraceMap = new HashMap<TAttribute, ProVerifResultTrace>();
+	protected Map<TAttribute, Integer> attrLocMap = new HashMap<TAttribute, Integer>();
 	
     public String oldValue;
 
@@ -195,7 +198,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         this.mySignals.add(sig);
     }
 
-    public void internalDrawingAux(Graphics graph) {
+    private void internalDrawingAux(Graphics graph) {
 
         //TraceManager.addDev("Block drawing aux = " + this);
 
@@ -595,7 +598,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
     }
 
-
+    @Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
         if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
             return this;
@@ -621,6 +624,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         return result;
     }
 
+    @Override
     public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
         int textX = (int) (this.textX * this.tdp.getZoom());
         if (iconIsDrawn) {
@@ -814,16 +818,18 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         _jdab.enableJavaKeyword(false);
     }
 
-
+    @Override
     public int getType() {
         return TGComponentManager.AVATARBD_BLOCK;
     }
 
+    @Override
     public boolean acceptSwallowedTGComponent(TGComponent tgc) {
         return tgc instanceof AvatarBDBlock || tgc instanceof AvatarBDLibraryFunction;
 
     }
 
+    @Override
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
         boolean swallowed = false;
 
@@ -871,6 +877,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         return true;
     }
 
+    @Override
     public void removeSwallowedTGComponent(TGComponent tgc) {
         removeMyInternalComponent(tgc, false);
     }
@@ -908,6 +915,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         return false;
     }
 
+    @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<blockType data=\"");
@@ -1123,7 +1131,6 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         }
 
         //TraceManager.addDev("LEP End Block  = " + this);
-
     }
 
     public boolean addStereotype(String s, int rgb) {
@@ -1191,7 +1198,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         return ret;
     }
 
-
+    @Override
     public void hasBeenResized() {
         for (int i = 0; i < nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof AvatarBDBlock) {
@@ -1207,6 +1214,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
     }
 
+    @Override
     public void resizeWithFather() {
         if ((father != null) && (father instanceof AvatarBDBlock)) {
             // Too large to fit in the father? -> resize it!
@@ -1217,8 +1225,8 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         }
     }
 
-    public LinkedList<AvatarBDBlock> getBlockList() {
-        LinkedList<AvatarBDBlock> list = new LinkedList<AvatarBDBlock>();
+    public List<AvatarBDBlock> getBlockList() {
+        List<AvatarBDBlock> list = new LinkedList<AvatarBDBlock>();
         for (int i = 0; i < nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof AvatarBDBlock) {
                 list.add((AvatarBDBlock) (tgcomponent[i]));
@@ -1227,8 +1235,8 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         return list;
     }
 
-    public LinkedList<AvatarBDBlock> getFullBlockList() {
-        LinkedList<AvatarBDBlock> list = new LinkedList<AvatarBDBlock>();
+    public List<AvatarBDBlock> getFullBlockList() {
+        List<AvatarBDBlock> list = new LinkedList<AvatarBDBlock>();
         for (int i = 0; i < nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof AvatarBDBlock) {
                 list.add((AvatarBDBlock) (tgcomponent[i]));
@@ -1238,8 +1246,8 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         return list;
     }
 
-    public LinkedList<AvatarBDLibraryFunction> getFullLibraryFunctionList() {
-        LinkedList<AvatarBDLibraryFunction> list = new LinkedList<AvatarBDLibraryFunction>();
+    public List<AvatarBDLibraryFunction> getFullLibraryFunctionList() {
+        List<AvatarBDLibraryFunction> list = new LinkedList<AvatarBDLibraryFunction>();
         for (int i = 0; i < nbInternalTGComponent; i++) {
             if (this.tgcomponent[i] instanceof AvatarBDLibraryFunction)
                 list.add((AvatarBDLibraryFunction) this.tgcomponent[i]);
@@ -1251,13 +1259,13 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
     }
 
     public boolean hasInternalBlockWithName(String name) {
-        LinkedList<AvatarBDBlock> list = getFullBlockList();
+        List<AvatarBDBlock> list = getFullBlockList();
         for (AvatarBDBlock b : list) {
             if (b.getValue().compareTo(name) == 0) {
                 return true;
             }
         }
-        LinkedList<AvatarBDLibraryFunction> llist = getFullLibraryFunctionList();
+        List<AvatarBDLibraryFunction> llist = getFullLibraryFunctionList();
         for (AvatarBDLibraryFunction b : llist) {
             if (b.getFunctionName().compareTo(name) == 0) {
                 return true;
@@ -1267,12 +1275,12 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         return false;
     }
 
-
+    @Override
     public int getDefaultConnector() {
         return TGComponentManager.AVATARBD_PORT_CONNECTOR;
     }
 
-    public LinkedList<TAttribute> getAttributeList() {
+    public List<TAttribute> getAttributeList() {
         return this.myAttributes;
     }
 
@@ -1287,54 +1295,54 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         this.myAttributes.add(ta);
     }
 
-    public LinkedList<AvatarMethod> getMethodList() {
+    public List<AvatarMethod> getMethodList() {
         return this.myMethods;
     }
 
-    public LinkedList<AvatarSignal> getSignalList() {
+    public List<AvatarSignal> getSignalList() {
         return this.mySignals;
     }
 
-    public LinkedList<AvatarSignal> getOutSignalList() {
-        LinkedList<AvatarSignal> v = new LinkedList<AvatarSignal>();
+    public List<AvatarSignal> getOutSignalList() {
+        List<AvatarSignal> v = new LinkedList<AvatarSignal>();
         for (AvatarSignal s : this.mySignals)
             if (s.getInOut() == AvatarSignal.OUT)
                 v.add(s);
         return v;
     }
 
-    public LinkedList<AvatarSignal> getInSignalList() {
-        LinkedList<AvatarSignal> v = new LinkedList<AvatarSignal>();
+    public List<AvatarSignal> getInSignalList() {
+        List<AvatarSignal> v = new LinkedList<AvatarSignal>();
         for (AvatarSignal s : this.mySignals)
             if (s.getInOut() == AvatarSignal.IN)
                 v.add(s);
         return v;
     }
 
-    public LinkedList<AvatarMethod> getAllMethodList() {
+    public List<AvatarMethod> getAllMethodList() {
         if (getFather() == null) {
             return this.myMethods;
         }
 
-        LinkedList<AvatarMethod> v = new LinkedList<AvatarMethod>();
+        List<AvatarMethod> v = new LinkedList<AvatarMethod>();
         v.addAll(this.myMethods);
         v.addAll(((AvatarBDBlock) getFather()).getAllMethodList());
         return v;
     }
 
-    public LinkedList<AvatarSignal> getAllSignalList() {
+    public List<AvatarSignal> getAllSignalList() {
         if (getFather() == null) {
             return this.mySignals;
         }
 
-        LinkedList<AvatarSignal> v = new LinkedList<AvatarSignal>();
+        List<AvatarSignal> v = new LinkedList<AvatarSignal>();
         v.addAll(this.mySignals);
         v.addAll(((AvatarBDBlock) getFather()).getAllSignalList());
         return v;
     }
 
-    public LinkedList<String> getAllTimerList() {
-        LinkedList<String> v = new LinkedList<String>();
+    public List<String> getAllTimerList() {
+        List<String> v = new LinkedList<String>();
 
         for (TAttribute a : this.myAttributes)
             if (a.getType() == TAttribute.TIMER)
@@ -1349,18 +1357,17 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         return null;
     }
 
-    public LinkedList<AvatarSignal> getListOfAvailableSignals() {
+    public List<AvatarSignal> getListOfAvailableSignals() {
         return ((AvatarBDPanel) (tdp)).getListOfAvailableSignals(this);
     }
 
-    public LinkedList<AvatarSignal> getListOfAvailableOutSignals() {
+    public List<AvatarSignal> getListOfAvailableOutSignals() {
         return ((AvatarBDPanel) (tdp)).getListOfAvailableOutSignals(this);
     }
 
-    public LinkedList<AvatarSignal> getListOfAvailableInSignals() {
+    public List<AvatarSignal> getListOfAvailableInSignals() {
         return ((AvatarBDPanel) (tdp)).getListOfAvailableInSignals(this);
     }
-
 
     // _id may contain the full signal
     public AvatarSignal getSignalNameBySignalDef(String _id) {
@@ -1494,6 +1501,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         return -1;
     }
 
+    @Override
     public ImageIcon getImageIcon() {
         return myImageIcon;
     }
@@ -1507,10 +1515,10 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         return this.getBlockName();
     }
 
+    @Override
     public String toString() {
         return "Block: " + getValue();
     }
-
 
     public String getAttributes() {
         String attr = "";
@@ -1525,9 +1533,4 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         }
         return attr;
     }
-
-
-
-
-
 }

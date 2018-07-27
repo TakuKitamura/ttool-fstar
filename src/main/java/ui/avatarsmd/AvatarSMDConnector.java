@@ -109,7 +109,6 @@ public class AvatarSMDConnector extends TGConnectorWithCommentConnectionPoints i
        }
        }*/
 
-
     public void setTransitionInfo(String guard, String action) {
         AvatarSMDTransitionInfo tgc = (AvatarSMDTransitionInfo) getInternalTGComponent(0);
         if (!guard.isEmpty()) {

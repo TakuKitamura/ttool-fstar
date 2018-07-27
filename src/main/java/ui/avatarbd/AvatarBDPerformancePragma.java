@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package ui.avatarbd;
 
 import myutil.Conversion;
@@ -49,10 +48,14 @@ import ui.util.IconManager;
 import ui.window.JDialogPerformancePragma;
 
 import javax.swing.*;
-import java.awt.*;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -66,7 +69,7 @@ import java.util.Map;
 public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalComponent {
 
     protected String[] values;
-    protected LinkedList<String> properties;
+    protected List<String> properties;
     protected int textX = 40;
     protected int textY = 5;
     protected int marginY = 20;
@@ -74,7 +77,7 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
     protected int limit = 15;
     protected int lockX = 1;
     protected int lockY = 5;
-    public ArrayList<String> syntaxErrors;
+    public List<String> syntaxErrors;
     protected Graphics myg;
 
     protected Color myColor;
@@ -83,7 +86,7 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
     //    private int maxFontSize = 30;
 //    private int minFontSize = 4;
     private int currentFontSize = -1;
-    private final String[] pPragma = {"A[]", "A<>", "E[]", "E<>"};
+   // private final String[] pPragma = {"A[]", "A<>", "E[]", "E<>"};
     public Map<String, String> verifMap = new HashMap<String, String>();
 
     protected Graphics graphics;
@@ -129,10 +132,11 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
         return values;
     }
 
-    public LinkedList<String> getProperties() {
+    public List<String> getProperties() {
         return properties;
     }
 
+    @Override
     public void internalDrawing(Graphics g) {
         Font f = g.getFont();
         Font fold = f;
@@ -255,7 +259,7 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
       }
       }*/
 
-
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
         String oldValue = value;
 
@@ -283,6 +287,7 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
         return null;
     }
 
+    @Override
     public void rescale(double scaleFactor) {
         /*dlineHeight = (lineHeight + dlineHeight) / oldScaleFactor * scaleFactor;
           lineHeight = (int)(dlineHeight);
@@ -294,10 +299,12 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
         super.rescale(scaleFactor);
     }
 
+    @Override
     public int getType() {
         return TGComponentManager.PERFORMANCE_PRAGMA;
     }
 
+    @Override
     protected String translateExtraParam() {
         if (values == null) {
             makeValue();

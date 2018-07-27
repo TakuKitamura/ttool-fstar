@@ -49,11 +49,10 @@ import ui.util.IconManager;
 import ui.window.JDialogAvatarTransition;
 
 import javax.swing.*;
-import java.awt.*;
-import java.util.LinkedList;
-import java.util.Vector;
 
-//import java.awt.geom.*;
+import java.awt.Graphics;
+import java.util.List;
+import java.util.Vector;
 
 /**
  * Class AvatarSMDTransitionInfo
@@ -68,7 +67,6 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
 
 //    private static String FILE_INFO = "(user files specified)";
     //   private static String CODE_INFO = "(user code specified)";
-
 
     protected String guard;
     protected String afterMin;
@@ -279,13 +277,15 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
         return null;
     }
 
+    @Override
     public boolean isInRectangle(int x1, int y1, int width, int height) {
         return !((getX() < x1) || (getY() < y1) || ((getX() + this.width) > (x1 + width)) || ((getY() + this.height) > (y1 + height)));
     }
 
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
-        LinkedList<TAttribute> attributes = tdp.getMGUI().getAllAttributes();
-        LinkedList<AvatarMethod> methods = tdp.getMGUI().getAllMethods();
+        List<TAttribute> attributes = tdp.getMGUI().getAllAttributes();
+        List<AvatarMethod> methods = tdp.getMGUI().getAllMethods();
         JDialogAvatarTransition jdat = new JDialogAvatarTransition(frame, "Setting transition parameters", guard, afterMin, afterMax, computeMin, computeMax, listOfActions, attributes, methods, filesToInclude, codeToInclude, probability);
         //  jdat.setSize(600, 550);
         GraphicLib.centerOnParent(jdat, 600, 550);

@@ -36,21 +36,29 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatarsmd;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.geom.Line2D;
+import java.util.List;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import myutil.GraphicLib;
 import myutil.TraceManager;
-import ui.*;
+import ui.AvatarSignal;
+import ui.BasicErrorHighlight;
+import ui.ColorManager;
+import ui.ErrorHighlight;
+import ui.PartOfInvariant;
+import ui.TDiagramPanel;
+import ui.TGComponent;
+import ui.TGComponentManager;
+import ui.TGConnectingPoint;
 import ui.util.IconManager;
 import ui.window.JDialogAvatarTimer;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.geom.Line2D;
-import java.util.LinkedList;
 
 /**
  * Class AvatarSMDSetTimer
@@ -97,9 +105,9 @@ public class AvatarSMDSetTimer extends AvatarSMDBasicComponent implements BasicE
         myImageIcon = IconManager.imgic904;
     }
     
+    @Override
     public void internalDrawing(Graphics g) {
-		
-        int w  = g.getFontMetrics().stringWidth(value);
+		int w  = g.getFontMetrics().stringWidth(value);
         int w1 = Math.max(minWidth, w + 2 * textX);
         if ((w1 != width) & (!tdp.isScaled())) {
             setCd(x + width/2 - w1/2, y);
@@ -168,6 +176,7 @@ public class AvatarSMDSetTimer extends AvatarSMDBasicComponent implements BasicE
 		
     }
     
+    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width + hourglassSpace + hourglassWidth, height)) {
             return this;
@@ -180,8 +189,8 @@ public class AvatarSMDSetTimer extends AvatarSMDBasicComponent implements BasicE
         return null;
     }
     
-    public void makeValue() {
-    }
+//    public void makeValue() {
+//    }
     
     public String getTimerName() {
         return AvatarSignal.getValue(value, 0);
@@ -191,8 +200,9 @@ public class AvatarSMDSetTimer extends AvatarSMDBasicComponent implements BasicE
 		return AvatarSignal.getValue(value, 1);
 	}
     
+	@Override
     public boolean editOndoubleClick(JFrame frame) {
-		LinkedList<String> timers = tdp.getMGUI().getAllTimers();
+		List<String> timers = tdp.getMGUI().getAllTimers();
 		TraceManager.addDev("Nb of timers:" + timers.size());
 		
 		JDialogAvatarTimer jdat = new JDialogAvatarTimer(frame, "Setting timer set",  getTimerName(), getTimerValue(), timers, true);

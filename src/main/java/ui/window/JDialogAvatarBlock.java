@@ -48,10 +48,19 @@ import ui.TAttribute;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import java.awt.*;
+
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
+import java.util.List;
 
 
 /**
@@ -64,10 +73,10 @@ import java.util.LinkedList;
  */
 public class JDialogAvatarBlock extends JDialogBase implements ActionListener, ListSelectionListener {
 
-    private LinkedList<TAttribute> attributes, attributesPar, forbidden;
-    private LinkedList<Boolean> initValues;
-    private LinkedList<AvatarMethod> methods, methodsPar;
-    private LinkedList<AvatarSignal> signals, signalsPar;
+    private List<TAttribute> attributes, attributesPar, forbidden;
+    private List<Boolean> initValues;
+    private List<AvatarMethod> methods, methodsPar;
+    private List<AvatarSignal> signals, signalsPar;
     private boolean checkKeyword, checkJavaKeyword;
 
     private boolean cancelled = true;
@@ -122,7 +131,7 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
     /**
      * Creates new form
      */
-    public JDialogAvatarBlock(LinkedList<TAttribute> _attributes, LinkedList<AvatarMethod> _methods, LinkedList<AvatarSignal> _signals, LinkedList<TAttribute> _forbidden, Frame f, String title, String attrib, int _tab, String[] _globalCode, boolean _hasGlobalCode, String _mainCode) {
+    public JDialogAvatarBlock( List<TAttribute> _attributes, List<AvatarMethod> _methods, List<AvatarSignal> _signals, List<TAttribute> _forbidden, Frame f, String title, String attrib, int _tab, String[] _globalCode, boolean _hasGlobalCode, String _mainCode) {
         super(f, title, true);
         frame = f;
         attributesPar = _attributes;

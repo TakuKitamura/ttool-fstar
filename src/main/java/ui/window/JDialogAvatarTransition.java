@@ -36,23 +36,34 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
+
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Font;
+import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+import java.util.Vector;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 import myutil.Conversion;
 import myutil.GraphicLib;
 import ui.AvatarMethod;
-import ui.util.IconManager;
 import ui.TAttribute;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.LinkedList;
-import java.util.Vector;
 
 /**
    * Class JDialogAvatarTransition
@@ -65,8 +76,8 @@ public class JDialogAvatarTransition extends JDialogBase implements ActionListen
 
     private Vector<String> actions;
     private String guard, afterMin, afterMax, computeMin, computeMax, probability;
-    private LinkedList<TAttribute> myAttributes;
-    private LinkedList<AvatarMethod> myMethods;
+    private List<TAttribute> myAttributes;
+    private List<AvatarMethod> myMethods;
     private Vector<String> allElements, insertElements;
 
     protected String [] filesToInclude;
@@ -91,7 +102,7 @@ public class JDialogAvatarTransition extends JDialogBase implements ActionListen
     // arrayDelay: [0] -> minDelay ; [1] -> maxDelay
     public JDialogAvatarTransition(Frame _f, String _title, String _guard, String _afterMin, String _afterMax,
 								   String _computeMin, String _computeMax, Vector<String> _actions,
-								   LinkedList<TAttribute> _myAttributes, LinkedList<AvatarMethod> _myMethods,
+								   List<TAttribute> _myAttributes, List<AvatarMethod> _myMethods,
 								   String[] _filesToInclude, String[] _codeToInclude, String _probability) {
 
         super(_f, _title, true);
@@ -407,5 +418,4 @@ public class JDialogAvatarTransition extends JDialogBase implements ActionListen
     public String[] getCodeToInclude() {
         return codeToInclude;
     }
-
 }
