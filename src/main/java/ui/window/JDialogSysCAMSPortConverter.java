@@ -220,6 +220,7 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 		listArrayTypeString.add("int");
 		listArrayTypeString.add("bool");
 		listArrayTypeString.add("double");
+		listArrayTypeString.add("sc_uint<32>");
 		if (port.getFather() != null) {
 			if (port.getFather() instanceof SysCAMSBlockTDF) {
 				if (!((SysCAMSBlockTDF) port.getFather()).getListTypedef().isEmpty()) {
