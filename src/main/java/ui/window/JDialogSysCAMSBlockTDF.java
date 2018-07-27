@@ -240,17 +240,20 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 		gridBag.setConstraints(periodTextField, constraints);
 		attributesBoxPanel.add(periodTextField);
 
-		listPeriodString = new String[3];
-		listPeriodString[0] = "us";
+		listPeriodString = new String[4];
+		listPeriodString[0] = "s";
 		listPeriodString[1] = "ms";
-		listPeriodString[2] = "s";
+		listPeriodString[2] = "\u03BCs";
+		listPeriodString[3] = "ns";
 		periodComboBoxString = new JComboBox<String>(listPeriodString);
-		if (block.getTime().equals("") || block.getTime().equals("us")) {
+		if (block.getTime().equals("") || block.getTime().equals("s")) {
 			periodComboBoxString.setSelectedIndex(0);
 		} else if (block.getTime().equals("ms")) {
 			periodComboBoxString.setSelectedIndex(1);
-		} else if (block.getTime().equals("s")) {
+		} else if (block.getTime().equals("\u03BCs")) {
 			periodComboBoxString.setSelectedIndex(2);
+		} else if (block.getTime().equals("ns")) {
+			periodComboBoxString.setSelectedIndex(3);
 		}
 		periodComboBoxString.addActionListener(this);
 		constraints = new GridBagConstraints(2, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
