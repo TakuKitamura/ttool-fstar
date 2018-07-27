@@ -222,7 +222,7 @@ public class PrimitiveCode {
 			}
 
 			if (tdf.getPeriod() != -1) {
-				corpsPrimitiveTDF = corpsPrimitiveTDF + "\tvoid set_attributes() {" + CR + "\t\t" + "set_timestep(" + tdf.getPeriod() + ", sc_core::SC_" + tdf.getTime().toUpperCase() + CR;
+				corpsPrimitiveTDF = corpsPrimitiveTDF + "\tvoid set_attributes() {" + CR + "\t\t" + "set_timestep(" + tdf.getPeriod() + ", sc_core::SC_" + tdf.getTime().toUpperCase() + ");" + CR;
 				cpt2++;
 			}	
 			if (cpt2 > 0) {

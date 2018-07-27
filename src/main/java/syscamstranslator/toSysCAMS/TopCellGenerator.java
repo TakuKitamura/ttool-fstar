@@ -102,8 +102,8 @@ public class TopCellGenerator {
 
 		try {
 			// Save file .cpp
-			System.err.println(path + GENERATED_PATH1 + cluster.getClusterName() + ".cpp");
-			FileWriter fw = new FileWriter(path + GENERATED_PATH1 + "/" + cluster.getClusterName() + "_tb.cpp");
+			System.err.println(path + GENERATED_PATH1 + cluster.getClusterName() + ".h");
+			FileWriter fw = new FileWriter(path + GENERATED_PATH1 + "/" + cluster.getClusterName() + ".h");
 			top = generateTopCell(cluster, connectors);
 			fw.write(top);
 			fw.close();
