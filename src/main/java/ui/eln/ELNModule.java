@@ -56,12 +56,13 @@ import javax.swing.*;
  * @author Irina Kit Yan LEE
  */
 
-public class ELNModule extends TGCScalableWithInternalComponent implements SwallowTGComponent {
+public class ELNModule extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent {
 	private int maxFontSize = 14;
 	private int minFontSize = 4;
 	private int currentFontSize = -1;
 	protected int orientation;
 	private Color myColor;
+	protected int oldx, oldy;
 
 	private int textX = 15;
 	private double dtextX = 0.0;
@@ -257,6 +258,27 @@ public class ELNModule extends TGCScalableWithInternalComponent implements Swall
 			if (tgcomponent[i] instanceof ELNModuleTerminal) {
 				tgcomponent[i].resizeWithFather();
 			}
+		}
+	}
+	
+	public void wasSwallowed() {
+		myColor = null;
+	}
+
+	public void wasUnswallowed() {
+		myColor = null;
+		setFather(null);
+		TDiagramPanel tdp = getTDiagramPanel();
+		setCdRectangle(tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY());
+	}
+
+	public void resizeWithFather() {
+		if ((father != null) && (father instanceof ELNCluster)) {
+			setCdRectangle(0 - getWidth() / 2, father.getWidth() - (getWidth() / 2), 0 - getHeight() / 2,
+					father.getHeight() - (getHeight() / 2));
+			setMoveCd(x, y);
+			oldx = -1;
+			oldy = -1;
 		}
 	}
 
