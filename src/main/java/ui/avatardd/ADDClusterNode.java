@@ -43,6 +43,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import ui.*;
 import ui.syscams.SysCAMSComponentTaskDiagramPanel;
+import ui.syscams.SysCAMSCompositeComponent;
 import ui.util.IconManager;
 
 import javax.swing.*;
@@ -63,8 +64,8 @@ public class ADDClusterNode extends ADDNode implements WithAttributes {
 	private int derivationx = 2;
 	private int derivationy = 3;
 	private String stereotype = "SystemC-AMS Cluster";
-	private int currentFontSize = -1;
-	private int textX = 15; // border for ports
+
+	private SysCAMSCompositeComponent cluster;
 
 	private int index = 0;
 
@@ -201,6 +202,7 @@ public class ADDClusterNode extends ADDNode implements WithAttributes {
 				SysCAMSComponentTaskDiagramPanel tdp = mgui.getListSysCAMSPanel().get(i);
 				if (tdp.getCompositeComponent().getValue().equals(getName())) {
 					mgui.selectTab(tdp);
+					setCluster(tdp.getCompositeComponent());
 					return true;
 				}
 			}
@@ -272,5 +274,13 @@ public class ADDClusterNode extends ADDNode implements WithAttributes {
 		String attr = "";
 		attr += "index = " + index + "\n";
 		return attr;	
+	}
+
+	public SysCAMSCompositeComponent getCluster() {
+		return cluster;
+	}
+
+	public void setCluster(SysCAMSCompositeComponent cluster) {
+		this.cluster = cluster;
 	}
 }
