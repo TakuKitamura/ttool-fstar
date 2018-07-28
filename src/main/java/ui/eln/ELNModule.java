@@ -90,7 +90,7 @@ public class ELNModule extends TGCScalableWithInternalComponent implements Swall
 		removable = true;
 		userResizable = true;
 
-		value = tdp.findELNComponentName("Module_");
+		value = tdp.findELNComponentName("Module");
 	}
 
 	public void internalDrawing(Graphics g) {
@@ -100,7 +100,7 @@ public class ELNModule extends TGCScalableWithInternalComponent implements Swall
 		MainGUI mgui = getTDiagramPanel().getMainGUI();
 
 		if (myColor == null) {
-			myColor = Color.white;
+			myColor = Color.lightGray;
 		}
 
 		if (this.rescaled && !this.tdp.isScaled()) {
