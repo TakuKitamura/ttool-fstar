@@ -129,6 +129,16 @@ public class SysCAMSPortConnector extends TGConnector implements ScalableTGCompo
 						g.setStroke(dashed);
 						GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
 					}
+				} else if ((pt1.port instanceof SysCAMSPortDE) && (pt2.port instanceof SysCAMSPortDE) 
+						|| (pt2.port instanceof SysCAMSPortDE) && (pt1.port instanceof SysCAMSPortDE)) {
+					if (pt1.port.getFather().getFather() instanceof SysCAMSCompositeComponent 
+							&& pt2.port.getFather().getFather() instanceof SysCAMSCompositeComponent) {
+						GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
+					} else {
+						Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0,	new float[] { 9 }, 0);
+						g.setStroke(dashed);
+						GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
+					}
 				} else if ((pt1.port instanceof SysCAMSPortTDF) && (pt2.port instanceof SysCAMSPortTDF)
 						 || (pt2.port instanceof SysCAMSPortTDF) && (pt1.port instanceof SysCAMSPortTDF)) {
 					GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);

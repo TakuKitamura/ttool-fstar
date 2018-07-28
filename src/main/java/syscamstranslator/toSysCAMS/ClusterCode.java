@@ -55,7 +55,7 @@ import syscamstranslator.*;
  * Creation: 14/05/2018
  * @version 1.0 14/05/2018
  * @author Irina Kit Yan LEE
-*/
+ */
 
 public class ClusterCode {
 	static private String corpsCluster;
@@ -67,66 +67,101 @@ public class ClusterCode {
 	public static String getClusterCode(SysCAMSTCluster cluster, LinkedList<SysCAMSTConnector> connectors) {
 		int nb_con = 1;
 		int nb_block = 1;
-		
+
+		LinkedList<String> names = new LinkedList<String>();
+
 		if (cluster != null) {
 			LinkedList<SysCAMSTBlockTDF> tdf = cluster.getBlockTDF();
 			LinkedList<SysCAMSTBlockDE> de = cluster.getBlockDE();
-			
+
 			corpsCluster = "// Simulation entry point." + CR + "int sc_main(int argc, char *argv[]) {" + CR2 
 					+ "\tusing namespace sc_core;" + CR + "\tusing namespace sca_util;" + CR2;
-			
+
 			corpsCluster = corpsCluster + "\t// Declare signal to interconnect." + CR;
-			
+
 			for (SysCAMSTConnector c : connectors) {
-				if (c.get_p1().getComponent() instanceof SysCAMSTPortTDF) {
-					corpsCluster = corpsCluster + "\tsca_tdf::sca_signal<" + ((SysCAMSTPortTDF) c.get_p1().getComponent()).getTDFType() + "> " 
-					+ "sig_" + nb_con + "(\"" 
-					+ "sig_" + nb_con + "\");" + CR;
-					nb_con++;
-				} else if (c.get_p1().getComponent() instanceof SysCAMSTPortConverter) {
-					corpsCluster = corpsCluster + "\tsca_tdf::sca_signal<" + ((SysCAMSTPortConverter) c.get_p1().getComponent()).getConvType() + "> " 
-					+ "sig_" + nb_con + "(\"" 
-					+ "sig_" + nb_con + "\");" + CR;
-					nb_con++;
-				} else if (c.get_p1().getComponent() instanceof SysCAMSTPortDE) {
-					corpsCluster = corpsCluster + "\tsca_tdf::sca_signal<" + ((SysCAMSTPortDE) c.get_p1().getComponent()).getDEType() + "> " 
-					+ "sig_" + nb_con + "(\"" 
-					+ "sig_" + nb_con + "\");" + CR;
-					nb_con++;
+				if ((c.get_p1().getComponent() instanceof SysCAMSTPortTDF && c.get_p2().getComponent() instanceof SysCAMSTPortTDF) 
+						|| (c.get_p1().getComponent() instanceof SysCAMSTPortTDF && c.get_p2().getComponent() instanceof SysCAMSTPortTDF)) {
+					if (c.getName().equals("")) {
+						corpsCluster = corpsCluster + "\tsca_tdf::sca_signal<" + ((SysCAMSTPortTDF) c.get_p1().getComponent()).getTDFType() + "> " 
+								+ "sig_" + nb_con + ";" + CR;
+						names.add("sig_" + nb_con);
+						nb_con++;
+					} else {
+						corpsCluster = corpsCluster + "\tsca_tdf::sca_signal<" + ((SysCAMSTPortTDF) c.get_p1().getComponent()).getTDFType() + "> " 
+								+ c.getName() + ";" + CR;
+						names.add(c.getName());
+					}
+				} else if ((c.get_p1().getComponent() instanceof SysCAMSTPortConverter && c.get_p2().getComponent() instanceof SysCAMSTPortDE)) {
+					if (c.getName().equals("")) {
+						corpsCluster = corpsCluster + "\tsca_tdf::sca_signal<" + ((SysCAMSTPortConverter) c.get_p1().getComponent()).getConvType() + "> " 
+								+ "sig_" + nb_con + ";" + CR;
+						names.add("sig_" + nb_con);
+						nb_con++;
+					} else {
+						corpsCluster = corpsCluster + "\tsca_tdf::sca_signal<" + ((SysCAMSTPortConverter) c.get_p1().getComponent()).getConvType() + "> " 
+								+ c.getName() + ";" + CR;
+						names.add(c.getName());
+					}
+				} else if ((c.get_p2().getComponent() instanceof SysCAMSTPortConverter && c.get_p1().getComponent() instanceof SysCAMSTPortDE)) {
+					if (c.getName().equals("")) {
+						corpsCluster = corpsCluster + "\tsca_tdf::sca_signal<" + ((SysCAMSTPortConverter) c.get_p2().getComponent()).getConvType() + "> " 
+								+ "sig_" + nb_con + ";" + CR;
+						names.add("sig_" + nb_con);
+						nb_con++;
+					} else {
+						corpsCluster = corpsCluster + "\tsca_tdf::sca_signal<" + ((SysCAMSTPortConverter) c.get_p2().getComponent()).getConvType() + "> " 
+								+ c.getName() + ";" + CR;
+						names.add(c.getName());
+					}
+				} else if ((c.get_p1().getComponent() instanceof SysCAMSTPortDE && c.get_p2().getComponent() instanceof SysCAMSTPortDE) 
+						|| (c.get_p2().getComponent() instanceof SysCAMSTPortDE && c.get_p1	().getComponent() instanceof SysCAMSTPortDE)) {
+					if (c.getName().equals("")) {
+						corpsCluster = corpsCluster + "\tsc_core::sc_signal<" + ((SysCAMSTPortDE) c.get_p1().getComponent()).getDEType() + "> " 
+								+ "sig_" + nb_con + ";" + CR;
+						names.add("sig_" + nb_con);
+						nb_con++;
+					} else {
+						corpsCluster = corpsCluster + "\tsc_core::sc_signal<" + ((SysCAMSTPortDE) c.get_p1().getComponent()).getDEType() + "> " 
+								+ c.getName() + ";" + CR;
+						names.add(c.getName());
+					}
 				}
 			}
 
 			corpsCluster = corpsCluster + CR + "\t// Instantiate headers files as well as bind their ports to the signal." + CR;
-			
+
 			for (SysCAMSTBlockTDF t : tdf) {
 				corpsCluster = corpsCluster + "\t" + t.getName() + " " + t.getName() + "_" + nb_block + "(\"" + t.getName() + "_" + nb_block + "\");" + CR;
-				
+
 				LinkedList<SysCAMSTPortTDF> portTDF = t.getPortTDF();
 				LinkedList<SysCAMSTPortConverter> portConv = t.getPortConverter();
-			
+
 				for (SysCAMSTPortTDF p : portTDF) {
 					for (int i = 0; i < connectors.size(); i++) {
-						nb_con = i+1;
-						if (connectors.get(i).get_p1().getComponent() instanceof SysCAMSTPortTDF) {
+						if (connectors.get(i).get_p1().getComponent() instanceof SysCAMSTPortTDF && connectors.get(i).get_p2().getComponent() instanceof SysCAMSTPortTDF) {
 							if (((SysCAMSTPortTDF) connectors.get(i).get_p1().getComponent()).getName().equals(p.getName()) && ((SysCAMSTPortTDF) connectors.get(i).get_p1().getComponent()).getBlockTDF().getName().equals(t.getName())) {
-								corpsCluster = corpsCluster + "\t" + t.getName() + "_" + nb_block + "." + p.getName() + "(" + "sig_" + nb_con + ");" + CR;
+								corpsCluster = corpsCluster + "\t" + t.getName() + "_" + nb_block + "." + p.getName() + "(" + names.get(i) + ");" + CR;
 							} else if (((SysCAMSTPortTDF) connectors.get(i).get_p2().getComponent()).getName().equals(p.getName()) && ((SysCAMSTPortTDF) connectors.get(i).get_p2().getComponent()).getBlockTDF().getName().equals(t.getName())) {
-								corpsCluster = corpsCluster + "\t" + t.getName() + "_" + nb_block + "." + p.getName() + "(" + "sig_" + nb_con + ");" + CR;
+								corpsCluster = corpsCluster + "\t" + t.getName() + "_" + nb_block + "." + p.getName() + "(" + names.get(i) + ");" + CR;
 							}
 						} 
 					}
 				}
-					
+
 				for (SysCAMSTPortConverter p : portConv) {
 					for (int i = 0; i < connectors.size(); i++) {
-						nb_con = i+1;
-						if (connectors.get(i).get_p1().getComponent() instanceof SysCAMSTPortConverter) {
+						if (connectors.get(i).get_p1().getComponent() instanceof SysCAMSTPortConverter && connectors.get(i).get_p2().getComponent() instanceof SysCAMSTPortDE) {
 							if (((SysCAMSTPortConverter) connectors.get(i).get_p1().getComponent()).getName().equals(p.getName()) && ((SysCAMSTPortConverter) connectors.get(i).get_p1().getComponent()).getBlockTDF().getName().equals(t.getName())) {
-								corpsCluster = corpsCluster + "\t" + t.getName() + "_" + nb_block + "." + p.getName() + "(" + "sig_" + nb_con + ");" + CR;
+								corpsCluster = corpsCluster + "\t" + t.getName() + "_" + nb_block + "." + p.getName() + "(" + names.get(i) + ");" + CR;
+							} else if (((SysCAMSTPortDE) connectors.get(i).get_p2().getComponent()).getName().equals(p.getName()) && ((SysCAMSTPortDE) connectors.get(i).get_p2().getComponent()).getBlockDE().getName().equals(t.getName())) {
+								corpsCluster = corpsCluster + "\t" + t.getName() + "_" + nb_block + "." + p.getName() + "(" + names.get(i) + ");" + CR;
 							}
-						} else if (connectors.get(i).get_p2().getComponent() instanceof SysCAMSTPortConverter) {
+						} else if (connectors.get(i).get_p2().getComponent() instanceof SysCAMSTPortConverter && connectors.get(i).get_p1().getComponent() instanceof SysCAMSTPortDE) {
 							if (((SysCAMSTPortConverter) connectors.get(i).get_p2().getComponent()).getName().equals(p.getName()) && ((SysCAMSTPortConverter) connectors.get(i).get_p2().getComponent()).getBlockTDF().getName().equals(t.getName())) {
-								corpsCluster = corpsCluster + "\t" + t.getName() + "_" + nb_block + "." + p.getName() + "(" + "sig_" + nb_con + ");" + CR;
+								corpsCluster = corpsCluster + "\t" + t.getName() + "_" + nb_block + "." + p.getName() + "(" + names.get(i) + ");" + CR;
+							} else if (((SysCAMSTPortDE) connectors.get(i).get_p1().getComponent()).getName().equals(p.getName()) && ((SysCAMSTPortDE) connectors.get(i).get_p1().getComponent()).getBlockDE().getName().equals(t.getName())) {
+								corpsCluster = corpsCluster + "\t" + t.getName() + "_" + nb_block + "." + p.getName() + "(" + names.get(i) + ");" + CR;
 							}
 						}
 					}
@@ -134,22 +169,31 @@ public class ClusterCode {
 				corpsCluster = corpsCluster + CR;
 				nb_block++;
 			}
-			
+
 			for (SysCAMSTBlockDE t : de) {
 				corpsCluster = corpsCluster + "\t" + t.getName() + " " + t.getName() + "_" + nb_block + "(\"" + t.getName() + "_" + nb_block + "\");" + CR;
-				
+
 				LinkedList<SysCAMSTPortDE> portDE = t.getPortDE();
-			
+
 				for (SysCAMSTPortDE p : portDE) {
 					for (int i = 0; i < connectors.size(); i++) {
-						nb_con = i+1;
-						if (connectors.get(i).get_p1().getComponent() instanceof SysCAMSTPortDE) {
+						if (connectors.get(i).get_p1().getComponent() instanceof SysCAMSTPortDE && connectors.get(i).get_p2().getComponent() instanceof SysCAMSTPortDE) {
 							if (((SysCAMSTPortDE) connectors.get(i).get_p1().getComponent()).getName().equals(p.getName()) && ((SysCAMSTPortDE) connectors.get(i).get_p1().getComponent()).getBlockDE().getName().equals(t.getName())) {
-								corpsCluster = corpsCluster + "\t" + t.getName() + "_" + nb_block + "." + p.getName() + "(" + "sig_" + nb_con + ");" + CR;
-							} 
-						} else if (connectors.get(i).get_p2().getComponent() instanceof SysCAMSTPortDE) {
-							if (((SysCAMSTPortDE) connectors.get(i).get_p2().getComponent()).getName().equals(p.getName()) && ((SysCAMSTPortDE) connectors.get(i).get_p2().getComponent()).getBlockDE().getName().equals(t.getName())) {
-								corpsCluster = corpsCluster + "\t" + t.getName() + "_" + nb_block + "." + p.getName() + "(" + "sig_" + nb_con + ");" + CR;
+								corpsCluster = corpsCluster + "\t" + t.getName() + "_" + nb_block + "." + p.getName() + "(" + names.get(i) + ");" + CR;
+							} else if (((SysCAMSTPortDE) connectors.get(i).get_p2().getComponent()).getName().equals(p.getName()) && ((SysCAMSTPortDE) connectors.get(i).get_p2().getComponent()).getBlockDE().getName().equals(t.getName())) {
+								corpsCluster = corpsCluster + "\t" + t.getName() + "_" + nb_block + "." + p.getName() + "(" + names.get(i) + ");" + CR;
+							}
+						} else if (connectors.get(i).get_p1().getComponent() instanceof SysCAMSTPortConverter && connectors.get(i).get_p2().getComponent() instanceof SysCAMSTPortDE) {
+							if (((SysCAMSTPortConverter) connectors.get(i).get_p1().getComponent()).getName().equals(p.getName()) && ((SysCAMSTPortConverter) connectors.get(i).get_p1().getComponent()).getBlockTDF().getName().equals(t.getName())) {
+								corpsCluster = corpsCluster + "\t" + t.getName() + "_" + nb_block + "." + p.getName() + "(" + names.get(i) + ");" + CR;
+							} else if (((SysCAMSTPortDE) connectors.get(i).get_p2().getComponent()).getName().equals(p.getName()) && ((SysCAMSTPortDE) connectors.get(i).get_p2().getComponent()).getBlockDE().getName().equals(t.getName())) {
+								corpsCluster = corpsCluster + "\t" + t.getName() + "_" + nb_block + "." + p.getName() + "(" + names.get(i) + ");" + CR;
+							}
+						} else if (connectors.get(i).get_p2().getComponent() instanceof SysCAMSTPortConverter && connectors.get(i).get_p1().getComponent() instanceof SysCAMSTPortDE) {
+							if (((SysCAMSTPortConverter) connectors.get(i).get_p2().getComponent()).getName().equals(p.getName()) && ((SysCAMSTPortConverter) connectors.get(i).get_p2().getComponent()).getBlockTDF().getName().equals(t.getName())) {
+								corpsCluster = corpsCluster + "\t" + t.getName() + "_" + nb_block + "." + p.getName() + "(" + names.get(i) + ");" + CR;
+							} else if (((SysCAMSTPortDE) connectors.get(i).get_p1().getComponent()).getName().equals(p.getName()) && ((SysCAMSTPortDE) connectors.get(i).get_p1().getComponent()).getBlockDE().getName().equals(t.getName())) {
+								corpsCluster = corpsCluster + "\t" + t.getName() + "_" + nb_block + "." + p.getName() + "(" + names.get(i) + ");" + CR;
 							}
 						}
 					}
@@ -157,14 +201,12 @@ public class ClusterCode {
 				corpsCluster = corpsCluster + CR;
 				nb_block++;
 			}
-			
+
 			corpsCluster = corpsCluster + "\t// Configure signal tracing." + CR 
 					+ "\tsca_trace_file* tfp = sca_create_tabular_trace_file(\"" + cluster.getClusterName() + "_tb\");" + CR;
-			
-			nb_con = 1;
+
 			for (int i = 0; i < connectors.size(); i++) {
-				corpsCluster = corpsCluster + "\tsca_trace(tfp, "+ "sig_" + nb_con + ", \"" + "sig_" + nb_con + "\");" + CR;
-				nb_con++;
+				corpsCluster = corpsCluster + "\tsca_trace(tfp, "+ names.get(i) + ", \"" + names.get(i) + "\");" + CR;
 			}
 			corpsCluster = corpsCluster + CR + "\t// Start simulation." + CR + "\tsc_start(100.0, SC_MS);" + CR2
 					+ "\t// Close trace file and stop simulation to enable clean-up by" + CR
