@@ -407,11 +407,10 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
 
 	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
     	if (tgc instanceof SysCAMSBlockTDF) {
-    		return tgc instanceof SysCAMSBlockTDF;
+    		return true;
     	} else if (tgc instanceof SysCAMSBlockDE) {
-    		return tgc instanceof SysCAMSBlockDE;
-    	} else {
     		return true;
     	}
+    	return false;
 	}
 }
