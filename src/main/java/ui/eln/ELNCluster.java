@@ -70,7 +70,7 @@ public class ELNCluster extends TGCScalableWithInternalComponent implements Swal
 	public ELNCluster(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-		initScaling(400, 400);
+		initScaling(400, 600);
 
 		oldScaleFactor = tdp.getZoom();
 		dtextX = textX * oldScaleFactor;
@@ -200,43 +200,78 @@ public class ELNCluster extends TGCScalableWithInternalComponent implements Swal
 	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
 		if (tgc instanceof ELNModule) {
 			return true;
-		}
-		if (tgc instanceof SysCAMSPortDE) {
+		} else if (tgc instanceof SysCAMSPortDE) {
 			return true;
-		}
-		if (tgc instanceof SysCAMSPortTDF) {
+		} else 	if (tgc instanceof SysCAMSPortTDF) {
 			return true;
 		}
 		return false;
 	}
 
 	public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
+		boolean swallowed = false;
+
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof SwallowTGComponent) {
+				if (((SwallowTGComponent)tgcomponent[i]).acceptSwallowedTGComponent(tgc)) {
+					if (tgcomponent[i].isOnMe(x, y) != null) {
+						swallowed = true;
+						((SwallowTGComponent)tgcomponent[i]).addSwallowedTGComponent(tgc, x, y);
+						break;
+					}
+				}
+			}
+		}
+
+		if (swallowed) {
+			return true;
+		}
+
+		if (!acceptSwallowedTGComponent(tgc)) {
+			return false;
+		}
+
+		tgc.setFather(this);
+		tgc.setDrawingZone(true);
+
 		if (tgc instanceof ELNModule) {
-			tgc.setFather(this);
-			tgc.setDrawingZone(true);
 			tgc.resizeWithFather();
-			addInternalComponent(tgc, 0);
-			return true;
 		}
+
 		if (tgc instanceof SysCAMSPortDE) {
-			tgc.setFather(this);
-			tgc.setDrawingZone(true);
 			tgc.resizeWithFather();
-			addInternalComponent(tgc, 0);
-			return true;
 		}
+
 		if (tgc instanceof SysCAMSPortTDF) {
-			tgc.setFather(this);
-			tgc.setDrawingZone(true);
 			tgc.resizeWithFather();
-			addInternalComponent(tgc, 0);
-			return true;
 		}
-		return false;
+
+		addInternalComponent(tgc, 0);
+
+		return true;
 	}
 
 	public void removeSwallowedTGComponent(TGComponent tgc) {
-		removeInternalComponent(tgc);
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] == tgc) {
+				nbInternalTGComponent = nbInternalTGComponent - 1;
+				if (nbInternalTGComponent == 0) {
+					tgcomponent = null;
+				} else {
+					TGComponent [] tgcomponentbis = new TGComponent[nbInternalTGComponent];
+					for(int j=0; j<nbInternalTGComponent; j++) {
+						if (j<i) {
+							tgcomponentbis[j] = tgcomponent[j];
+						}
+						if (j>=i) {
+							tgcomponentbis[j] = tgcomponent[j+1];
+						}
+					}
+					tgcomponent = tgcomponentbis;
+				}
+				break;
+			}
+		}
 	}
 
 	public void hasBeenResized() {
@@ -257,7 +292,7 @@ public class ELNCluster extends TGCScalableWithInternalComponent implements Swal
 	public int getCurrentFontSize() {
 		return currentFontSize;
 	}
-	
+
 	public java.util.List<ELNModule> getAllModule() {
 		java.util.List<ELNModule> list = new ArrayList<ELNModule>();
 		for(int i=0; i<nbInternalTGComponent; i++) {
@@ -267,7 +302,7 @@ public class ELNCluster extends TGCScalableWithInternalComponent implements Swal
 		}
 		return list;
 	}
-	
+
 	public java.util.List<SysCAMSPortDE> getAllPortDE() {
 		java.util.List<SysCAMSPortDE> list = new ArrayList<SysCAMSPortDE>();
 		for(int i=0; i<nbInternalTGComponent; i++) {
@@ -277,7 +312,7 @@ public class ELNCluster extends TGCScalableWithInternalComponent implements Swal
 		}
 		return list;
 	}
-	
+
 	public java.util.List<SysCAMSPortTDF> getAllPortTDF() {
 		java.util.List<SysCAMSPortTDF> list = new ArrayList<SysCAMSPortTDF>();
 		for(int i=0; i<nbInternalTGComponent; i++) {

@@ -42,6 +42,7 @@ import myutil.GraphicLib;
 import ui.*;
 import ui.eln.sca_eln.*;
 import ui.eln.sca_eln_sca_tdf.*;
+import ui.syscams.*;
 import ui.util.IconManager;
 import ui.window.*;
 import java.awt.*;
@@ -62,7 +63,6 @@ public class ELNModule extends TGCScalableWithInternalComponent implements Swall
 	private int currentFontSize = -1;
 	protected int orientation;
 	private Color myColor;
-	protected int oldx, oldy;
 
 	private int textX = 15;
 	private double dtextX = 0.0;
@@ -73,7 +73,7 @@ public class ELNModule extends TGCScalableWithInternalComponent implements Swall
 	public ELNModule(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-		initScaling(200, 150);
+		initScaling(300, 500);
 
 		oldScaleFactor = tdp.getZoom();
 		dtextX = textX * oldScaleFactor;
@@ -205,7 +205,43 @@ public class ELNModule extends TGCScalableWithInternalComponent implements Swall
 	}
 
 	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
-		if (tgc instanceof ELNComponent) {
+		if (tgc instanceof ELNComponentCapacitor) {
+			return true;
+		} 
+		if (tgc instanceof ELNComponentIdealTransformer) {
+			return true;
+		} 
+		if (tgc instanceof ELNComponentIndependentCurrentSource) {
+			return true;
+		} 
+		if (tgc instanceof ELNComponentIndependentVoltageSource) {
+			return true;
+		} 
+		if (tgc instanceof ELNComponentInductor) {
+			return true;
+		} 
+		if (tgc instanceof ELNComponentResistor) {
+			return true;
+		} 
+		if (tgc instanceof ELNComponentTransmissionLine) {
+			return true;
+		} 
+		if (tgc instanceof ELNComponentVoltageControlledCurrentSource) {
+			return true;
+		} 
+		if (tgc instanceof ELNComponentVoltageControlledVoltageSource) {
+			return true;
+		} 
+		if (tgc instanceof ELNComponentCurrentSinkTDF) {
+			return true;
+		} 
+		if (tgc instanceof ELNComponentCurrentSourceTDF) {
+			return true;
+		} 
+		if (tgc instanceof ELNComponentVoltageSinkTDF) {
+			return true;
+		} 
+		if (tgc instanceof ELNComponentVoltageSourceTDF) {
 			return true;
 		} 
 		if (tgc instanceof ELNComponentNodeRef) {
@@ -214,11 +250,101 @@ public class ELNModule extends TGCScalableWithInternalComponent implements Swall
 		if (tgc instanceof ELNModuleTerminal) {
 			return true;
 		}
+		if (tgc instanceof SysCAMSPortDE) {
+			return true;
+		}
+		if (tgc instanceof SysCAMSPortTDF) {
+			return true;
+		}
 		return false;
 	}
 
 	public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
-		if (tgc instanceof ELNComponent) {
+		if (tgc instanceof ELNComponentCapacitor) {
+			tgc.setFather(this);
+			tgc.setDrawingZone(true);
+			tgc.resizeWithFather();
+			addInternalComponent(tgc, 0);
+			return true;
+		}
+		if (tgc instanceof ELNComponentIdealTransformer) {
+			tgc.setFather(this);
+			tgc.setDrawingZone(true);
+			tgc.resizeWithFather();
+			addInternalComponent(tgc, 0);
+			return true;
+		}
+		if (tgc instanceof ELNComponentIndependentCurrentSource) {
+			tgc.setFather(this);
+			tgc.setDrawingZone(true);
+			tgc.resizeWithFather();
+			addInternalComponent(tgc, 0);
+			return true;
+		}
+		if (tgc instanceof ELNComponentIndependentVoltageSource) {
+			tgc.setFather(this);
+			tgc.setDrawingZone(true);
+			tgc.resizeWithFather();
+			addInternalComponent(tgc, 0);
+			return true;
+		}
+		if (tgc instanceof ELNComponentInductor) {
+			tgc.setFather(this);
+			tgc.setDrawingZone(true);
+			tgc.resizeWithFather();
+			addInternalComponent(tgc, 0);
+			return true;
+		}
+		if (tgc instanceof ELNComponentResistor) {
+			tgc.setFather(this);
+			tgc.setDrawingZone(true);
+			tgc.resizeWithFather();
+			addInternalComponent(tgc, 0);
+			return true;
+		}
+		if (tgc instanceof ELNComponentTransmissionLine) {
+			tgc.setFather(this);
+			tgc.setDrawingZone(true);
+			tgc.resizeWithFather();
+			addInternalComponent(tgc, 0);
+			return true;
+		}
+		if (tgc instanceof ELNComponentVoltageControlledCurrentSource) {
+			tgc.setFather(this);
+			tgc.setDrawingZone(true);
+			tgc.resizeWithFather();
+			addInternalComponent(tgc, 0);
+			return true;
+		}
+		if (tgc instanceof ELNComponentVoltageControlledVoltageSource) {
+			tgc.setFather(this);
+			tgc.setDrawingZone(true);
+			tgc.resizeWithFather();
+			addInternalComponent(tgc, 0);
+			return true;
+		}
+		if (tgc instanceof ELNComponentCurrentSinkTDF) {
+			tgc.setFather(this);
+			tgc.setDrawingZone(true);
+			tgc.resizeWithFather();
+			addInternalComponent(tgc, 0);
+			return true;
+		}
+		if (tgc instanceof ELNComponentCurrentSourceTDF) {
+			tgc.setFather(this);
+			tgc.setDrawingZone(true);
+			tgc.resizeWithFather();
+			addInternalComponent(tgc, 0);
+			return true;
+		}
+		if (tgc instanceof ELNComponentVoltageSinkTDF) {
+			tgc.setFather(this);
+			tgc.setDrawingZone(true);
+			tgc.resizeWithFather();
+			addInternalComponent(tgc, 0);
+			return true;
+		}
+		if (tgc instanceof ELNComponentVoltageSourceTDF) {
 			tgc.setFather(this);
 			tgc.setDrawingZone(true);
 			tgc.resizeWithFather();
@@ -233,6 +359,20 @@ public class ELNModule extends TGCScalableWithInternalComponent implements Swall
 			return true;
 		}
 		if (tgc instanceof ELNModuleTerminal) {
+			tgc.setFather(this);
+			tgc.setDrawingZone(true);
+			tgc.resizeWithFather();
+			addInternalComponent(tgc, 0);
+			return true;
+		}
+		if (tgc instanceof SysCAMSPortDE) {
+			tgc.setFather(this);
+			tgc.setDrawingZone(true);
+			tgc.resizeWithFather();
+			addInternalComponent(tgc, 0);
+			return true;
+		}
+		if (tgc instanceof SysCAMSPortTDF) {
 			tgc.setFather(this);
 			tgc.setDrawingZone(true);
 			tgc.resizeWithFather();
@@ -249,7 +389,43 @@ public class ELNModule extends TGCScalableWithInternalComponent implements Swall
 	public void hasBeenResized() {
 		rescaled = true;
 		for(int i=0; i<nbInternalTGComponent; i++) {
-			if (tgcomponent[i] instanceof ELNComponent) {
+			if (tgcomponent[i] instanceof ELNComponentCapacitor) {
+				tgcomponent[i].resizeWithFather();
+			}
+			if (tgcomponent[i] instanceof ELNComponentIdealTransformer) {
+				tgcomponent[i].resizeWithFather();
+			}
+			if (tgcomponent[i] instanceof ELNComponentIndependentCurrentSource) {
+				tgcomponent[i].resizeWithFather();
+			}
+			if (tgcomponent[i] instanceof ELNComponentIndependentVoltageSource) {
+				tgcomponent[i].resizeWithFather();
+			}
+			if (tgcomponent[i] instanceof ELNComponentInductor) {
+				tgcomponent[i].resizeWithFather();
+			}
+			if (tgcomponent[i] instanceof ELNComponentResistor) {
+				tgcomponent[i].resizeWithFather();
+			}
+			if (tgcomponent[i] instanceof ELNComponentTransmissionLine) {
+				tgcomponent[i].resizeWithFather();
+			}
+			if (tgcomponent[i] instanceof ELNComponentVoltageControlledCurrentSource) {
+				tgcomponent[i].resizeWithFather();
+			}
+			if (tgcomponent[i] instanceof ELNComponentVoltageControlledVoltageSource) {
+				tgcomponent[i].resizeWithFather();
+			}
+			if (tgcomponent[i] instanceof ELNComponentCurrentSinkTDF) {
+				tgcomponent[i].resizeWithFather();
+			}
+			if (tgcomponent[i] instanceof ELNComponentCurrentSourceTDF) {
+				tgcomponent[i].resizeWithFather();
+			}
+			if (tgcomponent[i] instanceof ELNComponentVoltageSinkTDF) {
+				tgcomponent[i].resizeWithFather();
+			}
+			if (tgcomponent[i] instanceof ELNComponentVoltageSourceTDF) {
 				tgcomponent[i].resizeWithFather();
 			}
 			if (tgcomponent[i] instanceof ELNComponentNodeRef) {
@@ -258,6 +434,15 @@ public class ELNModule extends TGCScalableWithInternalComponent implements Swall
 			if (tgcomponent[i] instanceof ELNModuleTerminal) {
 				tgcomponent[i].resizeWithFather();
 			}
+			if (tgcomponent[i] instanceof SysCAMSPortDE) {
+				tgcomponent[i].resizeWithFather();
+			}
+			if (tgcomponent[i] instanceof SysCAMSPortTDF) {
+				tgcomponent[i].resizeWithFather();
+			}
+		}
+		if (getFather() != null) {
+			resizeWithFather();
 		}
 	}
 	
@@ -274,11 +459,10 @@ public class ELNModule extends TGCScalableWithInternalComponent implements Swall
 
 	public void resizeWithFather() {
 		if ((father != null) && (father instanceof ELNCluster)) {
-			setCdRectangle(0 - getWidth() / 2, father.getWidth() - (getWidth() / 2), 0 - getHeight() / 2,
-					father.getHeight() - (getHeight() / 2));
+			resizeToFatherSize();
+
+			setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
 			setMoveCd(x, y);
-			oldx = -1;
-			oldy = -1;
 		}
 	}
 
