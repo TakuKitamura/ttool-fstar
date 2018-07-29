@@ -70,7 +70,7 @@ public class ELNCluster extends TGCScalableWithInternalComponent implements Swal
 	public ELNCluster(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-		initScaling(400, 600);
+		initScaling(400, 400);
 
 		oldScaleFactor = tdp.getZoom();
 		dtextX = textX * oldScaleFactor;
@@ -222,32 +222,25 @@ public class ELNCluster extends TGCScalableWithInternalComponent implements Swal
 				}
 			}
 		}
-
 		if (swallowed) {
 			return true;
 		}
-
 		if (!acceptSwallowedTGComponent(tgc)) {
 			return false;
 		}
-
 		tgc.setFather(this);
 		tgc.setDrawingZone(true);
 
 		if (tgc instanceof ELNModule) {
 			tgc.resizeWithFather();
 		}
-
 		if (tgc instanceof SysCAMSPortDE) {
 			tgc.resizeWithFather();
 		}
-
 		if (tgc instanceof SysCAMSPortTDF) {
 			tgc.resizeWithFather();
 		}
-
 		addInternalComponent(tgc, 0);
-
 		return true;
 	}
 
