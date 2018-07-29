@@ -2926,12 +2926,6 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     public String findELNComponentName(String name) {
     	return this.findGoodName(name, new NameChecker() {
-    		public boolean checkELNCluster(ELNCluster o, String name) {
-    			return o.getValue().equals(name);
-    		}
-    		public boolean checkELNModule(ELNModule o, String name) {
-    			return o.getValue().equals(name);
-    		}
     		public boolean checkELNComponentNodeRef(ELNComponentNodeRef o, String name) {
     			return o.getValue().equals(name);
     		}
@@ -2973,6 +2967,22 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     		}
     		public boolean checkELNComponentVoltageSourceTDF(ELNComponentVoltageSourceTDF o, String name) {
     			return o.getValue().equals(name);
+    		}
+    		public boolean checkELNModule(ELNModule o, String name) {
+    			if (o.getValue().equals(name))
+    				return true;
+    			for (int i = 0; i < o.getNbInternalTGComponent(); i++)
+    				if (this.isNameAlreadyTaken(o.getInternalTGComponent(i), name))
+    					return true;
+    			return false;
+    		}
+    		public boolean checkELNCluster(ELNCluster o, String name) {
+    			if (o.getValue().equals(name))
+    				return true;
+    			for (int i = 0; i < o.getNbInternalTGComponent(); i++)
+    				if (this.isNameAlreadyTaken(o.getInternalTGComponent(i), name))
+    					return true;
+    			return false;
     		}
     	});
     }
