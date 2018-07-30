@@ -895,8 +895,9 @@ public class ActionPerformer {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLCP_START_STATE);
         } else if (command.equals(mgui.actions[TGUIAction.TMLCP_STOP].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLCP_STOP_STATE);
-        } else if (command.equals(mgui.actions[TGUIAction.TMLCP_JUNCTION].getActionCommand())) {
-            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLCP_JUNCTION);
+        // Issue #69 Removed unused TMLCPJunction
+//        } else if (command.equals(mgui.actions[TGUIAction.TMLCP_JUNCTION].getActionCommand())) {
+//            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLCP_JUNCTION);
         } else if (command.equals(mgui.actions[TGUIAction.TMLCP_FOR_LOOP].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLCP_FOR_LOOP);
         } else if (command.equals(mgui.actions[TGUIAction.TMLSD_EDIT].getActionCommand())) {

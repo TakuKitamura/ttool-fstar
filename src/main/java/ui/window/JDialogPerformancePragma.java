@@ -43,10 +43,21 @@ import ui.util.IconManager;
 
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
-import java.awt.*;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.ComponentOrientation;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Frame;
+import java.awt.Insets;
+import java.awt.Point;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Class JDialogPragma
@@ -67,7 +78,7 @@ public class JDialogPerformancePragma extends JDialogBase implements ActionListe
     protected JMenuBar menuBar;
     protected JMenu help;
     protected JPopupMenu helpPopup;
-    public HashMap<String, java.util.List<String>> blockAttributeMap = new HashMap<String, java.util.List<String>>();
+    public Map<String, List<String>> blockAttributeMap = new HashMap<String, java.util.List<String>>();
 
     /**
      * Creates new form
@@ -85,7 +96,7 @@ public class JDialogPerformancePragma extends JDialogBase implements ActionListe
         //Form list of all blocks
         //For each block, create a list of all states and signals
 
-        private JList list;
+        private JList<String> list;
         private JPopupMenu popupMenu;
         private String subWord;
         private final int insertionPosition;
@@ -112,8 +123,8 @@ public class JDialogPerformancePragma extends JDialogBase implements ActionListe
             }
         }
 
-        private JList createSuggestionList(int linePosition, final int position, final String subWord) {
-            ArrayList<String> matches = new ArrayList<String>();
+        private JList<String> createSuggestionList(int linePosition, final int position, final String subWord) {
+            List<String> matches = new ArrayList<String>();
             if (linePosition < 6) {
                 matches.add("Latency(");
             } else if (!subWord.contains(".")) {
@@ -257,7 +268,6 @@ public class JDialogPerformancePragma extends JDialogBase implements ActionListe
     }
 
     protected void initComponents() {
-
         Container c = getContentPane();
         Font f = new Font("Helvetica", Font.PLAIN, 14);
         setFont(f);

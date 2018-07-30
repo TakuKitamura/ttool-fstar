@@ -42,6 +42,7 @@ package avatartranslator;
 import myutil.TraceManager;
 
 import java.util.LinkedList;
+import java.util.List;
 
 
 /**
@@ -52,20 +53,23 @@ import java.util.LinkedList;
  */
 public class AvatarActionOnSignal extends AvatarStateMachineElement {
     private AvatarSignal signal;
-    private LinkedList<String> values;
+    private List<String> values;
 	private boolean checkLatency;
 
-    public AvatarActionOnSignal(String _name, AvatarSignal _signal, Object _referenceObject) {
-        super(_name, _referenceObject);
-        signal = _signal;
-        values = new LinkedList<String>();
-    }
 
-    public AvatarActionOnSignal(String _name, AvatarSignal _signal, Object _referenceObject, boolean _isCheckable, boolean _isChecked) {
-        super(_name, _referenceObject, _isCheckable, _isChecked);
-        signal = _signal;
-        values = new LinkedList<String>();
-    }
+	public AvatarActionOnSignal(String _name, AvatarSignal _signal, Object _referenceObject ) {
+		this( _name, _signal, _referenceObject, false );
+	}
+
+	public AvatarActionOnSignal(	String _name,
+									AvatarSignal _signal,
+									Object _referenceObject,
+									boolean _isCheckable ) {
+		super( _name, _referenceObject, _isCheckable, false );
+		
+		signal = _signal;
+		values = new LinkedList<String>();
+	}
 
     public AvatarSignal getSignal() {
         return signal;
@@ -75,7 +79,7 @@ public class AvatarActionOnSignal extends AvatarStateMachineElement {
         values.add(_val);
     }
 
-    public LinkedList<String> getValues() {
+    public List<String> getValues() {
         return values;
     }
 
@@ -104,32 +108,32 @@ public class AvatarActionOnSignal extends AvatarStateMachineElement {
     }
 
     public AvatarActionOnSignal basicCloneMe(AvatarStateMachineOwner _block) {
-        //TraceManager.addDev("I HAVE BEEN CLONED: " + this);
-	AvatarSignal sig = _block.getAvatarSignalWithName(getSignal().getName());
-	if (sig != null) {
-	    AvatarActionOnSignal aaos = new AvatarActionOnSignal(getName() + "__clone", sig, getReferenceObject(), isCheckable(), isChecked());
-	    for(int i=0; i<getNbOfValues(); i++) {
-		aaos.addValue(getValue(i));
-	    }
-	    return aaos;
-	} else {
-	    TraceManager.addDev("NULL signal in new spec: " + getSignal().getName());
-	}
+    	//TraceManager.addDev("I HAVE BEEN CLONED: " + this);
+    	AvatarSignal sig = _block.getAvatarSignalWithName(getSignal().getName());
+    	if (sig != null) {
+    		AvatarActionOnSignal aaos = new AvatarActionOnSignal(getName() + "__clone", sig, getReferenceObject(), isCheckable()/*, isChecked()*/);
+    		for(int i=0; i<getNbOfValues(); i++) {
+    			aaos.addValue(getValue(i));
+    		}
+    		return aaos;
+    	} else {
+    		TraceManager.addDev("NULL signal in new spec: " + getSignal().getName());
+    	}
 
-        return null;
+    	return null;
     }
 
     public String getExtendedName() {
-	if (getSignal() == null) {
-	    String s = getName() + " refobjt=" + referenceObject.toString();
-	    TraceManager.addDev("Null signal" + " res=" + s);
-	    return s;
-	}
-	if (getName() == null) {
-	    TraceManager.addDev("Null name");
-	}
+    	if (getSignal() == null) {
+    		String s = getName() + " refobjt=" + referenceObject.toString();
+    		TraceManager.addDev("Null signal" + " res=" + s);
+    		return s;
+    	}
+    	if (getName() == null) {
+    		TraceManager.addDev("Null name");
+    	}
 
-        return getName() + ":" + getSignal().getName();
+    	return getName() + ":" + getSignal().getName();
     }
 
     public String getNiceName() {

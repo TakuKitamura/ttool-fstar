@@ -1078,7 +1078,7 @@ public class GTMLModeling {
                     if (!(alreadyConsidered.contains(port1))) {
                         portstome = tmlcdp.tmlctdp.getPortsConnectedTo(port1, componentsToTakeIntoAccount);
                         //TraceManager.addDev("Considering port1 = " +port1.getPortName() + " size of connecting ports:" + portstome.size());
-                        Iterator<?> ite = portstome.listIterator();
+                       // Iterator<?> ite = portstome.listIterator();
                         /*while(ite.hasNext()) {
                             TraceManager.addDev("port=" + ((TMLCPrimitivePort)(ite.next())).getPortName());
                         }*/
@@ -2691,6 +2691,8 @@ public class GTMLModeling {
           // Syntax has been checked -> splitting ads
           // The splitting works only if there is no other operations than sequences and references to ADs/SDs
           // between forks and joins
+    	
+    	// Issue #69; Unused TMLCPJunction
           tmlcp.splitADs();
 
           TraceManager.addDev("<--- TMLCP modeling:");
@@ -3078,7 +3080,8 @@ public class GTMLModeling {
         tmlcp.correctReferences(); //Update references to the right activity and sequence diagrams
         //tmlcp.generateNexts(); // Add nexts elements to CPElements
         //tmlcp.removeADConnectors(); // Remove connectors since nexts have been filled
-        tmlcp.splitADs(); // Splitting ADs so as to remove junctions -> new ADs are introduced for each junction inside an AD
+        // Issue #69; Unused TMLCPJunction
+        //tmlcp.splitADs(); // Splitting ADs so as to remove junctions -> new ADs are introduced for each junction inside an AD
 
         /*for( TMLCPSequenceDiagram seqDiag: tmlcp.getCPSequenceDiagrams() )      {
           TraceManager.addDev( "**********" );
@@ -3096,7 +3099,7 @@ public class GTMLModeling {
             throws MalformedTMLDesignException {
         tmltranslator.tmlcp.TMLCPStart start;
         tmltranslator.tmlcp.TMLCPStop stop;
-        tmltranslator.tmlcp.TMLCPJunction junction;
+      //  tmltranslator.tmlcp.TMLCPJunction junction;
         tmltranslator.tmlcp.TMLCPJoin join;
         tmltranslator.tmlcp.TMLCPFork fork;
         tmltranslator.tmlcp.TMLCPChoice choice;
@@ -3157,11 +3160,12 @@ public class GTMLModeling {
                     refAD = new tmltranslator.tmlcp.TMLCPRefAD(compID, component);
                     AD.addTMLCPElement(refAD);
                 }
-                if (component instanceof ui.tmlcp.TMLCPJunction) {
-                    //TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() + "\t" + component.getY() );
-                    junction = new tmltranslator.tmlcp.TMLCPJunction(compID, component);
-                    AD.addTMLCPElement(junction);
-                }
+                // Issue #69; Unused TMLCPJunction
+//                if (component instanceof ui.tmlcp.TMLCPJunction) {
+//                    //TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() + "\t" + component.getY() );
+//                    junction = new tmltranslator.tmlcp.TMLCPJunction(compID, component);
+//                    AD.addTMLCPElement(junction);
+//                }
                 if (component instanceof ui.tmlcp.TMLCPJoin) {
                     //TraceManager.addDev( k + " " + component.getName() + "\t" + component.getValue() + "\t" + component.getY() );
                     join = new tmltranslator.tmlcp.TMLCPJoin(compID, component);

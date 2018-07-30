@@ -14,5 +14,8 @@
 	<classpathentry kind="lib" path="/libs/commons-math3-3.6.1.jar"/>
 	<classpathentry kind="lib" path="/libs/batik-dom.jar"/>
 	<classpathentry kind="lib" path="/libs/batik-svggen.jar"/>
+	<classpathentry kind="lib" path="/libs/batik-awt-util.jar"/>
+	<classpathentry kind="lib" path="/libs/batik-xml.jar"/>
+	<classpathentry kind="lib" path="/libs/batik-util.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

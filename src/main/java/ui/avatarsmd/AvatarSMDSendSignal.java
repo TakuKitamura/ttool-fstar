@@ -36,27 +36,35 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatarsmd;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.geom.Line2D;
+import java.util.List;
+import java.util.Vector;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import myutil.GraphicLib;
-import ui.*;
+import ui.AvatarSignal;
+import ui.BasicErrorHighlight;
+import ui.CheckableAccessibility;
+import ui.CheckableLatency;
+import ui.ColorManager;
+import ui.ErrorHighlight;
+import ui.LinkedReference;
+import ui.PartOfInvariant;
+import ui.TDiagramPanel;
+import ui.TGComponent;
+import ui.TGComponentManager;
+import ui.TGConnectingPoint;
+import ui.avatarrd.AvatarRDRequirement;
+import ui.tmlad.TMLADWriteChannel;
 import ui.util.IconManager;
 import ui.window.JDialogAvatarSignal;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.geom.Line2D;
-import java.util.LinkedList;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.Vector;
-import ui.avatarrd.AvatarRDRequirement;
-
-import ui.tmlad.TMLADWriteChannel;
 /**
    * Class AvatarSMDSendSignal
    * Action of sending a signal
@@ -105,11 +113,13 @@ public class AvatarSMDSendSignal extends AvatarSMDBasicComponent implements Chec
         myImageIcon = IconManager.imgic904;
 		latencyVals = new ConcurrentHashMap<String, String>();
     }
+    
 	public void addLatency(String name, String num){
 		latencyVals.put(name,num);
 	}
+	
+	@Override
     public void internalDrawing(Graphics g) {
-
         int w  = g.getFontMetrics().stringWidth(value);
         int w1 = Math.max(minWidth, w + 2 * textX);
         if ((w1 != width) & (!tdp.isScaled())) {
@@ -289,6 +299,7 @@ public class AvatarSMDSendSignal extends AvatarSMDBasicComponent implements Chec
 		}
 	}
 
+	@Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -353,10 +364,11 @@ public class AvatarSMDSendSignal extends AvatarSMDBasicComponent implements Chec
         return AvatarSignal.getValue(value, _index);
     }
 
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
-        LinkedList<AvatarSignal> signals = tdp.getMGUI().getAllSignals();
+        List<AvatarSignal> signals = tdp.getMGUI().getAllSignals();
         //TraceManager.addDev("Nb of signals:" + signals.size());
-		ArrayList<TGComponent> comps = tdp.getMGUI().getAllLatencyChecks();
+		List<TGComponent> comps = tdp.getMGUI().getAllLatencyChecks();
 		
 		Vector<TGComponent> refs = new Vector<TGComponent>();
 		for (TGComponent req: tdp.getMGUI().getAllRequirements()){
@@ -466,15 +478,17 @@ public class AvatarSMDSendSignal extends AvatarSMDBasicComponent implements Chec
       makeValue();
       }*/
 
-
+	@Override
     public int getType() {
         return TGComponentManager.AVATARSMD_SEND_SIGNAL;
     }
 
+	@Override
     public int getDefaultConnector() {
         return TGComponentManager.AVATARSMD_CONNECTOR;
     }
 
+	@Override
     public void setStateAction(int _stateAction) {
         stateOfError = _stateAction;
     }

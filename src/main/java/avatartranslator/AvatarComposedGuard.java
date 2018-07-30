@@ -36,10 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package avatartranslator;
 
 /**
@@ -49,7 +45,8 @@ package avatartranslator;
    * @author Florian LUGOU
  */
 public abstract class AvatarComposedGuard extends AvatarGuard {
-    public AvatarComposedGuard getOpposite () {
+    
+	public AvatarComposedGuard getOpposite () {
         return new AvatarUnaryGuard ("not", "(", ")", this);
     }
 

@@ -36,18 +36,25 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
 
-import ui.util.IconManager;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.LinkedList;
+import java.util.List;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.border.TitledBorder;
 
 /**
  * Class JDialogAvatarTimer
@@ -58,7 +65,7 @@ import java.util.LinkedList;
  */
 public class JDialogAvatarTimer extends JDialogBase implements ActionListener  {
 
-    private LinkedList<String> timers;
+    private List<String> timers;
 
     private boolean cancelled = true;
     private JPanel panel1, panel2;
@@ -77,8 +84,7 @@ public class JDialogAvatarTimer extends JDialogBase implements ActionListener  {
 
 
     /** Creates new form  */
-    public JDialogAvatarTimer(Frame _f, String _title, String _timer, String _value, LinkedList<String> _timers, boolean _setValue) {
-
+    public JDialogAvatarTimer(Frame _f, String _title, String _timer, String _value, List<String> _timers, boolean _setValue) {
         super(_f, _title, true);
 
         timers = _timers;
@@ -87,13 +93,13 @@ public class JDialogAvatarTimer extends JDialogBase implements ActionListener  {
         setValue = _setValue;
 
         initComponents();
-        myInitComponents();
+     //   myInitComponents();
         pack();
     }
-
-
-    private void myInitComponents() {
-    }
+//
+//
+//    private void myInitComponents() {
+//    }
 
     private void initComponents() {
         Container c = getContentPane();
@@ -102,7 +108,7 @@ public class JDialogAvatarTimer extends JDialogBase implements ActionListener  {
         GridBagLayout gridbag2 = new GridBagLayout();
         GridBagConstraints c0 = new GridBagConstraints();
         GridBagConstraints c1 = new GridBagConstraints();
-        GridBagConstraints c2 = new GridBagConstraints();
+        //GridBagConstraints c2 = new GridBagConstraints();
 
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         c.setLayout(gridbag0);
@@ -112,7 +118,7 @@ public class JDialogAvatarTimer extends JDialogBase implements ActionListener  {
         panel1 = new JPanel();
         panel1.setLayout(gridbag1);
 
-        panel1.setBorder(new javax.swing.border.TitledBorder("Timer"));
+        panel1.setBorder(new TitledBorder("Timer"));
 
         panel1.setPreferredSize(new Dimension(300, 150));
 

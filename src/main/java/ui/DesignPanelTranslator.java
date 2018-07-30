@@ -60,11 +60,11 @@ import java.util.Vector;
  */
 public class DesignPanelTranslator {
     protected TURTLEDesignPanelInterface dp;
-    protected LinkedList<CheckingError> checkingErrors, warnings;
+    protected List<CheckingError> checkingErrors, warnings;
     protected CorrespondanceTGElement listE; // usual list
     protected CorrespondanceTGElement listB; // list for particular element -> first element of group of blocks
-    protected LinkedList <TDiagramPanel> panels;
-    protected LinkedList <ActivityDiagram> activities;
+    protected List <TDiagramPanel> panels;
+    protected List <ActivityDiagram> activities;
 
     public DesignPanelTranslator(TURTLEDesignPanelInterface _dp) {
         dp = _dp;
@@ -80,11 +80,11 @@ public class DesignPanelTranslator {
         activities = new LinkedList <ActivityDiagram>();
     }
 
-    public LinkedList<CheckingError> getErrors() {
+    public List<CheckingError> getErrors() {
         return checkingErrors;
     }
 
-    public LinkedList<CheckingError> getWarnings() {
+    public List<CheckingError> getWarnings() {
         return warnings;
     }
 
@@ -93,7 +93,7 @@ public class DesignPanelTranslator {
     }
 
     public TURTLEModeling generateTURTLEModeling() {
-        LinkedList<TClassInterface> tclasses = new LinkedList<TClassInterface>();
+        List<TClassInterface> tclasses = new LinkedList<TClassInterface>();
 
         for (Object tgc: dp.getStructurePanel ().getComponentList ())
             if (tgc instanceof TClassInterface)
@@ -102,7 +102,7 @@ public class DesignPanelTranslator {
         return generateTURTLEModeling(tclasses, "");
     }
 
-    public TURTLEModeling generateTURTLEModeling(LinkedList<TClassInterface> tclasses, String preName) {
+    public TURTLEModeling generateTURTLEModeling(List<TClassInterface> tclasses, String preName) {
         TURTLEModeling tmodel = new TURTLEModeling();
         addTClasses(dp, tclasses, preName, tmodel);
         addRelations(dp, tmodel);
@@ -124,7 +124,7 @@ public class DesignPanelTranslator {
     }
 
 
-    public void addTClasses(TURTLEDesignPanelInterface dp, LinkedList<TClassInterface> tclasses, String preName, TURTLEModeling tm) {
+    public void addTClasses(TURTLEDesignPanelInterface dp, List<TClassInterface> tclasses, String preName, TURTLEModeling tm) {
         TDiagramPanel tdp;
         // search for class diagram panels
         tdp = dp.panelAt(0);
@@ -135,8 +135,8 @@ public class DesignPanelTranslator {
             addTClassesFromPanel(tdp, (ClassDiagramPanelInterface)tdp, tclasses, preName, tm);
     }
 
-    private void addTClassesFromPanel(TDiagramPanel diag, ClassDiagramPanelInterface tdp, LinkedList<TClassInterface> tclasses, String preName, TURTLEModeling tm) {
-       // LinkedList list = tdp.getComponentList();
+    private void addTClassesFromPanel(TDiagramPanel diag, ClassDiagramPanelInterface tdp, List<TClassInterface> tclasses, String preName, TURTLEModeling tm) {
+       // List list = tdp.getComponentList();
 
         // search for tclasses
         for (Object tgc: tdp.getComponentList ())
@@ -1156,7 +1156,7 @@ public class DesignPanelTranslator {
         return -1;
     }
 
-    private void setGatesOf(Relation r, LinkedList<TTwoAttributes> gates, TClass tc1, TClass tc2) {
+    private void setGatesOf(Relation r, List<TTwoAttributes> gates, TClass tc1, TClass tc2) {
         Gate g1, g2;
 
         for (TTwoAttributes tt: gates) {
@@ -1174,7 +1174,7 @@ public class DesignPanelTranslator {
      * Seems like we can't instantiate TCDWatchdogOperator
      * and the setWatchdogGatesOf function is buggy: it uses
      * TTwoAttributes as if they were TAttribute.
-    private void setWatchdogGatesOf(Relation r, LinkedList<TTwoAttributes> gates, TClass tc1, TClass tc2) {
+    private void setWatchdogGatesOf(Relation r, List<TTwoAttributes> gates, TClass tc1, TClass tc2) {
 
         for (TTwoAttributes t: gates) {
             Gate g1 = tc1.getGateByName(((TAttribute) t).getId());

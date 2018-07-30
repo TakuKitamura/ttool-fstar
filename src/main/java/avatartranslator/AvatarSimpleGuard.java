@@ -36,12 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package avatartranslator;
-
 
 /**
  * An AvatarSimpleGuard is an {@link AvatarGuard} that is of the form:

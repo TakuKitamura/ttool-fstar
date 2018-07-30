@@ -39,13 +39,40 @@
 
 package avatartranslator.toexecutable;
 
-import avatartranslator.*;
-import common.SpecConfigTTool;
-import myutil.*;
-
 import java.io.File;
-import java.util.LinkedList;
+import java.util.List;
 import java.util.Vector;
+
+import avatartranslator.AvatarAction;
+import avatartranslator.AvatarActionAssignment;
+import avatartranslator.AvatarActionOnSignal;
+import avatartranslator.AvatarArithmeticOp;
+import avatartranslator.AvatarAttribute;
+import avatartranslator.AvatarBlock;
+import avatartranslator.AvatarConstant;
+import avatartranslator.AvatarLeftHand;
+import avatartranslator.AvatarMethod;
+import avatartranslator.AvatarRandom;
+import avatartranslator.AvatarRelation;
+import avatartranslator.AvatarSignal;
+import avatartranslator.AvatarSpecification;
+import avatartranslator.AvatarStartState;
+import avatartranslator.AvatarState;
+import avatartranslator.AvatarStateMachine;
+import avatartranslator.AvatarStateMachineElement;
+import avatartranslator.AvatarStopState;
+import avatartranslator.AvatarTerm;
+import avatartranslator.AvatarTermFunction;
+import avatartranslator.AvatarTermRaw;
+import avatartranslator.AvatarTransition;
+import avatartranslator.AvatarTuple;
+import avatartranslator.AvatarType;
+import common.SpecConfigTTool;
+import myutil.Conversion;
+import myutil.FileException;
+import myutil.FileUtils;
+import myutil.Plugin;
+import myutil.TraceManager;
 
 /**
  * Class AVATAR2CPOSIX
@@ -63,7 +90,7 @@ public class AVATAR2CPOSIX {
 
     private final static String UNUSED_ATTR = "__attribute__((unused))";
     private final static String GENERATED_PATH = "generated_src" + File.separator;
-    private final static String UNKNOWN = "UNKNOWN";
+    //private final static String UNKNOWN = "UNKNOWN";
     private final static String CR = "\n";
 
     private AvatarSpecification avspec;
@@ -305,8 +332,8 @@ public class AVATAR2CPOSIX {
 
     private void makeMethod(AvatarBlock _block, AvatarMethod _am, Vector<String> _allNames, TaskFile _taskFile) {
         String ret = "";
-        LinkedList<AvatarAttribute> list;
-        LinkedList<AvatarAttribute> listA;
+        List<AvatarAttribute> list;
+        List<AvatarAttribute> listA;
 
         String nameMethod = _block.getName() + "__" + _am.getName();
 
@@ -503,8 +530,7 @@ public class AVATAR2CPOSIX {
     }
 
     public String makeBehaviourFromElement(AvatarBlock _block, AvatarStateMachineElement _asme, boolean firstCall) {
-        AvatarStateMachineElement asme0;
-
+        //AvatarStateMachineElement asme0;
 
         if (_asme == null) {
             return "";
@@ -536,7 +562,7 @@ public class AVATAR2CPOSIX {
                 ret += "waitFor(" + reworkDelay(at.getMinDelay()) + ", " + reworkDelay(at.getMaxDelay()) + ");" + CR;
             }
 
-            String act;
+            //String act;
             ret += makeActionsOfTransaction(_block, at);
             /*for(i=0; i<at.getNbOfAction(); i++) {
             // Must know whether this is an action or a method call
@@ -649,7 +675,7 @@ public class AVATAR2CPOSIX {
             AvatarActionOnSignal aaos = (AvatarActionOnSignal) _asme;
             ret += makeSignalAction(aaos, 0, false, "", "");
             AvatarSignal as = aaos.getSignal();
-            AvatarRelation ar = avspec.getAvatarRelationWithSignal(as);
+            //AvatarRelation ar = avspec.getAvatarRelationWithSignal(as);
             ret += executeOneRequest("__req0");
             ret += traceRequest();
         }

@@ -36,13 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package avatartranslator;
 
-import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -52,7 +48,8 @@ import java.util.HashMap;
  * @author Florian LUGOU
  */
 public class AvatarGuardEmpty extends AvatarGuard {
-    public AvatarGuardEmpty () {
+    
+	public AvatarGuardEmpty () {
     }
 
     public boolean isGuarded () {
@@ -69,5 +66,5 @@ public class AvatarGuardEmpty extends AvatarGuard {
     }
 
     @Override
-    public void replaceAttributes (HashMap<AvatarAttribute, AvatarAttribute> attributesMapping) { }
+    public void replaceAttributes( Map<AvatarAttribute, AvatarAttribute> attributesMapping) { }
 }

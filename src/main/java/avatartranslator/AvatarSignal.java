@@ -36,10 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package avatartranslator;
 
 /**
@@ -51,7 +47,7 @@ package avatartranslator;
  */
 public class AvatarSignal extends AvatarMethod {
 
-    // Signa type
+    // Signal type
     public final static int IN = 0;
     public final static int OUT = 1;
 
@@ -59,8 +55,9 @@ public class AvatarSignal extends AvatarMethod {
 
     public AvatarSignal(String _name, int _inout, Object _referenceObject) {
         super(_name, _referenceObject);
+        
         inout = _inout;
-	name = _name;
+        name = _name;
     }
 
     public int getInOut() {
@@ -87,6 +84,7 @@ public class AvatarSignal extends AvatarMethod {
         return AvatarTerm.isValidName (_signal);
     }
 
+    @Override
     public String toString() {
         String ret = super.toString();
         if (isOut()) {
@@ -95,7 +93,7 @@ public class AvatarSignal extends AvatarMethod {
         return "in " + ret;
     }
 
-
+    @Override
     public String toBasicString() {
         String ret = super.toBasicString();
         if (isOut()) {
@@ -139,18 +137,18 @@ public class AvatarSignal extends AvatarMethod {
         return cumul;
 	}*/
     //fin DG 
-    public AvatarSignal advancedClone(AvatarStateMachineOwner _block) {
-	AvatarSignal as = new AvatarSignal(getName(), getInOut(), getReferenceObject());
-	setAdvancedClone(as, _block);
-	return as;
-    }
-
-
-    public boolean isCompatibleWith(AvatarSignal _as) {
-	if (getInOut() == _as.getInOut()) {
-	    return false;
+	public AvatarSignal advancedClone(AvatarStateMachineOwner _block) {
+		AvatarSignal as = new AvatarSignal(getName(), getInOut(), getReferenceObject());
+		setAdvancedClone(as, _block);
+		return as;
 	}
 
-	return super.isCompatibleWith(_as);
-    }
+
+	public boolean isCompatibleWith(AvatarSignal _as) {
+		if (getInOut() == _as.getInOut()) {
+			return false;
+		}
+
+		return super.isCompatibleWith(_as);
+	}
 }

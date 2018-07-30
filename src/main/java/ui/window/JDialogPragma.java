@@ -36,17 +36,27 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package ui.window;
 
 import ui.util.IconManager;
 
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
-import java.awt.*;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.ComponentOrientation;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Frame;
+import java.awt.Insets;
+import java.awt.Point;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -68,8 +78,8 @@ public class JDialogPragma extends JDialogBase implements ActionListener {
     protected JButton cancel;
     protected JMenu help;
     private JPopupMenu helpPopup;
-    public HashMap<String, java.util.List<String>> blockAttributeMap = new HashMap<>();
-    public HashMap<String, java.util.List<String>> blockStateMap = new HashMap<>();
+    public Map<String, java.util.List<String>> blockAttributeMap = new HashMap<>();
+    public Map<String, java.util.List<String>> blockStateMap = new HashMap<>();
 
     /**
      * Creates new form
@@ -85,7 +95,7 @@ public class JDialogPragma extends JDialogBase implements ActionListener {
 
     public class SuggestionPanel {
         private final String[] pragma = {"#Authenticity", "#Confidentiality", "#PublicConstant", "#PrivateConstant", "#InitialSessionKnowledge", "#InitialSystemKnowledge", "#PrivatePublicKeys", "#Public", "#SecrecyAssumption", "#Secret"};
-        private JList list;
+        private JList<String> list;
         private JPopupMenu popupMenu;
         private String subWord;
         private final int insertionPosition;
@@ -111,8 +121,8 @@ public class JDialogPragma extends JDialogBase implements ActionListener {
             }
         }
 
-        private JList createSuggestionList(final int position, final String subWord, String header) {
-            ArrayList<String> matches = new ArrayList<>();
+        private JList<String> createSuggestionList(final int position, final String subWord, String header) {
+            List<String> matches = new ArrayList<>();
             if (subWord.startsWith("#")) {
                 for (String p : pragma) {
                     if (p.startsWith(subWord)) {
@@ -291,7 +301,6 @@ public class JDialogPragma extends JDialogBase implements ActionListener {
     }
 
     protected void initComponents() {
-
         Container c = getContentPane();
         Font f = new Font("Helvetica", Font.PLAIN, 14);
         setFont(f);
@@ -358,11 +367,9 @@ public class JDialogPragma extends JDialogBase implements ActionListener {
             }
         });
 
-
         JScrollPane jsp = new JScrollPane(textarea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         jsp.setPreferredSize(new Dimension(300, 300));
         c.add(jsp, BorderLayout.CENTER);
-
 
         close = new JButton("Ok", IconManager.imgic25);
         cancel = new JButton("Cancel", IconManager.imgic27);

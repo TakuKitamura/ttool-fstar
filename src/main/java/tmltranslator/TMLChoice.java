@@ -36,14 +36,12 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator;
 
 import myutil.Conversion;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class TMLChoice
@@ -52,7 +50,7 @@ import java.util.ArrayList;
  * @author Ludovic APVRILLE
  */
 public class TMLChoice extends TMLActivityElement{
-    private ArrayList<String> guards;
+    private List<String> guards;
 
     public TMLChoice(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
@@ -331,13 +329,11 @@ public class TMLChoice extends TMLActivityElement{
         }
     }
 
-    
     public String customExtraToXML() {
-	String g = "";
-	for(String s: guards) {
-	    g += s + ";";
-	}
-	return " guards=\"" + g + "\" ";
+    	String g = "";
+    	for(String s: guards) {
+    		g += s + ";";
+    	}
+    	return " guards=\"" + g + "\" ";
     }
-
 }

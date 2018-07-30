@@ -36,14 +36,11 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package avatartranslator;
 
-import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
    * Class AvatarTuple
@@ -52,7 +49,7 @@ import java.util.LinkedList;
    * @author Florian LUGOU
  */
 public class AvatarTuple extends AvatarLeftHand {
-    LinkedList<AvatarTerm> components;
+    List<AvatarTerm> components;
 
     public AvatarTuple (Object _referenceObject) {
         super (null, _referenceObject);
@@ -96,7 +93,7 @@ public class AvatarTuple extends AvatarLeftHand {
         this.components.add (term);
     }
 
-    public LinkedList<AvatarTerm> getComponents () {
+    public List<AvatarTerm> getComponents () {
         return this.components;
     }
 
@@ -104,6 +101,7 @@ public class AvatarTuple extends AvatarLeftHand {
         return this.toString ();
     }
 
+    @Override
     public String toString () {
         String result = "(";
         boolean first = true;
@@ -142,8 +140,8 @@ public class AvatarTuple extends AvatarLeftHand {
     }
 
     @Override
-    public void replaceAttributes (HashMap<AvatarAttribute, AvatarAttribute> attributesMapping) {
-        LinkedList<AvatarTerm> components = new LinkedList<AvatarTerm> ();
+    public void replaceAttributes( Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
+        List<AvatarTerm> components = new LinkedList<AvatarTerm> ();
         for (AvatarTerm term: this.components)
             if (term instanceof AvatarAttribute)
                 components.add (attributesMapping.get (term));

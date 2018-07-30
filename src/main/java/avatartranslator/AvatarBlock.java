@@ -36,13 +36,11 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package avatartranslator;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 
 /**
@@ -54,9 +52,9 @@ import java.util.LinkedList;
 public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwner {
 
     private AvatarBlock father;
-    private LinkedList<AvatarAttribute> attributes;
-    private LinkedList<AvatarMethod> methods;
-    private LinkedList<AvatarSignal> signals;
+    private List<AvatarAttribute> attributes;
+    private List<AvatarMethod> methods;
+    private List<AvatarSignal> signals;
     private AvatarStateMachine asm;
     private AvatarSpecification avspec;
 
@@ -119,16 +117,16 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
         signals.add(_signal);
     }
 
-    public LinkedList<AvatarAttribute> getAttributes() {
+    public List<AvatarAttribute> getAttributes() {
         return attributes;
     }
 
-    public LinkedList<AvatarMethod> getMethods() {
+    public List<AvatarMethod> getMethods() {
         return methods;
     }
 
 
-    public LinkedList<AvatarSignal> getSignals() {
+    public List<AvatarSignal> getSignals() {
         return signals ;
     }
 
@@ -435,8 +433,7 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
         return (asme != null);
     }
 
-
-    public void removeTimers(AvatarSpecification _spec, LinkedList<AvatarBlock> _addedBlocks) {
+    public void removeTimers(AvatarSpecification _spec, List<AvatarBlock> _addedBlocks) {
         AvatarSignal as;
         AvatarAttribute value;
 
@@ -479,25 +476,24 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
 
         // Remove Timer attribute
 	//boolean hasTimerAttribute = false;
-        LinkedList<AvatarAttribute> tmps = attributes;
+        List<AvatarAttribute> tmps = attributes;
         attributes = new LinkedList<AvatarAttribute>();
         for (AvatarAttribute aa: tmps) {
             if (aa.getType() != AvatarType.TIMER) {
                 attributes.add(aa);
-	    } else {
+            } else {
 		//hasTimerAttribute = true;
-	    }
+            }
         }
-
     }
 
     public boolean hasTimerAttribute() {
-	for(AvatarAttribute attr: attributes) {
-	    if (attr.isTimer()) {
-		return true;
-	    }
-	}
-	return false;
+    	for(AvatarAttribute attr: attributes) {
+    		if (attr.isTimer()) {
+    			return true;
+    		}
+    	}
+    	return false;
     }
 
     public AvatarAttribute addTimerAttribute(String _name) {

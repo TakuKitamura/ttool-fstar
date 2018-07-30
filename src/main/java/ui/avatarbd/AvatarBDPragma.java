@@ -405,6 +405,7 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
 
     }
 
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
         String oldValue = value;
 

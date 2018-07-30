@@ -4,14 +4,15 @@ import static org.junit.Assert.fail;
 
 import myutil.PluginManager;
 import test.AbstractTest;
-import ui.util.IconManager;
 
 public abstract class AbstractUITest extends AbstractTest {
 	
 	protected final MainGUI mainGui;
 	
 	protected AbstractUITest() {
-		IconManager.loadImg();
+		
+		// DB: Not needed for tests (causes NPE)
+		//IconManager.loadImg();
 		mainGui = new MainGUI(false,false, false, false, false, false, false, false, false, false, true, false, false);
 		mainGui.build();
 		PluginManager.pluginManager = new PluginManager();

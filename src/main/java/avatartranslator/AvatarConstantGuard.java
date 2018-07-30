@@ -36,14 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package avatartranslator;
 
-import java.util.HashMap;
-
+import java.util.Map;
 
 /**
  * An AvatarConstantGuard is an {@link AvatarSimpleGuard} that is of the form:
@@ -73,5 +68,5 @@ public class AvatarConstantGuard extends AvatarSimpleGuard {
     }
 
     @Override
-    public void replaceAttributes (HashMap<AvatarAttribute, AvatarAttribute> attributesMapping) { }
+    public void replaceAttributes( Map<AvatarAttribute, AvatarAttribute> attributesMapping) { }
 }

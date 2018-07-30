@@ -57,10 +57,10 @@ public class AttackTreePanelTranslator {
 
     protected AttackTree at;
     protected AttackTreePanel atp;
-    protected LinkedList<CheckingError> checkingErrors, warnings;
+    protected List<CheckingError> checkingErrors, warnings;
     protected CorrespondanceTGElement listE; // usual list
     //protected CorrespondanceTGElement listB; // list for particular element -> first element of group of blocks
-    protected LinkedList<TDiagramPanel> panels;
+    protected List<TDiagramPanel> panels;
 
 
     public AttackTreePanelTranslator(AttackTreePanel _atp) {
@@ -75,11 +75,11 @@ public class AttackTreePanelTranslator {
         panels = new LinkedList<TDiagramPanel>();
     }
 
-    public LinkedList<CheckingError> getCheckingErrors() {
+    public List<CheckingError> getCheckingErrors() {
         return checkingErrors;
     }
 
-    public LinkedList<CheckingError> getWarnings() {
+    public List<CheckingError> getWarnings() {
         return warnings;
     }
 

@@ -36,21 +36,32 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui;
+
+import java.io.StringReader;
+import java.util.LinkedList;
+import java.util.List;
 
 import compiler.tmlparser.ParseException;
 import compiler.tmlparser.SimpleNode;
 import compiler.tmlparser.TMLExprParser;
 import compiler.tmlparser.TokenMgrError;
 import myutil.TraceManager;
-import translator.*;
-
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.LinkedList;
+import translator.ADActionStateWithGate;
+import translator.ADActionStateWithParam;
+import translator.ADChoice;
+import translator.ADComponent;
+import translator.ADDelay;
+import translator.ADLatency;
+import translator.ADParallel;
+import translator.ADTLO;
+import translator.ADTimeInterval;
+import translator.ActivityDiagram;
+import translator.CheckingError;
+import translator.Gate;
+import translator.Param;
+import translator.TClass;
+import translator.TURTLEModeling;
 
 
 /**
@@ -95,7 +106,7 @@ public class TURTLEModelChecker {
 	private String ERROR_AD_009_1 = " variable is not correctly used";
 	private String ERROR_AD_009_2 = " unknown variable";
 	private String ERROR_AD_009_3 = " unknown gate";
-	private String ERROR_AD_009_4 = " unknown param";
+	//private String ERROR_AD_009_4 = " unknown param";
 	private String ERROR_AD_009_5 = " null gate";
 	private String ERROR_AD_009_6 = " null param";
 	
@@ -581,7 +592,7 @@ public class TURTLEModelChecker {
 		}  
 		
 		// Tree analysis: if the tree contains a variable, then, this variable has not been declared
-		ArrayList<String> vars = root.getVariables();
+		List<String> vars = root.getVariables();
 		for(String s: vars) {
 			// is that string a variable?
 			if ((s.compareTo("true") != 0) && (s.compareTo("false") != 0) && (s.compareTo("nil") != 0)) {

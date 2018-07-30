@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui;
 
 import common.ConfigurationTTool;
@@ -49,9 +46,6 @@ import javax.swing.event.EventListenerList;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-
-import myutil.*;
-
 
 /**
  * Class TGUIAction
@@ -265,7 +259,7 @@ public class TGUIAction extends AbstractAction {
     public static final int TMLCP_START = 384;
     public static final int TMLCP_STOP = 385;
     public static final int TMLCP_CHOICE = 386;
-    public static final int TMLCP_JUNCTION = 387;
+   // public static final int TMLCP_JUNCTION = 387;
     public static final int TMLCP_FOR_LOOP = 416;
 
     public static final int TMLSD_STORAGE_INSTANCE = 388;
@@ -1146,7 +1140,9 @@ public class TGUIAction extends AbstractAction {
         actions[TMLCP_CHOICE] = new TAction("add-tmlcp-choice", "Add Choice", IconManager.imgic208, IconManager.imgic208, "Choice", "Add a choice - non-deterministic or guarded - to the currently opened communication pattern diagram", 0);
         actions[TMLCP_START] = new TAction("add-tmlcp-start", "Add Start state", IconManager.imgic222, IconManager.imgic222, "Start", "Add a start state to the currently opened communication pattern diagram", 0);
         actions[TMLCP_STOP] = new TAction("add-tmlcp-stop", "Add Stop", IconManager.imgic210, IconManager.imgic210, "Stop", "Add a termination state to the currently opened communication pattern diagram", 0);
-        actions[TMLCP_JUNCTION] = new TAction("add-tmlcp-junction", "Add Junction", IconManager.imgic212, IconManager.imgic212, "Junction", "Add a junction with three inputs to the currently opened communication pattern diagram", 0);
+        
+        // Issue #69 Removed unused TMLCPJunction
+        //actions[TMLCP_JUNCTION] = new TAction("add-tmlcp-junction", "Add Junction", IconManager.imgic212, IconManager.imgic212, "Junction", "Add a junction with three inputs to the currently opened communication pattern diagram", 0);
         actions[TMLCP_FOR_LOOP] = new TAction("add-tmlcp-forloop", "Add loop", IconManager.imgic912, IconManager.imgic912, "Loop", "Add a for loop to the currently opened communication pattern diagram", 0);
 
         actions[TMLSD_EDIT] = new TAction("edit-tmlsd-diagram", "Edit CP-SD diagram", IconManager.imgic100, IconManager.imgic101, "Edit the Sequence Diagram", "Make it possible to edit the currently opened communication pattern sequence diagram", 0);

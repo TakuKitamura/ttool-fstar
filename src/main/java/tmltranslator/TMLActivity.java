@@ -36,16 +36,12 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator;
 
 import myutil.Conversion;
 import myutil.TraceManager;
 
 import java.util.Vector;
-
 
 /**
    * Class TMLActivity
@@ -571,13 +567,13 @@ public class TMLActivity extends TMLElement {
     }
 
     public String toXML() {
-	String s = new String("<ACTIVITY first=\"" + elements.indexOf(first) + "\">\n");
-	for(TMLActivityElement elt: elements) {
-	    s += elt.toXML(elements);
-	}
-	s += "</ACTIVITY>\n";
-	return s;
+    	String s = new String("<ACTIVITY first=\"" + elements.indexOf(first) + "\">\n");
+    	
+    	for(TMLActivityElement elt: elements) {
+    		s += elt.toXML(elements);
+    	}
+    	s += "</ACTIVITY>\n";
+    	
+    	return s;
     }
-
-    
 }

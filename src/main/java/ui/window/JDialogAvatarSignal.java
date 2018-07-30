@@ -38,18 +38,28 @@
 
 package ui.window;
 
-import ui.AvatarSignal;
-import ui.util.IconManager;
-import ui.TGComponent;
-import myutil.TraceManager;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Font;
+import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import myutil.TraceManager;
+import ui.AvatarSignal;
+import ui.TGComponent;
 
 
 /**
@@ -61,8 +71,8 @@ import java.util.Vector;
  */
 public class JDialogAvatarSignal extends JDialogBase implements ActionListener  {
 
-    private LinkedList<AvatarSignal> signals, realSignals;
-    private LinkedList<String> showSignals;
+    private List<AvatarSignal> signals, realSignals;
+    private List<String> showSignals;
     private String currentSignal;
     private boolean isOut;
 	
@@ -81,7 +91,7 @@ public class JDialogAvatarSignal extends JDialogBase implements ActionListener  
     private JTextField signal;
 
     /** Creates new form  */
-    public JDialogAvatarSignal(Frame _f, String _title, String _currentSignal, LinkedList<AvatarSignal> _signals, boolean _isOut, TGComponent _reference, Vector<TGComponent> _refs) {
+    public JDialogAvatarSignal(Frame _f, String _title, String _currentSignal, List<AvatarSignal> _signals, boolean _isOut, TGComponent _reference, Vector<TGComponent> _refs) {
 
         super(_f, _title, true);
 
@@ -99,7 +109,6 @@ public class JDialogAvatarSignal extends JDialogBase implements ActionListener  
 
         pack();
     }
-
 
     private void makeSignals() {
         showSignals = new LinkedList<String> ();

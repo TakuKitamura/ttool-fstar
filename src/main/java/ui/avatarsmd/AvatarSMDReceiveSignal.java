@@ -36,29 +36,36 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatarsmd;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.geom.Line2D;
+import java.util.List;
+import java.util.Vector;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import myutil.GraphicLib;
 import myutil.TraceManager;
-import ui.*;
+import ui.AvatarSignal;
+import ui.BasicErrorHighlight;
+import ui.CheckableAccessibility;
+import ui.CheckableLatency;
+import ui.ColorManager;
+import ui.ErrorHighlight;
+import ui.LinkedReference;
+import ui.PartOfInvariant;
+import ui.TDiagramPanel;
+import ui.TGComponent;
+import ui.TGComponentManager;
+import ui.TGConnectingPoint;
+import ui.avatarrd.AvatarRDRequirement;
+import ui.tmlad.TMLADReadChannel;
 import ui.util.IconManager;
 import ui.window.JDialogAvatarSignal;
-
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.geom.Line2D;
-import java.util.LinkedList;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Vector;
-import ui.avatarrd.AvatarRDRequirement;
-
-import ui.tmlad.TMLADReadChannel;
 /**
  * Class AvatarSMDReceiveSignal
  * Action of receiving a signal
@@ -112,11 +119,12 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
 		//latencyVals.put("sendChannel: sensorData", "15");
     }
     
-
 	public void addLatency(String name, String num){
 		latencyVals.put(name,num);
 	}
-    public void internalDrawing(Graphics g) {
+    
+	@Override
+	public void internalDrawing(Graphics g) {
 		
         int w  = g.getFontMetrics().stringWidth(value + textX1);
         int w1 = Math.max(minWidth, w + 2 * textX);
@@ -360,14 +368,14 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
         return nParam;
     }*/
 	
-    
+
+	@Override
     public boolean editOndoubleClick(JFrame frame) {
-    //	
-		LinkedList<AvatarSignal> signals = tdp.getMGUI().getAllSignals();
+		List<AvatarSignal> signals = tdp.getMGUI().getAllSignals();
 		TraceManager.addDev("Nb of signals:" + signals.size());
 		
 
-		ArrayList<TGComponent> comps = tdp.getMGUI().getAllLatencyChecks();
+		List<TGComponent> comps = tdp.getMGUI().getAllLatencyChecks();
 		Vector<TGComponent> refs = new Vector<TGComponent>();
 		for (TGComponent req: tdp.getMGUI().getAllRequirements()){
             //
@@ -380,6 +388,7 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
 				refs.add(tg);
 			}
 		}
+		
 		JDialogAvatarSignal jdas = new JDialogAvatarSignal(frame, "Setting receive signal",  value, signals, false, reference, refs);
 		//jdas.setSize(350, 300);
         GraphicLib.centerOnParent(jdas, 550, 300);

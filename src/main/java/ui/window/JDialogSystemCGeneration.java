@@ -59,9 +59,9 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.text.BadLocationException;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -73,9 +73,21 @@ import java.util.Vector;
  * Creation: 01/12/2005
  *
  * @author Ludovic APVRILLE, Andrea ENRICI
- * @version 1.2 02/06/2014
+ * @version 1.3 24/07/2018
  */
 public class JDialogSystemCGeneration extends JDialog implements ActionListener, Runnable, MasterProcessInterface, ListSelectionListener {
+
+    protected static final String HELP = "Penalties of components:\n" +
+            "*CPUs*: \n" +
+            "\tTask switching time \n" +
+            "\tPipeline\n" +
+            "\tCache miss\n" +
+            "\tMiss branching prediction\n" +
+            "\tCycles before being idle\n" +
+            "\tcycles for mode switch to/from idle\n\n" +
+            "*Buses*:\n" +
+            "\tPipeline\n";
+
 
     protected MainGUI mgui;
 
@@ -122,6 +134,11 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
     protected JScrollPane jsp;
     protected JCheckBox removeCppFiles, removeXFiles, debugmode, optimizemode, activatePenalties;
     protected JComboBox<String> versionSimulator;
+
+    protected JMenu help;
+    protected JPopupMenu helpPopup;
+    protected JTextArea textarea;
+    protected JMenuBar menuBar;
 
     //TEPE Diagram
     private static Vector<AvatarPDPanel> validatedTepe, ignoredTepe;
@@ -312,7 +329,24 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
         optimizemode.setSelected(optimizeModeSelected);
         jp01.add(optimizemode, c01);
 
-        activatePenalties = new JCheckBox("Activate penalties");
+
+        helpPopup = new JPopupMenu();
+        helpPopup.add(new JTextArea(HELP));
+        //helpPopup.setPreferredSize(new Dimension(400, 500));
+        menuBar = new JMenuBar();
+        menuBar.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+        help = new JMenu("?");
+        help.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+               help();
+            }
+        });
+        menuBar.add(help);
+        setJMenuBar(menuBar);
+        help.setPreferredSize(new Dimension(30, 30));
+
+        activatePenalties = new JCheckBox("Activate penalties (task switching time, cache miss, miss branching prediction)");
         activatePenalties.setSelected(activatePenaltiesSelected);
         jp01.add(activatePenalties, c01);
 
@@ -1145,6 +1179,14 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
 
         for (i = 0; i < valTepe.size(); i++) {
             validatedTepe.add(valTepe.get(i));
+        }
+    }
+
+    public void help() {
+        if (!helpPopup.isVisible()) {
+            helpPopup.show(help, 20, 20);
+        } else {
+            helpPopup.setVisible(false);
         }
     }
 }
