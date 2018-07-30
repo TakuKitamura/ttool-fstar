@@ -27,6 +27,11 @@ updategeneratedcode:
 	cp Makefile.soclib mutekh/examples/avatar/Makefile
 
 compilesoclib:
+	rm soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial/*_tdf.h ||:
+	cp ../SysCAMSGenerationCode/generated_CPP/*_tdf.h soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial/ ||:
+	cp ../SysCAMSGenerationCode/generated_H/*_tdf.h soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial/ ||:
+	rm ../SysCAMSGenerationCode/generated_H/*_tdf.h ||:
+	rm ../SysCAMSGenerationCode/generated_CPP/*_tdf.h ||:
 	cp generated_topcell/top.cc  soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial/
 	cp generated_topcell/deployinfo.h  mutekh/arch/soclib/
 	cp generated_topcell/deployinfo_map.h  mutekh/arch/soclib/

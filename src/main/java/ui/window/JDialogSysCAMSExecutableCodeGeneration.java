@@ -40,6 +40,7 @@ package ui.window;
 
 import syscamstranslator.toSysCAMS.MakefileCode;
 import syscamstranslator.toSysCAMS.TopCellGenerator;
+import syscamstranslator.toSysCAMSCluster.TopCellGeneratorCluster;
 import launcher.LauncherException;
 import launcher.RshClient;
 import myutil.*;
@@ -523,6 +524,7 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
                 		System.err.println("**SYSCAMS TOPCELL found");
 
                 		TopCellGenerator topCellGenerator = new TopCellGenerator(syscalsspec);
+                        TopCellGeneratorCluster topCellGeneratorCluster = new TopCellGeneratorCluster(syscalsspec);
                 		testGo();
                 		jta.append("Generation of TopCell \"" + syscalsspec.getCluster().getClusterName() + "\" executable code: done\n");
 
@@ -533,6 +535,7 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
 
                 			System.err.println("SYSCAMS TOPCELL : " + syscalsspec.getCluster().getClusterName() + "saved in " + code2.getText());
                 			topCellGenerator.saveFile(pathCode);
+                            topCellGeneratorCluster.saveFile(pathCode);
 
                 			jta.append("Code saved\n");
                 		} catch (Exception e) {

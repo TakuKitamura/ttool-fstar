@@ -43,7 +43,7 @@
 /* authors: v1.0 Raja GATGOUT 2014
             v2.0 Daniela GENIUS, Julien HENON 2015 */
 
-package syscamstranslator.toSysCAMS;
+package syscamstranslator.toSysCAMSCluster;
 
 import java.util.LinkedList;
 
@@ -142,18 +142,18 @@ public class PrimitiveCode {
 			if (!tdfports.isEmpty()) {
 				for (SysCAMSTPortTDF t : tdfports) {
 					if (t.getOrigin() == 0) {
-						corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_in<" + t.getTDFType() + "> " + t.getName() + ";" + CR;
+						corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_in< " + t.getTDFType() + " > " + t.getName() + ";" + CR;
 					} else if (t.getOrigin() == 1) {
-						corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_out<" + t.getTDFType() + "> " + t.getName() + ";" + CR;
+						corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_out< " + t.getTDFType() + " > " + t.getName() + ";" + CR;
 					}
 				}
 			}
 			if (!convports.isEmpty()) {
 				for (SysCAMSTPortConverter conv : convports) {
 					if (conv.getOrigin() == 0) {
-						corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_de::sca_in<" + conv.getConvType() + "> " + conv.getName() + ";" + CR;
+						corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_de::sca_in< " + conv.getConvType() + " > " + conv.getName() + ";" + CR;
 					} else if (conv.getOrigin() == 1) {
-						corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_de::sca_out<" + conv.getConvType() + "> " + conv.getName() + ";" + CR;
+						corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_de::sca_out< " + conv.getConvType() + " > " + conv.getName() + ";" + CR;
 					}
 				}
 			}
@@ -370,7 +370,7 @@ public class PrimitiveCode {
 					}
 				}
 			}
-			corpsPrimitiveTDF = corpsPrimitiveTDF + "};" + CR2 + "#endif" + " // " + tdf.getName().toUpperCase() + "_H";
+			corpsPrimitiveTDF = corpsPrimitiveTDF + "};" + CR2 + "#endif" + " // " + tdf.getName().toUpperCase() + "_TDF_H";
 		} else {
 			corpsPrimitiveTDF = "";
 		}
@@ -596,7 +596,7 @@ public class PrimitiveCode {
 			String pc = buffer.toString();
 			corpsPrimitiveDE = corpsPrimitiveDE + "\t" + pc;
 			
-			corpsPrimitiveDE = corpsPrimitiveDE + CR + "};" + CR2 + "#endif" + " // " + de.getName().toUpperCase() + "_H";
+			corpsPrimitiveDE = corpsPrimitiveDE + CR + "};" + CR2 + "#endif" + " // " + de.getName().toUpperCase() + "_TDF_H";
 		} else {
 			corpsPrimitiveDE = "";
 		}
