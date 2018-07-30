@@ -44,11 +44,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import ui.*;
+import ui.eln.*;
 import ui.util.IconManager;
-import ui.window.JDialogSysCAMSPortConverter;
-import ui.window.JDialogSysCAMSPortDE;
-import ui.window.JDialogSysCAMSPortTDF;
-
+import ui.window.*;
 import javax.swing.*;
 import java.awt.*;
 
@@ -357,6 +355,18 @@ public class SysCAMSPrimitivePort extends TGCScalableWithInternalComponent imple
         	oldy = -1;
         }
         if ((father != null) && (father instanceof SysCAMSBlockGPIO2VCI)) {
+        	setCdRectangle(0-getWidth()/2, father.getWidth() - (getWidth()/2), 0-getHeight()/2, father.getHeight() - (getHeight()/2));
+        	setMoveCd(x, y);
+        	oldx = -1;
+        	oldy = -1;
+        }
+        if ((father != null) && (father instanceof ELNCluster)) {
+        	setCdRectangle(0-getWidth()/2, father.getWidth() - (getWidth()/2), 0-getHeight()/2, father.getHeight() - (getHeight()/2));
+        	setMoveCd(x, y);
+        	oldx = -1;
+        	oldy = -1;
+        }
+        if ((father != null) && (father instanceof ELNModule)) {
         	setCdRectangle(0-getWidth()/2, father.getWidth() - (getWidth()/2), 0-getHeight()/2, father.getHeight() - (getHeight()/2));
         	setMoveCd(x, y);
         	oldx = -1;

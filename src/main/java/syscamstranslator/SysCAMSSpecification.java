@@ -143,7 +143,7 @@ public class SysCAMSSpecification{
 					cons.add(con);
 				} else if (con.get_p1().getComponent() instanceof SysCAMSTPortConverter && con.get_p2().getComponent() instanceof SysCAMSTPortDE) {
 					if (((SysCAMSTPortDE) con.get_p2().getComponent()).getBlockDE() != null) {
-						if ((((SysCAMSTPortDE) con.get_p2().getComponent()).getBlockDE()).getCluster() != null ) {
+						if ((((SysCAMSTPortDE) con.get_p2().getComponent()).getBlockDE()).getCluster() != null) {
 							cons.add(con);
 						}
 					} else if (((SysCAMSTPortDE) con.get_p2().getComponent()).getBlockGPIO2VCI() != null) {
@@ -152,14 +152,20 @@ public class SysCAMSSpecification{
                     }
 				} else if (con.get_p2().getComponent() instanceof SysCAMSTPortConverter && con.get_p1().getComponent() instanceof SysCAMSTPortDE) {
 					if (((SysCAMSTPortDE) con.get_p1().getComponent()).getBlockDE() != null) {
-						if ((((SysCAMSTPortDE) con.get_p1().getComponent()).getBlockDE()).getCluster() != null ) {
+						if ((((SysCAMSTPortDE) con.get_p1().getComponent()).getBlockDE()).getCluster() != null) {
 							cons.add(con);
 						}
 					} else if (((SysCAMSTPortDE) con.get_p1().getComponent()).getBlockGPIO2VCI() != null) {
                         System.out.println("Spec: IF p1 belongs to GPIO");
                         cons.add(con);
                     }
-				}
+				} else if (con.get_p1().getComponent() instanceof SysCAMSTPortDE && con.get_p2().getComponent() instanceof SysCAMSTPortDE) {
+					if (((SysCAMSTPortDE) con.get_p1().getComponent()).getBlockDE() != null && ((SysCAMSTPortDE) con.get_p2().getComponent()).getBlockDE() != null) {
+						if ((((SysCAMSTPortDE) con.get_p1().getComponent()).getBlockDE()).getCluster() != null && (((SysCAMSTPortDE) con.get_p2().getComponent()).getBlockDE()).getCluster() != null) {
+							cons.add(con);
+						}
+					}
+				} 
 			}
 		}
 		return cons;

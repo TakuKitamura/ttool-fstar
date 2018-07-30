@@ -163,6 +163,7 @@ public class ELNComponentIndependentVoltageSource extends TGCScalableWithInterna
 				old = width;
 				width = height;
 				height = old;
+				resizeWithFather();
 			}
 
 			int attributeFontSize = this.currentFontSize * 5 / 6;
@@ -241,6 +242,7 @@ public class ELNComponentIndependentVoltageSource extends TGCScalableWithInterna
 				old = width;
 				width = height;
 				height = old;
+				resizeWithFather();
 			}
 
 			int attributeFontSize = this.currentFontSize * 5 / 6;
@@ -325,6 +327,7 @@ public class ELNComponentIndependentVoltageSource extends TGCScalableWithInterna
 				old = width;
 				width = height;
 				height = old;
+				resizeWithFather();
 			}
 
 			int attributeFontSize = this.currentFontSize * 5 / 6;
@@ -403,6 +406,7 @@ public class ELNComponentIndependentVoltageSource extends TGCScalableWithInterna
 				old = width;
 				width = height;
 				height = old;
+				resizeWithFather();
 			}
 
 			int attributeFontSize = this.currentFontSize * 5 / 6;

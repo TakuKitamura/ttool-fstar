@@ -197,17 +197,6 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
         return TGComponentManager.CAMS_CLUSTER;
     }
 	
-	public void wasSwallowed() {
-		myColor = null;
-	}
-	
-	public void wasUnswallowed() {
-		myColor = null;
-		setFather(null);
-		TDiagramPanel tdp = getTDiagramPanel();
-		setCdRectangle(tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY());
-	}
-	
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
 		boolean swallowed = false;
 		
@@ -418,11 +407,10 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
 
 	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
     	if (tgc instanceof SysCAMSBlockTDF) {
-    		return tgc instanceof SysCAMSBlockTDF;
+    		return true;
     	} else if (tgc instanceof SysCAMSBlockDE) {
-    		return tgc instanceof SysCAMSBlockDE;
-    	} else {
     		return true;
     	}
+    	return false;
 	}
 }

@@ -154,6 +154,7 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent imple
 				old = width;
 				width = height;
 				height = old;
+				resizeWithFather();
 			}
 
 			rotateTopBottom(g);
@@ -236,6 +237,7 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent imple
 				old = width;
 				width = height;
 				height = old;
+				resizeWithFather();
 			}
 
 			rotateRightLeft(g);
@@ -313,6 +315,7 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent imple
 				old = width;
 				width = height;
 				height = old;
+				resizeWithFather();
 			}
 
 			rotateTopBottom(g);
@@ -395,6 +398,7 @@ public class ELNComponentResistor extends TGCScalableWithInternalComponent imple
 				old = width;
 				width = height;
 				height = old;
+				resizeWithFather();
 			}
 
 			rotateRightLeft(g);

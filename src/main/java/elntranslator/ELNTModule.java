@@ -40,8 +40,6 @@ package elntranslator;
 
 import java.util.LinkedList;
 
-import syscamstranslator.SysCAMSTBlockTDF;
-
 /**
  * Class ELNTModule
  * Parameters of a ELN component : module
@@ -67,7 +65,7 @@ public class ELNTModule extends ELNTComponent {
 	private LinkedList<ELNTComponentCurrentSourceTDF> TDF_isource;
 	private LinkedList<ELNTComponentVoltageSinkTDF> TDF_vsink;
 	private LinkedList<ELNTComponentVoltageSourceTDF> TDF_vsource;
-	private LinkedList<ELNTComponentModuleTerminal> moduleTerminal;
+	private LinkedList<ELNTModuleTerminal> moduleTerminal;
 	
 	public ELNTModule(String _name) {
 		name = _name;
@@ -85,7 +83,7 @@ public class ELNTModule extends ELNTComponent {
 		TDF_isource = new LinkedList<ELNTComponentCurrentSourceTDF>();
 		TDF_vsink = new LinkedList<ELNTComponentVoltageSinkTDF>();
 		TDF_vsource = new LinkedList<ELNTComponentVoltageSourceTDF>();
-		moduleTerminal = new LinkedList<ELNTComponentModuleTerminal>();
+		moduleTerminal = new LinkedList<ELNTModuleTerminal>();
 	}
 
 	public String getName() {

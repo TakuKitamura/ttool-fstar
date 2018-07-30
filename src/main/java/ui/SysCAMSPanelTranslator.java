@@ -261,6 +261,8 @@ public class SysCAMSPanelTranslator {
 
 				TGConnectingPoint connectingPoint1 = connector.get_p1();
 				TGConnectingPoint connectingPoint2 = connector.get_p2();	
+				
+				String name = connector.getValue();
 
 				TGComponent owner_p1 = syscamsDiagramPanel.getComponentToWhichBelongs(connectingPoint1);
 				TGComponent owner_p2 = syscamsDiagramPanel.getComponentToWhichBelongs(connectingPoint2);
@@ -271,7 +273,7 @@ public class SysCAMSPanelTranslator {
 				SysCAMSTConnectingPoint avConnectingPoint1 = new SysCAMSTConnectingPoint(avowner_p1);
 				SysCAMSTConnectingPoint avConnectingPoint2 = new SysCAMSTConnectingPoint(avowner_p2);
 
-				SysCAMSTConnector avconnector = new SysCAMSTConnector(avConnectingPoint1, avConnectingPoint2);			
+				SysCAMSTConnector avconnector = new SysCAMSTConnector(avConnectingPoint1, avConnectingPoint2, name);			
 				syscamsConnectors.add(avconnector);
 			}
 		}

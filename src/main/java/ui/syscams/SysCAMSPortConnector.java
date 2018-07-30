@@ -40,13 +40,13 @@ package ui.syscams;
 
 import ui.*;
 import ui.util.IconManager;
+import ui.window.JDialogELNConnector;
+import ui.window.JDialogSysCAMSConnector;
 
 import java.awt.*;
-import java.awt.geom.Point2D;
 import java.util.Vector;
 
-import javax.swing.JDialog;
-import javax.swing.JOptionPane;
+import javax.swing.JFrame;
 
 import myutil.GraphicLib;
 
@@ -65,8 +65,8 @@ public class SysCAMSPortConnector extends TGConnector implements ScalableTGCompo
 		super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
 		
 		myImageIcon = IconManager.imgic202;
-		value = "Connector between ports";
-		editable = false;
+		value = "";
+		editable = true;
 		oldScaleFactor = tdp.getZoom();
 		
 		p1 = _p1;
@@ -81,8 +81,21 @@ public class SysCAMSPortConnector extends TGConnector implements ScalableTGCompo
 		return p2;
 	}
 
+	public boolean editOndoubleClick(JFrame frame) {
+		JDialogSysCAMSConnector jde = new JDialogSysCAMSConnector(this);
+		jde.setVisible(true);
+		return true;
+	}
+	
 	protected void drawLastSegment(Graphics gr, int x1, int y1, int x2, int y2) {
 		Graphics2D g = (Graphics2D) gr;
+		
+		int w = g.getFontMetrics().stringWidth(value);
+		Font fold = g.getFont();
+		Font f = fold.deriveFont(Font.ITALIC, (float) (tdp.getFontSize()));
+		g.setFont(f);
+		g.drawString(value, (x1 + x2 - w) / 2, (y1 + y2) / 2);
+		g.setFont(fold);
 
 		try {
 			SysCAMSPortConnectingPoint pt1 = (SysCAMSPortConnectingPoint) p1;
@@ -110,6 +123,16 @@ public class SysCAMSPortConnector extends TGConnector implements ScalableTGCompo
 					}
 				} else if ((pt2.port instanceof SysCAMSPortConverter) && (pt1.port instanceof SysCAMSPortDE)) {
 					if (pt1.port.getFather().getFather() instanceof SysCAMSCompositeComponent) {
+						GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
+					} else {
+						Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0,	new float[] { 9 }, 0);
+						g.setStroke(dashed);
+						GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
+					}
+				} else if ((pt1.port instanceof SysCAMSPortDE) && (pt2.port instanceof SysCAMSPortDE) 
+						|| (pt2.port instanceof SysCAMSPortDE) && (pt1.port instanceof SysCAMSPortDE)) {
+					if (pt1.port.getFather().getFather() instanceof SysCAMSCompositeComponent 
+							&& pt2.port.getFather().getFather() instanceof SysCAMSCompositeComponent) {
 						GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
 					} else {
 						Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0,	new float[] { 9 }, 0);

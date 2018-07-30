@@ -364,6 +364,7 @@ public class TGComponentManager {
     public static final int ELN_MODULE_TERMINAL = 1624;
     public static final int ELN_TDF_VOLTAGE_SOURCE = 1625;
     public static final int ELN_TDF_CURRENT_SOURCE = 1626;
+    public static final int ELN_CLUSTER = 1627;
     
     // SMD diagram
     public static final int PROSMD_START_STATE = 2000;
@@ -1339,6 +1340,9 @@ public class TGComponentManager {
             case ELN_TDF_CURRENT_SOURCE: 
             	tgc = new ELNComponentCurrentSourceTDF(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             	break;
+            case ELN_CLUSTER: 
+            	tgc = new ELNCluster(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;
             // Communication patterns + SD
             case TMLCP_CHOICE:
                 tgc = new TMLCPChoice(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -1775,6 +1779,8 @@ public class TGComponentManager {
         	return ELN_TDF_VOLTAGE_SOURCE;
         } else if (tgc instanceof ELNComponentCurrentSourceTDF) {
         	return ELN_TDF_CURRENT_SOURCE;
+        } else if (tgc instanceof ELNCluster) {
+        	return ELN_CLUSTER;
         	
         	// Others
         } else if (tgc instanceof TADDeterministicDelay) {
