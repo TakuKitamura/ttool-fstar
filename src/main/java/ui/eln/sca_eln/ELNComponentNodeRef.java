@@ -148,6 +148,7 @@ public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implem
 				old = width;
 				width = height;
 				height = old;
+				resizeWithFather();
 			}
 
 			int attributeFontSize = this.currentFontSize * 5 / 6;
@@ -195,6 +196,7 @@ public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implem
 				old = width;
 				width = height;
 				height = old;
+				resizeWithFather();
 			}
 
 			int attributeFontSize = this.currentFontSize * 5 / 6;
@@ -243,6 +245,7 @@ public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implem
 				old = width;
 				width = height;
 				height = old;
+				resizeWithFather();
 			}
 
 			int attributeFontSize = this.currentFontSize * 5 / 6;
@@ -291,6 +294,7 @@ public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implem
 				old = width;
 				width = height;
 				height = old;
+				resizeWithFather();
 			}
 
 			int attributeFontSize = this.currentFontSize * 5 / 6;

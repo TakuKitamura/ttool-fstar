@@ -155,6 +155,7 @@ public class ELNComponentVoltageControlledVoltageSource extends TGCScalableWithI
 				old = width;
 				width = height;
 				height = old;
+				resizeWithFather();
 			}
 
 			int attributeFontSize = this.currentFontSize * 5 / 6;
@@ -267,6 +268,7 @@ public class ELNComponentVoltageControlledVoltageSource extends TGCScalableWithI
 				old = width;
 				width = height;
 				height = old;
+				resizeWithFather();
 			}
 
 			int attributeFontSize = this.currentFontSize * 5 / 6;
@@ -379,6 +381,7 @@ public class ELNComponentVoltageControlledVoltageSource extends TGCScalableWithI
 				old = width;
 				width = height;
 				height = old;
+				resizeWithFather();
 			}
 
 			int attributeFontSize = this.currentFontSize * 5 / 6;
@@ -491,6 +494,7 @@ public class ELNComponentVoltageControlledVoltageSource extends TGCScalableWithI
 				old = width;
 				width = height;
 				height = old;
+				resizeWithFather();
 			}
 
 			int attributeFontSize = this.currentFontSize * 5 / 6;

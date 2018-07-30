@@ -156,6 +156,7 @@ public class ELNComponentCapacitor extends TGCScalableWithInternalComponent impl
 				old = width;
 				width = height;
 				height = old;
+				resizeWithFather();
 			}
 
 			rotateTopBottom(g);
@@ -238,6 +239,7 @@ public class ELNComponentCapacitor extends TGCScalableWithInternalComponent impl
 				old = width;
 				width = height;
 				height = old;
+				resizeWithFather();
 			}
 
 			rotateRightLeft(g);
@@ -314,6 +316,7 @@ public class ELNComponentCapacitor extends TGCScalableWithInternalComponent impl
 				old = width;
 				width = height;
 				height = old;
+				resizeWithFather();
 			}
 
 			rotateTopBottom(g);
@@ -396,6 +399,7 @@ public class ELNComponentCapacitor extends TGCScalableWithInternalComponent impl
 				old = width;
 				width = height;
 				height = old;
+				resizeWithFather();
 			}
 
 			rotateRightLeft(g);

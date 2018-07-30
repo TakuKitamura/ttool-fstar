@@ -157,6 +157,7 @@ public class ELNComponentInductor extends TGCScalableWithInternalComponent imple
 				old = width;
 				width = height;
 				height = old;
+				resizeWithFather();
 			}
 
 			int attributeFontSize = this.currentFontSize * 5 / 6;
@@ -241,6 +242,7 @@ public class ELNComponentInductor extends TGCScalableWithInternalComponent imple
 				old = width;
 				width = height;
 				height = old;
+				resizeWithFather();
 			}
 
 			int attributeFontSize = this.currentFontSize * 5 / 6;
@@ -319,6 +321,7 @@ public class ELNComponentInductor extends TGCScalableWithInternalComponent imple
 				old = width;
 				width = height;
 				height = old;
+				resizeWithFather();
 			}
 
 			int attributeFontSize = this.currentFontSize * 5 / 6;
@@ -403,6 +406,7 @@ public class ELNComponentInductor extends TGCScalableWithInternalComponent imple
 				old = width;
 				width = height;
 				height = old;
+				resizeWithFather();
 			}
 
 			int attributeFontSize = this.currentFontSize * 5 / 6;

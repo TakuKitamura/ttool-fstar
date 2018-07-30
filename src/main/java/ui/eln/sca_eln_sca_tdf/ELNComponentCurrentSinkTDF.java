@@ -154,6 +154,7 @@ public class ELNComponentCurrentSinkTDF extends TGCScalableWithInternalComponent
 				old = width;
 				width = height;
 				height = old;
+				resizeWithFather();
 			}
 
 			int attributeFontSize = this.currentFontSize * 5 / 6;
@@ -252,6 +253,7 @@ public class ELNComponentCurrentSinkTDF extends TGCScalableWithInternalComponent
 				old = width;
 				width = height;
 				height = old;
+				resizeWithFather();
 			}
 
 			int attributeFontSize = this.currentFontSize * 5 / 6;
@@ -347,6 +349,7 @@ public class ELNComponentCurrentSinkTDF extends TGCScalableWithInternalComponent
 				old = width;
 				width = height;
 				height = old;
+				resizeWithFather();
 			}
 
 			int attributeFontSize = this.currentFontSize * 5 / 6;
@@ -445,6 +448,7 @@ public class ELNComponentCurrentSinkTDF extends TGCScalableWithInternalComponent
 				old = width;
 				width = height;
 				height = old;
+				resizeWithFather();
 			}
 
 			int attributeFontSize = this.currentFontSize * 5 / 6;
