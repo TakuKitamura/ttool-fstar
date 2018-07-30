@@ -40,6 +40,7 @@ package elntranslator;
 
 import java.util.LinkedList;
 import java.util.List;
+import syscamstranslator.*;
 
 /**
  * Class ELNSpecification
@@ -50,25 +51,87 @@ import java.util.List;
 */
 
 public class ELNSpecification{
-    private List<ELNTComponent> components;
-    private List<ELNTConnector> connectors;
+    private List<ELNTComponent> elnComponents;
+    private List<ELNTConnector> elnConnectors;
+    private List<SysCAMSTComponent> syscamsComponents;
+    private List<SysCAMSTConnector> syscamsConnectors;
 		
-    public ELNSpecification(List<ELNTComponent> _components, List<ELNTConnector> _connectors){
-		components = _components ;
-		connectors = _connectors ;
-	}
+    public ELNSpecification(List<ELNTComponent> _elnComponents, List<ELNTConnector> _elnConnectors, List<SysCAMSTComponent> _syscamsComponents, List<SysCAMSTConnector> _syscamsConnectors){
+		elnComponents = _elnComponents ;
+		elnConnectors = _elnConnectors ;
+		syscamsComponents = _syscamsComponents ;
+		syscamsConnectors = _syscamsConnectors ;
+    }
+
+    public List<ELNTComponent> getELNComponents(){
+    	return elnComponents;
+    }
+
+    public List<ELNTConnector> getELNConnectors(){
+    	return elnConnectors;
+    }
+
+    public List<SysCAMSTComponent> getSysCAMSComponents(){
+    	return syscamsComponents;
+    }
+
+    public List<SysCAMSTConnector> getSysCAMSConnectors(){
+    	return syscamsConnectors;
+    }
+
+    public LinkedList<ELNTConnector> getAllConnectorsBetweenELNModuleTerminal(){
+    	LinkedList<ELNTConnector> cons = new LinkedList<ELNTConnector>();
+    	for (ELNTConnector con : elnConnectors) {
+    		if (con.get_p1().getComponent() instanceof ELNTModuleTerminal && con.get_p2().getComponent() instanceof ELNTModuleTerminal) {
+    			cons.add(con);
+			}
+		}
+		return cons;
+    }
     
-    public List<ELNTComponent> getComponents(){
-      return components;
+    public LinkedList<SysCAMSTConnector> getAllConnectorsBetweenTDFModulePort(){
+    	LinkedList<SysCAMSTConnector> cons = new LinkedList<SysCAMSTConnector>();
+    	for (SysCAMSTConnector con : syscamsConnectors) {
+    		if (con.get_p1().getComponent() instanceof SysCAMSTPortTDF && con.get_p2().getComponent() instanceof SysCAMSTPortTDF) {
+    			cons.add(con);
+    		}
+    	}
+    	return cons;
     }
 
-    public List<ELNTConnector> getConnectors(){
-      return connectors;
+    public LinkedList<SysCAMSTConnector> getAllConnectorsBetweenDEModulePort(){
+    	LinkedList<SysCAMSTConnector> cons = new LinkedList<SysCAMSTConnector>();
+    	for (SysCAMSTConnector con : syscamsConnectors) {
+    		if (con.get_p1().getComponent() instanceof SysCAMSTPortDE && con.get_p2().getComponent() instanceof SysCAMSTPortDE) {
+    			cons.add(con);
+    		}
+    	}
+    	return cons;
     }
-
+    
+    public LinkedList<SysCAMSTPortDE> getAllPortDE(){
+		LinkedList<SysCAMSTPortDE> portsDE = new LinkedList<SysCAMSTPortDE>();
+		for (SysCAMSTComponent portDE : syscamsComponents) {
+			if (portDE instanceof SysCAMSTPortDE) {
+				portsDE.add((SysCAMSTPortDE) portDE);
+			}
+		}
+		return portsDE;
+    }
+    
+    public LinkedList<SysCAMSTPortTDF> getAllPortTDF(){
+ 		LinkedList<SysCAMSTPortTDF> portsTDF = new LinkedList<SysCAMSTPortTDF>();
+ 		for (SysCAMSTComponent portTDF : syscamsComponents) {
+ 			if (portTDF instanceof SysCAMSTPortTDF) {
+ 				portsTDF.add((SysCAMSTPortTDF) portTDF);
+ 			}
+ 		}
+ 		return portsTDF;
+     }
+    
     public LinkedList<ELNTComponentCapacitor> getAllComponentCapacitor(){
 		LinkedList<ELNTComponentCapacitor> capacitors = new LinkedList<ELNTComponentCapacitor>();
-		for (ELNTComponent capacitor : components) {
+		for (ELNTComponent capacitor : elnComponents) {
 			if (capacitor instanceof ELNTComponentCapacitor) {
 				capacitors.add((ELNTComponentCapacitor) capacitor);
 			}
@@ -78,7 +141,7 @@ public class ELNSpecification{
     
     public LinkedList<ELNTComponentCurrentSinkTDF> getAllComponentCurrentSinkTDF(){
 		LinkedList<ELNTComponentCurrentSinkTDF> TDF_isinks = new LinkedList<ELNTComponentCurrentSinkTDF>();
-		for (ELNTComponent TDF_isink : components) {
+		for (ELNTComponent TDF_isink : elnComponents) {
 			if (TDF_isink instanceof ELNTComponentCurrentSinkTDF) {
 				TDF_isinks.add((ELNTComponentCurrentSinkTDF) TDF_isink);
 			}
@@ -88,7 +151,7 @@ public class ELNSpecification{
     
     public LinkedList<ELNTComponentCurrentSourceTDF> getAllComponentCurrentSourceTDF(){
 		LinkedList<ELNTComponentCurrentSourceTDF> TDF_isources = new LinkedList<ELNTComponentCurrentSourceTDF>();
-		for (ELNTComponent TDF_isource : components) {
+		for (ELNTComponent TDF_isource : elnComponents) {
 			if (TDF_isource instanceof ELNTComponentCurrentSourceTDF) {
 				TDF_isources.add((ELNTComponentCurrentSourceTDF) TDF_isource);
 			}
@@ -98,7 +161,7 @@ public class ELNSpecification{
     
     public LinkedList<ELNTComponentIdealTransformer> getAllComponentIdealTransformer(){
 		LinkedList<ELNTComponentIdealTransformer> idealTransformers = new LinkedList<ELNTComponentIdealTransformer>();
-		for (ELNTComponent idealTransformer : components) {
+		for (ELNTComponent idealTransformer : elnComponents) {
 			if (idealTransformer instanceof ELNTComponentIdealTransformer) {
 				idealTransformers.add((ELNTComponentIdealTransformer) idealTransformer);
 			}
@@ -108,7 +171,7 @@ public class ELNSpecification{
     
     public LinkedList<ELNTComponentIndependentCurrentSource> getAllComponentIndependentCurrentSource(){
 		LinkedList<ELNTComponentIndependentCurrentSource> isources = new LinkedList<ELNTComponentIndependentCurrentSource>();
-		for (ELNTComponent isource : components) {
+		for (ELNTComponent isource : elnComponents) {
 			if (isource instanceof ELNTComponentIndependentCurrentSource) {
 				isources.add((ELNTComponentIndependentCurrentSource) isource);
 			}
@@ -118,7 +181,7 @@ public class ELNSpecification{
     
     public LinkedList<ELNTComponentIndependentVoltageSource> getAllComponentIndependentVoltageSource(){
 		LinkedList<ELNTComponentIndependentVoltageSource> vsources = new LinkedList<ELNTComponentIndependentVoltageSource>();
-		for (ELNTComponent vsource : components) {
+		for (ELNTComponent vsource : elnComponents) {
 			if (vsource instanceof ELNTComponentIndependentVoltageSource) {
 				vsources.add((ELNTComponentIndependentVoltageSource) vsource);
 			}
@@ -128,7 +191,7 @@ public class ELNSpecification{
     
     public LinkedList<ELNTComponentInductor> getAllComponentInductor(){
 		LinkedList<ELNTComponentInductor> inductors = new LinkedList<ELNTComponentInductor>();
-		for (ELNTComponent inductor : components) {
+		for (ELNTComponent inductor : elnComponents) {
 			if (inductor instanceof ELNTComponentInductor) {
 				inductors.add((ELNTComponentInductor) inductor);
 			}
@@ -138,7 +201,7 @@ public class ELNSpecification{
     
     public LinkedList<ELNTComponentNodeRef> getAllComponentNodeRef(){
 		LinkedList<ELNTComponentNodeRef> nodeRefs = new LinkedList<ELNTComponentNodeRef>();
-		for (ELNTComponent nodeRef : components) {
+		for (ELNTComponent nodeRef : elnComponents) {
 			if (nodeRef instanceof ELNTComponentNodeRef) {
 				nodeRefs.add((ELNTComponentNodeRef) nodeRef);
 			}
@@ -148,7 +211,7 @@ public class ELNSpecification{
     
     public LinkedList<ELNTComponentResistor> getAllComponentResistor(){
 		LinkedList<ELNTComponentResistor> resistors = new LinkedList<ELNTComponentResistor>();
-		for (ELNTComponent resistor : components) {
+		for (ELNTComponent resistor : elnComponents) {
 			if (resistor instanceof ELNTComponentResistor) {
 				resistors.add((ELNTComponentResistor) resistor);
 			}
@@ -158,7 +221,7 @@ public class ELNSpecification{
     
     public LinkedList<ELNTComponentTransmissionLine> getAllComponentTransmissionLine(){
 		LinkedList<ELNTComponentTransmissionLine> transmissionLines = new LinkedList<ELNTComponentTransmissionLine>();
-		for (ELNTComponent transmissionLine : components) {
+		for (ELNTComponent transmissionLine : elnComponents) {
 			if (transmissionLine instanceof ELNTComponentTransmissionLine) {
 				transmissionLines.add((ELNTComponentTransmissionLine) transmissionLine);
 			}
@@ -168,7 +231,7 @@ public class ELNSpecification{
     
     public LinkedList<ELNTComponentVoltageControlledCurrentSource> getAllComponentVoltageControlledCurrentSource(){
 		LinkedList<ELNTComponentVoltageControlledCurrentSource> vccss = new LinkedList<ELNTComponentVoltageControlledCurrentSource>();
-		for (ELNTComponent vccs : components) {
+		for (ELNTComponent vccs : elnComponents) {
 			if (vccs instanceof ELNTComponentVoltageControlledCurrentSource) {
 				vccss.add((ELNTComponentVoltageControlledCurrentSource) vccs);
 			}
@@ -178,7 +241,7 @@ public class ELNSpecification{
     
     public LinkedList<ELNTComponentVoltageControlledVoltageSource> getAllComponentVoltageControlledVoltageSource(){
 		LinkedList<ELNTComponentVoltageControlledVoltageSource> vcvss = new LinkedList<ELNTComponentVoltageControlledVoltageSource>();
-		for (ELNTComponent vcvs : components) {
+		for (ELNTComponent vcvs : elnComponents) {
 			if (vcvs instanceof ELNTComponentVoltageControlledVoltageSource) {
 				vcvss.add((ELNTComponentVoltageControlledVoltageSource) vcvs);
 			}
@@ -188,7 +251,7 @@ public class ELNSpecification{
     
     public LinkedList<ELNTComponentVoltageSinkTDF> getAllComponentVoltageSinkTDF(){
 		LinkedList<ELNTComponentVoltageSinkTDF> TDF_vsinks = new LinkedList<ELNTComponentVoltageSinkTDF>();
-		for (ELNTComponent TDF_vsink : components) {
+		for (ELNTComponent TDF_vsink : elnComponents) {
 			if (TDF_vsink instanceof ELNTComponentVoltageSinkTDF) {
 				TDF_vsinks.add((ELNTComponentVoltageSinkTDF) TDF_vsink);
 			}
@@ -198,7 +261,7 @@ public class ELNSpecification{
     
     public LinkedList<ELNTComponentVoltageSourceTDF> getAllComponentVoltageSourceTDF(){
 		LinkedList<ELNTComponentVoltageSourceTDF> TDF_vsources = new LinkedList<ELNTComponentVoltageSourceTDF>();
-		for (ELNTComponent TDF_vsource : components) {
+		for (ELNTComponent TDF_vsource : elnComponents) {
 			if (TDF_vsource instanceof ELNTComponentVoltageSourceTDF) {
 				TDF_vsources.add((ELNTComponentVoltageSourceTDF) TDF_vsource);
 			}
@@ -208,7 +271,7 @@ public class ELNSpecification{
     
     public LinkedList<ELNTMidPortTerminal> getAllMidPortTerminal(){
 		LinkedList<ELNTMidPortTerminal> midPortTerminals = new LinkedList<ELNTMidPortTerminal>();
-		for (ELNTComponent midPortTerminal : components) {
+		for (ELNTComponent midPortTerminal : elnComponents) {
 			if (midPortTerminal instanceof ELNTMidPortTerminal) {
 				midPortTerminals.add((ELNTMidPortTerminal) midPortTerminal);
 			}
@@ -218,7 +281,7 @@ public class ELNSpecification{
     
     public LinkedList<ELNTModule> getAllModule(){
 		LinkedList<ELNTModule> modules = new LinkedList<ELNTModule>();
-		for (ELNTComponent module : components) {
+		for (ELNTComponent module : elnComponents) {
 			if (module instanceof ELNTModule) {
 				modules.add((ELNTModule) module);
 			}
@@ -228,12 +291,20 @@ public class ELNSpecification{
     
     public LinkedList<ELNTModuleTerminal> getAllModuleTerminal(){
 		LinkedList<ELNTModuleTerminal> moduleTerminals = new LinkedList<ELNTModuleTerminal>();
-		for (ELNTComponent moduleTerminal : components) {
+		for (ELNTComponent moduleTerminal : elnComponents) {
 			if (moduleTerminal instanceof ELNTModuleTerminal) {
 				moduleTerminals.add((ELNTModuleTerminal) moduleTerminal);
 			}
 		}
 		return moduleTerminals;
+    }
+    
+    public int getNbPortDE(){
+    	return (getAllPortDE()).size();
+    }
+    
+    public int getNbPortTDf(){
+    	return (getAllPortTDF()).size();
     }
     
     public int getNbComponentCapacitor(){

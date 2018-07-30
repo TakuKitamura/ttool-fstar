@@ -619,4 +619,24 @@ public class ELNModule extends TGCScalableWithInternalComponent implements Swall
 		}
 		return list;
 	}
+	
+	public java.util.List<SysCAMSPortDE> getAllPortDE() {
+		java.util.List<SysCAMSPortDE> list = new ArrayList<SysCAMSPortDE>();
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof SysCAMSPortDE) {
+				list.add((SysCAMSPortDE)(tgcomponent[i]));
+			}
+		}
+		return list;
+	}
+
+	public java.util.List<SysCAMSPortTDF> getAllPortTDF() {
+		java.util.List<SysCAMSPortTDF> list = new ArrayList<SysCAMSPortTDF>();
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof SysCAMSPortTDF) {
+				list.add((SysCAMSPortTDF)(tgcomponent[i]));
+			}
+		}
+		return list;
+	}
 }
