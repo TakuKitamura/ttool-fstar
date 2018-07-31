@@ -301,6 +301,7 @@ public class TGUIAction extends AbstractAction {
     public static final int ELN_TDF_VOLTAGE_SOURCE = 502;
     public static final int ELN_TDF_CURRENT_SOURCE = 503;
     public static final int ELN_CLUSTER = 504;
+    public static final int ELN_GENCODE = 505;
     
     public static final int EBRDD_EDIT = 271;
     public static final int EBRDD_CONNECTOR = 272;
@@ -656,7 +657,7 @@ public class TGUIAction extends AbstractAction {
     public static final int MOVE_ENABLED = 463;
     public static final int FIRST_DIAGRAM = 464;
     
-    public static final int NB_ACTION = 505;
+    public static final int NB_ACTION = 506;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -1161,7 +1162,7 @@ public class TGUIAction extends AbstractAction {
         actions[CAMS_PORT_DE] = new TAction("C-AMS-port-DE", "Add a DE port", IconManager.imgic8001, IconManager.imgic8001, "DE port", "Add a DE port to the currently opened SystemC-AMS Diagram", 0);
         actions[CAMS_PORT_CONVERTER] = new TAction("C-AMS-port-converter", "Add a converter port", IconManager.imgic8003, IconManager.imgic8003, "Converter port", "Add a converter port to the currently opened SystemC-AMS Diagram", 0);
         actions[CAMS_CLUSTER] = new TAction("C-AMS-cluster", "Add a cluster", IconManager.imgic8006, IconManager.imgic8006, "Cluster", "Add a cluster to the currently opened SystemC-AMS Diagram", 0);
-        actions[CAMS_GENCODE] = new TAction("GENCODE", "GENCODE",IconManager.imgic94, IconManager.imgic94, "Generate SystemC-AMS code", "SystemC-AMS diagram without check syntax", 0);
+        actions[CAMS_GENCODE] = new TAction("C-AMS-gencode", "SystemC-AMS code generation",IconManager.imgic94, IconManager.imgic94, "Generate SystemC-AMS code", "SystemC-AMS diagram without check syntax", 0);
         actions[CAMS_BLOCK_GPIO2VCI] = new TAction("C-AMS-block-GPIO2VCI", "Add a block GPIO2VCI",IconManager.imgic8009, IconManager.imgic8009, "GPIO2VCI block", "Add a GPIO2VCI block to the currently opened SystemC-AMS Diagram", 0);
 
         // ELN
@@ -1185,6 +1186,7 @@ public class TGUIAction extends AbstractAction {
         actions[ELN_TDF_VOLTAGE_SOURCE] = new TAction("eln-tdf-vsource", "Add a voltage source driven by a TDF input signal", IconManager.imgic8033, IconManager.imgic8033, "Voltage source driven by a TDF input signal", "Add a voltage source driven by a TDF input signal to the currently opened ELN Diagram", 0);
         actions[ELN_TDF_CURRENT_SOURCE] = new TAction("eln-tdf-isource", "Add a current source driven by a TDF input signal", IconManager.imgic8034, IconManager.imgic8034, "Current source driven by a TDF input signal", "Add a current source driven by a TDF input signal to the currently opened ELN Diagram", 0);
         actions[ELN_CLUSTER] = new TAction("eln-cluster", "Add a cluster", IconManager.imgic8006, IconManager.imgic8006, "Cluster", "Add a cluster to the currently opened ELN Diagram", 0);
+        actions[ELN_GENCODE] = new TAction("eln-gencode", "ELN code generation",IconManager.imgic94, IconManager.imgic94, "Generate ELN code", "ELN diagram without check syntax", 0);
 
         //ProActive State Machine Diagram
         actions[PROSMD_EDIT] = new TAction("edit-prosmd-diagram", "Edit ProActive state machine diagram", IconManager.imgic100, IconManager.imgic101, "Edit ProActive state machine diagram", "Make it possible to edit the currently opened ProActive state machine diagram", 0);

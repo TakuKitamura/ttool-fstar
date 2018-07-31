@@ -43,7 +43,6 @@ import myutil.GraphicLib;
 import ui.eln.ELNDiagramPanel;
 import ui.eln.ELNDiagramToolBar;
 import ui.util.IconManager;
-
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -87,31 +86,7 @@ public class ELNDesignPanel extends TURTLEPanel {
 	}
 
 	public void init() {
-
-		// Toolbar
-		ELNDiagramToolBar toolBarELN = new ELNDiagramToolBar(mgui);
-		toolbars.add(toolBarELN);
-
-		toolBarPanel = new JPanel();
-		toolBarPanel.setLayout(new BorderLayout());
-
-		// Diagram
-		elndp = new ELNDiagramPanel(mgui, toolBarELN);
-		elndp.setName("ELN Diagram");
-		elndp.tp = this;
-		tdp = elndp;
-		panels.add(elndp); // Always first in list
-		JScrollDiagramPanel jsp = new JScrollDiagramPanel(elndp);
-		elndp.jsp = jsp;
-		jsp.setWheelScrollingEnabled(true);
-		jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
-		toolBarPanel.add(toolBarELN, BorderLayout.NORTH);
-		toolBarPanel.add(jsp, BorderLayout.CENTER);
-		tabbedPane.addTab("ELN Diagram", IconManager.imgic1208, toolBarPanel,
-				"Opens ELN diagram");
-		tabbedPane.setSelectedIndex(0);
-
-		mgui.changeMade(elndp, TDiagramPanel.NEW_COMPONENT);
+		mgui.changeMade(null, TDiagramPanel.NEW_COMPONENT);
 	}
 
 	public String saveHeaderInXml(String extensionToName) {
@@ -127,6 +102,51 @@ public class ELNDesignPanel extends TURTLEPanel {
 
 	public String toString() {
 		return mgui.getTitleAt(this) + "(ELN Application diagram)";
+	}
+	
+	public boolean canFirstDiagramBeMoved() {
+		return true;
+	}
+
+	public boolean removeEnabled(int index) {
+		return panels.size() > 1;
+	}
+
+	public boolean renameEnabled(int index) {
+		if (panels.size() == 0) {
+			return false;
+		}
+		return (panels.elementAt(index) instanceof ELNDiagramPanel);
+	}
+
+	public boolean isELNEnabled() {
+		return true;
+	}
+
+	public boolean addELN(String s) {
+		ELNDiagramToolBar elntb = new ELNDiagramToolBar(mgui);
+		toolbars.add(elntb);
+
+		toolBarPanel = new JPanel();
+		toolBarPanel.setLayout(new BorderLayout());
+
+		elndp = new ELNDiagramPanel(mgui, elntb);
+		elndp.setName(s);
+		elndp.tp = this;
+		tdp = elndp;
+		panels.add(elndp);
+		JScrollDiagramPanel jsp = new JScrollDiagramPanel(elndp);
+		elndp.jsp = jsp;
+		jsp.setWheelScrollingEnabled(true);
+		jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
+		toolBarPanel.add(elntb, BorderLayout.NORTH);
+		toolBarPanel.add(jsp, BorderLayout.CENTER);
+		tabbedPane.addTab(s, IconManager.imgic1208, toolBarPanel, "Opens ELN component diagram");
+		tabbedPane.setSelectedIndex(0);
+		JPanel toolBarPanel = new JPanel();
+		toolBarPanel.setLayout(new BorderLayout());
+
+		return true;
 	}
 
 //	public SysCAMSBlockTDF getBlockTDFComponentByName(String _name) {

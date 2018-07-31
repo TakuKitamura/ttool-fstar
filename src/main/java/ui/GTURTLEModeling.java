@@ -5863,6 +5863,7 @@ memloop:
 			String nameTab;
 			NodeList diagramNl;
 			int indexDesign;
+			int indexTab = 0;
 
 			nameTab = elt.getAttribute("nameTab");
 
@@ -5878,7 +5879,8 @@ memloop:
 					if (elt.getTagName().compareTo("ELNDiagramPanel") == 0) {
 						// Class diagram
 						TraceManager.addDev("Loading ELN");
-						loadELNDiagram(elt, indexDesign);
+						loadELNDiagram(elt, indexDesign, indexTab);
+						indexTab++;
 						TraceManager.addDev("End loading ELN");
 					}
 				}
@@ -6385,8 +6387,7 @@ memloop:
 			loadDiagram(elt, tdp);
 		}
 
-		public void loadSysCAMSDiagram(Element elt, int indexDesign, int indexTab)
-				throws MalformedModelingException, SAXException {
+		public void loadSysCAMSDiagram(Element elt, int indexDesign, int indexTab) throws MalformedModelingException, SAXException {
 			String name;
 
 			name = elt.getAttribute("name");
@@ -6402,15 +6403,18 @@ memloop:
 			loadDiagram(elt, tdp);
 		}
 
-		public void loadELNDiagram(Element elt, int indexDesign) throws MalformedModelingException, SAXException {
+		public void loadELNDiagram(Element elt, int indexDesign, int indexTab) throws MalformedModelingException, SAXException {
 			String name;
-			TDiagramPanel tdp;
 
-			// class diagram name
 			name = elt.getAttribute("name");
-			mgui.setELNDiagramName(indexDesign, name);
-			tdp = mgui.getMainTDiagramPanel(indexDesign);
-			tdp.setName(name);
+			mgui.createELN(indexDesign, name);
+
+			TDiagramPanel tdp = mgui.getELNPanel(indexDesign, indexTab, name);
+
+			if (tdp == null) {
+				throw new MalformedModelingException();
+			}
+			tdp.removeAll();
 
 			loadDiagram(elt, tdp);
 		}

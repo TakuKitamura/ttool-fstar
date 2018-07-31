@@ -68,6 +68,7 @@ import ui.avatarsmd.AvatarSMDPanel;
 import ui.cd.TClassDiagramPanel;
 import ui.diplodocusmethodology.DiplodocusMethodologyDiagramPanel;
 import ui.ebrdd.EBRDDPanel;
+import ui.eln.ELNDiagramPanel;
 import ui.file.*;
 import ui.ftd.FaultTreeDiagramPanel;
 import ui.interactivesimulation.JFrameInteractiveSimulation;
@@ -1101,7 +1102,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         mainTabbedPane.add(sccdp.tabbedPane, index);
         mainTabbedPane.setToolTipTextAt(index, "Open SystemC-AMS design diagrams");
         mainTabbedPane.setTitleAt(index, name);
-        mainTabbedPane.setIconAt(index, IconManager.imgic60);
+        mainTabbedPane.setIconAt(index, IconManager.imgic1208);
         //mainTabbedPane.addTab(name, IconManager.imgic14, dp.tabbedPane, "Opens design diagrams");
         sccdp.init();
         //ystem.out.println("Design added");
@@ -1117,7 +1118,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     	mainTabbedPane.add(elndp.tabbedPane, index);
     	mainTabbedPane.setToolTipTextAt(index, "Open ELN design diagrams");
     	mainTabbedPane.setTitleAt(index, name);
-    	mainTabbedPane.setIconAt(index, IconManager.imgic60);
+    	mainTabbedPane.setIconAt(index, IconManager.imgic1208);
     	//mainTabbedPane.addTab(name, IconManager.imgic14, dp.tabbedPane, "Opens design diagrams");
     	elndp.init();
     	//ystem.out.println("Design added");
@@ -1935,7 +1936,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     public void newELN() {
     	//TraceManager.addDev("NEW DESIGN");
     	addELNDesignPanel("ELN", -1);
-    	tabs.elementAt(tabs.size() - 1).tabbedPane.setSelectedIndex(0);
+//    	tabs.elementAt(tabs.size() - 1).tabbedPane.setSelectedIndex(0);
     	mainTabbedPane.setSelectedIndex(tabs.size() - 1);
     	//paneAction(null);
     	//frame.repaint();
@@ -7181,6 +7182,20 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         setPanelMode();
         return true;
     }
+    
+    public boolean createELN(int index, String s) {
+        return createELN(tabs.elementAt(index), s);
+    }
+
+    public boolean createELN(TURTLEPanel tp, String s) {
+        if (!(tp instanceof ELNDesignPanel)) {
+            return false;
+        }
+
+        ((ELNDesignPanel) tp).addELN(s);
+        setPanelMode();
+        return true;
+    }
 
     public boolean isRequirementCreated(int index, String s) {
         return isRequirementCreated(tabs.elementAt(index), s);
@@ -7290,6 +7305,18 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     public SysCAMSComponentTaskDiagramPanel getSysCAMSPanel(TURTLEPanel tp, int indexTab, String s) {
     	if (tp.tabbedPane.getTitleAt(indexTab).equals(s)) {
     		return (SysCAMSComponentTaskDiagramPanel) (tp.panelAt(indexTab));
+    	}
+    	return null;
+    }
+    
+    public ELNDiagramPanel getELNPanel(int index, int indexTab, String s) {
+    	TURTLEPanel tp = tabs.elementAt(index);
+    	return getELNPanel(tp, indexTab, s);
+    }
+    
+    public ELNDiagramPanel getELNPanel(TURTLEPanel tp, int indexTab, String s) {
+    	if (tp.tabbedPane.getTitleAt(indexTab).equals(s)) {
+    		return (ELNDiagramPanel) (tp.panelAt(indexTab));
     	}
     	return null;
     }
@@ -8452,12 +8479,12 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     			}
     		}
     		if (syscamsDiagram.size() == 0) 
-    			System.err.println("No SysCAMS Panel found : MainGUI.getSysCAMSPanel()");
+    			System.err.println("No SysCAMS Panel found : MainGUI.getListSysCAMSPanel()");
     		return syscamsDiagram;
     	} else {
     		JDialog msg = new JDialog();
     		msg.setLocationRelativeTo(null);
-    		JOptionPane.showMessageDialog(msg, "There is no Systemc-AMS panel. Please add one.", "Warning !",
+    		JOptionPane.showMessageDialog(msg, "There is no SystemC-AMS panel. Please add one.", "Warning !",
     				JOptionPane.WARNING_MESSAGE);
     		return null;
     	}
@@ -8466,6 +8493,37 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     public void syscamsExecutableCodeGeneration() {
         JDialogSysCAMSExecutableCodeGeneration jgen = new JDialogSysCAMSExecutableCodeGeneration(frame, this, "Executable Code generation, compilation and execution",
                 "../SysCAMSGenerationCode/");
+   
+        GraphicLib.centerOnParent(jgen, 500, 450);
+        jgen.setVisible(true);
+        dtree.toBeUpdated();
+    }
+    
+    public Vector<ELNDiagramPanel> getListELNPanel() {
+    	Vector<ELNDiagramPanel> elnDiagram = new Vector<ELNDiagramPanel>(); 
+    	TURTLEPanel tp = getTURTLEPanel("ELN");
+    	if (tp != null) {
+    		Vector<TDiagramPanel> ps = tp.panels;
+    		for (TDiagramPanel panel : ps) {
+    			if (panel instanceof ELNDiagramPanel) {
+    				elnDiagram.add((ELNDiagramPanel) panel);
+    			}
+    		}
+    		if (elnDiagram.size() == 0) 
+    			System.err.println("No ELN Panel found : MainGUI.getListELNPanel()");
+    		return elnDiagram;
+    	} else {
+    		JDialog msg = new JDialog();
+    		msg.setLocationRelativeTo(null);
+    		JOptionPane.showMessageDialog(msg, "There is no ELN panel. Please add one.", "Warning !",
+    				JOptionPane.WARNING_MESSAGE);
+    		return null;
+    	}
+    }
+    
+    public void elnExecutableCodeGeneration() {
+        JDialogELNExecutableCodeGeneration jgen = new JDialogELNExecutableCodeGeneration(frame, this, "Executable Code generation, compilation and execution",
+                "../ELNGenerationCode/");
    
         GraphicLib.centerOnParent(jgen, 500, 450);
         jgen.setVisible(true);

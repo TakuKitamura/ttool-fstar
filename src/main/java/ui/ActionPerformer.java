@@ -976,6 +976,8 @@ public class ActionPerformer {
         	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_TDF_CURRENT_SOURCE);
         } else if (command.equals(mgui.actions[TGUIAction.ELN_CLUSTER].getActionCommand())){
         	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_CLUSTER);
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_GENCODE].getActionCommand())){
+            mgui.elnExecutableCodeGeneration();
 
             // Attack Tree Diagrams
         } else if (command.equals(mgui.actions[TGUIAction.ATD_BLOCK].getActionCommand())) {

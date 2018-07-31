@@ -79,6 +79,15 @@ public class ELNSpecification{
     	return syscamsConnectors;
     }
 
+    public ELNTCluster getCluster(){
+		for (ELNTComponent comp : elnComponents) {
+			if (comp instanceof ELNTCluster) {
+				return (ELNTCluster) comp;
+			}
+		}
+		return null;
+	}
+    
     public LinkedList<ELNTConnector> getAllConnectorsBetweenELNModuleTerminal(){
     	LinkedList<ELNTConnector> cons = new LinkedList<ELNTConnector>();
     	for (ELNTConnector con : elnConnectors) {
@@ -105,6 +114,16 @@ public class ELNSpecification{
     		if (con.get_p1().getComponent() instanceof SysCAMSTPortDE && con.get_p2().getComponent() instanceof SysCAMSTPortDE) {
     			cons.add(con);
     		}
+    	}
+    	return cons;
+    }
+    
+    public LinkedList<ELNTConnector> getAllConnectorsInModule(){
+    	LinkedList<ELNTConnector> cons = new LinkedList<ELNTConnector>();
+    	for (ELNTConnector con : elnConnectors) {
+    		if (!(con.get_p1().getComponent() instanceof ELNTModuleTerminal && con.get_p2().getComponent() instanceof ELNTModuleTerminal)) {
+    			cons.add(con);
+			}
     	}
     	return cons;
     }
