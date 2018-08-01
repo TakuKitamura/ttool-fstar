@@ -155,10 +155,17 @@ public class ELNPanelTranslator {
 						double q0 = capacitor.getQ0();
 						String unit0 = capacitor.getUnit0();
 						String unit1 = capacitor.getUnit1();
-						ELNConnectingPoint[] cp = (ELNConnectingPoint[]) capacitor.connectingPoint;
+						ELNConnectingPoint cp0 = (ELNConnectingPoint) capacitor.getTGConnectingPointAtIndex(0);
+						ELNConnectingPoint cp1 = (ELNConnectingPoint) capacitor.getTGConnectingPointAtIndex(1); 
 	
-						ELNTComponentCapacitor elnCapacitor = new ELNTComponentCapacitor(name, val, q0, unit0, unit1, cp, elnModule);
-	
+						ELNTComponentCapacitor elnCapacitor = new ELNTComponentCapacitor(name, val, q0, unit0, unit1, elnModule);
+						
+						ELNTConnectingPoint elncp0 = new ELNTConnectingPoint(elnCapacitor, cp0.getName());
+						ELNTConnectingPoint elncp1 = new ELNTConnectingPoint(elnCapacitor, cp1.getName());
+
+						elnCapacitor.addConnectingPoint(elncp0);
+						elnCapacitor.addConnectingPoint(elncp1);
+						
 						elnMap.put(capacitor, elnCapacitor);
 						elnModule.addCapacitor(elnCapacitor);
 						elnComponents.add(elnCapacitor);
@@ -169,9 +176,19 @@ public class ELNPanelTranslator {
 	
 						String name = TDF_isink.getValue();
 						double scale = TDF_isink.getScale();
-						ELNConnectingPoint[] cp = (ELNConnectingPoint[]) TDF_isink.connectingPoint;
+						ELNConnectingPoint cp0 = (ELNConnectingPoint) TDF_isink.getTGConnectingPointAtIndex(0);
+						ELNConnectingPoint cp1 = (ELNConnectingPoint) TDF_isink.getTGConnectingPointAtIndex(1); 
+						ELNConnectingPoint cp2 = (ELNConnectingPoint) TDF_isink.getTGConnectingPointAtIndex(2);
 	
-						ELNTComponentCurrentSinkTDF elnTDF_isink = new ELNTComponentCurrentSinkTDF(name, scale, cp, elnModule);
+						ELNTComponentCurrentSinkTDF elnTDF_isink = new ELNTComponentCurrentSinkTDF(name, scale,elnModule);
+						
+						ELNTConnectingPoint elncp0 = new ELNTConnectingPoint(elnTDF_isink, cp0.getName());
+						ELNTConnectingPoint elncp1 = new ELNTConnectingPoint(elnTDF_isink, cp1.getName());
+						ELNTConnectingPoint elncp2 = new ELNTConnectingPoint(elnTDF_isink, cp2.getName());
+						
+						elnTDF_isink.addConnectingPoint(elncp0);
+						elnTDF_isink.addConnectingPoint(elncp1);
+						elnTDF_isink.addConnectingPoint(elncp2);
 	
 						elnMap.put(TDF_isink, elnTDF_isink);
 						elnModule.addTDF_isink(elnTDF_isink);
@@ -183,10 +200,20 @@ public class ELNPanelTranslator {
 	
 						String name = TDF_isource.getValue();
 						double scale = TDF_isource.getScale();
-						ELNConnectingPoint[] cp = (ELNConnectingPoint[]) TDF_isource.connectingPoint;
+						ELNConnectingPoint cp0 = (ELNConnectingPoint) TDF_isource.getTGConnectingPointAtIndex(0);
+						ELNConnectingPoint cp1 = (ELNConnectingPoint) TDF_isource.getTGConnectingPointAtIndex(1); 
+						ELNConnectingPoint cp2 = (ELNConnectingPoint) TDF_isource.getTGConnectingPointAtIndex(2);
+						
+						ELNTComponentCurrentSourceTDF elnTDF_isource = new ELNTComponentCurrentSourceTDF(name, scale, elnModule);
 	
-						ELNTComponentCurrentSourceTDF elnTDF_isource = new ELNTComponentCurrentSourceTDF(name, scale, cp, elnModule);
-	
+						ELNTConnectingPoint elncp0 = new ELNTConnectingPoint(elnTDF_isource, cp0.getName());
+						ELNTConnectingPoint elncp1 = new ELNTConnectingPoint(elnTDF_isource, cp1.getName());
+						ELNTConnectingPoint elncp2 = new ELNTConnectingPoint(elnTDF_isource, cp2.getName());
+						
+						elnTDF_isource.addConnectingPoint(elncp0);
+						elnTDF_isource.addConnectingPoint(elncp1);
+						elnTDF_isource.addConnectingPoint(elncp2);
+						
 						elnMap.put(TDF_isource, elnTDF_isource);
 						elnModule.addTDF_isource(elnTDF_isource);
 						elnComponents.add(elnTDF_isource);
@@ -197,10 +224,23 @@ public class ELNPanelTranslator {
 	
 						String name = idealTransformer.getValue();
 						double ratio = idealTransformer.getRatio();
-						ELNConnectingPoint[] cp = (ELNConnectingPoint[]) idealTransformer.connectingPoint;
+						ELNConnectingPoint cp0 = (ELNConnectingPoint) idealTransformer.getTGConnectingPointAtIndex(0);
+						ELNConnectingPoint cp1 = (ELNConnectingPoint) idealTransformer.getTGConnectingPointAtIndex(1); 
+						ELNConnectingPoint cp2 = (ELNConnectingPoint) idealTransformer.getTGConnectingPointAtIndex(2);
+						ELNConnectingPoint cp3 = (ELNConnectingPoint) idealTransformer.getTGConnectingPointAtIndex(3); 
 	
-						ELNTComponentIdealTransformer elnIdealTransformer = new ELNTComponentIdealTransformer(name, ratio, cp, elnModule);
+						ELNTComponentIdealTransformer elnIdealTransformer = new ELNTComponentIdealTransformer(name, ratio, elnModule);
 	
+						ELNTConnectingPoint elncp0 = new ELNTConnectingPoint(elnIdealTransformer, cp0.getName());
+						ELNTConnectingPoint elncp1 = new ELNTConnectingPoint(elnIdealTransformer, cp1.getName());
+						ELNTConnectingPoint elncp2 = new ELNTConnectingPoint(elnIdealTransformer, cp2.getName());
+						ELNTConnectingPoint elncp3 = new ELNTConnectingPoint(elnIdealTransformer, cp3.getName());
+						
+						elnIdealTransformer.addConnectingPoint(elncp0);
+						elnIdealTransformer.addConnectingPoint(elncp1);
+						elnIdealTransformer.addConnectingPoint(elncp2);
+						elnIdealTransformer.addConnectingPoint(elncp3);
+						
 						elnMap.put(idealTransformer, elnIdealTransformer);
 						elnModule.addIdealTransformer(elnIdealTransformer);
 						elnComponents.add(elnIdealTransformer);
@@ -220,10 +260,17 @@ public class ELNPanelTranslator {
 						double acNoiseAmpliture = isource.getAcNoiseAmplitude();
 						String delay = isource.getDelay();
 						String unit0 = isource.getUnit0();
-						ELNConnectingPoint[] cp = (ELNConnectingPoint[]) isource.connectingPoint;
+						ELNConnectingPoint cp0 = (ELNConnectingPoint) isource.getTGConnectingPointAtIndex(0);
+						ELNConnectingPoint cp1 = (ELNConnectingPoint) isource.getTGConnectingPointAtIndex(1); 
 	
-						ELNTComponentIndependentCurrentSource elnISource = new ELNTComponentIndependentCurrentSource(name, initValue, offset, amplitude, frequency, phase, acAmplitude, acPhase, acNoiseAmpliture, delay, unit0, cp, elnModule);
+						ELNTComponentIndependentCurrentSource elnISource = new ELNTComponentIndependentCurrentSource(name, initValue, offset, amplitude, frequency, phase, acAmplitude, acPhase, acNoiseAmpliture, delay, unit0, elnModule);
 	
+						ELNTConnectingPoint elncp0 = new ELNTConnectingPoint(elnISource, cp0.getName());
+						ELNTConnectingPoint elncp1 = new ELNTConnectingPoint(elnISource, cp1.getName());
+						
+						elnISource.addConnectingPoint(elncp0);
+						elnISource.addConnectingPoint(elncp1);
+						
 						elnMap.put(isource, elnISource);
 						elnModule.addIsource(elnISource);
 						elnComponents.add(elnISource);
@@ -243,10 +290,17 @@ public class ELNPanelTranslator {
 						double acNoiseAmpliture = vsource.getAcNoiseAmplitude();
 						String delay = vsource.getDelay();
 						String unit0 = vsource.getUnit0();
-						ELNConnectingPoint[] cp = (ELNConnectingPoint[]) vsource.connectingPoint;
+						ELNConnectingPoint cp0 = (ELNConnectingPoint) vsource.getTGConnectingPointAtIndex(0);
+						ELNConnectingPoint cp1 = (ELNConnectingPoint) vsource.getTGConnectingPointAtIndex(1); 
+						
+						ELNTComponentIndependentVoltageSource elnVSource = new ELNTComponentIndependentVoltageSource(name, initValue, offset, amplitude, frequency, phase, acAmplitude, acPhase, acNoiseAmpliture, delay, unit0, elnModule);
 	
-						ELNTComponentIndependentVoltageSource elnVSource = new ELNTComponentIndependentVoltageSource(name, initValue, offset, amplitude, frequency, phase, acAmplitude, acPhase, acNoiseAmpliture, delay, unit0, cp, elnModule);
-	
+						ELNTConnectingPoint elncp0 = new ELNTConnectingPoint(elnVSource, cp0.getName());
+						ELNTConnectingPoint elncp1 = new ELNTConnectingPoint(elnVSource, cp1.getName());
+						
+						elnVSource.addConnectingPoint(elncp0);
+						elnVSource.addConnectingPoint(elncp1);
+						
 						elnMap.put(vsource, elnVSource);
 						elnModule.addVsource(elnVSource);
 						elnComponents.add(elnVSource);
@@ -260,10 +314,17 @@ public class ELNPanelTranslator {
 						double phi0 = inductor.getPhi0();
 						String unit0 = inductor.getUnit0();
 						String unit1 = inductor.getUnit1();
-						ELNConnectingPoint[] cp = (ELNConnectingPoint[]) inductor.connectingPoint;
+						ELNConnectingPoint cp0 = (ELNConnectingPoint) inductor.getTGConnectingPointAtIndex(0);
+						ELNConnectingPoint cp1 = (ELNConnectingPoint) inductor.getTGConnectingPointAtIndex(1); 
+						
+						ELNTComponentInductor elnInductor = new ELNTComponentInductor(name, val, phi0, unit0, unit1, elnModule);
 	
-						ELNTComponentInductor elnInductor = new ELNTComponentInductor(name, val, phi0, unit0, unit1, cp, elnModule);
-	
+						ELNTConnectingPoint elncp0 = new ELNTConnectingPoint(elnInductor, cp0.getName());
+						ELNTConnectingPoint elncp1 = new ELNTConnectingPoint(elnInductor, cp1.getName());
+						
+						elnInductor.addConnectingPoint(elncp0);
+						elnInductor.addConnectingPoint(elncp1);
+						
 						elnMap.put(inductor, elnInductor);
 						elnModule.addInductor(elnInductor);
 						elnComponents.add(elnInductor);
@@ -287,10 +348,17 @@ public class ELNPanelTranslator {
 						String name = resistor.getValue();
 						double val = resistor.getVal();
 						String unit = resistor.getUnit();
-						ELNConnectingPoint[] cp = (ELNConnectingPoint[]) resistor.connectingPoint;
+						ELNConnectingPoint cp0 = (ELNConnectingPoint) resistor.getTGConnectingPointAtIndex(0);
+						ELNConnectingPoint cp1 = (ELNConnectingPoint) resistor.getTGConnectingPointAtIndex(1);
 	
-						ELNTComponentResistor elnResistor = new ELNTComponentResistor(name, val, unit, cp, elnModule);
+						ELNTComponentResistor elnResistor = new ELNTComponentResistor(name, val, unit, elnModule);
 	
+						ELNTConnectingPoint elncp0 = new ELNTConnectingPoint(elnResistor, cp0.getName());
+						ELNTConnectingPoint elncp1 = new ELNTConnectingPoint(elnResistor, cp1.getName());
+						
+						elnResistor.addConnectingPoint(elncp0);
+						elnResistor.addConnectingPoint(elncp1);
+						
 						elnMap.put(resistor, elnResistor);
 						elnModule.addResistor(elnResistor);
 						elnComponents.add(elnResistor);
@@ -305,10 +373,23 @@ public class ELNPanelTranslator {
 						String delay = transmissionLine.getDelay();
 						String unit0 = transmissionLine.getUnit0();
 						String unit2 = transmissionLine.getUnit2();
-						ELNConnectingPoint[] cp = (ELNConnectingPoint[]) transmissionLine.connectingPoint;
+						ELNConnectingPoint cp0 = (ELNConnectingPoint) transmissionLine.getTGConnectingPointAtIndex(0);
+						ELNConnectingPoint cp1 = (ELNConnectingPoint) transmissionLine.getTGConnectingPointAtIndex(1); 
+						ELNConnectingPoint cp2 = (ELNConnectingPoint) transmissionLine.getTGConnectingPointAtIndex(2);
+						ELNConnectingPoint cp3 = (ELNConnectingPoint) transmissionLine.getTGConnectingPointAtIndex(3); 
 	
-						ELNTComponentTransmissionLine elnTransmissionLine = new ELNTComponentTransmissionLine(name, z0, delta0, delay, unit0, unit2, cp, elnModule);
+						ELNTComponentTransmissionLine elnTransmissionLine = new ELNTComponentTransmissionLine(name, z0, delta0, delay, unit0, unit2, elnModule);
 	
+						ELNTConnectingPoint elncp0 = new ELNTConnectingPoint(elnTransmissionLine, cp0.getName());
+						ELNTConnectingPoint elncp1 = new ELNTConnectingPoint(elnTransmissionLine, cp1.getName());
+						ELNTConnectingPoint elncp2 = new ELNTConnectingPoint(elnTransmissionLine, cp2.getName());
+						ELNTConnectingPoint elncp3 = new ELNTConnectingPoint(elnTransmissionLine, cp3.getName());
+						
+						elnTransmissionLine.addConnectingPoint(elncp0);
+						elnTransmissionLine.addConnectingPoint(elncp1);
+						elnTransmissionLine.addConnectingPoint(elncp2);
+						elnTransmissionLine.addConnectingPoint(elncp3);
+						
 						elnMap.put(transmissionLine, elnTransmissionLine);
 						elnModule.addTransmissionLine(elnTransmissionLine);
 						elnComponents.add(elnTransmissionLine);
@@ -320,10 +401,23 @@ public class ELNPanelTranslator {
 						String name = vccs.getValue();
 						double val = vccs.getVal();
 						String unit = vccs.getUnit();
-						ELNConnectingPoint[] cp = (ELNConnectingPoint[]) vccs.connectingPoint;
+						ELNConnectingPoint cp0 = (ELNConnectingPoint) vccs.getTGConnectingPointAtIndex(0);
+						ELNConnectingPoint cp1 = (ELNConnectingPoint) vccs.getTGConnectingPointAtIndex(1); 
+						ELNConnectingPoint cp2 = (ELNConnectingPoint) vccs.getTGConnectingPointAtIndex(2);
+						ELNConnectingPoint cp3 = (ELNConnectingPoint) vccs.getTGConnectingPointAtIndex(3); 
 	
-						ELNTComponentVoltageControlledCurrentSource elnVCCS = new ELNTComponentVoltageControlledCurrentSource(name, val, unit, cp, elnModule);
+						ELNTComponentVoltageControlledCurrentSource elnVCCS = new ELNTComponentVoltageControlledCurrentSource(name, val, unit, elnModule);
 	
+						ELNTConnectingPoint elncp0 = new ELNTConnectingPoint(elnVCCS, cp0.getName());
+						ELNTConnectingPoint elncp1 = new ELNTConnectingPoint(elnVCCS, cp1.getName());
+						ELNTConnectingPoint elncp2 = new ELNTConnectingPoint(elnVCCS, cp2.getName());
+						ELNTConnectingPoint elncp3 = new ELNTConnectingPoint(elnVCCS, cp3.getName());
+						
+						elnVCCS.addConnectingPoint(elncp0);
+						elnVCCS.addConnectingPoint(elncp1);
+						elnVCCS.addConnectingPoint(elncp2);
+						elnVCCS.addConnectingPoint(elncp3);
+						
 						elnMap.put(vccs, elnVCCS);
 						elnModule.addVccs(elnVCCS);
 						elnComponents.add(elnVCCS);
@@ -334,10 +428,23 @@ public class ELNPanelTranslator {
 	
 						String name = vcvs.getValue();
 						double val = vcvs.getVal();
-						ELNConnectingPoint[] cp = (ELNConnectingPoint[]) vcvs.connectingPoint;
+						ELNConnectingPoint cp0 = (ELNConnectingPoint) vcvs.getTGConnectingPointAtIndex(0);
+						ELNConnectingPoint cp1 = (ELNConnectingPoint) vcvs.getTGConnectingPointAtIndex(1); 
+						ELNConnectingPoint cp2 = (ELNConnectingPoint) vcvs.getTGConnectingPointAtIndex(2);
+						ELNConnectingPoint cp3 = (ELNConnectingPoint) vcvs.getTGConnectingPointAtIndex(3); 
 						
-						ELNTComponentVoltageControlledVoltageSource elnVCVS = new ELNTComponentVoltageControlledVoltageSource(name, val, cp, elnModule);
+						ELNTComponentVoltageControlledVoltageSource elnVCVS = new ELNTComponentVoltageControlledVoltageSource(name, val, elnModule);
 	
+						ELNTConnectingPoint elncp0 = new ELNTConnectingPoint(elnVCVS, cp0.getName());
+						ELNTConnectingPoint elncp1 = new ELNTConnectingPoint(elnVCVS, cp1.getName());
+						ELNTConnectingPoint elncp2 = new ELNTConnectingPoint(elnVCVS, cp2.getName());
+						ELNTConnectingPoint elncp3 = new ELNTConnectingPoint(elnVCVS, cp3.getName());
+						
+						elnVCVS.addConnectingPoint(elncp0);
+						elnVCVS.addConnectingPoint(elncp1);
+						elnVCVS.addConnectingPoint(elncp2);
+						elnVCVS.addConnectingPoint(elncp3);
+						
 						elnMap.put(vcvs, elnVCVS);
 						elnModule.addVcvs(elnVCVS);
 						elnComponents.add(elnVCVS);
@@ -348,10 +455,20 @@ public class ELNPanelTranslator {
 	
 						String name = TDF_vsink.getValue();
 						double scale = TDF_vsink.getScale();
-						ELNConnectingPoint[] cp = (ELNConnectingPoint[]) TDF_vsink.connectingPoint;
+						ELNConnectingPoint cp0 = (ELNConnectingPoint) TDF_vsink.getTGConnectingPointAtIndex(0);
+						ELNConnectingPoint cp1 = (ELNConnectingPoint) TDF_vsink.getTGConnectingPointAtIndex(1); 
+						ELNConnectingPoint cp2 = (ELNConnectingPoint) TDF_vsink.getTGConnectingPointAtIndex(2);
+						
+						ELNTComponentVoltageSinkTDF elnTDF_vsink = new ELNTComponentVoltageSinkTDF(name, scale, elnModule);
 	
-						ELNTComponentVoltageSinkTDF elnTDF_vsink = new ELNTComponentVoltageSinkTDF(name, scale, cp, elnModule);
-	
+						ELNTConnectingPoint elncp0 = new ELNTConnectingPoint(elnTDF_vsink, cp0.getName());
+						ELNTConnectingPoint elncp1 = new ELNTConnectingPoint(elnTDF_vsink, cp1.getName());
+						ELNTConnectingPoint elncp2 = new ELNTConnectingPoint(elnTDF_vsink, cp2.getName());
+						
+						elnTDF_vsink.addConnectingPoint(elncp0);
+						elnTDF_vsink.addConnectingPoint(elncp1);
+						elnTDF_vsink.addConnectingPoint(elncp2);
+						
 						elnMap.put(TDF_vsink, elnTDF_vsink);
 						elnModule.addTDF_vsink(elnTDF_vsink);
 						elnComponents.add(elnTDF_vsink);
@@ -362,10 +479,20 @@ public class ELNPanelTranslator {
 	
 						String name = TDF_vsource.getValue();
 						double scale = TDF_vsource.getScale();
-						ELNConnectingPoint[] cp = (ELNConnectingPoint[]) TDF_vsource.connectingPoint;
+						ELNConnectingPoint cp0 = (ELNConnectingPoint) TDF_vsource.getTGConnectingPointAtIndex(0);
+						ELNConnectingPoint cp1 = (ELNConnectingPoint) TDF_vsource.getTGConnectingPointAtIndex(1); 
+						ELNConnectingPoint cp2 = (ELNConnectingPoint) TDF_vsource.getTGConnectingPointAtIndex(2);
+						
+						ELNTComponentVoltageSourceTDF elnTDF_vsource = new ELNTComponentVoltageSourceTDF(name, scale, elnModule);
 	
-						ELNTComponentVoltageSourceTDF elnTDF_vsource = new ELNTComponentVoltageSourceTDF(name, scale, cp, elnModule);
-	
+						ELNTConnectingPoint elncp0 = new ELNTConnectingPoint(elnTDF_vsource, cp0.getName());
+						ELNTConnectingPoint elncp1 = new ELNTConnectingPoint(elnTDF_vsource, cp1.getName());
+						ELNTConnectingPoint elncp2 = new ELNTConnectingPoint(elnTDF_vsource, cp2.getName());
+						
+						elnTDF_vsource.addConnectingPoint(elncp0);
+						elnTDF_vsource.addConnectingPoint(elncp1);
+						elnTDF_vsource.addConnectingPoint(elncp2);
+						
 						elnMap.put(TDF_vsource, elnTDF_vsource);
 						elnModule.addTDF_vsource(elnTDF_vsource);
 						elnComponents.add(elnTDF_vsource);

@@ -38,7 +38,7 @@
 
 package elntranslator;
 
-import ui.eln.ELNConnectingPoint;
+import java.util.LinkedList;
 
 /**
  * Class ELNTComponentIdealTransformer
@@ -51,14 +51,14 @@ import ui.eln.ELNConnectingPoint;
 public class ELNTComponentIdealTransformer extends ELNTComponent {
 	private String name;
 	private double ratio;
-	private ELNConnectingPoint[] cp;
+	private LinkedList<ELNTConnectingPoint> cp;
 	
 	private ELNTModule module;
 	
-	public ELNTComponentIdealTransformer(String _name, double _ratio, ELNConnectingPoint[] _cp, ELNTModule _module) {
+	public ELNTComponentIdealTransformer(String _name, double _ratio, ELNTModule _module) {
 		name = _name;
 		ratio = _ratio;
-		cp = _cp;
+		cp = new LinkedList<ELNTConnectingPoint>();
 		module = _module;
 	}
 
@@ -70,10 +70,14 @@ public class ELNTComponentIdealTransformer extends ELNTComponent {
 		return ratio;
 	}
 	
-	public ELNConnectingPoint[] getCp() {
+	public LinkedList<ELNTConnectingPoint> getConnectingPoint() {
 		return cp;
 	}
-
+	
+	public void addConnectingPoint(ELNTConnectingPoint _cp) {
+		cp.add(_cp);
+	}
+	
 	public ELNTModule getModule() {
 		return module;
 	}

@@ -38,7 +38,7 @@
 
 package elntranslator;
 
-import ui.eln.ELNConnectingPoint;
+import java.util.LinkedList;
 
 /**
  * Class ELNTComponentInductor
@@ -52,17 +52,17 @@ public class ELNTComponentInductor extends ELNTComponent {
 	private String name;
 	private double val, phi0;
 	private String unit0, unit1;
-	private ELNConnectingPoint[] cp;
+	private LinkedList<ELNTConnectingPoint> cp;
 	
 	private ELNTModule module;
 	
-	public ELNTComponentInductor(String _name, double _val, double _phi0, String _unit0, String _unit1, ELNConnectingPoint[] _cp, ELNTModule _module) {
+	public ELNTComponentInductor(String _name, double _val, double _phi0, String _unit0, String _unit1, ELNTModule _module) {
 		name = _name;
 		val = _val;
 		phi0 = _phi0;
 		unit0 = _unit0;
 		unit1 = _unit1;
-		cp = _cp;
+		cp = new LinkedList<ELNTConnectingPoint>();
 		module = _module;
 	}
 
@@ -86,8 +86,12 @@ public class ELNTComponentInductor extends ELNTComponent {
 		return unit1;
 	}
 
-	public ELNConnectingPoint[] getCp() {
+	public LinkedList<ELNTConnectingPoint> getConnectingPoint() {
 		return cp;
+	}
+	
+	public void addConnectingPoint(ELNTConnectingPoint _cp) {
+		cp.add(_cp);
 	}
 	
 	public ELNTModule getModule() {
