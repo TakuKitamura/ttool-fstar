@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatarsmd;
 
 import ui.MainGUI;
@@ -46,9 +43,6 @@ import ui.TGUIAction;
 import ui.TToolBar;
 
 import javax.swing.*;
-
-//import java.awt.*;
-//import java.awt.event.*;
 
 /**
  * Class AvatarSMDToolBar
@@ -59,11 +53,11 @@ import javax.swing.*;
  */
 public class AvatarSMDToolBar extends TToolBar {
     
-    
     public AvatarSMDToolBar(MainGUI _mgui) {
         super(_mgui);
     }
     
+    @Override
     protected void setActive(boolean b) {
         mgui.actions[TGUIAction.ASMD_EDIT].setEnabled(b);
         mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
@@ -75,7 +69,7 @@ public class AvatarSMDToolBar extends TToolBar {
 		mgui.actions[TGUIAction.ASMD_SEND_SIGNAL].setEnabled(b);
         mgui.actions[TGUIAction.ASMD_RECEIVE_SIGNAL].setEnabled(b);
         mgui.actions[TGUIAction.ASMD_LIBRARY_FUNCTION_CALL].setEnabled(b);
-		mgui.actions[TGUIAction.ASMD_PARALLEL].setEnabled(b);
+		//mgui.actions[TGUIAction.ASMD_PARALLEL].setEnabled(b);
 		mgui.actions[TGUIAction.ASMD_STATE].setEnabled(b);
 		mgui.actions[TGUIAction.ASMD_CHOICE].setEnabled(b);
 		mgui.actions[TGUIAction.ASMD_RANDOM].setEnabled(b);
@@ -97,6 +91,7 @@ public class AvatarSMDToolBar extends TToolBar {
 		mgui.updateZoomInfo();
     }
     
+    @Override
     protected void setButtons() {
         JButton button;
         
@@ -111,12 +106,10 @@ public class AvatarSMDToolBar extends TToolBar {
 		button = this.add(mgui.actions[TGUIAction.CONNECTOR_COMMENT]);
         button.addMouseListener(mgui.mouseHandler);
         
-        
         this.addSeparator();
         
 		button = this.add(mgui.actions[TGUIAction.ASMD_CONNECTOR]);
         button.addMouseListener(mgui.mouseHandler);
-		
         
         this.addSeparator();
         
@@ -185,7 +178,6 @@ public class AvatarSMDToolBar extends TToolBar {
 		
 		button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_AVATAR_ID]);
         button.addMouseListener(mgui.mouseHandler);
-       
     }
 } // Class
 

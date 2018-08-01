@@ -59,7 +59,7 @@ import java.awt.*;
  * @author Ludovic APVRILLE
  * @version 1.0 09/12/2009
  */
-public class ATDAttack extends TGCScalableWithInternalComponent implements SwallowedTGComponent, WithAttributes, CheckableAccessibility, CanBeDisabled {
+public class ATDAttack extends TGCScalableWithInternalComponent implements SwallowedTGComponent, WithAttributes, CheckableAccessibility/*, CanBeDisabled*/ {
     private int textY1 = 3;
     //   private int textY2 = 3;
 
@@ -127,6 +127,7 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
         myImageIcon = IconManager.imgic702;
     }
 
+    @Override
     public void internalDrawing(Graphics g) {
         String ster;
         if (isRootAttack) {
@@ -196,14 +197,20 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
         // Core of the attack
         Color c = g.getColor();
         g.draw3DRect(x, y, width, height, true);
+        
         if (isEnabled()) {
             if (isRootAttack) {
                 g.setColor(ColorManager.ATD_ROOT_ATTACK);
             } else {
                 g.setColor(ColorManager.ATD_ATTACK);
             }
-        } else {
-            g.setColor(ColorManager.ATD_ATTACK_DISABLED);
+        } 
+        else {
+    		// Issue #69: Disabled color now managed in TGComponent / ColorManager
+	    	// For filled shapes ensure background color is white so that text is
+	    	// readable
+	    	g.setColor( ColorManager.DISABLED_FILLING );
+//            g.setColor(ColorManager.ATD_ATTACK_DISABLED);
         }
 
         g.fill3DRect(x + 1, y + 1, width - 1, height - 1, true);
@@ -254,13 +261,14 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
                 }
             }
 
-            if (!isEnabled()) {
-                String val = "disabled";
-                w = g.getFontMetrics().stringWidth(val);
-                //int h =  currentFontSize + (int)(textY1 * tdp.getZoom());
-                g.setFont(f.deriveFont(Font.ITALIC));
-                g.drawString(val, x + (width - w - 5), y + height - 2);
-            }
+            // Issue #69: Use the same disabling UI as other components
+//            if (!isEnabled()) {
+//                String val = "disabled";
+//                w = g.getFontMetrics().stringWidth(val);
+//                //int h =  currentFontSize + (int)(textY1 * tdp.getZoom());
+//                g.setFont(f.deriveFont(Font.ITALIC));
+//                g.drawString(val, x + (width - w - 5), y + height - 2);
+//            }
 
 
         } else {
@@ -271,7 +279,7 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
 
     }
 
-    public void setValue(String val, Graphics g) {
+    private void setValue(String val, Graphics g) {
         oldValue = value;
         String ster;
         if (isRootAttack) {
@@ -299,10 +307,9 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
 
 
         g.setFont(f0);
-
-        //
     }
 
+    @Override
     public void resizeWithFather() {
         if ((father != null) && (father instanceof ATDBlock)) {
             //
@@ -312,7 +319,7 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
         }
     }
 
-
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
         String tmp;
         boolean error = false;
@@ -356,6 +363,7 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
         return !error;
     }
 
+    @Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
 
         if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
@@ -364,10 +372,12 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
         return null;
     }
 
+    @Override
     public int getType() {
         return TGComponentManager.ATD_ATTACK;
     }
 
+    @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<info description=\"" + description);
@@ -379,9 +389,7 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
 
     @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
-        //
         try {
-
             NodeList nli;
             Node n1, n2;
             Element elt;
@@ -420,7 +428,6 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
         }
     }
 
-
     public String getDescription() {
         return description;
     }
@@ -439,7 +446,6 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
         return s;
     }
 
-
     public boolean isRootAttack() {
         return isRootAttack;
     }
@@ -448,8 +454,14 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
         setFather(null);
         TDiagramPanel tdp = getTDiagramPanel();
         setCdRectangle(tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY());
-
     }
-
-
+    
+    /**
+     * Issue #69
+     * @return
+     */
+    @Override
+    public boolean canBeDisabled() {
+    	return true;
+    }
 }

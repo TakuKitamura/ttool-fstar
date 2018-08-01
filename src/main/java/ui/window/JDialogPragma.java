@@ -78,8 +78,8 @@ public class JDialogPragma extends JDialogBase implements ActionListener {
     protected JButton cancel;
     protected JMenu help;
     private JPopupMenu helpPopup;
-    public Map<String, java.util.List<String>> blockAttributeMap = new HashMap<>();
-    public Map<String, java.util.List<String>> blockStateMap = new HashMap<>();
+    public Map<String, List<String>> blockAttributeMap = new HashMap<>();
+    public Map<String, List<String>> blockStateMap = new HashMap<>();
 
     /**
      * Creates new form
@@ -395,6 +395,7 @@ public class JDialogPragma extends JDialogBase implements ActionListener {
 
     }
 
+    @Override
     public void actionPerformed(ActionEvent evt) {
         String command = evt.getActionCommand();
 
@@ -404,7 +405,6 @@ public class JDialogPragma extends JDialogBase implements ActionListener {
         } else if (command.equals("Ok")) {
             close();
         }
-
     }
 
     public void cancel() {
@@ -427,6 +427,4 @@ public class JDialogPragma extends JDialogBase implements ActionListener {
     public String getText() {
         return text;
     }
-
-
 }

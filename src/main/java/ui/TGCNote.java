@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package ui;
 
 import myutil.*;
@@ -119,7 +118,7 @@ public class TGCNote extends TGCScalableWithoutInternalComponent {
         return this.values;
     }
 
-
+    @Override
     public void internalDrawing(Graphics graph) {
         if (this.rescaled && !this.tdp.isScaled()) {
             this.rescaled = false;
@@ -178,10 +177,10 @@ public class TGCNote extends TGCScalableWithoutInternalComponent {
         graph.fillPolygon(px, py, 4);
 
         graph.setColor(c);
-        Graphics2D g2 = (Graphics2D)graph;
+       // Graphics2D g2 = (Graphics2D)graph;
         for (int i = 0; i < this.values.length; i++) {
             //TraceManager.addDev("Value #" + i + " = " + this.values[i]);
-            g2.drawString(this.values[i], this.x + this.textX, this.y + this.textY + (i + 1) * this.currentFontSize);
+        	graph.drawString(this.values[i], this.x + this.textX, this.y + this.textY + (i + 1) * this.currentFontSize);
         }
     }
 
@@ -189,6 +188,7 @@ public class TGCNote extends TGCScalableWithoutInternalComponent {
         values = Conversion.wrapText(value);
     }
 
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
         String oldValue = this.value;
 
@@ -205,6 +205,7 @@ public class TGCNote extends TGCScalableWithoutInternalComponent {
         return false;
     }
 
+    @Override
     public TGComponent isOnMe(int x1, int y1) {
         if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
             return this;
@@ -212,6 +213,7 @@ public class TGCNote extends TGCScalableWithoutInternalComponent {
         return null;
     }
 
+    @Override
     public void rescale(double scaleFactor) {
         /*dlineHeight = (lineHeight + dlineHeight) / oldScaleFactor * scaleFactor;
           lineHeight = (int)(dlineHeight);
@@ -223,10 +225,12 @@ public class TGCNote extends TGCScalableWithoutInternalComponent {
         super.rescale(scaleFactor);
     }
 
+    @Override
     public int getType() {
         return TGComponentManager.UML_NOTE;
     }
 
+    @Override
     protected String translateExtraParam() {
         if (values == null)
             this.makeValue();

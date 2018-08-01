@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
- 
 package ui.ad;
 
 import myutil.GraphicLib;
@@ -54,9 +51,11 @@ import java.awt.*;
  * @version 1.0 12/12/2003
  * @author Ludovic APVRILLE
  */
-public class TADStopState extends TGCWithoutInternalComponent{
+public class TADStopState extends TADComponentWithoutSubcomponents /* Issue #69 TGCWithoutInternalComponent*/ {
+	
 	private int internalCircleSize = 16;
-	private int lineLength = 5;
+	
+	protected int lineLength = 5;
 
 	public TADStopState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -64,9 +63,10 @@ public class TADStopState extends TGCWithoutInternalComponent{
 		width = 20;
 		height = 20;
 
-		nbConnectingPoint = 1;
-		connectingPoint = new TGConnectingPoint[1];
-		connectingPoint[0] = new TGConnectingPointAD(this, 0, - lineLength, true, false, 0.5, 0.0);
+		createConnectingPoints();
+//		nbConnectingPoint = 1;
+//		connectingPoint = new TGConnectingPoint[1];
+//		connectingPoint[0] = new TGConnectingPointAD(this, 0, - lineLength, true, false, 0.5, 0.0);
 
 		nbInternalTGComponent = 0;
 
@@ -79,14 +79,24 @@ public class TADStopState extends TGCWithoutInternalComponent{
 		myImageIcon = IconManager.imgic210;
 	}
 
+	protected void createConnectingPoints() {
+		nbConnectingPoint = 1;
+		connectingPoint = new TGConnectingPoint[1];
+		connectingPoint[0] = new TGConnectingPointAD(this, 0, - lineLength, true, false, 0.5, 0.0);
+	}
+
+	@Override
 	public void internalDrawing(Graphics g) {
-		ColorManager.setColor(g, state, 0);
+	
+		// Issue #69
+		ColorManager.setColor( g, state, 0, isEnabled() );
+//		ColorManager.setColor(g, state, 0);
 		g.fillOval(x + (width - internalCircleSize)/2, y + (height - internalCircleSize)/2, internalCircleSize, internalCircleSize);
 		g.drawOval(x, y, width, height);
 		g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
 	}
 
-
+	@Override
 	public TGComponent isOnMe(int _x, int _y) {
 		if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
 			return this;
@@ -94,19 +104,22 @@ public class TADStopState extends TGCWithoutInternalComponent{
 		return null;
 	}
 	
+	@Override
 	public int getType() {
 		return TGComponentManager.TAD_STOP_STATE;
 	}
 	
+	@Override
 	public int getDefaultConnector() {
-      return TGComponentManager.CONNECTOR_AD_DIAGRAM;
+		return TGComponentManager.CONNECTOR_AD_DIAGRAM;
     }
-	
-}
-
-
-
-
     
-
-
+    /* Issue #69
+     * (non-Javadoc)
+     * @see ui.AbstractCDElement#canBeDisabled()
+     */
+    @Override
+    public boolean canBeDisabled() {
+    	return false;
+    }
+}

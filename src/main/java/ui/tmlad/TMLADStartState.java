@@ -36,17 +36,14 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmlad;
 
-import myutil.GraphicLib;
-import ui.*;
-import ui.util.IconManager;
-
-import java.awt.*;
-import java.awt.geom.Line2D;
+import ui.EmbeddedComment;
+import ui.TDiagramPanel;
+import ui.TGComponent;
+import ui.TGComponentManager;
+import ui.TGConnectingPoint;
+import ui.ad.TADStartState;
 
 /**
  * Class TMLADStartState
@@ -55,53 +52,61 @@ import java.awt.geom.Line2D;
  * @version 1.0 28/10/2005
  * @author Ludovic APVRILLE
  */
-public class TMLADStartState extends TGCWithoutInternalComponent implements EmbeddedComment{
+public class TMLADStartState extends TADStartState /* Issue #69 TGCWithoutInternalComponent*/ implements EmbeddedComment{
     private int lineLength = 5;
     
     public TMLADStartState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        width = 15;
-        height = 15;
-        
+//        
+//        width = 15;
+//        height = 15;
+//        
+//        nbConnectingPoint = 1;
+//        connectingPoint = new TGConnectingPoint[1];
+//        connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.5, 1.0);
+//        
+//        nbInternalTGComponent = 0;
+//        
+//        moveable = true;
+//        editable = false;
+//        removable = true;
+//        
+//        name = "start state";
+//        
+//        myImageIcon = IconManager.imgic222;
+    }
+
+    @Override
+    protected void createConnectingPoints() {
         nbConnectingPoint = 1;
         connectingPoint = new TGConnectingPoint[1];
         connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.5, 1.0);
-        
-        nbInternalTGComponent = 0;
-        
-        moveable = true;
-        editable = false;
-        removable = true;
-        
-        name = "start state";
-        
-        myImageIcon = IconManager.imgic222;
     }
     
-    public void internalDrawing(Graphics g) {
-        g.fillOval(x, y, width, height);
-        g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
-    }
+//    public void internalDrawing(Graphics g) {
+//        g.fillOval(x, y, width, height);
+//        g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
+//    }
+//    
+//    public TGComponent isOnMe(int _x, int _y) {
+//        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+//            return this;
+//        }
+//        
+//        if ((int)(Line2D.ptSegDistSq(x+(width/2), y+height, x+(width/2), y + lineLength + height, _x, _y)) < distanceSelected) {
+//			return this;	
+//		}
+//        
+//        return null;
+//    }
     
-    public TGComponent isOnMe(int _x, int _y) {
-        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-            return this;
-        }
-        
-        if ((int)(Line2D.ptSegDistSq(x+(width/2), y+height, x+(width/2), y + lineLength + height, _x, _y)) < distanceSelected) {
-			return this;	
-		}
-        
-        return null;
-    }
-    
+    @Override
     public int getType() {
         return TGComponentManager.TMLAD_START_STATE;
     }
     
+    @Override
     public int getDefaultConnector() {
-      return TGComponentManager.CONNECTOR_TMLAD;
+    	return TGComponentManager.CONNECTOR_TMLAD;
     }
-    
 }

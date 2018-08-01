@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatardd;
 
 import myutil.GraphicLib;
@@ -95,9 +92,8 @@ public class ADDArtifact extends TGCWithoutInternalComponent implements Swallowe
         myImageIcon = IconManager.imgic702;
     }
 
-
+    @Override
     public void internalDrawing(Graphics g) {
-
         if (oldValue.compareTo(value) != 0) {
             setValue(value, g);
         }
@@ -136,6 +132,7 @@ public class ADDArtifact extends TGCWithoutInternalComponent implements Swallowe
         //
     }
 
+    @Override
     public void resizeWithFather() {
         if ((father != null) && ((father instanceof ADDCPUNode))) {
             //
@@ -145,9 +142,9 @@ public class ADDArtifact extends TGCWithoutInternalComponent implements Swallowe
         }
     }
 
-
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
-        String tmp;
+//        String tmp;
         boolean error = false;
 
         /*JDialogTMLTaskArtifact dialog = new JDialogTMLTaskArtifact(frame, "Setting artifact attributes", this);
@@ -199,6 +196,7 @@ public class ADDArtifact extends TGCWithoutInternalComponent implements Swallowe
         value = referenceTaskName + "::" + taskName;
     }
 
+    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -206,10 +204,12 @@ public class ADDArtifact extends TGCWithoutInternalComponent implements Swallowe
         return null;
     }
 
+    @Override
     public int getType() {
         return TGComponentManager.ADD_ARTIFACT;
     }
 
+    @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<info value=\"" + value + "\" taskName=\"" + taskName + "\" referenceTaskName=\"");
@@ -263,7 +263,7 @@ public class ADDArtifact extends TGCWithoutInternalComponent implements Swallowe
             }
 
         } catch (Exception e) {
-            throw new MalformedModelingException();
+            throw new MalformedModelingException( e );
         }
         makeFullValue();
     }
@@ -291,8 +291,4 @@ public class ADDArtifact extends TGCWithoutInternalComponent implements Swallowe
     public String getAttributesToFile() {
         return "";
     }
-
-
-
-
 }

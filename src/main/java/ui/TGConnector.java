@@ -37,9 +37,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui;
 
 import myutil.*;
@@ -58,7 +55,7 @@ import java.util.Vector;
  * @version 1.0 22/12/2003
  * @author Ludovic APVRILLE, Andrea ENRICI
  */
-public abstract class TGConnector extends TGCScalableWithInternalComponent      {
+public abstract class TGConnector extends TGCScalableWithInternalComponent {
 
     protected final static String XML_CONNECTOR_HEAD = "<CONNECTOR type=\"";
     protected final static String XML_ID = "\" id=\"";
@@ -174,10 +171,9 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
         //TraceManager.addDev("Index=" + index);
         return index;
     }
-
  
     public int getFirstIndexOfOtherInternalComponents() {
-	return getIndexOfLastTGCPointOfConnector() + 1;
+    	return getIndexOfLastTGCPointOfConnector() + 1;
     }
 
     public boolean hasTGCPointOfConnector() {
@@ -195,24 +191,25 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
         return -1;
 	}*/
 
+    @Override
     public void internalDrawing(Graphics g) {
-
         TGComponent p3, p4;
-
 
         if (hasTGCPointOfConnector())  {
             p3 = tgcomponent[0];
             p4 = tgcomponent[0];
             //TraceManager.addDev("p3.x " + p3.getX() + " p3.y " + p3.getY());
             //drawMiddleSegment(g, p1.getX(), p1.getY(), p3.getXZoom(), p3.getYZoom());
-	    drawMiddleSegment(g, p1.getX(), p1.getY(), p3.getX(), p3.getY());
+            drawMiddleSegment(g, p1.getX(), p1.getY(), p3.getX(), p3.getY());
 
-	    TGCPointOfConnector[] pts = listOfPointsToArray();
+            TGCPointOfConnector[] pts = listOfPointsToArray();
+            
             for(int i=0; i<pts.length-1; i++) {
                 p3 = tgcomponent[i];
                 p4 = tgcomponent[i+1];
                 drawMiddleSegment(g, p3.getX(), p3.getY(), p4.getX(), p4.getY());
             }
+            
             drawLastSegment(g, p4.getX(), p4.getY(), p2.getX(), p2.getY());
         } else {
             drawLastSegment(g, p1.getX(), p1.getY(), p2.getX(), p2.getY());
@@ -430,12 +427,12 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
     }
 
     private int indexOf(TGComponent pt) {
-	for(int i=0; i<tgcomponent.length; i++) {
-	    if (tgcomponent[i] == pt) {
-		return i;
-	    }
-	}
-	return -1;
+		for(int i=0; i<tgcomponent.length; i++) {
+		    if (tgcomponent[i] == pt) {
+		    	return i;
+		    }
+		}
+		return -1;
     }
 
     public int indexPointedSegment(int x1, int y1) {
@@ -448,7 +445,7 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
                 return 0;
             }
 
-	    TGCPointOfConnector []points = listOfPointsToArray();
+            TGCPointOfConnector []points = listOfPointsToArray();
             for(int i=0; i<points.length-1; i++) {
                 p3 = points[i];
                 p4 = points[i+1];
@@ -576,6 +573,7 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
         return true;
     }
 
+    @Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
         TGComponent p3, p4;
         int i;
@@ -698,6 +696,7 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
 
     }
 
+    @Override
     public StringBuffer saveInXML() {
         StringBuffer sb = new StringBuffer(XML_CONNECTOR_HEAD);
         sb.append(getType());
@@ -752,6 +751,7 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
         }
     }
 
+    @Override
     public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
         popupx = x;
         popupy = y;
@@ -784,6 +784,7 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
         }
     }
 
+    @Override
     public boolean eventOnPopup(ActionEvent e) {
         if (e.getActionCommand().equals("Add Point")) {
             return addTGCPointOfConnector(popupx, popupy);
@@ -827,8 +828,8 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
         tgcomponent = tgcomponentnew;
     }
 
-
     // Middle of the last segment
+    @Override
     public void drawAttributes(Graphics g, String attr) {
         int s0=4, s1=9, s2=30, s3=10;
         int x1, y1;
@@ -893,5 +894,47 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
     	maxValue = Math.max( maxValue,  getTGConnectingPointP2().getCurrentMaxY() );
         
         return maxValue;
+    }
+	
+    /* Issue #69
+     * (non-Javadoc)
+     * @see ui.TGComponent#acceptForward(ui.ICDElementVisitor)
+     */
+    @Override
+	public void acceptForward( ICDElementVisitor visitor ) {
+		if ( visitor.visit( this ) ) {
+			
+			// Traverse the graph in the direction of the connector
+			getTGConnectingPointP2().acceptForward( visitor );
+		}
+	}
+	
+    /* Issue #69
+     * (non-Javadoc)
+     * @see ui.TGComponent#acceptBackward(ui.ICDElementVisitor)
+     */
+    @Override
+	public void acceptBackward( ICDElementVisitor visitor ) {
+		if ( visitor.visit( this ) ) {
+			
+			// Traverse the graph in the direction of the connector
+			getTGConnectingPointP1().acceptBackward( visitor );
+		}
+	}
+    
+    public boolean isContainedBy( final TGComponent component ) {
+		if ( p2 != null ) {
+			if ( p2.getFather() instanceof TGComponent && ( (TGComponent) p2.getFather() ).getFather() == component ) {
+				return true;
+			}
+		}
+		
+		if ( p1 != null ) {
+			if ( p1.getFather() instanceof TGComponent && ( (TGComponent) p1.getFather() ).getFather() == component ) {
+				return true;
+			}
+		}
+		
+		return false;
     }
 }//End of class

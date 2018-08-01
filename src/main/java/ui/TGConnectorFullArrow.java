@@ -35,9 +35,6 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-
-
-
  
 package ui;
 
@@ -56,13 +53,16 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 public  class TGConnectorFullArrow extends TGConnector implements TGConnectorBetweenElementsInterface {
+
 	protected int arrowLength = 10;
 
 	public TGConnectorFullArrow(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
 		super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+	
 		myImageIcon = IconManager.imgic202;
 	}
 
+    @Override
 	protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
 		if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
 			g.drawLine(x1, y1, x2, y2);
@@ -71,15 +71,8 @@ public  class TGConnectorFullArrow extends TGConnector implements TGConnectorBet
 		}
 	}
 	
+    @Override
 	public int getType() {
-            //
-            return TGComponentManager.CONNECTOR_AD_DIAGRAM;
+    	return TGComponentManager.CONNECTOR_AD_DIAGRAM;
 	}
 }
-
-
-
-
-    
-
-

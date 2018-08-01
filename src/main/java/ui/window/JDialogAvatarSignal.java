@@ -61,7 +61,6 @@ import myutil.TraceManager;
 import ui.AvatarSignal;
 import ui.TGComponent;
 
-
 /**
  * Class JDialogAvatarSignal
  * Dialog for managing several string components
@@ -92,7 +91,6 @@ public class JDialogAvatarSignal extends JDialogBase implements ActionListener  
 
     /** Creates new form  */
     public JDialogAvatarSignal(Frame _f, String _title, String _currentSignal, List<AvatarSignal> _signals, boolean _isOut, TGComponent _reference, Vector<TGComponent> _refs) {
-
         super(_f, _title, true);
 
         signals = _signals;
@@ -101,11 +99,10 @@ public class JDialogAvatarSignal extends JDialogBase implements ActionListener  
 		reference=_reference;
 		refs=_refs;
 
-
         makeSignals();
 
         initComponents();
-        myInitComponents();
+//        myInitComponents();
 
         pack();
     }
@@ -121,11 +118,8 @@ public class JDialogAvatarSignal extends JDialogBase implements ActionListener  
             }
     }
 
-
-
-    private void myInitComponents() {
-    }
-
+//    private void myInitComponents() {
+//    }
 
     private void initComponents() {
         Container c = getContentPane();
@@ -196,6 +190,7 @@ public class JDialogAvatarSignal extends JDialogBase implements ActionListener  
         c.add(buttons, BorderLayout.SOUTH);
     }
 
+    @Override
     public void	actionPerformed(ActionEvent evt)  {
         //String command = evt.getActionCommand();
 
@@ -226,7 +221,6 @@ public class JDialogAvatarSignal extends JDialogBase implements ActionListener  
 	public TGComponent getReference(){
 		return (TGComponent) refChecks.getSelectedItem();
 	}
-
 
     public boolean hasValidString() {
         return signal.getText().length() > 0;

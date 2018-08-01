@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.ad;
 
 import myutil.GraphicLib;
@@ -55,7 +52,7 @@ import java.awt.geom.Line2D;
  * @version 1.0 12/12/2003
  * @author Ludovic APVRILLE
  */
-public class TADTimeInterval extends TGCWithInternalComponent{
+public class TADTimeInterval extends TADComponentWithSubcomponents/* Issue #69 TGCWithInternalComponent */{
     private int lineLength = 5;
     private int textX, textY;
     private int incrementY = 3;
@@ -70,7 +67,7 @@ public class TADTimeInterval extends TGCWithInternalComponent{
         textY = height/2 + 5;
         
         nbConnectingPoint = 2;
-        connectingPoint = new TGConnectingPoint[2];
+        connectingPoint = new TGConnectingPoint[ nbConnectingPoint ];
         connectingPoint[0] = new TGConnectingPointAD(this, 0, -lineLength, true, false, 0.5, 0.0);
         connectingPoint[1] = new TGConnectingPointAD(this, 0, + lineLength, false, true, 0.5, 1.0);
         addTGConnectingPointsComment();
@@ -92,6 +89,7 @@ public class TADTimeInterval extends TGCWithInternalComponent{
         myImageIcon = IconManager.imgic224;
     }
     
+    @Override
     public void internalDrawing(Graphics g) {
         g.drawRect(x, y, width, height);
         g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
@@ -109,6 +107,7 @@ public class TADTimeInterval extends TGCWithInternalComponent{
         }
     }
     
+    @Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
         if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
             return this;
@@ -137,19 +136,13 @@ public class TADTimeInterval extends TGCWithInternalComponent{
         ((TGCTimeInterval)(tgcomponent[0])).setMaxDelay(val);
     }
     
+    @Override
     public int getType() {
         return TGComponentManager.TAD_DELAY_NON_DETERMINISTIC_DELAY;
     }
     
+    @Override
    	public int getDefaultConnector() {
-      return TGComponentManager.CONNECTOR_AD_DIAGRAM;
+    	return TGComponentManager.CONNECTOR_AD_DIAGRAM;
     }
-    
 }
-
-
-
-
-
-
-

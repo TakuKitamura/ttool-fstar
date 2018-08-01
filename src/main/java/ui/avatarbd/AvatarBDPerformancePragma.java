@@ -227,7 +227,7 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
 
     }
 
-    public void makeValue() {
+    private void makeValue() {
         values = Conversion.wrapText(value);
         properties.clear();
         for (String s : values) {
