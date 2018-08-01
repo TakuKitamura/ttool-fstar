@@ -46,7 +46,7 @@
 <infoparam name="point " value="null" />
 </SUBCOMPONENT>
 
-<CONNECTOR type="1501" id="7701" >
+<!-- CONNECTOR type="1501" id="7701" >
 <cdparam x="282" y="387" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -79,7 +79,7 @@
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="point " value="null" />
-</SUBCOMPONENT>
+</SUBCOMPONENT-->
 
 <COMPONENT type="1500" id="7650" >
 <cdparam x="374" y="286" />
@@ -152,7 +152,7 @@
 <TGConnectingPoint num="9" id="7617" />
 </COMPONENT>
 
-<COMPONENT type="1508" id="7623" >
+<!--COMPONENT type="1508" id="7623" >
 <cdparam x="374" y="184" />
 <sizeparam width="30" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -162,7 +162,7 @@
 <TGConnectingPoint num="1" id="7620" />
 <TGConnectingPoint num="2" id="7621" />
 <TGConnectingPoint num="3" id="7622" />
-</COMPONENT>
+</COMPONENT-->
 
 <COMPONENT type="1505" id="7634" >
 <cdparam x="461" y="341" />
@@ -208,7 +208,7 @@
 <P2  x="523" y="411" id="7606" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
-<CONNECTOR type="1501" id="7706" >
+<!-- CONNECTOR type="1501" id="7706" >
 <cdparam x="389" y="132" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -223,7 +223,7 @@
 <P1  x="389" y="214" id="7622" />
 <P2  x="389" y="276" id="7638" />
 <AutomaticDrawing  data="true" />
-</CONNECTOR>
+</CONNECTOR-->
 <CONNECTOR type="1501" id="23058" >
 <cdparam x="398" y="55" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
