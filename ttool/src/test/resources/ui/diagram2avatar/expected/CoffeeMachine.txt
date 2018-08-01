@@ -1,0 +1,106 @@
+State machine Id=15
+start ID=71 / top level operator
+ nexts= 0:avatar transition/ ID=116 
+WaitingForFirstCoin ID=72 / top level operator
+ nexts= 0:avatar transition/ ID=115 
+action_on_signal:getCoin ID=73 / top level operator
+ nexts= 0:avatar transition/ ID=109 
+WaitingForSecondCoin ID=74 / top level operator
+ nexts= 0:avatar transition/ ID=106 1:avatar transition/ ID=108 
+ejectState ID=75 / top level operator
+ nexts= 0:avatar transition/ ID=84 
+action_on_signal:ejectCoin ID=76 / top level operator
+ nexts= 0:avatar transition/ ID=103 
+action_on_signal:getCoin ID=77 / top level operator
+ nexts= 0:avatar transition/ ID=107 
+Beverage ID=78 / top level operator
+ nexts= 
+start ID=79 / in state Beverage ID=78
+ nexts= 0:avatar transition/ ID=102 
+WaitingForSelection ID=80 / in state Beverage ID=78
+ nexts= 0:avatar transition/ ID=89 1:avatar transition/ ID=95 2:avatar transition/ ID=101 
+action_on_signal:ejectCoin ID=81 / in state Beverage ID=78
+ nexts= 0:avatar transition/ ID=85 
+action_on_signal:pushCoffeeButton ID=82 / in state Beverage ID=78
+ nexts= 0:avatar transition/ ID=96 
+action_on_signal:pushTeaButton ID=83 / in state Beverage ID=78
+ nexts= 0:avatar transition/ ID=90 
+avatar transition ID=84 / top level operator
+ value:Empty transition weight:1.0
+ nexts= 0:action_on_signal/ ID=76 
+weight=1.0
+
+avatar transition ID=85 / top level operator
+ value:Transition (nbOfCoins = 0, ...) weight:1.0
+ nexts= 0:WaitingForFirstCoin/ ID=72 
+weight=1.0
+nbOfCoins = 0 / 
+avatar transition ID=89 / top level operator
+ value:Transition (delay=(coinDelay, ), ...) weight:1.0
+ nexts= 0:action_on_signal/ ID=81 
+minDelay=coinDelay maxDelay=coinDelay
+weight=1.0
+
+avatar transition ID=90 / top level operator
+ value:Transition (nbOfCoins = 0, ...) weight:1.0
+ nexts= 0:WaitingForFirstCoin/ ID=72 
+minCompute=teaMinDelay maxcompute=teaMaxDelay
+weight=1.0
+nbOfCoins = 0 / beverageReady () / 
+avatar transition ID=95 / top level operator
+ value:Empty transition weight:1.0
+ nexts= 0:action_on_signal/ ID=83 
+weight=1.0
+
+avatar transition ID=96 / top level operator
+ value:Transition (nbOfCoins = 0, ...) weight:1.0
+ nexts= 0:WaitingForFirstCoin/ ID=72 
+minCompute=coffeeMinDelay maxcompute=coffeeMaxDelay
+weight=1.0
+nbOfCoins = 0 / beverageReady () / 
+avatar transition ID=101 / top level operator
+ value:Empty transition weight:1.0
+ nexts= 0:action_on_signal/ ID=82 
+weight=1.0
+
+avatar transition ID=102 / top level operator
+ value:Empty transition weight:1.0
+ nexts= 0:WaitingForSelection/ ID=80 
+weight=1.0
+
+avatar transition ID=103 / top level operator
+ value:Transition (nbOfCoins = 0, ...) weight:1.0
+ nexts= 0:WaitingForFirstCoin/ ID=72 
+weight=1.0
+nbOfCoins = 0 / 
+avatar transition ID=106 / top level operator
+ value:Transition (delay=(coinDelay, ), ...) weight:1.0
+ nexts= 0:ejectState/ ID=75 
+minDelay=coinDelay maxDelay=coinDelay
+weight=1.0
+
+avatar transition ID=107 / top level operator
+ value:Empty transition weight:1.0
+ nexts= 0:Beverage/ ID=78 
+weight=1.0
+
+avatar transition ID=108 / top level operator
+ value:Empty transition weight:1.0
+ nexts= 0:action_on_signal/ ID=77 
+weight=1.0
+
+avatar transition ID=109 / top level operator
+ value:Transition (nbOfCoins = nbOfCoins+x, ...) weight:1.0
+ nexts= 0:WaitingForSecondCoin/ ID=74 
+weight=1.0
+nbOfCoins = nbOfCoins+x / 
+avatar transition ID=115 / top level operator
+ value:Empty transition weight:1.0
+ nexts= 0:action_on_signal/ ID=73 
+weight=1.0
+
+avatar transition ID=116 / top level operator
+ value:Empty transition weight:1.0
+ nexts= 0:WaitingForFirstCoin/ ID=72 
+weight=1.0
+

@@ -1,0 +1,13 @@
+<ACTIVITY first="0">
+<ACTIVITYELEMENT type="tmltranslator.TMLStartState" value="" id="0" name="start">
+<CUSTOM  />
+<NEXTACTIVITYELEMENT id="2" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLStopState" value="" id="1" name="stop state">
+<CUSTOM  />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLSendRequest" value="" id="2" name="send request">
+<CUSTOM  request="Zigbee_TX__source_req" params="size"  />
+<NEXTACTIVITYELEMENT id="1" />
+</ACTIVITYELEMENT>
+</ACTIVITY>

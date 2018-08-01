@@ -1,0 +1,403 @@
+<TMLMODELING>
+<TASK name="Zigbee_TX__X_Source" priority="0" >
+<ATTRIBUTE type="1" name="size" initialValue=""/>
+<ATTRIBUTE type="1" name="arg1__req" initialValue="0"/>
+<ACTIVITY first="0">
+<ACTIVITYELEMENT type="tmltranslator.TMLStartState" value="" id="0" name="start">
+<CUSTOM  />
+<NEXTACTIVITYELEMENT id="4" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLExecI" value="size" id="1" name="execi">
+<CUSTOM  action="size" />
+<NEXTACTIVITYELEMENT id="3" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLStopState" value="" id="2" name="stop state">
+<CUSTOM  />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLWriteChannel" value="" id="3" name="write channel">
+<CUSTOM  nbOfSamples="size"  channels="Zigbee_TX__Source_ch_out__Zigbee_TX__symbol2ChipSeq_ch_in "  />
+<NEXTACTIVITYELEMENT id="2" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLActionState" value="" id="4" name="action reading args">
+<CUSTOM  action="size = arg1__req" />
+<NEXTACTIVITYELEMENT id="1" />
+</ACTIVITYELEMENT>
+</ACTIVITY>
+</TASK>
+<TASK name="Zigbee_TX__F_Source" priority="0" >
+<ATTRIBUTE type="1" name="size" initialValue="127"/>
+<ACTIVITY first="0">
+<ACTIVITYELEMENT type="tmltranslator.TMLStartState" value="" id="0" name="start">
+<CUSTOM  />
+<NEXTACTIVITYELEMENT id="4" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLStopState" value="" id="1" name="stop state">
+<CUSTOM  />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLSendEvent" value="" id="2" name="send event">
+<CUSTOM  event="Zigbee_TX__Source_evt_out__Zigbee_TX__bit2symbol_evt_in" params="size"  />
+<NEXTACTIVITYELEMENT id="1" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLSendRequest" value="" id="3" name="send request">
+<CUSTOM  request="Zigbee_TX__source_req" params="size"  />
+<NEXTACTIVITYELEMENT id="2" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLActionState" value="" id="4" name="action">
+<CUSTOM  action="size = 127" />
+<NEXTACTIVITYELEMENT id="3" />
+</ACTIVITYELEMENT>
+</ACTIVITY>
+</TASK>
+<TASK name="Zigbee_TX__X_Symbol2ChipSeq" priority="0" >
+<ATTRIBUTE type="1" name="size" initialValue=""/>
+<ATTRIBUTE type="1" name="arg1__req" initialValue="0"/>
+<ACTIVITY first="0">
+<ACTIVITYELEMENT type="tmltranslator.TMLStartState" value="" id="0" name="start">
+<CUSTOM  />
+<NEXTACTIVITYELEMENT id="5" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLExecC" value="size" id="1" name="execc">
+<CUSTOM  action="size" />
+<NEXTACTIVITYELEMENT id="4" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLReadChannel" value="" id="2" name="read channel">
+<CUSTOM  nbOfSamples="size"  channels="Zigbee_TX__Source_ch_out__Zigbee_TX__symbol2ChipSeq_ch_in "  />
+<NEXTACTIVITYELEMENT id="1" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLStopState" value="" id="3" name="stop state">
+<CUSTOM  />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLWriteChannel" value="" id="4" name="write channel">
+<CUSTOM  nbOfSamples="size"  channels="Zigbee_TX__symbol2ChipSeq_ch_out__Zigbee_TX__chip2octet_ch_in "  />
+<NEXTACTIVITYELEMENT id="3" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLActionState" value="" id="5" name="action reading args">
+<CUSTOM  action="size = arg1__req" />
+<NEXTACTIVITYELEMENT id="2" />
+</ACTIVITYELEMENT>
+</ACTIVITY>
+</TASK>
+<TASK name="Zigbee_TX__F_Symbol2ChipSeq" priority="0" >
+<ATTRIBUTE type="1" name="size" initialValue=""/>
+<ACTIVITY first="0">
+<ACTIVITYELEMENT type="tmltranslator.TMLStartState" value="" id="0" name="start">
+<CUSTOM  />
+<NEXTACTIVITYELEMENT id="1" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLWaitEvent" value="" id="1" name="wait event">
+<CUSTOM  event="Zigbee_TX__Source_evt_out__Zigbee_TX__bit2symbol_evt_in" params="size"  />
+<NEXTACTIVITYELEMENT id="4" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLStopState" value="" id="2" name="stop state">
+<CUSTOM  />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLSendEvent" value="" id="3" name="send event">
+<CUSTOM  event="Zigbee_TX__bit2symbol_evt_out__Zigbee_TX__chip2octet_evt_in" params="size"  />
+<NEXTACTIVITYELEMENT id="2" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLSendRequest" value="" id="4" name="send request">
+<CUSTOM  request="Zigbee_TX__bit2chip_req" params="size"  />
+<NEXTACTIVITYELEMENT id="3" />
+</ACTIVITYELEMENT>
+</ACTIVITY>
+</TASK>
+<TASK name="Zigbee_TX__X_Chip2Octet" priority="0" >
+<ATTRIBUTE type="1" name="size" initialValue=""/>
+<ATTRIBUTE type="1" name="arg1__req" initialValue="0"/>
+<ACTIVITY first="0">
+<ACTIVITYELEMENT type="tmltranslator.TMLStartState" value="" id="0" name="start">
+<CUSTOM  />
+<NEXTACTIVITYELEMENT id="5" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLExecC" value="size" id="1" name="execc">
+<CUSTOM  action="size" />
+<NEXTACTIVITYELEMENT id="4" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLReadChannel" value="" id="2" name="read channel">
+<CUSTOM  nbOfSamples="size"  channels="Zigbee_TX__symbol2ChipSeq_ch_out__Zigbee_TX__chip2octet_ch_in "  />
+<NEXTACTIVITYELEMENT id="1" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLStopState" value="" id="3" name="stop state">
+<CUSTOM  />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLWriteChannel" value="" id="4" name="write channel">
+<CUSTOM  nbOfSamples="size"  channels="Zigbee_TX__chip2octet_ch_out__Zigbee_TX__cwl_ch_in "  />
+<NEXTACTIVITYELEMENT id="3" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLActionState" value="" id="5" name="action reading args">
+<CUSTOM  action="size = arg1__req" />
+<NEXTACTIVITYELEMENT id="2" />
+</ACTIVITYELEMENT>
+</ACTIVITY>
+</TASK>
+<TASK name="Zigbee_TX__F_Chip2Octet" priority="0" >
+<ATTRIBUTE type="1" name="size" initialValue=""/>
+<ACTIVITY first="0">
+<ACTIVITYELEMENT type="tmltranslator.TMLStartState" value="" id="0" name="start">
+<CUSTOM  />
+<NEXTACTIVITYELEMENT id="1" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLWaitEvent" value="" id="1" name="wait event">
+<CUSTOM  event="Zigbee_TX__bit2symbol_evt_out__Zigbee_TX__chip2octet_evt_in" params="size"  />
+<NEXTACTIVITYELEMENT id="4" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLStopState" value="" id="2" name="stop state">
+<CUSTOM  />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLSendEvent" value="" id="3" name="send event">
+<CUSTOM  event="Zigbee_TX__chip2octet_evt_out__Zigbee_TX__cwl_evt_in" params="size"  />
+<NEXTACTIVITYELEMENT id="2" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLSendRequest" value="" id="4" name="send request">
+<CUSTOM  request="Zigbee_TX__chip2octet_req" params="size"  />
+<NEXTACTIVITYELEMENT id="3" />
+</ACTIVITYELEMENT>
+</ACTIVITY>
+</TASK>
+<TASK name="Zigbee_TX__X_CWL" priority="0" >
+<ATTRIBUTE type="1" name="size" initialValue=""/>
+<ATTRIBUTE type="1" name="arg1__req" initialValue="0"/>
+<ACTIVITY first="0">
+<ACTIVITYELEMENT type="tmltranslator.TMLStartState" value="" id="0" name="start">
+<CUSTOM  />
+<NEXTACTIVITYELEMENT id="5" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLExecI" value="size" id="1" name="execi">
+<CUSTOM  action="size" />
+<NEXTACTIVITYELEMENT id="4" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLReadChannel" value="" id="2" name="read channel">
+<CUSTOM  nbOfSamples="size"  channels="Zigbee_TX__chip2octet_ch_out__Zigbee_TX__cwl_ch_in "  />
+<NEXTACTIVITYELEMENT id="1" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLStopState" value="" id="3" name="stop state">
+<CUSTOM  />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLWriteChannel" value="" id="4" name="write channel">
+<CUSTOM  nbOfSamples="size"  channels="Zigbee_TX__cwl_ch_out__cwpQ_ch_in__cwpI_ch_in "  />
+<NEXTACTIVITYELEMENT id="3" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLActionState" value="" id="5" name="action reading args">
+<CUSTOM  action="size = arg1__req" />
+<NEXTACTIVITYELEMENT id="2" />
+</ACTIVITYELEMENT>
+</ACTIVITY>
+</TASK>
+<TASK name="Zigbee_TX__F_CWL" priority="0" >
+<ATTRIBUTE type="1" name="size" initialValue=""/>
+<ACTIVITY first="0">
+<ACTIVITYELEMENT type="tmltranslator.TMLStartState" value="" id="0" name="start">
+<CUSTOM  />
+<NEXTACTIVITYELEMENT id="1" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLWaitEvent" value="" id="1" name="wait event">
+<CUSTOM  event="Zigbee_TX__chip2octet_evt_out__Zigbee_TX__cwl_evt_in" params="size"  />
+<NEXTACTIVITYELEMENT id="3" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLStopState" value="" id="2" name="stop state">
+<CUSTOM  />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLSendRequest" value="" id="3" name="send request">
+<CUSTOM  request="Zigbee_TX__cwl_req" params="size"  />
+<NEXTACTIVITYELEMENT id="5" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLSendEvent" value="" id="4" name="send event">
+<CUSTOM  event="Zigbee_TX__cwl_evt_out_1__Zigbee_TX__cwpQ_evt_in" params="size"  />
+<NEXTACTIVITYELEMENT id="2" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLSendEvent" value="" id="5" name="send event">
+<CUSTOM  event="Zigbee_TX__cwl_evt_out__Zigbee_TX__cwpI_evt_in" params="size"  />
+<NEXTACTIVITYELEMENT id="4" />
+</ACTIVITYELEMENT>
+</ACTIVITY>
+</TASK>
+<TASK name="Zigbee_TX__X_Sink" priority="0" >
+<ATTRIBUTE type="1" name="size" initialValue=""/>
+<ATTRIBUTE type="1" name="arg1__req" initialValue="0"/>
+<ACTIVITY first="0">
+<ACTIVITYELEMENT type="tmltranslator.TMLStartState" value="" id="0" name="start">
+<CUSTOM  />
+<NEXTACTIVITYELEMENT id="4" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLExecI" value="size" id="1" name="execi">
+<CUSTOM  action="size" />
+<NEXTACTIVITYELEMENT id="3" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLReadChannel" value="" id="2" name="read channel">
+<CUSTOM  nbOfSamples="size"  channels="Zigbee_TX__cwpQ_ch_out__sink_ch_in__cwpI_ch_out "  />
+<NEXTACTIVITYELEMENT id="1" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLStopState" value="" id="3" name="stop state">
+<CUSTOM  />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLActionState" value="" id="4" name="action reading args">
+<CUSTOM  action="size = arg1__req" />
+<NEXTACTIVITYELEMENT id="2" />
+</ACTIVITYELEMENT>
+</ACTIVITY>
+</TASK>
+<TASK name="Zigbee_TX__F_Sink" priority="0" >
+<ATTRIBUTE type="1" name="size" initialValue=""/>
+<ATTRIBUTE type="1" name="size_1" initialValue=""/>
+<ACTIVITY first="0">
+<ACTIVITYELEMENT type="tmltranslator.TMLStartState" value="" id="0" name="start">
+<CUSTOM  />
+<NEXTACTIVITYELEMENT id="4" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLStopState" value="" id="1" name="stop state">
+<CUSTOM  />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLSendRequest" value="" id="2" name="send request">
+<CUSTOM  request="Zigbee_TX__sink_req" params="size+size_1"  />
+<NEXTACTIVITYELEMENT id="1" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLWaitEvent" value="" id="3" name="wait event">
+<CUSTOM  event="Zigbee_TX__cwpQ_evt_out__Zigbee_TX__sink_evt_in_1" params="size_1"  />
+<NEXTACTIVITYELEMENT id="2" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLWaitEvent" value="" id="4" name="wait event">
+<CUSTOM  event="Zigbee_TX__cwpI_evt_out__Zigbee_TX__sink_evt_in" params="size"  />
+<NEXTACTIVITYELEMENT id="3" />
+</ACTIVITYELEMENT>
+</ACTIVITY>
+</TASK>
+<TASK name="Zigbee_TX__X_CWP_Q" priority="0" >
+<ATTRIBUTE type="1" name="size" initialValue=""/>
+<ATTRIBUTE type="1" name="arg1__req" initialValue="0"/>
+<ACTIVITY first="0">
+<ACTIVITYELEMENT type="tmltranslator.TMLStartState" value="" id="0" name="start">
+<CUSTOM  />
+<NEXTACTIVITYELEMENT id="5" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLExecI" value="size" id="1" name="execi">
+<CUSTOM  action="size" />
+<NEXTACTIVITYELEMENT id="4" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLReadChannel" value="" id="2" name="read channel">
+<CUSTOM  nbOfSamples="size"  channels="Zigbee_TX__cwl_ch_out__cwpQ_ch_in__cwpI_ch_in "  />
+<NEXTACTIVITYELEMENT id="1" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLStopState" value="" id="3" name="stop state">
+<CUSTOM  />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLWriteChannel" value="" id="4" name="write channel">
+<CUSTOM  nbOfSamples="size"  channels="Zigbee_TX__cwpQ_ch_out__sink_ch_in__cwpI_ch_out "  />
+<NEXTACTIVITYELEMENT id="3" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLActionState" value="" id="5" name="action reading args">
+<CUSTOM  action="size = arg1__req" />
+<NEXTACTIVITYELEMENT id="2" />
+</ACTIVITYELEMENT>
+</ACTIVITY>
+</TASK>
+<TASK name="Zigbee_TX__F_CWP_Q" priority="0" >
+<ATTRIBUTE type="1" name="size" initialValue=""/>
+<ACTIVITY first="0">
+<ACTIVITYELEMENT type="tmltranslator.TMLStartState" value="" id="0" name="start">
+<CUSTOM  />
+<NEXTACTIVITYELEMENT id="1" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLWaitEvent" value="" id="1" name="wait event">
+<CUSTOM  event="Zigbee_TX__cwl_evt_out_1__Zigbee_TX__cwpQ_evt_in" params="size"  />
+<NEXTACTIVITYELEMENT id="4" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLStopState" value="" id="2" name="stop state">
+<CUSTOM  />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLSendEvent" value="" id="3" name="send event">
+<CUSTOM  event="Zigbee_TX__cwpQ_evt_out__Zigbee_TX__sink_evt_in_1" params="size"  />
+<NEXTACTIVITYELEMENT id="2" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLSendRequest" value="" id="4" name="send request">
+<CUSTOM  request="Zigbee_TX__cwpQ_req" params="size"  />
+<NEXTACTIVITYELEMENT id="3" />
+</ACTIVITYELEMENT>
+</ACTIVITY>
+</TASK>
+<TASK name="Zigbee_TX__X_CWP_I" priority="0" >
+<ATTRIBUTE type="1" name="size" initialValue=""/>
+<ATTRIBUTE type="1" name="arg1__req" initialValue="0"/>
+<ACTIVITY first="0">
+<ACTIVITYELEMENT type="tmltranslator.TMLStartState" value="" id="0" name="start">
+<CUSTOM  />
+<NEXTACTIVITYELEMENT id="5" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLExecI" value="size" id="1" name="execi">
+<CUSTOM  action="size" />
+<NEXTACTIVITYELEMENT id="4" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLReadChannel" value="" id="2" name="read channel">
+<CUSTOM  nbOfSamples="size"  channels="Zigbee_TX__cwl_ch_out__cwpQ_ch_in__cwpI_ch_in "  />
+<NEXTACTIVITYELEMENT id="1" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLStopState" value="" id="3" name="stop state">
+<CUSTOM  />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLWriteChannel" value="" id="4" name="write channel">
+<CUSTOM  nbOfSamples="size"  channels="Zigbee_TX__cwpQ_ch_out__sink_ch_in__cwpI_ch_out "  />
+<NEXTACTIVITYELEMENT id="3" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLActionState" value="" id="5" name="action reading args">
+<CUSTOM  action="size = arg1__req" />
+<NEXTACTIVITYELEMENT id="2" />
+</ACTIVITYELEMENT>
+</ACTIVITY>
+</TASK>
+<TASK name="Zigbee_TX__F_CWP_I" priority="0" >
+<ATTRIBUTE type="1" name="size" initialValue=""/>
+<ACTIVITY first="0">
+<ACTIVITYELEMENT type="tmltranslator.TMLStartState" value="" id="0" name="start">
+<CUSTOM  />
+<NEXTACTIVITYELEMENT id="1" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLWaitEvent" value="" id="1" name="wait event">
+<CUSTOM  event="Zigbee_TX__cwl_evt_out__Zigbee_TX__cwpI_evt_in" params="size"  />
+<NEXTACTIVITYELEMENT id="4" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLStopState" value="" id="2" name="stop state">
+<CUSTOM  />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLSendEvent" value="" id="3" name="send event">
+<CUSTOM  event="Zigbee_TX__cwpI_evt_out__Zigbee_TX__sink_evt_in" params="size"  />
+<NEXTACTIVITYELEMENT id="2" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLSendRequest" value="" id="4" name="send request">
+<CUSTOM  request="Zigbee_TX__cwpI_req" params="size"  />
+<NEXTACTIVITYELEMENT id="3" />
+</ACTIVITYELEMENT>
+</ACTIVITY>
+</TASK>
+<TMLCHANNEL name="Zigbee_TX__Source_ch_out__Zigbee_TX__symbol2ChipSeq_ch_in" origintask="Zigbee_TX__X_Source" originport="Source_ch_out" destinationtask="Zigbee_TX__X_Symbol2ChipSeq" destinationport="symbol2ChipSeq_ch_in" dataFlowType="uint_16" isLossy="false" lossPercentage="0" maxNbOfLoss="0" type="BRBW" size="4" max="8"  />
+<TMLCHANNEL name="Zigbee_TX__symbol2ChipSeq_ch_out__Zigbee_TX__chip2octet_ch_in" origintask="Zigbee_TX__X_Symbol2ChipSeq" originport="symbol2ChipSeq_ch_out" destinationtask="Zigbee_TX__X_Chip2Octet" destinationport="chip2octet_ch_in" dataFlowType="uint_16" isLossy="false" lossPercentage="0" maxNbOfLoss="0" type="BRBW" size="4" max="8"  />
+<TMLCHANNEL name="Zigbee_TX__chip2octet_ch_out__Zigbee_TX__cwl_ch_in" origintask="Zigbee_TX__X_Chip2Octet" originport="chip2octet_ch_out" destinationtask="Zigbee_TX__X_CWL" destinationport="cwl_ch_in" dataFlowType="uint_16" isLossy="false" lossPercentage="0" maxNbOfLoss="0" type="BRBW" size="4" max="8"  />
+<TMLCHANNEL name="Zigbee_TX__cwl_ch_out__cwpQ_ch_in__cwpI_ch_in" origintask="Zigbee_TX__X_CWL" originport="cwl_ch_out" destinationtask="Zigbee_TX__X_CWP_Q;Zigbee_TX__X_CWP_I;" destinationport="cwpQ_ch_in;cwpI_ch_in;" dataFlowType="uint_16" isLossy="false" lossPercentage="0" maxNbOfLoss="0" type="BRBW" size="4" max="8"  />
+<TMLCHANNEL name="Zigbee_TX__cwpQ_ch_out__sink_ch_in__cwpI_ch_out" destinationtask="Zigbee_TX__X_Sink" destinationport="sink_ch_in" origintask="Zigbee_TX__X_CWP_Q;Zigbee_TX__X_CWP_I;" originport="cwpQ_ch_out;cwpI_ch_out;" dataFlowType="uint_16" isLossy="false" lossPercentage="0" maxNbOfLoss="0" type="BRBW" size="4" max="8"  />
+<TMLREQUEST name="Zigbee_TX__source_req" destinationtask="Zigbee_TX__X_Source" isLossy="false" lossPercentage="0" maxNbOfLoss="0"  >
+<ORIGINTASK name="Zigbee_TX__F_Source" /> <PARAM type="int" /></TMLREQUEST>
+<TMLREQUEST name="Zigbee_TX__bit2chip_req" destinationtask="Zigbee_TX__X_Symbol2ChipSeq" isLossy="false" lossPercentage="0" maxNbOfLoss="0"  >
+<ORIGINTASK name="Zigbee_TX__F_Symbol2ChipSeq" /> <PARAM type="int" /></TMLREQUEST>
+<TMLREQUEST name="Zigbee_TX__chip2octet_req" destinationtask="Zigbee_TX__X_Chip2Octet" isLossy="false" lossPercentage="0" maxNbOfLoss="0"  >
+<ORIGINTASK name="Zigbee_TX__F_Chip2Octet" /> <PARAM type="int" /></TMLREQUEST>
+<TMLREQUEST name="Zigbee_TX__cwl_req" destinationtask="Zigbee_TX__X_CWL" isLossy="false" lossPercentage="0" maxNbOfLoss="0"  >
+<ORIGINTASK name="Zigbee_TX__F_CWL" /> <PARAM type="int" /></TMLREQUEST>
+<TMLREQUEST name="Zigbee_TX__sink_req" destinationtask="Zigbee_TX__X_Sink" isLossy="false" lossPercentage="0" maxNbOfLoss="0"  >
+<ORIGINTASK name="Zigbee_TX__F_Sink" /> <PARAM type="int" /></TMLREQUEST>
+<TMLREQUEST name="Zigbee_TX__cwpQ_req" destinationtask="Zigbee_TX__X_CWP_Q" isLossy="false" lossPercentage="0" maxNbOfLoss="0"  >
+<ORIGINTASK name="Zigbee_TX__F_CWP_Q" /> <PARAM type="int" /></TMLREQUEST>
+<TMLREQUEST name="Zigbee_TX__cwpI_req" destinationtask="Zigbee_TX__X_CWP_I" isLossy="false" lossPercentage="0" maxNbOfLoss="0"  >
+<ORIGINTASK name="Zigbee_TX__F_CWP_I" /> <PARAM type="int" /></TMLREQUEST>
+<TMLEVENT name="Zigbee_TX__Source_evt_out__Zigbee_TX__bit2symbol_evt_in" origintask="Zigbee_TX__F_Source" destinationtask="Zigbee_TX__F_Symbol2ChipSeq" maxEvt="-1" isBlocking="false" canBeNotified="false" isLossy="false" lossPercentage="0" maxNbOfLoss="0" >
+<PARAM type="int" /></TMLEVENT>
+<TMLEVENT name="Zigbee_TX__bit2symbol_evt_out__Zigbee_TX__chip2octet_evt_in" origintask="Zigbee_TX__F_Symbol2ChipSeq" destinationtask="Zigbee_TX__F_Chip2Octet" maxEvt="-1" isBlocking="false" canBeNotified="false" isLossy="false" lossPercentage="0" maxNbOfLoss="0" >
+<PARAM type="int" /></TMLEVENT>
+<TMLEVENT name="Zigbee_TX__chip2octet_evt_out__Zigbee_TX__cwl_evt_in" origintask="Zigbee_TX__F_Chip2Octet" destinationtask="Zigbee_TX__F_CWL" maxEvt="-1" isBlocking="false" canBeNotified="false" isLossy="false" lossPercentage="0" maxNbOfLoss="0" >
+<PARAM type="int" /></TMLEVENT>
+<TMLEVENT name="Zigbee_TX__cwl_evt_out__Zigbee_TX__cwpI_evt_in" origintask="Zigbee_TX__F_CWL" destinationtask="Zigbee_TX__F_CWP_I" maxEvt="-1" isBlocking="false" canBeNotified="false" isLossy="false" lossPercentage="0" maxNbOfLoss="0" >
+<PARAM type="int" /></TMLEVENT>
+<TMLEVENT name="Zigbee_TX__cwl_evt_out_1__Zigbee_TX__cwpQ_evt_in" origintask="Zigbee_TX__F_CWL" destinationtask="Zigbee_TX__F_CWP_Q" maxEvt="-1" isBlocking="false" canBeNotified="false" isLossy="false" lossPercentage="0" maxNbOfLoss="0" >
+<PARAM type="int" /></TMLEVENT>
+<TMLEVENT name="Zigbee_TX__cwpQ_evt_out__Zigbee_TX__sink_evt_in_1" origintask="Zigbee_TX__F_CWP_Q" destinationtask="Zigbee_TX__F_Sink" maxEvt="-1" isBlocking="false" canBeNotified="false" isLossy="false" lossPercentage="0" maxNbOfLoss="0" >
+<PARAM type="int" /></TMLEVENT>
+<TMLEVENT name="Zigbee_TX__cwpI_evt_out__Zigbee_TX__sink_evt_in" origintask="Zigbee_TX__F_CWP_I" destinationtask="Zigbee_TX__F_Sink" maxEvt="-1" isBlocking="false" canBeNotified="false" isLossy="false" lossPercentage="0" maxNbOfLoss="0" >
+<PARAM type="int" /></TMLEVENT>
+</TMLMODELING>

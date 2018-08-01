@@ -1,0 +1,17 @@
+<ACTIVITY first="0">
+<ACTIVITYELEMENT type="tmltranslator.TMLStartState" value="" id="0" name="start">
+<CUSTOM  />
+<NEXTACTIVITYELEMENT id="1" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLExecI" value="size" id="1" name="execi">
+<CUSTOM  action="size" />
+<NEXTACTIVITYELEMENT id="3" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLStopState" value="" id="2" name="stop state">
+<CUSTOM  />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLWriteChannel" value="" id="3" name="write channel">
+<CUSTOM  nbOfSamples="size"  channels="Zigbee_TX__Source_ch_out__Zigbee_TX__symbol2ChipSeq_ch_in "  />
+<NEXTACTIVITYELEMENT id="2" />
+</ACTIVITYELEMENT>
+</ACTIVITY>

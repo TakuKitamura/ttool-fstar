@@ -2,7 +2,6 @@ package launcher;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.StringWriter;
@@ -14,9 +13,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import launcher.LauncherException;
-import launcher.RshClient;
-import launcher.RshServer;
 import myutil.FileException;
 import myutil.FileUtils;
 import test.AbstractTest;
@@ -74,11 +70,11 @@ public class TestRshClient extends AbstractTest {
         throws Exception {
         SERVER_THREAD.interrupt();
     }
-
-    private void handleException( final Throwable th ) {
-        th.printStackTrace();
-        fail( th.getLocalizedMessage() );
-    }
+//
+//    private void handleException( final Throwable th ) {
+//        th.printStackTrace();
+//        fail( th.getLocalizedMessage() );
+//    }
 
     @Test
     public void testStopCommand() {
