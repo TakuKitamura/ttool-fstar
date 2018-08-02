@@ -80,6 +80,7 @@ public class ELNPanelTranslator {
 		TGComponent tgc;
 		Iterator<TGComponent> iterator1 = tgcComponents.listIterator();
 		Iterator<TGComponent> iterator2 = tgcComponents.listIterator();
+		Iterator<TGComponent> iterator3 = tgcComponents.listIterator();
 		List<TGComponent> list = new ArrayList<TGComponent>();
 
 		while (iterator1.hasNext()) {
@@ -92,10 +93,21 @@ public class ELNPanelTranslator {
 		while (iterator2.hasNext()) {
 			tgc = iterator2.next();
 			if (tgc instanceof TGConnector) {
-				list.add(tgc);
+				if (!(((TGConnector) tgc).getTGConnectingPointP1().getFather() instanceof ELNMidPortTerminal || ((TGConnector) tgc).getTGConnectingPointP2().getFather() instanceof ELNMidPortTerminal)) {
+					list.add(tgc);
+				}
 			}
 		}	
 
+		while (iterator3.hasNext()) {
+			tgc = iterator3.next();
+			if (tgc instanceof TGConnector) {
+				if (((TGConnector) tgc).getTGConnectingPointP1().getFather() instanceof ELNMidPortTerminal || ((TGConnector) tgc).getTGConnectingPointP2().getFather() instanceof ELNMidPortTerminal) {
+					list.add(tgc);
+				}
+			}
+		}
+		
 		for (TGComponent dp : list) {
 			if (dp instanceof ELNCluster) {
 				ELNCluster cluster = (ELNCluster) dp;
