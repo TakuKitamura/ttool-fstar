@@ -247,7 +247,7 @@ public class ELNModule extends TGCScalableWithInternalComponent implements Swall
 		if (tgc instanceof ELNComponentNodeRef) {
 			return true;
 		}
-		if (tgc instanceof ELNModuleTerminal) {
+		if (tgc instanceof ELNModuleTerminalInout) {
 			return true;
 		}
 		if (tgc instanceof SysCAMSPortDE) {
@@ -358,7 +358,7 @@ public class ELNModule extends TGCScalableWithInternalComponent implements Swall
 			addInternalComponent(tgc, 0);
 			return true;
 		}
-		if (tgc instanceof ELNModuleTerminal) {
+		if (tgc instanceof ELNModuleTerminalInout) {
 			tgc.setFather(this);
 			tgc.setDrawingZone(true);
 			tgc.resizeWithFather();
@@ -431,7 +431,7 @@ public class ELNModule extends TGCScalableWithInternalComponent implements Swall
 			if (tgcomponent[i] instanceof ELNComponentNodeRef) {
 				tgcomponent[i].resizeWithFather();
 			}
-			if (tgcomponent[i] instanceof ELNModuleTerminal) {
+			if (tgcomponent[i] instanceof ELNModuleTerminalInout) {
 				tgcomponent[i].resizeWithFather();
 			}
 			if (tgcomponent[i] instanceof SysCAMSPortDE) {
@@ -610,11 +610,11 @@ public class ELNModule extends TGCScalableWithInternalComponent implements Swall
 		return list;
 	}
 	
-	public java.util.List<ELNModuleTerminal> getAllModuleTerminal() {
-		java.util.List<ELNModuleTerminal> list = new ArrayList<ELNModuleTerminal>();
+	public java.util.List<ELNModuleTerminalInout> getAllModuleTerminal() {
+		java.util.List<ELNModuleTerminalInout> list = new ArrayList<ELNModuleTerminalInout>();
 		for(int i=0; i<nbInternalTGComponent; i++) {
-			if (tgcomponent[i] instanceof ELNModuleTerminal) {
-				list.add((ELNModuleTerminal)(tgcomponent[i]));
+			if (tgcomponent[i] instanceof ELNModuleTerminalInout) {
+				list.add((ELNModuleTerminalInout)(tgcomponent[i]));
 			}
 		}
 		return list;

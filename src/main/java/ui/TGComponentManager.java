@@ -1332,7 +1332,7 @@ public class TGComponentManager {
             	tgc = new ELNModule(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             	break;
             case ELN_MODULE_TERMINAL: 
-            	tgc = new ELNModuleTerminal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	tgc = new ELNModuleTerminalInout(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             	break;
             case ELN_TDF_VOLTAGE_SOURCE: 
             	tgc = new ELNComponentVoltageSourceTDF(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -1773,7 +1773,7 @@ public class TGComponentManager {
         	return ELN_TDF_CURRENT_SINK;
         } else if (tgc instanceof ELNModule) {
         	return ELN_MODULE;
-        } else if (tgc instanceof ELNModuleTerminal) {
+        } else if (tgc instanceof ELNModuleTerminalInout) {
         	return ELN_MODULE_TERMINAL;
         } else if (tgc instanceof ELNComponentVoltageSourceTDF) {
         	return ELN_TDF_VOLTAGE_SOURCE;
