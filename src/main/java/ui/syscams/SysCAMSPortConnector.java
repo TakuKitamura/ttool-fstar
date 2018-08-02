@@ -40,7 +40,6 @@ package ui.syscams;
 
 import ui.*;
 import ui.util.IconManager;
-import ui.window.JDialogELNConnector;
 import ui.window.JDialogSysCAMSConnector;
 
 import java.awt.*;
