@@ -200,10 +200,10 @@ public class ModuleCode {
 			}
 			for (int i = 0; i < capacitors.size(); i++) {
 				if (cpt == 0) {
-					corpsModule = corpsModule + "\t: " + capacitors.get(i).getName() + "(\"" + capacitors.get(i).getName() + "\", " + capacitors.get(i).getVal() + ", " + capacitors.get(i).getQ0() + ")" + CR;
+					corpsModule = corpsModule + "\t: " + capacitors.get(i).getName() + "(\"" + capacitors.get(i).getName() + "\", " + encode(capacitors.get(i).getVal(), capacitors.get(i).getUnit0()) + ", " + encode(capacitors.get(i).getQ0(), capacitors.get(i).getUnit1()) + ")" + CR;
 					cpt ++;
 				} else {
-					corpsModule = corpsModule + "\t, " + capacitors.get(i).getName() + "(\"" + capacitors.get(i).getName() + "\", " + capacitors.get(i).getVal() + ", " + capacitors.get(i).getQ0() + ")" + CR;
+					corpsModule = corpsModule + "\t, " + capacitors.get(i).getName() + "(\"" + capacitors.get(i).getName() + "\", " + encode(capacitors.get(i).getVal(), capacitors.get(i).getUnit0()) + ", " + encode(capacitors.get(i).getQ0(), capacitors.get(i).getUnit1()) + ")" + CR;
 				}
 			}
 			for (int i = 0; i < idealTransformers.size(); i++) {
@@ -217,57 +217,57 @@ public class ModuleCode {
 			for (int i = 0; i < isources.size(); i++) {
 				if (cpt == 0) {
 					corpsModule = corpsModule + "\t: " + isources.get(i).getName() + "(\"" + isources.get(i).getName() + "\", " + isources.get(i).getInitValue() + ", " + isources.get(i).getOffset() 
-					  + ", " + isources.get(i).getAmplitude() + ", " + isources.get(i).getFrequency() + ", " + isources.get(i).getPhase() + ", " + isources.get(i).getDelay() 
+					  + ", " + isources.get(i).getAmplitude() + ", " + encode(isources.get(i).getFrequency(), isources.get(i).getUnit0()) + ", " + isources.get(i).getPhase() + ", " + isources.get(i).getDelay() 
 					  + ", " + isources.get(i).getAcAmplitude() + ", " + isources.get(i).getAcPhase() + ", " + isources.get(i).getAcNoiseAmplitude() + ")" + CR;
 					cpt ++;
 				} else {
 					corpsModule = corpsModule + "\t, " + isources.get(i).getName() + "(\"" + isources.get(i).getName() + "\", " + isources.get(i).getInitValue() + ", " + isources.get(i).getOffset() 
-					  + ", " + isources.get(i).getAmplitude() + ", " + isources.get(i).getFrequency() + ", " + isources.get(i).getPhase() + ", " + isources.get(i).getDelay() 
+					  + ", " + isources.get(i).getAmplitude() + ", " + encode(isources.get(i).getFrequency(), isources.get(i).getUnit0()) + ", " + isources.get(i).getPhase() + ", " + isources.get(i).getDelay() 
 					  + ", " + isources.get(i).getAcAmplitude() + ", " + isources.get(i).getAcPhase() + ", " + isources.get(i).getAcNoiseAmplitude() + ")" + CR;
 				}
 			}
 			for (int i = 0; i < vsources.size(); i++) {
 				if (cpt == 0) {
 					corpsModule = corpsModule + "\t: " + vsources.get(i).getName() + "(\"" + vsources.get(i).getName() + "\", " + vsources.get(i).getInitValue() + ", " + vsources.get(i).getOffset() 
-					  + ", " + vsources.get(i).getAmplitude() + ", " + vsources.get(i).getFrequency() + ", " + vsources.get(i).getPhase() + ", " + vsources.get(i).getDelay() 
+					  + ", " + vsources.get(i).getAmplitude() + ", " + encode(vsources.get(i).getFrequency(), vsources.get(i).getUnit0()) + ", " + vsources.get(i).getPhase() + ", " + vsources.get(i).getDelay() 
 					  + ", " + vsources.get(i).getAcAmplitude() + ", " + vsources.get(i).getAcPhase() + ", " + vsources.get(i).getAcNoiseAmplitude() + ")" + CR;
 					cpt ++;
 				} else {
 					corpsModule = corpsModule + "\t, " + vsources.get(i).getName() + "(\"" + vsources.get(i).getName() + "\", " + vsources.get(i).getInitValue() + ", " + vsources.get(i).getOffset() 
-					  + ", " + vsources.get(i).getAmplitude() + ", " + vsources.get(i).getFrequency() + ", " + vsources.get(i).getPhase() + ", " + vsources.get(i).getDelay() 
+					  + ", " + vsources.get(i).getAmplitude() + ", " + encode(vsources.get(i).getFrequency(), vsources.get(i).getUnit0()) + ", " + vsources.get(i).getPhase() + ", " + vsources.get(i).getDelay() 
 					  + ", " + vsources.get(i).getAcAmplitude() + ", " + vsources.get(i).getAcPhase() + ", " + vsources.get(i).getAcNoiseAmplitude() + ")" + CR;
 				}
 			}
 			for (int i = 0; i < inductors.size(); i++) {
 				if (cpt == 0) {
-					corpsModule = corpsModule + "\t: " + inductors.get(i).getName() + "(\"" + inductors.get(i).getName() + "\", " + inductors.get(i).getVal() + ", " + inductors.get(i).getPhi0() + ")" + CR;
+					corpsModule = corpsModule + "\t: " + inductors.get(i).getName() + "(\"" + inductors.get(i).getName() + "\", " + encode(inductors.get(i).getVal(), inductors.get(i).getUnit0()) + ", " + encode(inductors.get(i).getPhi0(), inductors.get(i).getUnit1()) + ")" + CR;
 					cpt ++;
 				} else {
-					corpsModule = corpsModule + "\t, " + inductors.get(i).getName() + "(\"" + inductors.get(i).getName() + "\", " + inductors.get(i).getVal() + ", " + inductors.get(i).getPhi0() + ")" + CR;
+					corpsModule = corpsModule + "\t, " + inductors.get(i).getName() + "(\"" + inductors.get(i).getName() + "\", " + encode(inductors.get(i).getVal(), inductors.get(i).getUnit0()) + ", " + encode(inductors.get(i).getPhi0(), inductors.get(i).getUnit1()) + ")" + CR;
 				}
 			}
 			for (int i = 0; i < resistors.size(); i++) {
 				if (cpt == 0) {
-					corpsModule = corpsModule + "\t: " + resistors.get(i).getName() + "(\"" + resistors.get(i).getName() + "\", " + resistors.get(i).getVal() + ")" + CR;
+					corpsModule = corpsModule + "\t: " + resistors.get(i).getName() + "(\"" + resistors.get(i).getName() + "\", " + encode(resistors.get(i).getVal(), resistors.get(i).getUnit()) + ")" + CR;
 					cpt ++;
 				} else {
-					corpsModule = corpsModule + "\t, " + resistors.get(i).getName() + "(\"" + resistors.get(i).getName() + "\", " + resistors.get(i).getVal() + ")" + CR;
+					corpsModule = corpsModule + "\t, " + resistors.get(i).getName() + "(\"" + resistors.get(i).getName() + "\", " + encode(resistors.get(i).getVal(), resistors.get(i).getUnit()) + ")" + CR;
 				}
 			}
 			for (int i = 0; i < transmissionLines.size(); i++) {
 				if (cpt == 0) {
-					corpsModule = corpsModule + "\t: " + transmissionLines.get(i).getName() + "(\"" + transmissionLines.get(i).getName() + "\", " + transmissionLines.get(i).getZ0() + ", " + transmissionLines.get(i).getDelay() + ", " + transmissionLines.get(i).getDelta0() + ")" + CR;
+					corpsModule = corpsModule + "\t: " + transmissionLines.get(i).getName() + "(\"" + transmissionLines.get(i).getName() + "\", " + encode(transmissionLines.get(i).getZ0(), transmissionLines.get(i).getUnit0()) + ", " + transmissionLines.get(i).getDelay() + ", " + encode(transmissionLines.get(i).getDelta0(), transmissionLines.get(i).getUnit2()) + ")" + CR;
 					cpt ++;
 				} else {
-					corpsModule = corpsModule + "\t, " + transmissionLines.get(i).getName() + "(\"" + transmissionLines.get(i).getName() + "\")" + CR;
+					corpsModule = corpsModule + "\t, " + transmissionLines.get(i).getName() + "(\"" + transmissionLines.get(i).getName() + "\", " + encode(transmissionLines.get(i).getZ0(), transmissionLines.get(i).getUnit0()) + ", " + transmissionLines.get(i).getDelay() + ", " + encode(transmissionLines.get(i).getDelta0(), transmissionLines.get(i).getUnit2()) + ")" + CR;
 				}
 			}
 			for (int i = 0; i < vccss.size(); i++) {
 				if (cpt == 0) {
-					corpsModule = corpsModule + "\t: " + vccss.get(i).getName() + "(\"" + vccss.get(i).getName() + "\", " + vccss.get(i).getVal() + ")" + CR;
+					corpsModule = corpsModule + "\t: " + vccss.get(i).getName() + "(\"" + vccss.get(i).getName() + "\", " + encode(vccss.get(i).getVal(), vccss.get(i).getUnit()) + ")" + CR;
 					cpt ++;
 				} else {
-					corpsModule = corpsModule + "\t, " + vccss.get(i).getName() + "(\"" + vccss.get(i).getName() + "\", " + vccss.get(i).getVal() + ")" + CR;
+					corpsModule = corpsModule + "\t, " + vccss.get(i).getName() + "(\"" + vccss.get(i).getName() + "\", " + encode(vccss.get(i).getVal(), vccss.get(i).getUnit()) + ")" + CR;
 				}
 			}
 			for (int i = 0; i < vcvss.size(); i++) {
@@ -875,6 +875,34 @@ public class ModuleCode {
 			corpsModule = "";
 		}
 		return corpsModule;
+	}
+	
+	private static String encode(double value, String unit) {
+		StringBuffer unit_buf = new StringBuffer(unit);
+		if (unit_buf.length() == 1) {
+			return "" + value;
+		} else if (unit_buf.length() == 2) {
+			char c = unit_buf.charAt(0);
+			switch(c) {
+			case 'G' :
+				return value + "e9";
+			case 'M' :
+				return value + "e6";
+			case 'k' :
+				return value + "e3";
+			case 'm' :
+				return value + "e-3";
+			case '\u03BC' :
+				return value + "e-6";
+			case 'n' :
+				return value + "e-9";
+			case 'p' :
+				return value + "e-12";
+			default : 
+				return value + "e-15";
+			}
+		}
+		return "";
 	}
 	
 	private static String searchName(ELNTConnector connector) {
