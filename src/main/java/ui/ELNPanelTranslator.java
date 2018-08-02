@@ -170,24 +170,13 @@ public class ELNPanelTranslator {
 						ELNConnectingPoint cp0 = (ELNConnectingPoint) capacitor.getTGConnectingPointAtIndex(0);
 						ELNConnectingPoint cp1 = (ELNConnectingPoint) capacitor.getTGConnectingPointAtIndex(1); 
 	
-						System.out.println(((ELNConnectingPoint) capacitor.getTGConnectingPointAtIndex(0)).getName());
-						System.out.println(((ELNConnectingPoint) capacitor.getTGConnectingPointAtIndex(1)).getName());
-						System.out.println(cp0.getName());
-						System.out.println(cp1.getName());
-						
 						ELNTComponentCapacitor elnCapacitor = new ELNTComponentCapacitor(name, val, q0, unit0, unit1, elnModule);
 						
 						ELNTConnectingPoint elncp0 = new ELNTConnectingPoint(cp0.getName(), elnCapacitor);
 						ELNTConnectingPoint elncp1 = new ELNTConnectingPoint(cp1.getName(), elnCapacitor);
-
-						System.out.println(elncp0.getName());
-						System.out.println(elncp1.getName());
 						
 						elnCapacitor.addConnectingPoint(elncp0);
 						elnCapacitor.addConnectingPoint(elncp1);
-						
-						System.out.println(elnCapacitor.getConnectingPoint().get(0).getName());
-						System.out.println(elnCapacitor.getConnectingPoint().get(1).getName());
 						
 						elnMap.put(capacitor, elnCapacitor);
 						elnModule.addCapacitor(elnCapacitor);
