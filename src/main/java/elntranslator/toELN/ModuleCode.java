@@ -344,7 +344,7 @@ public class ModuleCode {
 				for (int j = 0; j < capacitors.get(i).getConnectingPoint().size(); j++) {
 					corpsModule = corpsModule + "\t\t" + capacitors.get(i).getName() + "." + capacitors.get(i).getConnectingPoint().get(j).getName() + "(";
 					for (int k = 0; k < connectors.size(); k++) {
-						if (connectors.get(k).get_p1().getComponent().equals(capacitors.get(i))) {
+						if (connectors.get(k).get_p1().getName().equals(capacitors.get(i).getConnectingPoint().get(j).getName()) && connectors.get(k).get_p1().getComponent().equals(capacitors.get(i))) {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
@@ -360,7 +360,7 @@ public class ModuleCode {
 								}
 							}
 						}
-						if (connectors.get(k).get_p2().getComponent().equals(capacitors.get(i))) {
+						if (connectors.get(k).get_p2().getName().equals(capacitors.get(i).getConnectingPoint().get(j).getName()) && connectors.get(k).get_p2().getComponent().equals(capacitors.get(i))) {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
@@ -384,7 +384,7 @@ public class ModuleCode {
 				for (int j = 0; j < idealTransformers.get(i).getConnectingPoint().size(); j++) {
 					corpsModule = corpsModule + "\t\t" + idealTransformers.get(i).getName() + "." + idealTransformers.get(i).getConnectingPoint().get(j).getName() + "(";
 					for (int k = 0; k < connectors.size(); k++) {
-						if (connectors.get(k).get_p1().getComponent().equals(idealTransformers.get(i))) {
+						if (connectors.get(k).get_p1().getName().equals(idealTransformers.get(i).getConnectingPoint().get(j).getName()) && connectors.get(k).get_p1().getComponent().equals(idealTransformers.get(i))) {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
@@ -400,7 +400,7 @@ public class ModuleCode {
 								}
 							}
 						}
-						if (connectors.get(k).get_p2().getComponent().equals(idealTransformers.get(i))) {
+						if (connectors.get(k).get_p2().getName().equals(idealTransformers.get(i).getConnectingPoint().get(j).getName()) && connectors.get(k).get_p2().getComponent().equals(idealTransformers.get(i))) {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
@@ -424,7 +424,7 @@ public class ModuleCode {
 				for (int j = 0; j < isources.get(i).getConnectingPoint().size(); j++) {
 					corpsModule = corpsModule + "\t\t" + isources.get(i).getName() + "." + isources.get(i).getConnectingPoint().get(j).getName() + "(";
 					for (int k = 0; k < connectors.size(); k++) {
-						if (connectors.get(k).get_p1().getComponent().equals(isources.get(i))) {
+						if (connectors.get(k).get_p1().getName().equals(isources.get(i).getConnectingPoint().get(j).getName()) && connectors.get(k).get_p1().getComponent().equals(isources.get(i))) {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
@@ -440,7 +440,7 @@ public class ModuleCode {
 								}
 							}
 						}
-						if (connectors.get(k).get_p2().getComponent().equals(isources.get(i))) {
+						if (connectors.get(k).get_p2().getName().equals(isources.get(i).getConnectingPoint().get(j).getName()) && connectors.get(k).get_p2().getComponent().equals(isources.get(i))) {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
@@ -464,7 +464,7 @@ public class ModuleCode {
 				for (int j = 0; j < vsources.get(i).getConnectingPoint().size(); j++) {
 					corpsModule = corpsModule + "\t\t" + vsources.get(i).getName() + "." + vsources.get(i).getConnectingPoint().get(j).getName() + "(";
 					for (int k = 0; k < connectors.size(); k++) {
-						if (connectors.get(k).get_p1().getComponent().equals(vsources.get(i))) {
+						if (connectors.get(k).get_p1().getName().equals(vsources.get(i).getConnectingPoint().get(j).getName()) && connectors.get(k).get_p1().getComponent().equals(vsources.get(i))) {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
@@ -480,7 +480,7 @@ public class ModuleCode {
 								}
 							}
 						}
-						if (connectors.get(k).get_p2().getComponent().equals(vsources.get(i))) {
+						if (connectors.get(k).get_p2().getName().equals(vsources.get(i).getConnectingPoint().get(j).getName()) && connectors.get(k).get_p2().getComponent().equals(vsources.get(i))) {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
@@ -504,7 +504,7 @@ public class ModuleCode {
 				for (int j = 0; j < inductors.get(i).getConnectingPoint().size(); j++) {
 					corpsModule = corpsModule + "\t\t" + inductors.get(i).getName() + "." + inductors.get(i).getConnectingPoint().get(j).getName() + "(";
 					for (int k = 0; k < connectors.size(); k++) {
-						if (connectors.get(k).get_p1().getComponent().equals(inductors.get(i))) {
+						if (connectors.get(k).get_p1().getName().equals(inductors.get(i).getConnectingPoint().get(j).getName()) && connectors.get(k).get_p1().getComponent().equals(inductors.get(i))) {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
@@ -520,7 +520,7 @@ public class ModuleCode {
 								}
 							}
 						}
-						if (connectors.get(k).get_p2().getComponent().equals(inductors.get(i))) {
+						if (connectors.get(k).get_p2().getName().equals(inductors.get(i).getConnectingPoint().get(j).getName()) && connectors.get(k).get_p2().getComponent().equals(inductors.get(i))) {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
@@ -544,7 +544,7 @@ public class ModuleCode {
 				for (int j = 0; j < resistors.get(i).getConnectingPoint().size(); j++) {
 					corpsModule = corpsModule + "\t\t" + resistors.get(i).getName() + "." + resistors.get(i).getConnectingPoint().get(j).getName() + "(";
 					for (int k = 0; k < connectors.size(); k++) {
-						if (connectors.get(k).get_p1().getComponent().equals(resistors.get(i))) {
+						if (connectors.get(k).get_p1().getName().equals(resistors.get(i).getConnectingPoint().get(j).getName()) && connectors.get(k).get_p1().getComponent().equals(resistors.get(i))) {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
@@ -560,7 +560,7 @@ public class ModuleCode {
 								}
 							}
 						}
-						if (connectors.get(k).get_p2().getComponent().equals(resistors.get(i))) {
+						if (connectors.get(k).get_p2().getName().equals(resistors.get(i).getConnectingPoint().get(j).getName()) && connectors.get(k).get_p2().getComponent().equals(resistors.get(i))) {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
@@ -584,7 +584,7 @@ public class ModuleCode {
 				for (int j = 0; j < transmissionLines.get(i).getConnectingPoint().size(); j++) {
 					corpsModule = corpsModule + "\t\t" + transmissionLines.get(i).getName() + "." + transmissionLines.get(i).getConnectingPoint().get(j).getName() + "(";
 					for (int k = 0; k < connectors.size(); k++) {
-						if (connectors.get(k).get_p1().getComponent().equals(transmissionLines.get(i))) {
+						if (connectors.get(k).get_p1().getName().equals(transmissionLines.get(i).getConnectingPoint().get(j).getName()) && connectors.get(k).get_p1().getComponent().equals(transmissionLines.get(i))) {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
@@ -600,7 +600,7 @@ public class ModuleCode {
 								}
 							}
 						}
-						if (connectors.get(k).get_p2().getComponent().equals(transmissionLines.get(i))) {
+						if (connectors.get(k).get_p2().getName().equals(transmissionLines.get(i).getConnectingPoint().get(j).getName()) && connectors.get(k).get_p2().getComponent().equals(transmissionLines.get(i))) {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
@@ -624,7 +624,7 @@ public class ModuleCode {
 				for (int j = 0; j < vccss.get(i).getConnectingPoint().size(); j++) {
 					corpsModule = corpsModule + "\t\t" + vccss.get(i).getName() + "." + vccss.get(i).getConnectingPoint().get(j).getName() + "(";
 					for (int k = 0; k < connectors.size(); k++) {
-						if (connectors.get(k).get_p1().getComponent().equals(vccss.get(i))) {
+						if (connectors.get(k).get_p1().getName().equals(vccss.get(i).getConnectingPoint().get(j).getName()) && connectors.get(k).get_p1().getComponent().equals(vccss.get(i))) {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
@@ -640,7 +640,7 @@ public class ModuleCode {
 								}
 							}
 						}
-						if (connectors.get(k).get_p2().getComponent().equals(vccss.get(i))) {
+						if (connectors.get(k).get_p2().getName().equals(vccss.get(i).getConnectingPoint().get(j).getName()) && connectors.get(k).get_p2().getComponent().equals(vccss.get(i))) {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
@@ -664,7 +664,7 @@ public class ModuleCode {
 				for (int j = 0; j < vcvss.get(i).getConnectingPoint().size(); j++) {
 					corpsModule = corpsModule + "\t\t" + vcvss.get(i).getName() + "." + vcvss.get(i).getConnectingPoint().get(j).getName() + "(";
 					for (int k = 0; k < connectors.size(); k++) {
-						if (connectors.get(k).get_p1().getComponent().equals(vcvss.get(i))) {
+						if (connectors.get(k).get_p1().getName().equals(vcvss.get(i).getConnectingPoint().get(j).getName()) && connectors.get(k).get_p1().getComponent().equals(vcvss.get(i))) {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
@@ -680,7 +680,7 @@ public class ModuleCode {
 								}
 							}
 						}
-						if (connectors.get(k).get_p2().getComponent().equals(vcvss.get(i))) {
+						if (connectors.get(k).get_p2().getName().equals(vcvss.get(i).getConnectingPoint().get(j).getName()) && connectors.get(k).get_p2().getComponent().equals(vcvss.get(i))) {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
@@ -704,7 +704,7 @@ public class ModuleCode {
 				for (int j = 0; j < TDF_isinks.get(i).getConnectingPoint().size(); j++) {
 					corpsModule = corpsModule + "\t\t" + TDF_isinks.get(i).getName() + "." + TDF_isinks.get(i).getConnectingPoint().get(j).getName() + "(";
 					for (int k = 0; k < connectors.size(); k++) {
-						if (connectors.get(k).get_p1().getComponent().equals(TDF_isinks.get(i))) {
+						if (connectors.get(k).get_p1().getName().equals(TDF_isinks.get(i).getConnectingPoint().get(j).getName()) && connectors.get(k).get_p1().getComponent().equals(TDF_isinks.get(i))) {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
@@ -720,7 +720,7 @@ public class ModuleCode {
 								}
 							}
 						}
-						if (connectors.get(k).get_p2().getComponent().equals(TDF_isinks.get(i))) {
+						if (connectors.get(k).get_p2().getName().equals(TDF_isinks.get(i).getConnectingPoint().get(j).getName()) && connectors.get(k).get_p2().getComponent().equals(TDF_isinks.get(i))) {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
@@ -744,7 +744,7 @@ public class ModuleCode {
 				for (int j = 0; j < TDF_isources.get(i).getConnectingPoint().size(); j++) {
 					corpsModule = corpsModule + "\t\t" + TDF_isources.get(i).getName() + "." + TDF_isources.get(i).getConnectingPoint().get(j).getName() + "(";
 					for (int k = 0; k < connectors.size(); k++) {
-						if (connectors.get(k).get_p1().getComponent().equals(TDF_isources.get(i))) {
+						if (connectors.get(k).get_p1().getName().equals(TDF_isources.get(i).getConnectingPoint().get(j).getName()) && connectors.get(k).get_p1().getComponent().equals(TDF_isources.get(i))) {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
@@ -760,7 +760,7 @@ public class ModuleCode {
 								}
 							}
 						}
-						if (connectors.get(k).get_p2().getComponent().equals(TDF_isources.get(i))) {
+						if (connectors.get(k).get_p2().getName().equals(TDF_isources.get(i).getConnectingPoint().get(j).getName()) && connectors.get(k).get_p2().getComponent().equals(TDF_isources.get(i))) {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
@@ -784,7 +784,7 @@ public class ModuleCode {
 				for (int j = 0; j < TDF_vsinks.get(i).getConnectingPoint().size(); j++) {
 					corpsModule = corpsModule + "\t\t" + TDF_vsinks.get(i).getName() + "." + TDF_vsinks.get(i).getConnectingPoint().get(j).getName() + "(";
 					for (int k = 0; k < connectors.size(); k++) {
-						if (connectors.get(k).get_p1().getComponent().equals(TDF_vsinks.get(i))) {
+						if (connectors.get(k).get_p1().getName().equals(TDF_vsinks.get(i).getConnectingPoint().get(j).getName()) && connectors.get(k).get_p1().getComponent().equals(TDF_vsinks.get(i))) {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
@@ -800,7 +800,7 @@ public class ModuleCode {
 								}
 							}
 						}
-						if (connectors.get(k).get_p2().getComponent().equals(TDF_vsinks.get(i))) {
+						if (connectors.get(k).get_p2().getName().equals(TDF_vsinks.get(i).getConnectingPoint().get(j).getName()) && connectors.get(k).get_p2().getComponent().equals(TDF_vsinks.get(i))) {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
@@ -824,7 +824,7 @@ public class ModuleCode {
 				for (int j = 0; j < TDF_vsources.get(i).getConnectingPoint().size(); j++) {
 					corpsModule = corpsModule + "\t\t" + TDF_vsources.get(i).getName() + "." + TDF_vsources.get(i).getConnectingPoint().get(j).getName() + "(";
 					for (int k = 0; k < connectors.size(); k++) {
-						if (connectors.get(k).get_p1().getComponent().equals(TDF_vsources.get(i))) {
+						if (connectors.get(k).get_p1().getName().equals(TDF_vsources.get(i).getConnectingPoint().get(j).getName()) && connectors.get(k).get_p1().getComponent().equals(TDF_vsources.get(i))) {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
@@ -840,7 +840,7 @@ public class ModuleCode {
 								}
 							}
 						}
-						if (connectors.get(k).get_p2().getComponent().equals(TDF_vsources.get(i))) {
+						if (connectors.get(k).get_p2().getName().equals(TDF_vsources.get(i).getConnectingPoint().get(j).getName()) && connectors.get(k).get_p2().getComponent().equals(TDF_vsources.get(i))) {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
@@ -863,11 +863,11 @@ public class ModuleCode {
 			corpsModule = corpsModule + "\t}" + CR2 + "private:" + CR;
 			
 			for (int i = 0; i < nodes.size(); i++) {
-				corpsModule = corpsModule + "\tsca_eln::sca_node " + nodes.get(i).getName() + CR;
+				corpsModule = corpsModule + "\tsca_eln::sca_node " + nodes.get(i).getName() + ";" + CR;
 			}
 			
 			for (int i = 0; i < nodeRefs.size(); i++) {
-				corpsModule = corpsModule + "\tsca_eln::sca_node_ref " + nodeRefs.get(i).getName() + CR;
+				corpsModule = corpsModule + "\tsca_eln::sca_node_ref " + nodeRefs.get(i).getName() + ";" + CR;
 			}
 			
 			corpsModule = corpsModule + "};" + CR2 + "#endif" + " // " + module.getName().toUpperCase() + "_H";

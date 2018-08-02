@@ -46,13 +46,14 @@ package elntranslator;
  * @author Irina Kit Yan LEE
 */
 
-public class ELNTConnectingPoint{
+public class ELNTConnectingPoint {
 	private String name;
 	
-	private ELNTConnector ownerConnector ;
+	private ELNTConnector ownerConnector;
 	private ELNTComponent ownerComponent;
 
-	public ELNTConnectingPoint(ELNTComponent _ownerComponent, String _name) {
+	public ELNTConnectingPoint(String _name, ELNTComponent _ownerComponent) {
+		name = _name;
 		ownerComponent = _ownerComponent;
 	}
 	
@@ -62,6 +63,10 @@ public class ELNTConnectingPoint{
 
 	public ELNTConnector getConnector() {
 		return ownerConnector;
+	}
+	
+	public void setOwnerConnector(ELNTConnector _ownerConnector) {
+		ownerConnector = _ownerConnector;
 	}
 
 	public ELNTComponent getComponent() {
