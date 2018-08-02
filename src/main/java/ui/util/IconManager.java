@@ -187,7 +187,7 @@ public class IconManager {
 
     // ELN
     public static ImageIcon imgic8020, imgic8021, imgic8022, imgic8023, imgic8024, imgic8025, imgic8026, imgic8027, imgic8028, imgic8029, 
-    						imgic8030, imgic8031, imgic8032, imgic8033, imgic8034;
+    						imgic8030, imgic8031, imgic8032, imgic8033, imgic8034, imgic8035;
     
     //private static String icon7 = "turtle_large.gif";
     private static String ttoolStringIcon = "starting_logo.gif";
@@ -691,9 +691,10 @@ public class IconManager {
     private static String icon8029 = "elnground.gif";
     private static String icon8030 = "elntdfvsink.gif";
     private static String icon8031 = "elntdfisink.gif";
-    private static String icon8032 = "elnportterminal.gif";
+    private static String icon8032 = "elnterminal.gif";
     private static String icon8033 = "elntdfvsource.gif";
     private static String icon8034 = "elntdfisource.gif";
+    private static String icon8035 = "elnmodule.gif";
     
     public IconManager() {
 
@@ -1210,6 +1211,7 @@ public class IconManager {
         imgic8032 = getIcon(icon8032);
         imgic8033 = getIcon(icon8033);
         imgic8034 = getIcon(icon8034);
+        imgic8035 = getIcon(icon8035);
     }
 
 } // Class
