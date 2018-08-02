@@ -148,7 +148,7 @@ public class ELNPanelTranslator {
 
 					List<ELNComponentCapacitor> capacitors = module.getAllComponentCapacitor();
 					for (int j = 0; j < capacitors.size(); j++) {
-						ELNComponentCapacitor capacitor = capacitors.get(i);
+						ELNComponentCapacitor capacitor = capacitors.get(j);
 	
 						String name = capacitor.getValue();
 						double val = capacitor.getVal();
@@ -172,7 +172,7 @@ public class ELNPanelTranslator {
 					}	
 					List<ELNComponentCurrentSinkTDF> TDF_isinks = module.getAllComponentCurrentSinkTDF();
 					for (int j = 0; j < TDF_isinks.size(); j++) {
-						ELNComponentCurrentSinkTDF TDF_isink = TDF_isinks.get(i);
+						ELNComponentCurrentSinkTDF TDF_isink = TDF_isinks.get(j);
 	
 						String name = TDF_isink.getValue();
 						double scale = TDF_isink.getScale();
@@ -196,7 +196,7 @@ public class ELNPanelTranslator {
 					}	
 					List<ELNComponentCurrentSourceTDF> TDF_isources = module.getAllComponentCurrentSourceTDF();
 					for (int j = 0; j < TDF_isources.size(); j++) {
-						ELNComponentCurrentSourceTDF TDF_isource = TDF_isources.get(i);
+						ELNComponentCurrentSourceTDF TDF_isource = TDF_isources.get(j);
 	
 						String name = TDF_isource.getValue();
 						double scale = TDF_isource.getScale();
@@ -220,7 +220,7 @@ public class ELNPanelTranslator {
 					}	
 					List<ELNComponentIdealTransformer> idealTransformers = module.getAllComponentIdealTransformer();
 					for (int j = 0; j < idealTransformers.size(); j++) {
-						ELNComponentIdealTransformer idealTransformer = idealTransformers.get(i);
+						ELNComponentIdealTransformer idealTransformer = idealTransformers.get(j);
 	
 						String name = idealTransformer.getValue();
 						double ratio = idealTransformer.getRatio();
@@ -247,7 +247,7 @@ public class ELNPanelTranslator {
 					}	
 					List<ELNComponentIndependentCurrentSource> isources = module.getAllComponentIndependentCurrentSource();
 					for (int j = 0; j < isources.size(); j++) {
-						ELNComponentIndependentCurrentSource isource = isources.get(i);
+						ELNComponentIndependentCurrentSource isource = isources.get(j);
 	
 						String name = isource.getValue();
 						double initValue = isource.getInitValue();
@@ -277,7 +277,7 @@ public class ELNPanelTranslator {
 					}	
 					List<ELNComponentIndependentVoltageSource> vsources = module.getAllComponentIndependentVoltageSource();
 					for (int j = 0; j < vsources.size(); j++) {
-						ELNComponentIndependentVoltageSource vsource = vsources.get(i);
+						ELNComponentIndependentVoltageSource vsource = vsources.get(j);
 	
 						String name = vsource.getValue();
 						double initValue = vsource.getInitValue();
@@ -307,7 +307,7 @@ public class ELNPanelTranslator {
 					}
 					List<ELNComponentInductor> inductors = module.getAllComponentInductor();
 					for (int j = 0; j < inductors.size(); j++) {
-						ELNComponentInductor inductor = inductors.get(i);
+						ELNComponentInductor inductor = inductors.get(j);
 	
 						String name = inductor.getValue();
 						double val = inductor.getVal();
@@ -331,7 +331,7 @@ public class ELNPanelTranslator {
 					}
 					List<ELNComponentNodeRef> nodeRefs = module.getAllComponentNodeRef();
 					for (int j = 0; j < nodeRefs.size(); j++) {
-						ELNComponentNodeRef nodeRef = nodeRefs.get(i);
+						ELNComponentNodeRef nodeRef = nodeRefs.get(j);
 	
 						String name = nodeRef.getValue();
 	
@@ -343,7 +343,7 @@ public class ELNPanelTranslator {
 					}	
 					List<ELNComponentResistor> resistors = module.getAllComponentResistor();
 					for (int j = 0; j < resistors.size(); j++) {
-						ELNComponentResistor resistor = resistors.get(i);
+						ELNComponentResistor resistor = resistors.get(j);
 	
 						String name = resistor.getValue();
 						double val = resistor.getVal();
@@ -365,7 +365,7 @@ public class ELNPanelTranslator {
 					}
 					List<ELNComponentTransmissionLine> transmissionLines = module.getAllComponentTransmissionLine();
 					for (int j = 0; j < transmissionLines.size(); j++) {
-						ELNComponentTransmissionLine transmissionLine = transmissionLines.get(i);
+						ELNComponentTransmissionLine transmissionLine = transmissionLines.get(j);
 	
 						String name = transmissionLine.getValue();
 						double z0 = transmissionLine.getZ0();
@@ -396,7 +396,7 @@ public class ELNPanelTranslator {
 					}
 					List<ELNComponentVoltageControlledCurrentSource> vccss = module.getAllComponentVoltageControlledCurrentSource();
 					for (int j = 0; j < vccss.size(); j++) {
-						ELNComponentVoltageControlledCurrentSource vccs = vccss.get(i);
+						ELNComponentVoltageControlledCurrentSource vccs = vccss.get(j);
 	
 						String name = vccs.getValue();
 						double val = vccs.getVal();
@@ -424,7 +424,7 @@ public class ELNPanelTranslator {
 					}
 					List<ELNComponentVoltageControlledVoltageSource> vcvss = module.getAllComponentVoltageControlledVoltageSource();
 					for (int j = 0; j < vcvss.size(); j++) {
-						ELNComponentVoltageControlledVoltageSource vcvs = vcvss.get(i);
+						ELNComponentVoltageControlledVoltageSource vcvs = vcvss.get(j);
 	
 						String name = vcvs.getValue();
 						double val = vcvs.getVal();
@@ -451,7 +451,7 @@ public class ELNPanelTranslator {
 					}
 					List<ELNComponentVoltageSinkTDF> TDF_vsinks = module.getAllComponentVoltageSinkTDF();
 					for (int j = 0; j < TDF_vsinks.size(); j++) {
-						ELNComponentVoltageSinkTDF TDF_vsink = TDF_vsinks.get(i);
+						ELNComponentVoltageSinkTDF TDF_vsink = TDF_vsinks.get(j);
 	
 						String name = TDF_vsink.getValue();
 						double scale = TDF_vsink.getScale();
@@ -475,7 +475,7 @@ public class ELNPanelTranslator {
 					}	
 					List<ELNComponentVoltageSourceTDF> TDF_vsources = module.getAllComponentVoltageSourceTDF();
 					for (int j = 0; j < TDF_vsources.size(); j++) {
-						ELNComponentVoltageSourceTDF TDF_vsource = TDF_vsources.get(i);
+						ELNComponentVoltageSourceTDF TDF_vsource = TDF_vsources.get(j);
 	
 						String name = TDF_vsource.getValue();
 						double scale = TDF_vsource.getScale();
@@ -499,7 +499,7 @@ public class ELNPanelTranslator {
 					}	
 					List<ELNModuleTerminal> moduleTerminals = module.getAllModuleTerminal();
 					for (int j = 0; j < moduleTerminals.size(); j++) {
-						ELNModuleTerminal moduleTerminal = moduleTerminals.get(i);
+						ELNModuleTerminal moduleTerminal = moduleTerminals.get(j);
 	
 						String name = moduleTerminal.getValue();
 	
@@ -511,7 +511,7 @@ public class ELNPanelTranslator {
 					}
 					List<SysCAMSPortDE> portsDEModule = module.getAllPortDE();
 					for (int j = 0; j < portsDEModule.size(); j++) {
-						SysCAMSPortDE portDE = portsDEModule.get(i);
+						SysCAMSPortDE portDE = portsDEModule.get(j);
 
 						String portName = portDE.getPortName();
 						String type = portDE.getDEType();
@@ -527,7 +527,7 @@ public class ELNPanelTranslator {
 					}
 					List<SysCAMSPortTDF> portsTDFModule = module.getAllPortTDF();
 					for (int j = 0; j < portsTDFModule.size(); j++) {
-						SysCAMSPortTDF portTDF = portsTDFModule.get(i);
+						SysCAMSPortTDF portTDF = portsTDFModule.get(j);
 
 						String portName = portTDF.getPortName();
 						int periodPort = portTDF.getPeriod();
