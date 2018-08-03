@@ -50,7 +50,6 @@ import java.io.*;
 import java.util.LinkedList;
 import java.util.List;
 import elntranslator.*;
-import syscamstranslator.*;
 
 /**
  * Class TopCellGenerator
@@ -70,9 +69,12 @@ public class TopCellGenerator {
 		eln = _eln;
 	}
 
-	public String generateTopCell(ELNTCluster cluster, LinkedList<ELNTConnector> ELNconnectors, LinkedList<SysCAMSTConnector> TDFconnectors, LinkedList<SysCAMSTConnector> DEconnectors) {
+	public String generateTopCell(ELNTCluster cluster, LinkedList<ELNTConnector> connectors) {
 		if (TopCellGenerator.eln.getCluster() == null) {
 			System.out.println("***Warning: require at least one cluster***");
+		}
+		if (TopCellGenerator.eln.getNbClusterTerminal() == 0) {
+			System.out.println("***Warning: require at least one cluster terminal***");
 		}
 		if (TopCellGenerator.eln.getNbModule() == 0) {
 			System.out.println("***Warning: require at least one module***");
@@ -91,16 +93,14 @@ public class TopCellGenerator {
 		if (TopCellGenerator.eln.getNbComponentNodeRef() == 0) {
 			System.out.println("***Warning: require at least one node ref***");
 		}
-		String top = ClusterCode.getClusterCode(cluster, ELNconnectors, TDFconnectors, DEconnectors);
+		String top = ClusterCode.getClusterCode(cluster, connectors);
 		return (top);
 	}
 
 	public void saveFile(String path) {
 		ELNTCluster cluster = TopCellGenerator.eln.getCluster();
-		LinkedList<ELNTConnector> ELNconnectorsIn = TopCellGenerator.eln.getAllConnectorsInModule();
-		LinkedList<ELNTConnector> ELNconnectorsOut = TopCellGenerator.eln.getAllConnectorsBetweenELNModuleTerminal();
-		LinkedList<SysCAMSTConnector> TDFconnectors = TopCellGenerator.eln.getAllConnectorsBetweenTDFModulePort();
-		LinkedList<SysCAMSTConnector> DEconnectors = TopCellGenerator.eln.getAllConnectorsBetweenDEModulePort();
+		LinkedList<ELNTConnector> connectorsModule = TopCellGenerator.eln.getAllConnectorsInModule();
+		LinkedList<ELNTConnector> connectorsCluster = TopCellGenerator.eln.getAllConnectorsInCluster();
 
 		String top;
 
@@ -108,14 +108,14 @@ public class TopCellGenerator {
 			// Save file .cpp
 			System.err.println(path + GENERATED_PATH1 + cluster.getName() + ".cpp");
 			FileWriter fw = new FileWriter(path + GENERATED_PATH1 + "/" + cluster.getName() + "_tb.cpp");
-			top = generateTopCell(cluster, ELNconnectorsOut, TDFconnectors, DEconnectors);
+			top = generateTopCell(cluster, connectorsCluster);
 			fw.write(top);
 			fw.close();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 		// Save files .h
-		saveFileModule(path, cluster, ELNconnectorsIn);
+		saveFileModule(path, cluster, connectorsModule);
 	}
 
 	public void saveFileModule(String path, ELNTCluster cluster, List<ELNTConnector> connectors) {

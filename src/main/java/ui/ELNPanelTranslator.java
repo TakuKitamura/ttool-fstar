@@ -41,10 +41,8 @@ package ui;
 import ui.eln.*;
 import ui.eln.sca_eln.*;
 import ui.eln.sca_eln_sca_tdf.*;
-import ui.syscams.*;
 import java.util.*;
 import elntranslator.*;
-import syscamstranslator.*;
 
 /**
  * Class ELNPanelTranslator
@@ -58,16 +56,12 @@ public class ELNPanelTranslator {
 	private List<TGComponent> tgcComponents;
 	private List<ELNTComponent> elnComponents;
 	private List<ELNTConnector> elnConnectors;
-	private List<SysCAMSTComponent> syscamsComponents;
-	private List<SysCAMSTConnector> syscamsConnectors;
 
 	public ELNPanelTranslator(ELNDiagramPanel _elnDiagramPanel) {
 		tgcComponents = _elnDiagramPanel.getComponentList();
 
 		elnComponents = new LinkedList<ELNTComponent>();
 		elnConnectors = new LinkedList<ELNTConnector>();
-		syscamsComponents = new LinkedList<SysCAMSTComponent>();
-		syscamsConnectors = new LinkedList<SysCAMSTConnector>();
 
 		MakeListOfComponent(_elnDiagramPanel);
 	}
@@ -75,7 +69,6 @@ public class ELNPanelTranslator {
 	private void MakeListOfComponent(ELNDiagramPanel elnDiagramPanel) {
 
 		Map<TGComponent, ELNTComponent> elnMap = new HashMap<TGComponent, ELNTComponent>();
-		Map<TGComponent, SysCAMSTComponent> syscamsMap = new HashMap<TGComponent, SysCAMSTComponent>();
 
 		TGComponent tgc;
 		Iterator<TGComponent> iterator1 = tgcComponents.listIterator();
@@ -116,39 +109,41 @@ public class ELNPanelTranslator {
 				
 				ELNTCluster elnCluster = new ELNTCluster(clusterName);
 				
-				List<SysCAMSPortDE> portsDE = cluster.getAllPortDE();
-				for (int i = 0; i < portsDE.size(); i++) {
-					SysCAMSPortDE portDE = portsDE.get(i);
+				List<ELNClusterTerminal> clusterTerminals = cluster.getAllClusterTerminal();
+				for (int i = 0; i < clusterTerminals.size(); i++) {
+					ELNClusterTerminal clusterTerminal = clusterTerminals.get(i);
 
-					String portName = portDE.getPortName();
-					String type = portDE.getDEType();
-					int origin = portDE.getOrigin();
-					boolean sensitive = portDE.getSensitive();
-					String sensitiveMethod = portDE.getSensitiveMethod();
+					String termName = clusterTerminal.getValue();
 
-					SysCAMSTPortDE syscamsPortDE = new SysCAMSTPortDE(portName, origin, type, sensitive, sensitiveMethod, elnCluster);
+					ELNTClusterTerminal elnClusterTerminal = new ELNTClusterTerminal(termName, elnCluster);
 
-					syscamsMap.put(portDE, syscamsPortDE);
-					elnCluster.addPortDE(syscamsPortDE);
-					syscamsComponents.add(syscamsPortDE);
+					elnMap.put(clusterTerminal, elnClusterTerminal);
+					elnCluster.addClusterTerminal(elnClusterTerminal);
+					elnComponents.add(elnClusterTerminal);
 				}
-				List<SysCAMSPortTDF> portsTDF = cluster.getAllPortTDF();
-				for (int i = 0; i < portsTDF.size(); i++) {
-					SysCAMSPortTDF portTDF = portsTDF.get(i);
+				List<ELNClusterPortDE> clusterPortsDE = cluster.getAllClusterPortDE();
+				for (int i = 0; i < clusterPortsDE.size(); i++) {
+					ELNClusterPortDE clusterPortDE = clusterPortsDE.get(i);
 
-					String portName = portTDF.getPortName();
-					int periodPort = portTDF.getPeriod();
-					String time = portTDF.getTime();
-					int rate = portTDF.getRate();
-					int delay = portTDF.getDelay();
-					String type = portTDF.getTDFType();
-					int origin = portTDF.getOrigin();
+					String portName = clusterPortDE.getValue();
 
-					SysCAMSTPortTDF syscamsPortTDF = new SysCAMSTPortTDF(portName, periodPort, time, rate, delay, origin, type, elnCluster);
+					ELNTClusterPortDE elnClusterPortDE = new ELNTClusterPortDE(portName, elnCluster);
 
-					syscamsMap.put(portTDF, syscamsPortTDF);
-					elnCluster.addPortTDF(syscamsPortTDF);
-					syscamsComponents.add(syscamsPortTDF);
+					elnMap.put(clusterPortDE, elnClusterPortDE);
+					elnCluster.addClusterPortDE(elnClusterPortDE);
+					elnComponents.add(elnClusterPortDE);
+				}
+				List<ELNClusterPortTDF> clusterPortsTDF = cluster.getAllClusterPortTDF();
+				for (int i = 0; i < clusterPortsTDF.size(); i++) {
+					ELNClusterPortTDF clusterPortTDF = clusterPortsTDF.get(i);
+
+					String portName = clusterPortTDF.getValue();
+
+					ELNTClusterPortTDF elnClusterPortTDF = new ELNTClusterPortTDF(portName, elnCluster);
+
+					elnMap.put(clusterPortTDF, elnClusterPortTDF);
+					elnCluster.addClusterPortTDF(elnClusterPortTDF);
+					elnComponents.add(elnClusterPortTDF);
 				}
 				List<ELNModule> modules = cluster.getAllModule();
 				for (int i = 0; i < modules.size(); i++) {
@@ -521,39 +516,29 @@ public class ELNPanelTranslator {
 						elnModule.addModuleTerminal(elnModuleTerminal);
 						elnComponents.add(elnModuleTerminal);
 					}
-					List<SysCAMSPortDE> portsDEModule = module.getAllPortDE();
-					for (int j = 0; j < portsDEModule.size(); j++) {
-						SysCAMSPortDE portDE = portsDEModule.get(j);
+					List<ELNModulePortDE> modulePortsDE = module.getAllModulePortDE();
+					for (int j = 0; j < modulePortsDE.size(); j++) {
+						ELNModulePortDE modulePortDE = modulePortsDE.get(j);
 
-						String portName = portDE.getPortName();
-						String type = portDE.getDEType();
-						int origin = portDE.getOrigin();
-						boolean sensitive = portDE.getSensitive();
-						String sensitiveMethod = portDE.getSensitiveMethod();
+						String portName = modulePortDE.getValue();
 
-						SysCAMSTPortDE syscamsPortDE = new SysCAMSTPortDE(portName, origin, type, sensitive, sensitiveMethod, elnModule);
+						ELNTModulePortDE elnModulePortDE = new ELNTModulePortDE(portName, elnModule);
 
-						syscamsMap.put(portDE, syscamsPortDE);
-						elnModule.addPortDE(syscamsPortDE);
-						syscamsComponents.add(syscamsPortDE);
+						elnMap.put(modulePortDE, elnModulePortDE);
+						elnModule.addModulePortDE(elnModulePortDE);
+						elnComponents.add(elnModulePortDE);
 					}
-					List<SysCAMSPortTDF> portsTDFModule = module.getAllPortTDF();
-					for (int j = 0; j < portsTDFModule.size(); j++) {
-						SysCAMSPortTDF portTDF = portsTDFModule.get(j);
+					List<ELNModulePortTDF> modulePortsTDF = module.getAllModulePortTDF();
+					for (int j = 0; j < modulePortsTDF.size(); j++) {
+						ELNModulePortTDF modulePortTDF = modulePortsTDF.get(j);
 
-						String portName = portTDF.getPortName();
-						int periodPort = portTDF.getPeriod();
-						String time = portTDF.getTime();
-						int rate = portTDF.getRate();
-						int delay = portTDF.getDelay();
-						String type = portTDF.getTDFType();
-						int origin = portTDF.getOrigin();
+						String portName = modulePortTDF.getValue();
 
-						SysCAMSTPortTDF syscamsPortTDF = new SysCAMSTPortTDF(portName, periodPort, time, rate, delay, origin, type, elnModule);
+						ELNTModulePortTDF elnModulePortTDF = new ELNTModulePortTDF(portName, elnModule);
 
-						syscamsMap.put(portTDF, syscamsPortTDF);
-						elnModule.addPortTDF(syscamsPortTDF);
-						syscamsComponents.add(syscamsPortTDF);
+						elnMap.put(modulePortTDF, elnModulePortTDF);
+						elnModule.addModulePortTDF(elnModulePortTDF);
+						elnComponents.add(elnModulePortTDF);
 					}
 					elnMap.put(module, elnModule);
 					elnCluster.addModule(elnModule);
@@ -595,30 +580,11 @@ public class ELNPanelTranslator {
 				}	
 
 				elnConnectors.add(avconnector);
-			} else if (dp instanceof SysCAMSPortConnector) {
-				SysCAMSPortConnector connector = (SysCAMSPortConnector) dp;
-
-				TGConnectingPoint connectingPoint1 = connector.get_p1();
-				TGConnectingPoint connectingPoint2 = connector.get_p2();	
-				
-				String name = connector.getValue();
-
-				TGComponent owner_p1 = elnDiagramPanel.getComponentToWhichBelongs(connectingPoint1);
-				TGComponent owner_p2 = elnDiagramPanel.getComponentToWhichBelongs(connectingPoint2);
-
-				SysCAMSTComponent avowner_p1 = syscamsMap.get(owner_p1);	
-				SysCAMSTComponent avowner_p2 = syscamsMap.get(owner_p2);
-
-				SysCAMSTConnectingPoint avConnectingPoint1 = new SysCAMSTConnectingPoint(avowner_p1);
-				SysCAMSTConnectingPoint avConnectingPoint2 = new SysCAMSTConnectingPoint(avowner_p2);
-
-				SysCAMSTConnector avconnector = new SysCAMSTConnector(avConnectingPoint1, avConnectingPoint2, name);			
-				syscamsConnectors.add(avconnector);
 			}
 		}
 	}
 
 	public ELNSpecification getELNSpecification() {
-		return new ELNSpecification(elnComponents, elnConnectors, syscamsComponents, syscamsConnectors);
+		return new ELNSpecification(elnComponents, elnConnectors);
 	}
 }

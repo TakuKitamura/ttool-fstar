@@ -39,7 +39,6 @@
 package elntranslator;
 
 import java.util.LinkedList;
-import syscamstranslator.*;
 
 /**
  * Class ELNTCluster
@@ -52,14 +51,16 @@ import syscamstranslator.*;
 public class ELNTCluster extends ELNTComponent {
 	private String name;
 	
-	private LinkedList<SysCAMSTPortDE> portDE;
-	private LinkedList<SysCAMSTPortTDF> portTDF;
+	private LinkedList<ELNTClusterTerminal> clusterTerminal;
+	private LinkedList<ELNTClusterPortDE> clusterPortDE;
+	private LinkedList<ELNTClusterPortTDF> clusterPortTDF;
 	private LinkedList<ELNTModule> module;
 	
 	public ELNTCluster(String _name) {
 		name = _name;
-		portDE = new LinkedList<SysCAMSTPortDE>();
-		portTDF = new LinkedList<SysCAMSTPortTDF>();
+		clusterTerminal = new LinkedList<ELNTClusterTerminal>();
+		clusterPortDE = new LinkedList<ELNTClusterPortDE>();
+		clusterPortTDF = new LinkedList<ELNTClusterPortTDF>();
 		module = new LinkedList<ELNTModule>();
 	}
 
@@ -67,20 +68,28 @@ public class ELNTCluster extends ELNTComponent {
 		return name;
 	}
 
-	public LinkedList<SysCAMSTPortDE> getPortDE() {
-		return portDE;
-	}
-
-	public void addPortDE(SysCAMSTPortDE _portDE){
-		portDE.add(_portDE);
+	public LinkedList<ELNTClusterTerminal> getClusterTerminal() {
+		return clusterTerminal;
 	}
 	
-	public LinkedList<SysCAMSTPortTDF> getPortTDF() {
-		return portTDF;
+	public void addClusterTerminal(ELNTClusterTerminal _clusterTerminal){
+		clusterTerminal.add(_clusterTerminal);
 	}
 
-	public void addPortTDF(SysCAMSTPortTDF _portTDF){
-		portTDF.add(_portTDF);
+	public LinkedList<ELNTClusterPortDE> getClusterPortDE() {
+		return clusterPortDE;
+	}
+
+	public void addClusterPortDE(ELNTClusterPortDE _clusterPortDE){
+		clusterPortDE.add(_clusterPortDE);
+	}
+	
+	public LinkedList<ELNTClusterPortTDF> getClusterPortTDF() {
+		return clusterPortTDF;
+	}
+
+	public void addClusterPortTDF(ELNTClusterPortTDF _clusterPortTDF){
+		clusterPortTDF.add(_clusterPortTDF);
 	}
 	
 	public LinkedList<ELNTModule> getModule() {

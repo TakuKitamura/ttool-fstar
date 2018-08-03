@@ -39,7 +39,6 @@
 package elntranslator;
 
 import java.util.LinkedList;
-import syscamstranslator.*;
 
 /**
  * Class ELNTModule
@@ -67,8 +66,8 @@ public class ELNTModule extends ELNTComponent {
 	private LinkedList<ELNTComponentVoltageSinkTDF> TDF_vsink;
 	private LinkedList<ELNTComponentVoltageSourceTDF> TDF_vsource;
 	private LinkedList<ELNTModuleTerminal> moduleTerminal;
-	private LinkedList<SysCAMSTPortDE> portDE;
-	private LinkedList<SysCAMSTPortTDF> portTDF;
+	private LinkedList<ELNTModulePortDE> modulePortDE;
+	private LinkedList<ELNTModulePortTDF> modulePortTDF;
 	
 	private ELNTCluster cluster;
 	
@@ -89,8 +88,8 @@ public class ELNTModule extends ELNTComponent {
 		TDF_vsink = new LinkedList<ELNTComponentVoltageSinkTDF>();
 		TDF_vsource = new LinkedList<ELNTComponentVoltageSourceTDF>();
 		moduleTerminal = new LinkedList<ELNTModuleTerminal>();
-		portDE = new LinkedList<SysCAMSTPortDE>();
-		portTDF = new LinkedList<SysCAMSTPortTDF>();
+		modulePortDE = new LinkedList<ELNTModulePortDE>();
+		modulePortTDF = new LinkedList<ELNTModulePortTDF>();
 		cluster = _cluster;
 	}
 
@@ -218,20 +217,20 @@ public class ELNTModule extends ELNTComponent {
 		moduleTerminal.add(_moduleTerminal);
 	}
 	
-	public LinkedList<SysCAMSTPortDE> getPortDE() {
-		return portDE;
-	}
-
-	public void addPortDE(SysCAMSTPortDE _portDE){
-		portDE.add(_portDE);
+	public LinkedList<ELNTModulePortDE> getModulePortDE() {
+		return modulePortDE;
 	}
 	
-	public LinkedList<SysCAMSTPortTDF> getPortTDF() {
-		return portTDF;
+	public void addModulePortDE(ELNTModulePortDE _portDE){
+		modulePortDE.add(_portDE);
 	}
 
-	public void addPortTDF(SysCAMSTPortTDF _portTDF){
-		portTDF.add(_portTDF);
+	public LinkedList<ELNTModulePortTDF> getModulePortTDF() {
+		return modulePortTDF;
+	}
+	
+	public void addModulePortTDF(ELNTModulePortTDF _portTDF){
+		modulePortTDF.add(_portTDF);
 	}
 
 	public ELNTCluster getCluster() {

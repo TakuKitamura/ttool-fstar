@@ -47,7 +47,6 @@ package elntranslator.toELN;
 
 import java.util.LinkedList;
 import elntranslator.*;
-import syscamstranslator.*;
 
 /**
  * Class ClusterCode 
@@ -65,10 +64,8 @@ public class ClusterCode {
 	ClusterCode() {
 	}
 
-	public static String getClusterCode(ELNTCluster cluster, LinkedList<ELNTConnector> ELNconnectors, LinkedList<SysCAMSTConnector> TDFconnectors, LinkedList<SysCAMSTConnector> DEconnectors) {
+	public static String getClusterCode(ELNTCluster cluster, LinkedList<ELNTConnector> connectors) {
 		LinkedList<String> ELNnames = new LinkedList<String>();
-		LinkedList<String> TDFnames = new LinkedList<String>();
-		LinkedList<String> DEnames = new LinkedList<String>();
 
 		if (cluster != null) {
 			LinkedList<ELNTModule> modules = cluster.getModule();
@@ -83,45 +80,35 @@ public class ClusterCode {
 			}
 			corpsCluster = corpsCluster + "int sc_main(int argc, char *argv[])" + CR + "{" + CR;
 
-			for (int i = 0; i < ELNconnectors.size(); i++) {
-				if (ELNconnectors.get(i).getName().equals("")) {
-					corpsCluster = corpsCluster + "\tsca_eln::sca_node " + "n_" + ((ELNTModuleTerminal) ELNconnectors.get(i).get_p1().getComponent()).getName() + "_" + ((ELNTModuleTerminal) ELNconnectors.get(i).get_p2().getComponent()).getName() + ";" + CR;
-					ELNnames.add("n_" + ((ELNTModuleTerminal) ELNconnectors.get(i).get_p1().getComponent()).getName() + "_" + ((ELNTModuleTerminal) ELNconnectors.get(i).get_p2().getComponent()).getName());
+			for (int i = 0; i < connectors.size(); i++) {
+				if (connectors.get(i).getName().equals("")) {
+					if (connectors.get(i).get_p1().getComponent() instanceof ELNTModuleTerminal && connectors.get(i).get_p2().getComponent() instanceof ELNTModuleTerminal) {
+						corpsCluster = corpsCluster + "\tsca_eln::sca_node " + "n_" + ((ELNTModuleTerminal) connectors.get(i).get_p1().getComponent()).getName() + "_" + ((ELNTModuleTerminal) connectors.get(i).get_p2().getComponent()).getName() + ";" + CR;
+						ELNnames.add("n_" + ((ELNTModuleTerminal) connectors.get(i).get_p1().getComponent()).getName() + "_" + ((ELNTModuleTerminal) connectors.get(i).get_p2().getComponent()).getName());
+					} else if (connectors.get(i).get_p1().getComponent() instanceof ELNTModuleTerminal && connectors.get(i).get_p2().getComponent() instanceof ELNTClusterTerminal) {
+						corpsCluster = corpsCluster + "\tsca_eln::sca_node " + "n_" + ((ELNTModuleTerminal) connectors.get(i).get_p1().getComponent()).getName() + "_" + ((ELNTClusterTerminal) connectors.get(i).get_p2().getComponent()).getName() + ";" + CR;
+						ELNnames.add("n_" + ((ELNTModuleTerminal) connectors.get(i).get_p1().getComponent()).getName() + "_" + ((ELNTModuleTerminal) connectors.get(i).get_p2().getComponent()).getName());
+					} else if (connectors.get(i).get_p1().getComponent() instanceof ELNTClusterTerminal && connectors.get(i).get_p2().getComponent() instanceof ELNTModuleTerminal) {
+						corpsCluster = corpsCluster + "\tsca_eln::sca_node " + "n_" + ((ELNTClusterTerminal) connectors.get(i).get_p1().getComponent()).getName() + "_" + ((ELNTModuleTerminal) connectors.get(i).get_p2().getComponent()).getName() + ";" + CR;
+						ELNnames.add("n_" + ((ELNTClusterTerminal) connectors.get(i).get_p1().getComponent()).getName() + "_" + ((ELNTModuleTerminal) connectors.get(i).get_p2().getComponent()).getName());
+					} else if (connectors.get(i).get_p1().getComponent() instanceof ELNTModulePortDE && connectors.get(i).get_p2().getComponent() instanceof ELNTClusterPortDE) {
+						corpsCluster = corpsCluster + "\tsca_tdf::sca_signal " + "n_" + ((ELNTModulePortDE) connectors.get(i).get_p1().getComponent()).getName() + "_" + ((ELNTClusterPortDE) connectors.get(i).get_p2().getComponent()).getName() + ";" + CR;
+						ELNnames.add("s_" + ((ELNTModulePortDE) connectors.get(i).get_p1().getComponent()).getName() + "_" + ((ELNTClusterPortDE) connectors.get(i).get_p2().getComponent()).getName());
+					} else if (connectors.get(i).get_p1().getComponent() instanceof ELNTClusterPortDE && connectors.get(i).get_p2().getComponent() instanceof ELNTModulePortDE) {
+						corpsCluster = corpsCluster + "\tsca_tdf::sca_signal " + "n_" + ((ELNTClusterPortDE) connectors.get(i).get_p1().getComponent()).getName() + "_" + ((ELNTModulePortDE) connectors.get(i).get_p2().getComponent()).getName() + ";" + CR;
+						ELNnames.add("s_" + ((ELNTClusterPortDE) connectors.get(i).get_p1().getComponent()).getName() + "_" + ((ELNTModulePortDE) connectors.get(i).get_p2().getComponent()).getName());
+					} else if (connectors.get(i).get_p1().getComponent() instanceof ELNTModulePortTDF && connectors.get(i).get_p2().getComponent() instanceof ELNTClusterPortTDF) {
+						corpsCluster = corpsCluster + "\tsc_core::sc_signal " + "n_" + ((ELNTModulePortTDF) connectors.get(i).get_p1().getComponent()).getName() + "_" + ((ELNTClusterPortTDF) connectors.get(i).get_p2().getComponent()).getName() + ";" + CR;
+						ELNnames.add("s_" + ((ELNTModulePortTDF) connectors.get(i).get_p1().getComponent()).getName() + "_" + ((ELNTClusterPortTDF) connectors.get(i).get_p2().getComponent()).getName());
+					} else if (connectors.get(i).get_p1().getComponent() instanceof ELNTClusterPortTDF && connectors.get(i).get_p2().getComponent() instanceof ELNTModulePortTDF) {
+						corpsCluster = corpsCluster + "\tsc_core::sc_signal " + "n_" + ((ELNTClusterPortTDF) connectors.get(i).get_p1().getComponent()).getName() + "_" + ((ELNTModulePortTDF) connectors.get(i).get_p2().getComponent()).getName() + ";" + CR;
+						ELNnames.add("s_" + ((ELNTClusterPortTDF) connectors.get(i).get_p1().getComponent()).getName() + "_" + ((ELNTModulePortTDF) connectors.get(i).get_p2().getComponent()).getName());
+					}
 				} else {
-					corpsCluster = corpsCluster + "\tsca_eln::sca_node " + ELNconnectors.get(i).getName() + ";" + CR;
-					ELNnames.add(ELNconnectors.get(i).getName());
+					corpsCluster = corpsCluster + "\tsca_eln::sca_node " + connectors.get(i).getName() + ";" + CR;
+					ELNnames.add(connectors.get(i).getName());
 				}
-				if (i == ELNconnectors.size()-1) {
-					corpsCluster = corpsCluster + CR;
-				}
-			}
-				
-			for (int i = 0; i < TDFconnectors.size(); i++) {
-				if (TDFconnectors.get(i).getName().equals("")) {
-					corpsCluster = corpsCluster + "\tsca_tdf::sca_signal<" + ((SysCAMSTPortTDF) TDFconnectors.get(i).get_p1().getComponent()).getTDFType() + "> " 
-							+ "s_" + ((SysCAMSTPortTDF) TDFconnectors.get(i).get_p1().getComponent()).getName() + "_" + ((SysCAMSTPortTDF) TDFconnectors.get(i).get_p2().getComponent()).getName() + ";" + CR;
-					TDFnames.add("s_" + ((SysCAMSTPortTDF) TDFconnectors.get(i).get_p1().getComponent()).getName() + "_" + ((SysCAMSTPortTDF) TDFconnectors.get(i).get_p2().getComponent()).getName());
-				} else {
-					corpsCluster = corpsCluster + "\tsca_tdf::sca_signal<" + ((SysCAMSTPortTDF) TDFconnectors.get(i).get_p1().getComponent()).getTDFType() + "> " 
-							+ TDFconnectors.get(i).getName() + ";" + CR;
-					TDFnames.add(TDFconnectors.get(i).getName());
-				}
-				if (i == TDFconnectors.size()-1) {
-					corpsCluster = corpsCluster + CR;
-				}
-			}
-			
-			for (int i = 0; i < DEconnectors.size(); i++) {
-				if (DEconnectors.get(i).getName().equals("")) {
-					corpsCluster = corpsCluster + "\tsc_core::sc_signal<" + ((SysCAMSTPortDE) DEconnectors.get(i).get_p1().getComponent()).getDEType() + "> " 
-							+ "s_" + ((SysCAMSTPortDE) DEconnectors.get(i).get_p1().getComponent()).getName() + "_" + ((SysCAMSTPortDE) DEconnectors.get(i).get_p2().getComponent()).getName() + ";" + CR;
-					DEnames.add("s_" + ((SysCAMSTPortDE) DEconnectors.get(i).get_p1().getComponent()).getName() + "_" + ((SysCAMSTPortDE) DEconnectors.get(i).get_p2().getComponent()).getName());
-				} else {
-					corpsCluster = corpsCluster + "\tsc_core::sc_signal<" + ((SysCAMSTPortDE) DEconnectors.get(i).get_p1().getComponent()).getDEType() + "> " 
-							+ DEconnectors.get(i).getName() + ";" + CR;
-					DEnames.add(DEconnectors.get(i).getName());
-				}
-				if (i == DEconnectors.size()-1) {
+				if (i == connectors.size()-1) {
 					corpsCluster = corpsCluster + CR;
 				}
 			}
@@ -130,35 +117,50 @@ public class ClusterCode {
 				corpsCluster = corpsCluster + "\t" + t.getName() + " i_" + t.getName() + "(\"i_" + t.getName() + "\");" + CR;
 
 				LinkedList<ELNTModuleTerminal> term = t.getModuleTerminal();
-				LinkedList<SysCAMSTPortTDF> portTDF = t.getPortTDF();
-				LinkedList<SysCAMSTPortDE> portDE = t.getPortDE();
+				LinkedList<ELNTModulePortTDF> portTDF = t.getModulePortTDF();
+				LinkedList<ELNTModulePortDE> portDE = t.getModulePortDE();
 
 				for (ELNTModuleTerminal p : term) {
-					for (int i = 0; i < ELNconnectors.size(); i++) {
-						if (((ELNTModuleTerminal) ELNconnectors.get(i).get_p1().getComponent()).getName().equals(p.getName()) && ((ELNTModuleTerminal) ELNconnectors.get(i).get_p1().getComponent()).getModule().getName().equals(t.getName())) {
-							corpsCluster = corpsCluster + "\ti_" + t.getName() + "." + p.getName() + "(" + ELNnames.get(i) + ");" + CR;
-						} else if (((ELNTModuleTerminal) ELNconnectors.get(i).get_p2().getComponent()).getName().equals(p.getName()) && ((ELNTModuleTerminal) ELNconnectors.get(i).get_p2().getComponent()).getModule().getName().equals(t.getName())) {
-							corpsCluster = corpsCluster + "\ti_" + t.getName() + "." + p.getName() + "(" + ELNnames.get(i) + ");" + CR;
+					for (int i = 0; i < connectors.size(); i++) {
+						if (connectors.get(i).get_p1().getComponent() instanceof ELNTModuleTerminal) {
+							if (((ELNTModuleTerminal) connectors.get(i).get_p1().getComponent()).getName().equals(p.getName()) && ((ELNTModuleTerminal) connectors.get(i).get_p1().getComponent()).getModule().getName().equals(t.getName())) {
+								corpsCluster = corpsCluster + "\ti_" + t.getName() + "." + p.getName() + "(" + ELNnames.get(i) + ");" + CR;
+							}
+						}
+						if (connectors.get(i).get_p2().getComponent() instanceof ELNTModuleTerminal) {
+							if (((ELNTModuleTerminal) connectors.get(i).get_p2().getComponent()).getName().equals(p.getName()) && ((ELNTModuleTerminal) connectors.get(i).get_p2().getComponent()).getModule().getName().equals(t.getName())) {
+								corpsCluster = corpsCluster + "\ti_" + t.getName() + "." + p.getName() + "(" + ELNnames.get(i) + ");" + CR;
+							}
 						}
 					}
 				}
 
-				for (SysCAMSTPortTDF p : portTDF) {
-					for (int i = 0; i < TDFconnectors.size(); i++) {
-						if (((SysCAMSTPortTDF) TDFconnectors.get(i).get_p1().getComponent()).getName().equals(p.getName()) && ((SysCAMSTPortTDF) TDFconnectors.get(i).get_p1().getComponent()).getModule().getName().equals(t.getName())) {
-							corpsCluster = corpsCluster + "\ti_" + t.getName() + "." + p.getName() + "(" + TDFnames.get(i) + ");" + CR;
-						} else if (((SysCAMSTPortTDF) TDFconnectors.get(i).get_p2().getComponent()).getName().equals(p.getName()) && ((SysCAMSTPortTDF) TDFconnectors.get(i).get_p2().getComponent()).getModule().getName().equals(t.getName())) {
-							corpsCluster = corpsCluster + "\ti_" + t.getName() + "." + p.getName() + "(" + TDFnames.get(i) + ");" + CR;
+				for (ELNTModulePortTDF p : portTDF) {
+					for (int i = 0; i < connectors.size(); i++) {
+						if (connectors.get(i).get_p1().getComponent() instanceof ELNTModulePortTDF) {
+							if (((ELNTModulePortTDF) connectors.get(i).get_p1().getComponent()).getName().equals(p.getName()) && ((ELNTModulePortTDF) connectors.get(i).get_p1().getComponent()).getModule().getName().equals(t.getName())) {
+								corpsCluster = corpsCluster + "\ti_" + t.getName() + "." + p.getName() + "(" + ELNnames.get(i) + ");" + CR;
+							}
+						}
+						if (connectors.get(i).get_p2().getComponent() instanceof ELNTModulePortTDF) {
+							if (((ELNTModulePortTDF) connectors.get(i).get_p2().getComponent()).getName().equals(p.getName()) && ((ELNTModulePortTDF) connectors.get(i).get_p2().getComponent()).getModule().getName().equals(t.getName())) {
+								corpsCluster = corpsCluster + "\ti_" + t.getName() + "." + p.getName() + "(" + ELNnames.get(i) + ");" + CR;
+							}
 						}
 					}
 				}
 				
-				for (SysCAMSTPortDE p : portDE) {
-					for (int i = 0; i < DEconnectors.size(); i++) {
-						if (((SysCAMSTPortDE) DEconnectors.get(i).get_p1().getComponent()).getName().equals(p.getName()) && ((SysCAMSTPortDE) DEconnectors.get(i).get_p1().getComponent()).getModule().getName().equals(t.getName())) {
-							corpsCluster = corpsCluster + "\ti_" + t.getName() + "." + p.getName() + "(" + DEnames.get(i) + ");" + CR;
-						} else if (((SysCAMSTPortDE) DEconnectors.get(i).get_p2().getComponent()).getName().equals(p.getName()) && ((SysCAMSTPortDE) DEconnectors.get(i).get_p2().getComponent()).getModule().getName().equals(t.getName())) {
-							corpsCluster = corpsCluster + "\ti_" + t.getName() + "." + p.getName() + "(" + DEnames.get(i) + ");" + CR;
+				for (ELNTModulePortDE p : portDE) {
+					for (int i = 0; i < connectors.size(); i++) {
+						if (connectors.get(i).get_p1().getComponent() instanceof ELNTModulePortDE) {
+							if (((ELNTModulePortDE) connectors.get(i).get_p1().getComponent()).getName().equals(p.getName()) && ((ELNTModulePortDE) connectors.get(i).get_p1().getComponent()).getModule().getName().equals(t.getName())) {
+								corpsCluster = corpsCluster + "\ti_" + t.getName() + "." + p.getName() + "(" + ELNnames.get(i) + ");" + CR;
+							}
+						}
+						if (connectors.get(i).get_p2().getComponent() instanceof ELNTModulePortDE) {
+							if (((ELNTModulePortDE) connectors.get(i).get_p2().getComponent()).getName().equals(p.getName()) && ((ELNTModulePortDE) connectors.get(i).get_p2().getComponent()).getModule().getName().equals(t.getName())) {
+								corpsCluster = corpsCluster + "\ti_" + t.getName() + "." + p.getName() + "(" + ELNnames.get(i) + ");" + CR;
+							}
 						}
 					}
 				}
@@ -167,16 +169,8 @@ public class ClusterCode {
 
 			corpsCluster = corpsCluster + "\tsca_util::sca_trace_file* tfp = sca_util::sca_create_tabular_trace_file(\"" + cluster.getName() + "_tb\");" + CR;
 
-			for (int i = 0; i < ELNconnectors.size(); i++) {
+			for (int i = 0; i < connectors.size(); i++) {
 				corpsCluster = corpsCluster + "\tsca_util::sca_trace(tfp, "+ ELNnames.get(i) + ", \"" + ELNnames.get(i) + "\");" + CR;
-			}
-			
-			for (int i = 0; i < TDFconnectors.size(); i++) {
-				corpsCluster = corpsCluster + "\tsca_util::sca_trace(tfp, "+ TDFnames.get(i) + ", \"" + TDFnames.get(i) + "\");" + CR;
-			}
-			
-			for (int i = 0; i < DEconnectors.size(); i++) {
-				corpsCluster = corpsCluster + "\tsca_util::sca_trace(tfp, "+ DEnames.get(i) + ", \"" + DEnames.get(i) + "\");" + CR;
 			}
 			
 			corpsCluster = corpsCluster + CR + "\tsc_start(100.0, sc_core::SC_MS);" + CR2
