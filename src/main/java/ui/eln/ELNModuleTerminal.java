@@ -55,7 +55,7 @@ import java.awt.*;
  * @author Irina Kit Yan LEE
  */
 
-public class ELNModuleTerminalInout extends TGCScalableWithInternalComponent implements SwallowedTGComponent, LinkedReference {
+public class ELNModuleTerminal extends TGCScalableWithInternalComponent implements SwallowedTGComponent, LinkedReference {
 	protected Color myColor;
 	protected int orientation;
 	private int maxFontSize = 14;
@@ -68,7 +68,7 @@ public class ELNModuleTerminalInout extends TGCScalableWithInternalComponent imp
 	private double dtextX = 0.0;
 	protected int decPoint = 3;
 
-	public ELNModuleTerminalInout(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
+	public ELNModuleTerminal(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
 		initScaling(10, 10);

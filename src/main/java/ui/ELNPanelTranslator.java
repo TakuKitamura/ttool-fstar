@@ -509,9 +509,9 @@ public class ELNPanelTranslator {
 						elnModule.addTDF_vsource(elnTDF_vsource);
 						elnComponents.add(elnTDF_vsource);
 					}	
-					List<ELNModuleTerminalInout> moduleTerminals = module.getAllModuleTerminal();
+					List<ELNModuleTerminal> moduleTerminals = module.getAllModuleTerminal();
 					for (int j = 0; j < moduleTerminals.size(); j++) {
-						ELNModuleTerminalInout moduleTerminal = moduleTerminals.get(j);
+						ELNModuleTerminal moduleTerminal = moduleTerminals.get(j);
 	
 						String name = moduleTerminal.getValue();
 	

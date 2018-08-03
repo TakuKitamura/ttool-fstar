@@ -38,7 +38,7 @@
 
 package ui.window;
 
-import ui.eln.ELNModuleTerminalInout;
+import ui.eln.ELNModuleTerminal;
 import ui.util.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -58,9 +58,9 @@ public class JDialogELNModuleTerminal extends JDialog implements ActionListener 
 
 	private JTextField nameTextField;
 
-	private ELNModuleTerminalInout term;
+	private ELNModuleTerminal term;
 
-	public JDialogELNModuleTerminal(ELNModuleTerminalInout term) {
+	public JDialogELNModuleTerminal(ELNModuleTerminal term) {
 		this.setTitle("Setting Module Terminal Attributes");
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
