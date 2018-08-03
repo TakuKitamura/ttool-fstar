@@ -42,7 +42,6 @@ import myutil.GraphicLib;
 import ui.*;
 import ui.eln.sca_eln.*;
 import ui.eln.sca_eln_sca_tdf.*;
-import ui.syscams.*;
 import ui.util.IconManager;
 import ui.window.*;
 import java.awt.*;
@@ -250,10 +249,10 @@ public class ELNModule extends TGCScalableWithInternalComponent implements Swall
 		if (tgc instanceof ELNModuleTerminal) {
 			return true;
 		}
-		if (tgc instanceof SysCAMSPortDE) {
+		if (tgc instanceof ELNModulePortDE) {
 			return true;
 		}
-		if (tgc instanceof SysCAMSPortTDF) {
+		if (tgc instanceof ELNModulePortTDF) {
 			return true;
 		}
 		return false;
@@ -365,14 +364,14 @@ public class ELNModule extends TGCScalableWithInternalComponent implements Swall
 			addInternalComponent(tgc, 0);
 			return true;
 		}
-		if (tgc instanceof SysCAMSPortDE) {
+		if (tgc instanceof ELNModulePortDE) {
 			tgc.setFather(this);
 			tgc.setDrawingZone(true);
 			tgc.resizeWithFather();
 			addInternalComponent(tgc, 0);
 			return true;
 		}
-		if (tgc instanceof SysCAMSPortTDF) {
+		if (tgc instanceof ELNModulePortTDF) {
 			tgc.setFather(this);
 			tgc.setDrawingZone(true);
 			tgc.resizeWithFather();
@@ -434,10 +433,10 @@ public class ELNModule extends TGCScalableWithInternalComponent implements Swall
 			if (tgcomponent[i] instanceof ELNModuleTerminal) {
 				tgcomponent[i].resizeWithFather();
 			}
-			if (tgcomponent[i] instanceof SysCAMSPortDE) {
+			if (tgcomponent[i] instanceof ELNModulePortDE) {
 				tgcomponent[i].resizeWithFather();
 			}
-			if (tgcomponent[i] instanceof SysCAMSPortTDF) {
+			if (tgcomponent[i] instanceof ELNModulePortTDF) {
 				tgcomponent[i].resizeWithFather();
 			}
 		}
@@ -620,21 +619,21 @@ public class ELNModule extends TGCScalableWithInternalComponent implements Swall
 		return list;
 	}
 	
-	public java.util.List<SysCAMSPortDE> getAllPortDE() {
-		java.util.List<SysCAMSPortDE> list = new ArrayList<SysCAMSPortDE>();
+	public java.util.List<ELNModulePortDE> getAllModulePortDE() {
+		java.util.List<ELNModulePortDE> list = new ArrayList<ELNModulePortDE>();
 		for(int i=0; i<nbInternalTGComponent; i++) {
-			if (tgcomponent[i] instanceof SysCAMSPortDE) {
-				list.add((SysCAMSPortDE)(tgcomponent[i]));
+			if (tgcomponent[i] instanceof ELNModulePortDE) {
+				list.add((ELNModulePortDE)(tgcomponent[i]));
 			}
 		}
 		return list;
 	}
 
-	public java.util.List<SysCAMSPortTDF> getAllPortTDF() {
-		java.util.List<SysCAMSPortTDF> list = new ArrayList<SysCAMSPortTDF>();
+	public java.util.List<ELNModulePortTDF> getAllModulePortTDF() {
+		java.util.List<ELNModulePortTDF> list = new ArrayList<ELNModulePortTDF>();
 		for(int i=0; i<nbInternalTGComponent; i++) {
-			if (tgcomponent[i] instanceof SysCAMSPortTDF) {
-				list.add((SysCAMSPortTDF)(tgcomponent[i]));
+			if (tgcomponent[i] instanceof ELNModulePortTDF) {
+				list.add((ELNModulePortTDF)(tgcomponent[i]));
 			}
 		}
 		return list;
