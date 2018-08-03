@@ -87,7 +87,7 @@ public class ClusterCode {
 						ELNnames.add("n_" + ((ELNTModuleTerminal) connectors.get(i).get_p1().getComponent()).getName() + "_" + ((ELNTModuleTerminal) connectors.get(i).get_p2().getComponent()).getName());
 					} else if (connectors.get(i).get_p1().getComponent() instanceof ELNTModuleTerminal && connectors.get(i).get_p2().getComponent() instanceof ELNTClusterTerminal) {
 						corpsCluster = corpsCluster + "\tsca_eln::sca_node " + "n_" + ((ELNTModuleTerminal) connectors.get(i).get_p1().getComponent()).getName() + "_" + ((ELNTClusterTerminal) connectors.get(i).get_p2().getComponent()).getName() + ";" + CR;
-						ELNnames.add("n_" + ((ELNTModuleTerminal) connectors.get(i).get_p1().getComponent()).getName() + "_" + ((ELNTModuleTerminal) connectors.get(i).get_p2().getComponent()).getName());
+						ELNnames.add("n_" + ((ELNTModuleTerminal) connectors.get(i).get_p1().getComponent()).getName() + "_" + ((ELNTClusterTerminal) connectors.get(i).get_p2().getComponent()).getName());
 					} else if (connectors.get(i).get_p1().getComponent() instanceof ELNTClusterTerminal && connectors.get(i).get_p2().getComponent() instanceof ELNTModuleTerminal) {
 						corpsCluster = corpsCluster + "\tsca_eln::sca_node " + "n_" + ((ELNTClusterTerminal) connectors.get(i).get_p1().getComponent()).getName() + "_" + ((ELNTModuleTerminal) connectors.get(i).get_p2().getComponent()).getName() + ";" + CR;
 						ELNnames.add("n_" + ((ELNTClusterTerminal) connectors.get(i).get_p1().getComponent()).getName() + "_" + ((ELNTModuleTerminal) connectors.get(i).get_p2().getComponent()).getName());
