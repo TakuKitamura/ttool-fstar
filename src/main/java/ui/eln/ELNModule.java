@@ -90,7 +90,7 @@ public class ELNModule extends TGCScalableWithInternalComponent implements Swall
 		removable = true;
 		userResizable = true;
 
-		value = tdp.findELNComponentName("Module");
+		value = tdp.findELNComponentName("module");
 	}
 
 	public void internalDrawing(Graphics g) {

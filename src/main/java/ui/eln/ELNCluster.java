@@ -87,7 +87,7 @@ public class ELNCluster extends TGCScalableWithInternalComponent implements Swal
 		removable = true;
 		userResizable = true;
 
-		value = tdp.findELNComponentName("Cluster");
+		value = "cluster";
 	}
 
 	public void internalDrawing(Graphics g) {

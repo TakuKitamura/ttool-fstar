@@ -102,7 +102,7 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 		removable = true;
 		userResizable = true;
 
-		value = tdp.findSysCAMSPrimitiveComponentName("Block_TDF_");
+		value = tdp.findSysCAMSPrimitiveComponentName("blockTDF");
 		oldValue = value;
 		name = "Primitive component - Block TDF";
 
