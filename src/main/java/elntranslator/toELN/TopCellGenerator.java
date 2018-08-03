@@ -73,14 +73,8 @@ public class TopCellGenerator {
 		if (TopCellGenerator.eln.getCluster() == null) {
 			System.out.println("***Warning: require at least one cluster***");
 		}
-		if (TopCellGenerator.eln.getNbClusterTerminal() == 0) {
-			System.out.println("***Warning: require at least one cluster terminal***");
-		}
 		if (TopCellGenerator.eln.getNbModule() == 0) {
 			System.out.println("***Warning: require at least one module***");
-		}
-		if (TopCellGenerator.eln.getNbModuleTerminal() == 0) {
-			System.out.println("***Warning: require at least one module terminal***");
 		}
 		if (TopCellGenerator.eln.getNbComponentCapacitor() + TopCellGenerator.eln.getNbComponentCurrentSinkTDF() + 
 				TopCellGenerator.eln.getNbComponentCurrentSourceTDF() + TopCellGenerator.eln.getNbComponentIdealTransformer() + 
