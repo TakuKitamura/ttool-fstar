@@ -978,6 +978,16 @@ public class ActionPerformer {
         	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_CLUSTER);
         } else if (command.equals(mgui.actions[TGUIAction.ELN_GENCODE].getActionCommand())){
             mgui.elnExecutableCodeGeneration();
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_MODULE_PORT_DE].getActionCommand())){
+        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_MODULE_PORT_DE);
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_MODULE_PORT_TDF].getActionCommand())){
+        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_MODULE_PORT_TDF);
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_CLUSTER_TERMINAL].getActionCommand())){
+        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_CLUSTER_TERMINAL);
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_CLUSTER_PORT_DE].getActionCommand())){
+        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_CLUSTER_PORT_DE);
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_CLUSTER_PORT_TDF].getActionCommand())){
+        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_CLUSTER_PORT_TDF);
 
             // Attack Tree Diagrams
         } else if (command.equals(mgui.actions[TGUIAction.ATD_BLOCK].getActionCommand())) {

@@ -302,6 +302,11 @@ public class TGUIAction extends AbstractAction {
     public static final int ELN_TDF_CURRENT_SOURCE = 503;
     public static final int ELN_CLUSTER = 504;
     public static final int ELN_GENCODE = 505;
+    public static final int ELN_MODULE_PORT_DE = 506;
+    public static final int ELN_MODULE_PORT_TDF = 507;
+    public static final int ELN_CLUSTER_TERMINAL = 508;
+    public static final int ELN_CLUSTER_PORT_DE = 509;
+    public static final int ELN_CLUSTER_PORT_TDF = 510;
     
     public static final int EBRDD_EDIT = 271;
     public static final int EBRDD_CONNECTOR = 272;
@@ -657,7 +662,7 @@ public class TGUIAction extends AbstractAction {
     public static final int MOVE_ENABLED = 463;
     public static final int FIRST_DIAGRAM = 464;
     
-    public static final int NB_ACTION = 506;
+    public static final int NB_ACTION = 511;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -1187,6 +1192,11 @@ public class TGUIAction extends AbstractAction {
         actions[ELN_TDF_CURRENT_SOURCE] = new TAction("eln-tdf-isource", "Add a current source driven by a TDF input signal", IconManager.imgic8034, IconManager.imgic8034, "Current source driven by a TDF input signal", "Add a current source driven by a TDF input signal to the currently opened ELN Diagram", 0);
         actions[ELN_CLUSTER] = new TAction("eln-cluster", "Add a cluster", IconManager.imgic8006, IconManager.imgic8006, "Cluster", "Add a cluster to the currently opened ELN Diagram", 0);
         actions[ELN_GENCODE] = new TAction("eln-gencode", "ELN code generation",IconManager.imgic94, IconManager.imgic94, "Generate ELN code", "ELN diagram without check syntax", 0);
+        actions[ELN_MODULE_PORT_DE] = new TAction("eln-module-port-DE", "Add a module port DE", IconManager.imgic8001, IconManager.imgic8001, "Module port DE", "Add a module port DE to the currently opened ELN Diagram", 0);
+        actions[ELN_MODULE_PORT_TDF] = new TAction("eln-module-port-TDF", "Add a module port TDF", IconManager.imgic8000, IconManager.imgic8000, "Module port TDF", "Add a module port TDF to the currently opened ELN Diagram", 0);
+        actions[ELN_CLUSTER_TERMINAL] = new TAction("eln-cluster-terminal", "Add a cluster terminal", IconManager.imgic8032, IconManager.imgic8032, "Cluster terminal", "Add a cluster terminal to the currently opened ELN Diagram", 0);
+        actions[ELN_CLUSTER_PORT_DE] = new TAction("eln-cluster-port-DE", "Add a cluster port DE", IconManager.imgic8001, IconManager.imgic8001, "Cluster port DE", "Add a cluster port DE to the currently opened ELN Diagram", 0);
+        actions[ELN_CLUSTER_PORT_TDF] = new TAction("eln-cluster-port-TDF", "Add a cluster port TDF", IconManager.imgic8000, IconManager.imgic8000, "Cluster port TDF", "Add a cluster port TDF to the currently opened ELN Diagram", 0);
 
         //ProActive State Machine Diagram
         actions[PROSMD_EDIT] = new TAction("edit-prosmd-diagram", "Edit ProActive state machine diagram", IconManager.imgic100, IconManager.imgic101, "Edit ProActive state machine diagram", "Make it possible to edit the currently opened ProActive state machine diagram", 0);

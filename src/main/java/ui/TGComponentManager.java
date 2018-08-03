@@ -365,6 +365,11 @@ public class TGComponentManager {
     public static final int ELN_TDF_VOLTAGE_SOURCE = 1625;
     public static final int ELN_TDF_CURRENT_SOURCE = 1626;
     public static final int ELN_CLUSTER = 1627;
+    public static final int ELN_MODULE_PORT_DE = 1628;
+    public static final int ELN_MODULE_PORT_TDF = 1629;
+    public static final int ELN_CLUSTER_TERMINAL = 1630;
+    public static final int ELN_CLUSTER_PORT_DE = 1631;
+    public static final int ELN_CLUSTER_PORT_TDF = 1632;
     
     // SMD diagram
     public static final int PROSMD_START_STATE = 2000;
@@ -1343,6 +1348,21 @@ public class TGComponentManager {
             case ELN_CLUSTER: 
             	tgc = new ELNCluster(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             	break;
+            case ELN_MODULE_PORT_DE: 
+            	tgc = new ELNModulePortDE(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;
+            case ELN_MODULE_PORT_TDF: 
+            	tgc = new ELNModulePortTDF(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;
+            case ELN_CLUSTER_TERMINAL: 
+            	tgc = new ELNClusterTerminal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;
+            case ELN_CLUSTER_PORT_DE: 
+            	tgc = new ELNClusterPortDE(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;
+            case ELN_CLUSTER_PORT_TDF: 
+            	tgc = new ELNCLusterPortTDF(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;
             // Communication patterns + SD
             case TMLCP_CHOICE:
                 tgc = new TMLCPChoice(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -1781,6 +1801,16 @@ public class TGComponentManager {
         	return ELN_TDF_CURRENT_SOURCE;
         } else if (tgc instanceof ELNCluster) {
         	return ELN_CLUSTER;
+        } else if (tgc instanceof ELNModulePortDE) {
+        	return ELN_MODULE_PORT_DE;
+        } else if (tgc instanceof ELNModulePortTDF) {
+        	return ELN_MODULE_PORT_TDF;
+        } else if (tgc instanceof ELNClusterTerminal) {
+        	return ELN_CLUSTER_TERMINAL;
+        } else if (tgc instanceof ELNClusterPortDE) {
+        	return ELN_CLUSTER_PORT_DE;
+        } else if (tgc instanceof ELNClusterPortTDF) {
+        	return ELN_CLUSTER_PORT_TDF;
         	
         	// Others
         } else if (tgc instanceof TADDeterministicDelay) {
