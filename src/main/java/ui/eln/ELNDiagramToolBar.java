@@ -81,13 +81,16 @@ public class ELNDiagramToolBar extends TToolBar {
 		mgui.actions[TGUIAction.ELN_TDF_CURRENT_SINK].setEnabled(b);
 		mgui.actions[TGUIAction.ELN_MODULE].setEnabled(b);
 		mgui.actions[TGUIAction.ELN_MODULE_TERMINAL].setEnabled(b);
+		mgui.actions[TGUIAction.ELN_MODULE_PORT_DE].setEnabled(b);
+		mgui.actions[TGUIAction.ELN_MODULE_PORT_TDF].setEnabled(b);
 		mgui.actions[TGUIAction.ELN_TOGGLE_ATTR].setEnabled(b);
 		mgui.actions[TGUIAction.ELN_TDF_VOLTAGE_SOURCE].setEnabled(b);
 		mgui.actions[TGUIAction.ELN_TDF_CURRENT_SOURCE].setEnabled(b);
 		mgui.actions[TGUIAction.ELN_CONNECTOR].setEnabled(b);
 		mgui.actions[TGUIAction.ELN_CLUSTER].setEnabled(b);
-		mgui.actions[TGUIAction.CAMS_PORT_DE].setEnabled(b);
-		mgui.actions[TGUIAction.CAMS_PORT_TDF].setEnabled(b);
+		mgui.actions[TGUIAction.ELN_CLUSTER_TERMINAL].setEnabled(b);
+		mgui.actions[TGUIAction.ELN_CLUSTER_PORT_DE].setEnabled(b);
+		mgui.actions[TGUIAction.ELN_CLUSTER_PORT_TDF].setEnabled(b);
 		mgui.actions[TGUIAction.ELN_GENCODE].setEnabled(b);
 		
 		mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
@@ -117,10 +120,13 @@ public class ELNDiagramToolBar extends TToolBar {
 		button = this.add(mgui.actions[TGUIAction.ELN_CLUSTER]);
 		button.addMouseListener(mgui.mouseHandler);
 		
-		button = this.add(mgui.actions[TGUIAction.CAMS_PORT_DE]);
+		button = this.add(mgui.actions[TGUIAction.ELN_CLUSTER_TERMINAL]);
 		button.addMouseListener(mgui.mouseHandler);
 		
-		button = this.add(mgui.actions[TGUIAction.CAMS_PORT_TDF]);
+		button = this.add(mgui.actions[TGUIAction.ELN_CLUSTER_PORT_DE]);
+		button.addMouseListener(mgui.mouseHandler);
+		
+		button = this.add(mgui.actions[TGUIAction.ELN_CLUSTER_PORT_TDF]);
 		button.addMouseListener(mgui.mouseHandler);
 		
 		this.addSeparator();
@@ -129,6 +135,12 @@ public class ELNDiagramToolBar extends TToolBar {
 		button.addMouseListener(mgui.mouseHandler);
 	
 		button = this.add(mgui.actions[TGUIAction.ELN_MODULE_TERMINAL]);
+		button.addMouseListener(mgui.mouseHandler);
+		
+		button = this.add(mgui.actions[TGUIAction.ELN_MODULE_PORT_DE]);
+		button.addMouseListener(mgui.mouseHandler);
+		
+		button = this.add(mgui.actions[TGUIAction.ELN_MODULE_PORT_TDF]);
 		button.addMouseListener(mgui.mouseHandler);
 		
 		this.addSeparator();
@@ -179,12 +191,12 @@ public class ELNDiagramToolBar extends TToolBar {
 		
 		this.addSeparator();
 		
-		button = this.add(mgui.actions[TGUIAction.ELN_GENCODE]);
+		button = this.add(mgui.actions[TGUIAction.ELN_TOGGLE_ATTR]);
 		button.addMouseListener(mgui.mouseHandler);
 		
 		this.addSeparator();
 		
-		button = this.add(mgui.actions[TGUIAction.ELN_TOGGLE_ATTR]);
+		button = this.add(mgui.actions[TGUIAction.ELN_GENCODE]);
 		button.addMouseListener(mgui.mouseHandler);
 	}
 }
