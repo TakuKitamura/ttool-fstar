@@ -1361,7 +1361,7 @@ public class TGComponentManager {
             	tgc = new ELNClusterPortDE(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             	break;
             case ELN_CLUSTER_PORT_TDF: 
-            	tgc = new ELNCLusterPortTDF(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	tgc = new ELNClusterPortTDF(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             	break;
             // Communication patterns + SD
             case TMLCP_CHOICE:
