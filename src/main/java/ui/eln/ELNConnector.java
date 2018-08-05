@@ -39,6 +39,7 @@
 package ui.eln;
 
 import ui.*;
+import ui.eln.sca_eln_sca_tdf.*;
 import ui.util.IconManager;
 import ui.window.JDialogELNConnector;
 import java.awt.*;
@@ -64,7 +65,7 @@ public class ELNConnector extends TGConnector implements ScalableTGComponent {
 		value = "";
 		editable = false;
 		oldScaleFactor = tdp.getZoom();
-
+		
 		p1 = _p1;
 		p2 = _p2;
 	}
@@ -94,7 +95,7 @@ public class ELNConnector extends TGConnector implements ScalableTGComponent {
 		ELNConnectingPoint pt1 = (ELNConnectingPoint) p1;
 		ELNConnectingPoint pt2 = (ELNConnectingPoint) p2;
 
-		if (pt1.getFather() instanceof ELNComponent && pt2.getFather() instanceof ELNComponent) {
+		if ((pt1.getFather() instanceof ELNComponent && pt2.getFather() instanceof ELNComponent) || (pt2.getFather() instanceof ELNComponent && pt1.getFather() instanceof ELNComponent)) {
 			g.drawLine(x1, y1, x2, y2);
 			editable = true;
 			g.drawString(value, (x1 + x2 - w) / 2, (y1 + y2) / 2);
@@ -110,7 +111,7 @@ public class ELNConnector extends TGConnector implements ScalableTGComponent {
 			if (connector.getValue().equals("")) {
 				value = searchName(connector);
 			}
-		} else if (pt1.getFather() instanceof ELNModuleTerminal && pt2.getFather() instanceof ELNModuleTerminal) {
+		} else if ((pt1.getFather() instanceof ELNModuleTerminal && pt2.getFather() instanceof ELNModuleTerminal) || (pt2.getFather() instanceof ELNModuleTerminal && pt1.getFather() instanceof ELNModuleTerminal)) {
 			String name1 = ((ELNModuleTerminal) pt1.getFather()).getValue();
 			String name2 = ((ELNModuleTerminal) pt2.getFather()).getValue();
 			if (name1.equals(name2)) {
@@ -137,6 +138,17 @@ public class ELNConnector extends TGConnector implements ScalableTGComponent {
 			g.drawLine(x1, y1, x2, y2);
 			editable = true;
 			g.drawString(value, (x1 + x2 - w) / 2, (y1 + y2) / 2);
+		} else if ((pt1.getFather() instanceof ELNModulePortDE && pt2.getFather() instanceof ELNModulePortDE) || (pt2.getFather() instanceof ELNModulePortDE && pt1.getFather() instanceof ELNModulePortDE)) {
+			String name1 = ((ELNModulePortDE) pt1.getFather()).getValue();
+			String name2 = ((ELNModulePortDE) pt2.getFather()).getValue();
+			if (name1.equals(name2)) {
+				value = name1;
+			}
+			Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0,	new float[] { 9 }, 0);
+			g.setStroke(dashed);
+			GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
+			editable = true;
+			g.drawString(value, (x1 + x2 - w) / 2, (y1 + y2) / 2);
 		} else if (pt1.getFather() instanceof ELNModulePortDE && pt2.getFather() instanceof ELNClusterPortDE) {
 			String name1 = ((ELNModulePortDE) pt1.getFather()).getValue();
 			String name2 = ((ELNClusterPortDE) pt2.getFather()).getValue();
@@ -159,6 +171,15 @@ public class ELNConnector extends TGConnector implements ScalableTGComponent {
 			GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
 			editable = true;
 			g.drawString(value, (x1 + x2 - w) / 2, (y1 + y2) / 2);
+		} else if ((pt1.getFather() instanceof ELNModulePortTDF && pt2.getFather() instanceof ELNModulePortTDF) || (pt2.getFather() instanceof ELNModulePortTDF && pt1.getFather() instanceof ELNModulePortTDF)) {
+			String name1 = ((ELNModulePortTDF) pt1.getFather()).getValue();
+			String name2 = ((ELNModulePortTDF) pt2.getFather()).getValue();
+			if (name1.equals(name2)) {
+				value = name1;
+			}
+			GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
+			editable = true;
+			g.drawString(value, (x1 + x2 - w) / 2, (y1 + y2) / 2);
 		} else if (pt1.getFather() instanceof ELNModulePortTDF && pt2.getFather() instanceof ELNClusterPortTDF) {
 			String name1 = ((ELNModulePortTDF) pt1.getFather()).getValue();
 			String name2 = ((ELNClusterPortTDF) pt2.getFather()).getValue();
@@ -177,6 +198,12 @@ public class ELNConnector extends TGConnector implements ScalableTGComponent {
 			GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
 			editable = true;
 			g.drawString(value, (x1 + x2 - w) / 2, (y1 + y2) / 2);
+		} else if (pt1.getFather() instanceof ELNModulePortTDF && (pt2.getFather() instanceof ELNComponentVoltageSourceTDF || pt2.getFather() instanceof ELNComponentVoltageSinkTDF || pt2.getFather() instanceof ELNComponentCurrentSourceTDF || pt2.getFather() instanceof ELNComponentCurrentSinkTDF)) {
+			g.drawLine(x1, y1, x2, y2);
+			value = ((ELNModulePortTDF) pt1.getFather()).getValue();
+		} else if (pt2.getFather() instanceof ELNModulePortTDF && (pt1.getFather() instanceof ELNComponentVoltageSourceTDF || pt1.getFather() instanceof ELNComponentVoltageSinkTDF || pt1.getFather() instanceof ELNComponentCurrentSourceTDF || pt1.getFather() instanceof ELNComponentCurrentSinkTDF)) {
+			g.drawLine(x1, y1, x2, y2);
+			value = ((ELNModulePortTDF) pt2.getFather()).getValue();
 		} else {
 			g.drawLine(x1, y1, x2, y2);
 		}
