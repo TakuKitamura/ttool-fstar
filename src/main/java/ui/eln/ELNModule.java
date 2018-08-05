@@ -243,7 +243,7 @@ public class ELNModule extends TGCScalableWithInternalComponent implements Swall
 		if (tgc instanceof ELNComponentVoltageSourceTDF) {
 			return true;
 		} 
-		if (tgc instanceof ELNComponentNodeRef) {
+		if (tgc instanceof ELNNodeRef) {
 			return true;
 		}
 		if (tgc instanceof ELNModuleTerminal) {
@@ -350,7 +350,7 @@ public class ELNModule extends TGCScalableWithInternalComponent implements Swall
 			addInternalComponent(tgc, 0);
 			return true;
 		}
-		if (tgc instanceof ELNComponentNodeRef) {
+		if (tgc instanceof ELNNodeRef) {
 			tgc.setFather(this);
 			tgc.setDrawingZone(true);
 			tgc.resizeWithFather();
@@ -427,7 +427,7 @@ public class ELNModule extends TGCScalableWithInternalComponent implements Swall
 			if (tgcomponent[i] instanceof ELNComponentVoltageSourceTDF) {
 				tgcomponent[i].resizeWithFather();
 			}
-			if (tgcomponent[i] instanceof ELNComponentNodeRef) {
+			if (tgcomponent[i] instanceof ELNNodeRef) {
 				tgcomponent[i].resizeWithFather();
 			}
 			if (tgcomponent[i] instanceof ELNModuleTerminal) {
@@ -539,11 +539,11 @@ public class ELNModule extends TGCScalableWithInternalComponent implements Swall
 		return list;
 	}
 	
-	public java.util.List<ELNComponentNodeRef> getAllComponentNodeRef() {
-		java.util.List<ELNComponentNodeRef> list = new ArrayList<ELNComponentNodeRef>();
+	public java.util.List<ELNNodeRef> getAllComponentNodeRef() {
+		java.util.List<ELNNodeRef> list = new ArrayList<ELNNodeRef>();
 		for(int i=0; i<nbInternalTGComponent; i++) {
-			if (tgcomponent[i] instanceof ELNComponentNodeRef) {
-				list.add((ELNComponentNodeRef)(tgcomponent[i]));
+			if (tgcomponent[i] instanceof ELNNodeRef) {
+				list.add((ELNNodeRef)(tgcomponent[i]));
 			}
 		}
 		return list;

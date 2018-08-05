@@ -189,7 +189,7 @@ public class ELNConnector extends TGConnector implements ScalableTGComponent {
 			if (c.p2.getFather() instanceof ELNComponent) {
 				return c.getValue();
 			}
-			if (c.p2.getFather() instanceof ELNComponentNodeRef || c.p2.getFather() instanceof ELNModuleTerminal) {
+			if (c.p2.getFather() instanceof ELNNodeRef || c.p2.getFather() instanceof ELNModuleTerminal) {
 				return "";
 			}
 			if (c.p2.getFather() instanceof ELNMidPortTerminal) {
@@ -201,11 +201,11 @@ public class ELNConnector extends TGConnector implements ScalableTGComponent {
 				}
 			}
 		}
-		if (c.p1.getFather() instanceof ELNComponentNodeRef || c.p1.getFather() instanceof ELNModuleTerminal) {
+		if (c.p1.getFather() instanceof ELNNodeRef || c.p1.getFather() instanceof ELNModuleTerminal) {
 			return "";
 		}
 		if (c.p1.getFather() instanceof ELNMidPortTerminal) {
-			if (c.p2.getFather() instanceof ELNComponentNodeRef || c.p2.getFather() instanceof ELNModuleTerminal) {
+			if (c.p2.getFather() instanceof ELNNodeRef || c.p2.getFather() instanceof ELNModuleTerminal) {
 				return "";
 			}
 			if (c.p2.getFather() instanceof ELNComponent) {

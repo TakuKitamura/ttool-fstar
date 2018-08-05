@@ -38,7 +38,7 @@
 
 package ui.window;
 
-import ui.eln.ELNComponentNodeRef;
+import ui.eln.ELNNodeRef;
 import ui.util.IconManager;
 
 import java.awt.BorderLayout;
@@ -81,10 +81,10 @@ public class JDialogELNComponentNodeRef extends JDialog implements ActionListene
 	private JTextField nameTextField;
 
 	/** Parameters **/
-	private ELNComponentNodeRef gnd;
+	private ELNNodeRef gnd;
 
 	/** Constructor **/
-	public JDialogELNComponentNodeRef(ELNComponentNodeRef _gnd) {
+	public JDialogELNComponentNodeRef(ELNNodeRef _gnd) {
 		/** Set JDialog **/
 		setTitle("Setting the reference node");
 		setLocationRelativeTo(null);

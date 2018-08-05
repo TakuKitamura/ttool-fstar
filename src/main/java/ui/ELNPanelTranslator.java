@@ -336,9 +336,9 @@ public class ELNPanelTranslator {
 						elnModule.addInductor(elnInductor);
 						elnComponents.add(elnInductor);
 					}
-					List<ELNComponentNodeRef> nodeRefs = module.getAllComponentNodeRef();
+					List<ELNNodeRef> nodeRefs = module.getAllComponentNodeRef();
 					for (int j = 0; j < nodeRefs.size(); j++) {
-						ELNComponentNodeRef nodeRef = nodeRefs.get(j);
+						ELNNodeRef nodeRef = nodeRefs.get(j);
 	
 						String name = nodeRef.getValue();
 	

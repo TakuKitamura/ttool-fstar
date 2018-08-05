@@ -58,7 +58,7 @@ import java.awt.event.ActionListener;
  * @author Irina Kit Yan LEE
  */
 
-public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implements ActionListener, SwallowedTGComponent {
+public class ELNNodeRef extends TGCScalableWithInternalComponent implements ActionListener, SwallowedTGComponent {
 	protected Color myColor;
 	protected int orientation;
 	private int maxFontSize = 14;
@@ -74,7 +74,7 @@ public class ELNComponentNodeRef extends TGCScalableWithInternalComponent implem
 	private int old;
 	private boolean first;
 
-	public ELNComponentNodeRef(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
+	public ELNNodeRef(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
 		initScaling(40, 40);

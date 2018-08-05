@@ -2634,7 +2634,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                     || (o instanceof SysCAMSCompositeComponent && this.checkSysCAMSCompositeComponent((SysCAMSCompositeComponent) o, name))
                     || (o instanceof ELNCluster && this.checkELNCluster((ELNCluster) o, name))
                     || (o instanceof ELNModule && this.checkELNModule((ELNModule) o, name))
-                    || (o instanceof ELNComponentNodeRef && this.checkELNComponentNodeRef((ELNComponentNodeRef) o, name))
+                    || (o instanceof ELNNodeRef && this.checkELNComponentNodeRef((ELNNodeRef) o, name))
                     || (o instanceof ELNComponentResistor && this.checkELNComponentResistor((ELNComponentResistor) o, name))
                     || (o instanceof ELNComponentCapacitor && this.checkELNComponentCapacitor((ELNComponentCapacitor) o, name))
                     || (o instanceof ELNComponentInductor && this.checkELNComponentInductor((ELNComponentInductor) o, name))
@@ -2719,7 +2719,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         	return false;
         }
         
-        public boolean checkELNComponentNodeRef(ELNComponentNodeRef o, String name) {
+        public boolean checkELNComponentNodeRef(ELNNodeRef o, String name) {
         	return false;
         }
         
@@ -2926,7 +2926,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     public String findELNComponentName(String name) {
     	return this.findGoodName(name, new NameChecker() {
-    		public boolean checkELNComponentNodeRef(ELNComponentNodeRef o, String name) {
+    		public boolean checkELNComponentNodeRef(ELNNodeRef o, String name) {
     			return o.getValue().equals(name);
     		}
     		public boolean checkELNComponentResistor(ELNComponentResistor o, String name) {

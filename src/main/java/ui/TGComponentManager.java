@@ -1325,7 +1325,7 @@ public class TGComponentManager {
             	tgc = new ELNComponentIndependentCurrentSource(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             	break;	
             case ELN_NODE_REF: 
-            	tgc = new ELNComponentNodeRef(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	tgc = new ELNNodeRef(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             	break;
             case ELN_TDF_VOLTAGE_SINK: 
             	tgc = new ELNComponentVoltageSinkTDF(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -1785,7 +1785,7 @@ public class TGComponentManager {
         	return ELN_INDEPENDENT_VOLTAGE_SOURCE;
         } else if (tgc instanceof ELNComponentIndependentCurrentSource) {
         	return ELN_INDEPENDENT_CURRENT_SOURCE;
-        } else if (tgc instanceof ELNComponentNodeRef) {
+        } else if (tgc instanceof ELNNodeRef) {
         	return ELN_NODE_REF;
         } else if (tgc instanceof ELNComponentVoltageSinkTDF) {
         	return ELN_TDF_VOLTAGE_SINK;
