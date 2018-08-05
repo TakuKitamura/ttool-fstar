@@ -866,8 +866,8 @@ public class ModuleCode {
 				corpsModule = corpsModule + "\tsca_eln::sca_node " + nodes.get(i).getName() + ";" + CR;
 			}
 			
-			for (int i = 0; i < nodeRefs.size(); i++) {
-				corpsModule = corpsModule + "\tsca_eln::sca_node_ref " + nodeRefs.get(i).getName() + ";" + CR;
+			if (nodeRefs.size() >= 1) {
+				corpsModule = corpsModule + "\tsca_eln::sca_node_ref " + nodeRefs.get(0).getName() + ";" + CR;
 			}
 			
 			corpsModule = corpsModule + "};" + CR2 + "#endif" + " // " + module.getName().toUpperCase() + "_H";

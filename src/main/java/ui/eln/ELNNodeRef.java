@@ -94,7 +94,7 @@ public class ELNNodeRef extends TGCScalableWithInternalComponent implements Acti
 		editable = true;
 		removable = true;
 		userResizable = false;
-		value = tdp.findELNComponentName("gnd");
+		value = "gnd";
 
 		old = width;
 		width = height;
