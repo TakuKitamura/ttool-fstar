@@ -38,7 +38,7 @@
 
 package ui.window;
 
-import ui.eln.sca_eln.ELNComponentNodeRef;
+import ui.eln.ELNComponentNodeRef;
 import ui.util.IconManager;
 
 import java.awt.BorderLayout;

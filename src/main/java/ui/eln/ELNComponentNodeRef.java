@@ -36,7 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-package ui.eln.sca_eln;
+package ui.eln;
 
 import myutil.GraphicLib;
 
@@ -44,8 +44,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import ui.*;
-import ui.eln.ELNConnectingPoint;
-import ui.eln.ELNModule;
 import ui.window.JDialogELNComponentNodeRef;
 import javax.swing.*;
 import java.awt.*;

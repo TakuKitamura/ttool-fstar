@@ -39,7 +39,6 @@
 package ui.eln;
 
 import ui.*;
-import ui.eln.sca_eln.ELNComponentNodeRef;
 import ui.util.IconManager;
 import ui.window.JDialogELNConnector;
 import java.awt.*;
