@@ -7,8 +7,8 @@ int sc_main(int argc, char *argv[])
 	sca_eln::sca_node in;
 
 	eln_in_tdf i_eln_in_tdf("i_eln_in_tdf");
-	i_eln_in_tdf.in(in);
 	i_eln_in_tdf.out(out);
+	i_eln_in_tdf.in(in);
 
 	sca_util::sca_trace_file* tfp = sca_util::sca_create_tabular_trace_file("cluster_tb");
 	sca_util::sca_trace(tfp, out, "out");

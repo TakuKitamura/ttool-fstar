@@ -7,8 +7,8 @@
 
 SC_MODULE(eln_in_tdf)
 {
-	sca_tdf::sca_in<double> in;
 	sca_tdf::sca_out<double> out;
+	sca_tdf::sca_in<double> in;
 
 	sca_eln::sca_c c;
 	sca_eln::sca_r r;
@@ -16,8 +16,8 @@ SC_MODULE(eln_in_tdf)
 	sca_eln::sca_tdf_vsource vin;
 
 	SC_CTOR(eln_in_tdf)
-	: in("in")
-	, out("out")
+	: out("out")
+	, in("in")
 	, c("c", 1.0, 0.0)
 	, r("r", 1.0)
 	, vout("vout", 1.0)
