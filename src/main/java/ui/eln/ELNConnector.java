@@ -150,6 +150,10 @@ public class ELNConnector extends TGConnector implements ScalableTGComponent {
 			editable = true;
 			g.drawString(value, (x1 + x2 - w) / 2, (y1 + y2) / 2);
 		} else if (pt1.getFather() instanceof ELNModulePortDE && pt2.getFather() instanceof ELNClusterPortDE) {
+			((ELNClusterPortDE) pt2.getFather()).setPortType(((ELNModulePortDE) pt1.getFather()).getPortType());
+			((ELNClusterPortTDF) pt2.getFather()).setOrigin(((ELNModulePortDE) pt1.getFather()).getOrigin());
+			((ELNClusterPortTDF) pt2.getFather()).setValue(((ELNModulePortDE) pt1.getFather()).getValue());
+			
 			String name1 = ((ELNModulePortDE) pt1.getFather()).getValue();
 			String name2 = ((ELNClusterPortDE) pt2.getFather()).getValue();
 			if (name1.equals(name2)) {
@@ -161,6 +165,10 @@ public class ELNConnector extends TGConnector implements ScalableTGComponent {
 			editable = true;
 			g.drawString(value, (x1 + x2 - w) / 2, (y1 + y2) / 2);
 		} else if (pt2.getFather() instanceof ELNModulePortDE && pt1.getFather() instanceof ELNClusterPortDE) {
+			((ELNClusterPortDE) pt1.getFather()).setPortType(((ELNModulePortDE) pt2.getFather()).getPortType());
+			((ELNClusterPortDE) pt1.getFather()).setOrigin(((ELNModulePortDE) pt2.getFather()).getOrigin());
+			((ELNClusterPortDE) pt1.getFather()).setValue(((ELNModulePortDE) pt2.getFather()).getValue());
+			
 			String name1 = ((ELNClusterPortDE) pt1.getFather()).getValue();
 			String name2 = ((ELNModulePortDE) pt2.getFather()).getValue();
 			if (name1.equals(name2)) {
@@ -181,6 +189,10 @@ public class ELNConnector extends TGConnector implements ScalableTGComponent {
 			editable = true;
 			g.drawString(value, (x1 + x2 - w) / 2, (y1 + y2) / 2);
 		} else if (pt1.getFather() instanceof ELNModulePortTDF && pt2.getFather() instanceof ELNClusterPortTDF) {
+			((ELNClusterPortTDF) pt2.getFather()).setPortType(((ELNModulePortTDF) pt1.getFather()).getPortType());
+			((ELNClusterPortTDF) pt2.getFather()).setOrigin(((ELNModulePortTDF) pt1.getFather()).getOrigin());
+			((ELNClusterPortTDF) pt2.getFather()).setValue(((ELNModulePortTDF) pt1.getFather()).getValue());
+			
 			String name1 = ((ELNModulePortTDF) pt1.getFather()).getValue();
 			String name2 = ((ELNClusterPortTDF) pt2.getFather()).getValue();
 			if (name1.equals(name2)) {
@@ -190,6 +202,10 @@ public class ELNConnector extends TGConnector implements ScalableTGComponent {
 			editable = true;
 			g.drawString(value, (x1 + x2 - w) / 2, (y1 + y2) / 2);
 		} else if (pt2.getFather() instanceof ELNModulePortTDF && pt1.getFather() instanceof ELNClusterPortTDF) {
+			((ELNClusterPortTDF) pt1.getFather()).setPortType(((ELNModulePortTDF) pt2.getFather()).getPortType());
+			((ELNClusterPortTDF) pt1.getFather()).setOrigin(((ELNModulePortTDF) pt2.getFather()).getOrigin());
+			((ELNClusterPortTDF) pt1.getFather()).setValue(((ELNModulePortTDF) pt2.getFather()).getValue());
+			
 			String name1 = ((ELNClusterPortTDF) pt1.getFather()).getValue();
 			String name2 = ((ELNModulePortTDF) pt2.getFather()).getValue();
 			if (name1.equals(name2)) {

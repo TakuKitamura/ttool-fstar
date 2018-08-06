@@ -108,7 +108,8 @@ public class JDialogELNClusterPortDE extends JDialog implements ActionListener {
 		gridBag.setConstraints(labelName, constraints);
 		attributesBoxPanel.add(labelName);
 
-		nameTextField = new JTextField(term.getValue().toString(), 10); 
+		nameTextField = new JTextField(term.getValue().toString(), 10);
+		nameTextField.setEditable(false);
 		constraints = new GridBagConstraints(1, 0, 2, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 				new Insets(15, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(nameTextField, constraints);
@@ -134,6 +135,7 @@ public class JDialogELNClusterPortDE extends JDialog implements ActionListener {
 			}
 		}
 		typeComboBoxString.addActionListener(this);
+		typeComboBoxString.setEnabled(false);
 		constraints = new GridBagConstraints(1, 1, 2, 1, 1.0, 1.0,
 				GridBagConstraints.CENTER,
 				GridBagConstraints.BOTH,
@@ -160,6 +162,7 @@ public class JDialogELNClusterPortDE extends JDialog implements ActionListener {
 			}
 		}
 		originComboBoxString.addActionListener(this);
+		originComboBoxString.setEnabled(false);
 		constraints = new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 				new Insets(5, 10, 15, 10), 0, 0);
 		gridBag.setConstraints(originComboBoxString, constraints);
@@ -193,8 +196,6 @@ public class JDialogELNClusterPortDE extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if ("Save_Close".equals(e.getActionCommand())) {
 			term.setValue(new String(nameTextField.getText()));
-			term.setPortType((String) typeComboBoxString.getSelectedItem());
-			term.setOrigin((String) originComboBoxString.getSelectedItem());
 			
 			this.dispose();
 		}
