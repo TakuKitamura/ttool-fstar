@@ -38,32 +38,13 @@
 
 package ui.window;
 
+import ui.TGComponent;
+import ui.eln.ELNModule;
 import ui.eln.ELNNodeRef;
 import ui.util.IconManager;
-
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.AbstractAction;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.KeyStroke;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
 
 /**
  * Class JDialogELNComponentNodeRef
@@ -167,6 +148,18 @@ public class JDialogELNComponentNodeRef extends JDialog implements ActionListene
 	public void actionPerformed(ActionEvent e) {
 		if ("Save_Close".equals(e.getActionCommand())) {
 			gnd.setValue(new String(nameTextField.getText()));
+			
+			for (TGComponent tgc : gnd.getTDiagramPanel().getComponentList()) {
+				if (tgc instanceof ELNModule) {
+					if (gnd.getFather() != null) {
+						if (gnd.getFather().equals(tgc)) {
+							for (ELNNodeRef t : ((ELNModule) tgc).getAllComponentNodeRef()) {
+								t.setValue(gnd.getValue());
+							}
+						}
+					}
+				}
+			}
 			
 			this.dispose();
 		}
