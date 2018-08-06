@@ -370,35 +370,30 @@ public class ModuleCode {
 			LinkedList<ELNTConnector> nodes = new LinkedList<ELNTConnector>();
 			for (int i = 0; i < connectors.size(); i++) {
 				if (!connectors.get(i).getName().equals("")) {
-					if (!((connectors.get(i).get_p1().getComponent() instanceof ELNTModulePortTDF && (connectors.get(i)
-							.get_p2().getComponent() instanceof ELNTComponentVoltageSourceTDF
+					if (!((connectors.get(i).get_p1().getComponent() instanceof ELNTModulePortTDF 
+							&& (connectors.get(i).get_p2().getComponent() instanceof ELNTComponentVoltageSourceTDF
 							|| connectors.get(i).get_p2().getComponent() instanceof ELNTComponentVoltageSinkTDF
 							|| connectors.get(i).get_p2().getComponent() instanceof ELNTComponentCurrentSourceTDF
 							|| connectors.get(i).get_p2().getComponent() instanceof ELNTComponentCurrentSinkTDF))
-							|| (connectors.get(i).get_p2().getComponent() instanceof ELNTModulePortTDF && (connectors
-									.get(i).get_p1().getComponent() instanceof ELNTClusterPortTDF
-									|| connectors.get(i).get_p1().getComponent() instanceof ELNTComponentVoltageSinkTDF
-									|| connectors.get(i).get_p1()
-											.getComponent() instanceof ELNTComponentCurrentSourceTDF
-									|| connectors.get(i).get_p1()
-											.getComponent() instanceof ELNTComponentCurrentSinkTDF))
-							|| (connectors.get(i).get_p1().getComponent() instanceof ELNTModulePortDE && (connectors
-									.get(i).get_p2().getComponent() instanceof ELNTClusterPortDE
-									|| connectors.get(i).get_p2().getComponent() instanceof ELNTComponentVoltageSinkTDF
-									|| connectors.get(i).get_p2()
-											.getComponent() instanceof ELNTComponentCurrentSourceTDF
-									|| connectors.get(i).get_p2()
-											.getComponent() instanceof ELNTComponentCurrentSinkTDF))
-							|| (connectors.get(i).get_p2().getComponent() instanceof ELNTModulePortDE && (connectors
-									.get(i).get_p1().getComponent() instanceof ELNTClusterPortDE
-									|| connectors.get(i).get_p1().getComponent() instanceof ELNTComponentVoltageSinkTDF
-									|| connectors.get(i).get_p1()
-											.getComponent() instanceof ELNTComponentCurrentSourceTDF
-									|| connectors.get(i).get_p1().getComponent() instanceof ELNTComponentCurrentSinkTDF)
-									|| (connectors.get(i).get_p1().getComponent() instanceof ELNTMidPortTerminal
-											&& connectors.get(i).get_p2().getComponent() instanceof ELNTComponent)
-									|| (connectors.get(i).get_p2().getComponent() instanceof ELNTMidPortTerminal
-											&& connectors.get(i).get_p1().getComponent() instanceof ELNTComponent)))) {
+							|| (connectors.get(i).get_p2().getComponent() instanceof ELNTModulePortTDF 
+							&& (connectors.get(i).get_p1().getComponent() instanceof ELNTClusterPortTDF
+							|| connectors.get(i).get_p1().getComponent() instanceof ELNTComponentVoltageSinkTDF
+							|| connectors.get(i).get_p1().getComponent() instanceof ELNTComponentCurrentSourceTDF
+							|| connectors.get(i).get_p1().getComponent() instanceof ELNTComponentCurrentSinkTDF))
+							|| (connectors.get(i).get_p1().getComponent() instanceof ELNTModulePortDE 
+							&& (connectors.get(i).get_p2().getComponent() instanceof ELNTClusterPortDE
+							|| connectors.get(i).get_p2().getComponent() instanceof ELNTComponentVoltageSinkTDF
+							|| connectors.get(i).get_p2().getComponent() instanceof ELNTComponentCurrentSourceTDF
+							|| connectors.get(i).get_p2().getComponent() instanceof ELNTComponentCurrentSinkTDF))
+							|| (connectors.get(i).get_p2().getComponent() instanceof ELNTModulePortDE 
+							&& (connectors.get(i).get_p1().getComponent() instanceof ELNTClusterPortDE
+							|| connectors.get(i).get_p1().getComponent() instanceof ELNTComponentVoltageSinkTDF
+							|| connectors.get(i).get_p1().getComponent() instanceof ELNTComponentCurrentSourceTDF
+							|| connectors.get(i).get_p1().getComponent() instanceof ELNTComponentCurrentSinkTDF))
+							|| (connectors.get(i).get_p1().getComponent() instanceof ELNTMidPortTerminal
+							&& connectors.get(i).get_p2().getComponent() instanceof ELNTComponent)
+							|| (connectors.get(i).get_p2().getComponent() instanceof ELNTMidPortTerminal
+							&& connectors.get(i).get_p1().getComponent() instanceof ELNTComponent))) {
 						nodes.add(connectors.get(i));
 					}
 				}
