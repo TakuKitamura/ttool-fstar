@@ -42,6 +42,7 @@ import ui.eln.ELNClusterPortTDF;
 import ui.util.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
 import javax.swing.*;
 
 /**
@@ -57,6 +58,10 @@ import javax.swing.*;
 public class JDialogELNClusterPortTDF extends JDialog implements ActionListener {
 
 	private JTextField nameTextField;
+	private ArrayList<String> listArrayTypeString;
+	private JComboBox<String> typeComboBoxString;
+	private ArrayList<String> listOriginString;
+	private JComboBox<String> originComboBoxString;
 
 	private ELNClusterPortTDF term;
 
@@ -103,16 +108,63 @@ public class JDialogELNClusterPortTDF extends JDialog implements ActionListener 
 		gridBag.setConstraints(labelName, constraints);
 		attributesBoxPanel.add(labelName);
 
-		if (term.getValue().toString().equals("")) {
-			nameTextField = new JTextField(10);
-		} else {
-			nameTextField = new JTextField(term.getValue().toString(), 10); 
-		}
+		nameTextField = new JTextField(term.getValue().toString(), 10); 
 		constraints = new GridBagConstraints(1, 0, 2, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 				new Insets(15, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(nameTextField, constraints);
 		attributesBoxPanel.add(nameTextField);
 
+		JLabel typeLabel = new JLabel("Type : ");
+		constraints = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(5, 10, 5, 10), 0, 0);
+		gridBag.setConstraints(typeLabel, constraints);
+		attributesBoxPanel.add(typeLabel);
+
+		listArrayTypeString = new ArrayList<String>();
+		listArrayTypeString.add("bool");
+		listArrayTypeString.add("double");
+		listArrayTypeString.add("int");
+		typeComboBoxString = new JComboBox<String>();
+		for (int i = 0; i < listArrayTypeString.size(); i++) {
+			typeComboBoxString.addItem(listArrayTypeString.get(i));
+		}
+		for (int i = 0; i < listArrayTypeString.size(); i++) {
+			if (term.getPortType().equals(listArrayTypeString.get(i))) {
+				typeComboBoxString.setSelectedIndex(i);
+			}
+		}
+		typeComboBoxString.addActionListener(this);
+		constraints = new GridBagConstraints(1, 1, 2, 1, 1.0, 1.0,
+				GridBagConstraints.CENTER,
+				GridBagConstraints.BOTH,
+				new Insets(5, 10, 5, 10), 0, 0);
+		gridBag.setConstraints(typeComboBoxString, constraints);
+		attributesBoxPanel.add(typeComboBoxString); 
+
+		JLabel orginLabel = new JLabel("In / Out : ");
+		constraints = new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(5, 10, 15, 10), 0, 0);
+		gridBag.setConstraints(orginLabel, constraints);
+		attributesBoxPanel.add(orginLabel);
+
+		listOriginString = new ArrayList<String>();
+		listOriginString.add("in");
+		listOriginString.add("out");
+		originComboBoxString = new JComboBox<String>();
+		for (int i = 0; i < listOriginString.size(); i++) {
+			originComboBoxString.addItem(listOriginString.get(i));
+		}
+		for (int i = 0; i < listOriginString.size(); i++) {
+			if (term.getOrigin().equals(listOriginString.get(i))) {
+				originComboBoxString.setSelectedIndex(i);
+			}
+		}
+		originComboBoxString.addActionListener(this);
+		constraints = new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(5, 10, 15, 10), 0, 0);
+		gridBag.setConstraints(originComboBoxString, constraints);
+		attributesBoxPanel.add(originComboBoxString);
+		
 		attributesBox.add(attributesBoxPanel);
 
 		attributesMainPanel.add(attributesBox, BorderLayout.NORTH); 
@@ -141,6 +193,9 @@ public class JDialogELNClusterPortTDF extends JDialog implements ActionListener 
 	public void actionPerformed(ActionEvent e) {
 		if ("Save_Close".equals(e.getActionCommand())) {
 			term.setValue(new String(nameTextField.getText()));
+			term.setPortType((String) typeComboBoxString.getSelectedItem());
+			term.setOrigin((String) originComboBoxString.getSelectedItem());
+			
 			this.dispose();
 		}
 

@@ -48,7 +48,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Class ELNPortTDFInout 
+ * Class ELNModulePortTDF
  * Primitive port. To be used in ELN diagrams 
  * Creation: 03/08/2018
  * @version 1.0 03/08/2018
@@ -68,6 +68,9 @@ public class ELNModulePortTDF extends TGCScalableWithInternalComponent implement
 	private double dtextX = 0.0;
 	protected int decPoint = 3;
 
+	private String type;
+	private String origin;
+	
 	public ELNModulePortTDF(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
@@ -92,6 +95,8 @@ public class ELNModulePortTDF extends TGCScalableWithInternalComponent implement
 		userResizable = false;
 
 		value = "";
+		type = "bool";
+		origin = "in";
 	}
 
 	public void initConnectingPoint(int nb) {
@@ -285,7 +290,9 @@ public class ELNModulePortTDF extends TGCScalableWithInternalComponent implement
 
 	protected String translateExtraParam() {
 		StringBuffer sb = new StringBuffer("<extraparam>\n");
-		sb.append("<attributes name=\"" + getValue() + "\"");
+		sb.append("<attributes name=\"" + value);
+		sb.append("\" type=\"" + type);
+		sb.append("\" origin=\"" + origin + "\"");
 		sb.append("/>\n");
 		sb.append("</extraparam>\n");
 		return new String(sb);
@@ -297,7 +304,7 @@ public class ELNModulePortTDF extends TGCScalableWithInternalComponent implement
 			Node n1, n2;
 			Element elt;
 
-			String name;
+			String name, type, origin;
 
 			for (int i = 0; i < nl.getLength(); i++) {
 				n1 = nl.item(i);
@@ -309,7 +316,11 @@ public class ELNModulePortTDF extends TGCScalableWithInternalComponent implement
 							elt = (Element) n2;
 							if (elt.getTagName().equals("attributes")) {
 								name = elt.getAttribute("name");
+								type = elt.getAttribute("type");
+								origin = elt.getAttribute("origin");
 								setValue(name);
+								setPortType(type);
+								setOrigin(origin);
 							}
 						}
 					}
@@ -322,5 +333,21 @@ public class ELNModulePortTDF extends TGCScalableWithInternalComponent implement
 
 	public int getDefaultConnector() {
 		return TGComponentManager.ELN_CONNECTOR;
+	}
+	
+	public String getPortType() {
+		return type;
+	}
+
+	public void setPortType(String _type) {
+		type = _type;
+	}
+	
+	public String getOrigin() {
+		return origin;
+	}
+
+	public void setOrigin(String _origin) {
+		origin = _origin;
 	}
 }
