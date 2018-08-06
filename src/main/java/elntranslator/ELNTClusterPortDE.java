@@ -48,16 +48,28 @@ package elntranslator;
 
 public class ELNTClusterPortDE extends ELNTComponent {
 	private String name;
+	private String type;
+	private String origin;
 	
 	private ELNTCluster cluster;
 	
-	public ELNTClusterPortDE(String _name, ELNTCluster _cluster) {
+	public ELNTClusterPortDE(String _name, String _type, String _origin, ELNTCluster _cluster) {
 		name = _name;
+		type = _type;
+		origin = _origin;
 		cluster = _cluster;
 	}
 
 	public String getName() {
 		return name;
+	}
+	
+	public String getType() {
+		return type;
+	}
+
+	public String getOrigin() {
+		return origin;
 	}
 
 	public ELNTCluster getCluster() {

@@ -126,8 +126,10 @@ public class ELNPanelTranslator {
 					ELNClusterPortDE clusterPortDE = clusterPortsDE.get(i);
 
 					String portName = clusterPortDE.getValue();
+					String type = clusterPortDE.getPortType();
+					String origin = clusterPortDE.getOrigin();
 
-					ELNTClusterPortDE elnClusterPortDE = new ELNTClusterPortDE(portName, elnCluster);
+					ELNTClusterPortDE elnClusterPortDE = new ELNTClusterPortDE(portName, type, origin, elnCluster);
 
 					elnMap.put(clusterPortDE, elnClusterPortDE);
 					elnCluster.addClusterPortDE(elnClusterPortDE);
@@ -138,8 +140,10 @@ public class ELNPanelTranslator {
 					ELNClusterPortTDF clusterPortTDF = clusterPortsTDF.get(i);
 
 					String portName = clusterPortTDF.getValue();
+					String type = clusterPortTDF.getPortType();
+					String origin = clusterPortTDF.getOrigin();
 
-					ELNTClusterPortTDF elnClusterPortTDF = new ELNTClusterPortTDF(portName, elnCluster);
+					ELNTClusterPortTDF elnClusterPortTDF = new ELNTClusterPortTDF(portName, type, origin, elnCluster);
 
 					elnMap.put(clusterPortTDF, elnClusterPortTDF);
 					elnCluster.addClusterPortTDF(elnClusterPortTDF);
@@ -521,8 +525,10 @@ public class ELNPanelTranslator {
 						ELNModulePortDE modulePortDE = modulePortsDE.get(j);
 
 						String portName = modulePortDE.getValue();
+						String type = modulePortDE.getPortType();
+						String origin = modulePortDE.getOrigin();
 
-						ELNTModulePortDE elnModulePortDE = new ELNTModulePortDE(portName, elnModule);
+						ELNTModulePortDE elnModulePortDE = new ELNTModulePortDE(portName, type, origin, elnModule);
 
 						elnMap.put(modulePortDE, elnModulePortDE);
 						elnModule.addModulePortDE(elnModulePortDE);
@@ -533,8 +539,10 @@ public class ELNPanelTranslator {
 						ELNModulePortTDF modulePortTDF = modulePortsTDF.get(j);
 
 						String portName = modulePortTDF.getValue();
+						String type = modulePortTDF.getPortType();
+						String origin = modulePortTDF.getOrigin();
 
-						ELNTModulePortTDF elnModulePortTDF = new ELNTModulePortTDF(portName, elnModule);
+						ELNTModulePortTDF elnModulePortTDF = new ELNTModulePortTDF(portName, type, origin, elnModule);
 
 						elnMap.put(modulePortTDF, elnModulePortTDF);
 						elnModule.addModulePortTDF(elnModulePortTDF);

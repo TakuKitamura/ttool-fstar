@@ -48,11 +48,15 @@ package elntranslator;
 
 public class ELNTModulePortTDF extends ELNTComponent {
 	private String name;
+	private String type;
+	private String origin;
 	
 	private ELNTModule module;
 	
-	public ELNTModulePortTDF(String _name, ELNTModule _module) {
+	public ELNTModulePortTDF(String _name, String _type, String _origin, ELNTModule _module) {
 		name = _name;
+		type = _type;
+		origin = _origin;
 		module = _module;
 	}
 
@@ -60,6 +64,14 @@ public class ELNTModulePortTDF extends ELNTComponent {
 		return name;
 	}
 
+	public String getType() {
+		return type;
+	}
+
+	public String getOrigin() {
+		return origin;
+	}
+	
 	public ELNTModule getModule() {
 		return module;
 	}
