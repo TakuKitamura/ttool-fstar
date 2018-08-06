@@ -626,11 +626,11 @@ public class ELNComponentVoltageControlledCurrentSource extends TGCScalableWithI
 		int[] ptx3 = { x + 2 * width / 6 - width / 12 - width / 24, x + 2 * width / 6 - width / 12,
 				x + 2 * width / 6 - width / 12, x + 2 * width / 6 - width / 12, x + 2 * width / 6 - width / 12,
 				x + 2 * width / 6 - width / 24 };
-		int[] pty3 = { y + height / 4, y + height / 4, y + height / 4 - height / 16, y + height / 4 + height / 16,
-				y + height / 4, y + height / 4 };
+		int[] pty3 = { y + height / 8 + height / 16, y + height / 8 + height / 16, y + height / 8, y + height / 4,
+				y + height / 8 + height / 16, y + height / 8 + height / 16 };
 		g.drawPolygon(ptx3, pty3, 6);
 		int[] ptx4 = { x + 2 * width / 6 - width / 12 - width / 24, x + 2 * width / 6 - width / 24 };
-		int[] pty4 = { y + height - height / 4, y + height - height / 4 };
+		int[] pty4 = { y + height - height / 8 - height / 16, y + height - height / 8 - height / 16 };
 		g.drawPolygon(ptx4, pty4, 2);
 		int[] ptx5 = { x + 5 * width / 6 + width / 12 + width / 24, x + 5 * width / 6 + width / 12 + width / 24,
 				x + 5 * width / 6 + width / 12, x + 5 * width / 6 + width / 12 + width / 24,
@@ -683,11 +683,11 @@ public class ELNComponentVoltageControlledCurrentSource extends TGCScalableWithI
 		int[] ptx3 = { x + 2 * width / 6 - width / 12 - width / 24, x + 2 * width / 6 - width / 12,
 				x + 2 * width / 6 - width / 12, x + 2 * width / 6 - width / 12, x + 2 * width / 6 - width / 12,
 				x + 2 * width / 6 - width / 24 };
-		int[] pty3 = { y + height - height / 4, y + height - height / 4, y + height - height / 4 + height / 16,
-				y + height - height / 4 - height / 16, y + height - height / 4, y + height - height / 4 };
+		int[] pty3 = { y + height - height / 8 - height / 16, y + height - height / 8 - height / 16, y + height - height / 8, y + height - height / 4,
+				y + height - height / 8 - height / 16, y + height - height / 8 - height / 16 };
 		g.drawPolygon(ptx3, pty3, 6);
 		int[] ptx4 = { x + 2 * width / 6 - width / 12 - width / 24, x + 2 * width / 6 - width / 24 };
-		int[] pty4 = { y + height / 4, y + height / 4 };
+		int[] pty4 = { y + height / 8 + height / 16, y + height / 8 + height / 16 };
 		g.drawPolygon(ptx4, pty4, 2);
 		int[] ptx5 = { x + 5 * width / 6 + width / 12 + width / 24, x + 5 * width / 6 + width / 12 + width / 24,
 				x + 5 * width / 6 + width / 12, x + 5 * width / 6 + width / 12 + width / 24,
@@ -740,11 +740,11 @@ public class ELNComponentVoltageControlledCurrentSource extends TGCScalableWithI
 		int[] ptx3 = { x + 4 * width / 6 + width / 24, x + 4 * width / 6 + width / 12, x + 4 * width / 6 + width / 12,
 				x + 4 * width / 6 + width / 12, x + 4 * width / 6 + width / 12,
 				x + 4 * width / 6 + width / 12 + width / 24 };
-		int[] pty3 = { y + height - height / 4, y + height - height / 4, y + height - height / 4 + height / 16,
-				y + height - height / 4 - height / 16, y + height - height / 4, y + height - height / 4 };
+		int[] pty3 = { y + height - height / 8 - height / 16, y + height - height / 8 - height / 16, y + height - height / 8, y + height - height / 4,
+				y + height - height / 8 - height / 16, y + height - height / 8 - height / 16 };
 		g.drawPolygon(ptx3, pty3, 6);
 		int[] ptx4 = { x + 4 * width / 6 + width / 24, x + 4 * width / 6 + width / 12 + width / 24 };
-		int[] pty4 = { y + height / 4, y + height / 4 };
+		int[] pty4 = { y + height / 8 + height / 16, y + height / 8 + height / 16 };
 		g.drawPolygon(ptx4, pty4, 2);
 		int[] ptx5 = { x + width / 6 - width / 12 - width / 24, x + width / 6 - width / 12 - width / 24,
 				x + width / 6 - width / 12, x + width / 6 - width / 12 - width / 24, x + width / 6 - width / 6,
@@ -797,11 +797,11 @@ public class ELNComponentVoltageControlledCurrentSource extends TGCScalableWithI
 		int[] ptx3 = { x + 4 * width / 6 + width / 24, x + 4 * width / 6 + width / 12, x + 4 * width / 6 + width / 12,
 				x + 4 * width / 6 + width / 12, x + 4 * width / 6 + width / 12,
 				x + 4 * width / 6 + width / 12 + width / 24 };
-		int[] pty3 = { y + height / 4, y + height / 4, y + height / 4 - height / 16, y + height / 4 + height / 16,
-				y + height / 4, y + height / 4 };
+		int[] pty3 = { y + height / 8 + height / 16, y + height / 8 + height / 16, y + height / 8, y + height / 4,
+				y + height / 8 + height / 16, y + height / 8 + height / 16 };
 		g.drawPolygon(ptx3, pty3, 6);
 		int[] ptx4 = { x + 4 * width / 6 + width / 24, x + 4 * width / 6 + width / 12 + width / 24 };
-		int[] pty4 = { y + height - height / 4, y + height - height / 4 };
+		int[] pty4 = { y + height - height / 8 - height / 16, y + height - height / 8 - height / 16 };
 		g.drawPolygon(ptx4, pty4, 2);
 		int[] ptx5 = { x + width / 6 - width / 12 - width / 24, x + width / 6 - width / 12 - width / 24,
 				x + width / 6 - width / 12, x + width / 6 - width / 12 - width / 24, x + width / 6 - width / 6,
@@ -851,13 +851,13 @@ public class ELNComponentVoltageControlledCurrentSource extends TGCScalableWithI
 				y + 4 * height / 6, y + height, y + 4 * height / 6, y + 4 * height / 6, y + 5 * height / 6,
 				y + 3 * height / 6, y + 5 * height / 6, y + 4 * height / 6, y + 4 * height / 6 };
 		g.drawPolygon(ptx2, pty2, 14);
-		int[] ptx3 = { x + width - width / 4, x + width - width / 4, x + width - width / 4 + width / 16,
-				x + width - width / 4 - width / 16, x + width - width / 4, x + width - width / 4 };
+		int[] ptx3 = { x + width - width / 8 - width / 16, x + width - width / 8 - width / 16, x + width - width / 8,
+				x + width - width / 4, x + width - width / 8 - width / 16, x + width - width / 8 - width / 16 };
 		int[] pty3 = { y + 2 * height / 6 - height / 12 - height / 24, y + 2 * height / 6 - height / 12,
 				y + 2 * height / 6 - height / 12, y + 2 * height / 6 - height / 12, y + 2 * height / 6 - height / 12,
 				y + 2 * height / 6 - height / 24 };
 		g.drawPolygon(ptx3, pty3, 6);
-		int[] ptx4 = { x + width / 4, x + width / 4 };
+		int[] ptx4 = { x + width / 8 + width / 16, x + width / 8 + width / 16 };
 		int[] pty4 = { y + 2 * height / 6 - height / 12 - height / 24, y + 2 * height / 6 - height / 24 };
 		g.drawPolygon(ptx4, pty4, 2);
 		int[] ptx5 = { x + 3 * width / 4, x + width / 4 + width / 8, x + width / 4 + width / 8, x + width / 4,
@@ -908,13 +908,13 @@ public class ELNComponentVoltageControlledCurrentSource extends TGCScalableWithI
 				y + 2 * height / 6, y, y + 2 * height / 6, y + 2 * height / 6, y + 3 * height / 6, y + height / 6,
 				y + 3 * height / 6, y + 2 * height / 6, y + 2 * height / 6 };
 		g.drawPolygon(ptx2, pty2, 14);
-		int[] ptx3 = { x + width - width / 4, x + width - width / 4, x + width - width / 4 + width / 16,
-				x + width - width / 4 - width / 16, x + width - width / 4, x + width - width / 4 };
+		int[] ptx3 = { x + width - width / 8 - width / 16, x + width - width / 8 - width / 16, x + width - width / 8,
+				x + width - width / 4, x + width - width / 8 - width / 16, x + width - width / 8 - width / 16 };
 		int[] pty3 = { y + 4 * height / 6 + height / 24, y + 4 * height / 6 + height / 12,
 				y + 4 * height / 6 + height / 12, y + 4 * height / 6 + height / 12, y + 4 * height / 6 + height / 12,
 				y + 4 * height / 6 + height / 12 + height / 24 };
 		g.drawPolygon(ptx3, pty3, 6);
-		int[] ptx4 = { x + width / 4, x + width / 4 };
+		int[] ptx4 = { x + width / 8 + width / 16, x + width / 8 + width / 16 };
 		int[] pty4 = { y + 4 * height / 6 + height / 24, y + 4 * height / 6 + height / 12 + height / 24 };
 		g.drawPolygon(ptx4, pty4, 2);
 		int[] ptx5 = { x + 3 * width / 4, x + width / 4 + width / 8, x + width / 4 + width / 8, x + width / 4,
@@ -965,13 +965,13 @@ public class ELNComponentVoltageControlledCurrentSource extends TGCScalableWithI
 				y + 2 * height / 6, y, y + 2 * height / 6, y + 2 * height / 6, y + 3 * height / 6, y + height / 6,
 				y + 3 * height / 6, y + 2 * height / 6, y + 2 * height / 6 };
 		g.drawPolygon(ptx2, pty2, 14);
-		int[] ptx3 = { x + width / 4, x + width / 4, x + width / 4 - width / 16, x + width / 4 + width / 16,
-				x + width / 4, x + width / 4 };
+		int[] ptx3 = { x + width / 8 + width / 16, x + width / 8 + width / 16, x + width / 8, x + width / 4,
+				x + width / 8 + width / 16, x + width / 8 + width / 16 };
 		int[] pty3 = { y + 4 * height / 6 + height / 24, y + 4 * height / 6 + height / 12,
 				y + 4 * height / 6 + height / 12, y + 4 * height / 6 + height / 12, y + 4 * height / 6 + height / 12,
 				y + 4 * height / 6 + height / 12 + height / 24 };
 		g.drawPolygon(ptx3, pty3, 6);
-		int[] ptx4 = { x + width - width / 4, x + width - width / 4 };
+		int[] ptx4 = { x + width - width / 8 - width / 16, x + width - width / 8 - width / 16 };
 		int[] pty4 = { y + 4 * height / 6 + height / 24, y + 4 * height / 6 + height / 12 + height / 24 };
 		g.drawPolygon(ptx4, pty4, 2);
 		int[] ptx5 = { x + width / 4, x + 3 * width / 4 - width / 8, x + 3 * width / 4 - width / 8, x + 3 * width / 4,
@@ -1022,13 +1022,13 @@ public class ELNComponentVoltageControlledCurrentSource extends TGCScalableWithI
 				y + 4 * height / 6, y + height, y + 4 * height / 6, y + 4 * height / 6, y + 5 * height / 6,
 				y + 3 * height / 6, y + 5 * height / 6, y + 4 * height / 6, y + 4 * height / 6 };
 		g.drawPolygon(ptx2, pty2, 14);
-		int[] ptx3 = { x + width / 4, x + width / 4, x + width / 4 - width / 16, x + width / 4 + width / 16,
-				x + width / 4, x + width / 4 };
+		int[] ptx3 = { x + width / 8 + width / 16, x + width / 8 + width / 16, x + width / 8, x + width / 4,
+				x + width / 8 + width / 16, x + width / 8 + width / 16 };
 		int[] pty3 = { y + 2 * height / 6 - height / 12 - height / 24, y + 2 * height / 6 - height / 12,
 				y + 2 * height / 6 - height / 12, y + 2 * height / 6 - height / 12, y + 2 * height / 6 - height / 12,
 				y + 2 * height / 6 - height / 24 };
 		g.drawPolygon(ptx3, pty3, 6);
-		int[] ptx4 = { x + width - width / 4, x + width - width / 4 };
+		int[] ptx4 = { x + width - width / 8 - width / 16, x + width - width / 8 - width / 16 };
 		int[] pty4 = { y + 2 * height / 6 - height / 12 - height / 24, y + 2 * height / 6 - height / 24 };
 		g.drawPolygon(ptx4, pty4, 2);
 		int[] ptx5 = { x + width / 4, x + 3 * width / 4 - width / 8, x + 3 * width / 4 - width / 8, x + 3 * width / 4,
