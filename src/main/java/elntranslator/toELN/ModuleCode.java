@@ -1333,8 +1333,10 @@ public class ModuleCode {
 				return value + "e-9";
 			case 'p':
 				return value + "e-12";
-			default:
+			case 'f':
 				return value + "e-15";
+			default:
+				return "" + value;
 			}
 		}
 		return "";
