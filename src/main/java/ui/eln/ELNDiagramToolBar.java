@@ -92,6 +92,10 @@ public class ELNDiagramToolBar extends TToolBar {
 		mgui.actions[TGUIAction.ELN_CLUSTER_PORT_DE].setEnabled(b);
 		mgui.actions[TGUIAction.ELN_CLUSTER_PORT_TDF].setEnabled(b);
 		mgui.actions[TGUIAction.ELN_GENCODE].setEnabled(b);
+		mgui.actions[TGUIAction.ELN_DE_CURRENT_SINK].setEnabled(b);
+		mgui.actions[TGUIAction.ELN_DE_CURRENT_SOURCE].setEnabled(b);
+		mgui.actions[TGUIAction.ELN_DE_VOLTAGE_SINK].setEnabled(b);
+		mgui.actions[TGUIAction.ELN_DE_VOLTAGE_SOURCE].setEnabled(b);
 		
 		mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
 		mgui.actions[TGUIAction.ACT_ONECLICK_LOTOS_RG].setEnabled(b);
@@ -180,13 +184,27 @@ public class ELNDiagramToolBar extends TToolBar {
 		button = this.add(mgui.actions[TGUIAction.ELN_TDF_VOLTAGE_SOURCE]);
 		button.addMouseListener(mgui.mouseHandler);
 		
-		button = this.add(mgui.actions[TGUIAction.ELN_TDF_CURRENT_SOURCE]);
-		button.addMouseListener(mgui.mouseHandler);
-		
 		button = this.add(mgui.actions[TGUIAction.ELN_TDF_VOLTAGE_SINK]);
 		button.addMouseListener(mgui.mouseHandler);
 		
+		button = this.add(mgui.actions[TGUIAction.ELN_TDF_CURRENT_SOURCE]);
+		button.addMouseListener(mgui.mouseHandler);
+		
 		button = this.add(mgui.actions[TGUIAction.ELN_TDF_CURRENT_SINK]);
+		button.addMouseListener(mgui.mouseHandler);
+		
+		this.addSeparator();
+		
+		button = this.add(mgui.actions[TGUIAction.ELN_DE_VOLTAGE_SOURCE]);
+		button.addMouseListener(mgui.mouseHandler);
+		
+		button = this.add(mgui.actions[TGUIAction.ELN_DE_VOLTAGE_SINK]);
+		button.addMouseListener(mgui.mouseHandler);
+		
+		button = this.add(mgui.actions[TGUIAction.ELN_DE_CURRENT_SOURCE]);
+		button.addMouseListener(mgui.mouseHandler);
+		
+		button = this.add(mgui.actions[TGUIAction.ELN_DE_CURRENT_SINK]);
 		button.addMouseListener(mgui.mouseHandler);
 		
 		this.addSeparator();

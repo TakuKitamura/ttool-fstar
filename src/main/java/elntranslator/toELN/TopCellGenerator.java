@@ -81,7 +81,9 @@ public class TopCellGenerator {
 				TopCellGenerator.eln.getNbComponentIndependentCurrentSource() + TopCellGenerator.eln.getNbComponentIndependentVoltageSource() +
 				TopCellGenerator.eln.getNbComponentInductor() + TopCellGenerator.eln.getNbComponentResistor() + TopCellGenerator.eln.getNbComponentTransmissionLine() +
 				TopCellGenerator.eln.getNbComponentVoltageControlledCurrentSource() + TopCellGenerator.eln.getNbComponentVoltageControlledVoltageSource() + 
-				TopCellGenerator.eln.getNbComponentVoltageSinkTDF() + TopCellGenerator.eln.getNbComponentVoltageSourceTDF() == 0) {
+				TopCellGenerator.eln.getNbComponentVoltageSinkTDF() + TopCellGenerator.eln.getNbComponentVoltageSourceTDF() + 
+				TopCellGenerator.eln.getNbComponentVoltageSinkDE() + TopCellGenerator.eln.getNbComponentVoltageSourceDE() + 
+				TopCellGenerator.eln.getNbComponentCurrentSinkDE() + TopCellGenerator.eln.getNbComponentCurrentSourceDE()== 0) {
 			System.out.println("***Warning: require at least one primitive component***");
 		}
 		if (TopCellGenerator.eln.getNbComponentNodeRef() == 0) {

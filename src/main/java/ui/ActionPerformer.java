@@ -988,6 +988,14 @@ public class ActionPerformer {
         	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_CLUSTER_PORT_DE);
         } else if (command.equals(mgui.actions[TGUIAction.ELN_CLUSTER_PORT_TDF].getActionCommand())){
         	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_CLUSTER_PORT_TDF);
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_DE_CURRENT_SINK].getActionCommand())){
+        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_DE_CURRENT_SINK);
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_DE_CURRENT_SOURCE].getActionCommand())){
+        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_DE_CURRENT_SOURCE);
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_DE_VOLTAGE_SINK].getActionCommand())){
+        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_DE_VOLTAGE_SINK);
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_DE_VOLTAGE_SOURCE].getActionCommand())){
+        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_DE_VOLTAGE_SOURCE);
 
             // Attack Tree Diagrams
         } else if (command.equals(mgui.actions[TGUIAction.ATD_BLOCK].getActionCommand())) {

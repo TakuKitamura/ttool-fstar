@@ -553,6 +553,7 @@ public class ELNComponentCurrentSinkTDF extends TGCScalableWithInternalComponent
 		int[] pty1 = { y + height / 2, y + height / 2 + height / 20, y + height / 2 };
 		g.drawPolygon(ptx1, pty1, 3);
 		g.fillPolygon(ptx1, pty1, 3);
+		g.drawRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
 		g.fillRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
@@ -582,6 +583,7 @@ public class ELNComponentCurrentSinkTDF extends TGCScalableWithInternalComponent
 		int[] pty1 = { y + height / 2, y + height / 2 - height / 20, y + height / 2 };
 		g.drawPolygon(ptx1, pty1, 3);
 		g.fillPolygon(ptx1, pty1, 3);
+		g.drawRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
 		g.fillRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
@@ -612,6 +614,7 @@ public class ELNComponentCurrentSinkTDF extends TGCScalableWithInternalComponent
 		int[] pty1 = { y + height / 2, y + height / 2 - height / 20, y + height / 2 };
 		g.drawPolygon(ptx1, pty1, 3);
 		g.fillPolygon(ptx1, pty1, 3);
+		g.drawRect(x, y + 2 * height / 5, width / 5, height / 5);
 		g.fillRect(x, y + 2 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
@@ -642,6 +645,7 @@ public class ELNComponentCurrentSinkTDF extends TGCScalableWithInternalComponent
 		int[] pty1 = { y + height / 2, y + height / 2 + height / 20, y + height / 2 };
 		g.drawPolygon(ptx1, pty1, 3);
 		g.fillPolygon(ptx1, pty1, 3);
+		g.drawRect(x, y + 2 * height / 5, width / 5, height / 5);
 		g.fillRect(x, y + 2 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
@@ -671,6 +675,7 @@ public class ELNComponentCurrentSinkTDF extends TGCScalableWithInternalComponent
 		int[] pty1 = { y + 2 * height / 5 - height / 20, y + 2 * height / 5, y + 2 * height / 5 + height / 20 };
 		g.drawPolygon(ptx1, pty1, 3);
 		g.fillPolygon(ptx1, pty1, 3);
+		g.drawRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
 		g.fillRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
@@ -701,6 +706,7 @@ public class ELNComponentCurrentSinkTDF extends TGCScalableWithInternalComponent
 		int[] pty1 = { y + 3 * height / 5 - height / 20, y + 3 * height / 5, y + 3 * height / 5 + height / 20 };
 		g.drawPolygon(ptx1, pty1, 3);
 		g.fillPolygon(ptx1, pty1, 3);
+		g.drawRect(x + 2 * width / 5, y, width / 5, height / 5);
 		g.fillRect(x + 2 * width / 5, y, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
@@ -731,6 +737,7 @@ public class ELNComponentCurrentSinkTDF extends TGCScalableWithInternalComponent
 		int[] pty1 = { y + 3 * height / 5 - height / 20, y + 3 * height / 5, y + 3 * height / 5 + height / 20 };
 		g.drawPolygon(ptx1, pty1, 3);
 		g.fillPolygon(ptx1, pty1, 3);
+		g.drawRect(x + 2 * width / 5, y, width / 5, height / 5);
 		g.fillRect(x + 2 * width / 5, y, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
@@ -760,6 +767,7 @@ public class ELNComponentCurrentSinkTDF extends TGCScalableWithInternalComponent
 		int[] pty1 = { y + 2 * height / 5 - height / 20, y + 2 * height / 5, y + 2 * height / 5 + height / 20 };
 		g.drawPolygon(ptx1, pty1, 3);
 		g.fillPolygon(ptx1, pty1, 3);
+		g.drawRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
 		g.fillRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();

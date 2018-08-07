@@ -41,6 +41,7 @@ package ui.eln;
 import myutil.GraphicLib;
 import ui.*;
 import ui.eln.sca_eln.*;
+import ui.eln.sca_eln_sca_de.*;
 import ui.eln.sca_eln_sca_tdf.*;
 import ui.util.IconManager;
 import ui.window.*;
@@ -243,6 +244,18 @@ public class ELNModule extends TGCScalableWithInternalComponent implements Swall
 		if (tgc instanceof ELNComponentVoltageSourceTDF) {
 			return true;
 		} 
+		if (tgc instanceof ELNComponentCurrentSinkDE) {
+			return true;
+		} 
+		if (tgc instanceof ELNComponentCurrentSourceDE) {
+			return true;
+		} 
+		if (tgc instanceof ELNComponentVoltageSinkDE) {
+			return true;
+		} 
+		if (tgc instanceof ELNComponentVoltageSourceDE) {
+			return true;
+		} 
 		if (tgc instanceof ELNNodeRef) {
 			return true;
 		}
@@ -350,6 +363,34 @@ public class ELNModule extends TGCScalableWithInternalComponent implements Swall
 			addInternalComponent(tgc, 0);
 			return true;
 		}
+		if (tgc instanceof ELNComponentCurrentSinkDE) {
+			tgc.setFather(this);
+			tgc.setDrawingZone(true);
+			tgc.resizeWithFather();
+			addInternalComponent(tgc, 0);
+			return true;
+		}
+		if (tgc instanceof ELNComponentCurrentSourceDE) {
+			tgc.setFather(this);
+			tgc.setDrawingZone(true);
+			tgc.resizeWithFather();
+			addInternalComponent(tgc, 0);
+			return true;
+		}
+		if (tgc instanceof ELNComponentVoltageSinkDE) {
+			tgc.setFather(this);
+			tgc.setDrawingZone(true);
+			tgc.resizeWithFather();
+			addInternalComponent(tgc, 0);
+			return true;
+		}
+		if (tgc instanceof ELNComponentVoltageSourceDE) {
+			tgc.setFather(this);
+			tgc.setDrawingZone(true);
+			tgc.resizeWithFather();
+			addInternalComponent(tgc, 0);
+			return true;
+		}
 		if (tgc instanceof ELNNodeRef) {
 			tgc.setFather(this);
 			tgc.setDrawingZone(true);
@@ -427,6 +468,18 @@ public class ELNModule extends TGCScalableWithInternalComponent implements Swall
 			if (tgcomponent[i] instanceof ELNComponentVoltageSourceTDF) {
 				tgcomponent[i].resizeWithFather();
 			}
+			if (tgcomponent[i] instanceof ELNComponentCurrentSinkDE) {
+				tgcomponent[i].resizeWithFather();
+			}
+			if (tgcomponent[i] instanceof ELNComponentCurrentSourceDE) {
+				tgcomponent[i].resizeWithFather();
+			}
+			if (tgcomponent[i] instanceof ELNComponentVoltageSinkDE) {
+				tgcomponent[i].resizeWithFather();
+			}
+			if (tgcomponent[i] instanceof ELNComponentVoltageSourceDE) {
+				tgcomponent[i].resizeWithFather();
+			}
 			if (tgcomponent[i] instanceof ELNNodeRef) {
 				tgcomponent[i].resizeWithFather();
 			}
@@ -474,6 +527,26 @@ public class ELNModule extends TGCScalableWithInternalComponent implements Swall
 		for(int i=0; i<nbInternalTGComponent; i++) {
 			if (tgcomponent[i] instanceof ELNComponentCapacitor) {
 				list.add((ELNComponentCapacitor)(tgcomponent[i]));
+			}
+		}
+		return list;
+	}
+	
+	public java.util.List<ELNComponentCurrentSinkDE> getAllComponentCurrentSinkDE() {
+		java.util.List<ELNComponentCurrentSinkDE> list = new ArrayList<ELNComponentCurrentSinkDE>();
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof ELNComponentCurrentSinkDE) {
+				list.add((ELNComponentCurrentSinkDE)(tgcomponent[i]));
+			}
+		}
+		return list;
+	}
+	
+	public java.util.List<ELNComponentCurrentSourceDE> getAllComponentCurrentSourceDE() {
+		java.util.List<ELNComponentCurrentSourceDE> list = new ArrayList<ELNComponentCurrentSourceDE>();
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof ELNComponentCurrentSourceDE) {
+				list.add((ELNComponentCurrentSourceDE)(tgcomponent[i]));
 			}
 		}
 		return list;
@@ -584,6 +657,26 @@ public class ELNModule extends TGCScalableWithInternalComponent implements Swall
 		for(int i=0; i<nbInternalTGComponent; i++) {
 			if (tgcomponent[i] instanceof ELNComponentVoltageControlledVoltageSource) {
 				list.add((ELNComponentVoltageControlledVoltageSource)(tgcomponent[i]));
+			}
+		}
+		return list;
+	}
+	
+	public java.util.List<ELNComponentVoltageSinkDE> getAllComponentVoltageSinkDE() {
+		java.util.List<ELNComponentVoltageSinkDE> list = new ArrayList<ELNComponentVoltageSinkDE>();
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof ELNComponentVoltageSinkDE) {
+				list.add((ELNComponentVoltageSinkDE)(tgcomponent[i]));
+			}
+		}
+		return list;
+	}
+	
+	public java.util.List<ELNComponentVoltageSourceDE> getAllComponentVoltageSourceDE() {
+		java.util.List<ELNComponentVoltageSourceDE> list = new ArrayList<ELNComponentVoltageSourceDE>();
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof ELNComponentVoltageSourceDE) {
+				list.add((ELNComponentVoltageSourceDE)(tgcomponent[i]));
 			}
 		}
 		return list;

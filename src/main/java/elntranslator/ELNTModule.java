@@ -65,6 +65,10 @@ public class ELNTModule extends ELNTComponent {
 	private LinkedList<ELNTComponentCurrentSourceTDF> TDF_isource;
 	private LinkedList<ELNTComponentVoltageSinkTDF> TDF_vsink;
 	private LinkedList<ELNTComponentVoltageSourceTDF> TDF_vsource;
+	private LinkedList<ELNTComponentCurrentSinkDE> DE_isink;
+	private LinkedList<ELNTComponentCurrentSourceDE> DE_isource;
+	private LinkedList<ELNTComponentVoltageSinkDE> DE_vsink;
+	private LinkedList<ELNTComponentVoltageSourceDE> DE_vsource;
 	private LinkedList<ELNTModuleTerminal> moduleTerminal;
 	private LinkedList<ELNTModulePortDE> modulePortDE;
 	private LinkedList<ELNTModulePortTDF> modulePortTDF;
@@ -87,6 +91,10 @@ public class ELNTModule extends ELNTComponent {
 		TDF_isource = new LinkedList<ELNTComponentCurrentSourceTDF>();
 		TDF_vsink = new LinkedList<ELNTComponentVoltageSinkTDF>();
 		TDF_vsource = new LinkedList<ELNTComponentVoltageSourceTDF>();
+		DE_isink = new LinkedList<ELNTComponentCurrentSinkDE>();
+		DE_isource = new LinkedList<ELNTComponentCurrentSourceDE>();
+		DE_vsink = new LinkedList<ELNTComponentVoltageSinkDE>();
+		DE_vsource = new LinkedList<ELNTComponentVoltageSourceDE>();
 		moduleTerminal = new LinkedList<ELNTModuleTerminal>();
 		modulePortDE = new LinkedList<ELNTModulePortDE>();
 		modulePortTDF = new LinkedList<ELNTModulePortTDF>();
@@ -207,6 +215,38 @@ public class ELNTModule extends ELNTComponent {
 
 	public void addTDF_vsource(ELNTComponentVoltageSourceTDF _TDF_vsource){
 		TDF_vsource.add(_TDF_vsource);
+	}
+	
+	public LinkedList<ELNTComponentCurrentSinkDE> getDE_isink() {
+		return DE_isink;
+	}
+	
+	public void addDE_isink(ELNTComponentCurrentSinkDE _DE_isink){
+		DE_isink.add(_DE_isink);
+	}
+
+	public LinkedList<ELNTComponentCurrentSourceDE> getDE_isource() {
+		return DE_isource;
+	}
+	
+	public void addDE_isource(ELNTComponentCurrentSourceDE _DE_isource){
+		DE_isource.add(_DE_isource);
+	}
+
+	public LinkedList<ELNTComponentVoltageSinkDE> getDE_vsink() {
+		return DE_vsink;
+	}
+	
+	public void addDE_vsink(ELNTComponentVoltageSinkDE _DE_vsink){
+		DE_vsink.add(_DE_vsink);
+	}
+
+	public LinkedList<ELNTComponentVoltageSourceDE> getDE_vsource() {
+		return DE_vsource;
+	}
+
+	public void addDE_vsource(ELNTComponentVoltageSourceDE _DE_vsource){
+		DE_vsource.add(_DE_vsource);
 	}
 	
 	public LinkedList<ELNTModuleTerminal> getModuleTerminal() {

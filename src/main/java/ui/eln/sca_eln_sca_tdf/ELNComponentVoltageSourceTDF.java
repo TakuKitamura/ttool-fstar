@@ -562,6 +562,7 @@ public class ELNComponentVoltageSourceTDF extends TGCScalableWithInternalCompone
 		int[] pty2 = { y + height - height / 10 - height / 20, y + height - height / 10 - height / 20 };
 		g.drawPolygon(ptx2, pty2, 2);
 		GraphicLib.arrowWithLine(g, 1, 0, 10, x + width / 5, y + height / 2, x + 2 * width / 5, y + height / 2, true);
+		g.drawRect(x, y + 2 * height / 5, width / 5, height / 5);
 		g.fillRect(x, y + 2 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
@@ -600,6 +601,7 @@ public class ELNComponentVoltageSourceTDF extends TGCScalableWithInternalCompone
 		int[] pty2 = { y + height / 10 + height / 20, y + height / 10 + height / 20 };
 		g.drawPolygon(ptx2, pty2, 2);
 		GraphicLib.arrowWithLine(g, 1, 0, 10, x + width / 5, y + height / 2, x + 2 * width / 5, y + height / 2, true);
+		g.drawRect(x, y + 2 * height / 5, width / 5, height / 5);
 		g.fillRect(x, y + 2 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
@@ -638,6 +640,7 @@ public class ELNComponentVoltageSourceTDF extends TGCScalableWithInternalCompone
 		g.drawPolygon(ptx4, pty4, 2);
 		GraphicLib.arrowWithLine(g, 1, 0, 10, x + 4 * width / 5, y + height / 2, x + 3 * width / 5, y + height / 2,
 				true);
+		g.drawRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
 		g.fillRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
@@ -675,6 +678,7 @@ public class ELNComponentVoltageSourceTDF extends TGCScalableWithInternalCompone
 		g.drawPolygon(ptx4, pty4, 2);
 		GraphicLib.arrowWithLine(g, 1, 0, 10, x + 4 * width / 5, y + height / 2, x + 3 * width / 5, y + height / 2,
 				true);
+		g.drawRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
 		g.fillRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
@@ -713,6 +717,7 @@ public class ELNComponentVoltageSourceTDF extends TGCScalableWithInternalCompone
 		int[] pty4 = { y + 3 * height / 5 + height / 20, y + 3 * height / 5 + height / 10 + height / 20 };
 		g.drawPolygon(ptx4, pty4, 2);
 		GraphicLib.arrowWithLine(g, 1, 0, 10, x + width / 2, y + height / 5, x + width / 2, y + 2 * height / 5, true);
+		g.drawRect(x + 2 * width / 5, y, width / 5, height / 5);
 		g.fillRect(x + 2 * width / 5, y, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
@@ -752,6 +757,7 @@ public class ELNComponentVoltageSourceTDF extends TGCScalableWithInternalCompone
 		GraphicLib.arrowWithLine(g, 1, 0, 10, x + width / 2, y + 4 * height / 5, x + width / 2, y + 3 * height / 5,
 				true);
 		g.fillRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
+		g.drawRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
 		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
@@ -788,6 +794,7 @@ public class ELNComponentVoltageSourceTDF extends TGCScalableWithInternalCompone
 		g.drawPolygon(ptx4, pty4, 2);
 		GraphicLib.arrowWithLine(g, 1, 0, 10, x + width / 2, y + 4 * height / 5, x + width / 2, y + 3 * height / 5,
 				true);
+		g.drawRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
 		g.fillRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
@@ -825,6 +832,7 @@ public class ELNComponentVoltageSourceTDF extends TGCScalableWithInternalCompone
 		int[] pty4 = { y + 3 * height / 5 + height / 20, y + 3 * height / 5 + height / 10 + height / 20 };
 		g.drawPolygon(ptx4, pty4, 2);
 		GraphicLib.arrowWithLine(g, 1, 0, 10, x + width / 2, y + height / 5, x + width / 2, y + 2 * height / 5, true);
+		g.drawRect(x + 2 * width / 5, y, width / 5, height / 5);
 		g.fillRect(x + 2 * width / 5, y, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();

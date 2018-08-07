@@ -558,6 +558,7 @@ public class ELNComponentCurrentSourceTDF extends TGCScalableWithInternalCompone
 		GraphicLib.arrowWithLine(g, 1, 0, 10, x + 4 * width / 5 + width / 10, y + height / 5 + height / 10,
 				x + 4 * width / 5 + width / 10, y + 4 * height / 5 - height / 10, true);
 		GraphicLib.arrowWithLine(g, 1, 0, 10, x + width / 5, y + height / 2, x + 2 * width / 5, y + height / 2, true);
+		g.drawRect(x, y + 2 * height / 5, width / 5, height / 5);
 		g.fillRect(x, y + 2 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
@@ -591,6 +592,7 @@ public class ELNComponentCurrentSourceTDF extends TGCScalableWithInternalCompone
 		GraphicLib.arrowWithLine(g, 1, 0, 10, x + 4 * width / 5 + width / 10, y + 4 * height / 5 - height / 10,
 				x + 4 * width / 5 + width / 10, y + height / 5 + height / 10, true);
 		GraphicLib.arrowWithLine(g, 1, 0, 10, x + width / 5, y + height / 2, x + 2 * width / 5, y + height / 2, true);
+		g.drawRect(x, y + 2 * height / 5, width / 5, height / 5);
 		g.fillRect(x, y + 2 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
@@ -625,6 +627,7 @@ public class ELNComponentCurrentSourceTDF extends TGCScalableWithInternalCompone
 				y + height / 5 + height / 10, true);
 		GraphicLib.arrowWithLine(g, 1, 0, 10, x + 4 * width / 5, y + height / 2, x + 3 * width / 5, y + height / 2,
 				true);
+		g.drawRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
 		g.fillRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
@@ -659,6 +662,7 @@ public class ELNComponentCurrentSourceTDF extends TGCScalableWithInternalCompone
 				y + 4 * height / 5 - height / 10, true);
 		GraphicLib.arrowWithLine(g, 1, 0, 10, x + 4 * width / 5, y + height / 2, x + 3 * width / 5, y + height / 2,
 				true);
+		g.drawRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
 		g.fillRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
@@ -692,6 +696,7 @@ public class ELNComponentCurrentSourceTDF extends TGCScalableWithInternalCompone
 		GraphicLib.arrowWithLine(g, 1, 0, 10, x + 4 * width / 5 - width / 10, y + 4 * height / 5 + height / 10,
 				x + width / 5 + width / 10, y + 4 * height / 5 + height / 10, true);
 		GraphicLib.arrowWithLine(g, 1, 0, 10, x + width / 2, y + height / 5, x + width / 2, y + 2 * height / 5, true);
+		g.drawRect(x + 2 * width / 5, y, width / 5, height / 5);
 		g.fillRect(x + 2 * width / 5, y, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
@@ -726,6 +731,7 @@ public class ELNComponentCurrentSourceTDF extends TGCScalableWithInternalCompone
 				x + width / 5 + width / 10, y + height / 10, true);
 		GraphicLib.arrowWithLine(g, 1, 0, 10, x + width / 2, y + 4 * height / 5, x + width / 2, y + 3 * height / 5,
 				true);
+		g.drawRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
 		g.fillRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
@@ -760,6 +766,7 @@ public class ELNComponentCurrentSourceTDF extends TGCScalableWithInternalCompone
 				x + 4 * width / 5 - width / 10, y + height / 10, true);
 		GraphicLib.arrowWithLine(g, 1, 0, 10, x + width / 2, y + 4 * height / 5, x + width / 2, y + 3 * height / 5,
 				true);
+		g.drawRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
 		g.fillRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
@@ -793,6 +800,7 @@ public class ELNComponentCurrentSourceTDF extends TGCScalableWithInternalCompone
 		GraphicLib.arrowWithLine(g, 1, 0, 10, x + width / 5 + width / 10, y + 4 * height / 5 + height / 10,
 				x + 4 * width / 5 - width / 10, y + 4 * height / 5 + height / 10, true);
 		GraphicLib.arrowWithLine(g, 1, 0, 10, x + width / 2, y + height / 5, x + width / 2, y + 2 * height / 5, true);
+		g.drawRect(x + 2 * width / 5, y, width / 5, height / 5);
 		g.fillRect(x + 2 * width / 5, y, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();

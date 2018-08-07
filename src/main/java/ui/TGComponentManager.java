@@ -58,6 +58,7 @@ import ui.diplodocusmethodology.*;
 import ui.ebrdd.*;
 import ui.eln.*;
 import ui.eln.sca_eln.*;
+import ui.eln.sca_eln_sca_de.*;
 import ui.eln.sca_eln_sca_tdf.*;
 import ui.ftd.*;
 import ui.iod.*;
@@ -369,6 +370,10 @@ public class TGComponentManager {
     public static final int ELN_CLUSTER_TERMINAL = 1630;
     public static final int ELN_CLUSTER_PORT_DE = 1631;
     public static final int ELN_CLUSTER_PORT_TDF = 1632;
+    public static final int ELN_DE_CURRENT_SINK = 1633;
+    public static final int ELN_DE_CURRENT_SOURCE = 1634;
+    public static final int ELN_DE_VOLTAGE_SINK = 1635;
+    public static final int ELN_DE_VOLTAGE_SOURCE = 1636;
     
     // SMD diagram
     public static final int PROSMD_START_STATE = 2000;
@@ -1365,6 +1370,18 @@ public class TGComponentManager {
             case ELN_CLUSTER_PORT_TDF: 
             	tgc = new ELNClusterPortTDF(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             	break;
+            case ELN_DE_CURRENT_SINK: 
+            	tgc = new ELNComponentCurrentSinkDE(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;
+            case ELN_DE_CURRENT_SOURCE: 
+            	tgc = new ELNComponentCurrentSourceDE(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;
+            case ELN_DE_VOLTAGE_SINK: 
+            	tgc = new ELNComponentVoltageSinkDE(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;
+            case ELN_DE_VOLTAGE_SOURCE: 
+            	tgc = new ELNComponentVoltageSourceDE(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;
             // Communication patterns + SD
             case TMLCP_CHOICE:
                 tgc = new TMLCPChoice(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -1813,6 +1830,14 @@ public class TGComponentManager {
         	return ELN_CLUSTER_PORT_DE;
         } else if (tgc instanceof ELNClusterPortTDF) {
         	return ELN_CLUSTER_PORT_TDF;
+        } else if (tgc instanceof ELNComponentCurrentSinkDE) {
+        	return ELN_DE_CURRENT_SINK;
+        } else if (tgc instanceof ELNComponentCurrentSourceDE) {
+        	return ELN_DE_CURRENT_SOURCE;
+        } else if (tgc instanceof ELNComponentVoltageSinkDE) {
+        	return ELN_DE_VOLTAGE_SINK;
+        } else if (tgc instanceof ELNComponentVoltageSourceDE) {
+        	return ELN_DE_VOLTAGE_SOURCE;
         	
         	// Others
         } else if (tgc instanceof TADDeterministicDelay) {

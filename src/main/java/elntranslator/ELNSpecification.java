@@ -146,6 +146,26 @@ public class ELNSpecification{
 		}
 		return capacitors;
 	}
+	
+	public LinkedList<ELNTComponentCurrentSinkDE> getAllComponentCurrentSinkDE(){
+		LinkedList<ELNTComponentCurrentSinkDE> DE_isinks = new LinkedList<ELNTComponentCurrentSinkDE>();
+		for (ELNTComponent DE_isink : elnComponents) {
+			if (DE_isink instanceof ELNTComponentCurrentSinkDE) {
+				DE_isinks.add((ELNTComponentCurrentSinkDE) DE_isink);
+			}
+		}
+		return DE_isinks;
+	}
+
+	public LinkedList<ELNTComponentCurrentSourceDE> getAllComponentCurrentSourceDE(){
+		LinkedList<ELNTComponentCurrentSourceDE> DE_isources = new LinkedList<ELNTComponentCurrentSourceDE>();
+		for (ELNTComponent DE_isource : elnComponents) {
+			if (DE_isource instanceof ELNTComponentCurrentSourceDE) {
+				DE_isources.add((ELNTComponentCurrentSourceDE) DE_isource);
+			}
+		}
+		return DE_isources;
+	}
 
 	public LinkedList<ELNTComponentCurrentSinkTDF> getAllComponentCurrentSinkTDF(){
 		LinkedList<ELNTComponentCurrentSinkTDF> TDF_isinks = new LinkedList<ELNTComponentCurrentSinkTDF>();
@@ -257,6 +277,26 @@ public class ELNSpecification{
 		return vcvss;
 	}
 
+	public LinkedList<ELNTComponentVoltageSinkDE> getAllComponentVoltageSinkDE(){
+		LinkedList<ELNTComponentVoltageSinkDE> DE_vsinks = new LinkedList<ELNTComponentVoltageSinkDE>();
+		for (ELNTComponent DE_vsink : elnComponents) {
+			if (DE_vsink instanceof ELNTComponentVoltageSinkDE) {
+				DE_vsinks.add((ELNTComponentVoltageSinkDE) DE_vsink);
+			}
+		}
+		return DE_vsinks;
+	}
+
+	public LinkedList<ELNTComponentVoltageSourceDE> getAllComponentVoltageSourceDE(){
+		LinkedList<ELNTComponentVoltageSourceDE> DE_vsources = new LinkedList<ELNTComponentVoltageSourceDE>();
+		for (ELNTComponent DE_vsource : elnComponents) {
+			if (DE_vsource instanceof ELNTComponentVoltageSourceDE) {
+				DE_vsources.add((ELNTComponentVoltageSourceDE) DE_vsource);
+			}
+		}
+		return DE_vsources;
+	}
+	
 	public LinkedList<ELNTComponentVoltageSinkTDF> getAllComponentVoltageSinkTDF(){
 		LinkedList<ELNTComponentVoltageSinkTDF> TDF_vsinks = new LinkedList<ELNTComponentVoltageSinkTDF>();
 		for (ELNTComponent TDF_vsink : elnComponents) {
@@ -343,6 +383,14 @@ public class ELNSpecification{
 		return (getAllComponentCapacitor()).size();
 	}
 
+	public int getNbComponentCurrentSinkDE(){
+		return (getAllComponentCurrentSinkDE()).size();
+	}
+
+	public int getNbComponentCurrentSourceDE(){
+		return (getAllComponentCurrentSourceDE()).size();
+	}
+	
 	public int getNbComponentCurrentSinkTDF(){
 		return (getAllComponentCurrentSinkTDF()).size();
 	}
@@ -387,6 +435,14 @@ public class ELNSpecification{
 		return (getAllComponentVoltageControlledVoltageSource()).size();
 	}
 
+	public int getNbComponentVoltageSinkDE(){
+		return (getAllComponentVoltageSinkDE()).size();
+	}
+
+	public int getNbComponentVoltageSourceDE(){
+		return (getAllComponentVoltageSourceDE()).size();
+	}
+	
 	public int getNbComponentVoltageSinkTDF(){
 		return (getAllComponentVoltageSinkTDF()).size();
 	}

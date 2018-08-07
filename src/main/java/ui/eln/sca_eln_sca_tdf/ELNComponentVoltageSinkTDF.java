@@ -566,6 +566,7 @@ public class ELNComponentVoltageSinkTDF extends TGCScalableWithInternalComponent
 				y + height - height / 20 };
 		g.drawPolygon(ptx5, pty5, 5);
 		g.fillPolygon(ptx5, pty5, 5);
+		g.drawRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
 		g.fillRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
@@ -607,6 +608,7 @@ public class ELNComponentVoltageSinkTDF extends TGCScalableWithInternalComponent
 		int[] pty5 = { y + height - height / 20, y + height / 20, y + height / 10, y + height / 10, y + height / 20 };
 		g.drawPolygon(ptx5, pty5, 5);
 		g.fillPolygon(ptx5, pty5, 5);
+		g.drawRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
 		g.fillRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
@@ -648,6 +650,7 @@ public class ELNComponentVoltageSinkTDF extends TGCScalableWithInternalComponent
 		int[] pty5 = { y + height - height / 20, y + height / 20, y + height / 10, y + height / 10, y + height / 20 };
 		g.drawPolygon(ptx5, pty5, 5);
 		g.fillPolygon(ptx5, pty5, 5);
+		g.drawRect(x, y + 2 * height / 5, width / 5, height / 5);
 		g.fillRect(x, y + 2 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
@@ -689,6 +692,7 @@ public class ELNComponentVoltageSinkTDF extends TGCScalableWithInternalComponent
 				y + height - height / 20 };
 		g.drawPolygon(ptx5, pty5, 5);
 		g.fillPolygon(ptx5, pty5, 5);
+		g.drawRect(x, y + 2 * height / 5, width / 5, height / 5);
 		g.fillRect(x, y + 2 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
@@ -730,6 +734,7 @@ public class ELNComponentVoltageSinkTDF extends TGCScalableWithInternalComponent
 				y + 2 * height / 5 + height / 20, y + 2 * height / 5 };
 		g.drawPolygon(ptx5, pty5, 5);
 		g.fillPolygon(ptx5, pty5, 5);
+		g.drawRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
 		g.fillRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
@@ -771,6 +776,7 @@ public class ELNComponentVoltageSinkTDF extends TGCScalableWithInternalComponent
 				y + 3 * height / 5 - height / 20, y + 3 * height / 5 };
 		g.drawPolygon(ptx5, pty5, 5);
 		g.fillPolygon(ptx5, pty5, 5);
+		g.drawRect(x + 2 * width / 5, y, width / 5, height / 5);
 		g.fillRect(x + 2 * width / 5, y, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
@@ -812,6 +818,7 @@ public class ELNComponentVoltageSinkTDF extends TGCScalableWithInternalComponent
 				y + 3 * height / 5 - height / 20, y + 3 * height / 5 };
 		g.drawPolygon(ptx5, pty5, 5);
 		g.fillPolygon(ptx5, pty5, 5);
+		g.drawRect(x + 2 * width / 5, y, width / 5, height / 5);
 		g.fillRect(x + 2 * width / 5, y, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
@@ -853,6 +860,7 @@ public class ELNComponentVoltageSinkTDF extends TGCScalableWithInternalComponent
 				y + 2 * height / 5 + height / 20, y + 2 * height / 5 };
 		g.drawPolygon(ptx5, pty5, 5);
 		g.fillPolygon(ptx5, pty5, 5);
+		g.drawRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
 		g.fillRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
