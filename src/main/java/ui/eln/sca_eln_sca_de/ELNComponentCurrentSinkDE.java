@@ -36,7 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-package ui.eln.sca_eln_sca_tdf;
+package ui.eln.sca_eln_sca_de;
 
 import myutil.GraphicLib;
 import org.w3c.dom.Element;
