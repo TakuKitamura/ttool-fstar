@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatardd;
 
 import myutil.GraphicLib;
@@ -97,9 +94,8 @@ public class ADDChannelArtifact extends TGCWithoutInternalComponent implements S
         myImageIcon = IconManager.imgic702;
     }
 
-
+    @Override
     public void internalDrawing(Graphics g) {
-
         if (oldValue.compareTo(value) != 0) {
             setValue(value, g);
         }
@@ -122,7 +118,6 @@ public class ADDChannelArtifact extends TGCWithoutInternalComponent implements S
         g.drawImage(IconManager.img9, x+width-space-fileX + 3, y + space + 7, null);
 
         g.drawString(value, x + textX , y + textY);
-
     }
 
     public void setValue(String val, Graphics g) {
@@ -138,6 +133,7 @@ public class ADDChannelArtifact extends TGCWithoutInternalComponent implements S
         //
     }
 
+    @Override
     public void resizeWithFather() {
         if ((father != null) && ((father instanceof ADDRAMNode))) {
             //
@@ -147,7 +143,7 @@ public class ADDChannelArtifact extends TGCWithoutInternalComponent implements S
         }
     }
 
-
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
         String tmp;
         boolean error = false;
@@ -204,6 +200,7 @@ public class ADDChannelArtifact extends TGCWithoutInternalComponent implements S
        value = referenceDiagram + "::" + channelName;
        }*/
 
+    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -215,6 +212,7 @@ public class ADDChannelArtifact extends TGCWithoutInternalComponent implements S
         return TGComponentManager.ADD_CHANNELARTIFACT;
     }
 
+    @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<info value=\"" + value + "\" channelName=\"" + channelName + "\" fullChannelName=\"" + fullChannelName + "\" referenceDiagram=\"");
@@ -274,7 +272,7 @@ public class ADDChannelArtifact extends TGCWithoutInternalComponent implements S
             }
 
         } catch (Exception e) {
-            throw new MalformedModelingException();
+            throw new MalformedModelingException( e );
         }
         makeFullValue();
     }
@@ -301,7 +299,6 @@ public class ADDChannelArtifact extends TGCWithoutInternalComponent implements S
     }
 
     public String getStatusInformation() {
-	return "Name of the channel: " + fullChannelName;
+    	return "Name of the channel: " + fullChannelName;
     }
-
 }

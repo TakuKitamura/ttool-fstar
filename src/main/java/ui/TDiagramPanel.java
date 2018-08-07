@@ -1701,7 +1701,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
 
         if (e.getSource() == enableDisable) {
-            componentPopup.setEnabled(!componentPopup.isEnabled());
+            
+        	// Issue #69
+        	componentPopup.setEnabled( !componentPopup.isEnabled( true ) );
+//            componentPopup.setEnabled(!componentPopup.isEnabled());
             getGUI().changeMade(this, CHANGE_VALUE_COMPONENT);
             repaint();
             return;
@@ -2031,15 +2034,17 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             clone.setEnabled(false);
         }
 
-        if (componentPointed instanceof CanBeDisabled) {
-            /*if (componentPointed.hasFather()) {
-              clone.setEnabled(false);
-              } else {*/
-            enableDisable.setEnabled(true);
-            //}
-        } else {
-            enableDisable.setEnabled(false);
-        }
+        // Issue #69
+        enableDisable.setEnabled( componentPointed.canBeDisabled() );
+//        if (componentPointed instanceof CanBeDisabled) {
+//            /*if (componentPointed.hasFather()) {
+//              clone.setEnabled(false);
+//              } else {*/
+//            enableDisable.setEnabled(true);
+//            //}
+//        } else {
+//            enableDisable.setEnabled(false);
+//        }
 
         if (componentPointed instanceof SwallowedTGComponent) {
             if (componentPointed.getFather() == null) {
@@ -2548,6 +2553,18 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
         return null;
     }
+    
+    public List<TGConnector> getConnectors() {
+    	final List<TGConnector> connectors = new ArrayList<TGConnector>();
+ 
+        for( final TGComponent compo : componentList ) {
+        	if ( compo instanceof TGConnector ) {
+        		connectors.add( (TGConnector) compo );
+        	}
+        }
+        
+        return connectors;
+    }
 
     public TGComponent getComponentToWhichBelongs(TGConnectingPoint p) {
         for (TGComponent tgc1 : this.componentList) {
@@ -2569,7 +2586,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         return null;
     }
 
-    public void getAllLatencyChecks(ArrayList<TGComponent> _list) {
+    public void getAllLatencyChecks(List<TGComponent> _list) {
         for (TGComponent tgc : this.componentList) {
             if (tgc.getCheckLatency()) {
                 _list.add(tgc);
@@ -2577,13 +2594,13 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
     }
 
-    public void getAllCheckedTGComponent(ArrayList<TGComponent> _list) {
+    public void getAllCheckedTGComponent( List<TGComponent> _list) {
         for (TGComponent tgc : this.componentList)
             if (tgc.hasCheckedAccessibility())
                 _list.addAll(tgc.getAllCheckedAccessibility());
     }
 
-    public void getAllCheckableTGComponent(ArrayList<TGComponent> _list) {
+    public void getAllCheckableTGComponent(List<TGComponent> _list) {
         for (TGComponent tgc : this.componentList) {
             //if (tgc instanceof CheckableAccessibility) {
                 _list.addAll(tgc.getAllCheckableAccessibility());
@@ -2594,7 +2611,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     }
 
-    public void getAllCheckableInvariantTGComponent(ArrayList<TGComponent> _list) {
+    public void getAllCheckableInvariantTGComponent(List<TGComponent> _list) {
         for (TGComponent tgc : this.componentList)
             if (tgc.hasCheckableInvariant())
                 _list.addAll(tgc.getAllCheckableInvariant());
@@ -3702,8 +3719,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         ;
     }
 
-
-    public void getListOfBreakPoints(java.util.List<Point> points, int taskID) {
+    public void getListOfBreakPoints(List<Point> points, int taskID) {
         for (TGComponent tgc : this.componentList)
             if (tgc.getBreakpoint() && (tgc.getDIPLOID() != -1)) {
                 boolean found = false;
@@ -3863,7 +3879,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         select = b;
     }
 
-    public void upComponent() {
+    protected void upComponent() {
         TGComponent tgc = componentPointed;
         if (tgc != null && tgc.moveable) {
             tgc.setMoveCd(tgc.x, tgc.y - MOVE_SPEED);
@@ -3871,7 +3887,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
     }
 
-    public void downComponent() {
+    protected void downComponent() {
         TGComponent tgc = componentPointed;
         if (tgc != null && tgc.moveable) {
             tgc.setMoveCd(tgc.x, tgc.y + MOVE_SPEED);
@@ -3879,7 +3895,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
     }
 
-    public void leftComponent() {
+    protected void leftComponent() {
         TGComponent tgc = componentPointed;
         if (tgc != null && tgc.moveable) {
             tgc.setMoveCd(tgc.x - MOVE_SPEED, tgc.y);
@@ -3887,7 +3903,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
     }
 
-    public void rightComponent() {
+    protected void rightComponent() {
         TGComponent tgc = componentPointed;
         if (tgc != null && tgc.moveable) {
             tgc.setMoveCd(tgc.x + MOVE_SPEED, tgc.y);
@@ -3895,22 +3911,22 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
     }
 
-    public void upComponents() {
+    protected void upComponents() {
         moveSelected(xSel, ySel - MOVE_SPEED);
         repaint();
     }
 
-    public void downComponents() {
+    protected void downComponents() {
         moveSelected(xSel, ySel + MOVE_SPEED);
         repaint();
     }
 
-    public void leftComponents() {
+    protected void leftComponents() {
         moveSelected(xSel - MOVE_SPEED, ySel);
         repaint();
     }
 
-    public void rightComponents() {
+    protected void rightComponents() {
         moveSelected(xSel + MOVE_SPEED, ySel);
         repaint();
     }
@@ -3921,6 +3937,21 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     public TDiagramMouseManager getMouseManager() {
         return tdmm;
+    }
+
+    /**
+     * Check if newvalue is already a name of a component.
+     *
+     * @param newvalue
+     * @return true if the name is used
+     * @author Fabien Tessier
+     */
+    public boolean isCompositeNameUsed(String newvalue) {
+        for (TGComponent tgc : this.componentList) {
+            if (tgc.getValue().equals(newvalue))
+                return true;
+        }
+        return false;
     }
 }
 

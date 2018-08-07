@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatarsmd;
 
 import myutil.GraphicLib;
@@ -60,7 +57,7 @@ import java.awt.geom.Line2D;
  * @version 1.0 12/07/2010
  * @author Ludovic APVRILLE
  */
-public class AvatarSMDRandom  extends AvatarSMDBasicComponent implements EmbeddedComment, BasicErrorHighlight {
+public class AvatarSMDRandom extends  AvatarSMDBasicCanBeDisabledComponent /* Issue #69 AvatarSMDBasicComponent*/ implements EmbeddedComment, BasicErrorHighlight {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
@@ -97,15 +94,16 @@ public class AvatarSMDRandom  extends AvatarSMDBasicComponent implements Embedde
         myImageIcon = IconManager.imgic912;
     }
 
-    public void makeValue() {
+    private void makeValue() {
         valueRandom = variable + " = RANDOM" + functionId + "[" + minValue + ", " + maxValue + "]";
     }
 
 	public void setVariable(String v){
 		variable=v;
 	}
-    public void internalDrawing(Graphics g) {
 
+	@Override
+    public void internalDrawing(Graphics g) {
         if (valueRandom.length() == 0) {
             makeValue();
         }
@@ -118,8 +116,9 @@ public class AvatarSMDRandom  extends AvatarSMDBasicComponent implements Embedde
             //updateConnectingPoints();
         }
 
+        Color c = g.getColor();
+
         if (stateOfError > 0)  {
-            Color c = g.getColor();
             switch(stateOfError) {
             case ErrorHighlight.OK:
                 g.setColor(ColorManager.RANDOM);
@@ -132,13 +131,22 @@ public class AvatarSMDRandom  extends AvatarSMDBasicComponent implements Embedde
         }
 
         g.drawRoundRect(x, y, width, height, arc, arc);
-        g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
+
+        // Issue #69
+    	if ( !isEnabled() && isContainedInEnabledState() ) {
+	    	g.setColor( ColorManager.DISABLED_FILLING );
+	    	g.fillRoundRect(x, y, width, height, arc, arc);
+	    	g.setColor( c );
+    	}
+
+    	g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
         //g.drawLine(x+width, y+height/2, x+width +lineLength, y+height/2);
 
         g.drawString(valueRandom, x + (width - w) / 2 , y + textY);
     }
 
+	@Override
     public boolean editOndoubleClick(JFrame frame) {
         boolean error = false;
         String errors = "";
@@ -194,6 +202,7 @@ public class AvatarSMDRandom  extends AvatarSMDBasicComponent implements Embedde
         return true;
     }
 
+	@Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -226,6 +235,7 @@ public class AvatarSMDRandom  extends AvatarSMDBasicComponent implements Embedde
         return functionId;
     }
 
+	@Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<Data variable=\"");
@@ -243,17 +253,12 @@ public class AvatarSMDRandom  extends AvatarSMDBasicComponent implements Embedde
 
     @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-        //
         try {
-
             NodeList nli;
             Node n1, n2;
             Element elt;
         //    int k;
             String s;
-
-            //
-            //
 
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
@@ -284,19 +289,18 @@ public class AvatarSMDRandom  extends AvatarSMDBasicComponent implements Embedde
             }
 
         } catch (Exception e) {
-            throw new MalformedModelingException();
+            throw new MalformedModelingException( e );
         }
         makeValue();
     }
 
-
+	@Override
     public int getType() {
         return TGComponentManager.AVATARSMD_RANDOM;
     }
 
+	@Override
     public void setStateAction(int _stateAction) {
         stateOfError = _stateAction;
     }
-
-
 }

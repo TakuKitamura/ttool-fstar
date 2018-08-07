@@ -6235,7 +6235,7 @@ POLLING
 <TGConnectingPoint num="0" id="2490" />
 </COMPONENT>
 
-<COMPONENT type="1508" id="2496" >
+<!-- COMPONENT type="1508" id="2496" >
 <cdparam x="360" y="163" />
 <sizeparam width="30" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -6245,7 +6245,7 @@ POLLING
 <TGConnectingPoint num="1" id="2493" />
 <TGConnectingPoint num="2" id="2494" />
 <TGConnectingPoint num="3" id="2495" />
-</COMPONENT>
+</COMPONENT-->
 
 <COMPONENT type="1505" id="2507" >
 <cdparam x="182" y="332" />
@@ -6299,7 +6299,7 @@ POLLING
 <infoparam name="point " value="null" />
 </SUBCOMPONENT>
 
-<CONNECTOR type="1501" id="2516" >
+<!-- CONNECTOR type="1501" id="2516" >
 <cdparam x="244" y="372" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -6309,7 +6309,8 @@ POLLING
 <Point x="136" y="425" />
 <Point x="136" y="178" />
 <AutomaticDrawing  data="true" />
-</CONNECTOR><SUBCOMPONENT type="-1" id="2513" >
+</CONNECTOR>
+<SUBCOMPONENT type="-1" id="2513" >
 <father id="2516" num="0" />
 <cdparam x="244" y="425" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
@@ -6332,7 +6333,7 @@ POLLING
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="point " value="null" />
-</SUBCOMPONENT>
+</SUBCOMPONENT-->
 
 <CONNECTOR type="1501" id="2517" >
 <cdparam x="375" y="314" />
@@ -6342,22 +6343,22 @@ POLLING
 <P2  x="375" y="386" id="2463" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
-<CONNECTOR type="1501" id="2518" >
+<!-- CONNECTOR type="1501" id="2518" >
 <cdparam x="375" y="193" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
 <P1  x="375" y="193" id="2495" />
 <P2  x="375" y="249" id="2477" />
 <AutomaticDrawing  data="true" />
-</CONNECTOR>
-<CONNECTOR type="1501" id="2519" >
+</CONNECTOR-->
+<!-- CONNECTOR type="1501" id="2519" >
 <cdparam x="375" y="115" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
 <P1  x="375" y="115" id="2508" />
 <P2  x="375" y="163" id="2492" />
 <AutomaticDrawing  data="true" />
-</CONNECTOR>
+</CONNECTOR-->
 
 </CommunicationPatternDiagramPanel>
 
@@ -6911,7 +6912,7 @@ POLLING
 <infoparam name="guard 3" value="[ transferTerminated == true ]" />
 </SUBCOMPONENT>
 
-<COMPONENT type="1508" id="2866" >
+<!-- COMPONENT type="1508" id="2866" >
 <cdparam x="279" y="127" />
 <sizeparam width="30" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -6921,7 +6922,7 @@ POLLING
 <TGConnectingPoint num="1" id="2863" />
 <TGConnectingPoint num="2" id="2864" />
 <TGConnectingPoint num="3" id="2865" />
-</COMPONENT>
+</COMPONENT-->
 
 <COMPONENT type="1505" id="2877" >
 <cdparam x="101" y="296" />
@@ -6958,7 +6959,7 @@ POLLING
 <P2  x="294" y="337" id="2844" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
-<CONNECTOR type="1501" id="2884" >
+<!-- CONNECTOR type="1501" id="2884" >
 <cdparam x="163" y="336" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -6968,7 +6969,8 @@ POLLING
 <Point x="55" y="389" />
 <Point x="55" y="142" />
 <AutomaticDrawing  data="true" />
-</CONNECTOR><SUBCOMPONENT type="-1" id="2881" >
+</CONNECTOR>
+<SUBCOMPONENT type="-1" id="2881" >
 <father id="2884" num="0" />
 <cdparam x="163" y="389" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
@@ -6991,7 +6993,7 @@ POLLING
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="point " value="null" />
-</SUBCOMPONENT>
+</SUBCOMPONENT-->
 
 <CONNECTOR type="1501" id="2886" >
 <cdparam x="254" y="238" />
@@ -7010,22 +7012,22 @@ POLLING
 <infoparam name="point " value="null" />
 </SUBCOMPONENT>
 
-<CONNECTOR type="1501" id="2887" >
+<!-- CONNECTOR type="1501" id="2887" >
 <cdparam x="294" y="157" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
 <P1  x="294" y="157" id="2865" />
 <P2  x="294" y="213" id="2849" />
 <AutomaticDrawing  data="true" />
-</CONNECTOR>
-<CONNECTOR type="1501" id="2888" >
+</CONNECTOR-->
+<!-- CONNECTOR type="1501" id="2888" >
 <cdparam x="294" y="79" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
 <P1  x="294" y="79" id="2878" />
 <P2  x="294" y="127" id="2862" />
 <AutomaticDrawing  data="true" />
-</CONNECTOR>
+</CONNECTOR-->
 
 </CommunicationPatternDiagramPanel>
 

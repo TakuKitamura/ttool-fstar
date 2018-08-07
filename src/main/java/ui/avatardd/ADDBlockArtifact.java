@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatardd;
 
 import myutil.GraphicLib;
@@ -96,9 +93,8 @@ public class ADDBlockArtifact extends TGCWithoutInternalComponent implements Swa
         myImageIcon = IconManager.imgic702;
     }
 	
-    
+    @Override
     public void internalDrawing(Graphics g) {
-        
         if (oldValue.compareTo(value) != 0) {
             setValue(value, g);
         }
@@ -137,6 +133,7 @@ public class ADDBlockArtifact extends TGCWithoutInternalComponent implements Swa
         //
     }
     
+    @Override
     public void resizeWithFather() {
         if ((father != null) && ((father instanceof ADDCPUNode))) {
             //
@@ -146,8 +143,8 @@ public class ADDBlockArtifact extends TGCWithoutInternalComponent implements Swa
         }
     }
     
-    
-     public boolean editOndoubleClick(JFrame frame) {
+    @Override
+    public boolean editOndoubleClick(JFrame frame) {
 		String tmp;
 		boolean error = false;
 		
@@ -191,15 +188,14 @@ public class ADDBlockArtifact extends TGCWithoutInternalComponent implements Swa
 		
 		makeFullValue();
 	
-			
 		return !error;
-      
     }
     
     private void makeFullValue() {
         value = referenceTaskName + "::" + taskName;
     }
     
+    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -207,10 +203,12 @@ public class ADDBlockArtifact extends TGCWithoutInternalComponent implements Swa
         return null;
     }
     
+    @Override
     public int getType() {
         return TGComponentManager.ADD_ARTIFACT;
     }
     
+    @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<info value=\"" + value + "\" taskName=\"" + taskName + "\" referenceTaskName=\"");
@@ -224,7 +222,6 @@ public class ADDBlockArtifact extends TGCWithoutInternalComponent implements Swa
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
         //
         try {
-            
             NodeList nli;
             Node n1, n2;
             Element elt;
@@ -263,7 +260,7 @@ public class ADDBlockArtifact extends TGCWithoutInternalComponent implements Swa
             }
             
         } catch (Exception e) {
-            throw new MalformedModelingException();
+            throw new MalformedModelingException( e );
         }
         makeFullValue();
     }
@@ -284,5 +281,4 @@ public class ADDBlockArtifact extends TGCWithoutInternalComponent implements Swa
     public String getTaskName() {
         return taskName;
     }
-	
 }

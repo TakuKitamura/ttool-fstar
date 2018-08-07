@@ -1,0 +1,13 @@
+<ACTIVITY first="0">
+<ACTIVITYELEMENT type="tmltranslator.TMLStartState" value="" id="0" name="start">
+<CUSTOM  />
+<NEXTACTIVITYELEMENT id="2" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLStopState" value="" id="1" name="stop state">
+<CUSTOM  />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLActionState" value="" id="2" name="action">
+<CUSTOM  action="tcpctrl__state=0" />
+<NEXTACTIVITYELEMENT id="1" />
+</ACTIVITYELEMENT>
+</ACTIVITY>

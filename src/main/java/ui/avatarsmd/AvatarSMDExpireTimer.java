@@ -40,6 +40,7 @@ package ui.avatarsmd;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Polygon;
 import java.awt.geom.Line2D;
 import java.util.List;
 
@@ -67,16 +68,21 @@ import ui.window.JDialogAvatarTimer;
    * @version 1.0 15/07/2010
    * @author Ludovic APVRILLE
  */
-public class AvatarSMDExpireTimer extends AvatarSMDBasicComponent implements BasicErrorHighlight, PartOfInvariant {
-    protected int lineLength = 5;
-    protected int textX =  5;
-    protected int textY =  15;
-    protected int arc = 5;
-    protected int linebreak = 10;
+public class AvatarSMDExpireTimer extends AvatarSMDBasicCanBeDisabledComponent /* Issue #69 AvatarSMDBasicComponent*/ implements BasicErrorHighlight, PartOfInvariant {
+    
+	protected int lineLength = 5;
+    
+	protected int textX =  5;
+    
+	protected int textY =  15;
+    
+	protected int arc = 5;
+    
+	protected int linebreak = 10;
 
     protected int hourglassWidth = 10;
+    
     protected int hourglassSpace = 2;
-
 
     protected int stateOfError = 0; // Not yet checked
 
@@ -153,13 +159,27 @@ public class AvatarSMDExpireTimer extends AvatarSMDBasicComponent implements Bas
         g.drawLine(x1, y1+height1, x1+linebreak, y1+height1/2);
         g.setColor(c);
 
-        g.drawLine(x, y, x+width, y);
-        g.drawLine(x+width, y, x+width, y+height);
-        g.drawLine(x, y+height, x+width, y+height);
-        g.drawLine(x, y, x+linebreak, y+height/2);
-        g.drawLine(x, y+height, x+linebreak, y+height/2);
+		final Polygon shape = new Polygon();
+		shape.addPoint( x, y );
+		shape.addPoint( x + width, y );
+		shape.addPoint( x + width, y + height );
+		shape.addPoint( x, y + height );
+		shape.addPoint( x + linebreak, y + height / 2 );
+		g.drawPolygon( shape );
+//        g.drawLine(x, y, x+width, y);
+//        g.drawLine(x+width, y, x+width, y+height);
+//        g.drawLine(x, y+height, x+width, y+height);
+//        g.drawLine(x, y, x+linebreak, y+height/2);
+//        g.drawLine(x, y+height, x+linebreak, y+height/2);
 
-        // hourglass
+        // Issue #69
+    	if ( !isEnabled() && isContainedInEnabledState() ) {
+	    	g.setColor( ColorManager.DISABLED_FILLING );
+	    	g.fillPolygon( shape );
+	    	g.setColor( c );
+    	}
+
+    	// hourglass
         g.setColor(ColorManager.AVATAR_SET_TIMER);
         g.drawLine(x+width+hourglassSpace+1, y+1, x+width+hourglassSpace + hourglassWidth+1, y+1);
         g.drawLine(x+width+hourglassSpace+1, y+height+1, x+width+hourglassSpace + hourglassWidth+1, y+height+1);
@@ -173,8 +193,6 @@ public class AvatarSMDExpireTimer extends AvatarSMDBasicComponent implements Bas
 
         //g.drawString("sig()", x+(width-w) / 2, y);
         g.drawString(value, x + (width - w) / 2  + textX, y + textY);
-
-
     }
 
     @Override
@@ -225,20 +243,19 @@ public class AvatarSMDExpireTimer extends AvatarSMDBasicComponent implements Bas
         value = "expire(" + val0 + ")";
 
         return true;
-
     }
 
-
-
-
+    @Override
     public int getType() {
         return TGComponentManager.AVATARSMD_EXPIRE_TIMER;
     }
 
+    @Override
     public int getDefaultConnector() {
         return TGComponentManager.AVATARSMD_CONNECTOR;
     }
 
+    @Override
     public void setStateAction(int _stateAction) {
         stateOfError = _stateAction;
     }

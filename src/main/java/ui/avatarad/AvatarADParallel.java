@@ -36,16 +36,16 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatarad;
+
+import java.awt.Graphics;
+import java.util.Arrays;
+import java.util.List;
 
 import myutil.GraphicLib;
 import ui.*;
+import ui.ad.EnablingADConnectorVisitor;
 import ui.util.IconManager;
-
-import java.awt.*;
 
 /**
  * Class AvatarADParallel
@@ -55,9 +55,9 @@ import java.awt.*;
  * @version 1.0 02/09/2011
  * @author Ludovic APVRILLE
  */
-public class AvatarADParallel extends AvatarADBasicComponent{
+public class AvatarADParallel extends AvatarADBasicCanBeDisabledComponent /* Issue #69 AvatarADBasicComponent*/ {
     private int lineLength = 0;
-    private int textX, textY;
+   // private int textX, textY;
     
     public AvatarADParallel(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -65,8 +65,8 @@ public class AvatarADParallel extends AvatarADBasicComponent{
         initScaling(150, 5);
         oldScaleFactor = tdp.getZoom();
         
-        textX = width - 10;
-        textY = height - 8;
+//        textX = width - 10;
+//        textY = height - 8;
         
         nbConnectingPoint = 10;
         connectingPoint = new TGConnectingPoint[10];
@@ -93,11 +93,13 @@ public class AvatarADParallel extends AvatarADBasicComponent{
         myImageIcon = IconManager.imgic206;
     }
     
+    @Override
     public void internalDrawing(Graphics g) {
         g.drawRect(x, y, width, height);
         g.fillRect(x, y, width, height);
     }
     
+    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -113,18 +115,37 @@ public class AvatarADParallel extends AvatarADBasicComponent{
         tgcomponent[0].setValue(val);
     }
     
+    @Override
     public int getType() {
         return TGComponentManager.AAD_PARALLEL;
     }
+//    
+//   	public int getDefaultConnector() {
+//      return TGComponentManager.AAD_ASSOCIATION_CONNECTOR;
+//    }
+	
+    public List<TGConnectingPoint> getEnterConnectingPoints() {
+    	return Arrays.asList( Arrays.copyOfRange( connectingPoint, 0, 5 ) );
+    }
+	
+    public List<TGConnectingPoint> getExitConnectingPoints() {
+    	return Arrays.asList( Arrays.copyOfRange( connectingPoint, 5, connectingPoint.length ) );
+    }
     
-   	public int getDefaultConnector() {
-      return TGComponentManager.AAD_ASSOCIATION_CONNECTOR;
+    /**
+     * Issue #69
+     * @param _enabled
+     */
+    @Override
+    public void setEnabled( final boolean _enabled ) {
+    	super.setEnabled( _enabled );
+    	
+    	final List<TGConnectingPoint> enterConPoints = getEnterConnectingPoints();
+    	
+    	for ( final TGConnectingPoint point : connectingPoint ) {
+    		if ( !enterConPoints.contains( point ) ) {
+    			point.acceptForward( new EnablingADConnectorVisitor( _enabled ) );
+        	}
+    	}
     }
 }
-
-
-
-
-
-
-

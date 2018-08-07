@@ -36,11 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatarad;
-
 
 import ui.CDElement;
 import ui.TGComponentManager;
@@ -53,14 +49,14 @@ import ui.TGConnectingPointWidthHeight;
  * @version 1.0 01/09/2011
  * @author Ludovic APVRILLE
  */
-public class AvatarADConnectingPoint extends  TGConnectingPointWidthHeight {
+public class AvatarADConnectingPoint extends TGConnectingPointWidthHeight {
     
     public AvatarADConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
         super(_container, _x, _y, _in, _out, _w, _h);
     }
     
+    @Override
     public boolean isCompatibleWith(int type) {
         return type == TGComponentManager.AAD_ASSOCIATION_CONNECTOR;
     }
-    
 }
