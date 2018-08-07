@@ -37,9 +37,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmlcp;
 
 import ui.MainGUI;
@@ -47,9 +44,6 @@ import ui.TGUIAction;
 import ui.TToolBar;
 
 import javax.swing.*;
-
-//import java.awt.*;
-//import java.awt.event.*;
 
 /**
    * Class TMLCPToolBar
@@ -63,9 +57,9 @@ public class TMLCPToolBar extends TToolBar {
 
     public TMLCPToolBar(MainGUI _mgui) {
         super(_mgui);
-
     }
 
+    @Override
     protected void setActive(boolean b) {
         mgui.actions[TGUIAction.TMLCP_EDIT].setEnabled(b);
         mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
@@ -79,7 +73,7 @@ public class TMLCPToolBar extends TToolBar {
         mgui.actions[TGUIAction.TMLCP_START].setEnabled(b);
         mgui.actions[TGUIAction.TMLCP_STOP].setEnabled(b);
         //mgui.actions[TGUIAction.TMLCP_JUNCTION].setEnabled(b);
-	mgui.actions[TGUIAction.TMLCP_FOR_LOOP].setEnabled(b);
+        mgui.actions[TGUIAction.TMLCP_FOR_LOOP].setEnabled(b);
         mgui.actions[TGUIAction.ACT_ENHANCE].setEnabled(b);
 
         mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
@@ -90,6 +84,7 @@ public class TMLCPToolBar extends TToolBar {
 
     }
 
+    @Override
     protected void setButtons() {
         JButton button;
 
@@ -129,7 +124,7 @@ public class TMLCPToolBar extends TToolBar {
         button.addMouseListener(mgui.mouseHandler);
 
         button = this.add(mgui.actions[TGUIAction.TMLCP_JOIN]);
-	button.addMouseListener(mgui.mouseHandler);
+        button.addMouseListener(mgui.mouseHandler);
 	
 
         button = this.add(mgui.actions[TGUIAction.TMLCP_CHOICE]);
@@ -138,14 +133,12 @@ public class TMLCPToolBar extends TToolBar {
         /*button = this.add(mgui.actions[TGUIAction.TMLCP_JUNCTION]);
 	  button.addMouseListener(mgui.mouseHandler);*/
 
-	button = this.add(mgui.actions[TGUIAction.TMLCP_FOR_LOOP]);
-	button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.TMLCP_FOR_LOOP]);
+        button.addMouseListener(mgui.mouseHandler);
 
         this.addSeparator();
 
         button = this.add(mgui.actions[TGUIAction.ACT_ENHANCE]);
         button.addMouseListener(mgui.mouseHandler);
-
     }
-
 } // Class

@@ -36,11 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.atd;
-
 
 import ui.*;
 import ui.util.IconManager;
@@ -63,8 +59,7 @@ public  class ATDCompositionConnector extends TGConnectorWithCommentConnectionPo
 	protected int xp1, xp2, yp1, yp2;
 	protected double oldScaleFactor;
 	protected boolean rescaled;
-	
-    
+	    
     public ATDCompositionConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
         super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
         myImageIcon = IconManager.imgic202;
@@ -74,6 +69,7 @@ public  class ATDCompositionConnector extends TGConnectorWithCommentConnectionPo
 		rescaled = true;
     }
     
+    @Override
     protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
         /*if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
 		g.drawLine(x1, y1, x2, y2);
@@ -86,7 +82,7 @@ public  class ATDCompositionConnector extends TGConnectorWithCommentConnectionPo
 			xp2 = x2;
 			yp1 = y1;
 			yp2 = y2;
-			Double alpha;
+			//Double alpha;
 			
 			int dd = (int)(d*tdp.getZoom());
 			int DD = (int)(D*tdp.getZoom());
@@ -169,6 +165,7 @@ public  class ATDCompositionConnector extends TGConnectorWithCommentConnectionPo
 		rescaled = false;
     }
 	
+    @Override
 	public TGComponent extraIsOnOnlyMe(int x1, int y1) {
 		if (p != null) {
 			if (p.contains(x1, y1)) {
@@ -179,6 +176,7 @@ public  class ATDCompositionConnector extends TGConnectorWithCommentConnectionPo
         return null;
     }
 	
+    @Override
 	public void rescale(double scaleFactor){
 		//
 		int xx, yy;
@@ -203,11 +201,8 @@ public  class ATDCompositionConnector extends TGConnectorWithCommentConnectionPo
 		rescaled = true;
 	}
     
-    
+    @Override
     public int getType() {
         return TGComponentManager.ATD_COMPOSITION_CONNECTOR;
     }
-	
-	
-    
 }

@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatarsmd;
 
 import myutil.GraphicLib;
@@ -58,21 +55,21 @@ import java.awt.geom.Line2D;
 public class AvatarSMDChoice extends AvatarSMDBasicComponent implements EmbeddedComment, BasicErrorHighlight, PartOfInvariant {
     private int lineLength = 10;
     private int lineOutLength = 10;
-    private int textX1, textY1, textX2, textY2, textX3, textY3;
+//    private int textX1, textY1, textX2, textY2, textX3, textY3;
 	
-	 protected int stateOfError = 0; // Not yet checked
+	protected int stateOfError = 0; // Not yet checked
 	
     public AvatarSMDChoice(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
         width = 30;
         height = 30;
-        textX1 = -lineOutLength;
-        textY1 = height/2 - 5;
-        textX2 = width + 5;
-        textY2 = height/2 - 5;
-        textX3 = width /2 + 5;
-        textY3 = height + 15;
+//        textX1 = -lineOutLength;
+//        textY1 = height/2 - 5;
+//        textX2 = width + 5;
+//        textY2 = height/2 - 5;
+//        textX3 = width /2 + 5;
+//        textY3 = height + 15;
         
         nbConnectingPoint = 7;
         connectingPoint = new TGConnectingPoint[nbConnectingPoint];
@@ -98,6 +95,7 @@ public class AvatarSMDChoice extends AvatarSMDBasicComponent implements Embedded
         myImageIcon = IconManager.imgic208;
     }
     
+    @Override
     public void internalDrawing(Graphics g) {
 		if (stateOfError > 0)  {
 			Color c = g.getColor();
@@ -126,6 +124,7 @@ public class AvatarSMDChoice extends AvatarSMDBasicComponent implements Embedded
         g.drawLine(x+(width/2), y + height, x+(width/2), y + height + lineOutLength);
     }
     
+    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -150,18 +149,18 @@ public class AvatarSMDChoice extends AvatarSMDBasicComponent implements Embedded
         return null;
     }
     
-    
+    @Override
     public int getType() {
         return TGComponentManager.AVATARSMD_CHOICE;
     }
     
+    @Override
     public int getDefaultConnector() {
-      return TGComponentManager.AVATARSMD_CONNECTOR;
+    	return TGComponentManager.AVATARSMD_CONNECTOR;
     }
 	
+    @Override
 	public void setStateAction(int _stateAction) {
 		stateOfError = _stateAction;
 	}
-	
-    
 }

@@ -45,47 +45,30 @@
 
 package avatartranslator;
 
-import org.junit.Test;
-import org.junit.*;
-
-import static org.junit.Assert.*;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-
-import java.util.LinkedList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
+import org.junit.Before;
+import org.junit.Test;
 
 import ui.TAttribute;
-import ui.avatarbd.AvatarBDPragma;
 import ui.avatarbd.AvatarBDPanel;
-
-import avatartranslator.ErrorAccumulator;
-import avatartranslator.AvatarStateMachine;
-import avatartranslator.AvatarState;
-import avatartranslator.AvatarAttribute;
-import avatartranslator.AvatarType;
-import avatartranslator.AvatarBlock;
-import avatartranslator.AvatarPragma;
-import avatartranslator.AvatarPragmaSecret;
-import avatartranslator.AvatarPragmaSecrecyAssumption;
-import avatartranslator.AvatarPragmaInitialKnowledge;
-import avatartranslator.AvatarPragmaPrivatePublicKey;
-import avatartranslator.AvatarPragmaPublic;
-import avatartranslator.AvatarPragmaAuthenticity;
-import avatartranslator.AvatarPragmaConstant;
+import ui.avatarbd.AvatarBDPragma;
 
 public class AvatarPragmaTests {	
 	List<AvatarPragma> res;
 	ErrorAccumulator errorAcc;
-	HashMap<String, List<TAttribute>> typeAttributesMap = new HashMap<>();  
-	HashMap<String, String> nameTypeMap = new HashMap<String, String>();
-	LinkedList<AvatarBlock> blocks; 
+	Map<String, List<TAttribute>> typeAttributesMap = new HashMap<>();  
+	Map<String, String> nameTypeMap = new HashMap<String, String>();
+	List<AvatarBlock> blocks; 
 	AvatarBDPragma bdpragma;
-	public AvatarPragmaTests () {
+	
+	public AvatarPragmaTests() {
        //
     }
 	
@@ -127,8 +110,8 @@ public class AvatarPragmaTests {
 		this.nameTypeMap.put("C.m", "T1");
 		this.nameTypeMap.put("B.m", "T1");
 		this.nameTypeMap.put("C.d", "T2");
-		LinkedList<TAttribute> t1s = new LinkedList<TAttribute>();
-		LinkedList<TAttribute> t2s = new LinkedList<TAttribute>();
+		List<TAttribute> t1s = new LinkedList<TAttribute>();
+		List<TAttribute> t2s = new LinkedList<TAttribute>();
 		t1s.add(attr_a);
 		t1s.add(attr_b);
 		t2s.add(attr_c);
@@ -142,9 +125,6 @@ public class AvatarPragmaTests {
 	}
     //protected void test () {
 	
-
-
-
 	@Test
 	public void testBadKeywordNoPragmaCreated(){
 		//Test Bad keyword

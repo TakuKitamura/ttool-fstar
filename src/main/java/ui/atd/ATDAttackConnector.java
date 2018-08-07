@@ -36,11 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.atd;
-
 
 import myutil.Conversion;
 import myutil.GraphicLib;
@@ -66,7 +62,6 @@ public  class ATDAttackConnector extends TGConnectorWithCommentConnectionPoints 
     protected double oldScaleFactor;
     protected int fontSize = 12;
 
-
     public ATDAttackConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
         super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
         myImageIcon = IconManager.imgic202;
@@ -75,6 +70,7 @@ public  class ATDAttackConnector extends TGConnectorWithCommentConnectionPoints 
         oldScaleFactor = tdp.getZoom();
     }
 
+    @Override
     protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
         /*if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
           g.drawLine(x1, y1, x2, y2);
@@ -137,19 +133,19 @@ public  class ATDAttackConnector extends TGConnectorWithCommentConnectionPoints 
           g.fillRect(p1.getX()-(cz/2), p1.getY()-(cz/2), cz, cz);*/
 
         Point p = new Point(x2, y2);
-        if (p == null) {
+//        if (p == null) {
+//            //
+//        } else {
+        if (Point2D.distance(x1, y1, p.x, p.y) < GraphicLib.longueur * 1.5) {
             //
-        } else {
-            if (Point2D.distance(x1, y1, p.x, p.y) < GraphicLib.longueur * 1.5) {
+            if ((p.x != x1) || (p.y != y1)) {
+                g.drawLine(x1, y1, p.x, p.y);
                 //
-                if ((p.x != x1) || (p.y != y1)) {
-                    g.drawLine(x1, y1, p.x, p.y);
-                    //
-                }
-            } else {
-                GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, p.x, p.y, true);
             }
+        } else {
+            GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, p.x, p.y, true);
         }
+      //  }
 
         if (value.length() > 0) {
             Font f = g.getFont();
@@ -160,9 +156,9 @@ public  class ATDAttackConnector extends TGConnectorWithCommentConnectionPoints 
             g.drawString(value, x2+(cz/2)+1, y2);
             g.setFont(f);
         }
-
     }
 
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
         String oldValue = value;
         String text = getName() + "Connector";
@@ -175,8 +171,6 @@ public  class ATDAttackConnector extends TGConnectorWithCommentConnectionPoints 
             s = Conversion.removeFirstSpaces(s);
         }
 
-        //
-
         if ((s != null) && (!s.equals(oldValue))) {
             setValue(s);
             return true;
@@ -185,11 +179,12 @@ public  class ATDAttackConnector extends TGConnectorWithCommentConnectionPoints 
         return false;
     }
 
-
+    @Override
     public int getType() {
         return TGComponentManager.ATD_ATTACK_CONNECTOR;
     }
 
+    @Override
     public void rescale(double scaleFactor){
         //
         int xx, yy;
@@ -212,9 +207,4 @@ public  class ATDAttackConnector extends TGConnectorWithCommentConnectionPoints 
 
         oldScaleFactor = scaleFactor;
     }
-
-
-
-
-
 }

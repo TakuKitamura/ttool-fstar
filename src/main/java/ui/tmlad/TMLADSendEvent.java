@@ -36,21 +36,36 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package ui.tmlad;
 
-import myutil.GraphicLib;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.geom.Line2D;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JFrame;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import ui.*;
+
+import myutil.GraphicLib;
+import ui.AllowedBreakpoint;
+import ui.BasicErrorHighlight;
+import ui.CheckableAccessibility;
+import ui.CheckableLatency;
+import ui.ColorManager;
+import ui.EmbeddedComment;
+import ui.ErrorHighlight;
+import ui.MalformedModelingException;
+import ui.TDiagramPanel;
+import ui.TGComponent;
+import ui.TGComponentManager;
+import ui.TGConnectingPoint;
+import ui.ad.TADComponentWithoutSubcomponents;
 import ui.util.IconManager;
 import ui.window.JDialogMultiString;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.geom.Line2D;
-import java.util.ArrayList;
 
 /**
  * Class TMLADSendEvent
@@ -60,7 +75,7 @@ import java.util.ArrayList;
  * @author Ludovic APVRILLE
  * @version 1.0 21/11/2005
  */
-public class TMLADSendEvent extends TGCWithoutInternalComponent implements CheckableAccessibility, CheckableLatency, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
+public class TMLADSendEvent extends TADComponentWithoutSubcomponents implements CheckableAccessibility, CheckableLatency, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
     protected int lineLength = 5;
     protected int textX = 5;
     protected int textY = 15;
@@ -106,8 +121,8 @@ public class TMLADSendEvent extends TGCWithoutInternalComponent implements Check
         myImageIcon = IconManager.imgic904;
     }
 
+    @Override
     public void internalDrawing(Graphics g) {
-
         int w = g.getFontMetrics().stringWidth(value);
         int w1 = Math.max(minWidth, w + 2 * textX);
         if ((w1 != width) & (!tdp.isScaled())) {
@@ -116,7 +131,8 @@ public class TMLADSendEvent extends TGCWithoutInternalComponent implements Check
         }
 
 
-        if (stateOfError > 0) {
+        // Issue #69
+        if ( isEnabled() && stateOfError > 0) {
             Color c = g.getColor();
             switch (stateOfError) {
                 case ErrorHighlight.OK:
@@ -147,7 +163,12 @@ public class TMLADSendEvent extends TGCWithoutInternalComponent implements Check
         int y1 = y + 1;
         int height1 = height;
         int width1 = width;
-        g.setColor(ColorManager.TML_PORT_EVENT);
+        
+        // Issue #69
+        if ( isEnabled() ) {
+        	g.setColor(ColorManager.TML_PORT_EVENT);
+        }
+        
         g.drawLine(x1, y1, x1 + width1 - linebreak, y1);
         g.drawLine(x1, y1 + height1, x1 + width1 - linebreak, y1 + height1);
         g.drawLine(x1, y1, x1, y1 + height1);
@@ -166,10 +187,9 @@ public class TMLADSendEvent extends TGCWithoutInternalComponent implements Check
         g.drawString(value, x + (width - w) / 2, y + textY);
 
         drawReachabilityInformation(g);
-
     }
 
-    public void drawReachabilityInformation(Graphics g) {
+    private void drawReachabilityInformation(Graphics g) {
         if (reachabilityInformation > 0) {
 
             Color c = g.getColor();
@@ -194,6 +214,7 @@ public class TMLADSendEvent extends TGCWithoutInternalComponent implements Check
         }
     }
 
+   // @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -206,7 +227,7 @@ public class TMLADSendEvent extends TGCWithoutInternalComponent implements Check
         return null;
     }
 
-    public void makeValue() {
+    private void makeValue() {
         boolean first = true;
         value = eventName + "(";
         for (int i = 0; i < nParam; i++) {
@@ -269,6 +290,7 @@ public class TMLADSendEvent extends TGCWithoutInternalComponent implements Check
         return value;
     }
 
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
         String[] labels = new String[nParam + 1];
         String[] values = new String[nParam + 1];
@@ -278,7 +300,8 @@ public class TMLADSendEvent extends TGCWithoutInternalComponent implements Check
             labels[i + 1] = "Param #" + (i + 1);
             values[i + 1] = params[i];
         }
-        ArrayList<String[]> help = new ArrayList<String[]>();
+        
+        List<String[]> help = new ArrayList<String[]>();
         String[] allOutEvents = tdp.getMGUI().getAllOutEvents();
         help.add(allOutEvents);
 

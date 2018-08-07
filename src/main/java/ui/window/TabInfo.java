@@ -36,15 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package ui.window;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 
 /**
  * Class TabInfo
@@ -59,7 +53,7 @@ public class TabInfo  {
     public String identifier;
     public String[] labels;
     public String[] values;
-    public ArrayList<String[]> help;
+    public List<String[]> help;
 
     public TabInfo(String _identifier) {
         identifier = _identifier;

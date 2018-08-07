@@ -36,15 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
 
 import translator.CheckingError;
-
-
 
 /**
  * Class UICheckingError
@@ -54,7 +48,14 @@ import translator.CheckingError;
  */
 public class UICheckingError extends CheckingError {
 
-    private TDiagramPanel tdp;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6532490783339577084L;
+	
+	public static final String MESSAGE_CHOICE_BOTH_STOCHASTIC_DETERMINISTIC = "Badly formatted choice: it has both non-determinitic/ stochastic and regular guards";
+
+	private TDiagramPanel tdp;
     private TGComponent tgc;
 
     public UICheckingError(int _type, String _message) {

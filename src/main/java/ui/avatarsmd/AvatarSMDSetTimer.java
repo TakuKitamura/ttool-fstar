@@ -40,6 +40,7 @@ package ui.avatarsmd;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Polygon;
 import java.awt.geom.Line2D;
 import java.util.List;
 
@@ -67,7 +68,7 @@ import ui.window.JDialogAvatarTimer;
  * @version 1.0 15/07/2010
  * @author Ludovic APVRILLE
  */
-public class AvatarSMDSetTimer extends AvatarSMDBasicComponent implements BasicErrorHighlight, PartOfInvariant {
+public class AvatarSMDSetTimer extends AvatarSMDBasicCanBeDisabledComponent /* Issue #69 AvatarSMDBasicComponent*/ implements BasicErrorHighlight, PartOfInvariant {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
@@ -149,14 +150,30 @@ public class AvatarSMDSetTimer extends AvatarSMDBasicComponent implements BasicE
         g.drawLine(x1+width1-linebreak, y1, x1+width1, y1+height1/2);
         g.drawLine(x1+width1-linebreak, y1+height1, x1+width1, y1+height1/2);
 		g.setColor(c);
+
+		final Polygon shape = new Polygon();
+		shape.addPoint( x, y );
+		shape.addPoint( x + width - linebreak, y );
+		shape.addPoint( x + width, y + height / 2 );
+		shape.addPoint( x + width - linebreak, y + height );
+		shape.addPoint(x, y + height );
 		
-		g.drawLine(x, y, x+width-linebreak, y);
-        g.drawLine(x, y+height, x+width-linebreak, y+height);
-        g.drawLine(x, y, x, y+height);
-        g.drawLine(x+width-linebreak, y, x+width, y+height/2);
-        g.drawLine(x+width-linebreak, y+height, x+width, y+height/2);
+		g.drawPolygon( shape );
+//		
+//		g.drawLine(x, y, x+width-linebreak, y);
+//        g.drawLine(x, y+height, x+width-linebreak, y+height);
+//        g.drawLine(x, y, x, y+height);
+//        g.drawLine(x+width-linebreak, y, x+width, y+height/2);
+//        g.drawLine(x+width-linebreak, y+height, x+width, y+height/2);
 		
-		// hourglass
+        // Issue #69
+    	if ( !isEnabled() && isContainedInEnabledState() ) {
+	    	g.setColor( ColorManager.DISABLED_FILLING );
+	    	g.fillPolygon( shape );
+	    	g.setColor( c );
+    	}
+
+    	// hourglass
 		g.setColor(ColorManager.AVATAR_SET_TIMER);
 		g.drawLine(x+width+hourglassSpace+1, y+1, x+width+hourglassSpace + hourglassWidth+1, y+1);
 		g.drawLine(x+width+hourglassSpace+1, y+height+1, x+width+hourglassSpace + hourglassWidth+1, y+height+1);
@@ -168,12 +185,8 @@ public class AvatarSMDSetTimer extends AvatarSMDBasicComponent implements BasicE
 		g.drawLine(x+width+hourglassSpace, y, x+width+hourglassSpace + hourglassWidth, y+height);
 		g.drawLine(x+width+hourglassSpace, y+height, x+width+hourglassSpace + hourglassWidth, y);
 		
-		
-		
         //g.drawString("sig()", x+(width-w) / 2, y);
         g.drawString(value, x + (width - w) / 2 , y + textY);
-		
-		
     }
     
     @Override
@@ -239,18 +252,18 @@ public class AvatarSMDSetTimer extends AvatarSMDBasicComponent implements BasicE
 		return true;
          
     }
-    
-  
-    
 
+	@Override
     public int getType() {
         return TGComponentManager.AVATARSMD_SET_TIMER;
     }
     
-     public int getDefaultConnector() {
-      return TGComponentManager.AVATARSMD_CONNECTOR;
+	@Override
+    public int getDefaultConnector() {
+		return TGComponentManager.AVATARSMD_CONNECTOR;
     }
 	
+	@Override
 	public void setStateAction(int _stateAction) {
 		stateOfError = _stateAction;
 	}

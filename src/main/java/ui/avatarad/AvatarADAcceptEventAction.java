@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatarad;
 
 import myutil.GraphicLib;
@@ -56,7 +53,7 @@ import java.awt.geom.Line2D;
    * @version 1.0 02/09/2011
    * @author Ludovic APVRILLE
  */
-public class AvatarADAcceptEventAction extends AvatarADBasicComponent implements EmbeddedComment, BasicErrorHighlight {
+public class AvatarADAcceptEventAction extends  AvatarADBasicCanBeDisabledComponent/* Issue #69 AvatarADBasicComponent*/ implements EmbeddedComment, BasicErrorHighlight {
     protected int lineLength = 5;
     protected int textX =  6;
     protected int textY =  15;
@@ -69,8 +66,8 @@ public class AvatarADAcceptEventAction extends AvatarADBasicComponent implements
     public AvatarADAcceptEventAction(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-	initScaling(30, 20);
-	minWidth = (int)(30* tdp.getZoom());
+        initScaling(30, 20);
+        minWidth = (int)(30* tdp.getZoom());
         oldScaleFactor = tdp.getZoom();
 
         nbConnectingPoint = 2;
@@ -89,6 +86,7 @@ public class AvatarADAcceptEventAction extends AvatarADBasicComponent implements
         myImageIcon = IconManager.imgic904;
     }
 
+    @Override
     public void internalDrawing(Graphics g) {
         int w  = g.getFontMetrics().stringWidth(value);
         int w1 = Math.max(minWidth, w + 2 * textX);
@@ -142,6 +140,7 @@ public class AvatarADAcceptEventAction extends AvatarADBasicComponent implements
 
     }
 
+    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -154,15 +153,11 @@ public class AvatarADAcceptEventAction extends AvatarADBasicComponent implements
         return null;
     }
 
-
-
     public String getEventName() {
         return value;
     }
 
-
-
-
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
         String oldValue = value;
 
@@ -182,15 +177,13 @@ public class AvatarADAcceptEventAction extends AvatarADBasicComponent implements
 
     }
 
-
-
+    @Override
     public int getType() {
         return TGComponentManager.AAD_ACCEPT_EVENT_ACTION;
     }
 
-
+    @Override
     public void setStateAction(int _stateAction) {
         stateOfError = _stateAction;
     }
-
 }
