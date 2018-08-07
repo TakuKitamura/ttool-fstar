@@ -44,7 +44,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import ui.*;
-import ui.window.JDialogELNComponentNodeRef;
+import ui.window.JDialogELNNodeRef;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -380,7 +380,7 @@ public class ELNNodeRef extends TGCScalableWithInternalComponent implements Acti
 	}
 
 	public boolean editOndoubleClick(JFrame frame) {
-		JDialogELNComponentNodeRef jde = new JDialogELNComponentNodeRef(this);
+		JDialogELNNodeRef jde = new JDialogELNNodeRef(this);
 		jde.setVisible(true);
 		return true;
 	}

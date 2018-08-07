@@ -56,7 +56,7 @@ import javax.swing.*;
 
 @SuppressWarnings("serial")
 
-public class JDialogELNComponentNodeRef extends JDialog implements ActionListener {
+public class JDialogELNNodeRef extends JDialog implements ActionListener {
 
 	/** Access to ActionPerformed **/
 	private JTextField nameTextField;
@@ -65,7 +65,7 @@ public class JDialogELNComponentNodeRef extends JDialog implements ActionListene
 	private ELNNodeRef gnd;
 
 	/** Constructor **/
-	public JDialogELNComponentNodeRef(ELNNodeRef _gnd) {
+	public JDialogELNNodeRef(ELNNodeRef _gnd) {
 		/** Set JDialog **/
 		setTitle("Setting the reference node");
 		setLocationRelativeTo(null);
