@@ -22104,7 +22104,7 @@ input components per cycle
 <TGConnectingPoint num="9" id="7576" />
 </COMPONENT>
 
-<!-- COMPONENT type="1508" id="7582" >
+<COMPONENT type="1508" id="7582" >
 <cdparam x="343" y="202" />
 <sizeparam width="30" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -22114,7 +22114,7 @@ input components per cycle
 <TGConnectingPoint num="1" id="7579" />
 <TGConnectingPoint num="2" id="7580" />
 <TGConnectingPoint num="3" id="7581" />
-</COMPONENT-->
+</COMPONENT>
 
 <COMPONENT type="1505" id="7593" >
 <cdparam x="296" y="114" />
@@ -22152,7 +22152,7 @@ input components per cycle
 <TGConnectingPoint num="0" id="7596" />
 </COMPONENT>
 
-<!-- CONNECTOR type="1501" id="7601" >
+<CONNECTOR type="1501" id="7601" >
 <cdparam x="253" y="388" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -22185,7 +22185,7 @@ input components per cycle
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="point " value="null" />
-</SUBCOMPONENT-->
+</SUBCOMPONENT>
 
 <CONNECTOR type="1501" id="7603" >
 <cdparam x="318" y="297" />
@@ -22220,7 +22220,7 @@ input components per cycle
 <P2  x="358" y="109" id="7583" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
-<!-- CONNECTOR type="1501" id="7606" >
+<CONNECTOR type="1501" id="7606" >
 <cdparam x="358" y="154" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -22235,7 +22235,7 @@ input components per cycle
 <P1  x="358" y="232" id="7581" />
 <P2  x="358" y="272" id="7554" />
 <AutomaticDrawing  data="true" />
-</CONNECTOR-->
+</CONNECTOR>
 
 </CommunicationPatternDiagramPanel>
 
@@ -22622,7 +22622,7 @@ input components per cycle
 </extraparam>
 </COMPONENT>
 
-<!-- COMPONENT type="1508" id="7856" >
+<COMPONENT type="1508" id="7856" >
 <cdparam x="346" y="190" />
 <sizeparam width="30" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -22632,7 +22632,7 @@ input components per cycle
 <TGConnectingPoint num="1" id="7853" />
 <TGConnectingPoint num="2" id="7854" />
 <TGConnectingPoint num="3" id="7855" />
-</COMPONENT-->
+</COMPONENT>
 
 <COMPONENT type="1505" id="7867" >
 <cdparam x="299" y="102" />
@@ -22705,7 +22705,7 @@ input components per cycle
 <infoparam name="point " value="null" />
 </SUBCOMPONENT>
 
-<!-- CONNECTOR type="1501" id="7888" >
+<CONNECTOR type="1501" id="7888" >
 <cdparam x="256" y="376" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -22738,7 +22738,7 @@ input components per cycle
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="point " value="null" />
-</SUBCOMPONENT-->
+</SUBCOMPONENT>
 
 <CONNECTOR type="1501" id="7889" >
 <cdparam x="361" y="325" />
@@ -22756,7 +22756,7 @@ input components per cycle
 <P2  x="361" y="97" id="7857" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
-<!-- CONNECTOR type="1501" id="7891" >
+<CONNECTOR type="1501" id="7891" >
 <cdparam x="361" y="142" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -22771,7 +22771,7 @@ input components per cycle
 <P1  x="361" y="220" id="7855" />
 <P2  x="361" y="260" id="7822" />
 <AutomaticDrawing  data="true" />
-</CONNECTOR-->
+</CONNECTOR>
 
 </CommunicationPatternDiagramPanel>
 
@@ -23247,7 +23247,7 @@ INTERRUPTS
 <TGConnectingPoint num="9" id="8167" />
 </COMPONENT>
 
-<!-- COMPONENT type="1508" id="8173" >
+<COMPONENT type="1508" id="8173" >
 <cdparam x="281" y="543" />
 <sizeparam width="30" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -23257,7 +23257,7 @@ INTERRUPTS
 <TGConnectingPoint num="1" id="8170" />
 <TGConnectingPoint num="2" id="8171" />
 <TGConnectingPoint num="3" id="8172" />
-</COMPONENT-->
+</COMPONENT>
 
 <COMPONENT type="1505" id="8184" >
 <cdparam x="368" y="700" />
@@ -23357,7 +23357,7 @@ INTERRUPTS
 <TGConnectingPoint num="9" id="8221" />
 </COMPONENT>
 
-<!-- COMPONENT type="1508" id="8227" >
+<COMPONENT type="1508" id="8227" >
 <cdparam x="281" y="183" />
 <sizeparam width="30" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -23367,7 +23367,7 @@ INTERRUPTS
 <TGConnectingPoint num="1" id="8224" />
 <TGConnectingPoint num="2" id="8225" />
 <TGConnectingPoint num="3" id="8226" />
-</COMPONENT-->
+</COMPONENT>
 
 <COMPONENT type="1505" id="8238" >
 <cdparam x="234" y="95" />
@@ -23413,7 +23413,7 @@ INTERRUPTS
 <infoparam name="point " value="null" />
 </SUBCOMPONENT>
 
-<!-- CONNECTOR type="1501" id="8246" >
+<CONNECTOR type="1501" id="8246" >
 <cdparam x="191" y="369" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -23446,7 +23446,7 @@ INTERRUPTS
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="point " value="null" />
-</SUBCOMPONENT-->
+</SUBCOMPONENT>
 
 <CONNECTOR type="1501" id="8247" >
 <cdparam x="430" y="740" />
@@ -23456,7 +23456,7 @@ INTERRUPTS
 <P2  x="430" y="770" id="8156" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
-<!-- CONNECTOR type="1501" id="8251" >
+<CONNECTOR type="1501" id="8251" >
 <cdparam x="189" y="746" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -23489,7 +23489,7 @@ INTERRUPTS
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="point " value="null" />
-</SUBCOMPONENT-->
+</SUBCOMPONENT>
 
 <CONNECTOR type="1501" id="8253" >
 <cdparam x="256" y="660" />
@@ -23525,7 +23525,7 @@ INTERRUPTS
 <infoparam name="point " value="null" />
 </SUBCOMPONENT>
 
-<!-- CONNECTOR type="1501" id="8256" >
+<CONNECTOR type="1501" id="8256" >
 <cdparam x="296" y="491" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -23540,7 +23540,7 @@ INTERRUPTS
 <P1  x="296" y="573" id="8172" />
 <P2  x="296" y="635" id="8188" />
 <AutomaticDrawing  data="true" />
-</CONNECTOR-->
+</CONNECTOR>
 <CONNECTOR type="1501" id="8258" >
 <cdparam x="296" y="318" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
@@ -23557,7 +23557,7 @@ INTERRUPTS
 <P2  x="296" y="90" id="8228" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
-<!-- CONNECTOR type="1501" id="8260" >
+<CONNECTOR type="1501" id="8260" >
 <cdparam x="296" y="135" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -23572,7 +23572,7 @@ INTERRUPTS
 <P1  x="296" y="213" id="8226" />
 <P2  x="296" y="253" id="8109" />
 <AutomaticDrawing  data="true" />
-</CONNECTOR-->
+</CONNECTOR>
 
 </CommunicationPatternDiagramPanel>
 
@@ -24871,7 +24871,7 @@ sequence diagram.
 </extraparam>
 </COMPONENT>
 
-<!-- COMPONENT type="1508" id="9105" >
+<COMPONENT type="1508" id="9105" >
 <cdparam x="340" y="217" />
 <sizeparam width="30" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -24881,7 +24881,7 @@ sequence diagram.
 <TGConnectingPoint num="1" id="9102" />
 <TGConnectingPoint num="2" id="9103" />
 <TGConnectingPoint num="3" id="9104" />
-</COMPONENT-->
+</COMPONENT>
 
 <COMPONENT type="1505" id="9116" >
 <cdparam x="293" y="129" />
@@ -24937,7 +24937,7 @@ sequence diagram.
 <TGConnectingPoint num="0" id="9130" />
 </COMPONENT>
 
-<!-- CONNECTOR type="1501" id="9135" >
+<CONNECTOR type="1501" id="9135" >
 <cdparam x="250" y="403" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -24970,7 +24970,7 @@ sequence diagram.
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="point " value="null" />
-</SUBCOMPONENT-->
+</SUBCOMPONENT>
 
 <CONNECTOR type="1501" id="9137" >
 <cdparam x="315" y="312" />
@@ -25005,7 +25005,7 @@ sequence diagram.
 <P2  x="355" y="124" id="9106" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
-<!-- CONNECTOR type="1501" id="9140" >
+<CONNECTOR type="1501" id="9140" >
 <cdparam x="355" y="169" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -25020,7 +25020,7 @@ sequence diagram.
 <P1  x="355" y="247" id="9104" />
 <P2  x="355" y="287" id="9071" />
 <AutomaticDrawing  data="true" />
-</CONNECTOR-->
+</CONNECTOR>
 
 </CommunicationPatternDiagramPanel>
 
@@ -25540,7 +25540,7 @@ INTERRUPTS
 <TGConnectingPoint num="9" id="9432" />
 </COMPONENT>
 
-<!-- COMPONENT type="1508" id="9438" >
+<COMPONENT type="1508" id="9438" >
 <cdparam x="329" y="553" />
 <sizeparam width="30" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -25550,7 +25550,7 @@ INTERRUPTS
 <TGConnectingPoint num="1" id="9435" />
 <TGConnectingPoint num="2" id="9436" />
 <TGConnectingPoint num="3" id="9437" />
-</COMPONENT-->
+</COMPONENT>
 
 <COMPONENT type="1505" id="9449" >
 <cdparam x="416" y="710" />
@@ -25606,7 +25606,7 @@ INTERRUPTS
 <TGConnectingPoint num="9" id="9470" />
 </COMPONENT>
 
-<!-- COMPONENT type="1508" id="9476" >
+<COMPONENT type="1508" id="9476" >
 <cdparam x="329" y="193" />
 <sizeparam width="30" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -25616,7 +25616,7 @@ INTERRUPTS
 <TGConnectingPoint num="1" id="9473" />
 <TGConnectingPoint num="2" id="9474" />
 <TGConnectingPoint num="3" id="9475" />
-</COMPONENT-->
+</COMPONENT>
 
 <COMPONENT type="1505" id="9487" >
 <cdparam x="282" y="105" />
@@ -25679,7 +25679,7 @@ INTERRUPTS
 <infoparam name="point " value="null" />
 </SUBCOMPONENT>
 
-<!-- CONNECTOR type="1501" id="9497" >
+<CONNECTOR type="1501" id="9497" >
 <cdparam x="237" y="756" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -25747,7 +25747,7 @@ INTERRUPTS
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="point " value="null" />
-</SUBCOMPONENT-->
+</SUBCOMPONENT>
 
 <CONNECTOR type="1501" id="9503" >
 <cdparam x="304" y="288" />
@@ -25774,7 +25774,7 @@ INTERRUPTS
 <P2  x="478" y="780" id="9421" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
-<!-- CONNECTOR type="1501" id="9505" >
+<CONNECTOR type="1501" id="9505" >
 <cdparam x="344" y="501" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -25789,7 +25789,7 @@ INTERRUPTS
 <P1  x="344" y="583" id="9437" />
 <P2  x="344" y="645" id="9358" />
 <AutomaticDrawing  data="true" />
-</CONNECTOR-->
+</CONNECTOR>
 <CONNECTOR type="1501" id="9507" >
 <cdparam x="344" y="328" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
@@ -25806,7 +25806,7 @@ INTERRUPTS
 <P2  x="344" y="100" id="9477" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
-<!-- CONNECTOR type="1501" id="9509" >
+<CONNECTOR type="1501" id="9509" >
 <cdparam x="344" y="145" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -25821,7 +25821,7 @@ INTERRUPTS
 <P1  x="344" y="223" id="9475" />
 <P2  x="344" y="263" id="9374" />
 <AutomaticDrawing  data="true" />
-</CONNECTOR-->
+</CONNECTOR>
 
 </CommunicationPatternDiagramPanel>
 
@@ -27120,7 +27120,7 @@ sequence diagram.
 </extraparam>
 </COMPONENT>
 
-<!-- COMPONENT type="1508" id="10354" >
+<COMPONENT type="1508" id="10354" >
 <cdparam x="351" y="210" />
 <sizeparam width="30" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -27130,7 +27130,7 @@ sequence diagram.
 <TGConnectingPoint num="1" id="10351" />
 <TGConnectingPoint num="2" id="10352" />
 <TGConnectingPoint num="3" id="10353" />
-</COMPONENT-->
+</COMPONENT>
 
 <COMPONENT type="1505" id="10365" >
 <cdparam x="304" y="122" />
@@ -27186,7 +27186,7 @@ sequence diagram.
 <TGConnectingPoint num="0" id="10379" />
 </COMPONENT>
 
-<!-- CONNECTOR type="1501" id="10384" >
+<CONNECTOR type="1501" id="10384" >
 <cdparam x="261" y="396" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -27219,7 +27219,7 @@ sequence diagram.
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="point " value="null" />
-</SUBCOMPONENT-->
+</SUBCOMPONENT>
 
 <CONNECTOR type="1501" id="10386" >
 <cdparam x="326" y="305" />
@@ -27254,7 +27254,7 @@ sequence diagram.
 <P2  x="366" y="117" id="10355" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
-<!-- CONNECTOR type="1501" id="10389" >
+<CONNECTOR type="1501" id="10389" >
 <cdparam x="366" y="162" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -27269,7 +27269,7 @@ sequence diagram.
 <P1  x="366" y="240" id="10353" />
 <P2  x="366" y="280" id="10320" />
 <AutomaticDrawing  data="true" />
-</CONNECTOR-->
+</CONNECTOR>
 
 </CommunicationPatternDiagramPanel>
 
@@ -27696,7 +27696,7 @@ sequence diagram.
 <TGConnectingPoint num="9" id="10646" />
 </COMPONENT>
 
-<!-- COMPONENT type="1508" id="10652" >
+<COMPONENT type="1508" id="10652" >
 <cdparam x="262" y="196" />
 <sizeparam width="30" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -27706,7 +27706,7 @@ sequence diagram.
 <TGConnectingPoint num="1" id="10649" />
 <TGConnectingPoint num="2" id="10650" />
 <TGConnectingPoint num="3" id="10651" />
-</COMPONENT-->
+</COMPONENT>
 
 <COMPONENT type="1505" id="10663" >
 <cdparam x="215" y="108" />
@@ -27761,7 +27761,7 @@ sequence diagram.
 <infoparam name="point " value="null" />
 </SUBCOMPONENT>
 
-<!-- CONNECTOR type="1501" id="10673" >
+<CONNECTOR type="1501" id="10673" >
 <cdparam x="172" y="382" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -27794,7 +27794,7 @@ sequence diagram.
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="point " value="null" />
-</SUBCOMPONENT-->
+</SUBCOMPONENT>
 
 <CONNECTOR type="1501" id="10674" >
 <cdparam x="277" y="331" />
@@ -27812,7 +27812,7 @@ sequence diagram.
 <P2  x="277" y="103" id="10653" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
-<!--  CONNECTOR type="1501" id="10676" >
+<CONNECTOR type="1501" id="10676" >
 <cdparam x="277" y="148" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -27827,7 +27827,7 @@ sequence diagram.
 <P1  x="277" y="226" id="10651" />
 <P2  x="277" y="266" id="10607" />
 <AutomaticDrawing  data="true" />
-</CONNECTOR-->
+</CONNECTOR>
 
 </CommunicationPatternDiagramPanel>
 
@@ -28214,7 +28214,7 @@ sequence diagram.
 </extraparam>
 </COMPONENT>
 
-<!-- COMPONENT type="1508" id="10926" >
+<COMPONENT type="1508" id="10926" >
 <cdparam x="260" y="183" />
 <sizeparam width="30" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -28224,7 +28224,7 @@ sequence diagram.
 <TGConnectingPoint num="1" id="10923" />
 <TGConnectingPoint num="2" id="10924" />
 <TGConnectingPoint num="3" id="10925" />
-</COMPONENT-->
+</COMPONENT>
 
 <COMPONENT type="1505" id="10937" >
 <cdparam x="213" y="95" />
@@ -28280,7 +28280,7 @@ sequence diagram.
 <TGConnectingPoint num="0" id="10951" />
 </COMPONENT>
 
-<!-- CONNECTOR type="1501" id="10956" >
+<CONNECTOR type="1501" id="10956" >
 <cdparam x="170" y="369" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -28313,7 +28313,7 @@ sequence diagram.
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="point " value="null" />
-</SUBCOMPONENT-->
+</SUBCOMPONENT>
 
 <CONNECTOR type="1501" id="10958" >
 <cdparam x="235" y="278" />
@@ -28348,7 +28348,7 @@ sequence diagram.
 <P2  x="275" y="90" id="10927" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
-<!-- CONNECTOR type="1501" id="10961" >
+<CONNECTOR type="1501" id="10961" >
 <cdparam x="275" y="135" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -28363,7 +28363,7 @@ sequence diagram.
 <P1  x="275" y="213" id="10925" />
 <P2  x="275" y="253" id="10892" />
 <AutomaticDrawing  data="true" />
-</CONNECTOR-->
+</CONNECTOR>
 
 </CommunicationPatternDiagramPanel>
 
@@ -28772,7 +28772,7 @@ sequence diagram.
 </extraparam>
 </COMPONENT>
 
-<!-- COMPONENT type="1508" id="11213" >
+<COMPONENT type="1508" id="11213" >
 <cdparam x="405" y="249" />
 <sizeparam width="30" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -28782,7 +28782,7 @@ sequence diagram.
 <TGConnectingPoint num="1" id="11210" />
 <TGConnectingPoint num="2" id="11211" />
 <TGConnectingPoint num="3" id="11212" />
-</COMPONENT-->
+</COMPONENT>
 
 <COMPONENT type="1505" id="11224" >
 <cdparam x="358" y="161" />
@@ -28838,7 +28838,7 @@ sequence diagram.
 <TGConnectingPoint num="0" id="11238" />
 </COMPONENT>
 
-<!-- CONNECTOR type="1501" id="11243" >
+<CONNECTOR type="1501" id="11243" >
 <cdparam x="315" y="435" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -28871,7 +28871,7 @@ sequence diagram.
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="point " value="null" />
-</SUBCOMPONENT-->
+</SUBCOMPONENT>
 
 <CONNECTOR type="1501" id="11245" >
 <cdparam x="380" y="344" />
@@ -28906,7 +28906,7 @@ sequence diagram.
 <P2  x="420" y="156" id="11214" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
-<!-- CONNECTOR type="1501" id="11248" >
+<CONNECTOR type="1501" id="11248" >
 <cdparam x="420" y="201" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -28921,7 +28921,7 @@ sequence diagram.
 <P1  x="420" y="279" id="11212" />
 <P2  x="420" y="319" id="11179" />
 <AutomaticDrawing  data="true" />
-</CONNECTOR-->
+</CONNECTOR>
 
 </CommunicationPatternDiagramPanel>
 
@@ -29348,7 +29348,7 @@ sequence diagram.
 <TGConnectingPoint num="9" id="11505" />
 </COMPONENT>
 
-<!-- COMPONENT type="1508" id="11511" >
+<COMPONENT type="1508" id="11511" >
 <cdparam x="260" y="198" />
 <sizeparam width="30" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -29358,7 +29358,7 @@ sequence diagram.
 <TGConnectingPoint num="1" id="11508" />
 <TGConnectingPoint num="2" id="11509" />
 <TGConnectingPoint num="3" id="11510" />
-</COMPONENT-->
+</COMPONENT>
 
 <COMPONENT type="1505" id="11522" >
 <cdparam x="213" y="110" />
@@ -29413,7 +29413,7 @@ sequence diagram.
 <infoparam name="point " value="null" />
 </SUBCOMPONENT>
 
-<!-- CONNECTOR type="1501" id="11532" >
+<CONNECTOR type="1501" id="11532" >
 <cdparam x="170" y="384" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -29446,7 +29446,7 @@ sequence diagram.
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="point " value="null" />
-</SUBCOMPONENT-->
+</SUBCOMPONENT>
 
 <CONNECTOR type="1501" id="11533" >
 <cdparam x="275" y="333" />
@@ -29464,7 +29464,7 @@ sequence diagram.
 <P2  x="275" y="105" id="11512" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
-<!-- CONNECTOR type="1501" id="11535" >
+<CONNECTOR type="1501" id="11535" >
 <cdparam x="275" y="150" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -29479,7 +29479,7 @@ sequence diagram.
 <P1  x="275" y="228" id="11510" />
 <P2  x="275" y="268" id="11466" />
 <AutomaticDrawing  data="true" />
-</CONNECTOR-->
+</CONNECTOR>
 
 </CommunicationPatternDiagramPanel>
 
@@ -29884,7 +29884,7 @@ sequence diagram.
 <TGConnectingPoint num="9" id="11790" />
 </COMPONENT>
 
-<!-- COMPONENT type="1508" id="11796" >
+<COMPONENT type="1508" id="11796" >
 <cdparam x="267" y="201" />
 <sizeparam width="30" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -29894,7 +29894,7 @@ sequence diagram.
 <TGConnectingPoint num="1" id="11793" />
 <TGConnectingPoint num="2" id="11794" />
 <TGConnectingPoint num="3" id="11795" />
-</COMPONENT-->
+</COMPONENT>
 
 <COMPONENT type="1505" id="11807" >
 <cdparam x="220" y="113" />
@@ -29949,7 +29949,7 @@ sequence diagram.
 <infoparam name="point " value="null" />
 </SUBCOMPONENT>
 
-<!-- CONNECTOR type="1501" id="11817" >
+<CONNECTOR type="1501" id="11817" >
 <cdparam x="177" y="387" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -29982,7 +29982,7 @@ sequence diagram.
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="point " value="null" />
-</SUBCOMPONENT-->
+</SUBCOMPONENT>
 
 <CONNECTOR type="1501" id="11818" >
 <cdparam x="282" y="336" />
@@ -30000,7 +30000,7 @@ sequence diagram.
 <P2  x="282" y="108" id="11797" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
-<!-- CONNECTOR type="1501" id="11820" >
+<CONNECTOR type="1501" id="11820" >
 <cdparam x="282" y="153" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -30015,7 +30015,7 @@ sequence diagram.
 <P1  x="282" y="231" id="11795" />
 <P2  x="282" y="271" id="11751" />
 <AutomaticDrawing  data="true" />
-</CONNECTOR-->
+</CONNECTOR>
 
 </CommunicationPatternDiagramPanel>
 
@@ -30515,7 +30515,7 @@ INTERRUPTS
 <TGConnectingPoint num="9" id="12110" />
 </COMPONENT>
 
-<!-- COMPONENT type="1508" id="12116" >
+<COMPONENT type="1508" id="12116" >
 <cdparam x="319" y="222" />
 <sizeparam width="30" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -30525,7 +30525,7 @@ INTERRUPTS
 <TGConnectingPoint num="1" id="12113" />
 <TGConnectingPoint num="2" id="12114" />
 <TGConnectingPoint num="3" id="12115" />
-</COMPONENT-->
+</COMPONENT>
 
 <COMPONENT type="1505" id="12127" >
 <cdparam x="406" y="379" />
@@ -30563,7 +30563,7 @@ INTERRUPTS
 <TGConnectingPoint num="9" id="12137" />
 </COMPONENT>
 
-<!-- COMPONENT type="1508" id="12143" >
+<COMPONENT type="1508" id="12143" >
 <cdparam x="453" y="543" />
 <sizeparam width="30" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -30573,7 +30573,7 @@ INTERRUPTS
 <TGConnectingPoint num="1" id="12140" />
 <TGConnectingPoint num="2" id="12141" />
 <TGConnectingPoint num="3" id="12142" />
-</COMPONENT-->
+</COMPONENT>
 
 <COMPONENT type="1505" id="12154" >
 <cdparam x="406" y="459" />
@@ -30620,7 +30620,7 @@ INTERRUPTS
 <TGConnectingPoint num="9" id="12166" />
 </COMPONENT>
 
-<!-- CONNECTOR type="1501" id="12171" >
+<CONNECTOR type="1501" id="12171" >
 <cdparam x="363" y="729" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -30653,7 +30653,7 @@ INTERRUPTS
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="point " value="null" />
-</SUBCOMPONENT-->
+</SUBCOMPONENT>
 
 <CONNECTOR type="1501" id="12173" >
 <cdparam x="428" y="638" />
@@ -30672,7 +30672,7 @@ INTERRUPTS
 <infoparam name="point " value="null" />
 </SUBCOMPONENT>
 
-<!-- CONNECTOR type="1501" id="12177" >
+<CONNECTOR type="1501" id="12177" >
 <cdparam x="227" y="425" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -30705,7 +30705,7 @@ INTERRUPTS
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="point " value="null" />
-</SUBCOMPONENT-->
+</SUBCOMPONENT>
 
 <CONNECTOR type="1501" id="12179" >
 <cdparam x="294" y="339" />
@@ -30749,7 +30749,7 @@ INTERRUPTS
 <P2  x="468" y="454" id="12144" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
-<!-- CONNECTOR type="1501" id="12183" >
+<CONNECTOR type="1501" id="12183" >
 <cdparam x="334" y="170" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -30764,7 +30764,7 @@ INTERRUPTS
 <P1  x="334" y="252" id="12115" />
 <P2  x="334" y="314" id="12052" />
 <AutomaticDrawing  data="true" />
-</CONNECTOR-->
+</CONNECTOR>
 <CONNECTOR type="1501" id="12185" >
 <cdparam x="343" y="93" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
@@ -30781,7 +30781,7 @@ INTERRUPTS
 <P2  x="468" y="771" id="12155" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
-<!-- CONNECTOR type="1501" id="12187" >
+<CONNECTOR type="1501" id="12187" >
 <cdparam x="552" y="464" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -30796,7 +30796,7 @@ INTERRUPTS
 <P1  x="468" y="573" id="12142" />
 <P2  x="468" y="613" id="12036" />
 <AutomaticDrawing  data="true" />
-</CONNECTOR-->
+</CONNECTOR>
 
 </CommunicationPatternDiagramPanel>
 
@@ -32277,7 +32277,7 @@ INTERRUPTS
 <TGConnectingPoint num="9" id="13092" />
 </COMPONENT>
 
-<!-- COMPONENT type="1508" id="13098" >
+<COMPONENT type="1508" id="13098" >
 <cdparam x="272" y="204" />
 <sizeparam width="30" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -32287,7 +32287,7 @@ INTERRUPTS
 <TGConnectingPoint num="1" id="13095" />
 <TGConnectingPoint num="2" id="13096" />
 <TGConnectingPoint num="3" id="13097" />
-</COMPONENT-->
+</COMPONENT>
 
 <COMPONENT type="1505" id="13109" >
 <cdparam x="225" y="116" />
@@ -32342,7 +32342,7 @@ INTERRUPTS
 <infoparam name="point " value="null" />
 </SUBCOMPONENT>
 
-<!-- CONNECTOR type="1501" id="13119" >
+<CONNECTOR type="1501" id="13119" >
 <cdparam x="182" y="390" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -32375,7 +32375,7 @@ INTERRUPTS
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="point " value="null" />
-</SUBCOMPONENT-->
+</SUBCOMPONENT>
 
 <CONNECTOR type="1501" id="13120" >
 <cdparam x="287" y="339" />
@@ -32393,7 +32393,7 @@ INTERRUPTS
 <P2  x="287" y="111" id="13099" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
-<!-- CONNECTOR type="1501" id="13122" >
+<CONNECTOR type="1501" id="13122" >
 <cdparam x="287" y="156" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -32408,7 +32408,7 @@ INTERRUPTS
 <P1  x="287" y="234" id="13097" />
 <P2  x="287" y="274" id="13070" />
 <AutomaticDrawing  data="true" />
-</CONNECTOR-->
+</CONNECTOR>
 
 </CommunicationPatternDiagramPanel>
 
@@ -32779,7 +32779,7 @@ INTERRUPTS
 <TGConnectingPoint num="9" id="13360" />
 </COMPONENT>
 
-<!-- COMPONENT type="1508" id="13366" >
+<COMPONENT type="1508" id="13366" >
 <cdparam x="268" y="197" />
 <sizeparam width="30" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -32789,7 +32789,7 @@ INTERRUPTS
 <TGConnectingPoint num="1" id="13363" />
 <TGConnectingPoint num="2" id="13364" />
 <TGConnectingPoint num="3" id="13365" />
-</COMPONENT-->
+</COMPONENT>
 
 <COMPONENT type="1505" id="13377" >
 <cdparam x="221" y="109" />
@@ -32844,7 +32844,7 @@ INTERRUPTS
 <infoparam name="point " value="null" />
 </SUBCOMPONENT>
 
-<!-- CONNECTOR type="1501" id="13387" >
+<CONNECTOR type="1501" id="13387" >
 <cdparam x="178" y="383" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -32877,7 +32877,7 @@ INTERRUPTS
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="point " value="null" />
-</SUBCOMPONENT-->
+</SUBCOMPONENT>
 
 <CONNECTOR type="1501" id="13388" >
 <cdparam x="283" y="332" />
@@ -32895,7 +32895,7 @@ INTERRUPTS
 <P2  x="283" y="104" id="13367" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
-<!-- CONNECTOR type="1501" id="13390" >
+<CONNECTOR type="1501" id="13390" >
 <cdparam x="283" y="149" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -32910,7 +32910,7 @@ INTERRUPTS
 <P1  x="283" y="227" id="13365" />
 <P2  x="283" y="267" id="13338" />
 <AutomaticDrawing  data="true" />
-</CONNECTOR-->
+</CONNECTOR>
 
 </CommunicationPatternDiagramPanel>
 
@@ -33263,7 +33263,7 @@ INTERRUPTS
 <infoparam name="guard 3" value="[ else ]" />
 </SUBCOMPONENT>
 
-<!-- COMPONENT type="1508" id="13623" >
+<COMPONENT type="1508" id="13623" >
 <cdparam x="260" y="185" />
 <sizeparam width="30" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -33273,7 +33273,7 @@ INTERRUPTS
 <TGConnectingPoint num="1" id="13620" />
 <TGConnectingPoint num="2" id="13621" />
 <TGConnectingPoint num="3" id="13622" />
-</COMPONENT-->
+</COMPONENT>
 
 <COMPONENT type="1505" id="13634" >
 <cdparam x="213" y="97" />
@@ -33329,7 +33329,7 @@ INTERRUPTS
 <TGConnectingPoint num="0" id="13648" />
 </COMPONENT>
 
-<!-- CONNECTOR type="1501" id="13653" >
+<CONNECTOR type="1501" id="13653" >
 <cdparam x="170" y="371" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -33362,7 +33362,7 @@ INTERRUPTS
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="point " value="null" />
-</SUBCOMPONENT-->
+</SUBCOMPONENT>
 
 <CONNECTOR type="1501" id="13655" >
 <cdparam x="235" y="280" />
@@ -33397,7 +33397,7 @@ INTERRUPTS
 <P2  x="275" y="92" id="13624" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
-<!-- CONNECTOR type="1501" id="13658" >
+<CONNECTOR type="1501" id="13658" >
 <cdparam x="275" y="137" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -33412,7 +33412,7 @@ INTERRUPTS
 <P1  x="275" y="215" id="13622" />
 <P2  x="275" y="255" id="13606" />
 <AutomaticDrawing  data="true" />
-</CONNECTOR-->
+</CONNECTOR>
 
 </CommunicationPatternDiagramPanel>
 
@@ -33823,7 +33823,7 @@ INTERRUPTS
 <TGConnectingPoint num="9" id="13902" />
 </COMPONENT>
 
-<!-- COMPONENT type="1508" id="13908" >
+<COMPONENT type="1508" id="13908" >
 <cdparam x="272" y="176" />
 <sizeparam width="30" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -33833,7 +33833,7 @@ INTERRUPTS
 <TGConnectingPoint num="1" id="13905" />
 <TGConnectingPoint num="2" id="13906" />
 <TGConnectingPoint num="3" id="13907" />
-</COMPONENT-->
+</COMPONENT>
 
 <COMPONENT type="1505" id="13919" >
 <cdparam x="359" y="333" />
@@ -33871,7 +33871,7 @@ INTERRUPTS
 <TGConnectingPoint num="9" id="13929" />
 </COMPONENT>
 
-<!-- CONNECTOR type="1501" id="13934" >
+<CONNECTOR type="1501" id="13934" >
 <cdparam x="180" y="379" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -33904,7 +33904,7 @@ INTERRUPTS
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="point " value="null" />
-</SUBCOMPONENT-->
+</SUBCOMPONENT>
 
 <CONNECTOR type="1501" id="13936" >
 <cdparam x="247" y="293" />
@@ -33948,7 +33948,7 @@ INTERRUPTS
 <P2  x="421" y="403" id="13891" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
-<!-- CONNECTOR type="1501" id="13940" >
+<CONNECTOR type="1501" id="13940" >
 <cdparam x="287" y="124" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -33963,7 +33963,7 @@ INTERRUPTS
 <P1  x="287" y="206" id="13907" />
 <P2  x="287" y="268" id="13876" />
 <AutomaticDrawing  data="true" />
-</CONNECTOR-->
+</CONNECTOR>
 <CONNECTOR type="1501" id="13942" >
 <cdparam x="296" y="47" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />

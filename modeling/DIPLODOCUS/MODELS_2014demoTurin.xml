@@ -4346,7 +4346,7 @@ SRC to CWM1, CWS and SINK
 <infoparam name="guard 3" value="[ ]" />
 </SUBCOMPONENT>
 
-<!-- COMPONENT type="1508" id="1266" >
+<COMPONENT type="1508" id="1266" >
 <cdparam x="668" y="275" />
 <sizeparam width="30" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -4356,7 +4356,7 @@ SRC to CWM1, CWS and SINK
 <TGConnectingPoint num="1" id="1263" />
 <TGConnectingPoint num="2" id="1264" />
 <TGConnectingPoint num="3" id="1265" />
-</COMPONENT-->
+</COMPONENT>
 
 <COMPONENT type="1507" id="1268" >
 <cdparam x="465" y="594" />
@@ -4389,7 +4389,7 @@ SRC to CWM1, CWS and SINK
 <TGConnectingPoint num="13" id="1282" />
 </COMPONENT>
 
-<!-- COMPONENT type="1508" id="1288" >
+<COMPONENT type="1508" id="1288" >
 <cdparam x="198" y="272" />
 <sizeparam width="30" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -4399,7 +4399,7 @@ SRC to CWM1, CWS and SINK
 <TGConnectingPoint num="1" id="1285" />
 <TGConnectingPoint num="2" id="1286" />
 <TGConnectingPoint num="3" id="1287" />
-</COMPONENT-->
+</COMPONENT>
 
 <COMPONENT type="1500" id="1304" >
 <cdparam x="198" y="362" />
@@ -4584,7 +4584,7 @@ SRC to CWM1, CWS and SINK
 <TGConnectingPoint num="9" id="1386" />
 </COMPONENT>
 
-<!-- CONNECTOR type="1501" id="1392" >
+<CONNECTOR type="1501" id="1392" >
 <cdparam x="801" y="457" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -4626,7 +4626,7 @@ SRC to CWM1, CWS and SINK
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="point " value="null" />
-</SUBCOMPONENT-->
+</SUBCOMPONENT>
 
 <CONNECTOR type="1501" id="1394" >
 <cdparam x="723" y="370" />
@@ -4686,7 +4686,7 @@ SRC to CWM1, CWS and SINK
 <P2  x="425" y="550" id="1269" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
-<!-- CONNECTOR type="1501" id="1404" >
+<CONNECTOR type="1501" id="1404" >
 <cdparam x="94" y="485" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -4737,7 +4737,7 @@ SRC to CWM1, CWS and SINK
 <P1  x="213" y="302" id="1287" />
 <P2  x="213" y="352" id="1292" />
 <AutomaticDrawing  data="true" />
-</CONNECTOR-->
+</CONNECTOR>
 <CONNECTOR type="1501" id="1407" >
 <cdparam x="173" y="377" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
@@ -4796,7 +4796,7 @@ SRC to CWM1, CWS and SINK
 <P2  x="456" y="117" id="1310" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
-<!-- CONNECTOR type="1501" id="1413" >
+<CONNECTOR type="1501" id="1413" >
 <cdparam x="209" y="311" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -4819,7 +4819,7 @@ SRC to CWM1, CWS and SINK
 <P1  x="683" y="305" id="1265" />
 <P2  x="683" y="345" id="1249" />
 <AutomaticDrawing  data="true" />
-</CONNECTOR-->
+</CONNECTOR>
 
 </CommunicationPatternDiagramPanel>
 

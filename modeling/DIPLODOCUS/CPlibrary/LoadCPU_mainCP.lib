@@ -64,7 +64,7 @@
 <infoparam name="point " value="null" />
 </SUBCOMPONENT>
 
-<!-- CONNECTOR type="1501" id="9922" >
+<CONNECTOR type="1501" id="9922" >
 <cdparam x="256" y="376" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -109,7 +109,7 @@
 <TGConnectingPoint num="1" id="9898" />
 <TGConnectingPoint num="2" id="9899" />
 <TGConnectingPoint num="3" id="9900" />
-</COMPONENT-->
+</COMPONENT>
 
 <COMPONENT type="1505" id="9885" >
 <cdparam x="299" y="102" />
@@ -181,7 +181,7 @@
 <P2  x="361" y="97" id="9886" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
-<!-- CONNECTOR type="1501" id="9901" >
+<CONNECTOR type="1501" id="9901" >
 <cdparam x="361" y="142" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -196,7 +196,7 @@
 <P1  x="361" y="220" id="9900" />
 <P2  x="361" y="260" id="9903" />
 <AutomaticDrawing  data="true" />
-</CONNECTOR-->
+</CONNECTOR>
 
 </CommunicationPatternDiagramPanelCopy>
 

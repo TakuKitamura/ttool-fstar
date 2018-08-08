@@ -3,7 +3,7 @@
 <TURTLEGSELECTEDCOMPONENTS version="0.96-beta1" copyMaxId="5622" decX="91" decY="17" >
 
 <CommunicationPatternDiagramPanelCopy name="MainCP" xSel="91" ySel="17" widthSel="426" heightSel="465" >
-<!-- CONNECTOR type="1501" id="5619" >
+<CONNECTOR type="1501" id="5619" >
 <cdparam x="253" y="388" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -36,7 +36,7 @@
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="point " value="null" />
-</SUBCOMPONENT-->
+</SUBCOMPONENT>
 
 <CONNECTOR type="1501" id="5617" >
 <cdparam x="318" y="297" />
@@ -117,7 +117,7 @@
 <TGConnectingPoint num="9" id="1710" />
 </COMPONENT>
 
-<!-- COMPONENT type="1508" id="5593" >
+<COMPONENT type="1508" id="5593" >
 <cdparam x="343" y="202" />
 <sizeparam width="30" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -127,7 +127,7 @@
 <TGConnectingPoint num="1" id="5595" />
 <TGConnectingPoint num="2" id="5596" />
 <TGConnectingPoint num="3" id="5597" />
-</COMPONENT-->
+</COMPONENT>
 
 <COMPONENT type="1505" id="5582" >
 <cdparam x="296" y="114" />
@@ -181,7 +181,7 @@
 <P2  x="358" y="109" id="5583" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
-<!-- CONNECTOR type="1501" id="5598" >
+<CONNECTOR type="1501" id="5598" >
 <cdparam x="358" y="154" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -196,7 +196,7 @@
 <P1  x="358" y="232" id="5597" />
 <P2  x="358" y="272" id="5600" />
 <AutomaticDrawing  data="true" />
-</CONNECTOR-->
+</CONNECTOR>
 
 </CommunicationPatternDiagramPanelCopy>
 

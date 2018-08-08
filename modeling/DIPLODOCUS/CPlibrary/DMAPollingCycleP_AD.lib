@@ -3,7 +3,7 @@
 <TURTLEGSELECTEDCOMPONENTS version="0.96-beta1" copyMaxId="141314" decX="14" decY="10" >
 
 <CommunicationPatternDiagramPanelCopy name="DMAPollingCycleP_AD" xSel="14" ySel="10" widthSel="638" heightSel="382" >
-<!--CONNECTOR type="1501" id="141311" >
+<CONNECTOR type="1501" id="141311" >
 <cdparam x="174" y="274" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -36,9 +36,9 @@
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="point " value="null" />
-</SUBCOMPONENT-->
+</SUBCOMPONENT>
 
-<!--CONNECTOR type="1501" id="141310" >
+<CONNECTOR type="1501" id="141310" >
 <cdparam x="418" y="121" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
@@ -56,7 +56,7 @@
 <TGConnectingPoint num="1" id="141307" />
 <TGConnectingPoint num="2" id="141308" />
 <TGConnectingPoint num="3" id="141309" />
-</COMPONENT-->
+</COMPONENT>
 
 <CONNECTOR type="1501" id="141303" >
 <cdparam x="271" y="184" />
@@ -163,14 +163,14 @@
 <TGConnectingPoint num="0" id="141271" />
 </COMPONENT>
 
-<!--CONNECTOR type="1501" id="141299" >
+<CONNECTOR type="1501" id="141299" >
 <cdparam x="316" y="90" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
 <P1  x="311" y="40" id="141271" />
 <P2  x="311" y="84" id="141306" />
 <AutomaticDrawing  data="true" />
-</CONNECTOR-->
+</CONNECTOR>
 
 </CommunicationPatternDiagramPanelCopy>
 

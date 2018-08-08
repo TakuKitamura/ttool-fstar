@@ -367,8 +367,8 @@ public class ActionPerformer {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARSMD_RECEIVE_SIGNAL);
         } else if (command.equals(mgui.actions[TGUIAction.ASMD_LIBRARY_FUNCTION_CALL].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARSMD_LIBRARY_FUNCTION_CALL);
-// Issue #69       } else if (command.equals(mgui.actions[TGUIAction.ASMD_PARALLEL].getActionCommand())) {
-//            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARSMD_PARALLEL);
+        } else if (command.equals(mgui.actions[TGUIAction.ASMD_PARALLEL].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARSMD_PARALLEL);
         } else if (command.equals(mgui.actions[TGUIAction.ASMD_STATE].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARSMD_STATE);
         } else if (command.equals(mgui.actions[TGUIAction.ASMD_CHOICE].getActionCommand())) {
