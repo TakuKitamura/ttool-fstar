@@ -36,27 +36,21 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui.tmlcp;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import myutil.GraphicLib;
+import ui.*;
+import ui.tmlsd.TMLSDPanel;
+import ui.util.IconManager;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Line2D;
-
-import javax.swing.JFrame;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
-
-import myutil.GraphicLib;
-import ui.ColorManager;
-import ui.TDiagramPanel;
-import ui.TGComponent;
-import ui.TGComponentManager;
-import ui.TGConnectingPoint;
-import ui.ad.TADOneLineText;
-import ui.util.IconManager;
 
 /**
  * Class TMLCPRefSD
@@ -65,12 +59,12 @@ import ui.util.IconManager;
  * @version 1.0 17/02/2014
  * @author Ludovic APVRILLE
  */
-public class TMLCPRefSD extends TADOneLineText /* Issue #69 TGCOneLineText*/ {
+public class TMLCPRefSD extends TGCOneLineText {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
     protected int arc = 5;
-	//	private TMLSDPanel refToSD;
+		private TMLSDPanel refToSD;
 //		private TGConnectorTMLCP[] connectors = new TGConnectorTMLCP[2];
 		//private int index = 0;
 
@@ -93,12 +87,11 @@ public class TMLCPRefSD extends TADOneLineText /* Issue #69 TGCOneLineText*/ {
         removable = true;
         value = "Reference to a SD";
         name = "SequenceDiagram";
-		//		refToSD = null;
+				refToSD = null;
 
         myImageIcon = IconManager.imgic400;
     }
     
-    @Override
     public void internalDrawing(Graphics g) {
         //int w2 = g.getFontMetrics().stringWidth("ref");
         int w  = g.getFontMetrics().stringWidth(value) /*+ w2*/;
@@ -125,7 +118,6 @@ public class TMLCPRefSD extends TADOneLineText /* Issue #69 TGCOneLineText*/ {
         g.drawLine(x+15, y+15, x+25, y+8);
     }
     
-    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -142,42 +134,41 @@ public class TMLCPRefSD extends TADOneLineText /* Issue #69 TGCOneLineText*/ {
         return value;
     }
     
-    @Override
+    
     public int getType() {
         return TGComponentManager.TMLCP_REF_SD;
     }
     
-    @Override
     public void addActionToPopupMenu( JPopupMenu componentMenu, ActionListener menuAL, int x, int y ) {
-    	componentMenu.addSeparator();
-    	boolean b = ((TMLCPPanel)tdp).isTMLCPSDCreated( name );
-    	JMenuItem isSDCreated;
-
-    	if( b )	{ 
-    		isSDCreated = new JMenuItem("Open diagram");
-    	}
-    	else	{
-    		isSDCreated = new JMenuItem( "Create Sequence Diagram" );
-    	}
-
-    	isSDCreated.addActionListener( menuAL );
-    	componentMenu.add( isSDCreated );
+			
+			componentMenu.addSeparator();
+      boolean b = ((TMLCPPanel)tdp).isTMLCPSDCreated( name );
+      JMenuItem isSDCreated;
+        
+      if( b )	{ 
+				isSDCreated = new JMenuItem("Open diagram");
+			}
+			else	{
+				isSDCreated = new JMenuItem( "Create Sequence Diagram" );
+      }
+        
+      isSDCreated.addActionListener( menuAL );
+      componentMenu.add( isSDCreated );
     }
     
-    @Override
     public boolean eventOnPopup(ActionEvent e) {
-    	boolean b = ((TMLCPPanel)tdp).isTMLCPSDCreated( name );
-    	if( b )	{
-    		( (TMLCPPanel)tdp ).openTMLCPSequenceDiagram( name );
-    	}
-    	else {
-    		( (TMLCPPanel)tdp ).createTMLCPSequenceDiagram( name );
-    	}
-    	tdp.getMouseManager().setSelection(-1, -1);
-    	return true;
+
+			boolean b = ((TMLCPPanel)tdp).isTMLCPSDCreated( name );
+      if( b )	{
+				( (TMLCPPanel)tdp ).openTMLCPSequenceDiagram( name );
+      }
+			else {
+				( (TMLCPPanel)tdp ).createTMLCPSequenceDiagram( name );
+			}
+      tdp.getMouseManager().setSelection(-1, -1);
+      return true;
     }
 	
-    @Override
 	public int getDefaultConnector() {
       return TGComponentManager.CONNECTOR_TMLCP;
     }
@@ -186,26 +177,28 @@ public class TMLCPRefSD extends TADOneLineText /* Issue #69 TGCOneLineText*/ {
 		refToSD = _panel;
 	}*/
 
-	@Override
-	public boolean editOndoubleClick(JFrame frame) {
-		String text = "Reference to a SD: ";
-		if( hasFather() ) {
+	@Override public boolean editOndoubleClick(JFrame frame) {
+		
+		//
+     String text = "Reference to a SD: ";
+    if( hasFather() ) {
 			text = getTopLevelName() + " / " + text;
-		}
-		String s = (String) JOptionPane.showInputDialog(frame, text,
-				"Setting Name", JOptionPane.PLAIN_MESSAGE, IconManager.imgic100, null, getName() );
-		if( (s != null) && (s.length() > 0) )	{
-			if (nameUsed(s)) {
-				JOptionPane.showMessageDialog(frame,
-						"Error: the name is already in use",
-						"Name modification",
-						JOptionPane.ERROR_MESSAGE);
-				return false;
-			}
-			renameTab(s);
+    }
+    String s = (String) JOptionPane.showInputDialog(frame, text,
+		"Setting Name", JOptionPane.PLAIN_MESSAGE, IconManager.imgic100, null, getName() );
+    if( (s != null) && (s.length() > 0) )	{
+    	if (nameUsed(s)) {
+            JOptionPane.showMessageDialog(frame,
+                                          "Error: the name is already in use",
+                                          "Name modification",
+                                          JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    		renameTab(s);
 			setName(s);
 			return true;
 		}
-		return false;
+    return false;
     }
+
 }	//End of Class

@@ -36,7 +36,12 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui;
+
+//import java.awt.*;
 
 /**
  * Class TGCWithoutInternalComponent
@@ -54,7 +59,6 @@ public abstract class TGCWithoutInternalComponent extends TGComponent{
         nbInternalTGComponent = 0;
     }
     
-    @Override
     public void setState(int s) {
         if ((s == TGState.POINTED) && (father == null)) {
             state = TGState.POINTER_ON_ME;

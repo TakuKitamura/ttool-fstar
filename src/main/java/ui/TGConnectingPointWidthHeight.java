@@ -36,7 +36,12 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui;
+
+//import java.awt.*;
 
 /**
  * Class TGConnectingPointWidthHeight
@@ -46,10 +51,8 @@ package ui;
  * @author Ludovic APVRILLE
  */
 public class TGConnectingPointWidthHeight extends TGConnectingPoint{
-
-	protected double w;
-    
-	protected double h;
+    protected double w;
+    protected double h;
 
     public TGConnectingPointWidthHeight(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
         super(_container, _x, _y, _in, _out);
@@ -57,12 +60,10 @@ public class TGConnectingPointWidthHeight extends TGConnectingPoint{
         h = _h;
     }
 
-    @Override
     public int getX() {
         return x + container.getX() + (int)(container.getWidth() * w);
     }
 
-    @Override
     public int getY() {
         return y + container.getY() + (int)(container.getHeight() * h);
     }

@@ -37,15 +37,16 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-package ui.tmlcp;
 
-import java.awt.Graphics;
-import java.util.Arrays;
-import java.util.List;
+
+ 
+package ui.tmlcp;
 
 import myutil.GraphicLib;
 import ui.*;
 import ui.util.IconManager;
+
+import java.awt.*;
 
 /**
  * Class TMLCPJoin
@@ -80,7 +81,8 @@ public class TMLCPJoin extends TGCWithoutInternalComponent{
 		connectingPoint[4] = new TGConnectingPointTMLCP(this, 0, -lineLength, true, false, 0.833, 0.0);
 		connectingPoint[5] = new TGConnectingPointTMLCP(this, 0, lineLength, false, true, 0.5, 1.0);
 
-		addTGConnectingPointsComment();
+                
+                addTGConnectingPointsComment();
 
 		nbInternalTGComponent = 0;
 
@@ -95,13 +97,11 @@ public class TMLCPJoin extends TGCWithoutInternalComponent{
 		myImageIcon = IconManager.imgic206;
 	}
 
-	@Override
 	public void internalDrawing(Graphics g) {
 		g.drawRect(x, y, width, height);
 		g.fillRect(x, y, width, height);
 	}
 
-	@Override
 	public TGComponent isOnMe(int x1, int y1) {
 		if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
 			return this;
@@ -113,21 +113,11 @@ public class TMLCPJoin extends TGCWithoutInternalComponent{
 		return tgcomponent[0].getValue();	
 	}
 	
-	@Override
 	public int getType() {
 		return TGComponentManager.TMLCP_JOIN;
 	}
 	
-	@Override
 	public int getDefaultConnector() {
-		return TGComponentManager.CONNECTOR_TMLCP;
-    }
-	
-    public List<TGConnectingPoint> getEnterConnectingPoints() {
-    	return Arrays.asList( Arrays.copyOfRange( connectingPoint, 0, connectingPoint.length - 1 ) );
-    }
-
-    public TGConnectingPoint getExitConnectingPoint() {
-    	return connectingPoint[ 5 ];
+      return TGComponentManager.CONNECTOR_TMLCP;
     }
 }

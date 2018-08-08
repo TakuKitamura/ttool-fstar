@@ -36,6 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui.ad;
 
 import myutil.GraphicLib;
@@ -52,11 +55,9 @@ import java.awt.geom.Line2D;
  * @version 1.0 21/12/2003
  * @author Ludovic APVRILLE
  */
-public class TADDeterministicDelay extends TADComponentWithSubcomponents/* Issue #69 TGCWithInternalComponent */{
-    
-	private int lineLength = 5;
-    
-	private int textX, textY;
+public class TADDeterministicDelay extends TGCWithInternalComponent {
+    private int lineLength = 5;
+    private int textX, textY;
     
     public TADDeterministicDelay(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -89,14 +90,12 @@ public class TADDeterministicDelay extends TADComponentWithSubcomponents/* Issue
         myImageIcon = IconManager.imgic214;
     }
     
-    @Override
     public void internalDrawing(Graphics g) {
         g.drawRect(x, y, width, height);
         g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
     }
     
-    @Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
         if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
             return this;
@@ -117,13 +116,13 @@ public class TADDeterministicDelay extends TADComponentWithSubcomponents/* Issue
         tgcomponent[0].setValue(value);
     }
     
-    @Override
     public int getType() {
         return TGComponentManager.TAD_DETERMINISTIC_DELAY;
     }
     
-    @Override
    	public int getDefaultConnector() {
       return TGComponentManager.CONNECTOR_AD_DIAGRAM;
     }
+    
 }
+

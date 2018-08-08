@@ -36,6 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui.avatarmad;
 
 import ui.*;
@@ -43,6 +46,8 @@ import ui.util.IconManager;
 
 import java.awt.*;
 import java.util.Vector;
+
+//import java.awt.geom.*;
 
 /**
  * Class AvatarMADCompositionConnector
@@ -52,7 +57,7 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 public  class AvatarMADCompositionConnector extends TGConnectorWithCommentConnectionPoints {
-  //  int w, h;
+    int w, h;
 	private int radius = 5;
     
     public AvatarMADCompositionConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
@@ -62,7 +67,7 @@ public  class AvatarMADCompositionConnector extends TGConnectorWithCommentConnec
 		myImageIcon = IconManager.imgic1012;
     }
     
-    @Override
+    
     protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
 		 
         //g.drawLine(x1, y1, x2, y2);

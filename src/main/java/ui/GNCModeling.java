@@ -36,6 +36,10 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
+
 package ui;
 
 import myutil.TreeCell;
@@ -45,7 +49,6 @@ import ui.ncdd.*;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.ListIterator;
 
 /**
@@ -61,14 +64,16 @@ public class GNCModeling  {
 	private NCDiagramPanel ncdp;
     private LinkedList<CheckingError> checkingErrors, warnings;
 	private CorrespondanceTGElement listE;
-	//private NCStructure nc;
+	private NCStructure nc;
 	
 	private static int PATH_INDEX = 0;
-	    
+	
+    
     public GNCModeling(NCPanel _ncp) {
         ncp = _ncp;
 		ncdp = ncp.ncdp;
     }
+	
     
 	public NCStructure translateToNCStructure() {
 		PATH_INDEX = 0;
@@ -88,6 +93,8 @@ public class GNCModeling  {
 			manageParameters();
 		}
 		
+		//
+		
         return ncs;
     }
 	
@@ -95,7 +102,8 @@ public class GNCModeling  {
 		return listE;
 	}
     
-    public List<CheckingError> getCheckingErrors() {
+    
+    public LinkedList<CheckingError> getCheckingErrors() {
         return checkingErrors;
     }
     
@@ -104,16 +112,16 @@ public class GNCModeling  {
     }
     
 	private void addEquipments() {
-		ListIterator<NCEqNode> iterator = ncdp.getListOfEqNode().listIterator();
+		ListIterator iterator = ncdp.getListOfEqNode().listIterator();
 		NCEqNode node;
 		NCEquipment eq;
-	//	NCConnectorNode con;
-		//int cpt;
+		NCConnectorNode con;
+		int cpt;
 		
 		
 		
 		while(iterator.hasNext()) {
-			node = iterator.next();
+			node = (NCEqNode)(iterator.next());
 			
 			// Find the only interface of that Equipment
 			// If more than one interface -> error
@@ -155,13 +163,13 @@ public class GNCModeling  {
 	}
 	
 	private void addSwitches() {
-		ListIterator<NCSwitchNode> iterator = ncdp.getListOfSwitchNode().listIterator();
+		ListIterator iterator = ncdp.getListOfSwitchNode().listIterator();
 		NCSwitchNode node;
 		NCSwitch sw;
 		NCCapacityUnit unit = new NCCapacityUnit();
 		
 		while(iterator.hasNext()) {
-			node = iterator.next();
+			node = (NCSwitchNode)(iterator.next());
 			
 			sw= new NCSwitch();
 			sw.setName(node.getNodeName());
@@ -176,13 +184,13 @@ public class GNCModeling  {
 	}
 	
 	private void addTraffics() {
-		ListIterator<NCTrafficArtifact> iterator = ncdp.getTrafficArtifacts().listIterator();
+		ListIterator iterator = ncdp.getTrafficArtifacts().listIterator();
 		NCTrafficArtifact arti;
 		NCTraffic tr;
 		NCTimeUnit unit;
 		
 		while(iterator.hasNext()) {
-			arti = iterator.next();
+			arti = (NCTrafficArtifact)(iterator.next());
 			tr = new NCTraffic();
 			tr.setName(arti.getValue());
 			tr.setPeriodicType(arti.getPeriodicType());
@@ -202,9 +210,9 @@ public class GNCModeling  {
 	}
 	
 	private void addLinks() {
-		ListIterator<NCConnectorNode> iterator = ncdp.getListOfLinks().listIterator();
+		ListIterator iterator = ncdp.getListOfLinks().listIterator();
 		NCConnectorNode nccn;
-		NCLink lk = null;//, lkr;
+		NCLink lk = null, lkr;
 		boolean added;
 		TGComponent tgc;
 		TGConnectingPoint tp;
@@ -215,7 +223,7 @@ public class GNCModeling  {
 		
 		while(iterator.hasNext()) {
 			added = false;
-			nccn = iterator.next();
+			nccn = (NCConnectorNode)(iterator.next());
 			
 			if (ncdp.isALinkBetweenEquipment(nccn)) {
 				UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Link connected between two equipments: " + nccn.getInterfaceName());
@@ -297,24 +305,19 @@ public class GNCModeling  {
 						nccu.setUnit(nccn.getCapacityUnit());
 						lk.setCapacityUnit(nccu);
 					} else {
-						if (switch1 == null && switch2 != null ) {
+						if (switch1 == null) {
 							lk.setCapacity(switch2.getCapacity());
 							nccu = new NCCapacityUnit();
 							nccu.setUnit(switch2.getCapacityUnit());
 							lk.setCapacityUnit(nccu);
 						}
-						// DB: Seems to be a bug...
-						else if (switch2 == null && switch1 != null ) {
+						if (switch2 == null) {
 							lk.setCapacity(switch1.getCapacity());
 							nccu = new NCCapacityUnit();
-							
-							// DB looks like a copy paste error
-							nccu.setUnit(switch1.getCapacityUnit());
-//							nccu.setUnit(switch2.getCapacityUnit());
+							nccu.setUnit(switch2.getCapacityUnit());
 							lk.setCapacityUnit(nccu);
 						}
-						else {
-						//if ((switch1 != null) && (switch2 != null)) {
+						if ((switch1 != null) && (switch2 != null)) {
 							if (switch1.getCapacity() != switch2.getCapacity()) {
 								UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Link with no capacity between two switches of different capacity: " + nccn.getInterfaceName());
 								ce.setTDiagramPanel(ncdp);
@@ -354,18 +357,18 @@ public class GNCModeling  {
 		// Consider each traffic
 		// For each traffic, its builds a tree
 		// Then, its generates the corresponding paths
-		ListIterator<NCTrafficArtifact> iterator = ncdp.getTrafficArtifacts().listIterator();
+		ListIterator iterator = ncdp.getTrafficArtifacts().listIterator();
 		NCTrafficArtifact arti;
 		NCTraffic tr;
 		TreeCell tree;
 		int ret;
-		//NCPath path;
+		NCPath path;
 		NCEqNode node;
 		NCEquipment eq;
-		List<String> list;
+		ArrayList<String> list;
 		
 		while(iterator.hasNext()) {
-			arti = iterator.next();
+			arti = (NCTrafficArtifact)(iterator.next());
 			
 			tr = ncs.getTrafficByName(arti.getValue());
 			if (tr == null) {
@@ -396,7 +399,7 @@ public class GNCModeling  {
 		}
 	}
 	
-	private void exploreTree(TreeCell tree, List<String> list, NCEquipment origin, NCTraffic traffic) {
+	public void exploreTree(TreeCell tree, ArrayList<String> list, NCEquipment origin, NCTraffic traffic) {
 		NCSwitchNode sw;
 		NCSwitch ncsw;
 		NCLinkedElement ncle;
@@ -502,7 +505,7 @@ public class GNCModeling  {
 		
 		// Find the only interface of that Equipment
 		// If more than one interface -> error
-		List<NCSwitchNode> listsw = ncdp.getSwitchesOfEq(node);
+		ArrayList<NCSwitchNode> listsw = ncdp.getSwitchesOfEq(node);
 		
 		if (listsw.size() == 0) {
 			UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Equipment " + node.getName() + " has non interface: traffic " + arti.getValue() + " cannot be sent over the network");
@@ -566,10 +569,10 @@ public class GNCModeling  {
 		TreeCell cell;
 		NCConnectorNode nextArriving;
 		
-		List<NCRoute> computed = new ArrayList<NCRoute>(); 
+		ArrayList<NCRoute> computed = new ArrayList<NCRoute>(); 
 		
 		// Get all routes concerning that traffic on that switch
-		List<NCRoute> routes = ncdp.getAllRoutesFor(sw, arti);
+		ArrayList<NCRoute> routes = ncdp.getAllRoutesFor(sw, arti);
 		
 		//
 		
@@ -700,9 +703,9 @@ public class GNCModeling  {
 	}
 	
 	public void manageParameters() {
-		//ListIterator iterator;
+		ListIterator iterator;
 		NCEqNode node1, node2;
-		List<NCConnectorNode> cons1, cons2;
+		ArrayList<NCConnectorNode> cons1, cons2;
 		NCConnectorNode con1, con2;
 		int i;
 		int parameter1, parameter2;
@@ -713,14 +716,14 @@ public class GNCModeling  {
 		//NCPath path1;
 		
 		//ArrayList<NCEquipment> newEquipments = new ArrayList<NCEquipment>();
-		//List<NCTraffic> newTraffics = new ArrayList<NCTraffic>();
-		//List<NCLink> newLinks = new ArrayList<NCLink>();
-		List<NCPath> newPaths = new ArrayList<NCPath>();
+		ArrayList<NCTraffic> newTraffics = new ArrayList<NCTraffic>();
+		ArrayList<NCLink> newLinks = new ArrayList<NCLink>();
+		ArrayList<NCPath> newPaths = new ArrayList<NCPath>();
 		
-		List<NCEquipment> oldEquipments = new ArrayList<NCEquipment>();
-		List<NCTraffic> oldTraffics = new ArrayList<NCTraffic>();
-		List<NCLink> oldLinks = new ArrayList<NCLink>();
-		List<NCPath> oldPaths = new ArrayList<NCPath>();
+		ArrayList<NCEquipment> oldEquipments = new ArrayList<NCEquipment>();
+		ArrayList<NCTraffic> oldTraffics = new ArrayList<NCTraffic>();
+		ArrayList<NCLink> oldLinks = new ArrayList<NCLink>();
+		ArrayList<NCPath> oldPaths = new ArrayList<NCPath>();
 		
 		// Are there any path to duplicate?
 		for(NCPath path: ncs.paths) {
@@ -859,4 +862,5 @@ public class GNCModeling  {
 			cpt ++;
 		}
 	}
+
 }

@@ -36,6 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui.tmlcompd;
 
 import myutil.GraphicLib;
@@ -48,12 +51,8 @@ import ui.util.IconManager;
 import ui.window.JDialogTMLRemoteCompositeComponent;
 
 import javax.swing.*;
-
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
+import java.awt.*;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
 * Class TMLCRemoteCompositeComponent
@@ -138,7 +137,6 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
 		}
 	}
     
-	@Override
     public void internalDrawing(Graphics g) {
 		int w;
 		int c;
@@ -260,7 +258,6 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
 		}
     }
 	
-	@Override
 	public void rescale(double scaleFactor){
 		dtextX = (textX + dtextX) / oldScaleFactor * scaleFactor;
 		textX = (int)(dtextX);
@@ -273,7 +270,6 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
 		super.rescale(scaleFactor);
 	}
     
-	@Override
     public TGComponent isOnOnlyMe(int _x, int _y) {
 		if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -281,7 +277,7 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
         return null;
     }
 	
-	@Override
+    
     public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
 		
 		// On the icon?
@@ -320,7 +316,6 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
 		return false;
     }
 	
-	@Override
 	protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         
@@ -359,7 +354,7 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
 			TMLCRemotePortCompositeComponent pcc;
 			TGConnectingPoint[] old = null;
 			
-			List<TMLCCompositePort> tmp = null;
+			ArrayList<TMLCCompositePort> tmp = null;
 			//ArrayList<TMLCReferencePortConnectingPoint> points = new ArrayList<TMLCReferencePortConnectingPoint>();
 			
             for(int i=0; i<nl.getLength(); i++) {
@@ -463,30 +458,29 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
 			((TMLComponentTaskDiagramPanel)getTDiagramPanel()).makePaths();
             
         } catch (Exception e) {
-            throw new MalformedModelingException( e );
+            throw new MalformedModelingException();
         }
 		
     }
     
-	@Override
+    
     public int getType() {
         return TGComponentManager.TMLCTD_CREMOTECOMPONENT;
     }
 	
-	@Override
 	public void wasSwallowed() {
 		myColor = null;
 	}
 	
-	@Override
 	public void wasUnswallowed() {
 		myColor = null;
 		setFather(null);
 		TDiagramPanel tdp = getTDiagramPanel();
 		setCdRectangle(tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY());
+		
 	}
 	
-	@Override
+    
     public void hasBeenResized() {
 		rescaled = true;
         /*for(int i=0; i<nbInternalTGComponent; i++) {
@@ -506,7 +500,6 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
 		}
     }
 	
-	@Override
 	public void resizeWithFather() {
         if ((father != null) && ((father instanceof TMLCCompositeComponent) ||(father instanceof TMLCPrimitiveComponent))) {
 			// Too large to fit in the father? -> resize it!
@@ -517,30 +510,30 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
         }
     }
 	
-	public List<TMLCPrimitiveComponent> getAllPrimitiveComponents() {
+	public java.util.List<TMLCPrimitiveComponent> getAllPrimitiveComponents() {
 		if (tmlcc == null) {
 			return new ArrayList<TMLCPrimitiveComponent>();
 		}
 		return tmlcc.getAllPrimitiveComponents();
 	}
 	
-	public List<TMLCRecordComponent> getAllRecordComponents() {
+	public java.util.List<TMLCRecordComponent> getAllRecordComponents() {
 		if (tmlcc == null) {
 			return new ArrayList<TMLCRecordComponent>();
 		}
 		return tmlcc.getAllRecordComponents();
 	}
 	
-	public List<TMLCCompositePort> getAllInternalCompositePorts() {
-		List<TMLCCompositePort> list = new ArrayList<TMLCCompositePort>();
+	public java.util.List<TMLCCompositePort> getAllInternalCompositePorts() {
+		java.util.List<TMLCCompositePort> list = new ArrayList<TMLCCompositePort>();
 		if (tmlcc == null) {
 			return list;
 		}
 		return tmlcc.getAllInternalCompositePorts();
 	}
 	
-	public List<TMLCPrimitivePort> getAllInternalPrimitivePorts() {
-		List<TMLCPrimitivePort> list = new ArrayList<TMLCPrimitivePort>();
+	public ArrayList<TMLCPrimitivePort> getAllInternalPrimitivePorts() {
+		ArrayList<TMLCPrimitivePort> list = new ArrayList<TMLCPrimitivePort>();
 		if (tmlcc == null) {
 			return list;
 		}
@@ -580,7 +573,7 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
 	// to a list of those points, keep that list, and then, generate a array of those points.
 	public void updatePorts() {
 		//TraceManager.addDev("Update my ports");
-		List<TMLCCompositePort> list = tmlcc.getFirstLevelCompositePorts();
+		ArrayList<TMLCCompositePort> list = tmlcc.getFirstLevelCompositePorts();
 		int cpt=0;
 		
 		/*TraceManager.addDev("list size:" + list.size());
@@ -611,7 +604,7 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
 		if (change) {
 			TraceManager.addDev("change on  ports!");
 			// Delete unused ports and 
-			List<TMLCReferencePortConnectingPoint> points = new ArrayList<TMLCReferencePortConnectingPoint>();
+			ArrayList<TMLCReferencePortConnectingPoint> points = new ArrayList<TMLCReferencePortConnectingPoint>();
 			cpt=0;
 			
 			for(i=0; i<ports.size(); i++) {
@@ -706,6 +699,7 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
 		int i;
         //TraceManager.addDev("name= " + name + " nbCP=" + nbConnectingPoint + " num=" + num +  "id=" + id);
 		try {
+			
 			if (connectingPoint == null) {
 				nbConnectingPoint = num + 1;
 				connectingPoint = new TGConnectingPoint[nbConnectingPoint];
@@ -787,13 +781,11 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
 		}
     }*/
 	
-	@Override
 	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
         return tgc instanceof TMLCRemotePortCompositeComponent;
 
     }
 	
-	@Override
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
 		if (!acceptSwallowedTGComponent(tgc)) {
 			return false;
@@ -807,7 +799,6 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
 		 return true;
 	}
 	
-	@Override
     public void removeSwallowedTGComponent(TGComponent tgc) {
 	}
 	
@@ -825,4 +816,5 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
 	public TMLCCompositeComponent getReference() {
 		return tmlcc;
 	}
+    
 }

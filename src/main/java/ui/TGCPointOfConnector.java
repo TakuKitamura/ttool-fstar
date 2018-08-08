@@ -109,13 +109,4 @@ public class TGCPointOfConnector extends TGCScalableWithoutInternalComponent {
     public int getCurrentMaxY() {
     	return getY() + getHeight();
     }
-
-	/* Issue #69
-	 * (non-Javadoc)
-	 * @see ui.CDElement#canBeDisabled()
-	 */
-	@Override
-	public boolean canBeDisabled() {
-		return false;
-	}
 }

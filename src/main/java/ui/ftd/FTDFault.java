@@ -36,7 +36,11 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui.ftd;
+
 
 import myutil.GraphicLib;
 import myutil.TraceManager;
@@ -50,6 +54,11 @@ import ui.window.JDialogFault;
 import javax.swing.*;
 import java.awt.*;
 
+
+//import org.w3c.dom.*;
+//import org.xml.sax.*;
+//import javax.xml.parsers.*;
+
 /**
  * Class FTDFault
  * Panel used for drawing fault trees
@@ -58,7 +67,7 @@ import java.awt.*;
  * @author Ludovic APVRILLE
  */
 
-public class FTDFault extends TGCScalableWithInternalComponent implements SwallowedTGComponent, WithAttributes, CheckableAccessibility/*, Issue #69 CanBeDisabled*/ {
+public class FTDFault extends TGCScalableWithInternalComponent implements SwallowedTGComponent, WithAttributes, CheckableAccessibility, CanBeDisabled {
     public static double DEFAULT_PROBABILITY = 0.5;
 
     private int textY1 = 3;
@@ -130,7 +139,6 @@ public class FTDFault extends TGCScalableWithInternalComponent implements Swallo
         myImageIcon = IconManager.imgic702;
     }
 
-    @Override
     public void internalDrawing(Graphics g) {
         String ster;
         if (isRootFault) {
@@ -175,11 +183,7 @@ public class FTDFault extends TGCScalableWithInternalComponent implements Swallo
                 g.setColor(ColorManager.FTD_FAULT);
             }
         } else {
-    		// Issue #69: Disabled color now managed in TGComponent / ColorManager
-	    	// For filled shapes ensure background color is white so that text is
-	    	// readable
-	    	g.setColor( ColorManager.DISABLED_FILLING );
-            //g.setColor(ColorManager.FTD_FAULT_DISABLED);
+            g.setColor(ColorManager.FTD_FAULT_DISABLED);
         }
 
         g.fill3DRect(x+1, y+1, width-1, height-1, true);
@@ -230,22 +234,25 @@ public class FTDFault extends TGCScalableWithInternalComponent implements Swallo
                 }
             }
 
-            // Issue #69
-//            if (!isEnabled()) {
-//                String val = "disabled";
-//                w = g.getFontMetrics().stringWidth(val);
-//                //int h =  currentFontSize + (int)(textY1 * tdp.getZoom());
-//                g.setFont(f.deriveFont(Font.ITALIC));
-//                g.drawString(val, x + (width - w - 5), y + height - 2);
-//            }
+            if (!isEnabled()) {
+                String val = "disabled";
+                w = g.getFontMetrics().stringWidth(val);
+                //int h =  currentFontSize + (int)(textY1 * tdp.getZoom());
+                g.setFont(f.deriveFont(Font.ITALIC));
+                g.drawString(val, x + (width - w - 5), y + height - 2);
+            }
+
+
+
         } else {
             TraceManager.addDev("-------------------------------------------------- Cannot display text of attack");
         }
 
         g.setFont(fold);
+
     }
 
-    private void setValue(String val, Graphics g) {
+    public void setValue(String val, Graphics g) {
         oldValue = value;
         String ster;
         if (isRootFault) {
@@ -271,10 +278,12 @@ public class FTDFault extends TGCScalableWithInternalComponent implements Swallo
             resizeWithFather();
         }
 
+
         g.setFont(f0);
+
+        //
     }
 
-    @Override
     public void resizeWithFather() {
         if ((father != null) && (father instanceof FTDBlock)) {
             //
@@ -284,7 +293,7 @@ public class FTDFault extends TGCScalableWithInternalComponent implements Swallo
         }
     }
 
-    @Override
+
     public boolean editOndoubleClick(JFrame frame) {
         String tmp;
         boolean error = false;
@@ -319,6 +328,8 @@ public class FTDFault extends TGCScalableWithInternalComponent implements Swallo
             probability = new Double(dialog.getProbability()).doubleValue();
         }
 
+
+
         isRootFault = dialog.isRootFault();
 
         if (error) {
@@ -331,20 +342,18 @@ public class FTDFault extends TGCScalableWithInternalComponent implements Swallo
         return !error;
     }
 
-    @Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
+
         if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
             return this;
         }
         return null;
     }
 
-    @Override
     public int getType() {
         return TGComponentManager.FTD_FAULT;
     }
 
-    @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<info description=\"" + description);
@@ -352,13 +361,14 @@ public class FTDFault extends TGCScalableWithInternalComponent implements Swallo
         sb.append("\" probability=\"" + probability);
         sb.append("\" />\n");
         sb.append("</extraparam>\n");
-
         return new String(sb);
     }
 
     @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
+        //
         try {
+
             NodeList nli;
             Node n1, n2;
             Element elt;
@@ -408,9 +418,10 @@ public class FTDFault extends TGCScalableWithInternalComponent implements Swallo
             }
 
         } catch (Exception e) {
-            throw new MalformedModelingException( e );
+            throw new MalformedModelingException();
         }
     }
+
 
     public double getProbability() {
         return probability;
@@ -434,6 +445,7 @@ public class FTDFault extends TGCScalableWithInternalComponent implements Swallo
         return s;
     }
 
+
     public boolean isRootFault() {
         return isRootFault;
     }
@@ -444,13 +456,6 @@ public class FTDFault extends TGCScalableWithInternalComponent implements Swallo
         setCdRectangle(tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY());
 
     }
-    
-    /**
-     * Issue #69
-     * @return
-     */
-    @Override
-    public boolean canBeDisabled() {
-    	return true;
-    }
+
+
 }

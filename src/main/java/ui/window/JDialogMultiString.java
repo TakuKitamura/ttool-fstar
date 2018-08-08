@@ -36,25 +36,15 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
 package ui.window;
 
-import java.awt.Container;
-import java.awt.Font;
-import java.awt.Frame;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 /**
  * Class JDialogMultiString
@@ -78,9 +68,9 @@ public class JDialogMultiString extends JDialogBase implements ActionListener {
     // Panel1
     private JTextField[] texts;
     private JButton inserts[];
-    private Map<Integer, JComboBox<String>> helps;
+    private HashMap<Integer, JComboBox<String>> helps;
 
-    private List<String[]> possibleValues = null;
+    private ArrayList<String[]> possibleValues = null;
 
 
     /**
@@ -99,11 +89,11 @@ public class JDialogMultiString extends JDialogBase implements ActionListener {
         texts = new JTextField[nbString];
 
         initComponents();
-     //   myInitComponents();
+        myInitComponents();
         pack();
     }
 
-    public JDialogMultiString(Frame f, String title, int _nbString, String[] _labels, String[] _values, List<String[]> _possibleValues) {
+    public JDialogMultiString(Frame f, String title, int _nbString, String[] _labels, String[] _values, ArrayList<String[]> _possibleValues) {
 
         super(f, title, true);
 
@@ -115,12 +105,13 @@ public class JDialogMultiString extends JDialogBase implements ActionListener {
         texts = new JTextField[nbString];
 
         initComponents();
-    //    myInitComponents();
+        myInitComponents();
         pack();
     }
 
-//    private void myInitComponents() {
-//    }
+
+    private void myInitComponents() {
+    }
 
     private void initComponents() {
         inserts = new JButton[labels.length];
@@ -201,7 +192,6 @@ public class JDialogMultiString extends JDialogBase implements ActionListener {
         initButtons(c0, c, this);
     }
 
-    @Override
     public void actionPerformed(ActionEvent evt) {
         String command = evt.getActionCommand();
 
@@ -218,6 +208,7 @@ public class JDialogMultiString extends JDialogBase implements ActionListener {
             }
         }
     }
+
 
     public void closeDialog() {
         set = true;

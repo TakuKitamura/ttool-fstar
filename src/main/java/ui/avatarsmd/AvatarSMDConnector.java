@@ -36,6 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
 package ui.avatarsmd;
 
 import myutil.GraphicLib;
@@ -123,7 +124,6 @@ public class AvatarSMDConnector extends TGConnectorWithCommentConnectionPoints i
         tgc.setTimes(minDelay, maxDelay, minCompute, maxCompute);
     }
 
-    @Override
     protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
         if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
             g.drawLine(x1, y1, x2, y2);
@@ -132,7 +132,6 @@ public class AvatarSMDConnector extends TGConnectorWithCommentConnectionPoints i
         }
     }
 
-    @Override
     public boolean editOndoubleClick(JFrame frame) {
         AvatarSMDTransitionInfo info = getAvatarSMDTransitionInfo();
         if (info == null) {
@@ -141,7 +140,6 @@ public class AvatarSMDConnector extends TGConnectorWithCommentConnectionPoints i
         return info.editOndoubleClick(frame);
     }
 
-    @Override
     public int getType() {
         return TGComponentManager.AVATARSMD_CONNECTOR;
     }
@@ -159,191 +157,66 @@ public class AvatarSMDConnector extends TGConnectorWithCommentConnectionPoints i
         return getAvatarSMDTransitionInfo().getGuard();
     }
 
-    public String getEffectiveGuard() {
-        return getAvatarSMDTransitionInfo().getEffectiveGuard();
+    public String getTotalMinDelay() {
+        String s1 = getAvatarSMDTransitionInfo().getAfterMinDelay();
+        String s2 = getAvatarSMDTransitionInfo().getComputeMinDelay();
+        return addedDelays(s1, s2);
     }
-//
-//    public String getTotalMinDelay() {
-//        String s1 = getAvatarSMDTransitionInfo().getAfterMinDelay();
-//        String s2 = getAvatarSMDTransitionInfo().getComputeMinDelay();
-//        return addedDelays(s1, s2);
-//    }
-//
-//    public String getTotalMaxDelay() {
-//        String s1 = getAvatarSMDTransitionInfo().getAfterMaxDelay();
-//        String s2 = getAvatarSMDTransitionInfo().getComputeMaxDelay();
-//        return addedDelays(s1, s2);
-//    }
-//
-//    public String addedDelays(String s1, String s2) {
-//        if (s1.trim().length() == 0) {
-//            return s2.trim();
-//        } else {
-//            if (s2.trim().length() == 0) {
-//                return s1;
-//            } else {
-//                return "(" + s1 + ") + (" + s2 + ")";
-//            }
-//        }
-//    }
+
+    public String getTotalMaxDelay() {
+        String s1 = getAvatarSMDTransitionInfo().getAfterMaxDelay();
+        String s2 = getAvatarSMDTransitionInfo().getComputeMaxDelay();
+        return addedDelays(s1, s2);
+    }
+
+    public String addedDelays(String s1, String s2) {
+        if (s1.trim().length() == 0) {
+            return s2.trim();
+        } else {
+            if (s2.trim().length() == 0) {
+                return s1;
+            } else {
+                return "(" + s1 + ") + (" + s2 + ")";
+            }
+        }
+    }
 
     public Vector<String> getActions() {
         return getAvatarSMDTransitionInfo().getActions();
-    }
-  
-    public Vector<String> getEffectiveActions() {
-        return getAvatarSMDTransitionInfo().getEffectiveActions();
     }
 
     public String getAfterMinDelay() {
         return getAvatarSMDTransitionInfo().getAfterMinDelay();
     }
-    
-    public String getEffectiveAfterMinDelay() {
-        return getAvatarSMDTransitionInfo().getEffectiveAfterMinDelay();
-    }
 
     public String getAfterMaxDelay() {
         return getAvatarSMDTransitionInfo().getAfterMaxDelay();
     }
-    public String getEffectiveAfterMaxDelay() {
-        return getAvatarSMDTransitionInfo().getEffectiveAfterMaxDelay();
-    }
 
     public String getComputeMinDelay() {
         return getAvatarSMDTransitionInfo().getComputeMinDelay();
-    }
-    
-    public String getEffectiveComputeMinDelay() {
-        return getAvatarSMDTransitionInfo().getEffectiveComputeMinDelay();
     }
 
     public String getComputeMaxDelay() {
         return getAvatarSMDTransitionInfo().getComputeMaxDelay();
     }
 
-    public String getEffectiveComputeMaxDelay() {
-        return getAvatarSMDTransitionInfo().getEffectiveComputeMaxDelay();
-    }
-
     public String getProbability() {
         return getAvatarSMDTransitionInfo().getProbability();
     }
 
-    public String getEffectiveProbability() {
-        return getAvatarSMDTransitionInfo().getEffectiveProbability();
+
+
+
+    public String getFilesToInclude() {
+        return getAvatarSMDTransitionInfo().getFilesToInclude();
     }
-//
-//    public String getFilesToInclude() {
-//        return getAvatarSMDTransitionInfo().getFilesToInclude();
-//    }
-//
-//    public String getCodeToInclude() {
-//        return getAvatarSMDTransitionInfo().getCodeToInclude();
-//    }
+
+    public String getCodeToInclude() {
+        return getAvatarSMDTransitionInfo().getCodeToInclude();
+    }
 
     public String getAttributes() {
         return getAvatarSMDTransitionInfo().getAttributes();
-    }
-	
-    /**
-     * Issue #69
-     * @param _enabled
-     */
-    @Override
-    public void setEnabled( final boolean _enabled ) {
-    	if ( p2 != null ) {
-    		p2.acceptForward( new EnablingAvatarSMDConnectorVisitor( _enabled ) );
-    	}
-    }
-    
-    /**
-     * Issue #69
-     * @return
-     */
-    @Override
-    public boolean canBeDisabled() {
-		if ( p2 != null ) {
-			if ( p2.getFather() instanceof AvatarSMDStopState ) {
-				return false;
-			}
-		}
-
-		return canBeDisabledContainer();
-    }
-    
-    public boolean canBeDisabledContainer() {
-		if ( p2 != null ) {
-			if ( p2.getFather() instanceof TGComponent && ( (TGComponent) p2.getFather() ).getFather() instanceof AvatarSMDState ) {
-				if ( !( (TGComponent) p2.getFather() ).getFather().isEnabled() ) {
-					return false;
-				}
-			}
-		}
-		
-		if ( p1 != null ) {
-			if ( p1.getFather() instanceof TGComponent && ( (TGComponent) p1.getFather() ).getFather() instanceof AvatarSMDState ) {
-				if ( !( (TGComponent) p1.getFather() ).getFather().isEnabled() ) {
-					return false;
-				}
-			}
-		}
-		
-		return true;
-    }
-    
-    public boolean isContainedInEnabledState() {
-    	final AvatarSMDState sourceContainingState = getContainingState( p1 );
-    	
-    	if ( sourceContainingState != null && sourceContainingState.isEnabled() ) {
-    		return true;
-    	}
-    	
-    	final AvatarSMDState targetContainingState = getContainingState( p2 );
-    	
-    	return targetContainingState != null && targetContainingState.isEnabled();
-    }
-
-    public AvatarSMDState getContainingState() {
-    	final AvatarSMDState sourceContainingState = getContainingState( p1 );
-    	
-    	final AvatarSMDState targetContainingState = getContainingState( p2 );
-    	
-    	if ( sourceContainingState == targetContainingState ) {
-    		return sourceContainingState;
-    	}
-    	
-    	return null;
-    }
-    
-    private AvatarSMDState getContainingState( final TGConnectingPoint point ) {
-    	if ( p1 == null ) {
-    		return null;
-    	}
-
-    	if ( point.getFather() instanceof TGComponent ) {
-    		final TGComponent sourceComponent = (TGComponent) point.getFather();
-    		
-    		if ( sourceComponent.getFather() instanceof AvatarSMDState ) {
-    			return (AvatarSMDState) sourceComponent.getFather();
-    		}
-    	}
-    	
-    	return null;
-    }
-    
-    
-    /** Issue #69
-     * @return
-     */
-    public boolean isEnabled( boolean checkBranch ) {
-    	if ( checkBranch && p2 != null ) {
-    		final ForwardComponentsEnabledVisitor visitor = new ForwardComponentsEnabledVisitor();
-    		p2.acceptForward( visitor );
-    		
-    		return visitor.isEnabled();
-    	}
-    	
-    	return super.isEnabled();
     }
 }

@@ -425,7 +425,7 @@ public class TGUIAction extends AbstractAction {
     public static final int ASMD_SEND_SIGNAL = 296;
     public static final int ASMD_RECEIVE_SIGNAL = 297;
     public static final int ASMD_LIBRARY_FUNCTION_CALL = 432;
-    //public static final int ASMD_PARALLEL = 298; Issue #69
+    public static final int ASMD_PARALLEL = 298;
     public static final int ASMD_STATE = 299;
     public static final int ASMD_CHOICE = 325;
     public static final int ASMD_RANDOM = 326;
@@ -1301,7 +1301,7 @@ public class TGUIAction extends AbstractAction {
         actions[ASMD_RECEIVE_SIGNAL] = new TAction("add-asmd-receivesignal", "Receive signal", IconManager.imgic2016, IconManager.imgic2016, "Receive signal", "Add a receive signal operator to the currently opened AVATAR state machine diagram", 0);
         // TODO: change icon
         actions[ASMD_LIBRARY_FUNCTION_CALL] = new TAction("add-asmd-libraryfunctioncall", "Library function call", IconManager.imgic2018, IconManager.imgic2018, "Library function call", "Add a library function call to the currently opened AVATAR state machine diagram", 0);
-        //actions[ASMD_PARALLEL] = new TAction("add-asmd-parallel", "Parallel", IconManager.imgic206, IconManager.imgic206, "Parallel", "Add a parallel operator to the currently opened AVATAR state machine diagram", 0);
+        actions[ASMD_PARALLEL] = new TAction("add-asmd-parallel", "Parallel", IconManager.imgic206, IconManager.imgic206, "Parallel", "Add a parallel operator to the currently opened AVATAR state machine diagram", 0);
         actions[ASMD_STATE] = new TAction("add-asmd-state", "State", IconManager.imgic5036, IconManager.imgic5036, "State", "Add a new state to the currently opened AVATAR state machine diagram", 0);
         actions[ASMD_CHOICE] = new TAction("add-asmd-choice", "Add Choice", IconManager.imgic208, IconManager.imgic208, "Choice", "Add a choice - non-deterministic or guarded - to the currently opened AVATAR state machine diagram", 0);
         actions[ASMD_RANDOM] = new TAction("add-asmd-random", "Add random", IconManager.imgic924, IconManager.imgic924, "Select random", "Add a random operator to the currently opened AVATAR State Machine diagram", 0);
@@ -1382,8 +1382,9 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_GENERATE_ONTOLOGIES_ALL_DIAGRAMS] = new TAction("generate-ontology-all-diagrams", "Generate ontology (all diagrams)", IconManager.imgic338, IconManager.imgic339, "Generate ontology (all diagrams)",  "Generate the ontology for the diagrams under edition", 0);
 
         actions[MOVE_ENABLED] = new TAction("Move", "Move enabled", IconManager.imgic780, IconManager.imgic780, "Move enabled (shift + arrow)", "Move", 0);
-        actions[FIRST_DIAGRAM] = new TAction("FirstDiagram", "First Diagram", IconManager.imgic142, IconManager.imgic142, "Switch the the first diagram", "Switch to the first diagram", 0);
+	actions[FIRST_DIAGRAM] = new TAction("FirstDiagram", "First Diagram", IconManager.imgic142, IconManager.imgic142, "Switch the the first diagram", "Switch to the first diagram", 0);
     }
+
 
     public String getActionCommand()  {
         return (String)getValue(Action.ACTION_COMMAND_KEY);
@@ -1397,7 +1398,6 @@ public class TGUIAction extends AbstractAction {
         return (String)getValue(Action.LONG_DESCRIPTION);
     }
 
-    @Override
     public void actionPerformed(ActionEvent evt)  {
         if (listeners != null) {
             Object[] listenerList = listeners.getListenerList();

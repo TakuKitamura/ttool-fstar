@@ -36,6 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui.tmlcp;
 
 import ui.*;
@@ -57,7 +60,6 @@ public class TMLCPPanel extends TDiagramPanel {
 
     }
     
-    @Override
     public boolean actionOnDoubleClick(TGComponent tgc) {
         //
         /*if (tgc instanceof TCDTClass) {
@@ -78,7 +80,6 @@ public class TMLCPPanel extends TDiagramPanel {
         return false;
     }
     
-    @Override
     public boolean actionOnAdd(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {
             TCDTClass tgcc = (TCDTClass)(tgc);
@@ -88,7 +89,6 @@ public class TMLCPPanel extends TDiagramPanel {
         return false;
     }
     
-    @Override
     public boolean actionOnRemove(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {
             TCDTClass tgcc = (TCDTClass)(tgc);
@@ -99,7 +99,6 @@ public class TMLCPPanel extends TDiagramPanel {
         return false;
     }
     
-    @Override
     public boolean actionOnValueChanged(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {
             return actionOnDoubleClick(tgc);
@@ -107,32 +106,26 @@ public class TMLCPPanel extends TDiagramPanel {
         return false;
     }
     
-    @Override
     public String getXMLHead() {
         return "<CommunicationPatternDiagramPanel name=\"" + name + "\"" + sizeParam() + " >";
     }
     
-    @Override
     public String getXMLTail() {
         return "</CommunicationPatternDiagramPanel>";
     }
     
-    @Override
     public String getXMLSelectedHead() {
         return "<CommunicationPatternDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
     }
     
-    @Override
     public String getXMLSelectedTail() {
         return "</CommunicationPatternDiagramPanelCopy>";
     }
     
-    @Override
     public String getXMLCloneHead() {
         return "<CommunicationPatternDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
     }
     
-    @Override
     public String getXMLCloneTail() {
         return "</CommunicationPatternDiagramPanelCopy>";
     }
@@ -190,7 +183,7 @@ public class TMLCPPanel extends TDiagramPanel {
     }*/
     
     public void makePostLoadingProcessing() throws MalformedModelingException {
-       // TGComponent tgc;
+        TGComponent tgc;
         
         /*for(int i=0; i<componentList.size(); i++) {
             tgc = (TGComponent)(componentList.elementAt(i));
@@ -232,7 +225,7 @@ public class TMLCPPanel extends TDiagramPanel {
         //
         Vector<TGComponent> v = new Vector<>();
         Object o;
-        Iterator<TGComponent> iterator = componentList.listIterator();
+        Iterator iterator = componentList.listIterator();
         
         while(iterator.hasNext()) {
             o = iterator.next();
@@ -249,6 +242,8 @@ public class TMLCPPanel extends TDiagramPanel {
         TGComponent tgc1;
         TGConnector tgcon;
         int i;
+        
+        //
         
         if (tgc == null) {
             return;
@@ -280,8 +275,8 @@ public class TMLCPPanel extends TDiagramPanel {
         }
     }
 	
-    @Override
 	public boolean hasAutoConnect() {
 		return true;
 	}
+   
 }

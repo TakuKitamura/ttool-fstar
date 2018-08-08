@@ -36,11 +36,13 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui.tmlad;
 
 import myutil.GraphicLib;
 import ui.*;
-import ui.ad.TADComponentWithoutSubcomponents;
 import ui.util.IconManager;
 
 import java.awt.*;
@@ -53,7 +55,7 @@ import java.awt.geom.Line2D;
  * @version 1.0 06/04/2007
  * @author Ludovic APVRILLE
  */
-public class TMLADSelectEvt extends TADComponentWithoutSubcomponents/* Issue #69 TGCWithoutInternalComponent*/ implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
+public class TMLADSelectEvt extends TGCWithoutInternalComponent implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
     private int lineLength = 10;
     private int lineOutLength = 25;
     //private int textX1, textY1, textX2, textY2, textX3, textY3;
@@ -94,8 +96,8 @@ public class TMLADSelectEvt extends TADComponentWithoutSubcomponents/* Issue #69
         myImageIcon = IconManager.imgic208;
     }
     
-    @Override
     public void internalDrawing(Graphics g) {
+		
 		if (stateOfError > 0)  {
 			Color c = g.getColor();
 			switch(stateOfError) {
@@ -124,9 +126,9 @@ public class TMLADSelectEvt extends TADComponentWithoutSubcomponents/* Issue #69
         
         //g.drawString("select", x, y + height/2 - 5);
         g.drawString("evt", x+7, y + height/2 + 3);
+
     }
     
-    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -151,27 +153,15 @@ public class TMLADSelectEvt extends TADComponentWithoutSubcomponents/* Issue #69
         return null;
     }
 
-    @Override
     public int getType() {
         return TGComponentManager.TMLAD_SELECT_EVT;
     }
     
-    @Override
     public int getDefaultConnector() {
-    	return TGComponentManager.CONNECTOR_TMLAD;
+      return TGComponentManager.CONNECTOR_TMLAD;
     }
     
-    @Override
 	public void setStateAction(int _stateAction) {
 		stateOfError = _stateAction;
 	}	
-    
-    /* Issue #69
-     * (non-Javadoc)
-     * @see ui.AbstractCDElement#canBeDisabled()
-     */
-    @Override
-    public boolean canBeDisabled() {
-    	return false;
-    }
 }

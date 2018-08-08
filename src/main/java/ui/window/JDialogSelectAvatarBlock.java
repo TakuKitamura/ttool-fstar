@@ -36,6 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
 package ui.window;
 
 import ui.avatarbd.AvatarBDStateMachineOwner;
@@ -68,8 +69,7 @@ import java.util.List;
  * @version 1.0 18/05/2010
  */
 public class JDialogSelectAvatarBlock extends JDialogBase implements ActionListener, ListSelectionListener {
-    
-	public List<AvatarBDStateMachineOwner> validated, ignored;
+    public List<AvatarBDStateMachineOwner> validated, ignored;
     private boolean optimized = true;
 
     private List<AvatarBDStateMachineOwner> val, ign, back;
@@ -282,6 +282,8 @@ public class JDialogSelectAvatarBlock extends JDialogBase implements ActionListe
             return;
         }
 
+
+
         // Compare the action command to the known actions.
         switch (command) {
             case "addOneIgnored":
@@ -298,6 +300,7 @@ public class JDialogSelectAvatarBlock extends JDialogBase implements ActionListe
                 break;
         }
     }
+
 
     private void addOneIgnored() {
         for (AvatarBDStateMachineOwner o : this.listValidated.getSelectedValuesList()) {

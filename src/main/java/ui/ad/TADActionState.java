@@ -36,6 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui.ad;
 
 import myutil.GraphicLib;
@@ -52,7 +55,7 @@ import java.awt.geom.Line2D;
  * @version 1.0 12/08/2003
  * @author Ludovic APVRILLE
  */
-public class TADActionState extends TADOneLineText/* Issue #69 TGCOneLineText*/ implements PreJavaCode, PostJavaCode, CheckableAccessibility, ActionStateErrorHighlight {
+public class TADActionState extends TGCOneLineText implements PreJavaCode, PostJavaCode, CheckableAccessibility, ActionStateErrorHighlight {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
@@ -68,12 +71,11 @@ public class TADActionState extends TADOneLineText/* Issue #69 TGCOneLineText*/ 
         height = 20;
         minWidth = 30;
         
-        createConnectingPoints();
-//        nbConnectingPoint = 2;
-//        connectingPoint = new TGConnectingPoint[2];
-//        connectingPoint[0] = new TGConnectingPointAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-//        connectingPoint[1] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.5, 1.0);
-//        addTGConnectingPointsComment();
+        nbConnectingPoint = 2;
+        connectingPoint = new TGConnectingPoint[2];
+        connectingPoint[0] = new TGConnectingPointAD(this, 0, -lineLength, true, false, 0.5, 0.0);
+        connectingPoint[1] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.5, 1.0);
+        addTGConnectingPointsComment();
         
         moveable = true;
         editable = true;
@@ -85,16 +87,6 @@ public class TADActionState extends TADOneLineText/* Issue #69 TGCOneLineText*/ 
         myImageIcon = IconManager.imgic204;
     }
     
-    protected void createConnectingPoints() {
-        nbConnectingPoint = 2;
-        connectingPoint = new TGConnectingPoint[ nbConnectingPoint ];
-        connectingPoint[0] = new TGConnectingPointAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-        connectingPoint[1] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.5, 1.0);
-
-        addTGConnectingPointsComment();
-    }
-    
-    @Override
     public void internalDrawing(Graphics g) {
         int w  = g.getFontMetrics().stringWidth(value);
         int w1 = Math.max(minWidth, w + 2 * textX);
@@ -135,7 +127,6 @@ public class TADActionState extends TADOneLineText/* Issue #69 TGCOneLineText*/ 
 		}
     }
     
-    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -184,18 +175,19 @@ public class TADActionState extends TADOneLineText/* Issue #69 TGCOneLineText*/ 
         return ret; 
     }
     
-    @Override
     public int getType() {
         return TGComponentManager.TAD_ACTION_STATE;
     }
     
-    @Override
    	public int getDefaultConnector() {
       return TGComponentManager.CONNECTOR_AD_DIAGRAM;
     }
 	
-    @Override
 	public void setStateAction(int _stateAction) {
 		stateAction = _stateAction;
 	}
+	
+
+    
+    
 }

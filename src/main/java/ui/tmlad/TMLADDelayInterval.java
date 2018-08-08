@@ -36,11 +36,13 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui.tmlad;
 
 import myutil.GraphicLib;
 import ui.*;
-import ui.ad.TADComponentWithSubcomponents;
 import ui.util.IconManager;
 
 import java.awt.*;
@@ -53,11 +55,11 @@ import java.awt.geom.Line2D;
 * @version 1.0 10/11/2008
 * @author Ludovic APVRILLE
  */
-public class TMLADDelayInterval extends TADComponentWithSubcomponents /* Issue #69 TGCWithInternalComponent*/ implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
+public class TMLADDelayInterval extends TGCWithInternalComponent implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
     private int lineLength = 5;
 	private int textX, textY;
-//    private int ilength = 10;
-//    private int lineLength1 = 2;
+    private int ilength = 10;
+    private int lineLength1 = 2;
 	private int incrementY = 3;
     private int segment = 4;
 	
@@ -97,8 +99,8 @@ public class TMLADDelayInterval extends TADComponentWithSubcomponents /* Issue #
         myImageIcon = IconManager.imgic214;
     }
     
-    @Override
     public void internalDrawing(Graphics g) {
+		
 		if (stateOfError > 0)  {
 			Color c = g.getColor();
 			switch(stateOfError) {
@@ -128,7 +130,6 @@ public class TMLADDelayInterval extends TADComponentWithSubcomponents /* Issue #
         }
     }
     
-    @Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
         if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
             return this;
@@ -157,12 +158,10 @@ public class TMLADDelayInterval extends TADComponentWithSubcomponents /* Issue #
         ((TGCTimeDelay)(tgcomponent[0])).setMaxDelay(val);
     }
     
-    @Override
     public int getType() {
         return TGComponentManager.TMLAD_INTERVAL_DELAY;
     }
     
-    @Override
     public int getDefaultConnector() {
 		return TGComponentManager.CONNECTOR_TMLAD;
     }
@@ -171,8 +170,8 @@ public class TMLADDelayInterval extends TADComponentWithSubcomponents /* Issue #
 		return ((TGCTimeDelay)tgcomponent[0]).getUnit();
 	}
 	
-    @Override
 	public void setStateAction(int _stateAction) {
 		stateOfError = _stateAction;
 	}
+    
 }

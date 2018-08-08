@@ -36,6 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
 package ui.window;
 
 import ui.util.IconManager;
@@ -77,7 +78,7 @@ public class JDialogPerformancePragma extends JDialogBase implements ActionListe
     protected JMenuBar menuBar;
     protected JMenu help;
     protected JPopupMenu helpPopup;
-    public Map<String, List<String>> blockAttributeMap = new HashMap<String, List<String>>();
+    public Map<String, List<String>> blockAttributeMap = new HashMap<String, java.util.List<String>>();
 
     /**
      * Creates new form
@@ -159,6 +160,7 @@ public class JDialogPerformancePragma extends JDialogBase implements ActionListe
 
             return list;
         }
+
 
         public boolean insertSelection() {
             //Note that it will not add if the selection will not fit on the current line
@@ -402,6 +404,7 @@ public class JDialogPerformancePragma extends JDialogBase implements ActionListe
         } else if (evt.getSource() == close) {
             close();
         }
+
     }
 
     public void cancel() {
@@ -424,4 +427,6 @@ public class JDialogPerformancePragma extends JDialogBase implements ActionListe
     public String getText() {
         return text;
     }
+
+
 }

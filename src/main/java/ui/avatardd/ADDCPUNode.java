@@ -36,6 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui.avatardd;
 
 import myutil.GraphicLib;
@@ -74,6 +77,7 @@ public class ADDCPUNode extends ADDNode implements SwallowTGComponent, WithAttri
 
     protected int index = 0;
     protected int monitored = 0;
+
 
     public ADDCPUNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -119,10 +123,10 @@ public class ADDCPUNode extends ADDNode implements SwallowTGComponent, WithAttri
         myImageIcon = IconManager.imgic700;
     }
 
-    @Override
     public void internalDrawing(Graphics g) {
         Color c = g.getColor();
         g.draw3DRect(x, y, width, height, true);
+
 
         // Top lines
         g.drawLine(x, y, x + derivationx, y - derivationy);
@@ -153,7 +157,6 @@ public class ADDCPUNode extends ADDNode implements SwallowTGComponent, WithAttri
         g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
     }
 
-    @Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
 
         Polygon pol = new Polygon();
@@ -179,7 +182,6 @@ public class ADDCPUNode extends ADDNode implements SwallowTGComponent, WithAttri
         return name;
     }
 
-    @Override
     public boolean editOndoubleClick(JFrame frame) {
         boolean error = false;
         String errors = "";
@@ -205,6 +207,7 @@ public class ADDCPUNode extends ADDNode implements SwallowTGComponent, WithAttri
                 name = tmpName;
             }
         }
+
 
         if (dialog.getNbOFIRQ().length() != 0) {
             try {
@@ -311,6 +314,8 @@ public class ADDCPUNode extends ADDNode implements SwallowTGComponent, WithAttri
             }
         }
 
+
+
         /*if (dialog.getClockRatio().length() != 0) {
           try {
           tmp = clockRatio;
@@ -326,7 +331,7 @@ public class ADDCPUNode extends ADDNode implements SwallowTGComponent, WithAttri
           }
           }*/
 
-        if (dialog.getIndex().length() != 0) {
+	if (dialog.getIndex().length() != 0) {
             try {
                 tmp = index;
                 index = Integer.decode(dialog.getIndex()).intValue();
@@ -341,7 +346,8 @@ public class ADDCPUNode extends ADDNode implements SwallowTGComponent, WithAttri
             }
         }
 
-        if (dialog.getMonitored() != 0) {
+
+	if (dialog.getMonitored() != 0) {
             try {
                 tmp = monitored;
 
@@ -368,19 +374,17 @@ public class ADDCPUNode extends ADDNode implements SwallowTGComponent, WithAttri
         return true;
     }
 
-    @Override
+
     public int getType() {
         return TGComponentManager.ADD_CPUNODE;
     }
 
-    @Override
     public boolean acceptSwallowedTGComponent(TGComponent tgc) {
         //TraceManager.addDev("Accept swallowed?");
         return tgc instanceof ADDBlockArtifact;
 
     }
 
-    @Override
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
         //TraceManager.addDev("Add swallowed?");
         //Set its coordinates
@@ -397,7 +401,6 @@ public class ADDCPUNode extends ADDNode implements SwallowTGComponent, WithAttri
 
     }
 
-    @Override
     public void removeSwallowedTGComponent(TGComponent tgc) {
         removeInternalComponent(tgc);
     }
@@ -415,7 +418,6 @@ public class ADDCPUNode extends ADDNode implements SwallowTGComponent, WithAttri
         return v;
     }
 
-    @Override
     public void hasBeenResized() {
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof ADDBlockArtifact) {
@@ -425,7 +427,6 @@ public class ADDCPUNode extends ADDNode implements SwallowTGComponent, WithAttri
 
     }
 
-    @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<info stereotype=\"" + stereotype + "\" nodeName=\"" + name);
@@ -492,14 +493,14 @@ public class ADDCPUNode extends ADDNode implements SwallowTGComponent, WithAttri
             }
 
         } catch (Exception e) {
-            throw new MalformedModelingException( e );
+            throw new MalformedModelingException();
         }
     }
 
-    @Override
     public int getDefaultConnector() {
         return TGComponentManager.ADD_CONNECTOR;
     }
+
 
     public String getAttributes() {
         String attr = "";
@@ -551,7 +552,8 @@ public class ADDCPUNode extends ADDNode implements SwallowTGComponent, WithAttri
     }
 
     public void setMonitored(int _monitored){
-    	monitored = _monitored;
+	monitored = _monitored;
     }
+
 }
 

@@ -36,6 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui.avatarad;
 
 import myutil.GraphicLib;
@@ -52,13 +55,13 @@ import java.awt.geom.Line2D;
  * @version 1.0 01/09/2011
  * @author Ludovic APVRILLE
  */
-public class AvatarADStartState extends AvatarADBasicComponent implements EmbeddedComment {
+public class AvatarADStartState extends AvatarADBasicComponent implements EmbeddedComment{
     private int lineLength = 5;
     
     public AvatarADStartState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        initScaling(15, 15);
+	initScaling(15, 15);
         oldScaleFactor = tdp.getZoom();
         
         nbConnectingPoint = 1;
@@ -76,13 +79,11 @@ public class AvatarADStartState extends AvatarADBasicComponent implements Embedd
         myImageIcon = IconManager.imgic222;
     }
     
-    @Override
     public void internalDrawing(Graphics g) {
         g.fillOval(x, y, width, height);
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
     }
     
-    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -95,13 +96,12 @@ public class AvatarADStartState extends AvatarADBasicComponent implements Embedd
         return null;
     }
     
-    @Override
     public int getType() {
         return TGComponentManager.AAD_START_STATE;
     }
-//    
-//    public int getDefaultConnector() {
-//      return TGComponentManager.AAD_ASSOCIATION_CONNECTOR;
-//    }
+    
+    public int getDefaultConnector() {
+      return TGComponentManager.AAD_ASSOCIATION_CONNECTOR;
+    }
     
 }

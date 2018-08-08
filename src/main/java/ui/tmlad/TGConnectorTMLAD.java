@@ -36,11 +36,13 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui.tmlad;
 
 import myutil.GraphicLib;
 import ui.*;
-import ui.ad.TADConnector;
 import ui.util.IconManager;
 
 import java.awt.*;
@@ -54,9 +56,8 @@ import java.util.Vector;
  * @version 1.0 30/09/2004
  * @author Ludovic APVRILLE
  */
-public  class TGConnectorTMLAD extends TADConnector /* Issue #69 TGConnector*/ {
-    
-	protected int arrowLength = 10;
+public  class TGConnectorTMLAD extends TGConnector {
+    protected int arrowLength = 10;
     
     public TGConnectorTMLAD(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
         super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
@@ -64,7 +65,6 @@ public  class TGConnectorTMLAD extends TADConnector /* Issue #69 TGConnector*/ {
         myImageIcon = IconManager.imgic202;
     }
     
-    @Override
     protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
         if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
             g.drawLine(x1, y1, x2, y2);
@@ -73,8 +73,14 @@ public  class TGConnectorTMLAD extends TADConnector /* Issue #69 TGConnector*/ {
         }
     }
     
-    @Override
     public int getType() {
         return TGComponentManager.CONNECTOR_TMLAD;
     }
 }
+
+
+
+
+
+
+

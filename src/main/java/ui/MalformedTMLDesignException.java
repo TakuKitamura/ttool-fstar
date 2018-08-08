@@ -36,12 +36,11 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import translator.CheckingError;
 
 /**
  * Class MalformedTMLDesigngException
@@ -51,43 +50,10 @@ import translator.CheckingError;
  */
 public	class MalformedTMLDesignException extends Exception {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -379782523139636075L;
-	
-	private final List<CheckingError> errors;
-
 	public MalformedTMLDesignException(String msg) {
-		this( msg, new ArrayList<CheckingError>() );
+		super(msg);
 	}
     
-	public MalformedTMLDesignException( final String msg,
-										final List<CheckingError> errors ) {
-		super( msg );
-		
-		this.errors = errors;
-	}
-	
-	public List<CheckingError> getErrors() {
-		return errors;
-	}
-	
-	@Override
-	public String toString() {
-		final StringBuilder message = new StringBuilder( super.toString() );
-		
-		if ( !getErrors().isEmpty() ) {
-			message.append( "Errors are:" );
-		}
-		
-		for ( final CheckingError  error : getErrors() ) {
-			message.append( System.lineSeparator() + error );
-		}
-		
-		return message.toString();
-	}
-   
 } // Class 
 
 	

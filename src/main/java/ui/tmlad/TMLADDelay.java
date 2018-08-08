@@ -36,11 +36,13 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui.tmlad;
 
 import myutil.GraphicLib;
 import ui.*;
-import ui.ad.TADComponentWithSubcomponents;
 import ui.util.IconManager;
 
 import java.awt.*;
@@ -53,11 +55,11 @@ import java.awt.geom.Line2D;
  * @version 1.0 10/11/2008
  * @author Ludovic APVRILLE
  */
-public class TMLADDelay extends TADComponentWithSubcomponents /* Issue #69 TGCWithInternalComponent*/ implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
+public class TMLADDelay extends TGCWithInternalComponent implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
     private int lineLength = 5;
     private int textX, textY;
-//    private int ilength = 10;
-//    private int lineLength1 = 2;
+    private int ilength = 10;
+    private int lineLength1 = 2;
 	
 	protected int stateOfError = 0; // Not yet checked
     
@@ -95,7 +97,6 @@ public class TMLADDelay extends TADComponentWithSubcomponents /* Issue #69 TGCWi
         myImageIcon = IconManager.imgic214;
     }
     
-    @Override
     public void internalDrawing(Graphics g) {
 		if (stateOfError > 0)  {
 			Color c = g.getColor();
@@ -115,7 +116,6 @@ public class TMLADDelay extends TADComponentWithSubcomponents /* Issue #69 TGCWi
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
     }
     
-    @Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
         if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
             return this;
@@ -140,18 +140,17 @@ public class TMLADDelay extends TADComponentWithSubcomponents /* Issue #69 TGCWi
 		return ((TGCTimeDelay)tgcomponent[0]).getUnit();
 	}
     
-    @Override
     public int getType() {
         return TGComponentManager.TMLAD_DELAY;
     }
     
-    @Override
     public int getDefaultConnector() {
-    	return TGComponentManager.CONNECTOR_TMLAD;
+      return TGComponentManager.CONNECTOR_TMLAD;
     }
 	
-    @Override
 	public void setStateAction(int _stateAction) {
 		stateOfError = _stateAction;
 	}
+    
 }
+

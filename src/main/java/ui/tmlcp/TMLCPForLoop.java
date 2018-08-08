@@ -36,30 +36,20 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
 package ui.tmlcp;
 
-import java.awt.Color;
-import java.awt.Graphics;
-
-import javax.swing.JFrame;
-
+import myutil.GraphicLib;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import myutil.GraphicLib;
-import ui.BasicErrorHighlight;
-import ui.ColorManager;
-import ui.EmbeddedComment;
-import ui.ErrorHighlight;
-import ui.GTURTLEModeling;
-import ui.MalformedModelingException;
-import ui.TDiagramPanel;
-import ui.TGComponent;
-import ui.TGComponentManager;
-import ui.TGConnectingPoint;
-import ui.ad.TADForLoop;
+import ui.*;
+import ui.util.IconManager;
 import ui.window.JDialogMultiString;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.geom.Line2D;
 
 /**
  * Class TMLCPForLoop
@@ -69,24 +59,24 @@ import ui.window.JDialogMultiString;
  * @author Ludovic APVRILLE
  * @version 1.0 03/06/2015
  */
-public class TMLCPForLoop extends TADForLoop /* Issue #69 TGCWithoutInternalComponent*/ implements EmbeddedComment, BasicErrorHighlight {
-//    protected int lineLength = 5;
-//    protected int textX = 5;
-//    protected int textY = 15;
-//    protected int arc = 5;
+public class TMLCPForLoop extends TGCWithoutInternalComponent implements EmbeddedComment, BasicErrorHighlight {
+    protected int lineLength = 5;
+    protected int textX = 5;
+    protected int textY = 15;
+    protected int arc = 5;
 
     protected String init = "i=0";
     protected String condition = "i<5";
     protected String increment = "i = i+1";
 
-  //  protected int stateOfError = 0; // Not yet checked
+    protected int stateOfError = 0; // Not yet checked
 
     public TMLCPForLoop(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-//        width = 30;
-//        height = 20;
-//        minWidth = 30;
+        width = 30;
+        height = 20;
+        minWidth = 30;
 
         nbConnectingPoint = 3;
         connectingPoint = new TGConnectingPoint[3];
@@ -94,18 +84,17 @@ public class TMLCPForLoop extends TADForLoop /* Issue #69 TGCWithoutInternalComp
         connectingPoint[1] = new TGConnectingPointTMLCP(this, 0, lineLength, false, true, 1.0, 0.45); // loop
         connectingPoint[2] = new TGConnectingPointTMLCP(this, 0, lineLength, false, true, 0.5, 1.0); // after lopp
 
-//        moveable = true;
-//        editable = true;
-//        removable = true;
+        moveable = true;
+        editable = true;
+        removable = true;
 
         makeValue();
 
         name = "for loop";
 
-//        myImageIcon = IconManager.imgic912;
+        myImageIcon = IconManager.imgic912;
     }
 
-    @Override
     public void internalDrawing(Graphics g) {
         final int textWidth = g.getFontMetrics().stringWidth(value);
         int w1 = Math.max(minWidth, textWidth + 2 * textX);
@@ -136,7 +125,6 @@ public class TMLCPForLoop extends TADForLoop /* Issue #69 TGCWithoutInternalComp
         g.drawString(value, x + (width - textWidth) / 2, y + textY);
     }
 
-    @Override
     public boolean editOndoubleClick(JFrame frame) {
         String[] labels = new String[3];
         String[] values = new String[3];
@@ -146,6 +134,7 @@ public class TMLCPForLoop extends TADForLoop /* Issue #69 TGCWithoutInternalComp
         values[1] = condition;
         labels[2] = "Increment at each loop";
         values[2] = increment;
+
 
         JDialogMultiString jdms = new JDialogMultiString(frame, "Setting loop's properties", 3, labels, values);
         //    jdms.setSize(400, 300);
@@ -162,23 +151,24 @@ public class TMLCPForLoop extends TADForLoop /* Issue #69 TGCWithoutInternalComp
         }
 
         return false;
+
     }
 
-//    public TGComponent isOnMe(int _x, int _y) {
-//        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-//            return this;
-//        }
-//
-//        if ((int) (Line2D.ptSegDistSq(x + (width / 2), y - lineLength, x + (width / 2), y + lineLength + height, _x, _y)) < distanceSelected) {
-//            return this;
-//        }
-//
-//        if ((int) (Line2D.ptSegDistSq(x + width, y + height / 2, x + width + lineLength, y + height / 2, _x, _y)) < distanceSelected) {
-//            return this;
-//        }
-//
-//        return null;
-//    }
+    public TGComponent isOnMe(int _x, int _y) {
+        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+            return this;
+        }
+
+        if ((int) (Line2D.ptSegDistSq(x + (width / 2), y - lineLength, x + (width / 2), y + lineLength + height, _x, _y)) < distanceSelected) {
+            return this;
+        }
+
+        if ((int) (Line2D.ptSegDistSq(x + width, y + height / 2, x + width + lineLength, y + height / 2, _x, _y)) < distanceSelected) {
+            return this;
+        }
+
+        return null;
+    }
 
     public void makeValue() {
         value = "for(" + init + ";" + condition + ";" + increment + ")";
@@ -200,7 +190,6 @@ public class TMLCPForLoop extends TADForLoop /* Issue #69 TGCWithoutInternalComp
         return increment;
     }
 
-    @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<Data init=\"");
@@ -216,12 +205,18 @@ public class TMLCPForLoop extends TADForLoop /* Issue #69 TGCWithoutInternalComp
 
     @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
+        //
         try {
+
             NodeList nli;
             Node n1, n2;
             Element elt;
 //            int k;
 //            String s;
+
+            //
+            //
+
             for (int i = 0; i < nl.getLength(); i++) {
                 n1 = nl.item(i);
                 //
@@ -244,22 +239,23 @@ public class TMLCPForLoop extends TADForLoop /* Issue #69 TGCWithoutInternalComp
             }
 
         } catch (Exception e) {
-            throw new MalformedModelingException( e );
+            throw new MalformedModelingException();
         }
         makeValue();
     }
 
-    @Override
+
     public int getType() {
         return TGComponentManager.TMLCP_FOR_LOOP;
     }
 
-    @Override
     public int getDefaultConnector() {
         return TGComponentManager.CONNECTOR_TMLCP;
     }
 
-//    public void setStateAction(int _stateAction) {
-//        stateOfError = _stateAction;
-//    }
+    public void setStateAction(int _stateAction) {
+        stateOfError = _stateAction;
+    }
+
+
 }

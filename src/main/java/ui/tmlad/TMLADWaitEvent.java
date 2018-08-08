@@ -36,6 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui.tmlad;
 
 import myutil.GraphicLib;
@@ -43,17 +46,13 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import ui.*;
-import ui.ad.TADComponentWithoutSubcomponents;
 import ui.util.IconManager;
 import ui.window.JDialogMultiString;
 
 import javax.swing.*;
-
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
    * Class TMLADWaitEvent
@@ -62,7 +61,7 @@ import java.util.List;
    * @version 1.0 21/11/2005
    * @author Ludovic APVRILLE
  */
-public class TMLADWaitEvent extends TADComponentWithoutSubcomponents/* Issue #69 TGCWithoutInternalComponent*/ implements CheckableAccessibility, CheckableLatency, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
+public class TMLADWaitEvent extends TGCWithoutInternalComponent implements CheckableAccessibility, CheckableLatency, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
@@ -108,7 +107,6 @@ public class TMLADWaitEvent extends TADComponentWithoutSubcomponents/* Issue #69
         myImageIcon = IconManager.imgic904;
     }
 
-    @Override
     public void internalDrawing(Graphics g) {
         int w  = g.getFontMetrics().stringWidth(value);
         int w1 = Math.max(minWidth, w + 2 * textX);
@@ -118,8 +116,7 @@ public class TMLADWaitEvent extends TADComponentWithoutSubcomponents/* Issue #69
             //updateConnectingPoints();
         }
 
-        // Issue #69
-        if ( isEnabled() && stateOfError > 0)  {
+        if (stateOfError > 0)  {
             Color c = g.getColor();
             switch(stateOfError) {
             case ErrorHighlight.OK:
@@ -144,12 +141,7 @@ public class TMLADWaitEvent extends TADComponentWithoutSubcomponents/* Issue #69
         int y1 = y + 1;
         int height1 = height;
         int width1 = width;
-        
-        // Issue #69
-        if ( isEnabled() ) {
-        	g.setColor(ColorManager.TML_PORT_EVENT);
-        }
-
+        g.setColor(ColorManager.TML_PORT_EVENT);
         g.drawLine(x1, y1, x1+width1, y1);
         g.drawLine(x1+width1, y1, x1+width1, y1+height1);
         g.drawLine(x1, y1+height1, x1+width1, y1+height1);
@@ -166,12 +158,12 @@ public class TMLADWaitEvent extends TADComponentWithoutSubcomponents/* Issue #69
         g.drawString("evt", x+(width-w) / 2, y);
         g.drawString(value, x + linebreak + textX1, y + textY);
 
-        drawReachabilityInformation(g);
-    }
+	drawReachabilityInformation(g);
 
-    private void drawReachabilityInformation(Graphics g) {
-    	// Issue #69
-        if ( isEnabled() && reachabilityInformation > 0 ) {
+    }
+    public void drawReachabilityInformation(Graphics g) {
+        if (reachabilityInformation > 0) {
+
             Color c = g.getColor();
             Color c1;
             switch(reachabilityInformation) {
@@ -194,8 +186,6 @@ public class TMLADWaitEvent extends TADComponentWithoutSubcomponents/* Issue #69
 
         }
     }
-    
-    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -225,6 +215,8 @@ public class TMLADWaitEvent extends TADComponentWithoutSubcomponents/* Issue #69
         value += ") ";
 
     }
+
+	
 
     public String getEventName() {
         return eventName;
@@ -276,7 +268,6 @@ public class TMLADWaitEvent extends TADComponentWithoutSubcomponents/* Issue #69
         return value;
     }
 
-    @Override
     public boolean editOndoubleClick(JFrame frame) {
         String [] labels = new String[nParam + 1];
         String [] values = new String[nParam + 1];
@@ -287,9 +278,9 @@ public class TMLADWaitEvent extends TADComponentWithoutSubcomponents/* Issue #69
             values[i+1] = params[i];
         }
 
-        List<String []> help = new ArrayList<String []>();
-        String[] allInEvents = tdp.getMGUI().getAllInEvents();
-        help.add(allInEvents);
+	ArrayList<String []> help = new ArrayList<String []>();
+	String[] allInEvents = tdp.getMGUI().getAllInEvents();
+	help.add(allInEvents);
 
         JDialogMultiString jdms = new JDialogMultiString(frame, "Setting event's properties", nParam+1, labels, values, help);
       //  jdms.setSize(450, 300);
@@ -310,7 +301,6 @@ public class TMLADWaitEvent extends TADComponentWithoutSubcomponents/* Issue #69
 
     }
 
-    @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<Data eventName=\"");
@@ -369,23 +359,22 @@ public class TMLADWaitEvent extends TADComponentWithoutSubcomponents/* Issue #69
             }
 
         } catch (Exception e) {
-            throw new MalformedModelingException( e );
+            throw new MalformedModelingException();
         }
         makeValue();
     }
 
-    @Override
+
     public int getType() {
         return TGComponentManager.TMLAD_WAIT_EVENT;
     }
 
-    @Override
     public int getDefaultConnector() {
         return TGComponentManager.CONNECTOR_TMLAD;
     }
 
-    @Override
     public void setStateAction(int _stateAction) {
         stateOfError = _stateAction;
     }
+
 }

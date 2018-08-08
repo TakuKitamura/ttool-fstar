@@ -36,11 +36,15 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui;
 
 import myutil.GraphicLib;
 
 import java.awt.*;
+
 
 /**
  * Class IconManager
@@ -52,11 +56,6 @@ public class ColorManager {
     public static final Color DEFAULT = Color.black;
 
     public static final Color NORMAL_0 = Color.black;
-
-    // Issue #69: Disabling components in diagram
-    public static  Color DISABLED = new Color(214, 206, 198);
-    public static  Color DISABLED_FILLING = Color.WHITE;
-    
     public static final Color POINTER_ON_ME_0 = Color.red;
     public static final Color ACCESSIBILITY = Color.red;
     public static final Color ACCESSIBILITY_UNKNOWN = Color.DARK_GRAY;
@@ -150,20 +149,14 @@ public class ColorManager {
     //public static  Color ATD_BLOCK = new Color(196, 232, 195);
     public static  Color ATD_BLOCK = new Color(218, 218, 218);
     public static  Color ATD_ATTACK = new Color(214, 187, 158);
-
-    // Issue # 69: Using default disabled color
-    //public static  Color ATD_ATTACK_DISABLED = new Color(214, 206, 198);
-    
+    public static  Color ATD_ATTACK_DISABLED = new Color(214, 206, 198);
     public static  Color ATD_ROOT_ATTACK = new Color(243, 131, 10);
     public static  Color ATD_CONSTRAINT = new Color(191, 153, 161);
     public static  Color ATD_COUNTERMEASURE = new Color(209, 218, 174);
 
     public static  Color FTD_BLOCK = new Color(218, 218, 218);
     public static  Color FTD_FAULT = new Color(214, 187, 158);
-
-    // Issue # 69: Using default disabled color
-    // public static  Color FTD_FAULT_DISABLED = new Color(214, 206, 198);
-    
+    public static  Color FTD_FAULT_DISABLED = new Color(214, 206, 198);
     public static  Color FTD_ROOT_FAULT = new Color(243, 131, 10);
     public static  Color FTD_CONSTRAINT = new Color(191, 153, 161);
     public static  Color FTD_COUNTERMEASURE = new Color(209, 218, 174);
@@ -229,52 +222,37 @@ public class ColorManager {
     public static final Color InteractiveSimulationText_TERM = new Color(241, 6, 6);
     public static final Color InteractiveSimulationText_UNKNOWN = new Color(6, 6, 241);
 
-    // Issue #69: Managing color for disabled diagram components
-    public final static void setColor( 	Graphics g,
-    									int state,
-    									int type ) {
-    	setColor( g, state, type, true );
-    }
-
-    public final static void setColor(	Graphics g, 
-    									int state,
-    									int type,
-    									boolean enabled ) {
+    public final static void setColor(Graphics g, int state, int type) {
         if (type == 0) {
-        	if ( !enabled ) {
-                g.setColor( DISABLED );
-        	}
-        	else {
-	            switch(state) {
-	            case 0:
-	                g.setColor(NORMAL_0);
-	                break;
-	            case 1:
-	                g.setColor(POINTER_ON_ME_0);
-	                GraphicLib.setMediumStroke(g);
-	                break;
-	            case 2:
-	                g.setColor(SELECTED_0);
-	                break;
-	            case 3:
-	                g.setColor(MOVING_0);
-	                break;
-	            case 4:
-	                g.setColor(ADDING_0);
-	                break;
-	            case 5:
-	                g.setColor(POINTED_0);
-	                break;
-	            case 6:
-	                g.setColor(RESIZE_POINTED);
-	                break;
-	            case 7:
-	                g.setColor(RESIZE_POINTED);
-	                break;
-	            default:
-	                g.setColor(DEFAULT);
-	            }
-        	}
+            switch(state) {
+            case 0:
+                g.setColor(NORMAL_0);
+                break;
+            case 1:
+                g.setColor(POINTER_ON_ME_0);
+                GraphicLib.setMediumStroke(g);
+                break;
+            case 2:
+                g.setColor(SELECTED_0);
+                break;
+            case 3:
+                g.setColor(MOVING_0);
+                break;
+            case 4:
+                g.setColor(ADDING_0);
+                break;
+            case 5:
+                g.setColor(POINTED_0);
+                break;
+            case 6:
+                g.setColor(RESIZE_POINTED);
+                break;
+            case 7:
+                g.setColor(RESIZE_POINTED);
+                break;
+            default:
+                g.setColor(DEFAULT);
+            }
         }
     }
 
@@ -320,8 +298,10 @@ public class ColorManager {
         AVATAR_RECEIVE_SIGNAL = Color.white;
         AVATAR_ASSUMPTION_ATTRIBUTES = Color.white;
         AVATAR_ASSUMPTION_TOP = Color.white;
-		SYSMLSEC_PARTITIONING = Color.white;
-		SYSMLSEC_SWDESIGN = Color.white;
-		SYSMLSEC_REQ = Color.white;
+	SYSMLSEC_PARTITIONING = Color.white;
+	SYSMLSEC_SWDESIGN = Color.white;
+	SYSMLSEC_REQ = Color.white;
+
     }
+
 } // Class Color

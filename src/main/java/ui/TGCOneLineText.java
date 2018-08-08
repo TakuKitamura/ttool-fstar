@@ -36,6 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui;
 
 import myutil.Conversion;
@@ -45,6 +48,8 @@ import ui.util.IconManager;
 import javax.swing.*;
 import java.awt.*;
 
+//import java.awt.geom.*;
+
 /**
    * Class TGCOneLineText
    * Internal component that is a onle line text
@@ -53,8 +58,8 @@ import java.awt.*;
    * @author Ludovic APVRILLE
  */
 public class TGCOneLineText extends TGCWithoutInternalComponent{
+    protected boolean emptyText;
 
-	protected boolean emptyText;
 
     public TGCOneLineText(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y,  _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -74,7 +79,6 @@ public class TGCOneLineText extends TGCWithoutInternalComponent{
         myImageIcon = IconManager.imgic302;
     }
 
-    @Override
     public void internalDrawing(Graphics g) {
         if (!tdp.isScaled()) {
             width = g.getFontMetrics().stringWidth(value);
@@ -86,7 +90,6 @@ public class TGCOneLineText extends TGCWithoutInternalComponent{
         }
     }
 
-    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y - height, Math.max(width, minWidth), height)) {
             return this;
@@ -94,7 +97,6 @@ public class TGCOneLineText extends TGCWithoutInternalComponent{
         return null;
     }
 
-    @Override
     public boolean editOndoubleClick(JFrame frame) {
         String oldValue = value;
         String text = getName() + ": ";
@@ -122,12 +124,21 @@ public class TGCOneLineText extends TGCWithoutInternalComponent{
         return false;
     }
     
-    /* Issue #69
-     *  (non-Javadoc)
-     * @see ui.TGComponent#canBeDisabled()
-     */
-    @Override
-    public boolean canBeDisabled() {
-    	return getFather() != null && getFather().canLabelBeDisabled( this );
+    public void renameTab(String s) {
+    	TURTLEPanel tp = this.tdp.tp;
+    	for (TDiagramPanel tdpTmp: tp.panels) {
+    		if (tdpTmp.name.equals(name)) {
+    	    	if (!tp.nameInUse(s)) {
+    	            tp.tabbedPane.setTitleAt(tp.getIndexOfChild(tdpTmp), s);
+    	            tp.panels.elementAt(tp.getIndexOfChild(tdpTmp)).setName(s);
+    	            tp.mgui.changeMade(null, -1);
+    	        }
+    			break;
+    		}
+    	}
     }
+    
+   public boolean nameUsed(String s) {
+    	return this.tdp.tp.refNameUsed(s);
+   }
 }

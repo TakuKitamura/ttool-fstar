@@ -37,11 +37,13 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui.tmlcp;
 
 import myutil.GraphicLib;
 import ui.*;
-import ui.ad.TADOneLineText;
 import ui.util.IconManager;
 
 import javax.swing.*;
@@ -57,7 +59,7 @@ import java.awt.geom.Line2D;
  * @version 1.0 17/02/2014
  * @author Ludovic APVRILLE, Andrea ENRICI
  */
-public class TMLCPRefAD extends TADOneLineText /* Issue #69 TGCOneLineText*/ {
+public class TMLCPRefAD extends TGCOneLineText {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
@@ -87,7 +89,6 @@ public class TMLCPRefAD extends TADOneLineText /* Issue #69 TGCOneLineText*/ {
         myImageIcon = IconManager.imgic400;
     }
 
-    @Override
     public void internalDrawing(Graphics g) {
         //int w2 = g.getFontMetrics().stringWidth("ref");
         int w  = g.getFontMetrics().stringWidth(value) /*+ w2*/;
@@ -118,7 +119,6 @@ public class TMLCPRefAD extends TADOneLineText /* Issue #69 TGCOneLineText*/ {
 
     }
 
-    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -136,13 +136,12 @@ public class TMLCPRefAD extends TADOneLineText /* Issue #69 TGCOneLineText*/ {
     }
 
 
-    @Override
     public int getType() {
         return TGComponentManager.TMLCP_REF_CP;
     }
 
-    @Override
     public void addActionToPopupMenu( JPopupMenu componentMenu, ActionListener menuAL, int x, int y ) {
+
         componentMenu.addSeparator();
         boolean b = ( (TMLCPPanel)tdp ).isTMLCPCreated( name );
         JMenuItem isCPCreated;
@@ -158,8 +157,8 @@ public class TMLCPRefAD extends TADOneLineText /* Issue #69 TGCOneLineText*/ {
         componentMenu.add( isCPCreated );
     }
 
-    @Override
     public boolean eventOnPopup( ActionEvent e ) {
+
         boolean b = ( (TMLCPPanel)tdp ).isTMLCPCreated( name );
         if (b) {
             ( (TMLCPPanel)tdp ).openTMLCPDiagram( name );
@@ -171,13 +170,13 @@ public class TMLCPRefAD extends TADOneLineText /* Issue #69 TGCOneLineText*/ {
         return true;
     }
 
-    @Override
     public int getDefaultConnector() {
         return TGComponentManager.CONNECTOR_TMLCP;
     }
 
-    @Override
-    public boolean editOndoubleClick( JFrame frame ) {
+    @Override public boolean editOndoubleClick( JFrame frame ) {
+
+        //
         String text = "Reference to AD: ";
         if( hasFather() ) {
             text = getTopLevelName() + " / " + text;

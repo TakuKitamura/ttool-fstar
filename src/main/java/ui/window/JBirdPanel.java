@@ -36,6 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui.window;
 
 import ui.ColorManager;
@@ -48,6 +51,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+
 /**
  * Class JbirdPanel
  * Panel for displaying bird'eyes view of panels
@@ -56,8 +60,7 @@ import java.awt.event.MouseMotionListener;
  * @author Ludovic APVRILLE
  */
 public class JBirdPanel extends JPanel implements MouseListener, MouseMotionListener {
-
-	private MainGUI mgui;
+    private MainGUI mgui;
     private int w, h, wc, wh;
     //private Image image, scaledImage;
     //private Graphics graphics;
@@ -81,7 +84,6 @@ public class JBirdPanel extends JPanel implements MouseListener, MouseMotionList
         startProcess();
     }
     
-    @Override
     protected void paintComponent(Graphics g) {
         if (isShowing()) {
             super.paintComponent(g);
@@ -107,7 +109,8 @@ public class JBirdPanel extends JPanel implements MouseListener, MouseMotionList
         }
     }
     
-    private void centerRectangle(int x, int y) {
+    
+    public void centerRectangle(int x, int y) {
         if (rect != null) {
             x = (int)(x - rect.width*wratio/2);
             y = (int)(y - rect.height*hratio/2);
@@ -124,7 +127,6 @@ public class JBirdPanel extends JPanel implements MouseListener, MouseMotionList
         }
     }
     
-    @Override
     public void mousePressed(MouseEvent e) {
         //
         //startX = e.getX();
@@ -143,27 +145,28 @@ public class JBirdPanel extends JPanel implements MouseListener, MouseMotionList
         }
     }
     
-    @Override
-   public void mouseReleased(MouseEvent e) {
+    public void mouseReleased(MouseEvent e) {
+        
     }
     
-    @Override
     public void mouseEntered(MouseEvent e) {
+        
     }
     
-    @Override
     public void mouseExited(MouseEvent e) {
+        
     }
     
-    @Override
     public void mouseClicked(MouseEvent e) {
+        
     }
     
-    @Override
+    
     public void mouseMoved(MouseEvent e) {
+        
+        
     }
     
-    @Override
     public void mouseDragged(MouseEvent e) {
         centerRectangle(e.getX(), e.getY());
     }
@@ -180,4 +183,5 @@ public class JBirdPanel extends JPanel implements MouseListener, MouseMotionList
     public boolean getGo() {
         return go;
     }
+    
 }

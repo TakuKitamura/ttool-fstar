@@ -36,6 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui.avatarad;
 
 import myutil.GraphicLib;
@@ -52,7 +55,7 @@ import java.awt.*;
  * @author Ludovic APVRILLE
  */
 public class AvatarADStopFlow extends AvatarADBasicComponent implements EmbeddedComment, AllowedBreakpoint {
-//    private int internalCircleSize = 16;
+    private int internalCircleSize = 16;
     private int lineLength = 5;
 
     public AvatarADStopFlow(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
@@ -76,7 +79,6 @@ public class AvatarADStopFlow extends AvatarADBasicComponent implements Embedded
         myImageIcon = IconManager.imgic210;
     }
 
-    @Override
     public void internalDrawing(Graphics g) {
         ColorManager.setColor(g, state, 0);
         //g.fillOval(x + (width - internalCircleSize)/2, y + (height - internalCircleSize)/2, internalCircleSize, internalCircleSize);
@@ -86,7 +88,6 @@ public class AvatarADStopFlow extends AvatarADBasicComponent implements Embedded
         g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
     }
 
-    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -94,12 +95,12 @@ public class AvatarADStopFlow extends AvatarADBasicComponent implements Embedded
         return null;
     }
 
-    @Override
     public int getType() {
         return TGComponentManager.AAD_STOP_FLOW;
     }
-//
-//    public int getDefaultConnector() {
-//        return TGComponentManager.AAD_ASSOCIATION_CONNECTOR;
-//    }
+
+    public int getDefaultConnector() {
+        return TGComponentManager.AAD_ASSOCIATION_CONNECTOR;
+    }
+
 }

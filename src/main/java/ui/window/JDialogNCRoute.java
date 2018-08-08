@@ -36,32 +36,22 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui.window;
 
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Frame;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.List;
-import java.util.Vector;
+import ui.util.IconManager;
+import ui.ncdd.NCRoute;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
+import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
-import ui.ncdd.NCRoute;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Vector;
 
 
 /**
@@ -73,7 +63,7 @@ import ui.ncdd.NCRoute;
  */
 public class JDialogNCRoute extends JDialogBase implements ActionListener, ListSelectionListener  {
     private Vector<NCRoute> routes;
-	private List<String> inputInterfaces, traffics, outputInterfaces;
+	private ArrayList<String> inputInterfaces, traffics, outputInterfaces;
 
 	protected String value;
 	
@@ -92,7 +82,7 @@ public class JDialogNCRoute extends JDialogBase implements ActionListener, ListS
 	private JTextField valueText;
 
     /** Creates new form  */
-    public JDialogNCRoute(Frame _f, String _title, String _value, Vector<NCRoute> _routes, List<String> _inputInterfaces, List<String> _traffics, List<String> _outputInterfaces) {
+    public JDialogNCRoute(Frame _f, String _title, String _value, Vector<NCRoute> _routes, ArrayList<String> _inputInterfaces, ArrayList<String> _traffics, ArrayList<String> _outputInterfaces) {
         super(_f, _title, true);
 
 		value = _value;
@@ -286,8 +276,8 @@ public class JDialogNCRoute extends JDialogBase implements ActionListener, ListS
         initButtons(c0, c, this);
     }
     
-    @Override
     public void	actionPerformed(ActionEvent evt)  {
+        
         String command = evt.getActionCommand();
         
         // Compare the action command to the known actions.
@@ -329,6 +319,7 @@ public class JDialogNCRoute extends JDialogBase implements ActionListener, ListS
 			inputInterfaceBox.setSelectedIndex(index);
 		}
 	}
+    
     
     private void addRoute() {
         String s0 = (String)(inputInterfaceBox.getSelectedItem());
@@ -395,7 +386,6 @@ public class JDialogNCRoute extends JDialogBase implements ActionListener, ListS
 		return hasBeenCancelled;
 	}
     
-	@Override
     public void valueChanged(ListSelectionEvent e) {
         int i = listRoute.getSelectedIndex() ;
         if (i == -1) {
@@ -420,4 +410,6 @@ public class JDialogNCRoute extends JDialogBase implements ActionListener, ListS
 	public String getValue() {
 		return valueText.getText();
 	}
+    
+    
 }

@@ -35,6 +35,9 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
+
+
+
  
 package ui.ad;
 
@@ -44,6 +47,7 @@ import ui.util.IconManager;
 import java.awt.*;
 import java.awt.geom.Line2D;
 
+
 /**
  * Class TADJunction
  * Junction between several activities, without any synchronization. To be used in activity diagrams
@@ -51,7 +55,7 @@ import java.awt.geom.Line2D;
  * @version 1.0 28/12/2003
  * @author Ludovic APVRILLE
  */
-public class TADJunction extends TADComponentWithoutSubcomponents /* Issue #69 TGCWithoutInternalComponent*/ {
+public class TADJunction extends TGCWithoutInternalComponent {
 	
 	protected int range = 5;
 	
@@ -104,7 +108,6 @@ public class TADJunction extends TADComponentWithoutSubcomponents /* Issue #69 T
 		myImageIcon = IconManager.imgic212;
 	}
 
-	@Override
 	public void internalDrawing(Graphics g) {
 		//g.drawLine(x +width/2, y,  x+width/2, y + height);
 		//g.drawLine(x, y + (height/2), x+width, y + (height/2));
@@ -120,7 +123,6 @@ public class TADJunction extends TADComponentWithoutSubcomponents /* Issue #69 T
 		g.drawLine(x+width/2+range, y + height / 2, x+width/2, y+height/2+range);
 	}
 
-	@Override
 	public TGComponent isOnMe(int _x, int _y) {
 		// vertical line
 		if ((int)(Line2D.ptSegDistSq(x +width/2, y,  x+width/2, y + height, _x, _y)) < distanceSelected) {
@@ -133,13 +135,19 @@ public class TADJunction extends TADComponentWithoutSubcomponents /* Issue #69 T
 		return null;
 	}
 	
-	@Override
 	public int getType() {
 		return TGComponentManager.TAD_JUNCTION;
 	}
 	
-	@Override
 	public int getDefaultConnector() {
-		return TGComponentManager.CONNECTOR_AD_DIAGRAM;
+      return TGComponentManager.CONNECTOR_AD_DIAGRAM;
     }
+
 }
+
+
+
+
+    
+
+

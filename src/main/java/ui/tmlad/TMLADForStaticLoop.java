@@ -36,11 +36,13 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui.tmlad;
 
 import myutil.GraphicLib;
 import ui.*;
-import ui.ad.TADForLoop;
 import ui.util.IconManager;
 
 import javax.swing.*;
@@ -54,51 +56,50 @@ import java.awt.geom.Line2D;
  * @version 1.0 21/11/2005
  * @author Ludovic APVRILLE
  */
-public class TMLADForStaticLoop extends TADForLoop /* Issue #69 TGCWithoutInternalComponent*/ implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
-//    private final static String IN_LOOP = "inside loop";
-//    private final static String EXIT_LOOP = "exit loop";
-//
-//    protected int lineLength = 5;
-//    protected int textX =  5;
-//    protected int textY =  15;
-//    protected int arc = 5;
+public class TMLADForStaticLoop extends TGCWithoutInternalComponent implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
+    private final static String IN_LOOP = "inside loop";
+    private final static String EXIT_LOOP = "exit loop";
+
+    protected int lineLength = 5;
+    protected int textX =  5;
+    protected int textY =  15;
+    protected int arc = 5;
     protected String valueLoop = "";
 
-    //protected int stateOfError = 0; // Not yet checked
+    protected int stateOfError = 0; // Not yet checked
 
     public TMLADForStaticLoop(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-//        width = 30;
-//        height = 20;
-//        minWidth = 30;
+        width = 30;
+        height = 20;
+        minWidth = 30;
 
         nbConnectingPoint = 3;
         connectingPoint = new TGConnectingPoint[3];
-        connectingPoint[ INDEX_ENTER_LOOP ] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-        connectingPoint[ INDEX_INSIDE_LOOP ] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 1.0, 0.45); // loop
-        connectingPoint[ INDEX_EXIT_LOOP ] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.5, 1.0); // after lopp
+        connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
+        connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 1.0, 0.45); // loop
+        connectingPoint[2] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.5, 1.0); // after lopp
 
-//        moveable = true;
-//        editable = true;
-//        removable = true;
+        moveable = true;
+        editable = true;
+        removable = true;
 
         value = "10";
         name = "for loop";
 
-//        myImageIcon = IconManager.imgic912;
+        myImageIcon = IconManager.imgic912;
     }
 
-    private void makeValueLoop() {
+    public void makeValueLoop() {
         valueLoop = "Loop " + value + " times";
     }
 
-    @Override
     public void internalDrawing(Graphics g) {
+
         if (valueLoop.length() == 0) {
             makeValueLoop();
         }
-
         int w  = g.getFontMetrics().stringWidth(valueLoop);
         int w1 = Math.max(minWidth, w + 2 * textX);
         if ((w1 != width) & (!tdp.isScaled())) {
@@ -133,7 +134,6 @@ public class TMLADForStaticLoop extends TADForLoop /* Issue #69 TGCWithoutIntern
 	
     }
 
-    @Override
     public boolean editOndoubleClick(JFrame frame) {
         String text = "Static for loop : ";
         String s = (String)JOptionPane.showInputDialog(frame, text,
@@ -145,6 +145,8 @@ public class TMLADForStaticLoop extends TADForLoop /* Issue #69 TGCWithoutIntern
             s = s.trim();
         }
 
+        //
+
         if ((s != null) && (s.length() > 0) && (s.matches("\\d*"))) {
             setValue(s);
             makeValueLoop();
@@ -155,7 +157,6 @@ public class TMLADForStaticLoop extends TADForLoop /* Issue #69 TGCWithoutIntern
         return false;
     }
 
-    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -172,17 +173,16 @@ public class TMLADForStaticLoop extends TADForLoop /* Issue #69 TGCWithoutIntern
         return null;
     }
 
-    @Override
+
     public int getType() {
         return TGComponentManager.TMLAD_FOR_STATIC_LOOP;
     }
 
-    @Override
     public int getDefaultConnector() {
         return TGComponentManager.CONNECTOR_TMLAD;
     }
-//
-//    public void setStateAction(int _stateAction) {
-//        stateOfError = _stateAction;
-//    }
+
+    public void setStateAction(int _stateAction) {
+        stateOfError = _stateAction;
+    }
 }

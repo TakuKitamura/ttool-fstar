@@ -36,6 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui.ad;
 
 import myutil.GraphicLib;
@@ -52,11 +55,9 @@ import java.awt.*;
  * @version 1.0 12/12/2003
  * @author Ludovic APVRILLE
  */
-public class TADPreemption extends TADComponentWithSubcomponents/* Issue #69 TGCWithInternalComponent*/ {
-    
-	private int lineLength = 0;
-    
-	private int textX, textY;
+public class TADPreemption extends TGCWithInternalComponent{
+    private int lineLength = 0;
+    private int textX, textY;
     
     public TADPreemption(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -97,13 +98,11 @@ public class TADPreemption extends TADComponentWithSubcomponents/* Issue #69 TGC
         myImageIcon = IconManager.imgic206;
     }
     
-    @Override
     public void internalDrawing(Graphics g) {
         g.drawRect(x, y, width, height);
         g.fillRect(x, y, width, height);
     }
     
-    @Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
         if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
             return this;
@@ -111,13 +110,11 @@ public class TADPreemption extends TADComponentWithSubcomponents/* Issue #69 TGC
         return null;
     }
     
-    @Override
     public int getType() {
         return TGComponentManager.TAD_PREEMPTION;
     }
     
-    @Override
    	public int getDefaultConnector() {
-    	return TGComponentManager.CONNECTOR_AD_DIAGRAM;
+      return TGComponentManager.CONNECTOR_AD_DIAGRAM;
     }
 }

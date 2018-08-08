@@ -36,11 +36,13 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui.tmlad;
 
 import myutil.GraphicLib;
 import ui.*;
-import ui.ad.TADComponentWithSubcomponents;
 import ui.util.IconManager;
 
 import java.awt.*;
@@ -53,7 +55,7 @@ import java.awt.geom.Line2D;
  * @version 1.0 02/12/2005
  * @author Ludovic APVRILLE
  */
-public class TMLADExecIInterval extends TADComponentWithSubcomponents /* Issue #69 TGCWithInternalComponent */ implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
+public class TMLADExecIInterval extends TGCWithInternalComponent implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
     private int lineLength = 5;
     private int textX, textY;
     private int ilength = 10;
@@ -91,7 +93,6 @@ public class TMLADExecIInterval extends TADComponentWithSubcomponents /* Issue #
         myImageIcon = IconManager.imgic214;
     }
     
-    @Override
     public void internalDrawing(Graphics g) {
 		if (stateOfError > 0)  {
 			Color c = g.getColor();
@@ -113,7 +114,6 @@ public class TMLADExecIInterval extends TADComponentWithSubcomponents /* Issue #
         g.drawLine(x + (width/2), y+(height-ilength)/2, x + (width/2), y+(height+ilength)/2);
     }
     
-    @Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
         if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
             return this;
@@ -142,18 +142,16 @@ public class TMLADExecIInterval extends TADComponentWithSubcomponents /* Issue #
         ((TGCTimeInterval)(tgcomponent[0])).setMaxDelay(val);
     }
     
-    @Override
     public int getType() {
         return TGComponentManager.TMLAD_EXECI_INTERVAL;
     }
     
-    @Override
     public int getDefaultConnector() {
-    	return TGComponentManager.CONNECTOR_TMLAD;
+      return TGComponentManager.CONNECTOR_TMLAD;
     }
 	
-    @Override
 	public void setStateAction(int _stateAction) {
 		stateOfError = _stateAction;
 	}
+    
 }

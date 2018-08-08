@@ -36,6 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui.avatarad;
 
 import myutil.GraphicLib;
@@ -43,11 +46,9 @@ import ui.*;
 import ui.util.IconManager;
 
 import javax.swing.*;
-
-import java.awt.Font;
-import java.awt.Graphics;
+import java.awt.*;
 import java.util.LinkedList;
-import java.util.List;
+
 
 /**
    * Class AvatarADActivity
@@ -57,22 +58,23 @@ import java.util.List;
    * @author Ludovic APVRILLE
  */
 public class AvatarADActivity extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent {
-//    private int textY1 = 3;
+    private int textY1 = 3;
 
-    //private int maxFontSize = 12;
-  //  private int minFontSize = 4;
-    //private int currentFontSize = -1;
+    private int maxFontSize = 12;
+    private int minFontSize = 4;
+    private int currentFontSize = -1;
     private boolean displayText = true;
     private int textX = 7;
+
 
     public String oldValue;
 
     public AvatarADActivity(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        initScaling(100, 50);
-        minWidth = (int)(40* tdp.getZoom());
-        minHeight = (int)(30* tdp.getZoom());
+	initScaling(100, 50);
+	minWidth = (int)(40* tdp.getZoom());
+	minHeight = (int)(30* tdp.getZoom());
         oldScaleFactor = tdp.getZoom();
 
         nbConnectingPoint = 32;
@@ -135,7 +137,7 @@ public class AvatarADActivity extends TGCScalableWithInternalComponent implement
         setValue(name);
         oldValue = value;
 
-        //currentFontSize = maxFontSize;
+        currentFontSize = maxFontSize;
         oldScaleFactor = tdp.getZoom();
 
         myImageIcon = IconManager.imgic700;
@@ -143,7 +145,6 @@ public class AvatarADActivity extends TGCScalableWithInternalComponent implement
         //actionOnAdd();
     }
 
-    @Override
     public void internalDrawing(Graphics g) {
         Font f = g.getFont();
         Font fold = f;
@@ -199,7 +200,7 @@ public class AvatarADActivity extends TGCScalableWithInternalComponent implement
         g.drawRect(x, y, width, height);
         int decY = (int)(15 * tdp.getZoom());
         int decX = (int)(20 * tdp.getZoom());
-        int h = g.getFontMetrics().getHeight();
+	int h = g.getFontMetrics().getHeight();
         if ((height > decY) && (width > decX)) {
             g.drawLine(x, y+decY, x+decY, y+decY);
             g.drawLine(x+decY, y+decY, x+decX, y+decY-5);
@@ -229,7 +230,7 @@ public class AvatarADActivity extends TGCScalableWithInternalComponent implement
         g.setFont(fold);
     }
 
-    @Override
+
     public TGComponent isOnOnlyMe(int x1, int y1) {
 
         if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
@@ -243,8 +244,8 @@ public class AvatarADActivity extends TGCScalableWithInternalComponent implement
         return value;
     }
 
-    @Override
     public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
+
         oldValue = value;
 
         //String text = getName() + ": ";
@@ -271,12 +272,11 @@ public class AvatarADActivity extends TGCScalableWithInternalComponent implement
 
     }
 
-    @Override
+
     public int getType() {
         return TGComponentManager.AAD_ACTIVITY;
     }
 
-    @Override
     public boolean acceptSwallowedTGComponent(TGComponent tgc) {
         if (tgc instanceof AvatarADBasicComponent) {
             return true;
@@ -290,7 +290,6 @@ public class AvatarADActivity extends TGCScalableWithInternalComponent implement
 
     }
 
-    @Override
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
         boolean swallowed = false;
 
@@ -341,7 +340,6 @@ public class AvatarADActivity extends TGCScalableWithInternalComponent implement
         return true;
     }
 
-    @Override
     public void removeSwallowedTGComponent(TGComponent tgc) {
         removeMyInternalComponent(tgc, false);
     }
@@ -381,7 +379,7 @@ public class AvatarADActivity extends TGCScalableWithInternalComponent implement
         return false;
     }
 
-    @Override
+
     public void hasBeenResized() {
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof AvatarADBasicComponent) {
@@ -401,8 +399,8 @@ public class AvatarADActivity extends TGCScalableWithInternalComponent implement
 
     }
 
-    @Override
     public void resizeWithFather() {
+
         if ((father != null) && (father instanceof AvatarADActivity)) {
             // Too large to fit in the father? -> resize it!
             resizeToFatherSize();
@@ -412,8 +410,8 @@ public class AvatarADActivity extends TGCScalableWithInternalComponent implement
         }
     }
 
-    public List<AvatarADActivity> getActivityList() {
-        List<AvatarADActivity> list = new LinkedList<AvatarADActivity>();
+    public LinkedList<AvatarADActivity> getActivityList() {
+        LinkedList<AvatarADActivity> list = new LinkedList<AvatarADActivity>();
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof AvatarADActivity) {
                 list.add((AvatarADActivity)(tgcomponent[i]));
@@ -422,8 +420,8 @@ public class AvatarADActivity extends TGCScalableWithInternalComponent implement
         return list;
     }
 
-    public List<AvatarADActivity> getFullActivityList() {
-        List<AvatarADActivity> list = new LinkedList<AvatarADActivity>();
+    public LinkedList<AvatarADActivity> getFullActivityList() {
+        LinkedList<AvatarADActivity> list = new LinkedList<AvatarADActivity>();
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof AvatarADActivity) {
                 list.add((AvatarADActivity)(tgcomponent[i]));
@@ -434,7 +432,7 @@ public class AvatarADActivity extends TGCScalableWithInternalComponent implement
     }
 
     public boolean hasInternalActivityWithName(String name) {
-        List<AvatarADActivity> list  = getFullActivityList();
+        LinkedList<AvatarADActivity> list  = getFullActivityList();
         for(AvatarADActivity s: list) {
             if (s.getValue().compareTo(name) ==0) {
                 return true;
@@ -443,7 +441,6 @@ public class AvatarADActivity extends TGCScalableWithInternalComponent implement
         return false;
     }
 
-    @Override
     public int getDefaultConnector() {
         return TGComponentManager.AAD_ASSOCIATION_CONNECTOR;
     }
@@ -474,13 +471,6 @@ public class AvatarADActivity extends TGCScalableWithInternalComponent implement
     public boolean isACompositeActivity() {
         return (nbInternalTGComponent > 0);
     }
-    
-    /* Issue #69
-     * (non-Javadoc)
-     * @see ui.AbstractCDElement#canBeDisabled()
-     */
-    @Override
-    public boolean canBeDisabled() {
-    	return true;
-    }
+
+
 }

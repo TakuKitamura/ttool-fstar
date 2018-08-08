@@ -36,6 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+ 
 package ui.ad;
 
 import myutil.GraphicLib;
@@ -54,7 +57,7 @@ import java.awt.geom.Line2D;
  * @version 1.0 12/12/2003
  * @author Ludovic APVRILLE
  */
-public class TADTimeLimitedOffer extends  TADComponentWithSubcomponents/* Issue #69 TGCWithInternalComponent*/ implements ActionStateErrorHighlight {
+public class TADTimeLimitedOffer extends TGCWithInternalComponent implements ActionStateErrorHighlight  {
 	protected int lineLength = 25;
 	protected int lineDistance = 10;
 	protected int textX =  5;
@@ -78,7 +81,7 @@ public class TADTimeLimitedOffer extends  TADComponentWithSubcomponents/* Issue 
 		connectingPoint[0] = new TGConnectingPointAD(this, 0, -lineLength, true, false, 0.5, 0.0);
 		connectingPoint[1] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.5, 1.0);
 		connectingPoint[2] = new TGConnectingPointAD(this, distanceTwoLines, lineLength, false, true, 0.5, 1.0);
-        addTGConnectingPointsComment();
+                addTGConnectingPointsComment();
 
 		nbInternalTGComponent = 1;
 		tgcomponent = new TGComponent[nbInternalTGComponent];
@@ -98,7 +101,6 @@ public class TADTimeLimitedOffer extends  TADComponentWithSubcomponents/* Issue 
 		myImageIcon = IconManager.imgic218;
 	}
 
-	@Override
 	public void internalDrawing(Graphics g) {
 		int w  = g.getFontMetrics().stringWidth(value);
 		int w1 = Math.max(minWidth, w + 2 * textX);
@@ -140,7 +142,6 @@ public class TADTimeLimitedOffer extends  TADComponentWithSubcomponents/* Issue 
 	
 	}
 
-	@Override
 	public TGComponent isOnOnlyMe(int x1, int y1) {
 		if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
 			return this;
@@ -174,7 +175,7 @@ public class TADTimeLimitedOffer extends  TADComponentWithSubcomponents/* Issue 
 		connectingPoint[2].setCdX(width / 2 + distanceTwoLines);	
 	}*/
 	
-	protected void updateInternalComponents(int diffWidth, int diffX) {
+	public void updateInternalComponents(int diffWidth, int diffX) {
 		int x1 = tgcomponent[0].getX();
 		int y1 = tgcomponent[0].getY();
 		tgcomponent[0].setCdRectangle(width + distanceStateLine + 2, width + distanceStateLine + 10, textY - 10, textY + 10);
@@ -183,7 +184,6 @@ public class TADTimeLimitedOffer extends  TADComponentWithSubcomponents/* Issue 
 		//
 	}
 	
-	@Override
 	public boolean editOndoubleClick(JFrame frame) {
 		String oldValue = value;
 		String text = getName() + ": ";
@@ -209,18 +209,23 @@ public class TADTimeLimitedOffer extends  TADComponentWithSubcomponents/* Issue 
 		return tgcomponent[0].getValue();	
 	}
 	
-	@Override
 	public int getType() {
 		return TGComponentManager.TAD_TIME_LIMITED_OFFER;
 	}
 	
-	@Override
 	public int getDefaultConnector() {
-		return TGComponentManager.CONNECTOR_AD_DIAGRAM;
+      return TGComponentManager.CONNECTOR_AD_DIAGRAM;
     }
 	
-	@Override
 	public void setStateAction(int _stateAction) {
 		stateAction = _stateAction;
 	}
+
 }
+
+
+
+
+    
+
+

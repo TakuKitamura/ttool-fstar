@@ -36,7 +36,11 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui.tmlcp;
+
 
 import ui.CDElement;
 import ui.TGComponentManager;
@@ -50,12 +54,13 @@ import ui.TGConnectingPointWidthHeight;
  * @author Ludovic APVRILLE
  */
 public class TGConnectingPointTMLCP extends  TGConnectingPointWidthHeight{
+
+
     
     public TGConnectingPointTMLCP(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
         super(_container, _x, _y, _in, _out, _w, _h);
     }
     
-    @Override
     public boolean isCompatibleWith(int type) {
         //
         if (type == TGComponentManager.CONNECTOR_TMLCP) {

@@ -36,6 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui.avatarad;
 
 import ui.*;
@@ -48,18 +51,16 @@ import ui.*;
  * @author Ludovic APVRILLE
  */
 public abstract class AvatarADBasicComponent extends TGCScalableWithoutInternalComponent implements SwallowedTGComponent {
-   // private int lineLength = 5;
+    private int lineLength = 5;
 
     public AvatarADBasicComponent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
     }
 
-    @Override
     public int getDefaultConnector() {
         return TGComponentManager.AAD_ASSOCIATION_CONNECTOR;
     }
 
-    @Override
     public void resizeWithFather() {
         if ((father != null) && (father instanceof AvatarADActivity)) {
             // Too large to fit in the father? -> resize it!
@@ -69,4 +70,5 @@ public abstract class AvatarADBasicComponent extends TGCScalableWithoutInternalC
             setMoveCd(x, y);
         }
     }
+
 }

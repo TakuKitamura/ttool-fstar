@@ -36,6 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
 package ui.avatarad;
 
 import ui.MainGUI;
@@ -43,6 +44,9 @@ import ui.TGUIAction;
 import ui.TToolBar;
 
 import javax.swing.*;
+
+//import java.awt.*;
+//import java.awt.event.*;
 
 /**
  * Class AvatarADToolBar
@@ -58,6 +62,7 @@ public class AvatarADToolBar extends TToolBar {
 
     public AvatarADToolBar(MainGUI _mgui) {
         super(_mgui);
+
     }
 
     protected void setActive(boolean b) {
@@ -157,10 +162,14 @@ public class AvatarADToolBar extends TToolBar {
         button = this.add(mgui.actions[TGUIAction.AAD_ALIGN_PARTITION]);
         button.addMouseListener(mgui.mouseHandler);
 
+
         /*this.addSeparator();
           this.addSeparator();
 
           button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR]);
           button.addMouseListener(mgui.mouseHandler);*/
+
+
     }
+
 } // Class

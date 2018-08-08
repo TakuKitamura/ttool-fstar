@@ -36,6 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui.avatarad;
 
 import myutil.GraphicLib;
@@ -53,7 +56,7 @@ import java.awt.geom.Line2D;
    * @version 1.0 02/09/2011
    * @author Ludovic APVRILLE
  */
-public class AvatarADAction extends AvatarADBasicCanBeDisabledComponent/* Issue #69 AvatarADBasicComponent*/ implements EmbeddedComment, BasicErrorHighlight {
+public class AvatarADAction extends AvatarADBasicComponent implements EmbeddedComment, BasicErrorHighlight {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
@@ -85,7 +88,6 @@ public class AvatarADAction extends AvatarADBasicCanBeDisabledComponent/* Issue 
         myImageIcon = IconManager.imgic204;
     }
 
-    @Override
     public void internalDrawing(Graphics g) {
         int w  = g.getFontMetrics().stringWidth(value);
         int w1 = Math.max(minWidth, w + 2 * textX);
@@ -116,7 +118,6 @@ public class AvatarADAction extends AvatarADBasicCanBeDisabledComponent/* Issue 
 
     }
 
-    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -129,7 +130,6 @@ public class AvatarADAction extends AvatarADBasicCanBeDisabledComponent/* Issue 
         return null;
     }
 
-    @Override
     public boolean editOndoubleClick(JFrame frame) {
         oldValue = value;
 
@@ -177,13 +177,13 @@ public class AvatarADAction extends AvatarADBasicCanBeDisabledComponent/* Issue 
         return ret;
     }
 
-    @Override
     public int getType() {
         return TGComponentManager.AAD_ACTION;
     }
 
-    @Override
     public void setStateAction(int _stateAction) {
         stateOfError = _stateAction;
     }
+
+
 }

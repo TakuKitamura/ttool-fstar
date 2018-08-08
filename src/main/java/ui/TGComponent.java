@@ -68,7 +68,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
@@ -82,7 +81,7 @@ import java.util.Vector;
  * @version 1.0 21/12/2003
  */
 
-public abstract class TGComponent  extends AbstractCDElement implements /*CDElement,*/ GenericTree {
+public abstract class TGComponent implements CDElement, GenericTree {
 
     protected final static String XML_HEAD = "<COMPONENT type=\"";
     protected final static String XML_ID = "\" id=\"";
@@ -157,7 +156,7 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
     protected TGComponent selectedInternalComponent;
 
     // characteristics
-    //protected boolean enabled = true;
+    protected boolean enabled = true;
     protected boolean moveable;
     protected boolean removable;
     protected boolean multieditable = false;
@@ -169,7 +168,7 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
 
     //Associated transactions
     public String transaction = "";
-    public List<SimulationTransaction> transactions = new ArrayList<SimulationTransaction>();
+    public java.util.List<SimulationTransaction> transactions = new ArrayList<SimulationTransaction>();
 
     //If task
     public String runningStatus = "";
@@ -246,14 +245,14 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
 
     public abstract void setState(int s);
 
-//
-//    public void setEnabled(boolean _enabled) {
-//        enabled = _enabled;
-//    }
-//
-//    public boolean isEnabled() {
-//        return enabled;
-//    }
+
+    public void setEnabled(boolean _enabled) {
+        enabled = _enabled;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
 
     // Internal component operations
     public void setFather(TGComponent _father) {
@@ -388,14 +387,14 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
         return false;
     }
 
-    public List<TGComponent> getAllCheckedAccessibility() {
-        List<TGComponent> list = new LinkedList<TGComponent>();
+    public java.util.List<TGComponent> getAllCheckedAccessibility() {
+        java.util.List<TGComponent> list = new LinkedList<TGComponent>();
         getAllCheckedAccessibility(list);
 
         return list;
     }
 
-    public void getAllCheckedAccessibility(List<TGComponent> _list) {
+    public void getAllCheckedAccessibility(java.util.List<TGComponent> _list) {
         if (accessibility) {
             _list.add(this);
         }
@@ -407,14 +406,14 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
         }
     }
 
-    public List<TGComponent> getAllCheckableAccessibility() {
-        List<TGComponent> list = new LinkedList<TGComponent>();
+    public java.util.List<TGComponent> getAllCheckableAccessibility() {
+        java.util.List<TGComponent> list = new LinkedList<TGComponent>();
         getAllCheckableAccessibility(list);
 
         return list;
     }
 
-    public void getAllCheckableAccessibility(List<TGComponent> _list) {
+    public void getAllCheckableAccessibility(java.util.List<TGComponent> _list) {
         TraceManager.addDev("Investigating accessibility of " + this);
         if (this instanceof CheckableAccessibility) {
             _list.add(this);
@@ -613,7 +612,7 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
         GraphicLib.dashedRect(g, x + width + s2 + s3, y + s3, w + 15, h - 12);
     }
 
-    protected void drawAttributes(Graphics g, String attr) {
+    public void drawAttributes(Graphics g, String attr) {
         if (attr == null) {
             return;
         }
@@ -631,9 +630,11 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
         int w = p1.x;
         int h = p1.y - y + s3;
         GraphicLib.dashedRect(g, x + width + s2 + s3, y + s3, w + 15, h - 12);
+
     }
 
-    protected Point drawCode(Graphics g, String s, int x1, int y1, boolean pre, boolean java, int dec) {
+    public Point drawCode(Graphics g, String s, int x1, int y1, boolean pre, boolean java, int dec) {
+
         Point p = new Point(0, y1);
 
         String info;
@@ -1021,14 +1022,11 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
 
     }
 
+
     public void draw(Graphics g) {
         RunningInfo ri;
         LoadInfo li;
-        
-        // Issue #69: Disabling of components
-        ColorManager.setColor(g, state, 0, isEnabled() );
-//        ColorManager.setColor(g, state, 0);
-  
+        ColorManager.setColor(g, state, 0);
         Font font = new Font(Font.SANS_SERIF, Font.PLAIN, this.tdp.getFontSize());
         g.setFont(font);
         internalDrawing(g);
@@ -1155,7 +1153,7 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
                         if (li != null) {
                             drawLoadDiploID(g, li);
                         }
-                        List<SimulationTransaction> ts = tdp.getMGUI().getTransactions(getDIPLOID());
+                        java.util.List<SimulationTransaction> ts = tdp.getMGUI().getTransactions(getDIPLOID());
                         if (ts != null && ts.size() > 0) {
                             transactions = new ArrayList<SimulationTransaction>(ts);
                             transaction = transactions.get(transactions.size() - 1).taskName + ":" + transactions.get(transactions.size() - 1).command;
@@ -1629,8 +1627,8 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
         return tgcomponent[index];
     }
 
-    public List<TGComponent> getRecursiveAllInternalComponent() {
-        List<TGComponent> ll = new LinkedList<TGComponent>();
+    public LinkedList<TGComponent> getRecursiveAllInternalComponent() {
+        LinkedList<TGComponent> ll = new LinkedList<TGComponent>();
 
         for (int i = 0; i < nbInternalTGComponent; i++) {
             ll.add(tgcomponent[i]);
@@ -3049,7 +3047,7 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
         return saveInXML(true);
     }
 
-    protected StringBuffer saveInXML(boolean saveSubComponents) {
+    public StringBuffer saveInXML(boolean saveSubComponents) {
         StringBuffer sb = null;
         boolean b = (father == null);
         if (b) {
@@ -3070,10 +3068,7 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
         sb.append(translateCDParam());
         sb.append(translateSizeParam());
         sb.append(translateHidden());
-
-        // Issue #69
-        if ( canBeDisabled() ) {
-        //if (this instanceof CanBeDisabled) {
+        if (this instanceof CanBeDisabled) {
             sb.append(translateEnabled());
         }
         sb.append(translateCDRectangleParam());
@@ -3124,7 +3119,7 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
     }
 
     protected String translateEnabled() {
-        return "<enabled value=\"" + isEnabled() + "\" />\n";
+        return "<enabled value=\"" + enabled + "\" />\n";
     }
 
     protected String translateHidden() {
@@ -3284,7 +3279,6 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
     public void postLoading(int decId) throws MalformedModelingException {
     }
 
-    @Override
     public String toString() {
         String s1 = getName();
         String s2 = getValue();
@@ -3347,131 +3341,4 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
     public void clickSelect(boolean b) {
         isSelect = b;
     }
-    
-    /**
-     * Issue #69
-     * @param point
-     * @return
-     */
-    public TGConnector getConnectorConnectedTo( final TGConnectingPoint point ) {
-    	return tdp.getConnectorConnectedTo( point );
-    }
-    
-    /**
-     * Issue #69
-     * @return
-     */
-    public List<TGConnector> getConnectors() {
-    	return tdp.getConnectors();
-    }
-    
-    /**
-     * Issue #69
-     * @return
-     */
-    public List<TGConnector> getInputConnectors() {
-    	final List<TGConnector> connectors = new ArrayList<TGConnector>();
-    	final List<TGConnectingPoint> points = Arrays.asList( getConnectingPoints() );
-    	
-    	for ( final TGConnector connector : getConnectors() ) {
-    		if ( points.contains( connector.getTGConnectingPointP2() ) ) {
-    			connectors.add( connector );
-    		}
-    	}
-    	
-    	return connectors;
-    }
-    
-    /**
-     * Issue #69
-     * @return
-     */
-    public List<TGConnector> getOutputConnectors() {
-    	final List<TGConnector> connectors = new ArrayList<TGConnector>();
-    	final List<TGConnectingPoint> points = Arrays.asList( getConnectingPoints() );
-    	
-    	for ( final TGConnector connector : getConnectors() ) {
-    		if ( points.contains( connector.getTGConnectingPointP1() ) ) {
-    			connectors.add( connector );
-    		}
-    	}
-    	
-    	return connectors;
-    }
-
-	/**
-	 * Issue #69
-	 * @return
-	 */
-	public TGConnectingPoint[] getConnectingPoints() {
-		return connectingPoint;
-	}
-	
-    /* Issue #69
-     * (non-Javadoc)
-     * @see ui.CDElement#acceptForward(ui.ICDElementVisitor)
-     */
-    @Override
-	public void acceptForward( final ICDElementVisitor visitor ) {
-		if ( visitor.visit( this ) ) {
-			if ( tgcomponent !=  null ) {
-				for ( final TGComponent subCompo : tgcomponent ) {
-					subCompo.acceptForward( visitor );
-				}
-			}
-			
-			if ( connectingPoint !=  null ) {
-				for ( final TGConnectingPoint point : connectingPoint ) {
-					final TGConnector connector = getConnectorConnectedTo( point );
-					
-					if ( connector != null && point == connector.getTGConnectingPointP1() ) {
-						point.acceptForward( visitor );
-					}
-				}
-			}
-		}
-	}
-	
-    /* Issue #69
-     * (non-Javadoc)
-     * @see ui.CDElement#acceptBackward(ui.ICDElementVisitor)
-     */
-    @Override
-	public void acceptBackward( final ICDElementVisitor visitor ) {
-		if ( visitor.visit( this ) ) {
-			if ( tgcomponent !=  null ) {
-				for ( final TGComponent subCompo : tgcomponent ) {
-					subCompo.acceptBackward( visitor );
-				}
-			}
-			
-			if ( connectingPoint !=  null ) {
-				for ( final TGConnectingPoint point : connectingPoint ) {
-					final TGConnector connector = getConnectorConnectedTo( point );
-					
-					if ( connector != null && point == connector.getTGConnectingPointP2() ) {
-						point.acceptBackward( visitor );
-					}
-				}
-			}
-		}
-	}
-    
-    public void renameTab(String s) {
-    	TURTLEPanel tp = this.tdp.tp;
-    	for (TDiagramPanel tdpTmp: tp.panels) {
-    		if (tdpTmp.name.equals(name)) {
-    	    	if (!tp.nameInUse(s)) {
-    	            tp.tabbedPane.setTitleAt(tp.getIndexOfChild(tdpTmp), s);
-    	            tp.panels.elementAt(tp.getIndexOfChild(tdpTmp)).setName(s);
-    	            tp.mgui.changeMade(null, -1);
-    	        }
-    			break;
-    		}
-    	}
-    }
-    
-   public boolean nameUsed(String s) {
-    	return this.tdp.tp.refNameUsed(s);
-   }
 }

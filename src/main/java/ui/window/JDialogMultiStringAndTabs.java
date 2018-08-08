@@ -36,26 +36,15 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
 package ui.window;
 
-import java.awt.Container;
-import java.awt.Font;
-import java.awt.Frame;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
 
 /**
  * Class JDialogMultiStringAndTabs
@@ -67,7 +56,7 @@ import javax.swing.JTextField;
  */
 public class JDialogMultiStringAndTabs extends JDialogBase implements ActionListener {
 
-    private List<TabInfo> tabs;
+    private ArrayList<TabInfo> tabs;
     private int totalNbOfStrings;
 
     private boolean set = false;
@@ -75,16 +64,16 @@ public class JDialogMultiStringAndTabs extends JDialogBase implements ActionList
     // Panel1
     private JTextField[] texts;
     private JButton inserts[];
-    private Map<Integer, JComboBox<String>> helps;
+    private HashMap<Integer, JComboBox<String>> helps;
 
-   // private List<String[]> possibleValues = null;
+    private ArrayList<String[]> possibleValues = null;
 
 
     /**
      * Creates new form
      */
     // arrayDelay: [0] -> minDelay ; [1] -> maxDelay
-    public JDialogMultiStringAndTabs(Frame f, String title, List<TabInfo> _tabs) {
+    public JDialogMultiStringAndTabs(Frame f, String title, ArrayList<TabInfo> _tabs) {
 
         super(f, title, true);
 
@@ -98,13 +87,13 @@ public class JDialogMultiStringAndTabs extends JDialogBase implements ActionList
         texts = new JTextField[totalNbOfStrings];
 
         initComponents();
-        //myInitComponents();
+        myInitComponents();
         pack();
     }
 
 
-//    private void myInitComponents() {
-//    }
+    private void myInitComponents() {
+    }
 
     private void initComponents() {
         inserts = new JButton[totalNbOfStrings];
@@ -172,9 +161,14 @@ public class JDialogMultiStringAndTabs extends JDialogBase implements ActionList
 
         }
 
+
+
         //panel1.setBorder(new javax.swing.border.TitledBorder("Properties"));
 
         //panel1.setPreferredSize(new Dimension(600, 300));
+
+
+
 
         // main panel;
         c0.gridwidth = 1;
@@ -192,7 +186,6 @@ public class JDialogMultiStringAndTabs extends JDialogBase implements ActionList
         initButtons(c0, c, this);
     }
 
-    @Override
     public void actionPerformed(ActionEvent evt) {
         String command = evt.getActionCommand();
 
@@ -209,6 +202,7 @@ public class JDialogMultiStringAndTabs extends JDialogBase implements ActionList
             }
         }
     }
+
 
     public void closeDialog() {
         set = true;
@@ -237,6 +231,7 @@ public class JDialogMultiStringAndTabs extends JDialogBase implements ActionList
     public boolean hasValidString(int i) {
         return texts[i].getText().length() > 0;
     }
+
 
     public boolean hasBeenSet() {
         return set;

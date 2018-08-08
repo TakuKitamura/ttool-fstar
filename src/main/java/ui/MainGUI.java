@@ -8054,7 +8054,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return false;
     }
 
-    public boolean newSysCAMSComponentTaskName(TURTLEPanel tp, String old, String niou) {
+		public boolean newSysCAMSComponentTaskName(TURTLEPanel tp, String old, String niou) {
     	JTabbedPane jtp = tp.tabbedPane;
     	for (int i = 0; i < jtp.getTabCount(); i++) {
     		if (jtp.getTitleAt(i).equals(niou)) {
@@ -8075,7 +8075,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     					tdp.setName(niou);
     				}
     			}
-
+    			
     			return true;
     		}
     	}
@@ -8439,33 +8439,33 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         //tofile.extracParamToFile();
     }
 
-//    public void avatarToSoclib() {
-//        //DG 6.2. appelee nulle part?
-//
-//        ADDDiagramPanel deploymentDiagramPanel = getDeploymentPanel();
-//        AvatarDesignPanel designDiagramPanel = getFirstAvatarDesignPanelFound();
-//
-//        AvatarDeploymentPanelTranslator avdeploymenttranslator = new AvatarDeploymentPanelTranslator(deploymentDiagramPanel);
-//        AvatarddSpecification avddspec = avdeploymenttranslator.getAvatarddSpecification();
-//
-//
-//        AvatarDesignPanelTranslator avdesigntranslator = new AvatarDesignPanelTranslator(designDiagramPanel);
-//
-//        List<AvatarBDStateMachineOwner> adp = designDiagramPanel.getAvatarBDPanel().getFullStateMachineOwnerList();
-//        AvatarSpecification avaspec = avdesigntranslator.generateAvatarSpecification(adp);
-//
-//        // Generator for block tasks and application main file
-//
-//        TasksAndMainGenerator gene = new TasksAndMainGenerator(avddspec, avaspec);
-//        gene.generateSoclib(false, false);
-//        try {
-//            //System.err.println("ok");
-//            gene.saveInFiles(TasksAndMainGenerator.getGeneratedPath());
-//        } catch (FileException e) {
-//            System.err.println("FileException : MainGUI.avatarToSoclib()");
-//        }
-//
-//    }
+    public void avatarToSoclib() {
+        //DG 6.2. appelee nulle part?
+
+        ADDDiagramPanel deploymentDiagramPanel = getDeploymentPanel();
+        AvatarDesignPanel designDiagramPanel = getFirstAvatarDesignPanelFound();
+
+        AvatarDeploymentPanelTranslator avdeploymenttranslator = new AvatarDeploymentPanelTranslator(deploymentDiagramPanel);
+        AvatarddSpecification avddspec = avdeploymenttranslator.getAvatarddSpecification();
+
+
+        AvatarDesignPanelTranslator avdesigntranslator = new AvatarDesignPanelTranslator(designDiagramPanel);
+
+        List<AvatarBDStateMachineOwner> adp = designDiagramPanel.getAvatarBDPanel().getFullStateMachineOwnerList();
+        AvatarSpecification avaspec = avdesigntranslator.generateAvatarSpecification(adp);
+
+        // Generator for block tasks and application main file
+
+        TasksAndMainGenerator gene = new TasksAndMainGenerator(avddspec, avaspec);
+        gene.generateSoclib(false, false);
+        try {
+            //System.err.println("ok");
+            gene.saveInFiles(TasksAndMainGenerator.getGeneratedPath());
+        } catch (FileException e) {
+            System.err.println("FileException : MainGUI.avatarToSoclib()");
+        }
+
+    }
     //--------------------end DDD------------------------------------------------
 
     public Vector<SysCAMSComponentTaskDiagramPanel> getListSysCAMSPanel() {

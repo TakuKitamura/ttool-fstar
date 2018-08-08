@@ -36,6 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui.tmlad;
 
 import myutil.GraphicLib;
@@ -43,7 +46,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import ui.*;
-import ui.ad.TADComponentWithoutSubcomponents;
 import ui.util.IconManager;
 import ui.window.JDialogMultiString;
 
@@ -58,7 +60,7 @@ import java.awt.geom.Line2D;
  * @version 1.0 27/10/2006
  * @author Ludovic APVRILLE
  */
-public class TMLADNotifiedEvent extends TADComponentWithoutSubcomponents/* Issue #69TGCWithoutInternalComponent */ implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
+public class TMLADNotifiedEvent extends TGCWithoutInternalComponent implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
@@ -92,7 +94,6 @@ public class TMLADNotifiedEvent extends TADComponentWithoutSubcomponents/* Issue
         myImageIcon = IconManager.imgic904;
     }
     
-    @Override
     public void internalDrawing(Graphics g) {
         int w  = g.getFontMetrics().stringWidth(value);
         int w1 = Math.max(minWidth, w + 3 * textX);
@@ -146,7 +147,6 @@ public class TMLADNotifiedEvent extends TADComponentWithoutSubcomponents/* Issue
         g.drawString(value, x + linebreak + textX1, y + textY);
     }
     
-    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -159,7 +159,7 @@ public class TMLADNotifiedEvent extends TADComponentWithoutSubcomponents/* Issue
         return null;
     }
     
-    private void makeValue() {
+    public void makeValue() {
         value = result + "=?" + eventName + "()";
     }
     
@@ -180,7 +180,6 @@ public class TMLADNotifiedEvent extends TADComponentWithoutSubcomponents/* Issue
         return value;
     }
     
-    @Override
     public boolean editOndoubleClick(JFrame frame) {
         String [] labels = new String[2];
         String [] values = new String[2];
@@ -206,7 +205,6 @@ public class TMLADNotifiedEvent extends TADComponentWithoutSubcomponents/* Issue
          
     }
     
-    @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<Data eventName=\"");
@@ -220,12 +218,17 @@ public class TMLADNotifiedEvent extends TADComponentWithoutSubcomponents/* Issue
     
     @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
+        //
         try {
+            
             NodeList nli;
             Node n1, n2;
             Element elt;
 //            int k;
 //            String s;
+            
+            //
+            //
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
@@ -248,22 +251,23 @@ public class TMLADNotifiedEvent extends TADComponentWithoutSubcomponents/* Issue
             }
             
         } catch (Exception e) {
-            throw new MalformedModelingException( e );
+            throw new MalformedModelingException();
         }
         makeValue();
     }
     
-    @Override
+
     public int getType() {
         return TGComponentManager.TMLAD_NOTIFIED_EVENT;
     }
     
-    @Override
     public int getDefaultConnector() {
-    	return TGComponentManager.CONNECTOR_TMLAD;
+      return TGComponentManager.CONNECTOR_TMLAD;
     }
 	
 	public void setStateAction(int _stateAction) {
 		stateOfError = _stateAction;
 	}
+    
+    
 }

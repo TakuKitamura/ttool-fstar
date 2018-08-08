@@ -36,6 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
 package ui.avatarbd;
 
 import myutil.Conversion;
@@ -48,10 +49,7 @@ import ui.util.IconManager;
 import ui.window.JDialogSafetyPragma;
 
 import javax.swing.*;
-
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
+import java.awt.*;
 import java.util.*;
 
 /**
@@ -65,7 +63,7 @@ import java.util.*;
 public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
 
     protected String[] values;
-    protected List<String> properties;
+    protected LinkedList<String> properties;
     protected int textX = 25;
     protected int textY = 5;
     protected int marginY = 20;
@@ -74,7 +72,7 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
     protected int lockX = 1;
     protected int lockY = 5;
     protected Graphics myg;
-    public List<String> syntaxErrors;
+    public ArrayList<String> syntaxErrors;
     protected Color myColor;
 
     private Font myFont;//, myFontB;
@@ -129,11 +127,10 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
         return values;
     }
 
-    public List<String> getProperties() {
+    public LinkedList<String> getProperties() {
         return properties;
     }
 
-    @Override
     public void internalDrawing(Graphics g) {
         Font f = g.getFont();
         Font fold = f;
@@ -224,7 +221,8 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
 
     }
 
-    private void makeValue() {
+    public void makeValue() {
+
         values = Conversion.wrapText(value);
         properties.clear();
         for (String s : values) {
@@ -260,7 +258,7 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
       }
       }*/
 
-    @Override
+
     public boolean editOndoubleClick(JFrame frame) {
         String oldValue = value;
 
@@ -281,7 +279,6 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
         return false;
     }
 
-    @Override
     public TGComponent isOnMe(int x1, int y1) {
         if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
             return this;
@@ -289,7 +286,6 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
         return null;
     }
 
-    @Override
     public void rescale(double scaleFactor) {
         /*dlineHeight = (lineHeight + dlineHeight) / oldScaleFactor * scaleFactor;
           lineHeight = (int)(dlineHeight);
@@ -301,12 +297,10 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
         super.rescale(scaleFactor);
     }
 
-    @Override
     public int getType() {
         return TGComponentManager.SAFETY_PRAGMA;
     }
 
-    @Override
     protected String translateExtraParam() {
         if (values == null) {
             makeValue();

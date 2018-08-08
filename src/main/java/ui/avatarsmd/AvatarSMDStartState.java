@@ -36,6 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui.avatarsmd;
 
 import myutil.GraphicLib;
@@ -53,8 +56,7 @@ import java.awt.geom.Line2D;
  * @author Ludovic APVRILLE
  */
 public class AvatarSMDStartState extends AvatarSMDBasicComponent implements EmbeddedComment, PartOfInvariant{
-    
-	private int lineLength = 5;
+    private int lineLength = 5;
     
     public AvatarSMDStartState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -77,13 +79,11 @@ public class AvatarSMDStartState extends AvatarSMDBasicComponent implements Embe
         myImageIcon = IconManager.imgic222;
     }
     
-    @Override
     public void internalDrawing(Graphics g) {
         g.fillOval(x, y, width, height);
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
     }
     
-    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -96,28 +96,12 @@ public class AvatarSMDStartState extends AvatarSMDBasicComponent implements Embe
         return null;
     }
     
-    @Override
     public int getType() {
         return TGComponentManager.AVATARSMD_START_STATE;
     }
     
-    @Override
     public int getDefaultConnector() {
-    	return TGComponentManager.AVATARSMD_CONNECTOR;
+      return TGComponentManager.AVATARSMD_CONNECTOR;
     }
-	
-    /* Issue #69
-     * (non-Javadoc)
-     * @see ui.CDElement#acceptBackward(ui.ICDElementVisitor)
-     */
-    @Override
-	public void acceptBackward( final ICDElementVisitor visitor ) {
-		if ( visitor.visit( this ) ) {
-			
-			// Needed to escape containing composite state machine
-			if ( getFather() instanceof AvatarSMDState ) {
-				getFather().acceptBackward( visitor );
-			}
-		}
-	}
+    
 }

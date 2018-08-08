@@ -36,6 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui.tmlad;
 
 import myutil.GraphicLib;
@@ -43,7 +46,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import ui.*;
-import ui.ad.TADComponentWithoutSubcomponents;
 import ui.util.IconManager;
 import ui.window.JDialogMultiString;
 
@@ -58,7 +60,7 @@ import java.awt.geom.Line2D;
 * @version 1.0 11/02/201
 * @author Ludovic APVRILLE
  */
-public class TMLADReadRequestArg extends TADComponentWithoutSubcomponents/* Issue #69 TGCWithoutInternalComponent*/ implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
+public class TMLADReadRequestArg extends TGCWithoutInternalComponent implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
@@ -150,8 +152,8 @@ public class TMLADReadRequestArg extends TADComponentWithoutSubcomponents/* Issu
 		return value;
 	}
 	
-	@Override
 	public void internalDrawing(Graphics g) {
+		
 		if (value.length() == 0) {
 			makeValue();
 		}
@@ -187,7 +189,6 @@ public class TMLADReadRequestArg extends TADComponentWithoutSubcomponents/* Issu
 		g.drawString(value, x + (width - w) / 2 , y + textY);
 	}
 	
-	@Override
 	public boolean editOndoubleClick(JFrame frame) {
 		String [] labels = new String[nParam];
 		String [] values = new String[nParam];
@@ -213,7 +214,6 @@ public class TMLADReadRequestArg extends TADComponentWithoutSubcomponents/* Issu
 		
 	}
 	
-	@Override
 	public TGComponent isOnMe(int _x, int _y) {
 		if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
 			return this;
@@ -255,6 +255,9 @@ public class TMLADReadRequestArg extends TADComponentWithoutSubcomponents/* Issu
 			int k;
 			String s;
 			
+			//
+			//
+			
 			for(int i=0; i<nl.getLength(); i++) {
 				n1 = nl.item(i);
 				//
@@ -284,18 +287,18 @@ public class TMLADReadRequestArg extends TADComponentWithoutSubcomponents/* Issu
 		makeValue();
 	}
 	
-	@Override
+	
 	public int getType() {
 		return TGComponentManager.TMLAD_READ_REQUEST_ARG;
 	}
 	
-	@Override
 	public int getDefaultConnector() {
 		return TGComponentManager.CONNECTOR_TMLAD;
 	}
 	
-	@Override
 	public void setStateAction(int _stateAction) {
 		stateOfError = _stateAction;
 	}
+	
+	
 }

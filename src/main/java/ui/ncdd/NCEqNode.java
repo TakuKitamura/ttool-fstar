@@ -36,6 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui.ncdd;
 
 import myutil.GraphicLib;
@@ -44,13 +47,8 @@ import ui.util.IconManager;
 import ui.window.JDialogNCEqNode;
 
 import javax.swing.*;
-
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Polygon;
+import java.awt.*;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Vector;
 
 
@@ -115,7 +113,6 @@ public class NCEqNode extends TGCWithInternalComponent implements SwallowTGCompo
         myImageIcon = IconManager.imgic700;
     }
     
-    @Override
     public void internalDrawing(Graphics g) {
 		Color c = g.getColor();
 		g.draw3DRect(x, y, width, height, true);
@@ -149,7 +146,6 @@ public class NCEqNode extends TGCWithInternalComponent implements SwallowTGCompo
 		g.drawImage(IconManager.imgic1100.getImage(), x + width - 20, y + 4, null);
     }
     
-    @Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
         
         Polygon pol = new Polygon();
@@ -183,7 +179,6 @@ public class NCEqNode extends TGCWithInternalComponent implements SwallowTGCompo
 		return type;
 	}
 	
-    @Override
 	public boolean editOndoubleClick(JFrame frame) {
 	//
         String oldName = name;
@@ -230,18 +225,16 @@ public class NCEqNode extends TGCWithInternalComponent implements SwallowTGCompo
         return true;
     }
     
-    @Override
+    
     public int getType() {
         return TGComponentManager.NCDD_EQNODE;
     }
 	
-    @Override
 	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
         return tgc instanceof NCTrafficArtifact;
 
     }
     
-    @Override
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
    
         if (tgc instanceof NCTrafficArtifact) {
@@ -258,10 +251,10 @@ public class NCEqNode extends TGCWithInternalComponent implements SwallowTGCompo
        
     }
     
-    @Override
     public void removeSwallowedTGComponent(TGComponent tgc) {
         removeInternalComponent(tgc);
     }
+    
     
     public Vector<NCTrafficArtifact> getArtifactList() {
         Vector<NCTrafficArtifact> v = new Vector<NCTrafficArtifact> ();
@@ -273,13 +266,13 @@ public class NCEqNode extends TGCWithInternalComponent implements SwallowTGCompo
         return v;
     }
 	
-	public void addAllTraffics( List<String> list) {
+	public void addAllTraffics(ArrayList<String> list) {
 		for(int i=0; i<nbInternalTGComponent; i++) {
            list.add(tgcomponent[i].getValue());
         }
 	}
 	
-	public void addAllTrafficArtifacts( List<NCTrafficArtifact> list) {
+	public void addAllTrafficArtifacts(ArrayList<NCTrafficArtifact> list) {
 		for(int i=0; i<nbInternalTGComponent; i++) {
            list.add((NCTrafficArtifact)(tgcomponent[i]));
         }
@@ -303,13 +296,14 @@ public class NCEqNode extends TGCWithInternalComponent implements SwallowTGCompo
         
     }
     
-    @Override
+ 
+    
    	public int getDefaultConnector() {
         return TGComponentManager.CONNECTOR_NODE_NC;
       }
 	 
-    public String getAttributes() {
-		String attr = "Type: ";
+	  public String getAttributes() {
+		  String attr = "Type: ";
 		if (type == 0) {
 			attr += "Standard\n";
 		} else {
@@ -322,7 +316,8 @@ public class NCEqNode extends TGCWithInternalComponent implements SwallowTGCompo
 			pol = "SP";
 		}
 		attr += "Scheduling policy = " + pol + "\n";
-		
 		return attr;
+		
 	}
+    
 }

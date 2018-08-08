@@ -36,25 +36,17 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui.tmlad;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import myutil.GraphicLib;
+import ui.*;
+import ui.util.IconManager;
 
-import ui.AllowedBreakpoint;
-import ui.BasicErrorHighlight;
-import ui.CheckableAccessibility;
-import ui.CheckableLatency;
-import ui.ColorManager;
-import ui.EmbeddedComment;
-import ui.ErrorHighlight;
-import ui.PostJavaCode;
-import ui.PreJavaCode;
-import ui.TDiagramPanel;
-import ui.TGComponent;
-import ui.TGComponentManager;
-import ui.TGConnectingPoint;
-import ui.ad.TADActionState;
+import java.awt.*;
+import java.awt.geom.Line2D;
 
 /**
  * Class TMLADActionState
@@ -63,45 +55,36 @@ import ui.ad.TADActionState;
  * @version 1.0 21/11/2005
  * @author Ludovic APVRILLE
  */
-public class TMLADActionState extends TADActionState/* Issue #69 TGCOneLineText */implements PreJavaCode, PostJavaCode, CheckableAccessibility, CheckableLatency, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
-//    protected int lineLength = 5;
-//    protected int textX =  5;
-//    protected int textY =  15;
-//    protected int arc = 5;
-//	
-//	protected int stateOfError = 0; // Not yet checked
+public class TMLADActionState extends TGCOneLineText implements PreJavaCode, PostJavaCode, CheckableAccessibility, CheckableLatency, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
+    protected int lineLength = 5;
+    protected int textX =  5;
+    protected int textY =  15;
+    protected int arc = 5;
+	
+	protected int stateOfError = 0; // Not yet checked
     
     public TMLADActionState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-//        
-//        width = 30;
-//        height = 20;
-//        minWidth = 30;
-//        
-//        nbConnectingPoint = 2;
-//        connectingPoint = new TGConnectingPoint[2];
-//        connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-//        connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.5, 1.0);
-//        
-//        moveable = true;
-//        editable = true;
-//        removable = true;
-//        
-//        value = "action";
-//        name = "action state";
-//        
-//        myImageIcon = IconManager.imgic204;
+        
+        width = 30;
+        height = 20;
+        minWidth = 30;
+        
+        nbConnectingPoint = 2;
+        connectingPoint = new TGConnectingPoint[2];
+        connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
+        connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.5, 1.0);
+        
+        moveable = true;
+        editable = true;
+        removable = true;
+        
+        value = "action";
+        name = "action state";
+        
+        myImageIcon = IconManager.imgic204;
     }
     
-    @Override
-    protected void createConnectingPoints() {
-    	nbConnectingPoint = 2;
-    	connectingPoint = new TGConnectingPoint[ nbConnectingPoint ];
-    	connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-    	connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.5, 1.0);
-    }
-
-    @Override
     public void internalDrawing(Graphics g) {
         int w  = g.getFontMetrics().stringWidth(value);
         int w1 = Math.max(minWidth, w + 2 * textX);
@@ -111,9 +94,9 @@ public class TMLADActionState extends TADActionState/* Issue #69 TGCOneLineText 
             //updateConnectingPoints();
         }
 		
-		if (stateAction > 0)  {
+		if (stateOfError > 0)  {
 			Color c = g.getColor();
-			switch(stateAction) {
+			switch(stateOfError) {
 			case ErrorHighlight.OK:
 				g.setColor(ColorManager.ATTRIBUTE_BOX_ACTION);
 				break;
@@ -129,25 +112,25 @@ public class TMLADActionState extends TADActionState/* Issue #69 TGCOneLineText 
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
         
         g.drawString(value, x + (width - w) / 2 , y + textY);
+		
     }
     
-//    public TGComponent isOnMe(int _x, int _y) {
-//        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
-//            return this;
-//        }
-//        
-//        if ((int)(Line2D.ptSegDistSq(x +width/2, y- lineLength,  x+width/2, y + lineLength + height, _x, _y)) < distanceSelected) {
-//			return this;	
-//		}
-//        
-//        return null;
-//    }
-//    
-//    public String getAction() {
-//        return value;
-//    }
+    public TGComponent isOnMe(int _x, int _y) {
+        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+            return this;
+        }
+        
+        if ((int)(Line2D.ptSegDistSq(x +width/2, y- lineLength,  x+width/2, y + lineLength + height, _x, _y)) < distanceSelected) {
+			return this;	
+		}
+        
+        return null;
+    }
     
-    @Override
+    public String getAction() {
+        return value;
+    }
+    
     public String getAction(int cpt) {
         if (cpt <0) {
             return value;
@@ -173,17 +156,17 @@ public class TMLADActionState extends TADActionState/* Issue #69 TGCOneLineText 
         return ret; 
     }
     
-    @Override
     public int getType() {
         return TGComponentManager.TMLAD_ACTION_STATE;
     }
     
-    @Override
     public int getDefaultConnector() {
-    	return TGComponentManager.CONNECTOR_TMLAD;
+      return TGComponentManager.CONNECTOR_TMLAD;
     }
 	
-//	public void setStateAction(int _stateAction) {
-//		stateOfError = _stateAction;
-//	}
+	public void setStateAction(int _stateAction) {
+		stateOfError = _stateAction;
+	}
+    
+    
 }

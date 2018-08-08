@@ -36,41 +36,25 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
 package ui.tmlad;
-
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.geom.Line2D;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.swing.JFrame;
-
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import myutil.Conversion;
 import myutil.GraphicLib;
-import ui.AllowedBreakpoint;
-import ui.BasicErrorHighlight;
-import ui.CheckableAccessibility;
-import ui.CheckableLatency;
-import ui.ColorManager;
-import ui.EmbeddedComment;
-import ui.ErrorHighlight;
-import ui.LinkedReference;
-import ui.MalformedModelingException;
-import ui.TDiagramPanel;
-import ui.TGComponent;
-import ui.TGComponentManager;
-import ui.TGConnectingPoint;
-import ui.ad.TADComponentWithoutSubcomponents;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import ui.*;
 import ui.util.IconManager;
+import ui.window.JDialogMultiString;
 import ui.window.JDialogMultiStringAndTabs;
 import ui.window.TabInfo;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.geom.Line2D;
+import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Class TMLADWriteChannel
@@ -80,7 +64,7 @@ import ui.window.TabInfo;
  * @author Ludovic APVRILLE
  * @version 1.0 17/11/2005
  */
-public class TMLADWriteChannel extends TADComponentWithoutSubcomponents/* Issue #69 TGCWithoutInternalComponent*/ implements CheckableAccessibility, LinkedReference, CheckableLatency, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
+public class TMLADWriteChannel extends TGCWithoutInternalComponent implements CheckableAccessibility, LinkedReference, CheckableLatency, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
     protected int lineLength = 5;
     protected int textX = 5;
     protected int textY = 15;
@@ -88,12 +72,14 @@ public class TMLADWriteChannel extends TADComponentWithoutSubcomponents/* Issue 
     protected int linebreak = 10;
     protected int decSec = 4;
 
-    private Map<String, String> latencyVals;
+
+    private ConcurrentHashMap<String, String> latencyVals;
 
     protected int latencyX = 30;
     protected int latencyY = 25;
     protected int textWidth = 10;
     protected int textHeight = 20;
+
 
     protected String channelName = "ch";
     protected String nbOfSamples = "1";
@@ -134,11 +120,10 @@ public class TMLADWriteChannel extends TADComponentWithoutSubcomponents/* Issue 
         latencyVals = new ConcurrentHashMap<String, String>();
     }
 
-    public Map<String, String> getLatencyMap() {
+    public ConcurrentHashMap<String, String> getLatencyMap() {
         return latencyVals;
     }
 
-    @Override
     public void internalDrawing(Graphics g) {
         int w = g.getFontMetrics().stringWidth(value);
         int w1 = Math.max(minWidth, w + 2 * textX);
@@ -212,7 +197,7 @@ public class TMLADWriteChannel extends TADComponentWithoutSubcomponents/* Issue 
         drawReachabilityInformation(g);
     }
 
-    private void drawLatencyInformation(Graphics g) {
+    public void drawLatencyInformation(Graphics g) {
         int index = 1;
         for (String s : latencyVals.keySet()) {
             int w = g.getFontMetrics().stringWidth(s);
@@ -224,11 +209,12 @@ public class TMLADWriteChannel extends TADComponentWithoutSubcomponents/* Issue 
         }
     }
 
+
     public void addLatency(String name, String num) {
         latencyVals.put(name, num);
     }
 
-    private void drawReachabilityInformation(Graphics g) {
+    public void drawReachabilityInformation(Graphics g) {
         if (reachabilityInformation > 0) {
 
             Color c = g.getColor();
@@ -257,7 +243,6 @@ public class TMLADWriteChannel extends TADComponentWithoutSubcomponents/* Issue 
         }
     }
 
-    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -297,7 +282,6 @@ public class TMLADWriteChannel extends TADComponentWithoutSubcomponents/* Issue 
         return value;
     }
 
-    @Override
     public boolean editOndoubleClick(JFrame frame) {
         TabInfo tab1 = new TabInfo("Name and samples");
         String[] labels = new String[2];
@@ -311,7 +295,7 @@ public class TMLADWriteChannel extends TADComponentWithoutSubcomponents/* Issue 
         values[2] = securityContext;
 		labels[3] = "Attacker?";
 		values[3] = isAttacker ? "Yes" : "No"; */
-        List<String []> help = new ArrayList<String []>();
+        ArrayList<String []> help = new ArrayList<String []>();
 		String[] allOutChannels = tdp.getMGUI().getAllOutChannels();
 		if (isAttacker){
 			allOutChannels =tdp.getMGUI().getAllCompOutChannels();
@@ -344,7 +328,7 @@ public class TMLADWriteChannel extends TADComponentWithoutSubcomponents/* Issue 
         tab2.values =  values;
         tab2.help = help;
 
-        List<TabInfo> tabs = new ArrayList<>();
+        ArrayList<TabInfo> tabs = new ArrayList<>();
         tabs.add(tab1);
         tabs.add(tab2);
 
@@ -363,13 +347,15 @@ public class TMLADWriteChannel extends TADComponentWithoutSubcomponents/* Issue 
             isEncForm = jdmsat.getString(1, 2).equals("Yes");
             makeValue();
             
+
+            
             return true;
         }
 
         return false;
+
     }
 
-    @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<Data channelName=\"");
@@ -389,10 +375,15 @@ public class TMLADWriteChannel extends TADComponentWithoutSubcomponents/* Issue 
 
     @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
+        //
         try {
+
             NodeList nli;
             Node n1, n2;
             Element elt;
+
+            //
+            //
 
             for (int i = 0; i < nl.getLength(); i++) {
                 n1 = nl.item(i);
@@ -422,17 +413,16 @@ public class TMLADWriteChannel extends TADComponentWithoutSubcomponents/* Issue 
             }
 
         } catch (Exception e) {
-            throw new MalformedModelingException( e );
+            throw new MalformedModelingException();
         }
         makeValue();
     }
 
-    @Override
+
     public int getType() {
         return TGComponentManager.TMLAD_WRITE_CHANNEL;
     }
 
-    @Override
     public int getDefaultConnector() {
         return TGComponentManager.CONNECTOR_TMLAD;
     }
@@ -459,6 +449,7 @@ public class TMLADWriteChannel extends TADComponentWithoutSubcomponents/* Issue 
         securityContext = sc;
     }
 
+
     public boolean isAttacker() {
         return isAttacker;
     }
@@ -472,8 +463,8 @@ public class TMLADWriteChannel extends TADComponentWithoutSubcomponents/* Issue 
 		isEncForm=encForm;
 	}
 
-    @Override
     public void setStateAction(int _stateAction) {
         stateOfError = _stateAction;
     }
+
 }

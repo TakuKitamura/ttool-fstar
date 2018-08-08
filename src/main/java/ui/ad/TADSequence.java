@@ -36,15 +36,16 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-package ui.ad;
 
-import java.awt.Graphics;
-import java.util.Arrays;
-import java.util.List;
+
+
+package ui.ad;
 
 import myutil.GraphicLib;
 import ui.*;
 import ui.util.IconManager;
+
+import java.awt.*;
 
 /**
  * Class TADSequence
@@ -54,11 +55,9 @@ import ui.util.IconManager;
  * @version 1.0 12/12/2003
  * @author Ludovic APVRILLE
  */
-public class TADSequence extends TADComponentWithSubcomponents /* Issue #69 TGCWithInternalComponent*/ {
-    
-	protected int lineLength = 0;
-    
-	private int textX, textY;
+public class TADSequence extends TGCWithInternalComponent{
+    private int lineLength = 0;
+    private int textX, textY;
     
     public TADSequence(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -70,16 +69,15 @@ public class TADSequence extends TADComponentWithSubcomponents /* Issue #69 TGCW
         textX = width - 6;
         textY = height + 2;
         
-        createConnectingPoints();
-//        nbConnectingPoint = 6;
-//        connectingPoint = new TGConnectingPoint[6];
-//        connectingPoint[0] = new TGConnectingPointAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-//        connectingPoint[1] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.167, 1.0);
-//        connectingPoint[2] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.333, 1.0);
-//        connectingPoint[3] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.5, 1.0);
-//        connectingPoint[4] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.667, 1.0);
-//        connectingPoint[5] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.833, 1.0);
-//        addTGConnectingPointsCommentCorner();
+        nbConnectingPoint = 6;
+        connectingPoint = new TGConnectingPoint[6];
+        connectingPoint[0] = new TGConnectingPointAD(this, 0, -lineLength, true, false, 0.5, 0.0);
+        connectingPoint[1] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.167, 1.0);
+        connectingPoint[2] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.333, 1.0);
+        connectingPoint[3] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.5, 1.0);
+        connectingPoint[4] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.667, 1.0);
+        connectingPoint[5] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.833, 1.0);
+        addTGConnectingPointsCommentCorner();
         
         nbInternalTGComponent = 1;
         tgcomponent = new TGComponent[nbInternalTGComponent];
@@ -100,25 +98,11 @@ public class TADSequence extends TADComponentWithSubcomponents /* Issue #69 TGCW
         myImageIcon = IconManager.imgic206;
     }
     
-    protected void createConnectingPoints() {
-        nbConnectingPoint = 6;
-        connectingPoint = new TGConnectingPoint[6];
-        connectingPoint[0] = new TGConnectingPointAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-        connectingPoint[1] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.167, 1.0);
-        connectingPoint[2] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.333, 1.0);
-        connectingPoint[3] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.5, 1.0);
-        connectingPoint[4] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.667, 1.0);
-        connectingPoint[5] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.833, 1.0);
-        addTGConnectingPointsCommentCorner();
-    }
-    
-    @Override
     public void internalDrawing(Graphics g) {
         g.drawRect(x, y, width, height);
         g.fillRect(x, y, width, height);
     }
     
-    @Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
         if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
             return this;
@@ -126,36 +110,11 @@ public class TADSequence extends TADComponentWithSubcomponents /* Issue #69 TGCW
         return null;
     }
     
-    @Override
     public int getType() {
         return TGComponentManager.TAD_SEQUENCE;
     }
     
-    @Override
    	public int getDefaultConnector() {
-    	return TGComponentManager.CONNECTOR_AD_DIAGRAM;
-    }
-
-    public TGConnectingPoint getEnterConnectingPoint() {
-    	return connectingPoint[ 0 ];
-    }
-	
-    public List<TGConnectingPoint> getExitConnectingPoints() {
-    	return Arrays.asList( Arrays.copyOfRange( connectingPoint, 1, connectingPoint.length ) );
-    }
-	
-    /**
-     * Issue #69
-     * @param _enabled
-     */
-    @Override
-    public void setEnabled( final boolean _enabled ) {
-    	super.setEnabled( _enabled );
-    	
-    	for ( final TGConnectingPoint point : connectingPoint ) {
-    		if ( point != getEnterConnectingPoint() ) {
-    			point.acceptForward( new EnablingADConnectorVisitor( _enabled ) );
-        	}
-    	}
+      return TGComponentManager.CONNECTOR_AD_DIAGRAM;
     }
 }

@@ -35,6 +35,9 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
+
+
+
  
 package ui.ad;
 
@@ -49,14 +52,21 @@ import ui.TGConnectingPointWidthHeight;
  * @version 1.0 12/12/2003
  * @author Ludovic APVRILLE
  */
-public class TGConnectingPointAD extends TGConnectingPointWidthHeight{
+public class TGConnectingPointAD extends  TGConnectingPointWidthHeight{
 
 	public TGConnectingPointAD(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
 		super(_container, _x, _y, _in, _out, _w, _h);
 	}
 
-	@Override
 	public boolean isCompatibleWith(int type) {
         return type == TGComponentManager.CONNECTOR_AD_DIAGRAM;
     }
+       
 }
+
+
+
+
+    
+
+

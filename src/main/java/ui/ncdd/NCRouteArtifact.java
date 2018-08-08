@@ -36,6 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui.ncdd;
 
 import myutil.GraphicLib;
@@ -47,11 +50,8 @@ import ui.util.IconManager;
 import ui.window.JDialogNCRoute;
 
 import javax.swing.*;
-
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.*;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Vector;
 
 /**
@@ -95,8 +95,8 @@ public class NCRouteArtifact extends TGCWithoutInternalComponent implements Swal
 		myImageIcon = IconManager.imgic702;
 	}
 
-	@Override
 	public void internalDrawing(Graphics g) {
+
 		if (oldValue.compareTo(value) != 0) {
 			setValue(value, g);
 		}
@@ -117,9 +117,10 @@ public class NCRouteArtifact extends TGCWithoutInternalComponent implements Swal
 		g.drawLine(x+width-space-cran, y+space+cran, x + width-space, y+space+cran);
 
 		g.drawString(value, x + textX , y + textY);
+
 	}
 
-	private void setValue(String val, Graphics g) {
+	public void setValue(String val, Graphics g) {
 		oldValue = value;
 		int w  = g.getFontMetrics().stringWidth(value);
 		int w1 = Math.max(minWidth, w + 2 * textX + fileX + space);
@@ -129,9 +130,9 @@ public class NCRouteArtifact extends TGCWithoutInternalComponent implements Swal
 			width = w1;
 			resizeWithFather();
 		}
+		//
 	}
 
-	@Override
 	public void resizeWithFather() {
 		if ((father != null) && ((father instanceof NCEqNode) || (father instanceof NCSwitchNode))) {
 			//
@@ -141,16 +142,15 @@ public class NCRouteArtifact extends TGCWithoutInternalComponent implements Swal
 		}
 	}
 
-	@Override
 	public boolean editOndoubleClick(JFrame frame) {
 		String tmp;
 		boolean error = false;
 
 		Vector<NCRoute> vroutes = new Vector<NCRoute>(routes);
 
-		List<String> inputInterfaces = ((NCDiagramPanel)tdp).getInterfaces((NCSwitchNode)(getFather()));
-		List<String> traffics = ((NCDiagramPanel)tdp).getTraffics();
-		List<String> outputInterfaces = new ArrayList<>(inputInterfaces);
+		ArrayList<String> inputInterfaces = ((NCDiagramPanel)tdp).getInterfaces((NCSwitchNode)(getFather()));
+		ArrayList<String> traffics = ((NCDiagramPanel)tdp).getTraffics();
+		ArrayList<String> outputInterfaces = new ArrayList<>(inputInterfaces);
 
 		JDialogNCRoute dialog = new JDialogNCRoute(frame, "Setting route attributes", value, vroutes, inputInterfaces, traffics, outputInterfaces);
 		//	dialog.setSize(900, 500);
@@ -196,7 +196,6 @@ public class NCRouteArtifact extends TGCWithoutInternalComponent implements Swal
 
 	}
 
-	@Override
 	public TGComponent isOnMe(int _x, int _y) {
 		if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
 			return this;
@@ -204,12 +203,10 @@ public class NCRouteArtifact extends TGCWithoutInternalComponent implements Swal
 		return null;
 	}
 
-	@Override
 	public int getType() {
 		return TGComponentManager.NCDD_ROUTE_ARTIFACT;
 	}
 
-	@Override
 	protected String translateExtraParam() {
 		StringBuffer sb = new StringBuffer("<extraparam>\n");
 		for(NCRoute route: routes) {
@@ -268,7 +265,7 @@ public class NCRouteArtifact extends TGCWithoutInternalComponent implements Swal
 		//makeFullValue();
 	}
 
-	public List<NCRoute> getRoutes() {
+	public java.util.List<NCRoute> getRoutes() {
 		return routes;
 	}
 

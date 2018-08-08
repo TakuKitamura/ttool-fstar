@@ -36,6 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui.ad;
 
 import myutil.GraphicLib;
@@ -57,7 +60,7 @@ import java.awt.geom.Line2D;
  * @version 1.0 20/03/2009
  * @author Ludovic APVRILLE
  */
-public class TADArrayGetState extends TADComponentWithoutSubcomponents/* Issue #69 TGCWithoutInternalComponent*/ implements BasicErrorHighlight {
+public class TADArrayGetState extends TGCWithoutInternalComponent implements BasicErrorHighlight {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
@@ -95,7 +98,8 @@ public class TADArrayGetState extends TADComponentWithoutSubcomponents/* Issue #
         myImageIcon = IconManager.imgic230;
     }
 	
-    @Override
+
+    
     public void internalDrawing(Graphics g) {
         int w  = g.getFontMetrics().stringWidth(value);
         int w1 = Math.max(minWidth, w + 2 * textX);
@@ -132,8 +136,8 @@ public class TADArrayGetState extends TADComponentWithoutSubcomponents/* Issue #
 		}*/
     }
 	
-    @Override
 	public boolean editOndoubleClick(JFrame frame) {
+        
         String oldValue = value;
         
         JDialogArrayGet jdag = new JDialogArrayGet(frame, variable, array, index, "Getting value from an array");
@@ -157,7 +161,6 @@ public class TADArrayGetState extends TADComponentWithoutSubcomponents/* Issue #
 		value = variable + " = " + array + "[" + index + "]"; 
 	}
     
-    @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<Prop variable=\"");
@@ -210,7 +213,6 @@ public class TADArrayGetState extends TADComponentWithoutSubcomponents/* Issue #
         makeValue();
     }
     
-    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -240,18 +242,17 @@ public class TADArrayGetState extends TADComponentWithoutSubcomponents/* Issue #
 		return index;
 	}
     
-    @Override
     public int getType() {
         return TGComponentManager.TAD_ARRAY_GET;
     }
     
-    @Override
    	public int getDefaultConnector() {
       return TGComponentManager.CONNECTOR_AD_DIAGRAM;
     }
 	
-    @Override
 	public void setStateAction(int _stateAction) {
 		stateAction = _stateAction;
 	}
+    
+    
 }

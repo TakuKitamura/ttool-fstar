@@ -36,6 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui.ad;
 
 import myutil.GraphicLib;
@@ -52,7 +55,7 @@ import java.awt.geom.Line2D;
  * @version 1.0 10/12/2003
  * @author Ludovic APVRILLE
  */
-public class TADNonDeterministicDelay extends TADComponentWithSubcomponents /* Issue #69 TGCWithInternalComponent*/ {
+public class TADNonDeterministicDelay extends TGCWithInternalComponent{
     private int lineLength = 5;
     private int textX = 5;
     private int textY = 5;
@@ -88,7 +91,6 @@ public class TADNonDeterministicDelay extends TADComponentWithSubcomponents /* I
         myImageIcon = IconManager.imgic216;
     }
     
-    @Override
     public void internalDrawing(Graphics g) {
         int y1 = y;
         
@@ -106,7 +108,6 @@ public class TADNonDeterministicDelay extends TADComponentWithSubcomponents /* I
         
     }
     
-    @Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
         if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
             return this;
@@ -127,13 +128,18 @@ public class TADNonDeterministicDelay extends TADComponentWithSubcomponents /* I
         tgcomponent[0].setValue(value);
     }
     
-    @Override
     public int getType() {
         return TGComponentManager.TAD_NON_DETERMINISTIC_DELAY;
     }
     
-    @Override
    	public int getDefaultConnector() {
-    	return TGComponentManager.CONNECTOR_AD_DIAGRAM;
+      return TGComponentManager.CONNECTOR_AD_DIAGRAM;
     }
 }
+
+
+
+
+
+
+

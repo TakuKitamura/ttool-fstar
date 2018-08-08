@@ -36,6 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui.avatarad;
 
 import myutil.GraphicLib;
@@ -53,7 +56,7 @@ import java.awt.geom.Line2D;
    * @version 1.0 02/09/2011
    * @author Ludovic APVRILLE
  */
-public class AvatarADSendSignalAction extends AvatarADBasicCanBeDisabledComponent/* Issue #69 AvatarADBasicComponent*/ implements EmbeddedComment, BasicErrorHighlight {
+public class AvatarADSendSignalAction extends AvatarADBasicComponent implements EmbeddedComment, BasicErrorHighlight {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
@@ -69,7 +72,7 @@ public class AvatarADSendSignalAction extends AvatarADBasicCanBeDisabledComponen
         minWidth = (int)(30* tdp.getZoom());
         oldScaleFactor = tdp.getZoom();
 	
-        nbConnectingPoint = 2;
+	nbConnectingPoint = 2;
         connectingPoint = new TGConnectingPoint[2];
         connectingPoint[0] = new AvatarADConnectingPoint(this, 0, -lineLength, true, false, 0.5, 0.0);
         connectingPoint[1] = new AvatarADConnectingPoint(this, 0, lineLength, false, true, 0.5, 1.0);
@@ -84,8 +87,8 @@ public class AvatarADSendSignalAction extends AvatarADBasicCanBeDisabledComponen
         myImageIcon = IconManager.imgic904;
     }
 
-    @Override
     public void internalDrawing(Graphics g) {
+
         int w  = g.getFontMetrics().stringWidth(value);
         int w1 = Math.max(minWidth, w + 2 * textX);
         if ((w1 != width) & (!tdp.isScaled())) {
@@ -139,11 +142,14 @@ public class AvatarADSendSignalAction extends AvatarADBasicCanBeDisabledComponen
         g.drawLine(x+width-linebreak, y, x+width, y+height/2);
         g.drawLine(x+width-linebreak, y+height, x+width, y+height/2);
 
+
+
         g.drawString("sig", x+(width-w) / 2, y);
         g.drawString(value, x + (width - w) / 2 , y + (int)((textY*tdp.getZoom())));
+
+
     }
 
-    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -160,7 +166,6 @@ public class AvatarADSendSignalAction extends AvatarADBasicCanBeDisabledComponen
         return value;
     }
 
-    @Override
     public boolean editOndoubleClick(JFrame frame) {
         String oldValue = value;
 
@@ -180,12 +185,12 @@ public class AvatarADSendSignalAction extends AvatarADBasicCanBeDisabledComponen
 
     }
 
-    @Override
     public int getType() {
         return TGComponentManager.AAD_SEND_SIGNAL_ACTION;
     }
 
-    @Override
+
+
     public void setStateAction(int _stateAction) {
         stateOfError = _stateAction;
     }

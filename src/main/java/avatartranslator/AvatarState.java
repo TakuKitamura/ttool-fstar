@@ -89,6 +89,7 @@ public class AvatarState extends AvatarStateElement {
         checkLatency = b;
     }
 
+
     public int hasEmptyTransitionsOnItself(AvatarStateMachine _asm) {
         AvatarTransition at;
         int cpt = 0;

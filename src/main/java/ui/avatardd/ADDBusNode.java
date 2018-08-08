@@ -36,6 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui.avatardd;
 
 import myutil.GraphicLib;
@@ -68,6 +71,8 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
     private int nbOfAttachedTargets = 0;
     private int fifoDepth = 0;
     private int minLatency = 0;
+
+
 
     public ADDBusNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -113,7 +118,6 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
         myImageIcon = IconManager.imgic700;
     }
 
-    @Override
     public void internalDrawing(Graphics g) {
         Color c = g.getColor();
         g.draw3DRect(x, y, width, height, true);
@@ -149,8 +153,8 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
         g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
     }
 
-    @Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
+
         Polygon pol = new Polygon();
         pol.addPoint(x, y);
         pol.addPoint(x + derivationx, y - derivationy);
@@ -174,7 +178,6 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
         return name;
     }
 
-    @Override
     public boolean editOndoubleClick(JFrame frame) {
         boolean error = false;
         String errors = "";
@@ -200,6 +203,8 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
                 name = tmpName;
             }
         }
+
+
 
         if (dialog.getIndex().length() != 0) {
             try {
@@ -230,6 +235,7 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
                 errors += "nbOfAttachedInitiators  ";
             }
         }
+
 
         if (dialog.getNbOfAttachedTargets().length() != 0) {
             try {
@@ -288,12 +294,11 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
         return true;
     }
 
-    @Override
+
     public int getType() {
         return TGComponentManager.ADD_BUSNODE;
     }
 
-    @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<info stereotype=\"" + stereotype + "\" nodeName=\"" + name);
@@ -310,7 +315,9 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
 
     @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
+        //
         try {
+
             NodeList nli;
             Node n1, n2;
             Element elt;
@@ -356,9 +363,12 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
             }
 
         } catch (Exception e) {
-            throw new MalformedModelingException( e );
+            throw new MalformedModelingException();
         }
     }
+
+
+
 
     public String getAttributes() {
         String attr = "";
@@ -386,8 +396,8 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
     public int getFifoDepth() { return fifoDepth;}
     public int getMinLatency() { return minLatency;}
 
-    @Override
     public String toString(){
         return "Bus";
     }
+
 }

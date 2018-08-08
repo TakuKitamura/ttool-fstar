@@ -44,7 +44,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import ui.*;
-import ui.ad.TADComponentWithoutSubcomponents;
 import ui.util.IconManager;
 import ui.window.JDialogCryptographicConfiguration;
 
@@ -60,7 +59,7 @@ import java.awt.geom.Line2D;
  * @author Ludovic APVRILLE
  * @version 1.0 21/11/2005
  */
-public class TMLADEncrypt extends TADComponentWithoutSubcomponents/* Issue #69 TGCWithoutInternalComponent*/ implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
+public class TMLADEncrypt extends TGCWithoutInternalComponent implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
     private int lineLength = 5;
     //  private int textX, textY;
     private int ex = 5;
@@ -102,7 +101,6 @@ public class TMLADEncrypt extends TADComponentWithoutSubcomponents/* Issue #69 T
         myImageIcon = IconManager.imgic214;
     }
 
-    @Override
     public void internalDrawing(Graphics g) {
         if (stateOfError > 0) {
             Color c = g.getColor();
@@ -183,8 +181,8 @@ public class TMLADEncrypt extends TADComponentWithoutSubcomponents/* Issue #69 T
         g.drawImage(IconManager.imgic7000.getImage(), x - 22, y + height / 2, null);
     }
 
-    @Override
     public boolean editOndoubleClick(JFrame frame) {
+
         //JDialogTwoString jdts = new JDialogTwoString(frame, "Setting channel's properties", "Channel name", channelName, "Nb of samples", nbOfSamples);]
         String[] values = new String[]{securityContext, type, message_overhead, encTime, size, nonce, formula, decTime, key, algorithm};
         String[] nonces = tdp.getMGUI().getAllNonce();
@@ -211,7 +209,6 @@ public class TMLADEncrypt extends TADComponentWithoutSubcomponents/* Issue #69 T
         return false;
     }
 
-    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -228,7 +225,6 @@ public class TMLADEncrypt extends TADComponentWithoutSubcomponents/* Issue #69 T
         return null;
     }
 
-    @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<Data secContext=\"");
@@ -256,12 +252,17 @@ public class TMLADEncrypt extends TADComponentWithoutSubcomponents/* Issue #69 T
 
     @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
+        //
         try {
+
             NodeList nli;
             Node n1, n2;
             Element elt;
             //    int k;
             //     String s;
+
+            //
+            //
 
             for (int i = 0; i < nl.getLength(); i++) {
                 n1 = nl.item(i);
@@ -291,22 +292,20 @@ public class TMLADEncrypt extends TADComponentWithoutSubcomponents/* Issue #69 T
             }
 
         } catch (Exception e) {
-            throw new MalformedModelingException( e );
+            throw new MalformedModelingException();
         }
     }
 
-    @Override
     public int getType() {
         return TGComponentManager.TMLAD_ENCRYPT;
     }
 
-    @Override
     public int getDefaultConnector() {
         return TGComponentManager.CONNECTOR_TMLAD;
     }
 
-    @Override
     public void setStateAction(int _stateAction) {
         stateOfError = _stateAction;
     }
 }
+

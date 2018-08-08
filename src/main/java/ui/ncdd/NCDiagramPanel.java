@@ -36,21 +36,19 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
+
+
 package ui.ncdd;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
 
 import org.w3c.dom.Element;
+import ui.*;
 
-import ui.MainGUI;
-import ui.TDPWithAttributes;
-import ui.TDiagramPanel;
-import ui.TGComponent;
-import ui.TGConnectingPoint;
-import ui.TToolBar;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.ListIterator;
 
 /**
  * Class NCDiagramPanel
@@ -68,7 +66,6 @@ public class NCDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
         addMouseMotionListener(tdmm);*/
 	}
 
-	@Override
 	public boolean actionOnDoubleClick(TGComponent tgc) {
 		//
         /*if (tgc instanceof TCDTClass) {
@@ -89,7 +86,6 @@ public class NCDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
 		return false;
 	}
 
-	@Override
 	public boolean actionOnAdd(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {
             TCDTClass tgcc = (TCDTClass)(tgc);
@@ -100,7 +96,6 @@ public class NCDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
 		return false;
 	}
 
-	@Override
 	public boolean actionOnRemove(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {
             TCDTClass tgcc = (TCDTClass)(tgc);
@@ -111,7 +106,6 @@ public class NCDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
 		return false;
 	}
 
-	@Override
 	public boolean actionOnValueChanged(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {
             return actionOnDoubleClick(tgc);
@@ -119,32 +113,26 @@ public class NCDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
 		return false;
 	}
 
-	@Override
 	public String getXMLHead() {
 		return "<NCDiagramPanel name=\"" + name + "\"" + sizeParam() + displayParam() + " >";
 	}
 
-	@Override
 	public String getXMLTail() {
 		return "</NCDiagramPanel>";
 	}
 
-	@Override
 	public String getXMLSelectedHead() {
 		return "<NCDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
 	}
 
-	@Override
 	public String getXMLSelectedTail() {
 		return "</NCDiagramPanelCopy>";
 	}
 
-	@Override
 	public String getXMLCloneHead() {
 		return "<NCDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
 	}
 
-	@Override
 	public String getXMLCloneTail() {
 		return "</NCDiagramPanelCopy>";
 	}
@@ -189,8 +177,8 @@ public class NCDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
         return true;
     }*/
 
-	public List<TGComponent> getListOfNodes() {
-		List<TGComponent> ll = new LinkedList<>();
+	public LinkedList<TGComponent> getListOfNodes() {
+		LinkedList<TGComponent> ll = new LinkedList<>();
 
 		for (TGComponent tgc : componentList) {
 			if (tgc instanceof NCEqNode) {
@@ -206,8 +194,8 @@ public class NCDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
 		return ll;
 	}
 
-	public List<NCEqNode> getListOfEqNode() {
-		List<NCEqNode> ll = new LinkedList<>();
+	public LinkedList<NCEqNode> getListOfEqNode() {
+		LinkedList<NCEqNode> ll = new LinkedList<>();
 
 		for (TGComponent tgc : this.componentList) {
 			if (tgc instanceof NCEqNode) {
@@ -230,8 +218,8 @@ public class NCDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
 		return null;
 	}
 
-	public List<NCSwitchNode> getListOfSwitchNode() {
-		List<NCSwitchNode> ll = new LinkedList<>();
+	public LinkedList<NCSwitchNode> getListOfSwitchNode() {
+		LinkedList<NCSwitchNode> ll = new LinkedList<>();
 		for (TGComponent tgc : this.componentList) {
 			if (tgc instanceof NCSwitchNode) {
 				ll.add((NCSwitchNode) tgc);
@@ -241,8 +229,8 @@ public class NCDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
 		return ll;
 	}
 
-	public List<NCConnectorNode> getListOfLinks() {
-		List<NCConnectorNode> ll = new LinkedList<>();
+	public LinkedList<NCConnectorNode> getListOfLinks() {
+		LinkedList<NCConnectorNode> ll = new LinkedList<>();
 		for (TGComponent tgc : this.componentList) {
 			if (tgc instanceof NCConnectorNode) {
 				ll.add((NCConnectorNode) tgc);
@@ -252,15 +240,15 @@ public class NCDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
 		return ll;
 	}
 
-	public List<String> getInterfaces(NCSwitchNode sw) {
-		ListIterator<NCConnectorNode> iterator = getListOfLinks().listIterator();
+	public ArrayList<String> getInterfaces(NCSwitchNode sw) {
+		ListIterator iterator = getListOfLinks().listIterator();
 		NCConnectorNode lk;
 		TGConnectingPoint p;
 
-		List<String> list = new ArrayList<String>();
+		ArrayList<String> list = new ArrayList<String>();
 
 		while (iterator.hasNext()) {
-			lk = iterator.next();
+			lk = (NCConnectorNode) (iterator.next());
 			p = lk.getTGConnectingPointP1();
 			if (sw.belongsToMe(p)) {
 				list.add(lk.getInterfaceName());
@@ -275,10 +263,10 @@ public class NCDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
 		return list;
 	}
 
-	public List<NCRoute> getAllRoutesFor(NCSwitchNode sw, NCTrafficArtifact arti) {
-		List<NCRoute> list = sw.getRoutesList();
+	public ArrayList<NCRoute> getAllRoutesFor(NCSwitchNode sw, NCTrafficArtifact arti) {
+		ArrayList<NCRoute> list = sw.getRoutesList();
 
-		List<NCRoute> ret = new ArrayList<NCRoute>();
+		ArrayList<NCRoute> ret = new ArrayList<NCRoute>();
 
 		for (NCRoute route : list) {
 			if (route.traffic.equals(arti.getValue())) {
@@ -289,15 +277,15 @@ public class NCDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
 		return ret;
 	}
 
-	public List<NCSwitchNode> getSwitchesOfEq(NCEqNode eq) {
-		ListIterator<NCConnectorNode> iterator = getListOfLinks().listIterator();
+	public ArrayList<NCSwitchNode> getSwitchesOfEq(NCEqNode eq) {
+		ListIterator iterator = getListOfLinks().listIterator();
 		NCConnectorNode lk;
 		TGConnectingPoint p;
 
 		ArrayList<NCSwitchNode> list = new ArrayList<NCSwitchNode>();
 
 		while (iterator.hasNext()) {
-			lk = iterator.next();
+			lk = (NCConnectorNode) (iterator.next());
 			p = lk.getTGConnectingPointP1();
 			if (eq.belongsToMe(p)) {
 				list.add((NCSwitchNode) (getComponentToWhichBelongs(lk.getTGConnectingPointP2())));
@@ -312,15 +300,15 @@ public class NCDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
 		return list;
 	}
 
-	public List<NCConnectorNode> getConnectorOfEq(NCEqNode eq) {
-		ListIterator<NCConnectorNode> iterator = getListOfLinks().listIterator();
+	public ArrayList<NCConnectorNode> getConnectorOfEq(NCEqNode eq) {
+		ListIterator iterator = getListOfLinks().listIterator();
 		NCConnectorNode lk;
 		TGConnectingPoint p;
 
-		List<NCConnectorNode> list = new ArrayList<NCConnectorNode>();
+		ArrayList<NCConnectorNode> list = new ArrayList<NCConnectorNode>();
 
 		while (iterator.hasNext()) {
-			lk = iterator.next();
+			lk = (NCConnectorNode) (iterator.next());
 			p = lk.getTGConnectingPointP1();
 			if (eq.belongsToMe(p)) {
 				list.add(lk);
@@ -335,14 +323,14 @@ public class NCDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
 		return list;
 	}
 
-	public List<NCTrafficArtifact> getTrafficArtifacts() {
-		ListIterator<NCEqNode> iterator = getListOfEqNode().listIterator();
+	public ArrayList<NCTrafficArtifact> getTrafficArtifacts() {
+		ListIterator iterator = getListOfEqNode().listIterator();
 		NCEqNode eq;
 
-		List<NCTrafficArtifact> list = new ArrayList<NCTrafficArtifact>();
+		ArrayList<NCTrafficArtifact> list = new ArrayList<NCTrafficArtifact>();
 
 		while (iterator.hasNext()) {
-			eq = iterator.next();
+			eq = (NCEqNode) (iterator.next());
 			eq.addAllTrafficArtifacts(list);
 		}
 
@@ -350,11 +338,11 @@ public class NCDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
 	}
 
 	public NCEqNode getNCEqNodeOf(NCTrafficArtifact arti) {
-		ListIterator<NCEqNode> iterator = getListOfEqNode().listIterator();
+		ListIterator iterator = getListOfEqNode().listIterator();
 		NCEqNode eq;
 
 		while (iterator.hasNext()) {
-			eq = iterator.next();
+			eq = (NCEqNode) (iterator.next());
 			if (eq.hasTraffic(arti)) {
 				return eq;
 			}
@@ -364,14 +352,14 @@ public class NCDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
 
 	}
 
-	public List<String> getTraffics() {
-		ListIterator<NCEqNode> iterator = getListOfEqNode().listIterator();
+	public ArrayList<String> getTraffics() {
+		ListIterator iterator = getListOfEqNode().listIterator();
 		NCEqNode eq;
 
-		List<String> list = new ArrayList<String>();
+		ArrayList<String> list = new ArrayList<String>();
 
 		while (iterator.hasNext()) {
-			eq = iterator.next();
+			eq = (NCEqNode) (iterator.next());
 			eq.addAllTraffics(list);
 		}
 
@@ -411,6 +399,7 @@ public class NCDiagramPanel extends TDiagramPanel implements TDPWithAttributes {
 	}
 
 	public NCConnectorNode getLinkByName(String name) {
+
 		for (TGComponent tgc : this.componentList) {
 			if (tgc instanceof NCConnectorNode) {
 				NCConnectorNode link = (NCConnectorNode) tgc;
