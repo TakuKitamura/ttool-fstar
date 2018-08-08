@@ -227,11 +227,11 @@ public class ELNSpecification{
 		return inductors;
 	}
 
-	public LinkedList<ELNTComponentNodeRef> getAllComponentNodeRef(){
-		LinkedList<ELNTComponentNodeRef> nodeRefs = new LinkedList<ELNTComponentNodeRef>();
+	public LinkedList<ELNTNodeRef> getAllComponentNodeRef(){
+		LinkedList<ELNTNodeRef> nodeRefs = new LinkedList<ELNTNodeRef>();
 		for (ELNTComponent nodeRef : elnComponents) {
-			if (nodeRef instanceof ELNTComponentNodeRef) {
-				nodeRefs.add((ELNTComponentNodeRef) nodeRef);
+			if (nodeRef instanceof ELNTNodeRef) {
+				nodeRefs.add((ELNTNodeRef) nodeRef);
 			}
 		}
 		return nodeRefs;

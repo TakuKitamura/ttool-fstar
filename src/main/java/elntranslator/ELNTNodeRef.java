@@ -39,19 +39,19 @@
 package elntranslator;
 
 /**
- * Class ELNTComponentNodeRef
+ * Class ELNTNodeRef
  * Parameters of a ELN primitive component : node ref
  * Creation: 23/07/2018
  * @version 1.0 23/07/2018
  * @author Irina Kit Yan LEE
 */
 
-public class ELNTComponentNodeRef extends ELNTComponent {
+public class ELNTNodeRef extends ELNTComponent {
 	private String name;
 	
 	private ELNTModule module;
 	
-	public ELNTComponentNodeRef(String _name, ELNTModule _module) {
+	public ELNTNodeRef(String _name, ELNTModule _module) {
 		name = _name;
 		module = _module;
 	}

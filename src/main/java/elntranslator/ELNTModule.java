@@ -56,7 +56,7 @@ public class ELNTModule extends ELNTComponent {
 	private LinkedList<ELNTComponentIndependentCurrentSource> isource;
 	private LinkedList<ELNTComponentIndependentVoltageSource> vsource;
 	private LinkedList<ELNTComponentInductor> inductor;
-	private LinkedList<ELNTComponentNodeRef> nodeRef;
+	private LinkedList<ELNTNodeRef> nodeRef;
 	private LinkedList<ELNTComponentResistor> resistor;
 	private LinkedList<ELNTComponentTransmissionLine> transmissionLine;
 	private LinkedList<ELNTComponentVoltageControlledCurrentSource> vccs;
@@ -82,7 +82,7 @@ public class ELNTModule extends ELNTComponent {
 		isource = new LinkedList<ELNTComponentIndependentCurrentSource>();
 		vsource = new LinkedList<ELNTComponentIndependentVoltageSource>();
 		inductor = new LinkedList<ELNTComponentInductor>();
-		nodeRef = new LinkedList<ELNTComponentNodeRef>();
+		nodeRef = new LinkedList<ELNTNodeRef>();
 		resistor = new LinkedList<ELNTComponentResistor>();
 		transmissionLine = new LinkedList<ELNTComponentTransmissionLine>();
 		vccs = new LinkedList<ELNTComponentVoltageControlledCurrentSource>();
@@ -145,11 +145,11 @@ public class ELNTModule extends ELNTComponent {
 		inductor.add(_inductor);
 	}
 	
-	public LinkedList<ELNTComponentNodeRef> getNodeRef() {
+	public LinkedList<ELNTNodeRef> getNodeRef() {
 		return nodeRef;
 	}
 	
-	public void addNodeRef(ELNTComponentNodeRef _nodeRef){
+	public void addNodeRef(ELNTNodeRef _nodeRef){
 		nodeRef.add(_nodeRef);
 	}
 

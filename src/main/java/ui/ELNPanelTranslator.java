@@ -395,7 +395,7 @@ public class ELNPanelTranslator {
 	
 						String name = nodeRef.getValue();
 	
-						ELNTComponentNodeRef elnNodeRef = new ELNTComponentNodeRef(name, elnModule);
+						ELNTNodeRef elnNodeRef = new ELNTNodeRef(name, elnModule);
 	
 						elnMap.put(nodeRef, elnNodeRef);
 						elnModule.addNodeRef(elnNodeRef);

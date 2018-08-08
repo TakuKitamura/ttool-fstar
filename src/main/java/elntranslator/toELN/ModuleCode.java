@@ -498,7 +498,7 @@ public class ModuleCode {
 				}
 			}
 
-			LinkedList<ELNTComponentNodeRef> nodeRefs = module.getNodeRef();
+			LinkedList<ELNTNodeRef> nodeRefs = module.getNodeRef();
 			if (nodeRefs.size() >= 1) {
 				if (cpt == 0) {
 					corpsModule = corpsModule + "\t: " + nodeRefs.get(0).getName() + "(\"" + nodeRefs.get(0).getName()
@@ -551,7 +551,7 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTComponentNodeRef) {
+								if (connectors.get(k).get_p2().getComponent() instanceof ELNTNodeRef) {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -604,7 +604,7 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p1().getComponent() instanceof ELNTComponentNodeRef) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTNodeRef) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -666,7 +666,7 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTComponentNodeRef) {
+								if (connectors.get(k).get_p2().getComponent() instanceof ELNTNodeRef) {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -719,7 +719,7 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p1().getComponent() instanceof ELNTComponentNodeRef) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTNodeRef) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -781,7 +781,7 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTComponentNodeRef) {
+								if (connectors.get(k).get_p2().getComponent() instanceof ELNTNodeRef) {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -834,7 +834,7 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p1().getComponent() instanceof ELNTComponentNodeRef) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTNodeRef) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -896,7 +896,7 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTComponentNodeRef) {
+								if (connectors.get(k).get_p2().getComponent() instanceof ELNTNodeRef) {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -949,7 +949,7 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p1().getComponent() instanceof ELNTComponentNodeRef) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTNodeRef) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -1011,7 +1011,7 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTComponentNodeRef) {
+								if (connectors.get(k).get_p2().getComponent() instanceof ELNTNodeRef) {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -1064,7 +1064,7 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p1().getComponent() instanceof ELNTComponentNodeRef) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTNodeRef) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -1126,7 +1126,7 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTComponentNodeRef) {
+								if (connectors.get(k).get_p2().getComponent() instanceof ELNTNodeRef) {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -1179,7 +1179,7 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p1().getComponent() instanceof ELNTComponentNodeRef) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTNodeRef) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -1241,7 +1241,7 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTComponentNodeRef) {
+								if (connectors.get(k).get_p2().getComponent() instanceof ELNTNodeRef) {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -1294,7 +1294,7 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p1().getComponent() instanceof ELNTComponentNodeRef) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTNodeRef) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -1356,7 +1356,7 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTComponentNodeRef) {
+								if (connectors.get(k).get_p2().getComponent() instanceof ELNTNodeRef) {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -1409,7 +1409,7 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p1().getComponent() instanceof ELNTComponentNodeRef) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTNodeRef) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -1471,7 +1471,7 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTComponentNodeRef) {
+								if (connectors.get(k).get_p2().getComponent() instanceof ELNTNodeRef) {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -1524,7 +1524,7 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p1().getComponent() instanceof ELNTComponentNodeRef) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTNodeRef) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -1586,7 +1586,7 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTComponentNodeRef) {
+								if (connectors.get(k).get_p2().getComponent() instanceof ELNTNodeRef) {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -1639,7 +1639,7 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p1().getComponent() instanceof ELNTComponentNodeRef) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTNodeRef) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -1701,7 +1701,7 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTComponentNodeRef) {
+								if (connectors.get(k).get_p2().getComponent() instanceof ELNTNodeRef) {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -1754,7 +1754,7 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p1().getComponent() instanceof ELNTComponentNodeRef) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTNodeRef) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -1816,7 +1816,7 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTComponentNodeRef) {
+								if (connectors.get(k).get_p2().getComponent() instanceof ELNTNodeRef) {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -1869,7 +1869,7 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p1().getComponent() instanceof ELNTComponentNodeRef) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTNodeRef) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -1931,7 +1931,7 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTComponentNodeRef) {
+								if (connectors.get(k).get_p2().getComponent() instanceof ELNTNodeRef) {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -1984,7 +1984,7 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p1().getComponent() instanceof ELNTComponentNodeRef) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTNodeRef) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -2046,7 +2046,7 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTComponentNodeRef) {
+								if (connectors.get(k).get_p2().getComponent() instanceof ELNTNodeRef) {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -2099,7 +2099,7 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p1().getComponent() instanceof ELNTComponentNodeRef) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTNodeRef) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -2161,7 +2161,7 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTComponentNodeRef) {
+								if (connectors.get(k).get_p2().getComponent() instanceof ELNTNodeRef) {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -2214,7 +2214,7 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p1().getComponent() instanceof ELNTComponentNodeRef) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTNodeRef) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -2276,7 +2276,7 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTComponentNodeRef) {
+								if (connectors.get(k).get_p2().getComponent() instanceof ELNTNodeRef) {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -2329,7 +2329,7 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p1().getComponent() instanceof ELNTComponentNodeRef) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTNodeRef) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -2391,7 +2391,7 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTComponentNodeRef) {
+								if (connectors.get(k).get_p2().getComponent() instanceof ELNTNodeRef) {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -2444,7 +2444,7 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p1().getComponent() instanceof ELNTComponentNodeRef) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTNodeRef) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -2525,7 +2525,7 @@ public class ModuleCode {
 			if (connector.get_p2().getComponent() instanceof ELNTModuleTerminal) {
 				return connector.get_p2().getComponent().getName();
 			}
-			if (connector.get_p2().getComponent() instanceof ELNTComponentNodeRef) {
+			if (connector.get_p2().getComponent() instanceof ELNTNodeRef) {
 				return connector.get_p2().getComponent().getName();
 			}
 			if (connector.get_p2().getComponent() instanceof ELNTMidPortTerminal) {
@@ -2542,7 +2542,7 @@ public class ModuleCode {
 		if (connector.get_p1().getComponent() instanceof ELNTModuleTerminal) {
 			return connector.get_p1().getComponent().getName();
 		}
-		if (connector.get_p1().getComponent() instanceof ELNTComponentNodeRef) {
+		if (connector.get_p1().getComponent() instanceof ELNTNodeRef) {
 			return connector.get_p1().getComponent().getName();
 		}
 		if (connector.get_p1().getComponent() instanceof ELNTMidPortTerminal) {
@@ -2555,7 +2555,7 @@ public class ModuleCode {
 			if (connector.get_p2().getComponent() instanceof ELNTModuleTerminal) {
 				return connector.get_p2().getComponent().getName();
 			}
-			if (connector.get_p2().getComponent() instanceof ELNTComponentNodeRef) {
+			if (connector.get_p2().getComponent() instanceof ELNTNodeRef) {
 				return connector.get_p2().getComponent().getName();
 			}
 			if (connector.get_p2().getComponent() instanceof ELNTPrimitiveComponent) {
