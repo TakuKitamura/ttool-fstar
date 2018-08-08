@@ -1953,7 +1953,7 @@
 <TGConnectingPoint num="9" id="1135" />
 </COMPONENT>
 
-<!-- COMPONENT type="1508" id="1141" >
+<COMPONENT type="1508" id="1141" >
 <cdparam x="304" y="202" />
 <sizeparam width="30" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -1963,7 +1963,7 @@
 <TGConnectingPoint num="1" id="1138" />
 <TGConnectingPoint num="2" id="1139" />
 <TGConnectingPoint num="3" id="1140" />
-</COMPONENT-->
+</COMPONENT>
 
 <COMPONENT type="1505" id="1152" >
 <cdparam x="122" y="359" />
@@ -2090,7 +2090,7 @@
 <TGConnectingPoint num="9" id="1202" />
 </COMPONENT>
 
-<!-- CONNECTOR type="1501" id="1207" >
+<CONNECTOR type="1501" id="1207" >
 <cdparam x="466" y="506" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from Zama to junction1" value="null" />
@@ -2123,7 +2123,7 @@
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="point " value="null" />
-</SUBCOMPONENT-->
+</SUBCOMPONENT>
 
 <CONNECTOR type="1501" id="1208" >
 <cdparam x="178" y="475" />
@@ -2191,7 +2191,7 @@
 <P2  x="319" y="91" id="1180" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
-<!-- CONNECTOR type="1501" id="1216" >
+<CONNECTOR type="1501" id="1216" >
 <cdparam x="319" y="136" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from lala to junction1" value="null" />
@@ -2206,7 +2206,7 @@
 <P1  x="319" y="232" id="1140" />
 <P2  x="319" y="288" id="1167" />
 <AutomaticDrawing  data="true" />
-</CONNECTOR-->
+</CONNECTOR>
 <CONNECTOR type="1501" id="1218" >
 <cdparam x="319" y="488" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
@@ -2288,7 +2288,7 @@
 <infoparam name="guard 3" value="[ ]" />
 </SUBCOMPONENT>
 
-<!-- COMPONENT type="1508" id="1243" >
+<COMPONENT type="1508" id="1243" >
 <cdparam x="755" y="345" />
 <sizeparam width="30" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -2298,7 +2298,7 @@
 <TGConnectingPoint num="1" id="1240" />
 <TGConnectingPoint num="2" id="1241" />
 <TGConnectingPoint num="3" id="1242" />
-</COMPONENT-->
+</COMPONENT>
 
 <COMPONENT type="1505" id="1254" >
 <cdparam x="890" y="503" />
@@ -2376,7 +2376,7 @@
 <TGConnectingPoint num="13" id="1290" />
 </COMPONENT>
 
-<!-- COMPONENT type="1508" id="1296" >
+<COMPONENT type="1508" id="1296" >
 <cdparam x="298" y="342" />
 <sizeparam width="30" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -2386,7 +2386,7 @@
 <TGConnectingPoint num="1" id="1293" />
 <TGConnectingPoint num="2" id="1294" />
 <TGConnectingPoint num="3" id="1295" />
-</COMPONENT-->
+</COMPONENT>
 
 <COMPONENT type="1500" id="1312" >
 <cdparam x="298" y="429" />
@@ -2567,7 +2567,7 @@
 <infoparam name="point " value="null" />
 </SUBCOMPONENT>
 
-<!-- CONNECTOR type="1501" id="1372" >
+<CONNECTOR type="1501" id="1372" >
 <cdparam x="946" y="543" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from ExecuteTransfer2 to junction5" value="null" />
@@ -2600,7 +2600,7 @@
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="point " value="null" />
-</SUBCOMPONENT-->
+</SUBCOMPONENT>
 
 <CONNECTOR type="1501" id="1374" >
 <cdparam x="810" y="452" />
@@ -2619,7 +2619,7 @@
 <infoparam name="point " value="null" />
 </SUBCOMPONENT>
 
-<!-- CONNECTOR type="1501" id="1375" >
+<CONNECTOR type="1501" id="1375" >
 <cdparam x="770" y="375" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from junction5 to choice5" value="null" />
@@ -2668,7 +2668,7 @@
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="point " value="null" />
-</SUBCOMPONENT-->
+</SUBCOMPONENT>
 
 <CONNECTOR type="1501" id="1382" >
 <cdparam x="273" y="444" />
@@ -2687,7 +2687,7 @@
 <infoparam name="point " value="null" />
 </SUBCOMPONENT>
 
-<!-- CONNECTOR type="1501" id="1383" >
+<CONNECTOR type="1501" id="1383" >
 <cdparam x="313" y="372" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from junction2 to choice2" value="null" />
@@ -2702,7 +2702,7 @@
 <P1  x="313" y="294" id="1353" />
 <P2  x="313" y="342" id="1292" />
 <AutomaticDrawing  data="true" />
-</CONNECTOR-->
+</CONNECTOR>
 <CONNECTOR type="1501" id="1385" >
 <cdparam x="556" y="182" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
@@ -2828,7 +2828,7 @@
 <infoparam name="guard 3" value="[ ]" />
 </SUBCOMPONENT>
 
-<!-- COMPONENT type="1508" id="1433" >
+<COMPONENT type="1508" id="1433" >
 <cdparam x="797" y="201" />
 <sizeparam width="30" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -2838,7 +2838,7 @@
 <TGConnectingPoint num="1" id="1430" />
 <TGConnectingPoint num="2" id="1431" />
 <TGConnectingPoint num="3" id="1432" />
-</COMPONENT-->
+</COMPONENT>
 
 <COMPONENT type="1505" id="1444" >
 <cdparam x="756" y="89" />
@@ -2938,7 +2938,7 @@
 <infoparam name="guard 3" value="[ ]" />
 </SUBCOMPONENT>
 
-<!-- COMPONENT type="1508" id="1487" >
+<COMPONENT type="1508" id="1487" >
 <cdparam x="315" y="188" />
 <sizeparam width="30" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -2948,7 +2948,7 @@
 <TGConnectingPoint num="1" id="1484" />
 <TGConnectingPoint num="2" id="1485" />
 <TGConnectingPoint num="3" id="1486" />
-</COMPONENT-->
+</COMPONENT>
 
 <COMPONENT type="1505" id="1498" >
 <cdparam x="274" y="91" />
@@ -2977,7 +2977,7 @@
 <TGConnectingPoint num="0" id="1499" />
 </COMPONENT>
 
-<!-- CONNECTOR type="1501" id="1504" >
+<CONNECTOR type="1501" id="1504" >
 <cdparam x="205" y="382" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from ExecuteTransfer3 to junction6" value="null" />
@@ -3010,7 +3010,7 @@
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="point " value="null" />
-</SUBCOMPONENT-->
+</SUBCOMPONENT>
 
 <CONNECTOR type="1501" id="1506" >
 <cdparam x="290" y="291" />
@@ -3090,14 +3090,14 @@
 <infoparam name="point " value="null" />
 </SUBCOMPONENT>
 
-<!-- CONNECTOR type="1501" id="1514" >
+<CONNECTOR type="1501" id="1514" >
 <cdparam x="330" y="131" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from ProgramTransfer3 to junction6" value="null" />
 <P1  x="330" y="131" id="1489" />
 <P2  x="330" y="188" id="1483" />
 <AutomaticDrawing  data="true" />
-</CONNECTOR-->
+</CONNECTOR>
 <CONNECTOR type="1501" id="1515" >
 <cdparam x="330" y="45" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
@@ -3106,7 +3106,7 @@
 <P2  x="330" y="86" id="1488" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
-<!-- CONNECTOR type="1501" id="1519" >
+<CONNECTOR type="1501" id="1519" >
 <cdparam x="979" y="404" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from ExecuteTransfer4 to junction7" value="null" />
@@ -3139,7 +3139,7 @@
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="point " value="null" />
-</SUBCOMPONENT-->
+</SUBCOMPONENT>
 
 <CONNECTOR type="1501" id="1521" >
 <cdparam x="852" y="300" />
@@ -3175,7 +3175,7 @@
 <infoparam name="point " value="null" />
 </SUBCOMPONENT>
 
-<!-- CONNECTOR type="1501" id="1524" >
+<CONNECTOR type="1501" id="1524" >
 <cdparam x="812" y="231" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from junction7 to choice7" value="null" />
@@ -3190,7 +3190,7 @@
 <P1  x="812" y="129" id="1435" />
 <P2  x="812" y="201" id="1429" />
 <AutomaticDrawing  data="true" />
-</CONNECTOR-->
+</CONNECTOR>
 <CONNECTOR type="1501" id="1526" >
 <cdparam x="702" y="402" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
@@ -3199,14 +3199,14 @@
 <P2  x="702" y="444" id="1389" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
-<!-- CONNECTOR type="1501" id="1527" >
+<CONNECTOR type="1501" id="1527" >
 <cdparam x="330" y="218" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from junction6 to choice6" value="null" />
 <P1  x="330" y="218" id="1486" />
 <P2  x="330" y="266" id="1470" />
 <AutomaticDrawing  data="true" />
-</CONNECTOR-->
+</CONNECTOR>
 
 </CommunicationPatternDiagramPanel>
 
