@@ -74,6 +74,9 @@ public class ModuleCode {
 			LinkedList<ELNTModuleTerminal> terms = module.getModuleTerminal();
 			for (int i = 0; i < terms.size(); i++) {
 				corpsModule = corpsModule + "\tsca_eln::sca_terminal " + terms.get(i).getName() + ";" + CR;
+				if (i == terms.size() - 1) {
+					corpsModule = corpsModule + CR;
+				}
 			}
 
 			LinkedList<ELNTModulePortDE> portsDE = module.getModulePortDE();
