@@ -121,7 +121,7 @@ public class ClusterCode {
 						corpsCluster = corpsCluster + "\tsc_core::sc_signal " + "s_" + connectors.get(i).getName() + ";" + CR;
 						ELNnames.add("s_" + connectors.get(i).getName());
 					} else if (connectors.get(i).get_p1().getComponent() instanceof ELNTModulePortTDF && connectors.get(i).get_p2().getComponent() instanceof ELNTClusterPortTDF) {
-						corpsCluster = corpsCluster + "\tsca_tdf::sca_signal " + "s_" +connectors.get(i).getName() + ";" + CR;
+						corpsCluster = corpsCluster + "\tsca_tdf::sca_signal " + "s_" + connectors.get(i).getName() + ";" + CR;
 						ELNnames.add("s_" + connectors.get(i).getName());
 					} else if (connectors.get(i).get_p1().getComponent() instanceof ELNTClusterPortTDF && connectors.get(i).get_p2().getComponent() instanceof ELNTModulePortTDF) {
 						corpsCluster = corpsCluster + "\tsca_tdf::sca_signal " + "s_" + connectors.get(i).getName() + ";" + CR;
