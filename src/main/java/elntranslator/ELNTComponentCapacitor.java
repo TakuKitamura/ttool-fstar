@@ -48,7 +48,7 @@ import java.util.LinkedList;
  * @author Irina Kit Yan LEE
 */
 
-public class ELNTComponentCapacitor extends ELNTComponent {
+public class ELNTComponentCapacitor extends ELNTComponent implements ELNTPrimitiveComponent {
 	private String name;
 	private double val, q0;
 	private String unit0, unit1;

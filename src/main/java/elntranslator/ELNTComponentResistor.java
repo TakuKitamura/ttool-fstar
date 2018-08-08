@@ -48,7 +48,7 @@ import java.util.LinkedList;
  * @author Irina Kit Yan LEE
 */
 
-public class ELNTComponentResistor extends ELNTComponent {
+public class ELNTComponentResistor extends ELNTComponent implements ELNTPrimitiveComponent {
 	private String name;
 	private double val;
 	private String unit;

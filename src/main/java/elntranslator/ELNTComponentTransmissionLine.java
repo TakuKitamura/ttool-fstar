@@ -48,7 +48,7 @@ import java.util.LinkedList;
  * @author Irina Kit Yan LEE
 */
 
-public class ELNTComponentTransmissionLine extends ELNTComponent {
+public class ELNTComponentTransmissionLine extends ELNTComponent implements ELNTPrimitiveComponent {
 	private String name;
 	private double z0, delta0;
 	private String delay;

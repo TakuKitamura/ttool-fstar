@@ -48,7 +48,7 @@ import java.util.LinkedList;
  * @author Irina Kit Yan LEE
 */
 
-public class ELNTComponentVoltageSourceTDF extends ELNTComponent {
+public class ELNTComponentVoltageSourceTDF extends ELNTComponent implements ELNTPrimitiveComponent {
 	private String name;
 	private double scale;
 	private LinkedList<ELNTConnectingPoint> cp;

@@ -48,7 +48,7 @@ import java.util.LinkedList;
  * @author Irina Kit Yan LEE
 */
 
-public class ELNTComponentIdealTransformer extends ELNTComponent {
+public class ELNTComponentIdealTransformer extends ELNTComponent implements ELNTPrimitiveComponent {
 	private String name;
 	private double ratio;
 	private LinkedList<ELNTConnectingPoint> cp;

@@ -48,7 +48,7 @@ import java.util.LinkedList;
  * @author Irina Kit Yan LEE
 */
 
-public class ELNTComponentVoltageControlledCurrentSource extends ELNTComponent {
+public class ELNTComponentVoltageControlledCurrentSource extends ELNTComponent implements ELNTPrimitiveComponent {
 	private String name;
 	private double val;
 	private String unit;

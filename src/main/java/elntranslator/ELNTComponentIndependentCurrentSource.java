@@ -48,7 +48,7 @@ import java.util.LinkedList;
  * @author Irina Kit Yan LEE
 */
 
-public class ELNTComponentIndependentCurrentSource extends ELNTComponent {
+public class ELNTComponentIndependentCurrentSource extends ELNTComponent implements ELNTPrimitiveComponent {
 	private String name;
 	private double initValue, offset, amplitude, frequency, phase, acAmplitude, acPhase, acNoiseAmplitude;
 	private String delay;

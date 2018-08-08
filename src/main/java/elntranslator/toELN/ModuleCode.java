@@ -448,12 +448,12 @@ public class ModuleCode {
 							|| connectors.get(i).get_p1().getComponent() instanceof ELNTComponentVoltageSinkTDF
 							|| connectors.get(i).get_p1().getComponent() instanceof ELNTComponentCurrentSourceTDF
 							|| connectors.get(i).get_p1().getComponent() instanceof ELNTComponentCurrentSinkTDF))
-							|| (connectors.get(i).get_p1().getComponent() instanceof ELNTModulePortDE 
+							|| (connectors.get(i).get_p1().getComponent() instanceof ELNTModulePortTDF 
 							&& (connectors.get(i).get_p2().getComponent() instanceof ELNTComponentVoltageSourceTDF
 							|| connectors.get(i).get_p2().getComponent() instanceof ELNTComponentVoltageSinkTDF
 							|| connectors.get(i).get_p2().getComponent() instanceof ELNTComponentCurrentSourceTDF
 							|| connectors.get(i).get_p2().getComponent() instanceof ELNTComponentCurrentSinkTDF))
-							|| (connectors.get(i).get_p2().getComponent() instanceof ELNTModulePortDE 
+							|| (connectors.get(i).get_p2().getComponent() instanceof ELNTModulePortTDF 
 							&& (connectors.get(i).get_p1().getComponent() instanceof ELNTComponentVoltageSourceTDF
 							|| connectors.get(i).get_p1().getComponent() instanceof ELNTComponentVoltageSinkTDF
 							|| connectors.get(i).get_p1().getComponent() instanceof ELNTComponentCurrentSourceTDF
@@ -479,9 +479,9 @@ public class ModuleCode {
 							|| connectors.get(i).get_p1().getComponent() instanceof ELNTComponentCurrentSourceDE
 							|| connectors.get(i).get_p1().getComponent() instanceof ELNTComponentCurrentSinkDE))
 							|| (connectors.get(i).get_p1().getComponent() instanceof ELNTMidPortTerminal
-							&& connectors.get(i).get_p2().getComponent() instanceof ELNTComponent)
+							&& connectors.get(i).get_p2().getComponent() instanceof ELNTPrimitiveComponent)
 							|| (connectors.get(i).get_p2().getComponent() instanceof ELNTMidPortTerminal
-							&& connectors.get(i).get_p1().getComponent() instanceof ELNTComponent))) {
+							&& connectors.get(i).get_p1().getComponent() instanceof ELNTPrimitiveComponent))) {
 						nodes.add(connectors.get(i));
 					}
 				}
@@ -523,6 +523,30 @@ public class ModuleCode {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
+								if (connectors.get(k).get_p2().getComponent() instanceof ELNTPrimitiveComponent) {
+									LinkedList<ELNTMidPortTerminal> mids = connectors.get(k).getMidPortTerminal();
+									boolean stop = false;
+									for (ELNTMidPortTerminal mid : mids) {
+										for (int l = 0; l < connectors.size(); l++) {
+											if (connectors.get(l).get_p1().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											} else if (connectors.get(l).get_p2().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											}
+										}
+										if (stop == true) {
+											break;
+										}
+									}
+								}	
 								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModuleTerminal) {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
@@ -552,6 +576,30 @@ public class ModuleCode {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTPrimitiveComponent) {
+									LinkedList<ELNTMidPortTerminal> mids = connectors.get(k).getMidPortTerminal();
+									boolean stop = false;
+									for (ELNTMidPortTerminal mid : mids) {
+										for (int l = 0; l < connectors.size(); l++) {
+											if (connectors.get(l).get_p1().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											} else if (connectors.get(l).get_p2().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											}
+										}
+										if (stop == true) {
+											break;
+										}
+									}
+								}
 								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModuleTerminal) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
@@ -560,11 +608,11 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModulePortDE) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModulePortDE) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModulePortTDF) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModulePortTDF) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -590,6 +638,30 @@ public class ModuleCode {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
+								if (connectors.get(k).get_p2().getComponent() instanceof ELNTPrimitiveComponent) {
+									LinkedList<ELNTMidPortTerminal> mids = connectors.get(k).getMidPortTerminal();
+									boolean stop = false;
+									for (ELNTMidPortTerminal mid : mids) {
+										for (int l = 0; l < connectors.size(); l++) {
+											if (connectors.get(l).get_p1().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											} else if (connectors.get(l).get_p2().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											}
+										}
+										if (stop == true) {
+											break;
+										}
+									}
+								}
 								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModuleTerminal) {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
@@ -619,6 +691,30 @@ public class ModuleCode {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTPrimitiveComponent) {
+									LinkedList<ELNTMidPortTerminal> mids = connectors.get(k).getMidPortTerminal();
+									boolean stop = false;
+									for (ELNTMidPortTerminal mid : mids) {
+										for (int l = 0; l < connectors.size(); l++) {
+											if (connectors.get(l).get_p1().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											} else if (connectors.get(l).get_p2().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											}
+										}
+										if (stop == true) {
+											break;
+										}
+									}
+								}
 								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModuleTerminal) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
@@ -627,11 +723,11 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModulePortDE) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModulePortDE) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModulePortTDF) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModulePortTDF) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -657,6 +753,30 @@ public class ModuleCode {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
+								if (connectors.get(k).get_p2().getComponent() instanceof ELNTPrimitiveComponent) {
+									LinkedList<ELNTMidPortTerminal> mids = connectors.get(k).getMidPortTerminal();
+									boolean stop = false;
+									for (ELNTMidPortTerminal mid : mids) {
+										for (int l = 0; l < connectors.size(); l++) {
+											if (connectors.get(l).get_p1().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											} else if (connectors.get(l).get_p2().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											}
+										}
+										if (stop == true) {
+											break;
+										}
+									}
+								}
 								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModuleTerminal) {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
@@ -686,6 +806,30 @@ public class ModuleCode {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTPrimitiveComponent) {
+									LinkedList<ELNTMidPortTerminal> mids = connectors.get(k).getMidPortTerminal();
+									boolean stop = false;
+									for (ELNTMidPortTerminal mid : mids) {
+										for (int l = 0; l < connectors.size(); l++) {
+											if (connectors.get(l).get_p1().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											} else if (connectors.get(l).get_p2().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											}
+										}
+										if (stop == true) {
+											break;
+										}
+									}
+								}
 								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModuleTerminal) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
@@ -694,11 +838,11 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModulePortDE) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModulePortDE) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModulePortTDF) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModulePortTDF) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -724,6 +868,30 @@ public class ModuleCode {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
+								if (connectors.get(k).get_p2().getComponent() instanceof ELNTPrimitiveComponent) {
+									LinkedList<ELNTMidPortTerminal> mids = connectors.get(k).getMidPortTerminal();
+									boolean stop = false;
+									for (ELNTMidPortTerminal mid : mids) {
+										for (int l = 0; l < connectors.size(); l++) {
+											if (connectors.get(l).get_p1().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											} else if (connectors.get(l).get_p2().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											}
+										}
+										if (stop == true) {
+											break;
+										}
+									}
+								}
 								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModuleTerminal) {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
@@ -753,6 +921,30 @@ public class ModuleCode {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTPrimitiveComponent) {
+									LinkedList<ELNTMidPortTerminal> mids = connectors.get(k).getMidPortTerminal();
+									boolean stop = false;
+									for (ELNTMidPortTerminal mid : mids) {
+										for (int l = 0; l < connectors.size(); l++) {
+											if (connectors.get(l).get_p1().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											} else if (connectors.get(l).get_p2().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											}
+										}
+										if (stop == true) {
+											break;
+										}
+									}
+								}
 								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModuleTerminal) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
@@ -761,11 +953,11 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModulePortDE) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModulePortDE) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModulePortTDF) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModulePortTDF) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -791,6 +983,30 @@ public class ModuleCode {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
+								if (connectors.get(k).get_p2().getComponent() instanceof ELNTPrimitiveComponent) {
+									LinkedList<ELNTMidPortTerminal> mids = connectors.get(k).getMidPortTerminal();
+									boolean stop = false;
+									for (ELNTMidPortTerminal mid : mids) {
+										for (int l = 0; l < connectors.size(); l++) {
+											if (connectors.get(l).get_p1().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											} else if (connectors.get(l).get_p2().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											}
+										}
+										if (stop == true) {
+											break;
+										}
+									}
+								}
 								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModuleTerminal) {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
@@ -820,6 +1036,30 @@ public class ModuleCode {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTPrimitiveComponent) {
+									LinkedList<ELNTMidPortTerminal> mids = connectors.get(k).getMidPortTerminal();
+									boolean stop = false;
+									for (ELNTMidPortTerminal mid : mids) {
+										for (int l = 0; l < connectors.size(); l++) {
+											if (connectors.get(l).get_p1().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											} else if (connectors.get(l).get_p2().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											}
+										}
+										if (stop == true) {
+											break;
+										}
+									}
+								}
 								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModuleTerminal) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
@@ -828,11 +1068,11 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModulePortDE) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModulePortDE) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModulePortTDF) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModulePortTDF) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -858,6 +1098,30 @@ public class ModuleCode {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
+								if (connectors.get(k).get_p2().getComponent() instanceof ELNTPrimitiveComponent) {
+									LinkedList<ELNTMidPortTerminal> mids = connectors.get(k).getMidPortTerminal();
+									boolean stop = false;
+									for (ELNTMidPortTerminal mid : mids) {
+										for (int l = 0; l < connectors.size(); l++) {
+											if (connectors.get(l).get_p1().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											} else if (connectors.get(l).get_p2().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											}
+										}
+										if (stop == true) {
+											break;
+										}
+									}
+								}
 								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModuleTerminal) {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
@@ -887,6 +1151,30 @@ public class ModuleCode {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTPrimitiveComponent) {
+									LinkedList<ELNTMidPortTerminal> mids = connectors.get(k).getMidPortTerminal();
+									boolean stop = false;
+									for (ELNTMidPortTerminal mid : mids) {
+										for (int l = 0; l < connectors.size(); l++) {
+											if (connectors.get(l).get_p1().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											} else if (connectors.get(l).get_p2().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											}
+										}
+										if (stop == true) {
+											break;
+										}
+									}
+								}
 								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModuleTerminal) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
@@ -895,11 +1183,11 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModulePortDE) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModulePortDE) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModulePortTDF) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModulePortTDF) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -925,6 +1213,30 @@ public class ModuleCode {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
+								if (connectors.get(k).get_p2().getComponent() instanceof ELNTPrimitiveComponent) {
+									LinkedList<ELNTMidPortTerminal> mids = connectors.get(k).getMidPortTerminal();
+									boolean stop = false;
+									for (ELNTMidPortTerminal mid : mids) {
+										for (int l = 0; l < connectors.size(); l++) {
+											if (connectors.get(l).get_p1().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											} else if (connectors.get(l).get_p2().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											}
+										}
+										if (stop == true) {
+											break;
+										}
+									}
+								}
 								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModuleTerminal) {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
@@ -954,6 +1266,30 @@ public class ModuleCode {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTPrimitiveComponent) {
+									LinkedList<ELNTMidPortTerminal> mids = connectors.get(k).getMidPortTerminal();
+									boolean stop = false;
+									for (ELNTMidPortTerminal mid : mids) {
+										for (int l = 0; l < connectors.size(); l++) {
+											if (connectors.get(l).get_p1().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											} else if (connectors.get(l).get_p2().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											}
+										}
+										if (stop == true) {
+											break;
+										}
+									}
+								}
 								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModuleTerminal) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
@@ -962,11 +1298,11 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModulePortDE) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModulePortDE) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModulePortTDF) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModulePortTDF) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -992,6 +1328,30 @@ public class ModuleCode {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
+								if (connectors.get(k).get_p2().getComponent() instanceof ELNTPrimitiveComponent) {
+									LinkedList<ELNTMidPortTerminal> mids = connectors.get(k).getMidPortTerminal();
+									boolean stop = false;
+									for (ELNTMidPortTerminal mid : mids) {
+										for (int l = 0; l < connectors.size(); l++) {
+											if (connectors.get(l).get_p1().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											} else if (connectors.get(l).get_p2().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											}
+										}
+										if (stop == true) {
+											break;
+										}
+									}
+								}
 								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModuleTerminal) {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
@@ -1021,6 +1381,30 @@ public class ModuleCode {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTPrimitiveComponent) {
+									LinkedList<ELNTMidPortTerminal> mids = connectors.get(k).getMidPortTerminal();
+									boolean stop = false;
+									for (ELNTMidPortTerminal mid : mids) {
+										for (int l = 0; l < connectors.size(); l++) {
+											if (connectors.get(l).get_p1().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											} else if (connectors.get(l).get_p2().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											}
+										}
+										if (stop == true) {
+											break;
+										}
+									}
+								}
 								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModuleTerminal) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
@@ -1029,11 +1413,11 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModulePortDE) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModulePortDE) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModulePortTDF) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModulePortTDF) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -1059,6 +1443,30 @@ public class ModuleCode {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
+								if (connectors.get(k).get_p2().getComponent() instanceof ELNTPrimitiveComponent) {
+									LinkedList<ELNTMidPortTerminal> mids = connectors.get(k).getMidPortTerminal();
+									boolean stop = false;
+									for (ELNTMidPortTerminal mid : mids) {
+										for (int l = 0; l < connectors.size(); l++) {
+											if (connectors.get(l).get_p1().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											} else if (connectors.get(l).get_p2().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											}
+										}
+										if (stop == true) {
+											break;
+										}
+									}
+								}
 								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModuleTerminal) {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
@@ -1088,6 +1496,30 @@ public class ModuleCode {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTPrimitiveComponent) {
+									LinkedList<ELNTMidPortTerminal> mids = connectors.get(k).getMidPortTerminal();
+									boolean stop = false;
+									for (ELNTMidPortTerminal mid : mids) {
+										for (int l = 0; l < connectors.size(); l++) {
+											if (connectors.get(l).get_p1().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											} else if (connectors.get(l).get_p2().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											}
+										}
+										if (stop == true) {
+											break;
+										}
+									}
+								}
 								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModuleTerminal) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
@@ -1096,11 +1528,11 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModulePortDE) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModulePortDE) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModulePortTDF) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModulePortTDF) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -1126,6 +1558,30 @@ public class ModuleCode {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
+								if (connectors.get(k).get_p2().getComponent() instanceof ELNTPrimitiveComponent) {
+									LinkedList<ELNTMidPortTerminal> mids = connectors.get(k).getMidPortTerminal();
+									boolean stop = false;
+									for (ELNTMidPortTerminal mid : mids) {
+										for (int l = 0; l < connectors.size(); l++) {
+											if (connectors.get(l).get_p1().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											} else if (connectors.get(l).get_p2().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											}
+										}
+										if (stop == true) {
+											break;
+										}
+									}
+								}
 								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModuleTerminal) {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
@@ -1155,6 +1611,30 @@ public class ModuleCode {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTPrimitiveComponent) {
+									LinkedList<ELNTMidPortTerminal> mids = connectors.get(k).getMidPortTerminal();
+									boolean stop = false;
+									for (ELNTMidPortTerminal mid : mids) {
+										for (int l = 0; l < connectors.size(); l++) {
+											if (connectors.get(l).get_p1().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											} else if (connectors.get(l).get_p2().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											}
+										}
+										if (stop == true) {
+											break;
+										}
+									}
+								}
 								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModuleTerminal) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
@@ -1163,11 +1643,11 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModulePortDE) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModulePortDE) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModulePortTDF) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModulePortTDF) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -1193,6 +1673,30 @@ public class ModuleCode {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
+								if (connectors.get(k).get_p2().getComponent() instanceof ELNTPrimitiveComponent) {
+									LinkedList<ELNTMidPortTerminal> mids = connectors.get(k).getMidPortTerminal();
+									boolean stop = false;
+									for (ELNTMidPortTerminal mid : mids) {
+										for (int l = 0; l < connectors.size(); l++) {
+											if (connectors.get(l).get_p1().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											} else if (connectors.get(l).get_p2().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											}
+										}
+										if (stop == true) {
+											break;
+										}
+									}
+								}
 								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModuleTerminal) {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
@@ -1222,6 +1726,30 @@ public class ModuleCode {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTPrimitiveComponent) {
+									LinkedList<ELNTMidPortTerminal> mids = connectors.get(k).getMidPortTerminal();
+									boolean stop = false;
+									for (ELNTMidPortTerminal mid : mids) {
+										for (int l = 0; l < connectors.size(); l++) {
+											if (connectors.get(l).get_p1().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											} else if (connectors.get(l).get_p2().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											}
+										}
+										if (stop == true) {
+											break;
+										}
+									}
+								}
 								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModuleTerminal) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
@@ -1230,11 +1758,11 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModulePortDE) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModulePortDE) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModulePortTDF) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModulePortTDF) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -1260,6 +1788,30 @@ public class ModuleCode {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
+								if (connectors.get(k).get_p2().getComponent() instanceof ELNTPrimitiveComponent) {
+									LinkedList<ELNTMidPortTerminal> mids = connectors.get(k).getMidPortTerminal();
+									boolean stop = false;
+									for (ELNTMidPortTerminal mid : mids) {
+										for (int l = 0; l < connectors.size(); l++) {
+											if (connectors.get(l).get_p1().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											} else if (connectors.get(l).get_p2().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											}
+										}
+										if (stop == true) {
+											break;
+										}
+									}
+								}
 								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModuleTerminal) {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
@@ -1289,6 +1841,30 @@ public class ModuleCode {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTPrimitiveComponent) {
+									LinkedList<ELNTMidPortTerminal> mids = connectors.get(k).getMidPortTerminal();
+									boolean stop = false;
+									for (ELNTMidPortTerminal mid : mids) {
+										for (int l = 0; l < connectors.size(); l++) {
+											if (connectors.get(l).get_p1().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											} else if (connectors.get(l).get_p2().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											}
+										}
+										if (stop == true) {
+											break;
+										}
+									}
+								}
 								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModuleTerminal) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
@@ -1297,11 +1873,11 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModulePortDE) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModulePortDE) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModulePortTDF) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModulePortTDF) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -1327,6 +1903,30 @@ public class ModuleCode {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
+								if (connectors.get(k).get_p2().getComponent() instanceof ELNTPrimitiveComponent) {
+									LinkedList<ELNTMidPortTerminal> mids = connectors.get(k).getMidPortTerminal();
+									boolean stop = false;
+									for (ELNTMidPortTerminal mid : mids) {
+										for (int l = 0; l < connectors.size(); l++) {
+											if (connectors.get(l).get_p1().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											} else if (connectors.get(l).get_p2().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											}
+										}
+										if (stop == true) {
+											break;
+										}
+									}
+								}
 								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModuleTerminal) {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
@@ -1356,6 +1956,30 @@ public class ModuleCode {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTPrimitiveComponent) {
+									LinkedList<ELNTMidPortTerminal> mids = connectors.get(k).getMidPortTerminal();
+									boolean stop = false;
+									for (ELNTMidPortTerminal mid : mids) {
+										for (int l = 0; l < connectors.size(); l++) {
+											if (connectors.get(l).get_p1().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											} else if (connectors.get(l).get_p2().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											}
+										}
+										if (stop == true) {
+											break;
+										}
+									}
+								}
 								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModuleTerminal) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
@@ -1364,11 +1988,11 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModulePortDE) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModulePortDE) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModulePortTDF) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModulePortTDF) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -1394,6 +2018,30 @@ public class ModuleCode {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
+								if (connectors.get(k).get_p2().getComponent() instanceof ELNTPrimitiveComponent) {
+									LinkedList<ELNTMidPortTerminal> mids = connectors.get(k).getMidPortTerminal();
+									boolean stop = false;
+									for (ELNTMidPortTerminal mid : mids) {
+										for (int l = 0; l < connectors.size(); l++) {
+											if (connectors.get(l).get_p1().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											} else if (connectors.get(l).get_p2().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											}
+										}
+										if (stop == true) {
+											break;
+										}
+									}
+								}
 								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModuleTerminal) {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
@@ -1423,6 +2071,30 @@ public class ModuleCode {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTPrimitiveComponent) {
+									LinkedList<ELNTMidPortTerminal> mids = connectors.get(k).getMidPortTerminal();
+									boolean stop = false;
+									for (ELNTMidPortTerminal mid : mids) {
+										for (int l = 0; l < connectors.size(); l++) {
+											if (connectors.get(l).get_p1().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											} else if (connectors.get(l).get_p2().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											}
+										}
+										if (stop == true) {
+											break;
+										}
+									}
+								}
 								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModuleTerminal) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
@@ -1431,11 +2103,11 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModulePortDE) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModulePortDE) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModulePortTDF) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModulePortTDF) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -1461,6 +2133,30 @@ public class ModuleCode {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
+								if (connectors.get(k).get_p2().getComponent() instanceof ELNTPrimitiveComponent) {
+									LinkedList<ELNTMidPortTerminal> mids = connectors.get(k).getMidPortTerminal();
+									boolean stop = false;
+									for (ELNTMidPortTerminal mid : mids) {
+										for (int l = 0; l < connectors.size(); l++) {
+											if (connectors.get(l).get_p1().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											} else if (connectors.get(l).get_p2().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											}
+										}
+										if (stop == true) {
+											break;
+										}
+									}
+								}
 								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModuleTerminal) {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
@@ -1490,6 +2186,30 @@ public class ModuleCode {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTPrimitiveComponent) {
+									LinkedList<ELNTMidPortTerminal> mids = connectors.get(k).getMidPortTerminal();
+									boolean stop = false;
+									for (ELNTMidPortTerminal mid : mids) {
+										for (int l = 0; l < connectors.size(); l++) {
+											if (connectors.get(l).get_p1().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											} else if (connectors.get(l).get_p2().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											}
+										}
+										if (stop == true) {
+											break;
+										}
+									}
+								}
 								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModuleTerminal) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
@@ -1498,11 +2218,11 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModulePortDE) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModulePortDE) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModulePortTDF) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModulePortTDF) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -1528,6 +2248,30 @@ public class ModuleCode {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
+								if (connectors.get(k).get_p2().getComponent() instanceof ELNTPrimitiveComponent) {
+									LinkedList<ELNTMidPortTerminal> mids = connectors.get(k).getMidPortTerminal();
+									boolean stop = false;
+									for (ELNTMidPortTerminal mid : mids) {
+										for (int l = 0; l < connectors.size(); l++) {
+											if (connectors.get(l).get_p1().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											} else if (connectors.get(l).get_p2().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											}
+										}
+										if (stop == true) {
+											break;
+										}
+									}
+								}
 								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModuleTerminal) {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
@@ -1557,6 +2301,30 @@ public class ModuleCode {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTPrimitiveComponent) {
+									LinkedList<ELNTMidPortTerminal> mids = connectors.get(k).getMidPortTerminal();
+									boolean stop = false;
+									for (ELNTMidPortTerminal mid : mids) {
+										for (int l = 0; l < connectors.size(); l++) {
+											if (connectors.get(l).get_p1().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											} else if (connectors.get(l).get_p2().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											}
+										}
+										if (stop == true) {
+											break;
+										}
+									}
+								}
 								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModuleTerminal) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
@@ -1565,11 +2333,11 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModulePortDE) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModulePortDE) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModulePortTDF) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModulePortTDF) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -1595,6 +2363,30 @@ public class ModuleCode {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
+								if (connectors.get(k).get_p2().getComponent() instanceof ELNTPrimitiveComponent) {
+									LinkedList<ELNTMidPortTerminal> mids = connectors.get(k).getMidPortTerminal();
+									boolean stop = false;
+									for (ELNTMidPortTerminal mid : mids) {
+										for (int l = 0; l < connectors.size(); l++) {
+											if (connectors.get(l).get_p1().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											} else if (connectors.get(l).get_p2().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											}
+										}
+										if (stop == true) {
+											break;
+										}
+									}
+								}
 								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModuleTerminal) {
 									corpsModule = corpsModule + connectors.get(k).get_p2().getComponent().getName()
 											+ ");" + CR;
@@ -1624,6 +2416,30 @@ public class ModuleCode {
 							if (!connectors.get(k).getName().equals("")) {
 								corpsModule = corpsModule + connectors.get(k).getName() + ");" + CR;
 							} else {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTPrimitiveComponent) {
+									LinkedList<ELNTMidPortTerminal> mids = connectors.get(k).getMidPortTerminal();
+									boolean stop = false;
+									for (ELNTMidPortTerminal mid : mids) {
+										for (int l = 0; l < connectors.size(); l++) {
+											if (connectors.get(l).get_p1().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											} else if (connectors.get(l).get_p2().getComponent().equals(mid)) {
+												if (!searchName(connectors.get(l)).equals("")) {
+													corpsModule = corpsModule + searchName(connectors.get(l)) + ");" + CR;
+													stop = true;
+													break;
+												}
+											}
+										}
+										if (stop == true) {
+											break;
+										}
+									}
+								}
 								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModuleTerminal) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
@@ -1632,11 +2448,11 @@ public class ModuleCode {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModulePortDE) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModulePortDE) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
-								if (connectors.get(k).get_p2().getComponent() instanceof ELNTModulePortTDF) {
+								if (connectors.get(k).get_p1().getComponent() instanceof ELNTModulePortTDF) {
 									corpsModule = corpsModule + connectors.get(k).get_p1().getComponent().getName()
 											+ ");" + CR;
 								}
@@ -1699,7 +2515,13 @@ public class ModuleCode {
 	}
 
 	private static String searchName(ELNTConnector connector) {
-		if (connector.get_p1().getComponent() instanceof ELNTComponent) {
+		if (connector.get_p1().getComponent() instanceof ELNTPrimitiveComponent) {
+			if (connector.get_p2().getComponent() instanceof ELNTModulePortTDF) {
+				return connector.get_p2().getComponent().getName();
+			}
+			if (connector.get_p2().getComponent() instanceof ELNTModulePortDE) {
+				return connector.get_p2().getComponent().getName();
+			}
 			if (connector.get_p2().getComponent() instanceof ELNTModuleTerminal) {
 				return connector.get_p2().getComponent().getName();
 			}
@@ -1711,6 +2533,12 @@ public class ModuleCode {
 				return searchName(c);
 			}
 		}
+		if (connector.get_p1().getComponent() instanceof ELNTModulePortTDF) {
+			return connector.get_p1().getComponent().getName();
+		}
+		if (connector.get_p1().getComponent() instanceof ELNTModulePortDE) {
+			return connector.get_p1().getComponent().getName();
+		}
 		if (connector.get_p1().getComponent() instanceof ELNTModuleTerminal) {
 			return connector.get_p1().getComponent().getName();
 		}
@@ -1718,13 +2546,19 @@ public class ModuleCode {
 			return connector.get_p1().getComponent().getName();
 		}
 		if (connector.get_p1().getComponent() instanceof ELNTMidPortTerminal) {
+			if (connector.get_p2().getComponent() instanceof ELNTModulePortTDF) {
+				return connector.get_p2().getComponent().getName();
+			}
+			if (connector.get_p2().getComponent() instanceof ELNTModulePortDE) {
+				return connector.get_p2().getComponent().getName();
+			}
 			if (connector.get_p2().getComponent() instanceof ELNTModuleTerminal) {
 				return connector.get_p2().getComponent().getName();
 			}
 			if (connector.get_p2().getComponent() instanceof ELNTComponentNodeRef) {
 				return connector.get_p2().getComponent().getName();
 			}
-			if (connector.get_p2().getComponent() instanceof ELNTComponent) {
+			if (connector.get_p2().getComponent() instanceof ELNTPrimitiveComponent) {
 				ELNTConnector c = ((ELNTMidPortTerminal) connector.get_p1().getComponent()).getConnector();
 				return searchName(c);
 			}
