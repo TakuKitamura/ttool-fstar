@@ -6235,7 +6235,7 @@ POLLING
 <TGConnectingPoint num="0" id="2490" />
 </COMPONENT>
 
-<!-- Issue #69 COMPONENT type="1508" id="2496" >
+<COMPONENT type="1508" id="2496" >
 <cdparam x="360" y="163" />
 <sizeparam width="30" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -6245,7 +6245,7 @@ POLLING
 <TGConnectingPoint num="1" id="2493" />
 <TGConnectingPoint num="2" id="2494" />
 <TGConnectingPoint num="3" id="2495" />
-</COMPONENT-->
+</COMPONENT>
 
 <COMPONENT type="1505" id="2507" >
 <cdparam x="182" y="332" />
@@ -6911,7 +6911,7 @@ POLLING
 <infoparam name="guard 3" value="[ transferTerminated == true ]" />
 </SUBCOMPONENT>
 
-<!-- Issue #69 COMPONENT type="1508" id="2866" >
+<COMPONENT type="1508" id="2866" >
 <cdparam x="279" y="127" />
 <sizeparam width="30" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
@@ -6921,7 +6921,7 @@ POLLING
 <TGConnectingPoint num="1" id="2863" />
 <TGConnectingPoint num="2" id="2864" />
 <TGConnectingPoint num="3" id="2865" />
-</COMPONENT-->
+</COMPONENT>
 
 <COMPONENT type="1505" id="2877" >
 <cdparam x="101" y="296" />

@@ -17,6 +17,7 @@ import myutil.FileUtils;
 
 public class TestGTURTLEModeling extends AbstractUITest {
 
+    //private static final String RESOURCES_DIR = "resources/ui/generateccode/";
     private String[] codeGenOptions = { "", "-mas" };
 
     @BeforeClass
@@ -29,17 +30,17 @@ public class TestGTURTLEModeling extends AbstractUITest {
     public TestGTURTLEModeling() {
         super();
 
-        mainGUI.openProjectFromFile( new File( RESOURCES_DIR + "input/ZigBeeTutorial.xml") );
+        mainGui.openProjectFromFile( new File( RESOURCES_DIR + "models/ZigBeeTutorial.xml") );
 
         // FIXME: Temporarily ignoring the debug text file due to bug in comparator tool
         textComparator = new TextComparator( Collections.singletonList( "txt" ) );
     }
 
     private void testGenerateCCode( final String mappingDiagName ) {
-        final TMLArchiPanel panel = findArchiPanel( mappingDiagName );
+        final TMLArchiPanel panel = findPanel( mappingDiagName );
         final Vector<TGComponent> compos = new Vector<TGComponent>( panel.tmlap.getComponentList() );
 
-        assertTrue( mainGUI.gtm.checkSyntaxTMLMapping( compos, panel, true ) );
+        assertTrue( mainGui.gtm.checkSyntaxTMLMapping( compos, panel, true ) );
 
         final String codeDir = RESOURCES_DIR + mappingDiagName + File.separator + "actual" + File.separator;
         FileUtils.deleteFiles( codeDir );
@@ -47,7 +48,7 @@ public class TestGTURTLEModeling extends AbstractUITest {
         final String codeDirExpected = RESOURCES_DIR + mappingDiagName + File.separator + "expected" + File.separator;
 
         for( String compilerOption: codeGenOptions )    {
-        	mainGUI.gtm.generateCCode( codeDir, compilerOption );
+            mainGui.gtm.generateCCode( codeDir, compilerOption );
             /*try {
                 Thread.sleep(5000);
             } catch (Exception ignored) {
@@ -68,6 +69,16 @@ public class TestGTURTLEModeling extends AbstractUITest {
                 handleException( ex );
             }
         }
+    }
+
+    private TMLArchiPanel findPanel( final String name ) {
+        for ( final TMLArchiPanel panel : mainGui.getTMLArchiDiagramPanels() ) {
+            if ( name.equals( mainGui.getTitleAt( panel ) ) ) {
+                return panel;
+            }
+        }
+
+        return null;
     }
 
     @Test
