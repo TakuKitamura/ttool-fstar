@@ -176,9 +176,6 @@ public class ELNDiagramToolBar extends TToolBar {
 		button = this.add(mgui.actions[TGUIAction.ELN_INDEPENDENT_CURRENT_SOURCE]);
 		button.addMouseListener(mgui.mouseHandler);
 		
-		button = this.add(mgui.actions[TGUIAction.ELN_NODE_REF]);
-		button.addMouseListener(mgui.mouseHandler);
-		
 		this.addSeparator();
 		
 		button = this.add(mgui.actions[TGUIAction.ELN_TDF_VOLTAGE_SOURCE]);
@@ -205,6 +202,11 @@ public class ELNDiagramToolBar extends TToolBar {
 		button.addMouseListener(mgui.mouseHandler);
 		
 		button = this.add(mgui.actions[TGUIAction.ELN_DE_CURRENT_SINK]);
+		button.addMouseListener(mgui.mouseHandler);
+		
+		this.addSeparator();
+		
+		button = this.add(mgui.actions[TGUIAction.ELN_NODE_REF]);
 		button.addMouseListener(mgui.mouseHandler);
 		
 		this.addSeparator();
