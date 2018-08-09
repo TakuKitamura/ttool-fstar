@@ -205,55 +205,7 @@ public class ELNModule extends TGCScalableWithInternalComponent implements Swall
 	}
 
 	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
-		if (tgc instanceof ELNComponentCapacitor) {
-			return true;
-		} 
-		if (tgc instanceof ELNComponentIdealTransformer) {
-			return true;
-		} 
-		if (tgc instanceof ELNComponentIndependentCurrentSource) {
-			return true;
-		} 
-		if (tgc instanceof ELNComponentIndependentVoltageSource) {
-			return true;
-		} 
-		if (tgc instanceof ELNComponentInductor) {
-			return true;
-		} 
-		if (tgc instanceof ELNComponentResistor) {
-			return true;
-		} 
-		if (tgc instanceof ELNComponentTransmissionLine) {
-			return true;
-		} 
-		if (tgc instanceof ELNComponentVoltageControlledCurrentSource) {
-			return true;
-		} 
-		if (tgc instanceof ELNComponentVoltageControlledVoltageSource) {
-			return true;
-		} 
-		if (tgc instanceof ELNComponentCurrentSinkTDF) {
-			return true;
-		} 
-		if (tgc instanceof ELNComponentCurrentSourceTDF) {
-			return true;
-		} 
-		if (tgc instanceof ELNComponentVoltageSinkTDF) {
-			return true;
-		} 
-		if (tgc instanceof ELNComponentVoltageSourceTDF) {
-			return true;
-		} 
-		if (tgc instanceof ELNComponentCurrentSinkDE) {
-			return true;
-		} 
-		if (tgc instanceof ELNComponentCurrentSourceDE) {
-			return true;
-		} 
-		if (tgc instanceof ELNComponentVoltageSinkDE) {
-			return true;
-		} 
-		if (tgc instanceof ELNComponentVoltageSourceDE) {
+		if (tgc instanceof ELNPrimitiveComponent) {
 			return true;
 		} 
 		if (tgc instanceof ELNNodeRef) {
@@ -272,119 +224,7 @@ public class ELNModule extends TGCScalableWithInternalComponent implements Swall
 	}
 
 	public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
-		if (tgc instanceof ELNComponentCapacitor) {
-			tgc.setFather(this);
-			tgc.setDrawingZone(true);
-			tgc.resizeWithFather();
-			addInternalComponent(tgc, 0);
-			return true;
-		}
-		if (tgc instanceof ELNComponentIdealTransformer) {
-			tgc.setFather(this);
-			tgc.setDrawingZone(true);
-			tgc.resizeWithFather();
-			addInternalComponent(tgc, 0);
-			return true;
-		}
-		if (tgc instanceof ELNComponentIndependentCurrentSource) {
-			tgc.setFather(this);
-			tgc.setDrawingZone(true);
-			tgc.resizeWithFather();
-			addInternalComponent(tgc, 0);
-			return true;
-		}
-		if (tgc instanceof ELNComponentIndependentVoltageSource) {
-			tgc.setFather(this);
-			tgc.setDrawingZone(true);
-			tgc.resizeWithFather();
-			addInternalComponent(tgc, 0);
-			return true;
-		}
-		if (tgc instanceof ELNComponentInductor) {
-			tgc.setFather(this);
-			tgc.setDrawingZone(true);
-			tgc.resizeWithFather();
-			addInternalComponent(tgc, 0);
-			return true;
-		}
-		if (tgc instanceof ELNComponentResistor) {
-			tgc.setFather(this);
-			tgc.setDrawingZone(true);
-			tgc.resizeWithFather();
-			addInternalComponent(tgc, 0);
-			return true;
-		}
-		if (tgc instanceof ELNComponentTransmissionLine) {
-			tgc.setFather(this);
-			tgc.setDrawingZone(true);
-			tgc.resizeWithFather();
-			addInternalComponent(tgc, 0);
-			return true;
-		}
-		if (tgc instanceof ELNComponentVoltageControlledCurrentSource) {
-			tgc.setFather(this);
-			tgc.setDrawingZone(true);
-			tgc.resizeWithFather();
-			addInternalComponent(tgc, 0);
-			return true;
-		}
-		if (tgc instanceof ELNComponentVoltageControlledVoltageSource) {
-			tgc.setFather(this);
-			tgc.setDrawingZone(true);
-			tgc.resizeWithFather();
-			addInternalComponent(tgc, 0);
-			return true;
-		}
-		if (tgc instanceof ELNComponentCurrentSinkTDF) {
-			tgc.setFather(this);
-			tgc.setDrawingZone(true);
-			tgc.resizeWithFather();
-			addInternalComponent(tgc, 0);
-			return true;
-		}
-		if (tgc instanceof ELNComponentCurrentSourceTDF) {
-			tgc.setFather(this);
-			tgc.setDrawingZone(true);
-			tgc.resizeWithFather();
-			addInternalComponent(tgc, 0);
-			return true;
-		}
-		if (tgc instanceof ELNComponentVoltageSinkTDF) {
-			tgc.setFather(this);
-			tgc.setDrawingZone(true);
-			tgc.resizeWithFather();
-			addInternalComponent(tgc, 0);
-			return true;
-		}
-		if (tgc instanceof ELNComponentVoltageSourceTDF) {
-			tgc.setFather(this);
-			tgc.setDrawingZone(true);
-			tgc.resizeWithFather();
-			addInternalComponent(tgc, 0);
-			return true;
-		}
-		if (tgc instanceof ELNComponentCurrentSinkDE) {
-			tgc.setFather(this);
-			tgc.setDrawingZone(true);
-			tgc.resizeWithFather();
-			addInternalComponent(tgc, 0);
-			return true;
-		}
-		if (tgc instanceof ELNComponentCurrentSourceDE) {
-			tgc.setFather(this);
-			tgc.setDrawingZone(true);
-			tgc.resizeWithFather();
-			addInternalComponent(tgc, 0);
-			return true;
-		}
-		if (tgc instanceof ELNComponentVoltageSinkDE) {
-			tgc.setFather(this);
-			tgc.setDrawingZone(true);
-			tgc.resizeWithFather();
-			addInternalComponent(tgc, 0);
-			return true;
-		}
-		if (tgc instanceof ELNComponentVoltageSourceDE) {
+		if (tgc instanceof ELNPrimitiveComponent) {
 			tgc.setFather(this);
 			tgc.setDrawingZone(true);
 			tgc.resizeWithFather();
@@ -429,55 +269,7 @@ public class ELNModule extends TGCScalableWithInternalComponent implements Swall
 	public void hasBeenResized() {
 		rescaled = true;
 		for(int i=0; i<nbInternalTGComponent; i++) {
-			if (tgcomponent[i] instanceof ELNComponentCapacitor) {
-				tgcomponent[i].resizeWithFather();
-			}
-			if (tgcomponent[i] instanceof ELNComponentIdealTransformer) {
-				tgcomponent[i].resizeWithFather();
-			}
-			if (tgcomponent[i] instanceof ELNComponentIndependentCurrentSource) {
-				tgcomponent[i].resizeWithFather();
-			}
-			if (tgcomponent[i] instanceof ELNComponentIndependentVoltageSource) {
-				tgcomponent[i].resizeWithFather();
-			}
-			if (tgcomponent[i] instanceof ELNComponentInductor) {
-				tgcomponent[i].resizeWithFather();
-			}
-			if (tgcomponent[i] instanceof ELNComponentResistor) {
-				tgcomponent[i].resizeWithFather();
-			}
-			if (tgcomponent[i] instanceof ELNComponentTransmissionLine) {
-				tgcomponent[i].resizeWithFather();
-			}
-			if (tgcomponent[i] instanceof ELNComponentVoltageControlledCurrentSource) {
-				tgcomponent[i].resizeWithFather();
-			}
-			if (tgcomponent[i] instanceof ELNComponentVoltageControlledVoltageSource) {
-				tgcomponent[i].resizeWithFather();
-			}
-			if (tgcomponent[i] instanceof ELNComponentCurrentSinkTDF) {
-				tgcomponent[i].resizeWithFather();
-			}
-			if (tgcomponent[i] instanceof ELNComponentCurrentSourceTDF) {
-				tgcomponent[i].resizeWithFather();
-			}
-			if (tgcomponent[i] instanceof ELNComponentVoltageSinkTDF) {
-				tgcomponent[i].resizeWithFather();
-			}
-			if (tgcomponent[i] instanceof ELNComponentVoltageSourceTDF) {
-				tgcomponent[i].resizeWithFather();
-			}
-			if (tgcomponent[i] instanceof ELNComponentCurrentSinkDE) {
-				tgcomponent[i].resizeWithFather();
-			}
-			if (tgcomponent[i] instanceof ELNComponentCurrentSourceDE) {
-				tgcomponent[i].resizeWithFather();
-			}
-			if (tgcomponent[i] instanceof ELNComponentVoltageSinkDE) {
-				tgcomponent[i].resizeWithFather();
-			}
-			if (tgcomponent[i] instanceof ELNComponentVoltageSourceDE) {
+			if (tgcomponent[i] instanceof ELNPrimitiveComponent) {
 				tgcomponent[i].resizeWithFather();
 			}
 			if (tgcomponent[i] instanceof ELNNodeRef) {
