@@ -38,8 +38,6 @@
 
 package ui;
 
-import myutil.TraceManager;
-
 /**
    * Class TGCScalableWithInternalComponent
    * Graphical component that contains one or more internal components, and which is scalable
@@ -48,8 +46,10 @@ import myutil.TraceManager;
    * @author Ludovic APVRILLE
  */
 public abstract class TGCScalableWithInternalComponent extends TGCWithInternalComponent implements ScalableTGComponent {
-    protected boolean rescaled = false;
-    protected double oldScaleFactor;
+    
+	protected boolean rescaled = false;
+    
+	protected double oldScaleFactor;
 
     public TGCScalableWithInternalComponent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -114,7 +114,7 @@ public abstract class TGCScalableWithInternalComponent extends TGCWithInternalCo
         hasBeenResized();
     }
 
-    public void initScaling(int w, int h) {
+    protected void initScaling(int w, int h) {
         oldScaleFactor = tdp.getZoom();
 
         dx = 0;
@@ -139,5 +139,4 @@ public abstract class TGCScalableWithInternalComponent extends TGCWithInternalCo
 
         rescaled = true;
     }
-
 }

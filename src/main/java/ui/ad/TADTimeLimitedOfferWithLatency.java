@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.ad;
 
 import myutil.GraphicLib;
@@ -57,7 +54,7 @@ import java.awt.geom.Line2D;
  * @version 1.0 12/12/2003
  * @author Ludovic APVRILLE
  */
-public class TADTimeLimitedOfferWithLatency extends TGCWithInternalComponent implements ActionStateErrorHighlight {
+public class TADTimeLimitedOfferWithLatency extends TADComponentWithSubcomponents/* Issue #69 TGCWithInternalComponent*/ implements ActionStateErrorHighlight {
     protected int lineLength = 25;
     protected int lineLengthLatency = 5;
     protected int lineDistance = 10;
@@ -116,9 +113,9 @@ public class TADTimeLimitedOfferWithLatency extends TGCWithInternalComponent imp
         minWidth = 30;
         
         myImageIcon = IconManager.imgic220;
-        
     }
     
+    @Override
     public void internalDrawing(Graphics g) {
         //
         int w  = g.getFontMetrics().stringWidth(value);
@@ -170,6 +167,7 @@ public class TADTimeLimitedOfferWithLatency extends TGCWithInternalComponent imp
         }
     }
     
+    @Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
         // state
         if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
@@ -210,7 +208,7 @@ public class TADTimeLimitedOfferWithLatency extends TGCWithInternalComponent imp
                 connectingPoint[2].setCdX(width / 2 + distanceTwoLines);
         }*/
     
-    public void updateInternalComponents(int diffWidth, int diffX) {
+    protected void updateInternalComponents(int diffWidth, int diffX) {
         int x1 = tgcomponent[0].getX();
         int y1 = tgcomponent[0].getY();
         
@@ -223,6 +221,7 @@ public class TADTimeLimitedOfferWithLatency extends TGCWithInternalComponent imp
         tgcomponent[1].setCdRectangle(posx, posx+10, posy - 10, posy + 10);
     }
     
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
         String oldValue = value;
         String text = getName() + ": ";
@@ -264,16 +263,18 @@ public class TADTimeLimitedOfferWithLatency extends TGCWithInternalComponent imp
         tgcomponent[0].setValue(delay);
     }
     
+    @Override
     public int getType() {
         return TGComponentManager.TAD_TIME_LIMITED_OFFER_WITH_LATENCY;
     }
     
+    @Override
    	public int getDefaultConnector() {
-      return TGComponentManager.CONNECTOR_AD_DIAGRAM;
+    	return TGComponentManager.CONNECTOR_AD_DIAGRAM;
     }
 	
+    @Override
 	public void setStateAction(int _stateAction) {
 		stateAction = _stateAction;
 	}
- 
-}
+ }

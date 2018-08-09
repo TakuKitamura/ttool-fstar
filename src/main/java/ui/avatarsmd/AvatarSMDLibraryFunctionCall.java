@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatarsmd;
 
 import myutil.GraphicLib;
@@ -51,18 +48,23 @@ import ui.util.IconManager;
 import ui.window.JDialogSMDLibraryFunctionCall;
 
 import javax.swing.*;
-import java.awt.*;
-import java.util.LinkedList;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
 * @version 1.0 04.18.2016
 * @author Florian LUGOU
 */
-public class AvatarSMDLibraryFunctionCall extends TGCScalableWithoutInternalComponent implements BasicErrorHighlight {
-    private LinkedList<TAttribute> parameters;
-    private LinkedList<AvatarSignal> signals;
-    private LinkedList<TAttribute> returnAttributes;
+public class AvatarSMDLibraryFunctionCall extends AvatarSMDBasicCanBeDisabledComponent /* Issue #69 TGCScalableWithoutInternalComponent*/ implements BasicErrorHighlight {
+    
+	private List<TAttribute> parameters;
+    
+	private List<AvatarSignal> signals;
+    
+	private List<TAttribute> returnAttributes;
 
     private AvatarBDLibraryFunction libraryFunction;
 
@@ -104,8 +106,8 @@ public class AvatarSMDLibraryFunctionCall extends TGCScalableWithoutInternalComp
         this.myImageIcon = IconManager.imgic904;
     }
 
+    @Override
     public void internalDrawing(Graphics graph) {
-
         this.value = this.prettyPrint ();
 
         int [] px1 = {this.x, this.x+this.width-AvatarSMDLibraryFunctionCall.linebreak, this.x+this.width, this.x+this.width-AvatarSMDLibraryFunctionCall.linebreak, this.x, this.x+AvatarSMDLibraryFunctionCall.linebreak};
@@ -128,6 +130,13 @@ public class AvatarSMDLibraryFunctionCall extends TGCScalableWithoutInternalComp
 
         graph.drawPolygon (px1, py1, 6);
 
+        // Issue #69
+    	if ( !isEnabled() && isContainedInEnabledState() ) {
+    		graph.setColor( ColorManager.DISABLED_FILLING );
+    		graph.fillPolygon( px1, py1, 6  );
+    		graph.setColor( c );
+    	}
+
         graph.drawLine (this.x+this.width/2, this.y, this.x+this.width/2, this.y - AvatarSMDLibraryFunctionCall.lineLength);
         graph.drawLine (this.x+this.width/2, this.y+this.height, this.x+this.width/2, this.y + AvatarSMDLibraryFunctionCall.lineLength + this.height);
 
@@ -149,6 +158,7 @@ public class AvatarSMDLibraryFunctionCall extends TGCScalableWithoutInternalComp
             graph.drawString (this.value, this.x + (this.width - stringWidth) / 2 , this.y + (this.height+h)/2);
     }
 
+    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (_x < this.x || _x > this.x + this.width || _y > this.y + this.height || _y < this.y)
             return null;
@@ -175,6 +185,7 @@ public class AvatarSMDLibraryFunctionCall extends TGCScalableWithoutInternalComp
         return this;
     }
 
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
         JDialogSMDLibraryFunctionCall dialog = new JDialogSMDLibraryFunctionCall (
                 this,
@@ -196,27 +207,27 @@ public class AvatarSMDLibraryFunctionCall extends TGCScalableWithoutInternalComp
         this.libraryFunction = libraryFunction;
     }
 
-    public LinkedList<TAttribute> getParameters () {
+    public List<TAttribute> getParameters () {
         return this.parameters;
     }
 
-    public void setParameters (LinkedList<TAttribute> parameters) {
+    public void setParameters( List<TAttribute> parameters) {
         this.parameters = parameters;
     }
 
-    public LinkedList<AvatarSignal> getSignals () {
+    public List<AvatarSignal> getSignals () {
         return this.signals;
     }
 
-    public void setSignals (LinkedList<AvatarSignal> signals) {
+    public void setSignals( List<AvatarSignal> signals) {
         this.signals = signals;
     }
 
-    public LinkedList<TAttribute> getReturnAttributes () {
+    public List<TAttribute> getReturnAttributes () {
         return this.returnAttributes;
     }
 
-    public void setReturnAttributes (LinkedList<TAttribute> returnAttributes) {
+    public void setReturnAttributes( List<TAttribute> returnAttributes) {
         this.returnAttributes = returnAttributes;
     }
 
@@ -264,10 +275,12 @@ public class AvatarSMDLibraryFunctionCall extends TGCScalableWithoutInternalComp
         return builder.toString ();
     }
 
+    @Override
     public int getDefaultConnector() {
         return TGComponentManager.AVATARSMD_CONNECTOR;
     }
 
+    @Override
     public void setStateAction(int _stateAction) {
         stateOfError = _stateAction;
     }
@@ -426,7 +439,7 @@ public class AvatarSMDLibraryFunctionCall extends TGCScalableWithoutInternalComp
         } catch (MalformedModelingException e) {
             throw e;
         } catch (Exception e) {
-            throw new MalformedModelingException();
+            throw new MalformedModelingException( e );
         }
 
         if (this.libraryFunction != null &&

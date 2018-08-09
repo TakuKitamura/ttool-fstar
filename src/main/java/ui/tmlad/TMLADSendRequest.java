@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmlad;
 
 import myutil.GraphicLib;
@@ -46,13 +43,17 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import ui.*;
+import ui.ad.TADComponentWithoutSubcomponents;
 import ui.util.IconManager;
 import ui.window.JDialogMultiString;
 
 import javax.swing.*;
-import java.awt.*;
+
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
    * Class TMLADSendRequest
@@ -61,7 +62,7 @@ import java.util.ArrayList;
    * @version 1.0 18/11/2005
    * @author Ludovic APVRILLE
  */
-public class TMLADSendRequest extends TGCWithoutInternalComponent implements CheckableAccessibility, CheckableLatency, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
+public class TMLADSendRequest extends TADComponentWithoutSubcomponents/* Issue #69TGCWithoutInternalComponent*/ implements CheckableAccessibility, CheckableLatency, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
@@ -107,6 +108,7 @@ public class TMLADSendRequest extends TGCWithoutInternalComponent implements Che
         myImageIcon = IconManager.imgic902;
     }
 
+    @Override
     public void internalDrawing(Graphics g) {
         int w  = g.getFontMetrics().stringWidth(value);
         int w1 = Math.max(minWidth, w + 2 * textX);
@@ -157,11 +159,11 @@ public class TMLADSendRequest extends TGCWithoutInternalComponent implements Che
         g.drawString("req", x+(width-w) / 2, y);
         g.drawString(value, x + (width - w) / 2 , y + textY);
 
-	drawReachabilityInformation(g);
+        drawReachabilityInformation(g);
     }
-    public void drawReachabilityInformation(Graphics g) {
+    
+    private void drawReachabilityInformation(Graphics g) {
         if (reachabilityInformation > 0) {
-
             Color c = g.getColor();
             Color c1;
             switch(reachabilityInformation) {
@@ -181,9 +183,10 @@ public class TMLADSendRequest extends TGCWithoutInternalComponent implements Che
             g.fillRect(x-12, y-7, 9, 7);
             g.setColor(c);
             g.drawRect(x-12, y-7, 9, 7);
-
         }
     }
+
+    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -217,7 +220,6 @@ public class TMLADSendRequest extends TGCWithoutInternalComponent implements Che
     public String getRequestName() {
         return requestName;
     }
-
 
 	public void setRequestName(String name){
 		requestName = name;
@@ -263,6 +265,7 @@ public class TMLADSendRequest extends TGCWithoutInternalComponent implements Che
         return value;
     }
 
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
         String [] labels = new String[nParam + 1];
         String [] values = new String[nParam + 1];
@@ -273,9 +276,9 @@ public class TMLADSendRequest extends TGCWithoutInternalComponent implements Che
             values[i+1] = params[i];
         }
 
-	ArrayList<String []> help = new ArrayList<String []>();
-	String[] allOutRequests = tdp.getMGUI().getAllOutRequests();
-	help.add(allOutRequests);
+        List<String []> help = new ArrayList<String []>();
+        String[] allOutRequests = tdp.getMGUI().getAllOutRequests();
+        help.add(allOutRequests);
 
         JDialogMultiString jdms = new JDialogMultiString(frame, "Setting request's properties", nParam+1, labels, values, help);
     //    jdms.setSize(350, 300);
@@ -293,9 +296,9 @@ public class TMLADSendRequest extends TGCWithoutInternalComponent implements Che
         }
 
         return false;
-
     }
 
+    @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<Data requestName=\"");
@@ -326,9 +329,6 @@ public class TMLADSendRequest extends TGCWithoutInternalComponent implements Che
             int k;
             String s;
 
-            //
-            //
-
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
                 //
@@ -354,22 +354,23 @@ public class TMLADSendRequest extends TGCWithoutInternalComponent implements Che
             }
 
         } catch (Exception e) {
-            throw new MalformedModelingException();
+            throw new MalformedModelingException( e );
         }
         makeValue();
     }
 
-
+    @Override
     public int getType() {
         return TGComponentManager.TMLAD_SEND_REQUEST;
     }
 
+    @Override
     public int getDefaultConnector() {
         return TGComponentManager.CONNECTOR_TMLAD;
     }
 
+    @Override
     public void setStateAction(int _stateAction) {
         stateOfError = _stateAction;
     }
-
 }

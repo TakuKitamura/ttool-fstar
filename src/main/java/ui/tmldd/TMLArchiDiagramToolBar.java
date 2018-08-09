@@ -69,6 +69,7 @@ public class TMLArchiDiagramToolBar extends TToolBar  implements ActionListener 
         super(_mgui);
     }
 
+    @Override
     protected void setActive(boolean b) {
         mgui.actions[TGUIAction.TMLARCHI_EDIT].setEnabled(b);
         mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
@@ -100,6 +101,7 @@ public class TMLArchiDiagramToolBar extends TToolBar  implements ActionListener 
         mgui.updateZoomInfo();
     }
 
+    @Override
     protected void setButtons() {
         JButton button;
 

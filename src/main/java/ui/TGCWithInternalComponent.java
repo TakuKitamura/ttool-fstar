@@ -36,12 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui;
-
-//import java.awt.*;
 
 /**
    * Class TGCWithInternalComponent
@@ -50,13 +45,13 @@ package ui;
    * @version 1.0 22/12/2003
    * @author Ludovic APVRILLE
  */
-public abstract class TGCWithInternalComponent extends TGComponent{
-
+public abstract class TGCWithInternalComponent extends TGComponent {
 
     public TGCWithInternalComponent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
     }
 
+    @Override
     public void setState(int s) {
         state = s;
         if (s != TGState.POINTER_ON_ME) {
@@ -76,6 +71,7 @@ public abstract class TGCWithInternalComponent extends TGComponent{
         }
     }
 
+    @Override
     public final TGComponent isOnMe(int x1, int y1) {
         selectedInternalComponent = isOnAnInternalTGComponent(x1, y1);
 
@@ -87,5 +83,4 @@ public abstract class TGCWithInternalComponent extends TGComponent{
     }
 
     public abstract TGComponent isOnOnlyMe(int x1, int y1);
-
 }

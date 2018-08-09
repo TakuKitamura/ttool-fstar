@@ -37,10 +37,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package ui;
-
-//import java.awt.*;
 
 import ui.ad.*;
 import ui.atd.*;
@@ -328,7 +325,9 @@ public class TGComponentManager {
     public static final int TMLCP_REF_SD = 1505;
     public static final int TMLCP_START_STATE = 1506;
     public static final int TMLCP_STOP_STATE = 1507;
-    public static final int TMLCP_JUNCTION = 1508;
+
+    // Issue #69
+   // public static final int TMLCP_JUNCTION = 1508;
     public static final int TMLCP_FOR_LOOP = 1510;
 
     public static final int TMLSD_STORAGE_INSTANCE = 1520;
@@ -433,7 +432,10 @@ public class TGComponentManager {
     public static final int AVATARSMD_CONNECTOR = 5102;
     public static final int AVATARSMD_SEND_SIGNAL = 5103;
     public static final int AVATARSMD_RECEIVE_SIGNAL = 5104;
-    public static final int AVATARSMD_PARALLEL = 5105;
+    
+    // Issue #69
+    //public static final int AVATARSMD_PARALLEL = 5105;
+    
     public static final int AVATARSMD_STATE = 5106;
     public static final int AVATARSMD_CHOICE = 5107;
     public static final int AVATARSMD_RANDOM = 5108;
@@ -602,9 +604,9 @@ public class TGComponentManager {
             case AVATARSMD_RECEIVE_SIGNAL:
                 tgc = new AvatarSMDReceiveSignal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
-            case AVATARSMD_PARALLEL:
-                tgc = new AvatarSMDParallel(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-                break;
+//              case AVATARSMD_PARALLEL: Issue #69
+//              tgc = new AvatarSMDParallel(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+//              break;
             case AVATARSMD_STATE:
                 tgc = new AvatarSMDState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
@@ -1402,9 +1404,9 @@ public class TGComponentManager {
             case TMLCP_STOP_STATE:
                 tgc = new TMLCPStopState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
-            case TMLCP_JUNCTION:
-                tgc = new TMLCPJunction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-                break;
+//            case TMLCP_JUNCTION: // Issue #69
+//                tgc = new TMLCPJunction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+//                break;
             case TMLCP_FOR_LOOP:
                 tgc = new TMLCPForLoop(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
@@ -1557,8 +1559,8 @@ public class TGComponentManager {
             return AVATARSMD_RECEIVE_SIGNAL;
         } else if (tgc instanceof AvatarSMDLibraryFunctionCall) {
             return AVATARSMD_LIBRARY_FUNCTION_CALL;
-        } else if (tgc instanceof AvatarSMDParallel) {
-            return AVATARSMD_PARALLEL;
+//        } else if (tgc instanceof AvatarSMDParallel) { // Issue #69
+//            return AVATARSMD_PARALLEL;
         } else if (tgc instanceof AvatarSMDState) {
             return AVATARSMD_STATE;
         } else if (tgc instanceof AvatarSMDChoice) {
@@ -2200,8 +2202,8 @@ public class TGComponentManager {
             return TMLCP_START_STATE;
         } else if (tgc instanceof TMLCPStopState) {
             return TMLCP_STOP_STATE;
-        } else if (tgc instanceof TMLCPJunction) {
-            return TMLCP_JUNCTION;
+//          } else if (tgc instanceof TMLCPJunction) { Issue #69
+//          return TMLCP_JUNCTION;
         } else if (tgc instanceof TMLCPForLoop) {
             return TMLCP_FOR_LOOP;
         } else if (tgc instanceof TGConnectorTMLCP) {

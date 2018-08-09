@@ -38,13 +38,13 @@
 
 package ui;
 
-import ui.window.JDialogSearchBox;
-
-import java.awt.*;
+import java.awt.Cursor;
+import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import myutil.*;
+
+import ui.window.JDialogSearchBox;
 
 /**
  * Class TDiagramMouseManager
@@ -58,7 +58,7 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
     private TDiagramPanel tdp;
 
     private TGComponent tgc;
-    private TGComponent lastSelectedComponent = null;
+   // private TGComponent lastSelectedComponent = null;
 
     private int oldx;
     private int oldy;
@@ -75,7 +75,7 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
 
     private int resizeInfo;
 
-    private boolean selectedComponent = false;
+   // private boolean selectedComponent = false;
 
     //private Point p;
     private TGConnectingPoint cp;
@@ -496,14 +496,14 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
  	    	else
  	    		tdp.getGUI().setMode(MainGUI.OPENED);
  	    	
-     	    lastSelectedComponent = tgc;
+     	    //lastSelectedComponent = tgc;
      	    tdp.setSelect(true);
      	    tgc.singleClick(tdp.getGUI().getFrame(), x, y);       	   
         }
         else {
         	tdp.getGUI().setMode(MainGUI.OPENED);
      	    tdp.setSelect(false);
-     	    lastSelectedComponent = null;
+     	   // lastSelectedComponent = null;
      	    tdp.componentPointed = null;
         }
         tdp.getGUI().changeMade(tdp, TDiagramPanel.CHANGE_VALUE_COMPONENT);
@@ -581,19 +581,22 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
                 tdp.repaint();
             }
         }
+        
+        // Issue #69 Always repaint. Needed for displaying the transition element in Avatar state machine diagram
+//
+//        if ((selected == TGComponentManager.CONNECTOR) && (tdp.mode == TDiagramPanel.NORMAL)) { // is connectingPointShow selected
+//            if(tdp.highlightOutAndFreeConnectingPoint(e.getX(), e.getY(), tdp.getMGUI().getIdButtonSelected())) {
+//                tdp.repaint();
+//            }
+//        }
+//
+//        if ((selected == TGComponentManager.CONNECTOR) && (tdp.mode == TDiagramPanel.ADDING_CONNECTOR)) {
+//            tdp.highlightInAndFreeConnectingPoint(e.getX(), e.getY(), tdp.getMGUI().getIdButtonSelected());
+//            tdp.setAddingTGConnector(e.getX(), e.getY());
+//            tdp.repaint();
+//        }
 
-        if ((selected == TGComponentManager.CONNECTOR) && (tdp.mode == TDiagramPanel.NORMAL)) { // is connectingPointShow selected
-            if(tdp.highlightOutAndFreeConnectingPoint(e.getX(), e.getY(), tdp.getMGUI().getIdButtonSelected())) {
-                tdp.repaint();
-            }
-        }
-
-        if ((selected == TGComponentManager.CONNECTOR) && (tdp.mode == TDiagramPanel.ADDING_CONNECTOR)) {
-            tdp.highlightInAndFreeConnectingPoint(e.getX(), e.getY(), tdp.getMGUI().getIdButtonSelected());
-            tdp.setAddingTGConnector(e.getX(), e.getY());
-            tdp.repaint();
-        }
-
+        tdp.repaint();
     }
 
     @Override

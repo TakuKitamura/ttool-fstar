@@ -36,13 +36,11 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatarad;
 
 import myutil.GraphicLib;
 import ui.*;
+import ui.ad.TADConnector;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -55,14 +53,14 @@ import java.util.Vector;
 * @version 1.0 01/09/2011
 * @author Ludovic APVRILLE
  */
-public  class AvatarADAssociationConnector extends TGConnector {
+public  class AvatarADAssociationConnector extends TADConnector/* Issue #69 TGConnector*/ {
     int w, h;
     
     public AvatarADAssociationConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
         super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
     }
     
-    
+    @Override
     protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
         if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
             g.drawLine(x1, y1, x2, y2);
@@ -75,6 +73,7 @@ public  class AvatarADAssociationConnector extends TGConnector {
     GraphicLib.dashedLine(g, x1, y1, x2, y2);
     }*/
     
+    @Override
     public TGComponent extraIsOnOnlyMe(int x1, int y1) {
         if (GraphicLib.isInRectangle(x1, y1, (p1.getX() + p2.getX() - w) / 2, (p1.getY() + p2.getY())/2 - h, w, h)) {
             return this;
@@ -82,15 +81,21 @@ public  class AvatarADAssociationConnector extends TGConnector {
         return null;
     }
 	
+    @Override
     public int getType() {
         return TGComponentManager.AAD_ASSOCIATION_CONNECTOR;
     }
     
+    /**
+     * Issue #69
+     * @return
+     */
+    @Override
+    public boolean canBeDisabled() {
+    	if ( p2 != null && ( p2.getFather() instanceof AvatarADStopState || p2.getFather() instanceof AvatarADStopFlow ) ) {
+    		return false;
+    	}
+    	
+    	return super.canBeDisabled();
+    }
 }
-
-
-
-
-
-
-

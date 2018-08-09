@@ -36,16 +36,11 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
- 
 package ui.tmlad;
-
-//import java.awt.*;
 
 import ui.CDElement;
 import ui.TGComponentManager;
-import ui.TGConnectingPointWidthHeight;
+import ui.ad.TGConnectingPointAD;
 
 /**
  * Class TGConnectingPointTMLAD
@@ -54,21 +49,14 @@ import ui.TGConnectingPointWidthHeight;
  * @version 1.0 28/10/2005
  * @author Ludovic APVRILLE
  */
-public class TGConnectingPointTMLAD extends  TGConnectingPointWidthHeight{
+public class TGConnectingPointTMLAD extends TGConnectingPointAD /* Issue #69TGConnectingPoint*/ {
 
 	public TGConnectingPointTMLAD(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
 		super(_container, _x, _y, _in, _out, _w, _h);
 	}
 
+	@Override
 	public boolean isCompatibleWith(int type) {
         return type == TGComponentManager.CONNECTOR_TMLAD;
     }
-       
 }
-
-
-
-
-    
-
-

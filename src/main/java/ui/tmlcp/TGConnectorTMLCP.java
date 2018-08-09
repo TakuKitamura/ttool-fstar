@@ -36,13 +36,11 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmlcp;
 
 import myutil.GraphicLib;
 import ui.*;
+import ui.ad.TADConnector;
 import ui.util.IconManager;
 
 import java.awt.*;
@@ -56,7 +54,7 @@ import java.util.Vector;
  * @version 1.0 17/02/2014
  * @author Ludovic APVRILLE
  */
-public class TGConnectorTMLCP extends TGConnector {
+public class TGConnectorTMLCP extends TADConnector /* Issue #69 TGConnector*/ {
     protected int arrowLength = 10;
 		protected String guard = "";
     
@@ -65,12 +63,12 @@ public class TGConnectorTMLCP extends TGConnector {
         myImageIcon = IconManager.imgic202;
 
         name = "connector";
-				_p1.setReferenceToConnector( this );
-				_p2.setReferenceToConnector( this );
-
+		_p1.setReferenceToConnector( this );
+		_p2.setReferenceToConnector( this );
 				//editable = true;
     }
     
+    @Override
     protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
         if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
             g.drawLine(x1, y1, x2, y2);
@@ -79,6 +77,7 @@ public class TGConnectorTMLCP extends TGConnector {
         }
     }
     
+    @Override
     public int getType() {
         return TGComponentManager.CONNECTOR_TMLCP;
     }
@@ -95,5 +94,4 @@ public class TGConnectorTMLCP extends TGConnector {
 		}
 		return "noGuard";
 	}
-
 }//End of class

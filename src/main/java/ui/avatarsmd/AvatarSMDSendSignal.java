@@ -40,8 +40,10 @@ package ui.avatarsmd;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Polygon;
 import java.awt.geom.Line2D;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -72,7 +74,7 @@ import ui.window.JDialogAvatarSignal;
    * @version 1.0 12/04/2010
    * @author Ludovic APVRILLE
  */
-public class AvatarSMDSendSignal extends AvatarSMDBasicComponent implements CheckableAccessibility, LinkedReference, CheckableLatency, BasicErrorHighlight, PartOfInvariant {
+public class AvatarSMDSendSignal extends AvatarSMDBasicCanBeDisabledComponent /* Issue #69 AvatarSMDBasicComponent*/ implements CheckableAccessibility, LinkedReference, CheckableLatency, BasicErrorHighlight, PartOfInvariant {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
@@ -127,7 +129,6 @@ public class AvatarSMDSendSignal extends AvatarSMDBasicComponent implements Chec
             width = w1;            //updateConnectingPoints();
         }
 
-
         if (stateOfError > 0)  {
             Color c = g.getColor();
             switch(stateOfError) {
@@ -167,17 +168,33 @@ public class AvatarSMDSendSignal extends AvatarSMDBasicComponent implements Chec
         g.drawLine(x1+width1-linebreak, y1+height1, x1+width1, y1+height1/2);
         g.setColor(c);
 
-        g.drawLine(x, y, x+width-linebreak, y);
-        g.drawLine(x, y+height, x+width-linebreak, y+height);
-        g.drawLine(x, y, x, y+height);
-        g.drawLine(x+width-linebreak, y, x+width, y+height/2);
-        g.drawLine(x+width-linebreak, y+height, x+width, y+height/2);
+        final Polygon shape = new Polygon();
+        shape.addPoint( x, y );
+        shape.addPoint( x + width - linebreak, y );
+        shape.addPoint( x + width, y + height / 2 );
+        shape.addPoint( x + width - linebreak, y + height );
+        shape.addPoint( x, y + height );
+        
+        g.drawPolygon( shape );
+
+        // Issue #69
+    	if ( !isEnabled() && isContainedInEnabledState() ) {
+	    	g.setColor( ColorManager.DISABLED_FILLING );
+	    	g.fillPolygon( shape );
+	    	g.setColor( c );
+    	}
+//        g.drawLine(x, y, x+width-linebreak, y);
+//        g.drawLine(x, y+height, x+width-linebreak, y+height);
+//        g.drawLine(x, y, x, y+height);
+//        g.drawLine(x+width-linebreak, y, x+width, y+height/2);
+//        g.drawLine(x+width-linebreak, y+height, x+width, y+height/2);
 
 
         //g.drawString("sig()", x+(width-w) / 2, y);
         g.drawString(value, x + (width - w) / 2 , y + textY);
 		//g.drawString("Reference " + reference, x-latencyX/2, y+latencyY/2);
-		if (getCheckLatency()){
+		
+        if (getCheckLatency()){
 			ConcurrentHashMap<String, String> latency =tdp.getMGUI().getLatencyVals(getAVATARID());
 			if (latency!=null){
 				latencyVals=latency;
@@ -192,7 +209,7 @@ public class AvatarSMDSendSignal extends AvatarSMDBasicComponent implements Chec
 		}
     }
 
-	public void drawLatencyInformation(Graphics g){
+	private void drawLatencyInformation(Graphics g){
 		int index=1;
 		for (String s:latencyVals.keySet()){
 			int w  = g.getFontMetrics().stringWidth(s);
@@ -274,7 +291,7 @@ public class AvatarSMDSendSignal extends AvatarSMDBasicComponent implements Chec
 				if (reference instanceof TMLADWriteChannel){
 					//	
 					TMLADWriteChannel rc = (TMLADWriteChannel) reference;
-					ConcurrentHashMap<String, String> refLats =rc.getLatencyMap();
+					Map<String, String> refLats =rc.getLatencyMap();
 					//
 					for (String checkpoint:refLats.keySet()){
 						if (s.split("\\-")[1].split(":")[0].equals(checkpoint.split(":")[1].split(" ")[0])){
@@ -291,7 +308,6 @@ public class AvatarSMDSendSignal extends AvatarSMDBasicComponent implements Chec
 					}
 				}
 			}
-			
 			
 			g.drawString(latencyVals.get(s), x-latencyX/2, y-latencyY*index/2);
 			g.setColor(c);
@@ -312,23 +328,23 @@ public class AvatarSMDSendSignal extends AvatarSMDBasicComponent implements Chec
         return null;
     }
 
-    public void makeValue() {
-        /*boolean first = true;
-          value = eventName + "(";
-          for(int i=0; i<nParam; i++) {
-          if (params[i].length() > 0) {
-          if (!first) {
-          value += ", " + params[i];
-          } else {
-          first = false;
-          value += params[i];
-          }
-
-          }
-          }
-          value += ")";*/
-
-    }
+//    public void makeValue() {
+//        /*boolean first = true;
+//          value = eventName + "(";
+//          for(int i=0; i<nParam; i++) {
+//          if (params[i].length() > 0) {
+//          if (!first) {
+//          value += ", " + params[i];
+//          } else {
+//          first = false;
+//          value += params[i];
+//          }
+//
+//          }
+//          }
+//          value += ")";*/
+//
+//    }
 
     public String getSignalName() {
         if (value == null) {

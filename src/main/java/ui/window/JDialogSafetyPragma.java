@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package ui.window;
 
 import ui.util.IconManager;
@@ -78,7 +77,7 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
     protected JMenuBar menuBar;
     protected JMenu help;
     protected JPopupMenu helpPopup;
-    public Map<String, List<String>> blockAttributeMap = new HashMap<String, java.util.List<String>>();
+    public Map<String, List<String>> blockAttributeMap = new HashMap<String, List<String>>();
 
     /**
      * Creates new form

@@ -37,9 +37,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui;
 
 import myutil.GraphicLib;
@@ -53,9 +50,9 @@ import java.awt.*;
    * @version 1.0 22/12/2003
    * @author Ludovic APVRILLE, Andrea Enrici
  */
-public class TGConnectingPoint implements CDElement {
+public class TGConnectingPoint extends AbstractCDElement /*implements CDElement*/ {
 
-    protected TGComponent father;
+    //protected TGComponent father;
 
     //private static int ID = 0;
 
@@ -123,6 +120,7 @@ public class TGConnectingPoint implements CDElement {
     public void draw(Graphics g) {
         int mx = getX();
         int my = getY();
+
         if (state == SELECTED) {
             mx = mx - width / 2;
             my = my - height / 2;
@@ -133,7 +131,6 @@ public class TGConnectingPoint implements CDElement {
             g.setColor(myColor);
             g.fillRect(mx - width/4, my - width/4, width/2, height/2);
             GraphicLib.doubleColorRect(g, mx - width/4, my - width/4, width/2, height/2, Color.lightGray, Color.black);
-
         }
     }
 
@@ -220,8 +217,6 @@ public class TGConnectingPoint implements CDElement {
         TGComponent.setGeneralId(id + 1);
     }
 
-
-
     // return true if state _s is different from the previous one
     public boolean setState(int _s){
         boolean b = false;
@@ -296,9 +291,9 @@ public class TGConnectingPoint implements CDElement {
       }*/
 
     //DG 27.02.
-    public TGComponent getOwner()        {
-        return father;
-    }
+//    public TGComponent getOwner()        {
+//        return father;
+//    }
     //fin DG
 
     public void setReferenceToConnector( TGConnector _ref )     {
@@ -324,5 +319,71 @@ public class TGConnectingPoint implements CDElement {
 
     public int getCurrentMaxY() {
     	return getY() + getHeight();
+    }
+
+	/* Issue #69
+	 * (non-Javadoc)
+	 * @see ui.CDElement#canBeDisabled()
+	 */
+	@Override
+	public boolean canBeDisabled() {
+		return false;
+	}
+    
+	/*  Issue #69
+	 * (non-Javadoc)
+	 * @see ui.CDElement#isEnabled()
+	 */
+    @Override
+	public boolean isEnabled() {
+		return true;
+	}
+
+    /* Issue #69
+     * (non-Javadoc)
+     * @see ui.CDElement#acceptForward(ui.ICDElementVisitor)
+     */
+    @Override
+	public void acceptForward( final ICDElementVisitor visitor ) {
+		if ( visitor.visit( this ) ) {
+			if ( getFather() instanceof TGComponent ) {
+				final TGConnector connector = ( (TGComponent) getFather() ).getConnectorConnectedTo( this );
+				
+				if ( connector != null ) {
+	
+					// Traverse the graph in its direction
+					if ( this == connector.getTGConnectingPointP2() ) {
+						getFather().acceptForward( visitor );
+					}
+					else {
+						connector.acceptForward( visitor );
+					}
+				}
+	    	}
+		}
+    }
+
+    /* Issue #69
+     * (non-Javadoc)
+     * @see ui.CDElement#acceptBackward(ui.ICDElementVisitor)
+     */
+    @Override
+	public void acceptBackward( final ICDElementVisitor visitor ) {
+		if ( visitor.visit( this ) ) {
+			if ( getFather() instanceof TGComponent ) {
+				final TGConnector connector = ( (TGComponent) getFather() ).getConnectorConnectedTo( this );
+				
+				if ( connector != null ) {
+	
+					// Traverse the graph in its direction
+					if ( this == connector.getTGConnectingPointP1() ) {
+						getFather().acceptBackward( visitor );
+					}
+					else {
+						connector.acceptBackward( visitor );
+					}
+				}
+	    	}
+		}
     }
 }
