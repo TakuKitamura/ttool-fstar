@@ -165,10 +165,10 @@ public class ELNModulePortTDF extends TGCScalableWithInternalComponent implement
 		}
 
 		Color c = g.getColor();
-		g.drawRect(x, y, width, height);
 		g.setColor(Color.BLACK);
 		g.fillRect(x, y, width, height);
 		g.setColor(c);
+		g.drawRect(x, y, width, height);
 		g.setFont(fold);
 	}
 
