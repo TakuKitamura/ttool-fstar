@@ -3,8 +3,8 @@
 
 int sc_main(int argc, char *argv[])
 {
-	sca_tdf::sca_signal s_out;
-	sca_tdf::sca_signal s_in;
+	sca_tdf::sca_signal<double> s_out;
+	sca_tdf::sca_signal<double> s_in;
 
 	eln_in_tdf i_eln_in_tdf("i_eln_in_tdf");
 	i_eln_in_tdf.in(s_in);
