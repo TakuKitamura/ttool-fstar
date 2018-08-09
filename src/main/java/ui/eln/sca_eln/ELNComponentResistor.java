@@ -58,7 +58,7 @@ import java.awt.event.ActionListener;
  * @author Irina Kit Yan LEE
  */
 
-public class ELNComponentResistor extends TGCScalableWithInternalComponent implements ActionListener, SwallowedTGComponent, ELNComponent {
+public class ELNComponentResistor extends TGCScalableWithInternalComponent implements ActionListener, SwallowedTGComponent, ELNPrimitiveComponent {
 	protected Color myColor;
 	protected int orientation;
 	private int maxFontSize = 14;

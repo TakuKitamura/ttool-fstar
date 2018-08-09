@@ -95,11 +95,11 @@ public class ELNConnector extends TGConnector implements ScalableTGComponent {
 		ELNConnectingPoint pt1 = (ELNConnectingPoint) p1;
 		ELNConnectingPoint pt2 = (ELNConnectingPoint) p2;
 
-		if ((pt1.getFather() instanceof ELNComponent && pt2.getFather() instanceof ELNComponent) || (pt2.getFather() instanceof ELNComponent && pt1.getFather() instanceof ELNComponent)) {
+		if ((pt1.getFather() instanceof ELNPrimitiveComponent && pt2.getFather() instanceof ELNPrimitiveComponent) || (pt2.getFather() instanceof ELNPrimitiveComponent && pt1.getFather() instanceof ELNPrimitiveComponent)) {
 			g.drawLine(x1, y1, x2, y2);
 			editable = true;
 			g.drawString(value, (x1 + x2 - w) / 2, (y1 + y2) / 2);
-		} else if (pt1.getFather() instanceof ELNComponent && pt2.getFather() instanceof ELNMidPortTerminal) {
+		} else if (pt1.getFather() instanceof ELNPrimitiveComponent && pt2.getFather() instanceof ELNMidPortTerminal) {
 			ELNConnector connector = (ELNConnector) ((ELNMidPortTerminal) pt2.getFather()).getFather();
 			g.drawLine(x1, y1, x2, y2);
 			if (connector.getValue().equals("")) {
@@ -107,7 +107,7 @@ public class ELNConnector extends TGConnector implements ScalableTGComponent {
 			} else {
 				value = connector.getValue();
 			}
-		} else if (pt2.getFather() instanceof ELNComponent && pt1.getFather() instanceof ELNMidPortTerminal) {
+		} else if (pt2.getFather() instanceof ELNPrimitiveComponent && pt1.getFather() instanceof ELNMidPortTerminal) {
 			g.drawLine(x1, y1, x2, y2);
 			ELNConnector connector = (ELNConnector) ((ELNMidPortTerminal) pt1.getFather()).getFather();
 			if (connector.getValue().equals("")) {
@@ -232,8 +232,8 @@ public class ELNConnector extends TGConnector implements ScalableTGComponent {
 	}
 	
 	private String searchName(ELNConnector c) {
-		if (c.p1.getFather() instanceof ELNComponent) {
-			if (c.p2.getFather() instanceof ELNComponent) {
+		if (c.p1.getFather() instanceof ELNPrimitiveComponent) {
+			if (c.p2.getFather() instanceof ELNPrimitiveComponent) {
 				return c.getValue();
 			}
 			if (c.p2.getFather() instanceof ELNNodeRef || c.p2.getFather() instanceof ELNModuleTerminal) {
@@ -255,7 +255,7 @@ public class ELNConnector extends TGConnector implements ScalableTGComponent {
 			if (c.p2.getFather() instanceof ELNNodeRef || c.p2.getFather() instanceof ELNModuleTerminal) {
 				return "";
 			}
-			if (c.p2.getFather() instanceof ELNComponent) {
+			if (c.p2.getFather() instanceof ELNPrimitiveComponent) {
 				ELNConnector connector = (ELNConnector) ((ELNMidPortTerminal) c.p1.getFather()).getFather();
 				if (!connector.getValue().equals("")) {
 					return connector.getValue();

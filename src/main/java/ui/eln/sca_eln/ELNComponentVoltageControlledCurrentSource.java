@@ -60,7 +60,7 @@ import java.awt.geom.RoundRectangle2D;
  */
 
 public class ELNComponentVoltageControlledCurrentSource extends TGCScalableWithInternalComponent
-		implements ActionListener, SwallowedTGComponent, ELNComponent {
+		implements ActionListener, SwallowedTGComponent, ELNPrimitiveComponent {
 	protected Color myColor;
 	protected int orientation;
 	private int maxFontSize = 14;

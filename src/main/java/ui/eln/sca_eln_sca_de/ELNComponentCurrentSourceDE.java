@@ -59,7 +59,7 @@ import java.awt.geom.RoundRectangle2D;
  * @author Irina Kit Yan LEE
  */
 
-public class ELNComponentCurrentSourceDE extends TGCScalableWithInternalComponent implements ActionListener, SwallowedTGComponent, ELNComponent {
+public class ELNComponentCurrentSourceDE extends TGCScalableWithInternalComponent implements ActionListener, SwallowedTGComponent, ELNPrimitiveComponent {
 	protected Color myColor;
 	protected int orientation;
 	private int maxFontSize = 14;
