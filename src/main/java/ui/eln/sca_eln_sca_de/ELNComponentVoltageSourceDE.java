@@ -561,10 +561,6 @@ public class ELNComponentVoltageSourceDE extends TGCScalableWithInternalComponen
 		int[] pty2 = { y + height - height / 10 - height / 20, y + height - height / 10 - height / 20 };
 		g.drawPolygon(ptx2, pty2, 2);
 		GraphicLib.arrowWithLine(g, 1, 0, 10, x + width / 5, y + height / 2, x + 2 * width / 5, y + height / 2, true);
-		g.drawRect(x, y + 2 * height / 5, width / 5, height / 5);
-		g.setColor(Color.WHITE);
-		g.fillRect(x, y + 2 * height / 5, width / 5, height / 5);
-		g.setColor(c);
 
 		Graphics2D g2d = (Graphics2D) g.create();
 		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
@@ -581,6 +577,11 @@ public class ELNComponentVoltageSourceDE extends TGCScalableWithInternalComponen
 		g.setColor(Color.WHITE);
 		g.fillOval(x + width - width / 10, y + height - height / 10, width / 10, height / 10);
 		g.setColor(c);
+		
+		g.setColor(Color.WHITE);
+		g.fillRect(x, y + 2 * height / 5, width / 5, height / 5);
+		g.setColor(c);
+		g.drawRect(x, y + 2 * height / 5, width / 5, height / 5);
 	}
 
 	private void rotateTopFlip(Graphics g) {
@@ -602,10 +603,6 @@ public class ELNComponentVoltageSourceDE extends TGCScalableWithInternalComponen
 		int[] pty2 = { y + height / 10 + height / 20, y + height / 10 + height / 20 };
 		g.drawPolygon(ptx2, pty2, 2);
 		GraphicLib.arrowWithLine(g, 1, 0, 10, x + width / 5, y + height / 2, x + 2 * width / 5, y + height / 2, true);
-		g.drawRect(x, y + 2 * height / 5, width / 5, height / 5);
-		g.setColor(Color.WHITE);
-		g.fillRect(x, y + 2 * height / 5, width / 5, height / 5);
-		g.setColor(c);
 
 		Graphics2D g2d = (Graphics2D) g.create();
 		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
@@ -622,6 +619,11 @@ public class ELNComponentVoltageSourceDE extends TGCScalableWithInternalComponen
 		g.setColor(Color.WHITE);
 		g.fillOval(x + width - width / 10, y + height - height / 10, width / 10, height / 10);
 		g.setColor(c);
+		
+		g.setColor(Color.WHITE);
+		g.fillRect(x, y + 2 * height / 5, width / 5, height / 5);
+		g.setColor(c);
+		g.drawRect(x, y + 2 * height / 5, width / 5, height / 5);
 	}
 
 	private void rotateBottom(Graphics g) {
@@ -643,10 +645,6 @@ public class ELNComponentVoltageSourceDE extends TGCScalableWithInternalComponen
 		g.drawPolygon(ptx4, pty4, 2);
 		GraphicLib.arrowWithLine(g, 1, 0, 10, x + 4 * width / 5, y + height / 2, x + 3 * width / 5, y + height / 2,
 				true);
-		g.drawRect(x, y + 2 * height / 5, width / 5, height / 5);
-		g.setColor(Color.WHITE);
-		g.fillRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
-		g.setColor(c);
 
 		Graphics2D g2d = (Graphics2D) g.create();
 		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
@@ -663,6 +661,11 @@ public class ELNComponentVoltageSourceDE extends TGCScalableWithInternalComponen
 		g.setColor(Color.WHITE);
 		g.fillOval(x, y + height - height / 10, width / 10, height / 10);
 		g.setColor(c);
+		
+		g.setColor(Color.WHITE);
+		g.fillRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
+		g.setColor(c);
+		g.drawRect(x, y + 2 * height / 5, width / 5, height / 5);
 	}
 
 	private void rotateBottomFlip(Graphics g) {
@@ -683,10 +686,6 @@ public class ELNComponentVoltageSourceDE extends TGCScalableWithInternalComponen
 		g.drawPolygon(ptx4, pty4, 2);
 		GraphicLib.arrowWithLine(g, 1, 0, 10, x + 4 * width / 5, y + height / 2, x + 3 * width / 5, y + height / 2,
 				true);
-		g.drawRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
-		g.setColor(Color.WHITE);
-		g.fillRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
-		g.setColor(c);
 
 		Graphics2D g2d = (Graphics2D) g.create();
 		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
@@ -703,6 +702,11 @@ public class ELNComponentVoltageSourceDE extends TGCScalableWithInternalComponen
 		g.setColor(Color.WHITE);
 		g.fillOval(x, y + height - height / 10, width / 10, height / 10);
 		g.setColor(c);
+		
+		g.setColor(Color.WHITE);
+		g.fillRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
+		g.setColor(c);
+		g.drawRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
 	}
 
 	private void rotateRight(Graphics g) {
@@ -724,10 +728,6 @@ public class ELNComponentVoltageSourceDE extends TGCScalableWithInternalComponen
 		int[] pty4 = { y + 3 * height / 5 + height / 20, y + 3 * height / 5 + height / 10 + height / 20 };
 		g.drawPolygon(ptx4, pty4, 2);
 		GraphicLib.arrowWithLine(g, 1, 0, 10, x + width / 2, y + height / 5, x + width / 2, y + 2 * height / 5, true);
-		g.drawRect(x + 2 * width / 5, y, width / 5, height / 5);
-		g.setColor(Color.WHITE);
-		g.fillRect(x + 2 * width / 5, y, width / 5, height / 5);
-		g.setColor(c);
 
 		Graphics2D g2d = (Graphics2D) g.create();
 		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
@@ -744,6 +744,11 @@ public class ELNComponentVoltageSourceDE extends TGCScalableWithInternalComponen
 		g.setColor(Color.WHITE);
 		g.fillOval(x + width - width / 10, y + height - height / 10, width / 10, height / 10);
 		g.setColor(c);
+		
+		g.setColor(Color.WHITE);
+		g.fillRect(x + 2 * width / 5, y, width / 5, height / 5);
+		g.setColor(c);
+		g.drawRect(x + 2 * width / 5, y, width / 5, height / 5);
 	}
 
 	private void rotateRightFlip(Graphics g) {
@@ -765,10 +770,6 @@ public class ELNComponentVoltageSourceDE extends TGCScalableWithInternalComponen
 		g.drawPolygon(ptx4, pty4, 2);
 		GraphicLib.arrowWithLine(g, 1, 0, 10, x + width / 2, y + 4 * height / 5, x + width / 2, y + 3 * height / 5,
 				true);
-		g.drawRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
-		g.setColor(Color.WHITE);
-		g.fillRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
-		g.setColor(c);
 
 		Graphics2D g2d = (Graphics2D) g.create();
 		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
@@ -785,6 +786,11 @@ public class ELNComponentVoltageSourceDE extends TGCScalableWithInternalComponen
 		g.setColor(Color.WHITE);
 		g.fillOval(x + width - width / 10, y, width / 10, height / 10);
 		g.setColor(c);
+		
+		g.setColor(Color.WHITE);
+		g.fillRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
+		g.setColor(c);
+		g.drawRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
 	}
 
 	private void rotateLeft(Graphics g) {
@@ -805,10 +811,6 @@ public class ELNComponentVoltageSourceDE extends TGCScalableWithInternalComponen
 		g.drawPolygon(ptx4, pty4, 2);
 		GraphicLib.arrowWithLine(g, 1, 0, 10, x + width / 2, y + 4 * height / 5, x + width / 2, y + 3 * height / 5,
 				true);
-		g.drawRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
-		g.setColor(Color.WHITE);
-		g.fillRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
-		g.setColor(c);
 
 		Graphics2D g2d = (Graphics2D) g.create();
 		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
@@ -825,6 +827,11 @@ public class ELNComponentVoltageSourceDE extends TGCScalableWithInternalComponen
 		g.setColor(Color.WHITE);
 		g.fillOval(x + width - width / 10, y, width / 10, height / 10);
 		g.setColor(c);
+		
+		g.setColor(Color.WHITE);
+		g.fillRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
+		g.setColor(c);
+		g.drawRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
 	}
 
 	private void rotateLeftFlip(Graphics g) {
@@ -845,10 +852,6 @@ public class ELNComponentVoltageSourceDE extends TGCScalableWithInternalComponen
 		int[] pty4 = { y + 3 * height / 5 + height / 20, y + 3 * height / 5 + height / 10 + height / 20 };
 		g.drawPolygon(ptx4, pty4, 2);
 		GraphicLib.arrowWithLine(g, 1, 0, 10, x + width / 2, y + height / 5, x + width / 2, y + 2 * height / 5, true);
-		g.drawRect(x + 2 * width / 5, y, width / 5, height / 5);
-		g.setColor(Color.WHITE);
-		g.fillRect(x + 2 * width / 5, y, width / 5, height / 5);
-		g.setColor(c);
 
 		Graphics2D g2d = (Graphics2D) g.create();
 		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
@@ -865,6 +868,11 @@ public class ELNComponentVoltageSourceDE extends TGCScalableWithInternalComponen
 		g.setColor(Color.WHITE);
 		g.fillOval(x + width - width / 10, y + height - height / 10, width / 10, height / 10);
 		g.setColor(c);
+		
+		g.setColor(Color.WHITE);
+		g.fillRect(x + 2 * width / 5, y, width / 5, height / 5);
+		g.setColor(c);
+		g.drawRect(x + 2 * width / 5, y, width / 5, height / 5);
 	}
 
 	public TGComponent isOnOnlyMe(int _x, int _y) {

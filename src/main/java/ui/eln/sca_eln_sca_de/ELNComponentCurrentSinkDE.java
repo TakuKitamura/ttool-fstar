@@ -553,10 +553,6 @@ public class ELNComponentCurrentSinkDE extends TGCScalableWithInternalComponent 
 		int[] pty1 = { y + height / 2, y + height / 2 + height / 20, y + height / 2 };
 		g.drawPolygon(ptx1, pty1, 3);
 		g.fillPolygon(ptx1, pty1, 3);
-		g.drawRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
-		g.setColor(Color.WHITE);
-		g.fillRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
-		g.setColor(c);
 
 		Graphics2D g2d = (Graphics2D) g.create();
 		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
@@ -573,6 +569,11 @@ public class ELNComponentCurrentSinkDE extends TGCScalableWithInternalComponent 
 		g.setColor(Color.WHITE);
 		g.fillOval(x, y + height - height / 10, width / 10, height / 10);
 		g.setColor(c);
+		
+		g.setColor(Color.WHITE);
+		g.fillRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
+		g.setColor(c);
+		g.drawRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
 	}
 
 	private void rotateTopFlip(Graphics g) {
@@ -585,10 +586,6 @@ public class ELNComponentCurrentSinkDE extends TGCScalableWithInternalComponent 
 		int[] pty1 = { y + height / 2, y + height / 2 - height / 20, y + height / 2 };
 		g.drawPolygon(ptx1, pty1, 3);
 		g.fillPolygon(ptx1, pty1, 3);
-		g.drawRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
-		g.setColor(Color.WHITE);
-		g.fillRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
-		g.setColor(c);
 
 		Graphics2D g2d = (Graphics2D) g.create();
 		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
@@ -605,6 +602,11 @@ public class ELNComponentCurrentSinkDE extends TGCScalableWithInternalComponent 
 		g.setColor(Color.WHITE);
 		g.fillOval(x, y + height - height / 10, width / 10, height / 10);
 		g.setColor(c);
+		
+		g.setColor(Color.WHITE);
+		g.fillRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
+		g.setColor(c);
+		g.drawRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
 	}
 
 	private void rotateBottom(Graphics g) {
@@ -618,10 +620,6 @@ public class ELNComponentCurrentSinkDE extends TGCScalableWithInternalComponent 
 		int[] pty1 = { y + height / 2, y + height / 2 - height / 20, y + height / 2 };
 		g.drawPolygon(ptx1, pty1, 3);
 		g.fillPolygon(ptx1, pty1, 3);
-		g.drawRect(x, y + 2 * height / 5, width / 5, height / 5);
-		g.setColor(Color.WHITE);
-		g.fillRect(x, y + 2 * height / 5, width / 5, height / 5);
-		g.setColor(c);
 
 		Graphics2D g2d = (Graphics2D) g.create();
 		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
@@ -638,6 +636,11 @@ public class ELNComponentCurrentSinkDE extends TGCScalableWithInternalComponent 
 		g.setColor(Color.WHITE);
 		g.fillOval(x + width - width / 10, y + height - height / 10, width / 10, height / 10);
 		g.setColor(c);
+		
+		g.setColor(Color.WHITE);
+		g.fillRect(x, y + 2 * height / 5, width / 5, height / 5);
+		g.setColor(c);
+		g.drawRect(x, y + 2 * height / 5, width / 5, height / 5);
 	}
 
 	private void rotateBottomFlip(Graphics g) {
@@ -651,10 +654,6 @@ public class ELNComponentCurrentSinkDE extends TGCScalableWithInternalComponent 
 		int[] pty1 = { y + height / 2, y + height / 2 + height / 20, y + height / 2 };
 		g.drawPolygon(ptx1, pty1, 3);
 		g.fillPolygon(ptx1, pty1, 3);
-		g.drawRect(x, y + 2 * height / 5, width / 5, height / 5);
-		g.setColor(Color.WHITE);
-		g.fillRect(x, y + 2 * height / 5, width / 5, height / 5);
-		g.setColor(c);
 
 		Graphics2D g2d = (Graphics2D) g.create();
 		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
@@ -671,6 +670,11 @@ public class ELNComponentCurrentSinkDE extends TGCScalableWithInternalComponent 
 		g.setColor(Color.WHITE);
 		g.fillOval(x + width - width / 10, y + height - height / 10, width / 10, height / 10);
 		g.setColor(c);
+		
+		g.setColor(Color.WHITE);
+		g.fillRect(x, y + 2 * height / 5, width / 5, height / 5);
+		g.setColor(c);
+		g.drawRect(x, y + 2 * height / 5, width / 5, height / 5);
 	}
 
 	private void rotateRight(Graphics g) {
@@ -683,10 +687,6 @@ public class ELNComponentCurrentSinkDE extends TGCScalableWithInternalComponent 
 		int[] pty1 = { y + 2 * height / 5 - height / 20, y + 2 * height / 5, y + 2 * height / 5 + height / 20 };
 		g.drawPolygon(ptx1, pty1, 3);
 		g.fillPolygon(ptx1, pty1, 3);
-		g.drawRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
-		g.setColor(Color.WHITE);
-		g.fillRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
-		g.setColor(c);
 
 		Graphics2D g2d = (Graphics2D) g.create();
 		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
@@ -703,6 +703,11 @@ public class ELNComponentCurrentSinkDE extends TGCScalableWithInternalComponent 
 		g.setColor(Color.WHITE);
 		g.fillOval(x + width - width / 10, y, width / 10, height / 10);
 		g.setColor(c);
+		
+		g.setColor(Color.WHITE);
+		g.fillRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
+		g.setColor(c);
+		g.drawRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
 	}
 
 	private void rotateRightFlip(Graphics g) {
@@ -716,10 +721,6 @@ public class ELNComponentCurrentSinkDE extends TGCScalableWithInternalComponent 
 		int[] pty1 = { y + 3 * height / 5 - height / 20, y + 3 * height / 5, y + 3 * height / 5 + height / 20 };
 		g.drawPolygon(ptx1, pty1, 3);
 		g.fillPolygon(ptx1, pty1, 3);
-		g.drawRect(x + 2 * width / 5, y, width / 5, height / 5);
-		g.setColor(Color.WHITE);
-		g.fillRect(x + 2 * width / 5, y, width / 5, height / 5);
-		g.setColor(c);
 
 		Graphics2D g2d = (Graphics2D) g.create();
 		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
@@ -736,6 +737,11 @@ public class ELNComponentCurrentSinkDE extends TGCScalableWithInternalComponent 
 		g.setColor(Color.WHITE);
 		g.fillOval(x + width - width / 10, y + height - height / 10, width / 10, height / 10);
 		g.setColor(c);
+		
+		g.setColor(Color.WHITE);
+		g.fillRect(x + 2 * width / 5, y, width / 5, height / 5);
+		g.setColor(c);
+		g.drawRect(x + 2 * width / 5, y, width / 5, height / 5);
 	}
 
 	private void rotateLeft(Graphics g) {
@@ -749,10 +755,6 @@ public class ELNComponentCurrentSinkDE extends TGCScalableWithInternalComponent 
 		int[] pty1 = { y + 3 * height / 5 - height / 20, y + 3 * height / 5, y + 3 * height / 5 + height / 20 };
 		g.drawPolygon(ptx1, pty1, 3);
 		g.fillPolygon(ptx1, pty1, 3);
-		g.drawRect(x + 2 * width / 5, y, width / 5, height / 5);
-		g.setColor(Color.WHITE);
-		g.fillRect(x + 2 * width / 5, y, width / 5, height / 5);
-		g.setColor(c);
 
 		Graphics2D g2d = (Graphics2D) g.create();
 		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
@@ -769,6 +771,12 @@ public class ELNComponentCurrentSinkDE extends TGCScalableWithInternalComponent 
 		g.setColor(Color.WHITE);
 		g.fillOval(x + width - width / 10, y + height - height / 10, width / 10, height / 10);
 		g.setColor(c);
+		
+		g.setColor(Color.WHITE);
+		g.fillRect(x + 2 * width / 5, y, width / 5, height / 5);
+		g.setColor(c);
+		g.drawRect(x + 2 * width / 5, y, width / 5, height / 5);
+
 	}
 
 	private void rotateLeftFlip(Graphics g) {
@@ -781,10 +789,6 @@ public class ELNComponentCurrentSinkDE extends TGCScalableWithInternalComponent 
 		int[] pty1 = { y + 2 * height / 5 - height / 20, y + 2 * height / 5, y + 2 * height / 5 + height / 20 };
 		g.drawPolygon(ptx1, pty1, 3);
 		g.fillPolygon(ptx1, pty1, 3);
-		g.drawRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
-		g.setColor(Color.WHITE);
-		g.fillRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
-		g.setColor(c);
 
 		Graphics2D g2d = (Graphics2D) g.create();
 		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
@@ -801,6 +805,11 @@ public class ELNComponentCurrentSinkDE extends TGCScalableWithInternalComponent 
 		g.setColor(Color.WHITE);
 		g.fillOval(x + width - width / 10, y, width / 10, height / 10);
 		g.setColor(c);
+		
+		g.setColor(Color.WHITE);
+		g.fillRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
+		g.setColor(c);
+		g.drawRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
 	}
 
 	public TGComponent isOnOnlyMe(int _x, int _y) {
