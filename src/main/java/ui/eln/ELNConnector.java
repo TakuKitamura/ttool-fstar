@@ -166,7 +166,6 @@ public class ELNConnector extends TGConnector implements ScalableTGComponent {
 			Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0,	new float[] { 9 }, 0);
 			g.setStroke(dashed);
 			GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
-			editable = true;
 			g.drawString(value, (x1 + x2 - w) / 2, (y1 + y2) / 2);
 		} else if (pt2.getFather() instanceof ELNModulePortDE && pt1.getFather() instanceof ELNClusterPortDE) {
 			((ELNClusterPortDE) pt1.getFather()).setPortType(((ELNModulePortDE) pt2.getFather()).getPortType());
@@ -181,7 +180,6 @@ public class ELNConnector extends TGConnector implements ScalableTGComponent {
 			Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0,	new float[] { 9 }, 0);
 			g.setStroke(dashed);
 			GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
-			editable = true;
 			g.drawString(value, (x1 + x2 - w) / 2, (y1 + y2) / 2);
 		} else if ((pt1.getFather() instanceof ELNModulePortTDF && pt2.getFather() instanceof ELNModulePortTDF) || (pt2.getFather() instanceof ELNModulePortTDF && pt1.getFather() instanceof ELNModulePortTDF)) {
 			String name1 = ((ELNModulePortTDF) pt1.getFather()).getValue();
@@ -190,7 +188,6 @@ public class ELNConnector extends TGConnector implements ScalableTGComponent {
 				value = name1;
 			}
 			GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
-			editable = true;
 			g.drawString(value, (x1 + x2 - w) / 2, (y1 + y2) / 2);
 		} else if (pt1.getFather() instanceof ELNModulePortTDF && pt2.getFather() instanceof ELNClusterPortTDF) {
 			((ELNClusterPortTDF) pt2.getFather()).setPortType(((ELNModulePortTDF) pt1.getFather()).getPortType());
@@ -203,7 +200,6 @@ public class ELNConnector extends TGConnector implements ScalableTGComponent {
 				value = name1;
 			}
 			GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
-			editable = true;
 			g.drawString(value, (x1 + x2 - w) / 2, (y1 + y2) / 2);
 		} else if (pt2.getFather() instanceof ELNModulePortTDF && pt1.getFather() instanceof ELNClusterPortTDF) {
 			((ELNClusterPortTDF) pt1.getFather()).setPortType(((ELNModulePortTDF) pt2.getFather()).getPortType());
