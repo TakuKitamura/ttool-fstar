@@ -7,7 +7,7 @@
 <MainCode value="void __user_init() {"/>
 <MainCode value="}"/>
 <Optimized value="true" />
-<Validated value="" />
+<Validated value="Block0;" />
 <Ignored value="" />
 
 <COMPONENT type="5000" id="25" >
@@ -443,25 +443,25 @@
 <CONNECTOR type="1601" id="223" >
 <cdparam x="1232" y="401" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="connector" value="Connector between ports" />
-<P1  x="1232" y="401" id="226" />
-<P2  x="907" y="292" id="274" />
+<infoparam name="connector" value="" />
+<P1  x="1232" y="401" id="236" />
+<P2  x="907" y="292" id="275" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="1601" id="224" >
 <cdparam x="733" y="410" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="connector" value="Connector between ports" />
-<P1  x="811" y="410" id="284" />
-<P2  x="816" y="455" id="255" />
+<infoparam name="connector" value="sine_sink_sig" />
+<P1  x="811" y="410" id="265" />
+<P2  x="816" y="455" id="294" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="1601" id="225" >
 <cdparam x="860" y="449" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<infoparam name="connector" value="Connector between ports" />
-<P1  x="907" y="333" id="294" />
-<P2  x="1232" y="447" id="236" />
+<infoparam name="connector" value="" />
+<P1  x="907" y="333" id="255" />
+<P2  x="1232" y="447" id="226" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <COMPONENT type="1608" id="254" >
@@ -481,11 +481,11 @@
 </COMPONENT>
 <SUBCOMPONENT type="1605" id="235" >
 <father id="254" num="0" />
-<cdparam x="1232" y="388" />
+<cdparam x="1232" y="434" />
 <sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="187" minY="-13" maxY="137" />
-<infoparam name="Primitive port - Port DE" value="out" />
+<infoparam name="Primitive port - Port DE" value="in" />
 <TGConnectingPoint num="0" id="226" />
 <TGConnectingPoint num="1" id="227" />
 <TGConnectingPoint num="2" id="228" />
@@ -496,16 +496,16 @@
 <TGConnectingPoint num="7" id="233" />
 <TGConnectingPoint num="8" id="234" />
 <extraparam>
-<Prop commName="out" commType="0" origin="1" type="int" sensitive="false" sensitive_method="positive" />
+<Prop commName="in" commType="0" origin="0" type="int" sensitive="false" sensitive_method="positive" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1605" id="245" >
 <father id="254" num="1" />
-<cdparam x="1232" y="434" />
+<cdparam x="1232" y="388" />
 <sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="187" minY="-13" maxY="137" />
-<infoparam name="Primitive port - Port DE" value="in" />
+<infoparam name="Primitive port - Port DE" value="out" />
 <TGConnectingPoint num="0" id="236" />
 <TGConnectingPoint num="1" id="237" />
 <TGConnectingPoint num="2" id="238" />
@@ -516,7 +516,7 @@
 <TGConnectingPoint num="7" id="243" />
 <TGConnectingPoint num="8" id="244" />
 <extraparam>
-<Prop commName="in" commType="0" origin="0" type="int" sensitive="false" sensitive_method="positive" />
+<Prop commName="out" commType="0" origin="1" type="int" sensitive="false" sensitive_method="positive" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -535,35 +535,38 @@
 <TGConnectingPoint num="6" id="319" />
 <TGConnectingPoint num="7" id="320" />
 </COMPONENT>
-<SUBCOMPONENT type="1602" id="273" >
+<SUBCOMPONENT type="1602" id="293" >
 <father id="321" num="0" />
-<cdparam x="705" y="468" />
+<cdparam x="694" y="247" />
 <sizeparam width="200" height="150" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="608" minY="0" maxY="308" />
-<infoparam name="Primitive component - Block TDF" value="Sink" />
-<TGConnectingPoint num="0" id="265" />
-<TGConnectingPoint num="1" id="266" />
-<TGConnectingPoint num="2" id="267" />
-<TGConnectingPoint num="3" id="268" />
-<TGConnectingPoint num="4" id="269" />
-<TGConnectingPoint num="5" id="270" />
-<TGConnectingPoint num="6" id="271" />
-<TGConnectingPoint num="7" id="272" />
+<infoparam name="Primitive component - Block TDF" value="Sine" />
+<TGConnectingPoint num="0" id="285" />
+<TGConnectingPoint num="1" id="286" />
+<TGConnectingPoint num="2" id="287" />
+<TGConnectingPoint num="3" id="288" />
+<TGConnectingPoint num="4" id="289" />
+<TGConnectingPoint num="5" id="290" />
+<TGConnectingPoint num="6" id="291" />
+<TGConnectingPoint num="7" id="292" />
 <extraparam>
-<Attribute period="-1" time="" processCode="void processing() {
-	in.read();
+<Attribute period="6" time="ns" processCode="void processing() {
+	double t = out_de.get_time().to_seconds();
+	double x = in_de.read() * sin(2.0 * M_PI * 5000000.0 * t);
+	out_de.write( (int) x);
+	tdf_out.write(x);
 }
-        " listStruct="" nameTemplate="" typeTemplate="int" listTypedef="" />
+            " listStruct="" nameTemplate="" typeTemplate="int" listTypedef="" />
 </extraparam>
 </SUBCOMPONENT>
-<SUBCOMPONENT type="1604" id="264" >
-<father id="273" num="0" />
-<cdparam x="803" y="455" />
+<SUBCOMPONENT type="1606" id="264" >
+<father id="293" num="0" />
+<cdparam x="881" y="320" />
 <sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="187" minY="-13" maxY="137" />
-<infoparam name="Primitive port - Port TDF" value="in" />
+<infoparam name="Primitive port - Port Converter" value="out_de" />
 <TGConnectingPoint num="0" id="255" />
 <TGConnectingPoint num="1" id="256" />
 <TGConnectingPoint num="2" id="257" />
@@ -574,16 +577,56 @@
 <TGConnectingPoint num="7" id="262" />
 <TGConnectingPoint num="8" id="263" />
 <extraparam>
-<Prop commName="in" commType="0" origin="0" period="-1" time="us" rate="1" delay="-1" type="double" />
+<Prop commName="out_de" commType="0" origin="1" period="6" time="ns" rate="1" delay="0" type="sc_uint&lt;32&gt;" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="1604" id="274" >
+<father id="293" num="1" />
+<cdparam x="798" y="384" />
+<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="-13" maxX="187" minY="-13" maxY="137" />
+<infoparam name="Primitive port - Port TDF" value="tdf_out" />
+<TGConnectingPoint num="0" id="265" />
+<TGConnectingPoint num="1" id="266" />
+<TGConnectingPoint num="2" id="267" />
+<TGConnectingPoint num="3" id="268" />
+<TGConnectingPoint num="4" id="269" />
+<TGConnectingPoint num="5" id="270" />
+<TGConnectingPoint num="6" id="271" />
+<TGConnectingPoint num="7" id="272" />
+<TGConnectingPoint num="8" id="273" />
+<extraparam>
+<Prop commName="tdf_out" commType="0" origin="1" period="6" time="ns" rate="1" delay="-1" type="double" />
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="1606" id="284" >
+<father id="293" num="2" />
+<cdparam x="881" y="279" />
+<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="-13" maxX="187" minY="-13" maxY="137" />
+<infoparam name="Primitive port - Port Converter" value="in_de" />
+<TGConnectingPoint num="0" id="275" />
+<TGConnectingPoint num="1" id="276" />
+<TGConnectingPoint num="2" id="277" />
+<TGConnectingPoint num="3" id="278" />
+<TGConnectingPoint num="4" id="279" />
+<TGConnectingPoint num="5" id="280" />
+<TGConnectingPoint num="6" id="281" />
+<TGConnectingPoint num="7" id="282" />
+<TGConnectingPoint num="8" id="283" />
+<extraparam>
+<Prop commName="in_de" commType="0" origin="0" period="-1" time="s" rate="-1" delay="-1" type="sc_uint&lt;32&gt;" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1602" id="312" >
 <father id="321" num="1" />
-<cdparam x="694" y="247" />
+<cdparam x="705" y="468" />
 <sizeparam width="200" height="150" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="608" minY="0" maxY="308" />
-<infoparam name="Primitive component - Block TDF" value="Sine" />
+<infoparam name="Primitive component - Block TDF" value="Sink" />
 <TGConnectingPoint num="0" id="304" />
 <TGConnectingPoint num="1" id="305" />
 <TGConnectingPoint num="2" id="306" />
@@ -593,62 +636,19 @@
 <TGConnectingPoint num="6" id="310" />
 <TGConnectingPoint num="7" id="311" />
 <extraparam>
-<Attribute period="6" time="ns" processCode="void processing() {
-	double t = out_de.get_time().to_seconds();
-	double x = in_de.read() * sin(2.0 * M_PI * 5000000.0 * t);
-	out_de.write( (int) x);
-	tdf_out.write(x);
+<Attribute period="-1" time="" processCode="void processing() {
+	in.read();
 }
-           " listStruct="" nameTemplate="" typeTemplate="int" listTypedef="" />
+         " listStruct="" nameTemplate="" typeTemplate="int" listTypedef="" />
 </extraparam>
 </SUBCOMPONENT>
-<SUBCOMPONENT type="1606" id="283" >
+<SUBCOMPONENT type="1604" id="303" >
 <father id="312" num="0" />
-<cdparam x="881" y="279" />
+<cdparam x="803" y="455" />
 <sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="187" minY="-13" maxY="137" />
-<infoparam name="Primitive port - Port Converter" value="in_de" />
-<TGConnectingPoint num="0" id="274" />
-<TGConnectingPoint num="1" id="275" />
-<TGConnectingPoint num="2" id="276" />
-<TGConnectingPoint num="3" id="277" />
-<TGConnectingPoint num="4" id="278" />
-<TGConnectingPoint num="5" id="279" />
-<TGConnectingPoint num="6" id="280" />
-<TGConnectingPoint num="7" id="281" />
-<TGConnectingPoint num="8" id="282" />
-<extraparam>
-<Prop commName="in_de" commType="0" origin="0" period="-1" time="s" rate="-1" delay="-1" type="sc_uint&lt;32&gt;" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="1604" id="293" >
-<father id="312" num="1" />
-<cdparam x="798" y="384" />
-<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="-13" maxX="187" minY="-13" maxY="137" />
-<infoparam name="Primitive port - Port TDF" value="tdf_out" />
-<TGConnectingPoint num="0" id="284" />
-<TGConnectingPoint num="1" id="285" />
-<TGConnectingPoint num="2" id="286" />
-<TGConnectingPoint num="3" id="287" />
-<TGConnectingPoint num="4" id="288" />
-<TGConnectingPoint num="5" id="289" />
-<TGConnectingPoint num="6" id="290" />
-<TGConnectingPoint num="7" id="291" />
-<TGConnectingPoint num="8" id="292" />
-<extraparam>
-<Prop commName="tdf_out" commType="0" origin="1" period="6" time="ns" rate="1" delay="-1" type="double" />
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="1606" id="303" >
-<father id="312" num="2" />
-<cdparam x="881" y="320" />
-<sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="-13" maxX="187" minY="-13" maxY="137" />
-<infoparam name="Primitive port - Port Converter" value="out_de" />
+<infoparam name="Primitive port - Port TDF" value="in" />
 <TGConnectingPoint num="0" id="294" />
 <TGConnectingPoint num="1" id="295" />
 <TGConnectingPoint num="2" id="296" />
@@ -659,7 +659,7 @@
 <TGConnectingPoint num="7" id="301" />
 <TGConnectingPoint num="8" id="302" />
 <extraparam>
-<Prop commName="out_de" commType="0" origin="1" period="6" time="ns" rate="1" delay="0" type="sc_uint&lt;32&gt;" />
+<Prop commName="in" commType="0" origin="0" period="-1" time="us" rate="1" delay="-1" type="double" />
 </extraparam>
 </SUBCOMPONENT>
 
