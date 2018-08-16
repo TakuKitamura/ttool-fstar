@@ -56,6 +56,8 @@ import java.util.LinkedList;
  * Creation: 14/05/2018
  * @version 1.0 14/05/2018
  * @author Irina Kit Yan LEE
+ * @version 1.1 30/07/2018
+ * @author Rodrigo CORTES PORTO
 */
 
 public class TopCellGeneratorCluster {

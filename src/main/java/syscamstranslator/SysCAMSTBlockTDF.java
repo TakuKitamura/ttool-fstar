@@ -64,6 +64,8 @@ public class SysCAMSTBlockTDF extends SysCAMSTComponent {
 	
 	private LinkedList<SysCAMSTPortTDF> portTDF;
 	private LinkedList<SysCAMSTPortConverter> portConverter;
+    private SysCAMSTPortConverter localPortConverter;
+    private int n;
 	
 	public SysCAMSTBlockTDF(String _name, int _period, String _time, String _processCode, DefaultListModel<String> _listStruct, String _nameTemplate, String _typeTemplate, DefaultListModel<String> _listTypedef, SysCAMSTCluster _cluster) {
 		name = _name;
@@ -77,6 +79,7 @@ public class SysCAMSTBlockTDF extends SysCAMSTComponent {
 		cluster = _cluster;
 		portTDF = new LinkedList<SysCAMSTPortTDF>();
 		portConverter = new LinkedList<SysCAMSTPortConverter>();
+        n = 0;
 	}
 
 	public String getName() {
@@ -130,4 +133,116 @@ public class SysCAMSTBlockTDF extends SysCAMSTComponent {
 	public void addPortConverter(SysCAMSTPortConverter converter){
 		portConverter.add(converter);
 	}
+
+    public void syncTDFBlockDEBlock(double[] time_prev) throws SysCAMSValidateException {
+        double tp;
+        try{
+            for(int i = 0; i < portConverter.size(); i++) {
+                localPortConverter = portConverter.get(i);
+                if(localPortConverter.getOrigin() == 0) { //Input
+                    check_causality_in(time_prev);
+                } else if (localPortConverter.getOrigin() == 1) { //Output
+                    check_causality_out(time_prev);
+                }
+            }
+        } catch (SysCAMSValidateException se){
+             throw new SysCAMSValidateException(se.getMessage());
+        }
+    }
+    
+    private void check_causality_in(double[] time_prev_max) throws SysCAMSValidateException {
+        double time_now_min_tdf, time_now_max_tdf, time_tmp_tdf, time_tmp_de,
+                time_now_min_de, time_now_max_de;
+        double tm = 0.0;
+        double tp = 0.0;
+        int r = 0;
+        int d = 0;
+        int k = 1;
+        if(period > 0)
+            tm = period;
+        if(localPortConverter.getPeriod() > 0)
+            tp = localPortConverter.getPeriod();
+        if(localPortConverter.getRate() > 0)
+            r = localPortConverter.getRate();
+        if(localPortConverter.getDelay() > 0)
+            d = localPortConverter.getDelay();
+
+        time_now_min_tdf = (n*tm)+((k-1)*tp);
+        time_now_max_tdf = (n*tm)+((k-1)*tp);
+        time_now_min_de = (n*tm)+((k-1)*tp)-(d*tp);
+        time_now_max_de = (n*tm)+((k-1)*tp)-(d*tp);
+        
+        for (k = 1; k <= r; k++) {
+            time_tmp_tdf = (n*tm)+((k-1)*tp);
+            time_tmp_de = (n*tm)+((k-1)*tp)-(d*tp);
+            System.out.println("tmstmp_in_tdf: " + time_tmp_tdf);
+            System.out.println("tmstmp_in_de: " + time_tmp_de);
+            time_now_min_tdf = Math.min(time_tmp_tdf, time_now_min_tdf);
+            time_now_max_tdf = Math.max(time_tmp_tdf, time_now_max_tdf);
+            time_now_min_de = Math.min(time_tmp_de, time_now_min_de);
+            time_now_max_de = Math.max(time_tmp_de, time_now_max_de);
+            System.out.println("time_now_min_de: " + time_now_min_de);
+            System.out.println("time_now_max_de: " + time_now_max_de);
+            System.out.println("time_now_min_tdf: " + time_now_min_tdf);
+            System.out.println("time_now_max_tdf: " + time_now_max_tdf);
+        }
+        //Increase number of times block has been executed
+        n++;
+        
+        System.out.println("time_prev_max_out: " + time_prev_max[1]);
+        if(time_now_min_de < time_prev_max[1]) {
+            throw new SysCAMSValidateException("Timestamp of previous write port executed module is: " + time_prev_max[1]
+                 + " and current timestamp is: " + time_now_min_de);
+        }
+        time_prev_max[0] = Double.valueOf(Math.max(time_prev_max[0],time_now_max_de));
+        System.out.println("New time_prev_max_in: " + time_prev_max[0]);
+    }
+    
+    private void check_causality_out(double[] time_prev_max) throws SysCAMSValidateException {
+        double time_now_min_tdf, time_now_max_tdf, time_tmp_tdf, time_tmp_de,
+                time_now_min_de, time_now_max_de;
+        double tm = 0.0;
+        double tp = 0.0;
+        int r = 0;
+        int d = 0;
+        int k = 1;
+        if(period > 0)
+            tm = period;
+        if(localPortConverter.getPeriod() > 0)
+            tp = localPortConverter.getPeriod();
+        if(localPortConverter.getRate() > 0)
+            r = localPortConverter.getRate();
+        if(localPortConverter.getDelay() > 0)
+            d = localPortConverter.getDelay();
+
+        time_now_min_tdf = (n*tm)+((k-1)*tp);
+        time_now_max_tdf = (n*tm)+((k-1)*tp);
+        time_now_min_de = (n*tm)+((k-1)*tp)+(d*tp);
+        time_now_max_de = (n*tm)+((k-1)*tp)+(d*tp);
+        
+        for (k = 1; k <= r; k++) {
+            time_tmp_tdf = (n*tm)+((k-1)*tp);
+            time_tmp_de = (n*tm)+((k-1)*tp)+(d*tp);;
+            System.out.println("tmstmp_in_tdf: " + time_tmp_tdf);
+            System.out.println("tmstmp_in_de: " + time_tmp_de);
+            time_now_min_tdf = Math.min(time_tmp_tdf, time_now_min_tdf);
+            time_now_max_tdf = Math.max(time_tmp_tdf, time_now_max_tdf);
+            time_now_min_de = Math.min(time_tmp_de, time_now_min_de);
+            time_now_max_de = Math.max(time_tmp_de, time_now_max_de);
+            System.out.println("time_now_min_de: " + time_now_min_de);
+            System.out.println("time_now_max_de: " + time_now_max_de);
+            System.out.println("time_now_min_tdf: " + time_now_min_tdf);
+            System.out.println("time_now_max_tdf: " + time_now_max_tdf);
+        }
+        //Increase number of times block has been executed
+        n++;
+        
+        System.out.println("time_prev_max_in: " + time_prev_max[0]);
+        if(time_now_min_de < time_prev_max[0]) {
+            throw new SysCAMSValidateException("Timestamp of previous read port executed module is: " + time_prev_max[0]
+                 + " and current timestamp is: " + time_now_min_de);
+        }
+        time_prev_max[1] = Double.valueOf(Math.max(time_prev_max[1],time_now_max_tdf));
+        System.out.println("New time_prev_max_out: " + time_prev_max[1]);
+    }
 }

@@ -170,6 +170,18 @@ public class SysCAMSSpecification{
 		}
 		return cons;
 	}
+    
+    public LinkedList<SysCAMSTConnector> getAllConnectorsCluster4Matrix(){
+        LinkedList<SysCAMSTConnector> cons = new LinkedList<SysCAMSTConnector>();
+        for (SysCAMSTConnector con : connectors) {
+            if (con instanceof SysCAMSTConnector) {
+                if (con.get_p1().getComponent() instanceof SysCAMSTPortTDF && con.get_p2().getComponent() instanceof SysCAMSTPortTDF) {
+                    cons.add(con);
+                }
+            }
+        }
+        return cons;
+    }
 
 	public int getNbBlockTDF(){
 		return (getAllBlockTDF()).size();

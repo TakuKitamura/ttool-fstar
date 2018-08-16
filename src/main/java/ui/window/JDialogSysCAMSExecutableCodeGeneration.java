@@ -44,12 +44,14 @@ import syscamstranslator.toSysCAMSCluster.TopCellGeneratorCluster;
 import launcher.LauncherException;
 import launcher.RshClient;
 import myutil.*;
-import syscamstranslator.SysCAMSSpecification;
-import syscamstranslator.SysCAMSTCluster;
+import syscamstranslator.*;
 import ui.util.IconManager;
 import ui.MainGUI;
 import ui.SysCAMSPanelTranslator;
 import ui.syscams.SysCAMSComponentTaskDiagramPanel;
+import org.apache.commons.math3.linear.*;
+import org.apache.commons.math3.util.*;
+import org.apache.commons.math3.fraction.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -60,6 +62,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.LinkedList;
 import java.util.Vector;
+import java.util.Arrays;
 
 /**
  * Class JDialogSysCAMSExecutableCodeGeneration
@@ -130,7 +133,7 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
 
     private Thread t;
     private boolean go = false;
-//    private boolean hasError = false;
+    private boolean hasError = false;
     protected boolean startProcess = false;
 
 //    private String hostExecute;
@@ -178,31 +181,33 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
 
         // Issue #41 Ordering of tabbed panes 
         jp1 = GraphicLib.createTabbedPane();//new JTabbedPane();
-
+        
+        JPanel jp00 = new JPanel();
+        GridBagLayout gridbag00 = new GridBagLayout();
+        GridBagConstraints c00 = new GridBagConstraints();
+        jp00.setLayout(gridbag00);
+        jp00.setBorder(new javax.swing.border.TitledBorder("Validation"));
+       
         JPanel jp01 = new JPanel();
         GridBagLayout gridbag01 = new GridBagLayout();
         GridBagConstraints c01 = new GridBagConstraints();
         jp01.setLayout(gridbag01);
         jp01.setBorder(new javax.swing.border.TitledBorder("Code generation"));
+        
+         // Panel 00 -> Validation
+        c00.gridheight = 1;
+        c00.weighty = 1.0;
+        c00.weightx = 1.0;
+        c00.gridwidth = GridBagConstraints.REMAINDER; //end row
+        c00.fill = GridBagConstraints.BOTH;
+        c00.gridheight = 1;
 
-//        JPanel jp02 = new JPanel();
-//        GridBagLayout gridbag02 = new GridBagLayout();
-//        GridBagConstraints c02 = new GridBagConstraints();
-//        jp02.setLayout(gridbag02);
-//        jp02.setBorder(new javax.swing.border.TitledBorder("Compilation"));
-//
-//        JPanel jp03 = new JPanel();
-//        GridBagLayout gridbag03 = new GridBagLayout();
-//        GridBagConstraints c03 = new GridBagConstraints();
-//        jp03.setLayout(gridbag03);
-//        jp03.setBorder(new javax.swing.border.TitledBorder("Execution"));
-//
-//        JPanel jp04 = new JPanel();
-//        GridBagLayout gridbag04 = new GridBagLayout();
-//        GridBagConstraints c04 = new GridBagConstraints();
-//        jp04.setLayout(gridbag04);
-//        jp04.setBorder(new javax.swing.border.TitledBorder("Simulation trace"));
+        jp00.add(new JLabel(" "), c00);
+        c00.gridwidth = GridBagConstraints.REMAINDER; //end row
 
+        jp1.add("Validation", jp00);
+
+        // Panel 01 -> Code Generation
         c01.gridheight = 1;
         c01.weighty = 1.0;
         c01.weightx = 1.0;
@@ -229,7 +234,7 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
         jp01.add(code3, c01);
 
         jp01.add(new JLabel(" "), c01);
-        c01.gridwidth = GridBagConstraints.REMAINDER; //end row
+        //c01.gridwidth = GridBagConstraints.REMAINDER; //end row
 
 //        removeCFiles = new JCheckBox("Remove .c / .h files");
 //        removeCFiles.setSelected(removeCFilesValue);
@@ -371,7 +376,7 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
         jta.setEditable(false);
         jta.setMargin(new Insets(10, 10, 10, 10));
         jta.setTabSize(3);
-        jta.append("Select options and then, click on 'start' to launch code generation\n"); // / compilation / execution
+        jta.append("Select options and then, click on 'start' to launch validation / code generation\n"); // / compilation / execution
         Font f = new Font("Courrier", Font.BOLD, 12);
         jta.setFont(f);
         jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -500,10 +505,55 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
     public void run() {
 //        String cmd;
 //        String list;//, data;
-//        hasError = false;
+        hasError = false;
 
         try {
             if (jp1.getSelectedIndex() == 0) {
+                Vector<SysCAMSComponentTaskDiagramPanel> syscamsDiagramPanels = mgui.getListSysCAMSPanel();
+                for (SysCAMSComponentTaskDiagramPanel syscamsDiagramPanel : syscamsDiagramPanels) {
+                    SysCAMSPanelTranslator syscamspaneltranslator = new SysCAMSPanelTranslator(syscamsDiagramPanel);
+                    SysCAMSSpecification syscalsspec = syscamspaneltranslator.getSysCAMSSpecification();
+                    if (syscalsspec == null) {
+                        jta.append("Error: No SYSCAMS specification\n");
+                    } else {
+                        jta.append("Performing Validation for \""+(syscalsspec.getCluster()).getClusterName()+"\".\n");
+                        LinkedList<SysCAMSTConnector> connectors = syscalsspec.getAllConnectorsCluster4Matrix();
+                        System.out.printf("Connectors for 1 cluster = %d.\n", connectors.size());
+                        LinkedList<SysCAMSTBlockTDF> tdfBlocks = syscalsspec.getAllBlockTDF();
+                        System.out.printf("Blocks for 1 cluster = %d.\n", tdfBlocks.size());
+                        //TODO: verify trivial case when only 1 block and no connectors. 
+                        if(connectors.size() > 0) {
+                            RealVector buffer = new ArrayRealVector(connectors.size());
+                            RealVectorFormat printFormat = new RealVectorFormat();
+                            RealMatrix topologyMatrix = buildTopologyMatrix(connectors, tdfBlocks, buffer);
+                            System.out.println("Buffer after topMatrix is: " + printFormat.format(buffer) );
+                            try {
+                                RealVector execRate = solveTopologyMatrix(topologyMatrix, tdfBlocks);
+                                //TODO: to recompute, put a while loop here with a flag. Check after compute if no error. If error, modify buffer with the suggested delay, and loop.
+                                computeSchedule(execRate, topologyMatrix, buffer, tdfBlocks, connectors);
+                                jta.append("Validation for \""+(syscalsspec.getCluster()).getClusterName()+"\" completed.\n");
+                            } catch (InterruptedException ie) {
+                                System.err.println("Interrupted");
+                                jta.append("Interrupted\n");
+                                mode = STOPPED;
+                                setButtons();
+                                hasError = true;
+                                //return;
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                mode = STOPPED;
+                                setButtons();
+                                hasError = true;
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+            
+            testGo();
+            
+            if (jp1.getSelectedIndex() == 1) {
                 jta.append("Generating executable code (SystemC-AMS version)\n");
 
                 Vector<SysCAMSComponentTaskDiagramPanel> syscamsDiagramPanels = mgui.getListSysCAMSPanel();
@@ -675,17 +725,18 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
 //                    return;
 //                }
 //            }
-//            if ((hasError == false) && (jp1.getSelectedIndex() < 2)) {
-//                jp1.setSelectedIndex(jp1.getSelectedIndex() + 1);
-//            }
+            if ((hasError == false) && (jp1.getSelectedIndex() < 2)) {
+                jp1.setSelectedIndex(jp1.getSelectedIndex() + 1);
+            }
         } catch (InterruptedException ie) {
             jta.append("Interrupted\n");
         }
+        if (!hasError) {
+            jta.append("\n\nReady to process next command\n");
 
-        jta.append("\n\nReady to process next command\n");
-
-        checkMode();
-        setButtons();
+            checkMode();
+            setButtons();
+        }
     }
 
     protected void processCmd(String cmd, JTextArea _jta) throws LauncherException {
@@ -739,6 +790,135 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
 //        hasError = true;
     }
 
+    public RealMatrix buildTopologyMatrix(LinkedList<SysCAMSTConnector> connectors, LinkedList<SysCAMSTBlockTDF> blocks, RealVector buffer) {
+        double [][] tArray = new double[connectors.size()][blocks.size()];
+        for(int i = 0; i < connectors.size(); i++) {
+            for(int j = 0; j < blocks.size(); j++) {
+                if( ((SysCAMSTPortTDF) connectors.get(i).get_p1().getComponent()).getBlockTDF().getName().equals(blocks.get(j).getName()) ) {
+                    System.out.println("Inserting in : "+ i + " " + j + " From port: "+ ((SysCAMSTPortTDF) connectors.get(i).get_p1().getComponent()).getName() +" Rate: " + ((SysCAMSTPortTDF) connectors.get(i).get_p1().getComponent()).getRate() );
+                    tArray[i][j] = ((SysCAMSTPortTDF) connectors.get(i).get_p1().getComponent()).getRate();
+                    if(((SysCAMSTPortTDF) connectors.get(i).get_p1().getComponent()).getDelay() > 0) {
+                        buffer.addToEntry(i, ((SysCAMSTPortTDF) connectors.get(i).get_p1().getComponent()).getDelay() ); 
+                    }
+                } else if( ((SysCAMSTPortTDF) connectors.get(i).get_p2().getComponent()).getBlockTDF().getName().equals(blocks.get(j).getName()) ) {
+                    System.out.println("Inserting in : "+ i + " " + j + " From port: "+ ((SysCAMSTPortTDF) connectors.get(i).get_p2().getComponent()).getName() +" Rate: " + -((SysCAMSTPortTDF) connectors.get(i).get_p2().getComponent()).getRate() );
+                    tArray[i][j] = -((SysCAMSTPortTDF) connectors.get(i).get_p2().getComponent()).getRate();
+                    if(((SysCAMSTPortTDF) connectors.get(i).get_p2().getComponent()).getDelay() > 0) {
+                        buffer.addToEntry(i, ((SysCAMSTPortTDF) connectors.get(i).get_p2().getComponent()).getDelay() );
+                    }
+                }
+            }
+        }
+        
+        //double[][] tArray = { { 2, -1, 0 }, { 0, 2, -4 }, { -1, 0, 1 } };
+        //double[][] tArray = { { 2, 3, 5 }, { -4, 2, 3} };
+        //double[][] tArray = { { 3, -2, 0, 0 }, { 0, 4, 0, -3 }, { 0, 1, -3, 0 }, { -1, 0, 2, 0 }, { -2, 0, 0, 1 } };
+        //double[][] tArray = { { 3, -2 } };
+        RealMatrix tMatrix = new Array2DRowRealMatrix(tArray);
+        return tMatrix;
+    }
+
+    public RealVector solveTopologyMatrix(RealMatrix matrixA, LinkedList<SysCAMSTBlockTDF> blocks) throws InterruptedException {
+        double dropThreshold = 1e-7;
+        //Using QR decomposition, A^TP=QR. Since rank MUST be rank = s-1 
+        //(where s is number of blocks), then the last column of Q provides a basis for the kernel of A.
+        RRQRDecomposition qr = new RRQRDecomposition(matrixA.transpose());
+        RealMatrix qMatrix = qr.getQ();
+        int rank = qr.getRank(dropThreshold);
+        if(rank != blocks.size()-1){
+            jta.append("Error: Port sample rates are inconsistent. Topology matrix can not be solved.\n");
+            System.err.println("Port sample rates are inconsistent. Topology matrix can not be solved. Rank: " +rank+" != #blocks-1");
+            throw new InterruptedException(); 
+        }
+        System.out.println("Checking kernel columns ...");
+        RealMatrix zMatrix = matrixA.multiply(qMatrix);
+        for (int c = rank; c < matrixA.getColumnDimension(); c++) {
+            System.out.printf("The product of A with column %d of Q has sup "
+                            + "norm %f.\n",
+                            c, zMatrix.getColumnMatrix(c).getNorm());
+            //TODO: verify if norm is not zero, throw error that kernel could not be found.              
+        }
+        
+        RealMatrix kernelMatrix = qMatrix.getSubMatrix( 0, qMatrix.getRowDimension()-1, rank, qMatrix.getColumnDimension()-1 );
+        double[] resultArray = new double[kernelMatrix.getRowDimension()];
+        double result_tmp = 0.0;
+        int v_lcm = 1;
+        Fraction[] resultFractionArray = new Fraction[kernelMatrix.getRowDimension()];
+        for (int i = 0; i < kernelMatrix.getRowDimension(); i++) {
+            System.out.printf("The kernelMatrix is %f .\n", kernelMatrix.getEntry(i, 0) );
+            resultArray[i] = kernelMatrix.getEntry(i, 0) / kernelMatrix.getEntry(kernelMatrix.getRowDimension()-1, 0);
+            result_tmp = kernelMatrix.getEntry(i, 0) / kernelMatrix.getEntry(kernelMatrix.getRowDimension()-1, 0);
+            resultFractionArray[i] = new Fraction(result_tmp);
+            System.out.println("The resultArray is: "+ resultArray[i] );
+            System.out.println("The resultFractionArray is: "+ resultFractionArray[i].toString() );
+            v_lcm = ArithmeticUtils.lcm(resultFractionArray[i].getDenominator() , v_lcm);
+            System.out.println("The lcm is: "+ v_lcm );
+        }
+        int[] tmpResult = new int[kernelMatrix.getRowDimension()];
+        double[] finalResult = new double[kernelMatrix.getRowDimension()];
+        for (int i = 0; i < kernelMatrix.getRowDimension(); i++) {
+            tmpResult[i] = (resultFractionArray[i].multiply(v_lcm)).intValue();
+            finalResult[i] = (double)tmpResult[i];
+            System.out.println("The finalResult is: "+ finalResult[i] + " - " + blocks.get(i).getName() );
+        }
+            RealVector xVector = new ArrayRealVector(finalResult);
+            return xVector;
+    }
+    
+    public void computeSchedule(RealVector q, RealMatrix gamma, RealVector buffer, LinkedList<SysCAMSTBlockTDF> tdfBlocks, LinkedList<SysCAMSTConnector> connectors) throws InterruptedException {
+        RealVector q1 = new ArrayRealVector(q.getDimension());
+        RealVector nu = new ArrayRealVector(q.getDimension());
+        RealVector tmpBuffer = new ArrayRealVector(gamma.getRowDimension());;
+        RealVectorFormat printFormat = new RealVectorFormat();
+        boolean deadlock = false;
+        SysCAMSTBlockTDF tdfBlock;
+        double[] time_prev = {0.0, 0.0}; //array to store in[0] and out[1] previous times
+        try {
+            while (!(q1.equals(q)) && !deadlock){
+                deadlock = true;
+                for(int i = 0; i < tdfBlocks.size(); i++) {
+                    tdfBlock = tdfBlocks.get(i);
+                    //check if block is runnable: If it has not run q times 
+                    //and it won't cause a buffer size to go negative.
+                    System.out.println("q1 is: " + printFormat.format(q1) );
+                    System.out.println("q is: " + printFormat.format(q) );
+                    if(q1.getEntry(i) != q.getEntry(i)) {
+                        nu.setEntry(i, 1);
+                        tmpBuffer = buffer.add(gamma.operate(nu));
+                        System.out.println("tmpBuffer is: " + printFormat.format(tmpBuffer) );
+                        if(tmpBuffer.getMinValue() >= 0) {
+                            deadlock = false;
+                            q1 = q1.add(nu);
+                            buffer = tmpBuffer.copy();
+                            System.out.println("Schedule " + tdfBlock.getName() );
+                            System.out.println("Buffer is: " + printFormat.format(buffer) );
+                            //Validate sync bewtween TDF/DE 
+                            tdfBlock.syncTDFBlockDEBlock(time_prev);
+                        }
+                        nu.setEntry(i, 0);
+                    }
+                }
+            }
+        } catch (SysCAMSValidateException se) {
+            System.out.println("Causality exception: " + se.getMessage());
+        }
+        if (deadlock){
+            System.out.println("Static schedule can not be computed due to missing delays in loops" );
+            jta.append("Error: Static schedule can not be computed due to missing delays in loops\n" );
+            int minIndex = tmpBuffer.getMinIndex();
+            //TODO: for the suggested delay, I need to first detect loops within the graph(DFS?), then recompute recursively with the suggested delay until it can be solved.
+            /*jta.append("Following delay is suggested:\n" );
+            int currentDelay = ((SysCAMSTPortTDF) connectors.get(minIndex).get_p2().getComponent()).getDelay();
+            jta.append(currentDelay-(int)tmpBuffer.getMinValue() +" in port \""
+            +((SysCAMSTPortTDF) connectors.get(minIndex).get_p2().getComponent()).getName()
+            +"\" from block \""+ ((SysCAMSTPortTDF) connectors.get(minIndex).get_p2().getComponent()).getBlockTDF().getName()+"\"\n");
+            */
+            throw new InterruptedException(); 
+        } else {
+            System.out.println("Schedule complete-STOP" );
+        }
+    }
+    
 //    public void showSimulationTrace() {
 //        JFrameSimulationSDPanel jfssdp = new JFrameSimulationSDPanel(f, mgui, "Simulation trace of " + simulationTraceFile.getText());
 //        jfssdp.setIconImage(IconManager.img8);

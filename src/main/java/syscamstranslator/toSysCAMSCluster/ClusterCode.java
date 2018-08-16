@@ -38,11 +38,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-/* this class produces the lines containing essentially the initial #includes; we include all potential components event if they are not used in the deployment diagram*/
-
-/* authors: v1.0 Raja GATGOUT 2014
-            v2.0 Daniela GENIUS, Julien HENON 2015 */
-
 package syscamstranslator.toSysCAMSCluster;
 
 import java.util.LinkedList;
@@ -51,10 +46,10 @@ import syscamstranslator.*;
 
 /**
  * Class ClusterCode
- * Principal code of a cluster component
- * Creation: 14/05/2018
- * @version 1.0 14/05/2018
- * @author Irina Kit Yan LEE
+ * Principal code of a cluster component that wraps all AMS components.
+ * Creation: 30/07/2018
+ * @version 1.0 30/07/2018
+ * @author Rodrigo CORTES PORTO
 */
 
 public class ClusterCode {
