@@ -215,7 +215,9 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
             }
             drawLastSegment(g, p4.getX(), p4.getY(), p2.getX(), p2.getY());
         } else {
-            drawLastSegment(g, p1.getX(), p1.getY(), p2.getX(), p2.getY());
+        	if (p1!=null && p2!=null){
+	            drawLastSegment(g, p1.getX(), p1.getY(), p2.getX(), p2.getY());
+	    	}
         }
     }
 
@@ -600,7 +602,7 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
             }
 
         } else {
-            if (p2 != null) {
+            if (p2 != null && p1!=null) {
                 if ((int)(Line2D.ptSegDistSq(p1.getX(), p1.getY(), p2.getX(), p2.getY(), x1, y1)) < distanceSelected) {
                     return this;
                 }
@@ -725,8 +727,11 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent      
     }
 
     public String translateP1() {
-        int id = p1.getId();
-        return ("<P1  x=\"" + p1.getX() + "\" y=\"" + p1.getY() + "\" id=\"" + id + "\" />\n");
+    	if (p1!=null){
+        	int id = p1.getId();
+	        return ("<P1  x=\"" + p1.getX() + "\" y=\"" + p1.getY() + "\" id=\"" + id + "\" />\n");
+	    }
+	    return "";
     }
 
     public String translateP2() {

@@ -1996,6 +1996,7 @@ public class GTMLModeling {
                     tmlreadchannel.setEncForm(((TMLADReadChannel) tgc).getEncForm());               
                     tmlreadchannel.addChannel(channel);
                     //security pattern
+                    
                     if (securityPatterns.get(((TMLADReadChannel) tgc).getSecurityContext()) != null) {
                         tmlreadchannel.securityPattern = securityPatterns.get(((TMLADReadChannel) tgc).getSecurityContext());
                         //NbOfSamples will increase due to extra overhead from MAC
@@ -2316,15 +2317,20 @@ public class GTMLModeling {
                     //add sec pattern
                     if (securityPatterns.get(((TMLADWriteChannel) tgc).getSecurityContext()) != null) {
                         tmlwritechannel.securityPattern = securityPatterns.get(((TMLADWriteChannel) tgc).getSecurityContext());
-                        int cur = Integer.valueOf(modifyString(((TMLADWriteChannel) tgc).getSamplesValue()));
-                        int add = Integer.valueOf(tmlwritechannel.securityPattern.overhead);
-                        if (!tmlwritechannel.securityPattern.nonce.equals("")) {
-                            SecurityPattern nonce = securityPatterns.get(tmlwritechannel.securityPattern.nonce);
-                            if (nonce != null) {
+                        
+                        int cur = 0;
+                        try {
+                        	cur = Integer.valueOf(modifyString(((TMLADWriteChannel) tgc).getSamplesValue()));
+                        	int add = Integer.valueOf(tmlwritechannel.securityPattern.overhead);
+                        	if (!tmlwritechannel.securityPattern.nonce.equals("")) {
+                            	SecurityPattern nonce = securityPatterns.get(tmlwritechannel.securityPattern.nonce);
+                            	if (nonce != null) {
                                 add = Integer.valueOf(nonce.overhead);
-                            }
+                            	}
+                        	}
+                        	cur = cur + add;
+                        } catch (Exception e){
                         }
-                        cur = cur + add;
                         tmlwritechannel.setNbOfSamples(Integer.toString(cur));
                     } else if (!((TMLADWriteChannel) tgc).getSecurityContext().isEmpty()) {
                         //Throw error for missing security pattern
@@ -2953,6 +2959,7 @@ public class GTMLModeling {
                     memory.byteDataSize = memorynode.getByteDataSize();
                     memory.clockRatio = memorynode.getClockRatio();
                     memory.bufferType = memorynode.getBufferType();
+                    System.out.println("ADDING memory " + memorynode.getName() + " " + memorynode + " " + memory);
                     listE.addCor(memory, memorynode);
                     archi.addHwNode(memory);
                     //TraceManager.addDev("Memory node added:" + memory.getName());
@@ -3385,7 +3392,7 @@ public class GTMLModeling {
         Vector<Vector<TGComponent>> taskss = new Vector<Vector<TGComponent>>();
         Vector<TMLCPrimitiveComponent> allcomp = new Vector<TMLCPrimitiveComponent>();
         int index;
-
+	//	System.out.println("nodes " + nodesToTakeIntoAccount);
         if (nodesToTakeIntoAccount == null) {
             components = tmlap.tmlap.getComponentList();
         } else {
