@@ -53,6 +53,7 @@ import remotesimulation.RemoteConnection;
 import remotesimulation.RemoteConnectionException;
 import tmltranslator.*;
 import ui.*;
+import ui.window.JDialogSelectTasks;
 import ui.util.IconManager;
 
 import javax.swing.*;
@@ -103,7 +104,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
     private static int STARTED_NOT_CONNECTED = 2;
     private static int STARTED_AND_CONNECTED = 3;
 
-    //private Frame f;
+    private Frame f;
     private MainGUI mgui;
     // private String title;
     private String hostSystemC;
@@ -256,7 +257,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	public JFrameInteractiveSimulation(Frame _f, MainGUI _mgui, String _title, String _hostSystemC, String _pathExecute, TMLMapping<TGComponent> _tmap, List<Point> _points) {
         super(_title);
 
-        // f = _f;
+        f = _f;
         mgui = _mgui;
         //title = _title;
         hostSystemC = _hostSystemC;
@@ -1403,13 +1404,24 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		try {
 			tmlSimPanel = new JFrameTMLSimulationPanel(new Frame(), mgui, "Simulation Transactions");
 
+			//Make a popup to select which tasks
+			Vector<String> tmlComponentsToValidate = new Vector<String>();
+			List<String> tasks = new ArrayList<String>();
+			for (TMLTask task: tmap.getTMLModeling().getTasks()){
+				tasks.add(task.getName());
+			}
+			JDialogSelectTasks jdstmlc = new JDialogSelectTasks(f, tmlComponentsToValidate, tasks, "Select tasks to show in trace");
+
+			GraphicLib.centerOnParent(jdstmlc);
+            jdstmlc.setVisible(true); 
+ 
 			HashMap<String, ArrayList<String>> deviceTaskMap = new HashMap<String, ArrayList<String>>();
 			for (HwNode node : tmap.getTMLArchitecture().getHwNodes()){
 				deviceTaskMap.put(node.getName(), new ArrayList<String>());
 			}
 			for (TMLTask task: tmap.getTMLModeling().getTasks()){
 				HwNode node = tmap.getHwNodeOf(task);
-				if (node!=null){
+				if (node!=null && tmlComponentsToValidate.contains(task.getName())){
 					deviceTaskMap.get(node.getName()).add(task.getName());
 				}
 			}
@@ -1424,7 +1436,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 				simIndex++;
 			}*/
 			for (TMLTask task : tmap.getTMLModeling().getTasks()){
-				if (!simtraces.contains("time=0 block="+ task.getName()+" type=state_entering state=startState")){
+				if (!simtraces.contains("time=0 block="+ task.getName()+" type=state_entering state=startState") && tmlComponentsToValidate.contains(task.getName())){
 					simtraces.add("time=0 block="+ task.getName()+" type=state_entering state=startState");
 					simIndex++;
 				}

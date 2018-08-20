@@ -1017,6 +1017,7 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
         long value;
         int value1, value2;
 
+
         if (!(trans.startsWith("#"))) {
             return;
         }
@@ -1078,8 +1079,11 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 
         //TraceManager.addDev("4");
 
-        addEntityNameIfApplicable(tmp);
+//        addEntityNameIfApplicable(tmp);
         gt.entityName = tmp;
+        if (!entityNames.contains(tmp)){
+        	return;
+        }
 
         // Type of the transaction
         tmp = extract(trans, "type");
@@ -1139,7 +1143,12 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
         tmp = extract(trans, "blockdestination");
         if (tmp != null) {
             gt.otherEntityName = tmp;
-            addEntityNameIfApplicable(tmp);
+           // addEntityNameIfApplicable(tmp);
+        }
+        
+
+        if (!entityNames.contains(tmp)){
+        	return;
         }
 
         // Channel of the transaction?

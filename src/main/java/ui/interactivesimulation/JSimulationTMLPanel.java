@@ -1041,6 +1041,8 @@ public class JSimulationTMLPanel extends JPanel implements MouseMotionListener, 
     }
 
     private void addGenericTransaction(String trans) {
+    
+ 
 		//
         int index0;
         String tmp, tmp1, tmp2;
@@ -1108,8 +1110,11 @@ public class JSimulationTMLPanel extends JPanel implements MouseMotionListener, 
 
         //TraceManager.addDev("4");
 
-        addEntityNameIfApplicable(tmp);
+        //addEntityNameIfApplicable(tmp);
         gt.entityName = tmp;
+        if (!entityNames.contains(tmp)){
+        	return;
+        }
 
         // Type of the transaction
         tmp = extract(trans, "type");
@@ -1170,9 +1175,12 @@ public class JSimulationTMLPanel extends JPanel implements MouseMotionListener, 
         tmp = extract(trans, "blockdestination");
         if (tmp != null) {
             gt.otherEntityName = tmp;
-            addEntityNameIfApplicable(tmp);
+           // addEntityNameIfApplicable(tmp);
         }
 
+		if (!entityNames.contains(tmp)){
+			return;
+		}
         // Channel of the transaction?
         tmp = extract(trans, "channel");
         if (tmp != null) {
