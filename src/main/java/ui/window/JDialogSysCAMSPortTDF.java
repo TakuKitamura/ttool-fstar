@@ -312,7 +312,7 @@ public class JDialogSysCAMSPortTDF extends JDialog implements ActionListener {
 			if (!(periodTextField.getText().isEmpty())) {
 				Boolean periodValueInteger = false;
 				try {
-					Integer.parseInt(periodTextField.getText());
+					Double.parseDouble(periodTextField.getText());
 				} catch (NumberFormatException e1) {
 					JDialog msg = new JDialog(this);
 					msg.setLocationRelativeTo(null);
@@ -321,7 +321,7 @@ public class JDialogSysCAMSPortTDF extends JDialog implements ActionListener {
 					periodValueInteger = true;
 				}
 				if (periodValueInteger == false) {
-					port.setPeriod(Integer.parseInt(periodTextField.getText()));
+					port.setPeriod(Double.parseDouble(periodTextField.getText()));
 				}
 			} else {
 				port.setPeriod(-1);

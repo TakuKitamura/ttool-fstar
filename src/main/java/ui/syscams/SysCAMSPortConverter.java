@@ -52,7 +52,7 @@ import ui.TGComponent;
 */
 
 public class SysCAMSPortConverter extends SysCAMSPrimitivePort {
-	private int period;
+	private double period;
 	private String time;
 	private int rate;
 	private int delay;
@@ -70,11 +70,11 @@ public class SysCAMSPortConverter extends SysCAMSPrimitivePort {
 		this.time = time;
 	}
 
-	public int getPeriod() {
+	public double getPeriod() {
 		return period;
 	}
 
-	public void setPeriod(int period) {
+	public void setPeriod(double period) {
 		this.period = period;
 	}
 

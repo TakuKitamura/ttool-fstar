@@ -49,16 +49,17 @@ package syscamstranslator;
 public class SysCAMSTPortConverter extends SysCAMSTComponent {
 
 	private String name;
-	private int period;
+	private double period;
 	private String time;
 	private int rate;
 	private int delay;
 	private int origin;
 	private String ConvType;
+    private boolean recompute;
 	
 	private SysCAMSTBlockTDF blockTDF;
 	
-	public SysCAMSTPortConverter(String _name, int _period, String _time, int _rate, int _delay, int _origin, String _ConvType, SysCAMSTBlockTDF _blockTDF) {
+	public SysCAMSTPortConverter(String _name, double _period, String _time, int _rate, int _delay, int _origin, String _ConvType, SysCAMSTBlockTDF _blockTDF) {
 		name = _name;
 		period = _period;
 		time = _time;
@@ -67,14 +68,19 @@ public class SysCAMSTPortConverter extends SysCAMSTComponent {
 		origin = _origin;
 		ConvType = _ConvType;
 		blockTDF = _blockTDF;
+        recompute = false;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public int getPeriod() {
+	public double getPeriod() {
 		return period;
+	}
+    
+    public void setPeriod(double _period) {
+		period = _period;
 	}
 
 	public String getTime() {
@@ -84,10 +90,26 @@ public class SysCAMSTPortConverter extends SysCAMSTComponent {
 	public int getRate() {
 		return rate;
 	}
+    
+    public void setRate(int _rate) {
+		rate = _rate;
+	}
 
 	public int getDelay() {
 		return delay;
 	}
+    
+    public void setDelay(int _delay) {
+		delay = _delay;
+	}
+    
+    public boolean getRecompute() {
+        return recompute;
+    }
+    
+    public void setRecompute(boolean _recompute) {
+        recompute = _recompute;
+    }
 
 	public int getOrigin() {
 		return origin;

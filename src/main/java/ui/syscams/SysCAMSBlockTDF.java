@@ -59,7 +59,7 @@ import java.util.LinkedList;
  */
 
 public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent {
-	private int period;
+	private double period;
 	private String time;
 	private String processCode;
 	private DefaultListModel<String> listStruct;
@@ -447,7 +447,7 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 			Node n1, n2;
 			Element elt;
 
-			int period;
+			double period;
 			String time, processCode, listStruct, nameTemplate, typeTemplate, listTypedef;
 
 			for(int i=0; i<nl.getLength(); i++) {
@@ -459,7 +459,7 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 						if (n2.getNodeType() == Node.ELEMENT_NODE) {
 							elt = (Element) n2;
 							if (elt.getTagName().equals("Attribute")) {
-								period = Integer.decode(elt.getAttribute("period")).intValue();
+								period = Double.valueOf(elt.getAttribute("period")).doubleValue();
 								time = elt.getAttribute("time");
 								processCode = elt.getAttribute("processCode");
 								listStruct = elt.getAttribute("listStruct");
@@ -568,11 +568,11 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 		return list;
 	}
 
-	public int getPeriod() {
+	public double getPeriod() {
 		return period;
 	}
 
-	public void setPeriod(int _period) {
+	public void setPeriod(double _period) {
 		period = _period;
 	}
 

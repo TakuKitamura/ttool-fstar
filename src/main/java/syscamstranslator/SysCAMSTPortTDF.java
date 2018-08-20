@@ -49,7 +49,7 @@ package syscamstranslator;
 public class SysCAMSTPortTDF extends SysCAMSTComponent {
 
 	private String name;
-	private int period;
+	private double period;
 	private String time;
 	private int rate;
 	private int delay;
@@ -58,7 +58,7 @@ public class SysCAMSTPortTDF extends SysCAMSTComponent {
 	
 	private SysCAMSTBlockTDF blockTDF;
 	
-	public SysCAMSTPortTDF(String _name, int _period, String _time, int _rate, int _delay, int _origin, String _TDFType, SysCAMSTBlockTDF _blockTDF) {
+	public SysCAMSTPortTDF(String _name, double _period, String _time, int _rate, int _delay, int _origin, String _TDFType, SysCAMSTBlockTDF _blockTDF) {
 		name = _name;
 		period = _period;
 		time = _time;
@@ -73,8 +73,12 @@ public class SysCAMSTPortTDF extends SysCAMSTComponent {
 		return name;
 	}
 
-	public int getPeriod() {
+	public double getPeriod() {
 		return period;
+	}
+
+    public void setPeriod(double _period) {
+		period = _period;
 	}
 
 	public String getTime() {
@@ -84,9 +88,17 @@ public class SysCAMSTPortTDF extends SysCAMSTComponent {
 	public int getRate() {
 		return rate;
 	}
+    
+    public void setRate(int _rate) {
+		rate = _rate;
+	}
 
 	public int getDelay() {
 		return delay;
+	}
+    
+    public void setDelay(int _delay) {
+		delay = _delay;
 	}
 
 	public int getOrigin() {

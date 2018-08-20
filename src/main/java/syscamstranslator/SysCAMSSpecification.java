@@ -46,7 +46,7 @@ import java.util.List;
  * List and number of all the elements in a SystemC-AMS diagram
  * Creation: 14/05/2018
  * @version 1.0 14/05/2018
- * @author Irina Kit Yan LEE
+ * @author Irina Kit Yan LEE, Rodrigo CORTES PORTO
  */
 
 public class SysCAMSSpecification{
@@ -147,7 +147,6 @@ public class SysCAMSSpecification{
 							cons.add(con);
 						}
 					} else if (((SysCAMSTPortDE) con.get_p2().getComponent()).getBlockGPIO2VCI() != null) {
-                        System.out.println("Spec: IF p2 belongs to GPIO");
                         cons.add(con);
                     }
 				} else if (con.get_p2().getComponent() instanceof SysCAMSTPortConverter && con.get_p1().getComponent() instanceof SysCAMSTPortDE) {
@@ -156,7 +155,6 @@ public class SysCAMSSpecification{
 							cons.add(con);
 						}
 					} else if (((SysCAMSTPortDE) con.get_p1().getComponent()).getBlockGPIO2VCI() != null) {
-                        System.out.println("Spec: IF p1 belongs to GPIO");
                         cons.add(con);
                     }
 				} else if (con.get_p1().getComponent() instanceof SysCAMSTPortDE && con.get_p2().getComponent() instanceof SysCAMSTPortDE) {
@@ -179,6 +177,34 @@ public class SysCAMSSpecification{
                     cons.add(con);
                 }
             }
+        }
+        return cons;
+    }
+    
+    public LinkedList<SysCAMSTConnector> getAllConnectorsTdfDe(){
+        LinkedList<SysCAMSTConnector> cons = new LinkedList<SysCAMSTConnector>();
+        for (SysCAMSTConnector con : connectors) {
+            if (con instanceof SysCAMSTConnector) {
+                if (con.get_p1().getComponent() instanceof SysCAMSTPortTDF && con.get_p2().getComponent() instanceof SysCAMSTPortTDF) {
+                    cons.add(con);
+                } else if (con.get_p1().getComponent() instanceof SysCAMSTPortConverter && con.get_p2().getComponent() instanceof SysCAMSTPortDE) {
+                    if (((SysCAMSTPortDE) con.get_p2().getComponent()).getBlockDE() != null) {
+                        if ((((SysCAMSTPortDE) con.get_p2().getComponent()).getBlockDE()).getCluster() != null) {
+                            cons.add(con);
+                        }
+                    } else if (((SysCAMSTPortDE) con.get_p2().getComponent()).getBlockGPIO2VCI() != null) {
+                        cons.add(con);
+                    }
+                } else if (con.get_p2().getComponent() instanceof SysCAMSTPortConverter && con.get_p1().getComponent() instanceof SysCAMSTPortDE) {
+                    if (((SysCAMSTPortDE) con.get_p1().getComponent()).getBlockDE() != null) {
+                        if ((((SysCAMSTPortDE) con.get_p1().getComponent()).getBlockDE()).getCluster() != null) {
+                            cons.add(con);
+                        }
+                    } else if (((SysCAMSTPortDE) con.get_p1().getComponent()).getBlockGPIO2VCI() != null) {
+                        cons.add(con);
+                    }
+                }
+            } 
         }
         return cons;
     }

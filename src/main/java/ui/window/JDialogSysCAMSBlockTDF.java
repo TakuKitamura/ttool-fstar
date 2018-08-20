@@ -936,16 +936,16 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 			if (!(periodTextField.getText().isEmpty())) {
 				Boolean periodValueInteger = false;
 				try {
-					Integer.parseInt(periodTextField.getText());
+					Double.parseDouble(periodTextField.getText());
 				} catch (NumberFormatException e1) {
 					JDialog msg = new JDialog(this);
 					msg.setLocationRelativeTo(null);
-					JOptionPane.showMessageDialog(msg, "Period Tm is not a Integer", "Warning !",
+					JOptionPane.showMessageDialog(msg, "Period Tm is not a Double", "Warning !",
 							JOptionPane.WARNING_MESSAGE);
 					periodValueInteger = true;
 				}
 				if (periodValueInteger == false) {
-					block.setPeriod(Integer.parseInt(periodTextField.getText()));
+					block.setPeriod(Double.parseDouble(periodTextField.getText()));
 					block.setTime((String) periodComboBoxString.getSelectedItem());
 				}
 			} else {

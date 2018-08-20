@@ -464,7 +464,8 @@ public class SysCAMSPrimitivePort extends TGCScalableWithInternalComponent imple
             Node n1, n2;
             Element elt;
             
-            int period, rate, delay;
+            double period;
+            int rate, delay;
             String type, time, sensitiveMethod; 
             Boolean sensitive;
 
@@ -482,7 +483,7 @@ public class SysCAMSPrimitivePort extends TGCScalableWithInternalComponent imple
                                 isOrigin = Integer.decode(elt.getAttribute("origin")).intValue();
 								setPortName(commName);
 								if (this instanceof SysCAMSPortTDF) {
-									period = Integer.decode(elt.getAttribute("period")).intValue();
+									period = Double.valueOf(elt.getAttribute("period")).doubleValue();
 									time = elt.getAttribute("time");
 									rate = Integer.decode(elt.getAttribute("rate")).intValue();
 									delay = Integer.decode(elt.getAttribute("delay")).intValue();
@@ -504,7 +505,7 @@ public class SysCAMSPrimitivePort extends TGCScalableWithInternalComponent imple
 									((SysCAMSPortDE) this).setSensitive(sensitive);
 									((SysCAMSPortDE) this).setSensitiveMethod(sensitiveMethod);
 								} else if (this instanceof SysCAMSPortConverter) {
-									period = Integer.decode(elt.getAttribute("period")).intValue();
+									period = Double.valueOf(elt.getAttribute("period")).doubleValue();
 									time = elt.getAttribute("time");
 									rate = Integer.decode(elt.getAttribute("rate")).intValue();
 									delay = Integer.decode(elt.getAttribute("delay")).intValue();

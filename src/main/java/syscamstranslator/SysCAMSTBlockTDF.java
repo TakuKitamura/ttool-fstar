@@ -48,11 +48,13 @@ import javax.swing.DefaultListModel;
  * Creation: 19/05/2018
  * @version 1.0 19/05/2018
  * @author Irina Kit Yan LEE
+ * @version 1.1 06/08/2018
+ * @author Rodrigo CORTES PORTO
 */
 
 public class SysCAMSTBlockTDF extends SysCAMSTComponent {
 	private String name;
-	private int period;
+	private double period;
 	private String time;
 	private String processCode;
 	private DefaultListModel<String> listStruct;
@@ -67,7 +69,7 @@ public class SysCAMSTBlockTDF extends SysCAMSTComponent {
     private SysCAMSTPortConverter localPortConverter;
     private int n;
 	
-	public SysCAMSTBlockTDF(String _name, int _period, String _time, String _processCode, DefaultListModel<String> _listStruct, String _nameTemplate, String _typeTemplate, DefaultListModel<String> _listTypedef, SysCAMSTCluster _cluster) {
+	public SysCAMSTBlockTDF(String _name, double _period, String _time, String _processCode, DefaultListModel<String> _listStruct, String _nameTemplate, String _typeTemplate, DefaultListModel<String> _listTypedef, SysCAMSTCluster _cluster) {
 		name = _name;
 		period = _period;
 		time = _time;
@@ -86,8 +88,12 @@ public class SysCAMSTBlockTDF extends SysCAMSTComponent {
 		return name;
 	}
 	
-	public int getPeriod() {
+	public double getPeriod() {
 		return period;
+	}
+    
+    public void setPeriod(double _period) {
+		period = _period;
 	}
 	
 	public String getTime() {
@@ -145,6 +151,8 @@ public class SysCAMSTBlockTDF extends SysCAMSTComponent {
                     check_causality_out(time_prev);
                 }
             }
+            //Increase number of times block has been executed
+            n++;
         } catch (SysCAMSValidateException se){
              throw new SysCAMSValidateException(se.getMessage());
         }
@@ -155,7 +163,7 @@ public class SysCAMSTBlockTDF extends SysCAMSTComponent {
                 time_now_min_de, time_now_max_de;
         double tm = 0.0;
         double tp = 0.0;
-        int r = 0;
+        int r = 1;
         int d = 0;
         int k = 1;
         if(period > 0)
@@ -186,13 +194,14 @@ public class SysCAMSTBlockTDF extends SysCAMSTComponent {
             System.out.println("time_now_min_tdf: " + time_now_min_tdf);
             System.out.println("time_now_max_tdf: " + time_now_max_tdf);
         }
-        //Increase number of times block has been executed
-        n++;
         
         System.out.println("time_prev_max_out: " + time_prev_max[1]);
         if(time_now_min_de < time_prev_max[1]) {
+            localPortConverter.setDelay((int)Math.ceil((time_prev_max[1]-time_now_min_de)/tp) + d);
+            localPortConverter.setRecompute(true);
             throw new SysCAMSValidateException("Timestamp of previous write port executed module is: " + time_prev_max[1]
-                 + " and current timestamp is: " + time_now_min_de);
+                 + " and current timestamp is: " + time_now_min_de + ".\n"
+                 + "Suggested delay in port \"" + localPortConverter.getName() + "\": " + (Math.ceil((time_prev_max[1]-time_now_min_de)/tp) + d));
         }
         time_prev_max[0] = Double.valueOf(Math.max(time_prev_max[0],time_now_max_de));
         System.out.println("New time_prev_max_in: " + time_prev_max[0]);
@@ -203,7 +212,7 @@ public class SysCAMSTBlockTDF extends SysCAMSTComponent {
                 time_now_min_de, time_now_max_de;
         double tm = 0.0;
         double tp = 0.0;
-        int r = 0;
+        int r = 1;
         int d = 0;
         int k = 1;
         if(period > 0)
@@ -234,15 +243,21 @@ public class SysCAMSTBlockTDF extends SysCAMSTComponent {
             System.out.println("time_now_min_tdf: " + time_now_min_tdf);
             System.out.println("time_now_max_tdf: " + time_now_max_tdf);
         }
-        //Increase number of times block has been executed
-        n++;
         
         System.out.println("time_prev_max_in: " + time_prev_max[0]);
         if(time_now_min_de < time_prev_max[0]) {
+            localPortConverter.setDelay((int)Math.ceil((time_prev_max[0]-time_now_min_de)/tp) + d);
+            localPortConverter.setRecompute(true);
             throw new SysCAMSValidateException("Timestamp of previous read port executed module is: " + time_prev_max[0]
-                 + " and current timestamp is: " + time_now_min_de);
+                 + " and current timestamp is: " + time_now_min_de + ".\n"
+                 + "Suggested delay in port " + localPortConverter.getName() + ": " + (Math.ceil((time_prev_max[0]-time_now_min_de)/tp) + d));
         }
         time_prev_max[1] = Double.valueOf(Math.max(time_prev_max[1],time_now_max_tdf));
         System.out.println("New time_prev_max_out: " + time_prev_max[1]);
     }
+    
+    public void setN(int _n) {
+        n = _n;
+    }
+
 }

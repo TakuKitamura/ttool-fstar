@@ -313,16 +313,16 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 			if (!(periodTextField.getText().isEmpty())) {
 				Boolean periodValueInteger = false;
 				try {
-					Integer.parseInt(periodTextField.getText());
+					Double.parseDouble(periodTextField.getText());
 				} catch (NumberFormatException e1) {
 					JDialog msg = new JDialog(this);
 					msg.setLocationRelativeTo(null);
-					JOptionPane.showMessageDialog(msg, "Period is not a Integer", "Warning !",
+					JOptionPane.showMessageDialog(msg, "Period is not a Double", "Warning !",
 							JOptionPane.WARNING_MESSAGE);
 					periodValueInteger = true;
 				}
 				if (periodValueInteger == false) {
-					port.setPeriod(Integer.parseInt(periodTextField.getText()));
+					port.setPeriod(Double.parseDouble(periodTextField.getText()));
 				}
 			} else {
 				port.setPeriod(-1);

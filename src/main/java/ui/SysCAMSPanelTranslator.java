@@ -165,7 +165,7 @@ public class SysCAMSPanelTranslator {
 					SysCAMSBlockTDF blockTDF = blocksTDF.get(i);
 
 					String blockTDFName = blockTDF.getValue();
-					int periodBlock = blockTDF.getPeriod();
+					double periodBlock = blockTDF.getPeriod();
 					String timeBlock = blockTDF.getTime();
 					String processCode = blockTDF.getProcessCode();
 					DefaultListModel<String> listStruct = blockTDF.getListStruct();
@@ -180,7 +180,7 @@ public class SysCAMSPanelTranslator {
 						SysCAMSPortTDF portTDF = portsTDF.get(j);
 
 						String portName = portTDF.getPortName();
-						int periodPort = portTDF.getPeriod();
+						double periodPort = portTDF.getPeriod();
 						String time = portTDF.getTime();
 						int rate = portTDF.getRate();
 						int delay = portTDF.getDelay();
@@ -198,7 +198,7 @@ public class SysCAMSPanelTranslator {
 						SysCAMSPortConverter portConverter = portsConverter.get(j);
 
 						String portName = portConverter.getPortName();
-						int periodPort = portConverter.getPeriod();
+						double periodPort = portConverter.getPeriod();
 						String time = portConverter.getTime();
 						int rate = portConverter.getRate();
 						int delay = portConverter.getDelay();
