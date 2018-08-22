@@ -68,6 +68,7 @@ public class SysCAMSTBlockTDF extends SysCAMSTComponent {
 	private LinkedList<SysCAMSTPortConverter> portConverter;
     private SysCAMSTPortConverter localPortConverter;
     private int n;
+    private boolean isTimestepPropagated;
 	
 	public SysCAMSTBlockTDF(String _name, double _period, String _time, String _processCode, DefaultListModel<String> _listStruct, String _nameTemplate, String _typeTemplate, DefaultListModel<String> _listTypedef, SysCAMSTCluster _cluster) {
 		name = _name;
@@ -82,6 +83,7 @@ public class SysCAMSTBlockTDF extends SysCAMSTComponent {
 		portTDF = new LinkedList<SysCAMSTPortTDF>();
 		portConverter = new LinkedList<SysCAMSTPortConverter>();
         n = 0;
+        isTimestepPropagated = false;
 	}
 
 	public String getName() {
@@ -139,6 +141,14 @@ public class SysCAMSTBlockTDF extends SysCAMSTComponent {
 	public void addPortConverter(SysCAMSTPortConverter converter){
 		portConverter.add(converter);
 	}
+    
+    public boolean getIsTimestepPropagated() {
+        return isTimestepPropagated;
+    }
+    
+    public void setIsTimestepPropagated() {
+        isTimestepPropagated = true;
+    }
 
     public void syncTDFBlockDEBlock(double[] time_prev) throws SysCAMSValidateException {
         double tp;
@@ -196,12 +206,12 @@ public class SysCAMSTBlockTDF extends SysCAMSTComponent {
         }
         
         System.out.println("time_prev_max_out: " + time_prev_max[1]);
-        if(time_now_min_de < time_prev_max[1]) {
+        if(time_now_min_tdf < time_prev_max[1]) {
             localPortConverter.setDelay((int)Math.ceil((time_prev_max[1]-time_now_min_de)/tp) + d);
             localPortConverter.setRecompute(true);
             throw new SysCAMSValidateException("Timestamp of previous write port executed module is: " + time_prev_max[1]
-                 + " and current timestamp is: " + time_now_min_de + ".\n"
-                 + "Suggested delay in port \"" + localPortConverter.getName() + "\": " + (Math.ceil((time_prev_max[1]-time_now_min_de)/tp) + d));
+                 + " and current timestamp is: " + time_now_min_tdf + ".\n"
+                 + "Suggested delay in port \"" + localPortConverter.getName() + "\": " + (Math.ceil((time_prev_max[1]-time_now_min_tdf)/tp) + d));
         }
         time_prev_max[0] = Double.valueOf(Math.max(time_prev_max[0],time_now_max_de));
         System.out.println("New time_prev_max_in: " + time_prev_max[0]);
@@ -232,8 +242,8 @@ public class SysCAMSTBlockTDF extends SysCAMSTComponent {
         for (k = 1; k <= r; k++) {
             time_tmp_tdf = (n*tm)+((k-1)*tp);
             time_tmp_de = (n*tm)+((k-1)*tp)+(d*tp);;
-            System.out.println("tmstmp_in_tdf: " + time_tmp_tdf);
-            System.out.println("tmstmp_in_de: " + time_tmp_de);
+            System.out.println("tmstmp_out_tdf: " + time_tmp_tdf);
+            System.out.println("tmstmp_out_de: " + time_tmp_de);
             time_now_min_tdf = Math.min(time_tmp_tdf, time_now_min_tdf);
             time_now_max_tdf = Math.max(time_tmp_tdf, time_now_max_tdf);
             time_now_min_de = Math.min(time_tmp_de, time_now_min_de);

@@ -591,7 +591,6 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
                                 RealVector execRate = solveTopologyMatrix(topologyMatrix, tdfBlocks);
                                 //TODO: to recompute missing delays in loops: modify buffer with the suggested delay, and loop.
                                 do {
-                                    System.out.println("Computing schedule... " );
                                     recompute = computeSchedule(execRate, topologyMatrix, buffer, tdfBlocks, connectors);
                                     if(recompute)
                                         suggest_delays = true;
@@ -893,9 +892,7 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
             }
         }
         jta.append("Error: At least one Module or Port Timestep should be entered in at least one TDF block of this cluster.\n");
-        //System.out.println("Error: at least one timestep should be entered.");
         throw new InterruptedException(); 
-        //return;
     }
     
     public boolean propagateTm(SysCAMSTBlockTDF tdfBlock, LinkedList<SysCAMSTConnector> connectors) {
@@ -910,11 +907,15 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
          *              propagateTp(nextTdfBlock);
          *          else //(Tp of connected block > 0)
          *              validate timestep consitency between 2 ports.
+         *              if connected block is unvisted
+         *                  propagateTp(nextTdfBlock);
          * return
          * */
         double tm = tdfBlock.getPeriod();
         double tp;
         int rate;
+        //Mark this tdf block as visited.
+        tdfBlock.setIsTimestepPropagated();
         SysCAMSTPortTDF p1_tdfPort, p2_tdfPort;
         for(SysCAMSTPortTDF tdfPort : tdfBlock.getPortTDF()) {
             tp = tdfPort.getPeriod();
@@ -923,7 +924,6 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
                 //validate timestep consistency (rate*tp == tm)
                 if(rate*tp != tm){
                     jta.append("Error: In block \""+tdfBlock.getName()+ "\" Timestep Tm is inconsistent with timestep Tp of port \"" + tdfPort.getName()+"\".\n");
-                    //System.out.println("Error in propagateTM: Tm inconsistent with Tp of port: " + tdfPort.getName());
                     return false;
                 }
             } else {
@@ -946,8 +946,13 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
                             if(p2_tdfPort.getPeriod() != tp) {
                                 jta.append("Error: In block \""+tdfBlock.getName()+"\" Timestep Tp of port \"" +tdfPort.getName()
                                + "\" is inconsistent with timestep Tp of port \"" + p2_tdfPort.getName()+"\" from block \""+p2_tdfPort.getBlockTDF().getName()+"\".\n");
-                                //System.out.println("Error in propagateTM: Tp inconsistent with Tp of ports " + tdfPort.getName() + " and " + p2_tdfPort.getName());
                                 return false;
+                            }
+                            //if connected block was not visited yet, then propagate timestep
+                            if(!p2_tdfPort.getBlockTDF().getIsTimestepPropagated()) {
+                                if(!propagateTpTdf(p2_tdfPort.getBlockTDF(), p2_tdfPort, connectors)) {
+                                    return false;
+                                }
                             }
                         }
                     } else if(p2_tdfPort.getName().equals(tdfPort.getName()) && p2_tdfPort.getBlockTDF().getName().equals(tdfBlock.getName())) {
@@ -961,8 +966,13 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
                             if(p1_tdfPort.getPeriod() != tp) {
                                jta.append("Error: In block \""+tdfBlock.getName()+"\" Timestep Tp of port \"" +tdfPort.getName()
                                + "\" is inconsistent with timestep Tp of port \"" + p1_tdfPort.getName()+"\" from block \""+p1_tdfPort.getBlockTDF().getName()+"\".\n");
-                               //System.out.println("Error in propagateTM: Tp inconsistent with Tp of ports " + tdfPort.getName() + " and " + p1_tdfPort.getName());
                                return false;
+                            }
+                            //if connected block was not visited yet, then propagate timestep
+                            if(!p1_tdfPort.getBlockTDF().getIsTimestepPropagated()) {
+                                if(!propagateTpTdf(p1_tdfPort.getBlockTDF(), p1_tdfPort, connectors)) {
+                                    return false;
+                                }
                             }
                         }
                     }
@@ -977,7 +987,6 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
                //validate timestep consistency (rate*tp == tm)
                if(rate*tp != tm){
                    jta.append("Error: In block \""+tdfBlock.getName()+ "\" Timestep Tm is inconsistent with timestep Tp of port \"" + converterPort.getName()+"\".\n");
-                   //System.out.println("Error in propagateTM: Tm inconsistent with Tp of port: " + converterPort.getName());
                    return false;
                }
            } else {
@@ -1003,7 +1012,6 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
         if(tm > 0) {
             if(rate*tp != tm) {
                 jta.append("Error: In block \""+tdfBlock.getName()+ "\" Timestep Tm is inconsistent with timestep Tp of port \"" + tdfPort.getName()+"\".\n");
-                //System.out.println("Error in propagateTpTdf: Tm inconsistent with Tp of port " + tdfPort.getName());
                 return false;
             } 
         } else {
@@ -1021,7 +1029,6 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
         if(tm > 0) {
             if(rate*tp != tm) {
                 jta.append("Error: In block \""+tdfBlock.getName()+ "\" Timestep Tm is inconsistent with timestep Tp of port \"" + converterPort.getName()+"\".\n");
-                //System.out.println("Error in propagateTpConverter: Tm inconsistent with Tp of port " + converterPort.getName());
                 return false;
             } 
         } else {
@@ -1085,15 +1092,16 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
         double[] resultArray = new double[kernelMatrix.getRowDimension()];
         double result_tmp = 0.0;
         int v_lcm = 1;
-        Fraction[] resultFractionArray = new Fraction[kernelMatrix.getRowDimension()];
+        BigFraction[] resultFractionArray = new BigFraction[kernelMatrix.getRowDimension()];
         for (int i = 0; i < kernelMatrix.getRowDimension(); i++) {
             System.out.printf("The kernelMatrix is %f .\n", kernelMatrix.getEntry(i, 0) );
             resultArray[i] = kernelMatrix.getEntry(i, 0) / kernelMatrix.getEntry(kernelMatrix.getRowDimension()-1, 0);
             result_tmp = kernelMatrix.getEntry(i, 0) / kernelMatrix.getEntry(kernelMatrix.getRowDimension()-1, 0);
-            resultFractionArray[i] = new Fraction(result_tmp);
-            System.out.println("The resultArray is: "+ resultArray[i] );
-            System.out.println("The resultFractionArray is: "+ resultFractionArray[i].toString() );
-            v_lcm = ArithmeticUtils.lcm(resultFractionArray[i].getDenominator() , v_lcm);
+            resultFractionArray[i] = new BigFraction(result_tmp, 2147483647);
+            System.out.println("The resultArray is: "+ resultArray[i] + ", result_tmp: " + result_tmp);
+            System.out.println("The resultFractionArray is: "+ resultFractionArray[i].toString() + " with num: " + resultFractionArray[i].getNumeratorAsInt() + " and denom: "+ resultFractionArray[i].getDenominatorAsInt()
+            + " and given as a double: " + resultFractionArray[i].doubleValue());
+            v_lcm = ArithmeticUtils.lcm(resultFractionArray[i].getDenominatorAsInt() , v_lcm);
             System.out.println("The lcm is: "+ v_lcm );
         }
         int[] tmpResult = new int[kernelMatrix.getRowDimension()];
@@ -1115,11 +1123,13 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
         boolean deadlock = false;
         boolean recompute = false;
         SysCAMSTBlockTDF tdfBlock;
+        LinkedList<SysCAMSTPortConverter> portConvertersTmp;
+        double[] time_prev = {0.0, 0.0}; //array to store "in" ([0]) and "out" ([1]) previous times
         //Reset the number of times all blocks have been executed
         for(int i = 0; i < tdfBlocks.size(); i++) {
             tdfBlocks.get(i).setN(0);
         }
-        double[] time_prev = {0.0, 0.0}; //array to store in[0] and out[1] previous times
+        
         try {
             while (!(q1.equals(q)) && !deadlock){
                 deadlock = true;
