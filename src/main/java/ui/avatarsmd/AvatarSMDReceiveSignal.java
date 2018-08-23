@@ -36,29 +36,38 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatarsmd;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Polygon;
+import java.awt.geom.Line2D;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import myutil.GraphicLib;
 import myutil.TraceManager;
-import ui.*;
+import ui.AvatarSignal;
+import ui.BasicErrorHighlight;
+import ui.CheckableAccessibility;
+import ui.CheckableLatency;
+import ui.ColorManager;
+import ui.ErrorHighlight;
+import ui.LinkedReference;
+import ui.PartOfInvariant;
+import ui.TDiagramPanel;
+import ui.TGComponent;
+import ui.TGComponentManager;
+import ui.TGConnectingPoint;
+import ui.avatarrd.AvatarRDRequirement;
+import ui.tmlad.TMLADReadChannel;
 import ui.util.IconManager;
 import ui.window.JDialogAvatarSignal;
-
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.geom.Line2D;
-import java.util.LinkedList;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Vector;
-import ui.avatarrd.AvatarRDRequirement;
-
-import ui.tmlad.TMLADReadChannel;
 /**
  * Class AvatarSMDReceiveSignal
  * Action of receiving a signal
@@ -66,7 +75,7 @@ import ui.tmlad.TMLADReadChannel;
  * @version 1.0 12/04/2010
  * @author Ludovic APVRILLE
  */
-public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements CheckableAccessibility, LinkedReference, CheckableLatency, BasicErrorHighlight, PartOfInvariant {
+public class AvatarSMDReceiveSignal extends AvatarSMDBasicCanBeDisabledComponent /* Issue #69 AvatarSMDBasicComponent*/ implements CheckableAccessibility, LinkedReference, CheckableLatency, BasicErrorHighlight, PartOfInvariant {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
@@ -74,14 +83,12 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
     protected int linebreak = 10;
 	protected int textX1 = 2;
    
-	private ConcurrentHashMap<String, String> latencyVals;
-
+	private Map<String, String> latencyVals;
 
 	protected int latencyX=30;
 	protected int latencyY=25;
 	protected int textWidth=10;
 	protected int textHeight=20;
-	
 
 	protected int stateOfError = 0; // Not yet checked
     
@@ -112,12 +119,12 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
 		//latencyVals.put("sendChannel: sensorData", "15");
     }
     
-
 	public void addLatency(String name, String num){
 		latencyVals.put(name,num);
 	}
-    public void internalDrawing(Graphics g) {
-		
+    
+	@Override
+	public void internalDrawing(Graphics g) {
         int w  = g.getFontMetrics().stringWidth(value + textX1);
         int w1 = Math.max(minWidth, w + 2 * textX);
         if ((w1 != width) & (!tdp.isScaled())) {
@@ -125,7 +132,6 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
             width = w1;
             //updateConnectingPoints();
         }
-		
 		
 		if (stateOfError > 0)  {
 			Color c = g.getColor();
@@ -165,13 +171,27 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
         g.drawLine(x1, y1, x1+linebreak, y1+height1/2);
         g.drawLine(x1, y1+height1, x1+linebreak, y1+height1/2);
 		g.setColor(c);
+
+		final Polygon shape = new Polygon();
+		shape.addPoint( x, y );
+		shape.addPoint( x + width, y );
+		shape.addPoint( x + width, y + height );
+		shape.addPoint( x, y + height );
+		shape.addPoint( x + linebreak, y + height / 2 );
+		g.drawPolygon( shape );
 		
-        g.drawLine(x, y, x+width, y);
-        g.drawLine(x+width, y, x+width, y+height);
-        g.drawLine(x, y+height, x+width, y+height);
-        g.drawLine(x, y, x+linebreak, y+height/2);
-        g.drawLine(x, y+height, x+linebreak, y+height/2);
+//        g.drawLine(x, y, x+width, y);
+//        g.drawLine(x+width, y, x+width, y+height);
+//        g.drawLine(x, y+height, x+width, y+height);
+//        g.drawLine(x, y, x+linebreak, y+height/2);
+//        g.drawLine(x, y+height, x+linebreak, y+height/2);
 		
+        // Issue #69
+    	if ( !isEnabled() && isContainedInEnabledState() ) {
+	    	g.setColor( ColorManager.DISABLED_FILLING );
+	    	g.fillPolygon( shape );
+	    	g.setColor( c );
+    	}
 		   
         //g.drawString("sig()", x+(width-w) / 2, y);
         g.drawString(value, x + linebreak + textX1, y + textY);
@@ -183,6 +203,7 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
 				drawLatencyInformation(g);
 			}
 		}
+		
 		if (reference!=null){
 			if (reference instanceof AvatarRDRequirement){
 				AvatarRDRequirement refReq = (AvatarRDRequirement) reference;
@@ -190,7 +211,8 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
 			}
 		}
     }
-	public void drawLatencyInformation(Graphics g){
+	
+	private void drawLatencyInformation(Graphics g){
 		int index=1;
 		for (String s:latencyVals.keySet()){
 			int w  = g.getFontMetrics().stringWidth(s);
@@ -270,9 +292,8 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
 					}
 				}
 				if (reference instanceof TMLADReadChannel){
-				//	
 					TMLADReadChannel rc = (TMLADReadChannel) reference;
-					ConcurrentHashMap<String, String> refLats =rc.getLatencyMap();
+					Map<String, String> refLats =rc.getLatencyMap();
 					//
 					for (String checkpoint:refLats.keySet()){
 						if (s.split("\\-")[1].split(":")[0].equals(checkpoint.split("channel:")[1].split(" ")[0])){
@@ -296,6 +317,7 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
 		}
 	}
     
+	@Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -308,7 +330,7 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
         return null;
     }
     
-    public void makeValue() {
+    //public void makeValue() {
         /*boolean first = true;
         value = eventName + "(";
         for(int i=0; i<nParam; i++) {
@@ -324,7 +346,7 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
         }
         value += ")";*/
         
-    }
+  //  }
     
     public String getSignalName() {
        if (value == null) {
@@ -360,14 +382,14 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
         return nParam;
     }*/
 	
-    
+
+	@Override
     public boolean editOndoubleClick(JFrame frame) {
-    //	
-		LinkedList<AvatarSignal> signals = tdp.getMGUI().getAllSignals();
+		List<AvatarSignal> signals = tdp.getMGUI().getAllSignals();
 		TraceManager.addDev("Nb of signals:" + signals.size());
 		
 
-		ArrayList<TGComponent> comps = tdp.getMGUI().getAllLatencyChecks();
+		List<TGComponent> comps = tdp.getMGUI().getAllLatencyChecks();
 		Vector<TGComponent> refs = new Vector<TGComponent>();
 		for (TGComponent req: tdp.getMGUI().getAllRequirements()){
             //
@@ -380,6 +402,7 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
 				refs.add(tg);
 			}
 		}
+		
 		JDialogAvatarSignal jdas = new JDialogAvatarSignal(frame, "Setting receive signal",  value, signals, false, reference, refs);
 		//jdas.setSize(350, 300);
         GraphicLib.centerOnParent(jdas, 550, 300);
@@ -411,15 +434,17 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicComponent implements C
          
     }
     
-
+	@Override
     public int getType() {
         return TGComponentManager.AVATARSMD_RECEIVE_SIGNAL;
     }
     
-     public int getDefaultConnector() {
-      return TGComponentManager.AVATARSMD_CONNECTOR;
+	@Override
+    public int getDefaultConnector() {
+		return TGComponentManager.AVATARSMD_CONNECTOR;
     }
 	
+	@Override
 	public void setStateAction(int _stateAction) {
 		stateOfError = _stateAction;
 	}

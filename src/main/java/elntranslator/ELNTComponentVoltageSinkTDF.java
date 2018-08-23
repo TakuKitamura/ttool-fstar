@@ -38,7 +38,7 @@
 
 package elntranslator;
 
-import ui.eln.ELNConnectingPoint;
+import java.util.LinkedList;
 
 /**
  * Class ELNTComponentVoltageSinkTDF
@@ -48,17 +48,17 @@ import ui.eln.ELNConnectingPoint;
  * @author Irina Kit Yan LEE
 */
 
-public class ELNTComponentVoltageSinkTDF extends ELNTComponent {
+public class ELNTComponentVoltageSinkTDF extends ELNTComponent implements ELNTPrimitiveComponent {
 	private String name;
 	private double scale;
-	private ELNConnectingPoint[] cp;
+	private LinkedList<ELNTConnectingPoint> cp;
 	
 	private ELNTModule module;
 	
-	public ELNTComponentVoltageSinkTDF(String _name, double _scale, ELNConnectingPoint[] _cp, ELNTModule _module) {
+	public ELNTComponentVoltageSinkTDF(String _name, double _scale, ELNTModule _module) {
 		name = _name;
 		scale = _scale;
-		cp = _cp;
+		cp = new LinkedList<ELNTConnectingPoint>();
 		module = _module;
 	}
 
@@ -70,8 +70,12 @@ public class ELNTComponentVoltageSinkTDF extends ELNTComponent {
 		return scale;
 	}
 
-	public ELNConnectingPoint[] getCp() {
+	public LinkedList<ELNTConnectingPoint> getConnectingPoint() {
 		return cp;
+	}
+	
+	public void addConnectingPoint(ELNTConnectingPoint _cp) {
+		cp.add(_cp);
 	}
 	
 	public ELNTModule getModule() {

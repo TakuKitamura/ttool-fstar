@@ -36,10 +36,10 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package avatartranslator;
+
+import java.io.StringReader;
+import java.util.List;
 
 import compiler.tmlparser.ParseException;
 import compiler.tmlparser.SimpleNode;
@@ -50,9 +50,6 @@ import myutil.Conversion;
 import myutil.IntExpressionEvaluator;
 import myutil.TraceManager;
 
-import java.io.StringReader;
-import java.util.ArrayList;
-
 
 /**
  * Class AvatarSyntaxChecker
@@ -61,7 +58,6 @@ import java.util.ArrayList;
  * @author Ludovic APVRILLE
  */
 public class AvatarSyntaxChecker  {
-
 
     public AvatarSyntaxChecker() {
     }
@@ -87,7 +83,7 @@ public class AvatarSyntaxChecker  {
         BoolExpressionEvaluator bee = new BoolExpressionEvaluator();
 
         //TraceManager.addDev("Evaluating (modified) guard:" + act);
-        boolean result = bee.getResultOf(act);
+        //boolean result = bee.getResultOf(act);
         if (bee.getError() != null) {
             //TraceManager.addDev("Error: " + bee.getError());
             return -1;
@@ -114,7 +110,7 @@ public class AvatarSyntaxChecker  {
         IntExpressionEvaluator iee = new IntExpressionEvaluator();
 
         //TraceManager.addDev("Evaluating int:" + act);
-        double result = iee.getResultOf(act);
+        //double result = iee.getResultOf(act);
         if (iee.getError() != null) {
             //TraceManager.addDev("Error: " + iee.getError());
             return -1;
@@ -163,7 +159,7 @@ public class AvatarSyntaxChecker  {
         BoolExpressionEvaluator bee = new BoolExpressionEvaluator();
 
         //TraceManager.addDev("IsValidBoolExpr Evaluating bool:" + act);
-        boolean result = bee.getResultOf(act);
+        //boolean result = bee.getResultOf(act);
         if (bee.getError() != null) {
             //TraceManager.addDev("Error: " + bee.getError());
             return -1;
@@ -264,7 +260,7 @@ public class AvatarSyntaxChecker  {
         }  
 
         // Tree analysis: if the tree contains a variable, then, this variable has not been declared
-        ArrayList<String> vars = root.getVariables();
+        List<String> vars = root.getVariables();
         for(String s: vars) {
             // is that string a variable?
             if ((s.compareTo("true") != 0) && (s.compareTo("false") != 0) && (s.compareTo("nil") != 0)) {

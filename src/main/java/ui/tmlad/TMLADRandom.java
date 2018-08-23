@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmlad;
 
 import myutil.GraphicLib;
@@ -46,6 +43,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import ui.*;
+import ui.ad.TADComponentWithoutSubcomponents;
 import ui.util.IconManager;
 import ui.window.JDialogTMLADRandom;
 
@@ -60,7 +58,7 @@ import java.awt.geom.Line2D;
  * @version 1.0 10/06/2008
  * @author Ludovic APVRILLE
  */
-public class TMLADRandom extends TGCWithoutInternalComponent implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
+public class TMLADRandom extends TADComponentWithoutSubcomponents/* Issue #69 TGCWithoutInternalComponent */implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
@@ -97,12 +95,12 @@ public class TMLADRandom extends TGCWithoutInternalComponent implements Embedded
         myImageIcon = IconManager.imgic912;
     }
 	
-	public void makeValue() {
+	private void makeValue() {
 		valueRandom = variable + " = RANDOM" + functionId + "(" + minValue + ", " + maxValue + ")";
 	}
     
+	@Override
     public void internalDrawing(Graphics g) {
-		
 		if (valueRandom.length() == 0) {
 			makeValue();
 		}
@@ -136,6 +134,7 @@ public class TMLADRandom extends TGCWithoutInternalComponent implements Embedded
         g.drawString(valueRandom, x + (width - w) / 2 , y + textY);
     }
 	
+	@Override
 	public boolean editOndoubleClick(JFrame frame) {
         boolean error = false;
 		String errors = "";
@@ -191,6 +190,7 @@ public class TMLADRandom extends TGCWithoutInternalComponent implements Embedded
         return true;
     }
     
+	@Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -223,6 +223,7 @@ public class TMLADRandom extends TGCWithoutInternalComponent implements Embedded
 		return functionId;
 	}
 	
+	@Override
 	protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<Data variable=\"");
@@ -240,17 +241,12 @@ public class TMLADRandom extends TGCWithoutInternalComponent implements Embedded
     
     @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-        //
         try {
-            
             NodeList nli;
             Node n1, n2;
             Element elt;
          //   int k;
             String s;
-            
-            //
-            //
             
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
@@ -281,23 +277,23 @@ public class TMLADRandom extends TGCWithoutInternalComponent implements Embedded
             }
             
         } catch (Exception e) {
-            throw new MalformedModelingException();
+            throw new MalformedModelingException( e );
         }
         makeValue();
     }
     
-    
+	@Override
     public int getType() {
         return TGComponentManager.TMLAD_RANDOM;
     }
     
+	@Override
     public int getDefaultConnector() {
-      return TGComponentManager.CONNECTOR_TMLAD;
+		return TGComponentManager.CONNECTOR_TMLAD;
     }
 	
+	@Override
 	public void setStateAction(int _stateAction) {
 		stateOfError = _stateAction;
 	}
-	
-    
 }

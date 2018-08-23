@@ -36,10 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package avatartranslator;
 
-import java.util.HashMap;
+import java.util.Map;
 
 /**
    * Class AvatarBinaryGuard
@@ -81,7 +80,7 @@ public class AvatarBinaryGuard extends AvatarComposedGuard {
     }
 
     @Override
-    public void replaceAttributes (HashMap<AvatarAttribute, AvatarAttribute> attributesMapping) {
+    public void replaceAttributes( Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
         this.guardA.replaceAttributes (attributesMapping);
         this.guardB.replaceAttributes (attributesMapping);
     }

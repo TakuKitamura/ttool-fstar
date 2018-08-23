@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.ad;
 
 import ui.MainGUI;
@@ -46,9 +43,6 @@ import ui.TGUIAction;
 import ui.TToolBar;
 
 import javax.swing.*;
-
-//import java.awt.*;
-//import java.awt.event.*;
 
 /**
  * Class TActivityDiagramToolBar
@@ -58,7 +52,6 @@ import javax.swing.*;
  * @author Ludovic APVRILLE
  */
 public class TActivityDiagramToolBar extends TToolBar {
-    
     
     public TActivityDiagramToolBar(MainGUI _mgui) {
         super(_mgui);
@@ -185,8 +178,3 @@ public class TActivityDiagramToolBar extends TToolBar {
         button.addMouseListener(mgui.mouseHandler);
     }
 } // Class
-
-
-
-
-

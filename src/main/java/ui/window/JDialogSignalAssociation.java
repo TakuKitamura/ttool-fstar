@@ -36,26 +36,38 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
+
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+import java.util.Vector;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import myutil.TraceManager;
 import ui.AvatarSignal;
-import ui.util.IconManager;
 import ui.avatarbd.AvatarBDBlock;
 import ui.avatarbd.AvatarBDPortConnector;
-
-import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.LinkedList;
-import java.util.Vector;
-
 
 /**
    * Class JDialogSignalAssociation
@@ -67,7 +79,7 @@ import java.util.Vector;
 public class JDialogSignalAssociation extends JDialogBase implements ActionListener, ListSelectionListener  {
     private Vector<String> signalAssociation, localSignalAssociations;
     private AvatarBDBlock block1, block2;
-    private LinkedList<AvatarSignal> available1, available2;
+    private List<AvatarSignal> available1, available2;
     private AvatarBDPortConnector connector;
 
     private JRadioButton synchronous, asynchronous;
@@ -88,7 +100,6 @@ public class JDialogSignalAssociation extends JDialogBase implements ActionListe
     private JButton downButton;
     private JButton removeButton;
 
-
     /** Creates new form  */
     public JDialogSignalAssociation(Frame _f, AvatarBDBlock _block1, AvatarBDBlock _block2, Vector<String> _signalAssociation, AvatarBDPortConnector _connector, String _title) {
         super(_f, _title, true);
@@ -100,13 +111,13 @@ public class JDialogSignalAssociation extends JDialogBase implements ActionListe
         localSignalAssociations.addAll(signalAssociation);
 
         // Available signals
-	if (block1 != block2) {
-	    available1 = block1.getListOfAvailableSignals();
-	    available2 = block2.getListOfAvailableSignals();
-	} else {
-	    available1 = block1.getListOfAvailableOutSignals();
-	    available2 = block2.getListOfAvailableInSignals();
-	}
+		if (block1 != block2) {
+		    available1 = block1.getListOfAvailableSignals();
+		    available2 = block2.getListOfAvailableSignals();
+		} else {
+		    available1 = block1.getListOfAvailableOutSignals();
+		    available2 = block2.getListOfAvailableInSignals();
+		}
 
         initComponents();
         myInitComponents();

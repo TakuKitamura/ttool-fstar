@@ -36,10 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package avatartranslator;
 
 import myutil.Conversion;
@@ -58,7 +54,8 @@ import java.util.ArrayList;
    * @author Ludovic APVRILLE
  */
 public class AvatarSpecification extends AvatarElement {
-    public static String[] ops = {">", "<", "+", "-", "*", "/", "[", "]", "(", ")", ":", "=", "==", ",", "!", "?", "{", "}", "|", "&"};
+    
+	public static String[] ops = {">", "<", "+", "-", "*", "/", "[", "]", "(", ")", ":", "=", "==", ",", "!", "?", "{", "}", "|", "&"};
     
     private List<AvatarBlock> blocks;
     private List<AvatarRelation> relations;
@@ -72,10 +69,10 @@ public class AvatarSpecification extends AvatarElement {
 
     //private AvatarBroadcast broadcast;
 
-    private LinkedList<AvatarPragma> pragmas;
-    private LinkedList<String> safety_pragmas;
-	private LinkedList<AvatarPragmaLatency> latency_pragmas;
-    private LinkedList<AvatarConstant> constants;
+    private List<AvatarPragma> pragmas;
+    private List<String> safety_pragmas;
+	private List<AvatarPragmaLatency> latency_pragmas;
+    private List<AvatarConstant> constants;
 	public List<String> checkedIDs;
     private boolean robustnessMade = false;
 
@@ -88,8 +85,8 @@ public class AvatarSpecification extends AvatarElement {
         relations = new LinkedList<AvatarRelation>();
         //broadcast = new AvatarBroadcast("Broadcast", _referenceObject);
         pragmas = new LinkedList<AvatarPragma>();
-	constants = new LinkedList<AvatarConstant>();
-	safety_pragmas = new LinkedList<String>();
+        constants = new LinkedList<AvatarConstant>();
+        safety_pragmas = new LinkedList<String>();
 		latency_pragmas = new LinkedList<AvatarPragmaLatency>();
         this.constants.add (AvatarConstant.FALSE);
         this.constants.add (AvatarConstant.TRUE);
@@ -165,11 +162,11 @@ public class AvatarSpecification extends AvatarElement {
     }
 
     public int getNbOfASMGraphicalElements() {
-	int cpt = 0;
-	for(AvatarBlock block: blocks) {
-	    cpt += block.getNbOfASMGraphicalElements();
-	}
-	return cpt;
+    	int cpt = 0;
+    	for(AvatarBlock block: blocks) {
+    		cpt += block.getNbOfASMGraphicalElements();
+    	}
+    	return cpt;
     }
 
     public boolean isASynchronousSignal(AvatarSignal _as) {
@@ -180,7 +177,6 @@ public class AvatarSpecification extends AvatarElement {
         }
 
         return false;
-
     }
 
     //DG
@@ -226,12 +222,13 @@ public class AvatarSpecification extends AvatarElement {
     }
 
     public void addConstant(AvatarConstant _constant) {
-	//Only add unique constants
-	if (this.getAvatarConstantWithName(_constant.getName())==null){
-	    constants.add(_constant);
-	}
+    	//Only add unique constants
+    	if (this.getAvatarConstantWithName(_constant.getName())==null){
+    		constants.add(_constant);
+    	}
     }
 
+    @Override
     public String toString() {
         //Thread.currentThread().dumpStack();
         StringBuffer sb = new StringBuffer("Blocks:\n");
@@ -246,11 +243,11 @@ public class AvatarSpecification extends AvatarElement {
         for(AvatarPragma pragma: pragmas) {
             sb.append("Pragma:" + pragma.toString() + "\n");
         }
-	for (AvatarConstant constant: constants){
-	    sb.append("Constant:" + constant.toString() + "\n");
-	}
-        return sb.toString();
+		for (AvatarConstant constant: constants){
+		    sb.append("Constant:" + constant.toString() + "\n");
+		}
 
+		return sb.toString();
     }
 
     public AvatarBlock getBlockWithName(String _name) {
@@ -263,9 +260,6 @@ public class AvatarSpecification extends AvatarElement {
         return null;
     }
 
-
-    
-
     public AvatarConstant getAvatarConstantWithName(String _name) {
         for(AvatarConstant constant: constants) {
             if (constant.getName().compareTo(_name)== 0) {
@@ -275,6 +269,7 @@ public class AvatarSpecification extends AvatarElement {
 
         return null;
     }
+
     public static String putAttributeValueInString(String _source, AvatarAttribute _at) {
         return Conversion.putVariableValueInString(ops, _source, _at.getName(), _at.getDefaultInitialValue());
     }
@@ -283,7 +278,6 @@ public class AvatarSpecification extends AvatarElement {
         return Conversion.putVariableValueInString(ops, _source, _at.getName(), _at.getInitialValue());
     }
 
-
     public void removeCompositeStates() {
         for(AvatarBlock block: blocks) {
 	    //TraceManager.addDev("- - - - - - - - Removing composite states of " + block);
@@ -291,17 +285,14 @@ public class AvatarSpecification extends AvatarElement {
         }
     }
 
-
     public void makeFullStates() {
-	for(AvatarBlock block: blocks) {
-	    //TraceManager.addDev("- - - - - - - - Making full states of " + block);
+    	for(AvatarBlock block: blocks) {
             block.getStateMachine().makeFullStates(block);
         }
     }
 
     public void removeRandoms() {
-	for(AvatarBlock block: blocks) {
-	    //TraceManager.addDev("- - - - - - - - Removing randoms of " + block);
+		for(AvatarBlock block: blocks) {
             block.getStateMachine().removeRandoms(block);
         }
     }
@@ -309,11 +300,11 @@ public class AvatarSpecification extends AvatarElement {
     public void removeTimers() {
         //renameTimers();
 
-        LinkedList<AvatarBlock> addedBlocks = new LinkedList<AvatarBlock>();
+        List<AvatarBlock> addedBlocks = new LinkedList<AvatarBlock>();
         for(AvatarBlock block: blocks) {
-	    if (block.hasTimerAttribute()) {
-		block.removeTimers(this, addedBlocks);
-	    }
+        	if (block.hasTimerAttribute()) {
+        		block.removeTimers(this, addedBlocks);
+        	}
         }
 
         for(int i=0; i<addedBlocks.size(); i++) {
@@ -348,81 +339,75 @@ public class AvatarSpecification extends AvatarElement {
      * The size of the infinite fifo is max 1024
      * and min 1
      */
-
-    
     public void removeFIFOs(int _maxSizeOfInfiniteFifo) {
-	
-	LinkedList<AvatarRelation> oldOnes = new LinkedList<AvatarRelation>();
-	LinkedList<AvatarRelation> newOnes = new LinkedList<AvatarRelation>();
+    	List<AvatarRelation> oldOnes = new LinkedList<AvatarRelation>();
+    	List<AvatarRelation> newOnes = new LinkedList<AvatarRelation>();
 
-	int FIFO_ID = 0;
-	for(AvatarRelation ar: relations) {
-	    if (ar.isAsynchronous()) {
-		// Must be removed
-		int size = Math.min(_maxSizeOfInfiniteFifo, ar.getSizeOfFIFO());
-		TraceManager.addDev("***************************** Size of FIFO:" + size);
-		size = Math.max(1, size);
-		FIFO_ID = removeFIFO(ar, size, oldOnes, newOnes, FIFO_ID);
-	    }
-	}
+    	int FIFO_ID = 0;
+    	for(AvatarRelation ar: relations) {
+    		if (ar.isAsynchronous()) {
+    			// Must be removed
+    			int size = Math.min(_maxSizeOfInfiniteFifo, ar.getSizeOfFIFO());
+    			TraceManager.addDev("***************************** Size of FIFO:" + size);
+    			size = Math.max(1, size);
+    			FIFO_ID = removeFIFO(ar, size, oldOnes, newOnes, FIFO_ID);
+    		}
+    	}
 
-	for(AvatarRelation ar: oldOnes) {
-	    relations.remove(ar);
-	}
+    	for(AvatarRelation ar: oldOnes) {
+    		relations.remove(ar);
+    	}
 
-	for(AvatarRelation ar: newOnes) {
-	    relations.add(ar);
-	}
+    	for(AvatarRelation ar: newOnes) {
+    		relations.add(ar);
+    	}
     }
 
-    private int removeFIFO(AvatarRelation _ar, int _sizeOfInfiniteFifo, LinkedList<AvatarRelation> _oldOnes, LinkedList<AvatarRelation> _newOnes, int FIFO_ID ) {
-	for(int i=0; i<_ar.nbOfSignals(); i++) {
-	    if (_ar.getSignal1(i).isIn()) {
-		FIFO_ID = removeFIFO(_ar, _ar.getSignal2(i), _ar.getSignal1(i), _sizeOfInfiniteFifo, _oldOnes, _newOnes, FIFO_ID);
-	    } else {
-		FIFO_ID = removeFIFO(_ar, _ar.getSignal1(i), _ar.getSignal2(i), _sizeOfInfiniteFifo, _oldOnes, _newOnes, FIFO_ID);
-	    }
-	}
-	_oldOnes.add(_ar);
-	return FIFO_ID;
-    }
-
-    
-    private int removeFIFO(AvatarRelation _ar, AvatarSignal _sig1, AvatarSignal _sig2, int _sizeOfInfiniteFifo, LinkedList<AvatarRelation> _oldOnes, LinkedList<AvatarRelation> _newOnes, int FIFO_ID) {
-	// We create the new block, and the new relation towards the new block
-	String nameOfBlock = "FIFO__" + _sig1.getName() + "__" + _sig2.getName() + "__" + FIFO_ID;
-	AvatarBlock fifoBlock = AvatarBlockTemplate.getFifoBlock(nameOfBlock, this, _ar, _ar.getReferenceObject(), _sig1, _sig2, _sizeOfInfiniteFifo, FIFO_ID);
-	blocks.add(fifoBlock);
-
-	// We now need to create the new relation
-	AvatarRelation newAR1 = new AvatarRelation("FIFO__write_" + FIFO_ID, _ar.block1, fifoBlock, _ar.getReferenceObject());
-	newAR1.setAsynchronous(false);
-	newAR1.setPrivate(_ar.isPrivate());
-	newAR1.addSignals(_sig1, fifoBlock.getSignalByName("write"));
-	_newOnes.add(newAR1);
-
-	AvatarRelation newAR2 = new AvatarRelation("FIFO__read_" + FIFO_ID, fifoBlock, _ar.block2, _ar.getReferenceObject());
-	newAR2.setAsynchronous(false);
-	newAR2.setPrivate(_ar.isPrivate());
-	newAR2.addSignals(fifoBlock.getSignalByName("read"), _sig2);
-	_newOnes.add(newAR2);
-	
-	FIFO_ID ++;
-	return FIFO_ID;
+    private int removeFIFO(AvatarRelation _ar, int _sizeOfInfiniteFifo, List<AvatarRelation> _oldOnes, List<AvatarRelation> _newOnes, int FIFO_ID ) {
+    	for(int i=0; i<_ar.nbOfSignals(); i++) {
+    		if (_ar.getSignal1(i).isIn()) {
+    			FIFO_ID = removeFIFO(_ar, _ar.getSignal2(i), _ar.getSignal1(i), _sizeOfInfiniteFifo, _oldOnes, _newOnes, FIFO_ID);
+    		} else {
+    			FIFO_ID = removeFIFO(_ar, _ar.getSignal1(i), _ar.getSignal2(i), _sizeOfInfiniteFifo, _oldOnes, _newOnes, FIFO_ID);
+    		}
+    	}
+    	_oldOnes.add(_ar);
+    	return FIFO_ID;
     }
     
-    
+    private int removeFIFO(AvatarRelation _ar, AvatarSignal _sig1, AvatarSignal _sig2, int _sizeOfInfiniteFifo, List<AvatarRelation> _oldOnes, List<AvatarRelation> _newOnes, int FIFO_ID) {
+    	// We create the new block, and the new relation towards the new block
+    	String nameOfBlock = "FIFO__" + _sig1.getName() + "__" + _sig2.getName() + "__" + FIFO_ID;
+    	AvatarBlock fifoBlock = AvatarBlockTemplate.getFifoBlock(nameOfBlock, this, _ar, _ar.getReferenceObject(), _sig1, _sig2, _sizeOfInfiniteFifo, FIFO_ID);
+    	blocks.add(fifoBlock);
+
+    	// We now need to create the new relation
+    	AvatarRelation newAR1 = new AvatarRelation("FIFO__write_" + FIFO_ID, _ar.block1, fifoBlock, _ar.getReferenceObject());
+    	newAR1.setAsynchronous(false);
+    	newAR1.setPrivate(_ar.isPrivate());
+    	newAR1.addSignals(_sig1, fifoBlock.getSignalByName("write"));
+    	_newOnes.add(newAR1);
+
+    	AvatarRelation newAR2 = new AvatarRelation("FIFO__read_" + FIFO_ID, fifoBlock, _ar.block2, _ar.getReferenceObject());
+    	newAR2.setAsynchronous(false);
+    	newAR2.setPrivate(_ar.isPrivate());
+    	newAR2.addSignals(fifoBlock.getSignalByName("read"), _sig2);
+    	_newOnes.add(newAR2);
+
+    	FIFO_ID ++;
+    	return FIFO_ID;
+    }
 
     public boolean areSynchronized(AvatarSignal as1, AvatarSignal as2) {
-	AvatarRelation ar = getAvatarRelationWithSignal(as1);
-	if (ar == null) {
-	    return false;
-	}
+    	AvatarRelation ar = getAvatarRelationWithSignal(as1);
+    	if (ar == null) {
+    		return false;
+    	}
 
-	int index1 = ar.getIndexOfSignal(as1);
-	int index2 = ar.getIndexOfSignal(as2);
+    	int index1 = ar.getIndexOfSignal(as1);
+    	int index2 = ar.getIndexOfSignal(as2);
 
-	return (index1 == index2);
+    	return (index1 == index2);
     }
 
     public AvatarRelation getAvatarRelationWithSignal(AvatarSignal _as) {

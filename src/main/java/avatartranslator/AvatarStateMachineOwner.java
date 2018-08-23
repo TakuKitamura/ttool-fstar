@@ -36,13 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package avatartranslator;
 
-import java.util.LinkedList;
-
+import java.util.List;
 
 /**
  *
@@ -50,10 +46,14 @@ import java.util.LinkedList;
  * @author Florian LUGOU
  */
 public interface AvatarStateMachineOwner {
-    String getName();
-    AvatarStateMachine getStateMachine();
-    AvatarSignal getAvatarSignalWithName(String signalName);
-    AvatarMethod getAvatarMethodWithName(String methodName);
+    
+	String getName();
+   
+	AvatarStateMachine getStateMachine();
+    
+	AvatarSignal getAvatarSignalWithName(String signalName);
+    
+	AvatarMethod getAvatarMethodWithName(String methodName);
 
     /**
      * Look for an attribute in the list of local attributes, parameters and return values.
@@ -66,7 +66,10 @@ public interface AvatarStateMachineOwner {
     AvatarAttribute getAvatarAttributeWithName(String attributeName);
 
     AvatarSpecification getAvatarSpecification();
-    LinkedList<AvatarAttribute> getAttributes();
+    
+    List<AvatarAttribute> getAttributes();
+    
     void addAttribute(AvatarAttribute attribute);
+    
     AvatarStateMachineOwner advancedClone(AvatarSpecification avspec);
 }

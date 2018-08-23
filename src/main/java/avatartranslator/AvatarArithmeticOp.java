@@ -36,12 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package avatartranslator;
 
-import java.util.HashMap;
+import java.util.Map;
 
 /**
    * Class AvatarArithmeticOp
@@ -114,7 +111,7 @@ public class AvatarArithmeticOp extends AvatarTerm {
     }
 
     @Override
-    public void replaceAttributes (HashMap<AvatarAttribute, AvatarAttribute> attributesMapping) {
+    public void replaceAttributes( Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
         if (this.term1 instanceof AvatarAttribute)
             this.term1 = attributesMapping.get (this.term1);
         else

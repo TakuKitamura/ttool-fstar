@@ -368,6 +368,10 @@ public abstract class TURTLEPanel implements GenericTree {
     	return false;
     }
     
+    public boolean isELNEnabled() {
+    	return false;
+    }
+    
     public MainGUI getMainGUI() {
         return mgui;
     }

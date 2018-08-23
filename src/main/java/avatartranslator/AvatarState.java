@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package avatartranslator;
 
 /**
@@ -89,7 +88,6 @@ public class AvatarState extends AvatarStateElement {
     public void setCheckLatency(boolean b) {
         checkLatency = b;
     }
-
 
     public int hasEmptyTransitionsOnItself(AvatarStateMachine _asm) {
         AvatarTransition at;

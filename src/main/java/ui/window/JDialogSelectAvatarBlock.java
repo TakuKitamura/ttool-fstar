@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package ui.window;
 
 import ui.avatarbd.AvatarBDStateMachineOwner;
@@ -45,11 +44,19 @@ import ui.util.IconManager;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import java.awt.*;
+
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 
 /**
@@ -61,10 +68,11 @@ import java.util.LinkedList;
  * @version 1.0 18/05/2010
  */
 public class JDialogSelectAvatarBlock extends JDialogBase implements ActionListener, ListSelectionListener {
-    public LinkedList<AvatarBDStateMachineOwner> validated, ignored;
+    
+	public List<AvatarBDStateMachineOwner> validated, ignored;
     private boolean optimized = true;
 
-    private LinkedList<AvatarBDStateMachineOwner> val, ign, back;
+    private List<AvatarBDStateMachineOwner> val, ign, back;
 
     private JList<AvatarBDStateMachineOwner> listIgnored;
     private JList<AvatarBDStateMachineOwner> listValidated;
@@ -79,7 +87,7 @@ public class JDialogSelectAvatarBlock extends JDialogBase implements ActionListe
     /**
      * Creates new form
      */
-    public JDialogSelectAvatarBlock(Frame f, LinkedList<AvatarBDStateMachineOwner> _back, LinkedList<AvatarBDStateMachineOwner> componentList, String title, LinkedList<AvatarBDStateMachineOwner> _validated, LinkedList<AvatarBDStateMachineOwner> _ignored, boolean _optimized) {
+    public JDialogSelectAvatarBlock(Frame f, List<AvatarBDStateMachineOwner> _back, List<AvatarBDStateMachineOwner> componentList, String title, List<AvatarBDStateMachineOwner> _validated, List<AvatarBDStateMachineOwner> _ignored, boolean _optimized) {
         super(f, title, true);
 
         back = _back;
@@ -103,7 +111,7 @@ public class JDialogSelectAvatarBlock extends JDialogBase implements ActionListe
         pack();
     }
 
-    private void checkTask(LinkedList<AvatarBDStateMachineOwner> tobeChecked, LinkedList<AvatarBDStateMachineOwner> source) {
+    private void checkTask( List<AvatarBDStateMachineOwner> tobeChecked, List<AvatarBDStateMachineOwner> source) {
         Iterator<AvatarBDStateMachineOwner> iterator = tobeChecked.iterator();
 
         while (iterator.hasNext()) {
@@ -113,7 +121,7 @@ public class JDialogSelectAvatarBlock extends JDialogBase implements ActionListe
         }
     }
 
-    private void addNewTask(LinkedList<AvatarBDStateMachineOwner> added, LinkedList<AvatarBDStateMachineOwner> source, LinkedList<AvatarBDStateMachineOwner> notSource) {
+    private void addNewTask( List<AvatarBDStateMachineOwner> added, List<AvatarBDStateMachineOwner> source, List<AvatarBDStateMachineOwner> notSource) {
         for (AvatarBDStateMachineOwner tgc : source)
             if (!added.contains(tgc) && !notSource.contains(tgc))
                 added.add(tgc);
@@ -262,6 +270,7 @@ public class JDialogSelectAvatarBlock extends JDialogBase implements ActionListe
 
     }
 
+    @Override
     public void actionPerformed(ActionEvent evt) {
         String command = evt.getActionCommand();
 
@@ -272,8 +281,6 @@ public class JDialogSelectAvatarBlock extends JDialogBase implements ActionListe
             cancelDialog();
             return;
         }
-
-
 
         // Compare the action command to the known actions.
         switch (command) {
@@ -291,7 +298,6 @@ public class JDialogSelectAvatarBlock extends JDialogBase implements ActionListe
                 break;
         }
     }
-
 
     private void addOneIgnored() {
         for (AvatarBDStateMachineOwner o : this.listValidated.getSelectedValuesList()) {
@@ -380,7 +386,6 @@ public class JDialogSelectAvatarBlock extends JDialogBase implements ActionListe
         }
     }
 
-
     public void valueChanged(ListSelectionEvent e) {
         setButtons();
     }
@@ -393,11 +398,11 @@ public class JDialogSelectAvatarBlock extends JDialogBase implements ActionListe
         return hasBeenCancelled;
     }
 
-    public LinkedList<AvatarBDStateMachineOwner> getValidated() {
+    public List<AvatarBDStateMachineOwner> getValidated() {
         return validated;
     }
 
-    public LinkedList<AvatarBDStateMachineOwner> getIgnored() {
+    public List<AvatarBDStateMachineOwner> getIgnored() {
         return ignored;
     }
 }

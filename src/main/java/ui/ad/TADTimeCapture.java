@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.ad;
 
 import myutil.GraphicLib;
@@ -55,14 +52,13 @@ import java.awt.geom.Line2D;
  * @version 1.0 23/07/2009
  * @author Ludovic APVRILLE
  */
-public class TADTimeCapture extends TGCOneLineText implements ActionStateErrorHighlight {
+public class TADTimeCapture extends TADOneLineText/* Issue #69 TGCOneLineText*/ implements ActionStateErrorHighlight {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
     protected int arc = 5;
 	
 	protected int stateAction = 0; // 0: unchecked 1: attribute; 3:unknown
-
 	
     public TADTimeCapture(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -87,6 +83,7 @@ public class TADTimeCapture extends TGCOneLineText implements ActionStateErrorHi
         myImageIcon = IconManager.imgic204;
     }
     
+    @Override
     public void internalDrawing(Graphics g) {
 		String myVal = "time -> " + value;
         int w  = g.getFontMetrics().stringWidth(myVal);
@@ -110,15 +107,16 @@ public class TADTimeCapture extends TGCOneLineText implements ActionStateErrorHi
 			g.fillRoundRect(x, y, width, height, arc, arc);
 			g.setColor(c);
 		}
-        g.drawRoundRect(x, y, width, height, arc, arc);
+
+		g.drawRoundRect(x, y, width, height, arc, arc);
 		
         g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
         
         g.drawString(myVal, x + (width - w) / 2 , y + textY);
-		
     }
     
+    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -127,22 +125,22 @@ public class TADTimeCapture extends TGCOneLineText implements ActionStateErrorHi
         if ((int)(Line2D.ptSegDistSq(x +width/2, y- lineLength,  x+width/2, y + lineLength + height, _x, _y)) < distanceSelected) {
 			return this;	
 		}
-        
 
         return null;
     }
     
-    
+    @Override
     public int getType() {
         return TGComponentManager.TAD_TIME_CAPTURE;
     }
     
+    @Override
    	public int getDefaultConnector() {
-      return TGComponentManager.CONNECTOR_AD_DIAGRAM;
+    	return TGComponentManager.CONNECTOR_AD_DIAGRAM;
     }
 	
+    @Override
 	public void setStateAction(int _stateAction) {
 		stateAction = _stateAction;
 	}
-    
 }

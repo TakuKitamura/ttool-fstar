@@ -36,15 +36,13 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package avatartranslator;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
-
+import java.util.List;
+import java.util.Map;
 
 /**
  * AvatarLibraryFunction is used to represent a library function that can be further used in state machine diagrams.
@@ -70,34 +68,34 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
      *
      * <p>Note that these are only placeholders and should not be used outside this class.</p>
      */
-    private LinkedList<AvatarAttribute> parameters;
+    private List<AvatarAttribute> parameters;
 
     /**
      * The list of variables local to the function.
      *
      * <p>Note that these are only placeholders and should not be used outside this class.</p>
      */
-    private LinkedList<AvatarAttribute> attributes;
+    private List<AvatarAttribute> attributes;
 
     /**
      * The list of signals used by the function.
      *
      * <p>Note that these are only placeholders and should not be used outside this class.</p>
      */
-    private LinkedList<AvatarSignal> signals;
+    private List<AvatarSignal> signals;
 
     /**
      * The list of attribute that will hold the return values of the function. These shouldn't be elements of {@link AvatarLibraryFunction#attributes} or {@link AvatarLibraryFunction#parameters}.
      *
      * <p>Note that these are only placeholders and should not be used outside this class.</p>
      */
-    private LinkedList<AvatarAttribute> returnAttributes;
+    private List<AvatarAttribute> returnAttributes;
 
     /**
      * The list of methods that can be used by the function.
      *
      */
-    private LinkedList<AvatarMethod> methods;
+    private List<AvatarMethod> methods;
 
     /**
      * The state machine describing the behaviour of the function.
@@ -166,7 +164,7 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
      *
      * @return The list of parameters.
      */
-    public LinkedList<AvatarAttribute> getParameters () {
+    public List<AvatarAttribute> getParameters () {
         return this.parameters;
     }
 
@@ -185,7 +183,7 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
      *
      * @return The list of signals.
      */
-    public LinkedList<AvatarSignal> getSignals () {
+    public List<AvatarSignal> getSignals () {
         return this.signals;
     }
 
@@ -213,7 +211,7 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
      *
      * @return The list of return values.
      */
-    public LinkedList<AvatarAttribute> getReturnAttributes () {
+    public List<AvatarAttribute> getReturnAttributes () {
         return this.returnAttributes;
     }
 
@@ -232,13 +230,13 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
      *
      * @return The list of local attributes.
      */
-    public LinkedList<AvatarAttribute> getLocalAttributes () {
+    public List<AvatarAttribute> getLocalAttributes () {
         return this.attributes;
     }
 
     @Override
-    public LinkedList<AvatarAttribute> getAttributes () {
-        LinkedList<AvatarAttribute> result = new LinkedList<AvatarAttribute> ();
+    public List<AvatarAttribute> getAttributes () {
+        List<AvatarAttribute> result = new LinkedList<AvatarAttribute> ();
 
         for (AvatarAttribute attr: this.attributes)
             result.add (attr);
@@ -260,7 +258,7 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
      *
      * @return The list of methods used by this function.
      */
-    public LinkedList<AvatarMethod> getMethods () {
+    public List<AvatarMethod> getMethods () {
         return this.methods;
     }
 
@@ -310,7 +308,7 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
      * @param mapping
      *      A mapping from placeholders to attributes of the block.
      */
-    public void addAttributesToBlock (AvatarBlock block, HashMap<AvatarAttribute, AvatarAttribute> mapping) {
+    public void addAttributesToBlock (AvatarBlock block, Map<AvatarAttribute, AvatarAttribute> mapping) {
         for (AvatarAttribute attribute: this.attributes) {
             // TODO: We should use different attributes for different library function call
             String name = this.name + "__" + attribute.getName ();
@@ -334,7 +332,7 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
      * @param returnAttributes
      *      A list of the attributes that should receive return values.
      */
-    public void addAttributesToMapping (HashMap<AvatarAttribute, AvatarAttribute> mapping, LinkedList<AvatarAttribute> parameters, LinkedList<AvatarAttribute> returnAttributes) {
+    public void addAttributesToMapping( Map<AvatarAttribute, AvatarAttribute> mapping, List<AvatarAttribute> parameters, List<AvatarAttribute> returnAttributes) {
         Iterator<AvatarAttribute> placeholders = this.parameters.iterator ();
         for (AvatarAttribute attr: parameters)
             mapping.put (placeholders.next (), attr);
@@ -352,7 +350,7 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
      * @param signals
      *      A list of the attributes that were passed as parameters.
      */
-    public void addSignalsToMapping (HashMap<AvatarSignal, AvatarSignal> mapping, LinkedList<AvatarSignal> signals) {
+    public void addSignalsToMapping( Map<AvatarSignal, AvatarSignal> mapping, List<AvatarSignal> signals) {
         Iterator<AvatarSignal> placeholders = this.signals.iterator ();
         for (AvatarSignal signal: signals)
             mapping.put (placeholders.next (), signal);
@@ -366,12 +364,12 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
         /**
          * A mapping from placeholders to attributes of the block.
          */
-        public HashMap<AvatarAttribute, AvatarAttribute> placeholdersMapping;
+        public Map<AvatarAttribute, AvatarAttribute> placeholdersMapping;
 
         /**
          * A mapping from placeholders to signals of the block.
          */
-        public HashMap<AvatarSignal, AvatarSignal> signalsMapping;
+        public Map<AvatarSignal, AvatarSignal> signalsMapping;
 
         /**
          * The previous element of the state machine being created.
@@ -386,7 +384,7 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
         /**
          * A mapping from placeholder state machine elements to "real" elements.
          */
-        public HashMap<AvatarStateMachineElement, AvatarStateMachineElement> elementsMapping;
+        public Map<AvatarStateMachineElement, AvatarStateMachineElement> elementsMapping;
 
         /**
          * The block the function call belongs to.
@@ -423,7 +421,7 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
          * @param counter
          *      The counter for the library function call.
          */
-        public TranslatorArgument (HashMap<AvatarAttribute, AvatarAttribute> placeholdersMapping, HashMap<AvatarSignal, AvatarSignal> signalsMapping, AvatarStateMachineElement previousElement, AvatarStateMachineElement lastElement, HashMap<AvatarStateMachineElement, AvatarStateMachineElement> elementsMapping, AvatarBlock block, Object referenceObject, int counter) {
+        public TranslatorArgument( Map<AvatarAttribute, AvatarAttribute> placeholdersMapping, Map<AvatarSignal, AvatarSignal> signalsMapping, AvatarStateMachineElement previousElement, AvatarStateMachineElement lastElement, Map<AvatarStateMachineElement, AvatarStateMachineElement> elementsMapping, AvatarBlock block, Object referenceObject, int counter) {
             this.placeholdersMapping = placeholdersMapping;
             this.signalsMapping = signalsMapping;
             this.previousElement = previousElement;
@@ -451,7 +449,7 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
      *
      * @return The last element of the state machine created.
      */
-    public AvatarState translateASMWithMapping (HashMap<AvatarAttribute, AvatarAttribute> placeholdersMapping, HashMap<AvatarSignal, AvatarSignal> signalsMapping, AvatarStateMachineElement firstElement, AvatarBlock block, Object referenceObject, int counter) {
+    public AvatarState translateASMWithMapping( Map<AvatarAttribute, AvatarAttribute> placeholdersMapping, Map<AvatarSignal, AvatarSignal> signalsMapping, AvatarStateMachineElement firstElement, AvatarBlock block, Object referenceObject, int counter) {
         /* Create the last state */
         AvatarState lastState = new AvatarState ("exit_" + this.name + "_" + counter, referenceObject);
 

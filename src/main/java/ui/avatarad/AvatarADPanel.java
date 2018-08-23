@@ -36,21 +36,13 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatarad;
-
-//import java.awt.*;
 
 import ui.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-
-//import org.w3c.dom.*;
-//import org.xml.sax.*;
-//import javax.xml.parsers.*;
+import java.util.List;
 
 /**
  * Class AvatarADPanel
@@ -71,41 +63,52 @@ public class AvatarADPanel extends TDiagramPanel implements TDPWithAttributes{
         addMouseMotionListener(tdmm);*/
     }
     
+    @Override
     public boolean actionOnDoubleClick(TGComponent tgc) {
         return true;
     }
     
+    @Override
     public boolean actionOnAdd(TGComponent tgc) {
         return false;
     }
+
+    @Override
     public boolean actionOnValueChanged(TGComponent tgc) {
         return false;
     }
     
+    @Override
     public  boolean actionOnRemove(TGComponent tgc) {
         return false;
     }
     
+    @Override
     public String getXMLHead() {
         return "<AvatarADPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
     }
     
+    @Override
     public String getXMLTail() {
         return "</AvatarADPanel>";
     }
     
+    @Override
     public String getXMLSelectedHead() {
         return "<AvatarADPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
     }
     
+    @Override
     public String getXMLSelectedTail() {
         return "</AvatarADPanelCopy>";
     }
     
+    @Override
     public String getXMLCloneHead() {
         return "<AvatarADPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
     }
     
+    @Override
     public String getXMLCloneTail() {
         return "</AvatarADPanelCopy>";
     }
@@ -118,47 +121,41 @@ public class AvatarADPanel extends TDiagramPanel implements TDPWithAttributes{
         // Position correctly guards of choice
     }
     
-    
-	
+    @Override
 	public boolean hasAutoConnect() {
 		return false;
 	}
 	
 	public void setConnectorsToFront() {
 		TGComponent tgc;
-		
-		//
-		
-        Iterator iterator = componentList.listIterator();
+        Iterator<TGComponent> iterator = componentList.listIterator();
         
-		ArrayList<TGComponent> list = new ArrayList<TGComponent>();
+		List<TGComponent> list = new ArrayList<TGComponent>();
 		
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
 			if (!(tgc instanceof TGConnector)) {
 				list.add(tgc);
 			}
 		}
 		
-		//
 		for(TGComponent tgc1: list) {
-			//
 			componentList.remove(tgc1);
 			componentList.add(tgc1);
 		}
 	}
 	
 	public void alignPartitions() {
-        AvatarADPartition ontheLeft = null, sdi;
+        AvatarADPartition ontheLeft = null;//, sdi;
         int x = getMaxX(),xtmp;
         int y;
         int i;
         TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
+        Iterator<TGComponent> iterator = componentList.listIterator();
         
         // search for the instances which is the most on the left
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             if (tgc instanceof AvatarADPartition) {
                 xtmp = tgc.getX();
                 if (xtmp < x) {
@@ -180,7 +177,5 @@ public class AvatarADPanel extends TDiagramPanel implements TDPWithAttributes{
                 tgc.setCd(tgc.getX(), y);
             }
         }
-        
     }
-    
 }

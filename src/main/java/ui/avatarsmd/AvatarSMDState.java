@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatarsmd;
 
 import myutil.Conversion;
@@ -51,10 +48,14 @@ import ui.util.IconManager;
 import ui.window.JDialogAvatarState;
 
 import javax.swing.*;
-import java.awt.*;
-import java.util.LinkedList;
-import java.util.Vector;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Vector;
 
 /**
    * Class AvatarSMDState
@@ -156,7 +157,7 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 
         name = tdp.findAvatarSMDStateName("state");
         setValue(name);
-	name = "State";
+        name = "State";
         oldValue = value;
 
         currentFontSize = maxFontSize;
@@ -190,6 +191,7 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
         mutexStates = null;
     }
 
+    @Override
     public void internalDrawing(Graphics g) {
         Font f = g.getFont();
         Font fold = f;
@@ -235,17 +237,21 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 
         }
 
-        //
-
         Color c = g.getColor();
         //g.setColor(ColorManager.AVATAR_STATE);
-        Color avat = ColorManager.AVATAR_STATE;
-        g.setColor(new Color(avat.getRed(), avat.getGreen(), Math.min(255, avat.getBlue() + (getMyDepth() * 10))));
+        
+        // Issue #69
+    	if ( isEnabled() ) {
+            Color avat = ColorManager.AVATAR_STATE;
+    		g.setColor(new Color(avat.getRed(), avat.getGreen(), Math.min(255, avat.getBlue() + (getMyDepth() * 10))));
+    	}
+    	else {
+	    	g.setColor( ColorManager.DISABLED_FILLING );
+    	}
+
         g.fillRoundRect(x, y, width, height, 5, 5);
         g.setColor(c);
         g.drawRoundRect(x, y, width, height, 5, 5);
-
-
 
         // Strings
         int w;
@@ -306,7 +312,7 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
         drawSecurityInformation(g);
     }
 
-    public void drawSecurityInformation(Graphics g) {
+    private void drawSecurityInformation(Graphics g) {
         if (securityInformation > 0) {
 
             Color c = g.getColor();
@@ -330,10 +336,9 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
             g.drawRect(x-12, y, 9, 7);
 
         }
-
     }
 
-
+    @Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
 
         if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
@@ -342,13 +347,12 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
         return null;
     }
 
-
     public String getStateName() {
         return value;
     }
 
+    @Override
     public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
-
         oldValue = value;
 
         //String text = getName() + ": ";
@@ -356,7 +360,6 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
           "setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
           null,
           getValue());*/
-
 
         JDialogAvatarState jdas = new JDialogAvatarState(frame, "Setting state parameters", value, entryCode);
        // jdas.setSize(600, 550);
@@ -369,7 +372,6 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
         }
 
         String s = jdas.getStateName();
-
 
         if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
             //boolean b;
@@ -407,19 +409,19 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
         entryCode =  jdas.getEntryCode();
 
         return true;
-
-
     }
 
+    @Override
     public void recalculateSize() {
         width = Math.max(width, value.length()*11);
     }
 
-
+    @Override
     public int getType() {
         return TGComponentManager.AVATARSMD_STATE;
     }
 
+    @Override
     public boolean acceptSwallowedTGComponent(TGComponent tgc) {
         if (tgc instanceof AvatarSMDBasicComponent) {
             return true;
@@ -429,6 +431,7 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 
     }
 
+    @Override
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
         boolean swallowed = false;
 
@@ -475,6 +478,7 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
         return true;
     }
 
+    @Override
     public void removeSwallowedTGComponent(TGComponent tgc) {
         removeMyInternalComponent(tgc, false);
     }
@@ -514,7 +518,7 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
         return false;
     }
 
-
+    @Override
     public void hasBeenResized() {
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof AvatarSMDBasicComponent) {
@@ -531,6 +535,7 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 
     }
 
+    @Override
     public void resizeWithFather() {
 
         if ((father != null) && (father instanceof AvatarSMDState)) {
@@ -542,8 +547,8 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
         }
     }
 
-    public LinkedList<AvatarSMDState> getStateList() {
-        LinkedList<AvatarSMDState> list = new LinkedList<AvatarSMDState>();
+    public List<AvatarSMDState> getStateList() {
+        List<AvatarSMDState> list = new LinkedList<AvatarSMDState>();
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof AvatarSMDState) {
                 list.add((AvatarSMDState)(tgcomponent[i]));
@@ -552,8 +557,8 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
         return list;
     }
 
-    public LinkedList<AvatarSMDState> getFullStateList() {
-        LinkedList<AvatarSMDState> list = new LinkedList<AvatarSMDState>();
+    public List<AvatarSMDState> getFullStateList() {
+        List<AvatarSMDState> list = new LinkedList<AvatarSMDState>();
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof AvatarSMDState) {
                 list.add((AvatarSMDState)(tgcomponent[i]));
@@ -564,7 +569,7 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
     }
 
     public boolean hasInternalStateWithName(String name) {
-        LinkedList<AvatarSMDState> list  = getFullStateList();
+        List<AvatarSMDState> list  = getFullStateList();
         for(AvatarSMDState s: list) {
             if (s.getValue().compareTo(name) ==0) {
                 return true;
@@ -573,13 +578,14 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
         return false;
     }
 
+    @Override
     public int getDefaultConnector() {
         return TGComponentManager.AVATARSMD_CONNECTOR;
     }
 
     public AvatarSMDState checkForStartStateOfCompositeStates() {
         AvatarSMDState tgc;
-        LinkedList<AvatarSMDState> list  = getFullStateList();
+        List<AvatarSMDState> list  = getFullStateList();
         for(AvatarSMDState s: list) {
             tgc = s.checkForStartStateOfCompositeStates();
             if (tgc != null) {
@@ -597,6 +603,7 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
         if (cpt > 1) {
             return this;
         }
+        
         return null;
     }
 
@@ -617,6 +624,7 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
         return s;
     }
 
+    @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
 
@@ -689,9 +697,8 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
             }
 
         } catch (Exception e) {
-            throw new MalformedModelingException();
+            throw new MalformedModelingException( e );
         }
-
 
         /*if (tmpGlobalCode.trim().length() == 0) {
           globalCode = null;
@@ -704,8 +711,6 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
             entryCode = Conversion.wrapText(tmpEntryCode);
             //TraceManager.addDev("Entry code = " + entryCode);
         }
-
-
     }
 
     /*public boolean hasGlobalCode() {
@@ -774,7 +779,6 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
         return ret;
     }
 
-
     public void resetSecurityInfo() {
         securityInformation = NOT_VERIFIED;
         for(int i=0; i<nbInternalTGComponent; i++) {
@@ -797,8 +801,146 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
                 ((AvatarSMDState)tgcomponent[i]).setSecurityInfo(_info, _name);
             }
         }
-
     }
 
+	/* Issue #69
+	 * (non-Javadoc)
+	 * @see ui.AbstractCDElement#canBeDisabled()
+	 */
+	@Override
+    public boolean canBeDisabled() {
+		if ( getFather() instanceof AvatarSMDState ) {
+			return getFather().isEnabled();
+		}
+		
+    	return true;
+    }
+	
+	private List<AvatarSMDConnector> getContainedConnectors() {
+		final List<AvatarSMDConnector> connectors = new ArrayList<AvatarSMDConnector>();
+		
+    	for ( final TGComponent component : tdp.getComponentList() ) {
+    		if ( component instanceof AvatarSMDConnector ) {
+    			final AvatarSMDConnector smdCon = (AvatarSMDConnector) component;
+    			
+    			if ( smdCon.isContainedBy( this ) ) {
+    				connectors.add( smdCon );
+    			}
+    		}
+    	}
+    	
+    	return connectors;
+	}
+	
+    /**
+     * Issue #69
+     * @param _enabled
+     */
+    @Override
+    public void setEnabled( final boolean _enabled ) {
+    	if ( _enabled ) { 
+        	super.setEnabled( _enabled );
+    	}
+    	
+    	// Enabling for composite states
+    	for ( final TGComponent component : tgcomponent ) {
+    		if ( component.canBeDisabled() ) {
+    			component.setEnabled( _enabled );
+    		}
+    	}
+    	
+    	for ( final AvatarSMDConnector containedConnector : getContainedConnectors() ) {
+    		containedConnector.getAvatarSMDTransitionInfo().setEnabled( _enabled );
+    	}
 
+    	if ( !_enabled ) { 
+        	super.setEnabled( _enabled );
+    	}
+    	
+    	// Enabling of states with the same name
+    	for ( final AvatarSMDState sameState : getSameStates() ) {
+    		sameState.doSetEnabled( _enabled );
+    	}
+    }
+    
+    public List<AvatarSMDState> getSameStates() {
+    	final List<AvatarSMDState> states = new ArrayList<AvatarSMDState>();
+    	
+    	for ( final TGComponent component : tdp.getComponentList() ) {
+    		if ( 	component != this && getValue() != null && component instanceof AvatarSMDState && 
+    				getFather() == component.getFather() && getValue().equals( component.getValue() ) ) {
+    			states.add( (AvatarSMDState) component );
+    		}
+    	}
+    	
+    	return states;
+    }
+    
+    public AvatarSMDStartState getCompositeStartState() {
+		if ( tgcomponent ==  null ) {
+			return null;
+		}
+		
+		for ( final TGComponent subCompo : tgcomponent ) {
+			if ( subCompo instanceof AvatarSMDStartState ) {
+				return (AvatarSMDStartState) subCompo;
+			}
+		}
+
+		return null;
+    }
+	
+    /* Issue #69
+     * (non-Javadoc)
+     * @see ui.CDElement#acceptForward(ui.ICDElementVisitor)
+     */
+    @Override
+	public void acceptForward( final ICDElementVisitor visitor ) {
+		if ( visitor.visit( this ) ) {
+			final AvatarSMDStartState subStartElement = getCompositeStartState();
+			
+			if ( subStartElement != null ) {
+				subStartElement.acceptForward( visitor );
+			}
+			
+			if ( connectingPoint !=  null ) {
+				for ( final TGConnectingPoint point : connectingPoint ) {
+					final TGConnector connector = getConnectorConnectedTo( point );
+					
+					if ( connector != null && point == connector.getTGConnectingPointP1() ) {
+						point.acceptForward( visitor );
+					}
+				}
+			}
+			
+			// Also visit the states with the same name
+			for ( final AvatarSMDState state : getSameStates() ) {
+				state.acceptForward( visitor );
+			}
+		}
+	}
+	
+    /* Issue #69
+     * (non-Javadoc)
+     * @see ui.CDElement#acceptBackward(ui.ICDElementVisitor)
+     */
+    @Override
+	public void acceptBackward( final ICDElementVisitor visitor ) {
+		if ( visitor.visit( this ) ) {
+			if ( connectingPoint !=  null ) {
+				for ( final TGConnectingPoint point : connectingPoint ) {
+					final TGConnector connector = getConnectorConnectedTo( point );
+					
+					if ( connector != null && point == connector.getTGConnectingPointP2() ) {
+						point.acceptBackward( visitor );
+					}
+				}
+			}
+		}
+		
+		// Also visit the states with the same name
+		for ( final AvatarSMDState state : getSameStates() ) {
+			state.acceptBackward( visitor );
+		}
+	}
 }

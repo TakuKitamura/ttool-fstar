@@ -547,7 +547,7 @@ public class AvatarSimulationBlock {
     public void makeAction(String _action, Vector<String> _attributeValues, Vector<String> _actions) {
         String nameOfVar;
         String act;
-        String nameOfMethod;
+        //String nameOfMethod;
         int ind;
 
         AvatarAction action = AvatarTerm.createActionFromString(block, _action);
@@ -568,12 +568,12 @@ public class AvatarSimulationBlock {
             }
             act = act.substring(0, ind);
 
-            ind = nameOfVar.indexOf("=");
-            if (ind != -1) {
-                nameOfMethod = nameOfVar.substring(ind + 1, nameOfVar.length());
-            } else {
-                nameOfMethod = nameOfVar;
-            }
+            //ind = nameOfVar.indexOf("=");
+//            if (ind != -1) {
+//                nameOfMethod = nameOfVar.substring(ind + 1, nameOfVar.length());
+//            } else {
+//                nameOfMethod = nameOfVar;
+//            }
 
             String[] params = act.split(",");
             String parameters = "";

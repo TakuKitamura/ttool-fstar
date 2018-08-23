@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package ui.avatarad;
 
 import ui.TDiagramPanel;
@@ -47,7 +46,6 @@ import ui.util.IconManager;
 
 import java.awt.*;
 import java.awt.geom.Line2D;
-
 
 /**
  * Class AvatarADJunction
@@ -102,7 +100,7 @@ public class AvatarADJunction extends AvatarADBasicComponent {
         myImageIcon = IconManager.imgic212;
     }
 
-
+    @Override
     public void internalDrawing(Graphics g) {
         //g.drawLine(x +width/2, y,  x+width/2, y + height);
         //g.drawLine(x, y + (height/2), x+width, y + (height/2));
@@ -118,6 +116,7 @@ public class AvatarADJunction extends AvatarADBasicComponent {
         g.drawLine(x + width / 2 + range, y + height / 2, x + width / 2, y + height / 2 + range);
     }
 
+    @Override
     public TGComponent isOnMe(int _x, int _y) {
         // vertical line
         if ((int) (Line2D.ptSegDistSq(x + width / 2, y, x + width / 2, y + height, _x, _y)) < distanceSelected) {
@@ -130,12 +129,12 @@ public class AvatarADJunction extends AvatarADBasicComponent {
         return null;
     }
 
+    @Override
     public int getType() {
         return TGComponentManager.AAD_JUNCTION;
     }
 
-    public int getDefaultConnector() {
-        return TGComponentManager.AAD_ASSOCIATION_CONNECTOR;
-    }
-
+//    public int getDefaultConnector() {
+//        return TGComponentManager.AAD_ASSOCIATION_CONNECTOR;
+//    }
 }

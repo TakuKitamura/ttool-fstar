@@ -319,11 +319,14 @@ public class JDialogELNComponentTransmissionLine extends JDialog implements Acti
 			}
 			transmission_line.setUnit0((String) z0ComboBoxString.getSelectedItem());
 			
-			String a = delayTextField.getText().split(Pattern.quote("("))[1].split(",")[0];
-			String b = delayTextField.getText().split(Pattern.quote("("))[1].split(",")[1].split(Pattern.quote(")"))[0].split(" ")[1];
-			
-			if (delayTextField.getText() == "sc_core::SC_ZERO_TIME" || (Double.parseDouble(a) >= 1.0) && b.equals("sc_core::SC_SEC")) {
+			if (delayTextField.getText().equals("sc_core::SC_ZERO_TIME")) {
 				transmission_line.setDelay(delayTextField.getText());
+			} else if (!delayTextField.getText().equals("sc_core::SC_ZERO_TIME")) {
+				String a = delayTextField.getText().split(Pattern.quote("("))[1].split(",")[0];
+				String b = delayTextField.getText().split(Pattern.quote("("))[1].split(",")[1].split(Pattern.quote(")"))[0].split(" ")[1];
+				if ((Double.parseDouble(a) >= 1.0) && (b.equals("sc_core::SC_SEC"))) {
+					transmission_line.setDelay(delayTextField.getText());
+				}
 			}
 			
 			if (!(delta0TextField.getText().isEmpty())) {

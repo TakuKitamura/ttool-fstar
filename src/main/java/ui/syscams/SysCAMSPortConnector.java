@@ -40,7 +40,6 @@ package ui.syscams;
 
 import ui.*;
 import ui.util.IconManager;
-import ui.window.JDialogELNConnector;
 import ui.window.JDialogSysCAMSConnector;
 
 import java.awt.*;
@@ -90,13 +89,6 @@ public class SysCAMSPortConnector extends TGConnector implements ScalableTGCompo
 	protected void drawLastSegment(Graphics gr, int x1, int y1, int x2, int y2) {
 		Graphics2D g = (Graphics2D) gr;
 		
-		int w = g.getFontMetrics().stringWidth(value);
-		Font fold = g.getFont();
-		Font f = fold.deriveFont(Font.ITALIC, (float) (tdp.getFontSize()));
-		g.setFont(f);
-		g.drawString(value, (x1 + x2 - w) / 2, (y1 + y2) / 2);
-		g.setFont(fold);
-
 		try {
 			SysCAMSPortConnectingPoint pt1 = (SysCAMSPortConnectingPoint) p1;
 			SysCAMSPortConnectingPoint pt2 = (SysCAMSPortConnectingPoint) p2;
@@ -113,6 +105,11 @@ public class SysCAMSPortConnector extends TGConnector implements ScalableTGCompo
 				}
 			}
 			if ((pt1.port != null) && (pt2.port != null)) {
+				String name1 = pt1.port.getPortName();
+				String name2 = pt2.port.getPortName();
+				if (name1.equals(name2)) {
+					value = name1;
+				}
 				if ((pt1.port instanceof SysCAMSPortConverter) && (pt2.port instanceof SysCAMSPortDE)) {
 					if (pt2.port.getFather().getFather() instanceof SysCAMSCompositeComponent) {
 						GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
@@ -144,6 +141,14 @@ public class SysCAMSPortConnector extends TGConnector implements ScalableTGCompo
 					GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
 				}
 			}
+			
+			int w = g.getFontMetrics().stringWidth(value);
+			Font fold = g.getFont();
+			Font f = fold.deriveFont(Font.ITALIC, (float) (tdp.getFontSize()));
+			g.setFont(f);
+			g.drawString(value, (x1 + x2 - w) / 2, (y1 + y2) / 2);
+			g.setFont(fold);
+			
 			return;
 		} catch (Exception e) {
 		}

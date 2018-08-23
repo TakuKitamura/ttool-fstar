@@ -183,11 +183,11 @@ public class IconManager {
     public static ImageIcon imgic2111; //New icon created by Solange
     
     // SystemC-AMS
-    public static ImageIcon imgic8000, imgic8001, imgic8002, imgic8003, imgic8004, imgic8005, imgic8006, imgic8007, imgic8008, imgic8009;
+    public static ImageIcon imgic8000, imgic8001, imgic8002, imgic8003, imgic8004, imgic8005, imgic8006;
 
     // ELN
-    public static ImageIcon imgic8020, imgic8021, imgic8022, imgic8023, imgic8024, imgic8025, imgic8026, imgic8027, imgic8028, imgic8029, 
-    						imgic8030, imgic8031, imgic8032, imgic8033, imgic8034;
+    public static ImageIcon imgic8010, imgic8011, imgic8012, imgic8013, imgic8014, imgic8015, imgic8016, imgic8017, imgic8018, imgic8019, 
+    						imgic8020, imgic8021, imgic8022, imgic8023, imgic8024, imgic8025, imgic8026, imgic8027, imgic8028, imgic8029;
     
     //private static String icon7 = "turtle_large.gif";
     private static String ttoolStringIcon = "starting_logo.gif";
@@ -669,31 +669,33 @@ public class IconManager {
     // SystemC-AMS
     private static String icon8000 = "camstdfport.gif";
     private static String icon8001 = "camsdeport.gif";
-    private static String icon8002 = "camsconverterportW.gif";
-    private static String icon8003 = "camsconverterportE.gif";
-    private static String icon8004 = "camsconverterportN.gif";
-    private static String icon8005 = "camsconverterportS.gif";
-    private static String icon8006 = "camsclusterblock.gif";
-    private static String icon8007 = "camstdfblock.gif";
-    private static String icon8008 = "camsdeblock.gif";
-    private static String icon8009 = "camsgpio2vciblock.gif";
+    private static String icon8002 = "camsconverterport.gif";
+    private static String icon8003 = "camsclusterblock.gif";
+    private static String icon8004 = "camstdfblock.gif";
+    private static String icon8005 = "camsdeblock.gif";
+    private static String icon8006 = "camsgpio2vciblock.gif";
     
     // ELN
-    private static String icon8020 = "elnresistor.gif";
-    private static String icon8021 = "elncapacitor.gif";
-    private static String icon8022 = "elninductor.gif";
-    private static String icon8023 = "elnvcvs.gif";
-    private static String icon8024 = "elnvccs.gif";
-    private static String icon8025 = "elnidealtransformer.gif";
-    private static String icon8026 = "elntransmissionline.gif";
-    private static String icon8027 = "elnvsource.gif";
-    private static String icon8028 = "elnisource.gif";
-    private static String icon8029 = "elnground.gif";
-    private static String icon8030 = "elntdfvsink.gif";
-    private static String icon8031 = "elntdfisink.gif";
-    private static String icon8032 = "elnportterminal.gif";
-    private static String icon8033 = "elntdfvsource.gif";
-    private static String icon8034 = "elntdfisource.gif";
+    private static String icon8010 = "elnresistor.gif";
+    private static String icon8011 = "elncapacitor.gif";
+    private static String icon8012 = "elninductor.gif";
+    private static String icon8013 = "elnvcvs.gif";
+    private static String icon8014 = "elnvccs.gif";
+    private static String icon8015 = "elnidealtransformer.gif";
+    private static String icon8016 = "elntransmissionline.gif";
+    private static String icon8017 = "elnvsource.gif";
+    private static String icon8018 = "elnisource.gif";
+    private static String icon8019 = "elnground.gif";
+    private static String icon8020 = "elntdfvsink.gif";
+    private static String icon8021 = "elntdfisink.gif";
+    private static String icon8022 = "elnterminal.gif";
+    private static String icon8023 = "elntdfvsource.gif";
+    private static String icon8024 = "elntdfisource.gif";
+    private static String icon8025 = "elnmodule.gif";
+    private static String icon8026 = "elndeisink.gif";
+    private static String icon8027 = "elndeisource.gif";
+    private static String icon8028 = "elndevsink.gif";
+    private static String icon8029 = "elndevsource.gif";
     
     public IconManager() {
 
@@ -1191,10 +1193,17 @@ public class IconManager {
         imgic8004 = getIcon(icon8004);
         imgic8005 = getIcon(icon8005);
         imgic8006 = getIcon(icon8006);
-        imgic8007 = getIcon(icon8007);
-        imgic8008 = getIcon(icon8008);
-        imgic8009 = getIcon(icon8009);
 
+        imgic8010 = getIcon(icon8010);
+        imgic8011 = getIcon(icon8011);
+        imgic8012 = getIcon(icon8012);
+        imgic8013 = getIcon(icon8013);
+        imgic8014 = getIcon(icon8014);
+        imgic8015 = getIcon(icon8015);
+        imgic8016 = getIcon(icon8016);
+        imgic8017 = getIcon(icon8017);
+        imgic8018 = getIcon(icon8018);
+        imgic8019 = getIcon(icon8019);
         imgic8020 = getIcon(icon8020);
         imgic8021 = getIcon(icon8021);
         imgic8022 = getIcon(icon8022);
@@ -1205,11 +1214,6 @@ public class IconManager {
         imgic8027 = getIcon(icon8027);
         imgic8028 = getIcon(icon8028);
         imgic8029 = getIcon(icon8029);
-        imgic8030 = getIcon(icon8030);
-        imgic8031 = getIcon(icon8031);
-        imgic8032 = getIcon(icon8032);
-        imgic8033 = getIcon(icon8033);
-        imgic8034 = getIcon(icon8034);
     }
 
 } // Class

@@ -1,0 +1,192 @@
+State machine Id=3
+start ID=80 / top level operator
+ nexts= 0:avatar transition/ ID=146 
+WaitingForPageToLoad ID=81 / top level operator
+ nexts= 0:avatar transition/ ID=147 
+action_on_signal:loadPage ID=82 / top level operator
+ nexts= 0:avatar transition/ ID=148 
+getFromMemory ID=83 / top level operator
+ nexts= 0:avatar transition/ ID=166 
+choice__0 ID=84 / top level operator
+ nexts= 0:avatar transition/ ID=132 1:avatar transition/ ID=133 2:avatar transition/ ID=138 3:avatar transition/ ID=167 
+gotItFromMemory ID=85 / top level operator
+ nexts= 0:avatar transition/ ID=172 
+PageReady ID=86 / top level operator
+ nexts= 0:avatar transition/ ID=173 
+action_on_signal:pageReady ID=87 / top level operator
+ nexts= 0:avatar transition/ ID=122 
+choice__1 ID=88 / top level operator
+ nexts= 0:avatar transition/ ID=104 1:avatar transition/ ID=175 
+Prefetching ID=89 / top level operator
+ nexts= 0:avatar transition/ ID=129 
+start ID=90 / in state Prefetching ID=89
+ nexts= 0:avatar transition/ ID=106 
+random ID=91 / in state Prefetching ID=89
+ nexts= 0:avatar transition/ ID=121 
+PagePrefetched ID=92 / in state Prefetching ID=89
+ nexts= 0:avatar transition/ ID=107 
+PutPrefetchInMemory ID=93 / top level operator
+ nexts= 0:avatar transition/ ID=108 
+PutPrefetchInMemoryDone ID=94 / top level operator
+ nexts= 0:avatar transition/ ID=105 
+action_on_signal:loadPage ID=95 / top level operator
+ nexts= 0:avatar transition/ ID=174 
+LoadingPage ID=96 / top level operator
+ nexts= 0:avatar transition/ ID=144 
+start ID=97 / in state LoadingPage ID=96
+ nexts= 0:avatar transition/ ID=149 
+random_converted_to_dummy_state ID=98 / in state LoadingPage ID=96
+ nexts= 0:avatar transition/ ID=150 
+PageLoaded ID=99 / top level operator
+ nexts= 0:avatar transition/ ID=143 
+PutPageInMemory ID=100 / top level operator
+ nexts= 0:avatar transition/ ID=153 
+PutPageInMemoryDone ID=101 / top level operator
+ nexts= 0:avatar transition/ ID=131 
+action_on_signal:loadPage ID=102 / top level operator
+ nexts= 0:avatar transition/ ID=145 
+Interrupted ID=103 / top level operator
+ nexts= 0:avatar transition/ ID=130 
+avatar transition ID=104 / top level operator
+ value:Transition (guard=not((pageid<doc__nbOfPages)and(not(memory__index1 == pageid))and(not(memory__index2 == pageid))and(not(memory__index3 == pageid))), ...) weight:1.0
+ nexts= 0:WaitingForPageToLoad/ ID=81 
+weight=1.0
+guard not((pageid<doc__nbOfPages)and(not(memory__index1 == pageid))and(not(memory__index2 == pageid))and(not(memory__index3 == pageid))) / 
+avatar transition ID=105 / top level operator
+ value:Empty transition weight:1.0
+ nexts= 0:WaitingForPageToLoad/ ID=81 
+weight=1.0
+
+avatar transition ID=106 / top level operator
+ value:Transition (delay=(minPageLoadingTime, maxPageLoadingTime), ...) weight:1.0
+ nexts= 0:random/ ID=91 
+minDelay=minPageLoadingTime maxDelay=maxPageLoadingTime
+weight=1.0
+
+avatar transition ID=107 / top level operator
+ value:Empty transition weight:1.0
+ nexts= 0:PutPrefetchInMemory/ ID=93 
+weight=1.0
+
+avatar transition ID=108 / top level operator
+ value:Transition (memory__index1 = memory__index2, ...) weight:1.0
+ nexts= 0:PutPrefetchInMemoryDone/ ID=94 
+weight=1.0
+memory__index1 = memory__index2 / memory__data1 = memory__data2 / memory__index2 = memory__index3 / memory__data2 = memory__data3 / memory__index3 = pageid / memory__data3 = x / 
+avatar transition ID=121 / top level operator
+ value:Empty transition weight:1.0
+ nexts= 0:PagePrefetched/ ID=92 
+weight=1.0
+
+avatar transition ID=122 / top level operator
+ value:Transition (pageid = pageid+1, ...) weight:1.0
+ nexts= 0:choice__1/ ID=88 
+weight=1.0
+pageid = pageid+1 / 
+avatar transition ID=129 / top level operator
+ value:Empty transition weight:1.0
+ nexts= 0:action_on_signal/ ID=95 
+weight=1.0
+
+avatar transition ID=130 / top level operator
+ value:Empty transition weight:1.0
+ nexts= 0:getFromMemory/ ID=83 
+weight=1.0
+
+avatar transition ID=131 / top level operator
+ value:Empty transition weight:1.0
+ nexts= 0:PageReady/ ID=86 
+weight=1.0
+
+avatar transition ID=132 / top level operator
+ value:Transition (guard=((not(pageid == memory__index3))and(not(pageid == memory__index1)))and(not(pageid == memory__index2)), ...) weight:1.0
+ nexts= 0:LoadingPage/ ID=96 
+weight=1.0
+guard ((not(pageid == memory__index3))and(not(pageid == memory__index1)))and(not(pageid == memory__index2)) / 
+avatar transition ID=133 / top level operator
+ value:Transition (guard=pageid == memory__index3, ...) weight:1.0
+ nexts= 0:gotItFromMemory/ ID=85 
+weight=1.0
+page__data = memory__data3 / guard pageid == memory__index3 / 
+avatar transition ID=138 / top level operator
+ value:Transition (guard=pageid == memory__index1, ...) weight:1.0
+ nexts= 0:gotItFromMemory/ ID=85 
+weight=1.0
+page__data = memory__data1 / guard pageid == memory__index1 / 
+avatar transition ID=143 / top level operator
+ value:Empty transition weight:1.0
+ nexts= 0:PutPageInMemory/ ID=100 
+weight=1.0
+
+avatar transition ID=144 / top level operator
+ value:Empty transition weight:1.0
+ nexts= 0:action_on_signal/ ID=102 
+weight=1.0
+
+avatar transition ID=145 / top level operator
+ value:Empty transition weight:1.0
+ nexts= 0:Interrupted/ ID=103 
+weight=1.0
+
+avatar transition ID=146 / top level operator
+ value:Empty transition weight:1.0
+ nexts= 0:WaitingForPageToLoad/ ID=81 
+weight=1.0
+
+avatar transition ID=147 / top level operator
+ value:Empty transition weight:1.0
+ nexts= 0:action_on_signal/ ID=82 
+weight=1.0
+
+avatar transition ID=148 / top level operator
+ value:Empty transition weight:1.0
+ nexts= 0:getFromMemory/ ID=83 
+weight=1.0
+
+avatar transition ID=149 / top level operator
+ value:Transition (delay=(minPageLoadingTime, maxPageLoadingTime), ...) weight:1.0
+ nexts= 0:random_converted_to_dummy_state/ ID=98 
+minDelay=minPageLoadingTime maxDelay=maxPageLoadingTime
+weight=1.0
+
+avatar transition ID=150 / top level operator
+ value:Transition (page__data = x, ...) weight:1.0
+ nexts= 0:PageLoaded/ ID=99 
+weight=1.0
+page__data = x / 
+avatar transition ID=153 / top level operator
+ value:Transition (memory__index1 = memory__index2, ...) weight:1.0
+ nexts= 0:PutPageInMemoryDone/ ID=101 
+weight=1.0
+memory__index1 = memory__index2 / memory__data1 = memory__data2 / memory__index2 = memory__index3 / memory__data2 = memory__data3 / memory__index3 = pageid / memory__data3 = page__data / 
+avatar transition ID=166 / top level operator
+ value:Empty transition weight:1.0
+ nexts= 0:choice__0/ ID=84 
+weight=1.0
+
+avatar transition ID=167 / top level operator
+ value:Transition (guard=pageid == memory__index2, ...) weight:1.0
+ nexts= 0:gotItFromMemory/ ID=85 
+weight=1.0
+page__data = memory__data2 / guard pageid == memory__index2 / 
+avatar transition ID=172 / top level operator
+ value:Transition (delay=(memoryPageAccessTime, memoryPageAccessTime), ...) weight:1.0
+ nexts= 0:PageReady/ ID=86 
+minDelay=memoryPageAccessTime maxDelay=memoryPageAccessTime
+weight=1.0
+
+avatar transition ID=173 / top level operator
+ value:Empty transition weight:1.0
+ nexts= 0:action_on_signal/ ID=87 
+weight=1.0
+
+avatar transition ID=174 / top level operator
+ value:Empty transition weight:1.0
+ nexts= 0:WaitingForPageToLoad/ ID=81 
+weight=1.0
+
+avatar transition ID=175 / top level operator
+ value:Transition (guard=(pageid<doc__nbOfPages)and(not(memory__index1 == pageid))and(not(memory__index2 == pageid))and(not(memory__index3 == pageid)), ...) weight:1.0
+ nexts= 0:Prefetching/ ID=89 
+weight=1.0
+guard (pageid<doc__nbOfPages)and(not(memory__index1 == pageid))and(not(memory__index2 == pageid))and(not(memory__index3 == pageid)) / 

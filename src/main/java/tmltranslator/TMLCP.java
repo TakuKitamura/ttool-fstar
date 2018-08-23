@@ -37,7 +37,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package tmltranslator;
 
 import myutil.TraceManager;
@@ -329,15 +328,16 @@ public class TMLCP extends TMLElement {
         }
     }
 
-    public void splitADs() {
-
-        ArrayList<TMLCPActivityDiagram> all = new ArrayList<TMLCPActivityDiagram>();
-        all.addAll(mainCP.splitADs());
-        for (TMLCPActivityDiagram diag : otherCPs) {
-            all.addAll(diag.splitADs());
-        }
-        otherCPs.addAll(all);
-    }
+    // Issue #69; Unused TMLCPJunction
+//    public void splitADs() {
+//
+//        List<TMLCPActivityDiagram> all = new ArrayList<TMLCPActivityDiagram>();
+//        all.addAll(mainCP.splitADs());
+//        for (TMLCPActivityDiagram diag : otherCPs) {
+//            all.addAll(diag.splitADs());
+//        }
+//        otherCPs.addAll(all);
+//    }
 
     public TMLCPElement getNonConnectedElement() {
         TMLCPElement elt;
@@ -378,10 +378,10 @@ public class TMLCP extends TMLElement {
 
         List<TMLCPActivityDiagram> CPlist = new ArrayList<TMLCPActivityDiagram>();
         List<TMLCPSequenceDiagram> SDlist = new ArrayList<TMLCPSequenceDiagram>();
-        List<TMLAttribute> listAttributes = new ArrayList<TMLAttribute>();
+      //  List<TMLAttribute> listAttributes = new ArrayList<TMLAttribute>();
         TMLCPActivityDiagram tempCP;
         TMLCPSequenceDiagram tempSD;
-        TMLAttribute attr;
+    //    TMLAttribute attr;
         int i, j, k;
 
         TraceManager.addDev("The data structure contains " + getNumSections() + " CP sections (AD) and " +
@@ -450,22 +450,22 @@ public class TMLCP extends TMLElement {
             TraceManager.addDev("Sequence Diagram n. " + (i+1) + ": " + tempSD.getName() + "\n");
 
             //Print Variables
-            listAttributes = tempSD.getAttributes();
+            //listAttributes = tempSD.getAttributes();
             //TraceManager.addDevf("\tAttributes:\n");
-            for (j = 0; j < listAttributes.size(); j++) {
-                attr = listAttributes.get(j);
+           // for (j = 0; j < listAttributes.size(); j++) {
+             //   attr = listAttributes.get(j);
                 //TraceManager.addDev("\t\t %s\t%s\t%s\n", attr.getName(), attr.getType(), attr.getInitialValue());
-            }
+            //}
 
             //Print Instances
-            List<TMLSDInstance> listInstances;
-            TMLSDInstance inst;
-            listInstances = tempSD.getInstances();
-            TraceManager.addDev("\tInstances:");
-            for (j = 0; j < listInstances.size(); j++) {
-                inst = listInstances.get(j);
+            //List<TMLSDInstance> listInstances;
+            //TMLSDInstance inst;
+            //listInstances = tempSD.getInstances();
+            //TraceManager.addDev("\tInstances:");
+           // for (j = 0; j < listInstances.size(); j++) {
+             //   inst = listInstances.get(j);
                 //TraceManager.addDev("\t\t" + inst.getName() + "\n");
-            }
+            //}
 
             //Print Messages
             List<TMLSDMessage> listMessages;

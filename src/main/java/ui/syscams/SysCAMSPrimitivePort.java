@@ -65,7 +65,6 @@ public class SysCAMSPrimitivePort extends TGCScalableWithInternalComponent imple
     private int minFontSize = 4;
     private int currentFontSize = -1;
     protected int oldx, oldy;
-    protected int halfwidth = 13;
     protected int currentOrientation = GraphicLib.NORTH;
 
     private int isOrigin = -1;
@@ -76,14 +75,11 @@ public class SysCAMSPrimitivePort extends TGCScalableWithInternalComponent imple
     private int textX = 15;
     private double dtextX = 0.0;
     protected int decPoint = 3;
-
-    private ImageIcon portImageIconTDF, portImageIconDE;
-    private ImageIcon portImageIconW, portImageIconE, portImageIconN, portImageIconS;
     
     public SysCAMSPrimitivePort(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        initScaling(2*halfwidth, 2*halfwidth);
+        initScaling(20, 20);
 
         dtextX = textX * oldScaleFactor;
         textX = (int)dtextX;
@@ -107,12 +103,6 @@ public class SysCAMSPrimitivePort extends TGCScalableWithInternalComponent imple
         name = "Primitive port - " + getPortTypeName();
         
         myImageIcon = IconManager.imgic1206;
-        portImageIconTDF = IconManager.imgic8000;
-        portImageIconDE = IconManager.imgic8001;
-        portImageIconW = IconManager.imgic8002; 
-        portImageIconE = IconManager.imgic8003; 
-        portImageIconN = IconManager.imgic8004; 
-        portImageIconS = IconManager.imgic8005; 
         
         if (this instanceof SysCAMSPortTDF) {
         	((SysCAMSPortTDF) this).setPeriod(-1);
@@ -186,84 +176,205 @@ public class SysCAMSPrimitivePort extends TGCScalableWithInternalComponent imple
             f = f.deriveFont(this.currentFontSize);
     	}
 
+    	int attributeFontSize = this.currentFontSize * 5 / 6;
+    	int w = g.getFontMetrics().stringWidth(commName);
+		int h = g.getFontMetrics().getAscent();
+        g.setFont(f.deriveFont((float) attributeFontSize));
+        g.setFont(f);
+    	g.setFont(f.deriveFont(Font.BOLD));
+    	
         Color c = g.getColor();
         g.setColor(c);
          
         if (this instanceof SysCAMSPortTDF) {
-        	g.drawRect(x+width/2-portImageIconTDF.getIconWidth()/2, y+height/2-portImageIconTDF.getIconHeight()/2, portImageIconTDF.getIconWidth(), portImageIconTDF.getIconHeight());
-    		g.drawImage(portImageIconTDF.getImage(), x+width/2-portImageIconTDF.getIconWidth()/2, y+height/2-portImageIconTDF.getIconHeight()/2, null);
+        	g.setColor(Color.BLACK);
+        	g.fillRect(x, y, width, height);
+        	g.setColor(c);
+        	g.drawRect(x, y, width, height);
+        	switch (currentOrientation) {
+			case GraphicLib.NORTH:
+				g.drawString(commName, x + width + width / 2, y);
+				break;
+			case GraphicLib.WEST:
+				g.drawString(commName, x - w, y + height + height / 2 + h);
+				break;
+			case GraphicLib.SOUTH:
+				g.drawString(commName, x + width + width / 2, y + height + h);
+				break;
+			case GraphicLib.EAST:
+			default:
+				g.drawString(commName, x + width, y + height + height / 2 + h);
+			}
         } else if (this instanceof SysCAMSPortConverter) {
         	switch(currentOrientation) {
             case GraphicLib.NORTH:
-        		g.drawRect(x-1+width/2-portImageIconN.getIconWidth()/2, y-1+height/2-portImageIconN.getIconHeight()/2, portImageIconN.getIconWidth()+2, portImageIconN.getIconHeight()+2);
-         		g.drawImage(portImageIconN.getImage(), x+width/2-portImageIconN.getIconWidth()/2, y+height/2-portImageIconN.getIconHeight()/2, null);
+            	g.setColor(Color.WHITE);
+            	g.fillRect(x, y, width, height / 2);
+            	g.setColor(Color.BLACK);
+            	g.fillRect(x, y + height / 2, width, height / 2);
+            	g.setColor(c);
+            	g.drawRect(x, y, width, height);
+            	g.drawString(commName, x + width + width / 2, y);
             	break;
             case GraphicLib.SOUTH:
-        		g.drawRect(x+width/2-portImageIconS.getIconWidth()/2, y+height/2-portImageIconS.getIconHeight()/2, portImageIconS.getIconWidth(), portImageIconS.getIconHeight());
-         		g.drawImage(portImageIconS.getImage(), x+width/2-portImageIconS.getIconWidth()/2, y+height/2-portImageIconS.getIconHeight()/2, null);
+            	g.setColor(Color.BLACK);
+            	g.fillRect(x, y, width, height / 2);
+            	g.setColor(Color.WHITE);
+            	g.fillRect(x, y + height / 2, width, height / 2);
+            	g.setColor(c);
+            	g.drawRect(x, y, width, height);
+            	g.drawString(commName, x + width + width / 2, y + height + h);
             	break;
             case GraphicLib.WEST:
-        		g.drawRect(x+width/2-portImageIconW.getIconWidth()/2, y+height/2-portImageIconW.getIconHeight()/2, portImageIconW.getIconWidth(), portImageIconW.getIconHeight());
-         		g.drawImage(portImageIconW.getImage(), x+width/2-portImageIconW.getIconWidth()/2, y+height/2-portImageIconW.getIconHeight()/2, null);
+            	g.setColor(Color.WHITE);
+            	g.fillRect(x, y, width / 2, height);
+            	g.setColor(Color.BLACK);
+            	g.fillRect(x + width / 2, y, width / 2, height);
+            	g.setColor(c);
+            	g.drawRect(x, y, width, height);
+            	g.drawString(commName, x - w, y + height + height / 2 + h);
             	break;
             case GraphicLib.EAST:
             default:
-        		g.drawRect(x+width/2-portImageIconE.getIconWidth()/2, y+height/2-portImageIconE.getIconHeight()/2, portImageIconE.getIconWidth(), portImageIconE.getIconHeight());
-         		g.drawImage(portImageIconE.getImage(), x+width/2-portImageIconE.getIconWidth()/2, y+height/2-portImageIconE.getIconHeight()/2, null);
+            	g.setColor(Color.BLACK);
+            	g.fillRect(x, y, width / 2, height);
+            	g.setColor(Color.WHITE);
+            	g.fillRect(x + width / 2, y, width / 2, height);
+            	g.setColor(c);
+            	g.drawRect(x, y, width, height);
+            	g.drawString(commName, x + width, y + height + height / 2 + h);
             }
         } else if (this instanceof SysCAMSPortDE) {
-        	g.drawRect(x+width/2-portImageIconDE.getIconWidth()/2, y+height/2-portImageIconDE.getIconHeight()/2, portImageIconDE.getIconWidth(), portImageIconDE.getIconHeight());
-    		g.drawImage(portImageIconDE.getImage(), x+width/2-portImageIconDE.getIconWidth()/2, y+height/2-portImageIconDE.getIconHeight()/2, null);
+        	g.setColor(Color.WHITE);
+        	g.fillRect(x, y, width, height);
+        	g.setColor(c);
+        	g.drawRect(x, y, width, height);
+        	switch (currentOrientation) {
+			case GraphicLib.NORTH:
+				g.drawString(commName, x + width + width / 2, y);
+				break;
+			case GraphicLib.WEST:
+				g.drawString(commName, x - w, y + height + height / 2 + h);
+				break;
+			case GraphicLib.SOUTH:
+				g.drawString(commName, x + width + width / 2, y + height + h);
+				break;
+			case GraphicLib.EAST:
+			default:
+				g.drawString(commName, x + width, y + height + height / 2 + h);
+			}
     	}
         
         TGComponent tgc = getFather();
         if ((tgc != null) && (tgc instanceof SysCAMSBlockTDF)) {
         	if (tgc instanceof SysCAMSBlockTDF && this instanceof SysCAMSPortTDF) {
-        		g.drawRect(x+width/2-portImageIconTDF.getIconWidth()/2, y+height/2-portImageIconTDF.getIconHeight()/2, portImageIconTDF.getIconWidth(), portImageIconTDF.getIconHeight());
-        		g.drawImage(portImageIconTDF.getImage(), x+width/2-portImageIconTDF.getIconWidth()/2, y+height/2-portImageIconTDF.getIconHeight()/2, null);
+        		g.setColor(Color.BLACK);
+            	g.fillRect(x, y, width, height);
+            	g.setColor(c);
+            	g.drawRect(x, y, width, height);
+            	switch (currentOrientation) {
+    			case GraphicLib.NORTH:
+    				g.drawString(commName, x + width + width / 2, y);
+    				break;
+    			case GraphicLib.WEST:
+    				g.drawString(commName, x - w, y + height + height / 2 + h);
+    				break;
+    			case GraphicLib.SOUTH:
+    				g.drawString(commName, x + width + width / 2, y + height + h);
+    				break;
+    			case GraphicLib.EAST:
+    			default:
+    				g.drawString(commName, x + width, y + height + height / 2 + h);
+    			}
         	} 
         }
         if ((tgc != null) && (tgc instanceof SysCAMSBlockDE)) {
         	if (tgc instanceof SysCAMSBlockDE && this instanceof SysCAMSPortDE) {
-        		g.drawRect(x+width/2-portImageIconDE.getIconWidth()/2, y+height/2-portImageIconDE.getIconHeight()/2, portImageIconDE.getIconWidth(), portImageIconDE.getIconHeight());
-        		g.drawImage(portImageIconDE.getImage(), x+width/2-portImageIconDE.getIconWidth()/2, y+height/2-portImageIconDE.getIconHeight()/2, null);
+        		g.setColor(Color.WHITE);
+            	g.fillRect(x, y, width, height);
+            	g.setColor(c);
+            	g.drawRect(x, y, width, height);
+            	switch (currentOrientation) {
+    			case GraphicLib.NORTH:
+    				g.drawString(commName, x + width + width / 2, y);
+    				break;
+    			case GraphicLib.WEST:
+    				g.drawString(commName, x - w, y + height + height / 2 + h);
+    				break;
+    			case GraphicLib.SOUTH:
+    				g.drawString(commName, x + width + width / 2, y + height + h);
+    				break;
+    			case GraphicLib.EAST:
+    			default:
+    				g.drawString(commName, x + width, y + height + height / 2 + h);
+    			}
         	}
         }
         if ((tgc != null) && (tgc instanceof SysCAMSBlockGPIO2VCI)) {
         	if (tgc instanceof SysCAMSBlockGPIO2VCI && this instanceof SysCAMSPortDE) {
-        		g.drawRect(x+width/2-portImageIconDE.getIconWidth()/2, y+height/2-portImageIconDE.getIconHeight()/2, portImageIconDE.getIconWidth(), portImageIconDE.getIconHeight());
-        		g.drawImage(portImageIconDE.getImage(), x+width/2-portImageIconDE.getIconWidth()/2, y+height/2-portImageIconDE.getIconHeight()/2, null);
+        		g.setColor(Color.WHITE);
+            	g.fillRect(x, y, width, height);
+            	g.setColor(c);
+            	g.drawRect(x, y, width, height);
+            	switch (currentOrientation) {
+    			case GraphicLib.NORTH:
+    				g.drawString(commName, x + width + width / 2, y);
+    				break;
+    			case GraphicLib.WEST:
+    				g.drawString(commName, x - w, y + height + height / 2 + h);
+    				break;
+    			case GraphicLib.SOUTH:
+    				g.drawString(commName, x + width + width / 2, y + height + h);
+    				break;
+    			case GraphicLib.EAST:
+    			default:
+    				g.drawString(commName, x + width, y + height + height / 2 + h);
+    			}
         	}
         }
         if ((tgc != null) && (tgc instanceof SysCAMSBlockTDF)) {
         	if (tgc instanceof SysCAMSBlockTDF && this instanceof SysCAMSPortConverter) {
         		switch(currentOrientation) {
                 case GraphicLib.NORTH:
-            		g.drawRect(x-1+width/2-portImageIconN.getIconWidth()/2, y-1+height/2-portImageIconN.getIconHeight()/2, portImageIconN.getIconWidth()+2, portImageIconN.getIconHeight()+2);
-             		g.drawImage(portImageIconN.getImage(), x+width/2-portImageIconN.getIconWidth()/2, y+height/2-portImageIconN.getIconHeight()/2, null);
+                	g.setColor(Color.WHITE);
+                	g.fillRect(x, y, width, height / 2);
+                	g.setColor(Color.BLACK);
+                	g.fillRect(x, y + height / 2, width, height / 2);
+                	g.setColor(c);
+                	g.drawRect(x, y, width, height);
+                	g.drawString(commName, x + width + width / 2, y);
                 	break;
                 case GraphicLib.SOUTH:
-            		g.drawRect(x+width/2-portImageIconS.getIconWidth()/2, y+height/2-portImageIconS.getIconHeight()/2, portImageIconS.getIconWidth(), portImageIconS.getIconHeight());
-             		g.drawImage(portImageIconS.getImage(), x+width/2-portImageIconS.getIconWidth()/2, y+height/2-portImageIconS.getIconHeight()/2, null);
+                	g.setColor(Color.BLACK);
+                	g.fillRect(x, y, width, height / 2);
+                	g.setColor(Color.WHITE);
+                	g.fillRect(x, y + height / 2, width, height / 2);
+                	g.setColor(c);
+                	g.drawRect(x, y, width, height);
+                	g.drawString(commName, x + width + width / 2, y + height + h);
                 	break;
                 case GraphicLib.WEST:
-            		g.drawRect(x+width/2-portImageIconW.getIconWidth()/2, y+height/2-portImageIconW.getIconHeight()/2, portImageIconW.getIconWidth(), portImageIconW.getIconHeight());
-             		g.drawImage(portImageIconW.getImage(), x+width/2-portImageIconW.getIconWidth()/2, y+height/2-portImageIconW.getIconHeight()/2, null);
+                	g.setColor(Color.WHITE);
+                	g.fillRect(x, y, width / 2, height);
+                	g.setColor(Color.BLACK);
+                	g.fillRect(x + width / 2, y, width / 2, height);
+                	g.setColor(c);
+                	g.drawRect(x, y, width, height);
+                	g.drawString(commName, x - w, y + height + height / 2 + h);
                 	break;
                 case GraphicLib.EAST:
                 default:
-            		g.drawRect(x+width/2-portImageIconE.getIconWidth()/2, y+height/2-portImageIconE.getIconHeight()/2, portImageIconE.getIconWidth(), portImageIconE.getIconHeight());
-             		g.drawImage(portImageIconE.getImage(), x+width/2-portImageIconE.getIconWidth()/2, y+height/2-portImageIconE.getIconHeight()/2, null);
+                	g.setColor(Color.BLACK);
+                	g.fillRect(x, y, width / 2, height);
+                	g.setColor(Color.WHITE);
+                	g.fillRect(x + width / 2, y, width / 2, height);
+                	g.setColor(c);
+                	g.drawRect(x, y, width, height);
+                	g.drawString(commName, x + width, y + height + height / 2 + h);
                 }
         	}
         }
         
-        int attributeFontSize = this.currentFontSize * 5 / 6;
-        g.setFont(f.deriveFont((float) attributeFontSize));
-        g.setFont(f);
-    	g.setFont(f.deriveFont(Font.BOLD));
-    	g.drawString(commName, x, y-1);
-
         g.setFont(fold);
     }
 

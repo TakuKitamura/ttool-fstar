@@ -68,6 +68,7 @@ import ui.avatarsmd.AvatarSMDPanel;
 import ui.cd.TClassDiagramPanel;
 import ui.diplodocusmethodology.DiplodocusMethodologyDiagramPanel;
 import ui.ebrdd.EBRDDPanel;
+import ui.eln.ELNDiagramPanel;
 import ui.file.*;
 import ui.ftd.FaultTreeDiagramPanel;
 import ui.interactivesimulation.JFrameInteractiveSimulation;
@@ -109,8 +110,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
-
-import static myutil.FileUtils.checkFileForOpen;
 
 // AVATAR
 
@@ -172,7 +171,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     public KeyListener keyHandler;
 
     // Validation
-    public LinkedList<TClassInterface> tclassesToValidate = new LinkedList<TClassInterface>();
+    public List<TClassInterface> tclassesToValidate = new LinkedList<TClassInterface>();
 
     // Status bar
     private JLabel status;
@@ -1103,7 +1102,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         mainTabbedPane.add(sccdp.tabbedPane, index);
         mainTabbedPane.setToolTipTextAt(index, "Open SystemC-AMS design diagrams");
         mainTabbedPane.setTitleAt(index, name);
-        mainTabbedPane.setIconAt(index, IconManager.imgic60);
+        mainTabbedPane.setIconAt(index, IconManager.imgic1208);
         //mainTabbedPane.addTab(name, IconManager.imgic14, dp.tabbedPane, "Opens design diagrams");
         sccdp.init();
         //ystem.out.println("Design added");
@@ -1119,7 +1118,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     	mainTabbedPane.add(elndp.tabbedPane, index);
     	mainTabbedPane.setToolTipTextAt(index, "Open ELN design diagrams");
     	mainTabbedPane.setTitleAt(index, name);
-    	mainTabbedPane.setIconAt(index, IconManager.imgic60);
+    	mainTabbedPane.setIconAt(index, IconManager.imgic1208);
     	//mainTabbedPane.addTab(name, IconManager.imgic14, dp.tabbedPane, "Opens design diagrams");
     	elndp.init();
     	//ystem.out.println("Design added");
@@ -1937,7 +1936,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     public void newELN() {
     	//TraceManager.addDev("NEW DESIGN");
     	addELNDesignPanel("ELN", -1);
-    	tabs.elementAt(tabs.size() - 1).tabbedPane.setSelectedIndex(0);
+//    	tabs.elementAt(tabs.size() - 1).tabbedPane.setSelectedIndex(0);
     	mainTabbedPane.setSelectedIndex(tabs.size() - 1);
     	//paneAction(null);
     	//frame.repaint();
@@ -2430,7 +2429,6 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     public void updateLastOpenFile(File file) {
         if (ConfigurationTTool.LastOpenFileDefined) {
 
-
             ConfigurationTTool.LastOpenFile = file.getPath();
             if (ConfigurationTTool.LastOpenFile.contains(".ttool" + File.separator)) {
                 int last = 0;
@@ -2500,28 +2498,8 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             // open the new TURTLE modeling
             newTurtleModeling();
 
-            //TraceManager.addDev("Loading");
-            // load the new TURTLE modeling
-            // Issue #41: Moved to common method
             loadModels(gtm.mergeTURTLEGModeling(oldmodeling, s), "merged");
-            //            try {
-            //                //TraceManager.addDev("Merging");
-            //                gtm.enableUndo(false);
-            //                gtm.loadModelingFromXML(gtm.mergeTURTLEGModeling(oldmodeling, s));
-            //                gtm.enableUndo(true);
-            //                gtm.saveOperation(getCurrentSelectedPoint());
-            //                //gtm.saveOperation(tcdp);
-            //                frame.setTitle("TTool: " + file.getAbsolutePath());
-            //                makeLotosFile();
-            //
-            //                if (gtm.getCheckingErrors().size() > 0) {
-            //                    JOptionPane.showMessageDialog(frame, "Modeling could not be correctly merged", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
-            //                }
-            //
-            //            } catch (MalformedModelingException mme) {
-            //                JOptionPane.showMessageDialog(frame, "Modeling could not be correctly merged", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
-            //            }
-            //            dtree.forceUpdate();
+
         }
     }
 
@@ -2566,91 +2544,12 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             jfc.setAcceptAllFileFilterUsed(false);
             FileNameExtensionFilter filter = new FileNameExtensionFilter("TTool project", "ttool");
             jfc.setFileFilter(filter);
-            /*jfc.addMouseListener(new MouseListener() {
-
-        	    @Override
-        	    public void mouseClicked(MouseEvent arg0) {
-
-        	        if(arg0.getClickCount() == 2) {
-        	            File file = jfc.getSelectedFile();
-        	            if(!FileUtils.getExtension(file).equals("ttool")) {
-        	                jfc.setCurrentDirectory(file);
-        	                jfc.rescanCurrentDirectory();
-        	            }
-        	            else {
-        	                jfc.approveSelection();
-        	            }
-        	        }
-        	    }
-
-				@Override
-				public void mouseEntered(MouseEvent e) {
-					// TODO Auto-generated method stub
-					return;
-				}
-
-				@Override
-				public void mouseExited(MouseEvent e) {
-					// TODO Auto-generated method stub
-					return;
-				}
-
-				@Override
-				public void mousePressed(MouseEvent e) {
-					// TODO Auto-generated method stub
-					return;
-				}
-
-				@Override
-				public void mouseReleased(MouseEvent e) {
-					// TODO Auto-generated method stub
-					return;
-				}		
-        	});*/
         } else {
             jfc.resetChoosableFileFilters();
             jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
             jfc.setAcceptAllFileFilterUsed(false);
             FileNameExtensionFilter filter = new FileNameExtensionFilter("XML files", "xml");
             jfc.setFileFilter(filter);
-            /*jfc.addMouseListener(new MouseListener() {
-
-        	    @Override
-        	    public void mouseClicked(MouseEvent arg0) {
-
-        	        if(arg0.getClickCount() == 2) {
-        	            File file = jfc.getSelectedFile();
-        	            if(!FileUtils.getExtension(file).equals("ttool")) {
-        	                jfc.setCurrentDirectory(file);
-        	                jfc.rescanCurrentDirectory();
-        	            }
-        	        }
-        	    }
-
-				@Override
-				public void mouseEntered(MouseEvent e) {
-					// TODO Auto-generated method stub
-					return;
-				}
-
-				@Override
-				public void mouseExited(MouseEvent e) {
-					// TODO Auto-generated method stub
-					return;
-				}
-
-				@Override
-				public void mousePressed(MouseEvent e) {
-					// TODO Auto-generated method stub
-					return;
-				}
-
-				@Override
-				public void mouseReleased(MouseEvent e) {
-					// TODO Auto-generated method stub
-					return;
-				}		
-        	});*/
         }
         int returnVal = jfc.showOpenDialog(frame);
 
@@ -2755,6 +2654,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     }
 
     public void openLastProject(int id) {
+
         // Check if a current modeling is opened
         boolean b = actions[TGUIAction.ACT_SAVE].isEnabled();
         if (b) {
@@ -2764,11 +2664,15 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         }
 
         file = new File(ConfigurationTTool.LastOpenFiles[id]);
+        //TraceManager.addDev("Opening project #" + id + " for file=" + file.getAbsolutePath());
 
         if (checkFileForOpen(file)) {
             String s = null;
 
             if (FileUtils.getExtension(file).equals("ttool")) {
+                openProjectFromFile(file);
+                return;
+                /*TraceManager.addDev("this is a ttool project");
                 int last = 0;
                 for (int i = 0; i < ConfigurationTTool.LastOpenFile.length(); i++) {
                     if (ConfigurationTTool.LastOpenFile.charAt(i) == '/')
@@ -2783,26 +2687,27 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                     SpecConfigTTool.loadConfigFile(config);
                 } catch (MalformedConfigurationException e) {
                     System.err.println(e.getMessage() + " : Can't load config file.");
-                }
+                }*/
             } else {
                 dir = null;
                 config = null;
                 SpecConfigTTool.setBasicConfig(systemcOn);
+                try {
+                    FileInputStream fis = new FileInputStream(file);
+                    int nb = fis.available();
+
+                    byte[] ba = new byte[nb];
+                    fis.read(ba);
+                    fis.close();
+                    s = new String(ba, "UTF-8");
+                    //TraceManager.addDev("Model:" + s);
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(frame, "File could not be opened because " + e.getMessage(), "File Error", JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                }
             }
 
-            try {
-                FileInputStream fis = new FileInputStream(file);
-                int nb = fis.available();
 
-                byte[] ba = new byte[nb];
-                fis.read(ba);
-                fis.close();
-                s = new String(ba, "UTF-8");
-                //TraceManager.addDev("Model:" + s);
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(frame, "File could not be opened because " + e.getMessage(), "File Error", JOptionPane.INFORMATION_MESSAGE);
-                return;
-            }
 
             // close current modeling
             closeTurtleModeling();
@@ -2815,32 +2720,9 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             // Issue #41: Moved to common method
             updateLastOpenFile(file);
             loadModels(s, "loaded");
-            //TraceManager.addDev("Loading");
-            // load the new TURTLE modeling
-            //            try {
-            //                gtm.loadModelingFromXML(s);
-            //                //gtm.saveOperation(tcdp);
-            //                frame.setTitle("TTool: " + file.getAbsolutePath());
-            //                makeLotosFile();
-            //
-            //                if (gtm.getCheckingErrors().size() > 0) {
-            //                    JOptionPane.showMessageDialog(frame, "Modeling could not be correctly loaded", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
-            //                }
-            //            }
-            //            catch (MalformedModelingException mme) {
-            //                JOptionPane.showMessageDialog(frame, "Modeling could not be correctly loaded ", "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
-            //                frame.setTitle("TTool: unamed project");
-            //            }
-            //
-            //            dtree.forceUpdate();
-            //            gtm.enableUndo(true);
-            //            gtm.saveOperation(getCurrentSelectedPoint());
+
         }
 
-        //Added by Solange
-        //TURTLEPanel tp = getCurrentTURTLEPanel();
-        //gtm.generateLists((ProactiveDesignPanel)tp);
-        //
     }
 
     private void loadModels(final String xmlModel,
@@ -3610,7 +3492,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             DesignPanel dp = (DesignPanel) tp;
             JDialogModelChecking.validated = dp.validated;
             JDialogModelChecking.ignored = dp.ignored;
-            LinkedList<TClassInterface> tclassesToValidate = new LinkedList<TClassInterface>();
+            List<TClassInterface> tclassesToValidate = new LinkedList<TClassInterface>();
             JDialogModelChecking jdmc = new JDialogModelChecking(frame, tclassesToValidate, dp.tcdp.getComponentList(), "Choosing Tclasses to validate");
             if (!automatic) {
                 GraphicLib.centerOnParent(jdmc);
@@ -3722,7 +3604,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             AvatarDesignPanel adp = (AvatarDesignPanel) tp;
             //JDialogModelChecking.validated = adp.validated;
             //JDialogModelChecking.ignored = adp.ignored;
-            LinkedList<AvatarBDStateMachineOwner> blocksToValidate = new LinkedList<AvatarBDStateMachineOwner>();
+            List<AvatarBDStateMachineOwner> blocksToValidate = new LinkedList<AvatarBDStateMachineOwner>();
             JDialogSelectAvatarBlock jdmc = new JDialogSelectAvatarBlock(frame, blocksToValidate, adp.getAvatarBDPanel().getFullStateMachineOwnerList(), "Choosing blocks to validate", adp.getValidated(), adp.getIgnored(), adp.getOptimized());
             if (!automatic) {
                 GraphicLib.centerOnParent(jdmc);
@@ -3782,7 +3664,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
             //JDialogModelChecking.validated = adp.validated;
             //JDialogModelChecking.ignored = adp.ignored;
-            LinkedList<AvatarBDStateMachineOwner> blocksToValidate = new LinkedList<AvatarBDStateMachineOwner>();
+            List<AvatarBDStateMachineOwner> blocksToValidate = new LinkedList<AvatarBDStateMachineOwner>();
             JDialogSelectAvatarBlock jdmc = new JDialogSelectAvatarBlock(frame, blocksToValidate, adp.getAvatarBDPanel().getFullStateMachineOwnerList(), "Choosing blocks to validate", adp.getValidated(), adp.getIgnored(), adp.getOptimized());
             if (!automatic) {
                 GraphicLib.centerOnParent(jdmc);
@@ -4208,14 +4090,14 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return ret;
     }
 
-    public LinkedList<TAttribute> getAllAttributes() {
+    public List<TAttribute> getAllAttributes() {
         TURTLEPanel tp = getCurrentTURTLEPanel();
         String name = getCurrentTDiagramPanel().getName();
 
         return this.getAllAttributes(tp, name);
     }
 
-    public LinkedList<TAttribute> getAllAttributes(TURTLEPanel tp, String name) {
+    public List<TAttribute> getAllAttributes(TURTLEPanel tp, String name) {
         if (tp == null) {
             return null;
         }
@@ -4228,8 +4110,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return adp.getAllAttributes(name);
     }
 
-
-    public LinkedList<AvatarMethod> getAllMethods() {
+    public List<AvatarMethod> getAllMethods() {
         TURTLEPanel tp = getCurrentTURTLEPanel();
         if (tp == null) {
             return null;
@@ -4245,13 +4126,13 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return adp.getAllMethods(name);
     }
 
-    public LinkedList<AvatarSignal> getAllSignals() {
+    public List<AvatarSignal> getAllSignals() {
         TURTLEPanel tp = getCurrentTURTLEPanel();
         String name = getCurrentTDiagramPanel().getName();
         return this.getAllSignals(tp, name);
     }
 
-    public LinkedList<AvatarSignal> getAllSignals(TURTLEPanel tp, String name) {
+    public List<AvatarSignal> getAllSignals(TURTLEPanel tp, String name) {
         if (tp == null) {
             return null;
         }
@@ -4505,7 +4386,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return tmlcomp.getAllOutRequests(name);
     }
 
-    public LinkedList<String> getAllTimers() {
+    public List<String> getAllTimers() {
         TURTLEPanel tp = getCurrentTURTLEPanel();
         if (tp == null) {
             return null;
@@ -7301,6 +7182,20 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         setPanelMode();
         return true;
     }
+    
+    public boolean createELN(int index, String s) {
+        return createELN(tabs.elementAt(index), s);
+    }
+
+    public boolean createELN(TURTLEPanel tp, String s) {
+        if (!(tp instanceof ELNDesignPanel)) {
+            return false;
+        }
+
+        ((ELNDesignPanel) tp).addELN(s);
+        setPanelMode();
+        return true;
+    }
 
     public boolean isRequirementCreated(int index, String s) {
         return isRequirementCreated(tabs.elementAt(index), s);
@@ -7410,6 +7305,18 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     public SysCAMSComponentTaskDiagramPanel getSysCAMSPanel(TURTLEPanel tp, int indexTab, String s) {
     	if (tp.tabbedPane.getTitleAt(indexTab).equals(s)) {
     		return (SysCAMSComponentTaskDiagramPanel) (tp.panelAt(indexTab));
+    	}
+    	return null;
+    }
+    
+    public ELNDiagramPanel getELNPanel(int index, int indexTab, String s) {
+    	TURTLEPanel tp = tabs.elementAt(index);
+    	return getELNPanel(tp, indexTab, s);
+    }
+    
+    public ELNDiagramPanel getELNPanel(TURTLEPanel tp, int indexTab, String s) {
+    	if (tp.tabbedPane.getTitleAt(indexTab).equals(s)) {
+    		return (ELNDiagramPanel) (tp.panelAt(indexTab));
     	}
     	return null;
     }
@@ -8147,7 +8054,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return false;
     }
 
-		public boolean newSysCAMSComponentTaskName(TURTLEPanel tp, String old, String niou) {
+    public boolean newSysCAMSComponentTaskName(TURTLEPanel tp, String old, String niou) {
     	JTabbedPane jtp = tp.tabbedPane;
     	for (int i = 0; i < jtp.getTabCount(); i++) {
     		if (jtp.getTitleAt(i).equals(niou)) {
@@ -8168,7 +8075,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     					tdp.setName(niou);
     				}
     			}
-    			
+
     			return true;
     		}
     	}
@@ -8532,33 +8439,33 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         //tofile.extracParamToFile();
     }
 
-    public void avatarToSoclib() {
-        //DG 6.2. appelee nulle part?
-
-        ADDDiagramPanel deploymentDiagramPanel = getDeploymentPanel();
-        AvatarDesignPanel designDiagramPanel = getFirstAvatarDesignPanelFound();
-
-        AvatarDeploymentPanelTranslator avdeploymenttranslator = new AvatarDeploymentPanelTranslator(deploymentDiagramPanel);
-        AvatarddSpecification avddspec = avdeploymenttranslator.getAvatarddSpecification();
-
-
-        AvatarDesignPanelTranslator avdesigntranslator = new AvatarDesignPanelTranslator(designDiagramPanel);
-
-        LinkedList<AvatarBDStateMachineOwner> adp = designDiagramPanel.getAvatarBDPanel().getFullStateMachineOwnerList();
-        AvatarSpecification avaspec = avdesigntranslator.generateAvatarSpecification(adp);
-
-        // Generator for block tasks and application main file
-
-        TasksAndMainGenerator gene = new TasksAndMainGenerator(avddspec, avaspec);
-        gene.generateSoclib(false, false);
-        try {
-            //System.err.println("ok");
-            gene.saveInFiles(TasksAndMainGenerator.getGeneratedPath());
-        } catch (FileException e) {
-            System.err.println("FileException : MainGUI.avatarToSoclib()");
-        }
-
-    }
+//    public void avatarToSoclib() {
+//        //DG 6.2. appelee nulle part?
+//
+//        ADDDiagramPanel deploymentDiagramPanel = getDeploymentPanel();
+//        AvatarDesignPanel designDiagramPanel = getFirstAvatarDesignPanelFound();
+//
+//        AvatarDeploymentPanelTranslator avdeploymenttranslator = new AvatarDeploymentPanelTranslator(deploymentDiagramPanel);
+//        AvatarddSpecification avddspec = avdeploymenttranslator.getAvatarddSpecification();
+//
+//
+//        AvatarDesignPanelTranslator avdesigntranslator = new AvatarDesignPanelTranslator(designDiagramPanel);
+//
+//        List<AvatarBDStateMachineOwner> adp = designDiagramPanel.getAvatarBDPanel().getFullStateMachineOwnerList();
+//        AvatarSpecification avaspec = avdesigntranslator.generateAvatarSpecification(adp);
+//
+//        // Generator for block tasks and application main file
+//
+//        TasksAndMainGenerator gene = new TasksAndMainGenerator(avddspec, avaspec);
+//        gene.generateSoclib(false, false);
+//        try {
+//            //System.err.println("ok");
+//            gene.saveInFiles(TasksAndMainGenerator.getGeneratedPath());
+//        } catch (FileException e) {
+//            System.err.println("FileException : MainGUI.avatarToSoclib()");
+//        }
+//
+//    }
     //--------------------end DDD------------------------------------------------
 
     public Vector<SysCAMSComponentTaskDiagramPanel> getListSysCAMSPanel() {
@@ -8572,12 +8479,12 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     			}
     		}
     		if (syscamsDiagram.size() == 0) 
-    			System.err.println("No SysCAMS Panel found : MainGUI.getSysCAMSPanel()");
+    			System.err.println("No SysCAMS Panel found : MainGUI.getListSysCAMSPanel()");
     		return syscamsDiagram;
     	} else {
     		JDialog msg = new JDialog();
     		msg.setLocationRelativeTo(null);
-    		JOptionPane.showMessageDialog(msg, "There is no Systemc-AMS panel. Please add one.", "Warning !",
+    		JOptionPane.showMessageDialog(msg, "There is no SystemC-AMS panel. Please add one.", "Warning !",
     				JOptionPane.WARNING_MESSAGE);
     		return null;
     	}
@@ -8586,6 +8493,37 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     public void syscamsExecutableCodeGeneration() {
         JDialogSysCAMSExecutableCodeGeneration jgen = new JDialogSysCAMSExecutableCodeGeneration(frame, this, "Executable Code generation, compilation and execution",
                 "../SysCAMSGenerationCode/");
+   
+        GraphicLib.centerOnParent(jgen, 500, 450);
+        jgen.setVisible(true);
+        dtree.toBeUpdated();
+    }
+    
+    public Vector<ELNDiagramPanel> getListELNPanel() {
+    	Vector<ELNDiagramPanel> elnDiagram = new Vector<ELNDiagramPanel>(); 
+    	TURTLEPanel tp = getTURTLEPanel("ELN");
+    	if (tp != null) {
+    		Vector<TDiagramPanel> ps = tp.panels;
+    		for (TDiagramPanel panel : ps) {
+    			if (panel instanceof ELNDiagramPanel) {
+    				elnDiagram.add((ELNDiagramPanel) panel);
+    			}
+    		}
+    		if (elnDiagram.size() == 0) 
+    			System.err.println("No ELN Panel found : MainGUI.getListELNPanel()");
+    		return elnDiagram;
+    	} else {
+    		JDialog msg = new JDialog();
+    		msg.setLocationRelativeTo(null);
+    		JOptionPane.showMessageDialog(msg, "There is no ELN panel. Please add one.", "Warning !",
+    				JOptionPane.WARNING_MESSAGE);
+    		return null;
+    	}
+    }
+    
+    public void elnExecutableCodeGeneration() {
+        JDialogELNExecutableCodeGeneration jgen = new JDialogELNExecutableCodeGeneration(frame, this, "Executable Code generation, compilation and execution",
+                "../ELNGenerationCode/");
    
         GraphicLib.centerOnParent(jgen, 500, 450);
         jgen.setVisible(true);

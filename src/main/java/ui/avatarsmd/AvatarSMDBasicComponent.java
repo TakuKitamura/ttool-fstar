@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatarsmd;
 
 import ui.*;
@@ -51,16 +48,18 @@ import ui.*;
  * @author Ludovic APVRILLE
  */
 public abstract class AvatarSMDBasicComponent extends TGCWithoutInternalComponent implements SwallowedTGComponent {
-    private int lineLength = 5;
+    //private int lineLength = 5;
     
     public AvatarSMDBasicComponent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
     }
     
+    @Override
     public int getDefaultConnector() {
-      return TGComponentManager.AVATARSMD_CONNECTOR;
+    	return TGComponentManager.AVATARSMD_CONNECTOR;
     }
 	
+    @Override
 	public void resizeWithFather() {
         if ((father != null) && (father instanceof AvatarSMDState)) {
 			// Too large to fit in the father? -> resize it!
@@ -70,5 +69,8 @@ public abstract class AvatarSMDBasicComponent extends TGCWithoutInternalComponen
             setMoveCd(x, y);
         }
     }
-    
+
+    protected boolean isContainedInEnabledState() {
+    	return getFather() instanceof AvatarSMDState && getFather().isEnabled();
+    }
 }

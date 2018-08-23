@@ -89,7 +89,7 @@ public class SysCAMSBlockGPIO2VCI extends TGCScalableWithInternalComponent imple
         removable = true;
         userResizable = true;
 
-    	value = "Block_GPIO2VCI";
+    	value = "blockGPIO2VCI";
         name = "Primitive component - Block GPIO2VCI";
         
         myImageIcon = IconManager.imgic1202;

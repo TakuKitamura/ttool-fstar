@@ -36,14 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package avatartranslator;
 
-import java.util.HashMap;
-
+import java.util.Map;
 
 /**
  * An AvatarSimpleGuardDuo is an {@link AvatarSimpleGuard} that is of the form:
@@ -85,7 +80,7 @@ public class AvatarSimpleGuardDuo extends AvatarSimpleGuard {
     }
 
     @Override
-    public void replaceAttributes (HashMap<AvatarAttribute, AvatarAttribute> attributesMapping) {
+    public void replaceAttributes( Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
         if (this.termA instanceof AvatarAttribute)
         {
             this.termA = attributesMapping.get(this.termA);

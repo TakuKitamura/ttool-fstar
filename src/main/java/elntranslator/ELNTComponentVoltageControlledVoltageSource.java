@@ -38,7 +38,7 @@
 
 package elntranslator;
 
-import ui.eln.ELNConnectingPoint;
+import java.util.LinkedList;
 
 /**
  * Class ELNTComponentVoltageControlledVoltageSource
@@ -48,17 +48,17 @@ import ui.eln.ELNConnectingPoint;
  * @author Irina Kit Yan LEE
 */
 
-public class ELNTComponentVoltageControlledVoltageSource extends ELNTComponent {
+public class ELNTComponentVoltageControlledVoltageSource extends ELNTComponent implements ELNTPrimitiveComponent {
 	private String name;
 	private double val;
-	private ELNConnectingPoint[] cp;
+	private LinkedList<ELNTConnectingPoint> cp;
 	
 	private ELNTModule module;
 	
-	public ELNTComponentVoltageControlledVoltageSource(String _name, double _val, ELNConnectingPoint[] _cp, ELNTModule _module) {
+	public ELNTComponentVoltageControlledVoltageSource(String _name, double _val, ELNTModule _module) {
 		name = _name;
 		val = _val;
-		cp = _cp;
+		cp = new LinkedList<ELNTConnectingPoint>();
 		module = _module;
 	}
 
@@ -70,10 +70,14 @@ public class ELNTComponentVoltageControlledVoltageSource extends ELNTComponent {
 		return val;
 	}
 	
-	public ELNConnectingPoint[] getCp() {
+	public LinkedList<ELNTConnectingPoint> getConnectingPoint() {
 		return cp;
 	}
-
+	
+	public void addConnectingPoint(ELNTConnectingPoint _cp) {
+		cp.add(_cp);
+	}
+	
 	public ELNTModule getModule() {
 		return module;
 	}

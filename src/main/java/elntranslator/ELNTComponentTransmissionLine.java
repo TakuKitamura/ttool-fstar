@@ -38,7 +38,7 @@
 
 package elntranslator;
 
-import ui.eln.ELNConnectingPoint;
+import java.util.LinkedList;
 
 /**
  * Class ELNTComponentTransmissionLine
@@ -48,23 +48,23 @@ import ui.eln.ELNConnectingPoint;
  * @author Irina Kit Yan LEE
 */
 
-public class ELNTComponentTransmissionLine extends ELNTComponent {
+public class ELNTComponentTransmissionLine extends ELNTComponent implements ELNTPrimitiveComponent {
 	private String name;
 	private double z0, delta0;
 	private String delay;
 	private String unit0, unit2;
-	private ELNConnectingPoint[] cp;
+	private LinkedList<ELNTConnectingPoint> cp;
 	
 	private ELNTModule module;
 	
-	public ELNTComponentTransmissionLine(String _name, double _z0, double _delta0, String _delay, String _unit0, String _unit2, ELNConnectingPoint[] _cp, ELNTModule _module) {
+	public ELNTComponentTransmissionLine(String _name, double _z0, double _delta0, String _delay, String _unit0, String _unit2, ELNTModule _module) {
 		name = _name;
 		z0 = _z0;
 		delta0 = _delta0;
 		delay = _delay;
 		unit0 = _unit0;
 		unit2 = _unit2;
-		cp = _cp;
+		cp = new LinkedList<ELNTConnectingPoint>();
 		module = _module;
 	}
 
@@ -92,8 +92,12 @@ public class ELNTComponentTransmissionLine extends ELNTComponent {
 		return unit2;
 	}
 
-	public ELNConnectingPoint[] getCp() {
+	public LinkedList<ELNTConnectingPoint> getConnectingPoint() {
 		return cp;
+	}
+	
+	public void addConnectingPoint(ELNTConnectingPoint _cp) {
+		cp.add(_cp);
 	}
 	
 	public ELNTModule getModule() {

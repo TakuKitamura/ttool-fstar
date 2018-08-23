@@ -586,11 +586,11 @@ public class TMLCPSyntaxChecking {
         }
 
         // Tree analysis: if the tree contains a variable, then, this variable has not been declared
-        ArrayList<String> vars = root.getVariables();
+        List<String> vars = root.getVariables();
 
         //Do not raise a syntax error when variables appear in actions
-        ArrayList<String> boolAttrNamesList = new ArrayList<String>();    //a list of the boolean attribute names
-        ArrayList<String> natAttrNamesList = new ArrayList<String>();    //a list of the natural attribute names
+        List<String> boolAttrNamesList = new ArrayList<String>();    //a list of the boolean attribute names
+        List<String> natAttrNamesList = new ArrayList<String>();    //a list of the natural attribute names
         for (TMLAttribute attr : attributes) {
             if (attr.isNat()) {
                 natAttrNamesList.add(attr.getName());

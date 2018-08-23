@@ -36,25 +36,40 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package ui.tmlad;
 
-import myutil.GraphicLib;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.geom.Line2D;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.swing.JFrame;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import ui.*;
+
+import myutil.GraphicLib;
+import ui.AllowedBreakpoint;
+import ui.BasicErrorHighlight;
+import ui.CheckableAccessibility;
+import ui.CheckableLatency;
+import ui.ColorManager;
+import ui.EmbeddedComment;
+import ui.ErrorHighlight;
+import ui.LinkedReference;
+import ui.MalformedModelingException;
+import ui.TDiagramPanel;
+import ui.TGComponent;
+import ui.TGComponentManager;
+import ui.TGConnectingPoint;
+import ui.ad.TADComponentWithoutSubcomponents;
 import ui.util.IconManager;
-import ui.window.JDialogMultiString;
-import myutil.*;
 import ui.window.JDialogMultiStringAndTabs;
 import ui.window.TabInfo;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.geom.Line2D;
-import java.util.ArrayList;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Class TMLADReadChannel
@@ -64,8 +79,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Ludovic APVRILLE
  * @version 1.0 21/11/2005
  */
-public class TMLADReadChannel extends TGCWithoutInternalComponent implements CheckableAccessibility, LinkedReference, CheckableLatency, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
-    private ConcurrentHashMap<String, String> latencyVals;
+public class TMLADReadChannel extends TADComponentWithoutSubcomponents/* Issue #69 TGCWithoutInternalComponent*/ implements CheckableAccessibility, LinkedReference, CheckableLatency, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
+    private Map<String, String> latencyVals;
     protected int lineLength = 5;
     protected int textX = 5;
     protected int textX0 = 2;
@@ -117,17 +132,17 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
         myImageIcon = IconManager.imgic906;
         latencyVals = new ConcurrentHashMap<String, String>();
         //latencyVals.put("sendChannel: sensorData", "3");
-
     }
 
 	/*public void addLatency(String name, String num){
         latencyVals.put(name,num);
 	}*/
 
-    public ConcurrentHashMap<String, String> getLatencyMap() {
+    public Map<String, String> getLatencyMap() {
         return latencyVals;
     }
 
+    @Override
     public void internalDrawing(Graphics g) {
         int w = g.getFontMetrics().stringWidth(value);
         int w1 = Math.max(minWidth, w + 2 * textX);
@@ -201,7 +216,7 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
         }
     }
 
-    public void drawLatencyInformation(Graphics g) {
+    private void drawLatencyInformation(Graphics g) {
         int index = 1;
         for (String s : latencyVals.keySet()) {
             int w = g.getFontMetrics().stringWidth(s);
@@ -213,9 +228,8 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
         }
     }
 
-    public void drawReachabilityInformation(Graphics g) {
+    private void drawReachabilityInformation(Graphics g) {
         if (reachabilityInformation > 0) {
-
             Color c = g.getColor();
             Color c1;
             switch (reachabilityInformation) {
@@ -242,6 +256,7 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
         }
     }
 
+    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -270,6 +285,7 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
         return value;
     }
 
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
         TabInfo tab1 = new TabInfo("Name and samples");
         String[] labels = new String[2];
@@ -280,7 +296,7 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
         values[1] = nbOfSamples;
         tab1.labels=labels;
         tab1.values =  values;
-        ArrayList<String[]> help = new ArrayList<String[]>();
+        List<String[]> help = new ArrayList<String[]>();
         String[] allInChannels = tdp.getMGUI().getAllInChannels();
         if (isAttacker) {
             allInChannels = tdp.getMGUI().getAllCompInChannels();
@@ -307,7 +323,7 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
         tab2.values =  values;
         tab2.help = help;
 
-        ArrayList<TabInfo> tabs = new ArrayList<>();
+        List<TabInfo> tabs = new ArrayList<>();
         tabs.add(tab1);
         tabs.add(tab2);
 
@@ -328,8 +344,6 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
         }
 
         return false;
-
-
     }
 
     public void setSamples(String sp) {
@@ -337,6 +351,7 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
         makeValue();
     }
 
+    @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<Data channelName=\"");
@@ -388,11 +403,10 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
             }
 
         } catch (Exception e) {
-            throw new MalformedModelingException();
+            throw new MalformedModelingException( e );
         }
         makeValue();
     }
-
 
     public String getSecurityContext() {
         return securityContext;
@@ -406,18 +420,22 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
         return isAttacker;
     }
 
+    @Override
     public int getType() {
         return TGComponentManager.TMLAD_READ_CHANNEL;
     }
 
+    @Override
     public int getDefaultConnector() {
         return TGComponentManager.CONNECTOR_TMLAD;
     }
 
+    @Override
     public void setStateAction(int _stateAction) {
         stateOfError = _stateAction;
     }
-	public boolean getEncForm(){
+
+    public boolean getEncForm(){
 		return isEncForm;
 	}
 		
@@ -430,5 +448,4 @@ public class TMLADReadChannel extends TGCWithoutInternalComponent implements Che
         channelName = s;
         makeValue();
     }
-
 }

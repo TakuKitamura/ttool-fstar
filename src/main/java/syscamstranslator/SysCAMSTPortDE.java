@@ -38,6 +38,8 @@
 
 package syscamstranslator;
 
+import elntranslator.*;
+
 /**
  * Class SysCAMSTPortDE
  * Parameters of a SystemC-AMS port DE
@@ -60,6 +62,8 @@ public class SysCAMSTPortDE extends SysCAMSTComponent {
 	
 	private SysCAMSTBlockDE blockDE;
 	private SysCAMSTBlockGPIO2VCI blockGPIO2VCI;
+	private ELNTCluster cluster;
+	private ELNTModule module;
 	
 	public SysCAMSTPortDE(String _name, int _origin, String _DEType, boolean _sensitive, String _sensitiveMethod, SysCAMSTBlockDE _blockDE) {
 		name = _name;
@@ -86,7 +90,33 @@ public class SysCAMSTPortDE extends SysCAMSTComponent {
 		sensitiveMethod = _sensitiveMethod;
 		blockGPIO2VCI = _blockGPIO2VCI;
 	}
+	
+	public SysCAMSTPortDE(String _name, int _origin, String _DEType, boolean _sensitive, String _sensitiveMethod, ELNTCluster _cluster) {
+		name = _name;
+//		period = _period;
+//		time = _time;
+//		rate = _rate;
+//		delay = _delay;ELNTCluster
+		origin = _origin;
+		DEType = _DEType;
+		sensitive = _sensitive;
+		sensitiveMethod = _sensitiveMethod;
+		cluster = _cluster;
+	}
 
+	public SysCAMSTPortDE(String _name, int _origin, String _DEType, boolean _sensitive, String _sensitiveMethod, ELNTModule _module) {
+		name = _name;
+//		period = _period;
+//		time = _time;
+//		rate = _rate;
+//		delay = _delay;ELNTCluster
+		origin = _origin;
+		DEType = _DEType;
+		sensitive = _sensitive;
+		sensitiveMethod = _sensitiveMethod;
+		module = _module;
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -129,5 +159,13 @@ public class SysCAMSTPortDE extends SysCAMSTComponent {
 	
 	public SysCAMSTBlockGPIO2VCI getBlockGPIO2VCI() {
 		return blockGPIO2VCI;
+	}
+
+	public ELNTCluster getCluster() {
+		return cluster;
+	}
+
+	public ELNTModule getModule() {
+		return module;
 	}
 }

@@ -104,7 +104,7 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 		removable = true;
 		userResizable = true;
 
-		value = tdp.findSysCAMSPrimitiveComponentName("Block_DE_");
+		value = tdp.findSysCAMSPrimitiveComponentName("blockDE");
 		name = "Primitive component - Block DE";
 
 //		setPeriod(-1);
@@ -430,7 +430,6 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 			Node n1, n2;
 			Element elt;
 
-			int period;
 			String code, nameFn, listStruct, nameTemplate, typeTemplate, listTypedef;
 
 			for(int i=0; i<nl.getLength(); i++) {

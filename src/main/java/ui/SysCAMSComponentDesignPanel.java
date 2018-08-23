@@ -164,7 +164,7 @@ public class SysCAMSComponentDesignPanel extends TURTLEPanel {
 		jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
 		toolBarPanel.add(ardtb, BorderLayout.NORTH);
 		toolBarPanel.add(jsp, BorderLayout.CENTER);
-		tabbedPane.addTab(s, IconManager.imgic84, toolBarPanel, "Opens SysCAMS component diagram");
+		tabbedPane.addTab(s, IconManager.imgic1208, toolBarPanel, "Opens SysCAMS component diagram");
 		tabbedPane.setSelectedIndex(0);
 		JPanel toolBarPanel = new JPanel();
 		toolBarPanel.setLayout(new BorderLayout());

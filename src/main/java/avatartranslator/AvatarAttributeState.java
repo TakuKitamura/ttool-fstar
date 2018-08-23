@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package avatartranslator;
 
 /**
@@ -52,14 +49,16 @@ public class AvatarAttributeState extends AvatarElement {
     private AvatarState state;
     public AvatarAttributeState(String _name, Object _referenceObject, AvatarAttribute attr, AvatarState st) {
         super(_name, _referenceObject);
-	attribute = attr;
-	state = st;
+        attribute = attr;
+        state = st;
     }
+    
     public AvatarAttribute getAttribute(){
-	return attribute;
+    	return attribute;
     }
+    
     public AvatarState getState(){
-	return state;
+    	return state;
     }
 
     public AvatarAttributeState advancedClone (AvatarSpecification avspec) {
@@ -72,8 +71,8 @@ public class AvatarAttributeState extends AvatarElement {
         return result;
     }
 
-    public String toString()
-    {
+    @Override
+    public String toString() {
         return this.attribute.getBlock().getName().replaceAll("__", ".") + "." + this.state.getName() + "." + this.attribute.getName();
     }
 }

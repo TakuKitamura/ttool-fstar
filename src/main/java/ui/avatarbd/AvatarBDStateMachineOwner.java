@@ -36,18 +36,14 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatarbd;
+
+import java.util.List;
 
 import ui.AvatarMethod;
 import ui.AvatarSignal;
 import ui.TAttribute;
 import ui.avatarsmd.AvatarSMDPanel;
-
-import java.util.LinkedList;
-
 
 /**
  * This interface represent block diagram elements that are associated to a state machine.
@@ -59,14 +55,14 @@ import java.util.LinkedList;
  */
 public interface AvatarBDStateMachineOwner {
 
-    LinkedList<TAttribute> getAttributeList();
-    LinkedList<String> getAllTimerList();
+    List<TAttribute> getAttributeList();
+    List<String> getAllTimerList();
     TAttribute getAttributeByName(String _name);
-    LinkedList<AvatarSignal> getSignalList();
-    LinkedList<AvatarSignal> getAllSignalList();
+    List<AvatarSignal> getSignalList();
+    List<AvatarSignal> getAllSignalList();
     AvatarSignal getSignalNameBySignalDef(String _id);
-    LinkedList<AvatarMethod> getMethodList();
-    LinkedList<AvatarMethod> getAllMethodList();
+    List<AvatarMethod> getMethodList();
+    List<AvatarMethod> getAllMethodList();
 
     String getOwnerName();
     AvatarSMDPanel getAvatarSMDPanel();

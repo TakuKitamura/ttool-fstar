@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatardd;
 
 import org.w3c.dom.Element;
@@ -65,7 +62,6 @@ public class ADDBridgeNode extends ADDCommunicationNode implements WithAttribute
     private int derivationy = 3;
     private String stereotype = "BRIDGE";
 	
-    
     public ADDBridgeNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
@@ -110,6 +106,7 @@ public class ADDBridgeNode extends ADDCommunicationNode implements WithAttribute
         myImageIcon = IconManager.imgic700;
     }
     
+    @Override
     public void internalDrawing(Graphics g) {
 		Color c = g.getColor();
 		g.draw3DRect(x, y, width, height, true);
@@ -141,8 +138,8 @@ public class ADDBridgeNode extends ADDCommunicationNode implements WithAttribute
 		g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
     }
     
+    @Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
-        
         Polygon pol = new Polygon();
         pol.addPoint(x, y);
         pol.addPoint(x + derivationx, y - derivationy);
@@ -166,6 +163,7 @@ public class ADDBridgeNode extends ADDCommunicationNode implements WithAttribute
         return name;
     }
     
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
 	//	boolean error = false;
 		//String errors = "";
@@ -234,11 +232,12 @@ public class ADDBridgeNode extends ADDCommunicationNode implements WithAttribute
         return true;
     }
     
-    
+    @Override
     public int getType() {
         return TGComponentManager.ADD_BRIDGENODE;
     }
     
+    @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<info stereotype=\"" + stereotype + "\" nodeName=\"" + name);
@@ -295,17 +294,14 @@ public class ADDBridgeNode extends ADDCommunicationNode implements WithAttribute
             }
             
         } catch (Exception e) {
-            throw new MalformedModelingException();
+            throw new MalformedModelingException( e );
         }
     }
-    
-	  
-	  public String getAttributes() {
-		  String attr = "";
-		  //attr += "Buffer size (in byte) = " + bufferByteDataSize + "\n";
-		  //attr += "Clock ratio = " + clockRatio + "\n";
-		  return attr;
-	  }
-	  
-    
+
+    public String getAttributes() {
+    	String attr = "";
+    	//attr += "Buffer size (in byte) = " + bufferByteDataSize + "\n";
+    	//attr += "Clock ratio = " + clockRatio + "\n";
+    	return attr;
+    }
 }

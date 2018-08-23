@@ -60,7 +60,7 @@ import java.awt.geom.RoundRectangle2D;
  * @author Irina Kit Yan LEE
  */
 
-public class ELNComponentCurrentSourceTDF extends TGCScalableWithInternalComponent implements ActionListener, SwallowedTGComponent, ELNComponent {
+public class ELNComponentCurrentSourceTDF extends TGCScalableWithInternalComponent implements ActionListener, SwallowedTGComponent, ELNPrimitiveComponent {
 	protected Color myColor;
 	protected int orientation;
 	private int maxFontSize = 14;
@@ -559,6 +559,7 @@ public class ELNComponentCurrentSourceTDF extends TGCScalableWithInternalCompone
 				x + 4 * width / 5 + width / 10, y + 4 * height / 5 - height / 10, true);
 		GraphicLib.arrowWithLine(g, 1, 0, 10, x + width / 5, y + height / 2, x + 2 * width / 5, y + height / 2, true);
 		g.fillRect(x, y + 2 * height / 5, width / 5, height / 5);
+		g.drawRect(x, y + 2 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
 		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
@@ -592,6 +593,7 @@ public class ELNComponentCurrentSourceTDF extends TGCScalableWithInternalCompone
 				x + 4 * width / 5 + width / 10, y + height / 5 + height / 10, true);
 		GraphicLib.arrowWithLine(g, 1, 0, 10, x + width / 5, y + height / 2, x + 2 * width / 5, y + height / 2, true);
 		g.fillRect(x, y + 2 * height / 5, width / 5, height / 5);
+		g.drawRect(x, y + 2 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
 		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
@@ -626,6 +628,7 @@ public class ELNComponentCurrentSourceTDF extends TGCScalableWithInternalCompone
 		GraphicLib.arrowWithLine(g, 1, 0, 10, x + 4 * width / 5, y + height / 2, x + 3 * width / 5, y + height / 2,
 				true);
 		g.fillRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
+		g.drawRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
 		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
@@ -660,6 +663,7 @@ public class ELNComponentCurrentSourceTDF extends TGCScalableWithInternalCompone
 		GraphicLib.arrowWithLine(g, 1, 0, 10, x + 4 * width / 5, y + height / 2, x + 3 * width / 5, y + height / 2,
 				true);
 		g.fillRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
+		g.drawRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
 		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
@@ -693,6 +697,7 @@ public class ELNComponentCurrentSourceTDF extends TGCScalableWithInternalCompone
 				x + width / 5 + width / 10, y + 4 * height / 5 + height / 10, true);
 		GraphicLib.arrowWithLine(g, 1, 0, 10, x + width / 2, y + height / 5, x + width / 2, y + 2 * height / 5, true);
 		g.fillRect(x + 2 * width / 5, y, width / 5, height / 5);
+		g.drawRect(x + 2 * width / 5, y, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
 		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
@@ -727,6 +732,7 @@ public class ELNComponentCurrentSourceTDF extends TGCScalableWithInternalCompone
 		GraphicLib.arrowWithLine(g, 1, 0, 10, x + width / 2, y + 4 * height / 5, x + width / 2, y + 3 * height / 5,
 				true);
 		g.fillRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
+		g.drawRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
 		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
@@ -761,6 +767,7 @@ public class ELNComponentCurrentSourceTDF extends TGCScalableWithInternalCompone
 		GraphicLib.arrowWithLine(g, 1, 0, 10, x + width / 2, y + 4 * height / 5, x + width / 2, y + 3 * height / 5,
 				true);
 		g.fillRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
+		g.drawRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
 		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
@@ -794,6 +801,7 @@ public class ELNComponentCurrentSourceTDF extends TGCScalableWithInternalCompone
 				x + 4 * width / 5 - width / 10, y + 4 * height / 5 + height / 10, true);
 		GraphicLib.arrowWithLine(g, 1, 0, 10, x + width / 2, y + height / 5, x + width / 2, y + 2 * height / 5, true);
 		g.fillRect(x + 2 * width / 5, y, width / 5, height / 5);
+		g.drawRect(x + 2 * width / 5, y, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
 		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);

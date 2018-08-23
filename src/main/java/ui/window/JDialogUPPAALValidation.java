@@ -757,7 +757,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         UPPAALSpec spec = mgui.gtm.getLastUPPAALSpecification();
         AVATAR2UPPAAL avatar2uppaal = mgui.gtm.getAvatar2Uppaal();
         AvatarSpecification avspec = mgui.gtm.getAvatarSpecification();
-        Hashtable<String, String> hash = avatar2uppaal.getHash();
+        Map<String, String> hash = avatar2uppaal.getHash();
         String finQuery = query + " ";
         /*      String[] split = query.split("[\\s-()=]+");
                 for (String s: split){

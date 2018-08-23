@@ -36,21 +36,30 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatarsmd;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Polygon;
+import java.awt.geom.Line2D;
+import java.util.List;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import myutil.GraphicLib;
 import myutil.TraceManager;
-import ui.*;
+import ui.AvatarSignal;
+import ui.BasicErrorHighlight;
+import ui.ColorManager;
+import ui.ErrorHighlight;
+import ui.PartOfInvariant;
+import ui.TDiagramPanel;
+import ui.TGComponent;
+import ui.TGComponentManager;
+import ui.TGConnectingPoint;
 import ui.util.IconManager;
 import ui.window.JDialogAvatarTimer;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.geom.Line2D;
-import java.util.LinkedList;
 
 /**
  * Class AvatarSMDResetTimer
@@ -59,7 +68,7 @@ import java.util.LinkedList;
  * @version 1.0 15/07/2010
  * @author Ludovic APVRILLE
  */
-public class AvatarSMDResetTimer extends AvatarSMDBasicComponent implements BasicErrorHighlight, PartOfInvariant {
+public class AvatarSMDResetTimer extends AvatarSMDBasicCanBeDisabledComponent /* Issue #69 AvatarSMDBasicComponent*/ implements BasicErrorHighlight, PartOfInvariant {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
@@ -97,8 +106,8 @@ public class AvatarSMDResetTimer extends AvatarSMDBasicComponent implements Basi
         myImageIcon = IconManager.imgic904;
     }
     
+    @Override
     public void internalDrawing(Graphics g) {
-		
         int w  = g.getFontMetrics().stringWidth(value);
         int w1 = Math.max(minWidth, w + 2 * textX);
         if ((w1 != width) & (!tdp.isScaled())) {
@@ -142,11 +151,26 @@ public class AvatarSMDResetTimer extends AvatarSMDBasicComponent implements Basi
         g.drawLine(x1+width1-linebreak, y1+height1, x1+width1, y1+height1/2);
 		g.setColor(c);
 		
-		g.drawLine(x, y, x+width-linebreak, y);
-        g.drawLine(x, y+height, x+width-linebreak, y+height);
-        g.drawLine(x, y, x, y+height);
-        g.drawLine(x+width-linebreak, y, x+width, y+height/2);
-        g.drawLine(x+width-linebreak, y+height, x+width, y+height/2);
+		final Polygon shape = new Polygon();
+		shape.addPoint( x, y );
+		shape.addPoint( x + width - linebreak, y );
+		shape.addPoint( x + width, y + height / 2 );
+		shape.addPoint( x + width - linebreak, y + height );
+		shape.addPoint(x, y + height );
+		
+		g.drawPolygon( shape );
+//		g.drawLine(x, y, x+width-linebreak, y);
+//        g.drawLine(x, y+height, x+width-linebreak, y+height);
+//        g.drawLine(x, y, x, y+height);
+//        g.drawLine(x+width-linebreak, y, x+width, y+height/2);
+//        g.drawLine(x+width-linebreak, y+height, x+width, y+height/2);
+
+        // Issue #69
+    	if ( !isEnabled() && isContainedInEnabledState() ) {
+	    	g.setColor( ColorManager.DISABLED_FILLING );
+	    	g.fillPolygon( shape );
+	    	g.setColor( c );
+    	}
 		
 		// hourglass
 		g.setColor(ColorManager.AVATAR_SET_TIMER);
@@ -162,10 +186,9 @@ public class AvatarSMDResetTimer extends AvatarSMDBasicComponent implements Basi
 		
         //g.drawString("sig()", x+(width-w) / 2, y);
         g.drawString(value, x + (width - w) / 2 , y + textY);
-		
-		
     }
     
+    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width + hourglassSpace + hourglassWidth, height)) {
             return this;
@@ -178,15 +201,16 @@ public class AvatarSMDResetTimer extends AvatarSMDBasicComponent implements Basi
         return null;
     }
     
-    public void makeValue() {
-    }
+//    public void makeValue() {
+//    }
     
     public String getTimerName() {
         return AvatarSignal.getValue(value, 0);
     }
     
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
-		LinkedList<String> timers = tdp.getMGUI().getAllTimers();
+		List<String> timers = tdp.getMGUI().getAllTimers();
 		TraceManager.addDev("Nb of timers:" + timers.size());
 		
 		JDialogAvatarTimer jdat = new JDialogAvatarTimer(frame, "Reset timer",  getTimerName(), "", timers, false);
@@ -212,20 +236,19 @@ public class AvatarSMDResetTimer extends AvatarSMDBasicComponent implements Basi
 		value = "reset(" + val0 + ")";
 		
 		return true;
-         
     }
-    
-  
-    
 
+    @Override
     public int getType() {
         return TGComponentManager.AVATARSMD_RESET_TIMER;
     }
     
-     public int getDefaultConnector() {
-      return TGComponentManager.AVATARSMD_CONNECTOR;
+    @Override
+    public int getDefaultConnector() {
+    	return TGComponentManager.AVATARSMD_CONNECTOR;
     }
 	
+    @Override
 	public void setStateAction(int _stateAction) {
 		stateOfError = _stateAction;
 	}

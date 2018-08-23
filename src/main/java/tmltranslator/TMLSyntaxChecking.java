@@ -50,6 +50,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 
 /**
@@ -608,7 +609,7 @@ public class TMLSyntaxChecking {
         }
 
         // Tree analysis: if the tree contains a variable, then, this variable has not been declared
-        ArrayList<String> vars = root.getVariables();
+        List<String> vars = root.getVariables();
         for (String s : vars) {
             addError(t, elt, UNDECLARED_VARIABLE + " :" + s + " in expression " + action, TMLError.ERROR_BEHAVIOR);
         }

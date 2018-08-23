@@ -59,7 +59,7 @@ import java.awt.geom.RoundRectangle2D;
  * @author Irina Kit Yan LEE
  */
 
-public class ELNComponentCurrentSinkTDF extends TGCScalableWithInternalComponent implements ActionListener, SwallowedTGComponent, ELNComponent {
+public class ELNComponentCurrentSinkTDF extends TGCScalableWithInternalComponent implements ActionListener, SwallowedTGComponent, ELNPrimitiveComponent {
 	protected Color myColor;
 	protected int orientation;
 	private int maxFontSize = 14;
@@ -554,6 +554,7 @@ public class ELNComponentCurrentSinkTDF extends TGCScalableWithInternalComponent
 		g.drawPolygon(ptx1, pty1, 3);
 		g.fillPolygon(ptx1, pty1, 3);
 		g.fillRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
+		g.drawRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
 		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
@@ -583,6 +584,7 @@ public class ELNComponentCurrentSinkTDF extends TGCScalableWithInternalComponent
 		g.drawPolygon(ptx1, pty1, 3);
 		g.fillPolygon(ptx1, pty1, 3);
 		g.fillRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
+		g.drawRect(x + 4 * width / 5, y + 2 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
 		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
@@ -613,6 +615,7 @@ public class ELNComponentCurrentSinkTDF extends TGCScalableWithInternalComponent
 		g.drawPolygon(ptx1, pty1, 3);
 		g.fillPolygon(ptx1, pty1, 3);
 		g.fillRect(x, y + 2 * height / 5, width / 5, height / 5);
+		g.drawRect(x, y + 2 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
 		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
@@ -643,6 +646,7 @@ public class ELNComponentCurrentSinkTDF extends TGCScalableWithInternalComponent
 		g.drawPolygon(ptx1, pty1, 3);
 		g.fillPolygon(ptx1, pty1, 3);
 		g.fillRect(x, y + 2 * height / 5, width / 5, height / 5);
+		g.drawRect(x, y + 2 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
 		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
@@ -672,6 +676,7 @@ public class ELNComponentCurrentSinkTDF extends TGCScalableWithInternalComponent
 		g.drawPolygon(ptx1, pty1, 3);
 		g.fillPolygon(ptx1, pty1, 3);
 		g.fillRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
+		g.drawRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
 		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
@@ -702,6 +707,7 @@ public class ELNComponentCurrentSinkTDF extends TGCScalableWithInternalComponent
 		g.drawPolygon(ptx1, pty1, 3);
 		g.fillPolygon(ptx1, pty1, 3);
 		g.fillRect(x + 2 * width / 5, y, width / 5, height / 5);
+		g.drawRect(x + 2 * width / 5, y, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
 		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
@@ -732,6 +738,7 @@ public class ELNComponentCurrentSinkTDF extends TGCScalableWithInternalComponent
 		g.drawPolygon(ptx1, pty1, 3);
 		g.fillPolygon(ptx1, pty1, 3);
 		g.fillRect(x + 2 * width / 5, y, width / 5, height / 5);
+		g.drawRect(x + 2 * width / 5, y, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
 		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);
@@ -761,6 +768,7 @@ public class ELNComponentCurrentSinkTDF extends TGCScalableWithInternalComponent
 		g.drawPolygon(ptx1, pty1, 3);
 		g.fillPolygon(ptx1, pty1, 3);
 		g.fillRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
+		g.drawRect(x + 2 * width / 5, y + 4 * height / 5, width / 5, height / 5);
 
 		Graphics2D g2d = (Graphics2D) g.create();
 		Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[] { 9 }, 0);

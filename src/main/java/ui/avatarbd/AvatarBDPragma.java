@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package ui.avatarbd;
 
 import myutil.Conversion;
@@ -55,6 +54,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 
@@ -67,11 +69,11 @@ import proverifspec.ProVerifResultTraceStep;
 import ui.interactivesimulation.JFrameSimulationSDPanel;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Class Pragma
@@ -84,9 +86,9 @@ import java.util.LinkedList;
 public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
 
     protected String[] values;
-    protected LinkedList<String> models;
-    protected LinkedList<String> properties;
-    public ArrayList<String> syntaxErrors;
+    protected List<String> models;
+    protected List<String> properties;
+    public List<String> syntaxErrors;
     protected int textX = 25;
     protected int textY = 5;
     protected int marginY = 20;
@@ -165,14 +167,15 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
         makeValue();
     }
 
-    public LinkedList<String> getProperties() {
+    public List<String> getProperties() {
         return properties;
     }
 
-    public LinkedList<String> getModels() {
+    public List<String> getModels() {
         return this.models;
     }
 
+    @Override
     public void internalDrawing(Graphics g) {
         Font f = g.getFont();
         Font fold = f;
@@ -299,7 +302,6 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
         }
 */
         g.setColor(c);
-
     }
 
     public void makeValue() {
@@ -402,9 +404,9 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
 //	if (c1==Color.gray){
 //	    g.drawString("?", _x+4, _y+2);
 //	}
-
     }
 
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
         String oldValue = value;
 
@@ -418,7 +420,7 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
 
         String s = jdn.getText();
         if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
-            String tmp = s;
+           // String tmp = s;
             setValue(s);
             makeValue();
             return true;
@@ -426,6 +428,7 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
         return false;
     }
 
+    @Override
     public TGComponent isOnMe(int x1, int y1) {
         if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
             return this;
@@ -433,10 +436,12 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
         return null;
     }
 
+    @Override
     public String getToolTipText() {
         return "The lock shows status of weak and strong authenticity. Green: Proved True, Red: Proved False, Grey: Cannot be proved";
     }
 
+    @Override
     public void rescale(double scaleFactor) {
         //TraceManager.addDev("Rescaling BD Pragma");
         /*dlineHeight = (lineHeight + dlineHeight) / oldScaleFactor * scaleFactor;
@@ -449,10 +454,12 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
         super.rescale(scaleFactor);
     }
 
+    @Override
     public int getType() {
         return TGComponentManager.PRAGMA;
     }
 
+    @Override
     protected String translateExtraParam() {
         if (values == null) {
             makeValue();
@@ -540,10 +547,9 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
         	    	} catch (IOException ignored) {
         			}
         		}
-        		break;
 
+       			break;
     		}
     	}
-		//
 	}
 }

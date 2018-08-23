@@ -44,6 +44,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import ui.*;
+import ui.ad.TADComponentWithoutSubcomponents;
 import ui.util.IconManager;
 import ui.window.JDialogMultiString;
 
@@ -60,7 +61,7 @@ import java.util.ArrayList;
  * @author Ludovic APVRILLE
  * @version 1.0 21/11/2005
  */
-public class TMLADDecrypt extends TGCWithoutInternalComponent implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
+public class TMLADDecrypt extends TADComponentWithoutSubcomponents/* Issue #69 TGCWithoutInternalComponent*/ implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
     private int lineLength = 5;
     //    private int textX, textY;
     private int ilength = 20;
@@ -92,6 +93,7 @@ public class TMLADDecrypt extends TGCWithoutInternalComponent implements Embedde
         myImageIcon = IconManager.imgic214;
     }
 
+    @Override
     public void internalDrawing(Graphics g) {
         if (stateOfError > 0) {
             Color c = g.getColor();
@@ -131,6 +133,7 @@ public class TMLADDecrypt extends TGCWithoutInternalComponent implements Embedde
         g.drawString("sec:" + securityContext, x + 3 * width / 2, y + height / 2);
     }
 
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
         String[] labels = new String[1];
         String[] values = new String[1];
@@ -151,9 +154,9 @@ public class TMLADDecrypt extends TGCWithoutInternalComponent implements Embedde
         }
 
         return false;
-
     }
 
+    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -170,6 +173,7 @@ public class TMLADDecrypt extends TGCWithoutInternalComponent implements Embedde
         return null;
     }
 
+    @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<Data secPattern=\"");
@@ -189,9 +193,6 @@ public class TMLADDecrypt extends TGCWithoutInternalComponent implements Embedde
             Element elt;
 //            int k;
 //            String s;
-
-            //
-            //
 
             for (int i = 0; i < nl.getLength(); i++) {
                 n1 = nl.item(i);
@@ -213,20 +214,22 @@ public class TMLADDecrypt extends TGCWithoutInternalComponent implements Embedde
             }
 
         } catch (Exception e) {
-            throw new MalformedModelingException();
+            throw new MalformedModelingException( e );
         }
     }
 
+    @Override
     public int getType() {
         return TGComponentManager.TMLAD_DECRYPT;
     }
 
+    @Override
     public int getDefaultConnector() {
         return TGComponentManager.CONNECTOR_TMLAD;
     }
 
+    @Override
     public void setStateAction(int _stateAction) {
         stateOfError = _stateAction;
     }
 }
-

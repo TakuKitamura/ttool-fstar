@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.ad;
 
 import myutil.GraphicLib;
@@ -60,7 +57,7 @@ import java.awt.geom.Line2D;
  * @version 1.0 20/03/2009
  * @author Ludovic APVRILLE
  */
-public class TADArraySetState extends TGCWithoutInternalComponent implements BasicErrorHighlight {
+public class TADArraySetState extends TADComponentWithoutSubcomponents/* Issue #69TGCWithoutInternalComponent */ implements BasicErrorHighlight {
     protected int lineLength = 5;
     protected int textX =  5;
     protected int textY =  15;
@@ -72,7 +69,6 @@ public class TADArraySetState extends TGCWithoutInternalComponent implements Bas
 	protected String expr = "x";
 	
 	protected int stateAction = 0; // 0: unchecked 1: ok; 2:unknown
-	
     
     public TADArraySetState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -97,8 +93,7 @@ public class TADArraySetState extends TGCWithoutInternalComponent implements Bas
         myImageIcon = IconManager.imgic232;
     }
 	
-
-    
+    @Override
     public void internalDrawing(Graphics g) {
         int w  = g.getFontMetrics().stringWidth(value);
         int w1 = Math.max(minWidth, w + 2 * textX);
@@ -126,11 +121,10 @@ public class TADArraySetState extends TGCWithoutInternalComponent implements Bas
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
         
         g.drawString(value, x + (width - w) / 2 , y + textY);
-		
     }
-	
+
+    @Override
 	public boolean editOndoubleClick(JFrame frame) {
-        
         String oldValue = value;
         
         JDialogArraySet jdas = new JDialogArraySet(frame, array, index, expr, "Setting value of an array location");
@@ -154,6 +148,7 @@ public class TADArraySetState extends TGCWithoutInternalComponent implements Bas
 		value = array + "[" + index + "] = " + expr; 
 	}
     
+    @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<Prop expr=\"");
@@ -206,6 +201,7 @@ public class TADArraySetState extends TGCWithoutInternalComponent implements Bas
         makeValue();
     }
     
+    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -235,17 +231,18 @@ public class TADArraySetState extends TGCWithoutInternalComponent implements Bas
 		return index;
 	}
     
+    @Override
     public int getType() {
         return TGComponentManager.TAD_ARRAY_SET;
     }
     
+    @Override
    	public int getDefaultConnector() {
-      return TGComponentManager.CONNECTOR_AD_DIAGRAM;
+    	return TGComponentManager.CONNECTOR_AD_DIAGRAM;
     }
 	
+    @Override
 	public void setStateAction(int _stateAction) {
 		stateAction = _stateAction;
 	}
-    
-    
 }

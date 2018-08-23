@@ -43,6 +43,7 @@ import ui.TGComponent;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 
 
 /**
@@ -54,7 +55,7 @@ import java.util.LinkedList;
  */
 public abstract class AvatarStateMachineElement extends AvatarElement {
 
-    protected LinkedList<AvatarStateMachineElement> nexts;
+    protected List<AvatarStateMachineElement> nexts;
     private AvatarState myState;
 
     private boolean isCheckable;
@@ -63,18 +64,21 @@ public abstract class AvatarStateMachineElement extends AvatarElement {
 
     private boolean isHidden = false;
 
-    public AvatarStateMachineElement(String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
-        nexts = new LinkedList<AvatarStateMachineElement>();
-        canBeVerified = false;
+    public AvatarStateMachineElement(	final String _name, 
+    									final Object _referenceObject ) {
+    	this( _name, _referenceObject, false, false );
     }
 
-    public AvatarStateMachineElement(String _name, Object _referenceObject, boolean _isCheckable, boolean _isChecked) {
-        super(_name, _referenceObject);
+    public AvatarStateMachineElement(	String _name,
+    									Object _referenceObject,
+    									boolean _isCheckable,
+    									final boolean _isChecked ) {
+        super( _name, _referenceObject );
+        
         nexts = new LinkedList<AvatarStateMachineElement>();
         isCheckable = _isCheckable;
-        isChecked = _isChecked;
         canBeVerified = false;
+        isChecked = _isChecked;
     }
 
     public void setAsVerifiable(boolean _canBeVerified) {
@@ -107,7 +111,7 @@ public abstract class AvatarStateMachineElement extends AvatarElement {
         }
     }
 
-    public LinkedList<AvatarStateMachineElement> getNexts() {
+    public List<AvatarStateMachineElement> getNexts() {
         return this.nexts;
     }
 
@@ -203,11 +207,12 @@ public abstract class AvatarStateMachineElement extends AvatarElement {
 
     }
 
+    @Override
     public String toString() {
         return toString(null);
     }
 
-    public String toString(String val) {
+    protected String toString(String val) {
         String ret = getExtendedName() + " ID=" + getID();
         if (myState == null) {
             ret += " / top level operator\n";
@@ -255,7 +260,7 @@ public abstract class AvatarStateMachineElement extends AvatarElement {
 
     public void replaceAllNext(AvatarStateMachineElement oldone, AvatarStateMachineElement newone) {
         if (nexts.contains(oldone)) {
-            LinkedList<AvatarStateMachineElement> oldnexts = nexts;
+            List<AvatarStateMachineElement> oldnexts = nexts;
             nexts = new LinkedList<AvatarStateMachineElement>();
             for (AvatarStateMachineElement elt : oldnexts) {
                 if (elt == oldone) {
@@ -391,6 +396,4 @@ public abstract class AvatarStateMachineElement extends AvatarElement {
     public abstract String getNiceName();
 
     public abstract void translate(AvatarTranslator translator, Object arg);
-
-
 }

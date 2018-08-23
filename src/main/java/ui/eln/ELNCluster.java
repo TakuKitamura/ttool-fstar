@@ -40,7 +40,6 @@ package ui.eln;
 
 import myutil.GraphicLib;
 import ui.*;
-import ui.syscams.*;
 import ui.util.IconManager;
 import java.awt.*;
 import java.util.*;
@@ -88,7 +87,7 @@ public class ELNCluster extends TGCScalableWithInternalComponent implements Swal
 		removable = true;
 		userResizable = true;
 
-		value = tdp.findELNComponentName("Cluster");
+		value = "cluster";
 	}
 
 	public void internalDrawing(Graphics g) {
@@ -200,9 +199,11 @@ public class ELNCluster extends TGCScalableWithInternalComponent implements Swal
 	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
 		if (tgc instanceof ELNModule) {
 			return true;
-		} else if (tgc instanceof SysCAMSPortDE) {
+		} else if (tgc instanceof ELNClusterTerminal) {
 			return true;
-		} else 	if (tgc instanceof SysCAMSPortTDF) {
+		} else if (tgc instanceof ELNClusterPortDE) {
+			return true;
+		} else 	if (tgc instanceof ELNClusterPortTDF) {
 			return true;
 		}
 		return false;
@@ -234,10 +235,13 @@ public class ELNCluster extends TGCScalableWithInternalComponent implements Swal
 		if (tgc instanceof ELNModule) {
 			tgc.resizeWithFather();
 		}
-		if (tgc instanceof SysCAMSPortDE) {
+		if (tgc instanceof ELNClusterTerminal) {
 			tgc.resizeWithFather();
 		}
-		if (tgc instanceof SysCAMSPortTDF) {
+		if (tgc instanceof ELNClusterPortDE) {
+			tgc.resizeWithFather();
+		}
+		if (tgc instanceof ELNClusterPortTDF) {
 			tgc.resizeWithFather();
 		}
 		addInternalComponent(tgc, 0);
@@ -273,10 +277,13 @@ public class ELNCluster extends TGCScalableWithInternalComponent implements Swal
 			if (tgcomponent[i] instanceof ELNModule) {
 				tgcomponent[i].resizeWithFather();
 			}
-			if (tgcomponent[i] instanceof SysCAMSPortDE) {
+			if (tgcomponent[i] instanceof ELNClusterTerminal) {
 				tgcomponent[i].resizeWithFather();
 			}
-			if (tgcomponent[i] instanceof SysCAMSPortTDF) {
+			if (tgcomponent[i] instanceof ELNClusterPortDE) {
+				tgcomponent[i].resizeWithFather();
+			}
+			if (tgcomponent[i] instanceof ELNClusterPortTDF) {
 				tgcomponent[i].resizeWithFather();
 			}
 		}
@@ -296,21 +303,31 @@ public class ELNCluster extends TGCScalableWithInternalComponent implements Swal
 		return list;
 	}
 
-	public java.util.List<SysCAMSPortDE> getAllPortDE() {
-		java.util.List<SysCAMSPortDE> list = new ArrayList<SysCAMSPortDE>();
+	public java.util.List<ELNClusterTerminal> getAllClusterTerminal() {
+		java.util.List<ELNClusterTerminal> list = new ArrayList<ELNClusterTerminal>();
 		for(int i=0; i<nbInternalTGComponent; i++) {
-			if (tgcomponent[i] instanceof SysCAMSPortDE) {
-				list.add((SysCAMSPortDE)(tgcomponent[i]));
+			if (tgcomponent[i] instanceof ELNClusterTerminal) {
+				list.add((ELNClusterTerminal)(tgcomponent[i]));
+			}
+		}
+		return list;
+	}
+	
+	public java.util.List<ELNClusterPortDE> getAllClusterPortDE() {
+		java.util.List<ELNClusterPortDE> list = new ArrayList<ELNClusterPortDE>();
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof ELNClusterPortDE) {
+				list.add((ELNClusterPortDE)(tgcomponent[i]));
 			}
 		}
 		return list;
 	}
 
-	public java.util.List<SysCAMSPortTDF> getAllPortTDF() {
-		java.util.List<SysCAMSPortTDF> list = new ArrayList<SysCAMSPortTDF>();
+	public java.util.List<ELNClusterPortTDF> getAllClusterPortTDF() {
+		java.util.List<ELNClusterPortTDF> list = new ArrayList<ELNClusterPortTDF>();
 		for(int i=0; i<nbInternalTGComponent; i++) {
-			if (tgcomponent[i] instanceof SysCAMSPortTDF) {
-				list.add((SysCAMSPortTDF)(tgcomponent[i]));
+			if (tgcomponent[i] instanceof ELNClusterPortTDF) {
+				list.add((ELNClusterPortTDF)(tgcomponent[i]));
 			}
 		}
 		return list;

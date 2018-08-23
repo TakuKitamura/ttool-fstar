@@ -37,10 +37,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package ui;
-
-//import java.awt.*;
 
 import ui.ad.*;
 import ui.atd.*;
@@ -61,6 +58,7 @@ import ui.diplodocusmethodology.*;
 import ui.ebrdd.*;
 import ui.eln.*;
 import ui.eln.sca_eln.*;
+import ui.eln.sca_eln_sca_de.*;
 import ui.eln.sca_eln_sca_tdf.*;
 import ui.ftd.*;
 import ui.iod.*;
@@ -327,7 +325,9 @@ public class TGComponentManager {
     public static final int TMLCP_REF_SD = 1505;
     public static final int TMLCP_START_STATE = 1506;
     public static final int TMLCP_STOP_STATE = 1507;
-    public static final int TMLCP_JUNCTION = 1508;
+
+    // Issue #69
+   // public static final int TMLCP_JUNCTION = 1508;
     public static final int TMLCP_FOR_LOOP = 1510;
 
     public static final int TMLSD_STORAGE_INSTANCE = 1520;
@@ -365,6 +365,15 @@ public class TGComponentManager {
     public static final int ELN_TDF_VOLTAGE_SOURCE = 1625;
     public static final int ELN_TDF_CURRENT_SOURCE = 1626;
     public static final int ELN_CLUSTER = 1627;
+    public static final int ELN_MODULE_PORT_DE = 1628;
+    public static final int ELN_MODULE_PORT_TDF = 1629;
+    public static final int ELN_CLUSTER_TERMINAL = 1630;
+    public static final int ELN_CLUSTER_PORT_DE = 1631;
+    public static final int ELN_CLUSTER_PORT_TDF = 1632;
+    public static final int ELN_DE_CURRENT_SINK = 1633;
+    public static final int ELN_DE_CURRENT_SOURCE = 1634;
+    public static final int ELN_DE_VOLTAGE_SINK = 1635;
+    public static final int ELN_DE_VOLTAGE_SOURCE = 1636;
     
     // SMD diagram
     public static final int PROSMD_START_STATE = 2000;
@@ -423,7 +432,10 @@ public class TGComponentManager {
     public static final int AVATARSMD_CONNECTOR = 5102;
     public static final int AVATARSMD_SEND_SIGNAL = 5103;
     public static final int AVATARSMD_RECEIVE_SIGNAL = 5104;
-    public static final int AVATARSMD_PARALLEL = 5105;
+    
+    // Issue #69
+    //public static final int AVATARSMD_PARALLEL = 5105;
+    
     public static final int AVATARSMD_STATE = 5106;
     public static final int AVATARSMD_CHOICE = 5107;
     public static final int AVATARSMD_RANDOM = 5108;
@@ -592,9 +604,9 @@ public class TGComponentManager {
             case AVATARSMD_RECEIVE_SIGNAL:
                 tgc = new AvatarSMDReceiveSignal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
-            case AVATARSMD_PARALLEL:
-                tgc = new AvatarSMDParallel(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-                break;
+//              case AVATARSMD_PARALLEL: Issue #69
+//              tgc = new AvatarSMDParallel(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+//              break;
             case AVATARSMD_STATE:
                 tgc = new AvatarSMDState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
@@ -1320,7 +1332,7 @@ public class TGComponentManager {
             	tgc = new ELNComponentIndependentCurrentSource(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             	break;	
             case ELN_NODE_REF: 
-            	tgc = new ELNComponentNodeRef(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	tgc = new ELNNodeRef(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             	break;
             case ELN_TDF_VOLTAGE_SINK: 
             	tgc = new ELNComponentVoltageSinkTDF(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -1342,6 +1354,33 @@ public class TGComponentManager {
             	break;
             case ELN_CLUSTER: 
             	tgc = new ELNCluster(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;
+            case ELN_MODULE_PORT_DE: 
+            	tgc = new ELNModulePortDE(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;
+            case ELN_MODULE_PORT_TDF: 
+            	tgc = new ELNModulePortTDF(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;
+            case ELN_CLUSTER_TERMINAL: 
+            	tgc = new ELNClusterTerminal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;
+            case ELN_CLUSTER_PORT_DE: 
+            	tgc = new ELNClusterPortDE(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;
+            case ELN_CLUSTER_PORT_TDF: 
+            	tgc = new ELNClusterPortTDF(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;
+            case ELN_DE_CURRENT_SINK: 
+            	tgc = new ELNComponentCurrentSinkDE(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;
+            case ELN_DE_CURRENT_SOURCE: 
+            	tgc = new ELNComponentCurrentSourceDE(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;
+            case ELN_DE_VOLTAGE_SINK: 
+            	tgc = new ELNComponentVoltageSinkDE(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;
+            case ELN_DE_VOLTAGE_SOURCE: 
+            	tgc = new ELNComponentVoltageSourceDE(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             	break;
             // Communication patterns + SD
             case TMLCP_CHOICE:
@@ -1365,9 +1404,9 @@ public class TGComponentManager {
             case TMLCP_STOP_STATE:
                 tgc = new TMLCPStopState(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
-            case TMLCP_JUNCTION:
-                tgc = new TMLCPJunction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-                break;
+//            case TMLCP_JUNCTION: // Issue #69
+//                tgc = new TMLCPJunction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+//                break;
             case TMLCP_FOR_LOOP:
                 tgc = new TMLCPForLoop(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
@@ -1520,8 +1559,8 @@ public class TGComponentManager {
             return AVATARSMD_RECEIVE_SIGNAL;
         } else if (tgc instanceof AvatarSMDLibraryFunctionCall) {
             return AVATARSMD_LIBRARY_FUNCTION_CALL;
-        } else if (tgc instanceof AvatarSMDParallel) {
-            return AVATARSMD_PARALLEL;
+//        } else if (tgc instanceof AvatarSMDParallel) { // Issue #69
+//            return AVATARSMD_PARALLEL;
         } else if (tgc instanceof AvatarSMDState) {
             return AVATARSMD_STATE;
         } else if (tgc instanceof AvatarSMDChoice) {
@@ -1765,7 +1804,7 @@ public class TGComponentManager {
         	return ELN_INDEPENDENT_VOLTAGE_SOURCE;
         } else if (tgc instanceof ELNComponentIndependentCurrentSource) {
         	return ELN_INDEPENDENT_CURRENT_SOURCE;
-        } else if (tgc instanceof ELNComponentNodeRef) {
+        } else if (tgc instanceof ELNNodeRef) {
         	return ELN_NODE_REF;
         } else if (tgc instanceof ELNComponentVoltageSinkTDF) {
         	return ELN_TDF_VOLTAGE_SINK;
@@ -1781,6 +1820,24 @@ public class TGComponentManager {
         	return ELN_TDF_CURRENT_SOURCE;
         } else if (tgc instanceof ELNCluster) {
         	return ELN_CLUSTER;
+        } else if (tgc instanceof ELNModulePortDE) {
+        	return ELN_MODULE_PORT_DE;
+        } else if (tgc instanceof ELNModulePortTDF) {
+        	return ELN_MODULE_PORT_TDF;
+        } else if (tgc instanceof ELNClusterTerminal) {
+        	return ELN_CLUSTER_TERMINAL;
+        } else if (tgc instanceof ELNClusterPortDE) {
+        	return ELN_CLUSTER_PORT_DE;
+        } else if (tgc instanceof ELNClusterPortTDF) {
+        	return ELN_CLUSTER_PORT_TDF;
+        } else if (tgc instanceof ELNComponentCurrentSinkDE) {
+        	return ELN_DE_CURRENT_SINK;
+        } else if (tgc instanceof ELNComponentCurrentSourceDE) {
+        	return ELN_DE_CURRENT_SOURCE;
+        } else if (tgc instanceof ELNComponentVoltageSinkDE) {
+        	return ELN_DE_VOLTAGE_SINK;
+        } else if (tgc instanceof ELNComponentVoltageSourceDE) {
+        	return ELN_DE_VOLTAGE_SOURCE;
         	
         	// Others
         } else if (tgc instanceof TADDeterministicDelay) {
@@ -2145,8 +2202,8 @@ public class TGComponentManager {
             return TMLCP_START_STATE;
         } else if (tgc instanceof TMLCPStopState) {
             return TMLCP_STOP_STATE;
-        } else if (tgc instanceof TMLCPJunction) {
-            return TMLCP_JUNCTION;
+//          } else if (tgc instanceof TMLCPJunction) { Issue #69
+//          return TMLCP_JUNCTION;
         } else if (tgc instanceof TMLCPForLoop) {
             return TMLCP_FOR_LOOP;
         } else if (tgc instanceof TGConnectorTMLCP) {

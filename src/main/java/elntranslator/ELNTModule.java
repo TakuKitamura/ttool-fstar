@@ -56,7 +56,7 @@ public class ELNTModule extends ELNTComponent {
 	private LinkedList<ELNTComponentIndependentCurrentSource> isource;
 	private LinkedList<ELNTComponentIndependentVoltageSource> vsource;
 	private LinkedList<ELNTComponentInductor> inductor;
-	private LinkedList<ELNTComponentNodeRef> nodeRef;
+	private LinkedList<ELNTNodeRef> nodeRef;
 	private LinkedList<ELNTComponentResistor> resistor;
 	private LinkedList<ELNTComponentTransmissionLine> transmissionLine;
 	private LinkedList<ELNTComponentVoltageControlledCurrentSource> vccs;
@@ -65,16 +65,24 @@ public class ELNTModule extends ELNTComponent {
 	private LinkedList<ELNTComponentCurrentSourceTDF> TDF_isource;
 	private LinkedList<ELNTComponentVoltageSinkTDF> TDF_vsink;
 	private LinkedList<ELNTComponentVoltageSourceTDF> TDF_vsource;
+	private LinkedList<ELNTComponentCurrentSinkDE> DE_isink;
+	private LinkedList<ELNTComponentCurrentSourceDE> DE_isource;
+	private LinkedList<ELNTComponentVoltageSinkDE> DE_vsink;
+	private LinkedList<ELNTComponentVoltageSourceDE> DE_vsource;
 	private LinkedList<ELNTModuleTerminal> moduleTerminal;
+	private LinkedList<ELNTModulePortDE> modulePortDE;
+	private LinkedList<ELNTModulePortTDF> modulePortTDF;
 	
-	public ELNTModule(String _name) {
+	private ELNTCluster cluster;
+	
+	public ELNTModule(String _name, ELNTCluster _cluster) {
 		name = _name;
 		capacitor = new LinkedList<ELNTComponentCapacitor>();
 		idealTransformer = new LinkedList<ELNTComponentIdealTransformer>();
 		isource = new LinkedList<ELNTComponentIndependentCurrentSource>();
 		vsource = new LinkedList<ELNTComponentIndependentVoltageSource>();
 		inductor = new LinkedList<ELNTComponentInductor>();
-		nodeRef = new LinkedList<ELNTComponentNodeRef>();
+		nodeRef = new LinkedList<ELNTNodeRef>();
 		resistor = new LinkedList<ELNTComponentResistor>();
 		transmissionLine = new LinkedList<ELNTComponentTransmissionLine>();
 		vccs = new LinkedList<ELNTComponentVoltageControlledCurrentSource>();
@@ -83,7 +91,14 @@ public class ELNTModule extends ELNTComponent {
 		TDF_isource = new LinkedList<ELNTComponentCurrentSourceTDF>();
 		TDF_vsink = new LinkedList<ELNTComponentVoltageSinkTDF>();
 		TDF_vsource = new LinkedList<ELNTComponentVoltageSourceTDF>();
+		DE_isink = new LinkedList<ELNTComponentCurrentSinkDE>();
+		DE_isource = new LinkedList<ELNTComponentCurrentSourceDE>();
+		DE_vsink = new LinkedList<ELNTComponentVoltageSinkDE>();
+		DE_vsource = new LinkedList<ELNTComponentVoltageSourceDE>();
 		moduleTerminal = new LinkedList<ELNTModuleTerminal>();
+		modulePortDE = new LinkedList<ELNTModulePortDE>();
+		modulePortTDF = new LinkedList<ELNTModulePortTDF>();
+		cluster = _cluster;
 	}
 
 	public String getName() {
@@ -130,11 +145,11 @@ public class ELNTModule extends ELNTComponent {
 		inductor.add(_inductor);
 	}
 	
-	public LinkedList<ELNTComponentNodeRef> getNodeRef() {
+	public LinkedList<ELNTNodeRef> getNodeRef() {
 		return nodeRef;
 	}
 	
-	public void addNodeRef(ELNTComponentNodeRef _nodeRef){
+	public void addNodeRef(ELNTNodeRef _nodeRef){
 		nodeRef.add(_nodeRef);
 	}
 
@@ -202,11 +217,63 @@ public class ELNTModule extends ELNTComponent {
 		TDF_vsource.add(_TDF_vsource);
 	}
 	
+	public LinkedList<ELNTComponentCurrentSinkDE> getDE_isink() {
+		return DE_isink;
+	}
+	
+	public void addDE_isink(ELNTComponentCurrentSinkDE _DE_isink){
+		DE_isink.add(_DE_isink);
+	}
+
+	public LinkedList<ELNTComponentCurrentSourceDE> getDE_isource() {
+		return DE_isource;
+	}
+	
+	public void addDE_isource(ELNTComponentCurrentSourceDE _DE_isource){
+		DE_isource.add(_DE_isource);
+	}
+
+	public LinkedList<ELNTComponentVoltageSinkDE> getDE_vsink() {
+		return DE_vsink;
+	}
+	
+	public void addDE_vsink(ELNTComponentVoltageSinkDE _DE_vsink){
+		DE_vsink.add(_DE_vsink);
+	}
+
+	public LinkedList<ELNTComponentVoltageSourceDE> getDE_vsource() {
+		return DE_vsource;
+	}
+
+	public void addDE_vsource(ELNTComponentVoltageSourceDE _DE_vsource){
+		DE_vsource.add(_DE_vsource);
+	}
+	
 	public LinkedList<ELNTModuleTerminal> getModuleTerminal() {
 		return moduleTerminal;
 	}
 
 	public void addModuleTerminal(ELNTModuleTerminal _moduleTerminal){
 		moduleTerminal.add(_moduleTerminal);
+	}
+	
+	public LinkedList<ELNTModulePortDE> getModulePortDE() {
+		return modulePortDE;
+	}
+	
+	public void addModulePortDE(ELNTModulePortDE _portDE){
+		modulePortDE.add(_portDE);
+	}
+
+	public LinkedList<ELNTModulePortTDF> getModulePortTDF() {
+		return modulePortTDF;
+	}
+	
+	public void addModulePortTDF(ELNTModulePortTDF _portTDF){
+		modulePortTDF.add(_portTDF);
+	}
+
+	public ELNTCluster getCluster() {
+		return cluster;
 	}
 }

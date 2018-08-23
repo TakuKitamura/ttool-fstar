@@ -39,9 +39,6 @@
 package ui.syscams;
 
 import myutil.GraphicLib;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import ui.*;
 import ui.util.IconManager;
 

@@ -38,6 +38,9 @@
 
 package syscamstranslator;
 
+import elntranslator.ELNTCluster;
+import elntranslator.ELNTModule;
+
 /**
  * Class SysCAMSTPortTDF
  * Parameters of a SystemC-AMS port TDF
@@ -57,6 +60,8 @@ public class SysCAMSTPortTDF extends SysCAMSTComponent {
 	private String TDFType;
 	
 	private SysCAMSTBlockTDF blockTDF;
+	private ELNTCluster cluster;
+	private ELNTModule module;
 	
 	public SysCAMSTPortTDF(String _name, double _period, String _time, int _rate, int _delay, int _origin, String _TDFType, SysCAMSTBlockTDF _blockTDF) {
 		name = _name;
@@ -67,6 +72,28 @@ public class SysCAMSTPortTDF extends SysCAMSTComponent {
 		origin = _origin;
 		TDFType = _TDFType;
 		blockTDF = _blockTDF;
+	}
+	
+	public SysCAMSTPortTDF(String _name, int _period, String _time, int _rate, int _delay, int _origin, String _TDFType, ELNTCluster _cluster) {
+		name = _name;
+		period = _period;
+		time = _time;
+		rate = _rate;
+		delay = _delay;
+		origin = _origin;
+		TDFType = _TDFType;
+		cluster = _cluster;
+	}
+	
+	public SysCAMSTPortTDF(String _name, int _period, String _time, int _rate, int _delay, int _origin, String _TDFType, ELNTModule _module) {
+		name = _name;
+		period = _period;
+		time = _time;
+		rate = _rate;
+		delay = _delay;
+		origin = _origin;
+		TDFType = _TDFType;
+		module = _module;
 	}
 
 	public String getName() {
@@ -111,5 +138,13 @@ public class SysCAMSTPortTDF extends SysCAMSTComponent {
 
 	public SysCAMSTBlockTDF getBlockTDF() {
 		return blockTDF;
+	}
+
+	public ELNTCluster getCluster() {
+		return cluster;
+	}
+
+	public ELNTModule getModule() {
+		return module;
 	}
 }

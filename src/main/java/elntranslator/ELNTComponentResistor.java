@@ -38,7 +38,7 @@
 
 package elntranslator;
 
-import ui.eln.ELNConnectingPoint;
+import java.util.LinkedList;
 
 /**
  * Class ELNTComponentResistor
@@ -48,19 +48,19 @@ import ui.eln.ELNConnectingPoint;
  * @author Irina Kit Yan LEE
 */
 
-public class ELNTComponentResistor extends ELNTComponent {
+public class ELNTComponentResistor extends ELNTComponent implements ELNTPrimitiveComponent {
 	private String name;
 	private double val;
 	private String unit;
-	private ELNConnectingPoint[] cp;
+	private LinkedList<ELNTConnectingPoint> cp;
 	
 	private ELNTModule module;
 	
-	public ELNTComponentResistor(String _name, double _val, String _unit, ELNConnectingPoint[] _cp, ELNTModule _module) {
+	public ELNTComponentResistor(String _name, double _val, String _unit, ELNTModule _module) {
 		name = _name;
 		val = _val;
 		unit = _unit;
-		cp = _cp;
+		cp = new LinkedList<ELNTConnectingPoint>();
 		module = _module;
 	}
 
@@ -76,8 +76,12 @@ public class ELNTComponentResistor extends ELNTComponent {
 		return unit;
 	}
 	
-	public ELNConnectingPoint[] getCp() {
+	public LinkedList<ELNTConnectingPoint> getConnectingPoint() {
 		return cp;
+	}
+	
+	public void addConnectingPoint(ELNTConnectingPoint _cp) {
+		cp.add(_cp);
 	}
 
 	public ELNTModule getModule() {
