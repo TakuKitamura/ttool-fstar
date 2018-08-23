@@ -525,40 +525,57 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
                         System.out.printf("Blocks for 1 cluster = %d.\n", tdfBlocks.size());
                         LinkedList<SysCAMSTConnector> connectorsTdfDe = syscalsspec.getAllConnectorsTdfDe();
                         System.out.printf("ConnectorsTdfDe for 1 cluster = %d.\n", connectorsTdfDe.size());
-                        for(SysCAMSTBlockTDF tdfBlock : tdfBlocks) {
-                            if(tdfBlock.getPeriod() < 0) {
-                                tdfBlock.setPeriod(0);
+                        LinkedList<SysCAMSTConnector> allConnectors = syscalsspec.getAllConnectorCluster();
+                        LinkedList<SysCAMSTBlockDE> deBlocks = syscalsspec.getAllBlockDE();
+                        LinkedList<SysCAMSTBlockGPIO2VCI> gpioBlocks = syscalsspec.getAllBlockGPIO2VCI();
+                        //Validate that all ports are connected
+                        try {
+                            int nbPorts = 0;
+                            for(SysCAMSTBlockTDF tdfBlock : tdfBlocks) {
+                                nbPorts += tdfBlock.getPortTDF().size() + tdfBlock.getPortConverter().size();
                             }
-                            for(SysCAMSTPortTDF portTdf : tdfBlock.getPortTDF()) {
-                                if(portTdf.getPeriod() < 0) {
-                                    portTdf.setPeriod(0);
+                            for(SysCAMSTBlockDE deBlock : deBlocks) {
+                                nbPorts += deBlock.getPortDE().size();
+                            } 
+                            for(SysCAMSTBlockGPIO2VCI gpioBlock : gpioBlocks) {
+                                nbPorts += gpioBlock.getPortDE().size();
+                            }
+                            if(nbPorts != (allConnectors.size()*2)) {
+                                jta.append("Error: There are unconnected ports.\n");
+                                throw new InterruptedException();
+                            }
+                            
+                            for(SysCAMSTBlockTDF tdfBlock : tdfBlocks) {
+                                if(tdfBlock.getPeriod() < 0) {
+                                    tdfBlock.setPeriod(0);
                                 }
-                                if(portTdf.getRate() < 0) {
-                                    portTdf.setRate(1);
+                                for(SysCAMSTPortTDF portTdf : tdfBlock.getPortTDF()) {
+                                    if(portTdf.getPeriod() < 0) {
+                                        portTdf.setPeriod(0);
+                                    }
+                                    if(portTdf.getRate() < 0) {
+                                        portTdf.setRate(1);
+                                    }
+                                    if(portTdf.getDelay() < 0) {
+                                        portTdf.setDelay(0);
+                                    }
                                 }
-                                if(portTdf.getDelay() < 0) {
-                                    portTdf.setDelay(0);
+                                for(SysCAMSTPortConverter portConverter : tdfBlock.getPortConverter()) {
+                                    if(portConverter.getPeriod() < 0) {
+                                        portConverter.setPeriod(0);
+                                    }
+                                    if(portConverter.getRate() < 0) {
+                                        portConverter.setRate(1);
+                                    }
+                                    if(portConverter.getDelay() < 0) {
+                                        portConverter.setDelay(0);
+                                    }
                                 }
                             }
-                            for(SysCAMSTPortConverter portConverter : tdfBlock.getPortConverter()) {
-                                if(portConverter.getPeriod() < 0) {
-                                    portConverter.setPeriod(0);
-                                }
-                                if(portConverter.getRate() < 0) {
-                                    portConverter.setRate(1);
-                                }
-                                if(portConverter.getDelay() < 0) {
-                                    portConverter.setDelay(0);
-                                }
-                            }
-                        }
                         
                         //Validate Block parameters (rate, Tp, Tm, Delay) and propagate timesteps to all blocks
-                        try {
-                        //if(!propagateTimestep(connectorsTdfDe, tdfBlocks)){
+                        //try {
                             propagateTimestep(connectorsTdfDe, tdfBlocks);
-                            //System.out.println("Error in propagateTimestep");
-                        //}
                         
                             //TODO-DELETE THIS, after debugging:
                             for(SysCAMSTBlockTDF tdfBlock : tdfBlocks) {
