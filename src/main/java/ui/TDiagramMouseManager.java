@@ -582,21 +582,17 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
             }
         }
         
-        // Issue #69 Always repaint. Needed for displaying the transition element in Avatar state machine diagram
-//
-//        if ((selected == TGComponentManager.CONNECTOR) && (tdp.mode == TDiagramPanel.NORMAL)) { // is connectingPointShow selected
-//            if(tdp.highlightOutAndFreeConnectingPoint(e.getX(), e.getY(), tdp.getMGUI().getIdButtonSelected())) {
-//                tdp.repaint();
-//            }
-//        }
-//
-//        if ((selected == TGComponentManager.CONNECTOR) && (tdp.mode == TDiagramPanel.ADDING_CONNECTOR)) {
-//            tdp.highlightInAndFreeConnectingPoint(e.getX(), e.getY(), tdp.getMGUI().getIdButtonSelected());
-//            tdp.setAddingTGConnector(e.getX(), e.getY());
-//            tdp.repaint();
-//        }
+        if ((selected == TGComponentManager.CONNECTOR) && (tdp.mode == TDiagramPanel.NORMAL)) { // is connectingPointShow selected
+            if(tdp.highlightOutAndFreeConnectingPoint(e.getX(), e.getY(), tdp.getMGUI().getIdButtonSelected())) {
+                tdp.repaint();
+            }
+        }
 
-        tdp.repaint();
+        if ((selected == TGComponentManager.CONNECTOR) && (tdp.mode == TDiagramPanel.ADDING_CONNECTOR)) {
+            tdp.highlightInAndFreeConnectingPoint(e.getX(), e.getY(), tdp.getMGUI().getIdButtonSelected());
+            tdp.setAddingTGConnector(e.getX(), e.getY());
+            tdp.repaint();
+        }
     }
 
     @Override
