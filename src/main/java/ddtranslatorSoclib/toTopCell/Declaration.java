@@ -556,6 +556,9 @@ public class Declaration
 					     TopCellGenerator.cpus_in_cluster(avatardd, cluster_no)					 );
 			TraceManager.addDev ("CROSSBAR " +cluster_no+" rams: " +
 					     TopCellGenerator.rams_in_cluster(avatardd, cluster_no) 		 );
+			TraceManager.addDev ("CROSSBAR " +cluster_no+" ttys: " +
+					     TopCellGenerator.ttys_in_cluster(avatardd, cluster_no) 		 );
+			
 
 			declaration +=
 			    "soclib::caba::VciLocalCrossbar<vci_param> crossbar" +
