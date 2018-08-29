@@ -51,6 +51,7 @@ import java.awt.event.ActionListener;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
+import java.util.Collections;
 
 
 /**
@@ -76,6 +77,9 @@ public class JDialogSelectTasks extends JDialogBase implements ActionListener, L
     private JButton addOneValidated;
     private JButton addOneIgnored;
     private JButton allIgnored;
+    
+    private JButton shiftUp;
+    private JButton shiftDown;
 
     /**
      * Creates new form
@@ -169,7 +173,7 @@ public class JDialogSelectTasks extends JDialogBase implements ActionListener, L
         // ignored list
         panel1 = new JPanel();
         panel1.setLayout(new BorderLayout());
-        panel1.setBorder(new javax.swing.border.TitledBorder("Ignored components"));
+        panel1.setBorder(new javax.swing.border.TitledBorder("Ignored Tasks"));
         listIgnored = new JList<String>(ign);
         //listIgnored.setPreferredSize(new Dimension(200, 250));
         listIgnored.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -218,10 +222,28 @@ public class JDialogSelectTasks extends JDialogBase implements ActionListener, L
 
         c.add(panel3, c2);
 
+
+        shiftUp = new JButton(IconManager.imgic78);
+        shiftUp.addActionListener(this);
+        shiftUp.setPreferredSize(new Dimension(50, 25));
+        shiftUp.setActionCommand("shiftUp");
+        panel3.add(shiftUp, c1);
+
+        c.add(panel3, c2);
+
+
+        shiftDown = new JButton(IconManager.imgic79);
+        shiftDown.addActionListener(this);
+        shiftDown.setPreferredSize(new Dimension(50, 25));
+        shiftDown.setActionCommand("shiftDown");
+        panel3.add(shiftDown, c1);
+
+        c.add(panel3, c2);
+
         // validated list
         panel2 = new JPanel();
         panel2.setLayout(new BorderLayout());
-        panel2.setBorder(new javax.swing.border.TitledBorder("Used components"));
+        panel2.setBorder(new javax.swing.border.TitledBorder("Displayed Tasks"));
         listValidated = new JList<String>(val);
         //listValidated.setPreferredSize(new Dimension(200, 250));
         listValidated.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -259,8 +281,30 @@ public class JDialogSelectTasks extends JDialogBase implements ActionListener, L
             allValidated();
         } else if (command.equals("allIgnored")) {
             allIgnored();
+        } else if (command.equals("shiftUp")) {
+            shiftUp();
+        } else if (command.equals("shiftDown")) {
+            shiftDown();
         }
     }
+
+	private void shiftUp(){
+	   int index = listValidated.getSelectedIndices()[0];
+	   
+	   Collections.swap(val, index, index-1);
+       listValidated.setListData(val);
+       setButtons();
+	}
+
+
+	private void shiftDown(){
+	   int index = listValidated.getSelectedIndices()[0];
+	   
+	   Collections.swap(val, index, index+1);
+       listValidated.setListData(val);
+       setButtons();
+	}
+
 
 
     private void addOneIgnored() {
@@ -357,6 +401,20 @@ public class JDialogSelectTasks extends JDialogBase implements ActionListener, L
             allIgnored.setEnabled(true);
             closeButton.setEnabled(true);
         }
+        if (i2 < 1){
+        	shiftUp.setEnabled(false);
+        	
+		}
+		else {
+			shiftUp.setEnabled(true);
+		}
+		
+		if (i2==val.size()-1 || i2==-1){
+			shiftDown.setEnabled(false);
+		}
+		else {
+			shiftDown.setEnabled(true);
+		}
     }
 
 

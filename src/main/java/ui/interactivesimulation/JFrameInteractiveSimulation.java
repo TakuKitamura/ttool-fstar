@@ -1415,13 +1415,17 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 			GraphicLib.centerOnParent(jdstmlc);
             jdstmlc.setVisible(true); 
  
-			HashMap<String, ArrayList<String>> deviceTaskMap = new HashMap<String, ArrayList<String>>();
-			for (HwNode node : tmap.getTMLArchitecture().getHwNodes()){
-				deviceTaskMap.put(node.getName(), new ArrayList<String>());
-			}
-			for (TMLTask task: tmap.getTMLModeling().getTasks()){
+			LinkedHashMap<String, ArrayList<String>> deviceTaskMap = new LinkedHashMap<String, ArrayList<String>>();
+			for (String name: tmlComponentsToValidate){
+				TMLTask task = tmap.getTMLModeling().getTMLTaskByName(name);
+				if (task==null){
+					continue;
+				}
 				HwNode node = tmap.getHwNodeOf(task);
-				if (node!=null && tmlComponentsToValidate.contains(task.getName())){
+				if (node!=null) {
+					if (!deviceTaskMap.containsKey(node.getName())){
+						deviceTaskMap.put(node.getName(), new ArrayList<String>());
+					}
 					deviceTaskMap.get(node.getName()).add(task.getName());
 				}
 			}
