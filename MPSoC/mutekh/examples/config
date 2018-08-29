@@ -29,6 +29,9 @@ CONFIG_PTHREAD_ATTRIBUTES
  CONFIG_MWMR
  CONFIG_MWMR_SOCLIB
 #fin ajoute DG
+#changes RCP
+  CONFIG_LIBSYSCAMS
+#end changes RCP
   CONFIG_MUTEK_SCHEDULER_STATIC
 
 %include $(SRC_DIR)/examples/common/build_options.conf

@@ -622,8 +622,8 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
                                         }
                                     }
                                 }
-                                jta.append("Validation for \""+(syscalsspec.getCluster()).getClusterName()+"\" completed.\n");
                             }
+                            jta.append("Validation for \""+(syscalsspec.getCluster()).getClusterName()+"\" completed.\n");
                         } catch (InterruptedException ie) {
                             System.err.println("Interrupted");
                             jta.append("Interrupted\n");
