@@ -1,7 +1,5 @@
 package ui;
 
-import java.awt.Cursor;
-import java.awt.MouseInfo;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -63,18 +61,16 @@ public class PanelKeyListener implements KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-		if (!arg0.isShiftDown())
-			if (tdp.mode == TDiagramPanel.MOVING_SELECTED_COMPONENTS) {
-				tdp.showSelectionZone(tdp.currentX, tdp.currentY);
-				tdp.mode = TDiagramPanel.SELECTED_COMPONENTS;
-	            tdp.setStopMovingSelectedComponents();
-	            tdp.getGUI().changeMade(tdp, TDiagramPanel.MOVE_COMPONENT);
-	            tdp.repaint();
-			}
+		if ( !arg0.isShiftDown() && tdp.mode == TDiagramPanel.MOVING_SELECTED_COMPONENTS ) {
+			tdp.showSelectionZone(tdp.currentX, tdp.currentY);
+			tdp.mode = TDiagramPanel.SELECTED_COMPONENTS;
+            tdp.setStopMovingSelectedComponents();
+            tdp.getGUI().changeMade(tdp, TDiagramPanel.MOVE_COMPONENT);
+            tdp.repaint();
+		}
 	}
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
 	}
-
 }
