@@ -36,12 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui;
-
-//import java.awt.*;
 
 /**
    * Class TGCScalableWithoutInternalComponent
@@ -51,8 +46,10 @@ package ui;
    * @author Ludovic APVRILLE
  */
 public abstract class TGCScalableWithoutInternalComponent extends TGCWithoutInternalComponent implements ScalableTGComponent {
-    protected boolean rescaled = false;
-    protected double oldScaleFactor;
+    
+	protected boolean rescaled = false;
+    
+	protected double oldScaleFactor;
 
     public TGCScalableWithoutInternalComponent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -62,14 +59,16 @@ public abstract class TGCScalableWithoutInternalComponent extends TGCWithoutInte
     public void rescale (double scaleFactor){
         rescaled = true;
 
-        dwidth = (width + dwidth) / oldScaleFactor * scaleFactor;
-        dheight = (height + dheight) / oldScaleFactor * scaleFactor;
-        dx = (dx + x) / oldScaleFactor * scaleFactor;
-        dy = (dy + y) / oldScaleFactor * scaleFactor;
-        dMinWidth = (minWidth + dMinWidth) / oldScaleFactor * scaleFactor;
-        dMinHeight = (minHeight + dMinHeight) / oldScaleFactor * scaleFactor;
-        dMaxWidth = (maxWidth + dMaxWidth) / oldScaleFactor * scaleFactor;
-        dMaxHeight = (maxHeight + dMaxHeight) / oldScaleFactor * scaleFactor;
+        final double factor = scaleFactor / oldScaleFactor;
+
+        dwidth = (width + dwidth) * factor;// oldScaleFactor * scaleFactor;
+        dheight = (height + dheight) * factor;// oldScaleFactor * scaleFactor;
+        dx = (dx + x) * factor;// oldScaleFactor * scaleFactor;
+        dy = (dy + y) * factor;// oldScaleFactor * scaleFactor;
+        dMinWidth = (minWidth + dMinWidth) * factor;// oldScaleFactor * scaleFactor;
+        dMinHeight = (minHeight + dMinHeight) * factor;// oldScaleFactor * scaleFactor;
+        dMaxWidth = (maxWidth + dMaxWidth) * factor;// oldScaleFactor * scaleFactor;
+        dMaxHeight = (maxHeight + dMaxHeight) * factor;// oldScaleFactor * scaleFactor;
 
         width = (int)(dwidth);
         dwidth = dwidth - width;
@@ -91,6 +90,10 @@ public abstract class TGCScalableWithoutInternalComponent extends TGCWithoutInte
         dx = dx - x;
         y = (int)(dy);
         dy = dy - y;
+        
+        // Issue #81: We also need to update max coordinate values
+        maxX *= factor;
+        maxY *= factor;
 
         oldScaleFactor = scaleFactor;
 
@@ -102,7 +105,7 @@ public abstract class TGCScalableWithoutInternalComponent extends TGCWithoutInte
         setMoveCd(x, y, true);
     }
 
-    public void initScaling(int w, int h) {
+    protected void initScaling(int w, int h) {
         oldScaleFactor = tdp.getZoom();
 
         dx = 0;

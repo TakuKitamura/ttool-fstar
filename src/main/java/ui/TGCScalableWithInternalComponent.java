@@ -61,15 +61,17 @@ public abstract class TGCScalableWithInternalComponent extends TGCWithInternalCo
                 " new scale factor = " + scaleFactor + " dx=" + dx + " dy=" + dy +
                 " x=" + x + " y=" + y + " width=" + width + " height=" + height);*/
         rescaled = true;
+        
+        final double factor = scaleFactor / oldScaleFactor;
 
-        dwidth = (width + dwidth) / oldScaleFactor * scaleFactor;
-        dheight = (height + dheight) / oldScaleFactor * scaleFactor;
-        dx = (dx + x) / oldScaleFactor * scaleFactor;
-        dy = (dy + y) / oldScaleFactor * scaleFactor;
-        dMinWidth = (minWidth + dMinWidth) / oldScaleFactor * scaleFactor;
-        dMinHeight = (minHeight + dMinHeight) / oldScaleFactor * scaleFactor;
-        dMaxWidth = (maxWidth + dMaxWidth) / oldScaleFactor * scaleFactor;
-        dMaxHeight = (maxHeight + dMaxHeight) / oldScaleFactor * scaleFactor;
+        dwidth = (width + dwidth) * factor;//oldScaleFactor * scaleFactor;
+        dheight = (height + dheight) * factor;//oldScaleFactor * scaleFactor;
+        dx = (dx + x) * factor;//oldScaleFactor * scaleFactor;
+        dy = (dy + y) * factor;//oldScaleFactor * scaleFactor;
+        dMinWidth = (minWidth + dMinWidth) * factor;//oldScaleFactor * scaleFactor;
+        dMinHeight = (minHeight + dMinHeight) * factor;//oldScaleFactor * scaleFactor;
+        dMaxWidth = (maxWidth + dMaxWidth) * factor;//oldScaleFactor * scaleFactor;
+        dMaxHeight = (maxHeight + dMaxHeight) * factor;//oldScaleFactor * scaleFactor;
 
         width = (int)(dwidth);
         dwidth = dwidth - width;
@@ -91,6 +93,10 @@ public abstract class TGCScalableWithInternalComponent extends TGCWithInternalCo
         dx = dx - x;
         y = (int)(dy);
         dy = dy - y;
+        
+        // Issue #81: We also need to update max coordinate values
+        maxX *= factor;
+        maxY *= factor;
 
         //TraceManager.addDev("x=" + x + " y=" + y + " width=" + width + " height=" + height);
 
