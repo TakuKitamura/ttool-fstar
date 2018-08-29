@@ -42,8 +42,6 @@ package ui;
 import avatartranslator.AvatarSpecification;
 import common.ConfigurationTTool;
 import common.SpecConfigTTool;
-import ddtranslatorSoclib.AvatarddSpecification;
-import ddtranslatorSoclib.toSoclib.TasksAndMainGenerator;
 import graph.AUTGraph;
 import graph.RG;
 import launcher.RemoteExecutionThread;
@@ -631,7 +629,12 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             p = getPoint(tdp);
         }
         //TraceManager.addDev("Change made!");
-        gtm.saveOperation(p);
+        
+        // Issue #81: For tests
+        if ( gtm != null ) {
+        	gtm.saveOperation(p);
+        }
+        
         dtree.toBeUpdated();
     }
 
@@ -8219,15 +8222,19 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         int index;
         TURTLEPanel tp;
 
-        for (int i = 0; i < tabs.size(); i++) {
-            tp = tabs.elementAt(i);
-            index = tp.panels.indexOf(tdp);
-            if (index > -1) {
-                p.x = i;
-                p.y = index;
-                return p;
-            }
+        // Issue #81: For tests
+        if ( tabs != null ) {
+	        for (int i = 0; i < tabs.size(); i++) {
+	            tp = tabs.elementAt(i);
+	            index = tp.panels.indexOf(tdp);
+	            if (index > -1) {
+	                p.x = i;
+	                p.y = index;
+	                return p;
+	            }
+	        }
         }
+        
         p.x = 0;
         p.y = 0;
 
