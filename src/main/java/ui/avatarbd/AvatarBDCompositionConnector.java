@@ -36,11 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatarbd;
-
 
 import ui.*;
 import ui.util.IconManager;
@@ -76,6 +72,7 @@ public  class AvatarBDCompositionConnector extends TGConnectorWithCommentConnect
 		rescaled = true;
     }
     
+    @Override
     protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
 		if ((p == null) || (rescaled) || (xp1 != x1) || (xp2 != x2) || (yp1 != y1) || (yp2 != y2)){
 			p = new Polygon();
@@ -83,7 +80,7 @@ public  class AvatarBDCompositionConnector extends TGConnectorWithCommentConnect
 			xp2 = x2;
 			yp1 = y1;
 			yp2 = y2;
-			Double alpha;
+			//Double alpha;
 			
 			int dd = (int)(d*tdp.getZoom());
 			int DD = (int)(D*tdp.getZoom());
@@ -166,6 +163,7 @@ public  class AvatarBDCompositionConnector extends TGConnectorWithCommentConnect
 		rescaled = false;
     }
 	
+    @Override
 	public TGComponent extraIsOnOnlyMe(int x1, int y1) {
 		if (p != null) {
 			if (p.contains(x1, y1)) {
@@ -176,6 +174,7 @@ public  class AvatarBDCompositionConnector extends TGConnectorWithCommentConnect
         return null;
     }
 	
+    @Override
 	public void rescale(double scaleFactor){
 		//
 		int xx, yy;
@@ -200,11 +199,8 @@ public  class AvatarBDCompositionConnector extends TGConnectorWithCommentConnect
 		rescaled = true;
 	}
     
-    
+    @Override
     public int getType() {
         return TGComponentManager.AVATARBD_COMPOSITION_CONNECTOR;
     }
-	
-	
-    
 }

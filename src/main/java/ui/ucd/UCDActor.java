@@ -68,11 +68,10 @@ public class UCDActor extends TGCScalableWithoutInternalComponentOneLineText {
     
     public UCDActor(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-
 	
         width = (int)(30 * tdp.getZoom());
         height = (int)(70 * tdp.getZoom());
-	oldScaleFactor = tdp.getZoom();
+        oldScaleFactor = tdp.getZoom();
         //minWidth = 30;
         
         nbConnectingPoint = 24;
@@ -94,7 +93,7 @@ public class UCDActor extends TGCScalableWithoutInternalComponentOneLineText {
         editable = true;
         removable = true;
 
-	super.oldScaleFactor = tdp.getZoom();
+        super.oldScaleFactor = tdp.getZoom();
         //currentFontSize = (int) (maxFontSize*oldScaleFactor);
         
         value = "Actor";
@@ -111,8 +110,8 @@ public class UCDActor extends TGCScalableWithoutInternalComponentOneLineText {
     }
     
     public void internalDrawingAux(Graphics graph) {
-	Font font = graph.getFont ();
-        String ster;
+	//Font font = graph.getFont ();
+      //  String ster;
 	
 	/*if (this.rescaled && !this.tdp.isScaled ()) {
             this.rescaled = false;

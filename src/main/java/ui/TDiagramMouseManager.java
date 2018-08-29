@@ -617,7 +617,6 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
             return;
         }
 
-
         if (tdp.mode == TDiagramPanel.SELECTING_COMPONENTS) {
             tdp.updateSelectingComponents(e.getX(), e.getY());
             tdp.repaint();

@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui;
 
 import myutil.Conversion;
@@ -48,10 +45,6 @@ import ui.util.IconManager;
 import javax.swing.*;
 import java.awt.*;
 
-//import java.awt.geom.*;
-
-//import java.awt.*;
-
 /**
    * Class TGCScalableWithoutInternalComponent
    * Graphical component that contains no internal components, and which is scalable
@@ -59,10 +52,9 @@ import java.awt.*;
    * @version 1.0 08/03/2017
    * @author Ludovic APVRILLE
  */
-public abstract class TGCScalableWithoutInternalComponentOneLineText extends TGCScalableWithoutInternalComponent implements ScalableTGComponent {
+public abstract class TGCScalableWithoutInternalComponentOneLineText extends TGCScalableWithoutInternalComponent /*implements ScalableTGComponent*/ {
  
     protected boolean emptyText;
-    
 
     public TGCScalableWithoutInternalComponentOneLineText(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -82,7 +74,7 @@ public abstract class TGCScalableWithoutInternalComponentOneLineText extends TGC
         myImageIcon = IconManager.imgic302;
     }
 
-
+    @Override
     public void internalDrawing(Graphics g) {
         if (!tdp.isScaled()) {
             width = g.getFontMetrics().stringWidth(value);
@@ -94,6 +86,7 @@ public abstract class TGCScalableWithoutInternalComponentOneLineText extends TGC
         }
     }
 
+    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y - height, Math.max(width, minWidth), height)) {
             return this;
@@ -101,12 +94,14 @@ public abstract class TGCScalableWithoutInternalComponentOneLineText extends TGC
         return null;
     }
 
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
         String oldValue = value;
         String text = getName() + ": ";
         if (hasFather()) {
             text = getTopLevelName() + " / " + text;
         }
+
         String s = (String)JOptionPane.showInputDialog(frame, text,
                                                        "setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
                                                        null,
@@ -116,17 +111,12 @@ public abstract class TGCScalableWithoutInternalComponentOneLineText extends TGC
             s = Conversion.removeFirstSpaces(s);
         }
 
-        //
-
         if ((s != null) && ((emptyText) || s.length() > 0) && (!s.equals(oldValue))) {
             setValue(s);
             //
             return true;
         }
 
-
         return false;
     }
-
-
 }

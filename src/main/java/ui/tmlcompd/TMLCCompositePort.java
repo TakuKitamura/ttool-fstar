@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmlcompd;
 
 import myutil.GraphicLib;
@@ -264,15 +261,17 @@ public class TMLCCompositePort extends TMLCChannelFacility implements SwallowedT
         return null;
     }*/
 
-    
+    @Override
     public int getType() {
         return TGComponentManager.TMLCTD_CPORT;
     }
 	
+    @Override
 	public void wasSwallowed() {
 		myColor = null;
 	}
 	
+    @Override
 	public void wasUnswallowed() {
 		myColor = null;
 		setFather(null);
@@ -281,6 +280,7 @@ public class TMLCCompositePort extends TMLCChannelFacility implements SwallowedT
 			
 	}
 	
+    @Override
 	public void resizeWithFather() {
 		//TraceManager.addDev("Resize port with father");
         if ((father != null) && (father instanceof TMLCCompositeComponent)) {
@@ -404,7 +404,8 @@ public class TMLCCompositePort extends TMLCChannelFacility implements SwallowedT
 		 return s;
 	 }*/
 	 
-	 public void myActionWhenRemoved() {
+	@Override
+	public void myActionWhenRemoved() {
 		tdp = null;
 		TGComponent tgc =  getFather();
 		if (tgc instanceof TMLCCompositeComponent) {
@@ -416,6 +417,4 @@ public class TMLCCompositePort extends TMLCChannelFacility implements SwallowedT
 	/*public Color getPortColor() {
 		return portColor;
 	}*/
-	 
-	 
 }

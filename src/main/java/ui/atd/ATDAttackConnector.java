@@ -55,7 +55,7 @@ import java.util.Vector;
    * @version 1.0 09/12/2009
    * @author Ludovic APVRILLE
  */
-public  class ATDAttackConnector extends TGConnectorWithCommentConnectionPoints implements ScalableTGComponent {
+public class ATDAttackConnector extends TGConnectorWithCommentConnectionPoints implements ScalableTGComponent {
     //protected int arrowLength = 10;
     //protected int widthValue, heightValue, maxWidthValue, h;
     protected int c = 5; //square length

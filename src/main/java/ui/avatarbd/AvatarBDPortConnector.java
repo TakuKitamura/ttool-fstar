@@ -36,9 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package ui.avatarbd;
-
 
 import myutil.GraphicLib;
 import myutil.TraceManager;
@@ -50,8 +48,14 @@ import ui.util.IconManager;
 import ui.window.JDialogSignalAssociation;
 
 import javax.swing.*;
-import java.awt.*;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Polygon;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -71,11 +75,11 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
     protected int decY = 12;
     protected int decX = 6;
 
-    protected LinkedList<String> inSignalsAtOrigin;
-    protected LinkedList<String> outSignalsAtDestination;
+    protected List<String> inSignalsAtOrigin;
+    protected List<String> outSignalsAtDestination;
 
-    protected LinkedList<String> inSignalsAtDestination;
-    protected LinkedList<String> outSignalsAtOrigin;
+    protected List<String> inSignalsAtDestination;
+    protected List<String> outSignalsAtOrigin;
 
     protected boolean asynchronous;
     protected int sizeOfFIFO;
@@ -98,6 +102,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
         outSignalsAtDestination = new LinkedList<String>();
     }
 
+    @Override
     protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
         /*if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
           g.drawLine(x1, y1, x2, y2);
@@ -137,7 +142,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
         }
 
         if (isLossy) {
-            int czz = (int) (cz * 1.4);
+         //   int czz = (int) (cz * 1.4);
             int x3 = p1.getX();
             int y3 = p1.getY();
             g.drawImage(IconManager.img5072, x3 -cz, y3 + cz/2, null);
@@ -172,9 +177,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
             g.drawOval(x3 + czz - 4, y3 - cz - 7, 8, 6);
             g.fillOval(x2 + czz - 2, y2 - cz - 6, 5, 4);
             g.fillOval(x3 + czz - 2, y3 - cz - 6, 5, 4);
-
         }
-
 
         Point p11;
         if (isp1) {
@@ -302,6 +305,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
         return (AvatarBDBlock) (tdp.getComponentToWhichBelongs(p2));
     }
 
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
         // Gets the two concerned blocks
 
@@ -368,6 +372,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
         return true;
     }
 
+    @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         for (String iso : inSignalsAtOrigin) {
@@ -509,15 +514,16 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
             }
 
         } catch (Exception e) {
-            throw new MalformedModelingException();
+            throw new MalformedModelingException( e );
         }
     }
 
-
+    @Override
     public int getType() {
         return TGComponentManager.AVATARBD_PORT_CONNECTOR;
     }
 
+    @Override
     public void rescale(double scaleFactor) {
         //
         int xx, yy;
@@ -541,15 +547,15 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
         oldScaleFactor = scaleFactor;
     }
 
-    public LinkedList<String> getListOfSignalsOrigin() {
-        LinkedList<String> list = new LinkedList<String>();
+    public List<String> getListOfSignalsOrigin() {
+        List<String> list = new LinkedList<String>();
         list.addAll(inSignalsAtOrigin);
         list.addAll(outSignalsAtOrigin);
         return list;
     }
 
-    public LinkedList<String> getListOfSignalsDestination() {
-        LinkedList<String> list = new LinkedList<String>();
+    public List<String> getListOfSignalsDestination() {
+        List<String> list = new LinkedList<String>();
         list.addAll(outSignalsAtDestination);
         list.addAll(inSignalsAtDestination);
         return list;
@@ -770,9 +776,5 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
         }
 
         return b1 + "/" + sig1 + " #--# " + b2 + "/" + sig2;
-
-
     }
-
-
 }
