@@ -520,12 +520,13 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
                     } else {
                         jta.append("\nPerforming Validation for \""+(syscalsspec.getCluster()).getClusterName()+"\".\n");
                         LinkedList<SysCAMSTConnector> connectors = syscalsspec.getAllConnectorsCluster4Matrix();
-                        System.out.printf("Connectors for 1 cluster = %d.\n", connectors.size());
+                        System.out.printf("Connectors4matrix for 1 cluster = %d.\n", connectors.size());
                         LinkedList<SysCAMSTBlockTDF> tdfBlocks = syscalsspec.getAllBlockTDF();
                         System.out.printf("Blocks for 1 cluster = %d.\n", tdfBlocks.size());
                         LinkedList<SysCAMSTConnector> connectorsTdfDe = syscalsspec.getAllConnectorsTdfDe();
                         System.out.printf("ConnectorsTdfDe for 1 cluster = %d.\n", connectorsTdfDe.size());
-                        LinkedList<SysCAMSTConnector> allConnectors = syscalsspec.getAllConnectorCluster();
+                        LinkedList<SysCAMSTConnector> allConnectors = syscalsspec.getAllConnectorsCluster4Soclib();
+                        System.out.printf("All Connectors for 1 cluster = %d.\n", allConnectors.size());
                         LinkedList<SysCAMSTBlockDE> deBlocks = syscalsspec.getAllBlockDE();
                         LinkedList<SysCAMSTBlockGPIO2VCI> gpioBlocks = syscalsspec.getAllBlockGPIO2VCI();
                         //Validate that all ports are connected
