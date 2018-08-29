@@ -243,7 +243,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
 
     public boolean drawable = true;
-    public static final int MOVE_SPEED = 1; //Speed of component moving with arrow keys
+    protected static final int MOVE_SPEED = 1; //Speed of component moving with arrow keys
 
 
     // Constructor
@@ -379,6 +379,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         return name;
     }
 
+    @Override
     public String toString() {
         return name;
     }
@@ -386,7 +387,6 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     public void removeAll() {
         this.componentList = new LinkedList<>();
     }
-
 
     public void setInternalCommentVisible(int mode) {
         internalCommentVisible = mode;
@@ -425,7 +425,6 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         mgui.selectTab(tp, name);
     }
 
-
     @Override
     protected void paintComponent(Graphics g) {
         paintMycomponents(g);
@@ -435,7 +434,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         paintMycomponents(g, true, 1, 1);
     }
 
-    public void basicPaintMyComponents(Graphics g) {
+    protected void basicPaintMyComponents(Graphics g) {
         TGComponent tgc;
         for (int i = componentList.size() - 1; i >= 0; i--) {
             tgc = this.componentList.get(i);
@@ -454,7 +453,6 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         if (!drawable) {
             return;
         }
-
 
         if (this.fontToUse == null)
             this.fontToUse = g.getFont();
@@ -684,7 +682,6 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         return sb;
     }
 
-
     public void activateActions(boolean b) {
         ttb.setActive(b);
     }
@@ -721,7 +718,6 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         //boolean b = false;
         boolean hoveredElementFound = false;
         byte info = 0;
-
 
         TGComponent tmp = componentHovered;
         componentHovered = null;
@@ -768,7 +764,6 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         //boolean b = false;
         boolean pointedElementFound = false;
         byte info = 0;
-
 
         TGComponent tmp = componentPointed;
         componentPointed = null;
@@ -1277,15 +1272,17 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         int oldY = ySel;
         xSel = x;
         ySel = y;
-        for (TGComponent tgc : this.componentList)
+        
+        for (TGComponent tgc : this.componentList) {
             if (tgc.isSelected()) {
                 if ((xSel - oldX != 0) || (ySel - oldY != 0)) {
                     /*TraceManager.addDev("" + tgc + " is selected oldX=" + xSel +
                             " oldY=" + oldY + " xSel=" + xSel + " ySel=" + ySel);*/
                 }
+                
                 tgc.forceMove(xSel - oldX, ySel - oldY);
-
             }
+        }
     }
 
     public TGComponent nextSelectedComponent() {
