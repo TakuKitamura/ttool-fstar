@@ -36,72 +36,58 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
-package ddtranslatorSoclib.toSoclib;
-import ddtranslatorSoclib.toTopCell.TopCellGenerator;
-
 /**
  * Class AVATAR2CSOCLIB
- * Creation: 01/07/2014
- * @version 1.0 01/07/2014
- * @author Ludovic APVRILLE, Raja GATGOUT
+ * Creation: 28/08/2018
+ * @version 1.0 28/08/2018
+ * @author Rodrigo CORTES PORTO
  */
-public class TaskFileSoclib {
 
-//deleted pthread.h
-//added  mwmr.h
+package ddtranslatorSoclib.toSoclib;
 
-    private final static String INCLUDE_HEADER = "#include <stdio.h>\n#include <unistd.h>\n#include <stdlib.h>\n";
-    private final static String LOCAL_INCLUDE_HEADER = "#include \"request.h\"\n#include \"syncchannel.h\"\n#include \"request_manager.h\"\n#include \"debug.h\"\n#include \"defs.h\"\n#include \"mytimelib.h\"\n#include \"random.h\"\n#include \"tracemanager.h\"\n#include \"main.h\"\n#include \"mwmr.h\"\n"; 
-	
+import ddtranslatorSoclib.toTopCell.TopCellGenerator;
+import ddtranslatorSoclib.AvatarAmsCluster;
+
+public class Gpio2VciAddress {
+    private final static String INCLUDE_HEADER = "#include \"gpio2vci_address.h\"\n";
+
+    private final static String GET_ADDRESS_DEC = "int get_address(char name[]) {\n";
+
     private final static String CR = "\n";
-	
+    private final static String CR2 = "\n\n";
+
     private String name;
-    private int cpuId = 0;
-	
-    private String headerCode;
-    private String mainCode;
-	
-	
-    public TaskFileSoclib(String _name , int cpuid) {
-	    name = _name;
-	    headerCode = "";
-	    mainCode = "";
-	    cpuId = cpuid;
-    }
-	
-    public String getName() {
-	return name;
+    private String code;
+
+    public Gpio2VciAddress(String _name) {
+        name = _name;
     }
 
-    public int getCPUId(){
-      return cpuId; 
-    }
-	
-    public String getFullHeaderCode() {
-	String s = "#ifndef " + name + "_H\n#define " + name + "_H\n";
-	s += INCLUDE_HEADER + CR + LOCAL_INCLUDE_HEADER; 
-    if(TopCellGenerator.avatardd.getNbAmsCluster() > 0) {
-        s += "#include \"gpio2vci_iface.h\"\n";
+    public String getName() {
+        return name;
     }
     
-	s += CR + headerCode;
-	s += "#endif\n";
-	return s;
-	}
-	
-	public String getMainCode() {
-	    return "#include \"" + name + ".h\"" + CR + CR + mainCode;
-	}
-	
-	public void addToHeaderCode(String _code) {
-	    headerCode += _code;
-	}
-	
-	public void addToMainCode(String _code) {
-	    mainCode += _code;
-	}	
+    public void buildAddressCode() {
+        code = INCLUDE_HEADER + CR + GET_ADDRESS_DEC;
+        for(AvatarAmsCluster amsCluster : TopCellGenerator.avatardd.getAllAmsCluster ()) {
+            if(amsCluster.getNo_amsCluster() == 0) {
+                code += "if(strcmp(name, \""+amsCluster.getAmsClusterName()+"\") == 0) {\n";
+                code += "return 0xc"+Integer.toHexString(amsCluster.getNo_amsCluster())+"200000;\n";
+                code += "} ";
+            } else {
+                code += "else if(strcmp(name, \""+amsCluster.getAmsClusterName()+"\") == 0) {\n";
+                code += "return 0xc"+Integer.toHexString(amsCluster.getNo_amsCluster())+"200000;\n";
+                code += "} ";
+            }
+        }
+        
+        code += "else {\n";
+        code += "printf(\"ERROR getting address for cluster: \\\"%s\\\"\\n\", name);\n";
+        code += "return -1;\n";
+        code += "}\n}";
+    }
+
+    public String getAddressCode() {
+        return code;
+    }
 }

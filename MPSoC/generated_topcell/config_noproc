@@ -26,6 +26,7 @@
   CONFIG_MWMR
   CONFIG_MWMR_SOCLIB
   CONFIG_MUTEK_SCHEDULER_STATIC
+  CONFIG_LIBSYSCAMS
 
 %include $(SRC_DIR)/examples/common/build_options.conf
 %include $(SRC_DIR)/examples/common/platforms.conf
