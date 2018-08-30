@@ -7,7 +7,7 @@
 <MainCode value="void __user_init() {"/>
 <MainCode value="}"/>
 <Optimized value="true" />
-<Validated value="Block0;" />
+<Validated value="" />
 <Ignored value="" />
 
 <COMPONENT type="5000" id="25" >
@@ -63,6 +63,7 @@
 <cdparam x="458" y="139" />
 <sizeparam width="10" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
 <TGConnectingPoint num="0" id="26" />
@@ -70,12 +71,12 @@
 <TGConnectingPoint num="2" id="28" />
 <TGConnectingPoint num="3" id="29" />
 <extraparam>
-<guard value="[ ]" />
-<afterMin value="" />
-<afterMax value="" />
-<computeMin value="" />
-<computeMax value="" />
-<probability value="" />
+<guard value="[ ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -92,6 +93,7 @@
 <cdparam x="407" y="110" />
 <sizeparam width="10" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
 <TGConnectingPoint num="0" id="33" />
@@ -99,12 +101,12 @@
 <TGConnectingPoint num="2" id="35" />
 <TGConnectingPoint num="3" id="36" />
 <extraparam>
-<guard value="[ ]" />
-<afterMin value="" />
-<afterMax value="" />
-<computeMin value="" />
-<computeMax value="" />
-<probability value="" />
+<guard value="[ ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -121,6 +123,7 @@
 <cdparam x="410" y="65" />
 <sizeparam width="100" height="50" minWidth="40" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="state0" value="state0" />
 <TGConnectingPoint num="0" id="42" />
@@ -554,7 +557,7 @@
 <Attribute period="6.0" time="ns" processCode="void processing() {
 	in.read();
 }
-                  " listStruct="" nameTemplate="" typeTemplate="int" listTypedef="" />
+                    " listStruct="" nameTemplate="" typeTemplate="int" listTypedef="" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1604" id="264" >
@@ -599,7 +602,7 @@
 	out_de.write( (int) x);
 	tdf_out.write(x);
 }
-                     " listStruct="" nameTemplate="" typeTemplate="int" listTypedef="" />
+                       " listStruct="" nameTemplate="" typeTemplate="int" listTypedef="" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1606" id="283" >
