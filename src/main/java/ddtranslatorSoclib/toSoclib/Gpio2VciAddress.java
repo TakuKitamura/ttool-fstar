@@ -80,11 +80,16 @@ public class Gpio2VciAddress {
                 code += "} ";
             }
         }
-        
-        code += "else {\n";
-        code += "printf(\"ERROR getting address for cluster: \\\"%s\\\"\\n\", name);\n";
-        code += "return -1;\n";
-        code += "}\n}";
+        if (TopCellGenerator.avatardd.getNbAmsCluster() > 0 ) {
+            code += "else {\n";
+            code += "printf(\"ERROR getting address for cluster: \\\"%s\\\"\\n\", name);\n";
+            code += "return -1;\n";
+            code += "}\n}";
+        } else {
+            code += "printf(\"ERROR getting address for cluster: \\\"%s\\\"\\n\", name);\n";
+            code += "return -1;\n";
+            code += "}";
+        }
     }
 
     public String getAddressCode() {
