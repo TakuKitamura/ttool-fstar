@@ -113,7 +113,7 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent {
             if (getTDiagramPanel().getName().equals("ELN Diagram")) {
             	tgcomponent[i] = new ELNMidPortTerminal(p.x, p.y, minX, maxX, minY, maxY, false, this, tdp );
             } else {
-            	tgcomponent[i] = new TGCPointOfConnector(p.x, p.y, minX, maxX, minY, maxY, false, this, tdp );
+            	tgcomponent[i] = new TGCPointOfConnector(p.x, p.y, minX, maxX, minY, maxY, false, this, tdp );	
             }
         }
     }
@@ -124,9 +124,7 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent {
 
     public int getIndexOfFirstTGCPointOfConnector() {
 		for(int i=0; i<nbInternalTGComponent; i++) {
-			if (tgcomponent[i] instanceof ELNMidPortTerminal) {
-		    	return i;
-		    } else if (tgcomponent[i] instanceof TGCPointOfConnector) {
+		    if (tgcomponent[i] instanceof TGCPointOfConnector) {
 		    	return i;
 		    }
 		}
@@ -145,10 +143,7 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent {
 		TGCPointOfConnector []tab = new TGCPointOfConnector[nb];
 		nb = 0;
 		for(int i=0; i<nbInternalTGComponent; i++) {
-			if (tgcomponent[i] instanceof ELNMidPortTerminal) {
-				tab[nb] = (ELNMidPortTerminal)(tgcomponent[i]);
-				nb++;
-			} else if (tgcomponent[i] instanceof TGCPointOfConnector) {
+			if (tgcomponent[i] instanceof TGCPointOfConnector) {
 				tab[nb] = (TGCPointOfConnector)(tgcomponent[i]);
 				nb++;
 			}
@@ -161,9 +156,7 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent {
         Vector<Point> v = new Vector<Point>();
 	
         for(int i=0; i<nbInternalTGComponent; i++) {
-        	if (tgcomponent[i] instanceof ELNMidPortTerminal) {
-        		v.add(new Point(tgcomponent[i].getX(), tgcomponent[i].getY()));
-        	} else if (tgcomponent[i] instanceof TGCPointOfConnector) {
+        	if (tgcomponent[i] instanceof TGCPointOfConnector) {
         		v.add(new Point(tgcomponent[i].getX(), tgcomponent[i].getY()));
         	}
         }
@@ -175,9 +168,7 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent {
         if (nbInternalTGComponent == 0) { return -1;}
         int index;
         for(index = 0; index<tgcomponent.length; index++) {
-        	if (!(tgcomponent[index] instanceof ELNMidPortTerminal)) {
-                break;
-            } else if (!(tgcomponent[index] instanceof TGCPointOfConnector)) {
+            if (!(tgcomponent[index] instanceof TGCPointOfConnector)) {
                 break;
             }
         }
@@ -265,10 +256,7 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent {
             return new Point((p1.getX()+p2.getX())/2, (p1.getY()+p2.getY())/2);
         }
 
-        if (tgcomponent[0] instanceof ELNMidPortTerminal) {
-            //TraceManager.addDev("TGCPointOfConnector");
-            return new Point((p1.getX()+tgcomponent[0].getX())/2, (p1.getY()+tgcomponent[0].getY())/2);
-        } else if (tgcomponent[0] instanceof TGCPointOfConnector) {
+        if (tgcomponent[0] instanceof TGCPointOfConnector) {
             //TraceManager.addDev("TGCPointOfConnector");
             return new Point((p1.getX()+tgcomponent[0].getX())/2, (p1.getY()+tgcomponent[0].getY())/2);
         }
@@ -504,62 +492,34 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent {
 
     public CDElement[] getPointedSegment(int x1, int y1) {
         TGCPointOfConnector p3, p4;
-        ELNMidPortTerminal p3a, p4a;
         CDElement [] pt = new CDElement[2];
         try {
 
             if (hasTGCPointOfConnector()) {
-            	if (tgcomponent[0] instanceof ELNMidPortTerminal) {
-            		p3a = (ELNMidPortTerminal)tgcomponent[0];
-                    p4a = p3a; 
+                p3 = (TGCPointOfConnector)tgcomponent[0];
+                p4 = p3;
+                if ((int)(Line2D.ptSegDistSq(p1.getX(), p1.getY(), p3.getX(), p3.getY(), x1, y1)) < distanceSelected) {
+                    pt[0] = p1;
+                    pt[1] = p3;
+                    return pt;
+                }
+                for(int i=0; i<getIndexOfLastTGCPointOfConnector(); i++) {
+                    p3 = (TGCPointOfConnector)(tgcomponent[i]);
+                    p4 = (TGCPointOfConnector)(tgcomponent[i+1]);
 
-                    if ((int)(Line2D.ptSegDistSq(p1.getX(), p1.getY(), p3a.getX(), p3a.getY(), x1, y1)) < distanceSelected) {
-                        pt[0] = p1;
-                        pt[1] = p3a;
+                    if ((int)(Line2D.ptSegDistSq(p3.getX(), p3.getY(), p4.getX(), p4.getY(), x1, y1)) < distanceSelected) {
+                        pt[0] = p3;
+                        pt[1] = p4;
                         return pt;
                     }
-                    for(int i=0; i<getIndexOfLastTGCPointOfConnector(); i++) {
-                        p3a = (ELNMidPortTerminal)(tgcomponent[i]);
-                        p4a = (ELNMidPortTerminal)(tgcomponent[i+1]);
+                }
 
-                        if ((int)(Line2D.ptSegDistSq(p3a.getX(), p3a.getY(), p4a.getX(), p4a.getY(), x1, y1)) < distanceSelected) {
-                            pt[0] = p3a;
-                            pt[1] = p4a;
-                            return pt;
-                        }
-                    }
+                if ((int)(Line2D.ptSegDistSq(p4.getX(), p4.getY(), p2.getX(), p2.getY(), x1, y1)) < distanceSelected) {
+                    pt[0] = p4;
+                    pt[1] = p2;
+                    return pt;
+                }
 
-                    if ((int)(Line2D.ptSegDistSq(p4a.getX(), p4a.getY(), p2.getX(), p2.getY(), x1, y1)) < distanceSelected) {
-                        pt[0] = p4a;
-                        pt[1] = p2;
-                        return pt;
-                    }
-            	} else {
-            		p3 = (TGCPointOfConnector)tgcomponent[0];
-                    p4 = p3;
-
-                    if ((int)(Line2D.ptSegDistSq(p1.getX(), p1.getY(), p3.getX(), p3.getY(), x1, y1)) < distanceSelected) {
-            			pt[0] = p1;
-            			pt[1] = p3;
-            			return pt;
-            		}
-            		for(int i=0; i<getIndexOfLastTGCPointOfConnector(); i++) {
-            			p3 = (TGCPointOfConnector)(tgcomponent[i]);
-            			p4 = (TGCPointOfConnector)(tgcomponent[i+1]);
-
-            			if ((int)(Line2D.ptSegDistSq(p3.getX(), p3.getY(), p4.getX(), p4.getY(), x1, y1)) < distanceSelected) {
-            				pt[0] = p3;
-            				pt[1] = p4;
-            				return pt;
-            			}
-            		}
-
-            		if ((int)(Line2D.ptSegDistSq(p4.getX(), p4.getY(), p2.getX(), p2.getY(), x1, y1)) < distanceSelected) {
-            			pt[0] = p4;
-            			pt[1] = p2;
-            			return pt;
-            		}
-            	}
             } else {
                 if (p2 != null) {
                     if ((int)(Line2D.ptSegDistSq(p1.getX(), p1.getY(), p2.getX(), p2.getY(), x1, y1)) < distanceSelected) {
@@ -669,41 +629,10 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent {
         return;
     }
 
-    public void pointHasBeenRemoved(ELNMidPortTerminal tgc) {
-        return;
-    }
 
     // indexCon indicates from which points the potential connecitng point is the closer
     public void pointHasBeenAdded(TGCPointOfConnector tgc, int index, int indexCon) {
         return;
-    }
-    
-    public void pointHasBeenAdded(ELNMidPortTerminal tgc, int index, int indexCon) {
-        return;
-    }
-
-    private boolean addELNMidPortTerminal(int x, int y) {
-        CDElement [] pt = getPointedSegment(x, y);
-        if (pt != null) {
-            Point p = new Point((pt[0].getX() + pt[1].getX()) / 2, (pt[0].getY() + pt[1].getY()) / 2);
-            int distance1 = (int)(new Point(x, y).distance(pt[0].getX(), pt[0].getY()));
-            int distance2 = (int)(new Point(x, y).distance(pt[1].getX(), pt[1].getY()));
-            int index = indexPointedSegment(x, y);
-            int indexCon;
-
-            if (distance1 < distance2) {
-                indexCon = 0;
-            } else {
-                indexCon = 1;
-            }
-
-            ELNMidPortTerminal t = new ELNMidPortTerminal(p.x, p.y, minX, maxX, minY, maxY, false, this, tdp);
-            if (addInternalComponent(t, index) ) {
-                pointHasBeenAdded(t, index, indexCon);
-                return true;
-            }
-        }
-        return false;
     }
 
     private boolean addTGCPointOfConnector(int x, int y) {
@@ -734,6 +663,30 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent {
             }
         }
         //TraceManager.addDev("Return false");
+        return false;
+    }
+    
+    private boolean addELNMidPortTerminal(int x, int y) {
+        CDElement [] pt = getPointedSegment(x, y);
+        if (pt != null) {
+            Point p = new Point((pt[0].getX() + pt[1].getX()) / 2, (pt[0].getY() + pt[1].getY()) / 2);
+            int distance1 = (int)(new Point(x, y).distance(pt[0].getX(), pt[0].getY()));
+            int distance2 = (int)(new Point(x, y).distance(pt[1].getX(), pt[1].getY()));
+            int index = indexPointedSegment(x, y);
+            int indexCon;
+
+            if (distance1 < distance2) {
+                indexCon = 0;
+            } else {
+                indexCon = 1;
+            }
+
+            ELNMidPortTerminal t = new ELNMidPortTerminal(p.x, p.y, minX, maxX, minY, maxY, false, this, tdp);
+            if (addInternalComponent(t, index) ) {
+                pointHasBeenAdded(t, index, indexCon);
+                return true;
+            }
+        }
         return false;
     }
 
@@ -812,9 +765,9 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent {
     public StringBuffer translatePoints() {
         StringBuffer sb = new StringBuffer();
         for(int i=0; i<getIndexOfLastTGCPointOfConnector()+1; i++) {
-        	if (tgcomponent[i] instanceof TGCPointOfConnector || tgcomponent[i] instanceof ELNMidPortTerminal) {
-        		sb.append("<Point x=\"" + tgcomponent[i].getX() + "\" y=\"" + tgcomponent[i].getY() + "\" type=\"" + tgcomponent[i].getType() + "\" />\n");
-        	}
+            if (tgcomponent[i] instanceof TGCPointOfConnector) {
+                sb.append("<Point x=\"" + tgcomponent[i].getX() + "\" y=\"" + tgcomponent[i].getY() + "\" />\n");
+            }
         }
         return sb;
     }
