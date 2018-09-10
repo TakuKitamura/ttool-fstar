@@ -67,7 +67,7 @@ public class ADDTTYNode extends ADDNode implements WithAttributes {
 	private String stereotype = "TTY";
 	
 	private int index = 0;
-	
+    //protected int cluster_index = 0;
 	
 	public ADDTTYNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -175,7 +175,10 @@ public class ADDTTYNode extends ADDNode implements WithAttributes {
 	public int getIndex() {
 		return index;
 	}
-	
+
+    /*  public int getClusterIndex() {
+        return cluster_index;
+	}*/
 	
 	public boolean editOndoubleClick(JFrame frame) {
 			boolean error = false;
@@ -220,6 +223,22 @@ public class ADDTTYNode extends ADDNode implements WithAttributes {
 					}
 			}
 			
+			/*	if (dialog.getClusterIndex().length() != 0) {
+            try {
+                tmp = cluster_index;
+                index = Integer.decode(dialog.getClusterIndex()).intValue();
+                if (index < 0) {
+                    index = tmp;
+                    error = true;
+                    errors += "cluster index ";
+                }
+            } catch (Exception e) {
+                error = true;
+                errors += "cluster index  ";
+            }
+	    }*/
+
+			
 			if (error) {
 					JOptionPane.showMessageDialog(frame,
 							"Invalid value for the following attributes: " + errors,
@@ -241,6 +260,7 @@ public class ADDTTYNode extends ADDNode implements WithAttributes {
 		sb.append("<info stereotype=\"" + stereotype + "\" nodeName=\"" + name);
 		sb.append("\" />\n");
 		sb.append("<attributes index=\"" + index + "\" ");
+		//sb.append("cluster_index=\"" + cluster_index + "\" ");
 		//sb.append(" clockRatio=\"" + clockRatio + "\"");
 		sb.append("/>\n");
 		sb.append("</extraparam>\n");
@@ -282,6 +302,7 @@ public class ADDTTYNode extends ADDNode implements WithAttributes {
 							if (elt.getTagName().equals("attributes")) {
 								
 								index = Integer.decode(elt.getAttribute("index")).intValue();
+								//cluster_index = Integer.decode(elt.getAttribute("cluster_index")).intValue();
 							}
 						}
 					}

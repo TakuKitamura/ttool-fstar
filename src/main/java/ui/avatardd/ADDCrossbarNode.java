@@ -305,7 +305,7 @@ public class ADDCrossbarNode extends ADDCommunicationNode implements WithAttribu
         //sb.append(" nbOfAttachedInitiators=\"" + nbOfAttachedInitiators + "\" ");
 
         //sb.append(" nbOfAttachedTargets=\"" + nbOfAttachedTargets + "\" ");
-        sb.append(" cluster_index=\"" + cluster_index + "\" ");
+        sb.append("<attributes cluster_index=\"" + cluster_index + "\" ");
         sb.append(" cluster_address=\"" + cluster_address + "\" ");
         sb.append("/>\n");
         sb.append("</extraparam>\n");

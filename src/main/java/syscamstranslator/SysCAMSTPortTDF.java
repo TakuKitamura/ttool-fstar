@@ -38,7 +38,12 @@
 
 package syscamstranslator;
 
+import elntranslator.ELNTCluster;
+import elntranslator.ELNTModule;
+
 /**
+ * Class SysCAMSTPortTDF
+ * Parameters of a SystemC-AMS port TDF
  * Creation: 07/05/2018
  * @version 1.0 07/05/2018
  * @author Irina Kit Yan LEE
@@ -47,53 +52,79 @@ package syscamstranslator;
 public class SysCAMSTPortTDF extends SysCAMSTComponent {
 
 	private String name;
-	private int period;
+	private double period;
+	private String time;
 	private int rate;
 	private int delay;
 	private int origin;
 	private String TDFType;
 	
 	private SysCAMSTBlockTDF blockTDF;
+	private ELNTCluster cluster;
+	private ELNTModule module;
 	
-	public SysCAMSTPortTDF(String _name, int _period, int _rate, int _delay, int _origin, String _TDFType, SysCAMSTBlockTDF _blockTDF) {
+	public SysCAMSTPortTDF(String _name, double _period, String _time, int _rate, int _delay, int _origin, String _TDFType, SysCAMSTBlockTDF _blockTDF) {
 		name = _name;
 		period = _period;
+		time = _time;
 		rate = _rate;
 		delay = _delay;
 		origin = _origin;
 		TDFType = _TDFType;
 		blockTDF = _blockTDF;
 	}
+	
+	public SysCAMSTPortTDF(String _name, int _period, String _time, int _rate, int _delay, int _origin, String _TDFType, ELNTCluster _cluster) {
+		name = _name;
+		period = _period;
+		time = _time;
+		rate = _rate;
+		delay = _delay;
+		origin = _origin;
+		TDFType = _TDFType;
+		cluster = _cluster;
+	}
+	
+	public SysCAMSTPortTDF(String _name, int _period, String _time, int _rate, int _delay, int _origin, String _TDFType, ELNTModule _module) {
+		name = _name;
+		period = _period;
+		time = _time;
+		rate = _rate;
+		delay = _delay;
+		origin = _origin;
+		TDFType = _TDFType;
+		module = _module;
+	}
 
 	public String getName() {
 		return name;
 	}
 
-	public void setName(String _name) {
-		name = _name;
-	}
-
-	public int getPeriod() {
+	public double getPeriod() {
 		return period;
 	}
 
-	public void setPeriod(int _period) {
+    public void setPeriod(double _period) {
 		period = _period;
+	}
+
+	public String getTime() {
+		return time;
 	}
 
 	public int getRate() {
 		return rate;
 	}
-
-	public void setRate(int _rate) {
+    
+    public void setRate(int _rate) {
 		rate = _rate;
 	}
 
 	public int getDelay() {
 		return delay;
 	}
-
-	public void setDelay(int _delay) {
+    
+    public void setDelay(int _delay) {
 		delay = _delay;
 	}
 
@@ -101,23 +132,19 @@ public class SysCAMSTPortTDF extends SysCAMSTComponent {
 		return origin;
 	}
 
-	public void setOrigin(int _origin) {
-		origin = _origin;
-	}
-
 	public String getTDFType() {
 		return TDFType;
 	}
 
-	public void setTDFType(String _TDFType) {
-		TDFType = _TDFType;
-	}
-
-	public synchronized SysCAMSTBlockTDF getBlockTDF() {
+	public SysCAMSTBlockTDF getBlockTDF() {
 		return blockTDF;
 	}
 
-	public synchronized void setBlockTDF(SysCAMSTBlockTDF _blockTDF) {
-		blockTDF = _blockTDF;
+	public ELNTCluster getCluster() {
+		return cluster;
+	}
+
+	public ELNTModule getModule() {
+		return module;
 	}
 }

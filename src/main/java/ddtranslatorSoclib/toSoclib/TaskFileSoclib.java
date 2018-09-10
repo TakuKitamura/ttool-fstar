@@ -41,6 +41,7 @@
 
 
 package ddtranslatorSoclib.toSoclib;
+import ddtranslatorSoclib.toTopCell.TopCellGenerator;
 
 /**
  * Class AVATAR2CSOCLIB
@@ -54,7 +55,7 @@ public class TaskFileSoclib {
 //added  mwmr.h
 
     private final static String INCLUDE_HEADER = "#include <stdio.h>\n#include <unistd.h>\n#include <stdlib.h>\n";
-    private final static String LOCAL_INCLUDE_HEADER = "#include \"request.h\"\n#include \"syncchannel.h\"\n#include \"request_manager.h\"\n#include \"debug.h\"\n#include \"defs.h\"\n#include \"mytimelib.h\"\n#include \"random.h\"\n#include \"tracemanager.h\"\n#include \"main.h\"\n#include \"mwmr.h\"\n "; 
+    private final static String LOCAL_INCLUDE_HEADER = "#include \"request.h\"\n#include \"syncchannel.h\"\n#include \"request_manager.h\"\n#include \"debug.h\"\n#include \"defs.h\"\n#include \"mytimelib.h\"\n#include \"random.h\"\n#include \"tracemanager.h\"\n#include \"main.h\"\n#include \"mwmr.h\"\n"; 
 	
     private final static String CR = "\n";
 	
@@ -82,8 +83,12 @@ public class TaskFileSoclib {
 	
     public String getFullHeaderCode() {
 	String s = "#ifndef " + name + "_H\n#define " + name + "_H\n";
-	s += INCLUDE_HEADER + CR + LOCAL_INCLUDE_HEADER + CR + CR;
-	s += headerCode;
+	s += INCLUDE_HEADER + CR + LOCAL_INCLUDE_HEADER; 
+    if(TopCellGenerator.avatardd.getNbAmsCluster() > 0) {
+        s += "#include \"gpio2vci_iface.h\"\n";
+    }
+    
+	s += CR + headerCode;
 	s += "#endif\n";
 	return s;
 	}

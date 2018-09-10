@@ -1,8 +1,8 @@
 #include<time.h>
 
-#include "mytimelib.h"
-#include "random.h"
-#include "debug.h"
+#include "include/mytimelib.h"
+#include "include/random.h"
+#include "include/debug.h"
 
 #ifndef CLOCK_REALTIME
 #define CLOCK_REALTIME

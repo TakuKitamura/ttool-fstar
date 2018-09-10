@@ -40,45 +40,90 @@ package syscamstranslator;
 
 import java.util.LinkedList;
 
+import javax.swing.DefaultListModel;
+
 /**
+ * Class SysCAMSTBlockDE
+ * Parameters of a SystemC-AMS block DE
  * Creation: 19/05/2018
  * @version 1.0 19/05/2018
  * @author Irina Kit Yan LEE
 */
 
 public class SysCAMSTBlockDE extends SysCAMSTComponent {
-
-	private String blockDEName;
-	private int period;
+	private String name;
+//	private int period;
+//	private String time;
+	private String nameFn;
+	private String code;
+	private DefaultListModel<String> listStruct;
+	private String nameTemplate;
+	private String typeTemplate;
+	private DefaultListModel<String> listTypedef;
+	
+	private SysCAMSTCluster cluster;
 	
 	private LinkedList<SysCAMSTPortDE> portDE;
 	
-	public SysCAMSTBlockDE(String _blockDEName, int _period) {
-		blockDEName = _blockDEName;
-		period = _period;
+	public SysCAMSTBlockDE(String _name, String _nameFn, String _code, DefaultListModel<String> _listStruct, String _nameTemplate, String _typeTemplate, DefaultListModel<String> _listTypedef, SysCAMSTCluster _cluster) {
+		name = _name;
+//		period = _period;
+//		time = _time;
+		nameFn = _nameFn;
+		code = _code;
+		listStruct = _listStruct;
+		nameTemplate = _nameTemplate;
+		typeTemplate = _typeTemplate;
+		listTypedef = _listTypedef;
+		cluster = _cluster;
+		portDE = new LinkedList<SysCAMSTPortDE>();
 	}
 
-	public int getPeriod() {
-		return period;
+//	public int getPeriod() {
+//		return period;
+//	}
+//	
+//	public String getTime() {
+//		return time;
+//	}
+
+	public String getName() {
+		return name;
 	}
 
-	public void setPeriod(int _period) {
-		period = _period;
+	public String getNameFn() {
+		return nameFn;
+	}
+	
+	public String getCode() {
+		return code;
+	}
+	
+	public DefaultListModel<String> getListStruct() {
+		return listStruct;
 	}
 
-	public String getBlockDEName() {
-		return blockDEName;
+	public String getNameTemplate() {
+		return nameTemplate;
 	}
 
-	public void setBlockDEName(String _blockDEName) {
-		blockDEName = _blockDEName;
+	public String getTypeTemplate() {
+		return typeTemplate;
 	}
 
-    public LinkedList<SysCAMSTPortDE> getPortDE(){
-    	return portDE;
-    }
+	public DefaultListModel<String> getListTypedef() {
+		return listTypedef;
+	}
+	
+	public SysCAMSTCluster getCluster() {
+		return cluster;
+	}
+	
+	public LinkedList<SysCAMSTPortDE> getPortDE(){
+		return portDE;
+	}
 
-    public void addPortDE(SysCAMSTPortDE de){
-    	portDE.add(de);
-    }
+	public void addPortDE(SysCAMSTPortDE de){
+		portDE.add(de);
+	}
 }

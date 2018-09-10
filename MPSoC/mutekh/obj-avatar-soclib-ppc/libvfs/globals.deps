@@ -1,9 +1,0 @@
-/users/enseig/genius/TTool/MPSoC/mutekh/obj-avatar-soclib-ppc/libvfs/globals.o: \
- /users/enseig/genius/TTool/MPSoC/mutekh/libvfs/globals.c \
- /users/enseig/genius/TTool/MPSoC/mutekh/obj-avatar-soclib-ppc/config.h \
- /users/enseig/genius/TTool/MPSoC/mutekh/hexo/include/hexo/local.h \
- /users/enseig/genius/TTool/MPSoC/mutekh/hexo/include/hexo/decls.h \
- /users/enseig/genius/TTool/MPSoC/mutekh/hexo/include/hexo/types.h \
- /users/enseig/genius/TTool/MPSoC/mutekh/cpu/ppc/include/cpu/hexo/types.h \
- /users/enseig/genius/TTool/MPSoC/mutekh/arch/soclib/include/arch/hexo/types.h \
- /users/enseig/genius/TTool/MPSoC/mutekh/cpu/ppc/include/cpu/hexo/local.h

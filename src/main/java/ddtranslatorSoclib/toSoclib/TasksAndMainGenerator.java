@@ -96,6 +96,7 @@ public class TasksAndMainGenerator {
 
     private MainFileSoclib mainFile;
     private Vector<TaskFileSoclib> taskFiles;
+    private Gpio2VciAddress gpio2vciAddressFile;
     private String makefile_src;
     private String makefile_SocLib;
 
@@ -147,6 +148,9 @@ public class TasksAndMainGenerator {
         // Makefile for SocLib
         makeMakefileSocLib();
         FileUtils.saveFile(path + "Makefile.soclib", makefile_SocLib);
+        
+        TraceManager.addDev("Generating gpio2vci_address file in "+path+"mutekh/libsyscams/" + gpio2vciAddressFile.getName());
+        FileUtils.saveFile(path + "mutekh"+File.separator+"libsyscams"+File.separator + gpio2vciAddressFile.getName(), Conversion.indentString(gpio2vciAddressFile.getAddressCode(), 4));
     }
 
     public Vector<?> getWarnings() {
@@ -158,6 +162,8 @@ public class TasksAndMainGenerator {
         tracing = _tracing;
 
         mainFile = new  MainFileSoclib("main");
+        gpio2vciAddressFile = new Gpio2VciAddress("gpio2vci_address.c");
+        gpio2vciAddressFile.buildAddressCode();
 
         avspec.removeCompositeStates();
 	avspec.removeLibraryFunctionCalls();

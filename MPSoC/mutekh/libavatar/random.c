@@ -4,8 +4,8 @@
 #include <time.h>
 #include <limits.h>
 
-#include "random.h"
-#include "debug.h"
+#include "include/random.h"
+#include "include/debug.h"
 #include <math.h>
 
 #include "mytimelib.h"

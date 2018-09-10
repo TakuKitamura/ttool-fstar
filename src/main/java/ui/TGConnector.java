@@ -40,6 +40,7 @@
 package ui;
 
 import myutil.*;
+import ui.eln.ELNMidPortTerminal;
 
 import javax.swing.*;
 import java.awt.*;
@@ -109,7 +110,11 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent {
         for(int i=0; i<nbInternalTGComponent; i++) {
             final Point p = _listPoint.elementAt(i);
             //TraceManager.addDev("p.x " + p.x + " p.y" + p.y + " minX" + _minX + " maxX" + _maxX);
-            tgcomponent[i] = new TGCPointOfConnector(p.x, p.y, minX, maxX, minY, maxY, false, this, tdp );
+            if (getTDiagramPanel().getName().equals("ELN Diagram")) {
+            	tgcomponent[i] = new ELNMidPortTerminal(p.x, p.y, minX, maxX, minY, maxY, false, this, tdp );
+            } else {
+            	tgcomponent[i] = new TGCPointOfConnector(p.x, p.y, minX, maxX, minY, maxY, false, this, tdp );	
+            }
         }
     }
 
@@ -662,6 +667,30 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent {
         //TraceManager.addDev("Return false");
         return false;
     }
+    
+    private boolean addELNMidPortTerminal(int x, int y) {
+        CDElement [] pt = getPointedSegment(x, y);
+        if (pt != null) {
+            Point p = new Point((pt[0].getX() + pt[1].getX()) / 2, (pt[0].getY() + pt[1].getY()) / 2);
+            int distance1 = (int)(new Point(x, y).distance(pt[0].getX(), pt[0].getY()));
+            int distance2 = (int)(new Point(x, y).distance(pt[1].getX(), pt[1].getY()));
+            int index = indexPointedSegment(x, y);
+            int indexCon;
+
+            if (distance1 < distance2) {
+                indexCon = 0;
+            } else {
+                indexCon = 1;
+            }
+
+            ELNMidPortTerminal t = new ELNMidPortTerminal(p.x, p.y, minX, maxX, minY, maxY, false, this, tdp);
+            if (addInternalComponent(t, index) ) {
+                pointHasBeenAdded(t, index, indexCon);
+                return true;
+            }
+        }
+        return false;
+    }
 
     public void setAutomaticDrawing(boolean b) {
         automaticDrawing = b;
@@ -764,6 +793,9 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent {
         JMenuItem addPoint = new JMenuItem("Add Point");
         addPoint.addActionListener(menuAL);
         componentMenu.add(addPoint);
+        JMenuItem CPPoint = new JMenuItem("Add Connecting Point");
+        CPPoint.addActionListener(menuAL);
+        componentMenu.add(CPPoint);
         JMenuItem align = new JMenuItem("Align");
         align.addActionListener(menuAL);
         componentMenu.add(align);
@@ -793,7 +825,9 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent {
     public boolean eventOnPopup(ActionEvent e) {
         if (e.getActionCommand().equals("Add Point")) {
             return addTGCPointOfConnector(popupx, popupy);
-        } else if (e.getActionCommand().equals("Add Point")){
+        } else if (e.getActionCommand().equals("Add Connecting Point")) {
+            return addELNMidPortTerminal(popupx, popupy);
+        } else if (e.getActionCommand().equals("Align")){
             return alignTGComponents();
         } else if (e.getActionCommand().equals("NO automatic drawing")){
             automaticDrawing = false;

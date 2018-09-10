@@ -83,7 +83,6 @@ public class ADDPanel extends TURTLEPanel {
 
     public void init() {
         addDeploymentPanelDiagram("Deployment Diagram");
-
     }
 
     public boolean addDeploymentPanelDiagram(String s) {
@@ -95,7 +94,7 @@ public class ADDPanel extends TURTLEPanel {
 
         //Class diagram
         tmladd = new ADDDiagramPanel(mgui, toolBar);
-        tmladd.setName("Deployment Diagram");
+        tmladd.setName(s);
         tmladd.tp = this;
         tdp = tmladd;
         panels.add(tmladd); // Always first in list
@@ -105,7 +104,7 @@ public class ADDPanel extends TURTLEPanel {
         jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
         toolBarPanel.add(toolBar, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
-        tabbedPane.addTab("Deployment Diagram", IconManager.imgic60, toolBarPanel, "Opens deployment diagram");
+        tabbedPane.addTab(s, IconManager.imgic60, toolBarPanel, "Opens deployment diagram");
         tabbedPane.setSelectedIndex(0);
 
         return true;
@@ -133,3 +132,4 @@ public class ADDPanel extends TURTLEPanel {
     }
 
 }
+

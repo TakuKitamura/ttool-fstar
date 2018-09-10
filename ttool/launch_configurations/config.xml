@@ -58,7 +58,7 @@
 <AVATARExecutableSoclibCodeCompileCommand data="make -C ../MPSoC/ updategeneratedcode compilesoclib" />
 <AVATARExecutableSoclibCodeExecuteCommand data="make -C ../MPSoC/ runsoclib" />
 <AVATARExecutableSoclibCodeTraceCommand data="make -C ../MPSoC/ runsoclib-trace" />
-<AVATARExecutableSoclibTraceFile data="../Prog/soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial/trace" />
+<AVATARExecutableSoclibTraceFile data="../MPSoC/soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial/trace" />
 <NCDirectory data="../nc/"/>
 
 <ExternalCommand1Host data="localhost"/>

@@ -111,15 +111,15 @@ public class AvatarDesignPanelTranslator {
         createRelationsBetweenBlocks(as, blocks);
         makeBlockStateMachines(as);
         /*for (String s: nameTypeMap.keySet()){
-          
-          
+          System.out.println(s + " "+ nameTypeMap.get(s));
+          System.out.println(typeAttributesMap.get(nameTypeMap.get(s)).size());
           } */
         createPragmas(as, blocks);
 
         //TraceManager.addDev("Removing else guards");
         as.removeElseGuards();
         //TraceManager.addDev("Removing else guards ... done");
-        //
+        //System.out.println(as.toString());
 		adp.abdp.repaint();
         return as;
     }
@@ -436,7 +436,7 @@ public class AvatarDesignPanelTranslator {
             _pragma = _pragma.replaceAll(" ","");
             String state1 = _pragma.split("-->")[0];
             String state2 = _pragma.split("-->")[1];
-        //    
+        //    System.out.println("checking... " + state1 + " " + state2);
             if (!state1.contains(".") || !state2.contains(".")){
                 TraceManager.addDev("UPPAAL Pragma " + _pragma + " cannot be parsed: missing '.'");
                 return false;
@@ -474,7 +474,7 @@ public class AvatarDesignPanelTranslator {
         //Divide into simple statements
         
         String[] split = state.split("[|&]+");
-   //     
+   //     System.out.println("split " + split[0]);
         if (split.length >1){
             boolean validity = true;
             for (String fragment: split){

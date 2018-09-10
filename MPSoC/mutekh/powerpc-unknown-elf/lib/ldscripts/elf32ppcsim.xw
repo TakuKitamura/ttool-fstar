@@ -3,7 +3,7 @@ OUTPUT_FORMAT("elf32-powerpc", "elf32-powerpc",
 	      "elf32-powerpc")
 OUTPUT_ARCH(powerpc:common)
 ENTRY(_start)
-SEARCH_DIR("/users/cao/genius/Prog/mutekh/powerpc-unknown-elf/lib");
+SEARCH_DIR("/users/enseig/genius/TTool/MPSoC/mutekh/powerpc-unknown-elf/lib");
 PROVIDE (__stack = 0); PROVIDE (___stack = 0);
 SECTIONS
 {
