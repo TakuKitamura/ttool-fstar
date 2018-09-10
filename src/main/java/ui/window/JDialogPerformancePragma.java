@@ -167,7 +167,7 @@ public class JDialogPerformancePragma extends JDialogBase implements ActionListe
             }
             if (list.getSelectedValue() != null) {
                 try {
-                    final String selectedSuggestion = ((String) list.getSelectedValue()).substring(subWord.length());
+                    final String selectedSuggestion = (list.getSelectedValue()).substring(subWord.length());
                     textarea.getDocument().insertString(insertionPosition, selectedSuggestion, null);
                     return true;
                 } catch (BadLocationException e1) {
