@@ -1200,11 +1200,28 @@ public class TML2Avatar {
                 }
                 //Add the confidentiality pragma for this channel data
                 if (ch.checkConf) {
-                    if (!attrsToCheck.contains(getName(ch.getName()) + "_chData")) {
-                        AvatarAttribute attr = block.getAvatarAttributeWithName(getName(ch.getName()) + "_chData");
-                        if (attr != null) {
-                            attrsToCheck.add(getName(ch.getName()) + "_chData");
-                            avspec.addPragma(new AvatarPragmaSecret("#Confidentiality " + block.getName() + "." + ch.getName() + "_chData", ch.getReferenceObject(), attr));
+                	if (ch.originalOriginTasks.size()!=0 && ch.getOriginPort().getName().contains("PORTORIGIN")){
+                	//	System.out.println("Channel " + ch.getOriginPort().getName() + " block " + block.getName());
+                		if (!attrsToCheck.contains(ch.getOriginPort().getName() + "_chData") ) {
+                			for (TMLTask origTask: ch.originalOriginTasks){
+                				AvatarBlock bl = avspec.getBlockWithName(origTask.getName().split("__")[origTask.getName().split("__").length - 1]);
+                				if (bl!=null){
+                					AvatarAttribute attr = bl.getAvatarAttributeWithName(block.getName() + "_chData");
+                					if (attr != null) {
+		    	                        attrsToCheck.add(ch.getOriginPort().getName() + "_chData");
+		    	                        avspec.addPragma(new AvatarPragmaSecret("#Confidentiality " + bl.getName() + "." + block.getName() + "_chData", ch.getReferenceObject(), attr));
+ 			   	                    }
+                				}
+                			}
+                		}
+                	}
+                	else {
+	                    if (!attrsToCheck.contains(ch.getOriginPort().getName() + "_chData") ) {
+    	                    AvatarAttribute attr = block.getAvatarAttributeWithName(ch.getOriginPort().getName() + "_chData");
+    	                    if (attr != null) {
+    	                        attrsToCheck.add(ch.getOriginPort().getName() + "_chData");
+    	                        avspec.addPragma(new AvatarPragmaSecret("#Confidentiality " + block.getName() + "." + ch.getName() + "_chData", ch.getReferenceObject(), attr));
+    	                    }
                         }
                     }
                 }
@@ -1256,7 +1273,7 @@ public class TML2Avatar {
                 } else {
                     //No security pattern
                     //	TraceManager.addDev("no security pattern for " + ch.getName());
-                    as.addValue(getName(ch.getName()) + "_chData");
+                    as.addValue(ch.getOriginPort().getName()+ "_chData");
                 }
 
                 tran = new AvatarTransition(block, "__after_" + ae.getName(), ae.getReferenceObject());
@@ -1442,16 +1459,17 @@ public class TML2Avatar {
 			}*/
 
     public String getName(String s) {
+    //	System.out.println("String " + s);
         if (nameMap.containsKey(s)) {
             return nameMap.get(s);
         } else {
             if (!s.contains("__")) {
                 nameMap.put(s, s);
                 return s;
-            } else if (s.split("__").length == 1) {
+            } else if (s.split("__").length == 1 ) {
                 nameMap.put(s, s.split("__")[s.split("__").length - 1]);
                 return s.split("__")[s.split("__").length - 1];
-            } else if (s.contains("JOIN")) {
+            } else if (s.contains("JOIN") || s.contains("FORK")) {
                 String t = "";
                 t += s.split("__")[0];
                 for (int i = 2; i < s.split("__").length; i++) {
@@ -1460,8 +1478,14 @@ public class TML2Avatar {
                 nameMap.put(s, t);
                 return t;
             } else {
-                nameMap.put(s, s.split("__")[s.split("__").length - 1]);
-                return s.split("__")[s.split("__").length - 1];
+	       /*     String t = "";
+                for (int i = 0; i < s.split("__").length; i++) {
+                    t += s.split("__")[i];
+                }*/
+                nameMap.put(s, s);
+                return s;
+               // nameMap.put(s, s.split("__")[s.split("__").length - 1]);
+               // return s.split("__")[s.split("__").length - 1];
             }
         }
     }
@@ -1483,10 +1507,10 @@ public class TML2Avatar {
         attrsToCheck.clear();
         tmlmodel.removeForksAndJoins();
         
-        System.out.println("MODIFIED model " + tmlmodel);
+//        System.out.println("MODIFIED model " + tmlmodel);
         
         for (TMLChannel chan: tmlmodel.getChannels()){
-        	System.out.println("chan " + chan);
+        	//System.out.println("chan " + chan);
         	TMLTask task = chan.getOriginTask();
         	
         	TMLTask task2 = chan.getDestinationTask();
@@ -1517,18 +1541,6 @@ public class TML2Avatar {
             for (TMLCPrimitivePort p : channel.ports) {
                 channel.checkConf = channel.checkConf || p.checkConf;
                 channel.checkAuth = channel.checkAuth || p.checkAuth;
-            }
-        }
-        for (TMLEvent event : tmlmodel.getEvents()) {
-            if (event.port != null && event.port2 == null) {
-                event.checkConf = event.port.checkConf || event.port2.checkConf;
-                event.checkAuth = event.port.checkAuth || event.port2.checkAuth;
-            }
-        }
-        for (TMLRequest request : tmlmodel.getRequests()) {
-            for (TMLCPrimitivePort p : request.ports) {
-                request.checkConf = p.checkConf || request.checkConf;
-                request.checkAuth = p.checkAuth || request.checkAuth;
             }
         }
 
@@ -1573,12 +1585,12 @@ public class TML2Avatar {
             //Add all signals
             for (TMLChannel chan : tmlmodel.getChannels(task)) {
                 if (chan.hasOriginTask(task)) {
-                    AvatarSignal sig = new AvatarSignal(getName(chan.getName()), AvatarSignal.OUT, chan.getReferenceObject());
+                    AvatarSignal sig = new AvatarSignal(chan.getOriginPort().getName(), AvatarSignal.OUT, chan.getReferenceObject());
 
                     block.addSignal(sig);
                     signals.add(sig);
-                    AvatarAttribute channelData = new AvatarAttribute(getName(chan.getName()) + "_chData", AvatarType.INTEGER, block, null);
-                    if (block.getAvatarAttributeWithName(getName(chan.getName()) + "_chData") == null) {
+                    AvatarAttribute channelData = new AvatarAttribute(chan.getOriginPort().getName() + "_chData", AvatarType.INTEGER, block, null);
+                    if (block.getAvatarAttributeWithName(chan.getOriginPort().getName() + "_chData") == null) {
                         block.addAttribute(channelData);
                     }
                     sig.addParameter(channelData);
@@ -1743,13 +1755,14 @@ public class TML2Avatar {
 				}
 				for (SecurityPattern secPattern: secPatterns){
 					AvatarAttribute sec = block.getAvatarAttributeWithName(secPattern.name);
-					if (sec==null){
-						sec = new AvatarAttribute(secPattern.name, AvatarType.INTEGER, block, null);
-						AvatarAttribute enc = new AvatarAttribute(secPattern.name+"_encrypted", AvatarType.INTEGER, block, null);
-						block.addAttribute(sec);
-						block.addAttribute(enc);
+					if (sec!=null){
+						//sec = new AvatarAttribute(secPattern.name, AvatarType.INTEGER, block, null);
+						//AvatarAttribute enc = new AvatarAttribute(secPattern.name+"_encrypted", AvatarType.INTEGER, block, null);
+					//	block.addAttribute(sec);
+					//	block.addAttribute(enc);
+					//}
+						avspec.addPragma(new AvatarPragmaSecret("#Confidentiality "+block.getName() + "."+ secPattern.name, null, sec));
 					}
-					avspec.addPragma(new AvatarPragmaSecret("#Confidentiality "+block.getName() + "."+ secPattern.name, null, sec));
 				}
 
 			}
@@ -1783,7 +1796,7 @@ public class TML2Avatar {
 			//Events are ?? to ??
 			AvatarBlock fifo = new AvatarBlock("FIFO", avspec,null);
 			for (TMLChannel channel:tmlmodel.getChannels()){
-				if (channel.getName().contains("JOINCHANNEL")){
+				/*if (channel.getName().contains("JOINCHANNEL")){
 					//System.out.println("JOINCHANNEL");
 					AvatarRelation ar= new AvatarRelation(channel.getName(), taskBlockMap.get(channel.getOriginTask()), taskBlockMap.get(channel.getDestinationTask()), channel.getReferenceObject());
 					ar.setPrivate(false);
@@ -1897,8 +1910,8 @@ public class TML2Avatar {
 						}
 					}		
 					avspec.addRelation(ar);
-				}
-				else if (channel.isBasicChannel()){
+				}*/
+				if (channel.isBasicChannel()){
 					//System.out.println("checking channel " + channel.getName());
 					AvatarRelation ar= new AvatarRelation(channel.getName(), taskBlockMap.get(channel.getOriginTask()), taskBlockMap.get(channel.getDestinationTask()), channel.getReferenceObject());
 					LinkedList<HwCommunicationNode> path =tmlmap.findNodesForElement(channel);
@@ -1913,7 +1926,25 @@ public class TML2Avatar {
 						}
 					}
 					else {
-						ar.setPrivate(originDestMap.get(channel.getOriginTask().getName()+"__"+channel.getDestinationTask().getName())==1);
+						if (channel.originalOriginTasks.size()==0){
+							ar.setPrivate(originDestMap.get(channel.getOriginTask().getName()+"__"+channel.getDestinationTask().getName())==1);
+						}
+						else {
+							//System.out.println("complex channel " + channel.getName());
+							//Find privacy of original tasks
+							boolean priv = true;
+							for (TMLTask task1: channel.originalOriginTasks){
+								for (TMLTask task2: channel.originalDestinationTasks){
+									if (originDestMap.get(task1.getName()+"__"+task2.getName())!=1){
+										priv=false;
+										break;
+									}
+							
+								}
+								
+							}
+							ar.setPrivate(priv);
+						}
 					}
 					if (channel.getType()==TMLChannel.BRBW){
 						ar.setAsynchronous(true);		
@@ -1933,14 +1964,17 @@ public class TML2Avatar {
 						}
 					}
 					//Find in signal
+					
 					List<AvatarSignal> sig1 = new ArrayList<AvatarSignal>();
 					//Sig1 contains IN Signals, Sig2 contains OUT signals
+					sig1.add(signalInMap.get(channel.getName()));
 					List<AvatarSignal> sig2 = new ArrayList<AvatarSignal>();
+					sig2.add(signalOutMap.get(channel.getName()));
 					for (AvatarSignal sig: signals){
 						if (sig.getInOut()==AvatarSignal.IN){
 							String name = sig.getName();
 							if (name.equals(getName(channel.getName()))){
-								sig1.add(sig);
+					//			sig1.add(sig);
 							}
 						}
 					}
@@ -1948,11 +1982,12 @@ public class TML2Avatar {
 					for (AvatarSignal sig: signals){
 						if (sig.getInOut()==AvatarSignal.OUT){
 							String name = sig.getName();
-							if (name.equals(getName(channel.getName()))){
-								sig2.add(sig);
+							if (name.equals(channel.getOriginPort().getName())){
+				//				sig2.add(sig);
 							}
 						}
 					}
+					//System.out.println("size " + sig1.size() + " " + sig2.size());
 					if (sig1.size()==0){
 						sig1.add(new AvatarSignal(getName(channel.getName()), AvatarSignal.IN, null));
 					}
@@ -1970,7 +2005,7 @@ public class TML2Avatar {
 							AvatarSignal write = fifo.getSignalByName("writeSignal");
 							//set OUT signal with write
 							ar2.addSignals(write, sig2.get(0));
-							System.out.println("Set " + sig2.get(0) + " and write");
+					//		System.out.println("Set " + sig2.get(0) + " and write");
 							ar2.setAsynchronous(false);
 							avspec.addRelation(ar2);
 						}
@@ -1988,13 +2023,13 @@ public class TML2Avatar {
 							top.addSignal(s2);
 							relation.addSignals(s2,s1);
 							avspec.addRelation(relation);
-							System.out.println("Failure to match signals for TMLChannel "+ channel.getName());
+						//	System.out.println("Failure to match signals for TMLChannel "+ channel.getName());
 						}
 					}
 					avspec.addRelation(ar);
 				}
 				else {
-				//	System.out.println("Found non-basic channel");
+					//System.out.println("WTF Found non-basic channel");
 					//If not a basic channel, create a relation between TOP block and itself
 					AvatarRelation relation= new AvatarRelation(channel.getName(), top, top, channel.getReferenceObject());
 					AvatarSignal s1 = new AvatarSignal(getName(channel.getName())+"in", AvatarSignal.IN, null);

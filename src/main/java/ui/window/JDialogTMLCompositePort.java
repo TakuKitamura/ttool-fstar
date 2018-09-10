@@ -578,11 +578,7 @@ public class JDialogTMLCompositePort extends JDialogBase implements ActionListen
         String command = evt.getActionCommand();
 
         checkMode();
-        if (confCheckBox.isSelected() || authCheckBox.isSelected()) {
-            refReq.setEnabled(true);
-        } else {
-            refReq.setEnabled(false);
-        }
+        
         /*if (evt.getSource() == finite) {
             if (finite.getSelectedIndex() == 1) {
 				blocking.setSelectedIndex(1);
@@ -636,6 +632,14 @@ public class JDialogTMLCompositePort extends JDialogBase implements ActionListen
         if (index == 0) {
             // channel
             origin.setEnabled(true);
+            if (origin.getSelectedIndex()==0){
+            	confCheckBox.setEnabled(true);
+  	            authCheckBox.setEnabled(false);          	
+            }
+            else {
+	            authCheckBox.setEnabled(true);
+            	confCheckBox.setEnabled(false);	            
+	        }
             typeList1.setEnabled(false);
             typeList2.setEnabled(false);
             typeList3.setEnabled(false);
@@ -649,6 +653,8 @@ public class JDialogTMLCompositePort extends JDialogBase implements ActionListen
         } else if (index == 1) {
             // Event
             origin.setEnabled(true);
+            confCheckBox.setEnabled(false);
+            authCheckBox.setEnabled(false);
             typeList1.setEnabled(true);
             typeList2.setEnabled(true);
             typeList3.setEnabled(true);
@@ -676,6 +682,9 @@ public class JDialogTMLCompositePort extends JDialogBase implements ActionListen
         } else {
             // Request
             origin.setEnabled(true);
+            
+            confCheckBox.setEnabled(false);
+            authCheckBox.setEnabled(false);
             typeList1.setEnabled(true);
             typeList2.setEnabled(true);
             typeList3.setEnabled(true);
@@ -706,6 +715,11 @@ public class JDialogTMLCompositePort extends JDialogBase implements ActionListen
         maxNbOfLossText.setEnabled(origin.getSelectedIndex() == 0);
         lossPercentageLabel.setEnabled(origin.getSelectedIndex() == 0);
         maxNbOfLossLabel.setEnabled(origin.getSelectedIndex() == 0);
+        if (confCheckBox.isSelected() || authCheckBox.isSelected()) {
+            refReq.setEnabled(true);
+        } else {
+            refReq.setEnabled(false);
+        }
     }
 
     public boolean hasNewData() {

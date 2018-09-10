@@ -338,7 +338,7 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
         jp02.add(autoConf, c01);
         autoConf.setEnabled(false);
         autoConf.addActionListener(this);
-        autoWeakAuth = new JCheckBox("Add security (Weak Authenticity)");
+        autoWeakAuth = new JCheckBox("Add security (Integrity)");
         autoWeakAuth.setEnabled(false);
         jp02.add(autoWeakAuth, c01);
         autoWeakAuth.addActionListener(this);
@@ -350,6 +350,7 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
 		autoStrongAuth.addActionListener(this);
 		
 		addHSM = new JCheckBox("Add HSM to component:");
+        addHSM.addActionListener(this);
 		addHSM.setEnabled(false);
 		jp02.add(addHSM, c01);
 		
@@ -733,14 +734,14 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
                 } else if (command.equals("allIgnored")) {
                     allIgnored();
                 }
-                if (evt.getSource() == autoConf || evt.getSource() == autoSec || evt.getSource() == autoMapKeys || evt.getSource() == autoWeakAuth) {
+                if (evt.getSource() == autoConf || evt.getSource() == autoSec || evt.getSource() == autoMapKeys || evt.getSource() == autoWeakAuth || evt.getSource()==addHSM) {
                     //autoWeakAuth.setEnabled(autoConf.isSelected());
                     autoConf.setEnabled(autoSec.isSelected());
                     addHSM.setEnabled(autoSec.isSelected());
-                    addOneValidated.setEnabled(autoSec.isSelected());
-                    allValidated.setEnabled(autoSec.isSelected());
-                    addOneIgnored.setEnabled(autoSec.isSelected());
-                    allIgnored.setEnabled(autoSec.isSelected());
+                    addOneValidated.setEnabled(addHSM.isSelected());
+                    allValidated.setEnabled(addHSM.isSelected());
+                    addOneIgnored.setEnabled(addHSM.isSelected());
+                    allIgnored.setEnabled(addHSM.isSelected());
                     autoWeakAuth.setEnabled(autoSec.isSelected());
                     autoStrongAuth.setEnabled(autoWeakAuth.isSelected());
                     
@@ -843,6 +844,9 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
                 else if (autoMapKeys.isSelected()) {
                     mgui.gtm.autoMapKeys();
                 }
+                JLabel label = new JLabel("Security Generation Complete");
+            	label.setAlignmentX(Component.LEFT_ALIGNMENT);
+            	this.jta.add(label, this.createGbc(0));
                 mode = NOT_STARTED;
             }
             else {
@@ -878,6 +882,7 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
                         ) {
                     throw new ProVerifVerificationException("Could not generate proverif code");
                 }
+                
 
                 String cmd = exe2.getText().trim();
 
