@@ -530,7 +530,6 @@ public class NetList
 		}
 		if (nb_clusters == 0)
 		    {
-
 			if (icn == "vgmn")
 			    {
 				netlist =
@@ -548,8 +547,21 @@ public class NetList
 				    "]);" + CR2;
 			    }
 			else
-			    {
+			    {	netlist =
+				    netlist +
+				    "vcifdtrom.begin_device_node(\"vci_multi_tty" +
+				    i + "\",\"soclib:vci_multi_tty"  + tty.getIndex() + "\");" +
+				    CR2;
 				netlist =
+				    netlist + "vgsb.p_to_target[" +
+				    tty.getNo_target () + "](signal_vci_tty" + tty.getIndex() +
+				    ");" + CR2;
+				netlist =
+				    netlist + tty.getTTYName () +
+				    ".p_irq[0](signal_xicu_irq[" + no_irq_tty +
+				    "]);" + CR2;
+			       	
+				/*	netlist =
 				    netlist +
 				    "vcifdtrom.begin_device_node(\"vci_multi_tty" +
 				    i + "\",\"soclib:vci_multi_tty" +tty.getIndex ()+"_"+
@@ -562,7 +574,7 @@ public class NetList
 				netlist =
 				    netlist + tty.getTTYName () +
 				    ".p_irq[0](signal_xicu_irq[" + no_irq_tty +
-				    "]);" + CR2;
+				    "]);" + CR2;*/
 			    }
 		    }
 
