@@ -38,12 +38,12 @@
 
 package ui;
 
-import myutil.*;
+import myutil.Conversion;
 import myutil.GraphicLib;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import ui.util.*;
+import ui.util.IconManager;
 import ui.window.JDialogNote;
 
 import javax.swing.*;
@@ -177,10 +177,10 @@ public class TGCNote extends TGCScalableWithoutInternalComponent {
         graph.fillPolygon(px, py, 4);
 
         graph.setColor(c);
-       // Graphics2D g2 = (Graphics2D)graph;
+        // Graphics2D g2 = (Graphics2D)graph;
         for (int i = 0; i < this.values.length; i++) {
             //TraceManager.addDev("Value #" + i + " = " + this.values[i]);
-        	graph.drawString(this.values[i], this.x + this.textX, this.y + this.textY + (i + 1) * this.currentFontSize);
+            graph.drawString(this.values[i], this.x + this.textX, this.y + this.textY + (i + 1) * this.currentFontSize);
         }
     }
 
