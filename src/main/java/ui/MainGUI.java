@@ -5172,7 +5172,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                     gtm.getUPPAALVerifierHost(),
                     _tp);
             // jduv.setSize(450, 600);
-            GraphicLib.centerOnParent(jduv, 650, 600);
+            GraphicLib.centerOnParent(jduv, 800, 600);
             jduv.setVisible(true);
             dtree.toBeUpdated();
         } else if (gtm.getLanguageID() == GTURTLEModeling.MATRIX) {
