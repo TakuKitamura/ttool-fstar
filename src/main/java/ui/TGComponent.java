@@ -1533,12 +1533,16 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
         return !((getX() < x1) || (getY() < y1) || ((getX() + this.width) > (x1 + width)) || ((getY() + this.height) > (y1 + height)));
     }
 
+    //Isssue #73: Hidden component still clickable
     public final void drawInternalComponents(Graphics g) {
         for (int i = 0; i < nbInternalTGComponent; i++) {
             //ColorManager.setColor(g, tgcomponent[i].getState(), 0);
             if (!tgcomponent[i].isHidden()) {
                 tgcomponent[i].draw(g);
+                tgcomponent[i].setHidden(false);
             }
+            else
+            	tgcomponent[i].setHidden(true);
         }
     }
 

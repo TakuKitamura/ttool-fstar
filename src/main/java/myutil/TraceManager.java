@@ -58,10 +58,10 @@ public class TraceManager {
     public static int devPolicy = TO_CONSOLE;
     public static int errPolicy = TO_CONSOLE;
 
-    public static void addDev(String _s) {
+    public static void addDev(String res) {
         switch(devPolicy) {
             case TO_CONSOLE:
-                System.out.println(_s);
+                System.out.println(res);
                 break;
             case TO_DEVNULL:
                 break;

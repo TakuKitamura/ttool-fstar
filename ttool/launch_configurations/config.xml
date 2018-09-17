@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
-
 <TURTLECONFIGURATION>
 <RTLHost data="localhost" />
 <RTLPath data="/packages/RT-LOTOS.0.12/bin/rtl" />
