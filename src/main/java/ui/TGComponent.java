@@ -614,7 +614,7 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
     }
 
     protected void drawAttributes(Graphics g, String attr) {
-        if (attr == null) {
+        if (attr == null || this.isHidden()) {
             return;
         }
 
@@ -1225,10 +1225,9 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
         } else if (TDiagramPanel.DIPLO_ID_ON) {
             drawDiploID(g);
         } else if (TDiagramPanel.AVATAR_ID_ON) {
-
-            drawAVATARID(g);
+        	drawAVATARID(g);
         } else if (TDiagramPanel.TEPE_ID_ON) {
-            drawTEPEID(g);
+        		drawTEPEID(g);
         } else {
             runningStatus = "";
             transactions.clear();
@@ -1540,9 +1539,9 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
             if (!tgcomponent[i].isHidden()) {
                 tgcomponent[i].draw(g);
                 tgcomponent[i].setHidden(false);
-            }
-            else
+            } else {
             	tgcomponent[i].setHidden(true);
+            }
         }
     }
 
