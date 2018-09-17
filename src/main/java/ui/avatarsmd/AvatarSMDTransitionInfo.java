@@ -67,6 +67,7 @@ import ui.TGState;
 import ui.WithAttributes;
 import ui.util.IconManager;
 import ui.window.JDialogAvatarTransition;
+import myutil.TraceManager;
 
 /**
  * Class AvatarSMDTransitionInfo
@@ -125,8 +126,8 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
         removable = false;
 
         guard = new Expression( NULL_GUARD_EXPR, NULL_GUARD_EXPR, null );
-        afterDelay = new RangeExpression( NULL_EXPR, NULL_EXPR, NULL_EXPR, "after (%s, %s)", null );
-        computeDelay = new RangeExpression( NULL_EXPR, NULL_EXPR, NULL_EXPR, "computeFor (%s, %s)", null );
+        afterDelay = new RangeExpression( NULL_EXPR, NULL_EXPR, NULL_EXPR, "after (%s, %s)", null , "after(%s)");
+        computeDelay = new RangeExpression( NULL_EXPR, NULL_EXPR, NULL_EXPR, "computeFor (%s, %s)", null, "computeFor (%s)");
         probability = new Expression( NULL_EXPR, NULL_EXPR, "weight=%s" );
 
 //        guard = "[ ]";
@@ -465,6 +466,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
         	guard.setText( "[ " + guard + " ]" );
         }
 
+        //TraceManager.addDev("Max delay:" + jdat.getAfterMax().trim());
         afterDelay.getMinExpression().setText( jdat.getAfterMin().trim() );
         afterDelay.getMaxExpression().setText( jdat.getAfterMax().trim() );
 //        computeDelay.getMinExpression().setText( jdat.getComputeMin().trim() );
