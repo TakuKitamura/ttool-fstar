@@ -2862,7 +2862,6 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	       // 
 	       //
 	        List<Integer> minTimes = new ArrayList<Integer>();
-			System.out.println("times1 " + times1 + " times2 " + times2);
 	        for (int time1 : times1){
 				int match = Integer.MAX_VALUE;
 				//Find the first subsequent transaction
@@ -2886,7 +2885,6 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             		minTimes.add(time);
             	}
             }
-			System.out.println("mintimes " + minTimes);
             if (minTimes.size()>0){
             	int sum=0;
                 sl.setMinTime(Integer.toString(Collections.min(minTimes)));
