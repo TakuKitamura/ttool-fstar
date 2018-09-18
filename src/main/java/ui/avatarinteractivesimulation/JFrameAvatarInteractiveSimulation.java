@@ -1528,8 +1528,8 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
                             }
                         }
                         if (transTimes.containsKey(key)) {
-                            if (!transTimes.get(key).contains(Long.toString(trans.initialClockValue))) {
-                                transTimes.get(key).add(Long.toString(trans.initialClockValue));
+                            if (!transTimes.get(key).contains(Long.toString(trans.clockValueWhenFinished))) {
+                                transTimes.get(key).add(Long.toString(trans.clockValueWhenFinished));
                             }
                         }
                     }
@@ -1550,7 +1550,7 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
                               sl.setTransaction1(st1);
                               sl.setTransaction2(st2);*/
 		
-						
+
                             for (String time1 : transTimes.get(st1)) {
 								String match = "";
                                 //Find the first subsequent transaction
