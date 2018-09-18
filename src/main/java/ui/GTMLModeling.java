@@ -970,9 +970,7 @@ public class GTMLModeling {
                                     tt2 = tmlm.getTMLTaskByName(makeName(port2, port2.getFather().getValue()));
                                     channel.setTasks(tt1, tt2);
 
-                                    if (port1.isLossy()) {
-                                        channel.setLossy(true, port1.getLossPercentage(), port1.getMaxNbOfLoss());
-                                    }
+
 
                                     // Complex channels are used only for transformation towards the simulator
                                     TMLPort tmlport1, tmlport2;
@@ -985,6 +983,10 @@ public class GTMLModeling {
                                     tmlport2.setPostex(port2.isPostex());
                                     tmlport2.setAssociatedEvent(port2.getAssociatedEvent());
                                     channel.setPorts(tmlport1, tmlport2);
+
+                                    if (port1.isLossy()) {
+                                        channel.setLossy(true, port1.getLossPercentage(), port1.getMaxNbOfLoss());
+                                    }
                                     tmlm.addChannel(channel);
                                     listE.addCor(channel, tgc);
                                     //TraceManager.addDev("Adding channel " + channel.getName());

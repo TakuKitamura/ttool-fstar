@@ -1536,30 +1536,41 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
                 }
             }
             //  
+
             for (String st1 : transTimes.keySet()) {
                 for (String st2 : transTimes.keySet()) {
                     if (st1 != st2 && nameLatencyMap.containsKey(st1 + "--" + st2)) {
                         SimulationLatency sl = nameLatencyMap.get(st1 + "--" + st2);
                         if (transTimes.get(st1) != null && transTimes.get(st2) != null) {
+
+							List<String> tmptimes2 = new ArrayList<>(transTimes.get(st2));
+
                             ArrayList<Integer> minTimes = new ArrayList<Integer>();
                             /*SimulationLatency sl = new SimulationLatency();
                               sl.setTransaction1(st1);
                               sl.setTransaction2(st2);*/
+		
+						
                             for (String time1 : transTimes.get(st1)) {
+								String match = "";
                                 //Find the first subsequent transaction
                                 int time = Integer.MAX_VALUE;
-                                for (String time2 : transTimes.get(st2)) {
+                                for (String time2 : tmptimes2) {
+								
                                     int diff = Integer.valueOf(time2) - Integer.valueOf(time1);
                                     if (diff < time && diff >= 0) {
                                         time = diff;
+										match = time2;
                                     }
                                 }
+								tmptimes2.remove(match);
                                 if (time != Integer.MAX_VALUE) {
                                     minTimes.add(time);
                                 }
                             }
                             //  
                             if (minTimes.size() > 0) {
+
                                 int sum = 0;
                                 sl.setMinTime(Integer.toString(Collections.min(minTimes)));
                                 sl.setMaxTime(Integer.toString(Collections.max(minTimes)));
