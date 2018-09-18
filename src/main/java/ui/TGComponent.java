@@ -614,7 +614,7 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
     }
 
     protected void drawAttributes(Graphics g, String attr) {
-        if (attr == null) {
+        if (attr == null || this.isHidden()) {
             return;
         }
 
@@ -1225,10 +1225,9 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
         } else if (TDiagramPanel.DIPLO_ID_ON) {
             drawDiploID(g);
         } else if (TDiagramPanel.AVATAR_ID_ON) {
-
-            drawAVATARID(g);
+        	drawAVATARID(g);
         } else if (TDiagramPanel.TEPE_ID_ON) {
-            drawTEPEID(g);
+        		drawTEPEID(g);
         } else {
             runningStatus = "";
             transactions.clear();
@@ -1533,11 +1532,15 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
         return !((getX() < x1) || (getY() < y1) || ((getX() + this.width) > (x1 + width)) || ((getY() + this.height) > (y1 + height)));
     }
 
+    //Isssue #73: Hidden component still clickable
     public final void drawInternalComponents(Graphics g) {
         for (int i = 0; i < nbInternalTGComponent; i++) {
             //ColorManager.setColor(g, tgcomponent[i].getState(), 0);
             if (!tgcomponent[i].isHidden()) {
                 tgcomponent[i].draw(g);
+                tgcomponent[i].setHidden(false);
+            } else {
+            	tgcomponent[i].setHidden(true);
             }
         }
     }
