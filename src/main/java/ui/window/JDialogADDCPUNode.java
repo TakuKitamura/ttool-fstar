@@ -79,6 +79,7 @@ public class JDialogADDCPUNode extends JDialogBase implements ActionListener {
 	// Panel2
 	protected JTextField nbOfIrq, iCacheWays, iCacheSets, iCacheWords, dCacheWays, dCacheSets, dCacheWords;
 	 protected JTextField index;
+         protected JTextField cluster_index;
 	 protected JTextField monitored;	
 	
 	/** Creates new form  */
@@ -177,11 +178,17 @@ public class JDialogADDCPUNode extends JDialogBase implements ActionListener {
 		panel2.add(dCacheWords, c2);
 		
 		c2.gridwidth = 1;
-		panel2.add(new JLabel("Index:"), c2);
+		panel2.add(new JLabel("Index:"), c2);//DG 2.7.
 		c2.gridwidth = GridBagConstraints.REMAINDER; //end row
 		index = new JTextField(""+node.getIndex(), 15);
 		panel2.add(index, c2);
 
+		c2.gridwidth = 1;
+		panel2.add(new JLabel("Cluster Index:"), c2);//DG 2.7.
+		c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+		cluster_index = new JTextField(""+node.getIndex(), 15);
+		panel2.add(cluster_index, c2);
+		
 		c2.gridwidth = 1;
 		panel2.add(new JLabel("Monitored:"), c2);
 		//c2.gridwidth = GridBagConstraints.REMAINDER; //end row

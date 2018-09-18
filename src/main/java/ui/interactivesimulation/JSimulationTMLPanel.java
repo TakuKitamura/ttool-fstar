@@ -57,6 +57,7 @@ import java.util.Hashtable;
 import java.util.Vector;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * Class JSimulationSDPanel
@@ -109,7 +110,7 @@ public class JSimulationTMLPanel extends JPanel implements MouseMotionListener, 
     // Or the list is described in the trace (header information)
     private Vector <String> entityNames;
 
-	private HashMap<String, ArrayList<String>> deviceTaskMap = new HashMap<String, ArrayList<String>>();
+	private LinkedHashMap<String, ArrayList<String>> deviceTaskMap = new LinkedHashMap<String, ArrayList<String>>();
 
     private final int NO_MODE = 0;
     private final int FILE_MODE = 1;
@@ -179,7 +180,7 @@ public class JSimulationTMLPanel extends JPanel implements MouseMotionListener, 
         this.repaint();
     }
 
-	public void setDevices(HashMap<String, ArrayList<String>> map){
+	public void setDevices(LinkedHashMap<String, ArrayList<String>> map){
 		deviceTaskMap = map;
 		for (String device: deviceTaskMap.keySet()){
 			for (String task: deviceTaskMap.get(device)){
@@ -1041,6 +1042,8 @@ public class JSimulationTMLPanel extends JPanel implements MouseMotionListener, 
     }
 
     private void addGenericTransaction(String trans) {
+    
+ 
 		//
         int index0;
         String tmp, tmp1, tmp2;
@@ -1065,32 +1068,14 @@ public class JSimulationTMLPanel extends JPanel implements MouseMotionListener, 
         }
 
 
-        //TraceManager.addDev("1");
-
         // Time
         tmp = extract(trans, "time");
         if (tmp == null) {
             return;
         }
 
-        //TraceManager.addDev("2 tmp=" + tmp);
 
         try {
-            //index0 = tmp.indexOf('.');
-            //if (index0 == -1) {
-                //TraceManager.addDev("Invalid time value");
-              //  return;
-            //}
-            //tmp1 = tmp.substring(0, index0);
-            //tmp2 = Conversion.removeStartingCharacters(tmp.substring(index0+1, tmp.length()), "0");
-            //TraceManager.addDev("2 tmp1=" + tmp1 + " tmp2=" + tmp2);
-            //value1 = Integer.decode(tmp1);
-           // if (tmp2.length() == 0) {
-             //   value2 = 0;
-           // } else {
-             //   value2 = Integer.decode(tmp2);
-            //}
-           // value = ((long)value1)*1000000000+value2;
             gt.startingTime = Long.valueOf(tmp);
             gt.finishTime = Long.valueOf(tmp);
         } catch (Exception e) {
@@ -1098,18 +1083,19 @@ public class JSimulationTMLPanel extends JPanel implements MouseMotionListener, 
             return;
         }
 
-        //TraceManager.addDev("3");
-
         // Name of the block
         tmp = extract(trans, "block");
         if (tmp == null) {
             return;
         }
 
-        //TraceManager.addDev("4");
 
-        addEntityNameIfApplicable(tmp);
+        //addEntityNameIfApplicable(tmp);
+        //Show traces of only the selected tasks and ignore transactions if the task is missing
         gt.entityName = tmp;
+        if (!entityNames.contains(tmp)){
+        	return;
+        }
 
         // Type of the transaction
         tmp = extract(trans, "type");
@@ -1170,9 +1156,12 @@ public class JSimulationTMLPanel extends JPanel implements MouseMotionListener, 
         tmp = extract(trans, "blockdestination");
         if (tmp != null) {
             gt.otherEntityName = tmp;
-            addEntityNameIfApplicable(tmp);
+           // addEntityNameIfApplicable(tmp);
         }
 
+		if (!entityNames.contains(tmp)){
+			return;
+		}
         // Channel of the transaction?
         tmp = extract(trans, "channel");
         if (tmp != null) {

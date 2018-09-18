@@ -52,48 +52,74 @@ import ui.TGComponent;
 */
 
 public class SysCAMSPortDE extends SysCAMSPrimitivePort {
-	private int period;
-	private int rate;
-	private int delay;
+//	private int period;
+//	private String time;
+//	private int rate;
+//	private int delay;
 	private String DEType;
+	private boolean sensitive;
+	private String sensitiveMethod;
 	
-	public SysCAMSPortDE(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
-			TDiagramPanel _tdp) {
+	public SysCAMSPortDE(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+	}
+
+//	public int getPeriod() {
+//		return period;
+//	}
+//
+//	public void setPeriod(int period) {
+//		this.period = period;
+//	}
+//
+//	public String getTime() {
+//		return time;
+//	}
+//
+//	public void setTime(String time) {
+//		this.time = time;
+//	}
+//
+//	public int getRate() {
+//		return rate;
+//	}
+//
+//	public void setRate(int rate) {
+//		this.rate = rate;
+//	}
+//
+//	public int getDelay() {
+//		return delay;
+//	}
+//
+//	public void setDelay(int delay) {
+//		this.delay = delay;
+//	}
+
+	public void drawParticularity(Graphics g) {
 	}
 
 	public String getDEType() {
 		return DEType;
 	}
 
-	public void setDEType(String DEType) {
-		this.DEType = DEType;
+	public void setDEType(String _DEType) {
+		DEType = _DEType;
+	}
+	
+	public boolean getSensitive() {
+		return sensitive;
 	}
 
-	public int getPeriod() {
-		return period;
+	public void setSensitive(boolean _sensitive) {
+		sensitive = _sensitive;
 	}
 
-	public void setPeriod(int period) {
-		this.period = period;
+	public String getSensitiveMethod() {
+		return sensitiveMethod;
 	}
 
-	public int getRate() {
-		return rate;
-	}
-
-	public void setRate(int rate) {
-		this.rate = rate;
-	}
-
-	public int getDelay() {
-		return delay;
-	}
-
-	public void setDelay(int delay) {
-		this.delay = delay;
-	}
-
-	public void drawParticularity(Graphics g) {
+	public void setSensitiveMethod(String _sensitiveMethod) {
+		sensitiveMethod = _sensitiveMethod;
 	}	
 }

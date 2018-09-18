@@ -115,6 +115,7 @@ public	class JFrameTMLSimulationPanel extends JFrame implements ActionListener {
         topPanel.add(buttonSVG);
         JButton buttonPNG = new JButton(actions[InteractiveSimulationActions.ACT_SAVE_SD_PNG]);
         topPanel.add(buttonPNG);
+
         /*topPanel.add(new JLabel(" time unit:"));
         units = new JComboBox<>(unitTab);
         units.setSelectedIndex(1);
@@ -221,6 +222,7 @@ public	class JFrameTMLSimulationPanel extends JFrame implements ActionListener {
 		//TraceManager.addDev("Command:" + command);
 		
 		if (command.equals(actions[InteractiveSimulationActions.ACT_QUIT_SD_WINDOW].getActionCommand()))  {
+			sdpanel=null;
 			close();
 		} else if (command.equals(actions[InteractiveSimulationActions.ACT_SAVE_SD_SVG].getActionCommand())) {
             saveSVG();

@@ -38,7 +38,7 @@
 
 package ui.avatarbd;
 
-import myutil.Conversion;
+import myutil.*;
 import myutil.GraphicLib;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -160,21 +160,24 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
         //  int h  = g.getFontMetrics().getHeight();
         Color c = g.getColor();
 
-        int desiredWidth = minWidth;
-        desiredWidth = Math.max(desiredWidth, 2 * g.getFontMetrics().stringWidth("Safety Pragmas") + marginX + textX);
+        if (!(this.tdp.isScaled())) {
+            int desiredWidth = minWidth;
+            desiredWidth = Math.max(desiredWidth, 2 * g.getFontMetrics().stringWidth("Safety Pragmas") + marginX + textX);
 
-        for (int i = 0; i < values.length; i++) {
-            desiredWidth = Math.max(desiredWidth, g.getFontMetrics().stringWidth(values[i]) + marginX + textX);
+            for (int i = 0; i < values.length; i++) {
+                desiredWidth = Math.max(desiredWidth, g.getFontMetrics().stringWidth(values[i]) + marginX + textX);
+            }
+
+            int desiredHeight = (properties.size() + 2) * currentFontSize + textY + 1;
+
+            //TraceManager.addDev("resize: " + desiredWidth + "," + desiredHeight);
+
+            if ((desiredWidth != width) || (desiredHeight != height)) {
+                resize(desiredWidth, desiredHeight);
+            }
         }
 
-        int desiredHeight = (properties.size() + 2) * currentFontSize + textY + 1;
-
-        //TraceManager.addDev("resize: " + desiredWidth + "," + desiredHeight);
-
-        if ((desiredWidth != width) || (desiredHeight != height)) {
-            resize(desiredWidth, desiredHeight);
-        }
-
+        //TraceManager.addDev("x+Width=" + (x+width));
         g.drawLine(x, y, x + width, y);
         g.drawLine(x, y, x, y + height);
         g.drawLine(x, y + height, x + width - limit, y + height);
@@ -266,6 +269,7 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
 
         JDialogSafetyPragma jdn = new JDialogSafetyPragma(frame, "Setting the safety pragmas", value);
         //jdn.setLocation(200, 150);
+        jdn.setSize(500, 500);
         GraphicLib.centerOnParent(jdn);
         AvatarBDPanel abdp = (AvatarBDPanel) tdp;
         jdn.blockAttributeMap = abdp.getBlockStrings(true, true, true);
@@ -283,6 +287,8 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
 
     @Override
     public TGComponent isOnMe(int x1, int y1) {
+        //TraceManager.addDev("x+width=" + (x+width) + " x1=" + x1);
+        //TraceManager.addDev("y+height=" + (y+height) + " y1=" + y1);
         if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
             return this;
         }

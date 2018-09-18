@@ -163,19 +163,21 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
         //  int h  = g.getFontMetrics().getHeight();
         Color c = g.getColor();
 
-        int desiredWidth = minWidth;
-        desiredWidth = Math.max(desiredWidth, 2 * g.getFontMetrics().stringWidth("Performance Pragma") + marginX + textX);
+        if (!(this.tdp.isScaled())) {
+            int desiredWidth = minWidth;
+            desiredWidth = Math.max(desiredWidth, 2 * g.getFontMetrics().stringWidth("Performance Pragma") + marginX + textX);
 
-        for (int i = 0; i < values.length; i++) {
-            desiredWidth = Math.max(desiredWidth, g.getFontMetrics().stringWidth(values[i]) + marginX + textX);
-        }
+            for (int i = 0; i < values.length; i++) {
+                desiredWidth = Math.max(desiredWidth, g.getFontMetrics().stringWidth(values[i]) + marginX + textX);
+            }
 
-        int desiredHeight = (properties.size() + 2) * currentFontSize + textY + 1;
+            int desiredHeight = (properties.size() + 2) * currentFontSize + textY + 1;
 
-        //TraceManager.addDev("resize: " + desiredWidth + "," + desiredHeight);
+            //TraceManager.addDev("resize: " + desiredWidth + "," + desiredHeight);
 
-        if ((desiredWidth != width) || (desiredHeight != height)) {
-            resize(desiredWidth, desiredHeight);
+            if ((desiredWidth != width) || (desiredHeight != height)) {
+                resize(desiredWidth, desiredHeight);
+            }
         }
 
         g.drawLine(x, y, x + width, y);

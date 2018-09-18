@@ -14,7 +14,7 @@ ifeq "$(GRADLE)" ""
     GRADLE 	= false && echo >/dev/null
 else
     GRADLE_VERSION 	:= $(shell $(GRADLE) --version | grep "^Gradle" | awk '{print $$2}')
-    GRADLE_VERSION_MIN 	:= $(shell printf "%s\n%s\n" "$(GRADLE_VERSION_NEEDED)" "$(GRADLE_VERSION)" | sort -V 2>/dev/null | head -n1)
+    GRADLE_VERSION_MIN 	:= $(shell printf "%s\n%s\n" "$(GRADLE_VERSION_NEEDED)" "$(GRADLE_VERSION)"|sort -n 2>/dev/null|head -n1)
     ifneq "$(GRADLE_VERSION_NEEDED)" "$(GRADLE_VERSION_MIN)"
 	ERROR_MSG	= echo "$(COLOR)Gradle $(GRADLE_VERSION) is too old. Needs at least $(GRADLE_VERSION_NEEDED). Falling back to regular javac command...\n$(RESET)"
 	GRADLE = false && echo >/dev/null
@@ -124,7 +124,7 @@ all: ttool launcher graphminimize graphshow tiftranslator tmltranslator rundse r
 ttool: $(TTOOL_BINARY)
 
 $(TTOOL_BINARY): FORCE
-	@($(GRADLE) :ttool:build) || ($(ERROR_MSG) && $(MAKE) -C $(TTOOL_DIR) -e $@)
+	@($(GRADLE) :ttool:build) || ($(ERROR_MSG) $(GRADLE_VERSION) $(GRADLE_VERSION_NEEDED)&& $(MAKE) -C $(TTOOL_DIR) -e $@)
 
 ttooljavac:
 	$(MAKE) -C $(TTOOL_DIR)

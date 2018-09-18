@@ -100,6 +100,28 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
     protected int oldTypep = typep;
     public String commName;
 
+	//Authenticity lock parameters
+	protected int authlockwidth=(int) (16*tdp.getZoom());
+    protected int authlockheight=(int) (16*tdp.getZoom());
+
+    protected int xc=(int) (18*tdp.getZoom());
+    protected int yc= (int) (12*tdp.getZoom());
+
+    protected int authxoffset= (int) (20*tdp.getZoom());
+    protected int authyoffset= (int) (18*tdp.getZoom());
+
+    protected int authovalwidth=(int) (10*tdp.getZoom());
+    protected int authovalheight=(int) (15*tdp.getZoom());
+
+
+	//Confidentiality lock parameters
+	protected int conflockwidth=(int) (9*tdp.getZoom());
+    protected int conflockheight=(int) (7*tdp.getZoom());
+    protected int confyoffset = 3*conflockheight;
+
+    protected int confovalwidth=(int) (6*tdp.getZoom());
+    protected int confovalheight=(int) (9*tdp.getZoom());
+
     protected boolean isLossy;
     protected boolean isPostex = false;
     protected boolean isPrex = false;
@@ -354,17 +376,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 
 
     public void drawAuthVerification(Graphics g){
-        int lockwidth=(int) (16*tdp.getZoom());
-        int lockheight=(int) (16*tdp.getZoom());
-
-        int xc=(int) (18*tdp.getZoom());
-        int yc= (int) (12*tdp.getZoom());
-
-        int xoffset= (int) (20*tdp.getZoom());
-        int yoffset= (int) (18*tdp.getZoom());
-
-        int ovalwidth=(int) (10*tdp.getZoom());
-        int ovalheight=(int) (15*tdp.getZoom());
+        
         g.drawString(secName, x-xc*2/3, y+yc*2/3);
         Color c = g.getColor();
         Color c1;
@@ -390,12 +402,12 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
             c2= c1;
         }
 
-        g.drawOval(x-xc, y+yc, ovalwidth, ovalheight);
+        g.drawOval(x-xc, y+yc, authovalwidth, authovalheight);
         g.setColor(c1);
-        int[] xps = new int[]{x-xoffset, x-xoffset, x-xoffset+lockwidth};
-        int[] yps = new int[]{y+yoffset, y+yoffset+lockheight, y+yoffset+lockheight};
-        int[] xpw = new int[]{x-xoffset+lockwidth, x-xoffset+lockwidth, x-xoffset};
-        int[] ypw = new int[]{y+yoffset+lockheight, y+yoffset, y+yoffset};
+        int[] xps = new int[]{x-authxoffset, x-authxoffset, x-authxoffset+authlockwidth};
+        int[] yps = new int[]{y+authyoffset, y+authyoffset+authlockheight, y+authyoffset+authlockheight};
+        int[] xpw = new int[]{x-authxoffset+authlockwidth, x-authxoffset+authlockwidth, x-authxoffset};
+        int[] ypw = new int[]{y+authyoffset+authlockheight, y+authyoffset, y+authyoffset};
         g.fillPolygon(xps, yps,3);
 
         g.setColor(c2);
@@ -403,27 +415,21 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         g.setColor(c);
         g.drawPolygon(xps, yps,3);
         g.drawPolygon(xpw, ypw, 3);
-        g.drawString("S", x-xoffset+1, y+yc+yoffset);
-        g.drawString("W", x-xoffset+lockwidth/2, y+yc+ovalheight);
+        g.drawString("S", x-authxoffset+1, y+yc+authyoffset);
+        g.drawString("W", x-authxoffset+authlockwidth/2, y+yc+authovalheight);
         if (checkStrongAuthStatus ==3){
-            g.drawLine(x-xoffset, y+yoffset*3/2, x-xoffset/2, y+yoffset+yc);
-            g.drawLine(x-xoffset, y+yoffset+yc, x-xoffset/2, y+yoffset*3/2);
+            g.drawLine(x-authxoffset, y+authyoffset*3/2, x-authxoffset/2, y+authyoffset+yc);
+            g.drawLine(x-authxoffset, y+authyoffset+yc, x-authxoffset/2, y+authyoffset*3/2);
         }
         if (checkWeakAuthStatus==3 || checkStrongAuthStatus==3 && checkWeakAuthStatus <2){
-            g.drawLine(x-xc*2/3, y+yoffset, x-xc/3, y+yc+lockheight);
-            g.drawLine(x-xc*2/3, y+yc+lockheight, x-xc/3, y+yoffset);
+            g.drawLine(x-xc*2/3, y+authyoffset, x-xc/3, y+yc+authlockheight);
+            g.drawLine(x-xc*2/3, y+yc+authlockheight, x-xc/3, y+authyoffset);
         }
     }
 
 
     public void drawConfVerification(Graphics g){
 
-        int lockwidth=(int) (9*tdp.getZoom());
-        int lockheight=(int) (7*tdp.getZoom());
-        int yoffset = 3*lockheight;
-
-        int ovalwidth=(int) (6*tdp.getZoom());
-        int ovalheight=(int) (9*tdp.getZoom());
 
         Color c = g.getColor();
         Color c1;
@@ -440,15 +446,15 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         default:
             return;
         }
-        g.drawString(mappingName, x-lockwidth*2, y-lockheight);
-        g.drawOval(x-ovalwidth*2, y, ovalwidth, ovalheight);
+        g.drawString(mappingName, x-conflockwidth*2, y-conflockheight);
+        g.drawOval(x-confovalwidth*2, y, confovalwidth, confovalheight);
         g.setColor(c1);
-        g.fillRect(x-lockwidth*3/2, y+lockheight/2, lockwidth, lockheight);
+        g.fillRect(x-conflockwidth*3/2, y+conflockheight/2, conflockwidth, conflockheight);
         g.setColor(c);
-        g.drawRect(x-lockwidth*3/2, y+lockheight/2, lockwidth, lockheight);
+        g.drawRect(x-conflockwidth*3/2, y+conflockheight/2, conflockwidth, conflockheight);
         if (checkConfStatus==3){
-            g.drawLine(x-lockwidth*2, y, x, y+lockheight*2);
-            g.drawLine(x-lockwidth*2, y+lockheight*2, x, y);
+            g.drawLine(x-conflockwidth*2, y, x, y+conflockheight*2);
+            g.drawLine(x-conflockwidth*2, y+conflockheight*2, x, y);
         }
 
 
@@ -466,12 +472,12 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
             default:
                 return;
             }
-            g.drawString(secName, x-lockwidth*2, y+lockheight*3);
-            g.drawOval(x-ovalwidth*2, y+yoffset, ovalwidth, ovalheight);
+            g.drawString(secName, x-conflockwidth*2, y+conflockheight*3);
+            g.drawOval(x-confovalwidth*2, y+confyoffset, confovalwidth, confovalheight);
             g.setColor(c1);
-            g.fillRect(x-lockwidth*3/2, y+lockheight/2+yoffset, lockwidth, lockheight);
+            g.fillRect(x-conflockwidth*3/2, y+conflockheight/2+confyoffset, conflockwidth, conflockheight);
             g.setColor(c);
-            g.drawRect(x-lockwidth*3/2, y+lockheight/2+yoffset, lockwidth, lockheight);
+            g.drawRect(x-conflockwidth*3/2, y+conflockheight/2+confyoffset, conflockwidth, conflockheight);
         }
     }
     
@@ -528,6 +534,12 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
     public TGComponent isOnOnlyMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
+        }
+        else if(checkAuth && !isOrigin && GraphicLib.isInRectangle(_x, _y, x-authxoffset, y, authxoffset, authlockheight)){
+        	return this;
+        }
+        else if (checkConf && isOrigin && GraphicLib.isInRectangle(_x, _y, x-conflockwidth*3/2, y, conflockwidth*3/2, height)){
+        	return this;
         }
         return null;
     }
@@ -652,6 +664,9 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
     
     public void showTrace(){
     	//Show Result trace
+    	if (resTrace==null){
+    		return;
+    	}
 		PipedOutputStream pos = new PipedOutputStream();
         try {
         	PipedInputStream pis = new PipedInputStream(pos, 4096);

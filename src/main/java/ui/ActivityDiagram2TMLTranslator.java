@@ -770,41 +770,38 @@ public class ActivityDiagram2TMLTranslator {
 		            	final TMLActivityElement ae2 = activity.findReferenceElement( compo2 );
 		
 		                //Special case if "for loop" or if "choice"
-		                if (ae1 instanceof TMLForLoop) {
-		                    final int index = compo1.indexOf( conPoint1 ) - 1;
-		                    
-		                    if (index == 0) {
-		                        ae1.addNext( 0, ae2 );
-		                    }
-		                    else {
-		                        ae1.addNext( ae2 );
-		                    }
-		
-		                }
-		                else if (ae1 instanceof TMLChoice) {
-		                	//final int index = compo1.indexOf( conPoint1 ) - 1;
-		                    //TraceManager.addDev("Adding next:" + ae2);
-		                    ae1.addNext(ae2);
-		                    
-		                    final TMLADChoice choice = (TMLADChoice) compo1;
-		                    final TGCOneLineText guard = choice.getGuardForConnectingPoint( conPoint1 );
-		                    ( (TMLChoice) ae1 ).addGuard( modifyString( choice.getEffectiveCondition( guard ) ) );
-		                }
-		                else if (ae1 instanceof TMLSequence) {
-		                	final int index = compo1.indexOf( conPoint1 ) - 1;
-		                    ((TMLSequence)ae1).addIndex(index);
-		                    ae1.addNext(ae2);
-		                    //TraceManager.addDev("Adding " + ae2 + " at index " + index);
-		
-		                }
-		                else if (ae1 instanceof TMLRandomSequence) {
-		                	final int  index = compo1.indexOf( conPoint1 ) - 1;
-		                    ((TMLRandomSequence)ae1).addIndex(index);
-		                    ae1.addNext(ae2);
-		                }
-		                else {
-		                    ae1.addNext(ae2);
-		                }
+						if ((ae1 !=null) && (ae2 != null)) {
+							if (ae1 instanceof TMLForLoop) {
+								final int index = compo1.indexOf(conPoint1) - 1;
+
+								if (index == 0) {
+									ae1.addNext(0, ae2);
+								} else {
+									ae1.addNext(ae2);
+								}
+
+							} else if (ae1 instanceof TMLChoice) {
+								//final int index = compo1.indexOf( conPoint1 ) - 1;
+								//TraceManager.addDev("Adding next:" + ae2);
+								ae1.addNext(ae2);
+
+								final TMLADChoice choice = (TMLADChoice) compo1;
+								final TGCOneLineText guard = choice.getGuardForConnectingPoint(conPoint1);
+								((TMLChoice) ae1).addGuard(modifyString(choice.getEffectiveCondition(guard)));
+							} else if (ae1 instanceof TMLSequence) {
+								final int index = compo1.indexOf(conPoint1) - 1;
+								((TMLSequence) ae1).addIndex(index);
+								ae1.addNext(ae2);
+								//TraceManager.addDev("Adding " + ae2 + " at index " + index);
+
+							} else if (ae1 instanceof TMLRandomSequence) {
+								final int index = compo1.indexOf(conPoint1) - 1;
+								((TMLRandomSequence) ae1).addIndex(index);
+								ae1.addNext(ae2);
+							} else {
+								ae1.addNext(ae2);
+							}
+						}
 		            }
 		        }
             }

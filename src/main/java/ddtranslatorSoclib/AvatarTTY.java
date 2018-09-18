@@ -50,18 +50,14 @@ package ddtranslatorSoclib;
 
 public class AvatarTTY extends AvatarComponent {
 
-    private int index = 0;
+    private int index;
     private String ttyName;
 
-    public int no_tty;
     public int no_target;
-    public int no_cluster;
     
-    public AvatarTTY(String _ttyName, int _index, int _no_tty, int _no_cluster){
+    public AvatarTTY(String _ttyName, int _index){
       index =  _index;
       ttyName =  _ttyName;
-      no_tty = _no_tty;
-      no_cluster= _no_cluster;
     }
 
     public String getTTYName(){
@@ -72,28 +68,12 @@ public class AvatarTTY extends AvatarComponent {
       return index;
     }
 
-    public int getNo_tty(){
-      return no_tty;
-    }
-
     public int getNo_target(){
       return no_target;
     }
-
-    public int getNo_cluster(){
-      return no_cluster;
-    } 
-
-    public void setNo_tty(int _no_tty){
-        no_tty = _no_tty;
-    }
-    
+  
     public void setNo_target(int _no_target){
 	no_target = _no_target;
-    }
-
-    public void setNo_cluster(int _no_cluster){
-	no_cluster = _no_cluster;
     }
 }
 

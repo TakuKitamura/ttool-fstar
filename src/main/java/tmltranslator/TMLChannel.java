@@ -82,6 +82,10 @@ public class TMLChannel extends TMLCommunicationElement {
     private String CR = "\n";
     private String SP = " ";
     private int priority;
+    
+    public ArrayList<TMLTask> originalOriginTasks = new ArrayList<TMLTask>(); 
+    public ArrayList<TMLTask> originalDestinationTasks = new ArrayList<TMLTask>(); 
+    //A reference to the original origin and destination tasks
 
 
     public TMLChannel(String name, Object reference) {
@@ -248,6 +252,33 @@ public class TMLChannel extends TMLCommunicationElement {
         return null;
 
     }
+
+    public TMLPort hasOriginPort(String name) {
+        //TraceManager.addDev("Searching for dest port=" + name);
+        if (originPort != null) {
+            //TraceManager.addDev("Dest port1=" + destinationPort.getName());
+            if (originPort.getName().compareTo(name) == 0) {
+                //TraceManager.addDev("Found1");
+                return originPort;
+            }
+        }
+
+        if (originPorts == null) {
+            return null;
+        }
+
+        for (TMLPort port :originPorts) {
+            //TraceManager.addDev("Dest portm=" + port.getName());
+            if (port.getName().compareTo(name) == 0) {
+                //TraceManager.addDev("Foundm");
+                return port;
+            }
+        }
+        //TraceManager.addDev("Not found");
+        return null;
+
+    }
+
 
     // Complex channels
     public boolean isBasicChannel() {

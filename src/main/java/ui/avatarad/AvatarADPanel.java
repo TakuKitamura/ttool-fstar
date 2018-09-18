@@ -172,7 +172,7 @@ public class AvatarADPanel extends TDiagramPanel implements TDPWithAttributes{
         y = ontheLeft.getY();
         iterator = componentList.listIterator();
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             if ((tgc instanceof AvatarADPartition) && (tgc !=  ontheLeft)){
                 tgc.setCd(tgc.getX(), y);
             }

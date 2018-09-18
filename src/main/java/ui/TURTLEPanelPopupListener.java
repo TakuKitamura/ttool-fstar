@@ -65,7 +65,7 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
     protected MainGUI mgui;
 
     private JMenuItem rename, remove, moveRight, moveLeft, sort, newucd, newsd, newsdzv, newsdfromucd, newreq,
-        newebrdd, newprosmd, newavatarrd, newavatarpd, newavatarcd, newavatarad, newavatarmad;
+        newebrdd, newprosmd, newavatarrd, newavatarpd, newavatarcd, newavatarad, newavatarmad, newsyscams, neweln;
     private JMenuItem newatd, newftd;
 
     public TURTLEPanelPopupListener(TURTLEPanel _tp, MainGUI _mgui) {
@@ -120,6 +120,8 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
         newavatarcd = createMenuItem("New Context Diagram");
         newavatarad = createMenuItem("New Activity Diagram");
         newavatarmad = createMenuItem("New AVATAR Modeling Assumptions Diagram");
+        newsyscams = createMenuItem("New SystemC-AMS Diagram");
+        neweln = createMenuItem("New ELN Diagram");
 
         menu = new JPopupMenu("TURTLE panel");
         menu.add(moveLeft);
@@ -152,6 +154,11 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
             menu.add(newavatarmad);
             menu.add(newavatarrd);
             menu.add(newavatarpd);
+        }
+        if (mgui.isSystemcOn()) {
+        	menu.addSeparator();
+            menu.add(newsyscams);
+            menu.add(neweln);
         }
     }
 
@@ -209,12 +216,14 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
         newebrdd.setEnabled(tp.isReqEnabled());
         newprosmd.setEnabled(tp.isProSMDEnabled());
         newatd.setEnabled(tp.isATDEnabled());
-	newftd.setEnabled(tp.isFTDEnabled());
+        newftd.setEnabled(tp.isFTDEnabled());
         newavatarrd.setEnabled(tp.isAvatarRDEnabled());
         newavatarpd.setEnabled(tp.isAvatarPDEnabled());
         newavatarcd.setEnabled(tp.isAvatarCDEnabled());
         newavatarad.setEnabled(tp.isAvatarADEnabled());
         newavatarmad.setEnabled(tp.isAvatarMADEnabled());
+        newsyscams.setEnabled(tp.isSystemCAMSEnabled());
+        neweln.setEnabled(tp.isELNEnabled());
     }
 
     private Action listener = new AbstractAction() {
@@ -252,7 +261,7 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
                 } else if (ac.equals("New Attack Tree Diagram")) {
                     mgui.createAttackTreeDiagram(tp, "Attack Tree");
                     mgui.changeMade(null, -1);
-		} else if (e.getSource() == newftd) {
+                } else if (e.getSource() == newftd) {
                     mgui.createFaultTreeDiagram(tp, "Fault Tree");
                     mgui.changeMade(null, -1);
                 } else if (ac.equals("New Event-Based Requirement Description Diagram")) {
@@ -276,7 +285,14 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
                 } else if (e.getSource() == newavatarmad) {
                     mgui.createAvatarMAD(tp, "Modeling Assumptions Diagram");
                     mgui.changeMade(null, -1);
+                } else if (e.getSource() == newsyscams) {
+                	mgui.createSysCAMS(tp, "SystemC-AMS Component Diagram");
+                	mgui.changeMade(null, -1);
+                } else if (e.getSource() == neweln) {
+                	mgui.createELN(tp, "ELN Diagram");
+                	mgui.changeMade(null, -1);
                 }
             }
         };
 }
+

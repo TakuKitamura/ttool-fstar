@@ -240,43 +240,64 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         c01.weightx = 1.0;
         c01.gridwidth = GridBagConstraints.REMAINDER; //end row
         c01.fill = GridBagConstraints.BOTH;
-        c01.gridheight = 1;
 
 
         sizeOfInfiniteFIFO = new JTextField(size, 10);
         c01.gridwidth = 1;
-        jp01.add(new JLabel("Size of infinite FIFO = "), c01);
+        jp01.add(new JLabel("Size of \"infinite FIFO\":"), c01);
         c01.gridwidth = GridBagConstraints.REMAINDER; //end row
         jp01.add(sizeOfInfiniteFIFO, c01);
+
+        generateTrace = new JCheckBox("Generate simulation trace");
+        generateTrace.addActionListener(this);
+        jp01.add(generateTrace, c01);
+        generateTrace.setSelected(generateTraceChecked);
+
+        showDetails = new JCheckBox("Show verification details");
+        showDetails.addActionListener(this);
+        jp01.add(showDetails, c01);
+        showDetails.setSelected(showDetailsChecked);
+
         jp1.add(jp01, c1);
 
         c1.gridheight = 1;
 
+        JPanel jpbasic = new JPanel();
+        GridBagLayout gridbagbasic = new GridBagLayout();
+        GridBagConstraints cbasic = new GridBagConstraints();
+        cbasic.anchor = GridBagConstraints.WEST;
+        cbasic.gridheight = 1;
+        cbasic.weighty = 1.0;
+        cbasic.weightx = 1.0;
+        jpbasic.setLayout(gridbagbasic);
+        jpbasic.setBorder(new javax.swing.border.TitledBorder("Basic properties"));
+        cbasic.fill = GridBagConstraints.BOTH;
 
+        cbasic.gridwidth = GridBagConstraints.REMAINDER; //end row
         deadlockA = new JCheckBox("No deadlocks?");
         deadlockA.addActionListener(this);
-        jp1.add(deadlockA, c1);
+        jpbasic.add(deadlockA, cbasic);
         deadlockA.setSelected(deadlockAChecked);
 
 
         // Reachability
-        c1.gridwidth = 1;
-        jp1.add(new JLabel("Reachability:"), c1);
+        cbasic.gridwidth = 1;
+        jpbasic.add(new JLabel("Reachability:"), cbasic);
         stateR_None = new JRadioButton("None");
         stateR_None.addActionListener(this);
         stateR_None.setToolTipText("Won't study reachability properties");
-        jp1.add(stateR_None, c1);
+        jpbasic.add(stateR_None, cbasic);
 
         stateR_Selected = new JRadioButton("Selected");
         stateR_Selected.addActionListener(this);
         stateR_Selected.setToolTipText("Study the fact that selected states may be reachable i.e. in at least one path");
-        jp1.add(stateR_Selected, c1);
+        jpbasic.add(stateR_Selected, cbasic);
 
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+        cbasic.gridwidth = GridBagConstraints.REMAINDER; //end row
         stateR_All = new JRadioButton("All");
         stateR_All.addActionListener(this);
         stateR_All.setToolTipText("Study the fact that all states may be reachable i.e. in at least one path");
-        jp1.add(stateR_All, c1);
+        jpbasic.add(stateR_All, cbasic);
 
 
         // Making the button group.
@@ -290,23 +311,23 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         stateR_All.setSelected(stateR_AllChecked);
 
         // Liveness
-        c1.gridwidth = 1;
-        jp1.add(new JLabel("Liveness:"), c1);
+        cbasic.gridwidth = 1;
+        jpbasic.add(new JLabel("Liveness:"), cbasic);
         stateL_None = new JRadioButton("None");
         stateL_None.addActionListener(this);
         stateL_None.setToolTipText("Won't study liveness properties");
-        jp1.add(stateL_None, c1);
+        jpbasic.add(stateL_None, cbasic);
 
         stateL_Selected = new JRadioButton("Selected");
         stateL_Selected.addActionListener(this);
         stateL_Selected.setToolTipText("Study the fact that selected states are always reachable i.e. in all possible paths");
-        jp1.add(stateL_Selected, c1);
+        jpbasic.add(stateL_Selected, cbasic);
 
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+        cbasic.gridwidth = GridBagConstraints.REMAINDER; //end row
         stateL_All = new JRadioButton("All");
         stateL_All.addActionListener(this);
         stateL_All.setToolTipText("Study the fact that selected states are always reachable i.e. in all possible paths");
-        jp1.add(stateL_All, c1);
+        jpbasic.add(stateL_All, cbasic);
 
 
         // Making the button group.
@@ -320,18 +341,18 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         stateL_All.setSelected(stateL_AllChecked);
 
         // LeadsTo
-        c1.gridwidth = 1;
-        jp1.add(new JLabel("Leads to:"), c1);
+        cbasic.gridwidth = 1;
+        jpbasic.add(new JLabel("Leads to:"), cbasic);
         stateLe_None = new JRadioButton("None");
         stateLe_None.addActionListener(this);
         stateLe_None.setToolTipText("No leads to properties");
-        jp1.add(stateLe_None, c1);
+        jpbasic.add(stateLe_None, cbasic);
 
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+        cbasic.gridwidth = GridBagConstraints.REMAINDER; //end row
         stateLe_Selected = new JRadioButton("Selected");
         stateLe_Selected.addActionListener(this);
         stateLe_Selected.setToolTipText("Study the fact that selected states lead to one another");
-        jp1.add(stateLe_Selected, c1);
+        jpbasic.add(stateLe_Selected, cbasic);
 
         // Making the button group.
         // then selecting the button according to the previous user selection
@@ -341,7 +362,9 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         stateLe_None.setSelected(stateLe_NoneChecked);
         stateLe_Selected.setSelected(stateLe_SelectedChecked);
 
-
+        c1.anchor = GridBagConstraints.WEST;
+        c1.fill = GridBagConstraints.BOTH;
+        jp1.add(jpbasic, c1);
 
         /*stateA = new JCheckBox("Liveness of selected states");
           stateA.addActionListener(this);
@@ -355,30 +378,43 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         jp1.add(stateL, c1);
         stateL.setSelected(stateLChecked);*/
 
-        c1.gridwidth = GridBagConstraints.REMAINDER;
+
+        JPanel jpadvanced = new JPanel();
+        GridBagLayout gridbagadvanced = new GridBagLayout();
+        GridBagConstraints cadvanced = new GridBagConstraints();
+        cadvanced.anchor = GridBagConstraints.WEST;
+        cadvanced.gridheight = 1;
+        cadvanced.weighty = 1.0;
+        cadvanced.weightx = 1.0;
+        jpadvanced.setLayout(gridbagadvanced);
+        jpadvanced.setBorder(new javax.swing.border.TitledBorder("Advanced properties"));
+        cbasic.fill = GridBagConstraints.BOTH;
+
+        cadvanced.gridwidth = GridBagConstraints.REMAINDER;
         custom = new JCheckBox("Safety pragmas");
         custom.addActionListener(this);
         if ((customQueries != null) && (customQueries.size() > 0)) {
-            jp1.add(custom, c1);
+            jpadvanced.add(custom, cadvanced);
             custom.setSelected(customChecked);
         }
         //jp1.add(custom, c1);
         //custom.setSelected(customChecked);
         if (customQueries != null) {
             for (String s : customQueries) {
-                c1.gridwidth = GridBagConstraints.RELATIVE;
+                cadvanced.gridwidth = GridBagConstraints.RELATIVE;
                 JLabel space = new JLabel("   ");
-                c1.weightx = 0.0;
-                jp1.add(space, c1);
-                c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+                cadvanced.weightx = 0.0;
+                jpadvanced.add(space, cadvanced);
+                cadvanced.gridwidth = GridBagConstraints.REMAINDER; //end row
                 JCheckBox cqb = new JCheckBox(s);
                 cqb.addActionListener(this);
-                c1.weightx = 1.0;
-                jp1.add(cqb, c1);
+                cadvanced.weightx = 1.0;
+                jpadvanced.add(cqb, cadvanced);
                 customChecks.add(cqb);
 
             }
         }
+        jp1.add(jpadvanced, c1);
         /*  jp1.add(new JLabel("Custom formula to translate = "), c1);
             c1.gridwidth = GridBagConstraints.REMAINDER; //end row
             customText = new JTextField("Type your CTL formulae here!", 80);
@@ -395,15 +431,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
             customText.addActionListener(this);
             jp1.add(translatedText,c1);
         */
-        generateTrace = new JCheckBox("Generate simulation trace");
-        generateTrace.addActionListener(this);
-        jp1.add(generateTrace, c1);
-        generateTrace.setSelected(generateTraceChecked);
 
-        showDetails = new JCheckBox("Show verification details");
-        showDetails.addActionListener(this);
-        jp1.add(showDetails, c1);
-        showDetails.setSelected(showDetailsChecked);
 
         jp1.setMinimumSize(jp1.getPreferredSize());
         c.add(jp1, BorderLayout.NORTH);

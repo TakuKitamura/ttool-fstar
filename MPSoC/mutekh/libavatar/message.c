@@ -3,8 +3,8 @@
 #include <unistd.h>
 #include <pthread.h>
 
-#include "message.h"
-#include "myerrors.h"
+#include "include/message.h"
+#include "include/myerrors.h"
 
 long __id_message = 0;
 pthread_mutex_t __message_mutex;

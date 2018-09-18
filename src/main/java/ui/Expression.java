@@ -17,11 +17,12 @@ public class Expression {
 	public Expression( 	final String text,
 						final String nullText,
 						final String label ) {
-		this.text = text;
-		this.nullText = nullText;
-		this.label = label;
-		this.enabled = true;
+        this.text = text;
+        this.nullText = nullText;
+        this.label = label;
+        this.enabled = true;
 	}
+
 //
 //	public Expression( 	final String text,
 //						final boolean enabled,
@@ -58,7 +59,7 @@ public class Expression {
 	
 	@Override
 	public String toString() {
-		final String text = isNull() ? "null" : getText();
+		final String text = isNull() ? nullText : getText();
 
 		return label == null ? text : String.format( label, text );
 	}

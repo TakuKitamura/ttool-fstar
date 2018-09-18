@@ -52,21 +52,29 @@ import ui.TGComponent;
 */
 
 public class SysCAMSPortConverter extends SysCAMSPrimitivePort {
-	private int period;
+	private double period;
+	private String time;
 	private int rate;
 	private int delay;
 	private String convType;
 	
-	public SysCAMSPortConverter(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
-			TGComponent _father, TDiagramPanel _tdp) {
+	public SysCAMSPortConverter(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 	}
 
-	public int getPeriod() {
+	public String getTime() {
+		return time;
+	}
+
+	public void setTime(String time) {
+		this.time = time;
+	}
+
+	public double getPeriod() {
 		return period;
 	}
 
-	public void setPeriod(int period) {
+	public void setPeriod(double period) {
 		this.period = period;
 	}
 

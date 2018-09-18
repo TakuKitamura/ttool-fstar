@@ -1304,7 +1304,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
                             tup.add (new ProVerifVar (AVATAR2ProVerif.translateTerm (attr, arg.attributeCmp), "bitstring"));
                             if (this.secrecyChecked.contains (attr)) {
                                 UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "'" + attr.getName () + "' is re-assigned while its secrecy is being checked. Note that the proof will only guarantee the secrecy of the initial value of " + attr.getName () + ".");
-                                ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
+                             //   ce.setTDiagramPanel(((AvatarDesignPanel)(this.avspec.getReferenceObject())).getAvatarSMDPanel(arg.block.getName()));
                                 ce.setTGComponent((TGComponent)(_asme.getReferenceObject()));
                                 this.warnings.add(ce);
                             }

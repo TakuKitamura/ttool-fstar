@@ -52,7 +52,4 @@ public class SysCAMSTComponent {
 		return name;
 	}
 
-	public void setName(String _name) {
-		name = _name;
-	}
 }

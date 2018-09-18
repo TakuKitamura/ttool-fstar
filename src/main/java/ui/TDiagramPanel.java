@@ -53,16 +53,17 @@ import ui.avatarrd.AvatarRDRequirement;
 import ui.avatarsmd.AvatarSMDState;
 import ui.cd.*;
 import ui.ftd.FTDFault;
+import ui.eln.*;
+import ui.eln.sca_eln.*;
+import ui.eln.sca_eln_sca_de.*;
+import ui.eln.sca_eln_sca_tdf.*;
+import ui.syscams.*;
 import ui.ncdd.NCEqNode;
 import ui.ncdd.NCRouteArtifact;
 import ui.ncdd.NCSwitchNode;
 import ui.ncdd.NCTrafficArtifact;
 import ui.oscd.TOSClass;
 import ui.req.Requirement;
-import ui.syscams.SysCAMSBlockDE;
-import ui.syscams.SysCAMSBlockTDF;
-import ui.syscams.SysCAMSCompositeComponent;
-import ui.syscams.SysCAMSRecordComponent;
 import ui.tmlcd.TMLTaskOperator;
 import ui.tmlcompd.TMLCCompositeComponent;
 import ui.tmlcompd.TMLCPrimitiveComponent;
@@ -1275,7 +1276,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         
         for (TGComponent tgc : this.componentList) {
             if (tgc.isSelected()) {
-                if ((xSel - oldX != 0) || (ySel - oldY != 0)) {
+                if ((xSel - oldX != 0 ) || (ySel - oldY != 0 )) {
                     /*TraceManager.addDev("" + tgc + " is selected oldX=" + xSel +
                             " oldY=" + oldY + " xSel=" + xSel + " ySel=" + ySel);*/
                 }
@@ -2347,7 +2348,6 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                     actionOnRemove(t);
                     tgcon.getTGConnectingPointP1().setFree(true);
                     tgcon.getTGConnectingPointP2().setFree(true);
-                    
                     TraceManager.addDev("Removed one connector!");
                     for (int k = 0; k < tgcon.getNbConnectingPoint(); k++)
                         removeOneConnector(tgcon.tgconnectingPointAtIndex(k));
@@ -2646,8 +2646,27 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                     || (o instanceof TMLTaskInterface && this.checkTMLTaskInterface((TMLTaskInterface) o, name))
                     || (o instanceof SysCAMSBlockTDF && this.checkSysCAMSBlockTDFComponent((SysCAMSBlockTDF) o, name))
                     || (o instanceof SysCAMSBlockDE && this.checkSysCAMSBlockDEComponent((SysCAMSBlockDE) o, name))
-                    || (o instanceof SysCAMSRecordComponent && this.checkSysCAMSRecordComponent((SysCAMSRecordComponent) o, name))
                     || (o instanceof SysCAMSCompositeComponent && this.checkSysCAMSCompositeComponent((SysCAMSCompositeComponent) o, name))
+                    || (o instanceof ELNCluster && this.checkELNCluster((ELNCluster) o, name))
+                    || (o instanceof ELNModule && this.checkELNModule((ELNModule) o, name))
+                    || (o instanceof ELNNodeRef && this.checkELNComponentNodeRef((ELNNodeRef) o, name))
+                    || (o instanceof ELNComponentResistor && this.checkELNComponentResistor((ELNComponentResistor) o, name))
+                    || (o instanceof ELNComponentCapacitor && this.checkELNComponentCapacitor((ELNComponentCapacitor) o, name))
+                    || (o instanceof ELNComponentInductor && this.checkELNComponentInductor((ELNComponentInductor) o, name))
+                    || (o instanceof ELNComponentVoltageControlledVoltageSource && this.checkELNComponentVoltageControlledVoltageSource((ELNComponentVoltageControlledVoltageSource) o, name))
+                    || (o instanceof ELNComponentVoltageControlledCurrentSource && this.checkELNComponentVoltageControlledCurrentSource((ELNComponentVoltageControlledCurrentSource) o, name))
+                    || (o instanceof ELNComponentIdealTransformer && this.checkELNComponentIdealTransformer((ELNComponentIdealTransformer) o, name))
+                    || (o instanceof ELNComponentTransmissionLine && this.checkELNComponentTransmissionLine ((ELNComponentTransmissionLine) o, name))
+                    || (o instanceof ELNComponentIndependentVoltageSource && this.checkELNComponentIndependentVoltageSource((ELNComponentIndependentVoltageSource) o, name))
+                    || (o instanceof ELNComponentIndependentCurrentSource && this.checkELNComponentIndependentCurrentSource((ELNComponentIndependentCurrentSource) o, name))
+                    || (o instanceof ELNComponentCurrentSinkTDF && this.checkELNComponentCurrentSinkTDF((ELNComponentCurrentSinkTDF) o, name))
+                    || (o instanceof ELNComponentCurrentSourceTDF && this.checkELNComponentCurrentSourceTDF((ELNComponentCurrentSourceTDF) o, name))
+                    || (o instanceof ELNComponentVoltageSinkTDF && this.checkELNComponentVoltageSinkTDF((ELNComponentVoltageSinkTDF) o, name))
+                    || (o instanceof ELNComponentVoltageSourceTDF && this.checkELNComponentVoltageSourceTDF((ELNComponentVoltageSourceTDF) o, name))
+                    || (o instanceof ELNComponentCurrentSinkDE && this.checkELNComponentCurrentSinkDE((ELNComponentCurrentSinkDE) o, name))
+                    || (o instanceof ELNComponentCurrentSourceDE && this.checkELNComponentCurrentSourceDE((ELNComponentCurrentSourceDE) o, name))
+                    || (o instanceof ELNComponentVoltageSinkDE && this.checkELNComponentVoltageSinkDE((ELNComponentVoltageSinkDE) o, name))
+                    || (o instanceof ELNComponentVoltageSourceDE && this.checkELNComponentVoltageSourceDE((ELNComponentVoltageSourceDE) o, name))
                     || (o instanceof ATDBlock && this.checkATDBlock((ATDBlock) o, name))
                     || (o instanceof ATDAttack && this.checkATDAttack((ATDAttack) o, name))
                     || (o instanceof FTDFault && this.checkFTDFault((FTDFault) o, name))
@@ -2698,27 +2717,103 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         public boolean checkTMLTaskInterface(TMLTaskInterface o, String name) {
             return false;
         }
-
+        
         public boolean checkSysCAMSBlockTDFComponent(SysCAMSBlockTDF o, String name) {
-            return false;
+      		return false;
         }
-
+        
         public boolean checkSysCAMSBlockDEComponent(SysCAMSBlockDE o, String name) {
-            return false;
+        	return false;
         }
-
-        public boolean checkSysCAMSRecordComponent(SysCAMSRecordComponent o, String name) {
-            return false;
-        }
-
+        
         public boolean checkSysCAMSCompositeComponent(SysCAMSCompositeComponent o, String name) {
-            return false;
+        	return false;
+        }
+
+        public boolean checkELNCluster(ELNCluster o, String name) {
+        	return false;
+        }
+        
+        public boolean checkELNModule(ELNModule o, String name) {
+        	return false;
+        }
+        
+        public boolean checkELNComponentNodeRef(ELNNodeRef o, String name) {
+        	return false;
+        }
+        
+        public boolean checkELNComponentResistor(ELNComponentResistor o, String name) {
+        	return false;
+        }
+        
+        public boolean checkELNComponentCapacitor(ELNComponentCapacitor o, String name) {
+        	return false;
+        }
+        
+        public boolean checkELNComponentInductor(ELNComponentInductor o, String name) {
+        	return false;
+        }
+        
+        public boolean checkELNComponentVoltageControlledVoltageSource(ELNComponentVoltageControlledVoltageSource o, String name) {
+        	return false;
+        }
+        
+        public boolean checkELNComponentVoltageControlledCurrentSource(ELNComponentVoltageControlledCurrentSource o, String name) {
+        	return false;
+        }
+        
+        public boolean checkELNComponentIdealTransformer(ELNComponentIdealTransformer o, String name) {
+        	return false;
+        }
+        
+        public boolean checkELNComponentTransmissionLine(ELNComponentTransmissionLine o, String name) {
+        	return false;
+        }
+        
+        public boolean checkELNComponentIndependentVoltageSource(ELNComponentIndependentVoltageSource o, String name) {
+        	return false;
+        }
+        
+        public boolean checkELNComponentIndependentCurrentSource(ELNComponentIndependentCurrentSource o, String name) {
+        	return false;
+        }
+        
+        public boolean checkELNComponentCurrentSinkTDF(ELNComponentCurrentSinkTDF o, String name) {
+        	return false;
+        }
+        
+        public boolean checkELNComponentCurrentSourceTDF(ELNComponentCurrentSourceTDF o, String name) {
+        	return false;
+        }
+        
+        public boolean checkELNComponentVoltageSinkTDF(ELNComponentVoltageSinkTDF o, String name) {
+        	return false;
+        }
+        
+        public boolean checkELNComponentVoltageSourceTDF(ELNComponentVoltageSourceTDF o, String name) {
+        	return false;
+        }
+        
+        public boolean checkELNComponentCurrentSinkDE(ELNComponentCurrentSinkDE o, String name) {
+        	return false;
+        }
+        
+        public boolean checkELNComponentCurrentSourceDE(ELNComponentCurrentSourceDE o, String name) {
+        	return false;
+        }
+        
+        public boolean checkELNComponentVoltageSinkDE(ELNComponentVoltageSinkDE o, String name) {
+        	return false;
+        }
+        
+        public boolean checkELNComponentVoltageSourceDE(ELNComponentVoltageSourceDE o, String name) {
+        	return false;
         }
 
         public boolean checkATDBlock(ATDBlock o, String name) {
             return false;
         }
-
+        
         public boolean checkATDAttack(ATDAttack o, String name) {
             return false;
         }
@@ -2846,28 +2941,99 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public String findSysCAMSPrimitiveComponentName(String name) {
-        return this.findGoodName(name, new NameChecker() {
-            public boolean checkSysCAMSBlockTDFComponent(SysCAMSBlockTDF o, String name) {
-                return o.getValue().equals(name);
-            }
-
-            public boolean checkSysCAMSBlockDEComponent(SysCAMSBlockDE o, String name) {
-                return o.getValue().equals(name);
-            }
-
-            public boolean checkSysCAMSRecordComponent(SysCAMSRecordComponent o, String name) {
-                return o.getValue().equals(name);
-            }
-
-            public boolean checkSysCAMSCompositeComponent(SysCAMSCompositeComponent o, String name) {
-                for (int i = 0; i < o.getNbInternalTGComponent(); i++)
-                    if (this.isNameAlreadyTaken(o.getInternalTGComponent(i), name))
-                        return true;
-                return false;
-            }
-        });
+    	return this.findGoodName(name, new NameChecker() {
+    		public boolean checkSysCAMSBlockTDFComponent(SysCAMSBlockTDF o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		
+    		public boolean checkSysCAMSBlockDEComponent(SysCAMSBlockDE o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		
+    		public boolean checkSysCAMSCompositeComponent(SysCAMSCompositeComponent o, String name) {
+    			for (int i = 0; i < o.getNbInternalTGComponent(); i++)
+    				if (this.isNameAlreadyTaken(o.getInternalTGComponent(i), name))
+    					return true;
+    			return false;
+    		}
+    	});
     }
 
+    public String findELNComponentName(String name) {
+    	return this.findGoodName(name, new NameChecker() {
+    		public boolean checkELNComponentNodeRef(ELNNodeRef o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		public boolean checkELNComponentResistor(ELNComponentResistor o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		public boolean checkELNComponentCapacitor(ELNComponentCapacitor o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		public boolean checkELNComponentInductor(ELNComponentInductor o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		public boolean checkELNComponentVoltageControlledVoltageSource(ELNComponentVoltageControlledVoltageSource o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		public boolean checkELNComponentVoltageControlledCurrentSource(ELNComponentVoltageControlledCurrentSource o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		public boolean checkELNComponentIdealTransformer(ELNComponentIdealTransformer o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		public boolean checkELNComponentTransmissionLine(ELNComponentTransmissionLine o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		public boolean checkELNComponentIndependentVoltageSource(ELNComponentIndependentVoltageSource o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		public boolean checkELNComponentIndependentCurrentSource(ELNComponentIndependentCurrentSource o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		public boolean checkELNComponentCurrentSinkTDF(ELNComponentCurrentSinkTDF o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		public boolean checkELNComponentCurrentSourceTDF(ELNComponentCurrentSourceTDF o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		public boolean checkELNComponentVoltageSinkTDF(ELNComponentVoltageSinkTDF o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		public boolean checkELNComponentVoltageSourceTDF(ELNComponentVoltageSourceTDF o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		public boolean checkELNComponentCurrentSinkDE(ELNComponentCurrentSinkDE o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		public boolean checkELNComponentCurrentSourceDE(ELNComponentCurrentSourceDE o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		public boolean checkELNComponentVoltageSinkDE(ELNComponentVoltageSinkDE o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		public boolean checkELNComponentVoltageSourceDE(ELNComponentVoltageSourceDE o, String name) {
+    			return o.getValue().equals(name);
+    		}
+    		public boolean checkELNModule(ELNModule o, String name) {
+    			if (o.getValue().equals(name))
+    				return true;
+    			for (int i = 0; i < o.getNbInternalTGComponent(); i++)
+    				if (this.isNameAlreadyTaken(o.getInternalTGComponent(i), name))
+    					return true;
+    			return false;
+    		}
+    		public boolean checkELNCluster(ELNCluster o, String name) {
+    			if (o.getValue().equals(name))
+    				return true;
+    			for (int i = 0; i < o.getNbInternalTGComponent(); i++)
+    				if (this.isNameAlreadyTaken(o.getInternalTGComponent(i), name))
+    					return true;
+    			return false;
+    		}
+    	});
+    }
+    
     public String findAttackName(String name) {
         return this.findGoodName(name, new NameChecker() {
             public boolean checkATDAttack(ATDAttack o, String name) {
@@ -2883,7 +3049,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             }
         });
     }
-
+    
     public String findBlockName(String name) {
         return this.findGoodName(name, new NameChecker() {
             public boolean checkATDBlock(ATDBlock o, String name) {
@@ -3620,7 +3786,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         h = Math.min(h, getHeight() - y);
 
 
-        /*StringBuffer sb = new StringBuffer("<?xml version=\"1.0\" standalone=\"no\"?>\n");
+		/*StringBuffer sb = new StringBuffer("<?xml version=\"1.0\" standalone=\"no\"?>\n");
         sb.append("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n");
         //sb.append(" width=\"" + (w+x) + "\" height=\"" + (h+y) + "\" viewbox=\"" + x + " " + y + " " + w + " " + h + "\">\n");
         sb.append("<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\"");
@@ -3818,3 +3984,5 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         return false;
     }
 }
+
+

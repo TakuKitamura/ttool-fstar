@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatardd;
 
 import myutil.GraphicLib;
@@ -60,6 +57,7 @@ import java.awt.*;
    * @version 1.0 21/08/2014
    * @author Ludovic APVRILLE
  */
+
 public abstract class ADDMemoryNode extends ADDCommunicationNode implements WithAttributes {
     protected int textY1 = 15;
     protected int textY2 = 30;
@@ -68,12 +66,16 @@ public abstract class ADDMemoryNode extends ADDCommunicationNode implements With
     protected String stereotype = "RAM";
 
     protected int index = 0;
+    //protected int cluster_index = 0;
     protected int monitored = 0;
     protected int byteDataSize = HwMemory.DEFAULT_BYTE_DATA_SIZE;
 
+    private String processCode;
+    
     public ADDMemoryNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-
+        
+        setProcessCode("");
     }
 
     public void internalDrawing(Graphics g) {
@@ -111,7 +113,6 @@ public abstract class ADDMemoryNode extends ADDCommunicationNode implements With
     }
 
     public TGComponent isOnOnlyMe(int x1, int y1) {
-
         Polygon pol = new Polygon();
         pol.addPoint(x, y);
         pol.addPoint(x + derivationx, y - derivationy);
@@ -122,13 +123,11 @@ public abstract class ADDMemoryNode extends ADDCommunicationNode implements With
         if (pol.contains(x1, y1)) {
             return this;
         }
-
         return null;
     }
 
     public String getStereotype() {
         return stereotype;
-
     }
 
     public String getNodeName() {
@@ -139,6 +138,10 @@ public abstract class ADDMemoryNode extends ADDCommunicationNode implements With
         return index;
     }
 
+    /* public int getClusterIndex() {
+        return cluster_index;
+	}*/
+    
     public int getDataSize() {
         return byteDataSize;
     }
@@ -173,8 +176,6 @@ public abstract class ADDMemoryNode extends ADDCommunicationNode implements With
             }
         }
 
-
-
         if (dialog.getIndex().length() != 0) {
             try {
                 tmp = index;
@@ -189,6 +190,23 @@ public abstract class ADDMemoryNode extends ADDCommunicationNode implements With
                 errors += "index  ";
             }
         }
+
+	/*	if (dialog.getClusterIndex().length() != 0) {
+            try {
+                tmp = cluster_index;
+                index = Integer.decode(dialog.getClusterIndex()).intValue();
+                if (index < 0) {
+                    index = tmp;
+                    error = true;
+                    errors += "cluster index ";
+                }
+            } catch (Exception e) {
+                error = true;
+                errors += "cluster index  ";
+            }
+	    }*/
+
+	
 
         if (dialog.getDataSize().length() != 0) {
             try {
@@ -209,14 +227,7 @@ public abstract class ADDMemoryNode extends ADDCommunicationNode implements With
 	if (dialog.getMonitored() != 0) {
             try {
                 tmp = monitored;
-
-		
-
                 monitored = dialog.getMonitored();//Integer.decode(dialog.getMonitored()).intValue();
-
-		
-
-
                 if (index < 0) {
                     monitored = tmp;
                     error = true;
@@ -235,14 +246,8 @@ public abstract class ADDMemoryNode extends ADDCommunicationNode implements With
                                           JOptionPane.INFORMATION_MESSAGE);
             return false;
         }
-
         return true;
-
-
     }
-
-
-
 
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
@@ -250,22 +255,25 @@ public abstract class ADDMemoryNode extends ADDCommunicationNode implements With
         sb.append("\" />\n");
         sb.append("<attributes byteDataSize=\"" + byteDataSize + "\" ");
         sb.append(" index=\"" + index + "\" ");
-        sb.append("/>\n");
+	// sb.append(" cluster_index=\"" + cluster_index + "\" ");
+        if (stereotype.equals("RAM")) {
+        	sb.append(" processCode=\"" + getProcessCode() + "\" ");
+        }
+    	sb.append("/>\n");
         sb.append("</extraparam>\n");
         return new String(sb);
     }
 
-    @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
         //
         try {
-
             NodeList nli;
             Node n1, n2;
             Element elt;
-          //  int t1id;
+            //int t1id;
             String sstereotype = null, snodeName = null;
             monitored = 0;
+            String processCode;
 
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
@@ -287,23 +295,24 @@ public abstract class ADDMemoryNode extends ADDCommunicationNode implements With
                             if (snodeName != null){
                                 name = snodeName;
                             }
-
                             if (elt.getTagName().equals("attributes")) {
                                 byteDataSize = Integer.decode(elt.getAttribute("byteDataSize")).intValue();
                                 //monitored = Integer.decode(elt.getAttribute("monitored")).intValue();
                                 index = Integer.decode(elt.getAttribute("index")).intValue();
-
+				//cluster_index = Integer.decode(elt.getAttribute("cluster_index")).intValue();
+                                if (sstereotype.equals("RAM")) {
+                                	processCode = elt.getAttribute("processCode");
+                            		setProcessCode(processCode);
+                            	}
                             }
                         }
                     }
                 }
             }
-
         } catch (Exception e) {
             throw new MalformedModelingException();
         }
     }
-
 
     public int getByteDataSize(){
         return byteDataSize;
@@ -316,5 +325,11 @@ public abstract class ADDMemoryNode extends ADDCommunicationNode implements With
         return attr;
     }
 
+	public String getProcessCode() {
+		return processCode;
+	}
 
+	public void setProcessCode(String _processCode) {
+		processCode = _processCode;
+	}
 }

@@ -601,6 +601,21 @@ public class TMLModeling<E> {
 
         return null;
     }
+    
+    public TMLChannel getChannelByOriginPortName(String _portName) {
+        TMLChannel ch;
+        Iterator<TMLChannel> iterator = channels.listIterator();
+
+        while(iterator.hasNext()) {
+            ch = iterator.next();
+
+            if (ch.hasOriginPort(_portName) != null) {
+                return ch;
+            }
+        }
+
+        return null;
+    }
 
     public TMLEvent getEventByName(String _name) {
         TMLEvent evt;
@@ -737,6 +752,16 @@ public class TMLModeling<E> {
             if ((ch.getOriginTask() == t) || (ch.getDestinationTask() == t)) {
                 list.add(ch);
             }
+            for (TMLTask task: ch.getOriginTasks()){
+            	if (task ==t){
+            		list.add(ch);
+            	}
+            }
+            for (TMLTask task: ch.getDestinationTasks()){
+            	if (task== t){
+            		list.add(ch);
+            	}
+            }
         }
 
         return list;
@@ -770,8 +795,12 @@ public class TMLModeling<E> {
 
             AvatarAttribute attr = pragma.getArg();
 
+
             TMLChannel channel = getChannelByShortName(attr.getName().replaceAll("_chData",""));
             boolean invalidate=false;
+            if (channel==null){
+            	channel = getChannelByOriginPortName(attr.getName().replaceAll("_chData",""));
+            }
             //If an attribute is confidential because it has never been sent on that channel, do not backtrace that result since it is misleading
             if (channel!=null){
             	//Mark the result only if the writechannel operator is reachable
@@ -887,8 +916,13 @@ public class TMLModeling<E> {
 
             if (result.isProved() && !result.isSatisfied()){
                 String signalName = s.toString().split("_chData")[0];
-                signalName = signalName.split("__")[1];
+                signalName = signalName.split("__")[signalName.split("__").length-1];
+
                 TMLChannel channel = getChannelByShortName(signalName);
+               
+                if (channel==null){
+                	channel= getChannelByDestinationPortName(signalName);
+                }
                 if (channel!=null){
                     for (TMLCPrimitivePort port:channel.ports){
                         if (port.checkAuth){
@@ -2210,6 +2244,7 @@ public class TMLModeling<E> {
 
 
     public void removeForksAndJoins() {
+    
         TraceManager.addDev("\n\n**** Remove forks and joins\n");
         //Exception e = new Exception(); e.printStackTrace();
 
@@ -2247,7 +2282,14 @@ public class TMLModeling<E> {
 
     public void removeFork(TMLChannel _ch, ArrayList<TMLChannel> _newChannels) {
         int i;
-
+		ArrayList<TMLTask> originTasks = new ArrayList<TMLTask>();
+		ArrayList<TMLTask> destTasks = new ArrayList<TMLTask>();	
+		for (TMLTask task: _ch.getOriginTasks()){
+			originTasks.add(task);
+		}
+		for (TMLTask task: _ch.getDestinationTasks()){
+			destTasks.add(task);
+		}
         // Create the new task and its activity diagram
         TMLTask forkTask = new TMLTask("FORKTASK" + SEP1 + _ch.getName(), _ch.getReferenceObject(), null);
         TMLActivity forkActivity = forkTask.getActivityDiagram();
@@ -2263,6 +2305,8 @@ public class TMLModeling<E> {
             chans[i].setType(_ch.getType());
             chans[i].setMax(_ch.getMax());
             chans[i].setSize(_ch.getSize());
+          	chans[i].originalOriginTasks = originTasks;
+			chans[i].originalDestinationTasks = destTasks;
             _newChannels.add(chans[i]);
         }
 
@@ -2278,6 +2322,10 @@ public class TMLModeling<E> {
         _ch.setPorts(_ch.getOriginPorts().get(0), new TMLPort("FORKPORTDESTINATION" + SEP1 + _ch.getName(), _ch.getReferenceObject()));
         _ch.removeComplexInformations();
 
+		//For security generation, provide the orignal tasks
+		_ch.originalOriginTasks = originTasks;
+		_ch.originalDestinationTasks = destTasks;
+		
         // Make the activity diagram of the fork task
         TMLStartState start = new TMLStartState("startOfFork", null);
         forkActivity.setFirst(start);
@@ -2442,7 +2490,14 @@ public class TMLModeling<E> {
 
     public void removeJoin(TMLChannel _ch, List<TMLChannel> _newChannels) {
         int i;
-
+    	ArrayList<TMLTask> originTasks = new ArrayList<TMLTask>();
+		ArrayList<TMLTask> destTasks = new ArrayList<TMLTask>();	
+		for (TMLTask task: _ch.getOriginTasks()){
+			originTasks.add(task);
+		}
+		for (TMLTask task: _ch.getDestinationTasks()){
+			destTasks.add(task);
+		}
         // Create the new task and its activity diagram
         TMLTask joinTask = new TMLTask("JOINTASK" + SEP1 + _ch.getName(), _ch.getReferenceObject(), null);
         TMLActivity joinActivity = joinTask.getActivityDiagram();
@@ -2458,6 +2513,8 @@ public class TMLModeling<E> {
             chans[i].setType(_ch.getType());
             chans[i].setMax(_ch.getMax());
             chans[i].setSize(_ch.getSize());
+            chans[i].originalOriginTasks = originTasks;
+			chans[i].originalDestinationTasks = destTasks;
             _newChannels.add(chans[i]);
         }
 
@@ -2471,6 +2528,8 @@ public class TMLModeling<E> {
         // Transform the original channel into a basic channel
         _ch.setTasks(joinTask, _ch.getDestinationTasks().get(0));
         _ch.setPorts(new TMLPort("JOINPORTORIGIN" + SEP1 + _ch.getName(), _ch.getReferenceObject()), _ch.getDestinationPorts().get(0));
+        _ch.originalOriginTasks = originTasks;
+		_ch.originalDestinationTasks = destTasks;
         _ch.removeComplexInformations();
 
         // Make the activity diagram of the fork task

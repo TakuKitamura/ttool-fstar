@@ -1743,6 +1743,7 @@ public class GTMLModeling {
             throw new MalformedTMLDesignException("Error(s) found in activity diagrams");
         }
     }
+
 //
 //    private String modifyActionString(String _input) {
 //        int index = _input.indexOf("++");
@@ -2591,6 +2592,7 @@ public class GTMLModeling {
 //            }
 //        }
 //    }
+
 
     public TMLMapping<TGComponent> translateToTMLMapping() {
         tmlm = new TMLModeling<>(true);
@@ -3472,7 +3474,7 @@ public class GTMLModeling {
         Vector<Vector<TGComponent>> taskss = new Vector<Vector<TGComponent>>();
         Vector<TMLCPrimitiveComponent> allcomp = new Vector<TMLCPrimitiveComponent>();
         int index;
-
+	//	System.out.println("nodes " + nodesToTakeIntoAccount);
         if (nodesToTakeIntoAccount == null) {
             components = tmlap.tmlap.getComponentList();
         } else {

@@ -40,75 +40,234 @@ package syscamstranslator;
 
 import java.util.LinkedList;
 
+import javax.swing.DefaultListModel;
+
 /**
+ * Class SysCAMSTBlockTDF
+ * Parameters of a SystemC-AMS block TDF
  * Creation: 19/05/2018
  * @version 1.0 19/05/2018
  * @author Irina Kit Yan LEE
+ * @version 1.1 06/08/2018
+ * @author Rodrigo CORTES PORTO
 */
 
 public class SysCAMSTBlockTDF extends SysCAMSTComponent {
-
-	private String blockTDFName;
-	private int period;
+	private String name;
+	private double period;
+	private String time;
 	private String processCode;
+	private DefaultListModel<String> listStruct;
+	private String nameTemplate;
+	private String typeTemplate;
+	private DefaultListModel<String> listTypedef;
 	
 	private SysCAMSTCluster cluster;
 	
 	private LinkedList<SysCAMSTPortTDF> portTDF;
 	private LinkedList<SysCAMSTPortConverter> portConverter;
+    private SysCAMSTPortConverter localPortConverter;
+    private int n;
+    private boolean isTimestepPropagated;
 	
-	public SysCAMSTBlockTDF(String _blockTDFName, int _period, String _processCode, SysCAMSTCluster _cluster) {
-		blockTDFName = _blockTDFName;
+	public SysCAMSTBlockTDF(String _name, double _period, String _time, String _processCode, DefaultListModel<String> _listStruct, String _nameTemplate, String _typeTemplate, DefaultListModel<String> _listTypedef, SysCAMSTCluster _cluster) {
+		name = _name;
 		period = _period;
+		time = _time;
 		processCode = _processCode;
+		listStruct = _listStruct;
+		nameTemplate = _nameTemplate;
+		typeTemplate = _typeTemplate;
+		listTypedef = _listTypedef;
 		cluster = _cluster;
+		portTDF = new LinkedList<SysCAMSTPortTDF>();
+		portConverter = new LinkedList<SysCAMSTPortConverter>();
+        n = 0;
+        isTimestepPropagated = false;
 	}
 
-	public int getPeriod() {
+	public String getName() {
+		return name;
+	}
+	
+	public double getPeriod() {
 		return period;
 	}
-
-	public void setPeriod(int _period) {
+    
+    public void setPeriod(double _period) {
 		period = _period;
+	}
+	
+	public String getTime() {
+		return time;
 	}
 
 	public String getProcessCode() {
 		return processCode;
 	}
 
-	public void setProcessCode(String _processCode) {
-		processCode = _processCode;
+	public DefaultListModel<String> getListStruct() {
+		return listStruct;
 	}
 
-	public String getBlockTDFName() {
-		return blockTDFName;
+	public String getNameTemplate() {
+		return nameTemplate;
 	}
 
-	public void setBlockTDFName(String _blockTDFName) {
-		blockTDFName = _blockTDFName;
+	public String getTypeTemplate() {
+		return typeTemplate;
+	}
+
+	public DefaultListModel<String> getListTypedef() {
+		return listTypedef;
 	}
 
 	public SysCAMSTCluster getCluster() {
 		return cluster;
 	}
 
-	public void setCluster(SysCAMSTCluster _cluster) {
-		cluster = _cluster;
+	public LinkedList<SysCAMSTPortTDF> getPortTDF(){
+		return portTDF;
 	}
 
-    public LinkedList<SysCAMSTPortTDF> getPortTDF(){
-    	return portTDF;
-    }
+	public void addPortTDF(SysCAMSTPortTDF tdf){
+		portTDF.add(tdf);
+	}
 
-    public void addPortTDF(SysCAMSTPortTDF tdf){
-    	portTDF.add(tdf);
+	public LinkedList<SysCAMSTPortConverter> getPortConverter(){
+		return portConverter;
+	}
+
+	public void addPortConverter(SysCAMSTPortConverter converter){
+		portConverter.add(converter);
+	}
+    
+    public boolean getIsTimestepPropagated() {
+        return isTimestepPropagated;
     }
     
-    public LinkedList<SysCAMSTPortConverter> getPortConverter(){
-    	return portConverter;
+    public void setIsTimestepPropagated() {
+        isTimestepPropagated = true;
     }
 
-    public void addPortConverter(SysCAMSTPortConverter converter){
-    	portConverter.add(converter);
+    public void syncTDFBlockDEBlock(double[] time_prev) throws SysCAMSValidateException {
+        double tp;
+        try{
+            for(int i = 0; i < portConverter.size(); i++) {
+                localPortConverter = portConverter.get(i);
+                if(localPortConverter.getOrigin() == 0) { //Input
+                    check_causality_in(time_prev);
+                } else if (localPortConverter.getOrigin() == 1) { //Output
+                    check_causality_out(time_prev);
+                }
+            }
+            //Increase number of times block has been executed
+            n++;
+        } catch (SysCAMSValidateException se){
+             throw new SysCAMSValidateException(se.getMessage());
+        }
     }
+    
+    private void check_causality_in(double[] time_prev_max) throws SysCAMSValidateException {
+        double time_now_min_tdf, time_now_max_tdf, time_tmp_tdf, time_tmp_de,
+                time_now_min_de, time_now_max_de;
+        double tm = 0.0;
+        double tp = 0.0;
+        int r = 1;
+        int d = 0;
+        int k = 1;
+        if(period > 0)
+            tm = period;
+        if(localPortConverter.getPeriod() > 0)
+            tp = localPortConverter.getPeriod();
+        if(localPortConverter.getRate() > 0)
+            r = localPortConverter.getRate();
+        if(localPortConverter.getDelay() > 0)
+            d = localPortConverter.getDelay();
+
+        time_now_min_tdf = (n*tm)+((k-1)*tp);
+        time_now_max_tdf = (n*tm)+((k-1)*tp);
+        time_now_min_de = (n*tm)+((k-1)*tp)-(d*tp);
+        time_now_max_de = (n*tm)+((k-1)*tp)-(d*tp);
+        
+        for (k = 1; k <= r; k++) {
+            time_tmp_tdf = (n*tm)+((k-1)*tp);
+            time_tmp_de = (n*tm)+((k-1)*tp)-(d*tp);
+            System.out.println("tmstmp_in_tdf: " + time_tmp_tdf);
+            System.out.println("tmstmp_in_de: " + time_tmp_de);
+            time_now_min_tdf = Math.min(time_tmp_tdf, time_now_min_tdf);
+            time_now_max_tdf = Math.max(time_tmp_tdf, time_now_max_tdf);
+            time_now_min_de = Math.min(time_tmp_de, time_now_min_de);
+            time_now_max_de = Math.max(time_tmp_de, time_now_max_de);
+            System.out.println("time_now_min_de: " + time_now_min_de);
+            System.out.println("time_now_max_de: " + time_now_max_de);
+            System.out.println("time_now_min_tdf: " + time_now_min_tdf);
+            System.out.println("time_now_max_tdf: " + time_now_max_tdf);
+        }
+        
+        System.out.println("time_prev_max_out: " + time_prev_max[1]);
+        if(time_now_min_tdf < time_prev_max[1]) {
+            localPortConverter.setDelay((int)Math.ceil((time_prev_max[1]-time_now_min_de)/tp) + d);
+            localPortConverter.setRecompute(true);
+            throw new SysCAMSValidateException("Timestamp of previous write port executed module is: " + time_prev_max[1]
+                 + " and current timestamp is: " + time_now_min_tdf + ".\n"
+                 + "Suggested delay in port \"" + localPortConverter.getName() + "\": " + (Math.ceil((time_prev_max[1]-time_now_min_tdf)/tp) + d));
+        }
+        time_prev_max[0] = Double.valueOf(Math.max(time_prev_max[0],time_now_max_de));
+        System.out.println("New time_prev_max_in: " + time_prev_max[0]);
+    }
+    
+    private void check_causality_out(double[] time_prev_max) throws SysCAMSValidateException {
+        double time_now_min_tdf, time_now_max_tdf, time_tmp_tdf, time_tmp_de,
+                time_now_min_de, time_now_max_de;
+        double tm = 0.0;
+        double tp = 0.0;
+        int r = 1;
+        int d = 0;
+        int k = 1;
+        if(period > 0)
+            tm = period;
+        if(localPortConverter.getPeriod() > 0)
+            tp = localPortConverter.getPeriod();
+        if(localPortConverter.getRate() > 0)
+            r = localPortConverter.getRate();
+        if(localPortConverter.getDelay() > 0)
+            d = localPortConverter.getDelay();
+
+        time_now_min_tdf = (n*tm)+((k-1)*tp);
+        time_now_max_tdf = (n*tm)+((k-1)*tp);
+        time_now_min_de = (n*tm)+((k-1)*tp)+(d*tp);
+        time_now_max_de = (n*tm)+((k-1)*tp)+(d*tp);
+        
+        for (k = 1; k <= r; k++) {
+            time_tmp_tdf = (n*tm)+((k-1)*tp);
+            time_tmp_de = (n*tm)+((k-1)*tp)+(d*tp);;
+            System.out.println("tmstmp_out_tdf: " + time_tmp_tdf);
+            System.out.println("tmstmp_out_de: " + time_tmp_de);
+            time_now_min_tdf = Math.min(time_tmp_tdf, time_now_min_tdf);
+            time_now_max_tdf = Math.max(time_tmp_tdf, time_now_max_tdf);
+            time_now_min_de = Math.min(time_tmp_de, time_now_min_de);
+            time_now_max_de = Math.max(time_tmp_de, time_now_max_de);
+            System.out.println("time_now_min_de: " + time_now_min_de);
+            System.out.println("time_now_max_de: " + time_now_max_de);
+            System.out.println("time_now_min_tdf: " + time_now_min_tdf);
+            System.out.println("time_now_max_tdf: " + time_now_max_tdf);
+        }
+        
+        System.out.println("time_prev_max_in: " + time_prev_max[0]);
+        if(time_now_min_de < time_prev_max[0]) {
+            localPortConverter.setDelay((int)Math.ceil((time_prev_max[0]-time_now_min_de)/tp) + d);
+            localPortConverter.setRecompute(true);
+            throw new SysCAMSValidateException("Timestamp of previous read port executed module is: " + time_prev_max[0]
+                 + " and current timestamp is: " + time_now_min_de + ".\n"
+                 + "Suggested delay in port " + localPortConverter.getName() + ": " + (Math.ceil((time_prev_max[0]-time_now_min_de)/tp) + d));
+        }
+        time_prev_max[1] = Double.valueOf(Math.max(time_prev_max[1],time_now_max_tdf));
+        System.out.println("New time_prev_max_out: " + time_prev_max[1]);
+    }
+    
+    public void setN(int _n) {
+        n = _n;
+    }
+
 }
