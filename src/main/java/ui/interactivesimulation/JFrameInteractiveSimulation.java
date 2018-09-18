@@ -2863,15 +2863,25 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	       //
 	        List<Integer> minTimes = new ArrayList<Integer>();
 	        for (int time1 : times1){
+				int match = Integer.MAX_VALUE;
 				//Find the first subsequent transaction
 	            int time = Integer.MAX_VALUE;
 	            for (int time2: times2){
-   		        	int diff = Integer.valueOf(time2) - Integer.valueOf(time1);
+
+   		        	int diff = time2 - time1;
                     if (diff < time && diff >=0){
                     	time=diff;
+						match = time2;
                     }
                 }
+				try {
+				if (times2.contains(match)){
+					times2.remove(Integer.valueOf(match));
+					}
+				} catch (Exception e){
+				}
                 if (time!=Integer.MAX_VALUE){
+
             		minTimes.add(time);
             	}
             }
