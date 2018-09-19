@@ -2783,7 +2783,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                 FileOutputStream fos = new FileOutputStream(libfile);
                 fos.write(data.getBytes());
                 fos.close();
-                JOptionPane.showMessageDialog(frame, "Modeling was correctly saved under a TURTLE library named " + libfile.getName(), "Saving", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Modeling was correctly saved under a TTool library named " + libfile.getName(), "Saving", JOptionPane.INFORMATION_MESSAGE);
                 return;
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(frame, "File could not be saved because " + e.getMessage(), "File Error", JOptionPane.INFORMATION_MESSAGE);
