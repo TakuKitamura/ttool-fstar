@@ -208,6 +208,9 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
         // Draw inner rectangle
         //graph.setColor(ColorManager.AVATAR_BLOCK);
+
+        //TraceManager.addDev("type stereotype=" + typeStereotype);
+
         graph.setColor(BLOCK_TYPE_COLOR.get(typeStereotype));
         graph.fillRect(this.x + 1, this.y + 1, this.width - 1, this.height - 1);
         graph.setColor(c);
@@ -234,6 +237,8 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
 
         String ster = BLOCK_TYPE_STR.get(typeStereotype);
+
+        //TraceManager.addDev("My ster=" + ster);
 
         if (this.rescaled && !this.tdp.isScaled()) {
             this.rescaled = false;
@@ -700,18 +705,22 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
                 int rgb = dialog.getColor();
 
-                TraceManager.addDev("RGBColor:" + rgb + " vs default color:" + ColorManager.AVATAR_BLOCK.getRGB());
+                //TraceManager.addDev("RGBColor:" + rgb + " vs default color:" + ColorManager.AVATAR_BLOCK.getRGB());
 
                 addStereotype(s, rgb);
 
-                TraceManager.addDev("My stereotype=" + BLOCK_TYPE_STR.get(typeStereotype) + " color=" + BLOCK_TYPE_COLOR.get(typeStereotype).getRGB());
+                //TraceManager.addDev("My stereotype=" + BLOCK_TYPE_STR.get(typeStereotype) + " color=" + BLOCK_TYPE_COLOR.get(typeStereotype).getRGB());
+
 
 
                 if (isCryptoBlock()) {
                     addCryptoElements();
                 } else {
+                    int tmpSter = typeStereotype;
                     removeCryptoElements();
+                    typeStereotype = tmpSter;
                 }
+
 
                 return true;
 
@@ -1146,17 +1155,21 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
         // Found stereotype
         if (index != -1) {
+            TraceManager.addDev("Found stereotype");
             typeStereotype = index;
             if (index > 0) {
+                TraceManager.addDev("Setting new color");
                 BLOCK_TYPE_COLOR.set(index, new Color(rgb));
             }
             return false;
 
             // Must add a new stereotype
         } else {
+            TraceManager.addDev("No stereotype found: adding" + s + " with color " + rgb);
             BLOCK_TYPE_STR.add(s);
             BLOCK_TYPE_COLOR.add(new Color(rgb));
             typeStereotype = BLOCK_TYPE_STR.size()-1;
+            TraceManager.addDev("Stereotype =" + BLOCK_TYPE_STR.get(typeStereotype) + " typestereotype=" + typeStereotype);
             return true;
         }
     }
