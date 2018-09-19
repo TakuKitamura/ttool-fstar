@@ -1043,7 +1043,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                                 //
                                 s = elt.getAttribute("data");
                                 String tmp3 = elt.getAttribute("color");
-                                TraceManager.addDev("stereotype=" + s + " color=" + tmp3);
+                                //TraceManager.addDev("stereotype=" + s + " color=" + tmp3);
                                 int rgb = ColorManager.AVATAR_REQUIREMENT_TOP.getRGB();
                                 try {
                                     rgb = Integer.decode(tmp3).intValue();
@@ -1143,7 +1143,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
     }
 
     public boolean addStereotype(String s, int rgb) {
-        TraceManager.addDev("Adding stereotype for " + s + " with color " + rgb);
+        //TraceManager.addDev("Adding stereotype for " + s + " with color " + rgb);
         int index = -1;
         String sLower = s.toLowerCase();
         for (int i=0; i<BLOCK_TYPE_STR.size(); i++) {
@@ -1155,21 +1155,21 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
         // Found stereotype
         if (index != -1) {
-            TraceManager.addDev("Found stereotype");
+            //TraceManager.addDev("Found stereotype");
             typeStereotype = index;
             if (index > 0) {
-                TraceManager.addDev("Setting new color");
+                //TraceManager.addDev("Setting new color");
                 BLOCK_TYPE_COLOR.set(index, new Color(rgb));
             }
             return false;
 
             // Must add a new stereotype
         } else {
-            TraceManager.addDev("No stereotype found: adding" + s + " with color " + rgb);
+            //TraceManager.addDev("No stereotype found: adding" + s + " with color " + rgb);
             BLOCK_TYPE_STR.add(s);
             BLOCK_TYPE_COLOR.add(new Color(rgb));
             typeStereotype = BLOCK_TYPE_STR.size()-1;
-            TraceManager.addDev("Stereotype =" + BLOCK_TYPE_STR.get(typeStereotype) + " typestereotype=" + typeStereotype);
+            //TraceManager.addDev("Stereotype =" + BLOCK_TYPE_STR.get(typeStereotype) + " typestereotype=" + typeStereotype);
             return true;
         }
     }
