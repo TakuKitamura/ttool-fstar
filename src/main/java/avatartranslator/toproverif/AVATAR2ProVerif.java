@@ -349,7 +349,9 @@ public class AVATAR2ProVerif implements AvatarTranslator {
             return null;
 
         if (_guard instanceof AvatarSimpleGuardMono) {
+            //TraceManager.addDev("SimpleGuardMono:" + _guard);
             String term = AVATAR2ProVerif.translateTerm (((AvatarSimpleGuardMono) _guard).getTerm (), attributeCmp);
+            //TraceManager.addDev("guard/ term=" + term);
             if (term != null)
                 return term + " = " + TRUE;
 
@@ -357,13 +359,19 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         }
 
         if (_guard instanceof AvatarSimpleGuardDuo) {
+            //TraceManager.addDev("SimpleGuardDuo");
             String delim = null;
             String termA = AVATAR2ProVerif.translateTerm (((AvatarSimpleGuardDuo) _guard).getTermA (), attributeCmp);
             String termB = AVATAR2ProVerif.translateTerm (((AvatarSimpleGuardDuo) _guard).getTermB (), attributeCmp);
+
             if (((AvatarSimpleGuardDuo) _guard).getBinaryOp ().equals ("=="))
                 delim = "=";
+            /*else if (((AvatarSimpleGuardDuo) _guard).getBinaryOp ().equals ("<"))
+                delim = "<";*/
             else if (((AvatarSimpleGuardDuo) _guard).getBinaryOp ().equals ("!="))
                 delim = "<>";
+            /*else if (((AvatarSimpleGuardDuo) _guard).getBinaryOp ().equals (">"))
+                delim = ">";*/
 
             if (termA != null && termB != null && delim != null)
                 return termA + " " + delim + " " + termB;
@@ -372,6 +380,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         }
 
         if (_guard instanceof AvatarUnaryGuard) {
+            //TraceManager.addDev("UnaryGuard");
             String unary = ((AvatarUnaryGuard) _guard).getUnaryOp ();
             AvatarGuard guard = ((AvatarUnaryGuard) _guard).getGuard ();
 
@@ -392,6 +401,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         }
 
         if (_guard instanceof AvatarBinaryGuard) {
+            //TraceManager.addDev("BinaryGuard");
             String delim = ((AvatarBinaryGuard) _guard).getBinaryOp ();
             AvatarGuard guardA = ((AvatarBinaryGuard) _guard).getGuardA ();
             AvatarGuard guardB = ((AvatarBinaryGuard) _guard).getGuardB ();
@@ -411,6 +421,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
         }
 
         if (_guard instanceof AvatarConstantGuard) {
+            //TraceManager.addDev("ConstantGuard");
             AvatarConstantGuard constant = (AvatarConstantGuard) _guard;
             if (constant.getConstant () == AvatarConstant.TRUE)
                 return "true";
@@ -1169,6 +1180,7 @@ public class AVATAR2ProVerif implements AvatarTranslator {
 
         // Check if the transition is guarded
         if (_asme.isGuarded() && !arg.lastASME.hasElseChoiceType1 ()) {
+            TraceManager.addDev("Analyzing GUARD: " + _asme.getGuard() + " real guard=" + _asme.getGuard().getRealGuard (arg.lastASME));
             String tmp = AVATAR2ProVerif.translateGuard(_asme.getGuard().getRealGuard (arg.lastASME), arg.attributeCmp);
             if (tmp != null) {
                 TraceManager.addDev("|    |    transition is guarded by " + tmp);

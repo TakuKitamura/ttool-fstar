@@ -177,7 +177,7 @@ public abstract class AvatarGuard {
             }
         }
 
-        for (String delim: new String[] {"==", "!="}) {
+        for (String delim: new String[] {"==", "!=", "<", ">"}) {
             int indexBinaryOp = sane.indexOf (delim);
             if (indexBinaryOp != -1) {
                 AvatarTerm firstTerm = AvatarTerm.createFromString (block, sane.substring (0, indexBinaryOp));
