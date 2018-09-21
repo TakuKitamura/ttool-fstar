@@ -91,6 +91,7 @@ Modifications} & \textbf{Sections Modified} \\
 1.0 & 17/10/2016 & First draft &  \\ 
 1.1 & 10/02/2017 & Added Eclipse IDE development + tests & All \\ 
 1.2 & 11/02/2017 & Added more info on tests & Tests \\ 
+1.3 & 00/00/2018 & Update and added GUI development & All\\
 \hline
 \end{tabular}
 \end{adjustbox}
@@ -144,7 +145,8 @@ as well as the testing, building and installation procedures.
 
 TTool sources are hosted on the Gitlab server of Telecom ParisTech under the
 group \textit{mbe}\textit{-tools} and project \textit{TTool}. The Gitlab project
-can be accessed via . Login must be performed using Shibboleth as shown in
+can be accessed via \url{https://gitlab.telecom-paristech.fr/users/sign_in}. 
+Login must be performed using Shibboleth as shown in
 figure~\ref{fig:image1}, using the credentials from your institution if it is a
 member of the Federation Education Recherche (\url{https://services.renater.fr/federation/participants/idp}). Otherwise, please ask us for an account.
 
@@ -158,7 +160,8 @@ member of the Federation Education Recherche (\url{https://services.renater.fr/f
  
 \subsection{Basic Sources Management}
 
-The address to access the sources is . For the time being and until further notice, we will keep using a centralized development process, like it was the case for Subversion. In this process, each developer first obtains a clone of the master remote repository. For this, go to the directory where the sources are to be downloaded and issue the following command: \\
+The address to access the sources is \url{https://gitlab.telecom-paristech.fr/mbe-tools/TTool}.
+For the time being and until further notice, we will keep using a centralized development process, like it was the case for Subversion. In this process, each developer first obtains a clone of the master remote repository. For this, go to the directory where the sources are to be downloaded and issue the following command: \\
 
 
 \begin{verbatim}
@@ -197,7 +200,7 @@ important so that other developers can understand why the changes were made.
 Ideally, the issue number should be mentioned within the modified code and
 commit messages.  \\
 
-\section{Development with Text Editor (emacs, vi) and Make}
+\section{Development with Text Editor (emacs, vim) and Make}
 
 The text editor of your choice can be used to edit the files of TTool. Yet, you must be sure that the correct indentation is respected. Use \textbf{4 spaces for each indentation level}.\\
 
@@ -206,21 +209,21 @@ Also, don't forget to insert your name at the top of the file in the authors lis
 The main Makefile can be used to compile the source files of TTool, and to generate the jar libraries in bin/.
 To compile TTool, do as follows, from the top directory of TTool:
 \begin{verbatim}
-$ make ttool
+42sh$ make 1ttool
 \end{verbatim}
 
 Other compilation targets can be obtained with:
 \begin{verbatim}
-$ make help
+42sh$ make help
 \end{verbatim}
 or:
 \begin{verbatim}
-$ make
+42sh$ make
 \end{verbatim}
 In particular, compiling the sources of all subprojects can be done with the
 \textit{all} target:
   \begin{verbatim}
-$ make all
+42sh$ make all
 \end{verbatim}
 
 
