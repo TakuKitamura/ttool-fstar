@@ -52,11 +52,11 @@ public class AvatarConstant extends AvatarTerm {
     public static final AvatarConstant FALSE = new AvatarConstant ("false", null);
 
     public boolean isLeftHand (){
-	return false;
+    	return false;
     }
 
     public AvatarConstant (String _name, Object _referenceObject) {
-        super (_name, _referenceObject);
+        super(_name, _referenceObject);
     }
 
     @Override
