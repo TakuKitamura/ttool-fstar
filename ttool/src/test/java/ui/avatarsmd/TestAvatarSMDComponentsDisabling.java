@@ -35,29 +35,6 @@ public class TestAvatarSMDComponentsDisabling extends AbstractUITest {
         final AvatarSMDChoice element = new AvatarSMDChoice( 500, 500, 0, 1400, 0, 1900, true, null, diagramPanel );
         
         assertFalse( element.canBeDisabled() );
-        
-        // TODO
-//        element.setGuard( Boolean.TRUE.toString(), 0 );
-//        TGComponent guard = element.getInternalTGComponent( 0 );
-//        assertTrue( guard.canBeDisabled() );
-//        
-//        guard.setEnabled( false );
-//        assertFalse( guard.isEnabled() );
-//
-//        guard.setEnabled( true );
-//        assertTrue( guard.isEnabled() );
-//
-//        element.setGuard( null, 0 );
-//        guard = element.getInternalTGComponent( 0 );
-//        assertFalse( guard.canBeDisabled() );
-//
-//        element.setGuard( "", 0 );
-//        guard = element.getInternalTGComponent( 0 );
-//        assertFalse( guard.canBeDisabled() );
-//
-//        element.setGuard( AvatarADChoice.EMPTY_GUARD_TEXT, 0 );
-//        guard = element.getInternalTGComponent( 0 );
-//        assertFalse( guard.canBeDisabled() );
     }
 	
 	@Test
