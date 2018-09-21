@@ -1921,7 +1921,7 @@ public class AvatarDesignPanelTranslator {
     								final AvatarSMDConnector connector ) {
     	final AvatarStateMachineOwner block = transition.getBlock();
     	final AvatarSpecification spec = block.getAvatarSpecification();
-    	final String probabilityStr = modifyString( connector.getEffectiveProbability() );
+    	final String probabilityStr = connector.getEffectiveProbability() ;
         final int error = AvatarSyntaxChecker.isAValidProbabilityExpr( spec, block, probabilityStr );
         
         if ( error < 0 ) {
@@ -1929,6 +1929,7 @@ public class AvatarDesignPanelTranslator {
         }
 
         if ( probabilityStr != null && !probabilityStr.isEmpty() ) {
+        	//TraceManager.addDev("Probability=" + probabilityStr);
         	transition.setProbability( Double.parseDouble( probabilityStr ) );
         }
     }
