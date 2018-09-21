@@ -48,10 +48,10 @@ action_on_signal:loadPage ID=102 / top level operator
 Interrupted ID=103 / top level operator
  nexts= 0:avatar transition/ ID=130 
 avatar transition ID=104 / top level operator
- value:Transition (guard=not((pageid<doc__nbOfPages)and(not(memory__index1 == pageid))and(not(memory__index2 == pageid))and(not(memory__index3 == pageid))), ...) weight:1.0
+ value:Transition (guard=not((pageid < doc__nbOfPages)and(not(memory__index1 == pageid))and(not(memory__index2 == pageid))and(not(memory__index3 == pageid))), ...) weight:1.0
  nexts= 0:WaitingForPageToLoad/ ID=81 
 weight=1.0
-guard not((pageid<doc__nbOfPages)and(not(memory__index1 == pageid))and(not(memory__index2 == pageid))and(not(memory__index3 == pageid))) / 
+guard not((pageid < doc__nbOfPages)and(not(memory__index1 == pageid))and(not(memory__index2 == pageid))and(not(memory__index3 == pageid))) / 
 avatar transition ID=105 / top level operator
  value:Empty transition weight:1.0
  nexts= 0:WaitingForPageToLoad/ ID=81 
@@ -186,7 +186,7 @@ avatar transition ID=174 / top level operator
 weight=1.0
 
 avatar transition ID=175 / top level operator
- value:Transition (guard=(pageid<doc__nbOfPages)and(not(memory__index1 == pageid))and(not(memory__index2 == pageid))and(not(memory__index3 == pageid)), ...) weight:1.0
+ value:Transition (guard=(pageid < doc__nbOfPages)and(not(memory__index1 == pageid))and(not(memory__index2 == pageid))and(not(memory__index3 == pageid)), ...) weight:1.0
  nexts= 0:Prefetching/ ID=89 
 weight=1.0
-guard (pageid<doc__nbOfPages)and(not(memory__index1 == pageid))and(not(memory__index2 == pageid))and(not(memory__index3 == pageid)) / 
+guard (pageid < doc__nbOfPages)and(not(memory__index1 == pageid))and(not(memory__index2 == pageid))and(not(memory__index3 == pageid)) / 

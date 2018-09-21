@@ -1,6 +1,6 @@
 State machine Id=3
 start ID=41 / top level operator
- nexts= 0:avatar transition/ ID=59 
+ nexts= 0:avatar transition/ ID=60 
 main ID=42 / top level operator
  nexts= 0:avatar transition/ ID=54 1:avatar transition/ ID=56 
 action_on_signal:putCoin ID=43 / top level operator
@@ -23,11 +23,11 @@ avatar transition ID=55 / top level operator
 weight=1.0
 
 avatar transition ID=56 / top level operator
- value:Transition (guard=nbOfCoins>0, ...) weight:1.0
+ value:Transition (guard=nbOfCoins > 0, ...) weight:1.0
  nexts= 0:action_on_signal/ ID=43 
 weight=1.0
-guard nbOfCoins>0 / 
-avatar transition ID=59 / top level operator
+guard nbOfCoins > 0 / 
+avatar transition ID=60 / top level operator
  value:Transition (contentOfWallet (nbOfCoins), ...) weight:1.0
  nexts= 0:main/ ID=42 
 weight=1.0

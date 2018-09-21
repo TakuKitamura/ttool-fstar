@@ -1,56 +1,56 @@
 State machine Id=15
-start ID=71 / top level operator
+start ID=72 / top level operator
  nexts= 0:avatar transition/ ID=93 
-WaitingForFirstCoin ID=72 / top level operator
+WaitingForFirstCoin ID=73 / top level operator
  nexts= 0:avatar transition/ ID=92 
-action_on_signal:getCoin ID=73 / top level operator
+action_on_signal:getCoin ID=74 / top level operator
  nexts= 0:avatar transition/ ID=86 
-WaitingForSecondCoin ID=74 / top level operator
+WaitingForSecondCoin ID=75 / top level operator
  nexts= 0:avatar transition/ ID=84 1:avatar transition/ ID=85 
-ejectState ID=75 / top level operator
- nexts= 0:avatar transition/ ID=78 
-action_on_signal:ejectCoin ID=76 / top level operator
- nexts= 0:avatar transition/ ID=80 
-action_on_signal:getCoin ID=77 / top level operator
+ejectState ID=76 / top level operator
  nexts= 0:avatar transition/ ID=79 
-avatar transition ID=78 / top level operator
- value:Empty transition weight:1.0
- nexts= 0:action_on_signal/ ID=76 
-weight=1.0
-
+action_on_signal:ejectCoin ID=77 / top level operator
+ nexts= 0:avatar transition/ ID=81 
+action_on_signal:getCoin ID=78 / top level operator
+ nexts= 0:avatar transition/ ID=80 
 avatar transition ID=79 / top level operator
  value:Empty transition weight:1.0
- nexts= 0:WaitingForFirstCoin/ ID=72 
+ nexts= 0:action_on_signal/ ID=77 
 weight=1.0
 
 avatar transition ID=80 / top level operator
+ value:Empty transition weight:1.0
+ nexts= 0:WaitingForFirstCoin/ ID=73 
+weight=1.0
+
+avatar transition ID=81 / top level operator
  value:Transition (nbOfCoins = 0, ...) weight:1.0
- nexts= 0:WaitingForFirstCoin/ ID=72 
+ nexts= 0:WaitingForFirstCoin/ ID=73 
 weight=1.0
 nbOfCoins = 0 / 
 avatar transition ID=84 / top level operator
  value:Transition (delay=(coinDelay, ), ...) weight:1.0
- nexts= 0:ejectState/ ID=75 
+ nexts= 0:ejectState/ ID=76 
 minDelay=coinDelay maxDelay=coinDelay
 weight=1.0
 
 avatar transition ID=85 / top level operator
  value:Empty transition weight:1.0
- nexts= 0:action_on_signal/ ID=77 
+ nexts= 0:action_on_signal/ ID=78 
 weight=1.0
 
 avatar transition ID=86 / top level operator
  value:Transition (nbOfCoins = nbOfCoins+x, ...) weight:1.0
- nexts= 0:WaitingForSecondCoin/ ID=74 
+ nexts= 0:WaitingForSecondCoin/ ID=75 
 weight=1.0
 nbOfCoins = nbOfCoins+x / 
 avatar transition ID=92 / top level operator
  value:Empty transition weight:1.0
- nexts= 0:action_on_signal/ ID=73 
+ nexts= 0:action_on_signal/ ID=74 
 weight=1.0
 
 avatar transition ID=93 / top level operator
  value:Empty transition weight:1.0
- nexts= 0:WaitingForFirstCoin/ ID=72 
+ nexts= 0:WaitingForFirstCoin/ ID=73 
 weight=1.0
 

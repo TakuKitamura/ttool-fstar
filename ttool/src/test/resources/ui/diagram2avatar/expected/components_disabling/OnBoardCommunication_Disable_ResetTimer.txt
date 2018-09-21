@@ -32,10 +32,10 @@ action_on_signal:INconconf ID=48 / top level operator
 CONNECTED ID=49 / top level operator
  nexts= 
 avatar transition ID=50 / top level operator
- value:Transition (guard=not(retransmissionCounter<maxRetransmissions), ...) weight:1.0
+ value:Transition (guard=not(retransmissionCounter < maxRetransmissions), ...) weight:1.0
  nexts= 0:action_on_signal/ ID=44 
 weight=1.0
-guard not(retransmissionCounter<maxRetransmissions) / 
+guard not(retransmissionCounter < maxRetransmissions) / 
 avatar transition ID=51 / top level operator
  value:Empty transition weight:1.0
  nexts= 0:choice__0/ ID=43 
@@ -92,10 +92,10 @@ avatar transition ID=64 / top level operator
 weight=1.0
 
 avatar transition ID=65 / top level operator
- value:Transition (guard=retransmissionCounter<maxRetransmissions, ...) weight:1.0
+ value:Transition (guard=retransmissionCounter < maxRetransmissions, ...) weight:1.0
  nexts= 0:SEND/ ID=38 
 weight=1.0
-retransmissionCounter = retransmissionCounter+1 / guard retransmissionCounter<maxRetransmissions / 
+retransmissionCounter = retransmissionCounter+1 / guard retransmissionCounter < maxRetransmissions / 
 avatar transition ID=74 / top level operator
  value:Empty transition weight:1.0
  nexts= 0:action_on_signal/ ID=45 
