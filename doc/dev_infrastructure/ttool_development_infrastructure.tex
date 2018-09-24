@@ -491,7 +491,7 @@ functionalities globally similar to Eclipse.
 Download IntelliJ IDEA here: \url{https://www.jetbrains.com/idea/}.
 
 Unzip IntelliJ folder where you want to keep the executable. Launch it by using
-the \texttt{idea.sh} script under the \texttt{bin} folder. Click on \emph{Open}
+the \textbf{\texttt{idea.sh}} script under the \textbf{\texttt{bin}} folder. Click on \textbf{\emph{Open}}
 and navigate to the root of the TTool git repository.
 
 \subsection{The IDE window layout}
@@ -525,8 +525,8 @@ by clicking on the icon on the lower-left side of the IntelliJ window.
 
 IntelliJ integrates a debugger that is helpful to find some bugs. You can either
 launch TTool in debug mode by clicking on the bug icon in the right part of the
-navigation bar when the \emph{TTool} configuration is selected, or debug a
-specific test by selecting \emph{debug} in the drop-down menu that appears when
+navigation bar when the \textbf{\emph{TTool} configuration} is selected, or debug a
+specific test by selecting \textbf{\emph{debug}} in the drop-down menu that appears when
 clicking on the arrow for this test.
 
 You can add breakpoints by clicking in the editor's left margin. You can the
@@ -540,13 +540,13 @@ see how an expression evaluates, resume the program, execute step-by-step, etc.
 \label{sec:intellij:subprojects}
 
 As described in section \ref{sec:code_orga}, TTool is composed of multiple
-sub-projects. In IntelliJ, this is achieved by using \emph{modules}. You can see
-the existing modules in the \emph{File -> Project structure...} menu. On the
-left pane, click on \emph{Modules}. In particular, the \texttt{shared} module
-consists of all the code used by other modules and the \texttt{ttool} module is
+sub-projects. In IntelliJ, this is achieved by using \textbf{\emph{modules}}. You can see
+the existing modules in the \textbf{\emph{File -> Project structure...}} menu. On the
+left pane, click on \textbf{\emph{Modules}}. In particular, the \textbf{\texttt{shared} module }
+consists of all the code used by other modules and the \textbf{\texttt{ttool} module} is
 the main TTool application.
 
-For each of these modules, you can add \emph{content roots} (path that will
+For each of these modules, you can add \textbf{\emph{content roots}} (path that will
 contain sub-folders for sources, tests, resources and test resources). Then you
 can select a sub-folder for a content root and mark it either as a source, test,
 resource or test resource folder.
@@ -560,7 +560,7 @@ Finally, you can add dependencies in the third tab. This is useful in particular
 if a sub-project requires an external library.
 
 In the project structure window, on the left pane, you can select
-\emph{Artifacts} to see the final results that can be built from the application
+\textbf{\emph{Artifacts}} to see the final results that can be built from the application
 (the \texttt{ttool.jar} file for instance). As of today (February 2018), these
 artifacts are:
 \begin{itemize}
@@ -576,7 +576,7 @@ variable) that are
 visible in the editor and by enabling to automatically correct them. These
 warnings have different levels (error, warning, weak warning, etc.) and they are
 fully configurable. In order to configure them, you can click on the icon at the
-extreme right of the status bar and click on \emph{configure inspections}. You
+extreme right of the status bar and click on \textbf{\emph{configure inspections}}. You
 can choose which inspection should be enabled and which warning level should be
 raised when code does not follow these inspections. In order to provide a
 common coding standard among TTool developers, the configuration of these
@@ -585,8 +585,9 @@ modify this profile without asking other developers.
 
 Similarly to these warnings, IntelliJ enables to harmonize code style by
 defining a profile that is shared between all developers. To see the code style
-options, go to \emph{File -> Settings} and navigate to \emph{Editor -> Code
-Style}. As for warnings, do not modify this shared profile except if you know
+options, go to \textbf{\emph{File -> Settings}} and navigate to
+ \textbf{\emph{Editor -> CodeStyle}}. 
+As for warnings, do not modify this shared profile except if you know
 what you are doing.
 
 Finally, IntelliJ enables to correct code style issues and some warnings
@@ -654,7 +655,7 @@ In particular, developers should try to:
         between a function name and the following parentheses.
 \end{itemize}
 
-Here is an example code with correct formatting:
+Here is an example code with correct formatting : \\
 
 \begin{lstlisting}[showspaces=true, language=java, commentstyle=\color{pgreen},
 keywordstyle=\color{pblue}, stringstyle=\color{pred}, basicstyle=\ttfamily]
