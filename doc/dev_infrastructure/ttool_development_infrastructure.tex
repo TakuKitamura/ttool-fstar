@@ -202,14 +202,14 @@ commit messages.  \\
 
 \section{Development with Text Editor (emacs, vim) and Make}
 
-The text editor of your choice can be used to edit the files of TTool. Yet, you must be sure that the correct indentation is respected. Use \textbf{4 spaces for each indentation level}.\\
+The text editor of your choice can be used to edit the files of TTool. Yet, you must be sure that the correct indentation is respected. Use \textbf{4 spaces for each indentation level} and refer yourself to the \textbf{Coding Instruction} (\ref{sec:code_info}) .\\
 
 Also, don't forget to insert your name at the top of the file in the authors list.\\
 
 The main Makefile can be used to compile the source files of TTool, and to generate the jar libraries in bin/.
 To compile TTool, do as follows, from the top directory of TTool:
 \begin{verbatim}
-42sh$ make 1ttool
+42sh$ make ttool
 \end{verbatim}
 
 Other compilation targets can be obtained with:
@@ -222,10 +222,9 @@ or:
 \end{verbatim}
 In particular, compiling the sources of all subprojects can be done with the
 \textit{all} target:
-  \begin{verbatim}
+\begin{verbatim}
 42sh$ make all
 \end{verbatim}
-
 
 
 \section{Development with Eclipse}
@@ -235,7 +234,7 @@ Eclipse is a well-known Integrated Development Environment (IDE) providing many 
 \subsection{Installing and Configuring Eclipse}
 
 Download Eclipse IDE for Java developers here: \\
-\url{http://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/neon2}
+\url{http://www.eclipse.org/downloads/packages/release/photon/r/eclipse-ide-java-developers}
 \\
 
 Unzip the package and launch the eclipse executable. For developing C++
@@ -599,7 +598,7 @@ commands.
 Here are gathered all tricks on how TTool source codes are organized, and what function is coded where, and also how to extend TTool, e.g. adding a new diagram.
 
 \subsection{Coding Instructions}
-
+\label{sec:code_info}
 \subsubsection{Best practices}
 
 TTool is a constantly evolving project with more or less experimental parts. As
