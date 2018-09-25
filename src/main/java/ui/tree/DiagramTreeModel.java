@@ -166,6 +166,10 @@ public class DiagramTreeModel implements TreeModel {
                 return false;
             }
 
+            if (node instanceof SimulationTraceTree) {
+                return false;
+            }
+
             if (node instanceof Invariant) {
                 return false;
             }

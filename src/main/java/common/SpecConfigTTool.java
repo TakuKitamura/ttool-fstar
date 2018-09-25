@@ -188,7 +188,7 @@ public class SpecConfigTTool {
         AVATARExecutableSoclibCodeCompileCommand = ConfigurationTTool.AVATARExecutableSoclibCodeCompileCommand.replace(ConfigurationTTool.AVATARMPSoCCodeDirectory, AVATARMPSoCCompileCommand);
         AVATARExecutableSoclibCodeExecuteCommand = ConfigurationTTool.AVATARExecutableSoclibCodeExecuteCommand.replace(ConfigurationTTool.AVATARMPSoCCodeDirectory, AVATARMPSoCCompileCommand);
         AVATARExecutableSoclibCodeTraceCommand = ConfigurationTTool.AVATARExecutableSoclibCodeTraceCommand.replace(ConfigurationTTool.AVATARMPSoCCodeDirectory, AVATARMPSoCCompileCommand);
-        ExternalCommand1 = ConfigurationTTool.ExternalCommand1.replace(ConfigurationTTool.VCDPath, SpecConfigTTool.VCDPath);
+        //ExternalCommand1 = ConfigurationTTool.ExternalCommand1.replace(ConfigurationTTool.VCDPath, SpecConfigTTool.VCDPath);
     }
 
     public static void setBasicConfig(boolean systemcOn) {
@@ -286,7 +286,7 @@ public class SpecConfigTTool {
         try {
             Element elt = (Element) (nl.item(0));
             lastVCD = elt.getAttribute("data");
-            ExternalCommand1 = "gtkwave " + lastVCD;
+           // ExternalCommand1 = "gtkwave " + lastVCD;
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
         }

@@ -41,6 +41,7 @@ package ui.tree;
 
 //import java.awt.*;
 
+import common.*;
 import translator.CheckingError;
 import tmltranslator.TMLCheckingError;
 import ui.*;
@@ -89,10 +90,15 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
     protected JMenuItem jmiRefusalGraph;
     protected JMenuItem jmiRemove;
     protected JMenuItem jmiShowInFinder;
+    protected JMenuItem jmiShowST;
+    protected JMenuItem jmiShowInFinderST;
     protected JPopupMenu popupTree;
+    protected JPopupMenu popupTreeST;
     protected RG selectedRG;
+    protected SimulationTrace selectedST;
 
     protected JPopupMenu popupGraphTree;
+    protected JPopupMenu popupSimulationTraceTree;
     protected JMenuItem jmiAddFromFile;
     protected GraphTree selectedGT;
 
@@ -202,6 +208,7 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
         if (obj instanceof RG) {
             //TraceManager.addDev("RG object");
             selectedRG = (RG) obj;
+            selectedST = null;
             if (popupTree == null) {
                 popupTree = new JPopupMenu();
                 jmiAnalyze = new JMenuItem("Analyze");
@@ -225,6 +232,30 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
                 popupTree.add(jmiShowInFinder);
             }
             popupTree.show(tree, x, y);
+        }
+
+        if (obj instanceof SimulationTrace) {
+            //TraceManager.addDev("RG object");
+            selectedST = (SimulationTrace) obj;
+            selectedRG = null;
+            //if (popupTree == null) {
+                popupTreeST = new JPopupMenu();
+                if (selectedST.getType() == SimulationTrace.VCD_DIPLO) {
+                    jmiShowST = new JMenuItem("Show with gtkwave");
+                } else {
+                    jmiShowST = new JMenuItem("Show (default app)");
+                }
+                jmiShowST.addActionListener(this);
+                popupTreeST.add(jmiShowST);
+                if(selectedST.hasFile()) {
+                    jmiShowInFinderST = new JMenuItem("Show in File Explorer");
+                    jmiShowInFinderST.addActionListener(this);
+                }
+
+                popupTreeST.add(jmiShowInFinderST);
+
+            //}
+            popupTreeST.show(tree, x, y);
         }
     }
 
@@ -404,17 +435,35 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
         }
     }
 
+    public void showSimulationTrace() {
+        TraceManager.addDev("Showing simulation trace");
+
+        if (selectedST.getType() == SimulationTrace.VCD_DIPLO) {
+            String gtkwavePath = ConfigurationTTool.GTKWavePath;
+            if ((gtkwavePath != null) && (gtkwavePath.length() > 0)) {
+                mgui.runGTKWave(selectedST.getFullPath());
+                return ;
+            }
+        }
+
+        if (selectedST.hasFile()) {
+            mgui.showInFinder(selectedST, false);
+        }
+    }
+
     public void actionPerformed(ActionEvent ae) {
         if (selectedRG != null) {
             if (ae.getSource() == jmiAnalyze) {
                 mgui.showAUTFromRG(selectedRG.name, selectedRG);
 
             } else if (ae.getSource() == jmiShow) {
-                if (selectedRG.graph != null) {
-                    selectedRG.graph.display();
-                } else {
-                    mgui.displayAUTFromRG(selectedRG.name, selectedRG);
-                }
+
+                    if (selectedRG.graph != null) {
+                        selectedRG.graph.display();
+                    } else {
+                        mgui.displayAUTFromRG(selectedRG.name, selectedRG);
+                    }
+
             } else if (ae.getSource() == jmiRemove) {
                 if (selectedRG != null) {
                     mgui.removeRG(selectedRG);
@@ -433,8 +482,17 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
                 if (selectedRG != null) {
                     mgui.showInFinder(selectedRG);
                 }
+
             }
 
+        }
+
+        if (selectedST != null) {
+           if (ae.getSource() == jmiShowST) {
+               showSimulationTrace();
+            } else if (ae.getSource() == jmiShowInFinderST) {
+               mgui.showInFinder(selectedST, true);
+            }
         }
 
         if (selectedGT != null) {

@@ -288,6 +288,10 @@ public class DiagramTreeRenderer extends DefaultTreeCellRenderer  {
             RG rg = (RG)value;
             setIcon(IconManager.imgic310);
             setToolTipText("Graph: " + rg.getToolTip());
+        } else if (value instanceof SimulationTrace) {
+            SimulationTrace st = (SimulationTrace)value;
+            setIcon(IconManager.imgic312);
+            setToolTipText("Simulation trace: " + st.getToolTip());
         } else if (value instanceof Invariant) {
             Invariant inv = (Invariant)value;
             setIcon(IconManager.imgic5110);
@@ -302,6 +306,9 @@ public class DiagramTreeRenderer extends DefaultTreeCellRenderer  {
         } else if (value instanceof GraphTree) {
             setIcon(IconManager.imgic310);
             setToolTipText("List of RG");
+        } else if (value instanceof SimulationTraceTree) {
+            setIcon(IconManager.imgic312);
+            setToolTipText("List of Simulation Traces");
         } else if (value instanceof TAttribute) {
             setIcon(IconManager.imgic5106);
             setToolTipText(value.toString());

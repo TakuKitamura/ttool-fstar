@@ -769,6 +769,35 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         jfm.setVisible(true);
     }
 
+
+    // Simulation traces
+    public List<SimulationTrace> getSimulationTraces() {
+        return gtm.getSimulationTraces();
+    }
+
+    public void addSimulationTrace(SimulationTrace _newSimulationTrace) {
+        gtm.addSimulationTrace(_newSimulationTrace);
+        expandToSimulationTraces();
+        dtree.toBeUpdated();
+    }
+
+    public void removeSimulationTrace(SimulationTrace _toBeRemoved) {
+        gtm.removeSimulationTrace(_toBeRemoved);
+        /*if (_toBeRemoved.fileName != null) {
+            TraceManager.addDev("Filename=" + _toBeRemoved.fileName);
+            File toBeDeleted = new File(_toBeRemoved.fileName);
+            try {
+                toBeDeleted.delete();
+                TraceManager.addDev("File of RG was deleted on disk");
+            } catch (Exception e) {
+
+            }
+        }*/
+        dtree.toBeUpdated();
+    }
+
+
+
     public void showInFinder(RG inputGraph) {
         TraceManager.addDev("in show in finder");
         if (inputGraph.fileName == null) {
@@ -782,6 +811,32 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         Desktop desktop = Desktop.getDesktop();
         try {
             TraceManager.addDev("opening in desktop");
+            desktop.open(file);
+        } catch (Exception e) {
+            TraceManager.addDev("Exception in opening explorer: " + e.getMessage());
+        }
+    }
+
+
+    // Can open directory or file
+    public void showInFinder(SimulationTrace trace, boolean openDirectory) {
+        TraceManager.addDev("in show in finder");
+        if (!trace.hasFile()) {
+            return;
+        }
+        if (!Desktop.isDesktopSupported()) {
+            return;
+        }
+        File file = new File(trace.getFullPath());
+        if (openDirectory) {
+            if (!file.isDirectory()) {
+                file = file.getParentFile();
+            }
+        }
+        TraceManager.addDev("Getting desktop");
+        Desktop desktop = Desktop.getDesktop();
+        try {
+            TraceManager.addDev("Opening in desktop");
             desktop.open(file);
         } catch (Exception e) {
             TraceManager.addDev("Exception in opening explorer: " + e.getMessage());
@@ -1171,6 +1226,12 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     public void expandToGraphs() {
         if (gtm != null) {
             gtm.expandToGraphs();
+        }
+    }
+
+    public void expandToSimulationTraces() {
+        if (gtm != null) {
+            gtm.expandToSimulationTraces();
         }
     }
 
@@ -5609,6 +5670,10 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         TraceManager.addDev("Showing diplo RG");
         displayAUTFromRG(lastDiploRG.name, lastDiploRG);
 
+    }
+
+    public void runGTKWave(String pathToFile) {
+        executeUserCommand("localhost", ConfigurationTTool.GTKWavePath + " " + pathToFile);
     }
 
     public void showModifiedAUTDOT() {

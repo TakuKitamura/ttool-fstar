@@ -607,7 +607,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             // Compute the hash of the new state, and create the link to the right next state
             SpecificationLink link = new SpecificationLink();
             link.originState = _ss;
-            action += " [" + tr.clockMin + " ..." + clockMax + "]";
+            action += " [" + tr.clockMin + "..." + clockMax + "]";
             link.action = action;
             newState.computeHash(blockValues);
             //SpecificationState similar = states.get(newState.getHash(blockValues));

@@ -91,7 +91,7 @@ public class ActivityDiagram2TMLTranslator {
         TMLActivity activity = tmltask.getActivityDiagram();
         TMLActivityDiagramPanel tadp = (TMLActivityDiagramPanel)(activity.getReferenceObject());
 
-        TraceManager.addDev( "Generating activity diagram of: " + tmltask.getName());
+        //TraceManager.addDev( "Generating activity diagram of: " + tmltask.getName());
 
         // search for start state
         List<TGComponent> list = tadp.getComponentList();

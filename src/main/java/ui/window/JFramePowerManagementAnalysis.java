@@ -428,7 +428,7 @@ public	class JFramePowerManagementAnalysis extends JFrame implements ActionListe
 			try {
 				generator.saveInFile(SpecConfigTTool.VCDPath, "spec.vcd");
 				SpecConfigTTool.lastVCD = SpecConfigTTool.VCDPath + "spec.vcd";
-				SpecConfigTTool.ExternalCommand1 = "gtkwave " + SpecConfigTTool.lastVCD;
+				//SpecConfigTTool.ExternalCommand1 = "gtkwave " + SpecConfigTTool.lastVCD;
 			} catch (FileException fe) {
 				jta.append("Saving in file failed: " + fe.getMessage() + "\n");
 			}

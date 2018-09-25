@@ -1314,6 +1314,7 @@
 <cdparam x="318" y="433" />
 <sizeparam width="44" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="send event" value="end()" />
 <TGConnectingPoint num="0" id="239" />
@@ -1376,6 +1377,7 @@
 <cdparam x="599" y="527" />
 <sizeparam width="52" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="-75" maxX="-20" minY="10" maxY="35" />
 <infoparam name="guard 1" value="[ x==0 ]" />
 </SUBCOMPONENT>
@@ -1392,6 +1394,7 @@
 <cdparam x="664" y="562" />
 <sizeparam width="42" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="20" maxX="40" minY="45" maxY="70" />
 <infoparam name="guard 3" value="[ x&gt;0 ]" />
 </SUBCOMPONENT>
@@ -1409,6 +1412,7 @@
 <cdparam x="188" y="137" />
 <sizeparam width="81" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="send request" value="activation()" />
 <TGConnectingPoint num="0" id="260" />
@@ -1422,6 +1426,7 @@
 <cdparam x="202" y="237" />
 <sizeparam width="53" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="send event" value="reset()" />
 <TGConnectingPoint num="0" id="263" />
@@ -1436,6 +1441,7 @@
 <cdparam x="168" y="288" />
 <sizeparam width="120" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="wait event" value="answerToReset() " />
 <TGConnectingPoint num="0" id="266" />
@@ -1449,6 +1455,7 @@
 <cdparam x="207" y="337" />
 <sizeparam width="43" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="send event" value="pTS()" />
 <TGConnectingPoint num="0" id="269" />
@@ -1462,6 +1469,7 @@
 <cdparam x="387" y="152" />
 <sizeparam width="94" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="wait event" value="pTSConfirm() " />
 <TGConnectingPoint num="0" id="272" />
@@ -1504,12 +1512,13 @@
 <cdparam x="429" y="448" />
 <sizeparam width="94" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="write channel" value="fromDtoSC(1)" />
 <TGConnectingPoint num="0" id="292" />
 <TGConnectingPoint num="1" id="293" />
 <extraparam>
-<Data channelName="fromDtoSC" nbOfSamples="1" secPattern="" isAttacker="No" />
+<Data channelName="fromDtoSC" nbOfSamples="1" secPattern="" isAttacker="No" isEncForm="No" />
 </extraparam>
 </COMPONENT>
 
@@ -1517,6 +1526,7 @@
 <cdparam x="419" y="507" />
 <sizeparam width="115" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="send event" value="data_Ready(x, b)" />
 <TGConnectingPoint num="0" id="295" />
@@ -1542,6 +1552,7 @@
 <cdparam x="588" y="447" />
 <sizeparam width="142" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="notified event" value="x=?data_Ready_SC()" />
 <TGConnectingPoint num="0" id="300" />
@@ -1564,12 +1575,13 @@
 <cdparam x="610" y="700" />
 <sizeparam width="98" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="read channel" value="fromSCtoD(1) " />
 <TGConnectingPoint num="0" id="305" />
 <TGConnectingPoint num="1" id="306" />
 <extraparam>
-<Data channelName="fromSCtoD" nbOfSamples="1" secPattern="" isAttacker="No" />
+<Data channelName="fromSCtoD" nbOfSamples="1" secPattern="" isAttacker="No" isEncForm="No" />
 </extraparam>
 </COMPONENT>
 
@@ -1577,6 +1589,7 @@
 <cdparam x="600" y="619" />
 <sizeparam width="119" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="wait event" value="data_Ready_SC() " />
 <TGConnectingPoint num="0" id="308" />
@@ -1600,6 +1613,7 @@
 <cdparam x="300" y="287" />
 <sizeparam width="268" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="for loop" value="for(i=0;i&lt;nbOfComputedPackets;i = i +1)" />
 <TGConnectingPoint num="0" id="313" />
@@ -1699,7 +1713,7 @@
 <cdparam x="228" y="57" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="600" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from start state to send request" value="null" />
-<P1  x="229" y="78" id="258" />
+<P1  x="229" y="73" id="258" />
 <P2  x="228" y="132" id="260" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -1807,6 +1821,7 @@
 <cdparam x="505" y="259" />
 <sizeparam width="10" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="execI" value="null" />
 <TGConnectingPoint num="0" id="342" />
@@ -1825,6 +1840,7 @@
 <cdparam x="479" y="129" />
 <sizeparam width="66" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="wait event" value="opened() " />
 <TGConnectingPoint num="0" id="345" />
@@ -1838,6 +1854,7 @@
 <cdparam x="449" y="192" />
 <sizeparam width="125" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="send event" value="connectionOpened()" />
 <TGConnectingPoint num="0" id="348" />
@@ -1896,6 +1913,7 @@
 <cdparam x="482" y="71" />
 <sizeparam width="47" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="send event" value="open()" />
 <TGConnectingPoint num="0" id="361" />
@@ -1909,12 +1927,13 @@
 <cdparam x="469" y="353" />
 <sizeparam width="80" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="write channel" value="fromAtoT(1)" />
 <TGConnectingPoint num="0" id="364" />
 <TGConnectingPoint num="1" id="365" />
 <extraparam>
-<Data channelName="fromAtoT" nbOfSamples="1" secPattern="" isAttacker="No" />
+<Data channelName="fromAtoT" nbOfSamples="1" secPattern="" isAttacker="No" isEncForm="No" />
 </extraparam>
 </COMPONENT>
 
@@ -1922,6 +1941,7 @@
 <cdparam x="471" y="399" />
 <sizeparam width="75" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="send event" value="send_TCP()" />
 <TGConnectingPoint num="0" id="367" />
@@ -1945,6 +1965,7 @@
 <cdparam x="563" y="589" />
 <sizeparam width="49" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="send event" value="abort()" />
 <TGConnectingPoint num="0" id="372" />
@@ -1958,6 +1979,7 @@
 <cdparam x="410" y="597" />
 <sizeparam width="47" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="send event" value="close()" />
 <TGConnectingPoint num="0" id="375" />
@@ -2012,7 +2034,7 @@
 <cdparam x="506" y="36" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="600" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from start state to send event" value="null" />
-<P1  x="505" y="53" id="359" />
+<P1  x="505" y="48" id="359" />
 <P2  x="505" y="66" id="361" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -2081,6 +2103,7 @@
 <cdparam x="418" y="364" />
 <sizeparam width="44" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="wait event" value="end() " />
 <TGConnectingPoint num="0" id="393" />
@@ -2094,6 +2117,7 @@
 <cdparam x="238" y="201" />
 <sizeparam width="129" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="wait event" value="connectionOpened() " />
 <TGConnectingPoint num="0" id="396" />
@@ -2117,6 +2141,7 @@
 <cdparam x="141" y="129" />
 <sizeparam width="51" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="wait event" value="reset() " />
 <TGConnectingPoint num="0" id="401" />
@@ -2131,6 +2156,7 @@
 <cdparam x="113" y="182" />
 <sizeparam width="106" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="send event" value="answerToReset()" />
 <TGConnectingPoint num="0" id="404" />
@@ -2144,6 +2170,7 @@
 <cdparam x="144" y="237" />
 <sizeparam width="44" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="wait event" value="pTS() " />
 <TGConnectingPoint num="0" id="407" />
@@ -2158,6 +2185,7 @@
 <cdparam x="124" y="308" />
 <sizeparam width="85" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="send event" value="pTSConfirm()" />
 <TGConnectingPoint num="0" id="410" />
@@ -2203,6 +2231,7 @@ the smart card and the terminal
 <cdparam x="254" y="97" />
 <sizeparam width="89" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="send request" value="start_TCP_IP()" />
 <TGConnectingPoint num="0" id="430" />
@@ -2216,6 +2245,7 @@ the smart card and the terminal
 <cdparam x="241" y="148" />
 <sizeparam width="114" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="send request" value="start_Application()" />
 <TGConnectingPoint num="0" id="433" />
@@ -2239,6 +2269,7 @@ the smart card and the terminal
 <cdparam x="240" y="471" />
 <sizeparam width="106" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="send event" value="data_Ready_SC()" />
 <TGConnectingPoint num="0" id="438" />
@@ -2261,12 +2292,13 @@ the smart card and the terminal
 <cdparam x="252" y="429" />
 <sizeparam width="83" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="read channel" value="fromTtoP(1) " />
 <TGConnectingPoint num="0" id="443" />
 <TGConnectingPoint num="1" id="444" />
 <extraparam>
-<Data channelName="fromTtoP" nbOfSamples="1" secPattern="" isAttacker="No" />
+<Data channelName="fromTtoP" nbOfSamples="1" secPattern="" isAttacker="No" isEncForm="No" />
 </extraparam>
 </COMPONENT>
 
@@ -2274,6 +2306,7 @@ the smart card and the terminal
 <cdparam x="268" y="385" />
 <sizeparam width="50" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="wait event" value="send() " />
 <TGConnectingPoint num="0" id="446" />
@@ -2287,12 +2320,13 @@ the smart card and the terminal
 <cdparam x="250" y="513" />
 <sizeparam width="87" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="write channel" value="fromSCtoD(1)" />
 <TGConnectingPoint num="0" id="449" />
 <TGConnectingPoint num="1" id="450" />
 <extraparam>
-<Data channelName="fromSCtoD" nbOfSamples="1" secPattern="" isAttacker="No" />
+<Data channelName="fromSCtoD" nbOfSamples="1" secPattern="" isAttacker="No" isEncForm="No" />
 </extraparam>
 </COMPONENT>
 
@@ -2300,6 +2334,7 @@ the smart card and the terminal
 <cdparam x="562" y="472" />
 <sizeparam width="59" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="send event" value="receive()" />
 <TGConnectingPoint num="0" id="452" />
@@ -2313,12 +2348,13 @@ the smart card and the terminal
 <cdparam x="546" y="433" />
 <sizeparam width="91" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="read channel" value="fromDtoSC(1) " />
 <TGConnectingPoint num="0" id="455" />
 <TGConnectingPoint num="1" id="456" />
 <extraparam>
-<Data channelName="fromDtoSC" nbOfSamples="1" secPattern="" isAttacker="No" />
+<Data channelName="fromDtoSC" nbOfSamples="1" secPattern="" isAttacker="No" isEncForm="No" />
 </extraparam>
 </COMPONENT>
 
@@ -2326,12 +2362,13 @@ the smart card and the terminal
 <cdparam x="552" y="509" />
 <sizeparam width="79" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="write channel" value="fromPtoT(1)" />
 <TGConnectingPoint num="0" id="458" />
 <TGConnectingPoint num="1" id="459" />
 <extraparam>
-<Data channelName="fromPtoT" nbOfSamples="1" secPattern="" isAttacker="No" />
+<Data channelName="fromPtoT" nbOfSamples="1" secPattern="" isAttacker="No" isEncForm="No" />
 </extraparam>
 </COMPONENT>
 
@@ -2339,6 +2376,7 @@ the smart card and the terminal
 <cdparam x="536" y="390" />
 <sizeparam width="110" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="wait event" value="data_Ready(t, b) " />
 <TGConnectingPoint num="0" id="461" />
@@ -2355,6 +2393,7 @@ the smart card and the terminal
 <cdparam x="236" y="261" />
 <sizeparam width="125" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="for loop" value="for(j=0;x==0;j = j)" />
 <TGConnectingPoint num="0" id="464" />
@@ -2448,7 +2487,7 @@ the smart card and the terminal
 <cdparam x="166" y="64" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="600" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from start state to wait event" value="null" />
-<P1  x="166" y="86" id="399" />
+<P1  x="166" y="81" id="399" />
 <P2  x="166" y="124" id="401" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -2624,6 +2663,7 @@ the smart card and the terminal
 <cdparam x="464" y="232" />
 <sizeparam width="51" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="-75" maxX="-20" minY="10" maxY="35" />
 <infoparam name="guard 1" value="[ x==0 ]" />
 </SUBCOMPONENT>
@@ -2632,6 +2672,7 @@ the smart card and the terminal
 <cdparam x="544" y="234" />
 <sizeparam width="41" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="35" maxX="55" minY="10" maxY="35" />
 <infoparam name="guard 2" value="[ x&gt;0 ]" />
 </SUBCOMPONENT>
@@ -2666,6 +2707,7 @@ the smart card and the terminal
 <cdparam x="396" y="339" />
 <sizeparam width="63" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="send event" value="timeOut()" />
 <TGConnectingPoint num="0" id="519" />
@@ -2679,6 +2721,7 @@ the smart card and the terminal
 <cdparam x="599" y="300" />
 <sizeparam width="47" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="wait event" value="stop() " />
 <TGConnectingPoint num="0" id="522" />
@@ -2701,6 +2744,7 @@ the smart card and the terminal
 <cdparam x="491" y="157" />
 <sizeparam width="70" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
 <infoparam name="notified event" value="x=?stop()" />
 <TGConnectingPoint num="0" id="527" />
@@ -2714,7 +2758,7 @@ the smart card and the terminal
 <cdparam x="496" y="46" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
-<P1  x="496" y="46" id="515" />
+<P1  x="496" y="41" id="515" />
 <P2  x="526" y="152" id="527" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -2766,6 +2810,7 @@ the smart card and the terminal
 <cdparam x="159" y="424" />
 <sizeparam width="62" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="send event" value="opened()" />
 <TGConnectingPoint num="0" id="536" />
@@ -2799,6 +2844,7 @@ the smart card and the terminal
 <cdparam x="2121" y="1388" />
 <sizeparam width="39" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="35" maxX="55" minY="10" maxY="35" />
 <infoparam name="guard 2" value="[ else ]" />
 </SUBCOMPONENT>
@@ -2807,6 +2853,7 @@ the smart card and the terminal
 <cdparam x="2106" y="1426" />
 <sizeparam width="124" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="20" maxX="40" minY="45" maxY="70" />
 <infoparam name="guard 3" value="[ tcpctrl.state ==10 ]" />
 </SUBCOMPONENT>
@@ -2827,6 +2874,7 @@ the smart card and the terminal
 <cdparam x="2212" y="961" />
 <sizeparam width="116" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="-75" maxX="-20" minY="10" maxY="35" />
 <infoparam name="guard 1" value="[ tcpctrl.state ==1 ]" />
 </SUBCOMPONENT>
@@ -2835,6 +2883,7 @@ the smart card and the terminal
 <cdparam x="2301" y="975" />
 <sizeparam width="116" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="35" maxX="55" minY="10" maxY="35" />
 <infoparam name="guard 2" value="[ tcpctrl.state ==3 ]" />
 </SUBCOMPONENT>
@@ -2843,6 +2892,7 @@ the smart card and the terminal
 <cdparam x="2282" y="996" />
 <sizeparam width="39" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="20" maxX="40" minY="45" maxY="70" />
 <infoparam name="guard 3" value="[ else ]" />
 </SUBCOMPONENT>
@@ -2863,6 +2913,7 @@ the smart card and the terminal
 <cdparam x="1934" y="1356" />
 <sizeparam width="116" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="-75" maxX="-20" minY="10" maxY="35" />
 <infoparam name="guard 1" value="[ tcpctrl.state ==5 ]" />
 </SUBCOMPONENT>
@@ -2871,6 +2922,7 @@ the smart card and the terminal
 <cdparam x="2016" y="1356" />
 <sizeparam width="39" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="35" maxX="55" minY="10" maxY="35" />
 <infoparam name="guard 2" value="[ else ]" />
 </SUBCOMPONENT>
@@ -2879,6 +2931,7 @@ the smart card and the terminal
 <cdparam x="2001" y="1391" />
 <sizeparam width="120" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="20" maxX="40" minY="45" maxY="70" />
 <infoparam name="guard 3" value="[ tcpctrl.state == 7 ]" />
 </SUBCOMPONENT>
@@ -2899,6 +2952,7 @@ the smart card and the terminal
 <cdparam x="1762" y="1279" />
 <sizeparam width="116" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="-75" maxX="-20" minY="10" maxY="35" />
 <infoparam name="guard 1" value="[ tcpctrl.state ==4 ]" />
 </SUBCOMPONENT>
@@ -2907,6 +2961,7 @@ the smart card and the terminal
 <cdparam x="1846" y="1279" />
 <sizeparam width="39" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="35" maxX="55" minY="10" maxY="35" />
 <infoparam name="guard 2" value="[ else ]" />
 </SUBCOMPONENT>
@@ -2915,6 +2970,7 @@ the smart card and the terminal
 <cdparam x="1831" y="1314" />
 <sizeparam width="116" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="20" maxX="40" minY="45" maxY="70" />
 <infoparam name="guard 3" value="[ tcpctrl.state ==2 ]" />
 </SUBCOMPONENT>
@@ -2959,6 +3015,7 @@ the smart card and the terminal
 <cdparam x="1524" y="1254" />
 <sizeparam width="10" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="execI" value="null" />
 <TGConnectingPoint num="0" id="580" />
@@ -2977,6 +3034,7 @@ the smart card and the terminal
 <cdparam x="1524" y="1064" />
 <sizeparam width="10" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="execI" value="null" />
 <TGConnectingPoint num="0" id="584" />
@@ -3007,6 +3065,7 @@ the smart card and the terminal
 <cdparam x="1542" y="1016" />
 <sizeparam width="124" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="-75" maxX="-20" minY="10" maxY="35" />
 <infoparam name="guard 1" value="[ tcpctrl.state  == 4 ]" />
 </SUBCOMPONENT>
@@ -3015,6 +3074,7 @@ the smart card and the terminal
 <cdparam x="1627" y="1016" />
 <sizeparam width="39" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="35" maxX="55" minY="10" maxY="35" />
 <infoparam name="guard 2" value="[ else ]" />
 </SUBCOMPONENT>
@@ -3067,6 +3127,7 @@ the smart card and the terminal
 <cdparam x="1636" y="1235" />
 <sizeparam width="10" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="execI" value="null" />
 <TGConnectingPoint num="0" id="604" />
@@ -3085,6 +3146,7 @@ the smart card and the terminal
 <cdparam x="2232" y="1059" />
 <sizeparam width="10" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="execI" value="null" />
 <TGConnectingPoint num="0" id="608" />
@@ -3103,6 +3165,7 @@ the smart card and the terminal
 <cdparam x="2312" y="1024" />
 <sizeparam width="10" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="execI" value="null" />
 <TGConnectingPoint num="0" id="612" />
@@ -3141,6 +3204,7 @@ the smart card and the terminal
 <cdparam x="1228" y="1030" />
 <sizeparam width="39" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="35" maxX="55" minY="10" maxY="35" />
 <infoparam name="guard 2" value="[ else ]" />
 </SUBCOMPONENT>
@@ -3149,6 +3213,7 @@ the smart card and the terminal
 <cdparam x="1213" y="1065" />
 <sizeparam width="116" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="20" maxX="40" minY="45" maxY="70" />
 <infoparam name="guard 3" value="[ tcpctrl.state ==6 ]" />
 </SUBCOMPONENT>
@@ -3157,6 +3222,7 @@ the smart card and the terminal
 <cdparam x="1203" y="1107" />
 <sizeparam width="10" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="execI" value="null" />
 <TGConnectingPoint num="0" id="624" />
@@ -3187,6 +3253,7 @@ the smart card and the terminal
 <cdparam x="482" y="747" />
 <sizeparam width="120" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="-75" maxX="-20" minY="10" maxY="35" />
 <infoparam name="guard 1" value="[ tcpctrl.state == 1 ]" />
 </SUBCOMPONENT>
@@ -3195,6 +3262,7 @@ the smart card and the terminal
 <cdparam x="592" y="722" />
 <sizeparam width="39" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="35" maxX="55" minY="10" maxY="35" />
 <infoparam name="guard 2" value="[ else ]" />
 </SUBCOMPONENT>
@@ -3211,6 +3279,7 @@ the smart card and the terminal
 <cdparam x="717" y="694" />
 <sizeparam width="10" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="execI" value="null" />
 <TGConnectingPoint num="0" id="636" />
@@ -3229,6 +3298,7 @@ the smart card and the terminal
 <cdparam x="938" y="1025" />
 <sizeparam width="10" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="execI" value="null" />
 <TGConnectingPoint num="0" id="640" />
@@ -3259,6 +3329,7 @@ the smart card and the terminal
 <cdparam x="959" y="974" />
 <sizeparam width="116" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="-75" maxX="-20" minY="10" maxY="35" />
 <infoparam name="guard 1" value="[ tcpctrl.state ==4 ]" />
 </SUBCOMPONENT>
@@ -3267,6 +3338,7 @@ the smart card and the terminal
 <cdparam x="1070" y="949" />
 <sizeparam width="39" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="35" maxX="55" minY="10" maxY="35" />
 <infoparam name="guard 2" value="[ else ]" />
 </SUBCOMPONENT>
@@ -3275,6 +3347,7 @@ the smart card and the terminal
 <cdparam x="1054" y="984" />
 <sizeparam width="116" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="20" maxX="40" minY="45" maxY="70" />
 <infoparam name="guard 3" value="[ tcpctrl.state == 5]" />
 </SUBCOMPONENT>
@@ -3283,6 +3356,7 @@ the smart card and the terminal
 <cdparam x="795" y="1009" />
 <sizeparam width="10" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="execI" value="null" />
 <TGConnectingPoint num="0" id="652" />
@@ -3313,6 +3387,7 @@ the smart card and the terminal
 <cdparam x="753" y="885" />
 <sizeparam width="116" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="-75" maxX="-20" minY="10" maxY="35" />
 <infoparam name="guard 1" value="[ tcpctrl.state ==0 ]" />
 </SUBCOMPONENT>
@@ -3321,6 +3396,7 @@ the smart card and the terminal
 <cdparam x="863" y="879" />
 <sizeparam width="39" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="35" maxX="55" minY="10" maxY="35" />
 <infoparam name="guard 2" value="[ else ]" />
 </SUBCOMPONENT>
@@ -3329,6 +3405,7 @@ the smart card and the terminal
 <cdparam x="848" y="914" />
 <sizeparam width="112" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="20" maxX="40" minY="45" maxY="70" />
 <infoparam name="guard 3" value="[ tcpctrl.state==0 ]" />
 </SUBCOMPONENT>
@@ -3337,6 +3414,7 @@ the smart card and the terminal
 <cdparam x="341" y="764" />
 <sizeparam width="10" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="execI" value="null" />
 <TGConnectingPoint num="0" id="664" />
@@ -3355,6 +3433,7 @@ the smart card and the terminal
 <cdparam x="127" y="794" />
 <sizeparam width="10" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="execI" value="null" />
 <TGConnectingPoint num="0" id="668" />
@@ -3409,6 +3488,7 @@ the smart card and the terminal
 <cdparam x="1003" y="701" />
 <sizeparam width="10" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="execI" value="null" />
 <TGConnectingPoint num="0" id="680" />
@@ -3427,6 +3507,7 @@ the smart card and the terminal
 <cdparam x="459" y="783" />
 <sizeparam width="10" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="execI" value="null" />
 <TGConnectingPoint num="0" id="684" />
@@ -3445,6 +3526,7 @@ the smart card and the terminal
 <cdparam x="225" y="863" />
 <sizeparam width="10" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="execI" value="null" />
 <TGConnectingPoint num="0" id="688" />
@@ -3463,6 +3545,7 @@ the smart card and the terminal
 <cdparam x="1044" y="1057" />
 <sizeparam width="10" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="execI" value="null" />
 <TGConnectingPoint num="0" id="692" />
@@ -3493,6 +3576,7 @@ the smart card and the terminal
 <cdparam x="98" y="496" />
 <sizeparam width="112" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="-75" maxX="-20" minY="10" maxY="35" />
 <infoparam name="guard 1" value="[ tcpctrl.state==0 ]" />
 </SUBCOMPONENT>
@@ -3501,6 +3585,7 @@ the smart card and the terminal
 <cdparam x="208" y="496" />
 <sizeparam width="39" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="35" maxX="55" minY="10" maxY="35" />
 <infoparam name="guard 2" value="[ else ]" />
 </SUBCOMPONENT>
@@ -3529,6 +3614,7 @@ the smart card and the terminal
 <cdparam x="317" y="202" />
 <sizeparam width="81" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="-75" maxX="-20" minY="10" maxY="35" />
 <infoparam name="guard 1" value="[ tcpctrl.a&gt;0 ]" />
 </SUBCOMPONENT>
@@ -3537,6 +3623,7 @@ the smart card and the terminal
 <cdparam x="394" y="202" />
 <sizeparam width="91" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="35" maxX="55" minY="10" maxY="35" />
 <infoparam name="guard 2" value="[ tcpctrl.a==0 ]" />
 </SUBCOMPONENT>
@@ -3565,6 +3652,7 @@ the smart card and the terminal
 <cdparam x="404" y="592" />
 <sizeparam width="116" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="-75" maxX="-20" minY="10" maxY="35" />
 <infoparam name="guard 1" value="[ tcpctrl.state ==9 ]" />
 </SUBCOMPONENT>
@@ -3573,6 +3661,7 @@ the smart card and the terminal
 <cdparam x="500" y="599" />
 <sizeparam width="39" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="35" maxX="55" minY="10" maxY="35" />
 <infoparam name="guard 2" value="[ else ]" />
 </SUBCOMPONENT>
@@ -3581,6 +3670,7 @@ the smart card and the terminal
 <cdparam x="469" y="627" />
 <sizeparam width="252" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="20" maxX="40" minY="45" maxY="70" />
 <infoparam name="guard 3" value="[ (tcpctrl.state ==2) or (tcpctrl.state ==4) ]" />
 </SUBCOMPONENT>
@@ -3601,6 +3691,7 @@ the smart card and the terminal
 <cdparam x="228" y="574" />
 <sizeparam width="116" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="-75" maxX="-20" minY="10" maxY="35" />
 <infoparam name="guard 1" value="[ tcpctrl.state == 1]" />
 </SUBCOMPONENT>
@@ -3609,6 +3700,7 @@ the smart card and the terminal
 <cdparam x="317" y="584" />
 <sizeparam width="39" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="35" maxX="55" minY="10" maxY="35" />
 <infoparam name="guard 2" value="[ else ]" />
 </SUBCOMPONENT>
@@ -3617,6 +3709,7 @@ the smart card and the terminal
 <cdparam x="306" y="616" />
 <sizeparam width="116" height="15" minWidth="10" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="20" maxX="40" minY="45" maxY="70" />
 <infoparam name="guard 3" value="[ tcpctrl.state ==4 ]" />
 </SUBCOMPONENT>
@@ -3682,6 +3775,7 @@ the smart card and the terminal
 <cdparam x="98" y="549" />
 <sizeparam width="100" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="action state" value="tcpctrl.state =1" />
 <TGConnectingPoint num="0" id="746" />
@@ -3701,12 +3795,13 @@ the smart card and the terminal
 <cdparam x="967" y="585" />
 <sizeparam width="83" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="read channel" value="fromPtoT(1) " />
 <TGConnectingPoint num="0" id="751" />
 <TGConnectingPoint num="1" id="752" />
 <extraparam>
-<Data channelName="fromPtoT" nbOfSamples="1" secPattern="" isAttacker="No" />
+<Data channelName="fromPtoT" nbOfSamples="1" secPattern="" isAttacker="No" isEncForm="No" />
 </extraparam>
 </COMPONENT>
 
@@ -3714,6 +3809,7 @@ the smart card and the terminal
 <cdparam x="150" y="85" />
 <sizeparam width="170" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="for loop" value="for(i=0;(tcpctrl.a==0);i = i)" />
 <TGConnectingPoint num="0" id="754" />
@@ -3737,6 +3833,7 @@ the smart card and the terminal
 <cdparam x="187" y="144" />
 <sizeparam width="96" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="action state" value="tcpctrl.state=0" />
 <TGConnectingPoint num="0" id="760" />
@@ -3747,6 +3844,7 @@ the smart card and the terminal
 <cdparam x="316" y="133" />
 <sizeparam width="116" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="notified event" value="tcpctrl.a=?abort()" />
 <TGConnectingPoint num="0" id="763" />
@@ -3760,12 +3858,13 @@ the smart card and the terminal
 <cdparam x="692" y="589" />
 <sizeparam width="60" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="read channel" value="temp(1) " />
 <TGConnectingPoint num="0" id="766" />
 <TGConnectingPoint num="1" id="767" />
 <extraparam>
-<Data channelName="temp" nbOfSamples="1" secPattern="" isAttacker="No" />
+<Data channelName="temp" nbOfSamples="1" secPattern="" isAttacker="No" isEncForm="No" />
 </extraparam>
 </COMPONENT>
 
@@ -3773,6 +3872,7 @@ the smart card and the terminal
 <cdparam x="689" y="534" />
 <sizeparam width="67" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="wait event" value="timeOut() " />
 <TGConnectingPoint num="0" id="769" />
@@ -3786,6 +3886,7 @@ the smart card and the terminal
 <cdparam x="977" y="528" />
 <sizeparam width="63" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="wait event" value="receive() " />
 <TGConnectingPoint num="0" id="772" />
@@ -3799,6 +3900,7 @@ the smart card and the terminal
 <cdparam x="439" y="492" />
 <sizeparam width="51" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="wait event" value="close() " />
 <TGConnectingPoint num="0" id="775" />
@@ -3812,6 +3914,7 @@ the smart card and the terminal
 <cdparam x="250" y="468" />
 <sizeparam width="79" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="wait event" value="send_TCP() " />
 <TGConnectingPoint num="0" id="778" />
@@ -3825,6 +3928,7 @@ the smart card and the terminal
 <cdparam x="163" y="383" />
 <sizeparam width="51" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="wait event" value="open() " />
 <TGConnectingPoint num="0" id="781" />
@@ -3876,6 +3980,7 @@ the smart card and the terminal
 <cdparam x="275" y="228" />
 <sizeparam width="53" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="wait event" value="abort() " />
 <TGConnectingPoint num="0" id="799" />
@@ -3932,12 +4037,13 @@ On prend b=1 comme exemple
 <cdparam x="188" y="808" />
 <sizeparam width="84" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="read channel" value="fromAtoT(1) " />
 <TGConnectingPoint num="0" id="821" />
 <TGConnectingPoint num="1" id="822" />
 <extraparam>
-<Data channelName="fromAtoT" nbOfSamples="1" secPattern="" isAttacker="No" />
+<Data channelName="fromAtoT" nbOfSamples="1" secPattern="" isAttacker="No" isEncForm="No" />
 </extraparam>
 </COMPONENT>
 
@@ -3945,12 +4051,13 @@ On prend b=1 comme exemple
 <cdparam x="191" y="1002" />
 <sizeparam width="79" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="write channel" value="fromTtoP(1)" />
 <TGConnectingPoint num="0" id="824" />
 <TGConnectingPoint num="1" id="825" />
 <extraparam>
-<Data channelName="fromTtoP" nbOfSamples="1" secPattern="" isAttacker="No" />
+<Data channelName="fromTtoP" nbOfSamples="1" secPattern="" isAttacker="No" isEncForm="No" />
 </extraparam>
 </COMPONENT>
 
@@ -3967,6 +4074,7 @@ On prend b=1 comme exemple
 <cdparam x="414" y="1032" />
 <sizeparam width="100" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="action state" value="tcpctrl.state =5" />
 <TGConnectingPoint num="0" id="829" />
@@ -3986,6 +4094,7 @@ On prend b=1 comme exemple
 <cdparam x="84" y="1041" />
 <sizeparam width="96" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="action state" value="tcpctrl.state=3" />
 <TGConnectingPoint num="0" id="834" />
@@ -3996,12 +4105,13 @@ On prend b=1 comme exemple
 <cdparam x="93" y="938" />
 <sizeparam width="79" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="write channel" value="fromTtoP(1)" />
 <TGConnectingPoint num="0" id="837" />
 <TGConnectingPoint num="1" id="838" />
 <extraparam>
-<Data channelName="fromTtoP" nbOfSamples="1" secPattern="" isAttacker="No" />
+<Data channelName="fromTtoP" nbOfSamples="1" secPattern="" isAttacker="No" isEncForm="No" />
 </extraparam>
 </COMPONENT>
 
@@ -4009,6 +4119,7 @@ On prend b=1 comme exemple
 <cdparam x="292" y="1026" />
 <sizeparam width="108" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="action state" value="tcpctrl.state =10" />
 <TGConnectingPoint num="0" id="840" />
@@ -4028,12 +4139,13 @@ On prend b=1 comme exemple
 <cdparam x="425" y="941" />
 <sizeparam width="79" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="write channel" value="fromTtoP(1)" />
 <TGConnectingPoint num="0" id="845" />
 <TGConnectingPoint num="1" id="846" />
 <extraparam>
-<Data channelName="fromTtoP" nbOfSamples="1" secPattern="" isAttacker="No" />
+<Data channelName="fromTtoP" nbOfSamples="1" secPattern="" isAttacker="No" isEncForm="No" />
 </extraparam>
 </COMPONENT>
 
@@ -4041,12 +4153,13 @@ On prend b=1 comme exemple
 <cdparam x="307" y="900" />
 <sizeparam width="79" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="write channel" value="fromTtoP(1)" />
 <TGConnectingPoint num="0" id="848" />
 <TGConnectingPoint num="1" id="849" />
 <extraparam>
-<Data channelName="fromTtoP" nbOfSamples="1" secPattern="" isAttacker="No" />
+<Data channelName="fromTtoP" nbOfSamples="1" secPattern="" isAttacker="No" isEncForm="No" />
 </extraparam>
 </COMPONENT>
 
@@ -4091,6 +4204,7 @@ On prend b=1 comme exemple
 <cdparam x="678" y="965" />
 <sizeparam width="100" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="action state" value="tcpctrl.state =1" />
 <TGConnectingPoint num="0" id="870" />
@@ -4110,12 +4224,13 @@ On prend b=1 comme exemple
 <cdparam x="761" y="1086" />
 <sizeparam width="79" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="write channel" value="fromTtoP(1)" />
 <TGConnectingPoint num="0" id="875" />
 <TGConnectingPoint num="1" id="876" />
 <extraparam>
-<Data channelName="fromTtoP" nbOfSamples="1" secPattern="" isAttacker="No" />
+<Data channelName="fromTtoP" nbOfSamples="1" secPattern="" isAttacker="No" isEncForm="No" />
 </extraparam>
 </COMPONENT>
 
@@ -4179,6 +4294,7 @@ On prend b=1 comme exemple
 <cdparam x="750" y="1193" />
 <sizeparam width="100" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="action state" value="tcpctrl.state =3" />
 <TGConnectingPoint num="0" id="912" />
@@ -4189,6 +4305,7 @@ On prend b=1 comme exemple
 <cdparam x="446" y="768" />
 <sizeparam width="100" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="action state" value="tcpctrl.state =0" />
 <TGConnectingPoint num="0" id="915" />
@@ -4208,12 +4325,13 @@ On prend b=1 comme exemple
 <cdparam x="904" y="1123" />
 <sizeparam width="79" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="write channel" value="fromTtoP(1)" />
 <TGConnectingPoint num="0" id="920" />
 <TGConnectingPoint num="1" id="921" />
 <extraparam>
-<Data channelName="fromTtoP" nbOfSamples="1" secPattern="" isAttacker="No" />
+<Data channelName="fromTtoP" nbOfSamples="1" secPattern="" isAttacker="No" isEncForm="No" />
 </extraparam>
 </COMPONENT>
 
@@ -4249,6 +4367,7 @@ On prend b=1 comme exemple
 <cdparam x="893" y="1234" />
 <sizeparam width="100" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="action state" value="tcpctrl.state =9" />
 <TGConnectingPoint num="0" id="940" />
@@ -4268,12 +4387,13 @@ On prend b=1 comme exemple
 <cdparam x="1010" y="1155" />
 <sizeparam width="79" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="write channel" value="fromTtoP(1)" />
 <TGConnectingPoint num="0" id="945" />
 <TGConnectingPoint num="1" id="946" />
 <extraparam>
-<Data channelName="fromTtoP" nbOfSamples="1" secPattern="" isAttacker="No" />
+<Data channelName="fromTtoP" nbOfSamples="1" secPattern="" isAttacker="No" isEncForm="No" />
 </extraparam>
 </COMPONENT>
 
@@ -4309,6 +4429,7 @@ On prend b=1 comme exemple
 <cdparam x="999" y="1266" />
 <sizeparam width="100" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="action state" value="tcpctrl.state =7" />
 <TGConnectingPoint num="0" id="965" />
@@ -4328,12 +4449,13 @@ On prend b=1 comme exemple
 <cdparam x="683" y="758" />
 <sizeparam width="79" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="write channel" value="fromTtoP(1)" />
 <TGConnectingPoint num="0" id="970" />
 <TGConnectingPoint num="1" id="971" />
 <extraparam>
-<Data channelName="fromTtoP" nbOfSamples="1" secPattern="" isAttacker="No" />
+<Data channelName="fromTtoP" nbOfSamples="1" secPattern="" isAttacker="No" isEncForm="No" />
 </extraparam>
 </COMPONENT>
 
@@ -4350,6 +4472,7 @@ On prend b=1 comme exemple
 <cdparam x="93" y="1100" />
 <sizeparam width="78" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="send request" value="req_Timer()" />
 <TGConnectingPoint num="0" id="975" />
@@ -4363,12 +4486,13 @@ On prend b=1 comme exemple
 <cdparam x="104" y="1167" />
 <sizeparam width="56" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="write channel" value="temp(1)" />
 <TGConnectingPoint num="0" id="978" />
 <TGConnectingPoint num="1" id="979" />
 <extraparam>
-<Data channelName="temp" nbOfSamples="1" secPattern="" isAttacker="No" />
+<Data channelName="temp" nbOfSamples="1" secPattern="" isAttacker="No" isEncForm="No" />
 </extraparam>
 </COMPONENT>
 
@@ -4385,6 +4509,7 @@ On prend b=1 comme exemple
 <cdparam x="191" y="1102" />
 <sizeparam width="78" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="send request" value="req_Timer()" />
 <TGConnectingPoint num="0" id="983" />
@@ -4398,12 +4523,13 @@ On prend b=1 comme exemple
 <cdparam x="202" y="1169" />
 <sizeparam width="56" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="write channel" value="temp(1)" />
 <TGConnectingPoint num="0" id="986" />
 <TGConnectingPoint num="1" id="987" />
 <extraparam>
-<Data channelName="temp" nbOfSamples="1" secPattern="" isAttacker="No" />
+<Data channelName="temp" nbOfSamples="1" secPattern="" isAttacker="No" isEncForm="No" />
 </extraparam>
 </COMPONENT>
 
@@ -4411,6 +4537,7 @@ On prend b=1 comme exemple
 <cdparam x="307" y="1106" />
 <sizeparam width="78" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="send request" value="req_Timer()" />
 <TGConnectingPoint num="0" id="989" />
@@ -4424,12 +4551,13 @@ On prend b=1 comme exemple
 <cdparam x="318" y="1173" />
 <sizeparam width="56" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="write channel" value="temp(1)" />
 <TGConnectingPoint num="0" id="992" />
 <TGConnectingPoint num="1" id="993" />
 <extraparam>
-<Data channelName="temp" nbOfSamples="1" secPattern="" isAttacker="No" />
+<Data channelName="temp" nbOfSamples="1" secPattern="" isAttacker="No" isEncForm="No" />
 </extraparam>
 </COMPONENT>
 
@@ -4437,6 +4565,7 @@ On prend b=1 comme exemple
 <cdparam x="425" y="1090" />
 <sizeparam width="78" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="send request" value="req_Timer()" />
 <TGConnectingPoint num="0" id="995" />
@@ -4450,12 +4579,13 @@ On prend b=1 comme exemple
 <cdparam x="436" y="1159" />
 <sizeparam width="56" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="write channel" value="temp(1)" />
 <TGConnectingPoint num="0" id="998" />
 <TGConnectingPoint num="1" id="999" />
 <extraparam>
-<Data channelName="temp" nbOfSamples="1" secPattern="" isAttacker="No" />
+<Data channelName="temp" nbOfSamples="1" secPattern="" isAttacker="No" isEncForm="No" />
 </extraparam>
 </COMPONENT>
 
@@ -4463,6 +4593,7 @@ On prend b=1 comme exemple
 <cdparam x="56" y="861" />
 <sizeparam width="153" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="action state" value="seqNum=seqNum+wind" />
 <TGConnectingPoint num="0" id="1001" />
@@ -4473,6 +4604,7 @@ On prend b=1 comme exemple
 <cdparam x="154" y="940" />
 <sizeparam width="153" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="action state" value="seqNum=seqNum+wind" />
 <TGConnectingPoint num="0" id="1004" />
@@ -4483,6 +4615,7 @@ On prend b=1 comme exemple
 <cdparam x="388" y="865" />
 <sizeparam width="153" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="action state" value="seqNum=seqNum+wind" />
 <TGConnectingPoint num="0" id="1007" />
@@ -4493,6 +4626,7 @@ On prend b=1 comme exemple
 <cdparam x="270" y="831" />
 <sizeparam width="153" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="action state" value="seqNum=seqNum+wind" />
 <TGConnectingPoint num="0" id="1010" />
@@ -4503,6 +4637,7 @@ On prend b=1 comme exemple
 <cdparam x="207" y="1052" />
 <sizeparam width="46" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="send event" value="send()" />
 <TGConnectingPoint num="0" id="1013" />
@@ -4516,6 +4651,7 @@ On prend b=1 comme exemple
 <cdparam x="323" y="962" />
 <sizeparam width="46" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="send event" value="send()" />
 <TGConnectingPoint num="0" id="1016" />
@@ -4529,6 +4665,7 @@ On prend b=1 comme exemple
 <cdparam x="441" y="983" />
 <sizeparam width="46" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="send event" value="send()" />
 <TGConnectingPoint num="0" id="1019" />
@@ -4542,6 +4679,7 @@ On prend b=1 comme exemple
 <cdparam x="109" y="986" />
 <sizeparam width="46" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="send event" value="send()" />
 <TGConnectingPoint num="0" id="1022" />
@@ -4555,6 +4693,7 @@ On prend b=1 comme exemple
 <cdparam x="699" y="813" />
 <sizeparam width="46" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="send event" value="send()" />
 <TGConnectingPoint num="0" id="1025" />
@@ -4568,6 +4707,7 @@ On prend b=1 comme exemple
 <cdparam x="777" y="1141" />
 <sizeparam width="46" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="send event" value="send()" />
 <TGConnectingPoint num="0" id="1028" />
@@ -4581,6 +4721,7 @@ On prend b=1 comme exemple
 <cdparam x="920" y="1178" />
 <sizeparam width="46" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="send event" value="send()" />
 <TGConnectingPoint num="0" id="1031" />
@@ -4594,6 +4735,7 @@ On prend b=1 comme exemple
 <cdparam x="1026" y="1211" />
 <sizeparam width="46" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="send event" value="send()" />
 <TGConnectingPoint num="0" id="1034" />
@@ -4625,12 +4767,13 @@ On prend b=1 comme exemple
 <cdparam x="1169" y="1214" />
 <sizeparam width="79" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="write channel" value="fromTtoP(1)" />
 <TGConnectingPoint num="0" id="1041" />
 <TGConnectingPoint num="1" id="1042" />
 <extraparam>
-<Data channelName="fromTtoP" nbOfSamples="1" secPattern="" isAttacker="No" />
+<Data channelName="fromTtoP" nbOfSamples="1" secPattern="" isAttacker="No" isEncForm="No" />
 </extraparam>
 </COMPONENT>
 
@@ -4666,6 +4809,7 @@ On prend b=1 comme exemple
 <cdparam x="1158" y="1295" />
 <sizeparam width="100" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="action state" value="tcpctrl.state =8" />
 <TGConnectingPoint num="0" id="1061" />
@@ -4685,6 +4829,7 @@ On prend b=1 comme exemple
 <cdparam x="1158" y="1402" />
 <sizeparam width="100" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="action state" value="tcpctrl.state =0" />
 <TGConnectingPoint num="0" id="1066" />
@@ -4695,6 +4840,7 @@ On prend b=1 comme exemple
 <cdparam x="1185" y="1351" />
 <sizeparam width="46" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="send event" value="send()" />
 <TGConnectingPoint num="0" id="1069" />
@@ -4726,12 +4872,13 @@ On prend b=1 comme exemple
 <cdparam x="1489" y="1132" />
 <sizeparam width="80" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="write channel" value="fromTtoA(1)" />
 <TGConnectingPoint num="0" id="1076" />
 <TGConnectingPoint num="1" id="1077" />
 <extraparam>
-<Data channelName="fromTtoA" nbOfSamples="1" secPattern="" isAttacker="No" />
+<Data channelName="fromTtoA" nbOfSamples="1" secPattern="" isAttacker="No" isEncForm="No" />
 </extraparam>
 </COMPONENT>
 
@@ -4739,12 +4886,13 @@ On prend b=1 comme exemple
 <cdparam x="1490" y="1348" />
 <sizeparam width="79" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="write channel" value="fromTtoP(1)" />
 <TGConnectingPoint num="0" id="1079" />
 <TGConnectingPoint num="1" id="1080" />
 <extraparam>
-<Data channelName="fromTtoP" nbOfSamples="1" secPattern="" isAttacker="No" />
+<Data channelName="fromTtoP" nbOfSamples="1" secPattern="" isAttacker="No" isEncForm="No" />
 </extraparam>
 </COMPONENT>
 
@@ -4752,6 +4900,7 @@ On prend b=1 comme exemple
 <cdparam x="1707" y="1026" />
 <sizeparam width="43" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="send event" value="stop()" />
 <TGConnectingPoint num="0" id="1082" />
@@ -4821,12 +4970,13 @@ On prend b=1 comme exemple
 <cdparam x="1602" y="1299" />
 <sizeparam width="79" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="write channel" value="fromTtoP(1)" />
 <TGConnectingPoint num="0" id="1119" />
 <TGConnectingPoint num="1" id="1120" />
 <extraparam>
-<Data channelName="fromTtoP" nbOfSamples="1" secPattern="" isAttacker="No" />
+<Data channelName="fromTtoP" nbOfSamples="1" secPattern="" isAttacker="No" isEncForm="No" />
 </extraparam>
 </COMPONENT>
 
@@ -4899,6 +5049,7 @@ On prend b=1 comme exemple
 <cdparam x="1506" y="1405" />
 <sizeparam width="46" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="send event" value="send()" />
 <TGConnectingPoint num="0" id="1158" />
@@ -4912,6 +5063,7 @@ On prend b=1 comme exemple
 <cdparam x="1618" y="1348" />
 <sizeparam width="46" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="send event" value="send()" />
 <TGConnectingPoint num="0" id="1161" />
@@ -4925,12 +5077,13 @@ On prend b=1 comme exemple
 <cdparam x="1613" y="1404" />
 <sizeparam width="56" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="write channel" value="temp(1)" />
 <TGConnectingPoint num="0" id="1164" />
 <TGConnectingPoint num="1" id="1165" />
 <extraparam>
-<Data channelName="temp" nbOfSamples="1" secPattern="" isAttacker="No" />
+<Data channelName="temp" nbOfSamples="1" secPattern="" isAttacker="No" isEncForm="No" />
 </extraparam>
 </COMPONENT>
 
@@ -4947,6 +5100,7 @@ On prend b=1 comme exemple
 <cdparam x="1776" y="1349" />
 <sizeparam width="100" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="action state" value="tcpctrl.state =4" />
 <TGConnectingPoint num="0" id="1169" />
@@ -4966,6 +5120,7 @@ On prend b=1 comme exemple
 <cdparam x="1870" y="1411" />
 <sizeparam width="100" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="action state" value="tcpctrl.state =6" />
 <TGConnectingPoint num="0" id="1174" />
@@ -4994,6 +5149,7 @@ On prend b=1 comme exemple
 <cdparam x="2051" y="1466" />
 <sizeparam width="100" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="action state" value="tcpctrl.state =0" />
 <TGConnectingPoint num="0" id="1181" />
@@ -5013,6 +5169,7 @@ On prend b=1 comme exemple
 <cdparam x="1946" y="1493" />
 <sizeparam width="100" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="action state" value="tcpctrl.state =0" />
 <TGConnectingPoint num="0" id="1186" />
@@ -5023,6 +5180,7 @@ On prend b=1 comme exemple
 <cdparam x="1946" y="1434" />
 <sizeparam width="100" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="action state" value="tcpctrl.state =8" />
 <TGConnectingPoint num="0" id="1189" />
@@ -5089,12 +5247,13 @@ On prend b=1 comme exemple
 <cdparam x="2198" y="1198" />
 <sizeparam width="79" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="write channel" value="fromTtoP(1)" />
 <TGConnectingPoint num="0" id="1226" />
 <TGConnectingPoint num="1" id="1227" />
 <extraparam>
-<Data channelName="fromTtoP" nbOfSamples="1" secPattern="" isAttacker="No" />
+<Data channelName="fromTtoP" nbOfSamples="1" secPattern="" isAttacker="No" isEncForm="No" />
 </extraparam>
 </COMPONENT>
 
@@ -5111,6 +5270,7 @@ On prend b=1 comme exemple
 <cdparam x="2198" y="1298" />
 <sizeparam width="78" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="send request" value="req_Timer()" />
 <TGConnectingPoint num="0" id="1231" />
@@ -5124,12 +5284,13 @@ On prend b=1 comme exemple
 <cdparam x="2209" y="1365" />
 <sizeparam width="56" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="write channel" value="temp(1)" />
 <TGConnectingPoint num="0" id="1234" />
 <TGConnectingPoint num="1" id="1235" />
 <extraparam>
-<Data channelName="temp" nbOfSamples="1" secPattern="" isAttacker="No" />
+<Data channelName="temp" nbOfSamples="1" secPattern="" isAttacker="No" isEncForm="No" />
 </extraparam>
 </COMPONENT>
 
@@ -5137,6 +5298,7 @@ On prend b=1 comme exemple
 <cdparam x="2161" y="1136" />
 <sizeparam width="153" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="action state" value="seqNum=seqNum+wind" />
 <TGConnectingPoint num="0" id="1237" />
@@ -5147,6 +5309,7 @@ On prend b=1 comme exemple
 <cdparam x="2214" y="1248" />
 <sizeparam width="46" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="send event" value="send()" />
 <TGConnectingPoint num="0" id="1240" />
@@ -5160,6 +5323,7 @@ On prend b=1 comme exemple
 <cdparam x="2187" y="1424" />
 <sizeparam width="100" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="action state" value="tcpctrl.state =2" />
 <TGConnectingPoint num="0" id="1243" />
@@ -5170,12 +5334,13 @@ On prend b=1 comme exemple
 <cdparam x="2278" y="1122" />
 <sizeparam width="79" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="write channel" value="fromTtoP(1)" />
 <TGConnectingPoint num="0" id="1246" />
 <TGConnectingPoint num="1" id="1247" />
 <extraparam>
-<Data channelName="fromTtoP" nbOfSamples="1" secPattern="" isAttacker="No" />
+<Data channelName="fromTtoP" nbOfSamples="1" secPattern="" isAttacker="No" isEncForm="No" />
 </extraparam>
 </COMPONENT>
 
@@ -5211,6 +5376,7 @@ On prend b=1 comme exemple
 <cdparam x="2267" y="1267" />
 <sizeparam width="100" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="action state" value="tcpctrl.state =2" />
 <TGConnectingPoint num="0" id="1266" />
@@ -5230,6 +5396,7 @@ On prend b=1 comme exemple
 <cdparam x="2294" y="1199" />
 <sizeparam width="46" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="send event" value="send()" />
 <TGConnectingPoint num="0" id="1271" />
@@ -5270,6 +5437,7 @@ On prend b=1 comme exemple
 <cdparam x="1465" y="1192" />
 <sizeparam width="129" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="send event" value="receive_Application()" />
 <TGConnectingPoint num="0" id="1280" />
@@ -5283,12 +5451,13 @@ On prend b=1 comme exemple
 <cdparam x="1698" y="1086" />
 <sizeparam width="60" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="read channel" value="temp(1) " />
 <TGConnectingPoint num="0" id="1283" />
 <TGConnectingPoint num="1" id="1284" />
 <extraparam>
-<Data channelName="temp" nbOfSamples="1" secPattern="" isAttacker="No" />
+<Data channelName="temp" nbOfSamples="1" secPattern="" isAttacker="No" isEncForm="No" />
 </extraparam>
 </COMPONENT>
 
@@ -5400,7 +5569,7 @@ On prend b=1 comme exemple
 <cdparam x="234" y="47" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="600" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector from start state to for loop" value="null" />
-<P1  x="234" y="47" id="727" />
+<P1  x="234" y="42" id="727" />
 <P2  x="235" y="80" id="754" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>

@@ -59,6 +59,7 @@ public class ValidationDataTree implements GenericTree {
     private CorrespondanceValidationDataTree cvdt;
     private InvariantDataTree idt;
     private GraphTree gt;
+    private SimulationTraceTree stt;
 
     public ValidationDataTree(MainGUI _mgui) {
         mgui = _mgui;
@@ -67,6 +68,7 @@ public class ValidationDataTree implements GenericTree {
         cvdt = new CorrespondanceValidationDataTree();
         idt = new InvariantDataTree(mgui);
         gt = new GraphTree(mgui);
+        stt = new SimulationTraceTree(mgui);
     }
 
     // TREE MANAGEMENT
@@ -77,7 +79,7 @@ public class ValidationDataTree implements GenericTree {
 
     public int getChildCount() {
         //
-        return 5;
+        return 6;
     }
 
     public Object getChild(int index) {
@@ -90,8 +92,10 @@ public class ValidationDataTree implements GenericTree {
         case 2:
             return cvdt;
         case 3:
-            return gt;
-        case 4:
+            return stt;
+            case 4:
+                return gt;
+        case 5:
             return idt;
         }
         return null;
@@ -105,10 +109,12 @@ public class ValidationDataTree implements GenericTree {
             return 1;
         } else if (child instanceof CorrespondanceValidationDataTree) {
             return 2;
-        } else if (child instanceof GraphTree) {
+        } else if (child instanceof SimulationTraceTree) {
             return 3;
-        } else if (child instanceof InvariantDataTree) {
+        } else if (child instanceof GraphTree) {
             return 4;
+        } else if (child instanceof InvariantDataTree) {
+            return 5;
         }
         return -1;
     }

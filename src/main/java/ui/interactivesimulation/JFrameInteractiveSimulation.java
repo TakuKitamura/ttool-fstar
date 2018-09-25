@@ -40,6 +40,7 @@ package ui.interactivesimulation;
 
 import common.ConfigurationTTool;
 import common.SpecConfigTTool;
+import ddtranslatorSoclib.toTopCell.Simulation;
 import launcher.LauncherException;
 import launcher.RshClient;
 import myutil.*;
@@ -2606,16 +2607,20 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
     	return filename;
     }
 
+    // Format. VCD=0, HTML=1, TXT=2
     private void sendSaveTraceCommand( 	String filename,
     									final String format) {
 //        String param = saveFileName.getText().trim();
-        
+
+        //TraceManager.addDev("format >" + format + "<");
+
         if ( filename.isEmpty() ) {
         	final String message = "Please enter a file name for the trace.";
         	JOptionPane.showMessageDialog( this, message, "Output File Name not Specified", JOptionPane.ERROR_MESSAGE );
         	error( message );
         }
         else {
+            String original = filename;
         	final String directory = saveDirName.getText().trim();
         	
 	        if ( !directory.isEmpty() ) {
@@ -2624,10 +2629,24 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	        	else
 	        		filename = directory + filename;
 	        }
-	        if ("vcd".equals(FileUtils.getExtension(filename))) {
-	        	SpecConfigTTool.ExternalCommand1 = SpecConfigTTool.ExternalCommand1.replace(SpecConfigTTool.lastVCD, filename);
+
+	        // VCD
+	        if (format.compareTo("0") == 0) {
+	        	//SpecConfigTTool.ExternalCommand1 = SpecConfigTTool.ExternalCommand1.replace(SpecConfigTTool.lastVCD, filename);
 	        	SpecConfigTTool.lastVCD = filename;
+
 	        }
+
+	        int type;
+            if (format.compareTo("0") == 0) {
+                type = SimulationTrace.VCD_DIPLO;
+            } else if (format.compareTo("1") == 0) {
+	            type = SimulationTrace.HTML_DIPLO;
+            } else {
+	            type = SimulationTrace.TXT_DIPLO;
+            }
+	        SimulationTrace st = new SimulationTrace(original, type, filename);
+            mgui.addSimulationTrace(st);
 
 	        // DB: now useless check
 //	        if (param.length() >0) {

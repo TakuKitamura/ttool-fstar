@@ -961,7 +961,7 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
                 executeSimulationCmd(exe2.getText(), "Generating one simulation trace");
                 String[] tab = exe2.getText().split(" ");
                 SpecConfigTTool.lastVCD = tab[2];
-                SpecConfigTTool.ExternalCommand1 = "gtkwave " + SpecConfigTTool.lastVCD;
+                //SpecConfigTTool.ExternalCommand1 = "gtkwave " + SpecConfigTTool.lastVCD;
                 break;
             case ANIMATION:
                 dispose();

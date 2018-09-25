@@ -201,8 +201,10 @@ public class GTURTLEModeling {
     private String tlsa;
     private String tlsadot;
 
+    private List<SimulationTrace> simulationTraces;
     private List<RG> graphs;
     private GraphTree gt;
+    private SimulationTraceTree stt;
 
     private int nbRTLOTOS;
     private int nbSuggestedDesign;
@@ -264,6 +266,7 @@ public class GTURTLEModeling {
         pointerOperation = -1;
 
         graphs = new ArrayList<RG>();
+        simulationTraces = new ArrayList<SimulationTrace>();
         invariants = new LinkedList<Invariant>();
 
         //vdt = new ValidationDataTree(mgui);
@@ -271,6 +274,7 @@ public class GTURTLEModeling {
         idt = new InvariantDataTree(mgui);
         st = new SearchTree(mgui);
         gt = new GraphTree(mgui);
+        stt = new SimulationTraceTree(mgui);
 
 		/*if (!Charset.isSupported("UTF-8")) {
 		  ErrorGUI.exit(ErrorGUI.ERROR_CHARSET);
@@ -288,6 +292,20 @@ public class GTURTLEModeling {
             return false;
         }
         return tm.isARegularTIFSpec();
+    }
+
+    public List<SimulationTrace> getSimulationTraces() {
+        return simulationTraces;
+    }
+
+    public void addSimulationTrace(SimulationTrace newTrace) {
+        TraceManager.addDev("Adding new simulation trace " + newTrace);
+        simulationTraces.add(newTrace);
+    }
+
+    public void removeSimulationTrace(SimulationTrace oldTrace) {
+        //TraceManager.addDev("Adding new graph " + newGraph);
+        simulationTraces.remove(oldTrace);
     }
 
     public List<RG> getRGs() {
@@ -2582,6 +2600,22 @@ public class GTURTLEModeling {
             mgui.dtree.expandMyPath(new TreePath(obj));
             mgui.dtree.forceUpdate();
 
+        } else {
+            TraceManager.addDev("Pb to expand Graph tree");
+        }
+    }
+
+    public void expandToSimulationTraces() {
+        if ((stt != null) && (simulationTraces != null) && (simulationTraces.size() > 0)) {
+            Object[] obj = new Object[2];
+            obj[0] = mgui.dtree.getModel().getRoot();
+            obj[1] = stt;
+            TraceManager.addDev("Expanding Path because of simulation traces");
+            mgui.dtree.expandMyPath(new TreePath(obj));
+            mgui.dtree.forceUpdate();
+
+        } else {
+            TraceManager.addDev("Pb to expand ST tree");
         }
     }
 
@@ -2590,7 +2624,7 @@ public class GTURTLEModeling {
     }
 
     public int getChildCount() {
-        return panels.size() + 4;
+        return panels.size() + 5;
     }
 
     public Object getChild(int index) {
@@ -2599,8 +2633,10 @@ public class GTURTLEModeling {
         } else if (index == panels.size()) {
             return mcvdt;
         } else if (index == (panels.size() + 1)) {
-            return gt;
+            return stt;
         } else if (index == (panels.size() + 2)) {
+            return gt;
+        } else if (index == (panels.size() + 3)) {
             return idt;
         } else {
             return st;
@@ -2618,16 +2654,20 @@ public class GTURTLEModeling {
             return panels.size();
         }
 
-        if (child == gt) {
+        if (child == stt) {
             return panels.size() + 1;
         }
 
-        if (child == idt) {
+        if (child == gt) {
             return panels.size() + 2;
         }
 
+        if (child == idt) {
+            return panels.size() + 3;
+        }
 
-        return panels.size() + 3;
+
+        return panels.size() + 4;
     }
 
     // Projection management
