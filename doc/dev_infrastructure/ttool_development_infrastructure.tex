@@ -708,7 +708,7 @@ System.out.println("blah blah blah");
 or similar ways of doing.
 
 \subsubsection{Warnings}
-TTool is compiled with the following Xlint warning flags:
+TTool is compiled with the following \textit{Xlint} warning flags:
 \begin{itemize}
     \item unchecked
     \item deprecation
@@ -739,17 +739,17 @@ projects. Here is a description of these sub-projects:
 \begin{itemize}
     \item \textbf{ttool}. This is the main project: the TTool application with a
         graphical user interface.
-    \item \textbf{graphminimize}. TODO
-    \item \textbf{graphshow}. TODO
-    \item \textbf{launcher}. TODO
-    \item \textbf{rundse}. TODO
-    \item \textbf{simulationcontrol} or remotesimulator. TODO
-    \item \textbf{tiftranslator}. TODO
-    \item \textbf{tmltranslator}. TODO
-    \item \textbf{webcrawler}. TODO
+    \item \textbf{graphminimize}. Command line application for minimizing graphs.
+    \item \textbf{graphshow}. Command line application for displaying graphs.
+    \item \textbf{launcher}. This is the application that launch the server in order to 
+    \item \textbf{rundse}. Application that run the \textbf{DSE} (\textit{Design Space Exploration}) of the current project. In \texttt{TTool/DIPLODOCUS}, the DSE evaluates the performance of a mapping solution by simulating the workload of computations and data-transfers
+    \item \textbf{simulationcontrol}. Application that allow to simulate a remote control between an \texttt{host} and a \texttt{port}
+    \item \textbf{tiftranslator}. This is the application for translating \textit{TIFT} to other languages (\texttt{LOTOS}, \texttt{RT-LOTOS}, \texttt{UPPAAL} or \texttt{JAVA}). The imput file should be in \textit{XML/TIF} format and be readable.
+    \item \textbf{tmltranslator}. The application in order to tranlate \textit{TML} to other languages (\texttt{LOTOS}, \texttt{UPPAAL}, \texttt{SystemC}, \texttt{SystemC2} or \texttt{TML}). The imput file must be in \textit{TML} format and be readable
+    \item \textbf{webcrawler}. Implement of a WebCrawler for \textbf{CVEs} (\textit{Common Vulnerabilities and Exposures}
         \begin{itemize}
-            \item \textbf{client}. TODO
-            \item \textbf{server}. TODO
+            \item \textbf{client}. Client part of the WebCrawler 
+            \item \textbf{server}. Server part of the WebCrawler
         \end{itemize}
     \item \textbf{jttool}. TODO \textit{(Development of this project has been
         dropped)}
@@ -809,6 +809,8 @@ The tree on the left contains a part dedicated to errors and warnings. The list 
 private List<CheckingError> checkingErrors;
 private List<CheckingError> warnings;
 \end{lstlisting}
+
+\newpage
 
 \section{Testing}
 
@@ -965,6 +967,8 @@ paths.
 
 TODO
 
+\newpage
+
 \section{Building}
 
 \subsection{Compiling and Packaging}
@@ -1052,8 +1056,12 @@ $
 \subsection{Automated Tests}
 TODO
 
+\newpage 
+
 \section{Installing}
 TODO
+
+\newpage
 
 \section{Adding a graphical operator to a diagram}
 This section addresses the adding of a specific graphical component to a diagram. To better show how to do this, we use the example on how we have added a FPGA component to the DIPLODOCUS deployment diagram. A FPGA is a \textit{computation unit}, just like a CPU, but the steps listed are valid for any kind of graphical component like memories or communication nodes, of for any other diagram of TTool. A few things to remember:
