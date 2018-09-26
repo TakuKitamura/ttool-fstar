@@ -672,7 +672,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         	PipedInputStream pis = new PipedInputStream(pos, 4096);
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(pos));
 
-            JFrameSimulationSDPanel jfssdp = new JFrameSimulationSDPanel(null, tdp.getMGUI(), pragma);
+            JFrameSimulationSDPanel jfssdp = new JFrameSimulationSDPanel(null, tdp.getMGUI(), "Trace for confidentiality property of " + pragma);
             jfssdp.setIconImage(IconManager.img8);
             GraphicLib.centerOnParent(jfssdp, 600, 600);
             jfssdp.setFileReference(new BufferedReader(new InputStreamReader(pis)));
@@ -681,9 +681,10 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
                           //      .APPLICATION_EXCLUDE);
             jfssdp.toFront();
 
-                        // TraceManager.addDev("\n--- Trace ---");
+                        TraceManager.addDev("\n--- Trace ---");
             int i = 0;
             for (ProVerifResultTraceStep step : resTrace.getTrace()) {
+                TraceManager.addDev("\n--- Trace #" + i + ": " + step.toString());
             	step.describeAsTMLSDTransaction(bw, i);
                 i++;
             }
