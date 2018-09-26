@@ -552,6 +552,8 @@ public class AUTGraph implements myutil.Graph {
             return;
         }
 
+        TraceManager.addDev("RG before partition: " + toFullString());
+
         partitionGraph();
 
     }
@@ -588,7 +590,7 @@ public class AUTGraph implements myutil.Graph {
                         for (AUTTransition trM : st1.outTransitions) {
                             st.outTransitions.add(trM);
                             trM.origin = st.id;
-                            //TraceManager.addDev("New out transitions " + trM);
+                           // TraceManager.addDev("New out transitions " + trM);
                         }
                         st1.outTransitions.clear();
                         break;
@@ -1046,7 +1048,10 @@ public class AUTGraph implements myutil.Graph {
         List<AUTElement> sortedAlphabet = new ArrayList<AUTElement>(alphabet.values());
         Collections.sort(sortedAlphabet);
 
-        //TraceManager.addDev("Alphabet size:" + alphabet.size());
+        TraceManager.addDev("Alphabet size:" + sortedAlphabet.size());
+        for (int i=0; i<alphabet.size(); i++) {
+            TraceManager.addDev("Letter #" + i +  ": " + sortedAlphabet.get(i).toString());
+        }
 
 
         Map<Integer, AUTBlock> allBlocks = Collections.synchronizedMap(new HashMap<Integer, AUTBlock>());
@@ -1087,7 +1092,7 @@ public class AUTGraph implements myutil.Graph {
 
         //printConfiguration(partition, w);
 
-        int maxIte = 1000; // With same nb of partitions
+        int maxIte = 10; // With same nb of partitions
         int nbOfPartitions = w.size();
         int evolution = 20;
         int hashCode = -1;
@@ -1113,7 +1118,7 @@ public class AUTGraph implements myutil.Graph {
 
             // Simple splitter?
             if (currentP.blocks.size() == 1) {
-                //TraceManager.addDev("Simple splitter = " + currentP);
+                TraceManager.addDev("Simple splitter = " + currentP);
                 AUTBlock currentBlock = currentP.blocks.get(0);
                 //List<AUTElement> sortedAlphabet = new ArrayList<AUTElement>(alphabet.values());
                 //Collections.sort(sortedAlphabet);
@@ -1150,15 +1155,15 @@ public class AUTGraph implements myutil.Graph {
                             X_X1_X2.addBlock(blockX);
                             X_X1_X2.addBlock(blockX1);
                             X_X1_X2.addBlock(blockX2);
-                            //TraceManager.addDev("Test concat X1+X2=" + AUTBlock.concat(blockX1, blockX2));
+                            TraceManager.addDev("Test concat X1+X2=" + AUTBlock.concat(blockX1, blockX2));
                             w.addPartition(X_X1_X2);
-                            //TraceManager.addDev("Modifying P and W:");
-                            //printConfiguration(partition, w);
-                            //TraceManager.addDev("-----------------\n");
+                            TraceManager.addDev("Modifying P and W:");
+                            printConfiguration(partition, w);
+                            TraceManager.addDev("-----------------\n");
                         }
 
                     }
-                    //TraceManager.addDev("-----------------\n");
+                    TraceManager.addDev("-----------------\n");
 
                 }
 
