@@ -2195,15 +2195,21 @@ public class TML2Avatar {
 			for (SecurityPattern sp:pubKeys.keySet()){
 				if (pubKeys.get(sp).size()!=0){
 					String keys = "";
+					List<String> pubKeyNames = new ArrayList<String>();
 					for (AvatarAttribute key: pubKeys.get(sp)){
-						keys= keys+" "+key.getBlock().getName() + "."+key.getName();
+						if (!pubKeyNames.contains(key.getBlock().getName()+"."+key.getName())){
+							keys= keys+" "+key.getBlock().getName() + "."+key.getName();
+							pubKeyNames.add(key.getBlock().getName()+"."+key.getName());
+						}
 					}
-					avspec.addPragma(new AvatarPragmaInitialKnowledge("#InitialSessionKnowledge "+keys, null, pubKeys.get(sp),true));
+				//	avspec.addPragma(new AvatarPragmaInitialKnowledge("#InitialSessionKnowledge "+keys, null, pubKeys.get(sp),true));
+					//System.out.println("pragma " + keys);
 				}
 			}
+			
 			tmlmap.getTMLModeling().secChannelMap = secChannelMap;
 	
-		//	System.out.println("avatar spec\n" +avspec);
+//			System.out.println("avatar spec\n" +avspec);
 			return avspec;
 		}
 

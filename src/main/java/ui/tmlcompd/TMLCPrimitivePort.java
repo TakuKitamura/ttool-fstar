@@ -671,12 +671,19 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         try {
         	PipedInputStream pis = new PipedInputStream(pos, 4096);
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(pos));
-
-            JFrameSimulationSDPanel jfssdp = new JFrameSimulationSDPanel(null, tdp.getMGUI(), "Trace for confidentiality property of " + pragma);
+			String title = "";
+			if (isOrigin){	
+				title = "Trace for confidentiality property of ";
+			}
+			else {
+				title = "Trace for authenticity property of ";
+			}
+            JFrameSimulationSDPanel jfssdp = new JFrameSimulationSDPanel(null, tdp.getMGUI(), title + pragma);
             jfssdp.setIconImage(IconManager.img8);
             GraphicLib.centerOnParent(jfssdp, 600, 600);
             jfssdp.setFileReference(new BufferedReader(new InputStreamReader(pis)));
             jfssdp.setVisible(true);
+			jfssdp.setLimitEntity(false);
                         //jfssdp.setModalExclusionType(ModalExclusionType
                           //      .APPLICATION_EXCLUDE);
             jfssdp.toFront();
