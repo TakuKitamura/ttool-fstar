@@ -47,7 +47,11 @@ public class SimulationTrace {
     public static final int TXT_DIPLO = 1;
     public static final int HTML_DIPLO = 2;
 
-	private static String[] TYPES = {"VCD DIPLO", "TXT DIPLO", "HTML DIPLO"};
+    public static final int PNG_AVATAR = 3;
+    public static final int TXT_AVATAR = 4;
+    public static final int SVG_AVATAR = 5;
+
+	private static String[] TYPES = {"VCD DIPLO", "TXT DIPLO", "HTML DIPLO", "PNG AVATAR", "TXT AVATAR", "SVG AVATAR"};
 
     public SimulationTrace(String name, int type) {
         this(name, type, null);

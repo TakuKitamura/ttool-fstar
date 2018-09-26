@@ -140,6 +140,7 @@ import java.util.List;
 // AVATAR
 
 //Communication Pattern javaCC parser
+//Communication Pattern javaCC parser
 //import compiler.tmlCPparser.*;
 
 /**
@@ -299,8 +300,24 @@ public class GTURTLEModeling {
     }
 
     public void addSimulationTrace(SimulationTrace newTrace) {
-        TraceManager.addDev("Adding new simulation trace " + newTrace);
+        //TraceManager.addDev("Adding new simulation trace " + newTrace);
+        if (newTrace.hasFile()) {
+            // We have to remove identical traces
+            LinkedList<SimulationTrace> ll = new LinkedList<>();
+            for(SimulationTrace trace: simulationTraces) {
+                if (trace.hasFile()) {
+                    if (trace.getFullPath().compareTo(newTrace.getFullPath()) == 0) {
+                        ll.add(trace);
+                    }
+                }
+            }
+            for(SimulationTrace trace: ll) {
+                simulationTraces.remove(trace);
+            }
+        }
+
         simulationTraces.add(newTrace);
+
     }
 
     public void removeSimulationTrace(SimulationTrace oldTrace) {

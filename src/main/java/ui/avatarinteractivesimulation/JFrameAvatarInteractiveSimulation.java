@@ -1803,10 +1803,16 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
             return;
         }
 
-        JOptionPane.showMessageDialog(this,
+        /*JOptionPane.showMessageDialog(this,
                 "Simulation trace was saved in " + fileName,
                 "Error",
-                JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.INFORMATION_MESSAGE);*/
+
+        String shortFileName;
+        File f = new File(fileName);
+        shortFileName = f.getName();
+        SimulationTrace st = new SimulationTrace(shortFileName, SimulationTrace.TXT_AVATAR, fileName);
+        mgui.addSimulationTrace(st);
 
         //ass.printExecutedTransactions();
     }
@@ -1852,6 +1858,12 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
         SVGGeneration gen = new SVGGeneration();
         gen.saveInSVG(sdpanel, fileName);
         //newSVGSave(fileName);
+
+        String shortFileName;
+        File f = new File(fileName);
+        shortFileName = f.getName();
+        SimulationTrace st = new SimulationTrace(shortFileName, SimulationTrace.SVG_AVATAR, fileName);
+        mgui.addSimulationTrace(st);
 
 
         /*StringBuffer sb = new StringBuffer("<?xml version=\"1.0\" standalone=\"no\"?>\n");
@@ -1950,7 +1962,10 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 
         file = new File(filePath);
 
-        mgui.writeImageCapture(bi, file, true);
+        mgui.writeImageCapture(bi, file, false);
+
+        SimulationTrace st = new SimulationTrace(file.getName(), SimulationTrace.PNG_AVATAR, file.getAbsolutePath());
+        mgui.addSimulationTrace(st);
     }
 
     public void deleteAsyncMsg() {
