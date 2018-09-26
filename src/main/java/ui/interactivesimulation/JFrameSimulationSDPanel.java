@@ -208,7 +208,9 @@ public	class JFrameSimulationSDPanel extends JFrame implements ActionListener {
 	public void setNbOfTransactions(int x, long minTime, long maxTime) {
 		status.setText("" + x + " transactions, min time=" + minTime + ", max time=" + maxTime);
 	}
-	
+	public void setLimitEntity(boolean limit){
+		sdpanel.setLimitEntity(limit);
+	}
     
 	
 	
