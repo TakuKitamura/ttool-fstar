@@ -681,6 +681,7 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
                         jfssdp.setVisible(true);
                         jfssdp.setModalExclusionType(ModalExclusionType
                                 .APPLICATION_EXCLUDE);
+						jfssdp.setLimitEntity(false);
                         jfssdp.toFront();
 
                         // TraceManager.addDev("\n--- Trace ---");

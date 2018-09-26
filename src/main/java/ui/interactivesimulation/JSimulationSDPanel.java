@@ -117,6 +117,7 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
     private Vector<GenericTransaction> transactions;
 
     private JFrameSimulationSDPanel jfssdp;
+	private boolean limitEntity = true; //For simulation, we want to select the entities to display, but for proverif traces, we display all of them
 
 
     JSimulationSDPanel(JFrameSimulationSDPanel _jfssdp) {
@@ -138,6 +139,7 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
         addMouseMotionListener(this);
 
     }
+
 
     //Return true iff exclu was obtained
     private synchronized boolean tryToGetExclu() {
@@ -452,6 +454,10 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
         g.drawLine(currentX, currentY-20, currentX, currentY);
         return currentY;
     }
+
+	public void setLimitEntity(boolean limit){
+		limitEntity = limit;
+	}
 
     private int drawSendAsynchro(Graphics g, GenericTransaction _gt, int currentX, int currentY) {
         int w;
@@ -1080,10 +1086,17 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
         //TraceManager.addDev("4");
 
 //        addEntityNameIfApplicable(tmp);
-        gt.entityName = tmp;
+
         if (!entityNames.contains(tmp)){
-        	return;
+			if (limitEntity){
+	        	return;
+			}
+			else {
+				addEntityNameIfApplicable(tmp);
+			}
         }
+		 
+	    gt.entityName = tmp;	
 
         // Type of the transaction
         tmp = extract(trans, "type");
@@ -1143,12 +1156,19 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
         tmp = extract(trans, "blockdestination");
         if (tmp != null) {
             gt.otherEntityName = tmp;
-           // addEntityNameIfApplicable(tmp);
+//            addEntityNameIfApplicable(tmp);
         }
         
 
         if (!entityNames.contains(tmp)){
-        	return;
+			if (limitEntity){
+	        	return;
+			}
+			else {
+				if (tmp!=null){	
+					addEntityNameIfApplicable(tmp);
+				}
+			}
         }
 
         // Channel of the transaction?
