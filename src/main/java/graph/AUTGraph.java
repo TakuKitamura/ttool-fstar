@@ -48,6 +48,9 @@ import java.io.BufferedReader;
 import java.io.StringReader;
 import java.util.*;
 
+import rationals.*;
+import rationals.transformations.*;
+
 /**
  * Class AUTGraph
  * Creation : 16/09/2004
@@ -1026,6 +1029,75 @@ public class AUTGraph implements myutil.Graph {
             hasExitTransition[t.origin] = true;
             hasEntryTransition[t.destination] = true;
         }
+    }
+
+    public AUTGraph fromAutomaton(Automaton a) {
+        AUTGraph graph = new AUTGraph();
+        Set<Transition<String>> trs = a.delta();
+        Set<State> sts = a.states();
+
+        HashMap<State, Integer> mapOfStates = new HashMap<>();
+        int cpt = 1;
+        for(State st: sts) {
+            if (st.isInitial()) {
+                mapOfStates.put(st, new Integer(0));
+            } else {
+                mapOfStates.put(st, new Integer(cpt));
+                cpt ++;
+            }
+        }
+
+        for(Transition tr: trs) {
+            State s1 = tr.start();
+            State s2 = tr.end();
+            String label = (String)(tr.label());
+            Integer i1 = mapOfStates.get(s1);
+            Integer i2 = mapOfStates.get(s2);
+
+            if ((i1 != null) && (i2 != null)) {
+                AUTTransition trNew = new AUTTransition(i1.intValue(), label, i2.intValue());
+                graph.addTransition(trNew);
+            }
+        }
+
+        computeStates();
+
+        return graph;
+    }
+
+    public Automaton toAutomaton() {
+        Automaton<String, Transition<String>, TransitionBuilder<String>> a = new Automaton<>();
+        computeStates();
+
+        boolean initial = true;
+        for(AUTState s: states) {
+            State as = a.addState(initial, s.isTerminationState());
+            s.referenceObject = as;
+            initial = false;
+        }
+        for(AUTTransition t: transitions) {
+            try {
+                String label = t.transition;
+                if (t.isTau) {
+                    label = null;
+                }
+                a.addTransition(new Transition<String>((State) (states.get(t.origin).referenceObject), label, (State) (states.get(t
+                        .destination)
+                        .referenceObject)));
+            } catch (NoSuchStateException nsse) { }
+        }
+
+        return a;
+    }
+
+    public void reduceGraph() {
+        Automaton a = toAutomaton();
+        Automaton<String, Transition<String>, TransitionBuilder<String>> b =
+                new EpsilonTransitionRemover<String, Transition<String>,
+                        TransitionBuilder<String>>().transform(a);
+
+        b = new Reducer<String, Transition<String>, TransitionBuilder<String>>().transform(b);
+        TraceManager.addDev("Error in reduce graph:" +  b);
     }
 
 
