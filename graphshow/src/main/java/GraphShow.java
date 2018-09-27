@@ -135,7 +135,7 @@ public class GraphShow  {
 	 AUTGraph graph = new AUTGraph();
 	 graph.buildGraph(graphData);
 
-	 System.out.println("Graph has " + graph.getNbOfStates() + " and " + graph.getNbOfTransitions() + " transitions.");
+	 System.out.println("Graph has " + graph.getNbOfStates() + " states and " + graph.getNbOfTransitions() + " transitions.");
 
 	 graph.display(true);
 

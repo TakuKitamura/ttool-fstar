@@ -1155,7 +1155,7 @@ public class AUTGraph implements myutil.Graph {
                             X_X1_X2.addBlock(blockX);
                             X_X1_X2.addBlock(blockX1);
                             X_X1_X2.addBlock(blockX2);
-                            TraceManager.addDev("Test concat X1+X2=" + AUTBlock.concat(blockX1, blockX2));
+                            //TraceManager.addDev("Test concat X1+X2=" + AUTBlock.concat(blockX1, blockX2));
                             w.addPartition(X_X1_X2);
                             TraceManager.addDev("Modifying P and W:");
                             printConfiguration(partition, w);
@@ -1171,7 +1171,7 @@ public class AUTGraph implements myutil.Graph {
 
             // Compound splitter
             else if (currentP.blocks.size() == 3) {
-                //TraceManager.addDev("Complexe splitter (b, bi, bii) =" + currentP);
+                TraceManager.addDev("Complex splitter (b, bi, bii) =" + currentP);
                 AUTBlock b = currentP.blocks.get(0);
                 AUTBlock bi = currentP.blocks.get(1);
                 AUTBlock bii = currentP.blocks.get(2);
@@ -1181,7 +1181,7 @@ public class AUTGraph implements myutil.Graph {
                     bii = currentP.blocks.get(1);
                 }
 
-                //TraceManager.addDev("B= " + b +  " bi=" + bi + " bii=" + bii);
+                TraceManager.addDev("B= " + b +  " bi=" + bi + " bii=" + bii);
 
                 for (AUTElement elt : sortedAlphabet) {
                     //TraceManager.addDev("\n*** Considering alphabet element = " + elt.value);
@@ -1214,13 +1214,13 @@ public class AUTGraph implements myutil.Graph {
                                 blockX3.addState(st);
                             }
                         }
-                        //TraceManager.addDev("Block X = " + blockX + " Block1,2,3 computed\n\tX1 = " + blockX1 + "\n\tX2 = " + blockX2 + "\n\tX3 = " + blockX3);
+                        TraceManager.addDev("Block X = " + blockX + " Block1,2,3 computed\n\tX1 = " + blockX1 + "\n\tX2 = " + blockX2 + "\n\tX3 = " + blockX3);
 
                         if ((blockX.compareTo(blockX1) == 0) || (blockX.compareTo(blockX2) == 0) || (blockX.compareTo(blockX2) == 0)) {
                             // do nothing
-                            //TraceManager.addDev("Identical blocks! X");
+                            TraceManager.addDev("Identical blocks! X");
                         } else {
-                            //TraceManager.addDev("Non Identical blocks! X");
+                            TraceManager.addDev("Non Identical blocks! X");
                             // Modifying partition
                             partition.removeBlock(blockX);
                             partition.addIfNonEmpty(blockX1);
@@ -1272,7 +1272,7 @@ public class AUTGraph implements myutil.Graph {
         }
 
         TraceManager.addDev("\nAll done: it: " + maxIte + "\n---------");
-        //printConfiguration(partition, w);
+        printConfiguration(partition, w);
         //TraceManager.addDev("------------------");
 
         // Generating new graph
