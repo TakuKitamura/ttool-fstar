@@ -838,7 +838,7 @@ public class TMLModeling<E> {
                         port.mappingName= mappingName;
                         //Add Result Trace also
                         ProVerifResultTrace trace = pvoa.getResults().get(pragma).getTrace();
-                        if (trace !=null){
+                        if (trace !=null && port.isOrigin){
                         	port.setResultTrace(trace);
                         	port.setPragmaString(pragma.toString());
                         }
@@ -929,7 +929,7 @@ public class TMLModeling<E> {
                             port.checkStrongAuthStatus = 3;
                             port.mappingName= mappingName;
                             ProVerifResultTrace trace = pvoa.getResults().get(pragma).getTrace();
-                        	if (trace !=null){
+                        	if (trace !=null && !port.isOrigin){
                         		port.setResultTrace(trace);
                         		port.setPragmaString(pragma.toString());
                         	}
@@ -981,7 +981,7 @@ public class TMLModeling<E> {
                                     TraceManager.addDev("not verified " + signalName);
                                     port.secName= signalName;
                                     ProVerifResultTrace trace = pvoa.getResults().get(pragma).getTrace();
-                        			if (trace !=null){
+                        			if (trace !=null && !port.isOrigin){
                         				port.setResultTrace(trace);
                         				port.setPragmaString(pragma.toString());
                         			}
@@ -1012,7 +1012,7 @@ public class TMLModeling<E> {
                                         port.checkWeakAuthStatus = 3;
                                         port.secName= signalName;
                                         ProVerifResultTrace trace = pvoa.getResults().get(pragma).getTrace();
-                        				if (trace !=null){
+                        				if (trace !=null && !port.isOrigin){
                         					port.setResultTrace(trace);
                         					port.setPragmaString(pragma.toString());
   					                      }
@@ -1035,7 +1035,7 @@ public class TMLModeling<E> {
                                 port.checkWeakAuthStatus = 2;
                                 port.mappingName= mappingName;
                                 ProVerifResultTrace trace = pvoa.getResults().get(pragma).getTrace();
-                        		if (trace !=null){
+                        		if (trace !=null && !port.isOrigin){
                         			port.setResultTrace(trace);
                         			port.setPragmaString(pragma.toString());
                         		}
@@ -1092,7 +1092,7 @@ public class TMLModeling<E> {
                                         port.checkWeakAuthStatus = 2;
                                         port.secName= signalName;
                                         ProVerifResultTrace trace = pvoa.getResults().get(pragma).getTrace();
-                        				if (trace !=null){
+                        				if (trace !=null && !port.isOrigin){
                         					port.setResultTrace(trace);
                 				        	port.setPragmaString(pragma.toString());
  				                       }
@@ -1123,7 +1123,7 @@ public class TMLModeling<E> {
                                             port.checkWeakAuthStatus = 2;
                                             port.secName= signalName;
                                             ProVerifResultTrace trace = pvoa.getResults().get(pragma).getTrace();
-                       						if (trace !=null){
+                       						if (trace !=null && !port.isOrigin){
                         						port.setResultTrace(trace);
                         						port.setPragmaString(pragma.toString());
                         					}
@@ -1150,7 +1150,7 @@ public class TMLModeling<E> {
                             port.checkStrongAuthStatus = 2;
                             port.mappingName= mappingName;
                             ProVerifResultTrace trace = pvoa.getResults().get(pragma).getTrace();
-                        	if (trace !=null){
+                        	if (trace !=null && !port.isOrigin){
                         		port.setResultTrace(trace);
                         		port.setPragmaString(pragma.toString());
                         	}
@@ -1210,7 +1210,7 @@ public class TMLModeling<E> {
                                     port.checkStrongAuthStatus = 2;
                                     port.secName= signalName;
                                     ProVerifResultTrace trace = pvoa.getResults().get(pragma).getTrace();
-                        			if (trace !=null){
+                        			if (trace !=null && !port.isOrigin){
                         				port.setResultTrace(trace);
                         				port.setPragmaString(pragma.toString());
                         			}
@@ -1242,7 +1242,7 @@ public class TMLModeling<E> {
                                         port.checkStrongAuthStatus = 2;
                                         port.secName= signalName;
                         				ProVerifResultTrace trace = pvoa.getResults().get(pragma).getTrace();
-                        				if (trace !=null){
+                        				if (trace !=null && !port.isOrigin){
                         					port.setResultTrace(trace);
                         					port.setPragmaString(pragma.toString());
                         				}                                        
