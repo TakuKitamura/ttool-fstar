@@ -23,6 +23,7 @@ dependencies {
     compileOnly name:'batik-xml'
     compileOnly name:'batik-dom'
     compileOnly name:'batik-util'
+    compile name:'jautomata-core'
 }
 
 jar {

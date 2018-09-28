@@ -25,6 +25,7 @@ dependencies {
     compile name: 'commons-io-2.5'
     compileOnly name: 'commons-codec-1.10'
     compileOnly name: 'jsoup-1.8.1'
+    compile name: 'jautomata-core'
 }
 
 jar {
