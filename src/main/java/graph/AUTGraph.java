@@ -540,6 +540,8 @@ public class AUTGraph implements myutil.Graph {
             }
         }
 
+        computeStates();
+
         //minimizeTau(tauOnly);
         //return this;
 
@@ -1103,18 +1105,21 @@ public class AUTGraph implements myutil.Graph {
 
     @SuppressWarnings("unchecked")
     public AUTGraph reduceGraph() {
-        Automaton a = toAutomaton();
-        //TraceManager.addDev("Initial AUT:" +  a.toString());
+        factorizeNonTauTransitions();
 
-        @SuppressWarnings("unchecked")
+        Automaton a = toAutomaton();
+        TraceManager.addDev("Initial AUT:" +  a.toString());
+
+        /*@SuppressWarnings("unchecked")
         Automaton<String, Transition<String>, TransitionBuilder<String>> newA =
                 new EpsilonTransitionRemover<String, Transition<String>,
                         TransitionBuilder<String>>().transform((Automaton<String, Transition<String>, TransitionBuilder<String>>)a);
-        //TraceManager.addDev("Aut with no tau / epsilon:" +  newA.toString());
+        TraceManager.addDev("Aut with no tau / epsilon:" +  newA.toString());*/
+        Automaton newA = a;
 
         newA = new Reducer<String, Transition<String>, TransitionBuilder<String>>().transform(newA);
         //TraceManager.addDev("Error in reduce graph:" +  newA);
-        //TraceManager.addDev("New Aut:" +  newA.toString());
+        TraceManager.addDev("New Aut:" +  newA.toString());
         return fromAutomaton(newA);
     }
 
