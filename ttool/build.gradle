@@ -32,6 +32,7 @@ dependencies {
     compile name: 'batik-svggen'
     compile name: 'batik-dom'
     compile name: 'batik-awt-util'
+    compile name: 'jautomata-core'
 
     // Use JUnit test framework
     testCompile 'junit:junit:4.12'

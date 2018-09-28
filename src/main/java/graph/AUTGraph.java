@@ -522,7 +522,7 @@ public class AUTGraph implements myutil.Graph {
     }
 
 
-    public void minimize(String[] tauTransitions, boolean tauOnly) {
+    public AUTGraph minimize(String[] tauTransitions, boolean tauOnly) {
         String s = "tau";
 
         // mark all transitions as non tau
@@ -540,8 +540,10 @@ public class AUTGraph implements myutil.Graph {
             }
         }
 
-        minimizeTau(tauOnly);
+        //minimizeTau(tauOnly);
+        //return this;
 
+        return reduceGraph();
     }
 
     public void minimizeTau(boolean tauOnly) {
@@ -1033,10 +1035,11 @@ public class AUTGraph implements myutil.Graph {
 
     public AUTGraph fromAutomaton(Automaton a) {
         AUTGraph graph = new AUTGraph();
-        Set<Transition<String>> trs = a.delta();
-        Set<State> sts = a.states();
+        Set<Transition<String>> trs = (Set<Transition<String>>)(a.delta());
+        //Set<?> trs = a.delta();
+        Set<State> sts = (Set<State>)(a.states());
 
-        HashMap<State, Integer> mapOfStates = new HashMap<>();
+        Map<State, Integer> mapOfStates = new HashMap<>();
         int cpt = 1;
         for(State st: sts) {
             if (st.isInitial()) {
@@ -1047,10 +1050,12 @@ public class AUTGraph implements myutil.Graph {
             }
         }
 
-        for(Transition tr: trs) {
+        graph.setNbOfStates(mapOfStates.size());
+
+        for(Transition<String> tr: trs) {
             State s1 = tr.start();
             State s2 = tr.end();
-            String label = (String)(tr.label());
+            String label = tr.label();
             Integer i1 = mapOfStates.get(s1);
             Integer i2 = mapOfStates.get(s2);
 
@@ -1060,7 +1065,7 @@ public class AUTGraph implements myutil.Graph {
             }
         }
 
-        computeStates();
+        graph.computeStates();
 
         return graph;
     }
@@ -1090,14 +1095,18 @@ public class AUTGraph implements myutil.Graph {
         return a;
     }
 
-    public void reduceGraph() {
+    public AUTGraph reduceGraph() {
         Automaton a = toAutomaton();
-        Automaton<String, Transition<String>, TransitionBuilder<String>> b =
+        //TraceManager.addDev("Initial AUT:" +  a.toString());
+        Automaton<String, Transition<String>, TransitionBuilder<String>> newA = (Automaton<String, Transition<String>, TransitionBuilder<String>>)(
                 new EpsilonTransitionRemover<String, Transition<String>,
-                        TransitionBuilder<String>>().transform(a);
+                        TransitionBuilder<String>>().transform(a));
+        //TraceManager.addDev("Aut with no tau / epsilon:" +  newA.toString());
 
-        b = new Reducer<String, Transition<String>, TransitionBuilder<String>>().transform(b);
-        TraceManager.addDev("Error in reduce graph:" +  b);
+        newA = new Reducer<String, Transition<String>, TransitionBuilder<String>>().transform(newA);
+        //TraceManager.addDev("Error in reduce graph:" +  newA);
+        //TraceManager.addDev("New Aut:" +  newA.toString());
+        return fromAutomaton(newA);
     }
 
 
