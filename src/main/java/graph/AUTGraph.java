@@ -1035,16 +1035,22 @@ public class AUTGraph implements myutil.Graph {
 
     public AUTGraph fromAutomaton(Automaton a) {
         AUTGraph graph = new AUTGraph();
-        Set<Transition<String>> trs = (Set<Transition<String>>)(a.delta());
+        @SuppressWarnings("unchecked")
+        Set<Transition<String>> trs = (Set<Transition<String>>) a.delta();
         //Set<?> trs = a.delta();
+        @SuppressWarnings("unchecked")
         Set<State> sts = (Set<State>)(a.states());
 
         Map<State, Integer> mapOfStates = new HashMap<>();
         int cpt = 1;
         for(State st: sts) {
             if (st.isInitial()) {
+
+                //@SuppressWarnings("unchecked")
                 mapOfStates.put(st, new Integer(0));
             } else {
+
+                //@SuppressWarnings("unchecked")
                 mapOfStates.put(st, new Integer(cpt));
                 cpt ++;
             }
@@ -1095,12 +1101,15 @@ public class AUTGraph implements myutil.Graph {
         return a;
     }
 
+    @SuppressWarnings("unchecked")
     public AUTGraph reduceGraph() {
         Automaton a = toAutomaton();
         //TraceManager.addDev("Initial AUT:" +  a.toString());
-        Automaton<String, Transition<String>, TransitionBuilder<String>> newA = (Automaton<String, Transition<String>, TransitionBuilder<String>>)(
+
+        @SuppressWarnings("unchecked")
+        Automaton<String, Transition<String>, TransitionBuilder<String>> newA =
                 new EpsilonTransitionRemover<String, Transition<String>,
-                        TransitionBuilder<String>>().transform(a));
+                        TransitionBuilder<String>>().transform((Automaton<String, Transition<String>, TransitionBuilder<String>>)a);
         //TraceManager.addDev("Aut with no tau / epsilon:" +  newA.toString());
 
         newA = new Reducer<String, Transition<String>, TransitionBuilder<String>>().transform(newA);
