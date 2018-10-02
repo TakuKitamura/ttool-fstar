@@ -89,7 +89,7 @@ public class AUTGraph implements myutil.Graph {
                     "} ";
 
     public AUTGraph() {
-        transitions = new ArrayList<AUTTransition>();
+        transitions = new ArrayList<>();
         //buildGraph(dataAUT);
     }
 
@@ -417,6 +417,7 @@ public class AUTGraph implements myutil.Graph {
                 states.get(aut1.destination).addInTransition(aut1);
             }
             statesComputed = true;
+            setNbOfStates(states.size());
         }
     }
 
@@ -540,7 +541,7 @@ public class AUTGraph implements myutil.Graph {
             }
         }
 
-        computeStates();
+
 
         //minimizeTau(tauOnly);
         //return this;
@@ -1035,6 +1036,10 @@ public class AUTGraph implements myutil.Graph {
         }
     }
 
+    public void computeNbOfTransitions() {
+        nbTransition = transitions.size();
+    }
+
     public AUTGraph fromAutomaton(Automaton a) {
         AUTGraph graph = new AUTGraph();
         @SuppressWarnings("unchecked")
@@ -1073,6 +1078,7 @@ public class AUTGraph implements myutil.Graph {
             }
         }
 
+        graph.computeNbOfTransitions();
         graph.computeStates();
 
         return graph;

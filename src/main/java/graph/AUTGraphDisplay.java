@@ -81,15 +81,14 @@ public class AUTGraphDisplay implements MouseListener, ViewerListener, Runnable 
     protected ArrayList<AbstractEdge> edges;
     protected boolean exitOnClose = false;
 
+    // see http://graphstream-project.org/doc/Advanced-Concepts/GraphStream-CSS-Reference/
     public static String STYLE_SHEET =
             "node {" +
                     "       fill-color: #B1CAF1; text-color: black; size: 11px, 11px;" +
                     "} " +
-                    //          "edge.defaultedge {" +
-                    //  "   shape: cubic-curve;" +
-                    //   "}" +
-                    //    "edge {shape: cubic-curve}" +
+                    "edge.default edge {" + "text-color: blue;" + " shape: cubic-curve; }" +
                     "edge.external {" +
+                    //"       arrow-shape: circle" +
                     "       text-style: bold;" +
                     "} " +
                     "node.deadlock {" +
@@ -317,7 +316,7 @@ public class AUTGraphDisplay implements MouseListener, ViewerListener, Runnable 
                   tmp = Conversion.replaceAllChar(tmp, ')', "$");
                   TraceManager.addDev("Transition=" + tmp);*/
                 edge.addAttribute("ui.label", transition.transition);
-                edge.addAttribute("ui.class", "defaultedge");
+                edge.addAttribute("ui.class", "classic");
                 if (!(transition.transition.startsWith("i("))) {
                     edge.addAttribute("ui.class", "external");
                 }
