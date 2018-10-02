@@ -61,6 +61,7 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.logging.Logger;
 
 
@@ -309,18 +310,23 @@ public class AUTGraphDisplay implements MouseListener, ViewerListener, Runnable 
                 cpt++;
             }
             cpt = 0;
+            // We must merge the transitions with the same starting and ending state
+            HashSet<AUTTransition> transitionsMet = new HashSet<>();
             for (AUTTransition transition : graph.getTransitions()) {
-                edge = vGraph.addEdge("" + cpt, "" + transition.origin, "" + transition.destination, true);
+                if (!(transitionsMet.contains(transition))) {
+                    transitionsMet.add(transition);
+                    edge = vGraph.addEdge("" + cpt, "" + transition.origin, "" + transition.destination, true);
                 /*TraceManager.addDev("Transition=" + transition.transition);
                   String tmp = Conversion.replaceAllChar(transition.transition, '(', "$");
                   tmp = Conversion.replaceAllChar(tmp, ')', "$");
                   TraceManager.addDev("Transition=" + tmp);*/
-                edge.addAttribute("ui.label", transition.transition);
-                edge.addAttribute("ui.class", "classic");
-                if (!(transition.transition.startsWith("i("))) {
-                    edge.addAttribute("ui.class", "external");
+                    edge.addAttribute("ui.label", transition.transition);
+                    edge.addAttribute("ui.class", "classic");
+                    if (!(transition.transition.startsWith("i("))) {
+                        edge.addAttribute("ui.class", "external");
+                    }
+                    cpt++;
                 }
-                cpt++;
             }
 
             viewer.enableAutoLayout();
