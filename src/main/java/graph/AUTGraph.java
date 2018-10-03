@@ -501,6 +501,25 @@ public class AUTGraph implements myutil.Graph {
     }
 
 
+    public String getCompoundString(AUTTransition t, HashSet<AUTTransition> set) {
+        String ret = "";
+        int cpt = 0;
+        for(AUTTransition tr: transitions) {
+            if ((tr.origin == t.origin) && (tr.destination == t.destination)) {
+                set.add(tr);
+                if (cpt > 0) {
+                    ret += " OR ";
+                } else {
+                    cpt ++;
+                }
+                ret += tr.transition;
+            }
+        }
+        return ret;
+    }
+
+
+
     public void minimizeRemoveInternal(boolean tauOnly) {
         String s = "tau";
 
@@ -1114,7 +1133,7 @@ public class AUTGraph implements myutil.Graph {
         factorizeNonTauTransitions();
 
         Automaton a = toAutomaton();
-        TraceManager.addDev("Initial AUT:" +  a.toString());
+        //TraceManager.addDev("Initial AUT:" +  a.toString());
 
         /*@SuppressWarnings("unchecked")
         Automaton<String, Transition<String>, TransitionBuilder<String>> newA =
@@ -1125,7 +1144,7 @@ public class AUTGraph implements myutil.Graph {
 
         newA = new Reducer<String, Transition<String>, TransitionBuilder<String>>().transform(newA);
         //TraceManager.addDev("Error in reduce graph:" +  newA);
-        TraceManager.addDev("New Aut:" +  newA.toString());
+        //TraceManager.addDev("New Aut:" +  newA.toString());
         return fromAutomaton(newA);
     }
 
