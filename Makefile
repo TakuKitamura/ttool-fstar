@@ -55,7 +55,7 @@ make ttooljavac		Build TTool only with javac
 Other targets:
 --------------
 make preinstall		Generate a preinstall version of TTool for Linux, Windows and
-			MacOS and publish them on perso.telecom-paristech.fr.
+			MacOS and publish them on the website of TTool (hidden link)
 			!!! Must have the right ssh key installed for this !!!
 make git		Update the build number.
 
@@ -191,6 +191,8 @@ documentation: $(patsubst %,$(TTOOL_SRC)/%,$(GLOBAL_JAVA))
 # ==========      RELEASES      ========== 
 # ======================================== 
 TTOOL_PRIVATE 			?= $(TTOOL_PATH)/../TTool-Private
+TTOOL_PRIVATE_RELEASES 			?= $(TTOOL_PRIVATE)/website/ttool/releases
+
 
 PROD_USERNAME			= apvrille
 PROD_ADDRESS			= ssh.enst.fr
@@ -460,12 +462,15 @@ $(BASERELEASE:.tgz=.tar): $(JTTOOL_BINARY) $(TTOOL_BINARY) $(LAUNCHER_BINARY) $(
 
 publish_jar: $(TTOOL_BINARY)
 	@echo "$(PREFIX) Publishing standard and advanced releases"
-	scp $< $(PROD_USERNAME)@$(PROD_ADDRESS):$(PROD_PATH)/
-	ssh $(PROD_USERNAME)@$(PROD_ADDRESS) "chmod a+r $(PROD_PATH)/$(notdir $<)"
+#	scp $< $(PROD_USERNAME)@$(PROD_ADDRESS):$(PROD_PATH)/
+#	ssh $(PROD_USERNAME)@$(PROD_ADDRESS) "chmod a+r $(PROD_PATH)/$(notdir $<)"
+	cp $< $(TTOOL_PRIVATE_RELEASES)/
 
 preinstall: $(TTOOL_PREINSTALL_WINDOWS) $(TTOOL_PREINSTALL_LINUX) $(TTOOL_PREINSTALL_MACOS)
 	@echo "$(PREFIX) Publishing preinstall versions"
-	scp $^ $(PROD_USERNAME)@$(PROD_ADDRESS):$(PROD_PATH)/
+#	scp $^ $(PROD_USERNAME)@$(PROD_ADDRESS):$(PROD_PATH)/
+	cp $^ $(TTOOL_PRIVATE_RELEASES)/
+	cd $(TTOOL_PRIVATE)/website&&make ttool
 
 git:
 	@echo "$(PREFIX) Updating build number"
