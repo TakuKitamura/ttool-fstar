@@ -92,6 +92,9 @@ export TTOOL_BINARY 		= $(TTOOL_BUILD)/ttool.jar
 export LAUNCHER_DIR		= $(TTOOL_PATH)/launcher
 export LAUNCHER_BINARY 		= $(TTOOL_BUILD)/launcher.jar
 
+export TTOOLCLI_DIR	= $(TTOOL_PATH)/ttool-cli
+export TTOOLCLI_BINARY 	= $(TTOOL_BUILD)/ttool-cli.jar
+
 export GRAPHMINIMIZE_DIR	= $(TTOOL_PATH)/graphminimize
 export GRAPHMINIMIZE_BINARY 	= $(TTOOL_BUILD)/graphminimize.jar
 
@@ -119,7 +122,7 @@ export WEBCRAWLER_SERVER_BINARY	= $(TTOOL_BUILD)/webcrawler-server.jar
 export JTTOOL_DIR		= $(TTOOL_PATH)/jttool
 export JTTOOL_BINARY		= $(TTOOL_BUILD)/jttool.jar
 
-all: ttool launcher graphminimize graphshow tiftranslator tmltranslator rundse remotesimulator webcrawler
+all: ttool launcher ttool-cli graphminimize graphshow tiftranslator tmltranslator rundse remotesimulator webcrawler
 
 ttool: $(TTOOL_BINARY)
 
@@ -133,6 +136,11 @@ launcher: $(LAUNCHER_BINARY)
 
 $(LAUNCHER_BINARY): FORCE
 	@($(GRADLE) :launcher:build) || ($(ERROR_MSG) && $(MAKE) -C $(LAUNCHER_DIR) -e $@)
+
+ttool-cli: $(TTOOLCLI_BINARY)
+
+$(TTOOLCLI_BINARY): FORCE
+	@($(GRADLE) :ttool-cli:build) || ($(ERROR_MSG) && $(MAKE) -C $(TTOOLCLI_DIR) -e $@)
 
 graphminimize: $(GRAPHMINIMIZE_BINARY)
 
@@ -308,6 +316,7 @@ $(ADVANCED_RELEASE:.tgz=.tar): $(STDRELEASE:.tgz=.tar) documentation
 	@cp -R $(TTOOL_SRC)/* $(TTOOL_TARGET)/src
 	@cp -r $(TTOOL_DIR)/src/main/java/* $(TTOOL_TARGET)/src
 	@cp -r $(LAUNCHER_DIR)/src/main/java/* $(TTOOL_TARGET)/src
+	@cp -r $(TTOOLCLI_DIR)/src/main/java/* $(TTOOL_TARGET)/src
 	@cp -r $(GRAPHMINIMIZE_DIR)/src/main/java/* $(TTOOL_TARGET)/src
 	@cp -r $(GRAPHSHOW_DIR)/src/main/java/* $(TTOOL_TARGET)/src
 	@cp -r $(TIFTRANSLATOR_DIR)/src/main/java/* $(TTOOL_TARGET)/src
@@ -503,6 +512,7 @@ test:
 clean:
 	@$(MAKE) -C $(TTOOL_DIR) -e clean
 	@$(MAKE) -C $(LAUNCHER_DIR) -e clean
+	@$(MAKE) -C $(TTOOLCLI_DIR) -e clean
 	@$(MAKE) -C $(GRAPHMINIMIZE_DIR) -e clean
 	@$(MAKE) -C $(GRAPHSHOW_DIR) -e clean
 	@$(MAKE) -C $(TIFTRANSLATOR_DIR) -e clean

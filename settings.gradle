@@ -17,6 +17,7 @@ include 'services:webservice'
 
 include 'ttool'
 include 'launcher'
+include 'ttool-cli'
 include 'graphminimize'
 include 'graphshow'
 include 'tiftranslator'
