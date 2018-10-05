@@ -11,6 +11,7 @@
       <module fileurl="file://$PROJECT_DIR$/tiftranslator/src/main/tiftranslator.iml" filepath="$PROJECT_DIR$/tiftranslator/src/main/tiftranslator.iml" />
       <module fileurl="file://$PROJECT_DIR$/tmltranslator/src/main/tmltranslator.iml" filepath="$PROJECT_DIR$/tmltranslator/src/main/tmltranslator.iml" />
       <module fileurl="file://$PROJECT_DIR$/ttool/src/main/ttool.iml" filepath="$PROJECT_DIR$/ttool/src/main/ttool.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ttool-cli/ttool-cli.iml" filepath="$PROJECT_DIR$/ttool-cli/ttool-cli.iml" />
       <module fileurl="file://$PROJECT_DIR$/webcrawler/client/src/main/webcrawler-client.iml" filepath="$PROJECT_DIR$/webcrawler/client/src/main/webcrawler-client.iml" />
       <module fileurl="file://$PROJECT_DIR$/webcrawler/server/src/main/webcrawler-server.iml" filepath="$PROJECT_DIR$/webcrawler/server/src/main/webcrawler-server.iml" />
     </modules>

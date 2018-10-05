@@ -1,6 +1,6 @@
-PREFIX			= [$(COLOR)GRAPHMINIMIZE$(RESET)]    
+PREFIX			= [$(COLOR)TTOOLCLI$(RESET)]    
 
-MANIFEST		= $(GRAPHMINIMIZE_DIR)/manifest.txt
+MANIFEST		= $(TTOOLCLI_DIR)/manifest.txt
 
 DEPEND			= $(patsubst %,$(TTOOL_BUILD)/%,$(shell cat $(MANIFEST) | grep Class-Path | cut -d: -f2))
 

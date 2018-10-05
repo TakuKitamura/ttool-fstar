@@ -41,6 +41,9 @@
 
 import myutil.*;
 import ui.*;
+import cli.*;
+
+import java.io.*;
 
 
 
@@ -53,18 +56,18 @@ import ui.*;
  * @author Ludovic APVRILLE
  * @version 1.10 05/10/2018
  */
-public class TToolCLI {
+public class TToolCLI implements InterpreterOutputInterface {
 
     public static void printCopyright() {
-        System.out.println("TToolCLI: (C) Telecom ParisTech, Ludovic APVRILLE ludovic.apvrille, andrea.enrici@telecom-paristech.fr");
-        System.out.println("GraphMinimize is released under a CECILL License. See http://www.cecill.info/index.en.html");
+        System.out.println("ttool-cli: (C) Telecom ParisTech, Ludovic APVRILLE ludovic.apvrille, andrea.enrici@telecom-paristech.fr");
+        System.out.println("ttool-cli is released under a CECILL License. See http://www.cecill.info/index.en.html");
         System.out.println("For more information on TTool related technologies, please consult http://ttool.telecom-paristech.fr/");
         System.out.println("Enjoy!!!\n");
     }
 
     public static void printUsage() {
-        System.out.println("TToolCLI: usage");
-        System.out.println("ttool-cli");
+        System.out.println("ttool-cli: usage");
+        System.out.println("ttool-cli <script file>");
     }
 
     public static boolean checkArgs(String[] args) {
@@ -85,6 +88,8 @@ public class TToolCLI {
         return args[args.length - 1];
     }
 
+
+
     public static void main(String[] args) {
         String[] tmp;
 
@@ -95,14 +100,43 @@ public class TToolCLI {
             return;
         }
 
-        int nbOfOptions = 0;
         if (hasDebug(args)) {
             TraceManager.devPolicy = TraceManager.TO_CONSOLE;
         } else {
             TraceManager.devPolicy = TraceManager.TO_DEVNULL;
         }
 
+        TToolCLI cli = new TToolCLI();
+        cli.print("Loading script:" + getInputFile(args));
+        // Load script file
+        File f = new File(getInputFile(args));
+        if (!FileUtils.checkFileForOpen(f)) {
+            cli.printError("File " + f.getAbsolutePath() + " could not be opened.");
+            cli.exit(-1);
+        }
+        String script = FileUtils.loadFileData(f);
+
+        // Call Interpreter
+        Interpreter interpret = new Interpreter(script, (InterpreterOutputInterface)cli);
+        interpret.interpret();
 
     }
 
-} // Class GraphShow
+
+    // InterpreterOutputInterface
+    public void print(String s) {
+        System.out.println(s);
+    }
+
+    public void printError(String s) {
+        System.out.println("\t*Fatal error*:" + s);
+    }
+
+    public void exit(int status) {
+        System.out.println("Exiting. Bye.");
+        System.exit(status);
+    }
+
+
+
+} // Class TToolCLI
