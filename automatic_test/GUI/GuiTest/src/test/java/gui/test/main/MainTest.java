@@ -30,8 +30,6 @@ public class MainTest extends AssertJSwingJUnitTestCase {
 	public void testMainBar() {
 		//JToolBarFixture jtb = window.toolBar("Main Bar");
 		//JMenuItemFixture jmi = window.menuItem("TestItem");
-		window.pressAndReleaseKeys(KeyEvent.VK_META, KeyEvent.VK_SHIFT, KeyEvent.VK_4);
-		
 		window.click();
 		try {
 			Thread.sleep(3600);
