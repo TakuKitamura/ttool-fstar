@@ -42,7 +42,7 @@ public class Main extends JFrame {
     button2.setVisible(true);
     button2.setBounds(50,100,100,50);
 
-    JTextArea text = new JTextArea("Enter the text here");
+    JTextArea text = new JTextArea();
     text.setName("TestArea");
     text.setBounds(200,65,100,50);
     
