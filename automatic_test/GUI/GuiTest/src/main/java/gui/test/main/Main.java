@@ -1,6 +1,19 @@
+/*
+ * Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Arthur VUAGNIAUX
+ *
+ * 
+ */
+
 package gui.test.main;
 
 import ui.MainGUI;
+
+/*
+ * Class Main
+ * Creation: 09/10/2018
+ * @version 1.0 09/10/2018
+ * @author Arthur VUAGNIAUX
+*/
 
 public class Main extends MainGUI {
 

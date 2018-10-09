@@ -178,7 +178,6 @@ public class JMenuBarTurtle extends JMenuBar {
         help = new JMenu("Help");
 
         JMenuItem menuItem;
-
         makeFileMenu(mgui);
 
         //Edit
@@ -657,5 +656,6 @@ public class JMenuBarTurtle extends JMenuBar {
         add(view);
         add(tool);
         add(help);
+        
     }
 } // Class
