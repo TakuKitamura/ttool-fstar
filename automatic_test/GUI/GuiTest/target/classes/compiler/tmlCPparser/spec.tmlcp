@@ -1,0 +1,211 @@
+// TML Communication Pattern - FORMAT 0.1
+// Communication Pattern: /home/enrici/TURTLE/modeling/testCP3.xml
+// Generated: Thu Jan 22 13:25:14 CET 2015
+
+TransferInstance.haloa:int=Natural
+TransferInstance.salut:int=Natural
+StorageInstance2.toto:int=2
+StorageInstance2.salut:int=Natural
+StorageInstance2.haloa:int=Natural
+StorageInstance2.mamma:bool=Boolean
+StorageInstance.toto:int=1
+StorageInstance.mamma:bool=false
+StorageInstance.salut:int=Natural
+StorageInstance.seq22_toto:int=5
+StorageInstance.seq33_toto:int=7
+StorageInstance.seq44_toto:int=0
+StorageInstance.seq55_toto:int=3
+StorageInstance.seq_toto:int=123
+StorageInstance.seq77_toto:int=23
+
+
+SEQUENCE seq11
+
+	TRANSFER TransferInstance
+		SND:StorageInstance2:HelloBuddy()
+		SND:StorageInstance2:HelloBuddy3(haloa)
+		SND:StorageInstance:HelloBuddy2(salut)
+
+	CONTROLLER StorageInstance2
+		SND:StorageInstance:HelloWorld(toto,mamma,toto)
+		RCV:TransferInstance:HelloBuddy()
+		RCV:TransferInstance:HelloBuddy3(haloa)
+
+	STORAGE StorageInstance
+		RCV:StorageInstance2:HelloWorld(toto,mamma,toto)
+		ACT:mamma = false
+		RCV:TransferInstance:HelloBuddy2(salut)
+		ACT:toto = 5 + toto
+
+END
+
+SEQUENCE seq22
+
+	CONTROLLER ControllerInstance
+		SND:StorageInstance:HelloWorld()
+
+	STORAGE StorageInstance
+		RCV:ControllerInstance:HelloWorld()
+
+END
+
+SEQUENCE seq33
+
+	CONTROLLER ControllerInstance
+		SND:StorageInstance:HelloWorld()
+
+	STORAGE StorageInstance
+		RCV:ControllerInstance:HelloWorld()
+
+END
+
+SEQUENCE seq44
+
+	CONTROLLER ControllerInstance
+		SND:StorageInstance:HelloWorld()
+
+	STORAGE StorageInstance
+		RCV:ControllerInstance:HelloWorld()
+
+END
+
+SEQUENCE seq55
+
+	CONTROLLER ControllerInstance
+		SND:StorageInstance:HelloWorld()
+
+	STORAGE StorageInstance
+		RCV:ControllerInstance:HelloWorld()
+
+END
+
+SEQUENCE seq66
+
+	CONTROLLER ControllerInstance
+		SND:StorageInstance:HelloWorld()
+
+	STORAGE StorageInstance
+		RCV:ControllerInstance:HelloWorld()
+
+END
+
+SEQUENCE seq77
+
+	CONTROLLER ControllerInstance
+		SND:StorageInstance:HelloWorld()
+		RCV:StorageInstance:CrossMessage()
+		RCV:StorageInstance:HelloBack()
+
+	STORAGE StorageInstance
+		RCV:ControllerInstance:HelloWorld()
+		SND:ControllerInstance:HelloBack()
+		SND:ControllerInstance:CrossMessage()
+
+END
+
+SEQUENCE CentralSD
+
+	CONTROLLER ControllerInstance
+		SND:StorageInstance:HelloWorld()
+
+	STORAGE StorageInstance
+		RCV:ControllerInstance:HelloWorld()
+
+END
+
+SEQUENCE AnotherSD
+
+	CONTROLLER ControllerInstance
+		SND:TransferInstance:HelloWorld()
+
+	TRANSFER TransferInstance
+		RCV:ControllerInstance:HelloWorld()
+
+END
+
+SEQUENCE YASD
+
+	CONTROLLER ControllerInstance
+		SND:StorageInstance:HelloWorld()
+
+	STORAGE StorageInstance
+		RCV:ControllerInstance:HelloWorld()
+
+END
+
+
+ACTIVITY MainCP
+
+	MAIN	
+	<>; seq11; seq22; activity11;  { {seq44} * {seq33} * {CentralSD} };seq55;  { {YASD} * {seq66} * {seq77} * {AnotherSD} };activity22; LastAD; 	><
+	END
+
+END MainCP
+
+ACTIVITY activity11
+
+	MAIN	
+	<>; configure; transfer; acknowledge;  { {parallel1} * {parallel2} };	><
+	END
+
+END activity11
+
+ACTIVITY activity22
+
+	MAIN	
+	<>; lala; junction1_#9_0;
+	><
+	END
+
+END activity22
+
+ACTIVITY AD2_seq
+
+	MAIN	
+	<>; ProgramTransfer3; junction6_#9_0;
+	><
+	END
+
+END AD2_seq
+
+ACTIVITY AD2_par
+
+	MAIN	
+	<>;  { {ProgramTransfer2; AckTransfer2} * {ProgramTransfer1; AckTransfer1} };	><
+	END
+
+END AD2_par
+
+ACTIVITY junction1_#9_0
+
+	MAIN
+	<>; SequenceDiagram1; SequenceDiagram2;
+		[ toto == 2 ] papa; figlio;	><
+		[ toto == 5] mama; prova;	><
+		[ toto > 2]  tata; Zama; junction1_#9_0; ><
+	><
+	END
+
+END junction1_#9_0
+
+ACTIVITY junction6_#9_0
+
+	MAIN
+	<>;
+		[samples3 > 0] ExecuteTransfer3; junction6_#9_0; ><
+		[samples3 == 0] AckTransfer3; ProgramTransfer4; junction7_#4_0; ><
+	><
+	END
+
+END junction6_#9_0
+
+ACTIVITY junction7_#4_0
+
+	MAIN
+	<>;
+		[samples4 > 0] ExecuteTransfer4; junction7_#4_0; ><
+		[samples4 == 0] AckTransfer4;	><
+	><
+	END
+
+END junction7_#4_0
