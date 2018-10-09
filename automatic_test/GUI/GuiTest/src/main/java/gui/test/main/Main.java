@@ -9,5 +9,6 @@ public class Main extends MainGUI {
 			boolean _avatarOnly, boolean _experimental) {
 		super(_openLast, _turtleOn, _systemcOn, _lotosOn, _proactiveOn, _tpnOn, _osOn, _uppaalOn, _ncOn, _avatarOn, _proverifOn,
 				_avatarOnly, _experimental);
+		super.build();
 	}
 }
