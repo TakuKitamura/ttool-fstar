@@ -417,7 +417,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
        } else {
            jfc = new JFileChooser();
        }
-
+       
        if (ConfigurationTTool.FILEPath.length() > 0) {
            jfctif = new JFileChooser(ConfigurationTTool.FILEPath);
        } else {
@@ -2624,6 +2624,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
            File tmpFile = jfc.getSelectedFile();
            openProjectFromFile(tmpFile);
        }
+       jfc.setName("jfc");
 
    }
 

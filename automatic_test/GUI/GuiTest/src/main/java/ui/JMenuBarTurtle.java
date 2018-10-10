@@ -87,20 +87,28 @@ public class JMenuBarTurtle extends JMenuBar {
 
         // FILE
         menuItem = file.add(mgui.actions[TGUIAction.ACT_NEW]);
+        menuItem.setName("File New");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = file.add(mgui.actions[TGUIAction.ACT_NEW_PROJECT]);
+        menuItem.setName("File New Project");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = file.add(mgui.actions[TGUIAction.ACT_OPEN]);
+        menuItem.setName("File Open");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = file.add(mgui.actions[TGUIAction.ACT_OPEN_PROJECT]);
+        menuItem.setName("File Open Project");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = file.add(mgui.actions[TGUIAction.ACT_OPEN_FROM_NETWORK]);
+        menuItem.setName("File Open From Network");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = file.add(mgui.actions[TGUIAction.ACT_SAVE]);
+        menuItem.setName("File Save");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = file.add(mgui.actions[TGUIAction.ACT_SAVE_AS_MODEL]);
+        menuItem.setName("File Save As Model");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = file.add(mgui.actions[TGUIAction.ACT_SAVE_AS_PROJECT]);
+        menuItem.setName("File Save As Project");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         file.addSeparator();
@@ -656,6 +664,8 @@ public class JMenuBarTurtle extends JMenuBar {
         add(view);
         add(tool);
         add(help);
+        
+        //menuItem.setName("Menu Item");
         
     }
 } // Class

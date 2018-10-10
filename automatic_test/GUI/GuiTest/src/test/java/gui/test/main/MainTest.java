@@ -6,6 +6,8 @@ import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 
+import javax.swing.JMenuItem;
+
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.*;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
@@ -27,19 +29,33 @@ public class MainTest extends AssertJSwingJUnitTestCase {
 	}
 
 	@Test
-	public void testMainBar() {
-		//JToolBarFixture jtb = window.toolBar("Main Bar");
-		//JMenuItemFixture jmi = window.menuItem("TestItem");
-		window.click();
+	public void createANewFile() {
+		JMenuItemFixture jmf = window.menuItem("File New");
+		jmf.click();
 		try {
-			Thread.sleep(3600);
+			Thread.sleep(1000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Point mouse = MouseInfo.getPointerInfo().getLocation();
-		System.out.println(mouse.x + "," + mouse.y);
-		//jtb.click();
+		window.rightClick();
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void openProject() {
+		JMenuItemFixture jmf = window.menuItem("File Open Project");
+		//JFileChooserFixture jfc = window.fileChooser("jfc");
+		jmf.click();
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		//jfc.approveButton().click();
 	}
 	
 	@Override
