@@ -517,29 +517,34 @@ public class JMenuBarTurtle extends JMenuBar {
         menuItem.setName("Ad Time Limited Latency");
         menuItem.addMouseListener(mgui.mouseHandler);
 
-        // V&V **************************
+        // V&V 
         menuItem = vAndV.add(mgui.actions[TGUIAction.ACT_MODEL_CHECKING]);
+        menuItem.setName("V&V Syntax Analysis");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         vAndV.addSeparator();
 
         menuItem = vAndV.add(mgui.actions[TGUIAction.ACT_GEN_RTLOTOS]);
+        menuItem.setName("V&V Gen RTLOTOS");
         menuItem.addMouseListener(mgui.mouseHandler);
 
 
         if (MainGUI.lotosOn) {
             menuItem = vAndV.add(mgui.actions[TGUIAction.ACT_GEN_LOTOS]);
+            menuItem.setName("V&V Gen LOTOS");
             menuItem.addMouseListener(mgui.mouseHandler);
         }
 
         if (MainGUI.uppaalOn) {
             menuItem = vAndV.add(mgui.actions[TGUIAction.ACT_GEN_UPPAAL]);
+            menuItem.setName("V&V Gen UPPAL");
             menuItem.addMouseListener(mgui.mouseHandler);
         }
 
         vAndV.addSeparator();
 
         menuItem = vAndV.add(mgui.actions[TGUIAction.ACT_GEN_DESIGN]);
+        menuItem.setName("V&V Gen Design");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         /*vAndV.addSeparator();
@@ -550,30 +555,41 @@ public class JMenuBarTurtle extends JMenuBar {
         vAndV.addSeparator();
 
         menuItem = vAndV.add(mgui.actions[TGUIAction.ACT_CHECKCODE]);
+        menuItem.setName("V&V Check");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = vAndV.add(mgui.actions[TGUIAction.ACT_SIMULATION]);
+        menuItem.setName("V&V Simulation");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = vAndV.add(mgui.actions[TGUIAction.ACT_VALIDATION]);
+        menuItem.setName("V&V Validation");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         vAndV.addSeparator();
         menuItem = vAndV.add(mgui.actions[TGUIAction.ACT_PROJECTION]);
+        menuItem.setName("V&V Projection");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = vAndV.add(mgui.actions[TGUIAction.ACT_GRAPH_MODIFICATION]);
+        menuItem.setName("V&V Graph Modification");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = vAndV.add(mgui.actions[TGUIAction.ACT_BISIMULATION]);
+        menuItem.setName("V&V Bisimulation Aldebaran");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = vAndV.add(mgui.actions[TGUIAction.ACT_BISIMULATION_CADP]);
+        menuItem.setName("V&V Bisimulation Bisimulator");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         vAndV.addSeparator();
         menuItem = vAndV.add(mgui.actions[TGUIAction.ACT_VIEW_STAT_AUT]);
+        menuItem.setName("V&V Aut");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = vAndV.add(mgui.actions[TGUIAction.ACT_VIEW_STAT_AUTPROJ]);
+        menuItem.setName("V&V Autproj");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = vAndV.add(mgui.actions[TGUIAction.ACT_VIEW_STAT_AUTDIPLODOCUS]);
+        menuItem.setName("V&V Autdiplodocus");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = vAndV.add(mgui.actions[TGUIAction.ACT_VIEW_STAT_SAVED_AUT]);
+        menuItem.setName("V&V Saved Aut");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         /*vAndV.addSeparator();
@@ -586,12 +602,16 @@ public class JMenuBarTurtle extends JMenuBar {
 
         vAndV.addSeparator();
         menuItem = vAndV.add(mgui.actions[TGUIAction.ACT_AVATAR_SIM]);
+        menuItem.setName("V&V Avatar Simulation");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = vAndV.add(mgui.actions[TGUIAction.ACT_AVATAR_FV_UPPAAL]);
+        menuItem.setName("V&V Avatar UPPAAL");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = vAndV.add(mgui.actions[TGUIAction.ACT_AVATAR_FV_PROVERIF]);
+        menuItem.setName("V&V ProVerif");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = vAndV.add(mgui.actions[TGUIAction.ACT_AVATAR_FV_STATICANALYSIS]);
+        menuItem.setName("V&V Avatar Static Analysis");
         menuItem.addMouseListener(mgui.mouseHandler);
 
 
@@ -605,62 +625,83 @@ public class JMenuBarTurtle extends JMenuBar {
         // Code generation
 
         menuItem = codeG.add(mgui.actions[TGUIAction.ACT_GEN_JAVA]);
+        menuItem.setName("CodeG Java");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         if (MainGUI.systemcOn) {
             menuItem = codeG.add(mgui.actions[TGUIAction.ACT_GEN_SYSTEMC]);
+            menuItem.setName("CodeG SystemC");
             menuItem.addMouseListener(mgui.mouseHandler);
 
             menuItem = codeG.add(mgui.actions[TGUIAction.ACT_GEN_TMLTXT]);
+            menuItem.setName("CodeG TMLTXT");
             menuItem.addMouseListener(mgui.mouseHandler);
 
             menuItem = codeG.add(mgui.actions[TGUIAction.ACT_GEN_CCODE]);
+            menuItem.setName("CodeG C");
             menuItem.addMouseListener(mgui.mouseHandler);
         }
 
         menuItem = codeG.add(mgui.actions[TGUIAction.ACT_AVATAR_EXECUTABLE_GENERATION]);
+        menuItem.setName("CodeG Executable");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         // View
         menuItem = view.add(mgui.actions[TGUIAction.ACT_VIEW_BIRDEYES_EMB]);
+        menuItem.setName("View Hide Birdeye");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = view.add(mgui.actions[TGUIAction.ACT_VIEW_BIRDEYES]);
+        menuItem.setName("View Show Birdeye");
         menuItem.addMouseListener(mgui.mouseHandler);
         view.addSeparator();
         menuItem = view.add(mgui.actions[TGUIAction.ACT_VIEW_JAVA]);
+        menuItem.setName("View Java");
         menuItem.addMouseListener(mgui.mouseHandler);
         view.addSeparator();
         menuItem = view.add(mgui.actions[TGUIAction.ACT_VIEW_RTLOTOS]);
+        menuItem.setName("View RT-LOTOS");
         menuItem.addMouseListener(mgui.mouseHandler);
         view.addSeparator();
         menuItem = view.add(mgui.actions[TGUIAction.ACT_VIEW_SUGGESTED_DESIGN]);
+        menuItem.setName("View Suggested Design");
         menuItem.addMouseListener(mgui.mouseHandler);
         view.addSeparator();
         menuItem = view.add(mgui.actions[TGUIAction.ACT_VIEW_SIM]);
+        menuItem.setName("View Sim");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = view.add(mgui.actions[TGUIAction.ACT_VIEW_SIM_CHRONO]);
+        menuItem.setName("View Sim Chrono");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = view.add(mgui.actions[TGUIAction.ACT_VIEW_DTADOT]);
+        menuItem.setName("View DTadot");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = view.add(mgui.actions[TGUIAction.ACT_VIEW_RGDOT]);
+        menuItem.setName("View RGdot");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = view.add(mgui.actions[TGUIAction.ACT_VIEW_TLSADOT]);
+        menuItem.setName("View TLSdot");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = view.add(mgui.actions[TGUIAction.ACT_VIEW_RGAUTDOT]);
+        menuItem.setName("View RGAutdot");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = view.add(mgui.actions[TGUIAction.ACT_VIEW_RGAUTPROJDOT]);
+        menuItem.setName("View RGAutProjdot");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = view.add(mgui.actions[TGUIAction.ACT_VIEW_MODIFIEDAUTDOT]);
+        menuItem.setName("View Modified Autdot");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         view.addSeparator();
         menuItem = view.add(mgui.actions[TGUIAction.ACT_VIEW_RG_DIPLODOCUS]);
+        menuItem.setName("View Show Diplodocus");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         view.addSeparator();
         menuItem = view.add(mgui.actions[TGUIAction.ACT_VIEW_SAVED_LOT]);
+        menuItem.setName("View Saved");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = view.add(mgui.actions[TGUIAction.ACT_VIEW_SAVED_DOT]);
+        menuItem.setName("View Saved Graph");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         /*if (MainGUI.systemcOn) {
@@ -677,66 +718,86 @@ public class JMenuBarTurtle extends JMenuBar {
         tool.add(capture);
 
         menuItem = capture.add(mgui.actions[TGUIAction.ACT_SCREEN_CAPTURE]);
+        menuItem.setName("Capture Screen");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = capture.add(mgui.actions[TGUIAction.ACT_TTOOL_WINDOW_CAPTURE]);
+        menuItem.setName("Capture Window");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = capture.add(mgui.actions[TGUIAction.ACT_DIAGRAM_CAPTURE]);
+        menuItem.setName("Capture Diagram");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = capture.add(mgui.actions[TGUIAction.ACT_SVG_DIAGRAM_CAPTURE]);
+        menuItem.setName("Capture SVG Diagram");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = capture.add(mgui.actions[TGUIAction.ACT_ALL_DIAGRAM_CAPTURE]);
+        menuItem.setName("Capture All Diagram");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = capture.add(mgui.actions[TGUIAction.ACT_ALL_DIAGRAM_CAPTURE_SVG]);
+        menuItem.setName("Capture All Diagram SVG");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = capture.add(mgui.actions[TGUIAction.ACT_SELECTED_CAPTURE]);
+        menuItem.setName("Capture Selected");
         menuItem.addMouseListener(mgui.mouseHandler);
 
 
         ontologies = new JMenu("Ontologies");
         tool.add(ontologies);
         menuItem = ontologies.add(mgui.actions[TGUIAction.ACT_GENERATE_ONTOLOGIES_CURRENT_DIAGRAM]);
+        menuItem.setName("Ontologie Current Diagram");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = ontologies.add(mgui.actions[TGUIAction.ACT_GENERATE_ONTOLOGIES_CURRENT_SET_OF_DIAGRAMS]);
+        menuItem.setName("Ontologie Set of Diagrams");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = ontologies.add(mgui.actions[TGUIAction.ACT_GENERATE_ONTOLOGIES_ALL_DIAGRAMS]);
+        menuItem.setName("Ontologie All Diagrams");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         menuItem = tool.add(mgui.actions[TGUIAction.ACT_GEN_DOC]);
         menuItem.addMouseListener(mgui.mouseHandler);
-
+        menuItem.setName("Tool Doc");
         menuItem = tool.add(mgui.actions[TGUIAction.ACT_GEN_DOC_REQ]);
         menuItem.addMouseListener(mgui.mouseHandler);
+        menuItem.setName("Tool SysML Doc");
 
         if ((SpecConfigTTool.ExternalCommand1.length() > 0) && (ConfigurationTTool.ExternalCommand1Host.length() > 0)) {
             menuItem = tool.add(mgui.actions[TGUIAction.EXTERNAL_ACTION_1]);
+            menuItem.setName("Tool External Action");
             menuItem.addMouseListener(mgui.mouseHandler);
             menuItem.setToolTipText("Launch gtkwave with last vcd file");
         }
 
         if ((ConfigurationTTool.ExternalCommand2.length() > 0) && (ConfigurationTTool.ExternalCommand2Host.length() > 0)) {
             menuItem = tool.add(mgui.actions[TGUIAction.EXTERNAL_ACTION_2]);
+            menuItem.setName("Tool External Action2");
             menuItem.addMouseListener(mgui.mouseHandler);
             menuItem.setToolTipText(ConfigurationTTool.ExternalCommand2);
         }
 
         menuItem = tool.add(mgui.actions[TGUIAction.ACT_EXTERNAL_SEARCH]);
+        menuItem.setName("Tool Search");
         menuItem.addMouseListener(mgui.mouseHandler);
 
 
         // HELP
         menuItem = help.add(mgui.actions[TGUIAction.ACT_TTOOL_CONFIGURATION]);
+        menuItem.setName("Help Configuration");
         menuItem.addMouseListener(mgui.mouseHandler);
         help.addSeparator();
         menuItem = help.add(mgui.actions[TGUIAction.ACT_TURTLE_DOCUMENTATION]);
+        menuItem.setName("Help Turtle Doc");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = help.add(mgui.actions[TGUIAction.ACT_DIPLODOCUS_DOCUMENTATION]);
+        menuItem.setName("Help Diplodocus Doc");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = help.add(mgui.actions[TGUIAction.ACT_SYSMLSEC_DOCUMENTATION]);
+        menuItem.setName("Help Sysmlsec Doc");
         menuItem.addMouseListener(mgui.mouseHandler);
         help.addSeparator();
         menuItem = help.add(mgui.actions[TGUIAction.ACT_TURTLE_WEBSITE]);
+        menuItem.setName("Help Turtle");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = help.add(mgui.actions[TGUIAction.ACT_ABOUT]);
+        menuItem.setName("Help About");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         // MenuBar
