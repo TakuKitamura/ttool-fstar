@@ -2624,7 +2624,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
            File tmpFile = jfc.getSelectedFile();
            openProjectFromFile(tmpFile);
        }
-       jfc.setName("jfc");
+       jfc.setName("Test JFC");
 
    }
 

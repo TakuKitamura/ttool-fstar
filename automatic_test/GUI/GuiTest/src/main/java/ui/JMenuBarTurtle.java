@@ -114,46 +114,59 @@ public class JMenuBarTurtle extends JMenuBar {
         file.addSeparator();
 
         menuItem = file.add(mgui.actions[TGUIAction.ACT_MERGE]);
+        menuItem.setName("File Merge");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         file.addSeparator();
 
         menuItem = file.add(mgui.actions[TGUIAction.ACT_OPEN_TIF]);
+        menuItem.setName("File Open Tif");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         menuItem = file.add(mgui.actions[TGUIAction.ACT_SAVE_TIF]);
+        menuItem.setName("File Save Tif");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         file.addSeparator();
 
         menuItem = file.add(mgui.actions[TGUIAction.ACT_OPEN_SD]);
+        menuItem.setName("File Open MSC");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         file.addSeparator();
 
         menuItem = file.add(mgui.actions[TGUIAction.ACT_SAVE_LOTOS]);
+        menuItem.setName("File Save RT-LOTOS");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         saveLastGraph = new JMenu("Save Last Graphs");
         menuItem = saveLastGraph.add(mgui.actions[TGUIAction.ACT_SAVE_DTA]);
+        menuItem.setName("File Save DTA");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = saveLastGraph.add(mgui.actions[TGUIAction.ACT_SAVE_RG]);
+        menuItem.setName("File Save RG");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = saveLastGraph.add(mgui.actions[TGUIAction.ACT_SAVE_TLSA]);
+        menuItem.setName("File Save TLSA");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = saveLastGraph.add(mgui.actions[TGUIAction.ACT_SAVE_AUT]);
+        menuItem.setName("File Save AUT");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = saveLastGraph.add(mgui.actions[TGUIAction.ACT_SAVE_AUTPROJ]);
+        menuItem.setName("File Save AUTPROJ");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = saveLastGraph.add(mgui.actions[TGUIAction.ACT_SAVE_AUTMODIFIED]);
+        menuItem.setName("File Save AUTMODIFIED");
         menuItem.addMouseListener(mgui.mouseHandler);
         file.add(saveLastGraph);
 
         file.addSeparator();
 
         menuItem = file.add(mgui.actions[TGUIAction.ACT_IMPORT_LIB]);
+        menuItem.setName("File Import");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = file.add(mgui.actions[TGUIAction.ACT_EXPORT_LIB]);
+        menuItem.setName("File Export");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         if (ConfigurationTTool.LastOpenFileDefined) {
@@ -170,6 +183,7 @@ public class JMenuBarTurtle extends JMenuBar {
         file.addSeparator();
 
         menuItem = file.add(mgui.actions[TGUIAction.ACT_QUIT]);
+        menuItem.setName("File Quit");
         menuItem.addMouseListener(mgui.mouseHandler);
     }
 

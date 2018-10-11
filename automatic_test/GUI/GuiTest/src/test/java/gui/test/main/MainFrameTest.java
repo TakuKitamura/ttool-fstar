@@ -20,14 +20,27 @@ import org.junit.Test;
  * @author Arthur VUAGNIAUX
 */
 
-public class MainTest extends AssertJSwingJUnitTestCase {
+public class MainFrameTest extends AssertJSwingJUnitTestCase {
     private FrameFixture window;
 	
 	@Test
-	public void test() {
-		assertTrue(1 == 1);
+	public void openProject() {
+		JMenuItemFixture jmif = window.menuItem("File Open Project");
+		//JFileChooserFixture jfc = window.fileChooser("Test JFC");
+		jmif.click();
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		//jfc.approveButton().click();
 	}
-
+	
+    @Test
+	public void quit() {
+		JMenuItemFixture jmif = window.menuItem("File Quit");
+	}
+	
 	@Test
 	public void createANewFile() {
 		JMenuItemFixture jmf = window.menuItem("File New");
@@ -46,16 +59,14 @@ public class MainTest extends AssertJSwingJUnitTestCase {
 	}
 	
 	@Test
-	public void openProject() {
-		JMenuItemFixture jmf = window.menuItem("File Open Project");
-		//JFileChooserFixture jfc = window.fileChooser("jfc");
-		jmf.click();
+	public void saveDTA() {
+		JMenuItemFixture jmif = window.menuItem("File Save DTA");
+		jmif.click();
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		//jfc.approveButton().click();
 	}
 	
 	@Override
