@@ -53,8 +53,9 @@ import javax.swing.*;
  * Class JMenuBarTurtle
  * Creation: 09/12/2003
  * Version 1.0 09/12/2003
- *
- * @author Ludovic APVRILLE
+ * Version 1.5 11/10/2018
+ * 
+ * @author Ludovic APVRILLE, Arthur VUAGNIAUX
  */
 public class JMenuBarTurtle extends JMenuBar {
     private JMenu menugraph;
@@ -204,44 +205,58 @@ public class JMenuBarTurtle extends JMenuBar {
 
         //Edit
         menuItem = edit.add(mgui.actions[TGUIAction.ACT_CUT]);
+        menuItem.setName("Edit Cut");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = edit.add(mgui.actions[TGUIAction.ACT_COPY]);
+        menuItem.setName("Edit Copy");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = edit.add(mgui.actions[TGUIAction.ACT_PASTE]);
+        menuItem.setName("Edit Paste");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = edit.add(mgui.actions[TGUIAction.ACT_DELETE]);
+        menuItem.setName("Edit Delete");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = edit.add(mgui.actions[TGUIAction.ACT_SUPPR]);
+        menuItem.setName("Edit Suppr");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         edit.addSeparator();
 
         menuItem = edit.add(mgui.actions[TGUIAction.ACT_BACKWARD]);
+        menuItem.setName("Edit Undo");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = edit.add(mgui.actions[TGUIAction.ACT_FORWARD]);
+        menuItem.setName("Edit Redo");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         edit.addSeparator();
 
         menuItem = edit.add(mgui.actions[TGUIAction.ACT_FIRST_DIAG]);
+        menuItem.setName("Edit First Diagram");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = edit.add(mgui.actions[TGUIAction.ACT_BACK_DIAG]);
+        menuItem.setName("Edit Previous Diagram");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = edit.add(mgui.actions[TGUIAction.ACT_NEXT_DIAG]);
+        menuItem.setName("Edit Next Diagram");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = edit.add(mgui.actions[TGUIAction.ACT_LAST_DIAG]);
+        menuItem.setName("Edit Last Diagram");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         // DIAGRAM
 
         menuItem = diagram.add(mgui.actions[TGUIAction.ACT_NEW_ANALYSIS]);
+        menuItem.setName("Diagram New Analysis");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = diagram.add(mgui.actions[TGUIAction.ACT_NEW_DESIGN]);
+        menuItem.setName("Diagram New Design");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         diagram.addSeparator();
 
         menuItem = diagram.add(mgui.actions[TGUIAction.UML_NOTE]);
+        menuItem.setName("Diagram UML Note");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         // Interaction Overview Diagram
@@ -249,33 +264,41 @@ public class JMenuBarTurtle extends JMenuBar {
         diagram.add(iod);
 
         menuItem = iod.add(mgui.actions[TGUIAction.IOD_EDIT]);
+        menuItem.setName("Iod Edit");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         iod.addSeparator();
 
         menuItem = iod.add(mgui.actions[TGUIAction.IOD_CONNECTOR]);
+        menuItem.setName("Iod Connector");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         iod.addSeparator();
 
         menuItem = iod.add(mgui.actions[TGUIAction.IOD_START]);
+        menuItem.setName("Iod Start");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = iod.add(mgui.actions[TGUIAction.IOD_STOP]);
+        menuItem.setName("Iod Stop");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         iod.addSeparator();
 
         menuItem = iod.add(mgui.actions[TGUIAction.IOD_REF_SD]);
+        menuItem.setName("Iod Ref");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = iod.add(mgui.actions[TGUIAction.IOD_PARALLEL]);
+        menuItem.setName("Iod Parallel");
         menuItem.addMouseListener(mgui.mouseHandler);
         /*menuItem = iod.add(mgui.actions[TGUIAction.IOD_SEQUENCE]);
           menuItem.addMouseListener(mgui.mouseHandler);
           menuItem = iod.add(mgui.actions[TGUIAction.IOD_PREEMPTION]);
           menuItem.addMouseListener(mgui.mouseHandler);*/
         menuItem = iod.add(mgui.actions[TGUIAction.IOD_CHOICE]);
+        menuItem.setName("Iod Choice");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = iod.add(mgui.actions[TGUIAction.IOD_JUNCTION]);
+        menuItem.setName("Iod Junction");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         // Sequence Diagram
@@ -283,52 +306,65 @@ public class JMenuBarTurtle extends JMenuBar {
         diagram.add(sd);
 
         menuItem = sd.add(mgui.actions[TGUIAction.SD_EDIT]);
+        menuItem.setName("Sd Edit");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         sd.addSeparator();
 
         menuItem = sd.add(mgui.actions[TGUIAction.SD_CONNECTOR_MESSAGE_SYNC]);
+        menuItem.setName("Sd Connector Message Sync");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         menuItem = sd.add(mgui.actions[TGUIAction.SD_CONNECTOR_MESSAGE_ASYNC]);
+        menuItem.setName("Sd Connector Message Async");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         sd.addSeparator();
 
         menuItem = sd.add(mgui.actions[TGUIAction.SD_INSTANCE]);
+        menuItem.setName("Sd Instance");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         menuItem = sd.add(mgui.actions[TGUIAction.SD_ACTION_STATE]);
+        menuItem.setName("Sd Action State");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         menuItem = sd.add(mgui.actions[TGUIAction.SD_COREGION]);
+        menuItem.setName("Sd Coregion");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         sd.addSeparator();
 
         menuItem = sd.add(mgui.actions[TGUIAction.SD_TIMER_SETTING]);
+        menuItem.setName("Sd Timer Setting");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         menuItem = sd.add(mgui.actions[TGUIAction.SD_TIMER_EXPIRATION]);
+        menuItem.setName("Sd Timer Expiration");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         menuItem = sd.add(mgui.actions[TGUIAction.SD_TIMER_CANCELLATION]);
+        menuItem.setName("Sd Timer Cancellation");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         sd.addSeparator();
 
         menuItem = sd.add(mgui.actions[TGUIAction.SD_ABSOLUTE_TIME_CONSTRAINT]);
+        menuItem.setName("Sd Absolute Time");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         menuItem = sd.add(mgui.actions[TGUIAction.SD_RELATIVE_TIME_CONSTRAINT]);
+        menuItem.setName("Sd Relative Time");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         menuItem = sd.add(mgui.actions[TGUIAction.SD_RELATIVE_TIME_CONSTRAINT_CONNECTOR]);
+        menuItem.setName("Sd Relative Time Connector");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         sd.addSeparator();
 
         menuItem = sd.add(mgui.actions[TGUIAction.SD_ALIGN_INSTANCES]);
+        menuItem.setName("Sd Align Instances");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         // Use case diagram
@@ -336,30 +372,37 @@ public class JMenuBarTurtle extends JMenuBar {
         diagram.add(ucd);
 
         menuItem = ucd.add(mgui.actions[TGUIAction.UCD_EDIT]);
+        menuItem.setName("Ucd Edit");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         ucd.addSeparator();
 
         menuItem = ucd.add(mgui.actions[TGUIAction.UCD_ACTOR]);
+        menuItem.setName("Ucd Actor");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         ucd.addSeparator();
 
         menuItem = ucd.add(mgui.actions[TGUIAction.UCD_USECASE]);
+        menuItem.setName("Ucd Usecase");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         ucd.addSeparator();
 
         menuItem = ucd.add(mgui.actions[TGUIAction.UCD_CONNECTOR_ACTOR_UC]);
+        menuItem.setName("Ucd Connector Actor");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         menuItem = ucd.add(mgui.actions[TGUIAction.UCD_CONNECTOR_INCLUDE]);
+        menuItem.setName("Ucd Connector Include");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         menuItem = ucd.add(mgui.actions[TGUIAction.UCD_CONNECTOR_EXTEND]);
+        menuItem.setName("Ucd Connector Extend");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         menuItem = ucd.add(mgui.actions[TGUIAction.UCD_CONNECTOR_SPECIA]);
+        menuItem.setName("Ucd Connector Special");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         // CLASS DIAGRAM
@@ -367,37 +410,49 @@ public class JMenuBarTurtle extends JMenuBar {
         diagram.add(cd);
 
         menuItem = cd.add(mgui.actions[TGUIAction.TCD_EDIT]);
+        menuItem.setName("Cd Edit");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         cd.addSeparator();
 
         menuItem = cd.add(mgui.actions[TGUIAction.TCD_ASSOCIATION]);
+        menuItem.setName("Cd Association");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = cd.add(mgui.actions[TGUIAction.TCD_ASSOCIATION_NAVIGATION]);
+        menuItem.setName("Cd Navigation");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = cd.add(mgui.actions[TGUIAction.TCD_CONNECTOR_ATTRIBUTE]);
+        menuItem.setName("Cd Connector Attribute");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         cd.addSeparator();
 
         menuItem = cd.add(mgui.actions[TGUIAction.TCD_NEW_TCLASS]);
+        menuItem.setName("Cd New Class");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = cd.add(mgui.actions[TGUIAction.TCD_NEW_TOBJECT]);
+        menuItem.setName("Cd New Object");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = cd.add(mgui.actions[TGUIAction.TCD_NEW_TDATA]);
+        menuItem.setName("Cd New Data");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         cd.addSeparator();
 
         menuItem = cd.add(mgui.actions[TGUIAction.TCD_PARALLEL_OPERATOR]);
+        menuItem.setName("Cd Parallel Operator");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = cd.add(mgui.actions[TGUIAction.TCD_SYNCHRO_OPERATOR]);
+        menuItem.setName("Cd Syncho Operator");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = cd.add(mgui.actions[TGUIAction.TCD_INVOCATION_OPERATOR]);
+        menuItem.setName("Cd Invocation Operator");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = cd.add(mgui.actions[TGUIAction.TCD_SEQUENCE_OPERATOR]);
+        menuItem.setName("Cd Sequence Operator");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = cd.add(mgui.actions[TGUIAction.TCD_PREEMPTION_OPERATOR]);
+        menuItem.setName("Cd Preemption Operator");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         // ACTIVITY DIAGRAM
@@ -405,49 +460,64 @@ public class JMenuBarTurtle extends JMenuBar {
         diagram.add(ad);
 
         menuItem = ad.add(mgui.actions[TGUIAction.AD_EDIT]);
+        menuItem.setName("Ad Edit");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         ad.addSeparator();
 
         menuItem = ad.add(mgui.actions[TGUIAction.AD_CONNECTOR]);
+        menuItem.setName("Ad Connector");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         ad.addSeparator();
 
         menuItem = ad.add(mgui.actions[TGUIAction.AD_START]);
+        menuItem.setName("Ad Start");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = ad.add(mgui.actions[TGUIAction.AD_STOP]);
+        menuItem.setName("Ad Stop");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         ad.addSeparator();
 
         menuItem = ad.add(mgui.actions[TGUIAction.AD_ACTION_STATE]);
+        menuItem.setName("Ad Action State");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = ad.add(mgui.actions[TGUIAction.AD_PARALLEL]);
+        menuItem.setName("Ad Parallel");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = ad.add(mgui.actions[TGUIAction.AD_SEQUENCE]);
+        menuItem.setName("Ad Sequence");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = ad.add(mgui.actions[TGUIAction.AD_PREEMPTION]);
+        menuItem.setName("Ad Preemption");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = ad.add(mgui.actions[TGUIAction.AD_CHOICE]);
+        menuItem.setName("Ad Choice");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = ad.add(mgui.actions[TGUIAction.AD_JUNCTION]);
+        menuItem.setName("Ad Junction");
         menuItem.addMouseListener(mgui.mouseHandler);
 
         ad.addSeparator();
 
         menuItem = ad.add(mgui.actions[TGUIAction.AD_DETERMINISTIC_DELAY]);
+        menuItem.setName("Ad DDelay");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = ad.add(mgui.actions[TGUIAction.AD_NON_DETERMINISTIC_DELAY]);
+        menuItem.setName("Ad NDDelay");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = ad.add(mgui.actions[TGUIAction.AD_DELAY_NON_DETERMINISTIC_DELAY]);
+        menuItem.setName("Ad DNDDelay");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = ad.add(mgui.actions[TGUIAction.AD_TIME_LIMITED_OFFER]);
+        menuItem.setName("Ad Time Limited");
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = ad.add(mgui.actions[TGUIAction.AD_TIME_LIMITED_OFFER_WITH_LATENCY]);
+        menuItem.setName("Ad Time Limited Latency");
         menuItem.addMouseListener(mgui.mouseHandler);
 
-        // V&V
+        // V&V **************************
         menuItem = vAndV.add(mgui.actions[TGUIAction.ACT_MODEL_CHECKING]);
         menuItem.addMouseListener(mgui.mouseHandler);
 
