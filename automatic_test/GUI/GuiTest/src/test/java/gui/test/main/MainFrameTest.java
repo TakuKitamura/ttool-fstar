@@ -37,10 +37,38 @@ public class MainFrameTest extends AssertJSwingJUnitTestCase {
 	}
 	
     @Test
+    public void help() {
+    	JMenuItemFixture jmif = window.menuItem("Help Configuration");
+    	jmif.click();
+    	try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+    }
+	
+    @Test
+    public void capture() {
+    	JMenuItemFixture jmif = window.menuItem("Capture Screen");
+		jmif.click();
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+    }
+    
+    @Test
 	public void quit() {
 		JMenuItemFixture jmif = window.menuItem("File Quit");
+		jmif.click();
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
-	
+	 
 	@Test
 	public void createANewFile() {
 		JMenuItemFixture jmf = window.menuItem("File New");
