@@ -52,16 +52,21 @@
 \hhline{----}
  & \textbf{Document Manager} & \textbf{Contributors}  & \textbf{Checked by}  \\ 
 \hhline{----}
-\textbf{Name}   & Dominique BLOUIN & \multirow{2}{*}{Ludovic APVRILLE} &
+\textbf{Name}   & Dominique BLOUIN & Ludovic APVRILLE &
 \multirow{2}{*}{Ludovic APVRILLE} \\
 \hhline{--~~}
-\textbf{Contact} & dominique.blouin@telecom-paristech.fr &  &  \\ 
+\textbf{Contact} & dominique.blouin@telecom-paristech.fr & \multirow{2}{*}{Arthur VUAGNIAUX} &  \\ 
 \hhline{--~~}
 \textbf{Date} & \today & Matteo BERTOLINO &  \\ 
 \hline
 \end{tabular}
 \end{adjustbox}
 \end{table}
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.4\textwidth]{images/image1.png}
+\end{figure}
 
 \newpage
 \tableofcontents
@@ -86,6 +91,7 @@ Modifications} & \textbf{Sections Modified} \\
 1.0 & 17/10/2016 & First draft &  \\ 
 1.1 & 10/02/2017 & Added Eclipse IDE development + tests & All \\ 
 1.2 & 11/02/2017 & Added more info on tests & Tests \\ 
+1.3 & 02/10/2018 & Update and added GUI development & All\\
 \hline
 \end{tabular}
 \end{adjustbox}
@@ -132,20 +138,23 @@ the development of TTool. It describes sources configuration management, the
 development process with basic editor and command lines, with the Eclipse IDE,
 as well as the testing, building and installation procedures.
 
+\newpage 
+
 \section{Source Configuration Management}
 \label{sec:scm}
 
 \subsection{Gitlab Server}
 
-TTool sources are hosted on the Gitlab server of Telecom ParisTech under the
-group \textit{mbe}\textit{-tools} and project \textit{TTool}. The Gitlab project
-can be accessed via . Login must be performed using Shibboleth as shown in
+TTool sources are hosted on the Gitlab server of \textbf{Telecom ParisTech} under the
+group \textbf{\textit{mbe}\textit{-tools}} and project \textbf{\textit{TTool}}. The Gitlab project
+can be accessed via \url{https://gitlab.telecom-paristech.fr/users/sign_in}. 
+Login must be performed using Shibboleth as shown in
 figure~\ref{fig:image1}, using the credentials from your institution if it is a
 member of the Federation Education Recherche (\url{https://services.renater.fr/federation/participants/idp}). Otherwise, please ask us for an account.
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=\textwidth]{images/image1.png}
+\includegraphics[width=\textwidth]{images/image2.png}
 \end{center}
 \caption{}
 \label{fig:image1}
@@ -153,7 +162,8 @@ member of the Federation Education Recherche (\url{https://services.renater.fr/f
  
 \subsection{Basic Sources Management}
 
-The address to access the sources is . For the time being and until further notice, we will keep using a centralized development process, like it was the case for Subversion. In this process, each developer first obtains a clone of the master remote repository. For this, go to the directory where the sources are to be downloaded and issue the following command: \\
+The address to access the sources is \url{https://gitlab.telecom-paristech.fr/mbe-tools/TTool}.
+For the time being and until further notice, we will keep using a centralized development process, like it was the case for Subversion. In this process, each developer first obtains a clone of the master remote repository. For this, go to the directory where the sources are to be downloaded and issue the following command: \\
 
 
 \begin{verbatim}
@@ -192,55 +202,54 @@ important so that other developers can understand why the changes were made.
 Ideally, the issue number should be mentioned within the modified code and
 commit messages.  \\
 
-\section{Development with Text Editor (emacs, vi) and Make}
+\section{Development with Text Editor (emacs, vim) and Make}
 
-The text editor of your choice can be used to edit the files of TTool. Yet, you must be sure that the correct indentation is respected. Use \textbf{4 spaces for each indentation level}.\\
+The text editor of your choice can be used to edit the files of TTool. Yet, you must be sure that the correct indentation is respected. Use \textbf{4 spaces for each indentation level} and refer yourself to the \textbf{Coding Instruction} (\ref{sec:code_info}) .\\
 
 Also, don't forget to insert your name at the top of the file in the authors list.\\
 
 The main Makefile can be used to compile the source files of TTool, and to generate the jar libraries in bin/.
 To compile TTool, do as follows, from the top directory of TTool:
 \begin{verbatim}
-$ make ttool
+42sh$ make ttool
 \end{verbatim}
 
 Other compilation targets can be obtained with:
 \begin{verbatim}
-$ make help
+42sh$ make help
 \end{verbatim}
 or:
 \begin{verbatim}
-$ make
+42sh$ make
 \end{verbatim}
 In particular, compiling the sources of all subprojects can be done with the
 \textit{all} target:
-  \begin{verbatim}
-$ make all
+\begin{verbatim}
+42sh$ make all
 \end{verbatim}
 
-
+\newpage
 
 \section{Development with Eclipse}
 
-Eclipse is a well-known Integrated Development Environment (IDE) providing many advanced functionalities to support developers and improve code quality by the application of built-in on the fly code analyses. One advantage of Eclipse is that it is a multi-platform application so it can be used on Linux, Windows and Mac. The procedures described in this section are valid for all platforms although some elements such as C++ projects need to be different due to different platform-specific compilation tool chains to be used. More information on this is provided on the concerned subsections. \\
+Eclipse is a well-known Integrated Development Environment (IDE) providing many advanced functionalities to support developers and improve code quality by the application of built-in on the fly code analyses. One advantage of Eclipse is that it is a \textbf{multi-platform application} so it can be used on Linux, Windows and macOS. The procedures described in this section are valid for all platforms although some elements such as C++ projects need to be different due to different platform-specific compilation tool chains to be used. More information on this is provided on the concerned subsections.
 
 \subsection{Installing and Configuring Eclipse}
 
 Download Eclipse IDE for Java developers here: \\
-\url{http://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/neon2}
-\\
+\url{http://www.eclipse.org/downloads/packages/release/photon/r/eclipse-ide-java-developers}
 
 Unzip the package and launch the eclipse executable. For developing C++
 applications such as the DIPLODOCUS simulator, add the C Development Tools
-(CDT). For this, select menu ``Help >> Install New Software''.
-From the dialog box that opens, select the ``Neon'' update site, unfold the
-``Programming Languages'' category and check the elements as shown in
+(CDT). For this, select menu ``\textbf{Help >> Install New Software}''.
+From the dialog box that opens, select the ``\textbf{Photon}'' update site, unfold the
+``\textbf{Programming Languages}'' category and check the elements as shown in
 figure~\ref{fig:image2}. Follow the wizard instructions to complete the
 installation.
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=\textwidth]{images/image2.png}
+\includegraphics[width=0.9\textwidth, height=0.5\textheight]{images/image3.png}
 \caption{}
 \label{fig:image2}
 \end{center}
@@ -248,7 +257,7 @@ installation.
 
 \subsection{Online Help}
 
-The first place to look for help is in via menu ``Help>>Help Content'' from
+The first place to look for help is in via menu ``\textbf{Help >> Help Content}'' from
 Eclipse. A dialog box will show a tree with branches for each integrated plugin
 or application. Help is provided for the 3 plugins that are used to develop
 TTool; EGit, Java Development Tools and C/C++ Development Tools.
@@ -261,36 +270,36 @@ configuration management using Git.
 \subsubsection{Cloning the TTool Repository}
 
 First, switch to the Git perspective by clicking menu
-``Window>>Perspective>>Open Perspective>>Other''. Then select the Git
+``\textbf{Window >> Perspective >> Open Perspective >> Other}''. Then select the Git
 perspective as illustrated in figure~\ref{fig:image3}.
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[width=0.6\textwidth]{images/image3.png}
-\end{center}
-\caption{}
-\label{fig:image3}
-\end{figure}
-
-Then clone the TTool Git repository by clicking the appropriate button as shown
-in figure~\ref{fig:image4}. Specify the TTool Git repository URI
-(git@gitlab.enst.fr:mbe-tools/TTool.git) and follow the wizard by also setting
-the local Git repository path.
 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=0.6\textwidth]{images/image4.png}
 \end{center}
 \caption{}
-\label{fig:image4}
+\label{fig:image3}
 \end{figure}
 
-The content of the cloned repository can be seen from the Git Repository view by
-unfolding the ``Working Tree'' folder (figure~\ref{fig:image5}).
+Then clone the TTool Git repository by clicking the appropriate button as shown
+in figure~\ref{fig:image4}. Specify the \textbf{TTool Git repository URI}
+(git@gitlab.enst.fr:mbe-tools/TTool.git) and follow the wizard by also setting
+the local Git repository path.
 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=0.6\textwidth]{images/image5.png}
+\end{center}
+\caption{}
+\label{fig:image4}
+\end{figure}
+
+The content of the cloned repository can be seen from the Git Repository view by
+unfolding the ``\textbf{Working Tree}'' folder (figure~\ref{fig:image5}).
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=0.6\textwidth]{images/image6.png}
 \end{center}
 \caption{}
 \label{fig:image5}
@@ -301,35 +310,35 @@ unfolding the ``Working Tree'' folder (figure~\ref{fig:image5}).
 
 Two Eclipse Java projects are needed to develop TTool: the \textit{bin} project
 that contains the required libraries (jars) and the \textit{src} project that
-contains the source code. Install these 2 projects in the workspace by
-right-clicking the ``Working Tree'' it in the Git repository view and
-selecting ``Import Projects\ldots'' as shown in figure~\ref{fig:image5}.
+contains the source code. Install these two projects in the workspace by
+right-clicking the ``\textbf{Working Tree}'' it in the Git repository view and
+selecting ``\textbf{Import Projects}\ldots'' as shown in figure~\ref{fig:image5}.
 
-Then select ``Import existing Eclipse projects'' as shown in
+Then select ``\textbf{Import existing Eclipse projects}'' as shown in
 figure~\ref{fig:image6} and follow the steps of the wizard.
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[width=0.7\textwidth]{images/image6.png}
-\end{center}
-\caption{}
-\label{fig:image6}
-\end{figure}
 
 \subsubsection{Committing, Pulling and Pushing Changes}
 
 Committing the changes of a file or a directory or a project is performed by
 selecting this element in the project navigator view then selecting
-``Team>>Commit''. This will open the Git Staging view for where the changed
+``\textbf{Team >> Commit}''. This will open the Git Staging view for where the changed
 files are listed. Double clicking a file in the unstaged changes view will open
 an editor allowing visualizing the changes (figure~\ref{fig:image7}). Right click and select
-``Add to Index'', then enter a commit message and click the ``Commit'' button to
+``\textbf{Add to Index}'', then enter a commit message and click the ''\textbf{Commit}'' button to
 commit the changes. Pushing and pulling can be performed by selecting the repository from
 the Git repository view or the elements from the project view.
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=\textwidth]{images/image7.png}
+\includegraphics[width=0.6\textwidth]{images/image7.png}
+\end{center}
+\caption{}
+\label{fig:image6}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{images/image8.png}
 \end{center}
 \caption{}
 \label{fig:image7}
@@ -340,11 +349,11 @@ the Git repository view or the elements from the project view.
 \subsubsection{Coding and Compiling}
 
 Switch to the Java perspective to develop TTool with JDT (select menu
-``Windows>>Perspective\ldots'' or select the appropriate perspective button from
+``\textbf{Windows >> Perspective}\ldots'' or select the appropriate perspective button from
 the upper right corner of Eclipse). By default Eclipse will automatically
 compile all files in the project. However the provided projects have already
 been configured so that only the required classes are compiled and also to use
-the required library files from the \textit{bin} project.
+the required library files from the \textbf{\textit{bin}} project.
 
 JDT provides several advanced functionalities such as automatically navigating
 from a variable to its declaration, finding its use throughout all the classes,
@@ -353,13 +362,13 @@ including refactoring capabilities, syntactic coloration, code completion, etc.
 \subsubsection{Launching TTool}
 \label{sec:launch}
 
-A default launch configuration is provided with the TTool \textit{src} project.
+A default launch configuration is provided with the TTool \textbf{\textit{src}} project.
 It allows for launching TTool from the compiled code. This configuration can be
-edited by opening the \textit{Run Configurations} dialog box as show in figure~\ref{fig:image8}.
+edited by opening the \textbf{\textit{Run Configurations}} dialog box as show in figure~\ref{fig:image8}.
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=0.9\textwidth]{images/image8.png}
+\includegraphics[width=0.9\textwidth]{images/image9.png}
 \end{center}
 \caption{}
 \label{fig:image8}
@@ -368,14 +377,14 @@ edited by opening the \textit{Run Configurations} dialog box as show in figure~\
 The TTool launch configuration is displayed in figure~\ref{fig:image9}. It
 specifies the main class to execute as well as the program arguments, working directory and
 optionally additional environment variables to be added to the default system
-environment. Click \textit{Run} to launch TTool. The output from TTool will be
+environment. Click \textbf{\textit{Run}} to launch TTool. The output from TTool will be
 displayed in the console view. Once TTool has been launched once, simply
 clicking the button to open the launch dialog box will directly launch TTool so
 that it is not necessary to open the launch dialog box every time.
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=\textwidth]{images/image9.png}
+\includegraphics[width=\textwidth]{images/image10.png}
 \end{center}
 \caption{}
 \label{fig:image9}
@@ -386,7 +395,7 @@ that it is not necessary to open the launch dialog box every time.
 In addition, JDT provides an enhanced debugger allowing executing the program
 step by step with sophisticated breakpoints to control the execution and to
 examine variable contents etc. However to use the debugger, the proper launch
-configurations must be used by clicking the \textit{debug}
+configurations must be used by clicking the \textbf{\textit{debug}}
 button just left of the launch configuration button of figure~\ref{fig:image8}.
 
 \subsection{C++ Development}
@@ -402,7 +411,7 @@ switch to this perspective as shown in figure~\ref{fig:image10}.
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=0.45\textwidth]{images/image10.png}
+\includegraphics[width=0.45\textwidth]{images/image11.png}
 \end{center}
 \caption{}
 \label{fig:image10}
@@ -413,42 +422,42 @@ must first be imported into the workspace as explained in
 section~\ref{sec:import}. Note that for CDT, the projects are platform dependent
 due to the different compilation toolchains (Cygwin is used for Windows) so there is one project per
 platform. For instance, for developing the DIPLODOCUS simulator on Linux, import
-the \textit{c++}\textit{2} project. For windows, import the
-\textit{c++}\textit{2 $  \_  $ windows} project (TODO to be provided later). CDT
+the \textbf{\textit{c++2} project}. For windows, import the
+\textbf{\textit{c++2 $  \_  $ windows} project} (TODO to be provided later). CDT
 provides the ability to define several build configurations. For the
-\textit{c++}\textit{2} project, two configurations are provided as shown in
+\textbf{\textit{c++2} project}, two configurations are provided as shown in
 figure~\ref{fig:image11}.
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=\textwidth]{images/image11.png}
+\includegraphics[width=0.9\textwidth, height=0.38\textheight]{images/image12.png}
 \end{center}
 \caption{}
 \label{fig:image11}
 \end{figure}
 
-The \textit{TTool} configuration will compile the code using the provided make
-file as if the simulator were compiled from TTool. The \textit{Debug}
-configuration allows for compiling TTool such that it can be executed in debug
+The \textbf{\textit{TTool} configuration} will compile the code using the provided make
+file as if the simulator were compiled from TTool. The \textbf{\textit{Debug}
+configuration} allows for compiling TTool such that it can be executed in debug
 mode. The selected button in figure~\ref{fig:image11} allows changing the configuration being
 used. The hammer button on the right hand side of it allows compiling and
 linking the code.
 
 The settings for these build configurations can be edited by selecting the
 \textit{c++2} project in the project navigator and clicking
-``Properties''. For the \textit{Debug} configuration, the CDT internal builder
+``\textbf{Properties}''. For the \textbf{\textit{Debug} configuration}, the CDT internal builder
 is used. This means that the compilation and linking options can be changed via
 the form editor shown in figure~\ref{fig:image12}.
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=\textwidth]{images/image12.png}
+\includegraphics[width=0.9\textwidth]{images/image13.png}
 \end{center}
 \caption{}
 \label{fig:image12}
 \end{figure}
 
-Note that the code provided by default in the \textit{c++2} project
+Note that the code provided by default in the \textbf{\textit{c++2} project}
 from the Git repository does not compile by itself. TTool must first be executed
 to generate the classes specific to the system being simulated. Once this is
 done, the simulator can be compiled and executed from CDT for the desired build
@@ -459,15 +468,17 @@ configuration.
 Like for JDT, the launch of C++ applications can be specified using the launch
 configurations dialog as introduced in section~\ref{sec:launch}. One launch
 configuration is provided for each build configuration and named
-\textit{c++2 TTool} and \textit{c++2 Debug}.
+\textbf{\textit{c++2 TTool}} and \textbf{\textit{c++2 Debug}}.
 
 \subsubsection{Using the Debugger}
 
 The CDT debugger is very similar to the JDT debugger. However to be able to use
-it only the \textit{c++2 Debug} launch configuration should be used and
-triggered from the \textit{Debug As} button. By default, the program execution
+it only the \textbf{\textit{c++2 Debug} launch configuration} should be used and
+triggered from the \textbf{\textit{Debug As} button}. By default, the program execution
 will automatically stop at the first instruction of the program. This behavior
 can be changed by editing the debug launch configuration.
+
+\newpage
 
 \section{Development with IntelliJ}
 
@@ -480,7 +491,7 @@ functionalities globally similar to Eclipse.
 Download IntelliJ IDEA here: \url{https://www.jetbrains.com/idea/}.
 
 Unzip IntelliJ folder where you want to keep the executable. Launch it by using
-the \texttt{idea.sh} script under the \texttt{bin} folder. Click on \emph{Open}
+the \textbf{\texttt{idea.sh}} script under the \textbf{\texttt{bin}} folder. Click on \textbf{\emph{Open}}
 and navigate to the root of the TTool git repository.
 
 \subsection{The IDE window layout}
@@ -514,8 +525,8 @@ by clicking on the icon on the lower-left side of the IntelliJ window.
 
 IntelliJ integrates a debugger that is helpful to find some bugs. You can either
 launch TTool in debug mode by clicking on the bug icon in the right part of the
-navigation bar when the \emph{TTool} configuration is selected, or debug a
-specific test by selecting \emph{debug} in the drop-down menu that appears when
+navigation bar when the \textbf{\emph{TTool} configuration} is selected, or debug a
+specific test by selecting \textbf{\emph{debug}} in the drop-down menu that appears when
 clicking on the arrow for this test.
 
 You can add breakpoints by clicking in the editor's left margin. You can the
@@ -529,13 +540,13 @@ see how an expression evaluates, resume the program, execute step-by-step, etc.
 \label{sec:intellij:subprojects}
 
 As described in section \ref{sec:code_orga}, TTool is composed of multiple
-sub-projects. In IntelliJ, this is achieved by using \emph{modules}. You can see
-the existing modules in the \emph{File -> Project structure...} menu. On the
-left pane, click on \emph{Modules}. In particular, the \texttt{shared} module
-consists of all the code used by other modules and the \texttt{ttool} module is
+sub-projects. In IntelliJ, this is achieved by using \textbf{\emph{modules}}. You can see
+the existing modules in the \textbf{\emph{File -> Project structure...}} menu. On the
+left pane, click on \textbf{\emph{Modules}}. In particular, the \textbf{\texttt{shared} module }
+consists of all the code used by other modules and the \textbf{\texttt{ttool} module} is
 the main TTool application.
 
-For each of these modules, you can add \emph{content roots} (path that will
+For each of these modules, you can add \textbf{\emph{content roots}} (path that will
 contain sub-folders for sources, tests, resources and test resources). Then you
 can select a sub-folder for a content root and mark it either as a source, test,
 resource or test resource folder.
@@ -549,7 +560,7 @@ Finally, you can add dependencies in the third tab. This is useful in particular
 if a sub-project requires an external library.
 
 In the project structure window, on the left pane, you can select
-\emph{Artifacts} to see the final results that can be built from the application
+\textbf{\emph{Artifacts}} to see the final results that can be built from the application
 (the \texttt{ttool.jar} file for instance). As of today (February 2018), these
 artifacts are:
 \begin{itemize}
@@ -565,7 +576,7 @@ variable) that are
 visible in the editor and by enabling to automatically correct them. These
 warnings have different levels (error, warning, weak warning, etc.) and they are
 fully configurable. In order to configure them, you can click on the icon at the
-extreme right of the status bar and click on \emph{configure inspections}. You
+extreme right of the status bar and click on \textbf{\emph{configure inspections}}. You
 can choose which inspection should be enabled and which warning level should be
 raised when code does not follow these inspections. In order to provide a
 common coding standard among TTool developers, the configuration of these
@@ -574,8 +585,9 @@ modify this profile without asking other developers.
 
 Similarly to these warnings, IntelliJ enables to harmonize code style by
 defining a profile that is shared between all developers. To see the code style
-options, go to \emph{File -> Settings} and navigate to \emph{Editor -> Code
-Style}. As for warnings, do not modify this shared profile except if you know
+options, go to \textbf{\emph{File -> Settings}} and navigate to
+ \textbf{\emph{Editor -> CodeStyle}}. 
+As for warnings, do not modify this shared profile except if you know
 what you are doing.
 
 Finally, IntelliJ enables to correct code style issues and some warnings
@@ -587,11 +599,13 @@ and select \emph{Reformat code}.
 Note that there is a vim plugin available in IntelliJ that supports some of vim
 commands.
 
+\newpage 
+
 \section{Coding Information}
 Here are gathered all tricks on how TTool source codes are organized, and what function is coded where, and also how to extend TTool, e.g. adding a new diagram.
 
 \subsection{Coding Instructions}
-
+\label{sec:code_info}
 \subsubsection{Best practices}
 
 TTool is a constantly evolving project with more or less experimental parts. As
@@ -641,7 +655,7 @@ In particular, developers should try to:
         between a function name and the following parentheses.
 \end{itemize}
 
-Here is an example code with correct formatting:
+Here is an example code with correct formatting : \\
 
 \begin{lstlisting}[showspaces=true, language=java, commentstyle=\color{pgreen},
 keywordstyle=\color{pblue}, stringstyle=\color{pred}, basicstyle=\ttfamily]
@@ -694,7 +708,7 @@ System.out.println("blah blah blah");
 or similar ways of doing.
 
 \subsubsection{Warnings}
-TTool is compiled with the following Xlint warning flags:
+TTool is compiled with the following \textit{Xlint} warning flags:
 \begin{itemize}
     \item unchecked
     \item deprecation
@@ -725,17 +739,17 @@ projects. Here is a description of these sub-projects:
 \begin{itemize}
     \item \textbf{ttool}. This is the main project: the TTool application with a
         graphical user interface.
-    \item \textbf{graphminimize}. TODO
-    \item \textbf{graphshow}. TODO
-    \item \textbf{launcher}. TODO
-    \item \textbf{rundse}. TODO
-    \item \textbf{simulationcontrol} or remotesimulator. TODO
-    \item \textbf{tiftranslator}. TODO
-    \item \textbf{tmltranslator}. TODO
-    \item \textbf{webcrawler}. TODO
+    \item \textbf{graphminimize}. Command line application for minimizing graphs.
+    \item \textbf{graphshow}. Command line application for displaying graphs.
+    \item \textbf{launcher}. TODO 
+    \item \textbf{rundse}. Application that run the \textbf{DSE} (\textit{Design Space Exploration}) of the current project. In \texttt{TTool/DIPLODOCUS}, the DSE evaluates the performance of a mapping solution by simulating the workload of computations and data-transfers
+    \item \textbf{simulationcontrol}. Application that allow to simulate a remote control between an \texttt{host} and a \texttt{port}
+    \item \textbf{tiftranslator}. This is the application for translating \textit{TIFT} to other languages (\texttt{LOTOS}, \texttt{RT-LOTOS}, \texttt{UPPAAL} or \texttt{JAVA}). The imput file should be in \textit{XML/TIF} format and be readable.
+    \item \textbf{tmltranslator}. The application in order to tranlate \textit{TML} to other languages (\texttt{LOTOS}, \texttt{UPPAAL}, \texttt{SystemC}, \texttt{SystemC2} or \texttt{TML}). The imput file must be in \textit{TML} format and be readable
+    \item \textbf{webcrawler}. Implement of a WebCrawler for \textbf{CVEs} (\textit{Common Vulnerabilities and Exposures}
         \begin{itemize}
-            \item \textbf{client}. TODO
-            \item \textbf{server}. TODO
+            \item \textbf{client}. Client part of the WebCrawler 
+            \item \textbf{server}. Server part of the WebCrawler
         \end{itemize}
     \item \textbf{jttool}. TODO \textit{(Development of this project has been
         dropped)}
@@ -795,6 +809,8 @@ The tree on the left contains a part dedicated to errors and warnings. The list 
 private List<CheckingError> checkingErrors;
 private List<CheckingError> warnings;
 \end{lstlisting}
+
+\newpage
 
 \section{Testing}
 
@@ -910,7 +926,7 @@ the tests (passed of failed) as shown in figure~\ref{fig:image14}.
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=\textwidth]{images/image13.png}
+\includegraphics[width=\textwidth]{images/image14.png}
 \end{center}
 \caption{}
 \label{fig:image13}
@@ -918,7 +934,7 @@ the tests (passed of failed) as shown in figure~\ref{fig:image14}.
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=\textwidth]{images/image14.png}
+\includegraphics[width=\textwidth]{images/image15.png}
 \end{center}
 \caption{}
 \label{fig:image14}
@@ -950,6 +966,8 @@ paths.
 \subsection{C++}
 
 TODO
+
+\newpage
 
 \section{Building}
 
@@ -1038,8 +1056,12 @@ $
 \subsection{Automated Tests}
 TODO
 
+\newpage 
+
 \section{Installing}
 TODO
+
+\newpage
 
 \section{Adding a graphical operator to a diagram}
 This section addresses the adding of a specific graphical component to a diagram. To better show how to do this, we use the example on how we have added a FPGA component to the DIPLODOCUS deployment diagram. A FPGA is a \textit{computation unit}, just like a CPU, but the steps listed are valid for any kind of graphical component like memories or communication nodes, of for any other diagram of TTool. A few things to remember:
