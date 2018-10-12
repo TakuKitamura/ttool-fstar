@@ -1,12 +1,13 @@
+/*
+ * Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Arthur VUAGNIAUX
+ */
+
 package gui.test.main;
 
 import static org.junit.Assert.*;
 
 import org.assertj.swing.edt.GuiActionRunner;
-import org.assertj.swing.fixture.FrameFixture;
-import org.assertj.swing.fixture.JButtonFixture;
-import org.assertj.swing.fixture.JInternalFrameFixture;
-import org.assertj.swing.fixture.JMenuItemFixture;
+import org.assertj.swing.fixture.*;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
 
@@ -15,16 +16,31 @@ import common.SpecConfigTTool;
 import ui.util.IconManager;
 import ui.window.JFrameBasicText;
 
+/*
+ * Class Main
+ * Creation: 12/10/2018
+ * @version 1.0 12/10/2018
+ * @author Arthur VUAGNIAUX
+*/
+
 public class JFrameBasicTextTest extends AssertJSwingJUnitTestCase {
    private FrameFixture window;
    
 	@Test
-	public void test() {
-		assertTrue(1 == 1); 
+	public void checkFrame() {
+		window.requireTitle("Your configuration of TTool ...");
+    	window.requireVisible();
 	}
 	
 	@Test
-    public void help() {
+    public void close() {
+		JScrollPaneFixture jsp = window.scrollPane("Jsp Configuration");
+		//jsp.horizontalScrollBar().click();
+    	try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
     	JButtonFixture jb = window.button("Close Configuration");
     	try {
 			Thread.sleep(1000);

@@ -128,6 +128,7 @@ public class JFrameBasicText extends JFrame implements ActionListener {
 		
 		pack();
 		button1.setName("Close Configuration");
+		jsp.setName("Jsp Configuration");
 	}
 	
  	public void actionPerformed(ActionEvent evt)  {
