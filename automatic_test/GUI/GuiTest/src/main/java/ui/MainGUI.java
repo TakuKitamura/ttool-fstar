@@ -3427,7 +3427,6 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
        //jft.setSize(700, 800);
        GraphicLib.centerOnParent(jft, 700, 800);
        jft.setVisible(true);
-
    }
 
    public void aboutTURTLE() {
