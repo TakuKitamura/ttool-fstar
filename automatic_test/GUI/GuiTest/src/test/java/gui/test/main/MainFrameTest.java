@@ -7,12 +7,17 @@ import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 
+import javax.swing.JButton;
 import javax.swing.JMenuItem;
 
+import org.assertj.swing.core.GenericTypeMatcher;
+import org.assertj.swing.core.matcher.FrameMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.*;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
+
+import static org.assertj.swing.finder.WindowFinder.findFrame;
 
 import common.ConfigurationTTool;
 import common.SpecConfigTTool;
@@ -29,6 +34,12 @@ import ui.window.JFrameBasicText;
 public class MainFrameTest extends AssertJSwingJUnitTestCase {
     private FrameFixture window;
     private FrameFixture window2;
+    
+    @Test
+    public void checkFrame() {
+    	window.requireTitle("TTool");
+    	window.requireVisible();
+    }
     
 	@Test
 	public void openProject() {
@@ -52,6 +63,7 @@ public class MainFrameTest extends AssertJSwingJUnitTestCase {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+    	window2 = findFrame("TestTest").using(robot());
     	JButtonFixture jb = window2.button("Close Configuration");
     	jb.click();
     	try {
@@ -105,14 +117,8 @@ public class MainFrameTest extends AssertJSwingJUnitTestCase {
 	@Override
 	protected void onSetUp() {
 		Main frame = GuiActionRunner.execute(()-> new Main(true, true, true, true, true, true, true, true, true, true, true, true, true));
-		JFrameBasicText frame2 = GuiActionRunner.execute(()-> new JFrameBasicText("Your configuration of TTool ...",
-	               "Default configuration:\n-----------------------\n" + ConfigurationTTool.getConfiguration(true)
-                + "\nProject configuration:\n-----------------------\n" + SpecConfigTTool.getConfiguration(true),
-        IconManager.imgic76));
-		window2 = new FrameFixture(robot(), frame2);
 		window = new FrameFixture(robot(), frame.getFrame());
 		window.show();
-		//window2.show();
 	}
 	
 	@Override
