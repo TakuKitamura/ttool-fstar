@@ -90,6 +90,17 @@ public class MainFrameTest extends AssertJSwingJUnitTestCase {
 //		jmif.click();
 //	}
 	 
+    @Test
+    public void vandV() {
+    	JMenuItemFixture jmf = window.menuItem("V&V Graph Modification");
+		jmf.click();
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+    }
+    
 	@Test
 	public void createANewFile() {
 		JMenuItemFixture jmf = window.menuItem("File New");
