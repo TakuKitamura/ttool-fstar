@@ -469,7 +469,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
        TFileFilter filter = new TFileFilter();
        jfc.setFileFilter(filter);
        jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-
+       
        TTIFFilter filtertif = new TTIFFilter();
        jfctif.setFileFilter(filtertif);
 
@@ -2624,8 +2624,6 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
            File tmpFile = jfc.getSelectedFile();
            openProjectFromFile(tmpFile);
        }
-       jfc.setName("Test JFC");
-
    }
 
    public void openProjectFromFile(File _f) {
@@ -9500,6 +9498,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
    public TMLArchiPanel getCurrentArchiPanel() {
        return tmlap;
    }
+   
 } // Class MainGUI
 
 

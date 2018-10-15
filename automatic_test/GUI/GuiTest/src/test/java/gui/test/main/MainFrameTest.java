@@ -17,11 +17,13 @@ import javax.swing.JMenuItem;
 import org.assertj.swing.core.GenericTypeMatcher;
 import org.assertj.swing.core.matcher.FrameMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
+import org.assertj.swing.finder.JFileChooserFinder;
 import org.assertj.swing.fixture.*;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
 
 import static org.assertj.swing.finder.WindowFinder.findFrame;
+import static org.assertj.swing.finder.JFileChooserFinder.findFileChooser;
 
 import common.ConfigurationTTool;
 import common.SpecConfigTTool;
@@ -38,6 +40,11 @@ import ui.window.JFrameBasicText;
 public class MainFrameTest extends AssertJSwingJUnitTestCase {
     private FrameFixture window;
     private FrameFixture window2;
+    private int[] enter = {KeyEvent.VK_SLASH, KeyEvent.VK_G, KeyEvent.VK_I, KeyEvent.VK_T, KeyEvent.VK_SLASH, 
+    		               KeyEvent.VK_CAPS_LOCK, KeyEvent.VK_T, KeyEvent.VK_T, KeyEvent.VK_CAPS_LOCK, 
+    		               KeyEvent.VK_O, KeyEvent.VK_O, KeyEvent.VK_L, KeyEvent.VK_SLASH, KeyEvent.VK_M, 
+    		               KeyEvent.VK_O, KeyEvent.VK_D, KeyEvent.VK_E, KeyEvent.VK_L, KeyEvent.VK_I ,
+    		               KeyEvent.VK_N, KeyEvent.VK_G, KeyEvent.VK_SLASH};
     
     @Test
     public void checkFrame() {
@@ -47,15 +54,34 @@ public class MainFrameTest extends AssertJSwingJUnitTestCase {
     
 	@Test
 	public void openProject() {
-		JMenuItemFixture jmif = window.menuItem("File Open Project");
-		//JFileChooserFixture jfc = window.fileChooser("Test JFC");
+		JMenuItemFixture jmif = window.menuItem("File Open Project");	
 		jmif.click();
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(3600);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		//jfc.approveButton().click();
+		JFileChooserFixture jfc = JFileChooserFinder.findFileChooser().using(robot());
+		jfc.fileNameTextBox().click();
+		jfc.fileNameTextBox().pressAndReleaseKeys(enter);	
+		try {
+			Thread.sleep(3600);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}	
+		jfc.approveButton().click();
+		try {
+			Thread.sleep(3600);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}		
+		jmif.click();
+		try {
+			Thread.sleep(3600);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}	
+		jfc.fileNameTextBox().click();
 	}
 	
     @Test
@@ -63,7 +89,7 @@ public class MainFrameTest extends AssertJSwingJUnitTestCase {
     	JMenuItemFixture jmif = window.menuItem("Help Configuration");
     	jmif.click();
     	try {
-			Thread.sleep(1000);
+			Thread.sleep(3600);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -71,7 +97,7 @@ public class MainFrameTest extends AssertJSwingJUnitTestCase {
     	JButtonFixture jb = window2.button("Close Configuration");
     	jb.click();
     	try {
-			Thread.sleep(1000);
+			Thread.sleep(3600);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -95,7 +121,7 @@ public class MainFrameTest extends AssertJSwingJUnitTestCase {
     	JMenuItemFixture jmf = window.menuItem("V&V Graph Modification");
 		jmf.click();
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(3600);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -106,13 +132,13 @@ public class MainFrameTest extends AssertJSwingJUnitTestCase {
 		JMenuItemFixture jmf = window.menuItem("File New");
 		jmf.click();
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(3600);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		window.rightClick();
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(3600);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -123,7 +149,7 @@ public class MainFrameTest extends AssertJSwingJUnitTestCase {
 		JMenuItemFixture jmif = window.menuItem("File Save DTA");
 		jmif.click();
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(3600);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
