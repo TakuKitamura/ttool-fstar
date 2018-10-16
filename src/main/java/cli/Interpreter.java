@@ -40,6 +40,7 @@
 package cli;
 
 import myutil.Conversion;
+import myutil.TraceManager;
 
 import java.util.*;
 
@@ -53,9 +54,30 @@ import java.util.*;
 public class Interpreter  {
     private final static Command[] commands = {new Action()};
 
+    // Commands
+    private final static String SET = "set";
+    private final static String ACTION = "action";
+
+
+    // Action commands
+    private final static String OPEN = "open";
+    private final static String START = "start";
+
+    // Errors
+    private final static String BAD = "Badly formatted expression";
+    private final static String BAD_VAR_VALUE ="Unvalid value for variable";
+    private final static String BAD_VAR_NAME ="Unvalid variable name";
+    private final static String UNKNOWN_NEXT_COMMAND ="Invalid action command";
+    private final static String TTOOL_NOT_STARTED ="TTool is not yet started. Cannot execute command.";
+    private final static String TTOOL_ALREADY_STARTED ="TTool is already started. Cannot execute command.";
+
     private String script;
-    private HashMap<String, String> variables;
     InterpreterOutputInterface printInterface;
+
+    // State management
+    private HashMap<String, String> variables;
+    private String error;
+    private boolean ttoolStarted = false;
 
 
 
@@ -70,17 +92,77 @@ public class Interpreter  {
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
             // Replace all double space by one unique space
-            line = Conversion.replaceAllString(line, "  ", " ");
+            line = Conversion.replaceAllString(line, "  ", " ").trim();
 
             // Replace variable value in the current line
             String lineWithNoVariable = removeVariablesIn(line);
 
             // Analyze current line
+            boolean success;
+            if (lineWithNoVariable.startsWith(SET + " ")) {
+                success = setVariable(lineWithNoVariable.substring(SET.length() + 1, lineWithNoVariable.length()).trim());
+            } else if (lineWithNoVariable.startsWith(ACTION + " ")) {
+                success =  performAction(lineWithNoVariable.substring(ACTION.length() + 1, lineWithNoVariable.length()).trim());
+            }
         }
         scanner.close();
         printInterface.print("All done. See you soon.");
         printInterface.exit(1);
 
+    }
+
+    // String with first element: name of var
+    // Second elt: content of var
+    private boolean setVariable(String set) {
+        int index = set.indexOf(" ");
+        if (index == -1) {
+            error = BAD;
+            return false;
+        }
+
+        String varName = set.substring(0, index);
+
+        if (varName.length() < 1) {
+            error = BAD_VAR_NAME;
+            return false;
+        }
+
+        String attr = set.substring(index+1, set.length()).trim();
+        if (attr.length() < 1) {
+            error = BAD_VAR_VALUE;
+            return false;
+        }
+
+        TraceManager.addDev("Adding variable " + varName + " with value: " + attr);
+        variables.put(varName, attr);
+
+        return true;
+    }
+
+    // String with first element: name of var
+    // Second elt: content of var
+    private boolean performAction(String action) {
+        int index = action.indexOf(" ");
+        String nextCommand;
+        String args;
+
+        if (index != -1) {
+            nextCommand = action;
+            args = "";
+        } else {
+            nextCommand = action.substring(0, index);
+            args = action.substring(index+1, action.length());
+        }
+
+        // Analyzing next command
+        if (nextCommand.compareTo(OPEN) == 0) {
+            return openModel(args);
+        } else if (nextCommand.compareTo(START) == 0) {
+            return startTTool();
+        }
+
+        error = UNKNOWN_NEXT_COMMAND + nextCommand;
+        return false;
     }
 
     private String removeVariablesIn(String input) {
@@ -111,6 +193,24 @@ public class Interpreter  {
 
         ret = ret + input;
         return ret;
+    }
+
+    // Arg is the model name
+    public boolean startTTool() {
+        if (ttoolStarted) {
+            error = TTOOL_ALREADY_STARTED;
+            return false;
+        }
+        return true;
+    }
+
+    // Arg is the model name
+    public boolean openModel(String arg) {
+        if (!ttoolStarted) {
+            error = TTOOL_NOT_STARTED;
+            return false;
+        }
+        return true;
     }
 
 
