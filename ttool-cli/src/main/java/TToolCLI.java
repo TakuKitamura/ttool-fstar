@@ -68,6 +68,7 @@ public class TToolCLI implements InterpreterOutputInterface {
     public static void printUsage() {
         System.out.println("ttool-cli: usage");
         System.out.println("ttool-cli <script file>");
+        System.out.println("options: -debug -show");
     }
 
     public static boolean checkArgs(String[] args) {
@@ -77,6 +78,16 @@ public class TToolCLI implements InterpreterOutputInterface {
     public static boolean hasDebug(String[] args) {
         for (String s : args) {
             if (s.equals("-debug")) {
+                return true;
+            }
+
+        }
+        return false;
+    }
+
+    public static boolean hasShow(String[] args) {
+        for (String s : args) {
+            if (s.equals("-show")) {
                 return true;
             }
 
@@ -106,6 +117,11 @@ public class TToolCLI implements InterpreterOutputInterface {
             TraceManager.devPolicy = TraceManager.TO_DEVNULL;
         }
 
+        boolean show = false;
+        if (hasShow(args)) {
+            show = true;
+        }
+
         TToolCLI cli = new TToolCLI();
         cli.print("Loading script:" + getInputFile(args));
         // Load script file
@@ -117,7 +133,7 @@ public class TToolCLI implements InterpreterOutputInterface {
         String script = FileUtils.loadFileData(f);
 
         // Call Interpreter
-        Interpreter interpret = new Interpreter(script, (InterpreterOutputInterface)cli);
+        Interpreter interpret = new Interpreter(script, (InterpreterOutputInterface)cli, show);
         interpret.interpret();
 
     }

@@ -1777,7 +1777,11 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         }
     }
 
+
     public void start() {
+        start(true);
+    }
+    public void start(boolean show) {
         // Main window is ready to be drawn on screen
         if (frame == null) {
             ErrorGUI.exit(ErrorGUI.GUI);
@@ -1809,7 +1813,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             //TraceManager.addDev("No default window attributes");
         }
 
-        frame.setVisible(true);
+        frame.setVisible(show);
 
         //split1.setDividerLocation(0.90);
         //split.setDividerLocation(0.2);

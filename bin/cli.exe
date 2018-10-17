@@ -1,1 +1,1 @@
-cd /Users/ludovicapvrille/TTool/bin&&java -Xmx2048m -jar ttool-cli.jar   -debug script1
+cd /Users/ludovicapvrille/TTool/bin&&java -Xmx2048m -jar ttool-cli.jar   -debug -show script1

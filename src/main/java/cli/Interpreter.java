@@ -39,8 +39,14 @@
 
 package cli;
 
+import common.ConfigurationTTool;
+import common.SpecConfigTTool;
+import launcher.RTLLauncher;
 import myutil.Conversion;
+import myutil.PluginManager;
 import myutil.TraceManager;
+import ui.MainGUI;
+import ui.util.IconManager;
 
 import java.util.*;
 
@@ -72,7 +78,8 @@ public class Interpreter  {
     private final static String TTOOL_ALREADY_STARTED ="TTool is already started. Cannot execute command.";
 
     private String script;
-    InterpreterOutputInterface printInterface;
+    private InterpreterOutputInterface printInterface;
+    private boolean show;
 
     // State management
     private HashMap<String, String> variables;
@@ -81,10 +88,11 @@ public class Interpreter  {
 
 
 
-    public Interpreter(String script, InterpreterOutputInterface printInterface) {
+    public Interpreter(String script, InterpreterOutputInterface printInterface, boolean show) {
         this.script = script;
         this.printInterface = printInterface;
         variables = new HashMap<>();
+        this.show = show;
     }
 
     public void interpret() {
@@ -146,7 +154,7 @@ public class Interpreter  {
         String nextCommand;
         String args;
 
-        if (index != -1) {
+        if (index == -1) {
             nextCommand = action;
             args = "";
         } else {
@@ -201,6 +209,27 @@ public class Interpreter  {
             error = TTOOL_ALREADY_STARTED;
             return false;
         }
+
+        TraceManager.addDev("Laoding images");
+        IconManager.loadImg();
+
+        TraceManager.addDev("Preparing plugins");
+        PluginManager.pluginManager = new PluginManager();
+        PluginManager.pluginManager.preparePlugins(ConfigurationTTool.PLUGIN_PATH, ConfigurationTTool.PLUGIN, ConfigurationTTool.PLUGIN_PKG);
+
+
+        TraceManager.addDev("Starting launcher");
+        Thread t = new Thread(new RTLLauncher());
+        t.start();
+
+        TraceManager.addDev("Creating main window");
+        MainGUI mainGUI = new MainGUI(false, true, true, true,
+                true, true, true, true, true, true,
+                true, false, true);
+        mainGUI.build();
+        mainGUI.start(show);
+
+
         return true;
     }
 
