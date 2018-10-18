@@ -3743,8 +3743,8 @@ public class GTURTLEModeling {
     }
 
     public void copyModelingFromXML(TDiagramPanel tdp, String s, int X, int Y) throws MalformedModelingException {
-        //TraceManager.addDev("copyModelingFromXML: " + s);
-        //TraceManager.addDev("tdp: " + tdp);
+        TraceManager.addDev("copyModelingFromXML: " + s);
+        TraceManager.addDev("tdp: " + tdp);
 
         //TraceManager.addDev(s);
         //TraceManager.addDev("copyModelingFromXML:");
@@ -3781,6 +3781,7 @@ public class GTURTLEModeling {
             nl = doc.getElementsByTagName("TURTLEGSELECTEDCOMPONENTS");
 
             if (nl == null) {
+                TraceManager.addDev("No node in " + s);
                 return;
             }
 
@@ -3974,7 +3975,7 @@ public class GTURTLEModeling {
                 }
             } else if (tdp instanceof ui.sd2.SequenceDiagramPanel) {
                 //TraceManager.addDev("Sequence diagram!");
-                nl = doc.getElementsByTagName("SequenceDiagramPanelCopy");
+                nl = doc.getElementsByTagName("SequenceDiagramPanelZVCopy");
 
                 if (nl == null) {
                     return;

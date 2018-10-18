@@ -2221,6 +2221,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     public void makePaste(int X, int Y) {
         if (copyData != null) {
             try {
+                //TraceManager.addDev("Data to copy:" + copyData);
                 mgui.gtm.copyModelingFromXML(this, copyData, X, Y);
             } catch (MalformedModelingException mme) {
                 TraceManager.addDev("Paste Exception: " + mme.getMessage());
