@@ -3743,8 +3743,8 @@ public class GTURTLEModeling {
     }
 
     public void copyModelingFromXML(TDiagramPanel tdp, String s, int X, int Y) throws MalformedModelingException {
-        TraceManager.addDev("copyModelingFromXML: " + s);
-        TraceManager.addDev("tdp: " + tdp);
+        //TraceManager.addDev("copyModelingFromXML: " + s);
+        //TraceManager.addDev("tdp: " + tdp);
 
         //TraceManager.addDev(s);
         //TraceManager.addDev("copyModelingFromXML:");
@@ -7868,38 +7868,40 @@ public class GTURTLEModeling {
         TGConnectingPoint p1, p2, p3, p4;
         TDiagramPanel tdp;
         TGConnector tgco;
-        for (TGConnectorInfo info : pendingConnectors) {
-            tgco = info.connector;
-            if (tgco != null) {
-                tdp = tgco.getTDiagramPanel();
-                if (tdp != null) {
-                    p1 = tgco.getTGConnectingPointP1();
-                    p2 = tgco.getTGConnectingPointP2();
-                    if ((p1 instanceof TGConnectingPointTmp) && (p2 instanceof TGConnectingPointTmp)) {
-                        TraceManager.addDev("Searching for id " + p1.getId());
-                        p3 = tdp.findConnectingPoint(p1.getId());
-                        TraceManager.addDev("Searching for id " + p2.getId());
-                        p4 = tdp.findConnectingPoint(p2.getId());
-                        if ((p3 == null) || (p4 == null)) {
-                            //warning = true;
-                            if (p3 == null) {
-                                TraceManager.addDev("Error on first id");
+        if (pendingConnectors != null) {
+            for (TGConnectorInfo info : pendingConnectors) {
+                tgco = info.connector;
+                if (tgco != null) {
+                    tdp = tgco.getTDiagramPanel();
+                    if (tdp != null) {
+                        p1 = tgco.getTGConnectingPointP1();
+                        p2 = tgco.getTGConnectingPointP2();
+                        if ((p1 instanceof TGConnectingPointTmp) && (p2 instanceof TGConnectingPointTmp)) {
+                            TraceManager.addDev("Searching for id " + p1.getId());
+                            p3 = tdp.findConnectingPoint(p1.getId());
+                            TraceManager.addDev("Searching for id " + p2.getId());
+                            p4 = tdp.findConnectingPoint(p2.getId());
+                            if ((p3 == null) || (p4 == null)) {
+                                //warning = true;
+                                if (p3 == null) {
+                                    TraceManager.addDev("Error on first id");
+                                }
+                                if (p4 == null) {
+                                    TraceManager.addDev("Error on second id");
+                                }
+                                TraceManager.addDev("One connector ignored");
+                            } else {
+                                tgco.setP1(p3);
+                                p3.setFree(false);
+                                tgco.setP2(p4);
+                                p4.setFree(false);
                             }
-                            if (p4 == null) {
-                                TraceManager.addDev("Error on second id");
-                            }
-                            TraceManager.addDev("One connector ignored");
-                        } else {
-                            tgco.setP1(p3);
-                            p3.setFree(false);
-                            tgco.setP2(p4);
-                            p4.setFree(false);
                         }
                     }
                 }
             }
+            pendingConnectors.clear();
         }
-        pendingConnectors.clear();
         //TraceManager.addDev("Last load done");
     }
 
