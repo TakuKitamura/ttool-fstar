@@ -47,6 +47,7 @@ import myutil.PluginManager;
 import myutil.TraceManager;
 import ui.MainGUI;
 import ui.util.IconManager;
+import java.io.*;
 
 import java.util.*;
 
@@ -68,9 +69,13 @@ public class Interpreter  {
     // Action commands
     private final static String OPEN = "open";
     private final static String START = "start";
+    private final static String WAIT = "wait";
+
 
     // Errors
+    private final static String UNKNOWN = "Unknown command";
     private final static String BAD = "Badly formatted expression";
+    private final static String BAD_WAIT_VALUE = "Must provide a int value > 0";
     private final static String BAD_VAR_VALUE ="Unvalid value for variable";
     private final static String BAD_VAR_NAME ="Unvalid variable name";
     private final static String UNKNOWN_NEXT_COMMAND ="Invalid action command";
@@ -85,6 +90,7 @@ public class Interpreter  {
     private HashMap<String, String> variables;
     private String error;
     private boolean ttoolStarted = false;
+    private MainGUI mgui;
 
 
 
@@ -97,21 +103,46 @@ public class Interpreter  {
 
     public void interpret() {
         Scanner scanner = new Scanner(script);
+        int cptLine = 0;
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
-            // Replace all double space by one unique space
-            line = Conversion.replaceAllString(line, "  ", " ").trim();
+            cptLine ++;
 
-            // Replace variable value in the current line
-            String lineWithNoVariable = removeVariablesIn(line);
+            // Comment
+            if (line.startsWith("#")) {
 
-            // Analyze current line
-            boolean success;
-            if (lineWithNoVariable.startsWith(SET + " ")) {
-                success = setVariable(lineWithNoVariable.substring(SET.length() + 1, lineWithNoVariable.length()).trim());
-            } else if (lineWithNoVariable.startsWith(ACTION + " ")) {
-                success =  performAction(lineWithNoVariable.substring(ACTION.length() + 1, lineWithNoVariable.length()).trim());
+            } else {
+
+                // Replace all double space by one unique space
+                line = Conversion.replaceAllString(line, "  ", " ").trim();
+
+                //TraceManager.addDev("Handling line: " + line);
+                // Replace variable value in the current line
+                String lineWithNoVariable = removeVariablesIn(line);
+
+                TraceManager.addDev("Handling line: " + lineWithNoVariable);
+
+                // Analyze current line
+                boolean success = false;
+                error = "";
+                if (lineWithNoVariable.startsWith(SET + " ")) {
+                    success = setVariable(lineWithNoVariable.substring(SET.length() + 1, lineWithNoVariable.length()).trim());
+                } else if (lineWithNoVariable.startsWith(ACTION + " ")) {
+                    success = performAction(lineWithNoVariable.substring(ACTION.length() + 1, lineWithNoVariable.length()).trim());
+                } else if (lineWithNoVariable.startsWith(WAIT + " ")) {
+                    success = waitFor(lineWithNoVariable.substring(WAIT.length() + 1, lineWithNoVariable.length()).trim());
+                } else {
+                    success = false;
+                    error = UNKNOWN;
+
+                }
+
+                if (!success) {
+                    System.out.println("Error in line " + cptLine + " : " + error);
+                    System.exit(-1);
+                }
             }
+
         }
         scanner.close();
         printInterface.print("All done. See you soon.");
@@ -145,6 +176,26 @@ public class Interpreter  {
         variables.put(varName, attr);
 
         return true;
+    }
+
+    private boolean waitFor(String value) {
+        try {
+            int val = Integer.decode(value).intValue();
+            if (val <= 0) {
+                error = BAD_WAIT_VALUE;
+                return false;
+            }
+            TraceManager.addDev("Waiting for " + val + " s.");
+            Thread.currentThread().sleep(val * 1000);
+            TraceManager.addDev("Waiting done");
+            // Coucou
+            return true;
+
+        } catch (Exception e) {
+            TraceManager.addDev("Exception: " + e.getMessage());
+            error = BAD_WAIT_VALUE;
+            return false;
+        }
     }
 
     // String with first element: name of var
@@ -197,6 +248,7 @@ public class Interpreter  {
                 printInterface.printError("Unknown variable name:" + varName + " in " + initialLine);
                 printInterface.exit(-1);
             }
+            ret = ret + value;
         }
 
         ret = ret + input;
@@ -223,22 +275,29 @@ public class Interpreter  {
         t.start();
 
         TraceManager.addDev("Creating main window");
-        MainGUI mainGUI = new MainGUI(false, true, true, true,
+        mgui = new MainGUI(false, true, true, true,
                 true, true, true, true, true, true,
                 true, false, true);
-        mainGUI.build();
-        mainGUI.start(show);
+        mgui.build();
+        mgui.start(show);
 
+        ttoolStarted = true;
 
         return true;
     }
 
     // Arg is the model name
     public boolean openModel(String arg) {
+        TraceManager.addDev("Opening model:" + arg);
+
+
         if (!ttoolStarted) {
             error = TTOOL_NOT_STARTED;
             return false;
         }
+
+        mgui.openProjectFromFile(new File(arg));
+
         return true;
     }
 
