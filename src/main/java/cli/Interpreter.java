@@ -45,7 +45,7 @@ import launcher.RTLLauncher;
 import myutil.Conversion;
 import myutil.PluginManager;
 import myutil.TraceManager;
-import ui.MainGUI;
+import ui.*;
 import ui.util.IconManager;
 import java.io.*;
 
@@ -64,12 +64,16 @@ public class Interpreter  {
     // Commands
     private final static String SET = "set";
     private final static String ACTION = "action";
+    private final static String WAIT = "wait";
+    private final static String PRINT = "print";
 
+    // Print commands
+    private final static String TABS = "tabs";
 
     // Action commands
     private final static String OPEN = "open";
     private final static String START = "start";
-    private final static String WAIT = "wait";
+    private final static String QUIT = "quit";
 
 
     // Errors
@@ -131,6 +135,8 @@ public class Interpreter  {
                     success = performAction(lineWithNoVariable.substring(ACTION.length() + 1, lineWithNoVariable.length()).trim());
                 } else if (lineWithNoVariable.startsWith(WAIT + " ")) {
                     success = waitFor(lineWithNoVariable.substring(WAIT.length() + 1, lineWithNoVariable.length()).trim());
+                } else if (lineWithNoVariable.startsWith(PRINT + " ")) {
+                    success = performPrint(lineWithNoVariable.substring(PRINT.length() + 1, lineWithNoVariable.length()).trim());
                 } else {
                     success = false;
                     error = UNKNOWN;
@@ -188,7 +194,7 @@ public class Interpreter  {
             TraceManager.addDev("Waiting for " + val + " s.");
             Thread.currentThread().sleep(val * 1000);
             TraceManager.addDev("Waiting done");
-            // Coucou
+
             return true;
 
         } catch (Exception e) {
@@ -198,8 +204,30 @@ public class Interpreter  {
         }
     }
 
-    // String with first element: name of var
-    // Second elt: content of var
+
+    private boolean performPrint(String action) {
+        int index = action.indexOf(" ");
+        String nextCommand;
+        String args;
+
+        if (index == -1) {
+            nextCommand = action;
+            args = "";
+        } else {
+            nextCommand = action.substring(0, index);
+            args = action.substring(index+1, action.length());
+        }
+
+        // Analyzing next command
+        if (nextCommand.compareTo(TABS) == 0) {
+            return printTabs();
+        }
+
+        error = UNKNOWN_NEXT_COMMAND + nextCommand;
+        return false;
+    }
+
+
     private boolean performAction(String action) {
         int index = action.indexOf(" ");
         String nextCommand;
@@ -218,6 +246,8 @@ public class Interpreter  {
             return openModel(args);
         } else if (nextCommand.compareTo(START) == 0) {
             return startTTool();
+        } else if (nextCommand.compareTo(QUIT) == 0) {
+            return exitCLI();
         }
 
         error = UNKNOWN_NEXT_COMMAND + nextCommand;
@@ -286,6 +316,11 @@ public class Interpreter  {
         return true;
     }
 
+    public boolean exitCLI() {
+        System.exit(-1);
+        return true;
+    }
+
     // Arg is the model name
     public boolean openModel(String arg) {
         TraceManager.addDev("Opening model:" + arg);
@@ -299,6 +334,26 @@ public class Interpreter  {
         mgui.openProjectFromFile(new File(arg));
 
         return true;
+    }
+
+
+    // PRINT
+    public boolean printTabs() {
+        if (!ttoolStarted) {
+            error = TTOOL_NOT_STARTED;
+            return false;
+        }
+
+        String tabs = "";
+        Vector<TURTLEPanel> panels = mgui.getTabs();
+        for(TURTLEPanel pane: panels) {
+            tabs += mgui.getTitleAt(pane) + " ";
+        }
+
+        System.out.println("Tabs: " + tabs);
+
+        return true;
+
     }
 
 
