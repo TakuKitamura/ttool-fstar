@@ -74,6 +74,8 @@ public class Interpreter  {
     private final static String OPEN = "open";
     private final static String START = "start";
     private final static String QUIT = "quit";
+    private final static String CHECKSYNTAX = "checksyntax";
+
 
 
     // Errors

@@ -51,7 +51,7 @@ import java.util.*;
  */
 public abstract class Command  {
 
-    public abstract String[] getListOfSubCommands();
+    public abstract List<Command> getListOfSubCommands();
     public abstract String getCommand();
     public abstract String getShortCommand();
     public abstract boolean executeCommand(String command, InterpreterOutputInterface output);

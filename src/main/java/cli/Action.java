@@ -50,15 +50,16 @@ import java.util.*;
  * @author Ludovic APVRILLE
  */
 public class Action extends Command  {
-    private final String[] SUB_COMMANDS = {"open"};
+    private List<Command> subcommands;
 
 
     public Action() {
+        subcommands = new LinkedList<Command>();
 
     }
 
-    public String[] getListOfSubCommands() {
-        return SUB_COMMANDS;
+    public List<Command> getListOfSubCommands() {
+        return subcommands;
     }
 
     public String getCommand() {
