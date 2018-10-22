@@ -115,7 +115,7 @@ public abstract class TGConnectorMessageTMLSD extends TGConnector {
 			name = value.substring(0, index0);
 		}
 
-		if (!TAttribute.isAValidId(name, false, false)) {
+		if (!TAttribute.isAValidId(name, false, false, false)) {
 			return false;
 		}
 
@@ -136,7 +136,7 @@ public abstract class TGConnectorMessageTMLSD extends TGConnector {
 		for(int i=0; i<nParam; i++) {
 			tmp = params[i].trim();
 			//
-			if (!TAttribute.isAValidId(tmp, false, false)) {
+			if (!TAttribute.isAValidId(tmp, false, false, false)) {
 				return false;
 			}
 		}

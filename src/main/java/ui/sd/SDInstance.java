@@ -205,7 +205,7 @@ public class SDInstance extends TGCWithInternalComponent implements SwallowTGCom
             }
 
             if((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
-                if(!TAttribute.isAValidId(s, false, false)) {
+                if(!TAttribute.isAValidId(s, false, false, false)) {
                     JOptionPane.showMessageDialog( frame,
                                                    "Could not change the name of the instance: the new name is not a valid name",
                                                    "Error", JOptionPane.INFORMATION_MESSAGE );

@@ -264,7 +264,7 @@ public class TMLCRecordComponent extends TGCScalableWithInternalComponent implem
 			if ((s != null) && (s.length() > 0)) {
 				// Check whether this name is already in use, or not 
 				
-				if (!TAttribute.isAValidId(s, false, false)) {
+				if (!TAttribute.isAValidId(s, false, false, false)) {
 					JOptionPane.showMessageDialog(frame,
 						"Could not change the name of the component: the new name is not a valid name",
 						"Error",
@@ -433,7 +433,7 @@ public class TMLCRecordComponent extends TGCScalableWithInternalComponent implem
                                 if (valueAtt.equals("null")) {
                                     valueAtt = "";
                                 }
-                                if ((TAttribute.isAValidId(id, false, false)) && (TAttribute.isAValidInitialValue(type, valueAtt))) {
+                                if ((TAttribute.isAValidId(id, false, false, false)) && (TAttribute.isAValidInitialValue(type, valueAtt))) {
                                     //
                                     TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
                                     myAttributes.add (ta);

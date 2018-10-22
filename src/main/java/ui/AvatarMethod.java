@@ -43,6 +43,7 @@ import myutil.Conversion;
 import myutil.TraceManager;
 import translator.JKeyword;
 import translator.RTLOTOSKeyword;
+import translator.UPPAALKeyword;
 
 import java.util.Vector;
 
@@ -169,7 +170,7 @@ public class AvatarMethod {
                 // So, there is a return type!
                 rt = tmp.trim();
                 method = method.substring(index2 + 1, method.length()).trim();
-                if (!isAValidId(rt, false, false, false)) {
+                if (!isAValidId(rt, false, false, false, false)) {
                     TraceManager.addDev("Unvalid type: " + rt);
                     return null;
                 }
@@ -194,7 +195,7 @@ public class AvatarMethod {
 
         // No parenthesis at all
         if ((index0 == -1) && (index1 == -1)) {
-            if (isAValidId(method, true, true, true)) {
+            if (isAValidId(method, true, true, true, true)) {
                 return new AvatarMethod(method, new String[0], new String[0], rt);
             } else {
                 return null;
@@ -223,7 +224,7 @@ public class AvatarMethod {
         // Before parenthesis -> id
         tmp = method.substring(0, index0).trim();
         //TraceManager.addDev("Checking for an id before parenthesis; tmp=" + tmp);
-        if (!isAValidId(tmp, true, true, true)) {
+        if (!isAValidId(tmp, true, true, true, true)) {
             return null;
         }
         id = tmp;
@@ -266,11 +267,11 @@ public class AvatarMethod {
                 if (splitted[i + 1].length() == 0) {
                     return null;
                 }
-                if (!isAValidId(splitted[i], false, false, false)) {
+                if (!isAValidId(splitted[i], false, false,false, false)) {
                     TraceManager.addDev("Unvalid type: " + splitted[i]);
                     return null;
                 }
-                if (!isAValidId(splitted[i + 1], true, true, true)) {
+                if (!isAValidId(splitted[i + 1], true, true,true, true)) {
                     TraceManager.addDev("Unvalid id of parameter " + splitted[i + 1]);
                     return null;
                 }
@@ -319,7 +320,7 @@ public class AvatarMethod {
     }
 
 
-    public static boolean isAValidId(String id, boolean checkKeyword, boolean checkJavaKeyword, boolean checkTypes) {
+    public static boolean isAValidId(String id, boolean checkKeyword, boolean checkUPPAALKeyword, boolean checkJavaKeyword, boolean checkTypes) {
         // test whether _id is a word
 
         if ((id == null) || (id.length() < 1)) {
@@ -327,7 +328,7 @@ public class AvatarMethod {
         }
 
         String lowerid = id.toLowerCase();
-        boolean b1, b2, b3, b4, b5;
+        boolean b1, b2, b3, b4, b5, b6;
         b1 = (id.substring(0, 1)).matches("[a-zA-Z]");
         b2 = id.matches("\\w*");
         if (checkKeyword) {
@@ -335,6 +336,13 @@ public class AvatarMethod {
         } else {
             b3 = true;
         }
+
+        if (checkKeyword) {
+            b6 = !UPPAALKeyword.isAKeyword(lowerid);
+        } else {
+            b6 = true;
+        }
+
         if (checkJavaKeyword) {
             b5 = !JKeyword.isAKeyword(lowerid);
         } else {
@@ -347,7 +355,7 @@ public class AvatarMethod {
             b4 = true;
         }
 
-        return (b1 && b2 && b3 && b4 && b5);
+        return (b1 && b2 && b3 && b4 && b5 && b6);
     }
 
     public static boolean notIn(String s, Vector forbidden) {

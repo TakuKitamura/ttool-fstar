@@ -153,7 +153,7 @@ public class TMLADRandom extends TADComponentWithoutSubcomponents/* Issue #69 TG
 		if (dialog.getVariable().length() != 0) {
 			tmpName = dialog.getVariable();
 			tmpName = tmpName.trim();
-			 if (!TAttribute.isAValidId(tmpName, false, false)) {
+			 if (!TAttribute.isAValidId(tmpName, false, false, false)) {
                 error = true;
 				errors += "Variable  ";
 			 } else {

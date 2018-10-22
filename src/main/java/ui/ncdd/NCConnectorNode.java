@@ -154,7 +154,7 @@ public  class NCConnectorNode extends TGConnector implements WithAttributes {
 		
 		if ((interfaceNameTmp != null) && (interfaceNameTmp.length() > 0) && (!interfaceNameTmp.equals(oldInterfaceName))) {
 			//boolean b;
-            if (!TAttribute.isAValidId(interfaceNameTmp, false, false)) {
+            if (!TAttribute.isAValidId(interfaceNameTmp, false, false, false)) {
                 JOptionPane.showMessageDialog(frame,
 					"Could not change the name of the Equipment: the new name is not a valid name",
 					"Error",

@@ -262,7 +262,7 @@ public class TCDTObject extends TGCWithInternalComponent implements TClassInterf
             
         }
         
-        if (!TAttribute.isAValidId(firstName, false, false)) {
+        if (!TAttribute.isAValidId(firstName, false, false, false)) {
             JOptionPane.showMessageDialog(frame,
             "Could not perfom changes: the new name is not a valid name",
             "Error",

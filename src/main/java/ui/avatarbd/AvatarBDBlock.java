@@ -658,7 +658,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
             if ((s != null) && (s.length() > 0)){
                 //boolean b;
                 if (!s.equals(oldValue)) {
-                    if (!TAttribute.isAValidId(s, false, false)) {
+                    if (!TAttribute.isAValidId(s, false, false, false)) {
                         JOptionPane.showMessageDialog(frame,
                                 "Could not change the name of the Block: the new name is not a valid name",
                                 "Error",
@@ -695,7 +695,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                 // Setting stereotype
                 s = dialog.getStereotype().trim();
 
-                if (!TAttribute.isAValidId(s, false, false)) {
+                if (!TAttribute.isAValidId(s, false, false, false)) {
                     JOptionPane.showMessageDialog(frame,
                             "Could not use the new stereotype: the new stereotype name is not valid",
                             "Error",
@@ -821,10 +821,10 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
             _jdab.addType(s, false);
         }
 
-
         _jdab.enableInitialValue(true);
         _jdab.enableRTLOTOSKeyword(false);
         _jdab.enableJavaKeyword(false);
+        _jdab.enableUPPAALKeyword(false);
     }
 
     @Override
@@ -1029,7 +1029,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                                 if (valueAtt.equals("null")) {
                                     valueAtt = "";
                                 }
-                                if ((TAttribute.isAValidId(id, false, false)) && (TAttribute.isAValidInitialValue(type, valueAtt))) {
+                                if ((TAttribute.isAValidId(id, false, false, false)) && (TAttribute.isAValidInitialValue(type, valueAtt))) {
                                     //TraceManager.addDev("Adding attribute " + id + " typeOther=" + typeOther);
                                     if (type == TAttribute.NATURAL) {
                                         type = TAttribute.INTEGER;

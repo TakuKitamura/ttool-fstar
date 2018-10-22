@@ -159,7 +159,7 @@ public class SDTimerCancellation extends TGCWithoutInternalComponent implements 
             s = s.trim();
         }
         if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
-            if (!TAttribute.isAValidId(s, false, false)) {
+            if (!TAttribute.isAValidId(s, false, false, false)) {
                 JOptionPane.showMessageDialog(frame,
 					"Could not perform any change: the new name is not a valid name",
 					"Error",

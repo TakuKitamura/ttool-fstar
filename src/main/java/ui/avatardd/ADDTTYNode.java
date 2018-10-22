@@ -198,7 +198,7 @@ public class ADDTTYNode extends ADDNode implements WithAttributes {
 			if (dialog.getNodeName().length() != 0) {
 					tmpName = dialog.getNodeName();
 					tmpName = tmpName.trim();
-					if (!TAttribute.isAValidId(tmpName, false, false)) {
+					if (!TAttribute.isAValidId(tmpName, false, false, false)) {
 							error = true;
 							errors += "Name of the node  ";
 					} else {

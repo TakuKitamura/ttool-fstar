@@ -237,7 +237,7 @@ public class AvatarPDAttribute extends AvatarPDToggle implements SwallowedTGComp
 				getValue());
 			if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
 				//boolean b;
-				if (!TAttribute.isAValidId(s, false, false)) {
+				if (!TAttribute.isAValidId(s, false, false, false)) {
 					JOptionPane.showMessageDialog(frame,
 						"Could not change the name of the attribute: the new name is not a valid name",
 						"Error",

@@ -255,7 +255,7 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
             tmpName = dialog.getNodeName();
             tmpName = tmpName.trim();
 
-            if( !TAttribute.isAValidId(tmpName, false, false) ) {
+            if( !TAttribute.isAValidId(tmpName, false, false, false) ) {
                 error = true;
                 errors += "Name of the node  ";
             }

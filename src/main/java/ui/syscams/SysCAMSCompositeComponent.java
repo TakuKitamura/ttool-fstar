@@ -170,7 +170,7 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
         null,
         getValue());
         if ((s != null) && (s.length() > 0)) {
-			if (!TAttribute.isAValidId(s, false, false)) {
+			if (!TAttribute.isAValidId(s, false, false, false)) {
 				JOptionPane.showMessageDialog(frame,
 					"Could not change the name of the component: the new name is not a valid name",
 					"Error",

@@ -613,7 +613,7 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
             if (s == null || s.isEmpty() || s.equals(this.value))
                 return false;
 
-            if (!TAttribute.isAValidId(s, false, false)) {
+            if (!TAttribute.isAValidId(s, false, false, false)) {
                 JOptionPane.showMessageDialog(frame,
                         "Could not change the name of the Library Function: the new name is not a valid name",
                         "Error",
@@ -813,7 +813,7 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
                             if (valueAtt.equals("null"))
                                 valueAtt = "";
 
-                            if (TAttribute.isAValidId(id, false, false) && TAttribute.isAValidInitialValue(type, valueAtt)) {
+                            if (TAttribute.isAValidId(id, false, false, false) && TAttribute.isAValidInitialValue(type, valueAtt)) {
                                 if (type == TAttribute.NATURAL)
                                     type = TAttribute.INTEGER;
 
@@ -848,7 +848,7 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
                             if (valueAtt.equals("null"))
                                 valueAtt = "";
 
-                            if (TAttribute.isAValidId(id, false, false) && TAttribute.isAValidInitialValue(type, valueAtt)) {
+                            if (TAttribute.isAValidId(id, false, false, false) && TAttribute.isAValidInitialValue(type, valueAtt)) {
                                 if (type == TAttribute.NATURAL)
                                     type = TAttribute.INTEGER;
 
@@ -869,7 +869,7 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
                             if (valueAtt.equals("null"))
                                 valueAtt = "";
 
-                            if (TAttribute.isAValidId(id, false, false) && TAttribute.isAValidInitialValue(type, valueAtt)) {
+                            if (TAttribute.isAValidId(id, false, false, false) && TAttribute.isAValidInitialValue(type, valueAtt)) {
                                 if (type == TAttribute.NATURAL)
                                     type = TAttribute.INTEGER;
 

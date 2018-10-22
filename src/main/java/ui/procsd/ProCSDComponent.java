@@ -440,7 +440,7 @@ public class ProCSDComponent extends TGCWithInternalComponent implements Swallow
 
 			if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
 			
-				if (!TAttribute.isAValidId(s, false, false)) {
+				if (!TAttribute.isAValidId(s, false, false, false)) {
 					JOptionPane
 							.showMessageDialog(
 									tdp,
@@ -757,7 +757,7 @@ public class ProCSDComponent extends TGCWithInternalComponent implements Swallow
 								if (valueAtt.equals("null")) {
 									valueAtt = "";
 								}
-								if ((TAttribute.isAValidId(id, false, false))
+								if ((TAttribute.isAValidId(id, false, false, false))
 										&& (TAttribute.isAValidInitialValue(
 												type, valueAtt))) {
 									// 

@@ -194,7 +194,7 @@ public class ADDCoproMWMRNode extends ADDCommunicationNode implements WithAttrib
 		if (dialog.getNodeName().length() != 0) {
 			tmpName = dialog.getNodeName();
 			tmpName = tmpName.trim();
-			if (!TAttribute.isAValidId(tmpName, false, false)) {
+			if (!TAttribute.isAValidId(tmpName, false, false, false)) {
 				error = true;
 				errors += "Name of the node  ";
 			} else {

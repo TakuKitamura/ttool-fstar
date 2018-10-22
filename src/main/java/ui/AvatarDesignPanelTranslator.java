@@ -2533,7 +2533,7 @@ public class AvatarDesignPanelTranslator {
             return true;
         }
 
-        return !(TAttribute.isAValidId(tmp, false, false));
+        return !(TAttribute.isAValidId(tmp, false, false, false));
     }
 //
 //    public void checkForAfterOnCompositeTransition() {

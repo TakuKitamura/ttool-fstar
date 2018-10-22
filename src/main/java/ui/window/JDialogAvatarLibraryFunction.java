@@ -719,7 +719,7 @@ public class JDialogAvatarLibraryFunction extends JDialogBase implements ActionL
             return;
         }
 
-        if (!TAttribute.isAValidId(identifier, this.checkKeyword, this.checkJavaKeyword)) {
+        if (!TAttribute.isAValidId(identifier, this.checkKeyword, this.checkJavaKeyword, this.checkJavaKeyword)) {
             // Identifier should not be used
             JOptionPane.showMessageDialog(this,
                     "Bad identifier '" + identifier + "': invalid identifier",

@@ -309,7 +309,7 @@ public class EBRDDAttributeBox extends TGCWithoutInternalComponent  {
                                 }
 								
 								//
-                                if ((TAttribute.isAValidId(id, false, false)) && (TAttribute.isAValidInitialValue(type, valueAtt))) {
+                                if ((TAttribute.isAValidId(id, false, false, false)) && (TAttribute.isAValidInitialValue(type, valueAtt))) {
                                     //
                                     TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
                                     myAttributes.add (ta);

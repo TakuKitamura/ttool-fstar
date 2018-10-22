@@ -170,7 +170,7 @@ public class TDDNode extends TGCWithInternalComponent implements SwallowTGCompon
         stereotype = array[0].trim(); nodeName = array[1].trim();
         
         if ((stereotype != null) && (nodeName != null)){
-            if (!TAttribute.isAValidId(nodeName, false, false)) {
+            if (!TAttribute.isAValidId(nodeName, false, false, false)) {
                 JOptionPane.showMessageDialog(frame,
                 "Could not change the name of the node: the new name is not a valid name",
                 "Error",

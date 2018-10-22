@@ -437,7 +437,7 @@ public abstract class TMLSDInstance extends TGCWithInternalComponent implements 
 								if( valueAtt.equals("null") )	{
 									valueAtt = "";
 								}
-								if( (TAttribute.isAValidId(id, false, false) ) && ( TAttribute.isAValidInitialValue(type, valueAtt)) )	{
+								if( (TAttribute.isAValidId(id, false, false, false) ) && ( TAttribute.isAValidInitialValue(type, valueAtt)) )	{
 									//TraceManager.addDev("Adding attribute " + id + " typeOther=" + typeOther);
 									TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
 									myAttributes.add (ta);

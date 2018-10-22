@@ -177,7 +177,7 @@ public class IODChoice extends TGCWithInternalComponent {
                 s = s.substring(1, index);
                 s = s.trim();
                 //
-                if (!TAttribute.isAValidId(s, false, false)) {
+                if (!TAttribute.isAValidId(s, false, false, false)) {
                 //if (!s.matches("(\\w)+*(\\s)*")) {
                     return g;
                 }

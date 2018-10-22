@@ -165,7 +165,7 @@ public class SDTimerSetting extends TGCScalableWithoutInternalComponent implemen
         if ((timer != null) && (duration != null) && ((!timer.equals(oldMin)) || (!duration.equals(oldMax)))){
             timer = timer.trim();
             duration = duration.trim();
-            if (!TAttribute.isAValidId(timer, false, false)) {
+            if (!TAttribute.isAValidId(timer, false, false, false)) {
                 JOptionPane.showMessageDialog(frame,
                 "Could not perform any change: the new name is not a valid name",
                 "Error",
@@ -182,7 +182,7 @@ public class SDTimerSetting extends TGCScalableWithoutInternalComponent implemen
                 isInteger = false;
             }
             
-            if ((!TAttribute.isAValidId(duration, false, false)) && (isInteger == false)) {
+            if ((!TAttribute.isAValidId(duration, false, false, false)) && (isInteger == false)) {
                 JOptionPane.showMessageDialog(frame,
                 "Could not perform any change: the new duration is not a valid duration",
                 "Error",

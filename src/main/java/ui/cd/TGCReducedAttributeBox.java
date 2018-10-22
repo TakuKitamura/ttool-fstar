@@ -297,7 +297,7 @@ public abstract class TGCReducedAttributeBox extends TGCWithoutInternalComponent
                                 if (valueAtt.equals("null")) {
                                     valueAtt = "";
                                 }
-                                if ((TAttribute.isAValidId(id, false, false)) && (TAttribute.isAValidInitialValue(type, valueAtt))) {
+                                if ((TAttribute.isAValidId(id, false, false, false)) && (TAttribute.isAValidInitialValue(type, valueAtt))) {
                                     //
                                     TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
                                     if (set.equals("true")) {

@@ -263,7 +263,7 @@ public class TCDTData extends TGCWithInternalComponent {
         
         if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
             //boolean b;
-            if (!TAttribute.isAValidId(s, false, false)) {
+            if (!TAttribute.isAValidId(s, false, false, false)) {
                 JOptionPane.showMessageDialog(frame,
                 "Could not change the name of the TData: the new name is not a valid name",
                 "Error",

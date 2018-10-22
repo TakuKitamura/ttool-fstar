@@ -300,7 +300,7 @@ public class AvatarBDDataType extends TGCScalableWithInternalComponent implement
 
             if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
                 //boolean b;
-                if (!TAttribute.isAValidId(s, false, false)) {
+                if (!TAttribute.isAValidId(s, false, false, false)) {
                     JOptionPane.showMessageDialog(frame,
                             "Could not change the name of the data type: the new name is not a valid name",
                             "Error",
@@ -357,6 +357,7 @@ public class AvatarBDDataType extends TGCScalableWithInternalComponent implement
         _jdab.enableInitialValue(true);
         _jdab.enableRTLOTOSKeyword(false);
         _jdab.enableJavaKeyword(false);
+        _jdab.enableUPPAALKeyword(false);
     }
 
 
@@ -429,7 +430,7 @@ public class AvatarBDDataType extends TGCScalableWithInternalComponent implement
                                 if (valueAtt.equals("null")) {
                                     valueAtt = "";
                                 }
-                                if ((TAttribute.isAValidId(id, false, false)) && (TAttribute.isAValidInitialValue(type, valueAtt))) {
+                                if ((TAttribute.isAValidId(id, false, false, false)) && (TAttribute.isAValidInitialValue(type, valueAtt))) {
                                     //
                                     if (type == TAttribute.NATURAL) {
                                         type = TAttribute.INTEGER;

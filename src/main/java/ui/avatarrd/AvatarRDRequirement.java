@@ -418,7 +418,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
             if ((s != null) && (s.length() > 0)){
                 //boolean b;
                 if (!s.equals(oldValue)) {
-                    if (!TAttribute.isAValidId(s, false, false)) {
+                    if (!TAttribute.isAValidId(s, false, false, false)) {
                         JOptionPane.showMessageDialog(frame,
                                 "Could not change the name of the Requirement: the new name is not a valid name",
                                 "Error",
@@ -455,7 +455,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
                 // Setting stereotype
                 s = dialog.getStereotype().trim();
 
-                if (!TAttribute.isAValidId(s, false, false)) {
+                if (!TAttribute.isAValidId(s, false, false, false)) {
                     JOptionPane.showMessageDialog(frame,
                             "Could not use the new stereotype: the new stereotype name is not valid",
                             "Error",

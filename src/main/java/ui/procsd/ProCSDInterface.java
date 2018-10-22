@@ -390,7 +390,7 @@ public class ProCSDInterface extends TCDCompositionOperator implements  ActionLi
 	        getValue());
 	        
 	        if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
-	            if (!TAttribute.isAValidId(s, false, false)) {
+	            if (!TAttribute.isAValidId(s, false, false, false)) {
 	                JOptionPane.showMessageDialog(tdp,
 	                "Could not change the name of the Interface: the new name is not a valid name",
 	                "Error",
@@ -524,7 +524,7 @@ public class ProCSDInterface extends TCDCompositionOperator implements  ActionLi
 	                                if (valueAtt.equals("null")) {
 	                                    valueAtt = "";
 	                                }
-	                                if ((TAttribute.isAValidId(id, false, false)) && (TAttribute.isAValidInitialValue(type, valueAtt))) {
+	                                if ((TAttribute.isAValidId(id, false, false, false)) && (TAttribute.isAValidInitialValue(type, valueAtt))) {
 	                                    //
 	                                	
 	                                    TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);

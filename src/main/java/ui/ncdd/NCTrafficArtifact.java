@@ -170,7 +170,7 @@ public class NCTrafficArtifact extends TGCWithoutInternalComponent implements Sw
 		}
 		
 		if ((tmp != null) && (tmp.length() > 0) && (!tmp.equals(oldValue))) {
-			if (!TAttribute.isAValidId(tmp, false, false)) {
+			if (!TAttribute.isAValidId(tmp, false, false, false)) {
                 JOptionPane.showMessageDialog(frame,
 					"Could not change the name of the Traffic: the new name is not a valid name",
 					"Error",

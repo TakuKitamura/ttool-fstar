@@ -525,7 +525,7 @@ public abstract class JDialogTMLSDInstance extends JDialog implements ActionList
         TAttribute a;
 
         if( s.length() > 0 ) {
-            if( ( TAttribute.isAValidId( s, checkKeyword, checkJavaKeyword ) ) && ( TAttribute.notIn(s, forbidden ) ) )	{
+            if( ( TAttribute.isAValidId( s, checkKeyword, checkJavaKeyword, checkJavaKeyword ) ) && ( TAttribute.notIn(s, forbidden ) ) )	{
                 int i = TAttribute.getAccess(o1.toString());
                 int j = TAttribute.getType(o2.toString());
                 if( ( j == TAttribute.ARRAY_NAT ) && ( value.length() < 1 ) )	{

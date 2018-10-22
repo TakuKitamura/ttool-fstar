@@ -206,7 +206,7 @@ public class NCEqNode extends TGCWithInternalComponent implements SwallowTGCompo
 		
 		 if ((tmp != null) && (tmp.length() > 0) && (!tmp.equals(oldName))) {
 			 //boolean b;
-            if (!TAttribute.isAValidId(tmp, false, false)) {
+            if (!TAttribute.isAValidId(tmp, false, false, false)) {
                 JOptionPane.showMessageDialog(frame,
 					"Could not change the name of the Switch: the new name is not a valid name",
 					"Error",

@@ -37,8 +37,6 @@
  */
 
 
-
-
 package ui.tmlcompd;
 
 import myutil.GraphicLib;
@@ -57,27 +55,28 @@ import java.util.LinkedList;
 import java.util.Vector;
 
 /**
-   * Class TMLCPrimitiveComponent
-   * Primitive Component. To be used in TML component task diagrams
-   * Creation: 12/03/2008
-   * @version 1.0 12/03/2008
-   * @author Ludovic APVRILLE
+ * Class TMLCPrimitiveComponent
+ * Primitive Component. To be used in TML component task diagrams
+ * Creation: 12/03/2008
+ *
+ * @author Ludovic APVRILLE
+ * @version 1.0 12/03/2008
  */
 public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent, WithAttributes {
     private int maxFontSize = 14;
     private int minFontSize = 4;
     private int currentFontSize = -1;
     private boolean displayText = true;
-//    private int spacePt = 3;
+    //    private int spacePt = 3;
     private Color myColor;
 
-	private boolean isAttacker=false;
+    private boolean isAttacker = false;
     // Icon
     private int iconSize = 15;
     private boolean iconIsDrawn = false;
 
     // Attributes
- //   private boolean attributesAreDrawn = false;
+    //   private boolean attributesAreDrawn = false;
     public HashMap<String, Integer> attrMap = new HashMap<String, Integer>();
     public String mappingName;
     protected LinkedList<TAttribute> myAttributes;
@@ -86,14 +85,14 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 
     public String oldValue;
 
-    public TMLCPrimitiveComponent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+    public TMLCPrimitiveComponent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
         initScaling(200, 150);
 
         oldScaleFactor = tdp.getZoom();
         dtextX = textX * oldScaleFactor;
-        textX = (int)dtextX;
+        textX = (int) dtextX;
         dtextX = dtextX - textX;
 
         minWidth = 1;
@@ -117,7 +116,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 
         myImageIcon = IconManager.imgic1202;
 
-        myAttributes = new LinkedList<TAttribute> ();
+        myAttributes = new LinkedList<TAttribute>();
 
         actionOnAdd();
     }
@@ -131,7 +130,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
             if (ColorManager.TML_COMPOSITE_COMPONENT == Color.white) {
                 myColor = Color.white;
             } else {
-                myColor = new Color(201, 243, 188- (getMyDepth() * 10), 200);
+                myColor = new Color(201, 243, 188 - (getMyDepth() * 10), 200);
             }
         }
 
@@ -147,26 +146,26 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
             // Or decrement of 1
             // If font is less than 4, no text is displayed
 
-            int maxCurrentFontSize = Math.max(0, Math.min(height-(2*textX), maxFontSize));
+            int maxCurrentFontSize = Math.max(0, Math.min(height - (2 * textX), maxFontSize));
 
-            f = f.deriveFont((float)maxCurrentFontSize);
+            f = f.deriveFont((float) maxCurrentFontSize);
             g.setFont(f);
-            while(maxCurrentFontSize > (minFontSize-1)) {
+            while (maxCurrentFontSize > (minFontSize - 1)) {
                 if (g.getFontMetrics().stringWidth(value) < (width - iconSize - (2 * textX))) {
                     break;
                 }
-                maxCurrentFontSize --;
-                f = f.deriveFont((float)maxCurrentFontSize);
+                maxCurrentFontSize--;
+                f = f.deriveFont((float) maxCurrentFontSize);
                 g.setFont(f);
             }
 
             currentFontSize = maxCurrentFontSize;
 
-            if(currentFontSize <minFontSize) {
+            if (currentFontSize < minFontSize) {
                 displayText = false;
             } else {
                 displayText = true;
-                f = f.deriveFont((float)currentFontSize);
+                f = f.deriveFont((float) currentFontSize);
                 g.setFont(f);
             }
 
@@ -177,32 +176,32 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         g.drawRect(x, y, width, height);
         if ((width > 2) && (height > 2)) {
             g.setColor(myColor);
-            g.fillRect(x+1, y+1, width-1, height-1);
+            g.fillRect(x + 1, y + 1, width - 1, height - 1);
             g.setColor(c);
         }
 
         // Font size
         if (displayText) {
-            f = f.deriveFont((float)currentFontSize);
+            f = f.deriveFont((float) currentFontSize);
             g.setFont(f);
             w = g.getFontMetrics().stringWidth(value);
             if (w > (width - 2 * (iconSize + textX))) {
                 g.drawString(value, x + textX + 1, y + currentFontSize + textX);
             } else {
-                g.drawString(value, x + (width - w)/2, y + currentFontSize + textX);
+                g.drawString(value, x + (width - w) / 2, y + currentFontSize + textX);
             }
         }
 
         // Icon
-        if ((width>30) && (height > (iconSize + 2*textX))) {
+        if ((width > 30) && (height > (iconSize + 2 * textX))) {
             iconIsDrawn = true;
             g.drawImage(IconManager.imgic1200.getImage(), x + width - iconSize - textX, y + textX, null);
         } else {
             iconIsDrawn = false;
         }
-		if (isAttacker){
-			g.drawImage(IconManager.imgic7008.getImage(), x + width - 2*iconSize - textX, y + 2*textX, null);
-		}
+        if (isAttacker) {
+            g.drawImage(IconManager.imgic7008.getImage(), x + width - 2 * iconSize - textX, y + 2 * textX, null);
+        }
 
         // Attributes
         if (tdp.areAttributesVisible()) {
@@ -212,24 +211,24 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 
             TAttribute a;
 
-            int si = Math.min(12, (int)((float)currentFontSize - 2));
+            int si = Math.min(12, (int) ((float) currentFontSize - 2));
 
             f = g.getFont();
-            f = f.deriveFont((float)si);
+            f = f.deriveFont((float) si);
             g.setFont(f);
             int step = si + 2;
 
-            while(index < myAttributes.size()) {
+            while (index < myAttributes.size()) {
                 cpt += step;
                 if (cpt >= (height - textX)) {
                     break;
                 }
-                a = myAttributes.get (index);
+                a = myAttributes.get(index);
                 attr = a.toString();
                 w = g.getFontMetrics().stringWidth(attr);
                 if ((w + (2 * textX) + 1) < width) {
                     g.drawString(attr, x + textX, y + cpt);
-		    drawVerification(g, x + textX, y+ cpt, a.getConfidentialityVerification());
+                    drawVerification(g, x + textX, y + cpt, a.getConfidentialityVerification());
                 } else {
                     attr = "...";
                     w = g.getFontMetrics().stringWidth(attr);
@@ -240,39 +239,39 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
                         cpt -= step;
                     }
                 }
-                index ++;
+                index++;
             }
         }
 
         g.setFont(fold);
 
     }
-     public void drawVerification(Graphics g, int x, int y, int checkConfStatus){
+
+    public void drawVerification(Graphics g, int x, int y, int checkConfStatus) {
         Color c = g.getColor();
         Color c1;
-        switch(checkConfStatus) {
-        case TAttribute.CONFIDENTIALITY_OK:
-            c1 = Color.green;
-            break;
-        case TAttribute.CONFIDENTIALITY_KO:
-            c1 = Color.red;
-            break;
-        default:
-            return;
+        switch (checkConfStatus) {
+            case TAttribute.CONFIDENTIALITY_OK:
+                c1 = Color.green;
+                break;
+            case TAttribute.CONFIDENTIALITY_KO:
+                c1 = Color.red;
+                break;
+            default:
+                return;
         }
-            g.drawOval(x-10, y-10, 6, 9);
-            g.setColor(c1);
-            g.fillRect(x-12, y-5, 9, 7);
-            g.setColor(c);
-            g.drawRect(x-12, y-5, 9, 7);
-        
+        g.drawOval(x - 10, y - 10, 6, 9);
+        g.setColor(c1);
+        g.fillRect(x - 12, y - 5, 9, 7);
+        g.setColor(c);
+        g.drawRect(x - 12, y - 5, 9, 7);
 
 
     }
 
-    public void rescale(double scaleFactor){
+    public void rescale(double scaleFactor) {
         dtextX = (textX + dtextX) / oldScaleFactor * scaleFactor;
-        textX = (int)(dtextX);
+        textX = (int) (dtextX);
         dtextX = dtextX - textX;
 
         super.rescale(scaleFactor);
@@ -286,15 +285,15 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
     }
 
 
-	public boolean isAttacker(){
-		return isAttacker;
-	}
+    public boolean isAttacker() {
+        return isAttacker;
+    }
 
     public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
         // On the icon?
         if (iconIsDrawn) {
             if (GraphicLib.isInRectangle(_x, _y, x + width - iconSize - textX, y + textX, iconSize, iconSize)) {
-            	tdp.getMouseManager().setSelection(-1, -1);
+                tdp.getMouseManager().setSelection(-1, -1);
                 tdp.selectTab(getValue());
                 return true;
             }
@@ -304,35 +303,35 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         if ((displayText) && (_y <= (y + currentFontSize + textX))) {
             //TraceManager.addDev("Edit on double click x=" + _x + " y=" + _y);
             oldValue = value;
-            String s = (String)JOptionPane.showInputDialog(frame, "Name:", "Setting component name",
-                                                           JOptionPane.PLAIN_MESSAGE, IconManager.imgic100,
-                                                           null,
-                                                           getValue());
+            String s = (String) JOptionPane.showInputDialog(frame, "Name:", "Setting component name",
+                    JOptionPane.PLAIN_MESSAGE, IconManager.imgic100,
+                    null,
+                    getValue());
             if ((s != null) && (s.length() > 0)) {
                 // Check whether this name is already in use, or not
 
-                if (!TAttribute.isAValidId(s, false, false)) {
+                if (!TAttribute.isAValidId(s, false, true, false)) {
                     JOptionPane.showMessageDialog(frame,
-                                                  "Could not change the name of the component: the new name is not a valid name",
-                                                  "Error",
-                                                  JOptionPane.INFORMATION_MESSAGE);
+                            "Could not change the name of the component: the new name is not a valid name",
+                            "Error",
+                            JOptionPane.INFORMATION_MESSAGE);
                     return false;
                 }
                 if (oldValue.compareTo(s) != 0) {
-                    if (((TMLComponentTaskDiagramPanel)(tdp)).namePrimitiveComponentInUse(oldValue, s)) {
+                    if (((TMLComponentTaskDiagramPanel) (tdp)).namePrimitiveComponentInUse(oldValue, s)) {
                         JOptionPane.showMessageDialog(frame,
-                                                      "Error: the name is already in use",
-                                                      "Name modification",
-                                                      JOptionPane.ERROR_MESSAGE);
+                                "Error: the name is already in use",
+                                "Name modification",
+                                JOptionPane.ERROR_MESSAGE);
                         return false;
                     }
                 }
 
 
                 //TraceManager.addDev("Set value with change");
-    			setComponentName(s);
+                setComponentName(s);
                 setValueWithChange(s);
-				isAttacker = s.contains("Attacker");
+                isAttacker = s.contains("Attacker");
                 rescaled = true;
                 //TraceManager.addDev("return true");
                 return true;
@@ -344,7 +343,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         // And so -> attributes!
         JDialogAttribute jda = new JDialogAttribute(myAttributes, null, frame, "Setting attributes of " + value, "Attribute");
         setJDialogOptions(jda);
-       // jda.setSize(650, 375);
+        // jda.setSize(650, 375);
         GraphicLib.centerOnParent(jda, 650, 375);
         jda.setVisible(true); // blocked until dialog has been closed
         //makeValue();
@@ -362,8 +361,8 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         jda.addType(TAttribute.getStringType(TAttribute.NATURAL), true);
         jda.addType(TAttribute.getStringType(TAttribute.BOOLEAN), true);
 
-        Vector<String> records = ((TMLComponentTaskDiagramPanel)(tdp)).getAllRecords(this);
-        for(String s: records) {
+        Vector<String> records = ((TMLComponentTaskDiagramPanel) (tdp)).getAllRecords(this);
+        for (String s : records) {
             jda.addType(s, false);
         }
 
@@ -374,11 +373,11 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
     }
 
     public Vector<String> getAllRecords() {
-        return ((TMLComponentTaskDiagramPanel)(tdp)).getAllRecords(this);
+        return ((TMLComponentTaskDiagramPanel) (tdp)).getAllRecords(this);
     }
 
     public TMLCRecordComponent getRecordNamed(String _nameOfRecord) {
-        return ((TMLComponentTaskDiagramPanel)(tdp)).getRecordNamed(this, _nameOfRecord);
+        return ((TMLComponentTaskDiagramPanel) (tdp)).getRecordNamed(this, _nameOfRecord);
     }
 
     public int getType() {
@@ -439,7 +438,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 
     public void hasBeenResized() {
         rescaled = true;
-        for(int i=0; i<nbInternalTGComponent; i++) {
+        for (int i = 0; i < nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof TMLCPrimitivePort) {
                 tgcomponent[i].resizeWithFather();
             }
@@ -469,9 +468,9 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
             return value;
         } else {
             if (index <= myAttributes.size()) {
-                return myAttributes.get (index-1);
+                return myAttributes.get(index - 1);
             } else {
-                return tgcomponent[index-1-myAttributes.size()];
+                return tgcomponent[index - 1 - myAttributes.size()];
             }
         }
     }
@@ -480,11 +479,11 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         if (child instanceof String) {
             return 0;
         } else {
-           // Object o;
+            // Object o;
             if (myAttributes.indexOf(child) > -1) {
                 return myAttributes.indexOf(child) + 1;
             } else {
-                for(int i=0; i<nbInternalTGComponent; i++) {
+                for (int i = 0; i < nbInternalTGComponent; i++) {
                     if (tgcomponent[i] == child) {
                         return myAttributes.size() + 1 + i;
                     }
@@ -499,12 +498,12 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         //TraceManager.addDev("Loading extra params of " + value);
         //value = "";
         StringBuffer sb = new StringBuffer("<extraparam>\n");
-			sb.append("<Data isAttacker=\"");
-            sb.append(isAttacker() ? "Yes": "No");
-	        sb.append("\" />\n");
-        for(int i=0; i<myAttributes.size(); i++) {
+        sb.append("<Data isAttacker=\"");
+        sb.append(isAttacker() ? "Yes" : "No");
+        sb.append("\" />\n");
+        for (int i = 0; i < myAttributes.size(); i++) {
             //TraceManager.addDev("Attribute:" + i);
-            a = myAttributes.get (i);
+            a = myAttributes.get(i);
             //TraceManager.addDev("Attribute:" + i + " = " + a.getId());
             //value = value + a + "\n";
             sb.append("<Attribute access=\"");
@@ -524,7 +523,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
     }
 
     @Override
-    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
+    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
         try {
             NodeList nli;
             Node n1, n2;
@@ -536,19 +535,19 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
             //TraceManager.addDev("Loading attributes");
             //TraceManager.addDev(nl.toString());
 
-            for(int i=0; i<nl.getLength(); i++) {
+            for (int i = 0; i < nl.getLength(); i++) {
                 n1 = nl.item(i);
                 //TraceManager.addDev(n1);
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; j<nli.getLength(); j++) {
+                    for (int j = 0; j < nli.getLength(); j++) {
                         n2 = nli.item(j);
                         //TraceManager.addDev(n2);
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
                             elt = (Element) n2;
-							if (elt.getTagName().equals("Data")) {
+                            if (elt.getTagName().equals("Data")) {
                                 isAttacker = elt.getAttribute("isAttacker").equals("Yes");
-							}
+                            }
                             if (elt.getTagName().equals("Attribute")) {
                                 //TraceManager.addDev("Analyzing attribute");
                                 access = Integer.decode(elt.getAttribute("access")).intValue();
@@ -564,10 +563,10 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
                                 if (valueAtt.equals("null")) {
                                     valueAtt = "";
                                 }
-                                if ((TAttribute.isAValidId(id, false, false)) && (TAttribute.isAValidInitialValue(type, valueAtt))) {
+                                if ((TAttribute.isAValidId(id, false, false, false)) && (TAttribute.isAValidInitialValue(type, valueAtt))) {
                                     //TraceManager.addDev("Adding attribute " + id + " typeOther=" + typeOther);
                                     TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
-                                    myAttributes.add (ta);
+                                    myAttributes.add(ta);
                                 }
                             }
                         }
@@ -613,14 +612,14 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
     }
 
     public java.util.List<TMLCPrimitivePort> getAllPorts(int _type, boolean _isOrigin) {
-    	java.util.List<TMLCPrimitivePort> ret = new LinkedList<TMLCPrimitivePort>();
+        java.util.List<TMLCPrimitivePort> ret = new LinkedList<TMLCPrimitivePort>();
         TMLCPrimitivePort port;
 
         //TraceManager.addDev("Type = " + _type + " isOrigin=" + _isOrigin);
 
-        for(int i=0; i<nbInternalTGComponent; i++) {
+        for (int i = 0; i < nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof TMLCPrimitivePort) {
-                port = (TMLCPrimitivePort)tgcomponent[i];
+                port = (TMLCPrimitivePort) tgcomponent[i];
                 //TraceManager.addDev("Found one port:" + port.getPortName() + " type=" + port.getPortType() + " origin=" + port.isOrigin());
                 if ((port.getPortType() == _type) && (port.isOrigin() == _isOrigin)) {
                     ret.add(port);
@@ -633,10 +632,10 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
     }
 
     public java.util.List<TMLCPrimitivePort> getAllInternalPrimitivePorts() {
-    	java.util.List<TMLCPrimitivePort> list = new ArrayList<TMLCPrimitivePort>();
-        for(int i=0; i<nbInternalTGComponent; i++) {
+        java.util.List<TMLCPrimitivePort> list = new ArrayList<TMLCPrimitivePort>();
+        for (int i = 0; i < nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof TMLCPrimitivePort) {
-                list.add((TMLCPrimitivePort)(tgcomponent[i]));
+                list.add((TMLCPrimitivePort) (tgcomponent[i]));
             }
         }
 
@@ -645,15 +644,15 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 
     public String getAttributes() {
         String attr = "";
-        for (TAttribute a: myAttributes) {
-            attr +=  a.toAvatarString() + "\n";
+        for (TAttribute a : myAttributes) {
+            attr += a.toAvatarString() + "\n";
         }
 
         return attr;
     }
 
     public TMLCPath findPathWith(TGComponent tgc) {
-        return ((TMLComponentTaskDiagramPanel)tdp).findPathWith(tgc);
+        return ((TMLComponentTaskDiagramPanel) tdp).findPathWith(tgc);
     }
 
 

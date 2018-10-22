@@ -207,7 +207,7 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
         if (dialog.getTaskName().length() != 0) {
             tmp = dialog.getTaskName();
 
-            if (!TAttribute.isAValidId(tmp, false, false)) {
+            if (!TAttribute.isAValidId(tmp, false, false, false)) {
                 error = true;
             } else {
                 taskName = tmp;

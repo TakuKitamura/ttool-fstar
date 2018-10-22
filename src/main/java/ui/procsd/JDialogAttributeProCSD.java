@@ -324,7 +324,7 @@ public class JDialogAttributeProCSD extends javax.swing.JDialog implements Actio
         
         
         if (s.length()>0) {
-            if ((TAttribute.isAValidId(s, checkKeyword, checkJavaKeyword)) && (TAttribute.notIn(s, forbidden))){
+            if ((TAttribute.isAValidId(s, checkKeyword, checkJavaKeyword, checkJavaKeyword)) && (TAttribute.notIn(s, forbidden))){
                 int i = TAttribute.getAccess(o1.toString());
                 int j = TAttribute.getType(o2.toString());
                 if ((i != -1) && (j!= -1)) {

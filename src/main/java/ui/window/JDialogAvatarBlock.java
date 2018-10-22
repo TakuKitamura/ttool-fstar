@@ -77,7 +77,7 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
     private List<Boolean> initValues;
     private List<AvatarMethod> methods, methodsPar;
     private List<AvatarSignal> signals, signalsPar;
-    private boolean checkKeyword, checkJavaKeyword;
+    private boolean checkKeyword, checkJavaKeyword, checkUPPAALKeyword;
 
     private boolean cancelled = true;
 
@@ -734,6 +734,10 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
         checkJavaKeyword = !b;
     }
 
+    public void enableUPPAALKeyword(boolean b) {
+        checkUPPAALKeyword = !b;
+    }
+
 
     public void addAttribute() {
         Object o1 = accessBox.getSelectedItem();
@@ -743,7 +747,7 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
         TAttribute a;
 
         if (s.length() > 0) {
-            if ((TAttribute.isAValidId(s, checkKeyword, checkJavaKeyword)) && (TAttribute.notIn(s, forbidden))) {
+            if ((TAttribute.isAValidId(s, checkKeyword, checkUPPAALKeyword, checkJavaKeyword)) && (TAttribute.notIn(s, forbidden))) {
                 int i = TAttribute.getAccess(o1.toString());
                 int j = TAttribute.getAvatarType(o2.toString());
 

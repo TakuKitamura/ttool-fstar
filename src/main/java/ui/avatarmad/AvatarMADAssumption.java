@@ -363,7 +363,7 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
 
         if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
             //boolean b;
-            if (!TAttribute.isAValidId(s, false, false)) {
+            if (!TAttribute.isAValidId(s, false, false, false)) {
                 JOptionPane.showMessageDialog(frame,
                                               "Could not change the name of the Assumption: the new name is not a valid name",
                                               "Error",

@@ -288,7 +288,7 @@ public class ProCSDInPort extends ProCSDPort implements SwallowedTGComponent, Ac
         
         if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
             
-            if (!TAttribute.isAValidId(s, false, false)) {
+            if (!TAttribute.isAValidId(s, false, false, false)) {
                 JOptionPane.showMessageDialog(frame,
                 "Could not change the name of the Component: the new name is not a valid name",
                 "Error",

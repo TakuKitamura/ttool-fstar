@@ -298,7 +298,7 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
                 return false;
             }
 
-            if (!TAttribute.isAValidId(ster, false, false)) {
+            if (!TAttribute.isAValidId(ster, false, false, false)) {
                 JOptionPane.showMessageDialog(frame,
                         "Could not change the name of the stereotype: the new name is not a valid name",
                         "Error",
@@ -306,7 +306,7 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
                 return false;
             }
 
-            if (!TAttribute.isAValidId(blo, false, false)) {
+            if (!TAttribute.isAValidId(blo, false, false, false)) {
                 JOptionPane.showMessageDialog(frame,
                         "Could not change the name of the Block: the new name is not a valid name",
                         "Error",

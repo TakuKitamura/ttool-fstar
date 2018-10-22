@@ -277,7 +277,7 @@ public class FTDCountermeasure extends TGCScalableWithInternalComponent implemen
 
         if (dialog.getName().length() > 0) {
             tmp = dialog.getName();
-            if (!TAttribute.isAValidId(tmp, false, false)) {
+            if (!TAttribute.isAValidId(tmp, false, false, false)) {
                 error = true;
             } else {
                 value = tmp;
