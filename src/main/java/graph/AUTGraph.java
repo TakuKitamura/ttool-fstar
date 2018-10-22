@@ -70,8 +70,10 @@ public class AUTGraph implements myutil.Graph {
     protected boolean[] hasEntryTransition;
     protected boolean statesComputed;
 
-    protected static String STYLE_SHEET =
-            "node {" +
+    /*protected static String STYLE_SHEET = "node {fill-color: #B1CAF1; text-color: black; size: 11px, 11px;} node.init " +
+            "{fill-color:green; text-color: black; size: 15px, 15px;} node.deadlock {fill-color: red; text-color: white; size: 15px," +
+            "15px;} edge {text-color: blue; shape: cubic-curve;} edge.external {text-color: red; text-style: bold} ";*/
+            /*"node {" +
                     "       fill-color: blue;" +
                     "} " +
                     //          "edge.defaultedge {" +
@@ -86,7 +88,7 @@ public class AUTGraph implements myutil.Graph {
                     "} " +
                     "node.init {" +
                     "       fill-color: red;" +
-                    "} ";
+                    "} ";*/
 
     public AUTGraph() {
         transitions = new ArrayList<>();

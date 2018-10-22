@@ -83,7 +83,13 @@ public class AUTGraphDisplay implements MouseListener, ViewerListener, Runnable 
     protected boolean exitOnClose = false;
 
     // see http://graphstream-project.org/doc/Advanced-Concepts/GraphStream-CSS-Reference/
-    public static String STYLE_SHEET =
+
+
+    protected static String STYLE_SHEET = "node {fill-color: #B1CAF1; text-color: black; size: 11px, 11px;} node.init " +
+            "{fill-color:green; text-color: black; size: 15px, 15px;} node.deadlock {fill-color: red; text-color: white; size: 15px," +
+            "15px;} edge {text-color: blue; shape: cubic-curve;} edge.external {text-color: red; text-style: bold} ";
+
+    /*public static String STYLE_SHEET =
             "node {" +
                     "       fill-color: #B1CAF1; text-color: black; size: 11px, 11px;" +
                     "} " +
@@ -98,7 +104,7 @@ public class AUTGraphDisplay implements MouseListener, ViewerListener, Runnable 
                     "} " +
                     "node.init {" +
                     "       fill-color: green; text-color: black; size: 15px, 15px;" +
-                    "} ";
+                    "} ";*/
 
     public AUTGraphDisplay(AUTGraph _graph, boolean _exitOnClose) {
         graph = _graph;
