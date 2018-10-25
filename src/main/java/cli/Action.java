@@ -69,7 +69,6 @@ public class Action extends Command  {
 
 
     public Action() {
-        subcommands = new LinkedList<Command>();
 
     }
 

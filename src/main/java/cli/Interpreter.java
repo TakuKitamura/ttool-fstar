@@ -59,22 +59,13 @@ import java.util.*;
  * @author Ludovic APVRILLE
  */
 public class Interpreter  {
-    private final static Command[] commands = {new Action()};
+    private final static Command[] commands = {new Action(), new Set(), new Wait()};
 
     // Commands
-    private final static String SET = "set";
-    private final static String ACTION = "action";
     private final static String WAIT = "wait";
     private final static String PRINT = "print";
 
-    // Print commands
-    private final static String TABS = "tabs";
 
-    // Action commands
-    private final static String OPEN = "open";
-    private final static String START = "start";
-    private final static String QUIT = "quit";
-    private final static String CHECKSYNTAX = "checksyntax";
 
 
     // Errors
@@ -198,48 +189,12 @@ public class Interpreter  {
         return true;
     }
 
-    private boolean waitFor(String value) {
-        try {
-            int val = Integer.decode(value).intValue();
-            if (val <= 0) {
-                error = BAD_WAIT_VALUE;
-                return false;
-            }
-            TraceManager.addDev("Waiting for " + val + " s.");
-            Thread.currentThread().sleep(val * 1000);
-            TraceManager.addDev("Waiting done");
-
-            return true;
-
-        } catch (Exception e) {
-            TraceManager.addDev("Exception: " + e.getMessage());
-            error = BAD_WAIT_VALUE;
-            return false;
-        }
+    public void addVariable(String name, String value) {
+        variables.put(name, value);
     }
 
 
-    private boolean performPrint(String action) {
-        int index = action.indexOf(" ");
-        String nextCommand;
-        String args;
 
-        if (index == -1) {
-            nextCommand = action;
-            args = "";
-        } else {
-            nextCommand = action.substring(0, index);
-            args = action.substring(index+1, action.length());
-        }
-
-        // Analyzing next command
-        if (nextCommand.compareTo(TABS) == 0) {
-            return printTabs();
-        }
-
-        error = UNKNOWN_NEXT_COMMAND + nextCommand;
-        return false;
-    }
 
 
     private String removeVariablesIn(String input) {
@@ -282,23 +237,7 @@ public class Interpreter  {
 
 
     // PRINT
-    public boolean printTabs() {
-        if (!ttoolStarted) {
-            error = TTOOL_NOT_STARTED;
-            return false;
-        }
 
-        String tabs = "";
-        Vector<TURTLEPanel> panels = mgui.getTabs();
-        for(TURTLEPanel pane: panels) {
-            tabs += mgui.getTitleAt(pane) + " ";
-        }
-
-        System.out.println("Tabs: " + tabs);
-
-        return true;
-
-    }
 
     public boolean isTToolStarted() {
         return ttoolStarted;

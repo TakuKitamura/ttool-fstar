@@ -50,7 +50,7 @@ import java.util.*;
  * @author Ludovic APVRILLE
  */
 public class Command implements CommandInterface {
-    private List<Command> subcommands;
+    protected List<Command> subcommands;
 
     public Command() {
         subcommands = new LinkedList<Command>();
