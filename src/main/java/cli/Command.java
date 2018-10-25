@@ -66,7 +66,7 @@ public class Command implements CommandInterface {
 
     }
     public  String getShortCommand() {
-        return "d";
+        return getCommand();
     }
     public String executeCommand(String command, Interpreter interpreter) {
         return null;

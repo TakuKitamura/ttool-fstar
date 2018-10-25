@@ -127,8 +127,22 @@ public class Interpreter  {
                 TraceManager.addDev("Handling line: " + lineWithNoVariable);
 
                 // Analyze current line
-                boolean success = false;
                 error = "";
+                for(Command c: commands) {
+                    if (lineWithNoVariable.startsWith(c.getCommand() + " ")) {
+                        error = c.executeCommand( lineWithNoVariable.substring(c.getCommand().length() + 1,
+                                lineWithNoVariable.length()).trim(), this);
+                        break;
+                    }
+                    if (lineWithNoVariable.startsWith(c.getShortCommand() + " ")) {
+                        error = c.executeCommand( lineWithNoVariable.substring(c.getShortCommand().length() + 1,
+                                lineWithNoVariable.length()).trim(), this);
+                        break;
+
+                    }
+                }
+
+
                 /*if (lineWithNoVariable.startsWith(SET + " ")) {
                     success = setVariable(lineWithNoVariable.substring(SET.length() + 1, lineWithNoVariable.length()).trim());
                 } else if (lineWithNoVariable.startsWith(ACTION + " ")) {
@@ -143,7 +157,7 @@ public class Interpreter  {
 
                 }*/
 
-                if (!success) {
+                if (error != null) {
                     System.out.println("Error in line " + cptLine + " : " + error);
                     System.exit(-1);
                 }
