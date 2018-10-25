@@ -49,40 +49,16 @@ import java.util.*;
  *
  * @author Ludovic APVRILLE
  */
-public class Command implements CommandInterface {
-    private List<Command> subcommands;
+public interface CommandInterface  {
 
-    public Command() {
-        subcommands = new LinkedList<Command>();
-        fillSubCommands();
-    }
+    List<Command> getListOfSubCommands();
+    String getCommand();
+    String getShortCommand();
 
+    // return null in case of success, or a error string in case of failure.
+    String executeCommand(String command, Interpreter interpreter);
+    void fillSubCommands();
 
-    public  List<Command> getListOfSubCommands() {
-        return subcommands;
-    }
-    public  String getCommand() {
-        return "default";
-
-    }
-    public  String getShortCommand() {
-        return "d";
-    }
-    public String executeCommand(String command, Interpreter interpreter) {
-        return null;
-    }
-
-    public void fillSubCommands() {
-
-    }
-
-    public String getUsage() {
-        return "No usage";
-    }
-
-    public String getDescription() {
-        return "Not meant to be used";
-    }
-
-
+    String getUsage();
+    String getDescription();
 }

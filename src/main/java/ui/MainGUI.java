@@ -3272,8 +3272,12 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     }
 
     public void quitApplication() {
+        quitApplication(true, true);
+    }
+
+    public void quitApplication(boolean askUser, boolean mustExit) {
         boolean b = actions[TGUIAction.ACT_SAVE].isEnabled();
-        if (b) {
+        if (b && askUser) {
             if (saveBeforeAction("SAVE and QUIT", "QUIT now") == false) {
                 return;
             }
@@ -3302,7 +3306,9 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         }
 
 
-        System.exit(0);
+        if (mustExit) {
+            System.exit(0);
+        }
     }
 
 

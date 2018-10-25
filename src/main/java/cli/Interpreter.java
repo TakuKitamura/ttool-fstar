@@ -77,16 +77,15 @@ public class Interpreter  {
     private final static String CHECKSYNTAX = "checksyntax";
 
 
-
     // Errors
-    private final static String UNKNOWN = "Unknown command";
-    private final static String BAD = "Badly formatted expression";
-    private final static String BAD_WAIT_VALUE = "Must provide a int value > 0";
-    private final static String BAD_VAR_VALUE ="Unvalid value for variable";
-    private final static String BAD_VAR_NAME ="Unvalid variable name";
-    private final static String UNKNOWN_NEXT_COMMAND ="Invalid action command";
-    private final static String TTOOL_NOT_STARTED ="TTool is not yet started. Cannot execute command.";
-    private final static String TTOOL_ALREADY_STARTED ="TTool is already started. Cannot execute command.";
+    public final static String UNKNOWN = "Unknown command";
+    public final static String BAD = "Badly formatted expression";
+    public final static String BAD_WAIT_VALUE = "Must provide a int value > 0";
+    public final static String BAD_VAR_VALUE ="Unvalid value for variable";
+    public final static String BAD_VAR_NAME ="Unvalid variable name";
+    public final static String UNKNOWN_NEXT_COMMAND ="Invalid action command";
+    public final static String TTOOL_NOT_STARTED ="TTool is not yet started. Cannot execute command.";
+    public final static String TTOOL_ALREADY_STARTED ="TTool is already started. Cannot execute command.";
 
     private String script;
     private InterpreterOutputInterface printInterface;
@@ -96,8 +95,7 @@ public class Interpreter  {
     private HashMap<String, String> variables;
     private String error;
     private boolean ttoolStarted = false;
-    private MainGUI mgui;
-
+    public MainGUI mgui;
 
 
     public Interpreter(String script, InterpreterOutputInterface printInterface, boolean show) {
@@ -131,7 +129,7 @@ public class Interpreter  {
                 // Analyze current line
                 boolean success = false;
                 error = "";
-                if (lineWithNoVariable.startsWith(SET + " ")) {
+                /*if (lineWithNoVariable.startsWith(SET + " ")) {
                     success = setVariable(lineWithNoVariable.substring(SET.length() + 1, lineWithNoVariable.length()).trim());
                 } else if (lineWithNoVariable.startsWith(ACTION + " ")) {
                     success = performAction(lineWithNoVariable.substring(ACTION.length() + 1, lineWithNoVariable.length()).trim());
@@ -143,7 +141,7 @@ public class Interpreter  {
                     success = false;
                     error = UNKNOWN;
 
-                }
+                }*/
 
                 if (!success) {
                     System.out.println("Error in line " + cptLine + " : " + error);
@@ -230,32 +228,6 @@ public class Interpreter  {
     }
 
 
-    private boolean performAction(String action) {
-        int index = action.indexOf(" ");
-        String nextCommand;
-        String args;
-
-        if (index == -1) {
-            nextCommand = action;
-            args = "";
-        } else {
-            nextCommand = action.substring(0, index);
-            args = action.substring(index+1, action.length());
-        }
-
-        // Analyzing next command
-        if (nextCommand.compareTo(OPEN) == 0) {
-            return openModel(args);
-        } else if (nextCommand.compareTo(START) == 0) {
-            return startTTool();
-        } else if (nextCommand.compareTo(QUIT) == 0) {
-            return exitCLI();
-        }
-
-        error = UNKNOWN_NEXT_COMMAND + nextCommand;
-        return false;
-    }
-
     private String removeVariablesIn(String input) {
         String ret = "";
         String initialLine = input;
@@ -287,56 +259,12 @@ public class Interpreter  {
         return ret;
     }
 
-    // Arg is the model name
-    public boolean startTTool() {
-        if (ttoolStarted) {
-            error = TTOOL_ALREADY_STARTED;
-            return false;
-        }
-
-        TraceManager.addDev("Laoding images");
-        IconManager.loadImg();
-
-        TraceManager.addDev("Preparing plugins");
-        PluginManager.pluginManager = new PluginManager();
-        PluginManager.pluginManager.preparePlugins(ConfigurationTTool.PLUGIN_PATH, ConfigurationTTool.PLUGIN, ConfigurationTTool.PLUGIN_PKG);
-
-
-        TraceManager.addDev("Starting launcher");
-        Thread t = new Thread(new RTLLauncher());
-        t.start();
-
-        TraceManager.addDev("Creating main window");
-        mgui = new MainGUI(false, true, true, true,
-                true, true, true, true, true, true,
-                true, false, true);
-        mgui.build();
-        mgui.start(show);
-
-        ttoolStarted = true;
-
-        return true;
-    }
 
     public boolean exitCLI() {
         System.exit(-1);
         return true;
     }
 
-    // Arg is the model name
-    public boolean openModel(String arg) {
-        TraceManager.addDev("Opening model:" + arg);
-
-
-        if (!ttoolStarted) {
-            error = TTOOL_NOT_STARTED;
-            return false;
-        }
-
-        mgui.openProjectFromFile(new File(arg));
-
-        return true;
-    }
 
 
     // PRINT
@@ -358,5 +286,16 @@ public class Interpreter  {
 
     }
 
+    public boolean isTToolStarted() {
+        return ttoolStarted;
+    }
+
+    public void setTToolStarted(boolean b) {
+        ttoolStarted = b;
+    }
+
+    public boolean showWindow() {
+        return show;
+    }
 
 }

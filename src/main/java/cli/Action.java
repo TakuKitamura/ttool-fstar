@@ -39,6 +39,14 @@
 
 package cli;
 
+import common.ConfigurationTTool;
+import launcher.RTLLauncher;
+import myutil.PluginManager;
+import myutil.TraceManager;
+import ui.MainGUI;
+import ui.util.IconManager;
+
+import java.io.File;
 import java.util.BitSet;
 import java.util.*;
 
@@ -50,6 +58,13 @@ import java.util.*;
  * @author Ludovic APVRILLE
  */
 public class Action extends Command  {
+    // Action commands
+    private final static String OPEN = "open";
+    private final static String START = "start";
+    private final static String QUIT = "quit";
+    private final static String CHECKSYNTAX = "checksyntax";
+
+
     private List<Command> subcommands;
 
 
@@ -71,7 +86,106 @@ public class Action extends Command  {
     }
 
 
-    public  boolean executeCommand(String command, InterpreterOutputInterface output) {
-        return true;
+    public  String executeCommand(String command, Interpreter interpreter) {
+        int index = command.indexOf(" ");
+        String nextCommand;
+        String args;
+
+        if (index == -1) {
+            nextCommand = command;
+            args = "";
+        } else {
+            nextCommand = command.substring(0, index);
+            args = command.substring(index+1, command.length());
+        }
+
+
+        // Analyzing next command
+        for(Command c: subcommands) {
+            if ((c.getCommand().compareTo(nextCommand) == 0) || (c.getCommand().compareTo(nextCommand) == 0)) {
+                return c.executeCommand(args, interpreter);
+            }
+        }
+        /*if (nextCommand.compareTo(OPEN) == 0) {
+            return openModel(args);
+        } else if (nextCommand.compareTo(START) == 0) {
+            return startTTool();
+        } else if (nextCommand.compareTo(QUIT) == 0) {
+            return exitCLI();
+        }*/
+
+        String error = Interpreter.UNKNOWN_NEXT_COMMAND + nextCommand;
+        return error;
+
+    }
+
+    public void fillSubCommands() {
+        // Start
+        Command start = new Command() {
+            public String getComamnd() { return START; }
+            public String getShortCommand() { return "s"; }
+
+            public  String executeCommand(String command, Interpreter interpreter) {
+                if (interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_ALREADY_STARTED;
+                }
+                TraceManager.addDev("Laoding images");
+                IconManager.loadImg();
+
+                TraceManager.addDev("Preparing plugins");
+                PluginManager.pluginManager = new PluginManager();
+                PluginManager.pluginManager.preparePlugins(ConfigurationTTool.PLUGIN_PATH, ConfigurationTTool.PLUGIN, ConfigurationTTool.PLUGIN_PKG);
+
+
+                TraceManager.addDev("Starting launcher");
+                Thread t = new Thread(new RTLLauncher());
+                t.start();
+
+                TraceManager.addDev("Creating main window");
+                interpreter.mgui = new MainGUI(false, true, true, true,
+                        true, true, true, true, true, true,
+                        true, false, true);
+                interpreter.mgui.build();
+                interpreter.mgui.start(interpreter.showWindow());
+
+                interpreter.setTToolStarted(true);
+
+                return null;
+            }
+        };
+
+        // Open
+        Command open = new Command() {
+            public String getCommand() { return OPEN; }
+            public String getShortCommand() { return "o"; }
+
+            public  String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                interpreter.mgui.openProjectFromFile(new File(command));
+
+                return null;
+            }
+        };
+
+        // Quit
+        Command quit = new Command() {
+            public String getCommand() { return QUIT; }
+            public String getShortCommand() { return "q"; }
+
+            public  String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+                interpreter.mgui.quitApplication(false, false);
+                return null;
+            }
+        };
+
+        subcommands.add(start);
+        subcommands.add(open);
+        subcommands.add(quit);
     }
 }
