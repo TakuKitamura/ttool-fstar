@@ -131,6 +131,7 @@ $(TTOOL_BINARY): FORCE
 
 ttooljavac:
 	$(MAKE) -C $(TTOOL_DIR)
+	$(MAKE) -C $(TTOOLCLI_DIR)
 
 launcher: $(LAUNCHER_BINARY)
 
