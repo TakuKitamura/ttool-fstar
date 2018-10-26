@@ -59,14 +59,7 @@ import java.util.*;
  * @author Ludovic APVRILLE
  */
 public class Interpreter  {
-    private final static Command[] commands = {new Action(), new Set(), new Wait()};
-
-    // Commands
-    private final static String WAIT = "wait";
-    private final static String PRINT = "print";
-
-
-
+    private final static Command[] commands = {new Action(), new Set(), new Wait(), new Print()};
 
     // Errors
     public final static String UNKNOWN = "Unknown command";
@@ -77,6 +70,7 @@ public class Interpreter  {
     public final static String UNKNOWN_NEXT_COMMAND ="Invalid action command";
     public final static String TTOOL_NOT_STARTED ="TTool is not yet started. Cannot execute command.";
     public final static String TTOOL_ALREADY_STARTED ="TTool is already started. Cannot execute command.";
+
 
     private String script;
     private InterpreterOutputInterface printInterface;
@@ -161,41 +155,10 @@ public class Interpreter  {
 
     }
 
-    // String with first element: name of var
-    // Second elt: content of var
-    private boolean setVariable(String set) {
-        int index = set.indexOf(" ");
-        if (index == -1) {
-            error = BAD;
-            return false;
-        }
-
-        String varName = set.substring(0, index);
-
-        if (varName.length() < 1) {
-            error = BAD_VAR_NAME;
-            return false;
-        }
-
-        String attr = set.substring(index+1, set.length()).trim();
-        if (attr.length() < 1) {
-            error = BAD_VAR_VALUE;
-            return false;
-        }
-
-        TraceManager.addDev("Adding variable " + varName + " with value: " + attr);
-        variables.put(varName, attr);
-
-        return true;
-    }
 
     public void addVariable(String name, String value) {
         variables.put(name, value);
     }
-
-
-
-
 
     private String removeVariablesIn(String input) {
         String ret = "";
@@ -233,10 +196,6 @@ public class Interpreter  {
         System.exit(-1);
         return true;
     }
-
-
-
-    // PRINT
 
 
     public boolean isTToolStarted() {
