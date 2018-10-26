@@ -65,9 +65,6 @@ public class Action extends Command  {
     private final static String CHECKSYNTAX = "checksyntax";
 
 
-    private List<Command> subcommands;
-
-
     public Action() {
 
     }
@@ -121,14 +118,14 @@ public class Action extends Command  {
     public void fillSubCommands() {
         // Start
         Command start = new Command() {
-            public String getComamnd() { return START; }
+            public String getCommand() { return START; }
             public String getShortCommand() { return "s"; }
 
             public  String executeCommand(String command, Interpreter interpreter) {
                 if (interpreter.isTToolStarted()) {
                     return Interpreter.TTOOL_ALREADY_STARTED;
                 }
-                TraceManager.addDev("Laoding images");
+                TraceManager.addDev("Loading images");
                 IconManager.loadImg();
 
                 TraceManager.addDev("Preparing plugins");
@@ -183,8 +180,23 @@ public class Action extends Command  {
             }
         };
 
+        // Quit
+        Command checkSyntax = new Command() {
+            public String getCommand() { return "checksyntax"; }
+            public String getShortCommand() { return "cs"; }
+
+            public  String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+                interpreter.mgui.checkModelingSyntax(interpreter.mgui.getCurrentTURTLEPanel(), true);
+                return null;
+            }
+        };
+
         subcommands.add(start);
         subcommands.add(open);
         subcommands.add(quit);
+        subcommands.add(checkSyntax);
     }
 }

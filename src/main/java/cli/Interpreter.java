@@ -67,7 +67,7 @@ public class Interpreter  {
     public final static String BAD_WAIT_VALUE = "Must provide a int value > 0";
     public final static String BAD_VAR_VALUE ="Unvalid value for variable";
     public final static String BAD_VAR_NAME ="Unvalid variable name";
-    public final static String UNKNOWN_NEXT_COMMAND ="Invalid action command";
+    public final static String UNKNOWN_NEXT_COMMAND ="Invalid action: ";
     public final static String TTOOL_NOT_STARTED ="TTool is not yet started. Cannot execute command.";
     public final static String TTOOL_ALREADY_STARTED ="TTool is already started. Cannot execute command.";
 
