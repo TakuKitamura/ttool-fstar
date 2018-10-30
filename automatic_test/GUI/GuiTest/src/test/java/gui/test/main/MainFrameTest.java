@@ -27,6 +27,7 @@ import static org.assertj.swing.finder.JFileChooserFinder.findFileChooser;
 
 import common.ConfigurationTTool;
 import common.SpecConfigTTool;
+import myutil.TraceManager;
 import ui.util.IconManager;
 import ui.window.JFrameBasicText;
 
@@ -48,12 +49,25 @@ public class MainFrameTest extends AssertJSwingJUnitTestCase {
     
     @Test
     public void checkFrame() {
+    	/*
+    	 * Description : Check the title of the main frame, and verify that the frame is visible.
+    	 */
+    	
+    	TraceManager.addDev("checkFrame: Checking title");
     	window.requireTitle("TTool");
+    	TraceManager.addDev("checkFrame: Done checking title");
+    	
+    	TraceManager.addDev("checkFrame: Checking visibility");
     	window.requireVisible();
+    	TraceManager.addDev("checkFrame: checking visibility");
     }
     
 	@Test
 	public void openProject() {
+		/*
+    	 * Description : Verify that TTool open right a project.
+    	 */
+		
 		JMenuItemFixture jmif = window.menuItem("File Open Project");	
 		jmif.click();
 		try {
@@ -86,6 +100,10 @@ public class MainFrameTest extends AssertJSwingJUnitTestCase {
 	
     @Test
     public void help() {
+    	/*
+    	 * Description : Check the help from the main frame.
+    	 */
+    	
     	JMenuItemFixture jmif = window.menuItem("Help Configuration");
     	jmif.click();
     	try {
@@ -118,6 +136,10 @@ public class MainFrameTest extends AssertJSwingJUnitTestCase {
 	 
     @Test
     public void vandV() {
+    	/*
+    	 * Description : Check the V&V part
+    	 */
+    	
     	JMenuItemFixture jmf = window.menuItem("V&V Graph Modification");
 		jmf.click();
 		try {
@@ -129,6 +151,11 @@ public class MainFrameTest extends AssertJSwingJUnitTestCase {
     
 	@Test
 	public void createANewFile() {
+		/*
+    	 * Description : Verify if TTool can create a new file, by clicking on the File menu then on
+    	 * the tab New. Then right click on it.
+    	 */
+		
 		JMenuItemFixture jmf = window.menuItem("File New");
 		jmf.click();
 		try {
@@ -146,6 +173,10 @@ public class MainFrameTest extends AssertJSwingJUnitTestCase {
 	
 	@Test
 	public void saveDTA() {
+		/*
+    	 * Description : Check the save DTA part, by clicking on it.
+    	 */
+		
 		JMenuItemFixture jmif = window.menuItem("File Save DTA");
 		jmif.click();
 		try {
