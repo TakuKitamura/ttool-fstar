@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <TURTLEGMODELING version="1.0beta">
 
 <Modeling type="AVATAR Design" nameTab="protocol" >
-<AVATARBlockDiagramPanel name="Block Diagram" minX="10" maxX="2500" minY="10" maxY="1500" >
+<AVATARBlockDiagramPanel name="Block Diagram" minX="10" maxX="2500" minY="10" maxY="1500" zoom="1.0" >
 <MainCode value="void __user_init() {"/>
 <MainCode value="}"/>
 <Optimized value="true" />
-<Validated value="" />
+<Validated value="System;Bob;Alice;Server;" />
 <Ignored value="" />
 
 <CONNECTOR type="5002" id="6" >
@@ -155,6 +155,7 @@
 <TGConnectingPoint num="22" id="139" />
 <TGConnectingPoint num="23" id="140" />
 <extraparam>
+<blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
 <Signal value="in chin(Message m)" attached="true" />
 <Signal value="out chout(Message m)" attached="true" />
@@ -192,6 +193,7 @@
 <TGConnectingPoint num="22" id="64" />
 <TGConnectingPoint num="23" id="65" />
 <extraparam>
+<blockType data="cryptoblock" color="-4072719" />
 <CryptoBlock value="true" />
 <Attribute access="0" id="filler" value="" type="5" typeOther="Message" />
 <Attribute access="0" id="requestBobPublicKeyBundle" value="" type="5" typeOther="Message" />
@@ -249,6 +251,7 @@
 <TGConnectingPoint num="22" id="89" />
 <TGConnectingPoint num="23" id="90" />
 <extraparam>
+<blockType data="cryptoblock" color="-4072719" />
 <CryptoBlock value="true" />
 <Attribute access="0" id="IK_a" value="" type="5" typeOther="Key" />
 <Attribute access="0" id="IKs_a" value="" type="5" typeOther="Key" />
@@ -328,6 +331,7 @@
 <TGConnectingPoint num="22" id="114" />
 <TGConnectingPoint num="23" id="115" />
 <extraparam>
+<blockType data="cryptoblock" color="-4072719" />
 <CryptoBlock value="true" />
 <Attribute access="0" id="IK_b" value="" type="5" typeOther="Key" />
 <Attribute access="0" id="SPK_b" value="" type="5" typeOther="Key" />
@@ -405,6 +409,7 @@
 <cdparam x="625" y="1427" />
 <sizeparam width="10" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="2000" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
 <TGConnectingPoint num="0" id="144" />
@@ -412,12 +417,12 @@
 <TGConnectingPoint num="2" id="146" />
 <TGConnectingPoint num="3" id="147" />
 <extraparam>
-<guard value="[ ]" />
-<afterMin value="" />
-<afterMax value="" />
-<computeMin value="" />
-<computeMax value="" />
-<probability value="" />
+<guard value="[ ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -434,6 +439,7 @@
 <cdparam x="435" y="845" />
 <sizeparam width="249" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
 <TGConnectingPoint num="0" id="151" />
@@ -441,13 +447,13 @@
 <TGConnectingPoint num="2" id="153" />
 <TGConnectingPoint num="3" id="154" />
 <extraparam>
-<guard value="[ ]" />
-<afterMin value="" />
-<afterMax value="" />
-<computeMin value="" />
-<computeMax value="" />
-<probability value="" />
-<actions value="AD_uncipher = sdecrypt(AD_cipher, SK) " />
+<guard value="[ ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
+<actions value="AD_uncipher = sdecrypt(AD_cipher, SK) " enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -464,6 +470,7 @@
 <cdparam x="444" y="916" />
 <sizeparam width="257" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
 <TGConnectingPoint num="0" id="158" />
@@ -471,12 +478,12 @@
 <TGConnectingPoint num="2" id="160" />
 <TGConnectingPoint num="3" id="161" />
 <extraparam>
-<guard value="[ AD.Message == AD_uncipher.Message]" />
-<afterMin value="" />
-<afterMax value="" />
-<computeMin value="" />
-<computeMax value="" />
-<probability value="" />
+<guard value="[ AD.Message == AD_uncipher.Message]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -493,6 +500,7 @@
 <cdparam x="444" y="448" />
 <sizeparam width="152" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
 <TGConnectingPoint num="0" id="165" />
@@ -500,13 +508,13 @@
 <TGConnectingPoint num="2" id="167" />
 <TGConnectingPoint num="3" id="168" />
 <extraparam>
-<guard value="[ ]" />
-<afterMin value="" />
-<afterMax value="" />
-<computeMin value="" />
-<computeMax value="" />
-<probability value="" />
-<actions value="DH1 = DH(IK_a, SPKs_b) " />
+<guard value="[ ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
+<actions value="DH1 = DH(IK_a, SPKs_b) " enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -523,6 +531,7 @@
 <cdparam x="439" y="227" />
 <sizeparam width="227" height="45" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
 <TGConnectingPoint num="0" id="172" />
@@ -530,15 +539,15 @@
 <TGConnectingPoint num="2" id="174" />
 <TGConnectingPoint num="3" id="175" />
 <extraparam>
-<guard value="[ ]" />
-<afterMin value="" />
-<afterMax value="" />
-<computeMin value="" />
-<computeMax value="" />
-<probability value="" />
-<actions value="get3(filler2, tmp1, tmp2, AD_cipher )" />
-<actions value="IK_a.Key = tmp1.Message" />
-<actions value="EC_a.Key = tmp2.Message " />
+<guard value="[ ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
+<actions value="get3(filler2, tmp1, tmp2, AD_cipher )" enabled="true"/>
+<actions value="IK_a.Key = tmp1.Message" enabled="true"/>
+<actions value="EC_a.Key = tmp2.Message " enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -555,6 +564,7 @@
 <cdparam x="446" y="75" />
 <sizeparam width="225" height="60" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
 <TGConnectingPoint num="0" id="179" />
@@ -562,16 +572,16 @@
 <TGConnectingPoint num="2" id="181" />
 <TGConnectingPoint num="3" id="182" />
 <extraparam>
-<guard value="[ ]" />
-<afterMin value="" />
-<afterMax value="" />
-<computeMin value="" />
-<computeMax value="" />
-<probability value="" />
-<actions value="tmp1.Message = IK_b.Key" />
-<actions value="tmp2.Message = SPK_b.Key" />
-<actions value="tmp4 = sign(tmp2,IKs_b )" />
-<actions value="filler = concat3(tmp1, tmp2,tmp4  ) " />
+<guard value="[ ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
+<actions value="tmp1.Message = IK_b.Key" enabled="true"/>
+<actions value="tmp2.Message = SPK_b.Key" enabled="true"/>
+<actions value="tmp4 = sign(tmp2,IKs_b )" enabled="true"/>
+<actions value="filler = concat3(tmp1, tmp2,tmp4  ) " enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -588,6 +598,7 @@
 <cdparam x="412" y="214" />
 <sizeparam width="10" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
 <TGConnectingPoint num="0" id="186" />
@@ -595,12 +606,12 @@
 <TGConnectingPoint num="2" id="188" />
 <TGConnectingPoint num="3" id="189" />
 <extraparam>
-<guard value="[ ]" />
-<afterMin value="" />
-<afterMax value="" />
-<computeMin value="" />
-<computeMax value="" />
-<probability value="" />
+<guard value="[ ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -617,6 +628,7 @@
 <cdparam x="440" y="326" />
 <sizeparam width="186" height="60" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
 <TGConnectingPoint num="0" id="193" />
@@ -624,15 +636,15 @@
 <TGConnectingPoint num="2" id="195" />
 <TGConnectingPoint num="3" id="196" />
 <extraparam>
-<guard value="[ IK_a.Key==preload_IK_a.Key]" />
-<afterMin value="" />
-<afterMax value="" />
-<computeMin value="" />
-<computeMax value="" />
-<probability value="" />
-<actions value="tmp1.Message = IK_a.Key" />
-<actions value="tmp2.Message = IK_b.Key" />
-<actions value="AD = concat2(tmp1, tmp2) " />
+<guard value="[ IK_a.Key==preload_IK_a.Key]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
+<actions value="tmp1.Message = IK_a.Key" enabled="true"/>
+<actions value="tmp2.Message = IK_b.Key" enabled="true"/>
+<actions value="AD = concat2(tmp1, tmp2) " enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -649,6 +661,7 @@
 <cdparam x="444" y="520" />
 <sizeparam width="145" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
 <TGConnectingPoint num="0" id="200" />
@@ -656,13 +669,13 @@
 <TGConnectingPoint num="2" id="202" />
 <TGConnectingPoint num="3" id="203" />
 <extraparam>
-<guard value="[ ]" />
-<afterMin value="" />
-<afterMax value="" />
-<computeMin value="" />
-<computeMax value="" />
-<probability value="" />
-<actions value="DH2 = DH(EC_a, IKs_b) " />
+<guard value="[ ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
+<actions value="DH2 = DH(EC_a, IKs_b) " enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -679,6 +692,7 @@
 <cdparam x="439" y="592" />
 <sizeparam width="158" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
 <TGConnectingPoint num="0" id="207" />
@@ -686,13 +700,13 @@
 <TGConnectingPoint num="2" id="209" />
 <TGConnectingPoint num="3" id="210" />
 <extraparam>
-<guard value="[ ]" />
-<afterMin value="" />
-<afterMax value="" />
-<computeMin value="" />
-<computeMax value="" />
-<probability value="" />
-<actions value="DH3 = DH(EC_a, SPKs_b) " />
+<guard value="[ ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
+<actions value="DH3 = DH(EC_a, SPKs_b) " enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -709,6 +723,7 @@
 <cdparam x="433" y="679" />
 <sizeparam width="219" height="90" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
 <TGConnectingPoint num="0" id="214" />
@@ -716,18 +731,18 @@
 <TGConnectingPoint num="2" id="216" />
 <TGConnectingPoint num="3" id="217" />
 <extraparam>
-<guard value="[ ]" />
-<afterMin value="" />
-<afterMax value="" />
-<computeMin value="" />
-<computeMax value="" />
-<probability value="" />
-<actions value="tmp1.Message = DH1.Key" />
-<actions value="tmp2.Message = DH2.Key" />
-<actions value="tmp4.Message = DH3.Key" />
-<actions value="tmp4 = concat3(tmp1,tmp2, tmp4)" />
-<actions value="tmp4 = hash(tmp4) " />
-<actions value="SK.Key = tmp4.Message" />
+<guard value="[ ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
+<actions value="tmp1.Message = DH1.Key" enabled="true"/>
+<actions value="tmp2.Message = DH2.Key" enabled="true"/>
+<actions value="tmp4.Message = DH3.Key" enabled="true"/>
+<actions value="tmp4 = concat3(tmp1,tmp2, tmp4)" enabled="true"/>
+<actions value="tmp4 = hash(tmp4) " enabled="true"/>
+<actions value="SK.Key = tmp4.Message" enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -744,6 +759,7 @@
 <cdparam x="487" y="1005" />
 <sizeparam width="197" height="45" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="2000" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
 <TGConnectingPoint num="0" id="221" />
@@ -751,15 +767,15 @@
 <TGConnectingPoint num="2" id="223" />
 <TGConnectingPoint num="3" id="224" />
 <extraparam>
-<guard value="[ ]" />
-<afterMin value="" />
-<afterMax value="" />
-<computeMin value="" />
-<computeMax value="" />
-<probability value="" />
-<actions value="tmp1.Message = MSG" />
-<actions value="tmp1 = concat2(tmp1, m)" />
-<actions value="m_cipher = sencrypt(tmp1, SK) " />
+<guard value="[ ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
+<actions value="tmp1.Message = MSG" enabled="true"/>
+<actions value="tmp1 = concat2(tmp1, m)" enabled="true"/>
+<actions value="m_cipher = sencrypt(tmp1, SK) " enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -767,6 +783,7 @@
 <cdparam x="396" y="1063" />
 <sizeparam width="112" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="2000" />
 <infoparam name="Send signal" value="chout(m_cipher)" />
 <TGConnectingPoint num="0" id="228" />
@@ -794,6 +811,7 @@
 <cdparam x="375" y="946" />
 <sizeparam width="155" height="30" minWidth="40" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="2000" />
 <infoparam name="State" value="Alice_Binding_OK" />
 <TGConnectingPoint num="0" id="241" />
@@ -844,6 +862,7 @@
 <cdparam x="344" y="866" />
 <sizeparam width="127" height="30" minWidth="40" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="2000" />
 <infoparam name="State" value="Verify_AD" />
 <TGConnectingPoint num="0" id="282" />
@@ -894,6 +913,7 @@
 <cdparam x="318" y="782" />
 <sizeparam width="179" height="30" minWidth="40" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="2000" />
 <infoparam name="State" value="CalculateSecretKey" />
 <TGConnectingPoint num="0" id="323" />
@@ -944,6 +964,7 @@
 <cdparam x="357" y="610" />
 <sizeparam width="100" height="30" minWidth="40" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="2000" />
 <infoparam name="State" value="CalcDH3" />
 <TGConnectingPoint num="0" id="364" />
@@ -994,6 +1015,7 @@
 <cdparam x="357" y="536" />
 <sizeparam width="100" height="30" minWidth="40" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="2000" />
 <infoparam name="State" value="CalcDH2" />
 <TGConnectingPoint num="0" id="405" />
@@ -1044,6 +1066,7 @@
 <cdparam x="357" y="466" />
 <sizeparam width="100" height="30" minWidth="40" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="2000" />
 <infoparam name="State" value="CalcDH1" />
 <TGConnectingPoint num="0" id="446" />
@@ -1094,6 +1117,7 @@
 <cdparam x="343" y="386" />
 <sizeparam width="129" height="30" minWidth="40" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="2000" />
 <infoparam name="State" value="Calc_Public_AD" />
 <TGConnectingPoint num="0" id="487" />
@@ -1144,6 +1168,7 @@
 <cdparam x="304" y="273" />
 <sizeparam width="206" height="31" minWidth="40" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="2000" />
 <infoparam name="State" value="Retrieve_Alice_message" />
 <TGConnectingPoint num="0" id="528" />
@@ -1194,6 +1219,7 @@
 <cdparam x="363" y="186" />
 <sizeparam width="88" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="2000" />
 <infoparam name="Receive signal" value="chin(filler2)" />
 <TGConnectingPoint num="0" id="569" />
@@ -1212,6 +1238,7 @@
 <cdparam x="366" y="141" />
 <sizeparam width="82" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="2000" />
 <infoparam name="Send signal" value="chout(filler)" />
 <TGConnectingPoint num="0" id="580" />
@@ -1252,6 +1279,7 @@
 <cdparam x="635" y="490" />
 <sizeparam width="40" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="2000" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
 <TGConnectingPoint num="0" id="593" />
@@ -1259,12 +1287,12 @@
 <TGConnectingPoint num="2" id="595" />
 <TGConnectingPoint num="3" id="596" />
 <extraparam>
-<guard value="[else ]" />
-<afterMin value="" />
-<afterMax value="" />
-<computeMin value="" />
-<computeMax value="" />
-<probability value="" />
+<guard value="[else ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1281,6 +1309,7 @@
 <cdparam x="381" y="1525" />
 <sizeparam width="10" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="2000" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
 <TGConnectingPoint num="0" id="600" />
@@ -1288,12 +1317,12 @@
 <TGConnectingPoint num="2" id="602" />
 <TGConnectingPoint num="3" id="603" />
 <extraparam>
-<guard value="[ ]" />
-<afterMin value="" />
-<afterMax value="" />
-<computeMin value="" />
-<computeMax value="" />
-<probability value="" />
+<guard value="[ ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1310,6 +1339,7 @@
 <cdparam x="179" y="946" />
 <sizeparam width="229" height="150" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
 <TGConnectingPoint num="0" id="607" />
@@ -1317,22 +1347,22 @@
 <TGConnectingPoint num="2" id="609" />
 <TGConnectingPoint num="3" id="610" />
 <extraparam>
-<guard value="[ ]" />
-<afterMin value="" />
-<afterMax value="" />
-<computeMin value="" />
-<computeMax value="" />
-<probability value="" />
-<actions value="tmp1.Message = DH1.Key" />
-<actions value="tmp2.Message = DH2.Key" />
-<actions value="tmp4.Message = DH3.Key" />
-<actions value="tmp4= concat3(tmp1, tmp2, tmp4)" />
-<actions value="tmp4= hash(tmp4)" />
-<actions value="tmp1.Message = IK_a.Key" />
-<actions value="tmp2.Message = EC_a.Key" />
-<actions value="SK.Key = tmp4.Message" />
-<actions value="tmp4= sencrypt(AD, SK)" />
-<actions value="filler2 = concat3(tmp1, tmp2,tmp4 ) " />
+<guard value="[ ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
+<actions value="tmp1.Message = DH1.Key" enabled="true"/>
+<actions value="tmp2.Message = DH2.Key" enabled="true"/>
+<actions value="tmp4.Message = DH3.Key" enabled="true"/>
+<actions value="tmp4= concat3(tmp1, tmp2, tmp4)" enabled="true"/>
+<actions value="tmp4= hash(tmp4)" enabled="true"/>
+<actions value="tmp1.Message = IK_a.Key" enabled="true"/>
+<actions value="tmp2.Message = EC_a.Key" enabled="true"/>
+<actions value="SK.Key = tmp4.Message" enabled="true"/>
+<actions value="tmp4= sencrypt(AD, SK)" enabled="true"/>
+<actions value="filler2 = concat3(tmp1, tmp2,tmp4 ) " enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1349,6 +1379,7 @@
 <cdparam x="230" y="857" />
 <sizeparam width="158" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
 <TGConnectingPoint num="0" id="614" />
@@ -1356,13 +1387,13 @@
 <TGConnectingPoint num="2" id="616" />
 <TGConnectingPoint num="3" id="617" />
 <extraparam>
-<guard value="[ ]" />
-<afterMin value="" />
-<afterMax value="" />
-<computeMin value="" />
-<computeMax value="" />
-<probability value="" />
-<actions value="DH3 = DH(SPK_b, ECs_a) " />
+<guard value="[ ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
+<actions value="DH3 = DH(SPK_b, ECs_a) " enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1379,6 +1410,7 @@
 <cdparam x="246" y="766" />
 <sizeparam width="145" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
 <TGConnectingPoint num="0" id="621" />
@@ -1386,13 +1418,13 @@
 <TGConnectingPoint num="2" id="623" />
 <TGConnectingPoint num="3" id="624" />
 <extraparam>
-<guard value="[ ]" />
-<afterMin value="" />
-<afterMax value="" />
-<computeMin value="" />
-<computeMax value="" />
-<probability value="" />
-<actions value="DH2 = DH(IK_b, ECs_a) " />
+<guard value="[ ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
+<actions value="DH2 = DH(IK_b, ECs_a) " enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1409,6 +1441,7 @@
 <cdparam x="241" y="678" />
 <sizeparam width="152" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
 <TGConnectingPoint num="0" id="628" />
@@ -1416,13 +1449,13 @@
 <TGConnectingPoint num="2" id="630" />
 <TGConnectingPoint num="3" id="631" />
 <extraparam>
-<guard value="[ ]" />
-<afterMin value="" />
-<afterMax value="" />
-<computeMin value="" />
-<computeMax value="" />
-<probability value="" />
-<actions value="DH1 = DH(SPK_b, IKs_a) " />
+<guard value="[ ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
+<actions value="DH1 = DH(SPK_b, IKs_a) " enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1439,6 +1472,7 @@
 <cdparam x="258" y="574" />
 <sizeparam width="112" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
 <TGConnectingPoint num="0" id="635" />
@@ -1446,14 +1480,14 @@
 <TGConnectingPoint num="2" id="637" />
 <TGConnectingPoint num="3" id="638" />
 <extraparam>
-<guard value="[ ]" />
-<afterMin value="" />
-<afterMax value="" />
-<computeMin value="" />
-<computeMax value="" />
-<probability value="" />
-<actions value="ECs_a.Key = tmp3" />
-<actions value="EC_a = pk(ECs_a)" />
+<guard value="[ ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
+<actions value="ECs_a.Key = tmp3" enabled="true"/>
+<actions value="EC_a = pk(ECs_a)" enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1470,6 +1504,7 @@
 <cdparam x="518" y="311" />
 <sizeparam width="168" height="60" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
 <TGConnectingPoint num="0" id="642" />
@@ -1477,15 +1512,15 @@
 <TGConnectingPoint num="2" id="644" />
 <TGConnectingPoint num="3" id="645" />
 <extraparam>
-<guard value="[b ]" />
-<afterMin value="" />
-<afterMax value="" />
-<computeMin value="" />
-<computeMax value="" />
-<probability value="" />
-<actions value="tmp1.Message = IK_a.Key" />
-<actions value="tmp2.Message = IK_b.Key" />
-<actions value="AD = concat2(tmp1, tmp2)" />
+<guard value="[b ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
+<actions value="tmp1.Message = IK_a.Key" enabled="true"/>
+<actions value="tmp2.Message = IK_b.Key" enabled="true"/>
+<actions value="AD = concat2(tmp1, tmp2)" enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1502,6 +1537,7 @@
 <cdparam x="260" y="322" />
 <sizeparam width="40" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
 <TGConnectingPoint num="0" id="649" />
@@ -1509,12 +1545,12 @@
 <TGConnectingPoint num="2" id="651" />
 <TGConnectingPoint num="3" id="652" />
 <extraparam>
-<guard value="[else ]" />
-<afterMin value="" />
-<afterMax value="" />
-<computeMin value="" />
-<computeMax value="" />
-<probability value="" />
+<guard value="[else ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1531,6 +1567,7 @@
 <cdparam x="416" y="91" />
 <sizeparam width="10" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
 <TGConnectingPoint num="0" id="656" />
@@ -1538,12 +1575,12 @@
 <TGConnectingPoint num="2" id="658" />
 <TGConnectingPoint num="3" id="659" />
 <extraparam>
-<guard value="[ ]" />
-<afterMin value="" />
-<afterMax value="" />
-<computeMin value="" />
-<computeMax value="" />
-<probability value="" />
+<guard value="[ ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1560,6 +1597,7 @@
 <cdparam x="421" y="169" />
 <sizeparam width="10" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
 <TGConnectingPoint num="0" id="663" />
@@ -1567,12 +1605,12 @@
 <TGConnectingPoint num="2" id="665" />
 <TGConnectingPoint num="3" id="666" />
 <extraparam>
-<guard value="[ ]" />
-<afterMin value="" />
-<afterMax value="" />
-<computeMin value="" />
-<computeMax value="" />
-<probability value="" />
+<guard value="[ ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1589,6 +1627,7 @@
 <cdparam x="427" y="208" />
 <sizeparam width="197" height="60" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
 <TGConnectingPoint num="0" id="670" />
@@ -1596,16 +1635,16 @@
 <TGConnectingPoint num="2" id="672" />
 <TGConnectingPoint num="3" id="673" />
 <extraparam>
-<guard value="[ ]" />
-<afterMin value="" />
-<afterMax value="" />
-<computeMin value="" />
-<computeMax value="" />
-<probability value="" />
-<actions value="get3(filler, tmp1, tmp2, sign) " />
-<actions value="IK_b.Key = tmp1.Message" />
-<actions value="SPK_b.Key = tmp2.Message" />
-<actions value="b = verifySign(tmp2, sign, IK_b) " />
+<guard value="[ ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
+<actions value="get3(filler, tmp1, tmp2, sign) " enabled="true"/>
+<actions value="IK_b.Key = tmp1.Message" enabled="true"/>
+<actions value="SPK_b.Key = tmp2.Message" enabled="true"/>
+<actions value="b = verifySign(tmp2, sign, IK_b) " enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1622,6 +1661,7 @@
 <cdparam x="219" y="491" />
 <sizeparam width="186" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
 <TGConnectingPoint num="0" id="677" />
@@ -1629,12 +1669,12 @@
 <TGConnectingPoint num="2" id="679" />
 <TGConnectingPoint num="3" id="680" />
 <extraparam>
-<guard value="[IK_b.Key== preload_IK_b.Key]" />
-<afterMin value="" />
-<afterMax value="" />
-<computeMin value="" />
-<computeMax value="" />
-<probability value="" />
+<guard value="[IK_b.Key== preload_IK_b.Key]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1651,6 +1691,7 @@
 <cdparam x="214" y="1227" />
 <sizeparam width="193" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="2000" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
 <TGConnectingPoint num="0" id="684" />
@@ -1658,14 +1699,14 @@
 <TGConnectingPoint num="2" id="686" />
 <TGConnectingPoint num="3" id="687" />
 <extraparam>
-<guard value="[ ]" />
-<afterMin value="" />
-<afterMax value="" />
-<computeMin value="" />
-<computeMax value="" />
-<probability value="" />
-<actions value="tmp1 = sdecrypt(m_cipher, SK)" />
-<actions value="get2(tmp1, tmp1, m)" />
+<guard value="[ ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
+<actions value="tmp1 = sdecrypt(m_cipher, SK)" enabled="true"/>
+<actions value="get2(tmp1, tmp1, m)" enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1682,6 +1723,7 @@
 <cdparam x="321" y="438" />
 <sizeparam width="10" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="2000" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
 <TGConnectingPoint num="0" id="691" />
@@ -1689,12 +1731,12 @@
 <TGConnectingPoint num="2" id="693" />
 <TGConnectingPoint num="3" id="694" />
 <extraparam>
-<guard value="[ ]" />
-<afterMin value="" />
-<afterMax value="" />
-<computeMin value="" />
-<computeMax value="" />
-<probability value="" />
+<guard value="[ ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1711,6 +1753,7 @@
 <cdparam x="659" y="567" />
 <sizeparam width="10" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="2000" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
 <TGConnectingPoint num="0" id="698" />
@@ -1718,12 +1761,12 @@
 <TGConnectingPoint num="2" id="700" />
 <TGConnectingPoint num="3" id="701" />
 <extraparam>
-<guard value="[ ]" />
-<afterMin value="" />
-<afterMax value="" />
-<computeMin value="" />
-<computeMax value="" />
-<probability value="" />
+<guard value="[ ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1740,6 +1783,7 @@
 <cdparam x="459" y="1318" />
 <sizeparam width="10" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="2000" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
 <TGConnectingPoint num="0" id="705" />
@@ -1747,12 +1791,12 @@
 <TGConnectingPoint num="2" id="707" />
 <TGConnectingPoint num="3" id="708" />
 <extraparam>
-<guard value="[ ]" />
-<afterMin value="" />
-<afterMax value="" />
-<computeMin value="" />
-<computeMax value="" />
-<probability value="" />
+<guard value="[ ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1769,6 +1813,7 @@
 <cdparam x="241" y="1319" />
 <sizeparam width="157" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="2000" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
 <TGConnectingPoint num="0" id="712" />
@@ -1776,12 +1821,12 @@
 <TGConnectingPoint num="2" id="714" />
 <TGConnectingPoint num="3" id="715" />
 <extraparam>
-<guard value="[tmp1.Message == MSG]" />
-<afterMin value="" />
-<afterMax value="" />
-<computeMin value="" />
-<computeMax value="" />
-<probability value="" />
+<guard value="[tmp1.Message == MSG]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -1789,6 +1834,7 @@
 <cdparam x="365" y="1338" />
 <sizeparam width="110" height="30" minWidth="40" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="2000" />
 <infoparam name="State" value="MDecrypted" />
 <TGConnectingPoint num="0" id="719" />
@@ -1866,6 +1912,7 @@
 <cdparam x="551" y="518" />
 <sizeparam width="147" height="30" minWidth="40" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="2000" />
 <infoparam name="State" value="error_bob_identity" />
 <TGConnectingPoint num="0" id="766" />
@@ -1916,6 +1963,7 @@
 <cdparam x="370" y="1263" />
 <sizeparam width="100" height="30" minWidth="40" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="2000" />
 <infoparam name="State" value="DecryptM" />
 <TGConnectingPoint num="0" id="807" />
@@ -1966,6 +2014,7 @@
 <cdparam x="365" y="1182" />
 <sizeparam width="110" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="2000" />
 <infoparam name="Receive signal" value="chin(m_cipher)" />
 <TGConnectingPoint num="0" id="848" />
@@ -1984,6 +2033,7 @@
 <cdparam x="335" y="882" />
 <sizeparam width="170" height="30" minWidth="40" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="2000" />
 <infoparam name="State" value="CalculateSecretKey" />
 <TGConnectingPoint num="0" id="859" />
@@ -2034,6 +2084,7 @@
 <cdparam x="370" y="788" />
 <sizeparam width="100" height="30" minWidth="40" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="2000" />
 <infoparam name="State" value="CalcDH3" />
 <TGConnectingPoint num="0" id="900" />
@@ -2084,6 +2135,7 @@
 <cdparam x="370" y="702" />
 <sizeparam width="100" height="30" minWidth="40" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="2000" />
 <infoparam name="State" value="CalcDH2" />
 <TGConnectingPoint num="0" id="941" />
@@ -2134,6 +2186,7 @@
 <cdparam x="370" y="619" />
 <sizeparam width="100" height="30" minWidth="40" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="2000" />
 <infoparam name="State" value="CalcDH1" />
 <TGConnectingPoint num="0" id="982" />
@@ -2184,6 +2237,7 @@
 <cdparam x="339" y="523" />
 <sizeparam width="163" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="2000" />
 <infoparam name="TGComponent" value="null" />
 <TGConnectingPoint num="0" id="1023" />
@@ -2197,6 +2251,7 @@
 <cdparam x="375" y="1126" />
 <sizeparam width="90" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="2000" />
 <infoparam name="Send signal" value="chout(filler2)" />
 <TGConnectingPoint num="0" id="1026" />
@@ -2215,6 +2270,7 @@
 <cdparam x="439" y="391" />
 <sizeparam width="162" height="30" minWidth="40" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="2000" />
 <infoparam name="State" value="GenerateEcKey" />
 <TGConnectingPoint num="0" id="1037" />
@@ -2265,6 +2321,7 @@
 <cdparam x="246" y="388" />
 <sizeparam width="100" height="30" minWidth="40" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="2000" />
 <infoparam name="State" value="error" />
 <TGConnectingPoint num="0" id="1078" />
@@ -2315,6 +2372,7 @@
 <cdparam x="357" y="273" />
 <sizeparam width="100" height="30" minWidth="40" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="2000" />
 <infoparam name="State" value="Verify_Sign" />
 <TGConnectingPoint num="0" id="1119" />
@@ -2365,6 +2423,7 @@
 <cdparam x="367" y="151" />
 <sizeparam width="80" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="2000" />
 <infoparam name="Receive signal" value="chin(filler)" />
 <TGConnectingPoint num="0" id="1160" />
@@ -2383,6 +2442,7 @@
 <cdparam x="292" y="97" />
 <sizeparam width="230" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="2000" />
 <infoparam name="Send signal" value="chout(requestBobPublicKeyBundle)" />
 <TGConnectingPoint num="0" id="1171" />
@@ -2423,6 +2483,7 @@
 <cdparam x="407" y="187" />
 <sizeparam width="10" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
 <TGConnectingPoint num="0" id="1184" />
@@ -2430,12 +2491,12 @@
 <TGConnectingPoint num="2" id="1186" />
 <TGConnectingPoint num="3" id="1187" />
 <extraparam>
-<guard value="[ ]" />
-<afterMin value="" />
-<afterMax value="" />
-<computeMin value="" />
-<computeMax value="" />
-<probability value="" />
+<guard value="[ ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2452,6 +2513,7 @@
 <cdparam x="416" y="103" />
 <sizeparam width="10" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
 <TGConnectingPoint num="0" id="1191" />
@@ -2459,12 +2521,12 @@
 <TGConnectingPoint num="2" id="1193" />
 <TGConnectingPoint num="3" id="1194" />
 <extraparam>
-<guard value="[ ]" />
-<afterMin value="" />
-<afterMax value="" />
-<computeMin value="" />
-<computeMax value="" />
-<probability value="" />
+<guard value="[ ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2481,6 +2543,7 @@
 <cdparam x="398" y="298" />
 <sizeparam width="10" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
 <TGConnectingPoint num="0" id="1198" />
@@ -2488,12 +2551,12 @@
 <TGConnectingPoint num="2" id="1200" />
 <TGConnectingPoint num="3" id="1201" />
 <extraparam>
-<guard value="[ ]" />
-<afterMin value="" />
-<afterMax value="" />
-<computeMin value="" />
-<computeMax value="" />
-<probability value="" />
+<guard value="[ ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2510,6 +2573,7 @@
 <cdparam x="394" y="377" />
 <sizeparam width="10" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
 <TGConnectingPoint num="0" id="1205" />
@@ -2517,12 +2581,12 @@
 <TGConnectingPoint num="2" id="1207" />
 <TGConnectingPoint num="3" id="1208" />
 <extraparam>
-<guard value="[ ]" />
-<afterMin value="" />
-<afterMax value="" />
-<computeMin value="" />
-<computeMax value="" />
-<probability value="" />
+<guard value="[ ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2539,6 +2603,7 @@
 <cdparam x="396" y="497" />
 <sizeparam width="10" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
 <TGConnectingPoint num="0" id="1212" />
@@ -2546,12 +2611,12 @@
 <TGConnectingPoint num="2" id="1214" />
 <TGConnectingPoint num="3" id="1215" />
 <extraparam>
-<guard value="[ ]" />
-<afterMin value="" />
-<afterMax value="" />
-<computeMin value="" />
-<computeMax value="" />
-<probability value="" />
+<guard value="[ ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2568,6 +2633,7 @@
 <cdparam x="395" y="596" />
 <sizeparam width="10" height="15" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="List of all parameters of an Avatar SMD transition" value="" />
 <TGConnectingPoint num="0" id="1219" />
@@ -2575,12 +2641,12 @@
 <TGConnectingPoint num="2" id="1221" />
 <TGConnectingPoint num="3" id="1222" />
 <extraparam>
-<guard value="[ ]" />
-<afterMin value="" />
-<afterMax value="" />
-<computeMin value="" />
-<computeMax value="" />
-<probability value="" />
+<guard value="[ ]" enabled="true"/>
+<afterMin value="" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -2597,6 +2663,7 @@
 <cdparam x="366" y="315" />
 <sizeparam width="82" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="Send signal" value="chout(filler)" />
 <TGConnectingPoint num="0" id="1228" />
@@ -2615,6 +2682,7 @@
 <cdparam x="312" y="254" />
 <sizeparam width="190" height="30" minWidth="40" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="State" value="Receive_Alice_request" />
 <TGConnectingPoint num="0" id="1239" />
@@ -2665,6 +2733,7 @@
 <cdparam x="293" y="198" />
 <sizeparam width="228" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="Receive signal" value="chin(requestBobPublicKeyBundle)" />
 <TGConnectingPoint num="0" id="1280" />
@@ -2683,6 +2752,7 @@
 <cdparam x="370" y="133" />
 <sizeparam width="74" height="30" minWidth="40" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="State" value="Store" />
 <TGConnectingPoint num="0" id="1291" />
@@ -2733,6 +2803,7 @@
 <cdparam x="367" y="87" />
 <sizeparam width="80" height="20" minWidth="30" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
+<enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="Receive signal" value="chin(filler)" />
 <TGConnectingPoint num="0" id="1332" />

@@ -2676,6 +2676,8 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                     System.err.println(e.getMessage() + " : Can't load config file.");
             }
             SpecConfigTTool.setDirConfig(tmpDir);
+        } else {
+            SpecConfigTTool.setBasicConfig(systemcOn);
         }
 
         file = tmpFile;
@@ -2797,7 +2799,8 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                             final String actionMessage) {
         gtm.enableUndo(false);
 
-        // load the new TURTLE modeling
+        TraceManager.addDev("Loading model");
+        // load the new TTool modeling
         try {
             gtm.loadModelingFromXML(xmlModel);
             frame.setTitle("TTool: " + file.getAbsolutePath());

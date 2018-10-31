@@ -5,6 +5,8 @@ JAVADOC			= javadoc
 MAKE			= make -s
 TAR			= tar
 GZIP			= gzip
+GRADLE_NO_TEST          = -x test 
+GRADLE_OPTIONS          = --parallel
 GRADLE			= $(shell which gradle)
 GRADLE_VERSION_NEEDED	= 3.3
 ERROR_MSG		= printf "$(COLOR)\nBuild with gradle failed. Falling back to regular javac command...\n$(RESET)"
@@ -122,12 +124,16 @@ export WEBCRAWLER_SERVER_BINARY	= $(TTOOL_BUILD)/webcrawler-server.jar
 export JTTOOL_DIR		= $(TTOOL_PATH)/jttool
 export JTTOOL_BINARY		= $(TTOOL_BUILD)/jttool.jar
 
-all: ttool launcher ttool-cli graphminimize graphshow tiftranslator tmltranslator rundse remotesimulator webcrawler
+all: ttool launcher ttool-cli graphminimize graphshow tiftranslator tmltranslator rundse remotesimulator webcrawler install
+
+allnotest: GRADLE_OPTIONS += $(GRADLE_NO_TEST)
+allnotest: ttool launcher ttool-cli graphminimize graphshow tiftranslator tmltranslator rundse remotesimulator webcrawler install
 
 ttool: $(TTOOL_BINARY)
+ttoolnotest: 
 
 $(TTOOL_BINARY): FORCE
-	@($(GRADLE) :ttool:build) || ($(ERROR_MSG) $(GRADLE_VERSION) $(GRADLE_VERSION_NEEDED)&& $(MAKE) -C $(TTOOL_DIR) -e $@)
+	@($(GRADLE) :ttool:build $(GRADLE_OPTIONS)) || ($(ERROR_MSG) $(GRADLE_VERSION) $(GRADLE_VERSION_NEEDED)&& $(MAKE) -C $(TTOOL_DIR) -e $@)
 
 ttooljavac:
 	$(MAKE) -C $(TTOOL_DIR)
@@ -141,7 +147,7 @@ $(LAUNCHER_BINARY): FORCE
 ttool-cli: $(TTOOLCLI_BINARY)
 
 $(TTOOLCLI_BINARY): FORCE
-	@($(GRADLE) :ttool-cli:build) || ($(ERROR_MSG) && $(MAKE) -C $(TTOOLCLI_DIR) -e $@)
+	@($(GRADLE) :ttool-cli:build $(GRADLE_OPTIONS)) || ($(ERROR_MSG) && $(MAKE) -C $(TTOOLCLI_DIR) -e $@)
 
 graphminimize: $(GRAPHMINIMIZE_BINARY)
 
