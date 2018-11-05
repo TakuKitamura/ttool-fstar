@@ -110,7 +110,7 @@ public class AvatarSyntaxChecker  {
         IntExpressionEvaluator iee = new IntExpressionEvaluator();
 
         //TraceManager.addDev("Evaluating int:" + act);
-        //double result = iee.getResultOf(act);
+        double result = iee.getResultOf(act);
         if (iee.getError() != null) {
             //TraceManager.addDev("Error: " + iee.getError());
             return -1;
@@ -186,6 +186,7 @@ public class AvatarSyntaxChecker  {
         String action = _expr.substring(index0 + 1,  _expr.length()).trim();
 
         if (aa.isInt()) {
+            //TraceManager.addDev("Testing action+" + action);
             return isAValidIntExpr(_as, _ab, action);
             //return parse(_as, _ab, "actionnat", action);
         } else if (aa.isBool()) {

@@ -1968,6 +1968,8 @@ public class AvatarDesignPanelTranslator {
     			}
     			else {
     				// Variable assignment
+
+                    TraceManager.addDev("Action=" + actionText);
     				error = AvatarSyntaxChecker.isAValidVariableExpr( block.getAvatarSpecification(), block, actionText);
 
     				if ( error < 0 ) {

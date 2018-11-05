@@ -52,6 +52,8 @@ make clean              Clean the repository from compilation artifacts.
 make ultraclean         Clean the repository from binaries and compilation artifacts.
 
 make ttooljavac		Build TTool only with javac
+make ttoolnotest	Build TTool with gradle, but do not execute test. Performs the install
+make allnotest		Builld all apps, but do not execute tests. Performs the install	
 
 
 Other targets:
@@ -128,6 +130,9 @@ all: ttool launcher ttool-cli graphminimize graphshow tiftranslator tmltranslato
 
 allnotest: GRADLE_OPTIONS += $(GRADLE_NO_TEST)
 allnotest: ttool launcher ttool-cli graphminimize graphshow tiftranslator tmltranslator rundse remotesimulator webcrawler install
+
+ttoolnotest: GRADLE_OPTIONS += $(GRADLE_NO_TEST)
+ttoolnotest: ttool install
 
 ttool: $(TTOOL_BINARY)
 ttoolnotest: 
