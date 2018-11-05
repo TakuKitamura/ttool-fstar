@@ -68,7 +68,7 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
     JButton checkcode, simulation, validation;
     JButton oneClickrtlotos, onclicklotos, gensystemc, simusystemc, gentml, genC, genjava, nc,externalSearch, internalSearch;
 
-    JTextField search;
+    private JTextField search;
 
     MainGUI mgui;
 
@@ -279,15 +279,15 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
         addSeparator();
 
         showAvatarActions(false);
-        search = new JTextField("", 10);
-        search.setEnabled(false);
-        add(search);
-        search.addActionListener(this);
+        setSearch(new JTextField("", 10));
+        getSearch().setEnabled(false);
+        add(getSearch());
+        getSearch().addActionListener(this);
 
-        search.getDocument().addDocumentListener(new DocumentListener() {
+        getSearch().getDocument().addDocumentListener(new DocumentListener() {
                 @Override
                 public void insertUpdate(DocumentEvent documentEvent) {
-                    if (search.getText().length()>0){
+                    if (getSearch().getText().length()>0){
                         internalSearch.setEnabled(true);
                     }else
                         internalSearch.setEnabled(false);
@@ -295,7 +295,7 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
 
                 @Override
                 public void removeUpdate(DocumentEvent documentEvent) {
-                    if (search.getText().length()>0){
+                    if (getSearch().getText().length()>0){
                         internalSearch.setEnabled(true);
                     }else
                         internalSearch.setEnabled(false);
@@ -471,18 +471,26 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
     }
 
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == search) {
-            String text = search.getText();
+        if (e.getSource() == getSearch()) {
+            String text = getSearch().getText();
             TraceManager.addDev("Searching elements with" + text);
             if (text.length()>0) {
-                search.setEnabled(false);
+                getSearch().setEnabled(false);
                 mgui.search(text);
-                search.setEnabled(true);
+                getSearch().setEnabled(true);
             }
         }
     }
 
     public void activateSearch(boolean enabled) {
-        search.setEnabled(enabled);
+        getSearch().setEnabled(enabled);
     }
+
+	public JTextField getSearch() {
+		return search;
+	}
+
+	public void setSearch(JTextField search) {
+		this.search = search;
+	}
 } // Class

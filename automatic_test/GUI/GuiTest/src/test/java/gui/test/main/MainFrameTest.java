@@ -101,18 +101,18 @@ public class MainFrameTest extends AssertJSwingJUnitTestCase {
 		}
 		TraceManager.addDev("MainFrameTest: openProject: Approve");
 		
-		TraceManager.addDev("MainFrameTest: openProject: Clicking on the tab for opening a project");
-		jmif.click();
-		try {
-			Thread.sleep(3600);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}	
-		TraceManager.addDev("MainFrameTest: openProject: Done clicking, the file chooser is now open");
-		
-		TraceManager.addDev("MainFrameTest: openProject: Clicking on the file chooser, in order to write on it");
-		jfc.fileNameTextBox().click();
-		TraceManager.addDev("MainFrameTest: openProject: Done clicking");
+//		TraceManager.addDev("MainFrameTest: openProject: Clicking on the tab for opening a project");
+//		jmif.click();
+//		try {
+//			Thread.sleep(3600);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}	
+//		TraceManager.addDev("MainFrameTest: openProject: Done clicking, the file chooser is now open");
+//		
+//		TraceManager.addDev("MainFrameTest: openProject: Clicking on the file chooser, in order to write on it");
+//		jfc.fileNameTextBox().click();
+//		TraceManager.addDev("MainFrameTest: openProject: Done clicking");
 	}
 	
     @Test
