@@ -48,6 +48,8 @@
 <ProVerifVerifierPath data="../../proverif" />
 <ProVerifVerifierHost data="localhost" />
 <AVATARExecutableCodeDirectory data="../executablecode/" />
+<AVATARExecutableCodeCompileCommand data="make " />
+<AVATARExecutableCodeExecuteCommand data="run.x" />
 <AVATARMPSoCCodeDirectory data="../MPSoC/" />
 <AVATARMPSoCCompileCommand data="make -C ../MPSoC/ updateruntime updategeneratedcode compilesoclib" />
 <AVATARExecutableCodeHost data="localhost"/>
