@@ -47,21 +47,21 @@ public class MainFrameTest extends AssertJSwingJUnitTestCase {
     		               KeyEvent.VK_O, KeyEvent.VK_D, KeyEvent.VK_E, KeyEvent.VK_L, KeyEvent.VK_I ,
     		               KeyEvent.VK_N, KeyEvent.VK_G, KeyEvent.VK_SLASH};
     
-    @Test
-    public void checkFrame() {
-    	/*
-    	 * Description : Check the title of the main frame, and verify that the frame is visible.
-    	 */
-    	
-    	TraceManager.addDev("MainFrameTest: checkFrame: Checking title");
-    	window.requireTitle("TTool");
-    	TraceManager.addDev("MainFrameTest: checkFrame: Done checking title");
-    	
-    	TraceManager.addDev("MainFrameTest: checkFrame: Checking visibility");
-    	window.requireVisible();
-    	TraceManager.addDev("MainFrameTest: checkFrame: checking visibility");
-    }
-    
+//    @Test
+//    public void checkFrame() {
+//    	/*
+//    	 * Description : Check the title of the main frame, and verify that the frame is visible.
+//    	 */
+//    	
+//    	TraceManager.addDev("MainFrameTest: checkFrame: Checking title");
+//    	window.requireTitle("TTool");
+//    	TraceManager.addDev("MainFrameTest: checkFrame: Done checking title");
+//    	
+//    	TraceManager.addDev("MainFrameTest: checkFrame: Checking visibility");
+//    	window.requireVisible();
+//    	TraceManager.addDev("MainFrameTest: checkFrame: checking visibility");
+//    }
+//    
 	@Test
 	public void openProject() {
 		/*
@@ -115,33 +115,33 @@ public class MainFrameTest extends AssertJSwingJUnitTestCase {
 //		TraceManager.addDev("MainFrameTest: openProject: Done clicking");
 	}
 	
-    @Test
-    public void help() {
-    	/*
-    	 * Description : Check the help from the main frame.
-    	 */
-    	
-    	JMenuItemFixture jmif = window.menuItem("Help Configuration");
-    	TraceManager.addDev("MainFrameTest: help: Opening the help by clicking on it");
-    	jmif.click();
-    	try {
-			Thread.sleep(3600);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-    	TraceManager.addDev("MainFrameTest: help: Done clicking");
-    	
-    	window2 = findFrame("TestTest").using(robot());
-    	JButtonFixture jb = window2.button("Close Configuration");
-    	TraceManager.addDev("MainFrameTest: help: Closing the help, by clicking on the button");
-    	jb.click();
-    	try {
-			Thread.sleep(3600);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-    	TraceManager.addDev("MainFrameTest: help: Done closing");
-    }
+//    @Test
+//    public void help() {
+//    	/*
+//    	 * Description : Check the help from the main frame.
+//    	 */
+//    	
+//    	JMenuItemFixture jmif = window.menuItem("Help Configuration");
+//    	TraceManager.addDev("MainFrameTest: help: Opening the help by clicking on it");
+//    	jmif.click();
+//    	try {
+//			Thread.sleep(3600);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
+//    	TraceManager.addDev("MainFrameTest: help: Done clicking");
+//    	
+//    	window2 = findFrame("TestTest").using(robot());
+//    	JButtonFixture jb = window2.button("Close Configuration");
+//    	TraceManager.addDev("MainFrameTest: help: Closing the help, by clicking on the button");
+//    	jb.click();
+//    	try {
+//			Thread.sleep(3600);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
+//    	TraceManager.addDev("MainFrameTest: help: Done closing");
+//    }
 	
 //    @Test
 //    public void capture() {
@@ -150,11 +150,11 @@ public class MainFrameTest extends AssertJSwingJUnitTestCase {
 //    }
  
     
-//    @Test
-//	public void quit() {
-//		JMenuItemFixture jmif = window.menuItem("File Quit");
-//		jmif.click();
-//	}
+    @Test
+	public void quit() {
+		JMenuItemFixture jmif = window.menuItem("File Quit");
+		jmif.click();
+	}
 	 
     @Test
     public void vandV() {
@@ -219,9 +219,9 @@ public class MainFrameTest extends AssertJSwingJUnitTestCase {
 	
 	@Override
 	protected void onSetUp() {
-		Main frame = GuiActionRunner.execute(()-> new Main(true, true, true, true, true, true, true, true, true, true, true, true, true));
-		window = new FrameFixture(robot(), frame.getFrame());
-		window.show();
+		Main frame = GuiActionRunner.execute(()-> new Main());//Main(false, false, false, false, false, false, false, false, false, false, false, false, false));
+//		window = new FrameFixture(robot(), frame.test.getFrame());
+//		window.show();
 	}
 	
 	@Override

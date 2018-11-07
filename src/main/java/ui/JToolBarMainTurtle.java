@@ -68,7 +68,7 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
     JButton checkcode, simulation, validation;
     JButton oneClickrtlotos, onclicklotos, gensystemc, simusystemc, gentml, genC, genjava, nc,externalSearch, internalSearch;
 
-    private JTextField search;
+    JTextField search;
 
     MainGUI mgui;
 
