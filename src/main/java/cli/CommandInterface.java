@@ -54,6 +54,7 @@ public interface CommandInterface  {
     List<Command> getListOfSubCommands();
     String getCommand();
     String getShortCommand();
+    String getExample();
 
     // return null in case of success, or a error string in case of failure.
     String executeCommand(String command, Interpreter interpreter);

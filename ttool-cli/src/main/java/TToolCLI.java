@@ -67,8 +67,9 @@ public class TToolCLI implements InterpreterOutputInterface {
 
     public static void printUsage() {
         System.out.println("ttool-cli: usage");
-        System.out.println("ttool-cli <script file>");
+        System.out.println("ttool-cli <script file> OR ttool-cli -help");
         System.out.println("options: -debug -show");
+
     }
 
     public static boolean checkArgs(String[] args) {
@@ -95,6 +96,16 @@ public class TToolCLI implements InterpreterOutputInterface {
         return false;
     }
 
+    public static boolean hasHelp(String[] args) {
+        for (String s : args) {
+            if (s.equals("-help")) {
+                return true;
+            }
+
+        }
+        return false;
+    }
+
     public static String getInputFile(String[] args) {
         return args[args.length - 1];
     }
@@ -103,6 +114,7 @@ public class TToolCLI implements InterpreterOutputInterface {
 
     public static void main(String[] args) {
         String[] tmp;
+
 
         printCopyright();
 
@@ -122,19 +134,34 @@ public class TToolCLI implements InterpreterOutputInterface {
             show = true;
         }
 
-        TToolCLI cli = new TToolCLI();
-        cli.print("Loading script:" + getInputFile(args));
-        // Load script file
-        File f = new File(getInputFile(args));
-        if (!FileUtils.checkFileForOpen(f)) {
-            cli.printError("File " + f.getAbsolutePath() + " could not be opened.");
-            cli.exit(-1);
+        boolean help = false;
+        if (hasHelp(args)) {
+            help = true;
         }
-        String script = FileUtils.loadFileData(f);
+
+
+        TToolCLI cli = new TToolCLI();
+        String script = null;
+
+        if (!help) {
+            cli.print("Loading script:" + getInputFile(args));
+            // Load script file
+            File f = new File(getInputFile(args));
+            if (!FileUtils.checkFileForOpen(f)) {
+                cli.printError("File " + f.getAbsolutePath() + " could not be opened.");
+                cli.exit(-1);
+            }
+            script = FileUtils.loadFileData(f);
+        }
 
         // Call Interpreter
         Interpreter interpret = new Interpreter(script, (InterpreterOutputInterface)cli, show);
-        interpret.interpret();
+        if (help) {
+            String fullHelp = interpret.getHelp();
+            System.out.println(fullHelp);
+        } else {
+            interpret.interpret();
+        }
 
     }
 

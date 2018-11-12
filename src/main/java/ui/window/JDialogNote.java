@@ -104,8 +104,8 @@ public class JDialogNote extends JDialogBase implements ActionListener {
         cancel.addActionListener(this);
         
         JPanel jp = new JPanel();
-        jp.add(close);
         jp.add(cancel);
+        jp.add(close);
         
         c.add(jp, BorderLayout.SOUTH);
     }

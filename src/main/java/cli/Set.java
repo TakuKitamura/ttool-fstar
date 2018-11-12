@@ -76,6 +76,18 @@ public class Set extends Command  {
         return "s";
     }
 
+    public String getUsage() {
+        return "set <variable name> <value>";
+    }
+
+    public String getDescription() {
+        return "Used to set a variable to a given value";
+    }
+
+    public String getExample() {
+        return "set model modeling/AVATAR/PressureController.xml";
+    }
+
 
     public  String executeCommand(String command, Interpreter interpreter) {
         int index = command.indexOf(" ");

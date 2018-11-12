@@ -135,7 +135,7 @@ public class AvatarADAcceptEventAction extends  AvatarADBasicCanBeDisabledCompon
         g.drawLine(x, y, x+linebreak, y+height/2);
         g.drawLine(x, y+height, x+linebreak, y+height/2);
 
-        g.drawString("evt", x+(width-w) / 2, y);
+        //g.drawString("evt", x+(width-w) / 2, y);
         g.drawString(value, x + linebreak + textX1, y + (int)((textY*tdp.getZoom())));
 
     }

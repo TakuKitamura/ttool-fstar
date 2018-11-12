@@ -210,4 +210,14 @@ public class Interpreter  {
         return show;
     }
 
+
+
+    public String getHelp() {
+        StringBuffer buf = new StringBuffer("");
+        for(Command c:commands) {
+            buf.append(c.getHelp(0) + "\n");
+        }
+        return buf.toString();
+    }
+
 }

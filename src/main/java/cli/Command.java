@@ -68,20 +68,56 @@ public class Command implements CommandInterface {
     public  String getShortCommand() {
         return getCommand();
     }
+    public String getExample() {
+        return "";
+    }
+
     public String executeCommand(String command, Interpreter interpreter) {
         return null;
     }
+
 
     public void fillSubCommands() {
 
     }
 
     public String getUsage() {
-        return "No usage";
+        return "";
     }
 
     public String getDescription() {
-        return "Not meant to be used";
+        return "";
+    }
+
+    public String getHelp(int level) {
+        String dec = getLevelString(level);
+        /*String h = "";
+        h+= getCommand() + " (" + getShortCommand() + "): " + getUsage() + "\n" + getDescription() + "\n";
+
+        for (Command c: subcommands) {
+            h+= "\t" + c.getHelp();
+        }*/
+
+        StringBuffer b = new StringBuffer(dec + "* " + getCommand() + " (" + getShortCommand() + "): " + getUsage() + "\n" + dec + getDescription() +
+                "\n");
+        if (getExample().length() > 0) {
+            b.append(dec + "Example: " + getExample() + "\n");
+        }
+
+        subcommands.forEach( (c) -> { b.append(c.getHelp(level + 1)); });
+
+
+        return b.toString();
+    }
+
+    public String getLevelString(int level) {
+        String ret = "";
+        while(level > 0) {
+            ret += "\t";
+            level --;
+        }
+        return ret;
+
     }
 
 

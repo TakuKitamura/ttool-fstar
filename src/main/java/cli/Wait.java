@@ -76,6 +76,14 @@ public class Wait extends Command  {
         return "w";
     }
 
+    public String getUsage() { return "wait <time in s>"; }
+
+    public String getDescription() { return "Making a pause in the execution of TTool"; }
+
+    public String getExample() {
+        return "wait 2";
+    }
+
 
     public  String executeCommand(String command, Interpreter interpreter) {
         try {

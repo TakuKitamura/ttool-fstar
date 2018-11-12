@@ -77,8 +77,14 @@ public class Print extends Command  {
         return "p";
     }
 
+    public String getUsage() { return "print <subcommand>"; }
 
-    public  String executeCommand(String command, Interpreter interpreter) {
+    public String getDescription() {
+        return "Can be used to print elements of the diagram";
+    }
+
+
+    /*public  String executeCommand(String command, Interpreter interpreter) {
         int index = command.indexOf(" ");
         String nextCommand;
         String args;
@@ -98,13 +104,34 @@ public class Print extends Command  {
 
         return Interpreter.UNKNOWN_NEXT_COMMAND + nextCommand;
 
-    }
+    }*/
 
     public void fillSubCommands() {
+        Command tabs = new Command() {
+            public String getCommand() { return TABS; }
+            public String getShortCommand() { return "t"; }
+            public String getDescription() { return "Printing the name of the tabs in the order of the (graphical) model"; }
+
+            public  String executeCommand(String command, Interpreter interpreter) {
+                if (interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_ALREADY_STARTED;
+                }
+                String tabs = "";
+                Vector<TURTLEPanel> panels = interpreter.mgui.getTabs();
+                for(TURTLEPanel pane: panels) {
+                    tabs += interpreter.mgui.getTitleAt(pane) + " ";
+                }
+
+                System.out.println("Tabs: " + tabs);
+
+                return null;
+            }
+        };
+        subcommands.add(tabs);
 
     }
 
-    public String printTabs(Interpreter interpreter) {
+    /*public String printTabs(Interpreter interpreter) {
         if (!interpreter.isTToolStarted()) {
             return Interpreter.TTOOL_NOT_STARTED;
         }
@@ -119,5 +146,5 @@ public class Print extends Command  {
 
         return null;
 
-    }
+    }*/
 }

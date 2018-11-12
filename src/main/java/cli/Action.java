@@ -81,6 +81,14 @@ public class Action extends Command  {
         return "a";
     }
 
+    public String getUsage() {
+        return "action <subcommand> <options>";
+    }
+
+    public String getDescription() {
+        return "Can be used to trigger an action in TTool";
+    }
+
 
     public  String executeCommand(String command, Interpreter interpreter) {
         int index = command.indexOf(" ");
@@ -120,6 +128,7 @@ public class Action extends Command  {
         Command start = new Command() {
             public String getCommand() { return START; }
             public String getShortCommand() { return "s"; }
+            public String getDescription() { return "Starting the graphical interface of TTool"; }
 
             public  String executeCommand(String command, Interpreter interpreter) {
                 if (interpreter.isTToolStarted()) {
@@ -154,6 +163,7 @@ public class Action extends Command  {
         Command open = new Command() {
             public String getCommand() { return OPEN; }
             public String getShortCommand() { return "o"; }
+            public String getDescription() { return "Opening a model in TTool"; }
 
             public  String executeCommand(String command, Interpreter interpreter) {
                 if (!interpreter.isTToolStarted()) {
@@ -170,6 +180,7 @@ public class Action extends Command  {
         Command quit = new Command() {
             public String getCommand() { return QUIT; }
             public String getShortCommand() { return "q"; }
+            public String getDescription() { return "Closing the graphical interface of TTool"; }
 
             public  String executeCommand(String command, Interpreter interpreter) {
                 if (!interpreter.isTToolStarted()) {
@@ -180,10 +191,11 @@ public class Action extends Command  {
             }
         };
 
-        // Quit
+        // Check syntax
         Command checkSyntax = new Command() {
             public String getCommand() { return "checksyntax"; }
             public String getShortCommand() { return "cs"; }
+            public String getDescription() { return "Checking the syntax of an opened model"; }
 
             public  String executeCommand(String command, Interpreter interpreter) {
                 if (!interpreter.isTToolStarted()) {
