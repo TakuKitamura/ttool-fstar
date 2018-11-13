@@ -47,21 +47,6 @@ public class MainFrameTest extends AssertJSwingJUnitTestCase {
     		               KeyEvent.VK_O, KeyEvent.VK_D, KeyEvent.VK_E, KeyEvent.VK_L, KeyEvent.VK_I ,
     		               KeyEvent.VK_N, KeyEvent.VK_G, KeyEvent.VK_SLASH};
     
-//    @Test
-//    public void checkFrame() {
-//    	/*
-//    	 * Description : Check the title of the main frame, and verify that the frame is visible.
-//    	 */
-//    	
-//    	TraceManager.addDev("MainFrameTest: checkFrame: Checking title");
-//    	window.requireTitle("TTool");
-//    	TraceManager.addDev("MainFrameTest: checkFrame: Done checking title");
-//    	
-//    	TraceManager.addDev("MainFrameTest: checkFrame: Checking visibility");
-//    	window.requireVisible();
-//    	TraceManager.addDev("MainFrameTest: checkFrame: checking visibility");
-//    }
-//    
 	@Test
 	public void openProject() {
 		/*
