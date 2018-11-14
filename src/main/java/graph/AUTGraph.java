@@ -48,8 +48,8 @@ import java.io.BufferedReader;
 import java.io.StringReader;
 import java.util.*;
 
-import rationals.*;
-import rationals.transformations.*;
+//import rationals.*;
+//import rationals.transformations.*;
 
 /**
  * Class AUTGraph
@@ -542,31 +542,31 @@ public class AUTGraph implements myutil.Graph {
     }
 
 
-    public AUTGraph minimize(String[] tauTransitions, boolean tauOnly) {
-        String s = "tau";
-
-        // mark all transitions as non tau
-        for (AUTTransition tr : transitions) {
-            tr.isTau = false;
-        }
-
-        // Mark all tau transitions as tau
-        for (AUTTransition tr : transitions) {
-            for (int i = 0; i < tauTransitions.length; i++) {
-                if (tr.transition.compareTo(tauTransitions[i]) == 0) {
-                    tr.isTau = true;
-                    tr.transition = s;
-                }
-            }
-        }
-
-
-
-        //minimizeTau(tauOnly);
-        //return this;
-
-        return reduceGraph();
-    }
+//    public AUTGraph minimize(String[] tauTransitions, boolean tauOnly) {
+//        String s = "tau";
+//
+//        // mark all transitions as non tau
+//        for (AUTTransition tr : transitions) {
+//            tr.isTau = false;
+//        }
+//
+//        // Mark all tau transitions as tau
+//        for (AUTTransition tr : transitions) {
+//            for (int i = 0; i < tauTransitions.length; i++) {
+//                if (tr.transition.compareTo(tauTransitions[i]) == 0) {
+//                    tr.isTau = true;
+//                    tr.transition = s;
+//                }
+//            }
+//        }
+//
+//
+//
+//        //minimizeTau(tauOnly);
+//        //return this;
+//
+//        return reduceGraph();
+//    }
 
     public void minimizeTau(boolean tauOnly) {
         boolean modif = true;
@@ -1059,94 +1059,94 @@ public class AUTGraph implements myutil.Graph {
         nbTransition = transitions.size();
     }
 
-    public AUTGraph fromAutomaton(Automaton a) {
-        AUTGraph graph = new AUTGraph();
-        @SuppressWarnings("unchecked")
-        Set<Transition<String>> trs = (Set<Transition<String>>) a.delta();
-        //Set<?> trs = a.delta();
-        @SuppressWarnings("unchecked")
-        Set<State> sts = (Set<State>)(a.states());
-
-        Map<State, Integer> mapOfStates = new HashMap<>();
-        int cpt = 1;
-        for(State st: sts) {
-            if (st.isInitial()) {
-
-                //@SuppressWarnings("unchecked")
-                mapOfStates.put(st, new Integer(0));
-            } else {
-
-                //@SuppressWarnings("unchecked")
-                mapOfStates.put(st, new Integer(cpt));
-                cpt ++;
-            }
-        }
-
-        graph.setNbOfStates(mapOfStates.size());
-
-        for(Transition<String> tr: trs) {
-            State s1 = tr.start();
-            State s2 = tr.end();
-            String label = tr.label();
-            Integer i1 = mapOfStates.get(s1);
-            Integer i2 = mapOfStates.get(s2);
-
-            if ((i1 != null) && (i2 != null)) {
-                AUTTransition trNew = new AUTTransition(i1.intValue(), label, i2.intValue());
-                graph.addTransition(trNew);
-            }
-        }
-
-        graph.computeNbOfTransitions();
-        graph.computeStates();
-
-        return graph;
-    }
-
-    public Automaton toAutomaton() {
-        Automaton<String, Transition<String>, TransitionBuilder<String>> a = new Automaton<>();
-        computeStates();
-
-        boolean initial = true;
-        for(AUTState s: states) {
-            State as = a.addState(initial, s.isTerminationState());
-            s.referenceObject = as;
-            initial = false;
-        }
-        for(AUTTransition t: transitions) {
-            try {
-                String label = t.transition;
-                if (t.isTau) {
-                    label = null;
-                }
-                a.addTransition(new Transition<String>((State) (states.get(t.origin).referenceObject), label, (State) (states.get(t
-                        .destination)
-                        .referenceObject)));
-            } catch (NoSuchStateException nsse) { }
-        }
-
-        return a;
-    }
-
-    @SuppressWarnings("unchecked")
-    public AUTGraph reduceGraph() {
-        factorizeNonTauTransitions();
-
-        Automaton a = toAutomaton();
-        //TraceManager.addDev("Initial AUT:" +  a.toString());
-
-        /*@SuppressWarnings("unchecked")
-        Automaton<String, Transition<String>, TransitionBuilder<String>> newA =
-                new EpsilonTransitionRemover<String, Transition<String>,
-                        TransitionBuilder<String>>().transform((Automaton<String, Transition<String>, TransitionBuilder<String>>)a);
-        TraceManager.addDev("Aut with no tau / epsilon:" +  newA.toString());*/
-        Automaton newA = a;
-
-        newA = new Reducer<String, Transition<String>, TransitionBuilder<String>>().transform(newA);
-        //TraceManager.addDev("Error in reduce graph:" +  newA);
-        //TraceManager.addDev("New Aut:" +  newA.toString());
-        return fromAutomaton(newA);
-    }
+//    public AUTGraph fromAutomaton(Automaton a) {
+//        AUTGraph graph = new AUTGraph();
+//        @SuppressWarnings("unchecked")
+//        Set<Transition<String>> trs = (Set<Transition<String>>) a.delta();
+//        //Set<?> trs = a.delta();
+//        @SuppressWarnings("unchecked")
+//        Set<State> sts = (Set<State>)(a.states());
+//
+//        Map<State, Integer> mapOfStates = new HashMap<>();
+//        int cpt = 1;
+//        for(State st: sts) {
+//            if (st.isInitial()) {
+//
+//                //@SuppressWarnings("unchecked")
+//                mapOfStates.put(st, new Integer(0));
+//            } else {
+//
+//                //@SuppressWarnings("unchecked")
+//                mapOfStates.put(st, new Integer(cpt));
+//                cpt ++;
+//            }
+//        }
+//
+//        graph.setNbOfStates(mapOfStates.size());
+//
+//        for(Transition<String> tr: trs) {
+//            State s1 = tr.start();
+//            State s2 = tr.end();
+//            String label = tr.label();
+//            Integer i1 = mapOfStates.get(s1);
+//            Integer i2 = mapOfStates.get(s2);
+//
+//            if ((i1 != null) && (i2 != null)) {
+//                AUTTransition trNew = new AUTTransition(i1.intValue(), label, i2.intValue());
+//                graph.addTransition(trNew);
+//            }
+//        }
+//
+//        graph.computeNbOfTransitions();
+//        graph.computeStates();
+//
+//        return graph;
+//    }
+//
+//    public Automaton toAutomaton() {
+//        Automaton<String, Transition<String>, TransitionBuilder<String>> a = new Automaton<>();
+//        computeStates();
+//
+//        boolean initial = true;
+//        for(AUTState s: states) {
+//            State as = a.addState(initial, s.isTerminationState());
+//            s.referenceObject = as;
+//            initial = false;
+//        }
+//        for(AUTTransition t: transitions) {
+//            try {
+//                String label = t.transition;
+//                if (t.isTau) {
+//                    label = null;
+//                }
+//                a.addTransition(new Transition<String>((State) (states.get(t.origin).referenceObject), label, (State) (states.get(t
+//                        .destination)
+//                        .referenceObject)));
+//            } catch (NoSuchStateException nsse) { }
+//        }
+//
+//        return a;
+//    }
+//
+//    @SuppressWarnings("unchecked")
+//    public AUTGraph reduceGraph() {
+//        factorizeNonTauTransitions();
+//
+//        Automaton a = toAutomaton();
+//        //TraceManager.addDev("Initial AUT:" +  a.toString());
+//
+//        /*@SuppressWarnings("unchecked")
+//        Automaton<String, Transition<String>, TransitionBuilder<String>> newA =
+//                new EpsilonTransitionRemover<String, Transition<String>,
+//                        TransitionBuilder<String>>().transform((Automaton<String, Transition<String>, TransitionBuilder<String>>)a);
+//        TraceManager.addDev("Aut with no tau / epsilon:" +  newA.toString());*/
+//        Automaton newA = a;
+//
+//        newA = new Reducer<String, Transition<String>, TransitionBuilder<String>>().transform(newA);
+//        //TraceManager.addDev("Error in reduce graph:" +  newA);
+//        //TraceManager.addDev("New Aut:" +  newA.toString());
+//        return fromAutomaton(newA);
+//    }
 
 
     public void partitionGraph() {

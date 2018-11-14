@@ -581,7 +581,7 @@ public class JFrameMinimize extends javax.swing.JFrame implements ActionListener
 
             }
         }
-        newRG.graph = newRG.graph.minimize(strarray, tauOnly.isSelected());
+        //newRG.graph = newRG.graph.minimize(strarray, tauOnly.isSelected());
         newRG.nbOfStates = newRG.graph.getNbOfStates();
         newRG.nbOfTransitions = newRG.graph.getTransitions().size();
         mgui.addRG(newRG);
