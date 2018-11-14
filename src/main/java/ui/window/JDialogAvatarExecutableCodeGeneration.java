@@ -285,13 +285,13 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
 
         jp01.add(new JLabel("Code generator used:"), c01);
 
-        String[] codesTmp = codes;
+        /*String[] codesTmp = codes;
         if (!mgui.isExperimentalOn()) {
             codesTmp = new String[1];
             codesTmp[0] = codes[0];
-        }
+        }*/
 
-        versionCodeGenerator = new JComboBox<String>(codesTmp);
+        versionCodeGenerator = new JComboBox<String>(codes);
         versionCodeGenerator.setSelectedIndex(selectedItem);
         versionCodeGenerator.addActionListener(this);
         jp01.add(versionCodeGenerator, c01);
