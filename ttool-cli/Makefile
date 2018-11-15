@@ -16,7 +16,7 @@ JARRSRCFLAGS	= uf
 
 .PHONY: compile clean
 
-$(GRAPHMINIMIZE_BINARY): compile $(DEPEND)
+$(TTOOLCLI_BINARY): compile $(DEPEND)
 	@echo "$(PREFIX) Archiving"
 	@mkdir -p $(TTOOL_BUILD)
 	@$(JAR) $(JARFLAGS) $(MANIFEST) $@ -C $(LOCAL_BUILD_DIR) .
