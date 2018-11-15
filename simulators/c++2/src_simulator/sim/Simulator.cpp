@@ -789,7 +789,7 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
     //std::cout << "Not crashed. I: " << iCmd << " param= " << aParam1 << std::endl;
 
     switch (aParam1){
-      _end =oLastTrans->printEnd();
+      //_end =oLastTrans->printEnd();
     case 0:     //Run to next breakpoint
       std::cout << "Run to next breakpoint." << std::endl;
       aGlobMsg << TAG_MSGo << "Run to next breakpoint" << TAG_MSGc << std::endl;
