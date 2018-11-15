@@ -4,8 +4,8 @@ MANIFEST		= $(TTOOLCLI_DIR)/manifest.txt
 
 DEPEND			= $(patsubst %,$(TTOOL_BUILD)/%,$(shell cat $(MANIFEST) | grep Class-Path | cut -d: -f2))
 
-LOCAL_SRC_DIR		= $(GRAPHMINIMIZE_DIR)/src/main/java
-LOCAL_BUILD_DIR		= $(GRAPHMINIMIZE_DIR)/build/classes/main
+LOCAL_SRC_DIR		= $(TTOOLCLI_DIR)/src/main/java
+LOCAL_BUILD_DIR		= $(TTOOLCLI_DIR)/build/classes/main
 
 LOCAL_JAVA	= $(shell cd $(LOCAL_SRC_DIR); find . -name "*.java")
 LOCAL_CLASS	= $(patsubst %.java,%.class,$(LOCAL_JAVA))
