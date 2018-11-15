@@ -82,7 +82,13 @@ int main(int len, char ** args) {
 		pthread_t aThreadSim, aThreadServ;
 		int  aRetVal;
 		aRetVal = pthread_create(&aThreadSim, NULL, SimThreadFunc, static_cast<void*>(&mySim));
+		if (aRetVal != 0) {
+		  exit(-1);
+		}
 		aRetVal = pthread_create(&aThreadServ, NULL, ServThreadFunc, static_cast<void*>(myServer));
+		if (aRetVal != 0) {
+		  exit(-1);
+		}
 		pthread_join(aThreadSim, NULL);
 		pthread_join(aThreadServ, NULL);
 		pthread_exit(NULL);

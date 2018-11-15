@@ -344,7 +344,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         JDialogAttribute jda = new JDialogAttribute(myAttributes, null, frame, "Setting attributes of " + value, "Attribute");
         setJDialogOptions(jda);
         // jda.setSize(650, 375);
-        GraphicLib.centerOnParent(jda, 650, 375);
+        GraphicLib.centerOnParent(jda, 750, 375);
         jda.setVisible(true); // blocked until dialog has been closed
         //makeValue();
         //if (oldValue.equals(value)) {

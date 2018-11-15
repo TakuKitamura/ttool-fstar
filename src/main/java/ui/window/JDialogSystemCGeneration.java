@@ -964,6 +964,9 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
                 //SpecConfigTTool.ExternalCommand1 = "gtkwave " + SpecConfigTTool.lastVCD;
                 break;
             case ANIMATION:
+                updateStaticList();
+                optimizeModeSelected = optimizemode.isSelected();
+                activatePenaltiesSelected = activatePenalties.isSelected();
                 dispose();
                 mgui.interactiveSimulationSystemC(getPathInteractiveExecute());
                 break;
