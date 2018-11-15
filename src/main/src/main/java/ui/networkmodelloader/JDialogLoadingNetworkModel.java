@@ -406,11 +406,11 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
                 }
                 File file = new File(filePath);
                 file = FileUtils.addFileExtensionIfMissing(file, TFileFilter.getExtension());
-                try {
-                    FileUtils.moveFileToDirectory(file, dir, false);
-                } catch (IOException e) {
-                    System.err.println(e.getMessage() + " : Network loading failed");
-                }
+//                try {
+//                    FileUtils.moveFileToDirectory(file, dir, false);
+//                } catch (IOException e) {
+//                    System.err.println(e.getMessage() + " : Network loading failed");
+//                }
                 mgui.openProjectFromFile(dir);
                 // Here, we can safely update the GUI
                 // because we'll be called from the

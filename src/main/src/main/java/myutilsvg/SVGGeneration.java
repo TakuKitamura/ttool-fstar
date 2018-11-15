@@ -85,7 +85,7 @@ public class SVGGeneration  {
         SVGGraphics2D svgGenerator = new SVGGraphics2D(document);
 
         // Ask the test to render into the SVG Graphics2D implementation.
-        panel.paint(svgGenerator);
+        //panel.paint(svgGenerator);
 
         return svgGenerator;
     }
@@ -109,7 +109,7 @@ public class SVGGeneration  {
         boolean useCSS = true; // we want to use CSS style attributes
         try {
             StringWriter ouS = new StringWriter();
-            svgGenerator.stream(ouS, useCSS);
+            //svgGenerator.stream(ouS, useCSS);
             String tmp = ouS.toString();
             return tmp;
         } catch (Exception e) {
