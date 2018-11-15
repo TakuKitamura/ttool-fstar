@@ -455,7 +455,7 @@ int MultiCoreCPU::allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const
   return total;
 }
 
-void MultiCoreCPU::latencies2XML(std::ostringstream& glob, int id1, int id2) {
+void MultiCoreCPU::latencies2XML(std::ostringstream& glob, unsigned int id1, unsigned int id2) {
 
   for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
     if ((*i)->getCommand() !=NULL){

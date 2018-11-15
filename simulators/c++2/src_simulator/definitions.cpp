@@ -130,7 +130,7 @@ int getexename(	char* buf,
 	pid = getpid();
 	if (snprintf(linkname, sizeof(linkname), "/proc/%i/exe", pid) < 0) return -1;
 	ret = readlink(linkname, buf, size);
-	if (ret == -1 || ret>=size) return -1;
+	if (ret == -1 || (unsigned int)ret>=size) return -1;
 	buf[ret] = 0;
 	return ret;
 }

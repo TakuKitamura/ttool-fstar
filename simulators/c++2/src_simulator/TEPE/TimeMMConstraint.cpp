@@ -77,7 +77,7 @@ void TimeMMConstraint::evalInput(){
 		if (_disabledNotified==TRUE && !_includeBounds) _constrEnabled=false;
 		if(_constrEnabled){
 			if (_s1Notified==TRUE){
-				if (_s1Time==-1){
+			  if (_s1Time==(unsigned int)-1){
 					_s1Time = SchedulableDevice::getSimulatedTime();
 					aEnaFlag |=2;
 				}else{
@@ -87,7 +87,7 @@ void TimeMMConstraint::evalInput(){
 					}
 				}
 			}
-			if (_s1Time!=-1){
+			if (_s1Time!=(unsigned int)-1){
 				//if (_simTime-_s1Time>_tmax) reportPropViolation();
 				if (SchedulableDevice::getSimulatedTime() - _s1Time>_tmax) reportPropOccurrence(false);
 
@@ -104,7 +104,7 @@ void TimeMMConstraint::evalInput(){
 		}
 		_constrEnabled |= (_enabledNotified==TRUE);
 		if (_disabledNotified==TRUE){
-			if (_s1Time!=-1) aEnaFlag |=1; //NEW to investigate
+		  if (_s1Time!=(unsigned int)-1) aEnaFlag |=1; //NEW to investigate
 			reset();
 		}
 		notifiedReset();

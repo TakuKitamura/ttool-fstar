@@ -107,7 +107,8 @@ int Server::run(){
 			//accept a connection: accept(filedescriptor, pointer to address information of caller, size of address information)
 			perror("accept");
 		}
-		char* aMsg="You are connected to the simulation server. Please enter a command:\0";
+		std::string msg ="You are connected to the simulation server. Please enter a command:\0";
+		const char *aMsg = msg.c_str();
 		if (send(_socketClient, aMsg, strlen(aMsg), 0) == -1) perror("send");
 		int aNumberOfBytes=0, aStringPos=0, aReturnPos;
 		char s[INET6_ADDRSTRLEN];

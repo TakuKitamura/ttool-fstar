@@ -49,7 +49,7 @@ TMLRandomChoiceCommand::TMLRandomChoiceCommand(ID iID, TMLTask* iTask, RangeFunc
 
 TMLCommand* TMLRandomChoiceCommand::prepareNextTransaction(){
 	ParamType aMin, aMax;
-	if (_randomValue==-1){
+	if (_randomValue==(unsigned int)-1){
 		_randomValue = (_task->*_rangeFunc)(aMin, aMax);
 		//if (_ID==234) std::cout << "Random value set randomly:" << _randomValue << "\n";
 		if (aMin==-1)
@@ -66,7 +66,7 @@ TMLCommand* TMLRandomChoiceCommand::prepareNextTransaction(){
 	TMLCommand* aNextCommand=getNextCommand();
 	//std::cout << _ID << " set next:" << (_randomValue+1) << "\n";
 	_task->setCurrCommand(aNextCommand);
-	_randomValue=-1;
+	_randomValue=(unsigned int)-1;
 	_execTimes++;
 #ifdef STATE_HASH_ENABLED
 	if (_liveVarList!=0) _task->refreshStateHash(_liveVarList);

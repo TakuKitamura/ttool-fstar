@@ -77,14 +77,14 @@ void TimeTConstraint::evalInput(){
 		if (_disabledNotified==TRUE && !_includeBounds) _constrEnabled=false;
 		if(_constrEnabled){
 			if (_s1Notified==TRUE){
-				if (_s1Time==-1){
+			  if (_s1Time==(unsigned int)-1){
 					_s1Time = SchedulableDevice::getSimulatedTime();
 					aEnaFlag |=2;
 				}else{
 					if (_retrigger) _s1Time = SchedulableDevice::getSimulatedTime();
 				}
 			}
-			if (_s1Time!=-1 && SchedulableDevice::getSimulatedTime() -_s1Time>=_t){
+			if (_s1Time!=(unsigned int)-1 && SchedulableDevice::getSimulatedTime() -_s1Time>=_t){
 				if (SchedulableDevice::getSimulatedTime() - _s1Time > _t && _aboveConstr!=0) _aboveConstr[0]->forceDisable();
 				aEnaFlag |=1;
 				aSigOut=true;
@@ -94,7 +94,7 @@ void TimeTConstraint::evalInput(){
 		}
 		_constrEnabled |= (_enabledNotified==TRUE);
 		if (_disabledNotified==TRUE){
-			if (_s1Time!=-1) aEnaFlag |=1; //NEW to investigate
+		  if (_s1Time!=(unsigned int)-1) aEnaFlag |=1; //NEW to investigate
 			reset();
 		}
 		notifiedReset();
