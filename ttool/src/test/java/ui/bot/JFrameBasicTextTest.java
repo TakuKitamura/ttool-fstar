@@ -2,7 +2,7 @@
  * Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Arthur VUAGNIAUX
  */
 
-package gui.test.main;
+package ui.bot;
 
 import static org.junit.Assert.*;
 

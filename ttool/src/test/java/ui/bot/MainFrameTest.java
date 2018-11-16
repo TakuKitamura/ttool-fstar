@@ -2,7 +2,7 @@
  * Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Arthur VUAGNIAUX
  */
 
-package gui.test.main;
+package ui.bot;
 
 import static org.junit.Assert.*;
 
@@ -100,33 +100,33 @@ public class MainFrameTest extends AssertJSwingJUnitTestCase {
 //		TraceManager.addDev("MainFrameTest: openProject: Done clicking");
 	}
 	
-//    @Test
-//    public void help() {
-//    	/*
-//    	 * Description : Check the help from the main frame.
-//    	 */
-//    	
-//    	JMenuItemFixture jmif = window.menuItem("Help Configuration");
-//    	TraceManager.addDev("MainFrameTest: help: Opening the help by clicking on it");
-//    	jmif.click();
-//    	try {
-//			Thread.sleep(3600);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-//    	TraceManager.addDev("MainFrameTest: help: Done clicking");
-//    	
-//    	window2 = findFrame("TestTest").using(robot());
-//    	JButtonFixture jb = window2.button("Close Configuration");
-//    	TraceManager.addDev("MainFrameTest: help: Closing the help, by clicking on the button");
-//    	jb.click();
-//    	try {
-//			Thread.sleep(3600);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-//    	TraceManager.addDev("MainFrameTest: help: Done closing");
-//    }
+    @Test
+    public void help() {
+    	/*
+    	 * Description : Check the help from the main frame.
+    	 */
+    	
+    	JMenuItemFixture jmif = window.menuItem("Help Configuration");
+    	TraceManager.addDev("MainFrameTest: help: Opening the help by clicking on it");
+    	jmif.click();
+    	try {
+			Thread.sleep(3600);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+    	TraceManager.addDev("MainFrameTest: help: Done clicking");
+    	
+    	window2 = findFrame("TestTest").using(robot());
+    	JButtonFixture jb = window2.button("Close Configuration");
+    	TraceManager.addDev("MainFrameTest: help: Closing the help, by clicking on the button");
+    	jb.click();
+    	try {
+			Thread.sleep(3600);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+    	TraceManager.addDev("MainFrameTest: help: Done closing");
+    }
 	
 //    @Test
 //    public void capture() {
@@ -135,12 +135,12 @@ public class MainFrameTest extends AssertJSwingJUnitTestCase {
 //    }
  
     
-    @Test
-	public void quit() {
-		JMenuItemFixture jmif = window.menuItem("File Quit");
-		jmif.click();
-	}
-	 
+//    @Test
+//	public void quit() {
+//		JMenuItemFixture jmif = window.menuItem("File Quit");
+//		jmif.click();
+//	}
+//	 
     @Test
     public void vandV() {
     	/*
@@ -204,9 +204,9 @@ public class MainFrameTest extends AssertJSwingJUnitTestCase {
 	
 	@Override
 	protected void onSetUp() {
-		Main frame = GuiActionRunner.execute(()-> new Main());//Main(false, false, false, false, false, false, false, false, false, false, false, false, false));
-//		window = new FrameFixture(robot(), frame.test.getFrame());
-//		window.show();
+		Main frame = GuiActionRunner.execute(()-> new Main(false, false, false, false, false, false, false, false, false, false, false, false, false));
+		window = new FrameFixture(robot(), frame.getFrame());
+		window.show();
 	}
 	
 	@Override
