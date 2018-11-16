@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>org.assertj</groupId>
+  <artifactId>assertj-swing-aut</artifactId>
+  <versioning>
+    <versions>
+      <version>1.0.0-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20181005082839</lastUpdated>
+  </versioning>
+</metadata>
