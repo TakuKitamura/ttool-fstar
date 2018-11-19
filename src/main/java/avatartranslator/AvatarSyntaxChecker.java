@@ -83,7 +83,7 @@ public class AvatarSyntaxChecker  {
         BoolExpressionEvaluator bee = new BoolExpressionEvaluator();
 
         //TraceManager.addDev("Evaluating (modified) guard:" + act);
-        //boolean result = bee.getResultOf(act);
+        boolean result = bee.getResultOf(act);
         if (bee.getError() != null) {
             //TraceManager.addDev("Error: " + bee.getError());
             return -1;

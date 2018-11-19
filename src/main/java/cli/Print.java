@@ -113,7 +113,7 @@ public class Print extends Command  {
             public String getDescription() { return "Printing the name of the tabs in the order of the (graphical) model"; }
 
             public  String executeCommand(String command, Interpreter interpreter) {
-                if (interpreter.isTToolStarted()) {
+                if (!interpreter.isTToolStarted()) {
                     return Interpreter.TTOOL_ALREADY_STARTED;
                 }
                 String tabs = "";
