@@ -1,13 +1,17 @@
 /*
  * Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Arthur VUAGNIAUX
+ * 
+ * This file was one of the first test file created in order to now if we could test
+ * other frame. This one was for the help frame. 
+ * There is not a lot of tests, or some complex tests. 
+ * But if those tests do not work, there is an issue
  */
 
 package ui.bot;
 
-import static org.junit.Assert.*;
-
 import org.assertj.swing.edt.GuiActionRunner;
-import org.assertj.swing.fixture.*;
+import org.assertj.swing.fixture.FrameFixture;
+import org.assertj.swing.fixture.JButtonFixture;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
 
@@ -18,13 +22,13 @@ import ui.util.IconManager;
 import ui.window.JFrameBasicText;
 
 /*
- * Class Main
+ * Class HelpFrameTests
  * Creation: 12/10/2018
  * @version 1.0 12/10/2018
  * @author Arthur VUAGNIAUX
 */
 
-public class JFrameBasicTextTest extends AssertJSwingJUnitTestCase {
+public class HelpFrameTests extends AssertJSwingJUnitTestCase {
    private FrameFixture window;
    
 	@Test

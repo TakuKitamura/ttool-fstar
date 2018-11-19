@@ -4,41 +4,29 @@
 
 package ui.bot;
 
-import static org.junit.Assert.*;
+import static org.assertj.swing.finder.WindowFinder.findFrame;
 
-import java.awt.Frame;
-import java.awt.MouseInfo;
-import java.awt.Point;
 import java.awt.event.KeyEvent;
 
-import javax.swing.JButton;
-import javax.swing.JMenuItem;
-
-import org.assertj.swing.core.GenericTypeMatcher;
-import org.assertj.swing.core.matcher.FrameMatcher;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.finder.JFileChooserFinder;
-import org.assertj.swing.fixture.*;
+import org.assertj.swing.fixture.FrameFixture;
+import org.assertj.swing.fixture.JButtonFixture;
+import org.assertj.swing.fixture.JFileChooserFixture;
+import org.assertj.swing.fixture.JMenuItemFixture;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
 
-import static org.assertj.swing.finder.WindowFinder.findFrame;
-import static org.assertj.swing.finder.JFileChooserFinder.findFileChooser;
-
-import common.ConfigurationTTool;
-import common.SpecConfigTTool;
 import myutil.TraceManager;
-import ui.util.IconManager;
-import ui.window.JFrameBasicText;
 
 /*
- * Class MainFrameTest
+ * Class MainFrameBasicTests
  * Creation: 09/10/2018
  * @version 1.0 09/10/2018
  * @author Arthur VUAGNIAUX
 */
 
-public class MainFrameTest extends AssertJSwingJUnitTestCase {
+public class MainFrameBasicTests extends AssertJSwingJUnitTestCase {
     private FrameFixture window;
     private FrameFixture window2;
     
@@ -49,7 +37,7 @@ public class MainFrameTest extends AssertJSwingJUnitTestCase {
     		               KeyEvent.VK_O, KeyEvent.VK_D, KeyEvent.VK_E, KeyEvent.VK_L, KeyEvent.VK_I ,
     		               KeyEvent.VK_N, KeyEvent.VK_G, KeyEvent.VK_SLASH};
     
-    // Path : /git/TTool/modeling/my-elt-filter.xml
+    // Path : git/TTool/modeling/my-elt-filter.xml
     private int[] model = {KeyEvent.VK_G, KeyEvent.VK_I, KeyEvent.VK_T, KeyEvent.VK_SLASH, 
             KeyEvent.VK_CAPS_LOCK, KeyEvent.VK_T, KeyEvent.VK_T, KeyEvent.VK_CAPS_LOCK, 
             KeyEvent.VK_O, KeyEvent.VK_O, KeyEvent.VK_L, KeyEvent.VK_SLASH, KeyEvent.VK_M, 

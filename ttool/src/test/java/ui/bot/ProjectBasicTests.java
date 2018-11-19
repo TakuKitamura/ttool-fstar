@@ -12,13 +12,13 @@ import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 
 /*
- * Class MainFrameTest
+ * Class ProjectBasicTests
  * Creation: 19/11/2018
  * @version 1.0 19/11/2018
  * @author Arthur VUAGNIAUX
 */
 
-public class OpenProjectTests extends AssertJSwingJUnitTestCase {
+public class ProjectBasicTests extends AssertJSwingJUnitTestCase {
 	private FrameFixture window;
 	
 	@Override
