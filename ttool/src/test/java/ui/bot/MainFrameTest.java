@@ -32,7 +32,7 @@ import ui.util.IconManager;
 import ui.window.JFrameBasicText;
 
 /*
- * Class Main
+ * Class MainFrameTest
  * Creation: 09/10/2018
  * @version 1.0 09/10/2018
  * @author Arthur VUAGNIAUX
@@ -41,71 +41,106 @@ import ui.window.JFrameBasicText;
 public class MainFrameTest extends AssertJSwingJUnitTestCase {
     private FrameFixture window;
     private FrameFixture window2;
-    private int[] enter = {KeyEvent.VK_SLASH, KeyEvent.VK_G, KeyEvent.VK_I, KeyEvent.VK_T, KeyEvent.VK_SLASH, 
+    
+    // Path : /git/TTool/modeling/
+    private int[] project = {KeyEvent.VK_SLASH, KeyEvent.VK_G, KeyEvent.VK_I, KeyEvent.VK_T, KeyEvent.VK_SLASH, 
     		               KeyEvent.VK_CAPS_LOCK, KeyEvent.VK_T, KeyEvent.VK_T, KeyEvent.VK_CAPS_LOCK, 
     		               KeyEvent.VK_O, KeyEvent.VK_O, KeyEvent.VK_L, KeyEvent.VK_SLASH, KeyEvent.VK_M, 
     		               KeyEvent.VK_O, KeyEvent.VK_D, KeyEvent.VK_E, KeyEvent.VK_L, KeyEvent.VK_I ,
     		               KeyEvent.VK_N, KeyEvent.VK_G, KeyEvent.VK_SLASH};
     
-//	@Test
-//	public void openProject() {
-//		/*
-//    	 * Description : Verify that TTool open right a project.
-//    	 */
-//		
-//		JMenuItemFixture jmif = window.menuItem("File Open Project");	
-//		TraceManager.addDev("MainFrameTest: openProject: Clicking on the tab for opening a project");
+    // Path : /git/TTool/modeling/my-elt-filter.xml
+    private int[] model = {KeyEvent.VK_G, KeyEvent.VK_I, KeyEvent.VK_T, KeyEvent.VK_SLASH, 
+            KeyEvent.VK_CAPS_LOCK, KeyEvent.VK_T, KeyEvent.VK_T, KeyEvent.VK_CAPS_LOCK, 
+            KeyEvent.VK_O, KeyEvent.VK_O, KeyEvent.VK_L, KeyEvent.VK_SLASH, KeyEvent.VK_M, 
+            KeyEvent.VK_O, KeyEvent.VK_D, KeyEvent.VK_E, KeyEvent.VK_L, KeyEvent.VK_I ,
+            KeyEvent.VK_N, KeyEvent.VK_G, KeyEvent.VK_SLASH, KeyEvent.VK_M, KeyEvent.VK_Y, 
+            KeyEvent.VK_UNDERSCORE, KeyEvent.VK_E, KeyEvent.VK_L, KeyEvent.VK_N, KeyEvent.VK_UNDERSCORE, KeyEvent.VK_F, 
+            KeyEvent.VK_I, KeyEvent.VK_L, KeyEvent.VK_T, KeyEvent.VK_E, KeyEvent.VK_R, 
+            KeyEvent.VK_PERIOD, KeyEvent.VK_X, KeyEvent.VK_M, KeyEvent.VK_L};
+    
+//  @Test
+//  public void capture() {
+//  	JMenuItemFixture jmif = window.menuItem("Capture Screen");
 //		jmif.click();
-//		try {
-//			Thread.sleep(3600);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-//		TraceManager.addDev("MainFrameTest: openProject: Done clicking, the file chooser is now open");
-//		
-//		JFileChooserFixture jfc = JFileChooserFinder.findFileChooser().using(robot());
-//		TraceManager.addDev("MainFrameTest: openProject: Clicking on the file chooser, in order to write on it");
-//		jfc.fileNameTextBox().click();
-//		TraceManager.addDev("MainFrameTest: openProject: Done clicking");
-//		
-//		TraceManager.addDev("MainFrameTest: openProject: Writting the testing path");
-//		jfc.fileNameTextBox().pressAndReleaseKeys(enter);	
-//		try {
-//			Thread.sleep(3600);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}	
-//		TraceManager.addDev("MainFrameTest: openProject: Done writting");
-//		
-//		TraceManager.addDev("MainFrameTest: openProject: Clicking on the approval button of the file chooser");
-//		jfc.approveButton().click();
-//		try {
-//			Thread.sleep(3600);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-//		TraceManager.addDev("MainFrameTest: openProject: Approve");
-//		
-//		TraceManager.addDev("MainFrameTest: openProject: Clicking on the tab for opening a project");
+//  }
+
+  
+//  @Test
+//	public void quit() {
+//		JMenuItemFixture jmif = window.menuItem("File Quit");
 //		jmif.click();
-//		try {
-//			Thread.sleep(3600);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}	
-//		TraceManager.addDev("MainFrameTest: openProject: Done clicking, the file chooser is now open");
-//		
-//		TraceManager.addDev("MainFrameTest: openProject: Clicking on the file chooser, in order to write on it");
-//		jfc.fileNameTextBox().click();
-//		TraceManager.addDev("MainFrameTest: openProject: Done clicking");
 //	}
+//	 
+    
+	@Test
+	public void openProject() {
+		/*
+    	 * Description : Verify that TTool open the right project.
+    	 */
+		TraceManager.addDev("==============" + System.lineSeparator() + 
+							"MainFrameTest: openProject: Started");
+		JMenuItemFixture jmif = window.menuItem("File Open Project");	
+		TraceManager.addDev("MainFrameTest: openProject: Clicking on the tab for opening a project");
+		jmif.click();
+		try {
+			Thread.sleep(3600);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		TraceManager.addDev("MainFrameTest: openProject: Done clicking, the file chooser is now open");
+		
+		JFileChooserFixture jfc = JFileChooserFinder.findFileChooser().using(robot());
+		TraceManager.addDev("MainFrameTest: openProject: Clicking on the file chooser, in order to write on it");
+		jfc.fileNameTextBox().click();
+		TraceManager.addDev("MainFrameTest: openProject: Done clicking");
+		
+		TraceManager.addDev("MainFrameTest: openProject: Writting the testing path");
+		jfc.fileNameTextBox().pressAndReleaseKeys(project);	
+		try {
+			Thread.sleep(3600);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}	
+		TraceManager.addDev("MainFrameTest: openProject: Done writting");
+		
+		TraceManager.addDev("MainFrameTest: openProject: Clicking on the approval button of the file chooser");
+		jfc.approveButton().click();
+		try {
+			Thread.sleep(3600);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		TraceManager.addDev("MainFrameTest: openProject: Approve");
+		
+//		TraceManager.addDev("MainFrameTest: openProject: Clicking on the tab for opening a project");
+//		jmif.click();
+//		try {
+//			Thread.sleep(3600);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}	
+//		TraceManager.addDev("MainFrameTest: openProject: Done clicking, the file chooser is now open");
+//		
+//		TraceManager.addDev("MainFrameTest: openProject: Clicking on the file chooser, in order to write on it");
+//		jfc.fileNameTextBox().click();
+//		TraceManager.addDev("MainFrameTest: openProject: Done clicking");
+//		try {
+//			Thread.sleep(3600);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}	
+		TraceManager.addDev("MainFrameTest: openProject: Finished" + 
+							System.lineSeparator() + "==============");
+	}
 	
     @Test
     public void help() {
     	/*
     	 * Description : Check the help from the main frame.
     	 */
-    	
+    	TraceManager.addDev("==============" + System.lineSeparator() + 
+    						"MainFrameTest: help: Started");
     	JMenuItemFixture jmif = window.menuItem("Help Configuration");
     	TraceManager.addDev("MainFrameTest: help: Opening the help by clicking on it");
     	jmif.click();
@@ -126,27 +161,17 @@ public class MainFrameTest extends AssertJSwingJUnitTestCase {
 			e.printStackTrace();
 		}
     	TraceManager.addDev("MainFrameTest: help: Done closing");
+    	TraceManager.addDev("MainFrameTest: help: Finished"+ 
+							System.lineSeparator() + "==============");
     }
 	
-//    @Test
-//    public void capture() {
-//    	JMenuItemFixture jmif = window.menuItem("Capture Screen");
-//		jmif.click();
-//    }
- 
-    
-//    @Test
-//	public void quit() {
-//		JMenuItemFixture jmif = window.menuItem("File Quit");
-//		jmif.click();
-//	}
-//	 
     @Test
     public void vandV() {
     	/*
     	 * Description : Check the V&V part
     	 */
-    	
+    	TraceManager.addDev("==============" + System.lineSeparator() + 
+    						"MainFrameTest: vandV: Started");
     	JMenuItemFixture jmf = window.menuItem("V&V Graph Modification");
     	TraceManager.addDev("MainFrameTest: vandV: Clicking on the tab specific of graph modification in V&V");
 		jmf.click();
@@ -156,6 +181,54 @@ public class MainFrameTest extends AssertJSwingJUnitTestCase {
 			e.printStackTrace();
 		}
 		TraceManager.addDev("MainFrameTest: vandV: Done clicking");
+		TraceManager.addDev("MainFrameTest: vandV: Finished " + 
+							System.lineSeparator() + "==============");
+    }
+    
+    @Test
+    public void openModel( ) {
+    	/*
+    	 * Description : Verify that TTool open the right model.
+    	 * Note : KeyEvent.VK_UNDERSCORE make a KeyEvent.VK_MINUS, and that's a real problem
+    	 */
+    	TraceManager.addDev("==============" + System.lineSeparator() + 
+    						"MainFrameTest: openModel: Started");
+    	JMenuItemFixture jmif = window.menuItem("File Model Project");	
+		TraceManager.addDev("MainFrameTest: openModel: Clicking on the tab for opening a model");
+		jmif.click();
+		try {
+			Thread.sleep(3600);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		TraceManager.addDev("MainFrameTest: openModel: Done clicking, the file chooser is now open");
+		
+		JFileChooserFixture jfc = JFileChooserFinder.findFileChooser().using(robot());
+		TraceManager.addDev("MainFrameTest: openModel: Writting the testing path");
+		jfc.fileNameTextBox().pressAndReleaseKeys(model);	
+		try {
+			Thread.sleep(3600);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}	
+		TraceManager.addDev("MainFrameTest: openModel: Done writting");
+		
+		TraceManager.addDev("MainFrameTest: openModel: Clicking on the approval button of the file chooser");
+		jfc.approveButton().click();
+		try {
+			Thread.sleep(3600);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		TraceManager.addDev("MainFrameTest: openModel: Approve");
+		
+		try {
+			Thread.sleep(3600);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		TraceManager.addDev("MainFrameTest: openModel: Finished" + 
+							System.lineSeparator() + "==============");
     }
     
 	@Test
@@ -164,7 +237,8 @@ public class MainFrameTest extends AssertJSwingJUnitTestCase {
     	 * Description : Verify if TTool can create a new file, by clicking on the File menu then on
     	 * the tab New. Then right click on it.
     	 */
-		
+		TraceManager.addDev("==============" + System.lineSeparator() +
+							"MainFrameTest: createANewFile: Started");
 		JMenuItemFixture jmf = window.menuItem("File New");
 		TraceManager.addDev("MainFrameTest: createANewFile: Creating a new file by clicking on New");
 		jmf.click();
@@ -183,6 +257,8 @@ public class MainFrameTest extends AssertJSwingJUnitTestCase {
 			e.printStackTrace();
 		}
 		TraceManager.addDev("MainFrameTest: createANewFile: Done clicking");
+		TraceManager.addDev("MainFrameTest: createANewFile: Finished" + 
+							System.lineSeparator() + "==============");
 	}
 	
 	@Test
@@ -190,7 +266,8 @@ public class MainFrameTest extends AssertJSwingJUnitTestCase {
 		/*
     	 * Description : Check the save DTA part, by clicking on it.
     	 */
-		
+		TraceManager.addDev("==============" + System.lineSeparator() +
+							"MainFrameTest: saveDTA: Started");
 		JMenuItemFixture jmif = window.menuItem("File Save DTA");
 		TraceManager.addDev("MainFrameTest: saveDTA: Clicking on the tab DTA");
 		jmif.click();
@@ -200,6 +277,8 @@ public class MainFrameTest extends AssertJSwingJUnitTestCase {
 			e.printStackTrace();
 		}
 		TraceManager.addDev("MainFrameTest: saveDTA: Done clicking");
+		TraceManager.addDev("MainFrameTest: saveDTA: Finished" + 
+							System.lineSeparator() + "==============");
 	}
 	
 	@Override
