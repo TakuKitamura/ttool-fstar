@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import common.ConfigurationTTool;
 import common.SpecConfigTTool;
+import myutil.TraceManager;
 import ui.util.IconManager;
 import ui.window.JFrameBasicText;
 
@@ -28,25 +29,35 @@ public class JFrameBasicTextTest extends AssertJSwingJUnitTestCase {
    
 	@Test
 	public void checkFrame() {
-		window.requireTitle("Your configuration of TTool ...");
+		TraceManager.addDev("==============" + System.lineSeparator() + 
+							"JFrameBasicTextTest: checkFrame: Started");
+		TraceManager.addDev("JFrameBasicTextTest: checkFrame: Checking Frame");
     	window.requireVisible();
+    	TraceManager.addDev("JFrameBasicTextTest: checkFrame: Check");
+    	TraceManager.addDev("JFrameBasicTextTest: checkFrame: Finished" + 
+							System.lineSeparator() + "==============");
 	}
 	
 	@Test
-    public void close() {
-		JScrollPaneFixture jsp = window.scrollPane("Jsp Configuration");
-		//jsp.horizontalScrollBar().click();
+    public void closeHelp() {
+		TraceManager.addDev("==============" + System.lineSeparator() + 
+							"JFrameBasicTextTest: closeHelp: Started");
+		TraceManager.addDev("JFrameBasicTextTest: closeHelp: Opening Frame");
     	try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+    	TraceManager.addDev("JFrameBasicTextTest: closeHelp: Clicking on the button Close");
     	JButtonFixture jb = window.button("Close Configuration");
     	try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+    	TraceManager.addDev("JFrameBasicTextTest: closeHelp: Closing the Help");
+    	TraceManager.addDev("JFrameBasicTextTest: closeHelp: Finished" + 
+							System.lineSeparator() + "==============");
     }
 
 	@Override
