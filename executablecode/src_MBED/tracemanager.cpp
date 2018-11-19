@@ -19,7 +19,7 @@
 
 #define TRACE_FILE_NAME "Trace.txt"
 
-
+Serial pc(USBTX, USBRX);
 rtos::Mutex __traceMutex;
 
 int trace = TRACE_OFF;
@@ -76,7 +76,8 @@ void writeInTrace(char *info) {
     }
     break;
   case TRACE_IN_CONSOLE:
-    printf("%s\n", s);
+    pc.printf("%s\n", s);
+    //printf("%s\n", s);
     break;
   }
   
@@ -93,7 +94,7 @@ void activeTracingInFile(char *fileName) {
   } else {
     name  = fileName;
   }
-  //TODO file = fopen(name,"w");
+  file = fopen(name,"w");
 
   /* Initializing mutex */
   //if (pthread_mutex_init(&__traceMutex, NULL) < 0) { exit(-1);}
@@ -287,25 +288,20 @@ void traceRequest(char *myname, request *req) {
       sprintf(s, "block=%s type=send_async_2 channel=%s\n", myname, req->asyncChannel->outname);
       break;
     case RECEIVE_ASYNC_REQUEST:
-      
       sprintf(s, "block=%s type=receive_async_2 channel=%s\n", myname, req->asyncChannel->inname);
       break;
     case SEND_BROADCAST_REQUEST:
-      
       debug2Msg("Sync channel", req->syncChannel->outname);
       sprintf(s, "block=%s type=send_broadcast channel=%s\n", myname, req->syncChannel->outname);
       break; 
     case RECEIVE_BROADCAST_REQUEST:
-      
       debug2Msg("Sync channel", req->syncChannel->outname);
       sprintf(s, "block=%s type=receive_broadcast channel=%s\n", myname, req->syncChannel->outname);
       break; 
     case IMMEDIATE:
-      
       sprintf(s, "block=%s type=action\n", myname);
       break;
     default:
-      
       sprintf(s, "block=%s type=unknown\n", myname);
   }
 

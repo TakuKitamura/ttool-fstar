@@ -54,7 +54,7 @@ void executeSendSyncTransaction(request *req) {
 
 	debugMsg("Signaling");
   
-	rtos::Thread::signal_wait(selectedReq->listOfRequests->wakeupCondition);
+  selectedReq->listOfRequests->cond->notify_all();
 
 	traceSynchroRequest(req, selectedReq);
 }
@@ -97,7 +97,7 @@ void executeReceiveSyncTransaction(request *req) {
 
   debugMsg("Signaling");
   //pthread_cond_signal(selectedReq->listOfRequests->wakeupCondition);
-  rtos::Thread::signal_wait(selectedReq->listOfRequests->wakeupCondition);
+  selectedReq->listOfRequests->cond->notify_all();
   traceSynchroRequest(selectedReq, req);
 }
 
@@ -117,7 +117,7 @@ void executeSendAsyncTransaction(request *req) {
   selectedReq = req->asyncChannel->inWaitQueue;
   while (selectedReq != NULL) {
     //pthread_cond_signal(selectedReq->listOfRequests->wakeupCondition);
-    rtos::Thread::signal_wait(selectedReq->listOfRequests->wakeupCondition);
+    selectedReq->listOfRequests->cond->notify_all();
     selectedReq = selectedReq->next;
   }
   debugMsg("Signaling done");
@@ -146,7 +146,7 @@ void executeReceiveAsyncTransaction(request *req) {
   debugMsg("Signaling async read to all requests waiting ");
   while (selectedReq != NULL) {
     //pthread_cond_signal(selectedReq->listOfRequests->wakeupCondition);
-    rtos::Thread::signal_wait(selectedReq->listOfRequests->wakeupCondition);
+    selectedReq->listOfRequests->cond->notify_all();
     selectedReq = selectedReq->next;
   }
   debugMsg("Signaling done");
@@ -204,7 +204,7 @@ void executeSendBroadcastTransaction(request *req) {
   while(currentReq != NULL) {
     cpt ++;
     //pthread_cond_signal(currentReq->listOfRequests->wakeupCondition);
-    rtos::Thread::signal_wait(currentReq->listOfRequests->wakeupCondition);
+    currentReq->listOfRequests->cond->notify_all();
     traceSynchroRequest(req, currentReq);
     currentReq = currentReq->relatedRequest;
   }
@@ -473,7 +473,7 @@ request *private__executeRequests0(setOfRequests *list, int nb) {
     if (req->executable == 1) {
       found ++;
       if (found == selectedIndex) {
-	break;
+	    break;
       }
     }
     realIndex ++;
@@ -557,11 +557,11 @@ request *executeListOfRequests(setOfRequests *list) {
       debug2Msg(list->ownerName, "Waiting for a request and at most for a given time");
       debugTime("Min time to wait=", &(list->minTimeToWait));
       //pthread_cond_timedwait(list->wakeupCondition, list->mutex, &(list->minTimeToWait));
-	    osEvent event = rtos::Thread::signal_wait(list->wakeupCondition, list->minTimeToWait.tv_sec);
+      list->cond->wait_for(list->minTimeToWait.tv_sec-list->startTime.tv_sec); 
     } else {
       debug2Msg(list->ownerName, "Releasing mutex");
       //pthread_cond_wait(list->wakeupCondition, list->mutex);
-	    osEvent event = rtos::Thread::signal_wait(list->wakeupCondition);
+      list->cond->wait();
     }
     debug2Msg(list->ownerName, "Waking up for requests! -> getting mutex");
   }

@@ -148,24 +148,23 @@ void clearListOfRequests(setOfRequests *list) {
   list->head = (request*)NULL;
 }
 //setOfRequests *newListOfRequests(pthread_cond_t *wakeupCondition, pthread_mutex_t *mutex) {
-setOfRequests *newListOfRequests(size_t wakeupCondition, rtos::Mutex *mutex) {
+setOfRequests *newListOfRequests(rtos::ConditionVariable *cond, rtos::Mutex *mutex) {
   setOfRequests *list = (setOfRequests *)(malloc(sizeof(setOfRequests)));
   list->head = (request*)NULL;
-  list->wakeupCondition = wakeupCondition;
   list->mutex = mutex;
+  list->cond = cond;
 
   return list;
 }
 
 //void fillListOfRequests(setOfRequests *list, char *name, pthread_cond_t *wakeupCondition, pthread_mutex_t *mutex) {
-void fillListOfRequests(setOfRequests *list, char *name, rtos::Thread* thread, size_t wakeupCondition, rtos::Mutex *mutex) {
+void fillListOfRequests(setOfRequests *list, char *name, rtos::Thread* thread, rtos::ConditionVariable *cond, rtos::Mutex *mutex) {
   list->head = (request*)NULL;
   list->ownerName = name;
   list->ownerThread = thread;
-  list->wakeupCondition = wakeupCondition;
   list->mutex = mutex;
+  list->cond = cond;
 }
-
 
 void addRequestToList(setOfRequests *list, request* req) {
   request *tmpreq;
