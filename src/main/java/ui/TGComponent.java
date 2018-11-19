@@ -1307,6 +1307,10 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
         }
     }
 
+    public boolean hasAnUpdateOnPointedComponent() {
+        return false;
+    }
+
     public int getDefaultConnector() {
         return -1;
     }

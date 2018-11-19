@@ -118,13 +118,13 @@ public class TMLComponentTaskDiagramToolBar extends TToolBar {
 		button = this.add(mgui.actions[TGUIAction.TMLCTD_CPORT]);
         button.addMouseListener(mgui.mouseHandler);
         
-        if (MainGUI.experimentalOn) {
+        //if (MainGUI.experimentalOn) {
         	this.addSeparator();
         	button = this.add(mgui.actions[TGUIAction.TMLCTD_FORK]);
         	button.addMouseListener(mgui.mouseHandler);
         	button = this.add(mgui.actions[TGUIAction.TMLCTD_JOIN]);
         	button.addMouseListener(mgui.mouseHandler);
-        }
+        //}
 		
 		this.addSeparator();
 		

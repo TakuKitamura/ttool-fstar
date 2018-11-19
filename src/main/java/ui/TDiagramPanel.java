@@ -747,6 +747,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         return info;
     }
 
+
+
+
+
     //author:huytruong
     public TGComponent componentHovered() {
         return componentHovered;

@@ -116,6 +116,9 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
     protected int minHeight = 15;
     protected int h;
 
+    protected int highlightedExpr;
+    protected Graphics mygraphics;
+
     protected String defaultValue;
 
     public AvatarSMDTransitionInfo(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
@@ -146,7 +149,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
         connectingPoint[2] = new TGConnectingPointComment(this, 0, 0, true, true, 1.0, 0.5);
         connectingPoint[3] = new TGConnectingPointComment(this, 0, 0, true, true, 0.0, 0.5);
 
-        listOfActions = new Vector<Expression>();
+        listOfActions = new Vector<>();
         //listOfActions = new Vector<String>();
 
         myImageIcon = IconManager.imgic302;
@@ -178,6 +181,10 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
 
     @Override
     public void internalDrawing(Graphics g) {
+        if (!tdp.isScaled()) {
+            mygraphics = g;
+        }
+        mygraphics = g;
         int step = 0;
       //  String s;
         h = g.getFontMetrics().getHeight();
@@ -187,7 +194,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
 
 //        ColorManager.setColor(g, getState(), 0);
         // Issue #69
-        final int inc = getExpressionTextHight();
+        final int inc = getExpressionTextHeight();
 //        int inc = h;
 
 
@@ -382,40 +389,59 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
             ColorManager.setColor( g, state, 0, isEnabled() );
 
             final Rectangle rectangle = new Rectangle( x - 1, y - h + 2, width + 2, height + 2 );
+            int indexOfPointedExpr = -2;
 
             if ( inc != 0 && isOnMe( tdp.currentX, tdp.currentY ) == this ) {
-            	
-            	// Issue #69: Draw rectangle only around the pointed line
-            	final Expression selExpr = getSelectedExpression();
-            	final int exprWidth;
-            	
-            	if ( selExpr == null ) {
-            		exprWidth = width;
-            	}
-            	else {
-            		exprWidth  = g.getFontMetrics().stringWidth( selExpr.toString() );
-                    ColorManager.setColor( g, state, 0, selExpr.isEnabled() );
-            	}
-            	
-            	final int pointedExpOrder = getPointedExpressionOrder() - 1;
-            	
-            	rectangle.y = y + pointedExpOrder * inc + 2;
+
+                final int exprWidth = getWidthExprOfSelectedExpression();
+                indexOfPointedExpr = getPointedExpressionOrder() - 1;
+            	rectangle.y = y + indexOfPointedExpr * inc + 2;
             	rectangle.width = exprWidth + 2;
             	rectangle.height = inc + 2;
             }
 
             g.drawRoundRect( rectangle.x, rectangle.y, rectangle.width, rectangle.height, 5, 5 );
-          //  g.drawRoundRect(x - 1, y - h + 2, width + 2, height + 2, 5, 5);
+            //TraceManager.addDev("Draw pointed req   highlighted expr=" + highlightedExpr);
+
+            if (!tdp.isScaled()) {
+                //TraceManager.addDev("Highlighted expr=" + highlightedExpr);
+                highlightedExpr = indexOfPointedExpr + 1;
+                //TraceManager.addDev("NEW Highlighted expr=" + highlightedExpr);
+            }
+
+            //  g.drawRoundRect(x - 1, y - h + 2, width + 2, height + 2, 5, 5);
         }
     }
 
-    private int getExpressionTextHight() {
+
+    private int getWidthExprOfSelectedExpression() {
+        if (mygraphics == null) {
+            return -1;
+        }
+        //TraceManager.addDev("currentX = " + tdp.currentX +  " currentY=" + tdp.currentY);
+        // Issue #69: Draw rectangle only around the pointed line
+        final Expression selExpr = getSelectedExpression();
+        final int exprWidth;
+
+        if ( selExpr == null ) {
+            exprWidth = width;
+        }
+        else {
+            exprWidth  = mygraphics.getFontMetrics().stringWidth( selExpr.toString() );
+            ColorManager.setColor( mygraphics, state, 0, selExpr.isEnabled() );
+        }
+
+        return exprWidth;
+    }
+
+    private int getExpressionTextHeight() {
     	return h;
     }
     
     private Integer getPointedExpressionOrder() {
-    	if ( getExpressionTextHight() != 0 ) {
-    		return ( tdp.currentY + 10 - y ) / getExpressionTextHight();
+        int h = getExpressionTextHeight();
+    	if ( h != 0 ) {
+    		return ( tdp.currentY + 10 - y ) / h;
     	}
     	
     	return null;
@@ -427,6 +453,18 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
             return this;
         }
         return null;
+    }
+
+
+    @Override
+    public boolean hasAnUpdateOnPointedComponent() {
+        int index = getPointedExpressionOrder();
+        //TraceManager.addDev("CurrentIndex: " + highlightedExpr + " newIndex:" + index);
+
+        return index != highlightedExpr;
+
+        //return true;
+        //return (getPointedExpressionOrder() != pointedExpOrder);
     }
 
     @Override

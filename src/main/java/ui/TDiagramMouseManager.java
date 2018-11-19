@@ -44,6 +44,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+import myutil.TraceManager;
 import ui.window.JDialogSearchBox;
 
 /**
@@ -551,6 +552,7 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
 
     @Override
     public void mouseMoved(MouseEvent e) {
+        //TraceManager.addDev("Mouse moved x=" + e.getX() + " y=" + e.getY());
         tdp.currentX = e.getX();
         tdp.currentY = e.getY();
 
@@ -563,11 +565,13 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
         }
 
         if ((tdp.mode == TDiagramPanel.NORMAL) && (selected == TGComponentManager.EDIT)){
+            //TraceManager.addDev("Pointed components?");
             byte info = 0;
         	if (!tdp.isSelect())
         		info = tdp.highlightComponent(e.getX(), e.getY());
             if (info > 1 || tdp.isSelect()) {
             	tgc = tdp.componentPointed();
+                //TraceManager.addDev("Components pointed: " + tgc);
                 if (tgc.isUserResizable()) {
                     setCursor(tgc.getResizeZone(e.getX(), e.getY()));
                 } else {
@@ -576,9 +580,17 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
             } else {
                 tdp.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             }
+            //TraceManager.addDev("info=" + info + " X=" + tdp.currentX + " Y=" + tdp.currentY);
             if ((info == 1) || (info == 3)) {
                 tdp.updateJavaCode();
                 tdp.repaint();
+            } else if (info == 2) {
+                if (tgc.hasAnUpdateOnPointedComponent()) {
+                    //TraceManager.addDev("has an update...");
+                    tdp.repaint();
+                } else {
+                    //TraceManager.addDev("No update...");
+                }
             }
         }
         
