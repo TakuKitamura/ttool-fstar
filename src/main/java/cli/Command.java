@@ -73,7 +73,35 @@ public class Command implements CommandInterface {
     }
 
     public String executeCommand(String command, Interpreter interpreter) {
-        return null;
+        int index = command.indexOf(" ");
+        String nextCommand;
+        String args;
+
+        if (index == -1) {
+            nextCommand = command;
+            args = "";
+        } else {
+            nextCommand = command.substring(0, index);
+            args = command.substring(index+1, command.length());
+        }
+
+
+        // Analyzing next command
+        for(Command c: subcommands) {
+            if ((c.getCommand().compareTo(nextCommand) == 0) || (c.getCommand().compareTo(nextCommand) == 0)) {
+                return c.executeCommand(args, interpreter);
+            }
+        }
+        /*if (nextCommand.compareTo(OPEN) == 0) {
+            return openModel(args);
+        } else if (nextCommand.compareTo(START) == 0) {
+            return startTTool();
+        } else if (nextCommand.compareTo(QUIT) == 0) {
+            return exitCLI();
+        }*/
+
+        String error = Interpreter.UNKNOWN_NEXT_COMMAND + nextCommand;
+        return error;
     }
 
 

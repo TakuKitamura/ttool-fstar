@@ -7461,7 +7461,19 @@ public class GTURTLEModeling {
                         myWidth = Integer.decode(elt.getAttribute("width")).intValue();
                         myHeight = Integer.decode(elt.getAttribute("height")).intValue();
                         myMinWidth = Integer.decode(elt.getAttribute("minWidth")).intValue();
+                        if (myMinWidth < 1) {
+                            myMinWidth = 1;
+                        }
+                        if (myWidth < myMinWidth) {
+                            myWidth = myMinWidth;
+                        }
                         myMinHeight = Integer.decode(elt.getAttribute("minHeight")).intValue();
+                        if (myMinHeight < 1) {
+                            myMinHeight = 1;
+                        }
+                        if (myHeight < myMinHeight) {
+                            myHeight = myMinHeight;
+                        }
                         myMinDesiredWidth = Integer.decode(elt.getAttribute("minDesiredWidth")).intValue();
                         myMinDesiredHeight = Integer.decode(elt.getAttribute("minDesiredHeight")).intValue();
                     } else if (elt.getTagName().equals("cdrectangleparam")) {

@@ -90,7 +90,7 @@ public class Action extends Command  {
     }
 
 
-    public  String executeCommand(String command, Interpreter interpreter) {
+    /*public  String executeCommand(String command, Interpreter interpreter) {
         int index = command.indexOf(" ");
         String nextCommand;
         String args;
@@ -110,18 +110,12 @@ public class Action extends Command  {
                 return c.executeCommand(args, interpreter);
             }
         }
-        /*if (nextCommand.compareTo(OPEN) == 0) {
-            return openModel(args);
-        } else if (nextCommand.compareTo(START) == 0) {
-            return startTTool();
-        } else if (nextCommand.compareTo(QUIT) == 0) {
-            return exitCLI();
-        }*/
+
 
         String error = Interpreter.UNKNOWN_NEXT_COMMAND + nextCommand;
         return error;
 
-    }
+    }*/
 
     public void fillSubCommands() {
         // Start
