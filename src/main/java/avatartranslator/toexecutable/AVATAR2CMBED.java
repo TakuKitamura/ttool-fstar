@@ -103,6 +103,18 @@ public class AVATAR2CMBED {
 
     public void saveInFiles(String path) throws FileException {
 
+        //TraceManager.addDev("save In Files AVATAR2CPOSIX");
+        if (!SpecConfigTTool.checkAndCreateAVATARCodeDir(path)) {
+            TraceManager.addDev("Directory cannot be created: " + path);
+            throw new FileException("ERROR: Executable code directory cannot be created.");
+        }
+        //TraceManager.addDev("Creating dir for saving generated code");
+        File src_dir = new File(path + GENERATED_PATH);
+        if (!src_dir.exists()) {
+            TraceManager.addDev("Creating: " + src_dir.getAbsolutePath());
+            src_dir.mkdir();
+        }
+
         TraceManager.addDev("Generating files");
 
         if (mainFileMbed != null) {
