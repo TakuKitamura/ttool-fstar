@@ -1,5 +1,8 @@
 /*
  * Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Arthur VUAGNIAUX
+ * 
+ * This file gather all the tests on the creation of one and single model.
+ * All the tests check the creation of the model, it development to it suppression 
  */
 
 package ui.bot;

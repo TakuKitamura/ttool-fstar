@@ -54,6 +54,7 @@ public class HelpFrameTests extends AssertJSwingJUnitTestCase {
 		}
     	TraceManager.addDev("JFrameBasicTextTest: closeHelp: Clicking on the button Close");
     	JButtonFixture jb = window.button("Close Configuration");
+    	jb.click();
     	try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {

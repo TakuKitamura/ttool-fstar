@@ -1,5 +1,10 @@
 /*
  * Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Arthur VUAGNIAUX
+ * 
+ * This file is for the creations of tests on the code generation part
+ * 
+ * These tests are on the same file, but the code generation is different.
+ * In the end, we should have some Jave, TML/TMAP and C code
  */
 
 package ui.bot;

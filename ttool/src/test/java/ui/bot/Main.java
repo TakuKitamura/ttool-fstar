@@ -1,5 +1,7 @@
 /*
  * Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Arthur VUAGNIAUX
+ * 
+ * This file is the main file, allowing to build the main frame correctly
  */
 
 package ui.bot;

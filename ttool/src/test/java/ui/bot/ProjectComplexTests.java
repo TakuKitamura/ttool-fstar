@@ -1,5 +1,8 @@
 /*
  * Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Arthur VUAGNIAUX
+ * 
+ * The purpose of this file is only to test all the project (all the xml files),
+ * in order to open each, and to do complex tests
  */
 
 package ui.bot;

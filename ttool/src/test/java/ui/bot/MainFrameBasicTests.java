@@ -1,5 +1,7 @@
 /*
  * Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Arthur VUAGNIAUX
+ * 
+ * This file is for some basic tests on the main frame
  */
 
 package ui.bot;
