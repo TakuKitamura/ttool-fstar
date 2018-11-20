@@ -32,6 +32,9 @@ public class MainFrameBasicTests extends AssertJSwingJUnitTestCase {
     private FrameFixture window;
     private FrameFixture window2;
     
+    private UsefulTools ut;
+    private boolean debug = true;
+    
     // Path : /git/TTool/modeling/
     private int[] project = {KeyEvent.VK_SLASH, KeyEvent.VK_G, KeyEvent.VK_I, KeyEvent.VK_T, KeyEvent.VK_SLASH, 
     		               KeyEvent.VK_CAPS_LOCK, KeyEvent.VK_T, KeyEvent.VK_T, KeyEvent.VK_CAPS_LOCK, 
@@ -61,7 +64,7 @@ public class MainFrameBasicTests extends AssertJSwingJUnitTestCase {
 //		JMenuItemFixture jmif = window.menuItem("File Quit");
 //		jmif.click();
 //	}
-//	 
+//	    
     
 	@Test
 	public void openProject() {
@@ -73,11 +76,8 @@ public class MainFrameBasicTests extends AssertJSwingJUnitTestCase {
 		JMenuItemFixture jmif = window.menuItem("File Open Project");	
 		TraceManager.addDev("MainFrameTest: openProject: Clicking on the tab for opening a project");
 		jmif.click();
-		try {
-			Thread.sleep(3600);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		if (debug)
+			ut.debugThread(3600, "MainFrameTest: openProject: ");
 		TraceManager.addDev("MainFrameTest: openProject: Done clicking, the file chooser is now open");
 		
 		JFileChooserFixture jfc = JFileChooserFinder.findFileChooser().using(robot());
@@ -87,20 +87,14 @@ public class MainFrameBasicTests extends AssertJSwingJUnitTestCase {
 		
 		TraceManager.addDev("MainFrameTest: openProject: Writting the testing path");
 		jfc.fileNameTextBox().pressAndReleaseKeys(project);	
-		try {
-			Thread.sleep(3600);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}	
+		if (debug)
+			ut.debugThread(3600, "MainFrameTest: openProject: ");
 		TraceManager.addDev("MainFrameTest: openProject: Done writting");
 		
 		TraceManager.addDev("MainFrameTest: openProject: Clicking on the approval button of the file chooser");
 		jfc.approveButton().click();
-		try {
-			Thread.sleep(3600);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		if (debug)
+			ut.debugThread(3600, "MainFrameTest: openProject: ");
 		TraceManager.addDev("MainFrameTest: openProject: Approve");
 		
 //		TraceManager.addDev("MainFrameTest: openProject: Clicking on the tab for opening a project");
@@ -134,22 +128,16 @@ public class MainFrameBasicTests extends AssertJSwingJUnitTestCase {
     	JMenuItemFixture jmif = window.menuItem("Help Configuration");
     	TraceManager.addDev("MainFrameTest: help: Opening the help by clicking on it");
     	jmif.click();
-    	try {
-			Thread.sleep(3600);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+    	if (debug)
+			ut.debugThread(3600, "MainFrameTest: help: ");
     	TraceManager.addDev("MainFrameTest: help: Done clicking");
     	
     	window2 = findFrame("TestTest").using(robot());
     	JButtonFixture jb = window2.button("Close Configuration");
     	TraceManager.addDev("MainFrameTest: help: Closing the help, by clicking on the button");
     	jb.click();
-    	try {
-			Thread.sleep(3600);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+    	if (debug)
+    		ut.debugThread(3600, "MainFrameTest: help: ");
     	TraceManager.addDev("MainFrameTest: help: Done closing");
     	TraceManager.addDev("MainFrameTest: help: Finished"+ 
 							System.lineSeparator() + "==============");
@@ -165,11 +153,8 @@ public class MainFrameBasicTests extends AssertJSwingJUnitTestCase {
     	JMenuItemFixture jmf = window.menuItem("V&V Graph Modification");
     	TraceManager.addDev("MainFrameTest: vandV: Clicking on the tab specific of graph modification in V&V");
 		jmf.click();
-		try {
-			Thread.sleep(3600);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		if (debug)
+			ut.debugThread(3600, "MainFrameTest: vandV: ");
 		TraceManager.addDev("MainFrameTest: vandV: Done clicking");
 		TraceManager.addDev("MainFrameTest: vandV: Finished " + 
 							System.lineSeparator() + "==============");
@@ -186,37 +171,24 @@ public class MainFrameBasicTests extends AssertJSwingJUnitTestCase {
     	JMenuItemFixture jmif = window.menuItem("File Model Project");	
 		TraceManager.addDev("MainFrameTest: openModel: Clicking on the tab for opening a model");
 		jmif.click();
-		try {
-			Thread.sleep(3600);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		if (debug)
+			ut.debugThread(3600, "MainFrameTest: openModel: ");
 		TraceManager.addDev("MainFrameTest: openModel: Done clicking, the file chooser is now open");
 		
 		JFileChooserFixture jfc = JFileChooserFinder.findFileChooser().using(robot());
 		TraceManager.addDev("MainFrameTest: openModel: Writting the testing path");
 		jfc.fileNameTextBox().pressAndReleaseKeys(model);	
-		try {
-			Thread.sleep(3600);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}	
+		if (debug)
+			ut.debugThread(3600, "MainFrameTest: openModel: ");	
 		TraceManager.addDev("MainFrameTest: openModel: Done writting");
 		
 		TraceManager.addDev("MainFrameTest: openModel: Clicking on the approval button of the file chooser");
 		jfc.approveButton().click();
-		try {
-			Thread.sleep(3600);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		TraceManager.addDev("MainFrameTest: openModel: Approve");
-		
-		try {
-			Thread.sleep(3600);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		if (debug)
+			ut.debugThread(3600, "MainFrameTest: openModel: ");
+		TraceManager.addDev("MainFrameTest: openModel: Approve");		
+		if (debug)
+			ut.debugThread(3600, "MainFrameTest: openModel: ");
 		TraceManager.addDev("MainFrameTest: openModel: Finished" + 
 							System.lineSeparator() + "==============");
     }
@@ -232,20 +204,14 @@ public class MainFrameBasicTests extends AssertJSwingJUnitTestCase {
 		JMenuItemFixture jmf = window.menuItem("File New");
 		TraceManager.addDev("MainFrameTest: createANewFile: Creating a new file by clicking on New");
 		jmf.click();
-		try {
-			Thread.sleep(3600);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		if (debug)
+			ut.debugThread(3600, "MainFrameTest: createANewFile: ");
 		TraceManager.addDev("MainFrameTest: createANewFile: File created");
 		
 		TraceManager.addDev("MainFrameTest: createANewFile: Right clicking on the file");
 		window.rightClick();
-		try {
-			Thread.sleep(3600);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		if (debug)
+			ut.debugThread(3600, "MainFrameTest: createANewFile: ");
 		TraceManager.addDev("MainFrameTest: createANewFile: Done clicking");
 		TraceManager.addDev("MainFrameTest: createANewFile: Finished" + 
 							System.lineSeparator() + "==============");
@@ -261,11 +227,8 @@ public class MainFrameBasicTests extends AssertJSwingJUnitTestCase {
 		JMenuItemFixture jmif = window.menuItem("File Save DTA");
 		TraceManager.addDev("MainFrameTest: saveDTA: Clicking on the tab DTA");
 		jmif.click();
-		try {
-			Thread.sleep(3600);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		if (debug)
+			ut.debugThread(3600, "MainFrameTest: saveDTA: ");
 		TraceManager.addDev("MainFrameTest: saveDTA: Done clicking");
 		TraceManager.addDev("MainFrameTest: saveDTA: Finished" + 
 							System.lineSeparator() + "==============");
@@ -274,6 +237,7 @@ public class MainFrameBasicTests extends AssertJSwingJUnitTestCase {
 	@Override
 	protected void onSetUp() {
 		Main frame = GuiActionRunner.execute(()-> new Main(false, false, false, false, false, false, false, false, false, false, false, false, false));
+		ut = new UsefulTools();
 		window = new FrameFixture(robot(), frame.getFrame());
 		window.show();
 	}
