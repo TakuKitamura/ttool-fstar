@@ -222,16 +222,17 @@ public class MainFrameBasicTests extends AssertJSwingJUnitTestCase {
 		/*
     	 * Description : Check the save DTA part, by clicking on it.
     	 */
-		TraceManager.addDev("==============" + System.lineSeparator() +
-							"MainFrameTest: saveDTA: Started");
-		JMenuItemFixture jmif = window.menuItem("File Save DTA");
-		TraceManager.addDev("MainFrameTest: saveDTA: Clicking on the tab DTA");
-		jmif.click();
-		if (debug)
-			ut.debugThread(3600, "MainFrameTest: saveDTA: ");
-		TraceManager.addDev("MainFrameTest: saveDTA: Done clicking");
-		TraceManager.addDev("MainFrameTest: saveDTA: Finished" + 
-							System.lineSeparator() + "==============");
+		ut.stringToKeyEvent("aaaa");
+//		TraceManager.addDev("==============" + System.lineSeparator() +
+//							"MainFrameTest: saveDTA: Started");
+//		JMenuItemFixture jmif = window.menuItem("File Save DTA");
+//		TraceManager.addDev("MainFrameTest: saveDTA: Clicking on the tab DTA");
+//		jmif.click();
+//		if (debug)
+//			ut.debugThread(3600, "MainFrameTest: saveDTA: ");
+//		TraceManager.addDev("MainFrameTest: saveDTA: Done clicking");
+//		TraceManager.addDev("MainFrameTest: saveDTA: Finished" + 
+//							System.lineSeparator() + "==============");
 	}
 	
 	@Override
