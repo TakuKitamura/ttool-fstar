@@ -32,8 +32,9 @@ public class UsefulTools {
 		}
     }
 	
-	public void stringToKeyEvent(String s) {
+	public int[] stringToKeyEvent(String s) {
 		ArrayList<Integer> t = new ArrayList<Integer>();
+		int i = 0;
 		
 		for (char c : s.toCharArray()) {
 			if (c < 123 && c > 96) {
@@ -50,11 +51,15 @@ public class UsefulTools {
 			else
 				t.add(specialCharToKeyEvent(c));
 		}
+		
+		int[] array = new int[t.size()] ;
+		
 		for (int a : t)
 		{
-			System.out.println(a);
+			array[i] = a;
+			i++;
 		}
-		
+		return array;
 	}
 	
 	public int numToKeyEvent(char c) {

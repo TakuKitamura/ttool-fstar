@@ -8,8 +8,6 @@ package ui.bot;
 
 import static org.assertj.swing.finder.WindowFinder.findFrame;
 
-import java.awt.event.KeyEvent;
-
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.finder.JFileChooserFinder;
 import org.assertj.swing.fixture.FrameFixture;
@@ -34,23 +32,6 @@ public class MainFrameBasicTests extends AssertJSwingJUnitTestCase {
     
     private UsefulTools ut;
     private boolean debug = true;
-    
-    // Path : /git/TTool/modeling/
-    private int[] project = {KeyEvent.VK_SLASH, KeyEvent.VK_G, KeyEvent.VK_I, KeyEvent.VK_T, KeyEvent.VK_SLASH, 
-    		               KeyEvent.VK_CAPS_LOCK, KeyEvent.VK_T, KeyEvent.VK_T, KeyEvent.VK_CAPS_LOCK, 
-    		               KeyEvent.VK_O, KeyEvent.VK_O, KeyEvent.VK_L, KeyEvent.VK_SLASH, KeyEvent.VK_M, 
-    		               KeyEvent.VK_O, KeyEvent.VK_D, KeyEvent.VK_E, KeyEvent.VK_L, KeyEvent.VK_I ,
-    		               KeyEvent.VK_N, KeyEvent.VK_G, KeyEvent.VK_SLASH};
-    
-    // Path : git/TTool/modeling/my-elt-filter.xml
-    private int[] model = {KeyEvent.VK_G, KeyEvent.VK_I, KeyEvent.VK_T, KeyEvent.VK_SLASH, 
-            KeyEvent.VK_CAPS_LOCK, KeyEvent.VK_T, KeyEvent.VK_T, KeyEvent.VK_CAPS_LOCK, 
-            KeyEvent.VK_O, KeyEvent.VK_O, KeyEvent.VK_L, KeyEvent.VK_SLASH, KeyEvent.VK_M, 
-            KeyEvent.VK_O, KeyEvent.VK_D, KeyEvent.VK_E, KeyEvent.VK_L, KeyEvent.VK_I ,
-            KeyEvent.VK_N, KeyEvent.VK_G, KeyEvent.VK_SLASH, KeyEvent.VK_M, KeyEvent.VK_Y, 
-            KeyEvent.VK_UNDERSCORE, KeyEvent.VK_E, KeyEvent.VK_L, KeyEvent.VK_N, KeyEvent.VK_UNDERSCORE, KeyEvent.VK_F, 
-            KeyEvent.VK_I, KeyEvent.VK_L, KeyEvent.VK_T, KeyEvent.VK_E, KeyEvent.VK_R, 
-            KeyEvent.VK_PERIOD, KeyEvent.VK_X, KeyEvent.VK_M, KeyEvent.VK_L};
     
 //  @Test
 //  public void capture() {
@@ -86,7 +67,7 @@ public class MainFrameBasicTests extends AssertJSwingJUnitTestCase {
 		TraceManager.addDev("MainFrameTest: openProject: Done clicking");
 		
 		TraceManager.addDev("MainFrameTest: openProject: Writting the testing path");
-		jfc.fileNameTextBox().pressAndReleaseKeys(project);	
+		jfc.fileNameTextBox().pressAndReleaseKeys(ut.stringToKeyEvent("/git/TTool/modeling"));	
 		if (debug)
 			ut.debugThread(3600, "MainFrameTest: openProject: ");
 		TraceManager.addDev("MainFrameTest: openProject: Done writting");
@@ -177,7 +158,7 @@ public class MainFrameBasicTests extends AssertJSwingJUnitTestCase {
 		
 		JFileChooserFixture jfc = JFileChooserFinder.findFileChooser().using(robot());
 		TraceManager.addDev("MainFrameTest: openModel: Writting the testing path");
-		jfc.fileNameTextBox().pressAndReleaseKeys(model);	
+		jfc.fileNameTextBox().pressAndReleaseKeys(ut.stringToKeyEvent("git/TTool/modeling/my_elt_filter.xml"));	
 		if (debug)
 			ut.debugThread(3600, "MainFrameTest: openModel: ");	
 		TraceManager.addDev("MainFrameTest: openModel: Done writting");
@@ -222,17 +203,16 @@ public class MainFrameBasicTests extends AssertJSwingJUnitTestCase {
 		/*
     	 * Description : Check the save DTA part, by clicking on it.
     	 */
-		ut.stringToKeyEvent("abc1A/");
-//		TraceManager.addDev("==============" + System.lineSeparator() +
-//							"MainFrameTest: saveDTA: Started");
-//		JMenuItemFixture jmif = window.menuItem("File Save DTA");
-//		TraceManager.addDev("MainFrameTest: saveDTA: Clicking on the tab DTA");
-//		jmif.click();
-//		if (debug)
-//			ut.debugThread(3600, "MainFrameTest: saveDTA: ");
-//		TraceManager.addDev("MainFrameTest: saveDTA: Done clicking");
-//		TraceManager.addDev("MainFrameTest: saveDTA: Finished" + 
-//							System.lineSeparator() + "==============");
+		TraceManager.addDev("==============" + System.lineSeparator() +
+							"MainFrameTest: saveDTA: Started");
+		JMenuItemFixture jmif = window.menuItem("File Save DTA");
+		TraceManager.addDev("MainFrameTest: saveDTA: Clicking on the tab DTA");
+		jmif.click();
+		if (debug)
+			ut.debugThread(3600, "MainFrameTest: saveDTA: ");
+		TraceManager.addDev("MainFrameTest: saveDTA: Done clicking");
+		TraceManager.addDev("MainFrameTest: saveDTA: Finished" + 
+							System.lineSeparator() + "==============");
 	}
 	
 	@Override
