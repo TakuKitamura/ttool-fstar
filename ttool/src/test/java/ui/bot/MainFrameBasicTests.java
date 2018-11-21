@@ -158,7 +158,7 @@ public class MainFrameBasicTests extends AssertJSwingJUnitTestCase {
 		
 		JFileChooserFixture jfc = JFileChooserFinder.findFileChooser().using(robot());
 		TraceManager.addDev("MainFrameTest: openModel: Writting the testing path");
-		jfc.fileNameTextBox().pressAndReleaseKeys(ut.stringToKeyEvent("git/TTool/modeling/my_elt_filter.xml"));	
+		jfc.fileNameTextBox().pressAndReleaseKeys(ut.stringToKeyEvent("git/TTool/modeling/my_eln_filter.xml"));	
 		if (debug)
 			ut.debugThread(3600, "MainFrameTest: openModel: ");	
 		TraceManager.addDev("MainFrameTest: openModel: Done writting");
