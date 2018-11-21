@@ -36,7 +36,19 @@ public class UsefulTools {
 		ArrayList<Integer> t = new ArrayList<Integer>();
 		
 		for (char c : s.toCharArray()) {
-			t.add(charToKeyEvent(c));
+			if (c < 123 && c > 96) {
+				t.add(charToKeyEvent(c));
+			}
+			else if (c < 91 && c > 64) {
+				t.add(KeyEvent.VK_CAPS_LOCK);
+				t.add(upCharToKeyEvent(c));
+				t.add(KeyEvent.VK_CAPS_LOCK);
+			}
+			else if (c < 58 && c > 47) {
+				t.add(numToKeyEvent(c));
+			}
+			else
+				t.add(specialCharToKeyEvent(c));
 		}
 		for (int a : t)
 		{
@@ -67,6 +79,66 @@ public class UsefulTools {
 			case '9' : code = KeyEvent.VK_9;
 				break;
 			default:
+				TraceManager.addDev("UsefulTools : numToKeyEvent : char not foud");
+		}
+		return code;
+	}
+	
+	public int specialCharToKeyEvent(char c) {
+		int code = 0;
+		switch(c) {
+			case '@' : code = KeyEvent.VK_AT;
+				break;
+			case '\\' : code = KeyEvent.VK_BACK_SLASH;
+				break;
+			case '/' : code = KeyEvent.VK_SLASH;
+				break;
+			case '^' : code = KeyEvent.VK_CIRCUMFLEX;
+				break;
+			case '[' : code = KeyEvent.VK_OPEN_BRACKET;
+				break;
+			case ']' : code = KeyEvent.VK_CLOSE_BRACKET;
+				break;
+			case '(' : code = KeyEvent.VK_LEFT_PARENTHESIS;
+				break;
+			case ')' : code = KeyEvent.VK_RIGHT_PARENTHESIS;
+				break;
+			case '{' : code = KeyEvent.VK_BRACELEFT;
+				break;
+			case '}' : code = KeyEvent.VK_BRACERIGHT;
+				break;
+			case ':' : code = KeyEvent.VK_COLON;
+				break;
+			case ';' : code = KeyEvent.VK_SEMICOLON;
+				break;
+			case '.' : code = KeyEvent.VK_PERIOD;
+				break;
+			case ',' : code = KeyEvent.VK_COMMA;
+				break;
+			case '<' : code = KeyEvent.VK_LESS;
+				break;
+			case '>' : code = KeyEvent.VK_GREATER;
+				break;
+			case '!' : code = KeyEvent.VK_EXCLAMATION_MARK;
+				break;
+			case ' ' : code = KeyEvent.VK_SPACE;
+				break;
+			case '-' : code = KeyEvent.VK_MINUS;
+				break;
+			case '+' : code = KeyEvent.VK_PLUS;
+				break;
+			case '*' : code = KeyEvent.VK_ASTERISK;
+				break;
+			case '=' : code = KeyEvent.VK_EQUALS;
+				break;
+			case '$' : code = KeyEvent.VK_DOLLAR;
+				break;
+			case '#' : code = KeyEvent.VK_NUMBER_SIGN;
+				break;
+			case '_' : code = KeyEvent.VK_UNDERSCORE;
+				break;
+			default:
+				TraceManager.addDev("UsefulTools : specialCharToKeyEvent : char not foud");
 		}
 		return code;
 	}
@@ -127,7 +199,70 @@ public class UsefulTools {
 			case 'z' : code = KeyEvent.VK_Z;
 				break;			
 			default:
+				TraceManager.addDev("UsefulTools : charToKeyEvent : char not foud");
 		}
 		return code;
 	}
+	
+	public int upCharToKeyEvent(char c) {
+		int code = 0;
+		switch(c) {
+			case 'A' : code = KeyEvent.VK_A;
+				break;
+			case 'B' : code = KeyEvent.VK_B;
+				break;
+			case 'C' : code = KeyEvent.VK_C;
+				break;
+			case 'D' : code = KeyEvent.VK_D;
+				break;
+			case 'E' : code = KeyEvent.VK_E;
+				break;
+			case 'F' : code = KeyEvent.VK_F;
+				break;
+			case 'G' : code = KeyEvent.VK_G;
+				break;
+			case 'H' : code = KeyEvent.VK_H;
+				break;
+			case 'I' : code = KeyEvent.VK_I;
+				break;
+			case 'J' : code = KeyEvent.VK_J;
+				break;
+			case 'K' : code = KeyEvent.VK_K;
+				break;
+			case 'L' : code = KeyEvent.VK_L;
+				break;
+			case 'M' : code = KeyEvent.VK_M;
+				break;
+			case 'N' : code = KeyEvent.VK_N;
+				break;
+			case 'O' : code = KeyEvent.VK_O;
+				break;
+			case 'P' : code = KeyEvent.VK_P;
+				break;
+			case 'Q' : code = KeyEvent.VK_Q;
+				break;
+			case 'R' : code = KeyEvent.VK_R;
+				break;
+			case 'S' : code = KeyEvent.VK_S;
+				break;
+			case 'T' : code = KeyEvent.VK_T;
+				break;
+			case 'U' : code = KeyEvent.VK_U;
+				break;
+			case 'V' : code = KeyEvent.VK_V;
+				break;
+			case 'W' : code = KeyEvent.VK_W;
+				break;
+			case 'X' : code = KeyEvent.VK_X;
+				break;
+			case 'Y' : code = KeyEvent.VK_Y;
+				break;
+			case 'Z' : code = KeyEvent.VK_Z;
+				break;			
+			default:
+				TraceManager.addDev("UsefulTools : upCharToKeyEvent : char not foud");
+		}
+		return code;
+	}
+	
 }

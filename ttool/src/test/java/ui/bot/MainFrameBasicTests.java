@@ -222,7 +222,7 @@ public class MainFrameBasicTests extends AssertJSwingJUnitTestCase {
 		/*
     	 * Description : Check the save DTA part, by clicking on it.
     	 */
-		ut.stringToKeyEvent("aaaa");
+		ut.stringToKeyEvent("abc1A/");
 //		TraceManager.addDev("==============" + System.lineSeparator() +
 //							"MainFrameTest: saveDTA: Started");
 //		JMenuItemFixture jmif = window.menuItem("File Save DTA");
