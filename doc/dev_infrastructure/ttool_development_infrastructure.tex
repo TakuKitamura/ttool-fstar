@@ -92,6 +92,7 @@ Modifications} & \textbf{Sections Modified} \\
 1.1 & 10/02/2017 & Added Eclipse IDE development + tests & All \\ 
 1.2 & 11/02/2017 & Added more info on tests & Tests \\ 
 1.3 & 02/10/2018 & Update and added GUI development & All\\
+1.4 & 22/11/2018 & Added more info on automated tests and on the installer & Automated tests / Installer \\
 \hline
 \end{tabular}
 \end{adjustbox}
@@ -1053,8 +1054,40 @@ java -Xmx1024m -Djavax.net.ssl.trustStore=ServerKeyStore \
 $
 \end{verbatim}
 
-\subsection{Automated Tests}
-TODO
+\newpage
+
+\section{Automated Tests}
+\subsection{Research Stage}
+In order to find the right framework, it needed to put some criteria in our research to determine : \textit{What is a good GUI automated testing framework ?}
+After research, to answer this question, we need : \textit{"Flexibility, Capacity to work with the other framework already implemented and to be updatable"}
+But this criterias are not enougth to make a good and stable framework. \newline
+Then, for it, the team added the following criteria :
+
+\begin{itemize}
+  \item \textbf{Work on all operating systems} : to work on MacOS, Linux and Windows
+  \item \textbf{Good Documentation} : to have a simple, understable documentation wioth possibly tutorials or others things
+  \item \textbf{Support Java}
+  \item \textbf{Support Swing}
+  \item \textbf{Open Source} : and possibly have a simple meaning to see the source
+  \item \textbf{Test Automation} : Unit test with a robot
+  \item \textbf{Regression Testing} : re-running functional/non-functional test to ensure that previously developed and tested software still performas
+  \item \textbf{Flexible}
+  \item \textbf{Record and Replay capabilities} : to record and replay the test
+  \item \textbf{Living Framework} : Updated regulary
+  \item \textbf{Work with other frameworks}
+\end{itemize}
+
+After a few weeks of research, it had been decided to choose the framework named \textbf{AssertJ}
+
+\subsection{AssertJ}
+AssertJ is a project developed by Joel Costigliola, which purpose is to rovides a fluent interface for writing assertions. 
+AssertJ is a fork of a previous project named FEST Assert. Its main goal is to improve test code readability and make maintenance of tests easier.
+AssertJ works like a Java Library and support also Swing. In order to create the automated tests sequence, we use a part of the library, named AssertJ Swing.
+AssertJ Swing is based on JDK standard types assertions and can be used with either JUnit or TestNG.
+The current verion of AssertJ Swing use in this project is the 3.8.0, which works with Java 8 or higher.
+
+\subsubsection{File instructions}
+\subsubsection{Test instructions}
 
 \newpage 
 
