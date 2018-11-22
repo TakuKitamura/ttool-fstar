@@ -1064,30 +1064,45 @@ But this criterias are not enougth to make a good and stable framework. \newline
 Then, for it, the team added the following criteria :
 
 \begin{itemize}
-  \item \textbf{Work on all operating systems} : to work on MacOS, Linux and Windows
-  \item \textbf{Good Documentation} : to have a simple, understable documentation wioth possibly tutorials or others things
+  \item \textbf{Work on all operating systems}: to work on MacOS, Linux and Windows
+  \item \textbf{Good Documentation}: to have a simple, understable documentation wioth possibly tutorials or others things
   \item \textbf{Support Java}
   \item \textbf{Support Swing}
-  \item \textbf{Open Source} : and possibly have a simple meaning to see the source
-  \item \textbf{Test Automation} : Unit test with a robot
-  \item \textbf{Regression Testing} : re-running functional/non-functional test to ensure that previously developed and tested software still performas
+  \item \textbf{Open Source}: and possibly have a simple meaning to see the source
+  \item \textbf{Test Automation}: Unit test with a robot
+  \item \textbf{Regression Testing}: re-running functional/non-functional test to ensure that previously developed and tested software still performas
   \item \textbf{Flexible}
-  \item \textbf{Record and Replay capabilities} : to record and replay the test
-  \item \textbf{Living Framework} : Updated regulary
+  \item \textbf{Record and Replay capabilities}: to record and replay the test
+  \item \textbf{Living Framework}: Updated regulary
   \item \textbf{Work with other frameworks}
 \end{itemize}
 
 After a few weeks of research, it had been decided to choose the framework named \textbf{AssertJ}
 
 \subsection{AssertJ}
-AssertJ is a project developed by Joel Costigliola, which purpose is to rovides a fluent interface for writing assertions. 
-AssertJ is a fork of a previous project named FEST Assert. Its main goal is to improve test code readability and make maintenance of tests easier.
-AssertJ works like a Java Library and support also Swing. In order to create the automated tests sequence, we use a part of the library, named AssertJ Swing.
-AssertJ Swing is based on JDK standard types assertions and can be used with either JUnit or TestNG.
-The current verion of AssertJ Swing use in this project is the 3.8.0, which works with Java 8 or higher.
+AssertJ is a project developed by \textbf{Joel Costigliola}, which purpose is to rovides a fluent interface for writing assertions. 
+AssertJ is a fork of a previous project named \textbf{FEST Assert}. Its main goal is to improve test code readability and make maintenance of tests easier.
+AssertJ works like a Java Library and support also Swing.\newline
+In order to create the automated tests sequence, we use a part of the library, named \textbf{AssertJ Swing}.
+AssertJ Swing is based on JDK standard types assertions and can be used with either JUnit or TestNG. \newline
+The current verion of AssertJ Swing use in this project is the \textbf{3.8.0}, which works with \textit{Java 8} or higher.
 
-\subsubsection{File instructions}
-\subsubsection{Test instructions}
+\newpage
+
+\subsection{Coding Instructions}
+Before doing any tests, make sure that all the libs are present and available. \newline
+If you are coding under an Integrated Development Environment (IDE) as Eclipse or IntelliJ, you should also download the AssertJ plugin. More informations here for :
+
+\begin{itemize}
+   \item \textbf{Eclipse}: \url{http://joel-costigliola.github.io/assertj-eclipse-plugin/}
+   \item \textbf{IntelliJ}:\url{https://plugins.jetbrains.com/plugin/10345-assertions2assertj}
+\end{itemize}
+
+\subsubsection{File Instructions}
+In order to create
+
+\subsubsection{Test Instructions}
+Here is an example of a fine test:
 
 \newpage 
 
