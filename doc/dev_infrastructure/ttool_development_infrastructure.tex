@@ -1098,8 +1098,29 @@ If you are coding under an Integrated Development Environment (IDE) as Eclipse o
    \item \textbf{IntelliJ}:\url{https://plugins.jetbrains.com/plugin/10345-assertions2assertj}
 \end{itemize}
 
+All the files about this automated sequence of tests, are in the following directory : \textbf{ttool/src/test/java/ui/bot/}
+
 \subsubsection{File Instructions}
-In order to create
+In order to create a class of tests, the developer need to find the package ui.bot, then to click on it and to select the tab \textbf{New/Class}.The developper will see the following window appear as in figure~\ref{fig:image15}:
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=0.8\textwidth]{images/image16.png}
+\end{center}
+\caption{}
+\label{fig:image15}
+\end{figure}
+
+The developer only need to change one thing: the superclass of the class. The superclass has to be form AssertJ libraary, and the most useful one is the superclass \textbf{AssertJSwingJUnitTestCase} \newline
+The example in figuree~\ref{fig:image16} is what the developer should find as superclass.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=0.9\textwidth]{images/image17.png}
+\end{center}
+\caption{}
+\label{fig:image16}
+\end{figure}
 
 \subsubsection{Test Instructions}
 Here is an example of a fine test:
