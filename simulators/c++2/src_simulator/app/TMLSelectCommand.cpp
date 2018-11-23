@@ -104,7 +104,7 @@ void TMLSelectCommand::execute(){
 			if (!_channel[_indexNextCommand]->read()) std::cout <<"Fatal error read!!!!\n" ;
 			aFinalIndex=_indexNextCommand;
 			//check=true;
-		}else{
+		} else {
 		 	_channel[_indexNextCommand]->cancelReadTransaction();
 		}
 	}

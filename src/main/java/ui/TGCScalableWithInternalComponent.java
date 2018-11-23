@@ -48,7 +48,6 @@ package ui;
 public abstract class TGCScalableWithInternalComponent extends TGCWithInternalComponent implements ScalableTGComponent {
     
 	protected boolean rescaled = false;
-    
 	protected double oldScaleFactor;
 
     public TGCScalableWithInternalComponent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
@@ -102,7 +101,7 @@ public abstract class TGCScalableWithInternalComponent extends TGCWithInternalCo
             minX = tdp.getMinX();
             maxX = tdp.getMaxX();
             minY = tdp.getMinY();
-            maxY = tdp.getMinY();
+            maxY = tdp.getMaxY();
         }
 
         //TraceManager.addDev("x=" + x + " y=" + y + " width=" + width + " height=" + height);
@@ -154,7 +153,7 @@ public abstract class TGCScalableWithInternalComponent extends TGCWithInternalCo
             minX = tdp.getMinX();
             maxX = tdp.getMaxX();
             minY = tdp.getMinY();
-            maxY = tdp.getMinY();
+            maxY = tdp.getMaxY();
         }
 
         rescaled = true;
