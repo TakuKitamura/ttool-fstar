@@ -98,6 +98,13 @@ public abstract class TGCScalableWithInternalComponent extends TGCWithInternalCo
         maxX *= factor;
         maxY *= factor;
 
+        if (father == null) {
+            minX = tdp.getMinX();
+            maxX = tdp.getMaxX();
+            minY = tdp.getMinY();
+            maxY = tdp.getMinY();
+        }
+
         //TraceManager.addDev("x=" + x + " y=" + y + " width=" + width + " height=" + height);
 
         oldScaleFactor = scaleFactor;
@@ -142,6 +149,13 @@ public abstract class TGCScalableWithInternalComponent extends TGCWithInternalCo
 
         dMaxWidth = dMaxWidth - maxWidth;
         dMaxHeight = dMaxHeight - maxHeight;
+
+        if (father == null) {
+            minX = tdp.getMinX();
+            maxX = tdp.getMaxX();
+            minY = tdp.getMinY();
+            maxY = tdp.getMinY();
+        }
 
         rescaled = true;
     }
