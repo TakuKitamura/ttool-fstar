@@ -97,12 +97,7 @@ public abstract class TGCScalableWithInternalComponent extends TGCWithInternalCo
         maxX *= factor;
         maxY *= factor;
 
-        if (father == null) {
-            minX = tdp.getMinX();
-            maxX = tdp.getMaxX();
-            minY = tdp.getMinY();
-            maxY = tdp.getMaxY();
-        }
+
 
         //TraceManager.addDev("x=" + x + " y=" + y + " width=" + width + " height=" + height);
 
@@ -111,6 +106,11 @@ public abstract class TGCScalableWithInternalComponent extends TGCWithInternalCo
         if (father != null) {
             // Must rescale my zone...
             resizeWithFather();
+        } else {
+            minX = (int)(tdp.getMinX()/tdp.getZoom());
+            maxX = (int)(tdp.getMaxX()/tdp.getZoom());
+            minY = (int)(tdp.getMinY()/tdp.getZoom());
+            maxY = (int)(tdp.getMaxY()/tdp.getZoom());
         }
 
         setMoveCd(x, y, true);
@@ -122,7 +122,6 @@ public abstract class TGCScalableWithInternalComponent extends TGCWithInternalCo
                 ((ScalableTGComponent)tgcomponent[i]).rescale(scaleFactor);
             }
         }
-
         hasBeenResized();
     }
 
@@ -150,10 +149,10 @@ public abstract class TGCScalableWithInternalComponent extends TGCWithInternalCo
         dMaxHeight = dMaxHeight - maxHeight;
 
         if (father == null) {
-            minX = tdp.getMinX();
-            maxX = tdp.getMaxX();
-            minY = tdp.getMinY();
-            maxY = tdp.getMaxY();
+            minX = (int)(tdp.getMinX()/tdp.getZoom());
+            maxX = (int)(tdp.getMaxX()/tdp.getZoom());
+            minY = (int)(tdp.getMinY()/tdp.getZoom());
+            maxY = (int)(tdp.getMaxY()/tdp.getZoom());
         }
 
         rescaled = true;

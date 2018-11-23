@@ -100,6 +100,12 @@ public abstract class TGCScalableWithoutInternalComponent extends TGCWithoutInte
         if (father != null) {
             // Must rescale my zone...
             resizeWithFather();
+        } else {
+            minX = (int)(tdp.getMinX()/tdp.getZoom());
+            maxX = (int)(tdp.getMaxX()/tdp.getZoom());
+            minY = (int)(tdp.getMinY()/tdp.getZoom());
+            maxY = (int)(tdp.getMaxY()/tdp.getZoom());
+
         }
 	
         setMoveCd(x, y, true);
@@ -127,6 +133,13 @@ public abstract class TGCScalableWithoutInternalComponent extends TGCWithoutInte
 
         dMaxWidth = dMaxWidth - maxWidth;
         dMaxHeight = dMaxHeight - maxHeight;
+
+        if (father == null) {
+            minX = (int)(tdp.getMinX()/tdp.getZoom());
+            maxX = (int)(tdp.getMaxX()/tdp.getZoom());
+            minY = (int)(tdp.getMinY()/tdp.getZoom());
+            maxY = (int)(tdp.getMaxY()/tdp.getZoom());
+        }
 
         rescaled = true;
     }

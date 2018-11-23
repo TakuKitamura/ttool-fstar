@@ -89,7 +89,7 @@ public class TestTDiagramPanel extends AbstractUITest {
     /**
      * Issue #81
      */
-    /*@Test
+    @Test
     public void testMoveAtomicComponentAfterZoom() {
         diagramPanel.setZoom(3.0);
 
@@ -100,10 +100,10 @@ public class TestTDiagramPanel extends AbstractUITest {
         diagramPanel.rightComponent();
 
         checkResults(expectedPos, atomicComponent);
-    }*/
+    }
 
 
-    /*
+
     @Test
     public void testMoveCompositeComponentAfterZoom() {
         diagramPanel.setZoom(3.0);
@@ -115,7 +115,7 @@ public class TestTDiagramPanel extends AbstractUITest {
         diagramPanel.rightComponent();
 
         checkResults(expectedPos, compositeComponent);
-    } */
+    }
 
     private void checkResults(final Point expectedPos, final TGComponent component) {
         assertTrue("X position is " + component.getX() + " instead of " + expectedPos.x + ".", component.getX() == expectedPos.x);
