@@ -693,6 +693,7 @@ automatically enforced.
 
 
 \subsubsection{How to output debug information}
+\label{sec:debug_info}
 Do as follows:
 \begin{lstlisting}
 TraceManager.addDev("blah blah blah");
@@ -1149,7 +1150,18 @@ protected void onTearDown() {
 \end{verbatim}
 
 \subsubsection{Test Instructions}
-Here is an example of a fine test:
+The following rules are:
+
+\begin{itemize}
+  \item \textbf{@Test}: First of all, before eveything you need to precise that the function is a test. For that, the developer only need to put \textbf{@Test} before the name of the function
+  \item \textbf{Name}: Clear name in order to understand the meanning of the test
+  \item \textbf{Description}: Need to be clear and not too long on the subject of the test
+  \item \textbf{Trace in Console}: As saw in \ref{sec:debug_info}, the developer need to use TraceManager.addDev() to put some words in the console. Now the real utilisation of TraceManager here is to inform what the test is doing and to have a trace in the console. The fact that there is trace in the console allow to debug and to know where a test could fail.\newline
+The developer need to put a trace before and after an action is performed
+  \item \textbf{Debug}: For that the developer can usesome of the functions developed in the file UsefulTools.java. This file has some functions useful for debugging or even just transform a string into KeyEvent for an input
+\end{itemize}
+
+With all the rules, here is an example of a fine test:
 \begin{verbatim}
 private FrameFixture window;
 private UsefulTools ut;
