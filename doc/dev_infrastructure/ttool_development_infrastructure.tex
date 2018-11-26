@@ -1125,14 +1125,61 @@ The example in figuree~\ref{fig:image16} is what the developer should find as su
 Now that constraint is done, here is the following files instructions:
 
 \begin{itemize}
-  \item \textbf{Avoid bad names}: for the files, it has to be clear. 
+  \item \textbf{Avoid bad names}: for the files, it has to be clear on what the developers are doing on the file itself.
   \item \textbf{Not too much tests by files}: no more than 10 tests by files. Its avoid to have files with a lot of tests, to be lost between some tests, to have file with too much lines and also to have tests that have no record with the name of the file. Its allow the developer to find more quickly tests and to ensure the name of the file.
   \item \textbf{Following the previous instructions}: see ~\ref{sec:code_info}
-
 \end{itemize}
+
+TODO: Explain what to put in the end of the file tests
+
+\begin{verbatim}
+@Override
+protected void onSetUp() {
+   Main frame = GuiActionRunner.execute(()-> new Main(false, false, false, false, false, false, false, false, false, false, false, false, false));
+   window = new FrameFixture(robot(), frame.getFrame());
+   window.show();
+}
+\end{verbatim}
+\begin{verbatim}
+@Override
+protected void onTearDown() {
+   super.onTearDown();
+   window.cleanUp();
+}
+\end{verbatim}
 
 \subsubsection{Test Instructions}
 Here is an example of a fine test:
+\begin{verbatim}
+private FrameFixture window;
+private UsefulTools ut;
+private boolean debug = true;
+
+@Test
+public void createANewFile() {
+   /*
+    * Description : Verify if TTool can create a new file, by clicking on the File menu then on
+    * the tab New. Then right click on it.
+    */
+
+   TraceManager.addDev("==============" + System.lineSeparator() +
+                       "MainFrameTest: createANewFile: Started");
+   JMenuItemFixture jmf = window.menuItem("File New");
+   TraceManager.addDev("MainFrameTest: createANewFile: Creating a new file by clicking on New");
+   jmf.click();
+   if (debug)
+      ut.debugThread(3600, "MainFrameTest: createANewFile: ");
+   TraceManager.addDev("MainFrameTest: createANewFile: File created");
+		
+   TraceManager.addDev("MainFrameTest: createANewFile: Right clicking on the file");
+   window.rightClick();
+   if (debug)
+      ut.debugThread(3600, "MainFrameTest: createANewFile: ");
+   TraceManager.addDev("MainFrameTest: createANewFile: Done clicking");
+   TraceManager.addDev("MainFrameTest: createANewFile: Finished" + 
+                       System.lineSeparator() + "==============");
+}
+\end{verbatim}
 
 \newpage 
 
