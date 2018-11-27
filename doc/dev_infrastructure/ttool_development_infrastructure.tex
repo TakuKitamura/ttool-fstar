@@ -1102,7 +1102,7 @@ If you are coding under an Integrated Development Environment (IDE) as Eclipse o
 All the files about this automated sequence of tests, are in the following directory : \textbf{ttool/src/test/java/ui/bot/}
 
 \subsubsection{File Instructions}
-In order to create a class of tests, the developer need to find the package ui.bot, then to click on it and to select the tab \textbf{New/Class}.The developper will see the following window appear as in figure~\ref{fig:image15}:
+In order to create a class of tests, the developer need to find the package \textbf{ui.bot}, then to click on it and to select the tab \textbf{New/Class}.The developper will see the following window appear as in figure~\ref{fig:image15}:
 
 \begin{figure}[H]
 \begin{center}
@@ -1112,7 +1112,7 @@ In order to create a class of tests, the developer need to find the package ui.b
 \label{fig:image15}
 \end{figure}
 
-The developer only need to change one thing: the superclass of the class. The superclass has to be form AssertJ libraary, and the most useful one is the superclass \textbf{AssertJSwingJUnitTestCase} \newline
+The developer only need to change one thing: the superclass of the class. The superclass has to be from \textbf{AssertJ library}, and the most useful one is the superclass \textbf{AssertJSwingJUnitTestCase} \newline
 The example in figuree~\ref{fig:image16} is what the developer should find as superclass.
 
 \begin{figure}[H]
@@ -1131,7 +1131,8 @@ Now that constraint is done, here is the following files instructions:
   \item \textbf{Following the previous instructions}: see ~\ref{sec:code_info}
 \end{itemize}
 
-TODO: Explain what to put in the end of the file tests
+The main function of each file will, if the developer do his job fine, have to extends \textbf{AssertJSwingJUnitTestCase}.Thus the developer will have to implement a method named : \textbf{onSetUp()} \newline
+This method has for purpose to initializes the test fixtures and to initializes also the frame on which tests are based. Here is an example of what could be the method :
 
 \begin{verbatim}
 @Override
@@ -1141,6 +1142,11 @@ protected void onSetUp() {
    window.show();
 }
 \end{verbatim}
+
+In this example there is some points to clarify. First of all the Main obeject is an object containing a frame (the frame on which the tests are based). The robot() in the definition of FrameFixture is not forced. The robot() allow to automate the test. Finally the window.show allow the user to see all the tests on the frame.\newline
+At the end of the file, it is better but not forced to have a method called \textbf{onTearDown()} whose aim is to clean up the frame fixture, thanks to the method named \textbf{cleanUp()}.
+Here is an example of the method onTearDown:
+
 \begin{verbatim}
 @Override
 protected void onTearDown() {
@@ -1153,7 +1159,7 @@ protected void onTearDown() {
 The following rules are:
 
 \begin{itemize}
-  \item \textbf{@Test}: First of all, before eveything you need to precise that the function is a test. For that, the developer only need to put \textbf{@Test} before the name of the function
+  \item \textbf{@Test}: First of all, before eveything you need to precise that the method is a test. For that, the developer only need to put \textbf{@Test} before the name of the function
   \item \textbf{Name}: Clear name in order to understand the meanning of the test
   \item \textbf{Description}: Need to be clear and not too long on the subject of the test
   \item \textbf{Trace in Console}: As saw in \ref{sec:debug_info}, the developer need to use TraceManager.addDev() to put some words in the console. Now the real utilisation of TraceManager here is to inform what the test is doing and to have a trace in the console. The fact that there is trace in the console allow to debug and to know where a test could fail.\newline
@@ -1196,7 +1202,10 @@ public void createANewFile() {
 \newpage 
 
 \section{Installing}
-TODO
+\subsection{Operating System}
+\subsubsection{Windows}
+\subsubsection{Linux}
+\subsubsection{MacOs}
 
 \newpage
 
