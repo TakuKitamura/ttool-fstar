@@ -8,6 +8,8 @@ package ui.bot;
 
 import static org.assertj.swing.finder.WindowFinder.findFrame;
 
+import java.awt.Component;
+
 import javax.swing.JTabbedPane;
 
 import org.assertj.swing.edt.GuiActionRunner;
@@ -183,6 +185,10 @@ public class MainFrameBasicTests extends AssertJSwingJUnitTestCase {
 
 		JTabbedPane test = frame.getMainTabbedPane();
 		TraceManager.addDev(test.getName());
+		TraceManager.addDev("" + test.getTabCount());
+		window.rightClick();
+		if (debug)
+			ut.debugThread(3600, "MainFrameTest: openModel: ");
 		
 		TraceManager.addDev("MainFrameTest: openModel: Finished" + 
 							System.lineSeparator() + "==============");
