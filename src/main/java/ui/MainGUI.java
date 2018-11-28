@@ -387,8 +387,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
    }
    
    public void build() {
-       // Swing look and feel
-
+       // Swing look and feel   
        //try {
        try {
            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
@@ -557,7 +556,10 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
        // Panels
        //analysisPanels = new Vector();
        //designPanels = new Vector();
-
+   }
+   
+   public JTabbedPane getMainTabbedPane() {
+	   return mainTabbedPane;
    }
 
    public void initActions() {
@@ -1706,6 +1708,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
        tabs = new Vector<TURTLEPanel>();
 
        frame.setVisible(true);
+       mainTabbedPane.setName("Main TabbedPane");
    }
 
    public Vector<TURTLEPanel> getTabs() {

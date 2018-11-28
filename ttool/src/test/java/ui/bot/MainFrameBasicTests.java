@@ -8,12 +8,16 @@ package ui.bot;
 
 import static org.assertj.swing.finder.WindowFinder.findFrame;
 
+import javax.swing.JTabbedPane;
+
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.finder.JFileChooserFinder;
+import org.assertj.swing.finder.JOptionPaneFinder;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JButtonFixture;
 import org.assertj.swing.fixture.JFileChooserFixture;
 import org.assertj.swing.fixture.JMenuItemFixture;
+import org.assertj.swing.fixture.JOptionPaneFixture;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
 
@@ -29,6 +33,7 @@ import myutil.TraceManager;
 public class MainFrameBasicTests extends AssertJSwingJUnitTestCase {
     private FrameFixture window;
     private FrameFixture window2;
+    private Main frame;
     
     private UsefulTools ut;
     private boolean debug = true;
@@ -67,7 +72,7 @@ public class MainFrameBasicTests extends AssertJSwingJUnitTestCase {
 		TraceManager.addDev("MainFrameTest: openProject: Done clicking");
 		
 		TraceManager.addDev("MainFrameTest: openProject: Writting the testing path");
-		jfc.fileNameTextBox().pressAndReleaseKeys(ut.stringToKeyEvent("/git/TTool/modeling"));	
+		jfc.fileNameTextBox().pressAndReleaseKeys(ut.stringToKeyEvent("/git/TTool/modeling/"));	
 		if (debug)
 			ut.debugThread(3600, "MainFrameTest: openProject: ");
 		TraceManager.addDev("MainFrameTest: openProject: Done writting");
@@ -158,7 +163,7 @@ public class MainFrameBasicTests extends AssertJSwingJUnitTestCase {
 		
 		JFileChooserFixture jfc = JFileChooserFinder.findFileChooser().using(robot());
 		TraceManager.addDev("MainFrameTest: openModel: Writting the testing path");
-		jfc.fileNameTextBox().pressAndReleaseKeys(ut.stringToKeyEvent("git/TTool/modeling/my_eln_filter.xml"));	
+		jfc.fileNameTextBox().pressAndReleaseKeys(ut.stringToKeyEvent("git/TTool/modeling/DIPLODOCUS/ZigBeeTutorial.xml"));	
 		if (debug)
 			ut.debugThread(3600, "MainFrameTest: openModel: ");	
 		TraceManager.addDev("MainFrameTest: openModel: Done writting");
@@ -168,8 +173,17 @@ public class MainFrameBasicTests extends AssertJSwingJUnitTestCase {
 		if (debug)
 			ut.debugThread(3600, "MainFrameTest: openModel: ");
 		TraceManager.addDev("MainFrameTest: openModel: Approve");		
+		
+		TraceManager.addDev("MainFrameTest: openModel: Clicking on the panel");
+		JOptionPaneFixture jopf = JOptionPaneFinder.findOptionPane().using(robot());
+		jopf.button().click();
 		if (debug)
 			ut.debugThread(3600, "MainFrameTest: openModel: ");
+		TraceManager.addDev("MainFrameTest: openModel: End clicking on the error");
+
+		JTabbedPane test = frame.getMainTabbedPane();
+		TraceManager.addDev(test.getName());
+		
 		TraceManager.addDev("MainFrameTest: openModel: Finished" + 
 							System.lineSeparator() + "==============");
     }
@@ -217,7 +231,7 @@ public class MainFrameBasicTests extends AssertJSwingJUnitTestCase {
 	
 	@Override
 	protected void onSetUp() {
-		Main frame = GuiActionRunner.execute(()-> new Main(false, false, false, false, false, false, false, false, false, false, false, false, false));
+		frame = GuiActionRunner.execute(()-> new Main(false, false, false, false, false, false, false, false, false, false, false, false, false));
 		ut = new UsefulTools();
 		window = new FrameFixture(robot(), frame.getFrame());
 		window.show();
