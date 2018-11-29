@@ -20,6 +20,7 @@ import org.assertj.swing.fixture.JButtonFixture;
 import org.assertj.swing.fixture.JFileChooserFixture;
 import org.assertj.swing.fixture.JMenuItemFixture;
 import org.assertj.swing.fixture.JOptionPaneFixture;
+import org.assertj.swing.fixture.JTabbedPaneFixture;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
 
@@ -183,13 +184,31 @@ public class MainFrameBasicTests extends AssertJSwingJUnitTestCase {
 			ut.debugThread(3600, "MainFrameTest: openModel: ");
 		TraceManager.addDev("MainFrameTest: openModel: End clicking on the error");
 
-		JTabbedPane test = frame.getMainTabbedPane();
-		TraceManager.addDev(test.getName());
-		TraceManager.addDev("" + test.getTabCount());
-		window.rightClick();
+		JTabbedPaneFixture test = window.tabbedPane("Main TabbedPane");
+		test.selectTab(0).click();
 		if (debug)
 			ut.debugThread(3600, "MainFrameTest: openModel: ");
 		
+		test.selectTab(5).click();
+		if (debug)
+			ut.debugThread(3600, "MainFrameTest: openModel: ");
+		
+		String[] names = test.tabTitles();
+		for (String s : names)
+			TraceManager.addDev(s);
+		
+		JTabbedPaneFixture t2 = test.selectTab(5);
+		if (debug)
+			ut.debugThread(3600, "MainFrameTest: openModel: ");
+		
+		names = t2.tabTitles();
+		for (String s : names)
+			TraceManager.addDev(s);
+		
+//		window.rightClick();
+//		if (debug)
+//			ut.debugThread(3600, "MainFrameTest: openModel: ");
+//		
 		TraceManager.addDev("MainFrameTest: openModel: Finished" + 
 							System.lineSeparator() + "==============");
     }
