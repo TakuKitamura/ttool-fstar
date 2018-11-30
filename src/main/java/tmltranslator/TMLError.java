@@ -63,6 +63,7 @@ public class TMLError {
     public String message;
 	public TMLTask task;
 	public TMLActivityElement element;
+	public Object referenceObject;
     
     public TMLError(int _type) {
         type = _type;

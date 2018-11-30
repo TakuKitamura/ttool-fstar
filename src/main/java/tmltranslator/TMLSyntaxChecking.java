@@ -81,6 +81,8 @@ public class TMLSyntaxChecking {
     private final String INVALID_CHANNEL_PATH = "Channel path is invalid";
     private final String INVALID_BUS_PATH = "Bus path is invalid for channel"; // Should be a warning only
 
+    private final String DUPLICATE_PATH_TO_BUS = "Path to bus is duplicated"; // Should be a warning only
+
 
     private ArrayList<TMLError> errors;
     private ArrayList<TMLError> warnings;
@@ -120,15 +122,19 @@ public class TMLSyntaxChecking {
             checkNextActions();
 
             checkPortName();
+
         }
 
+        // Mapping or architecture
         if (mapping != null) {
             checkMemoriesOfChannels();
             checkPathToMemory();
             checkPathValidity();
+            checkNonDuplicatePathToBuses();
 
             // Check that if their is a memory for a channel, the memory is connected to the path
         }
+
     }
 
 
@@ -154,11 +160,26 @@ public class TMLSyntaxChecking {
         return warnings;
     }
 
+    public void addErrorByReference(Object referenceObject, TMLTask t, TMLActivityElement elt, String message, int type) {
+        TMLError error = new TMLError(type);
+        error.message = message;
+        error.task = t;
+        error.element = elt;
+        error.referenceObject = referenceObject;
+        errors.add(error);
+    }
+
+
     public void addError(TMLTask t, TMLActivityElement elt, String message, int type) {
         TMLError error = new TMLError(type);
         error.message = message;
         error.task = t;
         error.element = elt;
+        if (t != null) {
+            error.referenceObject = t.getReferenceObject();
+        } else if (elt!= null) {
+            error.referenceObject = elt.getReferenceObject();
+        }
         errors.add(error);
     }
 
@@ -735,6 +756,26 @@ public class TMLSyntaxChecking {
             }
         }
 
+    }
+
+
+    private void checkNonDuplicatePathToBuses() {
+        TraceManager.addDev("Checking duplicate links to buses");
+        HashMap<HwBus, ArrayList<HwNode>> map = new HashMap<HwBus, ArrayList<HwNode>> ();
+
+        ArrayList<HwNode> list;
+        for (HwLink link: mapping.getTMLArchitecture().getHwLinks()) {
+            list = map.get(link.bus);
+            if (list == null) {
+                ArrayList<HwNode> newList = new ArrayList<HwNode>();
+                newList.add(link.hwnode);
+                map.put(link.bus, newList);
+            } else if (list.contains(link.hwnode)) {
+                addErrorByReference(null, null, null, DUPLICATE_PATH_TO_BUS + ": from " + link.hwnode.getName() + " to " + link.bus.getName(), TMLError.ERROR_STRUCTURE);
+            } else {
+                list.add(link.hwnode);
+            }
+        }
     }
 
 

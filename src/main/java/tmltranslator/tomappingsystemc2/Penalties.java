@@ -94,7 +94,7 @@ public class Penalties {
         } catch (FileException e) {
             mustChange = true;
         }
-        
+
 
         // Set new value if necessary
         if (!mustChange) {
