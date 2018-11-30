@@ -71,28 +71,30 @@ public class Penalties {
         // Load file and check for current status
         String fullPath = pathToFile + File.separator + FILE_NAME;
         String data = "";
-        try {
-            data = FileUtils.loadFile(fullPath);
-        } catch (FileException e) {
-            return -1;
-        }
-
-        int indexU = data.indexOf(NOT_ACTIVATED);
-        int indexD = data.indexOf(ACTIVATED);
         boolean mustChange = false;
 
-        //  No penalty
-        if ((indexD == -1) && (indexD == -1)) {
-            mustChange = true;
-        } else if ((indexD > -1) && (indexD > -1)) {
-            mustChange = true;
-        } else {
-            if (indexD > -1) {
-                mustChange = mustHandlePenalties == false;
+        try {
+            data = FileUtils.loadFile(fullPath);
+            int indexU = data.indexOf(NOT_ACTIVATED);
+            int indexD = data.indexOf(ACTIVATED);
+
+
+            //  No penalty
+            if ((indexD == -1) && (indexD == -1)) {
+                mustChange = true;
+            } else if ((indexD > -1) && (indexD > -1)) {
+                mustChange = true;
             } else {
-                mustChange = mustHandlePenalties == true;
+                if (indexD > -1) {
+                    mustChange = mustHandlePenalties == false;
+                } else {
+                    mustChange = mustHandlePenalties == true;
+                }
             }
+        } catch (FileException e) {
+            mustChange = true;
         }
+        
 
         // Set new value if necessary
         if (!mustChange) {
