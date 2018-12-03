@@ -8,10 +8,6 @@ package ui.bot;
 
 import static org.assertj.swing.finder.WindowFinder.findFrame;
 
-import java.awt.Component;
-
-import javax.swing.JTabbedPane;
-
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.finder.JFileChooserFinder;
 import org.assertj.swing.finder.JOptionPaneFinder;
