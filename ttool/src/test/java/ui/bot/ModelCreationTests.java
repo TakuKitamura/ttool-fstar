@@ -94,6 +94,35 @@ public class ModelCreationTests extends AssertJSwingJUnitTestCase {
 							System.lineSeparator() + "==============");
 	}
 	
+	@Test
+	public void diplodocusModel() {
+		/*
+    	 * Description : Open the file that had been created, and then use it
+    	 * in order to create a diplodocus model and to do some things.
+    	 */
+		TraceManager.addDev("==============" + System.lineSeparator() +
+							"ModelCreationTests: diplodocusModel: Started");
+		TraceManager.addDev("ModelCreationTests: diplodocusModel: Openning the file");
+		this.openAFile();
+		TraceManager.addDev("ModelCreationTests: diplodocusModel: File open");
+		
+		TraceManager.addDev("ModelCreationTests: diplodocusModel: Richt clicking");
+		window.rightClick();
+		if (debug)
+			ut.debugThread(3600, "ModelCreationTests: diplodocusModel: ");
+		TraceManager.addDev("ModelCreationTests: diplodocusModel: End Clicking");
+		
+		TraceManager.addDev("ModelCreationTests: diplodocusModel: Clicking on New DIPLODOCUS Methodology");
+		JMenuItemFixture jmf = window.menuItem("RC New TMLMethodology");
+		jmf.click();
+		if (debug)
+			ut.debugThread(3600, "MainFrameTest: diplodocusModel: ");
+		TraceManager.addDev("ModelCreationTests: diplodocusModel: End Clicking");
+		
+		TraceManager.addDev("ModelCreationTests: diplodocusModel: Finished" + 
+							System.lineSeparator() + "==============");
+	}
+	
 	@Override
 	protected void onSetUp() {
 		Main frame = GuiActionRunner.execute(()-> new Main(false, false, false, false, false, false, false, false, false, false, false, false, false));

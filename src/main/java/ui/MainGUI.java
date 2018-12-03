@@ -9207,7 +9207,8 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
            newRequirement = createMenuItem("New TURTLE Requirement Diagram");
 
            newTMLMethodo = createMenuItem("New DIPLODOCUS Methodology");
-
+           newTMLMethodo.setName("RC New TMLMethodology");
+           
            /*newTMLDesign =*/
            createMenuItem("New Partitioning - Design");
            newTMLComponentDesign = createMenuItem("New Partitioning - Functional view");
