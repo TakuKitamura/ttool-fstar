@@ -452,6 +452,50 @@ public class SpecConfigTTool {
 
     }
 
+    /**
+     * Check and create the directory for mbed code generation in AVATAR
+     *
+     * @param s directory path
+     * @return true if there's no error, false if the directory cannot be created
+     * @throws FileException
+     * @author Javier Errea
+     */
+    public static boolean checkAndCreateAVATARCodeDirMBED(String s) throws FileException {
+        //TraceManager.addDev("Trying to create the dir:" + s);
+        File f = new File(s);
+        try {
+            if (!f.exists()) {
+                //TraceManager.addDev("Does not exist");
+                if (!f.mkdir()) {
+                    return false;
+                }
+            }
+            if (!s.equals(ConfigurationTTool.AVATARExecutableCodeDirectory)) {
+                File make = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "Makefile");
+                File defs = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "Makefile.defs");
+                File soclib = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "Makefile.forsoclib");
+                File src = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "src_MBED");
+                File lic = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "LICENSE");
+                File liceng = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "LICENSE_CECILL_ENG");
+                File licfr = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "LICENSE_CECILL_FR");
+                //File topcell = new File(ConfigurationTTool.AVATARExecutableCodeDirectory + "generated_topcell");
+
+                FileUtils.copyFileToDirectory(make, f, false);
+                FileUtils.copyFileToDirectory(defs, f, false);
+                FileUtils.copyFileToDirectory(soclib, f, false);
+                FileUtils.copyDirectoryToDirectory(src, f);
+                FileUtils.copyFileToDirectory(lic, f, false);
+                FileUtils.copyFileToDirectory(liceng, f, false);
+                FileUtils.copyFileToDirectory(licfr, f, false);
+                //FileUtils.copyDirectoryToDirectory(topcell, f);
+            }
+            return true;
+        } catch (IOException e) {
+            throw new FileException(e.getMessage());
+        }
+
+    }
+
     public static boolean checkAndCreateProverifDir(String s) throws FileException {
         File f = new File(s);
         try {
