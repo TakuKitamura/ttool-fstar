@@ -52,6 +52,7 @@ public class TaskFileMbed {
     //1) enlever pthread.h
     //2) ajouter : srl.h et mwmr.h
     private final static String INCLUDE_HEADER = "#include <mbed.h>\n#include <rtos.h>\n";//"#include <stdio.h>\n#include <pthread.h>\n#include <unistd.h>\n#include <stdlib.h>\n";
+<<<<<<< HEAD
     //private final static String LOCAL_INCLUDE_HEADER = "#include \"main.h\"";
     //Quitamos de nuestros task files las librerias que causan errores.
     private final static String LOCAL_INCLUDE_HEADER = "#include \"request.h\"\n#include \"syncchannel.h\"\n#include \"asyncchannel.h\"\n#include " +
@@ -61,8 +62,18 @@ public class TaskFileMbed {
     private final static String INCLUDE_HEADER_SOCLIB = "#include <mbed.h>\n#include <rtos.h>\n";//"#include <stdio.h>\n#include <unistd.h>\n#include <stdlib.h>\n";
     //private final static String LOCAL_INCLUDE_HEADER_SOCLIB = "#include \"main.h\"";
 
+=======
+    private final static String LOCAL_INCLUDE_HEADER = "#include \"main.h\"";
+    //Quitamos de nuestros task files las librerias que causan errores.
+    /*private final static String LOCAL_INCLUDE_HEADER = "#include \"request.h\"\n#include \"syncchannel.h\"\n#include \"request_manager" +
+            ".h\"\n#include \"debug.h\"\n#include \"defs.h\"\n#include \"mytimelib.h\"\n#include \"random.h\"\n#include \"tracemanager.h\"\n#include \"main.h\"";
+    */
+    private final static String INCLUDE_HEADER_SOCLIB = "#include <mbed.h>\n#include <rtos.h>\n";//"#include <stdio.h>\n#include <unistd.h>\n#include <stdlib.h>\n";
+    private final static String LOCAL_INCLUDE_HEADER_SOCLIB = "#include \"main.h\"";
+    /*
+>>>>>>> Javier mbed changes
     private final static String LOCAL_INCLUDE_HEADER_SOCLIB = "#include \"request.h\"\n#include \"syncchannel.h\"\n#include \"request_manager.h\"\n#include \"debug.h\"\n#include \"defs.h\"\n#include \"mytimelib.h\"\n#include \"random.h\"\n#include \"tracemanager.h\"\n#include \"main.h\"\n#include \"/Users/ludovicapvrille/Prog/mutekh/libmwmr/include/mwmr/mwmr.h\"\n ";
-
+    */
     private final static String CR = "\n";
 
     private String name;
