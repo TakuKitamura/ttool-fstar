@@ -104,8 +104,9 @@ public class AVATAR2CMBED {
 
     public void saveInFiles(String path) throws FileException {
 
+        //First we check if the folder exists or  we have to create it, in order to be able to save the code
         //TraceManager.addDev("save In Files AVATAR2CPOSIX");
-        if (!SpecConfigTTool.checkAndCreateAVATARCodeDir(path)) {
+        if (!SpecConfigTTool.checkAndCreateAVATARCodeDirMBED(path)) {
             TraceManager.addDev("Directory cannot be created: " + path);
             throw new FileException("ERROR: Executable code directory cannot be created.");
         }
@@ -167,9 +168,9 @@ public class AVATAR2CMBED {
 
 		makeConcurrencyMutex();
 		
-        makeSynchronousChannels();
+        //makeSynchronousChannels();
 
-        makeAsynchronousChannels();
+        //makeAsynchronousChannels();
 
         makeTasks();
 
@@ -365,9 +366,9 @@ public class AVATAR2CMBED {
                     cpt ++;
                 }
                 ret += "\"," + tr + ");" + CR;
-                ret += traceFunctionCall(_block.getName(), _am.getName(), "my__attr");
+                //ret += traceFunctionCall(_block.getName(), _am.getName(), "my__attr");
             }  else {
-                ret += traceFunctionCall(_block.getName(), _am.getName(), null);
+                //ret += traceFunctionCall(_block.getName(), _am.getName(), null);
             }
         }
 
@@ -440,7 +441,7 @@ public class AVATAR2CMBED {
     public void makeMainFunction(AvatarBlock _block, TaskFileMbed _taskFile) {
         int i;
 
-        String s = "void mainFunc__" + _block.getName() + "(void *arg)";
+        String s = "void mainFunc__" + _block.getName() + "()";
         String sh = "extern " + s + ";" + CR;
         s+= "{" + CR;
 
@@ -450,6 +451,8 @@ public class AVATAR2CMBED {
 
         int nbOfMaxParams = _block.getMaxNbOfParams();
         //s+= "request *__req;" + CR;
+        //Comentamos todos los unused atributes
+        /*
         for(i=0; i<_block.getMaxNbOfMultipleBranches(); i++) {
             s+= UNUSED_ATTR + " request __req" + i + ";" + CR;
             s+= UNUSED_ATTR + "int *__params" + i + "[" + nbOfMaxParams + "];" + CR;
@@ -461,16 +464,17 @@ public class AVATAR2CMBED {
 
         s+= CR + "char * __myname = ((owner*)arg)->ownerName;" + CR;
 		s+= "rtos::Thread * __myself = ((owner*)arg)->ownerThread;" + CR;
+		*/
         /*if (tracing) {
           s+= CR + "char __value[CHAR_ALLOC_SIZE];" + CR;
           }*/
 
         //s+= CR + "pthread_cond_init(&__myCond, NULL);" + CR;
-
+        /*
         s+= CR + "fillListOfRequests(&__list, __myname, __myself, &__myCond, &__mainMutex);" + CR;
 
         s+= "//printf(\"my name = %s\\n\", __myname);" + CR;
-
+        */
         s+= CR + "/* Main loop on states */" + CR;
         s+= "while(__currentState != STATE__STOP__STATE) {" + CR;
 
@@ -480,7 +484,7 @@ public class AVATAR2CMBED {
         // Making start state
         AvatarStateMachine asm = _block.getStateMachine();
         s += "case STATE__START__STATE: " + CR;
-        s += traceStateEntering("__myname", "__StartState");
+        //s += traceStateEntering("__myname", "__StartState");
         s += makeBehaviourFromElement(_block, asm.getStartState(), true);
         s += "break;" + CR + CR;
 
@@ -489,7 +493,7 @@ public class AVATAR2CMBED {
         for(AvatarStateMachineElement asme: asm.getListOfElements()) {
             if (asme instanceof AvatarState) {
                 s += "case STATE__" + asme.getName() + ": " + CR;
-                s += traceStateEntering("__myname", asme.getName());
+                //s += traceStateEntering("__myname", asme.getName());
 
                 if (includeUserCode) {
                     tmp = ((AvatarState)asme).getEntryCode();
@@ -547,7 +551,7 @@ public class AVATAR2CMBED {
             }
 
             if (at.hasDelay()) {
-                ret+= "waitFor(" + reworkDelay(at.getMinDelay()) + ", " + reworkDelay(at.getMaxDelay()) + ");" + CR;
+                ret+= "wait_us(" + reworkDelay(at.getMaxDelay()) + ");" + CR;
             }
 
             String act;
@@ -817,8 +821,8 @@ public class AVATAR2CMBED {
         //mainFileMbed.appendToMainCode("/* Initializing the main mutex */" + CR);
         //mainFileMbed.appendToMainCode("if (pthread_mutex_init(&__mainMutex, NULL) < 0) { exit(-1);}" + CR + CR);
 
-        mainFileMbed.appendToMainCode("/* Initializing mutex of messages */" + CR);
-        mainFileMbed.appendToMainCode("initMessages();" + CR);
+        //mainFileMbed.appendToMainCode("/* Initializing mutex of messages */" + CR);
+        //mainFileMbed.appendToMainCode("initMessages();" + CR);
 
 
         if (avspec.hasApplicationCode()&& includeUserCode) {
@@ -829,11 +833,13 @@ public class AVATAR2CMBED {
 
         mainFileMbed.appendToMainCode(CR + CR + mainDebugMsg("Starting tasks"));
         for(TaskFileMbed taskFileMbed: taskFilesMbed) {
-			mainFileMbed.appendToMainCode(CR + "owner __" + taskFileMbed.getName() + ";" + CR);
-			mainFileMbed.appendToMainCode("__" + taskFileMbed.getName() + ".ownerName = \"" + taskFileMbed.getName() + "\";" + CR);
-			mainFileMbed.appendToMainCode("__" + taskFileMbed.getName() + ".ownerThread = &thread__" + taskFileMbed.getName() + ";" + CR);
+			//mainFileMbed.appendToMainCode(CR + "owner __" + taskFileMbed.getName() + ";" + CR);
+			//mainFileMbed.appendToMainCode("__" + taskFileMbed.getName() + ".ownerName = \"" + taskFileMbed.getName() + "\";" + CR);
+			//mainFileMbed.appendToMainCode("__" + taskFileMbed.getName() + ".ownerThread = &thread__" + taskFileMbed.getName() + ";" + CR);
+            mainFileMbed.appendToMainCode("thread__" + taskFileMbed.getName() + ".start(mainFunc__" + taskFileMbed.getName() + ");"  + CR);
+            /*
             mainFileMbed.appendToMainCode("thread__" + taskFileMbed.getName() + ".start(mainFunc__" + taskFileMbed.getName() + ", (void*)&__" + taskFileMbed.getName() + ");"  + CR);
-            
+            */
 			//mainFileMbed.appendToMainCode("pthread_create(&thread__" + taskFileMbed.getName() + ", NULL, mainFunc__" + taskFileMbed.getName() + ", (void *)\"" + taskFileMbed.getName() + "\");" + CR);
         }
 
@@ -850,9 +856,9 @@ public class AVATAR2CMBED {
         mainFileMbed.appendToMainCode("/* Activating tracing  */" + CR);
 
         if (tracing) {
-            mainFileMbed.appendToMainCode("if (argc>1){" + CR);
-            mainFileMbed.appendToMainCode("activeTracingInFile(argv[1]);" + CR + "} else {" + CR);
-            mainFileMbed.appendToMainCode("activeTracingInConsole();" + CR + "}" + CR);
+            //mainFileMbed.appendToMainCode("if (argc>1){" + CR);
+            //mainFileMbed.appendToMainCode("activeTracingInFile(argv[1]);" + CR + "} else {" + CR);
+            //mainFileMbed.appendToMainCode("activeTracingInConsole();" + CR + "}" + CR);
         }
     }
 

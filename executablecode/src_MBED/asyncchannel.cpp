@@ -1,5 +1,3 @@
-//#include <stdlib.h>
-
 #include "message.h"
 #include "asyncchannel.h"
 #include "myerrors.h"
