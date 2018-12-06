@@ -56,10 +56,4 @@ allprojects {
             options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation" << "-Xlint:cast" << "-Xlint:divzero" << "-Xlint:empty" << "-Xlint:finally" << "-Xlint:fallthrough"
         }
     }
-
-    dependencies {
-        testCompile 'org.assertj:assertj-core:3.6.2'
-        testCompile 'org.assertj:assertj-swing-junit:3.8.0'
-        testCompile 'org.assertj:assertj-swing-testng:3.8.0'
-    }
 }
