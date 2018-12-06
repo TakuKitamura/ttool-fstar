@@ -52,7 +52,7 @@ public class PanelKeyListener implements KeyListener {
                 tdp.repaint();
             } 
 			if (tdp.select){
-            	tdp.tdmm.setSelection(-1, -1);
+            	tdp.getTdmm().setSelection(-1, -1);
                 tdp.getGUI().setEditMode();
                 tdp.repaint();
             }

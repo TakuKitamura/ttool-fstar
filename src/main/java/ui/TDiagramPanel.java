@@ -259,9 +259,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         ttb = _ttb;
         mode = NORMAL;
 
-        tdmm = new TDiagramMouseManager(this);
-        addMouseListener(tdmm);
-        addMouseMotionListener(tdmm);
+        setTdmm(new TDiagramMouseManager(this));
+        addMouseListener(getTdmm());
+        addMouseMotionListener(getTdmm());
 
         pkl = new PanelKeyListener(this);
         addKeyListener(pkl);
@@ -1514,6 +1514,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
         clone = new JMenuItem("Clone");
         clone.addActionListener(menuAL);
+        clone.setName("Clone");
 
         enableDisable = new JMenuItem("Enable/Disable");
         enableDisable.addActionListener(menuAL);
@@ -2215,7 +2216,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             return;
         }
         mode = NORMAL;
-        tdmm.setSelection(-1, -1);
+        getTdmm().setSelection(-1, -1);
         mgui.setMode(MainGUI.CUTCOPY_KO);
         mgui.setMode(MainGUI.EXPORT_LIB_KO);
         mgui.changeMade(this, REMOVE_COMPONENT);
@@ -3864,8 +3865,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     public void stopAddingConnector() {
         //TraceManager.addDev("Stop Adding connector in tdp");
-        if (tdmm != null) {
-            tdmm.stopAddingConnector();
+        if (getTdmm() != null) {
+            getTdmm().stopAddingConnector();
         }
     }
 
@@ -3971,7 +3972,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public TDiagramMouseManager getMouseManager() {
-        return tdmm;
+        return getTdmm();
     }
 
     /**
@@ -3988,6 +3989,14 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
         return false;
     }
+
+	public TDiagramMouseManager getTdmm() {
+		return tdmm;
+	}
+
+	public void setTdmm(TDiagramMouseManager tdmm) {
+		this.tdmm = tdmm;
+	}
 }
 
 
