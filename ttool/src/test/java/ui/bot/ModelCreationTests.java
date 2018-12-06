@@ -7,15 +7,22 @@
 
 package ui.bot;
 
+import java.awt.Component;
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.PointerInfo;
+
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.finder.JFileChooserFinder;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JFileChooserFixture;
 import org.assertj.swing.fixture.JMenuItemFixture;
+import org.assertj.swing.fixture.JPanelFixture;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
 
 import myutil.TraceManager;
+import ui.TGComponent;
 
 /*
  * Class ModelCreationTests
@@ -26,6 +33,7 @@ import myutil.TraceManager;
 
 public class ModelCreationTests extends AssertJSwingJUnitTestCase {
 	private FrameFixture window;
+	private Main frame;
 	
 	private UsefulTools ut;
     private boolean debug = true;
@@ -98,7 +106,7 @@ public class ModelCreationTests extends AssertJSwingJUnitTestCase {
 	public void diplodocusModel() {
 		/*
     	 * Description : Open the file that had been created, and then use it
-    	 * in order to create a diplodocus model and to do some things.
+    	 * in order to create a diplodocus model and to do some things (clone).
     	 */
 		TraceManager.addDev("==============" + System.lineSeparator() +
 							"ModelCreationTests: diplodocusModel: Started");
@@ -116,8 +124,46 @@ public class ModelCreationTests extends AssertJSwingJUnitTestCase {
 		JMenuItemFixture jmf = window.menuItem("RC New TMLMethodology");
 		jmf.click();
 		if (debug)
-			ut.debugThread(3600, "MainFrameTest: diplodocusModel: ");
+			ut.debugThread(3600, "ModelCreationTests: diplodocusModel: ");
 		TraceManager.addDev("ModelCreationTests: diplodocusModel: End Clicking");
+		
+		TraceManager.addDev("ModelCreationTests: diplodocusModel: ");
+		TGComponent tgc = (TGComponent) frame.getCurrentTDiagramPanel().getChild(0);
+		JPanelFixture jpf = window.panel(frame.getTitleOf(frame.getCurrentTDiagramPanel()));
+		jpf.showPopupMenuAt(new Point(tgc.getX(), tgc.getY()));
+		if (debug)
+			ut.debugThread(3600, "ModelCreationTests: diplodocusModel: ");
+		TraceManager.addDev("ModelCreationTests: diplodocusModel: Popup Menu open");
+		
+		TraceManager.addDev("ModelCreationTests: diplodocusModel: Try to clone one child");
+		jmf = window.menuItem("Clone");
+		jmf.click();
+		if (debug)
+			ut.debugThread(3600, "ModelCreationTests: diplodocusModel: ");
+		TraceManager.addDev("ModelCreationTests: diplodocusModel: Clone successful");
+		
+//		window.robot().moveMouse(new Point(0,0));
+//		if (debug)
+//			ut.debugThread(3600, "MainFrameTest: diplodocusModel: ");
+//		window.robot().moveMouse(0, 0);
+//		if (debug)
+//			ut.debugThread(3600, "MainFrameTest: diplodocusModel: ");
+//		PointerInfo a = MouseInfo.getPointerInfo();
+//		Point p = a.getLocation();
+//		TraceManager.addDev("" + p.x + " " + p.y);
+//		
+//		window.moveTo(new Point(0,0));
+		
+//		window.robot().rightClick(tgc);;
+//		if (debug)
+//			ut.debugThread(3600, "MainFrameTest: diplodocusModel: ");
+//		a = MouseInfo.getPointerInfo();
+//		Point p1 = a.getLocation();
+//		TraceManager.addDev("" + p1.x + " " + p1.y);
+//		jmf = window.menuItem("Clone");
+//		jmf.click();
+//		if (debug)
+//			ut.debugThread(3600, "MainFrameTest: diplodocusModel: ");
 		
 		TraceManager.addDev("ModelCreationTests: diplodocusModel: Finished" + 
 							System.lineSeparator() + "==============");
@@ -125,7 +171,7 @@ public class ModelCreationTests extends AssertJSwingJUnitTestCase {
 	
 	@Override
 	protected void onSetUp() {
-		Main frame = GuiActionRunner.execute(()-> new Main(false, false, false, false, false, false, false, false, false, false, false, false, false));
+		frame = GuiActionRunner.execute(()-> new Main(false, false, false, false, false, false, false, false, false, false, false, false, false));
 		ut = new UsefulTools();
 		window = new FrameFixture(robot(), frame.getFrame());
 		window.show();

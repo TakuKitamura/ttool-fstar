@@ -1510,6 +1510,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
         clone = new JMenuItem("Clone");
         clone.addActionListener(menuAL);
+        clone.setName("Clone");
 
         enableDisable = new JMenuItem("Enable/Disable");
         enableDisable.addActionListener(menuAL);
