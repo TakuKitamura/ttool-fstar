@@ -2822,10 +2822,12 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         gtm.saveOperation(getCurrentSelectedPoint());
         dtree.forceUpdate();
         if (SpecConfigTTool.lastTab > -1 && SpecConfigTTool.lastPanel > -1 && mainTabbedPane.getTabCount() > 0) {
-            mainTabbedPane.setSelectedIndex(SpecConfigTTool.lastTab);
-            activetdp = tabs.get(SpecConfigTTool.lastTab).getPanels().elementAt(SpecConfigTTool.lastPanel);
-            activetdp.selectTab(activetdp.name);
-            basicActivateDrawing();
+            if (SpecConfigTTool.lastTab < mainTabbedPane.getTabCount()) {
+                mainTabbedPane.setSelectedIndex(SpecConfigTTool.lastTab);
+                activetdp = tabs.get(SpecConfigTTool.lastTab).getPanels().elementAt(SpecConfigTTool.lastPanel);
+                activetdp.selectTab(activetdp.name);
+                basicActivateDrawing();
+            }
         }
 
         if (dir != null)
