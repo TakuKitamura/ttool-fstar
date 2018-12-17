@@ -2,6 +2,5 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$/MPSoC/mutekh" vcs="hg4idea" />
-    <mapping directory="$PROJECT_DIR$/modeling/theseletitia" vcs="Git" />
   </component>
 </project>
