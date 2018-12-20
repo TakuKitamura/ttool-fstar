@@ -136,7 +136,7 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
     private LinkedList<ImageIcon> listOfLogos;
 
 
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogCCodeGeneration(Frame f, MainGUI _mgui, String title, String _pathCode, String _pathCompiler, GTURTLEModeling _gtm ) {
 
         super(f, title, true);

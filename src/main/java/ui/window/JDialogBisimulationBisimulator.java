@@ -114,7 +114,7 @@ public class JDialogBisimulationBisimulator extends JDialog implements ActionLis
     protected JButton stop;
     protected JButton close;
     
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogBisimulationBisimulator(Frame f, String _cadpHost, String _bisimulatorPath,  String _bcgioPath, String _remoteFile1, String _remoteFile2, String title) {
         super(f, title, true);
         

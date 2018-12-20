@@ -89,6 +89,8 @@ public class AvatarLibraryFunctionCall extends AvatarStateMachineElement {
      *      The name that identifies this function call (different from each call, even of the same function).
      * @param referenceObject
      *      The graphical element that this function is related to.
+     * @param libraryFunction
+     *      The library function that corresponds to this call.
      */
     public AvatarLibraryFunctionCall (String name, AvatarLibraryFunction libraryFunction, Object referenceObject) {
         super(name, referenceObject);
@@ -197,6 +199,8 @@ public class AvatarLibraryFunctionCall extends AvatarStateMachineElement {
      *
      * @param firstElement
      *      The first element that will be used as a base for the translation
+     * @param block
+     *      Avatar block
      *
      * @return The last state that marks the end of the function call.
      */

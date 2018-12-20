@@ -75,7 +75,7 @@ public class JDialogADDVgmnNode extends JDialogBase implements ActionListener  {
 	// Panel2
     protected JTextField index, nbOfAttachedInitiators, nbOfAttachedTargets, fifoDepth, minLatency;
     
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogADDVgmnNode(Frame _frame, String _title, ADDVgmnNode _node) {
         super(_frame, _title, true);
         frame = _frame;

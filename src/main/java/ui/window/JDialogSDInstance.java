@@ -70,7 +70,7 @@ public class JDialogSDInstance extends JDialogBase implements ActionListener {
     private JTextField instanceName;
 	private JCheckBox actor;
     
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogSDInstance(Frame f, String _name, boolean _isActor, String _title) {
         super(f, _title, true);
         frame = f;

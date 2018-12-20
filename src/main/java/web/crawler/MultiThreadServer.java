@@ -70,8 +70,9 @@ public class MultiThreadServer {
 
     /**
      *
-     * @param cmd
-     * @param msg
+     * @param cmd : command
+     * @param msg : message
+     * @return    : answer message to send back to the client
      */
     public static Message createImageAnswer(String cmd, Message msg) {
         byte[] byteImg = Message.convertImageToByte(msg);
@@ -86,12 +87,13 @@ public class MultiThreadServer {
         
     /**
      *
-     * @param msg
-     * @param database
-     * @throws IOException
-     * @throws SQLException
-     * @throws AWTException
-     * @throws TransformerException
+     * @param msg                   : message
+     * @param database              : DatabaseQuery
+     * @throws IOException          : I/O Exception
+     * @throws SQLException         : An exception that provides information on a database access error
+     * @throws AWTException         : Signals that an Abstract Window Toolkit exception has occurred
+     * @throws TransformerException : Specifies an exceptional condition that occurred during the transformation process.
+     * @return                      : answer message to send back to the client
      */
     public static Message analyseRequestMessage(Message msg, web.crawler.DatabaseQuery database) throws IOException, SQLException, AWTException, TransformerException {
         

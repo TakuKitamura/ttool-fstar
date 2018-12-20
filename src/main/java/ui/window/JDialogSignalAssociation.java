@@ -100,7 +100,7 @@ public class JDialogSignalAssociation extends JDialogBase implements ActionListe
     private JButton downButton;
     private JButton removeButton;
 
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogSignalAssociation(Frame _f, AvatarBDBlock _block1, AvatarBDBlock _block2, Vector<String> _signalAssociation, AvatarBDPortConnector _connector, String _title) {
         super(_f, _title, true);
         block1 = _block1;

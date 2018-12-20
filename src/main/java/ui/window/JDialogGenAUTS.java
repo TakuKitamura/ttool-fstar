@@ -96,7 +96,7 @@ public class JDialogGenAUTS extends JDialog implements ActionListener, Runnable 
     
     protected SortedVector<String> files;
     
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogGenAUTS(Frame f, MainGUI _mgui, String title, String _cmdCaesar, String _cmdBcgio, String _fileName, String _host, String _path) {
         super(f, title, true);
         

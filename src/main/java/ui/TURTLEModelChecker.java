@@ -509,12 +509,17 @@ public class TURTLEModelChecker {
 		}
 		
 	}
-	
+
 	/**
-	* Parsing in two steps:
-	* 1. Parsing the expression with no variable checking
-	* 2. Parsing the expression with variables values to see whether variables are well-placed or not
-	* The second parsing is performed iff the first one succeeds
+	 * Parsing in two steps:
+	 * 1. Parsing the expression with no variable checking
+	 * 2. Parsing the expression with variables values to see whether variables are well-placed or not
+	 * The second parsing is performed iff the first one succeeds
+     * @param t {@link TClass}
+     * @param elt       : {@link ADComponent}
+     * @param parseCmd  : Parsing the expression with no variable checking
+     * @param action    : Parsing the expression with variables values to see whether variables are well-placed or not
+     * @param errors    : list of checking errors
 	*/
 	public void parsing(TClass t, ADComponent elt, String parseCmd, String action, LinkedList<CheckingError> errors) {
 		TMLExprParser parser;

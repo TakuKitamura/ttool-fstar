@@ -243,7 +243,7 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
 //        }
     }
 
-    /**
+    /*
      * Creates new form
      */
     public JDialogProverifVerification(Frame f, MainGUI _mgui, String title, String _hostProVerif, String _pathCode, String _pathExecute, AvatarDesignPanel adp, boolean lim, HashMap<String, HashSet<String>> cpuTasks) {

@@ -86,10 +86,10 @@ private web.crawler.DatabaseCreation database;
     /**
      * Make query on table software according to keyword from the console
      * Be careful: this function is NOT protected against SQL injection
-     * @throws IOException
-     * @throws SQLException
-     * @throws AWTException
-     * @throws TransformerException
+     * @throws IOException          : I/O Exception
+     * @throws SQLException         : An exception that provides information on a database access error
+     * @throws AWTException         : Signals that an Abstract Window Toolkit exception has occurred
+     * @throws TransformerException : Specifies an exceptional condition that occurred during the transformation process.
      */
     public void MakeQueryOnTheDatabase() throws IOException, SQLException, AWTException, TransformerException {
 
@@ -155,10 +155,10 @@ private web.crawler.DatabaseCreation database;
      * This function is protected against sql injection because it is using prepared statement
      * @param argumentsfromclient keyword 1, date, keyword 2, number of result
      * @return xml file containing the result of the query
-     * @throws IOException
-     * @throws SQLException
-     * @throws AWTException
-     * @throws TransformerException
+     * @throws IOException          : I/O Exception
+     * @throws SQLException         : An exception that provides information on a database access error
+     * @throws AWTException         : Signals that an Abstract Window Toolkit exception has occurred
+     * @throws TransformerException : Specifies an exceptional condition that occurred during the transformation process.
      */
     public File GetCVEwithKeywords(ArrayList<String> argumentsfromclient) throws IOException, SQLException, AWTException, TransformerException {
         int Records;
@@ -252,10 +252,10 @@ private web.crawler.DatabaseCreation database;
      * This function is protected against sql injection because it is using prepared statement
      * @param argumentfromclient a cve ID
      * @return xml containing the result of the query
-     * @throws IOException
-     * @throws SQLException
-     * @throws AWTException
-     * @throws TransformerException
+     * @throws IOException          : I/O Exception
+     * @throws SQLException         : An exception that provides information on a database access error
+     * @throws AWTException         : Signals that an Abstract Window Toolkit exception has occurred
+     * @throws TransformerException : Specifies an exceptional condition that occurred during the transformation process.
      */
     public File GetinfofromCVE(String argumentfromclient) throws IOException, SQLException, AWTException, TransformerException {
         int Records;               

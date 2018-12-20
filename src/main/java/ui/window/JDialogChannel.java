@@ -70,7 +70,7 @@ public class JDialogChannel extends JDialogBase implements ActionListener {
     private JComboBox<String> typeList;
     private Vector<String> types;
 
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogChannel(String _name, int _size, int _type, int _max, Frame f, String title) {
         super(f, title, true);
 

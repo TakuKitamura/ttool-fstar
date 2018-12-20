@@ -128,7 +128,7 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
     private JButton downSignalButton;
     private JButton removeSignalButton;
 
-    /**
+    /*
      * Creates new form
      */
     public JDialogAvatarBlock( List<TAttribute> _attributes, List<AvatarMethod> _methods, List<AvatarSignal> _signals, List<TAttribute> _forbidden, Frame f, String title, String attrib, int _tab, String[] _globalCode, boolean _hasGlobalCode, String _mainCode) {

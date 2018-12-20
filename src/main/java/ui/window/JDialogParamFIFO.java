@@ -75,7 +75,7 @@ public class JDialogParamFIFO extends JDialogBase implements ActionListener {
     private JCheckBox finite, blocking;
     private Vector<String> types1, types2, types3;
 
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogParamFIFO(String _name, int _type1, int _type2, int _type3, boolean _isFinite, boolean _isBlocking, String _maxInFIFO, Frame f, String title) {
         super(f, title, true);
 

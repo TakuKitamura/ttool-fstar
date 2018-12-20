@@ -91,7 +91,7 @@ public class JDialogNCRoute extends JDialogBase implements ActionListener, ListS
 	// Panel3
 	private JTextField valueText;
 
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogNCRoute(Frame _f, String _title, String _value, Vector<NCRoute> _routes, List<String> _inputInterfaces, List<String> _traffics, List<String> _outputInterfaces) {
         super(_f, _title, true);
 

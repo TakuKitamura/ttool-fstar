@@ -81,7 +81,7 @@ public class JDialogPragma extends JDialogBase implements ActionListener {
     public Map<String, List<String>> blockAttributeMap = new HashMap<>();
     public Map<String, List<String>> blockStateMap = new HashMap<>();
 
-    /**
+    /*
      * Creates new form
      */
     public JDialogPragma(Frame f, String title, String _text) {

@@ -82,7 +82,7 @@ public class JDialogIDAndStereotype extends JDialogBase implements ActionListene
 
     private boolean cancelled;
 
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogIDAndStereotype(Frame _f, String _title,
                                   String[] _availableStereotypes, String _currentName,
                                   int _currentStereotype, Color[] _colors, Color _defaultColor) {

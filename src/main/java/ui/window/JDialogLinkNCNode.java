@@ -72,7 +72,7 @@ public class JDialogLinkNCNode extends JDialogBase implements ActionListener {
 	private JCheckBox hasCapacityBox, hasParameterBox;
 	private JComboBox<String> capacityUnitBox;
 
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogLinkNCNode(Frame _f, String _title, boolean _hasCapacity, int _capacity, String _capacityUnit, boolean _hasParameter, int _parameter, String _interfaceName) {
         super(_f, _title, true);
 

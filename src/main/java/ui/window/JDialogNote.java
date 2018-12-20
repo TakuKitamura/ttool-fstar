@@ -66,7 +66,7 @@ public class JDialogNote extends JDialogBase implements ActionListener {
     protected JButton close;
     protected JButton cancel;
     
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogNote(Frame f, String title, String _text) {
         super(f, title, true);
         text = _text;

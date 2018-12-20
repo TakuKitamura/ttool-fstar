@@ -83,7 +83,7 @@ public class JDialogELNComponentVoltageSinkTDF extends JDialog implements Action
 	/** Parameters **/
 	private ELNComponentVoltageSinkTDF vsink;
 
-	/** Constructor **/
+	/* Constructor **/
 	public JDialogELNComponentVoltageSinkTDF(ELNComponentVoltageSinkTDF _vsink) {
 		/** Set JDialog **/
 		setTitle("Setting the conversion of voltage to TDF output signal");

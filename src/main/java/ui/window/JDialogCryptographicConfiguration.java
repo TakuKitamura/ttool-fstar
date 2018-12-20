@@ -84,7 +84,7 @@ public class JDialogCryptographicConfiguration extends JDialogBase implements Ac
 
 	GridBagConstraints c0 = new GridBagConstraints();
 	Container c;
-	/** Creates new form  */
+	/* Creates new form  */
 	// arrayDelay: [0] -> minDelay ; [1] -> maxDelay
 	public JDialogCryptographicConfiguration(Frame f, String title, String[] _values, String[] _nonces, String[] _keys) {
 

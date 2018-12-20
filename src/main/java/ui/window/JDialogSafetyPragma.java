@@ -79,7 +79,7 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
     protected JPopupMenu helpPopup;
     public Map<String, List<String>> blockAttributeMap = new HashMap<String, List<String>>();
 
-    /**
+    /*
      * Creates new form
      */
     public JDialogSafetyPragma(Frame f, String title, String _text) {

@@ -75,7 +75,7 @@ public class JDialogAssumption extends JDialogBase implements ActionListener  {
     private JComboBox<String> durabilityBox, sourceBox, statusBox, limitationBox;
 
 
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogAssumption(Frame _frame, String _title, String _name, String _text, int _type, int _durability, int _source, int _status, int _limitation) {
         super(_frame, _title, true);
 		name = _name;

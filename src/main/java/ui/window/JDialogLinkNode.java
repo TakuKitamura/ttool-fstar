@@ -91,7 +91,7 @@ public class JDialogLinkNode extends JDialog implements ActionListener, ListSele
     
     //private String id1, id2;
     
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogLinkNode(Frame f, String _delay, String _lossRate, int _implementation, int _oport, int _dport, Vector<ArtifactTClassGate> _lothers, Vector<ArtifactTClassGate> _rothers, Vector<LRArtifactTClassGate> _associations) {
         
         super(f, "Setting link's properties", true);

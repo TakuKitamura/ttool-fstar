@@ -89,7 +89,7 @@ public class JDialogELNComponentInductor extends JDialog implements ActionListen
 	/** Parameters **/
 	private ELNComponentInductor l;
 
-	/** Constructor **/
+	/* Constructor **/
 	public JDialogELNComponentInductor(ELNComponentInductor _l) {
 		/** Set JDialog **/
 		setTitle("Setting the inductor");

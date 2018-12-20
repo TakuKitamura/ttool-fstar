@@ -458,7 +458,7 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
     
     /**
      * Issue #69
-     * @return
+     * @return : always true
      */
     @Override
     public boolean canBeDisabled() {

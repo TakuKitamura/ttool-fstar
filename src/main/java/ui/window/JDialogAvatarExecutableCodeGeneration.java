@@ -146,7 +146,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
 
     protected RshClient rshc;
 
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogAvatarExecutableCodeGeneration(Frame _f, MainGUI _mgui, String title, String _hostExecute, String _pathCode, String _pathCompiler, String _pathExecute, String _pathCompilerSoclib, String _pathExecuteSoclib, String _pathSoclibTraceFile) {
         super(title);
 

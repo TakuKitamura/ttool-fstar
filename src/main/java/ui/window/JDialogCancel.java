@@ -71,7 +71,7 @@ public class JDialogCancel extends JDialog implements ActionListener, Runnable  
     private String wait = DEFAULT_WAIT;
     private int cpt = 0;
 
-    /** Creates new form  */
+    /* Creates new form  */
     // arrayDelay: [0] -> minDelay ; [1] -> maxDelay
     public JDialogCancel(Frame f, String _title, String _info, StoppableGUIElement _sge) {
 

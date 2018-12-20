@@ -83,7 +83,7 @@ public class JDialogMultiString extends JDialogBase implements ActionListener {
     private List<String[]> possibleValues = null;
 
 
-    /**
+    /*
      * Creates new form
      */
     // arrayDelay: [0] -> minDelay ; [1] -> maxDelay

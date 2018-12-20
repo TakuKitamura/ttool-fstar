@@ -76,7 +76,7 @@ public class JDialogSelectRequirements extends JDialogBase implements ActionList
     private JButton addOneIgnored;
     private JButton allIgnored;
     
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogSelectRequirements(Frame f, Vector<Requirement> _back, java.util.List<TGComponent> componentList, String title) {
         super(f, title, true);
         

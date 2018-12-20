@@ -102,7 +102,7 @@ public class JFrameRefusalGraph extends javax.swing.JFrame implements ActionList
     private ScrolledJTextArea jta;
     private JButton start, stop, close;
 
-    /**
+    /*
      * Creates new form
      */
     public JFrameRefusalGraph(Frame _f, MainGUI _mgui, String _title, RG _rg, String _graphDir) {

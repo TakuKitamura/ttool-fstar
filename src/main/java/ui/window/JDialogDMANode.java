@@ -75,7 +75,7 @@ public class JDialogDMANode extends JDialogBase implements ActionListener  {
 	// Panel2
     protected JTextField byteDataSize, nbOfChannels, clockRatio;  
     
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogDMANode(Frame _frame, String _title, TMLArchiDMANode _node) {
         super(_frame, _title, true);
         frame = _frame;

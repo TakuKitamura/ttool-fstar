@@ -72,7 +72,7 @@ public class JDialogFault extends JDialogBase implements ActionListener  {
 
     private FTDFault fault;
 
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogFault(Frame _frame, String _title, FTDFault _fault) {
         super(_frame, _title, true);
         frame = _frame;

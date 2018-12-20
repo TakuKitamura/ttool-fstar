@@ -90,7 +90,7 @@ public class JDialogSimulation extends JDialog implements ActionListener, Runnab
     
     protected JRadioButton makeLOGIC, makeBOTH;
     
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogSimulation(Frame f, MainGUI _mgui, String title, String _cmdRTL, String _fileName, String _spec, String _host) {
         super(f, title, true);
         

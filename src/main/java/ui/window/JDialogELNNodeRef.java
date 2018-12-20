@@ -64,7 +64,7 @@ public class JDialogELNNodeRef extends JDialog implements ActionListener {
 	/** Parameters **/
 	private ELNNodeRef gnd;
 
-	/** Constructor **/
+	/* Constructor **/
 	public JDialogELNNodeRef(ELNNodeRef _gnd) {
 		/** Set JDialog **/
 		setTitle("Setting the reference node");

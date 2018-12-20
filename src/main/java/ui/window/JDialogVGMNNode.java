@@ -77,7 +77,7 @@ public class JDialogVGMNNode extends JDialogBase implements ActionListener  {
     protected JComboBox arbitrationPolicy, privacy;
     protected JTextField sliceTime;
 
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogVGMNNode(Frame _frame, String _title, TMLArchiVGMNNode _node) {
         super(_frame, _title, true);
         frame = _frame;

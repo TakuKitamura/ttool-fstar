@@ -95,9 +95,9 @@ public class DataVisualisation {
     /**
      * Generate an histogram graph by searching the number of time the vulnerability is conerning a keyword(parameter) since 3 years ago
      * @param keyword the keyword you want to do statistic with
-     * @throws IOException
-     * @throws SQLException
-     * @throws AWTException
+     * @throws IOException          : I/O Exception
+     * @throws SQLException         : An exception that provides information on a database access error
+     * @throws AWTException         : (Unused) Signals that an Abstract Window Toolkit exception has occurred
      */
     public void Histogram(String keyword) throws IOException, SQLException, AWTException {
         ResultSet rs;
@@ -220,10 +220,10 @@ public class DataVisualisation {
 
     /**
      * Generate the opencloud graph, generate different size for keyword according to their importance in the database
-     * @param argumentsfromclient list of keyword to use for generating the graph
-     * @throws IOException
-     * @throws SQLException
-     * @throws AWTException
+     * @param argumentsfromclient   : list of keyword to use for generating the graph
+     * @throws IOException          : I/O Exception
+     * @throws SQLException         : An exception that provides information on a database access error
+     * @throws AWTException         : (Unused) Signals that an Abstract Window Toolkit exception has occurred
      */
     public void OpenCloud(String argumentsfromclient) throws IOException, SQLException, AWTException {
 

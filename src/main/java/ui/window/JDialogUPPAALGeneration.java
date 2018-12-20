@@ -103,7 +103,7 @@ public class JDialogUPPAALGeneration extends JDialog implements ActionListener, 
  //   private boolean hasError = false;
 
 
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogUPPAALGeneration(Frame f, MainGUI _mgui, String title, String _pathCode, int _mode) {
         super(f, title, true);
 

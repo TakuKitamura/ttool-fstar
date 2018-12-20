@@ -71,7 +71,7 @@ public class JDialogParam extends JDialogBase implements ActionListener {
     private JComboBox<String> typeList1, typeList2, typeList3;
     private Vector<String> types1, types2, types3;
 
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogParam(String _name, int _type1, int _type2, int _type3, Frame f, String title) {
         super(f, title, true);
 

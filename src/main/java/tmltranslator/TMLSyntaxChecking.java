@@ -559,6 +559,10 @@ public class TMLSyntaxChecking {
      * 1. Parsing the expression with no variable checking
      * 2. Parsing the expression with variables values to see whether variables are well-placed or not
      * The second parsing is performed iff the first one succeeds
+     * @param t         : TML task {@link TMLTask}
+     * @param elt       : TML activity element {@link TMLActivityElement}
+     * @param parseCmd  : String - parse command
+     * @param action    : String
      */
     public void parsing(TMLTask t, TMLActivityElement elt, String parseCmd, String action) {
         if (action == null) {

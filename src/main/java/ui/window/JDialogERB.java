@@ -71,7 +71,7 @@ public class JDialogERB extends JDialogBase implements ActionListener  {
 	// Panel
     protected JTextField evt, condition, action;
     
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogERB(Frame _frame, EBRDDERB _erb) {
         super(_frame, "Event Reaction Block", true);
         frame = _frame;

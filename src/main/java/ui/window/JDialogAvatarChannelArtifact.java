@@ -73,7 +73,7 @@ public class JDialogAvatarChannelArtifact extends JDialogBase implements ActionL
     //protected JTextField taskName;
     protected JComboBox<String> referenceDiagram;
 
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogAvatarChannelArtifact(Frame _frame, String _title, ADDChannelArtifact _artifact) {
         super(_frame, _title, true);
         frame = _frame;

@@ -338,6 +338,7 @@ public class AvatarSpecification extends AvatarElement {
      * synchronous relations and one block per FIFO
      * The size of the infinite fifo is max 1024
      * and min 1
+     * @param _maxSizeOfInfiniteFifo : the max size of the infinite fifo
      */
     public void removeFIFOs(int _maxSizeOfInfiniteFifo) {
     	List<AvatarRelation> oldOnes = new LinkedList<AvatarRelation>();

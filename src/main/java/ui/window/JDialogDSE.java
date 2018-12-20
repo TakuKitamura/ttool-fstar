@@ -172,7 +172,7 @@ public class JDialogDSE extends JDialog implements ActionListener, ListSelection
     protected RshClient rshc;
 
 
-    /**
+    /*
      * Creates new form
      */
     public JDialogDSE(Frame f, MainGUI _mgui, String title, String _simulator, String dir) {

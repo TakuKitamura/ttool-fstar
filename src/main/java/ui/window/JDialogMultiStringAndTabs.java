@@ -80,7 +80,7 @@ public class JDialogMultiStringAndTabs extends JDialogBase implements ActionList
    // private List<String[]> possibleValues = null;
 
 
-    /**
+    /*
      * Creates new form
      */
     // arrayDelay: [0] -> minDelay ; [1] -> maxDelay

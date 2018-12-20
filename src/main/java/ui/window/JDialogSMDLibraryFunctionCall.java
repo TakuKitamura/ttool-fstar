@@ -108,7 +108,7 @@ public class JDialogSMDLibraryFunctionCall extends JDialogBase implements Action
 
     JComboBox<Object> parametersComboBox, signalsComboBox, returnAttributesComboBox;
 
-    /**
+    /*
      * Creates new dialog.
      */
     public JDialogSMDLibraryFunctionCall (AvatarSMDLibraryFunctionCall functionCall, JFrame f, String title) {

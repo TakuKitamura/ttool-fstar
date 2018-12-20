@@ -1588,6 +1588,7 @@ public class AvatarStateMachine extends AvatarElement {
      * DO NOT take into account code of states, and start states
      *
      * @param block The block containing the state machine
+     * @param _canOptimize boolean data
      */
     public void removeEmptyTransitions(AvatarBlock block, boolean _canOptimize) {
 

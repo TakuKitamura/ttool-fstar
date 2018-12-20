@@ -86,7 +86,7 @@ public class JDialogAvatarFirewall extends JDialogBase implements ActionListener
     // Main Panel
     private JComboBox<String> task1;
     private JComboBox<String> task2;
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogAvatarFirewall(Frame _frame, String _title, AvatarBDFirewall _node) {
         super(_frame, _title, true);
         frame = _frame;

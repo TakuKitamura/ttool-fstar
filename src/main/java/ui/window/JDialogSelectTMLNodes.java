@@ -80,7 +80,7 @@ public class JDialogSelectTMLNodes extends JDialogBase implements ActionListener
     protected JCheckBox optimize;
     protected JTextField clockField;
 
-    /**
+    /*
      * Creates new form
      */
     public JDialogSelectTMLNodes(Frame f, Vector<TGComponent> _back, java.util.List<TGComponent> componentList, String title, int _clock) {

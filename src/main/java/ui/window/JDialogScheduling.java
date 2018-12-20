@@ -91,7 +91,7 @@ public class JDialogScheduling extends JDialog implements ActionListener, Runnab
 	
 	private int generator;
 	
-	/** Creates new form  */
+	/* Creates new form  */
 	public JDialogScheduling(Frame f, MainGUI _mgui, String title, int _generator) {
 		super(f, title, true);
 		

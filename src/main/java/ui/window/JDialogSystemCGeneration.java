@@ -172,7 +172,7 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
     //  private boolean wasClosed = false;
 
 
-    /**
+    /*
      * Creates new form
      */
     public JDialogSystemCGeneration(Frame f, MainGUI _mgui, String title, String _simulatorHost, String _pathCode,

@@ -66,7 +66,7 @@ public class JDialogMultiStringCP extends JDialogBase implements ActionListener 
     // Panel1
     private JTextField[] texts;
 
-    /**
+    /*
      * Creates new form
      */
     // arrayDelay: [0] -> minDelay ; [1] -> maxDelay

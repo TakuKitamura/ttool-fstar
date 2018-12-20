@@ -75,7 +75,7 @@ public class JDialogHwANode extends JDialogBase implements ActionListener  {
     // Panel2
     protected JTextField byteDataSize, execiTime, clockRatio;
 
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogHwANode(Frame _frame, String _title, TMLArchiHWANode _node) {
         super(_frame, _title, true);
         frame = _frame;

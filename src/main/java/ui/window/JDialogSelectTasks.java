@@ -81,7 +81,7 @@ public class JDialogSelectTasks extends JDialogBase implements ActionListener, L
     private JButton shiftUp;
     private JButton shiftDown;
 
-    /**
+    /*
      * Creates new form
      */
     public JDialogSelectTasks(Frame f, Vector<String> _back, List<String> componentList, String title) {

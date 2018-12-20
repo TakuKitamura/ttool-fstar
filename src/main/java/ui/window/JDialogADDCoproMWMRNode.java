@@ -90,7 +90,7 @@ public class JDialogADDCoproMWMRNode extends JDialogBase implements ActionListen
    
     private static String[] coprocTab = {"Input Engine","Output Engine","Virtual Coprocessor"};
     
-		/** Creates new form  */
+		/* Creates new form  */
 		public JDialogADDCoproMWMRNode(Frame _frame, String _title, ADDCoproMWMRNode _node) {
 				super(_frame, _title, true);
 				frame = _frame;

@@ -72,7 +72,7 @@ public class JDialogCountermeasure extends JDialogBase implements ActionListener
 
     private ATDCountermeasure countermeasure;
 
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogCountermeasure(Frame _frame, String _title, ATDCountermeasure _countermeasure) {
         super(_frame, _title, true);
         frame = _frame;

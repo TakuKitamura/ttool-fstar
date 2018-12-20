@@ -86,7 +86,7 @@ public class JDialogTPNValidation extends JDialog implements ActionListener, Run
 
 	protected JCheckBox verbose, summary;
 
-	/** Creates new form  */
+	/* Creates new form  */
 	public JDialogTPNValidation(Frame f, MainGUI _mgui, String title, String _cmdTina, String _fileName, String _spec, String _host) {
 		super(f, title, true);
 

@@ -83,7 +83,7 @@ public class JDialogELNComponentIdealTransformer extends JDialog implements Acti
 	/** Parameters **/
 	private ELNComponentIdealTransformer idealTransformer;
 
-	/** Constructor **/
+	/* Constructor **/
 	public JDialogELNComponentIdealTransformer(ELNComponentIdealTransformer _idealTransformer) {
 		/** Set JDialog **/
 		setTitle("Setting the ideal transformer");

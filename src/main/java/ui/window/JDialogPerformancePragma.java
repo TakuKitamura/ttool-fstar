@@ -79,7 +79,7 @@ public class JDialogPerformancePragma extends JDialogBase implements ActionListe
     protected JPopupMenu helpPopup;
     public Map<String, List<String>> blockAttributeMap = new HashMap<String, List<String>>();
 
-    /**
+    /*
      * Creates new form
      */
     public JDialogPerformancePragma(Frame f, String title, String _text) {

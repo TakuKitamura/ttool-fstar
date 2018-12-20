@@ -70,7 +70,7 @@ public class JDialogArraySet extends JDialogBase implements ActionListener {
     private JTextField exprText, arrayText, indexText;
 	private JLabel valueLabel; 
     
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogArraySet(Frame f, String _array, String _index, String _expr, String title) {
         super(f, title, true);
         frame = f;

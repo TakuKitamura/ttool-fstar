@@ -83,7 +83,7 @@ public class JDialogAvatarTimer extends JDialogBase implements ActionListener  {
     private boolean setValue;
 
 
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogAvatarTimer(Frame _f, String _title, String _timer, String _value, List<String> _timers, boolean _setValue) {
         super(_f, _title, true);
 

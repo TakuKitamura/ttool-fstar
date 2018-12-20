@@ -99,7 +99,7 @@ public abstract class JDialogTMLSDInstance extends JDialog implements ActionList
 
     protected String name = "";
 
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogTMLSDInstance( java.util.List<TAttribute> _attributes, java.util.List<TAttribute> _forbidden, Frame f, String title, String attrib, String _name )	{
         super(f, title, true);
         frame = f;

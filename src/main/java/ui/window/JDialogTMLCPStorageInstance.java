@@ -54,7 +54,7 @@ import ui.TAttribute;
  */
 public class JDialogTMLCPStorageInstance extends JDialogTMLSDInstance {//implements ActionListener, ListSelectionListener  {
 
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogTMLCPStorageInstance( List<TAttribute> _attributes, List<TAttribute> _forbidden, Frame f, String title, String attrib, String _name )	{
         super( _attributes, _forbidden, f, title, attrib, _name );
     }

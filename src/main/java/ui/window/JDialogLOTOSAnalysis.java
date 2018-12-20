@@ -87,7 +87,7 @@
       
       protected JCheckBox warning;
       
-      /** Creates new form  */
+      /* Creates new form  */
       public JDialogLOTOSAnalysis(Frame f, MainGUI _mgui, String title, String _cmdCaesar, String _fileName, String _spec, String _host) {
           super(f, title, true);
           

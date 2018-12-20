@@ -77,7 +77,7 @@ public class JDialogCrossbarNode extends JDialogBase implements ActionListener  
     protected JComboBox arbitrationPolicy, privacy;
     protected JTextField sliceTime;
 
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogCrossbarNode(Frame _frame, String _title, TMLArchiCrossbarNode _node) {
         super(_frame, _title, true);
         frame = _frame;

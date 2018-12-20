@@ -69,7 +69,7 @@ public class JDialogEventArtifact extends JDialogBase implements ActionListener 
     
 	private JComboBox<String> referenceCommunicationName, priority;
 
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogEventArtifact(Frame _frame, String _title, TMLArchiEventArtifact _artifact) {
         super(_frame, _title, true);
         artifact = _artifact;

@@ -367,7 +367,7 @@ public class SpecConfigTTool {
      *
      * @param s directory path
      * @return true if there's no error, false if the directory cannot be created
-     * @throws FileException
+     * @throws FileException FileException
      * @author Fabien Tessier
      */
     public static boolean checkAndCreateSystemCDir(String s) throws FileException {
@@ -413,7 +413,7 @@ public class SpecConfigTTool {
      *
      * @param s directory path
      * @return true if there's no error, false if the directory cannot be created
-     * @throws FileException
+     * @throws FileException FileException
      * @author Fabien Tessier
      */
     public static boolean checkAndCreateAVATARCodeDir(String s) throws FileException {

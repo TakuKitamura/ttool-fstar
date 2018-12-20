@@ -95,7 +95,7 @@ public class JDialogELNComponentIndependentCurrentSource extends JDialog impleme
 	/** Parameters **/
 	private ELNComponentIndependentCurrentSource isource;
 
-	/** Constructor **/
+	/* Constructor **/
 	public JDialogELNComponentIndependentCurrentSource(ELNComponentIndependentCurrentSource _isource) {
 		/** Set JDialog **/
 		setTitle("Setting the independent current source");

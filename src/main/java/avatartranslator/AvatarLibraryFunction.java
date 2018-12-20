@@ -139,7 +139,7 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
     }
 
     /**
-     * Return a unique counter for library function call.
+     * @return : a unique counter for library function call.
      */
     public int getCounter()
     {
@@ -148,6 +148,7 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
 
     /**
      * Set counter for this library function.
+     * @param counter : counter to set
      */
     public void setCounter(int counter)
     {
@@ -171,8 +172,7 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
     /**
      * Add a parameter for this function.
      *
-     * @param attr
-     *      The parameter to add.
+     * @param attr The parameter to add.
      */
     public void addParameter (AvatarAttribute attr) {
         this.parameters.add (attr);
@@ -190,8 +190,7 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
     /**
      * Add a signal.
      *
-     * @param signal
-     *      The signal to add.
+     * @param signal The signal to add.
      */
     public void addSignal (AvatarSignal signal) {
         this.signals.add (signal);
@@ -446,6 +445,8 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
      *      The block the function call belongs to.
      * @param referenceObject
      *      The reference object associated to the function call being translated.
+     * @param counter
+     *      The counter of this library function
      *
      * @return The last element of the state machine created.
      */

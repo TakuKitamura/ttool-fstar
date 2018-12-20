@@ -72,7 +72,7 @@ public class JDialogFaultCountermeasure extends JDialogBase implements ActionLis
 
     private FTDCountermeasure countermeasure;
 
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogFaultCountermeasure(Frame _frame, String _title, FTDCountermeasure _countermeasure) {
         super(_frame, _title, true);
         frame = _frame;

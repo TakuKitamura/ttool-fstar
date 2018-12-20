@@ -1638,6 +1638,9 @@ public class TMLModeling<E> {
      *  Ununsed variables are removed from the class.
      *  Constant variables are also removed from the class, and each time
      *  they are used, they are replaced by their respective value.
+     * @param task          : TML task {@link TMLTask}
+     * @param activity      : TML activity {@link TMLActivity}
+     * @param warnings      : list of TML errors ({@link TMLError})
      */
     public void optimizeVariables(TMLTask task,  TMLActivity activity, List<TMLError> warnings) {
         int i;
@@ -1952,6 +1955,7 @@ public class TMLModeling<E> {
 
     /**
      *  Concatenate EXECI and EXEC operations
+     * @param activity : TML activity {@link TMLActivity}
      */
     public void optimizeMergeEXECs(TMLActivity activity) {
         TMLActivityElement elt0, elt1;
@@ -2087,6 +2091,7 @@ public class TMLModeling<E> {
 
     /**
      *  Concatenate Delay operations
+     * @param activity : TML actvity {@link TMLActivity}
      */
     public void optimizeMergeDELAYSs(TMLActivity activity) {
         TMLActivityElement elt0, elt1;

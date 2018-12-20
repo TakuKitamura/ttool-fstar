@@ -73,7 +73,7 @@ public class JDialogTMLADRandom extends JDialogBase implements ActionListener  {
     private JTextField jvariable, jminValue, jmaxValue;
 	private JComboBox<String> randomFunction;
     
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogTMLADRandom(Frame _frame, String _title, String _variable, String _minValue, String _maxValue, int _functionId) {
         super(_frame, _title, true);
         frame = _frame;

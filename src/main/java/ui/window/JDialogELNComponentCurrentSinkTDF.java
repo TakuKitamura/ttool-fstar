@@ -83,7 +83,7 @@ public class JDialogELNComponentCurrentSinkTDF extends JDialog implements Action
 	/** Parameters **/
 	private ELNComponentCurrentSinkTDF isink;
 
-	/** Constructor **/
+	/* Constructor **/
 	public JDialogELNComponentCurrentSinkTDF(ELNComponentCurrentSinkTDF _isink) {
 		/** Set JDialog **/
 		setTitle("Setting the conversion of current to TDF output signal");

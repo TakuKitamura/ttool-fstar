@@ -103,7 +103,7 @@ public class JDialogGraphModification extends JDialog implements ActionListener,
     protected JButton stop;
     protected JButton close;
 
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogGraphModification(Frame f, String _cadpHost, String _bcgioPath, String _remoteFile1, String title, String _lastRG, String _lastMinimizedRG) {
         super(f, title, true);
 

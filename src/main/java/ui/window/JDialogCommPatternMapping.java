@@ -162,7 +162,7 @@ public class JDialogCommPatternMapping extends JDialog /* implements ActionListe
     private JButton closeButton;
     private JButton cancelButton;
 
-    /**
+    /*
      * Creates new form
      */
     public JDialogCommPatternMapping(JFrame _frame,

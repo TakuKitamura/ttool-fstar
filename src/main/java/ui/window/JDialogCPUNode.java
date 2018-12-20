@@ -85,7 +85,7 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
     private JTabbedPane tabbedPane;
 
     private java.util.List<SimulationTransaction> transactions;
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogCPUNode(Frame _frame, String _title, TMLArchiCPUNode _node, ArchUnitMEC _MECType, java.util.List<SimulationTransaction> _transactions) {
         super(_frame, _title, true);
       //  frame = _frame;

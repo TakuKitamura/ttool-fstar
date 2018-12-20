@@ -114,7 +114,7 @@ public class JDialogProjection extends JDialog implements ActionListener, ListSe
     // Main Panel
     private JButton start, stop, close;
 
-    /**
+    /*
      * Creates new form
      */
     public JDialogProjection(Frame f, MainGUI _mgui, TClassDiagramPanel tcd, TURTLEModeling tm, String _aldebaranHost, String _aldebaranPath, String _bcgminPath, String _bcgioPath, String _inputData, String _fileName, String title) {

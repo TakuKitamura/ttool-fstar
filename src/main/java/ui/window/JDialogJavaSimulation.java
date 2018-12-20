@@ -109,7 +109,7 @@ public class JDialogJavaSimulation extends JDialog implements ActionListener, Ru
     private TURTLE2SimuJava t2j;
     
     
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogJavaSimulation(Frame f, MainGUI _mgui, String title, String _pathCode, String _pathCompiler, String _ttoolclasspath, String _pathExecute) {
         super(f, title, true);
         

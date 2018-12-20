@@ -76,7 +76,7 @@ public class JDialogNCSwitchNode extends JDialogBase implements ActionListener {
 	private JComboBox<String> capacityUnitBox;
 	private JTextField technicalLatencyText;
 
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogNCSwitchNode(Frame _f, String _title, String _switchName, int _schedulingPolicy, int _switchingTechnique, int _capacity, String _capacityUnit, int _technicalLatency) {
         super(_f, _title, true);
 

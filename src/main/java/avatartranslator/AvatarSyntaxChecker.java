@@ -201,9 +201,13 @@ public class AvatarSyntaxChecker  {
      * 1. Parsing the expression with no variable checking
      * 2. Parsing the expression with variables values to see whether variables are well-placed or not
      * The second parsing is performed iff the first one succeeds
-     * return -1 in case of error in first pass
-     * return -2 in case of error in second pass
-     * return -3 in case a variable has not been declared
+     * @param _as       : Unused
+     * @param _ab       : Avatar block
+     * @param _parseCmd : Parsing the expression with no variable checking
+     * @param _action   : Parsing the expression with variables values to see whether variables are well-placed or not
+     * @return :    return -1 in case of error in first pass
+     *              return -2 in case of error in second pass
+     *              return -3 in case a variable has not been declared
      */
     public static int parse(AvatarSpecification _as, AvatarBlock _ab, String _parseCmd, String _action) {
         TMLExprParser parser;

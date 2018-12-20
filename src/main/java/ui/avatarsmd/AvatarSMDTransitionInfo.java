@@ -769,7 +769,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
     
     /**
      * Issue #69
-     * @return
+     * @return Effective expression - DISABLED_GUARD_EXPR ([])
      */
     public String getEffectiveGuard() {
     	return guard.getEffectiveExpression( DISABLED_GUARD_EXPR );
@@ -782,7 +782,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
 
     /**
      * Issue #69
-     * @return
+     * @return Effective After Min expression - DISABLED_DELAY_EXPR ("")
      */
     public String getEffectiveAfterMinDelay() {
         return afterDelay.getMinExpression().getEffectiveExpression( DISABLED_DELAY_EXPR );
@@ -795,7 +795,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
 
     /**
      * Issue #69
-     * @return
+     * @return Effective After Max expression - DISABLED_DELAY_EXPR ("")
      */
     public String getEffectiveAfterMaxDelay() {
         return afterDelay.getMaxExpression().getEffectiveExpression( DISABLED_DELAY_EXPR );
@@ -808,7 +808,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
 
     /**
      * Issue #69
-     * @return
+     * @return Effective Compute Min expression - DISABLED_DELAY_EXPR ("")
      */
     public String getEffectiveComputeMinDelay() {
         return computeDelay.getMinExpression().getEffectiveExpression( DISABLED_DELAY_EXPR );
@@ -821,7 +821,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
 
     /**
      * Issue #69
-     * @return
+     * @return Effective Compute Max expression - DISABLED_DELAY_EXPR ("")
      */
     public String getEffectiveComputeMaxDelay() {
         return computeDelay.getMaxExpression().getEffectiveExpression( DISABLED_DELAY_EXPR );
@@ -859,7 +859,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
 
     /**
      * Issue #69
-     * @return
+     * @return List of effective actions
      */
     public Vector<String> getEffectiveActions() {
     	final Vector<String> actionExpressions = new Vector<String>( listOfActions.size() );

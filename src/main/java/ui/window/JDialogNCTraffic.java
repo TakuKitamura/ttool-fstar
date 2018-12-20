@@ -67,7 +67,7 @@ public class JDialogNCTraffic extends JDialogBase implements ActionListener {
     private JTextField valueText, periodText, deadlineText, minPacketSizeText, maxPacketSizeText;
 	private JComboBox<String> periodicTypeBox, priorityBox, periodUnitBox, deadlineUnitBox;
 
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogNCTraffic(Frame _f, String _title, String _value, int _periodicType, int _period, String _periodUnit, int _deadline, String _deadlineUnit, int _minPacketSize, int _maxPacketSize, int _priority) {
         super(_f, _title, true);
 

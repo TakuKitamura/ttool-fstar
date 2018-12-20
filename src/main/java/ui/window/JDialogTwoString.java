@@ -68,7 +68,7 @@ public class JDialogTwoString extends JDialogBase implements ActionListener  {
     private JTextField text1, text2;
     
     
-    /** Creates new form  */
+    /* Creates new form  */
     // arrayDelay: [0] -> minDelay ; [1] -> maxDelay
     public JDialogTwoString(Frame f, String title, String _id1, String _string1, String _id2, String _string2) {
         

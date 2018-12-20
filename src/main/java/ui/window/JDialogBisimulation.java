@@ -100,7 +100,7 @@ public class JDialogBisimulation extends JDialog implements ActionListener, Runn
     protected JButton stop;
     protected JButton close;
     
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogBisimulation(Frame f, String _aldebaranHost, String _aldebaranPath,  String _remoteFile1, String _remoteFile2, String title) {
         super(f, title, true);
         

@@ -83,7 +83,7 @@ public class JDialogAttribute extends JDialogBase implements ActionListener, Lis
     protected JButton downButton;
     protected JButton removeButton;
     
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogAttribute(java.util.List<TAttribute> _attributes, java.util.List<TAttribute>_forbidden, Frame f, String title, String attrib) {
         super(f, title, true);
         frame = f;

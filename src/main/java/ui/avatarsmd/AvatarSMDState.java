@@ -834,7 +834,7 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 	
     /**
      * Issue #69
-     * @param _enabled
+     * @param _enabled boolean data
      */
     @Override
     public void setEnabled( final boolean _enabled ) {

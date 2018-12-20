@@ -117,7 +117,7 @@ public class JFrameMinimize extends javax.swing.JFrame implements ActionListener
     // Main Panel
     private JButton start, stop, close;
 
-    /**
+    /*
      * Creates new form
      */
     public JFrameMinimize(Frame _f, MainGUI _mgui, String _title, RG _rg, String _graphDir) {

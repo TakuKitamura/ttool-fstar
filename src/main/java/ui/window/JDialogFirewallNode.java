@@ -78,7 +78,7 @@ public class JDialogFirewallNode extends JDialogBase implements ActionListener,L
 
     private JComboBox<String> task1;
     private JComboBox<String> task2;
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogFirewallNode(Frame _frame, String _title, TMLArchiFirewallNode _node) {
         super(_frame, _title, true);
         node = _node;

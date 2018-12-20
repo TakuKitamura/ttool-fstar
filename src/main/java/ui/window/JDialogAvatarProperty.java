@@ -67,7 +67,7 @@ public class JDialogAvatarProperty extends JDialogBase implements ActionListener
 
     //private String id1, id2;
 
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogAvatarProperty(Frame f, String _name, int _kind, boolean _notSelected) {
 
         super(f, "Setting property attributes", true);
