@@ -146,7 +146,7 @@ public class TADSequence extends TADComponentWithSubcomponents /* Issue #69 TGCW
 	
     /**
      * Issue #69
-     * @param _enabled
+     * @param _enabled  :  boolean data
      */
     @Override
     public void setEnabled( final boolean _enabled ) {

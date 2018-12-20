@@ -504,9 +504,11 @@ public abstract class ProCSDPort  extends TGCWithoutInternalComponent implements
     
     //Method added by Solange
     /** Allows to get all the messages of
-	* a mandatory interface.
-	* @param p port connected to the interface
-	* @return msgMandatory Vector of messages
+	 * a mandatory interface.
+	 * @param p port connected to the interface
+	 * @param it : interface
+	 * @return msgMandatory Vector of messages
+	 *
 	**/
     public Vector<TAttribute> getMsgMandatory(ProCSDPort p, ProCSDInterface it){
     	Vector<TAttribute> msgMandatory=new Vector<TAttribute>();

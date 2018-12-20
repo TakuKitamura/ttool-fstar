@@ -10,7 +10,7 @@ public abstract class AbstractCDElement implements CDElement {
     
     /**
      * Issue #69
-     * @param _enabled
+     * @param _enabled  :   boolean data type
      */
     @Override
     public void setEnabled( final boolean _enabled ) {
@@ -19,7 +19,7 @@ public abstract class AbstractCDElement implements CDElement {
     
     /**
      * Issue #69
-     * @param _enabled
+     * @param _enabled  :   boolean data type
      */
     @Override
     public void doSetEnabled( final boolean _enabled ) {
@@ -38,16 +38,17 @@ public abstract class AbstractCDElement implements CDElement {
 
     /**
      * Issue #69
-     * @return
+     * @return  :   Always False
      */
     @Override
     public boolean canBeDisabled() {
     	return false;
     }
 
-    	/**
+    /**
      * Issue #69
-     * @return
+     * @param label :   Label
+     * @return      :   Always False
      */
     @Override
     public boolean canLabelBeDisabled( TGCOneLineText label ) {

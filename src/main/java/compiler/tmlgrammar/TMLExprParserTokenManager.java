@@ -50,7 +50,9 @@ public class TMLExprParserTokenManager implements TMLExprParserConstants
 
   /** Debug output. */
   public  java.io.PrintStream debugStream = System.out;
-  /** Set debug output. */
+  /** Set debug output.
+   * @param ds debug output
+   */
   public  void setDebugStream(java.io.PrintStream ds) { debugStream = ds; }
 private final int jjStopStringLiteralDfa_0(int pos, long active0, long active1)
 {
@@ -1191,20 +1193,20 @@ protected SimpleCharStream input_stream;
 private final int[] jjrounds = new int[24];
 private final int[] jjstateSet = new int[48];
 protected char curChar;
-/** Constructor. */
+/* Constructor. */
 public TMLExprParserTokenManager(SimpleCharStream stream){
    if (SimpleCharStream.staticFlag)
       throw new Error("ERROR: Cannot use a static CharStream class with a non-static lexical analyzer.");
    input_stream = stream;
 }
 
-/** Constructor. */
+/* Constructor. */
 public TMLExprParserTokenManager(SimpleCharStream stream, int lexState){
    this(stream);
    SwitchTo(lexState);
 }
 
-/** Reinitialise parser. */
+/* Reinitialise parser. */
 public void ReInit(SimpleCharStream stream)
 {
    jjmatchedPos = jjnewStateCnt = 0;
@@ -1220,14 +1222,16 @@ private void ReInitRounds()
       jjrounds[i] = 0x80000000;
 }
 
-/** Reinitialise parser. */
+/* Reinitialise parser. */
 public void ReInit(SimpleCharStream stream, int lexState)
 {
    ReInit(stream);
    SwitchTo(lexState);
 }
 
-/** Switch to specified lex state. */
+/** Switch to specified lex state
+ * @param lexState : lex state
+ */
 public void SwitchTo(int lexState)
 {
    if (lexState >= 1 || lexState < 0)
@@ -1267,7 +1271,7 @@ int jjround;
 int jjmatchedPos;
 int jjmatchedKind;
 
-/** Get the next Token. */
+/** @return : Get the next Token. */
 public Token getNextToken() 
 {
   Token specialToken = null;

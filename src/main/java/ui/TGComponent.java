@@ -2842,6 +2842,9 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
      * Highlight the selected component
      *
      * @author Fabien Tessier
+     * @param frame     :   Unused
+     * @param x         :   X position
+     * @param y         :   Y position
      */
     public final void singleClick(JFrame frame, int x, int y) {
         isSelect = true;
@@ -3357,8 +3360,8 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
     
     /**
      * Issue #69
-     * @param point
-     * @return
+     * @param point :   connecting point
+     * @return      :   Connector
      */
     public TGConnector getConnectorConnectedTo( final TGConnectingPoint point ) {
     	return tdp.getConnectorConnectedTo( point );
@@ -3366,7 +3369,7 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
     
     /**
      * Issue #69
-     * @return
+     * @return  :   List of connectors
      */
     public List<TGConnector> getConnectors() {
     	return tdp.getConnectors();
@@ -3374,7 +3377,7 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
     
     /**
      * Issue #69
-     * @return
+     * @return  :   List of connectors
      */
     public List<TGConnector> getInputConnectors() {
     	final List<TGConnector> connectors = new ArrayList<TGConnector>();
@@ -3391,7 +3394,7 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
     
     /**
      * Issue #69
-     * @return
+     * @return  :   List of output connectors
      */
     public List<TGConnector> getOutputConnectors() {
     	final List<TGConnector> connectors = new ArrayList<TGConnector>();
@@ -3408,7 +3411,7 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
 
 	/**
 	 * Issue #69
-	 * @return
+	 * @return  :   Array of connecting points
 	 */
 	public TGConnectingPoint[] getConnectingPoints() {
 		return connectingPoint;

@@ -69,6 +69,9 @@ public class ParseException extends Exception {
    * in the generated parser.  Calling this constructor generates
    * a new object of this type with the fields "currentToken",
    * "expectedTokenSequences", and "tokenImage" set.
+   * @param currentTokenVal current token
+   * @param expectedTokenSequencesVal expected token sequences
+   * @param tokenImageVal token image
    */
   public ParseException(Token currentTokenVal,
                         int[][] expectedTokenSequencesVal,
@@ -95,7 +98,7 @@ public class ParseException extends Exception {
     super();
   }
 
-  /** Constructor with message. */
+  /* Constructor with message. */
   public ParseException(String message) {
     super(message);
   }

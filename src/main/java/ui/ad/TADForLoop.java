@@ -115,7 +115,7 @@ public abstract class TADForLoop extends TADComponentWithoutSubcomponents implem
 	
     /**
      * Issue #69
-     * @param _enabled
+     * @param _enabled	:	true for getting inside loop
      */
     @Override
     public void setEnabled( final boolean _enabled ) {

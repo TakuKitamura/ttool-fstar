@@ -87,7 +87,7 @@ public class JDialogAttributeProCSD extends javax.swing.JDialog implements Actio
     private JButton closeButton;
     private JButton cancelButton;
     
-    /** Creates new form  */
+    /* Creates new form  */
     
     public JDialogAttributeProCSD(LinkedList<TAttribute> _attributes, LinkedList<TAttribute> _forbidden, Frame f, String title, String attrib) {
         super(f, title, true);

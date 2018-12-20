@@ -3978,7 +3978,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     /**
      * Check if newvalue is already a name of a component.
      *
-     * @param newvalue
+     * @param newvalue : Checked name value
      * @return true if the name is used
      * @author Fabien Tessier
      */

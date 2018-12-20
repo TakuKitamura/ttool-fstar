@@ -203,7 +203,8 @@ public class ActivityDiagram extends Vector<ADComponent>{
     }
     
     
-    /** g !expr1 ...!exprn ?exprn+1 ...?exprn+m -> g!expr1...!exprn followed by g?exprn+1 ...?exprn+m
+    /** g !expr1 ...!exprn ?exprn+1 ...?exprn+m to g!expr1...!exprn followed by g?exprn+1 ...?exprn+m
+     * @param g : Gate
      */
     public void distinguishAllCallOn(Gate g) {
         ADComponent adc;
