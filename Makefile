@@ -349,6 +349,7 @@ $(TTOOL_PREINSTALL_WINDOWS:.tgz=.tar): $(BASERELEASE:.tgz=.tar)
 	@$(TAR) xzvf $(TTOOL_PRIVATE)/stocks/uppaal.tar.gz -C $(TTOOL_TARGET_WINDOWS)
 	@cp $(TTOOL_DOC)/config_windows.xml $(TTOOL_TARGET_WINDOWS)/TTool/bin/
 	@sed 's#chdir .*#chdir TTool/bin#' $(TTOOL_DOC)/ttool_windows.bat > $(TTOOL_TARGET_WINDOWS)/ttool.bat
+	@cp $(TTOOL_PATH)/build/*.jar $(TTOOL_TARGET_WINDOWS)/TTool/bin/
 	@$(TAR) uf $@ -C $(TTOOL_TARGET_WINDOWS) proverif uppaal TTool/bin/config_windows.xml ttool.bat
 
 $(TTOOL_PREINSTALL_MACOS:.tgz=.tar): $(BASERELEASE:.tgz=.tar)
@@ -361,6 +362,7 @@ $(TTOOL_PREINSTALL_MACOS:.tgz=.tar): $(BASERELEASE:.tgz=.tar)
 	@cp $(TTOOL_DOC)/config_macosx.xml $(TTOOL_TARGET_MACOS)/TTool/bin/config_macosx.xml
 	@sed 's#cd [^;]*#cd TTool/bin#' $(TTOOL_DOC)/ttool_macosx.exe > $(TTOOL_TARGET_MACOS)/ttool.exe
 	@chmod u+x $(TTOOL_TARGET_MACOS)/ttool.exe
+	@cp $(TTOOL_PATH)/build/*.jar $(TTOOL_TARGET_MACOS)/TTool/bin/
 	@$(TAR) uf $@ -C $(TTOOL_TARGET_MACOS) proverif uppaal TTool/bin/config_macosx.xml ttool.exe
 
 $(TTOOL_PREINSTALL_LINUX:.tgz=.tar): $(BASERELEASE:.tgz=.tar)
@@ -372,6 +374,7 @@ $(TTOOL_PREINSTALL_LINUX:.tgz=.tar): $(BASERELEASE:.tgz=.tar)
 	@cp $(TTOOL_DOC)/config_linux.xml $(TTOOL_TARGET_LINUX)/TTool/bin/config_linux.xml
 	@sed 's#cd [^;]*#cd TTool/bin#' $(TTOOL_DOC)/ttool_linux.exe > $(TTOOL_TARGET_LINUX)/ttool.exe
 	@chmod u+x $(TTOOL_TARGET_LINUX)/ttool.exe
+	@cp $(TTOOL_PATH)/build/*.jar $(TTOOL_TARGET_LINUX)/TTool/bin/
 	@$(TAR) uf $@ -C $(TTOOL_TARGET_LINUX) proverif uppaal TTool/bin/config_linux.xml ttool.exe
 
 $(BASERELEASE:.tgz=.tar): $(JTTOOL_BINARY) $(TTOOL_BINARY) $(LAUNCHER_BINARY) $(TIFTRANSLATOR_BINARY) $(TMLTRANSLATOR_BINARY) $(RUNDSE_BINARY) FORCE
@@ -437,7 +440,7 @@ $(BASERELEASE:.tgz=.tar): $(JTTOOL_BINARY) $(TTOOL_BINARY) $(LAUNCHER_BINARY) $(
 	@mkdir -p $(TTOOL_TARGET)/doc
 	@cp $(TTOOL_DOC)/README_doc $(TTOOL_TARGET)/doc
 # AVATAR executable code
-	@mkdir -p $(TTOOL_TARGET)/TToolexecutablecode
+	@mkdir -p $(TTOOL_TARGET)/executablecode
 	@mkdir -p $(TTOOL_TARGET)/executablecode/src
 	@mkdir -p $(TTOOL_TARGET)/executablecode/generated_src
 	@mkdir -p $(TTOOL_TARGET)/executablecode/example
