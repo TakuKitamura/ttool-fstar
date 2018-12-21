@@ -203,8 +203,8 @@ public class AvatarSyntaxChecker  {
      * The second parsing is performed iff the first one succeeds
      * @param _as       : Unused
      * @param _ab       : Avatar block
-     * @param _parseCmd : Parsing the expression with no variable checking
-     * @param _action   : Parsing the expression with variables values to see whether variables are well-placed or not
+     * @param _parseCmd : Parse Command
+     * @param _action   : Action
      * @return :    return -1 in case of error in first pass
      *              return -2 in case of error in second pass
      *              return -3 in case a variable has not been declared
