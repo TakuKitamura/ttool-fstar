@@ -84,7 +84,7 @@ public class JDialogADConnector extends JDialog {//implements ActionListener  {
 	protected JTextArea jtaCode, jtaFiles;
     
     
-    /** Creates new form  */
+    /* Creates new form  */
     // arrayDelay: [0] -> minDelay ; [1] -> maxDelay
   public JDialogADConnector( Frame _f, String _title, String _guard )
 	/*, String _afterMin, String _afterMax, String _computeMin, String _computeMax, Vector<String> _actions,

@@ -89,7 +89,7 @@ public class JDialogELNComponentCapacitor extends JDialog implements ActionListe
 	/** Parameters **/
 	private ELNComponentCapacitor c;
 
-	/** Constructor **/
+	/* Constructor **/
 	public JDialogELNComponentCapacitor(ELNComponentCapacitor _c) {
 		/** Set JDialog **/
 		setTitle("Setting the capacitor");

@@ -72,7 +72,7 @@ public class JDialogArtifact extends JDialog implements ActionListener  {
     
     //private String id1, id2;
     
-    /** Creates new form  */
+    /* Creates new form  */
     // arrayDelay: [0] -> minDelay ; [1] -> maxDelay
     public JDialogArtifact(Frame f, String _name, String _jarName, boolean _userCode) {
         

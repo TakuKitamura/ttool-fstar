@@ -73,7 +73,7 @@ public class JDialogCommunicationArtifact extends JDialogBase implements ActionL
     
 	protected JComboBox<String> referenceCommunicationName, priority;
     
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogCommunicationArtifact(Frame _frame, String _title, TMLArchiCommunicationArtifact _artifact) {
         super(_frame, _title, true);
         frame = _frame;

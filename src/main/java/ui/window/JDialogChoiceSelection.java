@@ -75,7 +75,7 @@ public class JDialogChoiceSelection extends JDialogBase implements ActionListene
 
     private boolean cancelled;
 
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogChoiceSelection(Frame _f, String _title,
                                   String[] _availableElements, int _indexOfCurrentElements) {
 

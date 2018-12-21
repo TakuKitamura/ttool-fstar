@@ -160,7 +160,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
     private ArrayList<Object[]> rowsGoogle;
     private ArrayList<Object[]> rowsGoogleScholar;
     private ArrayList<Object[]> rowsDB;
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogSearchBox(Frame _frame, String _title, java.util.List<String> l, TDiagramMouseManager tdmm) {
         //super(_frame, _title, true);
         initComponents();
@@ -898,7 +898,8 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
     /**
      *
-     * @param msg
+     * @param msg : message
+     * @return message to send back to client
      */
     public Message sendMessage(Message msg) {
         Client cl = new Client();
@@ -1123,8 +1124,8 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
     /**
      * Display content in table.
-     * @param list
-     * @param model
+     * @param list        : content
+     * @param model       : Default table model
      * @param objectType 0: google
      *                   1: google scholar
      *                   2: database
@@ -1165,10 +1166,10 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
     /**
      *
-     * @param evt
-     * @param rows
-     * @param resultTable
-     * @param textpane
+     * @param evt         : {@link ListSelectionEvent}
+     * @param rows        : list of rows
+     * @param resultTable : {@link JTable}
+     * @param textpane    : {@link JTextPane}
      * @param typeObject 0: google
      *                   1: google scholar
      *                   2: database
@@ -1243,7 +1244,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
     /**
      * add new value into Keyword list.
-     * @param st
+     * @param st : new value into Keyword list
      */
     public void addValueListKeyword(String st){
         if  (! this.listModel.contains(st)){
@@ -1313,11 +1314,11 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
     /**
      *
-     * @param obj
+     * @param obj         : {@link Object}
      * @param typeObject 0: obj from google.
      *                   1: obj from googleScholar
      *                   2: obj from database
-     * @param textPane
+     * @param textPane    : {@link JTextPane}
      */
     public void presentDataInDetail(Object obj, int typeObject, JTextPane textPane){
 
@@ -1493,7 +1494,8 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
     /**
      * Check a string if it contains only number.
-     * @param str
+     * @param str : string
+     * @return    : true if the contains only number
      */
     public boolean isNum(String str){
         try{
@@ -1506,7 +1508,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
     /**
      * create html format for content from Google Scholar
-     * @param gs
+     * @param gs        : {@link GoogleSearch}
      * @return String
      */
     public String formatOutput_GoogleScholar (GoogleSearch gs){
@@ -1525,7 +1527,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
     /**
      * create html format for content from Google
-     * @param gs
+     * @param gs {@link GoogleSearch}
      * @return String
      */
     public String formatOutput_Google (GoogleSearch gs){
@@ -1542,7 +1544,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
     /**
      * create html format for content from Database (not detail)
-     * @param r
+     * @param r {@link Record}
      * @return String
      */
     public String formatOutput_DB_SHORT (Record r){
@@ -1560,7 +1562,7 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
     /**
      * create html format for content from Database (detail)
-     * @param r
+     * @param r {@link Record}
      * @return String
      */
     public String formatOutput_DB_DETAIL (Record r){
@@ -1586,7 +1588,8 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
     /**
      * Check the printable character.
-     * @param c
+     * @param c : character
+     * @return if the character is printable
      */
     public boolean isPrintableChar( char c ) {
         Character.UnicodeBlock block = Character.UnicodeBlock.of( c );
@@ -1598,7 +1601,8 @@ public class JDialogSearchBox extends javax.swing.JFrame  {
 
     /**
      * Check the printable string
-     * @param s
+     * @param s string
+     * @return true if the string is printable
      */
     public boolean isPrintableString(String s){
         if (s==null)

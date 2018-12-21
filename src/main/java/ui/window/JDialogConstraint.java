@@ -71,7 +71,7 @@ public class JDialogConstraint extends JDialogBase implements ActionListener  {
 
 	private ConstraintListInterface constraint;
     
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogConstraint(Frame _frame, String _title, ConstraintListInterface _constraint) {
         super(_frame, _title, true);
         frame = _frame;

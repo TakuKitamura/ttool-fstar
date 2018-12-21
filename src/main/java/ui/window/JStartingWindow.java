@@ -74,6 +74,7 @@ public class JStartingWindow extends Window {
      *
      * @param owner The frame owning the splash window.
      * @param splashImage The splashImage to be displayed.
+     * @param message the message to be displayed
      */
 
     public JStartingWindow(Frame owner, Image splashImage, String message) {
@@ -169,6 +170,7 @@ public class JStartingWindow extends Window {
      * Dispose the returned frame to get rid of the splash window.<p>
      *
      * @param splashImage The image to be displayed.
+     * @param msg the message to be displayed
      * @return Returns the frame that owns the SplashWindow.
      */
 

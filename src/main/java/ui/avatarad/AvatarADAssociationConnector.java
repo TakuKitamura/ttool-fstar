@@ -88,7 +88,7 @@ public  class AvatarADAssociationConnector extends TADConnector/* Issue #69 TGCo
     
     /**
      * Issue #69
-     * @return
+     * @return  :   true if can be able to disable Association Connector in Activity Diagram
      */
     @Override
     public boolean canBeDisabled() {

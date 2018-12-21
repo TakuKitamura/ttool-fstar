@@ -73,7 +73,7 @@ public class JDialogAvatarBlockArtifact extends JDialogBase implements ActionLis
     //protected JTextField taskName;
 	protected JComboBox<String> referenceTaskName;
     
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogAvatarBlockArtifact(Frame _frame, String _title, ADDBlockArtifact _artifact) {
         super(_frame, _title, true);
         frame = _frame;

@@ -68,9 +68,9 @@ public class ThreadSocket extends Thread {
     DatabaseQuery database = null;
 
     /**
-     *
-     * @param socket
-     * @param database
+     * Constructor
+     * @param socket    : SSL socket
+     * @param database  : DatabaseQuery
      */
     public ThreadSocket(SSLSocket socket, web.crawler.DatabaseQuery database){
 

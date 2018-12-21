@@ -135,7 +135,7 @@ public class TMLCPFork extends TADComponentWithoutSubcomponents /* Issue #69 TGC
 	
     /**
      * Issue #69
-     * @param _enabled
+     * @param _enabled boolean data
      */
     @Override
     public void setEnabled( final boolean _enabled ) {

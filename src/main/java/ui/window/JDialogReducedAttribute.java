@@ -80,7 +80,7 @@ public class JDialogReducedAttribute extends JDialogBase implements ActionListen
     private JList<TAttribute> setAttributes;
     private JButton unsetButton;
     
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogReducedAttribute(java.util.List<TAttribute> _attributes, java.util.List<TAttribute> _tclassAttributes, Frame f, String title, String  _attrib, String _nameTObject, String _nameTClass) {
         super(f, title, true);
         frame = f;

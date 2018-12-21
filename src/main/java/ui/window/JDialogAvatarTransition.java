@@ -122,7 +122,7 @@ public class JDialogAvatarTransition extends JDialogBase implements ActionListen
     protected JTextArea jtaCode, jtaFiles;
 
 
-    /** Creates new form  */
+    /* Creates new form  */
     // arrayDelay: [0] -> minDelay ; [1] -> maxDelay
     public JDialogAvatarTransition(	Frame _f, 
     								String _title, 

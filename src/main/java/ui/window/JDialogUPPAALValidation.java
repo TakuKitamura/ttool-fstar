@@ -147,7 +147,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
     public Map<String, Integer> verifMap;
     protected int status = -1;
 
-    /**
+    /*
      * Creates new form
      */
     public JDialogUPPAALValidation(Frame f, MainGUI _mgui, String title, String _cmdVerifyta, String _pathTrace, String _fileName, String _spec, String _host, TURTLEPanel _tp) {

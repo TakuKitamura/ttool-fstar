@@ -79,7 +79,7 @@ public class JDialogTMLTaskArtifact extends JDialogBase implements ActionListene
 	
 	private JTabbedPane tabbedPane;
     
-    /** Creates new form  */
+    /* Creates new form  */
   public JDialogTMLTaskArtifact(Frame _frame, String _title, TMLArchiArtifact _artifact, String _operation, ArchUnitMEC _MECType) {
         super(_frame, _title, true);
         //frame = _frame;

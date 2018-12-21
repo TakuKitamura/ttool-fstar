@@ -69,7 +69,7 @@ public class JDialogObserver extends JDialogBase implements ActionListener  {
     protected JTextField diagramBox;
     private JTextField violatedActionBox;
     
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogObserver(Frame _frame, String _title, String _diagram, String _violatedAction) {
         super(_frame, _title, true);
         frame = _frame;

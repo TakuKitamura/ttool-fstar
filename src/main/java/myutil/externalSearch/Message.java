@@ -58,7 +58,7 @@ import java.util.ArrayList;
  * CMD : A string of command, for example : search, detail, stats
  * search : search with keywords
  * detail : clients send CVE-ID and get back all information
- * stats : -> Images
+ * stats : to Images
  * Options and Values ArrayLists,
  * "Options" contains names
  * "Values" contains values respectively

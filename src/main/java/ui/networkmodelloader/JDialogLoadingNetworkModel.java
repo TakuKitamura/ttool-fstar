@@ -104,7 +104,7 @@ public class JDialogLoadingNetworkModel extends javax.swing.JFrame implements Ac
     private JFileChooser jfc;
 
 
-    /**
+    /*
      * Creates new form
      */
     public JDialogLoadingNetworkModel(Frame _f, MainGUI _mgui, String title, String _url) {

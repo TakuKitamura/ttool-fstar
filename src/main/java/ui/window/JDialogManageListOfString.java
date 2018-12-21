@@ -80,7 +80,7 @@ public class JDialogManageListOfString extends JDialogBase implements ActionList
 
     private boolean hasBeenCancelled = true;
 
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogManageListOfString(Frame f, Vector<String> _ignored, Vector<String> _selected, String title) {
         super(f, title, true);
 

@@ -134,7 +134,7 @@ public class AvatarADParallel extends AvatarADBasicCanBeDisabledComponent /* Iss
     
     /**
      * Issue #69
-     * @param _enabled
+     * @param _enabled  :   true for enabling the Parallel Operator
      */
     @Override
     public void setEnabled( final boolean _enabled ) {

@@ -62,7 +62,7 @@ public class TAction {
     public char KEY;
     public boolean hasControl = false;
 
-    /**
+    /*
      * Creates a new TAction
      */
     public TAction(String ActionCommand, String name, ImageIcon smallIcon, ImageIcon largeIcon, String shortDescription, String longDescription, int mneKey) {

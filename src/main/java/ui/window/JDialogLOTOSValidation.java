@@ -91,7 +91,7 @@ public class JDialogLOTOSValidation extends JDialog implements ActionListener, R
 	
 	protected boolean distributorEnabled;
 	
-	/** Creates new form  */
+	/* Creates new form  */
 	public JDialogLOTOSValidation(Frame f, MainGUI _mgui, String title, String _cmdCaesar, String _cmdCaesarOpen, String _cmdBcgio, String _cmdBcgmerge, String _fileName, String _spec, String _host) {
 		super(f, title, true);
 		

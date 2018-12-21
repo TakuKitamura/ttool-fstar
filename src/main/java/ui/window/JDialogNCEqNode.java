@@ -69,7 +69,7 @@ public class JDialogNCEqNode extends JDialogBase implements ActionListener {
 	private JComboBox<String> schedulingPolicyBox;
 	private JComboBox<String> typeBox;
 
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogNCEqNode(Frame _f, String _title, String _eqName, int _schedulingPolicy, int _type) {
         super(_f, _title, true);
 

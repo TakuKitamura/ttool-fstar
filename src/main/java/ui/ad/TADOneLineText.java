@@ -13,7 +13,7 @@ public abstract class TADOneLineText extends TGCOneLineText {
     
     /**
      * Issue #69
-     * @return
+     * @return	:	True if OneLineText is able to disable
      */
     @Override
     public boolean canBeDisabled() {

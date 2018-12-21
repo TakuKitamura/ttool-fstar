@@ -91,7 +91,7 @@ public class JDialogELNComponentTransmissionLine extends JDialog implements Acti
 	/** Parameters **/
 	private ELNComponentTransmissionLine transmission_line;
 
-	/** Constructor **/
+	/* Constructor **/
 	public JDialogELNComponentTransmissionLine(ELNComponentTransmissionLine _transmission_line) {
 		/** Set JDialog **/
 		setTitle("Setting the transmission line");

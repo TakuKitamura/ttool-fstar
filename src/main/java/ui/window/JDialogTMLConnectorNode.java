@@ -71,7 +71,7 @@ public class JDialogTMLConnectorNode extends JDialogBase implements ActionListen
     //protected JTextField taskName;
 	protected JComboBox<String> priority;
     
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogTMLConnectorNode(Frame _frame, String _title, TMLArchiConnectorNode _connector) {
         super(_frame, _title, true);
         frame = _frame;

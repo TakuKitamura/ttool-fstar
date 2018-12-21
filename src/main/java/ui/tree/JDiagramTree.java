@@ -103,7 +103,7 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
     protected GraphTree selectedGT;
 
 
-    /**
+    /*
      * Creates new form
      */
     public JDiagramTree(MainGUI _mgui) {

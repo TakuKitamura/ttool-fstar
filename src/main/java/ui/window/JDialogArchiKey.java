@@ -73,7 +73,7 @@ public class JDialogArchiKey extends JDialogBase implements ActionListener  {
     
 	protected JComboBox<String> referenceCommunicationName;
     
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogArchiKey(Frame _frame, String _title, TMLArchiKey _artifact) {
         super(_frame, _title, true);
         frame = _frame;

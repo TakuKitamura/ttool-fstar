@@ -98,7 +98,7 @@ public class JDialogFormalValidation extends JDialog implements ActionListener, 
     protected JRadioButton fromDTA, onTheFly;
     protected JRadioButton autFromDTA, autOnTheFly;
     
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogFormalValidation(Frame f, MainGUI _mgui, String title, String _cmdRTL, String _cmdDTA2DOT, String _cmdRGSTRAP, String _cmdRG2TLSA, String _fileName, String _spec, String _host, String _aldebaranHost, String _bcgioPath) {
         super(f, title, true);
         

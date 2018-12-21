@@ -82,7 +82,7 @@ public class JDialogMemoryNode extends JDialogBase implements ActionListener  {
 
     private JTabbedPane tabbedPane;
 
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogMemoryNode( Frame _frame, String _title, TMLArchiMemoryNode _node, int _bufferType ) {
         super(_frame, _title, true);
       //  frame = _frame;

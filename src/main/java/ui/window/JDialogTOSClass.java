@@ -74,7 +74,7 @@ public class JDialogTOSClass extends JDialog implements ActionListener {
     protected boolean changeMade = false;
 
 
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogTOSClass(Frame f, String title, TOSClass _tos) {
         super(f, title, true);
 

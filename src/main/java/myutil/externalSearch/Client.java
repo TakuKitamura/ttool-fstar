@@ -57,7 +57,7 @@ import java.util.ArrayList;
  * dialog for external search with key words
  * Creation: 11/03/2015
  *
- * @author Dan VO & Huy TRUONG
+ * @author Dan VO, Huy TRUONG
  * @version 1.0 11/03/2015
  */
 public class Client {
@@ -175,7 +175,7 @@ public class Client {
     /**
      * @param cmd     strings in Message class.
      * @param options list of options corresponds to list of values.
-     * @param values
+     * @param values   list of values
      * @return Message.
      */
     public Message createRequestMessage(String cmd, ArrayList<String> options, ArrayList<String> values) {
@@ -187,9 +187,10 @@ public class Client {
      * @param msg    Message
      * @param server server address
      * @param port   port of service
+     * @param ssl    ssl socket (Secure Sockets Layer)
      * @return Message from Server.
-     * @throws IOException
-     * @throws ClassNotFoundException
+     * @throws IOException  :   I/O exception
+     * @throws ClassNotFoundException : ClassNotFoundException
      */
     public Message send(Message msg, String server, int port, boolean ssl) throws IOException, ClassNotFoundException {
 

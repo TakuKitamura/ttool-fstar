@@ -75,7 +75,7 @@ public class JDialogADDBusNode extends JDialogBase implements ActionListener  {
 	// Panel2
     protected JTextField index, nbOfAttachedInitiators, nbOfAttachedTargets, fifoDepth, minLatency;
     
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogADDBusNode(Frame _frame, String _title, ADDBusNode _node) {
         super(_frame, _title, true);
         frame = _frame;

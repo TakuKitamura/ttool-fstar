@@ -68,7 +68,7 @@ public class JDialogTimeIntervalUnit extends JDialogBase implements ActionListen
     
     private String id1, id2;
     
-    /** Creates new form  */
+    /* Creates new form  */
     // arrayDelay: [0] -> minDelay ; [1] -> maxDelay
     public JDialogTimeIntervalUnit(Frame f, String[] _arrayDelay, boolean _hasMaxDelay, String title) {
         

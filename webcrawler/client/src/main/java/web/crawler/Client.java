@@ -61,10 +61,10 @@ public class Client {
 
     /**
      *
-     * @param cmd
-     * @param options
-     * @param values
-     * @return
+     * @param cmd     strings in Message class.
+     * @param options list of options corresponds to list of values.
+     * @param values   list of values
+     * @return Message.
      */
     public static Message createRequestMessage(String cmd, ArrayList<String> options, ArrayList<String> values) {
         Message requestMsg = new Message(cmd, options, values);
@@ -73,8 +73,7 @@ public class Client {
     }
 
     /**
-     *
-     * @param answerMsg
+     * @param answerMsg the answer message from the server
      */
     public static void analyseAnswerMessage(Message answerMsg) {
         //Analyse the message from the server,
@@ -136,10 +135,6 @@ public class Client {
 
     }
 
-    /**
-     *
-     * @param args
-     */
     public static void main(String[] args) {
         SSLSocket client = null;
 

@@ -115,7 +115,7 @@ public class DatabaseCreation {
      * Execute an SQL statement on the database. Be careful, this method does not protect of SQL injection
      * @param SQLquery the query you want to execute on the database
      * @return the result of the query
-     * @throws SQLException
+     * @throws SQLException An exception that provides information on a database access error
      */
     public ResultSet executestatement(String SQLquery) throws SQLException {
 
@@ -134,7 +134,7 @@ public class DatabaseCreation {
     /**
      * get method to get the number of total recods in the table vulnerabilities
      * @return the total number of record in vulnerabilities table
-     * @throws SQLException
+     * @throws SQLException An exception that provides information on a database access error
      */
     public int getTotalRecordsInDatabase() throws SQLException {
 
@@ -156,7 +156,7 @@ public class DatabaseCreation {
     }
 
     /**
-     *
+     * @return static SQL statement
      */
     public java.sql.Statement getstmt() {
         return stmt;
@@ -164,7 +164,7 @@ public class DatabaseCreation {
 
     /**
      * Print the table vulnerabilities int the output
-     * @throws SQLException
+     * @throws SQLException An exception that provides information on a database access error
      */
     public void PrintDatabase() throws SQLException {
         int Records = 0;
@@ -186,7 +186,7 @@ public class DatabaseCreation {
 
     /**
      * Clear outputs of the console
-     * @throws AWTException
+     * @throws AWTException : Signals that an Abstract Window Toolkit exception has occurred
      */
     public void ClearOutputs() throws AWTException {
         /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
@@ -204,10 +204,11 @@ public class DatabaseCreation {
 
     /**
      * Create the database
-     * @throws ClassNotFoundException
-     * @throws InstantiationException
-     * @throws IllegalAccessException
-     * @throws Exception
+     * @throws ClassNotFoundException :  no definition for the class with the specified name could be found.
+     * @throws InstantiationException :  the specified class object cannot be instantiated
+     * @throws IllegalAccessException :  the currently executing method does not have access to the definition of the specified class, field
+     * method or constructor
+     * @throws Exception              :  Exception
      */
     public void CreateDatabase() throws Exception {
 
@@ -247,7 +248,7 @@ public class DatabaseCreation {
 
     /**
      * Create 3 tables in the database, vulnerabilites, references, softwares
-     * @throws SQLException
+     * @throws SQLException : An exception that provides information on a database access error
      */
     public void CreateTable() throws SQLException {
         System.out.println("Creating tables in database...");
@@ -300,7 +301,7 @@ public class DatabaseCreation {
 
     /**
      * import previous table from a file to have a database already fill
-     * @throws SQLException
+     * @throws SQLException : An exception that provides information on a database access error
      */
     public void CreateDatabaseFromSQLFile() throws SQLException {
         PreparedStatement ps;
@@ -342,7 +343,7 @@ public class DatabaseCreation {
 
     /**
      * Sabe all the tables in a file to use them later
-     * @throws SQLException
+     * @throws SQLException : An exception that provides information on a database access error
      */
     public void StoreDatabaseInFile() throws SQLException {
         PreparedStatement ps;

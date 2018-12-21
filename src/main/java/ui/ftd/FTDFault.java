@@ -447,7 +447,7 @@ public class FTDFault extends TGCScalableWithInternalComponent implements Swallo
     
     /**
      * Issue #69
-     * @return
+     * @return : always true
      */
     @Override
     public boolean canBeDisabled() {

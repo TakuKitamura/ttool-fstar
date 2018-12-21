@@ -95,7 +95,7 @@ public class JDialogELNComponentIndependentVoltageSource extends JDialog impleme
 	/** Parameters **/
 	private ELNComponentIndependentVoltageSource vsource;
 
-	/** Constructor **/
+	/* Constructor **/
 	public JDialogELNComponentIndependentVoltageSource(ELNComponentIndependentVoltageSource _vsource) {
 		/** Set JDialog **/
 		setTitle("Setting the independent voltage source");

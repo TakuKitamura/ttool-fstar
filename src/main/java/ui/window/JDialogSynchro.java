@@ -81,7 +81,7 @@ public class JDialogSynchro extends JDialogBase implements ActionListener, ListS
     private JButton downButton;
     private JButton removeButton;
     
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogSynchro(Frame f, TClassSynchroInterface _t1, TClassSynchroInterface _t2, java.util.List<TTwoAttributes> _synchro, TCDSynchroGateList _tcdsgl, String title) {
         super(f, title, true);
         t1 = _t1;

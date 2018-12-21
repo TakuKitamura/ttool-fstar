@@ -72,7 +72,7 @@ public class JDialogESO extends JDialogBase implements ActionListener  {
     protected JTextField timeout, n ,m;
 	protected JComboBox<String> ids, oncePerEvent;
     
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogESO(Frame _frame, EBRDDESO _eso) {
         super(_frame, "Event Sequence Operator", true);
         frame = _frame;

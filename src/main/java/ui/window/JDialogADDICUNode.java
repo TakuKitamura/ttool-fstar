@@ -76,7 +76,7 @@ public class JDialogADDICUNode extends JDialogBase implements ActionListener  {
     protected JTextField index;
     protected JTextField nIrq;
     
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogADDICUNode(Frame _frame, String _title, ADDICUNode _node) {
         super(_frame, _title, true);
         frame = _frame;

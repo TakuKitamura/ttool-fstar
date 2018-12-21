@@ -142,7 +142,7 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
 
     protected RshClient rshc;
 
-    /**
+    /*
      * Creates new form
      */
 

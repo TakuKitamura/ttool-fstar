@@ -53,7 +53,7 @@ import java.awt.*;
 
 /**
  * Class ATDAttack
- * Attack -> SysML value type
+ * Attack to SysML value type
  * Creation: 09/12/2009
  *
  * @author Ludovic APVRILLE
@@ -458,7 +458,7 @@ public class ATDAttack extends TGCScalableWithInternalComponent implements Swall
     
     /**
      * Issue #69
-     * @return
+     * @return : always true
      */
     @Override
     public boolean canBeDisabled() {

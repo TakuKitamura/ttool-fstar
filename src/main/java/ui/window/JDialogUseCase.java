@@ -71,7 +71,7 @@ public class JDialogUseCase extends JDialogBase implements ActionListener  {
     // Panel1
     protected JTextField jname, jextension;
     
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogUseCase(Frame _frame, String _title, String _name, String _extension) {
         super(_frame, _title, true);
         frame = _frame;

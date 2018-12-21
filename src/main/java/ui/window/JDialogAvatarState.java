@@ -78,7 +78,7 @@ public class JDialogAvatarState extends JDialogBase implements ActionListener  {
 	//jtaGlobalCode;
     
     
-    /** Creates new form  */
+    /* Creates new form  */
     // arrayDelay: [0] -> minDelay ; [1] -> maxDelay
     public JDialogAvatarState(Frame _f, String _title, String _name, String[] _entryCode) {
         

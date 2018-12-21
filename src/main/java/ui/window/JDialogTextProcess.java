@@ -83,7 +83,7 @@ public class JDialogTextProcess extends JDialogBase implements ActionListener, R
 	protected JButton close;
 	
 	
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogTextProcess(Frame f, String title, String _cmd, String _fileName, String _spec, String _host) {
 	    super(f, title, true);
 	    

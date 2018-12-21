@@ -225,8 +225,8 @@ public class TADChoice extends TADComponentWithSubcomponents/* Issue #69  TGCWit
 
     /**
      * Issue #69
-     * @param point
-     * @return
+     * @param point :   Connecting point
+     * @return      :   Guard of connecting point
      */
     public TGCOneLineText getGuardForConnectingPoint( final TGConnectingPoint point ) {
 		final int index = Arrays.asList( connectingPoint ).indexOf( point );
@@ -263,7 +263,8 @@ public class TADChoice extends TADComponentWithSubcomponents/* Issue #69  TGCWit
     
     /**
      * Issue #69
-     * @return
+     * @param label :   TGOneLineText
+     * @return      :   true if label is neither null nor empty nor []
      */
     @Override
     public boolean canLabelBeDisabled( final TGCOneLineText label ) {
@@ -272,8 +273,8 @@ public class TADChoice extends TADComponentWithSubcomponents/* Issue #69  TGCWit
     
     /**
      * Issue #69
-     * @param guard
-     * @return
+     * @param guard :    Guard value
+     * @return      :    Effective condition
      */
     public String getEffectiveCondition( final TGCOneLineText guard ) {
     	if ( guard.isEnabled() ) {

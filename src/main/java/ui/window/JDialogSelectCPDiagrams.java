@@ -84,7 +84,7 @@ public class JDialogSelectCPDiagrams extends JDialogBase implements ActionListen
     protected JCheckBox optimize;
     //  protected JTextField clockField;
 
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogSelectCPDiagrams( Frame f, Vector<TGComponent> _back, List<TGComponent> componentList, String title ) {
 
         super(f, title, true);

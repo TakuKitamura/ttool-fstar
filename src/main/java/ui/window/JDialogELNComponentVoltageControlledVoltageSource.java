@@ -83,7 +83,7 @@ public class JDialogELNComponentVoltageControlledVoltageSource extends JDialog i
 	/** Parameters **/
 	private ELNComponentVoltageControlledVoltageSource vcvs;
 
-	/** Constructor **/
+	/* Constructor **/
 	public JDialogELNComponentVoltageControlledVoltageSource(ELNComponentVoltageControlledVoltageSource _vcvs) {
 		/** Set JDialog **/
 		setTitle("Setting the voltage controlled voltage source");

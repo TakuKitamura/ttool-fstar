@@ -52,7 +52,7 @@ public abstract class AvatarMADConnector extends TGConnectorWithCommentConnectio
         return null;
     }
     
-    /**
+    /*
      * Issue #69
      * @return
      */
@@ -68,7 +68,7 @@ public abstract class AvatarMADConnector extends TGConnectorWithCommentConnectio
     	return visitor.isCanBeDisabled();
     }
     
-    /** Issue #69
+    /* Issue #69
      * @return
      */
     public boolean isEnabled( boolean checkBranch ) {

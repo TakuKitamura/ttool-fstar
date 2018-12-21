@@ -76,7 +76,7 @@ public class JDialogADDTimerNode extends JDialogBase implements ActionListener  
     protected JTextField index;
     protected JTextField nIrq;
     
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogADDTimerNode(Frame _frame, String _title, ADDTimerNode _node) {
         super(_frame, _title, true);
         frame = _frame;

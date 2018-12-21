@@ -81,7 +81,7 @@ public class JDialogADDMemoryNode extends JDialogBase implements ActionListener 
     
     private String memoryName;
     
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogADDMemoryNode(Frame _frame, String _title, ADDMemoryNode _node) {
         super(_frame, _title, true);
         frame = _frame;

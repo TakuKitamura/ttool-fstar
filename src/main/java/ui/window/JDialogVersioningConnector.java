@@ -68,7 +68,7 @@ public class JDialogVersioningConnector extends JDialogBase implements ActionLis
     
     //private String id1, id2;
     
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogVersioningConnector(Frame f, int _oldVersion, int _newVersion) {
         
         super(f, "Setting versions", true);

@@ -604,6 +604,11 @@ public class Conversion {
     /**
      * Returns the index of the corresponding closing parenthesis.
      * indexFirst corresponds to the indexd of the open parenthesis
+     * @param closePar      : closing parenthesis
+     * @param expr          : string
+     * @param indexFirst    : index of the corresponding open parenthesis
+     * @param openPar       : open parenthesis
+     * @return              : index of the corresponding closing parenthesis
      */
     public static int findMatchingParenthesis(String expr, int indexFirst, char openPar, char closePar) {
         int index = indexFirst + 1;

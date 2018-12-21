@@ -64,7 +64,7 @@ public class JDialogAvatarPropertyConnector extends JDialogBase implements Actio
     
     //private String id1, id2;
     
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogAvatarPropertyConnector(Frame f, boolean _negated) {
         
         super(f, "Setting negation on property", true);

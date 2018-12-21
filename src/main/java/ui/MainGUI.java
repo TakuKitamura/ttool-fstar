@@ -8281,7 +8281,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     /**
      * Check if a name is already used by another TURTLEPanel tab
      *
-     * @param name
+     * @param name  the name to be checked
      * @return true if the name matches another tab name
      * @author Fabien Tessier
      */
@@ -8296,8 +8296,8 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     /**
      * Rename reference to the tab in Diplodocus Methodology
      *
-     * @param oldname
-     * @param newname
+     * @param oldname : old name
+     * @param newname : new name
      * @author Fabien Tessier
      */
     public void renameInMethodo(String oldname, String newname) {

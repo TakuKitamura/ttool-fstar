@@ -101,7 +101,7 @@ public class JDialogInvariantAnalysis extends JDialog implements ActionListener,
     private IntMatrix im;
     
     
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogInvariantAnalysis(Frame f, MainGUI _mgui, String title) {
         super(f, title, true);
         

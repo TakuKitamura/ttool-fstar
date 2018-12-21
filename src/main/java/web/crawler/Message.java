@@ -56,7 +56,7 @@ import java.util.ArrayList;
  *  CMD : A string of command, for example : search, detail, stats
  * search : search with keywords
  * detail : clients send CVE-ID and get back all information
- * stats : -> Images 
+ * stats : to Images
  *  Options and Values ArrayLists, 
  *      "Options" contains names 
  *      "Values" contains values respectively 
@@ -173,18 +173,19 @@ public class Message implements Serializable {
     
 
    
-    //Get value of cmd
+
 
     /**
-     *
+     * Get value of command
+     * @return : value of command
      */
         public String getCmd() {
         return cmd;
     }
-    //Get value of content
 
     /**
-     *
+     * Get value of content
+     * @return : value of content
      */
         public ArrayList<Object> getContent() {
         return content;
@@ -193,39 +194,37 @@ public class Message implements Serializable {
 //    public byte[] getImageByte(){
 //        return imageByte;
 //    }
-    //Get value of Options    
 
     /**
-     *
+     * Get value of Options
+     * @return list of Options
      */
     public ArrayList<String> getOptions() {
         return options;
     }
-    
-   //Get value of values
+
 
     /**
-     *
+     * Get value of values
+     * @return : values
      */
         public ArrayList<String> getValues() {
         return values;
-    } 
-    
-    //Set value for cmd
+    }
 
     /**
-     *
-     * @param cmd
+     * Set value for cmd
+     * @param cmd : command
      */
         public void setCmd(String cmd) {
         this.cmd = cmd;
     }
     
-    //Set value for content
+
 
     /**
-     *
-     * @param content
+     * Set value for content
+     * @param content : value of content
      */
         public void setContent(ArrayList<Object> content) {
         this.content = content;
@@ -236,39 +235,30 @@ public class Message implements Serializable {
 //        this.imageByte = imageByte;
 //    }
     
-    //set values for options
 
     /**
-     *
-     * @param options
+     * set values for options
+     * @param options : list of options
      */
         public void setOptions(ArrayList<String> options) {
         this.options = options;
     }
 
-    //Set values for values
-
     /**
-     *
-     * @param values
+     * Set values for values
+     * @param values : list of values
      */
         public void setValues(ArrayList<String> values) {
         this.values = values;
     }
     
-    //Constructors
-    
-    /**
-     *
-     * @param content
-     */
-        
+    /* Constructors */
     public Message(ArrayList<Object> content){
         this.content = content;
     }
     
     /**
-     *
+     * Constructor without parameter
      */
     public Message()
     {
@@ -279,12 +269,7 @@ public class Message implements Serializable {
         
     }
     
-    /**
-     *
-     * @param cmd
-     * @param options
-     * @param values
-     */
+    /* Constructor */
     public  Message(String cmd, ArrayList<String> options , ArrayList<String> values){
              
         this.cmd = cmd;
@@ -293,13 +278,12 @@ public class Message implements Serializable {
         
     }
     
-    //Create a request message for clients
 
     /**
-     *
-     * @param cmd
-     * @param options
-     * @param values
+     * Create a request message for clients
+     * @param cmd       : command
+     * @param options   : list of Options
+     * @param values    : value of message
      */
         public void createRequestMessage(String cmd, ArrayList<String> options, ArrayList<String> values)
     {
@@ -308,13 +292,11 @@ public class Message implements Serializable {
         this.values = values;
         
     }
-    
-    //Create an answer for server to send to the client
 
     /**
-     *
-     * @param cmd
-     * @param content
+     * Create an answer for server to send to the client
+     * @param cmd       : command
+     * @param content   : content
      */
         public void createAnswerMessage(String cmd, ArrayList<Object> content){
         this.content = content;
@@ -327,8 +309,9 @@ public class Message implements Serializable {
 //    }
     
     /**
-     *
-     * @param msg
+     * parsing message
+     * @param msg   : message
+     * @return      : content
      */
     public ArrayList<Object> parseMessage(Message msg)
     {
@@ -337,7 +320,9 @@ public class Message implements Serializable {
     }
    
     /**
-     *
+     * convert image to bytes
+     * @param msg : message
+     * @return    : array of bytes
      */
     public static byte[] convertImageToByte(Message msg) {
     
@@ -373,8 +358,9 @@ public class Message implements Serializable {
     //a function to convert a string byte to an image
 
     /**
-     *
-     * @param imgByte
+     * Convert bytes to Image
+     * @param imgByte : image bytes
+     * @param msg     : message
      */
         public static void convertByteToImage(byte[] imgByte,Message msg) {
 

@@ -151,7 +151,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     //protected boolean startProcess = false;
 
 
-    /**
+    /*
      * Creates new form
      */
     public JDialogAvatarModelChecker(Frame f, MainGUI _mgui, String title, AvatarSpecification _spec, String _graphDir, boolean _showLiveness) {

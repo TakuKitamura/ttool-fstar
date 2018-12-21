@@ -82,7 +82,9 @@ public class FileManagement {
      * Download the zipped xml file from the National Vulnerability Database's website (https://nvd.nist.gov/)
      * if the file doesn't exist in the working directory of the project.
      * After extracting the xml file delete the zipped one.
-     * @param filename name of the file on the website
+     * @param filename          : name of the file on the website
+     * @param destinationPath   : destination Path
+     * @throws IOException      : I/O Exception
      */
     public static void downloadFile(String filename, String destinationPath) throws IOException {
 
@@ -200,9 +202,9 @@ public class FileManagement {
      * Store the result of one query on an xml file to be sent to a client
      * @param rs result of a sql query 
      * @return the xml file
-     * @throws TransformerConfigurationException
-     * @throws TransformerException
-     * @throws IOException
+     * @throws TransformerConfigurationException    : Indicates a serious configuration error
+     * @throws TransformerException                 : Specifies an exceptional condition that occurred during the transformation process
+     * @throws IOException                          : I/O Exception
      */
     public static File StoreResultsInFile(ResultSet rs)
             throws TransformerException, IOException {
@@ -272,6 +274,7 @@ public class FileManagement {
      * The structure of the CVE has to be the same as the structure you can find in the cve from https://nvd.nist.gov/ 
      * @param filename name of the xml file you want to parse
      * @param database database you want to fill with data from the file
+     * @param destinationPath destination Path
      */
     public static void ParsingXML(String filename, String destinationPath, web.crawler.DatabaseCreation database) {
         LinkedList<String> list_id = new LinkedList<>();

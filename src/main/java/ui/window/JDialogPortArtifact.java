@@ -117,7 +117,7 @@ public class JDialogPortArtifact extends JDialogBase implements ActionListener  
     private Vector<String> portsList;
     //private String appName = "";
 
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogPortArtifact(Frame _frame, String _title, TMLArchiPortArtifact _artifact, String _mappedMemory, Vector<String> _portsList, String _mappedPort ) {
         super(_frame, _title, true);
         //frame = _frame;

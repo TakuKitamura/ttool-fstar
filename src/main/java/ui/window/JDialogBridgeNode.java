@@ -75,7 +75,7 @@ public class JDialogBridgeNode extends JDialogBase implements ActionListener  {
     // Panel2
     protected JTextField bufferByteDataSize, clockRatio;
 
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogBridgeNode(Frame _frame, String _title, TMLArchiBridgeNode _node) {
         super(_frame, _title, true);
         frame = _frame;

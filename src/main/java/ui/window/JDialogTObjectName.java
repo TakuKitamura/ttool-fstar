@@ -69,7 +69,7 @@ public class JDialogTObjectName extends JDialogBase implements ActionListener {
 	private JTextField identifierText;
     private JComboBox<TCDTClass> tclassList;
 	
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogTObjectName(TCDTObject _to, Frame f, String title) {
         super(f, title, true);
         to = _to;

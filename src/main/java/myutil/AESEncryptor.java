@@ -47,8 +47,6 @@ import javax.crypto.spec.SecretKeySpec;
 
 /**
  * Code taken initially taken from stack overflow
- * <p>
- * <p>
  * Class AESEncryptor
  * For remote execution of processes
  * Creation: 2015

@@ -82,7 +82,7 @@ public class JDialogADDCPUNode extends JDialogBase implements ActionListener {
          protected JTextField cluster_index;
 	 protected JTextField monitored;	
 	
-	/** Creates new form  */
+	/* Creates new form  */
 	public JDialogADDCPUNode(Frame _frame, String _title, ADDCPUNode _node) {
 		super(_frame, _title, true);
 		frame = _frame;

@@ -64,7 +64,8 @@ public class TMLExprParser/*@bgen(jjtree)*/implements TMLExprParserTreeConstants
     }
   }
 
-/***************************************************
+/*
+ ***************************************************
  * THE TML Expression LANGUAGE GRAMMAR STARTS HERE *
  ***************************************************/
 
@@ -222,7 +223,7 @@ public class TMLExprParser/*@bgen(jjtree)*/implements TMLExprParserTreeConstants
     }
   }
 
-/*************** NAT ****************/
+//*************** NAT ****************/
   final public void NatExtendedExpression() throws ParseException {
  /*@bgen(jjtree) NatExtendedExpression */
  SimpleNode jjtn000 = new SimpleNode(JJTNATEXTENDEDEXPRESSION);
@@ -556,7 +557,7 @@ public class TMLExprParser/*@bgen(jjtree)*/implements TMLExprParserTreeConstants
     }
   }
 
-/********* QUEUE_NAT ***************/
+//********* QUEUE_NAT ***************/
   final public void QueueNatExtendedExpression() throws ParseException {
  /*@bgen(jjtree) QueueNatExtendedExpression */
   SimpleNode jjtn000 = new SimpleNode(JJTQUEUENATEXTENDEDEXPRESSION);
@@ -664,7 +665,7 @@ public class TMLExprParser/*@bgen(jjtree)*/implements TMLExprParserTreeConstants
     }
   }
 
-/********* BOOL ***************/
+//********* BOOL ***************/
   final public void BoolExtendedExpression() throws ParseException {
  /*@bgen(jjtree) BoolExtendedExpression */
  SimpleNode jjtn000 = new SimpleNode(JJTBOOLEXTENDEDEXPRESSION);
@@ -2099,11 +2100,11 @@ void BoolExtendedExpressionAfterIDComparisonID() :
   private boolean jj_rescan = false;
   private int jj_gc = 0;
 
-  /** Constructor with InputStream. */
+  /* Constructor with InputStream. */
   public TMLExprParser(java.io.InputStream stream) {
      this(stream, null);
   }
-  /** Constructor with InputStream and supplied encoding */
+  /* Constructor with InputStream and supplied encoding */
   public TMLExprParser(java.io.InputStream stream, String encoding) {
     try { jj_input_stream = new SimpleCharStream(stream, encoding, 1, 1); } catch(java.io.UnsupportedEncodingException e) { throw new RuntimeException(e); }
     token_source = new TMLExprParserTokenManager(jj_input_stream);
@@ -2114,11 +2115,11 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
-  /** Reinitialise. */
+  /* Reinitialise. */
   public void ReInit(java.io.InputStream stream) {
      ReInit(stream, null);
   }
-  /** Reinitialise. */
+  /* Reinitialise. */
   public void ReInit(java.io.InputStream stream, String encoding) {
     try { jj_input_stream.ReInit(stream, encoding, 1, 1); } catch(java.io.UnsupportedEncodingException e) { throw new RuntimeException(e); }
     token_source.ReInit(jj_input_stream);
@@ -2130,7 +2131,7 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
-  /** Constructor. */
+  /* Constructor. */
   public TMLExprParser(java.io.Reader stream) {
     jj_input_stream = new SimpleCharStream(stream, 1, 1);
     token_source = new TMLExprParserTokenManager(jj_input_stream);
@@ -2141,7 +2142,7 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
-  /** Reinitialise. */
+  /* Reinitialise. */
   public void ReInit(java.io.Reader stream) {
     jj_input_stream.ReInit(stream, 1, 1);
     token_source.ReInit(jj_input_stream);
@@ -2153,7 +2154,7 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
-  /** Constructor with generated Token Manager. */
+  /* Constructor with generated Token Manager. */
   public TMLExprParser(TMLExprParserTokenManager tm) {
     token_source = tm;
     token = new Token();
@@ -2163,7 +2164,7 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
-  /** Reinitialise. */
+  /* Reinitialise. */
   public void ReInit(TMLExprParserTokenManager tm) {
     token_source = tm;
     token = new Token();
@@ -2222,7 +2223,7 @@ void BoolExtendedExpressionAfterIDComparisonID() :
   }
 
 
-/** Get the next Token. */
+/** @return : Get the next Token. */
   final public Token getNextToken() {
     if (token.next != null) token = token.next;
     else token = token.next = token_source.getNextToken();
@@ -2231,7 +2232,10 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     return token;
   }
 
-/** Get the specific Token. */
+  /**
+   * @return : Get the specific Token
+   * @param index : index
+   */
   final public Token getToken(int index) {
     Token t = token;
     for (int i = 0; i < index; i++) {
@@ -2279,7 +2283,7 @@ void BoolExtendedExpressionAfterIDComparisonID() :
     }
   }
 
-  /** Generate ParseException. */
+  /** @return : Generate ParseException. */
   public ParseException generateParseException() {
     jj_expentries.clear();
     boolean[] la1tokens = new boolean[89];

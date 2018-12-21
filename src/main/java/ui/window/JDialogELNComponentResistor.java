@@ -86,7 +86,7 @@ public class JDialogELNComponentResistor extends JDialog implements ActionListen
 	/** Parameters **/
 	private ELNComponentResistor r;
 
-	/** Constructor **/
+	/* Constructor **/
 	public JDialogELNComponentResistor(ELNComponentResistor _r) {
 		/** Set JDialog **/
 		setTitle("Setting the resistance");

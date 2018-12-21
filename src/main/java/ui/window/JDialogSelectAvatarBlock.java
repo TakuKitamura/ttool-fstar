@@ -84,7 +84,7 @@ public class JDialogSelectAvatarBlock extends JDialogBase implements ActionListe
 
     private boolean hasBeenCancelled = true;
 
-    /**
+    /*
      * Creates new form
      */
     public JDialogSelectAvatarBlock(Frame f, List<AvatarBDStateMachineOwner> _back, List<AvatarBDStateMachineOwner> componentList, String title, List<AvatarBDStateMachineOwner> _validated, List<AvatarBDStateMachineOwner> _ignored, boolean _optimized) {

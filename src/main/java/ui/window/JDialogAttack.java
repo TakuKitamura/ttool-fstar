@@ -72,7 +72,7 @@ public class JDialogAttack extends JDialogBase implements ActionListener  {
 	
 	private ATDAttack attack;
     
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogAttack(Frame _frame, String _title, ATDAttack _attack) {
         super(_frame, _title, true);
         frame = _frame;

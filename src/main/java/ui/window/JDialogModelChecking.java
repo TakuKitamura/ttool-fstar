@@ -85,7 +85,7 @@ public class JDialogModelChecking extends JDialogBase implements ActionListener,
     private JButton allIgnored;
     protected JCheckBox syntax;
 
-    /**
+    /*
      * Creates new form
      */
     public JDialogModelChecking(Frame f, List<TClassInterface> _back, List<TGComponent> componentList, String title) {

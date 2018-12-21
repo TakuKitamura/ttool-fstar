@@ -18,7 +18,7 @@ public abstract class TADComponentWithoutSubcomponents extends TGCWithoutInterna
     
     /**
      * Issue #69
-     * @return
+     * @return	:	true if can be able to disable ElementVisitor in Activity Diagram
      */
     @Override
     public boolean canBeDisabled() {

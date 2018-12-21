@@ -33,7 +33,7 @@ public abstract class TADConnector extends TGConnector {
 	
     /**
      * Issue #69
-     * @param _enabled
+     * @param _enabled	:	true for enabling the connector in Activity Diagram
      */
     @Override
     public void setEnabled( final boolean _enabled ) {
@@ -44,7 +44,7 @@ public abstract class TADConnector extends TGConnector {
     
     /**
      * Issue #69
-     * @return
+     * @return	:	true if can be able to disable the Connector in Activity Diagram
      */
     @Override
     public boolean canBeDisabled() {
@@ -59,7 +59,7 @@ public abstract class TADConnector extends TGConnector {
     }
     
     /** Issue #69
-     * @return
+     * @return	:	boolean value allows to verify the connector stage in Activity Diagram
      */
     public boolean isEnabled( boolean checkBranch ) {
     	if ( checkBranch && p2 != null ) {

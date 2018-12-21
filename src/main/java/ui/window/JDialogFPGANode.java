@@ -78,7 +78,7 @@ public class JDialogFPGANode extends JDialogBase implements ActionListener {
     private JTabbedPane tabbedPane;
 
 
-    /**
+    /*
      * Creates new form
      */
     public JDialogFPGANode(Frame _frame, String _title, TMLArchiFPGANode _node) {

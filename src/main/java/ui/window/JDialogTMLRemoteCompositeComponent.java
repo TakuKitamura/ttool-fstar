@@ -68,7 +68,7 @@ public class JDialogTMLRemoteCompositeComponent extends JDialogBase implements A
     
 	private JComboBox<String> referenceComponentName;
 
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogTMLRemoteCompositeComponent(Frame _frame, String _title, TMLCRemoteCompositeComponent _artifact) {
         super(_frame, _title, true);
         artifact = _artifact;

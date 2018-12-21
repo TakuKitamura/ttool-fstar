@@ -248,7 +248,7 @@ public class AvatarSMDConnector extends TGConnectorWithCommentConnectionPoints i
 	
     /**
      * Issue #69
-     * @param _enabled
+     * @param _enabled : boolean data
      */
     @Override
     public void setEnabled( final boolean _enabled ) {
@@ -259,7 +259,7 @@ public class AvatarSMDConnector extends TGConnectorWithCommentConnectionPoints i
     
     /**
      * Issue #69
-     * @return
+     * @return boolean value
      */
     @Override
     public boolean canBeDisabled() {
@@ -334,7 +334,8 @@ public class AvatarSMDConnector extends TGConnectorWithCommentConnectionPoints i
     
     
     /** Issue #69
-     * @return
+     * @param checkBranch boolean data
+     * @return boolean value
      */
     public boolean isEnabled( boolean checkBranch ) {
     	if ( checkBranch && p2 != null ) {

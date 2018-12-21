@@ -76,7 +76,7 @@ public class JDialogADDTTYNode extends JDialogBase implements ActionListener  {
     protected JTextField index;
     // protected JTextField cluster_index;
     
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogADDTTYNode(Frame _frame, String _title, ADDTTYNode _node) {
         super(_frame, _title, true);
         frame = _frame;

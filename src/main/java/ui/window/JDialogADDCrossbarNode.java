@@ -76,7 +76,7 @@ public class JDialogADDCrossbarNode extends JDialogBase implements ActionListene
     //protected JTextField index, nbOfAttachedInitiators, nbOfAttachedTargets, cluster_index, cluster_address;
     	protected JTextField cluster_index, cluster_address;
 
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogADDCrossbarNode(Frame _frame, String _title, ADDCrossbarNode _node) {
         super(_frame, _title, true);
         frame = _frame;

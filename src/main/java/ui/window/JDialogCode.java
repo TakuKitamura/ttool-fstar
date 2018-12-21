@@ -66,7 +66,7 @@ public class JDialogCode extends JDialogBase implements ActionListener {
     protected JButton close;
     protected JButton cancel;
     
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogCode(Frame f, String title, String _pretext, boolean pretextEnabled, String _posttext, boolean posttextEnabled) {
         super(f, title, true);
         

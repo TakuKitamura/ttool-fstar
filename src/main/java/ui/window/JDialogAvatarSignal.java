@@ -89,7 +89,7 @@ public class JDialogAvatarSignal extends JDialogBase implements ActionListener  
     private JButton selectSignal;
     private JTextField signal;
 
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogAvatarSignal(Frame _f, String _title, String _currentSignal, List<AvatarSignal> _signals, boolean _isOut, TGComponent _reference, Vector<TGComponent> _refs) {
         super(_f, _title, true);
 

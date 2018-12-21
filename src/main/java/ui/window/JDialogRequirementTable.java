@@ -82,7 +82,7 @@ public class JDialogRequirementTable extends JDialogBase implements ActionListen
 
     private boolean data = false;
     
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogRequirementTable(JFrame f, String title) {
         super(f, title, true);
 

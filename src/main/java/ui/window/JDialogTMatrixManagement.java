@@ -102,7 +102,7 @@ public class JDialogTMatrixManagement extends JFrame implements ActionListener, 
 
     protected Vector<Requirements> toBeChecked;
 
-    /**
+    /*
      * Creates new form
      */
     public JDialogTMatrixManagement(Frame f, MainGUI _mgui, String title, RequirementModeling _rm, String _cmdRTL, String _cmdDTA2DOT, String _cmdRGSTRAP, String _cmdRG2TLSA, String _fileName, String _host, String _aldebaranHost, String _bcgioPath) {

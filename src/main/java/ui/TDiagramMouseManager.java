@@ -478,6 +478,8 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
 
     /**
      * Set the selection on the clicked component
+     * @param x : x position
+     * @param y : y position
      * @author Fabien Tessier
      */
     public void setSelection(int x, int y) {

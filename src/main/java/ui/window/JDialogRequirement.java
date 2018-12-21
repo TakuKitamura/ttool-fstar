@@ -90,7 +90,7 @@ public class JDialogRequirement extends JDialogBase implements ActionListener  {
     private JComboBox<String> kindBox, criticalityBox;
     private JTextField idBox, violatedActionBox, attackTreeNodeBox, referenceElementsBox;
     
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogRequirement(Frame _frame, String _title, String _id, String _text, String _kind, String _criticality, String _violatedAction, int
             _type, String _attackTreeNode, String _referenceElements, ArrayList<String> _extraParamIDs, ArrayList<String> _extraParamValues) {
         super(_frame, _title, true);
