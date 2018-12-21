@@ -50,7 +50,7 @@ import java.awt.*;
 
 /**
 * Class AvatarPDAttribute
-* Attribute -> SysML value type
+* Attribute to SysML value type
 * Creation: 22/04/2010
 * @version 1.0 22/04/2010
 * @author Ludovic APVRILLE

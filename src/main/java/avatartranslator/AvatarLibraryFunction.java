@@ -56,7 +56,7 @@ import java.util.Map;
  * <li>a set of {@link AvatarAttribute} that will contain the return values of the function and</li>
  * <li>an {@link AvatarStateMachine} that describes the content of the function.</li>
  * </ul>
- * </p>
+ * <p>
  *
  * @version 1.0 04.07.2016
  * @author Florian LUGOU

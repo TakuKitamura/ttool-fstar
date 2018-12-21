@@ -57,7 +57,7 @@ import java.util.ArrayList;
  * dialog for external search with key words
  * Creation: 11/03/2015
  *
- * @author Dan VO & Huy TRUONG
+ * @author Dan VO, Huy TRUONG
  * @version 1.0 11/03/2015
  */
 public class Client {

@@ -50,7 +50,7 @@ import java.awt.*;
 
 /**
  * Class AvatarPDSignal
- * Signal -> SysML value type
+ * Signal to SysML value type
  * Creation: 23/04/2010
  * @version 1.0 23/04/2010
  * @author Ludovic APVRILLE

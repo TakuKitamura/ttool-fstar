@@ -55,7 +55,7 @@ import java.awt.*;
 
 /**
    * Class AvatarPDProperty
-   * Property -> SysML constraint
+   * Property to SysML constraint
    * Creation: 23/04/2010
    * @version 1.0 23/04/2010
    * @author Ludovic APVRILLE
