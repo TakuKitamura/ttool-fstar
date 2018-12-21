@@ -246,6 +246,7 @@ public class TGUIAction extends AbstractAction {
     public static final int TMLARCHI_MEMORYNODE = 224;
     public static final int TMLARCHI_DMANODE = 364;
     public static final int TMLARCHI_BRIDGENODE = 225;
+    public static final int TMLARCHI_ROUTERNODE = 515;
     public static final int TMLARCHI_KEY = 435;
     public static final int TMLARCHI_FIREWALL = 436;
     public static final int TMLARCHI_FPGANODE = 474;
@@ -666,7 +667,7 @@ public class TGUIAction extends AbstractAction {
     public static final int MOVE_ENABLED = 463;
     public static final int FIRST_DIAGRAM = 464;
     
-    public static final int NB_ACTION = 515;
+    public static final int NB_ACTION = 516;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -1134,6 +1135,7 @@ public class TGUIAction extends AbstractAction {
         actions[TMLARCHI_PORT_ARTIFACT] = new TAction("add-tmlarchi-port-artifact", "Map a port", IconManager.imgic702, IconManager.imgic702, "Map a port", "Map a port onto a node in the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_EVENT_ARTIFACT] = new TAction("add-tmlarchi-event-artifact", "Map an event / request", IconManager.imgic702, IconManager.imgic702, "Map an event/request", "Map an event or a request onto a node in the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_BRIDGENODE] = new TAction("add-tmlarchi-bridgenode", "Add a Bridge node", IconManager.imgic1104, IconManager.imgic1104, "Bridge node", "Add a bridge node to the currently opened DIPLODOCUS architecture diagram", 0);
+        actions[TMLARCHI_ROUTERNODE] = new TAction("add-tmlarchi-routernode", "Add a Router node", IconManager.imgic1104, IconManager.imgic1104, "Router node", "Add a router node to the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_HWANODE] = new TAction("add-tmlarchi-hwanode", "Add a hardware accelerator node", IconManager.imgic1106, IconManager.imgic1106, "Hardware accelerator node", "Add a hardware accelerator node to the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_CAMSNODE] = new TAction("add-tmlarchi-camsnode", "Add a System C-AMS node", IconManager.imgic1106, IconManager.imgic1106, "System C-AMS node", "Add a System C-AMS node to the currently open DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_MEMORYNODE] = new TAction("add-tmlarchi-memorynode", "Add a memory node", IconManager.imgic1108, IconManager.imgic1108, "Memory node", "Add a memory node to the currently opened DIPLODOCUS architecture diagram", 0);

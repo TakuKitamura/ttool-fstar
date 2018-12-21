@@ -855,6 +855,8 @@ public class ActionPerformer {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_CPNODE);
         } else if (command.equals(mgui.actions[TGUIAction.TMLARCHI_BRIDGENODE].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_BRIDGENODE);
+        }  else if (command.equals(mgui.actions[TGUIAction.TMLARCHI_ROUTERNODE].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_ROUTERNODE);
         }  else if (command.equals(mgui.actions[TGUIAction.TMLARCHI_HWANODE].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_HWANODE);
 	}  else if (command.equals(mgui.actions[TGUIAction.TMLARCHI_CAMSNODE].getActionCommand())) {

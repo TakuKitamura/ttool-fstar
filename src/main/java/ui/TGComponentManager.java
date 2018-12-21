@@ -280,6 +280,7 @@ public class TGComponentManager {
     public static final int TMLARCHI_CROSSBARNODE = 1113;
     public static final int TMLARCHI_FIREWALL = 1114;
     public static final int TMLARCHI_FPGANODE = 1116;
+    public static final int TMLARCHI_ROUTERNODE = 1117;
 
     public static final int TMLCTD_CCOMPONENT = 1200;
     public static final int TMLCTD_CPORT = 1201;
@@ -1254,6 +1255,9 @@ public class TGComponentManager {
             case TMLARCHI_BRIDGENODE:
                 tgc = new TMLArchiBridgeNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
+            case TMLARCHI_ROUTERNODE:
+                tgc = new TMLArchiRouterNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
             case TMLARCHI_FIREWALL:
                 tgc = new TMLArchiFirewallNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
@@ -2166,6 +2170,8 @@ public class TGComponentManager {
             return TMLARCHI_CPNODE;
         } else if (tgc instanceof TMLArchiBridgeNode) {
             return TMLARCHI_BRIDGENODE;
+        } else if (tgc instanceof TMLArchiRouterNode) {
+            return TMLARCHI_ROUTERNODE;
         } else if (tgc instanceof TMLArchiFirewallNode) {
             return TMLARCHI_FIREWALL;
         } else if (tgc instanceof AvatarBDFirewall) {
