@@ -1202,11 +1202,52 @@ public void createANewFile() {
 \newpage 
 
 \section{Installing}
-\subsection{Operating System}
-\subsubsection{Windows}
-\subsubsection{Linux}
-\subsubsection{MacOs}
+\subsection{IzPack}
+IzPack is an installers generator for the Java platform. It produces lightweight installers that can be run on any operating system where a Java virtual machine is available. Depending on the operating system, it can be launched by a double-click or a simple 'java -jar installer.jar' on a shell.\newline
+For more information about it, you can check two things :
+\begin{itemize}
+\item \textbf{Main Page}: \url{http://www.izforge.com/izpack/}
+\item \textbf{IzPack Documentation}: \url{https://www.izforge.com/izpack/izpack-doc.pdf}
+\end{itemize}
 
+The current used version is : 5.1.3
+
+\subsection{How to use it} 
+First, you have to export in a environment variable named \textbf{JAVA\_HOME} the path
+to your Java directory (for exemple, mine is in /usr/lib/jvm/)\newline \newline
+The script to compile the installer is src/compile.sh with the xml of the
+installer in argument.
+If you want to test it, you can make a copy of the installer.xml and
+edit the paths to your TTool (IzPack doesn't allow to use variable in path, so
+every path is writed entirely), \textbf{BUT DON'T PUSH YOUR CHANGES !!!} The install.xml
+is configured for Ludovic Apvrille's computer.\newline
+To launch the installer, just use the \textbf{installer/src/install.exe}.\newline
+
+Now if you to compile it in order to test it, you need to go to the directory \textbf{installer/ src}
+
+\subsection{How to compile it}
+
+In order to compile (in order to test manually) just use \textbf{./compile.sh install.xml}. The file install.xml represent the main configuration for any computers \newline
+Here is some help in order to understand the file :
+\begin{itemize}
+\item \textbf{info}: Section for project's informations.
+\item \textbf{guiprefs}: Graphical preference (size of window)
+\item \textbf{locale}: Set which lnaguage can be used in the installer
+\item \textbf{ressource}: All file used for the installer (html, images)
+\item \textbf{panels}: All panels used for the installer (in appearance order)
+\item \textbf{packs}: Sources of TTool, divided in packs
+\end{itemize}
+
+\subsection{Operating System Configuration}
+There are some configuration files dependent on the operating system :
+\begin{itemize}
+\item \textbf{Windows}: named config\_win.xml
+\item \textbf{Linux}: named config.xml
+\item \textbf{MacOs}: There is currently no configuration file for MacOs
+\end{itemize}
+
+\subsection{Proverif and Gtkwave}
+The installer has for purpose to install TTool but also \textbf{Gtkwave} and \textbf{Proverif}. If you need to update those things, you will find all the jar in the following directory : \textbf{installer/lib}. \newline
 \newpage
 
 \section{Adding a graphical operator to a diagram}
