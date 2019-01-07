@@ -47,6 +47,7 @@ import graph.AUTTransition;
 import myutil.DijkstraState;
 import myutil.GraphAlgorithms;
 import myutil.TraceManager;
+import tmltranslator.tonetwork.TMAP2Network;
 import tmltranslator.toproverif.TML2ProVerif;
 import ui.CorrespondanceTGElement;
 
@@ -1797,5 +1798,11 @@ public class TMLMapping<E> {
     public TMLChannelPath makePathOfChannel(TMLChannel ch) {
         TMLChannelPath path = new TMLChannelPath(ch);
         return path;
+    }
+
+    // Routers / NoC / Network
+    public void removeAllRouters() {
+        TMAP2Network translator = new TMAP2Network(this);
+        translator.removeAllRouters();
     }
 }

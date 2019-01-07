@@ -50,7 +50,7 @@ import java.util.*;
    * @author Ludovic APVRILLE
  */
 public class TMLTask extends TMLElement {
-    private TMLActivity activity;
+    protected TMLActivity activity;
     private boolean isRequested = false;
     private TMLRequest request;
     private List<TMLAttribute> attributes;

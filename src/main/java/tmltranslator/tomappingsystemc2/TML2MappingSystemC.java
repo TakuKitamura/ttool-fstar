@@ -92,6 +92,7 @@ public class TML2MappingSystemC implements IDiploSimulatorCodeGenerator {
         tmlmapping.handleCPs();
         tmlmapping.removeForksAndJoins();
         tmlmapping.makeMinimumMapping();
+        tmlmapping.removeAllRouters();
         tepeTranslator = new SystemCTEPE(new ArrayList<TEPE>(), this);
     }
 

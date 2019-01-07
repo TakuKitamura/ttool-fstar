@@ -70,8 +70,8 @@ public class TMLArchiTextSpecification {
     private ArrayList<TMLTXTError> errors;
     private ArrayList<TMLTXTError> warnings;
 
-    private String keywords[] = {"NODE", "CPU", "FPGA", "SET", "BUS", "LINK", "BRIDGE", "MEMORY", "MASTERCLOCKFREQUENCY", "DMA"};
-    private String nodetypes[] = {"CPU", "FPGA", "BUS", "LINK", "BRIDGE", "MEMORY", "HWA", "DMA"};
+    private String keywords[] = {"NODE", "CPU", "FPGA", "SET", "BUS", "LINK", "BRIDGE", "ROUTER", "MEMORY", "MASTERCLOCKFREQUENCY", "DMA"};
+    private String nodetypes[] = {"CPU", "FPGA", "BUS", "LINK", "BRIDGE", "ROUTER", "MEMORY", "HWA", "DMA"};
     private String cpuparameters[] = {"nbOfCores", "byteDataSize", "pipelineSize", "goIdleTime", "maxConsecutiveIdleCycles", "taskSwitchingTime", "branchingPredictionPenalty", "cacheMiss", "schedulingPolicy", "sliceTime", "execiTime", "execcTime"};
     private String fpgaparameters[] = {"capacity", "byteDataSize", "mappingPenalty", "goIdleTime", "maxConsecutiveIdleCycles", "reconfigurationTime", "execiTime", "execcTime"};
     private String linkparameters[] = {"bus", "node", "priority"};
@@ -146,6 +146,7 @@ public class TMLArchiTextSpecification {
         HwA hwa;
         HwBus bus;
         HwBridge bridge;
+        HwRouter router;
         HwMemory memory;
         HwDMA dma;
 
@@ -217,6 +218,15 @@ public class TMLArchiTextSpecification {
                 set = "SET " + name + " ";
                 code += "NODE BRIDGE " + name + CR;
                 code += set + "bufferByteSize " + bridge.bufferByteSize + CR;
+            }
+
+            // Router
+            if (node instanceof HwRouter) {
+                router = (HwRouter) node;
+                name = prepareString(node.getName());
+                set = "SET " + name + " ";
+                code += "NODE ROUTER " + name + CR;
+                code += set + "bufferByteSize " + router.bufferByteSize + CR;
             }
 
             // Memory
@@ -445,6 +455,9 @@ public class TMLArchiTextSpecification {
             } else if (_split[1].equals("BRIDGE")) {
                 HwBridge bridge = new HwBridge(_split[2]);
                 tmla.addHwNode(bridge);
+            } else if (_split[1].equals("ROUTER")) {
+                HwRouter router = new HwRouter(_split[2]);
+                tmla.addHwNode(router);
             } else if (_split[1].equals("HWA")) {
                 HwA hwa = new HwA(_split[2]);
                 tmla.addHwNode(hwa);
@@ -678,6 +691,22 @@ public class TMLArchiTextSpecification {
 
                     if (_split[2].toUpperCase().equals("BUFFERBYTESIZE")) {
                         bridge.bufferByteSize = Integer.decode(_split[3]).intValue();
+                    }
+                }
+
+                if (node instanceof HwRouter) {
+                    HwRouter router = (HwRouter) node;
+
+                    if (!checkParameter("SET", _split, 2, 11, _lineNb)) {
+                        return -1;
+                    }
+
+                    if (!checkParameter("SET", _split, 3, 1, _lineNb)) {
+                        return -1;
+                    }
+
+                    if (_split[2].toUpperCase().equals("BUFFERBYTESIZE")) {
+                        router.bufferByteSize = Integer.decode(_split[3]).intValue();
                     }
                 }
 

@@ -54,6 +54,7 @@ import avatartranslator.AvatarSpecification;
 import myutil.TraceManager;
 import tmltranslator.HwA;
 import tmltranslator.HwBridge;
+import tmltranslator.HwRouter;
 import tmltranslator.HwBus;
 import tmltranslator.HwCPU;
 import tmltranslator.HwCommunicationNode;
@@ -114,6 +115,7 @@ import ui.tmlcompd.TMLCRecordComponent;
 import ui.tmldd.TMLArchiArtifact;
 import ui.tmldd.TMLArchiBUSNode;
 import ui.tmldd.TMLArchiBridgeNode;
+import ui.tmldd.TMLArchiRouterNode;
 import ui.tmldd.TMLArchiCPNode;
 import ui.tmldd.TMLArchiCPUNode;
 import ui.tmldd.TMLArchiCommunicationArtifact;
@@ -2820,6 +2822,7 @@ public class GTMLModeling {
         TMLArchiMemoryNode memorynode;
         TMLArchiDMANode dmanode;
         TMLArchiFirewallNode firewallnode;
+        TMLArchiRouterNode routerNode;
         HwCPU cpu;
         HwFPGA fpga;
         HwA hwa;
@@ -2827,6 +2830,7 @@ public class GTMLModeling {
         HwVGMN vgmn;
         HwCrossbar crossbar;
         HwBridge bridge;
+        HwRouter router;
         HwMemory memory;
         HwDMA dma;
 
@@ -3000,6 +3004,25 @@ public class GTMLModeling {
                     listE.addCor(bridge, bridgenode);
                     archi.addHwNode(bridge);
                     //TraceManager.addDev("Bridge node added:" + bridge.getName());
+                }
+            }
+
+            if (tgc instanceof TMLArchiRouterNode) {
+                routerNode = (TMLArchiRouterNode) tgc;
+                if (nameInUse(names, routerNode.getName())) {
+                    // Node with the same name
+                    UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Two nodes have the same name: " + routerNode.getName());
+                    ce.setTDiagramPanel(tmlap.tmlap);
+                    ce.setTGComponent(routerNode);
+                    checkingErrors.add(ce);
+                } else {
+                    names.add(routerNode.getName());
+                    router = new HwRouter(routerNode.getName());
+                    router.bufferByteSize = routerNode.getBufferByteDataSize();
+                    router.clockRatio = routerNode.getClockRatio();
+                    listE.addCor(router, routerNode);
+                    archi.addHwNode(router);
+                    //TraceManager.addDev("Router node added:" + router.getName());
                 }
             }
 
