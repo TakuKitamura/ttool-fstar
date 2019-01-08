@@ -45,24 +45,24 @@ import java.util.Vector;
 
 
 /**
- * Class TaskINForDispatch
- * Creation: 07/01/2019
+ * Class TaskINForVC
+ * Creation: 08/01/2019
  *
  * @author Ludovic Apvrille
- * @version 1.0 07/01/2019
+ * @version 1.0 08/01/2019
  */
-public class TaskINForDispatch extends TMLTask {
+public class TaskINForVC extends TMLTask {
     protected int nbOfVCs;
 
-    public TaskINForDispatch(String name, Object referenceToClass, Object referenceToActivityDiagram) {
+    public TaskINForVC(String name, Object referenceToClass, Object referenceToActivityDiagram) {
         super(name, referenceToClass, referenceToActivityDiagram);
     }
 
     // Output Channels are given in the order of VCs
 
-    public void generate(int nbOfVCs, TMLEvent inputEvent, TMLChannel inputChannel, Vector<TMLEvent> outputEvents, Vector<TMLChannel> outputChannels) {
+    public void generate(TMLEvent inPacketEvent, Vector<TMLEvent> inFeedbackEvents, TMLChannel inChannel,
+                         TMLEvent outFeedbackEvent, Vector<TMLEvent> outVCEvents) {
 
-        this.nbOfVCs = nbOfVCs;
 
 
         // Attributes
@@ -74,22 +74,47 @@ public class TaskINForDispatch extends TMLTask {
         this.addAttribute(vc);
         TMLAttribute eop = new TMLAttribute("eop", "eop", new TMLType(TMLType.NATURAL), "0");
         this.addAttribute(eop);
+        TMLAttribute feedbackDownstr = new TMLAttribute("feedbackDownstr", "feedbackDownstr", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(feedbackDownstr);
+        TMLAttribute bufferSize = new TMLAttribute("bufferSize", "bufferSize", new TMLType(TMLType.NATURAL), "2");
+        this.addAttribute(bufferSize);
+        TMLAttribute requestedOutput = new TMLAttribute("requestedOutput", "requestedOutput", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(requestedOutput);
+        TMLAttribute j = new TMLAttribute("j", "j", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(j);
 
         // Events and channels
-        addTMLEvent(inputEvent);
-        for(TMLEvent evt: outputEvents) {
+        addTMLEvent(inPacketEvent);
+        for(TMLEvent evt: inFeedbackEvents) {
             addTMLEvent(evt);
         }
-        addReadTMLChannel(inputChannel);
-        for(TMLChannel ch: outputChannels) {
-            addWriteTMLChannel(ch);
+        addReadTMLChannel(inChannel);
+        addTMLEvent(outFeedbackEvent);
+        for(TMLEvent evt: outVCEvents) {
+            addTMLEvent(evt);
         }
 
         // Activity Diagram
         TMLStartState start = new TMLStartState("mainStart", referenceObject);
         activity.setFirst(start);
 
+        // Main Sequence
+        TMLSequence seq = new TMLSequence("mainSequence", referenceObject);
+        activity.addElement(seq);
+
+        // Loop at the left of the sequence
         TMLForLoop loop = new TMLForLoop("mainLoop", referenceObject);
+        loop.setInit("j=0");
+        loop.setCondition("j<buferSize");
+        loop.setIncrement("j=j+1");
+        activity.addElement(loop);
+        seq.addNext(loop);
+
+        // TO BE CONTINUED...
+
+
+
+        /*TMLForLoop loop = new TMLForLoop("mainLoop", referenceObject);
         loop.setInfinite(true);
         activity.addElement(loop);
         start.addNext(loop);
@@ -137,7 +162,7 @@ public class TaskINForDispatch extends TMLTask {
         // Ending loop
         TMLStopState stop = new TMLStopState("StopState", referenceObject);
         activity.addElement(stop);
-        loop.addNext(stop);
+        loop.addNext(stop);*/
 
     }
 
