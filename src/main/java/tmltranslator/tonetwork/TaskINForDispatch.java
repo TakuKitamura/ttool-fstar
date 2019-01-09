@@ -121,7 +121,7 @@ public class TaskINForDispatch extends TMLTask {
             read.addChannel(inputChannel);
             read.setNbOfSamples("1");
             activity.addElement(read);
-            sendEvt.addNext(sendEvt);
+            sendEvt.addNext(read);
 
             TMLWriteChannel write = new TMLWriteChannel("WriteFlit" + i, referenceObject);
             write.addChannel(outputChannels.get(i));

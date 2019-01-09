@@ -104,6 +104,12 @@ public class TMLActivity extends TMLElement {
     }
 
 
+    public void addLinkElement(TMLActivityElement _previous, TMLActivityElement _tmlae) {
+        addElement(_tmlae);
+        _previous.addNext(_tmlae);
+    }
+
+
     public TMLActivityElement findReferenceElement(Object reference) {
         TMLActivityElement ae;
         for(int i=0; i<elements.size(); i++) {

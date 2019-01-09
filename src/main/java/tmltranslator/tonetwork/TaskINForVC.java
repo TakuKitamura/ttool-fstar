@@ -52,7 +52,6 @@ import java.util.Vector;
  * @version 1.0 08/01/2019
  */
 public class TaskINForVC extends TMLTask {
-    protected int nbOfVCs;
 
     public TaskINForVC(String name, Object referenceToClass, Object referenceToActivityDiagram) {
         super(name, referenceToClass, referenceToActivityDiagram);
@@ -63,7 +62,8 @@ public class TaskINForVC extends TMLTask {
     public void generate(TMLEvent inPacketEvent, Vector<TMLEvent> inFeedbackEvents, TMLChannel inChannel,
                          TMLEvent outFeedbackEvent, Vector<TMLEvent> outVCEvents) {
 
-
+        TMLSendEvent sendEvt;
+        TMLStopState stop;
 
         // Attributes
         TMLAttribute pktlen = new TMLAttribute("pktlen", "pktlen", new TMLType(TMLType.NATURAL), "0");
@@ -100,69 +100,120 @@ public class TaskINForVC extends TMLTask {
 
         // Main Sequence
         TMLSequence seq = new TMLSequence("mainSequence", referenceObject);
-        activity.addElement(seq);
+        activity.addLinkElement(start, seq);
 
         // Loop at the left of the sequence
         TMLForLoop loop = new TMLForLoop("mainLoop", referenceObject);
         loop.setInit("j=0");
-        loop.setCondition("j<buferSize");
+        loop.setCondition("j<bufferSize");
         loop.setIncrement("j=j+1");
         activity.addElement(loop);
         seq.addNext(loop);
 
-        // TO BE CONTINUED...
+        sendEvt = new TMLSendEvent("outFeedbackEvent", referenceObject);
+        sendEvt.setEvent(outFeedbackEvent);
+        activity.addElement(sendEvt);
+        loop.addNext(sendEvt);
 
+        stop = new TMLStopState("StopStateInLoop", referenceObject);
+        activity.addElement(stop);
+        sendEvt.addNext(stop);
 
+        stop = new TMLStopState("StopStateAfterLoop", referenceObject);
+        activity.addElement(stop);
+        loop.addNext(stop);
 
-        /*TMLForLoop loop = new TMLForLoop("mainLoop", referenceObject);
-        loop.setInfinite(true);
-        activity.addElement(loop);
-        start.addNext(loop);
+        // Second activity after sequence
+        TMLForLoop loop2 = new TMLForLoop("mainLoop", referenceObject);
+        loop2.setInfinite(true);
+        activity.addElement(loop2);
+        seq.addNext(loop2);
 
         TMLWaitEvent waitEvt = new TMLWaitEvent("PacketEvent", referenceObject);
-        waitEvt.setEvent(inputEvent);
+        waitEvt.setEvent(inPacketEvent);
         waitEvt.addParam("pktlen");
         waitEvt.addParam("dst");
         waitEvt.addParam("vc");
         waitEvt.addParam("eop");
-        activity.addElement(waitEvt);
-        loop.addNext(waitEvt);
+        activity.addLinkElement(loop2, waitEvt);
 
-        TMLChoice choice = new TMLChoice("MainChoice", referenceObject);
-        activity.addElement(choice);
+        TMLActionState reqOut = new TMLActionState("ReqOut", referenceObject);
+        reqOut.setAction("requestedOutput = dst");
+        activity.addLinkElement(waitEvt, reqOut);
 
-        for(int i=0; i<nbOfVCs; i++) {
-            TMLSendEvent sendEvt = new TMLSendEvent("SendEvtToVC" + i, referenceObject);
-            sendEvt.setEvent(outputEvents.get(i));
+
+        // Main choice
+        TMLChoice mainChoice = new TMLChoice("mainChoice", referenceObject);
+        activity.addLinkElement(reqOut, mainChoice);
+
+        // Each link to an output for a given packet
+        for(int i=0;  i<outVCEvents.size(); i++) {
+            TMLForLoop packetLoop = new TMLForLoop("packetLoop", referenceObject);
+            packetLoop.setInit("j=0");
+            packetLoop.setCondition("j<pktlen-1");
+            packetLoop.setIncrement("j=j+1");
+            activity.addLinkElement(mainChoice, packetLoop);
+            mainChoice.addGuard("requestedOutput == " + i);
+
+            // Inside packetloop
+            sendEvt = new TMLSendEvent("info on packet", referenceObject);
+            sendEvt.setEvent(outVCEvents.get(i));
             sendEvt.addParam("pktlen");
             sendEvt.addParam("dst");
             sendEvt.addParam("vc");
             sendEvt.addParam("eop");
-            activity.addElement(sendEvt);
-            choice.addNext(sendEvt);
-            choice.addGuard("vc == " + i);
+            activity.addLinkElement(packetLoop, sendEvt);
+
+            waitEvt = new TMLWaitEvent("FeedbackDownEvent", referenceObject);
+            waitEvt.setEvent(inFeedbackEvents.get(i));
+            activity.addLinkElement(sendEvt, waitEvt);
+
+            sendEvt = new TMLSendEvent("feedbackUpEvent", referenceObject);
+            sendEvt.setEvent(outFeedbackEvent);
+            activity.addLinkElement(waitEvt, sendEvt);
 
             TMLReadChannel read = new TMLReadChannel("ReadFlit" + i, referenceObject);
-            read.addChannel(inputChannel);
+            read.addChannel(inChannel);
             read.setNbOfSamples("1");
-            activity.addElement(read);
-            sendEvt.addNext(sendEvt);
+            activity.addLinkElement(sendEvt, read);
 
-            TMLWriteChannel write = new TMLWriteChannel("WriteFlit" + i, referenceObject);
-            write.addChannel(outputChannels.get(i));
-            write.setNbOfSamples("1");
-            activity.addElement(write);
-            read.addNext(write);
+            waitEvt = new TMLWaitEvent("PacketEventInLoop", referenceObject);
+            waitEvt.setEvent(inPacketEvent);
+            waitEvt.addParam("pktlen");
+            waitEvt.addParam("dst");
+            waitEvt.addParam("vc");
+            waitEvt.addParam("eop");
+            activity.addLinkElement(read, waitEvt);
 
-            TMLStopState stopL = new TMLStopState("WriteFlit" + i, referenceObject);
-            activity.addElement(stopL);
-            write.addNext(stopL);
+            stop = new TMLStopState("StopStateInLoop", referenceObject);
+            activity.addLinkElement(waitEvt, stop);
+
+            // After packetloop
+            sendEvt = new TMLSendEvent("infoOnPacketO", referenceObject);
+            sendEvt.setEvent(outVCEvents.get(i));
+            sendEvt.addParam("pktlen");
+            sendEvt.addParam("dst");
+            sendEvt.addParam("vc");
+            sendEvt.addParam("eop");
+            activity.addLinkElement(loop, sendEvt);
+
+            waitEvt = new TMLWaitEvent("FeedbackDownEventO", referenceObject);
+            waitEvt.setEvent(inFeedbackEvents.get(i));
+            activity.addLinkElement(sendEvt, waitEvt);
+
+            sendEvt = new TMLSendEvent("feedbackUpEventO", referenceObject);
+            sendEvt.setEvent(outFeedbackEvent);
+            activity.addLinkElement(waitEvt, sendEvt);
+
+            read = new TMLReadChannel("ReadFlitO" + i, referenceObject);
+            read.addChannel(inChannel);
+            read.setNbOfSamples("1");
+            activity.addLinkElement(sendEvt, read);
+
+            stop = new TMLStopState("StopStateOutLoop", referenceObject);
+            activity.addLinkElement(waitEvt, stop);
+
         }
-
-        // Ending loop
-        TMLStopState stop = new TMLStopState("StopState", referenceObject);
-        activity.addElement(stop);
-        loop.addNext(stop);*/
 
     }
 
