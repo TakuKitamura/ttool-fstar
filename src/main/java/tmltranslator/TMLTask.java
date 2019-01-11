@@ -37,17 +37,18 @@
  */
 
 
-
-
 package tmltranslator;
+
+import myutil.TraceManager;
 
 import java.util.*;
 
 /**
-   * Class TMLTask
-   * Creation: 17/11/2005
-   * @version 1.0 17/11/2005
-   * @author Ludovic APVRILLE
+ * Class TMLTask
+ * Creation: 17/11/2005
+ *
+ * @author Ludovic APVRILLE
+ * @version 1.0 17/11/2005
  */
 public class TMLTask extends TMLElement {
     protected TMLActivity activity;
@@ -61,12 +62,12 @@ public class TMLTask extends TMLElement {
     private Set<TMLChannel> writeTMLChannelsList;
     private Set<TMLEvent> eventsList;
     private int operationType;
-	private boolean isAttacker;
+    private boolean isAttacker;
 
     public TMLTask(String name, Object referenceToClass, Object referenceToActivityDiagram) {
         super(name, referenceToClass);
         //TraceManager.addDev("Creating new TMLTask:" + name);
-        activity = new TMLActivity(name+"activity_diagram", referenceToActivityDiagram);
+        activity = new TMLActivity(name + "activity_diagram", referenceToActivityDiagram);
         attributes = new ArrayList<TMLAttribute>();
         channelsList = new HashSet<TMLChannel>();
         readTMLChannelsList = new HashSet<TMLChannel>();
@@ -90,13 +91,13 @@ public class TMLTask extends TMLElement {
         return isRequested;
     }
 
-	public boolean isAttacker(){
-		return isAttacker;
-	}
-	
-	public void setAttacker(boolean a){
-		isAttacker=a;
-	}
+    public boolean isAttacker() {
+        return isAttacker;
+    }
+
+    public void setAttacker(boolean a) {
+        isAttacker = a;
+    }
 
     public void setRequest(TMLRequest _request) {
         request = _request;
@@ -116,7 +117,7 @@ public class TMLTask extends TMLElement {
 
     public boolean hasCommand(int commandID) {
         TMLActivityElement tmlae;
-        for(int i=0; i<activity.nElements(); i++) {
+        for (int i = 0; i < activity.nElements(); i++) {
             tmlae = activity.get(i);
             if (tmlae.getID() == commandID) {
                 return true;
@@ -125,29 +126,29 @@ public class TMLTask extends TMLElement {
         return false;
     }
 
-    public String[] makeCommandIDs () {
+    public String[] makeCommandIDs() {
         String[] list = new String[activity.nElements()];
         TMLActivityElement tmlae;
-        for(int i=0; i<activity.nElements(); i++) {
+        for (int i = 0; i < activity.nElements(); i++) {
             tmlae = activity.get(i);
             list[i] = tmlae.getName() + " (" + tmlae.getID() + ")";
         }
         return list;
     }
 
-    public String[] makeVariableIDs () {
+    public String[] makeVariableIDs() {
         String[] list = new String[attributes.size()];
         int cpt = 0;
 
-        for(TMLAttribute att: attributes) {
+        for (TMLAttribute att : attributes) {
             list[cpt] = att.getName() + " (" + att.getID() + ")";
-            cpt ++;
+            cpt++;
         }
         return list;
     }
 
     public TMLAttribute getAttributeByName(String _name) {
-        for(TMLAttribute attribute:attributes) {
+        for (TMLAttribute attribute : attributes) {
             if (attribute.getName().compareTo(_name) == 0) {
                 return attribute;
             }
@@ -156,79 +157,77 @@ public class TMLTask extends TMLElement {
     }
 
     //For SDR operations only 1 channel
-    public List<TMLReadChannel> getReadChannels()  {
+    public List<TMLReadChannel> getReadChannels() {
 
         List<TMLReadChannel> list = new ArrayList<TMLReadChannel>();
-        for( int i = 0; i < getActivityDiagram().nElements(); i++ )     {
-            if( getActivityDiagram().get(i) instanceof TMLReadChannel ) {
-                list.add( (TMLReadChannel) getActivityDiagram().get(i) );
+        for (int i = 0; i < getActivityDiagram().nElements(); i++) {
+            if (getActivityDiagram().get(i) instanceof TMLReadChannel) {
+                list.add((TMLReadChannel) getActivityDiagram().get(i));
                 //TraceManager.addDev( "Element: " + task.getActivityDiagram().get(i).toString() );
             }
         }
-        
+
         return list;
     }
 
     //For SDR operations, only 1 channel
-    public List<TMLWriteChannel> getWriteChannels()        {
+    public List<TMLWriteChannel> getWriteChannels() {
 
         List<TMLWriteChannel> list = new ArrayList<TMLWriteChannel>();
-        for( int i = 0; i < getActivityDiagram().nElements(); i++ )     {
-            if( getActivityDiagram().get(i) instanceof TMLWriteChannel )        {
-                list.add( (TMLWriteChannel) getActivityDiagram().get(i) );
+        for (int i = 0; i < getActivityDiagram().nElements(); i++) {
+            if (getActivityDiagram().get(i) instanceof TMLWriteChannel) {
+                list.add((TMLWriteChannel) getActivityDiagram().get(i));
                 //TraceManager.addDev( "Element: " + task.getActivityDiagram().get(i).toString() );
             }
         }
         return list;
     }
 
-    public List<TMLSendEvent> getSendEvents()  {
+    public List<TMLSendEvent> getSendEvents() {
 
         List<TMLSendEvent> list = new ArrayList<TMLSendEvent>();
-        
-        for( int i = 0; i < getActivityDiagram().nElements(); i++ )     {
-            if( getActivityDiagram().get(i) instanceof TMLSendEvent ) {
-                list.add( (TMLSendEvent) getActivityDiagram().get(i) );
+
+        for (int i = 0; i < getActivityDiagram().nElements(); i++) {
+            if (getActivityDiagram().get(i) instanceof TMLSendEvent) {
+                list.add((TMLSendEvent) getActivityDiagram().get(i));
             }
         }
-        
+
         return list;
     }
 
-    public List<TMLWaitEvent> getWaitEvents()  {
+    public List<TMLWaitEvent> getWaitEvents() {
         List<TMLWaitEvent> list = new ArrayList<TMLWaitEvent>();
-        
-        for( int i = 0; i < getActivityDiagram().nElements(); i++ )     {
-            if( getActivityDiagram().get(i) instanceof TMLWaitEvent ) {
-                list.add( (TMLWaitEvent) getActivityDiagram().get(i) );
+
+        for (int i = 0; i < getActivityDiagram().nElements(); i++) {
+            if (getActivityDiagram().get(i) instanceof TMLWaitEvent) {
+                list.add((TMLWaitEvent) getActivityDiagram().get(i));
             }
         }
-        
+
         return list;
     }
 
-    public String getID0()      {
+    public String getID0() {
 
-        if( getReadChannels().size() > 0 )      {
+        if (getReadChannels().size() > 0) {
             return getReadChannels().get(0).toString().split("__")[1];
-        }
-        else    {
+        } else {
             return "";
         }
     }
 
-    public String getOD0()      {
+    public String getOD0() {
 
-        if( getWriteChannels().size() > 0 )     {
+        if (getWriteChannels().size() > 0) {
             return getWriteChannels().get(0).toString().split("__")[1];
-        }
-        else    {
+        } else {
             return "";
         }
     }
 
-    public String getTaskName()      {
-        return getName().split( "__" )[1];
+    public String getTaskName() {
+        return getName().split("__")[1];
     }
 
 
@@ -262,15 +261,15 @@ public class TMLTask extends TMLElement {
 
     public String getAttributeString() {
         String ret = "";
-        for(TMLAttribute attribute:attributes) {
-            ret += attribute.toString() + " / " ;
+        for (TMLAttribute attribute : attributes) {
+            ret += attribute.toString() + " / ";
         }
         return ret;
     }
 
     public boolean hasTMLRandom() {
         TMLActivityElement element;
-        for (int i=0; i<activity.nElements(); i++) {
+        for (int i = 0; i < activity.nElements(); i++) {
             element = activity.get(i);
             if (element instanceof TMLRandom) {
                 return true;
@@ -285,7 +284,7 @@ public class TMLTask extends TMLElement {
 
     public Vector<String> getAllAttributesStartingWith(String _name) {
         Vector<String> v = new Vector<String>();
-        for(TMLAttribute attribute:attributes) {
+        for (TMLAttribute attribute : attributes) {
             if (attribute.getName().startsWith(_name)) {
                 v.add(attribute.getName());
             }
@@ -295,7 +294,7 @@ public class TMLTask extends TMLElement {
 
     public Vector<TMLAttribute> getAllTMLAttributesStartingWith(String _name) {
         Vector<TMLAttribute> v = new Vector<TMLAttribute>();
-        for(TMLAttribute attribute:attributes) {
+        for (TMLAttribute attribute : attributes) {
             if (attribute.getName().startsWith(_name)) {
                 v.add(attribute);
             }
@@ -311,7 +310,7 @@ public class TMLTask extends TMLElement {
         return max;
     }
 
-    public void computeCorrespondance(TMLElement [] _correspondance) {
+    public void computeCorrespondance(TMLElement[] _correspondance) {
         _correspondance[getID()] = this;
         if (activity != null) {
             activity.computeCorrespondance(_correspondance);
@@ -343,57 +342,70 @@ public class TMLTask extends TMLElement {
         activity.addSendAndReceiveEventAfterWriteIn(chan, evt1, evt2, action1, action2);
     }
 
-    public void addTMLChannel( TMLChannel _ch ) {
-        channelsList.add( _ch );
+    public void addTMLChannel(TMLChannel _ch) {
+        channelsList.add(_ch);
     }
 
-    public void addReadTMLChannel( TMLChannel _ch )     {
-        readTMLChannelsList.add( _ch );
+    public void addReadTMLChannel(TMLChannel _ch) {
+        readTMLChannelsList.add(_ch);
     }
 
-    public void addWriteTMLChannel( TMLChannel _ch )    {
-        writeTMLChannelsList.add( _ch );
+    public void addWriteTMLChannel(TMLChannel _ch) {
+        writeTMLChannelsList.add(_ch);
     }
 
-    public List<TMLChannel> getTMLChannels()       {
-        return new ArrayList<TMLChannel>( channelsList );
+    public List<TMLChannel> getTMLChannels() {
+        return new ArrayList<TMLChannel>(channelsList);
     }
 
-    public List<TMLChannel> getReadTMLChannels()   {
-        return new ArrayList<TMLChannel>( readTMLChannelsList );
+    public List<TMLChannel> getReadTMLChannels() {
+        return new ArrayList<TMLChannel>(readTMLChannelsList);
     }
 
-    public List<TMLChannel> getWriteTMLChannels()  {
-        return new ArrayList<TMLChannel>( writeTMLChannelsList );
+    public List<TMLChannel> getWriteTMLChannels() {
+        return new ArrayList<TMLChannel>(writeTMLChannelsList);
     }
 
-    public void addTMLEvent( TMLEvent _evt )    {
-        eventsList.add( _evt );
+    public void addTMLEvent(TMLEvent _evt) {
+        eventsList.add(_evt);
     }
 
-    public List<TMLEvent> getTMLEvents()   {
-        return new ArrayList<TMLEvent>( eventsList );
+    public List<TMLEvent> getTMLEvents() {
+        return new ArrayList<TMLEvent>(eventsList);
     }
 
-    public void addOperationType( int _operationType )   {
+    public void addOperationType(int _operationType) {
         operationType = _operationType;
     }
 
-    public int getOperationType()       {
+    public int getOperationType() {
         return operationType;
     }
 
     public void removeEmptyInfiniteLoop() {
-    	activity.removeEmptyInfiniteLoop();
+        activity.removeEmptyInfiniteLoop();
     }
 
     public String toXML() {
-	String s = new String("<TASK name=\"" + name + "\" priority=\"" + priority + "\" >\n");
-	for(TMLAttribute attr: attributes) {
-	    s += attr.toXML();
-	}
-	s += activity.toXML();
-	s += "</TASK>\n";
-	return s;
+        String s = new String("<TASK name=\"" + name + "\" priority=\"" + priority + "\" >\n");
+        for (TMLAttribute attr : attributes) {
+            s += attr.toXML();
+        }
+        s += activity.toXML();
+        s += "</TASK>\n";
+        return s;
     }
+
+
+    // returns -1 if the WC cannot be computed
+    // The function follows one path randomly and concatenate ExecI operators
+    public int getWorstCaseIComplexity() {
+        if (activity == null) {
+            return -1;
+        }
+         TraceManager.addDev("Handling task:" + getTaskName());
+        return activity.getWorstCaseIComplexity();
+
+    }
+
 }

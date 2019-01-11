@@ -44,10 +44,11 @@ import myutil.TraceManager;
 import java.util.Vector;
 
 /**
-   * Class TMLActivity
-   * Creation: 23/11/2005
-   * @version 1.0 23/11/2005
-   * @author Ludovic APVRILLE
+ * Class TMLActivity
+ * Creation: 23/11/2005
+ *
+ * @author Ludovic APVRILLE
+ * @version 1.0 23/11/2005
  */
 public class TMLActivity extends TMLElement {
     private TMLActivityElement first;
@@ -59,17 +60,17 @@ public class TMLActivity extends TMLElement {
         elements = new Vector<TMLActivityElement>();
     }
 
-    public TMLActivity copy(){
+    public TMLActivity copy() {
         TMLActivity newAct = new TMLActivity(this.name, this.referenceObject);
         newAct.setFirst(this.first);
-        
-        for (TMLActivityElement act: elements){
+
+        for (TMLActivityElement act : elements) {
             newAct.addElement(act);
         }
-        
+
         return newAct;
     }
-    
+
     public boolean contains(TMLActivityElement _elt) {
         return elements.contains(_elt);
     }
@@ -112,7 +113,7 @@ public class TMLActivity extends TMLElement {
 
     public TMLActivityElement findReferenceElement(Object reference) {
         TMLActivityElement ae;
-        for(int i=0; i<elements.size(); i++) {
+        for (int i = 0; i < elements.size(); i++) {
             ae = elements.elementAt(i);
             if (ae.getReferenceObject() == reference) {
                 return ae;
@@ -125,11 +126,11 @@ public class TMLActivity extends TMLElement {
         int found = -1;
         int next;
         TMLActivityElement ae;
-        for(int i=0; i<elements.size(); i++) {
+        for (int i = 0; i < elements.size(); i++) {
             ae = elements.elementAt(i);
             if (ae instanceof TMLSelectEvt) {
                 next = ae.getNbNext();
-                if (next>found) {
+                if (next > found) {
                     found = next;
                 }
             }
@@ -139,7 +140,7 @@ public class TMLActivity extends TMLElement {
 
     private void replaceAllNext(TMLActivityElement _oldE, TMLActivityElement _newE) {
         TMLActivityElement tmlae;
-        for(int i=0; i<elements.size(); i++) {
+        for (int i = 0; i < elements.size(); i++) {
             tmlae = elements.elementAt(i);
             tmlae.setNewNext(_oldE, _newE);
         }
@@ -147,30 +148,30 @@ public class TMLActivity extends TMLElement {
 
     private TMLRandomSequence findTMLRandomSequence() {
         TMLActivityElement tmlae;
-        for(int i=0; i<elements.size(); i++) {
+        for (int i = 0; i < elements.size(); i++) {
             tmlae = elements.elementAt(i);
             if (tmlae instanceof TMLRandomSequence) {
-                return (TMLRandomSequence)tmlae;
+                return (TMLRandomSequence) tmlae;
             }
         }
 
         return null;
     }
 
-	public void replaceElement(TMLActivityElement _oldE, TMLActivityElement _newE) {
-		_newE.setNexts(_oldE.getNexts());
-		replaceAllNext(_oldE, _newE);
-		elements.add(_newE);
-		elements.remove(_oldE);
-	}
+    public void replaceElement(TMLActivityElement _oldE, TMLActivityElement _newE) {
+        _newE.setNexts(_oldE.getNexts());
+        replaceAllNext(_oldE, _newE);
+        elements.add(_newE);
+        elements.remove(_oldE);
+    }
 
     public void removeAllRandomSequences(TMLTask _task) {
         int idRandomSequence = 0;
         TMLRandomSequence tmlrs = findTMLRandomSequence();
 
-        while(tmlrs != null) {
+        while (tmlrs != null) {
             replaceRandomSequence(_task, tmlrs, idRandomSequence);
-            idRandomSequence ++;
+            idRandomSequence++;
             tmlrs = findTMLRandomSequence();
         }
     }
@@ -212,12 +213,12 @@ public class TMLActivity extends TMLElement {
         TMLStopState tmlstop = new TMLStopState("stop", _tmlrs.getReferenceObject());
         addElement(tmlstop);
 
-        TMLActionState [] tmlactions = new TMLActionState[nnext];
+        TMLActionState[] tmlactions = new TMLActionState[nnext];
         TMLActionState tmlaction;
         TMLAttribute[] attributes = new TMLAttribute[nnext];
 
 
-        for(i=0; i<nnext; i++) {
+        for (i = 0; i < nnext; i++) {
             name = "rd__" + _idRandomSequence + "__" + i;
             attributes[i] = new TMLAttribute(name, name, new TMLType(TMLType.BOOLEAN), "false");
             _task.addAttribute(attributes[i]);
@@ -234,13 +235,13 @@ public class TMLActivity extends TMLElement {
             choice.addNext(tmlaction);
             choice.addGuard("[not(" + name + ")]");
 
-            if (i!=0) {
-                tmlactions[i-1].addNext(tmlactions[i]);
+            if (i != 0) {
+                tmlactions[i - 1].addNext(tmlactions[i]);
             }
         }
 
         replaceAllNext(_tmlrs, tmlactions[0]);
-        tmlactions[nnext-1].addNext(loop);
+        tmlactions[nnext - 1].addNext(loop);
         loop.addNext(choice);
         loop.addNext(tmlstop);
         removeElement(_tmlrs);
@@ -251,14 +252,14 @@ public class TMLActivity extends TMLElement {
 
         TMLActivityElement ae;
         Vector<TMLActionState> states = new Vector<TMLActionState>();
-        for(int i=0; i<elements.size(); i++) {
+        for (int i = 0; i < elements.size(); i++) {
             ae = elements.elementAt(i);
             if (ae instanceof TMLActionState) {
-                states.add((TMLActionState)ae);
+                states.add((TMLActionState) ae);
             }
         }
 
-        for(TMLActionState as: states) {
+        for (TMLActionState as : states) {
             splitActionStatesWithUnderscoreVariables(as, _task);
         }
 
@@ -286,7 +287,7 @@ public class TMLActivity extends TMLElement {
         }
 
         String name0 = s.substring(0, index0).trim();
-        String name1 = s.substring(index0+1, s.length()).trim();
+        String name1 = s.substring(index0 + 1, s.length()).trim();
 
         //TraceManager.addDev("name0=" + name0 + " name1=" + name1);
 
@@ -308,7 +309,7 @@ public class TMLActivity extends TMLElement {
         }
 
         //TraceManager.addDev("Analyzing types");
-        for(int i=0; i<v0.size(); i++) {
+        for (int i = 0; i < v0.size(); i++) {
             if (v0.get(i).getType() == v1.get(i).getType()) {
                 return;
             }
@@ -328,7 +329,7 @@ public class TMLActivity extends TMLElement {
         _ae.clearNexts();
         previous = _ae;
 
-        for(int i=1; i<v0.size(); i++) {
+        for (int i = 1; i < v0.size(); i++) {
             tmlas = new TMLActionState(previous.getName(), previous.getReferenceObject());
             tmlas.setAction(v0.get(i).getName() + " = " + v1.get(i).getName());
             elements.add(tmlas);
@@ -344,14 +345,14 @@ public class TMLActivity extends TMLElement {
 
         TMLActivityElement ae;
         Vector<TMLActionState> states = new Vector<TMLActionState>();
-        for(int i=0; i<elements.size(); i++) {
+        for (int i = 0; i < elements.size(); i++) {
             ae = elements.elementAt(i);
             if (ae instanceof TMLActionState) {
-                states.add((TMLActionState)ae);
+                states.add((TMLActionState) ae);
             }
         }
 
-        for(TMLActionState as: states) {
+        for (TMLActionState as : states) {
             splitActionStatesWithDollars(as, _task);
         }
     }
@@ -378,9 +379,9 @@ public class TMLActivity extends TMLElement {
         }
 
         String name0 = s.substring(0, index0).trim();
-        String name1 = s.substring(index0+1, s.length()).trim();
+        String name1 = s.substring(index0 + 1, s.length()).trim();
 
-        if ((name0.length() ==0) || (name1.length() == 0)) {
+        if ((name0.length() == 0) || (name1.length() == 0)) {
             _ae.setAction(Conversion.replaceAllString(_ae.getAction(), "$", " ").trim());
             return;
         }
@@ -410,33 +411,34 @@ public class TMLActivity extends TMLElement {
     public int computeMaxID() {
         int max = -1;
         TMLActivityElement ae;
-        for(int i=0; i<elements.size(); i++) {
+        for (int i = 0; i < elements.size(); i++) {
             ae = elements.elementAt(i);
             max = Math.max(max, ae.getID());
         }
         return max;
     }
 
-    public void computeCorrespondance(TMLElement [] _correspondance) {
+    public void computeCorrespondance(TMLElement[] _correspondance) {
         _correspondance[getID()] = this;
         TMLActivityElement ae;
-        for(int i=0; i<elements.size(); i++) {
+        for (int i = 0; i < elements.size(); i++) {
             ae = elements.elementAt(i);
             _correspondance[ae.getID()] = ae;
         }
 
     }
-    public Vector<TMLActivityElement> getElements(){
+
+    public Vector<TMLActivityElement> getElements() {
         return elements;
     }
 
     public void replaceWaitEventWith(TMLEvent oldEvt, TMLEvent newEvt) {
         TMLActivityElement ae;
 
-        for(int i=0; i<elements.size(); i++) {
+        for (int i = 0; i < elements.size(); i++) {
             ae = elements.elementAt(i);
             if (ae instanceof TMLWaitEvent) {
-                ((TMLWaitEvent)ae).replaceEventWith(oldEvt, newEvt);
+                ((TMLWaitEvent) ae).replaceEventWith(oldEvt, newEvt);
             }
         }
     }
@@ -444,10 +446,10 @@ public class TMLActivity extends TMLElement {
     public void replaceSendEventWith(TMLEvent oldEvt, TMLEvent newEvt) {
         TMLActivityElement ae;
 
-        for(int i=0; i<elements.size(); i++) {
+        for (int i = 0; i < elements.size(); i++) {
             ae = elements.elementAt(i);
             if (ae instanceof TMLSendEvent) {
-                ((TMLSendEvent)ae).replaceEventWith(oldEvt, newEvt);
+                ((TMLSendEvent) ae).replaceEventWith(oldEvt, newEvt);
             }
         }
     }
@@ -455,10 +457,10 @@ public class TMLActivity extends TMLElement {
     public void replaceReadChannelWith(TMLChannel oldChan, TMLChannel newChan) {
         TMLActivityElement ae;
 
-        for(int i=0; i<elements.size(); i++) {
+        for (int i = 0; i < elements.size(); i++) {
             ae = elements.elementAt(i);
             if (ae instanceof TMLReadChannel) {
-                ((TMLReadChannel)ae).replaceChannelWith(oldChan, newChan);
+                ((TMLReadChannel) ae).replaceChannelWith(oldChan, newChan);
             }
         }
     }
@@ -466,10 +468,10 @@ public class TMLActivity extends TMLElement {
     public void replaceWriteChannelWith(TMLChannel oldChan, TMLChannel newChan) {
         TMLActivityElement ae;
 
-        for(int i=0; i<elements.size(); i++) {
+        for (int i = 0; i < elements.size(); i++) {
             ae = elements.elementAt(i);
             if (ae instanceof TMLWriteChannel) {
-                ((TMLWriteChannel)ae).replaceChannelWith(oldChan, newChan);
+                ((TMLWriteChannel) ae).replaceChannelWith(oldChan, newChan);
             }
         }
     }
@@ -481,19 +483,19 @@ public class TMLActivity extends TMLElement {
 
         Vector<TMLSendEvent> newElements = new Vector<TMLSendEvent>();
 
-        for(int i=0; i<elements.size(); i++) {
+        for (int i = 0; i < elements.size(); i++) {
             ae = elements.elementAt(i);
             if (ae instanceof TMLWriteChannel) {
-                twc = (TMLWriteChannel)ae;
-                for (int j = 0; j<twc.getNbOfChannels(); j++) {
+                twc = (TMLWriteChannel) ae;
+                for (int j = 0; j < twc.getNbOfChannels(); j++) {
                     if (twc.getChannel(j) == chan) {
                         TMLSendEvent send = new TMLSendEvent("SendEvt" + cpt, ae.getReferenceObject());
                         send.setEvent(evt);
                         //Vector nexts = ae.getNexts();
-                        for (TMLActivityElement o: ae.getNexts() ) {
-                            send.addNext( o );
+                        for (TMLActivityElement o : ae.getNexts()) {
+                            send.addNext(o);
                         }
-                        
+
                         newElements.add(send);
                         send.addParam(action);
                         ae.clearNexts();
@@ -503,7 +505,7 @@ public class TMLActivity extends TMLElement {
             }
         }
 
-        for(TMLSendEvent s: newElements) {
+        for (TMLSendEvent s : newElements) {
             elements.add(s);
         }
     }
@@ -515,22 +517,22 @@ public class TMLActivity extends TMLElement {
 
         Vector<TMLActivityElementEvent> newElements = new Vector<TMLActivityElementEvent>();
 
-        for(int i=0; i<elements.size(); i++) {
+        for (int i = 0; i < elements.size(); i++) {
             ae = elements.elementAt(i);
             if (ae instanceof TMLWriteChannel) {
-                twc = (TMLWriteChannel)ae;
-                for (int j = 0; j<twc.getNbOfChannels(); j++) {
+                twc = (TMLWriteChannel) ae;
+                for (int j = 0; j < twc.getNbOfChannels(); j++) {
                     if (twc.getChannel(j) == chan) {
                         TMLSendEvent send = new TMLSendEvent("SendEvt" + cpt, ae.getReferenceObject());
                         send.setEvent(evt1);
                         TMLWaitEvent receive = new TMLWaitEvent("RecvEvt" + cpt, ae.getReferenceObject());
                         receive.setEvent(evt2);
 
-                       // Vector nexts = ae.getNexts();
-                        for (TMLActivityElement o: ae.getNexts() ) {
-                            receive.addNext( o );
+                        // Vector nexts = ae.getNexts();
+                        for (TMLActivityElement o : ae.getNexts()) {
+                            receive.addNext(o);
                         }
-                        
+
                         send.addNext(receive);
                         newElements.add(send);
                         newElements.add(receive);
@@ -543,17 +545,17 @@ public class TMLActivity extends TMLElement {
             }
         }
 
-        for(TMLActivityElementEvent s: newElements) {
+        for (TMLActivityElementEvent s : newElements) {
             elements.add(s);
         }
     }
 
     public void removeEmptyInfiniteLoop() {
         TMLForLoop loop = null;
-        for(TMLActivityElement elt: elements) {
+        for (TMLActivityElement elt : elements) {
             if (elt instanceof TMLForLoop) {
-                if (((TMLForLoop)elt).isInfinite()) {
-                    loop = (TMLForLoop)elt;
+                if (((TMLForLoop) elt).isInfinite()) {
+                    loop = (TMLForLoop) elt;
                     break;
                 }
             }
@@ -563,7 +565,7 @@ public class TMLActivity extends TMLElement {
             TMLActivityElement next = (loop.getNexts()).get(0);
             if ((next == null) || (next instanceof TMLStopState)) {
                 //Replace the element pointing to the infinite loop to the element at getNext(0)
-                for(TMLActivityElement elt: elements) {
+                for (TMLActivityElement elt : elements) {
                     elt.setNewNext(loop, next);
                 }
             }
@@ -573,13 +575,104 @@ public class TMLActivity extends TMLElement {
     }
 
     public String toXML() {
-    	String s = new String("<ACTIVITY first=\"" + elements.indexOf(first) + "\">\n");
-    	
-    	for(TMLActivityElement elt: elements) {
-    		s += elt.toXML(elements);
-    	}
-    	s += "</ACTIVITY>\n";
-    	
-    	return s;
+        String s = new String("<ACTIVITY first=\"" + elements.indexOf(first) + "\">\n");
+
+        for (TMLActivityElement elt : elements) {
+            s += elt.toXML(elements);
+        }
+        s += "</ACTIVITY>\n";
+
+        return s;
+    }
+
+
+    // returns -1 if the WC cannot be computed
+    // The function follows execution paths and concatenate ExecI values
+    // Loops are assumed to be executed only once
+    public int getWorstCaseIComplexity() {
+        return getWorstCaseIComplexity(getFirst());
+    }
+
+    public int getWorstCaseIComplexity(TMLActivityElement tae) {
+        //TraceManager.addDev("Handling op:" + tae);
+        TMLActivityElement currentElement = tae;
+        int result = 0;
+        int ret;
+
+        if (tae == null) {
+            return 0;
+        }
+
+        try {
+
+
+                if ((currentElement instanceof TMLForLoop) || (currentElement instanceof TMLSequence) || (currentElement instanceof TMLRandomSequence)) {
+                    // We consider each next independently
+                    for (TMLActivityElement elt : currentElement.getNexts()) {
+                        ret = getWorstCaseIComplexity(elt);
+                        if (ret == -1) {
+                            //TraceManager.addDev("1. -1 in Handling op:" + tae);
+                            return -1;
+                        } else {
+                            result += ret;
+                        }
+                    }
+
+                } else if ((currentElement instanceof TMLChoice) || (currentElement instanceof TMLSelectEvt)) {
+                    for (TMLActivityElement elt : currentElement.getNexts()) {
+                        ret = getWorstCaseIComplexity(elt);
+                        if (ret == -1) {
+                            //TraceManager.addDev("2. -1 in Handling op:" + tae);
+                            return -1;
+                        } else {
+                            result = Math.max(ret, result);
+                        }
+                    }
+
+                } else if (currentElement instanceof TMLExecI) {
+                    ret = getWorstCaseIComplexity(currentElement.getNextElement(0));
+                    if (ret == -1) {
+                        //TraceManager.addDev("3. -1 in Handling op:" + tae);
+                        return -1;
+                    }
+                    // Get the value exec value
+                    String value = ((TMLExecI) (currentElement)).getAction();
+                    int val = Integer.decode(value).intValue();
+                    if (val > 0) {
+                        result = ret + val;
+                    } else {
+                        result = ret;
+                    }
+
+
+                } else if (currentElement instanceof TMLExecIInterval) {
+                    ret = getWorstCaseIComplexity(currentElement.getNextElement(0));
+                    if (ret == -1) {
+                        //TraceManager.addDev("4. -1 in Handling op:" + tae);
+                        return -1;
+                    }
+                    // Get the value exec value
+                    String value = ((TMLExecI) (currentElement)).getAction().trim();
+                    int index = value.indexOf(" ");
+                    if (index != -1) {
+                        value = value.substring(index+1, value.length());
+                    }
+                    int val = Integer.decode(value).intValue();
+                    if (val > 0) {
+                        result = ret + val;
+                    } else {
+                        result = ret;
+                    }
+
+
+                } else {
+                    return getWorstCaseIComplexity(currentElement.getNextElement(0));
+                }
+        } catch (Exception e) {
+            TraceManager.addDev("Exception in Complexity computation:" + e.getMessage());
+            return -1;
+        }
+
+        return result;
     }
 }

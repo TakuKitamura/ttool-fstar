@@ -2248,6 +2248,15 @@ public class TMLModeling<E> {
     }
 
 
+    public void printWCETOfTasks() {
+        String result = "";
+        for(TMLTask task: tasks) {
+            result += "\tTask " + task.getTaskName() + ":" + task.getWorstCaseIComplexity() + "\n";
+        }
+        TraceManager.addDev("Worst Case I Complexity:\n" + result);
+    }
+
+
     public void removeForksAndJoins() {
     
         TraceManager.addDev("\n\n**** Remove forks and joins\n");

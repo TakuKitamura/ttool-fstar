@@ -210,8 +210,13 @@ public class TMLTextSpecification<E> {
 
 
     public String toTextFormat(TMLModeling<E> tmlm) {
-	tmlm.removeForksAndJoins();
+	    tmlm.removeForksAndJoins();
         tmlm.sortByName();
+
+        // Print TMLTasks WCET
+        tmlm.printWCETOfTasks();
+
+
         spec = makeDeclarations(tmlm);
         //Set up Cryptographic Configurations
         
