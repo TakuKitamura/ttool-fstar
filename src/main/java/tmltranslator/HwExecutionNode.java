@@ -41,6 +41,8 @@
 
 package tmltranslator;
 
+import java.util.Vector;
+
 /**
  * Class HwExecutionNode
  * Creation: 23/11/2007
@@ -56,8 +58,12 @@ public abstract class HwExecutionNode extends HwNode  {
     public static final int DEFAULT_EXECC_TIME = 1;
     public int execcTime = DEFAULT_EXECC_TIME;
 
+    protected Vector<String> operationTypes;
+
+
     public HwExecutionNode(String _name) {
         super(_name);
+        operationTypes = new Vector<>();
     }
 
     public abstract String getType();
@@ -68,6 +74,30 @@ public abstract class HwExecutionNode extends HwNode  {
 
     public int getExeccTime() {
         return execcTime;
+    }
+
+    public void addOperationType(String opType) {
+        operationTypes.add(opType.toLowerCase().trim());
+    }
+
+    public Vector<String> getOperationTypes() {
+        return operationTypes;
+    }
+
+    public boolean supportAllOperations() {
+        return (operationTypes.size() == 0) || (containsOperationType("all"));
+    }
+
+    public boolean containsOperationType(String opType) {
+        if(supportAllOperations()) {
+            return true;
+        }
+        for(String s: operationTypes) {
+            if (s.compareTo(opType) == 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

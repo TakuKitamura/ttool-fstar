@@ -71,6 +71,8 @@ public class TMLArchiHWANode extends TMLArchiNode implements SwallowTGComponent,
     private int byteDataSize = HwCPU.DEFAULT_BYTE_DATA_SIZE;
     private int execiTime = HwCPU.DEFAULT_EXECI_TIME;
 
+    private String operationTypes = "all";
+
     public TMLArchiHWANode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
@@ -167,7 +169,6 @@ public class TMLArchiHWANode extends TMLArchiNode implements SwallowTGComponent,
 
     public String getStereotype() {
         return stereotype;
-
     }
 
     public String getNodeName() {
@@ -245,6 +246,13 @@ public class TMLArchiHWANode extends TMLArchiNode implements SwallowTGComponent,
             }
         }
 
+        String tmpOp = dialog.getOperationTypes().trim().toLowerCase();
+        if (tmpOp.length() < 1) {
+            operationTypes = "all";
+        } else {
+            operationTypes = tmpOp;
+        }
+
         if (error) {
             JOptionPane.showMessageDialog(frame,
                                           "Invalid value for the following attributes: " + errors,
@@ -310,6 +318,7 @@ public class TMLArchiHWANode extends TMLArchiNode implements SwallowTGComponent,
         sb.append("<attributes byteDataSize=\"" + byteDataSize + "\" ");
         sb.append(" execiTime=\"" + execiTime + "\" ");
         sb.append(" clockRatio=\"" + clockRatio + "\" ");
+        sb.append(" operationTypes=\"" + operationTypes + "\" ");
         sb.append("/>\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -325,6 +334,7 @@ public class TMLArchiHWANode extends TMLArchiNode implements SwallowTGComponent,
             Element elt;
          //   int t1id;
             String sstereotype = null, snodeName = null;
+            String operationTypesTmp;
 
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
@@ -353,6 +363,10 @@ public class TMLArchiHWANode extends TMLArchiNode implements SwallowTGComponent,
                                 if ((elt.getAttribute("clockRatio") != null) &&  (elt.getAttribute("clockRatio").length() > 0)){
                                     clockRatio = Integer.decode(elt.getAttribute("clockRatio")).intValue();
                                 }
+                                operationTypesTmp = elt.getAttribute("operationTypes");
+                                if (operationTypesTmp != null) {
+                                    operationTypes = operationTypesTmp;
+                                }
                             }
                         }
                     }
@@ -376,11 +390,16 @@ public class TMLArchiHWANode extends TMLArchiNode implements SwallowTGComponent,
         return execiTime;
     }
 
+    public String getOperationTypes() {
+        return operationTypes;
+    }
+
 
     public String getAttributes() {
         String attr = "";
         attr += "Data size (in byte) = " + byteDataSize + "\n";
-        attr += "Execi execution time (in cycle) = " + execiTime + "\n";
+        attr += "EXECI execution time (in cycle) = " + execiTime + "\n";
+        attr += "Operation types = " + operationTypes + "\n";
         attr += "Clock divider = " + clockRatio + "\n";
         return attr;
     }

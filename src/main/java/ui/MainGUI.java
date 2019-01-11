@@ -2650,7 +2650,6 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                     .INFORMATION_MESSAGE);
             return;
         }
-
         try {
             FileInputStream fis = new FileInputStream(tmpFile);
             int nb = fis.available();
@@ -2666,6 +2665,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                     JOptionPane.INFORMATION_MESSAGE);
             return;
         }
+
 
         if (FileUtils.getExtension(_f).equals("ttool")) {
             File tmpDir = _f;

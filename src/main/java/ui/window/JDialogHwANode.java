@@ -73,7 +73,7 @@ public class JDialogHwANode extends JDialogBase implements ActionListener  {
     protected JTextField nodeName;
 
     // Panel2
-    protected JTextField byteDataSize, execiTime, clockRatio;
+    protected JTextField byteDataSize, execiTime, clockRatio, operationTypes;
 
     /* Creates new form  */
     public JDialogHwANode(Frame _frame, String _title, TMLArchiHWANode _node) {
@@ -106,7 +106,7 @@ public class JDialogHwANode extends JDialogBase implements ActionListener  {
 
         panel2 = new JPanel();
         panel2.setLayout(gridbag2);
-        panel2.setBorder(new javax.swing.border.TitledBorder("CPU attributes"));
+        panel2.setBorder(new javax.swing.border.TitledBorder("HwA attributes"));
         panel2.setPreferredSize(new Dimension(400, 300));
 
         c1.gridwidth = 1;
@@ -144,6 +144,12 @@ public class JDialogHwANode extends JDialogBase implements ActionListener  {
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         clockRatio = new JTextField(""+node.getClockRatio(), 15);
         panel2.add(clockRatio, c2);
+
+        c2.gridwidth = 1;
+        panel2.add(new JLabel("Operating types:"), c2);
+        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        operationTypes = new JTextField(""+node.getOperationTypes(), 15);
+        panel2.add(operationTypes, c2);
 
         // main panel;
         c0.gridheight = 10;
@@ -205,5 +211,11 @@ public class JDialogHwANode extends JDialogBase implements ActionListener  {
     public String getClockRatio(){
         return clockRatio.getText();
     }
+
+    public String getOperationTypes(){
+        return operationTypes.getText();
+    }
+
+
 
 }

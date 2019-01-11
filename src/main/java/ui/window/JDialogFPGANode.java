@@ -72,7 +72,7 @@ public class JDialogFPGANode extends JDialogBase implements ActionListener {
 
     // Panel2
     protected JTextField byteDataSize, goIdleTime, maxConsecutiveIdleCycles, clockRatio, execiTime, execcTime,
-            capacity, mappingPenalty, reconfigurationTime;
+            capacity, mappingPenalty, reconfigurationTime, operationTypes;
 
     // Tabbed pane for panel1 and panel2
     private JTabbedPane tabbedPane;
@@ -111,7 +111,7 @@ public class JDialogFPGANode extends JDialogBase implements ActionListener {
 
         panel2 = new JPanel();
         panel2.setLayout(gridbag2);
-        panel2.setBorder(new javax.swing.border.TitledBorder("CPU attributes"));
+        panel2.setBorder(new javax.swing.border.TitledBorder("FPGA attributes"));
         panel2.setPreferredSize(new Dimension(400, 300));
 
         // Issue #41 Ordering of tabbed panes 
@@ -178,6 +178,12 @@ public class JDialogFPGANode extends JDialogBase implements ActionListener {
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         execcTime = new JTextField("" + node.getExeccTime(), 15);
         panel2.add(execcTime, c2);
+
+        c2.gridwidth = 1;
+        panel2.add(new JLabel("Operating types:"), c2);
+        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        operationTypes = new JTextField(""+node.getOperationTypes(), 15);
+        panel2.add(operationTypes, c2);
 
         c2.gridwidth = 1;
         panel2.add(new JLabel("Clock divider:"), c2);
@@ -295,6 +301,10 @@ public class JDialogFPGANode extends JDialogBase implements ActionListener {
 
     public String getExeccTime() {
         return execcTime.getText();
+    }
+
+    public String getOperationTypes() {
+        return operationTypes.getText();
     }
 
 
