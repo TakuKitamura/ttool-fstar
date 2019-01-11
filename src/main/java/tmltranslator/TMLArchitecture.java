@@ -215,7 +215,7 @@ public class TMLArchitecture {
     }
 
     public String[] getBusIDs() {
-        String[] list = new String[getNbOfBus()];
+        String[] list = new String[getNbOfBusses()];
         int cpt = 0;
 
         for (HwNode node : hwnodes) {
@@ -260,16 +260,7 @@ public class TMLArchitecture {
         }
         return cpt;
     }
-
-    public int getNbOfBus() {
-        int cpt = 0;
-        for (HwNode node : hwnodes) {
-            if (node instanceof HwBus) {
-                cpt++;
-            }
-        }
-        return cpt;
-    }
+    
 
     public int getNbOfMem() {
         int cpt = 0;
