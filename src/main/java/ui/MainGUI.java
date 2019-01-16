@@ -9108,7 +9108,11 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     }
     
     public boolean isAValidTabName(String name) {
-        return name.matches("((\\w)*(\\s)*)*");
+        boolean b1, b2, b3, b4, b5, b6, b7;
+        b1 = (name.substring(0, 1)).matches("[a-zA-Z]");
+        b2 = name.matches("\\w*");
+        return b1&&b2;
+        //return name.matches("((\\w)*(\\s)*)*");
     }
 
 

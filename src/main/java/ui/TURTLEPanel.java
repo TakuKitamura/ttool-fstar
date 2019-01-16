@@ -274,23 +274,32 @@ public abstract class TURTLEPanel implements GenericTree {
 
     public void requestRenameTab(int index) {
         String s = (String)JOptionPane.showInputDialog(mgui.frame, "TTool modeling:", "Name=", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101, null, tabbedPane.getTitleAt(index));
+        TraceManager.addDev("Testing new name:" + s);
         if ((s != null) && (s.length() > 0)){
             // name already in use?
-            if (!nameInUse(s) && !refNameUsed(s)) {
-                for (TDiagramPanel tdpTmp: panels)
-                    for (TGComponent tgc: tdpTmp.componentList) {
-                        if ((tgc instanceof TMLCPRefSD || tgc instanceof TMLCPRefAD) && tgc.name.equals(tabbedPane.getTitleAt(index)))
-                            tgc.name = s;
-                    }
-                tabbedPane.setTitleAt(index, s);
-                panels.elementAt(index).setName(s);
-                mgui.changeMade(null, -1);
-            }
-            else {
+            // Test if valid name
+            if (!mgui.isAValidTabName(s)) {
                 JOptionPane.showMessageDialog(this.mgui.frame,
-                                              "Error: the name is already in use",
-                                              "Name modification",
-                                              JOptionPane.ERROR_MESSAGE);
+                        "Error: the new name is not valid",
+                        "Name modification",
+                        JOptionPane.ERROR_MESSAGE);
+            } else {
+
+                if (!nameInUse(s) && !refNameUsed(s)) {
+                    for (TDiagramPanel tdpTmp : panels)
+                        for (TGComponent tgc : tdpTmp.componentList) {
+                            if ((tgc instanceof TMLCPRefSD || tgc instanceof TMLCPRefAD) && tgc.name.equals(tabbedPane.getTitleAt(index)))
+                                tgc.name = s;
+                        }
+                    tabbedPane.setTitleAt(index, s);
+                    panels.elementAt(index).setName(s);
+                    mgui.changeMade(null, -1);
+                } else {
+                    JOptionPane.showMessageDialog(this.mgui.frame,
+                            "Error: the name is already in use",
+                            "Name modification",
+                            JOptionPane.ERROR_MESSAGE);
+                }
             }
         }
     }

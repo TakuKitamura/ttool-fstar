@@ -37,11 +37,10 @@
  */
 
 
-
-
 package ui;
 
 import myutil.GraphicLib;
+import myutil.TraceManager;
 import ui.ucd.UseCaseDiagramPanel;
 
 import javax.swing.*;
@@ -55,8 +54,9 @@ import java.awt.event.MouseEvent;
  * Class TURTLEPanelPopupListener
  * Management of TURTLE panels
  * Creation: 14/01/2005
- * @version 1.0 14/01/2005
+ *
  * @author Ludovic APVRILLE
+ * @version 1.0 14/01/2005
  * @see MainGUI
  */
 public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto tabs */ {
@@ -65,7 +65,7 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
     protected MainGUI mgui;
 
     private JMenuItem rename, remove, moveRight, moveLeft, sort, newucd, newsd, newsdzv, newsdfromucd, newreq,
-        newebrdd, newprosmd, newavatarrd, newavatarpd, newavatarcd, newavatarad, newavatarmad, newsyscams, neweln;
+            newebrdd, newprosmd, newavatarrd, newavatarpd, newavatarcd, newavatarad, newavatarmad, newsyscams, neweln;
     private JMenuItem newatd, newftd;
 
     public TURTLEPanelPopupListener(TURTLEPanel _tp, MainGUI _mgui) {
@@ -93,7 +93,7 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
     }
 
     private void checkForPopup(MouseEvent e) {
-        if(e.isPopupTrigger()) {
+        if (e.isPopupTrigger()) {
             Component c = e.getComponent();
             updateMenu(tp.tabbedPane.getSelectedIndex());
             menu.show(c, e.getX(), e.getY());
@@ -146,7 +146,7 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
         menu.add(newreq);
         menu.add(newebrdd);
         menu.add(newatd);
-	menu.add(newftd);
+        menu.add(newftd);
         menu.addSeparator();
         menu.add(newprosmd);
         if (mgui.isAvatarOn()) {
@@ -156,7 +156,7 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
             menu.add(newavatarpd);
         }
         if (mgui.isSystemcOn()) {
-        	menu.addSeparator();
+            menu.addSeparator();
             menu.add(newsyscams);
             menu.add(neweln);
         }
@@ -228,71 +228,75 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
 
     private Action listener = new AbstractAction() {
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JMenuItem item = (JMenuItem)e.getSource();
-                String ac = item.getActionCommand();
-                if(ac.equals("Rename")) {
-                    tp.requestRenameTab(tp.tabbedPane.getSelectedIndex());
-                } else if (ac.equals("Remove")) {
-                    tp.requestRemoveTab(tp.tabbedPane.getSelectedIndex());
-                } else if (ac.equals("Move to the left")) {
-                    tp.requestMoveLeftTab(tp.tabbedPane.getSelectedIndex());
-                } else if (ac.equals("Move to the right")) {
-                    tp.requestMoveRightTab(tp.tabbedPane.getSelectedIndex());
-                } else if (ac.equals("Sort")) {
-                    GraphicLib.sortJTabbedPane(tp.tabbedPane, tp.panels, 1, tp.tabbedPane.getTabCount());
-                    mgui.changeMade(null, -1);
-                } else if (ac.equals("New Use Case Diagram")) {
-                    mgui.createUniqueUseCaseDiagram(tp, "Use Case Diagram");
-                    mgui.changeMade(null, -1);
-                } else if (item == newsd) {
-                    mgui.createUniqueSequenceDiagram(tp, "MyScenario");
-                    mgui.changeMade(null, -1);
-                } else if (item == newsdzv) {
-                    mgui.createUniqueSequenceDiagramZV(tp, "MyScenario");
-                    mgui.changeMade(null, -1);
-                } else if (item == newsdfromucd) {
-                    mgui.createSequenceDiagramFromUCD(tp, "ScenarioFromUCD", (UseCaseDiagramPanel)(mgui.getCurrentTDiagramPanel()));
-                    mgui.changeMade(null, -1);
-                } else if (ac.equals("New Requirement Diagram")) {
-                    mgui.createRequirementDiagram(tp, "Requirement Diagram");
-                    mgui.changeMade(null, -1);
-                } else if (ac.equals("New Attack Tree Diagram")) {
-                    mgui.createAttackTreeDiagram(tp, "Attack Tree");
-                    mgui.changeMade(null, -1);
-                } else if (e.getSource() == newftd) {
-                    mgui.createFaultTreeDiagram(tp, "Fault Tree");
-                    mgui.changeMade(null, -1);
-                } else if (ac.equals("New Event-Based Requirement Description Diagram")) {
-                    mgui.createEBRDD(tp, "EBRDD");
-                    mgui.changeMade(null, -1);
-                } else if (ac.equals("New ProActive State Machine Diagram")) {
-                    mgui.createProActiveSMD(tp, "ProActive SMD");
-                    mgui.changeMade(null, -1);
-                } else if (e.getSource() == newavatarrd) {
-                    mgui.createAvatarRD(tp, "AVATAR RD");
-                    mgui.changeMade(null, -1);
-                } else if (e.getSource() == newavatarpd) {
-                    mgui.createAvatarPD(tp, "AVATAR PD");
-                    mgui.changeMade(null, -1);
-                } else if (e.getSource() == newavatarcd) {
-                    mgui.createUniqueAvatarCD(tp, "Context Diagram");
-                    mgui.changeMade(null, -1);
-                } else if (e.getSource() == newavatarad) {
-                    mgui.createUniqueAvatarAD(tp, "Activity Diagram");
-                    mgui.changeMade(null, -1);
-                } else if (e.getSource() == newavatarmad) {
-                    mgui.createAvatarMAD(tp, "Modeling Assumptions Diagram");
-                    mgui.changeMade(null, -1);
-                } else if (e.getSource() == newsyscams) {
-                	mgui.createSysCAMS(tp, "SystemC-AMS Component Diagram");
-                	mgui.changeMade(null, -1);
-                } else if (e.getSource() == neweln) {
-                	mgui.createELN(tp, "ELN Diagram");
-                	mgui.changeMade(null, -1);
-                }
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            //TraceManager.addDev("Action on TURTLE Panel");
+
+            JMenuItem item = (JMenuItem) e.getSource();
+            String ac = item.getActionCommand();
+            if (e.getSource() == rename) {
+                TraceManager.addDev("Rename tab");
+                tp.requestRenameTab(tp.tabbedPane.getSelectedIndex());
+            } else if (ac.equals("Remove")) {
+                tp.requestRemoveTab(tp.tabbedPane.getSelectedIndex());
+            } else if (ac.equals("Move to the left")) {
+                tp.requestMoveLeftTab(tp.tabbedPane.getSelectedIndex());
+            } else if (ac.equals("Move to the right")) {
+                tp.requestMoveRightTab(tp.tabbedPane.getSelectedIndex());
+            } else if (ac.equals("Sort")) {
+                GraphicLib.sortJTabbedPane(tp.tabbedPane, tp.panels, 1, tp.tabbedPane.getTabCount());
+                mgui.changeMade(null, -1);
+            } else if (ac.equals("New Use Case Diagram")) {
+                mgui.createUniqueUseCaseDiagram(tp, "Use Case Diagram");
+                mgui.changeMade(null, -1);
+            } else if (item == newsd) {
+                mgui.createUniqueSequenceDiagram(tp, "MyScenario");
+                mgui.changeMade(null, -1);
+            } else if (item == newsdzv) {
+                mgui.createUniqueSequenceDiagramZV(tp, "MyScenario");
+                mgui.changeMade(null, -1);
+            } else if (item == newsdfromucd) {
+                mgui.createSequenceDiagramFromUCD(tp, "ScenarioFromUCD", (UseCaseDiagramPanel) (mgui.getCurrentTDiagramPanel()));
+                mgui.changeMade(null, -1);
+            } else if (ac.equals("New Requirement Diagram")) {
+                mgui.createRequirementDiagram(tp, "Requirement Diagram");
+                mgui.changeMade(null, -1);
+            } else if (ac.equals("New Attack Tree Diagram")) {
+                mgui.createAttackTreeDiagram(tp, "Attack Tree");
+                mgui.changeMade(null, -1);
+            } else if (e.getSource() == newftd) {
+                mgui.createFaultTreeDiagram(tp, "Fault Tree");
+                mgui.changeMade(null, -1);
+            } else if (ac.equals("New Event-Based Requirement Description Diagram")) {
+                mgui.createEBRDD(tp, "EBRDD");
+                mgui.changeMade(null, -1);
+            } else if (ac.equals("New ProActive State Machine Diagram")) {
+                mgui.createProActiveSMD(tp, "ProActive SMD");
+                mgui.changeMade(null, -1);
+            } else if (e.getSource() == newavatarrd) {
+                mgui.createAvatarRD(tp, "AVATAR RD");
+                mgui.changeMade(null, -1);
+            } else if (e.getSource() == newavatarpd) {
+                mgui.createAvatarPD(tp, "AVATAR PD");
+                mgui.changeMade(null, -1);
+            } else if (e.getSource() == newavatarcd) {
+                mgui.createUniqueAvatarCD(tp, "Context Diagram");
+                mgui.changeMade(null, -1);
+            } else if (e.getSource() == newavatarad) {
+                mgui.createUniqueAvatarAD(tp, "Activity Diagram");
+                mgui.changeMade(null, -1);
+            } else if (e.getSource() == newavatarmad) {
+                mgui.createAvatarMAD(tp, "Modeling Assumptions Diagram");
+                mgui.changeMade(null, -1);
+            } else if (e.getSource() == newsyscams) {
+                mgui.createSysCAMS(tp, "SystemC-AMS Component Diagram");
+                mgui.changeMade(null, -1);
+            } else if (e.getSource() == neweln) {
+                mgui.createELN(tp, "ELN Diagram");
+                mgui.changeMade(null, -1);
             }
-        };
+        }
+    };
 }
 
