@@ -6634,6 +6634,14 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return (tp.panelAt(index) instanceof ui.sd.SequenceDiagramPanel);
     }
 
+    public boolean isSDCreatedZV(TURTLEPanel tp, String s) {
+        int index = tp.tabbedPane.indexOfTab(s);
+        if (index == -1) {
+            return false;
+        }
+        return (tp.panelAt(index) instanceof ui.sd2.SequenceDiagramPanel);
+    }
+
     public boolean isSDZVCreated(int index, String s) {
         return isSDZVCreated(tabs.elementAt(index), s);
     }
@@ -6990,7 +6998,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     public boolean createUniqueSequenceDiagramZV(TURTLEPanel tp, String s) {
         int i;
         for (i = 0; i < 1000; i++) {
-            if (!isSDCreated(tp, s + i)) {
+            if (!isSDCreatedZV(tp, s + i)) {
                 break;
             }
         }

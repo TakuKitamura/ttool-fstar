@@ -2,6 +2,22 @@
 
 <TURTLEGMODELING version="1.0beta">
 
+<Modeling type="Avatar Analysis" nameTab="Analysis" >
+</Modeling>
+
+
+
+
+<Modeling type="Avatar Analysis" nameTab="Analysis" >
+<SequenceDiagramPanelZV name="MyScenario0" minX="10" maxX="2500" minY="10" maxY="1500" >
+
+</SequenceDiagramPanelZV>
+
+</Modeling>
+
+
+
+
 <Modeling type="TML Component Design" nameTab="AppC" >
 <TMLComponentTaskDiagramPanel name="TML Component Task Diagram" minX="0" maxX="2724" minY="0" maxY="916" channels="true" events="true" requests="true" zoom="1.0000000000000018" >
 <CONNECTOR type="126" id="1" >

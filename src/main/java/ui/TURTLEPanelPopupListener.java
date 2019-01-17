@@ -138,7 +138,10 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
             menu.add(newavatarcd);
             menu.add(newavatarad);
         }
-        menu.add(newsd);
+
+        if (mgui.isExperimentalOn()) {
+            menu.add(newsd);
+        }
         menu.add(newsdzv);
 
         menu.add(newsdfromucd);
@@ -209,7 +212,7 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
         }
 
         newucd.setEnabled(tp.isUCDEnabled());
-        newsd.setEnabled(tp.isSDEnabled());
+        newsd.setEnabled(tp.isSDEnabled()&&mgui.isExperimentalOn());
         newsdzv.setEnabled(tp.isSDEnabled());
         newsdfromucd.setEnabled(tp.isSDEnabled() && (mgui.getCurrentTDiagramPanel() instanceof UseCaseDiagramPanel));
         newreq.setEnabled(tp.isReqEnabled());
