@@ -39,66 +39,81 @@
 
 package tmltranslator.tonetwork;
 
-import myutil.Conversion;
-import myutil.FileException;
-import myutil.FileUtils;
-import myutil.TraceManager;
 import tmltranslator.*;
+import ui.TGComponent;
 
-import java.util.*;
+import java.util.Vector;
 
 
 /**
- * Class TMAP2Network
- * Creation: 07/01/2019
+ * Class TaskINForVC
+ * Creation: 17/01/2019
  *
  * @author Ludovic Apvrille
- * @version 1.0 07/01/2019
+ * @version 1.0 17/01/2019
  */
-public class TMAP2Network  {
+public class TranslatedRouter<E>  {
+    private final int NB_OF_PORTS = 5;
+    private final int CHANNEL_SIZE = 4;
+    private final int CHANNEL_MAX = 8;
 
-    private TMLModeling<?> tmlmodeling;
-    private TMLMapping<?> tmlmapping;
+    private int nbOfVCs, xPos, yPos;
+    private TMLMapping<E> map;
+    private Vector<TMLEvent> pktins;
 
-    private boolean debug;
-    private boolean optimize;
 
-    private int nbOfVCs = 2;
-    private TranslatedRouter[][] routers;
 
-    public TMAP2Network(TMLMapping<?> _tmlmapping) {
-        tmlmapping = _tmlmapping;
-        routers = new TranslatedRouter[nbOfVCs][nbOfVCs];
+    public TranslatedRouter(int nbOfVCs, int xPos, int yPos) {
+        this.nbOfVCs = nbOfVCs;
+        this.xPos = xPos;
+        this.yPos = yPos;
     }
 
-    /* List of assumptions:
-        - Only one router set (i.e. no router, then bus, then router) between two tasks
-        - Channels must be mapped on at least one route to be taken into account
-     */
-    public void removeAllRouters() {
-        // Make all routers
-        for(int i=0; i<nbOfVCs; i++) {
-            for(int j=0; j<nbOfVCs; j++) {
-                TranslatedRouter tr = new TranslatedRouter(nbOfVCs, i, j);
-                routers[i][j] = tr;
-                tr.makeRouter();
-            }
+
+    private String getInfo() {
+        return "__R" + xPos + "_" + yPos;
+    }
+
+    public void makeRouter() {
+        int i, j;
+
+        // A router is made upon tasks, hardware components and a mapping i.e. a TMLMapping
+        TMLModeling<E> tmlm = new TMLModeling<>();
+        TMLArchitecture tmla = new TMLArchitecture();
+        map = new TMLMapping<E>(tmlm, tmla, false);
+
+        // Create all channels
+        // For each input VC, we have to create a channel
+        for (i=0; i<NB_OF_PORTS*nbOfVCs; i++) {
+            TMLChannel channel = new TMLChannel("Channel" + i + getInfo(), this);
+            channel.setSize(CHANNEL_SIZE);
+            channel.setMax(CHANNEL_MAX);
+            channel.setType(TMLChannel.BRBW);
+            tmlm.addChannel(channel);
         }
 
-        // Connect their feedback
 
-        // Make their routing
-
-        // Integrate into the TMLMapping
-
-        // Connect channels to the NoC
+        // Create all events
+        // pktins: between tasks
 
 
 
+        // Feedbacks between OUTVC and INVC
 
-        // A bridge is put with the same position as the router as to allow classical paths not to use the router
 
-        // We consider all channels mapped on at least one router.
+
+
+
+        // Create all tasks
+
+        // Create the architecture
+
+        // Map tasks
+
+        // Map channels
+
     }
+
+
 
 }

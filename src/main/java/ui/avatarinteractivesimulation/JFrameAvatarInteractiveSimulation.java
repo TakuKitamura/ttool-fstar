@@ -62,9 +62,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.util.*;
 import java.util.List;
 
@@ -798,14 +795,36 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
         variabletm = new VariableTableModel(ass);
 
         sorterPI = new TableSorter(variabletm);
-        jtablePI = new JTable(sorterPI);
+        final JTable JTablejtablePIV = new JTable(sorterPI);
         sorterPI.setTableHeader(jtablePI.getTableHeader());
-        ((jtablePI.getColumnModel()).getColumn(0)).setPreferredWidth(100);
-        ((jtablePI.getColumnModel()).getColumn(1)).setPreferredWidth(75);
-        ((jtablePI.getColumnModel()).getColumn(2)).setPreferredWidth(100);
-        ((jtablePI.getColumnModel()).getColumn(3)).setPreferredWidth(100);
-        jtablePI.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        jspVariableInfo = new JScrollPane(jtablePI);
+        JTablejtablePIV.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                int r = JTablejtablePIV.rowAtPoint(e.getPoint());
+                if (r >= 0 && r < JTablejtablePIV.getRowCount()) {
+                    JTablejtablePIV.setRowSelectionInterval(r, r);
+                } else {
+                    JTablejtablePIV.clearSelection();
+                }
+
+                int rowindex = JTablejtablePIV.getSelectedRow();
+                if (rowindex < 0)
+                    return;
+                if (e.getComponent() instanceof JTable) {
+                    TraceManager.addDev("Popup at x=" + e.getX() + " y=" + e.getY());
+                    //JPopupMenu popup = createYourPopUp();
+                    //popup.show(e.getComponent(), e.getX(), e.getY());
+                }
+            }
+        });
+
+
+        ((JTablejtablePIV.getColumnModel()).getColumn(0)).setPreferredWidth(100);
+        ((JTablejtablePIV.getColumnModel()).getColumn(1)).setPreferredWidth(75);
+        ((JTablejtablePIV.getColumnModel()).getColumn(2)).setPreferredWidth(100);
+        ((JTablejtablePIV.getColumnModel()).getColumn(3)).setPreferredWidth(100);
+        JTablejtablePIV.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        jspVariableInfo = new JScrollPane(JTablejtablePIV);
         jspVariableInfo.setWheelScrollingEnabled(true);
         jspVariableInfo.getVerticalScrollBar().setUnitIncrement(10);
         jspVariableInfo.setPreferredSize(new Dimension(250, 300));
@@ -955,7 +974,7 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
         ((latTable.getColumnModel()).getColumn(3)).setPreferredWidth(100);
         ((latTable.getColumnModel()).getColumn(4)).setPreferredWidth(100);
         ((latTable.getColumnModel()).getColumn(5)).setPreferredWidth(100);
-      //  latTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        //  latTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         jspLatency = new JScrollPane(latTable, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         jspLatency.setWheelScrollingEnabled(true);
         jspLatency.getVerticalScrollBar().setUnitIncrement(10);
@@ -1543,27 +1562,27 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
                         SimulationLatency sl = nameLatencyMap.get(st1 + "--" + st2);
                         if (transTimes.get(st1) != null && transTimes.get(st2) != null) {
 
-							List<String> tmptimes2 = new ArrayList<>(transTimes.get(st2));
+                            List<String> tmptimes2 = new ArrayList<>(transTimes.get(st2));
 
                             ArrayList<Integer> minTimes = new ArrayList<Integer>();
                             /*SimulationLatency sl = new SimulationLatency();
                               sl.setTransaction1(st1);
                               sl.setTransaction2(st2);*/
-		
+
 
                             for (String time1 : transTimes.get(st1)) {
-								String match = "";
+                                String match = "";
                                 //Find the first subsequent transaction
                                 int time = Integer.MAX_VALUE;
                                 for (String time2 : tmptimes2) {
-								
+
                                     int diff = Integer.valueOf(time2) - Integer.valueOf(time1);
                                     if (diff < time && diff >= 0) {
                                         time = diff;
-										match = time2;
+                                        match = time2;
                                     }
                                 }
-								tmptimes2.remove(match);
+                                tmptimes2.remove(match);
                                 if (time != Integer.MAX_VALUE) {
                                     minTimes.add(time);
                                 }
