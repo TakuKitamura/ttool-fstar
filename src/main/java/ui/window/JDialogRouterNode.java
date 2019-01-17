@@ -73,7 +73,7 @@ public class JDialogRouterNode extends JDialogBase implements ActionListener  {
     protected JTextField nodeName;
 
     // Panel2
-    protected JTextField bufferByteDataSize, clockRatio;
+    protected JTextField bufferByteDataSize, size, clockRatio;
 
     /* Creates new form  */
     public JDialogRouterNode(Frame _frame, String _title, TMLArchiRouterNode _node) {
@@ -132,6 +132,12 @@ public class JDialogRouterNode extends JDialogBase implements ActionListener  {
         panel2.add(bufferByteDataSize, c2);
 
         c2.gridwidth = 1;
+        panel2.add(new JLabel("Size x*x:"), c2);
+        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        size = new JTextField(""+node.getNoCSize(), 15);
+        panel2.add(size, c2);
+
+        c2.gridwidth = 1;
         panel2.add(new JLabel("Clock divider:"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         clockRatio = new JTextField(""+node.getClockRatio(), 15);
@@ -188,6 +194,10 @@ public class JDialogRouterNode extends JDialogBase implements ActionListener  {
 
     public String getBufferByteDataSize() {
         return bufferByteDataSize.getText();
+    }
+
+    public String getNoCSize() {
+        return size.getText();
     }
 
     public String getClockRatio() {

@@ -233,6 +233,7 @@ public class TMLArchiTextSpecification {
                 set = "SET " + name + " ";
                 code += "NODE ROUTER " + name + CR;
                 code += set + "bufferByteSize " + router.bufferByteSize + CR;
+                code += set + "NoCSize " + router.size + CR;
             }
 
             // Memory
@@ -721,6 +722,10 @@ public class TMLArchiTextSpecification {
 
                     if (_split[2].toUpperCase().equals("BUFFERBYTESIZE")) {
                         router.bufferByteSize = Integer.decode(_split[3]).intValue();
+                    }
+
+                    if (_split[2].toUpperCase().equals("NOCSIZE")) {
+                        router.size = Integer.decode(_split[3]).intValue();
                     }
                 }
 

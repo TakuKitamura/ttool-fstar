@@ -66,6 +66,7 @@ public class TMLArchiRouterNode extends TMLArchiCommunicationNode implements Swa
     private int derivationx = 2;
     private int derivationy = 3;
     private String stereotype = "ROUTER";
+    private int size = 2; // 2x2 NoC by default
 
     private int bufferByteDataSize = HwBridge.DEFAULT_BUFFER_BYTE_DATA_SIZE;
 
@@ -107,7 +108,7 @@ public class TMLArchiRouterNode extends TMLArchiCommunicationNode implements Swa
         removable = true;
         userResizable = true;
 
-        name = tdp.findNodeName("Router");
+        name = tdp.findNodeName("NoC");
         value = "name";
 
         myImageIcon = IconManager.imgic700;
@@ -212,6 +213,21 @@ public class TMLArchiRouterNode extends TMLArchiCommunicationNode implements Swa
             }
         }
 
+        if (dialog.getNoCSize().length() != 0) {
+            try {
+                tmp = size;
+                size = Integer.decode(dialog.getNoCSize()).intValue();
+                if (size <= 1) {
+                    size = tmp;
+                    error = true;
+                    errors += "size ";
+                }
+            } catch (Exception e) {
+                error = true;
+                errors += "Size  ";
+            }
+        }
+
         if (dialog.getClockRatio().length() != 0) {
             try {
                 tmp = clockRatio;
@@ -249,6 +265,7 @@ public class TMLArchiRouterNode extends TMLArchiCommunicationNode implements Swa
         sb.append("<info stereotype=\"" + stereotype + "\" nodeName=\"" + name);
         sb.append("\" />\n");
         sb.append("<attributes bufferByteDataSize=\"" + bufferByteDataSize + "\" ");
+        sb.append(" size=\"" + size + "\" ");
         sb.append(" clockRatio=\"" + clockRatio + "\" ");
         sb.append("/>\n");
         sb.append("</extraparam>\n");
@@ -289,6 +306,9 @@ public class TMLArchiRouterNode extends TMLArchiCommunicationNode implements Swa
 
                             if (elt.getTagName().equals("attributes")) {
                                 bufferByteDataSize = Integer.decode(elt.getAttribute("bufferByteDataSize")).intValue();
+                                if ((elt.getAttribute("size") != null) &&  (elt.getAttribute("size").length() > 0)){
+                                    size = Integer.decode(elt.getAttribute("size")).intValue();
+                                }
                                 if ((elt.getAttribute("clockRatio") != null) &&  (elt.getAttribute("clockRatio").length() > 0)){
                                     clockRatio = Integer.decode(elt.getAttribute("clockRatio")).intValue();
                                 }
@@ -308,9 +328,14 @@ public class TMLArchiRouterNode extends TMLArchiCommunicationNode implements Swa
         return bufferByteDataSize;
     }
 
+    public int getNoCSize(){
+        return size;
+    }
+
     public String getAttributes() {
         String attr = "";
         attr += "Buffer size (in byte) = " + bufferByteDataSize + "\n";
+        attr += "Nb of routers = " + size + "x" + size + "\n";
         attr += "Clock divider = " + clockRatio + "\n";
         return attr;
     }

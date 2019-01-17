@@ -3036,6 +3036,7 @@ public class GTMLModeling {
                     router = new HwRouter(routerNode.getName());
                     router.bufferByteSize = routerNode.getBufferByteDataSize();
                     router.clockRatio = routerNode.getClockRatio();
+                    router.size = routerNode.getNoCSize();
                     listE.addCor(router, routerNode);
                     archi.addHwNode(router);
                     //TraceManager.addDev("Router node added:" + router.getName());

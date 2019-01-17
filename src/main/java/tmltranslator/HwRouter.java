@@ -56,6 +56,7 @@ public class HwRouter extends HwCommunicationNode  {
 
     public int latency = 0;
     public int bufferByteSize = DEFAULT_BUFFER_BYTE_DATA_SIZE; // In bytes. Should more than 0
+    public int size = 2; //2x2 by default
     
     public HwRouter(String _name) {
         super(_name);
