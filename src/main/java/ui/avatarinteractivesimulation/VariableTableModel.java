@@ -169,6 +169,27 @@ public class VariableTableModel extends AbstractTableModel {
 		
 		return ERROR_STRING;
 	}
+
+	public boolean setAttributeValueByRow(int _row, String _value) {
+		int indexBlock = 0;
+		Vector<AvatarSimulationBlock>  blocks = ass.getSimulationBlocks();
+		if (blocks.size() == 0) {
+			return false;
+		}
+
+
+        AvatarSimulationBlock block;
+        while(_row >= 0) {
+            block = blocks.get(indexBlock);
+            if (_row < block.getBlock().attributeNb()) {
+                return block.setAttributeValue(_row, _value);
+            }
+            _row = _row - block.getBlock().attributeNb();
+            indexBlock ++;
+        }
+
+        return false;
+	}
 	
 	// Assumes tmlm != null
 	private String getBlockName(int row) {
@@ -195,26 +216,7 @@ public class VariableTableModel extends AbstractTableModel {
 	private String getVariableValue(int row) {
 		return getAttributeValueByRow(row);
 	}
-	
-	public String getBlockStatus(int row) {
-		int status = ass.getSimulationBlocks().get(row).getStatus();
-		
-		switch(status) {
-		case AvatarSimulationBlock.NOT_STARTED:
-			return "not started";
-		case AvatarSimulationBlock.STARTED:
-			return "running";
-		case AvatarSimulationBlock.COMPLETED:
-			return "terminated";
-		}
-		return "unknown";
-		
-	}
-	
-	public String getBlockNbOfTransactions(int row) {
-		return  ""+ ass.getSimulationBlocks().get(row).getTransactions().size();
-	}
-	
+
 	private void computeData() {
 		nbOfRows = 0;
 		if (ass == null) {

@@ -169,4 +169,13 @@ public class AvatarSimulationTransaction  {
         }
         return res;
     }
+
+    public boolean setAttributeValue(int _index, String _value) {
+        if (_index >= attributeValues.size()) {
+            return false;
+        }
+        attributeValues.set(_index, _value);
+        return true;
+
+    }
 }

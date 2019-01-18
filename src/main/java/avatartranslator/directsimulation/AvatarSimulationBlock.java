@@ -135,6 +135,15 @@ public class AvatarSimulationBlock {
         return lastTransaction.attributeValues.get(_index);
     }
 
+    public boolean setAttributeValue(int _index, String _value) {
+        if (lastTransaction == null) {
+            return block.setAttributeValue(_index, _value);
+        }
+
+
+        return lastTransaction.setAttributeValue(_index, _value);
+    }
+
     public Vector<AvatarSimulationTransaction> getTransactions() {
         return transactions;
     }

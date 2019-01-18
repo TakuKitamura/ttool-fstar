@@ -232,6 +232,14 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
         return attributes.get(_index);
     }
 
+    public boolean setAttributeValue(int _index, String _value) {
+        AvatarAttribute aa = attributes.get(_index);
+        if (aa == null) {
+            return false;
+        }
+        aa.setInitialValue(_value);
+        return true;
+    }
 
     public int getIndexOfAvatarAttributeWithName(String _name) {
         int cpt = 0;

@@ -98,12 +98,12 @@ public class AvatarSpecificationSimulation {
     private boolean executeStateEntering;
     private boolean silentTransactionExecuted;
 
-    private IntExpressionEvaluator iee;
+    //private IntExpressionEvaluator iee;
 
     public AvatarSpecificationSimulation(AvatarSpecification _avspec, AvatarSimulationInteraction _asi) {
         avspec = _avspec;
         asi = _asi;
-        iee = new IntExpressionEvaluator();
+        //iee = new IntExpressionEvaluator();
         executeEmptyTransition = true;
         executeStateEntering = true;
 

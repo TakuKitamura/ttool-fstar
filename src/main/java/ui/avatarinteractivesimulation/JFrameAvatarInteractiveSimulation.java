@@ -42,10 +42,7 @@ package ui.avatarinteractivesimulation;
 import avatartranslator.*;
 import avatartranslator.directsimulation.*;
 import common.ConfigurationTTool;
-import myutil.FileUtils;
-import myutil.GraphicLib;
-import myutil.TableSorter;
-import myutil.TraceManager;
+import myutil.*;
 import myutilsvg.SVGGeneration;
 import ui.*;
 import ui.avatarbd.AvatarBDPortConnector;
@@ -811,12 +808,12 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
                     JTablejtablePIV.clearSelection();
                 }
 
-                int selectedRow = JTablejtablePIV.getSelectedRow();
+                selectedRow = JTablejtablePIV.getSelectedRow();
                 if (selectedRow < 0)
                     return;
 
                 if (e.getComponent() instanceof JTable) {
-                    TraceManager.addDev("Popup at x=" + e.getX() + " y=" + e.getY());
+                    TraceManager.addDev("Popup at x=" + e.getX() + " y=" + e.getY() + " row=" + selectedRow);
                     JPopupMenu popup = createVariablePopup();
                     popup.show(e.getComponent(), e.getX(), e.getY());
                 }
@@ -2164,6 +2161,7 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
             downAsyncMsg();
         } else if (evt.getSource() == edit) {
             TraceManager.addDev("Edit variable at index: " + selectedRow);
+            editVariableValue(selectedRow);
         }
 
         // Check for source of jcheckbox
@@ -2287,6 +2285,52 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
         menu.add(edit);
         return menu;
     }
+
+
+    private void editVariableValue(int rowIndex) {
+        // Show dialog
+        String variableValue = (String)(variabletm.getValueAt(rowIndex, 3));
+        String blockName = (String)(variabletm.getValueAt(rowIndex, 0));
+        String variableName = (String)(variabletm.getValueAt(rowIndex, 2));
+        String type = ((String)(variabletm.getValueAt(rowIndex, 1))).toLowerCase();
+        String s = (String)JOptionPane.showInputDialog(this, "Block: " + blockName + ". Value of " + variableName,
+                "Variable modification", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
+                null,
+                variableValue);
+        s = s.trim();
+
+        boolean ret;
+
+        try {
+            // Verifie the value is correct
+            if (type.startsWith("int")) {
+                int value = Integer.parseInt(s);
+            } else {
+                // We assume this is a boolean
+                boolean b = Boolean.parseBoolean(s);
+            }
+
+            ret = variabletm.setAttributeValueByRow(rowIndex, s);
+            variablePanel.repaint();
+
+        } catch (Exception e) {
+            // Not a correct value: show an error
+            TraceManager.addDev("Error in new variable value:" + e.getMessage());
+            ret = false;
+        }
+
+        if (!ret) {
+            // Show error on value change
+            JOptionPane.showMessageDialog(this,
+                    "Could not change the value of " + variableName + ": the new value is incorrect",
+                    "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+        }
+
+
+    }
+
 
     public void windowClosing(WindowEvent e) {
         TraceManager.addDev("Windows closed!");

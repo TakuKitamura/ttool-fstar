@@ -260,7 +260,7 @@ public class TMLArchitecture {
         }
         return cpt;
     }
-    
+
 
     public int getNbOfMem() {
         int cpt = 0;
