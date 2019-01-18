@@ -127,6 +127,10 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
 
     private int totalNbOfElements = -1;
 
+    // Edition of variable value
+    protected JMenuItem edit;
+    protected int selectedRow;
+
 
     //private String[] cpuIDs, busIDs, memIDs, taskIDs, chanIDs;
 
@@ -807,13 +811,14 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
                     JTablejtablePIV.clearSelection();
                 }
 
-                int rowindex = JTablejtablePIV.getSelectedRow();
-                if (rowindex < 0)
+                int selectedRow = JTablejtablePIV.getSelectedRow();
+                if (selectedRow < 0)
                     return;
+
                 if (e.getComponent() instanceof JTable) {
                     TraceManager.addDev("Popup at x=" + e.getX() + " y=" + e.getY());
-                    //JPopupMenu popup = createYourPopUp();
-                    //popup.show(e.getComponent(), e.getX(), e.getY());
+                    JPopupMenu popup = createVariablePopup();
+                    popup.show(e.getComponent(), e.getX(), e.getY());
                 }
             }
         });
@@ -2157,6 +2162,8 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
         } else if (evt.getSource() == down) {
             TraceManager.addDev("Source = up");
             downAsyncMsg();
+        } else if (evt.getSource() == edit) {
+            TraceManager.addDev("Edit variable at index: " + selectedRow);
         }
 
         // Check for source of jcheckbox
@@ -2269,6 +2276,16 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
             }
         }
 
+    }
+
+
+    private JPopupMenu createVariablePopup() {
+        JPopupMenu menu = new JPopupMenu("Change variable value");
+        edit = new JMenuItem("Edit variable value");
+        edit.setActionCommand("edit");
+        edit.addActionListener(this);
+        menu.add(edit);
+        return menu;
     }
 
     public void windowClosing(WindowEvent e) {
