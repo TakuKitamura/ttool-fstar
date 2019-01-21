@@ -661,7 +661,7 @@ public class AvatarBDPanel extends TDiagramPanel {
     }
 
     public void makeValidated() {
-        TraceManager.addDev("Making validated with val=" + val);
+        //TraceManager.addDev("Making validated with val=" + val);
         validated = new LinkedList<AvatarBDStateMachineOwner> ();
         List<AvatarBDStateMachineOwner> list = getFullStateMachineOwnerList();
         String tmp;
@@ -682,7 +682,7 @@ public class AvatarBDPanel extends TDiagramPanel {
     }
 
     public void makeIgnored() {
-        TraceManager.addDev("Making ignored with ign=" + val);
+        //TraceManager.addDev("Making ignored with ign=" + val);
         ignored = new LinkedList<AvatarBDStateMachineOwner> ();
         List<AvatarBDStateMachineOwner> list = getFullStateMachineOwnerList();
         String tmp;

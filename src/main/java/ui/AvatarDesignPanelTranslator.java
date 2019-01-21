@@ -1969,7 +1969,7 @@ public class AvatarDesignPanelTranslator {
     			else {
     				// Variable assignment
 
-                    TraceManager.addDev("Action:" + actionText);
+                    //TraceManager.addDev("Action:" + actionText);
     				error = AvatarSyntaxChecker.isAValidVariableExpr( block.getAvatarSpecification(), block, actionText);
 
     				if ( error < 0 ) {
@@ -2531,7 +2531,7 @@ public class AvatarDesignPanelTranslator {
         int length = tmp.length();
         tmp = tmp.trim();
         if (tmp.length() != length) {
-            TraceManager.addDev("pb of length");
+            //TraceManager.addDev("pb of length");
             return true;
         }
 

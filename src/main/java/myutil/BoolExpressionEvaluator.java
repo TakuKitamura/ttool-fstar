@@ -497,7 +497,9 @@ public class BoolExpressionEvaluator {
                     return null;
                 }
                 Object ob1 = left.computeValue();
+                //TraceManager.addDev("ob1=" + ob1);
                 if (!(ob1 instanceof Boolean)) {
+                    TraceManager.addDev("ob1=" + ob1);
                     errorMessage = "Bad operand for  unary boolean operator";
                     return null;
                 }
@@ -594,7 +596,7 @@ public class BoolExpressionEvaluator {
             if (father == null) {
                 s += " father= no";
             } else {
-                s += " father=" + id;
+                s += " father=" + father.id;
             }
             s += " type:" + res + " op:" + toStringAction(op) + " int:" + i + " bool:" + b;
 
@@ -1646,11 +1648,13 @@ public class BoolExpressionEvaluator {
 
 
         //TraceManager.addDev("Tree of " + _expr + ": " + resIBR.toString() + "\nEnd of tree");
+        //TraceManager.addDev("Computing value of " + _expr);
 
 
         Object res = resIBR.computeValue();
 
         if (res == null) {
+            TraceManager.addDev("Error in tree of " + _expr + ": " + resIBR.toString() + "\nEnd of tree");
             return false;
         }
 
@@ -1803,14 +1807,6 @@ public class BoolExpressionEvaluator {
             return newElt;
         }
 
-        if (c1 == '>') {
-            newElt = current.addIntOperator(GT_TOKEN);
-            if (newElt == null) {
-                errorMessage = "Badly placed int operator:" + token;
-                return null;
-            }
-            return newElt;
-        }
 
         if (c1 == ';') {
             newElt = current.addIntOperator(LTEQ_TOKEN);
@@ -1834,6 +1830,15 @@ public class BoolExpressionEvaluator {
         // BOOL BINARY OP
         if (c1 == '=') {
             newElt = current.addBinaryOperator(EQUAL_TOKEN);
+            if (newElt == null) {
+                errorMessage = "Badly placed bool operator:" + token;
+                return null;
+            }
+            return newElt;
+        }
+
+        if (c1 == '$') {
+            newElt = current.addBinaryOperator(NOT_EQUAL_TOKEN);
             if (newElt == null) {
                 errorMessage = "Badly placed bool operator:" + token;
                 return null;

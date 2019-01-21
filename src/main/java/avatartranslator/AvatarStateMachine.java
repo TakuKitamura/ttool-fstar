@@ -623,7 +623,7 @@ public class AvatarStateMachine extends AvatarElement {
         }
 
         for (AvatarStateMachineElement element : v) {
-            TraceManager.addDev(">" + element + "<");
+            //TraceManager.addDev(">" + element + "<");
             splitAvatarTransition((AvatarTransition) element, _state);
         }
 
@@ -653,7 +653,7 @@ public class AvatarStateMachine extends AvatarElement {
         } else {
 
             if (_at.getNbOfAction() > 1) {
-                TraceManager.addDev("New split state");
+                //TraceManager.addDev("New split state");
                 String tmp = findUniqueStateName("splitstate_action__");
                 AvatarState as = new AvatarState(tmp, null);
                 as.setHidden(true);
@@ -712,7 +712,7 @@ public class AvatarStateMachine extends AvatarElement {
         //TraceManager.addDev("*** Analyzing components in state " + state);
         // Split avatar transitions
         for (AvatarStateMachineElement element : v) {
-            TraceManager.addDev(">" + element + "<");
+            //TraceManager.addDev(">" + element + "<");
             if (element instanceof AvatarTransition) {
                 splitAvatarTransition((AvatarTransition) element, state);
             }
@@ -1379,7 +1379,7 @@ public class AvatarStateMachine extends AvatarElement {
     }
 
     public AvatarTransition cloneCompositeTransition(AvatarTransition _at) {
-        TraceManager.addDev("Must clone: " + _at);
+        //TraceManager.addDev("Must clone: " + _at);
         // We clone elements until we find a state!
         AvatarStateMachineElement tomake, current;
         AvatarStateMachineElement tmp;
@@ -1390,7 +1390,7 @@ public class AvatarStateMachine extends AvatarElement {
         tomake = at;
 
         while ((current != null) && !(current instanceof AvatarState)) {
-            TraceManager.addDev("Cloning: " + current);
+            //TraceManager.addDev("Cloning: " + current);
             tmp = current.basicCloneMe(block);
             addElement(tmp);
             tomake.addNext(tmp);

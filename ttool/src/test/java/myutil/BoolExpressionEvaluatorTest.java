@@ -94,6 +94,14 @@ public class BoolExpressionEvaluatorTest {
     }
 
     @Test
+    public void testTrueDoubleIntegerNullEqualityExpr() {
+        BoolExpressionEvaluator bee = new BoolExpressionEvaluator();
+        System.out.println("Hello");
+        assertTrue(bee.getResultOfWithIntExpr("((0)==(0)) || (0==0)"));
+        assertFalse(bee.hasError());
+    }
+
+    @Test
     public void testFalseLeftAddition() {
         BoolExpressionEvaluator bee = new BoolExpressionEvaluator();
         assertFalse(bee.getResultOfWithIntExpr("(1+2)==4"));
