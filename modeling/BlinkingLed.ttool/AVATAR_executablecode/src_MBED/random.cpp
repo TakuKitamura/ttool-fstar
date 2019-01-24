@@ -7,7 +7,6 @@
 #include "random.h"
 #include <mbed.h>
 #include "debug.h"
-#include <math.h>
 
 #include "mytimelib.h"
 

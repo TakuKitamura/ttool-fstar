@@ -1,9 +1,9 @@
 #ifndef MAIN_H
 #define MAIN_H
 /* Main mutex */
-extern rtos::Mutex __mainMutex;
+extern pthread_mutex_t __mainMutex;
 
-/* ConcurrencyMutex mutex */
-extern rtos::Mutex __concurrencyMutex;
-
+/* Synchronous channels */
+extern syncchannel __MainBlock_RandVal__SecondaryBlock_RanVal;
+/* Asynchronous channels */
 #endif

@@ -168,9 +168,9 @@ public class AVATAR2CMBED {
 
 		makeConcurrencyMutex();
 		
-        //makeSynchronousChannels();
+        makeSynchronousChannels();
 
-        //makeAsynchronousChannels();
+        makeAsynchronousChannels();
 
         makeTasks();
 
@@ -366,9 +366,9 @@ public class AVATAR2CMBED {
                     cpt ++;
                 }
                 ret += "\"," + tr + ");" + CR;
-                //ret += traceFunctionCall(_block.getName(), _am.getName(), "my__attr");
+                ret += traceFunctionCall(_block.getName(), _am.getName(), "my__attr");
             }  else {
-                //ret += traceFunctionCall(_block.getName(), _am.getName(), null);
+                ret += traceFunctionCall(_block.getName(), _am.getName(), null);
             }
         }
 
@@ -452,7 +452,7 @@ public class AVATAR2CMBED {
         int nbOfMaxParams = _block.getMaxNbOfParams();
         //s+= "request *__req;" + CR;
         //Comentamos todos los unused atributes
-        /*
+
         for(i=0; i<_block.getMaxNbOfMultipleBranches(); i++) {
             s+= UNUSED_ATTR + " request __req" + i + ";" + CR;
             s+= UNUSED_ATTR + "int *__params" + i + "[" + nbOfMaxParams + "];" + CR;
@@ -460,21 +460,22 @@ public class AVATAR2CMBED {
         s+= UNUSED_ATTR + "setOfRequests __list;" + CR;
 
         s+= UNUSED_ATTR + "size_t __myCond;" + CR;
+        //s+= UNUSED_ATTR + "rtos::ConditionVariable __myCond(&__mainMutex)" + CR;
         s+= UNUSED_ATTR + "request *__returnRequest;" + CR;
 
-        s+= CR + "char * __myname = ((owner*)arg)->ownerName;" + CR;
-		s+= "rtos::Thread * __myself = ((owner*)arg)->ownerThread;" + CR;
-		*/
-        /*if (tracing) {
-          s+= CR + "char __value[CHAR_ALLOC_SIZE];" + CR;
-          }*/
-
-        //s+= CR + "pthread_cond_init(&__myCond, NULL);" + CR;
+        s+= CR + "char * __myname = \"mainFunc__" + _block.getName() + "\";" + CR;
+		//s+= "rtos::Thread * __myself = ((owner*)arg)->ownerThread;" + CR;
         /*
-        s+= CR + "fillListOfRequests(&__list, __myname, __myself, &__myCond, &__mainMutex);" + CR;
+        if (tracing) {
+          s+= CR + "char __value[CHAR_ALLOC_SIZE];" + CR;
+          }
+        */
+        //s+= CR + "pthread_cond_init(&__myCond, NULL);" + CR;
+
+        s+= CR + "fillListOfRequests(&__list, __myname, NULL, __myCond, &__mainMutex);" + CR;
 
         s+= "//printf(\"my name = %s\\n\", __myname);" + CR;
-        */
+
         s+= CR + "/* Main loop on states */" + CR;
         s+= "while(__currentState != STATE__STOP__STATE) {" + CR;
 
@@ -484,7 +485,7 @@ public class AVATAR2CMBED {
         // Making start state
         AvatarStateMachine asm = _block.getStateMachine();
         s += "case STATE__START__STATE: " + CR;
-        //s += traceStateEntering("__myname", "__StartState");
+        s += traceStateEntering("__myname", "__StartState");
         s += makeBehaviourFromElement(_block, asm.getStartState(), true);
         s += "break;" + CR + CR;
 
@@ -493,7 +494,7 @@ public class AVATAR2CMBED {
         for(AvatarStateMachineElement asme: asm.getListOfElements()) {
             if (asme instanceof AvatarState) {
                 s += "case STATE__" + asme.getName() + ": " + CR;
-                //s += traceStateEntering("__myname", asme.getName());
+                s += traceStateEntering("__myname", asme.getName());
 
                 if (includeUserCode) {
                     tmp = ((AvatarState)asme).getEntryCode();
@@ -551,7 +552,7 @@ public class AVATAR2CMBED {
             }
 
             if (at.hasDelay()) {
-                ret+= "wait_us(" + reworkDelay(at.getMaxDelay()) + ");" + CR;
+                ret += "wait_us(" + reworkDelay(at.getMinDelay()) +");" + CR;
             }
 
             String act;
@@ -836,10 +837,10 @@ public class AVATAR2CMBED {
 			//mainFileMbed.appendToMainCode(CR + "owner __" + taskFileMbed.getName() + ";" + CR);
 			//mainFileMbed.appendToMainCode("__" + taskFileMbed.getName() + ".ownerName = \"" + taskFileMbed.getName() + "\";" + CR);
 			//mainFileMbed.appendToMainCode("__" + taskFileMbed.getName() + ".ownerThread = &thread__" + taskFileMbed.getName() + ";" + CR);
+            //mainFileMbed.appendToMainCode("thread__" + taskFileMbed.getName() + ".start(mainFunc__" + taskFileMbed.getName() + ");"  + CR);
+
             mainFileMbed.appendToMainCode("thread__" + taskFileMbed.getName() + ".start(mainFunc__" + taskFileMbed.getName() + ");"  + CR);
-            /*
-            mainFileMbed.appendToMainCode("thread__" + taskFileMbed.getName() + ".start(mainFunc__" + taskFileMbed.getName() + ", (void*)&__" + taskFileMbed.getName() + ");"  + CR);
-            */
+
 			//mainFileMbed.appendToMainCode("pthread_create(&thread__" + taskFileMbed.getName() + ", NULL, mainFunc__" + taskFileMbed.getName() + ", (void *)\"" + taskFileMbed.getName() + "\");" + CR);
         }
 
