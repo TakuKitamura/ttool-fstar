@@ -10,14 +10,15 @@
 
 syncchannel *getNewSyncchannel(char *outname, char *inname) {
   syncchannel * syncch = (syncchannel *)(malloc(sizeof(struct syncchannel)));
+  //syncchannel * syncch = NULL;
   if (syncch == NULL) {
     criticalError("Allocation of request failed");
   }
   
   syncch->inname = inname;
   syncch->outname = outname;
-  syncch->inWaitQueue = (request*)NULL;
-  syncch->outWaitQueue = (request*)NULL;
+  //syncch->inWaitQueue = (request*)NULL;
+  //syncch->outWaitQueue = (request*)NULL;
   syncch->isBroadcast = false;
   return syncch;
 }

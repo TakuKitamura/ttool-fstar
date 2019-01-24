@@ -4,6 +4,7 @@
 
 #include <mbed.h>
 #include <Mutex.h>
+#include <Thread.h>
 
 #include "request.h"
 #include "mytimelib.h"

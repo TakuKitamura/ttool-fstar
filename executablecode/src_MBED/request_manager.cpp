@@ -31,7 +31,7 @@ void executeSendSyncTransaction(request *req) {
 	currentReq = currentReq->next;
 	}
 
-	cpt = random() % cpt;
+	cpt = rand() % cpt;
 
 	// Head of the list?
 	selectedReq = req->syncChannel->inWaitQueue;
@@ -77,7 +77,7 @@ void executeReceiveSyncTransaction(request *req) {
     //debugInt("cpt", cpt);
     currentReq = currentReq->next;
   }
-  cpt = random() % cpt;
+  cpt = rand() % cpt;
   selectedReq = req->syncChannel->outWaitQueue;
   while (cpt > 0) {
     selectedReq = selectedReq->next;
@@ -171,7 +171,7 @@ void executeSendBroadcastTransaction(request *req) {
     if (tmpreq != NULL) {
       // Must select one of the two
       // If =1, replace, otherwise, just do nothing
-      cpt = random() % 2;
+      cpt = rand() % 2;
       if (cpt == 1) {
 	debugMsg("Replacing broadcast request");
 	req->relatedRequest = replaceInListOfSelectedRequests(tmpreq, currentReq, req->relatedRequest);
@@ -557,11 +557,11 @@ request *executeListOfRequests(setOfRequests *list) {
       debug2Msg(list->ownerName, "Waiting for a request and at most for a given time");
       debugTime("Min time to wait=", &(list->minTimeToWait));
       //pthread_cond_timedwait(list->wakeupCondition, list->mutex, &(list->minTimeToWait));
-	  osEvent event = rtos::Thread::signal_wait(list->wakeupCondition, list->minTimeToWait.tv_sec*1000);
+	    osEvent event = rtos::Thread::signal_wait(list->wakeupCondition, list->minTimeToWait.tv_sec);
     } else {
       debug2Msg(list->ownerName, "Releasing mutex");
       //pthread_cond_wait(list->wakeupCondition, list->mutex);
-	  osEvent event = rtos::Thread::signal_wait(list->wakeupCondition);
+	    osEvent event = rtos::Thread::signal_wait(list->wakeupCondition);
     }
     debug2Msg(list->ownerName, "Waking up for requests! -> getting mutex");
   }
