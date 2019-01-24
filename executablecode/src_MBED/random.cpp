@@ -1,7 +1,7 @@
 
 //#include <stdlib.h>
 //#include <unistd.h>
-//#include <time.h>
+#include <time.h>
 //#include <limits.h>
 
 #include "random.h"
