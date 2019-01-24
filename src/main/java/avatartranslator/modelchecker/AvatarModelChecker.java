@@ -173,7 +173,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         for (AvatarBlock block : spec.getListOfBlocks()) {
             for (AvatarStateMachineElement elt : block.getStateMachine().getListOfElements()) {
                 //TraceManager.addDev("null elt in state machine of block=" + block.getName());
-                if (elt.isChecked()) {
+                if (elt.canBeVerified() && elt.isChecked()) {
                     SpecificationReachability reach = new SpecificationReachability(elt, block);
                     reachabilities.add(reach);
                 }

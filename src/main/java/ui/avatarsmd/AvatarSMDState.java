@@ -157,7 +157,7 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 
         name = tdp.findAvatarSMDStateName("state");
         setValue(name);
-        name = "State";
+        //name = "State";
         oldValue = value;
 
         currentFontSize = maxFontSize;

@@ -92,6 +92,9 @@ public abstract class AvatarStateMachineElement extends AvatarElement {
     public void setCheckable() {
         this.isCheckable = true;
     }
+    public void setNotCheckable() {
+        this.isCheckable = false;
+    }
 
     public boolean isCheckable() {
         return this.isCheckable;

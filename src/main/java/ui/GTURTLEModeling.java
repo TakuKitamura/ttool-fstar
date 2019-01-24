@@ -535,9 +535,11 @@ public class GTURTLEModeling {
         if (tmap != null) {
             TMLMappingTextSpecification<TGComponent> spec = new TMLMappingTextSpecification<>(_title);
             spec.toTextFormat(tmap);    //TMLMapping
+            String XMLSpec = tmap.toXML();
             try {
                 //TraceManager.addDev( "*** " + ConfigurationTTool.TMLCodeDirectory + File.separator );
                 spec.saveFile(SpecConfigTTool.TMLCodeDirectory, "spec");
+                FileUtils.saveFile(SpecConfigTTool.TMLCodeDirectory + "spec.xml", XMLSpec);
             } catch (Exception e) {
                 TraceManager.addError("Files could not be saved: " + e.getMessage());
                 return false;

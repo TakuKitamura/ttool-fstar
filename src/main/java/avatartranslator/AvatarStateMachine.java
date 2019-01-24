@@ -438,7 +438,7 @@ public class AvatarStateMachine extends AvatarElement {
 
     // Assumes no after clause on composite relation
     public void removeCompositeStates(AvatarBlock _block) {
-        //TraceManager.addDev("\n-------------- Remove composite states ---------------\n");
+        TraceManager.addDev("\n-------------- Remove composite states ---------------\n");
 
         /*LinkedList<AvatarState> lists =*/ removeAllInternalStartStates();
 
@@ -456,7 +456,7 @@ public class AvatarStateMachine extends AvatarElement {
             }
         }
 
-        // For each composite transition: Welink it to all the substates of the current state
+        // For each composite transition: We link it to all the substates of the current state
         AvatarState src;
         while (((at = getAvatarCompositeTransition()) != null)) {
             src = (AvatarState) (getPreviousElementOf(at));
@@ -480,6 +480,8 @@ public class AvatarStateMachine extends AvatarElement {
                 if ((elt instanceof AvatarState) && (elt.hasInUpperState(src))) {
                     AvatarTransition att = cloneCompositeTransition(at);
                     elt.addNext(att);
+                    att.setAsVerifiable(false);
+                    at.setAsVerifiable(false);
                 }
             }
 
@@ -487,118 +489,7 @@ public class AvatarStateMachine extends AvatarElement {
 
     }
 
-    public void removeCompositeStatesOld(AvatarBlock _block) {
-        //TraceManager.addDev("\n-------------- Remove composite states ---------------\n");
 
-        // Contains in odd index: composite state
-        // even index: new state replacing the start state
-
-        /*List<AvatarState> lists =*/ removeAllInternalStartStates();
-        //List<AvatarTransition> ats;
-        List<AvatarStateMachineElement> toRemove = new ArrayList<AvatarStateMachineElement>();
-        List<AvatarState> states = new ArrayList<AvatarState>();
-
-        AvatarTransition at;
-
-        //ats = getAllAvatarCompositeTransitions();
-
-        //at = getCompositeTransition();
-        while (((at = getAvatarCompositeTransition()) != null) && (!(toRemove.contains(at)))) {
-            TraceManager.addDev("*********************************** Found composite transition: " + at.toString());
-            //TraceManager.addDev(_block.toString());
-            if (!(toRemove.contains(getPreviousElementOf(at)))) {
-                toRemove.add(getPreviousElementOf(at));
-            }
-            toRemove.add(at);
-            AvatarTransition at2 = removeAfter(at, _block);
-            AvatarState state = (AvatarState) (getPreviousElementOf(at2));
-
-            if (!states.contains(state)) {
-                TraceManager.addDev("Working on internal elements of " + state);
-                states.add(state);
-                addFullInternalStates(state, at2);
-            }
-
-
-            for (int i = 0; i < elements.size(); i++) {
-                AvatarStateMachineElement element = elements.get(i);
-                if (element instanceof AvatarState) {
-                    if (element.hasInUpperState(state) == true) {
-                        AvatarTransition at3 = cloneCompositeTransition(at2);
-                        //addElement(at);
-                        element.addNext(at3);
-                    }
-                }
-            }
-
-            //removeCompositeTransition2(at, _block);
-        }
-
-        for (AvatarStateMachineElement asme : toRemove) {
-            removeElement(asme);
-        }
-
-        removeAllSuperStates();
-
-        /*if (at != null) {
-          TraceManager.addDev("********************************** Found composite transition: " + at.toString());
-          // Adding intermediate states in transitions : splitting transitions
-          }
-
-          LinkedList<AvatarStateMachineElement> toRemove = new LinkedList<AvatarStateMachineElement>();
-
-          while((at = getCompositeTransition()) != null) {
-          TraceManager.addDev("*********************************** Found composite transition: " + at.toString());
-          //TraceManager.addDev(_block.toString());
-          if (!(toRemove.contains(getPreviousElementOf(at)))) {
-          toRemove.add(getPreviousElementOf(at));
-          }
-          removeCompositeTransition(at, _block);
-
-          }*/
-
-
-
-        /*if (ats.size() > 0) {
-          LinkedList<AvatarStateMachineElement> toRemove = new LinkedList<AvatarStateMachineElement>();
-          ArrayList <AvatarTransition> ats2 = new ArrayList <AvatarTransition>();
-          ArrayList <AvatarState> states = new ArrayList <AvatarState>();
-          for(AvatarTransition at: ats) {
-          if (!(toRemove.contains(getPreviousElementOf(at)))) {
-          toRemove.add(getPreviousElementOf(at));
-          }
-
-          AvatarState state = (AvatarState)(getPreviousElementOf(_at));
-          AvatarTransition at = removeAfter(_at, _block);
-          // Put state after transition
-          modifyAvatarTransition(at);
-          ats2.add(at);
-
-
-          }
-
-
-
-
-          //removeStopStatesOf(state);
-
-          // Remove "after" and replace them with timers
-
-
-          remove
-
-          removeCompositeTransitions(ats, _block);
-
-
-          for(AvatarStateMachineElement asme: toRemove) {
-          removeElement(asme);
-          }
-          }*/
-
-        //TraceManager.addDev(_block.toString());
-
-
-    }
 
     private void modifyStateForCompositeSupport(AvatarState _state) {
         // Each time there is a transition with an after or more than one action, we must rework the transition
@@ -616,6 +507,7 @@ public class AvatarStateMachine extends AvatarElement {
                     if (previous.hasInUpperState(_state) == true) {
                         if (!(at.isEmpty())) {
                             v.add(at);
+                            at.setNotCheckable();
                         }
                     }
                 }

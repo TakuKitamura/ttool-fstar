@@ -628,7 +628,7 @@ public class TMLSyntaxChecking {
             addError(t, elt, VARIABLE_ERROR + " in expression " + action, TMLError.ERROR_BEHAVIOR);
             return;
         } catch (TokenMgrError tke) {
-            TraceManager.addDev("TokenMgrError --------> Parse error in :" + parseCmd + " " + action);
+            TraceManager.addDev("TokenMgrError --------> Parse error in :" + parseCmd + " " + action + " modified action:" + modif);
             addError(t, elt, VARIABLE_ERROR + " in expression " + action, TMLError.ERROR_BEHAVIOR);
             return;
         }
