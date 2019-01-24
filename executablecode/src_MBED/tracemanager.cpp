@@ -2,10 +2,15 @@
 //#include <stdio.h>
 //#include <time.h>
 
+#include <mbed.h>
+#include <Thread.h>
+#include <Mutex.h>
+#include <time.h>
+
 #include "tracemanager.h"
 #include "debug.h"
 #include "mytimelib.h"
-#include <Mutex.h>
+
 
 
 #define TRACE_OFF 0
@@ -248,6 +253,7 @@ void traceAsynchronousReceiveRequest(request *req) {
 void traceRequest(char *myname, request *req) {
   char s[1024];
   int i;
+  //printf("Calling tracerequest of type %s\n", req->type);
  
 
   debugMsg("Trace request");
@@ -261,40 +267,46 @@ void traceRequest(char *myname, request *req) {
 
   switch(req->type) {
     case SEND_SYNC_REQUEST:
-    debug2Msg("Sync channel", req->syncChannel->outname);
-    sprintf(s, "block=%s type=send_synchro channel=%s params=", myname, req->syncChannel->outname);
-    for(i=0; i<req->nbOfParams; i++) {
-      if (i>0) {
-	sprintf(s, "%s,", s);
+      debug2Msg("Sync channel", req->syncChannel->outname);
+      sprintf(s, "block=%s type=send_synchro channel=%s params=", myname, req->syncChannel->outname);
+      for(i=0; i<req->nbOfParams; i++) {
+        if (i>0) {
+          sprintf(s, "%s,", s);
+        }
+        sprintf(s, "%s%d", s, *(req->params[i]));
       }
-      sprintf(s, "%s%d", s, *(req->params[i]));
-    }
-    sprintf(s, "%s\n", s);
- 
-    break;
-  case RECEIVE_SYNC_REQUEST:
-    sprintf(s, "block=%s type=receive_synchro channel=%s\n", myname, req->syncChannel->inname);
-    break;
+      sprintf(s, "%s\n", s);
+  
+      break;
+    case RECEIVE_SYNC_REQUEST:
+      
+      sprintf(s, "block=%s type=receive_synchro channel=%s\n", myname, req->syncChannel->inname);
+      break;
     case SEND_ASYNC_REQUEST:
-    debug2Msg("Async channel", req->asyncChannel->outname);
-    sprintf(s, "block=%s type=send_async_2 channel=%s\n", myname, req->asyncChannel->outname);
-    break;
-  case RECEIVE_ASYNC_REQUEST:
-    sprintf(s, "block=%s type=receive_async_2 channel=%s\n", myname, req->asyncChannel->inname);
-    break;
-   case SEND_BROADCAST_REQUEST:
-    debug2Msg("Sync channel", req->syncChannel->outname);
-    sprintf(s, "block=%s type=send_broadcast channel=%s\n", myname, req->syncChannel->outname);
-    break; 
-   case RECEIVE_BROADCAST_REQUEST:
-    debug2Msg("Sync channel", req->syncChannel->outname);
-    sprintf(s, "block=%s type=receive_broadcast channel=%s\n", myname, req->syncChannel->outname);
-    break; 
-   case IMMEDIATE:
-     sprintf(s, "block=%s type=action\n", myname);
-    break;
-  default:
-    sprintf(s, "block=%s type=unknown\n", myname);
+      debug2Msg("Async channel", req->asyncChannel->outname);
+      sprintf(s, "block=%s type=send_async_2 channel=%s\n", myname, req->asyncChannel->outname);
+      break;
+    case RECEIVE_ASYNC_REQUEST:
+      
+      sprintf(s, "block=%s type=receive_async_2 channel=%s\n", myname, req->asyncChannel->inname);
+      break;
+    case SEND_BROADCAST_REQUEST:
+      
+      debug2Msg("Sync channel", req->syncChannel->outname);
+      sprintf(s, "block=%s type=send_broadcast channel=%s\n", myname, req->syncChannel->outname);
+      break; 
+    case RECEIVE_BROADCAST_REQUEST:
+      
+      debug2Msg("Sync channel", req->syncChannel->outname);
+      sprintf(s, "block=%s type=receive_broadcast channel=%s\n", myname, req->syncChannel->outname);
+      break; 
+    case IMMEDIATE:
+      
+      sprintf(s, "block=%s type=action\n", myname);
+      break;
+    default:
+      
+      sprintf(s, "block=%s type=unknown\n", myname);
   }
 
   debugMsg("Trace request 2");

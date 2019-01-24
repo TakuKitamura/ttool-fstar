@@ -8,6 +8,7 @@
 
 #include <Mutex.h>
 #include <mbed.h>
+#include <Thread.h>
 
 long __id_message = 0;
 rtos::Mutex __message_mutex;

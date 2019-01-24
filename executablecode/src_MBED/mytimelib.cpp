@@ -1,4 +1,4 @@
-//#include<time.h>
+#include <time.h>
 
 #include "mytimelib.h"
 #include "random.h"
@@ -103,7 +103,7 @@ void delayToTimeSpec(struct timespec *ts, long delay) {
 
 void waitFor(long minDelay, long maxDelay) {
   struct timespec tssrc;
-  struct timespec tsret;
+  //struct timespec tsret;
   int delay;
 
 
@@ -118,11 +118,7 @@ void waitFor(long minDelay, long maxDelay) {
   delayToTimeSpec(&tssrc, delay);
 
   debugLong("............. waiting For", delay);
-  if(tssrc.tv_nsec > tsret.tv_nsec){
-    wait_us(tsret.tv_nsec/1000);
-  }else{
-    wait_us(tssrc.tv_nsec/1000);
-  }
+  wait_us(delay);
   debugLong("............. waiting Done for: ", delay);
 }
 

@@ -12,6 +12,7 @@ struct request;
 #include "asyncchannel.h"
 #include "message.h"
 
+
 #define SEND_SYNC_REQUEST 0
 #define RECEIVE_SYNC_REQUEST 2
 #define SEND_ASYNC_REQUEST 4
@@ -87,7 +88,7 @@ void copyParameters(request *src, request *dst);
 setOfRequests *newListOfRequests(size_t *wakeupCondition, rtos::Mutex *mutex);
 void addRequestToList(setOfRequests *list, request* req);
 void clearListOfRequests(setOfRequests *list);
-void fillListOfRequests(setOfRequests *list, char *name, rtos::Thread* thread, size_t *wakeupCondition, rtos::Mutex *mutex);
+void fillListOfRequests(setOfRequests *list, char *name, rtos::Thread* thread, size_t wakeupCondition, rtos::Mutex *mutex);
 
 void removeAllPendingRequestsFromPendingLists(request *req, int apartThisOne);
 request *hasIdenticalRequestInListOfSelectedRequests(request *req, request *list);
