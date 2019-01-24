@@ -6,7 +6,6 @@
 #define DEBUG_OFF 2
 //Serial pc(USBTX,USBRX);
 
-#include <mbed.h>
 #include "debug.h"
 
 int _debug = DEBUG_OFF;
