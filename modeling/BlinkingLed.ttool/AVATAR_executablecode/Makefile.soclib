@@ -1,1 +1,1 @@
-objs = main.o MainBlock.o 
+objs = main.o SecondaryBlock.o MainBlock.o 

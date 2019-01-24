@@ -54,7 +54,7 @@ void executeSendSyncTransaction(request *req) {
 
 	debugMsg("Signaling");
   
-	pthread_cond_signal(selectedReq->listOfRequests->wakeupCondition);
+	rtos::Thread::signal_wait(selectedReq->listOfRequests->wakeupCondition);
 
 	traceSynchroRequest(req, selectedReq);
 }
@@ -96,8 +96,8 @@ void executeReceiveSyncTransaction(request *req) {
   copyParameters(selectedReq, req);
 
   debugMsg("Signaling");
-  pthread_cond_signal(selectedReq->listOfRequests->wakeupCondition);
-
+  //pthread_cond_signal(selectedReq->listOfRequests->wakeupCondition);
+  rtos::Thread::signal_wait(selectedReq->listOfRequests->wakeupCondition);
   traceSynchroRequest(selectedReq, req);
 }
 
@@ -116,7 +116,8 @@ void executeSendAsyncTransaction(request *req) {
   debugMsg("Signaling async write to all requests waiting ");
   selectedReq = req->asyncChannel->inWaitQueue;
   while (selectedReq != NULL) {
-    pthread_cond_signal(selectedReq->listOfRequests->wakeupCondition);
+    //pthread_cond_signal(selectedReq->listOfRequests->wakeupCondition);
+    rtos::Thread::signal_wait(selectedReq->listOfRequests->wakeupCondition);
     selectedReq = selectedReq->next;
   }
   debugMsg("Signaling done");
@@ -144,7 +145,8 @@ void executeReceiveAsyncTransaction(request *req) {
 
   debugMsg("Signaling async read to all requests waiting ");
   while (selectedReq != NULL) {
-    pthread_cond_signal(selectedReq->listOfRequests->wakeupCondition);
+    //pthread_cond_signal(selectedReq->listOfRequests->wakeupCondition);
+    rtos::Thread::signal_wait(selectedReq->listOfRequests->wakeupCondition);
     selectedReq = selectedReq->next;
   }
   debugMsg("Signaling done");
@@ -201,7 +203,8 @@ void executeSendBroadcastTransaction(request *req) {
   cpt = 0;
   while(currentReq != NULL) {
     cpt ++;
-    pthread_cond_signal(currentReq->listOfRequests->wakeupCondition);
+    //pthread_cond_signal(currentReq->listOfRequests->wakeupCondition);
+    rtos::Thread::signal_wait(currentReq->listOfRequests->wakeupCondition);
     traceSynchroRequest(req, currentReq);
     currentReq = currentReq->relatedRequest;
   }
