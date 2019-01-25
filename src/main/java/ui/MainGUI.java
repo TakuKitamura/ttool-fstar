@@ -635,8 +635,10 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         }
         //TraceManager.addDev("Change made!");
         
-        // Issue #81: For tests
-        if ( gtm != null ) {
+        // Issue #81: For tests when gtm could be null
+        if ( 	gtm != null && 
+        		type != TDiagramPanel.SELECT_COMPONENT ) { // Issue #105 
+        	TraceManager.addDev( "Saving current state for undo..." );
         	gtm.saveOperation(p);
         }
         
@@ -9116,7 +9118,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     }
     
     public boolean isAValidTabName(String name) {
-        boolean b1, b2, b3, b4, b5, b6, b7;
+        boolean b1, b2;//, b3, b4, b5, b6, b7;
         b1 = (name.substring(0, 1)).matches("[a-zA-Z]");
         b2 = name.matches("\\w*");
         return b1&&b2;

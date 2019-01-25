@@ -294,23 +294,14 @@ public class ProactiveDesignPanel extends TURTLEPanel {
         return null;
     }
 
-    
-    
-    
- public void renamePanel(TDiagramPanel tdp,String newName)
- {	
-	 //int index=this.tabbedPane.indexOfComponent((ProactiveSMDPanel)tdp);
-	   int index=tabbedPane.indexOfTab(tdp.name); 
-	 
-	   if (index!=-1)
-	   {
-	    tabbedPane.setTitleAt(index, newName);
-         panels.elementAt(index).setName(newName);
-          mgui.changeMade(null, -1);
-	   } 
- }
+    public void renamePanel(TDiagramPanel tdp,String newName) {	
+    	//int index=this.tabbedPane.indexOfComponent((ProactiveSMDPanel)tdp);
+    	int index=tabbedPane.indexOfTab(tdp.name); 
 
-
-
-
+    	if (index!=-1) {
+    		tabbedPane.setTitleAt(index, newName);
+    		panels.elementAt(index).setName(newName);
+    		mgui.changeMade(null, -1);
+    	} 
+    }
 }

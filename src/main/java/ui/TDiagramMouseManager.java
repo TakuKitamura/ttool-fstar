@@ -509,7 +509,10 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
      	   // lastSelectedComponent = null;
      	    tdp.componentPointed = null;
         }
-        tdp.getGUI().changeMade(tdp, TDiagramPanel.CHANGE_VALUE_COMPONENT);
+        
+ 	    // Issue #105: sending a change event prevents the undo from working
+ 	    tdp.getGUI().changeMade(tdp, TDiagramPanel.SELECT_COMPONENT);
+//        tdp.getGUI().changeMade(tdp, TDiagramPanel.CHANGE_VALUE_COMPONENT);
 	    tdp.repaint();
     }
     
