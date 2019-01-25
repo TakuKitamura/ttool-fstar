@@ -1358,6 +1358,8 @@ public class AvatarStateMachine extends AvatarElement {
 
         while ((current != null) && !(current instanceof AvatarState)) {
             //TraceManager.addDev("Cloning: " + current);
+            current.setNotCheckable();
+            current.setAsVerifiable(false);
             tmp = current.basicCloneMe(block);
             addElement(tmp);
             tomake.addNext(tmp);

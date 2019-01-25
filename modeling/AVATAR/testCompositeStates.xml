@@ -228,8 +228,8 @@
 </SUBCOMPONENT>
 
 <COMPONENT type="5103" id="91" >
-<cdparam x="374" y="386" />
-<sizeparam width="67" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="378" y="386" />
+<sizeparam width="59" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -307,8 +307,8 @@
 </COMPONENT>
 
 <COMPONENT type="5103" id="145" >
-<cdparam x="358" y="215" />
-<sizeparam width="56" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="362" y="215" />
+<sizeparam width="49" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -549,8 +549,8 @@
 </SUBCOMPONENT>
 
 <COMPONENT type="5104" id="207" >
-<cdparam x="387" y="367" />
-<sizeparam width="75" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="391" y="367" />
+<sizeparam width="67" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -565,11 +565,12 @@
 <TGConnectingPoint num="7" id="204" />
 <TGConnectingPoint num="8" id="205" />
 <TGConnectingPoint num="9" id="206" />
+<accessibility />
 </COMPONENT>
 
 <COMPONENT type="5104" id="218" >
-<cdparam x="383" y="260" />
-<sizeparam width="64" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="387" y="260" />
+<sizeparam width="57" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
