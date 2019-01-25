@@ -107,6 +107,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     // Issue #14
     public static final int DIAGRAM_RESIZED = 6;
 
+    // Issue #105
+    public static final int SELECT_COMPONENT = 7;
+
     // For cut/copy/paste
     public static String copyData;
     /*private static int copyX;
