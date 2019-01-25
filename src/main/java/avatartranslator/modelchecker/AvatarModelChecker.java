@@ -97,13 +97,14 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     private boolean studyLiveness;
     private SpecificationLiveness livenessInfo;
 
+
     public AvatarModelChecker(AvatarSpecification _spec) {
         if (_spec != null) {
             initialSpec = _spec;
             //TraceManager.addDev("Before clone:\n" + spec);
             initialSpec.removeLibraryFunctionCalls();
             initialSpec.removeCompositeStates();
-            TraceManager.addDev("Before clone:\n" + initialSpec);
+            //TraceManager.addDev("Before clone:\n" + initialSpec);
             spec = initialSpec.advancedClone();
             //TraceManager.addDev("After clone:\n" + spec);
         }
@@ -112,6 +113,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         studyReachability = false;
         computeRG = false;
         freeIntermediateStateCoding = true;
+    }
+
+    public AvatarSpecification getInitialSpec() {
+        return initialSpec;
     }
 
     public int getWeightOfTransition(int originState, int destinationState) {
@@ -268,6 +273,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         spec.removeRandoms();
         spec.removeFIFOs(4);
         spec.makeFullStates();
+
         if (ignoreEmptyTransitions) {
             spec.removeEmptyTransitions((nbOfRemainingReachabilities == 0) || studyLiveness);
         }

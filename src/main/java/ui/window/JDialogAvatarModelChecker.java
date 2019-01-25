@@ -510,15 +510,18 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             reinitValues();
             jta.append("Starting the model checker\n");
 
-            if (generateDesignSelected) {
-                TraceManager.addDev("Drawing non modified avatar spec");
-                if ((mgui != null) && (spec != null)) {
-                    mgui.drawAvatarSpecification(spec);
-                }
-            }
+
 
 
             amc = new AvatarModelChecker(spec);
+
+            if (generateDesignSelected) {
+                TraceManager.addDev("Drawing non modified avatar spec");
+                if ((mgui != null) && (spec != null)) {
+                    mgui.drawAvatarSpecification(amc.getInitialSpec());
+                }
+            }
+
             endDate = null;
             previousNbOfStates = 0;
             startDate = new Date();
@@ -570,13 +573,13 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             TraceManager.addDev("Model checking done");
             //TraceManager.addDev("RG:" + amc.statesToString() + "\n\n");
 
-            if (generateDesignSelected) {
+            /*if (generateDesignSelected) {
                 TraceManager.addDev("Drawing modified avatar spec");
                 AvatarSpecification reworkedSpec = amc.getReworkedAvatarSpecification();
                 if ((mgui != null) && (reworkedSpec != null)) {
                     mgui.drawAvatarSpecification(reworkedSpec);
                 }
-            }
+            }*/
 
             timer.cancel();
             endDate = new Date();
