@@ -92,6 +92,7 @@ Modifications} & \textbf{Sections Modified} \\
 1.1 & 10/02/2017 & Added Eclipse IDE development + tests & All \\ 
 1.2 & 11/02/2017 & Added more info on tests & Tests \\ 
 1.3 & 02/10/2018 & Update and added GUI development & All\\
+1.4 & 22/11/2018 & Added more info on automated tests and on the installer & Automated tests / Installer \\
 \hline
 \end{tabular}
 \end{adjustbox}
@@ -692,6 +693,7 @@ automatically enforced.
 
 
 \subsubsection{How to output debug information}
+\label{sec:debug_info}
 Do as follows:
 \begin{lstlisting}
 TraceManager.addDev("blah blah blah");
@@ -1053,14 +1055,218 @@ java -Xmx1024m -Djavax.net.ssl.trustStore=ServerKeyStore \
 $
 \end{verbatim}
 
-\subsection{Automated Tests}
-TODO
+\newpage
+
+\section{Automated Tests}
+\subsection{Research Stage}
+In order to find the right framework, it needed to put some criteria in our research to determine : \textit{What is a good GUI automated testing framework ?}
+After research, to answer this question, we need : \textit{"Flexibility, Capacity to work with the other framework already implemented and to be updatable"}
+But this criterias are not enougth to make a good and stable framework. \newline
+Then, for it, the team added the following criteria :
+
+\begin{itemize}
+  \item \textbf{Work on all operating systems}: to work on MacOS, Linux and Windows
+  \item \textbf{Good Documentation}: to have a simple, understable documentation wioth possibly tutorials or others things
+  \item \textbf{Support Java}
+  \item \textbf{Support Swing}
+  \item \textbf{Open Source}: and possibly have a simple meaning to see the source
+  \item \textbf{Test Automation}: Unit test with a robot
+  \item \textbf{Regression Testing}: re-running functional/non-functional test to ensure that previously developed and tested software still performas
+  \item \textbf{Flexible}
+  \item \textbf{Record and Replay capabilities}: to record and replay the test
+  \item \textbf{Living Framework}: Updated regulary
+  \item \textbf{Work with other frameworks}
+\end{itemize}
+
+After a few weeks of research, it had been decided to choose the framework named \textbf{AssertJ}
+
+\subsection{AssertJ}
+AssertJ is a project developed by \textbf{Joel Costigliola}, which purpose is to rovides a fluent interface for writing assertions. 
+AssertJ is a fork of a previous project named \textbf{FEST Assert}. Its main goal is to improve test code readability and make maintenance of tests easier.
+AssertJ works like a Java Library and support also Swing.\newline
+In order to create the automated tests sequence, we use a part of the library, named \textbf{AssertJ Swing}.
+AssertJ Swing is based on JDK standard types assertions and can be used with either JUnit or TestNG. \newline
+The current verion of AssertJ Swing use in this project is the \textbf{3.8.0}, which works with \textit{Java 8} or higher.
+
+\newpage
+
+\subsection{Coding Instructions}
+Before doing any tests, make sure that all the libs are present and available. \newline
+If you are coding under an Integrated Development Environment (IDE) as Eclipse or IntelliJ, you should also download the AssertJ plugin. More informations here for :
+
+\begin{itemize}
+   \item \textbf{Eclipse}: \url{http://joel-costigliola.github.io/assertj-eclipse-plugin/}
+   \item \textbf{IntelliJ}:\url{https://plugins.jetbrains.com/plugin/10345-assertions2assertj}
+\end{itemize}
+
+All the files about this automated sequence of tests, are in the following directory : \textbf{ttool/src/test/java/ui/bot/}
+
+\subsubsection{File Instructions}
+In order to create a class of tests, the developer need to find the package \textbf{ui.bot}, then to click on it and to select the tab \textbf{New/Class}.The developper will see the following window appear as in figure~\ref{fig:image15}:
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=0.8\textwidth]{images/image16.png}
+\end{center}
+\caption{}
+\label{fig:image15}
+\end{figure}
+
+The developer only need to change one thing: the superclass of the class. The superclass has to be from \textbf{AssertJ library}, and the most useful one is the superclass \textbf{AssertJSwingJUnitTestCase} \newline
+The example in figuree~\ref{fig:image16} is what the developer should find as superclass.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=0.9\textwidth]{images/image17.png}
+\end{center}
+\caption{}
+\label{fig:image16}
+\end{figure}
+
+Now that constraint is done, here is the following files instructions:
+
+\begin{itemize}
+  \item \textbf{Avoid bad names}: for the files, it has to be clear on what the developers are doing on the file itself.
+  \item \textbf{Not too much tests by files}: no more than 10 tests by files. Its avoid to have files with a lot of tests, to be lost between some tests, to have file with too much lines and also to have tests that have no record with the name of the file. Its allow the developer to find more quickly tests and to ensure the name of the file.
+  \item \textbf{Following the previous instructions}: see ~\ref{sec:code_info}
+\end{itemize}
+
+The main function of each file will, if the developer do his job fine, have to extends \textbf{AssertJSwingJUnitTestCase}.Thus the developer will have to implement a method named : \textbf{onSetUp()} \newline
+This method has for purpose to initializes the test fixtures and to initializes also the frame on which tests are based. Here is an example of what could be the method :
+
+\begin{verbatim}
+@Override
+protected void onSetUp() {
+   Main frame = GuiActionRunner.execute(()-> new Main(false, false, false, false, false, false, false, false, false, false, false, false, false));
+   window = new FrameFixture(robot(), frame.getFrame());
+   window.show();
+}
+\end{verbatim}
+
+In this example there is some points to clarify. First of all the Main obeject is an object containing a frame (the frame on which the tests are based). The robot() in the definition of FrameFixture is not forced. The robot() allow to automate the test. Finally the window.show allow the user to see all the tests on the frame.\newline
+At the end of the file, it is better but not forced to have a method called \textbf{onTearDown()} whose aim is to clean up the frame fixture, thanks to the method named \textbf{cleanUp()}.
+Here is an example of the method onTearDown:
+
+\begin{verbatim}
+@Override
+protected void onTearDown() {
+   super.onTearDown();
+   window.cleanUp();
+}
+\end{verbatim}
+
+\subsubsection{Test Instructions}
+The following rules are:
+
+\begin{itemize}
+  \item \textbf{@Test}: First of all, before eveything you need to precise that the method is a test. For that, the developer only need to put \textbf{@Test} before the name of the function
+  \item \textbf{Name}: Clear name in order to understand the meanning of the test
+  \item \textbf{Description}: Need to be clear and not too long on the subject of the test
+  \item \textbf{Trace in Console}: As saw in \ref{sec:debug_info}, the developer need to use TraceManager.addDev() to put some words in the console. Now the real utilisation of TraceManager here is to inform what the test is doing and to have a trace in the console. The fact that there is trace in the console allow to debug and to know where a test could fail.\newline
+The developer need to put a trace before and after an action is performed
+  \item \textbf{Debug}: For that the developer can usesome of the functions developed in the file UsefulTools.java. This file has some functions useful for debugging or even just transform a string into KeyEvent for an input
+\end{itemize}
+
+With all the rules, here is an example of a fine test:
+\begin{verbatim}
+private FrameFixture window;
+private UsefulTools ut;
+private boolean debug = true;
+
+@Test
+public void createANewFile() {
+   /*
+    * Description : Verify if TTool can create a new file, by clicking on the File menu then on
+    * the tab New. Then right click on it.
+    */
+
+   TraceManager.addDev("==============" + System.lineSeparator() +
+                       "MainFrameTest: createANewFile: Started");
+   JMenuItemFixture jmf = window.menuItem("File New");
+   TraceManager.addDev("MainFrameTest: createANewFile: Creating a new file by clicking on New");
+   jmf.click();
+   if (debug)
+      ut.debugThread(3600, "MainFrameTest: createANewFile: ");
+   TraceManager.addDev("MainFrameTest: createANewFile: File created");
+		
+   TraceManager.addDev("MainFrameTest: createANewFile: Right clicking on the file");
+   window.rightClick();
+   if (debug)
+      ut.debugThread(3600, "MainFrameTest: createANewFile: ");
+   TraceManager.addDev("MainFrameTest: createANewFile: Done clicking");
+   TraceManager.addDev("MainFrameTest: createANewFile: Finished" + 
+                       System.lineSeparator() + "==============");
+}
+\end{verbatim}
+
+\subsubsection{Run as Configuration}
+
+When you create a Configuration for a file of tests, in order to not have some bugs, you need to had some others files in the \textbf{Bootstrap Entries} \newline
+\begin{itemize}
+\item \textbf{AssertJ Swing}: you need to had all the assertj libraries for the swing (and of course the last version of them)
+\item \textbf{Ressources}: in \textbf{/src/main/}
+\item \textbf{src}
+\end{itemize}
+
+As you can see in the following figure. Then you will need to save it. In order to save your configuration, you will need to go to the section \textbf{Common} and to save the configuration as \textbf{Shared file}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=0.9\textwidth]{images/image18.png}
+\end{center}
+\caption{}
+\label{fig:image17}
+\end{figure}
 
 \newpage 
 
 \section{Installing}
-TODO
+\subsection{IzPack}
+IzPack is an installers generator for the Java platform. It produces lightweight installers that can be run on any operating system where a Java virtual machine is available. Depending on the operating system, it can be launched by a double-click or a simple 'java -jar installer.jar' on a shell.\newline
+For more information about it, you can check two things :
+\begin{itemize}
+\item \textbf{Main Page}: \url{http://www.izforge.com/izpack/}
+\item \textbf{IzPack Documentation}: \url{https://www.izforge.com/izpack/izpack-doc.pdf}
+\end{itemize}
 
+The current used version is : 5.1.3
+
+\subsection{How to use it} 
+First, you have to export in a environment variable named \textbf{JAVA\_HOME} the path
+to your Java directory (for exemple, mine is in /usr/lib/jvm/)\newline \newline
+The script to compile the installer is src/compile.sh with the xml of the
+installer in argument.
+If you want to test it, you can make a copy of the installer.xml and
+edit the paths to your TTool (IzPack doesn't allow to use variable in path, so
+every path is writed entirely), \textbf{BUT DON'T PUSH YOUR CHANGES !!!} The install.xml
+is configured for Ludovic Apvrille's computer.\newline
+To launch the installer, just use the \textbf{installer/src/install.exe}.\newline
+
+Now if you to compile it in order to test it, you need to go to the directory \textbf{installer/ src}
+
+\subsection{How to compile it}
+
+In order to compile (in order to test manually) just use \textbf{./compile.sh install.xml}. The file install.xml represent the main configuration for any computers \newline
+Here is some help in order to understand the file :
+\begin{itemize}
+\item \textbf{info}: Section for project's informations.
+\item \textbf{guiprefs}: Graphical preference (size of window)
+\item \textbf{locale}: Set which lnaguage can be used in the installer
+\item \textbf{ressource}: All file used for the installer (html, images)
+\item \textbf{panels}: All panels used for the installer (in appearance order)
+\item \textbf{packs}: Sources of TTool, divided in packs
+\end{itemize}
+
+\subsection{Operating System Configuration}
+There are some configuration files dependent on the operating system :
+\begin{itemize}
+\item \textbf{Windows}: named config\_win.xml
+\item \textbf{Linux}: named config.xml
+\item \textbf{MacOs}: There is currently no configuration file for MacOs
+\end{itemize}
+
+\subsection{Proverif and Gtkwave}
+The installer has for purpose to install TTool but also \textbf{Gtkwave} and \textbf{Proverif}. If you need to update those things, you will find all the jar in the following directory : \textbf{installer/lib}. \newline
 \newpage
 
 \section{Adding a graphical operator to a diagram}
