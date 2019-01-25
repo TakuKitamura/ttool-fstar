@@ -1742,7 +1742,7 @@ public class AvatarDesignPanelTranslator {
         //TDiagramPanel tdp = asmdp;
 
         // Search for composite AvatarStates: they cannot be checked for reachability and liveness
-         for (TGComponent tgc : asmdp.getComponentList()) {
+         /*for (TGComponent tgc : asmdp.getComponentList()) {
              if (tgc instanceof AvatarSMDState) {
                  AvatarSMDState sta = (AvatarSMDState)tgc;
                  if (sta.isACompositeState()) {
@@ -1758,7 +1758,7 @@ public class AvatarDesignPanelTranslator {
 
                  }
              }
-         }
+         }*/
 
 
 
