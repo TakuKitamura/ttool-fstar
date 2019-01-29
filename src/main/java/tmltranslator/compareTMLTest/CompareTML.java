@@ -1,4 +1,4 @@
-package ui.compareTMLTest;
+package tmltranslator.compareTMLTest;
 
 import java.io.BufferedReader;
 import java.io.File;
