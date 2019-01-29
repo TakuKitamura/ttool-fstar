@@ -2,9 +2,7 @@ package test;
 
 import static org.junit.Assert.fail;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
