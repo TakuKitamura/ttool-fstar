@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmlad;
 
 import ui.MainGUI;
@@ -46,9 +43,6 @@ import ui.TGUIAction;
 import ui.TToolBar;
 
 import javax.swing.*;
-
-//import java.awt.*;
-//import java.awt.event.*;
 
 /**
  * Class TMLActivityDiagramToolBar
@@ -64,6 +58,7 @@ public class TMLActivityDiagramToolBar extends TToolBar {
         super(_mgui);
     }
     
+    @Override
     protected void setActive(boolean b) {
         mgui.actions[TGUIAction.TMLAD_EDIT].setEnabled(b);
         mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
@@ -99,9 +94,13 @@ public class TMLActivityDiagramToolBar extends TToolBar {
 		mgui.actions[TGUIAction.ACT_TOGGLE_INTERNAL_COMMENT].setEnabled(b);
 		mgui.actions[TGUIAction.ACT_TOGGLE_DIPLO_ID].setEnabled(b);
 		
-		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
-		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
-		mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
+		// Issue #31
+		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(true);
+		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(true);
+		mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(true);
+//		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
+//		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
+//		mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
 		
 		mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
 		mgui.actions[TGUIAction.ACT_ONECLICK_LOTOS_RG].setEnabled(b);
