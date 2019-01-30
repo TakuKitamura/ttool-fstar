@@ -1,4 +1,16 @@
-// File with comment + context 3
-// Channels
-CHANNEL DIPLODOCUS_C_Design__channel BRBW 5 8 OUT DIPLODOCUS_C_Design__PrimitiveComp1 IN DIPLODOCUS_C_Design__PrimitiveComp2
-CHANNEL DIPLODOCUS_C_Design__channel_0 BRBW 4 8 OUT DIPLODOCUS_C_Design__PrimitiveComp1_0 IN DIPLODOCUS_C_Design__PrimitiveComp2_0
+                                      // File with comment + context 2
+
+
+
+            // Channels
+CHANNEL DIPLODOCUS_C_Design__channel BRBW 4 8 OUT DIPLODOCUS_C_Design__PrimitiveComp1 IN DIPLODOCUS_C_Design__PrimitiveComp2
+
+
+
+
+
+
+
+
+
+CHANNEL               DIPLODOCUS_C_Design__channel_0 BRBW 4 8 OUT DIPLODOCUS_C_Design__PrimitiveComp1_0 IN DIPLODOCUS_C_Design__PrimitiveComp2_0
