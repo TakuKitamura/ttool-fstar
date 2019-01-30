@@ -36,12 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui;
-
-import java.awt.*;
 
 /**
  * Class ZoomGraphics
@@ -50,31 +45,82 @@ import java.awt.*;
  * @version 1.0 19/11/2004
  * @author Ludovic APVRILLE
  */
-public class ZoomGraphics {
-    private Graphics g;
-    private double zoom;
+public class ZoomUtil {
+//    private Graphics g;
+//    private double zoom;
     
-    public ZoomGraphics(Graphics _g, double _zoom) {
-        g = _g;
-        zoom = _zoom;
+    private ZoomUtil(/*Graphics _g, double _zoom*/) {
+//        g = _g;
+//        zoom = _zoom;
     }
-    
-    public Graphics getGraphics() {
-        return g;
-    }
-    
-    
-    public void drawRoundRect(int x, int y, int w, int h, int arc1, int arc2) {
-        g.drawRoundRect((int)(x*zoom), (int)(y*zoom), (int)(w*zoom), (int)(h*zoom), arc1, arc2);
-    }
-    
-    public void drawLine(int x1, int y1, int x2, int y2) {
-        g.drawLine((int)(x1*zoom), (int)(y1*zoom), (int)(x2*zoom), (int)(y2*zoom));
-    }
+//    
+//    public Graphics getGraphics() {
+//        return g;
+//    }
+//    
+//    public void drawRoundRect(int x, int y, int w, int h, int arc1, int arc2) {
+//        g.drawRoundRect((int)(x*zoom), (int)(y*zoom), (int)(w*zoom), (int)(h*zoom), arc1, arc2);
+//    }
+//    
+//    public void drawLine(int x1, int y1, int x2, int y2) {
+//        g.drawLine((int)(x1*zoom), (int)(y1*zoom), (int)(x2*zoom), (int)(y2*zoom));
+//    }
+//
+//    public void drawString(String value, int x, int y) {
+//        g.drawString(value, (int)(x*zoom) , (int)(y*zoom));
+//    }
 
-    public void drawString(String value, int x, int y) {
-        g.drawString(value, (int)(x*zoom) , (int)(y*zoom));
+    public static void rescale(	final TGComponent component,
+    							final double scaleFactor ) {
+//        rescaled = true;
+
+     //   final double factor = scaleFactor / oldScaleFactor;
+
+//        dwidth = (width + dwidth) * factor;// oldScaleFactor * scaleFactor;
+//        dheight = (height + dheight) * factor;// oldScaleFactor * scaleFactor;
+//        dx = (dx + x) * factor;// oldScaleFactor * scaleFactor;
+//        dy = (dy + y) * factor;// oldScaleFactor * scaleFactor;
+//        dMinWidth = (minWidth + dMinWidth) * factor;// oldScaleFactor * scaleFactor;
+//        dMinHeight = (minHeight + dMinHeight) * factor;// oldScaleFactor * scaleFactor;
+//        dMaxWidth = (maxWidth + dMaxWidth) * factor;// oldScaleFactor * scaleFactor;
+//        dMaxHeight = (maxHeight + dMaxHeight) * factor;// oldScaleFactor * scaleFactor;
+//
+//        width = (int)(dwidth);
+//        dwidth = dwidth - width;
+//        height = (int)(dheight);
+//        dheight = dheight - height;
+//        minWidth = (int)(dMinWidth);
+//        minHeight = (int)(dMinHeight);
+//        maxWidth = (int)(dMaxWidth);
+//        maxHeight = (int)(dMaxHeight);
+//	
+//        dMinWidth = dMinWidth - minWidth;
+//        dMinHeight = dMinHeight - minHeight;
+//        dMaxWidth = dMaxWidth - maxWidth;
+//        dMaxHeight = dMaxHeight - maxHeight;
+//        x = (int)(dx);
+//        dx = dx - x;
+//        y = (int)(dy);
+//        dy = dy - y;
+//        
+//        // Issue #81: We also need to update max coordinate values
+//        maxX *= factor;
+//        maxY *= factor;
+//
+//        oldScaleFactor = scaleFactor;
+//
+//        if (father != null) {
+//            // Must rescale my zone...
+//            resizeWithFather();
+//        } else {
+//            minX = (int)(tdp.getMinX()/tdp.getZoom());
+//            maxX = (int)(tdp.getMaxX()/tdp.getZoom());
+//            minY = (int)(tdp.getMinY()/tdp.getZoom());
+//            maxY = (int)(tdp.getMaxY()/tdp.getZoom());
+//
+//        }
+//	
+//        setMoveCd(x, y, true);
     }
-        
- 
 }
+
