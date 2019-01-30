@@ -12,7 +12,7 @@ import static org.junit.Assert.*;
 
 public class CompareTMLTests {
 
-    final static String PATH_TO_TEST_COMPARE_FILE = "test/resources/ui/diagram2tml/input/";
+    final static String PATH_TO_TEST_COMPARE_FILE = "test/resources/tmltranslator/input/";
 
     final static String EMPTY_FILE = PATH_TO_TEST_COMPARE_FILE + "file1.tml";
     final static String ONLY_COMMENT_1 = PATH_TO_TEST_COMPARE_FILE + "file2.tml";
