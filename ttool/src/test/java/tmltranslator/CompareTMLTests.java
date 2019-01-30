@@ -28,7 +28,7 @@ public class CompareTMLTests {
     public void onlyCommentAndEmptyTest () throws Exception {
         CompareTML ctml = new CompareTML();
         /* file 1 and file 2
-         * file 1 includes only blank lines
+         * file 1 includes only empty lines
          * file 2 includes only comments
          */
         assertTrue("comparing between empty file and another file including only comment",ctml.compareTML(new File(EMPTY_FILE),
@@ -39,7 +39,7 @@ public class CompareTMLTests {
     public void onlyCommentAndOnlyComment () throws Exception {
         CompareTML ctml = new CompareTML();
         /* file 2 and file 3
-         * file 2 and file 3 include only comments and blank lines
+         * file 2 and file 3 include only comments and empty lines
          */
         assertTrue("comparing between 2 files including only comment",ctml.compareTML(new File(ONLY_COMMENT_1),
                 new File(ONLY_COMMENT_2)));
@@ -49,7 +49,8 @@ public class CompareTMLTests {
     public void sameContextDifferentComment () throws Exception {
         CompareTML ctml = new CompareTML();
         /* file 4 and file 5
-         * two files includes many comments, blank lines and white spaces before and after strings (comments or context)
+         * two files includes many comments, empty lines and white spaces before and after strings (comments or context)
+         * adding white spaces between two words
          */
         assertTrue("comparing between 2 files including the same context but different comment",ctml.compareTML(new File(COMMENT_AND_CONTEXT_1),
                 new File(COMMENT_AND_CONTEXT_2)));
@@ -57,17 +58,17 @@ public class CompareTMLTests {
 
     // Test false cases
     @Test
-    public void DifferentContextDifferentComment () throws Exception {
+    public void DifferentContextSameComment () throws Exception {
         CompareTML ctml = new CompareTML();
         /* file 5 and file 6
-         * adding white spaces between two words in file 6 in comparison with file 5
+         * file 5 has one different line in comparison with file 6
          */
         assertFalse("comparing between 2 files including the same context but different comment",ctml.compareTML(new File(COMMENT_AND_CONTEXT_2),
                 new File(COMMENT_AND_CONTEXT_3)));
     }
 
     @Test
-    public void DifferentContextSameComment () throws Exception {
+    public void DifferentContextSameComment_2 () throws Exception {
         CompareTML ctml = new CompareTML();
         /* file 6 and file 7
          * adding context in file 7 in comparison with file 6
