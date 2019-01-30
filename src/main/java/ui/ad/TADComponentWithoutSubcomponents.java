@@ -1,7 +1,7 @@
 package ui.ad;
 
 import ui.TDiagramPanel;
-import ui.TGCWithoutInternalComponent;
+import ui.TGCScalableWithoutInternalComponent;
 import ui.TGComponent;
 
 /**
@@ -9,7 +9,7 @@ import ui.TGComponent;
  * @author dblouin
  *
  */
-public abstract class TADComponentWithoutSubcomponents extends TGCWithoutInternalComponent {
+public abstract class TADComponentWithoutSubcomponents extends TGCScalableWithoutInternalComponent /* Issue #31 TGCWithoutInternalComponent*/ {
 
 	public TADComponentWithoutSubcomponents(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY,
 			boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
