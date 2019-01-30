@@ -21,12 +21,14 @@ public class CompareTML {
 
         while ((s1 = expectedReader.readLine()) != null) {
             if (!s1.contains("//") && s1.length() > 0) {
+                s1 = s1.trim();
                 expectedString += s1;
             }
         }
 
         while ((s2 = cloneReader.readLine()) != null){
             if (!s2.contains("//") && s2.length() > 0) {
+                s2 = s2.trim();
                 cloneString += s2;
             }
         }

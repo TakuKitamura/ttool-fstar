@@ -1,8 +1,10 @@
 package tmltranslator;
 
+import test.AbstractTest;
 import tmltranslator.compareTMLTest.CompareTML;
 import org.junit.Before;
 import org.junit.Test;
+import ui.AbstractUITest;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -10,17 +12,17 @@ import java.nio.file.Paths;
 
 import static org.junit.Assert.*;
 
-public class CompareTMLTests {
+public class CompareTMLTests extends AbstractTest {
 
-    final static String PATH_TO_TEST_COMPARE_FILE = "test/resources/tmltranslator/input/";
+    final static String PATH_TO_TEST_COMPARE_FILE = "/tmltranslator/input/";
 
-    final static String EMPTY_FILE = PATH_TO_TEST_COMPARE_FILE + "file1.tml";
-    final static String ONLY_COMMENT_1 = PATH_TO_TEST_COMPARE_FILE + "file2.tml";
-    final static String ONLY_COMMENT_2 = PATH_TO_TEST_COMPARE_FILE + "file3.tml";
-    final static String COMMENT_AND_CONTEXT_1 = PATH_TO_TEST_COMPARE_FILE + "file4.tml";
-    final static String COMMENT_AND_CONTEXT_2 = PATH_TO_TEST_COMPARE_FILE + "file5.tml";
-    final static String COMMENT_AND_CONTEXT_3 = PATH_TO_TEST_COMPARE_FILE + "file6.tml";
-    final static String COMMENT_AND_CONTEXT_4 = PATH_TO_TEST_COMPARE_FILE + "file7.tml";
+    final static String EMPTY_FILE = getBaseResourcesDir() + PATH_TO_TEST_COMPARE_FILE + "file1.tml";
+    final static String ONLY_COMMENT_1 = getBaseResourcesDir() + PATH_TO_TEST_COMPARE_FILE + "file2.tml";
+    final static String ONLY_COMMENT_2 = getBaseResourcesDir() + PATH_TO_TEST_COMPARE_FILE + "file3.tml";
+    final static String COMMENT_AND_CONTEXT_1 = getBaseResourcesDir() + PATH_TO_TEST_COMPARE_FILE + "file4.tml";
+    final static String COMMENT_AND_CONTEXT_2 = getBaseResourcesDir() + PATH_TO_TEST_COMPARE_FILE + "file5.tml";
+    final static String COMMENT_AND_CONTEXT_3 = getBaseResourcesDir() + PATH_TO_TEST_COMPARE_FILE + "file6.tml";
+    final static String COMMENT_AND_CONTEXT_4 = getBaseResourcesDir() + PATH_TO_TEST_COMPARE_FILE + "file7.tml";
 
 
     // Test true cases
