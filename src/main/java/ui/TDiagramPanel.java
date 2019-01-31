@@ -2365,6 +2365,67 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
     }
 
+    /* #issue 82
+     * added by Minh Hiep
+     */
+    public boolean checkInHierarchy(TGComponent mainTgc, TGComponent checkedCom) {
+        TGComponent tgctmp = checkedCom.getFather();
+        if (tgctmp == null) return checkedCom == mainTgc;
+        while(tgctmp != null && tgctmp != mainTgc) {
+            tgctmp = tgctmp.getFather();
+        }
+        return tgctmp == mainTgc;
+    }
+
+    /*
+     * #issue 82
+     * new cloneComponent added by Minh Hiep
+     */
+    public void cloneComponent(TGComponent _tgc) {
+        String clone;
+
+        Vector<TGComponent> connectorList = new Vector<>();
+        TGComponent c1, c2;
+        boolean b1,b2;
+
+        _tgc.select(true);
+
+        //list of connectors within the composite component
+        for(TGComponent tgc : this.getComponentList()) {
+            if(tgc instanceof TGConnector) {
+                c1 = getComponentToWhichBelongs(((TGConnector) tgc).getTGConnectingPointP1());
+                c2 = getComponentToWhichBelongs(((TGConnector) tgc).getTGConnectingPointP2());
+                b1 = checkInHierarchy(_tgc,c1);
+                b2 = checkInHierarchy(_tgc,c2);
+                if(b1 && b2){
+                    tgc.select(true);
+                    connectorList.add(tgc);
+                }
+            }
+        }
+
+        clone = mgui.gtm.makeXMLFromSelectedComponentOfADiagram(this, getMaxIdSelected(), _tgc.getX(), _tgc.getY());
+
+        _tgc.select(false);
+        for(int i = 0; i < connectorList.size(); i++){
+            connectorList.get(i).select(false);
+        }
+
+        //TraceManager.addDev("clone=\n"+ clone);
+        // paste
+        try {
+            mgui.gtm.copyModelingFromXML(this, clone, _tgc.getX() + 50, _tgc.getY() + 25);
+        } catch (MalformedModelingException mme) {
+            TraceManager.addDev("Clone Exception: " + mme.getMessage());
+            JOptionPane.showMessageDialog(mgui.getFrame(), "Clone creation failed", "Exception", JOptionPane.INFORMATION_MESSAGE);
+        }
+
+        //bringToBack(_tgc);
+        mgui.changeMade(this, NEW_COMPONENT);
+        repaint();
+    }
+
+    /*
     public void cloneComponent(TGComponent _tgc) {
         // copy
         String clone = mgui.gtm.makeXMLFromComponentOfADiagram(this, _tgc, getMaxIdSelected(), _tgc.getX(), _tgc.getY());
@@ -2381,7 +2442,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
         bringToBack(_tgc);
         mgui.changeMade(this, NEW_COMPONENT);
-    }
+    }*/
 
     public MainGUI getGUI() {
         return mgui;
@@ -2688,7 +2749,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                     || (o instanceof NCEqNode && this.checkNCEqNode((NCEqNode) o, name))
                     || (o instanceof NCSwitchNode && this.checkNCSwitchNode((NCSwitchNode) o, name))
                     || (o instanceof AvatarBDDataType && this.checkAvatarBDDataType((AvatarBDDataType) o, name))
-                    || (o instanceof AvatarBDLibraryFunction && this.checkAvatarBDLibraryFunction((AvatarBDLibraryFunction) o, name));
+                    || (o instanceof AvatarBDLibraryFunction && this.checkAvatarBDLibraryFunction((AvatarBDLibraryFunction) o, name))
+                    //#issue 82
+                    || (o instanceof TMLCPrimitivePort && this.checkCPrimitivePort((TMLCPrimitivePort) o, name));
         }
 
         public boolean checkTClassInterface(TClassInterface o, String name) {
@@ -2870,6 +2933,12 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         public boolean checkAvatarBDLibraryFunction(AvatarBDLibraryFunction o, String name) {
             return false;
         }
+
+        //#issue 82
+        public boolean checkCPrimitivePort(TMLCPrimitivePort o, String name) {
+            return  false;
+        }
+
     }
 
     private boolean isNameUnique(String name, NameChecker checker) {
@@ -2878,6 +2947,41 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                 return false;
         return true;
     }
+
+    //#issue 82
+    private Vector<TMLCPrimitivePort> getPortList () {
+        Vector<TMLCPrimitivePort> portList = new Vector<>();
+        //create list of ports
+        for (TGComponent o : componentList) {
+            if (o instanceof  TGConnector) {
+                if (this.getComponentToWhichBelongs(((TGConnector) o).getTGConnectingPointP1()) instanceof TMLCPrimitivePort) {
+                    TMLCPrimitivePort c1 = (TMLCPrimitivePort) getComponentToWhichBelongs(((TGConnector) o).getTGConnectingPointP1());
+                    portList.add(c1);
+                    // TraceManager.addDev("input port : " + c1.getValue());
+                }
+                if (this.getComponentToWhichBelongs(((TGConnector) o).getTGConnectingPointP2()) instanceof TMLCPrimitivePort) {
+                    TMLCPrimitivePort c2 = (TMLCPrimitivePort) getComponentToWhichBelongs(((TGConnector) o).getTGConnectingPointP2());
+                    portList.add(c2);
+                    // TraceManager.addDev("output port : " + c2.getValue());
+                }
+            }
+        }
+        return portList;
+    }
+
+    //#issue 82
+    private  boolean isPortNameUnique (String name, NameChecker checker) {
+        Vector<TMLCPrimitivePort> portList = getPortList();
+        //TraceManager.addDev("port list size : " + portList.size());
+        for (int i = 0; i < portList.size(); i++) {
+            if (checker.isNameAlreadyTaken(portList.get(i), name)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
 
     private String findGoodName(String name, NameChecker checker) {
         // index >= 0 catch overflows
@@ -2889,6 +2993,19 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
         throw new RuntimeException("Integer Overflow");
     }
+
+    //#issue 82
+    private String findGoodPortName(String name, NameChecker checker) {
+        // index >= 0 catch overflows
+        for (int index = 0; index >= 0; index++) {
+            String tryName = name + index;
+            if (this.isPortNameUnique(tryName, checker))
+                return tryName;
+        }
+
+        throw new RuntimeException("Integer Overflow");
+    }
+
 
     public String findTClassName(String name) {
         return this.findGoodName(name, new NameChecker() {
@@ -2933,6 +3050,16 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                     if (this.isNameAlreadyTaken(o.getInternalTGComponent(i), name))
                         return true;
                 return false;
+            }
+        });
+    }
+
+    //#issue 82
+    public String findTMLCPrimitivePortName(String name) {
+        return this.findGoodPortName(name, new NameChecker() {
+            public boolean checkCPrimitivePort(TMLCPrimitivePort o, String name) {
+                //TraceManager.addDev("in CheckCPrimitivePort : port value " + o.getValue());
+                return  o.getValue().equals(name);
             }
         });
     }
@@ -3254,6 +3381,16 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             }
         });
     }
+
+    //#issue 82;
+    public boolean isAlreadyATMLPrimitivePortName(String name) {
+        return !this.isPortNameUnique(name, new NameChecker() {
+            public boolean checkCPrimitivePort(TMLCPrimitivePort o, String name) {
+                return o.getValue().equals(name);
+            }
+        });
+    }
+
 
     public boolean isAlreadyATOSClassName(String name) {
         return !this.isTOSClassNameUnique(name);

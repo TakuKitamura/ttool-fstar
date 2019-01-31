@@ -156,6 +156,9 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
     protected String conflictMessage;
     protected String dataFlowType = "VOID";
     protected String associatedEvent = "VOID";
+
+    //#issue 82
+    public String oldValue;
     
 
 
@@ -178,7 +181,15 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         removable = true;
         userResizable = false;
         checkConf=false;
-        commName = "comm";
+
+        //#issue 82
+        value = tdp.findTMLCPrimitivePortName("Channel comm_");
+        oldValue = value;
+        commName = getPortNameFromValue(oldValue);
+        typep = getPortTypeFromValue(oldValue);
+        // added until here
+
+        //commName = "comm";
         //value = "MyName";
         makeValue();
         setName("Primitive port");
@@ -1124,6 +1135,30 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
             }
         }
     }
+
+    //#issue 82
+    public String getPortNameFromValue(String myValue) {
+        String s = "";
+        String string[] = myValue.split("\\s");
+        for (int i = 1; i < string.length; i++) {
+            s = s + string[i];
+        }
+        return s;
+    }
+
+    //#issue 82
+    public int getPortTypeFromValue(String myValue) {
+        String typePortName = myValue.split("\\s")[0];
+        int typePort = 0;
+        if (typePortName.equals("Channel"))
+            typePort = 0;
+        if (typePortName.equals("Event"))
+            typePort = 1;
+        if (typePortName.equals("Request"))
+            typePort = 2;
+        return typePort;
+    }
+
 
 
 }

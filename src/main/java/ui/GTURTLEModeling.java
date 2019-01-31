@@ -7716,6 +7716,23 @@ public class GTURTLEModeling {
             tgc.loadExtraParam(elt1.getElementsByTagName("extraparam"), decX, decY, decId);
             //TraceManager.addDev("Extra param ok");
 
+            //#issue 82
+            if ((myValue != null) && (!myValue.equals(null))) {
+                if ((tgc instanceof TMLCPrimitivePort) && (decId > 0)) {
+                    if (tdp.isAlreadyATMLPrimitivePortName(myValue)) {
+                        myValue = tdp.findTMLCPrimitivePortName(myValue + "_");
+                        //TraceManager.addDev("MyValue=" + myValue);
+                        ((TMLCPrimitivePort) tgc).setPortName(((TMLCPrimitivePort) tgc).getPortNameFromValue(myValue));
+                        ((TMLCPrimitivePort) tgc).commName = ((TMLCPrimitivePort) tgc).getPortNameFromValue(myValue);
+                        // ((TMLCPrimitivePort) tgc).loadExtraParam(elt1.getElementsByTagName("extraparam"), decX, decY, decId);
+                        // TraceManager.addDev("getPortType = " + ((TMLCPrimitivePort) tgc).getPortTypeName() + "" +
+                        //        "\ngetPortName = " + ((TMLCPrimitivePort) tgc).getPortName());
+                        tgc.setValue(myValue);
+                    }
+                }
+            }
+
+
             if ((tgc instanceof TCDTObject) && (decId > 0)) {
                 TCDTObject to = (TCDTObject) tgc;
                 //TraceManager.addDev("Setting TObject name to: " + to.getObjectName());
