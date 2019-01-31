@@ -57,7 +57,8 @@ public class TDiagramPanelCloneTest extends AbstractUITest {
     public void testCloneComponent() throws Exception{
         CompareTML compTML = new CompareTML();
         diagramPanel.cloneComponent(tgComponent);
-        mainGUI.modelChecking();
+       // mainGUI.modelChecking();
+        mainGUI.checkModelingSyntax(true);
         mainGUI.generateTMLTxt();
         File f1 = new File(EXPECTED_FILE);
         File f2 = new File("spec.tml");  //generated file after making TML generation
