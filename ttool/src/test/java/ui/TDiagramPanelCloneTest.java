@@ -16,15 +16,12 @@ public class TDiagramPanelCloneTest extends AbstractUITest {
 
     static TDiagramPanel diagramPanel;
     static  TGComponent tgComponent;
-    final static String PATH_TO_DIPLODOCUS = "../../modeling/DIPLODOCUS/";
-    final static String ORIGIN_FILE_NAME = "CloneCompositeComponentTest";
-    final static String GENERATED_FILE = "spec.tml";
-    final static String EXPECTED_FILE = "test/resources/tmltranslator/expected/expected_spec.tml";
+    final static String EXPECTED_FILE = getBaseResourcesDir() + "tmltranslator/expected/expected_spec.tml";
 
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
-        RESOURCES_DIR = PATH_TO_DIPLODOCUS + ORIGIN_FILE_NAME + XML_EXT;
+        RESOURCES_DIR = getBaseResourcesDir() + "/ui/diagram2tml/input/CloneCompositeComponentTest.xml";
     }
 
     public TDiagramPanelCloneTest() {
@@ -63,7 +60,7 @@ public class TDiagramPanelCloneTest extends AbstractUITest {
         mainGUI.modelChecking();
         mainGUI.generateTMLTxt();
         File f1 = new File(EXPECTED_FILE);
-        File f2 = new File(GENERATED_FILE);
+        File f2 = new File("spec.tml");  //generated file after making TML generation
         assertTrue(compTML.compareTML(f1,f2));
     }
 }
