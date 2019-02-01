@@ -8763,7 +8763,38 @@ public class GTURTLEModeling {
             //  tp = smdstop.tgconnectingPointAtIndex(0);
             locMap.put(asme, smdstop);
         }
-        if (asme instanceof AvatarState || asme instanceof AvatarTimerOperator ) {
+
+        if (asme instanceof AvatarSetTimer) {
+            AvatarSMDSetTimer timerSet = new AvatarSMDSetTimer(x, y, smp.getMinX(), smp.getMaxX(), smp.getMinY(), smp.getMaxY(), false, null, smp);
+            tgcomp = timerSet;
+            SMDMap.put(asme, timerSet);
+            smp.addComponent(timerSet, x, y, false, true);
+            //  tp = smdstop.tgconnectingPointAtIndex(0);
+            locMap.put(asme, timerSet);
+        }
+
+        if (asme instanceof AvatarExpireTimer) {
+            AvatarSMDExpireTimer timerExpire = new AvatarSMDExpireTimer(x, y, smp.getMinX(), smp.getMaxX(), smp.getMinY(), smp.getMaxY(), false, null,
+                    smp);
+            tgcomp = timerExpire;
+            SMDMap.put(asme, timerExpire);
+            smp.addComponent(timerExpire, x, y, false, true);
+            //  tp = smdstop.tgconnectingPointAtIndex(0);
+            locMap.put(asme, timerExpire);
+        }
+
+        if (asme instanceof AvatarResetTimer) {
+            AvatarSMDResetTimer timerReset = new AvatarSMDResetTimer(x, y, smp.getMinX(), smp.getMaxX(), smp.getMinY(), smp.getMaxY(), false,
+                    null,
+                    smp);
+            tgcomp = timerReset;
+            SMDMap.put(asme, timerReset);
+            smp.addComponent(timerReset, x, y, false, true);
+            //  tp = smdstop.tgconnectingPointAtIndex(0);
+            locMap.put(asme, timerReset);
+        }
+
+        if (asme instanceof AvatarState ) {
             //check if empty checker state
 			/* if (asme.getName().contains("signalstate_")){
 			//don't add the state, ignore next transition,
