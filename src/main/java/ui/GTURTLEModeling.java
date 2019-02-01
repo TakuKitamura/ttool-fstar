@@ -8763,7 +8763,7 @@ public class GTURTLEModeling {
             //  tp = smdstop.tgconnectingPointAtIndex(0);
             locMap.put(asme, smdstop);
         }
-        if (asme instanceof AvatarState) {
+        if (asme instanceof AvatarState || asme instanceof AvatarTimerOperator ) {
             //check if empty checker state
 			/* if (asme.getName().contains("signalstate_")){
 			//don't add the state, ignore next transition,
@@ -9093,12 +9093,14 @@ public class GTURTLEModeling {
         //Remove the empty check states
 
         AvatarStartState start = asm.getStartState();
+		
         addStates(start, smx, smy, smp, bl, SMDMap, locMap, tranDestMap, tranSourceMap);
         //Add transitions
         for (AvatarTransition t : tranSourceMap.keySet()) {
-            if (tranSourceMap.get(t) == null || tranDestMap.get(t) == null) {
+            if (tranSourceMap.get(t) == null || tranDestMap.get(t) == null || locMap.get(tranDestMap.get(t)) ==null) {
                 continue;
             }
+			
             int x = tranSourceMap.get(t).getX() + tranSourceMap.get(t).getWidth() / 2;
             int y = tranSourceMap.get(t).getY() + tranSourceMap.get(t).getHeight();
 
