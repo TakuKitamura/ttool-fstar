@@ -9128,7 +9128,8 @@ public class GTURTLEModeling {
 
                 return;
             }
-            AvatarSMDConnector SMDcon = new AvatarSMDConnector(p1.getX(), p1.getY(), p1.getX(), p1.getY(), p1.getX(), p1.getY(), true, null, smp, p1, p2, points);
+            AvatarSMDConnector SMDCon = new AvatarSMDConnector(p1.getX(), p1.getY(), p1.getX(), p1.getY(), p1.getX(), p1.getY(), true, null, smp,
+                    p1, p2, points);
             //
             ///
             p1.setFree(false);
@@ -9139,11 +9140,11 @@ public class GTURTLEModeling {
             } else {
                 action = t.getActions().get(0).toString().replaceAll(" ", "");
             }
-            SMDcon.setTransitionInfo(t.getGuard().toString(), action);
+            SMDCon.setTransitionInfo(t.getGuard().toString(), action);
             for (int i = 1; i < t.getActions().size(); i++) {
-                SMDcon.setTransitionInfo("", t.getActions().get(i).toString().replaceAll(" ", ""));
+                SMDCon.setTransitionInfo("", t.getActions().get(i).toString().replaceAll(" ", ""));
             }
-            smp.addComponent(SMDcon, p1.getX(), p1.getY(), false, true);
+            smp.addComponent(SMDCon, p1.getX(), p1.getY(), false, true);
         }
     }
 
