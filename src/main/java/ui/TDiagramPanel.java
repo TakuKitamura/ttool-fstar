@@ -345,15 +345,17 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         final int maxYPrev = maxY;
         maxX = (int) Math.round(zoomChange * maxX);
         maxY = (int) Math.round(zoomChange * maxY);
+     
+        // Issue #174: Also updated the minLimit to be consistent with 
+        final int minLimitPrev = minLimit;
+        minLimit = (int) Math.round(zoomChange * minLimit);
 
-        if (maxXPrev != maxX || maxYPrev != maxY) {
+        if (maxXPrev != maxX || maxYPrev != maxY || minLimitPrev != minLimit ) {
             mgui.changeMade(this, DIAGRAM_RESIZED);
             updateSize();
         }
 
         updateComponentsAfterZoom();
-
-        //TraceManager.addDev("end Setting zoom of " + getName() + " to " + zoom + " maxX=" + maxX + " maxY=" + maxY);
     }
 
     public boolean isDrawingMain() {
@@ -1161,8 +1163,12 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     // Multi-select
     public void setSelectingComponents(int x, int y) {
-        x = Math.min(Math.max((int) (Math.floor(minLimit * zoom)), x), (int) (Math.ceil(maxX * zoom)));
-        y = Math.min(Math.max((int) (Math.floor(minLimit * zoom)), y), (int) (Math.ceil(maxY * zoom)));
+    	
+    	// Issue #174: Diagram min and max values are scaled as the zoom is computed so should not be scaled again
+        x = Math.min( Math.max( minLimit, x ), maxX );
+        y = Math.min( Math.max( minLimit, y ), maxY );
+//        x = Math.min(Math.max((int) (Math.floor(minLimit * zoom)), x), (int) (Math.ceil(maxX * zoom)));
+//        y = Math.min(Math.max((int) (Math.floor(minLimit * zoom)), y), (int) (Math.ceil(maxY * zoom)));
         //        x = Math.min(Math.max(minLimit*zoom, x), maxX*zoom);
         //y = Math.min(Math.max(minLimit*zoom, y), maxY*zoom);
         initSelectX = x;
@@ -2387,45 +2393,46 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         return mgui;
     }
 
-
-    public int getRawMinX() {
-        return minLimit;
-    }
-
-    public int getRawMaxX() {
-        return maxX;
-    }
-
-    public int getRawMinY() {
-        return minLimit;
-    }
-
-    public int getRawMaxY() {
-        return maxY;
-    }
+//	Issue #174: The size of components saved in the XML file are the scaled one so to be consistent, also store the scaled diagram dimensions
+//    public int getRawMinX() {
+//        return minLimit;
+//    }
+//
+//    public int getRawMaxX() {
+//        return maxX;
+//    }
+//
+//    public int getRawMinY() {
+//        return minLimit;
+//    }
+//
+//    public int getRawMaxY() {
+//        return maxY;
+//    }
 
     public int getMaxX() {
-        //return maxX;
-        return (int) Math.ceil(maxX * zoom);
+        return maxX; // Issue #174: The maxX is updated after each zoom so no need to rescale it with the zoom factor
+        //return (int) Math.ceil(maxX * zoom);
     }
 
     public int getMinX() {
-        return (int) Math.floor(minLimit * zoom);
+    	return minLimit; // Issue #174: The minLimit is updated after each zoom so no need to rescale it with the zoom factor
+        //return (int) Math.floor(minLimit * zoom);
     }
 
     public int getMinY() {
-        return (int) Math.floor(minLimit * zoom);
+    	return minLimit; // Issue #174: The minLimit is updated after each zoom so no need to rescale it with the zoom factor
+//        return (int) Math.floor(minLimit * zoom);
         //return minLimit*zoom;
     }
 
     public int getMaxY() {
-        //return maxY;
-        return (int) Math.ceil(maxY * zoom);
+        return maxY; // Issue #174: The maxY is updated after each zoom so no need to rescale it with the zoom factor
+        //return (int) Math.ceil(maxY * zoom);
     }
 
     public void setMaxX(int x) {
         maxX = x;
-
     }
 
     public void setMinX(int x) {
@@ -2468,10 +2475,11 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public String sizeParam() {
-        String s = " minX=\"" + getRawMinX() + "\"";
-        s += " maxX=\"" + getRawMaxX() + "\"";
-        s += " minY=\"" + getRawMinY() + "\"";
-        s += " maxY=\"" + getRawMaxY() + "\"";
+    	// Issue #174: The size of components saved in the XML file are the scaled one so to be consistent, also store the scaled diagram dimensions
+        String s = " minX=\"" + getMinX()/*getRawMinX()*/ + "\"";
+        s += " maxX=\"" + getMaxX() /*getRawMaxX()*/ + "\"";
+        s += " minY=\"" + getMinY() /*getRawMinY()*/ + "\"";
+        s += " maxY=\"" + getMaxY() /*getRawMaxY()*/ + "\"";
         return s;
     }
 

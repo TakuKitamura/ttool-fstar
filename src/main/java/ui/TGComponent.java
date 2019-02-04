@@ -2595,18 +2595,24 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
         // if it has a father, check that it is in its authorized area first
         if (father != null && drawingZoneRelativeToFather) {
             targetX = Math.min(maxX + father.getX(), Math.max(minX + father.getX(), targetX));
-        } else {
-            if (x > targetX)
-                targetX = Math.max(Math.max(targetX, minX), Math.min(targetX, maxX - width));
-            else
-                targetX = Math.min(Math.max(targetX, minX), Math.min(targetX, maxX - width));
+        }
+        else {
+        	
+        	// Issue #174: Use the diagram min and max sizes when the component is not contained
+        	final int minVal = Math.max( targetX, tdp.getMinX() );
+        	final int maxVal = Math.min( targetX, tdp.getMaxX() - width );
+        	targetX = x > targetX ? Math.max( minVal, maxVal ) : Math.min( minVal, maxVal );
+//            if (x > targetX)
+//                targetX = Math.max(Math.max(targetX, minX), Math.min(targetX, maxX - width));
+//            else
+//                targetX = Math.min(Math.max(targetX, minX), Math.min(targetX, maxX - width));
         }
 
         // Issue #46: Added the else.
         // When we are moving a contained component, we should not check for the max of the diagram. This should be done for the father only
         // Issue #14: Do not check the diagram size
         // The problem is that this method is applied after a zoom and readjusts the targeted coordinate if it is outside the diagram area. 
-        // However the check involves getting the size of the component, but taking into account the size of its childs (getCurrentMaxX) that 
+        // However the check involves getting the size of the component, but taking into account the size of its children (getCurrentMaxX) that 
         // have not been zoomed yet therefore leading to an erroneous calculation of size. Disable this verification for now.
 //        else {
 //            int currentWidthPos = Math.abs(getCurrentMaxX() - x);
@@ -2621,11 +2627,17 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
         // if it has a father, check that it is in its authorized area first
         if ((father != null) && (drawingZoneRelativeToFather)) {
             targetY = Math.min(maxY + father.getY(), Math.max(minY + father.getY(), targetY));
-        } else {
-            if (y > targetY)
-                targetY = Math.max(Math.max(targetY, minY), Math.min(targetY, maxY - height));
-            else
-                targetY = Math.min(Math.max(targetY, minY), Math.min(targetY, maxY - height));
+        }
+        else {
+        	
+        	// Issue #174: Use the diagram min and max sizes when the component is not contained
+        	final int minVal = Math.max( targetY, tdp.getMinY() );
+        	final int maxVal = Math.min( targetY, tdp.getMaxY() - height );
+        	targetY = y > targetY ? Math.max( minVal, maxVal ) : Math.min( minVal, maxVal );
+//            if (y > targetY)
+//                targetY = Math.max(Math.max(targetY, minY), Math.min(targetY, maxY - height));
+//            else
+//                targetY = Math.min(Math.max(targetY, minY), Math.min(targetY, maxY - height));
         }
         // Issues #46 and #14: See comment in verifyMoveCdX
 //        else {
