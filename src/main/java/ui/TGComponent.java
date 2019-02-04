@@ -3484,4 +3484,16 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
    public boolean nameUsed(String s) {
     	return this.tdp.tp.refNameUsed(s);
    }
+
+    /* #issue 82
+     * added by Minh Hiep
+     */
+    public boolean isInHierarchy(TGComponent mainTgc) {
+        TGComponent tgctmp = getFather();
+        if (tgctmp == null) return tgctmp == mainTgc;
+        while(tgctmp != null && tgctmp != mainTgc) {
+            tgctmp = tgctmp.getFather();
+        }
+        return tgctmp == mainTgc;
+    }
 }
