@@ -157,10 +157,6 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
     protected String dataFlowType = "VOID";
     protected String associatedEvent = "VOID";
 
-    //#issue 82
-    public String oldValue;
-    
-
 
     public int verification;
     
@@ -183,12 +179,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         checkConf=false;
 
         //#issue 82
-        value = tdp.findTMLCPrimitivePortName("Channel comm_");
-        oldValue = value;
-        commName = getPortNameFromValue(oldValue);
-        typep = getPortTypeFromValue(oldValue);
-        // added until here
-
+        commName = tdp.findTMLCPrimitivePortName("comm_");
         //commName = "comm";
         //value = "MyName";
         makeValue();

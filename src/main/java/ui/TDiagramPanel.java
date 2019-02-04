@@ -2425,24 +2425,6 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         repaint();
     }
 
-    /*
-    public void cloneComponent(TGComponent _tgc) {
-        // copy
-        String clone = mgui.gtm.makeXMLFromComponentOfADiagram(this, _tgc, getMaxIdSelected(), _tgc.getX(), _tgc.getY());
-
-        //TraceManager.addDev("clone=\n"+ clone);
-
-        // paste
-
-        try {
-            mgui.gtm.copyModelingFromXML(this, clone, _tgc.getX() + 50, _tgc.getY() + 25);
-        } catch (MalformedModelingException mme) {
-            TraceManager.addDev("Clone Exception: " + mme.getMessage());
-            JOptionPane.showMessageDialog(mgui.getFrame(), "Clone creation failed", "Exception", JOptionPane.INFORMATION_MESSAGE);
-        }
-        bringToBack(_tgc);
-        mgui.changeMade(this, NEW_COMPONENT);
-    }*/
 
     public MainGUI getGUI() {
         return mgui;
