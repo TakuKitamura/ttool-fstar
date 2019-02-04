@@ -2365,18 +2365,6 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
     }
 
-    /* #issue 82
-     * added by Minh Hiep
-     */
-    public boolean checkInHierarchy(TGComponent mainTgc, TGComponent checkedCom) {
-        TGComponent tgctmp = checkedCom.getFather();
-        if (tgctmp == null) return checkedCom == mainTgc;
-        while(tgctmp != null && tgctmp != mainTgc) {
-            tgctmp = tgctmp.getFather();
-        }
-        return tgctmp == mainTgc;
-    }
-
     /*
      * #issue 82
      * new cloneComponent added by Minh Hiep
@@ -2395,8 +2383,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             if(tgc instanceof TGConnector) {
                 c1 = getComponentToWhichBelongs(((TGConnector) tgc).getTGConnectingPointP1());
                 c2 = getComponentToWhichBelongs(((TGConnector) tgc).getTGConnectingPointP2());
-                b1 = checkInHierarchy(_tgc,c1);
-                b2 = checkInHierarchy(_tgc,c2);
+                b1 = c1.isInHierarchy(_tgc);
+                b2 = c2.isInHierarchy(_tgc);
                 if(b1 && b2){
                     tgc.select(true);
                     connectorList.add(tgc);
