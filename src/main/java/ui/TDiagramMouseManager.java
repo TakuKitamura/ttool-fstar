@@ -369,7 +369,7 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
             tgc = tdp.componentPointed();
 
             //set text of seach field on menubar
-            tdp.mgui.getMainBar().search.setText(tgc.getValue());
+            tdp.mgui.getMainBar().setSearchText(tgc.getValue());
 
             if ( null == tdp.mgui.searchBox || ! tdp.mgui.searchBox.isShowing()){
                 selectedMultiComponents.add(tgc.getValue());
