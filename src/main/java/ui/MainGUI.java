@@ -638,7 +638,6 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         // Issue #81: For tests when gtm could be null
         if ( 	gtm != null && 
         		type != TDiagramPanel.SELECT_COMPONENT ) { // Issue #105 
-        	TraceManager.addDev( "Saving current state for undo..." );
         	gtm.saveOperation(p);
         }
         
@@ -3397,7 +3396,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     //@author: Huy TRUONG
     //open a new External Search Dialog
     public void showExternalSearch() {
-        String textSearchField = mainBar.search.getText();
+        String textSearchField = mainBar.getSearchText();
         List<String> listSearch = new ArrayList<String>();
 
         if (null == this.searchBox) {
@@ -3424,7 +3423,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     }
 
     public void doInternalSearch() {
-        search(mainBar.search.getText());
+        search(mainBar.getSearchText());
     }
 
     public void aboutVersion() {
