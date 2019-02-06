@@ -213,6 +213,43 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
         return false;
     }
 
+    /* method created for checking valid port name
+     * author : minh hiep
+     * */
+    public boolean namePrimitivePortInUse(TMLCPrimitivePort tmlcpp, String newName) {
+        List<TMLCPrimitiveComponent> pcompList = getPrimitiveComponentList();
+        List<TMLCPrimitivePort> originPPorts = new ArrayList<>();
+        List<TMLCPrimitivePort> destinationPPorts = new ArrayList<>();
+
+        for (TMLCPrimitiveComponent tmlcpc : pcompList) {
+            originPPorts.addAll(tmlcpc.getAllChannelsOriginPorts());
+            originPPorts.addAll(tmlcpc.getAllEventsOriginPorts());
+            originPPorts.addAll(tmlcpc.getAllRequestsOriginPorts());
+        }
+
+        for (TMLCPrimitiveComponent tmlcpc : pcompList) {
+            destinationPPorts.addAll(tmlcpc.getAllChannelsDestinationPorts());
+            destinationPPorts.addAll(tmlcpc.getAllEventsDestinationPorts());
+            destinationPPorts.addAll(tmlcpc.getAllRequestsDestinationPorts());
+        }
+
+        if (tmlcpp.isOrigin) {
+            for (TMLCPrimitivePort op : originPPorts) {
+                if (op.getPortName().equalsIgnoreCase(newName)) {
+                    return true;
+                }
+            }
+        }else {
+            for (TMLCPrimitivePort dp : destinationPPorts) {
+                if (dp.getPortName().equalsIgnoreCase(newName)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
     public List<TMLCRecordComponent> getRecordComponentList() {
         List<TMLCRecordComponent> ll = new LinkedList<TMLCRecordComponent>();
         TGComponent tgc;

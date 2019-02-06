@@ -610,6 +610,9 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         TraceManager.addDev( "The Data flow type is: " + dataFlowType );
         TraceManager.addDev( "The Associated event is: " + associatedEvent );
 
+        String oldName = getPortName();
+        //TraceManager.addDev("old port name : " + oldName);
+
         if (jda.hasNewData()) {
             try {
                 maxSamples = Integer.decode(jda.getMaxSamples()).intValue();
@@ -622,8 +625,39 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
                 isOrigin = jda.isOrigin();
                 isFinite = jda.isFinite();
                 isBlocking = jda.isBlocking();
-                setPortName(jda.getParamName());
-                commName = jda.getParamName();
+
+                /* is port name valid ?
+                 * author : minh hiep
+                 */
+                String s = jda.getParamName();
+                //TraceManager.addDev("port name : " + s);
+
+                if ((s != null) && (s.length() > 0)) {
+                    // Check whether this name is already in use, or not
+
+                    if (!TAttribute.isAValidId(s, false, true, false)) {
+                        JOptionPane.showMessageDialog(frame,
+                                "Could not change the name of the port: the new name is not a valid name",
+                                "Error",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        return false;
+                    }
+
+                    if (oldName.compareTo(s) != 0) {
+                        if (((TMLComponentTaskDiagramPanel) (tdp)).namePrimitivePortInUse(this, s)) {
+                            JOptionPane.showMessageDialog(frame,
+                                    "Error: the name is already in use",
+                                    "Name modification",
+                                    JOptionPane.ERROR_MESSAGE);
+                            return false;
+                        }
+                    }
+                    setPortName(s);
+                    commName = s;
+                }
+
+                //setPortName(jda.getParamName());
+                //commName = jda.getParamName();
                 isLossy = jda.isLossy();
                 lossPercentage = jda.getLossPercentage();
                 maxNbOfLoss = jda.getMaxNbOfLoss();
