@@ -61,7 +61,7 @@ public class TMLTask extends TMLElement {
     private Set<TMLChannel> readTMLChannelsList;
     private Set<TMLChannel> writeTMLChannelsList;
     private Set<TMLEvent> eventsList;
-    private int operationType;
+    private String operationType;
     private boolean isAttacker;
 
     public TMLTask(String name, Object referenceToClass, Object referenceToActivityDiagram) {
@@ -374,11 +374,11 @@ public class TMLTask extends TMLElement {
         return new ArrayList<TMLEvent>(eventsList);
     }
 
-    public void addOperationType(int _operationType) {
+    public void addOperationType(String _operationType) {
         operationType = _operationType;
     }
 
-    public int getOperationType() {
+    public String getOperationType() {
         return operationType;
     }
 
