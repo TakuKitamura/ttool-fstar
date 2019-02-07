@@ -396,7 +396,7 @@ public class TMLSyntaxChecking {
                 TMLCPrimitiveComponent tmlcpc = (TMLCPrimitiveComponent) t.getReferenceObject();
                 for (TMLCPrimitivePort tmlcpp : tmlcpc.getAllInternalPrimitivePorts()) {
                     String s = tmlcpp.getPortName();
-                    if(!TAttribute.isAValidId(s, false, true, false)) {
+                    if(!TAttribute.isAValidId(s, false, true, false,true)) {
                         addError(t, null, WRONG_VARIABLE_IDENTIFIER + ": invalid port name (" + s + ")", TMLError.ERROR_STRUCTURE);
                     }
                 }
