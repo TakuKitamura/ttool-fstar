@@ -45,6 +45,9 @@ import compiler.tmlparser.TMLExprParser;
 import compiler.tmlparser.TokenMgrError;
 import myutil.Conversion;
 import myutil.TraceManager;
+import ui.TAttribute;
+import ui.tmlcompd.TMLCPrimitiveComponent;
+import ui.tmlcompd.TMLCPrimitivePort;
 
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -384,6 +387,18 @@ public class TMLSyntaxChecking {
             for (TMLAttribute attri : t.getAttributes()) {
                 if (!TMLTextSpecification.isAValidId(attri.getName())) {
                     addError(t, null, WRONG_VARIABLE_IDENTIFIER + ": invalid identifier", TMLError.ERROR_STRUCTURE);
+                }
+            }
+
+            // Checking valid port names
+            // Minh Hiep
+            if (t.getReferenceObject() instanceof TMLCPrimitiveComponent) {
+                TMLCPrimitiveComponent tmlcpc = (TMLCPrimitiveComponent) t.getReferenceObject();
+                for (TMLCPrimitivePort tmlcpp : tmlcpc.getAllInternalPrimitivePorts()) {
+                    String s = tmlcpp.getPortName();
+                    if(!TAttribute.isAValidId(s, false, true, false)) {
+                        addError(t, null, WRONG_VARIABLE_IDENTIFIER + ": invalid port name (" + s + ")", TMLError.ERROR_STRUCTURE);
+                    }
                 }
             }
 
