@@ -1,0 +1,1 @@
+SRCS = generated_src/main.c generated_src/MainBlock.c 
