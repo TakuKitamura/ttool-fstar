@@ -61,7 +61,8 @@ public class TMLTask extends TMLElement {
     private Set<TMLChannel> readTMLChannelsList;
     private Set<TMLChannel> writeTMLChannelsList;
     private Set<TMLEvent> eventsList;
-    private String operationType;
+    private int operationType;
+    private String operation;
     private boolean isAttacker;
 
     public TMLTask(String name, Object referenceToClass, Object referenceToActivityDiagram) {
@@ -374,12 +375,20 @@ public class TMLTask extends TMLElement {
         return new ArrayList<TMLEvent>(eventsList);
     }
 
-    public void addOperationType(String _operationType) {
+    public void addOperationType(int _operationType) {
         operationType = _operationType;
     }
 
-    public String getOperationType() {
+    public int getOperationType() {
         return operationType;
+    }
+
+    public void addOperation(String _operation) {
+        operation = _operation;
+    }
+
+    public String getOperation() {
+        return operation;
     }
 
     public void removeEmptyInfiniteLoop() {

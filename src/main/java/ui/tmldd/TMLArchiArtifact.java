@@ -347,6 +347,10 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
         return "Priority = " + priority;
     }
 
+    public String getOperation() {
+        return operation;
+    }
+
     public int getOperationType()       {
 
         if( fatherArchUnitMECType instanceof FepMEC )   {

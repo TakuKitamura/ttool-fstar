@@ -3858,6 +3858,7 @@ public class GTMLModeling {
                     s = artifact.getReferenceTaskName();
                     ArchUnitMEC mec = artifact.getArchUnitMEC();
                     int operationType = artifact.getOperationType();
+                    String operation = artifact.getOperation();
                     //TraceManager.addDev("1) Trying to get task named:" + s);
                     s = s.replaceAll("\\s", "");
                     //TraceManager.addDev("2) Trying to get task named:" + s);
@@ -3865,9 +3866,10 @@ public class GTMLModeling {
                     //TraceManager.addDev("3) Trying to get task named:" + s);
                     task = tmlm.getTMLTaskByName(s);
                     if (task != null) {
-                        if (operationType != -1) {
+                        if (operationType !=  -1) {
                             task.addOperationType(operationType);
                         }
+                        task.addOperation(operation);
                         node.addMECToHwExecutionNode(mec);
                         map.addTaskToHwExecutionNode(task, (HwExecutionNode) node);
                     } else {
