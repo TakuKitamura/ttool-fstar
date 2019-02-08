@@ -20,7 +20,8 @@ public class TMLCPrimitivePortTest extends AbstractUITest {
 
     static TMLCPrimitiveComponent primitiveComponent1;
     static TMLCPrimitiveComponent primitiveComponent2;
-    final String VALID_NAME     = "valid_name";
+    final String VALID_NAME_1    = "valid_name";
+    final String VALID_NAME_2   = "valid_name_1, valid_name_2, valid_name_3";
     final String INVALID_NAME_1   = "1_name"; //name begins by number
     final String INVALID_NAME_2   = "name 2"; // name with whitespace
     final String INVALID_NAME_3  = "clock"; //one of UPPAAL keywords
@@ -30,6 +31,9 @@ public class TMLCPrimitivePortTest extends AbstractUITest {
     //final String INVALID_NAME_7  = "exit"; //one of RTLOTOS keywords
     final String INVALID_NAME_6   = "Natural"; //one of String type
     final String INVALID_NAME_7   = "ENDTASK"; // one of TMLkeywords
+    final String INVALID_NAME_8   = "name1, 2name, name3"; //fault at "2name"
+    final String INVALID_NAME_9   = "name1, name2, name3,"; //have not name after the comma
+
     final String CHANNEL_IN = "channel_in";
     final String CHANNEL_OUT = "channel_out";
     final String EVENT_IN = "event_in";
@@ -134,14 +138,17 @@ public class TMLCPrimitivePortTest extends AbstractUITest {
 
     @Test
     public void testInAValidName()throws  Exception {
-        assertTrue(TAttribute.isAValidId(VALID_NAME,false,true, false));
-        assertFalse(TAttribute.isAValidId(INVALID_NAME_1,false,true, false));
-        assertFalse(TAttribute.isAValidId(INVALID_NAME_2,false,true, false));
-        assertFalse(TAttribute.isAValidId(INVALID_NAME_3,false,true, false));
-        assertFalse(TAttribute.isAValidId(INVALID_NAME_4,false,true, false));
-        assertFalse(TAttribute.isAValidId(INVALID_NAME_5,false,true, false));
-        assertFalse(TAttribute.isAValidId(INVALID_NAME_6,false,true, false));
-        assertFalse(TAttribute.isAValidId(INVALID_NAME_7,false,true, false,true));
+        assertTrue(TAttribute.isAValidPortName(VALID_NAME_1,false,true, false,false));
+        assertTrue(TAttribute.isAValidPortName(VALID_NAME_2,false,true, false,false));
+        assertFalse(TAttribute.isAValidPortName(INVALID_NAME_1,false,true, false,false));
+        assertFalse(TAttribute.isAValidPortName(INVALID_NAME_2,false,true, false,false));
+        assertFalse(TAttribute.isAValidPortName(INVALID_NAME_3,false,true, false,false));
+        assertFalse(TAttribute.isAValidPortName(INVALID_NAME_4,false,true, false,false));
+        assertFalse(TAttribute.isAValidPortName(INVALID_NAME_5,false,true, false,false));
+        assertFalse(TAttribute.isAValidPortName(INVALID_NAME_6,false,true, false,false));
+        assertFalse(TAttribute.isAValidPortName(INVALID_NAME_7,false,true, false,true));
+        assertFalse(TAttribute.isAValidPortName(INVALID_NAME_8,false,true, false,false));
+        assertFalse(TAttribute.isAValidPortName(INVALID_NAME_9,false,true, false,false));
 
     }
 
