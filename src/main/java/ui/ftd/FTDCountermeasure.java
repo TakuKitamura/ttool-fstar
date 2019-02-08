@@ -375,6 +375,12 @@ public class FTDCountermeasure extends TGCScalableWithInternalComponent implemen
         makeValue();
     }
 
+    public void wasUnswallowed() {
+        setFather(null);
+        TDiagramPanel tdp = getTDiagramPanel();
+        setCdRectangle(tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY());
+    }
+
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
 

@@ -389,4 +389,10 @@ public class ATDCountermeasure extends TGCScalableWithInternalComponent implemen
         return new String(sb);
     }
 
+    public void wasUnswallowed() {
+        setFather(null);
+        TDiagramPanel tdp = getTDiagramPanel();
+        setCdRectangle(tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY());
+    }
+
 }
