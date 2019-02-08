@@ -226,6 +226,56 @@ public class TAttribute {
         return (b1 && b2 && b3 && b4 && b5 && b6 && b7);
     }
 
+    //checking port name
+    //author : minh hiep
+    public static boolean isAValidPortName(String id, boolean checkKeyword, boolean checkUPPAALKeyword, boolean checkJavaKeyword,
+                                      boolean checkTMLKeyword) {
+        // test whether _id is a word
+
+        if ((id == null) || (id.length() < 1)) {
+            return false;
+        }
+
+        String lowerid = id.toLowerCase();
+        boolean b1, b2, b3, b4, b5, b6, b7;
+        boolean b8 = true;
+
+        String [] splitName = id.split("\\s*,\\s*");
+        for (int i = 0; i < splitName.length; i ++) {
+            if (!splitName[i].substring(0, 1).matches("[a-zA-Z]")) {
+                b8 = false;
+            }
+        }
+
+        b1 = (id.substring(0, 1)).matches("[a-zA-Z]");
+        b2 = id.matches("\\w*|(\\w*\\s*,\\s*\\w+)*");
+        if (checkKeyword) {
+            b3 = !RTLOTOSKeyword.isAKeyword(lowerid);
+        } else {
+            b3 = true;
+        }
+        if (checkUPPAALKeyword) {
+            b7 = !UPPAALKeyword.isAKeyword(lowerid);
+        } else {
+            b7 = true;
+        }
+
+        if (checkJavaKeyword) {
+            b5 = !JKeyword.isAKeyword(lowerid);
+        } else {
+            b5 = true;
+        }
+
+        b4 = !((lowerid.equals(getStringType(0).toLowerCase())) || (lowerid.equals(getStringType(1).toLowerCase())) || (lowerid.equals(getStringType(2).toLowerCase())) || (lowerid.equals(getStringType(3).toLowerCase())) || (lowerid.equals(getStringType(4).toLowerCase())));
+
+        if (checkTMLKeyword) {
+            b6 = TMLTextSpecification.checkKeywords(lowerid);
+        } else {
+            b6 = true;
+        }
+
+        return (b1 && b2 && b3 && b4 && b5 && b6 && b7 && b8);
+    }
     public static boolean isAValidInitialValue(int type, String value) {
         //boolean b;
         int val;
