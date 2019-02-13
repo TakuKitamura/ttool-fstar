@@ -3,6 +3,8 @@ package ui.tmlcompd;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import tmltranslator.TMLSyntaxChecking;
+import tmltranslator.TMLTextSpecification;
 import ui.*;
 import java.io.File;
 
@@ -27,12 +29,11 @@ public class TMLCPrimitivePortTest extends AbstractUITest {
     final String INVALID_NAME_3  = "clock"; //one of UPPAAL keywords
     final String INVALID_NAME_4  = "name?"; //name with specialized characters
     final String INVALID_NAME_5 = "";
-    //final String INVALID_NAME_6   = "protected"; //one of java keywords
-    //final String INVALID_NAME_7  = "exit"; //one of RTLOTOS keywords
-    final String INVALID_NAME_6   = "Natural"; //one of String type
-    final String INVALID_NAME_7   = "ENDTASK"; // one of TMLkeywords
-    final String INVALID_NAME_8   = "name1, 2name, name3"; //fault at "2name"
-    final String INVALID_NAME_9   = "name1, name2, name3,"; //have not name after the comma
+    final String INVALID_NAME_6   = "protected"; //one of java keywords
+    final String INVALID_NAME_7  = "exit"; //one of RTLOTOS keywords
+    final String INVALID_NAME_8   = "Natural"; //one of String type
+    final String INVALID_NAME_9   = "ENDTASK"; // one of TMLkeywords
+    final String INVALID_NAME_10   = "name1, 2name, name3"; //fault at "2name"
 
     final String CHANNEL_IN = "channel_in";
     final String CHANNEL_OUT = "channel_out";
@@ -137,19 +138,28 @@ public class TMLCPrimitivePortTest extends AbstractUITest {
     }
 
     @Test
-    public void testInAValidName()throws  Exception {
-        assertTrue(TAttribute.isAValidPortName(VALID_NAME_1,false,true, false,false));
-        assertTrue(TAttribute.isAValidPortName(VALID_NAME_2,false,true, false,false));
-        assertFalse(TAttribute.isAValidPortName(INVALID_NAME_1,false,true, false,false));
-        assertFalse(TAttribute.isAValidPortName(INVALID_NAME_2,false,true, false,false));
-        assertFalse(TAttribute.isAValidPortName(INVALID_NAME_3,false,true, false,false));
-        assertFalse(TAttribute.isAValidPortName(INVALID_NAME_4,false,true, false,false));
-        assertFalse(TAttribute.isAValidPortName(INVALID_NAME_5,false,true, false,false));
-        assertFalse(TAttribute.isAValidPortName(INVALID_NAME_6,false,true, false,false));
-        assertFalse(TAttribute.isAValidPortName(INVALID_NAME_7,false,true, false,true));
-        assertFalse(TAttribute.isAValidPortName(INVALID_NAME_8,false,true, false,false));
-        assertFalse(TAttribute.isAValidPortName(INVALID_NAME_9,false,true, false,false));
-
+    public void testIsAValidName()throws  Exception {
+        assertTrue("valid name",TAttribute.isAValidPortName(VALID_NAME_1,true,true, true,true));
+        assertTrue("valid name",TAttribute.isAValidPortName(VALID_NAME_2,true,true, true,true));
+        assertFalse("name begins by number",TAttribute.isAValidPortName(INVALID_NAME_1,true,true, true,true));
+        assertFalse("name with whitespace",TAttribute.isAValidPortName(INVALID_NAME_2,true,true, true,true));
+        assertFalse("UPPAAL keyword",TAttribute.isAValidPortName(INVALID_NAME_3,false,true, false,false));
+        assertFalse("name with specialized character",TAttribute.isAValidPortName(INVALID_NAME_4,true,true, true,true));
+        assertFalse("empty name",TAttribute.isAValidPortName(INVALID_NAME_5,true,true, true,true));
+        assertFalse("java keyword",TAttribute.isAValidPortName(INVALID_NAME_6,false,false, true,false));
+        assertFalse("RTLOTOS keyword",TAttribute.isAValidPortName(INVALID_NAME_7,true,false, false,false));
+        assertFalse("String type",TAttribute.isAValidPortName(INVALID_NAME_8,true,true, true,true));
+        assertFalse("TML keyword",TAttribute.isAValidPortName(INVALID_NAME_9,false,false, false,true));
+        assertFalse("fault at one of the port names",TAttribute.isAValidPortName(INVALID_NAME_10,true,true, true,true));
     }
 
+    @Test
+    public void testIsAvalidId() throws Exception {
+        assertFalse("name begins by number",TMLTextSpecification.isAValidId(INVALID_NAME_1));
+        assertFalse("name with whitespace",TMLTextSpecification.isAValidId(INVALID_NAME_2));
+        assertFalse("name with specialized character",TMLTextSpecification.isAValidId(INVALID_NAME_4));
+        assertFalse("empty name",TMLTextSpecification.isAValidId(INVALID_NAME_5));
+        assertFalse("TML keyword",TMLTextSpecification.isAValidId(INVALID_NAME_9));
+        assertTrue("valid name",TMLTextSpecification.isAValidId(VALID_NAME_1));
+    }
 }
