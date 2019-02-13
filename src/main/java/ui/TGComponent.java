@@ -3489,8 +3489,12 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
      * added by Minh Hiep
      */
     public boolean isInHierarchy(TGComponent mainTgc) {
-        TGComponent tgctmp = getFather();
-        if (tgctmp == null) return tgctmp == mainTgc;
+        TGComponent tgctmp;
+        if (father == null) {
+            tgctmp = this;
+        } else {
+            tgctmp = father;
+        }
         while(tgctmp != null && tgctmp != mainTgc) {
             tgctmp = tgctmp.getFather();
         }
