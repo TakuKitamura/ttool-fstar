@@ -853,13 +853,9 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
                                     // Check whether this name is already in use, or not
 
                                     if (!TAttribute.isAValidPortName(s, false, true, false,false)) {
-                                        JOptionPane.showMessageDialog(null,
-                                                "the port name (" + s + ") is not a valid name",
-                                                "Modeling could not be correctly loaded",
-                                                JOptionPane.INFORMATION_MESSAGE);
-                                        setPortName(s);
-                                        makeValue();
+                                        throw new MalformedModelingException();
                                     }
+
                                     commName = s;
                                 }
                                 try {
