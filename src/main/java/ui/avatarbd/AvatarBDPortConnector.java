@@ -66,11 +66,11 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  * @version 1.0 06/04/2010
  */
-public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoints implements ScalableTGComponent {
+public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoints /* Issue #31 implements ScalableTGComponent*/ {
     //protected int arrowLength = 10;
     //protected int widthValue, heightValue, maxWidthValue, h;
     protected int c = 10; //square length
-    protected double oldScaleFactor;
+    //protected double oldScaleFactor;
     protected int fontSize = 10;
     protected int decY = 12;
     protected int decX = 6;
@@ -88,14 +88,14 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
     protected boolean isBroadcast = false;
     protected boolean isLossy = false;
 
-
     public AvatarBDPortConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
         super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+        
         myImageIcon = IconManager.imgic202;
         value = "";
         editable = true;
 
-        oldScaleFactor = tdp.getZoom();
+       // oldScaleFactor = tdp.getZoom();
         inSignalsAtOrigin = new LinkedList<String>();
         inSignalsAtDestination = new LinkedList<String>();
         outSignalsAtOrigin = new LinkedList<String>();
@@ -522,30 +522,30 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
     public int getType() {
         return TGComponentManager.AVATARBD_PORT_CONNECTOR;
     }
-
-    @Override
-    public void rescale(double scaleFactor) {
-        //
-        int xx, yy;
-
-        for (int i = 0; i < nbInternalTGComponent; i++) {
-            xx = tgcomponent[i].getX();
-            yy = tgcomponent[i].getY();
-            //
-            tgcomponent[i].dx = (tgcomponent[i].dx + xx) / oldScaleFactor * scaleFactor;
-            tgcomponent[i].dy = (tgcomponent[i].dy + yy) / oldScaleFactor * scaleFactor;
-            xx = (int) (tgcomponent[i].dx);
-            tgcomponent[i].dx = tgcomponent[i].dx - xx;
-            yy = (int) (tgcomponent[i].dy);
-            tgcomponent[i].dy = tgcomponent[i].dy - yy;
-
-            tgcomponent[i].setCd(xx, yy);
-
-            //
-        }
-
-        oldScaleFactor = scaleFactor;
-    }
+//
+//    @Override Issue #31 Now managed in upper class 
+//    public void rescale(double scaleFactor) {
+//        //
+//        int xx, yy;
+//
+//        for (int i = 0; i < nbInternalTGComponent; i++) {
+//            xx = tgcomponent[i].getX();
+//            yy = tgcomponent[i].getY();
+//            //
+//            tgcomponent[i].dx = (tgcomponent[i].dx + xx) / oldScaleFactor * scaleFactor;
+//            tgcomponent[i].dy = (tgcomponent[i].dy + yy) / oldScaleFactor * scaleFactor;
+//            xx = (int) (tgcomponent[i].dx);
+//            tgcomponent[i].dx = tgcomponent[i].dx - xx;
+//            yy = (int) (tgcomponent[i].dy);
+//            tgcomponent[i].dy = tgcomponent[i].dy - yy;
+//
+//            tgcomponent[i].setCd(xx, yy);
+//
+//            //
+//        }
+//
+//        oldScaleFactor = scaleFactor;
+//    }
 
     public List<String> getListOfSignalsOrigin() {
         List<String> list = new LinkedList<String>();

@@ -95,9 +95,9 @@ public class TMLActivityDiagramToolBar extends TToolBar {
 		mgui.actions[TGUIAction.ACT_TOGGLE_DIPLO_ID].setEnabled(b);
 		
 		// Issue #31
-		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(true);
-		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(true);
-		mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(true);
+		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled( b );
+		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled( b );
+		mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled( b );
 //		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
 //		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
 //		mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);

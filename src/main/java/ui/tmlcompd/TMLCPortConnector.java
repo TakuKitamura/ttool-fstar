@@ -36,11 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmlcompd;
-
 
 import ui.*;
 import ui.util.IconManager;
@@ -55,14 +51,14 @@ import java.util.Vector;
    * @version 1.0 12/03/2008
    * @author Ludovic APVRILLE
  */
-public  class TMLCPortConnector extends TGConnector implements ScalableTGComponent, SpecificActionAfterAdd,  SpecificActionAfterMove{
+public  class TMLCPortConnector extends TGConnector implements /* Issue #31 ScalableTGComponent,*/ SpecificActionAfterAdd,  SpecificActionAfterMove {
     //protected int arrowLength = 10;
     //protected int widthValue, heightValue, maxWidthValue, h;
 
     //protected int priority = 0; // Between 0 and 10
 
     //protected double dx, dy;
-    protected double oldScaleFactor;
+    //protected double oldScaleFactor;
     //protected TGConnectingPoint oldp1, oldp2;
 
 
@@ -72,7 +68,7 @@ public  class TMLCPortConnector extends TGConnector implements ScalableTGCompone
         value = "Connector between ports";
         editable = false;
 
-        oldScaleFactor = tdp.getZoom();
+       // oldScaleFactor = tdp.getZoom();
 
         //oldp1 = null;
         //oldp2 = null;
@@ -97,6 +93,7 @@ public  class TMLCPortConnector extends TGConnector implements ScalableTGCompone
       return true;
       }*/
 
+    @Override
     protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
         //if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
         /*if ((p1 != oldp1) || (p2 != oldp2)) {
@@ -149,31 +146,31 @@ public  class TMLCPortConnector extends TGConnector implements ScalableTGCompone
         //    GraphicLib.arrowWithLine(g, 1, 0, 10, x1, y1, x2, y2, true);
         //}
     }
+// Issue #31: Moved to upper class
+//    public void rescale(double scaleFactor){
+//        //
+//        int xx, yy;
+//
+//        for(int i=0; i<nbInternalTGComponent; i++) {
+//            xx = tgcomponent[i].getX();
+//            yy = tgcomponent[i].getY();
+//            //
+//            tgcomponent[i].dx = (tgcomponent[i].dx + xx) / oldScaleFactor * scaleFactor;
+//            tgcomponent[i].dy = (tgcomponent[i].dy + yy) / oldScaleFactor * scaleFactor;
+//            xx = (int)(tgcomponent[i].dx);
+//            tgcomponent[i].dx = tgcomponent[i].dx - xx;
+//            yy = (int)(tgcomponent[i].dy);
+//            tgcomponent[i].dy = tgcomponent[i].dy - yy;
+//
+//            tgcomponent[i].setCd(xx, yy);
+//
+//            //
+//        }
+//
+//        oldScaleFactor = scaleFactor;
+//    }
 
-    public void rescale(double scaleFactor){
-        //
-        int xx, yy;
-
-        for(int i=0; i<nbInternalTGComponent; i++) {
-            xx = tgcomponent[i].getX();
-            yy = tgcomponent[i].getY();
-            //
-            tgcomponent[i].dx = (tgcomponent[i].dx + xx) / oldScaleFactor * scaleFactor;
-            tgcomponent[i].dy = (tgcomponent[i].dy + yy) / oldScaleFactor * scaleFactor;
-            xx = (int)(tgcomponent[i].dx);
-            tgcomponent[i].dx = tgcomponent[i].dx - xx;
-            yy = (int)(tgcomponent[i].dy);
-            tgcomponent[i].dy = tgcomponent[i].dy - yy;
-
-            tgcomponent[i].setCd(xx, yy);
-
-            //
-        }
-
-        oldScaleFactor = scaleFactor;
-    }
-
-
+    @Override
     public int getType() {
         return TGComponentManager.CONNECTOR_PORT_TMLC;
     }
@@ -264,5 +261,4 @@ public  class TMLCPortConnector extends TGConnector implements ScalableTGCompone
       public String getAttributes() {
       return "Priority = " + priority;
       }*/
-
 }

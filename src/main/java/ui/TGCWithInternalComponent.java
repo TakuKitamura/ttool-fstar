@@ -45,7 +45,7 @@ package ui;
    * @version 1.0 22/12/2003
    * @author Ludovic APVRILLE
  */
-public abstract class TGCWithInternalComponent extends TGComponent {
+public abstract class TGCWithInternalComponent extends TGScalableComponent /* Issue #31 TGComponent*/{
 
     public TGCWithInternalComponent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
