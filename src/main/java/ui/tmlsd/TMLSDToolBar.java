@@ -78,9 +78,13 @@ public class TMLSDToolBar extends TToolBar {
         mgui.actions[TGUIAction.TMLSD_ACTION_STATE].setEnabled(b);
         mgui.actions[TGUIAction.SD_ALIGN_INSTANCES].setEnabled(b);
 
-        mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
-        mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
-        mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
+		// Issue #31
+		mgui.actions[ TGUIAction.ACT_ZOOM_MORE ].setEnabled( b );
+		mgui.actions[ TGUIAction.ACT_ZOOM_LESS ].setEnabled( b );
+		mgui.actions[ TGUIAction.ACT_SHOW_ZOOM ].setEnabled( b );
+//        mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
+//        mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
+//        mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
         mgui.updateZoomInfo();
     }
 

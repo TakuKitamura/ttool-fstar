@@ -92,7 +92,11 @@ public class ADDDiagramToolBar extends TToolBar {
         mgui.actions[TGUIAction.ADD_CLUSTERNODE].setEnabled(b);
         mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].setEnabled(b);
 
-        mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
+		// Issue #31
+		mgui.actions[ TGUIAction.ACT_ZOOM_MORE ].setEnabled( b );
+		mgui.actions[ TGUIAction.ACT_ZOOM_LESS ].setEnabled( b );
+		mgui.actions[ TGUIAction.ACT_SHOW_ZOOM ].setEnabled( b );
+//        mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
 
         // julien -------------------------------------------------
 

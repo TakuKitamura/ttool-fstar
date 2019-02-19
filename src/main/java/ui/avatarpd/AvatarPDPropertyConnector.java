@@ -36,11 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatarpd;
-
 
 import myutil.GraphicLib;
 import ui.*;
@@ -59,11 +55,11 @@ import java.util.Vector;
 * @version 1.0 22/04/2010
 * @author Ludovic APVRILLE
  */
-public  class AvatarPDPropertyConnector extends TGConnectorWithCommentConnectionPoints implements ScalableTGComponent {
+public  class AvatarPDPropertyConnector extends TGConnectorWithCommentConnectionPoints /* Issue #31 implements ScalableTGComponent*/ {
     //protected int arrowLength = 10;
     //protected int widthValue, heightValue, maxWidthValue, h;
 	protected int c = 10; //square length 
-	protected double oldScaleFactor;
+	//protected double oldScaleFactor;
 	protected int fontSize = 12;
 	protected int l = 4; // cross length;
 	
@@ -72,12 +68,14 @@ public  class AvatarPDPropertyConnector extends TGConnectorWithCommentConnection
     
     public AvatarPDPropertyConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
         super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
+        
         myImageIcon = IconManager.imgic202;
         value = "reg";
         editable = true;
-		oldScaleFactor = tdp.getZoom();
+		//oldScaleFactor = tdp.getZoom();
     }
     
+    @Override
     protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
         /*if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
 		g.drawLine(x1, y1, x2, y2);
@@ -147,9 +145,9 @@ public  class AvatarPDPropertyConnector extends TGConnectorWithCommentConnection
 		g.drawString(value, x2-(cz/2), y2-(cz/2)-1);
 		g.setFont(f);
 		}*/
-		
     }
 	
+    @Override
 	public boolean editOndoubleClick(JFrame frame) {
       //  String oldValue = value;
 		JDialogAvatarPropertyConnector jdapc = new JDialogAvatarPropertyConnector(frame, getValue().compareTo("not") == 0);
@@ -170,38 +168,36 @@ public  class AvatarPDPropertyConnector extends TGConnectorWithCommentConnection
 		return true;
     }
     
-    
+    @Override
     public int getType() {
         return TGComponentManager.APD_PROPERTY_CONNECTOR;
     }
 	
-	public void rescale(double scaleFactor){
-		//
-		int xx, yy;
-		
-		for(int i=0; i<nbInternalTGComponent; i++) {
-			xx = tgcomponent[i].getX();
-			yy = tgcomponent[i].getY();
-			//
-			tgcomponent[i].dx = (tgcomponent[i].dx + xx) / oldScaleFactor * scaleFactor;
-			tgcomponent[i].dy = (tgcomponent[i].dy + yy) / oldScaleFactor * scaleFactor;
-			xx = (int)(tgcomponent[i].dx);
-			tgcomponent[i].dx = tgcomponent[i].dx - xx;
-			yy = (int)(tgcomponent[i].dy);
-			tgcomponent[i].dy = tgcomponent[i].dy - yy;
-			
-			tgcomponent[i].setCd(xx, yy);
-			
-			//
-        }
-		
-		oldScaleFactor = scaleFactor;
-	}
+    // Issue #31: Now managed in upper class
+//	public void rescale(double scaleFactor){
+//		//
+//		int xx, yy;
+//		
+//		for(int i=0; i<nbInternalTGComponent; i++) {
+//			xx = tgcomponent[i].getX();
+//			yy = tgcomponent[i].getY();
+//			//
+//			tgcomponent[i].dx = (tgcomponent[i].dx + xx) / oldScaleFactor * scaleFactor;
+//			tgcomponent[i].dy = (tgcomponent[i].dy + yy) / oldScaleFactor * scaleFactor;
+//			xx = (int)(tgcomponent[i].dx);
+//			tgcomponent[i].dx = tgcomponent[i].dx - xx;
+//			yy = (int)(tgcomponent[i].dy);
+//			tgcomponent[i].dy = tgcomponent[i].dy - yy;
+//			
+//			tgcomponent[i].setCd(xx, yy);
+//			
+//			//
+//        }
+//		
+//		oldScaleFactor = scaleFactor;
+//	}
 	
 	public boolean isNegated() {
         return value.compareTo("not") == 0;
     }
-	
-	
-    
 }

@@ -51,14 +51,14 @@ import java.util.Vector;
 * @version 1.0 06/04/2010
 * @author Ludovic APVRILLE
  */
-public  class AvatarBDCompositionConnector extends TGConnectorWithCommentConnectionPoints implements ScalableTGComponent{
+public  class AvatarBDCompositionConnector extends TGConnectorWithCommentConnectionPoints /* Issue #31 implements ScalableTGComponent*/ {
     protected int d = 20;
 	protected int D = 26;
     //protected int widthValue, heightValue, maxWidthValue, h;
 	protected Polygon p;
 	protected int xp1, xp2, yp1, yp2;
-	protected double oldScaleFactor;
-	protected boolean rescaled;
+//	protected double oldScaleFactor;
+//	protected boolean rescaled;
 	
     
     public AvatarBDCompositionConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
@@ -68,8 +68,8 @@ public  class AvatarBDCompositionConnector extends TGConnectorWithCommentConnect
 
         value = "{info}";
         editable = true;
-		oldScaleFactor = tdp.getZoom();
-		rescaled = true;
+//		oldScaleFactor = tdp.getZoom();
+//		rescaled = true;
     }
     
     @Override
@@ -174,30 +174,30 @@ public  class AvatarBDCompositionConnector extends TGConnectorWithCommentConnect
         return null;
     }
 	
-    @Override
-	public void rescale(double scaleFactor){
-		//
-		int xx, yy;
-		
-		for(int i=0; i<nbInternalTGComponent; i++) {
-			xx = tgcomponent[i].getX();
-			yy = tgcomponent[i].getY();
-			//
-			tgcomponent[i].dx = (tgcomponent[i].dx + xx) / oldScaleFactor * scaleFactor;
-			tgcomponent[i].dy = (tgcomponent[i].dy + yy) / oldScaleFactor * scaleFactor;
-			xx = (int)(tgcomponent[i].dx);
-			tgcomponent[i].dx = tgcomponent[i].dx - xx;
-			yy = (int)(tgcomponent[i].dy);
-			tgcomponent[i].dy = tgcomponent[i].dy - yy;
-			
-			tgcomponent[i].setCd(xx, yy);
-			
-			//
-        }
-		
-		oldScaleFactor = scaleFactor;
-		rescaled = true;
-	}
+//    @Override Issue #31 Now managed in upper class
+//	public void rescale(double scaleFactor){
+//		//
+//		int xx, yy;
+//		
+//		for(int i=0; i<nbInternalTGComponent; i++) {
+//			xx = tgcomponent[i].getX();
+//			yy = tgcomponent[i].getY();
+//			//
+//			tgcomponent[i].dx = (tgcomponent[i].dx + xx) / oldScaleFactor * scaleFactor;
+//			tgcomponent[i].dy = (tgcomponent[i].dy + yy) / oldScaleFactor * scaleFactor;
+//			xx = (int)(tgcomponent[i].dx);
+//			tgcomponent[i].dx = tgcomponent[i].dx - xx;
+//			yy = (int)(tgcomponent[i].dy);
+//			tgcomponent[i].dy = tgcomponent[i].dy - yy;
+//			
+//			tgcomponent[i].setCd(xx, yy);
+//			
+//			//
+//        }
+//		
+//		oldScaleFactor = scaleFactor;
+//		rescaled = true;
+//	}
     
     @Override
     public int getType() {
