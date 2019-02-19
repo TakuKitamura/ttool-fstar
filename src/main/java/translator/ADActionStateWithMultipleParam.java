@@ -63,7 +63,7 @@ public class ADActionStateWithMultipleParam extends ADActionState {
 	
 	public int nbOfActions() {
 		int cpt = 0;
-		int index;
+		//int index;
 		
 		for(int i=0; i<actionValue.length(); i++) {
 			if (actionValue.charAt(i) == ';') {
