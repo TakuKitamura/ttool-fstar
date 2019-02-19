@@ -1,41 +1,56 @@
 package ui;
 
-import avatartranslator.*;
-import myutil.BoolExpressionEvaluator;
-import myutil.Conversion;
-import myutil.IntExpressionEvaluator;
-import myutil.TraceManager;
+import java.awt.Point;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
 
-import tmltranslator.*;
-import tmltranslator.toavatar.TML2Avatar;
-
-import avatartranslator.*;
+import avatartranslator.AvatarPragmaAuthenticity;
+import avatartranslator.AvatarPragmaSecret;
+import avatartranslator.AvatarSpecification;
 import avatartranslator.toproverif.AVATAR2ProVerif;
-
-
-import launcher.LauncherException;
-import launcher.RemoteExecutionThread;
-import launcher.RshClient;
-
-import ui.tmlad.*;
-import ui.tmlcd.TMLTaskDiagramPanel;
-import ui.tmlcd.TMLTaskOperator;
-import ui.tmlcompd.*;
-import ui.tmlcp.TMLCPPanel;
-import ui.tmldd.*;
 import common.ConfigurationTTool;
-
-import ui.tmlsd.TMLSDPanel;
-
+import launcher.RshClient;
+import myutil.TraceManager;
 import proverifspec.ProVerifOutputAnalyzer;
 import proverifspec.ProVerifQueryAuthResult;
 import proverifspec.ProVerifQueryResult;
 import proverifspec.ProVerifSpec;
-
-import java.awt.Point;
-
-import java.util.*;
-import java.io.*;
+import tmltranslator.TMLChannel;
+import tmltranslator.TMLMapping;
+import tmltranslator.TMLModeling;
+import tmltranslator.TMLPort;
+import tmltranslator.TMLTask;
+import tmltranslator.toavatar.TML2Avatar;
+import ui.tmlad.TGConnectorTMLAD;
+import ui.tmlad.TMLADChoice;
+import ui.tmlad.TMLADDecrypt;
+import ui.tmlad.TMLADEncrypt;
+import ui.tmlad.TMLADReadChannel;
+import ui.tmlad.TMLADReadRequestArg;
+import ui.tmlad.TMLADSendRequest;
+import ui.tmlad.TMLADStartState;
+import ui.tmlad.TMLADStopState;
+import ui.tmlad.TMLADWriteChannel;
+import ui.tmlad.TMLActivityDiagramPanel;
+import ui.tmlcompd.TMLCChannelOutPort;
+import ui.tmlcompd.TMLCCompositeComponent;
+import ui.tmlcompd.TMLCPortConnector;
+import ui.tmlcompd.TMLCPrimitiveComponent;
+import ui.tmlcompd.TMLCPrimitivePort;
+import ui.tmlcompd.TMLComponentTaskDiagramPanel;
+import ui.tmldd.TMLArchiArtifact;
+import ui.tmldd.TMLArchiBUSNode;
+import ui.tmldd.TMLArchiCPUNode;
+import ui.tmldd.TMLArchiConnectorNode;
+import ui.tmldd.TMLArchiDiagramPanel;
+import ui.tmldd.TMLArchiHWANode;
+import ui.tmldd.TMLArchiMemoryNode;
 
 
 public class SecurityGeneration implements Runnable {
@@ -68,7 +83,7 @@ public class SecurityGeneration implements Runnable {
 	List<String> hsmTasks = new ArrayList<String>();
 
 	Map<String, String> channelSecMap = new HashMap<String, String>();
-	TMLMapping newMap;
+	TMLMapping<TGComponent> newMap;
 
 	public SecurityGeneration(MainGUI gui, String name, TMLMapping<TGComponent> map, TMLArchiPanel newarch, String encComp, String overhead, String decComp, boolean autoConf, boolean autoWeakAuth, boolean autoStrongAuth,	Map<String, List<String>> selectedCPUTasks){
 
@@ -221,7 +236,7 @@ public class SecurityGeneration implements Runnable {
 		//TraceManager.addDev("mapping " + map.getSummaryTaskMapping());
 
 		//   Map<String, HSMChannel> secChannels = new HashMap<String, HSMChannel>();
-		Map<String, HSMChannel> hsmChannels = new HashMap<String, HSMChannel>();
+		//Map<String, HSMChannel> hsmChannels = new HashMap<String, HSMChannel>();
 
 
 		for (String cpuName : selectedCPUTasks.keySet()) {
@@ -659,8 +674,8 @@ public class SecurityGeneration implements Runnable {
 
 		for (TMLCPrimitiveComponent comp : comps) {
 
-			Map<String, HSMChannel> compChannels = new HashMap<String, HSMChannel>();
-			String compName = comp.getValue();
+			//Map<String, HSMChannel> compChannels = new HashMap<String, HSMChannel>();
+			//String compName = comp.getValue();
 
 			List<ChannelData> hsmChans = new ArrayList<ChannelData>();
 			ChannelData chd = new ChannelData("startHSM_" + cpuName, false, false);
@@ -1039,8 +1054,8 @@ for (TMLTask task : toSecure.keySet()) {
 	}
 	for (String channel: hsmSecOutChannels.get(task)){
 		Set<TGComponent> channelInstances = new HashSet<TGComponent>();
-		TGConnector conn = new TGConnectorTMLAD(0, 0, 0, 0, 0, 0, false, null, tad, null, null, new Vector<Point>());
-		TGConnectingPoint next = new TGConnectingPoint(null, 0, 0, false, false);     
+		//TGConnector conn = new TGConnectorTMLAD(0, 0, 0, 0, 0, 0, false, null, tad, null, null, new Vector<Point>());
+		//TGConnectingPoint next = new TGConnectingPoint(null, 0, 0, false, false);     
 		for (TGComponent tg : tad.getComponentList()) {
 			if (tg instanceof TMLADWriteChannel) {
 				TMLADWriteChannel writeChannel = (TMLADWriteChannel) tg;
@@ -1197,8 +1212,8 @@ for (TMLTask task : toSecure.keySet()) {
 	for (String channel: hsmSecInChannels.get(task)){
 		//System.out.println("Checking hsmsecinchannel " + channel + " " + task.getName());
 		Set<TGComponent> channelInstances = new HashSet<TGComponent>();
-		TGConnector conn = new TGConnectorTMLAD(0, 0, 0, 0, 0, 0, false, null, tad, null, null, new Vector<Point>());
-		TGConnectingPoint next = new TGConnectingPoint(null, 0, 0, false, false);     
+		//TGConnector conn = new TGConnectorTMLAD(0, 0, 0, 0, 0, 0, false, null, tad, null, null, new Vector<Point>());
+		//TGConnectingPoint next = new TGConnectingPoint(null, 0, 0, false, false);     
 		for (TGComponent tg : tad.getComponentList()) {
 			if (tg instanceof TMLADReadChannel) {
 				TMLADReadChannel readChannel = (TMLADReadChannel) tg;

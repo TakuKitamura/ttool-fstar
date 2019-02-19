@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmlcd;
 
 import myutil.GraphicLib;
@@ -47,8 +44,6 @@ import ui.util.IconManager;
 
 import java.awt.*;
 import java.util.Vector;
-
-//import java.awt.geom.*;
 
 /**
  * Class TGConnectorTMLCompositionOperator
@@ -64,25 +59,29 @@ public  class TGConnectorTMLCompositionOperator extends TGConnector {
         myImageIcon = IconManager.imgic108;
     }
     
+    @Override
     public void internalDrawing(Graphics g) {
         TMLTaskDiagramPanel tmltdp = (TMLTaskDiagramPanel)tdp;
         if (!tmltdp.areAllVisible()) {
             if (!tmltdp.connectedToVisible(this))
                 return;
         }
+        
         super.internalDrawing(g);
     }
     
+    @Override
     protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
         GraphicLib.dashedLine(g, x1, y1, x2, y2);
     }
     
+    @Override
     protected void drawMiddleSegment(Graphics g, int x1, int y1, int x2, int y2) {
         GraphicLib.dashedLine(g, x1, y1, x2, y2);
     }
     
+    @Override
     public int getType() {
         return TGComponentManager.CONNECTOR_TML_COMPOSITION_OPERATOR;
     }
-    
 }

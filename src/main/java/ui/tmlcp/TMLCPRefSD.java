@@ -179,7 +179,7 @@ public class TMLCPRefSD extends TADOneLineText /* Issue #69 TGCOneLineText*/ {
 	
     @Override
 	public int getDefaultConnector() {
-      return TGComponentManager.CONNECTOR_TMLCP;
+    	return TGComponentManager.CONNECTOR_TMLCP;
     }
 
 	/*public void setReferenceToSD( TMLSDPanel _panel )	{

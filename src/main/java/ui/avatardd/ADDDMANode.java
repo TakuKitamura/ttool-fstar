@@ -169,10 +169,10 @@ public class ADDDMANode extends ADDCommunicationNode implements WithAttributes {
     }
     
     public boolean editOndoubleClick(JFrame frame) {
-		boolean error = false;
-		String errors = "";
-		int tmp;
-		String tmpName;
+		//boolean error = false;
+	//	String errors = "";
+		//int tmp;
+		//String tmpName;
         
 		/*JDialogDMANode dialog = new JDialogDMANode(frame, "Setting Memory attributes", this);
 		dialog.setSize(400, 300);
