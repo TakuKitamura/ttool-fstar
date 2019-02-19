@@ -61,7 +61,6 @@ public class AttackTreeDiagramToolbar extends TToolBar {
 
     public AttackTreeDiagramToolbar(MainGUI _mgui) {
         super(_mgui);
-
     }
 
     protected void setActive(boolean b) {

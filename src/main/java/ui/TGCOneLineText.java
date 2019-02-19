@@ -52,7 +52,7 @@ import java.awt.*;
    * @version 1.0 21/12/2003
    * @author Ludovic APVRILLE
  */
-public class TGCOneLineText extends TGCWithoutInternalComponent{
+public class TGCOneLineText extends TGCWithoutInternalComponent {
 
 	protected boolean emptyText;
 

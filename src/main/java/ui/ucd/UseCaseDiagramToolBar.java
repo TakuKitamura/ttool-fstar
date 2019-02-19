@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.ucd;
 
 import myutil.TraceManager;
@@ -60,12 +57,11 @@ public class UseCaseDiagramToolBar extends TToolBar {
 
     public UseCaseDiagramToolBar(MainGUI _mgui) {
         super(_mgui);
-
     }
 
     protected void setActive(boolean b) {
-	TraceManager.addDev("Setting to " + b + " Zoom");
-	mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
+    	TraceManager.addDev("Setting to " + b + " Zoom");
+		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
         mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
 
         mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);

@@ -183,7 +183,7 @@ public class TMLTaskOperator extends TGCWithInternalComponent implements TMLTask
         return w;
     }*/
     
-    
+    @Override
     public void internalDrawing(Graphics g) {
         if (!tdp.isScaled()) {
             graphics = g;
@@ -210,6 +210,7 @@ public class TMLTaskOperator extends TGCWithInternalComponent implements TMLTask
         }
     }
     
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
         oldValue = value;
         

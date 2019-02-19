@@ -248,8 +248,8 @@ public class ADChoice extends ADComponent implements NonBlockingADComponent {
     }
 	
 	public boolean isSpecialChoiceAction(boolean variableAsActions) {
-		ADComponent adc, adc1;
-		String value;
+		ADComponent adc;//, adc1;
+		//String value;
 		
         for(int i=0; i<next.size(); i++) {
             adc = getNext(i);

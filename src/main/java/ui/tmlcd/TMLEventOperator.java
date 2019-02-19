@@ -73,6 +73,7 @@ public class TMLEventOperator extends TMLCompositionOperator {
         myImageIcon = IconManager.imgic800;
     }
     
+    @Override
     public void internalDrawing(Graphics g) {
         if (((TMLTaskDiagramPanel)(tdp)).areEventsVisible()) {
             g.drawRect(x, y, width, height);
@@ -122,6 +123,7 @@ public class TMLEventOperator extends TMLCompositionOperator {
 		return ColorManager.TML_PORT_EVENT;
 	}
     
+	@Override
     public int getType() {
         return TGComponentManager.TMLTD_EVENT_OPERATOR;
     }

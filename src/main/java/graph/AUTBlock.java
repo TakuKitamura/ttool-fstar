@@ -161,7 +161,7 @@ public class AUTBlock  implements Comparable<AUTBlock> {
     public void computeHash() {
         Collections.sort(states);
         int[] hash = new int[states.size()];
-        int cpt = 0;
+        //int cpt = 0;
         for(int i=0; i<hash.length; i++) {
             hash[i] = states.get(i).id;
         }
@@ -204,14 +204,13 @@ public class AUTBlock  implements Comparable<AUTBlock> {
     }
 
     public static AUTBlock concat(AUTBlock b1, AUTBlock b2) {
-	AUTBlock ret = new AUTBlock();
-	for(AUTState st1: b1.states) {
-	    ret.addState(st1);
-	}
-	for(AUTState st2: b2.states) {
-	    ret.addState(st2);
-	}
-	return ret;
+    	AUTBlock ret = new AUTBlock();
+    	for(AUTState st1: b1.states) {
+    		ret.addState(st1);
+    	}
+    	for(AUTState st2: b2.states) {
+    		ret.addState(st2);
+    	}
+    	return ret;
     }
-
 }
