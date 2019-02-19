@@ -123,6 +123,9 @@ public class TMLSyntaxChecking {
 
             checkPortName();
 
+            //added by minh hiep
+            checkAValidPortName();
+
         }
 
         // Mapping or architecture
@@ -196,6 +199,28 @@ public class TMLSyntaxChecking {
                     }
                 }
             }
+        }
+    }
+
+    //added by minh hiep
+    public void checkAValidPortName() {
+        List<TMLChannel> tmlChannels = tmlm.getChannels();
+        List<TMLEvent> tmlEvents = tmlm.getEvents();
+        List<TMLRequest> tmlRequests = tmlm.getRequests();
+
+        for (TMLChannel channel : tmlChannels) {
+            if (!TMLTextSpecification.isAValidId(channel.getName()))
+                addError(null, null, WRONG_VARIABLE_IDENTIFIER + ": invalid port name", TMLError.ERROR_STRUCTURE);
+        }
+
+        for (TMLEvent event : tmlEvents) {
+            if (!TMLTextSpecification.isAValidId(event.getName()))
+                addError(null, null, WRONG_VARIABLE_IDENTIFIER + ": invalid port name", TMLError.ERROR_STRUCTURE);
+        }
+
+        for (TMLRequest request: tmlRequests) {
+            if (!TMLTextSpecification.isAValidId(request.getName()))
+                addError(null, null, WRONG_VARIABLE_IDENTIFIER + ": invalid port name", TMLError.ERROR_STRUCTURE);
         }
     }
 
@@ -386,7 +411,6 @@ public class TMLSyntaxChecking {
                     addError(t, null, WRONG_VARIABLE_IDENTIFIER + ": invalid identifier", TMLError.ERROR_STRUCTURE);
                 }
             }
-
 
             int n = tactivity.nElements();
             //TraceManager.addDev("Task" + t.getName());

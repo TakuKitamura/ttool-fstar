@@ -226,6 +226,23 @@ public class TAttribute {
         return (b1 && b2 && b3 && b4 && b5 && b6 && b7);
     }
 
+    //checking port name
+    //author : minh hiep
+    public static boolean isAValidPortName(String id, boolean checkKeyword, boolean checkUPPAALKeyword, boolean checkJavaKeyword,
+                                           boolean checkTMLKeyword) {
+        // test whether _id is a word
+        if (id.contains(",")) {
+            String [] splitName = id.split("\\s*,\\s*");
+            for (int i = 0; i < splitName.length; i ++) {
+                if(!isAValidId(splitName[i],checkKeyword,checkUPPAALKeyword, checkJavaKeyword,checkTMLKeyword)) {
+                    return false;
+                }
+            }
+        }else {
+            return isAValidId(id,checkKeyword,checkUPPAALKeyword, checkJavaKeyword,checkTMLKeyword);
+        }
+        return  true;
+    }
     public static boolean isAValidInitialValue(int type, String value) {
         //boolean b;
         int val;

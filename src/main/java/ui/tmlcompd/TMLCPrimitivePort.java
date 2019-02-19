@@ -73,6 +73,8 @@ import ui.interactivesimulation.JFrameSimulationSDPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -159,6 +161,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 
 
     public int verification;
+    public String oldName;
     
     public TMLCPrimitivePort(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -610,6 +613,9 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         TraceManager.addDev( "The Data flow type is: " + dataFlowType );
         TraceManager.addDev( "The Associated event is: " + associatedEvent );
 
+        oldName = getPortName();
+        //TraceManager.addDev("old port name : " + oldName);
+
         if (jda.hasNewData()) {
             try {
                 maxSamples = Integer.decode(jda.getMaxSamples()).intValue();
@@ -622,8 +628,39 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
                 isOrigin = jda.isOrigin();
                 isFinite = jda.isFinite();
                 isBlocking = jda.isBlocking();
-                setPortName(jda.getParamName());
-                commName = jda.getParamName();
+
+                /* is port name valid ?
+                 * author : minh hiep
+                 */
+                String s = jda.getParamName();
+                //TraceManager.addDev("port name : " + s);
+
+                if ((s != null) && (s.length() > 0)) {
+                    // Check whether this name is already in use, or not
+
+                    if (!TAttribute.isAValidPortName(s, false, true, false,false)) {
+                        JOptionPane.showMessageDialog(frame,
+                                "Could not change the name of the port: the new name (" + s + ")  is not a valid name",
+                                "Error",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        return false;
+                    }
+
+                    if (oldName.compareTo(s) != 0) {
+                        if (((TMLComponentTaskDiagramPanel) tdp).namePrimitivePortInUse(this, s)) {
+                            JOptionPane.showMessageDialog(frame,
+                                    "Error: the name (" + s + ")  is already in use",
+                                    "Name modification",
+                                    JOptionPane.ERROR_MESSAGE);
+                            return false;
+                        }
+                    }
+                    setPortName(s);
+                    commName = s;
+                }
+
+                //setPortName(jda.getParamName());
+                //commName = jda.getParamName();
                 isLossy = jda.isLossy();
                 lossPercentage = jda.getLossPercentage();
                 maxNbOfLoss = jda.getMaxNbOfLoss();
@@ -807,7 +844,20 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
                             }
 
                             if (elt.getTagName().equals("Prop")) {
-                                commName = elt.getAttribute("commName");
+                                // checking the valid port name
+                                oldName = getPortName();
+                                String s = elt.getAttribute("commName");
+                                //TraceManager.addDev("port name : " + s);
+
+                                if ((s != null) && (s.length() > 0)) {
+                                    // Check whether this name is already in use, or not
+
+                                    if (!TAttribute.isAValidPortName(s, false, true, false,false)) {
+                                        throw new MalformedModelingException();
+                                    }
+
+                                    commName = s;
+                                }
                                 try {
                                     //
                                     typep = Integer.decode(elt.getAttribute("commType")).intValue();
@@ -1149,7 +1199,4 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
             typePort = 2;
         return typePort;
     }
-
-
-
 }
