@@ -58,8 +58,19 @@ public class OptimizationModel {
                 c_bound_x[t][p] = ctx.mkAnd(ctx.mkLe(ctx.mkInt(0), X[t][p]),
                         ctx.mkLe(X[t][p], ctx.mkInt(1)));
 
-               // System.out.println(c_bound_x[t][p]);
+                // System.out.println(c_bound_x[t][p]);
             }
+        }
+
+        //Constraint on start >=0
+        BoolExpr[] c_bound_start = new BoolExpr[inputInstance.getModeling().getTasks().size()];
+
+        for (TMLTask tmlTask : (List<TMLTask>) inputInstance.getModeling().getTasks()) {
+            int t = inputInstance.getModeling().getTasks().indexOf(tmlTask);
+
+            start[t] = ctx.mkIntConst("start_" + tmlTask.getID());
+            c_bound_start[t] = ctx.mkGe(start[t], ctx.mkInt(0));
+            mapping_constraints = ctx.mkAnd(mapping_constraints, c_bound_start[t]);
         }
 
         // TODO add the definition interval for Ycw
@@ -76,7 +87,7 @@ public class OptimizationModel {
 
             ArithExpr sum_X = ctx.mkAdd(X[t]);
             c_unique_x[t] = ctx.mkLe(sum_X, ctx.mkInt(1));
-           // System.out.println(c_unique_x[t]);
+            // System.out.println(c_unique_x[t]);
 
         }
 
@@ -119,8 +130,7 @@ public class OptimizationModel {
 
                 c_mem[p][t] = ctx.mkLe(bin_plus_bout_times_X, mem);
 
-                //TODO may be uncomment
-               // System.out.println(c_mem[p][t]);
+                // System.out.println(c_mem[p][t]);
 
             }
         }
@@ -156,12 +166,12 @@ public class OptimizationModel {
 
                     System.out.println("Channel(" + channel.toString() + ") " + c_route[c]);
 
-                    //TODO uncomment
+
                     // mapping_constraints = ctx.mkAnd(c_route[c], mapping_constraints);
                 }
             }
         }
-
+*/
         //Scheduling: Precedence constraints: ∀c, τs (t cons ) ≥ τe (t prod )
         System.out.println("\nPrecedence constraints (11)");
         BoolExpr[] c_precedence = new BoolExpr[inputInstance.getModeling().getChannels().size()];
@@ -192,9 +202,9 @@ public class OptimizationModel {
 
             c_precedence[c] = ctx.mkGe(startC_minus_endP, ctx.mkInt(0));
 
-            System.out.println(c_precedence[c]);
-            //TODO uncomment
-            // mapping_constraints = ctx.mkAnd(mapping_constraints, c_precedence[c]);
+          //  System.out.println(c_precedence[c]);
+
+            mapping_constraints = ctx.mkAnd(mapping_constraints, c_precedence[c]);
 
         }
 
@@ -250,10 +260,9 @@ public class OptimizationModel {
 
                         //
                         c_monoTask[p][ti][tj] = ctx.mkOr(not_alpha, beta);
-                        System.out.println("\n" + c_monoTask[p][ti][tj]);
+                       // System.out.println("\n" + c_monoTask[p][ti][tj]);
 
-                        //TODO uncomment
-                        //mapping_constraints = ctx.mkAnd(mapping_constraints, c_monoTask[p][ti][tj]);
+                        mapping_constraints = ctx.mkAnd(mapping_constraints, c_monoTask[p][ti][tj]);
                     }
                 }
 
@@ -261,8 +270,6 @@ public class OptimizationModel {
 
         }
 
-
-*/
 
         //Grouping remaining constraints of the model
 
@@ -293,6 +300,7 @@ public class OptimizationModel {
         if (s.check() == Status.SATISFIABLE) {
             Model m = s.getModel();
             Expr[][] optimized_result_X = new Expr[inputInstance.getModeling().getTasks().size()][inputInstance.getArchitecture().getCPUs().size()];
+            Expr[] optimized_result_start = new Expr[inputInstance.getModeling().getTasks().size()];
 
             System.out.println("\nProposed Mapping solution:\n");
             for (TMLTask task : (List<TMLTask>) inputInstance.getModeling().getTasks()) {
@@ -306,9 +314,17 @@ public class OptimizationModel {
                     System.out.println("X[" + task.getName() + "][" + hwNode.getName() + "] = " + optimized_result_X[t][p]);
                 }
 
-
                 System.out.println("\n");
             }
+
+            for (TMLTask task : (List<TMLTask>) inputInstance.getModeling().getTasks()) {
+                int t = inputInstance.getModeling().getTasks().indexOf(task);
+
+                optimized_result_start[t] = m.evaluate(start[t], false);
+                System.out.println("start[" + task.getName() + "] = " + optimized_result_start[t]);
+
+            }
+
 
         } else {
             System.out.println("Failed to solve mapping problem");

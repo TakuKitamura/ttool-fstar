@@ -37,22 +37,83 @@ public class InputInstanceTest {
 
         tmlm = new TMLModeling();
 
-        TMLTask taskA = new TMLTask("taskA", null, null);
-        TMLTask taskB = new TMLTask("taskB", null, null);
-        TMLTask taskD = new TMLTask("taskD", null, null);
-        TMLTask taskE = new TMLTask("taskE", null, null);
+        //create a reference to activity diagrams
+        TMLActivity refToA = null;
+        TMLActivity refToB = null;
+        TMLActivity refToD = null;
+        TMLActivity refToE = null;
 
 
-        TMLChannel ab = new TMLChannel("ab", null);
-        TMLChannel ad = new TMLChannel("ad", null);
-        TMLChannel be = new TMLChannel("be", null);
-        TMLChannel de = new TMLChannel("de", null);
+        TMLTask taskA = new TMLTask("task__A", null, refToA);
+        TMLTask taskB = new TMLTask("task__B", null, refToB);
+        TMLTask taskD = new TMLTask("task__D", null, refToD);
+        TMLTask taskE = new TMLTask("task__E", null, refToE);
+
+        //filling activity diagrams of tasks
+
+        //taskA
+        TMLActivityElementWithAction firstA = new TMLExecI("execiA", null);
+        firstA.setAction("150");
+        taskA.getActivityDiagram().setFirst(firstA);
+
+        TMLActivityElement AwB = new TMLWriteChannel("AwB", null);
+        taskA.getActivityDiagram().addLinkElement(firstA, AwB);
+        taskA.getActivityDiagram().addElement(AwB);
+
+        TMLActivityElement AwD = new TMLWriteChannel("AwD", null);
+        taskA.getActivityDiagram().addLinkElement(AwB, AwD);
+        taskA.getActivityDiagram().addElement(AwD);
+
+        //taskB
+        TMLActivityElement firstB = new TMLReadChannel("BrA", null);
+        taskB.getActivityDiagram().setFirst(firstB);
+
+        TMLActivityElementWithAction execiB = new TMLExecI("execiB", null);
+        execiB.setAction("100");
+        taskB.getActivityDiagram().addLinkElement(firstB, execiB);
+        taskB.getActivityDiagram().addElement(execiB);
+
+        TMLActivityElement BwE = new TMLWriteChannel("BwE", null);
+        taskB.getActivityDiagram().addLinkElement(execiB, BwE);
+        taskB.getActivityDiagram().addElement(BwE);
+
+        //taskD
+        TMLActivityElement firstD = new TMLReadChannel("DrA", null);
+        taskD.getActivityDiagram().setFirst(firstD);
+
+        TMLActivityElementWithAction execiD = new TMLExecI("execiD", null);
+        execiD.setAction("100");
+        taskD.getActivityDiagram().addLinkElement(firstD, execiD);
+        taskD.getActivityDiagram().addElement(execiD);
+
+        TMLActivityElement DwE = new TMLWriteChannel("DwE", null);
+        taskD.getActivityDiagram().addLinkElement(execiD, DwE);
+        taskD.getActivityDiagram().addElement(DwE);
+
+        //taskE
+        TMLActivityElement firstE = new TMLReadChannel("ErB", null);
+        taskE.getActivityDiagram().setFirst(firstE);
+
+        TMLActivityElement ErD = new TMLReadChannel("ErD", null);
+        taskE.getActivityDiagram().addLinkElement(firstE, ErD);
+        taskE.getActivityDiagram().addElement(ErD);
+
+        TMLActivityElementWithAction execiE = new TMLExecI("execiE", null);
+        execiE.setAction("50");
+        taskE.getActivityDiagram().addLinkElement(ErD, execiE);
+        taskE.getActivityDiagram().addElement(execiE);
+
 
         taskA.addOperation("generic");
         taskB.addOperation("fft");
         taskD.addOperation("fft");
         taskE.addOperation("generic");
 
+        //creating channels
+        TMLChannel ab = new TMLChannel("ab", null);
+        TMLChannel ad = new TMLChannel("ad", null);
+        TMLChannel be = new TMLChannel("be", null);
+        TMLChannel de = new TMLChannel("de", null);
 
         taskA.addWriteTMLChannel(ab);
         taskA.addWriteTMLChannel(ad);
@@ -65,6 +126,11 @@ public class InputInstanceTest {
 
         taskE.addReadTMLChannel(be);
         taskE.addReadTMLChannel(de);
+
+        ab.setTasks(taskA,taskB);
+        ad.setTasks(taskA,taskD);
+        be.setTasks(taskB,taskE);
+        de.setTasks(taskD,taskE);
 
         ab.setNumberOfSamples(2);
         ad.setNumberOfSamples(2);
@@ -85,6 +151,8 @@ public class InputInstanceTest {
         return tmlm;
     }
 
+
+
     private TMLArchitecture setUpTMLArchitecture() {
 
         HwExecutionNode mainCPU = new HwCPU("MainCPU");
@@ -103,9 +171,13 @@ public class InputInstanceTest {
         HwLink dsp_bus1 = new HwLink("dsp_bus1");
         HwLink bus1_dspmem = new HwLink("bus1_dspmem");
 
+        mainCPU.execiTime = 2;
+        dsp.execiTime = 1;
 
-        //mainCPU.addOperationType("FFT");
+
         mainCPU.addOperationType("generic");
+        mainCPU.addOperationType("fft");
+
         mainMem.memorySize = 200;
 
         dsp.addOperationType("fft");
@@ -142,7 +214,7 @@ public class InputInstanceTest {
 
 
     @Test
-    public void findFeasibleMapping(){
+    public void findFeasibleMapping() {
 
         try {
 
@@ -161,7 +233,8 @@ public class InputInstanceTest {
         } catch (Z3Exception ex) {
             System.out.println("Z3 Managed Exception: " + ex.getMessage());
             System.out.println("Stack trace: ");
-            ex.printStackTrace(System.out);
+            ex.printStackTrace(
+                    System.out);
         } catch (OptimizationModel.TestFailedException ex) {
             System.out.println("TEST CASE FAILED: " + ex.getMessage());
             System.out.println("Stack trace: ");
@@ -176,16 +249,11 @@ public class InputInstanceTest {
     }
 
 
-
-
-
-
-
     /****************************** TEST PASSED WITH SUCCESS **************************************/
     @Test
     public void getFeasibleCPUs() {
-        TMLTask tempTask;// = new TMLTask("",null,null);//inputInstance
-        tempTask = (TMLTask) inputInstance.getModeling().getTasks().get(3);
+        TMLTask tempTask;
+        tempTask = (TMLTask) inputInstance.getModeling().getTasks().get(2);
         System.out.println(tempTask.getName());
 
         List<HwExecutionNode> tempList = new ArrayList<>();
@@ -231,10 +299,6 @@ public class InputInstanceTest {
 
     }
 
-    @Test
-    public void getWCET() {
-    }
-
 
     /****************************** TEST PASSED WITH SUCCESS **************************************/
     @Test
@@ -250,5 +314,39 @@ public class InputInstanceTest {
         assertTrue(inputInstance.getLocalMemoryOfHwExecutionNode(inputInstance.getArchitecture().getHwNodeByName("dsp")) == output2);
 
     }
+
+    /****************************** TEST PASSED WITH SUCCESS **************************************/
+
+    @Test
+    public void getWCET() {
+        //a temporary list of the tasks
+        List<TMLTask> tempTasks = new ArrayList<>();
+        for (int i = 0; i < inputInstance.getModeling().getTasks().size(); i++) {
+            tempTasks.add((TMLTask) inputInstance.getModeling().getTasks().get(i));
+        }
+        int expectedWcetA_CPU = 150;
+        int expectedWcetA_dsp = 300;
+
+        assertEquals(expectedWcetA_CPU, inputInstance.getWCET(tempTasks.get(0), (HwExecutionNode) inputInstance.getArchitecture().getHwNodeByName("MainCPU")));
+        assertEquals(expectedWcetA_dsp, inputInstance.getWCET(tempTasks.get(0), (HwExecutionNode) inputInstance.getArchitecture().getHwNodeByName("dsp")));
+
+        System.out.println(tempTasks.get(1).getActivityDiagram().getName());
+        System.out.println(tempTasks.get(2).getActivityDiagram().getElements().size());
+
+        System.out.println(tempTasks.get(1).getActivityDiagram().getWorstCaseIComplexity());
+
+       System.out.println("WCET(" + tempTasks.get(0).getName() +", dsp) = " +
+               inputInstance.getWCET(tempTasks.get(0), (HwExecutionNode) inputInstance.getArchitecture().getHwNodeByName("dsp")));
+
+        System.out.println("WCET(" + tempTasks.get(1).getName() +", dsp) = " +
+                inputInstance.getWCET(tempTasks.get(1), (HwExecutionNode) inputInstance.getArchitecture().getHwNodeByName("dsp")));
+
+        System.out.println("WCET(" + tempTasks.get(2).getName() +", dsp) = " +
+                inputInstance.getWCET(tempTasks.get(2), (HwExecutionNode) inputInstance.getArchitecture().getHwNodeByName("dsp")));
+
+        System.out.println("WCET(" + tempTasks.get(3).getName() +", dsp) = " +
+                inputInstance.getWCET(tempTasks.get(3), (HwExecutionNode) inputInstance.getArchitecture().getHwNodeByName("dsp")));
+    }
+
 
 }
