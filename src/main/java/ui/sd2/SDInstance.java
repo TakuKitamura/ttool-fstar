@@ -81,8 +81,8 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
         height = (int)(500 * tdp.getZoom());
         minWidth = (int)(10 * tdp.getZoom());
         maxWidth = (int)(10 * tdp.getZoom());
-        minHeight = (int)(250 * tdp.getZoom());
-        maxHeight = (int)(1500 * tdp.getZoom());
+        minHeight = (int)(25 * tdp.getZoom());
+        maxHeight = (int)(2500 * tdp.getZoom());
         //TraceManager.addDev("Init tgc= " + this + " minHeight=" + minHeight);
         //TraceManager.addDev("Init tgc= " + this + " maxHeight=" + maxHeight);
         oldScaleFactor = tdp.getZoom();
