@@ -787,6 +787,23 @@ public class ActivityDiagram2TMLTranslator {
 
 								final TMLADChoice choice = (TMLADChoice) compo1;
 								final TGCOneLineText guard = choice.getGuardForConnectingPoint(conPoint1);
+								// Check validity of guard.
+								String tmpG = guard.getValue().trim();
+								if (tmpG.substring(0, 1).compareTo("[") != 0) {
+									UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formatted guard: " + tmpG);
+									ce.setTDiagramPanel(tadp);
+									ce.setTGComponent(choice);
+									checkingErrors.add(ce);
+								}
+
+								if (tmpG.substring(tmpG.length()-1, tmpG.length()).compareTo("]") != 0) {
+									UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "Badly formatted guard: " + tmpG);
+									ce.setTDiagramPanel(tadp);
+									ce.setTGComponent(choice);
+									checkingErrors.add(ce);
+								}
+
+
 								((TMLChoice) ae1).addGuard(modifyString(choice.getEffectiveCondition(guard)));
 							} else if (ae1 instanceof TMLSequence) {
 								final int index = compo1.indexOf(conPoint1) - 1;
