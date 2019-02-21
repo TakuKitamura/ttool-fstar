@@ -39,6 +39,7 @@
 
 package ui;
 
+import myutil.*;
 import avatartranslator.AvatarSpecification;
 import common.ConfigurationTTool;
 import common.SpecConfigTTool;
@@ -121,7 +122,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author Ludovic APVRILLE
  */
-public class MainGUI implements ActionListener, WindowListener, KeyListener, PeriodicBehavior {
+public class MainGUI implements ActionListener, WindowListener, KeyListener, PeriodicBehavior, DraggableTabbedPaneCallbackInterface {
 
     public static boolean systemcOn;
     public static boolean lotosOn;
@@ -268,7 +269,8 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
 
     //TURTLE modeling graphic components
-    private JTabbedPane mainTabbedPane;
+    //private JTabbedPane mainTabbedPane;
+    private myutil.DraggableTabbedPane mainTabbedPane;
     private JToolBarMainTurtle mainBar;
     //private JPopupMenu menuTabbedPane;
 
@@ -1677,7 +1679,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
         //TraceManager.addDev("New TURTLE Panels");
         // Issue #41 Ordering of tabbed panes
-        mainTabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
+        mainTabbedPane = GraphicLib.createDraggableTabbedPane(this);//new JTabbedPane();
         mainTabbedPane.setBackground(ColorManager.MainTabbedPane);
         mainTabbedPane.setForeground(Color.black);
 
@@ -9531,5 +9533,20 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     public TMLArchiPanel getCurrentArchiPanel() {
         return tmlap;
     }
+
+
+    //DraggableTabbedPaneCallbackInterface
+    public void hasBeenDragged(int initialPosition, int destinationPosition) {
+
+        TURTLEPanel p = tabs.get(initialPosition);
+        TraceManager.addDev("Has been dragged: " + mainTabbedPane.getTitleAt(initialPosition));
+        tabs.removeElementAt(initialPosition);
+        tabs.insertElementAt(p, destinationPosition);
+        mainTabbedPane.setSelectedIndex(destinationPosition);
+       //frame.repaint();
+
+    }
+
+
 } // Class MainGUI
 
