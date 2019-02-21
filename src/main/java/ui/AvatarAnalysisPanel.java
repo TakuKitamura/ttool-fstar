@@ -109,7 +109,7 @@ public class AvatarAnalysisPanel extends TURTLEPanel {
         //tabbedPane.setVisible(true);
         //sdp.setVisible(true);
         //jsp.setVisible(true);
-        //tabbedPane.setSelectedIndex(panels.size()-1);
+        tabbedPane.setSelectedIndex(tabbedPane.getTabCount()-1);
 
         return true;
 
@@ -137,6 +137,7 @@ public class AvatarAnalysisPanel extends TURTLEPanel {
         //sdp.setVisible(true);
         //jsp.setVisible(true);
         //tabbedPane.setSelectedIndex(panels.size()-1);
+        tabbedPane.setSelectedIndex(tabbedPane.getTabCount()-1);
 
         return true;
 
@@ -161,7 +162,7 @@ public class AvatarAnalysisPanel extends TURTLEPanel {
         toolBarPanel.add(toolBarUC, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
         tabbedPane.addTab(s, IconManager.imgic19, toolBarPanel, "Open the use case diagram of " + s);
-
+        tabbedPane.setSelectedIndex(tabbedPane.getTabCount()-1);
         return true;
     }
 
@@ -183,7 +184,7 @@ public class AvatarAnalysisPanel extends TURTLEPanel {
         toolBarPanel.add(toolBarACD, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
         tabbedPane.addTab(s, IconManager.imgic600, toolBarPanel, "Open the context diagram of " + s);
-
+        tabbedPane.setSelectedIndex(tabbedPane.getTabCount()-1);
         return true;
     }
 
@@ -205,7 +206,7 @@ public class AvatarAnalysisPanel extends TURTLEPanel {
         toolBarPanel.add(toolBarAAD, BorderLayout.NORTH);
         toolBarPanel.add(jsp, BorderLayout.CENTER);
         tabbedPane.addTab(s, IconManager.imgic5048, toolBarPanel, "Open the activity diagram of " + s);
-
+        tabbedPane.setSelectedIndex(tabbedPane.getTabCount()-1);
         return true;
     }
 

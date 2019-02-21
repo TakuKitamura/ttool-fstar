@@ -1904,7 +1904,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
     public void newAnalysis() {
         //TraceManager.addDev("NEW ANALYSIS");
-        addAnalysisPanel("Analysis", 0);
+        addAnalysisPanel("Analysis", -1);
         tabs.elementAt(0).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(0);
         //paneAction(null);
@@ -1913,9 +1913,9 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
     public void newAvatarAnalysis() {
         //TraceManager.addDev("NEW ANALYSIS");
-        addAvatarAnalysisPanel("Analysis", 0);
+        addAvatarAnalysisPanel("Analysis", -1);
         //((TURTLEPanel)tabs.elementAt(0)).tabbedPane.setSelectedIndex(0);
-        mainTabbedPane.setSelectedIndex(0);
+        mainTabbedPane.setSelectedIndex(tabs.size() - 1);
         //paneAction(null);
         //frame.repaint();
     }
@@ -1925,7 +1925,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         //TraceManager.addDev("NEW ANALYSIS");
         //addCommunicationPatternPanel("CP", 0);
         tabs.elementAt(0).tabbedPane.setSelectedIndex(0);
-        mainTabbedPane.setSelectedIndex(0);
+        mainTabbedPane.setSelectedIndex(tabs.size() - 1);
         //paneAction(null);
         //frame.repaint();
     }
@@ -1977,9 +1977,9 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
     public void newTMLCP() {
         //TraceManager.addDev("NEW ANALYSIS");
-        addTMLCPPanel("CP", 0);
+        addTMLCPPanel("CP", -1);
         tabs.elementAt(0).tabbedPane.setSelectedIndex(0);
-        mainTabbedPane.setSelectedIndex(0);
+        mainTabbedPane.setSelectedIndex(tabs.size() - 1);
         //paneAction(null);
         //frame.repaint();
     }
@@ -2043,23 +2043,25 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
     public void newAvatarRequirement() {
         //TraceManager.addDev("NEW AVATAR Requirement");
-        addAvatarRequirementPanel("Requirements", 0);
+        addAvatarRequirementPanel("Requirements", -1);
         //((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
-        mainTabbedPane.setSelectedIndex(0);
+        //mainTabbedPane.setSelectedIndex(0);
+        mainTabbedPane.setSelectedIndex(tabs.size() - 1);
     }
 
     public void newAvatarMADs() {
         //TraceManager.addDev("NEW AVATAR MAD");
-        addAvatarMADPanel("Assumptions", 0);
+        addAvatarMADPanel("Assumptions", -1);
         //((TURTLEPanel)tabs.elementAt(tabs.size()-1)).tabbedPane.setSelectedIndex(0);
-        mainTabbedPane.setSelectedIndex(0);
+        //mainTabbedPane.setSelectedIndex(0);
+        mainTabbedPane.setSelectedIndex(tabs.size() - 1);
     }
 
     public void newProactiveDesign() {
         //TraceManager.addDev("NEW DESIGN");
         /*int index = */
         addProActiveDesignPanel("ProActive Design", -1);
-        tabs.elementAt(tabs.size() - 1).tabbedPane.setSelectedIndex(0);
+        //tabs.elementAt(tabs.size() - 1).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(tabs.size() - 1);
         //paneAction(null);
         //frame.repaint();*/
@@ -2067,27 +2069,28 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
     public void newAttackTree() {
         //TraceManager.addDev("NEW ANALYSIS");
-        addAttackTreePanel("Attack Trees", 0);
+        addAttackTreePanel("Attack Trees", -1);
         //((TURTLEPanel)tabs.elementAt(0)).tabbedPane.setSelectedIndex(0);
-        mainTabbedPane.setSelectedIndex(0);
+        mainTabbedPane.setSelectedIndex(tabs.size() - 1);
         //paneAction(null);
         //frame.repaint();
     }
 
     public void newFaultTree() {
         //TraceManager.addDev("NEW ANALYSIS");
-        addFaultTreePanel("Fault Trees", 0);
+        addFaultTreePanel("Fault Trees", -1);
         //((TURTLEPanel)tabs.elementAt(0)).tabbedPane.setSelectedIndex(0);
-        mainTabbedPane.setSelectedIndex(0);
+        mainTabbedPane.setSelectedIndex(tabs.size() - 1);
         //paneAction(null);
         //frame.repaint();
     }
 
     public void newRequirement() {
         //TraceManager.addDev("NEW ANALYSIS");
-        addRequirementPanel("Requirements", 0);
+        addRequirementPanel("Requirements", -1);
         //((TURTLEPanel)tabs.elementAt(0)).tabbedPane.setSelectedIndex(0);
-        mainTabbedPane.setSelectedIndex(0);
+        //mainTabbedPane.setSelectedIndex(0);
+        mainTabbedPane.setSelectedIndex(tabs.size() - 1);
         //paneAction(null);
         //frame.repaint();
     }

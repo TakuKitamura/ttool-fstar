@@ -123,6 +123,7 @@ public class AvatarRequirementPanel extends TURTLEPanel {
         tabbedPane.setSelectedIndex(0);
         JPanel toolBarPanel = new JPanel();
         toolBarPanel.setLayout(new BorderLayout());
+        tabbedPane.setSelectedIndex(tabbedPane.getTabCount()-1);
 
         return true;
     }
@@ -152,6 +153,7 @@ public class AvatarRequirementPanel extends TURTLEPanel {
         tabbedPane.setSelectedIndex(0);
         JPanel toolBarPanel = new JPanel();
         toolBarPanel.setLayout(new BorderLayout());
+        tabbedPane.setSelectedIndex(tabbedPane.getTabCount()-1);
 
         return true;
     }

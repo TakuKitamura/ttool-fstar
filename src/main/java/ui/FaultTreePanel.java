@@ -117,6 +117,7 @@ public class FaultTreePanel extends TURTLEPanel {
         tabbedPane.setSelectedIndex(0);
         JPanel toolBarPanel = new JPanel();
         toolBarPanel.setLayout(new BorderLayout());
+        tabbedPane.setSelectedIndex(tabbedPane.getTabCount()-1);
 
         return true;
     }
