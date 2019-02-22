@@ -170,9 +170,10 @@ public class TMLComponentDesignPanel extends TURTLEPanel {
 
     public String saveHeaderInXml(String extensionToName) {
         if (extensionToName == null) {
-            return "<Modeling type=\"TML Component Design\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
+            return "<Modeling type=\"TML Component Design\" nameTab=\"" + mgui.getTabName(this)  + "\" tabs=\"" + getAllTabsName()  + "\" >\n";
         }
-        return "<Modeling type=\"TML Component Design\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
+        return "<Modeling type=\"TML Component Design\" nameTab=\"" + mgui.getTabName(this) + extensionToName +  "\" tabs=\"" + getAllTabsName()
+                + "\" >\n";
 
     }
 

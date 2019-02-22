@@ -1757,6 +1757,13 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return null;
     }
 
+    public TURTLEPanel getTURTLEPanel(int index) {
+        if (index >= tabs.size()) {
+            return null;
+        }
+        return tabs.get(index);
+    }
+
     public void drawAvatarSpecification(AvatarSpecification av) {
         int index = createAvatarDesign("GeneratedDesign");
         AvatarDesignPanel adp = (AvatarDesignPanel) (tabs.elementAt(index));
@@ -9543,6 +9550,8 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         tabs.removeElementAt(initialPosition);
         tabs.insertElementAt(p, destinationPosition);
         mainTabbedPane.setSelectedIndex(destinationPosition);
+
+        changeMade(null, -1);
        //frame.repaint();
 
     }

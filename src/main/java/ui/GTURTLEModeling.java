@@ -5568,6 +5568,7 @@ public class GTURTLEModeling {
 
 
         nameTab = elt.getAttribute("nameTab");
+        String tabs = elt.getAttribute("tabs");
 
         indexDesign = mgui.createAvatarDesign(nameTab);
 
@@ -5596,6 +5597,13 @@ public class GTURTLEModeling {
                     loadAvatarSMD(elt, indexDesign);
             }
         }
+
+        // Order tabs in the right order
+        TURTLEPanel tp = mgui.getTURTLEPanel(indexDesign);
+        if (tp != null) {
+            tp.reorderTabs(tabs, 1);
+        }
+
     }
 
     public void loadAvatarDeployment(Node node) throws MalformedModelingException, SAXException {
@@ -6176,6 +6184,7 @@ public class GTURTLEModeling {
 
 
         nameTab = elt.getAttribute("nameTab");
+        String tabs = elt.getAttribute("tabs");
 
         indexDesign = mgui.createTMLComponentDesign(nameTab);
 
@@ -6199,6 +6208,12 @@ public class GTURTLEModeling {
                     }
                 }
             }
+        }
+
+        // Order tabs in the right order
+        TURTLEPanel tp = mgui.getTURTLEPanel(indexDesign);
+        if (tp != null) {
+            tp.reorderTabs(tabs, 1);
         }
     }
 

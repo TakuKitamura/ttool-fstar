@@ -56,8 +56,9 @@ import java.util.Vector;
  * Class TURTLEPanel
  * Management of TURTLE panels
  * Creation: 14/01/2005
- * @version 1.0 14/01/2005
+ *
  * @author Ludovic APVRILLE
+ * @version 1.0 14/01/2005
  * @see MainGUI
  */
 public abstract class TURTLEPanel implements GenericTree, DraggableTabbedPaneCallbackInterface {
@@ -76,7 +77,9 @@ public abstract class TURTLEPanel implements GenericTree, DraggableTabbedPaneCal
     }
 
     public abstract void init();
+
     public abstract String saveHeaderInXml(String extensionToName);
+
     public abstract String saveTailInXml();
 
     public TDiagramPanel panelAt(int index) {
@@ -84,7 +87,7 @@ public abstract class TURTLEPanel implements GenericTree, DraggableTabbedPaneCal
     }
 
     public boolean hasTDiagramPanel(TDiagramPanel _tdp) {
-        for(int i=0; i<panels.size(); i++) {
+        for (int i = 0; i < panels.size(); i++) {
             if (panels.get(i) == _tdp) {
                 return true;
             }
@@ -94,20 +97,20 @@ public abstract class TURTLEPanel implements GenericTree, DraggableTabbedPaneCal
     }
 
     public void getAllCheckedTGComponent(ArrayList<TGComponent> _list) {
-        for(int i=0; i<panels.size(); i++) {
+        for (int i = 0; i < panels.size(); i++) {
             panelAt(i).getAllCheckedTGComponent(_list);
         }
     }
-    
+
     public void getAllCheckableTGComponent(ArrayList<TGComponent> _list) {
-        for(int i=0; i<panels.size(); i++) {
+        for (int i = 0; i < panels.size(); i++) {
             panelAt(i).getAllCheckableTGComponent(_list);
         }
     }
-    
-    
-    public void getAllLatencyChecks(ArrayList<TGComponent> _list){
-        for(int i=0; i<panels.size(); i++) {
+
+
+    public void getAllLatencyChecks(ArrayList<TGComponent> _list) {
+        for (int i = 0; i < panels.size(); i++) {
             panelAt(i).getAllLatencyChecks(_list);
         }
     }
@@ -128,7 +131,7 @@ public abstract class TURTLEPanel implements GenericTree, DraggableTabbedPaneCal
         StringBuffer sb = new StringBuffer();
         sb.append(saveHeaderInXml(extensionToName));
         StringBuffer s;
-        for(int i=0; i<panels.size(); i++) {
+        for (int i = 0; i < panels.size(); i++) {
             tdp = panels.elementAt(i);
             s = tdp.saveInXML();
             if (s == null) {
@@ -182,12 +185,12 @@ public abstract class TURTLEPanel implements GenericTree, DraggableTabbedPaneCal
         return panels.size();
     }
 
-    public Vector<TDiagramPanel> getPanels()    {
+    public Vector<TDiagramPanel> getPanels() {
         return panels;
     }
 
     public boolean nameInUse(String s) {
-        for(int i = 0; i<tabbedPane.getTabCount(); i++) {
+        for (int i = 0; i < tabbedPane.getTabCount(); i++) {
             if (tabbedPane.getTitleAt(i).compareTo(s) == 0) {
                 return true;
             }
@@ -201,7 +204,7 @@ public abstract class TURTLEPanel implements GenericTree, DraggableTabbedPaneCal
         }
 
         String tmp;
-        for(int i=0; i<100000; i++) {
+        for (int i = 0; i < 100000; i++) {
             tmp = s + "_" + i;
             if (!nameInUse(tmp)) {
                 return tmp;
@@ -222,10 +225,10 @@ public abstract class TURTLEPanel implements GenericTree, DraggableTabbedPaneCal
 
     public void requestMoveRightTab(int index) {
         //
-        if (index > panels.size()-2) {
+        if (index > panels.size() - 2) {
             return;
         }
-        requestMoveTabFromTo(index, index+1);
+        requestMoveTabFromTo(index, index + 1);
         mgui.changeMade(null, -1);
     }
 
@@ -234,8 +237,44 @@ public abstract class TURTLEPanel implements GenericTree, DraggableTabbedPaneCal
         if (index < 1) {
             return;
         }
-        requestMoveTabFromTo(index, index-1);
+        requestMoveTabFromTo(index, index - 1);
         mgui.changeMade(null, -1);
+    }
+
+    public int getIndexOfTab(String name) {
+        for (int i = 1; i < panels.size(); i++) {
+            if (tabbedPane.getTitleAt(i).compareTo(name) == 0) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public void reorderTabs(String tabs, int startIndex) {
+
+        TraceManager.addDev("tabs=" + tabs);
+        if (tabs != null) {
+            String[] splitTabs = tabs.split("\\$");
+            for (int i = startIndex; i < splitTabs.length; i++) {
+                putTabAtPosition(splitTabs[i], i);
+            }
+        }
+
+    }
+
+
+    public void putTabAtPosition(String name, int newPosition) {
+        //TraceManager.addDev("Testing tab: " + name + " target position:" + newPosition);
+        int index = getIndexOfTab(name);
+        //TraceManager.addDev("current index of:" + name + " = " + index);
+        if (index == -1) {
+            return;
+        }
+
+        if (index != newPosition) {
+            requestMoveTabFromTo(index, newPosition);
+        }
+
     }
 
     public void requestMoveTabFromTo(int src, int dst) {
@@ -268,15 +307,15 @@ public abstract class TURTLEPanel implements GenericTree, DraggableTabbedPaneCal
 
         Object o = panels.elementAt(src);
         panels.removeElementAt(src);
-        panels.insertElementAt((TDiagramPanel)o, dst);
+        panels.insertElementAt((TDiagramPanel) o, dst);
 
         tabbedPane.setSelectedIndex(dst);
     }
 
     public void requestRenameTab(int index) {
-        String s = (String)JOptionPane.showInputDialog(mgui.frame, "TTool modeling:", "Name=", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101, null, tabbedPane.getTitleAt(index));
+        String s = (String) JOptionPane.showInputDialog(mgui.frame, "TTool modeling:", "Name=", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101, null, tabbedPane.getTitleAt(index));
         TraceManager.addDev("Testing new name:" + s);
-        if ((s != null) && (s.length() > 0)){
+        if ((s != null) && (s.length() > 0)) {
             // name already in use?
             // Test if valid name
             if (!mgui.isAValidTabName(s)) {
@@ -306,8 +345,8 @@ public abstract class TURTLEPanel implements GenericTree, DraggableTabbedPaneCal
     }
 
     public boolean refNameUsed(String s) {
-        for (TDiagramPanel tdpTmp: this.panels)
-            for (TGComponent tgc: tdpTmp.componentList) {
+        for (TDiagramPanel tdpTmp : this.panels)
+            for (TGComponent tgc : tdpTmp.componentList) {
                 if ((tgc instanceof TMLCPRefSD || tgc instanceof TMLCPRefAD) && tgc.name.equals(s))
                     return true;
             }
@@ -375,19 +414,19 @@ public abstract class TURTLEPanel implements GenericTree, DraggableTabbedPaneCal
     }
 
     public boolean isSystemCAMSEnabled() {
-    	return false;
+        return false;
     }
-    
+
     public boolean isELNEnabled() {
-    	return false;
+        return false;
     }
-    
+
     public MainGUI getMainGUI() {
         return mgui;
     }
 
     public void resetAllDIPLOIDs() {
-        for(int i=0; i<panels.size(); i++) {
+        for (int i = 0; i < panels.size(); i++) {
             panelAt(i).resetAllDIPLOIDs();
         }
     }
@@ -423,7 +462,7 @@ public abstract class TURTLEPanel implements GenericTree, DraggableTabbedPaneCal
         }
 
 
-        for(TDiagramPanel tdp: panels) {
+        for (TDiagramPanel tdp : panels) {
             tdp.searchForText(text, elements);
         }
     }
@@ -455,6 +494,19 @@ public abstract class TURTLEPanel implements GenericTree, DraggableTabbedPaneCal
 
         panels.removeElementAt(initialPosition);
         panels.insertElementAt(panel, destinationPosition);
+
+        mgui.changeMade(panels.get(destinationPosition), -1);
+    }
+
+    public String getAllTabsName() {
+        String ret = "";
+        for (int i = 0; i < panels.size(); i++) {
+            if (i > 0) {
+                ret += "$";
+            }
+            ret += tabbedPane.getTitleAt(i);
+        }
+        return ret;
     }
 
 }
