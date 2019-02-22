@@ -39,6 +39,7 @@
 
 package ui;
 
+import myutil.DraggableTabbedPaneCallbackInterface;
 import myutil.GenericTree;
 import myutil.TraceManager;
 import ui.tmlcp.TMLCPRefAD;
@@ -59,7 +60,7 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  * @see MainGUI
  */
-public abstract class TURTLEPanel implements GenericTree {
+public abstract class TURTLEPanel implements GenericTree, DraggableTabbedPaneCallbackInterface {
     public JTabbedPane tabbedPane;
     protected MainGUI mgui;
     public Vector<TToolBar> toolbars;
@@ -441,6 +442,19 @@ public abstract class TURTLEPanel implements GenericTree {
 
     public boolean supportTMLGeneration() {
         return false;
+    }
+
+    // if draggable tabbed pane
+
+    public void hasBeenDragged(int initialPosition, int destinationPosition) {
+        TToolBar toolbar = toolbars.get(initialPosition);
+        TDiagramPanel panel = panels.get(initialPosition);
+
+        toolbars.removeElementAt(initialPosition);
+        toolbars.insertElementAt(toolbar, destinationPosition);
+
+        panels.removeElementAt(initialPosition);
+        panels.insertElementAt(panel, destinationPosition);
     }
 
 }

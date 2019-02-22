@@ -68,7 +68,8 @@ public class FaultTreePanel extends TURTLEPanel {
         super(_mgui);
 
         // Issue #41 Ordering of tabbed panes
-        tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
+        //tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
+        tabbedPane = GraphicLib.createDraggableEnhancedTabbedPane(this);//new JTabbedPane();
         UIManager.put("TabbedPane.tabAreaBackground", MainGUI.BACK_COLOR);
         UIManager.put("TabbedPane.selected", MainGUI.BACK_COLOR);
         SwingUtilities.updateComponentTreeUI(tabbedPane);

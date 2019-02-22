@@ -42,6 +42,7 @@
 package ui;
 
 import myutil.GraphicLib;
+import myutil.*;
 import ui.avatarpd.AvatarPDPanel;
 import ui.avatarpd.AvatarPDToolBar;
 import ui.avatarrd.AvatarRDPanel;
@@ -70,7 +71,7 @@ public class AvatarRequirementPanel extends TURTLEPanel {
         super(_mgui);
 
     	// Issue #41 Ordering of tabbed panes 
-        tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
+        tabbedPane = GraphicLib.createDraggableEnhancedTabbedPane(this);//new JTabbedPane();
         UIManager.put("TabbedPane.tabAreaBackground", MainGUI.BACK_COLOR);
         UIManager.put("TabbedPane.selected", MainGUI.BACK_COLOR);
         SwingUtilities.updateComponentTreeUI(tabbedPane);

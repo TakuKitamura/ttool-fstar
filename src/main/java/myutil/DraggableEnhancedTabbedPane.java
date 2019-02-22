@@ -49,6 +49,7 @@ public class DraggableEnhancedTabbedPane extends JTabbedPane {
   protected Rectangle rectForward = new Rectangle();
 
   private DraggableTabbedPaneCallbackInterface callback;
+  private int forbiddenDrag = -1;
 
   private void clickArrowButton(String actionKey) {
     JButton scrollForwardButton = null;
@@ -79,6 +80,10 @@ public class DraggableEnhancedTabbedPane extends JTabbedPane {
     // //     action.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null, 0, 0));
     // //   }
     // // }
+  }
+
+  public void setForbiddenDrag(int index) {
+      forbiddenDrag = index;
   }
 
   public void autoScrollTest(Point glassPt) {
@@ -142,6 +147,8 @@ public class DraggableEnhancedTabbedPane extends JTabbedPane {
       // This check is needed if tab content is null.
       return;
     }
+
+
     final Component cmp = getComponentAt(prev);
     final Component tab = getTabComponentAt(prev);
     final String title = getTitleAt(prev);
@@ -149,6 +156,12 @@ public class DraggableEnhancedTabbedPane extends JTabbedPane {
     final String tip = getToolTipTextAt(prev);
     final boolean isEnabled = isEnabledAt(prev);
     int tgtindex = prev > next ? next : next - 1;
+
+    // Forbidden drag on this tab?
+    if ((tgtindex == forbiddenDrag) || (prev == forbiddenDrag)) {
+        return;
+    }
+
     remove(prev);
     insertTab(title, icon, cmp, tip, tgtindex);
       if (callback != null) {

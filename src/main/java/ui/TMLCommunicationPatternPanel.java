@@ -70,7 +70,8 @@ public class TMLCommunicationPatternPanel extends TURTLEPanel {
         super(_mgui);
         
     	// Issue #41 Ordering of tabbed panes 
-        tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
+        //tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
+        tabbedPane = GraphicLib.createDraggableEnhancedTabbedPaneFixedAt0(this);//new JTabbedPane();
         
         cl = new ChangeListener() {
         	
