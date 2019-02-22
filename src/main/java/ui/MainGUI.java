@@ -270,7 +270,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
     //TURTLE modeling graphic components
     //private JTabbedPane mainTabbedPane;
-    private myutil.DraggableTabbedPane mainTabbedPane;
+    private myutil.DraggableEnhancedTabbedPane mainTabbedPane;
     private JToolBarMainTurtle mainBar;
     //private JPopupMenu menuTabbedPane;
 
@@ -1679,7 +1679,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
         //TraceManager.addDev("New TURTLE Panels");
         // Issue #41 Ordering of tabbed panes
-        mainTabbedPane = GraphicLib.createDraggableTabbedPane(this);//new JTabbedPane();
+        mainTabbedPane = GraphicLib.createDraggableEnhancedTabbedPane(this);//new JTabbedPane();
         mainTabbedPane.setBackground(ColorManager.MainTabbedPane);
         mainTabbedPane.setForeground(Color.black);
 

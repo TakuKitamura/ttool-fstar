@@ -24,6 +24,7 @@ public class DraggableTabbedPane extends JTabbedPane {
   private Point currentMouseLocation = null;
   private int draggedTabIndex = 0;
   private DraggableTabbedPaneCallbackInterface callback;
+  private int myY = 0;
 
   public DraggableTabbedPane(DraggableTabbedPaneCallbackInterface callback) {
     super();
@@ -38,10 +39,12 @@ public class DraggableTabbedPane extends JTabbedPane {
           if(tabNumber >= 0) {
             draggedTabIndex = tabNumber;
             Rectangle bounds = getUI().getTabBounds(DraggableTabbedPane.this, tabNumber);
+            bounds.height = bounds.height + 100;
+            TraceManager.addDev("bounds width:" + bounds.width + " height:" + bounds.height);
 
 
             // Paint the tabbed pane to a buffer
-            Image totalImage = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+            Image totalImage = new BufferedImage(getWidth(), getHeight() + 100, BufferedImage.TYPE_INT_ARGB);
             Graphics totalGraphics = totalImage.getGraphics();
             totalGraphics.setClip(bounds);
             // Don't be double buffered when painting to a static image.
@@ -51,10 +54,11 @@ public class DraggableTabbedPane extends JTabbedPane {
             // Paint just the dragged tab to the buffer
             tabImage = new BufferedImage(bounds.width, bounds.height, BufferedImage.TYPE_INT_ARGB);
             Graphics graphics = tabImage.getGraphics();
+            myY = bounds.y;
             graphics.drawImage(totalImage, 0, 0, bounds.width, bounds.height, bounds.x, bounds.y, bounds.x + bounds.width, bounds.y+bounds.height, DraggableTabbedPane.this);
 
             dragging = true;
-            repaint();
+            //repaint();
           }
         } else {
           currentMouseLocation = e.getPoint();
@@ -100,6 +104,7 @@ public class DraggableTabbedPane extends JTabbedPane {
     if(dragging && currentMouseLocation != null && tabImage != null) {
       // Draw the dragged tab
       g.drawImage(tabImage, currentMouseLocation.x, currentMouseLocation.y, this);
+      //g.drawImage(tabImage, currentMouseLocation.x, myY, this);
     }
   }
 

@@ -650,6 +650,13 @@ public final class GraphicLib {
         return pane;
     }
 
+    public static DraggableEnhancedTabbedPane createDraggableEnhancedTabbedPane(DraggableTabbedPaneCallbackInterface call) {
+        final DraggableEnhancedTabbedPane pane = new DraggableEnhancedTabbedPane(call);
+        pane.setTabPlacement(JTabbedPane.TOP);
+        pane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+        return pane;
+    }
+
     public static JTabbedPane createTabbedPaneRegular() {
         final JTabbedPane pane = new JTabbedPane(JTabbedPane.TOP);
         return pane;
