@@ -82,7 +82,9 @@ import ui.window.TabInfo;
 public class TMLADReadChannel extends TADComponentWithoutSubcomponents/* Issue #69 TGCWithoutInternalComponent*/ implements CheckableAccessibility, LinkedReference, CheckableLatency, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
     private Map<String, String> latencyVals;
     protected int lineLength = 5;
-    protected int textX = 5;
+    
+    // Issue #31
+//    protected int textX = 5;
     protected int textX0 = 2;
     protected int textY0 = 0;
     protected int textY1 = 15;

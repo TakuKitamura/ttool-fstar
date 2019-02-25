@@ -65,8 +65,11 @@ public class TMLADEncrypt extends TADComponentWithoutSubcomponents/* Issue #69 T
     //  private int textX, textY;
     private int ex = 5;
     private int textHeight = 8;
-    private int ilength = 12;
-    private int lineLength1 = 3;
+    
+    // Issue #31
+    private double dlength = 12;
+    private double dlineLength1 = 3;
+    
     public String type = "";
     public String message_overhead = "";
     public String size = "";
@@ -127,6 +130,10 @@ public class TMLADEncrypt extends TADComponentWithoutSubcomponents/* Issue #69 T
         g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
         g.drawLine(x + (width / 2), y + height + ex, x + (width / 2), y + lineLength + height + ex);
 
+        // Issue #31
+        final int ilength = (int) dlength;
+        final int lineLength1 = (int) dlineLength1;
+        
         if (type.equals("Symmetric Encryption")) {
             //S
             g.drawLine(x + ex, y + (height - ilength) / 4, x + width - ex, y + (height - ilength) / 4);
@@ -161,6 +168,7 @@ public class TMLADEncrypt extends TADComponentWithoutSubcomponents/* Issue #69 T
             g.drawLine(x + ex / 2 + 1, y + (height - ilength) / 2, x + width / 2, y + (height - ilength) / 2 + ilength);
             g.drawLine(x + width - ex / 2 - 1, y + (height - ilength) / 2, x + width / 2, y + (height - ilength) / 2 + ilength);
         } else if (type.equals("Hash")) {
+        	//H
             g.drawLine(x + (width / 2) - lineLength1, y + (height - ilength) / 2, x + (width / 2) - lineLength1, y + (height - ilength) / 2 + ilength);
             g.drawLine(x + (width / 2) + lineLength1, y + (height - ilength) / 2, x + (width / 2) + lineLength1, y + (height - ilength) / 2 + ilength);
             g.drawLine(x + (width / 2) - lineLength1, y + (height - ilength) / 2 + ilength / 2, x + (width / 2) + lineLength1, y + (height - ilength) / 2 + ilength / 2);
@@ -308,5 +316,16 @@ public class TMLADEncrypt extends TADComponentWithoutSubcomponents/* Issue #69 T
     @Override
     public void setStateAction(int _stateAction) {
         stateOfError = _stateAction;
+    }
+    
+    // Issue #31
+    @Override
+    public void rescale( final double scaleFactor ) {
+    	super.rescale(scaleFactor);
+    	
+        final double factor = scaleFactor / oldScaleFactor;
+    	
+        dlength = dlength * factor;
+        dlineLength1 = dlineLength1 * factor;
     }
 }

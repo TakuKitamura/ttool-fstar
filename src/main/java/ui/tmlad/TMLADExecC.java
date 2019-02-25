@@ -55,7 +55,9 @@ import java.awt.geom.Line2D;
  */
 public class TMLADExecC extends TADComponentWithSubcomponents /* Issue #69 TGCWithInternalComponent*/ implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
     private int lineLength = 5;
-    private int textX, textY;
+    
+    // Issue #31
+    //private int textX, textY;
     private int ilength = 10;
     private int lineLength1 = 2;
 	

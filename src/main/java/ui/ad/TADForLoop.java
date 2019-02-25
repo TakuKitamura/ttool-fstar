@@ -26,9 +26,11 @@ public abstract class TADForLoop extends TADComponentWithoutSubcomponents implem
 	protected static final int INDEX_EXIT_LOOP = 2;
 
 	protected int lineLength = 5;
-    protected int textX =  5;
-    protected int textY =  15;
-    protected int arc = 5;
+	
+	// Issue #31
+//    protected int textX =  5;
+//    protected int textY =  15;
+//    protected int arc = 5;
 
     protected int stateOfError = 0;
 
@@ -46,6 +48,9 @@ public abstract class TADForLoop extends TADComponentWithoutSubcomponents implem
 		width = 30;
         height = 20;
         minWidth = 30;
+        
+        // Issue #31
+        textX =  5;
 
         moveable = true;
         editable = true;

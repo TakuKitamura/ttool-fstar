@@ -66,7 +66,8 @@ public class TADChoice extends TADComponentWithSubcomponents/* Issue #69  TGCWit
     
 	protected int lineOutLength = 25;
     
-	private int textX1, textY1, textX2, textY2, textX3, textY3;
+//	Issue # 31 private int textX1, textY1, textX2, textY2, textX3, textY3;
+	private double dtextX1, dtextY1, dtextX2, dtextY2, dtextX3, dtextY3;
     
     protected int stateOfError = 0;
     
@@ -75,12 +76,14 @@ public class TADChoice extends TADComponentWithSubcomponents/* Issue #69  TGCWit
         
         width = 30;
         height = 30;
-        textX1 = -lineOutLength;
-        textY1 = height/2 - 5;
-        textX2 = width + 5;
-        textY2 = height/2 - 5;
-        textX3 = width /2 + 5;
-        textY3 = height + 15;
+        
+        // Issue #31
+        dtextX1 = -lineOutLength;
+        dtextY1 = height/2 - 5;
+        dtextX2 = width + 5;
+        dtextY2 = height/2 - 5;
+        dtextX3 = width /2 + 5;
+        dtextY3 = height + 15;
         
         createConnectingPoints();
 //        nbConnectingPoint = 4;
@@ -120,6 +123,21 @@ public class TADChoice extends TADComponentWithSubcomponents/* Issue #69  TGCWit
         myImageIcon = IconManager.imgic208;
     }
 
+    // Issue #31
+    @Override
+    public void rescale( final double scaleFactor ) {
+    	super.rescale( scaleFactor );
+
+    	final double factor = scaleFactor / oldScaleFactor;
+
+    	dtextX1 = dtextX1 * factor;
+        dtextY1 = dtextY1 * factor;
+        dtextX2 = dtextX2 * factor;
+        dtextY2 = dtextY2 * factor;
+        dtextX3 = dtextX3 * factor;
+        dtextY3 = dtextY3 * factor;
+    }
+
     protected void createConnectingPoints() {
         nbConnectingPoint = 4;
         connectingPoint = new TGConnectingPoint[nbConnectingPoint];
@@ -131,17 +149,21 @@ public class TADChoice extends TADComponentWithSubcomponents/* Issue #69  TGCWit
     }
     
     protected void createGuards() {
-        TGCOneLineText tgc = new TGCOneLineText(x+textX1, y+textY1, textX1-50, textX1+5, textY1, textY1 + 25, true, this, tdp);
+    	
+    	// Issue #31
+        TGCOneLineText tgc = new TGCOneLineText((int)(x+dtextX1), (int)(y+dtextY1), (int)(dtextX1-50), (int)(dtextX1+5), (int)dtextY1, (int)(dtextY1 + 25), true, this, tdp);
         tgc.setValue( EMPTY_GUARD_TEXT );
         tgc.setName("guard 1");
         tgcomponent[ 0 ] = tgc;
         
-        tgc = new TGCOneLineText(x+textX2, y+textY2, textX2, textX2+20, textY2, textY2+25, true, this, tdp);
+    	// Issue #31
+        tgc = new TGCOneLineText((int)(x+dtextX2), (int)(y+dtextY2), (int)dtextX2, (int)(dtextX2+20), (int)dtextY2, (int)(dtextY2+25), true, this, tdp);
         tgc.setValue( EMPTY_GUARD_TEXT );
         tgc.setName("guard 2");
         tgcomponent[ 1 ] = tgc;
         
-        tgc = new TGCOneLineText(x+textX3, y+textY3, textX3, textX3+20, textY3, textY3+25, true, this, tdp);
+    	// Issue #31
+        tgc = new TGCOneLineText((int)(x+dtextX3), (int)(y+dtextY3), (int)dtextX3, (int)(dtextX3+20), (int)dtextY3, (int)(dtextY3+25), true, this, tdp);
         tgc.setValue( EMPTY_GUARD_TEXT );
         tgc.setName("guard 3");
         tgcomponent[ 2 ] = tgc;

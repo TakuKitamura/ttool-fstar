@@ -54,9 +54,11 @@ import java.awt.geom.Line2D;
  */
 public class TADActionState extends TADOneLineText/* Issue #69 TGCOneLineText*/ implements PreJavaCode, PostJavaCode, CheckableAccessibility, ActionStateErrorHighlight {
     protected int lineLength = 5;
-    protected int textX =  5;
-    protected int textY =  15;
-    protected int arc = 5;
+    
+    // Issue #31
+//    protected int textX =  5;
+//    protected int textY =  15;
+    //protected int arc = 5;
 	
 	protected int stateAction = 0; // 0: unchecked 1: attribute; 2: gate; 3:unknown
 
@@ -67,6 +69,9 @@ public class TADActionState extends TADOneLineText/* Issue #69 TGCOneLineText*/ 
         width = 30;
         height = 20;
         minWidth = 30;
+        
+        // Issue #31
+        textX = 5;
         
         createConnectingPoints();
 //        nbConnectingPoint = 2;

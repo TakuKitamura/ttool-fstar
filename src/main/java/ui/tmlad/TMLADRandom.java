@@ -60,9 +60,11 @@ import java.awt.geom.Line2D;
  */
 public class TMLADRandom extends TADComponentWithoutSubcomponents/* Issue #69 TGCWithoutInternalComponent */implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
     protected int lineLength = 5;
-    protected int textX =  5;
-    protected int textY =  15;
-    protected int arc = 5;
+    
+    // Issue #31
+//    protected int textX =  5;
+//    protected int textY =  15;
+//    protected int arc = 5;
 	protected String valueRandom = "";
 	protected String variable;
 	protected String minValue;
