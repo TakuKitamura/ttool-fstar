@@ -77,9 +77,11 @@ import ui.window.JDialogMultiString;
  */
 public class TMLADSendEvent extends TADComponentWithoutSubcomponents implements CheckableAccessibility, CheckableLatency, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
     protected int lineLength = 5;
-    protected int textX = 5;
-    protected int textY = 15;
-    protected int arc = 5;
+    
+    // Issue #31
+//    protected int textX = 5;
+//    protected int textY = 15;
+//    protected int arc = 5;
     protected int linebreak = 10;
 
     protected String eventName = "evt";

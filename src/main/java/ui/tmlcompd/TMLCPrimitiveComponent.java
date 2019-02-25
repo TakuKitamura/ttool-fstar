@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package ui.tmlcompd;
 
 import myutil.GraphicLib;
@@ -50,8 +49,8 @@ import ui.window.JDialogAttribute;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -65,8 +64,10 @@ import java.util.Vector;
 public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent, WithAttributes {
     private int maxFontSize = 14;
     private int minFontSize = 4;
-    private int currentFontSize = -1;
-    private boolean displayText = true;
+    
+    // Issue #31
+    //private int currentFontSize = -1;
+    //private boolean displayText = true;
     //    private int spacePt = 3;
     private Color myColor;
 
@@ -79,9 +80,11 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
     //   private boolean attributesAreDrawn = false;
     //public HashMap<String, Integer> attrMap = new HashMap<String, Integer>();
     //public String mappingName;
-    protected LinkedList<TAttribute> myAttributes;
-    private int textX = 15; // border for ports
-    private double dtextX = 0.0;
+    protected List<TAttribute> myAttributes;
+    
+    // Issue #31
+//    private int textX = 15; // border for ports
+//    private double dtextX = 0.0;
 
     private String operation = "";
 
@@ -92,10 +95,11 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 
         initScaling(200, 150);
 
-        oldScaleFactor = tdp.getZoom();
-        dtextX = textX * oldScaleFactor;
-        textX = (int) dtextX;
-        dtextX = dtextX - textX;
+        // Issue #31
+//        oldScaleFactor = tdp.getZoom();
+//        dtextX = textX * oldScaleFactor;
+//        textX = (int) dtextX;
+//        dtextX = dtextX - textX;
 
         minWidth = 1;
         minHeight = 1;
@@ -123,6 +127,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         actionOnAdd();
     }
 
+    @Override
     public void internalDrawing(Graphics g) {
         int w;
         Font f = g.getFont();
@@ -246,7 +251,6 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         }
 
         g.setFont(fold);
-
     }
 
     public void drawVerification(Graphics g, int x, int y, int checkConfStatus) {
@@ -267,18 +271,19 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         g.fillRect(x - 12, y - 5, 9, 7);
         g.setColor(c);
         g.drawRect(x - 12, y - 5, 9, 7);
-
-
     }
 
-    public void rescale(double scaleFactor) {
-        dtextX = (textX + dtextX) / oldScaleFactor * scaleFactor;
-        textX = (int) (dtextX);
-        dtextX = dtextX - textX;
+// Issue #31    
+//    @Override
+//    public void rescale(double scaleFactor) {
+//        dtextX = (textX + dtextX) / oldScaleFactor * scaleFactor;
+//        textX = (int) (dtextX);
+//        dtextX = dtextX - textX;
+//
+//        super.rescale(scaleFactor);
+//    }
 
-        super.rescale(scaleFactor);
-    }
-
+    @Override
     public TGComponent isOnOnlyMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -286,11 +291,11 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         return null;
     }
 
-
     public boolean isAttacker() {
         return isAttacker;
     }
 
+    @Override
     public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
         // On the icon?
         if (iconIsDrawn) {
@@ -383,6 +388,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         return ((TMLComponentTaskDiagramPanel) (tdp)).getRecordNamed(this, _nameOfRecord);
     }
 
+    @Override
     public int getType() {
         return TGComponentManager.TMLCTD_PCOMPONENT;
     }
@@ -396,12 +402,10 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         setFather(null);
         TDiagramPanel tdp = getTDiagramPanel();
         setCdRectangle(tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY());
-
     }
 
     public boolean acceptSwallowedTGComponent(TGComponent tgc) {
         return tgc instanceof TMLCPrimitivePort;
-
     }
 
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
@@ -428,7 +432,6 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         removeInternalComponent(tgc);
     }
 
-
     /*public Vector getArtifactList() {
       Vector v = new Vector();
       for(int i=0; i<nbInternalTGComponent; i++) {
@@ -439,6 +442,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
       return v;
       }*/
 
+    @Override
     public void hasBeenResized() {
         rescaled = true;
         for (int i = 0; i < nbInternalTGComponent; i++) {
@@ -452,8 +456,9 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         }
     }
 
+    @Override
     public void resizeWithFather() {
-        if ((father != null) && (father instanceof TMLCCompositeComponent)) {
+        if (/*(father != null) && (*/father instanceof TMLCCompositeComponent ) {
             // Too large to fit in the father? -> resize it!
             resizeToFatherSize();
 
@@ -462,6 +467,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         }
     }
 
+    @Override
     public int getChildCount() {
         return myAttributes.size() + nbInternalTGComponent + 1;
     }
@@ -496,6 +502,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         return -1;
     }
 
+    @Override
     protected String translateExtraParam() {
         TAttribute a;
         //TraceManager.addDev("Loading extra params of " + value);
@@ -594,36 +601,36 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         return currentFontSize;
     }
 
-    public java.util.List<TAttribute> getAttributeList() {
+    public List<TAttribute> getAttributeList() {
         return myAttributes;
     }
 
-    public java.util.List<TMLCPrimitivePort> getAllChannelsOriginPorts() {
+    public List<TMLCPrimitivePort> getAllChannelsOriginPorts() {
         return getAllPorts(0, true);
     }
 
-    public java.util.List<TMLCPrimitivePort> getAllChannelsDestinationPorts() {
+    public List<TMLCPrimitivePort> getAllChannelsDestinationPorts() {
         return getAllPorts(0, false);
     }
 
-    public java.util.List<TMLCPrimitivePort> getAllEventsOriginPorts() {
+    public List<TMLCPrimitivePort> getAllEventsOriginPorts() {
         return getAllPorts(1, true);
     }
 
-    public java.util.List<TMLCPrimitivePort> getAllEventsDestinationPorts() {
+    public List<TMLCPrimitivePort> getAllEventsDestinationPorts() {
         return getAllPorts(1, false);
     }
 
-    public java.util.List<TMLCPrimitivePort> getAllRequestsDestinationPorts() {
+    public List<TMLCPrimitivePort> getAllRequestsDestinationPorts() {
         return getAllPorts(2, false);
     }
 
-    public java.util.List<TMLCPrimitivePort> getAllRequestsOriginPorts() {
+    public List<TMLCPrimitivePort> getAllRequestsOriginPorts() {
         return getAllPorts(2, true);
     }
 
-    public java.util.List<TMLCPrimitivePort> getAllPorts(int _type, boolean _isOrigin) {
-        java.util.List<TMLCPrimitivePort> ret = new LinkedList<TMLCPrimitivePort>();
+    public List<TMLCPrimitivePort> getAllPorts(int _type, boolean _isOrigin) {
+        List<TMLCPrimitivePort> ret = new LinkedList<TMLCPrimitivePort>();
         TMLCPrimitivePort port;
 
         //TraceManager.addDev("Type = " + _type + " isOrigin=" + _isOrigin);
@@ -642,8 +649,8 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         return ret;
     }
 
-    public java.util.List<TMLCPrimitivePort> getAllInternalPrimitivePorts() {
-        java.util.List<TMLCPrimitivePort> list = new ArrayList<TMLCPrimitivePort>();
+    public List<TMLCPrimitivePort> getAllInternalPrimitivePorts() {
+        List<TMLCPrimitivePort> list = new ArrayList<TMLCPrimitivePort>();
         for (int i = 0; i < nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof TMLCPrimitivePort) {
                 list.add((TMLCPrimitivePort) (tgcomponent[i]));

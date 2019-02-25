@@ -60,10 +60,14 @@ import java.awt.geom.Line2D;
  */
 public class TMLADNotifiedEvent extends TADComponentWithoutSubcomponents/* Issue #69TGCWithoutInternalComponent */ implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
     protected int lineLength = 5;
-    protected int textX =  5;
-    protected int textY =  15;
+    
+    // Issue #31
+//    protected int textX =  5;
+//    protected int textY =  15;
     protected int linebreak = 10;
-    protected int textX1 = 2;
+    private int textX1 = 2;
+    private double dtextX1;
+    
     
     protected String eventName = "evt";
     protected String result = "x";
@@ -76,6 +80,10 @@ public class TMLADNotifiedEvent extends TADComponentWithoutSubcomponents/* Issue
         width = 30;
         height = 20;
         minWidth = 30;
+        
+        // Issue #31
+        textX1 = 2;
+        dtextX1 = textX1 * oldScaleFactor;
         
         nbConnectingPoint = 2;
         connectingPoint = new TGConnectingPoint[2];
@@ -266,4 +274,19 @@ public class TMLADNotifiedEvent extends TADComponentWithoutSubcomponents/* Issue
 	public void setStateAction(int _stateAction) {
 		stateOfError = _stateAction;
 	}
+	
+    /* Issue #31
+     * (non-Javadoc)
+     * @see ui.TGScalableComponent#rescale(double)
+     */
+    @Override
+    public void rescale( final double scaleFactor ) {
+    	super.rescale(scaleFactor);
+    	
+        final double factor = scaleFactor / oldScaleFactor;
+
+        dtextX1 = (textX1 + dtextX1) * factor;
+        textX1 = (int) (dtextX1);
+        dtextX1 = dtextX1 - textX1;
+    }
 }

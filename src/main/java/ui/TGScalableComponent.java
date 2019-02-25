@@ -1,10 +1,24 @@
 package ui;
 
+/**
+ * Issue #31
+ * @author dblouin
+ *
+ */
 public abstract class TGScalableComponent extends TGComponent implements ScalableTGComponent {
 	
 	protected boolean rescaled;
 	
 	protected double oldScaleFactor;
+
+	protected int currentFontSize;
+	protected boolean displayText;
+	protected int textX; // border for ports
+	protected double dtextX;
+	protected int textY;
+	protected double dtextY;
+	protected int arc = 5;
+	protected double darc;
 
 	public TGScalableComponent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
 			TGComponent _father, TDiagramPanel _tdp) {
@@ -12,6 +26,23 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
 		
 		rescaled = false;
         oldScaleFactor = tdp.getZoom();//1.0;
+        textX = 15;
+        dtextX = textX * oldScaleFactor;
+        textX = (int) dtextX;
+        dtextX = dtextX - textX;
+
+        textY = 15;
+        dtextY = textY * oldScaleFactor;
+        textY = (int) dtextY;
+        dtextY = dtextY - textY;
+
+        arc = 5;
+        darc = arc * oldScaleFactor;
+        arc = (int) darc;
+        darc = darc - arc;
+        
+        currentFontSize = -1;
+    	displayText = true;
 	}
 
     protected void initScaling(int w, int h) {
@@ -79,6 +110,18 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
         dx = dx - x;
         y = (int)(dy);
         dy = dy - y;
+        
+        dtextX = (textX + dtextX) * factor;
+        textX = (int) (dtextX);
+        dtextX = dtextX - textX;
+
+        dtextY = (textY + dtextY) * factor;
+        textY = (int) (dtextY);
+        dtextY = dtextY - textY;
+
+        darc = (arc + darc) * factor;
+        arc = (int) (darc);
+        darc = darc - arc;
         
         // Issue #81: We also need to update max coordinate values
         maxX *= factor;
