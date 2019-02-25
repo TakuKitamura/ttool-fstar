@@ -37,17 +37,11 @@ public class InputInstanceTest {
 
         tmlm = new TMLModeling();
 
-        //create a reference to activity diagrams
-        TMLActivity refToA = null;
-        TMLActivity refToB = null;
-        TMLActivity refToD = null;
-        TMLActivity refToE = null;
 
-
-        TMLTask taskA = new TMLTask("task__A", null, refToA);
-        TMLTask taskB = new TMLTask("task__B", null, refToB);
-        TMLTask taskD = new TMLTask("task__D", null, refToD);
-        TMLTask taskE = new TMLTask("task__E", null, refToE);
+        TMLTask taskA = new TMLTask("task__A", null, null);
+        TMLTask taskB = new TMLTask("task__B", null, null);
+        TMLTask taskD = new TMLTask("task__D", null, null);
+        TMLTask taskE = new TMLTask("task__E", null, null);
 
         //filling activity diagrams of tasks
 
@@ -212,6 +206,40 @@ public class InputInstanceTest {
         return tmla;
     }
 
+    @Test
+    public void findOptimizedMapping() {
+
+        try {
+
+            // These examples need model generation turned on.
+            HashMap<String, String> cfg = new HashMap<String, String>();
+            cfg.put("model", "true");
+            Context ctx = new Context(cfg);
+
+
+            optimizationModel.findOptimizedMapping(ctx);
+
+            Log.close();
+            if (Log.isOpen())
+                System.out.println("Log is still open!");
+        } catch (Z3Exception ex) {
+            System.out.println("Z3 Managed Exception: " + ex.getMessage());
+            System.out.println("Stack trace: ");
+            ex.printStackTrace(
+                    System.out);
+        } catch (OptimizationModel.TestFailedException ex) {
+            System.out.println("TEST CASE FAILED: " + ex.getMessage());
+            System.out.println("Stack trace: ");
+            ex.printStackTrace(System.out);
+        } catch (Exception ex) {
+            System.out.println("Unknown Exception: " + ex.getMessage());
+            System.out.println("Stack trace: ");
+            ex.printStackTrace(System.out);
+        }
+
+
+    }
+
 
     @Test
     public void findFeasibleMapping() {
@@ -349,4 +377,8 @@ public class InputInstanceTest {
     }
 
 
+    @Test
+    public void getFinalTask() {
+        System.out.println(inputInstance.getFinalTask(inputInstance.getModeling()).getName());
+    }
 }

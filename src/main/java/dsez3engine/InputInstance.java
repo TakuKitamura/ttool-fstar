@@ -71,7 +71,7 @@ public class InputInstance {
         }
 
 
-        HwMemory tempMem = new HwMemory("testfailed");
+        HwMemory tempMem = new HwMemory("");
 
         if ((!firstLinks.isEmpty())) {
             List<HwLink> secondLinks = new ArrayList<>();
@@ -101,13 +101,18 @@ public class InputInstance {
         return tempMem;
     }
 
-    public void setArchitecture(TMLArchitecture architecture) {
-        this.architecture = architecture;
+    //TODO this supposes that we have one single final task
+
+    public TMLTask getFinalTask(TMLModeling tmlm){
+        TMLTask finalTask = null;
+        for (TMLTask tmlTask : (List<TMLTask>) tmlm.getTasks()){
+            if (tmlTask.getWriteTMLChannels().isEmpty())
+                finalTask = tmlTask;
+        }
+
+        return finalTask;
     }
 
-    public void setModeling(TMLModeling modeling) {
-        this.modeling = modeling;
-    }
 
     public TMLArchitecture getArchitecture() {
         return architecture;
