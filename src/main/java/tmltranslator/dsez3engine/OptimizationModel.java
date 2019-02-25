@@ -1,10 +1,8 @@
-package dsez3engine;
+package tmltranslator.dsez3engine;
 
 import com.microsoft.z3.*;
 import tmltranslator.*;
-import tmltranslator.tmlcp.TMLCPSequenceDiagram;
 
-import java.util.ArrayList;
 import java.util.List;
 
 

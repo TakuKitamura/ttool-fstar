@@ -1,10 +1,8 @@
-package dsez3engine;
+package tmltranslator.dsez3engine;
 
 import tmltranslator.*;
 
-import javax.swing.text.html.HTMLDocument;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 

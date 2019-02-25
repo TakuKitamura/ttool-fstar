@@ -1,4 +1,4 @@
-package dsez3engine;
+package tmltranslator.dsez3engine;
 
 import com.microsoft.z3.Context;
 import com.microsoft.z3.Log;
@@ -121,10 +121,10 @@ public class InputInstanceTest {
         taskE.addReadTMLChannel(be);
         taskE.addReadTMLChannel(de);
 
-        ab.setTasks(taskA,taskB);
-        ad.setTasks(taskA,taskD);
-        be.setTasks(taskB,taskE);
-        de.setTasks(taskD,taskE);
+        ab.setTasks(taskA, taskB);
+        ad.setTasks(taskA, taskD);
+        be.setTasks(taskB, taskE);
+        de.setTasks(taskD, taskE);
 
         ab.setNumberOfSamples(2);
         ad.setNumberOfSamples(2);
@@ -144,7 +144,6 @@ public class InputInstanceTest {
 
         return tmlm;
     }
-
 
 
     private TMLArchitecture setUpTMLArchitecture() {
@@ -253,7 +252,6 @@ public class InputInstanceTest {
 
 
             optimizationModel.findFeasibleMapping(ctx);
-            //optim.findOptimizedMappingModel(ctx);
 
             Log.close();
             if (Log.isOpen())
@@ -277,26 +275,31 @@ public class InputInstanceTest {
     }
 
 
-    /****************************** TEST PASSED WITH SUCCESS **************************************/
     @Test
     public void getFeasibleCPUs() {
-        TMLTask tempTask;
-        tempTask = (TMLTask) inputInstance.getModeling().getTasks().get(2);
-        System.out.println(tempTask.getName());
 
-        List<HwExecutionNode> tempList = new ArrayList<>();
+        Boolean test = false;
+        List <HwExecutionNode> expectedList = new ArrayList<>();
+        expectedList.add(inputInstance.getArchitecture().getHwCPUByName("MainCPU"));
+        expectedList.add(inputInstance.getArchitecture().getHwCPUByName("dsp"));
+
+        TMLTask tempTask = (TMLTask) inputInstance.getModeling().getTasks().get(2);
+
+
+        List<HwExecutionNode> actualList = new ArrayList<>();
+
         for (int i = 0; i < inputInstance.getFeasibleCPUs(tempTask).size(); i++) {
-            tempList.add(inputInstance.getFeasibleCPUs(tempTask).get(i));
+            actualList.add(inputInstance.getFeasibleCPUs(tempTask).get(i));
         }
 
-        for (int i = 0; i < tempList.size(); i++) {
-            System.out.println(tempList.get(i).getName());
-        }
+        assertEquals(actualList.size(), expectedList.size());
 
+        for (HwExecutionNode hwExecutionNode : actualList){
+            assertTrue(expectedList.contains(hwExecutionNode));
+        }
 
     }
 
-    /****************************** TEST PASSED WITH SUCCESS **************************************/
     @Test
     public void getBufferIn() {
 
@@ -305,14 +308,14 @@ public class InputInstanceTest {
             tempTasks.add((TMLTask) inputInstance.getModeling().getTasks().get(i));
         }
 
-        System.out.println("buffer in = " + inputInstance.getBufferIn((TMLTask) tempTasks.get(0)));
-        System.out.println("buffer in = " + inputInstance.getBufferIn((TMLTask) tempTasks.get(1)));
-        System.out.println("buffer in = " + inputInstance.getBufferIn((TMLTask) tempTasks.get(2)));
-        System.out.println("buffer in = " + inputInstance.getBufferIn((TMLTask) tempTasks.get(3)));
+        assertEquals(inputInstance.getBufferIn((TMLTask) tempTasks.get(0)), 0);
+        assertEquals(inputInstance.getBufferIn((TMLTask) tempTasks.get(1)), 2);
+        assertEquals(inputInstance.getBufferIn((TMLTask) tempTasks.get(2)), 2);
+        assertEquals(inputInstance.getBufferIn((TMLTask) tempTasks.get(3)), 10);
+
 
     }
 
-    /****************************** TEST PASSED WITH SUCCESS **************************************/
     @Test
     public void getBufferOut() {
         List<TMLTask> tempTasks = new ArrayList<>();
@@ -320,30 +323,25 @@ public class InputInstanceTest {
             tempTasks.add((TMLTask) inputInstance.getModeling().getTasks().get(i));
         }
 
-        System.out.println("buffer out = " + inputInstance.getBufferOut((TMLTask) tempTasks.get(0)));
-        System.out.println("buffer out = " + inputInstance.getBufferOut((TMLTask) tempTasks.get(1)));
-        System.out.println("buffer out = " + inputInstance.getBufferOut((TMLTask) tempTasks.get(2)));
-        System.out.println("buffer out = " + inputInstance.getBufferOut((TMLTask) tempTasks.get(3)));
+        assertEquals(inputInstance.getBufferOut((TMLTask) tempTasks.get(0)), 4);
+        assertEquals(inputInstance.getBufferOut((TMLTask) tempTasks.get(1)), 5);
+        assertEquals(inputInstance.getBufferOut((TMLTask) tempTasks.get(2)), 5);
+        assertEquals(inputInstance.getBufferOut((TMLTask) tempTasks.get(3)), 0);
 
     }
 
 
-    /****************************** TEST PASSED WITH SUCCESS **************************************/
     @Test
     public void getLocalMemoryOfHwExecutionNode() {
 
-        HwNode output1;
-        output1 = inputInstance.getArchitecture().getHwMemoryByName("mainMem");
+        HwNode output1 = inputInstance.getArchitecture().getHwMemoryByName("mainMem");
+        HwNode output2 = inputInstance.getArchitecture().getHwMemoryByName("dspMem");
 
-        HwNode output2;
-        output2 = inputInstance.getArchitecture().getHwMemoryByName("dspMem");
-
-        assertTrue(inputInstance.getLocalMemoryOfHwExecutionNode(inputInstance.getArchitecture().getHwNodeByName("MainCPU")) == output1);
-        assertTrue(inputInstance.getLocalMemoryOfHwExecutionNode(inputInstance.getArchitecture().getHwNodeByName("dsp")) == output2);
+        assertTrue("comparing between the expected local memory for main_CPU and the memory found", inputInstance.getLocalMemoryOfHwExecutionNode(inputInstance.getArchitecture().getHwNodeByName("MainCPU")) == output1);
+        assertTrue("comparing between the expected local memory for DSP and the memory found", inputInstance.getLocalMemoryOfHwExecutionNode(inputInstance.getArchitecture().getHwNodeByName("dsp")) == output2);
 
     }
 
-    /****************************** TEST PASSED WITH SUCCESS **************************************/
 
     @Test
     public void getWCET() {
@@ -352,33 +350,18 @@ public class InputInstanceTest {
         for (int i = 0; i < inputInstance.getModeling().getTasks().size(); i++) {
             tempTasks.add((TMLTask) inputInstance.getModeling().getTasks().get(i));
         }
-        int expectedWcetA_CPU = 150;
-        int expectedWcetA_dsp = 300;
+        int expectedWcetA_CPU = 300;
+        int expectedWcetA_dsp = 150;
 
-        assertEquals(expectedWcetA_CPU, inputInstance.getWCET(tempTasks.get(0), (HwExecutionNode) inputInstance.getArchitecture().getHwNodeByName("MainCPU")));
-        assertEquals(expectedWcetA_dsp, inputInstance.getWCET(tempTasks.get(0), (HwExecutionNode) inputInstance.getArchitecture().getHwNodeByName("dsp")));
+        assertEquals("comparing between the expected WCET of task A on main_CPU and the computed value", expectedWcetA_CPU, inputInstance.getWCET(tempTasks.get(0), (HwExecutionNode) inputInstance.getArchitecture().getHwNodeByName("MainCPU")));
+        assertEquals("comparing between the expected WCET of task A on DSP and the computed value", expectedWcetA_dsp, inputInstance.getWCET(tempTasks.get(0), (HwExecutionNode) inputInstance.getArchitecture().getHwNodeByName("dsp")));
 
-        System.out.println(tempTasks.get(1).getActivityDiagram().getName());
-        System.out.println(tempTasks.get(2).getActivityDiagram().getElements().size());
-
-        System.out.println(tempTasks.get(1).getActivityDiagram().getWorstCaseIComplexity());
-
-       System.out.println("WCET(" + tempTasks.get(0).getName() +", dsp) = " +
-               inputInstance.getWCET(tempTasks.get(0), (HwExecutionNode) inputInstance.getArchitecture().getHwNodeByName("dsp")));
-
-        System.out.println("WCET(" + tempTasks.get(1).getName() +", dsp) = " +
-                inputInstance.getWCET(tempTasks.get(1), (HwExecutionNode) inputInstance.getArchitecture().getHwNodeByName("dsp")));
-
-        System.out.println("WCET(" + tempTasks.get(2).getName() +", dsp) = " +
-                inputInstance.getWCET(tempTasks.get(2), (HwExecutionNode) inputInstance.getArchitecture().getHwNodeByName("dsp")));
-
-        System.out.println("WCET(" + tempTasks.get(3).getName() +", dsp) = " +
-                inputInstance.getWCET(tempTasks.get(3), (HwExecutionNode) inputInstance.getArchitecture().getHwNodeByName("dsp")));
     }
 
 
     @Test
     public void getFinalTask() {
-        System.out.println(inputInstance.getFinalTask(inputInstance.getModeling()).getName());
+        assertEquals("checking the last task", inputInstance.getModeling().getTMLTaskByName("task__E"), inputInstance.getFinalTask(inputInstance.getModeling()));
+
     }
 }
