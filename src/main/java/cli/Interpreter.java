@@ -48,6 +48,7 @@ import myutil.TraceManager;
 import ui.*;
 import ui.util.IconManager;
 import java.io.*;
+import myutil.*;
 
 import java.util.*;
 
@@ -58,8 +59,9 @@ import java.util.*;
  *
  * @author Ludovic APVRILLE
  */
-public class Interpreter  {
-    private final static Command[] commands = {new Action(), new Set(), new Wait(), new Print()};
+public class Interpreter implements Runnable  {
+    public final static Command[] commands = {new Help(), new Quit(), new Action(),
+            new Set(), new Wait(), new Print(), new History()};
 
     // Errors
     public final static String UNKNOWN = "Unknown command";
@@ -70,6 +72,7 @@ public class Interpreter  {
     public final static String UNKNOWN_NEXT_COMMAND ="Invalid action: ";
     public final static String TTOOL_NOT_STARTED ="TTool is not yet started. Cannot execute command.";
     public final static String TTOOL_ALREADY_STARTED ="TTool is already started. Cannot execute command.";
+    public final static String BAD_COMMAND_NAME ="The provided command is invalid";
 
 
     private String script;
@@ -81,6 +84,7 @@ public class Interpreter  {
     private String error;
     private boolean ttoolStarted = false;
     public MainGUI mgui;
+    private Vector<String> formerCommands;
 
 
     public Interpreter(String script, InterpreterOutputInterface printInterface, boolean show) {
@@ -88,6 +92,36 @@ public class Interpreter  {
         this.printInterface = printInterface;
         variables = new HashMap<>();
         this.show = show;
+        formerCommands = new Vector<>();
+    }
+
+    @Override
+    public void run() {
+        interact();
+    }
+
+
+    public void interact() {
+        /*if (RawConsoleInput.isWindows) {
+            print("In Windows");
+        } else  {
+            print("In Unix");
+        }*/
+
+        Scanner scanner = new Scanner(System.in);
+        int cptLine = 0;
+        printPrompt(cptLine);
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+            executeLine(line, cptLine, false);
+            cptLine ++;
+            printPrompt(cptLine);
+        }
+    }
+
+    private void printPrompt(int lineNb) {
+        System.out.print("" + lineNb + " -> ");
+        System.out.flush();
     }
 
     public void interpret() {
@@ -96,63 +130,67 @@ public class Interpreter  {
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
             cptLine ++;
-
-            // Comment
-            if (line.startsWith("#")) {
-
-            } else {
-
-                // Replace all double space by one unique space
-                line = Conversion.replaceAllString(line, "  ", " ").trim();
-
-                //TraceManager.addDev("Handling line: " + line);
-                // Replace variable value in the current line
-                String lineWithNoVariable = removeVariablesIn(line);
-
-                TraceManager.addDev("Handling line: " + lineWithNoVariable);
-
-                // Analyze current line
-                error = "";
-                for(Command c: commands) {
-                    if (lineWithNoVariable.startsWith(c.getCommand() + " ")) {
-                        error = c.executeCommand( lineWithNoVariable.substring(c.getCommand().length() + 1,
-                                lineWithNoVariable.length()).trim(), this);
-                        break;
-                    }
-                    if (lineWithNoVariable.startsWith(c.getShortCommand() + " ")) {
-                        error = c.executeCommand( lineWithNoVariable.substring(c.getShortCommand().length() + 1,
-                                lineWithNoVariable.length()).trim(), this);
-                        break;
-
-                    }
-                }
-
-
-                /*if (lineWithNoVariable.startsWith(SET + " ")) {
-                    success = setVariable(lineWithNoVariable.substring(SET.length() + 1, lineWithNoVariable.length()).trim());
-                } else if (lineWithNoVariable.startsWith(ACTION + " ")) {
-                    success = performAction(lineWithNoVariable.substring(ACTION.length() + 1, lineWithNoVariable.length()).trim());
-                } else if (lineWithNoVariable.startsWith(WAIT + " ")) {
-                    success = waitFor(lineWithNoVariable.substring(WAIT.length() + 1, lineWithNoVariable.length()).trim());
-                } else if (lineWithNoVariable.startsWith(PRINT + " ")) {
-                    success = performPrint(lineWithNoVariable.substring(PRINT.length() + 1, lineWithNoVariable.length()).trim());
-                } else {
-                    success = false;
-                    error = UNKNOWN;
-
-                }*/
-
-                if (error != null) {
-                    System.out.println("Error in line " + cptLine + " : " + error);
-                    System.exit(-1);
-                }
-            }
+            executeLine(line, cptLine, true);
 
         }
         scanner.close();
         printInterface.print("All done. See you soon.");
         printInterface.exit(1);
 
+    }
+
+    private void executeLine(String line, int cptLine, boolean exitOnError) {
+        // Comment
+
+        line = line.trim();
+        if (line.length() == 0) {
+            return;
+        }
+
+        if (line.startsWith("#")) {
+
+        } else {
+
+            formerCommands.add(line);
+
+            // Replace all double space by one unique space
+            line = Conversion.replaceAllString(line, "  ", " ").trim();
+
+            //TraceManager.addDev("Handling line: " + line);
+            // Replace variable value in the current line
+            String lineWithNoVariable = removeVariablesIn(line).trim();
+
+            String begOfLine = lineWithNoVariable;
+            int index = lineWithNoVariable.indexOf(' ');
+            if (index > -1) {
+                begOfLine = begOfLine.substring(0, index).trim();
+            }
+
+            TraceManager.addDev("Handling line: " + lineWithNoVariable);
+
+            // Analyze current line
+            error = "";
+            for(Command c: commands) {
+                if (lineWithNoVariable.compareTo(c.getCommand()) == 0) {
+                    error = c.executeCommand( lineWithNoVariable.substring(c.getCommand().length(),
+                            lineWithNoVariable.length()).trim(), this);
+                    break;
+                }
+                if (lineWithNoVariable.compareTo(c.getShortCommand()) == 0) {
+                    error = c.executeCommand( lineWithNoVariable.substring(c.getShortCommand().length(),
+                            lineWithNoVariable.length()).trim(), this);
+                    break;
+
+                }
+            }
+
+            if (error != null) {
+                System.out.println("Error in line " + cptLine + " : " + error);
+                if (exitOnError) {
+                    System.exit(-1);
+                }
+            }
+        }
     }
 
 
@@ -206,11 +244,22 @@ public class Interpreter  {
         ttoolStarted = b;
     }
 
+    public void setMGUI(MainGUI mgui) {
+        this.mgui = mgui;
+    }
+
     public boolean showWindow() {
         return show;
     }
 
-
+    public Command getCommandByName(String cmd) {
+        for (Command c: commands) {
+            if ((c.getShortCommand().compareTo(cmd) == 0) || (c.getCommand().compareTo(cmd) == 0)) {
+                return c;
+            }
+        }
+        return null;
+    }
 
     public String getHelp() {
         StringBuffer buf = new StringBuffer("");
@@ -219,5 +268,19 @@ public class Interpreter  {
         }
         return buf.toString();
     }
+
+    public void print(String s) {
+        printInterface.print(s);
+    }
+
+    public String printAllFormerCommands() {
+        StringBuffer sb = new StringBuffer("");
+        for(int i=0; i<formerCommands.size(); i++) {
+            sb.append("" + i + "\t" + formerCommands.get(i) + "\n");
+        }
+        print(sb.toString());
+        return null;
+    }
+
 
 }

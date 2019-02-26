@@ -46,6 +46,8 @@
  * @see
  */
 
+import cli.Interpreter;
+import cli.InterpreterOutputInterface;
 import common.ConfigurationTTool;
 import common.SpecConfigTTool;
 import launcher.RTLLauncher;
@@ -66,7 +68,7 @@ import java.util.Locale;
 
 //import java.io.*;
 
-public class Main implements ActionListener {
+public class Main implements ActionListener, InterpreterOutputInterface{
     public boolean finish = false;
     public static Main main = new Main();
     public static boolean systemc = true;
@@ -82,6 +84,11 @@ public class Main implements ActionListener {
     public static boolean avataronly = false;
     public static boolean turtle = false;
     public static boolean openLast = false;
+    public static boolean interact = false;
+
+    public Main() {
+
+    }
 
     public static void main(String[] args) {
 
@@ -168,6 +175,14 @@ public class Main implements ActionListener {
             }
             if (args[i].compareTo("-nodiplodocus") == 0) {
                 systemc = false;
+                //System.out.println("Diplodocus features deactivated");
+            }
+            if (args[i].compareTo("-interact") == 0) {
+                interact = true;
+                //System.out.println("Diplodocus features deactivated");
+            }
+            if (args[i].compareTo("-nointeract") == 0) {
+                interact = false;
                 //System.out.println("Diplodocus features deactivated");
             }
             if (args[i].compareTo("-proactive") == 0) {
@@ -291,6 +306,8 @@ public class Main implements ActionListener {
             t.start();
         }
 
+
+
         // making main window
         if (splashFrame != null) {
             splashFrame.setMessage("Creating main window");
@@ -320,6 +337,14 @@ public class Main implements ActionListener {
         if (splashFrame != null) {
             splashFrame.dispose();
         }
+
+        // interact
+        Interpreter interpret = new Interpreter(null, new Main(), true);
+        Thread t = new Thread(interpret);
+        interpret.setTToolStarted(true);
+        interpret.setMGUI(mainGUI);
+        t.start();
+
 
         // Checking for update
         //TToolUpdater tu = new TToolUpdater(mainGUI.frame);
@@ -423,6 +448,18 @@ public class Main implements ActionListener {
             System.out.println("Error = " + bee.getFullError());
         }
         System.out.println("\n\n");
+    }
+
+    public void print(String s) {
+        System.out.println(s);
+    }
+
+    public void printError(String s) {
+        System.err.println(s);
+    }
+
+    public void exit(int status) {
+        System.exit(status);
     }
 
 } // Class Main

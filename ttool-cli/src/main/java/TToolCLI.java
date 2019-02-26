@@ -86,6 +86,16 @@ public class TToolCLI implements InterpreterOutputInterface {
         return false;
     }
 
+    public static boolean hasInteract(String[] args) {
+        for (String s : args) {
+            if (s.equals("-interact")) {
+                return true;
+            }
+
+        }
+        return false;
+    }
+
     public static boolean hasShow(String[] args) {
         for (String s : args) {
             if (s.equals("-show")) {
@@ -139,19 +149,28 @@ public class TToolCLI implements InterpreterOutputInterface {
             help = true;
         }
 
+        boolean interact = false;
+        if (hasInteract(args)) {
+            interact = true;
+        }
+
 
         TToolCLI cli = new TToolCLI();
         String script = null;
 
+        //cli.print("Interact? :" + interact);
+
         if (!help) {
-            cli.print("Loading script:" + getInputFile(args));
-            // Load script file
-            File f = new File(getInputFile(args));
-            if (!FileUtils.checkFileForOpen(f)) {
-                cli.printError("File " + f.getAbsolutePath() + " could not be opened.");
-                cli.exit(-1);
+            if(!interact) {
+                cli.print("Loading script:" + getInputFile(args));
+                // Load script file
+                File f = new File(getInputFile(args));
+                if (!FileUtils.checkFileForOpen(f)) {
+                    cli.printError("File " + f.getAbsolutePath() + " could not be opened.");
+                    cli.exit(-1);
+                }
+                script = FileUtils.loadFileData(f);
             }
-            script = FileUtils.loadFileData(f);
         }
 
         // Call Interpreter
@@ -160,7 +179,11 @@ public class TToolCLI implements InterpreterOutputInterface {
             String fullHelp = interpret.getHelp();
             System.out.println(fullHelp);
         } else {
-            interpret.interpret();
+            if (interact) {
+                interpret.interact();
+            } else {
+                interpret.interpret();
+            }
         }
 
     }

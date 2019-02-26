@@ -142,7 +142,7 @@ public class SysmlsecMethodologyReferenceToApplication extends SysmlsecMethodolo
                     giveInformation("UPPAAL-based verification done");
                     return true;
                 }
-                giveInformation("UPPAAL-based verification falied");
+                giveInformation("UPPAAL-based verification failed");
                 return false;
 
             }

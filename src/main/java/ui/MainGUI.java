@@ -8231,6 +8231,12 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         changeMade(null, -1);
     }
 
+    public void selectPanelOnTheLeft() {
+        if (mainTabbedPane != null) {
+            mainTabbedPane.setSelectedIndex(Math.max(0, mainTabbedPane.getSelectedIndex() - 1));
+        }
+    }
+
     public void requestMoveLeftTab(int index) {
         //TraceManager.addDev("Move left");
         if (index < 1) {

@@ -40,15 +40,19 @@
 package cli;
 
 import common.ConfigurationTTool;
+import common.SpecConfigTTool;
 import launcher.RTLLauncher;
 import myutil.PluginManager;
 import myutil.TraceManager;
 import ui.MainGUI;
 import ui.util.IconManager;
+import ui.window.JDialogSystemCGeneration;
+import ui.*;
 
 import java.io.File;
 import java.util.BitSet;
 import java.util.*;
+
 
 /**
  * Class Action
@@ -62,8 +66,18 @@ public class Action extends Command  {
     private final static String OPEN = "open";
     private final static String START = "start";
     private final static String QUIT = "quit";
-    private final static String CHECKSYNTAX = "checksyntax";
+    private final static String CHECKSYNTAX = "check-syntax";
+    private final static String DIPLO_INTERACTIVE_SIMULATION = "diplodocus-interactive-simulation";
+    private final static String DIPLO_FORMAL_VERIFICATION = "diplodocus-formal-verification";
+    private final static String DIPLO_ONETRACE_SIMULATION = "diplodocus-onetrace-simulation";
+    private final static String DIPLO_GENERATE_TML = "diplodocus-generate-tml";
+    private final static String DIPLO_UPPAAL = "diplodocus-uppaal";
 
+    private final static String NAVIGATE_PANEL_TO_LEFT = "navigate-panel-to-left";
+
+    private final static String NAVIGATE_LEFT_PANEL = "navigate-left-panel";
+
+    private final static String GENERIC = "generic";
 
     public Action() {
 
@@ -187,7 +201,7 @@ public class Action extends Command  {
 
         // Check syntax
         Command checkSyntax = new Command() {
-            public String getCommand() { return "checksyntax"; }
+            public String getCommand() { return CHECKSYNTAX; }
             public String getShortCommand() { return "cs"; }
             public String getDescription() { return "Checking the syntax of an opened model"; }
 
@@ -195,14 +209,223 @@ public class Action extends Command  {
                 if (!interpreter.isTToolStarted()) {
                     return Interpreter.TTOOL_NOT_STARTED;
                 }
-                interpreter.mgui.checkModelingSyntax(interpreter.mgui.getCurrentTURTLEPanel(), true);
+
+                TURTLEPanel tp = interpreter.mgui.getCurrentTURTLEPanel();
+                if (tp == null) {
+                    return "No opened panel";
+                }
+
+                interpreter.mgui.checkModelingSyntax(tp, true);
                 return null;
             }
         };
+
+        // Diplodocus interactive simulation
+        Command diplodocusInteractiveSimulation = new Command() {
+            public String getCommand() { return DIPLO_INTERACTIVE_SIMULATION; }
+            public String getShortCommand() { return "dis"; }
+            public String getDescription() { return "Interactive simulation of a DIPLODOCUS model"; }
+
+            public  String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                TURTLEPanel tp = interpreter.mgui.getCurrentTURTLEPanel();
+
+                if (!(tp instanceof TMLArchiPanel)) {
+                    return "Current diagram is invalid for interactive simulationn";
+                }
+
+                if (interpreter.mgui.checkModelingSyntax(tp, true)) {
+                    interpreter.mgui.generateSystemC(JDialogSystemCGeneration.ANIMATION);
+                }
+
+                return null;
+            }
+        };
+
+        // Diplodocus interactive simulation
+        Command diplodocusFormalVerification = new Command() {
+            public String getCommand() { return DIPLO_FORMAL_VERIFICATION; }
+            public String getShortCommand() { return "dots"; }
+            public String getDescription() { return "Formal verification of a DIPLODOCUS mapping model"; }
+
+            public  String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                TURTLEPanel tp = interpreter.mgui.getCurrentTURTLEPanel();
+
+                if (!(tp instanceof TMLArchiPanel)) {
+                    return "Current diagram is invalid for formal verification";
+                }
+
+                if (interpreter.mgui.checkModelingSyntax(tp, true)) {
+                    interpreter.mgui.generateSystemC(JDialogSystemCGeneration.ONE_TRACE);
+                }
+
+                return null;
+            }
+        };
+
+        // Diplodocus interactive simulation
+        Command diplodocusOneTraceSimulation = new Command() {
+            public String getCommand() { return DIPLO_ONETRACE_SIMULATION; }
+            public String getShortCommand() { return "dots"; }
+            public String getDescription() { return "One-trace simulation of a DIPLODOCUS model"; }
+
+            public  String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                TURTLEPanel tp = interpreter.mgui.getCurrentTURTLEPanel();
+
+                if (!(tp instanceof TMLArchiPanel)) {
+                    return "Current diagram is invalid for one-trace simulation";
+                }
+
+
+                if (interpreter.mgui.checkModelingSyntax(interpreter.mgui.getCurrentTURTLEPanel(), true)) {
+                    interpreter.mgui.generateSystemC(JDialogSystemCGeneration.ONE_TRACE);
+                }
+
+                return null;
+            }
+        };
+
+        // Diplodocus generate TML
+        Command diplodocusGenerateTML = new Command() {
+            public String getCommand() { return DIPLO_GENERATE_TML; }
+            public String getShortCommand() { return "dgtml"; }
+            public String getDescription() { return "Generate the TML code of a diplodocus model"; }
+
+            public  String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                TURTLEPanel tp = interpreter.mgui.getCurrentTURTLEPanel();
+
+                if ((!(tp instanceof TMLArchiPanel)) &&  (!(tp instanceof TMLComponentDesignPanel))){
+                    return "Current diagram is invalid for generating TML";
+                }
+
+                if (interpreter.mgui.checkModelingSyntax(interpreter.mgui.getCurrentTURTLEPanel(), true)) {
+                    String tmp = interpreter.mgui.generateTMLTxt();
+                    if (tmp == null) {
+                        return "TML generation failed";
+                    } else {
+                        return "TML spec generated in: " + tmp;
+                    }
+
+                }
+
+                return null;
+            }
+        };
+
+        // Diplodocus uppaal
+        Command diplodocusUPPAAL = new Command() {
+            public String getCommand() { return DIPLO_UPPAAL; }
+            public String getShortCommand() { return "du"; }
+            public String getDescription() { return "Use UPPAAL for formal verification of a DIPLO app"; }
+
+            public  String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                TURTLEPanel tp = interpreter.mgui.getCurrentTURTLEPanel();
+
+                if (tp == null) {
+                    return "No diagram to verify";
+                }
+
+                if (!(tp instanceof TMLComponentDesignPanel)) {
+                    return "Current diagram is invalid for UPPAAL verification";
+                }
+
+                if (interpreter.mgui.checkModelingSyntax(tp, true)) {
+                    String tmp = interpreter.mgui.generateTMLTxt();
+                    boolean result = interpreter.mgui.gtm.generateUPPAALFromTML(SpecConfigTTool.UPPAALCodeDirectory, false, 8, false);
+
+                    if (!result) {
+                        interpreter.print("UPPAAL verification failed");
+                    } else {
+                        interpreter.print("UPPAAL verification done");
+                    }
+
+                }
+
+                return null;
+            }
+        };
+
+        // Navigation
+        Command navigateLeftPanel = new Command() {
+            public String getCommand() { return NAVIGATE_LEFT_PANEL; }
+            public String getShortCommand() { return "nlf"; }
+            public String getDescription() { return "Select the edition panel on the left"; }
+
+            public  String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                interpreter.mgui.selectPanelOnTheLeft();
+                return null;
+            }
+        };
+
+        Command movePanelToTheLeftPanel = new Command() {
+            public String getCommand() { return NAVIGATE_PANEL_TO_LEFT; }
+            public String getShortCommand() { return "nptf"; }
+            public String getDescription() { return "Select the edition panel on the left"; }
+
+            public  String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                interpreter.mgui.requestMoveLeftTab(interpreter.mgui.getCurrentJTabbedPane().getSelectedIndex());
+
+                return null;
+            }
+        };
+
+        Command generic = new Command() {
+            public String getCommand() { return GENERIC; }
+            public String getShortCommand() { return "g"; }
+            public String getDescription() { return "Apply a generic function of TTool"; }
+
+            public  String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                ActionPerformer.actionPerformed(interpreter.mgui, null, command.trim(), null);
+
+                return null;
+            }
+        };
+
 
         subcommands.add(start);
         subcommands.add(open);
         subcommands.add(quit);
         subcommands.add(checkSyntax);
+        subcommands.add(diplodocusInteractiveSimulation);
+        subcommands.add(diplodocusFormalVerification);
+        subcommands.add(diplodocusOneTraceSimulation);
+        subcommands.add(diplodocusGenerateTML);
+        subcommands.add(diplodocusUPPAAL);
+
+        subcommands.add(navigateLeftPanel);
+
+        subcommands.add(generic);
+
     }
 }

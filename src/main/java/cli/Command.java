@@ -88,7 +88,7 @@ public class Command implements CommandInterface {
 
         // Analyzing next command
         for(Command c: subcommands) {
-            if ((c.getCommand().compareTo(nextCommand) == 0) || (c.getCommand().compareTo(nextCommand) == 0)) {
+            if ((c.getCommand().compareTo(nextCommand) == 0) || (c.getShortCommand().compareTo(nextCommand) == 0)) {
                 return c.executeCommand(args, interpreter);
             }
         }
