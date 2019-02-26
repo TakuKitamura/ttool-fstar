@@ -103,9 +103,10 @@ public class InputInstance {
 
     public TMLTask getFinalTask(TMLModeling tmlm){
         TMLTask finalTask = null;
-        for (TMLTask tmlTask : (List<TMLTask>) tmlm.getTasks()){
-            if (tmlTask.getWriteTMLChannels().isEmpty())
-                finalTask = tmlTask;
+        for (Object tmlTask :  tmlm.getTasks()){
+            TMLTask taskCast = (TMLTask)tmlTask;
+            if (taskCast.getWriteTMLChannels().isEmpty())
+                finalTask = taskCast;
         }
 
         return finalTask;
