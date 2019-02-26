@@ -649,6 +649,7 @@ public class TGUIAction extends AbstractAction {
     public static final int ACT_AVATAR_EXECUTABLE_GENERATION = 340;
 
     public static final int ACT_DSE = 434;
+    public static final int ACT_DSE_Z3 = 516;
 
     // Ontologies
     public static final int ACT_GENERATE_ONTOLOGIES_CURRENT_DIAGRAM = 367;
@@ -667,7 +668,7 @@ public class TGUIAction extends AbstractAction {
     public static final int MOVE_ENABLED = 463;
     public static final int FIRST_DIAGRAM = 464;
     
-    public static final int NB_ACTION = 516;
+    public static final int NB_ACTION = 517;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -866,7 +867,9 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_VIEW_PM_AUT] = new TAction("viewpmaut-command", "Power Management Analysis (last AUT graph)", IconManager.imgic28, IconManager.imgic29, "Power Management Analysis (last AUT graph)",  "Power Management Analysis on the last generated reachability graph generated in AUT (Aldebaran) format", 0);
         actions[ACT_VIEW_PM_AUTPROJ] = new TAction("viewpmautproj-command", "Power Management Analysis (last minimized AUT graph)", IconManager.imgic28, IconManager.imgic29, "Power Management Analysis (last minimized AUT graph)",  "Power Management Analysis on the last minimized reachability graph  in AUT (Aldebaran) format", 0);
         actions[ACT_VIEW_PM_SAVED_AUT] = new TAction("viewpmsavedautproj-command", "Power Management Analysis (saved AUT graph)", IconManager.imgic28, IconManager.imgic29, "Power Management Analysis (saved AUT graph)",  "Power Management Analysis on a graph saved in AUT (Aldebaran) format", 0);
-        actions[ACT_DSE] = new TAction("auto-dse", "Automated Design Space Exploration", IconManager.imgic89, IconManager.imgic89, "Automated Design Space Exploration", "Find the optimal mapping and security additions automatically",0);
+        actions[ACT_DSE] = new TAction("auto-dse", "Automated Design Space Exploration", IconManager.imgic89, IconManager.imgic89, "Automated Design Space Exploration", "Find the optimal mapping with brute-force simulations",0);
+        actions[ACT_DSE_Z3] = new TAction("auto-dse-z3", "Automated Design Space Exploration with Z3", IconManager.imgic89_z3, IconManager.imgic89_z3, "Automated Design Space Exploration with Z3", "Find the optimal mapping with Z3",0);
+
         // AVATAR
         actions[ACT_AVATAR_SIM] = new TAction("avatar-simu", "Interactive simulation", IconManager.imgic18, IconManager.imgic18, "Interactive simulation",  "Interactive simulation of the AVATAR design under edition", '2');
         actions[ACT_AVATAR_FV_UPPAAL] = new TAction("avatar-formal-verification-uppaal", "Safety formal verification with UPPAAL (Safety)", IconManager.imgic86, IconManager.imgic86, "Formal verification with UPPAAL (Safety)",  "Formal verification with UPPAAL (Safety) of the AVATAR design under edition", '3');

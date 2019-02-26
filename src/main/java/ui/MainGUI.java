@@ -4793,6 +4793,15 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         dtree.toBeUpdated();
     }
 
+    public void dseZ3() {
+        TraceManager.addDev("Design space exploration with Z3");
+        /*JDialogDSE jdse = new JDialogDSE(frame, this, "Design Space Exploration", SpecConfigTTool.SystemCCodeDirectory, SpecConfigTTool.TMLCodeDirectory);
+        //   jdse.setSize(600,800);
+        GraphicLib.centerOnParent(jdse, 700, 800);
+        jdse.setVisible(true);
+        dtree.toBeUpdated();*/
+    }
+
     public void avatarStaticAnalysis() {
         TraceManager.addDev("Avatar static analysis invariants");
         JDialogInvariantAnalysis jgen = new JDialogInvariantAnalysis(frame, this, "Static analysis: invariants computation");

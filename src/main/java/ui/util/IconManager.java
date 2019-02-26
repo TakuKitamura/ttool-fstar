@@ -71,7 +71,7 @@ public class IconManager {
     public static ImageIcon imgic50, imgic51, imgic52, imgic53, imgic54, imgic55, imgic56, imgic57, imgic58, imgic59;
     public static ImageIcon imgic60, imgic61, imgic62, imgic63, imgic64, imgic65, imgic66, imgic68;
     public static ImageIcon imgic70, imgic71, imgic72, imgic73, imgic75, imgic76, imgic77, imgic78, imgic79, imgic780;
-    public static ImageIcon imgic80, imgic82, imgic84, imgic86, imgic88, imgic89;
+    public static ImageIcon imgic80, imgic82, imgic84, imgic86, imgic88, imgic89, imgic89_z3;
     public static ImageIcon imgic90, imgic92, imgic94, imgic96, imgic98, imgic99;
 
     public static ImageIcon imgic142;
@@ -295,6 +295,7 @@ public class IconManager {
     private static String icon86 = "avatarfvuppaal.png";
     private static String icon88 = "avatarfvproverif.png";
     private static String icon89 = "dse.png";
+    private static String icon89_z3 = "dse_z3.png";
     private static String icon90 = "genlotos.gif";
     private static String icon92 = "genuppaal.gif";
     private static String icon94 = "avatarcodegeneration.gif";
@@ -837,6 +838,7 @@ public class IconManager {
         imgic86 = getIcon(icon86);
         imgic88 = getIcon(icon88);
         imgic89 = getIcon(icon89);
+        imgic89_z3 = getIcon(icon89_z3);
         imgic90 = getIcon(icon90);
         imgic92 = getIcon(icon92);
         imgic94 = getIcon(icon94);

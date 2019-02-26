@@ -1,1 +1,2 @@
 Main-Class: RunDSE
+Class-Path: com.microsoft.z3.jar

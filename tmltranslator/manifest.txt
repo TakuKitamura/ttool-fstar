@@ -1,1 +1,2 @@
 Main-Class: TMLTranslator
+Class-Path: com.microsoft.z3.jar
