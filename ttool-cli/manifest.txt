@@ -1,2 +1,2 @@
 Main-Class: TToolCLI
-Class-Path: 
+Class-Path: ./com.microsoft.z3.jar
