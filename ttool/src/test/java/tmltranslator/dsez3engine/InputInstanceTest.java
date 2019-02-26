@@ -321,10 +321,10 @@ public class InputInstanceTest {
             tempTasks.add((TMLTask) inputInstance.getModeling().getTasks().get(i));
         }
 
-        assertEquals(inputInstance.getBufferIn((TMLTask) tempTasks.get(0)), 0);
-        assertEquals(inputInstance.getBufferIn((TMLTask) tempTasks.get(1)), 2);
-        assertEquals(inputInstance.getBufferIn((TMLTask) tempTasks.get(2)), 2);
-        assertEquals(inputInstance.getBufferIn((TMLTask) tempTasks.get(3)), 10);
+        assertEquals(inputInstance.getBufferIn( tempTasks.get(0)), 0);
+        assertEquals(inputInstance.getBufferIn( tempTasks.get(1)), 2);
+        assertEquals(inputInstance.getBufferIn( tempTasks.get(2)), 2);
+        assertEquals(inputInstance.getBufferIn(tempTasks.get(3)), 10);
 
 
     }
@@ -336,10 +336,10 @@ public class InputInstanceTest {
             tempTasks.add((TMLTask) inputInstance.getModeling().getTasks().get(i));
         }
 
-        assertEquals(inputInstance.getBufferOut((TMLTask) tempTasks.get(0)), 4);
-        assertEquals(inputInstance.getBufferOut((TMLTask) tempTasks.get(1)), 5);
-        assertEquals(inputInstance.getBufferOut((TMLTask) tempTasks.get(2)), 5);
-        assertEquals(inputInstance.getBufferOut((TMLTask) tempTasks.get(3)), 0);
+        assertEquals(inputInstance.getBufferOut( tempTasks.get(0)), 4);
+        assertEquals(inputInstance.getBufferOut( tempTasks.get(1)), 5);
+        assertEquals(inputInstance.getBufferOut( tempTasks.get(2)), 5);
+        assertEquals(inputInstance.getBufferOut( tempTasks.get(3)), 0);
 
     }
 
