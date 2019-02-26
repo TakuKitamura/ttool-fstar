@@ -173,6 +173,10 @@ public class ActionPerformer {
             mgui.generateUPPAAL();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_DSE].getActionCommand())) {
             mgui.dse();
+        } else if (command.equals(mgui.actions[TGUIAction.ACT_DSE_Z3].getActionCommand())) {
+            mgui.dseZ3();
+        } else if (command.equals(mgui.actions[TGUIAction.ACT_DSE].getActionCommand())) {
+            mgui.dse();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER].getActionCommand())) {
             mgui.avatarModelChecker();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_GEN_JAVA].getActionCommand())) {

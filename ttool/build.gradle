@@ -33,6 +33,7 @@ dependencies {
     compile name: 'batik-dom'
     compile name: 'batik-awt-util'
     compile name: 'jautomata-core'
+    compile name: 'com.microsoft.z3'
     compile name: 'assertj/assertj-swing/3.8.0/assertj-swing-3.8.0'
     compile name: 'assertj/assertj-swing/3.8.0/assertj-swing-3.8.0-sources'
     compile name: 'assertj/assertj-swing-junit/3.8.0/assertj-swing-junit-3.8.0'

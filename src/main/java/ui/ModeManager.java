@@ -144,6 +144,7 @@ public class ModeManager {
                 actions[TGUIAction.ACT_GEN_RTLOTOS].setEnabled(true);
                 actions[TGUIAction.ACT_GEN_LOTOS].setEnabled(true);
                 actions[TGUIAction.ACT_DSE].setEnabled(true);
+                actions[TGUIAction.ACT_DSE_Z3].setEnabled(true);
                 if (mgui.getCurrentTURTLEPanel() instanceof TMLComponentDesignPanel) {
                     actions[TGUIAction.ACT_GEN_UPPAAL].setEnabled(true);
                 } else {
@@ -228,6 +229,7 @@ public class ModeManager {
                 actions[TGUIAction.ACT_GEN_RTLOTOS].setEnabled(false);
                 actions[TGUIAction.ACT_GEN_LOTOS].setEnabled(false);
                 actions[TGUIAction.ACT_DSE].setEnabled(false);
+                actions[TGUIAction.ACT_DSE_Z3].setEnabled(false);
                 actions[TGUIAction.ACT_GEN_JAVA].setEnabled(false);
                 actions[TGUIAction.ACT_SIMU_JAVA].setEnabled(false);
                 actions[TGUIAction.ACT_GEN_DESIGN].setEnabled(false);
@@ -252,6 +254,7 @@ public class ModeManager {
                 actions[TGUIAction.ACT_GEN_RTLOTOS].setEnabled(false);
                 actions[TGUIAction.ACT_GEN_LOTOS].setEnabled(false);
                 actions[TGUIAction.ACT_DSE].setEnabled(false);
+                actions[TGUIAction.ACT_DSE_Z3].setEnabled(false);
                 actions[TGUIAction.ACT_CHECKCODE].setEnabled(false);
                 actions[TGUIAction.ACT_SIMULATION].setEnabled(false);
                 actions[TGUIAction.ACT_VALIDATION].setEnabled(false);
@@ -272,6 +275,7 @@ public class ModeManager {
                 actions[TGUIAction.ACT_GEN_RTLOTOS].setEnabled(false);
                 actions[TGUIAction.ACT_GEN_LOTOS].setEnabled(false);
                 actions[TGUIAction.ACT_DSE].setEnabled(false);
+                actions[TGUIAction.ACT_DSE_Z3].setEnabled(false);
                 actions[TGUIAction.ACT_GEN_JAVA].setEnabled(false);
                 actions[TGUIAction.ACT_SIMU_JAVA].setEnabled(false);
                 actions[TGUIAction.ACT_GEN_DESIGN].setEnabled(false);
