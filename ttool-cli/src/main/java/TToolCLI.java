@@ -165,11 +165,11 @@ public class TToolCLI implements InterpreterOutputInterface {
                 cli.print("Loading script:" + getInputFile(args));
                 // Load script file
                 File f = new File(getInputFile(args));
-                if (!FileUtils.checkFileForOpen(f)) {
+                if (!myutil.FileUtils.checkFileForOpen(f)) {
                     cli.printError("File " + f.getAbsolutePath() + " could not be opened.");
                     cli.exit(-1);
                 }
-                script = FileUtils.loadFileData(f);
+                script = myutil.FileUtils.loadFileData(f);
             }
         }
 

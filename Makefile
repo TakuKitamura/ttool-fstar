@@ -7,6 +7,7 @@ TAR			= tar
 GZIP			= gzip
 GRADLE_NO_TEST          = -x test 
 GRADLE_OPTIONS          = --parallel
+#GRADLE_OPTIONS          =
 GRADLE			= $(shell which gradle)
 GRADLE_VERSION_NEEDED	= 3.3
 ERROR_MSG		= printf "$(COLOR)\nBuild with gradle failed. Falling back to regular javac command...\n$(RESET)"

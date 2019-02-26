@@ -323,7 +323,9 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
 
         //TraceManager.addDev("Show avatar options with b = " + b);
         dse.setVisible(!b);
-        dseZ3.setVisible(!b);
+        if (dseZ3 != null) {
+            dseZ3.setVisible(!b);
+        }
 
         avatarSimu.setVisible(b);
         avatarFVUPPAAL.setVisible(b);
@@ -401,7 +403,9 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
         //TraceManager.addDev("Show diplodocus options with b = " + b);
 
         dse.setVisible(b);
-        dseZ3.setVisible(b);
+        if (dseZ3 != null) {
+            dseZ3.setVisible(b);
+        }
         avatarSimu.setVisible(!b);
         avatarFVUPPAAL.setVisible(!b);
         avatarFVStaticAnalysis.setVisible(!b);

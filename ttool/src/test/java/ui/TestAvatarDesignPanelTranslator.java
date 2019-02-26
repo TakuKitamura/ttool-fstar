@@ -42,6 +42,7 @@ public class TestAvatarDesignPanelTranslator extends AbstractUITest {
 	
 	public TestAvatarDesignPanelTranslator() {
 		super();
+		System.out.println("Test before super");
 	}
 
 	private AvatarSpecification translateDiagramToAvatar( final String diagramName )

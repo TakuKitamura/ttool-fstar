@@ -6,21 +6,30 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.logging.Logger;
 
 import myutil.PluginManager;
 import test.AbstractTest;
 
 public abstract class AbstractUITest extends AbstractTest {
+
+
+
+
 	
-	protected final MainGUI mainGUI;
+	protected MainGUI mainGUI = null;
 	
 	protected AbstractUITest() {
 		
 		// DB: Not needed for tests (causes NPE)
 		//IconManager.loadImg();
-		mainGUI = new MainGUI(false,false, false, false, false, false, false, false, false, false, true, false, false);
-		mainGUI.build();
-		PluginManager.pluginManager = new PluginManager();
+        System.out.println("Creating main Window");
+        mainGUI = new MainGUI(false, false, false, false, false, false, false, false, false, false, true, false, false);
+        System.out.println("Main Window new done");
+        mainGUI.build();
+        System.out.println("Main Window build done");
+        PluginManager.pluginManager = new PluginManager();
+        System.out.println("Main Window created");
 	}
 
 	protected void openModel( final String fileName ) {

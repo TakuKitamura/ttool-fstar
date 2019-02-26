@@ -405,6 +405,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         //} catch (Exception e) { ErrorGUI.exit(ErrorGUI.GUI);}
 
         // Creating main container
+
         frame = new JFrame("TTool");
 
         frame.addWindowListener(this);
@@ -503,6 +504,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         // statusBar
         status = createStatusBar();
 
+
         // Mouse handler
         mouseHandler = new MouseHandler(status);
 
@@ -515,6 +517,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         // Panels
         panelForTab = new JPanel();
         panelForTab.setLayout(new BorderLayout());
+
         //panelForTree = new JPanel(); panelForTree.setLayout(new BorderLayout());
         // Tree
         dtree = new JDiagramTree(this);
