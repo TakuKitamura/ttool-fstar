@@ -1,8 +1,7 @@
 package tmltranslator.dsez3engine;
 
-import com.microsoft.z3.Context;
-import com.microsoft.z3.Log;
-import com.microsoft.z3.Z3Exception;
+import com.microsoft.z3.*;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import tmltranslator.*;
@@ -10,6 +9,7 @@ import tmltranslator.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import myutil.TraceManager;
 
 import static org.junit.Assert.*;
 
@@ -220,22 +220,35 @@ public class InputInstanceTest {
 
             Log.close();
             if (Log.isOpen())
-                System.out.println("Log is still open!");
+                TraceManager.addDev("Log is still open!");
         } catch (Z3Exception ex) {
-            System.out.println("Z3 Managed Exception: " + ex.getMessage());
-            System.out.println("Stack trace: ");
+            TraceManager.addDev("Z3 Managed Exception: " + ex.getMessage());
+            TraceManager.addDev("Stack trace: ");
             ex.printStackTrace(
                     System.out);
         } catch (OptimizationModel.TestFailedException ex) {
-            System.out.println("TEST CASE FAILED: " + ex.getMessage());
-            System.out.println("Stack trace: ");
+            TraceManager.addDev("TEST CASE FAILED: " + ex.getMessage());
+            TraceManager.addDev("Stack trace: ");
             ex.printStackTrace(System.out);
         } catch (Exception ex) {
-            System.out.println("Unknown Exception: " + ex.getMessage());
-            System.out.println("Stack trace: ");
+            TraceManager.addDev("Unknown Exception: " + ex.getMessage());
+            TraceManager.addDev("Stack trace: ");
             ex.printStackTrace(System.out);
         }
 
+        assertEquals(1, optimizationModel.getOptimizedSolutionX().get("X[task__A][MainCPU] = ").intValue());
+        assertEquals(0, optimizationModel.getOptimizedSolutionX().get("X[task__A][dsp] = ").intValue());
+        assertEquals(0, optimizationModel.getOptimizedSolutionX().get("X[task__B][MainCPU] = ").intValue());
+        assertEquals(1, optimizationModel.getOptimizedSolutionX().get("X[task__B][dsp] = ").intValue());
+        assertEquals(0, optimizationModel.getOptimizedSolutionX().get("X[task__D][MainCPU] = ").intValue());
+        assertEquals(1, optimizationModel.getOptimizedSolutionX().get("X[task__D][dsp] = ").intValue());
+        assertEquals(1, optimizationModel.getOptimizedSolutionX().get("X[task__E][MainCPU] = ").intValue());
+        assertEquals(0, optimizationModel.getOptimizedSolutionX().get("X[task__E][dsp] = ").intValue());
+
+        assertEquals(0, optimizationModel.getOptimizedSolutionStart().get("start[task__A] = ").intValue());
+        assertEquals(300, optimizationModel.getOptimizedSolutionStart().get("start[task__B] = ").intValue());
+        assertEquals(400, optimizationModel.getOptimizedSolutionStart().get("start[task__D] = ").intValue());
+        assertEquals(500, optimizationModel.getOptimizedSolutionStart().get("start[task__E] = ").intValue());
 
     }
 
@@ -255,19 +268,19 @@ public class InputInstanceTest {
 
             Log.close();
             if (Log.isOpen())
-                System.out.println("Log is still open!");
+                TraceManager.addDev("Log is still open!");
         } catch (Z3Exception ex) {
-            System.out.println("Z3 Managed Exception: " + ex.getMessage());
-            System.out.println("Stack trace: ");
+            TraceManager.addDev("Z3 Managed Exception: " + ex.getMessage());
+            TraceManager.addDev("Stack trace: ");
             ex.printStackTrace(
                     System.out);
         } catch (OptimizationModel.TestFailedException ex) {
-            System.out.println("TEST CASE FAILED: " + ex.getMessage());
-            System.out.println("Stack trace: ");
+            TraceManager.addDev("TEST CASE FAILED: " + ex.getMessage());
+            TraceManager.addDev("Stack trace: ");
             ex.printStackTrace(System.out);
         } catch (Exception ex) {
-            System.out.println("Unknown Exception: " + ex.getMessage());
-            System.out.println("Stack trace: ");
+            TraceManager.addDev("Unknown Exception: " + ex.getMessage());
+            TraceManager.addDev("Stack trace: ");
             ex.printStackTrace(System.out);
         }
 

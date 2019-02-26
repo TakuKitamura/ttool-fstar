@@ -1,24 +1,47 @@
 package tmltranslator.dsez3engine;
 
 import com.microsoft.z3.*;
+import myutil.TraceManager;
+import sun.util.PreHashedMap;
 import tmltranslator.*;
 
+import javax.swing.*;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 
 public class OptimizationModel {
 
+    private Map<String, Integer> optimizedSolutionX = new HashMap<String, Integer>();
+    private Map<String, Integer> optimizedSolutionStart = new HashMap<String, Integer>();
     private InputInstance inputInstance;
-    //private List<TMLCPSequenceDiagram> tmlcpSequenceDiagrams = new ArrayList<TMLCPSequenceDiagram>();
 
     public OptimizationModel(InputInstance inputInstance) {
+
         this.inputInstance = inputInstance;
+    }
+
+    public Map<String, Integer> getOptimizedSolutionX() {
+        return optimizedSolutionX;
+    }
+
+    public void setOptimizedSolutionX(Map<String, Integer> optimizedSolutionX) {
+        this.optimizedSolutionX = optimizedSolutionX;
+    }
+
+    public Map<String, Integer> getOptimizedSolutionStart() {
+        return optimizedSolutionStart;
+    }
+
+    public void setOptimizedSolutionStart(Map<String, Integer> optimizedSolutionStart) {
+        this.optimizedSolutionStart = optimizedSolutionStart;
     }
 
 
     public void findFeasibleMapping(Context ctx) throws TestFailedException {
 
-        System.out.println("\nFind feasible Mapping");
+        TraceManager.addDev("\nFind feasible Mapping");
 
         //Decision variables
 
@@ -40,7 +63,7 @@ public class OptimizationModel {
         //Matrix of constraints to define the interval of Xtp : 0 <= Xtp <= 1
         BoolExpr[][] c_bound_x = new BoolExpr[inputInstance.getModeling().getTasks().size()][inputInstance.getArchitecture().getCPUs().size()];
 
-        //System.out.println("\nDefining the bounds of Xtp (1)");
+        //TraceManager.addDev("\nDefining the bounds of Xtp (1)");
 
         for (TMLTask tmlTask : (List<TMLTask>) inputInstance.getModeling().getTasks()) {
 
@@ -56,7 +79,7 @@ public class OptimizationModel {
                 c_bound_x[t][p] = ctx.mkAnd(ctx.mkLe(ctx.mkInt(0), X[t][p]),
                         ctx.mkLe(X[t][p], ctx.mkInt(1)));
 
-                // System.out.println(c_bound_x[t][p]);
+                // TraceManager.addDev(c_bound_x[t][p]);
             }
         }
 
@@ -78,20 +101,20 @@ public class OptimizationModel {
 
         // ∀t, SUM p (X tp) ≤ 1
 
-        //System.out.println("\nUnique task-CPU mapping constraints (3)");
+        //TraceManager.addDev("\nUnique task-CPU mapping constraints (3)");
         BoolExpr[] c_unique_x = new BoolExpr[inputInstance.getModeling().getTasks().size()];
         for (TMLTask tmlTask : (List<TMLTask>) inputInstance.getModeling().getTasks()) {
             int t = inputInstance.getModeling().getTasks().indexOf(tmlTask); // TODO or use the local instance modeling
 
             ArithExpr sum_X = ctx.mkAdd(X[t]);
             c_unique_x[t] = ctx.mkLe(sum_X, ctx.mkInt(1));
-            // System.out.println(c_unique_x[t]);
+            // TraceManager.addDev(c_unique_x[t]);
 
         }
 
 
         //Feasible Task map: ∀t, SUM p in F(t) (X tp) = 1
-        //System.out.println("\nFeasible task-CPU mapping constraints (4)");
+        //TraceManager.addDev("\nFeasible task-CPU mapping constraints (4)");
         BoolExpr[] c_feasibleMapX = new BoolExpr[inputInstance.getModeling().getTasks().size()];
         for (TMLTask tmlTask : (List<TMLTask>) inputInstance.getModeling().getTasks()) {
             int t = inputInstance.getModeling().getTasks().indexOf(tmlTask);
@@ -105,13 +128,13 @@ public class OptimizationModel {
             }
             c_feasibleMapX[t] = ctx.mkEq(sum_X, ctx.mkInt(1));
 
-            //System.out.println(c_feasibleMapX[t]);
+            //TraceManager.addDev(c_feasibleMapX[t]);
 
         }
 
         //Memory size constraint: ∀p, ∀t, X tp × (bin + bout ) ≤ mem
 
-        //System.out.println("\nMemory size constraints (5)");
+        //TraceManager.addDev("\nMemory size constraints (5)");
         BoolExpr[][] c_mem = new BoolExpr[inputInstance.getArchitecture().getNbOfCPU()][inputInstance.getModeling().getTasks().size()];
 
         for (HwNode hwNode : inputInstance.getArchitecture().getCPUs()) {
@@ -128,14 +151,14 @@ public class OptimizationModel {
 
                 c_mem[p][t] = ctx.mkLe(bin_plus_bout_times_X, mem);
 
-                // System.out.println(c_mem[p][t]);
+                // TraceManager.addDev(c_mem[p][t]);
 
             }
         }
 
 /*
         //At least one route Constraint: ∀c, (t1,t2) in c; X t1p1 + X t2p2 − r p1p2 ≤ 1
-        System.out.println("\nAt least one route constraints (6)");
+        TraceManager.addDev("\nAt least one route constraints (6)");
         BoolExpr[] c_route = new BoolExpr[inputInstance.getModeling().getChannels().size()];
 
         IntExpr[][] r = new IntExpr[inputInstance.getArchitecture().getCPUs().size()][inputInstance.getArchitecture().getCPUs().size()];
@@ -162,7 +185,7 @@ public class OptimizationModel {
 
                     c_route[c] = ctx.mkLe(Xp_plus_Xc_minus_r, ctx.mkInt(1));
 
-                    System.out.println("Channel(" + channel.toString() + ") " + c_route[c]);
+                    TraceManager.addDev("Channel(" + channel.toString() + ") " + c_route[c]);
 
 
                     // mapping_constraints = ctx.mkAnd(c_route[c], mapping_constraints);
@@ -171,7 +194,7 @@ public class OptimizationModel {
         }
 */
         //Scheduling: Precedence constraints: ∀c, τs (t cons ) ≥ τe (t prod )
-        // System.out.println("\nPrecedence constraints (11)");
+        // TraceManager.addDev("\nPrecedence constraints (11)");
         BoolExpr[] c_precedence = new BoolExpr[inputInstance.getModeling().getChannels().size()];
 
         for (TMLChannel channel : (List<TMLChannel>) inputInstance.getModeling().getChannels()) {
@@ -183,8 +206,6 @@ public class OptimizationModel {
 
             TMLTask consumer = channel.getDestinationTask();
             int consIndex = inputInstance.getModeling().getTasks().indexOf(consumer);
-
-            //System.out.println("\nChannel(" + producer.getId() + "," + consumer.getId() + ")");
 
             ArithExpr wcetProducer = ctx.mkInt(0);
 
@@ -200,7 +221,7 @@ public class OptimizationModel {
 
             c_precedence[c] = ctx.mkGe(startC_minus_endP, ctx.mkInt(0));
 
-            //  System.out.println(c_precedence[c]);
+            //  TraceManager.addDev(c_precedence[c]);
 
             mapping_constraints = ctx.mkAnd(mapping_constraints, c_precedence[c]);
 
@@ -209,7 +230,7 @@ public class OptimizationModel {
 
         //∀p∀t i ∀t j 6 = t i , ¬((X t i p = 1) ∧ (X t j p = 1)) ∨ ((τ s (t j ) ≥ τ e (t i )) ∨ (τ s (t i ) ≥ τ e (t j )))
         //Scheduling: One single task running on CPU ∀t
-        //System.out.println("\n Same resource/no time overlap Constraints (12)");
+        //TraceManager.addDev("\n Same resource/no time overlap Constraints (12)");
         BoolExpr c_monoTask[][][] = new BoolExpr[inputInstance.getArchitecture().getCPUs().size()][inputInstance.getModeling().getTasks().size()][inputInstance.getModeling().getTasks().size()];
 
         for (HwNode hwNode : inputInstance.getArchitecture().getCPUs()) {
@@ -258,7 +279,7 @@ public class OptimizationModel {
 
                         //
                         c_monoTask[p][ti][tj] = ctx.mkOr(not_alpha, beta);
-                        // System.out.println("\n" + c_monoTask[p][ti][tj]);
+                        // TraceManager.addDev("\n" + c_monoTask[p][ti][tj]);
 
                         mapping_constraints = ctx.mkAnd(mapping_constraints, c_monoTask[p][ti][tj]);
                     }
@@ -271,7 +292,7 @@ public class OptimizationModel {
 
         //Grouping remaining constraints of the model
 
-        // System.out.println("\nAll mapping constraints");
+        // TraceManager.addDev("\nAll mapping constraints");
         for (TMLTask task : (List<TMLTask>) inputInstance.getModeling().getTasks()) {
 
             int t = inputInstance.getModeling().getTasks().indexOf(task);
@@ -300,7 +321,9 @@ public class OptimizationModel {
             Expr[][] optimized_result_X = new Expr[inputInstance.getModeling().getTasks().size()][inputInstance.getArchitecture().getCPUs().size()];
             Expr[] optimized_result_start = new Expr[inputInstance.getModeling().getTasks().size()];
 
-            System.out.println("\nProposed feasible Mapping solution:\n");
+            TraceManager.addDev("Proposed feasible Mapping solution:");
+
+
             for (TMLTask task : (List<TMLTask>) inputInstance.getModeling().getTasks()) {
                 int t = inputInstance.getModeling().getTasks().indexOf(task);
 
@@ -309,23 +332,24 @@ public class OptimizationModel {
 
 
                     optimized_result_X[t][p] = m.evaluate(X[t][p], false);
-                    System.out.println("X[" + task.getName() + "][" + hwNode.getName() + "] = " + optimized_result_X[t][p]);
+                    TraceManager.addDev("X[" + task.getName() + "][" + hwNode.getName() + "] = " + optimized_result_X[t][p]);
+
                 }
 
-                System.out.println("\n");
+                TraceManager.addDev("\n");
             }
 
             for (TMLTask task : (List<TMLTask>) inputInstance.getModeling().getTasks()) {
                 int t = inputInstance.getModeling().getTasks().indexOf(task);
 
                 optimized_result_start[t] = m.evaluate(start[t], false);
-                System.out.println("start[" + task.getName() + "] = " + optimized_result_start[t]);
+                TraceManager.addDev("start[" + task.getName() + "] = " + optimized_result_start[t]);
 
             }
 
 
         } else {
-            System.out.println("Failed to solve mapping problem");
+            TraceManager.addDev("Failed to solve mapping problem");
             throw new TestFailedException();
         }
 
@@ -335,7 +359,7 @@ public class OptimizationModel {
 
     public void findOptimizedMapping(Context ctx) throws TestFailedException {
 
-        System.out.println("\nFind an optimized Mapping");
+        TraceManager.addDev("\nFind an optimized Mapping");
 
         //Decision variables
 
@@ -353,7 +377,7 @@ public class OptimizationModel {
         //Matrix of constraints to define the interval of Xtp : 0 <= Xtp <= 1
         BoolExpr[][] c_bound_x = new BoolExpr[inputInstance.getModeling().getTasks().size()][inputInstance.getArchitecture().getCPUs().size()];
 
-        //System.out.println("\nDefining the bounds of Xtp (1)");
+        //TraceManager.addDev("\nDefining the bounds of Xtp (1)");
 
         for (TMLTask tmlTask : (List<TMLTask>) inputInstance.getModeling().getTasks()) {
 
@@ -369,7 +393,7 @@ public class OptimizationModel {
                 c_bound_x[t][p] = ctx.mkAnd(ctx.mkLe(ctx.mkInt(0), X[t][p]),
                         ctx.mkLe(X[t][p], ctx.mkInt(1)));
 
-                // System.out.println(c_bound_x[t][p]);
+                // TraceManager.addDev(c_bound_x[t][p]);
             }
         }
 
@@ -390,20 +414,20 @@ public class OptimizationModel {
 
         // ∀t, SUM p (X tp) ≤ 1
 
-        //System.out.println("\nUnique task-CPU mapping constraints (3)");
+        //TraceManager.addDev("\nUnique task-CPU mapping constraints (3)");
         BoolExpr[] c_unique_x = new BoolExpr[inputInstance.getModeling().getTasks().size()];
         for (TMLTask tmlTask : (List<TMLTask>) inputInstance.getModeling().getTasks()) {
             int t = inputInstance.getModeling().getTasks().indexOf(tmlTask); // TODO or use the local instance modeling
 
             ArithExpr sum_X = ctx.mkAdd(X[t]);
             c_unique_x[t] = ctx.mkLe(sum_X, ctx.mkInt(1));
-            // System.out.println(c_unique_x[t]);
+            // TraceManager.addDev(c_unique_x[t]);
 
         }
 
 
         //Feasible Task map: ∀t, SUM p in F(t) (X tp) = 1
-        //System.out.println("\nFeasible task-CPU mapping constraints (4)");
+        //TraceManager.addDev("\nFeasible task-CPU mapping constraints (4)");
         BoolExpr[] c_feasibleMapX = new BoolExpr[inputInstance.getModeling().getTasks().size()];
         for (TMLTask tmlTask : (List<TMLTask>) inputInstance.getModeling().getTasks()) {
             int t = inputInstance.getModeling().getTasks().indexOf(tmlTask);
@@ -417,13 +441,13 @@ public class OptimizationModel {
             }
             c_feasibleMapX[t] = ctx.mkEq(sum_X, ctx.mkInt(1));
 
-            //System.out.println(c_feasibleMapX[t]);
+            //TraceManager.addDev(c_feasibleMapX[t]);
 
         }
 
         //Memory size constraint: ∀p, ∀t, X tp × (bin + bout ) ≤ mem
 
-        //System.out.println("\nMemory size constraints (5)");
+        //TraceManager.addDev("\nMemory size constraints (5)");
         BoolExpr[][] c_mem = new BoolExpr[inputInstance.getArchitecture().getNbOfCPU()][inputInstance.getModeling().getTasks().size()];
 
         for (HwNode hwNode : inputInstance.getArchitecture().getCPUs()) {
@@ -440,14 +464,14 @@ public class OptimizationModel {
 
                 c_mem[p][t] = ctx.mkLe(bin_plus_bout_times_X, mem);
 
-                // System.out.println(c_mem[p][t]);
+                // TraceManager.addDev(c_mem[p][t]);
 
             }
         }
 
 /*
         //At least one route Constraint: ∀c, (t1,t2) in c; X t1p1 + X t2p2 − r p1p2 ≤ 1
-        System.out.println("\nAt least one route constraints (6)");
+        TraceManager.addDev("\nAt least one route constraints (6)");
         BoolExpr[] c_route = new BoolExpr[inputInstance.getModeling().getChannels().size()];
 
         IntExpr[][] r = new IntExpr[inputInstance.getArchitecture().getCPUs().size()][inputInstance.getArchitecture().getCPUs().size()];
@@ -474,7 +498,7 @@ public class OptimizationModel {
 
                     c_route[c] = ctx.mkLe(Xp_plus_Xc_minus_r, ctx.mkInt(1));
 
-                    System.out.println("Channel(" + channel.toString() + ") " + c_route[c]);
+                    TraceManager.addDev("Channel(" + channel.toString() + ") " + c_route[c]);
 
 
                     // mapping_constraints = ctx.mkAnd(c_route[c], mapping_constraints);
@@ -483,7 +507,7 @@ public class OptimizationModel {
         }
 */
         //Scheduling: Precedence constraints: ∀c, τs (t cons ) ≥ τe (t prod )
-        // System.out.println("\nPrecedence constraints (11)");
+        // TraceManager.addDev("\nPrecedence constraints (11)");
         BoolExpr[] c_precedence = new BoolExpr[inputInstance.getModeling().getChannels().size()];
 
         for (TMLChannel channel : (List<TMLChannel>) inputInstance.getModeling().getChannels()) {
@@ -496,7 +520,7 @@ public class OptimizationModel {
             TMLTask consumer = channel.getDestinationTask();
             int consIndex = inputInstance.getModeling().getTasks().indexOf(consumer);
 
-            //System.out.println("\nChannel(" + producer.getId() + "," + consumer.getId() + ")");
+            //TraceManager.addDev("\nChannel(" + producer.getId() + "," + consumer.getId() + ")");
 
             ArithExpr wcetProducer = ctx.mkInt(0);
 
@@ -512,7 +536,7 @@ public class OptimizationModel {
 
             c_precedence[c] = ctx.mkGe(startC_minus_endP, ctx.mkInt(0));
 
-            //  System.out.println(c_precedence[c]);
+            //  TraceManager.addDev(c_precedence[c]);
 
             mapping_constraints = ctx.mkAnd(mapping_constraints, c_precedence[c]);
 
@@ -521,7 +545,7 @@ public class OptimizationModel {
 
         //∀p∀t i ∀t j 6 = t i , ¬((X t i p = 1) ∧ (X t j p = 1)) ∨ ((τ s (t j ) ≥ τ e (t i )) ∨ (τ s (t i ) ≥ τ e (t j )))
         //Scheduling: One single task running on CPU ∀t
-        //System.out.println("\n Same resource/no time overlap Constraints (12)");
+        //TraceManager.addDev("\n Same resource/no time overlap Constraints (12)");
         BoolExpr c_monoTask[][][] = new BoolExpr[inputInstance.getArchitecture().getCPUs().size()][inputInstance.getModeling().getTasks().size()][inputInstance.getModeling().getTasks().size()];
 
         for (HwNode hwNode : inputInstance.getArchitecture().getCPUs()) {
@@ -570,7 +594,7 @@ public class OptimizationModel {
 
                         //
                         c_monoTask[p][ti][tj] = ctx.mkOr(not_alpha, beta);
-                        // System.out.println("\n" + c_monoTask[p][ti][tj]);
+                        // TraceManager.addDev("\n" + c_monoTask[p][ti][tj]);
 
                         mapping_constraints = ctx.mkAnd(mapping_constraints, c_monoTask[p][ti][tj]);
                     }
@@ -583,7 +607,7 @@ public class OptimizationModel {
 
         //Grouping remaining constraints of the model
 
-        // System.out.println("\nAll mapping constraints");
+        // TraceManager.addDev("\nAll mapping constraints");
         for (TMLTask task : (List<TMLTask>) inputInstance.getModeling().getTasks()) {
 
             int t = inputInstance.getModeling().getTasks().indexOf(task);
@@ -635,41 +659,60 @@ public class OptimizationModel {
         // Add minimization objective.
         Optimize.Handle objective_latency = opt.MkMinimize(latency);
 
+        String outputToDisplay = "";
 
         if (opt.Check() == Status.SATISFIABLE) {
             Model m = opt.getModel();
             Expr[][] optimized_result_X = new Expr[inputInstance.getModeling().getTasks().size()][inputInstance.getArchitecture().getCPUs().size()];
             Expr[] optimized_result_start = new Expr[inputInstance.getModeling().getTasks().size()];
 
-            System.out.println("\nThe optimal mapping solution is:\n");
+            outputToDisplay ="The optimal mapping solution is:\n\n";
+
             for (TMLTask task : (List<TMLTask>) inputInstance.getModeling().getTasks()) {
                 int t = inputInstance.getModeling().getTasks().indexOf(task);
 
                 for (HwNode hwNode : inputInstance.getArchitecture().getCPUs()) {
                     int p = inputInstance.getArchitecture().getCPUs().indexOf(hwNode);
-
-
+                    //evaluate optimal solution
                     optimized_result_X[t][p] = m.evaluate(X[t][p], true);
-                    System.out.println("X[" + task.getName() + "][" + hwNode.getName() + "] = " + optimized_result_X[t][p]);
+
+                    optimizedSolutionX.put("X[" + task.getName() + "][" + hwNode.getName() + "] = ", Integer.parseInt(optimized_result_X[t][p]
+                            .toString()));
+
+                   // TraceManager.addDev("X[" + task.getName() + "][" + hwNode.getName() + "] = " + optimized_result_X[t][p]);
                 }
 
-                System.out.println("\n");
+                TraceManager.addDev("\n");
             }
 
             for (TMLTask task : (List<TMLTask>) inputInstance.getModeling().getTasks()) {
                 int t = inputInstance.getModeling().getTasks().indexOf(task);
 
                 optimized_result_start[t] = m.evaluate(start[t], false);
-                System.out.println("start[" + task.getName() + "] = " + optimized_result_start[t]);
+
+                optimizedSolutionStart.put("start[" + task.getName() + "] = ", Integer.parseInt(optimized_result_start[t].toString()));
+
+               // TraceManager.addDev("start[" + task.getName() + "] = " + optimized_result_start[t]);
 
             }
-        }
 
- else {
-            System.out.println("Failed to solve mapping problem");
+            for(Map.Entry<String, Integer> entry : optimizedSolutionX.entrySet()) {
+                outputToDisplay = outputToDisplay + entry.getKey() + " = " + entry.getValue() + "\n";
+            }
+
+            outputToDisplay += "\n\n";
+
+            for(Map.Entry<String, Integer> entry : optimizedSolutionStart.entrySet()) {
+                outputToDisplay = outputToDisplay + entry.getKey() + " = " + entry.getValue() + "\n";
+            }
+
+            TraceManager.addDev(outputToDisplay);
+
+        } else {
+            outputToDisplay ="Failed to solve mapping problem";
+            TraceManager.addDev(outputToDisplay);
             throw new TestFailedException();
         }
-
 
     }
 
@@ -681,5 +724,4 @@ public class OptimizationModel {
     }
 
 
-
-    }
+}
