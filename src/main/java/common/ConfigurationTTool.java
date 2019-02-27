@@ -141,6 +141,9 @@ public class ConfigurationTTool {
     public static String AVATARExecutableSoclibCodeTraceCommand = "";
     public static String AVATARExecutableSoclibTraceFile = "";
 
+    // Z3
+     public static String Z3LIBS = "";
+
 
     // Ontology
     //public static String RequirementOntologyWebsite = "";
@@ -432,6 +435,9 @@ public class ConfigurationTTool {
         sb.append("AVATARExecutableSocLibCodeTraceCommand: " + AVATARExecutableSoclibCodeTraceCommand + "\n");
         sb.append("AVATARExecutableSocLibCodeTraceFile: " + AVATARExecutableSoclibTraceFile + "\n");
 
+        sb.append("\nZ3 Libs:\n");
+        sb.append("Z3LIBS: " + Z3LIBS + "\n");
+
         sb.append("\nProVerif:\n");
         sb.append("ProVerifCodeDirectory: " + ProVerifCodeDirectory + "\n");
         sb.append("ProVerifVerifierPATH: " + ProVerifVerifierPath + "\n");
@@ -706,6 +712,10 @@ public class ConfigurationTTool {
             nl = doc.getElementsByTagName("AVATARExecutableSoclibTraceFile");
             if (nl.getLength() > 0)
                 AVATARExecutableSoclibTraceFile(nl);
+
+            nl = doc.getElementsByTagName("Z3LIBS");
+            if (nl.getLength() > 0)
+                Z3LIBS(nl);
 
             if (systemcOn) {
                 nl = doc.getElementsByTagName("SystemCHost");
@@ -1436,6 +1446,15 @@ public class ConfigurationTTool {
         try {
             Element elt = (Element) (nl.item(0));
             AVATARExecutableSoclibTraceFile = elt.getAttribute("data");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+
+    private static void Z3LIBS(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element) (nl.item(0));
+            Z3LIBS = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
         }
