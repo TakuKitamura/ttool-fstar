@@ -63,6 +63,7 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.*;
 
 
@@ -316,7 +317,7 @@ public class JDialogDSEZ3 extends JDialog implements ActionListener, ListSelecti
 
 
         outputText.append("Loading Z3 libs\n");
-        String error = loadZ3Libs();
+        String error = ConfigurationTTool.loadZ3Libs();
 
         if (error != null) {
             outputText.append(error);
@@ -324,21 +325,8 @@ public class JDialogDSEZ3 extends JDialog implements ActionListener, ListSelecti
            return;
         }
 
+        outputText.append("Z3 libs loaded.\n\n");
 
-
-        /*try {
-    	    System.load("/opt/z3/bin/libz3.so");
-    	    System.load("/opt/z3/bin/libz3java.so");
-        } catch (UnsatisfiedLinkError e) {
-            outputText.append("Z3 lib could not be loaded\n");
-           stopProcess();
-           return;
-        }*/
-
-        outputText.append("Z3 libs loaded.\n");
-
-
-        Context ctx = null;
         outputText.append("Looking for optimized mapping, please wait\n");
         OptimizationResult result = null;
         try {
@@ -364,29 +352,7 @@ public class JDialogDSEZ3 extends JDialog implements ActionListener, ListSelecti
 
     }
 
-    // Returns an error string in case of failure
-    private String loadZ3Libs() {
-        if ((ConfigurationTTool.Z3LIBS == null) || (ConfigurationTTool.Z3LIBS.length() == 0)) {
-            return "Z3 libraries not configured.\n Set them in configuration file (e.g. config.xml)\n" +
-                    "For instance:\n<Z3LIBS data=\"/opt/z3/bin/libz3.so:/opt/z3/bin/libz3java.so\" />\n";
-        }
 
-        try {
-            String [] libs = ConfigurationTTool.Z3LIBS.split(":");
-            for (int i=0; i<libs.length; i++) {
-                String tmp = libs[i].trim();
-                if (tmp.length() > 0) {
-                    TraceManager.addDev("Loading Z3 lib: " + tmp);
-                    System.load(tmp);
-                }
-            }
-
-        } catch (UnsatisfiedLinkError e) {
-            return ("Z3 libs + " + ConfigurationTTool.Z3LIBS + " could not be loaded\n");
-        }
-
-        return null;
-    }
 
 
 

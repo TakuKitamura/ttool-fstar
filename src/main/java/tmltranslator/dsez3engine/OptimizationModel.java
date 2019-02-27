@@ -75,9 +75,46 @@ public class OptimizationModel {
         return result;
     }
 
+    public OptimizationResult  findFeasibleMapping() {
+        Context ctx;
+        OptimizationResult result = null;
+        try {
 
-    public void findFeasibleMapping(Context ctx) throws TestFailedException {
+            // These examples need model generation turned on.
+            HashMap<String, String> cfg = new HashMap<String, String>();
+            cfg.put("model", "true");
+            ctx = new Context(cfg);
 
+
+            result = findFeasibleMapping(ctx);
+
+            Log.close();
+            if (Log.isOpen())
+                TraceManager.addDev("Log is still open!");
+        } catch (Z3Exception ex) {
+            TraceManager.addDev("Z3 Managed Exception: " + ex.getMessage());
+            TraceManager.addDev("Stack trace: ");
+            ex.printStackTrace(
+                    System.out);
+            if (result == null) {
+                result = new OptimizationResult();
+            }
+            result.error = "Z3 Exception: " + ex.getMessage();
+        } catch (Exception ex) {
+            TraceManager.addDev("Unknown Exception: " + ex.getMessage());
+            TraceManager.addDev("Stack trace: ");
+            ex.printStackTrace(System.out);
+            if (result == null) {
+                result = new OptimizationResult();
+            }
+            result.error = "Z3 Unknown Exception: " + ex.getMessage();
+        }
+        return result;
+    }
+
+
+    public OptimizationResult findFeasibleMapping(Context ctx) {
+        OptimizationResult result = new OptimizationResult();
         TraceManager.addDev("\nFind feasible Mapping");
 
         //Decision variables
@@ -393,12 +430,15 @@ public class OptimizationModel {
                 TraceManager.addDev("start[" + taskCast.getName() + "] = " + optimized_result_start[t]);
 
             }
-
+            result.result = "Feasible mapping found";
 
         } else {
-            TraceManager.addDev("Failed to solve mapping problem");
-            throw new TestFailedException();
+            TraceManager.addDev("No suitable mapping could be found");
+            result.mappingFound = false;
         }
+
+
+        return result;
 
 
     }//findFeasibleMapping()

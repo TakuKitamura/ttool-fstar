@@ -1,6 +1,7 @@
 package tmltranslator.dsez3engine;
 
 import com.microsoft.z3.*;
+import common.ConfigurationTTool;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -205,33 +206,26 @@ public class InputInstanceTest {
   @Test
   public void findOptimizedMapping() {
 
-    try {
-
-      // These examples need model generation turned on.
-      HashMap<String, String> cfg = new HashMap<String, String>();
-      cfg.put("model", "true");
-      Context ctx = new Context(cfg);
-
-
-      optimizationModel.findOptimizedMapping(ctx);
+        String error = ConfigurationTTool.loadZ3Libs();
+        if (error != null) {
+            // we cannot run the test since Z3 is not installed
+            return;
+        }
+      OptimizationResult result = optimizationModel.findOptimizedMapping();
 
       Log.close();
-      if (Log.isOpen())
+      /*if (Log.isOpen())
         TraceManager.addDev("Log is still open!");
     } catch (Z3Exception ex) {
-      TraceManager.addDev("Z3 Managed Exception: " + ex.getMessage());
-      TraceManager.addDev("Stack trace: ");
-      ex.printStackTrace(
-              System.out);
-    } catch (OptimizationModel.TestFailedException ex) {
-      TraceManager.addDev("TEST CASE FAILED: " + ex.getMessage());
-      TraceManager.addDev("Stack trace: ");
-      ex.printStackTrace(System.out);
+        TraceManager.addDev("Z3 Managed Exception: " + ex.getMessage());
+        TraceManager.addDev("Stack trace: ");
+        ex.printStackTrace(
+                System.out);
     } catch (Exception ex) {
       TraceManager.addDev("Unknown Exception: " + ex.getMessage());
       TraceManager.addDev("Stack trace: ");
       ex.printStackTrace(System.out);
-    }
+    }*/
 
     assertEquals(1, optimizationModel.getOptimizedSolutionX().get("X[task__A][MainCPU] = ").intValue());
     assertEquals(0, optimizationModel.getOptimizedSolutionX().get("X[task__A][dsp] = ").intValue());
@@ -252,34 +246,15 @@ public class InputInstanceTest {
 
   @Test
   public void findFeasibleMapping() {
-
-    try {
-
-      // These examples need model generation turned on.
-      HashMap<String, String> cfg = new HashMap<String, String>();
-      cfg.put("model", "true");
-      Context ctx = new Context(cfg);
-
-
-      optimizationModel.findFeasibleMapping(ctx);
+      String error = ConfigurationTTool.loadZ3Libs();
+      if (error != null) {
+          // we cannot run the test since Z3 is not installed
+          return;
+      }
+      OptimizationResult result = optimizationModel.findFeasibleMapping();
 
       Log.close();
-      if (Log.isOpen())
-        TraceManager.addDev("Log is still open!");
-    } catch (Z3Exception ex) {
-      TraceManager.addDev("Z3 Managed Exception: " + ex.getMessage());
-      TraceManager.addDev("Stack trace: ");
-      ex.printStackTrace(
-              System.out);
-    } catch (OptimizationModel.TestFailedException ex) {
-      TraceManager.addDev("TEST CASE FAILED: " + ex.getMessage());
-      TraceManager.addDev("Stack trace: ");
-      ex.printStackTrace(System.out);
-    } catch (Exception ex) {
-      TraceManager.addDev("Unknown Exception: " + ex.getMessage());
-      TraceManager.addDev("Stack trace: ");
-      ex.printStackTrace(System.out);
-    }
+
 
 
   }

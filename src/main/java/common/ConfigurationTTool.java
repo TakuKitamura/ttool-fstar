@@ -1682,4 +1682,43 @@ public class ConfigurationTTool {
         }
     }
 
+    // Returns an error string in case of failure
+    public static String loadZ3Libs() {
+        if ((ConfigurationTTool.Z3LIBS == null) || (ConfigurationTTool.Z3LIBS.length() == 0)) {
+            return "Z3 libraries not configured.\n Set them in configuration file (e.g. config.xml)\n" +
+                    "For instance:\n<Z3LIBS data=\"/opt/z3/bin/libz3.so:/opt/z3/bin/libz3java.so\" />\n";
+        }
+
+        try {
+
+
+
+            String [] libs = ConfigurationTTool.Z3LIBS.split(":");
+            boolean setLibPath = false;
+
+            for (int i=0; i<libs.length; i++) {
+                // get the path and set it as a property of java lib path
+
+
+
+                String tmp = libs[i].trim();
+                if (tmp.length() > 0) {
+                    if (setLibPath == false) {
+                        File f = new File(tmp);
+                        String dir = f.getParent();
+                        System.setProperty("java.library.path", dir);
+                        setLibPath = true;
+                    }
+                    TraceManager.addDev("Loading Z3 lib: " + tmp);
+                    System.load(tmp);
+                }
+            }
+
+        } catch (UnsatisfiedLinkError e) {
+            return ("Z3 libs + " + ConfigurationTTool.Z3LIBS + " could not be loaded\n");
+        }
+
+        return null;
+    }
+
 } //
