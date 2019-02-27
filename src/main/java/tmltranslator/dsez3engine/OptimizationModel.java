@@ -38,8 +38,9 @@ public class OptimizationModel {
         this.optimizedSolutionStart = optimizedSolutionStart;
     }
 
-    public Context  findOptimizedMapping() {
+    public OptimizationResult  findOptimizedMapping() {
         Context ctx;
+        OptimizationResult result = null;
         try {
 
             // These examples need model generation turned on.
@@ -48,7 +49,7 @@ public class OptimizationModel {
             ctx = new Context(cfg);
 
 
-            findOptimizedMapping(ctx);
+            result = findOptimizedMapping(ctx);
 
             Log.close();
             if (Log.isOpen())
@@ -58,19 +59,20 @@ public class OptimizationModel {
             TraceManager.addDev("Stack trace: ");
             ex.printStackTrace(
                     System.out);
-            return null;
-        } catch (OptimizationModel.TestFailedException ex) {
-            TraceManager.addDev("TEST CASE FAILED: " + ex.getMessage());
-            TraceManager.addDev("Stack trace: ");
-            ex.printStackTrace(System.out);
-            return null;
+            if (result == null) {
+                result = new OptimizationResult();
+            }
+            result.error = "Z3 Exception: " + ex.getMessage();
         } catch (Exception ex) {
             TraceManager.addDev("Unknown Exception: " + ex.getMessage());
             TraceManager.addDev("Stack trace: ");
             ex.printStackTrace(System.out);
-            return null;
+            if (result == null) {
+                result = new OptimizationResult();
+            }
+            result.error = "Z3 Unknown Exception: " + ex.getMessage();
         }
-        return ctx;
+        return result;
     }
 
 
@@ -402,7 +404,9 @@ public class OptimizationModel {
     }//findFeasibleMapping()
 
 
-    public void findOptimizedMapping(Context ctx) throws TestFailedException {
+    public OptimizationResult findOptimizedMapping(Context ctx)  {
+
+        OptimizationResult result = new OptimizationResult();
 
         TraceManager.addDev("\nFind an optimized Mapping");
 
@@ -766,12 +770,16 @@ public class OptimizationModel {
             }
 
             TraceManager.addDev(outputToDisplay);
+            result.mappingFound = true;
 
         } else {
-            outputToDisplay ="Failed to solve mapping problem";
+            outputToDisplay ="No suitable mapping could be found";
             TraceManager.addDev(outputToDisplay);
-            throw new TestFailedException();
+            result.mappingFound = false;
         }
+        result.result = outputToDisplay;
+
+        return result;
 
     }
 
