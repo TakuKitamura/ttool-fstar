@@ -19,7 +19,6 @@ public class OptimizationModel {
     private InputInstance inputInstance;
 
     public OptimizationModel(InputInstance inputInstance) {
-
         this.inputInstance = inputInstance;
     }
 
@@ -37,6 +36,41 @@ public class OptimizationModel {
 
     public void setOptimizedSolutionStart(Map<String, Integer> optimizedSolutionStart) {
         this.optimizedSolutionStart = optimizedSolutionStart;
+    }
+
+    public Context  findOptimizedMapping() {
+        Context ctx;
+        try {
+
+            // These examples need model generation turned on.
+            HashMap<String, String> cfg = new HashMap<String, String>();
+            cfg.put("model", "true");
+            ctx = new Context(cfg);
+
+
+            findOptimizedMapping(ctx);
+
+            Log.close();
+            if (Log.isOpen())
+                TraceManager.addDev("Log is still open!");
+        } catch (Z3Exception ex) {
+            TraceManager.addDev("Z3 Managed Exception: " + ex.getMessage());
+            TraceManager.addDev("Stack trace: ");
+            ex.printStackTrace(
+                    System.out);
+            return null;
+        } catch (OptimizationModel.TestFailedException ex) {
+            TraceManager.addDev("TEST CASE FAILED: " + ex.getMessage());
+            TraceManager.addDev("Stack trace: ");
+            ex.printStackTrace(System.out);
+            return null;
+        } catch (Exception ex) {
+            TraceManager.addDev("Unknown Exception: " + ex.getMessage());
+            TraceManager.addDev("Stack trace: ");
+            ex.printStackTrace(System.out);
+            return null;
+        }
+        return ctx;
     }
 
 

@@ -49,6 +49,7 @@ import launcher.RemoteExecutionThread;
 import launcher.RshClient;
 import myutil.*;
 import proverifspec.ProVerifOutputAnalyzer;
+import tmltranslator.TMLMapping;
 import translator.CheckingError;
 import translator.MasterGateManager;
 import ui.ad.TActivityDiagramPanel;
@@ -4788,7 +4789,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     }
 
     public void dse() {
-        TraceManager.addDev("Design space exploration");
+        //TraceManager.addDev("Design space exploration");
         JDialogDSE jdse = new JDialogDSE(frame, this, "Design Space Exploration", SpecConfigTTool.SystemCCodeDirectory, SpecConfigTTool.TMLCodeDirectory);
         //   jdse.setSize(600,800);
         GraphicLib.centerOnParent(jdse, 700, 800);
@@ -4797,12 +4798,22 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     }
 
     public void dseZ3() {
-        TraceManager.addDev("Design space exploration with Z3");
-        /*JDialogDSE jdse = new JDialogDSE(frame, this, "Design Space Exploration", SpecConfigTTool.SystemCCodeDirectory, SpecConfigTTool.TMLCodeDirectory);
-        //   jdse.setSize(600,800);
-        GraphicLib.centerOnParent(jdse, 700, 800);
-        jdse.setVisible(true);
-        dtree.toBeUpdated();*/
+        //TraceManager.addDev("Design space exploration with Z3");
+        if (gtm == null) {
+            return;
+        }
+
+        TMLMapping map = gtm.getTMLMapping();
+
+        if (map == null) {
+            return;
+        }
+
+        JDialogDSEZ3 jdsez3 = new JDialogDSEZ3(frame, this, "Design Space Exploration with Z3", map, SpecConfigTTool.TMLCodeDirectory);
+        //   jdsez3.setSize(600,800);
+        GraphicLib.centerOnParent(jdsez3, 700, 800);
+        jdsez3.setVisible(true);
+        dtree.toBeUpdated();
     }
 
     public void avatarStaticAnalysis() {
