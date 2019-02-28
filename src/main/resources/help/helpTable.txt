@@ -1,0 +1,5 @@
+- general TTool general
+- diplodocus.md diplodocus hardware software partitioning dse design space exploration
+-- architecture
+--- cpu
+----clockdivider clock_divider clock divider cpu 

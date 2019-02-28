@@ -830,12 +830,7 @@ public class OptimizationModel {
 
     }
 
-
-    class TestFailedException extends Exception {
-        public TestFailedException() {
-            super("Check FAILED");
-        }
-    }
+    
 
 
 }

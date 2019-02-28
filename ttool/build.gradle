@@ -57,5 +57,5 @@ jar {
 mainClassName = 'Main'
 
 test {
-  testLogging.showStandardStreams = true
+  testLogging.showStandardStreams = false
 }

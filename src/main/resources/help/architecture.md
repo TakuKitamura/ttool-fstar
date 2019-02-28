@@ -1,0 +1,1 @@
+The architecture is used to capture abstract hardware nodes that can be connected through buses.

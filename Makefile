@@ -54,7 +54,8 @@ make ultraclean         Clean the repository from binaries and compilation artif
 
 make ttooljavac		Build TTool only with javac
 make ttoolnotest	Build TTool with gradle, but do not execute test. Performs the install
-make allnotest		Builld all apps, but do not execute tests. Performs the install	
+make allnotest		Builld all apps, but do not execute tests. Performs the install
+make ttoolhelp		Generate the help of TTool in HTML format
 
 
 Other targets:
@@ -127,6 +128,10 @@ export WEBCRAWLER_SERVER_BINARY	= $(TTOOL_BUILD)/webcrawler-server.jar
 export JTTOOL_DIR		= $(TTOOL_PATH)/jttool
 export JTTOOL_BINARY		= $(TTOOL_BUILD)/jttool.jar
 
+export TTOOL_HELP_DIR	= $(TTOOL_PATH)/src/main/resources/help
+MD_FILES=$(wildcard src/main/resources/help/*.md)	
+MD2HTML=$(MD_FILES:.md=.html)
+
 all: ttool launcher ttool-cli graphminimize graphshow tiftranslator tmltranslator rundse remotesimulator webcrawler install
 
 allnotest: GRADLE_OPTIONS += $(GRADLE_NO_TEST)
@@ -141,7 +146,7 @@ ttoolnotest:
 $(TTOOL_BINARY): FORCE
 	@($(GRADLE) :ttool:build $(GRADLE_OPTIONS)) || ($(ERROR_MSG) $(GRADLE_VERSION) $(GRADLE_VERSION_NEEDED)&& $(MAKE) -C $(TTOOL_DIR) -e $@)
 
-ttooljavac:
+ttooljavac: 
 	$(MAKE) -C $(TTOOL_DIR)
 	$(MAKE) -C $(TTOOLCLI_DIR)
 
@@ -195,6 +200,13 @@ $(WEBCRAWLER_SERVER_BINARY): FORCE
 
 $(JTTOOL_BINARY): FORCE
 	@$(MAKE) -C $(JTTOOL_DIR) -e $@
+
+ttoolhelp: html
+
+html: $(MD2HTML)
+
+%.html: %.md
+	pandoc $< -f markdown -t html -s -o  $@
 
 # ======================================== 
 # ==========    DOCUMENTATION   ========== 

@@ -37,47 +37,44 @@
  */
 
 
-package ui.util;
+package help;
+
+import common.ConfigurationTTool;
+import common.SpecConfigTTool;
+import launcher.RTLLauncher;
+import myutil.PluginManager;
+import myutil.TraceManager;
+import ui.MainGUI;
+import ui.util.IconManager;
+import ui.window.JDialogSystemCGeneration;
+import ui.*;
+
+import java.io.File;
+import java.util.BitSet;
+import java.util.*;
 
 
 /**
- * Class DefaultText
- * Text of some windows
- * Creation: 01/12/2003
+ * Class HelpManager
+ * Creation: 28/02/2019
+ * Version 2.0 28/02/2019
  *
  * @author Ludovic APVRILLE
- * @version 1.2 21/06/2018
  */
-public class DefaultText {
+public class HelpManager  {
 
-    public static String BUILD = "12963";
-    public static String DATE = "2019/02/28 03:02:18 CET";
+    private boolean helpLoaded = false;
 
-    public static StringBuffer sbAbout = makeAbout();
+    Vector<HelpEntry> entries;
 
-    public static String getAboutText() {
-        return new String(sbAbout);
+    public HelpManager() {
+        entries = new Vector<>();
     }
 
-    public static String getVersion() {
-        return "1.0beta"; /* Set new release Nov. 16th, 2017 */
-    }
+    // Returns false in case of failure
+    public boolean loadEntries() {
+        helpLoaded = true;
 
-    public static String getFullVersion() {
-        return getVersion() + " -- build: " + DefaultText.BUILD + " date: " + DefaultText.DATE;
+        return true;
     }
-
-    private static StringBuffer makeAbout() {
-        StringBuffer sb = new StringBuffer();
-        sb.append("TTool version " + getFullVersion() + "\n");
-        sb.append("Copyright IMT - Telecom ParisTech / Ludovic Apvrille \n");
-        sb.append("\nContact: ludovic.apvrille@telecom-paristech.fr\n");
-        sb.append("\nProgrammers\n\tTelecom ParisTech: Ludovic Apvrille, Dominique Blouin, Fabien Tessier, \n\tDaniel Knorreck, Florian Lugou, Letitia Li\n");
-        sb.append("\n\tNokia: Andrea Enrici\n");
-        sb.append("\n\tLIP6: Daniela Genius\n");
-        sb.append("\nFor more information:\n");
-        sb.append("http://ttool.telecom-paristech.fr/\n\n");
-        return sb;
-    }
-
 }
