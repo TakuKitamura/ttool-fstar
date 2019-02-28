@@ -74,5 +74,7 @@ public class HelpManager  {
     // Returns false in case of failure
     public boolean loadEntries() {
         helpLoaded = true;
+
+        return true;
     }
 }
