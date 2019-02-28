@@ -39,6 +39,7 @@
 
 package ui;
 
+import help.HelpManager;
 import myutil.*;
 import avatartranslator.AvatarSpecification;
 import common.ConfigurationTTool;
@@ -329,6 +330,9 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     private JFrameInteractiveSimulation jfis;
     private JFrameAvatarInteractiveSimulation jfais;
 
+    // Help
+    HelpManager helpManager;
+
     // Invariants
     Invariant currentInvariant;
 
@@ -554,6 +558,9 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             //split1.setDividerLocation(600);
             //split.setDividerLocation(220);
         }
+
+        // Help
+        helpManager = new HelpManager();
 
         //
 
