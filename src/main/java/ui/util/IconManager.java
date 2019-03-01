@@ -708,8 +708,6 @@ public class IconManager {
 
         if (url != null) {
             return new ImageIcon(url);
-        } else {
-        
         }
 
         return null;

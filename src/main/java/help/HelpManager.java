@@ -39,19 +39,16 @@
 
 package help;
 
-import common.ConfigurationTTool;
-import common.SpecConfigTTool;
-import launcher.RTLLauncher;
-import myutil.PluginManager;
 import myutil.TraceManager;
-import ui.MainGUI;
-import ui.util.IconManager;
-import ui.window.JDialogSystemCGeneration;
-import ui.*;
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.util.BitSet;
-import java.util.*;
+import java.io.FileReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Scanner;
 
 
 /**
@@ -61,20 +58,176 @@ import java.util.*;
  *
  * @author Ludovic APVRILLE
  */
-public class HelpManager  {
+public class HelpManager extends HelpEntry  {
+
+    private static String PATH_TO_INDEX = "helpTable.txt";
+    private static String INIT_CHAR = "-";
 
     private boolean helpLoaded = false;
 
-    Vector<HelpEntry> entries;
 
     public HelpManager() {
-        entries = new Vector<>();
+        linkToParent = null;
     }
+
+
 
     // Returns false in case of failure
     public boolean loadEntries() {
+        if (helpLoaded) {
+            return true;
+        }
+
+       File file = getContent(PATH_TO_INDEX);
+        URL url = getURL(PATH_TO_INDEX);
+
+        int lineNb = 0;
+
+        try {
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(url.openStream()));
+
+        TraceManager.addDev("File=" + file);
+
+        HelpEntry currentHelpEntry = this;
+
+
+        //try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+        //try {
+            String line;
+            lineNb ++;
+            while ((line = in.readLine()) != null) {
+           // while ((line = br.readLine()) != null) {
+                TraceManager.addDev("Reading index line: " + line);
+               line = line.trim();
+               if (line.length() > 0) {
+                   TraceManager.addDev("Getting number of inits");
+                   int nb = getNumberOfInit(line);
+                   TraceManager.addDev("Testing number of inits=" + nb);
+                   if (nb > 0) {
+                       TraceManager.addDev("Before adding Entry");
+                       currentHelpEntry = addEntry(currentHelpEntry, nb, removeInitChars(line));
+                       TraceManager.addDev("After adding Entry");
+                       if (currentHelpEntry == null) {
+                           TraceManager.addDev("\nHelp: error when loading help index file at line: " + lineNb + "\n");
+                           return false;
+                       }
+                   }
+
+               }
+            }
+        } catch (Exception e) {
+            TraceManager.addDev("Help: exception when loading help index file at line: " + lineNb + "\n");
+            return false;
+        }
+
+
         helpLoaded = true;
 
         return true;
     }
+
+    public HelpEntry addEntry (HelpEntry entry, int inHierarchy, String infos){
+        if (entry == null) {
+            return null;
+        }
+
+        if (inHierarchy < 1) {
+            return null;
+        }
+
+        // We must locate the corresponding father
+        int currentN = entry.getNbInHierarchy();
+        HelpEntry father = null;
+
+        // Missing an intermediate section?
+        if (inHierarchy > (currentN + 1)) {
+            return null;
+        }
+
+        HelpEntry newNode = new HelpEntry();
+        boolean ok = newNode.fillInfos(infos);
+        if (!ok) {
+            return null;
+        }
+
+        // Child?
+        if (inHierarchy == (currentN + 1)) {
+            entry.addKid(newNode);
+            newNode.linkToParent = entry;
+            return newNode;
+        }
+
+        // Brother?
+        if (inHierarchy == (currentN)) {
+            if (entry.getFather() == null) {
+                return null;
+            }
+            entry.getFather().addKid(newNode);
+            newNode.linkToParent = entry.getFather();
+            return newNode;
+        }
+
+        // Next section!
+        // We must locate the correct father
+        father = entry;
+        int nbOfAncestors = inHierarchy - currentN;
+        while (nbOfAncestors > 0) {
+            father = father.getFather();
+            if (father == null) {
+                return null;
+            }
+        }
+        father.addKid(newNode);
+        return newNode;
+    }
+
+
+
+
+    private String removeInitChars(String s) {
+        while(s.startsWith(INIT_CHAR)) {
+            s = s.substring(1, s.length());
+        }
+        return s;
+    }
+
+    private int getNumberOfInit(String s) {
+        int cpt = 0;
+        while(s.startsWith(INIT_CHAR)) {
+            cpt ++;
+            s = s.substring(1, s.length());
+        }
+        return cpt;
+    }
+
+    public static URL getURL(String resource) {
+        return HelpManager.class.getResource(resource);
+    }
+
+    public static File getContent(String resource) {
+        try {
+            TraceManager.addDev("Getting resource:" + resource);
+            URL url = HelpManager.class.getResource(resource);
+
+
+            if (url != null) {
+                TraceManager.addDev("url = " + url);
+                File myFile = new File(url.toURI());
+                return myFile;
+            }
+
+            TraceManager.addDev("NULL URL");
+        } catch (Exception e) {}
+        return null;
+    }
+
+    public String printHierarchy() {
+        String top = "root\n";
+        for(HelpEntry he: entries) {
+            top += he.printHierarchy(1);
+        }
+        return top;
+    }
+
 }

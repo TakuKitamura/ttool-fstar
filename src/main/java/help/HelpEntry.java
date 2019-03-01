@@ -66,13 +66,86 @@ public class HelpEntry  {
     public String masterKeyword;
     public String[] keywords;
     public String htmlContent;
+    public HelpEntry linkToParent;
 
     Vector<HelpEntry> entries;
 
 
     public HelpEntry() {
-        entries = new Vector<>();
+
     }
+
+    // infos are: file of name, master key, list of keywords
+    public boolean fillInfos(String infos) {
+        infos = infos.trim();
+        infos = myutil.Conversion.replaceAllString(infos, "  ", " ");
+
+        String[] splitted = infos.split(" ");
+        if (splitted.length < 3) {
+            return false;
+        }
+
+        pathToHTMLFile = splitted[0] + ".html";
+        masterKeyword = splitted[1];
+        keywords = new String[splitted.length-2];
+        for(int i = 2; i<splitted.length; i++) {
+            keywords[i] = splitted[i+2];
+        }
+
+       return true;
+    }
+
+    public int getNbInHierarchy() {
+        if (linkToParent == null) {
+            return 0;
+        }
+        return 1 + linkToParent.getNbInHierarchy();
+    }
+
+    public void addKid(HelpEntry he) {
+        if (entries == null) {
+            entries = new Vector<>();
+        }
+    }
+
+    public boolean hasKids() {
+        if (entries == null) {
+            return false;
+        }
+
+        return entries.size() > 0;
+    }
+
+    public int getNbOfKids() {
+        if (entries == null) {
+            return 0;
+        }
+        return entries.size();
+    }
+
+    public HelpEntry getFather() {
+        return linkToParent;
+    }
+
+    public String toString() {
+        return masterKeyword + " " + keywords.toString();
+    }
+
+    public String printHierarchy(int n) {
+        String ret = "";
+        for (int i=0; i<n; i++){
+            ret += "  ";
+        }
+        ret += toString() + "\n";
+        if (entries != null) {
+            for(HelpEntry he: entries) {
+                ret += he.printHierarchy(n+1);
+            }
+        }
+        return ret;
+    }
+
+
 
 
 }

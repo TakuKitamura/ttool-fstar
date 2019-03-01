@@ -561,6 +561,13 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
         // Help
         helpManager = new HelpManager();
+        //TraceManager.addDev("Resources:");
+        //helpManager.listFiles("/help");
+        if (!helpManager.loadEntries()) {
+            TraceManager.addDev("Failed to load help");
+        } else {
+            TraceManager.addDev(helpManager.printHierarchy());
+        }
 
         //
 
