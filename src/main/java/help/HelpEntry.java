@@ -39,9 +39,16 @@
 
 package help;
 
+import myutil.GenericTree;
 import myutil.TraceManager;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 import java.util.Vector;
+import java.util.stream.Collectors;
 
 
 /**
@@ -51,18 +58,27 @@ import java.util.Vector;
  *
  * @author Ludovic APVRILLE
  */
-public class HelpEntry {
-    public String pathToHTMLFile;
+public class HelpEntry implements GenericTree {
+
+    public HelpEntry linkToParent;
+    Vector<HelpEntry> entries;
+
     public String masterKeyword;
     public String[] keywords;
-    public String htmlContent;
-    public HelpEntry linkToParent;
 
-    Vector<HelpEntry> entries;
+    public String pathToHTMLFile;
+    public String htmlContent;
 
 
     public HelpEntry() {
 
+    }
+
+    public String getMasterKeyword() {
+        if (masterKeyword == null) {
+            return "Help not loaded";
+        }
+        return masterKeyword;
     }
 
     // Infos are: file of name, master key, list of keywords
@@ -78,18 +94,33 @@ public class HelpEntry {
 
         pathToHTMLFile = splitted[0] + ".html";
         masterKeyword = splitted[1];
-        keywords = new String[splitted.length - 2];
-        for (int i = 0; i < splitted.length - 2; i++) {
-            keywords[i] = splitted[i + 2];
+        keywords = new String[splitted.length - 1];
+        for (int i = 0; i < splitted.length - 1; i++) {
+            keywords[i] = splitted[i + 1];
         }
 
         //TraceManager.addDev("Infos ok");
         return true;
     }
 
+    public String getToolTip() {
+        if (keywords == null) {
+            return "";
+        }
+
+        if (keywords.length == 0) {
+            return "";
+        }
+
+        String ret = "";
+        for (int i=1; i<keywords.length; i++) {
+            ret += keywords[i] + " ";
+        }
+        return ret;
+    }
+
     public int getNbInHierarchy() {
-        if (linkToParent == null) {
-            return 0;
+        if (linkToParent == null) { return 0;
         }
         return 1 + linkToParent.getNbInHierarchy();
     }
@@ -98,6 +129,7 @@ public class HelpEntry {
         if (entries == null) {
             entries = new Vector<>();
         }
+        entries.add(he);
     }
 
     public boolean hasKids() {
@@ -115,15 +147,80 @@ public class HelpEntry {
         return entries.size();
     }
 
+    public HelpEntry getKid(int index) {
+         if (entries == null) {
+            return null;
+        }
+        return entries.get(index);
+    }
+
+    public int getIndexOfKid(HelpEntry he) {
+        if (entries == null) {
+            return 0;
+        }
+        return entries.indexOf(he);
+    }
+
+    public String getHTMLContent() {
+        if (htmlContent == null) {
+            try {
+                URL url = HelpManager.getURL(pathToHTMLFile);
+                URLConnection conn = url.openConnection();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
+                htmlContent = reader.lines().collect(Collectors.joining("\n"));
+                //TraceManager.addDev("htmlcontent=" + getHTMLContent());
+
+                htmlContent = filterHTMLContent(htmlContent);
+
+            } catch (Exception e) {
+                TraceManager.addDev("Exception when retreiving HTML of " + pathToHTMLFile);
+                return "";
+            }
+        }
+
+        return htmlContent;
+    }
+
+
+    private String filterHTMLContent(String input) {
+
+        int index = input.indexOf("<meta http-equiv=");
+        if (index == -1) {
+            return input;
+        }
+        String ret1 = input.substring(0, index);
+        String ret2 = input.substring(index+17, input.length());
+
+        index = ret2.indexOf("/>");
+        if (index == -1) {
+            return input;
+        }
+
+        ret2 = ret2.substring(index+2, ret2.length());
+
+        return ret1 + ret2;
+    }
+
     public HelpEntry getFather() {
         return linkToParent;
     }
 
     public String toString() {
-        return masterKeyword + " " + keywords.toString();
+        if ((masterKeyword == null) || (keywords == null)) {
+            return "Help";
+        }
+
+        /*String ret = masterKeyword + " (";
+        for(int i=1; i<keywords.length; i++) {
+            ret += keywords[i] + " ";
+        }
+        ret += ")";*/
+
+        return masterKeyword.substring(0,1).toUpperCase() + masterKeyword.substring(1, masterKeyword.length());
     }
 
     public String printHierarchy(int n) {
+        String s = getHTMLContent();
         String ret = "";
         for (int i = 0; i < n; i++) {
             ret += "  ";
@@ -135,6 +232,21 @@ public class HelpEntry {
             }
         }
         return ret;
+    }
+
+
+    public int getChildCount() {
+        //TraceManager.addDev("GetChild count in " + toString() + " = " + getNbOfKids());
+        return getNbOfKids();
+    }
+
+
+    public Object getChild(int index) {
+       return getKid(index);
+    }
+
+    public int getIndexOfChild(Object child) {
+       return getIndexOfKid((HelpEntry)child);
     }
 
 

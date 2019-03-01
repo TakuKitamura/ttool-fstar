@@ -216,6 +216,7 @@ public class GTURTLEModeling {
     private SearchTree st;
     private SyntaxAnalysisTree mcvdt;
     private InvariantDataTree idt;
+    private HelpTree ht;
 
     private List<CheckingError> checkingErrors;
     private List<CheckingError> warnings;
@@ -276,6 +277,7 @@ public class GTURTLEModeling {
         st = new SearchTree(mgui);
         gt = new GraphTree(mgui);
         stt = new SimulationTraceTree(mgui);
+        ht = new HelpTree(mgui);
 
 		/*if (!Charset.isSupported("UTF-8")) {
 		  ErrorGUI.exit(ErrorGUI.ERROR_CHARSET);
@@ -2643,7 +2645,7 @@ public class GTURTLEModeling {
     }
 
     public int getChildCount() {
-        return panels.size() + 5;
+        return panels.size() + 6;
     }
 
     public Object getChild(int index) {
@@ -2657,8 +2659,10 @@ public class GTURTLEModeling {
             return gt;
         } else if (index == (panels.size() + 3)) {
             return idt;
-        } else {
+        } else if (index == (panels.size() + 4)) {
             return st;
+        } else {
+            return ht;
         }
     }
 
@@ -2685,8 +2689,12 @@ public class GTURTLEModeling {
             return panels.size() + 3;
         }
 
+        if (child == ht) {
+            return panels.size() + 4;
+        }
 
-        return panels.size() + 4;
+
+        return panels.size() + 5;
     }
 
     // Projection management

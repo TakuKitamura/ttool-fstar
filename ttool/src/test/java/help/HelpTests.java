@@ -36,10 +36,10 @@
  * knowledge of the CeCILL license and that you accept its terms.
  *
  * /**
- * Class AvatarGuardTests
- * Creation: 20/05/2015
- * @version 1.1 01/07/2015
- * @author Ludovic APVRILLE, Letitia LI
+ * Class HelpTests
+ * Creation: 01/03/2019
+ * @version 1.1 01/03/2019
+ * @author Ludovic APVRILLE
  * @see
  */
 

@@ -39,6 +39,7 @@
 
 package ui.tree;
 
+import help.HelpEntry;
 import myutil.GenericTree;
 import translator.GroupOfGates;
 import ui.*;
@@ -175,6 +176,14 @@ public class DiagramTreeModel implements TreeModel {
             }
 
             if (node instanceof GroupOfGates) {
+                return false;
+            }
+
+            if (node instanceof HelpEntry) {
+                return !((HelpEntry) node).hasKids();
+            }
+
+            if (node instanceof HelpTree) {
                 return false;
             }
 

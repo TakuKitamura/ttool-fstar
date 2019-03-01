@@ -3,4 +3,8 @@
 -- architecture architecture hardware os operating system
 --- cpu cpu processor cpu os
 ----clockdivider clock_divider clock divider cpu
-- avatar avatar software embedded systems
+-- mapping mapping tasks communication mapping 
+---taskmapping taskmapping tasks mapping
+---communicationmapping communicationmapping communication mapping
+- avatar avatar software embedded systems safety security
+-- requirements requirements satified satisfy derivereqt

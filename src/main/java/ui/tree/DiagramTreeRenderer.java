@@ -41,6 +41,7 @@
 
 package ui.tree;
 
+import help.HelpEntry;
 import translator.CheckingError;
 import translator.GroupOfGates;
 import ui.*;
@@ -335,6 +336,14 @@ public class DiagramTreeRenderer extends DefaultTreeCellRenderer  {
         } else if (value instanceof AvatarMADPanel) {
             setIcon(IconManager.imgic5060);
             setToolTipText("Avatar Modeling Assumptions Diagram");
+
+        } else if (value instanceof HelpTree) {
+            setIcon(IconManager.imgic33);
+            setToolTipText("Help on TTool");
+
+         } else if (value instanceof HelpEntry) {
+            setIcon(IconManager.imgic32);
+            setToolTipText(((HelpEntry)value).getToolTip());
 
         } else {
             setToolTipText(null);

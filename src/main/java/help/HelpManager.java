@@ -73,6 +73,10 @@ public class HelpManager extends HelpEntry {
             return true;
         }
 
+
+        // Setup the root entry
+        fillInfos("none Help TTool help");
+
         //File file = getContent(PATH_TO_INDEX);
         URL url = getURL(PATH_TO_INDEX);
 
@@ -175,15 +179,19 @@ public class HelpManager extends HelpEntry {
 
         // Next section!
         // We must locate the correct father
+        //TraceManager.addDev("Next section");
         father = entry;
-        int nbOfAncestors = inHierarchy - currentN;
+        int nbOfAncestors = currentN - inHierarchy + 1;
+        //TraceManager.addDev("Next section ancestors:" + nbOfAncestors);
         while (nbOfAncestors > 0) {
             father = father.getFather();
             if (father == null) {
                 return null;
             }
+            nbOfAncestors--;
         }
         father.addKid(newNode);
+        newNode.linkToParent = father;
         return newNode;
     }
 
@@ -227,7 +235,8 @@ public class HelpManager extends HelpEntry {
     }
 
     public String printHierarchy() {
-        String top = "root\n";
+        String top = "Help tree\n root has " + getNbOfKids() + " nodes.\n";
+
         for (HelpEntry he : entries) {
             top += he.printHierarchy(1);
         }
