@@ -346,13 +346,14 @@ public class JDialogDSEZ3 extends JDialog implements ActionListener, ListSelecti
         }
 
         if (result == null) {
-            outputText.append("ERROR: an unknown error occured");
+            outputText.append("ERROR: an unknown error occurred");
         } else {
             if (result.hasError()) {
                 outputText.append("ERROR: " + result.error);
             } else {
                 if (result.mappingFound) {
                     outputText.append("Optimized mapping found");
+                    outputText.append(result.result);
                 } else {
                     outputText.append("No suitable mapping could be found");
                 }
