@@ -1,5 +1,6 @@
 package tmltranslator.dsez3engine;
 
+import myutil.TraceManager;
 import tmltranslator.*;
 
 import java.util.ArrayList;
@@ -24,24 +25,27 @@ public class InputInstance {
         for (HwNode hwNode : architecture.getHwNodes()) {
             if (hwNode instanceof HwExecutionNode) {
 
-                for (String operationType : ((HwExecutionNode) hwNode).getOperationTypes()) {
+                /*for (String operationType : ((HwExecutionNode) hwNode).getOperationTypes()) {
                     if (operationType.equals(tmlTask.getOperation())) {
                         feasibleCPUs.add((HwExecutionNode) hwNode);
                         break;
                     }
-                }
+                }*/
+                feasibleCPUs.add((HwExecutionNode) hwNode);
+
             }
 
         }
         return feasibleCPUs;
     }
 
-    // TODO the location of the implemented methods (better in TMLTask).
     public int getBufferIn(TMLTask tmlTask) {
 
+        //TODO if tmlReadChannel.getNbOfSamples() does not return int msg: please enter an integer number of samples
+
         int bin = 0;
-        for (TMLChannel tmlReadChannel : tmlTask.getReadTMLChannels()) { // TODO replace with getReadChannels() once finished integration
-            bin = bin + tmlReadChannel.getNumberOfSamples();
+        for (TMLReadChannel tmlReadChannel : tmlTask.getReadChannels()) {
+                bin = bin + Integer.valueOf(tmlReadChannel.getNbOfSamples());
         }
 
         return bin;
@@ -49,8 +53,8 @@ public class InputInstance {
 
     public int getBufferOut(TMLTask tmlTask) {
         int bout = 0;
-        for (TMLChannel tmlWriteChannel : tmlTask.getWriteTMLChannels()) {
-            bout = bout + tmlWriteChannel.getNumberOfSamples();
+        for (TMLWriteChannel tmlWriteChannel : tmlTask.getWriteChannels()) {
+            bout = bout + Integer.valueOf(tmlWriteChannel.getNbOfSamples());
         }
         return bout;
     }
@@ -88,14 +92,6 @@ public class InputInstance {
         }
 
 
-//TODO
-      /*  if(firstLinks.size() >= 1){
-            for(HwLink recursiveHwLink : firstLinks){
-
-            }
-
-        }*/
-
         return tempMem;
     }
 
@@ -103,11 +99,15 @@ public class InputInstance {
 
     public TMLTask getFinalTask(TMLModeling tmlm){
         TMLTask finalTask = null;
+
         for (Object tmlTask :  tmlm.getTasks()){
             TMLTask taskCast = (TMLTask)tmlTask;
-            if (taskCast.getWriteTMLChannels().isEmpty())
+
+            if  ((taskCast.getWriteChannels().isEmpty()) && (!taskCast.getReadChannels().isEmpty()))
                 finalTask = taskCast;
         }
+
+       // TraceManager.addDev("final task is" + finalTask.getName());
 
         return finalTask;
     }

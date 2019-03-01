@@ -285,7 +285,7 @@ public class InputInstanceTest {
 
   }
 
-  @Test
+//  @Test
   public void getBufferIn() {
 
     List<TMLTask> tempTasks = new ArrayList<>();
@@ -301,7 +301,7 @@ public class InputInstanceTest {
 
   }
 
-  @Test
+ // @Test
   public void getBufferOut() {
     List<TMLTask> tempTasks = new ArrayList<>();
     for (int i = 0; i < inputInstance.getModeling().getTasks().size(); i++) {

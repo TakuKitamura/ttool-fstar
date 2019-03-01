@@ -75,7 +75,7 @@ public class OptimizationModel {
         return result;
     }
 
-    public OptimizationResult  findFeasibleMapping() {
+    public OptimizationResult findFeasibleMapping() {
         Context ctx;
         OptimizationResult result = null;
         try {
@@ -225,6 +225,7 @@ public class OptimizationModel {
                 TMLTask taskCast = (TMLTask)tmlTask;
 
                 IntExpr bin_plus_bout = ctx.mkInt(inputInstance.getBufferIn(taskCast) + inputInstance.getBufferOut(taskCast));
+
                 ArithExpr bin_plus_bout_times_X = ctx.mkMul(bin_plus_bout, X[t][p]);
 
                 c_mem[p][t] = ctx.mkLe(bin_plus_bout_times_X, mem);
@@ -283,6 +284,9 @@ public class OptimizationModel {
             //for each channel get producer and consumer
             TMLTask producer = channelCast.getOriginTask();
             int prodIndex = inputInstance.getModeling().getTasks().indexOf(producer);
+
+            TraceManager.addDev("prodIndex" + prodIndex + "producer "+producer + inputInstance.getModeling().getTasks());
+
 
             TMLTask consumer = channelCast.getDestinationTask();
             int consIndex = inputInstance.getModeling().getTasks().indexOf(consumer);
@@ -477,7 +481,7 @@ public class OptimizationModel {
 
                 int p = inputInstance.getArchitecture().getCPUs().indexOf(hwNode);
 
-                X[t][p] = ctx.mkIntConst("X_" + taskCast.getID() + "_" + hwNode.getID());
+                X[t][p] = ctx.mkIntConst("X_" + taskCast.getName() + "_" + hwNode.getName());
 
                 // Constraints: 0 <= Xtp <= 1
                 c_bound_x[t][p] = ctx.mkAnd(ctx.mkLe(ctx.mkInt(0), X[t][p]),
@@ -494,9 +498,10 @@ public class OptimizationModel {
             int t = inputInstance.getModeling().getTasks().indexOf(tmlTask);
 
             TMLTask taskCast = (TMLTask)tmlTask;
-            start[t] = ctx.mkIntConst("start_" + taskCast.getID());
+            start[t] = ctx.mkIntConst("start_" + taskCast.getName());
             c_bound_start[t] = ctx.mkGe(start[t], ctx.mkInt(0));
             mapping_constraints = ctx.mkAnd(mapping_constraints, c_bound_start[t]);
+            //TraceManager.addDev(c_bound_start[t].toString());
         }
 
 
@@ -512,7 +517,7 @@ public class OptimizationModel {
 
             ArithExpr sum_X = ctx.mkAdd(X[t]);
             c_unique_x[t] = ctx.mkLe(sum_X, ctx.mkInt(1));
-            // TraceManager.addDev(c_unique_x[t]);
+            //TraceManager.addDev(c_unique_x[t].toString());
 
         }
 
@@ -547,6 +552,7 @@ public class OptimizationModel {
             int p = inputInstance.getArchitecture().getCPUs().indexOf(hwNode);
 
             IntExpr mem = ctx.mkInt(inputInstance.getLocalMemoryOfHwExecutionNode(hwNode).memorySize);
+            //TraceManager.addDev("local memory of " + hwNode.getName() + " is :" + inputInstance.getLocalMemoryOfHwExecutionNode(hwNode).getName());
 
 
             for (Object tmlTask : inputInstance.getModeling().getTasks()) {
@@ -559,7 +565,7 @@ public class OptimizationModel {
 
                 c_mem[p][t] = ctx.mkLe(bin_plus_bout_times_X, mem);
 
-                // TraceManager.addDev(c_mem[p][t]);
+                //TraceManager.addDev(c_mem[p][t].toString());
 
             }
         }
@@ -632,7 +638,8 @@ public class OptimizationModel {
 
             c_precedence[c] = ctx.mkGe(startC_minus_endP, ctx.mkInt(0));
 
-            //  TraceManager.addDev(c_precedence[c]);
+            //TraceManager.addDev(channelCast.getName() + "\n");
+            //TraceManager.addDev(c_precedence[c].toString());
 
             mapping_constraints = ctx.mkAnd(mapping_constraints, c_precedence[c]);
 

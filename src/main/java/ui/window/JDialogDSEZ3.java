@@ -312,6 +312,15 @@ public class JDialogDSEZ3 extends JDialog implements ActionListener, ListSelecti
         TMLArchitecture tmla = map.getTMLArchitecture();
         TMLModeling tmlm = map.getTMLModeling();
 
+        /*
+        for(Object task : tmlm.getTasks()){
+            TMLTask tmlTask = (TMLTask) task;
+            TraceManager.addDev(tmlTask.getName() +  "\ngetReadChannels : " + tmlTask
+                    .getReadChannels() +   "\ngetWriteChannels : " + tmlTask
+                    .getWriteChannels() +"\n");
+        }*/
+
+
         inputInstance = new InputInstance(tmla, tmlm);
         optimizationModel = new OptimizationModel(inputInstance);
 
@@ -331,6 +340,7 @@ public class JDialogDSEZ3 extends JDialog implements ActionListener, ListSelecti
         OptimizationResult result = null;
         try {
             result = optimizationModel.findOptimizedMapping();
+            //result = optimizationModel.findFeasibleMapping();
         } catch (Exception e) {
             outputText.append("Exception during Z3 execution\nBadly installed?\n");
         }
