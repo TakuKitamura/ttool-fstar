@@ -51,8 +51,10 @@ import ui.tmldd.TMLArchiCPUNode;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.List;
 
 /**
  * Class JDialogCPUNode
@@ -84,7 +86,14 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
     // Tabbed pane for panel1 and panel2
     private JTabbedPane tabbedPane;
 
+    //
     private java.util.List<SimulationTransaction> transactions;
+
+    //issue 183
+    List<JTextArea> instructionHelpList;
+    List<JButton>   buttons;
+    int index;
+
     /* Creates new form  */
     public JDialogCPUNode(Frame _frame, String _title, TMLArchiCPUNode _node, ArchUnitMEC _MECType, java.util.List<SimulationTransaction> _transactions) {
         super(_frame, _title, true);
@@ -100,6 +109,254 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
 //    private void myInitComponents() {
 //    }
 
+    //issue 183
+    private void setButton(JButton button) {
+        button.setOpaque(false);
+        button.setFocusPainted(false);
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
+    }
+
+    private void hardwareHelp(){
+
+        instructionHelpList = new ArrayList<>();
+        buttons = new ArrayList<>();
+        JTextArea jft1 = new JTextArea();
+        jft1.setText("CPU name : ");
+        instructionHelpList.add(jft1);
+
+        JTextArea jft2 = new JTextArea();
+        jft2.setText("Scheduling policy : ");
+        instructionHelpList.add(jft2);
+
+        JTextArea jft3 = new JTextArea("Slice time : ");
+        instructionHelpList.add(jft3);
+
+        JTextArea jft4 = new JTextArea("Nb of Cores :  ");
+        instructionHelpList.add(jft4);
+
+        JTextArea jft5 = new JTextArea("Data size ");
+        instructionHelpList.add(jft5);
+
+        JTextArea jft6 = new JTextArea("Pipeline size : ");
+        instructionHelpList.add(jft6);
+
+        JTextArea jft7 = new JTextArea("Task switching : ");
+        instructionHelpList.add(jft7);
+
+        JTextArea jft8 = new JTextArea("Mis-branching prediction: ");
+        instructionHelpList.add(jft8);
+
+        JTextArea jft9 = new JTextArea("cahe-miss : ");
+        instructionHelpList.add(jft9);
+
+        JTextArea jft10 = new JTextArea("Go idle time : ");
+        instructionHelpList.add(jft10);
+
+        JTextArea jft11 = new JTextArea("Max consecutive cycles before idle : ");
+        instructionHelpList.add(jft11);
+
+        JTextArea jft12 = new JTextArea("EXECI execution : ");
+        instructionHelpList.add(jft12);
+
+        JTextArea jft13 = new JTextArea("EXECC execution : ");
+        instructionHelpList.add(jft13);
+
+        JTextArea jft14 = new JTextArea("Clock divider");
+        instructionHelpList.add(jft14);
+
+        for(int i = 0; i < instructionHelpList.size(); i++) {
+            Icon myIcon = new ImageIcon("/home/pham/Desktop/question.png");
+            JButton but = new JButton(myIcon);
+            setButton(but);
+            buttons.add(but);
+        }
+
+        buttons.get(0).addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                JPopupMenu helpPopup = new JPopupMenu();
+                helpPopup.add(jft1);
+                if (!helpPopup.isVisible()) {
+                    helpPopup.show(buttons.get(0),20,20);
+                } else {
+                    helpPopup.setVisible(false);
+                }
+            }
+        });
+
+        buttons.get(1).addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                JPopupMenu helpPopup = new JPopupMenu();
+                helpPopup.add(jft2);
+                if (!helpPopup.isVisible()) {
+                    helpPopup.show(buttons.get(1),20,20);
+                } else {
+                    helpPopup.setVisible(false);
+                }
+            }
+        });
+
+        buttons.get(2).addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                JPopupMenu helpPopup = new JPopupMenu();
+                helpPopup.add(jft3);
+                if (!helpPopup.isVisible()) {
+                    helpPopup.show(buttons.get(2),20,20);
+                } else {
+                    helpPopup.setVisible(false);
+                }
+            }
+        });
+
+        buttons.get(3).addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                JPopupMenu helpPopup = new JPopupMenu();
+                helpPopup.add(jft4);
+                if (!helpPopup.isVisible()) {
+                    helpPopup.show(buttons.get(3),20,20);
+                } else {
+                    helpPopup.setVisible(false);
+                }
+            }
+        });
+
+        buttons.get(4).addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                JPopupMenu helpPopup = new JPopupMenu();
+                helpPopup.add(jft5);
+                if (!helpPopup.isVisible()) {
+                    helpPopup.show(buttons.get(4),20,20);
+                } else {
+                    helpPopup.setVisible(false);
+                }
+            }
+        });
+
+        buttons.get(5).addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                JPopupMenu helpPopup = new JPopupMenu();
+                helpPopup.add(jft6);
+                if (!helpPopup.isVisible()) {
+                    helpPopup.show(buttons.get(5),20,20);
+                } else {
+                    helpPopup.setVisible(false);
+                }
+            }
+        });
+
+        buttons.get(6).addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                JPopupMenu helpPopup = new JPopupMenu();
+                helpPopup.add(jft7);
+                if (!helpPopup.isVisible()) {
+                    helpPopup.show(buttons.get(6),20,20);
+                } else {
+                    helpPopup.setVisible(false);
+                }
+            }
+        });
+
+        buttons.get(7).addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                JPopupMenu helpPopup = new JPopupMenu();
+                helpPopup.add(jft8);
+                if (!helpPopup.isVisible()) {
+                    helpPopup.show(buttons.get(7),20,20);
+                } else {
+                    helpPopup.setVisible(false);
+                }
+            }
+        });
+
+        buttons.get(8).addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                JPopupMenu helpPopup = new JPopupMenu();
+                helpPopup.add(jft9);
+                if (!helpPopup.isVisible()) {
+                    helpPopup.show(buttons.get(8),20,20);
+                } else {
+                    helpPopup.setVisible(false);
+                }
+            }
+        });
+
+        buttons.get(9).addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                JPopupMenu helpPopup = new JPopupMenu();
+                helpPopup.add(jft10);
+                if (!helpPopup.isVisible()) {
+                    helpPopup.show(buttons.get(9),20,20);
+                } else {
+                    helpPopup.setVisible(false);
+                }
+            }
+        });
+
+        buttons.get(10).addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                JPopupMenu helpPopup = new JPopupMenu();
+                helpPopup.add(jft11);
+                if (!helpPopup.isVisible()) {
+                    helpPopup.show(buttons.get(10),20,20);
+                } else {
+                    helpPopup.setVisible(false);
+                }
+            }
+        });
+
+        buttons.get(11).addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                JPopupMenu helpPopup = new JPopupMenu();
+                helpPopup.add(jft12);
+                if (!helpPopup.isVisible()) {
+                    helpPopup.show(buttons.get(11),20,20);
+                } else {
+                    helpPopup.setVisible(false);
+                }
+            }
+        });
+
+        buttons.get(12).addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                JPopupMenu helpPopup = new JPopupMenu();
+                helpPopup.add(jft13);
+                if (!helpPopup.isVisible()) {
+                    helpPopup.show(buttons.get(12),20,20);
+                } else {
+                    helpPopup.setVisible(false);
+                }
+            }
+        });
+
+        buttons.get(13).addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                JPopupMenu helpPopup = new JPopupMenu();
+                helpPopup.add(jft14);
+                if (!helpPopup.isVisible()) {
+                    helpPopup.show(buttons.get(13),20,20);
+                } else {
+                    helpPopup.setVisible(false);
+                }
+            }
+        });
+
+    }
+
+
     private void initComponents() {
         Container c = getContentPane();
         GridBagLayout gridbag0 = new GridBagLayout();
@@ -109,6 +366,7 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         //GridBagConstraints c1 = new GridBagConstraints();
         GridBagConstraints c2 = new GridBagConstraints();
         GridBagConstraints c4 = new GridBagConstraints();
+        hardwareHelp();
 
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         c.setLayout(gridbag0);
@@ -119,7 +377,7 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         panel2 = new JPanel();
         panel2.setLayout(gridbag2);
         panel2.setBorder(new javax.swing.border.TitledBorder("CPU attributes"));
-        panel2.setPreferredSize(new Dimension(400, 300));
+        panel2.setPreferredSize(new Dimension(500, 300));
 
         // Issue #41 Ordering of tabbed panes 
         tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
@@ -129,12 +387,20 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.weighty = 1.0;
         c2.weightx = 1.0;
         c2.fill = GridBagConstraints.HORIZONTAL;
+
         panel2.add(new JLabel("CPU name:"), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        //-------
+        //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         nodeName = new JTextField(node.getNodeName(), 30);
         nodeName.setEditable(true);
         nodeName.setFont(new Font("times", Font.PLAIN, 12));
         panel2.add(nodeName, c2);
+
+        //issue 183
+        c2.weighty = 0.0;
+        c2.weightx = 0.0;
+        c2.gridwidth = GridBagConstraints.REMAINDER;
+        panel2.add(buttons.get(0),c2);
 
         c2.gridwidth = 1;
         c2.gridheight = 1;
@@ -143,84 +409,198 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.fill = GridBagConstraints.HORIZONTAL;
         panel2.add(new JLabel("Scheduling policy:"), c2);
 
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         schedulingPolicy = new JComboBox<String>();
         schedulingPolicy.addItem("Round Robin");
         schedulingPolicy.addItem("Round Robin - Priority Based");
         schedulingPolicy.setSelectedIndex(node.getSchedulingPolicy());
         panel2.add(schedulingPolicy, c2);
 
+        //issue 183
+        c2.weighty = 0.0;
+        c2.weightx = 0.0;
+        c2.gridwidth = GridBagConstraints.REMAINDER;
+        panel2.add(buttons.get(1),c2);
+
         c2.gridwidth = 1;
+        //issue 183
+        c2.weighty = 1.0;
+        c2.weightx = 1.0;
         panel2.add(new JLabel("Slice time (in microseconds):"), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         sliceTime = new JTextField(""+node.getSliceTime(), 15);
         panel2.add(sliceTime, c2);
 
+        //issue 183
+        c2.weighty = 0.0;
+        c2.weightx = 0.0;
+        c2.gridwidth = GridBagConstraints.REMAINDER;
+        panel2.add(buttons.get(2),c2);
+
         c2.gridwidth = 1;
+        //issue 183
+        c2.weighty = 1.0;
+        c2.weightx = 1.0;
         panel2.add(new JLabel("Nb of cores:"), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         nbOfCores = new JTextField(""+node.getNbOfCores(), 15);
         panel2.add(nbOfCores, c2);
 
+        //issue 183
+        c2.weighty = 0.0;
+        c2.weightx = 0.0;
+        c2.gridwidth = GridBagConstraints.REMAINDER;
+        panel2.add(buttons.get(3),c2);
+
         c2.gridwidth = 1;
+        //issue 183
+        c2.weighty = 1.0;
+        c2.weightx = 1.0;
         panel2.add(new JLabel("Data size (in byte):"), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         byteDataSize = new JTextField(""+node.getByteDataSize(), 15);
         panel2.add(byteDataSize, c2);
 
+        //issue 183
+        c2.weighty = 0.0;
+        c2.weightx = 0.0;
+        c2.gridwidth = GridBagConstraints.REMAINDER;
+        panel2.add(buttons.get(4),c2);
+
         c2.gridwidth = 1;
+        //issue 183
+        c2.weighty = 1.0;
+        c2.weightx = 1.0;
         panel2.add(new JLabel("Pipeline size (num. stages):"), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         pipelineSize = new JTextField(""+node.getPipelineSize(), 15);
         panel2.add(pipelineSize, c2);
 
+        //issue 183
+        c2.weighty = 0.0;
+        c2.weightx = 0.0;
+        c2.gridwidth = GridBagConstraints.REMAINDER;
+        panel2.add(buttons.get(5),c2);
+
         c2.gridwidth = 1;
+        //issue 183
+        c2.weighty = 1.0;
+        c2.weightx = 1.0;
         panel2.add(new JLabel("Task switching time (in cycle):"), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         taskSwitchingTime = new JTextField(""+node.getTaskSwitchingTime(), 15);
         panel2.add(taskSwitchingTime, c2);
 
+        //issue 183
+        c2.weighty = 0.0;
+        c2.weightx = 0.0;
+        c2.gridwidth = GridBagConstraints.REMAINDER;
+        panel2.add(buttons.get(6),c2);
+
         c2.gridwidth = 1;
+        //issue 183
+        c2.weighty = 1.0;
+        c2.weightx = 1.0;
         panel2.add(new JLabel("Mis-Branching prediction (in %):"), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         branchingPredictionPenalty = new JTextField(""+node.getBranchingPredictionPenalty(), 15);
         panel2.add(branchingPredictionPenalty, c2);
 
+        //issue 183
+        c2.weighty = 0.0;
+        c2.weightx = 0.0;
+        c2.gridwidth = GridBagConstraints.REMAINDER;
+        panel2.add(buttons.get(7),c2);
+
         c2.gridwidth = 1;
+        //issue 183
+        c2.weighty = 1.0;
+        c2.weightx = 1.0;
         panel2.add(new JLabel("Cache-miss (in %):"), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         cacheMiss = new JTextField(""+node.getCacheMiss(), 15);
         panel2.add(cacheMiss, c2);
 
+        //issue 183
+        c2.weighty = 0.0;
+        c2.weightx = 0.0;
+        c2.gridwidth = GridBagConstraints.REMAINDER;
+        panel2.add(buttons.get(8),c2);
+
         c2.gridwidth = 1;
+        //issue 183
+        c2.weighty = 1.0;
+        c2.weightx = 1.0;
         panel2.add(new JLabel("Go idle time (in cycle):"), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         goIdleTime = new JTextField(""+node.getGoIdleTime(), 15);
         panel2.add(goIdleTime, c2);
 
+        //issue 183
+        c2.weighty = 0.0;
+        c2.weightx = 0.0;
+        c2.gridwidth = GridBagConstraints.REMAINDER;
+        panel2.add(buttons.get(9),c2);
+
         c2.gridwidth = 1;
+        //issue 183
+        c2.weighty = 1.0;
+        c2.weightx = 1.0;
         panel2.add(new JLabel("Max consecutive cycles before idle (in cycle):"), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         maxConsecutiveIdleCycles = new JTextField(""+node.getMaxConsecutiveIdleCycles(), 15);
         panel2.add(maxConsecutiveIdleCycles, c2);
 
+        //issue 183
+        c2.weighty = 0.0;
+        c2.weightx = 0.0;
+        c2.gridwidth = GridBagConstraints.REMAINDER;
+        panel2.add(buttons.get(10),c2);
+
         c2.gridwidth = 1;
+        //issue 183
+        c2.weighty = 1.0;
+        c2.weightx = 1.0;
         panel2.add(new JLabel("EXECI execution time (in cycle):"), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         execiTime = new JTextField(""+node.getExeciTime(), 15);
         panel2.add(execiTime, c2);
 
+        //issue 183
+        c2.weighty = 0.0;
+        c2.weightx = 0.0;
+        c2.gridwidth = GridBagConstraints.REMAINDER;
+        panel2.add(buttons.get(11),c2);
+
         c2.gridwidth = 1;
+        //issue 183
+        c2.weighty = 1.0;
+        c2.weightx = 1.0;
         panel2.add(new JLabel("EXECC execution time (in cycle):"), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         execcTime = new JTextField(""+node.getExeccTime(), 15);
         panel2.add(execcTime, c2);
 
+        //issue 183
+        c2.weighty = 0.0;
+        c2.weightx = 0.0;
+        c2.gridwidth = GridBagConstraints.REMAINDER;
+        panel2.add(buttons.get(12),c2);
+
         c2.gridwidth = 1;
+        //issue 183
+        c2.weighty = 1.0;
+        c2.weightx = 1.0;
         panel2.add(new JLabel("Clock divider:"), c2);
-        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         clockRatio = new JTextField(""+node.getClockRatio(), 15);
         panel2.add(clockRatio, c2);
+
+        //issue 183
+        c2.weighty = 0.0;
+        c2.weightx = 0.0;
+        c2.gridwidth = GridBagConstraints.REMAINDER;
+        panel2.add(buttons.get(13),c2);
 
         // monitored
         /*c2.gridwidth = 1;
@@ -240,7 +620,7 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         panel4 = new JPanel();
         panel4.setLayout( gridbag4 );
         panel4.setBorder( new javax.swing.border.TitledBorder("Code generation") );
-        panel4.setPreferredSize( new Dimension(400, 300) );
+        panel4.setPreferredSize( new Dimension(500, 300) );
         c4.gridwidth = 1;
         c4.gridheight = 1;
         c4.weighty = 1.0;
