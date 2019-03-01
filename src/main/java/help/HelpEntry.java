@@ -39,19 +39,9 @@
 
 package help;
 
-import common.ConfigurationTTool;
-import common.SpecConfigTTool;
-import launcher.RTLLauncher;
-import myutil.PluginManager;
 import myutil.TraceManager;
-import ui.MainGUI;
-import ui.util.IconManager;
-import ui.window.JDialogSystemCGeneration;
-import ui.*;
 
-import java.io.File;
-import java.util.BitSet;
-import java.util.*;
+import java.util.Vector;
 
 
 /**
@@ -61,7 +51,7 @@ import java.util.*;
  *
  * @author Ludovic APVRILLE
  */
-public class HelpEntry  {
+public class HelpEntry {
     public String pathToHTMLFile;
     public String masterKeyword;
     public String[] keywords;
@@ -75,24 +65,26 @@ public class HelpEntry  {
 
     }
 
-    // infos are: file of name, master key, list of keywords
+    // Infos are: file of name, master key, list of keywords
     public boolean fillInfos(String infos) {
         infos = infos.trim();
         infos = myutil.Conversion.replaceAllString(infos, "  ", " ");
 
         String[] splitted = infos.split(" ");
         if (splitted.length < 3) {
+            TraceManager.addDev("Split too small");
             return false;
         }
 
         pathToHTMLFile = splitted[0] + ".html";
         masterKeyword = splitted[1];
-        keywords = new String[splitted.length-2];
-        for(int i = 2; i<splitted.length; i++) {
-            keywords[i] = splitted[i+2];
+        keywords = new String[splitted.length - 2];
+        for (int i = 0; i < splitted.length - 2; i++) {
+            keywords[i] = splitted[i + 2];
         }
 
-       return true;
+        //TraceManager.addDev("Infos ok");
+        return true;
     }
 
     public int getNbInHierarchy() {
@@ -133,19 +125,17 @@ public class HelpEntry  {
 
     public String printHierarchy(int n) {
         String ret = "";
-        for (int i=0; i<n; i++){
+        for (int i = 0; i < n; i++) {
             ret += "  ";
         }
         ret += toString() + "\n";
         if (entries != null) {
-            for(HelpEntry he: entries) {
-                ret += he.printHierarchy(n+1);
+            for (HelpEntry he : entries) {
+                ret += he.printHierarchy(n + 1);
             }
         }
         return ret;
     }
-
-
 
 
 }

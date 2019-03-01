@@ -1,6 +1,6 @@
-- general TTool general
+- general TTool general info tool
 - diplodocus diplodocus hardware software partitioning dse design space exploration
--- architecture
---- cpu
+-- architecture architecture hardware os operating system
+--- cpu cpu processor cpu os
 ----clockdivider clock_divider clock divider cpu
 - avatar avatar software embedded systems
