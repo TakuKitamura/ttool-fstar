@@ -249,5 +249,55 @@ public class HelpEntry implements GenericTree {
        return getIndexOfKid((HelpEntry)child);
     }
 
+    public HelpEntry getFromMasterKeyword(String search) {
+        if (masterKeyword != null) {
+            if (masterKeyword.compareTo(search) == 0) {
+                return this;
+            }
+        }
+        if (entries != null) {
+            HelpEntry ret;
+            for(HelpEntry he: entries) {
+                ret = he.getFromMasterKeyword(search);
+                if (ret != null) {
+                    return ret;
+                }
+            }
+        }
+        return null;
+    }
+
+    public void addEntries(Vector<HelpEntry> list) {
+        list.add(this);
+        if (entries != null) {
+            for (HelpEntry he : entries) {
+                he.addEntries(list);
+            }
+        }
+    }
+
+    public int hasSimilarWords(String[] words) {
+        int result = 0;
+        for(String s:words) {
+            if (hasKeyword(s)) {
+                result ++;
+            }
+        }
+        return result;
+    }
+
+    public boolean hasKeyword(String word) {
+        for(String s: keywords) {
+            if (s.compareTo(word) == 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
+
+
 
 }

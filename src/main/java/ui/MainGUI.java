@@ -758,6 +758,8 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             panel.searchForText(text.toLowerCase(), elements);
         }
 
+        elements.addAll(helpManager.getEntriesWithKeyword(text.split( " ")));
+
         gtm.setElementsOfSearchTree(elements);
         //TraceManager.addDev("Found " + elements.size() + " elements");
         dtree.forceUpdate();

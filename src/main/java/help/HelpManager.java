@@ -45,6 +45,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.Vector;
 
 
 /**
@@ -60,6 +61,8 @@ public class HelpManager extends HelpEntry {
     private static String INIT_CHAR = "-";
 
     private boolean helpLoaded = false;
+
+    private Vector<HelpEntry> allEntries;
 
 
     public HelpManager() {
@@ -123,7 +126,7 @@ public class HelpManager extends HelpEntry {
             return false;
         }
 
-
+        computeAllEntries();
         helpLoaded = true;
 
         return true;
@@ -242,5 +245,24 @@ public class HelpManager extends HelpEntry {
         }
         return top;
     }
+
+    private void computeAllEntries() {
+        allEntries = new Vector<>();
+        addEntries(allEntries);
+
+    }
+
+    public Vector<HelpEntry> getEntriesWithKeyword(String[] words) {
+        Vector<HelpEntry> result = new Vector<>();
+        for(HelpEntry he: allEntries) {
+            int nb = he.hasSimilarWords(words);
+            if (nb > 0) {
+                result.add(he);
+            }
+        }
+        return result;
+    }
+
+
 
 }
