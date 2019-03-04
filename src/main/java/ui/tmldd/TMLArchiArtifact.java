@@ -71,7 +71,8 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
     protected String referenceTaskName = "referenceToTask";
     protected String taskName = "name";
     protected int priority = 0; // Between 0 and 10
-    protected String operation = "VOID";
+    protected String operation = "";
+    protected String operationMEC = "VOID";
 
     private ArchUnitMEC fatherArchUnitMECType = new CpuMEC();
 
@@ -185,11 +186,11 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
         if (father!=null){
             fatherArchUnitMECType = ((TMLArchiNode)father).getMECType();
         }
-        JDialogTMLTaskArtifact dialog = new JDialogTMLTaskArtifact(frame, "Setting artifact attributes", this, operation, fatherArchUnitMECType);
+        JDialogTMLTaskArtifact dialog = new JDialogTMLTaskArtifact(frame, "Setting artifact attributes", this, operationMEC, fatherArchUnitMECType);
     //    dialog.setSize(400, 350);
         GraphicLib.centerOnParent(dialog, 400, 350);
         dialog.setVisible( true ); // blocked until dialog has been closed
-        operation = dialog.getOperation();
+        operationMEC = dialog.getOperation();
 
         if (!dialog.isRegularClose()) {
             return false;
@@ -250,8 +251,8 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
         sb.append( referenceTaskName );
         sb.append( "\" priority=\"" );
         sb.append( priority );
-        sb.append( "\" operation=\"" );
-        sb.append( operation );
+        sb.append( "\" operationMEC=\"" );
+        sb.append( operationMEC );
         sb.append( "\" fatherComponentMECType=\"" + fatherArchUnitMECType.getIndex() );
         sb.append( "\" />\n" );
         sb.append( "</extraparam>\n" );
@@ -288,7 +289,7 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
                                 if (elt != null) {
                                     priority = Integer.decode(prio).intValue();
                                 }
-                                operation = elt.getAttribute("operation");
+                                operationMEC = elt.getAttribute("operationMEC");
                                 if( (elt.getAttribute("fatherComponentMECType") != null) &&  (elt.getAttribute("fatherComponentMECType").length() > 0) )        {
                                     if( elt.getAttribute("fatherComponentMECType").length() > 1 )       {
                                         fatherArchUnitMECType = ArchUnitMEC.Types.get(0);
@@ -347,9 +348,10 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
         return "Priority = " + priority;
     }
 
-    public String getOperation() {
-        return operation;
+    public String getOperationMEC() {
+        return operationMEC;
     }
+
 
     public int getOperationType()       {
 

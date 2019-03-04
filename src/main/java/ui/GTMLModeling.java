@@ -604,6 +604,7 @@ public class GTMLModeling {
                     throw new MalformedTMLDesignException(tmlcpc.getValue() + " msg");
                 }
                 tmlt = new TMLTask(makeName(tgc, tmlcpc.getValue()), tmlcpc, tmladp);
+                tmlt.addOperation(tmlcpc.getOperation());
                 tmlt.setAttacker(tmlcpc.isAttacker());
                 //TraceManager.addDev("Task added:" + tmlt.getName() + " with tadp=" + tmladp + " major=" + tmladp.getMGUI().getMajorTitle(tmladp));
                 listE.addCor(tmlt, tgc);
@@ -3858,7 +3859,7 @@ public class GTMLModeling {
                     s = artifact.getReferenceTaskName();
                     ArchUnitMEC mec = artifact.getArchUnitMEC();
                     int operationType = artifact.getOperationType();
-                    String operation = artifact.getOperation();
+                    String operationMEC = artifact.getOperationMEC();
                     //TraceManager.addDev("1) Trying to get task named:" + s);
                     s = s.replaceAll("\\s", "");
                     //TraceManager.addDev("2) Trying to get task named:" + s);
@@ -3869,7 +3870,7 @@ public class GTMLModeling {
                         if (operationType !=  -1) {
                             task.addOperationType(operationType);
                         }
-                        task.addOperation(operation);
+                        task.addOperationMEC(operationMEC);
                         node.addMECToHwExecutionNode(mec);
                         map.addTaskToHwExecutionNode(task, (HwExecutionNode) node);
                     } else {

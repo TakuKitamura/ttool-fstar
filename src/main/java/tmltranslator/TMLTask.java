@@ -63,6 +63,7 @@ public class TMLTask extends TMLElement {
     private Set<TMLEvent> eventsList;
     private int operationType;
     private String operation;
+    private String operationMEC;
     private boolean isAttacker;
 
     public TMLTask(String name, Object referenceToClass, Object referenceToActivityDiagram) {
@@ -381,6 +382,14 @@ public class TMLTask extends TMLElement {
 
     public int getOperationType() {
         return operationType;
+    }
+
+    public void addOperationMEC(String _operation) {
+        operationMEC = _operation;
+    }
+
+    public String getOperationMEC() {
+        return operationMEC;
     }
 
     public void addOperation(String _operation) {

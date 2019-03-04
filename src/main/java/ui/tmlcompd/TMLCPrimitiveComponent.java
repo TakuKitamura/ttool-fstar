@@ -83,6 +83,8 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
     private int textX = 15; // border for ports
     private double dtextX = 0.0;
 
+    private String operation = "";
+
     public String oldValue;
 
     public TMLCPrimitiveComponent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
@@ -341,7 +343,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         }
 
         // And so -> attributes!
-        JDialogAttribute jda = new JDialogAttribute(myAttributes, null, frame, "Setting attributes of " + value, "Attribute");
+        JDialogAttribute jda = new JDialogAttribute(myAttributes, null, frame, "Setting attributes of " + value, "Attribute", operation);
         setJDialogOptions(jda);
         // jda.setSize(650, 375);
         GraphicLib.centerOnParent(jda, 750, 375);
@@ -350,6 +352,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         //if (oldValue.equals(value)) {
         //return false;
         //}
+        operation = jda.getOperation();
         rescaled = true;
         return true;
 
@@ -500,6 +503,8 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<Data isAttacker=\"");
         sb.append(isAttacker() ? "Yes" : "No");
+        sb.append("\" Operation=\"");
+        sb.append(operation);
         sb.append("\" />\n");
         for (int i = 0; i < myAttributes.size(); i++) {
             //TraceManager.addDev("Attribute:" + i);
@@ -547,6 +552,12 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
                             elt = (Element) n2;
                             if (elt.getTagName().equals("Data")) {
                                 isAttacker = elt.getAttribute("isAttacker").equals("Yes");
+                                String tmpO = elt.getAttribute("Operation");
+                                if (tmpO == null) {
+                                    operation = "";
+                                }  else {
+                                    operation = tmpO;
+                                }
                             }
                             if (elt.getTagName().equals("Attribute")) {
                                 //TraceManager.addDev("Analyzing attribute");
@@ -649,6 +660,10 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         }
 
         return attr;
+    }
+
+    public String getOperation() {
+        return operation;
     }
 
     public TMLCPath findPathWith(TGComponent tgc) {
