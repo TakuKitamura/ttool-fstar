@@ -122,47 +122,57 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         instructionHelpList = new ArrayList<>();
         buttons = new ArrayList<>();
         JTextArea jft1 = new JTextArea();
-        jft1.setText("CPU name : ");
+        jft1.setText("CPU name");
         instructionHelpList.add(jft1);
 
         JTextArea jft2 = new JTextArea();
-        jft2.setText("Scheduling policy : ");
+        jft2.setText("Scheduling policy");
         instructionHelpList.add(jft2);
 
-        JTextArea jft3 = new JTextArea("Slice time : ");
+        JTextArea jft3 = new JTextArea("Slice time : The maximum time allocated by the OS " +
+                "scheduler to execute a task");
         instructionHelpList.add(jft3);
 
-        JTextArea jft4 = new JTextArea("Nb of Cores :  ");
+        JTextArea jft4 = new JTextArea("Nb of Cores :  The number of cores of the CPU");
         instructionHelpList.add(jft4);
 
-        JTextArea jft5 = new JTextArea("Data size ");
+        JTextArea jft5 = new JTextArea("Data size : The size of an EXECI/EXECC operation, in " +
+                "number of bytes");
         instructionHelpList.add(jft5);
 
-        JTextArea jft6 = new JTextArea("Pipeline size : ");
+        JTextArea jft6 = new JTextArea("Pipeline size : The number of stages of the pipeline");
         instructionHelpList.add(jft6);
 
-        JTextArea jft7 = new JTextArea("Task switching : ");
+        JTextArea jft7 = new JTextArea("Task switching : The time taken by the OS for a context switch");
         instructionHelpList.add(jft7);
 
-        JTextArea jft8 = new JTextArea("Mis-branching prediction: ");
+        JTextArea jft8 = new JTextArea("Mis-branching prediction: The miss percentage of the CPU branch " +
+                "prediction scheme");
         instructionHelpList.add(jft8);
 
-        JTextArea jft9 = new JTextArea("cahe-miss : ");
+        JTextArea jft9 = new JTextArea("cahe-miss : The percentage of cache misses");
         instructionHelpList.add(jft9);
 
-        JTextArea jft10 = new JTextArea("Go idle time : ");
+        JTextArea jft10 = new JTextArea("Go idle time (cycles) : The time taken by the OS and the CPU " +
+                "hardware to go idle");
         instructionHelpList.add(jft10);
 
-        JTextArea jft11 = new JTextArea("Max consecutive cycles before idle : ");
+        JTextArea jft11 = new JTextArea("Max consecutive cycles before idle (cycles) : Number of consecutive cycles of NOPs before the " +
+                "CPU goes idle");
         instructionHelpList.add(jft11);
 
-        JTextArea jft12 = new JTextArea("EXECI execution : ");
+        JTextArea jft12 = new JTextArea("EXECI execution : The number of clock cycles corresponding to an " +
+                "integer operation");
         instructionHelpList.add(jft12);
 
-        JTextArea jft13 = new JTextArea("EXECC execution : ");
+        JTextArea jft13 = new JTextArea("EXECC execution : The number of clock cycles corresponding to an " +
+                "operation on complex numbers");
         instructionHelpList.add(jft13);
 
-        JTextArea jft14 = new JTextArea("Clock divider");
+        JTextArea jft14 = new JTextArea("Clock divider : This number defines the operating clock frequency of the CPU \n" +
+                "It is expressed via a number that is used to divide the global design\n" +
+                "frequency, whose default value is 200 MHz. Thus a clock divider equal to 4 means that the CPU\n" +
+                "operates at 200/4 = 50 MHz");
         instructionHelpList.add(jft14);
 
         for(int i = 0; i < instructionHelpList.size(); i++) {
