@@ -412,7 +412,7 @@ public class TMLTask extends TMLElement {
         if (activity == null) {
             return -1;
         }
-         TraceManager.addDev("Handling task:" + getTaskName());
+        //TraceManager.addDev("Handling task:" + getTaskName());
         return activity.getWorstCaseIComplexity();
 
     }

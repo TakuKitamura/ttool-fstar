@@ -922,7 +922,7 @@ public class ActivityDiagram2TMLTranslator {
             }
         }
         
-        TraceManager.addDev( tmltask.getActivityDiagram().toXML() );
+        //TraceManager.addDev("Activity:" + tmltask.getActivityDiagram().toXML() );
     }
 
     private String modifyActionString(String _input) {

@@ -77,8 +77,8 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 
     // Attributes
     //   private boolean attributesAreDrawn = false;
-    public HashMap<String, Integer> attrMap = new HashMap<String, Integer>();
-    public String mappingName;
+    //public HashMap<String, Integer> attrMap = new HashMap<String, Integer>();
+    //public String mappingName;
     protected LinkedList<TAttribute> myAttributes;
     private int textX = 15; // border for ports
     private double dtextX = 0.0;
