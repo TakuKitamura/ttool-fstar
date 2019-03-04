@@ -166,7 +166,7 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         instructionHelpList.add(jft14);
 
         for(int i = 0; i < instructionHelpList.size(); i++) {
-            Icon myIcon = new ImageIcon("/home/pham/Desktop/question.png");
+            Icon myIcon = IconManager.imgic32;
             JButton but = new JButton(myIcon);
             setButton(but);
             buttons.add(but);
