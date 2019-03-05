@@ -20,6 +20,8 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
 	protected int arc = 5;
 	protected double darc;
 
+	protected int lineLength = 5;
+
 	public TGScalableComponent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
 			TGComponent _father, TDiagramPanel _tdp) {
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -43,6 +45,14 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
         
         currentFontSize = -1;
     	displayText = true;
+	}
+
+	protected void initSize( 	final int width,
+								final int height ) {
+		this.width = width;
+		this.height = height;
+		
+		initScaling( width, height );
 	}
 
     protected void initScaling(int w, int h) {

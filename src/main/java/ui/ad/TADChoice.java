@@ -74,10 +74,11 @@ public class TADChoice extends TADComponentWithSubcomponents/* Issue #69  TGCWit
     public TADChoice(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-        width = 30;
-        height = 30;
-        
         // Issue #31
+//        width = 30;
+//        height = 30;
+        initSize( 30, 30 );
+        
         dtextX1 = -lineOutLength;
         dtextY1 = height/2 - 5;
         dtextX2 = width + 5;
