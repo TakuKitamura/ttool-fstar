@@ -166,12 +166,11 @@ public class InputInstanceTest {
     dsp.execiTime = 1;
 
 
-    mainCPU.addOperationType("generic");
-    mainCPU.addOperationType("fft");
+    mainCPU.setOperation("generic fft");
 
     mainMem.memorySize = 200;
 
-    dsp.addOperationType("fft");
+    dsp.setOperation("fft");
     dspMem.memorySize = 100;
 
     maincpu_bus0.hwnode = mainCPU;
