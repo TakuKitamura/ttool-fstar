@@ -61,7 +61,6 @@ public abstract class HwExecutionNode extends HwNode  {
 
     public HwExecutionNode(String _name) {
         super(_name);
-
     }
 
     public abstract String getType();

@@ -710,6 +710,7 @@ public class TMLModelCompiler implements CCodeGenConstants {
                 outBuff = op.getOutBuffer();
                 ctxName = op.getContextName();
                 int xTaskOperationType = xTask.getOperationType();
+                TraceManager.addDev("TaskType for  task " + xTask.getTaskName() + " op: " + xTaskOperationType);
                 if (declaration) {
                     if (inBuff == null) {       //for source operation
                         buffersString.append("extern" + SP + outBuff.getType() + SP + outBuff.getName() + SC + CR);
@@ -943,6 +944,7 @@ public class TMLModelCompiler implements CCodeGenConstants {
         //TMLTask fTask =       op.getSDRTasks().get( Operation.F_TASK );
 
         int xTaskOperationType = xTask.getOperationType();
+        TraceManager.addDev("OperationType of " + xTask.getTaskName() + " = " + xTaskOperationType);
 
         if (op.getOutSignal() != null) {
             signalOutName = op.getOutSignal().getName();

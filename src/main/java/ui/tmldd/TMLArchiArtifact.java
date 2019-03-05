@@ -356,26 +356,26 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
     public int getOperationType()       {
 
         if( fatherArchUnitMECType instanceof FepMEC )   {
-            if( operation.equals( "CWM" ) )     {
+            if( operationMEC.equals( "CWM" ) )     {
                 return FepOperationMEC.CWM_MEC;
             }
-            else if( operation.equals( "CWL" ) )        {
+            else if( operationMEC.equals( "CWL" ) )        {
                 //TraceManager.addDev( "Operation: " + operation + " returns " + FepOperationMEC.CwlMEC );
                 return FepOperationMEC.CWL_MEC;
             }
-            else if( operation.equals( "CWA" ) )        {
+            else if( operationMEC.equals( "CWA" ) )        {
                 //TraceManager.addDev( "Operation: " + operation + " returns " + FepOperationMEC.CwaMEC );
                 return FepOperationMEC.CWA_MEC;
             }
-            else if( operation.equals( "CWP" ) )        {
+            else if( operationMEC.equals( "CWP" ) )        {
                 //TraceManager.addDev( "Operation: " + operation + " returns " + FepOperationMEC.CwpMEC );
                 return FepOperationMEC.CWP_MEC;
             }
-            else if( operation.equals( "FFT" ) )        {
+            else if( operationMEC.equals( "FFT" ) )        {
                 //TraceManager.addDev( "Operation: " + operation + " returns " + FepOperationMEC.FftMEC );
                 return FepOperationMEC.FFT_MEC;
             }
-            else if( operation.equals( "SUM" ) )        {
+            else if( operationMEC.equals( "SUM" ) )        {
                 //TraceManager.addDev( "Operation: " + operation + " returns " + FepOperationMEC.SumMEC );
                 return FepOperationMEC.SUM_MEC;
             }
