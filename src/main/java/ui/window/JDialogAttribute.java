@@ -247,7 +247,7 @@ public class JDialogAttribute extends JDialogBase implements ActionListener, Lis
             GridBagConstraints cOp = new GridBagConstraints();
             panelOperation = new JPanel();
             panelOperation.setLayout(gbOp);
-            panelOperation.setBorder(new javax.swing.border.TitledBorder("Operation type (empty means unspecified)"));
+            panelOperation.setBorder(new javax.swing.border.TitledBorder("Operation (empty means unspecified)"));
             //panelOperation.setPreferredSize(new Dimension(500, 70));
 
             cOp.weighty = 1.0;
