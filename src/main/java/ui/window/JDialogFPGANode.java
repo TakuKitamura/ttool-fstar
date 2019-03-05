@@ -57,7 +57,7 @@ import java.util.*;
  * Creation: 07/02/2018
  *
  * @author Ludovic APVRILLE
- * @version 1.0 07/02/2018
+ * @version 2.0 05/03/2019
  */
 public class JDialogFPGANode extends JDialogBase implements ActionListener {
 
@@ -72,10 +72,10 @@ public class JDialogFPGANode extends JDialogBase implements ActionListener {
 
     // Panel2
     protected JTextField byteDataSize, goIdleTime, maxConsecutiveIdleCycles, clockRatio, execiTime, execcTime,
-            capacity, mappingPenalty, reconfigurationTime, operationTypes;
+            capacity, mappingPenalty, reconfigurationTime, operation;
 
     // Tabbed pane for panel1 and panel2
-    private JTabbedPane tabbedPane;
+    //private JTabbedPane tabbedPane;
 
 
     /*
@@ -111,11 +111,11 @@ public class JDialogFPGANode extends JDialogBase implements ActionListener {
 
         panel2 = new JPanel();
         panel2.setLayout(gridbag2);
-        panel2.setBorder(new javax.swing.border.TitledBorder("FPGA attributes"));
+        panel2.setBorder(new javax.swing.border.TitledBorder("Attributes"));
         panel2.setPreferredSize(new Dimension(400, 300));
 
         // Issue #41 Ordering of tabbed panes 
-        tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
+        //tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
 
         c2.gridwidth = 1;
         c2.gridheight = 1;
@@ -180,10 +180,10 @@ public class JDialogFPGANode extends JDialogBase implements ActionListener {
         panel2.add(execcTime, c2);
 
         c2.gridwidth = 1;
-        panel2.add(new JLabel("Operating types:"), c2);
+        panel2.add(new JLabel("Operation:"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        operationTypes = new JTextField(""+node.getOperationTypes(), 15);
-        panel2.add(operationTypes, c2);
+        operation = new JTextField(""+node.getOperation(), 15);
+        panel2.add(operation, c2);
 
         c2.gridwidth = 1;
         panel2.add(new JLabel("Clock divider:"), c2);
@@ -191,30 +191,6 @@ public class JDialogFPGANode extends JDialogBase implements ActionListener {
         clockRatio = new JTextField("" + node.getClockRatio(), 15);
         panel2.add(clockRatio, c2);
 
-        // monitored
-        /*c2.gridwidth = 1;
-        panel2.add(new JLabel("Monitored:"), c2);
-        //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        //monitored = new JTextField(""+node.getMonitored(), 15);//DG 19.04.
-        tracemode = new JComboBox(tracemodeTab);
-        tracemode.setSelectedIndex(selectedTracemode);
-        tracemode.addActionListener(this);
-        panel2.add(tracemode, c2);
-
-        monitored = new JTextField("", 15);
-        panel2.add(monitored, c2);*/
-
-
-        // Code generation
-        panel4 = new JPanel();
-        panel4.setLayout(gridbag4);
-        panel4.setBorder(new javax.swing.border.TitledBorder("Code generation"));
-        panel4.setPreferredSize(new Dimension(400, 300));
-
-        tabbedPane.addTab("Simulation", panel2);
-        tabbedPane.addTab("Code generation", panel4);
-
-        tabbedPane.setSelectedIndex(0);
 
         // main panel;
         c0.gridheight = 10;
@@ -222,9 +198,7 @@ public class JDialogFPGANode extends JDialogBase implements ActionListener {
         c0.weightx = 1.0;
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
         c0.fill = GridBagConstraints.BOTH;
-        /*c.add(panel2, c0);
-          c.add(panel4, c0);*/
-        c.add(tabbedPane, c0);
+        c.add(panel2, c0);
 
         c0.gridwidth = 1;
         c0.gridheight = 1;
@@ -303,8 +277,8 @@ public class JDialogFPGANode extends JDialogBase implements ActionListener {
         return execcTime.getText();
     }
 
-    public String getOperationTypes() {
-        return operationTypes.getText();
+    public String getOperation() {
+        return operation.getText();
     }
 
 

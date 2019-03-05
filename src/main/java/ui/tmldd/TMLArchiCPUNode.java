@@ -81,6 +81,7 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
     private int execcTime = HwCPU.DEFAULT_EXECC_TIME;
     private int cacheMiss = HwCPU.DEFAULT_CACHE_MISS;
     private int encryption = HwCPU.ENCRYPTION_NONE;
+    private String operation = "";
 
     public TMLArchiCPUNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -401,6 +402,8 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
                 errors += "Clock divider  ";
             }
         }
+        operation = dialog.getOperation().trim();
+
         encryption = dialog.getEncryption();
         if (error) {
             JOptionPane.showMessageDialog(frame,
@@ -412,6 +415,7 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
 
         return true;
     }
+
 
 
     public int getType() {
@@ -478,6 +482,7 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         sb.append(" execiTime=\"" + execiTime + "\"");
         sb.append(" execcTime=\"" + execcTime + "\"");
         sb.append(" clockRatio=\"" + clockRatio + "\"");
+         sb.append(" operation=\"" + operation + "\"");
         sb.append(" MECType=\"" + MECType.getIndex() + "\"");
         sb.append(" encryption=\"" + encryption + "\"");
         sb.append("/>\n");
@@ -556,6 +561,13 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
                                 if ((elt.getAttribute("sliceTime") != null) && (elt.getAttribute("sliceTime").length() > 0)) {
                                     sliceTime = Integer.decode(elt.getAttribute("sliceTime")).intValue();
                                 }
+                                if ((elt.getAttribute("operation") != null) && (elt.getAttribute("operation").length() > 0)) {
+                                    operation = elt.getAttribute("operation");
+                                    if (operation == null) {
+                                        operation = "";
+                                    }
+
+                                }
                                 if ((elt.getAttribute("encryption") != null) && (elt.getAttribute("encryption").length() > 0)) {
                                     encryption = Integer.decode(elt.getAttribute("encryption")).intValue();
                                 }
@@ -626,6 +638,11 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         return encryption;
     }
 
+    public String getOperation() {
+        return operation;
+    }
+
+
     public String getAttributes() {
         String attr = "";
         attr += "Nb of cores = " + nbOfCores + "\n";
@@ -643,6 +660,7 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         attr += "Branch. pred. misrate (in %) = " + branchingPredictionPenalty + "\n";
         attr += "Cache miss (in %) = " + cacheMiss + "\n";
         attr += "Clock divider = " + clockRatio + "\n";
+        attr += "Operation = " + operation + "\n";
         attr += "MECType = " + MECType.getIndex() + "\n";
         attr += "encryption = " + encryption + "\n";
         return attr;

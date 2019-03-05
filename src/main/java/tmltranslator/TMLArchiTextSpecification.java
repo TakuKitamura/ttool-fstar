@@ -170,6 +170,7 @@ public class TMLArchiTextSpecification {
                 code += set + "sliceTime " + cpu.sliceTime + CR;
                 code += set + "execiTime " + cpu.execiTime + CR;
                 code += set + "execcTime " + cpu.execcTime + CR;
+                code += set + "operation " + cpu.getOperation() + CR;
             }
 
             // FPGA
@@ -186,9 +187,8 @@ public class TMLArchiTextSpecification {
                 code += set + "reconfigurationTime " + fpga.reconfigurationTime + CR;
                 code += set + "execiTime " + fpga.execiTime + CR;
                 code += set + "execcTime " + fpga.execcTime + CR;
-                for(String op: fpga.getOperationTypes()) {
-                    code += set + "operationType " + op + CR;
-                }
+                code += set + "operation " + fpga.getOperation() + CR;
+
             }
 
             //HWA
@@ -200,9 +200,7 @@ public class TMLArchiTextSpecification {
                 code += set + "byteDataSize " + hwa.byteDataSize + CR;
                 code += set + "execiTime " + hwa.execiTime + CR;
                 code += set + "execcTime " + hwa.execcTime + CR;
-                for(String op: hwa.getOperationTypes()) {
-                    code += set + "operationType " + op + CR;
-                }
+                code += set + "operation " + hwa.getOperation() + CR;
             }
 
             // BUS
@@ -594,6 +592,15 @@ public class TMLArchiTextSpecification {
                     if (_split[2].toUpperCase().equals("EXECCTIME")) {
                         cpu.execcTime = Integer.decode(_split[3]).intValue();
                     }
+
+                    if (_split[2].toUpperCase().equals("OPERATION")) {
+                        String tmpOp = "";
+                        for (int i=3; i<_split.length; i++) {
+                            tmpOp += _split[i] + " ";
+                        }
+
+                        cpu.setOperation(tmpOp.trim());
+                    }
                 }
 
                 if (node instanceof HwFPGA) {
@@ -640,8 +647,14 @@ public class TMLArchiTextSpecification {
                         fpga.execcTime = Integer.decode(_split[3]).intValue();
                     }
 
-                    if (_split[2].toUpperCase().equals("OPERATIONTYPE")) {
-                        fpga.addOperationType(_split[3]);
+                    if (_split[2].toUpperCase().equals("OPERATION")) {
+                        String tmpOp = "";
+                        for (int i=3; i<_split.length; i++) {
+                            tmpOp += _split[i] + " ";
+                        }
+
+                        fpga.setOperation(tmpOp.trim());
+
                     }
                 }
 
@@ -664,8 +677,13 @@ public class TMLArchiTextSpecification {
                         hwa.execiTime = Integer.decode(_split[3]).intValue();
                     }
 
-                    if (_split[2].toUpperCase().equals("OPERATIONTYPE")) {
-                        hwa.addOperationType(_split[3]);
+                    if (_split[2].toUpperCase().equals("OPERATION")) {
+                        String tmpOp = "";
+                        for (int i=3; i<_split.length; i++) {
+                            tmpOp += _split[i] + " ";
+                        }
+
+                        hwa.setOperation(tmpOp.trim());
                     }
                 }
 

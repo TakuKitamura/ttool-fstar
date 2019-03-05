@@ -80,7 +80,10 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
     protected JTextField nodeName;
 
     // Panel2
-    protected JTextField sliceTime, nbOfCores, byteDataSize, pipelineSize, goIdleTime, maxConsecutiveIdleCycles, taskSwitchingTime, branchingPredictionPenalty, cacheMiss, clockRatio, execiTime, execcTime, monitored;
+    protected JTextField sliceTime, nbOfCores, byteDataSize, pipelineSize, goIdleTime, maxConsecutiveIdleCycles,
+            taskSwitchingTime, branchingPredictionPenalty, cacheMiss, clockRatio, execiTime, execcTime, monitored,
+        operation;
+
     protected JComboBox<String> schedulingPolicy, MECTypeCB, encryption;
 
     // Tabbed pane for panel1 and panel2
@@ -386,7 +389,7 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
 
         panel2 = new JPanel();
         panel2.setLayout(gridbag2);
-        panel2.setBorder(new javax.swing.border.TitledBorder("CPU attributes"));
+        panel2.setBorder(new javax.swing.border.TitledBorder("Attributes"));
         panel2.setPreferredSize(new Dimension(500, 300));
 
         // Issue #41 Ordering of tabbed panes 
@@ -629,19 +632,13 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         // Code generation
         panel4 = new JPanel();
         panel4.setLayout( gridbag4 );
-        panel4.setBorder( new javax.swing.border.TitledBorder("Code generation") );
+        panel4.setBorder( new javax.swing.border.TitledBorder("Attributes") );
         panel4.setPreferredSize( new Dimension(500, 300) );
         c4.gridwidth = 1;
         c4.gridheight = 1;
         c4.weighty = 1.0;
         c4.weightx = 1.0;
         c4.fill = GridBagConstraints.HORIZONTAL;
-        /*c4.fill = GridBagConstraints.BOTH;
-          c4.gridheight = 3;
-          panel4.add( new JLabel(" "), c4 );
-          c4.gridwidth = 1;
-          c4.fill = GridBagConstraints.HORIZONTAL;
-          c4.anchor = GridBagConstraints.CENTER;*/
         panel4.add(new JLabel("Encryption:"), c4);
         c4.gridwidth = GridBagConstraints.REMAINDER;
         encryption = new JComboBox<String>();
@@ -650,6 +647,15 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         encryption.addItem("Hardware Security Module");
         encryption.setSelectedIndex(node.getEncryption());
         panel4.add(encryption, c4);
+
+        // operation
+        c4.gridwidth = 1;
+        panel4.add(new JLabel("Operation:"), c4);
+        c4.gridwidth = GridBagConstraints.REMAINDER; //end row
+        operation = new JTextField(""+node.getOperation(), 15);
+        panel4.add(operation, c4);
+
+        // extension constructs
         c4.gridwidth = 1;
         panel4.add(new JLabel("CPU Extension Construct:"), c4);
         c4.gridwidth = GridBagConstraints.REMAINDER; //end row
@@ -673,8 +679,8 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
             //Draw from transactions
         }
         else {
-            tabbedPane.addTab( "Simulation", panel2 );
-            tabbedPane.addTab( "Code generation", panel4 );
+            tabbedPane.addTab( "Main attributes", panel2 );
+            tabbedPane.addTab( "Security & operation type", panel4 );
 
             tabbedPane.setSelectedIndex(0);
         }
@@ -783,6 +789,10 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         //return monitored.getText();
     }
 
+    public String getOperation() {
+        return operation.getText();
+    }
+
     public String getClockRatio(){
         return clockRatio.getText();
     }
@@ -872,6 +882,7 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
             }
         }
 
+        // If simulation is ongoing
         public void paint(Graphics g) {
 
             //Draw Axis
