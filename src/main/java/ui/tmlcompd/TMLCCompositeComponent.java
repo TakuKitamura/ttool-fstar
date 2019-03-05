@@ -192,14 +192,14 @@ public class TMLCCompositeComponent extends TGCScalableWithInternalComponent imp
 		}
     }
 	
-    @Override
-	public void rescale(double scaleFactor){
-		dtextX = (textX + dtextX) / oldScaleFactor * scaleFactor;
-		textX = (int)(dtextX);
-		dtextX = dtextX - textX; 
-		
-		super.rescale(scaleFactor);
-	}
+//    @Override
+//	public void rescale(double scaleFactor){
+//		dtextX = (textX + dtextX) / oldScaleFactor * scaleFactor;
+//		textX = (int)(dtextX);
+//		dtextX = dtextX - textX; 
+//		
+//		super.rescale(scaleFactor);
+//	}
     
     @Override
     public TGComponent isOnOnlyMe(int _x, int _y) {
