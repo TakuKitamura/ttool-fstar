@@ -65,7 +65,7 @@ public class TMLArchiRouterNode extends TMLArchiCommunicationNode implements Swa
     private int textY2 = 30;
     private int derivationx = 2;
     private int derivationy = 3;
-    private String stereotype = "ROUTER";
+    private String stereotype = "NoC";
     private int size = 2; // 2x2 NoC by default
 
     private int bufferByteDataSize = HwBridge.DEFAULT_BUFFER_BYTE_DATA_SIZE;
@@ -178,7 +178,7 @@ public class TMLArchiRouterNode extends TMLArchiCommunicationNode implements Swa
         int tmp;
         String tmpName;
 
-        JDialogRouterNode dialog = new JDialogRouterNode(frame, "Setting router attributes", this);
+        JDialogRouterNode dialog = new JDialogRouterNode(frame, "Setting NoC attributes", this);
      //   dialog.setSize(350, 350);
         GraphicLib.centerOnParent(dialog, 350, 350);
         dialog.setVisible( true ); // blocked until dialog has been closed

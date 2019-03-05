@@ -61,6 +61,8 @@ public class TranslatedRouter<E>  {
     private TMLMapping<E> map;
     private Vector<TMLEvent> pktins;
 
+    private Vector<TMLTask> dispatchers;
+
 
 
     public TranslatedRouter(int nbOfVCs, int xPos, int yPos) {
@@ -81,6 +83,16 @@ public class TranslatedRouter<E>  {
         TMLModeling<E> tmlm = new TMLModeling<>();
         TMLArchitecture tmla = new TMLArchitecture();
         map = new TMLMapping<E>(tmlm, tmla, false);
+
+        // TASKS
+
+        // One dispatcher per port
+        // A dispatcher outputs to VCs tasks
+        dispatchers = new Vector<>();
+        for(i=0; i<NB_OF_PORTS; i++) {
+
+        }
+
 
         // Create all channels
         // For each input VC, we have to create a channel

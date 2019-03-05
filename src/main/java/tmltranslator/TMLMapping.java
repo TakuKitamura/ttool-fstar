@@ -1802,7 +1802,7 @@ public class TMLMapping<E> {
 
     // Routers / NoC / Network
     public void removeAllRouters() {
-        TMAP2Network translator = new TMAP2Network(this);
-        translator.removeAllRouters();
+        TMAP2Network translator = new TMAP2Network(this, 2);
+        translator.removeAllRouterNodes();
     }
 }

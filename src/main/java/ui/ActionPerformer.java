@@ -177,6 +177,8 @@ public class ActionPerformer {
             mgui.dseZ3();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_DSE].getActionCommand())) {
             mgui.dse();
+        } else if (command.equals(mgui.actions[TGUIAction.ACT_REMOVENOC].getActionCommand())) {
+                mgui.removeNoC();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER].getActionCommand())) {
             mgui.avatarModelChecker();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_GEN_JAVA].getActionCommand())) {

@@ -64,21 +64,23 @@ public class TMAP2Network  {
     private boolean optimize;
 
     private int nbOfVCs = 2;
+    private int nocSize = 2;
     private TranslatedRouter[][] routers;
 
-    public TMAP2Network(TMLMapping<?> _tmlmapping) {
+    public TMAP2Network(TMLMapping<?> _tmlmapping, int nocSize) {
         tmlmapping = _tmlmapping;
         routers = new TranslatedRouter[nbOfVCs][nbOfVCs];
+        this.nocSize = nocSize;
     }
 
     /* List of assumptions:
         - Only one router set (i.e. no router, then bus, then router) between two tasks
         - Channels must be mapped on at least one route to be taken into account
      */
-    public void removeAllRouters() {
+    public void removeAllRouterNodes() {
         // Make all routers
-        for(int i=0; i<nbOfVCs; i++) {
-            for(int j=0; j<nbOfVCs; j++) {
+        for(int i=0; i<nocSize; i++) {
+            for(int j=0; j<nocSize; j++) {
                 TranslatedRouter tr = new TranslatedRouter(nbOfVCs, i, j);
                 routers[i][j] = tr;
                 tr.makeRouter();

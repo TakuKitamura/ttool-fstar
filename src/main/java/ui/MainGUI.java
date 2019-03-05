@@ -4847,6 +4847,26 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         dtree.toBeUpdated();
     }
 
+
+    public void removeNoC() {
+        //TraceManager.addDev("Design space exploration with Z3");
+        if (gtm == null) {
+            return;
+        }
+
+        TMLMapping map = gtm.getTMLMapping();
+
+        if (map == null) {
+            return;
+        }
+
+        JDialogNoCManagement jdsenm = new JDialogNoCManagement(frame, this, "Removing NoC", map);
+        //   jdsez3.setSize(600,800);
+        GraphicLib.centerOnParent(jdsenm, 700, 800);
+        jdsenm.setVisible(true);
+        dtree.toBeUpdated();
+    }
+
     public void avatarStaticAnalysis() {
         TraceManager.addDev("Avatar static analysis invariants");
         JDialogInvariantAnalysis jgen = new JDialogInvariantAnalysis(frame, this, "Static analysis: invariants computation");
