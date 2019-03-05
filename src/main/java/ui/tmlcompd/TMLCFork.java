@@ -96,12 +96,9 @@ public class TMLCFork extends TMLCChannelFacility implements WithAttributes {
         myImageIcon = IconManager.imgic1204;
     }
 
-
-
-
+    @Override
     public void internalDrawing(Graphics g) {
-
-	radius = width / 2;
+    	radius = width / 2;
 
         if (rescaled) {
             rescaled = false;
