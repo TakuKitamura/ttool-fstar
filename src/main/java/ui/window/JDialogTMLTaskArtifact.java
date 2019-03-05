@@ -161,7 +161,7 @@ public class JDialogTMLTaskArtifact extends JDialogBase implements ActionListene
     	c3.gridwidth = GridBagConstraints.REMAINDER; //end row
     	panel3.add(new JLabel("<html>Task Extension<br>Construct:</html>"), c3);
     	c3.gridwidth = GridBagConstraints.REMAINDER; //end row
-    	Vector<String> operationsListS = new Vector();
+    	Vector<String> operationsListS = new Vector<>();
     	int indexOp = 0;
     	TraceManager.addDev( "Inside JDialogTMLTaskArtifact: " + MECType );
     	if( MECType instanceof FepMEC )	{

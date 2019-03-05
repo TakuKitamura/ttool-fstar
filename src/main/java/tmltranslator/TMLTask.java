@@ -62,7 +62,7 @@ public class TMLTask extends TMLElement {
     private Set<TMLChannel> writeTMLChannelsList;
     private Set<TMLEvent> eventsList;
     private int operationType;
-    private String operation;
+    private String operation = "";
     private String operationMEC;
     private boolean isAttacker;
 
