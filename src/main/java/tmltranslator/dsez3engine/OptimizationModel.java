@@ -783,7 +783,13 @@ public class OptimizationModel {
                     int p = inputInstance.getArchitecture().getCPUs().indexOf(hwNode);
                     //evaluate optimal solution
                     optimized_result_X[t][p] = m.evaluate(X[t][p], true);
+
                     TMLTask taskCast = (TMLTask)task;
+
+                    if(Integer.parseInt(optimized_result_X[t][p].toString()) == 1){
+                        outputToDisplay = outputToDisplay + "\n" + taskCast.getName() + " --> " + hwNode.getName();
+                    }
+
                     optimizedSolutionX.put("X[" + taskCast.getName() + "][" + hwNode.getName() + "] = ", Integer.parseInt
                             (optimized_result_X[t][p]
                             .toString()));
@@ -806,9 +812,9 @@ public class OptimizationModel {
 
             }
 
-            for(Map.Entry<String, Integer> entry : optimizedSolutionX.entrySet()) {
+           /* for(Map.Entry<String, Integer> entry : optimizedSolutionX.entrySet()) {
                 outputToDisplay = outputToDisplay + entry.getKey() + " = " + entry.getValue() + "\n";
-            }
+            }*/
 
             outputToDisplay += "\n\n";
 
