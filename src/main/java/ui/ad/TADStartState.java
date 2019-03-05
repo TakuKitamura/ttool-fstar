@@ -59,8 +59,10 @@ public class TADStartState extends TADComponentWithoutSubcomponents/* Issue #69 
 	public TADStartState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 		
-		width = 15;
-		height = 15;
+//		width = 15;
+//		height = 15;
+    	
+    	initSize( 15, 15 );
 
 		createConnectingPoints();
 //		nbConnectingPoint = 1;
@@ -86,8 +88,10 @@ public class TADStartState extends TADComponentWithoutSubcomponents/* Issue #69 
 
     @Override
 	public void internalDrawing(Graphics g) {
-		g.fillOval(x, y, width, height);
-		g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
+    	final int radius = width / 2;
+
+    	g.fillOval(x, y, radius * 2, radius * 2 );//width, height);
+		g.drawLine(x+(width/2), y+height, x+(width/2), (int) (y + lineLength * oldScaleFactor + height));
 	}
 
     @Override

@@ -66,12 +66,14 @@ public class TADActionState extends TADOneLineText/* Issue #69 TGCOneLineText*/ 
     public TADActionState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-        width = 30;
-        height = 20;
+//        width = 30;
+//        height = 20;
+        
         minWidth = 30;
         
         // Issue #31
         textX = 5;
+        initSize( 30, 20 );
         
         createConnectingPoints();
 //        nbConnectingPoint = 2;

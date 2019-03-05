@@ -73,10 +73,12 @@ public class TMLADDecrypt extends TADComponentWithoutSubcomponents/* Issue #69 T
     public TMLADDecrypt(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        width = 15;
-        height = 35;
+        // Issue #31
+//        width = 15;
+//        height = 35;
 //        textX = width + 5;
 //        textY = height/2 + 5;
+        initSize( 15, 35 );
 
         nbConnectingPoint = 2;
         connectingPoint = new TGConnectingPoint[2];
