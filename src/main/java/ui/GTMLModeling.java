@@ -3859,6 +3859,7 @@ public class GTMLModeling {
                         if (operationType !=  -1) {
                             task.addOperationType(operationType);
                         }
+                        //TraceManager.addDev("Putting operation " + operationType + "/" + operationMEC + " to task " + task.getTaskName());
                         task.addOperationMEC(operationMEC);
                         node.addMECToHwExecutionNode(mec);
                         map.addTaskToHwExecutionNode(task, (HwExecutionNode) node);
