@@ -263,6 +263,12 @@ public class HelpManager extends HelpEntry {
         return result;
     }
 
-
-
+    public HelpEntry getHelpEntryWithHTMLFile(String pathToHTMLFile) {
+        for(HelpEntry he: allEntries) {
+            if (he.pathToHTMLFile.compareTo(pathToHTMLFile) == 0) {
+                return he;
+            }
+        }
+        return null;
+    }
 }

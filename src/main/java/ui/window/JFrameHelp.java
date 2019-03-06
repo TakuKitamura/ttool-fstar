@@ -43,14 +43,18 @@ package ui.window;
 
 
 import help.HelpEntry;
+import help.HelpManager;
 import myutil.TraceManager;
 import ui.MainGUI;
 import ui.util.IconManager;
 
 import javax.swing.*;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URL;
 
 
 /**
@@ -62,9 +66,10 @@ import java.awt.event.ActionListener;
 public	class JFrameHelp extends JFrame implements ActionListener {
     private JEditorPane pane;
     private HelpEntry he;
+    private HelpManager hm;
     private JPanel jp01;
     
-    public JFrameHelp(String title, HelpEntry he) {
+    public JFrameHelp(String title, HelpManager hm, HelpEntry he) {
         super(title);
         this.he = he;
 
@@ -78,6 +83,34 @@ public	class JFrameHelp extends JFrame implements ActionListener {
         jp01.setBorder(new javax.swing.border.TitledBorder("Help of: " + he.getMasterKeyword()));
         pane = new JEditorPane("text/html;charset=UTF-8", he.getHTMLContent());
         pane.setEditable(false);
+        pane.addHyperlinkListener(new HyperlinkListener() {
+            public void hyperlinkUpdate(HyperlinkEvent e) {
+                if(e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+                    URL url = e.getURL();
+                    if (url == null) {
+                        return;
+                    }
+
+                    String link = e.getURL().toString();
+                   if (link.startsWith("file://")) {
+                       // Open the corresponding file in TTool
+                       String fileToOpen = link.substring(7, link.length());
+                       TraceManager.addDev("File to open:" + fileToOpen);
+                       if (hm == null) {
+                           return;
+                       }
+                       HelpEntry he = hm.getHelpEntryWithHTMLFile(fileToOpen);
+                       if (he != null) {
+                           setHelpEntry(he);
+                       } else {
+                           TraceManager.addDev("Null HE");
+                       }
+                   }
+                }
+            }
+        });
+
+
         //TraceManager.addDev("HMLTContent:" + he.getHTMLContent());
         JScrollPane jsp1 = new JScrollPane(pane);
         jsp1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);

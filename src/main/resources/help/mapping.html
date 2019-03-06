@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>cpu</title>
+  <title>mapping</title>
   <style>
       code{white-space: pre-wrap;}
       span.smallcaps{font-variant: small-caps;}
@@ -16,6 +16,12 @@
   <![endif]-->
 </head>
 <body>
-<p>The CPU node abstracts a CPU. It simulation semantics …</p>
+<h1 id="mapping">Mapping</h1>
+<p>The mapping consists in:</p>
+<ul>
+<li><a href="file://taskmapping.html">mapping tasks</a> to execution nodes: to CPUs, to FPGAS, to hardware accelerators (a.k.a. HwAs).</li>
+<li>mapping communication channels to communication paths built upon buses, bridges, memories.</li>
+</ul>
+<p>If a user makes an incomplete mapping of communication channels, TTool automatically decides of a channel mapping.</p>
 </body>
 </html>

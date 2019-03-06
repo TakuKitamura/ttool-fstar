@@ -206,7 +206,7 @@ ttoolhelp: html
 html: $(MD2HTML)
 
 %.html: %.md
-	pandoc $< -f markdown -t html -s -o  $@
+	pandoc $< -f markdown -t html -s -o  $@ --lua-filter=doc/ttoolfilter.lua
 
 # ======================================== 
 # ==========    DOCUMENTATION   ========== 
