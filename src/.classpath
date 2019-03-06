@@ -18,5 +18,6 @@
 	<classpathentry kind="lib" path="/libs/batik-xml.jar"/>
 	<classpathentry kind="lib" path="/libs/batik-util.jar"/>
 	<classpathentry kind="lib" path="/libs/jautomata-core.jar"/>
+	<classpathentry kind="lib" path="/libs/com.microsoft.z3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
