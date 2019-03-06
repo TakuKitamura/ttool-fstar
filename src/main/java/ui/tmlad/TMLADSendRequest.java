@@ -63,9 +63,9 @@ import java.util.List;
    * @author Ludovic APVRILLE
  */
 public class TMLADSendRequest extends TADComponentWithoutSubcomponents/* Issue #69TGCWithoutInternalComponent*/ implements CheckableAccessibility, CheckableLatency, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
-    protected int lineLength = 5;
-    
-    // Issue #31
+
+	// Issue #31
+//    protected int lineLength = 5;
 //    protected int textX =  5;
 //    protected int textY =  15;
     protected int arc = 5;

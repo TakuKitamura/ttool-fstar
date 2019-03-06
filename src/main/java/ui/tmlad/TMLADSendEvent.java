@@ -76,15 +76,15 @@ import ui.window.JDialogMultiString;
  * @version 1.0 21/11/2005
  */
 public class TMLADSendEvent extends TADComponentWithoutSubcomponents implements CheckableAccessibility, CheckableLatency, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
-    protected int lineLength = 5;
-    
-    // Issue #31
+
+	// Issue #31
+//    protected int lineLength = 5;
 //    protected int textX = 5;
 //    protected int textY = 15;
 //    protected int arc = 5;
-    protected int linebreak = 10;
+//    protected int linebreak = 10;
 
-    protected String eventName = "evt";
+    private String eventName = "evt";
     int nParam = 5;
     protected String[] params = new String[nParam];
 
@@ -152,7 +152,6 @@ public class TMLADSendEvent extends TADComponentWithoutSubcomponents implements 
 
         //g.drawRoundRect(x, y, width, height, arc, arc);
         Color c = g.getColor();
-        //
 
         g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
         g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
@@ -216,7 +215,7 @@ public class TMLADSendEvent extends TADComponentWithoutSubcomponents implements 
         }
     }
 
-   // @Override
+    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;

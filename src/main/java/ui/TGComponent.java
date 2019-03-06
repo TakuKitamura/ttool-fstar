@@ -1022,6 +1022,30 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
 
     }
 
+    /**
+     * Issue #31
+     * @return
+     */
+    protected int getReachabilityMargin() {
+    	return 18;
+    }
+
+    /**
+     * Issue #31
+     * @return
+     */
+    protected int getLivenessMargin() {
+    	return 10;
+    }
+
+    /**
+     * Issue #31
+     * @return
+     */
+    protected int getExclusionMargin() {
+    	return 12;
+    }
+
     public void draw(Graphics g) {
         RunningInfo ri;
         LoadInfo li;
@@ -1048,8 +1072,8 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
         }
 
         if ((accessibility) || (reachability != ACCESSIBILITY_UNKNOWN) || (liveness != ACCESSIBILITY_UNKNOWN)) {
-            drawAccessibility(reachability, g, x + width - 18, y - 1, "R");
-            drawAccessibility(liveness, g, x + width - 10, y - 1, "L");
+            drawAccessibility(reachability, g, x + width - getReachabilityMargin() /* Issue # 31 18*/, y - 1, "R");
+            drawAccessibility(liveness, g, x + width - getLivenessMargin() /* Issue #31 10*/, y - 1, "L");
 
             if ((reachability == ACCESSIBILITY_UNKNOWN) && (liveness == ACCESSIBILITY_UNKNOWN)) {
                 drawAccessibility(liveness, g, x + width - 2, y - 2, "?");
@@ -1066,13 +1090,16 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
         if (invariant) {
             g.setColor(ColorManager.ACCESSIBILITY);
             //GraphicLib.setMediumStroke(g);
+            // Issue #31
+            final int exclusionMargin = getExclusionMargin();
+            
             if (mutex == MUTEX_NOT_YET_STUDIED) {
-                g.drawString("mutual exclusion?", x + width + 1, y - 12);
+                g.drawString("mutual exclusion?", x + width + 1, y - exclusionMargin /* Issue #31 12*/);
             } else if (mutex == MUTEX_UNKNOWN) {
-                g.drawString("mutual exclusion: cannot be proved", x + width + 1, y - 12);
+                g.drawString("mutual exclusion: cannot be proved", x + width + 1, y - exclusionMargin);
             } else if (mutex == MUTEX_OK) {
                 g.setColor(ColorManager.MUTEX_OK);
-                g.drawString("mutual exclusion: OK", x + width + 1, y - 12);
+                g.drawString("mutual exclusion: OK", x + width + 1, y - exclusionMargin);
             }
 
             /*g.drawLine(x+width-2, y+2, x+width-6, y+6);

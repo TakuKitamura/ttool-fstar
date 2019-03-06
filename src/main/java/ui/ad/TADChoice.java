@@ -62,7 +62,7 @@ public class TADChoice extends TADComponentWithSubcomponents/* Issue #69  TGCWit
     
 	private static final String TRUE_GUARD_TEXT = "[ true ]";
 
-	protected int lineLength = 10;
+	//protected int lineLength = 10;
     
 	protected int lineOutLength = 25;
     
@@ -80,11 +80,12 @@ public class TADChoice extends TADComponentWithSubcomponents/* Issue #69  TGCWit
         initSize( 30, 30 );
         
         dtextX1 = -lineOutLength;
-        dtextY1 = height/2 - 5;
-        dtextX2 = width + 5;
-        dtextY2 = height/2 - 5;
-        dtextX3 = width /2 + 5;
-        dtextY3 = height + 15;
+        final int margin = scale( 5 );
+        dtextY1 = height/2 - margin;
+        dtextX2 = width + margin;
+        dtextY2 = height/2 - margin;
+        dtextX3 = width /2 + margin;
+        dtextY3 = height + scale( 15 );
         
         createConnectingPoints();
 //        nbConnectingPoint = 4;
@@ -130,6 +131,8 @@ public class TADChoice extends TADComponentWithSubcomponents/* Issue #69  TGCWit
     	super.rescale( scaleFactor );
 
     	final double factor = scaleFactor / oldScaleFactor;
+    	
+    	lineOutLength = (int) (lineOutLength * factor);
 
     	dtextX1 = dtextX1 * factor;
         dtextY1 = dtextY1 * factor;

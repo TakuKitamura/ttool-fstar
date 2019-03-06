@@ -55,6 +55,8 @@ import ui.ad.TADChoice;
  * @author Ludovic APVRILLE
  */
 public class TMLADChoice extends TADChoice /* Issue #69 TGCWithInternalComponent*/ implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
+
+	// Issue #31
 //    private int lineLength = 10;
 //    private int lineOutLength = 25;
 //    private int textX1, textY1, textX2, textY2, textX3, textY3;

@@ -59,13 +59,13 @@ import java.awt.geom.Line2D;
  * @author Ludovic APVRILLE
  */
 public class TMLADNotifiedEvent extends TADComponentWithoutSubcomponents/* Issue #69TGCWithoutInternalComponent */ implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
-    protected int lineLength = 5;
-    
-    // Issue #31
+
+	// Issue #31
+//    protected int lineLength = 5;
 //    protected int textX =  5;
 //    protected int textY =  15;
-    protected int linebreak = 10;
-    private int textX1 = 2;
+    //protected int linebreak = 10;
+    private int textX1;
     private double dtextX1;
     
     
@@ -77,12 +77,12 @@ public class TMLADNotifiedEvent extends TADComponentWithoutSubcomponents/* Issue
     public TMLADNotifiedEvent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-        width = 30;
-        height = 20;
-        minWidth = 30;
-        
         // Issue #31
-        textX1 = 2;
+//        width = 30;
+//        height = 20;
+        initSize( 30, 20 );
+        minWidth = 30;
+        textX1 = scale( 2 );
         dtextX1 = textX1 * oldScaleFactor;
         
         nbConnectingPoint = 2;

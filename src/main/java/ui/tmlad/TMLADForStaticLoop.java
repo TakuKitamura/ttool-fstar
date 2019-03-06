@@ -58,6 +58,8 @@ public class TMLADForStaticLoop extends TADForLoop /* Issue #69 TGCWithoutIntern
 //    private final static String IN_LOOP = "inside loop";
 //    private final static String EXIT_LOOP = "exit loop";
 //
+
+	// Issue #31
 //    protected int lineLength = 5;
 //    protected int textX =  5;
 //    protected int textY =  15;
@@ -127,10 +129,9 @@ public class TMLADForStaticLoop extends TADForLoop /* Issue #69 TGCWithoutIntern
 
         g.drawString(valueLoop, x + (width - w) / 2 , y + textY);
 
-	//info on loops
-	g.drawString(IN_LOOP, x+width+2, y+height/2);
-	g.drawString(EXIT_LOOP, x+width/2+2, y+height+10);
-	
+        //info on loops
+		g.drawString(IN_LOOP, x+width+2, y+height/2);
+		g.drawString(EXIT_LOOP, x+width/2+2, y+height+ scale( 10 ) );
     }
 
     @Override

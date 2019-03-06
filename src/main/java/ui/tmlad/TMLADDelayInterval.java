@@ -54,9 +54,9 @@ import java.awt.geom.Line2D;
 * @author Ludovic APVRILLE
  */
 public class TMLADDelayInterval extends TADComponentWithSubcomponents /* Issue #69 TGCWithInternalComponent*/ implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
-    private int lineLength = 5;
-    
-    // Isseu #31
+
+	// Issue #31
+//    private int lineLength = 5;
 	//private int textX, textY;
 //    private int ilength = 10;
 //    private int lineLength1 = 2;
@@ -73,8 +73,8 @@ public class TMLADDelayInterval extends TADComponentWithSubcomponents /* Issue #
 //        height = 30;
         initSize( 10, 30 );
 
-        textX = width + 5;
-        textY = height/2 + 5;
+        textX = width + scale( 5 );
+        textY = height/2 + scale( 5 );
         
         nbConnectingPoint = 2;
         connectingPoint = new TGConnectingPoint[2];

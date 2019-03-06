@@ -81,10 +81,12 @@ import ui.window.TabInfo;
  * @version 1.0 17/11/2005
  */
 public class TMLADWriteChannel extends TADComponentWithoutSubcomponents/* Issue #69 TGCWithoutInternalComponent*/ implements CheckableAccessibility, LinkedReference, CheckableLatency, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
-    protected int lineLength = 5;
-    protected int textX = 5;
-    protected int textY = 15;
-    protected int arc = 5;
+
+	// Issue #31
+//    protected int lineLength = 5;
+//    protected int textX = 5;
+//    protected int textY = 15;
+//    protected int arc = 5;
     protected int linebreak = 10;
     protected int decSec = 4;
 

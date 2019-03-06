@@ -62,11 +62,13 @@ import java.util.ArrayList;
  * @version 1.0 21/11/2005
  */
 public class TMLADDecrypt extends TADComponentWithoutSubcomponents/* Issue #69 TGCWithoutInternalComponent*/ implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
-    private int lineLength = 5;
+
+	// Issue #31
+//    private int lineLength = 5;
     //    private int textX, textY;
     private int ilength = 20;
     private int ex = 5;
-    private int lineLength1 = 2;
+    private int lineLength1;// = 2;
     public String securityContext = "";
     protected int stateOfError = 0; // Not yet checked
 
@@ -79,6 +81,7 @@ public class TMLADDecrypt extends TADComponentWithoutSubcomponents/* Issue #69 T
 //        textX = width + 5;
 //        textY = height/2 + 5;
         initSize( 15, 35 );
+        lineLength1 = scale( 2 );
 
         nbConnectingPoint = 2;
         connectingPoint = new TGConnectingPoint[2];
@@ -120,7 +123,7 @@ public class TMLADDecrypt extends TADComponentWithoutSubcomponents/* Issue #69 T
         g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
         g.drawLine(x + (width / 2), y + height + ex, x + (width / 2), y + lineLength + height + ex);
 
-        g.drawLine(x + (width / 2) - lineLength1, y + (height - ilength) / 2, x + (width / 2) - lineLength1, y + (height + ilength) / 2);
+        g.drawLine(x + (width / 2) - scale( lineLength1 ), y + (height - ilength) / 2, x + (width / 2) - scale( lineLength1 ), y + (height + ilength) / 2);
         g.drawArc(x - ex, y + ex, width, height - 2 * ex, 270, 180);
 
 /*

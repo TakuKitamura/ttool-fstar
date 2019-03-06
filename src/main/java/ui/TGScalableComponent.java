@@ -17,10 +17,11 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
 	protected double dtextX;
 	protected int textY;
 	protected double dtextY;
-	protected int arc = 5;
+	protected int arc;
 	protected double darc;
 
-	protected int lineLength = 5;
+	protected int lineLength;
+    protected int linebreak;
 
 	public TGScalableComponent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
 			TGComponent _father, TDiagramPanel _tdp) {
@@ -43,16 +44,32 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
         arc = (int) darc;
         darc = darc - arc;
         
+        lineLength = 5;
+        linebreak = 10;
+        
         currentFontSize = -1;
     	displayText = true;
 	}
 
+	/**
+	 * @param width
+	 * @param height
+	 */
 	protected void initSize( 	final int width,
 								final int height ) {
 		this.width = width;
 		this.height = height;
 		
 		initScaling( width, height );
+	}
+	
+	public static int scale( 	final int value,
+								final double factor ) {
+		return (int) ( value * factor );
+	}
+
+	protected int scale( final int value ) {
+		return scale( value, oldScaleFactor );
 	}
 
     protected void initScaling(int w, int h) {
@@ -68,6 +85,13 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
         dheight = h * oldScaleFactor;
         height = (int)(dheight);
         dheight = dheight - height;
+
+        darc = arc * oldScaleFactor;
+        arc = (int)(darc);
+        darc = darc - arc;
+
+        lineLength = scale( lineLength );
+        linebreak = scale( linebreak );
 
         dMaxWidth = defMaxWidth * oldScaleFactor;
         dMaxHeight = defMaxHeight * oldScaleFactor;
@@ -133,6 +157,9 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
         arc = (int) (darc);
         darc = darc - arc;
         
+        lineLength = scale( lineLength, factor );
+        linebreak = scale( linebreak, factor );
+        
         // Issue #81: We also need to update max coordinate values
         maxX *= factor;
         maxY *= factor;
@@ -160,5 +187,32 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
         }
         
         hasBeenResized();
+    }
+
+    /**
+     * Issue #31
+     * @return
+     */
+    @Override
+    protected int getReachabilityMargin() {
+    	return scale( super.getReachabilityMargin() );
+    }
+
+    /**
+     * Issue #31
+     * @return
+     */
+    @Override
+    protected int getLivenessMargin() {
+    	return scale( super.getLivenessMargin() );
+    }
+
+    /**
+     * Issue #31
+     * @return
+     */
+    @Override
+    protected int getExclusionMargin() {
+    	return scale( super.getExclusionMargin() );
     }
 }

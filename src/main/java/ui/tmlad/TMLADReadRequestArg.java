@@ -59,10 +59,12 @@ import java.awt.geom.Line2D;
 * @author Ludovic APVRILLE
  */
 public class TMLADReadRequestArg extends TADComponentWithoutSubcomponents/* Issue #69 TGCWithoutInternalComponent*/ implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
-    protected int lineLength = 5;
-    protected int textX =  5;
-    protected int textY =  15;
-    protected int arc = 5;
+
+	// Issue #31
+//    protected int lineLength = 5;
+//    protected int textX =  5;
+//    protected int textY =  15;
+//    protected int arc = 5;
 	int nParam = 5;
     protected String [] params = new String[nParam];
 	
@@ -70,11 +72,15 @@ public class TMLADReadRequestArg extends TADComponentWithoutSubcomponents/* Issu
     
     public TMLADReadRequestArg(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        width = 30;
-        height = 20;
-        minWidth = 30;
-        
+
+     
+        // Issue #31
+//        width = 30;
+//        height = 20;
+        minWidth = scale( 30 );
+
+        // Issue #31
+        initSize( 30, 20 );
         nbConnectingPoint = 2;
         connectingPoint = new TGConnectingPoint[2];
         connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);

@@ -64,6 +64,8 @@ import ui.ad.TADActionState;
  * @author Ludovic APVRILLE
  */
 public class TMLADActionState extends TADActionState/* Issue #69 TGCOneLineText */implements PreJavaCode, PostJavaCode, CheckableAccessibility, CheckableLatency, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
+
+	// Issue #31
 //    protected int lineLength = 5;
 //    protected int textX =  5;
 //    protected int textY =  15;

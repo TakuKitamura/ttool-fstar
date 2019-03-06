@@ -75,6 +75,8 @@ public class TMLADForLoop extends TADForLoop /* Issue #69 TGCWithoutInternalComp
 //    private final static String EXIT_LOOP = "exit loop";
 //
 //    
+
+	// Issue #31
 //    protected int lineLength = 5;
 //    protected int textX =  5;
 //    protected int textY =  15;
@@ -145,7 +147,7 @@ public class TMLADForLoop extends TADForLoop /* Issue #69 TGCWithoutInternalComp
 		//int wTmp =  g.getFontMetrics().stringWidth(EXIT_LOOP);
 		
 		// Issue #31
-		g.drawString(EXIT_LOOP, (int) (x+width/2+ 2 * oldScaleFactor), (int) (y+height+10 * oldScaleFactor) );
+		g.drawString(EXIT_LOOP, (int) (x+width/2+ 2 * oldScaleFactor), (int) (y+height+ scale( 10 ) ) );
     }
 
     @Override

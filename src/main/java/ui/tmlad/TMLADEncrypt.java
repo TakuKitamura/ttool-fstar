@@ -61,7 +61,9 @@ import java.awt.geom.Line2D;
  * @version 1.0 21/11/2005
  */
 public class TMLADEncrypt extends TADComponentWithoutSubcomponents/* Issue #69 TGCWithoutInternalComponent*/ implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
-    private int lineLength = 5;
+
+	// Issue #31
+//    private int lineLength = 5;
     //  private int textX, textY;
     private int ex = 5;
     private int textHeight = 8;
@@ -86,8 +88,8 @@ public class TMLADEncrypt extends TADComponentWithoutSubcomponents/* Issue #69 T
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
         // Issue #31
-        width = 15;
-        height = 35;
+//        width = 15;
+//        height = 35;
         //    textX = width + 5;
 //        textY = height/2 + 5;
         initSize( 15, 35 );

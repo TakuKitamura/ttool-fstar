@@ -59,9 +59,9 @@ import java.awt.geom.Line2D;
  * @author Ludovic APVRILLE
  */
 public class TMLADRandom extends TADComponentWithoutSubcomponents/* Issue #69 TGCWithoutInternalComponent */implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
-    protected int lineLength = 5;
-    
-    // Issue #31
+
+	// Issue #31
+//    protected int lineLength = 5;
 //    protected int textX =  5;
 //    protected int textY =  15;
 //    protected int arc = 5;
@@ -76,9 +76,11 @@ public class TMLADRandom extends TADComponentWithoutSubcomponents/* Issue #69 TG
     public TMLADRandom(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-        width = 30;
-        height = 20;
-        minWidth = 30;
+        // Issue #31
+//        width = 30;
+//        height = 20;
+        initSize( 30, 20 );
+        minWidth = scale( 30 );
         
         nbConnectingPoint = 2;
         connectingPoint = new TGConnectingPoint[2];

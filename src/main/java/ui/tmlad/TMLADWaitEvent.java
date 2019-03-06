@@ -63,9 +63,11 @@ import java.util.List;
    * @author Ludovic APVRILLE
  */
 public class TMLADWaitEvent extends TADComponentWithoutSubcomponents/* Issue #69 TGCWithoutInternalComponent*/ implements CheckableAccessibility, CheckableLatency, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
-    protected int lineLength = 5;
-    protected int textX =  5;
-    protected int textY =  15;
+
+	// Issue #31
+//    protected int lineLength = 5;
+//    protected int textX =  5;
+//    protected int textY =  15;
     protected int linebreak = 10;
     protected int textX1 = 2;
 

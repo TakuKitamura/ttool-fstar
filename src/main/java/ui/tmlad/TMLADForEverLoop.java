@@ -60,6 +60,8 @@ import ui.ad.TADForLoop;
  * @author Ludovic APVRILLE
  */
 public class TMLADForEverLoop extends TADForLoop /* Issue #69 TGCWithoutInternalComponent*/ implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
+
+	// Issue #31
 //    protected int lineLength = 5;
 //    protected int textX =  5;
 //    protected int textY =  15;
