@@ -3,6 +3,7 @@ package tmltranslator.dsez3engine;
 import com.microsoft.z3.*;
 import myutil.TraceManager;
 import tmltranslator.*;
+import ui.TGComponent;
 
 import javax.swing.*;
 import java.lang.reflect.Array;
@@ -17,6 +18,15 @@ public class OptimizationModel {
     private Map<String, Integer> optimizedSolutionX = new HashMap<String, Integer>();
     private Map<String, Integer> optimizedSolutionStart = new HashMap<String, Integer>();
     private InputInstance inputInstance;
+    private TMLMapping<TGComponent> tmlMapping;
+
+    public TMLMapping getTmlMapping() {
+        return tmlMapping;
+    }
+
+    public void setTmlMapping(TMLMapping<TGComponent> tmlMapping) {
+        this.tmlMapping = tmlMapping;
+    }
 
     public OptimizationModel(InputInstance inputInstance) {
         this.inputInstance = inputInstance;
@@ -774,6 +784,8 @@ public class OptimizationModel {
             Expr[][] optimized_result_X = new Expr[inputInstance.getModeling().getTasks().size()][inputInstance.getArchitecture().getCPUs().size()];
             Expr[] optimized_result_start = new Expr[inputInstance.getModeling().getTasks().size()];
 
+            tmlMapping = new TMLMapping<TGComponent>( inputInstance.getModeling(), inputInstance.getArchitecture(),false);
+
             outputToDisplay ="The optimal mapping solution is:\n\n";
 
             for ( Object task : inputInstance.getModeling().getTasks()) {
@@ -787,7 +799,18 @@ public class OptimizationModel {
                     TMLTask taskCast = (TMLTask)task;
 
                     if(Integer.parseInt(optimized_result_X[t][p].toString()) == 1){
+                        //mapping of task on hwExecutionNode
+                        tmlMapping.addTaskToHwExecutionNode(taskCast,(HwExecutionNode) hwNode);
+
+                        //mapping of R/W channels on local memory of hwExecutionNode TODO get(0)
+                        if(!taskCast.getReadChannels().isEmpty())
+                            tmlMapping.addCommToHwCommNode(taskCast.getReadChannels().get(0),inputInstance.getLocalMemoryOfHwExecutionNode(hwNode));
+
+                        if(!taskCast.getWriteChannels().isEmpty())
+                            tmlMapping.addCommToHwCommNode(taskCast.getWriteChannels().get(0),inputInstance.getLocalMemoryOfHwExecutionNode(hwNode));
+
                         outputToDisplay = outputToDisplay + "\n" + taskCast.getName() + " --> " + hwNode.getName();
+
                     }
 
                     optimizedSolutionX.put("X[" + taskCast.getName() + "][" + hwNode.getName() + "] = ", Integer.parseInt

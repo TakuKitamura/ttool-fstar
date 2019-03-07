@@ -4834,7 +4834,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             return;
         }
 
-        TMLMapping map = gtm.getTMLMapping();
+        TMLMapping<TGComponent> map = gtm.getTMLMapping();
 
         if (map == null) {
             return;

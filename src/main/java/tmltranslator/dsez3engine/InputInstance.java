@@ -2,6 +2,7 @@ package tmltranslator.dsez3engine;
 
 import myutil.TraceManager;
 import tmltranslator.*;
+import ui.TGComponent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,9 +11,9 @@ import java.util.List;
 public class InputInstance {
 
     private TMLArchitecture architecture;
-    private TMLModeling modeling;
+    private TMLModeling<TGComponent> modeling;
 
-    public InputInstance(TMLArchitecture architecture, TMLModeling modeling) {
+    public InputInstance(TMLArchitecture architecture, TMLModeling<TGComponent> modeling) {
         this.architecture = architecture;
         this.modeling = modeling;
     }
@@ -25,8 +26,7 @@ public class InputInstance {
         for (HwNode hwNode : architecture.getHwNodes()) {
             if (hwNode instanceof HwExecutionNode) {
 
-                if ((((HwExecutionNode) hwNode).supportOperation(tmlTask.getOperation()) == true) || (((HwExecutionNode) hwNode).getOperation() ==
-                        " "))
+                if ((((HwExecutionNode) hwNode).supportOperation(tmlTask.getOperation()) ) || (((HwExecutionNode) hwNode).getOperation().equals(" ")))
                     feasibleCPUs.add((HwExecutionNode) hwNode);
 
             }
@@ -113,7 +113,7 @@ public class InputInstance {
         return architecture;
     }
 
-    public TMLModeling getModeling() {
+    public TMLModeling<TGComponent> getModeling() {
         return modeling;
     }
 }
