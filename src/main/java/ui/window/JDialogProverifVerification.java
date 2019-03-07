@@ -148,7 +148,6 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
 
     TURTLEPanel currPanel;
 
-
     int mode;
 
 
@@ -175,7 +174,7 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
     JPanel listPanel;
 
 
-    //security generation buttons
+    // Security generation buttons
     ButtonGroup secGroup;
 
     protected JCheckBox autoConf, autoWeakAuth, autoStrongAuth, custom, addHSM;

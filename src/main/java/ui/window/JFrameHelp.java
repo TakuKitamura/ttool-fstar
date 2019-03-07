@@ -44,6 +44,7 @@ package ui.window;
 
 import help.HelpEntry;
 import help.HelpManager;
+import help.SearchResultHelpEntry;
 import myutil.TraceManager;
 import ui.MainGUI;
 import ui.util.IconManager;
@@ -70,12 +71,14 @@ public	class JFrameHelp extends JFrame implements ActionListener {
     private HelpManager hm;
     private JPanel jp01;
     private JButton back, forward, up, search;
+    private JTextField searchT;
     private Vector<HelpEntry> visitedEntries;
     private int currentHEPointer;
     
     public JFrameHelp(String title, HelpManager hm, HelpEntry he) {
         super(title);
         this.he = he;
+        this.hm = hm;
         visitedEntries = new Vector<>();
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -93,8 +96,21 @@ public	class JFrameHelp extends JFrame implements ActionListener {
         up = new JButton("Up", IconManager.imgic78Big);
         up.addActionListener(this);
         topButtons.add(up);
-        framePanel.add(topButtons, BorderLayout.NORTH);
 
+
+        // search
+        searchT = new JTextField("", 20);
+        searchT.setEnabled(true);
+        searchT.setEditable(true);
+        searchT.addActionListener(this);
+        topButtons.add(searchT);
+
+        search = new JButton("Search", IconManager.imgic5200);
+        search.addActionListener(this);
+        topButtons.add(search);
+
+        framePanel.add(topButtons, BorderLayout.NORTH);
+        // End of top panel
 
 
         jp01 = new JPanel();
@@ -184,6 +200,8 @@ public	class JFrameHelp extends JFrame implements ActionListener {
             forward();
         } else if (evt.getSource() == up) {
             up();
+        } else if ((evt.getSource() == search) || (evt.getSource() == searchT)) {
+            search();
         }
     }
 
@@ -216,6 +234,31 @@ public	class JFrameHelp extends JFrame implements ActionListener {
             return;
         }
         setHelpEntry(he.getFather());
+    }
+
+    public void search() {
+        TraceManager.addDev("Search");
+
+        if (hm == null) {
+            TraceManager.addDev("Null HM");
+            return;
+        }
+
+
+        String test = searchT.getText().trim();
+        if (test.length() == 0) {
+            TraceManager.addDev("Empty search");
+            return;
+        }
+
+        SearchResultHelpEntry srhe = new SearchResultHelpEntry();
+        srhe.fillInfos("searchresult search help list index");
+
+        hm.search(test.split(" "), srhe);
+
+
+        TraceManager.addDev("Setting new help entrywith search results ");
+        setHelpEntry(srhe);
     }
 
     

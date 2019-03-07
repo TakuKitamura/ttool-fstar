@@ -792,9 +792,6 @@ public class TMLMapping<E> {
         return list;
     }
 
-    public TMLMapping cloneMappingArchitecture() {
-        return null;
-    }
 
     public int getArchitectureComplexity() {
         if (tmla == null) {

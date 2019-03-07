@@ -60,14 +60,14 @@ import java.util.stream.Collectors;
  */
 public class HelpEntry implements GenericTree {
 
-    public HelpEntry linkToParent;
-    Vector<HelpEntry> entries;
+    protected HelpEntry linkToParent;
+    protected Vector<HelpEntry> entries;
 
-    public String masterKeyword;
-    public String[] keywords;
+    protected String masterKeyword;
+    protected String[] keywords;
 
-    public String pathToHTMLFile;
-    public String htmlContent;
+    protected String pathToHTMLFile;
+    protected String htmlContent;
 
 
     public HelpEntry() {
@@ -102,6 +102,9 @@ public class HelpEntry implements GenericTree {
         //TraceManager.addDev("Infos ok");
         return true;
     }
+
+
+
 
     public String getToolTip() {
         if (keywords == null) {
@@ -295,8 +298,43 @@ public class HelpEntry implements GenericTree {
         return false;
     }
 
+    public String getKeywords() {
+        String ret = "";
+        if (keywords != null) {
+            for (int i = 0; i < keywords.length; i++) {
+                ret += keywords[i] + " ";
+            }
+        }
+        return ret;
+    }
 
 
+    public String getKidsInHTML() {
+        String s = "";
+
+        if (entries != null) {
+            for (HelpEntry he : entries) {
+                s += "<li> ";
+                s += "<a href=\"file://" + he.getMasterKeyword() + ".html\"/>" + he.getMasterKeyword() + "</a>  " +
+                        he.getKeywords();
+                s += " </li>\n<br>\n";
+            }
+        }
+
+        return s;
+    }
+
+    public void search(String [] words, HelpEntry father) {
+        if (hasSimilarWords(words) > 0) {
+            father.addKid(this);
+        }
+
+        if (entries != null) {
+            for (HelpEntry he: entries) {
+                he.search(words, father);
+            }
+        }
+    }
 
 
 

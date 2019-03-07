@@ -847,6 +847,7 @@ public class OptimizationModel {
 
             TraceManager.addDev(outputToDisplay);
             result.mappingFound = true;
+            result.resultingMapping = tmlMapping;
 
         } else {
             outputToDisplay ="No suitable mapping could be found";
