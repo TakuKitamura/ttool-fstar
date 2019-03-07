@@ -43,6 +43,7 @@ package ui.tree;
 
 import common.*;
 import help.HelpEntry;
+import help.HelpManager;
 import translator.CheckingError;
 import tmltranslator.TMLCheckingError;
 import ui.*;
@@ -375,7 +376,10 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
             return;
         }
 
+
+
         Object nodeInfo = tp.getLastPathComponent();
+        //TraceManager.addDev("NodeInfo:" + nodeInfo);
         Object o;
 
         if (nodeInfo instanceof TDiagramPanel) {
@@ -436,6 +440,8 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
 
         } else if (nodeInfo instanceof HelpEntry) {
             mgui.openHelpFrame((HelpEntry)nodeInfo);
+        } else if (nodeInfo instanceof HelpTree) {
+            mgui.openHelpFrame(((HelpTree)nodeInfo).getHelpManager());
         }
     }
 

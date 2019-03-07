@@ -42,6 +42,7 @@
 package ui.tree;
 
 import help.HelpEntry;
+import help.HelpManager;
 import myutil.GenericTree;
 import myutil.TraceManager;
 import ui.MainGUI;
@@ -119,5 +120,9 @@ public class HelpTree implements GenericTree {
         }
 
         return 0;
+    }
+
+    public HelpManager getHelpManager() {
+        return mgui.getHelpManager();
     }
 }

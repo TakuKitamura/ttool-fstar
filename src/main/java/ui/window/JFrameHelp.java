@@ -148,8 +148,9 @@ public	class JFrameHelp extends JFrame implements ActionListener {
 
         setHelpEntry(he);
 
-        pack();
         setSize(500,600);
+        pack();
+
     }
 
 
