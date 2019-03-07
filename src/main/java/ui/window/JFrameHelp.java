@@ -90,7 +90,11 @@ public	class JFrameHelp extends JFrame implements ActionListener {
         forward = new JButton("Forward", IconManager.imgic53);
         forward.addActionListener(this);
         topButtons.add(forward);
+        up = new JButton("Up", IconManager.imgic78Big);
+        up.addActionListener(this);
+        topButtons.add(up);
         framePanel.add(topButtons, BorderLayout.NORTH);
+
 
 
         jp01 = new JPanel();
@@ -160,6 +164,7 @@ public	class JFrameHelp extends JFrame implements ActionListener {
     private void updatePanel() {
         back.setEnabled(currentHEPointer != 0);
         forward.setEnabled(currentHEPointer < visitedEntries.size()-1);
+        up.setEnabled(he.getFather() != null);
 
 
         jp01.setBorder(new javax.swing.border.TitledBorder("Help of: " + he.getMasterKeyword()));
@@ -176,6 +181,8 @@ public	class JFrameHelp extends JFrame implements ActionListener {
             back();
         } else if (evt.getSource() == forward) {
             forward();
+        } else if (evt.getSource() == up) {
+            up();
         }
     }
 
@@ -199,6 +206,15 @@ public	class JFrameHelp extends JFrame implements ActionListener {
         he = visitedEntries.get(currentHEPointer);
         updatePanel();
 
+    }
+
+    public void up() {
+        //TraceManager.addDev("Up");
+
+        if (he.getFather() == null) {
+            return;
+        }
+        setHelpEntry(he.getFather());
     }
 
     
