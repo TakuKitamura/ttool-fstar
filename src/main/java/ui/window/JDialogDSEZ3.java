@@ -52,6 +52,7 @@ import tmltranslator.TMLModeling;
 import tmltranslator.dsez3engine.InputInstance;
 import tmltranslator.dsez3engine.OptimizationModel;
 import tmltranslator.dsez3engine.OptimizationResult;
+import ui.TGComponent;
 import ui.util.IconManager;
 import ui.MainGUI;
 
@@ -113,7 +114,7 @@ public class JDialogDSEZ3 extends JDialog implements ActionListener, ListSelecti
 
     protected RshClient rshc;
 
-    private TMLMapping map;
+    private TMLMapping<TGComponent> map;
     private InputInstance inputInstance;
     private OptimizationModel optimizationModel;
 
@@ -121,7 +122,7 @@ public class JDialogDSEZ3 extends JDialog implements ActionListener, ListSelecti
     /*
      * Creates new form
      */
-    public JDialogDSEZ3(Frame f, MainGUI _mgui, String title, TMLMapping map, String dir) {
+    public JDialogDSEZ3(Frame f, MainGUI _mgui, String title, TMLMapping<TGComponent> map, String dir) {
         super(f, title, true);
 
         mgui = _mgui;
@@ -310,7 +311,7 @@ public class JDialogDSEZ3 extends JDialog implements ActionListener, ListSelecti
          outputText.append("\nPreparing input model for Z3\n");
         //   File testFile;
         TMLArchitecture tmla = map.getTMLArchitecture();
-        TMLModeling tmlm = map.getTMLModeling();
+        TMLModeling<TGComponent> tmlm = map.getTMLModeling();
 
         /*
         for(Object task : tmlm.getTasks()){
