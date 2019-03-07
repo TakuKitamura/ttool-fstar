@@ -42,11 +42,14 @@ package ui.tree;
 //import java.awt.*;
 
 import common.*;
+import help.HelpEntry;
+import help.HelpManager;
 import translator.CheckingError;
 import tmltranslator.TMLCheckingError;
 import ui.*;
 import graph.RG;
 import myutil.*;
+import ui.window.JFrameHelp;
 
 import javax.swing.*;
 import javax.swing.event.TreeExpansionEvent;
@@ -373,7 +376,10 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
             return;
         }
 
+
+
         Object nodeInfo = tp.getLastPathComponent();
+        //TraceManager.addDev("NodeInfo:" + nodeInfo);
         Object o;
 
         if (nodeInfo instanceof TDiagramPanel) {
@@ -432,6 +438,10 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
               mgui.showAUT("Last RG", rg.data);
               }*/
 
+        } else if (nodeInfo instanceof HelpEntry) {
+            mgui.openHelpFrame((HelpEntry)nodeInfo);
+        } else if (nodeInfo instanceof HelpTree) {
+            mgui.openHelpFrame(((HelpTree)nodeInfo).getHelpManager());
         }
     }
 

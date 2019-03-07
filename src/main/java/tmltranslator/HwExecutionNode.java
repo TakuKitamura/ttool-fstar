@@ -38,15 +38,13 @@
 
 
 
-
 package tmltranslator;
 
-import java.util.Vector;
 
 /**
  * Class HwExecutionNode
  * Creation: 23/11/2007
- * @version 1.0 23/11/2007
+ * @version 1.0 05/03/2019
  * @author Ludovic APVRILLE
  */
 public abstract class HwExecutionNode extends HwNode  {
@@ -58,12 +56,11 @@ public abstract class HwExecutionNode extends HwNode  {
     public static final int DEFAULT_EXECC_TIME = 1;
     public int execcTime = DEFAULT_EXECC_TIME;
 
-    protected Vector<String> operationTypes;
+    protected String operation = ""; // empty means all
 
 
     public HwExecutionNode(String _name) {
         super(_name);
-        operationTypes = new Vector<>();
     }
 
     public abstract String getType();
@@ -76,27 +73,27 @@ public abstract class HwExecutionNode extends HwNode  {
         return execcTime;
     }
 
-    public void addOperationType(String opType) {
-        operationTypes.add(opType.toLowerCase().trim());
+    public void setOperation(String operation) {
+        this.operation = operation;
     }
 
-    public Vector<String> getOperationTypes() {
-        return operationTypes;
+    public String getOperation() {
+        return operation;
     }
 
-    public boolean supportAllOperations() {
-        return (operationTypes.size() == 0) || (containsOperationType("all"));
-    }
 
-    public boolean containsOperationType(String opType) {
-        if(supportAllOperations()) {
+    public boolean supportOperation(String opType) {
+        if (operation.length() == 0) {
             return true;
         }
-        for(String s: operationTypes) {
-            if (s.compareTo(opType) == 0) {
+
+        String[]ops = operation.split( " ");
+        for(int i=0; i<ops.length; i++) {
+            if (ops[i].compareTo(opType) == 0) {
                 return true;
             }
         }
+
         return false;
     }
 

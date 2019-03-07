@@ -61,6 +61,8 @@ public class TranslatedRouter<E>  {
     private TMLMapping<E> map;
     private Vector<TMLEvent> pktins;
 
+    private Vector<TMLTask> dispatchers;
+
 
 
     public TranslatedRouter(int nbOfVCs, int xPos, int yPos) {
@@ -76,11 +78,24 @@ public class TranslatedRouter<E>  {
 
     public void makeRouter() {
         int i, j;
+        TMLTask t;
 
         // A router is made upon tasks, hardware components and a mapping i.e. a TMLMapping
         TMLModeling<E> tmlm = new TMLModeling<>();
         TMLArchitecture tmla = new TMLArchitecture();
         map = new TMLMapping<E>(tmlm, tmla, false);
+
+        // VC DISPATCHERS
+        // One dispatcher per port
+        // A dispatcher outputs to VCs tasks
+        dispatchers = new Vector<>();
+        for(i=0; i<NB_OF_PORTS; i++) {
+            //TaskINForDispatch dt = new TaskINForDispatch(nbOfVCs);
+            //dispatchers.add(dt);
+        }
+
+        // PORT DISPATCHER // according to destination
+
 
         // Create all channels
         // For each input VC, we have to create a channel

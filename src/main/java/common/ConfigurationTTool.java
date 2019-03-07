@@ -48,6 +48,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.lang.reflect.Field;
 
 
 /**
@@ -1692,21 +1693,22 @@ public class ConfigurationTTool {
         try {
 
 
-
             String [] libs = ConfigurationTTool.Z3LIBS.split(":");
             boolean setLibPath = false;
 
             for (int i=0; i<libs.length; i++) {
                 // get the path and set it as a property of java lib path
 
-
-
                 String tmp = libs[i].trim();
                 if (tmp.length() > 0) {
                     if (setLibPath == false) {
                         File f = new File(tmp);
                         String dir = f.getParent();
-                        System.setProperty("java.library.path", dir);
+                        //TraceManager.addDev("Old library path: " + System.getProperty("java.library.path"));
+                        //TraceManager.addDev("Setting java library path to " + dir);
+                        //System.setProperty("java.library.path", ".:" + dir);
+                        addToJavaLibraryPath(new File(dir));
+                        //TraceManager.addDev("New library path: " + System.getProperty("java.library.path"));
                         setLibPath = true;
                     }
                     TraceManager.addDev("Loading Z3 lib: " + tmp);
@@ -1720,5 +1722,41 @@ public class ConfigurationTTool {
 
         return null;
     }
+
+    /**
+ * Adding a new dir to java.library.path.
+ * @param dir The new directory
+ */
+public static void addToJavaLibraryPath(File dir) {
+	final String LIBRARY_PATH = "java.library.path";
+	if (!dir.isDirectory()) {
+		throw new IllegalArgumentException(dir + " is not a directory.");
+	}
+	String javaLibraryPath = System.getProperty(LIBRARY_PATH);
+	System.setProperty(LIBRARY_PATH, javaLibraryPath + File.pathSeparatorChar + dir.getAbsolutePath());
+
+	resetJavaLibraryPath();
+}
+
+/**
+ * Deletes "java.library.path" cache
+ */
+public static void resetJavaLibraryPath() {
+	synchronized(Runtime.getRuntime()) {
+		try {
+			Field field = ClassLoader.class.getDeclaredField("usr_paths");
+			field.setAccessible(true);
+			field.set(null, null);
+
+			field = ClassLoader.class.getDeclaredField("sys_paths");
+			field.setAccessible(true);
+			field.set(null, null);
+		} catch (NoSuchFieldException e) {
+			throw new RuntimeException(e);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
+	}
+}
 
 } //

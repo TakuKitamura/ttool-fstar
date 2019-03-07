@@ -97,15 +97,15 @@ public class Conversion {
         return output + s;
     }
 
-    public static String replaceAllString(String s, String input, String snew) {
+    public static String replaceAllString(String s, String sold, String snew) {
         if (s == null) {
             return s;
         }
         int index;
         String output = "";
-        while((index = s.indexOf(input)) > -1 ) {
+        while((index = s.indexOf(sold)) > -1 ) {
             output += s.substring(0, index) + snew;
-            s = s.substring(index + input.length());
+            s = s.substring(index + sold.length());
         }
         return output + s;
     }

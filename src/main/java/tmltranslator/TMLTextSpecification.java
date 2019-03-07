@@ -326,6 +326,7 @@ public class TMLTextSpecification<E> {
         String sb = "";
         for(TMLTask task: tmlm.getTasks()) {
             sb += "TASK" + SP + task.getName() + CR;
+            sb += "TASKOP" + SP + task.getOperation() + CR;
             sb += makeActivity(task);
             sb += "ENDTASK" + CR2;
         }
@@ -1189,7 +1190,7 @@ public class TMLTextSpecification<E> {
        //     inTaskBehavior = false;
 
             if (_split.length != 2) {
-                error = "A request must be declared with exactly 2 parameters, and not " + (_split.length - 1) ;
+                error = "A task must be declared with exactly 2 parameters, and not " + (_split.length - 1) ;
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
@@ -1220,6 +1221,26 @@ public class TMLTextSpecification<E> {
 
 
         } // TASK
+
+
+        // TASKOP
+        if((isInstruction("TASKOP", _split[0]))) {
+            //An operation is really specified?
+
+            if (!inTask) {
+                error = "A task operation cannot be declared outside the body of another task";
+                addError(0, _lineNb, 0, error);
+                return -1;
+            }
+
+            String tmpOp = "";
+
+            for(int j=1; j<_split.length; j++) {
+                tmpOp += _split[j];
+
+            }
+            task.addOperation(tmpOp);
+        }
 
 
         // ENDTASK

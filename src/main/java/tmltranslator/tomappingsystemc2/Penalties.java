@@ -42,6 +42,7 @@ package tmltranslator.tomappingsystemc2;
 
 import myutil.FileException;
 import myutil.FileUtils;
+import myutil.TraceManager;
 
 import java.io.File;
 
@@ -80,9 +81,9 @@ public class Penalties {
 
 
             //  No penalty
-            if ((indexD == -1) && (indexD == -1)) {
+            if ((indexD == -1) && (indexU == -1)) {
                 mustChange = true;
-            } else if ((indexD > -1) && (indexD > -1)) {
+            } else if ((indexD > -1) && (indexU > -1)) {
                 mustChange = true;
             } else {
                 if (indexD > -1) {
@@ -95,9 +96,11 @@ public class Penalties {
             mustChange = true;
         }
 
+        //TraceManager.addDev("Changing penalty file? " + mustChange);
 
         // Set new value if necessary
         if (!mustChange) {
+            //TraceManager.addDev("No need to change the source file");
             return 0;
         }
 

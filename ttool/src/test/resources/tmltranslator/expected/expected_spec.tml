@@ -1,6 +1,6 @@
 // TML Application - FORMAT 0.1
 // Application: /home/pham/Documents/TToolDev/TTool/modeling/DIPLODOCUS/CloneCompositeComponentTest.xml
-// Generated: Fri Jan 25 12:05:27 CET 2019
+// Generated: Tue Mar 05 15:16:43 CET 2019
 
 // Channels
 CHANNEL DIPLODOCUS_C_Design__channel BRBW 4 8 OUT DIPLODOCUS_C_Design__PrimitiveComp1 IN DIPLODOCUS_C_Design__PrimitiveComp2
@@ -13,6 +13,7 @@ EVENT DIPLODOCUS_C_Design__event__DIPLODOCUS_C_Design__event() NIB 8 DIPLODOCUS_
 // Requests
 
 TASK DIPLODOCUS_C_Design__PrimitiveComp1
+    TASKOP todo1
     //Local variables
     
     //Behavior
@@ -27,6 +28,7 @@ TASK DIPLODOCUS_C_Design__PrimitiveComp1
 ENDTASK
 
 TASK DIPLODOCUS_C_Design__PrimitiveComp1_0
+    TASKOP todo1
     //Local variables
     
     //Behavior
@@ -41,6 +43,7 @@ TASK DIPLODOCUS_C_Design__PrimitiveComp1_0
 ENDTASK
 
 TASK DIPLODOCUS_C_Design__PrimitiveComp2
+    TASKOP todo2
     //Local variables
     
     //Behavior
@@ -55,6 +58,7 @@ TASK DIPLODOCUS_C_Design__PrimitiveComp2
 ENDTASK
 
 TASK DIPLODOCUS_C_Design__PrimitiveComp2_0
+    TASKOP todo2
     //Local variables
     
     //Behavior

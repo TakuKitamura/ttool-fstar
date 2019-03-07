@@ -1,0 +1,1 @@
+Avatar targets the design of embedded software

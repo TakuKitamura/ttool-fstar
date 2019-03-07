@@ -604,6 +604,7 @@ public class GTMLModeling {
                     throw new MalformedTMLDesignException(tmlcpc.getValue() + " msg");
                 }
                 tmlt = new TMLTask(makeName(tgc, tmlcpc.getValue()), tmlcpc, tmladp);
+                tmlt.addOperation(tmlcpc.getOperation());
                 tmlt.setAttacker(tmlcpc.isAttacker());
                 //TraceManager.addDev("Task added:" + tmlt.getName() + " with tadp=" + tmladp + " major=" + tmladp.getMGUI().getMajorTitle(tmladp));
                 listE.addCor(tmlt, tgc);
@@ -2865,6 +2866,7 @@ public class GTMLModeling {
                     cpu.clockRatio = node.getClockRatio();
                     cpu.MEC = node.getMECType();
                     cpu.encryption = node.getEncryption();
+                    cpu.setOperation(node.getOperation());
                     listE.addCor(cpu, node);
                     archi.addHwNode(cpu);
                     //TraceManager.addDev("CPU node added: " + cpu.getName());
@@ -2892,13 +2894,7 @@ public class GTMLModeling {
                     fpga.execcTime = fpgaNode.getExeccTime();
                     fpga.clockRatio = fpgaNode.getClockRatio();
 
-                    String opTypes = fpgaNode.getOperationTypes().trim().toLowerCase();
-                    if (opTypes.compareTo("all") != 0) {
-                        String[] operations = opTypes.split(" ");
-                        for (String op : operations) {
-                            fpga.addOperationType(op);
-                        }
-                    }
+                    fpga.setOperation(fpgaNode.getOperation());
 
                     listE.addCor(fpga, fpgaNode);
                     archi.addHwNode(fpga);
@@ -2920,13 +2916,7 @@ public class GTMLModeling {
                     hwa.byteDataSize = hwanode.getByteDataSize();
                     hwa.execiTime = hwanode.getExeciTime();
                     hwa.clockRatio = hwanode.getClockRatio();
-                    String opTypes = hwanode.getOperationTypes().trim().toLowerCase();
-                    if (opTypes.compareTo("all") != 0) {
-                        String[] operations = opTypes.split(" ");
-                        for (String op : operations) {
-                            hwa.addOperationType(op);
-                        }
-                    }
+                    hwa.setOperation(hwanode.getOperation());
 
                     listE.addCor(hwa, hwanode);
                     archi.addHwNode(hwa);
@@ -3858,7 +3848,7 @@ public class GTMLModeling {
                     s = artifact.getReferenceTaskName();
                     ArchUnitMEC mec = artifact.getArchUnitMEC();
                     int operationType = artifact.getOperationType();
-                    String operation = artifact.getOperation();
+                    String operationMEC = artifact.getOperationMEC();
                     //TraceManager.addDev("1) Trying to get task named:" + s);
                     s = s.replaceAll("\\s", "");
                     //TraceManager.addDev("2) Trying to get task named:" + s);
@@ -3869,7 +3859,8 @@ public class GTMLModeling {
                         if (operationType !=  -1) {
                             task.addOperationType(operationType);
                         }
-                        task.addOperation(operation);
+                        //TraceManager.addDev("Putting operation " + operationType + "/" + operationMEC + " to task " + task.getTaskName());
+                        task.addOperationMEC(operationMEC);
                         node.addMECToHwExecutionNode(mec);
                         map.addTaskToHwExecutionNode(task, (HwExecutionNode) node);
                     } else {

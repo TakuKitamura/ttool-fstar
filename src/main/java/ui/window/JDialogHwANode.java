@@ -146,9 +146,9 @@ public class JDialogHwANode extends JDialogBase implements ActionListener  {
         panel2.add(clockRatio, c2);
 
         c2.gridwidth = 1;
-        panel2.add(new JLabel("Operating types:"), c2);
+        panel2.add(new JLabel("Operation:"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        operationTypes = new JTextField(""+node.getOperationTypes(), 15);
+        operationTypes = new JTextField(""+node.getOperation(), 15);
         panel2.add(operationTypes, c2);
 
         // main panel;
@@ -156,6 +156,7 @@ public class JDialogHwANode extends JDialogBase implements ActionListener  {
         c0.weighty = 1.0;
         c0.weightx = 1.0;
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
+        c0.fill = GridBagConstraints.BOTH;
         c.add(panel2, c0);
 
         c0.gridwidth = 1;
@@ -212,7 +213,7 @@ public class JDialogHwANode extends JDialogBase implements ActionListener  {
         return clockRatio.getText();
     }
 
-    public String getOperationTypes(){
+    public String getOperation(){
         return operationTypes.getText();
     }
 

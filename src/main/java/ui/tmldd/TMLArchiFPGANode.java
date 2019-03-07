@@ -78,7 +78,7 @@ public class TMLArchiFPGANode extends TMLArchiNode implements SwallowTGComponent
     private int mappingPenalty = HwFPGA.DEFAULT_MAPPING_PENALTY;
     private int reconfigurationTime = HwFPGA.DEFAULT_RECONFIGURATION_TIME;
 
-    private String operationTypes = "all";
+    private String operation = "";
 
 
     public TMLArchiFPGANode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
@@ -344,12 +344,8 @@ public class TMLArchiFPGANode extends TMLArchiNode implements SwallowTGComponent
             }
         }
 
-        String tmpOp = dialog.getOperationTypes().trim().toLowerCase();
-        if (tmpOp.length() < 1) {
-            operationTypes = "all";
-        } else {
-            operationTypes = tmpOp;
-        }
+       operation = dialog.getOperation().trim();
+
 
         if (error) {
             JOptionPane.showMessageDialog(frame,
@@ -421,7 +417,7 @@ public class TMLArchiFPGANode extends TMLArchiNode implements SwallowTGComponent
         sb.append(" execiTime=\"" + execiTime + "\"");
         sb.append(" execcTime=\"" + execcTime + "\"");
         sb.append(" clockRatio=\"" + clockRatio + "\"");
-        sb.append(" operationTypes=\"" + operationTypes + "\" ");
+        sb.append(" operation =\"" + operation + "\" ");
         sb.append("/>\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -494,9 +490,9 @@ public class TMLArchiFPGANode extends TMLArchiNode implements SwallowTGComponent
                                         MECType = ArchUnitMEC.Types.get( Integer.valueOf( elt.getAttribute("MECType") ) );
                                     }
                                 }
-                                operationTypesTmp = elt.getAttribute("operationTypes");
-                                if (operationTypesTmp != null) {
-                                    operationTypes = operationTypesTmp;
+                                operation = elt.getAttribute("operation");
+                                if (operation == null) {
+                                    operation = "";
                                 }
 
                             }
@@ -546,8 +542,8 @@ public class TMLArchiFPGANode extends TMLArchiNode implements SwallowTGComponent
         return mappingPenalty;
     }
 
-    public String getOperationTypes() {
-        return operationTypes;
+    public String getOperation() {
+        return operation;
     }
 
 
@@ -561,7 +557,7 @@ public class TMLArchiFPGANode extends TMLArchiNode implements SwallowTGComponent
         attr += "Idle cycles to go idle = " + maxConsecutiveIdleCycles + "\n";
         attr += "EXECI exec. time (in cycle) = " + execiTime + "\n";
         attr += "EXECC exec. time (in cycle) = " + execcTime + "\n";
-        attr += "Operation types = " + operationTypes + "\n";
+        attr += "Operation  = " + operation + "\n";
         attr += "Clock divider = " + clockRatio + "\n";
         return attr;
 

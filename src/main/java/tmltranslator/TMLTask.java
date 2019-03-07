@@ -62,7 +62,8 @@ public class TMLTask extends TMLElement {
     private Set<TMLChannel> writeTMLChannelsList;
     private Set<TMLEvent> eventsList;
     private int operationType;
-    private String operation;
+    private String operation = "";
+    private String operationMEC;
     private boolean isAttacker;
 
     public TMLTask(String name, Object referenceToClass, Object referenceToActivityDiagram) {
@@ -383,6 +384,14 @@ public class TMLTask extends TMLElement {
         return operationType;
     }
 
+    public void addOperationMEC(String _operation) {
+        operationMEC = _operation;
+    }
+
+    public String getOperationMEC() {
+        return operationMEC;
+    }
+
     public void addOperation(String _operation) {
         operation = _operation;
     }
@@ -412,7 +421,7 @@ public class TMLTask extends TMLElement {
         if (activity == null) {
             return -1;
         }
-         TraceManager.addDev("Handling task:" + getTaskName());
+        //TraceManager.addDev("Handling task:" + getTaskName());
         return activity.getWorstCaseIComplexity();
 
     }

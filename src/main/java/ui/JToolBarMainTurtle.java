@@ -64,7 +64,7 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
     JButton  avatarSimu, avatarFVUPPAAL, avatarFVProVerif, avatarFVStaticAnalysis, avatarCodeGeneration, avatarMC;
 
     // Other
-    JButton genrtlotos, genlotos, genuppaal, gendesign, dse, dseZ3;
+    JButton genrtlotos, genlotos, genuppaal, gendesign, dse, dseZ3, noc;
     JButton checkcode, simulation, validation;
     JButton oneClickrtlotos, onclicklotos, gensystemc, simusystemc, gentml, genC, genjava, nc,externalSearch, internalSearch;
 
@@ -259,6 +259,11 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
 
         addSeparator();
 
+        if (MainGUI.experimentalOn) {
+            noc = add(mgui.actions[TGUIAction.ACT_REMOVENOC]);
+            noc.addMouseListener(mgui.mouseHandler);
+        }
+
         if (MainGUI.ncOn) {
             nc = add(mgui.actions[TGUIAction.ACT_NC]);
             nc.addMouseListener(mgui.mouseHandler);
@@ -325,6 +330,10 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
         dse.setVisible(!b);
         if (dseZ3 != null) {
             dseZ3.setVisible(!b);
+        }
+
+        if (noc != null) {
+            noc.setVisible(!b);
         }
 
         avatarSimu.setVisible(b);
@@ -406,6 +415,11 @@ public  class JToolBarMainTurtle extends JToolBar implements ActionListener     
         if (dseZ3 != null) {
             dseZ3.setVisible(b);
         }
+
+        if (noc != null) {
+            noc.setVisible(b);
+        }
+
         avatarSimu.setVisible(!b);
         avatarFVUPPAAL.setVisible(!b);
         avatarFVStaticAnalysis.setVisible(!b);

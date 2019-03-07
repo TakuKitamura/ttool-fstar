@@ -124,6 +124,8 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
     private boolean hasError = false;
     protected boolean startProcess = false;
 
+    protected static int selectedcodeGenerator = -1;
+
     private String hostSystemC;
 
     protected RshClient rshc;
@@ -228,9 +230,14 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
         fillGeneratorsWithPlugins(generators);
 
         generatorsBox = new JComboBox<>(generators);
-        if (generators.size() > 1) {
-            generatorsBox.setSelectedIndex(1);
+        if (selectedcodeGenerator == -1) {
+            if (generators.size() > 1) {
+                generatorsBox.setSelectedIndex(1);
+            }
+        } else {
+            generatorsBox.setSelectedIndex(selectedcodeGenerator);
         }
+
 
         // Drawing image
         picLabel = new JLabel();
@@ -375,6 +382,7 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
         }
         //optimizeModeSelected = optimizemode.isSelected();
         //wasClosed = true;
+        selectedcodeGenerator = generatorsBox.getSelectedIndex();
         dispose();
     }
     //

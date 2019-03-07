@@ -106,7 +106,7 @@ public class JDialogRouterNode extends JDialogBase implements ActionListener  {
 
         panel2 = new JPanel();
         panel2.setLayout(gridbag2);
-        panel2.setBorder(new javax.swing.border.TitledBorder("Bridge attributes"));
+        panel2.setBorder(new javax.swing.border.TitledBorder("Attributes"));
         panel2.setPreferredSize(new Dimension(300, 200));
 
         c1.gridwidth = 1;
@@ -114,7 +114,7 @@ public class JDialogRouterNode extends JDialogBase implements ActionListener  {
         c1.weighty = 1.0;
         c1.weightx = 1.0;
         c1.fill = GridBagConstraints.HORIZONTAL;
-        panel2.add(new JLabel("Bridge name:"), c2);
+        panel2.add(new JLabel("NoC name:"), c2);
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
         nodeName = new JTextField(node.getNodeName(), 30);
         nodeName.setEditable(true);

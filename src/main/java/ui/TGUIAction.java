@@ -648,8 +648,12 @@ public class TGUIAction extends AbstractAction {
     public static final int ACT_AVATAR_FV_STATICANALYSIS = 365;
     public static final int ACT_AVATAR_EXECUTABLE_GENERATION = 340;
 
+    // DSE
     public static final int ACT_DSE = 434;
     public static final int ACT_DSE_Z3 = 516;
+
+    // NoC and routers
+    public static final int ACT_REMOVENOC = 517;
 
     // Ontologies
     public static final int ACT_GENERATE_ONTOLOGIES_CURRENT_DIAGRAM = 367;
@@ -668,7 +672,7 @@ public class TGUIAction extends AbstractAction {
     public static final int MOVE_ENABLED = 463;
     public static final int FIRST_DIAGRAM = 464;
     
-    public static final int NB_ACTION = 517;
+    public static final int NB_ACTION = 518;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -1138,13 +1142,15 @@ public class TGUIAction extends AbstractAction {
         actions[TMLARCHI_PORT_ARTIFACT] = new TAction("add-tmlarchi-port-artifact", "Map a port", IconManager.imgic702, IconManager.imgic702, "Map a port", "Map a port onto a node in the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_EVENT_ARTIFACT] = new TAction("add-tmlarchi-event-artifact", "Map an event / request", IconManager.imgic702, IconManager.imgic702, "Map an event/request", "Map an event or a request onto a node in the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_BRIDGENODE] = new TAction("add-tmlarchi-bridgenode", "Add a Bridge node", IconManager.imgic1104, IconManager.imgic1104, "Bridge node", "Add a bridge node to the currently opened DIPLODOCUS architecture diagram", 0);
-        actions[TMLARCHI_ROUTERNODE] = new TAction("add-tmlarchi-routernode", "Add a Router node", IconManager.imgic1104, IconManager.imgic1104, "Router node", "Add a router node to the currently opened DIPLODOCUS architecture diagram", 0);
+        actions[TMLARCHI_ROUTERNODE] = new TAction("add-tmlarchi-nocnode", "Add a NoC node", IconManager.imgic1104, IconManager.imgic1104, "NoC node", "Add a NoC node to the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_HWANODE] = new TAction("add-tmlarchi-hwanode", "Add a hardware accelerator node", IconManager.imgic1106, IconManager.imgic1106, "Hardware accelerator node", "Add a hardware accelerator node to the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_CAMSNODE] = new TAction("add-tmlarchi-camsnode", "Add a System C-AMS node", IconManager.imgic1106, IconManager.imgic1106, "System C-AMS node", "Add a System C-AMS node to the currently open DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_MEMORYNODE] = new TAction("add-tmlarchi-memorynode", "Add a memory node", IconManager.imgic1108, IconManager.imgic1108, "Memory node", "Add a memory node to the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_DMANODE] = new TAction("add-tmlarchi-dmanode", "Add a DMA node", IconManager.imgic1110, IconManager.imgic1110, "DMA node", "Add a DMA node to the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_KEY] = new TAction("add-tmlarchi-key", "Map a key", IconManager.imgic1118, IconManager.imgic1118, "Map a key", "Map a key onto a node in the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_FIREWALL] = new TAction("add-tmlarchi-firewall", "Add a Firewall", IconManager.imgic7001, IconManager.imgic7001, "Add a Firewall", "Add a Firewall in the currently opened DIPLODOCUS architecture diagram",0);
+
+        actions[ACT_REMOVENOC] = new TAction("remove-nocnode", "Remove NoC nodes", IconManager.imgic1104, IconManager.imgic1104, "Remove NoC node", "Replaces NoC nodes with similar tasks and nodes", 0);
 
         actions[TMLCP_EDIT] = new TAction("edit-tmlcp-diagram", "Edit communication pattern diagram", IconManager.imgic100, IconManager.imgic101, "Edit communication pattern diagram", "Make it possible to edit the currently opened communication pattern diagram", 0);
         actions[TMLCP_CONNECTOR] = new TAction("add-tmlcp-connector", "Add CP Connector", IconManager.imgic202, IconManager.imgic202, "Connector", "Add a Connector between two components of the currently opened communication pattern diagram", 0);

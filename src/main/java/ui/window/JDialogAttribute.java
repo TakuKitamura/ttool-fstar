@@ -57,7 +57,7 @@ import java.util.LinkedList;
  * Class JDialogAttribute
  * Dialog for managing attributes
  * Creation: 18/12/2003
- * @version 1.0 18/12/2003
+ * @version 2.0 04/03/2019
  * @author Ludovic APVRILLE
  */
 public class JDialogAttribute extends JDialogBase implements ActionListener, ListSelectionListener  {
@@ -70,6 +70,11 @@ public class JDialogAttribute extends JDialogBase implements ActionListener, Lis
     protected Frame frame;
     
     protected String attrib; // "Attributes", "Gates", etc.
+
+    // Operation type
+    protected String operation;
+    protected JPanel panelOperation;
+    protected JTextField operationField;
     
     // Panel1
     protected JComboBox<String> accessBox, typeBox;
@@ -84,13 +89,15 @@ public class JDialogAttribute extends JDialogBase implements ActionListener, Lis
     protected JButton removeButton;
     
     /* Creates new form  */
-    public JDialogAttribute(java.util.List<TAttribute> _attributes, java.util.List<TAttribute>_forbidden, Frame f, String title, String attrib) {
+    public JDialogAttribute(java.util.List<TAttribute> _attributes, java.util.List<TAttribute>_forbidden, Frame f,
+                            String title, String attrib, String _operation) {
         super(f, title, true);
         frame = f;
         attributesPar = _attributes;
         forbidden = _forbidden;
         initValues = new LinkedList<Boolean> ();
         this.attrib = attrib;
+        this.operation = _operation;
         
         attributes = new LinkedList<TAttribute> ();
         
@@ -233,6 +240,31 @@ public class JDialogAttribute extends JDialogBase implements ActionListener, Lis
         removeButton = new JButton("Remove " + attrib);
         removeButton.addActionListener(this);
         panel2.add(removeButton, c2);
+
+        // Operation panel
+        if (operation != null) {
+            GridBagLayout gbOp = new GridBagLayout();
+            GridBagConstraints cOp = new GridBagConstraints();
+            panelOperation = new JPanel();
+            panelOperation.setLayout(gbOp);
+            panelOperation.setBorder(new javax.swing.border.TitledBorder("Operation (empty means unspecified)"));
+            //panelOperation.setPreferredSize(new Dimension(500, 70));
+
+            cOp.weighty = 1.0;
+            cOp.weightx = 1.0;
+            cOp.gridwidth = GridBagConstraints.REMAINDER; //end row
+            cOp.fill = GridBagConstraints.BOTH;
+            cOp.gridheight = 3;
+            operationField = new JTextField(operation);
+            panelOperation.add(operationField, cOp);
+
+            c0.weighty = 1.0;
+            c0.weightx = 1.0;
+            c0.fill = GridBagConstraints.BOTH;
+            c0.gridwidth = GridBagConstraints.REMAINDER; //end row
+            c.add(panelOperation, c0);
+
+        }
         
         // main panel;
         c0.gridwidth = 1;
@@ -240,7 +272,9 @@ public class JDialogAttribute extends JDialogBase implements ActionListener, Lis
         c0.weighty = 1.0;
         c0.weightx = 1.0;
         c0.fill = GridBagConstraints.BOTH;
-        
+
+
+
         c.add(panel1, c0);
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
         c.add(panel2, c0);
@@ -471,6 +505,13 @@ public class JDialogAttribute extends JDialogBase implements ActionListener, Lis
                 return;
             }
         }
+    }
+
+    public String getOperation() {
+        if (operationField != null) {
+            return operationField.getText().trim();
+        }
+        return "";
     }
     
 }

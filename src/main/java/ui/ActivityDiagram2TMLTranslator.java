@@ -395,21 +395,26 @@ public class ActivityDiagram2TMLTranslator {
 		                if (securityPatterns.get(((TMLADReadChannel)tgc).getSecurityContext())!=null){
 		                    tmlreadchannel.securityPattern= securityPatterns.get(((TMLADReadChannel)tgc).getSecurityContext());
 		                    //NbOfSamples will increase due to extra overhead from MAC
-		                    int cur=1;
+		                    /*int cur=1;
 		                    try {
 		                        cur = Integer.valueOf(modifyString(((TMLADReadChannel)tgc).getSamplesValue()));
 		                    } catch(NumberFormatException e) {
 		                    } catch(NullPointerException e) {
-		                    }
-		                    int add = Integer.valueOf(tmlreadchannel.securityPattern.overhead);
+		                    }*/
+                            String curS = modifyString(((TMLADReadChannel)tgc).getSamplesValue());
+                            String addS = "" + tmlreadchannel.securityPattern.overhead;
+		                    //int add = Integer.valueOf(tmlreadchannel.securityPattern.overhead);
 		                    if (!tmlreadchannel.securityPattern.nonce.equals("")){
 		                        SecurityPattern nonce = securityPatterns.get(tmlreadchannel.securityPattern.nonce);
 		                        if (nonce!=null){
-		                            add = Integer.valueOf(nonce.overhead);
+		                            //add = Integer.valueOf(nonce.overhead);
+		                            addS = "" + nonce.overhead;
 		                        }
 		                    }
-		                    cur = cur+ add;
-		                    tmlreadchannel.setNbOfSamples(Integer.toString(cur));
+		                    //cur = cur+ add;
+
+		                    //tmlreadchannel.setNbOfSamples(Integer.toString(cur));
+                            tmlreadchannel.setNbOfSamples(curS + " + " + addS);
 		                }
 		                else if (!((TMLADReadChannel)tgc).getSecurityContext().isEmpty()){
 		                    //Throw error for missing security pattern
@@ -710,22 +715,30 @@ public class ActivityDiagram2TMLTranslator {
 		                    //tmlwritechannel.addChannel(channel);
 						//}
 		                //add sec pattern
-		                if (securityPatterns.get(((TMLADWriteChannel)tgc).getSecurityContext())!=null){
-		                    tmlwritechannel.securityPattern= securityPatterns.get(((TMLADWriteChannel)tgc).getSecurityContext());
-		                    int cur = Integer.valueOf(modifyString(((TMLADWriteChannel)tgc).getSamplesValue()));
-		                    int add = Integer.valueOf(tmlwritechannel.securityPattern.overhead);
+		                if (securityPatterns.get(((TMLADWriteChannel)tgc).getSecurityContext()) != null) {
+		                    tmlwritechannel.securityPattern =
+									securityPatterns.get(((TMLADWriteChannel)tgc).getSecurityContext());
+		                    String curS = modifyString(((TMLADWriteChannel)tgc).getSamplesValue());
+		                    String addS = "" + tmlwritechannel.securityPattern.overhead;
+		                    //int cur = Integer.valueOf(modifyString(((TMLADWriteChannel)tgc).getSamplesValue()));
+		                    //int add = Integer.valueOf(tmlwritechannel.securityPattern.overhead);
 		                    if (!tmlwritechannel.securityPattern.nonce.equals("")){
 		                        SecurityPattern nonce = securityPatterns.get(tmlwritechannel.securityPattern.nonce);
-		                        if (nonce!=null){
-		                            add = Integer.valueOf(nonce.overhead);
+		                        if (nonce != null){
+		                            addS = "" + nonce.overhead;
+		                            //add = Integer.valueOf(nonce.overhead);
 		                        }
 		                    }
-		                    cur = cur+ add;
-		                    tmlwritechannel.setNbOfSamples(Integer.toString(cur));
+		                    //cur = cur + add;
+		                    //tmlwritechannel.setNbOfSamples(Integer.toString(cur));
+                            //tmlwritechannel.setNbOfSamples(att.getName());
+                            tmlwritechannel.setNbOfSamples(curS + " + " + addS);
 		                }
 		                else if (!((TMLADWriteChannel)tgc).getSecurityContext().isEmpty()){
 		                    //Throw error for missing security pattern
-		                    UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Security Pattern " + ((TMLADWriteChannel)tgc).getSecurityContext() + " not found");
+		                    UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR,
+									"Security Pattern " + ((TMLADWriteChannel)tgc).getSecurityContext()
+											+ " not found");
 		                    ce.setTDiagramPanel(tadp);
 		                    ce.setTGComponent(tgc);
 		                    checkingErrors.add(ce);
@@ -922,7 +935,7 @@ public class ActivityDiagram2TMLTranslator {
             }
         }
         
-        TraceManager.addDev( tmltask.getActivityDiagram().toXML() );
+        //TraceManager.addDev("Activity:" + tmltask.getActivityDiagram().toXML() );
     }
 
     private String modifyActionString(String _input) {
