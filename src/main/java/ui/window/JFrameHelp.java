@@ -55,12 +55,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
+import java.util.Vector;
 
 
 /**
- * Class JFrameCode
- * Creation: 20/04/2005
- * version 1.0 20/04/2005
+ * Class JFrameHelp
+ * Creation: 07/03/2019
+ * version 1.0 07/03/2019
  * @author Ludovic APVRILLE
  */
 public	class JFrameHelp extends JFrame implements ActionListener {
@@ -68,21 +69,38 @@ public	class JFrameHelp extends JFrame implements ActionListener {
     private HelpEntry he;
     private HelpManager hm;
     private JPanel jp01;
+    private JButton back, forward, up, search;
+    private Vector<HelpEntry> visitedEntries;
+    private int currentHEPointer;
     
     public JFrameHelp(String title, HelpManager hm, HelpEntry he) {
         super(title);
         this.he = he;
+        visitedEntries = new Vector<>();
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         Container framePanel = getContentPane();
         framePanel.setLayout(new BorderLayout());
         Font f = new Font("Courrier", Font.BOLD, 12);
 
+        JPanel topButtons = new JPanel();
+        back = new JButton("Back", IconManager.imgic53r);
+        back.addActionListener(this);
+        topButtons.add(back);
+        forward = new JButton("Forward", IconManager.imgic53);
+        forward.addActionListener(this);
+        topButtons.add(forward);
+        framePanel.add(topButtons, BorderLayout.NORTH);
+
+
         jp01 = new JPanel();
         jp01.setLayout(new BorderLayout());
-        jp01.setBorder(new javax.swing.border.TitledBorder("Help of: " + he.getMasterKeyword()));
-        pane = new JEditorPane("text/html;charset=UTF-8", he.getHTMLContent());
+        jp01.setBorder(new javax.swing.border.TitledBorder("Help "));
+        pane = new JEditorPane("text/html;charset=UTF-8", "");
         pane.setEditable(false);
+
+
+
         pane.addHyperlinkListener(new HyperlinkListener() {
             public void hyperlinkUpdate(HyperlinkEvent e) {
                 if(e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
@@ -124,12 +142,26 @@ public	class JFrameHelp extends JFrame implements ActionListener {
         jp.add(button1);
         framePanel.add(jp, BorderLayout.SOUTH);
 
+        setHelpEntry(he);
+
         pack();
         setSize(500,600);
     }
 
+
+
     public void setHelpEntry(HelpEntry he) {
+        visitedEntries.add(he);
+        currentHEPointer = visitedEntries.size() - 1;
         this.he = he;
+        updatePanel();
+    }
+
+    private void updatePanel() {
+        back.setEnabled(currentHEPointer != 0);
+        forward.setEnabled(currentHEPointer < visitedEntries.size()-1);
+
+
         jp01.setBorder(new javax.swing.border.TitledBorder("Help of: " + he.getMasterKeyword()));
         pane.setText(he.getHTMLContent());
         setVisible(true);
@@ -140,7 +172,33 @@ public	class JFrameHelp extends JFrame implements ActionListener {
         if (command.equals("Close")) {
             setVisible (false);
             return;
+        } else if (evt.getSource() == back) {
+            back();
+        } else if (evt.getSource() == forward) {
+            forward();
         }
+    }
+
+    public void back() {
+        //TraceManager.addDev("Back");
+        if (currentHEPointer < 1) {
+            return;
+        }
+        currentHEPointer --;
+        he = visitedEntries.get(currentHEPointer);
+        updatePanel();
+    }
+
+    public void forward() {
+        //TraceManager.addDev("Forward");
+
+        if (currentHEPointer >= visitedEntries.size()-1) {
+            return;
+        }
+        currentHEPointer ++;
+        he = visitedEntries.get(currentHEPointer);
+        updatePanel();
+
     }
 
     
