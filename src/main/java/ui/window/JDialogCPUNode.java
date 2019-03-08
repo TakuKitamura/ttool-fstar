@@ -211,6 +211,9 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         JTextArea jft16 = new JTextArea("CPU Extension Construct");
         instructionHelpList.add(jft16);
 
+        JTextArea jft17 = new JTextArea("Operation");
+        instructionHelpList.add(jft17);
+
         for(int i = 0; i < instructionHelpList.size(); i++) {
             Icon myIcon = IconManager.imgic32;
             JButton but = new JButton(myIcon);
@@ -512,9 +515,17 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         // operation
         c4.gridwidth = 1;
         panel4.add(new JLabel("Operation:"), c4);
-        c4.gridwidth = GridBagConstraints.REMAINDER; //end row
+        //c4.gridwidth = GridBagConstraints.REMAINDER; //end row
         operation = new JTextField(""+node.getOperation(), 15);
         panel4.add(operation, c4);
+
+        //issue 183
+        c4.weighty = 0.5;
+        c4.weightx = 0.5;
+        c4.gridwidth = GridBagConstraints.REMAINDER;
+        panel4.add(buttons.get(16),c4);
+        c4.weighty = 1.0;
+        c4.weightx = 1.0;
 
         // extension constructs
         c4.gridwidth = 1;
