@@ -1560,9 +1560,15 @@ public class GTURTLEModeling {
     public boolean generateGraphicalMapping(TMLMapping map) {
         TURTLEPanel tmlap = tmap.getCorrespondanceList().getTG(tmap.getArch().getFirstCPU()).getTDiagramPanel().tp;
         int arch = mgui.tabs.indexOf(tmlap);
-        mgui.cloneRenameTab(arch, "enc");
+        mgui.cloneRenameTab(arch, "Z3");
         TMLArchiPanel newArch = (TMLArchiPanel) mgui.tabs.get(mgui.tabs.size() - 1);
         TMLArchiDiagramPanel panel = newArch.tmlap;
+
+        if (panel == null) {
+            return false;
+        }
+
+        panel.removeAllArtifacts();
 
         List<HwExecutionNode> nodes = map.getNodes();
         HwExecutionNode node;

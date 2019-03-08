@@ -96,7 +96,7 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
         editable = true;
         removable = true;
         userResizable=true;
-        value = "TMLDesign::task    ";
+        value = "TMLDesign::task";
         taskName = "name";
         referenceTaskName = "TMLTask";
 
@@ -231,7 +231,7 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
 
     }
 
-    private void makeFullValue() {
+    public void makeFullValue() {
         value = referenceTaskName + "::" + taskName;
     }
 

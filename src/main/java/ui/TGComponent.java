@@ -2905,6 +2905,17 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
         return false;
     }
 
+
+    public boolean removeAllInternalComponents() {
+        for(TGComponent tgc: tgcomponent) {
+            tgc.actionOnRemove();
+            tdp.actionOnRemove(tgc);
+        }
+        tgcomponent = new TGComponent[0];
+        nbInternalTGComponent = 0;
+        return true;
+    }
+
     public boolean removeInternalComponent(TGComponent t) {
         //TGComponent tgc;
         for (int i = 0; i < nbInternalTGComponent; i++) {

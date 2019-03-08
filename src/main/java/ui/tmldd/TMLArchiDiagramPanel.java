@@ -481,16 +481,27 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
     	return res;
     }
 
+    public void removeAllArtifacts() {
+        for(TGComponent tgc: componentList) {
+            if (tgc instanceof SwallowTGComponent) {
+                tgc.removeAllInternalComponents();
+            }
+        }
+    }
+
 
     public boolean addTaskToNode(String nodeName, String taskName) {
+        int ID = 10;
         for(TGComponent tgc: componentList) {
             if (tgc instanceof TMLArchiNode) {
                 TMLArchiNode node = (TMLArchiNode)tgc;
                 if (node.getName().compareTo(nodeName) == 0) {
                     if ((node instanceof TMLArchiCPUNode) || (node instanceof TMLArchiFPGANode) ||  (node instanceof TMLArchiHWANode)) {
-                        TMLArchiArtifact arti = new TMLArchiArtifact(node.getX() + 10, node.getY() + 10,
+                        TMLArchiArtifact arti = new TMLArchiArtifact(node.getX() + ID, node.getY() + ID,
                                 node.getCurrentMinX(), node.getCurrentMaxX(), node.getCurrentMinY(), node.getCurrentMaxY(), true, node, this);
+                        ID += 5;
                         arti.setTaskName(taskName);
+                        arti.makeFullValue();
                         node.addSwallowedTGComponent(arti, 5, 5);
                         return true;
                     }
