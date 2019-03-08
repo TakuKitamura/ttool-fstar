@@ -139,6 +139,8 @@ public class ActionPerformer {
             mgui.lastDiag();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_ABOUT].getActionCommand())) {
             mgui.aboutVersion();
+        } else if (command.equals(mgui.actions[TGUIAction.ACT_INTEGRATED_HELP].getActionCommand())) {
+            mgui.showIntegratedHelp();
         } else if (command.equals(mgui.actions[TGUIAction.FIRST_DIAGRAM].getActionCommand())) {
             mgui.firstDiag();
         //@author: Huy TRUONG.

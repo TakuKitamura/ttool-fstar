@@ -72,6 +72,7 @@ public class ModeManager {
                 actions[TGUIAction.ACT_OPEN_LAST].setEnabled(true);
                 actions[TGUIAction.ACT_QUIT].setEnabled(true);
                 actions[TGUIAction.ACT_ABOUT].setEnabled(true);
+                actions[TGUIAction.ACT_INTEGRATED_HELP].setEnabled(true);
                 actions[TGUIAction.ACT_TTOOL_CONFIGURATION].setEnabled(true);
                 actions[TGUIAction.ACT_TURTLE_WEBSITE].setEnabled(true);
                 actions[TGUIAction.ACT_TURTLE_DOCUMENTATION].setEnabled(true);

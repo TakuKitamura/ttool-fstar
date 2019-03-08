@@ -779,6 +779,9 @@ public class JMenuBarTurtle extends JMenuBar {
 
 
         // HELP
+        menuItem = help.add(mgui.actions[TGUIAction.ACT_INTEGRATED_HELP]);
+        menuItem.setName("Help");
+        menuItem.addMouseListener(mgui.mouseHandler);
         menuItem = help.add(mgui.actions[TGUIAction.ACT_TTOOL_CONFIGURATION]);
         menuItem.setName("Help Configuration");
         menuItem.addMouseListener(mgui.mouseHandler);

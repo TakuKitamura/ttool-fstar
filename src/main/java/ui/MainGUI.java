@@ -712,6 +712,12 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return helpManager;
     }
 
+    public void showIntegratedHelp() {
+        if (helpManager != null) {
+            openHelpFrame(helpManager);
+        }
+    }
+
     public void openHelpFrame(HelpEntry he) {
         if (helpFrame == null) {
             helpFrame = new JFrameHelp("Help", helpManager, he);
