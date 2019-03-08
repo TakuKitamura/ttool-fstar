@@ -323,7 +323,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
 
         //jp02.add(new JLabel("with"), c02);
 
-        compiler1 = new JTextField(pathCompiler, 100);
+        compiler1 = new JTextField(pathCompiler + " -C " + pathCode, 100);
         jp02.add(compiler1, c02);
 
         jp02.add(new JLabel(" "), c02);
@@ -354,7 +354,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
         exe.addActionListener(this);
         exegroup.add(exe);
         jp03.add(exe, c03);
-        exe2 = new JTextField(pathExecute, 100);
+        exe2 = new JTextField(pathCode + File.separator + pathExecute, 100);
         jp03.add(exe2, c03);
         exegroup.add(exe);
 
@@ -362,7 +362,7 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
         exetrace.addActionListener(this);
         exegroup.add(exetrace);
         jp03.add(exetrace, c03);
-        exe3 = new JTextField(pathExecute +  " " + pathCode + File.separator + "trace.txt", 100);
+        exe3 = new JTextField(pathCode + File.separator + pathExecute +  " " + pathCode + File.separator + "trace.txt", 100);
         jp03.add(exe3, c03);
 
         exesoclib = new JRadioButton(textSysC6, false);

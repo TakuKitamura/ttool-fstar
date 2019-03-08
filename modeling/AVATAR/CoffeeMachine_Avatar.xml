@@ -1278,7 +1278,7 @@
 <MainCode value="void __user_init() {"/>
 <MainCode value="}"/>
 <Optimized value="true" />
-<Validated value="" />
+<Validated value="Wallet;CoffeeMachine;CoffeeButton;TeaButton;" />
 <Ignored value="" />
 
 <CONNECTOR type="5002" id="695" >
@@ -2501,7 +2501,7 @@
 
 <COMPONENT type="301" id="1204" >
 <cdparam x="472" y="75" />
-<sizeparam width="100" height="15" minWidth="20" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="104" height="15" minWidth="20" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="1400" />
 <infoparam name="UML Note" value="Activity1.docx
@@ -2528,8 +2528,8 @@
 </COMPONENT>
 
 <COMPONENT type="5104" id="1215" >
-<cdparam x="268" y="141" />
-<sizeparam width="76" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="265" y="141" />
+<sizeparam width="82" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="1400" />
@@ -2547,8 +2547,8 @@
 </COMPONENT>
 
 <COMPONENT type="5103" id="1226" >
-<cdparam x="634" y="321" />
-<sizeparam width="130" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="629" y="321" />
+<sizeparam width="141" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="1400" />
@@ -2566,8 +2566,8 @@
 </COMPONENT>
 
 <COMPONENT type="5104" id="1237" >
-<cdparam x="239" y="280" />
-<sizeparam width="76" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="236" y="280" />
+<sizeparam width="82" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="1400" />
@@ -2902,8 +2902,8 @@
 </COMPONENT>
 <SUBCOMPONENT type="5103" id="1455" >
 <father id="1561" num="0" />
-<cdparam x="377" y="502" />
-<sizeparam width="130" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="372" y="502" />
+<sizeparam width="141" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="0" maxX="447" minY="0" maxY="334" />
@@ -2922,8 +2922,8 @@
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5104" id="1466" >
 <father id="1561" num="1" />
-<cdparam x="63" y="529" />
-<sizeparam width="127" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="56" y="529" />
+<sizeparam width="141" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="0" maxX="450" minY="0" maxY="334" />
@@ -3003,8 +3003,8 @@
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5104" id="1520" >
 <father id="1561" num="4" />
-<cdparam x="242" y="529" />
-<sizeparam width="112" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="236" y="529" />
+<sizeparam width="124" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="0" maxX="465" minY="0" maxY="334" />

@@ -48,11 +48,11 @@
 <ProVerifVerifierPath data="../../proverif" />
 <ProVerifVerifierHost data="localhost" />
 <AVATARExecutableCodeDirectory data="../executablecode/" />
+<AVATARExecutableCodeHost data="localhost"/>
 <AVATARExecutableCodeCompileCommand data="make " />
 <AVATARExecutableCodeExecuteCommand data="run.x" />
 <AVATARMPSoCCodeDirectory data="../MPSoC/" />
 <AVATARMPSoCCompileCommand data="make -C ../MPSoC/ updateruntime updategeneratedcode compilesoclib" />
-<AVATARExecutableCodeHost data="localhost"/>
 <AVATARExecutableCodeCompileCommand data="make -C ../executablecode/" />
 <AVATARExecutableCodeExecuteCommand data="../executablecode/run.x" />
 <AVATARExecutableSoclibCodeCompileCommand data="make -C ../MPSoC/ updategeneratedcode compilesoclib" />
@@ -60,6 +60,9 @@
 <AVATARExecutableSoclibCodeTraceCommand data="make -C ../MPSoC/ runsoclib-trace" />
 <AVATARExecutableSoclibTraceFile data="../MPSoC/soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial/trace" />
 <NCDirectory data="../nc/"/>
+<Z3LIBS data="/opt/z3/bin/libz3.so:/opt/z3/bin/libz3java.so"/>
+<PLUGIN_PATH data="../plugins" />
+<LastWindowAttributes x="10" y="10" width="1024" height="768" max="false" />
 
 <ExternalCommand1Host data="localhost"/>
 <ExternalCommand1 data="gtkwave ../simulators/c++2/vcddump.vcd"/>
@@ -69,6 +72,5 @@
 <ProVerifHash data="1427594573"/>
 
 <LastOpenFile data="../modeling/AVATAR/MicroWaveOven_SafetySecurity_fullMethodo.xml" />
-
 
 </TURTLECONFIGURATION>
