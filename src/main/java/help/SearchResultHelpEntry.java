@@ -47,7 +47,10 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Vector;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 
@@ -61,12 +64,19 @@ import java.util.stream.Collectors;
 public class SearchResultHelpEntry extends HelpEntry {
     public static String SEARCH_HEADER = "<h1>Search result</h1>\n<br>\n";
 
+    private Vector<AtomicInteger> scores;
+
     public SearchResultHelpEntry() {
 
     }
 
+    public void setScores(Vector<AtomicInteger> _scores) {
+        scores = _scores;
+    }
+
     @Override
     public String getHTMLContent() {
+
         String ret = super.getHTMLContent();
         String kids = getKidsInHTML();
         int index1 = ret.indexOf("<body>");
@@ -76,8 +86,90 @@ public class SearchResultHelpEntry extends HelpEntry {
                     kids + ret.substring(index1+1, ret.length());
         }
 
-        TraceManager.addDev("Resulting HTML of search:" + ret);
+        //TraceManager.addDev("Resulting HTML of search:" + ret);
 
         return ret;
+    }
+
+    @Override
+    public String getKidsInHTML() {
+        String s = "";
+        int maxScore = getMaxScore();
+
+
+        if (entries != null) {
+            int cpt = 0;
+            for (HelpEntry he : entries) {
+                s += "<li> ";
+                int score = (int)(scores.get(cpt).intValue() * 100.0/maxScore);
+                s += "<a href=\"file://" + he.getMasterKeyword() + ".html\"/>" +  he.getMasterKeyword
+                        () + "</a>  " +  "(" + score + "%)  " +
+                he.getKeywords();
+                s += " </li>\n<br>\n";
+                cpt ++;
+            }
+        }
+
+        return s;
+    }
+
+    private int getMaxScore() {
+        int maxScore = -1;
+        if (scores == null) {
+            return maxScore;
+        }
+        for(AtomicInteger i: scores) {
+            int val = i.intValue();
+            if (val > maxScore) {
+                maxScore = val;
+            }
+        }
+        return maxScore;
+    }
+
+    public void mergeResults() {
+        // Find duplicate sons, and compute final scores for sons
+        Vector<HelpEntry> tmp = new Vector<>();
+        Vector<AtomicInteger> tmpScores = new Vector<>();
+        int cpt = 0;
+        for(HelpEntry he: entries) {
+            int indexOriginal = tmp.indexOf(he);
+            if (indexOriginal > -1) {
+                AtomicInteger right = tmpScores.get(indexOriginal);
+                right.addAndGet(scores.get(cpt).intValue());
+            } else {
+                tmp.add(he);
+                tmpScores.add(new AtomicInteger(scores.get(cpt).intValue()));
+            }
+            cpt ++;
+        }
+        scores = tmpScores;
+        entries = tmp;
+    }
+
+    public void sortResults() {
+        HashMap<AtomicInteger, HelpEntry> mapScore = new HashMap<>();
+
+        for(int i=0; i<scores.size(); i++) {
+            mapScore.put(scores.get(i), entries.get(i));
+        }
+        Vector<Integer> vect = new Vector<>();
+        HashMap<Integer, AtomicInteger> mapInt = new HashMap<>();
+        for(int i=0; i<scores.size(); i++) {
+            Integer newInt = new Integer(scores.get(i).intValue());
+            vect.add(newInt);
+            mapInt.put(newInt, scores.get(i));
+        }
+
+        Collections.sort(vect, Collections.reverseOrder());
+        Vector<HelpEntry> tmp = new Vector<>();
+        Vector<AtomicInteger> tmpScores = new Vector<>();
+        for(int i=0; i<vect.size(); i++) {
+            AtomicInteger ai = mapInt.get(vect.get(i));
+            tmpScores.add(ai);
+            tmp.add(mapScore.get(ai));
+        }
+        scores = tmpScores;
+        entries = tmp;
     }
 }

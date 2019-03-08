@@ -57,6 +57,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
 import java.util.Vector;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 /**
@@ -245,7 +246,7 @@ public	class JFrameHelp extends JFrame implements ActionListener {
         }
 
 
-        String test = searchT.getText().trim();
+        String test = searchT.getText().trim().toLowerCase();
         if (test.length() == 0) {
             TraceManager.addDev("Empty search");
             return;
@@ -254,10 +255,18 @@ public	class JFrameHelp extends JFrame implements ActionListener {
         SearchResultHelpEntry srhe = new SearchResultHelpEntry();
         srhe.fillInfos("searchresult search help list index");
 
-        hm.search(test.split(" "), srhe);
+
+        Vector<AtomicInteger> scores = new Vector<>();
+
+        hm.searchInKeywords(test.split(" "), srhe, scores);
+        hm.searchInContent(test.split(" "), srhe, scores);
+        srhe.setScores(scores);
+
+        srhe.mergeResults();
+        srhe.sortResults();
 
 
-        TraceManager.addDev("Setting new help entrywith search results ");
+        TraceManager.addDev("Setting new help entry with search results ");
         setHelpEntry(srhe);
     }
 

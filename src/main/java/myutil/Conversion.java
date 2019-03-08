@@ -418,6 +418,19 @@ public class Conversion {
         return total;
     }
 
+    public static int nbOf(String _input, String _s) {
+        int total = 0;
+        char c = _s.charAt(0);
+        for(int i=0; i<_input.length(); i++) {
+            if (_input.charAt(i) == c) {
+                if (_input.substring(i, _input.length()).startsWith(_s)) {
+                    total++;
+                }
+            }
+        }
+        return total;
+    }
+
     public static String addHead(String _input, char _c, int _nb) {
         String output = "";
         while(_nb >0) {
@@ -574,6 +587,7 @@ public class Conversion {
           return ret.trim();
         */
     }
+
 
     public static String removeAllActionOps(String[] ops, String input, String replacementValue) {
         String ret = input;

@@ -39,6 +39,7 @@
 
 package help;
 
+import myutil.Conversion;
 import myutil.GenericTree;
 import myutil.TraceManager;
 
@@ -48,6 +49,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.Vector;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 
@@ -60,6 +62,8 @@ import java.util.stream.Collectors;
  */
 public class HelpEntry implements GenericTree {
 
+    protected static final int KEYWORD_SEARCH_IMPORTANCE = 5;
+
     protected HelpEntry linkToParent;
     protected Vector<HelpEntry> entries;
 
@@ -68,6 +72,7 @@ public class HelpEntry implements GenericTree {
 
     protected String pathToHTMLFile;
     protected String htmlContent;
+    protected String htmlContentLowerCase;
 
 
     public HelpEntry() {
@@ -298,6 +303,28 @@ public class HelpEntry implements GenericTree {
         return false;
     }
 
+    public int hasInContent(String [] words) {
+        int score = 0;
+        for(String word: words) {
+            score += hasInContentAWord(word);
+        }
+        return score;
+    }
+
+    public int hasInContentAWord(String word) {
+        if (htmlContentLowerCase == null) {
+            if (htmlContent == null) {
+                htmlContent = getHTMLContent();
+            }
+            if (htmlContent == null) {
+                return 0;
+            }
+            htmlContentLowerCase = htmlContent.toLowerCase();
+        }
+        //TraceManager.addDev("Computing nb Ofs:" + word);
+        return Conversion.nbOf(htmlContentLowerCase, word);
+    }
+
     public String getKeywords() {
         String ret = "";
         if (keywords != null) {
@@ -324,14 +351,32 @@ public class HelpEntry implements GenericTree {
         return s;
     }
 
-    public void search(String [] words, HelpEntry father) {
-        if (hasSimilarWords(words) > 0) {
+    public void searchInKeywords(String [] words, HelpEntry father, Vector<AtomicInteger> scores) {
+        int score = hasSimilarWords(words);
+        if (score > 0) {
             father.addKid(this);
+            scores.add(new AtomicInteger(KEYWORD_SEARCH_IMPORTANCE * score));
+            //TraceManager.addDev("Found in keyword:" + toString() + " score=" + score);
         }
 
         if (entries != null) {
             for (HelpEntry he: entries) {
-                he.search(words, father);
+                he.searchInKeywords(words, father, scores);
+            }
+        }
+    }
+
+    public void searchInContent(String [] words, HelpEntry father, Vector<AtomicInteger> scores) {
+        int score = hasInContent(words);
+        if (score > 0) {
+            father.addKid(this);
+            scores.add(new AtomicInteger(score));
+            //TraceManager.addDev("Found in content:" + toString() + " score=" + score);
+        }
+
+        if (entries != null) {
+            for (HelpEntry he: entries) {
+                he.searchInContent(words, father, scores);
             }
         }
     }
