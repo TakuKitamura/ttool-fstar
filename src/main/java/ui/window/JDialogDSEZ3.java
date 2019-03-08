@@ -97,7 +97,8 @@ public class JDialogDSEZ3 extends JDialog implements ActionListener, ListSelecti
     int mode;
 
 
-
+    protected  static boolean generateGraphicalMappingSelected;
+    protected JCheckBox generateGraphicalMapping;
     protected JButton start;
     protected JButton stop;
     protected JButton close;
@@ -165,7 +166,10 @@ public class JDialogDSEZ3 extends JDialog implements ActionListener, ListSelecti
         c03.fill = GridBagConstraints.BOTH;
         c03.gridheight = 1;
 
-
+        generateGraphicalMapping = new JCheckBox("Generate a graphical mapping if a solution is found");
+        generateGraphicalMapping.setSelected(generateGraphicalMappingSelected);
+        generateGraphicalMapping.addActionListener(this);
+        jp03.add(generateGraphicalMapping, c03);
 
 
         JPanel jp04 = new JPanel();
@@ -221,7 +225,6 @@ public class JDialogDSEZ3 extends JDialog implements ActionListener, ListSelecti
         jp2.add(stop);
         jp2.add(close);
 
-
         c.add(jp2, BorderLayout.SOUTH);
 
 
@@ -262,6 +265,8 @@ public class JDialogDSEZ3 extends JDialog implements ActionListener, ListSelecti
             stopProcess();
         } else if (evt.getSource() == close) {
             closeDialog();
+        } else if (evt.getSource() == generateGraphicalMapping) {
+            generateGraphicalMappingSelected = generateGraphicalMapping.isSelected();
         }
     }
 
@@ -355,12 +360,14 @@ public class JDialogDSEZ3 extends JDialog implements ActionListener, ListSelecti
                 if (result.mappingFound) {
                     outputText.append("Optimized mapping found\n");
                     outputText.append(result.result);
-                    outputText.append("\nGenerating graphical mapping\n");
-                    boolean b = mgui.gtm.generateGraphicalMapping(result.resultingMapping);
-                    if (!b) {
-                        outputText.append("*Error* when creating graphical model\n");
-                    } else {
-                        outputText.append("Graphical model created\n");
+                    if (generateGraphicalMappingSelected) {
+                        outputText.append("\nGenerating graphical mapping\n");
+                        boolean b = mgui.gtm.generateGraphicalMapping(result.resultingMapping);
+                        if (!b) {
+                            outputText.append("*Error* when creating graphical model\n");
+                        } else {
+                            outputText.append("Graphical model created\n");
+                        }
                     }
                 } else {
                     outputText.append("No suitable mapping could be found");
