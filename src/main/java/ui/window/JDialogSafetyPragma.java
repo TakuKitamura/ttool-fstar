@@ -366,14 +366,14 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
             }
         });
 
-        helpPopup.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "closeJTextArea");
-        helpPopup.getActionMap().put("closeJTextArea", new AbstractAction() {
+        helpPopup.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "closeJlabel");
+        helpPopup.getActionMap().put("closeJlabel", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 helpPopup.setVisible(false);
             }
         });
-        
+
         JPanel jp = new JPanel();
         jp.add(cancel);
         jp.add(close);
