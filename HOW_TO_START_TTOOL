@@ -1,0 +1,26 @@
+# Ensure you are up to date with the git
+$ git pull
+
+# Install jdk8(or more recent) and gradle > 3.3
+# The use of opendk is NOT recommended
+# To know which version of Java compiler you have, do as follows:
+$ javac --version
+
+# Then, you can compile TTool
+$ make all&&make install
+
+#To avoid running all the tests and compiling only TTool, ytou may try:
+$ make ttoolnotests&&make install
+
+#To start TTool, this is recommended to use your own version of ttool.exe and config.xml
+
+$ cp ttool.exe myttool.exe
+$ cp bin/config.xml bin/myconfig.xml
+
+#edit myttool.exe and replace config.xml with myconfig.xml
+
+#start TTool
+$ ./myttool.exe
+
+
+Enjoy!!
