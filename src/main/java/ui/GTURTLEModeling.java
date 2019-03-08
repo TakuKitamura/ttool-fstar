@@ -1556,6 +1556,34 @@ public class GTURTLEModeling {
         hsm.startThread();
     }
 
+    @SuppressWarnings("unchecked")
+    public boolean generateGraphicalMapping(TMLMapping map) {
+        TURTLEPanel tmlap = tmap.getCorrespondanceList().getTG(tmap.getArch().getFirstCPU()).getTDiagramPanel().tp;
+        int arch = mgui.tabs.indexOf(tmlap);
+        mgui.cloneRenameTab(arch, "enc");
+        TMLArchiPanel newArch = (TMLArchiPanel) mgui.tabs.get(mgui.tabs.size() - 1);
+        TMLArchiDiagramPanel panel = newArch.tmlap;
+
+        List<HwExecutionNode> nodes = map.getNodes();
+        HwExecutionNode node;
+        List<TMLTask> tasks = map.getMappedTasks();
+        TMLTask task;
+        for(int i=0; i<nodes.size(); i++) {
+            node = nodes.get(i);
+            task = tasks.get(i);
+            if ((node != null) && (task != null)) {
+                if (!panel.addTaskToNode(node.getName(), task.getTaskName())) {
+                    TraceManager.addDev("Could not add " + task.getTaskName() + " to " + node.getName());
+                    return false;
+                } else {
+                    TraceManager.addDev("Task " + task.getTaskName() + " was added to " + node.getName());
+                }
+            }
+        }
+
+        return true;
+    }
+
 
     public TMLMapping<TGComponent> autoSecure(MainGUI gui, boolean autoConf, boolean autoWeakAuth, boolean autoStrongAuth) {
         //TODO add more options

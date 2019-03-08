@@ -355,6 +355,13 @@ public class JDialogDSEZ3 extends JDialog implements ActionListener, ListSelecti
                 if (result.mappingFound) {
                     outputText.append("Optimized mapping found");
                     outputText.append(result.result);
+                    outputText.append("Generating graphical mapping");
+                    boolean b = mgui.gtm.generateGraphicalMapping(result.resultingMapping);
+                    if (!b) {
+                        outputText.append("Error when creating graphical model");
+                    } else {
+                        outputText.append("Graphical model created");
+                    }
                 } else {
                     outputText.append("No suitable mapping could be found");
                 }

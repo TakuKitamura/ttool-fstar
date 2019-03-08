@@ -3,7 +3,6 @@ package tmltranslator.dsez3engine;
 import com.microsoft.z3.*;
 import myutil.TraceManager;
 import tmltranslator.*;
-import ui.TGComponent;
 
 import javax.swing.*;
 import java.lang.reflect.Array;
@@ -18,13 +17,13 @@ public class OptimizationModel {
     private Map<String, Integer> optimizedSolutionX = new HashMap<String, Integer>();
     private Map<String, Integer> optimizedSolutionStart = new HashMap<String, Integer>();
     private InputInstance inputInstance;
-    private TMLMapping<TGComponent> tmlMapping;
+    private TMLMapping tmlMapping;
 
     public TMLMapping getTmlMapping() {
         return tmlMapping;
     }
 
-    public void setTmlMapping(TMLMapping<TGComponent> tmlMapping) {
+    public void setTmlMapping(TMLMapping tmlMapping) {
         this.tmlMapping = tmlMapping;
     }
 
@@ -784,7 +783,7 @@ public class OptimizationModel {
             Expr[][] optimized_result_X = new Expr[inputInstance.getModeling().getTasks().size()][inputInstance.getArchitecture().getCPUs().size()];
             Expr[] optimized_result_start = new Expr[inputInstance.getModeling().getTasks().size()];
 
-            tmlMapping = new TMLMapping<TGComponent>( inputInstance.getModeling(), inputInstance.getArchitecture(),false);
+            tmlMapping = new TMLMapping<>( inputInstance.getModeling(), inputInstance.getArchitecture(),false);
 
             outputToDisplay ="The optimal mapping solution is:\n\n";
 
