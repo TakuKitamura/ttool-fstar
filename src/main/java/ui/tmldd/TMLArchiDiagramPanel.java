@@ -489,8 +489,14 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
         }
     }
 
+    // Task name is build as diagram__taskname
+    public boolean addTaskToNode(String nodeName, String fullTaskName) {
+        if (fullTaskName.indexOf("__") == -1) {
+            return false;
+        }
+        String[] tasksID = fullTaskName.split("__");
 
-    public boolean addTaskToNode(String nodeName, String taskName) {
+
         int ID = 10;
         for(TGComponent tgc: componentList) {
             if (tgc instanceof TMLArchiNode) {
@@ -500,7 +506,8 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
                         TMLArchiArtifact arti = new TMLArchiArtifact(node.getX() + ID, node.getY() + ID,
                                 node.getCurrentMinX(), node.getCurrentMaxX(), node.getCurrentMinY(), node.getCurrentMaxY(), true, node, this);
                         ID += 5;
-                        arti.setTaskName(taskName);
+                        arti.setReferenceTaskName(tasksID[0]);
+                        arti.setTaskName(tasksID[1]);
                         arti.makeFullValue();
                         node.addSwallowedTGComponent(arti, 5, 5);
                         return true;

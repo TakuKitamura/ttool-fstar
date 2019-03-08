@@ -1578,11 +1578,11 @@ public class GTURTLEModeling {
             node = nodes.get(i);
             task = tasks.get(i);
             if ((node != null) && (task != null)) {
-                if (!panel.addTaskToNode(node.getName(), task.getTaskName())) {
-                    TraceManager.addDev("Could not add " + task.getTaskName() + " to " + node.getName());
+                if (!panel.addTaskToNode(node.getName(), task.getName())) {
+                    TraceManager.addDev("Could not add " + task.getName() + " to " + node.getName());
                     return false;
                 } else {
-                    TraceManager.addDev("Task " + task.getTaskName() + " was added to " + node.getName());
+                    TraceManager.addDev("Task " + task.getName() + " was added to " + node.getName());
                 }
             }
         }
