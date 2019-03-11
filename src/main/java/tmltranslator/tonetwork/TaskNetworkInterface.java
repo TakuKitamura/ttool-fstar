@@ -53,7 +53,6 @@ import java.util.Vector;
  */
 public class TaskNetworkInterface extends TMLTask {
     protected int nbOfVCs;
-    protected int nbOfTasks;
 
     public TaskNetworkInterface(String name, Object referenceToClass, Object referenceToActivityDiagram) {
         super(name, referenceToClass, referenceToActivityDiagram);
@@ -62,13 +61,11 @@ public class TaskNetworkInterface extends TMLTask {
     // feedbackEvents: one per vc
     // inputEvt, channels: one per task
     // outputChannel, output event: only one, common: this is a network interface, only one exit!
-    public void generate(int nbOfVCs, int nbOfTasks, TMLEvent outputEvent, TMLChannel outputChannel,
-                         Vector<TMLEvent> feedbackEvents, Vector<TMLEvent> inputEvents,
-                         Vector<TMLChannel> inputChannels) {
+    public void generate(int nbOfVCs, Vector<TMLEvent> inputFeedbackEvents, Vector<TMLEvent> inputEventsFromMUX,
+                         TMLEvent outputEvent, TMLChannel outputChannel) {
         int i;
 
         this.nbOfVCs = nbOfVCs;
-        this.nbOfTasks = nbOfTasks;
 
 
         // Attributes
@@ -87,7 +84,7 @@ public class TaskNetworkInterface extends TMLTask {
 
 
         //Attributes per tasks
-        for (i=0; i<nbOfTasks; i++) {
+        for (i=0; i<nbOfVCs; i++) {
             TMLAttribute pktlen = new TMLAttribute("pktlen"+i, "pktlen"+i, new TMLType(TMLType.NATURAL), "0");
             this.addAttribute(pktlen);
             TMLAttribute iA = new TMLAttribute("i"+i, "i"+i, new TMLType(TMLType.NATURAL), "0");
@@ -98,27 +95,22 @@ public class TaskNetworkInterface extends TMLTask {
             this.addAttribute(eopi);
             TMLAttribute dst = new TMLAttribute("dst"+i, "dst"+i, new TMLType(TMLType.NATURAL), "0");
             this.addAttribute(dst);
-
-        }
-
-        for (i=0; i<nbOfVCs; i++) {
             TMLAttribute vci = new TMLAttribute("vc"+i, "vc"+i, new TMLType(TMLType.NATURAL), ""+i);
             this.addAttribute(vci);
         }
 
 
+
         // Events and channels
         addTMLEvent(outputEvent);
-        for(TMLEvent evt: feedbackEvents) {
+        for(TMLEvent evt: inputFeedbackEvents) {
             addTMLEvent(evt);
         }
-        for(TMLEvent evt: inputEvents) {
+        for(TMLEvent evt: inputEventsFromMUX) {
             addTMLEvent(evt);
         }
-        addReadTMLChannel(outputChannel);
-        for(TMLChannel ch: inputChannels) {
-            addWriteTMLChannel(ch);
-        }
+        addWriteTMLChannel(outputChannel);
+
 
         // Activity Diagram
         TMLStartState start = new TMLStartState("mainStart", referenceObject);
@@ -126,53 +118,66 @@ public class TaskNetworkInterface extends TMLTask {
 
         TMLForLoop loop = new TMLForLoop("mainLoop", referenceObject);
         loop.setInfinite(true);
-        activity.addElement(loop);
-        start.addNext(loop);
+        addElement(start, loop);
 
-        /*TMLWaitEvent waitEvt = new TMLWaitEvent("PacketEvent", referenceObject);
-        waitEvt.setEvent(inputEvent);
-        waitEvt.addParam("pktlen");
-        waitEvt.addParam("dst");
-        waitEvt.addParam("vc");
-        waitEvt.addParam("eop");
-        activity.addElement(waitEvt);
-        loop.addNext(waitEvt);
+        TMLActionState state = new TMLActionState("LoopExitSeeting", referenceObject);
+        state.setAction("loopexit = 2");
+        addElement(loop, state);
 
-        TMLChoice choice = new TMLChoice("MainChoice", referenceObject);
-        activity.addElement(choice);
+        TMLSequence mainSequence = new TMLSequence("mainSequence", referenceObject);
+        addElement(state, mainSequence);
 
-        for(int i=0; i<nbOfVCs; i++) {
-            TMLSendEvent sendEvt = new TMLSendEvent("SendEvtToVC" + i, referenceObject);
-            sendEvt.setEvent(outputEvents.get(i));
-            sendEvt.addParam("pktlen");
-            sendEvt.addParam("dst");
-            sendEvt.addParam("vc");
-            sendEvt.addParam("eop");
-            activity.addElement(sendEvt);
-            choice.addNext(sendEvt);
-            choice.addGuard("vc == " + i);
+        for(i=0; i<nbOfVCs; i++) {
+            TMLNotifiedEvent notifiedEvent = new TMLNotifiedEvent("NotifiedVC", referenceObject);
+            notifiedEvent.setEvent(inputEventsFromMUX.get(i));
+            notifiedEvent.setVariable("nEvt");
+            addElement(mainSequence, notifiedEvent);
 
-            TMLReadChannel read = new TMLReadChannel("ReadFlit" + i, referenceObject);
-            read.addChannel(inputChannel);
-            read.setNbOfSamples("1");
-            activity.addElement(read);
-            sendEvt.addNext(read);
+            TMLChoice testingEvt = new TMLChoice("testingEvtVC", referenceObject);
+            addElement(notifiedEvent, testingEvt);
 
-            TMLWriteChannel write = new TMLWriteChannel("WriteFlit" + i, referenceObject);
-            write.addChannel(outputChannels.get(i));
-            write.setNbOfSamples("1");
-            activity.addElement(write);
-            read.addNext(write);
+            TMLStopState endOfLoopNotified = new TMLStopState("NoEvetNorispkt", referenceObject);
+            addElement(testingEvt, endOfLoopNotified);
+            testingEvt.addGuard("(nEvt == 0) and (ispkt" + i + " == 0)");
 
-            TMLStopState stopL = new TMLStopState("WriteFlit" + i, referenceObject);
-            activity.addElement(stopL);
-            write.addNext(stopL);
-        }*/
+            TMLSequence intermediateSeq = new TMLSequence("intermediateSeq", referenceObject);
+            addElement(testingEvt, intermediateSeq);
+            testingEvt.addGuard("(nEvt > 0) or (ispkt" + i + " > 0)");
 
-        // Ending loop
-        TMLStopState stop = new TMLStopState("StopState", referenceObject);
-        activity.addElement(stop);
-        loop.addNext(stop);
+            // Choice on the left of intermediate sequence
+            TMLChoice ispktChoice = new TMLChoice("ChoiceOnNewPacket", referenceObject);
+            addElement(intermediateSeq, ispktChoice);
+
+            TMLStopState endOfIspkt = new TMLStopState("endOfIspkt", referenceObject);
+            addElement(testingEvt, endOfIspkt);
+            testingEvt.addGuard("(ispkt" + i + " > 0)");
+
+            TMLWaitEvent waitingForStartPacket = new TMLWaitEvent("WaitingStartPacket", referenceObject);
+            waitingForStartPacket.setEvent(inputEventsFromMUX.get(i));
+            waitingForStartPacket.addParam("pktlen" + i);
+            waitingForStartPacket.addParam("dst" + i);
+            waitingForStartPacket.addParam("vc");
+            waitingForStartPacket.addParam("eop");
+            addElement(ispktChoice, waitingForStartPacket);
+            ispktChoice.addGuard("ispkt == 0");
+
+            TMLActionState ispktSetting = new TMLActionState("ispktSetting", referenceObject);
+            ispktSetting.setAction("ispkt = 1");
+            addElement(waitingForStartPacket, ispktSetting);
+
+            TMLActionState iSetting = new TMLActionState("iSetting", referenceObject);
+            iSetting.setAction("i" + i + " = 1");
+            addElement(ispktSetting, iSetting);
+
+            TMLStopState endOfInitPkt = new TMLStopState("endOfInitPkt", referenceObject);
+            addElement(iSetting, endOfInitPkt);
+
+            // Right branch of intermediate seq
+
+
+        }
+
+
 
     }
 

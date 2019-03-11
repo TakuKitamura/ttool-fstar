@@ -57,7 +57,7 @@ public class TranslatedRouter<E>  {
     private final int CHANNEL_SIZE = 4;
     private final int CHANNEL_MAX = 8;
 
-    private int nbOfVCs, xPos, yPos;
+    private int nbOfVCs, xPos, yPos, nbOfApps;
     private TMLMapping<E> map;
     private Vector<TMLEvent> pktins;
 
@@ -65,8 +65,9 @@ public class TranslatedRouter<E>  {
 
 
 
-    public TranslatedRouter(int nbOfVCs, int xPos, int yPos) {
+    public TranslatedRouter(int nbOfApps, int nbOfVCs, int xPos, int yPos) {
         this.nbOfVCs = nbOfVCs;
+        this.nbOfApps = nbOfApps;
         this.xPos = xPos;
         this.yPos = yPos;
     }
@@ -86,6 +87,8 @@ public class TranslatedRouter<E>  {
         map = new TMLMapping<E>(tmlm, tmla, false);
 
         // MUX for the different writing tasks
+
+
 
 
 

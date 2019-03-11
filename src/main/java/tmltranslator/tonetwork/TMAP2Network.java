@@ -81,7 +81,10 @@ public class TMAP2Network  {
         // Make all routers
         for(int i=0; i<nocSize; i++) {
             for(int j=0; j<nocSize; j++) {
-                TranslatedRouter tr = new TranslatedRouter(nbOfVCs, i, j);
+                // We must find the number of apps connected on this router
+                int nbOfApps = 2;
+
+                TranslatedRouter tr = new TranslatedRouter(nbOfApps, nbOfVCs, i, j);
                 routers[i][j] = tr;
                 tr.makeRouter();
             }
@@ -95,8 +98,7 @@ public class TMAP2Network  {
 
         // Connect channels to the NoC
 
-
-
+        
 
         // A bridge is put with the same position as the router as to allow classical paths not to use the router
 

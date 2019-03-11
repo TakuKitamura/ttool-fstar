@@ -237,6 +237,15 @@ public class TMLTask extends TMLElement {
         return activity;
     }
 
+    public void addElement(TMLActivityElement prev, TMLActivityElement succ) {
+        if (activity == null) {
+            return;
+        }
+        activity.addElement(succ);
+        prev.addNext(succ);
+    }
+
+
     public void setExit(boolean b) {
         mustExit = b;
     }
