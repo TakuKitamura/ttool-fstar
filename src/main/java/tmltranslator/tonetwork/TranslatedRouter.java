@@ -85,6 +85,10 @@ public class TranslatedRouter<E>  {
         TMLArchitecture tmla = new TMLArchitecture();
         map = new TMLMapping<E>(tmlm, tmla, false);
 
+        // MUX for the different writing tasks
+
+
+
         // VC DISPATCHERS
         // One dispatcher per port
         // A dispatcher outputs to VCs tasks

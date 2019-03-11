@@ -2286,7 +2286,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 
         if ((msg != null) && (error != null)) {
             if (error.trim().equals("0")) {
-                printFromServer(msg + ": command successful");
+                //printFromServer(msg + ": command successful");
                 
                 if (msg.indexOf("reset") != -1) {
                     time.setText("0");
