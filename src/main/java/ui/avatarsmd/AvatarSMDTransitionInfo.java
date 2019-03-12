@@ -458,9 +458,13 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
 
     @Override
     public boolean hasAnUpdateOnPointedComponent() {
-        int index = getPointedExpressionOrder();
-        //TraceManager.addDev("CurrentIndex: " + highlightedExpr + " newIndex:" + index);
+        Integer indexI = getPointedExpressionOrder();
+        if (indexI == null) {
+            return false;
+        }
+        int index = indexI.intValue();
 
+        //TraceManager.addDev("CurrentIndex: " + highlightedExpr + " newIndex:" + index);
         return index != highlightedExpr;
 
         //return true;

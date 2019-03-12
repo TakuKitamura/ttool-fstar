@@ -98,7 +98,7 @@ public class TMAP2Network  {
 
         // Connect channels to the NoC
 
-        
+
 
         // A bridge is put with the same position as the router as to allow classical paths not to use the router
 
