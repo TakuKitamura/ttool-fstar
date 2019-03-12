@@ -1574,9 +1574,9 @@ public class AvatarDesignPanelTranslator {
                              final AvatarSMDConnector connector) {
         final AvatarStateMachineOwner block = transition.getBlock();
         final String guardStr = modifyString(connector.getEffectiveGuard());
-        TraceManager.addDev("Effective guard:" + guardStr);
+        //TraceManager.addDev("Effective guard:" + guardStr);
         final AvatarGuard guard = AvatarGuard.createFromString(block, guardStr);
-         TraceManager.addDev("Avatarguard:" + guard);
+         //TraceManager.addDev("Avatarguard:" + guard);
         final int error;
 
         if (guard.isElseGuard()) {
