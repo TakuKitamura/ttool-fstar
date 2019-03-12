@@ -186,7 +186,11 @@ public	class JFrameHelp extends JFrame implements ActionListener {
 
 
         jp01.setBorder(new javax.swing.border.TitledBorder("Help of: " + he.getMasterKeyword()));
-        pane.setText(he.getHTMLContent());
+        String content = handleImages(he.getHTMLContent());
+        he.setHTMLContent(content);
+        //String content = he.getHTMLContent();
+        //TraceManager.addDev("HTML content is:" + content);
+        pane.setText(content);
         setVisible(true);
     }
     
@@ -268,6 +272,43 @@ public	class JFrameHelp extends JFrame implements ActionListener {
 
         TraceManager.addDev("Setting new help entry with search results ");
         setHelpEntry(srhe);
+    }
+
+    private String handleImages(String initialContent) {
+        int index;
+        int cpt = 0;
+
+        while ((index = initialContent.indexOf("<img src=\"file:")) != -1) {
+
+            String tmpContent = initialContent.substring(index + 15, initialContent.length());
+            int index2 = tmpContent.indexOf("\"");
+            if (index2 == -1) return initialContent;
+
+            String infoFile = tmpContent.substring(0, index2);
+
+            if (infoFile.startsWith("../ui/util/")) {
+                infoFile = infoFile.substring(11, infoFile.length());
+            }
+
+            URL url = IconManager.class.getResource(infoFile);
+            if (url != null) {
+                String imgsrc = url.toString();
+                TraceManager.addDev("Infofile:" + infoFile + " imgsrc=" + imgsrc);
+                String tmp1 = initialContent.substring(0, index + 10);
+                String tmp2 = initialContent.substring(index + 15 + index2, initialContent.length());
+                initialContent = tmp1 + imgsrc + tmp2;
+                TraceManager.addDev("New initial content:" + initialContent);
+            } else {
+                return initialContent;
+            }
+            cpt ++;
+            if (cpt == 1000) {
+                return initialContent;
+            }
+        }
+
+        return initialContent;
+
     }
 
     

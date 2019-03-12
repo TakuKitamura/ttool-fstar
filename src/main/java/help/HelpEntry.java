@@ -189,6 +189,10 @@ public class HelpEntry implements GenericTree {
         return htmlContent;
     }
 
+    public void setHTMLContent(String HTMLContent) {
+        htmlContentLowerCase = HTMLContent;
+    }
+
 
     private String filterHTMLContent(String input) {
 
