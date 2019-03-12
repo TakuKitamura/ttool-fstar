@@ -1,4 +1,5 @@
 - general TTool general info tool
+-- syntaxchecking syntaxchecking syntax checking model verification
 - diplodocus diplodocus hardware software partitioning dse design space exploration
 -- architecture architecture hardware os operating system
 --- cpu cpu processor cpu os
