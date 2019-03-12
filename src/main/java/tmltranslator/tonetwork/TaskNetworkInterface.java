@@ -81,6 +81,8 @@ public class TaskNetworkInterface extends TMLTask {
         this.addAttribute(loopExit);
         TMLAttribute higherPrio = new TMLAttribute("higherPrio", "higherPrio", new TMLType(TMLType.NATURAL), "0");
         this.addAttribute(higherPrio);
+        TMLAttribute feedback = new TMLAttribute("feedback", "feedback", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(feedback);
 
 
         //Attributes per tasks
@@ -128,10 +130,30 @@ public class TaskNetworkInterface extends TMLTask {
         addElement(state, mainSequence);
 
         for(i=0; i<nbOfVCs; i++) {
+            TMLChoice testOnLoopExit = null;
+            if (i>0) {
+                //Test on loopexit
+                testOnLoopExit = new TMLChoice("testOnLoopExit", referenceObject);
+                addElement(mainSequence, testOnLoopExit);
+
+                // Right branch
+                TMLStopState endOfLoopExit = new TMLStopState("endOfLoopExit", referenceObject);
+                addElement(testOnLoopExit, endOfLoopExit);
+                testOnLoopExit.addGuard("loopexit == 1");
+
+            } else {
+                testOnLoopExit = null;
+            }
+
             TMLNotifiedEvent notifiedEvent = new TMLNotifiedEvent("NotifiedVC", referenceObject);
             notifiedEvent.setEvent(inputEventsFromMUX.get(i));
             notifiedEvent.setVariable("nEvt");
-            addElement(mainSequence, notifiedEvent);
+            if (testOnLoopExit == null) {
+                addElement(mainSequence, notifiedEvent);
+            } else {
+                addElement(testOnLoopExit, notifiedEvent);
+                testOnLoopExit.addGuard("loopexit == 2");
+            }
 
             TMLChoice testingEvt = new TMLChoice("testingEvtVC", referenceObject);
             addElement(notifiedEvent, testingEvt);
@@ -173,6 +195,93 @@ public class TaskNetworkInterface extends TMLTask {
             addElement(iSetting, endOfInitPkt);
 
             // Right branch of intermediate seq
+            TMLForLoop loopOfRightBranch = new TMLForLoop("LoopOfRightBranch", referenceObject);
+            loopOfRightBranch.setInit("loopexit = 0");
+            loopOfRightBranch.setCondition("loopexit < 1");
+            loopOfRightBranch.setIncrement("loopexit = loopexit");
+            addElement(intermediateSeq, loopOfRightBranch);
+
+            TMLNotifiedEvent feedbackNotified = new TMLNotifiedEvent("WaitingForFeedback", referenceObject);
+            feedbackNotified.setEvent(inputFeedbackEvents.get(i));
+            feedbackNotified.setVariable("feedback");
+            addElement(loopOfRightBranch, feedbackNotified);
+
+            // Also adding end of intermediate loop
+             TMLStopState endOfIntermediateLoop = new TMLStopState("endOfIntermediateLoop", referenceObject);
+            addElement(loopOfRightBranch, endOfIntermediateLoop);
+
+            // Test on feedback
+            TMLChoice testOnFeedback = new TMLChoice("TestOnFeedback", referenceObject);
+            addElement(feedbackNotified, testOnFeedback);
+
+            // No feedback
+            TMLActionState noFeedbackAction = new TMLActionState("noFeedbackAction", referenceObject);
+            state.setAction("loopexit = 2");
+            addElement(testOnFeedback, noFeedbackAction);
+            testOnFeedback.addGuard("else");
+
+            // Feedback present
+            TMLWriteChannel sendingSample = new TMLWriteChannel("SendingSample", referenceObject);
+            sendingSample.addChannel(outputChannel);
+            addElement(testOnFeedback, sendingSample);
+            testOnFeedback.addGuard("feedback > 0");
+
+            // Waiting for feedback
+            TMLWaitEvent waitingForFeedback = new TMLWaitEvent("WaitingForFeedback", referenceObject);
+            waitingForFeedback.setEvent(inputFeedbackEvents.get(i));
+            addElement(sendingSample, waitingForFeedback);
+
+            TMLChoice packetLengthChoice = new TMLChoice("PacketLengthChoice",referenceObject);
+            addElement(waitingForFeedback, packetLengthChoice);
+
+            // Left branch
+            TMLSendEvent sendEvtpktin = new TMLSendEvent("SendEvtPktin", referenceObject);
+            sendEvtpktin.setEvent(outputEvent);
+            sendEvtpktin.addParam("pktlen" + i);
+            sendEvtpktin.addParam("dst" + i);
+            sendEvtpktin.addParam("vc" + i);
+            sendEvtpktin.addParam("0");
+            addElement(packetLengthChoice, sendEvtpktin);
+            packetLengthChoice.addGuard("i" + i + " < pktlen" + i + " - 1");
+
+            TMLActionState asOnI = new TMLActionState("ActionstateOnI", referenceObject);
+            asOnI.setAction("i" + i + " = i" + i + " 1");
+            addElement(sendEvtpktin, asOnI);
+
+            TMLStopState endOfLB = new TMLStopState("EndOfLB", referenceObject);
+            addElement(asOnI, endOfLB);
+
+            // Middle branch
+            TMLActionState loopExitMB = new TMLActionState("loopExitMB", referenceObject);
+            loopExitMB.setAction("loopexit = 1");
+            addElement(packetLengthChoice, loopExitMB);
+            packetLengthChoice.addGuard("i" + i + " == pktlen" + i);
+
+            TMLActionState isPktMB = new TMLActionState("isPktMB", referenceObject);
+            isPktMB.setAction("ispkt" + i + " = 0");
+            addElement(loopExitMB, isPktMB);
+
+            TMLStopState endOfMB = new TMLStopState("endOfMB", referenceObject);
+            addElement(isPktMB, endOfMB);
+
+
+            // Right branch
+            TMLSendEvent sendEvtpktinRB = new TMLSendEvent("sendEvtpktinRB", referenceObject);
+            sendEvtpktinRB.setEvent(outputEvent);
+            sendEvtpktinRB.addParam("pktlen" + i);
+            sendEvtpktinRB.addParam("dst" + i);
+            sendEvtpktinRB.addParam("vc" + i);
+            sendEvtpktinRB.addParam("1");
+            addElement(packetLengthChoice, sendEvtpktinRB);
+            packetLengthChoice.addGuard("i" + i + " == pktlen" + i + " - 1");
+
+            TMLActionState asOnIRB = new TMLActionState("asOnIRB", referenceObject);
+            asOnI.setAction("i" + i + " = i" + i + " 1");
+            addElement(sendEvtpktinRB, asOnIRB);
+
+            TMLStopState endOfRB = new TMLStopState("endOfRB", referenceObject);
+            addElement(asOnIRB, endOfRB);
+
 
 
         }
