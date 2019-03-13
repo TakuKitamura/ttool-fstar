@@ -308,8 +308,25 @@ public class JDialogNoCManagement extends JDialog implements ActionListener, Lis
         TraceManager.addDev("Thread started");
         outputText.append("\nPreparing model\n");
 
-        TMAP2Network  t2n = new TMAP2Network<>(map, 2);
-        t2n.removeAllRouterNodes();
+        int size = map.getTMLArchitecture().getSizeOfNoC();
+
+        if (size < 0) {
+            outputText.append("\nNo NoC found. Aborting.\n");
+            return;
+        }
+
+        if (size < 2) {
+            outputText.append("\nNoC must be at least of size 2x2. Currently: " + size + ". Aborting.\n");
+            return;
+        }
+
+        TMAP2Network  t2n = new TMAP2Network<>(map, size);
+        String error = t2n.removeAllRouterNodes();
+        if (error != null) {
+            outputText.append("\nERROR: " + error + ". Aborting.\n");
+            stopProcess();
+            return;
+        }
 
         outputText.append("\nAll done\n");
 

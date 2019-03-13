@@ -2991,6 +2991,13 @@ public class GTMLModeling {
                     router.bufferByteSize = routerNode.getBufferByteDataSize();
                     router.clockRatio = routerNode.getClockRatio();
                     router.size = routerNode.getNoCSize();
+                    boolean b = router.makePlacement(routerNode.getPlacement(), router.size);
+                    if (!b) {
+                        UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "NoC " + routerNode.getName() + "has an invalid placement map: ");
+                        ce.setTDiagramPanel(tmlap.tmlap);
+                        ce.setTGComponent(routerNode);
+                        checkingErrors.add(ce);
+                    }
                     listE.addCor(router, routerNode);
                     archi.addHwNode(router);
                     //TraceManager.addDev("Router node added:" + router.getName());

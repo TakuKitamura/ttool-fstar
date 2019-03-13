@@ -449,4 +449,18 @@ public class TMLArchitecture {
         }
         hwnodes = newList;
     }
+
+    public HwNoC getHwNoC() {
+        for(HwNode node: hwnodes) {
+            if (node instanceof HwNoC) {
+                return ((HwNoC)node);
+            }
+        }
+        return null;
+    }
+
+    public int getSizeOfNoC() {
+        HwNoC noc = getHwNoC();
+        return (noc == null ? -1 : noc.size);
+    }
 }

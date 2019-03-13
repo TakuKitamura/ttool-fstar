@@ -46,12 +46,15 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import tmltranslator.HwBridge;
+import tmltranslator.HwExecutionNode;
+import tmltranslator.HwNoC;
 import ui.*;
 import ui.util.IconManager;
 import ui.window.JDialogRouterNode;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
 
 /**
    * Class TMLArchiRouterNode
@@ -69,6 +72,7 @@ public class TMLArchiRouterNode extends TMLArchiCommunicationNode implements Swa
     private int size = 2; // 2x2 NoC by default
 
     private int bufferByteDataSize = HwBridge.DEFAULT_BUFFER_BYTE_DATA_SIZE;
+    private String placement = "";
 
     public TMLArchiRouterNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -180,7 +184,7 @@ public class TMLArchiRouterNode extends TMLArchiCommunicationNode implements Swa
 
         JDialogRouterNode dialog = new JDialogRouterNode(frame, "Setting NoC attributes", this);
      //   dialog.setSize(350, 350);
-        GraphicLib.centerOnParent(dialog, 350, 350);
+        GraphicLib.centerOnParent(dialog, 650, 350);
         dialog.setVisible( true ); // blocked until dialog has been closed
 
         if (!dialog.isRegularClose()) {
@@ -243,6 +247,17 @@ public class TMLArchiRouterNode extends TMLArchiCommunicationNode implements Swa
             }
         }
 
+        if (dialog.getPlacement().length() != 0) {
+                String tmpS = dialog.getPlacement();
+                HashMap<String, Point> hashMap = HwNoC.makePlacementMap(tmpS, size);
+                if (hashMap == null) {
+                    error = true;
+                    errors += "Placement is invalid  ";
+                } else {
+                    placement = tmpS;
+                }
+        }
+
 
         if (error) {
             JOptionPane.showMessageDialog(frame,
@@ -266,6 +281,7 @@ public class TMLArchiRouterNode extends TMLArchiCommunicationNode implements Swa
         sb.append("\" />\n");
         sb.append("<attributes bufferByteDataSize=\"" + bufferByteDataSize + "\" ");
         sb.append(" size=\"" + size + "\" ");
+        sb.append(" placement=\"" + placement + "\" ");
         sb.append(" clockRatio=\"" + clockRatio + "\" ");
         sb.append("/>\n");
         sb.append("</extraparam>\n");
@@ -312,6 +328,10 @@ public class TMLArchiRouterNode extends TMLArchiCommunicationNode implements Swa
                                 if ((elt.getAttribute("clockRatio") != null) &&  (elt.getAttribute("clockRatio").length() > 0)){
                                     clockRatio = Integer.decode(elt.getAttribute("clockRatio")).intValue();
                                 }
+
+                                if ((elt.getAttribute("placement") != null) &&  (elt.getAttribute("placement").length() > 0)){
+                                    placement = elt.getAttribute("placement");
+                                }
                             }
                         }
                     }
@@ -342,6 +362,10 @@ public class TMLArchiRouterNode extends TMLArchiCommunicationNode implements Swa
 
     public int getComponentType()       {
         return TRANSFER;
+    }
+
+    public String getPlacement() {
+        return placement;
     }
 
 

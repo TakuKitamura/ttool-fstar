@@ -45,7 +45,9 @@ import myutil.FileUtils;
 import myutil.TraceManager;
 import tmltranslator.*;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 
 /**
@@ -77,7 +79,7 @@ public class TMAP2Network<E>  {
         - Only one router set (i.e. no router, then bus, then router) between two tasks
         - Channels must be mapped on at least one route to be taken into account
      */
-    public void removeAllRouterNodes() {
+    public String removeAllRouterNodes() {
         //TMLModeling<E> tmlm = new TMLModeling<>();
         //TMLArchitecture tmla = new TMLArchitecture();
         //tmlmapping = new TMLMapping<E>(tmlm, tmla, false);
@@ -91,15 +93,23 @@ public class TMAP2Network<E>  {
         // all local channels are mapped on this memory, otherwise they
         // use the bus
 
-        // So, from the initial archi, we keep only the HwExecutionNodes
+        // So, from the initial archi, we keep only the HwExecutionNodes and the NoC
+        HwNoC noc = tmla.getHwNoC();
+        if (noc == null) {
+            return "No NoC in the architecture";
+        }
+
         tmla.removeAllNonHwExecutionNodes();
 
         // Then, for each HwExecNode, we add one bus and one memory
         // and we create the corresponding link
         tmla.getHwLinks().clear();
         List<HwNode> newList = new ArrayList<HwNode>();
+        int nbOfHwExecutionNode = 0;
         for(HwNode node: tmla.getHwNodes()) {
             if (node instanceof HwExecutionNode) {
+                nbOfHwExecutionNode ++;
+                newList.add(node);
                 HwBus bus = new HwBus(node.getName() + "__bus");
                 HwMemory mem = new HwMemory(node.getName() + "__mem");
                 newList.add(bus);
@@ -118,6 +128,34 @@ public class TMAP2Network<E>  {
             tmla.addHwNode(node);
         }
         newList = null;
+
+        // Check for no more CPU than gridsize
+        // Put a random place to non placed CPU
+        // All CPU must be placed
+        if (nbOfHwExecutionNode > (nocSize * nocSize)) {
+            return "Too many processors for the NoC size";
+        }
+
+        // Check for placementMap
+        if (noc.placementMap == null) {
+            noc.makePlacement("", noc.size);
+        }
+
+        for(HwNode node: tmla.getHwNodes()) {
+            if (node instanceof HwExecutionNode) {
+                Point p = noc.placementMap.get(node.getName());
+                if (p == null) {
+                    // Processor not mapped on grid
+                    // Find an available place
+                    if (!(noc.map(node.getName()))) {
+                        return "Could not map " + node.getName() + " on the NoC";
+                    }
+                }
+            }
+        }
+        // the NoC is fully mapped. Let's print it!
+        TraceManager.addDev("\nNoc:\n" + noc.toString() + "\n\n");
+
 
         // We need to update mapping information
         // First, wee keep only the task mapping
@@ -148,7 +186,7 @@ public class TMAP2Network<E>  {
                 // We must find the number of apps connected on this router
                 int nbOfApps = 2;
 
-                TranslatedRouter tr = new TranslatedRouter<>(tmlmapping, channelsCommunicatingViaNoc, nbOfVCs, i, j);
+                TranslatedRouter tr = new TranslatedRouter<>(tmlmapping, noc, channelsCommunicatingViaNoc, nbOfVCs, i, j);
                 routers[i][j] = tr;
                 tr.makeRouter();
             }
@@ -165,8 +203,9 @@ public class TMAP2Network<E>  {
 
 
         // A bridge is put with the same position as the router as to allow classical paths not to use the router
+        
 
-        // We consider all channels mapped on at least one router.
+        return null; // all ok
     }
 
 }

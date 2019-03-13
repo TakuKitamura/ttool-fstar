@@ -60,6 +60,7 @@ public class TranslatedRouter<E>  {
 
     private int nbOfVCs, xPos, yPos, nbOfApps;
 
+    private HwNoC noc;
     private List<TMLChannel> channelsViaNoc;
 
     private Vector<TMLEvent> pktins;
@@ -69,8 +70,9 @@ public class TranslatedRouter<E>  {
 
 
 
-    public TranslatedRouter(TMLMapping<E> tmlmap, List<TMLChannel> channelsViaNoc, int nbOfVCs, int xPos, int yPos) {
+    public TranslatedRouter(TMLMapping<E> tmlmap, HwNoC noc, List<TMLChannel> channelsViaNoc, int nbOfVCs, int xPos, int yPos) {
         this.nbOfVCs = nbOfVCs;
+        this.noc = noc;
         this.channelsViaNoc = channelsViaNoc;
         this.xPos = xPos;
         this.yPos = yPos;
