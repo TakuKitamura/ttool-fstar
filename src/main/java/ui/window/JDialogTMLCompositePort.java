@@ -744,6 +744,7 @@ public class JDialogTMLCompositePort extends JDialogBase implements ActionListen
         lossPercentageText.setEnabled(origin.getSelectedIndex() == 0);
         maxNbOfLossText.setEnabled(origin.getSelectedIndex() == 0);
         lossPercentageLabel.setEnabled(origin.getSelectedIndex() == 0);
+        vcText.setEnabled(origin.getSelectedIndex() == 0);
         maxNbOfLossLabel.setEnabled(origin.getSelectedIndex() == 0);
         if (confCheckBox.isSelected() || authCheckBox.isSelected()) {
             refReq.setEnabled(true);

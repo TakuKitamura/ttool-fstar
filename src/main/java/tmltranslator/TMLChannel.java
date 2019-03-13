@@ -82,6 +82,8 @@ public class TMLChannel extends TMLCommunicationElement {
     private String CR = "\n";
     private String SP = " ";
     private int priority;
+
+    private int vc;
     
     public ArrayList<TMLTask> originalOriginTasks = new ArrayList<TMLTask>(); 
     public ArrayList<TMLTask> originalDestinationTasks = new ArrayList<TMLTask>(); 
@@ -186,6 +188,13 @@ public class TMLChannel extends TMLCommunicationElement {
     }
 
     public int getNumberOfSamples() { return nbOfSamples;}
+
+    public void setVC(int vc) {
+        this.vc = vc;
+    }
+
+    public int getVC() { return vc;}
+
 
     public TMLTask getDestinationTask(int index) {
         return destinationTasks.get(index);
