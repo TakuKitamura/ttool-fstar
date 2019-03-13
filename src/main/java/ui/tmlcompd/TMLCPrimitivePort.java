@@ -159,6 +159,9 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
     protected String dataFlowType = "VOID";
     protected String associatedEvent = "VOID";
 
+    // Network
+    protected int vc;
+
 
     public int verification;
     public String oldName;
@@ -600,7 +603,12 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
             }
         }
 
-        JDialogTMLCompositePort jda = new JDialogTMLCompositePort(commName, typep, list[0], list[1], list[2], list[3], list[4], isOrigin, isFinite, isBlocking, ""+maxSamples, ""+widthSamples, isLossy, lossPercentage, maxNbOfLoss, frame, "Port properties", otherTypes, dataFlowType, associatedEvent, isPrex, isPostex, checkConf, checkAuth, reference, refs);
+        JDialogTMLCompositePort jda = new JDialogTMLCompositePort(commName, typep, list[0], list[1], list[2], list[3],
+                list[4], isOrigin, isFinite, isBlocking,
+                ""+maxSamples, ""+widthSamples, isLossy, lossPercentage, maxNbOfLoss,
+                frame, "Port properties",
+                otherTypes, dataFlowType, associatedEvent, isPrex, isPostex, checkConf, checkAuth, reference, refs,
+                vc);
         // jda.setSize(350, 700);
         GraphicLib.centerOnParent(jda, 350, 700 );
         // jda.show(); // blocked until dialog has been closed
@@ -688,6 +696,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
                     list[i].setType(jda.getStringType(i));
                     //TraceManager.addDev("Recorded type: " + list[i].getTypeOther());
                 }
+                vc = jda.getVC();
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(frame, "Non valid value: " + e.getMessage(), "Error", JOptionPane.INFORMATION_MESSAGE);
                 return false;
@@ -785,6 +794,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         sb.append("\" checkAuth=\"" + checkAuth);
         sb.append("\" checkWeakAuthStatus=\"" + checkWeakAuthStatus);
         sb.append("\" checkStrongAuthStatus=\"" + checkStrongAuthStatus);
+        sb.append("\" vc=\"" + vc);
         sb.append("\" />\n");
         for(int i=0; i<nbMaxAttribute; i++) {
             //
@@ -897,6 +907,13 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 
                                 } catch (Exception e) {}
 
+                                try {
+                                    vc = Integer.decode(elt.getAttribute("vc"));
+
+                                } catch (Exception e) {
+                                    vc = 0;
+                                }
+
                             }
 
                             makeValue();
@@ -969,6 +986,10 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         return TGComponentManager.CONNECTOR_PORT_TMLC;
     }
 
+    public int getVC() {
+        return vc;
+    }
+
 
     public String getAttributes() {
         String attr = "";
@@ -1031,8 +1052,10 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         }
 
         if (conflict) {
-            attr += "Error in path=" + conflictMessage;
+            attr += "Error in path=" + conflictMessage + "\n";
         }
+
+        attr += "vc=" + vc;
 
         return attr;
     }

@@ -203,7 +203,7 @@ public class TMAP2Network<E>  {
 
 
         // A bridge is put with the same position as the router as to allow classical paths not to use the router
-        
+
 
         return null; // all ok
     }
