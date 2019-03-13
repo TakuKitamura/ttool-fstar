@@ -55,7 +55,7 @@ import java.util.*;
  * @author Ludovic Apvrille
  * @version 1.0 07/01/2019
  */
-public class TMAP2Network  {
+public class TMAP2Network<E>  {
 
     private TMLModeling<?> tmlmodeling;
     private TMLMapping<?> tmlmapping;
@@ -78,13 +78,77 @@ public class TMAP2Network  {
         - Channels must be mapped on at least one route to be taken into account
      */
     public void removeAllRouterNodes() {
+        //TMLModeling<E> tmlm = new TMLModeling<>();
+        //TMLArchitecture tmla = new TMLArchitecture();
+        //tmlmapping = new TMLMapping<E>(tmlm, tmla, false);
+
+        TMLArchitecture tmla = tmlmapping.getTMLArchitecture();
+        TMLModeling<?> tmlm = tmlmapping.getTMLModeling();
+
+        // we have to redo the architecture:
+        // we assume that each processor is connected directly to the NoC via a first bus
+        // so, each CPU gets one memory, on bus connecting the mem and the NoC.
+        // all local channels are mapped on this memory, otherwise they
+        // use the bus
+
+        // So, from the initial archi, we keep only the HwExecutionNodes
+        tmla.removeAllNonHwExecutionNodes();
+
+        // Then, for each HwExecNode, we add one bus and one memory
+        // and we create the corresponding link
+        tmla.getHwLinks().clear();
+        List<HwNode> newList = new ArrayList<HwNode>();
+        for(HwNode node: tmla.getHwNodes()) {
+            if (node instanceof HwExecutionNode) {
+                HwBus bus = new HwBus(node.getName() + "__bus");
+                HwMemory mem = new HwMemory(node.getName() + "__mem");
+                newList.add(bus);
+                newList.add(mem);
+
+                HwLink cpuToBus = new HwLink(node.getName() + "__tocpu");
+                cpuToBus.setNodes(bus, node);
+                tmla.addHwLink(cpuToBus);
+
+                HwLink memToBus = new HwLink(node.getName() + "__tomem");
+                memToBus.setNodes(bus, mem);
+                tmla.addHwLink(memToBus);
+            }
+        }
+        for(HwNode node: newList) {
+            tmla.addHwNode(node);
+        }
+        newList = null;
+
+        // We need to update mapping information
+        // First, wee keep only the task mapping
+        // then, we map to the local memory only channels between tasks on the same CPU
+        // Other tasks, i.e. communicating thu the NoC, are put in a special list
+        tmlmapping.emptyCommunicationMapping();
+        List<TMLChannel> channelsCommunicatingViaNoc = new ArrayList<>();
+        List<tmltranslator.TMLChannel> allChannels = tmlm.getChannels();
+        for(TMLChannel chan: allChannels) {
+            HwNode originNode = tmlmapping.getHwNodeOf(chan.getOriginTask());
+            HwNode destinationNode = tmlmapping.getHwNodeOf(chan.getDestinationTask());
+            if (originNode == destinationNode) {
+                // Channel mapped on the same node
+                // We map it to the corresponding mem and bus
+                HwNode bus = tmla.getHwNodeByName(originNode.getName() + "__bus");
+                HwNode mem = tmla.getHwNodeByName(originNode.getName() + "__mem");
+                if (bus != null ) tmlmapping.addCommToHwCommNode(chan, (HwCommunicationNode)bus);
+                if (bus != null ) tmlmapping.addCommToHwCommNode(chan, (HwCommunicationNode)mem);
+            } else {
+                channelsCommunicatingViaNoc.add(chan);
+            }
+        }
+
+
         // Make all routers
         for(int i=0; i<nocSize; i++) {
             for(int j=0; j<nocSize; j++) {
                 // We must find the number of apps connected on this router
                 int nbOfApps = 2;
 
-                TranslatedRouter tr = new TranslatedRouter(nbOfApps, nbOfVCs, i, j);
+                TranslatedRouter tr = new TranslatedRouter<>(tmlmapping, channelsCommunicatingViaNoc, nbOfVCs, i, j);
                 routers[i][j] = tr;
                 tr.makeRouter();
             }

@@ -158,6 +158,11 @@ public class TMLMapping<E> {
         return null;
     }
 
+    public void emptyCommunicationMapping() {
+        oncommnodes.clear();
+        mappedcommelts.clear();
+    }
+
     public CorrespondanceTGElement getCorrespondanceList() {
         return listE;
     }
@@ -601,6 +606,7 @@ public class TMLMapping<E> {
 
         return onnodes.get(index);
     }
+
 
     public void removeTask(TMLTask _task) {
         int index = mappedtasks.indexOf(_task);
@@ -1799,7 +1805,21 @@ public class TMLMapping<E> {
 
     // Routers / NoC / Network
     public void removeAllRouters() {
-        TMAP2Network translator = new TMAP2Network(this, 2);
+        TMAP2Network translator = new TMAP2Network<>(this, 2);
         translator.removeAllRouterNodes();
+    }
+
+    public int getNbOfNoCs() {
+        if (tmla == null) {
+            return 0;
+        }
+
+        int cpt = 0;
+        for(HwNode node: tmla.getHwNodes()) {
+            if (node instanceof HwNoC) {
+                cpt ++;
+            }
+        }
+        return cpt;
     }
 }

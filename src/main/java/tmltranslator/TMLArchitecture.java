@@ -437,4 +437,16 @@ public class TMLArchitecture {
         }
         return false;
     }
+
+
+    // For NoC manipulation
+    public void removeAllNonHwExecutionNodes() {
+        List<HwNode> newList = new ArrayList<HwNode>();
+        for(HwNode node: hwnodes) {
+            if (node instanceof HwExecutionNode) {
+                newList.add(node);
+            }
+        }
+        hwnodes = newList;
+    }
 }

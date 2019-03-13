@@ -81,7 +81,7 @@ public  class TMLArchiConnectorNode extends TGConnector implements WithAttribute
     public boolean editOndoubleClick(JFrame frame) {
         JDialogTMLConnectorNode dialog = new JDialogTMLConnectorNode(frame, "Setting connector attributes", this);
 		//dialog.setSize(350, 300);
-        GraphicLib.centerOnParent(dialog, 350, 300 );
+        GraphicLib.centerOnParent(dialog, 450, 300 );
         dialog.setVisible( true ); // blocked until dialog has been closed
         
 		if (!dialog.isRegularClose()) {

@@ -146,7 +146,7 @@ public class TMLArchiTextSpecification {
         HwA hwa;
         HwBus bus;
         HwBridge bridge;
-        HwRouter router;
+        HwNoC router;
         HwMemory memory;
         HwDMA dma;
 
@@ -225,8 +225,8 @@ public class TMLArchiTextSpecification {
             }
 
             // Router
-            if (node instanceof HwRouter) {
-                router = (HwRouter) node;
+            if (node instanceof HwNoC) {
+                router = (HwNoC) node;
                 name = prepareString(node.getName());
                 set = "SET " + name + " ";
                 code += "NODE ROUTER " + name + CR;
@@ -461,7 +461,7 @@ public class TMLArchiTextSpecification {
                 HwBridge bridge = new HwBridge(_split[2]);
                 tmla.addHwNode(bridge);
             } else if (_split[1].equals("ROUTER")) {
-                HwRouter router = new HwRouter(_split[2]);
+                HwNoC router = new HwNoC(_split[2]);
                 tmla.addHwNode(router);
             } else if (_split[1].equals("HWA")) {
                 HwA hwa = new HwA(_split[2]);
@@ -727,8 +727,8 @@ public class TMLArchiTextSpecification {
                     }
                 }
 
-                if (node instanceof HwRouter) {
-                    HwRouter router = (HwRouter) node;
+                if (node instanceof HwNoC) {
+                    HwNoC router = (HwNoC) node;
 
                     if (!checkParameter("SET", _split, 2, 11, _lineNb)) {
                         return -1;

@@ -83,6 +83,11 @@ public class HwLink implements Comparable<HwLink> {
         return s;
     }
 
+    public void setNodes(HwBus bus, HwNode node) {
+        this.bus = bus;
+        this.hwnode = node;
+    }
+
     public boolean areConnected(HwNode node1, HwNode node2) {
         if (connectedBusHwNode(node1, node2)) {
             return true;

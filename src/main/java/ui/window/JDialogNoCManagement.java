@@ -156,7 +156,7 @@ public class JDialogNoCManagement extends JDialog implements ActionListener, Lis
         GridBagLayout gridbag03 = new GridBagLayout();
         GridBagConstraints c03 = new GridBagConstraints();
         jp03.setLayout(gridbag03);
-        jp03.setBorder(new javax.swing.border.TitledBorder("DSE Options"));
+        jp03.setBorder(new javax.swing.border.TitledBorder("NoC Management Options"));
         c03.weighty = 1.0;
         c03.weightx = 1.0;
         c03.gridwidth = GridBagConstraints.REMAINDER; //end row
@@ -308,7 +308,7 @@ public class JDialogNoCManagement extends JDialog implements ActionListener, Lis
         TraceManager.addDev("Thread started");
         outputText.append("\nPreparing model\n");
 
-        TMAP2Network  t2n = new TMAP2Network(map, 2);
+        TMAP2Network  t2n = new TMAP2Network<>(map, 2);
         t2n.removeAllRouterNodes();
 
         outputText.append("\nAll done\n");

@@ -82,6 +82,7 @@ public class TMLSyntaxChecking {
     private final String INVALID_BUS_PATH = "Bus path is invalid for channel"; // Should be a warning only
 
     private final String DUPLICATE_PATH_TO_BUS = "Path to bus is duplicated"; // Should be a warning only
+    private final String ONLY_ONE_NOC = "Only one NoC can be used"; // Should be a warning only
 
 
     private ArrayList<TMLError> errors;
@@ -134,6 +135,7 @@ public class TMLSyntaxChecking {
             checkPathToMemory();
             checkPathValidity();
             checkNonDuplicatePathToBuses();
+            checkOneNOC();
 
             // Check that if their is a memory for a channel, the memory is connected to the path
         }
@@ -805,6 +807,19 @@ public class TMLSyntaxChecking {
             }
         }
     }
+
+
+    private void checkOneNOC() {
+        TraceManager.addDev("Checking NOC Nodes");
+        int nb = mapping.getNbOfNoCs();
+
+        if (nb > 1) {
+            addError(null, null, ONLY_ONE_NOC, TMLError.ERROR_STRUCTURE);
+            return;
+        }
+
+    }
+
 
 
 }

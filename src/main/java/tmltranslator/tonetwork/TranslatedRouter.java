@@ -42,6 +42,7 @@ package tmltranslator.tonetwork;
 import tmltranslator.*;
 import ui.TGComponent;
 
+import java.util.List;
 import java.util.Vector;
 
 
@@ -58,18 +59,22 @@ public class TranslatedRouter<E>  {
     private final int CHANNEL_MAX = 8;
 
     private int nbOfVCs, xPos, yPos, nbOfApps;
-    private TMLMapping<E> map;
-    private Vector<TMLEvent> pktins;
 
+    private List<TMLChannel> channelsViaNoc;
+
+    private Vector<TMLEvent> pktins;
     private Vector<TMLTask> dispatchers;
 
+    private TMLMapping<?> tmlmap;
 
 
-    public TranslatedRouter(int nbOfApps, int nbOfVCs, int xPos, int yPos) {
+
+    public TranslatedRouter(TMLMapping<E> tmlmap, List<TMLChannel> channelsViaNoc, int nbOfVCs, int xPos, int yPos) {
         this.nbOfVCs = nbOfVCs;
-        this.nbOfApps = nbOfApps;
+        this.channelsViaNoc = channelsViaNoc;
         this.xPos = xPos;
         this.yPos = yPos;
+        this.tmlmap = tmlmap;
     }
 
 
@@ -80,11 +85,8 @@ public class TranslatedRouter<E>  {
     public void makeRouter() {
         int i, j;
         TMLTask t;
+        TMLModeling tmlm = tmlmap.getTMLModeling();
 
-        // A router is made upon tasks, hardware components and a mapping i.e. a TMLMapping
-        TMLModeling<E> tmlm = new TMLModeling<>();
-        TMLArchitecture tmla = new TMLArchitecture();
-        map = new TMLMapping<E>(tmlm, tmla, false);
 
         // MUX for the different writing tasks
 
@@ -95,7 +97,7 @@ public class TranslatedRouter<E>  {
         // VC DISPATCHERS
         // One dispatcher per port
         // A dispatcher outputs to VCs tasks
-        dispatchers = new Vector<>();
+        dispatchers = new Vector<TMLTask>();
         for(i=0; i<NB_OF_PORTS; i++) {
             //TaskINForDispatch dt = new TaskINForDispatch(nbOfVCs);
             //dispatchers.add(dt);

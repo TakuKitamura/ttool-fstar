@@ -59,7 +59,8 @@ public class TaskINForDispatch extends TMLTask {
     }
 
     // Output Channels are given in the order of VCs
-    public void generate(int nbOfVCs, TMLEvent inputEvent, TMLChannel inputChannel, Vector<TMLEvent> outputEvents, Vector<TMLChannel> outputChannels) {
+    public void generate(int nbOfVCs, TMLEvent inputEvent, TMLChannel inputChannel,
+                         Vector<TMLEvent> outputEvents, Vector<TMLChannel> outputChannels) {
 
         this.nbOfVCs = nbOfVCs;
 
