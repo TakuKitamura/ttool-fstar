@@ -102,7 +102,8 @@ public class TMLTextSpecification<E> {
 
     private Map<String, SecurityPattern> securityPatternMap = new HashMap<String, SecurityPattern>();
 
-    private static String keywords[] = {"BOOL", "INT", "NAT", "CHANNEL", "EVENT", "REQUEST", "LOSSYCHANNEL", "LOSSYEVENT", "LOSSYREQUEST", "BRBW", "NBRNBW",
+    private static String keywords[] = {"BOOL", "INT", "NAT", "CHANNEL", "EVENT", "REQUEST", "LOSSYCHANNEL", "VCCHANNEL",
+            "LOSSYEVENT", "LOSSYREQUEST", "BRBW", "NBRNBW",
                                         "BRNBW", "INF", "NIB", "NINB", "TASK", "ENDTASK", "IF", "ELSE", "ORIF", "ENDIF", "FOR", "ENDFOR",
                                         "SELECTEVT", "CASE", "ENDSELECTEVT", "ENDCASE", "WRITE", "READ", "WAIT", "NOTIFY", "NOTIFIED", "RAND", "CASERAND", "ENDRAND", "ENDCASERAND", "EXECI", "EXECC", "DELAY", "RANDOM",
                                         "RANDOMSEQ", "ENDRANDOMSEQ", "SEQ", "ENDSEQ"};
@@ -247,28 +248,39 @@ public class TMLTextSpecification<E> {
                 if (ch.isLossy()) {
                     sb += "LOSSYCHANNEL" + SP + ch.getName() + SP + ch.getLossPercentage() + SP + ch.getMaxNbOfLoss() + CR;
                 }
+
+                if (ch.getVC() >= 0) {
+                    sb += "VCCHANNEL" + SP + ch.getName() + SP + ch.getVC() + CR;
+                }
             } else {
-		sb += "CHANNEL" + SP + ch.getName() + SP + TMLChannel.getStringType(ch.getType()) + SP + ch.getSize();
+		        sb += "CHANNEL" + SP + ch.getName() + SP + TMLChannel.getStringType(ch.getType()) + SP + ch.getSize();
                 if (!ch.isInfinite()) {
                     sb += SP + ch.getMax();
                 }
 
 		
-		sb += SP + "OUT";
-		for (TMLTask task: ch.getOriginTasks()) {
-		    sb += SP + task.getName();
-		}
-		sb += SP + "IN";
-		for (TMLTask task: ch.getDestinationTasks()) {
-		    sb += SP + task.getName();
-		}
-		sb += CR;
+                sb += SP + "OUT";
+                for (TMLTask task: ch.getOriginTasks()) {
+                    sb += SP + task.getName();
+                }
+                sb += SP + "IN";
+                for (TMLTask task: ch.getDestinationTasks()) {
+                    sb += SP + task.getName();
+                }
+                sb += CR;
 		
 
-		if (ch.isLossy()) {
-                    sb += "LOSSYCHANNEL" + SP + ch.getName() + SP + ch.getLossPercentage() + SP + ch.getMaxNbOfLoss() + CR;
+                if (ch.isLossy()) {
+                            sb += "LOSSYCHANNEL" + SP + ch.getName() + SP + ch.getLossPercentage() + SP + ch.getMaxNbOfLoss() + CR;
                 }
-	    }
+
+                if (ch.getVC() >= 0) {
+                    sb += "VCCHANNEL" + SP + ch.getName() + SP + ch.getVC() + CR;
+                }
+            }
+
+
+
         }
         sb+= CR;
 
@@ -923,7 +935,7 @@ public class TMLTextSpecification<E> {
 
             ch = tmlm.getChannelByName(_split[1]);
             if (ch == null) {
-                error = "lossy channel not previsouly declared as a regular channel " + _split[1];
+                error = "lossy channel not previously declared as a regular channel " + _split[1];
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
@@ -937,6 +949,44 @@ public class TMLTextSpecification<E> {
 
             ch.setLossy(true, tmp0, tmp1);
         } // LOSSYCHANNEL
+
+        if(isInstruction("VCCHANNEL", _split[0])) {
+            if (!inDec) {
+                error = "A ycchannel may not be declared in a non-declaration part of a TML specification";
+                addError(0, _lineNb, 0, error);
+                return -1;
+            }
+
+            if (_split.length != 2) {
+                error = "A vcchannel must be declared with exactly 2 parameters, and not " + (_split.length - 1) ;
+                addError(0, _lineNb, 0, error);
+                return -1;
+            }
+
+
+            if (!checkParameter("VCCHANNEL", _split, 1, 0, _lineNb)) {
+                return -1;
+            }
+
+            if (!checkParameter("VCCHANNEL", _split, 2, 1, _lineNb)) {
+                return -1;
+            }
+
+
+            ch = tmlm.getChannelByName(_split[1]);
+            if (ch == null) {
+                error = "vc channel not previously declared as a regular channel " + _split[1];
+                addError(0, _lineNb, 0, error);
+                return -1;
+            }
+
+            try {
+                tmp0 = Integer.decode(_split[2]);
+            } catch (Exception e) {tmp0 = -1;}
+
+
+            ch.setVC(tmp0);
+        } // VCCHANNEL
 
         // EVENT
         if(isInstruction("EVENT", _split[0])) {

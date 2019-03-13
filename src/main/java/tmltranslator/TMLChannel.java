@@ -83,7 +83,7 @@ public class TMLChannel extends TMLCommunicationElement {
     private String SP = " ";
     private int priority;
 
-    private int vc;
+    private int vc = -1;
     
     public ArrayList<TMLTask> originalOriginTasks = new ArrayList<TMLTask>(); 
     public ArrayList<TMLTask> originalDestinationTasks = new ArrayList<TMLTask>(); 
