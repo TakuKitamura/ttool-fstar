@@ -41,6 +41,7 @@ package tmltranslator.tonetwork;
 
 import tmltranslator.*;
 
+import java.util.List;
 import java.util.Vector;
 
 
@@ -52,16 +53,14 @@ import java.util.Vector;
  * @version 1.0 11/03/2019
  */
 public class TaskMUXAppDispatch extends TMLTask {
-    protected int nbOfApps;
 
     public TaskMUXAppDispatch(String name, Object referenceToClass, Object referenceToActivityDiagram) {
         super(name, referenceToClass, referenceToActivityDiagram);
     }
 
     // Output Channels are given in the order of VCs
-    public void generate(int nbOfApps,   Vector<TMLEvent> inputEvents, TMLEvent outputEvent) {
+    public void generate(List<TMLEvent> inputEvents, TMLEvent outputEvent) {
 
-        this.nbOfApps = nbOfApps;
 
         // Attributes
         TMLAttribute pktlen = new TMLAttribute("pktlen", "pktlen", new TMLType(TMLType.NATURAL), "0");
@@ -95,7 +94,7 @@ public class TaskMUXAppDispatch extends TMLTask {
 
         // Branch for each app
 
-         for(int i=0; i<nbOfApps; i++) {
+         for(int i=0; i< inputEvents.size(); i++) {
              TMLWaitEvent waitEvt = new TMLWaitEvent("PacketEvent" + i, referenceObject);
             waitEvt.setEvent(inputEvents.get(i));
             waitEvt.addParam("pktlen");

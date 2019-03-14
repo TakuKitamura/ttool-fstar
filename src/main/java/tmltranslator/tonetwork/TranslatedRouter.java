@@ -39,9 +39,11 @@
 
 package tmltranslator.tonetwork;
 
+import myutil.TraceManager;
 import tmltranslator.*;
 import ui.TGComponent;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
@@ -95,6 +97,78 @@ public class TranslatedRouter<E>  {
         // We first get the corresponding CPU
         String nameOfExecNode = noc.getHwExecutionNode(xPos, yPos);
         HwExecutionNode execNode = tmlmap.getTMLArchitecture().getHwExecutionNodeByName(nameOfExecNode);
+
+        if (nameOfExecNode == null) {
+            nameOfExecNode = "fakeCPU_" + xPos + "_" + yPos;
+        }
+
+
+        if (execNode == null) {
+            TraceManager.addDev("Could NOT find an exec node for (" + xPos + "," + yPos + ")");
+        } else {
+            TraceManager.addDev("Found an exec node for (" + xPos + "," + yPos + "): " + execNode.getName());
+        }
+
+        // Then, we need to find the channels starting from/arriving to a task mapped on this execNode
+        Vector<TMLChannel> inputChannels = new Vector<>();
+        Vector<TMLChannel> outputChannels = new Vector<>();
+        if (execNode != null) {
+            for(TMLChannel ch: channelsViaNoc) {
+                TMLTask origin = ch.getOriginTask();
+                TMLTask destination = ch.getDestinationTask();
+
+                if (origin != null) {
+                    // find on which CPU is mapped this task
+                    HwNode cpuOfOrigin = tmlmap.getHwNodeOf(origin);
+                    if (cpuOfOrigin == execNode) {
+                        TraceManager.addDev("Found an output channel:" + ch.getName());
+                        outputChannels.add(ch);
+                    }
+                }
+
+                if (destination != null) {
+                    // find on which CPU is mapped this task
+                    HwNode cpuOfDestination = tmlmap.getHwNodeOf(destination);
+                    if (cpuOfDestination == execNode) {
+                        TraceManager.addDev("Found an input channel:" + ch.getName());
+                        inputChannels.add(ch);
+                    }
+                }
+            }
+        }
+
+        // Now that we know all channels, we can generate the MUX tasks
+        // We need one event par outputChannel
+        HashMap<TMLChannel, TMLEvent> mapOfOutputChannels = new HashMap<>();
+        Vector<TMLEvent> inputEventsOfMUX = new Vector<>();
+        for(TMLChannel chan: outputChannels) {
+            TMLEvent outputEventOfMux = new TMLEvent("EventMUXof" + chan.getName(), null, 8,
+                    true);
+            mapOfOutputChannels.put(chan, outputEventOfMux);
+            inputEventsOfMUX.add(outputEventOfMux);
+            tmlm.addEvent(outputEventOfMux);
+        }
+
+        // We also need an output event for MUX / NI_IN
+        TMLEvent eventForMUX_and_NI_IN = new TMLEvent("EventBetweenMUXandNI_IN_for_" + nameOfExecNode,
+                null, 8, true);
+        tmlm.addEvent(eventForMUX_and_NI_IN);
+
+        // We can create the MUX task
+        TaskMUXAppDispatch muxTask = new TaskMUXAppDispatch("MUXof" + nameOfExecNode, null, null);
+        tmlm.addTask(muxTask);
+        muxTask.generate(inputEventsOfMUX, eventForMUX_and_NI_IN);
+
+
+        // Finally, we need to modify the src apps with the new event, and modifying the channel as well to write in the local memory
+
+
+        // All done for MUX
+
+
+
+
+
 
 
         // VC DISPATCHERS
