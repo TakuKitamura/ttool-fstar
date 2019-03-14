@@ -408,11 +408,12 @@ public class TMLTranslator  {
 
     private static boolean saveData() {
         try {
+            System.out.println("Writing data in " + outputFile.getAbsolutePath() + " data=" + outputData);
             FileOutputStream fos = new FileOutputStream(outputFile);
             fos.write(outputData.getBytes());
             fos.close();
         } catch (Exception e) {
-            System.out.println("Error when writing output file");
+            System.out.println("Error when writing output file: " + e.getMessage());
             return false;
         }
         return true;
@@ -515,11 +516,14 @@ public class TMLTranslator  {
 
         System.out.println("Conversion done");
 
-        if (!saveData()) {
-          return;
+        if (outputData != null) {
+            if (!saveData()) {
+                return;
+            }
+            System.out.println("Specification written in " + outputFile.getName() + ": " + outputData.length() + " bytes");
         }
 
-        System.out.println("Specification written in " + outputFile.getName() + ": " + outputData.length() + " bytes");
+
 
     }
 
