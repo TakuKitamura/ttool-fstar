@@ -343,7 +343,8 @@ void Simulator::schedule2HTML(std::string& iTraceFileName) const {
 
     //for(CPUList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
     for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
-      (*i)->schedule2HTML(myfile);
+      for(unsigned int j = 0; j < (*i)->getAmoutOfCore(); j++) 
+	(*i)->schedule2HTML(myfile);
     }
     //for(BusList::const_iterator j=_simComp->getBusIterator(false); j != _simComp->getBusIterator(true); ++j){
     for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){

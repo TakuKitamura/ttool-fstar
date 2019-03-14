@@ -111,6 +111,7 @@ public:
 		SchedulableDevice::writeObject(os);
 		return os;
 	}
+	inline unsigned int getAmoutOfCore(){ return amountOfCore;} 
 	///Invalidate schedule of CPU
 	/*void setRescheduleFlag(){
 		_schedulingNeeded=true;

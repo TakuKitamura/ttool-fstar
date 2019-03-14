@@ -336,6 +336,8 @@ bool MultiCoreCPU::addTransaction(TMLTransaction* iTransToBeAdded){
       _endSchedule=getMinEndSchedule();
       initCore();
     }
+    _nextTransaction->setTransactCoreNumber(iCoreNumber);
+    std::cout <<"test transaction core number !!!! "<<_nextTransaction->getTransactCoreNumber()<<std::endl;
     std::cout << "set end schedule CPU: " << _endSchedule << "\n";
     _simulatedTime=max(_simulatedTime,_endSchedule);
     _overallTransNo++; //NEW!!!!!!!!

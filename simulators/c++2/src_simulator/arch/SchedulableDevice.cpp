@@ -184,6 +184,7 @@ std::string SchedulableDevice::determineHTMLCellClass( 	std::map<TMLTask*, std::
 }
 
 void SchedulableDevice::schedule2HTML(std::ofstream& myfile) const {
+        static unsigned int time=0;
 	myfile << "<h2><span>Scheduling for device: "<< _name << "</span></h2>" << std::endl;
 
 	if ( _transactList.size() == 0 ) {
@@ -197,6 +198,8 @@ void SchedulableDevice::schedule2HTML(std::ofstream& myfile) const {
 		TMLTime aCurrTime = 0;
 
 		for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
+		  myfile<<"test transaction core number!!!"<<(*i)->getTransactCoreNumber()<<std::endl;
+		  if( (*i)->getTransactCoreNumber() == time ){
 			TMLTransaction* aCurrTrans = *i;
 			unsigned int aBlanks = aCurrTrans->getStartTime() - aCurrTime;
 
@@ -221,7 +224,9 @@ void SchedulableDevice::schedule2HTML(std::ofstream& myfile) const {
 			writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString() );
 
 			aCurrTime = aCurrTrans->getEndTime();
+		  }
 		}
+		++time;
 
 		myfile << "</tr>" << std::endl << "<tr>";
 
