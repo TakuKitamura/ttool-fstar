@@ -91,9 +91,10 @@ public class TranslatedRouter<E>  {
 
 
         // MUX for the different writing tasks
-
-
-
+        // For each writing channel of the corresponding CPU, we need MUX to be created.
+        // We first get the corresponding CPU
+        String nameOfExecNode = noc.getHwExecutionNode(xPos, yPos);
+        HwExecutionNode execNode = tmlmap.getTMLArchitecture().getHwExecutionNodeByName(nameOfExecNode);
 
 
         // VC DISPATCHERS

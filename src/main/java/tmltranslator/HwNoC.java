@@ -187,6 +187,16 @@ public class HwNoC extends HwCommunicationNode  {
         return map;
     }
 
+    public String getHwExecutionNode(int x, int y) {
+        for(String s: placementMap.keySet()) {
+            Point p = placementMap.get(s);
+            if (p.x == x && p.y == y) {
+                return s;
+            }
+        }
+        return null;
+    }
+
 
 
 

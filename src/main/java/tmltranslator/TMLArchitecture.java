@@ -306,10 +306,28 @@ public class TMLArchitecture {
     }
 
     public HwCPU getHwCPUByName(String _name) {
+        if (_name == null) {
+            return null;
+        }
         for (HwNode node : hwnodes) {
             if (node.getName().equals(_name)) {
                 if (node instanceof HwCPU) {
                     return (HwCPU) node;
+                }
+            }
+        }
+        return null;
+    }
+
+    public HwExecutionNode getHwExecutionNodeByName(String _name) {
+        if (_name == null) {
+            return null;
+        }
+
+        for (HwNode node : hwnodes) {
+            if (node.getName().equals(_name)) {
+                if (node instanceof HwExecutionNode) {
+                    return (HwExecutionNode) node;
                 }
             }
         }

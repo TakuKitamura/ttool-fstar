@@ -122,7 +122,7 @@ public class TaskNetworkInterface extends TMLTask {
         loop.setInfinite(true);
         addElement(start, loop);
 
-        TMLActionState state = new TMLActionState("LoopExitSeeting", referenceObject);
+        TMLActionState state = new TMLActionState("LoopExitSetting", referenceObject);
         state.setAction("loopexit = 2");
         addElement(loop, state);
 
@@ -158,7 +158,7 @@ public class TaskNetworkInterface extends TMLTask {
             TMLChoice testingEvt = new TMLChoice("testingEvtVC", referenceObject);
             addElement(notifiedEvent, testingEvt);
 
-            TMLStopState endOfLoopNotified = new TMLStopState("NoEvetNorispkt", referenceObject);
+            TMLStopState endOfLoopNotified = new TMLStopState("NoEventNorispkt", referenceObject);
             addElement(testingEvt, endOfLoopNotified);
             testingEvt.addGuard("(nEvt == 0) and (ispkt" + i + " == 0)");
 
@@ -216,9 +216,13 @@ public class TaskNetworkInterface extends TMLTask {
 
             // No feedback
             TMLActionState noFeedbackAction = new TMLActionState("noFeedbackAction", referenceObject);
-            state.setAction("loopexit = 2");
+            noFeedbackAction.setAction("loopexit = 2");
             addElement(testOnFeedback, noFeedbackAction);
             testOnFeedback.addGuard("else");
+
+            TMLStopState endOfNoFeedback = new TMLStopState("endOfNoFeedback", referenceObject);
+            addElement(noFeedbackAction, endOfNoFeedback);
+
 
             // Feedback present
             TMLWriteChannel sendingSample = new TMLWriteChannel("SendingSample", referenceObject);
