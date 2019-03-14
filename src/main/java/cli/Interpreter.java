@@ -141,6 +141,7 @@ public class Interpreter implements Runnable  {
 
     private void executeLine(String line, int cptLine, boolean exitOnError) {
         // Comment
+        TraceManager.addDev("Executing line:" + line);
 
         line = line.trim();
         if (line.length() == 0) {
@@ -167,28 +168,42 @@ public class Interpreter implements Runnable  {
             }
 
             TraceManager.addDev("Handling line: " + lineWithNoVariable);
+            String [] commandInfo = lineWithNoVariable.split(" ");
+
+            if ((commandInfo == null) || (commandInfo.length < 1)){
+                System.out.println("Empty command");
+                if (exitOnError) {
+                    System.exit(-1);
+                }
+            }
+
+
 
             // Analyze current line
             error = "";
             for(Command c: commands) {
-                if (lineWithNoVariable.compareTo(c.getCommand()) == 0) {
+                if (commandInfo[0].compareTo(c.getCommand()) == 0) {
                     error = c.executeCommand( lineWithNoVariable.substring(c.getCommand().length(),
                             lineWithNoVariable.length()).trim(), this);
+                    TraceManager.addDev("Command executed");
                     break;
                 }
-                if (lineWithNoVariable.compareTo(c.getShortCommand()) == 0) {
+                if (commandInfo[0].compareTo(c.getShortCommand()) == 0) {
                     error = c.executeCommand( lineWithNoVariable.substring(c.getShortCommand().length(),
                             lineWithNoVariable.length()).trim(), this);
+                    TraceManager.addDev("Short Command executed");
                     break;
 
                 }
             }
 
-            if (error != null) {
+            if ((error != null) && (error.length() > 0)) {
                 System.out.println("Error in line " + cptLine + " : " + error);
                 if (exitOnError) {
                     System.exit(-1);
                 }
+            } else if ((error != null) && (error.length() == 0)) {
+                System.out.println("Unknown command in line " + cptLine + " : " + commandInfo[0]);
             }
         }
     }
