@@ -60,7 +60,7 @@ MultiCoreCPU::MultiCoreCPU(ID iID,
 			   unsigned int iChangeIdleModeCycles, 
 			   unsigned int iCyclesBeforeIdle, 
 			   unsigned int ibyteDataSize,
-			   unsigned int iAmountOfCore): CPU(iID, iName, iScheduler, iAmountOfCore), /*_lastTransaction(0),*/ _masterNextTransaction(0), _timePerCycle(iTimePerCycle)
+			   unsigned int iAmountOfCore): CPU(iID, iName, iScheduler, iAmountOfCore), /*_lastTransaction(0),*/ _masterNextTransaction(0), _timePerCycle(iTimePerCycle), coreNumber(0)
 #ifdef PENALTIES_ENABLED
                                                                                                                                                                                                                                                                  , _pipelineSize(iPipelineSize), _taskSwitchingCycles(iTaskSwitchingCycles),_brachingMissrate(iBranchingMissrate)
                                                                                                                                                                                                                                                                  , _changeIdleModeCycles(iChangeIdleModeCycles), _cyclesBeforeIdle(iCyclesBeforeIdle)
@@ -95,7 +95,7 @@ void MultiCoreCPU::initCore(){
     multiCore[i] = 0;
 }
 
-unsigned int MultiCoreCPU::getCoreNumber(){
+/*unsigned int MultiCoreCPU::getCoreNumber(){
   unsigned int i;
   for( i = 0; i < amountOfCore; i++){
     if(multiCore[i] == 0){
@@ -104,13 +104,15 @@ unsigned int MultiCoreCPU::getCoreNumber(){
     }
   }
   return i;
-}
+}*/
 
 TMLTime MultiCoreCPU::getMinEndSchedule(){
   TMLTime minTime=multiCore[0];
   for( TMLTime i = 1; i < multiCore.size(); i++){
-    if( minTime > multiCore[i])
+    if( minTime > multiCore[i]){
       minTime=multiCore[i];
+      coreNumber=i;
+      } 
   }
   return minTime;
 }
@@ -327,16 +329,20 @@ bool MultiCoreCPU::addTransaction(TMLTransaction* iTransToBeAdded){
     std::cout << "CPU:addt: to be started" << std::endl;
     _endSchedule=_nextTransaction->getEndTime();
     ////test///
-    unsigned int iCoreNumber=getCoreNumber();
-    multiCore[iCoreNumber]=_endSchedule;
-    if (iCoreNumber != (amountOfCore -1)){
+   // unsigned int iCoreNumber=getCoreNumber();
+    unsigned static time=0;
+    multiCore[coreNumber]=_endSchedule;
+    if (time < amountOfCore -1){
       _endSchedule=0;
+       _nextTransaction->setTransactCoreNumber(coreNumber);
+      ++coreNumber;
     }
     else {
       _endSchedule=getMinEndSchedule();
-      initCore();
+       _nextTransaction->setTransactCoreNumber(coreNumber);
+      //initCore();
     }
-    _nextTransaction->setTransactCoreNumber(iCoreNumber);
+    time++;
     std::cout <<"test transaction core number !!!! "<<_nextTransaction->getTransactCoreNumber()<<std::endl;
     std::cout << "set end schedule CPU: " << _endSchedule << "\n";
     _simulatedTime=max(_simulatedTime,_endSchedule);

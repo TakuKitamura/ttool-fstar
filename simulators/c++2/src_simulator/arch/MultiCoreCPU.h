@@ -146,9 +146,10 @@ protected:
 	///1/Processor frequency
 	TMLTime _timePerCycle;
 	///test////
+	unsigned int coreNumber;
 	//first parameter is the core number
 	///second parameter is the end schedule in the core
-	std::map <unsigned int, int> multiCore;
+	std::map <unsigned int, unsigned int> multiCore;
 	///initialization of all cores
 	void initCore();
 	///get the avaliable core
