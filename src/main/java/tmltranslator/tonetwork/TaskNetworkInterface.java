@@ -67,6 +67,18 @@ public class TaskNetworkInterface extends TMLTask {
 
         this.nbOfVCs = nbOfVCs;
 
+        for(TMLEvent evt: inputFeedbackEvents) {
+            evt.setDestinationTask(this);
+        }
+
+        for(TMLEvent evt: inputEventsFromMUX) {
+            evt.setDestinationTask(this);
+        }
+
+        outputEvent.setOriginTask(this);
+        outputChannel.setOriginTask(this);
+
+
 
         // Attributes
         //TMLAttribute dst = new TMLAttribute("dst", "dst", new TMLType(TMLType.NATURAL), "0");

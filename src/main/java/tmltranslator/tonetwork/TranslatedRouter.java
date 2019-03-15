@@ -137,81 +137,100 @@ public class TranslatedRouter<E>  {
             }
         }
 
-        // Now that we know all channels, we can generate the MUX tasks
-        // We need one event par outputChannel
-        HashMap<TMLChannel, TMLEvent> mapOfOutputChannels = new HashMap<>();
-        Vector<TMLEvent> inputEventsOfMUX = new Vector<>();
-        for(TMLChannel chan: outputChannels) {
-            TMLEvent outputEventOfMux = new TMLEvent("EventMUXof" + chan.getName(), null, 8,
-                    true);
-            mapOfOutputChannels.put(chan, outputEventOfMux);
-            inputEventsOfMUX.add(outputEventOfMux);
-            tmlm.addEvent(outputEventOfMux);
+
+        // We can create the MUX task: one mux task for each VC
+        Vector<TaskMUXAppDispatch> muxTasks = new Vector<>();
+        for(i=0; i<nbOfVCs; i++) {
+            // Now that we know all channels, we can generate the MUX tasks
+            // We need one event par outputChannel
+            HashMap<TMLChannel, TMLEvent> mapOfOutputChannels = new HashMap<>();
+            Vector<TMLEvent> inputEventsOfMUX = new Vector<>();
+            for(TMLChannel chan: outputChannels) {
+                if (chan.getVC() == i) {
+                    TMLEvent outputEventOfMux = new TMLEvent("EventMUXof" + chan.getName(), null, 8,
+                            true);
+                    mapOfOutputChannels.put(chan, outputEventOfMux);
+                    inputEventsOfMUX.add(outputEventOfMux);
+                    tmlm.addEvent(outputEventOfMux);
+                }
+            }
+
+            // We also need an output event for MUX / NI_IN
+            TMLEvent eventForMUX_and_NI_IN = new TMLEvent("EventBetweenMUXandNI_IN_for_" + nameOfExecNode,
+                    null, 8, true);
+            tmlm.addEvent(eventForMUX_and_NI_IN);
+
+            TaskMUXAppDispatch muxTask = new TaskMUXAppDispatch("MUXof" + nameOfExecNode +"_VC" + i, null, null);
+            tmlm.addTask(muxTask);
+            muxTask.generate(inputEventsOfMUX, eventForMUX_and_NI_IN);
+            muxTasks.add(muxTask);
         }
 
-        // We also need an output event for MUX / NI_IN
-        TMLEvent eventForMUX_and_NI_IN = new TMLEvent("EventBetweenMUXandNI_IN_for_" + nameOfExecNode,
+
+        // Finally, we need to modify the src apps with the new event, and modifying the channel in order to write into
+        // the corresponding local memory
+
+
+        // NETWORK INTERFACE IN
+        // We must first gathers events from must task
+        Vector<TMLEvent> inputEventsFromMUX = new Vector<>();
+        for(TaskMUXAppDispatch tmux: muxTasks) {
+            inputEventsFromMUX.add(tmux.getOutputEvent());
+        }
+
+
+        TaskNetworkInterface tniIn = new TaskNetworkInterface("NI_IN_" + nameOfExecNode, null,
+                null);
+        tmlm.addTask(tniIn);
+
+        // One TMLEvent for feedback for each VC
+        Vector<TMLEvent> feedbackEventsNIINs = new Vector<>();
+        for(i=0; i<nbOfVCs; i++) {
+            TMLEvent eventFeedback = new TMLEvent("EventBetweenNI_IN_ANd_IN_for_" + nameOfExecNode,
+                    null, 8, true);
+            feedbackEventsNIINs.add(eventFeedback);
+            tmlm.addEvent(eventFeedback);
+        }
+
+        TMLEvent outputFromNIINtoIN = new TMLEvent("EventBetweenNI_IN_to_IN_for_" + nameOfExecNode,
                 null, 8, true);
-        tmlm.addEvent(eventForMUX_and_NI_IN);
+        tmlm.addEvent(outputFromNIINtoIN);
+        TMLChannel outputChannelFromNIINtoIN = new TMLChannel("channelBetweenNI_IN_to_IN_for_" + nameOfExecNode,
+                null);
+        outputChannelFromNIINtoIN.setSize(4);
+        outputChannelFromNIINtoIN.setMax(8);
+        tmlm.addChannel(outputChannelFromNIINtoIN);
 
-        // We can create the MUX task
-        TaskMUXAppDispatch muxTask = new TaskMUXAppDispatch("MUXof" + nameOfExecNode, null, null);
-        tmlm.addTask(muxTask);
-        muxTask.generate(inputEventsOfMUX, eventForMUX_and_NI_IN);
-
-
-        // Finally, we need to modify the src apps with the new event, and modifying the channel as well to write in the local memory
-
-
-        // All done for MUX
+        tniIn.generate(nbOfVCs, feedbackEventsNIINs, inputEventsFromMUX, outputFromNIINtoIN, outputChannelFromNIINtoIN);
 
 
+        // IN NOC
+        // We need one ouput channel per VC and one output event per VC
+        Vector<TMLEvent> evtFromINtoINVCs = new Vector<>();
+        Vector<TMLChannel> chFromINtoINVCs = new Vector<>();
+        for(i=0; i<nbOfVCs; i++) {
+            TMLEvent evtFromINtoINVC = new TMLEvent("EventBetweenIN_IN_forVC_" + i + "_" + nameOfExecNode,
+                    null, 8, true);
+            tmlm.addEvent(evtFromINtoINVC);
+            evtFromINtoINVCs.add(evtFromINtoINVC);
 
-
-
-
-
-        // VC DISPATCHERS
-        // One dispatcher per port
-        // A dispatcher outputs to VCs tasks
-        dispatchers = new Vector<TMLTask>();
-        for(i=0; i<NB_OF_PORTS; i++) {
-            //TaskINForDispatch dt = new TaskINForDispatch(nbOfVCs);
-            //dispatchers.add(dt);
+            TMLChannel chFromINtoINVC = new TMLChannel("channelBetweenIN_IN_for_VC" + i + "_" + nameOfExecNode,
+                    null);
+            chFromINtoINVC.setSize(4);
+            chFromINtoINVC.setMax(8);
+            tmlm.addChannel(chFromINtoINVC);
+            chFromINtoINVCs.add(chFromINtoINVC);
         }
 
-        // PORT DISPATCHER // according to destination
+        TaskINForDispatch inDispatch = new TaskINForDispatch("IN_" + execNode, null, null);
+        tmlm.addTask(inDispatch);
+        inDispatch.generate(nbOfVCs, outputFromNIINtoIN, outputChannelFromNIINtoIN, evtFromINtoINVCs, chFromINtoINVCs);
 
 
-        // Create all channels
-        // For each input VC, we have to create a channel
-        for (i=0; i<NB_OF_PORTS*nbOfVCs; i++) {
-            TMLChannel channel = new TMLChannel("Channel" + i + getInfo(), this);
-            channel.setSize(CHANNEL_SIZE);
-            channel.setMax(CHANNEL_MAX);
-            channel.setType(TMLChannel.BRBW);
-            tmlm.addChannel(channel);
-        }
+        // IN specific to an input of the NoC apart from internal CPU
+        // inputs 0 to 3
+        
 
-
-        // Create all events
-        // pktins: between tasks
-
-
-
-        // Feedbacks between OUTVC and INVC
-
-
-
-
-
-        // Create all tasks
-
-        // Create the architecture
-
-        // Map tasks
-
-        // Map channels
 
     }
 

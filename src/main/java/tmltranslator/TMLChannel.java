@@ -374,6 +374,14 @@ public class TMLChannel extends TMLCommunicationElement {
         destinationTask = _destination;
     }
 
+    public void setOriginTask(TMLTask t) {
+        originTask = t;
+    }
+
+    public void setDestinationTask(TMLTask t) {
+        destinationTask = t;
+    }
+
     public void setPorts(TMLPort _origin, TMLPort _destination) {
         originPort = _origin;
         destinationPort = _destination;

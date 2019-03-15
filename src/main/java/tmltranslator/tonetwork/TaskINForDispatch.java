@@ -64,6 +64,14 @@ public class TaskINForDispatch extends TMLTask {
 
         this.nbOfVCs = nbOfVCs;
 
+        inputEvent.setDestinationTask(this);
+        inputChannel.setDestinationTask(this);
+        for(TMLEvent evt: outputEvents) {
+            evt.setOriginTask(this);
+        }
+        for(TMLChannel ch: outputChannels) {
+            ch.setOriginTask(this);
+        }
 
         // Attributes
         TMLAttribute pktlen = new TMLAttribute("pktlen", "pktlen", new TMLType(TMLType.NATURAL), "0");

@@ -107,6 +107,16 @@ public class TMLEvent extends TMLCommunicationElement {
         isBlocking = _isBlocking;
     }
 
+    public void setOriginTask(TMLTask t) {
+        origin = t;
+    }
+
+    public void setDestinationTask(TMLTask t) {
+        destination = t;
+    }
+
+
+
     public void setTasks(TMLTask _origin, TMLTask _destination) {
         origin = _origin;
         destination = _destination;

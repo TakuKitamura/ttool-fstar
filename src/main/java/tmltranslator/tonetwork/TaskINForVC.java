@@ -60,7 +60,7 @@ public class TaskINForVC extends TMLTask {
     // Output Channels are given in the order of VCs
 
     public void generate(TMLEvent inPacketEvent, Vector<TMLEvent> inFeedbackEvents, TMLChannel inChannel,
-                         TMLEvent outFeedbackEvent, Vector<TMLEvent> outVCEvents) {
+                         TMLEvent outFeedbackEvent, Vector<TMLEvent> outVCEvents, int nocSize, int xPos, int yPos) {
 
         TMLSendEvent sendEvt;
         TMLStopState stop;
@@ -83,14 +83,32 @@ public class TaskINForVC extends TMLTask {
         TMLAttribute j = new TMLAttribute("j", "j", new TMLType(TMLType.NATURAL), "0");
         this.addAttribute(j);
 
+        TMLAttribute noc_xsize = new TMLAttribute("noc_xsize", "noc_xsize", new TMLType(TMLType.NATURAL), "" + nocSize);
+        this.addAttribute(noc_xsize);
+
+        TMLAttribute noc_ysize = new TMLAttribute("noc_ysize", "noc_ysize", new TMLType(TMLType.NATURAL), "" + nocSize);
+        this.addAttribute(noc_ysize);
+
+        TMLAttribute x = new TMLAttribute("x", "x", new TMLType(TMLType.NATURAL), "" + xPos);
+        this.addAttribute(x);
+
+        TMLAttribute y = new TMLAttribute("y", "y", new TMLType(TMLType.NATURAL), "" + yPos);
+        this.addAttribute(y);
+
+        TMLAttribute xd = new TMLAttribute("xd", "xd", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(xd);
+
+        TMLAttribute yd = new TMLAttribute("yd", "yd", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(yd);
+
         // Events and channels
         addTMLEvent(inPacketEvent);
-        for(TMLEvent evt: inFeedbackEvents) {
+        for (TMLEvent evt : inFeedbackEvents) {
             addTMLEvent(evt);
         }
         addReadTMLChannel(inChannel);
         addTMLEvent(outFeedbackEvent);
-        for(TMLEvent evt: outVCEvents) {
+        for (TMLEvent evt : outVCEvents) {
             addTMLEvent(evt);
         }
 
@@ -137,17 +155,52 @@ public class TaskINForVC extends TMLTask {
         waitEvt.addParam("eop");
         activity.addLinkElement(loop2, waitEvt);
 
-        TMLActionState reqOut = new TMLActionState("ReqOut", referenceObject);
-        reqOut.setAction("requestedOutput = dst");
-        activity.addLinkElement(waitEvt, reqOut);
+        TMLSequence secondSeq = new TMLSequence("SecondSeq", referenceObject);
+        activity.addLinkElement(waitEvt, secondSeq);
 
 
-        // Main choice
+        // Routing : first branch of secondSeq
+        TMLActionState computeyd = new TMLActionState("computeyd", referenceObject);
+        computeyd.setAction("yd = dst/noc_xsize");
+        activity.addLinkElement(secondSeq, computeyd);
+
+        TMLActionState computexd = new TMLActionState("computexd", referenceObject);
+        computexd.setAction("xd = dst - yd * noc_xsize");
+        activity.addLinkElement(computeyd, computexd);
+
+        TMLChoice firstRoutingChoice = new TMLChoice("firstRoutingChoice", referenceObject);
+        activity.addLinkElement(computexd, firstRoutingChoice);
+
+        TMLActionState requested3 = new TMLActionState("requested3", referenceObject);
+        requested3.setAction("requested_output = 3");
+        activity.addLinkElement(firstRoutingChoice, requested3);
+        firstRoutingChoice.addGuard("xd > x");
+        activity.addLinkElement(requested3, new TMLStopState("stopOfRequest3", referenceObject));
+
+        TMLActionState requested2 = new TMLActionState("requested2", referenceObject);
+        requested2.setAction("requested_output = 2");
+        activity.addLinkElement(firstRoutingChoice, requested2);
+        firstRoutingChoice.addGuard("xd < x");
+        activity.addLinkElement(requested2, new TMLStopState("stopOfRequest2", referenceObject));
+
+        TMLChoice secondRoutingChoice = new TMLChoice("secondRoutingChoice", referenceObject);
+        activity.addLinkElement(firstRoutingChoice, secondRoutingChoice);
+        firstRoutingChoice.addGuard("xd == x");
+
+
+
+
+
+
+
+
+
+        // Main choice : second branch of secondSeq
         TMLChoice mainChoice = new TMLChoice("mainChoice", referenceObject);
-        activity.addLinkElement(reqOut, mainChoice);
+        activity.addLinkElement(secondSeq, mainChoice);
 
         // Each link to an output for a given packet
-        for(int i=0;  i<outVCEvents.size(); i++) {
+        for (int i = 0; i < outVCEvents.size(); i++) {
             TMLForLoop packetLoop = new TMLForLoop("packetLoop", referenceObject);
             packetLoop.setInit("j=0");
             packetLoop.setCondition("j<pktlen-1");

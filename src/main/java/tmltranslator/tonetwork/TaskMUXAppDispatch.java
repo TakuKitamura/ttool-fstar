@@ -54,13 +54,27 @@ import java.util.Vector;
  */
 public class TaskMUXAppDispatch extends TMLTask {
 
+    private TMLEvent outputEvent;
+    private List<TMLEvent> inputEvents;
+
     public TaskMUXAppDispatch(String name, Object referenceToClass, Object referenceToActivityDiagram) {
         super(name, referenceToClass, referenceToActivityDiagram);
     }
 
+    public TMLEvent getOutputEvent() {
+        return outputEvent;
+    }
+
     // Output Channels are given in the order of VCs
     public void generate(List<TMLEvent> inputEvents, TMLEvent outputEvent) {
+        this.inputEvents = inputEvents;
+        this.outputEvent = outputEvent;
 
+
+        for(TMLEvent evt: inputEvents) {
+            evt.setDestinationTask(this);
+        }
+        outputEvent.setOriginTask(this);
 
         // Attributes
         TMLAttribute pktlen = new TMLAttribute("pktlen", "pktlen", new TMLType(TMLType.NATURAL), "0");
