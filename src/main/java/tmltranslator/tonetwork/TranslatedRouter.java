@@ -41,7 +41,6 @@ package tmltranslator.tonetwork;
 
 import myutil.TraceManager;
 import tmltranslator.*;
-import ui.TGComponent;
 
 import java.util.HashMap;
 import java.util.List;
@@ -55,12 +54,16 @@ import java.util.Vector;
  * @author Ludovic Apvrille
  * @version 1.0 17/01/2019
  */
-public class TranslatedRouter<E>  {
+public class TranslatedRouter<E> {
+
+
     private final int NB_OF_PORTS = 5;
     private final int CHANNEL_SIZE = 4;
     private final int CHANNEL_MAX = 8;
 
     private int nbOfVCs, xPos, yPos, nbOfApps;
+
+    private TMAP2Network<?> main;
 
     private HwNoC noc;
     private List<TMLChannel> channelsViaNoc;
@@ -71,14 +74,17 @@ public class TranslatedRouter<E>  {
     private TMLMapping<?> tmlmap;
 
 
-
-    public TranslatedRouter(TMLMapping<E> tmlmap, HwNoC noc, List<TMLChannel> channelsViaNoc, int nbOfVCs, int xPos, int yPos) {
+    public TranslatedRouter(TMAP2Network<?> main, TMLMapping<?> tmlmap, HwNoC noc, List<TMLChannel> channelsViaNoc, int nbOfVCs, int xPos, int yPos) {
+        this.main = main;
         this.nbOfVCs = nbOfVCs;
         this.noc = noc;
         this.channelsViaNoc = channelsViaNoc;
         this.xPos = xPos;
         this.yPos = yPos;
         this.tmlmap = tmlmap;
+
+        //A router creates all its output events and channels, depending on its position in the NoC
+
     }
 
 
@@ -113,7 +119,7 @@ public class TranslatedRouter<E>  {
         Vector<TMLChannel> inputChannels = new Vector<>();
         Vector<TMLChannel> outputChannels = new Vector<>();
         if (execNode != null) {
-            for(TMLChannel ch: channelsViaNoc) {
+            for (TMLChannel ch : channelsViaNoc) {
                 TMLTask origin = ch.getOriginTask();
                 TMLTask destination = ch.getDestinationTask();
 
@@ -140,12 +146,12 @@ public class TranslatedRouter<E>  {
 
         // We can create the MUX task: one mux task for each VC
         Vector<TaskMUXAppDispatch> muxTasks = new Vector<>();
-        for(i=0; i<nbOfVCs; i++) {
+        for (i = 0; i < nbOfVCs; i++) {
             // Now that we know all channels, we can generate the MUX tasks
             // We need one event par outputChannel
             HashMap<TMLChannel, TMLEvent> mapOfOutputChannels = new HashMap<>();
             Vector<TMLEvent> inputEventsOfMUX = new Vector<>();
-            for(TMLChannel chan: outputChannels) {
+            for (TMLChannel chan : outputChannels) {
                 if (chan.getVC() == i) {
                     TMLEvent outputEventOfMux = new TMLEvent("EventMUXof" + chan.getName(), null, 8,
                             true);
@@ -160,7 +166,7 @@ public class TranslatedRouter<E>  {
                     null, 8, true);
             tmlm.addEvent(eventForMUX_and_NI_IN);
 
-            TaskMUXAppDispatch muxTask = new TaskMUXAppDispatch("MUXof" + nameOfExecNode +"_VC" + i, null, null);
+            TaskMUXAppDispatch muxTask = new TaskMUXAppDispatch("MUXof" + nameOfExecNode + "_VC" + i, null, null);
             tmlm.addTask(muxTask);
             muxTask.generate(inputEventsOfMUX, eventForMUX_and_NI_IN);
             muxTasks.add(muxTask);
@@ -174,7 +180,7 @@ public class TranslatedRouter<E>  {
         // NETWORK INTERFACE IN
         // We must first gathers events from must task
         Vector<TMLEvent> inputEventsFromMUX = new Vector<>();
-        for(TaskMUXAppDispatch tmux: muxTasks) {
+        for (TaskMUXAppDispatch tmux : muxTasks) {
             inputEventsFromMUX.add(tmux.getOutputEvent());
         }
 
@@ -185,7 +191,7 @@ public class TranslatedRouter<E>  {
 
         // One TMLEvent for feedback for each VC
         Vector<TMLEvent> feedbackEventsNIINs = new Vector<>();
-        for(i=0; i<nbOfVCs; i++) {
+        for (i = 0; i < nbOfVCs; i++) {
             TMLEvent eventFeedback = new TMLEvent("EventBetweenNI_IN_ANd_IN_for_" + nameOfExecNode,
                     null, 8, true);
             feedbackEventsNIINs.add(eventFeedback);
@@ -204,36 +210,52 @@ public class TranslatedRouter<E>  {
         tniIn.generate(nbOfVCs, feedbackEventsNIINs, inputEventsFromMUX, outputFromNIINtoIN, outputChannelFromNIINtoIN);
 
 
-        // IN NOC
-        // We need one ouput channel per VC and one output event per VC
-        Vector<TMLEvent> evtFromINtoINVCs = new Vector<>();
-        Vector<TMLChannel> chFromINtoINVCs = new Vector<>();
-        for(i=0; i<nbOfVCs; i++) {
-            TMLEvent evtFromINtoINVC = new TMLEvent("EventBetweenIN_IN_forVC_" + i + "_" + nameOfExecNode,
-                    null, 8, true);
-            tmlm.addEvent(evtFromINtoINVC);
-            evtFromINtoINVCs.add(evtFromINtoINVC);
+        // IN NOC - One for each input
+        // We need one output channel per VC and one output event per VC
+        // A task only create the output, never the input
 
-            TMLChannel chFromINtoINVC = new TMLChannel("channelBetweenIN_IN_for_VC" + i + "_" + nameOfExecNode,
-                    null);
-            chFromINtoINVC.setSize(4);
-            chFromINtoINVC.setMax(8);
-            tmlm.addChannel(chFromINtoINVC);
-            chFromINtoINVCs.add(chFromINtoINVC);
+        HashMap<Integer, TaskINForDispatch> dispatchIns = new HashMap<>();
+        for (int portNb = 0; portNb < NB_OF_PORTS; portNb++) {
+            TranslatedRouter routerToconnectWith = main.getRouterFrom(xPos, yPos, portNb);
+            if (routerToconnectWith != null) {
+                if (TMAP2Network.hasRouterAt(xPos, yPos, portNb, noc.size)) {
+
+                    Vector<TMLEvent> evtFromINtoINVCs = new Vector<>();
+                    Vector<TMLChannel> chFromINtoINVCs = new Vector<>();
+                    for (i = 0; i < nbOfVCs; i++) {
+                        TMLEvent evtFromINtoINVC = new TMLEvent("EventBetweenIN_IN_forVC_" + i + "_" + nameOfExecNode,
+                                null, 8, true);
+                        tmlm.addEvent(evtFromINtoINVC);
+                        evtFromINtoINVCs.add(evtFromINtoINVC);
+
+                        TMLChannel chFromINtoINVC = new TMLChannel("channelBetweenIN_IN_for_VC" + i + "_" + nameOfExecNode,
+                                null);
+                        chFromINtoINVC.setSize(4);
+                        chFromINtoINVC.setMax(8);
+                        tmlm.addChannel(chFromINtoINVC);
+                        chFromINtoINVCs.add(chFromINtoINVC);
+                    }
+
+                    TaskINForDispatch inDispatch = new TaskINForDispatch("IN_" + execNode, null, null);
+                    tmlm.addTask(inDispatch);
+                    if (portNb == NB_OF_PORTS) {
+                        inDispatch.generate(nbOfVCs, outputFromNIINtoIN, outputChannelFromNIINtoIN, evtFromINtoINVCs, chFromINtoINVCs);
+                    } else {
+
+
+                    }
+                    dispatchIns.put(new Integer(portNb), inDispatch);
+                }
+            }
         }
-
-        TaskINForDispatch inDispatch = new TaskINForDispatch("IN_" + execNode, null, null);
-        tmlm.addTask(inDispatch);
-        inDispatch.generate(nbOfVCs, outputFromNIINtoIN, outputChannelFromNIINtoIN, evtFromINtoINVCs, chFromINtoINVCs);
 
 
         // IN specific to an input of the NoC apart from internal CPU
         // inputs 0 to 3
-        
+        // We create all connection events
 
 
     }
-
 
 
 }
