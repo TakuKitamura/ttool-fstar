@@ -11,6 +11,7 @@ LOPT   = -O3 -ldl
 LTHREAD = -pthread
 
 DEBUG  = -g
+DEBUGFLAGS = -O0 -g -D_DEBUG
 PROFILE = -pg
 OTHER  = -Wall
 SOLARIS_SPECIFIC = -lsocket -lnsl

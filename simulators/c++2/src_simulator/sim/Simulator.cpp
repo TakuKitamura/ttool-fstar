@@ -81,7 +81,9 @@ TMLTransaction* Simulator::getTransLowestEndTime(SchedulableDevice*& oResultDevi
   //for(CPUList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
   for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
     aTempDevice=*i;
+    std::cout<<"test888!!!"<<std::endl;
     aTempTrans=aTempDevice->getNextTransaction();
+    std::cout<<"test999!!!"<<std::endl;
     if (aTempTrans!=0 && aTempTrans->getVirtualLength()>0){
 #ifdef DEBUG_KERNEL
       std::cout << "kernel:getTLET: transaction found on " << aTempDevice->toString() << ": " << aTempTrans->toString() << std::endl;
@@ -297,6 +299,7 @@ void Simulator::schedule2HTML(std::string& iTraceFileName) const {
   }
 
   std::ofstream myfile(iTraceFileName.c_str());
+   myfile<<iTraceFileName.c_str()<<std::endl;
 
   if (myfile.is_open()) {
     // DB: Issue #4
@@ -309,23 +312,24 @@ void Simulator::schedule2HTML(std::string& iTraceFileName) const {
 
     if ( findSlash == std::string::npos ) {
       indexSlash = 0;
+      myfile<<"indexSlash=0\n";
     }
     else {
       indexSlash = findSlash;
     }
 
     const std::string ext( EXT_HTML );
-    const std::string cssFileName = iTraceFileName.substr( indexSlash + 1, iTraceFileName.length() - indexSlash - ext.length() - 1 ) + EXT_CSS;
-
+    const std::string cssFileName = iTraceFileName.substr( indexSlash + 1, iTraceFileName.length() - indexSlash - ext.length() - 1 ) + EXT_CSS; 
+    myfile<<"length is "<< iTraceFileName.length() - indexSlash - ext.length() - 1<<std::endl;
     const std::string cssFullFileName = iTraceFileName.substr( 0, indexSlash + 1 ) + cssFileName;
     std::ofstream cssfile( cssFullFileName.c_str() );
-
+    myfile<<"full name is "<<cssFullFileName<<std::endl;
     if ( cssfile.is_open() ) {
       cssfile << SCHED_HTML_CSS_CONTENT;
       cssfile.close();
 
       myfile << SCHED_HTML_CSS_BEG_LINK;
-      myfile << cssFileName;
+      myfile << cssFullFileName;     
       myfile << SCHED_HTML_CSS_END_LINK;
     }
     else {
@@ -491,9 +495,12 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
   //std::cout << "after loop2" << std::endl;
   //for_each(_simComp->getCPUIterator(false), _simComp->getCPUIterator(true),std::mem_fun(&CPU::setRescheduleFlag));
   //for_each(_simComp->getCPUIterator(false), _simComp->getCPUIterator(true),std::mem_fun(&CPU::schedule));
+  std::cout<<"test666!!!"<<std::endl;
   for_each(_simComp->getCPUList().begin(), _simComp->getCPUList().end(),std::mem_fun(&CPU::schedule));
+  std::cout<<"test777!!!"<<std::endl;
   //std::cout << "after schedule" << std::endl;
   transLET=getTransLowestEndTime(cpuLET);
+  std::cout<<"test000!!!"<<std::endl;	      
   //std::cout << "after getTLET" << std::endl;
 #ifdef LISTENERS_ENABLED
   if (_wasReset) NOTIFY_SIM_STARTED();

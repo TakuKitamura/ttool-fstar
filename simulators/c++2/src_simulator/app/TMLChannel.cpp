@@ -67,20 +67,27 @@ BusMaster* TMLChannel::getNextMaster(TMLTransaction* iTrans){
 }
 
 BusMaster* TMLChannel::getFirstMaster(TMLTransaction* iTrans){
+  std::cout<<"get First master"<<std::endl;
   //if (iTrans->getCommand()->getTask()==_writeTask){
   //std::cout << "fima 1\n";
-  if (_masters==0 || _slaves==0 || _numberOfHops==0) return 0;
+  if(iTrans==0) std::cout<<"iTrans==0"<<std::endl;
+  else std::cout<<"iTrans is: "<<iTrans->toString()<<std::endl;
+  if (_masters==0 || _slaves==0 || _numberOfHops==0 ) { std::cout<<"case 1"<<std::endl; return 0;}
   //std::cout << "fima 2\n";
+  std::cout<<"test11111"<<std::endl;
   if (iTrans==_writeTrans){
     //if (iTrans->getCommand()->getTask()==_writeTask){
     //std::cout << "fima 3\n";
+    std::cout<<"case 2"<<std::endl;
     _writeTransCurrHop=0;
     return _masters[_writeTransCurrHop];
   }else{
+    std::cout<<"case 4"<<std::endl;
     //std::cout << "fima 4\n";
-    if (_slaves[(_numberOfHops/2)]==0) return 0;        //NEW!!!
+    if (_slaves[(_numberOfHops/2)]==0) { std::cout<<"case 3"<<std::endl; return 0;}        //NEW!!!
     //std::cout << "fima 5\n";
     _readTransCurrHop=_numberOfHops-1;
+    
     return _masters[_readTransCurrHop];
   }
 }

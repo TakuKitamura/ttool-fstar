@@ -198,7 +198,6 @@ void SchedulableDevice::schedule2HTML(std::ofstream& myfile) const {
 		TMLTime aCurrTime = 0;
 
 		for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
-		  myfile<<"test transaction core number!!!"<<(*i)->getTransactCoreNumber()<<std::endl;
 		  if( (*i)->getTransactCoreNumber() == time ){
 			TMLTransaction* aCurrTrans = *i;
 			unsigned int aBlanks = aCurrTrans->getStartTime() - aCurrTime;
