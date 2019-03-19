@@ -61,7 +61,7 @@ import java.util.*;
  */
 public class Interpreter implements Runnable  {
     public final static Command[] commands = {new Help(), new Quit(), new Action(),
-            new Set(), new Wait(), new Print(), new History()};
+            new Set(), new Wait(), new Print(), new History(), new TestSpecific()};
 
     // Errors
     public final static String UNKNOWN = "Unknown command";

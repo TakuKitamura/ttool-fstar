@@ -1608,6 +1608,9 @@ public class BoolExpressionEvaluator {
     public boolean getResultOfWithIntExpr(String _expr) {
         int index, indexPar;
 
+
+        //TraceManager.addDev("Going to evaluate: " + _expr);
+
         String tmp = Conversion.replaceAllString(_expr, "==", "$").trim();
         tmp = Conversion.replaceAllString(tmp, "!=", "$").trim();
         tmp = Conversion.replaceAllString(tmp, ">=", ":").trim();
@@ -1717,7 +1720,7 @@ public class BoolExpressionEvaluator {
         IntBoolRes newElt;
 
         //TraceManager.addDev(current.getTop().toString());
-        //TraceManager.addDev("<><><><><><> Dealing with token:" + token + " current=" + current);
+        TraceManager.addDev("<><><><><><> Dealing with token:" + token + " current=" + current);
 
         char c1 = token.charAt(0);
 

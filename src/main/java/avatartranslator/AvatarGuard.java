@@ -51,7 +51,7 @@ import myutil.TraceManager;
  */
 public abstract class AvatarGuard {
 
-    private static int getMatchingRParen (String s, int indexLParen) {
+    public static int getMatchingRParen (String s, int indexLParen) {
         int index, n;
         n = 1;
         for (index = indexLParen+1; index < s.length (); index++) {

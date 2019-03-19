@@ -77,7 +77,7 @@ public class IntExpressionEvaluator {
     }
 
     public double getResultOf(String _expr) {
-        // TraceManager.addDev("Computing:" + _expr);
+        TraceManager.addDev("IntExpr: Computing:" + _expr);
         tokens = new java.util.StringTokenizer(_expr," \t\n\r+-*/()",true);
 
         computeNextToken();

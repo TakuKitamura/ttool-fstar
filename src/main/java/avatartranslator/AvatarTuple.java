@@ -38,6 +38,8 @@
 
 package avatartranslator;
 
+import myutil.TraceManager;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -61,15 +63,13 @@ public class AvatarTuple extends AvatarLeftHand {
 
         if (toParse.trim().startsWith("(")) {
             int indexLParen = toParse.indexOf ("(");
-            int indexRParen = toParse.indexOf (")", indexLParen);
-            if (indexRParen == -1)
-                indexRParen = toParse.length ();
+            int indexRParen = AvatarGuard.getMatchingRParen (toParse, indexLParen);
             String[] components = toParse.substring (indexLParen+1, indexRParen).trim().split (",");
             boolean illFormed = false;
             AvatarTuple argsTuple = new AvatarTuple (block);
             for (String arg: components) {
                 if (!arg.isEmpty()) {
-                    // TraceManager.addDev("In for with arg=" + arg+"|");
+                    TraceManager.addDev("In for with arg=" + arg+"|");
                     AvatarTerm t = AvatarTerm.createFromString (block, arg);
                     if (t == null) {
                         // Term couldn't be parsed
@@ -81,9 +81,14 @@ public class AvatarTuple extends AvatarLeftHand {
                 }
             }
 
-            if (!illFormed)
+            if (!illFormed) {
                 // Every argument was correctly parsed
                 result = argsTuple;
+               TraceManager.addDev("Successfully parsed tuple \"" + toParse.substring (indexLParen+1, indexRParen) + "\"");
+            } else {
+                TraceManager.addDev("Illformed expression ...");
+            }
+
         }
 
         return result;
