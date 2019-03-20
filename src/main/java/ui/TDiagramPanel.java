@@ -2450,7 +2450,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             JOptionPane.showMessageDialog(mgui.getFrame(), "Clone creation failed", "Exception", JOptionPane.INFORMATION_MESSAGE);
         }
 
-        bringToBack(_tgc);
+        bringToBack(_tgc.getTopFather());
         for (int i = 0; i < componentList.size(); i ++){
             if (componentList.get(i) instanceof TGConnector) {
                 TGComponent t = componentList.get(i);
