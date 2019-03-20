@@ -1,0 +1,93 @@
+// TML Application - FORMAT 0.1
+// Application: /home/pham/Documents/TToolHelp/TTool/modeling/DIPLODOCUS/CloneCompositeComponentTest.xml
+// Generated: Wed Mar 20 17:20:10 CET 2019
+
+// Channels
+CHANNEL DIPLODOCUS_C_Design__channel BRBW 4 8 OUT DIPLODOCUS_C_Design__PrimitiveComp1 IN DIPLODOCUS_C_Design__PrimitiveComp2
+CHANNEL DIPLODOCUS_C_Design__channel2 BRBW 4 8 OUT DIPLODOCUS_C_Design__PrimitiveComp3 IN DIPLODOCUS_C_Design__PrimitiveComp4
+CHANNEL DIPLODOCUS_C_Design__channel2_0 BRBW 4 8 OUT DIPLODOCUS_C_Design__PrimitiveComp3_0 IN DIPLODOCUS_C_Design__PrimitiveComp4_0
+CHANNEL DIPLODOCUS_C_Design__channel3 BRBW 4 8 OUT DIPLODOCUS_C_Design__PrimitiveComp5 IN DIPLODOCUS_C_Design__PrimitiveComp5
+CHANNEL DIPLODOCUS_C_Design__channel3_0 BRBW 4 8 OUT DIPLODOCUS_C_Design__PrimitiveComp5_0 IN DIPLODOCUS_C_Design__PrimitiveComp5_0
+
+// Events
+EVENT DIPLODOCUS_C_Design__event__DIPLODOCUS_C_Design__event() NIB 8 DIPLODOCUS_C_Design__PrimitiveComp1 DIPLODOCUS_C_Design__PrimitiveComp2
+
+// Requests
+
+TASK DIPLODOCUS_C_Design__PrimitiveComp1
+    TASKOP
+    //Local variables
+
+    //Behavior
+    RAND
+        CASERAND 50
+            NOTIFY DIPLODOCUS_C_Design__event__DIPLODOCUS_C_Design__event
+        ENDCASERAND
+        CASERAND 50
+            WRITE DIPLODOCUS_C_Design__channel 1
+        ENDCASERAND
+    ENDRAND
+ENDTASK
+
+TASK DIPLODOCUS_C_Design__PrimitiveComp2
+    TASKOP
+    //Local variables
+
+    //Behavior
+    RAND
+        CASERAND 50
+            WAIT DIPLODOCUS_C_Design__event__DIPLODOCUS_C_Design__event
+        ENDCASERAND
+        CASERAND 50
+            READ DIPLODOCUS_C_Design__channel 1
+        ENDCASERAND
+    ENDRAND
+ENDTASK
+
+TASK DIPLODOCUS_C_Design__PrimitiveComp3
+    TASKOP
+    //Local variables
+
+    //Behavior
+    WRITE DIPLODOCUS_C_Design__channel2 1
+ENDTASK
+
+TASK DIPLODOCUS_C_Design__PrimitiveComp3_0
+    TASKOP
+    //Local variables
+
+    //Behavior
+    WRITE DIPLODOCUS_C_Design__channel2_0 1
+ENDTASK
+
+TASK DIPLODOCUS_C_Design__PrimitiveComp4
+    TASKOP
+    //Local variables
+
+    //Behavior
+    READ DIPLODOCUS_C_Design__channel2 1
+ENDTASK
+
+TASK DIPLODOCUS_C_Design__PrimitiveComp4_0
+    TASKOP
+    //Local variables
+
+    //Behavior
+    READ DIPLODOCUS_C_Design__channel2_0 1
+ENDTASK
+
+TASK DIPLODOCUS_C_Design__PrimitiveComp5
+    TASKOP
+    //Local variables
+
+    //Behavior
+    WRITE DIPLODOCUS_C_Design__channel3 1
+ENDTASK
+
+TASK DIPLODOCUS_C_Design__PrimitiveComp5_0
+    TASKOP
+    //Local variables
+
+    //Behavior
+    WRITE DIPLODOCUS_C_Design__channel3_0 1
+ENDTASK

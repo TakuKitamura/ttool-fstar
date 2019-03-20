@@ -2404,7 +2404,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
 
     public void cloneComponent(TGComponent _tgc) {
-        cloneComponent(_tgc, false);
+        cloneComponent(_tgc, true);
     }
 
     /*
@@ -2435,6 +2435,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
 
         clone = mgui.gtm.makeXMLFromSelectedComponentOfADiagram(this, getMaxIdSelected(), _tgc.getX(), _tgc.getY(), cloneEvenIfNonNullFather);
+        //TraceManager.addDev(clone);
 
         _tgc.select(false);
         for(int i = 0; i < connectorList.size(); i++){
