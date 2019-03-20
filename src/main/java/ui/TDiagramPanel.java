@@ -654,6 +654,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         sb.append(s);
         sb.append("\n");
         sb.append(getXMLTail());
+
         return sb;
     }
 
@@ -679,7 +680,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         //    LinkedList<TGComponent> ruteoList = this.componentList;
         //
 
-        for (TGComponent tgc : this.getAllComponent()){
+        for (TGComponent tgc : this.getAllComponentList()){
         //for (TGComponent tgc : this.componentList) {
             if ((selected == false) || (tgc.isSelected())) {
                if((tgc.getFather() == null) || (cloneEvenIfNonNullFather)) {
@@ -693,6 +694,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                    sb.append("\n");
                }
             }
+        }
+        if (cloneEvenIfNonNullFather) {
+            TraceManager.addDev("sb=\n" + sb);
         }
         return sb;
     }
@@ -1060,23 +1064,6 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         return ll;
     }
 
-    //issue 186
-    // get all list of all primitive components, composite components and connectors
-    public List<TGComponent> getAllComponent() {
-        List<TGComponent> ll = new LinkedList<TGComponent>();
-        ll.addAll(this.componentList);
-        for (TGComponent tgc : this.componentList) {
-            if (tgc instanceof TMLCCompositeComponent) {
-                for(TGComponent tg : ((TMLCCompositeComponent)tgc).getRecursiveAllInternalComponent()) {
-                    if(tg instanceof TMLCCompositeComponent) {
-                        ll.add(tg);
-                    }
-                }
-                ll.addAll(((TMLCCompositeComponent)tgc).getAllPrimitiveComponents());
-            }
-        }
-        return ll;
-    }
 
     // Adding connector
     public void addingTGConnector() {

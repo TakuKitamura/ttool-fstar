@@ -1028,7 +1028,7 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
         for (TMLCPath path : paths) {
             path.checkRules();
             if (path.hasError()) {
-                TraceManager.addDev("Path error:" + path.getErrorMessage());
+                //TraceManager.addDev("Path error:" + path.getErrorMessage());
                 faultyPaths.add(path);
                 //error = path.getErrorMessage();
             }
