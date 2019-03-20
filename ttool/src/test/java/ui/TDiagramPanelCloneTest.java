@@ -15,8 +15,12 @@ import static org.junit.Assert.*;
 public class TDiagramPanelCloneTest extends AbstractUITest {
 
     static TDiagramPanel diagramPanel;
-    static  TGComponent tgComponent;
-    final static String EXPECTED_FILE = getBaseResourcesDir() + "tmltranslator/expected/expected_spec.tml";
+    static  TGComponent tgComponent1;
+    static TGComponent tgComponent2;
+    static TGComponent tgComponent3;
+    final static String EXPECTED_FILE1 = getBaseResourcesDir() + "tmltranslator/expected/expected_spec1.tml";
+    final static String EXPECTED_FILE2 = getBaseResourcesDir() + "tmltranslator/expected/expected_spec2.tml";
+    final static String EXPECTED_FILE3 = getBaseResourcesDir() + "tmltranslator/expected/expected_spec3.tml";
 
 
     @BeforeClass
@@ -45,23 +49,58 @@ public class TDiagramPanelCloneTest extends AbstractUITest {
             }
         }
 
-        //tgComponent = findDiagComponent(238, diagramPanel);
-        for (TGComponent tgc : diagramPanel.getComponentList()) {
-            if (tgc instanceof TMLCCompositeComponent) {
-                tgComponent = tgc;
+        for (TGComponent tgc : diagramPanel.getAllComponent()) {
+            if (tgc.getValue().equals("CompositeComp1")) {
+                tgComponent1 = tgc;
+            }
+
+            if (tgc.getValue().equals("CompositeComp2")) {
+                tgComponent2 = tgc;
+            }
+
+            if (tgc.getValue().equals("PrimitiveComp5")) {
+                tgComponent3 = tgc;
             }
         }
     }
 
-    @Test
-    public void testCloneComponent() throws Exception{
+   @Test
+    public void testCloneCompositeComponentWithNullFather() throws Exception{
         CompareTML compTML = new CompareTML();
-        diagramPanel.cloneComponent(tgComponent);
+        diagramPanel.cloneComponent(tgComponent1);
        // mainGUI.modelChecking();
         mainGUI.checkModelingSyntax(true);
         mainGUI.generateTMLTxt();
-        File f1 = new File(EXPECTED_FILE);
+        File f1 = new File(EXPECTED_FILE1);
         File f2 = new File("spec.tml");  // Generated file after executing "TML generation"
         assertTrue(compTML.compareTML(f1,f2));
     }
+
+    @Test
+    public void testCloneCompositeComponentWithNonNullFather() throws Exception {
+        CompareTML compTML = new CompareTML();
+        diagramPanel.cloneComponent(tgComponent2);
+        // mainGUI.modelChecking();
+        mainGUI.checkModelingSyntax(true);
+        mainGUI.generateTMLTxt();
+        File f1 = new File(EXPECTED_FILE2);
+        File f2 = new File("spec.tml");  // Generated file after executing "TML generation"
+        assertTrue(compTML.compareTML(f1,f2));
+    }
+
+    @Test
+    public void testClonePrimitiveComponent() throws Exception {
+        CompareTML compTML = new CompareTML();
+        diagramPanel.cloneComponent(tgComponent3);
+        // mainGUI.modelChecking();
+        mainGUI.checkModelingSyntax(true);
+        mainGUI.generateTMLTxt();
+        File f1 = new File(EXPECTED_FILE3);
+        File f2 = new File("spec.tml");  // Generated file after executing "TML generation"
+        assertTrue(compTML.compareTML(f1,f2));
+    }
+
+
+
+
 }
