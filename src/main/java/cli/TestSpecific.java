@@ -41,6 +41,7 @@ package cli;
 
 import common.ConfigurationTTool;
 import launcher.RTLLauncher;
+import myutil.Conversion;
 import myutil.IntExpressionEvaluator;
 import myutil.PluginManager;
 import myutil.TraceManager;
@@ -108,11 +109,26 @@ public class TestSpecific extends Command  {
             at.addAction(command);
 
             IntExpressionEvaluator iee = new IntExpressionEvaluator();
-            iee.getResultOf(at.getAction(0).toString());
-            double result = iee.getResultOf(command);
 
             System.out.println("Value of x=" + x.getInitialValue() + " y=" + y.getInitialValue() + " z=" +z.getInitialValue());
-            System.out.println("Result =" + result);
+            String expr = at.getAction(0).toString();
+            int index = expr.indexOf('=');
+            if (index == -1) {
+                System.out.println("Invalid expr");
+                return "Test failed no '=' in assignation";
+            }
+
+            expr = expr.substring(index+1, expr.length()).trim();
+            System.out.println("Evaluating: " + expr);
+
+            for(AvatarAttribute aa: block.getAttributes()) {
+                expr = Conversion.putVariableValueInString(AvatarSpecification.ops, expr, aa.getName(), aa.getInitialValue());
+            }
+
+            System.out.println("Evaluating: " + expr);
+
+            double result = iee.getResultOf(expr);
+            System.out.println("Result = " + result);
 
             return null;
         } catch (Exception e) {

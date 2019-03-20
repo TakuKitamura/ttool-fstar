@@ -64,12 +64,14 @@ public class AvatarTuple extends AvatarLeftHand {
         if (toParse.trim().startsWith("(")) {
             int indexLParen = toParse.indexOf ("(");
             int indexRParen = AvatarGuard.getMatchingRParen (toParse, indexLParen);
+            if (indexRParen < 0)
+                return null;
             String[] components = toParse.substring (indexLParen+1, indexRParen).trim().split (",");
             boolean illFormed = false;
             AvatarTuple argsTuple = new AvatarTuple (block);
             for (String arg: components) {
                 if (!arg.isEmpty()) {
-                    TraceManager.addDev("In for with arg=" + arg+"|");
+                    //TraceManager.addDev("In for with arg=" + arg+"|");
                     AvatarTerm t = AvatarTerm.createFromString (block, arg);
                     if (t == null) {
                         // Term couldn't be parsed
