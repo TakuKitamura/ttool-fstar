@@ -1380,7 +1380,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     public Vector<TMLCPrimitiveComponent> selectedCPrimitiveComponent() {
         Vector<TMLCPrimitiveComponent> v = null;
 
-        for (TGComponent tgc : this.getAllComponent()){
+        for (TGComponent tgc : this.getAllComponentList()){
             if (tgc.isSelected()) {
                 if (tgc instanceof TMLCPrimitiveComponent) {
                     if (v == null)
@@ -2561,7 +2561,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     public int getMaxIdSelected() {
         int ret = 0;
         //issue 186
-        for (TGComponent tgc : this.getAllComponent())
+        for (TGComponent tgc : this.getAllComponentList())
             if (tgc.isSelected())
                 ret = Math.max(ret, tgc.getMaxId());
         return ret;

@@ -49,7 +49,7 @@ public class TDiagramPanelCloneTest extends AbstractUITest {
             }
         }
 
-        for (TGComponent tgc : diagramPanel.getAllComponent()) {
+        for (TGComponent tgc : diagramPanel.getAllComponentList()) {
             if (tgc.getValue().equals("CompositeComp1")) {
                 tgComponent1 = tgc;
             }
