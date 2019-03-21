@@ -1388,12 +1388,6 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                     v.addElement((TMLCPrimitiveComponent) tgc);
                 }
             }
-
-            if (tgc instanceof TMLCCompositeComponent) {
-                if (v == null)
-                    v = new Vector<TMLCPrimitiveComponent>();
-                v.addAll(((TMLCCompositeComponent) (tgc)).getAllPrimitiveComponents());
-            }
         }
 
         return v;
