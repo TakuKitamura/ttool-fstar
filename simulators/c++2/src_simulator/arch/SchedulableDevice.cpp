@@ -51,7 +51,8 @@ SchedulableDevice::SchedulableDevice(	ID iID,
 						_deleteScheduler(true),
 						_busyCycles(0),
 						_static_consumPerCycle (15),
-						_dynamic_consumPerCycle (35) {
+						_dynamic_consumPerCycle (35),
+						_cycleTime(0) {
 	_transactList.reserve( BLOCK_SIZE_TRANS );
 }
 
@@ -184,7 +185,7 @@ std::string SchedulableDevice::determineHTMLCellClass( 	std::map<TMLTask*, std::
 }
 
 void SchedulableDevice::schedule2HTML(std::ofstream& myfile) const {
-        static unsigned int time=0;
+        
 	myfile << "<h2><span>Scheduling for device: "<< _name << "</span></h2>" << std::endl;
 
 	if ( _transactList.size() == 0 ) {
@@ -198,7 +199,10 @@ void SchedulableDevice::schedule2HTML(std::ofstream& myfile) const {
 		TMLTime aCurrTime = 0;
 
 		for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
-		  if( (*i)->getTransactCoreNumber() == time ){
+		  std::cout<<"get transaction core number is: "<<(*i)->getTransactCoreNumber()<<std::endl;
+		  std::cout<<"time : "<<_cycleTime<<std::endl;
+		  std::cout << "CPU:calcSTL: html of CPU " << _name << ": " << (*i)->toString() << std::endl;
+		  if( (*i)->getTransactCoreNumber() == this->_cycleTime ){
 			TMLTransaction* aCurrTrans = *i;
 			unsigned int aBlanks = aCurrTrans->getStartTime() - aCurrTime;
 
@@ -225,7 +229,7 @@ void SchedulableDevice::schedule2HTML(std::ofstream& myfile) const {
 			aCurrTime = aCurrTrans->getEndTime();
 		  }
 		}
-		++time;
+		
 
 		myfile << "</tr>" << std::endl << "<tr>";
 

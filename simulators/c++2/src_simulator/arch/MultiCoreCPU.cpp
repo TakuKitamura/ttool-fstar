@@ -118,7 +118,7 @@ TMLTime MultiCoreCPU::getMinEndSchedule(){
 }
     
 TMLTransaction* MultiCoreCPU::getNextTransaction(){
-std::cout<<"getNextTransaction"<<std::endl;
+std::cout<<"getNextTransaction"<<_name<<std::endl;
 #ifdef BUS_ENABLED
   if (_masterNextTransaction == 0 || _nextTransaction == 0){
     return _nextTransaction;
@@ -128,7 +128,6 @@ std::cout<<"getNextTransaction"<<std::endl;
 #endif
     std::cout << "CRASH Trans:" << _nextTransaction->toString() << std::endl << "Channel: " << _nextTransaction->getChannel() << "\n";
     BusMaster* aTempMaster = getMasterForBus(_nextTransaction->getChannel()->getFirstMaster(_nextTransaction));
-    std::cout<<"getNextTransaction getfirstmaster ok"<<std::endl;
     //std::cout << "1  aTempMaster: " << aTempMaster << std::endl;
     bool aResult = aTempMaster->accessGranted();
     //std::cout << "2" << std::endl;
@@ -147,7 +146,7 @@ std::cout<<"getNextTransaction"<<std::endl;
 }
 
 void MultiCoreCPU::calcStartTimeLength(TMLTime iTimeSlice){
-std::cout<<"calcStartTimeLength"<<std::endl;
+std::cout<<"calcStartTimeLength"<<_name<<std::endl;
 #ifdef DEBUG_CPU
   std::cout << "CPU:calcSTL: scheduling decision of CPU " << _name << ": " << _nextTransaction->toString() << std::endl;
 #endif
@@ -174,7 +173,7 @@ std::cout << "CPU:calcSTL: scheduling decision of CPU " << _name << ": " << _nex
   TMLTime aStartTime = max(_endSchedule,_nextTransaction->getRunnableTime());
   TMLTime aReminder = aStartTime % _timePerCycle;
   if (aReminder!=0) aStartTime+=_timePerCycle - aReminder;
-  std::cout << "CPU: set starttime in CPU=" << aStartTime << "\n";
+  std::cout << _name << "CPU: set starttime in CPU=" << aStartTime << "\n";
 
   _nextTransaction->setStartTime(aStartTime);
 
@@ -267,7 +266,7 @@ TMLTime MultiCoreCPU::truncateNextTransAt(TMLTime iTime){
       _nextTransaction->setLength(_nextTransaction->getVirtualLength() *_timePerExeci);
     }
 #else
-    if (iTime <= _nextTransaction->getStartTime()) return 0;  //before: <=
+    if (iTime <= _nextTransaction->getStartTime()) return 0;  //before
     TMLTime aNewDuration = iTime - _nextTransaction->getStartTime();
     _nextTransaction->setVirtualLength(max((TMLTime)(aNewDuration /_timePerExeci), (TMLTime)1));
     _nextTransaction->setLength(_nextTransaction->getVirtualLength() *_timePerExeci);
@@ -281,7 +280,7 @@ TMLTime MultiCoreCPU::truncateNextTransAt(TMLTime iTime){
 }
 
 bool MultiCoreCPU::addTransaction(TMLTransaction* iTransToBeAdded){
-std::cout<<"addTransaction"<<std::endl;
+std::cout<<"addTransaction"<<_name<<std::endl;
   bool aFinish;
   //TMLTransaction* aTransCopy=0;
   if (_masterNextTransaction==0){
@@ -332,22 +331,24 @@ std::cout<<"addTransaction"<<std::endl;
 #endif
     //_nextTransaction->getCommand()->execute();  //NEW!!!!
     std::cout << "CPU:addt: to be started" << std::endl;
+std::cout << "CPU:calcSTL: addtransaction of CPU " << _name << ": " << _nextTransaction->toString() << std::endl;
     _endSchedule=_nextTransaction->getEndTime();
     ////test///
    // unsigned int iCoreNumber=getCoreNumber();
-    unsigned static time=0;
+    std::cout<<"multicore number "<<coreNumber<<" end schedule "<<_endSchedule<<std::endl;
     multiCore[coreNumber]=_endSchedule;
-    if (time < amountOfCore -1){
+    if (_cycleTime < amountOfCore -1){
       _endSchedule=0;
        _nextTransaction->setTransactCoreNumber(coreNumber);
       ++coreNumber;
+      std::cout<<"haha1"<<std::endl;
     }
     else {
       _endSchedule=getMinEndSchedule();
        _nextTransaction->setTransactCoreNumber(coreNumber);
+	std::cout<<"haha2"<<std::endl;
       //initCore();
     }
-    time++;
     std::cout <<"test transaction core number !!!! "<<_nextTransaction->getTransactCoreNumber()<<std::endl;
     std::cout << "set end schedule CPU: " << _endSchedule << "\n";
     _simulatedTime=max(_simulatedTime,_endSchedule);
@@ -371,9 +372,8 @@ std::cout<<"addTransaction"<<std::endl;
 }
 
 void MultiCoreCPU::schedule(){
-std::cout<<"schedule"<<std::endl;
   //std::cout <<"Hello\n";
-  //std::cout << "CPU:schedule BEGIN " << _name << "+++++++++++++++++++++++++++++++++\n";
+  std::cout << "CPU:schedule BEGIN " << _name << "+++++++++++++++++++++++++++++++++\n";
   TMLTime aTimeSlice = _scheduler->schedule(_endSchedule);
   //_schedulingNeeded=false;  05/05/11
   //std::cout << "1\n";
@@ -392,11 +392,10 @@ std::cout<<"schedule"<<std::endl;
     if (_masterNextTransaction!=0) _masterNextTransaction->registerTransaction(0);
   }
   //std::cout << "5\n";
-  if (_nextTransaction ==0) std::cout<<"in schedule nextTransaction is 0"<<std::endl;
-  if (aOldTransaction != _nextTransaction) std::cout<<"in schedule aOldTransaction = nextTransaction"<<std::endl;
   if (_nextTransaction!=0 && aOldTransaction != _nextTransaction) calcStartTimeLength(aTimeSlice);
   //std::cout << "CPU:schedule END " << _name << "+++++++++++++++++++++++++++++++++\n";
   else std::cout<<"no need calcStartTimeLength"<<std::endl;
+ std::cout << "CPU:schedule END " << _name << "+++++++++++++++++++++++++++++++++\n";
 }
 
 //std::string MultiCoreCPU::toString() const{

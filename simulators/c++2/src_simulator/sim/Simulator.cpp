@@ -81,9 +81,7 @@ TMLTransaction* Simulator::getTransLowestEndTime(SchedulableDevice*& oResultDevi
   //for(CPUList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
   for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
     aTempDevice=*i;
-    std::cout<<"test888!!!"<<std::endl;
     aTempTrans=aTempDevice->getNextTransaction();
-    std::cout<<"test999!!!"<<std::endl;
     if (aTempTrans!=0 && aTempTrans->getVirtualLength()>0){
 #ifdef DEBUG_KERNEL
       std::cout << "kernel:getTLET: transaction found on " << aTempDevice->toString() << ": " << aTempTrans->toString() << std::endl;
@@ -291,6 +289,7 @@ void Simulator::latencies2XML(std::ostringstream& glob, int id1, int id2) {
 }
 
 void Simulator::schedule2HTML(std::string& iTraceFileName) const {
+std::cout<<"schedule2HTML--------------------------------------"<<std::endl;
   struct timeval aBegin,aEnd;
   gettimeofday(&aBegin,NULL);
 
@@ -347,8 +346,14 @@ void Simulator::schedule2HTML(std::string& iTraceFileName) const {
 
     //for(CPUList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
     for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
-      for(unsigned int j = 0; j < (*i)->getAmoutOfCore(); j++) 
+      for(unsigned int j = 0; j < (*i)->getAmoutOfCore(); j++) {
+        std::cout<<"core number is "<<(*i)->getAmoutOfCore()<<std::endl;
 	(*i)->schedule2HTML(myfile);
+	(*i)->setCycleTime((*i)->getCycleTime()+1);
+	std::cout<<"~~~~~~~~~~~~~~~~~~"<<std::endl;
+	}
+        if((*i)->getAmoutOfCore() == 1)
+	   (*i)->setCycleTime(0);
     }
     //for(BusList::const_iterator j=_simComp->getBusIterator(false); j != _simComp->getBusIterator(true); ++j){
     for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
@@ -495,12 +500,10 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
   //std::cout << "after loop2" << std::endl;
   //for_each(_simComp->getCPUIterator(false), _simComp->getCPUIterator(true),std::mem_fun(&CPU::setRescheduleFlag));
   //for_each(_simComp->getCPUIterator(false), _simComp->getCPUIterator(true),std::mem_fun(&CPU::schedule));
-  std::cout<<"test666!!!"<<std::endl;
+  std::cout<<"simulate"<<std::endl;
   for_each(_simComp->getCPUList().begin(), _simComp->getCPUList().end(),std::mem_fun(&CPU::schedule));
-  std::cout<<"test777!!!"<<std::endl;
   //std::cout << "after schedule" << std::endl;
-  transLET=getTransLowestEndTime(cpuLET);
-  std::cout<<"test000!!!"<<std::endl;	      
+  transLET=getTransLowestEndTime(cpuLET);	      
   //std::cout << "after getTLET" << std::endl;
 #ifdef LISTENERS_ENABLED
   if (_wasReset) NOTIFY_SIM_STARTED();
@@ -520,6 +523,7 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
     std::cout << "kernel:simulate:cpuLET printed" << std::endl;
 #endif
         bool x = cpuLET->addTransaction(0);
+        cpuLET->setCycleTime(0);
 	//std::cout << "kernel:simulate: x=" << x << std::endl;
   #ifdef DEBUG_KERNEL
     std::cout << "kernel:simulate: AFTER add trans: " << x << std::endl;
