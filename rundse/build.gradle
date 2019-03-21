@@ -25,6 +25,7 @@ dependencies {
     compileOnly name:'batik-util'
     compile name:'jautomata-core'
     compile name:'com.microsoft.z3'
+    compileOnly name: 'jna-3.3.0'
 }
 
 jar {

@@ -26,6 +26,7 @@ dependencies {
     compile name: 'commons-math3-3.6.1'
     compile name: 'jautomata-core'
     compile name: 'com.microsoft.z3'
+    compileOnly name: 'jna-3.3.0'
 }
 
 jar {

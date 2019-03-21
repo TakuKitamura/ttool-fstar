@@ -26,6 +26,7 @@
       <root url="jar://$PROJECT_DIR$/libs/batik-xml.jar!/" />
       <root url="jar://$PROJECT_DIR$/libs/jautomata-core.jar!/" />
       <root url="jar://$PROJECT_DIR$/libs/com.microsoft.z3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/jna-3.3.0.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$PROJECT_DIR$/libs/commons-io-2.5-javadoc.jar!/" />

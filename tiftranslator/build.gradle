@@ -20,6 +20,7 @@ dependencies {
     compileOnly name: 'commons-io-2.5'
     compileOnly name: 'jsoup-1.8.1'
     compileOnly name: 'commons-codec-1.10'
+    compileOnly name: 'jna-3.3.0'
 }
 
 jar {
