@@ -42,84 +42,19 @@
 package myutil;
 
 
-import java.util.Vector;
 
 /**
- * Class Terminal
+ * Class TerminalProviderInterface
  * Creation: 21/03/2019
- * Version 2.0 21/03/2019
+ * Version 1.0 21/03/2019
  * @author Ludovic APVRILLE
  */
-public class Terminal {
-    private final static int MAX_BUFFER_SIZE = 5000;
-
-    private Vector<String> buffer;
-    private int maxbufferSize = MAX_BUFFER_SIZE;
-    private TerminalProviderInterface terminalProvider;
-    private int cpt;
-
-   public Terminal() {
-       buffer = new Vector<>();
-       cpt = 0;
-   }
-
-   public void setTerminalProvider(TerminalProviderInterface tp) {
-       terminalProvider = tp;
-   }
-
-   public String getNextCommand() {
-
-       char x = 110;
-       int val = 0;
+public interface TerminalProviderInterface {
 
 
-       printPrompt(cpt);
-       String currentBuf = "";
-       try {
-           while(val != 3) {
+    public String getMidPrompt();
 
-               val = (RawConsoleInput.read(true));
-               x = (char) val;
-               if (val >= 32) {
-                   //System.out.print("" + x + "(val=" + val + ");");
-                   myPrint(""+x);
-                   currentBuf += x;
-               }
-               if (val == 10) {
-                   cpt ++;
-                   //myPrint("\n");
-
-                   return currentBuf;
-               }
-           }
-       } catch (Exception e) {
-           return null;
-       }
-
-
-    return "";
-   }
-
-   public void myPrint(String s) {
-       System.out.print(s);
-   }
-
-   public void printHistory() {
-       int cpt = 1;
-       for(String s: buffer) {
-           System.out.println("" + cpt+ ":" + s);
-           cpt ++;
-       }
-   }
-
-
-
-
-
-    public void printPrompt(int cpt) {
-	    System.out.print("" + cpt + "> ");
-    }
-
+    public void tabAction(String buffer);
 
 
 

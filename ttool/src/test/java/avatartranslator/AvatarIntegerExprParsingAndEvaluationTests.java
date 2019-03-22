@@ -93,6 +93,7 @@ public class AvatarIntegerExprParsingAndEvaluationTests {
 
     private void testExpr(String command, double expectedResult, boolean expectedBool) {
 
+
         AvatarTransition at = new AvatarTransition(block, "at", null);
         at.addAction(command);
 
