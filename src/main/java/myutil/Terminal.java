@@ -77,7 +77,6 @@ public class Terminal {
        String currentBuf = "";
        try {
            while(val != 3) {
-
                val = (RawConsoleInput.read(true));
                x = (char) val;
                if (val >= 32) {
