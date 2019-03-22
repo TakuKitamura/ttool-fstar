@@ -58,10 +58,13 @@ public class Terminal {
     private final static int BACKSPACE = 8;
     private final static int DEL = 127;
 
+    private final static int ESC = 27;
+
     private Vector<String> buffer;
     private int maxbufferSize = MAX_BUFFER_SIZE;
     private TerminalProviderInterface terminalProvider;
     private int cpt;
+    private String sequence;
 
 
 
@@ -82,40 +85,82 @@ public class Terminal {
 
        printPrompt(cpt);
        String currentBuf = "";
+       sequence = null;
+       long timeSeq = 0;
        try {
            while(val != 3) {
                val = (RawConsoleInput.read(true));
                x = (char) val;
 
-               if (val == CR) {
-                   if (currentBuf.length() == 0) {
-                       myPrint("\n");
-                       printPrompt(cpt);
+               // Special sequence?
+               if (sequence == null) {
+                   if (val == ESC) {
+                       sequence = "";
+                       timeSeq = System.currentTimeMillis();
+                   }
+               } else  {
+                   //Time check
+                   long now = System.currentTimeMillis();
+                   if (now - timeSeq > 10) {
+                       sequence = null;
                    } else {
-                       cpt++;
-                       //myPrint("\n");
-                       return currentBuf;
+                       sequence += x;
                    }
                }
 
-               if ((val == BACKSPACE) || (val == DEL)) {
-                   myPrint("\b \b");
-                   if (currentBuf.length() > 0) {
-                       currentBuf = currentBuf.substring(0, currentBuf.length() - 1);
+               if ((sequence != null) && (sequence.length() == 3)) {
+                   //TraceManager.addDev("Sequence=" + sequence);
+                   //printSequence(sequence);
+                   if ((sequence.charAt(0) == 91) && (sequence.charAt(1) == 51) &&
+                           (sequence.charAt(2) == 126)) {
+                       currentBuf = del(currentBuf);
+                       sequence = null;
+                        val = -1;
+                       // DEL
+                       //TraceManager.addDev("DEL");
                    }
-               } else if (val >= 32) {
-                   //System.out.print("" + x + "(val=" + val + ");");
-                   myPrint(""+x);
-                   currentBuf += x;
+               } else if ((sequence != null) && (sequence.length() > 4)) {
+
+               }
+
+               if ((sequence == null) && (val != -1)) {
+                   if (val == CR) {
+                       if (currentBuf.length() == 0) {
+                           myPrint("\n");
+                           printPrompt(cpt);
+                       } else {
+                           cpt++;
+                           //myPrint("\n");
+                           return currentBuf;
+                       }
+                   }
+
+                   if ((val == BACKSPACE) || (val == DEL)) {
+                       currentBuf = del(currentBuf);
+                   } else if (val >= 32) {
+                       //System.out.print("" + x + "(val=" + val + ");");
+                       myPrint("" + x);
+                       currentBuf += x;
+                   }
                }
 
            }
        } catch (Exception e) {
+           TraceManager.addDev("Exception in terminal:" + e.getMessage());
            return null;
        }
 
 
     return "";
+   }
+
+
+   private String del(String currentBuf) {
+       if (currentBuf.length() > 0) {
+           myPrint("\b \b");
+           currentBuf = currentBuf.substring(0, currentBuf.length() - 1);
+       }
+       return currentBuf;
    }
 
    public void myPrint(String s) {
@@ -128,6 +173,13 @@ public class Terminal {
            System.out.println("" + cpt+ ":" + s);
            cpt ++;
        }
+   }
+
+   private void printSequence(String seq) {
+       for(int i=0; i<seq.length(); i++) {
+           System.out.print("" + (int)(seq.charAt(i)) + " ");
+       }
+       System.out.println("");
    }
 
 
