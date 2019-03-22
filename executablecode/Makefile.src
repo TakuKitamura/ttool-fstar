@@ -1,1 +1,1 @@
-SRCS = generated_src/main.c generated_src/MainBlock.c 
+SRCS = generated_src/main.c generated_src/HelloWorldReceiver.c generated_src/HelloWorldGenerator.c 

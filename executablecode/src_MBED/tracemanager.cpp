@@ -279,7 +279,6 @@ void traceRequest(char *myname, request *req) {
   
       break;
     case RECEIVE_SYNC_REQUEST:
-      
       sprintf(s, "block=%s type=receive_synchro channel=%s\n", myname, req->syncChannel->inname);
       break;
     case SEND_ASYNC_REQUEST:
@@ -287,25 +286,20 @@ void traceRequest(char *myname, request *req) {
       sprintf(s, "block=%s type=send_async_2 channel=%s\n", myname, req->asyncChannel->outname);
       break;
     case RECEIVE_ASYNC_REQUEST:
-      
       sprintf(s, "block=%s type=receive_async_2 channel=%s\n", myname, req->asyncChannel->inname);
       break;
     case SEND_BROADCAST_REQUEST:
-      
       debug2Msg("Sync channel", req->syncChannel->outname);
       sprintf(s, "block=%s type=send_broadcast channel=%s\n", myname, req->syncChannel->outname);
       break; 
     case RECEIVE_BROADCAST_REQUEST:
-      
       debug2Msg("Sync channel", req->syncChannel->outname);
       sprintf(s, "block=%s type=receive_broadcast channel=%s\n", myname, req->syncChannel->outname);
       break; 
     case IMMEDIATE:
-      
       sprintf(s, "block=%s type=action\n", myname);
       break;
     default:
-      
       sprintf(s, "block=%s type=unknown\n", myname);
   }
 
