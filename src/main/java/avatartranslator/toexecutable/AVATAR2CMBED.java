@@ -467,8 +467,8 @@ public class AVATAR2CMBED {
         /*
         if (tracing) {
           s+= CR + "char __value[CHAR_ALLOC_SIZE];" + CR;
-          }*/
-
+          }
+        */
         //s+= CR + "pthread_cond_init(&__myCond, NULL);" + CR;
 
         s += CR + "fillListOfRequests(&__list, __myname, NULL, __myCond, &__mainMutex);" + CR;
@@ -823,6 +823,7 @@ public class AVATAR2CMBED {
 
         //mainFileMbed.appendToMainCode("/* Initializing mutex of messages */" + CR);
         //mainFileMbed.appendToMainCode("initMessages();" + CR);
+
 
         if (avspec.hasApplicationCode()&& includeUserCode) {
             mainFileMbed.appendToMainCode("/* User initialization */" + CR);

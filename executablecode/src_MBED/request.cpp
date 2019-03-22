@@ -166,6 +166,10 @@ void fillListOfRequests(setOfRequests *list, char *name, rtos::Thread* thread, s
   list->mutex = mutex;
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/javierMBED
 void addRequestToList(setOfRequests *list, request* req) {
   request *tmpreq;
 

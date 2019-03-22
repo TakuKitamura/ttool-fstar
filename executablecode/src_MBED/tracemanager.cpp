@@ -279,6 +279,7 @@ void traceRequest(char *myname, request *req) {
   
       break;
     case RECEIVE_SYNC_REQUEST:
+      
       sprintf(s, "block=%s type=receive_synchro channel=%s\n", myname, req->syncChannel->inname);
       break;
     case SEND_ASYNC_REQUEST:
