@@ -170,7 +170,7 @@ public class TMAP2Network<E>  {
         TMLArchitecture tmla = tmlmapping.getTMLArchitecture();
         TMLModeling<?> tmlm = tmlmapping.getTMLModeling();
 
-        // we have to redo the architecture:
+        // *** we have to redo the architecture:
         // we assume that each processor is connected directly to the NoC via a first bus
         // so, each CPU gets one memory, on bus connecting the mem and the NoC.
         // all local channels are mapped on this memory, otherwise they
@@ -262,13 +262,22 @@ public class TMAP2Network<E>  {
             }
         }
 
-        //Create routers
+        // *** Create routers
         for(int i=0; i<nocSize; i++) {
             for(int j=0; j<nocSize; j++) {
                 // We must find the number of apps connected on this router
                 TranslatedRouter tr = new TranslatedRouter<>(this, tmlmapping, noc, channelsCommunicatingViaNoc,
                         nbOfVCs, i, j);
                 routers[i][j] = tr;
+            }
+        }
+
+
+        // Make the channels & events of routers
+        for(int i=0; i<nocSize; i++) {
+            for(int j=0; j<nocSize; j++) {
+                // We must find the number of apps connected on this router
+                routers[i][j].makeOutputEventsChannels();
             }
         }
 

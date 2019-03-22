@@ -53,10 +53,17 @@ import java.util.Vector;
 public class Terminal {
     private final static int MAX_BUFFER_SIZE = 5000;
 
+    private final static int CR = 10;
+
+    private final static int BACKSPACE = 8;
+    private final static int DEL = 127;
+
     private Vector<String> buffer;
     private int maxbufferSize = MAX_BUFFER_SIZE;
     private TerminalProviderInterface terminalProvider;
     private int cpt;
+
+
 
    public Terminal() {
        buffer = new Vector<>();
@@ -79,17 +86,29 @@ public class Terminal {
            while(val != 3) {
                val = (RawConsoleInput.read(true));
                x = (char) val;
-               if (val >= 32) {
+
+               if (val == CR) {
+                   if (currentBuf.length() == 0) {
+                       myPrint("\n");
+                       printPrompt(cpt);
+                   } else {
+                       cpt++;
+                       //myPrint("\n");
+                       return currentBuf;
+                   }
+               }
+
+               if ((val == BACKSPACE) || (val == DEL)) {
+                   myPrint("\b \b");
+                   if (currentBuf.length() > 0) {
+                       currentBuf = currentBuf.substring(0, currentBuf.length() - 1);
+                   }
+               } else if (val >= 32) {
                    //System.out.print("" + x + "(val=" + val + ");");
                    myPrint(""+x);
                    currentBuf += x;
                }
-               if (val == 10) {
-                   cpt ++;
-                   //myPrint("\n");
 
-                   return currentBuf;
-               }
            }
        } catch (Exception e) {
            return null;
