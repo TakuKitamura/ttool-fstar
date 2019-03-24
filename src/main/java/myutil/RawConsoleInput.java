@@ -201,6 +201,7 @@ private static int readUnix (boolean wait) throws IOException {
    setTerminalAttrs(stdinFd, rawTermios);                  // switch off canonical mode, echo and signals
    try {
       if (!wait && System.in.available() == 0) {
+          System.out.println("Not ready");
          return -2; }                                      // no input available
       return readSingleCharFromByteStream(System.in); }
     finally {
@@ -220,8 +221,10 @@ private static void setTerminalAttrs (int fd, Termios termios) throws IOExceptio
    try {
       int rc = libc.tcsetattr(fd, LibcDefs.TCSANOW, termios);
       if (rc != 0) {
+          System.out.println("Exception in term tcset");
          throw new RuntimeException("tcsetattr() failed."); }}
     catch (LastErrorException e) {
+        System.out.println("Exception in term tcset");
       throw new IOException("tcsetattr() failed.", e); }}
 
 private static int readSingleCharFromByteStream (InputStream inputStream) throws IOException {
@@ -257,13 +260,17 @@ private static synchronized void initUnix() throws IOException {
    stdinIsConsole = libc.isatty(stdinFd) == 1;
    charsetDecoder = Charset.defaultCharset().newDecoder();
    if (stdinIsConsole) {
+      //System.out.println("IsConsole=" + stdinIsConsole);
       originalTermios = getTerminalAttrs(stdinFd);
       rawTermios = new Termios(originalTermios);
       rawTermios.c_lflag &= ~(LibcDefs.ICANON | LibcDefs.ECHO | LibcDefs.ECHONL | LibcDefs.ISIG);
+      //rawTermios.c_lflag &= ~(LibcDefs.ICANON | LibcDefs.ECHO | LibcDefs.ECHONL);
       intermediateTermios = new Termios(rawTermios);
-      intermediateTermios.c_lflag |= LibcDefs.ICANON;
+      //intermediateTermios.c_lflag |= LibcDefs.ICANON;
          // Canonical mode can be switched off between the read() calls, but echo must remain disabled.
-      registerShutdownHook(); }
+      registerShutdownHook();
+       System.out.println("New console");
+   }
    initDone = true; }
 
 private static void resetConsoleModeUnix() throws IOException {

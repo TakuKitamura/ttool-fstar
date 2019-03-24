@@ -54,7 +54,7 @@ public interface TerminalProviderInterface {
 
     public String getMidPrompt();
 
-    public void tabAction(String buffer);
+    public boolean tabAction(String buffer);
 
 
 

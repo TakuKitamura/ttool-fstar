@@ -60,6 +60,7 @@ import java.util.*;
  * @author Ludovic APVRILLE
  */
 public class Interpreter implements Runnable, TerminalProviderInterface  {
+
     public final static Command[] commands = {new Help(), new Quit(), new Action(),
             new Set(), new Wait(), new Print(), new History(), new TestSpecific()};
 
@@ -94,8 +95,6 @@ public class Interpreter implements Runnable, TerminalProviderInterface  {
         variables = new HashMap<>();
         this.show = show;
         formerCommands = new Vector<>();
-        term = new Terminal();
-        term.setTerminalProvider(this);
     }
 
     @Override
@@ -317,8 +316,50 @@ public class Interpreter implements Runnable, TerminalProviderInterface  {
         return "> ";
     }
 
-    public void tabAction(String buffer) {
+    public boolean tabAction(String buffer) {
+        // Print all possibilities from current buffer
+        String buf = Conversion.replaceAllString(buffer, "  ", " ");
+        String[] split = buf.split(" ");
 
+        // From the split, determine commands already entered and completes it
+        Vector<Command> listOfCommands = findCommands(split, 0);
+
+        if (listOfCommands.size()== 0) {
+            return false;
+        }
+
+        for(Command c: listOfCommands) {
+                System.out.println(""+c.getCommand());
+                return true;
+        }
+
+        return true;
+
+    }
+
+    public Vector<Command> findCommands(String[] split, int index) {
+        if (split == null) {
+            return null;
+        }
+
+        if (index >= split.length) {
+            return null;
+        }
+
+        String s = split[index];
+        Vector<Command> couldBe = new Vector<>();
+
+        // Search of all compatible commands starting with s
+        for (Command c: commands) {
+            if (c.getShortCommand().startsWith(s) || c.getCommand().startsWith(s)) {
+                Vector<Command> others = c.findCommands(split, index+1);
+                if (others != null) {
+                    couldBe.addAll(others);
+                }
+            }
+        }
+
+        return couldBe;
     }
 
 

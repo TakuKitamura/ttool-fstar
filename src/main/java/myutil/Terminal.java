@@ -60,17 +60,23 @@ public class Terminal {
 
     private final static int ESC = 27;
 
+    private final static int TAB = 9;
+
     private Vector<String> buffer;
     private int maxbufferSize = MAX_BUFFER_SIZE;
     private TerminalProviderInterface terminalProvider;
     private int cpt;
     private String sequence;
+    private String os;
 
 
 
    public Terminal() {
        buffer = new Vector<>();
        cpt = 0;
+       os = System.getProperty("os.name").toLowerCase();
+       System.out.println("Detected OS:" + os);
+       os = os.split(" ")[0];
    }
 
    public void setTerminalProvider(TerminalProviderInterface tp) {
@@ -79,7 +85,7 @@ public class Terminal {
 
    public String getNextCommand() {
 
-       char x = 110;
+       char x;
        int val = 0;
 
 
@@ -123,6 +129,7 @@ public class Terminal {
 
                }
 
+               // Usual CHAR
                if ((sequence == null) && (val != -1)) {
                    if (val == CR) {
                        if (currentBuf.length() == 0) {
@@ -135,8 +142,18 @@ public class Terminal {
                        }
                    }
 
+                   //BACKSPACE
                    if ((val == BACKSPACE) || (val == DEL)) {
                        currentBuf = del(currentBuf);
+                       //TAB
+                   } else if (val == TAB) {
+                       System.out.println("TAB");
+                       if (terminalProvider != null) {
+                           boolean b =terminalProvider.tabAction(currentBuf);
+                           if (b) {
+                               printPrompt(cpt);
+                           }
+                       }
                    } else if (val >= 32) {
                        //System.out.print("" + x + "(val=" + val + ");");
                        myPrint("" + x);
@@ -164,7 +181,10 @@ public class Terminal {
    }
 
    public void myPrint(String s) {
-       System.out.print(s);
+       if (os.compareTo("mac") != 0) {
+           System.out.print(s);
+        }
+       //System.out.flush();
    }
 
    public void printHistory() {
