@@ -181,9 +181,9 @@ public class Terminal {
    }
 
    public void myPrint(String s) {
-       if (os.compareTo("mac") != 0) {
+       //if (os.compareTo("mac") != 0) {
            System.out.print(s);
-        }
+        //}
        //System.out.flush();
    }
 

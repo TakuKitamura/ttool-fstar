@@ -269,7 +269,7 @@ private static synchronized void initUnix() throws IOException {
       //intermediateTermios.c_lflag |= LibcDefs.ICANON;
          // Canonical mode can be switched off between the read() calls, but echo must remain disabled.
       registerShutdownHook();
-       System.out.println("New console");
+       //System.out.println("New console");
    }
    initDone = true; }
 
