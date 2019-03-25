@@ -1,5 +1,4 @@
 
-
 For users of TTool: (e.g., for users having a read-only access to the git)
 ------------------- 
 
@@ -34,6 +33,18 @@ make release
 * Starting TTool from the git clone
 You should not modify bin/config.xml. Create your own config.xml (e.g. myconfig.xml), and create your own "ttool.exe" file (e.g., myttool.exe) 
 if you need to modify the config.xml file
+-> proceed as follows:
+$ cp ttool.exe myttool.exe
+$ cp bin/config.xml bin/myconfig.xml
+
+Then edit myttool.exe and replace config.xml with myconfig.xml
+
+You can now start TTool:
+$ ./myttool.exe
+
+
+Enjoy!!
+
 
 
 
