@@ -74,6 +74,21 @@ public class TranslatedRouter<E> {
     private TMLMapping<?> tmlmap;
 
 
+    // Events and channels with other routers
+
+    // Between  IN and INVC
+    TMLEvent [][] pktInEvtsVCs; // position, vc
+    TMLChannel [][] pktInChsVCs; // position, vc
+
+    // Between INVC and OUTVC
+    TMLEvent [][][] routeEvtVCs; // Task, vc, destination id
+    TMLEvent [][][] routeEvtVCsFeedback; // Task, vc, destination id
+
+    // Between OUTVC and OUT
+    TMLEvent [][] evtOutVCs; // position, vc
+    TMLEvent [][] evtSelectVC; // position, vc
+
+
     public TranslatedRouter(TMAP2Network<?> main, TMLMapping<?> tmlmap, HwNoC noc, List<TMLChannel> channelsViaNoc, int nbOfVCs, int xPos, int yPos) {
         this.main = main;
         this.nbOfVCs = nbOfVCs;
@@ -82,8 +97,6 @@ public class TranslatedRouter<E> {
         this.xPos = xPos;
         this.yPos = yPos;
         this.tmlmap = tmlmap;
-
-        //A router creates all its output events and channels, depending on its position in the NoC
 
     }
 
@@ -254,6 +267,68 @@ public class TranslatedRouter<E> {
         // inputs 0 to 3
         // We create all connection events
 
+
+    }
+
+    public void makeOutputEventsChannels() {
+        TMLModeling tmlm = tmlmap.getTMLModeling();
+
+
+
+
+        // Internal events and channels
+
+        // Between IN and INVC
+        pktInEvtsVCs = new TMLEvent[TMAP2Network.DOMAIN+1][nbOfVCs];
+        pktInChsVCs = new TMLChannel[TMAP2Network.DOMAIN+1][nbOfVCs];
+
+        for(int i=0; i<TMAP2Network.DOMAIN+1; i++) {
+            for(int j=0; j<nbOfVCs; j++) {
+                pktInEvtsVCs[i][j] = new TMLEvent("evt_pktin" + i + "_vc" + j + "_" + xPos + "_" + yPos,
+                        null, 8, true);
+                tmlm.addEvent(pktInEvtsVCs[i][j]);
+                pktInChsVCs[i][j] = new TMLChannel("ch_pktin" + i + "_vc" + j + "_" + xPos + "_" + yPos,
+                        null);
+                pktInChsVCs[i][j].setSize(4);
+                pktInChsVCs[i][j].setMax(8);
+                tmlm.addChannel(pktInChsVCs[i][j]);
+            }
+        }
+
+        // Between INVC and OUTVC
+        routeEvtVCs = new TMLEvent[TMAP2Network.DOMAIN+1][nbOfVCs][TMAP2Network.DOMAIN+1];
+        routeEvtVCsFeedback = new TMLEvent[TMAP2Network.DOMAIN+1][nbOfVCs][TMAP2Network.DOMAIN+1];
+        for(int i=0; i<TMAP2Network.DOMAIN+1; i++) {
+            for (int j = 0; j < nbOfVCs; j++) {
+                 for (int k = 0; k < TMAP2Network.DOMAIN+1; k++) {
+                     routeEvtVCs[i][j][k] = new TMLEvent("evtroute_" + i + "_vc" + j + "_" + k + "_" +
+                             xPos + "_" + yPos, null, 8, true);
+                     tmlm.addEvent(routeEvtVCs[i][j][k]);
+                     routeEvtVCsFeedback[i][j][k] = new TMLEvent("evtfeedback_" + i + "_vc" + j + "_" + k + "_" +
+                             xPos + "_" + yPos, null, 8, true);
+                     tmlm.addEvent(routeEvtVCsFeedback[i][j][k]);
+                 }
+            }
+        }
+
+
+
+        // Between OUTVC and OUT
+        evtOutVCs = new TMLEvent[TMAP2Network.DOMAIN+1][nbOfVCs];
+        evtSelectVC = new TMLEvent[TMAP2Network.DOMAIN+1][nbOfVCs];
+        for(int i=0; i<TMAP2Network.DOMAIN+1; i++) {
+            for(int j=0; j<nbOfVCs; j++) {
+                evtOutVCs[i][j] = new TMLEvent("evt_out" + i + "_vc" + j + "_" + xPos + "_" + yPos,
+                        null, 8, true);
+                tmlm.addEvent(evtOutVCs[i][j]);
+                evtSelectVC[i][j] = new TMLEvent("evt_vcselect" + i + "_vc" + j + "_" + xPos + "_" + yPos,
+                        null, 8, true);
+                tmlm.addEvent(evtSelectVC[i][j]);
+            }
+        }
+
+
+        // Interconnection with routers depending on position
 
     }
 

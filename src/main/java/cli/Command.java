@@ -145,8 +145,31 @@ public class Command implements CommandInterface {
             level --;
         }
         return ret;
-
     }
 
+    public Vector<Command> findCommands(String[] split, int index) {
+        if (split == null) {
+            return null;
+        }
+
+        if (index >= split.length) {
+            return null;
+        }
+
+        String s = split[index];
+        Vector<Command> couldBe = new Vector<>();
+
+        // Search of all compatible commands starting with s
+        for (Command c: subcommands) {
+            if (c.getShortCommand().startsWith(s) || c.getCommand().startsWith(s)) {
+                Vector<Command> others = c.findCommands(split, index+1);
+                if (others != null) {
+                    couldBe.addAll(others);
+                }
+            }
+        }
+
+        return couldBe;
+    }
 
 }

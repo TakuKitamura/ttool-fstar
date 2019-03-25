@@ -21,6 +21,7 @@ dependencies {
     compileOnly name: 'commons-codec-1.10'
     compileOnly name: 'jsoup-1.8.1'
     compile name: 'jautomata-core'
+    compileOnly name: 'jna-3.3.0'
 }
 
 jar {

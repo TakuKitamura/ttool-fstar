@@ -59,7 +59,8 @@ import java.util.*;
  *
  * @author Ludovic APVRILLE
  */
-public class Interpreter implements Runnable  {
+public class Interpreter implements Runnable, TerminalProviderInterface  {
+
     public final static Command[] commands = {new Help(), new Quit(), new Action(),
             new Set(), new Wait(), new Print(), new History(), new TestSpecific()};
 
@@ -85,6 +86,7 @@ public class Interpreter implements Runnable  {
     private boolean ttoolStarted = false;
     public MainGUI mgui;
     private Vector<String> formerCommands;
+    private Terminal term;
 
 
     public Interpreter(String script, InterpreterOutputInterface printInterface, boolean show) {
@@ -102,6 +104,18 @@ public class Interpreter implements Runnable  {
 
 
     public void interact() {
+        Terminal term = new Terminal();
+        term.setTerminalProvider(this);
+
+        String line;
+        int cptLine = 0;
+        while ((line = term.getNextCommand()) != null) {
+            executeLine(line, cptLine, false);
+            cptLine ++;
+        }
+    }
+
+    public void interactIntegratedTerminal() {
         /*if (RawConsoleInput.isWindows) {
             print("In Windows");
         } else  {
@@ -141,7 +155,7 @@ public class Interpreter implements Runnable  {
 
     private void executeLine(String line, int cptLine, boolean exitOnError) {
         // Comment
-        TraceManager.addDev("Executing line:" + line);
+        //TraceManager.addDev("Executing line:" + line);
 
         line = line.trim();
         if (line.length() == 0) {
@@ -167,7 +181,7 @@ public class Interpreter implements Runnable  {
                 begOfLine = begOfLine.substring(0, index).trim();
             }
 
-            TraceManager.addDev("Handling line: " + lineWithNoVariable);
+            //TraceManager.addDev("Handling line: " + lineWithNoVariable);
             String [] commandInfo = lineWithNoVariable.split(" ");
 
             if ((commandInfo == null) || (commandInfo.length < 1)){
@@ -295,6 +309,57 @@ public class Interpreter implements Runnable  {
         }
         print(sb.toString());
         return null;
+    }
+
+    // Terminal provider interface
+    public String getMidPrompt() {
+        return "> ";
+    }
+
+    public boolean tabAction(String buffer) {
+        // Print all possibilities from current buffer
+        String buf = Conversion.replaceAllString(buffer, "  ", " ");
+        String[] split = buf.split(" ");
+
+        // From the split, determine commands already entered and completes it
+        Vector<Command> listOfCommands = findCommands(split, 0);
+
+        if (listOfCommands.size()== 0) {
+            return false;
+        }
+
+        for(Command c: listOfCommands) {
+                System.out.println(""+c.getCommand());
+                return true;
+        }
+
+        return true;
+
+    }
+
+    public Vector<Command> findCommands(String[] split, int index) {
+        if (split == null) {
+            return null;
+        }
+
+        if (index >= split.length) {
+            return null;
+        }
+
+        String s = split[index];
+        Vector<Command> couldBe = new Vector<>();
+
+        // Search of all compatible commands starting with s
+        for (Command c: commands) {
+            if (c.getShortCommand().startsWith(s) || c.getCommand().startsWith(s)) {
+                Vector<Command> others = c.findCommands(split, index+1);
+                if (others != null) {
+                    couldBe.addAll(others);
+                }
+            }
+        }
+
+        return couldBe;
     }
 
 
