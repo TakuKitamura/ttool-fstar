@@ -1,15 +1,16 @@
 package ui;
 
+import myutil.TraceManager;
 import org.junit.*;
 import tmltranslator.compareTMLTest.CompareTML;
-import ui.tmlcompd.TMLCCompositeComponent;
 import ui.tmlcompd.TMLComponentTaskDiagramPanel;
+
 
 import java.io.*;
 
 import static org.junit.Assert.*;
 /*
- * #issue 82
+ * #issue 82 + 186
  * author : Minh Hiep
  */
 public class TDiagramPanelCloneTest extends AbstractUITest {
@@ -18,9 +19,12 @@ public class TDiagramPanelCloneTest extends AbstractUITest {
     static  TGComponent tgComponent1;
     static TGComponent tgComponent2;
     static TGComponent tgComponent3;
+    static TGComponent tgComponent4;
+
     final static String EXPECTED_FILE1 = getBaseResourcesDir() + "tmltranslator/expected/expected_spec1.tml";
     final static String EXPECTED_FILE2 = getBaseResourcesDir() + "tmltranslator/expected/expected_spec2.tml";
     final static String EXPECTED_FILE3 = getBaseResourcesDir() + "tmltranslator/expected/expected_spec3.tml";
+    final static String EXPECTED_FILE4 = getBaseResourcesDir() + "tmltranslator/expected/expected_spec4.tml";
 
 
     @BeforeClass
@@ -41,7 +45,7 @@ public class TDiagramPanelCloneTest extends AbstractUITest {
                 for (TDiagramPanel tdp : _tab.getPanels()) {
                     if (tdp instanceof  TMLComponentTaskDiagramPanel) {
                         diagramPanel = tdp;
-                        mainGUI.selectTab(tdp);
+                        mainGUI.selectTab(diagramPanel);
                         break;
                     }
                 }
@@ -49,26 +53,32 @@ public class TDiagramPanelCloneTest extends AbstractUITest {
             }
         }
 
-        for (TGComponent tgc : diagramPanel.getAllComponentList()) {
-            if (tgc.getValue().equals("CompositeComp1")) {
-                tgComponent1 = tgc;
-            }
+        if (diagramPanel != null) {
+            //TraceManager.addDev("diagram pannel is non null !!!");
+            for (TGComponent tgc : diagramPanel.getAllComponentList()) {
+                if (tgc.getValue().equals("CompositeComp1")) {
+                    tgComponent1 = tgc;
+                }
 
-            if (tgc.getValue().equals("CompositeComp2")) {
-                tgComponent2 = tgc;
-            }
+                if (tgc.getValue().equals("CompositeComp2")) {
+                    tgComponent2 = tgc;
+                }
 
-            if (tgc.getValue().equals("PrimitiveComp5")) {
-                tgComponent3 = tgc;
+                if (tgc.getValue().equals("PrimitiveComp5")) {
+                    tgComponent3 = tgc;
+                }
+
+                if (tgc.getValue().equals("PrimitiveComp6")) {
+                    tgComponent4 = tgc;
+                }
             }
-        }
+       }
     }
 
    @Test
     public void testCloneCompositeComponentWithNullFather() throws Exception{
         CompareTML compTML = new CompareTML();
         diagramPanel.cloneComponent(tgComponent1);
-       // mainGUI.modelChecking();
         mainGUI.checkModelingSyntax(true);
         mainGUI.generateTMLTxt();
         File f1 = new File(EXPECTED_FILE1);
@@ -80,7 +90,6 @@ public class TDiagramPanelCloneTest extends AbstractUITest {
     public void testCloneCompositeComponentWithNonNullFather() throws Exception {
         CompareTML compTML = new CompareTML();
         diagramPanel.cloneComponent(tgComponent2);
-        // mainGUI.modelChecking();
         mainGUI.checkModelingSyntax(true);
         mainGUI.generateTMLTxt();
         File f1 = new File(EXPECTED_FILE2);
@@ -89,7 +98,7 @@ public class TDiagramPanelCloneTest extends AbstractUITest {
     }
 
     @Test
-    public void testClonePrimitiveComponent() throws Exception {
+    public void testClonePrimitiveComponentWithNonNullFather() throws Exception {
         CompareTML compTML = new CompareTML();
         diagramPanel.cloneComponent(tgComponent3);
         // mainGUI.modelChecking();
@@ -101,6 +110,15 @@ public class TDiagramPanelCloneTest extends AbstractUITest {
     }
 
 
-
+    @Test
+    public void testClonePrimitiveComponentWithNullFather() throws Exception {
+        CompareTML compTML = new CompareTML();
+        diagramPanel.cloneComponent(tgComponent4);
+        mainGUI.checkModelingSyntax(true);
+        mainGUI.generateTMLTxt();
+        File f1 = new File(EXPECTED_FILE4);
+        File f2 = new File("spec.tml");  // Generated file after executing "TML generation"
+        assertTrue(compTML.compareTML(f1,f2));
+    }
 
 }
