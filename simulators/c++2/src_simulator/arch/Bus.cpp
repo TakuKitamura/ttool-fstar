@@ -91,7 +91,7 @@ void Bus::schedule(){
 
 //Adds the transaction determined by the scheduling algorithm to the internal list of scheduled transactions
 bool Bus::addTransaction(TMLTransaction* iTransToBeAdded){
-	//std::cout << "Bus add trans " << _nextTransaction << "\n";
+	std::cout << "Bus add trans ####" << _nextTransaction << "\n";
 	_endSchedule = _nextTransaction->getEndTime();
 	//std::cout << "set end time to " << _endSchedule << "\n";
 	//_transactList.push_back(_nextTransaction);

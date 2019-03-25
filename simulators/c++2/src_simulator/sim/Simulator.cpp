@@ -289,7 +289,7 @@ void Simulator::latencies2XML(std::ostringstream& glob, int id1, int id2) {
 }
 
 void Simulator::schedule2HTML(std::string& iTraceFileName) const {
-std::cout<<"schedule2HTML--------------------------------------"<<std::endl;
+std::cout<<"schedule2HTML--------------------------------------******************"<<std::endl;
   struct timeval aBegin,aEnd;
   gettimeofday(&aBegin,NULL);
 
@@ -522,8 +522,11 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
     std::cout << "cpuLET= " << cpuLET->toString() << std::endl;
     std::cout << "kernel:simulate:cpuLET printed" << std::endl;
 #endif
+	std::cout<<"in simulator begin addTransaction "<<std::endl;
         bool x = cpuLET->addTransaction(0);
-        cpuLET->setCycleTime(0);
+       // cpuLET->setCycleTime(0);
+        std::cout<<"in simulator end addTransactin "<<std::endl;
+
 	//std::cout << "kernel:simulate: x=" << x << std::endl;
   #ifdef DEBUG_KERNEL
     std::cout << "kernel:simulate: AFTER add trans: " << x << std::endl;

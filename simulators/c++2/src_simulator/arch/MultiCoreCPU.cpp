@@ -337,17 +337,17 @@ std::cout << "CPU:calcSTL: addtransaction of CPU " << _name << ": " << _nextTran
    // unsigned int iCoreNumber=getCoreNumber();
     std::cout<<"multicore number "<<coreNumber<<" end schedule "<<_endSchedule<<std::endl;
     multiCore[coreNumber]=_endSchedule;
-    if (_cycleTime < amountOfCore -1){
-      _endSchedule=0;
-       _nextTransaction->setTransactCoreNumber(coreNumber);
-      ++coreNumber;
-      std::cout<<"haha1"<<std::endl;
-    }
-    else {
-      _endSchedule=getMinEndSchedule();
-       _nextTransaction->setTransactCoreNumber(coreNumber);
-	std::cout<<"haha2"<<std::endl;
-      //initCore();
+    std::cout<<"cycle time is "<<_cycleTime<<std::endl;
+    if (coreNumber < amountOfCore -1){
+	  _endSchedule=0;
+	  _nextTransaction->setTransactCoreNumber(coreNumber);
+	  ++coreNumber;
+	  std::cout<<"haha1: "<<coreNumber<<std::endl;
+     }else {
+	  _endSchedule=getMinEndSchedule();
+	  _nextTransaction->setTransactCoreNumber(coreNumber);
+          std::cout<<"haha2: "<<coreNumber<<std::endl;
+	  //initCore();
     }
     std::cout <<"test transaction core number !!!! "<<_nextTransaction->getTransactCoreNumber()<<std::endl;
     std::cout << "set end schedule CPU: " << _endSchedule << "\n";
