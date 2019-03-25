@@ -60,11 +60,12 @@ public class AvatarTuple extends AvatarLeftHand {
 
     public static AvatarTuple createFromString (AvatarStateMachineOwner block, String toParse) {
         AvatarTuple result = null;
+        toParse = toParse.trim();
 
-        if (toParse.trim().startsWith("(")) {
+        if (toParse.startsWith("(")) {
             int indexLParen = toParse.indexOf ("(");
             int indexRParen = AvatarGuard.getMatchingRParen (toParse, indexLParen);
-            if (indexRParen < 0)
+            if (indexRParen != toParse.length () - 1)
                 return null;
             String[] components = toParse.substring (indexLParen+1, indexRParen).trim().split (",");
             boolean illFormed = false;

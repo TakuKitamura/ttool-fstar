@@ -129,13 +129,15 @@ public class AvatarIntegerExprParsingAndEvaluationTests {
 
         testExpr("x = x + x*(y+z)*(x - z)", 570, true);
 
-        //testExpr("x = (x + y)*z", 30, true);
+        testExpr("x = (x + y)*z", 30, true);
 
-        //testExpr("x = (x + y)*z + (x+z)/z", 36, true);
+        testExpr("x = (x + y)*z + (x+z)/z", 36, true);
+
+        testExpr("x  = x*((x + y)*z + (x+z)/z)", 360, true);
+
+        testExpr("x  = x*((x + y)*z + (x+z)/z)/x", 36, true);
 
 
-        /*res= AvatarGuard.createFromString(A, "else");
-        assertTrue(res instanceof AvatarGuardElse);*/
     }
 
 
