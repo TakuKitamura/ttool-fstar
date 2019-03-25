@@ -175,8 +175,8 @@ public:
 			for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
 			  std::cout<<"get transaction core number is: "<<(*i)->getTransactCoreNumber()<<std::endl;
 			  std::cout<<"time : "<<_cycleTime<<std::endl;
-			  std::cout << "CPU:calcSTL: html of CPU " << _name << ": " << (*i)->toString() << std::endl;
-			  //if( (*i)->getTransactCoreNumber() == this->_cycleTime ){
+			  //std::cout << "CPU:calcSTL: html of CPU " << _name << ": " << (*i)->toString() << std::endl;
+			  if( (*i)->getTransactCoreNumber() == this->_cycleTime ){
 				TMLTransaction* aCurrTrans = *i;
 				unsigned int aBlanks = aCurrTrans->getStartTime() - aCurrTime;
 
@@ -201,7 +201,7 @@ public:
 				writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString() );
 
 				aCurrTime = aCurrTrans->getEndTime();
-			 // }
+			  }
 			}
 		
 

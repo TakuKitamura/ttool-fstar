@@ -108,8 +108,10 @@ void MultiCoreCPU::initCore(){
 
 TMLTime MultiCoreCPU::getMinEndSchedule(){
   TMLTime minTime=multiCore[0];
-  for( TMLTime i = 1; i < multiCore.size(); i++){
-    if( minTime > multiCore[i]){
+ std::cout<<"multicore number 0~~~~  end time is~~~~ "<<multiCore[0]<<std::endl;
+  for( TMLTime i = 0; i < multiCore.size(); i++){
+    std::cout<<"multicore number~~~~ "<<coreNumber<<"end time is~~~~ "<<multiCore[i]<<std::endl;
+    if( minTime >= multiCore[i]){
       minTime=multiCore[i];
       coreNumber=i;
       } 
@@ -335,20 +337,28 @@ std::cout << "CPU:calcSTL: addtransaction of CPU " << _name << ": " << _nextTran
     _endSchedule=_nextTransaction->getEndTime();
     ////test///
    // unsigned int iCoreNumber=getCoreNumber();
+    static unsigned int time=0;
     std::cout<<"multicore number "<<coreNumber<<" end schedule "<<_endSchedule<<std::endl;
     multiCore[coreNumber]=_endSchedule;
     std::cout<<"cycle time is "<<_cycleTime<<std::endl;
-    if (coreNumber < amountOfCore -1){
+    if (time < amountOfCore -1){
 	  _endSchedule=0;
 	  _nextTransaction->setTransactCoreNumber(coreNumber);
 	  ++coreNumber;
 	  std::cout<<"haha1: "<<coreNumber<<std::endl;
      }else {
-	  _endSchedule=getMinEndSchedule();
-	  _nextTransaction->setTransactCoreNumber(coreNumber);
+	  if( time == amountOfCore -1 ){
+		_nextTransaction->setTransactCoreNumber(coreNumber);
+	  	_endSchedule=getMinEndSchedule();
+	   }
+	  else {
+		_endSchedule=getMinEndSchedule();
+		_nextTransaction->setTransactCoreNumber(coreNumber);
+	   }
           std::cout<<"haha2: "<<coreNumber<<std::endl;
 	  //initCore();
     }
+    time++;
     std::cout <<"test transaction core number !!!! "<<_nextTransaction->getTransactCoreNumber()<<std::endl;
     std::cout << "set end schedule CPU: " << _endSchedule << "\n";
     _simulatedTime=max(_simulatedTime,_endSchedule);
