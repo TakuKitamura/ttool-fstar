@@ -63,6 +63,8 @@ public class Terminal {
     private final static int TAB = 9;
 
     private Vector<String> buffer;
+    private int bufferPointer ;
+    private int promptLength = 0;
     private int maxbufferSize = MAX_BUFFER_SIZE;
     private TerminalProviderInterface terminalProvider;
     private int cpt;
@@ -114,17 +116,53 @@ public class Terminal {
                    }
                }
 
+               /*if (sequence != null) {
+                   TraceManager.addDev("Sequence=" + sequence);
+                   printSequence(sequence);
+               }*/
+
+               if ((sequence != null) && (sequence.length() == 2)) {
+
+                   //UP?
+                   if ((sequence.charAt(0) == 91) && (sequence.charAt(1) == 65)) {
+
+                       //System.out.println("UP");
+                       delCurrent(currentBuf);
+                       bufferPointer = (bufferPointer > 0)? bufferPointer-1:bufferPointer;
+                       currentBuf = buffer.get(bufferPointer);
+                       //printPrompt(cpt);
+                       myPrint(currentBuf);
+                       sequence = null;
+                       val = -1;
+
+
+                    // DOWN?
+                   } else if ((sequence.charAt(0) == 91) && (sequence.charAt(1) == 66)) {
+
+                       //System.out.println("DOWN");
+                       delCurrent(currentBuf);
+                       bufferPointer = (bufferPointer==(buffer.size()-1))?bufferPointer:bufferPointer+1;
+                       currentBuf = buffer.get(bufferPointer);
+                       //printPrompt(cpt);
+                       myPrint(currentBuf);
+                       sequence = null;
+                       val = -1;
+                       // DEL
+                       //TraceManager.addDev("DEL");
+                   }
+               }
+
                if ((sequence != null) && (sequence.length() == 3)) {
-                   //TraceManager.addDev("Sequence=" + sequence);
-                   //printSequence(sequence);
+
+                   // DEL
                    if ((sequence.charAt(0) == 91) && (sequence.charAt(1) == 51) &&
                            (sequence.charAt(2) == 126)) {
                        currentBuf = del(currentBuf);
                        sequence = null;
                         val = -1;
-                       // DEL
                        //TraceManager.addDev("DEL");
                    }
+
                } else if ((sequence != null) && (sequence.length() > 4)) {
 
                }
@@ -138,6 +176,7 @@ public class Terminal {
                        } else {
                            cpt++;
                            //myPrint("\n");
+                           addToBuffer(currentBuf);
                            return currentBuf;
                        }
                    }
@@ -145,6 +184,7 @@ public class Terminal {
                    //BACKSPACE
                    if ((val == BACKSPACE) || (val == DEL)) {
                        currentBuf = del(currentBuf);
+
                        //TAB
                    } else if (val == TAB) {
                        System.out.println("TAB");
@@ -169,6 +209,23 @@ public class Terminal {
 
 
     return "";
+   }
+
+   private void addToBuffer (String newBuf) {
+       // Add at bufferPointer
+       // Therefore remove all elements after bufferPointer
+       for(int i=buffer.size()-1; i>=bufferPointer; i--) {
+           buffer.removeElementAt(i);
+       }
+
+       buffer.add(newBuf);
+
+       if (buffer.size() > maxbufferSize) {
+           buffer.removeElementAt(0);
+       }
+
+       bufferPointer = buffer.size();
+
    }
 
 
@@ -203,11 +260,22 @@ public class Terminal {
    }
 
 
+    private String delCurrent(String currentBuf) {
+        if (buffer.size() > 0) {
+            int size = currentBuf.length();
+            for(int i=0; i<size; i++) {
+                currentBuf =  del(currentBuf);
+            }
+        }
+        return currentBuf;
 
+    }
 
 
     public void printPrompt(int cpt) {
-	    System.out.print("" + cpt + "> ");
+       String p = "" + cpt + "> ";
+       promptLength = p.length();
+	    System.out.print(p);
     }
 
 
