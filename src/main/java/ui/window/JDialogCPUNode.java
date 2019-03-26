@@ -81,6 +81,7 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
  //   private static int selectedTracemode = 0;
     // Panel1
     protected JTextField nodeName;
+    private JFrameHelp jFrameHelp = null;
 
     // Panel2
     protected JTextField sliceTime, nbOfCores, byteDataSize, pipelineSize, goIdleTime, maxConsecutiveIdleCycles,
@@ -128,19 +129,30 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         but.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JFrameHelp jhf = new JFrameHelp("help", hm, he);
-                jhf.setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
-                //jhf.setAutoRequestFocus(true);
-                //jhf.setFocusableWindowState(true);
-                but.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "close");
-                but.getActionMap().put("close", new AbstractAction() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        if(!jhf.isVisible())
-                            dispose();
-                        jhf.setVisible(false);
+                if(jFrameHelp == null ) {
+                    jFrameHelp = new JFrameHelp("help", hm, he);
+                    jFrameHelp.setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
+                    //jhf.setAutoRequestFocus(true);
+                    //jhf.setFocusableWindowState(true);
+                    but.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "closeCPU");
+                    but.getActionMap().put("closeCPU", new AbstractAction() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            if((jFrameHelp != null) && (!jFrameHelp.isVisible()))
+                                dispose();
+                            jFrameHelp.setVisible(false);
+                            //jFrameHelp = null;
+                        }
+                    });
+                }else{
+                    if(!jFrameHelp.isVisible()) {
+                        jFrameHelp = new JFrameHelp("help", hm, he);
+                        jFrameHelp.setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
+                    }else{
+                        jFrameHelp.setVisible(false);
+                        jFrameHelp = null;
                     }
-                });
+                }
             }
         });
     }
@@ -537,8 +549,8 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c0.weightx = 1.0;
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
         c0.fill = GridBagConstraints.BOTH;
-        /*c.add(panel2, c0);
-          c.add(panel4, c0);*/
+       /* c.add(panel2, c0);
+        c.add(panel4, c0);*/
         c.add( tabbedPane, c0 );
 
         c0.gridwidth = 1;
