@@ -43,6 +43,7 @@
 package ui;
 
 import myutil.GraphicLib;
+import myutil.TraceManager;
 import ui.tmlad.TMLActivityDiagramPanel;
 import ui.tmlad.TMLActivityDiagramToolBar;
 import ui.tmlcd.TMLTaskDiagramPanel;
@@ -93,7 +94,8 @@ public class TMLDesignPanel extends TURTLEPanel {
         TMLActivityDiagramPanel tmladp;
         for(int i=1; i<panels.size(); i++) {
             tmladp = (TMLActivityDiagramPanel)(panels.elementAt(i));
-            if (tmladp.getName().compareTo(name) ==0) {
+            if (tmladp.getName().compareTo(name) == 0) {
+                //TraceManager.addDev("Ok!");
                 return tmladp;
             }
         }

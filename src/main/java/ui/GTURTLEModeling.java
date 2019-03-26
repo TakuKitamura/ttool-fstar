@@ -6812,6 +6812,7 @@ public class GTURTLEModeling {
 
         tmladp.removeAll();
 
+        //TraceManager.addDev("Loading diagram of " + name + " in " + tmladp.getName() +"\n");
         loadDiagram(elt, tmladp);
     }
 
