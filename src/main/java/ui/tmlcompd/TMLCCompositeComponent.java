@@ -124,7 +124,7 @@ public class TMLCCompositeComponent extends TGCScalableWithInternalComponent imp
 			if (ColorManager.TML_COMPOSITE_COMPONENT == Color.white) {
 				myColor = Color.white;
 			} else {
-			myColor = new Color(251, 252, 200- (getMyDepth() * 10), 200);
+				myColor = new Color(251, 252, 200- (getMyDepth() * 10), 200);
 			}
 		}
 		
@@ -176,7 +176,7 @@ public class TMLCCompositeComponent extends TGCScalableWithInternalComponent imp
 			f = f.deriveFont((float)currentFontSize);
 			g.setFont(f);
 			w = g.getFontMetrics().stringWidth(value);
-			//
+			
 			if (!(w < (width - 2 * (iconSize + textX)))) {
 				g.drawString(value, x + textX + 1, y + currentFontSize + textX);
 			} else {

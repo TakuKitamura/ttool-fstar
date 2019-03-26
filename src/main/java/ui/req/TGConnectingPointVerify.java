@@ -36,12 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.req;
-
-//import java.awt.*;
 
 import ui.CDElement;
 import ui.TGComponentManager;
@@ -54,7 +49,7 @@ import ui.TGConnectingPointWidthHeight;
  * @version 1.0 30/05/2006
  * @author Ludovic APVRILLE
  */
-public class TGConnectingPointVerify extends  TGConnectingPointWidthHeight {
+public class TGConnectingPointVerify extends TGConnectingPointWidthHeight {
     
     public TGConnectingPointVerify(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h, int _orientation) {
         super(_container, _x, _y, _in, _out, _w, _h);
@@ -65,6 +60,7 @@ public class TGConnectingPointVerify extends  TGConnectingPointWidthHeight {
         super(_container, _x, _y, _in, _out, _w, _h);
     }
     
+	@Override
     public boolean isCompatibleWith(int type) {
         //
         if (type == TGComponentManager.CONNECTOR_VERIFY_REQ) {

@@ -36,12 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.procsd;
-
-//import java.awt.*;
 
 import ui.CDElement;
 import ui.TGConnectingPointTwoFathers;
@@ -59,6 +54,7 @@ public class TGConnectingPointAssociationProCSD extends  TGConnectingPointTwoFat
         super(_container1, _container2, _x, _y, _in, _out);
     }
     
+    @Override
     public boolean isCompatibleWith(int type) {
         //A link is not compatible with an interface. By Solange
     	//if (type == TGComponentManager.CONNECTOR_ATTRIBUTE) {
@@ -66,5 +62,4 @@ public class TGConnectingPointAssociationProCSD extends  TGConnectingPointTwoFat
         //}
         return false;
     }
-    
 }

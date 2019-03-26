@@ -36,11 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.ucd;
-
 
 import ui.CDElement;
 import ui.TGComponentManager;
@@ -58,7 +54,8 @@ public class TGConnectingPointUCD extends  TGConnectingPointWidthHeight{
 	public TGConnectingPointUCD(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
 		super(_container, _x, _y, _in, _out, _w, _h);
 	}
-    
+	
+    @Override
     public boolean isCompatibleWith(int type) {
         //
         if ((type == TGComponentManager.CONNECTOR_ACTOR_UCD) ||(type == TGComponentManager.CONNECTOR_INCLUDE_UCD) || (type == TGComponentManager.CONNECTOR_SPECIA_UCD) || (type == TGComponentManager.CONNECTOR_EXTEND_UCD)) {

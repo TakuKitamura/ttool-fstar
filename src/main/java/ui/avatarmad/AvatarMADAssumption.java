@@ -75,7 +75,7 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
     //protected int iconSize = 30;
 
     private Font myFont, myFontB;
-    private int maxFontSize = 30;
+  //  private int maxFontSize = 30;
     private int minFontSize = 4;
     private int currentFontSize = -1;
     private boolean displayText = true;
@@ -106,7 +106,7 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
 
     // Icon
     private int iconSize = 18;
-    private boolean iconIsDrawn = false;
+   // private boolean iconIsDrawn = false;
 
     public AvatarMADAssumption(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -157,7 +157,7 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
         nbInternalTGComponent = 0;
         //tgcomponent = new TGComponent[nbInternalTGComponent];
 
-        int h = 1;
+     //   int h = 1;
         //TAttributeRequirement tgc0;
         //tgc0 = new TAttributeRequirement(x, y+height+h, 0, 0, height + h, height+h, true, this, _tdp);
         //tgcomponent[0] = tgc0;
@@ -191,8 +191,8 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
 
     public void internalDrawing(Graphics g) {
         Font f = g.getFont();
-        Font fold = f;
-        int w, c;
+ //       Font fold = f;
+   //     int w, c;
         int size;
 
         if (texts == null) {
@@ -216,7 +216,7 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
 
         displayText = currentFontSize >= minFontSize;
 
-        int h  = g.getFontMetrics().getHeight();
+     //   int h  = g.getFontMetrics().getHeight();
 
         g.drawRect(x, y, width, height);
 
@@ -238,7 +238,7 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
 
             size += currentFontSize;
             g.setFont(myFontB);
-            w = g.getFontMetrics().stringWidth(value);
+    //        w = g.getFontMetrics().stringWidth(value);
             drawLimitedString(g, value, x, y + size, width, 1);
 
         }
@@ -638,10 +638,10 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
             return;
         }
 
-        Font f = graphics.getFont();
-        Font f0 = f.deriveFont((float)currentFontSize);
-        Font f1 = f0.deriveFont(Font.BOLD);
-        Font f2 = f.deriveFont((float)(currentFontSize - 2));
+   //     Font f = graphics.getFont();
+   //     Font f0 = f.deriveFont((float)currentFontSize);
+   //     Font f1 = f0.deriveFont(Font.BOLD);
+    //    Font f2 = f.deriveFont((float)(currentFontSize - 2));
 
         /*// Must find for both modes which width is desirable
           String s0, s1;

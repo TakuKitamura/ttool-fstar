@@ -36,11 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatardd;
-
 
 import ui.CDElement;
 import ui.TGComponentManager;
@@ -53,14 +49,14 @@ import ui.TGConnectingPointWidthHeight;
  * @version 1.0 30/06/2014
  * @author Ludovic APVRILLE
  */
-public class ADDConnectingPoint extends  TGConnectingPointWidthHeight{
+public class ADDConnectingPoint extends TGConnectingPointWidthHeight {
     
     public ADDConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
         super(_container, _x, _y, _in, _out, _w, _h);
     }
     
+    @Override
     public boolean isCompatibleWith(int type) {
         return type == TGComponentManager.ADD_CONNECTOR;
     }
-    
 }

@@ -36,12 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatarmad;
-
-//import java.awt.*;
 
 import ui.CDElement;
 import ui.TGComponentManager;
@@ -56,7 +51,7 @@ import ui.TGConnectingPointWidthHeight;
  * @version 1.0 27/08/2013
  * @author Ludovic APVRILLE
  */
-public class AvatarMADToOthersConnectingPoint extends  TGConnectingPointWidthHeight {
+public class AvatarMADToOthersConnectingPoint extends TGConnectingPointWidthHeight {
     
     public AvatarMADToOthersConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
         super(_container, _x, _y, _in, _out, _w, _h);
@@ -68,14 +63,12 @@ public class AvatarMADToOthersConnectingPoint extends  TGConnectingPointWidthHei
 		orientation = _orientation;
     }
     
+    @Override
     public boolean isCompatibleWith(int type) {
         if (type == TGComponentManager.AVATARMAD_IMPACT_CONNECTOR) {
             return true;
         }
 
         return type == TGComponentManager.AVATARMAD_BELONGSTOCOMPOSITION_CONNECTOR;
-
     }
-	
-
 }

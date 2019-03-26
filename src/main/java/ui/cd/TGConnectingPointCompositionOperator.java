@@ -36,11 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.cd;
-
 
 import ui.CDElement;
 import ui.TGComponentManager;
@@ -53,21 +49,14 @@ import ui.TGConnectingPoint;
  * @version 1.0 12/12/2003
  * @author Ludovic APVRILLE
  */
-public class TGConnectingPointCompositionOperator extends  TGConnectingPoint{
+public class TGConnectingPointCompositionOperator extends TGConnectingPoint {
     
     public TGConnectingPointCompositionOperator(CDElement _container1, int _x, int _y, boolean _in, boolean _out) {
         super(_container1, _x, _y, _in, _out);
     }
     
+    @Override
     public boolean isCompatibleWith(int type) {
         return type == TGComponentManager.CONNECTOR_ATTRIBUTE;
     }
-    
 }
-
-
-
-
-
-
-

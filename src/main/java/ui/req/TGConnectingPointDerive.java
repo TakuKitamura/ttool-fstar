@@ -36,12 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.req;
-
-//import java.awt.*;
 
 import ui.CDElement;
 import ui.TGComponentManager;
@@ -61,6 +56,7 @@ public class TGConnectingPointDerive extends  TGConnectingPointWidthHeight {
 		orientation = _orientation;
     }
     
+    @Override
     public boolean isCompatibleWith(int type) {
         //
         if (type == TGComponentManager.CONNECTOR_DERIVE_REQ) {

@@ -36,12 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
- 
 package ui.oscd;
-
-//import java.awt.*;
 
 import ui.CDElement;
 import ui.TGComponentManager;

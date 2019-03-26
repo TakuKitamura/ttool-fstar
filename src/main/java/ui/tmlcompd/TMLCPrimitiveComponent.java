@@ -192,6 +192,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
             f = f.deriveFont((float) currentFontSize);
             g.setFont(f);
             w = g.getFontMetrics().stringWidth(value);
+            
             if (w > (width - 2 * (iconSize + textX))) {
                 g.drawString(value, x + textX + 1, y + currentFontSize + textX);
             } else {
