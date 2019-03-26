@@ -67,17 +67,16 @@ public class TMLADDelay extends TADComponentWithSubcomponents /* Issue #69 TGCWi
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
         // Issue #31
+        nbConnectingPoint = 2;
+        connectingPoint = new TGConnectingPoint[2];
+        connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
+        connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, + lineLength, false, true, 0.5, 1.0);
 //        width = 10;
 //        height = 30;
         initSize( 10, 30 );
 
         textX = width + scale( 5 );
         textY = height/2 + scale( 5 );
-        
-        nbConnectingPoint = 2;
-        connectingPoint = new TGConnectingPoint[2];
-        connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-        connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, + lineLength, false, true, 0.5, 1.0);
         
         nbInternalTGComponent = 1;
         tgcomponent = new TGComponent[nbInternalTGComponent];
@@ -101,7 +100,7 @@ public class TMLADDelay extends TADComponentWithSubcomponents /* Issue #69 TGCWi
     }
     
     @Override
-    public void internalDrawing(Graphics g) {
+    protected void internalDrawing(Graphics g) {
 		if (stateOfError > 0)  {
 			Color c = g.getColor();
 			switch(stateOfError) {

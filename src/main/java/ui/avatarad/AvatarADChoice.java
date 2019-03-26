@@ -112,9 +112,9 @@ public class AvatarADChoice extends TADChoice /* Issue #69 TGCScalableWithIntern
         nbConnectingPoint = 4;
         connectingPoint = new TGConnectingPoint[nbConnectingPoint];
         connectingPoint[0] = new AvatarADConnectingPoint(this, 0, -lineLength, true, false, 0.5, 0.0);
-        connectingPoint[1] = new AvatarADConnectingPoint(this, -lineOutLength, 0, false, true, 0.0, 0.5);
-        connectingPoint[2] = new AvatarADConnectingPoint(this, lineOutLength, 0, false, true, 1.0, 0.5);
-        connectingPoint[3] = new AvatarADConnectingPoint(this, 0, lineOutLength,  false, true, 0.5, 1.0);
+        connectingPoint[1] = new AvatarADConnectingPoint(this, -OUT_LINE_LENGTH, 0, false, true, 0.0, 0.5);
+        connectingPoint[2] = new AvatarADConnectingPoint(this, OUT_LINE_LENGTH, 0, false, true, 1.0, 0.5);
+        connectingPoint[3] = new AvatarADConnectingPoint(this, 0, OUT_LINE_LENGTH,  false, true, 0.5, 1.0);
     }
 //
 //    @Override

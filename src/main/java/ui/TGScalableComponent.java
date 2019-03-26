@@ -1,5 +1,10 @@
 package ui;
 
+import java.awt.Graphics;
+import java.awt.Image;
+
+import javax.swing.ImageIcon;
+
 /**
  * Issue #31
  * @author dblouin
@@ -21,7 +26,9 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
 	protected double darc;
 
 	protected int lineLength;
+	protected double dLineLength;
     protected int linebreak;
+	protected double dLinebreak;
 
 	public TGScalableComponent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
 			TGComponent _father, TDiagramPanel _tdp) {
@@ -90,8 +97,13 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
         arc = (int)(darc);
         darc = darc - arc;
 
-        lineLength = scale( lineLength );
-        linebreak = scale( linebreak );
+        dLineLength = lineLength * oldScaleFactor;
+        lineLength = (int) dLineLength;
+        dLineLength = dLineLength - lineLength;
+        
+        dLinebreak = linebreak * oldScaleFactor;
+        linebreak = (int) dLinebreak;
+        dLinebreak = dLinebreak - linebreak;
 
         dMaxWidth = defMaxWidth * oldScaleFactor;
         dMaxHeight = defMaxHeight * oldScaleFactor;
@@ -157,8 +169,13 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
         arc = (int) (darc);
         darc = darc - arc;
         
-        lineLength = scale( lineLength, factor );
-        linebreak = scale( linebreak, factor );
+        dLineLength = (lineLength + dLineLength) * factor;
+        lineLength = (int) dLineLength;
+        dLineLength = dLineLength - lineLength;
+        
+        dLinebreak = (linebreak + dLinebreak) * factor;
+        linebreak = (int) dLinebreak;
+        dLinebreak = dLinebreak - linebreak;
         
         // Issue #81: We also need to update max coordinate values
         maxX *= factor;
@@ -214,5 +231,40 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
     @Override
     protected int getExclusionMargin() {
     	return scale( super.getExclusionMargin() );
+    }
+
+    /**
+     * Issue #31
+     * @return
+     */
+    protected int getUnknownMargin() {
+    	return scale( super.getUnknownMargin() );
+    }
+
+    /**
+     * Issue #31: Shared this check
+     * @param graphics
+     */
+    protected int checkWidth( final Graphics graphics ) {
+    	return checkWidth( graphics, value );
+    }
+    
+    protected int checkWidth( 	final Graphics graphics,
+    							final String text ) {
+        // Issue #31: This is just to increase the width in case the actual width is not enough to display the text. 
+        // It is typically used when a component is created
+    	final int textWidth = graphics.getFontMetrics().stringWidth( text );
+        final int textWidthBorder = Math.max( minWidth, textWidth + 2 * textX );
+        
+        if ( textWidthBorder > width & !tdp.isScaled() ) {
+            setCd(x - ( textWidthBorder - width ) / 2 , y);
+            width = textWidthBorder;
+        }
+        
+        return textWidth;
+    }
+    
+    protected Image scale( final Image image ) {
+    	return new ImageIcon( image.getScaledInstance( width, - 1, Image.SCALE_SMOOTH ) ).getImage();
     }
 }

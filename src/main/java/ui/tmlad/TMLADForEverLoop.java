@@ -76,10 +76,10 @@ public class TMLADForEverLoop extends TADForLoop /* Issue #69 TGCWithoutInternal
 //        height = 20;
 //        minWidth = 30;
         
-        nbConnectingPoint = 2;
-        connectingPoint = new TGConnectingPoint[2];
-        connectingPoint[ INDEX_ENTER_LOOP ] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-        connectingPoint[ INDEX_INSIDE_LOOP ] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 1.0, 0.45); // loop
+//        nbConnectingPoint = 2;
+//        connectingPoint = new TGConnectingPoint[2];
+//        connectingPoint[ INDEX_ENTER_LOOP ] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
+//        connectingPoint[ INDEX_INSIDE_LOOP ] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 1.0, 0.45); // loop
         //connectingPoint[2] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.5, 1.0); // after lopp
         
 //        moveable = true;
@@ -93,14 +93,24 @@ public class TMLADForEverLoop extends TADForLoop /* Issue #69 TGCWithoutInternal
     }
 	
     @Override
-    public void internalDrawing(Graphics g) {
-        int w  = g.getFontMetrics().stringWidth(value);
-        int w1 = Math.max(minWidth, w + 2 * textX);
-        if ((w1 != width) & (!tdp.isScaled())) {
-            setCd(x + width/2 - w1/2, y);
-            width = w1;
-            //updateConnectingPoints();
-        }
+    protected void createConnectingPoints() {
+        nbConnectingPoint = 2;
+        connectingPoint = new TGConnectingPoint[2];
+        connectingPoint[ INDEX_ENTER_LOOP ] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
+        connectingPoint[ INDEX_INSIDE_LOOP ] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 1.0, 0.45); // loop
+    }
+
+    @Override
+    protected void internalDrawing(Graphics g) {
+    	
+    	// Issue #31
+        final int w = checkWidth( g );//g.getFontMetrics().stringWidth(value);
+//        int w1 = Math.max(minWidth, w + 2 * textX);
+//        if ((w1 != width) & (!tdp.isScaled())) {
+//            setCd(x + width/2 - w1/2, y);
+//            width = w1;
+//            //updateConnectingPoints();
+//        }
 		
 		if (stateOfError > 0)  {
 			Color c = g.getColor();
@@ -118,7 +128,7 @@ public class TMLADForEverLoop extends TADForLoop /* Issue #69 TGCWithoutInternal
         g.drawRoundRect(x, y, width, height, arc, arc);
         g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
         //g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
-        g.drawLine(x+width, y+height/2, x+width +lineLength, y+height/2);
+        //g.drawLine(x+width, y+height/2, x+width +lineLength, y+height/2);
         
         g.drawString(value, x + (width - w) / 2 , y + textY);
     }

@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
- 
 package ui;
 
 import myutil.GraphicLib;
@@ -52,7 +49,7 @@ import java.awt.*;
  * @version 1.0 22/12/2003
  * @author Ludovic APVRILLE
  */
-public class TGConnectingPointTwoFathers extends TGConnectingPoint{
+public class TGConnectingPointTwoFathers extends TGConnectingPoint {
 	protected CDElement container2;
 
 	public TGConnectingPointTwoFathers(CDElement _container1, CDElement _container2, int _x, int _y, boolean _in, boolean _out) {
@@ -60,9 +57,10 @@ public class TGConnectingPointTwoFathers extends TGConnectingPoint{
 		container2 = _container2;
 	}
 
+	@Override
 	public void draw(Graphics g) {
-		int mx = x + (container.getX() + container2.getX())/2;
-		int my = y + (container.getY() + container2.getY())/2;
+		int mx = scaledX() + (container.getX() + container2.getX())/2;
+		int my = scaledY() + (container.getY() + container2.getY())/2;
 		if (state == SELECTED) { 
 			mx = mx - width / 2;
 			my = my - height / 2;
@@ -85,8 +83,8 @@ public class TGConnectingPointTwoFathers extends TGConnectingPoint{
 	}
 
 	public boolean isCloseTo(int _x, int _y) {
-		int mx = x + (container.getX() + container2.getX())/2;
-		int my = y + (container.getY() + container2.getY())/2;
+		int mx = scaledX() + (container.getX() + container2.getX())/2;
+		int my = scaledY() + (container.getY() + container2.getY())/2;
 		return GraphicLib.isInRectangle(_x, _y, mx - width /2, my - height /2, width, height);
 	}
 
@@ -113,12 +111,4 @@ public class TGConnectingPointTwoFathers extends TGConnectingPoint{
 	public void setFather2(CDElement cd) {
 		container2 = cd;
 	}
-
 }
-
-
-
-
-    
-
-

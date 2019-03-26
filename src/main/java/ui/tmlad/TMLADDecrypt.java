@@ -36,22 +36,34 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package ui.tmlad;
 
-import myutil.GraphicLib;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.geom.Line2D;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JFrame;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import ui.*;
+
+import myutil.GraphicLib;
+import ui.AllowedBreakpoint;
+import ui.BasicErrorHighlight;
+import ui.ColorManager;
+import ui.EmbeddedComment;
+import ui.ErrorHighlight;
+import ui.MalformedModelingException;
+import ui.TDiagramPanel;
+import ui.TGComponent;
+import ui.TGComponentManager;
+import ui.TGConnectingPoint;
 import ui.ad.TADComponentWithoutSubcomponents;
 import ui.util.IconManager;
 import ui.window.JDialogMultiString;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.geom.Line2D;
-import java.util.ArrayList;
 
 /**
  * Class TMLADDecrypt
@@ -66,9 +78,12 @@ public class TMLADDecrypt extends TADComponentWithoutSubcomponents/* Issue #69 T
 	// Issue #31
 //    private int lineLength = 5;
     //    private int textX, textY;
-    private int ilength = 20;
-    private int ex = 5;
-    private int lineLength1;// = 2;
+//    private int ilength = 20;
+//    private int ex = 5;
+//    private int lineLength1;// = 2;
+	private static final int MARGIN = 5;
+	private static final int DEC_SYMBOL_MARGIN_Y = 6;
+	
     public String securityContext = "";
     protected int stateOfError = 0; // Not yet checked
 
@@ -76,18 +91,15 @@ public class TMLADDecrypt extends TADComponentWithoutSubcomponents/* Issue #69 T
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
         // Issue #31
+        nbConnectingPoint = 2;
+        connectingPoint = new TGConnectingPoint[2];
+        connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
+        connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, +lineLength + MARGIN, false, true, 0.5, 1.0);
 //        width = 15;
 //        height = 35;
 //        textX = width + 5;
 //        textY = height/2 + 5;
         initSize( 15, 35 );
-        lineLength1 = scale( 2 );
-
-        nbConnectingPoint = 2;
-        connectingPoint = new TGConnectingPoint[2];
-        connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-        connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, +lineLength + ex, false, true, 0.5, 1.0);
-
 
         moveable = true;
         editable = true;
@@ -99,7 +111,9 @@ public class TMLADDecrypt extends TADComponentWithoutSubcomponents/* Issue #69 T
     }
 
     @Override
-    public void internalDrawing(Graphics g) {
+    protected void internalDrawing(Graphics g) {
+    	final int scaledMargin = scale( MARGIN );
+    	
         if (stateOfError > 0) {
             Color c = g.getColor();
             switch (stateOfError) {
@@ -111,30 +125,26 @@ public class TMLADDecrypt extends TADComponentWithoutSubcomponents/* Issue #69 T
             }
             g.fillRect(x, y, width, height);
             int[] xP = new int[]{x, x + width, x + width / 2};
-            int[] yP = new int[]{y + height, y + height, y + height + ex};
+            int[] yP = new int[]{y + height, y + height, y + height + scaledMargin };
             g.fillPolygon(xP, yP, 3);
             g.setColor(c);
         }
         g.drawLine(x, y, x + width, y);
         g.drawLine(x, y, x, y + height);
         g.drawLine(x + width, y, x + width, y + height);
-        g.drawLine(x, y + height, x + width / 2, y + height + ex);
-        g.drawLine(x + width / 2, y + height + ex, x + width, y + height);
+        g.drawLine(x, y + height, x + width / 2, y + height + scaledMargin);
+        g.drawLine(x + width / 2, y + height + scaledMargin, x + width, y + height);
         g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
-        g.drawLine(x + (width / 2), y + height + ex, x + (width / 2), y + lineLength + height + ex);
+        g.drawLine(x + (width / 2), y + height + scaledMargin, x + (width / 2), y + lineLength + height + scaledMargin);
 
-        g.drawLine(x + (width / 2) - scale( lineLength1 ), y + (height - ilength) / 2, x + (width / 2) - scale( lineLength1 ), y + (height + ilength) / 2);
-        g.drawArc(x - ex, y + ex, width, height - 2 * ex, 270, 180);
+        // D
+        final int xPosOffset = (int) (width / 3 );
+        final int scaledSymbolMarginY = scale( DEC_SYMBOL_MARGIN_Y );
+        g.drawLine(x + xPosOffset, y + scaledSymbolMarginY, x + xPosOffset, y + height - scaledSymbolMarginY );
+        g.drawArc(x - scaledMargin, y + scaledMargin, width, height - 2 * scaledMargin, 270, 180);
 
-/*
-        g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/2,  x + (width/2) + lineLength1, y+(height-ilength)/2);
-
-
-        g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/2 + ilength,  x + (width/2) + lineLength1, y+(height-ilength)/2 + ilength);
-
-        g.drawLine(x + (width/2)+ lineLength1, y+(height-ilength)/2, x + (width/2)+ lineLength1, y+(height+ilength)/2);
-*/
-        g.drawImage(IconManager.imgic7000.getImage(), x - 22, y + height / 2, null);
+        g.drawImage( scale( IconManager.imgic7000.getImage() ), x - scale( 22 ), y + height / 2, null );
+        
         g.drawString("sec:" + securityContext, x + 3 * width / 2, y + height / 2);
     }
 
@@ -145,7 +155,7 @@ public class TMLADDecrypt extends TADComponentWithoutSubcomponents/* Issue #69 T
         labels[0] = "Security Pattern";
         values[0] = securityContext;
 
-        ArrayList<String[]> help = new ArrayList<String[]>();
+        List<String[]> help = new ArrayList<String[]>();
         help.add(tdp.getMGUI().getCurrentCryptoConfig());
         //JDialogTwoString jdts = new JDialogTwoString(frame, "Setting channel's properties", "Channel name", channelName, "Nb of samples", nbOfSamples);
         JDialogMultiString jdms = new JDialogMultiString(frame, "Setting Decryption", 1, labels, values, help);
@@ -190,14 +200,10 @@ public class TMLADDecrypt extends TADComponentWithoutSubcomponents/* Issue #69 T
 
     @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
-        //
         try {
-
             NodeList nli;
             Node n1, n2;
             Element elt;
-//            int k;
-//            String s;
 
             for (int i = 0; i < nl.getLength(); i++) {
                 n1 = nl.item(i);

@@ -64,10 +64,11 @@ public class TADChoice extends TADComponentWithSubcomponents/* Issue #69  TGCWit
 
 	//protected int lineLength = 10;
     
-	protected int lineOutLength = 25;
+	protected static final int OUT_LINE_LENGTH = 25;
+	protected static final int MARGIN = 5;
     
 //	Issue # 31 private int textX1, textY1, textX2, textY2, textX3, textY3;
-	private double dtextX1, dtextY1, dtextX2, dtextY2, dtextX3, dtextY3;
+	//private double dtextX1, dtextY1, dtextX2, dtextY2, dtextX3, dtextY3;
     
     protected int stateOfError = 0;
     
@@ -75,31 +76,23 @@ public class TADChoice extends TADComponentWithSubcomponents/* Issue #69  TGCWit
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
         // Issue #31
+        createConnectingPoints();
+
 //        width = 30;
 //        height = 30;
         initSize( 30, 30 );
         
-        dtextX1 = -lineOutLength;
-        final int margin = scale( 5 );
-        dtextY1 = height/2 - margin;
-        dtextX2 = width + margin;
-        dtextY2 = height/2 - margin;
-        dtextX3 = width /2 + margin;
-        dtextY3 = height + scale( 15 );
-        
-        createConnectingPoints();
-//        nbConnectingPoint = 4;
-//        connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-//        connectingPoint[0] = new TGConnectingPointAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-//        connectingPoint[1] = new TGConnectingPointAD(this, -lineOutLength, 0, false, true, 0.0, 0.5);
-//        connectingPoint[2] = new TGConnectingPointAD(this, lineOutLength, 0, false, true, 1.0, 0.5);
-//        connectingPoint[3] = new TGConnectingPointAD(this, 0, lineOutLength,  false, true, 0.5, 1.0);
-//        addTGConnectingPointsComment();
-        
         nbInternalTGComponent = 3;
         tgcomponent = new TGComponent[nbInternalTGComponent];
-
         createGuards();
+        
+//        dtextX1 = -lineOutLength;
+//        final int margin = scale( 5 );
+//        dtextY1 = height/2 - margin;
+//        dtextX2 = width + margin;
+//        dtextY2 = height/2 - margin;
+//        dtextX3 = width /2 + margin;
+//        dtextY3 = height + scale( 15 );
         
 //        TGCOneLineText tgc = new TGCOneLineText(x+textX1-50, y+textY1, textX1-50, textX1+5, textY1, textY1 + 25, true, this, _tdp);
 //        tgc.setValue("[ ]");
@@ -125,56 +118,46 @@ public class TADChoice extends TADComponentWithSubcomponents/* Issue #69  TGCWit
         myImageIcon = IconManager.imgic208;
     }
 
-    // Issue #31
-    @Override
-    public void rescale( final double scaleFactor ) {
-    	super.rescale( scaleFactor );
-
-    	final double factor = scaleFactor / oldScaleFactor;
-    	
-    	lineOutLength = (int) (lineOutLength * factor);
-
-    	dtextX1 = dtextX1 * factor;
-        dtextY1 = dtextY1 * factor;
-        dtextX2 = dtextX2 * factor;
-        dtextY2 = dtextY2 * factor;
-        dtextX3 = dtextX3 * factor;
-        dtextY3 = dtextY3 * factor;
-    }
-
     protected void createConnectingPoints() {
         nbConnectingPoint = 4;
         connectingPoint = new TGConnectingPoint[nbConnectingPoint];
         connectingPoint[0] = new TGConnectingPointAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-        connectingPoint[1] = new TGConnectingPointAD(this, -lineOutLength, 0, false, true, 0.0, 0.5);
-        connectingPoint[2] = new TGConnectingPointAD(this, lineOutLength, 0, false, true, 1.0, 0.5);
-        connectingPoint[3] = new TGConnectingPointAD(this, 0, lineOutLength,  false, true, 0.5, 1.0);
+        connectingPoint[1] = new TGConnectingPointAD(this, -OUT_LINE_LENGTH, 0, false, true, 0.0, 0.5);
+        connectingPoint[2] = new TGConnectingPointAD(this, OUT_LINE_LENGTH, 0, false, true, 1.0, 0.5);
+        connectingPoint[3] = new TGConnectingPointAD(this, 0, OUT_LINE_LENGTH,  false, true, 0.5, 1.0);
         addTGConnectingPointsComment();
     }
     
     protected void createGuards() {
     	
     	// Issue #31
-        TGCOneLineText tgc = new TGCOneLineText((int)(x+dtextX1), (int)(y+dtextY1), (int)(dtextX1-50), (int)(dtextX1+5), (int)dtextY1, (int)(dtextY1 + 25), true, this, tdp);
+    	final int textX1 = - scale( OUT_LINE_LENGTH );
+    	final int scaledMargin = scale( MARGIN ); 
+    	final int textY1 = height / 2 - scaledMargin;
+        TGCOneLineText tgc = new TGCOneLineText( x + textX1, y + textY1, textX1-50, textX1 + 5 , textY1, textY1 + 25, true, this, tdp );
         tgc.setValue( EMPTY_GUARD_TEXT );
         tgc.setName("guard 1");
         tgcomponent[ 0 ] = tgc;
         
     	// Issue #31
-        tgc = new TGCOneLineText((int)(x+dtextX2), (int)(y+dtextY2), (int)dtextX2, (int)(dtextX2+20), (int)dtextY2, (int)(dtextY2+25), true, this, tdp);
+        final int textX2 = width + scaledMargin;
+        final int textY2 = height / 2 - scaledMargin;
+        tgc = new TGCOneLineText( x + textX2, y + textY2, textX2, textX2 + 20, textY2, textY2 + 25, true, this, tdp);
         tgc.setValue( EMPTY_GUARD_TEXT );
         tgc.setName("guard 2");
         tgcomponent[ 1 ] = tgc;
         
     	// Issue #31
-        tgc = new TGCOneLineText((int)(x+dtextX3), (int)(y+dtextY3), (int)dtextX3, (int)(dtextX3+20), (int)dtextY3, (int)(dtextY3+25), true, this, tdp);
+        final int textX3 = width / 2 + scaledMargin;
+        final int textY3 = height + scale( 15 );
+        tgc = new TGCOneLineText( x + textX3, y + textY3, textX3, textX3 + 20, textY3, textY3 + 25, true, this, tdp );
         tgc.setValue( EMPTY_GUARD_TEXT );
         tgc.setName("guard 3");
         tgcomponent[ 2 ] = tgc;
     }
     
     @Override
-    public void internalDrawing(Graphics g) {
+    protected void internalDrawing(Graphics g) {
 		if (stateOfError > 0)  {
 			Color c = g.getColor();
 			switch(stateOfError) {
@@ -196,6 +179,9 @@ public class TADChoice extends TADComponentWithSubcomponents/* Issue #69  TGCWit
         g.drawLine(x + width/2, y, x, y + height/2);
         g.drawLine(x + width, y + height/2, x + width/2, y + height);
         
+        // Issue #31
+        final int lineOutLength = scale( OUT_LINE_LENGTH );
+        
         g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
         g.drawLine(x, y + height/2, x-lineOutLength, y + height/2);
         g.drawLine(x + width, y + height/2, x+ width + lineOutLength, y + height/2);
@@ -207,6 +193,9 @@ public class TADChoice extends TADComponentWithSubcomponents/* Issue #69  TGCWit
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
         }
+
+        // Issue #31
+        final int lineOutLength = scale( OUT_LINE_LENGTH );
 
         // horizontal line
 		if ((int)(Line2D.ptSegDistSq(x+(width/2), y + height, x+(width/2), y + height + lineOutLength, _x, _y)) < distanceSelected) {

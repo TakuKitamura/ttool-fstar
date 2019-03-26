@@ -65,8 +65,8 @@ public class TMLADNotifiedEvent extends TADComponentWithoutSubcomponents/* Issue
 //    protected int textX =  5;
 //    protected int textY =  15;
     //protected int linebreak = 10;
-    private int textX1;
-    private double dtextX1;
+//    private int textX1;
+//    private double dtextX1;
     
     
     protected String eventName = "evt";
@@ -78,17 +78,14 @@ public class TMLADNotifiedEvent extends TADComponentWithoutSubcomponents/* Issue
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
         // Issue #31
-//        width = 30;
-//        height = 20;
-        initSize( 30, 20 );
-        minWidth = 30;
-        textX1 = scale( 2 );
-        dtextX1 = textX1 * oldScaleFactor;
-        
         nbConnectingPoint = 2;
         connectingPoint = new TGConnectingPoint[2];
         connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
         connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.5, 1.0);
+//        width = 30;
+//        height = 20;
+        initSize( 30, 20 );
+        minWidth = 30;
 
         moveable = true;
         editable = true;
@@ -101,15 +98,16 @@ public class TMLADNotifiedEvent extends TADComponentWithoutSubcomponents/* Issue
     }
     
     @Override
-    public void internalDrawing(Graphics g) {
-        int w  = g.getFontMetrics().stringWidth(value);
-        int w1 = Math.max(minWidth, w + 3 * textX);
-        if ((w1 != width) && (!tdp.isScaled())) {
-            setCd(x + width/2 - w1/2, y);
-            width = w1;
-            //updateConnectingPoints();
-        }
-		
+    protected void internalDrawing(Graphics g) {
+  
+    	// Issue #31
+        final int w = checkWidth( g ); // g.getFontMetrics().stringWidth(value);
+//        int w1 = Math.max(minWidth, w + 3 * textX);
+//        if ((w1 != width) && (!tdp.isScaled())) {
+//            setCd(x + width/2 - w1/2, y);
+//            width = w1;
+//            //updateConnectingPoints();
+//        }
 		
 		if (stateOfError > 0)  {
 			Color c = g.getColor();
@@ -151,7 +149,7 @@ public class TMLADNotifiedEvent extends TADComponentWithoutSubcomponents/* Issue
         g.drawLine(x, y+height, x+linebreak, y+height/2);
         
         g.drawString("evt", x+(width-w) / 2, y);
-        g.drawString(value, x + linebreak + textX1, y + textY);
+        g.drawString(value, x + linebreak + scale( 2 ), y + textY);
     }
     
     @Override
@@ -271,22 +269,8 @@ public class TMLADNotifiedEvent extends TADComponentWithoutSubcomponents/* Issue
     	return TGComponentManager.CONNECTOR_TMLAD;
     }
 	
+    @Override
 	public void setStateAction(int _stateAction) {
 		stateOfError = _stateAction;
 	}
-	
-    /* Issue #31
-     * (non-Javadoc)
-     * @see ui.TGScalableComponent#rescale(double)
-     */
-    @Override
-    public void rescale( final double scaleFactor ) {
-    	super.rescale(scaleFactor);
-    	
-        final double factor = scaleFactor / oldScaleFactor;
-
-        dtextX1 = (textX1 + dtextX1) * factor;
-        textX1 = (int) (dtextX1);
-        dtextX1 = dtextX1 - textX1;
-    }
 }

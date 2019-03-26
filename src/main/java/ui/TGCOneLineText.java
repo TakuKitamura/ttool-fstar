@@ -60,7 +60,7 @@ public class TGCOneLineText extends TGCWithoutInternalComponent {
         super(_x, _y,  _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
         nbConnectingPoint = 0;
-        minWidth = 10;
+        minWidth = scale( 10 );
         nbInternalTGComponent = 0;
 
         moveable = true;
@@ -75,13 +75,15 @@ public class TGCOneLineText extends TGCWithoutInternalComponent {
     }
 
     @Override
-    public void internalDrawing(Graphics g) {
+    protected void internalDrawing(Graphics g) {
         if (!tdp.isScaled()) {
             width = g.getFontMetrics().stringWidth(value);
             height = g.getFontMetrics().getHeight();
         }
+        
         g.drawString(value, x, y);
-        if (value.equals("")) {
+        
+        if ( value.isEmpty() ) {
             g.drawString("value?", x, y);
         }
     }

@@ -74,12 +74,12 @@ public class TMLADForStaticLoop extends TADForLoop /* Issue #69 TGCWithoutIntern
 //        width = 30;
 //        height = 20;
 //        minWidth = 30;
-
-        nbConnectingPoint = 3;
-        connectingPoint = new TGConnectingPoint[3];
-        connectingPoint[ INDEX_ENTER_LOOP ] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-        connectingPoint[ INDEX_INSIDE_LOOP ] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 1.0, 0.45); // loop
-        connectingPoint[ INDEX_EXIT_LOOP ] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.5, 1.0); // after lopp
+//
+//        nbConnectingPoint = 3;
+//        connectingPoint = new TGConnectingPoint[3];
+//        connectingPoint[ INDEX_ENTER_LOOP ] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
+//        connectingPoint[ INDEX_INSIDE_LOOP ] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 1.0, 0.45); // loop
+//        connectingPoint[ INDEX_EXIT_LOOP ] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.5, 1.0); // after lopp
 
 //        moveable = true;
 //        editable = true;
@@ -91,23 +91,33 @@ public class TMLADForStaticLoop extends TADForLoop /* Issue #69 TGCWithoutIntern
 //        myImageIcon = IconManager.imgic912;
     }
 
+    @Override
+    protected void createConnectingPoints() {
+        nbConnectingPoint = 3;
+        connectingPoint = new TGConnectingPoint[3];
+        connectingPoint[ INDEX_ENTER_LOOP ] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
+        connectingPoint[ INDEX_INSIDE_LOOP ] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 1.0, 0.45); // loop
+        connectingPoint[ INDEX_EXIT_LOOP ] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.5, 1.0); // after lopp
+    }
+
     private void makeValueLoop() {
         valueLoop = "Loop " + value + " times";
     }
 
     @Override
-    public void internalDrawing(Graphics g) {
+    protected void internalDrawing(Graphics g) {
         if (valueLoop.length() == 0) {
             makeValueLoop();
         }
-
-        int w  = g.getFontMetrics().stringWidth(valueLoop);
-        int w1 = Math.max(minWidth, w + 2 * textX);
-        if ((w1 != width) & (!tdp.isScaled())) {
-            setCd(x + width/2 - w1/2, y);
-            width = w1;
-            //updateConnectingPoints();
-        }
+    	
+    	// Issue #31
+        final int w = checkWidth( g, valueLoop );//g.getFontMetrics().stringWidth(valueLoop);
+//        int w1 = Math.max(minWidth, w + 2 * textX);
+//        if ((w1 != width) & (!tdp.isScaled())) {
+//            setCd(x + width/2 - w1/2, y);
+//            width = w1;
+//            //updateConnectingPoints();
+//        }
 
         if (stateOfError > 0)  {
             Color c = g.getColor();

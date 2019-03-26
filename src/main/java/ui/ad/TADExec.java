@@ -36,84 +36,103 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-package ui.tmlad;
+package ui.ad;
 
-import myutil.GraphicLib;
-import ui.*;
-import ui.ad.TADComponentWithSubcomponents;
-import ui.util.IconManager;
-
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.geom.Line2D;
 
-/**
-* Class TMLADDelayInterval
-* Non deterministic physical duration operator. To be used in TML activity diagrams
-* Creation: 10/11/2008
-* @version 1.0 10/11/2008
-* @author Ludovic APVRILLE
- */
-public class TMLADDelayInterval extends TADComponentWithSubcomponents /* Issue #69 TGCWithInternalComponent*/ implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
+import myutil.GraphicLib;
+import ui.AllowedBreakpoint;
+import ui.BasicErrorHighlight;
+import ui.CDElement;
+import ui.ColorManager;
+import ui.EmbeddedComment;
+import ui.ErrorHighlight;
+import ui.TDiagramPanel;
+import ui.TGCOneLineText;
+import ui.TGComponent;
+import ui.TGConnectingPoint;
+import ui.TGScalableComponent;
+import ui.util.IconManager;
 
-	// Issue #31
-//    private int lineLength = 5;
-	//private int textX, textY;
-//    private int ilength = 10;
-//    private int lineLength1 = 2;
-//	private int incrementY = 3;
-//    private int segment = 4;
-	private static final int INCREMENT_Y = 3;
-	private static final int NB_SEGMENTS = 4;
+/**
+ * Class TMLADExecC
+ * Fixed custom duration operator. To be used in TML activity diagrams
+ * Creation: 21/05/2008
+ * @version 1.0 21/05/2008
+ * @author Ludovic APVRILLE
+ */
+public abstract class TADExec extends TADComponentWithSubcomponents implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
+
+   // private int ilength;// = 10;
+  //  private int lineLength1;// = 2;
 	
 	protected int stateOfError = 0; // Not yet checked
     
-    public TMLADDelayInterval(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+    public TADExec(	int _x,
+    				int _y,
+    				int _minX,
+    				int _maxX,
+    				int _minY,
+    				int _maxY,
+    				boolean _pos,
+    				TGComponent _father,
+    				TDiagramPanel _tdp,
+    				final String value,
+    				final String name )  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
        
-        // Issue #31
         nbConnectingPoint = 2;
         connectingPoint = new TGConnectingPoint[2];
-        connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-        connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, + lineLength, false, true, 0.5, 1.0);
-//        width = 10;
-//        height = 30;
-        initSize( 10, 30 );
+        connectingPoint[0] = createConnectingPoint(this, 0, -lineLength, true, false, 0.5, 0.0);
+        connectingPoint[1] = createConnectingPoint(this, 0, + lineLength, false, true, 0.5, 1.0);
 
+        initSize( 10, 30 );
+//        ilength = 10;
+//        lineLength1 = 2;
         textX = width + scale( 5 );
         textY = height/2 + scale( 5 );
         
         nbInternalTGComponent = 1;
         tgcomponent = new TGComponent[nbInternalTGComponent];
         
-        TGCTimeDelay tgc = new TGCTimeDelay(x+textX, y+textY, -75, 30, textY - 10, textY + 10, true, this, _tdp);
-        tgc.setMinDelay("10");
-		tgc.setMaxDelay("20");
-		tgc.setHasMaxValue(true);
-		tgc.setUnit("ms");
-        tgc.setName("value of the interval delay");
-		tgc.makeValue();
+        TGScalableComponent tgc = createInternalComponent();
+        tgc.setValue( value );
+        tgc.setName( name );
         tgcomponent[0] = tgc;
         
         moveable = true;
         editable = false;
         removable = true;
         
-        name = "delayInterval";
-        
         myImageIcon = IconManager.imgic214;
     }
+
+    protected TGScalableComponent createInternalComponent() {
+    	return new TGCOneLineText( x+textX, y+textY, -75, 30, textY - 10, textY + 10, true, this, tdp );
+    }
+    
+    protected abstract TGConnectingPointAD createConnectingPoint(	final CDElement _container,
+    																final int _x,
+    																final int _y,
+    																final boolean _in,
+    																final boolean _out,
+    																final double _w, 
+    																final double _h );
     
     @Override
     protected void internalDrawing(Graphics g) {
 		if (stateOfError > 0)  {
 			Color c = g.getColor();
 			switch(stateOfError) {
-			case ErrorHighlight.OK:
-				g.setColor(ColorManager.EXEC);
-				break;
-			default:
-				g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
+				case ErrorHighlight.OK:
+					g.setColor(ColorManager.EXEC);
+					break;
+				default:
+					g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
 			}
+
 			g.fillRect(x, y, width, height);
 			g.setColor(c);
 		}
@@ -122,19 +141,12 @@ public class TMLADDelayInterval extends TADComponentWithSubcomponents /* Issue #
         g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
         
-        int y1 = y + scale( 4 );
-        int x1 = x + scale( 2 );
-        int width1 = width - scale( 4 );
-        
-        final int scaledIncrementY = scale( INCREMENT_Y );
-        
-        for (int i = 0; i < NB_SEGMENTS; i++ ) {
-            g.drawLine( x1, y1, x1 + width1, y1 + scaledIncrementY );
-            y1 += scaledIncrementY;
-            g.drawLine( x1 + width1, y1, x1, y1 + scaledIncrementY );
-            y1 += scaledIncrementY;
-        }
+        drawInternalSymbol( g, scale( 2 ), scale( 10 ) );
     }
+    
+    protected abstract void drawInternalSymbol( Graphics g,
+    											int symbolWidth,
+    											int symbolHeight );
     
     @Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
@@ -149,35 +161,13 @@ public class TMLADDelayInterval extends TADComponentWithSubcomponents /* Issue #
         return null;
     }
     
-    public String getMinDelayValue() {
-        return ((TGCTimeDelay)(tgcomponent[0])).getMinDelay();
+    public String getDelayValue() {
+        return tgcomponent[0].getValue();
     }
     
-    public String getMaxDelayValue() {
-        return ((TGCTimeDelay)(tgcomponent[0])).getMaxDelay();
+    public void setDelayValue(String value) {
+        tgcomponent[0].setValue(value);
     }
-    
-    public void setMinValue(String val) {
-        ((TGCTimeDelay)(tgcomponent[0])).setMinDelay(val);
-    }
-    
-    public void setMaxValue(String val) {
-        ((TGCTimeDelay)(tgcomponent[0])).setMaxDelay(val);
-    }
-    
-    @Override
-    public int getType() {
-        return TGComponentManager.TMLAD_INTERVAL_DELAY;
-    }
-    
-    @Override
-    public int getDefaultConnector() {
-		return TGComponentManager.CONNECTOR_TMLAD;
-    }
-	
-	public String getUnit() {
-		return ((TGCTimeDelay)tgcomponent[0]).getUnit();
-	}
 	
     @Override
 	public void setStateAction(int _stateAction) {

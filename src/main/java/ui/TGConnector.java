@@ -197,7 +197,7 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent {
 	}*/
 
     @Override
-    public void internalDrawing(Graphics g) {
+    protected void internalDrawing(Graphics g) {
         TGComponent p3, p4;
 
         if (hasTGCPointOfConnector())  {

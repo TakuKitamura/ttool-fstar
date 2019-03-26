@@ -51,15 +51,15 @@ import java.awt.*;
  * @author Ludovic APVRILLE
  */
 public class TGCPointOfConnector extends TGCScalableWithoutInternalComponent {
-    private int width = 8;
-    private int height = 8;
+//    private int width = 8;
+//    private int height = 8;
     
     public TGCPointOfConnector(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y,  _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
         nbConnectingPoint = 0;
 
-        initScaling(0, 0);
+        initScaling( 8, 8 );
         
         nbInternalTGComponent = 0;
         

@@ -99,14 +99,15 @@ public class TMLADSendEvent extends TADComponentWithoutSubcomponents implements 
     public TMLADSendEvent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        width = 30;
-        height = 20;
-        minWidth = 30;
-
+    	// Issue #31
         nbConnectingPoint = 2;
         connectingPoint = new TGConnectingPoint[2];
         connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
         connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.5, 1.0);
+//        width = 30;
+//        height = 20;
+        initSize( 30, 20 );
+        minWidth = scale( 30 );
 
         for (int i = 0; i < nParam; i++) {
             params[i] = "";
@@ -119,19 +120,20 @@ public class TMLADSendEvent extends TADComponentWithoutSubcomponents implements 
 
         name = "send event";
         makeValue();
-
         myImageIcon = IconManager.imgic904;
     }
 
     @Override
-    public void internalDrawing(Graphics g) {
-        int w = g.getFontMetrics().stringWidth(value);
-        int w1 = Math.max(minWidth, w + 2 * textX);
-        if ((w1 != width) & (!tdp.isScaled())) {
-            setCd(x + width / 2 - w1 / 2, y);
-            width = w1;            //updateConnectingPoints();
-        }
-
+    protected void internalDrawing(Graphics g) {
+    	
+    	// Issue #31
+        final int w = checkWidth( g );//g.getFontMetrics().stringWidth(value);
+//        
+//        int w1 = Math.max(minWidth, w + 2 * textX);
+//        if ( w1 > width & !tdp.isScaled() ) {
+//            setCd(x - (w1 - width) / 2 , y);
+//            width = w1;            //updateConnectingPoints();
+//        }
 
         // Issue #69
         if ( isEnabled() && stateOfError > 0) {
@@ -242,8 +244,8 @@ public class TMLADSendEvent extends TADComponentWithoutSubcomponents implements 
 
             }
         }
-        value += ")";
 
+        value += ")";
     }
 
     public String getEventName() {
@@ -254,7 +256,6 @@ public class TMLADSendEvent extends TADComponentWithoutSubcomponents implements 
         eventName = _name;
         makeValue();
     }
-
 
     public String getParamValue(int i) {
         return params[i];

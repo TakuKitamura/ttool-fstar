@@ -104,23 +104,25 @@ public class TMLADActionState extends TADActionState/* Issue #69 TGCOneLineText 
     }
 
     @Override
-    public void internalDrawing(Graphics g) {
-        int w  = g.getFontMetrics().stringWidth(value);
-        int w1 = Math.max(minWidth, w + 2 * textX);
-        if ((w1 != width) & (!tdp.isScaled())) {
-            setCd(x + width/2 - w1/2, y);
-            width = w1;
-            //updateConnectingPoints();
-        }
+    protected void internalDrawing(Graphics g) {
+    	
+    	// Issue #31
+        final int w = checkWidth( g );//g.getFontMetrics().stringWidth(value);
+//        int w1 = Math.max(minWidth, w + 2 * textX);
+//        if ((w1 != width) /*& (!tdp.isScaled())*/) {
+//            setCd(x + width/2 - w1/2, y);
+//            width = w1;
+//            //updateConnectingPoints();
+//        }
 		
 		if (stateAction > 0)  {
 			Color c = g.getColor();
 			switch(stateAction) {
-			case ErrorHighlight.OK:
-				g.setColor(ColorManager.ATTRIBUTE_BOX_ACTION);
-				break;
-			default:
-				g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
+				case ErrorHighlight.OK:
+					g.setColor(ColorManager.ATTRIBUTE_BOX_ACTION);
+					break;
+				default:
+					g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
 			}
 			g.fillRoundRect(x, y, width, height, arc, arc);
 			g.setColor(c);

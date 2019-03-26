@@ -116,6 +116,22 @@ public class TGConnectingPoint extends AbstractCDElement /*implements CDElement*
         id = TGComponent.getGeneralId();
         TGComponent.setGeneralId(id + 1);
     }
+	
+	protected int scaledValue( final int value ) {
+		return (int) ( value * getZoomFactor() );
+	}
+	
+	protected double getZoomFactor() {
+		return ( container instanceof TGComponent ) ? ( (TGComponent) container ).getZoomFactor() : 1.0;
+	}
+	
+	protected int scaledX() {
+		return scaledValue( x );
+	}
+	
+	protected int scaledY() {
+		return scaledValue( y );
+	}
 
     public void draw(Graphics g) {
         int mx = getX();
@@ -183,16 +199,16 @@ public class TGConnectingPoint extends AbstractCDElement /*implements CDElement*
 
     public int getX() {
         if (container != null) {
-            return x + container.getX();
+            return scaledX() + container.getX();
         }
-        return x;
+        return scaledX();
     }
 
     public int getY() {
         if (container != null) {
-            return y + container.getY();
+            return scaledY() + container.getY();
         }
-        return y;
+        return scaledY();
     }
 
     public int getId() {

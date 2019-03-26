@@ -241,7 +241,7 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
 
     // abstract operations
 
-    public abstract void internalDrawing(Graphics g);
+    protected abstract void internalDrawing(Graphics g);
 
     public abstract TGComponent isOnMe(int _x, int _y);
 
@@ -1042,6 +1042,14 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
      * Issue #31
      * @return
      */
+    protected int getUnknownMargin() {
+    	return 2;
+    }
+
+    /**
+     * Issue #31
+     * @return
+     */
     protected int getExclusionMargin() {
     	return 12;
     }
@@ -1076,7 +1084,7 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
             drawAccessibility(liveness, g, x + width - getLivenessMargin() /* Issue #31 10*/, y - 1, "L");
 
             if ((reachability == ACCESSIBILITY_UNKNOWN) && (liveness == ACCESSIBILITY_UNKNOWN)) {
-                drawAccessibility(liveness, g, x + width - 2, y - 2, "?");
+                drawAccessibility(liveness, g, x + width - getUnknownMargin() /* Issue # 31 2 */, y - 1 /* Issue # 31 2*/, "?");
             }
 
             // Old way to do ..
@@ -2343,6 +2351,14 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
         return y;
     }
 
+    public double getZoomFactor() {
+    	if ( tdp == null ) {
+    		return 1.0;
+    	}
+    	
+    	return tdp.getZoom();
+    }
+    
     public int getXZoom() {
         if (tdp == null) {
             return x;

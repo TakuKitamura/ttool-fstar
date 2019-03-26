@@ -72,19 +72,18 @@ public class TMLADReadRequestArg extends TADComponentWithoutSubcomponents/* Issu
     
     public TMLADReadRequestArg(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-
      
         // Issue #31
+        nbConnectingPoint = 2;
+        connectingPoint = new TGConnectingPoint[2];
+        connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
+        connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.5, 1.0); // after lopp
 //        width = 30;
 //        height = 20;
         minWidth = scale( 30 );
 
         // Issue #31
         initSize( 30, 20 );
-        nbConnectingPoint = 2;
-        connectingPoint = new TGConnectingPoint[2];
-        connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-        connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.5, 1.0); // after lopp
         
 		for(int i=0; i<nParam; i++) {
             params[i] = "";   
@@ -102,7 +101,7 @@ public class TMLADReadRequestArg extends TADComponentWithoutSubcomponents/* Issu
 	
 	public void makeValue() {
 		boolean first = true;
-		value = "getReqArg (";
+		value = "getReqArg(";
 		for(int i=0; i<nParam; i++) {
 			if (params[i].length() > 0) {
 				if (!first) {
@@ -157,18 +156,19 @@ public class TMLADReadRequestArg extends TADComponentWithoutSubcomponents/* Issu
 	}
 	
 	@Override
-	public void internalDrawing(Graphics g) {
+	protected void internalDrawing(Graphics g) {
 		if (value.length() == 0) {
 			makeValue();
 		}
 		
-		int w  = g.getFontMetrics().stringWidth(value);
-		int w1 = Math.max(minWidth, w + 2 * textX);
-		if ((w1 != width) & (!tdp.isScaled())) {
-			setCd(x + width/2 - w1/2, y);
-			width = w1;
-			//updateConnectingPoints();
-		}
+    	// Issue #31
+        final int w = checkWidth( g );//g.getFontMetrics().stringWidth(value);
+//		int w1 = Math.max(minWidth, w + 2 * textX);
+//		if ((w1 != width) & (!tdp.isScaled())) {
+//			setCd(x + width/2 - w1/2, y);
+//			width = w1;
+//			//updateConnectingPoints();
+//		}
 		
 		Color c = g.getColor();
 		if (stateOfError > 0)  {

@@ -95,11 +95,11 @@ public class TMLADForLoop extends TADForLoop /* Issue #69 TGCWithoutInternalComp
 //        height = 20;
 //        minWidth = 30;
 
-        nbConnectingPoint = 3;
-        connectingPoint = new TGConnectingPoint[3];
-        connectingPoint[ INDEX_ENTER_LOOP ] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-        connectingPoint[ INDEX_INSIDE_LOOP ] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 1.0, 0.45); // loop
-        connectingPoint[ INDEX_EXIT_LOOP ] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.5, 1.0); // after lopp
+//        nbConnectingPoint = 3;
+//        connectingPoint = new TGConnectingPoint[3];
+//        connectingPoint[ INDEX_ENTER_LOOP ] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
+//        connectingPoint[ INDEX_INSIDE_LOOP ] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 1.0, 0.45); // loop
+//        connectingPoint[ INDEX_EXIT_LOOP ] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.5, 1.0); // after lopp
 //
 //        moveable = true;
 //        editable = true;
@@ -113,14 +113,25 @@ public class TMLADForLoop extends TADForLoop /* Issue #69 TGCWithoutInternalComp
     }
 
     @Override
-    public void internalDrawing(Graphics g) {
-        int w  = g.getFontMetrics().stringWidth(value);
-        int w1 = Math.max(minWidth, w + 2 * textX);
-        if ((w1 != width) & (!tdp.isScaled())) {
-            setCd(x + width/2 - w1/2, y);
-            width = w1;
-            //updateConnectingPoints();
-        }
+    protected void createConnectingPoints() {
+        nbConnectingPoint = 3;
+        connectingPoint = new TGConnectingPoint[3];
+        connectingPoint[ INDEX_ENTER_LOOP ] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
+        connectingPoint[ INDEX_INSIDE_LOOP ] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 1.0, 0.45); // loop
+        connectingPoint[ INDEX_EXIT_LOOP ] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.5, 1.0); // after lopp
+    }
+
+    @Override
+    protected void internalDrawing(Graphics g) {
+    	
+    	// Issue #31
+        final int w = checkWidth( g );//g.getFontMetrics().stringWidth(value);
+//        int w1 = Math.max(minWidth, w + 2 * textX);
+//        if ((w1 != width) & (!tdp.isScaled())) {
+//            setCd(x + width/2 - w1/2, y);
+//            width = w1;
+//            //updateConnectingPoints();
+//        }
 
         if ( isEnabled() && stateOfError > 0 )  {
             Color c = g.getColor();

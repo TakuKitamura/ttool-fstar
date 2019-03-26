@@ -58,8 +58,9 @@ public class TMLADSelectEvt extends TADComponentWithoutSubcomponents/* Issue #69
 	// Issue #31
 //    private int lineLength = 10;
     //private int textX1, textY1, textX2, textY2, textX3, textY3;
+//	private int lineOutLength;// = 25;
 
-	private int lineOutLength;// = 25;
+	protected static final int OUT_LINE_LENGTH = 25;
     
 	protected int stateOfError = 0; // Not yet checked
     
@@ -67,29 +68,27 @@ public class TMLADSelectEvt extends TADComponentWithoutSubcomponents/* Issue #69
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
         // Issue #31
+        nbConnectingPoint = 10;
+        connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+        connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
+        connectingPoint[1] = new TGConnectingPointTMLAD(this, -OUT_LINE_LENGTH, 0, false, true, 0.0, 0.5);
+        connectingPoint[2] = new TGConnectingPointTMLAD(this, OUT_LINE_LENGTH, 0, false, true, 1.0, 0.5);
+        connectingPoint[3] = new TGConnectingPointTMLAD(this, 0, OUT_LINE_LENGTH,  false, true, 0.5, 1.0);
+        connectingPoint[4] = new TGConnectingPointTMLAD(this, -OUT_LINE_LENGTH, 0, false, true, 0.0, 0.5);
+        connectingPoint[5] = new TGConnectingPointTMLAD(this, OUT_LINE_LENGTH, 0, false, true, 1.0, 0.5);
+        connectingPoint[6] = new TGConnectingPointTMLAD(this, 0, OUT_LINE_LENGTH,  false, true, 0.5, 1.0);
+        connectingPoint[7] = new TGConnectingPointTMLAD(this, -OUT_LINE_LENGTH, 0, false, true, 0.0, 0.5);
+        connectingPoint[8] = new TGConnectingPointTMLAD(this, OUT_LINE_LENGTH, 0, false, true, 1.0, 0.5);
+        connectingPoint[9] = new TGConnectingPointTMLAD(this, 0, OUT_LINE_LENGTH,  false, true, 0.5, 1.0);
 //        width = 30;
 //        height = 30;
         initSize( 30, 30 );
-        lineOutLength = scale( 25 );
         /*textX1 = -lineOutLength;
         textY1 = height/2 - 5;
         textX2 = width + 5;
         textY2 = height/2 - 5;
         textX3 = width /2 + 5;
         textY3 = height + 15;*/
-        
-        nbConnectingPoint = 10;
-        connectingPoint = new TGConnectingPoint[nbConnectingPoint];
-        connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-        connectingPoint[1] = new TGConnectingPointTMLAD(this, -lineOutLength, 0, false, true, 0.0, 0.5);
-        connectingPoint[2] = new TGConnectingPointTMLAD(this, lineOutLength, 0, false, true, 1.0, 0.5);
-        connectingPoint[3] = new TGConnectingPointTMLAD(this, 0, lineOutLength,  false, true, 0.5, 1.0);
-        connectingPoint[4] = new TGConnectingPointTMLAD(this, -lineOutLength, 0, false, true, 0.0, 0.5);
-        connectingPoint[5] = new TGConnectingPointTMLAD(this, lineOutLength, 0, false, true, 1.0, 0.5);
-        connectingPoint[6] = new TGConnectingPointTMLAD(this, 0, lineOutLength,  false, true, 0.5, 1.0);
-        connectingPoint[7] = new TGConnectingPointTMLAD(this, -lineOutLength, 0, false, true, 0.0, 0.5);
-        connectingPoint[8] = new TGConnectingPointTMLAD(this, lineOutLength, 0, false, true, 1.0, 0.5);
-        connectingPoint[9] = new TGConnectingPointTMLAD(this, 0, lineOutLength,  false, true, 0.5, 1.0);
 
         moveable = true;
         editable = false;
@@ -101,7 +100,7 @@ public class TMLADSelectEvt extends TADComponentWithoutSubcomponents/* Issue #69
     }
     
     @Override
-    public void internalDrawing(Graphics g) {
+    protected void internalDrawing(Graphics g) {
 		if (stateOfError > 0)  {
 			Color c = g.getColor();
 			switch(stateOfError) {
@@ -124,15 +123,14 @@ public class TMLADSelectEvt extends TADComponentWithoutSubcomponents/* Issue #69
         g.drawLine(x + width, y + height/2, x + width/2, y + height);
 
         // Issue #31
-        final int scaledLineOutLength = scale( lineOutLength );
+        final int scaledLineOutLength = scale( OUT_LINE_LENGTH );
         
         g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
         g.drawLine(x, y + height/2, x-scaledLineOutLength, y + height/2); // Issue #31
         g.drawLine(x + width, y + height/2, x+ width + scaledLineOutLength, y + height/2); // Issue #31
         g.drawLine(x+(width/2), y + height, x+(width/2), y + height + scaledLineOutLength); // Issue #31
         
-        //g.drawString("select", x, y + height/2 - 5);
-        g.drawString("evt", x+ scale( 7 ), y + height/2 + scale( 3 ) ); // Issue #31
+        g.drawString("evt", x + scale( 5 ), y + height/2 + scale( 3 ) ); // Issue #31
     }
     
     @Override
@@ -142,7 +140,7 @@ public class TMLADSelectEvt extends TADComponentWithoutSubcomponents/* Issue #69
         }
         
         // Issue #31
-        final int scaledLineOutLength = scale( lineOutLength );
+        final int scaledLineOutLength = scale( OUT_LINE_LENGTH );
 
         if ((int)(Line2D.ptSegDistSq(x+(width/2), y + height, x+(width/2), y + height + scaledLineOutLength, _x, _y)) < distanceSelected) { // Issue #31
 			return this;	

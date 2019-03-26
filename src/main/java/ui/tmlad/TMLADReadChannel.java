@@ -88,7 +88,7 @@ public class TMLADReadChannel extends TADComponentWithoutSubcomponents/* Issue #
     protected int textX0 = 2;
     //protected int textY0 = 0;
     protected int textY1 = 15;
-    protected int linebreak = 10;
+  //  protected int linebreak = 10;
 
     protected int decSec = 4;
 
@@ -116,16 +116,15 @@ public class TMLADReadChannel extends TADComponentWithoutSubcomponents/* Issue #
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
         // Issue #31
+        nbConnectingPoint = 2;
+        connectingPoint = new TGConnectingPoint[2];
+        connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
+        connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.5, 1.0);
 //        width = 30;
 //        height = 20;
         initSize( 30, 20 );
         minWidth = scale( 30 );
         textY = 0;
-
-        nbConnectingPoint = 2;
-        connectingPoint = new TGConnectingPoint[2];
-        connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-        connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.5, 1.0);
 
         moveable = true;
         editable = true;
@@ -148,14 +147,16 @@ public class TMLADReadChannel extends TADComponentWithoutSubcomponents/* Issue #
     }
 
     @Override
-    public void internalDrawing(Graphics g) {
-        int w = g.getFontMetrics().stringWidth(value);
-        int w1 = Math.max(minWidth, w + 2 * textX);
-        if ((w1 != width) & (!tdp.isScaled())) {
-            setCd(x + width / 2 - w1 / 2, y);
-            width = w1;
-            //updateConnectingPoints();
-        }
+    protected void internalDrawing(Graphics g) {
+    	
+    	// Issue #31
+        final int w = checkWidth( g );//g.getFontMetrics().stringWidth(value);
+//        int w1 = Math.max(minWidth, w + 2 * textX);
+//        if ((w1 != width) & (!tdp.isScaled())) {
+//            setCd(x + width / 2 - w1 / 2, y);
+//            width = w1;
+//            //updateConnectingPoints();
+//        }
 
         if (stateOfError > 0) {
             Color c = g.getColor();

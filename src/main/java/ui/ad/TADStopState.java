@@ -53,20 +53,19 @@ import java.awt.*;
  */
 public class TADStopState extends TADComponentWithoutSubcomponents /* Issue #69 TGCWithoutInternalComponent*/ {
 	
-	private int internalCircleSize = 16;
+	//private int internalCircleSize = 16;
+	private static final double INTERNAL_CIRCLE_RATIO = 0.8;
 	
-	protected int lineLength = 5;
+	//protected int lineLength = 5;
 
 	public TADStopState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-		width = 20;
-		height = 20;
-
+		// Issue #31
 		createConnectingPoints();
-//		nbConnectingPoint = 1;
-//		connectingPoint = new TGConnectingPoint[1];
-//		connectingPoint[0] = new TGConnectingPointAD(this, 0, - lineLength, true, false, 0.5, 0.0);
+//		width = 20;
+//		height = 20;
+		initSize( 20, 20 );
 
 		nbInternalTGComponent = 0;
 
@@ -86,11 +85,14 @@ public class TADStopState extends TADComponentWithoutSubcomponents /* Issue #69 
 	}
 
 	@Override
-	public void internalDrawing(Graphics g) {
+	protected void internalDrawing(Graphics g) {
 	
 		// Issue #69
 		ColorManager.setColor( g, state, 0, isEnabled() );
 //		ColorManager.setColor(g, state, 0);
+		
+		// Issue #3&
+		final int internalCircleSize = (int) ( width * INTERNAL_CIRCLE_RATIO );
 		g.fillOval(x + (width - internalCircleSize)/2, y + (height - internalCircleSize)/2, internalCircleSize, internalCircleSize);
 		g.drawOval(x, y, width, height);
 		g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);

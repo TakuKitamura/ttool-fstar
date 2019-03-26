@@ -46,6 +46,7 @@ public abstract class TADForLoop extends TADComponentWithoutSubcomponents implem
 		super( _x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp );
 
         // Issue #31
+		createConnectingPoints();
 //		width = 30;
 //        height = 20;
 		initSize( 30, 20 );
@@ -58,6 +59,8 @@ public abstract class TADForLoop extends TADComponentWithoutSubcomponents implem
         
         myImageIcon = IconManager.imgic912;
 	}
+
+    protected abstract void createConnectingPoints();
 
     @Override
     public TGComponent isOnMe(int _x, int _y) {

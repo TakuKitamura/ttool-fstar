@@ -88,11 +88,11 @@ public class TMLCPForLoop extends TADForLoop /* Issue #69 TGCWithoutInternalComp
 //        height = 20;
 //        minWidth = 30;
 
-        nbConnectingPoint = 3;
-        connectingPoint = new TGConnectingPoint[3];
-        connectingPoint[0] = new TGConnectingPointTMLCP(this, 0, -lineLength, true, false, 0.5, 0.0);
-        connectingPoint[1] = new TGConnectingPointTMLCP(this, 0, lineLength, false, true, 1.0, 0.45); // loop
-        connectingPoint[2] = new TGConnectingPointTMLCP(this, 0, lineLength, false, true, 0.5, 1.0); // after lopp
+//        nbConnectingPoint = 3;
+//        connectingPoint = new TGConnectingPoint[3];
+//        connectingPoint[0] = new TGConnectingPointTMLCP(this, 0, -lineLength, true, false, 0.5, 0.0);
+//        connectingPoint[1] = new TGConnectingPointTMLCP(this, 0, lineLength, false, true, 1.0, 0.45); // loop
+//        connectingPoint[2] = new TGConnectingPointTMLCP(this, 0, lineLength, false, true, 0.5, 1.0); // after lopp
 
 //        moveable = true;
 //        editable = true;
@@ -106,7 +106,16 @@ public class TMLCPForLoop extends TADForLoop /* Issue #69 TGCWithoutInternalComp
     }
 
     @Override
-    public void internalDrawing(Graphics g) {
+    protected void createConnectingPoints() {
+        nbConnectingPoint = 3;
+        connectingPoint = new TGConnectingPoint[3];
+        connectingPoint[0] = new TGConnectingPointTMLCP(this, 0, -lineLength, true, false, 0.5, 0.0);
+        connectingPoint[1] = new TGConnectingPointTMLCP(this, 0, lineLength, false, true, 1.0, 0.45); // loop
+        connectingPoint[2] = new TGConnectingPointTMLCP(this, 0, lineLength, false, true, 0.5, 1.0); // after lopp
+    }
+
+    @Override
+    protected void internalDrawing(Graphics g) {
         final int textWidth = g.getFontMetrics().stringWidth(value);
         int w1 = Math.max(minWidth, textWidth + 2 * textX);
         if ((w1 != width) & (!tdp.isScaled())) {

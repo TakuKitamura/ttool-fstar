@@ -53,7 +53,7 @@ import java.awt.geom.Line2D;
  * @author Ludovic APVRILLE
  */
 public class TADActionState extends TADOneLineText/* Issue #69 TGCOneLineText*/ implements PreJavaCode, PostJavaCode, CheckableAccessibility, ActionStateErrorHighlight {
-    protected int lineLength = 5;
+    //protected int lineLength = 5;
     
     // Issue #31
 //    protected int textX =  5;
@@ -66,16 +66,17 @@ public class TADActionState extends TADOneLineText/* Issue #69 TGCOneLineText*/ 
     public TADActionState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
+        // Issue #31
+        // Must be created before the dimensions are scaled for zoom
+        createConnectingPoints();
 //        width = 30;
 //        height = 20;
         
-        minWidth = 30;
-        
-        // Issue #31
-        textX = 5;
         initSize( 30, 20 );
         
-        createConnectingPoints();
+        minWidth = scale( 30 );
+        textX = scale( 5 );
+        
 //        nbConnectingPoint = 2;
 //        connectingPoint = new TGConnectingPoint[2];
 //        connectingPoint[0] = new TGConnectingPointAD(this, 0, -lineLength, true, false, 0.5, 0.0);
@@ -102,15 +103,16 @@ public class TADActionState extends TADOneLineText/* Issue #69 TGCOneLineText*/ 
     }
     
     @Override
-    public void internalDrawing(Graphics g) {
-        int w  = g.getFontMetrics().stringWidth(value);
-        int w1 = Math.max(minWidth, w + 2 * textX);
-        if ((w1 != width) & (!tdp.isScaled())) {
-            setCd(x + width/2 - w1/2, y);
-            width = w1;
-            //updateConnectingPoints();
-        }
-		
+    protected void internalDrawing(Graphics g) {
+    	
+    	// Issue #31
+        final int w = checkWidth( g );//g.getFontMetrics().stringWidth(value);
+//        int w1 = Math.max(minWidth, w + 2 * textX);
+//        if ((w1 != width) & (!tdp.isScaled())) {
+//            setCd(x + width/2 - w1/2, y);
+//            width = w1;
+//            //updateConnectingPoints();
+//        }
 		
 		if (stateAction > 0)  {
 			Color c = g.getColor();
