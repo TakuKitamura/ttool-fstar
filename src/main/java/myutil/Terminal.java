@@ -212,6 +212,7 @@ public class Terminal {
                    //BACKSPACE
                    if ((val == BACKSPACE) || (val == DEL)) {
                        currentBuf = del(currentBuf);
+                      
 
                     //TAB
                    } else if (val == TAB) {
@@ -230,7 +231,7 @@ public class Terminal {
                            myPrint("" + x);
                            currentBuf += x;
                        } else {
-                           System.out.println("Tricky cursor position");
+                           //System.out.println("Tricky cursor position");
                            currentBuf = currentBuf.substring(0,cursorPosition-1) + x + currentBuf.substring(cursorPosition, currentBuf.length());
                            myPrint("" + x + currentBuf.substring(cursorPosition, currentBuf.length()));
 
@@ -271,6 +272,7 @@ public class Terminal {
        if (currentBuf.length() > 0) {
            myPrint("\b \b");
            currentBuf = currentBuf.substring(0, currentBuf.length() - 1);
+           cursorPosition --;
        }
        return currentBuf;
    }
