@@ -79,8 +79,7 @@ public class History extends Command  {
     public String getUsage() { return "history [command id (optional)]"; }
 
     public String getDescription() {
-        return "Prints all the non empty commands previously executed\n" +
-                " If an int arg is povided, the corresponding command is executed";
+        return "Prints or recall previous commands \n";
     }
 
 
