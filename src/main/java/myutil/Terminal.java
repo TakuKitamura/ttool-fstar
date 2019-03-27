@@ -190,7 +190,7 @@ public class Terminal {
                             (sequence.charAt(2) == 126)) {
                         TraceManager.addDev("DEL");
                         currentBuf = del(currentBuf);
-                        cursorPosition--;
+                        //cursorPosition--;
 
                         sequence = null;
                         val = -1;
