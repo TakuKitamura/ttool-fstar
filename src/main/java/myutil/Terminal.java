@@ -104,6 +104,8 @@ public class Terminal {
                 val = (RawConsoleInput.read(true));
                 x = (char) val;
 
+                //TraceManager.addDev("val=" + val);
+
                 // Special sequence?
                 if (sequence == null) {
                     if (val == ESC) {
@@ -237,7 +239,7 @@ public class Terminal {
 
                         // Regular character
                     } else if (val >= 32) {
-                        //System.out.print("" + x + "(val=" + val + ");");
+                        System.out.print("" + x + "(val=" + val + ");");
                         if (cursorPosition == currentBuf.length()) {
                             myPrint("" + x);
                             currentBuf += x;
