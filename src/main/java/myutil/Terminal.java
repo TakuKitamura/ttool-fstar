@@ -285,6 +285,7 @@ public class Terminal {
 
 
     private String del(String currentBuf) {
+        TraceManager.addDev("DEL");
         if (cursorPosition > 0) {
             if (currentBuf.length() > 0) {
                 if (cursorPosition == currentBuf.length()) {
