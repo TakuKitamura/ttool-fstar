@@ -64,6 +64,7 @@ public class Terminal {
 
     private Vector<String> buffer;
     private int bufferPointer ;
+    private int cursorPosition;
     private int promptLength = 0;
     private int maxbufferSize = MAX_BUFFER_SIZE;
     private TerminalProviderInterface terminalProvider;
@@ -89,12 +90,16 @@ public class Terminal {
 
        char x;
        int val = 0;
+       cursorPosition = 0;
 
 
        printPrompt(cpt);
+
        String currentBuf = "";
        sequence = null;
        long timeSeq = 0;
+
+
        try {
            while(val != 3) {
                val = (RawConsoleInput.read(true));
@@ -147,9 +152,26 @@ public class Terminal {
                        myPrint(currentBuf);
                        sequence = null;
                        val = -1;
-                       // DEL
-                       //TraceManager.addDev("DEL");
-                   }
+
+
+                   // BACKWARD
+                   } else if ((sequence.charAt(0) == 91) && (sequence.charAt(1) == 68)) {
+
+                       //System.out.println("DOWN");
+                       backward();
+                       sequence = null;
+                       val = -1;
+
+                   // FORWARD
+                    } else if ((sequence.charAt(0) == 91) && (sequence.charAt(1) == 67)) {
+
+                   //System.out.println("DOWN");
+                   forward(currentBuf);
+                   sequence = null;
+                   val = -1;
+                   // DEL
+                   //TraceManager.addDev("DEL");
+               }
                }
 
                if ((sequence != null) && (sequence.length() == 3)) {
@@ -163,19 +185,20 @@ public class Terminal {
                        //TraceManager.addDev("DEL");
                    }
 
-               } else if ((sequence != null) && (sequence.length() > 4)) {
-
                }
 
                // Usual CHAR
                if ((sequence == null) && (val != -1)) {
                    if (val == CR) {
+                       cursorPosition = 0;
                        if (currentBuf.length() == 0) {
                            myPrint("\n");
                            printPrompt(cpt);
                        } else {
                            cpt++;
-                           //myPrint("\n");
+                           if (!(os.startsWith("mac"))) {
+                               myPrint("\n");
+                           }
                            addToBuffer(currentBuf);
                            return currentBuf;
                        }
@@ -185,7 +208,7 @@ public class Terminal {
                    if ((val == BACKSPACE) || (val == DEL)) {
                        currentBuf = del(currentBuf);
 
-                       //TAB
+                    //TAB
                    } else if (val == TAB) {
                        System.out.println("TAB");
                        if (terminalProvider != null) {
@@ -194,10 +217,18 @@ public class Terminal {
                                printPrompt(cpt);
                            }
                        }
+
+                   // Regular character
                    } else if (val >= 32) {
                        //System.out.print("" + x + "(val=" + val + ");");
-                       myPrint("" + x);
-                       currentBuf += x;
+                       if (cursorPosition == currentBuf.length()) {
+                           myPrint("" + x);
+                           currentBuf += x;
+                       } else {
+                           currentBuf = currentBuf.substring(0,cursorPosition) + x + currentBuf.substring(cursorPosition, currentBuf.length());
+                           myPrint("" + x + currentBuf.substring(cursorPosition, currentBuf.length()));
+                       }
+                       cursorPosition ++;
                    }
                }
 
@@ -275,7 +306,23 @@ public class Terminal {
     public void printPrompt(int cpt) {
        String p = "" + cpt + "> ";
        promptLength = p.length();
-	    System.out.print(p);
+       System.out.print(p);
+    }
+
+    private void backward() {
+       if (cursorPosition == 0) {
+           return;
+       }
+       System.out.print("\033[1D");
+       cursorPosition --;
+    }
+
+    private void forward(String currentBuf) {
+       if (cursorPosition == currentBuf.length()) {
+           return ;
+       }
+        System.out.print("\033[1C");
+        cursorPosition ++;
     }
 
 
