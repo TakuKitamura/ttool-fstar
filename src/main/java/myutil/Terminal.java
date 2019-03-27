@@ -104,7 +104,7 @@ public class Terminal {
                 val = (RawConsoleInput.read(true));
                 x = (char) val;
 
-                //TraceManager.addDev("val=" + val);
+                TraceManager.addDev("val=" + val);
 
                 // Special sequence?
                 if (sequence == null) {
