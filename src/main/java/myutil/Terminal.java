@@ -298,8 +298,14 @@ public class Terminal {
                     cursorPosition--;
                 } else {
                     currentBuf = currentBuf.substring(0, cursorPosition - 1) + currentBuf.substring(cursorPosition + 1, currentBuf.length());
-                    myPrint("\b" + currentBuf.substring(cursorPosition, currentBuf.length()) + " ");
+                    backwardCode();
                     cursorPosition --;
+                    myPrint(currentBuf.substring(cursorPosition, currentBuf.length()) + " ");
+                    int sep = currentBuf.length() + 1 - cursorPosition;
+                    for (int i = 0; i < sep; i++) {
+                        backwardCode();
+                    }
+
                 }
             }
         }
