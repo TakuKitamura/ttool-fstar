@@ -188,7 +188,7 @@ public class Terminal {
                     // DEL
                     if ((sequence.charAt(0) == 91) && (sequence.charAt(1) == 51) &&
                             (sequence.charAt(2) == 126)) {
-                        TraceManager.addDev("DEL");
+                        //TraceManager.addDev("DEL");
                         currentBuf = del(currentBuf);
                         //cursorPosition--;
 
@@ -221,6 +221,7 @@ public class Terminal {
 
                     //BACKSPACE
                     if ((val == BACKSPACE) || (val == DEL)) {
+                        System.out.println("BACKSPACE/DEL");
                         currentBuf = del(currentBuf);
 
 
