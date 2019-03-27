@@ -89,6 +89,7 @@ public class Terminal {
         char x;
         int val = 0;
         cursorPosition = 0;
+        bufferPointer = 0;
 
 
         printPrompt(cpt);
@@ -129,29 +130,38 @@ public class Terminal {
                     //UP?
                     if ((sequence.charAt(0) == 91) && (sequence.charAt(1) == 65)) {
 
-                        //System.out.println("UP");
-                        delCurrent(currentBuf);
-                        bufferPointer = (bufferPointer > 0) ? bufferPointer - 1 : bufferPointer;
-                        currentBuf = buffer.get(bufferPointer);
-                        //printPrompt(cpt);
-                        myPrint(currentBuf);
-                        cursorPosition = currentBuf.length();
-                        sequence = null;
-                        val = -1;
+                        if (buffer.size() > 0) {
+                            //System.out.println("UP");
+                            delCurrent(currentBuf);
+                            bufferPointer = (bufferPointer > 0) ? bufferPointer - 1 : bufferPointer;
+                            currentBuf = buffer.get(bufferPointer);
+                            //printPrompt(cpt);
+                            myPrint(currentBuf);
+                            cursorPosition = currentBuf.length();
+                            sequence = null;
+                            val = -1;
+                        } else {
+                            sequence = null;
+                            val = -1;
+                        }
 
 
                         // DOWN
                     } else if ((sequence.charAt(0) == 91) && (sequence.charAt(1) == 66)) {
-
-                        //System.out.println("DOWN");
-                        delCurrent(currentBuf);
-                        bufferPointer = (bufferPointer == (buffer.size() - 1)) ? bufferPointer : bufferPointer + 1;
-                        currentBuf = buffer.get(bufferPointer);
-                        //printPrompt(cpt);
-                        myPrint(currentBuf);
-                        cursorPosition = currentBuf.length();
-                        sequence = null;
-                        val = -1;
+                        if (buffer.size() > 0) {
+                            //System.out.println("DOWN");
+                            delCurrent(currentBuf);
+                            bufferPointer = (bufferPointer == (buffer.size() - 1)) ? bufferPointer : bufferPointer + 1;
+                            currentBuf = buffer.get(bufferPointer);
+                            //printPrompt(cpt);
+                            myPrint(currentBuf);
+                            cursorPosition = currentBuf.length();
+                            sequence = null;
+                            val = -1;
+                        } else {
+                            sequence = null;
+                            val = -1;
+                        }
 
 
                         // BACKWARD
