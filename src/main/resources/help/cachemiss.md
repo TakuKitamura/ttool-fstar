@@ -1,2 +1,2 @@
-##Cahe-miss
+## Cahe-miss (in %)
 The percentage of cache misses

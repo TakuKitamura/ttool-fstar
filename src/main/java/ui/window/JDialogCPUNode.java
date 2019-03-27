@@ -129,25 +129,33 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         but.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                setModalityType(ModalityType.MODELESS);
                 if(jFrameHelp == null ) {
                     jFrameHelp = new JFrameHelp("help", hm, he);
                     jFrameHelp.setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
-                    //jhf.setAutoRequestFocus(true);
-                    //jhf.setFocusableWindowState(true);
-                    but.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "closeCPU");
-                    but.getActionMap().put("closeCPU", new AbstractAction() {
+                    jFrameHelp.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "close");
+                    jFrameHelp.getRootPane().getActionMap().put("close", new AbstractAction() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            if((jFrameHelp != null) && (!jFrameHelp.isVisible()))
+                            if(!jFrameHelp.isVisible())
                                 dispose();
                             jFrameHelp.setVisible(false);
-                            //jFrameHelp = null;
                         }
                     });
                 }else{
                     if(!jFrameHelp.isVisible()) {
                         jFrameHelp = new JFrameHelp("help", hm, he);
                         jFrameHelp.setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
+                        setModalityType(ModalityType.MODELESS);
+                        jFrameHelp.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "close");
+                        jFrameHelp.getRootPane().getActionMap().put("close", new AbstractAction() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                if(!jFrameHelp.isVisible())
+                                    dispose();
+                                jFrameHelp.setVisible(false);
+                            }
+                        });
                     }else{
                         jFrameHelp.setVisible(false);
                         jFrameHelp = null;
@@ -194,9 +202,9 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
             helpEntries.add(he13);
             HelpEntry he14 = helpManager.getHelpEntryWithHTMLFile("encryption.html");
             helpEntries.add(he14);
-            HelpEntry he15 = helpManager.getHelpEntryWithHTMLFile("operation.html");
+            HelpEntry he15 = helpManager.getHelpEntryWithHTMLFile("cpuextension.html");
             helpEntries.add(he15);
-            HelpEntry he16 = helpManager.getHelpEntryWithHTMLFile("cpuextension.html");
+            HelpEntry he16 = helpManager.getHelpEntryWithHTMLFile("operation.html");
             helpEntries.add(he16);
         }
 
@@ -225,6 +233,7 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c.setLayout(gridbag0);
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setModalityType(ModalityType.APPLICATION_MODAL);
 
 
         panel2 = new JPanel();

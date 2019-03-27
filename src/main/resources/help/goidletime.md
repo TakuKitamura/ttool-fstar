@@ -1,1 +1,2 @@
-Go idle time (cycles) : The time taken by the OS and the CPU hardware to go idle
+## Go idle time (in cycle)
+The time taken by the OS and the CPU hardware to go idle
