@@ -297,7 +297,7 @@ public class Terminal {
                     currentBuf = currentBuf.substring(0, currentBuf.length() - 1);
                     cursorPosition--;
                 } else {
-                    currentBuf = currentBuf.substring(0, cursorPosition - 1) + currentBuf.substring(cursorPosition + 1, currentBuf.length());
+                    currentBuf = currentBuf.substring(0, cursorPosition - 1) + currentBuf.substring(cursorPosition, currentBuf.length());
                     backwardCode();
                     cursorPosition --;
                     myPrint(currentBuf.substring(cursorPosition, currentBuf.length()) + " ");
