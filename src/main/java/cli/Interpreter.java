@@ -87,6 +87,7 @@ public class Interpreter implements Runnable, TerminalProviderInterface  {
     public MainGUI mgui;
     private Vector<String> formerCommands;
     private Terminal term;
+    private int currentLine;
 
 
     public Interpreter(String script, InterpreterOutputInterface printInterface, boolean show) {
@@ -108,10 +109,10 @@ public class Interpreter implements Runnable, TerminalProviderInterface  {
         term.setTerminalProvider(this);
 
         String line;
-        int cptLine = 0;
+        currentLine = 0;
         while ((line = term.getNextCommand()) != null) {
-            executeLine(line, cptLine, false);
-            cptLine ++;
+            executeLine(line, currentLine, false);
+            currentLine++;
         }
     }
 
@@ -140,11 +141,11 @@ public class Interpreter implements Runnable, TerminalProviderInterface  {
 
     public void interpret() {
         Scanner scanner = new Scanner(script);
-        int cptLine = 0;
+        currentLine = 0;
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
-            cptLine ++;
-            executeLine(line, cptLine, true);
+            currentLine ++;
+            executeLine(line, currentLine, true);
 
         }
         scanner.close();
@@ -302,12 +303,25 @@ public class Interpreter implements Runnable, TerminalProviderInterface  {
         printInterface.print(s);
     }
 
+    // History
     public String printAllFormerCommands() {
         StringBuffer sb = new StringBuffer("");
         for(int i=0; i<formerCommands.size(); i++) {
             sb.append("" + i + "\t" + formerCommands.get(i) + "\n");
         }
         print(sb.toString());
+        return null;
+    }
+
+    public String executeFormerCommand(int indexOfCommand) {
+        if (indexOfCommand >= formerCommands.size() || (indexOfCommand < 0)) {
+            return "Invalid command index";
+        }
+
+        String formerCommand = formerCommands.get(indexOfCommand);
+        System.out.println("Executing: " + formerCommand);
+        executeLine(formerCommand, currentLine, false);
+
         return null;
     }
 

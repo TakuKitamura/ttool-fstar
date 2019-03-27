@@ -76,16 +76,31 @@ public class History extends Command  {
         return "hi";
     }
 
-    public String getUsage() { return "history"; }
+    public String getUsage() { return "history [command id (optional)]"; }
 
     public String getDescription() {
-        return "Prints all the non empty commands previously executed";
+        return "Prints all the non empty commands previously executed\n" +
+                " If an int arg is povided, the corresponding command is executed";
     }
 
 
     public  String executeCommand(String command, Interpreter interpreter) {
-        TraceManager.addDev("History command");
-        return interpreter.printAllFormerCommands();
+        //TraceManager.addDev("History command:" + command);
+
+        if (command.length() == 0) {
+            return interpreter.printAllFormerCommands();
+        }
+
+        try {
+            Integer indexInfo = new Integer(command);
+            return interpreter.executeFormerCommand(indexInfo);
+        } catch (Exception e) {
+            return "Invalid argument. Must provide an int";
+        }
+
+
+
+
     }
 
     public void fillSubCommands() {

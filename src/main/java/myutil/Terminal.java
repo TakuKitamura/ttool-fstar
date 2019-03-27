@@ -189,6 +189,8 @@ public class Terminal {
 
                // Usual CHAR
                if ((sequence == null) && (val != -1)) {
+
+                   // CR
                    if (val == CR) {
                        cursorPosition = 0;
                        if (currentBuf.length() == 0) {
@@ -196,9 +198,10 @@ public class Terminal {
                            printPrompt(cpt);
                        } else {
                            cpt++;
-                           if (!(os.startsWith("mac"))) {
+
+                           //if (!(os.startsWith("mac"))) {
                                myPrint("\n");
-                           }
+                           //}
                            addToBuffer(currentBuf);
                            return currentBuf;
                        }
@@ -225,7 +228,7 @@ public class Terminal {
                            myPrint("" + x);
                            currentBuf += x;
                        } else {
-                           currentBuf = currentBuf.substring(0,cursorPosition) + x + currentBuf.substring(cursorPosition, currentBuf.length());
+                           currentBuf = currentBuf.substring(0,cursorPosition-1) + x + currentBuf.substring(cursorPosition, currentBuf.length());
                            myPrint("" + x + currentBuf.substring(cursorPosition, currentBuf.length()));
                        }
                        cursorPosition ++;
@@ -272,23 +275,9 @@ public class Terminal {
        //if (os.compareTo("mac") != 0) {
            System.out.print(s);
         //}
-       //System.out.flush();
+       System.out.flush();
    }
 
-   public void printHistory() {
-       int cpt = 1;
-       for(String s: buffer) {
-           System.out.println("" + cpt+ ":" + s);
-           cpt ++;
-       }
-   }
-
-   private void printSequence(String seq) {
-       for(int i=0; i<seq.length(); i++) {
-           System.out.print("" + (int)(seq.charAt(i)) + " ");
-       }
-       System.out.println("");
-   }
 
 
     private String delCurrent(String currentBuf) {
