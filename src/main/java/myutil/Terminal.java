@@ -293,7 +293,7 @@ public class Terminal {
                     cursorPosition--;
                 } else {
                     currentBuf = currentBuf.substring(0, cursorPosition - 1) + currentBuf.substring(cursorPosition + 1, currentBuf.length());
-                    myPrint("\b");
+                    myPrint("\b" + currentBuf.substring(cursorPosition, currentBuf.length()) + " ");
                     cursorPosition --;
                 }
             }
