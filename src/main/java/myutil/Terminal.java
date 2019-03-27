@@ -212,7 +212,7 @@ public class Terminal {
                    //BACKSPACE
                    if ((val == BACKSPACE) || (val == DEL)) {
                        currentBuf = del(currentBuf);
-                      
+
 
                     //TAB
                    } else if (val == TAB) {
@@ -232,8 +232,13 @@ public class Terminal {
                            currentBuf += x;
                        } else {
                            //System.out.println("Tricky cursor position");
+                           int sep = currentBuf.length()- cursorPosition;
                            currentBuf = currentBuf.substring(0,cursorPosition-1) + x + currentBuf.substring(cursorPosition, currentBuf.length());
                            myPrint("" + x + currentBuf.substring(cursorPosition, currentBuf.length()));
+                            // Must move cursor to previous psition + 1
+                           for(int i=0; i<sep; i++) {
+                               backwardCode();
+                           }
 
                        }
                        cursorPosition ++;
@@ -308,8 +313,12 @@ public class Terminal {
        if (cursorPosition == 0) {
            return;
        }
-       System.out.print("\033[1D");
+       backwardCode();
        cursorPosition --;
+    }
+
+    private void backwardCode() {
+        System.out.print("\033[1D");
     }
 
     private void forward(String currentBuf) {
