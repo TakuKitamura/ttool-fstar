@@ -131,7 +131,6 @@ public class Terminal {
                     if ((sequence.charAt(0) == 91) && (sequence.charAt(1) == 65)) {
 
                         if (buffer.size() > 0) {
-                            //System.out.println("UP");
                             delCurrent(currentBuf);
                             bufferPointer = (bufferPointer > 0) ? bufferPointer - 1 : bufferPointer;
                             currentBuf = buffer.get(bufferPointer);
@@ -286,10 +285,18 @@ public class Terminal {
 
 
     private String del(String currentBuf) {
-        if (currentBuf.length() > 0) {
-            myPrint("\b \b");
-            currentBuf = currentBuf.substring(0, currentBuf.length() - 1);
-            cursorPosition--;
+        if (cursorPosition > 0) {
+            if (currentBuf.length() > 0) {
+                if (cursorPosition == currentBuf.length()) {
+                    myPrint("\b \b");
+                    currentBuf = currentBuf.substring(0, currentBuf.length() - 1);
+                    cursorPosition--;
+                } else {
+                    currentBuf = currentBuf.substring(0, cursorPosition - 1) + currentBuf.substring(cursorPosition + 1, currentBuf.length());
+                    myPrint("\b");
+                    cursorPosition --;
+                }
+            }
         }
         return currentBuf;
     }
