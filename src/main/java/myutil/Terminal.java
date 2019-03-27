@@ -104,7 +104,7 @@ public class Terminal {
                 val = (RawConsoleInput.read(true));
                 x = (char) val;
 
-                TraceManager.addDev("val=" + val);
+                //TraceManager.addDev("val=" + val);
 
                 // Special sequence?
                 if (sequence == null) {
@@ -223,7 +223,7 @@ public class Terminal {
 
                     //BACKSPACE
                     if ((val == BACKSPACE) || (val == DEL)) {
-                        System.out.println("BACKSPACE/DEL");
+                        //System.out.println("BACKSPACE/DEL");
                         currentBuf = del(currentBuf);
 
 
@@ -239,7 +239,7 @@ public class Terminal {
 
                         // Regular character
                     } else if (val >= 32) {
-                        System.out.print("" + x + "(val=" + val + ");");
+                        //System.out.print("" + x + "(val=" + val + ");");
                         if (cursorPosition == currentBuf.length()) {
                             myPrint("" + x);
                             currentBuf += x;
