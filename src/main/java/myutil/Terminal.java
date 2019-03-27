@@ -180,6 +180,8 @@ public class Terminal {
                    if ((sequence.charAt(0) == 91) && (sequence.charAt(1) == 51) &&
                            (sequence.charAt(2) == 126)) {
                        currentBuf = del(currentBuf);
+                       cursorPosition --;
+                       
                        sequence = null;
                         val = -1;
                        //TraceManager.addDev("DEL");
