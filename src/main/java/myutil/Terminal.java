@@ -188,12 +188,13 @@ public class Terminal {
                     // DEL
                     if ((sequence.charAt(0) == 91) && (sequence.charAt(1) == 51) &&
                             (sequence.charAt(2) == 126)) {
+                        TraceManager.addDev("DEL");
                         currentBuf = del(currentBuf);
                         cursorPosition--;
 
                         sequence = null;
                         val = -1;
-                        //TraceManager.addDev("DEL");
+                        //
                     }
 
                 }
@@ -285,7 +286,7 @@ public class Terminal {
 
 
     private String del(String currentBuf) {
-        TraceManager.addDev("DEL");
+        //TraceManager.addDev("DEL");
         if (cursorPosition > 0) {
             if (currentBuf.length() > 0) {
                 if (cursorPosition == currentBuf.length()) {
