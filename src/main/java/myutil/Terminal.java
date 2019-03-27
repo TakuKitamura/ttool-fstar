@@ -239,6 +239,7 @@ public class Terminal {
                            for(int i=0; i<sep; i++) {
                                backwardCode();
                            }
+                           cursorPosition --;
 
                        }
                        cursorPosition ++;
