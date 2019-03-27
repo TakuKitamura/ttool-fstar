@@ -234,8 +234,8 @@ public class Terminal {
                        } else {
                            //System.out.println("Tricky cursor position");
                            int sep = currentBuf.length()- cursorPosition;
-                           currentBuf = currentBuf.substring(0,cursorPosition-1) + x + currentBuf.substring(cursorPosition, currentBuf.length());
-                           TraceManager.addDev("buffer=" + currentBuf);
+                           currentBuf = currentBuf.substring(0,cursorPosition) + x + currentBuf.substring(cursorPosition, currentBuf.length());
+                           //TraceManager.addDev("buffer=" + currentBuf);
                            myPrint("" + x + currentBuf.substring(cursorPosition, currentBuf.length()));
                             // Must move cursor to previous psition + 1
                            for(int i=0; i<sep; i++) {
