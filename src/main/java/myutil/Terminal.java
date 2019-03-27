@@ -181,7 +181,7 @@ public class Terminal {
                            (sequence.charAt(2) == 126)) {
                        currentBuf = del(currentBuf);
                        cursorPosition --;
-                       
+
                        sequence = null;
                         val = -1;
                        //TraceManager.addDev("DEL");
@@ -230,8 +230,10 @@ public class Terminal {
                            myPrint("" + x);
                            currentBuf += x;
                        } else {
+                           System.out.println("Tricky cursor position");
                            currentBuf = currentBuf.substring(0,cursorPosition-1) + x + currentBuf.substring(cursorPosition, currentBuf.length());
                            myPrint("" + x + currentBuf.substring(cursorPosition, currentBuf.length()));
+
                        }
                        cursorPosition ++;
                    }
