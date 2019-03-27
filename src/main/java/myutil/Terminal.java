@@ -230,7 +230,6 @@ public class Terminal {
                        if (cursorPosition == currentBuf.length()) {
                            myPrint("" + x);
                            currentBuf += x;
-                           cursorPosition ++;
                        } else {
                            //System.out.println("Tricky cursor position");
                            int sep = currentBuf.length()- cursorPosition;
@@ -243,6 +242,7 @@ public class Terminal {
                            }
                            //TraceManager.addDev("buffer=" + currentBuf);
                        }
+                       cursorPosition ++;
 
                    }
                }
