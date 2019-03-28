@@ -45,7 +45,11 @@ import myutil.FileUtils;
 import myutil.PluginManager;
 import myutil.TraceManager;
 import tmltranslator.*;
+import tmltranslator.dsez3engine.InputInstance;
+import tmltranslator.dsez3engine.OptimizationModel;
+import tmltranslator.dsez3engine.OptimizationResult;
 import ui.MainGUI;
+import ui.TGComponent;
 import ui.TURTLEPanel;
 import ui.util.IconManager;
 
@@ -65,6 +69,8 @@ public class TML extends Command  {
 
     private TMLModeling tmlm;
     private TMLMapping tmlmap;
+
+    private OptimizationResult result;
 
     public TML() {
 
@@ -116,6 +122,54 @@ public class TML extends Command  {
         };
         subcommands.add(checkSyntax);
 
+        Command loadz3lib = new Command() {
+            public String getCommand() { return "loadz3lib"; }
+            public String getShortCommand() { return "z3lib"; }
+            public String getDescription() { return "Loading Z3 libs"; }
+
+            public  String executeCommand(String command, Interpreter interpreter) {
+                //interpreter.print("Command=" + command);
+                return loadZ3lib(command);
+            }
+        };
+        subcommands.add(loadz3lib);
+
+        Command z3 = new Command() {
+            public String getCommand() { return "z3opt"; }
+            public String getShortCommand() { return "z3o"; }
+            public String getDescription() { return "Searching for an optimal mapping using Z3 (Z3 MUST be installed)"; }
+
+            public  String executeCommand(String command, Interpreter interpreter) {
+                //interpreter.print("Command=" + command);
+                return z3OptimalMappingAnalysis();
+            }
+        };
+        subcommands.add(z3);
+
+        Command z3f = new Command() {
+            public String getCommand() { return "z3fea"; }
+            public String getShortCommand() { return "z3f"; }
+            public String getDescription() { return "Searching for a feasible mapping using Z3 (Z3 MUST be installed)"; }
+
+            public  String executeCommand(String command, Interpreter interpreter) {
+                //interpreter.print("Command=" + command);
+                return z3FeasibleMappingAnalysis();
+            }
+        };
+        subcommands.add(z3f);
+
+        Command saveResult = new Command() {
+            public String getCommand() { return "save-result"; }
+            public String getShortCommand() { return "sr"; }
+            public String getDescription() { return "save result <file>: save results of a mapping exploration"; }
+
+            public  String executeCommand(String command, Interpreter interpreter) {
+                //interpreter.print("Command=" + command);
+                return saveResult(command);
+            }
+        };
+        subcommands.add(saveResult);
+
 
 
     }
@@ -159,7 +213,7 @@ public class TML extends Command  {
 
 
         } catch (Exception e) {
-            return ("Exception during gile loading: " + e.getMessage());
+            return ("Exception during file loading: " + e.getMessage());
 
         }
 
@@ -215,9 +269,127 @@ public class TML extends Command  {
 
         syntax.checkSyntax();
 
-        if (syntax.hasErrors() == 0) {
+        if (syntax.hasErrors() > 0) {
             return syntax.getErrors().size() + " errors found.";
         }
+
+        return null;
+    }
+
+    private String loadZ3lib(String lib) {
+        try {
+            String [] libs = lib.split(":");
+            boolean setLibPath = false;
+
+            for (int i=0; i<libs.length; i++) {
+                // get the path and set it as a property of java lib path
+
+                String tmp = libs[i].trim();
+                if (tmp.length() > 0) {
+                    if (setLibPath == false) {
+                        File f = new File(tmp);
+                        String dir = f.getParent();
+                        //TraceManager.addDev("Old library path: " + System.getProperty("java.library.path"));
+                        //TraceManager.addDev("Setting java library path to " + dir);
+                        //System.setProperty("java.library.path", ".:" + dir);
+                        ConfigurationTTool.addToJavaLibraryPath(new File(dir));
+                        //TraceManager.addDev("New library path: " + System.getProperty("java.library.path"));
+                        setLibPath = true;
+                    }
+                    TraceManager.addDev("Loading Z3 lib: " + tmp);
+                    System.load(tmp);
+                    TraceManager.addDev("Loaded Z3 lib: " + tmp);
+                }
+
+            }
+        }  catch (UnsatisfiedLinkError e) {
+            return ("Z3 libs " + ConfigurationTTool.Z3LIBS + " could not be loaded");
+        }
+
+        return null;
+    }
+
+
+    private String z3OptimalMappingAnalysis() {
+        if (tmlmap == null) {
+            return "You must load a TML Mapping first";
+        }
+
+        if (tmlm == null) {
+            return "Empty task model";
+        }
+
+        @SuppressWarnings("unchecked")
+        InputInstance inputInstance = new InputInstance(tmlmap.getTMLArchitecture(), (TMLModeling<TGComponent>)tmlm);
+        OptimizationModel optimizationModel = new OptimizationModel(inputInstance);
+
+
+        //Loading Z3 libs;
+        //String error = ConfigurationTTool.loadZ3Libs();
+
+        try {
+            result = optimizationModel.findOptimizedMapping();
+            //result = optimizationModel.findFeasibleMapping();
+        } catch (Exception e) {
+            return("Exception during Z3 execution: Badly installed?");
+        }
+
+
+        return null;
+    }
+
+    private String z3FeasibleMappingAnalysis() {
+        if (tmlmap == null) {
+            return "You must load a TML Mapping first";
+        }
+
+        if (tmlm == null) {
+            return "Empty task model";
+        }
+
+        @SuppressWarnings("unchecked")
+        InputInstance inputInstance = new InputInstance(tmlmap.getTMLArchitecture(), (TMLModeling<TGComponent>)tmlm);
+        OptimizationModel optimizationModel = new OptimizationModel(inputInstance);
+
+
+        //Loading Z3 libs;
+        //String error = ConfigurationTTool.loadZ3Libs();
+
+        try {
+            //result = optimizationModel.findOptimizedMapping();
+            result = optimizationModel.findFeasibleMapping();
+        } catch (Exception e) {
+            return("Exception during Z3 execution: Badly installed?");
+        }
+
+
+        return null;
+    }
+
+    private String saveResult(String command) {
+        if (result == null) {
+            return "No result to save";
+        }
+
+        if (command.length() == 0) {
+            return "Must give a file as argument";
+        }
+
+        if (result.hasError()) {
+            return "No result to print since the exploration encountered errors";
+        }
+
+        File fileResult = new File(command);
+        try {
+            boolean b = FileUtils.checkFileForSave(fileResult);
+            if (!b) {
+                return "Results cannot be written to " + command + ": access denied";
+            }
+            FileUtils.saveFile(fileResult, result.result);
+        } catch (Exception e) {
+            return "Exception when writing results to file: " + e.getMessage();
+        }
+
 
         return null;
     }

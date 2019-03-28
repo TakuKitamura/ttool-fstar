@@ -639,8 +639,8 @@ public class TMLMappingTextSpecification<E> {
         // SET
         if (isInstruction("SET", _split[0])) {
 
-            if (_split.length != 4) {
-                error = "A set instruction must be used with 3 parameters, and not " + (_split.length - 1);
+            if (_split.length < 4) {
+                error = "A set instruction must be used with at least 3 parameters, and not " + (_split.length - 1);
                 addError(0, _lineNb, 0, error, _line);
                 return -1;
             }
