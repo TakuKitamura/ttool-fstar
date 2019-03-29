@@ -165,6 +165,8 @@ public class AVATAR2CMBED {
 
         makeMainMutex();
 
+        makeMainConditionVariable();
+
 		makeConcurrencyMutex();
 		
         makeSynchronousChannels();
@@ -185,6 +187,15 @@ public class AVATAR2CMBED {
         mainFileMbed.appendToBeforeMainCode("/* Main mutex */" + CR);
         mainFileMbed.appendToHCode("extern rtos::Mutex __mainMutex;" + CR + CR);
         mainFileMbed.appendToBeforeMainCode("rtos::Mutex __mainMutex;" + CR + CR);
+
+    }
+        
+    public void makeMainConditionVariable() {
+        // Create a main condition variable
+        mainFileMbed.appendToHCode("/* Main condition variable */" + CR);
+        mainFileMbed.appendToBeforeMainCode("/* Main condition variable */" + CR);
+        mainFileMbed.appendToHCode("extern rtos::ConditionVariable __mainCond;" + CR + CR);
+        mainFileMbed.appendToBeforeMainCode("rtos::ConditionVariable __mainCond(__mainMutex);" + CR + CR);
 
     }
 	
@@ -458,7 +469,7 @@ public class AVATAR2CMBED {
         }
         s+= UNUSED_ATTR + "setOfRequests __list;" + CR;
 
-        s+= UNUSED_ATTR + "size_t __myCond;" + CR;
+        //s+= UNUSED_ATTR + "size_t __myCond;" + CR;
         //s+= UNUSED_ATTR + "rtos::ConditionVariable __myCond(&__mainMutex)" + CR;
         s+= UNUSED_ATTR + "request *__returnRequest;" + CR;
 
@@ -471,7 +482,7 @@ public class AVATAR2CMBED {
         */
         //s+= CR + "pthread_cond_init(&__myCond, NULL);" + CR;
 
-        s += CR + "fillListOfRequests(&__list, __myname, NULL, __myCond, &__mainMutex);" + CR;
+        s += CR + "fillListOfRequests(&__list, __myname, NULL, &__mainCond, &__mainMutex);" + CR;
 
         s += "//printf(\"my name = %s\\n\", __myname);" + CR;
 

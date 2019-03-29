@@ -118,7 +118,14 @@ void waitFor(long minDelay, long maxDelay) {
   delayToTimeSpec(&tssrc, delay);
 
   debugLong("............. waiting For", delay);
-  wait_us(delay);
+  if (delay < 1000)
+  {
+    wait_us(delay);
+  }
+  else
+  {
+    wait_ms(delay/1000); // wait_us blocks deep sleep, wait_ms recommended for long delays
+  }
   debugLong("............. waiting Done for: ", delay);
 }
 

@@ -2,6 +2,7 @@
 #define REQUEST_H
 #include <Mutex.h>
 #include <Thread.h>
+#include <ConditionVariable.h>
 
 //#include <time.h>
 //#include <pthread.h>
@@ -35,9 +36,9 @@ struct setOfRequests {
   struct request *head;
   timespec startTime;
   timespec completionTime;
-  size_t wakeupCondition;
   rtos::Mutex *mutex;
-
+  rtos::ConditionVariable *cond;
+  
   int hasATimeRequest; // Means that at least on request of the list hasn't completed yet its time delay
   timespec minTimeToWait;
   struct request *selectedRequest;
@@ -85,10 +86,10 @@ request * removeRequestFromList(request *list, request *requestToRemove);
 
 void copyParameters(request *src, request *dst);
 
-setOfRequests *newListOfRequests(size_t *wakeupCondition, rtos::Mutex *mutex);
+setOfRequests *newListOfRequests(rtos::ConditionVariable *cond, rtos::Mutex *mutex);
 void addRequestToList(setOfRequests *list, request* req);
 void clearListOfRequests(setOfRequests *list);
-void fillListOfRequests(setOfRequests *list, char *name, rtos::Thread* thread, size_t wakeupCondition, rtos::Mutex *mutex);
+void fillListOfRequests(setOfRequests *list, char *name, rtos::Thread* thread, rtos::ConditionVariable *cond, rtos::Mutex *mutex);
 
 void removeAllPendingRequestsFromPendingLists(request *req, int apartThisOne);
 request *hasIdenticalRequestInListOfSelectedRequests(request *req, request *list);
