@@ -64,7 +64,6 @@ public class Header
     public static String getHeader ()
     {
 	int with_vgsb = TopCellGenerator.avatardd.getAllBus ().size ();
-    int with_amsCluster = TopCellGenerator.avatardd.getNbAmsCluster();
 
 	header =
 	    "//-------------------------------Header------------------------------------"
@@ -88,7 +87,7 @@ public class Header
 	    "#include \"vci_ram.h\"" + CR +
 	    "#include \"vci_heterogeneous_rom.h\"" + CR +
 	    "#include \"vci_multi_tty.h\"" + CR
-	    + "#include \"vci_dma.h\"" + CR
+	    //+ "#include \"vci_locks.h\"" + CR
 	    + "#include \"vci_xicu.h\"" + CR + "#include \"vci_mwmr_stats.h\"" + CR;	//DG 20.09.
 	if (with_vgsb > 0)
 	  {
@@ -109,7 +108,7 @@ public class Header
 	// if (with_hw_accellerator>0){  
 	//DG 23.08. actuellement il ne les trouve pas!
 	int hwas = 0;
-	//header += "#include \"fifo_virtual_copro_wrapper.h\"" + CR;
+	header += "#include \"fifo_virtual_copro_wrapper.h\"" + CR;
 
       for (AvatarCoproMWMR HWAccelerator:TopCellGenerator.avatardd.
 	     getAllCoproMWMR ())
@@ -140,7 +139,7 @@ public class Header
 
 		    else
 		      {
-			  header += "#include \"my_hwa.h\"" + CR;
+			  header += "#include \"my_hwa" + hwas + ".h\"" + CR;
 			  hwas++;
 		      }
 		}
@@ -153,15 +152,7 @@ public class Header
 	    "#include \"vci_rttimer.h\"" + CR + "#include \"vci_logger.h\"" +
 	    CR + "#include \"vci_local_crossbar.h\"" + CR2;
 
-    if (with_amsCluster > 0) {
-        header += "#include \"gpio2vci.h\"" + CR;
-        for (AvatarAmsCluster amsCluster:TopCellGenerator.avatardd.getAllAmsCluster ())
-        {
-            header += "#include \"" + amsCluster.getAmsClusterName () + "_tdf.h\"" + CR;
-        }
-    }
-
-	header = header + CR + "namespace {" + CR
+	header = header + "namespace {" + CR
 	    + "std::vector<std::string> stringArray(" + CR
 	    + "	const char *first, ... )" + CR
 	    + "{" + CR
@@ -220,7 +211,6 @@ public class Header
 		  header + CR2 +
 		  "static common::MappingTable maptab(32, IntTab(8,4), IntTab(8,4), 0xfff00000);";
 	  }
-
 	return header;
     }
 }

@@ -61,9 +61,6 @@ public class Platforminfo
 	int with_vgsb = TopCellGenerator.avatardd.getAllBus ().size ();
 	int nb_hwa = TopCellGenerator.avatardd.getAllCoproMWMR ().size ();
 
-    //Determine if AMS Cluster is present in Avatar DD
-    int with_amsCluster = TopCellGenerator.avatardd.getNbAmsCluster();
-
 	//bus can be other than VGSB (CAN...), for the moment restricted to VGSB
 	String platforminfo = CR;
 	  platforminfo += "use =  [" + CR
@@ -73,7 +70,6 @@ public class Platforminfo
 	    + "Uses('caba:vci_heterogeneous_rom')," + CR
 	    + "Uses('caba:vci_multi_tty')," + CR
 	    + "Uses('caba:vci_xicu')," + CR
-	    + "Uses('caba:vci_dma')," + CR
 	    + "Uses('caba:vci_block_device')," + CR
 	    + "Uses('caba:vci_ethernet')," + CR
 	    + "Uses('caba:vci_rttimer')," + CR
@@ -92,11 +88,9 @@ public class Platforminfo
 	//DG 23.08. added virtual coprocessor
 	platforminfo += "Uses('caba:vci_mwmr_stats')," + CR
 	    + "Uses('caba:vci_logger')," + CR
-	    + "Uses('caba:vci_local_crossbar')," + CR;
-	    // + "Uses('caba:fifo_virtual_copro_wrapper')," + CR;
+	    + "Uses('caba:vci_local_crossbar')," + CR
+	    + "Uses('caba:fifo_virtual_copro_wrapper')," + CR;
 
-	int hwa=1; // at least one HWA present
-	
       for (AvatarCoproMWMR copro:TopCellGenerator.avatardd.
 	     getAllCoproMWMR ())
 	  {
@@ -106,7 +100,7 @@ public class Platforminfo
 			+ "Uses('common:papr_slot')," + CR
 			+ "Uses('caba:generic_fifo')," + CR
 			+ "Uses('common:network_io')," + CR;
-		    
+		    nb_hwa--;
 		}
 
 	      else
@@ -115,7 +109,7 @@ public class Platforminfo
 		      {
 			  platforminfo +=
 			      "Uses('caba:vci_output_engine')," + CR;
-			 
+			  nb_hwa--;
 		      }
 
 
@@ -123,18 +117,13 @@ public class Platforminfo
 		      {
 			  int i;
 			  for (i = 0; i < nb_hwa; i++)
-			      {if (hwa>0){
+			    {
 				platforminfo +=
-				    "Uses('caba:my_hwa')," + CR;
-				hwa=0; }
+				    "Uses('caba:my_hwa" + i + "')," + CR;
 			    }
 		      }
 		}
 	  }
-
-    if (with_amsCluster > 0) {
-        platforminfo += "Uses('caba:gpio2vci')," + CR;
-    }
 
 	platforminfo += "Uses('common:elf_file_loader')," + CR
 	    + "Uses('common:plain_file_loader')," + CR

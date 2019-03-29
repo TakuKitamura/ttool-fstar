@@ -631,8 +631,7 @@ public class TasksAndMainGenerator {
         return table;
     }
 
-/*
- ***********************************************************************
+/************************************************************************
                 public int AccountAllSignal(AvatarBlock _block) {
                 int cpt=0;
                         for (AvatarSignal as: _block.getSignals()) {
