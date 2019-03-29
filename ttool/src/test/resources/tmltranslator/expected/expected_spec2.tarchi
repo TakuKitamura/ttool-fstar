@@ -26,7 +26,6 @@ SET CPU0 schedulingPolicy 0
 SET CPU0 sliceTime 10000
 SET CPU0 execiTime 1
 SET CPU0 execcTime 1
-SET CPU0 operation
 
 NODE CPU CPU2
 SET CPU2 nbOfCores 1
@@ -41,7 +40,6 @@ SET CPU2 schedulingPolicy 0
 SET CPU2 sliceTime 10000
 SET CPU2 execiTime 1
 SET CPU2 execcTime 1
-SET CPU2 operation
 
 NODE CPU CPU1
 SET CPU1 nbOfCores 1
@@ -56,7 +54,6 @@ SET CPU1 schedulingPolicy 0
 SET CPU1 sliceTime 10000
 SET CPU1 execiTime 1
 SET CPU1 execcTime 1
-SET CPU1 operation
 
 NODE LINK link_CPU0_to_Bus0
 SET link_CPU0_to_Bus0 node CPU0
