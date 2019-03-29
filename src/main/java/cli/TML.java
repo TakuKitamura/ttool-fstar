@@ -40,6 +40,7 @@
 package cli;
 
 import common.ConfigurationTTool;
+import common.SpecConfigTTool;
 import launcher.RTLLauncher;
 import myutil.FileUtils;
 import myutil.PluginManager;
@@ -169,6 +170,18 @@ public class TML extends Command  {
             }
         };
         subcommands.add(saveResult);
+
+        Command saveResultMapping = new Command() {
+            public String getCommand() { return "save-result-tml-mapping"; }
+            public String getShortCommand() { return "srtm"; }
+            public String getDescription() { return "srtm <file>: save the produced results of a mapping exploration"; }
+
+            public  String executeCommand(String command, Interpreter interpreter) {
+                //interpreter.print("Command=" + command);
+                return saveResultTMLMapping(command);
+            }
+        };
+        subcommands.add(saveResultMapping);
 
 
 
@@ -388,6 +401,45 @@ public class TML extends Command  {
             FileUtils.saveFile(fileResult, result.result);
         } catch (Exception e) {
             return "Exception when writing results to file: " + e.getMessage();
+        }
+
+
+        return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    private String saveResultTMLMapping(String command) {
+        if (result == null) {
+            return "No mapping to save";
+        }
+
+        if (command.length() == 0) {
+            return "Must give a file as argument";
+        }
+
+        if (result.hasError()) {
+            return "No mapping to save since the mapping exploration encountered errors";
+        }
+
+        if (result.resultingMapping == null) {
+            return "Empty mapping: cannot generate TML file";
+        }
+
+        File fileResult = new File(command);
+        try {
+            boolean b = FileUtils.checkFileForSave(fileResult);
+
+            if (!b) {
+                return "Results cannot be written to " + command + ": access denied";
+            }
+
+            TMLMappingTextSpecification spec = new TMLMappingTextSpecification("fromZ3");
+            spec.toTextFormat(result.resultingMapping);
+            spec.saveFile(fileResult.getAbsolutePath(), "");
+
+
+        } catch (Exception e) {
+            return "Exception when writing resulting mapping to file: " + e.getMessage();
         }
 
 
