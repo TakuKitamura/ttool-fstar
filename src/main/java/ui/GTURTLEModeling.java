@@ -68,6 +68,8 @@ import tmltranslator.toautomata.TML2AUT;
 import tmltranslator.toautomata.TML2AUTviaLOTOS;
 import tmltranslator.toavatar.TML2Avatar;
 import tmltranslator.tosystemc.TML2SystemC;
+import tmltranslator.toturtle.Mapping2TIF;//DG
+//import tmltranslator.toturtle.TML2TURTLE;//DG
 import tmltranslator.touppaal.RelationTMLUPPAAL;
 import tmltranslator.touppaal.TML2UPPAAL;
 import tmltranslator.toturtle.*;
@@ -96,8 +98,11 @@ import ui.dd.*;
 import ui.avatarsmd.*;
 import ui.diplodocusmethodology.DiplodocusMethodologyDiagramPanel;
 import ui.ebrdd.EBRDDPanel;
-import ui.eln.ELNDiagramPanel;
+//import ui.eln.ELNDiagramPanel;
+import ui.eln.*;//DG
 import ui.ftd.FaultTreeDiagramPanel;
+import graph.RG;//DG
+import ui.syscams.SysCAMSComponentTaskDiagramPanel;//DG
 import ui.iod.InteractionOverviewDiagramPanel;
 import ui.ncdd.NCDiagramPanel;
 import ui.osad.TURTLEOSActivityDiagramPanel;
@@ -106,6 +111,7 @@ import ui.oscd.TURTLEOSClassDiagramPanel;
 import ui.procsd.ProCSDComponent;
 import ui.procsd.ProactiveCSDPanel;
 import ui.prosmd.ProactiveSMDPanel;
+//import ui.req.Requirement;//DG
 import ui.req.RequirementDiagramPanel;
 import ui.sysmlsecmethodology.SysmlsecMethodologyDiagramPanel;
 import ui.tmlad.*;
@@ -5332,6 +5338,109 @@ public class GTURTLEModeling {
             }
 
 
+
+
+
+
+
+else if (tdp instanceof SysCAMSComponentTaskDiagramPanel) { 
+					nl = doc.getElementsByTagName("SysCAMSComponentTaskDiagramPanelCopy");
+
+					if (nl == null) {
+						return;
+					}
+
+					SysCAMSComponentTaskDiagramPanel camsp = (SysCAMSComponentTaskDiagramPanel) tdp;
+
+					for (i = 0; i < nl.getLength(); i++) {
+						adn = nl.item(i);
+						if (adn.getNodeType() == Node.ELEMENT_NODE) {
+							elt = (Element) adn;
+
+							if (camsp == null) {
+								throw new MalformedModelingException();
+							}
+
+							decX = _decX;
+							decY = _decY;
+
+							makeXMLComponents(elt.getElementsByTagName("COMPONENT"), camsp);
+							makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), camsp);
+							makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), camsp);
+							connectConnectorsToRealPoints(camsp);
+							camsp.structureChanged();
+							makePostLoading(camsp, beginIndex);
+						}
+					}
+				} else if (tdp instanceof ELNDiagramPanel) {
+					nl = doc.getElementsByTagName("ELNDiagramPanelCopy");
+
+					if (nl == null) {
+						return;
+					}
+
+					ELNDiagramPanel elndp = (ELNDiagramPanel) tdp;
+
+					for (i = 0; i < nl.getLength(); i++) {
+						adn = nl.item(i);
+						if (adn.getNodeType() == Node.ELEMENT_NODE) {
+							elt = (Element) adn;
+
+							if (elndp == null) {
+								throw new MalformedModelingException();
+							}
+
+							decX = _decX;
+							decY = _decY;
+
+							makeXMLComponents(elt.getElementsByTagName("COMPONENT"), elndp);
+							makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), elndp);
+							makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), elndp);
+							connectConnectorsToRealPoints(elndp);
+							elndp.structureChanged();
+							makePostLoading(elndp, beginIndex);
+						}
+					}
+				} else if (tdp instanceof AvatarADPanel) {
+					nl = doc.getElementsByTagName("AvatarADPanelCopy");
+
+					if (nl == null) {
+						return;
+					}
+
+					AvatarADPanel aadp = (AvatarADPanel) tdp;
+
+					for (i = 0; i < nl.getLength(); i++) {
+						adn = nl.item(i);
+						if (adn.getNodeType() == Node.ELEMENT_NODE) {
+							elt = (Element) adn;
+
+							if (aadp == null) {
+								throw new MalformedModelingException();
+							}
+
+							decX = _decX;
+							decY = _decY;
+
+							makeXMLComponents(elt.getElementsByTagName("COMPONENT"), aadp);
+							makeXMLConnectors(elt.getElementsByTagName("CONNECTOR"), aadp);
+							makeXMLComponents(elt.getElementsByTagName("SUBCOMPONENT"), aadp);
+							connectConnectorsToRealPoints(aadp);
+							aadp.structureChanged();
+							makePostLoading(aadp, beginIndex);
+						}
+					}
+}
+
+
+
+
+
+
+	    
+	    
+
+
         } catch (
                 NumberFormatException nfe)
 
@@ -6465,10 +6574,10 @@ public class GTURTLEModeling {
             ((AvatarCDPanel) tdp).setConnectorsToFront();
         }
 
-        /*if (tdp instanceof SysCAMSComponentTaskDiagramPanel) {
+        if (tdp instanceof SysCAMSComponentTaskDiagramPanel) {
             //TraceManager.addDev("Connectors...");
             ((SysCAMSComponentTaskDiagramPanel) tdp).setConnectorsToFront();
-        }*/
+        }//DG 1.4.2019 commented in
 
         if (tdp instanceof ELNDiagramPanel) {
             // TraceManager.addDev("Connectors...");
@@ -6702,6 +6811,19 @@ public class GTURTLEModeling {
         loadDiagram(elt, tdp);
     }
 
+/*    public void loadSysCAMSDiagram(Element elt, int indexDesign) throws MalformedModelingException, SAXException {
+        String name;
+        TDiagramPanel tdp;
+
+        // class diagram name
+        name = elt.getAttribute("name");
+        mgui.setSysCAMSComponentTaskDiagramName(indexDesign, name);
+        tdp = mgui.getMainTDiagramPanel(indexDesign);
+        tdp.setName(name);
+
+        loadDiagram(elt, tdp);
+	}*/ 
+    
     public void loadSysCAMSDiagram(Element elt, int indexDesign, int indexTab) throws MalformedModelingException, SAXException {
         String name;
 
@@ -6731,21 +6853,7 @@ public class GTURTLEModeling {
         }
         tdp.removeAll();
         loadDiagram(elt, tdp);
-    }
-
-
-    public void loadSysCAMSDiagram(Element elt, int indexDesign) throws MalformedModelingException, SAXException {
-        String name;
-        TDiagramPanel tdp;
-
-        // class diagram name
-        name = elt.getAttribute("name");
-        mgui.setSysCAMSComponentTaskDiagramName(indexDesign, name);
-        tdp = mgui.getMainTDiagramPanel(indexDesign);
-        tdp.setName(name);
-
-        loadDiagram(elt, tdp);
-    }
+    }    
 
     public void loadTMLTaskDiagram(Element elt, int indexDesign) throws MalformedModelingException, SAXException {
 

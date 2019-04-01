@@ -217,9 +217,7 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent {
             
             drawLastSegment(g, p4.getX(), p4.getY(), p2.getX(), p2.getY());
         } else {
-        	if (p1!=null && p2!=null){
-	            drawLastSegment(g, p1.getX(), p1.getY(), p2.getX(), p2.getY());
-	    	}
+            drawLastSegment(g, p1.getX(), p1.getY(), p2.getX(), p2.getY());
         }
     }
 
@@ -605,7 +603,7 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent {
             }
 
         } else {
-            if (p2 != null && p1!=null) {
+            if (p2 != null) {
                 if ((int)(Line2D.ptSegDistSq(p1.getX(), p1.getY(), p2.getX(), p2.getY(), x1, y1)) < distanceSelected) {
                     return this;
                 }
@@ -727,9 +725,8 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent {
 
     }
 
-
     @Override
-    public StringBuffer saveInXML(boolean saveSubComponents, boolean saveAsComponentEvenIfNonNullFather) {
+    public StringBuffer saveInXML() {
         StringBuffer sb = new StringBuffer(XML_CONNECTOR_HEAD);
         sb.append(getType());
         sb.append(XML_ID);
@@ -756,11 +753,8 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent {
     }
 
     public String translateP1() {
-    	if (p1!=null){
-        	int id = p1.getId();
-	        return ("<P1  x=\"" + p1.getX() + "\" y=\"" + p1.getY() + "\" id=\"" + id + "\" />\n");
-	    }
-	    return "";
+        int id = p1.getId();
+        return ("<P1  x=\"" + p1.getX() + "\" y=\"" + p1.getY() + "\" id=\"" + id + "\" />\n");
     }
 
     public String translateP2() {

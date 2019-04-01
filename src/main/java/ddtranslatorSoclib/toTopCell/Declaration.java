@@ -83,8 +83,7 @@ public class Declaration
 	String declaration =
 	    "//----------------------------Instantiation-------------------------------"
 	    + CR2;
-
-
+ 
 	int nb_clusters = TopCellGenerator.avatardd.getAllCrossbar ().size ();
 
 	boolean trace_caba = true;
@@ -133,14 +132,14 @@ public class Declaration
 	    {
 		declaration =
 		    declaration +
-		    "caba::VciXicu<vci_param> vcixicu(\"vci_xicu\", maptab, IntTab(5), 1, xicu_n_irq, cpus.size(), cpus.size());"
+		    "caba::VciXicu<vci_param> vcixicu(\"vci_xicu\", maptab, IntTab(4), 1, xicu_n_irq, cpus.size(), cpus.size());"
 		    + CR;
 	    }
 	else
 	    {
 		declaration =
 		    declaration +
-		    "caba::VciXicu<vci_param> vcixicu(\"vci_xicu\", maptab, IntTab(0,5), 1, xicu_n_irq, cpus.size(), cpus.size());"
+		    "caba::VciXicu<vci_param> vcixicu(\"vci_xicu\", maptab, IntTab(0,4), 1, xicu_n_irq, cpus.size(), cpus.size());"
 		    + CR;
 	    }
 
@@ -148,14 +147,14 @@ public class Declaration
 	    {
 		declaration =
 		    declaration +
-		    "caba::VciRtTimer<vci_param> vcirttimer    (\"vcirttimer\", IntTab(4), maptab, 1, true);"
+		    "caba::VciRtTimer<vci_param> vcirttimer    (\"vcirttimer\", IntTab(5), maptab, 1, true);"
 		    + CR2;
 	    }
 	else
 	    {
 		declaration =
 		    declaration +
-		    "caba::VciRtTimer<vci_param> vcirttimer    (\"vcirttimer\", IntTab(0,4), maptab, 1, true);"
+		    "caba::VciRtTimer<vci_param> vcirttimer    (\"vcirttimer\", IntTab(0,5), maptab, 1, true);"
 		    + CR2;
 	    }
 
@@ -278,7 +277,7 @@ public class Declaration
 	     
 		int target_no = (10+ nb_ram + nb_tty);
 		int init_no = TopCellGenerator.avatardd.getNb_init ();
-		for (AvatarCoproMWMR copro:TopCellGenerator.avatardd.
+			for (AvatarCoproMWMR copro:TopCellGenerator.avatardd.
 			 getAllCoproMWMR ())
 		    {
 			nb_clusters = TopCellGenerator.avatardd.getAllCrossbar ().size ();
@@ -347,7 +346,7 @@ public class Declaration
 			    }
 			init_no++;
 			target_no++;
-		    }
+			}
 	    }
 	else
 	    {
@@ -672,8 +671,9 @@ public class Declaration
                 "(\"" + amsCluster.getAmsClusterName () + amsCluster.getNo_amsCluster () + 
                 "\");" + CR2;
             }
-        }	
-
+        }
+	//	System.out.println("##########Declaration###########");
+	//	System.out.println(declaration);
 	return declaration;
     }
 

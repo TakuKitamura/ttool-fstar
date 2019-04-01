@@ -62,9 +62,11 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 	private double period;
 	private String time;
 	private String processCode;
+    private String constructorCode;
 	private DefaultListModel<String> listStruct;
 	private String nameTemplate;
 	private String typeTemplate;
+    private String valueTemplate;
 	private DefaultListModel<String> listTypedef;
 
 	private int maxFontSize = 14;
@@ -109,9 +111,11 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 		setPeriod(-1);
 		setTime("");
 		setProcessCode("void processing() {\n\n}");
+        setConstructorCode("");
 		setListStruct(new DefaultListModel<String>());
 		setNameTemplate("");
 		setTypeTemplate("");
+        setValueTemplate("");
 		setListTypedef(new DefaultListModel<String>());
 
 		myImageIcon = IconManager.imgic1202;
@@ -209,7 +213,8 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 					getValue());
 			if ((s != null) && (s.length() > 0)) {
 
-				if (!TAttribute.isAValidId(s, false, false, false)) {
+			    //if (!TAttribute.isAValidId(s, false, false)) {
+			    if (!TAttribute.isAValidId(s, false, false, false)) {
 					JOptionPane.showMessageDialog(frame,
 							"Could not change the name of the component: the new name is not a valid name",
 							"Error",
@@ -316,9 +321,11 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 		sb.append("<Attribute period=\"" + getPeriod());
 		sb.append("\" time=\"" + getTime());
 		sb.append("\" processCode=\"" + encode(getProcessCode()));
+        sb.append("\" constructorCode=\"" + encode(getConstructorCode()));
 		sb.append("\" listStruct=\"" + splitParameters(getListStruct()));
 		sb.append("\" nameTemplate=\"" + getNameTemplate());
 		sb.append("\" typeTemplate=\"" + getTypeTemplate());
+        sb.append("\" valueTemplate=\"" + getValueTemplate());
 		sb.append("\" listTypedef=\"" + splitParameters(getListTypedef()));
 		sb.append("\" />\n");
 		sb.append("</extraparam>\n");
@@ -448,7 +455,7 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 			Element elt;
 
 			double period;
-			String time, processCode, listStruct, nameTemplate, typeTemplate, listTypedef;
+			String time, processCode, constructorCode, listStruct, nameTemplate, typeTemplate, valueTemplate, listTypedef;
 
 			for(int i=0; i<nl.getLength(); i++) {
 				n1 = nl.item(i);
@@ -462,14 +469,18 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 								period = Double.valueOf(elt.getAttribute("period")).doubleValue();
 								time = elt.getAttribute("time");
 								processCode = elt.getAttribute("processCode");
+                                constructorCode = elt.getAttribute("constructorCode");
 								listStruct = elt.getAttribute("listStruct");
 								nameTemplate = elt.getAttribute("nameTemplate");
 								typeTemplate = elt.getAttribute("typeTemplate");
+                                valueTemplate = elt.getAttribute("valueTemplate");
 								listTypedef = elt.getAttribute("listTypedef");
 								setPeriod(period);
 								setTime(time);
 								processCode = decode(processCode).toString();
 								setProcessCode(processCode);
+                                constructorCode = decode(constructorCode).toString();
+                                setConstructorCode(constructorCode);
 								String[] splita = listStruct.split("\\|");
 								DefaultListModel<String> lista = new DefaultListModel<String>();
 								for (String s : splita) {
@@ -480,6 +491,7 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 								setListStruct(lista);
 								setNameTemplate(nameTemplate);
 								setTypeTemplate(typeTemplate);
+                                setValueTemplate(valueTemplate);
 								String[] splitb = listTypedef.split("\\|");
 								DefaultListModel<String> listb = new DefaultListModel<String>();
 								for (String s : splitb) {
@@ -591,6 +603,14 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 	public void setProcessCode(String _processCode) {
 		processCode = _processCode;
 	}
+
+    public String getConstructorCode() {
+		return constructorCode;
+	}
+    
+    public void setConstructorCode(String _constructorCode) {
+		constructorCode = _constructorCode;
+	}
 	
 	public DefaultListModel<String> getListStruct() {
 		return listStruct;
@@ -607,13 +627,21 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 	public void setNameTemplate(String _nameTemplate) {
 		nameTemplate = _nameTemplate;
 	}
-
+    
 	public String getTypeTemplate() {
 		return typeTemplate;
 	}
 
 	public void setTypeTemplate(String _typeTemplate) {
 		typeTemplate = _typeTemplate;
+	}
+    
+    public String getValueTemplate() {
+        return valueTemplate;
+    }
+    
+    public void setValueTemplate(String _valueTemplate) {
+		valueTemplate = _valueTemplate;
 	}
 
 	public DefaultListModel<String> getListTypedef() {

@@ -67,7 +67,7 @@ public class MappingTable {
     public static AvatarddSpecification avatardd;
     
     public static String getMappingTable(AvatarddSpecification dd) {
-  
+   
 	int nb_clusters=TopCellGenerator.avatardd.getAllCrossbar().size();
 	int nb_rams=TopCellGenerator.avatardd.getAllRAM().size();
 	int nb_ttys=TopCellGenerator.avatardd.getAllTTY().size();
@@ -94,8 +94,8 @@ public class MappingTable {
 
 	      Other targets :
 	      the simhelper segment (target 3)
-	      the timer segment (target 4)
-	      the icu segment (target 5)
+	      the icu segment (target 4)
+	      the timer segment (target 5)
 	      the dma segment (target 6)
 	      the fdt segment (target 7)
 	      
@@ -113,8 +113,8 @@ public class MappingTable {
 	    mapping += "maptab.add(Segment(\"data\", 0x7f000000, 0x01000000, IntTab(2), false)); " + CR2;
 
 	    mapping = mapping + "maptab.add(Segment(\"simhelper\", 0xd3200000, 0x00000100, IntTab(3), false));" + CR;	    
-	    mapping = mapping + "maptab.add(Segment(\"vci_rttimer\", 0xd6200000, 0x00000100, IntTab(4), false));" + CR2;
-	    mapping = mapping + " maptab.add(Segment(\"vci_xicu\", 0xd2200000, 0x00001000, IntTab(5), false));" + CR;
+	    mapping = mapping + "maptab.add(Segment(\"vci_rttimer\", 0xd6200000, 0x00000100, IntTab(5), false));" + CR2;
+	    mapping = mapping + " maptab.add(Segment(\"vci_xicu\", 0xd2200000, 0x00001000, IntTab(4), false));" + CR;
 	    // mapping = mapping + "maptab.add(Segment(\"vci_dma\", 0xf2000000, 0x00001000, IntTab(6), false));" + CR2;
 	    mapping = mapping + "maptab.add(Segment(\"vci_dma\", 0xf0200000, 0x00001000, IntTab(6), false));" + CR2;
 	    mapping = mapping + "maptab.add(Segment(\"vci_fdt_rom\", 0xe0200000, 0x00001000, IntTab(7), false));" + CR2;
@@ -184,7 +184,6 @@ public class MappingTable {
 		tty_count++;
 	    }
 
-        //AMS Cluster: TODO: Need to adapt this to new version and improve address calculation.
         int amsCluster_count = 0;
         for (AvatarAmsCluster amsCluster:TopCellGenerator.avatardd.getAllAmsCluster ()) {
             amsCluster.setNo_target(10+nb_rams+amsCluster_count + nb_ttys);
@@ -264,9 +263,9 @@ public class MappingTable {
 	    int SEG_RAM_BASE   =        268435456;    
 	    int    cluster = 0;     	 
 
-	    mapping += "maptab.add(Segment(\"vci_rttimer\", 0x"+ Integer.toHexString(SEG_TIM_BASE)+", 0x"+ Integer.toHexString(SEG_TIM_SIZE)+", IntTab(0,4), true));" + CR;
+	    mapping += "maptab.add(Segment(\"vci_rttimer\", 0x"+ Integer.toHexString(SEG_TIM_BASE)+", 0x"+ Integer.toHexString(SEG_TIM_SIZE)+", IntTab(0,5), true));" + CR;
       
-	    mapping += "maptab.add(Segment(\"vci_xicu\",0x"+ Integer.toHexString(SEG_ICU_BASE)+", 0x"+ Integer.toHexString(SEG_ICU_SIZE)+", IntTab(0,5), false));" + CR;  
+	    mapping += "maptab.add(Segment(\"vci_xicu\",0x"+ Integer.toHexString(SEG_ICU_BASE)+", 0x"+ Integer.toHexString(SEG_ICU_SIZE)+", IntTab(0,4), false));" + CR;  
 	    mapping += "maptab.add(Segment(\"dma\", 0x"+ Integer.toHexString(SEG_DMA_BASE)+", 0x"+ Integer.toHexString(SEG_DMA_SIZE)+", IntTab(0,6), false));" + CR; 
 
 	    int cacheability_bit= 2097152; //address 0x00200000 
@@ -299,7 +298,7 @@ public class MappingTable {
 		mapping += "maptab.add(Segment(\"vci_multi_tty"+tty.getIndex()+"\" , 0x"+Integer.toHexString(SEG_TTY_BASE +  cluster_no* CLUSTER_SIZE+(16*tty_no))+", 0x00000010, IntTab("+cluster_no+","+tty_no+"), false));" + CR; 	                tty_no++;
 	    }	  
 	}
-    
+	
 	return mapping;   
     }
 }

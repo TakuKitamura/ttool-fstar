@@ -42,6 +42,8 @@ package ui;
 import avatartranslator.AvatarSpecification;
 import common.ConfigurationTTool;
 import common.SpecConfigTTool;
+import ddtranslatorSoclib.AvatarddSpecification;
+import ddtranslatorSoclib.toSoclib.TasksAndMainGenerator;
 import graph.AUTGraph;
 import graph.RG;
 import help.HelpEntry;
@@ -96,6 +98,7 @@ import ui.ucd.UseCaseDiagramPanel;
 import ui.util.DefaultText;
 import ui.util.IconManager;
 import ui.window.*;
+import ui.syscams.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -3952,7 +3955,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                 }
             }
         } else if (tp instanceof SysCAMSComponentDesignPanel) {
-            SysCAMSComponentDesignPanel syscamscdp = (SysCAMSComponentDesignPanel) tp;
+	    /* SysCAMSComponentDesignPanel syscamscdp = (SysCAMSComponentDesignPanel) tp;
             JDialogSelectSysCAMSComponent.validated = syscamscdp.validated;
             JDialogSelectSysCAMSComponent.ignored = syscamscdp.ignored;
             Vector<TGComponent> syscamsComponentsToValidate = new Vector<TGComponent>();
@@ -3988,9 +3991,9 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                                 JOptionPane.INFORMATION_MESSAGE);
                     }
                 }
-            }
+		}*/
         } else if (tp instanceof ELNDesignPanel) {
-            ELNDesignPanel elndp = (ELNDesignPanel) tp;
+	    /*  ELNDesignPanel elndp = (ELNDesignPanel) tp;
             JDialogSelectELNComponent.validated = elndp.validated;
             JDialogSelectELNComponent.ignored = elndp.ignored;
             Vector<TGComponent> ELNComponentsToValidate = new Vector<TGComponent>();
@@ -4026,7 +4029,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                                 JOptionPane.INFORMATION_MESSAGE);
                     }
                 }
-            }
+		}*/
         } else if (tp instanceof TMLArchiPanel) {
             tmlap = (TMLArchiPanel) tp;
             JDialogSelectTMLNodes.validated = tmlap.validated;
@@ -9430,8 +9433,10 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                     menu.add(newTMLCP);
                     menu.add(newTMLArchi);
                     menu.addSeparator();
-                    menu.add(newSysCAMS);
-                    menu.add(newELN);
+		     if (experimentalOn) {
+			 menu.add(newSysCAMS);
+			 menu.add(newELN);
+		     }
                     menu.addSeparator();
                 }
             }

@@ -45,55 +45,74 @@
             v2.0 Daniela GENIUS, Julien HENON 2015 */
 
 package ddtranslatorSoclib.toTopCell;
-import ddtranslatorSoclib.AvatarCoproMWMR;//DG 30.04.2018
+import ddtranslatorSoclib.AvatarCoproMWMR;	//DG 30.04.2018
 
-public class Simulation {
-	
-    private  static String simulation;
-	
+public class Simulation
+{
+
+    private static String simulation;
+
     private final static String CR = "\n";
-	private final static String CR2 = "\n\n";
-    
-    public Simulation(){
+    private final static String CR2 = "\n\n";
+
+    public Simulation ()
+    {
     }
 
-    public static String getSimulation(){
- int network_io=0;
- simulation=CR;
- for (AvatarCoproMWMR copro : TopCellGenerator.avatardd.getAllCoproMWMR()){
-		//a coprocessor with its FIFO interface built from HWA 
-		/*	netlist = netlist +"hwa"+i+".p_clk(signal_clk);" + CR;
-		netlist = netlist +"hwa"+i+".p_resetn(signal_resetn);" + CR;	      	
-                netlist = netlist +"hwa"+i+".p_from_ctrl["+i+"](signal_fifo_"+i+"_from_ctrl);" + CR;
-		netlist = netlist +"hwa"+i+".p_to_ctrl["+i+"](signal_fifo_"+i+"_to_ctrl);" + CR2;*/
+    public static String getSimulation ()
+    {
+	int network_io = 0;
+	simulation = CR;
+      for (AvatarCoproMWMR copro:TopCellGenerator.avatardd.
+	     getAllCoproMWMR ())
+	  {
+	      //a coprocessor with its FIFO interface built from HWA 
+	      /*      netlist = netlist +"hwa"+i+".p_clk(signal_clk);" + CR;
+	         netlist = netlist +"hwa"+i+".p_resetn(signal_resetn);" + CR;         
+	         netlist = netlist +"hwa"+i+".p_from_ctrl["+i+"](signal_fifo_"+i+"_from_ctrl);" + CR;
+	         netlist = netlist +"hwa"+i+".p_to_ctrl["+i+"](signal_fifo_"+i+"_to_ctrl);" + CR2; */
 
 
-		//IE and OE are special cases as they have VCI an fifo initiator interface!!!
-		// In that case, another main (for Network_IO) is substituted
-  
-     
-     if((copro.getCoprocType()==0)||(copro.getCoprocType()==1)){
-	 network_io=1;
-     }
- }
-	
- if((network_io==0)){
-		 simulation  = CR2+ CR2+ 
-		     "/***************************************************************************" +	CR +
-		     "----------------------------simulation-------------------------" + CR +
-		     "***************************************************************************/"+CR2 ;
-		 simulation =simulation+"int sc_main (int argc, char *argv[])" + CR + "{" + CR;
-		 simulation = simulation +"       try {" + CR +"         return _main(argc, argv);" + CR + "    }" + CR2;
-		 simulation =simulation +"       catch (std::exception &e) {" + CR + "            std::cout << e.what() << std::endl;" + CR + "            throw;"+ CR+"    }"; 
-		simulation =simulation+" catch (...) {" + CR;
-		simulation =simulation+"std::cout << \"Unknown exception occured\" << std::endl;" + CR;
-		simulation =simulation+"throw;" + CR;
-		simulation =simulation+"}" + CR;
-		simulation =  simulation+ CR +"       return 1;"+ CR + "}"  ;		 
-		//return simulation;
-	}
- //  System.out.println("###############simulation###########");
- //System.out.println(simulation);
- return simulation;
+	      //IE and OE are special cases as they have VCI an fifo initiator interface!!!
+	      // In that case, another main (for Network_IO) is substituted
+
+
+	      if ((copro.getCoprocType () == 0)
+		  || (copro.getCoprocType () == 1))
+		{
+		    network_io = 1;
+		}
+	  }
+
+	if ((network_io == 0))
+	  {
+	      simulation = CR2 + CR2 +
+		  "/***************************************************************************"
+		  + CR +
+		  "----------------------------simulation-------------------------"
+		  + CR +
+		  "***************************************************************************/"
+		  + CR2;
+	      simulation =
+		  simulation + "int sc_main (int argc, char *argv[])" + CR +
+		  "{" + CR;
+	      simulation =
+		  simulation + "       try {" + CR +
+		  "         return _main(argc, argv);" + CR + "    }" + CR2;
+	      simulation =
+		  simulation + "       catch (std::exception &e) {" + CR +
+		  "            std::cout << e.what() << std::endl;" + CR +
+		  "            throw;" + CR + "    }";
+	      simulation = simulation + " catch (...) {" + CR;
+	      simulation =
+		  simulation +
+		  "std::cout << \"Unknown exception occured\" << std::endl;" +
+		  CR;
+	      simulation = simulation + "throw;" + CR;
+	      simulation = simulation + "}" + CR;
+	      simulation = simulation + CR + "       return 1;" + CR + "}";
+
+	  }
+	return simulation;
     }
 }

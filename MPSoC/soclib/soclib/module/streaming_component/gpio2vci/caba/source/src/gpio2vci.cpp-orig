@@ -35,11 +35,14 @@ tmpl(void)::transition() {
         case TARGET_IDLE:
             if( p_vci.cmdval.read() ) {
                 r_buf_eop = p_vci.eop.read();
-                if ( p_vci.cmd.read() == vci_param::CMD_WRITE ) {
+                if ( p_vci.cmd.read() == vci_param::CMD_WRITE ) { //CMD_WRITE ) {
                     r_wdata_ams = p_vci.wdata.read();
+                    printf("IDLE CMD_WRITE: %d\n", (int)p_vci.wdata.read());
                     r_fsm_state = TARGET_WRITE;
                 }
                 else {  //VCI_CMD_READ
+                    cout << "@" << sc_time_stamp() << ": ";
+                    printf("Gpio2Vci_IDLE p_rdata_ams=%d\n",(int)p_rdata_ams.read());
                     r_rdata_ams = p_rdata_ams.read();
                     r_fsm_state = TARGET_READ;
                 }
@@ -49,6 +52,7 @@ tmpl(void)::transition() {
         case TARGET_WRITE:
         case TARGET_READ:
             if( p_vci.rspack.read() ) {
+                printf("READ-WRITE rspack \n");
                 r_fsm_state = TARGET_IDLE;
             }
             break;
