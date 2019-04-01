@@ -58,7 +58,6 @@ public class SysCAMSTPortTDF extends SysCAMSTComponent {
 	private int delay;
 	private int origin;
 	private String TDFType;
-    private boolean recompute;
 	
 	private SysCAMSTBlockTDF blockTDF;
 	private ELNTCluster cluster;
@@ -72,7 +71,6 @@ public class SysCAMSTPortTDF extends SysCAMSTComponent {
 		delay = _delay;
 		origin = _origin;
 		TDFType = _TDFType;
-        recompute = false;
 		blockTDF = _blockTDF;
 	}
 	
@@ -129,14 +127,6 @@ public class SysCAMSTPortTDF extends SysCAMSTComponent {
     public void setDelay(int _delay) {
 		delay = _delay;
 	}
-    
-    public boolean getRecompute() {
-        return recompute;
-    }
-    
-    public void setRecompute(boolean _recompute) {
-        recompute = _recompute;
-    }
 
 	public int getOrigin() {
 		return origin;

@@ -127,12 +127,14 @@ public class PrimitiveCode {
 					if (i == 0) {
 						corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t: " + identifier + "(" + value + ")" + CR;
 					} 
-					if ((i > 0)) {
+					if ((i > 0) && (i < tdf.getListStruct().getSize()-1)) {
 						corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t, " + identifier + "(" + value + ")" + CR;
 					} 
-                    if (i == tdf.getListStruct().getSize()-1) {
-                        corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t{}" + CR;
-                    }
+					if (i == tdf.getListStruct().getSize()-1 && i != 0) {
+						corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t, " + identifier + "(" + value + ")" + CR + "\t\t{}" + CR;
+					} else {
+						corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t{}" + CR;
+					}
 				}
 				corpsPrimitiveTDF = corpsPrimitiveTDF + "\t};" + CR2;
 			}
@@ -216,9 +218,8 @@ public class PrimitiveCode {
 						}
 					}
 				}
+				corpsPrimitiveTDF = corpsPrimitiveTDF + "\t{}" + CR2 + "protected:" + CR;
 			}
-            String ctorcode = tdf.getConstructorCode();
-			corpsPrimitiveTDF = corpsPrimitiveTDF + "\t{\n"+ctorcode+"\n\t}" + CR2 + "protected:" + CR;
 
 			if (tdf.getPeriod() != -1) {
 				corpsPrimitiveTDF = corpsPrimitiveTDF + "\tvoid set_attributes() {" + CR + "\t\t" + "set_timestep(" + tdf.getPeriod() + ", sc_core::SC_" + tdf.getTime().toUpperCase() + ");" + CR;
@@ -388,7 +389,7 @@ public class PrimitiveCode {
 				corpsPrimitiveDE = corpsPrimitiveDE + "template<" + de.getTypeTemplate() + " " + de.getNameTemplate() + ">" + CR;
 			}
 			//corpsPrimitive = "SCA_TDF_MODULE(" + de.getName() + ") {" + CR2;
-			corpsPrimitiveDE = corpsPrimitiveDE + "class " + de.getName() + " : public sc_core::sc_module {" + CR2 + "public:" + CR;
+			corpsPrimitiveDE = corpsPrimitiveDE + "class " + de.getName() + " : public sca_core::sca_module {" + CR2 + "public:" + CR;
 
 			if (!de.getListTypedef().isEmpty()) {
 				for (int i = 0; i < de.getListTypedef().getSize(); i++) {
@@ -437,12 +438,14 @@ public class PrimitiveCode {
 					if (i == 0) {
 						corpsPrimitiveDE = corpsPrimitiveDE + "\t\t: " + identifier + "(" + value + ")" + CR;
 					} 
-					if ((i > 0)) {
+					if ((i > 0) && (i < de.getListStruct().getSize()-1)) {
 						corpsPrimitiveDE = corpsPrimitiveDE + "\t\t, " + identifier + "(" + value + ")" + CR;
 					} 
-                    if (i == de.getListStruct().getSize()-1) {
-                        corpsPrimitiveDE = corpsPrimitiveDE + "\t\t{}" + CR;
-                    }
+					if (i == de.getListStruct().getSize()-1 && i != 0) {
+						corpsPrimitiveDE = corpsPrimitiveDE + "\t\t, " + identifier + "(" + value + ")" + CR + "\t\t{}" + CR;
+					} else {
+						corpsPrimitiveDE = corpsPrimitiveDE + "\t\t{}" + CR;
+					}
 				}
 				corpsPrimitiveDE = corpsPrimitiveDE + "\t};" + CR2;
 			}
@@ -450,9 +453,9 @@ public class PrimitiveCode {
 			if (!deports.isEmpty()) {
 				for (SysCAMSTPortDE t : deports) {
 					if (t.getOrigin() == 0) {
-						corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_in< " + t.getDEType() + " > " + t.getName() + ";" + CR;
+						corpsPrimitiveDE = corpsPrimitiveDE + "\tsca_core::sca_in<" + t.getDEType() + "> " + t.getName() + ";" + CR;
 					} else if (t.getOrigin() == 1) {
-						corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_out< " + t.getDEType() + " > " + t.getName() + ";" + CR;
+						corpsPrimitiveDE = corpsPrimitiveDE + "\tsca_core::sca_out<" + t.getDEType() + "> " + t.getName() + ";" + CR;
 					}
 				}
 			}
@@ -515,14 +518,12 @@ public class PrimitiveCode {
 					if (method == false) {
 						corpsPrimitiveDE = corpsPrimitiveDE + "\t{" + CR;
 					} 
-					corpsPrimitiveDE = corpsPrimitiveDE + "\t\tsensitive << " + t.getName();
+					corpsPrimitiveDE = corpsPrimitiveDE + "\t\tsensitive << " + t.getName() + ".";
 					if (t.getSensitiveMethod().equals("positive")) {
-						corpsPrimitiveDE = corpsPrimitiveDE + ".pos();" + CR;
+						corpsPrimitiveDE = corpsPrimitiveDE + "pos();" + CR;
 					} else if (t.getSensitiveMethod().equals("negative")) {
-						corpsPrimitiveDE = corpsPrimitiveDE + ".neg();" + CR;
-					} else if (t.getSensitiveMethod().equals("")) {
-                        corpsPrimitiveDE = corpsPrimitiveDE + ";" + CR;
-                    }
+						corpsPrimitiveDE = corpsPrimitiveDE + "neg();" + CR;						
+					}
 					sensitive = true;
 				}
 			}

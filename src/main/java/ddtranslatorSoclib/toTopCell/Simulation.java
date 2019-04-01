@@ -92,8 +92,7 @@ public class Simulation {
 		simulation =  simulation+ CR +"       return 1;"+ CR + "}"  ;		 
 		//return simulation;
 	}
- //  System.out.println("###############simulation###########");
- //System.out.println(simulation);
+
  return simulation;
     }
 }

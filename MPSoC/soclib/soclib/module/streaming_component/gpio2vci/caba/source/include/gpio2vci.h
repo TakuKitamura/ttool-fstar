@@ -6,9 +6,14 @@
 #include <signal.h>
 #include <stdlib.h>
 #include <systemc.h>
+//#include <communication/vci/caba/source/include/vci_target.h>
+//#include <lib/base_module/include/base_module.h>
+//#include <lib/mapping_table/include/mapping_table.h>
 #include "caba_base_module.h"
 #include "vci_target.h"
 #include "mapping_table.h"
+
+//#include "vci_param.h"
 
 namespace soclib {
 namespace caba {
@@ -33,15 +38,15 @@ protected:
 
 public:
     //Ports
-    sc_in<bool>                             p_clk;
-    sc_in<bool>                             p_resetn;
-    soclib::caba::VciTarget<vci_param>      p_vci;
-    sc_in< typename vci_param::data_t >     p_rdata_ams;
-    sc_out< typename vci_param::data_t >    p_wdata_ams;
+    sc_in<bool> p_clk;
+    sc_in<bool> p_resetn;
+    soclib::caba::VciTarget<vci_param>  p_vci;
+    sc_in< typename vci_param::data_t > p_rdata_ams;
+    sc_out< typename vci_param::data_t > p_wdata_ams;
     
     Gpio2Vci( sc_module_name                insname,
-        const soclib::common::IntTab        &index,
-        const soclib::common::MappingTable  &mt );
+        const soclib::common::IntTab       &index,
+        const soclib::common::MappingTable &mt );
 
     ~Gpio2Vci();
 

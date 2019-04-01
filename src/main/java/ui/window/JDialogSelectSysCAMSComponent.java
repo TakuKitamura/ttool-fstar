@@ -81,7 +81,7 @@ public class JDialogSelectSysCAMSComponent extends JDialogBase implements Action
     private JButton allIgnored;
     protected JCheckBox optimize;
 
-    /** Creates new form  */
+    /* Creates new form  */
     public JDialogSelectSysCAMSComponent(Frame f, Vector<TGComponent> _back, List<TGComponent> componentList, String title) {
         super(f, title, true);
 

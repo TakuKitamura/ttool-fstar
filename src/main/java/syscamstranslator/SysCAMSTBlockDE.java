@@ -59,14 +59,13 @@ public class SysCAMSTBlockDE extends SysCAMSTComponent {
 	private DefaultListModel<String> listStruct;
 	private String nameTemplate;
 	private String typeTemplate;
-    private String valueTemplate;
 	private DefaultListModel<String> listTypedef;
 	
 	private SysCAMSTCluster cluster;
 	
 	private LinkedList<SysCAMSTPortDE> portDE;
 	
-	public SysCAMSTBlockDE(String _name, String _nameFn, String _code, DefaultListModel<String> _listStruct, String _nameTemplate, String _typeTemplate, String _valueTemplate, DefaultListModel<String> _listTypedef, SysCAMSTCluster _cluster) {
+	public SysCAMSTBlockDE(String _name, String _nameFn, String _code, DefaultListModel<String> _listStruct, String _nameTemplate, String _typeTemplate, DefaultListModel<String> _listTypedef, SysCAMSTCluster _cluster) {
 		name = _name;
 //		period = _period;
 //		time = _time;
@@ -75,7 +74,6 @@ public class SysCAMSTBlockDE extends SysCAMSTComponent {
 		listStruct = _listStruct;
 		nameTemplate = _nameTemplate;
 		typeTemplate = _typeTemplate;
-        valueTemplate = _valueTemplate;
 		listTypedef = _listTypedef;
 		cluster = _cluster;
 		portDE = new LinkedList<SysCAMSTPortDE>();
@@ -111,10 +109,6 @@ public class SysCAMSTBlockDE extends SysCAMSTComponent {
 
 	public String getTypeTemplate() {
 		return typeTemplate;
-	}
-    
-    public String getValueTemplate() {
-		return valueTemplate;
 	}
 
 	public DefaultListModel<String> getListTypedef() {

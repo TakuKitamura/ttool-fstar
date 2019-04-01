@@ -103,14 +103,10 @@ public class TopCellGenerator {
 		try {
 			// Save file .cpp
 			System.err.println(path + GENERATED_PATH1 + cluster.getClusterName() + ".cpp");
-			System.err.println(path + cluster.getClusterName() + ".cpp");//ajoute DG	
 			FileWriter fw = new FileWriter(path + GENERATED_PATH1 + "/" + cluster.getClusterName() + "_tb.cpp");
-			FileWriter fw2 = new FileWriter(path + "/" + cluster.getClusterName() + "_tb.cpp");//ajoute DG
 			top = generateTopCell(cluster, connectors);
 			fw.write(top);
 			fw.close();
-			fw2.write(top);	//ajoute DG
-			fw2.close();	//ajoute DG
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -126,16 +122,12 @@ public class TopCellGenerator {
 		for (SysCAMSTBlockTDF t : tdf) {
 			try {
 				System.err.println(path + GENERATED_PATH2 + t.getName() + ".h");
-				System.err.println(path + t.getName() + ".h");	//ajoute DG
 				FileWriter fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + ".h");
-				FileWriter fw2 = new FileWriter(path + "/" + t.getName() + ".h");//ajoute DG
 				headerTDF = Header.getPrimitiveHeaderTDF(t);
 				fw.write(headerTDF);
 				codeTDF = PrimitiveCode.getPrimitiveCodeTDF(t);
 				fw.write(codeTDF);
 				fw.close();
-				fw2.write(codeTDF);	//ajoute DG
-				fw2.close();	//ajoute DG
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
@@ -143,16 +135,12 @@ public class TopCellGenerator {
 		for (SysCAMSTBlockDE t : de) {
 			try {
 				System.err.println(path + GENERATED_PATH2 + t.getName() + ".h");
-				System.err.println(path + t.getName() + ".h");//ajoute DG
 				FileWriter fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + ".h");
-				FileWriter fw2 = new FileWriter(path + "/" + t.getName() + ".h");	//ajoute DG
 				headerDE = Header.getPrimitiveHeaderDE(t);
 				fw.write(headerDE);
 				codeDE = PrimitiveCode.getPrimitiveCodeDE(t);
 				fw.write(codeDE);
 				fw.close();
-				fw2.write(codeDE);	//ajoute DG
-				fw2.close();	//ajoute DG
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}

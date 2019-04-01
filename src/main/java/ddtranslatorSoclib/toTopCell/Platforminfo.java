@@ -92,8 +92,8 @@ public class Platforminfo
 	//DG 23.08. added virtual coprocessor
 	platforminfo += "Uses('caba:vci_mwmr_stats')," + CR
 	    + "Uses('caba:vci_logger')," + CR
-	    + "Uses('caba:vci_local_crossbar')," + CR;
-	    // + "Uses('caba:fifo_virtual_copro_wrapper')," + CR;
+	    + "Uses('caba:vci_local_crossbar')," + CR
+	    + "Uses('caba:fifo_virtual_copro_wrapper')," + CR;
 
 	int hwa=1; // at least one HWA present
 	

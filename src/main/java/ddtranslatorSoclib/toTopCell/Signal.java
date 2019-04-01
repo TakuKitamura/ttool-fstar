@@ -65,7 +65,7 @@ public class Signal {
     public static String getSignal(AvatarddSpecification dd) {
 	avatardd = dd;
 	int nb_clusters=TopCellGenerator.avatardd.getAllCrossbar().size();
-  
+	    
 	int i;
 	String signal = CR2 + "//-------------------------------signaux------------------------------------" + CR2;
 	if (nb_clusters==0){
@@ -182,9 +182,6 @@ public class Signal {
         signal += "sc_signal< vci_param::data_t > signal_from_ams"+amsCluster.getNo_amsCluster ()+
           "(\"signal_from_ams"+amsCluster.getNo_amsCluster ()+"\");" + CR2;
     }
-    
-    //		System.out.println("#########signal##########");
-    //	System.out.println(signal);
 	return signal;
     }
 }

@@ -215,9 +215,7 @@ if(isMipsArchitecture == 1){
 	  " // Avoid repeating these everywhere" + CR +
 	  "  std::vector<CpuEntry*> cpus;" + CR +
 	  "  common::Loader data_ldr;" + CR +
-	  "  data_ldr.memory_default(0x5a);" + CR;
-	  //	System.out.println("##########Code##########");
-	  //	System.out.println(creation);	  
+	  "  data_ldr.memory_default(0x5a);" + CR;		
       return creation;	        	   	
     }	
 }

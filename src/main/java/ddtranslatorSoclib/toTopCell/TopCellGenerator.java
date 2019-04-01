@@ -100,26 +100,24 @@ public class TopCellGenerator
 	}
 
      public static int getCrossbarIndex(AvatarComponent comp){
-	 int  cluster_index=-1;
-	 int nb_clusters = avatardd.getAllCrossbar ().size ();
+	int  cluster_index=-1;
+	for  (AvatarConnector connector : avatardd.getConnectors()){
 	
-	 for  (AvatarConnector connector : avatardd.getConnectors()){
-	
-	     AvatarConnectingPoint my_p1= connector.get_p1(); 
-	     AvatarConnectingPoint my_p2= connector.get_p2(); 
+		AvatarConnectingPoint my_p1= connector.get_p1(); 
+		AvatarConnectingPoint my_p2= connector.get_p2(); 
 				
-	     AvatarComponent comp1 = my_p1.getComponent();
-	     AvatarComponent comp2 = my_p2.getComponent(); 
+		AvatarComponent comp1 = my_p1.getComponent();
+		AvatarComponent comp2 = my_p2.getComponent(); 
 		//	if (comp2==comp){
 			if (comp1==comp){
 		//comp2 is a crossbar
-			    AvatarCrossbar comp3=  (AvatarCrossbar)comp2;
-			    cluster_index=comp3.getClusterIndex();
+		  AvatarCrossbar comp3=  (AvatarCrossbar)comp2;
+		     cluster_index=comp3.getClusterIndex();
 		     //System.out.println("$$$ Cluster Index "+cluster_index);
-			    return cluster_index;
-			}	
-	 }
-	return -1; //should not happen     
+		     	return cluster_index;
+		}	
+	}
+	return -1; //should not happen
      }
 
  public static int cpus_in_cluster(AvatarddSpecification dd,int cluster_no){
