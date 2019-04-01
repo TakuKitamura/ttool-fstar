@@ -74,6 +74,7 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 	private DefaultListModel<String> structListModel;
 	private boolean structBool = false;
 	private JTextField nameTemplateTextField;
+    private JTextField valueTemplateTextField;
 	private String listTypeTemplateString[];
 	private JComboBox<String> typeTemplateComboBoxString;
 	private JTextField nameTypedefTextField;
@@ -89,6 +90,7 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 
 	private JTextArea processCodeTextArea;
 	private String finalString;
+    private JTextArea constructorCodeTextArea;
 
 	private SysCAMSBlockTDF block;
 
@@ -190,9 +192,11 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 		JPanel attributesMainPanel = new JPanel();
 		JPanel parametersMainPanel = new JPanel();
 		JPanel processMainPanel = new JPanel();
+        JPanel contructorMainPanel = new JPanel();
 		tabbedPane.add("Attributes", attributesMainPanel);
 		tabbedPane.add("Parameters", parametersMainPanel);
 		tabbedPane.add("Process Code", processMainPanel);
+        tabbedPane.add("Contructor Code", contructorMainPanel);
 
 		mainPanel.add(tabbedPane, BorderLayout.NORTH); 
 
@@ -387,15 +391,35 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 				new Insets(5, 10, 5, 10), 0, 0);
 		templateGridBag.setConstraints(nameTemplateTextField, templateConstraint);
 		templatePanel.add(nameTemplateTextField);
+        
+        //CHANGES
+        JLabel egalTemplateLabel = new JLabel("=");
+		templateConstraint = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+				new Insets(5, 10, 5, 10), 0, 0);
+		templateGridBag.setConstraints(egalTemplateLabel, templateConstraint);
+		templatePanel.add(egalTemplateLabel);
+
+		JLabel valueTemplateLabel = new JLabel("value");
+		templateConstraint = new GridBagConstraints(2, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+				new Insets(5, 10, 5, 10), 0, 0);
+		templateGridBag.setConstraints(valueTemplateLabel, templateConstraint);
+		templatePanel.add(valueTemplateLabel);
+
+		valueTemplateTextField = new JTextField(block.getValueTemplate());
+		templateConstraint = new GridBagConstraints(2, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+				new Insets(5, 10, 5, 10), 0, 0);
+		templateGridBag.setConstraints(valueTemplateTextField, templateConstraint);
+		templatePanel.add(valueTemplateTextField);
+        //CHANGES
 
 		JLabel pointsTemplateLabel = new JLabel(":");
-		templateConstraint = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+		templateConstraint = new GridBagConstraints(3, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
 				new Insets(5, 10, 5, 10), 0, 0);
 		templateGridBag.setConstraints(pointsTemplateLabel, templateConstraint);
 		templatePanel.add(pointsTemplateLabel);
 
 		JLabel typeTemplateLabel = new JLabel("type");
-		templateConstraint = new GridBagConstraints(2, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+		templateConstraint = new GridBagConstraints(4, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
 				new Insets(5, 10, 5, 10), 0, 0);
 		templateGridBag.setConstraints(typeTemplateLabel, templateConstraint);
 		templatePanel.add(typeTemplateLabel);
@@ -407,7 +431,7 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 			typeTemplateComboBoxString.setSelectedIndex(0);
 		}
 		typeTemplateComboBoxString.addActionListener(this);
-		templateConstraint = new GridBagConstraints(2, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+		templateConstraint = new GridBagConstraints(4, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
 				new Insets(5, 10, 5, 10), 0, 0);
 		templateGridBag.setConstraints(typeTemplateComboBoxString, templateConstraint);
 		templatePanel.add(typeTemplateComboBoxString);
@@ -608,7 +632,39 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 
 		codeBox.add(codeBoxPanel);
 		processMainPanel.add(codeBox, BorderLayout.PAGE_START);
+        
+        // --- ContructorCode --- //
+        contructorMainPanel.setLayout(new BorderLayout());
 
+		Box codeBox2 = Box.createVerticalBox();
+		codeBox2.setBorder(BorderFactory.createTitledBorder("Contructor code of TDF block"));
+
+		JPanel codeBoxPanel2 = new JPanel(new BorderLayout());
+        
+        //StringBuffer stringbuf2 = encode(block.getConstructorCode());
+		//String beginString2 = stringbuf2.toString();
+		//finalString = beginString2.replaceAll("\t}", "}");
+        finalString = block.getConstructorCode();
+
+		constructorCodeTextArea = new JTextArea(finalString);
+		constructorCodeTextArea.setSize(100, 100);
+		constructorCodeTextArea.setTabSize(2);
+
+		constructorCodeTextArea.setFont(new Font("Arial", Font.PLAIN, 16));
+		constructorCodeTextArea.setLineWrap(true);
+		constructorCodeTextArea.setWrapStyleWord(true);
+
+		JScrollPane constructorScrollPane = new JScrollPane(constructorCodeTextArea);
+		constructorScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		constructorScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		constructorScrollPane.setPreferredSize(new Dimension(200, 300));
+		constructorScrollPane.setBorder(new EmptyBorder(15, 10, 15, 10));
+
+		codeBoxPanel2.add(constructorScrollPane, BorderLayout.SOUTH);
+
+		codeBox2.add(codeBoxPanel2);
+		contructorMainPanel.add(codeBox2, BorderLayout.PAGE_START);
+        
 		// --- Button --- //
 		JPanel downPanel = new JPanel(new FlowLayout());
 
@@ -954,9 +1010,11 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 			}
 
 			block.setProcessCode(processCodeTextArea.getText());
+            block.setConstructorCode(constructorCodeTextArea.getText());
 			block.setListStruct(structListModel);
 			block.setNameTemplate(nameTemplateTextField.getText());
 			block.setTypeTemplate((String) typeTemplateComboBoxString.getSelectedItem());
+            block.setValueTemplate(valueTemplateTextField.getText());
 			block.setListTypedef(typedefListModel);
 
 			this.dispose();

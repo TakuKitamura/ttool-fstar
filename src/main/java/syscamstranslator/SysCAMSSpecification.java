@@ -238,6 +238,14 @@ public class SysCAMSSpecification{
         }
         return cons;
     }
+    
+    public LinkedList<SysCAMSTConnector> getAllConnectors(){
+        LinkedList<SysCAMSTConnector> cons = new LinkedList<SysCAMSTConnector>();
+        for (SysCAMSTConnector con : connectors) {
+            cons.add(con);
+        }
+        return cons;
+    }
 
 	public int getNbBlockTDF(){
 		return (getAllBlockTDF()).size();
