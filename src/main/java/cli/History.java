@@ -97,9 +97,6 @@ public class History extends Command  {
             return "Invalid argument. Must provide an int";
         }
 
-
-
-
     }
 
     public void fillSubCommands() {
