@@ -542,10 +542,13 @@ void MultiCoreCPU::getNextSignalChange(bool iInit, SignalChangeData* oSigData){
   //new (oSigData) SignalChangeData(RUNNING, aCurrTrans->getStartTimeOperation(), this);
   //std::ostringstream outp;
   //oNoMoreTrans=false;
+  static unsigned int time = 0;
+  std::cout<<"getNextSignalChangemulticore!!!---------"<<std::endl;
   if (iInit){
     _posTrasactListVCD=_transactList.begin();
     _previousTransEndTime=0;
     _vcdOutputState=END_IDLE_CPU;
+   std::cout<<"init"<<std::endl;
     if (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTime()!=0){
       //outp << VCD_PREFIX << vcdValConvert(END_IDLE_CPU) << "cpu" << _ID;
       //oSigChange=outp.str();
@@ -559,11 +562,13 @@ void MultiCoreCPU::getNextSignalChange(bool iInit, SignalChangeData* oSigData){
     //oSigChange=outp.str();
     //oNoMoreTrans=true;
     //return _previousTransEndTime;
+    std::cout<<"end transact"<<std::endl;
     new (oSigData) SignalChangeData(END_IDLE_CPU, _previousTransEndTime, this);
   }else{
     TMLTransaction* aCurrTrans=*_posTrasactListVCD;
     switch (_vcdOutputState){
     case END_TASK_CPU:
+      std::cout<<"END_TASK_CPU"<<std::endl;
       do{
         _previousTransEndTime=(*_posTrasactListVCD)->getEndTime();
         _posTrasactListVCD++;
@@ -582,6 +587,7 @@ void MultiCoreCPU::getNextSignalChange(bool iInit, SignalChangeData* oSigData){
       //return _previousTransEndTime;
       break;
     case END_PENALTY_CPU:
+      std::cout<<"END_PENALTY_CPU"<<std::endl;
       //outp << VCD_PREFIX << vcdValConvert(END_TASK_CPU) << "cpu" << _ID;
       //oSigChange=outp.str();
       _vcdOutputState=END_TASK_CPU;
@@ -589,6 +595,7 @@ void MultiCoreCPU::getNextSignalChange(bool iInit, SignalChangeData* oSigData){
       new (oSigData) SignalChangeData(END_TASK_CPU, aCurrTrans->getStartTimeOperation(), this);
       break;
     case END_IDLE_CPU:
+      std::cout<<"END_IDLE_CPU"<<std::endl;
       if (aCurrTrans->getPenalties()==0){
         //outp << VCD_PREFIX << vcdValConvert(END_TASK_CPU) << "cpu" << _ID;
         _vcdOutputState=END_TASK_CPU;
@@ -603,6 +610,9 @@ void MultiCoreCPU::getNextSignalChange(bool iInit, SignalChangeData* oSigData){
       break;
     }
   }
+ 
+  if (*_posTrasactListVCD != 0)
+     std::cout<<(*_posTrasactListVCD)->toString()<<std::endl;
   //return 0;
 }
 

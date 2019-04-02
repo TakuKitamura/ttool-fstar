@@ -375,6 +375,7 @@ std::cout<<"schedule2HTML--------------------------------------*****************
 }
 
 void Simulator::schedule2VCD(std::string& iTraceFileName) const{
+  std::cout<<"schedule2VCD~~~~~~~~~~~~"<<std::endl;
   time_t aRawtime;
   struct tm * aTimeinfo;
   struct timeval aBegin,aEnd;
@@ -401,6 +402,7 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
     myfile << "$timescale\n5 ns\n$end\n\n$scope module Simulation $end\n";
     //std::cout << "Before 1st loop" << std::endl;
     //for (TraceableDeviceList::const_iterator i=_simComp->getVCDIterator(false); i!= _simComp->getVCDIterator(true); ++i){
+    int t=0;
     for (TraceableDeviceList::const_iterator i=_simComp->getVCDList().begin(); i!= _simComp->getVCDList().end(); ++i){
       //TraceableDevice* a=*i;
       //                        a->streamBenchmarks(std::cout);
@@ -408,31 +410,44 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
       //std::cout << "in 1st loop " << a << std::endl;
       //std::cout << "device: " << (*i)->toString() << std::endl;
       //myfile << "$var integer 3 " << (*i)->toShortString() << " " << (*i)->toString() << " $end\n";
-      myfile << "$var wire 1 " << (*i)->toShortString() << " " << (*i)->toString() << " $end\n";
-      //std::cout << "get next signal change" << std::endl;
-      //aTime = (*i)->getNextSignalChange(true, aSigString, aNoMoreTrans);
-      aTopElement = new SignalChangeData();
-      (*i)->getNextSignalChange(true, aTopElement);
-      aQueue.push(aTopElement);
-      //std::cout << "push" << std::endl;
-      //aQueue.push(new SignalChangeData(aSigString, aTime, (aNoMoreTrans)?0:(*i)));
+
+////////test////////
+      if ((*i)->toShortString().substr(0,3)=="cpu"){
+	for (unsigned int j = 0; j < (dynamic_cast<CPU*>(*i))->getAmoutOfCore();j++){
+	  myfile << "$var wire 1 " << (*i)->toShortString() << " " << (*i)->toString() << " $end\n";
+	 /* aTopElement = new SignalChangeData();
+	 (*i)->getNextSignalChange(true, aTopElement);
+	  aQueue.push(aTopElement);
+         */ ++t;
+	}
+      }
+      else {
+	myfile << "$var wire 1 " << (*i)->toShortString() << " " << (*i)->toString() << " $end\n";
+ 	aTopElement = new SignalChangeData();
+	(*i)->getNextSignalChange(true, aTopElement);
+	 aQueue.push(aTopElement);
+         ++t;
+       }
+      std::cout<<"cycle time is "<<t<<std::endl;
     }
+    std::cout<<"quit cycle!!!"<<std::endl;
+	  ////////end///////
     myfile << "$var integer 32 clk Clock $end\n";
     myfile << "$upscope $end\n$enddefinitions  $end\n\n";
     //std::cout << "Before 2nd loop" << std::endl;
     while (!aQueue.empty()){
       aTopElement=aQueue.top();
       while (aNextClockEvent < aTopElement->_time){
-        myfile << "#" << aNextClockEvent << "\nr" << aNextClockEvent << " clk\n";
-        aNextClockEvent+=CLOCK_INC;
+	myfile << "#" << aNextClockEvent << "\nr" << aNextClockEvent << " clk\n";
+	aNextClockEvent+=CLOCK_INC;
       }
       if (aCurrTime!=aTopElement->_time){
-        aCurrTime=aTopElement->_time;
-        myfile << "#" << aCurrTime << "\n";
+	aCurrTime=aTopElement->_time;
+	myfile << "#" << aCurrTime << "\n";
       }
       if (aNextClockEvent == aTopElement->_time){
-        myfile << "b" << vcdTimeConvert(aNextClockEvent) << " clk\n";
-        aNextClockEvent+=CLOCK_INC;
+	myfile << "b" << vcdTimeConvert(aNextClockEvent) << " clk\n";
+	aNextClockEvent+=CLOCK_INC;
       }
       //myfile << aTopElement->_sigChange << "\n";
       myfile << vcdValConvert(aTopElement->_sigChange) << aTopElement->_device->toShortString() << "\n";
@@ -440,9 +455,9 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
       TMLTime aTime = aTopElement->_time;
       aTopElement->_device->getNextSignalChange(false, aTopElement);
       if (aTopElement->_time == aTime)
-        delete aTopElement;
+	delete aTopElement;
       else
-        aQueue.push(aTopElement);
+	aQueue.push(aTopElement);
       //actDevice=aTopElement->_device;
       //if (actDevice!=0) aTime = actDevice->getNextSignalChange(false, aSigString, aNoMoreTrans);
       //delete aTopElement;
@@ -452,12 +467,17 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
     myfile << "#" << aCurrTime+1 << "\n";
     std::cout << "Simulated cycles: " << aCurrTime << std::endl;
     //for (TraceableDeviceList::const_iterator i=_simComp->getVCDIterator(false); i!= _simComp->getVCDIterator(true); ++i){
+///////test//////////
     for (TraceableDeviceList::const_iterator i=_simComp->getVCDList().begin(); i!= _simComp->getVCDList().end(); ++i){
+      if ((*i)->toShortString().substr(0,3)=="cpu"){
+	for (unsigned int j = 0; j < (dynamic_cast<CPU*>(*i))->getAmoutOfCore();j++){
+	    myfile << "0" << (*i)->toShortString() << "\n";
+	}
+      }	  
       //myfile << VCD_PREFIX << "100 " << (*i)->toShortString() << "\n";
-      myfile << "0" << (*i)->toShortString() << "\n";
+      else  myfile << "0" << (*i)->toShortString() << "\n";
       //std::cout << "Utilization of component " << (*i)->toString() << ": " << ((float)(*i)->getBusyCycles()) / ((float)aCurrTime) << std::endl;
     }
-
     myfile.close();
   }
   else
