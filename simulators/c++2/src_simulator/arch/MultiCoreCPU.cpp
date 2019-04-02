@@ -542,77 +542,87 @@ void MultiCoreCPU::getNextSignalChange(bool iInit, SignalChangeData* oSigData){
   //new (oSigData) SignalChangeData(RUNNING, aCurrTrans->getStartTimeOperation(), this);
   //std::ostringstream outp;
   //oNoMoreTrans=false;
-  static unsigned int time = 0;
   std::cout<<"getNextSignalChangemulticore!!!---------"<<std::endl;
-  if (iInit){
-    _posTrasactListVCD=_transactList.begin();
-    _previousTransEndTime=0;
-    _vcdOutputState=END_IDLE_CPU;
-   std::cout<<"init"<<std::endl;
-    if (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTime()!=0){
-      //outp << VCD_PREFIX << vcdValConvert(END_IDLE_CPU) << "cpu" << _ID;
-      //oSigChange=outp.str();
-      new (oSigData) SignalChangeData(END_IDLE_CPU, 0, this);
-      //return 0
-      return;
-    }
-  }
-  if (_posTrasactListVCD == _transactList.end()){
-    //outp << VCD_PREFIX << vcdValConvert(END_IDLE_CPU) << "cpu" << _ID;
-    //oSigChange=outp.str();
-    //oNoMoreTrans=true;
-    //return _previousTransEndTime;
-    std::cout<<"end transact"<<std::endl;
-    new (oSigData) SignalChangeData(END_IDLE_CPU, _previousTransEndTime, this);
-  }else{
-    TMLTransaction* aCurrTrans=*_posTrasactListVCD;
-    switch (_vcdOutputState){
-    case END_TASK_CPU:
-      std::cout<<"END_TASK_CPU"<<std::endl;
-      do{
-        _previousTransEndTime=(*_posTrasactListVCD)->getEndTime();
-        _posTrasactListVCD++;
-      }while (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTimeOperation()==_previousTransEndTime);
-      if (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTime()==_previousTransEndTime){
-        //outp << VCD_PREFIX << vcdValConvert(END_PENALTY_CPU) << "cpu" << _ID;
-        _vcdOutputState=END_PENALTY_CPU;
-        new (oSigData) SignalChangeData(END_PENALTY_CPU, _previousTransEndTime, this);
-      }else{
-        //outp << VCD_PREFIX << vcdValConvert(END_IDLE_CPU) << "cpu" << _ID;
-        _vcdOutputState=END_IDLE_CPU;
-        //if (_posTrasactListVCD == _transactList.end()) oNoMoreTrans=true;
-        new (oSigData) SignalChangeData(END_IDLE_CPU, _previousTransEndTime, this);
+  for( TransactionList::iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
+    std::cout<<"transaction core number is "<<  (*i)->getTransactCoreNumber()<<std::endl;
+    std::cout<<"cycle time is "<< this->_cycleTime<<std::endl;
+    if( (*i)->getTransactCoreNumber() == this->_cycleTime ){
+      std::cout<<"bingo!!"<<(*i)->toShortString()<<std::endl;
+      if (iInit){
+	_posTrasactListVCD= i;
+	_previousTransEndTime=0;
+	_vcdOutputState=END_IDLE_CPU;
+	std::cout<<"init"<<std::endl;
+	if (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTime()!=0){
+	  //outp << VCD_PREFIX << vcdValConvert(END_IDLE_CPU) << "cpu" << _ID;
+	  //oSigChange=outp.str();
+	  new (oSigData) SignalChangeData(END_IDLE_CPU, 0, this);
+	  //return 0
+	  return;
+	}
       }
-      //oSigChange=outp.str();
-      //return _previousTransEndTime;
-      break;
-    case END_PENALTY_CPU:
-      std::cout<<"END_PENALTY_CPU"<<std::endl;
-      //outp << VCD_PREFIX << vcdValConvert(END_TASK_CPU) << "cpu" << _ID;
-      //oSigChange=outp.str();
-      _vcdOutputState=END_TASK_CPU;
-      //return aCurrTrans->getStartTimeOperation();
-      new (oSigData) SignalChangeData(END_TASK_CPU, aCurrTrans->getStartTimeOperation(), this);
-      break;
-    case END_IDLE_CPU:
-      std::cout<<"END_IDLE_CPU"<<std::endl;
-      if (aCurrTrans->getPenalties()==0){
-        //outp << VCD_PREFIX << vcdValConvert(END_TASK_CPU) << "cpu" << _ID;
-        _vcdOutputState=END_TASK_CPU;
-        new (oSigData) SignalChangeData(END_TASK_CPU, aCurrTrans->getStartTime(), this);
+      if (_posTrasactListVCD == _transactList.end()){
+	//outp << VCD_PREFIX << vcdValConvert(END_IDLE_CPU) << "cpu" << _ID;
+	//oSigChange=outp.str();
+	//oNoMoreTrans=true;
+	//return _previousTransEndTime;
+	std::cout<<"end transact"<<std::endl;
+	new (oSigData) SignalChangeData(END_IDLE_CPU, _previousTransEndTime, this);
       }else{
-        //outp << VCD_PREFIX << vcdValConvert(END_PENALTY_CPU) << "cpu" << _ID;
-        _vcdOutputState=END_PENALTY_CPU;
-        new (oSigData) SignalChangeData(END_PENALTY_CPU, aCurrTrans->getStartTime(), this);
-      }
-      //oSigChange=outp.str();
-      //return aCurrTrans->getStartTime();
-      break;
+       _posTrasactListVCD = i;
+       TMLTransaction* aCurrTrans=*_posTrasactListVCD;
+       // if (aCurrTrans == (*i)){
+	switch (_vcdOutputState){
+	case END_TASK_CPU:
+	  std::cout<<"END_TASK_CPU"<<std::endl;
+	  do{
+	    _previousTransEndTime=(*_posTrasactListVCD)->getEndTime();
+	    _posTrasactListVCD++;
+	  }while (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTimeOperation()==_previousTransEndTime);
+	  if (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTime()==_previousTransEndTime){
+	    //outp << VCD_PREFIX << vcdValConvert(END_PENALTY_CPU) << "cpu" << _ID;
+	    _vcdOutputState=END_PENALTY_CPU;
+	    new (oSigData) SignalChangeData(END_PENALTY_CPU, _previousTransEndTime, this);
+	  }else{
+	    //outp << VCD_PREFIX << vcdValConvert(END_IDLE_CPU) << "cpu" << _ID;
+	    _vcdOutputState=END_IDLE_CPU;
+	    //if (_posTrasactListVCD == _transactList.end()) oNoMoreTrans=true;
+	    new (oSigData) SignalChangeData(END_IDLE_CPU, _previousTransEndTime, this);
+	  }
+	  //oSigChange=outp.str();
+	  //return _previousTransEndTime;
+          this->_cycleTime++;
+	  break;
+	case END_PENALTY_CPU:
+	  std::cout<<"END_PENALTY_CPU"<<std::endl;
+	  //outp << VCD_PREFIX << vcdValConvert(END_TASK_CPU) << "cpu" << _ID;
+	  //oSigChange=outp.str();
+	  _vcdOutputState=END_TASK_CPU;
+	  //return aCurrTrans->getStartTimeOperation();
+	  new (oSigData) SignalChangeData(END_TASK_CPU, aCurrTrans->getStartTimeOperation(), this);
+	  break;
+	case END_IDLE_CPU:
+	  std::cout<<"END_IDLE_CPU"<<std::endl;
+	  if (aCurrTrans->getPenalties()==0){
+	    //outp << VCD_PREFIX << vcdValConvert(END_TASK_CPU) << "cpu" << _ID;
+	    _vcdOutputState=END_TASK_CPU;
+	    new (oSigData) SignalChangeData(END_TASK_CPU, aCurrTrans->getStartTime(), this);
+	  }else{
+	    //outp << VCD_PREFIX << vcdValConvert(END_PENALTY_CPU) << "cpu" << _ID;
+	    _vcdOutputState=END_PENALTY_CPU;
+	    new (oSigData) SignalChangeData(END_PENALTY_CPU, aCurrTrans->getStartTime(), this);
+	  }
+	  //oSigChange=outp.str();
+	  //return aCurrTrans->getStartTime();
+	  break;
+	}
+       }
     }
+   
   }
  
-  if (*_posTrasactListVCD != 0)
-     std::cout<<(*_posTrasactListVCD)->toString()<<std::endl;
+  //if (*_posTrasactListVCD != 0)
+   // std::cout<<"pos trans is !!!!!"<<(*_posTrasactListVCD)->toString()<<std::endl;
   //return 0;
 }
 

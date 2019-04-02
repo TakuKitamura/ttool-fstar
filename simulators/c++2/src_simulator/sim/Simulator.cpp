@@ -402,7 +402,31 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
     myfile << "$timescale\n5 ns\n$end\n\n$scope module Simulation $end\n";
     //std::cout << "Before 1st loop" << std::endl;
     //for (TraceableDeviceList::const_iterator i=_simComp->getVCDIterator(false); i!= _simComp->getVCDIterator(true); ++i){
-    int t=0;
+  
+    //for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
+    for (TraceableDeviceList::const_iterator i=_simComp->getVCDList().begin(); i!= _simComp->getVCDList().end(); ++i){
+      if ((*i)->toShortString().substr(0,3) == "cpu"){
+	for(unsigned int j = 0; j < (dynamic_cast<CPU*>(*i))->getAmoutOfCore(); j++) {
+	  myfile << "$var wire 1 " << (*i)->toShortString() << " " << (*i)->toString() << " $end\n";
+	  aTopElement = new SignalChangeData();
+	  (*i)->getNextSignalChange(true, aTopElement);
+	  aQueue.push(aTopElement);
+	  (dynamic_cast<CPU*>(*i))->setCycleTime( (dynamic_cast<CPU*>(*i))->getCycleTime()+1);
+	}
+	if((dynamic_cast<CPU*>(*i))->getAmoutOfCore() == 1)
+	  (dynamic_cast<CPU*>(*i))->setCycleTime(0);
+      }    
+    }
+
+    for (TraceableDeviceList::const_iterator i=_simComp->getVCDList().begin(); i!= _simComp->getVCDList().end(); ++i){
+      if ((*i)->toShortString().substr(0,3) == "cpu"){
+	for(unsigned int j = 0; j < (dynamic_cast<CPU*>(*i))->getAmoutOfCore(); j++) {
+          (dynamic_cast<CPU*>(*i))->setCycleTime(0);
+        }
+      }
+    }
+      
+    std::cout<<"vcd name of cpu is finished !!!!!"<<std::endl;
     for (TraceableDeviceList::const_iterator i=_simComp->getVCDList().begin(); i!= _simComp->getVCDList().end(); ++i){
       //TraceableDevice* a=*i;
       //                        a->streamBenchmarks(std::cout);
@@ -410,33 +434,20 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
       //std::cout << "in 1st loop " << a << std::endl;
       //std::cout << "device: " << (*i)->toString() << std::endl;
       //myfile << "$var integer 3 " << (*i)->toShortString() << " " << (*i)->toString() << " $end\n";
-
-////////test////////
-      if ((*i)->toShortString().substr(0,3)=="cpu"){
-	for (unsigned int j = 0; j < (dynamic_cast<CPU*>(*i))->getAmoutOfCore();j++){
-	  myfile << "$var wire 1 " << (*i)->toShortString() << " " << (*i)->toString() << " $end\n";
-	 /* aTopElement = new SignalChangeData();
-	 (*i)->getNextSignalChange(true, aTopElement);
-	  aQueue.push(aTopElement);
-         */ ++t;
-	}
-      }
-      else {
+      if ((*i)->toShortString().substr(0,3)!="cpu"){
 	myfile << "$var wire 1 " << (*i)->toShortString() << " " << (*i)->toString() << " $end\n";
  	aTopElement = new SignalChangeData();
 	(*i)->getNextSignalChange(true, aTopElement);
-	 aQueue.push(aTopElement);
-         ++t;
-       }
-      std::cout<<"cycle time is "<<t<<std::endl;
+	aQueue.push(aTopElement);
+      }
     }
-    std::cout<<"quit cycle!!!"<<std::endl;
-	  ////////end///////
     myfile << "$var integer 32 clk Clock $end\n";
     myfile << "$upscope $end\n$enddefinitions  $end\n\n";
     //std::cout << "Before 2nd loop" << std::endl;
     while (!aQueue.empty()){
+      std::cout<<"this is queue"<<std::endl;
       aTopElement=aQueue.top();
+      std::cout<<"the member of queue is "<<aTopElement->_device->toShortString()<<std::endl;
       while (aNextClockEvent < aTopElement->_time){
 	myfile << "#" << aNextClockEvent << "\nr" << aNextClockEvent << " clk\n";
 	aNextClockEvent+=CLOCK_INC;
@@ -453,25 +464,42 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
       myfile << vcdValConvert(aTopElement->_sigChange) << aTopElement->_device->toShortString() << "\n";
       aQueue.pop();
       TMLTime aTime = aTopElement->_time;
+      std::cout<<"aTime is "<<aTime<<std::endl;
+      //std::cout<<"lets get next signal : )"<<std::endl;
+      //if (aTopElement->_device->toShortString().substr(0,3) == "cpu")
+       // std::cout<<"!!!!!"<<(dynamic_cast<CPU*>(aTopElement->_device))->getCycleTime()<<std::endl;
+        
       aTopElement->_device->getNextSignalChange(false, aTopElement);
-      if (aTopElement->_time == aTime)
+      if (aTopElement->_device->toShortString().substr(0,3) == "cpu"){
+         if (((dynamic_cast<CPU*>(aTopElement->_device))->getCycleTime()+1) >= (dynamic_cast<CPU*>(aTopElement->_device))->getAmoutOfCore())
+            (dynamic_cast<CPU*>(aTopElement->_device))->setCycleTime(0);
+         else
+            (dynamic_cast<CPU*>(aTopElement->_device))->setCycleTime( (dynamic_cast<CPU*>(aTopElement->_device))->getCycleTime()+1);
+      }    
+      std::cout<<"aTopElement time is : "<<aTopElement->_time<<std::endl;
+      if (aTopElement->_time == aTime){
 	delete aTopElement;
-      else
+        std::cout<<"delete"<<std::endl;
+      }
+      else{
 	aQueue.push(aTopElement);
+        std::cout<<"no delete"<<std::endl;
+      }
       //actDevice=aTopElement->_device;
       //if (actDevice!=0) aTime = actDevice->getNextSignalChange(false, aSigString, aNoMoreTrans);
       //delete aTopElement;
       //aQueue.pop();
       //if (actDevice!=0) aQueue.push(new SignalChangeData(aSigString, aTime, (aNoMoreTrans)?0:actDevice));
+      std::cout<<"hahahaha~~~~~~~~~~~~"<<std::endl;
     }
     myfile << "#" << aCurrTime+1 << "\n";
     std::cout << "Simulated cycles: " << aCurrTime << std::endl;
     //for (TraceableDeviceList::const_iterator i=_simComp->getVCDIterator(false); i!= _simComp->getVCDIterator(true); ++i){
-///////test//////////
+    ///////test//////////
     for (TraceableDeviceList::const_iterator i=_simComp->getVCDList().begin(); i!= _simComp->getVCDList().end(); ++i){
       if ((*i)->toShortString().substr(0,3)=="cpu"){
 	for (unsigned int j = 0; j < (dynamic_cast<CPU*>(*i))->getAmoutOfCore();j++){
-	    myfile << "0" << (*i)->toShortString() << "\n";
+	  myfile << "0" << (*i)->toShortString() << "\n";
 	}
       }	  
       //myfile << VCD_PREFIX << "100 " << (*i)->toShortString() << "\n";
