@@ -58,13 +58,13 @@ import java.util.LinkedList;
  * @author Irina Kit Yan LEE
 */
 
-public class TopCellGenerator {
+public class TopCellGeneratorRodrigo {
 	public static SysCAMSSpecification syscams;
 
 	private final static String GENERATED_PATH1 = "generated_CPP" + File.separator;
 	private final static String GENERATED_PATH2 = "generated_H" + File.separator;
 
-	public TopCellGenerator(SysCAMSSpecification sys) {
+	public TopCellGeneratorRodrigo(SysCAMSSpecification sys) {
 		syscams = sys;
 	}
 
@@ -72,38 +72,38 @@ public class TopCellGenerator {
 		if (c == null) {
 			System.out.println("***Warning: require at least one cluster***");
 		}
-		if (TopCellGenerator.syscams.getNbBlockTDF() == 0) {
+		if (TopCellGeneratorRodrigo.syscams.getNbBlockTDF() == 0) {
 			System.out.println("***Warning: require at least one TDF block***");
 		}
-		if (TopCellGenerator.syscams.getNbPortTDF() == 0) {
+		if (TopCellGeneratorRodrigo.syscams.getNbPortTDF() == 0) {
 			System.out.println("***Warning: require at least one TDF port***");
 		}
-		if (TopCellGenerator.syscams.getNbBlockDE() == 0) {
+		if (TopCellGeneratorRodrigo.syscams.getNbBlockDE() == 0) {
 			System.out.println("***Warning: require at least one DE block***");
 		}
-		if (TopCellGenerator.syscams.getNbPortDE() == 0) {
+		if (TopCellGeneratorRodrigo.syscams.getNbPortDE() == 0) {
 			System.out.println("***Warning: require at least one DE port***");
 		}
-		if (TopCellGenerator.syscams.getNbPortConverter() == 0) {
+		if (TopCellGeneratorRodrigo.syscams.getNbPortConverter() == 0) {
 			System.out.println("***Warning: require at least one converter port***");
 		}
-		if (TopCellGenerator.syscams.getNbConnectorCluster() == 0) {
+		if (TopCellGeneratorRodrigo.syscams.getNbConnectorCluster() == 0) {
 			System.out.println("***Warning: require at least one connector***");
 		}
-		String top = Header.getClusterHeader(c) + ClusterCode.getClusterCode(c, connectors);
+		String top = HeaderRodrigo.getClusterHeader(c) + ClusterCodeRodrigo.getClusterCode(c, connectors);
 		return (top);
 	}
 
 	public void saveFile(String path) {
-		SysCAMSTCluster cluster = TopCellGenerator.syscams.getCluster();
-		LinkedList<SysCAMSTConnector> connectors = TopCellGenerator.syscams.getAllConnectorCluster();
+		SysCAMSTCluster cluster = TopCellGeneratorRodrigo.syscams.getCluster();
+		LinkedList<SysCAMSTConnector> connectors = TopCellGeneratorRodrigo.syscams.getAllConnectorCluster();
 
 		String top;
 
 		try {
 			// Save file .cpp
-			System.err.println(path + GENERATED_PATH1 + cluster.getClusterName() + ".cpp");
-			FileWriter fw = new FileWriter(path + GENERATED_PATH1 + "/" + cluster.getClusterName() + "_tb.cpp");
+			System.err.println(path + GENERATED_PATH1 + cluster.getClusterName() + "_tdf.h");
+			FileWriter fw = new FileWriter(path + GENERATED_PATH1 + "/" + cluster.getClusterName() + "_tdf.h");
 			top = generateTopCell(cluster, connectors);
 			fw.write(top);
 			fw.close();
@@ -121,11 +121,11 @@ public class TopCellGenerator {
 		
 		for (SysCAMSTBlockTDF t : tdf) {
 			try {
-				System.err.println(path + GENERATED_PATH2 + t.getName() + ".h");
-				FileWriter fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + ".h");
-				headerTDF = Header.getPrimitiveHeaderTDF(t);
+				System.err.println(path + GENERATED_PATH2 + t.getName() + "_tdf.h");
+				FileWriter fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + "_tdf.h");
+				headerTDF = HeaderRodrigo.getPrimitiveHeaderTDF(t);
 				fw.write(headerTDF);
-				codeTDF = PrimitiveCode.getPrimitiveCodeTDF(t);
+				codeTDF = PrimitiveCodeRodrigo.getPrimitiveCodeTDF(t);
 				fw.write(codeTDF);
 				fw.close();
 			} catch (Exception ex) {
@@ -134,11 +134,11 @@ public class TopCellGenerator {
 		}
 		for (SysCAMSTBlockDE t : de) {
 			try {
-				System.err.println(path + GENERATED_PATH2 + t.getName() + ".h");
-				FileWriter fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + ".h");
-				headerDE = Header.getPrimitiveHeaderDE(t);
+				System.err.println(path + GENERATED_PATH2 + t.getName() + "_tdf.h");
+				FileWriter fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + "_tdf.h");
+				headerDE = HeaderRodrigo.getPrimitiveHeaderDE(t);
 				fw.write(headerDE);
-				codeDE = PrimitiveCode.getPrimitiveCodeDE(t);
+				codeDE = PrimitiveCodeRodrigo.getPrimitiveCodeDE(t);
 				fw.write(codeDE);
 				fw.close();
 			} catch (Exception ex) {

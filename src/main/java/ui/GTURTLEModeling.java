@@ -6133,7 +6133,8 @@ public class GTURTLEModeling {
 
         nameTab = elt.getAttribute("nameTab");
 
-        indexDesign = mgui.createSysmlsecMethodology(nameTab);
+        //indexDesign = mgui.createSysmlsecMethodology(nameTab);
+		indexDesign = mgui.createSysCAMSComponentDesign(nameTab);
 
         diagramNl = node.getChildNodes();
 
