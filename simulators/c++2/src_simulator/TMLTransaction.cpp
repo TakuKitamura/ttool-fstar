@@ -46,7 +46,11 @@
 MemPoolNoDel<TMLTransaction> TMLTransaction::memPool(BLOCK_SIZE_TRANS);
 
 
+<<<<<<< HEAD
 TMLTransaction::TMLTransaction():_runnableTime(0), _startTime(0), _length(0), _virtualLength(0), _command(0),
+=======
+TMLTransaction::TMLTransaction():_runnableTime(0), _startTime(0), _length(0), _virtualLength(0), _command(0),_transactCoreNumber(0),_transVcdOutputState(END_IDLE_TRANS),
+>>>>>>> simulation_niu
 #ifdef PENALTIES_ENABLED
                                  _idlePenalty(0), _taskSwitchingPenalty(0), //, _branchingPenalty(0),
 #endif

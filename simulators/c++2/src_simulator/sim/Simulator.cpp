@@ -381,7 +381,8 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
   if (myfile.is_open()){
     //std::cout << "File is open" << std::endl;
     SignalChangeQueue aQueue;
-    std::string aSigString;
+    SignalChangeQueue aQueueCpu;
+    //std::string aSigString;
     //bool aNoMoreTrans;
     //TraceableDevice* actDevice;
     TMLTime aCurrTime=-1;
@@ -390,7 +391,12 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
     myfile << "$date\n" << asctime(aTimeinfo) << "$end\n\n$version\nDaniel's TML simulator\n$end\n\n";
     myfile << "$timescale\n5 ns\n$end\n\n$scope module Simulation $end\n";
     //std::cout << "Before 1st loop" << std::endl;
+<<<<<<< HEAD
     //for (TraceableDeviceList::const_iterator i=_simComp->getVCDIterator(false); i!= _simComp->getVCDIterator(true); ++i){
+=======
+
+    std::cout<<"vcd name of cpu is finished !!!!!"<<std::endl;
+>>>>>>> simulation_niu
     for (TraceableDeviceList::const_iterator i=_simComp->getVCDList().begin(); i!= _simComp->getVCDList().end(); ++i){
       //TraceableDevice* a=*i;
       //                        a->streamBenchmarks(std::cout);
@@ -398,6 +404,7 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
       //std::cout << "in 1st loop " << a << std::endl;
       //std::cout << "device: " << (*i)->toString() << std::endl;
       //myfile << "$var integer 3 " << (*i)->toShortString() << " " << (*i)->toString() << " $end\n";
+<<<<<<< HEAD
       myfile << "$var wire 1 " << (*i)->toShortString() << " " << (*i)->toString() << " $end\n";
       //std::cout << "get next signal change" << std::endl;
       //aTime = (*i)->getNextSignalChange(true, aSigString, aNoMoreTrans);
@@ -406,12 +413,84 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
       aQueue.push(aTopElement);
       //std::cout << "push" << std::endl;
       //aQueue.push(new SignalChangeData(aSigString, aTime, (aNoMoreTrans)?0:(*i)));
+=======
+      if ((*i)->toShortString().substr(0,3) == "cpu"){
+	for(unsigned int j = 0; j < (dynamic_cast<CPU*>(*i))->getAmoutOfCore(); j++) {
+	  myfile << "$var wire 1 " << (*i)->toShortString() << " " << (*i)->toString() << " $end\n";
+	  aTopElement = new SignalChangeData();
+	  (*i)->getNextSignalChange(true, aTopElement);
+	  aQueueCpu.push(aTopElement);
+	}
+      }
+      else{
+	myfile << "$var wire 1 " << (*i)->toShortString() << " " << (*i)->toString() << " $end\n";
+ 	aTopElement = new SignalChangeData();
+	(*i)->getNextSignalChange(true, aTopElement);
+	aQueue.push(aTopElement);
+      }
+>>>>>>> simulation_niu
     }
     myfile << "$var integer 32 clk Clock $end\n";
     myfile << "$upscope $end\n$enddefinitions  $end\n\n";
+    while (!aQueueCpu.empty()){
+      std::cout<<"this is cpu queue"<<std::endl;	   
+      while (aNextClockEvent < aTopElement->_time){
+	myfile << "#" << aNextClockEvent << "\nr" << aNextClockEvent << " clk\n";
+	aNextClockEvent+=CLOCK_INC;
+      }
+      if (aCurrTime!=aTopElement->_time){
+	aCurrTime=aTopElement->_time;
+	myfile << "#" << aCurrTime << "\n";
+      }
+      if (aNextClockEvent == aTopElement->_time){
+	myfile << "b" << vcdTimeConvert(aNextClockEvent) << " clk\n";
+	aNextClockEvent+=CLOCK_INC;
+      }
+      //myfile << aTopElement->_sigChange << "\n";
+      myfile << vcdValConvert(aTopElement->_sigChange) << aTopElement->_device->toShortString() << "\n";
+      aQueueCpu.pop();
+      TMLTime aTime = aTopElement->_time;
+      aTopElement->_device->getNextSignalChange(false, aTopElement);    
+      std::cout<<"aTime is "<<aTime<<std::endl;
+      std::cout<<"aTopElement time is "<<aTopElement->_time<<std::endl;
+      if (aTopElement->_time == aTime){
+	delete aTopElement;
+	//std::cout<<"delete"<<std::endl;
+      }
+      else{
+	aQueueCpu.push(aTopElement);
+	//std::cout<<"no delete"<<std::endl;
+      }
+             
+    }
+    //  (dynamic_cast<CPU*>(*i))->setCycleTime( (dynamic_cast<CPU*>(*i))->getCycleTime()+1);
+    // aNextClockEvent=0;
+    // aCurrTime=-1;
+	  
+   
+    
+    
+    //if sucess, make it as a fonction !!!! change
+    /*  for (TraceableDeviceList::const_iterator i=_simComp->getVCDList().begin(); i!= _simComp->getVCDList().end(); ++i){
+      if ((*i)->toShortString().substr(0,3) == "cpu"){
+	for(unsigned int j = 0; j < (dynamic_cast<CPU*>(*i))->getAmoutOfCore(); j++) {
+          (dynamic_cast<CPU*>(*i))->setCycleTime(0);
+        }
+      }
+      }*/
+    
+    // myfile << "$var integer 32 clk Clock $end\n";
+    //  myfile << "$upscope $end\n$enddefinitions  $end\n\n";
     //std::cout << "Before 2nd loop" << std::endl;
+    aNextClockEvent=0;
+    aCurrTime=-1;
     while (!aQueue.empty()){
       aTopElement=aQueue.top();
+<<<<<<< HEAD
+=======
+      std::cout<<"the member of queue is "<<aTopElement->_device->toShortString()<<std::endl;
+      
+>>>>>>> simulation_niu
       while (aNextClockEvent < aTopElement->_time){
         myfile << "#" << aNextClockEvent << "\nr" << aNextClockEvent << " clk\n";
         aNextClockEvent+=CLOCK_INC;
@@ -428,11 +507,29 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
       myfile << vcdValConvert(aTopElement->_sigChange) << aTopElement->_device->toShortString() << "\n";
       aQueue.pop();
       TMLTime aTime = aTopElement->_time;
+<<<<<<< HEAD
       aTopElement->_device->getNextSignalChange(false, aTopElement);
       if (aTopElement->_time == aTime)
         delete aTopElement;
       else
         aQueue.push(aTopElement);
+=======
+      std::cout<<"aTime is "<<aTime<<std::endl;
+      //std::cout<<"lets get next signal : )"<<std::endl;
+      //if (aTopElement->_device->toShortString().substr(0,3) == "cpu")
+      // std::cout<<"!!!!!"<<(dynamic_cast<CPU*>(aTopElement->_device))->getCycleTime()<<std::endl;
+        
+      aTopElement->_device->getNextSignalChange(false, aTopElement);
+      if (aTopElement->_time == aTime){
+	delete aTopElement;
+	std::cout<<"delete"<<std::endl;
+      }
+      else{
+	aQueue.push(aTopElement);
+	std::cout<<"no delete"<<std::endl;
+      }
+	
+>>>>>>> simulation_niu
       //actDevice=aTopElement->_device;
       //if (actDevice!=0) aTime = actDevice->getNextSignalChange(false, aSigString, aNoMoreTrans);
       //delete aTopElement;
