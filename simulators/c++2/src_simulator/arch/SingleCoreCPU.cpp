@@ -59,7 +59,7 @@ SingleCoreCPU::SingleCoreCPU(   ID iID,
                                 unsigned int iBranchingMissrate,
                                 unsigned int iChangeIdleModeCycles,
                                 unsigned int iCyclesBeforeIdle,
-                                unsigned int ibyteDataSize ) : CPU( iID, iName, iScheduler, 1), /*_lastTransaction(0),*/ _masterNextTransaction(0), _timePerCycle(iTimePerCycle)
+                                unsigned int ibyteDataSize ) : CPU( iID, iName, iScheduler ), /*_lastTransaction(0),*/ _masterNextTransaction(0), _timePerCycle(iTimePerCycle)
 #ifdef PENALTIES_ENABLED
                                                              , _pipelineSize(iPipelineSize), _taskSwitchingCycles(iTaskSwitchingCycles),_brachingMissrate(iBranchingMissrate)
                                                              , _changeIdleModeCycles(iChangeIdleModeCycles), _cyclesBeforeIdle(iCyclesBeforeIdle)

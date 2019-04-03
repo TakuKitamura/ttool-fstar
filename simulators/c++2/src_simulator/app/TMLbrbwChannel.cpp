@@ -61,7 +61,6 @@ void TMLbrbwChannel::testRead(TMLTransaction* iTrans){
 }
 
 void TMLbrbwChannel::write(){
-std::cout<<"write!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<std::endl;
 #ifdef LOSS_ENABLED
   if (_maxNbOfLosses > _nbOfLosses){
     TMLLength aLostBytes = _writeTrans->getVirtualLength() * _lossRate + _lossRemainder;

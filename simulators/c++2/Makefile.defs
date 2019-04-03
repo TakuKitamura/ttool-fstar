@@ -30,13 +30,13 @@ makedir:
 	mkdir -p ./lib/sim
 
 $(OBJDIR)/%.o: $(SRCS_base_DIR)/%.cpp
-	$(CC) $(CFLAGS) $(INCDIR) -g -o $@ -c $<
+	$(CC) $(CFLAGS) $(INCDIR) -o $@ -c $<
 
 #$(OBJDIR)/evt/ListenersSimCmd.o: $(SRCS_base_DIR)/evt/ListenersSimCmd.cpp
-#	$(CC) $(CFLAGS) $(INCDIR) -g -o - ldl $@ -c $<
+#	$(CC) $(CFLAGS) $(INCDIR) -o - ldl $@ -c $<
 
 $(OBJDIR)/%.o: ./%.cpp
-	$(CC) $(CFLAGS) $(INCDIR) -g -o $@ -c $<
+	$(CC) $(CFLAGS) $(INCDIR) -o $@ -c $<
 
 test:
 	./run.x -oxml answer.xml -cmd '1 2 1000000;22 100;7 0 vcddump.vcd' 

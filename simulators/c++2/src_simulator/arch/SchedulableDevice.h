@@ -148,8 +148,6 @@ public:
 	static TMLTime getOverallTransNo() { return _overallTransNo; }
 	
 	static TMLTime getOverallTransSize() { return _overallTransSize; }
-	inline void setCycleTime (unsigned int t) { _cycleTime =t; }
-        inline unsigned int getCycleTime() { return _cycleTime; }
 	
 protected:
 	///Unique ID of the device
@@ -173,10 +171,9 @@ protected:
 	///Busy cycles since simulation start
 	TMLTime _busyCycles;
 	unsigned int _static_consumPerCycle; 
-   	unsigned int _dynamic_consumPerCycle;
+    unsigned int _dynamic_consumPerCycle;
 	static TMLTime _overallTransNo;
 	static TMLTime _overallTransSize;
-	unsigned int _cycleTime;
 
 	static void writeHTMLColumn(	std::ofstream& myfile,
 									const unsigned int colSpan,
