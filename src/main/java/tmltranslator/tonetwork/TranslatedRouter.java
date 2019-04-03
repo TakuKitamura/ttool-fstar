@@ -88,6 +88,8 @@ public class TranslatedRouter<E> {
     TMLEvent [][] evtOutVCs; // position, vc
     TMLEvent [][] evtSelectVC; // position, vc
 
+    // Between OUT and IN
+    TMLEvent [] evtOutVCstoIN;
 
     public TranslatedRouter(TMAP2Network<?> main, TMLMapping<?> tmlmap, HwNoC noc, List<TMLChannel> channelsViaNoc, int nbOfVCs, int xPos, int yPos) {
         this.main = main;
@@ -270,10 +272,10 @@ public class TranslatedRouter<E> {
 
     }
 
+
+    // TO DO: Adding PARAMS to events
     public void makeOutputEventsChannels() {
         TMLModeling tmlm = tmlmap.getTMLModeling();
-
-
 
 
         // Internal events and channels
@@ -329,6 +331,20 @@ public class TranslatedRouter<E> {
 
 
         // Interconnection with routers depending on position
+        // Between out_x and in_y
+        // We create events only when necessary
+        evtOutVCstoIN = new TMLEvent[TMAP2Network.DOMAIN+1];
+        for(int i=0; i<TMAP2Network.DOMAIN+1; i++) {
+
+            // must check if the i router is valid
+            if (i==TMAP2Network.DOMAIN || TMAP2Network.hasRouterAt(xPos, yPos, i, noc.size)) {
+                evtOutVCstoIN[i] = new TMLEvent("evt_pkt_out" + i + "_" + i + "_" + xPos + "_" + yPos,
+                        null, 8, true);
+                tmlm.addEvent(evtOutVCstoIN[i]);
+            }
+
+        }
+
 
     }
 
