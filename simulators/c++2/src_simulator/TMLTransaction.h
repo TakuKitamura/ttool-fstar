@@ -241,6 +241,8 @@ class TMLTransaction {
   inline void setStateID(ID iID) {_stateID=iID;}
   inline ID getStateID() {return _stateID;}
   inline void setTaskID(ID iID) {_taskID=iID;}
+  inline unsigned int getTransactCoreNumber() {return _transactCoreNumber;}
+  inline void setTransactCoreNumber(unsigned int num) {_transactCoreNumber=num;}
   void toXML(std::ostringstream& glob, int deviceID, std::string deviceName) const;
 
 
@@ -255,6 +257,8 @@ class TMLTransaction {
   TMLLength _virtualLength;
   ///Pointer to the command the transaction belongs to
   TMLCommand* _command;
+  ///Core number of the transaction
+  unsigned int _transactCoreNumber;
 #ifdef PENALTIES_ENABLED
   ///Idle penalty
   TMLTime _idlePenalty;
