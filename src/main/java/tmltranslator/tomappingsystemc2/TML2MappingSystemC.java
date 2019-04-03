@@ -280,8 +280,13 @@ public class TML2MappingSystemC implements IDiploSimulatorCodeGenerator {
                         //noOfCores=2;
                         for (int cores = 0; cores < noOfCores; cores++) {
                             String nodeName = node.getName();
+<<<<<<< HEAD
                             if ((node instanceof HwCPU) || (node instanceof HwA))
                                 nodeName += cores;
+=======
+                            if (node instanceof HwCPU)
+                                nodeName += ((HwCPU)node).nbOfCores;
+>>>>>>> simulation_niu
                             declaration += "BusMaster* " + nodeName + "_" + link.bus.getName() + "_Master = new BusMaster(\"" + nodeName + "_" + link.bus.getName() + "_Master\", " + link.getPriority() + ", " + link.bus.pipelineSize + ", array(" + link.bus.pipelineSize;
                             for (int i = 0; i < link.bus.pipelineSize; i++)
                                 declaration += ", (SchedulableCommDevice*)" + link.bus.getName() + "_" + i;
