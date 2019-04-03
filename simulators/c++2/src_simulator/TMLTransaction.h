@@ -48,13 +48,6 @@
 //class TMLCommand;
 class TMLChannel;
 
-enum vcdTransVisState
-    {
-	END_IDLE_TRANS,
-	END_PENALTY_TRANS,
-	END_TASK_TRANS
-};
-
 class TMLTransaction {
  public:
   ///Constructor
@@ -248,13 +241,6 @@ class TMLTransaction {
   inline void setStateID(ID iID) {_stateID=iID;}
   inline ID getStateID() {return _stateID;}
   inline void setTaskID(ID iID) {_taskID=iID;}
-<<<<<<< HEAD
-=======
-  inline unsigned int getTransactCoreNumber() {return _transactCoreNumber;}
-  inline void setTransactCoreNumber(unsigned int num) {_transactCoreNumber=num;}
-  inline void setTransVcdOutPutState(vcdTransVisState n) {_transVcdOutputState=n;}
-  inline vcdTransVisState getTransVcdOutPutState() { return _transVcdOutputState;}
->>>>>>> simulation_niu
   void toXML(std::ostringstream& glob, int deviceID, std::string deviceName) const;
 
 
@@ -269,13 +255,6 @@ class TMLTransaction {
   TMLLength _virtualLength;
   ///Pointer to the command the transaction belongs to
   TMLCommand* _command;
-<<<<<<< HEAD
-=======
-  ///Core number of the transaction
-  unsigned int _transactCoreNumber;
-  ///State variable for the cpu VCD output
-  vcdTransVisState _transVcdOutputState;
->>>>>>> simulation_niu
 #ifdef PENALTIES_ENABLED
   ///Idle penalty
   TMLTime _idlePenalty;

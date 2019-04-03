@@ -170,7 +170,7 @@ protected:
 	TMLTime _changeIdleModeTime;
 #endif
 	///State variable for the VCD output
-	//vcdCPUVisState _vcdOutputState;
+	vcdCPUVisState _vcdOutputState;
 };
 
 #endif
