@@ -19,7 +19,7 @@
 
 #define TRACE_FILE_NAME "Trace.txt"
 
-
+Serial pc(USBTX, USBRX);
 rtos::Mutex __traceMutex;
 
 int trace = TRACE_OFF;
@@ -76,7 +76,8 @@ void writeInTrace(char *info) {
     }
     break;
   case TRACE_IN_CONSOLE:
-    printf("%s\n", s);
+    pc.printf("%s\n", s);
+    //printf("%s\n", s);
     break;
   }
   
@@ -93,7 +94,7 @@ void activeTracingInFile(char *fileName) {
   } else {
     name  = fileName;
   }
-  //TODO file = fopen(name,"w");
+  file = fopen(name,"w");
 
   /* Initializing mutex */
   //if (pthread_mutex_init(&__traceMutex, NULL) < 0) { exit(-1);}
