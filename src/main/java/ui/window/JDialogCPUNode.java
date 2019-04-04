@@ -75,7 +75,6 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
 
 
     private boolean regularClose;
-    MainGUI mainGUI;
 
     private JPanel panel2, panel4, panel5;
  //   private Frame frame;
@@ -107,17 +106,15 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
     JFrameHWNodeHelp cpuHelp;
 
     /* Creates new form  */
-    public JDialogCPUNode(MainGUI _mainGUI, Frame _frame, String _title, TMLArchiCPUNode _node, ArchUnitMEC _MECType,
+    public JDialogCPUNode(MainGUI _mgui, Frame _frame, String _title, TMLArchiCPUNode _node, ArchUnitMEC _MECType,
                           java.util.List<SimulationTransaction> _transactions) {
         super(_frame, _title, true);
-        mainGUI = _mainGUI;
-      //  frame = _frame;
+
         mgui = _mgui;
         node = _node;
         MECType = _MECType;
         transactions = _transactions;
         initComponents();
-   //     myInitComponents();
         pack();
     }
 //
@@ -140,11 +137,11 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(cpuHelp == null ) {
-                    cpuHelp = new JFrameHWNodeHelp(mainGUI,"Help",he);
+                    cpuHelp = new JFrameHWNodeHelp(mgui,"Help",he);
                     cpuHelp.setLocationRelativeTo(but);
                 }else{
                     if(!cpuHelp.isVisible()) {
-                        cpuHelp = new JFrameHWNodeHelp(mainGUI,"Help",he);
+                        cpuHelp = new JFrameHWNodeHelp(mgui,"Help",he);
                         cpuHelp.setLocationRelativeTo(but);
                     }else{
                         cpuHelp.setVisible(false);
