@@ -18,8 +18,8 @@ updateruntime:
 	cp mutekh/libmwmr/include/mwmr/mwmr.h mutekh/examples/avatar
 	cp mutekh/libsyscams/*.c mutekh/examples/avatar
 	cp mutekh/libsyscams/*.h mutekh/examples/avatar
-	cp src/*.c ~/TTool/MPSoC/mutekh/examples/avatar
-	cp src/*.h ~/TTool/MPSoC/mutekh/examples/avatar
+	cp src/*.c mutekh/MPSoC/mutekh/examples/avatar
+	cp src/*.h mutekh/MPSoC/mutekh/examples/avatar
 
 	
 updategeneratedcode:

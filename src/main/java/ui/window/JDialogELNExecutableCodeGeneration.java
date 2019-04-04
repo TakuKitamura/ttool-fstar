@@ -500,6 +500,8 @@ public class JDialogELNExecutableCodeGeneration extends javax.swing.JFrame imple
 //        String list;//, data;
 //        hasError = false;
 
+	Boolean standalone = true; //are there any GPIO blocks? Currently ELN is always standalone and has no direct connection to SocLib (via TDF: yes)
+	
         try {
             if (jp1.getSelectedIndex() == 0) {
                 jta.append("Generating executable code (ELN version)\n");
@@ -531,7 +533,7 @@ public class JDialogELNExecutableCodeGeneration extends javax.swing.JFrame imple
                 			pathCode = code2.getText();
 
                 			System.err.println("ELN TOPCELL : " + elnSpec.getCluster().getName() + "saved in " + code2.getText());
-                			topCellGenerator.saveFile(pathCode);
+                			topCellGenerator.saveFile(pathCode, standalone);
 
                 			jta.append("Code saved\n");
                 		} catch (Exception e) {
