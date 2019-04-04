@@ -41,13 +41,13 @@
 
 package ui.window;
 
-import help.CPUNodeHelp;
 import help.HelpEntry;
 import help.HelpManager;
 import myutil.GraphicLib;
 import myutil.TraceManager;
 import tmltranslator.modelcompiler.ArchUnitMEC;
 import ui.ColorManager;
+import ui.MainGUI;
 import ui.util.IconManager;
 import ui.interactivesimulation.SimulationTransaction;
 import ui.tmldd.TMLArchiCPUNode;
@@ -70,6 +70,7 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
     //private static String[] tracemodeTab = {"vcd trace", "VCI logger", "VCI stats"};
 //    private static String[] tracemodeTab = {"VCI logger"};
     private boolean regularClose;
+    MainGUI mainGUI;
 
     private JPanel panel2, panel4, panel5;
  //   private Frame frame;
@@ -98,11 +99,13 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
     //issue 183
     List<JButton>   buttons = new ArrayList<>();
     List<HelpEntry> helpEntries;
-    CPUNodeHelp cpuHelp;
+    JFrameHWNodeHelp cpuHelp;
 
     /* Creates new form  */
-    public JDialogCPUNode(Frame _frame, String _title, TMLArchiCPUNode _node, ArchUnitMEC _MECType, java.util.List<SimulationTransaction> _transactions) {
+    public JDialogCPUNode(MainGUI _mainGUI, Frame _frame, String _title, TMLArchiCPUNode _node, ArchUnitMEC _MECType,
+                          java.util.List<SimulationTransaction> _transactions) {
         super(_frame, _title, true);
+        mainGUI = _mainGUI;
       //  frame = _frame;
         node = _node;
         MECType = _MECType;
@@ -131,11 +134,11 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(cpuHelp == null ) {
-                    cpuHelp = new CPUNodeHelp("Help",he);
+                    cpuHelp = new JFrameHWNodeHelp(mainGUI,"Help",he);
                     cpuHelp.setLocationRelativeTo(but);
                 }else{
                     if(!cpuHelp.isVisible()) {
-                        cpuHelp = new CPUNodeHelp("Help",he);
+                        cpuHelp = new JFrameHWNodeHelp(mainGUI,"Help",he);
                         cpuHelp.setLocationRelativeTo(but);
                     }else{
                         cpuHelp.setVisible(false);
