@@ -48,6 +48,7 @@ import myutil.GraphicLib;
 import myutil.TraceManager;
 import tmltranslator.modelcompiler.ArchUnitMEC;
 import ui.ColorManager;
+import ui.MainGUI;
 import ui.util.IconManager;
 import ui.interactivesimulation.SimulationTransaction;
 import ui.tmldd.TMLArchiCPUNode;
@@ -69,6 +70,11 @@ import java.util.List;
 public class JDialogCPUNode extends JDialogBase implements ActionListener  {
     //private static String[] tracemodeTab = {"vcd trace", "VCI logger", "VCI stats"};
 //    private static String[] tracemodeTab = {"VCI logger"};
+
+
+    protected MainGUI mgui;
+
+
     private boolean regularClose;
 
     private JPanel panel2, panel4, panel5;
@@ -101,9 +107,10 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
     List<HelpEntry> helpEntries;
 
     /* Creates new form  */
-    public JDialogCPUNode(Frame _frame, String _title, TMLArchiCPUNode _node, ArchUnitMEC _MECType, java.util.List<SimulationTransaction> _transactions) {
+    public JDialogCPUNode(MainGUI _mgui, Frame _frame, String _title, TMLArchiCPUNode _node, ArchUnitMEC _MECType, java.util.List<SimulationTransaction> _transactions) {
         super(_frame, _title, true);
       //  frame = _frame;
+        mgui = _mgui;
         node = _node;
         MECType = _MECType;
         transactions = _transactions;
