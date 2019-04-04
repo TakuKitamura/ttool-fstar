@@ -62,11 +62,8 @@ import elntranslator.*;
 public class TopCellGenerator {
 	public static ELNSpecification eln;
 
-    //private final static String GENERATED_PATH1 = "generated_CPP" + File.separator;
-    //private final static String GENERATED_PATH2 = "generated_H" + File.separator;
-
-    private  String GENERATED_PATH1 = "generated_CPP" + File.separator;
-    private  String GENERATED_PATH2 = "generated_H" + File.separator;
+	private final static String GENERATED_PATH1 = "generated_CPP" + File.separator;
+	private final static String GENERATED_PATH2 = "generated_H" + File.separator;
 
 	public TopCellGenerator(ELNSpecification _eln) {
 		eln = _eln;
@@ -96,19 +93,13 @@ public class TopCellGenerator {
 		return (top);
 	}
 
-    public void saveFile(String path, Boolean standalone) {
+	public void saveFile(String path) {
 		ELNTCluster cluster = TopCellGenerator.eln.getCluster();
 		LinkedList<ELNTConnector> connectorsModule = TopCellGenerator.eln.getAllConnectorsInModule();
 		LinkedList<ELNTConnector> connectorsCluster = TopCellGenerator.eln.getAllConnectorsInCluster();
 
 		String top;
 
-		if(standalone){
-		  
-		    GENERATED_PATH1 = "";
-		    GENERATED_PATH2 = "";
-		}
-		
 		try {
 			// Save file .cpp
 			System.err.println(path + GENERATED_PATH1 + cluster.getName() + ".cpp");
@@ -120,19 +111,13 @@ public class TopCellGenerator {
 			ex.printStackTrace();
 		}
 		// Save files .h
-		saveFileModule(path, cluster, connectorsModule, standalone);
+		saveFileModule(path, cluster, connectorsModule);
 	}
 
-    public void saveFileModule(String path, ELNTCluster cluster, List<ELNTConnector> connectors, Boolean standalone) {
+	public void saveFileModule(String path, ELNTCluster cluster, List<ELNTConnector> connectors) {
 		LinkedList<ELNTModule> modules = cluster.getModule();
 		
 		String code;
-
-		if(standalone){
-		  
-		    GENERATED_PATH1 = "";
-		    GENERATED_PATH2 = "";
-		}
 		
 		for (ELNTModule module : modules) {
 			try {

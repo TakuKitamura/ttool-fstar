@@ -107,7 +107,6 @@ import ui.procsd.ProCSDComponent;
 import ui.procsd.ProactiveCSDPanel;
 import ui.prosmd.ProactiveSMDPanel;
 import ui.req.RequirementDiagramPanel;
-import ui.syscams.SysCAMSComponentTaskDiagramPanel;
 import ui.sysmlsecmethodology.SysmlsecMethodologyDiagramPanel;
 import ui.tmlad.*;
 import ui.tmlcd.TMLTaskDiagramPanel;
@@ -6482,10 +6481,10 @@ public class GTURTLEModeling {
             ((AvatarADPanel) tdp).setConnectorsToFront();
         }
 
-        if(tdp instanceof SysCAMSComponentTaskDiagramPanel)  {
+        /*if(tdp instanceof SysCAMSComponentTaskDiagramPanel)  {
             //TraceManager.addDev("Connectors...");
             ((SysCAMSComponentTaskDiagramPanel) tdp).setConnectorsToFront();
-        }
+        }*/
     }
 
     // AVATAR

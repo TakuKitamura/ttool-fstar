@@ -61,12 +61,9 @@ import java.util.LinkedList;
 public class TopCellGenerator {
 	public static SysCAMSSpecification syscams;
 
-    //private final static String GENERATED_PATH1 = "generated_CPP" + File.separator;
-    //private final static String GENERATED_PATH2 = "generated_H" + File.separator;
-   
-    private  String GENERATED_PATH1 = "generated_CPP" + File.separator;
-    private  String GENERATED_PATH2 = "generated_H" + File.separator;
-    
+	private final static String GENERATED_PATH1 = "generated_CPP" + File.separator;
+	private final static String GENERATED_PATH2 = "generated_H" + File.separator;
+
 	public TopCellGenerator(SysCAMSSpecification sys) {
 		syscams = sys;
 	}
@@ -97,19 +94,12 @@ public class TopCellGenerator {
 		return (top);
 	}
 
-	public void saveFile(String path, Boolean standalone) {
+	public void saveFile(String path) {
 		SysCAMSTCluster cluster = TopCellGenerator.syscams.getCluster();
 		LinkedList<SysCAMSTConnector> connectors = TopCellGenerator.syscams.getAllConnectorCluster();
 
 		String top;
 
-		if(standalone){
-		  
-		    GENERATED_PATH1 = "";
-		    GENERATED_PATH2 = "";
-		}
-
-		
 		try {
 			// Save file .cpp
 			System.err.println(path + GENERATED_PATH1 + cluster.getClusterName() + ".cpp");
@@ -121,19 +111,13 @@ public class TopCellGenerator {
 			ex.printStackTrace();
 		}
 		// Save files .h
-		saveFileBlock(path, cluster, standalone);
+		saveFileBlock(path, cluster);
 	}
 
-	public void saveFileBlock(String path, SysCAMSTCluster c, Boolean standalone) {
+	public void saveFileBlock(String path, SysCAMSTCluster c) {
 		String headerTDF, headerDE, codeTDF, codeDE;
 		LinkedList<SysCAMSTBlockTDF> tdf = c.getBlockTDF();
 		LinkedList<SysCAMSTBlockDE> de = c.getBlockDE();
-
-		if(standalone){
-		  
-		    GENERATED_PATH1 = "";
-		    GENERATED_PATH2 = "";
-		}
 		
 		for (SysCAMSTBlockTDF t : tdf) {
 			try {

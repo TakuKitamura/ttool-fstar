@@ -509,8 +509,6 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
 //        String list;//, data;
         hasError = false;
 
-	Boolean standalone = true; //are there any GPIO blocks?
-	
         try {
             if (jp1.getSelectedIndex() == 0) {
                 Vector<SysCAMSComponentTaskDiagramPanel> syscamsDiagramPanels = mgui.getListSysCAMSPanel();
@@ -542,9 +540,6 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
                             } 
                             for(SysCAMSTBlockGPIO2VCI gpioBlock : gpioBlocks) {
                                 nbPorts += gpioBlock.getPortDE().size();
-				standalone=false;
-
-				
                             }
                             if(nbPorts != (allConnectors.size()*2)) {
                                 jta.append("Error: There are unconnected ports.\n");
@@ -681,8 +676,8 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
                 			pathCode = code2.getText();
 
                 			System.err.println("SYSCAMS TOPCELL : " + syscalsspec.getCluster().getClusterName() + "saved in " + code2.getText());
-                			topCellGenerator.saveFile(pathCode,standalone);
-                            topCellGeneratorCluster.saveFile(pathCode,standalone);
+                			topCellGenerator.saveFile(pathCode);
+                            topCellGeneratorCluster.saveFile(pathCode);
 
                 			jta.append("Code saved\n");
                 		} catch (Exception e) {

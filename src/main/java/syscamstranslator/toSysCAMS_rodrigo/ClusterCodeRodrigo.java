@@ -50,19 +50,19 @@ import java.util.LinkedList;
 import syscamstranslator.*;
 
 /**
- * Class ClusterCodeSoclib
+ * Class ClusterCodeRodrigo
  * Principal code of a cluster component
  * Creation: 14/05/2018
  * @version 1.0 14/05/2018
  * @author Irina Kit Yan LEE
 */
 
-public class ClusterCodeSoclib {
+public class ClusterCodeRodrigo {
 	static private String corpsCluster;
 	private final static String CR = "\n";
 	private final static String CR2 = "\n\n";
 
-	ClusterCodeSoclib() {}
+	ClusterCodeRodrigo() {}
 
 	public static String getClusterCode(SysCAMSTCluster cluster, LinkedList<SysCAMSTConnector> connectors) {
 		int nb_con = 0;

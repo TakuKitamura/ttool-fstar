@@ -50,21 +50,21 @@ import java.util.LinkedList;
 import syscamstranslator.*;
 
 /**
- * Class MakefileCodeSoclib Principal code of a makefile Creation: 02/06/2018
+ * Class MakefileCodeRodrigo Principal code of a makefile Creation: 02/06/2018
  * 
  * @version 1.0 02/06/2018
  * @author Irina Kit Yan LEE
  */
 
-public class MakefileCodeSoclib {
+public class MakefileCodeRodrigo {
 	static private String corpsMakefile;
 	private final static String CR = "\n";
 	private final static String CR2 = "\n\n";
 
-	MakefileCodeSoclib() {
+	MakefileCodeRodrigo() {
 	}
 
-	public static String getMakefileCodeSoclib(LinkedList<SysCAMSTCluster> clusters) {
+	public static String getMakefileCodeRodrigo(LinkedList<SysCAMSTCluster> clusters) {
 		if (clusters != null) {
 			corpsMakefile = "# Compiler and linker flags" + CR + "CXXFLAGS = -g -Wall -I. $(SYSTEMC_INCLUDE_DIRS)" + CR
 					+ "LDFLAGS = $(SYSTEMC_LIBRARY_DIRS)" + CR2 + "# List of all ecutables to be compiled" + CR
