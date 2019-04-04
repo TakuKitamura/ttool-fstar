@@ -41,7 +41,6 @@
 
 package ui.window;
 
-import cli.Action;
 import help.HelpEntry;
 import help.HelpManager;
 import myutil.GraphicLib;
@@ -76,6 +75,7 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
 
 
     private boolean regularClose;
+    MainGUI mainGUI;
 
     private JPanel panel2, panel4, panel5;
  //   private Frame frame;
@@ -87,7 +87,6 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
  //   private static int selectedTracemode = 0;
     // Panel1
     protected JTextField nodeName;
-    private JFrameHelp jFrameHelp = null;
 
     // Panel2
     protected JTextField sliceTime, nbOfCores, byteDataSize, pipelineSize, goIdleTime, maxConsecutiveIdleCycles,
@@ -105,10 +104,13 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
     //issue 183
     List<JButton>   buttons = new ArrayList<>();
     List<HelpEntry> helpEntries;
+    JFrameHWNodeHelp cpuHelp;
 
     /* Creates new form  */
-    public JDialogCPUNode(MainGUI _mgui, Frame _frame, String _title, TMLArchiCPUNode _node, ArchUnitMEC _MECType, java.util.List<SimulationTransaction> _transactions) {
+    public JDialogCPUNode(MainGUI _mainGUI, Frame _frame, String _title, TMLArchiCPUNode _node, ArchUnitMEC _MECType,
+                          java.util.List<SimulationTransaction> _transactions) {
         super(_frame, _title, true);
+        mainGUI = _mainGUI;
       //  frame = _frame;
         mgui = _mgui;
         node = _node;
@@ -132,51 +134,43 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
     }
 
     //issue 183
-    private void buttonClick(JButton but, HelpEntry he, HelpManager hm) {
+    private void buttonClick(JButton but, HelpEntry he) {
+        setModalityType(ModalityType.MODELESS);
         but.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setModalityType(ModalityType.MODELESS);
-                if(jFrameHelp == null ) {
-                    jFrameHelp = new JFrameHelp("help", hm, he);
-                    jFrameHelp.setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
-                    jFrameHelp.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "close");
-                    jFrameHelp.getRootPane().getActionMap().put("close", new AbstractAction() {
+                if(cpuHelp == null ) {
+                    cpuHelp = new JFrameHWNodeHelp(mainGUI,"Help",he);
+                    cpuHelp.setLocationRelativeTo(but);
+                }else{
+                    if(!cpuHelp.isVisible()) {
+                        cpuHelp = new JFrameHWNodeHelp(mainGUI,"Help",he);
+                        cpuHelp.setLocationRelativeTo(but);
+                    }else{
+                        cpuHelp.setVisible(false);
+                    }
+                }
+
+                if(cpuHelp != null) {
+                    cpuHelp.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "close");
+                    cpuHelp.getRootPane().getActionMap().put("close", new AbstractAction() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            if(!jFrameHelp.isVisible())
+                            if(!cpuHelp.isVisible())
                                 dispose();
-                            jFrameHelp.setVisible(false);
+                            cpuHelp.setVisible(false);
                         }
                     });
-                }else{
-                    if(!jFrameHelp.isVisible()) {
-                        jFrameHelp = new JFrameHelp("help", hm, he);
-                        jFrameHelp.setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
-                        setModalityType(ModalityType.MODELESS);
-                        jFrameHelp.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "close");
-                        jFrameHelp.getRootPane().getActionMap().put("close", new AbstractAction() {
-                            @Override
-                            public void actionPerformed(ActionEvent e) {
-                                if(!jFrameHelp.isVisible())
-                                    dispose();
-                                jFrameHelp.setVisible(false);
-                            }
-                        });
-                    }else{
-                        jFrameHelp.setVisible(false);
-                        jFrameHelp = null;
-                    }
                 }
             }
         });
     }
 
+
+
     //issue 183
     private void hardwareHelp(){
-
         HelpManager helpManager = new HelpManager();
-
         if(helpManager.loadEntries()) {
             helpEntries = new ArrayList<>();
             HelpEntry he0 = helpManager.getHelpEntryWithHTMLFile("cpuname.html");
@@ -219,13 +213,14 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
             Icon myIcon = IconManager.imgic32;
             JButton but = new JButton(myIcon);
             setButton(but);
-            buttonClick(but,helpEntries.get(i),helpManager);
+            buttonClick(but,helpEntries.get(i));
             buttons.add(but);
         }
     }
 
 
     private void initComponents() {
+
         hardwareHelp();
         Container c = getContentPane();
         GridBagLayout gridbag0 = new GridBagLayout();
@@ -240,7 +235,6 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c.setLayout(gridbag0);
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setModalityType(ModalityType.APPLICATION_MODAL);
 
 
         panel2 = new JPanel();
