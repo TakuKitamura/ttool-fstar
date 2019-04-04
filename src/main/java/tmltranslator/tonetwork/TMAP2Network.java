@@ -69,16 +69,99 @@ public class TMAP2Network<E>  {
     private int nocSize = 2;
     private TranslatedRouter[][] routers;
 
+    public final static int NORTH = 0;
+    public final static int SOUTH = 1;
+    public final static int WEST = 2;
+    public final static int EAST = 3;
+    public final static int DOMAIN = 4;
+
+
     public TMAP2Network(TMLMapping<?> _tmlmapping, int nocSize) {
         tmlmapping = _tmlmapping;
         routers = new TranslatedRouter[nbOfVCs][nbOfVCs];
         this.nocSize = nocSize;
     }
 
+    public static boolean hasRouterAt(int myX, int myY, int routerPosition, int nocSize) {
+        if (routerPosition == DOMAIN) {
+            return true;
+        }
+
+        int decX = 0;
+        int decY = 0;
+
+        switch(routerPosition) {
+            case NORTH:
+                decY = -1;
+                break;
+            case SOUTH:
+                decY = 1;
+                break;
+            case WEST:
+                decX = -1;
+                break;
+            case EAST:
+                decX = 1;
+
+        }
+
+        myX = myX + decX;
+        myY = myY + decY;
+
+        if ((myX < 0) || (myY < 0)) {
+            return false;
+        }
+
+        if ((myX >= nocSize) || (myY >= nocSize)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public TranslatedRouter getRouterAt(int xPos, int yPos) {
+        if (routers == null) {
+            return null;
+        }
+
+        if ((xPos < 0) || (xPos >= nocSize) || (yPos < 0) || (yPos >= nocSize)) {
+            return null;
+        }
+
+        return routers[xPos][yPos];
+    }
+
+
+    public TranslatedRouter getRouterFrom(int xPos, int yPos, int routerPosition) {
+        int decX = 0;
+        int decY = 0;
+
+        switch(routerPosition) {
+            case NORTH:
+                decY = -1;
+                break;
+            case SOUTH:
+                decY = 1;
+                break;
+            case WEST:
+                decX = -1;
+                break;
+            case EAST:
+                decX = 1;
+
+        }
+
+        xPos = xPos + decX;
+        yPos = yPos + decY;
+
+        return getRouterAt(xPos, yPos);
+
+    }
+
     /* List of assumptions:
-        - Only one router set (i.e. no router, then bus, then router) between two tasks
-        - Channels must be mapped on at least one route to be taken into account
-     */
+            - Only one router set (i.e. no router, then bus, then router) between two tasks
+            - Channels must be mapped on at least one route to be taken into account
+         */
     public String removeAllRouterNodes() {
         //TMLModeling<E> tmlm = new TMLModeling<>();
         //TMLArchitecture tmla = new TMLArchitecture();
@@ -87,7 +170,7 @@ public class TMAP2Network<E>  {
         TMLArchitecture tmla = tmlmapping.getTMLArchitecture();
         TMLModeling<?> tmlm = tmlmapping.getTMLModeling();
 
-        // we have to redo the architecture:
+        // *** we have to redo the architecture:
         // we assume that each processor is connected directly to the NoC via a first bus
         // so, each CPU gets one memory, on bus connecting the mem and the NoC.
         // all local channels are mapped on this memory, otherwise they
@@ -131,7 +214,7 @@ public class TMAP2Network<E>  {
 
         // Check for no more CPU than gridsize
         // Put a random place to non placed CPU
-        // All CPU must be placed
+        // All CPUs must be placed
         if (nbOfHwExecutionNode > (nocSize * nocSize)) {
             return "Too many processors for the NoC size";
         }
@@ -179,16 +262,30 @@ public class TMAP2Network<E>  {
             }
         }
 
+        // *** Create routers
+        for(int i=0; i<nocSize; i++) {
+            for(int j=0; j<nocSize; j++) {
+                // We must find the number of apps connected on this router
+                TranslatedRouter tr = new TranslatedRouter<>(this, tmlmapping, noc, channelsCommunicatingViaNoc,
+                        nbOfVCs, i, j);
+                routers[i][j] = tr;
+            }
+        }
+
+
+        // Make the channels & events of routers
+        for(int i=0; i<nocSize; i++) {
+            for(int j=0; j<nocSize; j++) {
+                // We must find the number of apps connected on this router
+                routers[i][j].makeOutputEventsChannels();
+            }
+        }
 
         // Make all routers
         for(int i=0; i<nocSize; i++) {
             for(int j=0; j<nocSize; j++) {
                 // We must find the number of apps connected on this router
-                int nbOfApps = 2;
-
-                TranslatedRouter tr = new TranslatedRouter<>(tmlmapping, noc, channelsCommunicatingViaNoc, nbOfVCs, i, j);
-                routers[i][j] = tr;
-                tr.makeRouter();
+                routers[i][j].makeRouter();
             }
         }
 

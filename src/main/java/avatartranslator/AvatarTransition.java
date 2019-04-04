@@ -38,6 +38,8 @@
 
 package avatartranslator;
 
+import myutil.TraceManager;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -204,14 +206,16 @@ public class AvatarTransition extends AvatarStateMachineElement {
     }
 
     public void addAction(String _action) {
+        TraceManager.addDev("****************************  String expr to be added: " + _action);
         AvatarAction aa = AvatarTerm.createActionFromString(block, _action);
-        //TraceManager.addDev("****************************  Avatar action : " + aa);
+        TraceManager.addDev("****************************  Adding Avatar action from String : " + aa);
         if (aa != null)
             actions.add(aa);
     }
 
     public void addAction(AvatarAction _action) {
         if (_action != null)
+            TraceManager.addDev("****************************  Avatar action from AvatarAction: " + _action);
             this.actions.add(_action);
     }
 

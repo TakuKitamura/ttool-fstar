@@ -22,6 +22,7 @@ dependencies {
     compileOnly name: 'JavaPlot'
     compileOnly name: 'jaxen-1.1.6'
     compileOnly name: 'opencloud'
+    compileOnly name: 'jna-3.3.0'
 }
 
 jar {

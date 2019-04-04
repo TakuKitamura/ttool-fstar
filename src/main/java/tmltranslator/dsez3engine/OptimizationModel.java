@@ -6,6 +6,7 @@ import tmltranslator.*;
 
 import javax.swing.*;
 import java.lang.reflect.Array;
+import java.nio.channels.Channel;
 import java.util.*;
 
 
@@ -469,6 +470,9 @@ public class OptimizationModel {
         //Definition of start time variable for each task
         IntExpr[] start = new IntExpr[inputInstance.getModeling().getTasks().size()];
 
+        //Definition of Y1: mapping variable of channel --> PE for transfer
+        IntExpr[][] Y1 = new IntExpr[inputInstance.getModeling().getChannels().size()][inputInstance.getArchitecture().getCPUs().size()];
+
 
         //Mapping Constraints :
         BoolExpr mapping_constraints = ctx.mkTrue();
@@ -510,8 +514,45 @@ public class OptimizationModel {
             //TraceManager.addDev(c_bound_start[t].toString());
         }
 
+        //Matrix of constraints to define the interval of Y1 : 0 <= Y1 <= 1
+        BoolExpr[][] c_bound_y1 = new BoolExpr[inputInstance.getModeling().getChannels().size()][inputInstance.getArchitecture().getCPUs().size()];
+
+        for (Object channel : inputInstance.getModeling().getChannels()) {
+            int c = inputInstance.getModeling().getChannels().indexOf(channel);
+            TMLChannel channelCast = (TMLChannel) channel;
+
+            for (HwNode hwNode : inputInstance.getArchitecture().getCPUs()) {
+                int p = inputInstance.getArchitecture().getCPUs().indexOf(hwNode);
+                Y1[c][p] = ctx.mkIntConst("Y1_" + channelCast.getName() + "_" + hwNode.getName());
+
+                // Constraints: 0 <= Y1 <= 1
+                c_bound_y1[c][p] = ctx.mkAnd(ctx.mkLe(ctx.mkInt(0), Y1[c][p]),
+                        ctx.mkLe(Y1[c][p], ctx.mkInt(1)));
+
+                mapping_constraints = ctx.mkAnd(mapping_constraints, c_bound_y1[c][p]);
+
+
+            }
+
+        }
 
         //CONSTRAINTS//
+
+        //Each channel must be mapped to exactly 1 processing unit:
+
+        // ∀ch, SUM p (Y 1) = 1
+
+        BoolExpr[] c_unique_y1 = new BoolExpr[inputInstance.getModeling().getChannels().size()];
+        for (Object channel : inputInstance.getModeling().getChannels()) {
+            int c = inputInstance.getModeling().getChannels().indexOf(channel);
+            TMLChannel channelCast = (TMLChannel) channel;
+
+            ArithExpr sum_Y1 = ctx.mkAdd(Y1[c]);
+            c_unique_y1[c] = ctx.mkEq(sum_Y1, ctx.mkInt(1));
+            mapping_constraints = ctx.mkAnd(mapping_constraints, c_unique_y1[c]);
+
+        }
+
         //Each task must be mapped to exactly 1 processing unit in its eligibility set:
 
         // ∀t, SUM p (X tp) ≤ 1
@@ -779,6 +820,8 @@ public class OptimizationModel {
             Model m = opt.getModel();
             Expr[][] optimized_result_X = new Expr[inputInstance.getModeling().getTasks().size()][inputInstance.getArchitecture().getCPUs().size()];
             Expr[] optimized_result_start = new Expr[inputInstance.getModeling().getTasks().size()];
+            Expr[][] optimized_result_Y1 = new Expr[inputInstance.getModeling().getChannels().size()][inputInstance.getArchitecture().getCPUs().size()];
+
 
             tmlMapping = new TMLMapping<>(inputInstance.getModeling(), inputInstance.getArchitecture(), false);
 
@@ -866,6 +909,39 @@ public class OptimizationModel {
 
             for (Map.Entry<String, Integer> entry : optimizedSolutionStart.entrySet()) {
                 outputToDisplay = outputToDisplay + entry.getKey() + " = " + entry.getValue() + "\n";
+            }
+
+            //mapping of communication channels
+            outputToDisplay = outputToDisplay + "\n\n(3) Spatial mapping of channels onto controllers:\n";
+            for (Object channel : inputInstance.getModeling().getChannels()) {
+                int c = inputInstance.getModeling().getChannels().indexOf(channel);
+                TMLChannel channelCast = (TMLChannel) channel;
+
+                for (HwNode hwNode : inputInstance.getArchitecture().getCPUs()) {
+                    int p = inputInstance.getArchitecture().getCPUs().indexOf(hwNode);
+                    //evaluate optimal solution
+                    optimized_result_Y1[c][p] = m.evaluate(Y1[c][p], true);
+
+
+                    if (Integer.parseInt(optimized_result_Y1[c][p].toString()) == 1) {
+
+                        //TODO Add this mapping in tmlmapping
+                        // mapping of R/W channels on local memory of hwExecutionNode TODO get(0)
+                    /*    if (!taskCast.getReadChannels().isEmpty())
+                            tmlMapping.addCommToHwCommNode(taskCast.getReadChannels().get(0), inputInstance.getLocalMemoryOfHwExecutionNode(hwNode));
+
+                        if (!taskCast.getWriteChannels().isEmpty())
+                            tmlMapping.addCommToHwCommNode(taskCast.getWriteChannels().get(0), inputInstance.getLocalMemoryOfHwExecutionNode(hwNode));
+
+                        outputToDisplay = outputToDisplay + "\n" + taskCast.getName() + "      -->      " + hwNode.getName();
+
+                    }*/
+
+
+                        outputToDisplay += "\nChannel(" + channelCast.getOriginTask().getTaskName() + "," +
+                                channelCast.getDestinationTask().getTaskName() + ")  -->  " + hwNode.getName();
+                    }
+                }
             }
 
 

@@ -816,7 +816,7 @@ public class GTMLModeling {
                             tmltt = new TMLType(request.getType(j).getType());
                             tmlattr = new TMLAttribute(attname, tmltt);
                             tmlattr.initialValue = tmlattr.getDefaultInitialValue();
-                            //TraceManager.addDev("Adding " + tmlattr.getName() + " to " + task.getName() + "with value =" + tmlattr.initialValue);
+                            TraceManager.addDev("Adding " + tmlattr.getName() + " to " + task.getName() + "with value =" + tmlattr.initialValue);
                             task.addAttribute(tmlattr);
                         }
                     }

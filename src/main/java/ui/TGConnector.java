@@ -727,8 +727,9 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent {
 
     }
 
+
     @Override
-    public StringBuffer saveInXML() {
+    public StringBuffer saveInXML(boolean saveSubComponents, boolean saveAsComponentEvenIfNonNullFather) {
         StringBuffer sb = new StringBuffer(XML_CONNECTOR_HEAD);
         sb.append(getType());
         sb.append(XML_ID);

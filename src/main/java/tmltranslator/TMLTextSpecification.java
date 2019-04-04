@@ -1,26 +1,26 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- * 
+ *
  * ludovic.apvrille AT enst.fr
- * 
+ *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- * 
+ *
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- * 
+ *
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- * 
+ *
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -31,42 +31,34 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- * 
+ *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
 
-
-
-
 package tmltranslator;
 
+import common.SpecConfigTTool;
 import myutil.Conversion;
 import myutil.FileException;
 import myutil.FileUtils;
 import myutil.TraceManager;
 
-import tmltranslator.SecurityPattern;
-
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Map;
 import java.util.HashMap;
-
-
-
-import common.SpecConfigTTool;
+import java.util.Map;
 
 /**
  * Class TMLTextSpecification
  * Import and export of TML textual specifications
  * Creation: 12/09/2007
- * @version 1.0 12/09/2007
+ *
  * @author Ludovic APVRILLE
+ * @version 1.0 12/09/2007
  */
 public class TMLTextSpecification<E> {
     public final static String CR = "\n";
@@ -74,15 +66,15 @@ public class TMLTextSpecification<E> {
     public final static String CR2 = "\n\n";
     public final static String SC = ";";
     public final static String C = ",";
-    
-    
-	public final static String AENCRYPT="AE";
-	public final static String SENCRYPT="SE";
-	public final static String MAC="MAC";
-	public final static String NONCE="NONCE";
-	public final static String HASH="HASH";
-	public final static String ADV="ADV";
-	
+
+
+    public final static String AENCRYPT = "AE";
+    public final static String SENCRYPT = "SE";
+    public final static String MAC = "MAC";
+    public final static String NONCE = "NONCE";
+    public final static String HASH = "HASH";
+    public final static String ADV = "ADV";
+
 
     private String spec;
     private String title;
@@ -95,7 +87,7 @@ public class TMLTextSpecification<E> {
     private boolean inDec = true;
     private boolean inTask = false;
     private boolean inTaskDec = false;
-  //  private boolean inTaskBehavior = false;
+    //  private boolean inTaskBehavior = false;
     private TMLTask task;
     private TMLActivityElement tmlae;
     private ArrayList<TMLParserSaveElt> parses;
@@ -104,9 +96,11 @@ public class TMLTextSpecification<E> {
 
     private static String keywords[] = {"BOOL", "INT", "NAT", "CHANNEL", "EVENT", "REQUEST", "LOSSYCHANNEL", "VCCHANNEL",
             "LOSSYEVENT", "LOSSYREQUEST", "BRBW", "NBRNBW",
-                                        "BRNBW", "INF", "NIB", "NINB", "TASK", "ENDTASK", "IF", "ELSE", "ORIF", "ENDIF", "FOR", "ENDFOR",
-                                        "SELECTEVT", "CASE", "ENDSELECTEVT", "ENDCASE", "WRITE", "READ", "WAIT", "NOTIFY", "NOTIFIED", "RAND", "CASERAND", "ENDRAND", "ENDCASERAND", "EXECI", "EXECC", "DELAY", "RANDOM",
-                                        "RANDOMSEQ", "ENDRANDOMSEQ", "SEQ", "ENDSEQ"};
+            "BRNBW", "INF", "NIB", "NINB", "TASK", "ENDTASK", "TASKOP", "IF", "ELSE", "ORIF", "ENDIF", "FOR", "ENDFOR",
+            "SELECTEVT", "CASE", "ENDSELECTEVT", "ENDCASE", "WRITE", "READ", "WAIT", "NOTIFY", "NOTIFIED", "NOTIFYREQUEST", "RAND", "CASERAND",
+            "ENDRAND",
+            "ENDCASERAND", "EXECI", "EXECC", "DELAY", "RANDOM",
+            "RANDOMSEQ", "ENDRANDOMSEQ", "SEQ", "ENDSEQ"};
 
     private String channeltypes[] = {"BRBW", "NBRNBW", "BRNBW"};
     private String eventtypes[] = {"INF", "NIB", "NINB"};
@@ -130,7 +124,7 @@ public class TMLTextSpecification<E> {
     }
 
     public void saveFile(String path, String filename) throws FileException {
-    	SpecConfigTTool.checkAndCreateTMLDir(path);
+        SpecConfigTTool.checkAndCreateTMLDir(path);
         TraceManager.addUser("Saving TML spec file in " + path + filename);
         FileUtils.saveFile(path + filename, spec);
     }
@@ -148,7 +142,6 @@ public class TMLTextSpecification<E> {
     }
 
 
-
     public void indent() {
         indent(4);
     }
@@ -161,10 +154,10 @@ public class TMLTextSpecification<E> {
         int nbOpen = 0;
         int nbClose = 0;
 
-        while ( (indexEnd = spec.indexOf('\n')) > -1) {
-            tmp = spec.substring(0, indexEnd+1);
+        while ((indexEnd = spec.indexOf('\n')) > -1) {
+            tmp = spec.substring(0, indexEnd + 1);
             try {
-                spec = spec.substring(indexEnd+1, spec.length());
+                spec = spec.substring(indexEnd + 1, spec.length());
             } catch (Exception e) {
                 spec = "";
             }
@@ -189,9 +182,9 @@ public class TMLTextSpecification<E> {
 
     private int nbOf(String _tmp, String[] array) {
         String tmp;
-     //   int size;
+        //   int size;
 
-        for(int i=0; i<array.length; i++) {
+        for (int i = 0; i < array.length; i++) {
             if (_tmp.startsWith(array[i])) {
                 tmp = _tmp.substring(array[i].length(), _tmp.length());
                 //TraceManager.addDev("tmp=" + tmp + " _tmp" + _tmp + " array=" + array[i]);
@@ -207,11 +200,10 @@ public class TMLTextSpecification<E> {
     public String toString() {
         return spec;
     }
-    
 
 
     public String toTextFormat(TMLModeling<E> tmlm) {
-	    tmlm.removeForksAndJoins();
+        tmlm.removeForksAndJoins();
         tmlm.sortByName();
 
         // Print TMLTasks WCET
@@ -220,13 +212,11 @@ public class TMLTextSpecification<E> {
 
         spec = makeDeclarations(tmlm);
         //Set up Cryptographic Configurations
-        
+
         spec += makeTasks(tmlm);
         indent();
         return spec;
     }
-
-
 
 
     public String makeDeclarations(TMLModeling<E> tmlm) {
@@ -237,7 +227,7 @@ public class TMLTextSpecification<E> {
         sb += "// Generated: " + new Date().toString() + CR2;
 
         sb += "// Channels" + CR;
-        for(TMLChannel ch:tmlm.getChannels()) {
+        for (TMLChannel ch : tmlm.getChannels()) {
             if (ch.isBasicChannel()) {
                 sb += "CHANNEL" + SP + ch.getName() + SP + TMLChannel.getStringType(ch.getType()) + SP + ch.getSize();
                 if (!ch.isInfinite()) {
@@ -253,25 +243,25 @@ public class TMLTextSpecification<E> {
                     sb += "VCCHANNEL" + SP + ch.getName() + SP + ch.getVC() + CR;
                 }
             } else {
-		        sb += "CHANNEL" + SP + ch.getName() + SP + TMLChannel.getStringType(ch.getType()) + SP + ch.getSize();
+                sb += "CHANNEL" + SP + ch.getName() + SP + TMLChannel.getStringType(ch.getType()) + SP + ch.getSize();
                 if (!ch.isInfinite()) {
                     sb += SP + ch.getMax();
                 }
 
-		
+
                 sb += SP + "OUT";
-                for (TMLTask task: ch.getOriginTasks()) {
+                for (TMLTask task : ch.getOriginTasks()) {
                     sb += SP + task.getName();
                 }
                 sb += SP + "IN";
-                for (TMLTask task: ch.getDestinationTasks()) {
+                for (TMLTask task : ch.getDestinationTasks()) {
                     sb += SP + task.getName();
                 }
                 sb += CR;
-		
+
 
                 if (ch.isLossy()) {
-                            sb += "LOSSYCHANNEL" + SP + ch.getName() + SP + ch.getLossPercentage() + SP + ch.getMaxNbOfLoss() + CR;
+                    sb += "LOSSYCHANNEL" + SP + ch.getName() + SP + ch.getLossPercentage() + SP + ch.getMaxNbOfLoss() + CR;
                 }
 
                 if (ch.getVC() >= 0) {
@@ -280,16 +270,15 @@ public class TMLTextSpecification<E> {
             }
 
 
-
         }
-        sb+= CR;
+        sb += CR;
 
         sb += "// Events" + CR;
-        for(TMLEvent evt:tmlm.getEvents()) {
+        for (TMLEvent evt : tmlm.getEvents()) {
             sb += "EVENT" + SP + evt.getName() + "(";
-            for(i=0; i<evt.getNbOfParams(); i++) {
+            for (i = 0; i < evt.getNbOfParams(); i++) {
                 if (i != 0) {
-                    sb+= ", ";
+                    sb += ", ";
                 }
                 sb += TMLType.getStringType(evt.getType(i).getType());
             }
@@ -298,37 +287,37 @@ public class TMLTextSpecification<E> {
             if (!evt.isInfinite()) {
                 sb += SP + evt.getMaxSize();
             }
-            sb +=  SP + evt.getOriginTask().getName() + SP + evt.getDestinationTask().getName();
+            sb += SP + evt.getOriginTask().getName() + SP + evt.getDestinationTask().getName();
 
-            sb+= CR;
+            sb += CR;
 
             if (evt.isLossy()) {
                 sb += "LOSSYEVENT" + SP + evt.getName() + SP + evt.getLossPercentage() + SP + evt.getMaxNbOfLoss() + CR;
             }
         }
-        sb+= CR;
+        sb += CR;
 
         sb += "// Requests" + CR;
-        for(TMLRequest request:tmlm.getRequests()) {
+        for (TMLRequest request : tmlm.getRequests()) {
             sb += "REQUEST" + SP + request.getName() + "(";
-            for(i=0; i<request.getNbOfParams(); i++) {
+            for (i = 0; i < request.getNbOfParams(); i++) {
                 if (i != 0) {
-                    sb+= ", ";
+                    sb += ", ";
                 }
                 sb += TMLType.getStringType(request.getType(i).getType());
             }
             sb += ")";
-            for(TMLTask t: request.getOriginTasks()) {
-                sb+= SP + t.getName();
+            for (TMLTask t : request.getOriginTasks()) {
+                sb += SP + t.getName();
             }
             sb += SP + request.getDestinationTask().getName();
-            sb+= CR;
+            sb += CR;
 
             if (request.isLossy()) {
                 sb += "LOSSYREQUEST" + SP + request.getName() + SP + request.getLossPercentage() + SP + request.getMaxNbOfLoss() + CR;
             }
         }
-        sb+= CR;
+        sb += CR;
 
         return sb;
 
@@ -336,7 +325,7 @@ public class TMLTextSpecification<E> {
 
     public String makeTasks(TMLModeling<E> tmlm) {
         String sb = "";
-        for(TMLTask task: tmlm.getTasks()) {
+        for (TMLTask task : tmlm.getTasks()) {
             sb += "TASK" + SP + task.getName() + CR;
             sb += "TASKOP" + SP + task.getOperation() + CR;
             sb += makeActivity(task);
@@ -349,9 +338,9 @@ public class TMLTextSpecification<E> {
         String sb = "";
         sb += "//Local variables" + CR;
 
-        for(TMLAttribute attr: task.getAttributes()) {
+        for (TMLAttribute attr : task.getAttributes()) {
             sb += TMLType.getStringType(attr.getType().getType()) + SP + attr.getName();
-            if ((attr.getInitialValue() != null) && (attr.getInitialValue().length() > 0)){
+            if ((attr.getInitialValue() != null) && (attr.getInitialValue().length() > 0)) {
                 sb += " = " + attr.getInitialValue();
             }
             sb += CR;
@@ -370,7 +359,7 @@ public class TMLTextSpecification<E> {
         TMLActivityElementChannel tmlch;
         TMLActivityElementEvent tmlevt;
         TMLSendRequest tmlreq;
-       // TMLEvent evt;
+        // TMLEvent evt;
         TMLRandom random;
         int i;
         String tmp1, tmp2;
@@ -382,57 +371,51 @@ public class TMLTextSpecification<E> {
             return "";
 
         } else if (elt instanceof TMLExecI) {
-            code = "EXECI" + SP + modifyString(((TMLExecI)elt).getAction()) + CR;
+            code = "EXECI" + SP + modifyString(((TMLExecI) elt).getAction()) + CR;
             return code + makeBehavior(task, elt.getNextElement(0));
 
         } else if (elt instanceof TMLExecIInterval) {
-            code = "EXECI" + SP + modifyString(((TMLExecIInterval)elt).getMinDelay()) + SP + modifyString(((TMLExecIInterval)elt).getMaxDelay()) + CR;
+            code = "EXECI" + SP + modifyString(((TMLExecIInterval) elt).getMinDelay()) + SP + modifyString(((TMLExecIInterval) elt).getMaxDelay()) + CR;
             return code + makeBehavior(task, elt.getNextElement(0));
 
         } else if (elt instanceof TMLExecC) {
-        	if (elt.securityPattern==null){
-	            code = "EXECC" + SP + modifyString(((TMLExecC)elt).getAction()) + CR;
-	        }
-	        else {
-	        	String type="";
-	        	if (elt.securityPattern.type.equals("Asymmetric Encryption")){
-	        		type = AENCRYPT;
-	        	}
-	        	else if (elt.securityPattern.type.equals("Symmetric Encryption")){
-	        		type = SENCRYPT;
-	        	}
-	        	else if (elt.securityPattern.type.equals("MAC")){
-	        		type = MAC;
-	        	}
-	        	else if (elt.securityPattern.type.equals("Nonce")){
-	        		type = NONCE;
-	        	}
-	        	else if (elt.securityPattern.type.equals("Hash")){
-	        		type = HASH;
-	        	}	        		        	
-	        	else {
-	        		type = ADV;
-	        	}	        	
-	        	code = "EXECC" + SP +  modifyString(((TMLExecC)elt).getAction()) + SP + elt.securityPattern.name + SP + type + SP + elt.securityPattern.encTime + SP + elt.securityPattern.decTime + SP + elt.securityPattern.overhead + SP + elt.securityPattern.size + SP + elt.securityPattern.nonce + SP + elt.securityPattern.key+   CR;
-	        }
+            if (elt.securityPattern == null) {
+                code = "EXECC" + SP + modifyString(((TMLExecC) elt).getAction()) + CR;
+            } else {
+                String type = "";
+                if (elt.securityPattern.type.equals("Asymmetric Encryption")) {
+                    type = AENCRYPT;
+                } else if (elt.securityPattern.type.equals("Symmetric Encryption")) {
+                    type = SENCRYPT;
+                } else if (elt.securityPattern.type.equals("MAC")) {
+                    type = MAC;
+                } else if (elt.securityPattern.type.equals("Nonce")) {
+                    type = NONCE;
+                } else if (elt.securityPattern.type.equals("Hash")) {
+                    type = HASH;
+                } else {
+                    type = ADV;
+                }
+                code = "EXECC" + SP + modifyString(((TMLExecC) elt).getAction()) + SP + elt.securityPattern.name + SP + type + SP + elt.securityPattern.encTime + SP + elt.securityPattern.decTime + SP + elt.securityPattern.overhead + SP + elt.securityPattern.size + SP + elt.securityPattern.nonce + SP + elt.securityPattern.key + CR;
+            }
             return code + makeBehavior(task, elt.getNextElement(0));
 
         } else if (elt instanceof TMLExecCInterval) {
-            code = "EXECC" + SP + modifyString(((TMLExecCInterval)elt).getMinDelay()) + SP + modifyString(((TMLExecCInterval)elt).getMaxDelay()) + CR;
+            code = "EXECC" + SP + modifyString(((TMLExecCInterval) elt).getMinDelay()) + SP + modifyString(((TMLExecCInterval) elt).getMaxDelay()) + CR;
             return code + makeBehavior(task, elt.getNextElement(0));
 
         } else if (elt instanceof TMLDelay) {
-            tmp1 = ((TMLDelay)elt).getMinDelay();
-            tmp2 = ((TMLDelay)elt).getMaxDelay();
+            tmp1 = ((TMLDelay) elt).getMinDelay();
+            tmp2 = ((TMLDelay) elt).getMaxDelay();
             if (tmp1.compareTo(tmp2) == 0) {
-                code = "DELAY" + SP + modifyString(((TMLDelay)elt).getMinDelay()) + SP + modifyString(((TMLDelay)elt).getUnit()) + CR;
+                code = "DELAY" + SP + modifyString(((TMLDelay) elt).getMinDelay()) + SP + modifyString(((TMLDelay) elt).getUnit()) + CR;
             } else {
-                code = "DELAY" + SP + modifyString(((TMLDelay)elt).getMinDelay()) + SP + modifyString(((TMLDelay)elt).getMaxDelay()) + SP + modifyString(((TMLDelay)elt).getUnit()) + CR;
+                code = "DELAY" + SP + modifyString(((TMLDelay) elt).getMinDelay()) + SP + modifyString(((TMLDelay) elt).getMaxDelay()) + SP + modifyString(((TMLDelay) elt).getUnit()) + CR;
             }
             return code + makeBehavior(task, elt.getNextElement(0));
 
         } else if (elt instanceof TMLForLoop) {
-            tmlfl = (TMLForLoop)elt;
+            tmlfl = (TMLForLoop) elt;
             code = "FOR(" + tmlfl.getInit() + SC + SP;
             code += tmlfl.getCondition() + SC + SP;
             code += tmlfl.getIncrement() + ")" + CR;
@@ -440,75 +423,73 @@ public class TMLTextSpecification<E> {
             return code + "ENDFOR" + CR + makeBehavior(task, elt.getNextElement(1));
 
         } else if (elt instanceof TMLRandom) {
-            random = (TMLRandom)elt;
-            code = "RANDOM" + SP + modifyString(""+random.getFunctionId()) + SP;
+            random = (TMLRandom) elt;
+            code = "RANDOM" + SP + modifyString("" + random.getFunctionId()) + SP;
             code += modifyString(random.getVariable()) + SP;
             code += modifyString(random.getMinValue()) + SP;
             code += modifyString(random.getMaxValue()) + CR;
             return code + makeBehavior(task, elt.getNextElement(0));
 
         } else if (elt instanceof TMLActionState) {
-            code = modifyString(((TMLActivityElementWithAction)elt).getAction()) + CR;
+            code = modifyString(((TMLActivityElementWithAction) elt).getAction()) + CR;
             return code + makeBehavior(task, elt.getNextElement(0));
 
         } else if (elt instanceof TMLWriteChannel) {
-            tmlch = (TMLActivityElementChannel)elt;
+            tmlch = (TMLActivityElementChannel) elt;
             code = "WRITE ";
-            for(int k=0; k<tmlch.getNbOfChannels(); k++) {
+            for (int k = 0; k < tmlch.getNbOfChannels(); k++) {
                 code = code + tmlch.getChannel(k).getName() + SP;
             }
             code = code + modifyString(tmlch.getNbOfSamples());
-            if (elt.securityPattern!=null){
-            	code = code + SP + elt.securityPattern.name + CR;
-            }
-            else {
-            	code = code + CR;
+            if (elt.securityPattern != null) {
+                code = code + SP + elt.securityPattern.name + CR;
+            } else {
+                code = code + CR;
             }
             return code + makeBehavior(task, elt.getNextElement(0));
 
         } else if (elt instanceof TMLReadChannel) {
-            tmlch = (TMLActivityElementChannel)elt;
-            if (elt.securityPattern==null){      
-            	code = "READ " + tmlch.getChannel(0).getName() + SP + modifyString(tmlch.getNbOfSamples()) + CR;
-            }
-            else {
-            	code = "READ " + tmlch.getChannel(0).getName() + SP + modifyString(tmlch.getNbOfSamples()) + SP + elt.securityPattern.name + CR;     	
+            tmlch = (TMLActivityElementChannel) elt;
+            if (elt.securityPattern == null) {
+                code = "READ " + tmlch.getChannel(0).getName() + SP + modifyString(tmlch.getNbOfSamples()) + CR;
+            } else {
+                code = "READ " + tmlch.getChannel(0).getName() + SP + modifyString(tmlch.getNbOfSamples()) + SP + elt.securityPattern.name + CR;
             }
             return code + makeBehavior(task, elt.getNextElement(0));
 
         } else if (elt instanceof TMLSendEvent) {
-            tmlevt = (TMLActivityElementEvent)elt;
+            tmlevt = (TMLActivityElementEvent) elt;
             code = "NOTIFY " + tmlevt.getEvent().getName() + " " + tmlevt.getAllParams(" ") + CR;
             return code + makeBehavior(task, elt.getNextElement(0));
 
         } else if (elt instanceof TMLWaitEvent) {
-            tmlevt = (TMLActivityElementEvent)elt;
+            tmlevt = (TMLActivityElementEvent) elt;
             code = "WAIT " + tmlevt.getEvent().getName() + " " + tmlevt.getAllParams(" ") + CR;
             return code + makeBehavior(task, elt.getNextElement(0));
 
         } else if (elt instanceof TMLNotifiedEvent) {
-            tmlevt = (TMLActivityElementEvent)elt;
+            tmlevt = (TMLActivityElementEvent) elt;
             code = "NOTIFIED " + tmlevt.getEvent().getName() + " " + tmlevt.getVariable() + CR;
             return code + makeBehavior(task, elt.getNextElement(0));
 
         } else if (elt instanceof TMLSendRequest) {
-            tmlreq = (TMLSendRequest)elt;
-            code = "REQUEST " + tmlreq.getRequest().getName() + " " + tmlreq.getAllParams(" ") + CR;
+            tmlreq = (TMLSendRequest) elt;
+            code = "NOTIFYREQUEST " + tmlreq.getRequest().getName() + " " + tmlreq.getAllParams(" ") + CR;
             return code + makeBehavior(task, elt.getNextElement(0));
 
-        }  else if (elt instanceof TMLSequence) {
+        } else if (elt instanceof TMLSequence) {
             code = "";
-            for(i=0; i<elt.getNbNext(); i++) {
+            for (i = 0; i < elt.getNbNext(); i++) {
                 code += makeBehavior(task, elt.getNextElement(i));
             }
 
             return code;
 
         } else if (elt instanceof TMLChoice) {
-            TMLChoice choice = (TMLChoice)elt;
+            TMLChoice choice = (TMLChoice) elt;
             code = "";
-            if (choice.getNbGuard() !=0 ) {
-               // code1 = "";
+            if (choice.getNbGuard() != 0) {
+                // code1 = "";
                 int index1 = choice.getElseGuard(), index2 = choice.getAfterGuard();
                 int nb = Math.max(choice.nbOfNonDeterministicGuard(), choice.nbOfStochasticGuard());
                 if (nb > 0) {
@@ -516,14 +497,14 @@ public class TMLTextSpecification<E> {
                     code += "RAND" + CR;
                 }
                 nb = 0;
-                for(i=0; i<choice.getNbGuard(); i++) {
+                for (i = 0; i < choice.getNbGuard(); i++) {
                     if (i != index2) {
                         if (choice.isNonDeterministicGuard(i)) {
-                            code2 = "" + (int)(Math.floor(100/choice.getNbGuard()));
-                            nb ++;
-                        } else if (choice.isStochasticGuard(i)){
+                            code2 = "" + (int) (Math.floor(100 / choice.getNbGuard()));
+                            nb++;
+                        } else if (choice.isStochasticGuard(i)) {
                             code2 = prepareString(choice.getStochasticGuard(i));
-                            nb ++;
+                            nb++;
                         } else {
                             code2 = modifyString(choice.getGuard(i));
                             code2 = Conversion.replaceAllChar(code2, '[', "(");
@@ -544,7 +525,7 @@ public class TMLTextSpecification<E> {
                                 code += "ENDCASERAND" + CR;
                             }
                         } else {
-                            if (i==0) {
+                            if (i == 0) {
                                 code += "IF " + code2;
                             } else {
                                 if (i != index1) {
@@ -571,9 +552,9 @@ public class TMLTextSpecification<E> {
 
         } else if (elt instanceof TMLSelectEvt) {
             code = "SELECTEVT" + CR;
-            for(i=0; i<elt.getNbNext(); i++) {
+            for (i = 0; i < elt.getNbNext(); i++) {
                 try {
-                    tmlevt = (TMLActivityElementEvent)(elt.getNextElement(i));
+                    tmlevt = (TMLActivityElementEvent) (elt.getNextElement(i));
                     code += "CASE ";
                     code += tmlevt.getEvent().getName() + " " + tmlevt.getAllParams(" ") + CR;
                     code += makeBehavior(task, elt.getNextElement(i).getNextElement(0));
@@ -587,7 +568,7 @@ public class TMLTextSpecification<E> {
 
         } else if (elt instanceof TMLRandomSequence) {
             code = "RANDOMSEQ" + CR;
-            for(i=0; i<elt.getNbNext(); i++) {
+            for (i = 0; i < elt.getNbNext(); i++) {
                 code += "SEQ" + CR;
                 code += makeBehavior(task, elt.getNextElement(i));
                 code += "ENDSEQ" + CR;
@@ -619,7 +600,7 @@ public class TMLTextSpecification<E> {
 
     public String printErrors() {
         String ret = "";
-        for(TMLTXTError error: errors) {
+        for (TMLTXTError error : errors) {
             ret += "ERROR at line " + error.lineNb + ": " + error.message + CR;
             try {
                 ret += "->" + spec.split("\n")[error.lineNb] + CR2;
@@ -632,7 +613,7 @@ public class TMLTextSpecification<E> {
 
     public String printWarnings() {
         String ret = "";
-        for(TMLTXTError error: warnings) {
+        for (TMLTXTError error : warnings) {
             ret += "WARNING at line " + error.lineNb + CR;
             ret += error.message + CR;
         }
@@ -648,7 +629,7 @@ public class TMLTextSpecification<E> {
         } else {
             ret += printErrors() + CR + printWarnings() + CR;
             ret += "Compilation failed" + CR;
-            ret += errors.size() + " error(s), "+ warnings.size() + " warning(s)" + CR;
+            ret += errors.size() + " error(s), " + warnings.size() + " warning(s)" + CR;
         }
 
         return ret;
@@ -663,22 +644,22 @@ public class TMLTextSpecification<E> {
         BufferedReader br = new BufferedReader(sr);
         String s;
         String s1;
-        String [] split;
+        String[] split;
         int lineNb = 0;
 
         inDec = true;
         inTask = false;
         inTaskDec = false;
-       // inTaskBehavior = false;
+        // inTaskBehavior = false;
 
 
         //String instruction;
 
         parses = new ArrayList<TMLParserSaveElt>();
 
-		//Start by reading once and creating all Cryptographic Configuration
-		 try {
-            while((s = br.readLine()) != null) {
+        //Start by reading once and creating all Cryptographic Configuration
+        try {
+            while ((s = br.readLine()) != null) {
                 if (s != null) {
                     s = s.trim();
                     //TraceManager.addDev("s=" + s);
@@ -690,23 +671,23 @@ public class TMLTextSpecification<E> {
                         split = s1.split("\\s");
                         if (split.length > 0) {
                             findSec(split);
-                            
+
                         }
                     }
 
                     lineNb++;
                 }
             }
-		
-		} catch (Exception e){
+
+        } catch (Exception e) {
             TraceManager.addError("Exception when reading specification: " + e.getMessage());
             addError(0, lineNb, 0, "Exception when reading specification");
-		}
-		
-		lineNb=0;
-		br = new BufferedReader(new StringReader(spec));
+        }
+
+        lineNb = 0;
+        br = new BufferedReader(new StringReader(spec));
         try {
-            while((s = br.readLine()) != null) {
+            while ((s = br.readLine()) != null) {
                 if (s != null) {
                     s = s.trim();
                     //TraceManager.addDev("s=" + s);
@@ -732,37 +713,32 @@ public class TMLTextSpecification<E> {
         }
     }
 
-	public void findSec(String[] _split){
-		if (isInstruction(_split[0],"EXECC")){
-			if (_split.length>4){
-				String ccName = _split[3];
-				String type = _split[4];
-				String stringType="";
-				if (type.equals(AENCRYPT)){
-					stringType="Symmetric Encryption";		
-				}
-				else if (type.equals(SENCRYPT)){
-					stringType="Symmetric Encryption";
-				}
-				else if (type.equals(HASH)){
-					stringType = "Hash";
-				}
-				else if (type.equals(MAC)){
-					stringType = "MAC";
-				}
-				else if (type.equals(NONCE)){
-					stringType = "Nonce";
-				}
-				else if (type.equals(ADV)){
-					stringType = "Advanced";
-				}
-				if (!stringType.equals("")){
-					SecurityPattern sp = new SecurityPattern(ccName, stringType, _split[6], _split[7], _split[4], _split[5], _split[8], "", _split[9]);
-					securityPatternMap.put(ccName, sp);
-				}
-			}
-		}
-	}
+    public void findSec(String[] _split) {
+        if (isInstruction(_split[0], "EXECC")) {
+            if (_split.length > 4) {
+                String ccName = _split[3];
+                String type = _split[4];
+                String stringType = "";
+                if (type.equals(AENCRYPT)) {
+                    stringType = "Symmetric Encryption";
+                } else if (type.equals(SENCRYPT)) {
+                    stringType = "Symmetric Encryption";
+                } else if (type.equals(HASH)) {
+                    stringType = "Hash";
+                } else if (type.equals(MAC)) {
+                    stringType = "MAC";
+                } else if (type.equals(NONCE)) {
+                    stringType = "Nonce";
+                } else if (type.equals(ADV)) {
+                    stringType = "Advanced";
+                }
+                if (!stringType.equals("")) {
+                    SecurityPattern sp = new SecurityPattern(ccName, stringType, _split[6], _split[7], _split[4], _split[5], _split[8], "", _split[9]);
+                    securityPatternMap.put(ccName, sp);
+                }
+            }
+        }
+    }
 
     public void addError(int _type, int _lineNb, int _charNb, String _msg) {
         TMLTXTError error = new TMLTXTError(_type);
@@ -781,7 +757,7 @@ public class TMLTextSpecification<E> {
         TMLRequest request;
         TMLTask t1, t2;
         TMLAttribute attribute;
-     //   TMLType type;
+        //   TMLType type;
         TMLStopState stop;
         TMLRandom random;
         int tmp, tmp0, tmp1, i;
@@ -806,7 +782,7 @@ public class TMLTextSpecification<E> {
         }
 
         // CHANNEL
-        if(isInstruction("CHANNEL", _split[0])) {
+        if (isInstruction("CHANNEL", _split[0])) {
             if (!inDec) {
                 error = "A channel may not be declared in a non-declaration part of a TML specification";
                 addError(0, _lineNb, 0, error);
@@ -814,7 +790,7 @@ public class TMLTextSpecification<E> {
             }
 
             if (!((_split.length > 7))) {
-                error = "A channel must be declared with at least 7 parameters, and not: " + (_split.length - 1) ;
+                error = "A channel must be declared with at least 7 parameters, and not: " + (_split.length - 1);
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
@@ -831,35 +807,38 @@ public class TMLTextSpecification<E> {
                 return -1;
             }
 
-	    // Max nb of elements?
-	    try {
-                    tmp = Integer.decode(_split[4]).intValue();
-		    dec = 1;
-	    } catch (Exception e) {dec = 0; tmp=8;}
+            // Max nb of elements?
+            try {
+                tmp = Integer.decode(_split[4]).intValue();
+                dec = 1;
+            } catch (Exception e) {
+                dec = 0;
+                tmp = 8;
+            }
 
 
-	    //TraceManager.addDev("Checking OUT");
-	    // "OUT" keyword?
-	     if (!checkParameter("CHANNEL", _split, 4+dec, 10, _lineNb)) {
+            //TraceManager.addDev("Checking OUT");
+            // "OUT" keyword?
+            if (!checkParameter("CHANNEL", _split, 4 + dec, 10, _lineNb)) {
                 return -1;
             }
 
-	     //TraceManager.addDev("Checking other params of channels");
-	     int indexOfIN = -1;
-	     for(i=5+dec; i<_split.length; i++) {
-		 if (!checkParameter("CHANNEL", _split, i, 0, _lineNb)) {
-		     return -1;
-		 }
-		 if (_split[i].compareTo("IN") == 0) {
-		     indexOfIN = i;
-		 }
-	     }
+            //TraceManager.addDev("Checking other params of channels");
+            int indexOfIN = -1;
+            for (i = 5 + dec; i < _split.length; i++) {
+                if (!checkParameter("CHANNEL", _split, i, 0, _lineNb)) {
+                    return -1;
+                }
+                if (_split[i].compareTo("IN") == 0) {
+                    indexOfIN = i;
+                }
+            }
 
-	     if (indexOfIN == -1) {
-		 error = "\"IN\" keyword is missing";
-		 addError(0, _lineNb, 0, error);
-		 return -1;
-	     }
+            if (indexOfIN == -1) {
+                error = "\"IN\" keyword is missing";
+                addError(0, _lineNb, 0, error);
+                return -1;
+            }
 
             if (tmlm.getChannelByName(_split[1]) != null) {
                 error = "Duplicate definition of channel " + _split[1];
@@ -875,38 +854,40 @@ public class TMLTextSpecification<E> {
             ch.setTypeByName(_split[2]);
             try {
                 tmp = Integer.decode(_split[3]).intValue();
-            } catch (Exception e) {tmp = 4;}
+            } catch (Exception e) {
+                tmp = 4;
+            }
             ch.setSize(tmp);
-	    ch.setMax(tmp);
+            ch.setMax(tmp);
 
-	    for(i=5+dec; i<_split.length; i++) {
-		if (i != indexOfIN) {
-		    t1 = tmlm.getTMLTaskByName(_split[i]);
-		    if (t1 == null) {
-			t1 = new TMLTask(_split[i], null, null);
-			tmlm.addTask(t1);
-			//TraceManager.addDev("New task:" + _split[4+dec]);
-		    }
-		    ch.addTaskPort(t1, null, (i<indexOfIN));
-		}
-		
-	    }
+            for (i = 5 + dec; i < _split.length; i++) {
+                if (i != indexOfIN) {
+                    t1 = tmlm.getTMLTaskByName(_split[i]);
+                    if (t1 == null) {
+                        t1 = new TMLTask(_split[i], null, null);
+                        tmlm.addTask(t1);
+                        //TraceManager.addDev("New task:" + _split[4+dec]);
+                    }
+                    ch.addTaskPort(t1, null, (i < indexOfIN));
+                }
 
-	    ch.toBasicIfPossible();
+            }
 
-	    if (!(ch.isBasicChannel())) {
-		if (ch.isBadComplexChannel()) {
-		    error = "A complex channel must be \"1 -> many\" of \"many -> 1\"";
-		    addError(0, _lineNb, 0, error);
-		    return -1;
-		}
-	    }
+            ch.toBasicIfPossible();
+
+            if (!(ch.isBasicChannel())) {
+                if (ch.isBadComplexChannel()) {
+                    error = "A complex channel must be \"1 -> many\" of \"many -> 1\"";
+                    addError(0, _lineNb, 0, error);
+                    return -1;
+                }
+            }
             tmlm.addChannel(ch);
         } // CHANNEL
 
 
         // LOSSYCHANNEL
-        if(isInstruction("LOSSYCHANNEL", _split[0])) {
+        if (isInstruction("LOSSYCHANNEL", _split[0])) {
             if (!inDec) {
                 error = "A lossychannel may not be declared in a non-declaration part of a TML specification";
                 addError(0, _lineNb, 0, error);
@@ -914,7 +895,7 @@ public class TMLTextSpecification<E> {
             }
 
             if (!((_split.length > 3) && (_split.length < 5))) {
-                error = "A lossychannel must be declared with exactly 3 parameters, and not " + (_split.length - 1) ;
+                error = "A lossychannel must be declared with exactly 3 parameters, and not " + (_split.length - 1);
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
@@ -942,23 +923,27 @@ public class TMLTextSpecification<E> {
 
             try {
                 tmp0 = Integer.decode(_split[2]).intValue();
-            } catch (Exception e) {tmp0 = 5;}
+            } catch (Exception e) {
+                tmp0 = 5;
+            }
             try {
                 tmp1 = Integer.decode(_split[3]).intValue();
-            } catch (Exception e) {tmp1 = -1;}
+            } catch (Exception e) {
+                tmp1 = -1;
+            }
 
             ch.setLossy(true, tmp0, tmp1);
         } // LOSSYCHANNEL
 
-        if(isInstruction("VCCHANNEL", _split[0])) {
+        if (isInstruction("VCCHANNEL", _split[0])) {
             if (!inDec) {
                 error = "A ycchannel may not be declared in a non-declaration part of a TML specification";
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
 
-            if (_split.length != 2) {
-                error = "A vcchannel must be declared with exactly 2 parameters, and not " + (_split.length - 1) ;
+            if (_split.length != 3) {
+                error = "A vcchannel must be declared with exactly 2 parameters, and not " + (_split.length - 1);
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
@@ -982,14 +967,16 @@ public class TMLTextSpecification<E> {
 
             try {
                 tmp0 = Integer.decode(_split[2]);
-            } catch (Exception e) {tmp0 = -1;}
+            } catch (Exception e) {
+                tmp0 = -1;
+            }
 
 
             ch.setVC(tmp0);
         } // VCCHANNEL
 
         // EVENT
-        if(isInstruction("EVENT", _split[0])) {
+        if (isInstruction("EVENT", _split[0])) {
             if (!inDec) {
                 error = "An event may not be declared in a non-declaration part of a TML specification";
                 addError(0, _lineNb, 0, error);
@@ -997,7 +984,7 @@ public class TMLTextSpecification<E> {
             }
 
             if (!((_split.length > 4) && (_split.length < 7))) {
-                error = "An event must be declared with only 4 or 5 parameters, and not " + (_split.length - 1) ;
+                error = "An event must be declared with only 4 or 5 parameters, and not " + (_split.length - 1);
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
@@ -1058,15 +1045,15 @@ public class TMLTextSpecification<E> {
             evt = new TMLEvent(id, null, tmp, blocking);
             evt.addParam(params);
 
-            t1 = tmlm.getTMLTaskByName(_split[3+dec]);
+            t1 = tmlm.getTMLTaskByName(_split[3 + dec]);
             if (t1 == null) {
-                t1 = new TMLTask(_split[3+dec], null, null);
+                t1 = new TMLTask(_split[3 + dec], null, null);
                 //TraceManager.addDev("New task:" + _split[3+dec]);
                 tmlm.addTask(t1);
             }
-            t2 = tmlm.getTMLTaskByName(_split[4+dec]);
+            t2 = tmlm.getTMLTaskByName(_split[4 + dec]);
             if (t2 == null) {
-                t2 = new TMLTask(_split[4+dec], null, null);
+                t2 = new TMLTask(_split[4 + dec], null, null);
                 //TraceManager.addDev("New task:" + _split[4+dec]);
                 tmlm.addTask(t2);
             }
@@ -1077,7 +1064,7 @@ public class TMLTextSpecification<E> {
         } // EVENT
 
         // LOSSYEVENT
-        if(isInstruction("LOSSYEVENT", _split[0])) {
+        if (isInstruction("LOSSYEVENT", _split[0])) {
             if (!inDec) {
                 error = "A lossyevent may not be declared in a non-declaration part of a TML specification";
                 addError(0, _lineNb, 0, error);
@@ -1085,7 +1072,7 @@ public class TMLTextSpecification<E> {
             }
 
             if (!((_split.length > 3) && (_split.length < 5))) {
-                error = "A lossyevent must be declared with exactly 3 parameters, and not " + (_split.length - 1) ;
+                error = "A lossyevent must be declared with exactly 3 parameters, and not " + (_split.length - 1);
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
@@ -1113,16 +1100,20 @@ public class TMLTextSpecification<E> {
 
             try {
                 tmp0 = Integer.decode(_split[2]).intValue();
-            } catch (Exception e) {tmp0 = 5;}
+            } catch (Exception e) {
+                tmp0 = 5;
+            }
             try {
                 tmp1 = Integer.decode(_split[3]).intValue();
-            } catch (Exception e) {tmp1 = -1;}
+            } catch (Exception e) {
+                tmp1 = -1;
+            }
 
             evt.setLossy(true, tmp0, tmp1);
         } // LOSSYEVENT
 
         // REQUEST
-        if((isInstruction("REQUEST", _split[0])) && (inDec)) {
+        if ((isInstruction("REQUEST", _split[0])) && (inDec)) {
             if (!inDec) {
                 error = "A request may not be declared in a non-declaration part of a TML specification";
                 addError(0, _lineNb, 0, error);
@@ -1130,7 +1121,7 @@ public class TMLTextSpecification<E> {
             }
 
             if (_split.length < 4) {
-                error = "A request must be declared with at least 4 paremeters, and not " + (_split.length - 1) ;
+                error = "A request must be declared with at least 4 paremeters, and not " + (_split.length - 1);
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
@@ -1145,7 +1136,7 @@ public class TMLTextSpecification<E> {
                 return -1;
             }
 
-            for(i=2; i<_split.length; i++) {
+            for (i = 2; i < _split.length; i++) {
                 if (!checkParameter("REQUEST", _split, i, 0, _lineNb)) {
                     return -1;
                 }
@@ -1160,14 +1151,14 @@ public class TMLTextSpecification<E> {
             request = new TMLRequest(id, null);
             request.addParam(params);
 
-            for(i=2; i<_split.length; i++) {
+            for (i = 2; i < _split.length; i++) {
                 t1 = tmlm.getTMLTaskByName(_split[i]);
                 if (t1 == null) {
                     t1 = new TMLTask(_split[i], null, null);
                     //TraceManager.addDev("New task:" + _split[i]);
                     tmlm.addTask(t1);
                 }
-                if ((i+1) == _split.length) {
+                if ((i + 1) == _split.length) {
                     request.setDestinationTask(t1);
                     t1.setRequested(true);
                     t1.setRequest(request);
@@ -1180,7 +1171,7 @@ public class TMLTextSpecification<E> {
         } // REQUEST
 
         // LOSSYREQUEST
-        if(isInstruction("LOSSYREQUEST", _split[0])) {
+        if (isInstruction("LOSSYREQUEST", _split[0])) {
             if (!inDec) {
                 error = "A lossyrequest may not be declared in a non-declaration part of a TML specification";
                 addError(0, _lineNb, 0, error);
@@ -1188,7 +1179,7 @@ public class TMLTextSpecification<E> {
             }
 
             if (!((_split.length > 3) && (_split.length < 5))) {
-                error = "A lossyrequest must be declared with exactly 3 parameters, and not " + (_split.length - 1) ;
+                error = "A lossyrequest must be declared with exactly 3 parameters, and not " + (_split.length - 1);
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
@@ -1216,16 +1207,20 @@ public class TMLTextSpecification<E> {
 
             try {
                 tmp0 = Integer.decode(_split[2]).intValue();
-            } catch (Exception e) {tmp0 = 5;}
+            } catch (Exception e) {
+                tmp0 = 5;
+            }
             try {
                 tmp1 = Integer.decode(_split[3]).intValue();
-            } catch (Exception e) {tmp1 = -1;}
+            } catch (Exception e) {
+                tmp1 = -1;
+            }
 
             request.setLossy(true, tmp0, tmp1);
         } // LOSSYREQUEST
 
         // TASK
-        if((isInstruction("TASK", _split[0]))) {
+        if ((isInstruction("TASK", _split[0]))) {
 
             //TraceManager.addDev("In task");
             if (inTask) {
@@ -1237,10 +1232,10 @@ public class TMLTextSpecification<E> {
             inDec = false;
             inTask = true;
             inTaskDec = true;
-       //     inTaskBehavior = false;
+            //     inTaskBehavior = false;
 
             if (_split.length != 2) {
-                error = "A task must be declared with exactly 2 parameters, and not " + (_split.length - 1) ;
+                error = "A task must be declared with exactly 2 parameters, and not " + (_split.length - 1);
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
@@ -1251,9 +1246,9 @@ public class TMLTextSpecification<E> {
 
             //TraceManager.addDev("In task: 12");
             task = tmlm.getTMLTaskByName(_split[1]);
-            if ((task != null)  && (task.getActivityDiagram() != null)) {
+            if ((task != null) && (task.getActivityDiagram() != null)) {
                 if (task.getActivityDiagram().getFirst() != null) {
-                    error = "Duplicate definition for task "+ (_split[1]);
+                    error = "Duplicate definition for task " + (_split[1]);
                     addError(0, _lineNb, 0, error);
                     return -1;
                 }
@@ -1274,7 +1269,7 @@ public class TMLTextSpecification<E> {
 
 
         // TASKOP
-        if((isInstruction("TASKOP", _split[0]))) {
+        if ((isInstruction("TASKOP", _split[0]))) {
             //An operation is really specified?
 
             if (!inTask) {
@@ -1283,9 +1278,19 @@ public class TMLTextSpecification<E> {
                 return -1;
             }
 
+            if (!inTaskDec) {
+                error = "A task operation cannot be declared outside the declarative part of another task";
+                addError(0, _lineNb, 0, error);
+                return -1;
+            }
+
+            inDec = false;
+            inTask = true;
+            inTaskDec = true;
+
             String tmpOp = "";
 
-            for(int j=1; j<_split.length; j++) {
+            for (int j = 1; j < _split.length; j++) {
                 tmpOp += _split[j];
 
             }
@@ -1294,7 +1299,7 @@ public class TMLTextSpecification<E> {
 
 
         // ENDTASK
-        if((isInstruction("ENDTASK", _split[0]))) {
+        if ((isInstruction("ENDTASK", _split[0]))) {
             if (!inTask) {
                 error = "A endtask may not be used outside the body of a task";
                 addError(0, _lineNb, 0, error);
@@ -1303,7 +1308,7 @@ public class TMLTextSpecification<E> {
             inDec = true;
             inTask = false;
             inTaskDec = false;
-           // inTaskBehavior = false;
+            // inTaskBehavior = false;
 
             stop = new TMLStopState("stop", null);
             task.getActivityDiagram().addElement(stop);
@@ -1314,9 +1319,9 @@ public class TMLTextSpecification<E> {
 
 
         // Attribute declaration
-        if ((isInstruction("INT", _split[0])) || (isInstruction("NAT", _split[0])) || (isInstruction("BOOL", _split[0]))){
+        if ((isInstruction("INT", _split[0])) || (isInstruction("NAT", _split[0])) || (isInstruction("BOOL", _split[0]))) {
             if (!inTaskDec) {
-                error = "An attribute declaration must be done in a task right after its declaration, and before its bahavior";
+                error = "An attribute declaration must be done in a task right after its declaration, and before its behavior";
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
@@ -1324,7 +1329,7 @@ public class TMLTextSpecification<E> {
             String inst = _split[0].toUpperCase();
 
             if (!((_split.length == 2) || (_split.length == 4))) {
-                error = "An attribute declaration must be done with either 1 or 3 parameters, and not " + (_split.length - 1) ;
+                error = "An attribute declaration must be done with either 1 or 3 parameters, and not " + (_split.length - 1);
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
@@ -1354,7 +1359,7 @@ public class TMLTextSpecification<E> {
         } // Attribute declaration
 
         // RANDOM
-        if((isInstruction("RANDOM", _split[0]))) {
+        if ((isInstruction("RANDOM", _split[0]))) {
 
             if (!inTask) {
                 error = "A RANDOM operation may only be performed in a task body";
@@ -1365,10 +1370,10 @@ public class TMLTextSpecification<E> {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-        //    inTaskBehavior = true;
+            //    inTaskBehavior = true;
 
             if (_split.length != 5) {
-                error = "A RANDOM operation must be declared with exactly 4 parameters, and not " + (_split.length - 1) ;
+                error = "A RANDOM operation must be declared with exactly 4 parameters, and not " + (_split.length - 1);
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
@@ -1400,7 +1405,7 @@ public class TMLTextSpecification<E> {
         } // RANDOM
 
         // READ
-        if((isInstruction("READ", _split[0]))) {
+        if ((isInstruction("READ", _split[0]))) {
 
             if (!inTask) {
                 error = "A READ operation may only be performed in a task body";
@@ -1411,10 +1416,10 @@ public class TMLTextSpecification<E> {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-         //   inTaskBehavior = true;
+            //   inTaskBehavior = true;
 
-            if (_split.length != 3 && _split.length!= 4) {
-                error = "A READ operation must be declared with exactly 3 or 4 parameters, and not " + (_split.length - 1) ;
+            if (_split.length != 3 && _split.length != 4) {
+                error = "A READ operation must be declared with exactly 3 or 4 parameters, and not " + (_split.length - 1);
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
@@ -1428,12 +1433,12 @@ public class TMLTextSpecification<E> {
               }*/
 
             ch = tmlm.getChannelByName(_split[1]);
-            if (ch == null ){
-                error = "Undeclared channel: " +  _split[1];
+            if (ch == null) {
+                error = "Undeclared channel: " + _split[1];
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
-            if (!(ch.hasDestinationTask(task))){
+            if (!(ch.hasDestinationTask(task))) {
                 error = "READ operations must be done only in destination task(s). Should be in task(s): " + ch.getNameOfDestinationTasks();
                 addError(0, _lineNb, 0, error);
                 return -1;
@@ -1445,19 +1450,19 @@ public class TMLTextSpecification<E> {
             tmlrch.setNbOfSamples(_split[2]);
             task.getActivityDiagram().addElement(tmlrch);
             tmlae.addNext(tmlrch);
-                        
-            if (_split.length==4){
-            	if (securityPatternMap.containsKey(_split[3])){
-            		tmlrch.securityPattern = securityPatternMap.get(_split[3]); 
-            	}
-			}		
-            
+
+            if (_split.length == 4) {
+                if (securityPatternMap.containsKey(_split[3])) {
+                    tmlrch.securityPattern = securityPatternMap.get(_split[3]);
+                }
+            }
+
             tmlae = tmlrch;
 
         } // READ
 
         // WRITE
-        if((isInstruction("WRITE", _split[0]))) {
+        if ((isInstruction("WRITE", _split[0]))) {
 
             if (!inTask) {
                 error = "A WRITE operation may only be performed in a task body";
@@ -1468,12 +1473,11 @@ public class TMLTextSpecification<E> {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-         //   inTaskBehavior = true;
+            //   inTaskBehavior = true;
 
-	
-			
-            if (_split.length > 5 || _split.length <2) {
-                error = "A WRITE operation must be declared with at most 4 parameters, and not " + (_split.length - 1) ;
+
+            if (_split.length > 5 || _split.length < 2) {
+                error = "A WRITE operation must be declared with at most 4 parameters, and not " + (_split.length - 1);
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
@@ -1482,64 +1486,63 @@ public class TMLTextSpecification<E> {
                 return -1;
             }
 
-	    //TraceManager.addDev("Handling write channel 1");
+            //TraceManager.addDev("Handling write channel 1");
             TMLWriteChannel tmlwch = new TMLWriteChannel(_split[1], null);
-            if (_split.length>3){
-            	if (securityPatternMap.containsKey(_split[_split.length-1])){
-            		tmlwch.securityPattern = securityPatternMap.get(_split[_split.length-1]); 
-            	}
-            	for(int k=0; k<_split.length-3; k++) {
-				//TraceManager.addDev("Handling write channel 1.1");
-                	ch = tmlm.getChannelByName(_split[1+k]);
-                	if (ch == null ){
-                    	error = "Undeclared channel: " +  _split[1+k];
-                   		addError(0, _lineNb, 0, error);
-                    	return -1;
-                	}
-					//TraceManager.addDev("Handling write channel 1.2 for task: " + task.getName());
-                	if (!(ch.hasOriginTask(task))){		    
-		    		error = "WRITE operations must be done only in origin task(s). Should be in task(s): " + ch.getNameOfOriginTasks();		    
-                	    addError(0, _lineNb, 0, error);
-                	    return -1;
-                	}
-					//TraceManager.addDev("Handling write channel 1.3");
+            if (_split.length > 3) {
+                if (securityPatternMap.containsKey(_split[_split.length - 1])) {
+                    tmlwch.securityPattern = securityPatternMap.get(_split[_split.length - 1]);
+                }
+                for (int k = 0; k < _split.length - 3; k++) {
+                    //TraceManager.addDev("Handling write channel 1.1");
+                    ch = tmlm.getChannelByName(_split[1 + k]);
+                    if (ch == null) {
+                        error = "Undeclared channel: " + _split[1 + k];
+                        addError(0, _lineNb, 0, error);
+                        return -1;
+                    }
+                    //TraceManager.addDev("Handling write channel 1.2 for task: " + task.getName());
+                    if (!(ch.hasOriginTask(task))) {
+                        error = "WRITE operations must be done only in origin task(s). Should be in task(s): " + ch.getNameOfOriginTasks();
+                        addError(0, _lineNb, 0, error);
+                        return -1;
+                    }
+                    //TraceManager.addDev("Handling write channel 1.3");
 
-                	tmlwch.addChannel(ch);
-            	}
-			}		    
-            else {
-            
-            	for(int k=0; k<_split.length-2; k++) {
-				//TraceManager.addDev("Handling write channel 1.1");
-                	ch = tmlm.getChannelByName(_split[1+k]);
-                	if (ch == null ){
-                    	error = "Undeclared channel: " +  _split[1+k];
-                   		addError(0, _lineNb, 0, error);
-                    	return -1;
-                	}
-					//TraceManager.addDev("Handling write channel 1.2 for task: " + task.getName());
-                	if (!(ch.hasOriginTask(task))){		    
-		    		error = "WRITE operations must be done only in origin task(s). Should be in task(s): " + ch.getNameOfOriginTasks();		    
-                	    addError(0, _lineNb, 0, error);
-                	    return -1;
-                	}
-					//TraceManager.addDev("Handling write channel 1.3");
+                    tmlwch.addChannel(ch);
+                }
+            } else {
 
-                	tmlwch.addChannel(ch);
-            	}
-			}
-	    	//TraceManager.addDev("Handling write channel 2");
+                for (int k = 0; k < _split.length - 2; k++) {
+                    //TraceManager.addDev("Handling write channel 1.1");
+                    ch = tmlm.getChannelByName(_split[1 + k]);
+                    if (ch == null) {
+                        error = "Undeclared channel: " + _split[1 + k];
+                        addError(0, _lineNb, 0, error);
+                        return -1;
+                    }
+                    //TraceManager.addDev("Handling write channel 1.2 for task: " + task.getName());
+                    if (!(ch.hasOriginTask(task))) {
+                        error = "WRITE operations must be done only in origin task(s). Should be in task(s): " + ch.getNameOfOriginTasks();
+                        addError(0, _lineNb, 0, error);
+                        return -1;
+                    }
+                    //TraceManager.addDev("Handling write channel 1.3");
+
+                    tmlwch.addChannel(ch);
+                }
+            }
+            //TraceManager.addDev("Handling write channel 2");
             tmlwch.setNbOfSamples(_split[2]);
             task.getActivityDiagram().addElement(tmlwch);
             tmlae.addNext(tmlwch);
-            
+
 
             tmlae = tmlwch;
 
         } // WRITE
 
         // NOTIFY
-        if((isInstruction("NOTIFY", _split[0]))) {
+        if ((isInstruction("NOTIFY", _split[0]))) {
 
             if (!inTask) {
                 error = "A NOTIFY operation may only be performed in a task body";
@@ -1550,17 +1553,17 @@ public class TMLTextSpecification<E> {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-           // inTaskBehavior = true;
+            // inTaskBehavior = true;
 
             if (_split.length < 2) {
-                error = "A NOTIFY operation must be declared with at least 2 parameters, and not " + (_split.length - 1) ;
+                error = "A NOTIFY operation must be declared with at least 2 parameters, and not " + (_split.length - 1);
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
 
             evt = tmlm.getEventByName(_split[1]);
             if (evt == null) {
-                error = "Unknown event: " + _split[1] ;
+                error = "Unknown event: " + _split[1];
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
@@ -1568,14 +1571,14 @@ public class TMLTextSpecification<E> {
             dec = evt.getNbOfParams();
 
             if (_split.length != 2 + dec) {
-                error = "A NOTIFY operation on evt " + evt.getName() + " must be declared with exactly " + (1 + dec) + " parameters and not " + (_split.length - 1) ;
+                error = "A NOTIFY operation on evt " + evt.getName() + " must be declared with exactly " + (1 + dec) + " parameters and not " + (_split.length - 1);
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
 
             TMLSendEvent sevt = new TMLSendEvent(evt.getName(), null);
             sevt.setEvent(evt);
-            for(i=2; i<2 + dec; i++) {
+            for (i = 2; i < 2 + dec; i++) {
                 sevt.addParam(_split[i]);
             }
 
@@ -1585,7 +1588,7 @@ public class TMLTextSpecification<E> {
         } // NOTIFY
 
         // WAIT
-        if((isInstruction("WAIT", _split[0]))) {
+        if ((isInstruction("WAIT", _split[0]))) {
 
             if (!inTask) {
                 error = "A WAIT operation may only be performed in a task body";
@@ -1596,17 +1599,17 @@ public class TMLTextSpecification<E> {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-       //     inTaskBehavior = true;
+            //     inTaskBehavior = true;
 
             if (_split.length < 2) {
-                error = "A WAIT operation must be declared with at least 2 parameters, and not " + (_split.length - 1) ;
+                error = "A WAIT operation must be declared with at least 2 parameters, and not " + (_split.length - 1);
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
 
             evt = tmlm.getEventByName(_split[1]);
             if (evt == null) {
-                error = "Unknown event: " + _split[1] ;
+                error = "Unknown event: " + _split[1];
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
@@ -1614,20 +1617,20 @@ public class TMLTextSpecification<E> {
             dec = evt.getNbOfParams();
 
             if (_split.length != 2 + dec) {
-                error = "A WAIT operation on evt " + evt.getName() + " must be declared with exactly " + (1 + dec) + " parameters and not " + (_split.length - 1) ;
+                error = "A WAIT operation on evt " + evt.getName() + " must be declared with exactly " + (1 + dec) + " parameters and not " + (_split.length - 1);
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
 
             // Each param must be a declared attribute of the right type
-            for(i=2; i<2 + dec; i++) {
+            for (i = 2; i < 2 + dec; i++) {
                 attribute = task.getAttributeByName(_split[i]);
                 if (attribute == null) {
                     error = "Attribute: " + _split[i] + " is undeclared";
                     addError(0, _lineNb, 0, error);
                     return -1;
                 }
-                if (attribute.type.getType() != evt.getType(i-2).getType()) {
+                if (attribute.type.getType() != evt.getType(i - 2).getType()) {
                     error = "Attribute: " + _split[i] + " is not of the right type";
                     addError(0, _lineNb, 0, error);
                     return -1;
@@ -1637,7 +1640,7 @@ public class TMLTextSpecification<E> {
 
             TMLWaitEvent wevt = new TMLWaitEvent(evt.getName(), null);
             wevt.setEvent(evt);
-            for(i=2; i<2 + dec; i++) {
+            for (i = 2; i < 2 + dec; i++) {
                 wevt.addParam(_split[i]);
             }
 
@@ -1647,7 +1650,7 @@ public class TMLTextSpecification<E> {
         } // WAIT
 
         // NOTIFIED
-        if((isInstruction("NOTIFIED", _split[0]))) {
+        if ((isInstruction("NOTIFIED", _split[0]))) {
 
             if (!inTask) {
                 error = "A NOTIFIED operation may only be performed in a task body";
@@ -1658,17 +1661,17 @@ public class TMLTextSpecification<E> {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-          //  inTaskBehavior = true;
+            //  inTaskBehavior = true;
 
             if (_split.length != 3) {
-                error = "A NOTIFIED operation must be declared with exactly 2 parameters, and not " + (_split.length - 1) ;
+                error = "A NOTIFIED operation must be declared with exactly 2 parameters, and not " + (_split.length - 1);
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
 
             evt = tmlm.getEventByName(_split[1]);
             if (evt == null) {
-                error = "Unknown event: " + _split[1] ;
+                error = "Unknown event: " + _split[1];
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
@@ -1694,23 +1697,23 @@ public class TMLTextSpecification<E> {
             tmlae = nevt;
         } // NOTIFIED
 
-        // Send REQUEST
-        if((isInstruction("REQUEST", _split[0])) && (inTask)) {
+        // Send REQUEST a.k.a. NOTIFYREQUEST
+        if ((isInstruction("NOTIFYREQUEST", _split[0])) && (inTask)) {
 
             inDec = false;
             inTask = true;
             inTaskDec = false;
-         //   inTaskBehavior = true;
+            //   inTaskBehavior = true;
 
             if (_split.length < 2) {
-                error = "A REQUEST operation must be declared with at least 1 parameter (request name), and not " + (_split.length - 1) ;
+                error = "A REQUEST operation must be declared with at least 1 parameter (request name), and not " + (_split.length - 1);
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
 
             request = tmlm.getRequestByName(_split[1]);
             if (request == null) {
-                error = "Unknown request: " + _split[1] ;
+                error = "Unknown request: " + _split[1];
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
@@ -1718,14 +1721,14 @@ public class TMLTextSpecification<E> {
             dec = request.getNbOfParams();
 
             if (_split.length != 2 + dec) {
-                error = "A REQUEST operation on request " + request.getName() + " must be declared with exactly " + (1 + dec) + " parameters and not " + (_split.length - 1) ;
+                error = "A REQUEST operation on request " + request.getName() + " must be declared with exactly " + (1 + dec) + " parameters and not " + (_split.length - 1);
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
 
             TMLSendRequest sreq = new TMLSendRequest(request.getName(), null);
             sreq.setRequest(request);
-            for(i=2; i<2 + dec; i++) {
+            for (i = 2; i < 2 + dec; i++) {
                 sreq.addParam(_split[i]);
             }
 
@@ -1735,7 +1738,7 @@ public class TMLTextSpecification<E> {
         } // Send REQUEST
 
         // FOR
-        if((isInstruction("FOR", _split[0])) && (inTask)) {
+        if ((isInstruction("FOR", _split[0])) && (inTask)) {
             //TraceManager.addDev("FOR encountered");
             if (_split.length < 2) {
                 error = "FOR operation: missing parameters";
@@ -1746,11 +1749,11 @@ public class TMLTextSpecification<E> {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-         //   inTaskBehavior = true;
+            //   inTaskBehavior = true;
 
             // Extract the three elements of FOR
             String forp = _split[1];
-         //   String forps[];
+            //   String forps[];
             tmp0 = forp.indexOf('(');
             tmp1 = forp.lastIndexOf(')');
             if ((tmp0 == -1) || (tmp1 == -1)) {
@@ -1758,33 +1761,33 @@ public class TMLTextSpecification<E> {
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
-            forp = forp.substring(tmp0+1, tmp1);
-	    int first = forp.indexOf(";");
-	    String init = "";
-	    if (first > -1) {
-		init = forp.substring(0, first);
-	    } else {
-		error = "FOR operation: badly formed parameters";
+            forp = forp.substring(tmp0 + 1, tmp1);
+            int first = forp.indexOf(";");
+            String init = "";
+            if (first > -1) {
+                init = forp.substring(0, first);
+            } else {
+                error = "FOR operation: badly formed parameters";
                 addError(0, _lineNb, 0, error);
                 return -1;
-	    }
+            }
 
-	    String condition = "";
-	    String increment = "";
-	    forp = forp.substring(first+1, forp.length()).trim();
+            String condition = "";
+            String increment = "";
+            forp = forp.substring(first + 1, forp.length()).trim();
 
-	    int second = forp.indexOf(";");
-	    if (second == -1) {
-		error = "FOR operation: badly formed parameters ";
+            int second = forp.indexOf(";");
+            if (second == -1) {
+                error = "FOR operation: badly formed parameters ";
                 addError(0, _lineNb, 0, error);
                 return -1;
-	    }
+            }
 
-	    condition = forp.substring(0, second);
-	    increment = forp.substring(second+1, forp.length());
-	    
-	    
-                        // All is ok: constructing the FOR
+            condition = forp.substring(0, second);
+            increment = forp.substring(second + 1, forp.length());
+
+
+            // All is ok: constructing the FOR
             parseElt = new TMLParserSaveElt();
             parseElt.type = TMLParserSaveElt.FOR;
             parses.add(0, parseElt);
@@ -1800,7 +1803,7 @@ public class TMLTextSpecification<E> {
         } // FOR
 
         // ENDFOR
-        if(isInstruction("ENDFOR", _split[0])) {
+        if (isInstruction("ENDFOR", _split[0])) {
             if (!inTask) {
                 error = "ENDFOR: must be used in a Task body";
                 addError(0, _lineNb, 0, error);
@@ -1810,7 +1813,7 @@ public class TMLTextSpecification<E> {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-      //      inTaskBehavior = true;
+            //      inTaskBehavior = true;
 
             // Extract the first element of the stack
             if (parses.size() == 0) {
@@ -1834,14 +1837,14 @@ public class TMLTextSpecification<E> {
         } // ENDFOR
 
         // SELECTEVT
-        if((isInstruction("SELECTEVT", _split[0]))) {
+        if ((isInstruction("SELECTEVT", _split[0]))) {
             if (!inTask) {
                 error = "SELECTEVT: must be used in a Task body";
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
 
-            if(_split.length > 1) {
+            if (_split.length > 1) {
                 error = "A SELECTEVT cannot have any parameters";
                 addError(0, _lineNb, 0, error);
                 return -1;
@@ -1850,7 +1853,7 @@ public class TMLTextSpecification<E> {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-         //   inTaskBehavior = true;
+            //   inTaskBehavior = true;
 
             parseElt = new TMLParserSaveElt();
             parseElt.type = TMLParserSaveElt.SELECTEVT;
@@ -1867,7 +1870,7 @@ public class TMLTextSpecification<E> {
         } // SELECTEVT
 
         // ENDSELECTEVT
-        if((isInstruction("ENDSELECTEVT", _split[0]))) {
+        if ((isInstruction("ENDSELECTEVT", _split[0]))) {
             if (!inTask) {
                 error = "ENDSELECTEVT: must be used in a Task body";
                 addError(0, _lineNb, 0, error);
@@ -1877,7 +1880,7 @@ public class TMLTextSpecification<E> {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-        //    inTaskBehavior = true;
+            //    inTaskBehavior = true;
 
             // Extract the first element of the stack
             if (parses.size() == 0) {
@@ -1897,7 +1900,7 @@ public class TMLTextSpecification<E> {
         } // ENDSELECTEVT
 
         // CASE
-        if((isInstruction("CASE", _split[0]))) {
+        if ((isInstruction("CASE", _split[0]))) {
             if (!inTask) {
                 error = "CASE: must be used in a Task body";
                 addError(0, _lineNb, 0, error);
@@ -1920,9 +1923,9 @@ public class TMLTextSpecification<E> {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-         //   inTaskBehavior = true;
+            //   inTaskBehavior = true;
 
-            if(_split.length < 2) {
+            if (_split.length < 2) {
                 error = "A CASE must have at least two parameters";
                 addError(0, _lineNb, 0, error);
                 return -1;
@@ -1930,7 +1933,7 @@ public class TMLTextSpecification<E> {
 
             evt = tmlm.getEventByName(_split[1]);
             if (evt == null) {
-                error = "Unknown event: " + _split[1] ;
+                error = "Unknown event: " + _split[1];
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
@@ -1938,14 +1941,14 @@ public class TMLTextSpecification<E> {
             dec = evt.getNbOfParams();
 
             if (_split.length != 2 + dec) {
-                error = "A CASE operation on evt " + evt.getName() + " must be declared with exactly " + (1 + dec) + " parameters and not " + (_split.length - 1) ;
+                error = "A CASE operation on evt " + evt.getName() + " must be declared with exactly " + (1 + dec) + " parameters and not " + (_split.length - 1);
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
 
             TMLWaitEvent wevt = new TMLWaitEvent(evt.getName(), null);
             wevt.setEvent(evt);
-            for(i=2; i<2 + dec; i++) {
+            for (i = 2; i < 2 + dec; i++) {
                 wevt.addParam(_split[i]);
             }
 
@@ -1963,7 +1966,7 @@ public class TMLTextSpecification<E> {
 
 
         // ENDCASE
-        if((isInstruction("ENDCASE", _split[0]))) {
+        if ((isInstruction("ENDCASE", _split[0]))) {
             if (!inTask) {
                 error = "ENDCASE: must be used in a Task body";
                 addError(0, _lineNb, 0, error);
@@ -1973,7 +1976,7 @@ public class TMLTextSpecification<E> {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-    //        inTaskBehavior = true;
+            //        inTaskBehavior = true;
 
             // Extract the first element of the stack
             if (parses.size() == 0) {
@@ -1995,14 +1998,14 @@ public class TMLTextSpecification<E> {
         } // ENDCASE
 
         // RANDOMSEQ
-        if((isInstruction("RANDOMSEQ", _split[0]))) {
+        if ((isInstruction("RANDOMSEQ", _split[0]))) {
             if (!inTask) {
                 error = "RANDOMSEQ: must be used in a Task body";
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
 
-            if(_split.length > 1) {
+            if (_split.length > 1) {
                 error = "A RANDOMSEQ cannot have any parameters";
                 addError(0, _lineNb, 0, error);
                 return -1;
@@ -2011,7 +2014,7 @@ public class TMLTextSpecification<E> {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-        //    inTaskBehavior = true;
+            //    inTaskBehavior = true;
 
             parseElt = new TMLParserSaveElt();
             parseElt.type = TMLParserSaveElt.RANDOMSEQ;
@@ -2028,7 +2031,7 @@ public class TMLTextSpecification<E> {
         } // RANDOMSEQ
 
         // ENDRANDOMSEQ
-        if((isInstruction("ENDRANDOMSEQ", _split[0]))) {
+        if ((isInstruction("ENDRANDOMSEQ", _split[0]))) {
             if (!inTask) {
                 error = "ENDRANDOMSEQ: must be used in a Task body";
                 addError(0, _lineNb, 0, error);
@@ -2038,7 +2041,7 @@ public class TMLTextSpecification<E> {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-         //   inTaskBehavior = true;
+            //   inTaskBehavior = true;
 
             // Extract the first element of the stack
             if (parses.size() == 0) {
@@ -2059,7 +2062,7 @@ public class TMLTextSpecification<E> {
 
 
         // SEQ
-        if((isInstruction("SEQ", _split[0]))) {
+        if ((isInstruction("SEQ", _split[0]))) {
             if (!inTask) {
                 error = "SEQ: must be used in a Task body";
                 addError(0, _lineNb, 0, error);
@@ -2082,9 +2085,9 @@ public class TMLTextSpecification<E> {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-         //   inTaskBehavior = true;
+            //   inTaskBehavior = true;
 
-            if(_split.length >1 ) {
+            if (_split.length > 1) {
                 error = "A SEQ has no parameter";
                 addError(0, _lineNb, 0, error);
                 return -1;
@@ -2096,7 +2099,7 @@ public class TMLTextSpecification<E> {
                 return -1;
             }
 
-            TMLRandomSequence rseq = (TMLRandomSequence)parseElt.tmlae;
+            TMLRandomSequence rseq = (TMLRandomSequence) parseElt.tmlae;
             TMLSequence seq = new TMLSequence("sequence", null);
             rseq.addNext(seq);
 
@@ -2112,7 +2115,7 @@ public class TMLTextSpecification<E> {
         } // SEQ
 
         // ENDSEQ
-        if((isInstruction("ENDSEQ", _split[0]))) {
+        if ((isInstruction("ENDSEQ", _split[0]))) {
             if (!inTask) {
                 error = "ENDSEQ: must be used in a Task body";
                 addError(0, _lineNb, 0, error);
@@ -2122,7 +2125,7 @@ public class TMLTextSpecification<E> {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-          //  inTaskBehavior = true;
+            //  inTaskBehavior = true;
 
             // Extract the first element of the stack
             if (parses.size() == 0) {
@@ -2144,14 +2147,14 @@ public class TMLTextSpecification<E> {
         } // ENDSEQ
 
         // RAND
-        if((isInstruction("RAND", _split[0]))) {
+        if ((isInstruction("RAND", _split[0]))) {
             if (!inTask) {
                 error = "RAND: must be used in a Task body";
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
 
-            if(_split.length > 1) {
+            if (_split.length > 1) {
                 error = "A RAND cannot have any parameters";
                 addError(0, _lineNb, 0, error);
                 return -1;
@@ -2160,7 +2163,7 @@ public class TMLTextSpecification<E> {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-       //     inTaskBehavior = true;
+            //     inTaskBehavior = true;
 
             parseElt = new TMLParserSaveElt();
             parseElt.type = TMLParserSaveElt.RAND;
@@ -2177,7 +2180,7 @@ public class TMLTextSpecification<E> {
         } // RAND
 
         // ENDRAND
-        if((isInstruction("ENDRAND", _split[0]))) {
+        if ((isInstruction("ENDRAND", _split[0]))) {
             if (!inTask) {
                 error = "ENDRAND: must be used in a Task body";
                 addError(0, _lineNb, 0, error);
@@ -2187,7 +2190,7 @@ public class TMLTextSpecification<E> {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-       //     inTaskBehavior = true;
+            //     inTaskBehavior = true;
 
             // Extract the first element of the stack
             if (parses.size() == 0) {
@@ -2207,7 +2210,7 @@ public class TMLTextSpecification<E> {
         } // ENDRAND
 
         // CASERAND
-        if((isInstruction("CASERAND", _split[0]))) {
+        if ((isInstruction("CASERAND", _split[0]))) {
             if (!inTask) {
                 error = "CASERAND: must be used in a Task body";
                 addError(0, _lineNb, 0, error);
@@ -2230,9 +2233,9 @@ public class TMLTextSpecification<E> {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-     //       inTaskBehavior = true;
+            //       inTaskBehavior = true;
 
-            if(_split.length != 2) {
+            if (_split.length != 2) {
                 error = "A CASERAND should have one parameter";
                 addError(0, _lineNb, 0, error);
                 return -1;
@@ -2244,7 +2247,7 @@ public class TMLTextSpecification<E> {
                 return -1;
             }
 
-            TMLChoice choice = (TMLChoice)parseElt.tmlae;
+            TMLChoice choice = (TMLChoice) parseElt.tmlae;
             TMLSequence seq = new TMLSequence("sequence", null);
             choice.addGuard("[" + _split[1] + "%]");
             choice.addNext(seq);
@@ -2263,7 +2266,7 @@ public class TMLTextSpecification<E> {
 
 
         // ENDCASERAND
-        if((isInstruction("ENDCASERAND", _split[0]))) {
+        if ((isInstruction("ENDCASERAND", _split[0]))) {
             if (!inTask) {
                 error = "ENDCASERAND: must be used in a Task body";
                 addError(0, _lineNb, 0, error);
@@ -2273,7 +2276,7 @@ public class TMLTextSpecification<E> {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-       //     inTaskBehavior = true;
+            //     inTaskBehavior = true;
 
             // Extract the first element of the stack
             if (parses.size() == 0) {
@@ -2295,14 +2298,14 @@ public class TMLTextSpecification<E> {
         } // ENDCASERAND
 
         // IF
-        if((isInstruction("IF", _split[0]))) {
+        if ((isInstruction("IF", _split[0]))) {
             if (!inTask) {
                 error = "IF: must be used in a Task body";
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
 
-            if(_split.length != 2) {
+            if (_split.length != 2) {
                 error = "IF should be followed by one condition";
                 addError(0, _lineNb, 0, error);
                 return -1;
@@ -2311,7 +2314,7 @@ public class TMLTextSpecification<E> {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-       //     inTaskBehavior = true;
+            //     inTaskBehavior = true;
 
             String cond = _split[1].trim();
             tmp0 = cond.indexOf('(');
@@ -2321,7 +2324,7 @@ public class TMLTextSpecification<E> {
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
-            cond = cond.substring(tmp0+1, tmp1);
+            cond = cond.substring(tmp0 + 1, tmp1);
 
             parseElt = new TMLParserSaveElt();
             parseElt.type = TMLParserSaveElt.IF;
@@ -2344,14 +2347,14 @@ public class TMLTextSpecification<E> {
         } // IF
 
         // ORIF
-        if((isInstruction("ORIF", _split[0]))) {
+        if ((isInstruction("ORIF", _split[0]))) {
             if (!inTask) {
                 error = "ORIF: must be used in a Task body";
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
 
-            if(_split.length != 2) {
+            if (_split.length != 2) {
                 error = "ORIF should be followed by one condition";
                 addError(0, _lineNb, 0, error);
                 return -1;
@@ -2360,7 +2363,7 @@ public class TMLTextSpecification<E> {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-       //     inTaskBehavior = true;
+            //     inTaskBehavior = true;
 
 
             String cond = _split[1].trim();
@@ -2372,7 +2375,7 @@ public class TMLTextSpecification<E> {
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
-            cond = cond.substring(tmp0+1, tmp1);
+            cond = cond.substring(tmp0 + 1, tmp1);
             //TraceManager.addDev("cond2=" + cond);
 
             if (parses.size() == 0) {
@@ -2398,7 +2401,7 @@ public class TMLTextSpecification<E> {
             tmlae.addNext(stop);
 
             TMLSequence seq = new TMLSequence("sequence", null);
-            TMLChoice choice = (TMLChoice)parseElt.tmlae;
+            TMLChoice choice = (TMLChoice) parseElt.tmlae;
             task.getActivityDiagram().addElement(seq);
 
             choice.addNext(seq);
@@ -2408,14 +2411,14 @@ public class TMLTextSpecification<E> {
         } // ORIF
 
         // ELSE
-        if((isInstruction("ELSE", _split[0]))) {
+        if ((isInstruction("ELSE", _split[0]))) {
             if (!inTask) {
                 error = "ELSE: must be used in a Task body";
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
 
-            if(_split.length != 1) {
+            if (_split.length != 1) {
                 error = "ELSE should have no parameter";
                 addError(0, _lineNb, 0, error);
                 return -1;
@@ -2424,7 +2427,7 @@ public class TMLTextSpecification<E> {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-       //     inTaskBehavior = true;
+            //     inTaskBehavior = true;
 
             if (parses.size() == 0) {
                 error = "ELSE: badly placed instruction.";
@@ -2442,10 +2445,10 @@ public class TMLTextSpecification<E> {
             task.getActivityDiagram().addElement(stop);
             tmlae.addNext(stop);
 
-            parseElt.nbElse ++;
+            parseElt.nbElse++;
 
             TMLSequence seq = new TMLSequence("sequence", null);
-            TMLChoice choice = (TMLChoice)parseElt.tmlae;
+            TMLChoice choice = (TMLChoice) parseElt.tmlae;
             task.getActivityDiagram().addElement(seq);
 
             choice.addNext(seq);
@@ -2455,7 +2458,7 @@ public class TMLTextSpecification<E> {
         } // ELSE
 
         // ENDIF
-        if((isInstruction("ENDIF", _split[0]))) {
+        if ((isInstruction("ENDIF", _split[0]))) {
             if (!inTask) {
                 error = "ENDIF: must be used in a Task body";
                 addError(0, _lineNb, 0, error);
@@ -2465,7 +2468,7 @@ public class TMLTextSpecification<E> {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-        //    inTaskBehavior = true;
+            //    inTaskBehavior = true;
 
             // Extract the first element of the stack
             if (parses.size() == 0) {
@@ -2489,7 +2492,7 @@ public class TMLTextSpecification<E> {
         } // ENDIF
 
         // EXECI
-        if((isInstruction("EXECI", _split[0]))) {
+        if ((isInstruction("EXECI", _split[0]))) {
 
             if (!inTask) {
                 error = "An EXECI operation may only be performed in a task body";
@@ -2500,10 +2503,10 @@ public class TMLTextSpecification<E> {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-       //     inTaskBehavior = true;
+            //     inTaskBehavior = true;
 
-            if ((_split.length < 2) ||(_split.length > 4)) {
-                error = "An EXECI operation must be declared with 1 or 2 parameters, and not " + (_split.length - 1) ;
+            if ((_split.length < 2) || (_split.length > 4)) {
+                error = "An EXECI operation must be declared with 1 or 2 parameters, and not " + (_split.length - 1);
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
@@ -2525,7 +2528,7 @@ public class TMLTextSpecification<E> {
         } // EXECI
 
         // EXECC
-        if((isInstruction("EXECC", _split[0]))) {
+        if ((isInstruction("EXECC", _split[0]))) {
 
             if (!inTask) {
                 error = "An EXECC operation may only be performed in a task body";
@@ -2536,43 +2539,42 @@ public class TMLTextSpecification<E> {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-      //     inTaskBehavior = true;
-      		if (_split.length>4){
- 				if (securityPatternMap.containsKey(_split[2])){
- 					//Security operation
- 					TMLExecC execc = new TMLExecC("execc", null);
-            	    execc.setAction(_split[1]);
-            	    execc.securityPattern = securityPatternMap.get(_split[2]);
-            	    tmlae.addNext(execc);
-            	    task.getActivityDiagram().addElement(execc);
-            	    tmlae = execc;
- 				}
- 			}
-			else {
-	            if ((_split.length < 2) ||(_split.length > 4)) {
-	                error = "An EXECC operation must be declared with 1, 2 parameters, and not " + (_split.length - 1) ;
-	                addError(0, _lineNb, 0, error);
-	                return -1;
-	            }
-            	if (_split.length == 2) {
-            	    TMLExecC execc = new TMLExecC("execc", null);
-            	    execc.setAction(_split[1]);
-            	    tmlae.addNext(execc);
-            	    task.getActivityDiagram().addElement(execc);
-            	    tmlae = execc;
-            	} else {
-            	    TMLExecCInterval execci = new TMLExecCInterval("execci", null);
-            	    execci.setMinDelay(_split[1]);
-            	    execci.setMaxDelay(_split[2]);
-            	    tmlae.addNext(execci);
-            	    task.getActivityDiagram().addElement(execci);
-            	    tmlae = execci;
-            	}
+            //     inTaskBehavior = true;
+            if (_split.length > 4) {
+                if (securityPatternMap.containsKey(_split[2])) {
+                    //Security operation
+                    TMLExecC execc = new TMLExecC("execc", null);
+                    execc.setAction(_split[1]);
+                    execc.securityPattern = securityPatternMap.get(_split[2]);
+                    tmlae.addNext(execc);
+                    task.getActivityDiagram().addElement(execc);
+                    tmlae = execc;
+                }
+            } else {
+                if ((_split.length < 2) || (_split.length > 4)) {
+                    error = "An EXECC operation must be declared with 1, 2 parameters, and not " + (_split.length - 1);
+                    addError(0, _lineNb, 0, error);
+                    return -1;
+                }
+                if (_split.length == 2) {
+                    TMLExecC execc = new TMLExecC("execc", null);
+                    execc.setAction(_split[1]);
+                    tmlae.addNext(execc);
+                    task.getActivityDiagram().addElement(execc);
+                    tmlae = execc;
+                } else {
+                    TMLExecCInterval execci = new TMLExecCInterval("execci", null);
+                    execci.setMinDelay(_split[1]);
+                    execci.setMaxDelay(_split[2]);
+                    tmlae.addNext(execci);
+                    task.getActivityDiagram().addElement(execci);
+                    tmlae = execci;
+                }
             }
         } // EXECC
 
         // DELAY
-        if((isInstruction("DELAY", _split[0]))) {
+        if ((isInstruction("DELAY", _split[0]))) {
 
             if (!inTask) {
                 error = "A DELAY operation may only be performed in a task body";
@@ -2583,17 +2585,17 @@ public class TMLTextSpecification<E> {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-     //       inTaskBehavior = true;
+            //       inTaskBehavior = true;
 
-            if ((_split.length < 3) ||(_split.length > 5)) {
-                error = "A DELAY operation must be declared with 2 or 3 parameters, and not " + (_split.length - 1) ;
+            if ((_split.length < 3) || (_split.length > 5)) {
+                error = "A DELAY operation must be declared with 2 or 3 parameters, and not " + (_split.length - 1);
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
 
             if (_split.length == 3) {
                 if (!checkParameter("DELAY", _split, 2, 0, _lineNb)) {
-                    error = "A DELAY operation must be specified with a valid time unit (ns, us, ms, s))" ;
+                    error = "A DELAY operation must be specified with a valid time unit (ns, us, ms, s))";
                     addError(0, _lineNb, 0, error);
                     return -1;
                 }
@@ -2601,7 +2603,7 @@ public class TMLTextSpecification<E> {
 
             if (_split.length == 4) {
                 if (!checkParameter("DELAY", _split, 3, 0, _lineNb)) {
-                    error = "A DELAY operation must be specified with a valid time unit (ns, us, ms, s))" ;
+                    error = "A DELAY operation must be specified with a valid time unit (ns, us, ms, s))";
                     addError(0, _lineNb, 0, error);
                     return -1;
                 }
@@ -2625,7 +2627,8 @@ public class TMLTextSpecification<E> {
         } // EXECC
 
         // Other command
-        if((_split[0].length() > 0) && (!(isInstruction(_split[0])))) {
+        if ((_split[0].length() > 0) && (!(isInstruction(_split[0])))) {
+            //TraceManager.addDev("Not an instruction:" + _split[0]);
             if (!inTask) {
                 error = "Syntax error in TML modeling: unrecognized instruction:" + _split[0];
                 addError(0, _lineNb, 0, error);
@@ -2635,7 +2638,7 @@ public class TMLTextSpecification<E> {
             inDec = false;
             inTask = true;
             inTaskDec = false;
-       //     inTaskBehavior = true;
+            //     inTaskBehavior = true;
 
             TMLActionState action = new TMLActionState(_split[0], null);
             action.setAction(_line);
@@ -2662,75 +2665,75 @@ public class TMLTextSpecification<E> {
         boolean err = false;
         String error;
 
-        if(_parameter < _split.length) {
-            switch(_type) {
-            case 0:
-                if (!isAValidId(_split[_parameter])) {
-                    err = true;
-                }
-                break;
-            case 1:
-                if (!isANumeral(_split[_parameter])) {
-                    err = true;
-                }
-                break;
-            case 2:
-                if (!isIncluded(_split[_parameter], channeltypes)) {
-                    err = true;
-                }
-                break;
-            case 3:
-                if (!isIncluded(_split[_parameter], eventtypes)) {
-                    err = true;
-                }
-                break;
-            case 4:
-                if (!isAValidId(getEvtId(_split[_parameter]))) {
-                    err = true;
-                    //TraceManager.addDev("Unvalid id");
-                } else if (!TMLEvent.isAValidListOfParams(getParams(_split[_parameter]))) {
-                    //TraceManager.addDev("Unvalid param");
-                    err = true;
-                }
-                break;
-            case 5:
-                if (!(_split[_parameter].equals("="))) {
-                    TraceManager.addDev("Error of =");
-                    err = true;
-                }
-                break;
-            case 6:
-                if (_inst.equals("BOOL")) {
-                    String tmp = _split[_parameter].toUpperCase();
-                    if (!(tmp.equals("TRUE") || tmp.equals("FALSE"))) {
+        if (_parameter < _split.length) {
+            switch (_type) {
+                case 0:
+                    if (!isAValidId(_split[_parameter])) {
                         err = true;
                     }
-                } else {
+                    break;
+                case 1:
                     if (!isANumeral(_split[_parameter])) {
                         err = true;
                     }
-                }
-                break;
-            case 7:
-                if (!isAValidId(_split[_parameter]) && !isANumeral(_split[_parameter])) {
-                    err = true;
-                }
-                break;
-            case 8:
-                if (!isAValidUnit(_split[_parameter])) {
-                    err = true;
-                }
-                break;
-            case 9:
-                if (!isANegativeOrPositiveNumeral(_split[_parameter])) {
-                    err = true;
-                }
-                break;
-	    case 10:
-                if (!(_split[_parameter].compareTo("OUT") == 0)) {
-                    err = true;
-                }
-                break;
+                    break;
+                case 2:
+                    if (!isIncluded(_split[_parameter], channeltypes)) {
+                        err = true;
+                    }
+                    break;
+                case 3:
+                    if (!isIncluded(_split[_parameter], eventtypes)) {
+                        err = true;
+                    }
+                    break;
+                case 4:
+                    if (!isAValidId(getEvtId(_split[_parameter]))) {
+                        err = true;
+                        //TraceManager.addDev("Unvalid id");
+                    } else if (!TMLEvent.isAValidListOfParams(getParams(_split[_parameter]))) {
+                        //TraceManager.addDev("Unvalid param");
+                        err = true;
+                    }
+                    break;
+                case 5:
+                    if (!(_split[_parameter].equals("="))) {
+                        TraceManager.addDev("Error of =");
+                        err = true;
+                    }
+                    break;
+                case 6:
+                    if (_inst.equals("BOOL")) {
+                        String tmp = _split[_parameter].toUpperCase();
+                        if (!(tmp.equals("TRUE") || tmp.equals("FALSE"))) {
+                            err = true;
+                        }
+                    } else {
+                        if (!isANumeral(_split[_parameter])) {
+                            err = true;
+                        }
+                    }
+                    break;
+                case 7:
+                    if (!isAValidId(_split[_parameter]) && !isANumeral(_split[_parameter])) {
+                        err = true;
+                    }
+                    break;
+                case 8:
+                    if (!isAValidUnit(_split[_parameter])) {
+                        err = true;
+                    }
+                    break;
+                case 9:
+                    if (!isANegativeOrPositiveNumeral(_split[_parameter])) {
+                        err = true;
+                    }
+                    break;
+                case 10:
+                    if (!(_split[_parameter].compareTo("OUT") == 0)) {
+                        err = true;
+                    }
+                    break;
             }
         } else {
             err = true;
@@ -2756,7 +2759,7 @@ public class TMLTextSpecification<E> {
             return false;
         }
 
-        boolean b1 = (_id.substring(0,1)).matches("[a-zA-Z]");
+        boolean b1 = (_id.substring(0, 1)).matches("[a-zA-Z]");
         boolean b2 = _id.matches("\\w*");
         boolean b3 = checkKeywords(_id);
 
@@ -2790,7 +2793,7 @@ public class TMLTextSpecification<E> {
 
     public static boolean checkKeywords(String _id) {
         String id = _id.toUpperCase();
-        for(int i=0; i<keywords.length; i++) {
+        for (int i = 0; i < keywords.length; i++) {
             if (id.compareTo(keywords[i]) == 0) {
                 return false;
             }
@@ -2800,7 +2803,7 @@ public class TMLTextSpecification<E> {
 
     public boolean isIncluded(String _id, String[] _list) {
         String id = _id.toUpperCase();
-        for(int i=0; i<_list.length; i++) {
+        for (int i = 0; i < _list.length; i++) {
             if (id.compareTo(_list[i]) == 0) {
                 return true;
             }

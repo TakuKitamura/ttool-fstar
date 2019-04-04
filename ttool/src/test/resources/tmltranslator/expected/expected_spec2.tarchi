@@ -1,0 +1,69 @@
+// Master clock frequency - in MHz
+MASTERCLOCKFREQUENCY 200
+
+NODE DMA DMA0
+SET DMA0 byteDataSize 4
+SET DMA0 nbOfChannels 1
+
+NODE BUS Bus0
+SET Bus0 byteDataSize 4
+SET Bus0 pipelineSize 1
+SET Bus0 arbitration 0
+
+NODE MEMORY Memory0
+SET Memory0 byteDataSize 4
+
+NODE CPU CPU0
+SET CPU0 nbOfCores 1
+SET CPU0 byteDataSize 4
+SET CPU0 pipelineSize 5
+SET CPU0 goIdleTime 10
+SET CPU0 maxConsecutiveIdleCycles 10
+SET CPU0 taskSwitchingTime 20
+SET CPU0 branchingPredictionPenalty 2
+SET CPU0 cacheMiss 5
+SET CPU0 schedulingPolicy 0
+SET CPU0 sliceTime 10000
+SET CPU0 execiTime 1
+SET CPU0 execcTime 1
+
+NODE CPU CPU2
+SET CPU2 nbOfCores 1
+SET CPU2 byteDataSize 4
+SET CPU2 pipelineSize 5
+SET CPU2 goIdleTime 10
+SET CPU2 maxConsecutiveIdleCycles 10
+SET CPU2 taskSwitchingTime 20
+SET CPU2 branchingPredictionPenalty 2
+SET CPU2 cacheMiss 5
+SET CPU2 schedulingPolicy 0
+SET CPU2 sliceTime 10000
+SET CPU2 execiTime 1
+SET CPU2 execcTime 1
+
+NODE CPU CPU1
+SET CPU1 nbOfCores 1
+SET CPU1 byteDataSize 4
+SET CPU1 pipelineSize 5
+SET CPU1 goIdleTime 10
+SET CPU1 maxConsecutiveIdleCycles 10
+SET CPU1 taskSwitchingTime 20
+SET CPU1 branchingPredictionPenalty 2
+SET CPU1 cacheMiss 5
+SET CPU1 schedulingPolicy 0
+SET CPU1 sliceTime 10000
+SET CPU1 execiTime 1
+SET CPU1 execcTime 1
+
+NODE LINK link_CPU0_to_Bus0
+SET link_CPU0_to_Bus0 node CPU0
+SET link_CPU0_to_Bus0 bus Bus0
+SET link_CPU0_to_Bus0 priority 0
+NODE LINK link_Memory0_to_Bus0
+SET link_Memory0_to_Bus0 node Memory0
+SET link_Memory0_to_Bus0 bus Bus0
+SET link_Memory0_to_Bus0 priority 0
+NODE LINK link_DMA0_to_Bus0
+SET link_DMA0_to_Bus0 node DMA0
+SET link_DMA0_to_Bus0 bus Bus0
+SET link_DMA0_to_Bus0 priority 0

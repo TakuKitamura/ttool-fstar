@@ -3079,12 +3079,12 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
 
     // saving
     public StringBuffer saveInXML() {
-        return saveInXML(true);
+        return saveInXML(true, false);
     }
 
-    protected StringBuffer saveInXML(boolean saveSubComponents) {
+    protected StringBuffer saveInXML(boolean saveSubComponents, boolean saveAsComponentEvenIfNonNullFather) {
         StringBuffer sb = null;
-        boolean b = (father == null);
+        boolean b = (father == null) || saveAsComponentEvenIfNonNullFather;
         if (b) {
             sb = new StringBuffer(XML_HEAD);
         } else {
@@ -3362,7 +3362,7 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
     }
 
     public void searchForText(String text, Vector<Object> elements) {
-        String save = saveInXML(false).toString().toLowerCase();
+        String save = saveInXML(false, false).toString().toLowerCase();
         if (save.indexOf(text) >= 0) {
             //TraceManager.addDev("Found " + this);
             elements.add(this);

@@ -96,6 +96,7 @@ public class Help extends Command  {
                 s += c.getShortCommand() + "\t" + c.getCommand() + "\t" + c.getDescription() + "\n";
             }
             interpreter.print(s);
+            TraceManager.addDev("Info on command");
             return null;
         }
 

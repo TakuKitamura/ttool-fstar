@@ -1,0 +1,1 @@
+cd bin&&java -Xmx2048m -jar ttool-cli.jar   -debug -show -interact

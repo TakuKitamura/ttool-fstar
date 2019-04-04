@@ -77,12 +77,11 @@ public class IntExpressionEvaluator {
     }
 
     public double getResultOf(String _expr) {
-        // TraceManager.addDev("Computing:" + _expr);
+        TraceManager.addDev("IntExpr: Computing:" + _expr);
         tokens = new java.util.StringTokenizer(_expr," \t\n\r+-*/()",true);
 
         computeNextToken();
         double d = parseExpression();
-
 
 
         if ((errorMessage == null) && (nbOpen!=0)) {
@@ -90,9 +89,9 @@ public class IntExpressionEvaluator {
         }
 
         if (errorMessage != null) {
-            TraceManager.addDev("Expr contains an error:" + errorMessage + " expr=" + _expr);
+            TraceManager.addDev("Expr contains an error: " + errorMessage + " for expr:" + _expr);
         } else {
-            //TraceManager.addDev("Expr is correct");
+            TraceManager.addDev("Expr is correct");
         }
 
         return d;
@@ -221,7 +220,7 @@ public class IntExpressionEvaluator {
 
         // <rootexp> ::= number
 
-        else if (currentType==NUMBER_TOKEN){
+        else if (currentType == NUMBER_TOKEN){
             result = currentValue;
             if (errorMessage != null) return result;
             match(NUMBER_TOKEN);
@@ -230,7 +229,7 @@ public class IntExpressionEvaluator {
 
         else {
             errorMessage =
-                "Expected a number or a parenthesis.";
+                "Expected a number or a parenthesis for currentType = " + currentType;
         }
 
         return result;
@@ -255,7 +254,7 @@ public class IntExpressionEvaluator {
             char c1 = s.charAt(0);
             if (s.length()>1 || Character.isDigit(c1)) {
                 try {
-                    currentValue = Integer.valueOf(s).intValue();
+                    currentValue = Integer.valueOf(s);
                     currentType = NUMBER_TOKEN;
                 }
                 catch (NumberFormatException x) {

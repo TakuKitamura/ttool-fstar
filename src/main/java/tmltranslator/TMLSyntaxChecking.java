@@ -71,7 +71,7 @@ public class TMLSyntaxChecking {
     private final String SYNTAX_ERROR = "syntax error";
     private final String WRONG_VARIABLE_IDENTIFIER = "forbidden variable's name";
     private final String VARIABLE_ERROR = "variable is not used according to its type";
-    private final String UNDECLARED_VARIABLE = "unknown variable";
+    private final String UNDECLARED_VARIABLE = "Unknown variable";
     private final String SYNTAX_ERROR_VARIABLE_EXPECTED = "syntax error (variable expected)";
     private final String TIME_UNIT_ERROR = "unknown time unit";
     private final String NO_NEXT_OPERATOR_ERROR = "No next operator";
@@ -474,7 +474,8 @@ public class TMLSyntaxChecking {
                                 // Declared variable?
                                 attr = t.getAttributeByName(action);
                                 if (attr == null) {
-                                    addError(t, elt, UNDECLARED_VARIABLE + " :" + action + " in expression " + action, TMLError.ERROR_BEHAVIOR);
+                                    addError(t, elt, UNDECLARED_VARIABLE + ": " + action + " in expression " + action, TMLError.ERROR_BEHAVIOR);
+                                    TraceManager.addDev("1 In task: " + t.getName() + " extended name:" + t.getNameExtension());
                                 } else {
                                     //TraceManager.addDev("Nb of params:" + tmlwe.getEvent().getNbOfParams() + " j:" + j);
                                     if (tmlwe.getEvent().getType(j).getType() == 0) {
@@ -567,7 +568,8 @@ public class TMLSyntaxChecking {
         }
 
         if (attrFound == null) {
-            addError(t, elt, UNDECLARED_VARIABLE + " :" + var + " in expression " + action, TMLError.ERROR_BEHAVIOR);
+            addError(t, elt, UNDECLARED_VARIABLE+ " :" + var + " in expression " + action, TMLError.ERROR_BEHAVIOR);
+            TraceManager.addDev("2 In task: " + t.getName() + " extended name:" + t.getNameExtension());
             return;
         }
 
@@ -663,6 +665,8 @@ public class TMLSyntaxChecking {
         List<String> vars = root.getVariables();
         for (String s : vars) {
             addError(t, elt, UNDECLARED_VARIABLE + " :" + s + " in expression " + action, TMLError.ERROR_BEHAVIOR);
+            TraceManager.addDev("3 In task: " + t.getName() + " extended name:" + t.getNameExtension());
+            TraceManager.addDev("TASK:" + t.toXML());
         }
 
     }

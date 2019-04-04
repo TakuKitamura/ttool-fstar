@@ -67,6 +67,18 @@ public class TaskNetworkInterface extends TMLTask {
 
         this.nbOfVCs = nbOfVCs;
 
+        for(TMLEvent evt: inputFeedbackEvents) {
+            evt.setDestinationTask(this);
+        }
+
+        for(TMLEvent evt: inputEventsFromMUX) {
+            evt.setDestinationTask(this);
+        }
+
+        outputEvent.setOriginTask(this);
+        outputChannel.setOriginTask(this);
+
+
 
         // Attributes
         //TMLAttribute dst = new TMLAttribute("dst", "dst", new TMLType(TMLType.NATURAL), "0");
@@ -122,7 +134,7 @@ public class TaskNetworkInterface extends TMLTask {
         loop.setInfinite(true);
         addElement(start, loop);
 
-        TMLActionState state = new TMLActionState("LoopExitSeeting", referenceObject);
+        TMLActionState state = new TMLActionState("LoopExitSetting", referenceObject);
         state.setAction("loopexit = 2");
         addElement(loop, state);
 
@@ -158,7 +170,7 @@ public class TaskNetworkInterface extends TMLTask {
             TMLChoice testingEvt = new TMLChoice("testingEvtVC", referenceObject);
             addElement(notifiedEvent, testingEvt);
 
-            TMLStopState endOfLoopNotified = new TMLStopState("NoEvetNorispkt", referenceObject);
+            TMLStopState endOfLoopNotified = new TMLStopState("NoEventNorispkt", referenceObject);
             addElement(testingEvt, endOfLoopNotified);
             testingEvt.addGuard("(nEvt == 0) and (ispkt" + i + " == 0)");
 
@@ -171,8 +183,8 @@ public class TaskNetworkInterface extends TMLTask {
             addElement(intermediateSeq, ispktChoice);
 
             TMLStopState endOfIspkt = new TMLStopState("endOfIspkt", referenceObject);
-            addElement(testingEvt, endOfIspkt);
-            testingEvt.addGuard("(ispkt" + i + " > 0)");
+            addElement(ispktChoice, endOfIspkt);
+            ispktChoice.addGuard("(ispkt" + i + " > 0)");
 
             TMLWaitEvent waitingForStartPacket = new TMLWaitEvent("WaitingStartPacket", referenceObject);
             waitingForStartPacket.setEvent(inputEventsFromMUX.get(i));
@@ -216,9 +228,13 @@ public class TaskNetworkInterface extends TMLTask {
 
             // No feedback
             TMLActionState noFeedbackAction = new TMLActionState("noFeedbackAction", referenceObject);
-            state.setAction("loopexit = 2");
+            noFeedbackAction.setAction("loopexit = 2");
             addElement(testOnFeedback, noFeedbackAction);
             testOnFeedback.addGuard("else");
+
+            TMLStopState endOfNoFeedback = new TMLStopState("endOfNoFeedback", referenceObject);
+            addElement(noFeedbackAction, endOfNoFeedback);
+
 
             // Feedback present
             TMLWriteChannel sendingSample = new TMLWriteChannel("SendingSample", referenceObject);
@@ -231,56 +247,138 @@ public class TaskNetworkInterface extends TMLTask {
             waitingForFeedback.setEvent(inputFeedbackEvents.get(i));
             addElement(sendingSample, waitingForFeedback);
 
-            TMLChoice packetLengthChoice = new TMLChoice("PacketLengthChoice",referenceObject);
-            addElement(waitingForFeedback, packetLengthChoice);
-
-            // Left branch
-            TMLSendEvent sendEvtpktin = new TMLSendEvent("SendEvtPktin", referenceObject);
-            sendEvtpktin.setEvent(outputEvent);
-            sendEvtpktin.addParam("pktlen" + i);
-            sendEvtpktin.addParam("dst" + i);
-            sendEvtpktin.addParam("vc" + i);
-            sendEvtpktin.addParam("0");
-            addElement(packetLengthChoice, sendEvtpktin);
-            packetLengthChoice.addGuard("i" + i + " < pktlen" + i + " - 1");
-
-            TMLActionState asOnI = new TMLActionState("ActionstateOnI", referenceObject);
-            asOnI.setAction("i" + i + " = i" + i + " 1");
-            addElement(sendEvtpktin, asOnI);
-
-            TMLStopState endOfLB = new TMLStopState("EndOfLB", referenceObject);
-            addElement(asOnI, endOfLB);
-
-            // Middle branch
-            TMLActionState loopExitMB = new TMLActionState("loopExitMB", referenceObject);
-            loopExitMB.setAction("loopexit = 1");
-            addElement(packetLengthChoice, loopExitMB);
-            packetLengthChoice.addGuard("i" + i + " == pktlen" + i);
-
-            TMLActionState isPktMB = new TMLActionState("isPktMB", referenceObject);
-            isPktMB.setAction("ispkt" + i + " = 0");
-            addElement(loopExitMB, isPktMB);
-
-            TMLStopState endOfMB = new TMLStopState("endOfMB", referenceObject);
-            addElement(isPktMB, endOfMB);
+            if (i == 0) {
 
 
-            // Right branch
-            TMLSendEvent sendEvtpktinRB = new TMLSendEvent("sendEvtpktinRB", referenceObject);
-            sendEvtpktinRB.setEvent(outputEvent);
-            sendEvtpktinRB.addParam("pktlen" + i);
-            sendEvtpktinRB.addParam("dst" + i);
-            sendEvtpktinRB.addParam("vc" + i);
-            sendEvtpktinRB.addParam("1");
-            addElement(packetLengthChoice, sendEvtpktinRB);
-            packetLengthChoice.addGuard("i" + i + " == pktlen" + i + " - 1");
+                TMLChoice packetLengthChoice = new TMLChoice("PacketLengthChoice", referenceObject);
+                addElement(waitingForFeedback, packetLengthChoice);
 
-            TMLActionState asOnIRB = new TMLActionState("asOnIRB", referenceObject);
-            asOnI.setAction("i" + i + " = i" + i + " 1");
-            addElement(sendEvtpktinRB, asOnIRB);
+                // Left branch
+                TMLSendEvent sendEvtpktin = new TMLSendEvent("SendEvtPktin", referenceObject);
+                sendEvtpktin.setEvent(outputEvent);
+                sendEvtpktin.addParam("pktlen" + i);
+                sendEvtpktin.addParam("dst" + i);
+                sendEvtpktin.addParam("vc" + i);
+                sendEvtpktin.addParam("0");
+                addElement(packetLengthChoice, sendEvtpktin);
+                packetLengthChoice.addGuard("i" + i + " < pktlen" + i + " - 1");
 
-            TMLStopState endOfRB = new TMLStopState("endOfRB", referenceObject);
-            addElement(asOnIRB, endOfRB);
+                TMLActionState asOnI = new TMLActionState("ActionstateOnI", referenceObject);
+                asOnI.setAction("i" + i + " = i" + i + " 1");
+                addElement(sendEvtpktin, asOnI);
+
+                TMLStopState endOfLB = new TMLStopState("EndOfLB", referenceObject);
+                addElement(asOnI, endOfLB);
+
+                // Middle branch
+                TMLActionState loopExitMB = new TMLActionState("loopExitMB", referenceObject);
+                loopExitMB.setAction("loopexit = 1");
+                addElement(packetLengthChoice, loopExitMB);
+                packetLengthChoice.addGuard("i" + i + " == pktlen" + i);
+
+                TMLActionState isPktMB = new TMLActionState("isPktMB", referenceObject);
+                isPktMB.setAction("ispkt" + i + " = 0");
+                addElement(loopExitMB, isPktMB);
+
+                TMLStopState endOfMB = new TMLStopState("endOfMB", referenceObject);
+                addElement(isPktMB, endOfMB);
+
+
+                // Right branch
+                TMLSendEvent sendEvtpktinRB = new TMLSendEvent("sendEvtpktinRB", referenceObject);
+                sendEvtpktinRB.setEvent(outputEvent);
+                sendEvtpktinRB.addParam("pktlen" + i);
+                sendEvtpktinRB.addParam("dst" + i);
+                sendEvtpktinRB.addParam("vc" + i);
+                sendEvtpktinRB.addParam("1");
+                addElement(packetLengthChoice, sendEvtpktinRB);
+                packetLengthChoice.addGuard("i" + i + " == pktlen" + i + " - 1");
+
+                TMLActionState asOnIRB = new TMLActionState("asOnIRB", referenceObject);
+                asOnIRB.setAction("i" + i + " = i" + i + " 1");
+                addElement(sendEvtpktinRB, asOnIRB);
+
+                TMLStopState endOfRB = new TMLStopState("endOfRB", referenceObject);
+                addElement(asOnIRB, endOfRB);
+            } else {
+                TMLChoice packetLengthChoice1 = new TMLChoice("PacketLengthChoice1", referenceObject);
+                addElement(waitingForFeedback, packetLengthChoice1);
+
+                // Right branch
+                TMLActionState loopexitTo1= new TMLActionState("loopexitTo1", referenceObject);
+                loopexitTo1.setAction("loopexit = 1");
+                addElement(packetLengthChoice1, loopexitTo1);
+                packetLengthChoice1.addGuard("i" + i + " = pktlen" + i);
+
+
+                TMLActionState ispktResetAction = new TMLActionState("ispktResetAction", referenceObject);
+                ispktResetAction.setAction("ispkt" + i + " = 0");
+                addElement(loopexitTo1, ispktResetAction);
+
+                TMLStopState endOfRB1 = new TMLStopState("endOfRB1", referenceObject);
+                addElement(ispktResetAction, endOfRB1);
+
+                // TMLSequence of left branch
+                TMLSequence seqLB = new TMLSequence("seqLB", referenceObject);
+                addElement(packetLengthChoice1, seqLB);
+                packetLengthChoice1.addGuard("i" + i + " < pktlen" + i);
+
+                //LB of seqLB
+                TMLChoice choiceLBSeq = new TMLChoice("choiceLBSeq", referenceObject);
+                addElement(seqLB, choiceLBSeq);
+
+                TMLSendEvent sendEvtpktin1 = new TMLSendEvent("sendEvtpktin1", referenceObject);
+                sendEvtpktin1.setEvent(outputEvent);
+                sendEvtpktin1.addParam("pktlen" + i);
+                sendEvtpktin1.addParam("dst" + i);
+                sendEvtpktin1.addParam("vc" + i);
+                sendEvtpktin1.addParam("0");
+                addElement(choiceLBSeq, sendEvtpktin1);
+                choiceLBSeq.addGuard("i" + i + " < pktlen" + i + " - 1");
+
+                TMLActionState asOnI1 = new TMLActionState("ActionstateOnI1", referenceObject);
+                asOnI1.setAction("i" + i + " = i" + i + " 1");
+                addElement(sendEvtpktin1, asOnI1);
+
+                TMLStopState endOfLB1 = new TMLStopState("endOfLB1", referenceObject);
+                addElement(asOnI1, endOfLB1);
+
+                TMLSendEvent sendEvtpktinRB1 = new TMLSendEvent("sendEvtpktinRB1", referenceObject);
+                sendEvtpktinRB1.setEvent(outputEvent);
+                sendEvtpktinRB1.addParam("pktlen" + i);
+                sendEvtpktinRB1.addParam("dst" + i);
+                sendEvtpktinRB1.addParam("vc" + i);
+                sendEvtpktinRB1.addParam("1");
+                addElement(choiceLBSeq, sendEvtpktinRB1);
+                choiceLBSeq.addGuard("i" + i + " == pktlen" + i + " - 1");
+
+                TMLActionState asOnIRB1 = new TMLActionState("asOnIRB1", referenceObject);
+                asOnIRB1.setAction("i" + i + " = i" + i + " 1");
+                addElement(sendEvtpktinRB1, asOnIRB1);
+
+                TMLStopState endOfRB1SEQ = new TMLStopState("endOfRB1SEQ", referenceObject);
+                addElement(asOnIRB1, endOfRB1SEQ);
+
+                // Right branch of seq
+                TMLNotifiedEvent notifiedEventPrio = new TMLNotifiedEvent("notifiedEventPrio", referenceObject);
+                notifiedEventPrio.setEvent(inputEventsFromMUX.get(i-1));
+                notifiedEventPrio.setVariable("higher_prio");
+                addElement(seqLB, notifiedEventPrio);
+
+                TMLChoice testPrio = new TMLChoice("testPrio", referenceObject);
+                addElement(notifiedEventPrio, testPrio);
+
+                TMLActionState loopexitPrio= new TMLActionState("loopexitPrio", referenceObject);
+                loopexitPrio.setAction("loopexit = 1");
+                addElement(testPrio, loopexitPrio);
+                testPrio.addGuard("higher_prio > 0");
+
+                addElement(loopexitPrio, new TMLStopState("EndOfHigherPrio", referenceObject));
+
+                addElement(testPrio, new TMLStopState("NoHigherPrio", referenceObject));
+                testPrio.addGuard("higher_prio == 0");
+
+            }
 
 
 

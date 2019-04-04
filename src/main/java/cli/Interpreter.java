@@ -59,9 +59,10 @@ import java.util.*;
  *
  * @author Ludovic APVRILLE
  */
-public class Interpreter implements Runnable  {
+public class Interpreter implements Runnable, TerminalProviderInterface  {
+
     public final static Command[] commands = {new Help(), new Quit(), new Action(),
-            new Set(), new Wait(), new Print(), new History()};
+            new Set(), new Wait(), new Print(), new History(), new TestSpecific(), new TML()};
 
     // Errors
     public final static String UNKNOWN = "Unknown command";
@@ -85,6 +86,8 @@ public class Interpreter implements Runnable  {
     private boolean ttoolStarted = false;
     public MainGUI mgui;
     private Vector<String> formerCommands;
+    private Terminal term;
+    private int currentLine;
 
 
     public Interpreter(String script, InterpreterOutputInterface printInterface, boolean show) {
@@ -102,6 +105,18 @@ public class Interpreter implements Runnable  {
 
 
     public void interact() {
+        Terminal term = new Terminal();
+        term.setTerminalProvider(this);
+
+        String line;
+        currentLine = 0;
+        while ((line = term.getNextCommand()) != null) {
+            executeLine(line, currentLine, false);
+            currentLine++;
+        }
+    }
+
+    public void interactIntegratedTerminal() {
         /*if (RawConsoleInput.isWindows) {
             print("In Windows");
         } else  {
@@ -126,11 +141,11 @@ public class Interpreter implements Runnable  {
 
     public void interpret() {
         Scanner scanner = new Scanner(script);
-        int cptLine = 0;
+        currentLine = 0;
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
-            cptLine ++;
-            executeLine(line, cptLine, true);
+            currentLine ++;
+            executeLine(line, currentLine, true);
 
         }
         scanner.close();
@@ -141,6 +156,7 @@ public class Interpreter implements Runnable  {
 
     private void executeLine(String line, int cptLine, boolean exitOnError) {
         // Comment
+        //TraceManager.addDev("Executing line:" + line);
 
         line = line.trim();
         if (line.length() == 0) {
@@ -166,29 +182,43 @@ public class Interpreter implements Runnable  {
                 begOfLine = begOfLine.substring(0, index).trim();
             }
 
-            TraceManager.addDev("Handling line: " + lineWithNoVariable);
+            //TraceManager.addDev("Handling line: " + lineWithNoVariable);
+            String [] commandInfo = lineWithNoVariable.split(" ");
+
+            if ((commandInfo == null) || (commandInfo.length < 1)){
+                System.out.println("Empty command");
+                if (exitOnError) {
+                    System.exit(-1);
+                }
+            }
+
+
 
             // Analyze current line
             error = "";
             for(Command c: commands) {
-                if (lineWithNoVariable.compareTo(c.getCommand()) == 0) {
+                if (commandInfo[0].compareTo(c.getCommand()) == 0) {
                     error = c.executeCommand( lineWithNoVariable.substring(c.getCommand().length(),
                             lineWithNoVariable.length()).trim(), this);
+                    TraceManager.addDev("Command executed");
                     break;
                 }
-                if (lineWithNoVariable.compareTo(c.getShortCommand()) == 0) {
+                if (commandInfo[0].compareTo(c.getShortCommand()) == 0) {
                     error = c.executeCommand( lineWithNoVariable.substring(c.getShortCommand().length(),
                             lineWithNoVariable.length()).trim(), this);
+                    TraceManager.addDev("Short Command executed");
                     break;
 
                 }
             }
 
-            if (error != null) {
+            if ((error != null) && (error.length() > 0)) {
                 System.out.println("Error in line " + cptLine + " : " + error);
                 if (exitOnError) {
                     System.exit(-1);
                 }
+            } else if ((error != null) && (error.length() == 0)) {
+                System.out.println("Unknown command in line " + cptLine + " : " + commandInfo[0]);
             }
         }
     }
@@ -273,6 +303,7 @@ public class Interpreter implements Runnable  {
         printInterface.print(s);
     }
 
+    // History
     public String printAllFormerCommands() {
         StringBuffer sb = new StringBuffer("");
         for(int i=0; i<formerCommands.size(); i++) {
@@ -280,6 +311,69 @@ public class Interpreter implements Runnable  {
         }
         print(sb.toString());
         return null;
+    }
+
+    public String executeFormerCommand(int indexOfCommand) {
+        if (indexOfCommand >= formerCommands.size() || (indexOfCommand < 0)) {
+            return "Invalid command index";
+        }
+
+        String formerCommand = formerCommands.get(indexOfCommand);
+        System.out.println("Executing: " + formerCommand);
+        executeLine(formerCommand, currentLine, false);
+
+        return null;
+    }
+
+    // Terminal provider interface
+    public String getMidPrompt() {
+        return "> ";
+    }
+
+    public boolean tabAction(String buffer) {
+        // Print all possibilities from current buffer
+        String buf = Conversion.replaceAllString(buffer, "  ", " ");
+        String[] split = buf.split(" ");
+
+        // From the split, determine commands already entered and completes it
+        Vector<Command> listOfCommands = findCommands(split, 0);
+
+        if (listOfCommands.size()== 0) {
+            return false;
+        }
+
+        for(Command c: listOfCommands) {
+                System.out.println(""+c.getCommand());
+                return true;
+        }
+
+        return true;
+
+    }
+
+    public Vector<Command> findCommands(String[] split, int index) {
+        if (split == null) {
+            return null;
+        }
+
+        if (index >= split.length) {
+            return null;
+        }
+
+        String s = split[index];
+        Vector<Command> couldBe = new Vector<>();
+
+        // Search of all compatible commands starting with s
+        for (Command c: commands) {
+            if (c.getShortCommand().startsWith(s) || c.getCommand().startsWith(s)) {
+                Vector<Command> others = c.findCommands(split, index+1);
+                if (others != null) {
+                    couldBe.addAll(others);
+                }
+            }
+        }
+
+        return couldBe;
     }
 
 

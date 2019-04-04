@@ -160,7 +160,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
     protected String associatedEvent = "VOID";
 
     // Network
-    protected int vc;
+    protected int vc = -1;
 
 
     public int verification;
@@ -909,9 +909,8 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 
                                 try {
                                     vc = Integer.decode(elt.getAttribute("vc"));
-
                                 } catch (Exception e) {
-                                    vc = 0;
+                                    vc = -1;
                                 }
 
                             }

@@ -712,6 +712,10 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return helpManager;
     }
 
+    public void setHelpManager(HelpManager hm) {
+        helpManager = hm;
+    }
+
     public void showIntegratedHelp() {
         if (helpManager != null) {
             openHelpFrame(helpManager);
@@ -4830,7 +4834,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         //TraceManager.addDev("Design space exploration");
         JDialogDSE jdse = new JDialogDSE(frame, this, "Design Space Exploration", SpecConfigTTool.SystemCCodeDirectory, SpecConfigTTool.TMLCodeDirectory);
         //   jdse.setSize(600,800);
-        GraphicLib.centerOnParent(jdse, 500, 400);
+        GraphicLib.centerOnParent(jdse, 700, 800);
         jdse.setVisible(true);
         dtree.toBeUpdated();
     }
@@ -6572,10 +6576,13 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         if (tp == null) {
             return null;
         }
+
         if (tp instanceof TMLDesignPanel) {
             return ((TMLDesignPanel) tp).getTMLActivityDiagramPanel(name);
         }
+
         if (tp instanceof TMLComponentDesignPanel) {
+            //TraceManager.addDev("Returning TMLComponentDesignPanel");
             return ((TMLComponentDesignPanel) tp).getTMLActivityDiagramPanel(name);
         }
         return null;

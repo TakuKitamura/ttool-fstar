@@ -1,1 +1,1 @@
-cd ~/TTool/bin&&java -Xmx2048m -jar ttool-cli.jar   -debug -show script1
+cd ~/TTool/bin&&java -Xmx2048m -jar ttool-cli.jar   -debug -show z3script

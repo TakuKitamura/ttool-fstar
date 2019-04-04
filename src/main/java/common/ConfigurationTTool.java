@@ -1713,11 +1713,13 @@ public class ConfigurationTTool {
                     }
                     TraceManager.addDev("Loading Z3 lib: " + tmp);
                     System.load(tmp);
+                    TraceManager.addDev("Loaded Z3 lib: " + tmp);
                 }
+
             }
 
         } catch (UnsatisfiedLinkError e) {
-            return ("Z3 libs + " + ConfigurationTTool.Z3LIBS + " could not be loaded\n");
+            return ("Z3 libs " + ConfigurationTTool.Z3LIBS + " could not be loaded\n");
         }
 
         return null;

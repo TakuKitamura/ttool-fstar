@@ -1668,7 +1668,9 @@ public class AvatarDesignPanelTranslator {
 
         for (String actionText : connector.getEffectiveActions()) {
             if (actionText.trim().length() > 0) {
+                //TraceManager.addDev("Action1:" + actionText);
                 actionText = modifyString(actionText.trim());
+                //TraceManager.addDev("Action2:" + actionText);
 
                 // Variable assignment or method call?
                 if (!isAVariableAssignation(actionText)) {
@@ -1700,6 +1702,7 @@ public class AvatarDesignPanelTranslator {
                     if (error < 0) {
                         makeError(error, connector.tdp, block, connector, "transition action", actionText);
                     } else {
+                        //TraceManager.addDev("Adding action:" + actionText);
                         transition.addAction(actionText);
                     }
                 }

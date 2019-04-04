@@ -1,0 +1,88 @@
+// TML Application - FORMAT 0.1
+// Application: /home/pham/Documents/TToolHelp/TTool/modeling/DIPLODOCUS/CloneCompositeComponentTest.xml
+// Generated: Thu Mar 21 16:20:51 CET 2019
+
+// Channels
+CHANNEL Application__channel BRBW 4 8 OUT Application__PrimitiveComp1 IN Application__PrimitiveComp2
+CHANNEL Application__channel2 BRBW 4 8 OUT Application__PrimitiveComp3 IN Application__PrimitiveComp4
+CHANNEL Application__channel3 BRBW 4 8 OUT Application__PrimitiveComp5 IN Application__PrimitiveComp5
+CHANNEL Application__channel3_0 BRBW 4 8 OUT Application__PrimitiveComp5_0 IN Application__PrimitiveComp5_0
+CHANNEL Application__channel4 BRBW 4 8 OUT Application__PrimitiveComp6 IN Application__PrimitiveComp6
+
+// Events
+EVENT Application__event__Application__event() NIB 8 Application__PrimitiveComp1 Application__PrimitiveComp2
+
+// Requests
+
+TASK Application__PrimitiveComp1
+    TASKOP
+    //Local variables
+
+    //Behavior
+    RAND
+        CASERAND 50
+            NOTIFY Application__event__Application__event
+        ENDCASERAND
+        CASERAND 50
+            WRITE Application__channel 1
+        ENDCASERAND
+    ENDRAND
+ENDTASK
+
+TASK Application__PrimitiveComp2
+    TASKOP
+    //Local variables
+
+    //Behavior
+    RAND
+        CASERAND 50
+            WAIT Application__event__Application__event
+        ENDCASERAND
+        CASERAND 50
+            READ Application__channel 1
+        ENDCASERAND
+    ENDRAND
+ENDTASK
+
+TASK Application__PrimitiveComp3
+    TASKOP
+    //Local variables
+
+    //Behavior
+    WRITE Application__channel2 1
+ENDTASK
+
+TASK Application__PrimitiveComp4
+    TASKOP
+    //Local variables
+
+    //Behavior
+    READ Application__channel2 1
+ENDTASK
+
+TASK Application__PrimitiveComp5
+    TASKOP
+    //Local variables
+
+    //Behavior
+    WRITE Application__channel3 1
+    READ Application__channel3 1
+ENDTASK
+
+TASK Application__PrimitiveComp5_0
+    TASKOP
+    //Local variables
+
+    //Behavior
+    WRITE Application__channel3_0 1
+    READ Application__channel3_0 1
+ENDTASK
+
+TASK Application__PrimitiveComp6
+    TASKOP
+    //Local variables
+
+    //Behavior
+    WRITE Application__channel4 1
+    READ Application__channel4 1
+ENDTASK

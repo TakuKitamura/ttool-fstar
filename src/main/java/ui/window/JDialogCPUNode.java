@@ -41,10 +41,13 @@
 
 package ui.window;
 
-import cli.Action;
+import help.HelpEntry;
+import help.HelpManager;
 import myutil.GraphicLib;
+import myutil.TraceManager;
 import tmltranslator.modelcompiler.ArchUnitMEC;
 import ui.ColorManager;
+import ui.MainGUI;
 import ui.util.IconManager;
 import ui.interactivesimulation.SimulationTransaction;
 import ui.tmldd.TMLArchiCPUNode;
@@ -66,6 +69,11 @@ import java.util.List;
 public class JDialogCPUNode extends JDialogBase implements ActionListener  {
     //private static String[] tracemodeTab = {"vcd trace", "VCI logger", "VCI stats"};
 //    private static String[] tracemodeTab = {"VCI logger"};
+
+
+    protected MainGUI mgui;
+
+
     private boolean regularClose;
 
     private JPanel panel2, panel4, panel5;
@@ -93,18 +101,20 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
     private java.util.List<SimulationTransaction> transactions;
 
     //issue 183
-    List<JTextArea> instructionHelpList;
-    List<JButton>   buttons;
+    List<JButton>   buttons = new ArrayList<>();
+    List<HelpEntry> helpEntries;
+    JFrameHWNodeHelp cpuHelp;
 
     /* Creates new form  */
-    public JDialogCPUNode(Frame _frame, String _title, TMLArchiCPUNode _node, ArchUnitMEC _MECType, java.util.List<SimulationTransaction> _transactions) {
+    public JDialogCPUNode(MainGUI _mgui, Frame _frame, String _title, TMLArchiCPUNode _node, ArchUnitMEC _MECType,
+                          java.util.List<SimulationTransaction> _transactions) {
         super(_frame, _title, true);
-      //  frame = _frame;
+
+        mgui = _mgui;
         node = _node;
         MECType = _MECType;
         transactions = _transactions;
         initComponents();
-   //     myInitComponents();
         pack();
     }
 //
@@ -121,114 +131,94 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
     }
 
     //issue 183
-    private void buttonClick(JButton but, JTextArea jta) {
-        JPopupMenu helpPopup = new JPopupMenu();
-        helpPopup.add(jta);
-        but.addMouseListener(new MouseAdapter() {
+    private void buttonClick(JButton but, HelpEntry he) {
+        setModalityType(ModalityType.MODELESS);
+        but.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void actionPerformed(ActionEvent e) {
+                if(cpuHelp == null ) {
+                    cpuHelp = new JFrameHWNodeHelp(mgui,"Help",he);
+                    cpuHelp.setLocationRelativeTo(but);
+                }else{
+                    if(!cpuHelp.isVisible()) {
+                        cpuHelp = new JFrameHWNodeHelp(mgui,"Help",he);
+                        cpuHelp.setLocationRelativeTo(but);
+                    }else{
+                        cpuHelp.setVisible(false);
+                    }
+                }
 
-                if (!helpPopup.isVisible()) {
-                    helpPopup.show(but,20,20);
-                } else {
-                    helpPopup.setVisible(false);
+                if(cpuHelp != null) {
+                    cpuHelp.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "close");
+                    cpuHelp.getRootPane().getActionMap().put("close", new AbstractAction() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            if(!cpuHelp.isVisible())
+                                dispose();
+                            cpuHelp.setVisible(false);
+                        }
+                    });
                 }
             }
         });
-
-        helpPopup.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "closeJTextArea");
-        helpPopup.getActionMap().put("closeJTextArea", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                helpPopup.setVisible(false);
-            }
-        });
-
     }
+
+
 
     //issue 183
     private void hardwareHelp(){
+        HelpManager helpManager = new HelpManager();
+        if(helpManager.loadEntries()) {
+            helpEntries = new ArrayList<>();
+            HelpEntry he0 = helpManager.getHelpEntryWithHTMLFile("cpuname.html");
+            helpEntries.add(he0);
+            HelpEntry he1 = helpManager.getHelpEntryWithHTMLFile("schedulingpolicy.html");
+            helpEntries.add(he1);
+            HelpEntry he2 = helpManager.getHelpEntryWithHTMLFile("slicetime.html");
+            helpEntries.add(he2);
+            HelpEntry he3 = helpManager.getHelpEntryWithHTMLFile("numbercores.html");
+            helpEntries.add(he3);
+            HelpEntry he4 = helpManager.getHelpEntryWithHTMLFile("datasize.html");
+            helpEntries.add(he4);
+            HelpEntry he5 = helpManager.getHelpEntryWithHTMLFile("pipelinesize.html");
+            helpEntries.add(he5);
+            HelpEntry he6 = helpManager.getHelpEntryWithHTMLFile("taskswitchingtime.html");
+            helpEntries.add(he6);
+            HelpEntry he7 = helpManager.getHelpEntryWithHTMLFile("misbrandingprediction.html");
+            helpEntries.add(he7);
+            HelpEntry he8 = helpManager.getHelpEntryWithHTMLFile("cachemiss.html");
+            helpEntries.add(he8);
+            HelpEntry he9 = helpManager.getHelpEntryWithHTMLFile("goidletime.html");
+            helpEntries.add(he9);
+            HelpEntry he10 = helpManager.getHelpEntryWithHTMLFile("maxconsecutivecycles.html");
+            helpEntries.add(he10);
+            HelpEntry he11 = helpManager.getHelpEntryWithHTMLFile("execi.html");
+            helpEntries.add(he11);
+            HelpEntry he12 = helpManager.getHelpEntryWithHTMLFile("execc.html");
+            helpEntries.add(he12);
+            HelpEntry he13 = helpManager.getHelpEntryWithHTMLFile("clockdivider.html");
+            helpEntries.add(he13);
+            HelpEntry he14 = helpManager.getHelpEntryWithHTMLFile("encryption.html");
+            helpEntries.add(he14);
+            HelpEntry he15 = helpManager.getHelpEntryWithHTMLFile("cpuextension.html");
+            helpEntries.add(he15);
+            HelpEntry he16 = helpManager.getHelpEntryWithHTMLFile("operation.html");
+            helpEntries.add(he16);
+        }
 
-        instructionHelpList = new ArrayList<>();
-        buttons = new ArrayList<>();
-        JTextArea jft1 = new JTextArea();
-        jft1.setText("CPU name");
-        instructionHelpList.add(jft1);
-
-        JTextArea jft2 = new JTextArea();
-        jft2.setText("The arbitration policy used by OS to schedule mapped tasks");
-        instructionHelpList.add(jft2);
-
-        JTextArea jft3 = new JTextArea("Slice time : The maximum time allocated by the OS " +
-                "scheduler to execute a task");
-        instructionHelpList.add(jft3);
-
-        JTextArea jft4 = new JTextArea("Nb of Cores :  The number of cores of the CPU");
-        instructionHelpList.add(jft4);
-
-        JTextArea jft5 = new JTextArea("Data size : The size of an EXECI/EXECC operation, in " +
-                "number of bytes");
-        instructionHelpList.add(jft5);
-
-        JTextArea jft6 = new JTextArea("Pipeline size : The number of stages of the pipeline");
-        instructionHelpList.add(jft6);
-
-        JTextArea jft7 = new JTextArea("Task switching : The time taken by the OS for a context switch");
-        instructionHelpList.add(jft7);
-
-        JTextArea jft8 = new JTextArea("Mis-branching prediction: The miss percentage of the CPU branch " +
-                "prediction scheme");
-        instructionHelpList.add(jft8);
-
-        JTextArea jft9 = new JTextArea("cahe-miss : The percentage of cache misses");
-        instructionHelpList.add(jft9);
-
-        JTextArea jft10 = new JTextArea("Go idle time (cycles) : The time taken by the OS and the CPU " +
-                "hardware to go idle");
-        instructionHelpList.add(jft10);
-
-        JTextArea jft11 = new JTextArea("Max consecutive cycles before idle (cycles) : Number of consecutive cycles of NOPs before the " +
-                "CPU goes idle");
-        instructionHelpList.add(jft11);
-
-        JTextArea jft12 = new JTextArea("EXECI execution : The number of clock cycles corresponding to an " +
-                "integer operation");
-        instructionHelpList.add(jft12);
-
-        JTextArea jft13 = new JTextArea("EXECC execution : The number of clock cycles corresponding to an " +
-                "operation on complex numbers");
-        instructionHelpList.add(jft13);
-
-        JTextArea jft14 = new JTextArea("Clock divider : This number defines the operating clock frequency of the CPU \n" +
-                "It is expressed via a number that is used to divide the global design\n" +
-                "frequency, whose default value is 200 MHz. Thus a clock divider equal to 4 means that the CPU\n" +
-                "operates at 200/4 = 50 MHz");
-        instructionHelpList.add(jft14);
-
-        JTextArea jft15 = new JTextArea("Encryption");
-        instructionHelpList.add(jft15);
-
-        JTextArea jft16 = new JTextArea("CPU Extension Construct");
-        instructionHelpList.add(jft16);
-
-        JTextArea jft17 = new JTextArea("Operation");
-        instructionHelpList.add(jft17);
-
-        for(int i = 0; i < instructionHelpList.size(); i++) {
+        for(int i = 0; i < 17; i++) {
             Icon myIcon = IconManager.imgic32;
             JButton but = new JButton(myIcon);
             setButton(but);
+            buttonClick(but,helpEntries.get(i));
             buttons.add(but);
-            instructionHelpList.get(i).setEditable(false);
-        }
-
-        for (int i = 0; i < instructionHelpList.size(); i++) {
-            buttonClick(buttons.get(i),instructionHelpList.get(i));
         }
     }
 
 
     private void initComponents() {
+
+        hardwareHelp();
         Container c = getContentPane();
         GridBagLayout gridbag0 = new GridBagLayout();
         GridBagLayout gridbag2 = new GridBagLayout();
@@ -237,7 +227,6 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         //GridBagConstraints c1 = new GridBagConstraints();
         GridBagConstraints c2 = new GridBagConstraints();
         GridBagConstraints c4 = new GridBagConstraints();
-        hardwareHelp();
 
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         c.setLayout(gridbag0);
@@ -290,7 +279,7 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.weighty = 0.5;
         c2.weightx = 0.5;
         c2.gridwidth = GridBagConstraints.REMAINDER;
-        panel2.add(buttons.get(1),c2);
+         panel2.add(buttons.get(1),c2);
 
         c2.gridwidth = 1;
         //issue 183
@@ -567,8 +556,8 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c0.weightx = 1.0;
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
         c0.fill = GridBagConstraints.BOTH;
-        /*c.add(panel2, c0);
-          c.add(panel4, c0);*/
+       /* c.add(panel2, c0);
+        c.add(panel4, c0);*/
         c.add( tabbedPane, c0 );
 
         c0.gridwidth = 1;

@@ -51,7 +51,7 @@ public class AvatarArithmeticOp extends AvatarTerm {
     AvatarTerm term2;
     String operator;
 
-    private static final String [] knownOp = {"+", "-"};
+    private static final String [] knownOp = {"+", "-", "*"};
 
     public AvatarArithmeticOp (AvatarTerm _term1, AvatarTerm _term2, String _operator, Object _referenceObject) {
         super (_term1.getName () + _operator + _term2.getName (), _referenceObject);

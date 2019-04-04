@@ -39,6 +39,8 @@
 
 package tmltranslator;
 
+import myutil.TraceManager;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -282,7 +284,9 @@ public class TMLArchitecture {
 
     public HwNode getHwNodeByName(String _name) {
         for (HwNode node : hwnodes) {
-            if (node.getName().equals(_name)) {
+            //TraceManager.addDev("Comparing >" + node.getName() + "< vs >" + _name + "<");
+            if (node.getName().compareTo(_name) == 0) {
+                //TraceManager.addDev("Returning node " + node.getName());
                 return node;
             }
         }
@@ -306,10 +310,28 @@ public class TMLArchitecture {
     }
 
     public HwCPU getHwCPUByName(String _name) {
+        if (_name == null) {
+            return null;
+        }
         for (HwNode node : hwnodes) {
             if (node.getName().equals(_name)) {
                 if (node instanceof HwCPU) {
                     return (HwCPU) node;
+                }
+            }
+        }
+        return null;
+    }
+
+    public HwExecutionNode getHwExecutionNodeByName(String _name) {
+        if (_name == null) {
+            return null;
+        }
+
+        for (HwNode node : hwnodes) {
+            if (node.getName().equals(_name)) {
+                if (node instanceof HwExecutionNode) {
+                    return (HwExecutionNode) node;
                 }
             }
         }

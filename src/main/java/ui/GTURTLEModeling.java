@@ -3593,7 +3593,7 @@ public class GTURTLEModeling {
     }
 
 
-    public String makeXMLFromSelectedComponentOfADiagram(TDiagramPanel tdp, int copyMaxId, int _decX, int _decY) {
+    public String makeXMLFromSelectedComponentOfADiagram(TDiagramPanel tdp, int copyMaxId, int _decX, int _decY, boolean cloneEvenIfNonNullFather) {
         StringBuffer sb = new StringBuffer();
         //TraceManager.addDev("Making copy");
 
@@ -3608,7 +3608,7 @@ public class GTURTLEModeling {
         StringBuffer s;
         String str;
 
-        s = tdp.saveSelectedInXML();
+        s = tdp.saveSelectedInXML(cloneEvenIfNonNullFather);
 
         final Vector<TCDTClass> classes = tdp.selectedTclasses();
 
@@ -6133,7 +6133,8 @@ public class GTURTLEModeling {
 
         nameTab = elt.getAttribute("nameTab");
 
-        indexDesign = mgui.createSysmlsecMethodology(nameTab);
+        //indexDesign = mgui.createSysmlsecMethodology(nameTab);
+		indexDesign = mgui.createSysCAMSComponentDesign(nameTab);
 
         diagramNl = node.getChildNodes();
 
@@ -6812,6 +6813,7 @@ public class GTURTLEModeling {
 
         tmladp.removeAll();
 
+        //TraceManager.addDev("Loading diagram of " + name + " in " + tmladp.getName() +"\n");
         loadDiagram(elt, tmladp);
     }
 

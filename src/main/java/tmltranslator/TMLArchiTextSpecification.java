@@ -72,7 +72,8 @@ public class TMLArchiTextSpecification {
 
     private String keywords[] = {"NODE", "CPU", "FPGA", "SET", "BUS", "LINK", "BRIDGE", "ROUTER", "MEMORY", "MASTERCLOCKFREQUENCY", "DMA"};
     private String nodetypes[] = {"CPU", "FPGA", "BUS", "LINK", "BRIDGE", "ROUTER", "MEMORY", "HWA", "DMA"};
-    private String cpuparameters[] = {"nbOfCores", "byteDataSize", "pipelineSize", "goIdleTime", "maxConsecutiveIdleCycles", "taskSwitchingTime", "branchingPredictionPenalty", "cacheMiss", "schedulingPolicy", "sliceTime", "execiTime", "execcTime"};
+    private String cpuparameters[] = {"nbOfCores", "byteDataSize", "pipelineSize", "goIdleTime", "maxConsecutiveIdleCycles", "taskSwitchingTime",
+            "branchingPredictionPenalty", "cacheMiss", "schedulingPolicy", "sliceTime", "execiTime", "execcTime", "operation"};
     private String fpgaparameters[] = {"capacity", "byteDataSize", "mappingPenalty", "goIdleTime", "maxConsecutiveIdleCycles", "reconfigurationTime", "execiTime", "execcTime"};
     private String linkparameters[] = {"bus", "node", "priority"};
     private String hwaparameters[] = {"byteDataSize", "execiTime"};
@@ -170,7 +171,9 @@ public class TMLArchiTextSpecification {
                 code += set + "sliceTime " + cpu.sliceTime + CR;
                 code += set + "execiTime " + cpu.execiTime + CR;
                 code += set + "execcTime " + cpu.execcTime + CR;
-                code += set + "operation " + cpu.getOperation() + CR;
+                if (cpu.getOperation().length() > 0) {
+                    code += set + "operation " + cpu.getOperation() + CR;
+                }
             }
 
             // FPGA
@@ -187,7 +190,9 @@ public class TMLArchiTextSpecification {
                 code += set + "reconfigurationTime " + fpga.reconfigurationTime + CR;
                 code += set + "execiTime " + fpga.execiTime + CR;
                 code += set + "execcTime " + fpga.execcTime + CR;
-                code += set + "operation " + fpga.getOperation() + CR;
+                if (fpga.getOperation().length() > 0) {
+                    code += set + "operation " + fpga.getOperation() + CR;
+                }
 
             }
 
@@ -200,7 +205,9 @@ public class TMLArchiTextSpecification {
                 code += set + "byteDataSize " + hwa.byteDataSize + CR;
                 code += set + "execiTime " + hwa.execiTime + CR;
                 code += set + "execcTime " + hwa.execcTime + CR;
-                code += set + "operation " + hwa.getOperation() + CR;
+                if (hwa.getOperation().length() > 0) {
+                    code += set + "operation " + hwa.getOperation() + CR;
+                }
             }
 
             // BUS
@@ -442,9 +449,12 @@ public class TMLArchiTextSpecification {
                 return -1;
             }
 
+            //TraceManager.addDev("NEW NODE =" + _split[1]);
+
             if (_split[1].equals("CPU")) {
                 HwCPU cpu = new HwCPU(_split[2]);
                 tmla.addHwNode(cpu);
+                //TraceManager.addDev("Adding CPU:" + cpu.getName());
             } else if (_split[1].equals("FPGA")) {
                 HwFPGA fpga = new HwFPGA(_split[2]);
                 tmla.addHwNode(fpga);
@@ -476,7 +486,7 @@ public class TMLArchiTextSpecification {
         // SET
         if (isInstruction("SET", _split[0])) {
 
-            if (_split.length != 4) {
+            if (_split.length < 4) {
                 error = "A set instruction must be used with 3 parameters, and not " + (_split.length - 1);
                 addError(0, _lineNb, 0, error);
                 return -1;
@@ -486,8 +496,14 @@ public class TMLArchiTextSpecification {
                 return -1;
             }
 
-            HwNode node = tmla.getHwNodeByName(_split[1]);
+
             HwLink link;
+            HwNode node = tmla.getHwNodeByName(_split[1]);
+            if (node != null) {
+                //TraceManager.addDev("Handling node=" + node.getName());
+            } else {
+                //TraceManager.addDev("Null node=" + _split[1]);
+            }
 
             if (node == null) {
                 link = tmla.getHwLinkByName(_split[1]);
@@ -497,6 +513,7 @@ public class TMLArchiTextSpecification {
                     return -1;
                 } else {
                     // Link node
+
                     if (link instanceof HwLink) {
                         if (!checkParameter("SET", _split, 2, 8, _lineNb)) {
                             return -1;
@@ -537,13 +554,21 @@ public class TMLArchiTextSpecification {
                 if (node instanceof HwCPU) {
                     HwCPU cpu = (HwCPU) node;
 
+                    //TraceManager.addDev("Seeting 1" + _split[2] + " in " + cpu.getName());
+
+
                     if (!checkParameter("SET", _split, 2, 3, _lineNb)) {
                         return -1;
                     }
 
-                    if (!checkParameter("SET", _split, 3, 1, _lineNb)) {
-                        return -1;
+                    if (_split[2].toUpperCase().compareTo("OPERATION") != 0) {
+                        if (!checkParameter("SET", _split, 3, 1, _lineNb)) {
+                            return -1;
+                        }
                     }
+
+                    //TraceManager.addDev("Setting 2" + _split[2] + " in " + cpu.getName());
+
 
                     if (_split[2].toUpperCase().equals("NBOFCORES")) {
                         cpu.nbOfCores = Integer.decode(_split[3]).intValue();
@@ -598,7 +623,7 @@ public class TMLArchiTextSpecification {
                         for (int i=3; i<_split.length; i++) {
                             tmpOp += _split[i] + " ";
                         }
-
+                        //TraceManager.addDev("Setting op in " + cpu.getName() + " to " + tmpOp);
                         cpu.setOperation(tmpOp.trim());
                     }
                 }
@@ -781,6 +806,7 @@ public class TMLArchiTextSpecification {
                     if (_split[2].toUpperCase().equals("NBOFCHANNELS")) {
                         dma.nbOfChannels = Integer.decode(_split[3]).intValue();
                     }
+
                 }
             }
 
