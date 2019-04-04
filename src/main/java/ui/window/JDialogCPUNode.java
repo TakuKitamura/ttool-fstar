@@ -41,7 +41,6 @@
 
 package ui.window;
 
-import cli.Action;
 import help.CPUNodeHelp;
 import help.HelpEntry;
 import help.HelpManager;
@@ -49,7 +48,6 @@ import myutil.GraphicLib;
 import myutil.TraceManager;
 import tmltranslator.modelcompiler.ArchUnitMEC;
 import ui.ColorManager;
-import ui.MainGUI;
 import ui.util.IconManager;
 import ui.interactivesimulation.SimulationTransaction;
 import ui.tmldd.TMLArchiCPUNode;
@@ -83,7 +81,6 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
  //   private static int selectedTracemode = 0;
     // Panel1
     protected JTextField nodeName;
-    private MainGUI mgui;
 
     // Panel2
     protected JTextField sliceTime, nbOfCores, byteDataSize, pipelineSize, goIdleTime, maxConsecutiveIdleCycles,
@@ -101,7 +98,7 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
     //issue 183
     List<JButton>   buttons = new ArrayList<>();
     List<HelpEntry> helpEntries;
-    CPUNodeHelp cpuHelp = null;
+    CPUNodeHelp cpuHelp;
 
     /* Creates new form  */
     public JDialogCPUNode(Frame _frame, String _title, TMLArchiCPUNode _node, ArchUnitMEC _MECType, java.util.List<SimulationTransaction> _transactions) {
@@ -134,7 +131,18 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(cpuHelp == null ) {
-                    cpuHelp = new CPUNodeHelp("help",he);
+                    cpuHelp = new CPUNodeHelp("Help",he);
+                    cpuHelp.setLocationRelativeTo(but);
+                }else{
+                    if(!cpuHelp.isVisible()) {
+                        cpuHelp = new CPUNodeHelp("Help",he);
+                        cpuHelp.setLocationRelativeTo(but);
+                    }else{
+                        cpuHelp.setVisible(false);
+                    }
+                }
+
+                if(cpuHelp != null) {
                     cpuHelp.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "close");
                     cpuHelp.getRootPane().getActionMap().put("close", new AbstractAction() {
                         @Override
@@ -144,22 +152,6 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
                             cpuHelp.setVisible(false);
                         }
                     });
-                }else{
-                    if(!cpuHelp.isVisible()) {
-                        cpuHelp = new CPUNodeHelp("help",he);
-                        cpuHelp.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "close");
-                        cpuHelp.getRootPane().getActionMap().put("close", new AbstractAction() {
-                            @Override
-                            public void actionPerformed(ActionEvent e) {
-                                if(!cpuHelp.isVisible())
-                                    dispose();
-                                cpuHelp.setVisible(false);
-                            }
-                        });
-                    }else{
-                        cpuHelp.setVisible(false);
-                        cpuHelp = null;
-                    }
                 }
             }
         });
@@ -207,7 +199,6 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
             HelpEntry he16 = helpManager.getHelpEntryWithHTMLFile("operation.html");
             helpEntries.add(he16);
         }
-
 
         for(int i = 0; i < 17; i++) {
             Icon myIcon = IconManager.imgic32;

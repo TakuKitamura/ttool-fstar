@@ -2,6 +2,7 @@ package help;
 
 import ui.MainGUI;
 import ui.util.IconManager;
+import ui.window.JFrameHelp;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,21 +16,20 @@ import java.awt.event.ActionListener;
  * @author Minh Hiep PHAM
  */
 
-public class CPUNodeHelp extends JFrame {
+public class CPUNodeHelp extends JFrame implements ActionListener{
     private HelpEntry he;
     private JButton helpBut;
     private JEditorPane pane;
 
-    private MainGUI mgui = new MainGUI(false, false, false,false,
-            false,false,false,false,false,
-            false,false,false,false);
+    private MainGUI mgui = new MainGUI(false, true, true, true,
+            true, true, true, true, true, true,
+            true, false, true);
 
     public CPUNodeHelp(String title, HelpEntry _he) {
         super(title);
         he = _he;
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setModalExclusionType(Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
         Container framePanel = getContentPane();
         framePanel.setLayout(new BorderLayout());
         Font f = new Font("Courrier", Font.BOLD, 12);
@@ -40,6 +40,7 @@ public class CPUNodeHelp extends JFrame {
         pane = new JEditorPane("text/html;charset=UTF-8", "");
         pane.setEditable(false);
         pane.setText(he.getHTMLContent());
+
         JScrollPane jsp = new JScrollPane(pane);
         jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         helpPanel.add(jsp, BorderLayout.CENTER);
@@ -47,12 +48,13 @@ public class CPUNodeHelp extends JFrame {
         framePanel.add(helpPanel, BorderLayout.CENTER);
 
         helpBut = new JButton("Help", IconManager.imgic32);
-        helpBut.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                mgui.openHelpFrame(he);
-            }
-        });
+
+        HelpManager hm = new HelpManager();
+        if(hm.loadEntries()) {
+            mgui.setHelpManager(hm);
+        }
+
+        helpBut.addActionListener(this);
 
         JPanel jp = new JPanel();
         jp.add(helpBut);
@@ -60,5 +62,13 @@ public class CPUNodeHelp extends JFrame {
 
         setSize(400, 400);
         setVisible(true);
+        pack();
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == helpBut) {
+            mgui.openHelpFrame(he);
+        }
     }
 }
