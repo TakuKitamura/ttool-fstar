@@ -132,16 +132,19 @@ public class SearchResultHelpEntry extends HelpEntry {
         Vector<HelpEntry> tmp = new Vector<>();
         Vector<AtomicInteger> tmpScores = new Vector<>();
         int cpt = 0;
-        for(HelpEntry he: entries) {
-            int indexOriginal = tmp.indexOf(he);
-            if (indexOriginal > -1) {
-                AtomicInteger right = tmpScores.get(indexOriginal);
-                right.addAndGet(scores.get(cpt).intValue());
-            } else {
-                tmp.add(he);
-                tmpScores.add(new AtomicInteger(scores.get(cpt).intValue()));
+
+        if (entries != null) {
+            for (HelpEntry he : entries) {
+                int indexOriginal = tmp.indexOf(he);
+                if (indexOriginal > -1) {
+                    AtomicInteger right = tmpScores.get(indexOriginal);
+                    right.addAndGet(scores.get(cpt).intValue());
+                } else {
+                    tmp.add(he);
+                    tmpScores.add(new AtomicInteger(scores.get(cpt).intValue()));
+                }
+                cpt++;
             }
-            cpt ++;
         }
         scores = tmpScores;
         entries = tmp;

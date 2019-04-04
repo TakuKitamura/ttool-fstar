@@ -214,7 +214,7 @@ public class TMAP2Network<E>  {
 
         // Check for no more CPU than gridsize
         // Put a random place to non placed CPU
-        // All CPU must be placed
+        // All CPUs must be placed
         if (nbOfHwExecutionNode > (nocSize * nocSize)) {
             return "Too many processors for the NoC size";
         }

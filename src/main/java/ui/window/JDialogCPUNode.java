@@ -69,6 +69,11 @@ import java.util.List;
 public class JDialogCPUNode extends JDialogBase implements ActionListener  {
     //private static String[] tracemodeTab = {"vcd trace", "VCI logger", "VCI stats"};
 //    private static String[] tracemodeTab = {"VCI logger"};
+
+
+    protected MainGUI mgui;
+
+
     private boolean regularClose;
     MainGUI mainGUI;
 
@@ -107,6 +112,7 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         super(_frame, _title, true);
         mainGUI = _mainGUI;
       //  frame = _frame;
+        mgui = _mgui;
         node = _node;
         MECType = _MECType;
         transactions = _transactions;
