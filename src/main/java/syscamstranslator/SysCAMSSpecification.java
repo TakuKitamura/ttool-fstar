@@ -91,6 +91,7 @@ public class SysCAMSSpecification{
 		for (SysCAMSTComponent blockGPIO2VCI : components) {
 			if (blockGPIO2VCI instanceof SysCAMSTBlockGPIO2VCI) {
 				blocksGPIO2VCI.add((SysCAMSTBlockGPIO2VCI) blockGPIO2VCI);
+				//System.out.println("@@@@@GPIO block found in spec");
 			}
 		}
 		return blocksGPIO2VCI;
@@ -235,6 +236,14 @@ public class SysCAMSSpecification{
                     }
                 }
             } 
+        }
+        return cons;
+    }
+    
+    public LinkedList<SysCAMSTConnector> getAllConnectors(){
+        LinkedList<SysCAMSTConnector> cons = new LinkedList<SysCAMSTConnector>();
+        for (SysCAMSTConnector con : connectors) {
+            cons.add(con);
         }
         return cons;
     }

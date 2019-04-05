@@ -51,20 +51,23 @@ import java.io.*;
 import java.util.LinkedList;
 
 /**
- * Class TopCellGenerator
+ * Class TopCellGeneratorSoclib
  * Save the components and connectors in files
  * Creation: 14/05/2018
  * @version 1.0 14/05/2018
  * @author Irina Kit Yan LEE
 */
 
-public class TopCellGeneratorRodrigo {
+public class TopCellGeneratorSoclib {
 	public static SysCAMSSpecification syscams;
 
 	private final static String GENERATED_PATH1 = "generated_CPP" + File.separator;
 	private final static String GENERATED_PATH2 = "generated_H" + File.separator;
+	private final static String CR = "\n";
+	private final static String CR2 = "\n\n";
 
-	public TopCellGeneratorRodrigo(SysCAMSSpecification sys) {
+    
+	public TopCellGeneratorSoclib(SysCAMSSpecification sys) {
 		syscams = sys;
 	}
 
@@ -72,62 +75,81 @@ public class TopCellGeneratorRodrigo {
 		if (c == null) {
 			System.out.println("***Warning: require at least one cluster***");
 		}
-		if (TopCellGeneratorRodrigo.syscams.getNbBlockTDF() == 0) {
+		if (TopCellGenerator.syscams.getNbBlockTDF() == 0) {
 			System.out.println("***Warning: require at least one TDF block***");
 		}
-		if (TopCellGeneratorRodrigo.syscams.getNbPortTDF() == 0) {
+		if (TopCellGenerator.syscams.getNbPortTDF() == 0) {
 			System.out.println("***Warning: require at least one TDF port***");
 		}
-		if (TopCellGeneratorRodrigo.syscams.getNbBlockDE() == 0) {
+		if (TopCellGenerator.syscams.getNbBlockDE() == 0) {
 			System.out.println("***Warning: require at least one DE block***");
 		}
-		if (TopCellGeneratorRodrigo.syscams.getNbPortDE() == 0) {
+		if (TopCellGenerator.syscams.getNbPortDE() == 0) {
 			System.out.println("***Warning: require at least one DE port***");
 		}
-		if (TopCellGeneratorRodrigo.syscams.getNbPortConverter() == 0) {
+		if (TopCellGenerator.syscams.getNbPortConverter() == 0) {
 			System.out.println("***Warning: require at least one converter port***");
 		}
-		if (TopCellGeneratorRodrigo.syscams.getNbConnectorCluster() == 0) {
+		if (TopCellGenerator.syscams.getNbConnectorCluster() == 0) {
 			System.out.println("***Warning: require at least one connector***");
 		}
-		String top = HeaderRodrigo.getClusterHeader(c) + ClusterCodeRodrigo.getClusterCode(c, connectors);
+		String top = HeaderSoclib.getClusterHeader(c) + ClusterCodeSoclib.getClusterCode(c, connectors);
 		return (top);
 	}
 
-	public void saveFile(String path) {
-		SysCAMSTCluster cluster = TopCellGeneratorRodrigo.syscams.getCluster();
-		LinkedList<SysCAMSTConnector> connectors = TopCellGeneratorRodrigo.syscams.getAllConnectorCluster();
-
+    public void saveFile(String path, Boolean standalone) {
+		SysCAMSTCluster cluster = TopCellGenerator.syscams.getCluster();
+		LinkedList<SysCAMSTConnector> connectors = TopCellGenerator.syscams.getAllConnectorCluster();
+		FileWriter fw;
 		String top;
 
 		try {
 			// Save file .cpp
 			System.err.println(path + GENERATED_PATH1 + cluster.getClusterName() + "_tdf.h");
-			FileWriter fw = new FileWriter(path + GENERATED_PATH1 + "/" + cluster.getClusterName() + "_tdf.h");
+			System.err.println(path + cluster.getClusterName() + "_tdf.h");
+		
+			if(standalone==true)
+			    fw = new FileWriter(path + cluster.getClusterName() + "_tdf.h");
+			else
+			    fw = new FileWriter(path + GENERATED_PATH1 + "/" + cluster.getClusterName() + "_tdf.h");
 			top = generateTopCell(cluster, connectors);
 			fw.write(top);
 			fw.close();
+		
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 		// Save files .h
-		saveFileBlock(path, cluster);
+		saveFileBlock(path, cluster,standalone);
 	}
 
-	public void saveFileBlock(String path, SysCAMSTCluster c) {
+    public void saveFileBlock(String path, SysCAMSTCluster c, Boolean standalone) {
 		String headerTDF, headerDE, codeTDF, codeDE;
 		LinkedList<SysCAMSTBlockTDF> tdf = c.getBlockTDF();
 		LinkedList<SysCAMSTBlockDE> de = c.getBlockDE();
+		FileWriter fw;
 		
 		for (SysCAMSTBlockTDF t : tdf) {
 			try {
 				System.err.println(path + GENERATED_PATH2 + t.getName() + "_tdf.h");
-				FileWriter fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + "_tdf.h");
-				headerTDF = HeaderRodrigo.getPrimitiveHeaderTDF(t);
+				System.err.println(path + t.getName() + "_tdf.h");//DG
+			
+				if(standalone==true){
+				    //System.out.println("@@@@@TDF Soclib version standalone");
+				    fw = new FileWriter(path + t.getName() + "_tdf.h");}
+				else
+				    fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + "_tdf.h");
+				    
+				headerTDF = HeaderSoclib.getPrimitiveHeaderTDF(t);
 				fw.write(headerTDF);
-				codeTDF = PrimitiveCodeRodrigo.getPrimitiveCodeTDF(t);
+			
+				codeTDF = PrimitiveCodeSoclib.getPrimitiveCodeTDF(t);
+				//	if(standalone==false)
+				//   codeTDF = codeTDF + CR + "};" + CR2 + "#endif"+CR;//DG				
 				fw.write(codeTDF);
+			
 				fw.close();
+			
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
@@ -135,12 +157,21 @@ public class TopCellGeneratorRodrigo {
 		for (SysCAMSTBlockDE t : de) {
 			try {
 				System.err.println(path + GENERATED_PATH2 + t.getName() + "_tdf.h");
-				FileWriter fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + "_tdf.h");
-				headerDE = HeaderRodrigo.getPrimitiveHeaderDE(t);
+			
+				if(standalone==true){
+				    //System.out.println("@@@@@DE Soclib version standalone");
+				    fw = new FileWriter(path + t.getName() + "_tdf.h");}
+				else
+				    fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + "_tdf.h"); 
+				headerDE = HeaderSoclib.getPrimitiveHeaderDE(t);
 				fw.write(headerDE);
-				codeDE = PrimitiveCodeRodrigo.getPrimitiveCodeDE(t);
+			
+				codeDE = PrimitiveCodeSoclib.getPrimitiveCodeDE(t);
+				//if(standalone==false)
+				//   codeDE = codeDE + CR + "};" + CR2 + "#endif" +CR;
 				fw.write(codeDE);
 				fw.close();
+			
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}

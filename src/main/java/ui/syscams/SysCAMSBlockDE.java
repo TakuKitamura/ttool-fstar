@@ -67,6 +67,7 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 	private DefaultListModel<String> listStruct;
 	private String nameTemplate;
 	private String typeTemplate;
+    private String valueTemplate;
 	private DefaultListModel<String> listTypedef;
 
 	private int maxFontSize = 14;
@@ -114,6 +115,7 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 		setListStruct(new DefaultListModel<String>());
 		setNameTemplate("");
 		setTypeTemplate("");
+        setValueTemplate("");
 		setListTypedef(new DefaultListModel<String>());
 
 		myImageIcon = IconManager.imgic1202;
@@ -305,6 +307,7 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 		sb.append("\" listStruct=\"" + splitParameters(getListStruct()));
 		sb.append("\" nameTemplate=\"" + getNameTemplate());
 		sb.append("\" typeTemplate=\"" + getTypeTemplate());
+        sb.append("\" valueTemplate=\"" + getValueTemplate());
 		sb.append("\" listTypedef=\"" + splitParameters(getListTypedef()));
 		sb.append("\" />\n");
 		sb.append("</extraparam>\n");
@@ -430,7 +433,7 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 			Node n1, n2;
 			Element elt;
 
-			String code, nameFn, listStruct, nameTemplate, typeTemplate, listTypedef;
+			String code, nameFn, listStruct, nameTemplate, typeTemplate, valueTemplate, listTypedef;
 
 			for(int i=0; i<nl.getLength(); i++) {
 				n1 = nl.item(i);
@@ -448,6 +451,7 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 								listStruct = elt.getAttribute("listStruct");
 								nameTemplate = elt.getAttribute("nameTemplate");
 								typeTemplate = elt.getAttribute("typeTemplate");
+                                valueTemplate = elt.getAttribute("valueTemplate");
 								listTypedef = elt.getAttribute("listTypedef");
 //								setPeriod(period);
 //								setTime(time);
@@ -464,6 +468,7 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 								setListStruct(lista);
 								setNameTemplate(nameTemplate);
 								setTypeTemplate(typeTemplate);
+                                setValueTemplate(valueTemplate);
 								String[] splitb = listTypedef.split("\\|");
 								DefaultListModel<String> listb = new DefaultListModel<String>();
 								for (String s : splitb) {
@@ -573,6 +578,14 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 
 	public void setTypeTemplate(String _typeTemplate) {
 		typeTemplate = _typeTemplate;
+	}
+    
+    public String getValueTemplate() {
+        return valueTemplate;
+    }
+    
+    public void setValueTemplate(String _valueTemplate) {
+		valueTemplate = _valueTemplate;
 	}
 
 	public DefaultListModel<String> getListTypedef() {

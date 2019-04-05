@@ -114,6 +114,7 @@ public class SysCAMSPanelTranslator {
 					syscamsComponents.add(syscamsPortDE);
 				}	
 				syscamsMap.put(blockGPIO2VCI, syscamsBlockGPIO2VCI);
+				//System.out.println("@@@ GPIO block put in map @@@");
 				syscamsComponents.add(syscamsBlockGPIO2VCI);
 			} else if (dp instanceof SysCAMSBlockDE) {
 				SysCAMSBlockDE blockDE = (SysCAMSBlockDE) dp;
@@ -128,7 +129,7 @@ public class SysCAMSPanelTranslator {
 //				String typeTemplate = blockDE.getTypeTemplate();
 //				DefaultListModel<String> listTypedef = blockDE.getListTypedef();
 
-				SysCAMSTBlockDE syscamsBlockDE = new SysCAMSTBlockDE(blockDEName, "", "", null, "", "", null, null);
+				SysCAMSTBlockDE syscamsBlockDE = new SysCAMSTBlockDE(blockDEName, "", "", null, "", "", "", null, null);
 
 				List<SysCAMSPortDE> portsDE = blockDE.getAllInternalPortsDE();
 				for (int i = 0; i < portsDE.size(); i++) {
@@ -149,8 +150,10 @@ public class SysCAMSPanelTranslator {
 					syscamsMap.put(portDE, syscamsPortDE);
 					syscamsBlockDE.addPortDE(syscamsPortDE);
 					syscamsComponents.add(syscamsPortDE);
-				}	
+				}
+			
 				syscamsMap.put(blockDE, syscamsBlockDE);
+				//	System.out.println("@@@ DE block put in map @@@");
 				syscamsComponents.add(syscamsBlockDE);
 			} else if (dp instanceof SysCAMSCompositeComponent) {
 				SysCAMSCompositeComponent cluster = (SysCAMSCompositeComponent) dp;
@@ -173,12 +176,14 @@ public class SysCAMSPanelTranslator {
                         timeBlock = "us";
                     }
 					String processCode = blockTDF.getProcessCode();
+                    String constructorCode = blockTDF.getConstructorCode();
 					DefaultListModel<String> listStruct = blockTDF.getListStruct();
 					String nameTemplate = blockTDF.getNameTemplate();
 					String typeTemplate = blockTDF.getTypeTemplate();
+                    String valueTemplate = blockTDF.getValueTemplate();
 					DefaultListModel<String> listTypedef = blockTDF.getListTypedef();
 
-					SysCAMSTBlockTDF syscamsBlockTDF = new SysCAMSTBlockTDF(blockTDFName, periodBlock, timeBlock, processCode, listStruct, nameTemplate, typeTemplate, listTypedef, syscamsCluster);				
+					SysCAMSTBlockTDF syscamsBlockTDF = new SysCAMSTBlockTDF(blockTDFName, periodBlock, timeBlock, processCode, constructorCode, listStruct, nameTemplate, typeTemplate, valueTemplate, listTypedef, syscamsCluster);				
 
 					List<SysCAMSPortTDF> portsTDF = blockTDF.getAllInternalPortsTDF();
 					for (int j = 0; j < portsTDF.size(); j++) {
@@ -227,6 +232,7 @@ public class SysCAMSPanelTranslator {
 						syscamsComponents.add(syscamsPortConverter);
 					}
 					syscamsMap.put(blockTDF, syscamsBlockTDF);
+					//System.out.println("@@@ TDF block put in map @@@");
 					syscamsCluster.addBlockTDF(syscamsBlockTDF);
 					syscamsComponents.add(syscamsBlockTDF);
 				}
@@ -241,9 +247,10 @@ public class SysCAMSPanelTranslator {
 					DefaultListModel<String> listStruct = blockDE.getListStruct();
 					String nameTemplate = blockDE.getNameTemplate();
 					String typeTemplate = blockDE.getTypeTemplate();
+                    String valueTemplate = blockDE.getValueTemplate();
 					DefaultListModel<String> listTypedef = blockDE.getListTypedef();
 
-					SysCAMSTBlockDE syscamsBlockDE = new SysCAMSTBlockDE(blockDEName, nameFn, code, listStruct, nameTemplate, typeTemplate, listTypedef, syscamsCluster);
+					SysCAMSTBlockDE syscamsBlockDE = new SysCAMSTBlockDE(blockDEName, nameFn, code, listStruct, nameTemplate, typeTemplate, valueTemplate, listTypedef, syscamsCluster);
 
 					List<SysCAMSPortDE> portsDE = blockDE.getAllInternalPortsDE();
 					for (int j = 0; j < portsDE.size(); j++) {
