@@ -50,20 +50,20 @@ import java.util.LinkedList;
 import syscamstranslator.*;
 
 /**
- * Class PrimitiveCodeRodrigo
+ * Class PrimitiveCodeSoclib
  * Principal code of a primive component
  * Creation: 14/05/2018
  * @version 1.0 14/05/2018
  * @author Irina Kit Yan LEE
  */
 
-public class PrimitiveCodeRodrigo {
+public class PrimitiveCodeSoclib {
 	static private String corpsPrimitiveTDF;
 	static private String corpsPrimitiveDE;
 	private final static String CR = "\n";
 	private final static String CR2 = "\n\n";
 
-	PrimitiveCodeRodrigo() {}
+	PrimitiveCodeSoclib() {}
 
 	public static String getPrimitiveCodeTDF(SysCAMSTBlockTDF tdf) {
 		corpsPrimitiveTDF = "";
@@ -370,7 +370,7 @@ public class PrimitiveCodeRodrigo {
 					}
 				}
 			}
-			corpsPrimitiveTDF = corpsPrimitiveTDF + "};" + CR2 + "#endif" + " // " + tdf.getName().toUpperCase() + "_H";
+				corpsPrimitiveTDF = corpsPrimitiveTDF + "};" + CR2 + "#endif" + " // " + tdf.getName().toUpperCase() + "_H";//DG
 		} else {
 			corpsPrimitiveTDF = "";
 		}
@@ -596,7 +596,7 @@ public class PrimitiveCodeRodrigo {
 			String pc = buffer.toString();
 			corpsPrimitiveDE = corpsPrimitiveDE + "\t" + pc;
 			
-			corpsPrimitiveDE = corpsPrimitiveDE + CR + "};" + CR2 + "#endif" + " // " + de.getName().toUpperCase() + "_TDF_H";
+				corpsPrimitiveDE = corpsPrimitiveDE + CR + "};" + CR2 + "#endif" + " // " + de.getName().toUpperCase() + "_TDF_H";//DG
 		} else {
 			corpsPrimitiveDE = "";
 		}

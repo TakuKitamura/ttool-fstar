@@ -370,7 +370,7 @@ public class PrimitiveCode {
 					}
 				}
 			}
-			corpsPrimitiveTDF = corpsPrimitiveTDF + "};" + CR2 + "#endif" + " // " + tdf.getName().toUpperCase() + "_H";
+				corpsPrimitiveTDF = corpsPrimitiveTDF + "};" + CR2 + "#endif" + " // " + tdf.getName().toUpperCase() + "_H"; 
 		} else {
 			corpsPrimitiveTDF = "";
 		}
@@ -596,7 +596,7 @@ public class PrimitiveCode {
 			String pc = buffer.toString();
 			corpsPrimitiveDE = corpsPrimitiveDE + "\t" + pc;
 			
-			corpsPrimitiveDE = corpsPrimitiveDE + CR + "};" + CR2 + "#endif" + " // " + de.getName().toUpperCase() + "_H";
+				corpsPrimitiveDE = corpsPrimitiveDE + CR + "};" + CR2 + "#endif" + " // " + de.getName().toUpperCase() + "_H";
 		} else {
 			corpsPrimitiveDE = "";
 		}

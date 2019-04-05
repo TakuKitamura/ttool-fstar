@@ -50,19 +50,19 @@ import java.util.LinkedList;
 import syscamstranslator.*;
 
 /**
- * Class ClusterCodeRodrigo
+ * Class ClusterCodeSoclib
  * Principal code of a cluster component
  * Creation: 14/05/2018
  * @version 1.0 14/05/2018
  * @author Irina Kit Yan LEE
 */
 
-public class ClusterCodeRodrigo {
+public class ClusterCodeSoclib {
 	static private String corpsCluster;
 	private final static String CR = "\n";
 	private final static String CR2 = "\n\n";
 
-	ClusterCodeRodrigo() {}
+	ClusterCodeSoclib() {}
 
 	public static String getClusterCode(SysCAMSTCluster cluster, LinkedList<SysCAMSTConnector> connectors) {
 		int nb_con = 0;
@@ -227,7 +227,7 @@ public class ClusterCodeRodrigo {
                     + "\tsca_close_tabular_trace_file(tfp);" + CR;
               */
             corpsCluster = corpsCluster + "};" + CR2;
-            corpsCluster = corpsCluster + "#endif // " + cluster.getClusterName().toUpperCase() + "_TDF_H"+ CR;
+	    // corpsCluster = corpsCluster + "#endif // " + cluster.getClusterName().toUpperCase() + "_TDF_H"+ CR;//DG
 		} else {
 			corpsCluster = "";
 		}

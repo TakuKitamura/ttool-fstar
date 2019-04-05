@@ -66,6 +66,9 @@ public class TopCellGeneratorCluster {
 	private final static String GENERATED_PATH1 = "generated_CPP" + File.separator;
 	private final static String GENERATED_PATH2 = "generated_H" + File.separator;
 
+	private final static String CR = "\n";
+	private final static String CR2 = "\n\n";
+    
 	public TopCellGeneratorCluster(SysCAMSSpecification sys) {
 		syscams = sys;
 	}
@@ -74,7 +77,7 @@ public class TopCellGeneratorCluster {
 		if (c == null) {
 			System.out.println("***Warning: require at least one cluster***");
 		}
-		if (TopCellGeneratorCluster.syscams.getNbBlockTDF() == 0) {
+		/*if (TopCellGeneratorCluster.syscams.getNbBlockTDF() == 0) {
 			System.out.println("***Warning: require at least one TDF block***");
 		}
 		if (TopCellGeneratorCluster.syscams.getNbPortTDF() == 0) {
@@ -91,58 +94,89 @@ public class TopCellGeneratorCluster {
 		}
 		if (TopCellGeneratorCluster.syscams.getNbConnectorCluster() == 0) {
 			System.out.println("***Warning: require at least one connector***");
-		}
-		String top = Header.getClusterHeader(c) + ClusterCode.getClusterCode(c, connectors);
+		}*/
+		String top = HeaderCluster.getClusterHeader(c) + ClusterCode.getClusterCode(c, connectors);
 		return (top);
 	}
 
-	public void saveFile(String path) {
+    public void saveFile(String path, Boolean standalone) {
 		SysCAMSTCluster cluster = TopCellGeneratorCluster.syscams.getCluster();
-		LinkedList<SysCAMSTConnector> connectors = TopCellGeneratorCluster.syscams.getAllConnectorsCluster4Soclib();
-
+		LinkedList<SysCAMSTConnector> connectors = TopCellGeneratorCluster.syscams.getAllConnectors();
+		FileWriter fw;
 		String top;
 
 		try {
 			// Save file .cpp
 			System.err.println(path + GENERATED_PATH1 + cluster.getClusterName() + "_tdf.h");
-			FileWriter fw = new FileWriter(path + GENERATED_PATH1 + "/" + cluster.getClusterName() + "_tdf.h");
+			System.err.println(path + cluster.getClusterName() + "_tdf.h");
+			if(standalone==true){
+			    //System.out.println("@@@ Cluster standalone");
+			    fw = new FileWriter(path   + cluster.getClusterName() + "_tdf.h");
+			}
+			else
+			    fw = new FileWriter(path + GENERATED_PATH1 + "/" + cluster.getClusterName() + "_tdf.h");
+		
 			top = generateTopCell(cluster, connectors);
 			fw.write(top);
 			fw.close();
+			
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 		// Save files .h
-		saveFileBlock(path, cluster);
+		saveFileBlock(path, cluster, standalone);
 	}
 
-	public void saveFileBlock(String path, SysCAMSTCluster c) {
+    public void saveFileBlock(String path, SysCAMSTCluster c, Boolean standalone) {
 		String headerTDF, headerDE, codeTDF, codeDE;
 		LinkedList<SysCAMSTBlockTDF> tdf = c.getBlockTDF();
 		LinkedList<SysCAMSTBlockDE> de = c.getBlockDE();
+
+		FileWriter fw;
 		
 		for (SysCAMSTBlockTDF t : tdf) {
 			try {
 				System.err.println(path + GENERATED_PATH2 + t.getName() + "_tdf.h");
-				FileWriter fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + "_tdf.h");
-				headerTDF = Header.getPrimitiveHeaderTDF(t);
+				System.err.println(path + t.getName() + "_tdf.h");
+				if(standalone==true){
+				    //System.out.println("@@@ TDF Cluster standalone");
+				    fw = new FileWriter(path + "/" + t.getName() + "_tdf.h");
+				}
+				
+				else
+				    fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + "_tdf.h");
+				headerTDF = HeaderCluster.getPrimitiveHeaderTDF(t);
 				fw.write(headerTDF);
-				codeTDF = PrimitiveCode.getPrimitiveCodeTDF(t);
+				codeTDF = PrimitiveCodeCluster.getPrimitiveCodeTDF(t);
+				//if(standalone==false)
+				//	    codeTDF = codeTDF + "#endif"+ CR;
 				fw.write(codeTDF);
 				fw.close();
+			
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
 		}
 		for (SysCAMSTBlockDE t : de) {
 			try {
-				System.err.println(path + GENERATED_PATH2 + t.getName() + "_tdf.h");
-				FileWriter fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + "_tdf.h");
-				headerDE = Header.getPrimitiveHeaderDE(t);
+				System.err.println(path + GENERATED_PATH2 + t.getName() + "_tdf.h");	System.err.println(path + GENERATED_PATH2 + t.getName() + "_tdf.h");
+			
+ 	
+				if(standalone==true)
+				    {
+					//System.out.println("@@@ DE Cluster standalone");	
+					fw = new FileWriter(path +"/" + t.getName() + "_tdf.h");}
+				else
+				    fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + "_tdf.h");
+				
+				headerDE = HeaderCluster.getPrimitiveHeaderDE(t);
 				fw.write(headerDE);
-				codeDE = PrimitiveCode.getPrimitiveCodeDE(t);
+				codeDE = PrimitiveCodeCluster.getPrimitiveCodeDE(t);
+				//if(standalone==false)
+				//   codeDE = codeDE + "#endif "+ CR;
 				fw.write(codeDE);
 				fw.close();
+				
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
