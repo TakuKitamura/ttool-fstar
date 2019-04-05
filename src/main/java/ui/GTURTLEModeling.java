@@ -97,6 +97,7 @@ import ui.avatarsmd.*;
 import ui.diplodocusmethodology.DiplodocusMethodologyDiagramPanel;
 import ui.ebrdd.EBRDDPanel;
 import ui.eln.ELNDiagramPanel;
+import ui.syscams.SysCAMSComponentTaskDiagramPanel;
 import ui.ftd.FaultTreeDiagramPanel;
 import ui.iod.InteractionOverviewDiagramPanel;
 import ui.ncdd.NCDiagramPanel;
