@@ -381,7 +381,7 @@ public class TMLCPSyntaxChecking {
         for (TMLSDMessage message : messagesList) {
             String senderInstance = message.getSenderName();
             String receiverInstance = message.getReceiverName();
-            ArrayList<TMLAttribute> parametersList = message.getAttributes();
+            List<TMLAttribute> parametersList = message.getAttributes();
             for (TMLAttribute parameter : parametersList) {
                 //skip numerical parameters
                 if (!parameter.getName().matches("-?\\d+(\\.\\d+)?")) {
