@@ -37,20 +37,13 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmlsd;
 
-import myutil.TraceManager;
+import javax.swing.JButton;
+
 import ui.MainGUI;
 import ui.TGUIAction;
 import ui.TToolBar;
-
-import javax.swing.*;
-
-//import java.awt.*;
-//import java.awt.event.*;
 
 /**
  * Class TMLSDToolBar
@@ -67,6 +60,7 @@ public class TMLSDToolBar extends TToolBar {
         super(_mgui);
     }
 
+    @Override
     protected void setActive(boolean b) {
         mgui.actions[TGUIAction.TMLSD_EDIT].setEnabled(b);
         mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
@@ -88,6 +82,7 @@ public class TMLSDToolBar extends TToolBar {
         mgui.updateZoomInfo();
     }
 
+    @Override
     protected void setButtons() {
         JButton button;
 
@@ -127,7 +122,5 @@ public class TMLSDToolBar extends TToolBar {
 
         button = this.add(mgui.actions[TGUIAction.SD_ALIGN_INSTANCES]);
         button.addMouseListener(mgui.mouseHandler);
-
     }
-
 } // Class
