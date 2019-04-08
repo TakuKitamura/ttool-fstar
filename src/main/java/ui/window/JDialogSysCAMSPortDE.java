@@ -215,6 +215,7 @@ public class JDialogSysCAMSPortDE extends JDialog implements ActionListener {
 		listArrayTypeString.add("int");
 		listArrayTypeString.add("bool");
 		listArrayTypeString.add("double");
+        listArrayTypeString.add("sc_uint<32>");
 		if (port.getFather() != null) {
 			if (port.getFather() instanceof SysCAMSBlockDE) {
 				if (!((SysCAMSBlockDE) port.getFather()).getListTypedef().isEmpty()) {
@@ -291,14 +292,17 @@ public class JDialogSysCAMSPortDE extends JDialog implements ActionListener {
 		gridBag.setConstraints(sensitivePanel, constraints);
 		boxPanel.add(sensitivePanel);
 		
-		listSensitiveString = new String[2];
-		listSensitiveString[0] = "positive";
-		listSensitiveString[1] = "negative";
+		listSensitiveString = new String[3];
+		listSensitiveString[0] = "";
+        listSensitiveString[1] = "positive";
+		listSensitiveString[2] = "negative";
 		sensitiveComboBoxString = new JComboBox<String>(listSensitiveString);
-		if (port.getSensitiveMethod().equals("") || port.getSensitiveMethod().equals("positive")) {
+		if (port.getSensitiveMethod().equals("")) {
 			sensitiveComboBoxString.setSelectedIndex(0);
+        } else if (port.getSensitiveMethod().equals("positive")) {
+            sensitiveComboBoxString.setSelectedIndex(1);
 		} else if (port.getSensitiveMethod().equals("negative")) {
-			sensitiveComboBoxString.setSelectedIndex(1);
+			sensitiveComboBoxString.setSelectedIndex(2);
 		}
 		sensitiveComboBoxString.setActionCommand("Sensitive_method");
 		sensitiveComboBoxString.setEnabled(port.getSensitive());

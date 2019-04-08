@@ -45,8 +45,8 @@ import java.util.LinkedList;
 import syscamstranslator.*;
 
 /**
- * Class Header
- * Header of files .h and .cpp
+ * Class HeaderCluster
+ * HeaderCluster of files .h and .cpp
  * Creation: 14/05/2018
  * @version 1.0 14/05/2018
  * @author Irina Kit Yan LEE
@@ -54,7 +54,7 @@ import syscamstranslator.*;
  * @author Rodrigo CORTES PORTO
 */
 
-public class Header {
+public class HeaderCluster {
 	static private String headerPrimitiveTDF;
 	static private String headerPrimitiveDE;
 	static private String headerCluster;
@@ -62,7 +62,7 @@ public class Header {
 	private final static String CR = "\n";
 	private final static String CR2 = "\n\n";
 
-	Header() {}
+	HeaderCluster() {}
 
 	public static String getPrimitiveHeaderTDF(SysCAMSTBlockTDF tdf) {
 		if (tdf != null) {
