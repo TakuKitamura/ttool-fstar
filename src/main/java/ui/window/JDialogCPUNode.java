@@ -132,7 +132,7 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
 
     //issue 183
     private void buttonClick(JButton but, HelpEntry he) {
-        setModalityType(ModalityType.MODELESS);
+        //setModalityType(ModalityType.MODELESS);
         but.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -589,16 +589,21 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
     }
 
     public void closeDialog() {
+        //TraceManager.addDev("Save and close");
         regularClose = true;
         MECType = ArchUnitMEC.Types.get( MECTypeCB.getSelectedIndex() );
         dispose();
     }
 
     public void cancelDialog() {
+
+        //TraceManager.addDev("Cancel dialog");
         dispose();
     }
 
     public boolean isRegularClose() {
+
+        TraceManager.addDev("regularclose=" + regularClose);
         return regularClose;
     }
 

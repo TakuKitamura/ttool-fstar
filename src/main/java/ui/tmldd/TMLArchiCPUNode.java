@@ -39,7 +39,9 @@
 
 package ui.tmldd;
 
+
 import myutil.GraphicLib;
+import myutil.TraceManager;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -195,13 +197,17 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         JDialogCPUNode dialog = new JDialogCPUNode(getTDiagramPanel().getMainGUI(), frame, "Setting CPU attributes", this, MECType, transactions);
         dialog.setSize(500, 450);
         GraphicLib.centerOnParent(dialog, 500, 450);
-        // dialog.show(); // blocked until dialog has been closed
-        dialog.setVisible(true);
+        dialog.setVisible(true); // blocked until dialog has been closed
+
         MECType = dialog.getMECType();
+
+        //TraceManager.addDev("CPU core 1");
 
         if (!dialog.isRegularClose()) {
             return false;
         }
+
+        //TraceManager.addDev("CPU core 2");
 
         if (dialog.getNodeName().length() != 0) {
             tmpName = dialog.getNodeName();
@@ -213,6 +219,7 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
                 name = tmpName;
             }
         }
+       // TraceManager.addDev("CPU core 3");
 
         schedulingPolicy = dialog.getSchedulingPolicy();
         if (schedulingPolicy == HwCPU.BASIC_ROUND_ROBIN) {
@@ -238,18 +245,21 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
             }
         }
 
+        //TraceManager.addDev("CPU core 4");
+
         if (dialog.getNbOfCores().length() != 0) {
             try {
                 tmp = nbOfCores;
                 nbOfCores = Integer.decode(dialog.getNbOfCores()).intValue();
+                TraceManager.addDev("Nb of cores=" + nbOfCores);
                 if (nbOfCores <= 0) {
                     nbOfCores = tmp;
                     error = true;
-                    errors += "Data size  ";
+                    errors += "Nb of cores   ";
                 }
             } catch (Exception e) {
                 error = true;
-                errors += "Data size  ";
+                errors += "nb of cores  ";
             }
         }
 
@@ -495,6 +505,8 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         //
         try {
 
+            //TraceManager.addDev("Extra param of CPU node " + this.getValue());
+
             NodeList nli;
             Node n1, n2;
             Element elt;
@@ -525,10 +537,15 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
                             }
 
                             if (elt.getTagName().equals("attributes")) {
+                                //TraceManager.addDev("LOADING attributes");
+
+
                                 try {
                                     // the "try" statement is for retro compatibility
                                     nbOfCores = Integer.decode(elt.getAttribute("nbOfCores")).intValue();
+                                    //TraceManager.addDev("Setting cores to:" + nbOfCores);
                                 } catch (Exception e) {
+                                    //TraceManager.addDev("Coud not load number of cores");
                                 }
                                 byteDataSize = Integer.decode(elt.getAttribute("byteDataSize")).intValue();
                                 schedulingPolicy = Integer.decode(elt.getAttribute("schedulingPolicy")).intValue();
