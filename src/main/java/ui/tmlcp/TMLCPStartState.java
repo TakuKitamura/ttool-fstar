@@ -52,7 +52,7 @@ import ui.ad.TADStartState;
  * @author Ludovic APVRILLE
  */
 public class TMLCPStartState extends TADStartState /* Issue #69 TGCWithoutInternalComponent*/{
-	private int lineLength = 5;
+	//private int lineLength = 5;
 
 	public TMLCPStartState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);

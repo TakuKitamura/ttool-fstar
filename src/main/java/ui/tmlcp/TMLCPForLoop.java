@@ -116,13 +116,15 @@ public class TMLCPForLoop extends TADForLoop /* Issue #69 TGCWithoutInternalComp
 
     @Override
     protected void internalDrawing(Graphics g) {
-        final int textWidth = g.getFontMetrics().stringWidth(value);
-        int w1 = Math.max(minWidth, textWidth + 2 * textX);
-        if ((w1 != width) & (!tdp.isScaled())) {
-            setCd(x + width / 2 - w1 / 2, y);
-            width = w1;
-            //updateConnectingPoints();
-        }
+    	
+    	// Issue #31
+        final int textWidth = checkWidth( g );//g.getFontMetrics().stringWidth(value);
+//        int w1 = Math.max(minWidth, textWidth + 2 * textX);
+//        if ((w1 != width) & (!tdp.isScaled())) {
+//            setCd(x + width / 2 - w1 / 2, y);
+//            width = w1;
+//            //updateConnectingPoints();
+//        }
 
         if (stateOfError > 0) {
             Color c = g.getColor();
@@ -140,7 +142,9 @@ public class TMLCPForLoop extends TADForLoop /* Issue #69 TGCWithoutInternalComp
         g.drawRoundRect(x, y, width, height, arc, arc);
         g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
         g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
-        g.drawLine(x + width, y + height / 2, x + width + lineLength, y + height / 2);
+        
+        // Issue #31 Useless line
+        //g.drawLine(x + width, y + height / 2, x + width + lineLength, y + height / 2);
 
         g.drawString(value, x + (width - textWidth) / 2, y + textY);
     }

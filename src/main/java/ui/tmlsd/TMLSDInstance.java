@@ -37,9 +37,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmlsd;
 
 import myutil.GraphicLib;
@@ -50,10 +47,12 @@ import ui.*;
 import ui.util.IconManager;
 
 import javax.swing.*;
-import java.awt.*;
+
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
+import java.util.List;
 
 //Abstract class, getType() and editOndoubleClick( JFrame ) are abstract
 /**
@@ -65,31 +64,43 @@ import java.util.LinkedList;
  */
 public abstract class TMLSDInstance extends TGCWithInternalComponent implements SwallowTGComponent {
 
+	// Issue #31
 	//protected int lineLength = 5;
 	//protected int textX, textY;
-	protected int spacePt = 10;
-	protected int wText = 10, hText = 15;
-	protected int increaseSlice = 250;
+	private static final int POINT_MARGIN = 10;
+//	protected int spacePt = 10;
+//	protected int wText = 10, hText = 15;
+	private static final int SLICE_INCREMENT = 250;
+//	protected int increaseSlice = 250;
+	private static final int ACTOR_HEIGHT = 30;
+//	protected static int heightActor = 30;
+	private static final int ACTOR_WIDTH = 16;
+//	protected static int widthActor = 16;
+
+	private int wText;
+	private int hText;
 	protected boolean isActor;
-	protected static int heightActor = 30;
-	protected static int widthActor = 16;
-	protected LinkedList<TAttribute> myAttributes;
+	protected List<TAttribute> myAttributes;
 	protected String mappedUnit = "";	//The arch unit where the instance is mapped to
 
 
 	public TMLSDInstance(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+		
+		initSize( 10, 500 );
+//		width = 10;
+//		height = 500;
+		minWidth = scale( 10 );
+		maxWidth = scale( 10 );
+		minHeight = scale( 250 );
+		maxHeight = scale( 1500 );
+		wText = 10;
+		hText = 15;
 
-		width = 10;
-		height = 500;
-		//textX = 0;
-		//textY = 2;
-		minWidth = 10;
-		maxWidth = 10;
-		minHeight = 250;
-		maxHeight = 1500;
+		// Issue #31
 		makeTGConnectingPoints();
 		//addTGConnectingPointsComment();
+
 		nbInternalTGComponent = 0;
 		moveable = true;
 		editable = true;
@@ -97,22 +108,39 @@ public abstract class TMLSDInstance extends TGCWithInternalComponent implements 
 		userResizable = true;
 		value = "Instance name";
 		name = "instance";
-		myAttributes = new LinkedList<TAttribute> ();
+		myAttributes = new LinkedList<TAttribute>();
 		myImageIcon = IconManager.imgic500;
 	}
 
-	public void internalDrawing(Graphics g) {
-		if (!tdp.isScaled()) {
-			wText  = g.getFontMetrics().stringWidth(name);
-			hText = g.getFontMetrics().getHeight();
-		}
-		g.drawString(name, x - (wText / 2) + width/2, y - 3);
-		g.drawLine(x - (wText / 2) + width/2, y-2, x + (wText / 2) + width/2, y-2);
-		g.drawLine(x+(width/2), y, x+(width/2), y +height);
+	@Override
+	protected void internalDrawing(Graphics g) {
+    	
+		// Issue #31
+        final int scaledWText;
+        final int scaledHText;
 
+        if (!tdp.isScaled()) {
+			wText  = g.getFontMetrics().stringWidth(name);
+        	scaledWText = wText;
+        	hText = g.getFontMetrics().getHeight();
+        	scaledHText = hText;
+		}
+        else {
+        	scaledWText = scale( wText );
+        	scaledHText = scale( hText );
+        }
+
+		g.drawString(name, x - (scaledWText / 2) + width/2, y - 3); // Issue #31
+		g.drawLine(x - (scaledWText / 2) + width/2, y-2, x + (scaledWText / 2) + width/2, y-2); // Issue #31
+		g.drawLine(x+(width/2), y, x+(width/2), y +height);
+		
 		if (isActor) {
+			final int widthActor = scale( ACTOR_WIDTH );
+			final int heightActor = scale( ACTOR_HEIGHT );
+			
 			int xtmp = x + (width-widthActor) / 2;
-			int ytmp = y-hText;
+			int ytmp = y - scaledHText; // Issue #31
+			
 			// Head
 			g.drawOval(xtmp+(widthActor/4)-1, ytmp-heightActor, 2+widthActor/2, 2+widthActor/2);
 			//Body
@@ -126,80 +154,87 @@ public abstract class TMLSDInstance extends TGCWithInternalComponent implements 
 		}
 	}
 
+	@Override
 	public TGComponent isOnOnlyMe(int _x, int _y) {
 		if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
 			return this;
 		}
 
-		if (GraphicLib.isInRectangle(_x, _y, x + (width/2) - (wText/2) , y-hText, wText, hText)) {
+		final int scaledHText = scale( hText );
+		final int scaledWText = scale( wText );
+				
+		if (GraphicLib.isInRectangle(_x, _y, x + (width/2) - (scaledWText/2) , y-scaledHText, scaledWText, scaledHText)) { // Issue #31
 			return this;
 		}
 
 		if (isActor) {
-			if (GraphicLib.isInRectangle(_x, _y, x + (width-widthActor) / 2, y-heightActor-hText, widthActor, heightActor)) {
+			final int widthActor = scale( ACTOR_WIDTH );
+			final int heightActor = scale( ACTOR_HEIGHT );
+
+			if (GraphicLib.isInRectangle(_x, _y, x + (width-widthActor) / 2, y-heightActor-scaledHText, widthActor, heightActor)) { // Issue #31
 				return this;
 			}
 		}
 		return null;
 	}
 
+	@Override
 	public int getMyCurrentMinX() {
-		return Math.min(x + (width/2) - (wText/2), x);
-
+		return Math.min(x + (width/2) - ( scale( wText ) / 2 ), x);
 	}
 
+	@Override
 	public int getMyCurrentMaxX() {
-		return Math.max(x + (width/2) + (wText/2), x + width);
+		return Math.max(x + (width/2) + ( scale( wText ) / 2 ), x + width);
 	}
 
+	@Override
 	public int getMyCurrentMinY() {
-		return Math.min(y-hText-heightActor, y);
+		return Math.min( y - scale( hText ) - scale( ACTOR_HEIGHT ), y); // Issue #31
 	}
 
 	public String getInstanceName() {
 		return getName();
 	}
 
-	public abstract int getType();
+//	public abstract int getType();
 
 	protected void makeTGConnectingPoints() {
-
+		// Issue #31
+		final int spacePt = scale( POINT_MARGIN );
 		nbConnectingPoint = ( (height - (2 * spacePt) ) / spacePt ) + 1;
 		connectingPoint = new TGConnectingPoint[ nbConnectingPoint ];
 
 		int yh = spacePt;
 
 		for(int i = 0; i < nbConnectingPoint; i++, yh += spacePt ) {
-			connectingPoint[i] = new TGConnectingPointTMLSD(this, ( width/2), yh, true, true );
+			connectingPoint[i] = new TGConnectingPointTMLSD(this, ( width / 2 ), yh, true, true );
 		}
-
 	}
 
-	public abstract boolean editOndoubleClick( JFrame frame );
+//	public abstract boolean editOndoubleClick( JFrame frame );
 
+	@Override
 	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
         return (tgc instanceof TMLSDActionState);
     }
 
+	@Override
 	public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
 		if (!acceptSwallowedTGComponent(tgc)) {
 			return false;
 		}
 
-
-		//
 		// Choose its position
+		final int spacePt = scale( POINT_MARGIN );
 		int realY = Math.max(y, getY() + spacePt);
 		realY = Math.min(realY, getY() + height + spacePt);
 		int realX = tgc.getX();
-
 
 		// Make it an internal component
 		// It's one of my son
 		tgc.setFather(this);
 		tgc.setDrawingZone(true);
-
-
 
 		if ((tgc instanceof TMLSDActionState)) {
 			realX = getX()+(width/2);
@@ -207,9 +242,7 @@ public abstract class TMLSDInstance extends TGCWithInternalComponent implements 
 			tgc.setCd(realX, realY);
 		}
 
-
 		setCDRectangleOfSwallowed(tgc);
-
 
 		//add it
 		addInternalComponent(tgc, 0);
@@ -217,11 +250,10 @@ public abstract class TMLSDInstance extends TGCWithInternalComponent implements 
 		return true;
 	}
 
+	@Override
 	public void removeSwallowedTGComponent(TGComponent tgc) {
 		removeInternalComponent(tgc);
 	}
-
-
 
 	// previous in the sense of with y the closer and before
 	public TGComponent getPreviousTGComponent(TGComponent tgcToAnalyse) {
@@ -253,9 +285,9 @@ public abstract class TMLSDInstance extends TGCWithInternalComponent implements 
 		/* now: only message! */
 
 		return ((TMLSDPanel)tdp).messageActionCloserTo(tgc, this);
-
 	}
 
+	@Override
 	public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
 		componentMenu.addSeparator();
 
@@ -268,15 +300,18 @@ public abstract class TMLSDInstance extends TGCWithInternalComponent implements 
 		componentMenu.add(increase);
 	}
 
+	@Override
 	public boolean eventOnPopup(ActionEvent e) {
 		if ((e.getActionCommand().compareTo("Decrease size")) == 0) {
 			decreaseSize();
 		} else {
 			increaseSize();
 		}
+		
 		return true;
 	}
 
+	@Override
 	public void updateMinMaxSize() {
 		minHeight = 250;
 		int i;
@@ -293,10 +328,13 @@ public abstract class TMLSDInstance extends TGCWithInternalComponent implements 
 	}
 
 	public boolean canDecreaseSize() {
+		final int increaseSlice = scale( SLICE_INCREMENT ); // Issue #31
+		
 		if (height <= increaseSlice) {
 			return false;
 		}
 
+		final int spacePt = scale( POINT_MARGIN );
 		int newNbConnectingPoint = (((height-increaseSlice) - (2 * spacePt)) / spacePt) + 1;
 		int i;
 
@@ -328,16 +366,17 @@ public abstract class TMLSDInstance extends TGCWithInternalComponent implements 
 		// new nb of connectingPoints
 
 		// If ok, do the modification
-		height = height - increaseSlice;
+		height = height - scale( SLICE_INCREMENT ); // Issue #31
 		hasBeenResized();
 	}
 
 	public void increaseSize() {
 		//
-		height = height + increaseSlice;
+		height = height + scale( SLICE_INCREMENT ); // Issue #31
 		hasBeenResized();
 	}
 
+	@Override
 	public void hasBeenResized(){
 		int i;
 
@@ -356,15 +395,13 @@ public abstract class TMLSDInstance extends TGCWithInternalComponent implements 
 	}
 
 	protected void setCDRectangleOfSwallowed(TGComponent tgc) {
-
-
 		if ((tgc instanceof TMLSDActionState)) {
+			final int spacePt =  scale( POINT_MARGIN );
 			tgc.setCdRectangle((width/2), (width/2), spacePt, height-spacePt-tgc.getHeight());
 		}
-
-
 	}
 
+	@Override
 	protected String translateExtraParam() {
 		StringBuffer sb = new StringBuffer( "<extraparam>\n" );
 		sb.append( "<Mapping mappedOn=\"" );
@@ -387,6 +424,7 @@ public abstract class TMLSDInstance extends TGCWithInternalComponent implements 
 			sb.append( "\" />\n" );
 		}
 		sb.append( "</extraparam>\n" );
+		
 		return new String(sb);
 	}
 
@@ -449,7 +487,7 @@ public abstract class TMLSDInstance extends TGCWithInternalComponent implements 
 			}
 		}
 		catch ( Exception e ) {
-			throw new MalformedModelingException();
+			throw new MalformedModelingException( e );
 		}
 	}
 
@@ -469,7 +507,7 @@ public abstract class TMLSDInstance extends TGCWithInternalComponent implements 
 		return connectingPoint;
 	}
 
-	public LinkedList<TAttribute> getAttributes()	{
+	public List<TAttribute> getAttributes()	{
 		return myAttributes;
 	}
 }

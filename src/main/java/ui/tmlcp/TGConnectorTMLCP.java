@@ -56,7 +56,8 @@ import java.util.Vector;
  */
 public class TGConnectorTMLCP extends TADConnector /* Issue #69 TGConnector*/ {
     
-	protected int arrowLength = 10;
+	// Issue #31
+	//protected int arrowLength = 10;
 	
 	protected String guard = "";
     

@@ -54,7 +54,6 @@ public class TMLCPPanel extends TDiagramPanel {
     
     public  TMLCPPanel(MainGUI mgui, TToolBar _ttb) {
         super(mgui, _ttb);
-
     }
     
     @Override
@@ -108,8 +107,8 @@ public class TMLCPPanel extends TDiagramPanel {
     }
     
     @Override
-    public String getXMLHead() {
-        return "<CommunicationPatternDiagramPanel name=\"" + name + "\"" + sizeParam() + " >";
+    public String getXMLHead() {												// Issue #31
+        return "<CommunicationPatternDiagramPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >"; // Issue #31
     }
     
     @Override
@@ -189,7 +188,7 @@ public class TMLCPPanel extends TDiagramPanel {
         return null;
     }*/
     
-    public void makePostLoadingProcessing() throws MalformedModelingException {
+    //public void makePostLoadingProcessing() throws MalformedModelingException {
        // TGComponent tgc;
         
         /*for(int i=0; i<componentList.size(); i++) {
@@ -198,7 +197,7 @@ public class TMLCPPanel extends TDiagramPanel {
                 ((TCDTObject)tgc).postLoadingProcessing();
             }
         }*/
-    }
+    //}
     
     public boolean isTMLCPSDCreated(String name) {
         return mgui.isTMLCPSDCreated(tp, name);

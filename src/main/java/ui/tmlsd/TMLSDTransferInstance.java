@@ -58,20 +58,21 @@ public class TMLSDTransferInstance extends TMLSDInstance implements SwallowTGCom
     public TMLSDTransferInstance( int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
 																	TGComponent _father, TDiagramPanel _tdp )  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+        // Issue #31
+//        width = 10;
+//        height = 500;
+
+        initSize( 10, 500 );
+        minWidth = scale( 10 );
+        maxWidth = scale( 10 );
+        minHeight = scale( 250 );
+        maxHeight = scale( 1500 );
         
-        width = 10;
-        height = 500;
-        //textX = 0;
-        //textY = 2;
-        minWidth = 10;
-        maxWidth = 10;
-        minHeight = 250;
-        maxHeight = 1500;
-        
-        
-        makeTGConnectingPoints();
+        // Issue #31 Already called in superclass
+        // makeTGConnectingPoints();
         //addTGConnectingPointsComment();
-        
+
         nbInternalTGComponent = 0;
         
         moveable = true;
@@ -103,7 +104,6 @@ public class TMLSDTransferInstance extends TMLSDInstance implements SwallowTGCom
 	}
 
 	protected void setJDialogOptions( JDialogTMLCPTransferInstance jda ) {
-		
 		jda.addAccess(TAttribute.getStringAccess(TAttribute.PUBLIC));
 		jda.addAccess(TAttribute.getStringAccess(TAttribute.PRIVATE));
 		jda.addType(TAttribute.getStringType(TAttribute.NATURAL), true);
@@ -121,7 +121,8 @@ public class TMLSDTransferInstance extends TMLSDInstance implements SwallowTGCom
 		//jda.enableTMLKeyword(false);
 	}
 
-	@Override public int getType() {
+	@Override
+	public int getType() {
 		return TGComponentManager.TMLSD_TRANSFER_INSTANCE;
 	}
 

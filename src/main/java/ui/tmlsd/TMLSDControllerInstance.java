@@ -37,9 +37,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmlsd;
 
 import myutil.GraphicLib;
@@ -62,17 +59,18 @@ public class TMLSDControllerInstance extends TMLSDInstance implements SwallowTGC
 																	TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-        width = 10;
-        height = 500;
-        //textX = 0;
-        //textY = 2;
-        minWidth = 10;
-        maxWidth = 10;
-        minHeight = 250;
-        maxHeight = 1500;
+        // Issue #31
+        initSize( 10, 500 );
+//        width = 10;
+//        height = 500;
+        minWidth = scale( 10 );
+        maxWidth = scale( 10 );
+        minHeight = scale( 250 );
+        maxHeight = scale( 1500 );
         
         
-        makeTGConnectingPoints();
+        // Issue #31 Already called in superclass
+//        makeTGConnectingPoints();
         //addTGConnectingPointsComment();
         
         nbInternalTGComponent = 0;
@@ -84,7 +82,7 @@ public class TMLSDControllerInstance extends TMLSDInstance implements SwallowTGC
         
         value = "Controller instance name";
         name = "ControllerInstance";
-				isActor = false;
+		isActor = false;
         
         myImageIcon = IconManager.imgic500;
 	}
@@ -106,7 +104,6 @@ public class TMLSDControllerInstance extends TMLSDInstance implements SwallowTGC
 	}
 	
 	protected void setJDialogOptions( JDialogTMLCPControllerInstance jda ) {
-		
 		jda.addAccess(TAttribute.getStringAccess(TAttribute.PUBLIC));
 		jda.addAccess(TAttribute.getStringAccess(TAttribute.PRIVATE));
 		jda.addType(TAttribute.getStringType(TAttribute.NATURAL), true);
@@ -124,7 +121,8 @@ public class TMLSDControllerInstance extends TMLSDInstance implements SwallowTGC
 		//jda.enableTMLKeyword(false);
 	}
 
-	@Override public int getType() {
+	@Override
+	public int getType() {
 		return TGComponentManager.TMLSD_CONTROLLER_INSTANCE;
 	}
 
