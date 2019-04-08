@@ -7403,7 +7403,7 @@ public class GTURTLEModeling {
                             t = "" + type;
                         }
                         TraceManager.addDev("A badly formed component could not be created in the diagram:" + " diagram: " + tdp + " component:" + n);
-
+                        mme.printStackTrace();
                         UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "A component could not be correctly loaded - type=" + t);
                         ce.setTDiagramPanel(tdp);
                         checkingErrors.add(ce);
@@ -7786,7 +7786,7 @@ public class GTURTLEModeling {
 
         } catch (Exception e) {
             TraceManager.addError("Exception XML Component " + e.getMessage() + "trace=" + e.getStackTrace());
-            throw new MalformedModelingException();
+            throw new MalformedModelingException( e );
         }
         return tgc;
     }
