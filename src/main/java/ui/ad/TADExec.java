@@ -57,11 +57,8 @@ import ui.TGScalableComponent;
 import ui.util.IconManager;
 
 /**
- * Class TMLADExecC
- * Fixed custom duration operator. To be used in TML activity diagrams
- * Creation: 21/05/2008
- * @version 1.0 21/05/2008
- * @author Ludovic APVRILLE
+ * @author dblouin
+ *
  */
 public abstract class TADExec extends TADComponentWithSubcomponents implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
 
