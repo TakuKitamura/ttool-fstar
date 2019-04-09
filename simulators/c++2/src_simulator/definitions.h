@@ -689,7 +689,7 @@ public:
 	SignalChangeData(unsigned int iSigChange, TMLTime iTime, TraceableDevice* iDevice):_sigChange(iSigChange),_time(iTime),_device(iDevice){
 		//std::cout << _sigChange << " " << _time << " " << _device << " " << " constructor***\n";
 	}
-	SignalChangeData():_sigChange(0),_time(0),_device(0){
+	SignalChangeData():_sigChange(0),_time(0),_device(0),_coreNumberVcd(0){
 	}
 	///String representation of the signal change in VCD format
 	//std::string _sigChange;
@@ -698,6 +698,8 @@ public:
 	TMLTime _time;
 	///Pointer to the device the signal belongs to
 	TraceableDevice* _device;
+        ///for cpu,the correspond core number
+        unsigned int _coreNumberVcd;
 };
 
 ///Function object for the comparison of the runnable time of two transaction

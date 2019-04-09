@@ -459,7 +459,9 @@ void SingleCoreCPU::latencies2XML(std::ostringstream& glob, unsigned int id1, un
 
 void SingleCoreCPU::getNextSignalChange(bool iInit, SignalChangeData* oSigData){
   if (iInit){
+   
     _posTrasactListVCD=_transactList.begin();
+    std::cout<<"init "<<(*_posTrasactListVCD)->toShortString()<<std::endl;
     _previousTransEndTime=0;
     _vcdOutputState = END_IDLE_CPU;
     if (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTime()!=0){
@@ -469,12 +471,15 @@ void SingleCoreCPU::getNextSignalChange(bool iInit, SignalChangeData* oSigData){
   }
 
   if (_posTrasactListVCD == _transactList.end()){
+    std::cout<<"end trans"<<std::endl;
     new (oSigData) SignalChangeData(END_IDLE_CPU, _previousTransEndTime, this);
   }
   else{
     TMLTransaction* aCurrTrans=*_posTrasactListVCD;
+    std::cout<<"current trans is "<<aCurrTrans->toShortString()<<std::endl;
     switch (_vcdOutputState){
     case END_TASK_CPU:
+      std::cout<<"END_TASK_CPU"<<std::endl;
       do{
         _previousTransEndTime=(*_posTrasactListVCD)->getEndTime();
         _posTrasactListVCD++;
@@ -482,6 +487,7 @@ void SingleCoreCPU::getNextSignalChange(bool iInit, SignalChangeData* oSigData){
       if (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTime()==_previousTransEndTime){
         //outp << VCD_PREFIX << vcdValConvert(END_PENALTY_CPU) << "cpu" << _ID;
         _vcdOutputState=END_PENALTY_CPU;
+	std::cout<<"why???"<<std::endl;
         new (oSigData) SignalChangeData(END_PENALTY_CPU, _previousTransEndTime, this);
       }else{
         //outp << VCD_PREFIX << vcdValConvert(END_IDLE_CPU) << "cpu" << _ID;
@@ -493,6 +499,7 @@ void SingleCoreCPU::getNextSignalChange(bool iInit, SignalChangeData* oSigData){
       //return _previousTransEndTime;
       break;
     case END_PENALTY_CPU:
+      std::cout<<"END_PENALTY_CPU"<<std::endl;
       //outp << VCD_PREFIX << vcdValConvert(END_TASK_CPU) << "cpu" << _ID;
       //oSigChange=outp.str();
       _vcdOutputState=END_TASK_CPU;
@@ -500,6 +507,7 @@ void SingleCoreCPU::getNextSignalChange(bool iInit, SignalChangeData* oSigData){
       new (oSigData) SignalChangeData(END_TASK_CPU, aCurrTrans->getStartTimeOperation(), this);
       break;
     case END_IDLE_CPU:
+      std::cout<<"END_IDLE_CPU"<<std::endl;
       if (aCurrTrans->getPenalties()==0){
         //outp << VCD_PREFIX << vcdValConvert(END_TASK_CPU) << "cpu" << _ID;
         _vcdOutputState=END_TASK_CPU;
@@ -513,6 +521,7 @@ void SingleCoreCPU::getNextSignalChange(bool iInit, SignalChangeData* oSigData){
       //return aCurrTrans->getStartTime();
       break;
     }
+  
   }
   //return 0;
 }

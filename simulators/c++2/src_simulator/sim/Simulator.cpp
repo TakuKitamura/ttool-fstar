@@ -392,7 +392,7 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
   if (myfile.is_open()){
     //std::cout << "File is open" << std::endl;
     SignalChangeQueue aQueue;
-    SignalChangeQueue aQueueCPU;
+    //std::queue<SignalChangeData*> aQueue;
     //std::string aSigString;
     //bool aNoMoreTrans;
     //TraceableDevice* actDevice;
@@ -402,7 +402,7 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
     myfile << "$date\n" << asctime(aTimeinfo) << "$end\n\n$version\nDaniel's TML simulator\n$end\n\n";
     myfile << "$timescale\n5 ns\n$end\n\n$scope module Simulation $end\n";
     //std::cout << "Before 1st loop" << std::endl;
-
+   
     for (TraceableDeviceList::const_iterator i=_simComp->getVCDList().begin(); i!= _simComp->getVCDList().end(); ++i){
       //TraceableDevice* a=*i;
       //                        a->streamBenchmarks(std::cout);
@@ -413,53 +413,12 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
       
       if ((*i)->toShortString().substr(0,3) == "cpu"){
 	for(unsigned int j = 0; j < (dynamic_cast<CPU*>(*i))->getAmoutOfCore(); j++) {
-	  myfile << "$var wire 1 " << (*i)->toShortString() << " " << (*i)->toString() <<"_Core"<<(j+1)<< " $end\n";
+	  myfile << "$var wire 1 " << (*i)->toShortString() << "_core" << j << " " << (*i)->toString() <<"_Core"<<j<< " $end\n";
 	  aTopElement = new SignalChangeData();
+	  aTopElement->_coreNumberVcd=j;
 	  (*i)->getNextSignalChange(true, aTopElement);
-	  aQueueCPU.push(aTopElement);
-	  myfile << "$var integer 32 clk Clock $end\n";
-	  myfile << "$upscope $end\n$enddefinitions  $end\n\n";
-	  while (!aQueueCPU.empty()){
-	    //static unsigned int count = 0;
-      
-	    std::cout<<"this is CPU queue"<<std::endl;
-	    aTopElement=aQueueCPU.top();
-	    std::cout<<"the member of queue is "<<aTopElement->_device->toShortString()<<std::endl;
-	   
-	    while (aNextClockEvent < aTopElement->_time){
-	      myfile << "#" << aNextClockEvent << "\nr" << aNextClockEvent << " clk\n";
-	      aNextClockEvent+=CLOCK_INC;
-	    }
-	    if (aCurrTime!=aTopElement->_time){
-	      aCurrTime=aTopElement->_time;
-	      myfile << "#" << aCurrTime << "\n";
-	    }
-	    if (aNextClockEvent == aTopElement->_time){
-	      myfile << "b" << vcdTimeConvert(aNextClockEvent) << " clk\n";
-	      aNextClockEvent+=CLOCK_INC;
-	      }
-	    //myfile << aTopElement->_sigChange << "\n";
-	    myfile << vcdValConvert(aTopElement->_sigChange) << aTopElement->_device->toShortString() << "\n";
-	    aQueueCPU.pop();
-	    TMLTime aTime = aTopElement->_time;
-     
-	    //std::cout<<"lets get next signal : )"<<std::endl;
-	    //if (aTopElement->_device->toShortString().substr(0,3) == "cpu")
-	    // std::cout<<"!!!!!"<<(dynamic_cast<CPU*>(aTopElement->_device))->getCycleTime()<<std::endl;
-	    std::cout<<"The cycle is cpu is ~~~!!"<<dynamic_cast<CPU*>(aTopElement->_device)->getCycleTime()<<std::endl;
-	    aTopElement->_device->getNextSignalChange(false, aTopElement);
-	    //dynamic_cast<CPU*>(aTopElement->_device)->setCycleTime((++count)% (dynamic_cast<CPU*>(aTopElement->_device)->getAmoutOfCore()));
-	    std::cout<<"aTime is "<<aTime<<std::endl;
-	    std::cout<<"top element time is "<<aTopElement->_time<<std::endl;
-	    if (aTopElement->_time == aTime){
-	      delete aTopElement;
-	      std::cout<<"delete"<<std::endl;
-	    }
-	    else{
-	      aQueueCPU.push(aTopElement);
-	      std::cout<<"no delete"<<std::endl;
-	    }
-	  }
+	  aQueue.push(aTopElement);
+
 	  // (dynamic_cast<CPU*>(*i))->setCycleTime( (dynamic_cast<CPU*>(*i))->getCycleTime()+1);
 	}	 
       }
@@ -478,39 +437,45 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
     
     
     //if sucess, make it as a fonction !!!! change
-     /* for (TraceableDeviceList::const_iterator i=_simComp->getVCDList().begin(); i!= _simComp->getVCDList().end(); ++i){
+    for (TraceableDeviceList::const_iterator i=_simComp->getVCDList().begin(); i!= _simComp->getVCDList().end(); ++i){
       if ((*i)->toShortString().substr(0,3) == "cpu"){
 	for(unsigned int j = 0; j < (dynamic_cast<CPU*>(*i))->getAmoutOfCore(); j++) {
           (dynamic_cast<CPU*>(*i))->setCycleTime(0);
         }
       }
-      }*/
+    }
      
     myfile << "$var integer 32 clk Clock $end\n";
     myfile << "$upscope $end\n$enddefinitions  $end\n\n";
-    //TMLTime aTimeCPU=0;
-	  
-   
-	  
+    
     while (!aQueue.empty()){
       std::cout<<"this is queue"<<std::endl;
       aTopElement=aQueue.top();
-      std::cout<<"the member of queue is "<<aTopElement->_device->toShortString()<<std::endl;
+      if( aTopElement->_device->toShortString().substr(0,3) == "cpu")
+        std::cout<<"the member of queue is "<<aTopElement->_device->toShortString()<< "_core" << aTopElement->_coreNumberVcd<<std::endl;
+      else 
+        std::cout<<"the member of queue is "<<aTopElement->_device->toShortString() <<std::endl;
+
       
       while (aNextClockEvent < aTopElement->_time){
 	myfile << "#" << aNextClockEvent << "\nr" << aNextClockEvent << " clk\n";
 	aNextClockEvent+=CLOCK_INC;
+	//std::cout<<"aaaa"<<std::endl;
       }
       if (aCurrTime!=aTopElement->_time){
 	aCurrTime=aTopElement->_time;
+	//std::cout<<"bbbbb"<<std::endl;
 	myfile << "#" << aCurrTime << "\n";
       }
       if (aNextClockEvent == aTopElement->_time){
 	myfile << "b" << vcdTimeConvert(aNextClockEvent) << " clk\n";
+	//std::cout<<"ccccc"<<std::endl;
 	aNextClockEvent+=CLOCK_INC;
       }
       //myfile << aTopElement->_sigChange << "\n";
-      myfile << vcdValConvert(aTopElement->_sigChange) << aTopElement->_device->toShortString() << "\n";
+      if( aTopElement->_device->toShortString().substr(0,3) == "cpu")
+        myfile << vcdValConvert(aTopElement->_sigChange) << aTopElement->_device->toShortString() << "_core" << aTopElement->_coreNumberVcd << "\n";
+      else myfile << vcdValConvert(aTopElement->_sigChange) << aTopElement->_device->toShortString() << "\n";
       aQueue.pop();
       TMLTime aTime = aTopElement->_time;
       aTopElement->_device->getNextSignalChange(false, aTopElement);
@@ -525,6 +490,7 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
 	std::cout<<"no delete"<<std::endl;
       }
     }
+  
 	
       //actDevice=aTopElement->_device;
       //if (actDevice!=0) aTime = actDevice->getNextSignalChange(false, aSigString, aNoMoreTrans);
