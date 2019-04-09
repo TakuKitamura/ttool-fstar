@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmlcompd;
 
 import myutil.GraphicLib;
@@ -73,8 +70,6 @@ import ui.interactivesimulation.JFrameSimulationSDPanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Vector;
 
 /**
@@ -209,6 +204,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         return myColor;
     }
 
+    @Override
     public void internalDrawing(Graphics g) {
         if ((x != oldx) | (oldy != y)) {
             // Component has moved!
@@ -350,7 +346,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         TGComponent tgc = getFather();
         int ft = 10;
         if ((tgc != null) && (tgc instanceof TMLCPrimitiveComponent)) {
-            ft = ((TMLCPrimitiveComponent)tgc).getCurrentFontSize();
+            ft = g.getFont().getSize();// Issue #31 ((TMLCPrimitiveComponent)tgc).getCurrentFontSize();
             //
         }
         //
