@@ -80,7 +80,7 @@ public class TADChoice extends TADComponentWithSubcomponents/* Issue #69  TGCWit
 
 //        width = 30;
 //        height = 30;
-        initSize( 30, 30 );
+        initScaling( 30, 30 );
         
         nbInternalTGComponent = 3;
         tgcomponent = new TGComponent[nbInternalTGComponent];

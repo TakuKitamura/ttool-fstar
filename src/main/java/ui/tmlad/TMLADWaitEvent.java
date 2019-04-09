@@ -93,7 +93,7 @@ public class TMLADWaitEvent extends TADComponentWithoutSubcomponents/* Issue #69
         connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.5, 1.0);
 //        width = 30;
 //        height = 20;
-        initSize( 30, 20 );
+        initScaling( 30, 20 );
         minWidth = scale( 30 );
 
         for(int i=0; i<nParam; i++) {

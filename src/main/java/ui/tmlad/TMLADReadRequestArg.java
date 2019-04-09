@@ -83,7 +83,7 @@ public class TMLADReadRequestArg extends TADComponentWithoutSubcomponents/* Issu
         minWidth = scale( 30 );
 
         // Issue #31
-        initSize( 30, 20 );
+        initScaling( 30, 20 );
         
 		for(int i=0; i<nParam; i++) {
             params[i] = "";   

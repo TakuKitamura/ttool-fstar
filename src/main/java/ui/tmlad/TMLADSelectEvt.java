@@ -82,7 +82,7 @@ public class TMLADSelectEvt extends TADComponentWithoutSubcomponents/* Issue #69
         connectingPoint[9] = new TGConnectingPointTMLAD(this, 0, OUT_LINE_LENGTH,  false, true, 0.5, 1.0);
 //        width = 30;
 //        height = 30;
-        initSize( 30, 30 );
+        initScaling( 30, 30 );
         /*textX1 = -lineOutLength;
         textY1 = height/2 - 5;
         textX2 = width + 5;

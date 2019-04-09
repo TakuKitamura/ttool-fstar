@@ -87,7 +87,7 @@ public abstract class TMLSDInstance extends TGCWithInternalComponent implements 
 	public TMLSDInstance(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 		
-		initSize( 10, 500 );
+		initScaling( 10, 500 );
 //		width = 10;
 //		height = 500;
 		minWidth = scale( 10 );

@@ -76,7 +76,7 @@ public class TMLCPJoin extends TGCWithoutInternalComponent{
 		connectingPoint[4] = new TGConnectingPointTMLCP(this, 0, -lineLength, true, false, 0.833, 0.0);
 		connectingPoint[5] = new TGConnectingPointTMLCP(this, 0, lineLength, false, true, 0.5, 1.0);
 			
-		initSize( 150, 5 );
+		initScaling( 150, 5 );
 //		width = 150;
 //		height = 5;
 

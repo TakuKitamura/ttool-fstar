@@ -49,7 +49,7 @@ public abstract class TADForLoop extends TADComponentWithoutSubcomponents implem
 		createConnectingPoints();
 //		width = 30;
 //        height = 20;
-		initSize( 30, 20 );
+		initScaling( 30, 20 );
         minWidth = scale( 30 );
         textX =  scale( 5 );
 

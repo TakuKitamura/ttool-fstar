@@ -64,7 +64,7 @@ public class TMLSDActionState extends TGCOneLineText implements SwallowedTGCompo
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
         // Issue #31
-        initSize( 30, 20 );
+        initScaling( 30, 20 );
 //        width = 30;
 //        height = 20;
         minWidth = scale( 30 );

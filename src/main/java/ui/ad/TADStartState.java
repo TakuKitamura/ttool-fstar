@@ -63,7 +63,7 @@ public class TADStartState extends TADComponentWithoutSubcomponents/* Issue #69 
 		createConnectingPoints();
 //		width = 15;
 //		height = 15;
-    	initSize( 15, 15 );
+		initScaling( 15, 15 );
 
 		nbInternalTGComponent = 0;
 

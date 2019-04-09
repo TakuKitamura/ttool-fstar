@@ -60,7 +60,7 @@ public class TMLSDControllerInstance extends TMLSDInstance implements SwallowTGC
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
         // Issue #31
-        initSize( 10, 500 );
+        initScaling( 10, 500 );
 //        width = 10;
 //        height = 500;
         minWidth = scale( 10 );

@@ -88,7 +88,7 @@ public class TMLCPRefSD extends TADOneLineText /* Issue #69 TGCOneLineText*/ {
         textX = 5;
 //        width = 30;
 //        height = 35;
-        initSize( 30, 35 );
+        initScaling( 30, 35 );
         minWidth = 70;
         
         addTGConnectingPointsComment();

@@ -63,7 +63,7 @@ public class TMLSDTransferInstance extends TMLSDInstance implements SwallowTGCom
 //        width = 10;
 //        height = 500;
 
-        initSize( 10, 500 );
+        initScaling( 10, 500 );
         minWidth = scale( 10 );
         maxWidth = scale( 10 );
         minHeight = scale( 250 );

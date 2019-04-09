@@ -100,7 +100,7 @@ public class TMLADEncrypt extends TADComponentWithoutSubcomponents/* Issue #69 T
 //        height = 35;
         //    textX = width + 5;
 //        textY = height/2 + 5;
-        initSize( 15, 35 );
+        initScaling( 15, 35 );
 
         moveable = true;
         editable = true;

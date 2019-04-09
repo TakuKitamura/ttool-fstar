@@ -73,7 +73,7 @@ public class TMLADDelay extends TADComponentWithSubcomponents /* Issue #69 TGCWi
         connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, + lineLength, false, true, 0.5, 1.0);
 //        width = 10;
 //        height = 30;
-        initSize( 10, 30 );
+        initScaling( 10, 30 );
 
         textX = width + scale( 5 );
         textY = height/2 + scale( 5 );

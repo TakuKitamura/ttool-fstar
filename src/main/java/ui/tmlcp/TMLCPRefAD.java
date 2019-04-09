@@ -74,7 +74,7 @@ public class TMLCPRefAD extends TADOneLineText /* Issue #69 TGCOneLineText*/ {
         connectingPoint[0] = new TGConnectingPointTMLCP(this, 0, -lineLength, true, false, 0.5, 0.0);
         connectingPoint[1] = new TGConnectingPointTMLCP(this, 0, lineLength, false, true, 0.5, 1.0);
 
-        initSize( 30, 35 );
+        initScaling( 30, 35 );
 //        width = 30;
 //        height = 35;
         minWidth = scale( 70 );

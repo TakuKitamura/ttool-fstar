@@ -59,7 +59,7 @@ public class TMLSDStorageInstance extends TMLSDInstance implements SwallowTGComp
 																	TGComponent _father, TDiagramPanel _tdp )  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-        initSize( 10, 500 );
+        initScaling( 10, 500 );
 //        width = 10;
 //        height = 500;
         minWidth = scale( 10 );

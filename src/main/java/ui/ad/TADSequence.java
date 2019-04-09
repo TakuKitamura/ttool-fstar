@@ -70,7 +70,7 @@ public class TADSequence extends TADComponentWithSubcomponents /* Issue #69 TGCW
         createConnectingPoints();
 //        width = 150;
 //        height = 5;
-        initSize( 150, 5 );
+        initScaling( 150, 5 );
         
         textX = width - scale( 6 );
         textY = height + scale( 2 );
