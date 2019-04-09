@@ -97,6 +97,7 @@ import ui.avatarsmd.*;
 import ui.diplodocusmethodology.DiplodocusMethodologyDiagramPanel;
 import ui.ebrdd.EBRDDPanel;
 import ui.eln.ELNDiagramPanel;
+import ui.syscams.SysCAMSComponentTaskDiagramPanel;
 import ui.ftd.FaultTreeDiagramPanel;
 import ui.iod.InteractionOverviewDiagramPanel;
 import ui.ncdd.NCDiagramPanel;
@@ -6466,10 +6467,10 @@ public class GTURTLEModeling {
             ((AvatarCDPanel) tdp).setConnectorsToFront();
         }
 
-        /*if (tdp instanceof SysCAMSComponentTaskDiagramPanel) {
+        if (tdp instanceof SysCAMSComponentTaskDiagramPanel) {
             //TraceManager.addDev("Connectors...");
             ((SysCAMSComponentTaskDiagramPanel) tdp).setConnectorsToFront();
-        }*/
+        }
 
         if (tdp instanceof ELNDiagramPanel) {
             // TraceManager.addDev("Connectors...");
