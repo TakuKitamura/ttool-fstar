@@ -103,7 +103,7 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
     //issue 183
     List<JButton>   buttons = new ArrayList<>();
     List<HelpEntry> helpEntries;
-    JFrameHWNodeHelp cpuHelp;
+    TGComponentHelp cpuHelp;
 
     /* Creates new form  */
     public JDialogCPUNode(MainGUI _mgui, Frame _frame, String _title, TMLArchiCPUNode _node, ArchUnitMEC _MECType,
@@ -132,32 +132,19 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
 
     //issue 183
     private void buttonClick(JButton but, HelpEntry he) {
-        //setModalityType(ModalityType.MODELESS);
         but.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(cpuHelp == null ) {
-                    cpuHelp = new JFrameHWNodeHelp(mgui,"Help",he);
-                    cpuHelp.setLocationRelativeTo(but);
+                    cpuHelp = new TGComponentHelp(mgui, he);
+                    cpuHelp.setLocationHelpWindow(but);
                 }else{
                     if(!cpuHelp.isVisible()) {
-                        cpuHelp = new JFrameHWNodeHelp(mgui,"Help",he);
-                        cpuHelp.setLocationRelativeTo(but);
+                        cpuHelp = new TGComponentHelp(mgui, he);
+                        cpuHelp.setLocationHelpWindow(but);
                     }else{
                         cpuHelp.setVisible(false);
                     }
-                }
-
-                if(cpuHelp != null) {
-                    cpuHelp.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "close");
-                    cpuHelp.getRootPane().getActionMap().put("close", new AbstractAction() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            if(!cpuHelp.isVisible())
-                                dispose();
-                            cpuHelp.setVisible(false);
-                        }
-                    });
                 }
             }
         });
@@ -593,12 +580,18 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         regularClose = true;
         MECType = ArchUnitMEC.Types.get( MECTypeCB.getSelectedIndex() );
         dispose();
+        if ((cpuHelp != null) && cpuHelp.isVisible()) {
+            cpuHelp.setVisible(false);
+        }
     }
 
     public void cancelDialog() {
 
         //TraceManager.addDev("Cancel dialog");
         dispose();
+        if ((cpuHelp != null) && cpuHelp.isVisible()) {
+            cpuHelp.setVisible(false);
+        }
     }
 
     public boolean isRegularClose() {

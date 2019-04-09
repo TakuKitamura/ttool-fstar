@@ -83,6 +83,7 @@ public	class JFrameHelp extends JFrame implements ActionListener {
         visitedEntries = new Vector<>();
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setModalExclusionType(Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
         Container framePanel = getContentPane();
         framePanel.setLayout(new BorderLayout());
         Font f = new Font("Courrier", Font.BOLD, 12);
