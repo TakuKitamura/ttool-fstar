@@ -11,7 +11,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class TGComponentHelp extends JFrame implements ActionListener {
+public class TGComponentHelp extends JDialog implements ActionListener {
 
     MainGUI mainGUI;
     HelpEntry helpEntry;
@@ -20,13 +20,20 @@ public class TGComponentHelp extends JFrame implements ActionListener {
     JEditorPane pane;
 
 
-    public TGComponentHelp(MainGUI _mgui, String title, HelpEntry _he) {
-        super(title);
+    public TGComponentHelp(MainGUI _mgui, HelpEntry _he) {
         mainGUI = _mgui;
         helpEntry = _he;
 
+        getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "close");
+        getRootPane().getActionMap().put("close", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
         setUndecorated(true);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
         Container framePanel = getContentPane();
         framePanel.setLayout(new BorderLayout());
         Font f = new Font("Courrier", Font.BOLD, 12);

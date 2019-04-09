@@ -133,30 +133,19 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
     //issue 183
     private void buttonClick(JButton but, HelpEntry he) {
         but.setSelected(true);
-        setModalityType(ModalityType.MODELESS);
         but.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(cpuHelp == null ) {
-                    cpuHelp = new TGComponentHelp(mgui,"Help",he);
+                    cpuHelp = new TGComponentHelp(mgui, he);
                     cpuHelp.setLocationHelpWindow(but);
                 }else{
                     if(!cpuHelp.isVisible()) {
-                        cpuHelp = new TGComponentHelp(mgui,"Help",he);
+                        cpuHelp = new TGComponentHelp(mgui, he);
                         cpuHelp.setLocationHelpWindow(but);
                     }else{
                         cpuHelp.setVisible(false);
                     }
-                }
-
-                if(cpuHelp != null) {
-                    cpuHelp.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "close");
-                    cpuHelp.getRootPane().getActionMap().put("close", new AbstractAction() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            cpuHelp.setVisible(false);
-                        }
-                    });
                 }
             }
         });
