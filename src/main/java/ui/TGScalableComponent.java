@@ -16,7 +16,6 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
 	
 	protected double oldScaleFactor;
 
-	protected int currentFontSize;
 	protected boolean displayText;
 	protected int textX; // border for ports
 	protected double dtextX;
@@ -29,47 +28,25 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
 	protected double dLineLength;
     protected int linebreak;
 	protected double dLinebreak;
+    
+	protected double dx = 0, dy = 0, dwidth, dheight, dMaxWidth, dMaxHeight, dMinWidth, dMinHeight;
 
 	public TGScalableComponent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
 			TGComponent _father, TDiagramPanel _tdp) {
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 		
 		rescaled = false;
-        oldScaleFactor = tdp.getZoom();//1.0;
-        textX = 15;
-        dtextX = textX * oldScaleFactor;
-        textX = (int) dtextX;
-        dtextX = dtextX - textX;
 
+		textX = 15;
         textY = 15;
-        dtextY = textY * oldScaleFactor;
-        textY = (int) dtextY;
-        dtextY = dtextY - textY;
 
         arc = 5;
-        darc = arc * oldScaleFactor;
-        arc = (int) darc;
-        darc = darc - arc;
         
         lineLength = 5;
         linebreak = 10;
-        
-        currentFontSize = -1;
     	displayText = true;
 	}
 
-	/**
-	 * @param width
-	 * @param height
-	 */
-	protected void initSize( 	final int width,
-								final int height ) {
-		this.width = width;
-		this.height = height;
-		
-		initScaling( width, height );
-	}
-	
 	public static int scale( 	final int value,
 								final double factor ) {
 		return (int) ( value * factor );
@@ -84,6 +61,18 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
 
         dx = 0;
         dy = 0;
+       
+        dtextX = textX * oldScaleFactor;
+        textX = (int) dtextX;
+        dtextX = dtextX - textX;
+
+        dtextY = textY * oldScaleFactor;
+        textY = (int) dtextY;
+        dtextY = dtextY - textY;
+
+        darc = arc * oldScaleFactor;
+        arc = (int) darc;
+        darc = darc - arc;
 
         dwidth = w * oldScaleFactor;
         width = (int)dwidth;
@@ -105,12 +94,16 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
         linebreak = (int) dLinebreak;
         dLinebreak = dLinebreak - linebreak;
 
+        dMinWidth = minWidth * oldScaleFactor;
+        dMinHeight = minHeight * oldScaleFactor;
         dMaxWidth = defMaxWidth * oldScaleFactor;
         dMaxHeight = defMaxHeight * oldScaleFactor;
 
         maxWidth = defMaxWidth;
         maxHeight = defMaxHeight;
 
+        dMinWidth = dMinWidth -minWidth;
+        dMinHeight = dMinHeight - minHeight;
         dMaxWidth = dMaxWidth - maxWidth;
         dMaxHeight = dMaxHeight - maxHeight;
 
@@ -265,6 +258,11 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
     }
     
     protected Image scale( final Image image ) {
+    	return scale( image, width );
+    }
+    
+    protected Image scale( 	final Image image,
+    						final int width ) {
     	return new ImageIcon( image.getScaledInstance( width, - 1, Image.SCALE_SMOOTH ) ).getImage();
     }
 }
