@@ -36,11 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.diplodocusmethodology;
-
 
 import myutil.GraphicLib;
 import myutil.TraceManager;
@@ -65,21 +61,23 @@ import java.util.Vector;
  */
 public abstract class DiplodocusMethodologyDiagramReference extends TGCScalableWithInternalComponent implements SwallowTGComponent  {
     public String oldValue;
-    protected int textX = 5;
-    protected int textY = 22;
-    protected int lineHeight = 30;
-    protected double dlineHeight = 0.0;
+    
+    //
+//    protected int textX = 5;
+//    protected int textY = 22;
+//    protected int lineHeight = 30;
+//    protected double dlineHeight = 0.0;
     //protected int reqType = 0;
     // 0: normal, 1: formal, 2: security
     //protected int startFontSize = 10;
-    protected Graphics graphics;
-    protected int iconSize = 30;
+    //protected Graphics graphics;
+    private static final int ICON_SIZE = 30;
 
     protected Font myFont, myFontB;
     protected int maxFontSize = 30;
     protected int minFontSize = 4;
-    protected int currentFontSize = -1;
-    protected boolean displayText = true;
+    //protected int currentFontSize = -1;
+    //protected boolean displayText = true;
 
     protected int typeOfReference;
 
@@ -94,23 +92,23 @@ public abstract class DiplodocusMethodologyDiagramReference extends TGCScalableW
 
     protected JMenuItem diagramReference;
 
-
-
-    // Icon
-    //private int iconSize = 18;
-    //private boolean iconIsDrawn = false;
-
     public DiplodocusMethodologyDiagramReference(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        initScaling(200, 120);
-        oldScaleFactor = tdp.getZoom();
-        dlineHeight = lineHeight * oldScaleFactor;
-        lineHeight = (int)dlineHeight;
-        dlineHeight = dlineHeight - lineHeight;
-
+        // Issue #31
+        lineLength = 30;
+        textX = 5;
+        textY = 22;
         minWidth = 10;
-        minHeight = lineHeight;
+        minHeight = lineLength;
+
+        initScaling(200, 120);
+        
+        // Issue #31
+//        oldScaleFactor = tdp.getZoom();
+//        dlineHeight = lineHeight * oldScaleFactor;
+//        lineHeight = (int)dlineHeight;
+//        dlineHeight = dlineHeight - lineHeight;
 
         addTGConnectingPointsCommentTop();
 
@@ -128,41 +126,40 @@ public abstract class DiplodocusMethodologyDiagramReference extends TGCScalableW
         userResizable = true;
         multieditable = true;
 
-
-
         oldValue = value;
 
         myImageIcon = IconManager.imgic5006;
 
-
         actionOnAdd();
     }
 
-
+    @Override
     public void internalDrawing(Graphics g) {
         Font f = g.getFont();
        // Font fold = f;
       //  int w, c;
-        int size;
+       // int size;
 
         value = TYPE_STR[typeOfReference];
 
-        if (!tdp.isScaled()) {
-            graphics = g;
-        }
+//        if (!tdp.isScaled()) {
+//            graphics = g;
+//        }
 
-        if (((rescaled) && (!tdp.isScaled())) || myFont == null) {
-            currentFontSize = tdp.getFontSize();
-            //
-            myFont = f.deriveFont((float)currentFontSize);
-            myFontB = myFont.deriveFont(Font.BOLD);
+        // Issue #31 The font is already managed when drawing the panel
+//        if (((rescaled) && (!tdp.isScaled())) || myFont == null) {
+//            currentFontSize = tdp.getFontSize();
+//            //
+//            myFont = f.deriveFont((float)currentFontSize);
+//            myFontB = myFont.deriveFont(Font.BOLD);
+//
+//            if (rescaled) {
+//                rescaled = false;
+//            }
+//        }
 
-            if (rescaled) {
-                rescaled = false;
-            }
-        }
-
-        displayText = currentFontSize >= minFontSize;
+        final int fontSize = g.getFont().getSize();
+        displayText = fontSize /*currentFontSize*/ >= minFontSize;
 
      //   int h  = g.getFontMetrics().getHeight();
 
@@ -177,15 +174,15 @@ public abstract class DiplodocusMethodologyDiagramReference extends TGCScalableW
         //g.setColor(ColorManager.AVATAR_REQUIREMENT_TOP);
         //g.fillRect(x+1, y+1+lineHeight, width-1, height-1-lineHeight);
         ColorManager.setColor(g, getState(), 0);
-        if ((lineHeight > 23) && (width > 23)){
-            g.drawImage(IconManager.img5100, x + width - iconSize + 1, y + 3, Color.yellow, null);
+        if ((lineLength > 23) && (width > 23)){
+            g.drawImage( scale( IconManager.img5100, scale( IconManager.img5100.getWidth( null ) ) ), x + width - scale( ICON_SIZE + 1 ), y + scale( 3 ), Color.yellow, null);
         }
 
         if (displayText) {
-            size = currentFontSize - 2;
-            g.setFont(myFontB);
+           // size = currentFontSize - 2;
+           // g.setFont(myFontB);
 
-            drawLimitedString(g, value, x, y + size + 3, width, 1);
+            drawLimitedString(g, value, x, y + fontSize + 1 /*size + 3*/, width, 1);
             g.setFont(f);
         }
 
@@ -280,6 +277,7 @@ public abstract class DiplodocusMethodologyDiagramReference extends TGCScalableW
           g.setFont(f);*/
     }
 
+    @Override
     public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
         addDiagramReference(frame);
         return true;
@@ -339,18 +337,18 @@ public abstract class DiplodocusMethodologyDiagramReference extends TGCScalableW
 
     }
 
+    // Issue #31
+//    public void rescale(double scaleFactor){
+//        dlineHeight = (lineHeight + dlineHeight) / oldScaleFactor * scaleFactor;
+//        lineHeight = (int)(dlineHeight);
+//        dlineHeight = dlineHeight - lineHeight;
+//
+//        minHeight = lineHeight;
+//
+//        super.rescale(scaleFactor);
+//    }
 
-    public void rescale(double scaleFactor){
-        dlineHeight = (lineHeight + dlineHeight) / oldScaleFactor * scaleFactor;
-        lineHeight = (int)(dlineHeight);
-        dlineHeight = dlineHeight - lineHeight;
-
-        minHeight = lineHeight;
-
-        super.rescale(scaleFactor);
-    }
-
-
+    @Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
         if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
             return this;
@@ -358,8 +356,7 @@ public abstract class DiplodocusMethodologyDiagramReference extends TGCScalableW
         return null;
     }
 
-
-
+    @Override
     public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
 
         componentMenu.addSeparator();
@@ -370,6 +367,7 @@ public abstract class DiplodocusMethodologyDiagramReference extends TGCScalableW
         componentMenu.add(diagramReference);
     }
 
+    @Override
     public boolean eventOnPopup(ActionEvent e) {
         //String s = e.getActionCommand();
 
@@ -463,15 +461,14 @@ public abstract class DiplodocusMethodologyDiagramReference extends TGCScalableW
         return false;
     }
 
-
     public void fillIgnoredSelectedFromInternalComponents(Vector<String> ignored, Vector<String>selected) {
         // Get from mgui the list of all diagrams with type depends from the subclass
         // If diagrams have the same name -> we do not see the difference
 
         TURTLEPanel tp;
-        Vector tabs = getTDiagramPanel().getMGUI().getTabs();
-        for(Object o: tabs) {
-            tp = (TURTLEPanel)o;
+        Vector<TURTLEPanel> tabs = getTDiagramPanel().getMGUI().getTabs();
+        for(TURTLEPanel o: tabs) {
+            tp = o;
             if (isAValidPanelType(tp)) {
                 ignored.add(getTDiagramPanel().getMGUI().getTitleAt(tp));
             }
@@ -511,10 +508,12 @@ public abstract class DiplodocusMethodologyDiagramReference extends TGCScalableW
 
     public abstract boolean isAValidPanelType(TURTLEPanel panel);
 
+    @Override
     public boolean acceptSwallowedTGComponent(TGComponent tgc) {
         return tgc instanceof DiplodocusMethodologyDiagramName;
     }
 
+    @Override
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
         tgc.setFather(this);
         addInternalComponent(tgc, 0);
@@ -522,6 +521,7 @@ public abstract class DiplodocusMethodologyDiagramReference extends TGCScalableW
         return true;
     }
 
+    @Override
     public void removeSwallowedTGComponent(TGComponent tgc) {
         removeInternalComponent(tgc);
     }
@@ -539,11 +539,4 @@ public abstract class DiplodocusMethodologyDiagramReference extends TGCScalableW
     protected void giveInformation(String info) {
         tdp.getMGUI().setStatusBarText(info);
     }
-
-
-
-    /*public String getDiagramReferences() {
-      return referenceElements;
-      }*/
-
 }
