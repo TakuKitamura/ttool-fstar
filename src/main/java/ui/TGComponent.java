@@ -214,8 +214,8 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
     protected boolean breakpoint;
 
     // Zoom
-    // Issue #31: Make these values accessible only by package classes such as ZoomUtil
-    /*public*/ double dx = 0, dy = 0, dwidth, dheight, dMaxWidth, dMaxHeight, dMinWidth, dMinHeight;
+    // Issue #31: Moved to scalable component
+    //double dx = 0, dy = 0, dwidth, dheight, dMaxWidth, dMaxHeight, dMinWidth, dMinHeight;
 
 
     //Constructor
