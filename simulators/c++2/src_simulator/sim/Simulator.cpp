@@ -291,16 +291,22 @@ void Simulator::latencies2XML(std::ostringstream& glob, int id1, int id2) {
 void Simulator::schedule2HTML(std::string& iTraceFileName) const {
 std::cout<<"schedule2HTML--------------------------------------******************"<<std::endl;
   struct timeval aBegin,aEnd;
+  time_t aRawtime;
+  struct tm * aTimeinfo;
   gettimeofday(&aBegin,NULL);
+  time(&aRawtime);
+  aTimeinfo=localtime(&aRawtime);
 
   if ( !ends_with( iTraceFileName, EXT_HTML ) ) {
     iTraceFileName.append( EXT_HTML );
   }
+  
 
   std::ofstream myfile(iTraceFileName.c_str());
-   myfile<<iTraceFileName.c_str()<<std::endl;
+   myfile<<"file name: "<<iTraceFileName.c_str()<<std::endl;
 
   if (myfile.is_open()) {
+    myfile << " date: " << asctime(aTimeinfo)<<std::endl;
     // DB: Issue #4
     myfile << SCHED_HTML_DOC; // <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n
     myfile << SCHED_HTML_BEG_HTML; // <html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n
@@ -311,7 +317,7 @@ std::cout<<"schedule2HTML--------------------------------------*****************
 
     if ( findSlash == std::string::npos ) {
       indexSlash = 0;
-      myfile<<"indexSlash=0\n";
+      //myfile<<"indexSlash=0\n";
     }
     else {
       indexSlash = findSlash;
@@ -319,10 +325,10 @@ std::cout<<"schedule2HTML--------------------------------------*****************
 
     const std::string ext( EXT_HTML );
     const std::string cssFileName = iTraceFileName.substr( indexSlash + 1, iTraceFileName.length() - indexSlash - ext.length() - 1 ) + EXT_CSS; 
-    myfile<<"length is "<< iTraceFileName.length() - indexSlash - ext.length() - 1<<std::endl;
+    //myfile<<"length is "<< iTraceFileName.length() - indexSlash - ext.length() - 1<<std::endl;
     const std::string cssFullFileName = iTraceFileName.substr( 0, indexSlash + 1 ) + cssFileName;
     std::ofstream cssfile( cssFullFileName.c_str() );
-    myfile<<"full name is "<<cssFullFileName<<std::endl;
+    //myfile<<"full name is "<<cssFullFileName<<std::endl;
     if ( cssfile.is_open() ) {
       cssfile << SCHED_HTML_CSS_CONTENT;
       cssfile.close();

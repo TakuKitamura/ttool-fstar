@@ -160,7 +160,7 @@ public:
 		if (_nextTransaction==0) std::cout << "0\n"; else std::cout << _nextTransaction->toString() << "\n";  
 	}*/
 	void schedule2HTML(std::ofstream& myfile) const {    
-		myfile << "<h2><span>Scheduling for device: "<< _name << "</span></h2>" << std::endl;
+		myfile << "<h2><span>Scheduling for device: "<< _name <<"_core_"<<this->_cycleTime<< "</span></h2>" << std::endl;
 
 		if ( _transactList.size() == 0 ) {
 			myfile << "<h4>Device never activated</h4>" << std::endl;
