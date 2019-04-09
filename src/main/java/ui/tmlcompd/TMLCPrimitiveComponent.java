@@ -65,8 +65,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
     private int maxFontSize = 14;
     private int minFontSize = 4;
     
-    // Issue #31
-    //private int currentFontSize = -1;
+    private int currentFontSize = -1;
     //private boolean displayText = true;
     //    private int spacePt = 3;
     private Color myColor;
@@ -93,6 +92,9 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
     public TMLCPrimitiveComponent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
+        // Issue #31
+        minWidth = 1;
+        minHeight = 1;
         initScaling(200, 150);
 
         // Issue #31
@@ -100,9 +102,6 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 //        dtextX = textX * oldScaleFactor;
 //        textX = (int) dtextX;
 //        dtextX = dtextX - textX;
-
-        minWidth = 1;
-        minHeight = 1;
 
         nbConnectingPoint = 0;
 
@@ -598,9 +597,10 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         }
     }
 
-    public int getCurrentFontSize() {
-        return currentFontSize;
-    }
+    // Issue #31
+//    public int getCurrentFontSize() {
+//        return currentFontSize;
+//    }
 
     public List<TAttribute> getAttributeList() {
         return myAttributes;
