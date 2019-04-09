@@ -602,8 +602,7 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
     }
 
     public boolean isRegularClose() {
-
-        TraceManager.addDev("regularclose=" + regularClose);
+        //TraceManager.addDev("regularclose=" + regularClose);
         return regularClose;
     }
 

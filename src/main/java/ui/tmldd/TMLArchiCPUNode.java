@@ -251,7 +251,7 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
             try {
                 tmp = nbOfCores;
                 nbOfCores = Integer.decode(dialog.getNbOfCores()).intValue();
-                TraceManager.addDev("Nb of cores=" + nbOfCores);
+                //TraceManager.addDev("Nb of cores=" + nbOfCores);
                 if (nbOfCores <= 0) {
                     nbOfCores = tmp;
                     error = true;
