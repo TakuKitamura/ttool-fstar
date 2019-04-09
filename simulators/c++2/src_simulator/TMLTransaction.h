@@ -251,7 +251,11 @@ class TMLTransaction {
   inline unsigned int getTransactCoreNumber() {return _transactCoreNumber;}
   inline void setTransactCoreNumber(unsigned int num) {_transactCoreNumber=num;}
   inline void setTransVcdOutPutState(vcdTransVisState n) {_transVcdOutputState=n;}
-  inline vcdTransVisState getTransVcdOutPutState() { return _transVcdOutputState;}
+ // inline void setPreviousTransEndTime(unsigned int n) {_previousTransEndTime=n;}
+  //inline unsigned int getPreviousTransEndTime() {return _previousTransEndTime;}
+  inline vcdTransVisState getTransVcdOutPutState() {return _transVcdOutputState;}
+  inline void setEndState (bool f) { _endState=f;}
+  inline bool getEndState () {return _endState;}
   void toXML(std::ostringstream& glob, int deviceID, std::string deviceName) const;
 
 
@@ -270,6 +274,10 @@ class TMLTransaction {
   unsigned int _transactCoreNumber;
   ///State variable for the cpu VCD output
   vcdTransVisState _transVcdOutputState;
+  //state of transaction for VCD output
+  bool _endState;
+  ///previous end time for the cpu VCD output
+ // unsigned int _previousTransEndTime;
 #ifdef PENALTIES_ENABLED
   ///Idle penalty
   TMLTime _idlePenalty;
