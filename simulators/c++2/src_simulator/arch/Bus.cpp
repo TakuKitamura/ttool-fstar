@@ -91,7 +91,7 @@ void Bus::schedule(){
 
 //Adds the transaction determined by the scheduling algorithm to the internal list of scheduled transactions
 bool Bus::addTransaction(TMLTransaction* iTransToBeAdded){
-	//std::cout << "Bus add trans " << _nextTransaction << "\n";
+	std::cout << "Bus add trans ####" << _nextTransaction << "\n";
 	_endSchedule = _nextTransaction->getEndTime();
 	//std::cout << "set end time to " << _endSchedule << "\n";
 	//_transactList.push_back(_nextTransaction);
@@ -257,12 +257,14 @@ void Bus::latencies2XML(std::ostringstream& glob, unsigned int id1, unsigned int
 
 //Returns the next signal change (for vcd output)
 void Bus::getNextSignalChange(bool iInit, SignalChangeData* oSigData){
+	std::cout<<"bus getnext"<<std::endl;
 	//std::ostringstream outp;
 	//std::cout << _transactList.size() << " elements in List of " << _name << std::endl;
 	if (iInit){
 		 _posTrasactListVCD=_transactList.begin();
 		_previousTransEndTime=0;
 		 _vcdOutputState=INIT_BUS;
+		std::cout<<"bus init"<<std::endl;
 	}
 	if (_posTrasactListVCD == _transactList.end()){
 		//outp << VCD_PREFIX << vcdValConvert(END_IDLE_BUS) << "bus" << _ID;
@@ -270,11 +272,13 @@ void Bus::getNextSignalChange(bool iInit, SignalChangeData* oSigData){
 		//oNoMoreTrans=true;
 		//return _previousTransEndTime;
 		new (oSigData) SignalChangeData(END_IDLE_BUS, _previousTransEndTime, this);
+		std::cout<<"bus end "<<std::endl;
 	}else{
 		TMLTransaction* aCurrTrans=*_posTrasactListVCD;
 		//oNoMoreTrans=false;
 		switch (_vcdOutputState){
 			case END_READ_BUS:
+			std::cout<<"BUS END_READ_BUS"<<std::endl;
 				do{
 					_previousTransEndTime=(*_posTrasactListVCD)->getEndTime();
 					_posTrasactListVCD++;
@@ -293,6 +297,7 @@ void Bus::getNextSignalChange(bool iInit, SignalChangeData* oSigData){
 				//return _previousTransEndTime;
 			break;
 			case END_WRITE_BUS:
+			std::cout<<"BUS END_WRTIE_BUS"<<std::endl;
 				do{
 					_previousTransEndTime=(*_posTrasactListVCD)->getEndTime();
 					_posTrasactListVCD++;
@@ -311,6 +316,7 @@ void Bus::getNextSignalChange(bool iInit, SignalChangeData* oSigData){
 				//return _previousTransEndTime;
 			break;
 			case INIT_BUS:
+			std::cout<<"BUS INIT_BUS"<<std::endl;
 				if (aCurrTrans->getStartTimeOperation()!=0){
 					_vcdOutputState=END_IDLE_BUS;
 					//outp << VCD_PREFIX << vcdValConvert(END_IDLE_BUS) << "bus" << _ID;
@@ -320,6 +326,7 @@ void Bus::getNextSignalChange(bool iInit, SignalChangeData* oSigData){
 					return;
 				}
 			case END_IDLE_BUS:
+			std::cout<<"BUS END_IDLE_BUS"<<std::endl;
 				if (aCurrTrans->getCommand()->getTask()==aCurrTrans->getChannel()->getBlockedReadTask()){
 					_vcdOutputState=END_READ_BUS;
 					new (oSigData) SignalChangeData(END_READ_BUS, aCurrTrans->getStartTimeOperation(), this);

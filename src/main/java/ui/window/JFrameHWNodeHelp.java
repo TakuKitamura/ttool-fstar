@@ -51,7 +51,7 @@ public class JFrameHWNodeHelp extends JFrame implements ActionListener{
 
         HelpManager hm = new HelpManager();
         if(hm.loadEntries()) {
-            mgui.setHelpManager(hm);
+            //mgui.setHelpManager(hm);
         }
 
         helpBut.addActionListener(this);

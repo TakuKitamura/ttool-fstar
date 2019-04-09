@@ -42,6 +42,7 @@
 package ui.tmldd;
 
 import myutil.GraphicLib;
+import myutil.TraceManager;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -221,6 +222,8 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
        // dialog.setSize(500, 450);
         GraphicLib.centerOnParent(dialog, 500, 450);
         dialog.setVisible( true ); // blocked until dialog has been closed
+
+        TraceManager.addDev("Bus 1");
 
         if (!dialog.isRegularClose()) {
             return false;

@@ -577,6 +577,7 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
     }
 
     public void closeDialog() {
+        //TraceManager.addDev("Save and close");
         regularClose = true;
         MECType = ArchUnitMEC.Types.get( MECTypeCB.getSelectedIndex() );
         dispose();
@@ -586,6 +587,8 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
     }
 
     public void cancelDialog() {
+
+        //TraceManager.addDev("Cancel dialog");
         dispose();
         if ((cpuHelp != null) && cpuHelp.isVisible()) {
             cpuHelp.setVisible(false);
@@ -593,6 +596,8 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
     }
 
     public boolean isRegularClose() {
+
+        TraceManager.addDev("regularclose=" + regularClose);
         return regularClose;
     }
 
