@@ -557,8 +557,7 @@ request *executeListOfRequests(setOfRequests *list) {
       debug2Msg(list->ownerName, "Waiting for a request and at most for a given time");
       debugTime("Min time to wait=", &(list->minTimeToWait));
       //pthread_cond_timedwait(list->wakeupCondition, list->mutex, &(list->minTimeToWait));
-	    list->cond->wait_for(list->minTimeToWait.tv_sec*1000);
-      
+      list->cond->wait_for(list->minTimeToWait.tv_sec-list->startTime.tv_sec); 
     } else {
       debug2Msg(list->ownerName, "Releasing mutex");
       //pthread_cond_wait(list->wakeupCondition, list->mutex);
