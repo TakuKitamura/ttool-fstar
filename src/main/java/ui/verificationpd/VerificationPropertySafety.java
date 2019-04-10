@@ -37,37 +37,48 @@
  */
 
 
-package verification;
 
-import myutil.TraceManager;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.util.Date;
-import java.util.Vector;
+package ui.verificationpd;
 
+
+import ui.*;
+import ui.verificationpd.VerificationPropertyGeneric;
 
 /**
- * Class Property
- * Creation: 10/04/2019
- * Version 1.0 10/04/2019
- *
- * @author Ludovic APVRILLE
+   * Class VerificationPropertySafety
+   * Safety verification tracking
+   * Creation: 10/04/2019
+   * @version 1.0 10/04/2019
+   * @author Ludovic APVRILLE
  */
-public class Property  {
+public class VerificationPropertySafety extends VerificationPropertyGeneric {
 
-    public PropertyType type;
-    public String name;
-    public String propertyDescription;
-    public PropertyResultType resultType;
-    public String result;
-    public Object reference;
-    public Date date;
 
-    public Property() {
-        date = new Date();
+    public VerificationPropertySafety(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+        initScaling(180, 70);
+
+        nbConnectingPoint = 0;
+        connectingPoint = new TGConnectingPoint[nbConnectingPoint];
+        //connectingPoint[0] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, false, true, 0.5, 0, TGConnectingPoint.WEST);
+
+        typeOfReference = PROPERTY;
+
+        addTGConnectingPointsCommentTop();
+
     }
+
+    public  int getType() {
+        return TGComponentManager.SYSMLSEC_METHODOLOGY_REF_PROPERTIES;
+    }
+
+    public boolean isAValidPanelType(TURTLEPanel panel) {
+        return panel instanceof AvatarRequirementPanel;
+
+    }
+
+
 
 }

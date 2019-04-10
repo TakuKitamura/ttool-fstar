@@ -1152,6 +1152,26 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return index;
     }
 
+    private int addVerificationPropertyPanel(String name, int index, boolean addDefaultElements) {
+        if (index == -1) {
+            index = tabs.size();
+        }
+        //TraceManager.addDev("New SysMLSec Methodopanel");
+        VerificationPanel dp = new VerificationPanel(this);
+        tabs.add(index, dp);
+        mainTabbedPane.add(dp.tabbedPane, index);
+        mainTabbedPane.setToolTipTextAt(index, "Open Verification Tracking");
+        mainTabbedPane.setTitleAt(index, name);
+        mainTabbedPane.setIconAt(index, IconManager.imgic99);
+        //mainTabbedPane.addTab(name, IconManager.imgic14, dp.tabbedPane, "Opens design diagrams");
+        dp.init(name);
+        if (addDefaultElements) {
+            dp.initElements();
+        }
+        //ystem.out.println("Design added");
+        return index;
+    }
+
 
     private int addTMLComponentDesignPanel(String name, int index) {
         if (index == -1) {
@@ -1609,6 +1629,12 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return index;
     }
 
+    public int createVerificationProperty(String name) {
+        int index = addVerificationPropertyPanel(name, -1, false);
+        mainTabbedPane.setSelectedIndex(index);
+        return index;
+    }
+
     public int createTMLDesign(String name) {
         int index = addTMLDesignPanel(name, -1);
         mainTabbedPane.setSelectedIndex(index);
@@ -2016,6 +2042,15 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     public void newSysmlsecMethodology() {
         //TraceManager.addDev("NEW DESIGN");
         addSysmlsecMethodologyPanel("SysMLSec_Methodology", -1, true);
+        tabs.elementAt(tabs.size() - 1).tabbedPane.setSelectedIndex(0);
+        mainTabbedPane.setSelectedIndex(tabs.size() - 1);
+        //paneAction(null);
+        //frame.repaint();
+    }
+
+    public void newVerificationPropertyPanel() {
+        //TraceManager.addDev("NEW DESIGN");
+        addVerificationPropertyPanel("Verification Tracking", -1, true);
         tabs.elementAt(tabs.size() - 1).tabbedPane.setSelectedIndex(0);
         mainTabbedPane.setSelectedIndex(tabs.size() - 1);
         //paneAction(null);
@@ -6642,6 +6677,11 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         tp.tabbedPane.setTitleAt(0, name);
     }
 
+    public void setVerificationPropertyDiagramName(int indexDesign, String name) {
+        TURTLEPanel tp = tabs.elementAt(indexDesign);
+        tp.tabbedPane.setTitleAt(0, name);
+    }
+
     public void setTMLTaskDiagramName(int indexDesign, String name) {
         TURTLEPanel tp = tabs.elementAt(indexDesign);
         tp.tabbedPane.setTitleAt(0, name);
@@ -9288,7 +9328,8 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         private JPopupMenu menu;
 
         private JMenuItem rename, remove, moveRight, moveLeft, newDesign, newAnalysis, newDeployment, newRequirement/*, newTMLDesign*/, newTMLComponentDesign, newTMLArchi, newProactiveDesign, newTURTLEOSDesign,
-                newNCDesign, sort, clone, newAttackTree, newFaultTree, newAVATARBD, newAVATARRequirement, newMAD, newTMLCP, newTMLMethodo, newAvatarMethodo, newAVATARDD, newSysmlsecMethodo, newSysCAMS, newELN;
+                newNCDesign, sort, clone, newAttackTree, newFaultTree, newAVATARBD, newAVATARRequirement, newMAD, newTMLCP, newTMLMethodo,
+                newAvatarMethodo, newAVATARDD, newSysmlsecMethodo, newSysCAMS, newELN, newVerificationProperty;
         private JMenuItem newAVATARAnalysis;
 
         public PopupListener(MainGUI _mgui) {
@@ -9358,6 +9399,8 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             newAVATARDD = createMenuItem("New Deployment Diagram");
             newAvatarMethodo = createMenuItem("New AVATAR Methodology");
             newSysmlsecMethodo = createMenuItem("New SysML-Sec Methodology");
+            newVerificationProperty = createMenuItem("New Verification Tracking");
+
 
             menu = new JPopupMenu("Views");
             menu.add(moveLeft);
@@ -9454,6 +9497,10 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                     menu.add(newAVATARDD);
                 }
             }
+
+            menu.addSeparator();
+            menu.add(newVerificationProperty);
+
 
         }
 
@@ -9589,6 +9636,9 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                 } else if (e.getSource() == newELN) {
                     ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newELN();
+                } else if (e.getSource() == newVerificationProperty) {
+                    ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
+                    mgui.newVerificationPropertyPanel();
                 }
             }
         };
