@@ -70,7 +70,8 @@ public:
 	\param iName Name of the device
 	\param iScheduler Pointer to the scheduler object
 	*/
-	CPU(ID iID, std::string iName, WorkloadSource* iScheduler, unsigned int iAmountOfCore): SchedulableDevice(iID, iName, iScheduler), _lastTransaction(0), amountOfCore(iAmountOfCore)/*,_schedulingNeeded(false)*/{
+	CPU(ID iID, std::string iName, WorkloadSource* iScheduler, unsigned int iAmountOfCore, std::string iModelName): SchedulableDevice(iID, iName, iScheduler), _lastTransaction(0),
+        amountOfCore(iAmountOfCore),  _modelName(iModelName)/*,_schedulingNeeded(false)*/{
 	}
 	///Destructor
 	virtual ~CPU(){
@@ -112,6 +113,9 @@ public:
 		return os;
 	}
 	inline unsigned int getAmoutOfCore(){ return amountOfCore;} 
+        inline std::string getModelName() {return _modelName;}
+        //inline void setModelName(std::string s) {_modelName=s;}
+        //inline std::string getModelName() {return _modelName;}
 	///Invalidate schedule of CPU
 	/*void setRescheduleFlag(){
 		_schedulingNeeded=true;
@@ -270,7 +274,9 @@ protected:
 	///List of bus masters
 	BusMasterList _busMasterList;
 	///Amount of cores
-	unsigned int amountOfCore;
+	unsigned int amountOfCore; 
+        ///model name
+	std::string _modelName;
 	///Dirty flag of the current scheduling decision
 	//bool _schedulingNeeded;
 };

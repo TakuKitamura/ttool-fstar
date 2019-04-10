@@ -303,7 +303,7 @@ std::cout<<"schedule2HTML--------------------------------------*****************
   
 
   std::ofstream myfile(iTraceFileName.c_str());
-   myfile<<"file name: "<<iTraceFileName.c_str()<<std::endl;
+   myfile<<"model name: "<<(*_simComp->getCPUList().begin())->getModelName();
 
   if (myfile.is_open()) {
     myfile << " date: " << asctime(aTimeinfo)<<std::endl;
@@ -429,7 +429,10 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
 	}	 
       }
       else{
-	myfile << "$var wire 1 " << (*i)->toShortString() << " " << (*i)->toString() << " $end\n";
+	if(((*i)->toShortString().substr(0,2) == "ta"))
+	  myfile << "$var wire 2 " << (*i)->toShortString() << " " << (*i)->toString() << " $end\n";
+	else
+	  myfile << "$var wire 1 " << (*i)->toShortString() << " " << (*i)->toString() << " $end\n";
  	aTopElement = new SignalChangeData();
 	(*i)->getNextSignalChange(true, aTopElement);
 	aQueue.push(aTopElement);
@@ -440,17 +443,6 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
     //  (dynamic_cast<CPU*>(*i))->setCycleTime( (dynamic_cast<CPU*>(*i))->getCycleTime()+1);
   
    
-    
-    
-    //if sucess, make it as a fonction !!!! change
-    for (TraceableDeviceList::const_iterator i=_simComp->getVCDList().begin(); i!= _simComp->getVCDList().end(); ++i){
-      if ((*i)->toShortString().substr(0,3) == "cpu"){
-	for(unsigned int j = 0; j < (dynamic_cast<CPU*>(*i))->getAmoutOfCore(); j++) {
-          (dynamic_cast<CPU*>(*i))->setCycleTime(0);
-        }
-      }
-    }
-     
     myfile << "$var integer 32 clk Clock $end\n";
     myfile << "$upscope $end\n$enddefinitions  $end\n\n";
     
@@ -480,7 +472,9 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
       }
       //myfile << aTopElement->_sigChange << "\n";
       if( aTopElement->_device->toShortString().substr(0,3) == "cpu")
-        myfile << vcdValConvert(aTopElement->_sigChange) << aTopElement->_device->toShortString() << "_core" << aTopElement->_coreNumberVcd << "\n";
+	myfile << vcdValConvert(aTopElement->_sigChange) << aTopElement->_device->toShortString() << "_core" << aTopElement->_coreNumberVcd << "\n"; 
+      else if(aTopElement->_device->toShortString().substr(0,2) == "ta")
+	myfile <<"b"<< vcdTaskValConvert(aTopElement->_sigChange) <<" "<< aTopElement->_device->toShortString() << "\n";
       else myfile << vcdValConvert(aTopElement->_sigChange) << aTopElement->_device->toShortString() << "\n";
       aQueue.pop();
       TMLTime aTime = aTopElement->_time;
