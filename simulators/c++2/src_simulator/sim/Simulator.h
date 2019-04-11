@@ -370,5 +370,6 @@ protected:
 	long _nbOfBranchesToExplore;
 	long _nbOfBranchesExplored;
 	std::string _end;
+       
 };
 #endif

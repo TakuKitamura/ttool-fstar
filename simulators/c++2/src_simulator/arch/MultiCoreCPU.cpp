@@ -60,7 +60,8 @@ MultiCoreCPU::MultiCoreCPU(ID iID,
 			   unsigned int iChangeIdleModeCycles, 
 			   unsigned int iCyclesBeforeIdle, 
 			   unsigned int ibyteDataSize,
-			   unsigned int iAmountOfCore): CPU(iID, iName, iScheduler, iAmountOfCore), /*_lastTransaction(0),*/ _masterNextTransaction(0), _timePerCycle(iTimePerCycle), coreNumber(0)
+			   unsigned int iAmountOfCore): CPU(iID, iName, iScheduler, iAmountOfCore), /*_lastTransaction(0),*/ _masterNextTransaction(0), _timePerCycle(iTimePerCycle), 
+							coreNumber(0)
 #ifdef PENALTIES_ENABLED
                                                                                                                                                                                                                                                                  , _pipelineSize(iPipelineSize), _taskSwitchingCycles(iTaskSwitchingCycles),_brachingMissrate(iBranchingMissrate)
                                                                                                                                                                                                                                                                  , _changeIdleModeCycles(iChangeIdleModeCycles), _cyclesBeforeIdle(iCyclesBeforeIdle)
@@ -581,17 +582,14 @@ void MultiCoreCPU::getNextSignalChange(bool iInit, SignalChangeData* oSigData){
           
 	  std::cout<<"END_TASK_CPU"<<std::endl;
 	  do{
-	     std::cout<<"1111"<<std::endl;
 	    _previousTransEndTime=(*_posTrasactListVCD)->getEndTime();
-	    _posTrasactListVCD++;
-	     std::cout<<"2222"<<std::endl;
+	    _posTrasactListVCD++;	  
 	    while(_posTrasactListVCD != _transactList.end()){
 		if((*_posTrasactListVCD)->getTransactCoreNumber() == oSigData->_coreNumberVcd)
 		  break;
 		else
 		  _posTrasactListVCD++;
 	      }
-	    std::cout<<"3333"<<std::endl;
 	  }while (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTimeOperation()==_previousTransEndTime);
 	  //  std::cout<<"4444"<<std::endl;
 	  if (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTime()==_previousTransEndTime){

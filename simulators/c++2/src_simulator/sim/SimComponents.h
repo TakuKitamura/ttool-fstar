@@ -69,6 +69,12 @@ public:
 	SimComponents(int iHashValue);
 	///Destructor
 	virtual	~SimComponents();
+	///Add name of model
+	/**
+	\param msg is the name of model
+	*/
+	inline void addModelName(std::string msg) {_modelName=msg;}
+        inline std::string getModelName() {return _modelName;}
 	///Add a task
 	/**
 	\param iTask Pointer to task
@@ -307,6 +313,8 @@ protected:
 	ChannelList _channelList;
 	///TEPE listener listener
 	TEPEListenerList _tepeListenerList;
+        ///name of model
+	std::string _modelName;
 #ifdef EBRDD_ENABLED
 	///List holding EBRDDs
 	EBRDDList _ebrddList;
