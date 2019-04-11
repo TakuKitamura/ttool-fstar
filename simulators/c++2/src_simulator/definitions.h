@@ -518,6 +518,7 @@ class EBRDD;
 class EBRDDCommand;
 class SignalConstraint;
 
+
 ///Datatype used for time measurements
 typedef unsigned long long TMLTime;
 ///Datatype used to indicate the virtual length of commands (execution units, data units)

@@ -57,7 +57,7 @@
 #include <EBRDDCommand.h>
 #include <ERC.h>
 #endif
-
+class CurrentComponents;
 
 Simulator::Simulator(SimServSyncInfo* iSyncInfo):_syncInfo(iSyncInfo), _simComp(_syncInfo->_simComponents), _busy(false), _simTerm(false),  _randChoiceBreak(_syncInfo->_simComponents), _wasReset(true), _longRunTime(0), _shortRunTime(-1), _replyToServer(true), _branchCoverage(60), _commandCoverage(100), _terminateExplore(false), _simDuration(0){
 }
@@ -303,7 +303,8 @@ std::cout<<"schedule2HTML--------------------------------------*****************
   
 
   std::ofstream myfile(iTraceFileName.c_str());
-   myfile<<"model name: "<<(*_simComp->getCPUList().begin())->getModelName();
+   //myfile<<"model name: "<<iTraceFileName.c_str();
+  myfile<<"model name: "<< _simComp->getModelName();
 
   if (myfile.is_open()) {
     myfile << " date: " << asctime(aTimeinfo)<<std::endl;

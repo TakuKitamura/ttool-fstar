@@ -51,7 +51,6 @@
 MultiCoreCPU::MultiCoreCPU(ID iID, 
 			   std::string iName, 
 			   WorkloadSource* iScheduler,  
-			   std::string iModelName,
 			   TMLTime iTimePerCycle, 
 			   unsigned int iCyclesPerExeci, 
 			   unsigned int iCyclesPerExecc, 
@@ -61,7 +60,7 @@ MultiCoreCPU::MultiCoreCPU(ID iID,
 			   unsigned int iChangeIdleModeCycles, 
 			   unsigned int iCyclesBeforeIdle, 
 			   unsigned int ibyteDataSize,
-			   unsigned int iAmountOfCore): CPU(iID, iName, iScheduler, iAmountOfCore, iModelName), /*_lastTransaction(0),*/ _masterNextTransaction(0), _timePerCycle(iTimePerCycle), 
+			   unsigned int iAmountOfCore): CPU(iID, iName, iScheduler, iAmountOfCore), /*_lastTransaction(0),*/ _masterNextTransaction(0), _timePerCycle(iTimePerCycle), 
 							coreNumber(0)
 #ifdef PENALTIES_ENABLED
                                                                                                                                                                                                                                                                  , _pipelineSize(iPipelineSize), _taskSwitchingCycles(iTaskSwitchingCycles),_brachingMissrate(iBranchingMissrate)

@@ -77,7 +77,7 @@ public:
 	\param iCyclesBeforeIdle Idle cycles which elapse before entering idle mode
 	\param ibyteDataSize Machine word length
     	*/
-	MultiCoreCPU(ID iID, std::string iName, WorkloadSource* iScheduler,std::string iModelName,TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize, unsigned int iAmountOfCore);
+	MultiCoreCPU(ID iID, std::string iName, WorkloadSource* iScheduler,TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize, unsigned int iAmountOfCore);
 	///Destructor
 	virtual ~MultiCoreCPU();
 	///Determines the next CPU transaction to be executed
