@@ -47,6 +47,8 @@ import myutil.TraceManager;
 import ui.*;
 import ui.util.IconManager;
 import ui.window.JDialogManageListOfString;
+import verification.Property;
+import verification.VerificationStorage;
 
 import javax.swing.*;
 import java.awt.*;
@@ -62,7 +64,7 @@ import java.util.Vector;
    * @version 1.0 26/01/2016
    * @author Ludovic APVRILLE
  */
-public abstract class VerificationPropertyGeneric extends TGCScalableWithInternalComponent   {
+public abstract class VerificationPropertyGeneric extends TGCScalableWithInternalComponent implements VerificationStorage {
     public String oldValue;
     protected int textX = 5;
     protected int textY = 22;
@@ -80,28 +82,16 @@ public abstract class VerificationPropertyGeneric extends TGCScalableWithInterna
     protected int currentFontSize = -1;
     protected boolean displayText = true;
 
-    protected int typeOfReference;
 
-    protected final static String[] TYPE_STR = {"Assumptions", "Requirements",
-            "Analysis", "Design", "Properties", "Prototyping", "Functional view",
-            "Architecture view", "Mapping", "Communication pattern", "Attacks", "Faults"};
-    protected final static int NB_TYPE = 6;
 
-    protected final static int ASSUMPTIONS = 0;
-    protected final static int REQUIREMENT = 1;
-    protected final static int ANALYSIS = 2;
-    protected final static int DESIGN = 3;
-    protected final static int PROPERTY = 4;
-    protected final static int PROTOTYPING = 5;
-    protected final static int FUNCTIONAL_VIEW = 6;
-    protected final static int ARCHITECTURE_VIEW = 7;
-    protected final static int MAPPING_VIEW = 8;
-    protected final static int CP_VIEW = 9;
-    protected final static int ATTACK = 10;
-    protected final static int FAULT = 11;
+
+
+    protected Vector<Property> properties;
+
+
     
 
-    protected JMenuItem diagramReference;
+
 
 
 
@@ -143,6 +133,8 @@ public abstract class VerificationPropertyGeneric extends TGCScalableWithInterna
 
         myImageIcon = IconManager.imgic5006;
 
+        properties = new Vector<>();
+
 
         actionOnAdd();
     }
@@ -154,7 +146,6 @@ public abstract class VerificationPropertyGeneric extends TGCScalableWithInterna
 //        int w, c;
         int size;
 
-        value = TYPE_STR[typeOfReference];
 
         if (!tdp.isScaled()) {
             graphics = g;
@@ -290,7 +281,7 @@ public abstract class VerificationPropertyGeneric extends TGCScalableWithInterna
     }
 
     public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
-        addDiagramReference(frame);
+        //addDiagramReference(frame);
         return true;
         // On the name ?
         /*oldValue = value;
@@ -367,9 +358,14 @@ public abstract class VerificationPropertyGeneric extends TGCScalableWithInterna
         return null;
     }
 
+    public boolean addProperty(Property p) {
+        properties.add(p);
+        return true;
+    }
 
 
-    public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
+
+    /*public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
 
         componentMenu.addSeparator();
 
@@ -389,11 +385,9 @@ public abstract class VerificationPropertyGeneric extends TGCScalableWithInterna
         }
 
         return true;
-    }
+    }*/
 
-    public void addDiagramReference(JFrame frame) {
 
-    }
 
     /*spublic abstract void makeValidationInfos(SysmlsecMethodologyDiagramName dn);
 

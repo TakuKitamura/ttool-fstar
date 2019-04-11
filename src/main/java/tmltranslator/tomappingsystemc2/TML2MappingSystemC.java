@@ -114,6 +114,9 @@ public class TML2MappingSystemC implements IDiploSimulatorCodeGenerator {
         //tepeTranslator.generateTEPEs();
     }
 
+    public void setModelName(String _modelName) {
+    }
+
     public void saveFile(String path, String filename) throws FileException {
         generateTaskFiles(path);
         FileUtils.saveFile(path + filename + ".cpp", getFullCode());

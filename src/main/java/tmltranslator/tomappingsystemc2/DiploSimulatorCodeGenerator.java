@@ -77,6 +77,8 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
     private String header, declaration, mainFile, src;
     private ArrayList<MappedSystemCTask> tasks;
 
+    private String modelName = "LovelyModel";
+
     //private ArrayList<EBRDD> ebrdds;
     //private ArrayList<TEPE> tepes;
     SystemCTEPE tepeTranslator;
@@ -124,6 +126,10 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         tmlmapping.makeMinimumMapping();
         tepeTranslator = new SystemCTEPE(_tepes, this);
         namesGen = NamesGenerationHelper.INSTANCE;
+    }
+
+    public void setModelName(String _modelName) {
+        modelName = _modelName;
     }
 
     public void saveFile(String path, String filename) throws FileException {
@@ -269,8 +275,8 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
 
 	// Declaration of Model Name 
 	declaration += "//Declaration of Model Name" + CR;
-        declaration += "std::string msg=" + "\"LovelyModel\"" + SCCR;
-        declaration += "addModelName(" + "\"LovelyModel\"" + ")" + SCCR;
+        declaration += "std::string msg=" + "\"" + modelName + "\"" + SCCR;
+        declaration += "addModelName(" + "\"" + modelName + "\"" + ")" + SCCR;
   
 
         // Declaration of Buses

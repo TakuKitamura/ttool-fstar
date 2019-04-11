@@ -64,7 +64,6 @@ public class VerificationPropertySafety extends VerificationPropertyGeneric {
         connectingPoint = new TGConnectingPoint[nbConnectingPoint];
         //connectingPoint[0] = new SysmlsecMethodologyConnectingPoint(this, 0, 0, false, true, 0.5, 0, TGConnectingPoint.WEST);
 
-        typeOfReference = PROPERTY;
 
         addTGConnectingPointsCommentTop();
 

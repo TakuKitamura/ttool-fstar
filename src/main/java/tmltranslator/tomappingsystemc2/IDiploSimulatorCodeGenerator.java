@@ -51,4 +51,6 @@ public interface IDiploSimulatorCodeGenerator {
     void saveFile(String path,
                   String filename)
             throws FileException;
+
+    public void setModelName(String _name);
 }

@@ -61,7 +61,7 @@ import java.util.List;
 
 
 /**
- * Class TIFTranslator
+ * Class TMLTranslator
  * Linecommand application for translating TIF to other languages
  * Creation: 29/06/2007
  * @version 1.1 30/05/2014
