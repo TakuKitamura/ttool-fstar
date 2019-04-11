@@ -267,6 +267,12 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
 
         declaration += CR;
 
+	// Declaration of Model Name 
+	declaration += "//Declaration of Model Name" + CR;
+        declaration += "std::string msg=" + "\"LovelyModel\"" + SCCR;
+        declaration += "addModelName(" + "\"LovelyModel\"" + ")" + SCCR;
+  
+
         // Declaration of Buses
         declaration += "//Declaration of Buses" + CR;
 

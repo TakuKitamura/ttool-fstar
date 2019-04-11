@@ -2687,7 +2687,6 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         }
 
     }
-
     public void openProjectFromFile(File _f) {
         String data = null;
         File tmpFile;
