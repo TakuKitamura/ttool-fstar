@@ -63,8 +63,8 @@ public class Command implements CommandInterface {
     }
     public  String getCommand() {
         return "default";
-
     }
+
     public  String getShortCommand() {
         return getCommand();
     }
@@ -117,6 +117,7 @@ public class Command implements CommandInterface {
         return "";
     }
 
+
     public String getHelp(int level) {
         String dec = getLevelString(level);
         /*String h = "";
@@ -138,6 +139,8 @@ public class Command implements CommandInterface {
 
         return b.toString();
     }
+
+
 
     public String getLevelString(int level) {
         String ret = "";
@@ -174,9 +177,6 @@ public class Command implements CommandInterface {
     }
 
     public void addAndSortSubcommand(Command c) {
-        /*if (subcommands.size() == 0) {
-            subcommands.add(c);
-        }*/
 
         int index = 0;
         for (Command cmd: subcommands) {
@@ -186,6 +186,26 @@ public class Command implements CommandInterface {
             index ++;
         }
         subcommands.add(index, c);
+    }
+
+    public Command getSubCommandByName(String cmd) {
+        String comm = cmd;
+
+        int index = cmd.indexOf(" ");
+
+        if (index > 0) {
+            comm = cmd.substring(0, index);
+        }
+
+        for (Command c: subcommands) {
+            if ((c.getShortCommand().compareTo(cmd) == 0) || (c.getCommand().compareTo(cmd) == 0)) {
+                if (index == -1) {
+                    return c;
+                }
+                return c.getSubCommandByName(cmd.substring(index+1, cmd.length()).trim());
+            }
+        }
+        return null;
     }
 
 }

@@ -77,7 +77,7 @@ public class Action extends Command  {
 
     private final static String NAVIGATE_LEFT_PANEL = "navigate-left-panel";
 
-    private final static String GENERIC = "generic";
+
 
     public Action() {
 
@@ -364,22 +364,6 @@ public class Action extends Command  {
             }
         };
 
-        // Navigation
-        Command navigateLeftPanel = new Command() {
-            public String getCommand() { return NAVIGATE_LEFT_PANEL; }
-            public String getShortCommand() { return "nlf"; }
-            public String getDescription() { return "Select the edition panel on the left"; }
-
-            public  String executeCommand(String command, Interpreter interpreter) {
-                if (!interpreter.isTToolStarted()) {
-                    return Interpreter.TTOOL_NOT_STARTED;
-                }
-
-                interpreter.mgui.selectPanelOnTheLeft();
-                return null;
-            }
-        };
-
         Command movePanelToTheLeftPanel = new Command() {
             public String getCommand() { return NAVIGATE_PANEL_TO_LEFT; }
             public String getShortCommand() { return "nptf"; }
@@ -396,21 +380,7 @@ public class Action extends Command  {
             }
         };
 
-        Command generic = new Command() {
-            public String getCommand() { return GENERIC; }
-            public String getShortCommand() { return "g"; }
-            public String getDescription() { return "Apply a generic function of TTool"; }
-
-            public  String executeCommand(String command, Interpreter interpreter) {
-                if (!interpreter.isTToolStarted()) {
-                    return Interpreter.TTOOL_NOT_STARTED;
-                }
-
-                ActionPerformer.actionPerformed(interpreter.mgui, null, command.trim(), null);
-
-                return null;
-            }
-        };
+        Command generic = new Generic();
 
 
         addAndSortSubcommand(start);
@@ -422,9 +392,7 @@ public class Action extends Command  {
         addAndSortSubcommand(diplodocusOneTraceSimulation);
         addAndSortSubcommand(diplodocusGenerateTML);
         addAndSortSubcommand(diplodocusUPPAAL);
-
-        addAndSortSubcommand(navigateLeftPanel);
-
+        addAndSortSubcommand(movePanelToTheLeftPanel);
         addAndSortSubcommand(generic);
 
     }

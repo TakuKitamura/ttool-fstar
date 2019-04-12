@@ -40,10 +40,19 @@
 package cli;
 
 import common.ConfigurationTTool;
+import common.SpecConfigTTool;
 import launcher.RTLLauncher;
+import myutil.FileUtils;
 import myutil.PluginManager;
 import myutil.TraceManager;
+import tmltranslator.*;
+import tmltranslator.dsez3engine.InputInstance;
+import tmltranslator.dsez3engine.OptimizationModel;
+import tmltranslator.dsez3engine.OptimizationResult;
+import ui.ActionPerformer;
 import ui.MainGUI;
+import ui.TGComponent;
+import ui.TURTLEPanel;
 import ui.util.IconManager;
 
 import java.io.File;
@@ -51,71 +60,38 @@ import java.util.BitSet;
 import java.util.*;
 
 /**
- * Class Set
- * Creation: 25/10/2018
- * Version 2.0 25/10/2018
+ * Class Generic
+ * Creation: 12/04/2019
+ * Version 2.0 12/04/2019
  *
  * @author Ludovic APVRILLE
  */
-public class Help extends Command  {
+public class Generic extends Command  {
+    private final static String GENERIC = "generic";
 
-
-    public Help() {
+    public Generic() {
 
     }
 
-    public List<Command> getListOfSubCommands() {
-        return subcommands;
-    }
-
-    public String getCommand() {
-        return "help";
-    }
-
-    public String getShortCommand() {
-        return "h";
-    }
-
-    public String getUsage() {
-        return "help or help <command>";
-    }
-
-    public String getDescription() {
-        return "Displays the general help of the help of a given command";
-    }
-
-    public String getExample() {
-        return "help action";
-    }
-
+    public String getCommand() { return GENERIC; }
+    public String getShortCommand() { return "g"; }
+    public String getDescription() { return "Apply a generic function of TTool"; }
+    
 
     public  String executeCommand(String command, Interpreter interpreter) {
-        if (command.trim().length() == 0) {
-            String s = "";
-            for(Command c: Interpreter.commands) {
-                s += c.getShortCommand() + "\t" + c.getCommand() + "\t" + c.getDescription() + "\n";
-            }
-            interpreter.print(s);
-            TraceManager.addDev("Info on command");
-            return null;
+        if (!interpreter.isTToolStarted()) {
+            return Interpreter.TTOOL_NOT_STARTED;
         }
 
-
-        Command c = interpreter.getSubCommandByName(command);
-
-        if (c == null) {
-            return Interpreter.BAD_COMMAND_NAME;
-        }
-
-        interpreter.print(c.getHelp(1));
-
+        ActionPerformer.actionPerformed(interpreter.mgui, null, command.trim(), null);
 
         return null;
-
     }
 
-    public void fillSubCommands() {
 
+
+
+    public void fillSubCommands() {
     }
 
 
