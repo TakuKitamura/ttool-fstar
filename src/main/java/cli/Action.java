@@ -413,19 +413,19 @@ public class Action extends Command  {
         };
 
 
-        subcommands.add(start);
-        subcommands.add(open);
-        subcommands.add(quit);
-        subcommands.add(checkSyntax);
-        subcommands.add(diplodocusInteractiveSimulation);
-        subcommands.add(diplodocusFormalVerification);
-        subcommands.add(diplodocusOneTraceSimulation);
-        subcommands.add(diplodocusGenerateTML);
-        subcommands.add(diplodocusUPPAAL);
+        addAndSortSubcommand(start);
+        addAndSortSubcommand(open);
+        addAndSortSubcommand(quit);
+        addAndSortSubcommand(checkSyntax);
+        addAndSortSubcommand(diplodocusInteractiveSimulation);
+        addAndSortSubcommand(diplodocusFormalVerification);
+        addAndSortSubcommand(diplodocusOneTraceSimulation);
+        addAndSortSubcommand(diplodocusGenerateTML);
+        addAndSortSubcommand(diplodocusUPPAAL);
 
-        subcommands.add(navigateLeftPanel);
+        addAndSortSubcommand(navigateLeftPanel);
 
-        subcommands.add(generic);
+        addAndSortSubcommand(generic);
 
     }
 }

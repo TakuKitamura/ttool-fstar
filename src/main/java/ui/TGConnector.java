@@ -237,6 +237,16 @@ public abstract class TGConnector extends TGCScalableWithInternalComponent {
         return p2;
     }
 
+    public TGComponent getTGComponent1() {
+        TDiagramPanel tdp = getTDiagramPanel();
+        return tdp.getComponentToWhichBelongs(p1);
+    }
+
+    public TGComponent getTGComponent2() {
+        TDiagramPanel tdp = getTDiagramPanel();
+        return tdp.getComponentToWhichBelongs(p2);
+    }
+
     public void setP1(TGConnectingPoint p) {
         p1 = p;
     }

@@ -109,7 +109,7 @@ public class TML extends Command  {
                 return loadSpec(command);
             }
         };
-        subcommands.add(load);
+        addAndSortSubcommand(load);
 
         Command checkSyntax = new Command() {
             public String getCommand() { return "checksyntax"; }
@@ -121,7 +121,7 @@ public class TML extends Command  {
                 return checkSyntax();
             }
         };
-        subcommands.add(checkSyntax);
+        addAndSortSubcommand(checkSyntax);
 
         Command loadz3lib = new Command() {
             public String getCommand() { return "loadz3lib"; }
@@ -133,7 +133,7 @@ public class TML extends Command  {
                 return loadZ3lib(command);
             }
         };
-        subcommands.add(loadz3lib);
+        addAndSortSubcommand(loadz3lib);
 
         Command z3 = new Command() {
             public String getCommand() { return "z3opt"; }
@@ -145,7 +145,7 @@ public class TML extends Command  {
                 return z3OptimalMappingAnalysis();
             }
         };
-        subcommands.add(z3);
+        addAndSortSubcommand(z3);
 
         Command z3f = new Command() {
             public String getCommand() { return "z3fea"; }
@@ -157,7 +157,7 @@ public class TML extends Command  {
                 return z3FeasibleMappingAnalysis();
             }
         };
-        subcommands.add(z3f);
+        addAndSortSubcommand(z3f);
 
         Command saveResult = new Command() {
             public String getCommand() { return "save-result"; }
@@ -169,7 +169,7 @@ public class TML extends Command  {
                 return saveResult(command);
             }
         };
-        subcommands.add(saveResult);
+        addAndSortSubcommand(saveResult);
 
         Command saveResultMapping = new Command() {
             public String getCommand() { return "save-result-tml-mapping"; }
@@ -181,7 +181,7 @@ public class TML extends Command  {
                 return saveResultTMLMapping(command);
             }
         };
-        subcommands.add(saveResultMapping);
+        addAndSortSubcommand(saveResultMapping);
 
 
 

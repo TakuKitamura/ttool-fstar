@@ -126,7 +126,8 @@ public class Command implements CommandInterface {
             h+= "\t" + c.getHelp();
         }*/
 
-        StringBuffer b = new StringBuffer(dec + "* " + getCommand() + " (" + getShortCommand() + "): " + getUsage() + "\n" + dec + getDescription() +
+        StringBuffer b = new StringBuffer(dec + "* " + getCommand() + " (" + getShortCommand() + "): " + getUsage() + "\n" + dec + "   " +
+                getDescription() +
                 "\n");
         if (getExample().length() > 0) {
             b.append(dec + "Example: " + getExample() + "\n");
@@ -170,6 +171,21 @@ public class Command implements CommandInterface {
         }
 
         return couldBe;
+    }
+
+    public void addAndSortSubcommand(Command c) {
+        /*if (subcommands.size() == 0) {
+            subcommands.add(c);
+        }*/
+
+        int index = 0;
+        for (Command cmd: subcommands) {
+            if (c.getCommand().compareTo(cmd.getCommand()) < 0) {
+                break;
+            }
+            index ++;
+        }
+        subcommands.add(index, c);
     }
 
 }

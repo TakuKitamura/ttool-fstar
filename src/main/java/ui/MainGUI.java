@@ -9497,8 +9497,10 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                 }
             }
 
-            menu.addSeparator();
-            menu.add(newVerificationProperty);
+            if (experimentalOn) {
+                menu.addSeparator();
+                menu.add(newVerificationProperty);
+            }
 
 
         }

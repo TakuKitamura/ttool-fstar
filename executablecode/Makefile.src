@@ -1,1 +1,1 @@
-SRCS = generated_src/main.c generated_src/MainBlock.c 
+SRCS = generated_src/main.c generated_src/MeasurementDisplayer2.c generated_src/MeasurementDisplayer1.c generated_src/MeasurementGenerator.c 

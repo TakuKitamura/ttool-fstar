@@ -384,7 +384,12 @@ public class AvatarTransition extends AvatarStateMachineElement {
                 ret += s.trim() + " / ";
             }
         }
-        String s = guard.toString();
+        String s = "";
+        if (guard == null) {
+            s = "";
+        } else {
+            s = guard.toString();
+        }
         if (s.trim().length() > 0) {
             ret += "guard " + s.trim() + " / ";
         }

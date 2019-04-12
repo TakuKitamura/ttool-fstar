@@ -61,8 +61,8 @@ import java.util.*;
  */
 public class Interpreter implements Runnable, TerminalProviderInterface  {
 
-    public final static Command[] commands = {new Help(), new Quit(), new Action(),
-            new Set(), new Wait(), new Print(), new History(), new TestSpecific(), new TML()};
+    public final static Command[] commands = {new Action(), new Help(), new History(), new Print(), new Quit(),
+            new TestSpecific(), new TML(), new Set(), new Wait()};
 
     // Errors
     public final static String UNKNOWN = "Unknown command";
