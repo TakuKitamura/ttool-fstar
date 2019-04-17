@@ -184,6 +184,34 @@ std::string SchedulableDevice::determineHTMLCellClass( 	std::map<TMLTask*, std::
 	return taskColors[ task ];
 }
 
+void SchedulableDevice::averageLoad(std::ofstream& myfile){
+  TMLTime _maxEndTime=0;
+  for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
+      TMLTime _endTime= (*i)->getEndTime();
+      _maxEndTime=max(_maxEndTime,_endTime);
+  }
+  std::cout<<"max end time is "<<_maxEndTime<<std::endl;
+  for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
+
+      std::cout<<"transaction end time "<<(*i)->getEndTime()<<std::endl;
+      if(_maxEndTime<=60 ||(*i)->getEndTime()>=_maxEndTime-60)
+	++_averageLoadOneMinute;
+      if(_maxEndTime<=300 || (*i)->getEndTime()>=_maxEndTime-300)
+	++_averageLoadFiveMinute;
+      if(_maxEndTime<=900 || (*i)->getEndTime()>=_maxEndTime-900)
+	++_averageLoadFifteenMinute;
+   
+  }
+  myfile<<"1 minute average load is "<< _averageLoadOneMinute<<"<br>";
+  myfile<<"5 minute average load is "<< _averageLoadFiveMinute<<"<br>";
+  myfile<<"15 minute average load is "<< _averageLoadFifteenMinute<<"<br>";
+  _averageLoadOneMinute=0;
+  _averageLoadFiveMinute=0;
+  _averageLoadFifteenMinute=0;
+  
+}
+
+
 void SchedulableDevice::schedule2HTML(std::ofstream& myfile) const {    
 	myfile << "<h2><span>Scheduling for device: "<< _name << "</span></h2>" << std::endl;
 

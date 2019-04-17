@@ -74,6 +74,7 @@ public:
       	\return Pointer to transaction
     	*/
 	virtual TMLTransaction* getNextTransaction() { return _nextTransaction; }
+	void averageLoad(std::ofstream& myfile);
 
 	///Writes a HTML representation of the schedule to an output file
 	/**
@@ -160,6 +161,10 @@ protected:
 	static TMLTime _simulatedTime;
 	///End time of the last scheduled transaction
 	TMLTime _endSchedule;
+
+ 	TMLTime _averageLoadOneMinute;
+ 	TMLTime _averageLoadFiveMinute;
+  	TMLTime _averageLoadFifteenMinute;
 	///Scheduler
 	WorkloadSource* _scheduler;
 	///List containing all already scheduled transactions
@@ -177,7 +182,6 @@ protected:
 	static TMLTime _overallTransNo;
 	static TMLTime _overallTransSize;
 	unsigned int _cycleTime;
-
 	static void writeHTMLColumn(	std::ofstream& myfile,
 									const unsigned int colSpan,
 									const std::string cellClass );

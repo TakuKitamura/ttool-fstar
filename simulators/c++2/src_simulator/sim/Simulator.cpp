@@ -360,9 +360,11 @@ std::cout<<"schedule2HTML--------------------------------------*****************
       for(unsigned int j = 0; j < (*i)->getAmoutOfCore(); j++) {
         std::cout<<"core number is "<<(*i)->getAmoutOfCore()<<std::endl;
 	(*i)->schedule2HTML(myfile);
+	(*i)->averageLoad(myfile);
+	(*i)->drawPieChart(myfile);
 	(*i)->setCycleTime((*i)->getCycleTime()+1);
 	std::cout<<"~~~~~~~~~~~~~~~~~~"<<std::endl;
-	if ( jsfile.is_open() ) {
+	/*	if ( jsfile.is_open() ) {
 	  //jsfile << SCHED_HTML_JS_CONTENT;
 	
 	  
@@ -375,7 +377,7 @@ std::cout<<"schedule2HTML--------------------------------------*****************
 	  myfile << SCHED_HTML_BEG_STYLE; // <style>\n";
 	  //myfile << SCHED_HTML_CSS_CONTENT;
 	  myfile << SCHED_HTML_END_STYLE; // <style>\n";
-	}
+	  }*/
 	
       }
         if((*i)->getAmoutOfCore() == 1)
@@ -385,6 +387,7 @@ std::cout<<"schedule2HTML--------------------------------------*****************
     //for(BusList::const_iterator j=_simComp->getBusIterator(false); j != _simComp->getBusIterator(true); ++j){
     for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
       (*j)->schedule2HTML(myfile);
+      (*j)->averageLoad(myfile);
     }
     //for_each(iCPUlist.begin(), iCPUlist.end(),std::bind2nd(std::mem_fun(&CPU::schedule2HTML),myfile));
 
