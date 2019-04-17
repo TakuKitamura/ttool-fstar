@@ -326,9 +326,13 @@ std::cout<<"schedule2HTML--------------------------------------*****************
 
     const std::string ext( EXT_HTML );
     const std::string cssFileName = iTraceFileName.substr( indexSlash + 1, iTraceFileName.length() - indexSlash - ext.length() - 1 ) + EXT_CSS; 
+    const std::string jsFileName = iTraceFileName.substr( indexSlash + 1, iTraceFileName.length() - indexSlash - ext.length() - 1 ) + EXT_JS;
     //myfile<<"length is "<< iTraceFileName.length() - indexSlash - ext.length() - 1<<std::endl;
     const std::string cssFullFileName = iTraceFileName.substr( 0, indexSlash + 1 ) + cssFileName;
+    const std::string jsFullFileName =  iTraceFileName.substr( 0, indexSlash + 1 ) + jsFileName;
     std::ofstream cssfile( cssFullFileName.c_str() );
+    std::ofstream jsfile( jsFullFileName.c_str() );
+    
     //myfile<<"full name is "<<cssFullFileName<<std::endl;
     if ( cssfile.is_open() ) {
       cssfile << SCHED_HTML_CSS_CONTENT;
@@ -358,10 +362,26 @@ std::cout<<"schedule2HTML--------------------------------------*****************
 	(*i)->schedule2HTML(myfile);
 	(*i)->setCycleTime((*i)->getCycleTime()+1);
 	std::cout<<"~~~~~~~~~~~~~~~~~~"<<std::endl;
+	if ( jsfile.is_open() ) {
+	  //jsfile << SCHED_HTML_JS_CONTENT;
+	
+	  
+	  myfile << SCHED_HTML_JS_CANVAS_NAME;
+	  myfile << SCHED_HTML_JS_BEG_LINK;
+	  myfile << jsFullFileName;     
+	  myfile << SCHED_HTML_JS_END_LINK;
 	}
+	else {
+	  myfile << SCHED_HTML_BEG_STYLE; // <style>\n";
+	  //myfile << SCHED_HTML_CSS_CONTENT;
+	  myfile << SCHED_HTML_END_STYLE; // <style>\n";
+	}
+	
+      }
         if((*i)->getAmoutOfCore() == 1)
 	   (*i)->setCycleTime(0);
     }
+    jsfile.close();
     //for(BusList::const_iterator j=_simComp->getBusIterator(false); j != _simComp->getBusIterator(true); ++j){
     for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
       (*j)->schedule2HTML(myfile);

@@ -232,6 +232,7 @@ using std::max;
 #define EXT_TXT ".txt"
 #define EXT_HTML ".html"
 #define EXT_CSS ".css"
+#define EXT_JS ".js"
 
 // Issue #4 HTML Trace Constants
 #define MAX_COL_SPAN 1000
@@ -253,6 +254,9 @@ using std::max;
 #define SCHED_HTML_END_STYLE "</style>\n"
 #define SCHED_HTML_CSS_BEG_LINK "<link rel=\"stylesheet\" type=\"text/css\" href=\""
 #define SCHED_HTML_CSS_END_LINK "\" />\n"
+#define SCHED_HTML_JS_CANVAS_NAME "\n<canvas id=\"myCanvas\"> </canvas>\n"
+#define SCHED_HTML_JS_BEG_LINK "<script type=\"text/javascript\" src=\""
+#define SCHED_HTML_JS_END_LINK "\"></script>\n"
 #define NB_HTML_COLORS 15
 #define SCHED_HTML_CSS_CONTENT "table{\n \
 	border-collapse: collapse;\n \
@@ -497,6 +501,8 @@ h2 span {\n \
 	background-color: LightGoldenRodYellow;\n \
 	border-style: solid solid solid none;\n \
 }"
+
+
 
 class TMLTask;
 class TMLTransaction;
