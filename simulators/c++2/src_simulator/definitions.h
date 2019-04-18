@@ -508,6 +508,7 @@ class TMLTask;
 class TMLTransaction;
 class TMLCommand;
 class CPU;
+class FPGA;
 class SchedulableCommDevice;
 class SchedulableDevice;
 class Parameter;
@@ -539,6 +540,8 @@ typedef std::list<TMLTask*> TaskList;
 typedef std::vector<TMLTransaction*> TransactionList;
 ///Datatype holding pointer to CPUs, used by SimComponents and simulation kernel
 typedef std::list<CPU*> CPUList;
+///Datatype holding pointer to FPGAs, used by SimComponents and simulation kernel
+typedef std::list<FPGA*> FPGAList;
 ///Datatype holding pointer to CPUs and Bridges, used by simulation kernel for scheduling
 typedef std::list<SchedulableDevice*> SchedulingList;
 ///Datatype holding references to buses, used by SimComponents and simulation kernel

@@ -54,6 +54,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 class TMLCommand;
 class CPU;
+class FPGA;
 class Comment;
 
 enum vcdTaskVisState
@@ -74,6 +75,7 @@ public:
 	\param iNoOfCPUs Number of CPUs
     	*/
 	TMLTask(ID iID, Priority iPriority, std::string iName, CPU** iCPU, unsigned int iNoOfCPUs);
+	//TMLTask(ID iID, Priority iPriority, std::string iName, FPGA** iFPGA, unsigned int iNoOfFPGAs);
 	///Destructor
 	virtual ~TMLTask();
 	///Returns the priority of the task

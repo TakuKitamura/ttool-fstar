@@ -100,6 +100,11 @@ public:
 	\param iCPU Pointer to CPU
 	*/
 	void addCPU(CPU* iCPU);
+	///Add a FPGA
+	/**
+	\param iFPGA Pointer to FPGA
+	*/
+	//void addFPGA(FPGA* iFPGA);
 	///Add a bus
 	/**
 	\param iBus Pointer to bus
@@ -206,6 +211,11 @@ public:
 	\return Const iterator for CPU list
 	*/	
 	inline const CPUList& getCPUList() const{return _cpuList;}
+	///Returns an iterator for the internal FPGA list
+	/**
+	\return Const iterator for FPGA list
+	*/	
+	//inline const FPGAList& getFPGAList() const{return _fpgaList;}
 	///Returns an iterator for the internal bus list
 	/**
 	\return Const iterator for bus list
@@ -299,6 +309,8 @@ protected:
 	Simulator* _simulator;
 	///List holding CPUs
 	CPUList _cpuList;
+	///List holding FPGAs
+	//FPGAList _fpgaList;
 	///List holding schedulable communication devices
 	BusList _busList;
 	///List holding traceable devices

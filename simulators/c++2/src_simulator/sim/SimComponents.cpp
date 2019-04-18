@@ -113,6 +113,12 @@ void SimComponents::addCPU(CPU* iCPU){
 	_serList.push_back(dynamic_cast<Serializable*>(iCPU));
 }
 
+/*void SimComponents::addFPGA(FPGA* iFPGA){
+	_fpgaList.push_back(ifpga);
+	_fpgaList.push_back(dynamic_cast<TraceableDevice*>(ifpga));
+	_fpgaList.push_back(dynamic_cast<Serializable*>(ifpga));
+}*/
+
 void SimComponents::addBus(SchedulableCommDevice* iBus){
 	_busList.push_back(iBus);
 	_vcdList.push_back(dynamic_cast<TraceableDevice*>(iBus));

@@ -42,6 +42,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLCommand.h>
 #include <TMLStopCommand.h>
 #include <CPU.h>
+#include <FPGA.h>
 
 //#define RESET_SCHEDULING {_isScheduled=false;if (_noOfCPUs>1) _currentCPU=0;}
 
@@ -57,6 +58,19 @@ TMLTask::TMLTask(ID iID, Priority iPriority, std::string iName, CPU** iCPU, unsi
 	_instanceCount++;
 	if (_noOfCPUs==1) _currentCPU = _cpus[0];
 }
+
+/*TMLTask::TMLTask(ID iID, Priority iPriority, std::string iName, FPGA** iFPGA, unsigned int iNoOfFPGAs): WorkloadSource(iPriority), _ID(iID), _name(iName), _endLastTransaction(0), _currCommand(0), _firstCommand(0), _currentFPGA(0), _fpgas(iCPU), _noOffpgas(iNoOfCPUs), _comment(0), _busyCycles(0), _FPGAContentionDelay(0), _noFPGATransactions(0), _justStarted(true), _myInstance(_instanceCount), */
+/*_isScheduled(false),*/
+/* _stateHash(0, 30) , _liveVarList(0), _hashInvalidated(true){
+	for (unsigned int i=0; i< _noOfFPGAs; i++)
+		_fpgas[i]->registerTask(this);
+#ifdef ADD_COMMENTS
+	_commentList.reserve(BLOCK_SIZE_TRANS);
+#endif
+	_transactList.reserve(BLOCK_SIZE_TRANS);
+	_instanceCount++;
+	if (_noOfFPGAs==1) _currentFPGA = _fpgas[0];
+}*/
 
 TMLTask::~TMLTask(){
 #ifdef ADD_COMMENTS
