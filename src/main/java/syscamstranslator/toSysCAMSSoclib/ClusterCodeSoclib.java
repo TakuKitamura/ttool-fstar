@@ -227,7 +227,8 @@ public class ClusterCodeSoclib {
                     + "\tsca_close_tabular_trace_file(tfp);" + CR;
               */
             corpsCluster = corpsCluster + "};" + CR2;
-	    // corpsCluster = corpsCluster + "#endif // " + cluster.getClusterName().toUpperCase() + "_TDF_H"+ CR;//DG
+	    corpsCluster = corpsCluster + "#endif "+ CR;//DG
+	    //corpsCluster = corpsCluster + "#endif // " + cluster.getClusterName().toUpperCase() + "_TDF_H"+ CR;//DG
 		} else {
 			corpsCluster = "";
 		}

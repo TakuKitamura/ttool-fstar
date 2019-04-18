@@ -109,7 +109,7 @@ public class Header
 	// if (with_hw_accellerator>0){  
 	//DG 23.08. actuellement il ne les trouve pas!
 	int hwas = 0;
-	header += "#include \"fifo_virtual_copro_wrapper.h\"" + CR;
+	//header += "#include \"fifo_virtual_copro_wrapper.h\"" + CR;
 
       for (AvatarCoproMWMR HWAccelerator:TopCellGenerator.avatardd.
 	     getAllCoproMWMR ())
