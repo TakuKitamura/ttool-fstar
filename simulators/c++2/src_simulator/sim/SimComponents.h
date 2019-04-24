@@ -104,7 +104,7 @@ public:
 	/**
 	\param iFPGA Pointer to FPGA
 	*/
-	//void addFPGA(FPGA* iFPGA);
+	void addFPGA(FPGA* iFPGA);
 	///Add a bus
 	/**
 	\param iBus Pointer to bus
@@ -152,6 +152,12 @@ public:
 	\return Pointer to that CPU
 	*/
 	SchedulableDevice* getCPUByName(const std::string& iCPU) const;
+	///Searches for a FPGA based on its name
+	/**
+	\param iFPGA Name of the FPGA
+	\return Pointer to that FPGA
+	*/
+	SchedulableDevice* getFPGAByName(const std::string& iFPGA) const;
 	///Searches for a Task based on its name
 	/**
 	\param iTask Name of the Task
@@ -182,6 +188,12 @@ public:
 	\return Pointer to that CPU
 	*/
 	SchedulableDevice* getCPUByID(ID iID) const;
+	///Searches for a FPGA based on its name
+	/**
+	\param iID ID of the FPGA
+	\return Pointer to that FPGA
+	*/
+	SchedulableDevice* getFPGAByID(ID iID) const;
 	///Searches for a Task based on its name
 	/**
 	\param iID ID of the Task
@@ -215,7 +227,7 @@ public:
 	/**
 	\return Const iterator for FPGA list
 	*/	
-	//inline const FPGAList& getFPGAList() const{return _fpgaList;}
+	inline const FPGAList& getFPGAList() const{return _fpgaList;}
 	///Returns an iterator for the internal bus list
 	/**
 	\return Const iterator for bus list
@@ -304,13 +316,14 @@ public:
 	virtual void generateTEPEs()=0;
 	void showTaskStates();
 	bool couldCPUBeIdle(CPU* iCPU);
+	bool couldFPGABeIdle(FPGA* iFPGA);
 protected:
 	///Pointer to simulator
 	Simulator* _simulator;
 	///List holding CPUs
 	CPUList _cpuList;
 	///List holding FPGAs
-	//FPGAList _fpgaList;
+	FPGAList _fpgaList;
 	///List holding schedulable communication devices
 	BusList _busList;
 	///List holding traceable devices

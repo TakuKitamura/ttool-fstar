@@ -48,6 +48,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <string.h>
 #include <iostream>
 #include <sstream>
+#include <iomanip>
 #include <fstream>
 #include <map>
 #include <set>
@@ -220,6 +221,8 @@ using std::max;
 #define TAG_UTILc "</util>"
 #define TAG_CPUo "<cpu"
 #define TAG_CPUc "</cpu>"
+#define TAG_FPGAo "<fpga"
+#define TAG_FPGAc "</fpga>"
 #define TAG_PROGRESSo "<progr>"
 #define TAG_PROGRESSc "</progr>"
 #define TAG_CURRTASKo "<currtask>"

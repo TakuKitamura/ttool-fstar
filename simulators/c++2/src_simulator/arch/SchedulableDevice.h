@@ -68,6 +68,7 @@ public:
 	virtual void schedule()=0;
 	///Adds the transaction determined by the scheduling algorithm to the internal list of scheduled transactions
 	virtual bool addTransaction(TMLTransaction* iTransToBeAdded)=0;
+	double round(double number, unsigned int bits);
 
 	///Returns a pointer to the transaction determined by the scheduling algorithm
     	/**
@@ -75,6 +76,7 @@ public:
     	*/
 	virtual TMLTransaction* getNextTransaction() { return _nextTransaction; }
 	void averageLoad(std::ofstream& myfile);
+	void drawTabCell(std::ofstream& myfile);
 
 	///Writes a HTML representation of the schedule to an output file
 	/**
@@ -186,10 +188,12 @@ protected:
 									const unsigned int colSpan,
 									const std::string cellClass );
 
+	
 	static void writeHTMLColumn(	std::ofstream& myfile,
 									const unsigned int colSpan,
 									const std::string cellClass,
 									const std::string title );
+	
 
 	static void writeHTMLColumn(	std::ofstream& myfile,
 									const unsigned int colSpan,
@@ -197,7 +201,6 @@ protected:
 									const std::string title,
 									const std::string content,
 									const bool endline );
-
 	static std::string determineHTMLCellClass( 	std::map<TMLTask*, std::string> &taskColors,
 												TMLTask* task,
 												unsigned int &nextColor );

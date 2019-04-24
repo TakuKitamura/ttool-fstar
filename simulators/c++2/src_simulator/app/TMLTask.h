@@ -75,7 +75,7 @@ public:
 	\param iNoOfCPUs Number of CPUs
     	*/
 	TMLTask(ID iID, Priority iPriority, std::string iName, CPU** iCPU, unsigned int iNoOfCPUs);
-	//TMLTask(ID iID, Priority iPriority, std::string iName, FPGA** iFPGA, unsigned int iNoOfFPGAs);
+	TMLTask(ID iID, Priority iPriority, std::string iName, FPGA** iFPGA, unsigned int iNoOfFPGAs);
 	///Destructor
 	virtual ~TMLTask();
 	///Returns the priority of the task
@@ -103,6 +103,11 @@ public:
       	\return Pointer to the CPU
     	*/
 	inline CPU* getCPU() const {return _currentCPU;}
+	///Return a pointer to the FPGA on which the task in running
+	/**
+      	\return Pointer to the FPGA
+    	*/
+	inline FPGA* getFPGA() const {return _currentFPGA;}
 	///Returns a string representation of the task
 	/**
 	\return Detailed string representation
@@ -226,6 +231,7 @@ public:
 	void refreshStateHash(const char* iLiveVarList);
 	void schedule2TXT(std::ostream& myfile) const;
 	int hasRunnableTrans(CPU* iCPU);
+	int hasRunnableTrans(FPGA* iFPGA);
 protected:
 	///ID of the task
 	ID _ID;
@@ -243,6 +249,12 @@ protected:
 	CPU** _cpus;
 	///Number of cores assigned to the task
 	unsigned int _noOfCPUs;
+	///Pointer to the FPGA which currently executes the task, can be zero in case the Task is mapped onto a multicore FPGA
+	FPGA* _currentFPGA;
+	///Array containing all the cores the task is mapped onto
+	FPGA** _fpgas;
+	///Number of cores assigned to the task
+	unsigned int _noOfFPGAs;
 #ifdef ADD_COMMENTS
 	///Comment list
 	CommentList _commentList;
@@ -261,6 +273,10 @@ protected:
 	unsigned long _CPUContentionDelay;
 	///Number of transactions which have been executed on a CPU
 	unsigned long _noCPUTransactions;
+	///Sum of contention delay of FPGA transactions
+	unsigned long _FPGAContentionDelay;
+	///Number of transactions which have been executed on a FPGA
+	unsigned long _noFPGATransactions;
 	///Look up table for task variables (by name)
 	VariableLookUpTableName _varLookUpName;
 	///Look up table for task variables (by ID)

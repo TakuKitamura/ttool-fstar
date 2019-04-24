@@ -59,9 +59,8 @@ TMLTask::TMLTask(ID iID, Priority iPriority, std::string iName, CPU** iCPU, unsi
 	if (_noOfCPUs==1) _currentCPU = _cpus[0];
 }
 
-/*TMLTask::TMLTask(ID iID, Priority iPriority, std::string iName, FPGA** iFPGA, unsigned int iNoOfFPGAs): WorkloadSource(iPriority), _ID(iID), _name(iName), _endLastTransaction(0), _currCommand(0), _firstCommand(0), _currentFPGA(0), _fpgas(iCPU), _noOffpgas(iNoOfCPUs), _comment(0), _busyCycles(0), _FPGAContentionDelay(0), _noFPGATransactions(0), _justStarted(true), _myInstance(_instanceCount), */
-/*_isScheduled(false),*/
-/* _stateHash(0, 30) , _liveVarList(0), _hashInvalidated(true){
+TMLTask::TMLTask(ID iID, Priority iPriority, std::string iName, FPGA** iFPGA, unsigned int iNoOfFPGAs): WorkloadSource(iPriority), _ID(iID), _name(iName), _endLastTransaction(0), _currCommand(0), _firstCommand(0), _currentFPGA(0), _fpgas(iFPGA), _noOfFPGAs(iNoOfFPGAs), _comment(0), _busyCycles(0), _FPGAContentionDelay(0), _noFPGATransactions(0), _justStarted(true), _myInstance(_instanceCount), 
+ _stateHash(0, 30) , _liveVarList(0), _hashInvalidated(true){
 	for (unsigned int i=0; i< _noOfFPGAs; i++)
 		_fpgas[i]->registerTask(this);
 #ifdef ADD_COMMENTS
@@ -70,7 +69,7 @@ TMLTask::TMLTask(ID iID, Priority iPriority, std::string iName, CPU** iCPU, unsi
 	_transactList.reserve(BLOCK_SIZE_TRANS);
 	_instanceCount++;
 	if (_noOfFPGAs==1) _currentFPGA = _fpgas[0];
-}*/
+}
 
 TMLTask::~TMLTask(){
 #ifdef ADD_COMMENTS
@@ -266,6 +265,7 @@ void TMLTask::streamBenchmarks(std::ostream& s) const{
 	s << TAG_TASKo << " id=\"" << _ID << "\" name=\"" << _name << "\">" << std::endl;
 	s << TAG_EXTIMEo << _busyCycles << TAG_EXTIMEc;
 	if (_noCPUTransactions!=0) s << TAG_CONTDELo << ">" << (static_cast<float>(_CPUContentionDelay)/static_cast<float>(_noCPUTransactions)) << TAG_CONTDELc;
+	if (_noFPGATransactions!=0) s << TAG_CONTDELo << ">" << (static_cast<float>(_FPGAContentionDelay)/static_cast<float>(_noFPGATransactions)) << TAG_CONTDELc;
 	s << TAG_TSKSTATEo;
 	//unsigned int aState=getState();
 	switch (getState()){
@@ -323,6 +323,7 @@ void TMLTask::finished(){
 }
 
 unsigned int TMLTask::getState() const{
+	std::cout<<"getState"<<std::endl;
 	/*if (!_transactList.empty() && _transactList.back()->getEndTime()==SchedulableDevice::getSimulatedTime()){
 		return RUNNING;
 	}else{
@@ -344,9 +345,13 @@ unsigned int TMLTask::getState() const{
 		return TERMINATED;
 	} else if (_currCommand->getCurrTransaction()->getVirtualLength()==0){
 		return SUSPENDED;
-	} else if (_currentCPU->SchedulableDevice::getNextTransaction()==_currCommand->getCurrTransaction()){
+	} else if (_currentCPU !=0 && _currentCPU->SchedulableDevice::getNextTransaction()==_currCommand->getCurrTransaction()){
 		return RUNNING;
-	}else{
+	}
+	  else if (_currentFPGA !=0 && _currentFPGA->SchedulableDevice::getNextTransaction()==_currCommand->getCurrTransaction()){
+		return RUNNING;
+	}
+	else{
 		return RUNNABLE;
 	}
 	return UNKNOWN;
@@ -396,6 +401,19 @@ int TMLTask::hasRunnableTrans(CPU* iCPU){
 		aIsMappedOnCPU |= (_cpus[i]==iCPU);
 	}
 	if (!aIsMappedOnCPU || _currCommand==0) return 0;
+	TMLTransaction* aCurrTrans = _currCommand->getCurrTransaction();
+	if (aCurrTrans==0 || aCurrTrans->getVirtualLength()==0) return 0;
+	if (aCurrTrans->getChannel()!=0 && aCurrTrans->getChannel()->mappedOnBus()) return 2;
+	//std::cout << "There would be: " << _currCommand->getCurrTransaction()->toString() << "\n";
+	return 1;
+}
+
+int TMLTask::hasRunnableTrans(FPGA* iFPGA){
+	bool aIsMappedOnFPGA=false;
+	for (unsigned int i=0; i< _noOfFPGAs; i++){
+		aIsMappedOnFPGA |= (_fpgas[i]==iFPGA);
+	}
+	if (!aIsMappedOnFPGA || _currCommand==0) return 0;
 	TMLTransaction* aCurrTrans = _currCommand->getCurrTransaction();
 	if (aCurrTrans==0 || aCurrTrans->getVirtualLength()==0) return 0;
 	if (aCurrTrans->getChannel()!=0 && aCurrTrans->getChannel()->mappedOnBus()) return 2;
