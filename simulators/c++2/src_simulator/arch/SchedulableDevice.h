@@ -74,10 +74,7 @@ public:
       	\return Pointer to transaction
     	*/
 	virtual TMLTransaction* getNextTransaction() { return _nextTransaction; }
-	double averageLoad() const;
-	void drawPieChart(std::ofstream& myfile) const;
-	void showPieChart(std::ofstream& myfile) const;
-	
+
 	///Writes a HTML representation of the schedule to an output file
 	/**
       	\param myfile Reference to the ofstream object representing the output file
@@ -163,8 +160,6 @@ protected:
 	static TMLTime _simulatedTime;
 	///End time of the last scheduled transaction
 	TMLTime _endSchedule;
-
-
 	///Scheduler
 	WorkloadSource* _scheduler;
 	///List containing all already scheduled transactions
@@ -182,16 +177,15 @@ protected:
 	static TMLTime _overallTransNo;
 	static TMLTime _overallTransSize;
 	unsigned int _cycleTime;
+
 	static void writeHTMLColumn(	std::ofstream& myfile,
 									const unsigned int colSpan,
 									const std::string cellClass );
 
-	
 	static void writeHTMLColumn(	std::ofstream& myfile,
 									const unsigned int colSpan,
 									const std::string cellClass,
 									const std::string title );
-	
 
 	static void writeHTMLColumn(	std::ofstream& myfile,
 									const unsigned int colSpan,
@@ -199,6 +193,7 @@ protected:
 									const std::string title,
 									const std::string content,
 									const bool endline );
+
 	static std::string determineHTMLCellClass( 	std::map<TMLTask*, std::string> &taskColors,
 												TMLTask* task,
 												unsigned int &nextColor );

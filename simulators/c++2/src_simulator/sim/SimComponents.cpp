@@ -43,7 +43,6 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <TMLTask.h>
 #include <CPU.h>
-#include <FPGA.h>
 #include <TMLChannel.h>
 #include <TMLEventChannel.h>
 //#include <TMLEventBChannel.h>
@@ -112,12 +111,6 @@ void SimComponents::addCPU(CPU* iCPU){
 	_cpuList.push_back(iCPU);
 	_vcdList.push_back(dynamic_cast<TraceableDevice*>(iCPU));
 	_serList.push_back(dynamic_cast<Serializable*>(iCPU));
-}
-
-void SimComponents::addFPGA(FPGA* iFPGA){
-	_fpgaList.push_back(iFPGA);
-	_vcdList.push_back(dynamic_cast<TraceableDevice*>(iFPGA));
-	_serList.push_back(dynamic_cast<Serializable*>(iFPGA));
 }
 
 void SimComponents::addBus(SchedulableCommDevice* iBus){
@@ -245,15 +238,6 @@ SchedulableDevice* SimComponents::getCPUByName(const std::string& iCPU) const{
 	return NULL;
 }
 
-SchedulableDevice* SimComponents::getFPGAByName(const std::string& iFPGA) const{
-	if (iFPGA[0]>='0' && iFPGA[0]<='9') return getFPGAByID(StringToNum<ID>(iFPGA));
-	for(FPGAList::const_iterator i=_fpgaList.begin(); i != _fpgaList.end(); ++i){
-		if ((*i)->toString()==iFPGA) return (*i);
-	}
-	return NULL;
-}
-
-
 TMLTask* SimComponents::getTaskByName(const std::string& iTask) const{
 	if (iTask[0]>='0' && iTask[0]<='9') return getTaskByID(StringToNum<ID>(iTask));
 	for(TaskList::const_iterator i=_taskList.begin(); i != _taskList.end(); ++i){
@@ -292,18 +276,6 @@ SchedulableDevice* SimComponents::getCPUByID(ID iID) const{
 	//CPUList::const_iterator i=_cpuList.begin();
 	//std::cerr << "getCPUByID after i=_cpuList.begin()" << iID << "\n";
 	for(CPUList::const_iterator i=_cpuList.begin(); i != _cpuList.end(); ++i){
-		//std::cout << "CPU x\n";
-		if ((*i)->getID()==iID) return (*i);
-	}
-	//std::cout << "End CPU\n";
-	return NULL;
-}
-
-SchedulableDevice* SimComponents::getFPGAByID(ID iID) const{
-	//std::cerr << "getFPGAByID " << iID << "\n";
-	//CPUList::const_iterator i=_cpuList.begin();
-	//std::cerr << "getFPGAByID after i=_cpuList.begin()" << iID << "\n";
-	for(FPGAList::const_iterator i=_fpgaList.begin(); i != _fpgaList.end(); ++i){
 		//std::cout << "CPU x\n";
 		if ((*i)->getID()==iID) return (*i);
 	}
@@ -499,15 +471,6 @@ bool SimComponents::couldCPUBeIdle(CPU* iCPU){
 	int aRunFlag =0;
 	for(TaskList::const_iterator i=_taskList.begin(); i != _taskList.end(); ++i){
 		aRunFlag |= (*i)->hasRunnableTrans(iCPU);
-		if ((aRunFlag & 2)!=0) return true;
-	}
-	return ((aRunFlag & 1)==0);
-}
-
-bool SimComponents::couldFPGABeIdle(FPGA* iFPGA){
-	int aRunFlag =0;
-	for(TaskList::const_iterator i=_taskList.begin(); i != _taskList.end(); ++i){
-		aRunFlag |= (*i)->hasRunnableTrans(iFPGA);
 		if ((aRunFlag & 2)!=0) return true;
 	}
 	return ((aRunFlag & 1)==0);

@@ -71,7 +71,6 @@ public:
 protected:
 	///Flag indicating whether bus master based or channel based priorities are used to arbitrate the bus
 	bool _channelBasedPrio;
-
 };
 
 #endif
