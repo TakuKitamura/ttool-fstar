@@ -71,6 +71,7 @@ Ludovic Apvrille, Renaud Pacalet
 #endif
 
 class CPU;
+class FPGA;
 class TMLTransaction;
 class TMLCommand;
 class TMLTask;
@@ -293,7 +294,13 @@ protected:
 	\param oResultDevice Pointer to the CPU which is running the returned transaction
 	\return Pointer to transaction with lowest end time
 	*/
-	TMLTransaction* getTransLowestEndTime(SchedulableDevice*& oResultDevice) const;
+	TMLTransaction* getTransLowestEndTimeCPU(SchedulableDevice*& oResultDevice) const;
+	///Returns a pointer to the transaction with the lowest end time proposed by FPGA schedulers
+	/**
+	\param oResultDevice Pointer to the FPGA which is running the returned transaction
+	\return Pointer to transaction with lowest end time
+	*/
+	TMLTransaction* getTransLowestEndTimeFPGA(SchedulableDevice*& oResultDevice) const;
 	///Decodes a simulation command
 	/**
 	\param iCmd Pointer to the command
