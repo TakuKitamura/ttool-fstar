@@ -68,16 +68,16 @@ public:
 	virtual void schedule()=0;
 	///Adds the transaction determined by the scheduling algorithm to the internal list of scheduled transactions
 	virtual bool addTransaction(TMLTransaction* iTransToBeAdded)=0;
-	double round(double number, unsigned int bits);
 
 	///Returns a pointer to the transaction determined by the scheduling algorithm
     	/**
       	\return Pointer to transaction
     	*/
 	virtual TMLTransaction* getNextTransaction() { return _nextTransaction; }
-	void averageLoad(std::ofstream& myfile);
-	void drawTabCell(std::ofstream& myfile);
-
+	double averageLoad() const;
+	void drawPieChart(std::ofstream& myfile) const;
+	void showPieChart(std::ofstream& myfile) const;
+	
 	///Writes a HTML representation of the schedule to an output file
 	/**
       	\param myfile Reference to the ofstream object representing the output file
@@ -164,9 +164,7 @@ protected:
 	///End time of the last scheduled transaction
 	TMLTime _endSchedule;
 
- 	TMLTime _averageLoadOneMinute;
- 	TMLTime _averageLoadFiveMinute;
-  	TMLTime _averageLoadFifteenMinute;
+
 	///Scheduler
 	WorkloadSource* _scheduler;
 	///List containing all already scheduled transactions

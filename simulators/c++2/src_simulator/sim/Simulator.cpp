@@ -404,41 +404,41 @@ std::cout<<"schedule2HTML--------------------------------------*****************
     myfile << SCHED_HTML_END_TITLE; // </title>\n
     myfile << SCHED_HTML_END_HEAD; // </head>\n
     myfile << SCHED_HTML_BEG_BODY; // <body>\n
-
+    
+    
+    myfile << SCHED_HTML_JS_TYPE;
+    myfile << SCHED_HTML_JS_CONTENT1;
+    for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
+      (*i)->drawPieChart(myfile);
+    }
+    for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
+      (*j)->drawPieChart(myfile);
+    }
+       
+    myfile << "}" <<std::endl;
+  
+   
+    myfile << SCHED_HTML_END_JS;
+    myfile << SCHED_HTML_JS_LINK;
+    myfile << SCHED_HTML_END_JS;
+    
     //for(CPUList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
     for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
       for(unsigned int j = 0; j < (*i)->getAmoutOfCore(); j++) {
         std::cout<<"core number is "<<(*i)->getAmoutOfCore()<<std::endl;
 	(*i)->schedule2HTML(myfile);
-	(*i)->averageLoad(myfile);
-	(*i)->drawTabCell(myfile);
+       	(*i)->showPieChart(myfile);
 	(*i)->setCycleTime((*i)->getCycleTime()+1);
-	std::cout<<"~~~~~~~~~~~~~~~~~~"<<std::endl;
-	/*	if ( jsfile.is_open() ) {
-	  //jsfile << SCHED_HTML_JS_CONTENT;
-	
-	  
-	  myfile << SCHED_HTML_JS_CANVAS_NAME;
-	  myfile << SCHED_HTML_JS_BEG_LINK;
-	  myfile << jsFullFileName;     
-	  myfile << SCHED_HTML_JS_END_LINK;
-	}
-	else {
-	  myfile << SCHED_HTML_BEG_STYLE; // <style>\n";
-	  //myfile << SCHED_HTML_CSS_CONTENT;
-	  myfile << SCHED_HTML_END_STYLE; // <style>\n";
-	  }*/
 	
       }
         if((*i)->getAmoutOfCore() == 1)
 	   (*i)->setCycleTime(0);
     }
     jsfile.close();
-    //for(BusList::const_iterator j=_simComp->getBusIterator(false); j != _simComp->getBusIterator(true); ++j){
+    
     for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
-      (*j)->schedule2HTML(myfile);
-      (*j)->averageLoad(myfile);
-      (*j)->drawTabCell(myfile);
+      (*j)->schedule2HTML(myfile);     
+      (*j)->showPieChart(myfile);
     }
     //for_each(iCPUlist.begin(), iCPUlist.end(),std::bind2nd(std::mem_fun(&CPU::schedule2HTML),myfile));
 

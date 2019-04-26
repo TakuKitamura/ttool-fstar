@@ -257,10 +257,33 @@ using std::max;
 #define SCHED_HTML_END_STYLE "</style>\n"
 #define SCHED_HTML_CSS_BEG_LINK "<link rel=\"stylesheet\" type=\"text/css\" href=\""
 #define SCHED_HTML_CSS_END_LINK "\" />\n"
-#define SCHED_HTML_JS_CANVAS_NAME "\n<canvas id=\"myCanvas\"> </canvas>\n"
-#define SCHED_HTML_JS_BEG_LINK "<script type=\"text/javascript\" src=\""
-#define SCHED_HTML_JS_END_LINK "\"></script>\n"
+#define SCHED_HTML_JS_TYPE "<script type=\"text/javascript\">\n"
+#define SCHED_HTML_END_JS "</script>\n"
+#define SCHED_HTML_JS_LINK "<script type=\"text/javascript\" src=\"https://canvasjs.com/assets/script/canvasjs.min.js\">"
+#define SCHED_HTML_JS_DIV_ID "<div id=\"chartContainer"
+#define SCHED_HTML_JS_DIV_END "\" style=\"height: 300px; width: 0%;\"></div>\n"
 #define NB_HTML_COLORS 15
+#define SCHED_HTML_JS_CONTENT1 "window.onload = function () {\n"
+#define SCHED_HTML_JS_CONTENT2 "{\n \
+		title:{\n \
+			text: \""
+#define SCHED_HTML_JS_CONTENT3 "\"\n \
+		},\n \
+		legend: {\n \
+			maxWidth: 350,\n \
+			itemWidth: 120\n \
+		},\n \
+		data: [\n \
+		{\n \
+			type: \"pie\",\n \
+			showInLegend: true,\n \
+			legendText: \"{indexLabel}\",\n \
+			dataPoints: [ \n"
+#define SCHED_HTML_PIE_END "]\n \
+		}\n \
+		]\n \
+	});\n"
+
 #define SCHED_HTML_CSS_CONTENT "table{\n \
 	border-collapse: collapse;\n \
 	empty-cells: show;\n \
@@ -504,6 +527,9 @@ h2 span {\n \
 	background-color: LightGoldenRodYellow;\n \
 	border-style: solid solid solid none;\n \
 }"
+
+
+#define SCHED_HTML_SCRIPT_CONTENT
 
 
 

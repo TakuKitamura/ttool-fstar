@@ -113,8 +113,10 @@ public:
 		return os;
 	}
 	inline unsigned int getAmoutOfCore(){ return amountOfCore;} 
-	void averageLoad(std::ofstream& myfile);
-	void drawTabCell(std::ofstream& myfile);
+	double averageLoad(unsigned int n) const;
+	//void drawTabCell(std::ofstream& myfile);
+	void drawPieChart(std::ofstream& myfile) const;
+	void showPieChart(std::ofstream& myfile) const;
 	void schedule2HTML(std::ofstream& myfile) const;
 	
 protected:

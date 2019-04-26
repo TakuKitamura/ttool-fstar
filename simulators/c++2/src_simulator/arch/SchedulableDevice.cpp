@@ -189,14 +189,9 @@ std::string SchedulableDevice::determineHTMLCellClass( 	std::map<TMLTask*, std::
 	return taskColors[ task ];
 }
 
-double SchedulableDevice::round(double number, unsigned int bits){
-  std::stringstream ss;
-  ss << std::fixed<<std::setprecision(bits) << number;
-  ss >> number;
-  return number;
-}
 
-void SchedulableDevice::averageLoad(std::ofstream& myfile){
+double SchedulableDevice::averageLoad() const{
+  double _averageLoad=0;
   TMLTime _maxEndTime=0;
   for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
       TMLTime _endTime= (*i)->getEndTime();
@@ -204,72 +199,57 @@ void SchedulableDevice::averageLoad(std::ofstream& myfile){
   }
   std::cout<<"max end time is "<<_maxEndTime<<std::endl;
   for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
-
-      std::cout<<"transaction end time "<<(*i)->getEndTime()<<std::endl;
-      if(_maxEndTime<=60 ||(*i)->getEndTime()>=_maxEndTime-60)
-	++_averageLoadOneMinute;
-      if(_maxEndTime<=300 || (*i)->getEndTime()>=_maxEndTime-300)
-	++_averageLoadFiveMinute;
-      if(_maxEndTime<=900 || (*i)->getEndTime()>=_maxEndTime-900)
-	++_averageLoadFifteenMinute;
-   
+     _averageLoad += (*i)->getEndTime() - (*i)->getStartTime();  
+  
   }
-  myfile<<"1 minute average load is "<< _averageLoadOneMinute<<"<br>";
-  myfile<<"5 minute average load is "<< _averageLoadFiveMinute<<"<br>";
-  myfile<<"15 minute average load is "<< _averageLoadFifteenMinute<<"<br>";
-  _averageLoadOneMinute=0;
-  _averageLoadFiveMinute=0;
-  _averageLoadFifteenMinute=0;
+  if(_maxEndTime == 0)
+    return 0;
+  else {
+    _averageLoad = (double)_averageLoad/_maxEndTime;
+    return _averageLoad;
+  }
+  /* if( _maxEndTime == 0 ) 
+    myfile << "average load is 0" << "<br>";
+  else
+  myfile<<"average load is "<< (double)_averageLoad/_maxEndTime<<"<br>";*/
   
 }
 
-void SchedulableDevice::drawTabCell(std::ofstream& myfile){
+void SchedulableDevice::drawPieChart(std::ofstream& myfile) const {
+ 
   TMLTime _maxEndTime=0;
+
   for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
-      TMLTime _endTime= (*i)->getEndTime();
-      _maxEndTime=max(_maxEndTime,_endTime);
+    TMLTime _endTime= (*i)->getEndTime();
+    _maxEndTime=max(_maxEndTime,_endTime);
   }
   std::map <TMLTask*, double > transPercentage;
-  std::map<TMLTask*, std::string> taskCellClasses;
-  unsigned int nextCellClassIndex = 0;
   for( TransactionList::const_iterator i = _transactList.begin(); i!= _transactList.end(); ++i){
-      transPercentage[(*i)-> getCommand()->getTask()]+=(double)((*i)->getEndTime()-(*i)->getStartTime())/_maxEndTime;      
+      
+    transPercentage[(*i)-> getCommand()->getTask()]+=(double)((*i)->getEndTime()-(*i)->getStartTime())/_maxEndTime;      
+      
   }
-  //double idlePercent=1;
   std::map <TMLTask*, double>::iterator iter = transPercentage.begin();
+  myfile << "     var chart" << _ID << "= new CanvasJS.Chart(\"chartContainer" << _ID <<"\"," << std::endl;
+  myfile <<  SCHED_HTML_JS_CONTENT2 << "Average load is " << averageLoad() <<  SCHED_HTML_JS_CONTENT3 << std::endl;
+  double idle=1;
   while( iter != transPercentage.end()){
-    // myfile<<iter->first->toString()<<" "<<iter->second<<"<br>";
-    // idlePercent = idlePercent-(iter->second);
-    double aCurrPercent=round(iter->second,2);
-    myfile << "<table>" << std::endl << "<tr>";
-    TMLTask* task = iter->first;
-    const std::string cellClass = determineHTMLCellClass( taskCellClasses, task, nextCellClassIndex );
-
-    writeHTMLColumn( myfile, aCurrPercent*100, cellClass, iter->first->toString() );
-    myfile << "</tr>" << std::endl << "<tr>";
-    
-    std::cout<<"current percent is !!!!!"<<aCurrPercent<<std::endl;
-    for ( double aLength = 0; aLength < aCurrPercent; aLength += 0.01 ) {
-      myfile << "<th></th>";
-    }
-
-    myfile << "</tr>" << std::endl << "<tr>";
-     
-    for ( double aLength = 0; aLength <= aCurrPercent + 0.000001; aLength += 0.05 ) {
-      //  std::cout<<aLength<<std::endl;
-      //std::cout<<"hh "<<aCurrPercent<<std::endl;
-      std::ostringstream spanVal;
-      spanVal << aLength;
-      writeHTMLColumn( myfile, 5, "sc", "", spanVal.str(), false );
-    }
-
-    myfile << "</tr>" << std::endl << "</table>" << std::endl << "<table>" << std::endl << "<tr>";
-    myfile << iter->first->toString() << " " << aCurrPercent << "<br>";
-    iter++;
-    }
-  //myfile<<"idle time percentage: "<<idlePercent<<"<br>";
- 
+    myfile << "                { y:" << (iter->second)*100 << ", indexLabel: \"" << iter->first->toString() << "\" }," << std::endl;
+    idle-=iter->second;
+    ++iter;  
+  }
+  myfile << "                { y:" << idle*100 << ", indexLabel: \"idle time\"" << " }" << std::endl;
+  myfile << std::endl;
+  myfile << SCHED_HTML_PIE_END;
+  myfile << "chart" << _ID  << ".render();" << std::endl; 
 }
+  
+
+
+void SchedulableDevice::showPieChart(std::ofstream& myfile) const{
+  myfile << SCHED_HTML_JS_DIV_ID << _ID << SCHED_HTML_JS_DIV_END << "<br>";
+}
+  
 
 void SchedulableDevice::schedule2HTML(std::ofstream& myfile) const {    
 	myfile << "<h2><span>Scheduling for device: "<< _name << "</span></h2>" << std::endl;
