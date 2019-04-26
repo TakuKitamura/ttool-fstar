@@ -149,7 +149,7 @@ public class TopCellGeneratorCluster {
 				fw.write(headerTDF);
 				codeTDF = PrimitiveCodeCluster.getPrimitiveCodeTDF(t);
 				//if(standalone==false)
-				//	    codeTDF = codeTDF + "#endif"+ CR;
+				codeTDF = codeTDF + "#endif"+ CR;
 				fw.write(codeTDF);
 				fw.close();
 			
@@ -173,7 +173,7 @@ public class TopCellGeneratorCluster {
 				fw.write(headerDE);
 				codeDE = PrimitiveCodeCluster.getPrimitiveCodeDE(t);
 				//if(standalone==false)
-				//   codeDE = codeDE + "#endif "+ CR;
+				codeDE = codeDE + "#endif "+ CR;
 				fw.write(codeDE);
 				fw.close();
 				

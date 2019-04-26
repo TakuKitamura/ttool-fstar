@@ -196,7 +196,7 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 		tabbedPane.add("Attributes", attributesMainPanel);
 		tabbedPane.add("Parameters", parametersMainPanel);
 		tabbedPane.add("Process Code", processMainPanel);
-        tabbedPane.add("Contructor Code", contructorMainPanel);
+        tabbedPane.add("Constructor Code", contructorMainPanel);
 
 		mainPanel.add(tabbedPane, BorderLayout.NORTH); 
 

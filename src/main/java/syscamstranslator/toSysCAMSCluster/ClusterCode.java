@@ -305,6 +305,7 @@ public class ClusterCode {
             corpsCluster += "\t}" +CR;
               
             corpsCluster = corpsCluster + "};" + CR2;
+	    corpsCluster = corpsCluster + "#endif " + CR;//DG
 	    // corpsCluster = corpsCluster + "#endif // " + cluster.getClusterName().toUpperCase() + "_TDF_H"+ CR;//DG
 		} else {
 			corpsCluster = "";
