@@ -48,6 +48,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <string.h>
 #include <iostream>
 #include <sstream>
+#include <iomanip>
 #include <fstream>
 #include <map>
 #include <set>
@@ -220,6 +221,8 @@ using std::max;
 #define TAG_UTILc "</util>"
 #define TAG_CPUo "<cpu"
 #define TAG_CPUc "</cpu>"
+#define TAG_FPGAo "<fpga"
+#define TAG_FPGAc "</fpga>"
 #define TAG_PROGRESSo "<progr>"
 #define TAG_PROGRESSc "</progr>"
 #define TAG_CURRTASKo "<currtask>"
@@ -232,6 +235,7 @@ using std::max;
 #define EXT_TXT ".txt"
 #define EXT_HTML ".html"
 #define EXT_CSS ".css"
+#define EXT_JS ".js"
 
 // Issue #4 HTML Trace Constants
 #define MAX_COL_SPAN 1000
@@ -253,7 +257,33 @@ using std::max;
 #define SCHED_HTML_END_STYLE "</style>\n"
 #define SCHED_HTML_CSS_BEG_LINK "<link rel=\"stylesheet\" type=\"text/css\" href=\""
 #define SCHED_HTML_CSS_END_LINK "\" />\n"
+#define SCHED_HTML_JS_TYPE "<script type=\"text/javascript\">\n"
+#define SCHED_HTML_END_JS "</script>\n"
+#define SCHED_HTML_JS_LINK "<script type=\"text/javascript\" src=\"https://canvasjs.com/assets/script/canvasjs.min.js\">"
+#define SCHED_HTML_JS_DIV_ID "<div id=\"chartContainer"
+#define SCHED_HTML_JS_DIV_END "\" style=\"height: 300px; width: 0%;\"></div>\n"
 #define NB_HTML_COLORS 15
+#define SCHED_HTML_JS_CONTENT1 "window.onload = function () {\n"
+#define SCHED_HTML_JS_CONTENT2 "{\n \
+		title:{\n \
+			text: \""
+#define SCHED_HTML_JS_CONTENT3 "\"\n \
+		},\n \
+		legend: {\n \
+			maxWidth: 350,\n \
+			itemWidth: 120\n \
+		},\n \
+		data: [\n \
+		{\n \
+			type: \"pie\",\n \
+			showInLegend: true,\n \
+			legendText: \"{indexLabel}\",\n \
+			dataPoints: [ \n"
+#define SCHED_HTML_PIE_END "]\n \
+		}\n \
+		]\n \
+	});\n"
+
 #define SCHED_HTML_CSS_CONTENT "table{\n \
 	border-collapse: collapse;\n \
 	empty-cells: show;\n \
@@ -498,10 +528,16 @@ h2 span {\n \
 	border-style: solid solid solid none;\n \
 }"
 
+
+#define SCHED_HTML_SCRIPT_CONTENT
+
+
+
 class TMLTask;
 class TMLTransaction;
 class TMLCommand;
 class CPU;
+class FPGA;
 class SchedulableCommDevice;
 class SchedulableDevice;
 class Parameter;
@@ -533,6 +569,8 @@ typedef std::list<TMLTask*> TaskList;
 typedef std::vector<TMLTransaction*> TransactionList;
 ///Datatype holding pointer to CPUs, used by SimComponents and simulation kernel
 typedef std::list<CPU*> CPUList;
+///Datatype holding pointer to FPGAs, used by SimComponents and simulation kernel
+typedef std::list<FPGA*> FPGAList;
 ///Datatype holding pointer to CPUs and Bridges, used by simulation kernel for scheduling
 typedef std::list<SchedulableDevice*> SchedulingList;
 ///Datatype holding references to buses, used by SimComponents and simulation kernel
