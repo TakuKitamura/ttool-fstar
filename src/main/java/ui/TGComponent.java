@@ -1156,6 +1156,11 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
                             drawLoadDiploID(g, li);
                         }
                         List<SimulationTransaction> ts = tdp.getMGUI().getTransactions(getDIPLOID());
+                        if (ts == null) {
+                            TraceManager.addDev("Null transactions for " + getDIPLOID());
+                        } else {
+                            TraceManager.addDev("Number of transactions for id " + getDIPLOID() + " = " + ts.size());
+                        }
                         if (ts != null && ts.size() > 0) {
                             transactions = new ArrayList<SimulationTransaction>(ts);
                             transaction = transactions.get(transactions.size() - 1).taskName + ":" + transactions.get(transactions.size() - 1).command;

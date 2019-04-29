@@ -8927,6 +8927,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
     public synchronized ArrayList<SimulationTransaction> getTransactions(int id) {
         if (transactionMap == null) {
+            TraceManager.addDev("Null map");
             return null;
         }
 

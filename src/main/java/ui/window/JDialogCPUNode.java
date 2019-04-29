@@ -522,19 +522,22 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c4.gridwidth = GridBagConstraints.REMAINDER;
         panel4.add(buttons.get(15),c4);
 
+        TraceManager.addDev("Transactions size=" + transactions.size());
         if (transactions.size()!=0) {
-            panel5=new JPanel();
+            TraceManager.addDev("On going simulation");
+
+            panel5 = new JPanel();
             panel5.setPreferredSize(new Dimension(400,300));
-            MyFrame f =new MyFrame();
-            f.setPreferredSize(new Dimension(400,300));
-            panel5.add(f,c4);
+            MyFrame simulationFrame = new MyFrame();
+            TraceManager.addDev("Adding simulation frame");
+            simulationFrame.setPreferredSize(new Dimension(400,300));
+            panel5.add(simulationFrame,c4);
             tabbedPane.addTab("Simulation Transactions", panel5);
             //Draw from transactions
         }
         else {
             tabbedPane.addTab( "Main attributes", panel2 );
             tabbedPane.addTab( "Security & operation type", panel4 );
-
             tabbedPane.setSelectedIndex(0);
         }
         // main panel;
