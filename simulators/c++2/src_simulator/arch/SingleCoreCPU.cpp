@@ -88,6 +88,7 @@ SingleCoreCPU::~SingleCoreCPU(){
 }
 
 TMLTransaction* SingleCoreCPU::getNextTransaction(){
+std::cout<<"getNextTransaction!!!!!"<<std::endl;
 #ifdef BUS_ENABLED
   if (_masterNextTransaction==0 || _nextTransaction==0){
     return _nextTransaction;
@@ -172,7 +173,8 @@ void SingleCoreCPU::calcStartTimeLength(TMLTime iTimeSlice){
 #endif
 }
 
-void SingleCoreCPU::truncateAndAddNextTransAt(TMLTime iTime){
+void SingleCoreCPU::truncateAndAddNextTransAt(TMLTime iTime){ 
+  std::cout<<"cpu truncatenextTransct"<<std::endl;
   //std::cout << "CPU:schedule BEGIN " << _name << "+++++++++++++++++++++++++++++++++\n";
   //return truncateNextTransAt(iTime);
   //not a problem if scheduling does not take place at time when transaction is actually truncated, tested
@@ -232,6 +234,7 @@ TMLTime SingleCoreCPU::truncateNextTransAt(TMLTime iTime){
 }
 
 bool SingleCoreCPU::addTransaction(TMLTransaction* iTransToBeAdded){
+std::cout<<"addTransaction"<<std::endl;
   bool aFinish;
   //TMLTransaction* aTransCopy=0;
   std::cout << "*************** LOOKING for master of" << _nextTransaction->toString() << std::endl;

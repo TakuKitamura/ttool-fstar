@@ -50,6 +50,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTask.h>
 #include <TMLCommand.h>
 
+
 class TMLTask;
 class TMLTransaction;
 class Bus;
@@ -113,156 +114,12 @@ public:
 		return os;
 	}
 	inline unsigned int getAmoutOfCore(){ return amountOfCore;} 
-	///Invalidate schedule of CPU
-	/*void setRescheduleFlag(){
-		_schedulingNeeded=true;
-		//std::cout <<" CPU " << _name << " forwards to scheduler\n";
-		_scheduler->resetScheduledFlag();
-	}*/
-
-	///Truncates current transaction if schedule is invalid
-	/**
-	\param iTime Truncation time
-	*/
-	/*void truncateIfNecessary(TMLTime iTime){
-		if(_schedulingNeeded && getNextTransaction()!=0){
-			//std::cout << "truncateIfNecessary for CPU " << _name << "\n";
-			_schedulingNeeded=false;	
-			truncateAndAddNextTransAt(iTime);
-			//std::cout << "truncateIfNecessary end\n";
-		}
-	}*/
-
-	///Reschedules CPU if schedule is invalid
-	/*void rescheduleIfNecessary(){
-		if(_schedulingNeeded){
-			//std::cout << "rescheduleIfNecessary for CPU " << _name << "\n";
-			_schedulingNeeded=false;
-			schedule();
-			//std::cout << "rescheduleIfNecessary end\n";
-		}
-	}*/
+	double averageLoad(unsigned int n) const;
+	//void drawTabCell(std::ofstream& myfile);
+	void drawPieChart(std::ofstream& myfile) const;
+	void showPieChart(std::ofstream& myfile) const;
+	void schedule2HTML(std::ofstream& myfile) const;
 	
-	/*void truncateAndRescheduleIfNecessary(TMLTime iTime){  commented out
-		std::cout << "truncateAndRescheduleIfNecessary for CPU " << _name << " started\n";
-		if(_schedulingNeeded){
-			_schedulingNeeded=false;
-			//if(_nextTransaction==0)
-			//std::cout << "shouldn't be raw >\n";
-			if(getNextTransaction()==0){
-				//std::cout << "shouldn't be raw <\n";		
-				schedule();
-			}else
-				
-			std::cout << "truncateAndRescheduleIfNecessary " << _name <<  " scheduled\n";
-		}else
-			std::cout << "truncateAndRescheduleIfNecessary " << _name <<  " no scheduling needed\n";
-		std::cout << "Current Trans " << _name << ": ";
-		if (_nextTransaction==0) std::cout << "0\n"; else std::cout << _nextTransaction->toString() << "\n";  
-	}*/
-	void schedule2HTML(std::ofstream& myfile) const {    
-		myfile << "<h2><span>Scheduling for device: "<< _name <<"_core_"<<this->_cycleTime<< "</span></h2>" << std::endl;
-
-		if ( _transactList.size() == 0 ) {
-			myfile << "<h4>Device never activated</h4>" << std::endl;
-		}
-		else {
-			myfile << "<table>" << std::endl << "<tr>";
-
-			std::map<TMLTask*, std::string> taskCellClasses;
-			unsigned int nextCellClassIndex = 0;
-			TMLTime aCurrTime = 0;
-
-			for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
-			  std::cout<<"get transaction core number is: "<<(*i)->getTransactCoreNumber()<<std::endl;
-			  std::cout<<"time : "<<_cycleTime<<std::endl;
-			  //std::cout << "CPU:calcSTL: html of CPU " << _name << ": " << (*i)->toString() << std::endl;
-			  if( (*i)->getTransactCoreNumber() == this->_cycleTime ){
-				TMLTransaction* aCurrTrans = *i;
-				unsigned int aBlanks = aCurrTrans->getStartTime() - aCurrTime;
-
-				if ( aBlanks > 0 ) {
-					writeHTMLColumn( myfile, aBlanks, "not", "idle time" );
-				}
-
-				unsigned int aLength = aCurrTrans->getPenalties();
-
-				if ( aLength != 0 ) {
-					std::ostringstream title;
-					title << "idle:" << aCurrTrans->getIdlePenalty() << " switch:" << aCurrTrans->getTaskSwitchingPenalty();
-					writeHTMLColumn( myfile, aLength, "not", title.str() );
-				}
-
-				aLength = aCurrTrans->getOperationLength();
-
-				// Issue #4
-				TMLTask* task = aCurrTrans->getCommand()->getTask();
-				const std::string cellClass = determineHTMLCellClass( taskCellClasses, task, nextCellClassIndex );
-
-				writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString() );
-
-				aCurrTime = aCurrTrans->getEndTime();
-			  }
-			}
-		
-
-			myfile << "</tr>" << std::endl << "<tr>";
-
-			for ( unsigned int aLength = 0; aLength < aCurrTime; aLength++ ) {
-				myfile << "<th></th>";
-			}
-
-			myfile << "</tr>" << std::endl << "<tr>";
-
-			for ( unsigned int aLength = 0; aLength <= aCurrTime; aLength += 5 ) {
-				std::ostringstream spanVal;
-				spanVal << aLength;
-				writeHTMLColumn( myfile, 5, "sc", "", spanVal.str(), false );
-				//myfile << "<td colspan=\"5\" class=\"sc\">" << aLength << "</td>";
-			}
-
-			myfile << "</tr>" << std::endl << "</table>" << std::endl << "<table>" << std::endl << "<tr>";
-
-			for( std::map<TMLTask*, std::string>::iterator taskColIt = taskCellClasses.begin(); taskColIt != taskCellClasses.end(); ++taskColIt ) {
-				TMLTask* task = (*taskColIt).first;
-				// Unset the default td max-width of 5px. For some reason setting the max-with on a specific t style does not work
-				myfile << "<td class=\"" << taskCellClasses[ task ] << "\"></td><td style=\"max-width: unset;\">" << task->toString() << "</td><td class=\"space\"></td>";
-			}
-
-			myfile << "</tr>" << std::endl;
-
-	#ifdef ADD_COMMENTS
-			bool aMoreComments = true, aInit = true;
-			Comment* aComment;
-
-			while ( aMoreComments ) {
-				aMoreComments = false;
-				myfile << "<tr>";
-
-				for( std::map<TMLTask*, std::string>::iterator taskColIt = taskCellClasses.begin(); taskColIt != taskCellClasses.end(); ++taskColIt ) {
-				//for(TaskList::const_iterator j=_taskList.begin(); j != _taskList.end(); ++j){
-					TMLTask* task = (*taskColIt).first;
-				    std::string aCommentString = task->getNextComment( aInit, aComment );
-
-					if ( aComment == 0 ) {
-						myfile << "<td></td><td></td><td class=\"space\"></td>";
-					}
-					else {
-						replaceAll(aCommentString,"<","&lt;");
-						replaceAll(aCommentString,">","&gt;");
-						aMoreComments = true;
-						myfile << "<td style=\"max-width: unset;\">" << aComment->_time << "</td><td><pre>" << aCommentString << "</pre></td><td class=\"space\"></td>";
-					}
-				}
-
-				aInit = false;
-				myfile << "</tr>" << std::endl;
-			}
-	#endif
-			myfile << "</table>" << std::endl;
-		}
-	}
-
 protected:
 	///List of all tasks running on the CPU
 	TaskList _taskList;
@@ -274,6 +131,7 @@ protected:
 	unsigned int amountOfCore; 
 	///Dirty flag of the current scheduling decision
 	//bool _schedulingNeeded;
+	
 };
 
 #endif

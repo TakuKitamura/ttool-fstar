@@ -304,10 +304,9 @@ std::cout<<"schedule2HTML--------------------------------------*****************
 
   std::ofstream myfile(iTraceFileName.c_str());
    //myfile<<"model name: "<<iTraceFileName.c_str();
-  myfile<<"model name: "<< _simComp->getModelName();
+ 
 
   if (myfile.is_open()) {
-    myfile << " date: " << asctime(aTimeinfo)<<std::endl;
     // DB: Issue #4
     myfile << SCHED_HTML_DOC; // <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n
     myfile << SCHED_HTML_BEG_HTML; // <html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n
@@ -326,9 +325,13 @@ std::cout<<"schedule2HTML--------------------------------------*****************
 
     const std::string ext( EXT_HTML );
     const std::string cssFileName = iTraceFileName.substr( indexSlash + 1, iTraceFileName.length() - indexSlash - ext.length() - 1 ) + EXT_CSS; 
+    const std::string jsFileName = iTraceFileName.substr( indexSlash + 1, iTraceFileName.length() - indexSlash - ext.length() - 1 ) + EXT_JS;
     //myfile<<"length is "<< iTraceFileName.length() - indexSlash - ext.length() - 1<<std::endl;
     const std::string cssFullFileName = iTraceFileName.substr( 0, indexSlash + 1 ) + cssFileName;
+    const std::string jsFullFileName =  iTraceFileName.substr( 0, indexSlash + 1 ) + jsFileName;
     std::ofstream cssfile( cssFullFileName.c_str() );
+    std::ofstream jsfile( jsFullFileName.c_str() );
+    
     //myfile<<"full name is "<<cssFullFileName<<std::endl;
     if ( cssfile.is_open() ) {
       cssfile << SCHED_HTML_CSS_CONTENT;
@@ -350,21 +353,43 @@ std::cout<<"schedule2HTML--------------------------------------*****************
     myfile << SCHED_HTML_END_TITLE; // </title>\n
     myfile << SCHED_HTML_END_HEAD; // </head>\n
     myfile << SCHED_HTML_BEG_BODY; // <body>\n
-
+    
+    myfile<<"model name: "<< _simComp->getModelName(); //name of model
+    myfile << " date: " << asctime(aTimeinfo)<<std::endl; //date and time
+    
+    myfile << SCHED_HTML_JS_TYPE;
+    myfile << SCHED_HTML_JS_CONTENT1;
+    for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
+      (*i)->drawPieChart(myfile);
+    }
+    for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
+      (*j)->drawPieChart(myfile);
+    }
+       
+    myfile << "}" <<std::endl;
+  
+   
+    myfile << SCHED_HTML_END_JS;
+    myfile << SCHED_HTML_JS_LINK;
+    myfile << SCHED_HTML_END_JS;
+    
     //for(CPUList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
     for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
       for(unsigned int j = 0; j < (*i)->getAmoutOfCore(); j++) {
         std::cout<<"core number is "<<(*i)->getAmoutOfCore()<<std::endl;
 	(*i)->schedule2HTML(myfile);
+       	(*i)->showPieChart(myfile);
 	(*i)->setCycleTime((*i)->getCycleTime()+1);
-	std::cout<<"~~~~~~~~~~~~~~~~~~"<<std::endl;
-	}
+	
+      }
         if((*i)->getAmoutOfCore() == 1)
 	   (*i)->setCycleTime(0);
     }
-    //for(BusList::const_iterator j=_simComp->getBusIterator(false); j != _simComp->getBusIterator(true); ++j){
+    jsfile.close();
+    
     for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
-      (*j)->schedule2HTML(myfile);
+      (*j)->schedule2HTML(myfile);     
+      (*j)->showPieChart(myfile);
     }
     //for_each(iCPUlist.begin(), iCPUlist.end(),std::bind2nd(std::mem_fun(&CPU::schedule2HTML),myfile));
 
@@ -380,7 +405,6 @@ std::cout<<"schedule2HTML--------------------------------------*****************
   gettimeofday(&aEnd,NULL);
   std::cout << "The HTML output took " << getTimeDiff(aBegin,aEnd) << "usec. File: " << iTraceFileName << std::endl;
 }
-
 void Simulator::schedule2VCD(std::string& iTraceFileName) const{
   std::cout<<"schedule2VCD~~~~~~~~~~~~"<<std::endl;
   time_t aRawtime;
