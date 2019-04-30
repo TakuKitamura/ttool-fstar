@@ -213,6 +213,16 @@ public class CommandParser {
         sc = new SimulationCommand("add-breakpoint", "abp", "11", params, paramNames, "Set a breakpoint in task which id is the first parameter on the command provided as the second parameter");
         commandList.add(sc);
 
+        // Get latencies
+        params = new int[2];
+        paramNames = new String[2];
+        params[0] = 1;
+        paramNames[0] = "Checkpoint 1 id";
+        params[1] = 1;
+        paramNames[1] = "Checkpoint2 id";
+        sc = new SimulationCommand("calculate-latencies", "cl", "23", params, paramNames, "Calculate latencies between checkpoints");
+        commandList.add(sc);
+
         // choose-branh
         params = new int[3];
         paramNames = new String[3];
@@ -224,6 +234,8 @@ public class CommandParser {
         paramNames[2] = "branch ID";
         sc = new SimulationCommand("choose-branch", "cb", "12", params, paramNames, "Chooses the branch of the given command of a task");
         commandList.add(sc);
+
+
 
 
         // get-breakpoint-list
@@ -298,6 +310,14 @@ public class CommandParser {
         params = new int[0];
         paramNames = new String[0];
         sc = new SimulationCommand("kill", "kill", "0", params, paramNames, "Terminates the remote simulator");
+        commandList.add(sc);
+
+        // Get transactions
+        params = new int[1];
+        paramNames = new String[1];
+        params[0] = 2;
+        paramNames[0] = "Max. nb of transactions";
+        sc = new SimulationCommand("list-transactions", "lt", "22", params, paramNames, "Get the most recent transactions");
         commandList.add(sc);
 
         // rm-breakpoint
@@ -471,24 +491,10 @@ public class CommandParser {
         commandList.add(sc);
 
 
-        // Get transactions
-        params = new int[1];
-        paramNames = new String[1];
-        params[0] = 2;
-        paramNames[0] = "Max. nb of transactions";
-        sc = new SimulationCommand("list-transactions", "lt", "22", params, paramNames, "Get the most recent transactions");
-        commandList.add(sc);
 
 
-        // Get latencies
-        params = new int[2];
-        paramNames = new String[2];
-        params[0] = 1;
-        paramNames[0] = "Checkpoint 1 id";
-        params[1] = 1;
-        paramNames[1] = "Checkpoint2 id";
-        sc = new SimulationCommand("calculate-latencies", "cl", "23", params, paramNames, "Calculate latencies between checkpoints");
-        commandList.add(sc);
+
+
 
     }
 
