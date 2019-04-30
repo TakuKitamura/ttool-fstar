@@ -110,6 +110,17 @@ public class TMLActivity extends TMLElement {
         _previous.addNext(_tmlae);
     }
 
+    public TMLActivityElement getPrevious(TMLActivityElement tmlae) {
+        TMLActivityElement ae;
+        for (int i = 0; i < elements.size(); i++) {
+            ae = elements.elementAt(i);
+            if (ae.hasNext(tmlae)) {
+                return ae;
+            }
+        }
+        return null;
+    }
+
 
     public TMLActivityElement findReferenceElement(Object reference) {
         TMLActivityElement ae;

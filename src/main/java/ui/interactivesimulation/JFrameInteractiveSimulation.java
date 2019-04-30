@@ -3508,6 +3508,21 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         return -1;
     }
 
+    public boolean breakpointAfterSelectEvent(int _commandID) {
+        if (tmap != null) {
+            TMLTask task = tmap.getTMLTaskByCommandID(_commandID);
+            if (task != null) {
+                TMLActivityElement tmlae = task.getElementByID(_commandID);
+                if (tmlae instanceof TMLWaitEvent) {
+                    if (task.getActivityDiagram().getPrevious(tmlae) instanceof TMLSelectEvt) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     public void addBreakPoint(int _commandID) {
         //TraceManager.addDev("Add breakpoint: " + _commandID);
         // Check whether that breakpoint is already listed or not
@@ -3516,6 +3531,15 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                 return;
             }
         }
+
+        if (breakpointAfterSelectEvent(_commandID)) {
+            jta.append("Breakpoint on sendEvent " + _commandID + " cannot be taken into account because it is placed after a selectEvent. \n " +
+                    "Instead, you can put this breakpoing on the selectEvent operator");
+            return;
+        }
+        // Check if valid breakpoint: cannot be put on receive events after selectevt
+
+
 
         if (tmap != null) {
             TMLTask task = tmap.getTMLTaskByCommandID(_commandID);
@@ -3543,7 +3567,12 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 
     public void sendBreakPointList() {
         for(Point p: points) {
-            sendCommand("add-breakpoint " + p.x + " " + p.y + "\n");
+            if (breakpointAfterSelectEvent(p.y)) {
+                jta.append("Breakpoint on sendEvent " + p.y + " cannot be taken into account because it is placed after a selectEvent. \n " +
+                        "Instead, you can put this breakpoing on the selectEvent operator");
+            } else {
+                sendCommand("add-breakpoint " + p.x + " " + p.y + "\n");
+            }
         }
         sendCommand("active-breakpoints 1");
     }

@@ -1920,7 +1920,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
         if (e.getSource() == breakpoint) {
             if (componentPopup instanceof AllowedBreakpoint) {
+                //TraceManager.addDev("hasBreakpoint?" + componentPopup.getBreakpoint());
+
                 componentPopup.setBreakpoint(!componentPopup.getBreakpoint());
+
                 if (componentPopup.getDIPLOID() != -1) {
                     if (componentPopup.getBreakpoint()) {
                         mgui.addBreakPoint(componentPopup.getDIPLOID());
@@ -1928,6 +1931,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                         mgui.removeBreakPoint(componentPopup.getDIPLOID());
                     }
                 }
+
+                repaint();
+
+                //TraceManager.addDev("hasBreakpoint?" + componentPopup.getBreakpoint());
             }
         }
 

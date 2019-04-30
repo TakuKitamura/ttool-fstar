@@ -128,6 +128,17 @@ public class TMLTask extends TMLElement {
         return false;
     }
 
+    public TMLActivityElement getElementByID(int commandID) {
+        TMLActivityElement tmlae;
+        for (int i = 0; i < activity.nElements(); i++) {
+            tmlae = activity.get(i);
+            if (tmlae.getID() == commandID) {
+                return tmlae;
+            }
+        }
+        return null;
+    }
+
     public String[] makeCommandIDs() {
         String[] list = new String[activity.nElements()];
         TMLActivityElement tmlae;

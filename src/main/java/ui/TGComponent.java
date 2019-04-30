@@ -1096,16 +1096,17 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
             g.drawString("Mutual exclusion with " + nameOfMasterStateMutex, x + width + 1, y + 12);
         }
 
+        if (breakpoint) {
+            //TraceManager.addDev("breakpoint");
+            g.setColor(ColorManager.BREAKPOINT);
+            Font f = g.getFont();
+            g.setFont(f.deriveFont(Font.BOLD));
+            g.drawString("bk", x + width, y + 3);
+            g.setFont(f);
+        }
+
 
         if (TDiagramPanel.DIPLO_ANIMATE_ON) {
-            if (breakpoint) {
-                //TraceManager.addDev("breakpoint");
-                g.setColor(ColorManager.BREAKPOINT);
-                Font f = g.getFont();
-                g.setFont(f.deriveFont(Font.BOLD));
-                g.drawString("bk", x + width, y + 3);
-                g.setFont(f);
-            }
             if (!((this instanceof TGConnector) || (this instanceof TGCNote) || (this instanceof TMLArchiFirewallNode))) {
                 if (tdp instanceof TMLActivityDiagramPanel) {
                     if (getFather() == null) {

@@ -81,6 +81,10 @@ public abstract class TMLActivityElement extends TMLElement{
         }
     }
 
+    public boolean hasNext(TMLActivityElement _tmlae) {
+        return nexts.contains(_tmlae);
+    }
+
     public void addNext(TMLActivityElement _tmlae) {
         nexts.add(_tmlae);
     }
