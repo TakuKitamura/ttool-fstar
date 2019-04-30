@@ -106,7 +106,7 @@ public class TMLCCompositeComponent extends TGCScalableWithInternalComponent imp
         removable = true;
         userResizable = true;
         
-		value = "MyName";
+		value = "ComponentName";
 		name = "Composite component";
 		
         myImageIcon = IconManager.imgic1200;

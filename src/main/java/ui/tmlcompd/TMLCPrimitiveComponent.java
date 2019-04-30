@@ -112,7 +112,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         removable = true;
         userResizable = true;
 
-        value = tdp.findTMLPrimitiveComponentName("TMLComp_");
+        value = tdp.findTMLPrimitiveComponentName("Function");
         oldValue = value;
         setName("Primitive component");
 
