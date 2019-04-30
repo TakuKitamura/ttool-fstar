@@ -440,7 +440,7 @@ int SingleCoreCPU::allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) cons
   int total = 0;
   for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
     if (cpt >= begining) {
-      (*i)->toXML(glob, 0, _name);
+      (*i)->toXML(glob, 0, _name, _ID);
       total ++;
     }
     cpt ++;
@@ -452,7 +452,7 @@ void SingleCoreCPU::latencies2XML(std::ostringstream& glob, unsigned int id1, un
   for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
     if ((*i)->getCommand() !=NULL){
       if ((*i)->getCommand()->getID() == id1 || (*i)->getCommand()->getID() == id2){
-        (*i)->toXML(glob, 0, _name);
+        (*i)->toXML(glob, 0, _name, _ID);
       }
     }
   }

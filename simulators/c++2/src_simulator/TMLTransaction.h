@@ -256,7 +256,7 @@ class TMLTransaction {
   inline vcdTransVisState getTransVcdOutPutState() {return _transVcdOutputState;}
   inline void setEndState (bool f) { _endState=f;}
   inline bool getEndState () {return _endState;}
-  void toXML(std::ostringstream& glob, int deviceID, std::string deviceName) const;
+  void toXML(std::ostringstream& glob, int deviceID, std::string deviceName, ID uniqueID) const;
 
 
  protected:

@@ -1157,9 +1157,9 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
                         }
                         List<SimulationTransaction> ts = tdp.getMGUI().getTransactions(getDIPLOID());
                         if (ts == null) {
-                            TraceManager.addDev("Null transactions for " + getDIPLOID());
+                            //TraceManager.addDev("Null transactions for " + getDIPLOID());
                         } else {
-                            TraceManager.addDev("Number of transactions for id " + getDIPLOID() + " = " + ts.size());
+                            //TraceManager.addDev("Number of transactions for id " + getDIPLOID() + " = " + ts.size());
                         }
                         if (ts != null && ts.size() > 0) {
                             transactions = new ArrayList<SimulationTransaction>(ts);

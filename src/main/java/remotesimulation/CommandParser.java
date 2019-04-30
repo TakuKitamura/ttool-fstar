@@ -266,7 +266,7 @@ public class CommandParser {
         params = new int[2];
         paramNames = new String[2];
         params[0] = 1;
-        paramNames[0] = "0: CPU; 1:Bus; 2: Mem; 3: Bridge; 4: Channel";
+        paramNames[0] = "0: CPU; 1:Bus; 2: Mem; 3: Bridge; 4: Channel; 5: Task";
         params[1] = 1;
         paramNames[1] = "id";
         sc = new SimulationCommand("get-info-on-hw", "gioh", "4", params, paramNames, "Returns information on hardware nodes of the architecture");

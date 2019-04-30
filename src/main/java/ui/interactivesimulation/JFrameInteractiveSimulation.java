@@ -1789,12 +1789,23 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		catch (Exception e){
 			
 		}
-		String nodename = tran.deviceName;
+
+		/*String nodename = tran.deviceName;
+		TraceManager.addDev("Transaction=" + tran);
 		for(HwNode node: tmap.getTMLArchitecture().getHwNodes()) {
+		    TraceManager.addDev("Adding transaction for " + nodename + " vs " + node.getName());
 			if ((node.getName()+"_0").equals(nodename)){
 				mgui.addTransaction(node.getID(), tran);
 			}
-		}
+		}*/
+        //TraceManager.addDev("Transaction=" + tran);
+        for(HwNode node: tmap.getTMLArchitecture().getHwNodes()) {
+            //TraceManager.addDev("Adding transaction for " + tran.uniqueID + " vs " + node.getID());
+            if (node.getID() == tran.uniqueID){
+                mgui.addTransaction(node.getID(), tran);
+                break;
+            }
+        }
 	}
     
     public void calculateCorrespondingTimes(){
@@ -2132,9 +2143,15 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                         }
 
                         if (elt.getTagName().compareTo(SIMULATION_TRANS) == 0) {
-							//System.out.println("EL " + elt.getAttribute("messageid"));
+							TraceManager.addDev("New simulation transaction:" + elt);
                             SimulationTransaction st = new SimulationTransaction();
                             st.nodeType = elt.getAttribute("deviceid");
+
+                            try {
+                                st.uniqueID = new Integer(elt.getAttribute("uniqueid"));
+                            } catch (Exception e) {
+
+                            }
 
                             st.deviceName = elt.getAttribute("devicename");
                             String commandT = elt.getAttribute("command");
@@ -2170,7 +2187,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                             st.virtualLength = elt.getAttribute("virtuallength");
                             st.channelName = elt.getAttribute("ch");
 
-                            //  st.id = id;
+                            //st.id = id;
                             if (trans == null) {
                                 trans = new Vector<SimulationTransaction>();
                             }

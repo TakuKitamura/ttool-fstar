@@ -9095,10 +9095,10 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             ts.add(st);
             transactionMap.put(_id, ts);
         }
-        TDiagramPanel tdp = getCurrentTDiagramPanel();
+        /*TDiagramPanel tdp = getCurrentTDiagramPanel();
         if (tdp != null) {
             tdp.repaint();
-        }
+        }*/
     }
 
     public synchronized void addStatus(String task, String stat) {

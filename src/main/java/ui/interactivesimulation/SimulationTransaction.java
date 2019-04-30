@@ -63,7 +63,13 @@ public class SimulationTransaction  {
     public String virtualLength;
     public String channelName;
 	public String id;
-    public SimulationTransaction() {
+	public long uniqueID = -1;
+
+	public SimulationTransaction() {
+    }
+
+    public String toString() {
+	    return "ID=" + uniqueID + " nodeType=" + nodeType + " name= " + deviceName + " id=" + id + " command=" + command;
     }
 
 }

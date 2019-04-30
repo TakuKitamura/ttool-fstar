@@ -775,7 +775,6 @@ public class MappedSystemCTask {
                     if (evt.getNbOfParams() == 0) {
                         paramList += ",(ParamFuncPointer)0";
                     } else {
-
                         //functionSig+="Parameter<ParamType>* " + cmdName + "_func_" + i + "(Parameter<ParamType>* ioParam)" + SCCR;
                         //functions+="Parameter<ParamType>* " + reference + "::" + cmdName +  "_func_" + i + "(Parameter<ParamType>* ioParam){" + CR;
                         functionSig += "Parameter* " + cmdName + "_func_" + i + "(Parameter* ioParam)" + SCCR;
