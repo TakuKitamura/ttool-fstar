@@ -2143,7 +2143,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                         }
 
                         if (elt.getTagName().compareTo(SIMULATION_TRANS) == 0) {
-							TraceManager.addDev("New simulation transaction:" + elt);
+							//TraceManager.addDev("New simulation transaction:" + elt);
                             SimulationTransaction st = new SimulationTransaction();
                             st.nodeType = elt.getAttribute("deviceid");
 
