@@ -589,6 +589,12 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
   std::cout<<"simulate"<<std::endl;
   //for_each(_simComp->getCPUList().begin(), _simComp->getCPUList().end(),std::mem_fun(&CPU::schedule));
    for_each(_simComp->getFPGAList().begin(), _simComp->getFPGAList().end(),std::mem_fun(&FPGA::schedule));
+   
+   /* for(FPGAList::iterator i=_simComp->getFPGAList().begin();i!=_simComp->getFPGAList().end();i++){
+     int j=0
+     (*i)->schedule();
+     (*i)->setFPGANumber(j++);
+     }*/
   //std::cout << "after schedule" << std::endl;
   //transLET=getTransLowestEndTime(cpuLET);
    std::cout<<"simulator get next transaction begin"<<std::endl;

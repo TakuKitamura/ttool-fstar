@@ -60,6 +60,7 @@ FPGA::FPGA(    ID iID,
 					      ,_cyclesBeforeIdle(iCyclesBeforeIdle)
 					      ,_cyclesPerExeci(iCyclesPerExeci)
 					      ,_cyclesPerExecc(iCyclesPerExecc)
+						// ,_fpgaNumber(0)
 					     
 {}
 
@@ -80,26 +81,32 @@ void FPGA::streamBenchmarks(std::ostream& s) const{
 
 TMLTransaction* FPGA::getNextTransaction(){
   std::cout<<"fpga getNextTransaction";
-#ifdef BUS_ENABLE
-  if(_masterNextTransaction==0 || _nextTransaction==0){
+  #ifdef BUS_ENABLED
+  if (_masterNextTransaction==0 || _nextTransaction==0){
+    if(_masterNextTransaction == 0) std::cout<<"master is 0"<<std::endl;
+    if(_nextTransaction==0) std::cout<<"nexttrans is 0"<<std::endl;
     return _nextTransaction;
-   }
-  else{
+  }else{
+#ifdef DEBUG_CPU
+    std::cout << "CPU:getNT: " << _name << " has bus transaction on master " << _masterNextTransaction->toString() << std::endl;
+#endif
+    //std::cout << "CRASH Trans:" << _nextTransaction->toString() << std::endl << "Channel: " << _nextTransaction->getChannel() << "\n";
     BusMaster* aTempMaster = getMasterForBus(_nextTransaction->getChannel()->getFirstMaster(_nextTransaction));
+    std::cout << "1  aTempMaster: " << aTempMaster << std::endl;
     bool aResult = aTempMaster->accessGranted();
- 
+    std::cout << "2" << std::endl;
     while (aResult && aTempMaster!=_masterNextTransaction){
-      
+      std::cout << "3" << std::endl;
       aTempMaster =_nextTransaction->getChannel()->getNextMaster(_nextTransaction);
-      
+      std::cout << "4" << std::endl;
       aResult = aTempMaster->accessGranted();
- 
+      std::cout << "5" << std::endl;
     }
     return (aResult)?_nextTransaction:0;
   }
 #else
-  if(_nextTransaction)std::cout<<_nextTransaction->toString()<<std::endl;
-  else std::cout<<"nexttrans is 0"<<std::endl;
+   if(_nextTransaction)std::cout<<_nextTransaction->toString()<<std::endl;
+
   return _nextTransaction;
 #endif
  }
@@ -208,7 +215,6 @@ std::cout<<"fpga addTransaction"<<std::endl;
       std::cout << "2\n";
       Slave* aTempSlave= _nextTransaction->getChannel()->getNextSlave(_nextTransaction);
       std::cout << "3\n";
-      aTempMaster->addBusContention(_nextTransaction->getStartTime()-max(_endSchedule,_nextTransaction->getRunnableTime()));
       while (aTempMaster!=0){
         std::cout << "3a\n";
         aTempMaster->addTransaction(_nextTransaction);
@@ -272,24 +278,28 @@ void FPGA::schedule(){
     std::cout<<(*it)->toShortString()<<std::endl;
   }
   TMLTransaction* aOldTransaction = _nextTransaction;
-  std::cout<<"111"<<std::endl;
-  static TaskList::iterator iter_task=_taskList.begin();
-   std::cout<<"222"<<std::endl;
+  //std::cout<<"111"<<std::endl;
+  TaskList::iterator iter_task=_taskList.begin();
+  //int time=0;
+  //  std::cout<<"222"<<std::endl;
    if(iter_task!=_taskList.end()){
-     std::cout<<"555"<<std::endl;
-    _nextTransaction=(*iter_task++)->getNextTransaction(0);
-    std::cout<<"666"<<std::endl;
+     //  std::cout<<"555"<<std::endl;
+    _nextTransaction=(*iter_task)->getNextTransaction(0);
+    if(_nextTransaction!=0 && _nextTransaction->getVirtualLength()==0)
+      _nextTransaction=0;
+    // std::cout<<"666"<<std::endl;
    }
    
-   std::cout<<"333"<<std::endl;
+   // std::cout<<"333"<<std::endl;
   //std::cout<<_nextTransaction->toShortString()<<std::endl;
+
   if (aOldTransaction!=0 && aOldTransaction!=_nextTransaction){ //NEW 
     if (_masterNextTransaction!=0) {
       _masterNextTransaction->registerTransaction(0);
 
     }
   }
-   std::cout<<"444"<<std::endl;
+  //std::cout<<"444"<<std::endl;
   if (_nextTransaction!=0 && aOldTransaction != _nextTransaction) calcStartTimeLength();
   std::cout << "fpga:schedule END " << _name << "+++++++++++++++++++++++++++++++++\n";
 }

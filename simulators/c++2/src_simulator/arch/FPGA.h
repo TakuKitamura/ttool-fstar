@@ -125,6 +125,8 @@ public:
 	virtual void registerTask(TMLTask* iTask){
 		_taskList.push_back(iTask);
 	}
+	inline void setFPGANumber(unsigned int num) { _fpgaNumber=num;}
+	inline unsigned int getFPGANumber() { return _fpgaNumber;}
 protected:
 	///List of all tasks running on the FPGA
 	TaskList _taskList;
@@ -140,6 +142,8 @@ protected:
 	void calcStartTimeLength();
 
 	TMLTime _reconfigTime;
+
+	unsigned int _fpgaNumber;
 
 	///Determines the correct bus master of this CPU connected to the same bus as bus master iDummy
 	/**
