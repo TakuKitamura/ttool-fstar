@@ -2985,7 +2985,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             _state = tasktm.getState(valueTable.get(new Integer(id)));
         }
 
-        TraceManager.addDev("state:" + _state);
+        //TraceManager.addDev("state:" + _state);
 
         if ((i != null) && (c != null)) {
             try {
