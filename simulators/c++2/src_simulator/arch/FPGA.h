@@ -70,10 +70,6 @@ public:
 	/**
 	\param iID ID of the device
 	\param iName Name of the device
-	\param iScheduler Pointer to the scheduler object
-	\param iTimePerCycle 1/Processor frequency
-	\param iMapCapacity Pointer to the overall mapping capacity ????
-	\param iMapPenalty Pointer to the mapping penalty  ????
 	\param iReconfigTime reconfiguration time
 	\param iChangeIdleModeCycles Cycles needed to switch into indle mode
 	\param iCyclesBeforeIdle Pointer to the max consecutive cycles before idle in cycle
@@ -81,7 +77,7 @@ public:
 	\param iCyclesPerExecc Cycles needed to execute one EXECC unit
 	*/
 	
-        FPGA(ID iID, std::string iName, WorkloadSource* iScheduler, TMLTime iTimePerCycle, TMLTime iReconfigTime, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle,unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc);
+        FPGA(ID iID, std::string iName, TMLTime iReconfigTime, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle,unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc);
 	///Destructor
 	virtual ~FPGA();
 	///Determines the next FPGA transaction to be executed
@@ -128,12 +124,11 @@ public:
     	*/
 	virtual void registerTask(TMLTask* iTask){
 		_taskList.push_back(iTask);
-		if (_scheduler!=0) _scheduler->addWorkloadSource(iTask);
 	}
 protected:
 	///List of all tasks running on the FPGA
 	TaskList _taskList;
-	
+        
 	/**
 	\param iTime Indicates at what time the transaction should be truncated
 	*/
@@ -142,9 +137,7 @@ protected:
 	/**
 	\param iTimeSlice FPGA Time slice granted by the scheduler
 	*/
-	void calcStartTimeLength(TMLTime iTimeSlice);
-	///1/Processor frequency
-	TMLTime _timePerCycle;
+	void calcStartTimeLength();
 
 	TMLTime _reconfigTime;
 
@@ -167,6 +160,7 @@ protected:
 #endif
 	///Cycles needed to execute one execi unit
 	unsigned int _cyclesPerExeci;
+	unsigned int _cyclesPerExecc;
 	///Time needed to execute one execi unit
 	float _timePerExeci;
 #ifdef PENALTIES_ENABLED
@@ -175,6 +169,7 @@ protected:
 	///Time needed to switch into idle mode
 	TMLTime _changeIdleModeTime;
 #endif
+		
 	///State variable for the VCD output
 	vcdFPGAVisState _vcdOutputState;
 };

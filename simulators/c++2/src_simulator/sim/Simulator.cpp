@@ -46,6 +46,7 @@
 #include <SimComponents.h>
 #include <IndeterminismSource.h>
 #include <CPU.h>
+#include <FPGA.h>
 #include <TMLTask.h>
 #include <TMLChannel.h>
 #include <ServerIF.h>
@@ -79,7 +80,8 @@ TMLTransaction* Simulator::getTransLowestEndTime(SchedulableDevice*& oResultDevi
 #endif
   //for(SchedulingList::const_iterator i=_simComp->_cpuList.begin(); i != _simComp->_cpuList.end(); ++i){
   //for(CPUList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
-  for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
+  // for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
+  for(FPGAList::const_iterator i=_simComp->getFPGAList().begin(); i != _simComp->getFPGAList().end(); ++i){
     aTempDevice=*i;
     aTempTrans=aTempDevice->getNextTransaction();
     if (aTempTrans!=0 && aTempTrans->getVirtualLength()>0){
@@ -247,7 +249,8 @@ void Simulator::schedule2TXT(std::string& iTraceFileName) const{
   std::ofstream myfile(iTraceFileName.c_str());
   if (myfile.is_open()){
     //for(CPUList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
-    for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
+    //for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
+    for(FPGAList::const_iterator i=_simComp->getFPGAList().begin(); i != _simComp->getFPGAList().end(); ++i){
       (*i)->schedule2TXT(myfile);
     }
     //for(BusList::const_iterator j=_simComp->getBusIterator(false); j != _simComp->getBusIterator(true); ++j){
@@ -554,11 +557,15 @@ bool Simulator::channelImpactsCommand(TMLChannel* iCh, TMLCommand* iCmd){
 }
 
 bool Simulator::simulate(TMLTransaction*& oLastTrans){
-  TMLTransaction* depTransaction,*depCPUnextTrans,*transLET;
-  TMLCommand* commandLET,*depCommand,*depCPUnextCommand;
+  //TMLTransaction* depTransaction,*depCPUnextTrans,*transLET;
+  //TMLCommand* commandLET,*depCommand,*depCPUnextCommand;
+  TMLTransaction* depTransaction,*depFPGAnextTrans,*transLET;
+  TMLCommand* commandLET,*depCommand,*depFPGAnextCommand;
   TMLTask* depTask;
-  SchedulableDevice* cpuLET;
-  CPU* depCPU;
+  // SchedulableDevice* cpuLET;
+  // CPU* depCPU;
+  SchedulableDevice* fpgaLET;
+  FPGA* depFPGA;
 #ifdef DEBUG_KERNEL
   std::cout << "kernel:simulate: first schedule" << std::endl;
 #endif
@@ -580,9 +587,13 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
   //for_each(_simComp->getCPUIterator(false), _simComp->getCPUIterator(true),std::mem_fun(&CPU::setRescheduleFlag));
   //for_each(_simComp->getCPUIterator(false), _simComp->getCPUIterator(true),std::mem_fun(&CPU::schedule));
   std::cout<<"simulate"<<std::endl;
-  for_each(_simComp->getCPUList().begin(), _simComp->getCPUList().end(),std::mem_fun(&CPU::schedule));
+  //for_each(_simComp->getCPUList().begin(), _simComp->getCPUList().end(),std::mem_fun(&CPU::schedule));
+   for_each(_simComp->getFPGAList().begin(), _simComp->getFPGAList().end(),std::mem_fun(&FPGA::schedule));
   //std::cout << "after schedule" << std::endl;
-  transLET=getTransLowestEndTime(cpuLET);	      
+  //transLET=getTransLowestEndTime(cpuLET);
+   std::cout<<"simulator get next transaction begin"<<std::endl;
+  transLET=getTransLowestEndTime(fpgaLET);
+  std::cout<<"simulator get next transaction end"<<std::endl;
   //std::cout << "after getTLET" << std::endl;
 #ifdef LISTENERS_ENABLED
   if (_wasReset) NOTIFY_SIM_STARTED();
@@ -598,11 +609,13 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
     //}
 #ifdef DEBUG_KERNEL
     std::cout << "kernel:simulate: BEFORE add trans " << commandLET->toString() << std::endl;
-    std::cout << "cpuLET= " << cpuLET->toString() << std::endl;
+    // std::cout << "cpuLET= " << cpuLET->toString() << std::endl;
+    std::cout << "fpgaLET= " << fpgaLET->toString() << std::endl;
     std::cout << "kernel:simulate:cpuLET printed" << std::endl;
 #endif
 	std::cout<<"in simulator begin addTransaction "<<std::endl;
-        bool x = cpuLET->addTransaction(0);
+	// bool x = cpuLET->addTransaction(0);
+	 bool x = fpgaLET->addTransaction(0);
        // cpuLET->setCycleTime(0);
         std::cout<<"in simulator end addTransactin "<<std::endl;
 
@@ -622,10 +635,12 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 #ifdef DEBUG_KERNEL
         std::cout << "kernel:simulate: dependent Task found" << std::endl;
 #endif
-        depCPU=depTask->getCPU();
+	// depCPU=depTask->getCPU();
+	depFPGA=depTask->getFPGA();
         //std::cout << "CPU this task : " << cpuLET->toString();
         //if (depCPU==0) std::cout << "  CPU dep task " << depTask->toString() << ": 0\n"; else std::cout << "  CPU dep task: "<< depTask->toString() << " " << depCPU->toString() << std::endl;
-        if (depCPU!=cpuLET){
+	// if (depCPU!=cpuLET){
+	if(depFPGA!=fpgaLET){
 #ifdef DEBUG_KERNEL
           std::cout << "kernel:simulate: Tasks running on different CPUs" << std::endl;
 #endif
@@ -650,28 +665,34 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
                  continue;
                  }*/
               //std::cout << "Let's crash!!!!!!!!\n";
-              depCPUnextTrans=depCPU->getNextTransaction();
+              //depCPUnextTrans=depCPU->getNextTransaction();
+	      depFPGAnextTrans=depFPGA->getNextTransaction();
               //std::cout << "Not crahed!!!!!!!!\n";
-              if (depCPUnextTrans!=0){
+	      // if (depCPUnextTrans!=0){
+	      if(depFPGAnextTrans!=0){
 #ifdef DEBUG_KERNEL
                 std::cout << "kernel:simulate: transaction scheduled on dependent CPU" << std::endl;
 #endif
-                depCPUnextCommand=depCPUnextTrans->getCommand();
-                if (depCPUnextCommand->getTask()!=depTask){
+                //depCPUnextCommand=depCPUnextTrans->getCommand();
+		depFPGAnextCommand=depFPGAnextTrans->getCommand();
+		// if (depCPUnextCommand->getTask()!=depTask){
+		 if (depFPGAnextCommand->getTask()!=depTask){
 #ifdef DEBUG_KERNEL
                   std::cout << "kernel:simulate: dependent task not yet scheduled on dependent CPU" << std::endl;
 #endif
 
-                  depCPU->truncateAndAddNextTransAt(transLET->getEndTime());
+		  // depCPU->truncateAndAddNextTransAt(transLET->getEndTime());
+		   depFPGA->truncateAndAddNextTransAt(transLET->getEndTime());
 #ifdef DEBUG_KERNEL
                   std::cout << "kernel:simulate: dependent transaction truncated" << std::endl;
 #endif
                 }
               }else{
 #ifdef DEBUG_KERNEL
-                std::cout << "kernel:simulate: schedule dependent CPU  " << depCPU->toString() << std::endl;
+                //std::cout << "kernel:simulate: schedule dependent CPU  " << depCPU->toString() << std::endl;
 #endif
-                depCPU->schedule();
+		// depCPU->schedule();
+		depFPGA->schedule();
               }
             }
           }
@@ -688,7 +709,8 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
         if (*i!=cpuLET) (*i)->rescheduleIfNecessary();
         }
         }*/
-      cpuLET->schedule();
+      // cpuLET->schedule();
+      fpgaLET->schedule();
 #ifdef LISTENERS_ENABLED
       NOTIFY_TIME_ADVANCES(transLET->getEndTime());
 #endif
@@ -696,7 +718,8 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
     oLastTrans=transLET;
 
     //std::cout << "kernel:simulate: getTransLowestEndTime" << std::endl;
-    transLET=getTransLowestEndTime(cpuLET);
+    //transLET=getTransLowestEndTime(cpuLET);
+    transLET=getTransLowestEndTime(fpgaLET);
 
     //_syncInfo->_server->sendReply("Sleep once again\n");
     //sleep(1);

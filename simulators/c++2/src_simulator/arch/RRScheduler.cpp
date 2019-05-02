@@ -123,7 +123,12 @@ TMLTime RRScheduler::schedule(TMLTime iEndSchedule){
 	//	_nextTransaction->setLength(min(_nextTransaction->getOperationLength(), _timeSlice-_elapsedTime));
 	//}
 	//std::cout << "End schedule\n" ;
+	if(_nextTransaction)
+	  std::cout<<"in rr next trans is"<<_nextTransaction->toShortString()<<std::endl;
+	else 
+	  std::cout<<"in rr next trans is 0"<<std::endl;
 	return _timeSlice-_elapsedTime;
+       
 }
 
 //TMLTransaction* RRScheduler::getNextTransaction(TMLTime iEndSchedule) const{
