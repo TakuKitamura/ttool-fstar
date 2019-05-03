@@ -4,7 +4,6 @@
 #include <mbed.h>
 
 
-
 asyncchannel *getNewAsyncchannel(char *outname, char *inname, int isBlocking, int maxNbOfMessages) {
   asyncchannel * asyncch = (asyncchannel *)(malloc(sizeof(struct asyncchannel)));
   if (asyncch == NULL) {
