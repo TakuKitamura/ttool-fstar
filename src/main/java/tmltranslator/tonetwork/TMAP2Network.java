@@ -177,6 +177,7 @@ public class TMAP2Network<E>  {
 
     }
 
+
     /* List of assumptions:
             - Only one router set (i.e. no router, then bus, then router) between two tasks
             - Channels must be mapped on at least one route to be taken into account

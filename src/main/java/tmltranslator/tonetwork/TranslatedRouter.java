@@ -242,21 +242,6 @@ public class TranslatedRouter<E> {
             if (routerToConnectWith != null) {
                 if (TMAP2Network.hasRouterAt(xPos, yPos, portNb, noc.size)) {
 
-                    /*Vector<TMLEvent> evtFromINtoINVCs = new Vector<>();
-                    Vector<TMLChannel> chFromINtoINVCs = new Vector<>();
-                    for (i = 0; i < nbOfVCs; i++) {
-                        TMLEvent evtFromINtoINVC = new TMLEvent("EventBetweenIN_IN_forVC_" + i + "_" + nameOfExecNode,
-                                null, 8, true);
-                        tmlm.addEvent(evtFromINtoINVC);
-                        evtFromINtoINVCs.add(evtFromINtoINVC);
-
-                        TMLChannel chFromINtoINVC = new TMLChannel("channelBetweenIN_IN_for_VC" + i + "_" +
-                                nameOfExecNode, null);
-                        chFromINtoINVC.setSize(4);
-                        chFromINtoINVC.setMax(8);
-                        tmlm.addChannel(chFromINtoINVC);
-                        chFromINtoINVCs.add(chFromINtoINVC);
-                    }*/
 
                     TaskINForDispatch inDispatch = new TaskINForDispatch("IN_" + execNode, null,
                             null);
@@ -296,18 +281,17 @@ public class TranslatedRouter<E> {
         }
 
         // IN VC
-        Vector<TaskINForVC> dispatchInVCs = new Vector<>();
+        TaskINForVC[][] dispatchInVCs = new TaskINForVC[NB_OF_PORTS][nbOfVCs];
         for (int portNb = 0; portNb < NB_OF_PORTS; portNb++) {
             for (int vcNb = 0; vcNb < nbOfVCs; vcNb++) {
                 TranslatedRouter routerToConnectWith = main.getRouterFrom(xPos, yPos, portNb);
                 if (routerToConnectWith != null) {
                     if (TMAP2Network.hasRouterAt(xPos, yPos, portNb, noc.size)) {
 
-
                         TaskINForVC taskINForVC = new TaskINForVC("IN_" + execNode + "_" + vcNb, null,
                                 null);
                         tmlm.addTask(taskINForVC);
-                        dispatchInVCs.add(taskINForVC);
+                        dispatchInVCs[portNb][vcNb] = taskINForVC;
 
                         pktInEvtsVCs[portNb][vcNb].setDestinationTask(taskINForVC);
 
@@ -334,6 +318,87 @@ public class TranslatedRouter<E> {
                 }
             }
         }
+
+        // OUT VC
+        TaskOUTForVC[][] dispatchOutVCs = new TaskOUTForVC[NB_OF_PORTS][nbOfVCs];
+        for (int portNb = 0; portNb < NB_OF_PORTS; portNb++) {
+            for (int vcNb = 0; vcNb < nbOfVCs; vcNb++) {
+                TranslatedRouter routerToConnectWith = main.getRouterFrom(xPos, yPos, portNb);
+                if (routerToConnectWith != null) {
+                    if (TMAP2Network.hasRouterAt(xPos, yPos, portNb, noc.size)) {
+                        TaskOUTForVC taskOUTForVC = new TaskOUTForVC("OUTVC_" + execNode + "_" + vcNb, null,
+                                null);
+                        tmlm.addTask(taskOUTForVC);
+                        dispatchOutVCs[portNb][vcNb] = taskOUTForVC;
+
+                        Vector<TMLEvent> inPackets = new Vector<>();
+                        Vector<TMLEvent> outFeedbacks = new Vector<>();
+                        for(int k=0; k<TMAP2Network.DOMAIN+1; k++) {
+                            inPackets.add(routeEvtVCs[portNb][vcNb][k]);
+                            routeEvtVCs[portNb][vcNb][k].setDestinationTask(taskOUTForVC);
+
+                            outFeedbacks.add(routeEvtVCsFeedback[portNb][vcNb][k]);
+                            routeEvtVCsFeedback[portNb][vcNb][k].setOriginTask(taskOUTForVC);
+
+                        }
+
+                        TMLEvent vcSelect = evtSelectVC[portNb][nbOfVCs];
+                        vcSelect.setDestinationTask(taskOUTForVC);
+
+                        TMLEvent outVCEvt = evtOutVCs[portNb][nbOfVCs];
+                        outVCEvt.setDestinationTask(taskOUTForVC);
+
+                        taskOUTForVC.generate(inPackets, vcSelect, outFeedbacks, outVCEvt);
+                    }
+                }
+            }
+        }
+
+        // OUT NOC - One for each output of the considered router
+        // We need one output channel for each exit and one output event per VC
+
+        HashMap<Integer, TaskOUTForDispatch> dispatchOuts = new HashMap<>();
+        for (int portNb = 0; portNb < NB_OF_PORTS; portNb++) {
+            TranslatedRouter routerToConnectWith = main.getRouterFrom(xPos, yPos, portNb);
+            if (routerToConnectWith != null) {
+                if (TMAP2Network.hasRouterAt(xPos, yPos, portNb, noc.size)) {
+
+
+                    TaskOUTForDispatch outDispatch = new TaskOUTForDispatch("OUT_" + execNode, null,
+                            null);
+                    tmlm.addTask(outDispatch);
+
+
+                    Vector<TMLEvent> inPacketEvents = new Vector<TMLEvent>();
+                    Vector<TMLEvent> inFeedbackEvents = new Vector<TMLEvent>();
+                    Vector<TMLEvent> outSelectEvents = new Vector<TMLEvent>();
+                    TMLEvent outPktEvent;
+                    TMLChannel outPkt;
+
+                    for(int nvc=0; nvc<nbOfVCs; nvc++) {
+                        inPacketEvents.add(evtOutVCs[portNb][nvc]);
+                        evtOutVCs[portNb][nvc].setDestinationTask(outDispatch);
+                        outSelectEvents.add(evtSelectVC[portNb][nvc]);
+                        evtSelectVC[portNb][nvc].setOriginTask(outDispatch);
+                        inFeedbackEvents.add(feedbackINVCtoOUTs[portNb][nvc]);
+                        feedbackINVCtoOUTs[portNb][nvc].setDestinationTask(outDispatch);
+                    }
+
+                    outPktEvent = evtOutVCstoINs[portNb];
+                    evtOutVCstoINs[portNb].setOriginTask(outDispatch);
+                    outPkt = chOutVCstoINs[portNb];
+                    chOutVCstoINs[portNb].setOriginTask(outDispatch);
+
+
+                    outDispatch.generate(inPacketEvents, inFeedbackEvents, outSelectEvents, outPktEvent, outPkt);
+
+                    dispatchOuts.put(new Integer(portNb), outDispatch);
+                }
+            }
+        }
+
+
+
     }
 
 
