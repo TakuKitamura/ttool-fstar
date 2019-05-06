@@ -82,6 +82,10 @@ public class TMAP2Network<E>  {
         this.nocSize = nocSize;
     }
 
+    public TMLMapping<?> getTMLMapping() {
+        return tmlmapping;
+    }
+
     public static boolean hasRouterAt(int myX, int myY, int routerPosition, int nocSize) {
         if (routerPosition == DOMAIN) {
             return true;
@@ -129,6 +133,21 @@ public class TMAP2Network<E>  {
         }
 
         return routers[xPos][yPos];
+    }
+
+
+    public int getFrom(int port) {
+        switch(port) {
+            case NORTH:
+                return SOUTH;
+            case SOUTH:
+                return NORTH;
+            case WEST:
+                return EAST;
+            case EAST:
+                return WEST;
+        }
+        return NORTH;
     }
 
 
@@ -299,7 +318,8 @@ public class TMAP2Network<E>  {
 
 
 
-        // A bridge is put with the same position as the router as to allow classical paths not to use the router
+        // A bridge is put with the same position as the router as to allow classical paths not
+        // to use the router
 
 
         return null; // all ok

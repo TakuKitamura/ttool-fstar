@@ -531,6 +531,7 @@ public class GTURTLEModeling {
         return false;
     }
 
+
     public boolean generateTMLTxt(String _title) {
 
         //This branch is activated if doing the syntax check from the architecture panel.

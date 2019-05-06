@@ -295,6 +295,7 @@ public class JDialogNoCManagement extends JDialog implements ActionListener, Lis
     //        }
     //    }
 
+    @SuppressWarnings("unchecked")
     public void run() {
         //      String cmd;
         //    String list, data;
@@ -327,6 +328,23 @@ public class JDialogNoCManagement extends JDialog implements ActionListener, Lis
             stopProcess();
             return;
         }
+
+        outputText.append("\nNoC removed\n");
+        outputText.append("\nGenerating TML\n");
+
+        TMLMapping<?> mapping = t2n.getTMLMapping();
+        TMLMappingTextSpecification ts = new TMLMappingTextSpecification<>("noNoc");
+        ts.toTextFormat(mapping);
+        String dir = SpecConfigTTool.TMLCodeDirectory;
+        try {
+            ts.saveFile(SpecConfigTTool.TMLCodeDirectory, "NoNoC");
+        } catch (Exception e) {
+            outputText.append("\nException when generating TML/TMAP file\n");
+            stopProcess();
+            return;
+        }
+
+        outputText.append("\nSpecification generated in " + dir + "\n");
 
         outputText.append("\nAll done\n");
 

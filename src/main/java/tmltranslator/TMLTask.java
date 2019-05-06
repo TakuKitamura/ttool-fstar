@@ -240,6 +240,9 @@ public class TMLTask extends TMLElement {
     }
 
     public String getTaskName() {
+        if (getName().indexOf("__") == -1) {
+            return getName();
+        }
         return getName().split("__")[1];
     }
 

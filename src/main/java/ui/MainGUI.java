@@ -775,6 +775,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         //TraceManager.addDev("Found " + elements.size() + " elements");
         dtree.forceUpdate();
     }
+    
 
 
     public List<Invariant> getInvariants() {
@@ -5185,8 +5186,9 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         }
 
         return null;
-
     }
+
+
 
     public String generateCCode() {
 

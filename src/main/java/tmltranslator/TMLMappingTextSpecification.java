@@ -85,7 +85,6 @@ public class TMLMappingTextSpecification<E> {
     }
 
     public void saveFile(String path, String filename) throws FileException {
-
         File dir = new File(path);
         if (!dir.exists())
             dir.mkdir();

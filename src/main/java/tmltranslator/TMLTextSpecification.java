@@ -233,6 +233,7 @@ public class TMLTextSpecification<E> {
                 if (!ch.isInfinite()) {
                     sb += SP + ch.getMax();
                 }
+                TraceManager.addDev("Declaration. Handling channel " + ch.getName());
                 sb += SP + "OUT" + SP + ch.getOriginTask().getName() + SP + "IN" + SP + ch.getDestinationTask().getName() + CR;
 
                 if (ch.isLossy()) {
