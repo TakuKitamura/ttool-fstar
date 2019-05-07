@@ -125,8 +125,8 @@ public:
 	virtual void registerTask(TMLTask* iTask){
 		_taskList.push_back(iTask);
 	}
-	inline void setFPGANumber(unsigned int num) { _fpgaNumber=num;}
-	inline unsigned int getFPGANumber() { return _fpgaNumber;}
+	inline void setTransNumber(unsigned int num) { _transNumber=num;}
+	inline unsigned int getTransNumber() { return _transNumber;}
 protected:
 	///List of all tasks running on the FPGA
 	TaskList _taskList;
@@ -143,7 +143,6 @@ protected:
 
 	TMLTime _reconfigTime;
 
-	unsigned int _fpgaNumber;
 
 	///Determines the correct bus master of this CPU connected to the same bus as bus master iDummy
 	/**
@@ -156,24 +155,25 @@ protected:
 	TMLTransaction* _lastTransaction;
 	///List of bus masters
 	BusMasterList _busMasterList;
-#ifdef PENALTIES_ENABLED		
+
+ 		
 	///Cycles needed to switch to idle mode
 	unsigned int _changeIdleModeCycles;
 	///Idle cycles which elapse before entering idle mode
 	unsigned int _cyclesBeforeIdle;
-#endif
+ 
 	///Cycles needed to execute one execi unit
 	unsigned int _cyclesPerExeci;
 	unsigned int _cyclesPerExecc;
 	///Time needed to execute one execi unit
 	float _timePerExeci;
-#ifdef PENALTIES_ENABLED
+ 
 	///Idle time which elapses before entering idle mode
 	TMLTime _timeBeforeIdle;
 	///Time needed to switch into idle mode
 	TMLTime _changeIdleModeTime;
-#endif
-		
+	unsigned int _transNumber;
+ 		
 	///State variable for the VCD output
 	vcdFPGAVisState _vcdOutputState;
 };
