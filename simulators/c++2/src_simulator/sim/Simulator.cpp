@@ -368,6 +368,9 @@ std::cout<<"schedule2HTML--------------------------------------*****************
     for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
       (*i)->drawPieChart(myfile);
     }
+    for(FPGAList::const_iterator i=_simComp->getFPGAList().begin(); i != _simComp->getFPGAList().end(); ++i){
+      (*i)->drawPieChart(myfile);
+    }
     for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
       (*j)->drawPieChart(myfile);
     }
@@ -392,6 +395,16 @@ std::cout<<"schedule2HTML--------------------------------------*****************
 	   (*i)->setCycleTime(0);
     }
     jsfile.close();
+    
+    for(FPGAList::const_iterator j=_simComp->getFPGAList().begin(); j != _simComp->getFPGAList().end(); ++j){     
+      for(TaskList::const_iterator i = (*j)->getTaskList().begin(); i != (*j)->getTaskList().end(); ++i){
+      	(*j)->setHtmlCurrTask(*i);
+	std::cout<<"begin fpga html "<<(*j)->toShortString()<<std::endl;
+	(*j)->schedule2HTML(myfile);
+	std::cout<<"end fpga html "<<(*j)->toShortString()<<std::endl;
+	(*j)->showPieChart(myfile);
+      }
+    }
     
     for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
       (*j)->schedule2HTML(myfile);     
