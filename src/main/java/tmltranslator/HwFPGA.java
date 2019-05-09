@@ -51,7 +51,6 @@ import tmltranslator.modelcompiler.ArchUnitMEC;
  */
 public class HwFPGA extends HwExecutionNode {
 
-
     public static final int DEFAULT_BYTE_DATA_SIZE = 4;
     public static final int DEFAULT_GO_IDLE_TIME = 10;
     public static final int DEFAULT_MAX_CONSECUTIVE_IDLE_CYCLES = 10;
@@ -59,14 +58,14 @@ public class HwFPGA extends HwExecutionNode {
     public static final int DEFAULT_MAPPING_PENALTY = 0;
     public static final int DEFAULT_RECONFIGURATION_TIME = 50;
 
-
-
     public int byteDataSize = DEFAULT_BYTE_DATA_SIZE; // Should be greater than 0
     public int goIdleTime = DEFAULT_GO_IDLE_TIME; // Should be greater or equal to 0
     public int maxConsecutiveIdleCycles = DEFAULT_MAX_CONSECUTIVE_IDLE_CYCLES; // Should be greater or equal to 0
     public int capacity = HwFPGA.DEFAULT_CAPACITY;
     public int mappingPenalty = HwFPGA.DEFAULT_MAPPING_PENALTY;
     public int reconfigurationTime = HwFPGA.DEFAULT_RECONFIGURATION_TIME;
+    public String scheduling = "";
+
 
     public HwFPGA(String _name) {
         super(_name);
@@ -76,9 +75,15 @@ public class HwFPGA extends HwExecutionNode {
         return "FPGA";
     }
 
+    public void setScheduling(String scheduling) { this.scheduling = scheduling;}
+
+    public String getScheduling() {return scheduling;}
+
     public String toXML() {
-        String s = "<FPGA name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize + "\" execiTime=\"" + execiTime + "\" execcTime=\"" + execcTime + "\" pipelineSize=\"";
-        s +=  "\" capacity=\"" + capacity + "\" mappingPenalty=\"" + mappingPenalty + "\" reconfigurationTime=\"" + reconfigurationTime + "\" />\n";
+        String s = "<FPGA name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize +
+                "\" execiTime=\"" + execiTime + "\" execcTime=\"" + execcTime + "\" pipelineSize=\"";
+        s +=  "\" capacity=\"" + capacity + "\" scheduling=\"" + scheduling + "\" mappingPenalty=\"" +
+                mappingPenalty + "\" reconfigurationTime=\"" + reconfigurationTime + "\" />\n";
         return s;
     }
 

@@ -71,6 +71,12 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
 //    private static String[] tracemodeTab = {"VCI logger"};
 
 
+    public static final String[] helpStrings = {"cpuname.html", "schedulingpolicy.html", "slicetime.html",
+            "numbercores.html", "datasize.html", "pipelinesize.html", "taskswitchingtime.html",
+            "misbrandingprediction.html", "cachemiss.html", "goidletime.html", "maxconsecutivecycles.html",
+            "execi.html", "execc.html", "clockdivider.html", "encryption.html", "cpuextension.html", "operation.html"};
+
+
     protected MainGUI mgui;
 
 
@@ -101,7 +107,7 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
     private java.util.List<SimulationTransaction> transactions;
 
     //issue 183
-    List<JButton>   buttons = new ArrayList<>();
+    List<JButton>  buttons;
     List<HelpEntry> helpEntries;
     TGComponentHelp cpuHelp;
 
@@ -114,6 +120,7 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         node = _node;
         MECType = _MECType;
         transactions = _transactions;
+
         initComponents();
         pack();
     }
@@ -135,14 +142,14 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         but.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(cpuHelp == null ) {
+                if(cpuHelp == null) {
                     cpuHelp = new TGComponentHelp(mgui, he);
                     cpuHelp.setLocationHelpWindow(but);
-                }else{
+                } else {
                     if(!cpuHelp.isVisible()) {
                         cpuHelp = new TGComponentHelp(mgui, he);
                         cpuHelp.setLocationHelpWindow(but);
-                    }else{
+                    } else{
                         cpuHelp.setVisible(false);
                     }
                 }
@@ -154,8 +161,16 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
 
     //issue 183
     private void hardwareHelp(){
-        HelpManager helpManager = new HelpManager();
-        if(helpManager.loadEntries()) {
+        HelpManager helpManager = mgui.getHelpManager();
+
+        if(!helpManager.loadEntries()) {
+            return;
+        }
+
+        buttons = new ArrayList<>();
+        helpEntries = new ArrayList<>();
+
+        /*if(helpManager.loadEntries()) {
             helpEntries = new ArrayList<>();
             HelpEntry he0 = helpManager.getHelpEntryWithHTMLFile("cpuname.html");
             helpEntries.add(he0);
@@ -191,13 +206,16 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
             helpEntries.add(he15);
             HelpEntry he16 = helpManager.getHelpEntryWithHTMLFile("operation.html");
             helpEntries.add(he16);
-        }
+        }*/
 
-        for(int i = 0; i < 17; i++) {
+
+        for(int i=0; i<helpStrings.length; i++) {
+            HelpEntry he = helpManager.getHelpEntryWithHTMLFile(helpStrings[i]);
+            helpEntries.add(he);
             Icon myIcon = IconManager.imgic32;
             JButton but = new JButton(myIcon);
             setButton(but);
-            buttonClick(but,helpEntries.get(i));
+            buttonClick(but, he);
             buttons.add(but);
         }
     }
@@ -247,7 +265,8 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.weighty = 0.5;
         c2.weightx = 0.5;
         c2.gridwidth = GridBagConstraints.REMAINDER;
-        panel2.add(buttons.get(0),c2);
+        if (buttons != null)
+            panel2.add(buttons.get(0),c2);
         c2.gridwidth = 1;
         c2.gridheight = 1;
         c2.weighty = 1.0;
@@ -266,7 +285,8 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.weighty = 0.5;
         c2.weightx = 0.5;
         c2.gridwidth = GridBagConstraints.REMAINDER;
-         panel2.add(buttons.get(1),c2);
+        if (buttons != null)
+            panel2.add(buttons.get(1), c2);
 
         c2.gridwidth = 1;
         //issue 183
@@ -281,7 +301,8 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.weighty = 0.5;
         c2.weightx = 0.5;
         c2.gridwidth = GridBagConstraints.REMAINDER;
-        panel2.add(buttons.get(2),c2);
+        if (buttons != null)
+            panel2.add(buttons.get(2),c2);
 
         c2.gridwidth = 1;
         //issue 183
@@ -290,13 +311,15 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         panel2.add(new JLabel("Nb of cores:"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         nbOfCores = new JTextField(""+node.getNbOfCores(), 15);
-        panel2.add(nbOfCores, c2);
+        if (buttons != null)
+            panel2.add(nbOfCores, c2);
 
         //issue 183
         c2.weighty = 0.5;
         c2.weightx = 0.5;
         c2.gridwidth = GridBagConstraints.REMAINDER;
-        panel2.add(buttons.get(3),c2);
+        if (buttons != null)
+            panel2.add(buttons.get(3),c2);
 
         c2.gridwidth = 1;
         //issue 183
@@ -311,7 +334,8 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.weighty = 0.5;
         c2.weightx = 0.5;
         c2.gridwidth = GridBagConstraints.REMAINDER;
-        panel2.add(buttons.get(4),c2);
+        if (buttons != null)
+            panel2.add(buttons.get(4),c2);
 
         c2.gridwidth = 1;
         //issue 183
@@ -326,7 +350,8 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.weighty = 0.5;
         c2.weightx = 0.5;
         c2.gridwidth = GridBagConstraints.REMAINDER;
-        panel2.add(buttons.get(5),c2);
+        if (buttons != null)
+            panel2.add(buttons.get(5),c2);
 
         c2.gridwidth = 1;
         //issue 183
@@ -341,7 +366,8 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.weighty = 0.5;
         c2.weightx = 0.5;
         c2.gridwidth = GridBagConstraints.REMAINDER;
-        panel2.add(buttons.get(6),c2);
+        if (buttons != null)
+            panel2.add(buttons.get(6),c2);
 
         c2.gridwidth = 1;
         //issue 183
@@ -356,7 +382,8 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.weighty = 0.5;
         c2.weightx = 0.5;
         c2.gridwidth = GridBagConstraints.REMAINDER;
-        panel2.add(buttons.get(7),c2);
+        if (buttons != null)
+            panel2.add(buttons.get(7),c2);
 
         c2.gridwidth = 1;
         //issue 183
@@ -371,7 +398,8 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.weighty = 0.5;
         c2.weightx = 0.5;
         c2.gridwidth = GridBagConstraints.REMAINDER;
-        panel2.add(buttons.get(8),c2);
+        if (buttons != null)
+            panel2.add(buttons.get(8),c2);
 
         c2.gridwidth = 1;
         //issue 183
@@ -386,7 +414,8 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.weighty = 0.5;
         c2.weightx = 0.5;
         c2.gridwidth = GridBagConstraints.REMAINDER;
-        panel2.add(buttons.get(9),c2);
+        if (buttons != null)
+            panel2.add(buttons.get(9), c2);
 
         c2.gridwidth = 1;
         //issue 183
@@ -401,7 +430,8 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.weighty = 0.5;
         c2.weightx = 0.5;
         c2.gridwidth = GridBagConstraints.REMAINDER;
-        panel2.add(buttons.get(10),c2);
+        if (buttons != null)
+            panel2.add(buttons.get(10), c2);
 
         c2.gridwidth = 1;
         //issue 183
@@ -416,7 +446,8 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.weighty = 0.5;
         c2.weightx = 0.5;
         c2.gridwidth = GridBagConstraints.REMAINDER;
-        panel2.add(buttons.get(11),c2);
+        if (buttons != null)
+            panel2.add(buttons.get(11),c2);
 
         c2.gridwidth = 1;
         //issue 183
@@ -431,7 +462,8 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.weighty = 0.5;
         c2.weightx = 0.5;
         c2.gridwidth = GridBagConstraints.REMAINDER;
-        panel2.add(buttons.get(12),c2);
+        if (buttons != null)
+            panel2.add(buttons.get(12),c2);
 
         c2.gridwidth = 1;
         //issue 183
@@ -446,7 +478,8 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.weighty = 0.5;
         c2.weightx = 0.5;
         c2.gridwidth = GridBagConstraints.REMAINDER;
-        panel2.add(buttons.get(13),c2);
+        if (buttons != null)
+            panel2.add(buttons.get(13), c2);
 
         // monitored
         /*c2.gridwidth = 1;
@@ -484,7 +517,8 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c4.weighty = 0.5;
         c4.weightx = 0.5;
         c4.gridwidth = GridBagConstraints.REMAINDER;
-        panel4.add(buttons.get(14),c4);
+        if (buttons != null)
+            panel4.add(buttons.get(14),c4);
         c4.weighty = 1.0;
         c4.weightx = 1.0;
         
@@ -499,7 +533,8 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c4.weighty = 0.5;
         c4.weightx = 0.5;
         c4.gridwidth = GridBagConstraints.REMAINDER;
-        panel4.add(buttons.get(16),c4);
+        if (buttons != null)
+            panel4.add(buttons.get(16),c4);
         c4.weighty = 1.0;
         c4.weightx = 1.0;
 
@@ -520,7 +555,8 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c4.weighty = 0.5;
         c4.weightx = 0.5;
         c4.gridwidth = GridBagConstraints.REMAINDER;
-        panel4.add(buttons.get(15),c4);
+        if (buttons != null)
+            panel4.add(buttons.get(15),c4);
 
         TraceManager.addDev("Transactions size=" + transactions.size());
         if (transactions.size()!=0) {

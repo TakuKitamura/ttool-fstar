@@ -74,7 +74,8 @@ public class TMLArchiTextSpecification {
     private String nodetypes[] = {"CPU", "FPGA", "BUS", "LINK", "BRIDGE", "ROUTER", "MEMORY", "HWA", "DMA"};
     private String cpuparameters[] = {"nbOfCores", "byteDataSize", "pipelineSize", "goIdleTime", "maxConsecutiveIdleCycles", "taskSwitchingTime",
             "branchingPredictionPenalty", "cacheMiss", "schedulingPolicy", "sliceTime", "execiTime", "execcTime", "operation"};
-    private String fpgaparameters[] = {"capacity", "byteDataSize", "mappingPenalty", "goIdleTime", "maxConsecutiveIdleCycles", "reconfigurationTime", "execiTime", "execcTime"};
+    private String fpgaparameters[] = {"capacity", "byteDataSize", "mappingPenalty", "goIdleTime",
+            "maxConsecutiveIdleCycles", "reconfigurationTime", "execiTime", "execcTime", "scheduling"};
     private String linkparameters[] = {"bus", "node", "priority"};
     private String hwaparameters[] = {"byteDataSize", "execiTime"};
     private String busparameters[] = {"byteDataSize", "pipelineSize", "arbitration"};
@@ -192,6 +193,9 @@ public class TMLArchiTextSpecification {
                 code += set + "execcTime " + fpga.execcTime + CR;
                 if (fpga.getOperation().length() > 0) {
                     code += set + "operation " + fpga.getOperation() + CR;
+                }
+                if (fpga.getScheduling().length() > 0) {
+                    code += set + "scheduling " + fpga.getScheduling() + CR;
                 }
 
             }
@@ -346,8 +350,8 @@ public class TMLArchiTextSpecification {
 
     public void browseCode() {
         // Browse lines of code one after the other
-        // Build accordinlgy the TMLModeling and updates errors and warnings
-        // In case of fatal error, immedialty quit code bowsing
+        // Build accordingly the TMLModeling and updates errors and warnings
+        // In case of fatal error, immediately quit code browsing
 
         StringReader sr = new StringReader(spec);
         BufferedReader br = new BufferedReader(sr);
@@ -680,6 +684,15 @@ public class TMLArchiTextSpecification {
 
                         fpga.setOperation(tmpOp.trim());
 
+                    }
+
+                    if (_split[2].toUpperCase().equals("SCHEDULING")) {
+                        String tmpOp = "";
+                        for (int i=3; i<_split.length; i++) {
+                            tmpOp += _split[i] + " ";
+                        }
+
+                        fpga.setScheduling(tmpOp.trim());
                     }
                 }
 

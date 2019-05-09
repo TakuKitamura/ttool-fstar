@@ -80,6 +80,8 @@ public class TMLArchiFPGANode extends TMLArchiNode implements SwallowTGComponent
 
     private String operation = "";
 
+    private String scheduling = "";
+
 
     public TMLArchiFPGANode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -329,6 +331,7 @@ public class TMLArchiFPGANode extends TMLArchiNode implements SwallowTGComponent
             }
         }
 
+
         if (dialog.getClockRatio().length() != 0) {
             try {
                 tmp = clockRatio;
@@ -345,6 +348,7 @@ public class TMLArchiFPGANode extends TMLArchiNode implements SwallowTGComponent
         }
 
        operation = dialog.getOperation().trim();
+        scheduling = dialog.getScheduling().trim();
 
 
         if (error) {
@@ -418,6 +422,7 @@ public class TMLArchiFPGANode extends TMLArchiNode implements SwallowTGComponent
         sb.append(" execcTime=\"" + execcTime + "\"");
         sb.append(" clockRatio=\"" + clockRatio + "\"");
         sb.append(" operation =\"" + operation + "\" ");
+        sb.append(" scheduling =\"" + scheduling + "\" ");
         sb.append("/>\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -495,6 +500,11 @@ public class TMLArchiFPGANode extends TMLArchiNode implements SwallowTGComponent
                                     operation = "";
                                 }
 
+                                scheduling = elt.getAttribute("scheduling");
+                                if (scheduling == null) {
+                                    scheduling = "";
+                                }
+
                             }
                         }
                     }
@@ -546,6 +556,10 @@ public class TMLArchiFPGANode extends TMLArchiNode implements SwallowTGComponent
         return operation;
     }
 
+    public String getScheduling() {
+        return scheduling;
+    }
+
 
     public String getAttributes() {
         String attr = "";
@@ -558,6 +572,7 @@ public class TMLArchiFPGANode extends TMLArchiNode implements SwallowTGComponent
         attr += "EXECI exec. time (in cycle) = " + execiTime + "\n";
         attr += "EXECC exec. time (in cycle) = " + execcTime + "\n";
         attr += "Operation  = " + operation + "\n";
+        attr += "Scheduling  = " + scheduling + "\n";
         attr += "Clock divider = " + clockRatio + "\n";
         return attr;
 

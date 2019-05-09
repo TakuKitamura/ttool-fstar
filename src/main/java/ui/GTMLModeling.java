@@ -2858,8 +2858,8 @@ public class GTMLModeling {
                     fpga.execiTime = fpgaNode.getExeciTime();
                     fpga.execcTime = fpgaNode.getExeccTime();
                     fpga.clockRatio = fpgaNode.getClockRatio();
-
                     fpga.setOperation(fpgaNode.getOperation());
+                    fpga.setScheduling(fpgaNode.getScheduling());
 
                     listE.addCor(fpga, fpgaNode);
                     archi.addHwNode(fpga);

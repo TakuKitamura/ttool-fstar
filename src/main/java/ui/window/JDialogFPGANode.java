@@ -72,7 +72,7 @@ public class JDialogFPGANode extends JDialogBase implements ActionListener {
 
     // Panel2
     protected JTextField byteDataSize, goIdleTime, maxConsecutiveIdleCycles, clockRatio, execiTime, execcTime,
-            capacity, mappingPenalty, reconfigurationTime, operation;
+            capacity, mappingPenalty, reconfigurationTime, operation, scheduling;
 
     // Tabbed pane for panel1 and panel2
     //private JTabbedPane tabbedPane;
@@ -186,6 +186,12 @@ public class JDialogFPGANode extends JDialogBase implements ActionListener {
         panel2.add(operation, c2);
 
         c2.gridwidth = 1;
+        panel2.add(new JLabel("Scheduling:"), c2);
+        c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+        scheduling = new JTextField(""+node.getScheduling(), 15);
+        panel2.add(scheduling, c2);
+
+        c2.gridwidth = 1;
         panel2.add(new JLabel("Clock divider:"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         clockRatio = new JTextField("" + node.getClockRatio(), 15);
@@ -279,6 +285,10 @@ public class JDialogFPGANode extends JDialogBase implements ActionListener {
 
     public String getOperation() {
         return operation.getText();
+    }
+
+    public String getScheduling() {
+        return scheduling.getText();
     }
 
 
