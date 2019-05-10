@@ -183,6 +183,8 @@ public class TMAP2Network<E>  {
             - Channels must be mapped on at least one route to be taken into account
          */
     public String removeAllRouterNodes() {
+        int i, j;
+
         //TMLModeling<E> tmlm = new TMLModeling<>();
         //TMLArchitecture tmla = new TMLArchitecture();
         //tmlmapping = new TMLMapping<E>(tmlm, tmla, false);
@@ -283,8 +285,8 @@ public class TMAP2Network<E>  {
         }
 
         // *** Create routers
-        for(int i=0; i<nocSize; i++) {
-            for(int j=0; j<nocSize; j++) {
+        for(i=0; i<nocSize; i++) {
+            for(j=0; j<nocSize; j++) {
                 // We must find the number of apps connected on this router
                 TranslatedRouter tr = new TranslatedRouter<>(this, tmlmapping, noc, channelsCommunicatingViaNoc,
                         nbOfVCs, i, j);
@@ -292,24 +294,100 @@ public class TMAP2Network<E>  {
             }
         }
 
+        // *** Create links and update routers accordingly
+        // For each router, I consider all routers that are around the considered on
+        for(i=0; i<nocSize; i++) {
+            for(j=0; j<nocSize; j++) {
+                for(int k=0; k< DOMAIN; k++) {
 
-        // Make the channels & events of routers
-        for(int i=0; i<nocSize; i++) {
-            for(int j=0; j<nocSize; j++) {
+                    // NORTH?
+                    if (i>0) {
+                        // There is a north router
+                        // link to next
+                        if (routers[i][j].toNextRouters[k] != null) {
+                            Link to = new Link(tmlmodeling, routers[i][j], routers[i-1][j], nbOfVCs);
+                            routers[i][j].toNextRouters[k] = to;
+                            routers[i-1][j].fromPreviousRouters[getFrom(k)] = to;
+                        }
+                        // Link to previous
+                        if (routers[i][j].fromPreviousRouters[k] != null) {
+                            Link from = new Link(tmlmodeling, routers[i][j], routers[i-1][j], nbOfVCs);
+                            routers[i][j].fromPreviousRouters[k] = from;
+                            routers[i-1][j].toNextRouters[getFrom(k)] = from;
+                        }
+                    }
+
+                    // SOUTH?
+                    if (i<nocSize-1) {
+                        // There is a south router
+                        // link to next
+                        if (routers[i][j].toNextRouters[k] != null) {
+                            Link to = new Link(tmlmodeling, routers[i][j], routers[i+1][j], nbOfVCs);
+                            routers[i][j].toNextRouters[k] = to;
+                            routers[i+1][j].fromPreviousRouters[getFrom(k)] = to;
+                        }
+                        // Link to previous
+                        if (routers[i][j].fromPreviousRouters[k] != null) {
+                            Link from = new Link(tmlmodeling, routers[i][j], routers[i+1][j], nbOfVCs);
+                            routers[i][j].fromPreviousRouters[k] = from;
+                            routers[i+1][j].toNextRouters[getFrom(k)] = from;
+                        }
+                    }
+
+                    // EAST?
+                    if (j<nocSize-1) {
+                        // There is an east router
+                        // link to next
+                        if (routers[i][j].toNextRouters[k] != null) {
+                            Link to = new Link(tmlmodeling, routers[i][j+1], routers[i][j+1], nbOfVCs);
+                            routers[i][j].toNextRouters[k] = to;
+                            routers[i][j+1].fromPreviousRouters[getFrom(k)] = to;
+                        }
+                        // Link to previous
+                        if (routers[i][j].fromPreviousRouters[k] != null) {
+                            Link from = new Link(tmlmodeling, routers[i][j], routers[i][j+1], nbOfVCs);
+                            routers[i][j].fromPreviousRouters[k] = from;
+                            routers[i][j+1].toNextRouters[getFrom(k)] = from;
+                        }
+                    }
+
+                    // WEST?
+                    if (j>0) {
+                        // There is an east router
+                        // link to next
+                        if (routers[i][j].toNextRouters[k] != null) {
+                            Link to = new Link(tmlmodeling, routers[i][j+1], routers[i][j-1], nbOfVCs);
+                            routers[i][j].toNextRouters[k] = to;
+                            routers[i][j-1].fromPreviousRouters[getFrom(k)] = to;
+                        }
+                        // Link to previous
+                        if (routers[i][j].fromPreviousRouters[k] != null) {
+                            Link from = new Link(tmlmodeling, routers[i][j], routers[i][j-1], nbOfVCs);
+                            routers[i][j].fromPreviousRouters[k] = from;
+                            routers[i][j-1].toNextRouters[getFrom(k)] = from;
+                        }
+                    }
+
+                }
+            }
+        }
+
+
+        // Make internal channels & events of routers
+        for(i=0; i<nocSize; i++) {
+            for(j=0; j<nocSize; j++) {
                 // We must find the number of apps connected on this router
                 routers[i][j].makeOutputEventsChannels();
             }
         }
 
         // Make all routers
-        for(int i=0; i<nocSize; i++) {
-            for(int j=0; j<nocSize; j++) {
+        for(i=0; i<nocSize; i++) {
+            for(j=0; j<nocSize; j++) {
                 // We must find the number of apps connected on this router
                 routers[i][j].makeRouter();
             }
         }
-
-        // Connect their feedback
 
         // Make their routing
 
