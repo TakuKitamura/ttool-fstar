@@ -266,7 +266,9 @@ void FPGA::schedule(){
       _nextTransaction=0;
       _transNumber=0;
     }
-    else 
+    else if(++iter_task==_taskList.end())
+      _transNumber=0;
+    else if(_nextTransaction->getCommand()->getProgress()==_nextTransaction->getLength())
       _transNumber++;
    }
 
@@ -276,7 +278,10 @@ void FPGA::schedule(){
 
     }
   }
-  if (_nextTransaction!=0 && aOldTransaction != _nextTransaction) calcStartTimeLength();
+  if (_nextTransaction!=0 && aOldTransaction != _nextTransaction) {
+    std::cout<<"trans progress "<<_nextTransaction->getCommand()->getProgress()<<std::endl;
+    std::cout<<"trans length "<<_nextTransaction->getCommand()->getLength()<<std::endl;
+    calcStartTimeLength();}
   std::cout << "fpga:schedule END " << _name << "+++++++++++++++++++++++++++++++++\n";
 }
 
