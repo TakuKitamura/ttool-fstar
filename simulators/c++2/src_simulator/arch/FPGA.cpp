@@ -48,12 +48,13 @@
 
 
 FPGA::FPGA(    ID iID, 
-	       std::string iName, 
+	       std::string iName,  
+	       WorkloadSource* iScheduler,
 	       TMLTime iReconfigTime, 
 	       unsigned int iChangeIdleModeCycles, 
 	       unsigned int iCyclesBeforeIdle,
 	       unsigned int iCyclesPerExeci, 
-	       unsigned int iCyclesPerExecc ) : SchedulableDevice(iID, iName, 0)
+	       unsigned int iCyclesPerExecc ) : SchedulableDevice(iID, iName, iScheduler)
 					      ,_reconfigTime(iReconfigTime)
 					      ,_lastTransaction(0)
 					      ,_changeIdleModeCycles(iChangeIdleModeCycles)
@@ -249,16 +250,14 @@ std::cout<<"fpga addTransaction"<<std::endl;
   } else return false;
 }
 
+
 void FPGA::schedule(){ 
   
   std::cout << "fpga:schedule BEGIN " << _name << "+++++++++++++++++++++++++++++++++\n";
-  /* for(TaskList::iterator it=_taskList.begin();it!=_taskList.end();++it){
-    std::cout<<"hahah"<<std::endl;
-    std::cout<<(*it)->toShortString()<<std::endl;
-    }*/
-  // std::cout<<"trans number is "<<_transNumber<<std::endl;
+  _scheduler->schedule(_endSchedule);
   TMLTransaction* aOldTransaction = _nextTransaction;
-  TaskList::const_iterator iter_task=_taskList.begin();
+  _nextTransaction=_scheduler->getNextTransaction(_endSchedule);
+  /* TaskList::const_iterator iter_task=_taskList.begin();
   std::advance(iter_task,_transNumber);
    if(iter_task!=_taskList.end()){    
      _nextTransaction=(*iter_task)->getNextTransaction(_endSchedule);
@@ -271,17 +270,14 @@ void FPGA::schedule(){
     else if(_nextTransaction->getCommand()->getProgress()==_nextTransaction->getLength())
       _transNumber++;
    }
-
+  */
   if (aOldTransaction!=0 && aOldTransaction!=_nextTransaction){ //NEW 
     if (_masterNextTransaction!=0) {
       _masterNextTransaction->registerTransaction(0);
 
     }
   }
-  if (_nextTransaction!=0 && aOldTransaction != _nextTransaction) {
-    std::cout<<"trans progress "<<_nextTransaction->getCommand()->getProgress()<<std::endl;
-    std::cout<<"trans length "<<_nextTransaction->getCommand()->getLength()<<std::endl;
-    calcStartTimeLength();}
+  if (_nextTransaction!=0 && aOldTransaction != _nextTransaction)  calcStartTimeLength();
   std::cout << "fpga:schedule END " << _name << "+++++++++++++++++++++++++++++++++\n";
 }
 

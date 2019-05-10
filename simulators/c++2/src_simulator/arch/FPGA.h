@@ -70,6 +70,7 @@ public:
 	/**
 	\param iID ID of the device
 	\param iName Name of the device
+	\param iScheduler Pointer to the scheduler object
 	\param iReconfigTime reconfiguration time
 	\param iChangeIdleModeCycles Cycles needed to switch into indle mode
 	\param iCyclesBeforeIdle Pointer to the max consecutive cycles before idle in cycle
@@ -77,7 +78,7 @@ public:
 	\param iCyclesPerExecc Cycles needed to execute one EXECC unit
 	*/
 	
-        FPGA(ID iID, std::string iName, TMLTime iReconfigTime, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle,unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc);
+        FPGA(ID iID, std::string iName, WorkloadSource* iScheduler, TMLTime iReconfigTime, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle,unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc);
 	///Destructor
 	virtual ~FPGA();
 	///Determines the next FPGA transaction to be executed
@@ -124,6 +125,7 @@ public:
     	*/
 	virtual void registerTask(TMLTask* iTask){
 		_taskList.push_back(iTask);
+		if (_scheduler!=0) _scheduler->addWorkloadSource(iTask);
 	}
 	inline void setTransNumber(unsigned int num) { _transNumber=num;}
 	inline unsigned int getTransNumber() { return _transNumber;}
