@@ -624,7 +624,7 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
   }
 #endif
   std::cout<<"simulate"<<std::endl;
-  /* for_each(_simComp->getCPUList().begin(), _simComp->getCPUList().end(),std::mem_fun(&CPU::schedule));
+  for_each(_simComp->getCPUList().begin(), _simComp->getCPUList().end(),std::mem_fun(&CPU::schedule));
   //std::cout << "after schedule" << std::endl;
   transLETcpu=getTransLowestEndTimeCPU(cpuLET);	      
   //std::cout << "after getTLET" << std::endl;
@@ -717,7 +717,7 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
     transLETcpu=getTransLowestEndTimeCPU(cpuLET);
 
   }
-  */
+  
    for_each(_simComp->getFPGAList().begin(), _simComp->getFPGAList().end(),std::mem_fun(&FPGA::schedule));
   //std::cout << "after schedule" << std::endl;
   transLETfpga=getTransLowestEndTimeFPGA(fpgaLET);	      
@@ -756,7 +756,7 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 #endif
         depFPGA=depTask->getFPGA();
     
-        if (depCPU!=cpuLET){
+        if (depFPGA!=fpgaLET){
 #ifdef DEBUG_KERNEL
           std::cout << "kernel:simulate: Tasks running on different CPUs" << std::endl;
 #endif
@@ -772,7 +772,7 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
               std::cout << "kernel:simulate: dependent task has a current transaction and is not blocked any more" << std::endl;
 #endif
              
-              depFPGAnextTrans=depCPU->getNextTransaction();
+              depFPGAnextTrans=depFPGA->getNextTransaction();
               if (depFPGAnextTrans!=0){
 #ifdef DEBUG_KERNEL
                 std::cout << "kernel:simulate: transaction scheduled on dependent CPU" << std::endl;
@@ -780,7 +780,7 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
                 depFPGAnextCommand=depFPGAnextTrans->getCommand();
                 if (depFPGAnextCommand->getTask()!=depTask){
 #ifdef DEBUG_KERNEL
-                  std::cout << "kernel:simulate: dependent task not yet scheduled on dependent CPU" << std::endl;
+                  std::cout << "kernel:simulate: dependent task not yet scheduled on dependent FPGA" << std::endl;
 #endif
 
 		  // depFPGA->truncateAndAddNextTransAt(transLETcpu->getEndTime());
@@ -790,7 +790,7 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
                 }
               }else{
 #ifdef DEBUG_KERNEL
-                std::cout << "kernel:simulate: schedule dependent CPU  " << depFPGA->toString() << std::endl;
+                std::cout << "kernel:simulate: schedule dependent FPGA  " << depFPGA->toString() << std::endl;
 #endif
                 depFPGA->schedule();
               }
