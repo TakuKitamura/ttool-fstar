@@ -69,7 +69,7 @@ public:
 	///Destructor
 	~RRScheduler();
 	TMLTime schedule(TMLTime iEndSchedule);
-	inline TMLTransaction* getNextTransaction(TMLTime iEndSchedule) const {if(_nextTransaction) std::cout<<"rr next trans"<<std::endl;return _nextTransaction;}
+	inline TMLTransaction* getNextTransaction(TMLTime iEndSchedule) const {return _nextTransaction;}
 	void reset();
 	std::istream& readObject(std::istream &is);
 	std::ostream& writeObject(std::ostream &os);

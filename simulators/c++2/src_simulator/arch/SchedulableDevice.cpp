@@ -191,14 +191,13 @@ std::string SchedulableDevice::determineHTMLCellClass( 	std::map<TMLTask*, std::
 
 
 double SchedulableDevice::averageLoad() const{
-  std::cout<<"average load"<<std::endl;
   double _averageLoad=0;
   TMLTime _maxEndTime=0;
   for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
       TMLTime _endTime= (*i)->getEndTime();
       _maxEndTime=max(_maxEndTime,_endTime);
   }
-  // std::cout<<"max end time is "<<_maxEndTime<<std::endl;
+  std::cout<<"max end time is "<<_maxEndTime<<std::endl;
   for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
      _averageLoad += (*i)->getEndTime() - (*i)->getStartTime();  
   
