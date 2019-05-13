@@ -1823,7 +1823,7 @@
 <SUBCOMPONENT type="-1" id="336" >
 <father id="339" num="0" />
 <cdparam x="1539" y="1274" />
-<sizeparam width="8" height="15" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="10" height="15" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-75" maxX="30" minY="10" maxY="30" />
 <infoparam name="value of the delay" value="b" />
@@ -1842,7 +1842,7 @@
 <SUBCOMPONENT type="-1" id="340" >
 <father id="343" num="0" />
 <cdparam x="1538" y="1088" />
-<sizeparam width="8" height="15" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="10" height="15" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-75" maxX="30" minY="10" maxY="30" />
 <infoparam name="value of the delay" value="b" />
@@ -1935,7 +1935,7 @@
 <SUBCOMPONENT type="-1" id="360" >
 <father id="363" num="0" />
 <cdparam x="1655" y="1254" />
-<sizeparam width="8" height="15" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="10" height="15" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-75" maxX="30" minY="10" maxY="30" />
 <infoparam name="value of the delay" value="b" />
@@ -1954,7 +1954,7 @@
 <SUBCOMPONENT type="-1" id="364" >
 <father id="367" num="0" />
 <cdparam x="2219" y="1083" />
-<sizeparam width="8" height="15" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="10" height="15" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-75" maxX="30" minY="10" maxY="30" />
 <infoparam name="value of the delay" value="b" />
@@ -1973,7 +1973,7 @@
 <SUBCOMPONENT type="-1" id="368" >
 <father id="371" num="0" />
 <cdparam x="2288" y="1044" />
-<sizeparam width="8" height="15" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="10" height="15" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-75" maxX="30" minY="10" maxY="30" />
 <infoparam name="value of the delay" value="b" />
@@ -2030,7 +2030,7 @@
 <SUBCOMPONENT type="-1" id="380" >
 <father id="383" num="0" />
 <cdparam x="1218" y="1127" />
-<sizeparam width="8" height="15" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="10" height="15" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-75" maxX="30" minY="10" maxY="30" />
 <infoparam name="value of the delay" value="b" />
@@ -2087,7 +2087,7 @@
 <SUBCOMPONENT type="-1" id="392" >
 <father id="395" num="0" />
 <cdparam x="732" y="714" />
-<sizeparam width="8" height="15" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="10" height="15" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-75" maxX="30" minY="10" maxY="30" />
 <infoparam name="value of the delay" value="b" />
@@ -2106,7 +2106,7 @@
 <SUBCOMPONENT type="-1" id="396" >
 <father id="399" num="0" />
 <cdparam x="953" y="1045" />
-<sizeparam width="8" height="15" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="10" height="15" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-75" maxX="30" minY="10" maxY="30" />
 <infoparam name="value of the delay" value="b" />
@@ -2164,7 +2164,7 @@
 <SUBCOMPONENT type="-1" id="408" >
 <father id="411" num="0" />
 <cdparam x="818" y="1031" />
-<sizeparam width="8" height="15" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="10" height="15" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-75" maxX="30" minY="10" maxY="30" />
 <infoparam name="value of the delay" value="b" />
@@ -2222,7 +2222,7 @@
 <SUBCOMPONENT type="-1" id="420" >
 <father id="423" num="0" />
 <cdparam x="354" y="785" />
-<sizeparam width="8" height="15" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="10" height="15" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-75" maxX="30" minY="10" maxY="30" />
 <infoparam name="value of the delay" value="b" />
@@ -2241,7 +2241,7 @@
 <SUBCOMPONENT type="-1" id="424" >
 <father id="427" num="0" />
 <cdparam x="146" y="818" />
-<sizeparam width="8" height="15" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="10" height="15" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-75" maxX="30" minY="10" maxY="30" />
 <infoparam name="value of the delay" value="b" />
@@ -2296,7 +2296,7 @@
 <SUBCOMPONENT type="-1" id="436" >
 <father id="439" num="0" />
 <cdparam x="474" y="802" />
-<sizeparam width="8" height="15" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="10" height="15" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-75" maxX="30" minY="10" maxY="30" />
 <infoparam name="value of the delay" value="b" />
@@ -2315,7 +2315,7 @@
 <SUBCOMPONENT type="-1" id="440" >
 <father id="443" num="0" />
 <cdparam x="245" y="885" />
-<sizeparam width="8" height="15" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="10" height="15" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-75" maxX="30" minY="10" maxY="30" />
 <infoparam name="value of the delay" value="b" />
@@ -2334,7 +2334,7 @@
 <SUBCOMPONENT type="-1" id="444" >
 <father id="447" num="0" />
 <cdparam x="1059" y="1077" />
-<sizeparam width="8" height="15" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="10" height="15" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-75" maxX="30" minY="10" maxY="30" />
 <infoparam name="value of the delay" value="b" />
@@ -2954,7 +2954,7 @@ On prend b=1 comme exemple
 
 <COMPONENT type="301" id="622" >
 <cdparam x="998" y="850" />
-<sizeparam width="50" height="15" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="50" height="20" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="UML Note" value="Final
@@ -3016,7 +3016,7 @@ On prend b=1 comme exemple
 
 <COMPONENT type="301" id="647" >
 <cdparam x="781" y="950" />
-<sizeparam width="94" height="15" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="94" height="20" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="UML Note" value="Active Open
@@ -3044,7 +3044,7 @@ On prend b=1 comme exemple
 
 <COMPONENT type="301" id="664" >
 <cdparam x="715" y="907" />
-<sizeparam width="104" height="15" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="104" height="20" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="UML Note" value="Passive Open
@@ -3117,7 +3117,7 @@ On prend b=1 comme exemple
 
 <COMPONENT type="301" id="692" >
 <cdparam x="884" y="1068" />
-<sizeparam width="115" height="15" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="115" height="20" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="UML Note" value="send Ack of Fin
@@ -3179,7 +3179,7 @@ On prend b=1 comme exemple
 
 <COMPONENT type="301" id="717" >
 <cdparam x="1000" y="1094" />
-<sizeparam width="115" height="15" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="115" height="20" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="UML Note" value="send Ack of Fin
@@ -3559,7 +3559,7 @@ On prend b=1 comme exemple
 
 <COMPONENT type="301" id="813" >
 <cdparam x="1159" y="1153" />
-<sizeparam width="115" height="15" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="115" height="20" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="UML Note" value="send Ack of Fin
@@ -3692,7 +3692,7 @@ On prend b=1 comme exemple
 
 <COMPONENT type="301" id="854" >
 <cdparam x="1759" y="1192" />
-<sizeparam width="92" height="15" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="92" height="20" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="UML Note" value="Correct ack
@@ -3720,7 +3720,7 @@ On prend b=1 comme exemple
 
 <COMPONENT type="301" id="871" >
 <cdparam x="1635" y="1168" />
-<sizeparam width="76" height="15" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="76" height="20" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="UML Note" value="false ack
@@ -3771,7 +3771,7 @@ On prend b=1 comme exemple
 
 <COMPONENT type="301" id="893" >
 <cdparam x="1469" y="1295" />
-<sizeparam width="137" height="15" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="137" height="20" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="UML Note" value="return acknowldge
@@ -3799,7 +3799,7 @@ On prend b=1 comme exemple
 
 <COMPONENT type="301" id="910" >
 <cdparam x="1620" y="927" />
-<sizeparam width="50" height="15" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="50" height="20" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="UML Note" value="data
@@ -3969,7 +3969,7 @@ On prend b=1 comme exemple
 
 <COMPONENT type="301" id="961" >
 <cdparam x="1825" y="889" />
-<sizeparam width="50" height="15" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="50" height="20" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="UML Note" value="Syn
@@ -3997,7 +3997,7 @@ On prend b=1 comme exemple
 
 <COMPONENT type="301" id="978" >
 <cdparam x="1707" y="945" />
-<sizeparam width="50" height="15" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="50" height="20" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="UML Note" value="ack
@@ -4126,7 +4126,7 @@ On prend b=1 comme exemple
 
 <COMPONENT type="301" id="1018" >
 <cdparam x="2283" y="1065" />
-<sizeparam width="121" height="15" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="121" height="20" minWidth="50" minHeight="20" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2900" minY="10" maxY="1900" />
 <infoparam name="UML Note" value="send Ack of SYN
@@ -6943,10 +6943,10 @@ the smart card and the terminal
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="1606" >
 <father id="1631" num="0" />
-<cdparam x="49" y="276" />
-<sizeparam width="172" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="56" y="276" />
+<sizeparam width="163" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="-7" minY="0" maxY="86" />
+<cdrectangleparam minX="0" maxX="2" minY="0" maxY="86" />
 <infoparam name="TGComponent" value="AppC::InterfaceDevice" />
 <TGConnectingPoint num="0" id="1598" />
 <TGConnectingPoint num="1" id="1599" />
@@ -6999,9 +6999,9 @@ the smart card and the terminal
 <SUBCOMPONENT type="1101" id="1640" >
 <father id="1683" num="0" />
 <cdparam x="272" y="94" />
-<sizeparam width="109" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="108" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="163" minY="0" maxY="121" />
+<cdrectangleparam minX="0" maxX="164" minY="0" maxY="121" />
 <infoparam name="TGComponent" value="AppC::TCPIP" />
 <TGConnectingPoint num="0" id="1632" />
 <TGConnectingPoint num="1" id="1633" />
@@ -7018,9 +7018,9 @@ the smart card and the terminal
 <SUBCOMPONENT type="1101" id="1649" >
 <father id="1683" num="1" />
 <cdparam x="288" y="169" />
-<sizeparam width="144" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="139" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="128" minY="0" maxY="121" />
+<cdrectangleparam minX="0" maxX="133" minY="0" maxY="121" />
 <infoparam name="TGComponent" value="AppC::Application" />
 <TGConnectingPoint num="0" id="1641" />
 <TGConnectingPoint num="1" id="1642" />
@@ -7037,9 +7037,9 @@ the smart card and the terminal
 <SUBCOMPONENT type="1101" id="1658" >
 <father id="1683" num="2" />
 <cdparam x="387" y="123" />
-<sizeparam width="141" height="37" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="136" height="37" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="131" minY="0" maxY="124" />
+<cdrectangleparam minX="0" maxX="136" minY="0" maxY="124" />
 <infoparam name="TGComponent" value="AppC::SmartCard" />
 <TGConnectingPoint num="0" id="1650" />
 <TGConnectingPoint num="1" id="1651" />
