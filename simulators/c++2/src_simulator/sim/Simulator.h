@@ -71,6 +71,7 @@ Ludovic Apvrille, Renaud Pacalet
 #endif
 
 class CPU;
+class FPGA;
 class TMLTransaction;
 class TMLCommand;
 class TMLTask;

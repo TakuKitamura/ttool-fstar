@@ -311,12 +311,14 @@ std::cout<<"addTransaction"<<std::endl;
 
 void SingleCoreCPU::schedule(){
   //std::cout <<"Hello\n";
-  std::cout << "CPU:schedule BEGIN " << _name << "+++++++++++++++++++++++++++++++++\n";
+  // std::cout << "CPU:schedule BEGIN " << _name << "+++++++++++++++++++++++++++++++++\n";
+  std::cout<<"CPU schedule"<<std::endl;
   TMLTime aTimeSlice = _scheduler->schedule(_endSchedule);
-  //_schedulingNeeded=false;  05/05/11
-  //std::cout << "1\n";
+
   TMLTransaction* aOldTransaction = _nextTransaction;
   _nextTransaction=_scheduler->getNextTransaction(_endSchedule);
+  if(_nextTransaction) std::cout<<"next trans is "<<_nextTransaction->toShortString()<<std::endl;
+  else std::cout<<"next trans is 0"<<std::endl;
   //std::cout << "2\n";
 
   //_scheduler->transWasScheduled(this); //NEW 05/05/11

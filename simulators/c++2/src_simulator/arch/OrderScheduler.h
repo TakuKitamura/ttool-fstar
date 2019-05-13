@@ -1,4 +1,4 @@
-/*Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Daniel Knorreck,
+/*Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Niu Siyuan,
 Ludovic Apvrille, Renaud Pacalet
  *
  * ludovic.apvrille AT telecom-paristech.fr
@@ -37,55 +37,40 @@ Ludovic Apvrille, Renaud Pacalet
  * knowledge of the CeCILL license and that you accept its terms.
  *
  */
-#ifndef RRSchedulerH
-#define RRSchedulerH
+#ifndef PrioSchedulerH
+#define PrioSchedulerH
 #include <WorkloadSource.h>
 
 class TMLTransaction;
 
-///Round Robin scheduler
-class RRScheduler: public WorkloadSource{
+///Fixed priority based scheduler
+class OrderScheduler: public WorkloadSource{
 public:
 	///Constructor
     	/**
 	\param iName Name of the scheduler
       	\param iPrio Priority of the scheduler
-	\param iTimeSlice Time slice which is granted to clients
-	\param iMinSliceSize Minimum size of a time slice
     	*/
-	RRScheduler(const std::string& iName, Priority iPrio, TMLTime iTimeSlice, TMLTime iMinSliceSize);
-	//RRScheduler(const std::string& iName, Priority iPrio, TMLTime iTimeSlice);
+	OrderScheduler(const std::string& iName, Priority iPrio);
 	///Constructor
     	/**
 	\param iName Name of the scheduler
       	\param iPrio Priority of the scheduler
-	\param iTimeSlice Time slice which is granted to clients
-	\param iMinSliceSize Minimum size of a time slice
 	\param aSourceArray Array of pointers to workload ressources from which transactions may be received
 	\param iNbOfSources Length of the array
     	*/
-	RRScheduler(const std::string& iName, Priority iPrio, TMLTime iTimeSlice, TMLTime iMinSliceSize, WorkloadSource** aSourceArray, unsigned int iNbOfSources);
-	//RRScheduler(const std::string& iName, Priority iPrio, TMLTime iTimeSlice, WorkloadSource** aSourceArray, unsigned int iNbOfSources);
-	///Destructor
-	~RRScheduler();
+	OrderScheduler(const std::string& iName, Priority iPrio, WorkloadSource** aSourceArray, unsigned int iNbOfSources);
+	~OrderScheduler();
 	TMLTime schedule(TMLTime iEndSchedule);
-	inline TMLTransaction* getNextTransaction(TMLTime iEndSchedule) const {if(_nextTransaction) std::cout<<"rr next trans"<<std::endl;return _nextTransaction;}
-	void reset();
-	std::istream& readObject(std::istream &is);
-	std::ostream& writeObject(std::ostream &os);
+	inline TMLTransaction* getNextTransaction(TMLTime iEndSchedule) const {return _nextTransaction;}
 	inline std::string toString() const {return _name;}
+	void reset();
 	//void transWasScheduled(SchedulableDevice* iDevice);
 protected:
 	///Name of the scheduler
 	std::string _name;
 	///Next transaction to be executed
 	TMLTransaction* _nextTransaction;
-	///Time slice which is granted to ressources
-	TMLTime _timeSlice;
-	///Minimum size of a time slice
-	TMLTime _minSliceSize;
-	///Consumed portion of a time slice
-	TMLTime _elapsedTime;
 	///Last workload source to which ressource access was granted
 	WorkloadSource* _lastSource;
 };
