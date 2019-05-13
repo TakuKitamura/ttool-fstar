@@ -107,7 +107,7 @@ bool Bus::addTransaction(TMLTransaction* iTransToBeAdded){
 #endif
 	_nextTransaction = 0;
 	_schedulingNeeded=true;
-	//std::cout << "End Bus add trans\n";
+	std::cout << "End Bus add trans\n";
 	return true;
 }
 
