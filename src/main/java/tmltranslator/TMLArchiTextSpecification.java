@@ -77,7 +77,7 @@ public class TMLArchiTextSpecification {
     private String fpgaparameters[] = {"capacity", "byteDataSize", "mappingPenalty", "goIdleTime",
             "maxConsecutiveIdleCycles", "reconfigurationTime", "execiTime", "execcTime", "scheduling"};
     private String linkparameters[] = {"bus", "node", "priority"};
-    private String hwaparameters[] = {"byteDataSize", "execiTime"};
+    private String hwaparameters[] = {"byteDataSize", "execiTime", "execTime"};
     private String busparameters[] = {"byteDataSize", "pipelineSize", "arbitration"};
     private String bridgeparameters[] = {"bufferByteSize"};
     private String memoryparameters[] = {"byteDataSize"};
@@ -699,6 +699,8 @@ public class TMLArchiTextSpecification {
                 if (node instanceof HwA) {
                     HwA hwa = (HwA) node;
 
+                    TraceManager.addDev("HWA = " + _split[2]);
+
                     if (!checkParameter("SET", _split, 2, 10, _lineNb)) {
                         return -1;
                     }
@@ -713,6 +715,12 @@ public class TMLArchiTextSpecification {
 
                     if (_split[2].toUpperCase().equals("EXECITIME")) {
                         hwa.execiTime = Integer.decode(_split[3]).intValue();
+                    }
+
+                    TraceManager.addDev("Testing HWA = " + _split[2]);
+
+                    if (_split[2].toUpperCase().equals("EXECCTIME")) {
+                        hwa.execcTime = Integer.decode(_split[3]).intValue();
                     }
 
                     if (_split[2].toUpperCase().equals("OPERATION")) {

@@ -5379,7 +5379,7 @@ On prend b=1 comme exemple
 <SUBCOMPONENT type="-1" id="1179" >
 <father id="1186" num="0" />
 <cdparam x="464" y="232" />
-<sizeparam width="52" height="15" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="51" height="15" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="-75" maxX="-20" minY="10" maxY="35" />
@@ -5388,7 +5388,7 @@ On prend b=1 comme exemple
 <SUBCOMPONENT type="-1" id="1180" >
 <father id="1186" num="1" />
 <cdparam x="544" y="234" />
-<sizeparam width="42" height="15" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="41" height="15" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="35" maxX="55" minY="10" maxY="35" />
@@ -5397,7 +5397,7 @@ On prend b=1 comme exemple
 <SUBCOMPONENT type="-1" id="1181" >
 <father id="1186" num="2" />
 <cdparam x="529" y="267" />
-<sizeparam width="14" height="15" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="12" height="15" minWidth="10" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="20" maxX="40" minY="45" maxY="70" />
 <infoparam name="guard 3" value="[ ]" />
@@ -5422,8 +5422,8 @@ On prend b=1 comme exemple
 </COMPONENT>
 
 <COMPONENT type="1008" id="1193" >
-<cdparam x="393" y="339" />
-<sizeparam width="69" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="396" y="339" />
+<sizeparam width="63" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
@@ -5437,8 +5437,8 @@ On prend b=1 comme exemple
 </COMPONENT>
 
 <COMPONENT type="1010" id="1196" >
-<cdparam x="596" y="300" />
-<sizeparam width="52" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="599" y="300" />
+<sizeparam width="47" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
@@ -5461,8 +5461,8 @@ On prend b=1 comme exemple
 </COMPONENT>
 
 <COMPONENT type="1017" id="1201" >
-<cdparam x="489" y="157" />
-<sizeparam width="75" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="491" y="157" />
+<sizeparam width="70" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
@@ -6726,9 +6726,9 @@ the smart card and the terminal
 <SUBCOMPONENT type="1101" id="1493" >
 <father id="1545" num="1" />
 <cdparam x="350" y="234" />
-<sizeparam width="144" height="50" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="139" height="50" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="315" minY="0" maxY="271" />
+<cdrectangleparam minX="0" maxX="320" minY="0" maxY="271" />
 <infoparam name="TGComponent" value="AppC::Application" />
 <TGConnectingPoint num="0" id="1485" />
 <TGConnectingPoint num="1" id="1486" />
@@ -6745,9 +6745,9 @@ the smart card and the terminal
 <SUBCOMPONENT type="1101" id="1502" >
 <father id="1545" num="2" />
 <cdparam x="156" y="246" />
-<sizeparam width="109" height="50" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="108" height="50" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="350" minY="0" maxY="271" />
+<cdrectangleparam minX="0" maxX="351" minY="0" maxY="271" />
 <infoparam name="TGComponent" value="AppC::TCPIP" />
 <TGConnectingPoint num="0" id="1494" />
 <TGConnectingPoint num="1" id="1495" />
@@ -6764,9 +6764,9 @@ the smart card and the terminal
 <SUBCOMPONENT type="1101" id="1511" >
 <father id="1545" num="3" />
 <cdparam x="351" y="153" />
-<sizeparam width="141" height="50" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="136" height="50" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="318" minY="0" maxY="271" />
+<cdrectangleparam minX="0" maxX="323" minY="0" maxY="271" />
 <infoparam name="TGComponent" value="AppC::SmartCard" />
 <TGConnectingPoint num="0" id="1503" />
 <TGConnectingPoint num="1" id="1504" />
@@ -6783,9 +6783,9 @@ the smart card and the terminal
 <SUBCOMPONENT type="1101" id="1520" >
 <father id="1545" num="4" />
 <cdparam x="152" y="154" />
-<sizeparam width="172" height="50" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="163" height="50" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="287" minY="0" maxY="271" />
+<cdrectangleparam minX="0" maxX="296" minY="0" maxY="271" />
 <infoparam name="TGComponent" value="AppC::InterfaceDevice" />
 <TGConnectingPoint num="0" id="1512" />
 <TGConnectingPoint num="1" id="1513" />
