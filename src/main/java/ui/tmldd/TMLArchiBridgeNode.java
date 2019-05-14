@@ -193,7 +193,8 @@ public class TMLArchiBridgeNode extends TMLArchiCommunicationNode implements Swa
                 error = true;
                 errors += "Name of the node  ";
             } else {
-                name = tmpName;
+                updateCPNodeConfigAfterRenamingHWNode(tmpName);
+                //name = tmpName;
             }
         }
 
