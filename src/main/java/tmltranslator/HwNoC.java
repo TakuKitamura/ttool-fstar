@@ -144,6 +144,8 @@ public class HwNoC extends HwCommunicationNode  {
         HashMap<String, Point> map = new HashMap<>();
         placement = placement.trim();
 
+        TraceManager.addDev("Placement:" + placement);
+
         if (placement.length() == 0) {
             return map;
         }
@@ -191,9 +193,11 @@ public class HwNoC extends HwCommunicationNode  {
         for(String s: placementMap.keySet()) {
             Point p = placementMap.get(s);
             if (p.x == x && p.y == y) {
+                TraceManager.addDev("Found " + s + " for x=" + x + " y=" +y);
                 return s;
             }
         }
+        TraceManager.addDev("Returning null for x=" + x + " y=" +y);
         return null;
     }
 

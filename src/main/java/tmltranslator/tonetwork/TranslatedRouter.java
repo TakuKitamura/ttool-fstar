@@ -135,23 +135,23 @@ public class TranslatedRouter<E> {
         int i, j;
         TMLTask t;
         TMLModeling tmlm = tmlmap.getTMLModeling();
+        HwExecutionNode execNode = null;
 
 
         // MUX for the different writing tasks
         // For each writing channel of the corresponding CPU, we need MUX to be created.
         // We first get the corresponding CPU
         String nameOfExecNode = noc.getHwExecutionNode(xPos, yPos);
-        HwExecutionNode execNode = tmlmap.getTMLArchitecture().getHwExecutionNodeByName(nameOfExecNode);
-
         if (nameOfExecNode == null) {
             nameOfExecNode = "fakeCPU_" + xPos + "_" + yPos;
-        }
-
-
-        if (execNode == null) {
-            TraceManager.addDev("Could NOT find an exec node for (" + xPos + "," + yPos + ")");
         } else {
-            TraceManager.addDev("Found an exec node for (" + xPos + "," + yPos + "): " + execNode.getName());
+            execNode = tmlmap.getTMLArchitecture().getHwExecutionNodeByName(nameOfExecNode);
+
+            if (execNode == null) {
+                TraceManager.addDev("Could NOT find an exec node for (" + xPos + "," + yPos + ")");
+            } else {
+                TraceManager.addDev("Found an exec node for (" + xPos + "," + yPos + "): " + execNode.getName());
+            }
         }
 
         // Then, we need to find the channels starting from/arriving to a task mapped on this execNode
@@ -258,7 +258,7 @@ public class TranslatedRouter<E> {
         for (int portNb = 0; portNb < NB_OF_PORTS; portNb++) {
             if (fromPreviousRouters[portNb] != null) {
 
-                TaskINForDispatch inDispatch = new TaskINForDispatch("IN_" + execNode, null,
+                TaskINForDispatch inDispatch = new TaskINForDispatch("IN_" + nameOfExecNode, null,
                         null);
                 tmlm.addTask(inDispatch);
                 Vector<TMLEvent> listOfOutEvents = new Vector<TMLEvent>();
@@ -300,7 +300,7 @@ public class TranslatedRouter<E> {
             if (fromPreviousRouters[portNb] != null) {
                 for (int vcNb = 0; vcNb < nbOfVCs; vcNb++) {
 
-                    TaskINForVC taskINForVC = new TaskINForVC("IN_" + execNode + "_" + vcNb, null,
+                    TaskINForVC taskINForVC = new TaskINForVC("IN_" + nameOfExecNode + "_" + vcNb, null,
                             null);
                     tmlm.addTask(taskINForVC);
                     dispatchInVCs[portNb][vcNb] = taskINForVC;
@@ -341,7 +341,7 @@ public class TranslatedRouter<E> {
                 TranslatedRouter routerToConnectWith = main.getRouterFrom(xPos, yPos, portNb);
                 if (routerToConnectWith != null) {
                     if (TMAP2Network.hasRouterAt(xPos, yPos, portNb, noc.size)) {
-                        TaskOUTForVC taskOUTForVC = new TaskOUTForVC("OUTVC_" + execNode + "_" + vcNb, null,
+                        TaskOUTForVC taskOUTForVC = new TaskOUTForVC("OUTVC_" + nameOfExecNode + "_" + vcNb, null,
                                 null);
                         tmlm.addTask(taskOUTForVC);
                         dispatchOutVCs[portNb][vcNb] = taskOUTForVC;
@@ -375,7 +375,7 @@ public class TranslatedRouter<E> {
         for (int portNb = 0; portNb < NB_OF_PORTS; portNb++) {
             if (toNextRouters[portNb] != null) {
 
-                TaskOUTForDispatch outDispatch = new TaskOUTForDispatch("OUT_" + execNode, null,
+                TaskOUTForDispatch outDispatch = new TaskOUTForDispatch("OUT_" + nameOfExecNode, null,
                         null);
                 tmlm.addTask(outDispatch);
 
