@@ -234,6 +234,12 @@ public class TMLTextSpecification<E> {
                     sb += SP + ch.getMax();
                 }
                 TraceManager.addDev("Declaration. Handling channel " + ch.getName());
+                if (ch.getOriginTask() == null) {
+                    TraceManager.addDev("Missing origin Task in " + ch.getName());
+                }
+                if (ch.getDestinationTask() == null) {
+                    TraceManager.addDev("Missing destination Task in " + ch.getName());
+                }
                 sb += SP + "OUT" + SP + ch.getOriginTask().getName() + SP + "IN" + SP + ch.getDestinationTask().getName() + CR;
 
                 if (ch.isLossy()) {
