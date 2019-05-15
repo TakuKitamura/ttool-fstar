@@ -201,7 +201,7 @@ $(WEBCRAWLER_SERVER_BINARY): FORCE
 $(JTTOOL_BINARY): FORCE
 	@$(MAKE) -C $(JTTOOL_DIR) -e $@
 
-ttoolhelp: html
+internalhelp: html
 
 html: $(MD2HTML)
 
