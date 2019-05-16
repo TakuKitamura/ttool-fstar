@@ -60,9 +60,9 @@ public class TMLChannel extends TMLCommunicationElement {
     public int confStatus;
     public boolean checkConf;
     public boolean checkAuth;
-    private int size;
+    private int size; // width of the channel i.e. nb of bytes of each sample
     private int type;
-    private int max;
+    private int max; // Maximum number of samples
     public TMLCPrimitivePort port;
     public TMLCPrimitivePort port2;
     public ArrayList<TMLCPrimitivePort> ports;
@@ -74,6 +74,7 @@ public class TMLChannel extends TMLCommunicationElement {
     // Used for 1 -> many channel, or for many -> 1 channel
     protected ArrayList<TMLTask> originTasks, destinationTasks;
     protected ArrayList<TMLPort> originPorts, destinationPorts;
+
     protected int nbOfSamples = 1; // Represent how many samples are read (join) or written (fork) at once
 
 

@@ -172,7 +172,7 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
     }
 
     public void resizeWithFather() {
-        if ((father != null) && ((father instanceof TMLArchiCPUNode) || (father instanceof TMLArchiHWANode))) {
+        if ((father != null) && ((father instanceof TMLArchiCPUNode) || (father instanceof TMLArchiHWANode) || (father instanceof TMLArchiFPGANode))) {
             //
             setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
             //setCd(Math.min(x, father.getWidth() - getWidth()), Math.min(y, father.getHeight() - getHeight()));

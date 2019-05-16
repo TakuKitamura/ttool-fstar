@@ -271,6 +271,10 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
                 ll.add( (TMLArchiHWANode) tgc );
             }
 
+            if (tgc instanceof TMLArchiFPGANode) {
+                ll.add( (TMLArchiFPGANode) tgc );
+            }
+
             if (tgc instanceof TMLArchiCommunicationNode) {
                 ll.add( (TMLArchiCommunicationNode) tgc );
             }
@@ -300,6 +304,9 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
     }
 
     public boolean isMapped(String _ref, String _name) {
+
+        //TraceManager.addDev("isMapped Ref:" + _ref + " name=" + _name);
+
         Iterator<TGComponent> iterator = getListOfNodes().listIterator();
         TGComponent node;
         Vector<TMLArchiArtifact> v;
@@ -309,6 +316,8 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
 
         while(iterator.hasNext()) {
             node = iterator.next();
+
+            //TraceManager.addDev("Testing node: " + node.getName());
             
             if (node instanceof TMLArchiCPUNode) {
                 v =  ((TMLArchiCPUNode) node ).getArtifactList();
@@ -321,7 +330,35 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
                     }
                 }
             }
+
+            if (node instanceof TMLArchiFPGANode) {
+
+                v =  ((TMLArchiFPGANode) node ).getArtifactList();
+                //TraceManager.addDev("FPGANode: " + ((TMLArchiFPGANode) node).getNodeName() + " artifact list:" + v.size());
+
+                for(i=0; i<v.size(); i++) {
+                    artifact = v.get(i);
+
+                    if (artifact.getValue().equals(name)) {
+                        return true;
+                    }
+                }
+            }
+
+            if (node instanceof TMLArchiHWANode) {
+                v =  ((TMLArchiHWANode) node ).getArtifactList();
+
+                for(i=0; i<v.size(); i++) {
+                    artifact = v.get(i);
+
+                    if (artifact.getValue().equals(name)) {
+                        return true;
+                    }
+                }
+            }
         }
+
+        //TraceManager.addDev("Not mapped");
 
         return false;
     }
@@ -339,13 +376,15 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
             node = iterator.next();
 
             // Task mapping
-            if ((node instanceof TMLArchiCPUNode) || (node instanceof TMLArchiHWANode)) {
+            if ((node instanceof TMLArchiCPUNode) || (node instanceof TMLArchiHWANode) || (node instanceof TMLArchiFPGANode)) {
                 if (node instanceof TMLArchiCPUNode) {
                     v =  ((TMLArchiCPUNode)(node)).getArtifactList();
                     //
-                } else {
+                } else if (node instanceof TMLArchiHWANode){
                     v =  ((TMLArchiHWANode)(node)).getArtifactList();
                     //
+                } else {
+                    v =  ((TMLArchiFPGANode)(node)).getArtifactList();
                 }
 
                 for(i=0; i<v.size(); i++) {

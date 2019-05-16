@@ -163,7 +163,7 @@ public class JDialogTMLTaskArtifact extends JDialogBase implements ActionListene
     	c3.gridwidth = GridBagConstraints.REMAINDER; //end row
     	Vector<String> operationsListS = new Vector<>();
     	int indexOp = 0;
-    	TraceManager.addDev( "Inside JDialogTMLTaskArtifact: " + MECType );
+    	//TraceManager.addDev( "Inside JDialogTMLTaskArtifact: " + MECType );
     	if( MECType instanceof FepMEC )	{
     		operationsListS = FepMEC.OPERATIONS_LIST;
     		indexOp = operationsListS.indexOf( operation );
