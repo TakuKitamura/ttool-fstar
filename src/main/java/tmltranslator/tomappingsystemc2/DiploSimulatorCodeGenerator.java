@@ -184,7 +184,8 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         header += "#include <AliasConstraint.h>\n#include <EqConstraint.h>\n#include <LogConstraint.h>\n#include <PropLabConstraint.h>\n";
         header += "#include <PropRelConstraint.h>\n#include <SeqConstraint.h>\n#include <SignalConstraint.h>\n#include <TimeMMConstraint.h>\n";
         header += "#include <TimeTConstraint.h>\n";
-        header += "#include <CPU.h>\n#include <SingleCoreCPU.h>\n#include <MultiCoreCPU.h>\n#include <RRScheduler.h>\n#include <RRPrioScheduler.h>\n#include <PrioScheduler.h>\n#include <Bus.h>\n";
+        header += "#include <CPU.h>\n#include <SingleCoreCPU.h>\n#include <MultiCoreCPU.h>\n#include <FPGA.h>\n#include <RRScheduler.h>\n#include " +
+                "<RRPrioScheduler.h>\n" + "#include <PrioScheduler.h>\n#include <Bus.h>\n";
         header += "#include <Bridge.h>\n#include <Memory.h>\n#include <TMLbrbwChannel.h>\n#include <TMLnbrnbwChannel.h>\n";
         header += "#include <TMLbrnbwChannel.h>\n#include <TMLEventBChannel.h>\n#include <TMLEventFChannel.h>\n#include <TMLEventFBChannel.h>\n";
         header += "#include <TMLTransaction.h>\n#include <TMLCommand.h>\n#include <TMLTask.h>\n";
@@ -268,6 +269,30 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
 
                 declaration += "addCPU(" + hwaInstName + ")" + SCCR;
                 //}
+            } else if (node instanceof HwFPGA) {
+                final HwFPGA hwFpgaNode = (HwFPGA) node;
+                //final String schedulerInstName = namesGen.rrSchedulerInstanceName(hwFpgaNode);
+                //final String schedulerName = namesGen.rrSchedulerName(hwFpgaNode);
+                //declaration += "RRScheduler* " + schedulerInstName + " = new RRScheduler(\"" + schedulerName + "\", 0, " + (tmlmapping
+                 //       .getTMLArchitecture().getMasterClockFrequency() * HwA.DEFAULT_SLICE_TIME) + ", " + (int) Math.ceil((float) (hwaNode
+                 //       .clockRatio * Math.max(hwaNode.execiTime, hwaNode.execcTime) * (HwA.DEFAULT_BRANCHING_PREDICTION_PENALTY * HwA
+                 //       .DEFAULT_PIPELINE_SIZE + 100 - HwA.DEFAULT_BRANCHING_PREDICTION_PENALTY)) / 100) + " ) " + SCCR;
+
+
+                final String hwFpgaInstName = namesGen.hwFpgaInstanceName(hwFpgaNode);
+                declaration += "FPGA* " + hwFpgaInstName + " = new FPGA(" + hwFpgaNode.getID() + ", \"" + namesGen.hwFpgaName(hwFpgaNode) + "\", ";
+
+                declaration += hwFpgaNode.reconfigurationTime + ", " + hwFpgaNode.goIdleTime + ", " +
+                        hwFpgaNode.maxConsecutiveIdleCycles + ", " +  hwFpgaNode.execiTime + ", " +
+                        hwFpgaNode.execcTime + ")" + SCCR;
+
+                // DB: Issue #21 TODO: Should there be a scheduler?? Given the for loop, cores is always 0 so this code is never executed
+                //                if (cores!=0) {
+                //                      declaration+= cpuInstName +  "->setScheduler(" + schedulerInstName + ",false)" + SCCR;
+                //                }
+
+                declaration += "addFPGA(" + hwFpgaInstName + ")" + SCCR;
+                //}
             }
         }
 
@@ -349,7 +374,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
                     //for (int cores = 0; cores < noOfCores; cores++) {
                         final String nodeInstanceName;
 
-                        if (node instanceof HwCPU || node instanceof HwA) {
+                        if (node instanceof HwCPU || node instanceof HwA || node instanceof HwFPGA) {
                             nodeInstanceName = namesGen.executionNodeInstanceName((HwExecutionNode) node, noOfCores);
                         } else {
                             nodeInstanceName = namesGen.bridgeInstanceName((HwBridge) node);
@@ -569,6 +594,18 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
                 //                }
                 //
                 //                declaration+= ")," + ((HwCPU)node).nbOfCores + CR;
+            } else if (node instanceof HwFPGA) {
+                    final HwFPGA hwFpga = (HwFPGA) node;
+                    declaration += "1 ," + namesGen.hwFpgaInstanceName(hwFpga);
+
+                    // DB Issue #22: copy paste error?? This causes class cast exception
+                    //              declaration+= ((HwCPU)node).nbOfCores;
+                    //
+                    //                for (int cores=0; cores< ((HwCPU)node).nbOfCores; cores++){
+                    //                    declaration+= "," + node.getName()+cores;
+                    //                }
+                    //
+                    //                declaration+= ")," + ((HwCPU)node).nbOfCores + CR;
             } else {
                 throw new UnsupportedOperationException("Not implemented for " + node.getClass().getSimpleName() + "!");
             }
