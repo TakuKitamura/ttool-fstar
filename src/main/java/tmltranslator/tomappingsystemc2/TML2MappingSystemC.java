@@ -467,7 +467,7 @@ public class TML2MappingSystemC implements IDiploSimulatorCodeGenerator {
             events = new ArrayList<TMLEvent>(tmlmodeling.getEvents(task));
             requests = new ArrayList<TMLRequest>(tmlmodeling.getRequests(task));
 
-            mst = new MappedSystemCTask(task, channels, events, requests, tmlmapping, mappedChannels);
+            mst = new MappedSystemCTask(task, channels, events, requests, tmlmapping, mappedChannels, true);
             //mst.generateSystemC(debug, optimize, dependencies);
             //mst.generateSystemC(debug, optimize);
             tasks.add(mst);

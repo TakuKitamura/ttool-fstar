@@ -71,6 +71,7 @@ public class MappedSystemCTask {
     // private boolean optimize;
     private StaticAnalysis _analysis;
     private LiveVariableNode _startAnaNode = null;
+    private boolean mappedOnCPU;
 
     private final static String DOTH = ".h";
     private final static String DOTCPP = ".cpp";
@@ -83,7 +84,8 @@ public class MappedSystemCTask {
 //    private final static String EF = "}";
 
 
-    public MappedSystemCTask(TMLTask _task, List<TMLChannel> _channels, List<TMLEvent> _events, List<TMLRequest> _requests, TMLMapping<?> _tmlmapping, Set<Integer> _depChannels) {
+    public MappedSystemCTask(TMLTask _task, List<TMLChannel> _channels, List<TMLEvent> _events, List<TMLRequest> _requests, TMLMapping<?>
+            _tmlmapping, Set<Integer> _depChannels, boolean mappedOnCPU) {
         task = _task;
         channels = _channels;
         events = _events;
@@ -99,6 +101,7 @@ public class MappedSystemCTask {
         functionSig = "";
         commentText = "";
         commentNum = 0;
+        this.mappedOnCPU = mappedOnCPU;
         // optimize=false;
 
         _analysis = new StaticAnalysis(_task, _channels, _events, _requests, _depChannels);
@@ -231,7 +234,18 @@ public class MappedSystemCTask {
 //    }
 
     private String makeConstructorSignature() {
-        String constSig = reference + "(ID iID, Priority iPriority, std::string iName, CPU** iCPUs, unsigned int iNumOfCPUs" + CR;
+
+
+        String constSig;
+
+        if (mappedOnCPU) {
+            constSig = reference + "(ID iID, Priority iPriority, std::string iName, CPU** iCPUs, unsigned int iNumOfCPUs" + CR;
+        }  else {
+            constSig = reference + "(ID iID, Priority iPriority, std::string iName, FPGA** iCPUs, unsigned int iNumOfCPUs" + CR;
+        }
+
+
+
         for (TMLChannel ch : channels) {
             constSig += ", TMLChannel* " + ch.getExtendedName() + CR;
         }

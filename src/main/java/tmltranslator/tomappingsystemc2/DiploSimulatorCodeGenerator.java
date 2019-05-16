@@ -271,16 +271,17 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
                 //}
             } else if (node instanceof HwFPGA) {
                 final HwFPGA hwFpgaNode = (HwFPGA) node;
-                //final String schedulerInstName = namesGen.rrSchedulerInstanceName(hwFpgaNode);
-                //final String schedulerName = namesGen.rrSchedulerName(hwFpgaNode);
-                //declaration += "RRScheduler* " + schedulerInstName + " = new RRScheduler(\"" + schedulerName + "\", 0, " + (tmlmapping
-                 //       .getTMLArchitecture().getMasterClockFrequency() * HwA.DEFAULT_SLICE_TIME) + ", " + (int) Math.ceil((float) (hwaNode
-                 //       .clockRatio * Math.max(hwaNode.execiTime, hwaNode.execcTime) * (HwA.DEFAULT_BRANCHING_PREDICTION_PENALTY * HwA
-                 //       .DEFAULT_PIPELINE_SIZE + 100 - HwA.DEFAULT_BRANCHING_PREDICTION_PENALTY)) / 100) + " ) " + SCCR;
+                final String schedulerInstName = namesGen.rrSchedulerInstanceName(hwFpgaNode);
+                final String schedulerName = namesGen.rrSchedulerName(hwFpgaNode);
+                declaration += "RRScheduler* " + schedulerInstName + " = new RRScheduler(\"" + schedulerName + "\", 0, " + (tmlmapping
+                        .getTMLArchitecture().getMasterClockFrequency() * HwA.DEFAULT_SLICE_TIME) + ", " + (int) Math.ceil((float) (hwFpgaNode
+                        .clockRatio * Math.max(hwFpgaNode.execiTime, hwFpgaNode.execcTime) * (HwA.DEFAULT_BRANCHING_PREDICTION_PENALTY * HwA
+                        .DEFAULT_PIPELINE_SIZE + 100 - HwA.DEFAULT_BRANCHING_PREDICTION_PENALTY)) / 100) + " ) " + SCCR;
 
 
                 final String hwFpgaInstName = namesGen.hwFpgaInstanceName(hwFpgaNode);
-                declaration += "FPGA* " + hwFpgaInstName + " = new FPGA(" + hwFpgaNode.getID() + ", \"" + namesGen.hwFpgaName(hwFpgaNode) + "\", ";
+                declaration += "FPGA* " + hwFpgaInstName + " = new FPGA(" + hwFpgaNode.getID() + ", \"" + namesGen.hwFpgaName(hwFpgaNode) + "\", "
+                        + schedulerInstName + ", ";
 
                 declaration += hwFpgaNode.reconfigurationTime + ", " + hwFpgaNode.goIdleTime + ", " +
                         hwFpgaNode.maxConsecutiveIdleCycles + ", " +  hwFpgaNode.execiTime + ", " +
@@ -569,6 +570,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
 
         for (final TMLTask task : tmlmapping.getMappedTasks()) {
             node = iterator.next();
+            boolean mappedOnCPU = true;
 
             final String taskClassName = namesGen.taskTypeName(task);
             declaration += taskClassName + "* " + namesGen.taskInstanceName(task) + " = new " + taskClassName + "(" + task.getID() + "," + task.getPriority() + ",\"" + namesGen.taskName(task) + "\", array(";
@@ -597,6 +599,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
             } else if (node instanceof HwFPGA) {
                     final HwFPGA hwFpga = (HwFPGA) node;
                     declaration += "1 ," + namesGen.hwFpgaInstanceName(hwFpga);
+                    mappedOnCPU = false;
 
                     // DB Issue #22: copy paste error?? This causes class cast exception
                     //              declaration+= ((HwCPU)node).nbOfCores;
@@ -616,7 +619,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
             final List<TMLEvent> events = new ArrayList<TMLEvent>(tmlmodeling.getEvents(task));
             final List<TMLRequest> requests = new ArrayList<TMLRequest>(tmlmodeling.getRequests(task));
 
-            final MappedSystemCTask mst = new MappedSystemCTask(task, channels, events, requests, tmlmapping, mappedChannels);
+            final MappedSystemCTask mst = new MappedSystemCTask(task, channels, events, requests, tmlmapping, mappedChannels, mappedOnCPU);
             tasks.add(mst);
 
             for (final TMLChannel channelb : channels) {
