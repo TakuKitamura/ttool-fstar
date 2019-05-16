@@ -185,7 +185,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         header += "#include <PropRelConstraint.h>\n#include <SeqConstraint.h>\n#include <SignalConstraint.h>\n#include <TimeMMConstraint.h>\n";
         header += "#include <TimeTConstraint.h>\n";
         header += "#include <CPU.h>\n#include <SingleCoreCPU.h>\n#include <MultiCoreCPU.h>\n#include <FPGA.h>\n#include <RRScheduler.h>\n#include " +
-                "<RRPrioScheduler.h>\n" + "#include <PrioScheduler.h>\n#include <Bus.h>\n";
+                "<RRPrioScheduler.h>\n" + "#include <OrderScheduler.h>\n" + "#include <PrioScheduler.h>\n#include <Bus.h>\n";
         header += "#include <Bridge.h>\n#include <Memory.h>\n#include <TMLbrbwChannel.h>\n#include <TMLnbrnbwChannel.h>\n";
         header += "#include <TMLbrnbwChannel.h>\n#include <TMLEventBChannel.h>\n#include <TMLEventFChannel.h>\n#include <TMLEventFBChannel.h>\n";
         header += "#include <TMLTransaction.h>\n#include <TMLCommand.h>\n#include <TMLTask.h>\n";
@@ -273,10 +273,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
                 final HwFPGA hwFpgaNode = (HwFPGA) node;
                 final String schedulerInstName = namesGen.rrSchedulerInstanceName(hwFpgaNode);
                 final String schedulerName = namesGen.rrSchedulerName(hwFpgaNode);
-                declaration += "RRScheduler* " + schedulerInstName + " = new RRScheduler(\"" + schedulerName + "\", 0, " + (tmlmapping
-                        .getTMLArchitecture().getMasterClockFrequency() * HwA.DEFAULT_SLICE_TIME) + ", " + (int) Math.ceil((float) (hwFpgaNode
-                        .clockRatio * Math.max(hwFpgaNode.execiTime, hwFpgaNode.execcTime) * (HwA.DEFAULT_BRANCHING_PREDICTION_PENALTY * HwA
-                        .DEFAULT_PIPELINE_SIZE + 100 - HwA.DEFAULT_BRANCHING_PREDICTION_PENALTY)) / 100) + " ) " + SCCR;
+                declaration += "OrderScheduler* " + schedulerInstName + " = new OrderScheduler(\"" + schedulerName + "\", 0) " + SCCR;
 
 
                 final String hwFpgaInstName = namesGen.hwFpgaInstanceName(hwFpgaNode);

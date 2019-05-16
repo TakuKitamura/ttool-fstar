@@ -190,7 +190,7 @@ public class TMLMapping<E> {
             tmla = new TMLArchitecture();
         }
 
-        if (!tmla.hasCPU()) {
+        if (!tmla.hasHwExecutionNode()) {
             cpu = new HwCPU("defaultCPU");
             cpu.byteDataSize = 4;
             cpu.pipelineSize = 1;

@@ -140,6 +140,15 @@ public class TMLArchitecture {
         return false;
     }
 
+    public boolean hasHwExecutionNode() {
+        for (HwNode node : hwnodes) {
+            if ((node instanceof HwCPU)|| (node instanceof HwA)|| (node instanceof HwFPGA)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean hasBus() {
         for (HwNode node : hwnodes) {
             if (node instanceof HwBus) {
