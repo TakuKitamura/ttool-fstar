@@ -300,7 +300,7 @@ public class TranslatedRouter<E> {
             if (fromPreviousRouters[portNb] != null) {
                 for (int vcNb = 0; vcNb < nbOfVCs; vcNb++) {
 
-                    TaskINForVC taskINForVC = new TaskINForVC("IN_" + nameOfExecNode + "_" + vcNb, null,
+                    TaskINForVC taskINForVC = new TaskINForVC("INVC_" + nameOfExecNode + "___" + portNb + "_" + vcNb, null,
                             null);
                     tmlm.addTask(taskINForVC);
                     dispatchInVCs[portNb][vcNb] = taskINForVC;
@@ -441,8 +441,11 @@ public class TranslatedRouter<E> {
         // Internal events and channels
 
         // Between IN and INVC
-        pktInEvtsVCs = new TMLEvent[TMAP2Network.DOMAIN + 1][nbOfVCs];
-        pktInChsVCs = new TMLChannel[TMAP2Network.DOMAIN + 1][nbOfVCs];
+
+
+
+        pktInEvtsVCs = new TMLEvent[NB_OF_PORTS][nbOfVCs];
+        pktInChsVCs = new TMLChannel[NB_OF_PORTS][nbOfVCs];
 
         for (int i = 0; i < TMAP2Network.DOMAIN + 1; i++) {
             for (int j = 0; j < nbOfVCs; j++) {

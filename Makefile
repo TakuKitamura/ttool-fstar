@@ -55,7 +55,7 @@ make ultraclean         Clean the repository from binaries and compilation artif
 make ttooljavac		Build TTool only with javac
 make ttoolnotest	Build TTool with gradle, but do not execute test. Performs the install
 make allnotest		Builld all apps, but do not execute tests. Performs the install
-make ttoolhelp		Generate the help of TTool in HTML format
+make internalhelp		Generate the help of TTool in HTML format
 
 
 Other targets:
@@ -201,7 +201,7 @@ $(WEBCRAWLER_SERVER_BINARY): FORCE
 $(JTTOOL_BINARY): FORCE
 	@$(MAKE) -C $(JTTOOL_DIR) -e $@
 
-ttoolhelp: html
+internalhelp: html
 
 html: $(MD2HTML)
 
