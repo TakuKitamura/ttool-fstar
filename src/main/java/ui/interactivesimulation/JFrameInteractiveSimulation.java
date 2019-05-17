@@ -623,6 +623,12 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         // First empty line
         c01.gridwidth = GridBagConstraints.REMAINDER; //end row
         jp02.add(new JLabel(" "), c01);
+        JLabel warning = new JLabel("Beware: Formal Verification ignores Penalties");
+        Font newLabelFont=new Font(warning.getFont().getName(),Font.ITALIC,warning.getFont().getSize());
+        //Set JLabel font using new created font
+        warning.setFont(newLabelFont);
+        jp02.add(warning, c01);
+        jp02.add(new JLabel(" "), c01);
 
         // Line minimum command: labels
         c01.gridwidth = 1;
@@ -653,11 +659,12 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 
         // One empty line
         c01.gridwidth = GridBagConstraints.REMAINDER; //end row
-        jp02.add(new JLabel(" "), c01);
+        jp02.add(new JLabel(""), c01);
 
         // Line minimum command: labels
         c01.gridwidth = 1;
         jp02.add(new JLabel("minimum BRANCH coverage"), c01);
+
         labelMinimalBranchCoverage = new JLabel("100%");
         c01.fill = GridBagConstraints.CENTER;
         jp02.add(labelMinimalBranchCoverage, c01);

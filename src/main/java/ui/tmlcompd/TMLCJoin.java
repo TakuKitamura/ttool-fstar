@@ -90,7 +90,7 @@ public class TMLCJoin extends TMLCChannelFacility implements WithAttributes {
 
 
         value = "1";
-        name = "Composite port";
+        name = "Join";
 
         //insides = new ArrayList<TMLCPrimitivePort>();
         //outsides = new ArrayList<TMLCPrimitivePort>();
@@ -176,7 +176,7 @@ public class TMLCJoin extends TMLCChannelFacility implements WithAttributes {
             return true;
         } else {
             JOptionPane.showMessageDialog(frame,
-                    "Only data channel joins can be configured",
+                    "Only correctly connected join can be configured",
                     "Error",
                     JOptionPane.INFORMATION_MESSAGE);
             return true;

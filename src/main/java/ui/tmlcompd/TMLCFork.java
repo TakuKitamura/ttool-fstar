@@ -81,13 +81,12 @@ public class TMLCFork extends TMLCChannelFacility implements WithAttributes {
         connectingPoint[5] = new TMLCPortConnectingPoint(this, 0, 0, false, true, 0.75, 0.866);
         connectingPoint[6] = new TMLCPortConnectingPoint(this, 0, 0, false, true, 0.75, 0.866);
 
-
         addTGConnectingPointsComment();
 
         nbInternalTGComponent = 0;
 
         value = "1";
-        name = "Composite port";
+        name = "Fork";
         editable = true;
 
         //insides = new ArrayList<TMLCPrimitivePort>();
@@ -166,7 +165,7 @@ public class TMLCFork extends TMLCChannelFacility implements WithAttributes {
             return true;
         } else {
             JOptionPane.showMessageDialog(frame,
-                    "Only data channel forks can be configured",
+                    "Only correctly connected fork can be configured",
                     "Error",
                     JOptionPane.INFORMATION_MESSAGE);
             return true;

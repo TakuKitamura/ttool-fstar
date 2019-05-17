@@ -164,6 +164,7 @@ public class JDialogMultiString extends JDialogBase implements ActionListener {
         // String1
         for (int i = 0; i < nbString; i++) {
             c1.gridwidth = 1;
+            c1.fill = GridBagConstraints.BOTH;
             panel1.add(new JLabel(labels[i] + " = "), c1);
 
             if (possibleValues != null) {
