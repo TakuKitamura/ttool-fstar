@@ -251,6 +251,8 @@ class TMLTransaction {
   inline unsigned int getTransactCoreNumber() {return _transactCoreNumber;}
   inline void setTransactCoreNumber(unsigned int num) {_transactCoreNumber=num;}
   inline void setTransVcdOutPutState(vcdTransVisState n) {_transVcdOutputState=n;}
+ // inline void setCurrDevice(SchedulableDevice* device) {_currDevice=device;}
+ // inline SchedulableDevice* getCurrDevice() {return _currDevice;}
  // inline void setPreviousTransEndTime(unsigned int n) {_previousTransEndTime=n;}
   //inline unsigned int getPreviousTransEndTime() {return _previousTransEndTime;}
   inline vcdTransVisState getTransVcdOutPutState() {return _transVcdOutputState;}
@@ -278,6 +280,8 @@ class TMLTransaction {
   bool _endState;
   ///previous end time for the cpu VCD output
  // unsigned int _previousTransEndTime;
+  //device executes the current device
+ // SchedulableDevice* currDevice;
 #ifdef PENALTIES_ENABLED
   ///Idle penalty
   TMLTime _idlePenalty;

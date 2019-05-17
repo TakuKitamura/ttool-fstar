@@ -154,6 +154,7 @@ public:
 	inline void setCycleTime (unsigned int t) { _cycleTime =t; }
         inline unsigned int getCycleTime() { return _cycleTime; }
 	
+	inline std::string getName() {return _name;}
 protected:
 	///Unique ID of the device
 	ID _ID;

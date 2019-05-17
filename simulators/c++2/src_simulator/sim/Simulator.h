@@ -293,13 +293,13 @@ protected:
 	\param oResultDevice Pointer to the CPU which is running the returned transaction
 	\return Pointer to transaction with lowest end time
 	*/
-	TMLTransaction* getTransLowestEndTimeCPU(SchedulableDevice*& oResultDevice) const;
+	TMLTransaction* getTransLowestEndTime(SchedulableDevice*& oResultDevice) const;
 	///Returns a pointer to the transaction with the lowest end time proposed by FPGA schedulers
 	/**
 	\param oResultDevice Pointer to the FPGA which is running the returned transaction
 	\return Pointer to transaction with lowest end time
 	*/
-	TMLTransaction* getTransLowestEndTimeFPGA(SchedulableDevice*& oResultDevice) const;
+	//TMLTransaction* getTransLowestEndTimeFPGA(SchedulableDevice*& oResultDevice) const;
 	///Decodes a simulation command
 	/**
 	\param iCmd Pointer to the command
