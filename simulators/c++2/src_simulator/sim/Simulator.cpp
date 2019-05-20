@@ -456,8 +456,8 @@ std::cout<<"schedule2HTML--------------------------------------*****************
 	std::cout<<"begin fpga html "<<(*j)->toShortString()<<std::endl;
 	(*j)->schedule2HTML(myfile);
 	std::cout<<"end fpga html "<<(*j)->toShortString()<<std::endl;
-	(*j)->showPieChart(myfile);
       }
+      (*j)->showPieChart(myfile);
     }
     
     for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){

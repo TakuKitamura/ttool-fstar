@@ -129,9 +129,6 @@ public:
 	}
 	inline void setTransNumber(unsigned int num) { _transNumber=num;}
 	inline unsigned int getTransNumber() { return _transNumber;}
-	double averageLoad (TMLTask* currTask) const;
-	void drawPieChart(std::ofstream& myfile) const;
-	void showPieChart(std::ofstream& myfile) const;
 	void schedule2HTML(std::ofstream& myfile) const;
 	inline const TaskList& getTaskList() const{return _taskList;}
 	inline void setHtmlCurrTask(TMLTask *t) { _htmlCurrTask=t;}

@@ -208,10 +208,6 @@ double SchedulableDevice::averageLoad() const{
     _averageLoad = (double)_averageLoad/_maxEndTime;
     return _averageLoad;
   }
-  /* if( _maxEndTime == 0 ) 
-    myfile << "average load is 0" << "<br>";
-  else
-  myfile<<"average load is "<< (double)_averageLoad/_maxEndTime<<"<br>";*/
   
 }
 
