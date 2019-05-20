@@ -95,7 +95,7 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
     protected TGTextFieldWithHelp nodeName;
 
     // Panel2
-    protected JTextField sliceTime, nbOfCores, byteDataSize, pipelineSize, goIdleTime, maxConsecutiveIdleCycles,
+    protected TGTextFieldWithHelp sliceTime, nbOfCores, byteDataSize, pipelineSize, goIdleTime, maxConsecutiveIdleCycles,
             taskSwitchingTime, branchingPredictionPenalty, cacheMiss, clockRatio, execiTime, execcTime, monitored,
         operation;
 
@@ -171,43 +171,6 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         buttons = new ArrayList<>();
         helpEntries = new ArrayList<>();
 
-        /*if(helpManager.loadEntries()) {
-            helpEntries = new ArrayList<>();
-            HelpEntry he0 = helpManager.getHelpEntryWithHTMLFile("cpuname.html");
-            helpEntries.add(he0);
-            HelpEntry he1 = helpManager.getHelpEntryWithHTMLFile("schedulingpolicy.html");
-            helpEntries.add(he1);
-            HelpEntry he2 = helpManager.getHelpEntryWithHTMLFile("slicetime.html");
-            helpEntries.add(he2);
-            HelpEntry he3 = helpManager.getHelpEntryWithHTMLFile("numbercores.html");
-            helpEntries.add(he3);
-            HelpEntry he4 = helpManager.getHelpEntryWithHTMLFile("datasize.html");
-            helpEntries.add(he4);
-            HelpEntry he5 = helpManager.getHelpEntryWithHTMLFile("pipelinesize.html");
-            helpEntries.add(he5);
-            HelpEntry he6 = helpManager.getHelpEntryWithHTMLFile("taskswitchingtime.html");
-            helpEntries.add(he6);
-            HelpEntry he7 = helpManager.getHelpEntryWithHTMLFile("misbrandingprediction.html");
-            helpEntries.add(he7);
-            HelpEntry he8 = helpManager.getHelpEntryWithHTMLFile("cachemiss.html");
-            helpEntries.add(he8);
-            HelpEntry he9 = helpManager.getHelpEntryWithHTMLFile("goidletime.html");
-            helpEntries.add(he9);
-            HelpEntry he10 = helpManager.getHelpEntryWithHTMLFile("maxconsecutivecycles.html");
-            helpEntries.add(he10);
-            HelpEntry he11 = helpManager.getHelpEntryWithHTMLFile("execi.html");
-            helpEntries.add(he11);
-            HelpEntry he12 = helpManager.getHelpEntryWithHTMLFile("execc.html");
-            helpEntries.add(he12);
-            HelpEntry he13 = helpManager.getHelpEntryWithHTMLFile("clockdivider.html");
-            helpEntries.add(he13);
-            HelpEntry he14 = helpManager.getHelpEntryWithHTMLFile("encryption.html");
-            helpEntries.add(he14);
-            HelpEntry he15 = helpManager.getHelpEntryWithHTMLFile("cpuextension.html");
-            helpEntries.add(he15);
-            HelpEntry he16 = helpManager.getHelpEntryWithHTMLFile("operation.html");
-            helpEntries.add(he16);
-        }*/
 
 
         for(int i=0; i<helpStrings.length; i++) {
@@ -300,12 +263,9 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.weightx = 1.0;
         panel2.add(new JLabel("Nb of cores:"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        nbOfCores = new JTextField(""+node.getNbOfCores(), 15);
-        if (buttons != null)
-            panel2.add(nbOfCores, c2);
-
-        //issue 183
-        addHelpButton(3, panel2, c2);
+        nbOfCores = new TGTextFieldWithHelp(""+node.getNbOfCores(), 15);
+        panel2.add(nbOfCores, c2);
+        nbOfCores.makeEndHelpButton(helpStrings[3], mgui, mgui.getHelpManager(), panel2, c2);
 
         c2.gridwidth = 1;
         //issue 183
@@ -313,11 +273,10 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.weightx = 1.0;
         panel2.add(new JLabel("Data size (in byte):"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        byteDataSize = new JTextField(""+node.getByteDataSize(), 15);
+        byteDataSize = new TGTextFieldWithHelp(""+node.getByteDataSize(), 15);
         panel2.add(byteDataSize, c2);
+        byteDataSize.makeEndHelpButton(helpStrings[4], mgui, mgui.getHelpManager(), panel2, c2);
 
-        //issue 183
-        addHelpButton(4, panel2, c2);
 
         c2.gridwidth = 1;
         //issue 183
@@ -325,11 +284,10 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.weightx = 1.0;
         panel2.add(new JLabel("Pipeline size (num. stages):"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        pipelineSize = new JTextField(""+node.getPipelineSize(), 15);
+        pipelineSize = new TGTextFieldWithHelp(""+node.getPipelineSize(), 15);
         panel2.add(pipelineSize, c2);
+        pipelineSize.makeEndHelpButton(helpStrings[5], mgui, mgui.getHelpManager(), panel2, c2);
 
-        //issue 183
-        addHelpButton(5, panel2, c2);
 
         c2.gridwidth = 1;
         //issue 183
@@ -337,11 +295,10 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.weightx = 1.0;
         panel2.add(new JLabel("Task switching time (in cycle):"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        taskSwitchingTime = new JTextField(""+node.getTaskSwitchingTime(), 15);
+        taskSwitchingTime = new TGTextFieldWithHelp(""+node.getTaskSwitchingTime(), 15);
         panel2.add(taskSwitchingTime, c2);
+        pipelineSize.makeEndHelpButton(helpStrings[6], mgui, mgui.getHelpManager(), panel2, c2);
 
-        //issue 183
-        addHelpButton(6, panel2, c2);
 
         c2.gridwidth = 1;
         //issue 183
@@ -349,15 +306,11 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.weightx = 1.0;
         panel2.add(new JLabel("Mis-Branching prediction (in %):"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        branchingPredictionPenalty = new JTextField(""+node.getBranchingPredictionPenalty(), 15);
+        branchingPredictionPenalty = new TGTextFieldWithHelp(""+node.getBranchingPredictionPenalty(), 15);
         panel2.add(branchingPredictionPenalty, c2);
+        branchingPredictionPenalty.makeEndHelpButton(helpStrings[7], mgui, mgui.getHelpManager(), panel2, c2);
 
-        //issue 183
-        c2.weighty = 0.5;
-        c2.weightx = 0.5;
-        c2.gridwidth = GridBagConstraints.REMAINDER;
-        if (buttons != null)
-            panel2.add(buttons.get(7),c2);
+
 
         c2.gridwidth = 1;
         //issue 183
@@ -365,11 +318,9 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.weightx = 1.0;
         panel2.add(new JLabel("Cache-miss (in %):"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        cacheMiss = new JTextField(""+node.getCacheMiss(), 15);
+        cacheMiss = new TGTextFieldWithHelp(""+node.getCacheMiss(), 15);
         panel2.add(cacheMiss, c2);
-
-        //issue 183
-        addHelpButton(8, panel2, c2);
+        cacheMiss.makeEndHelpButton(helpStrings[8], mgui, mgui.getHelpManager(), panel2, c2);
 
 
         c2.gridwidth = 1;
@@ -378,11 +329,10 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.weightx = 1.0;
         panel2.add(new JLabel("Go idle time (in cycle):"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        goIdleTime = new JTextField(""+node.getGoIdleTime(), 15);
+        goIdleTime = new TGTextFieldWithHelp(""+node.getGoIdleTime(), 15);
         panel2.add(goIdleTime, c2);
+        goIdleTime.makeEndHelpButton(helpStrings[9], mgui, mgui.getHelpManager(), panel2, c2);
 
-        //issue 183
-        addHelpButton(9, panel2, c2);
 
         c2.gridwidth = 1;
         //issue 183
@@ -390,11 +340,10 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.weightx = 1.0;
         panel2.add(new JLabel("Max consecutive cycles before idle (in cycle):"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        maxConsecutiveIdleCycles = new JTextField(""+node.getMaxConsecutiveIdleCycles(), 15);
+        maxConsecutiveIdleCycles = new TGTextFieldWithHelp(""+node.getMaxConsecutiveIdleCycles(), 15);
         panel2.add(maxConsecutiveIdleCycles, c2);
+        maxConsecutiveIdleCycles.makeEndHelpButton(helpStrings[10], mgui, mgui.getHelpManager(), panel2, c2);
 
-        //issue 183
-        addHelpButton(10, panel2, c2);
 
         c2.gridwidth = 1;
         //issue 183
@@ -402,11 +351,9 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.weightx = 1.0;
         panel2.add(new JLabel("EXECI execution time (in cycle):"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        execiTime = new JTextField(""+node.getExeciTime(), 15);
+        execiTime = new TGTextFieldWithHelp(""+node.getExeciTime(), 15);
         panel2.add(execiTime, c2);
-
-        //issue 183
-        addHelpButton(11, panel2, c2);
+        execiTime.makeEndHelpButton(helpStrings[11], mgui, mgui.getHelpManager(), panel2, c2);
 
 
         c2.gridwidth = 1;
@@ -415,11 +362,11 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.weightx = 1.0;
         panel2.add(new JLabel("EXECC execution time (in cycle):"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        execcTime = new JTextField(""+node.getExeccTime(), 15);
+        execcTime = new TGTextFieldWithHelp(""+node.getExeccTime(), 15);
         panel2.add(execcTime, c2);
+        execcTime.makeEndHelpButton(helpStrings[12], mgui, mgui.getHelpManager(), panel2, c2);
 
-        //issue 183
-        addHelpButton(12, panel2, c2);
+
 
         c2.gridwidth = 1;
         //issue 183
@@ -427,25 +374,10 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.weightx = 1.0;
         panel2.add(new JLabel("Clock divider:"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        clockRatio = new JTextField(""+node.getClockRatio(), 15);
+        clockRatio = new TGTextFieldWithHelp(""+node.getClockRatio(), 15);
         panel2.add(clockRatio, c2);
+        execcTime.makeEndHelpButton(helpStrings[13], mgui, mgui.getHelpManager(), panel2, c2);
 
-        //issue 183
-        addHelpButton(13, panel2, c2);
-
-
-        // monitored
-        /*c2.gridwidth = 1;
-        panel2.add(new JLabel("Monitored:"), c2);
-        //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        //monitored = new JTextField(""+node.getMonitored(), 15);//DG 19.04.
-        tracemode = new JComboBox(tracemodeTab);
-        tracemode.setSelectedIndex(selectedTracemode);
-        tracemode.addActionListener(this);
-        panel2.add(tracemode, c2);
-
-        monitored = new JTextField("", 15);
-        panel2.add(monitored, c2);*/
 
 
         // Code generation
@@ -476,14 +408,13 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c4.gridwidth = 1;
         panel4.add(new JLabel("Operation:"), c4);
         //c4.gridwidth = GridBagConstraints.REMAINDER; //end row
-        operation = new JTextField(""+node.getOperation(), 15);
+        operation = new TGTextFieldWithHelp(""+node.getOperation(), 15);
         panel4.add(operation, c4);
+        operation.makeEndHelpButton(helpStrings[16], mgui, mgui.getHelpManager(), panel4, c4);
 
-        //issue 183
-        addHelpButton(16, panel4, c4);
+
         c4.weighty = 1.0;
         c4.weightx = 1.0;
-
         // extension constructs
         c4.gridwidth = 1;
         panel4.add(new JLabel("CPU Extension Construct:"), c4);
