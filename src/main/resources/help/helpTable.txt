@@ -1,4 +1,4 @@
-- general TTool general info tool
+- general TTool general info ttool tool
 -- syntaxchecking syntaxchecking syntax checking model verification
 - diplodocus diplodocus hardware software partitioning dse design space exploration
 -- application application functional view diplodocus

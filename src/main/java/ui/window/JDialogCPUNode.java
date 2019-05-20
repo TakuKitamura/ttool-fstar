@@ -48,6 +48,7 @@ import myutil.TraceManager;
 import tmltranslator.modelcompiler.ArchUnitMEC;
 import ui.ColorManager;
 import ui.MainGUI;
+import ui.TGTextFieldWithHelp;
 import ui.util.IconManager;
 import ui.interactivesimulation.SimulationTransaction;
 import ui.tmldd.TMLArchiCPUNode;
@@ -91,7 +92,7 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
     protected JComboBox<String> tracemode;
  //   private static int selectedTracemode = 0;
     // Panel1
-    protected JTextField nodeName;
+    protected TGTextFieldWithHelp nodeName;
 
     // Panel2
     protected JTextField sliceTime, nbOfCores, byteDataSize, pipelineSize, goIdleTime, maxConsecutiveIdleCycles,
@@ -256,17 +257,13 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         panel2.add(new JLabel("CPU name:"), c2);
         //-------
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        nodeName = new JTextField(node.getNodeName(), 30);
+        nodeName = new TGTextFieldWithHelp(node.getNodeName(), 30);
         nodeName.setEditable(true);
         nodeName.setFont(new Font("times", Font.PLAIN, 12));
         panel2.add(nodeName, c2);
+        nodeName.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
 
-        //issue 183
-        c2.weighty = 0.5;
-        c2.weightx = 0.5;
-        c2.gridwidth = GridBagConstraints.REMAINDER;
-        if (buttons != null)
-            panel2.add(buttons.get(0),c2);
+
         c2.gridwidth = 1;
         c2.gridheight = 1;
         c2.weighty = 1.0;
@@ -290,8 +287,9 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.weightx = 1.0;
         panel2.add(new JLabel("Slice time (in microseconds):"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        sliceTime = new JTextField(""+node.getSliceTime(), 15);
+        sliceTime = new TGTextFieldWithHelp(""+node.getSliceTime(), 15);
         panel2.add(sliceTime, c2);
+
 
         //issue 183
         addHelpButton(2, panel2, c2);

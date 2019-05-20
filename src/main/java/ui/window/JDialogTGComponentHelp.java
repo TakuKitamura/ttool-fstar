@@ -36,7 +36,7 @@ public class JDialogTGComponentHelp extends JDialog implements ActionListener {
         setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
         Container framePanel = getContentPane();
         framePanel.setLayout(new BorderLayout());
-        Font f = new Font("Courrier", Font.BOLD, 12);
+        //Font f = new Font("Courrier", Font.BOLD, 12);
 
         JPanel helpPanel = new JPanel();
         helpPanel.setLayout(new BorderLayout());
