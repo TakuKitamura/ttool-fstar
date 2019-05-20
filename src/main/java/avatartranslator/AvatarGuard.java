@@ -122,7 +122,7 @@ public abstract class AvatarGuard {
                     if (indexLParen == -1)
                         indexLParen = indexRParen;
 
-                    for (String delim : new String[]{"and", "or", "&&", "||"}) {
+                    for (String delim: new String[]{"and", "or", "&&", "||"}) {
 
                         int indexBinaryOp = sane.substring(0, indexLParen).indexOf(delim, indexRParen + 1);
                         if (indexBinaryOp != -1) {

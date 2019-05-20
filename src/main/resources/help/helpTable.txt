@@ -1,6 +1,10 @@
 - general TTool general info tool
 -- syntaxchecking syntaxchecking syntax checking model verification
 - diplodocus diplodocus hardware software partitioning dse design space exploration
+-- application application functional view diplodocus
+--- channel channel functional view diplodocus
+----fork fork channel functional view diplodocus
+----join join channel functional view diplodocus
 -- architecture architecture hardware os operating system
 --- cpu cpu processor cpu os
 

@@ -499,10 +499,6 @@ public class TranslatedRouter<E> {
         //network out
         Link networkInterfaceOut = new Link(tmlm, this, this, nbOfVCs);
         toNextRouters[NB_OF_PORTS-1] = networkInterfaceOut;
-
-
-
     }
-
 
 }

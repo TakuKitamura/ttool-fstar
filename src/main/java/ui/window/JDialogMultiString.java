@@ -40,6 +40,7 @@ package ui.window;
 
 import help.HelpEntry;
 import help.HelpManager;
+import myutil.TraceManager;
 import ui.MainGUI;
 import ui.util.IconManager;
 
@@ -158,6 +159,7 @@ public class JDialogMultiString extends JDialogBase implements ActionListener {
                 buttons = new ArrayList<>();
                 helpEntries = new ArrayList<>();
                 for(int i=0; i<helpKeywords.length; i++) {
+                    TraceManager.addDev("Getting help entry with:" + helpKeywords[i]);
                     HelpEntry he = hm.getHelpEntryWithHTMLFile(helpKeywords[i]);
                     helpEntries.add(he);
                     Icon myIcon = IconManager.imgic32;
@@ -268,6 +270,7 @@ public class JDialogMultiString extends JDialogBase implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(cpuHelp == null) {
+                    TraceManager.addDev("Null CPU help");
                     cpuHelp = new TGComponentHelp(mgui, he);
                     cpuHelp.setLocationHelpWindow(but);
                 } else {

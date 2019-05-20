@@ -669,7 +669,7 @@
 </CONNECTOR>
 <COMPONENT type="301" id="119" >
 <cdparam x="18" y="45" />
-<sizeparam width="224" height="51" minWidth="60" minHeight="23" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="237" height="51" minWidth="60" minHeight="23" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="1702" minY="0" maxY="563" />
 <infoparam name="UML Note" value="In this model THE PARAMETER SIZE
@@ -3837,8 +3837,8 @@ processing tasks
 
 <TMLActivityDiagramPanel name="F_CWP_I" minX="10" maxX="1400" minY="10" maxY="900" >
 <COMPONENT type="1010" id="1147" >
-<cdparam x="324" y="132" />
-<sizeparam width="110" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="321" y="132" />
+<sizeparam width="116" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
@@ -3861,8 +3861,8 @@ processing tasks
 </COMPONENT>
 
 <COMPONENT type="1008" id="1152" >
-<cdparam x="322" y="278" />
-<sizeparam width="114" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="318" y="278" />
+<sizeparam width="122" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
@@ -3876,8 +3876,8 @@ processing tasks
 </COMPONENT>
 
 <COMPONENT type="1007" id="1155" >
-<cdparam x="333" y="204" />
-<sizeparam width="93" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="331" y="204" />
+<sizeparam width="97" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="1400" minY="10" maxY="900" />
@@ -6405,8 +6405,8 @@ POLLING
 <cdparam x="375" y="115" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
-<P1  x="12000" y="3680" id="2508" />
-<P2  x="12000" y="5216" id="2492" />
+<P1  x="192000" y="58880" id="2508" />
+<P2  x="192000" y="83456" id="2492" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 
@@ -7064,8 +7064,8 @@ POLLING
 <cdparam x="294" y="79" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
-<P1  x="9408" y="2528" id="2878" />
-<P2  x="9408" y="4064" id="2862" />
+<P1  x="150528" y="40448" id="2878" />
+<P2  x="150528" y="65024" id="2862" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 
@@ -14301,9 +14301,9 @@ sequence diagram.
 <SUBCOMPONENT type="1101" id="6786" >
 <father id="6811" num="0" />
 <cdparam x="48" y="315" />
-<sizeparam width="141" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="146" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="111" minY="0" maxY="141" />
+<cdrectangleparam minX="0" maxX="106" minY="0" maxY="141" />
 <infoparam name="TGComponent" value="Zigbee_TX::X_Sink" />
 <TGConnectingPoint num="0" id="6778" />
 <TGConnectingPoint num="1" id="6779" />
@@ -14428,9 +14428,9 @@ sequence diagram.
 <SUBCOMPONENT type="1101" id="6870" >
 <father id="6958" num="0" />
 <cdparam x="1465" y="339" />
-<sizeparam width="154" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="164" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="263" minY="0" maxY="253" />
+<cdrectangleparam minX="0" maxX="253" minY="0" maxY="253" />
 <infoparam name="TGComponent" value="Zigbee_TX::F_Source" />
 <TGConnectingPoint num="0" id="6862" />
 <TGConnectingPoint num="1" id="6863" />
@@ -14447,9 +14447,9 @@ sequence diagram.
 <SUBCOMPONENT type="1101" id="6879" >
 <father id="6958" num="1" />
 <cdparam x="1466" y="395" />
-<sizeparam width="156" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="164" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="261" minY="0" maxY="253" />
+<cdrectangleparam minX="0" maxX="253" minY="0" maxY="253" />
 <infoparam name="TGComponent" value="Zigbee_TX::X_Source" />
 <TGConnectingPoint num="0" id="6871" />
 <TGConnectingPoint num="1" id="6872" />
@@ -14466,9 +14466,9 @@ sequence diagram.
 <SUBCOMPONENT type="1101" id="6888" >
 <father id="6958" num="2" />
 <cdparam x="1466" y="456" />
-<sizeparam width="212" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="223" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="205" minY="0" maxY="253" />
+<cdrectangleparam minX="0" maxX="194" minY="0" maxY="253" />
 <infoparam name="TGComponent" value="Zigbee_TX::F_Symbol2ChipSeq" />
 <TGConnectingPoint num="0" id="6880" />
 <TGConnectingPoint num="1" id="6881" />
@@ -14485,9 +14485,9 @@ sequence diagram.
 <SUBCOMPONENT type="1101" id="6897" >
 <father id="6958" num="3" />
 <cdparam x="1466" y="518" />
-<sizeparam width="180" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="189" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="237" minY="0" maxY="253" />
+<cdrectangleparam minX="0" maxX="228" minY="0" maxY="253" />
 <infoparam name="TGComponent" value="Zigbee_TX::F_Chip2Octet" />
 <TGConnectingPoint num="0" id="6889" />
 <TGConnectingPoint num="1" id="6890" />
@@ -14504,9 +14504,9 @@ sequence diagram.
 <SUBCOMPONENT type="1101" id="6906" >
 <father id="6958" num="4" />
 <cdparam x="1688" y="405" />
-<sizeparam width="139" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="146" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="278" minY="0" maxY="253" />
+<cdrectangleparam minX="0" maxX="271" minY="0" maxY="253" />
 <infoparam name="TGComponent" value="Zigbee_TX::F_Sink" />
 <TGConnectingPoint num="0" id="6898" />
 <TGConnectingPoint num="1" id="6899" />
@@ -14523,9 +14523,9 @@ sequence diagram.
 <SUBCOMPONENT type="1101" id="6915" >
 <father id="6958" num="5" />
 <cdparam x="1691" y="345" />
-<sizeparam width="140" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="145" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="277" minY="0" maxY="253" />
+<cdrectangleparam minX="0" maxX="272" minY="0" maxY="253" />
 <infoparam name="TGComponent" value="Zigbee_TX::F_CWL" />
 <TGConnectingPoint num="0" id="6907" />
 <TGConnectingPoint num="1" id="6908" />
@@ -14542,9 +14542,9 @@ sequence diagram.
 <SUBCOMPONENT type="1101" id="6924" >
 <father id="6958" num="6" />
 <cdparam x="1685" y="459" />
-<sizeparam width="156" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="162" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="261" minY="0" maxY="253" />
+<cdrectangleparam minX="0" maxX="255" minY="0" maxY="253" />
 <infoparam name="TGComponent" value="Zigbee_TX::F_CWP_Q" />
 <TGConnectingPoint num="0" id="6916" />
 <TGConnectingPoint num="1" id="6917" />
@@ -14561,9 +14561,9 @@ sequence diagram.
 <SUBCOMPONENT type="1101" id="6933" >
 <father id="6958" num="7" />
 <cdparam x="1686" y="522" />
-<sizeparam width="150" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="156" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="267" minY="0" maxY="253" />
+<cdrectangleparam minX="0" maxX="261" minY="0" maxY="253" />
 <infoparam name="TGComponent" value="Zigbee_TX::F_CWP_I" />
 <TGConnectingPoint num="0" id="6925" />
 <TGConnectingPoint num="1" id="6926" />
@@ -14796,9 +14796,9 @@ sequence diagram.
 <SUBCOMPONENT type="1101" id="7092" >
 <father id="7117" num="0" />
 <cdparam x="105" y="993" />
-<sizeparam width="182" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="189" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="52" minY="0" maxY="100" />
+<cdrectangleparam minX="0" maxX="45" minY="0" maxY="100" />
 <infoparam name="TGComponent" value="Zigbee_TX::X_Chip2Octet" />
 <TGConnectingPoint num="0" id="7084" />
 <TGConnectingPoint num="1" id="7085" />
@@ -14995,9 +14995,9 @@ sequence diagram.
 <SUBCOMPONENT type="1101" id="7226" >
 <father id="7269" num="0" />
 <cdparam x="671" y="289" />
-<sizeparam width="152" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="156" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="86" minY="0" maxY="145" />
+<cdrectangleparam minX="0" maxX="82" minY="0" maxY="145" />
 <infoparam name="TGComponent" value="Zigbee_TX::X_CWP_I" />
 <TGConnectingPoint num="0" id="7218" />
 <TGConnectingPoint num="1" id="7219" />
@@ -15014,9 +15014,9 @@ sequence diagram.
 <SUBCOMPONENT type="1101" id="7235" >
 <father id="7269" num="1" />
 <cdparam x="640" y="335" />
-<sizeparam width="158" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="162" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="80" minY="0" maxY="145" />
+<cdrectangleparam minX="0" maxX="76" minY="0" maxY="145" />
 <infoparam name="TGComponent" value="Zigbee_TX::X_CWP_Q" />
 <TGConnectingPoint num="0" id="7227" />
 <TGConnectingPoint num="1" id="7228" />
@@ -15033,9 +15033,9 @@ sequence diagram.
 <SUBCOMPONENT type="1101" id="7244" >
 <father id="7269" num="2" />
 <cdparam x="639" y="239" />
-<sizeparam width="142" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="145" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="96" minY="0" maxY="145" />
+<cdrectangleparam minX="0" maxX="93" minY="0" maxY="145" />
 <infoparam name="TGComponent" value="Zigbee_TX::X_CWL" />
 <TGConnectingPoint num="0" id="7236" />
 <TGConnectingPoint num="1" id="7237" />
@@ -15267,10 +15267,10 @@ sequence diagram.
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="7403" >
 <father id="7428" num="0" />
-<cdparam x="759" y="1028" />
-<sizeparam width="214" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="755" y="1028" />
+<sizeparam width="223" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="5" minY="0" maxY="118" />
+<cdrectangleparam minX="0" maxX="-4" minY="0" maxY="118" />
 <infoparam name="TGComponent" value="Zigbee_TX::X_Symbol2ChipSeq" />
 <TGConnectingPoint num="0" id="7395" />
 <TGConnectingPoint num="1" id="7396" />
@@ -15354,9 +15354,9 @@ sequence diagram.
 <SUBCOMPONENT type="1110" id="7462" >
 <father id="7471" num="0" />
 <cdparam x="292" y="1303" />
-<sizeparam width="199" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="212" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="220" minY="0" maxY="45" />
+<cdrectangleparam minX="0" maxX="207" minY="0" maxY="45" />
 <infoparam name="TGComponent" value="Zigbee_TX::chip2octet_ch_in" />
 <TGConnectingPoint num="0" id="7454" />
 <TGConnectingPoint num="1" id="7455" />
@@ -15401,9 +15401,9 @@ sequence diagram.
 <SUBCOMPONENT type="1110" id="7480" >
 <father id="7489" num="0" />
 <cdparam x="327" y="1437" />
-<sizeparam width="157" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="164" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="248" minY="0" maxY="48" />
+<cdrectangleparam minX="0" maxX="241" minY="0" maxY="48" />
 <infoparam name="TGComponent" value="Zigbee_TX::cwl_ch_in" />
 <TGConnectingPoint num="0" id="7472" />
 <TGConnectingPoint num="1" id="7473" />
@@ -15456,9 +15456,9 @@ sequence diagram.
 <SUBCOMPONENT type="1110" id="7498" >
 <father id="7507" num="0" />
 <cdparam x="701" y="1315" />
-<sizeparam width="162" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="170" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="133" minY="0" maxY="105" />
+<cdrectangleparam minX="0" maxX="125" minY="0" maxY="105" />
 <infoparam name="TGComponent" value="Zigbee_TX::sink_ch_in" />
 <TGConnectingPoint num="0" id="7490" />
 <TGConnectingPoint num="1" id="7491" />
@@ -15504,9 +15504,9 @@ sequence diagram.
 <SUBCOMPONENT type="1110" id="7516" >
 <father id="7525" num="0" />
 <cdparam x="280" y="1181" />
-<sizeparam width="235" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="247" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="186" minY="0" maxY="45" />
+<cdrectangleparam minX="0" maxX="174" minY="0" maxY="45" />
 <infoparam name="TGComponent" value="Zigbee_TX::symbol2ChipSeq_ch_in" />
 <TGConnectingPoint num="0" id="7508" />
 <TGConnectingPoint num="1" id="7509" />
