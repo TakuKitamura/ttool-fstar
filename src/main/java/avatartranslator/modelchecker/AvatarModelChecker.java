@@ -1160,6 +1160,12 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     // Stop condition
 
     public synchronized boolean mustStop() {
+
+        if (stoppedBeforeEnd) {
+            return true;
+        }
+
+
         if (stoppedConditionReached) {
             return true;
         }

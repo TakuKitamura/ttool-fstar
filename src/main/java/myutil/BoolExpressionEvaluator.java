@@ -749,7 +749,7 @@ public class BoolExpressionEvaluator {
         while ((index = _expr.indexOf("not(")) != -1) {
             indexPar = Conversion.findMatchingParenthesis(_expr, index + 3, '(', ')');
             if (indexPar == -1) {
-                errorMessage = "Parenthesis not maching at index " + (index + 3) + " in expression: " + _expr;
+                errorMessage = "Parenthesis not matching at index " + (index + 3) + " in expression: " + _expr;
                 return false;
             }
 
@@ -1635,7 +1635,7 @@ public class BoolExpressionEvaluator {
         while ((index = _expr.indexOf("not(")) != -1) {
             indexPar = Conversion.findMatchingParenthesis(_expr, index + 3, '(', ')');
             if (indexPar == -1) {
-                errorMessage = "Parenthesis not maching at index " + (index + 3) + " in expression: " + _expr;
+                errorMessage = "Parenthesis not matching at index " + (index + 3) + " in expression: " + _expr;
                 return false;
             }
 
@@ -1720,7 +1720,7 @@ public class BoolExpressionEvaluator {
         IntBoolRes newElt;
 
         //TraceManager.addDev(current.getTop().toString());
-        TraceManager.addDev("<><><><><><> Dealing with token:" + token + " current=" + current);
+        //TraceManager.addDev("<><><><><><> Dealing with token:" + token + " current=" + current);
 
         char c1 = token.charAt(0);
 
