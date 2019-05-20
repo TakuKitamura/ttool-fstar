@@ -7,7 +7,6 @@
 ----join join channel functional view diplodocus
 -- architecture architecture hardware os operating system
 --- cpu cpu processor cpu os
-
 ----cpuname cpu_name cpu name
 ----schedulingpolicy scheduling_policy scheduling policy cpu
 ----slicetime slice_time slice time cpu

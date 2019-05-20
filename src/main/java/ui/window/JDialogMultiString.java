@@ -72,7 +72,7 @@ public class JDialogMultiString extends JDialogBase implements ActionListener {
     private HelpManager hm;
     private List<JButton>  buttons;
     private List<HelpEntry> helpEntries;
-    private TGComponentHelp cpuHelp;
+    private JDialogTGComponentHelp cpuHelp;
     private MainGUI mgui;
 
     private int nbString;
@@ -271,11 +271,11 @@ public class JDialogMultiString extends JDialogBase implements ActionListener {
             public void actionPerformed(ActionEvent e) {
                 if(cpuHelp == null) {
                     TraceManager.addDev("Null CPU help");
-                    cpuHelp = new TGComponentHelp(mgui, he);
+                    cpuHelp = new JDialogTGComponentHelp(mgui, he);
                     cpuHelp.setLocationHelpWindow(but);
                 } else {
                     if(!cpuHelp.isVisible()) {
-                        cpuHelp = new TGComponentHelp(mgui, he);
+                        cpuHelp = new JDialogTGComponentHelp(mgui, he);
                         cpuHelp.setLocationHelpWindow(but);
                     } else{
                         cpuHelp.setVisible(false);
@@ -284,6 +284,7 @@ public class JDialogMultiString extends JDialogBase implements ActionListener {
             }
         });
     }
+
 
     private void addHelpButton(int index, JPanel panel, GridBagConstraints c) {
         //issue 183

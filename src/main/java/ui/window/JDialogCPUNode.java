@@ -109,7 +109,7 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
     //issue 183
     private List<JButton>  buttons;
     private List<HelpEntry> helpEntries;
-    private TGComponentHelp cpuHelp;
+    private JDialogTGComponentHelp cpuHelp;
 
     /* Creates new form  */
     public JDialogCPUNode(MainGUI _mgui, Frame _frame, String _title, TMLArchiCPUNode _node, ArchUnitMEC _MECType,
@@ -143,11 +143,11 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(cpuHelp == null) {
-                    cpuHelp = new TGComponentHelp(mgui, he);
+                    cpuHelp = new JDialogTGComponentHelp(mgui, he);
                     cpuHelp.setLocationHelpWindow(but);
                 } else {
                     if(!cpuHelp.isVisible()) {
-                        cpuHelp = new TGComponentHelp(mgui, he);
+                        cpuHelp = new JDialogTGComponentHelp(mgui, he);
                         cpuHelp.setLocationHelpWindow(but);
                     } else{
                         cpuHelp.setVisible(false);
