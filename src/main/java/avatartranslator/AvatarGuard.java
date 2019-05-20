@@ -85,7 +85,7 @@ public abstract class AvatarGuard {
         if (sane.startsWith("not(")) {
             indexRParen = AvatarGuard.getMatchingRParen(sane, 3);
             if (indexRParen < 0) {
-                TraceManager.addDev("Invalid guard expression with tuple " + sane);
+                TraceManager.addDev("1. Invalid guard expression with tuple " + sane);
                 return new AvatarGuardEmpty();
             }
             first = AvatarGuard.createFromString(block, sane.substring(4, indexRParen));
@@ -103,7 +103,7 @@ public abstract class AvatarGuard {
         if (sane.startsWith("(")) {
             indexRParen = AvatarGuard.getMatchingRParen(sane, 0);
             if (indexRParen < 0) {
-                TraceManager.addDev("Invalid guard expression with tuple " + sane);
+                TraceManager.addDev("2. Invalid guard expression with tuple " + sane);
                 return new AvatarGuardEmpty();
             }
             tuple = AvatarTuple.createFromString(block, sane.substring(0, indexRParen));
@@ -122,7 +122,7 @@ public abstract class AvatarGuard {
                     if (indexLParen == -1)
                         indexLParen = indexRParen;
 
-                    for (String delim : new String[]{"and", "or"}) {
+                    for (String delim : new String[]{"and", "or", "&&", "||"}) {
 
                         int indexBinaryOp = sane.substring(0, indexLParen).indexOf(delim, indexRParen + 1);
                         if (indexBinaryOp != -1) {
@@ -134,7 +134,7 @@ public abstract class AvatarGuard {
                             return new AvatarGuardEmpty();
                         }
                     }
-                    TraceManager.addDev("Invalid guard " + sane);
+                    TraceManager.addDev("3. Invalid guard " + sane);
                     return new AvatarGuardEmpty();
                 }
             } else if (tuple.getComponents().size() == 1) {
@@ -163,7 +163,7 @@ public abstract class AvatarGuard {
                         return new AvatarGuardEmpty();
                     }
                 }
-                TraceManager.addDev("Invalid guard " + sane);
+                TraceManager.addDev("4. Invalid guard " + sane);
                 return new AvatarGuardEmpty();
             } else {
                 int indexLParen = sane.indexOf("(", indexRParen);
@@ -181,7 +181,7 @@ public abstract class AvatarGuard {
                     }
                 }
 
-                TraceManager.addDev("Invalid guard expression with tuple " + sane);
+                TraceManager.addDev("5. Invalid guard expression with tuple " + sane);
                 return new AvatarGuardEmpty();
             }
         }
