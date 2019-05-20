@@ -44,6 +44,7 @@ package ui.tmlcompd;
 import myutil.GraphicLib;
 import ui.*;
 import ui.util.IconManager;
+import ui.window.JDialogMultiString;
 
 import javax.swing.*;
 import java.awt.*;
@@ -137,7 +138,44 @@ public class TMLCFork extends TMLCChannelFacility implements WithAttributes {
     public boolean editOndoubleClick(JFrame frame) {
         if (isChannel) {
             String oldValue = value;
-            String s = (String) JOptionPane.showInputDialog(frame, "Nb of samples (positive int): ",
+            String[] labels = new String[1];
+            labels[0] = "Nb of samples (positive int): ";
+            String[] values = new String[1];
+            values[0] = "" + value;
+            String[] keywords = new String[1];
+            keywords[0] = "fork" ;
+
+
+            JDialogMultiString jdms = new JDialogMultiString(getTDiagramPanel().getMainGUI().getFrame(), "Fork attribute", 1,
+                    labels, values, keywords, getTDiagramPanel().getMainGUI().getHelpManager(), getTDiagramPanel().getMainGUI());
+            jdms.setSize(500, 450);
+            GraphicLib.centerOnParent(jdms, 500, 450);
+            jdms.setVisible(true);
+
+            if (jdms.hasBeenSet()) {
+                String tmp = jdms.getString(0).trim();
+                try {
+                    int val = Integer.decode(tmp);
+                    if (val > 0) {
+                        value = tmp;
+                    } else {
+                        JOptionPane.showMessageDialog(frame,
+                                "Could not change the number of samples: the number must be >0",
+                                "Error",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        return false;
+                    }
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(frame,
+                            "Could not change the number of samples: " + tmp + " is not a number",
+                            "Error",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    return false;
+                }
+                return true;
+            }
+
+            /*String s = (String) JOptionPane.showInputDialog(frame, "Nb of samples (positive int): ",
                     "Nb of samples per round", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101, null,
                     getValue());
             if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
@@ -162,7 +200,7 @@ public class TMLCFork extends TMLCChannelFacility implements WithAttributes {
                 }
 
             }
-            return true;
+            return true;*/
         } else {
             JOptionPane.showMessageDialog(frame,
                     "Only correctly connected fork can be configured",
@@ -170,6 +208,7 @@ public class TMLCFork extends TMLCChannelFacility implements WithAttributes {
                     JOptionPane.INFORMATION_MESSAGE);
             return true;
         }
+        return true;
 
     }
 

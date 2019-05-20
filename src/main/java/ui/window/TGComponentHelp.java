@@ -42,8 +42,11 @@ public class TGComponentHelp extends JDialog implements ActionListener {
         helpPanel.setLayout(new BorderLayout());
         pane = new JEditorPane("text/html;charset=UTF-8", "");
         pane.setEditable(false);
-        pane.setText(helpEntry.getHTMLContent());
-
+        if ((helpEntry != null) && (helpEntry.getHTMLContent() != null)) {
+            pane.setText(helpEntry.getHTMLContent());
+        } else {
+            pane.setText("No Help available");
+        }
         JScrollPane jsp = new JScrollPane(pane);
         jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         helpPanel.add(jsp, BorderLayout.CENTER);
@@ -58,6 +61,7 @@ public class TGComponentHelp extends JDialog implements ActionListener {
         }
 
         helpBut.addActionListener(this);
+        helpBut.setEnabled(helpEntry != null);
 
         JPanel jp = new JPanel();
         jp.add(helpBut);

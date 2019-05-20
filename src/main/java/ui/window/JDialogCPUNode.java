@@ -107,9 +107,9 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
     private java.util.List<SimulationTransaction> transactions;
 
     //issue 183
-    List<JButton>  buttons;
-    List<HelpEntry> helpEntries;
-    TGComponentHelp cpuHelp;
+    private List<JButton>  buttons;
+    private List<HelpEntry> helpEntries;
+    private TGComponentHelp cpuHelp;
 
     /* Creates new form  */
     public JDialogCPUNode(MainGUI _mgui, Frame _frame, String _title, TMLArchiCPUNode _node, ArchUnitMEC _MECType,

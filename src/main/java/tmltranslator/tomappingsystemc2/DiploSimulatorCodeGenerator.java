@@ -406,7 +406,8 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
                 final String channelTypeName = namesGen.channelTypeName(channel);
                 final String channelInstName = namesGen.channelInstanceName(channel);
 
-                declaration += channelTypeName + "* " + channelInstName + " = new " + channelTypeName + "(" + channel.getID() + ",\"" + namesGen.channelName(channel) + "\"," + channel.getSize() + ",";
+                declaration += channelTypeName + "* " + channelInstName + " = new " + channelTypeName + "(" + channel.getID() + ",\"" +
+                        namesGen.channelName(channel) + "\"," + channel.getSize() + ",";
 
                 final String param;
 

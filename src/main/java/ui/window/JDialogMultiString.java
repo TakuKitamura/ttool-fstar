@@ -38,23 +38,20 @@
 
 package ui.window;
 
-import java.awt.Container;
-import java.awt.Font;
-import java.awt.Frame;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import help.HelpEntry;
+import help.HelpManager;
+import ui.MainGUI;
+import ui.util.IconManager;
+
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 /**
  * Class JDialogMultiString
@@ -68,6 +65,14 @@ public class JDialogMultiString extends JDialogBase implements ActionListener {
 
     private String[] labels;
     private String[] values;
+
+    // Help
+    private String[] helpKeywords;
+    private HelpManager hm;
+    private List<JButton>  buttons;
+    private List<HelpEntry> helpEntries;
+    private TGComponentHelp cpuHelp;
+    private MainGUI mgui;
 
     private int nbString;
 
@@ -103,6 +108,26 @@ public class JDialogMultiString extends JDialogBase implements ActionListener {
         pack();
     }
 
+    public JDialogMultiString(Frame f, String title, int _nbString, String[] _labels, String[] _values,
+                              String[] _helpKeywords, HelpManager _hm, MainGUI _mgui) {
+
+        super(f, title, true);
+
+        nbString = _nbString;
+        labels = _labels;
+        values = _values;
+        helpKeywords = _helpKeywords;
+        hm = _hm;
+        mgui = _mgui;
+
+
+        texts = new JTextField[nbString];
+
+        initComponents();
+        //   myInitComponents();
+        pack();
+    }
+
     public JDialogMultiString(Frame f, String title, int _nbString, String[] _labels, String[] _values, List<String[]> _possibleValues) {
 
         super(f, title, true);
@@ -119,10 +144,32 @@ public class JDialogMultiString extends JDialogBase implements ActionListener {
         pack();
     }
 
+
+
 //    private void myInitComponents() {
 //    }
 
     private void initComponents() {
+
+        if (hm != null) {
+            if(!hm.loadEntries()) {
+                hm = null;
+            } else {
+                buttons = new ArrayList<>();
+                helpEntries = new ArrayList<>();
+                for(int i=0; i<helpKeywords.length; i++) {
+                    HelpEntry he = hm.getHelpEntryWithHTMLFile(helpKeywords[i]);
+                    helpEntries.add(he);
+                    Icon myIcon = IconManager.imgic32;
+                    JButton but = new JButton(myIcon);
+                    setButton(but);
+                    buttonClick(but, he);
+                    buttons.add(but);
+                }
+            }
+        }
+
+
         inserts = new JButton[labels.length];
         helps = new HashMap<>();
 
@@ -140,7 +187,7 @@ public class JDialogMultiString extends JDialogBase implements ActionListener {
         panel1 = new JPanel();
         panel1.setLayout(gridbag1);
 
-        panel1.setBorder(new javax.swing.border.TitledBorder("Properties"));
+        panel1.setBorder(new javax.swing.border.TitledBorder("Values"));
 
         //panel1.setPreferredSize(new Dimension(600, 300));
 
@@ -148,7 +195,7 @@ public class JDialogMultiString extends JDialogBase implements ActionListener {
         c1.weighty = 1.0;
         c1.weightx = 1.0;
         c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c1.fill = GridBagConstraints.BOTH;
+        c1.fill = GridBagConstraints.HORIZONTAL;
         c1.gridheight = 1;
         panel1.add(new JLabel(" "), c1);
 
@@ -180,9 +227,15 @@ public class JDialogMultiString extends JDialogBase implements ActionListener {
                     }
                 }
             }
-            c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-            texts[i] = new JTextField(values[i], 15);
-            panel1.add(texts[i], c1);
+            if ((helpKeywords != null) && (helpKeywords[i] != null)) {
+                texts[i] = new JTextField(values[i], 15);
+                panel1.add(texts[i], c1);
+                addHelpButton(i, panel1, c1);
+            } else {
+                c1.gridwidth = GridBagConstraints.REMAINDER; //end row
+                texts[i] = new JTextField(values[i], 15);
+                panel1.add(texts[i], c1);
+            }
         }
 
 
@@ -201,6 +254,43 @@ public class JDialogMultiString extends JDialogBase implements ActionListener {
 
         initButtons(c0, c, this);
     }
+
+    private void setButton(JButton button) {
+        button.setOpaque(false);
+        button.setFocusPainted(false);
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
+        button.setPreferredSize(new Dimension(20,20));
+    }
+
+    private void buttonClick(JButton but, HelpEntry he) {
+        but.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(cpuHelp == null) {
+                    cpuHelp = new TGComponentHelp(mgui, he);
+                    cpuHelp.setLocationHelpWindow(but);
+                } else {
+                    if(!cpuHelp.isVisible()) {
+                        cpuHelp = new TGComponentHelp(mgui, he);
+                        cpuHelp.setLocationHelpWindow(but);
+                    } else{
+                        cpuHelp.setVisible(false);
+                    }
+                }
+            }
+        });
+    }
+
+    private void addHelpButton(int index, JPanel panel, GridBagConstraints c) {
+        //issue 183
+        c.weighty = 0.5;
+        c.weightx = 0.5;
+        c.gridwidth = GridBagConstraints.REMAINDER;
+        if (buttons != null)
+            panel.add(buttons.get(index), c);
+    }
+
 
     @Override
     public void actionPerformed(ActionEvent evt) {
