@@ -48,6 +48,7 @@ import myutil.TraceManager;
 import tmltranslator.modelcompiler.ArchUnitMEC;
 import ui.ColorManager;
 import ui.MainGUI;
+import ui.TGComboBoxWithHelp;
 import ui.TGTextFieldWithHelp;
 import ui.util.IconManager;
 import ui.interactivesimulation.SimulationTransaction;
@@ -99,7 +100,7 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
             taskSwitchingTime, branchingPredictionPenalty, cacheMiss, clockRatio, execiTime, execcTime, monitored,
         operation;
 
-    protected JComboBox<String> schedulingPolicy, MECTypeCB, encryption;
+    protected TGComboBoxWithHelp<String> schedulingPolicy, MECTypeCB, encryption;
 
     // Tabbed pane for panel1 and panel2
     private JTabbedPane tabbedPane;
@@ -125,69 +126,10 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         initComponents();
         pack();
     }
-//
-//    private void myInitComponents() {
-//    }
-
-    //issue 183
-    private void setButton(JButton button) {
-        button.setOpaque(false);
-        button.setFocusPainted(false);
-        button.setContentAreaFilled(false);
-        button.setBorderPainted(false);
-        button.setPreferredSize(new Dimension(20,20));
-    }
-
-    //issue 183
-    private void buttonClick(JButton but, HelpEntry he) {
-        but.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(cpuHelp == null) {
-                    cpuHelp = new JDialogTGComponentHelp(mgui, he);
-                    cpuHelp.setLocationHelpWindow(but);
-                } else {
-                    if(!cpuHelp.isVisible()) {
-                        cpuHelp = new JDialogTGComponentHelp(mgui, he);
-                        cpuHelp.setLocationHelpWindow(but);
-                    } else{
-                        cpuHelp.setVisible(false);
-                    }
-                }
-            }
-        });
-    }
-
-
-
-    //issue 183
-    private void hardwareHelp(){
-        HelpManager helpManager = mgui.getHelpManager();
-
-        if(!helpManager.loadEntries()) {
-            return;
-        }
-
-        buttons = new ArrayList<>();
-        helpEntries = new ArrayList<>();
-
-
-
-        for(int i=0; i<helpStrings.length; i++) {
-            HelpEntry he = helpManager.getHelpEntryWithHTMLFile(helpStrings[i]);
-            helpEntries.add(he);
-            Icon myIcon = IconManager.imgic32;
-            JButton but = new JButton(myIcon);
-            setButton(but);
-            buttonClick(but, he);
-            buttons.add(but);
-        }
-    }
 
 
     private void initComponents() {
 
-        hardwareHelp();
         Container c = getContentPane();
         GridBagLayout gridbag0 = new GridBagLayout();
         GridBagLayout gridbag2 = new GridBagLayout();
@@ -235,14 +177,12 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         panel2.add(new JLabel("Scheduling policy:"), c2);
 
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        schedulingPolicy = new JComboBox<String>();
+        schedulingPolicy = new TGComboBoxWithHelp<String>();
         schedulingPolicy.addItem("Round Robin");
         schedulingPolicy.addItem("Round Robin - Priority Based");
         schedulingPolicy.setSelectedIndex(node.getSchedulingPolicy());
         panel2.add(schedulingPolicy, c2);
-
-        //issue 183
-        addHelpButton(1, panel2, c2);
+        schedulingPolicy.makeEndHelpButton(helpStrings[1], mgui, mgui.getHelpManager(), panel2, c2);
 
         c2.gridwidth = 1;
         //issue 183
@@ -252,10 +192,7 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
         sliceTime = new TGTextFieldWithHelp(""+node.getSliceTime(), 15);
         panel2.add(sliceTime, c2);
-
-
-        //issue 183
-        addHelpButton(2, panel2, c2);
+        sliceTime.makeEndHelpButton(helpStrings[2], mgui, mgui.getHelpManager(), panel2, c2);
 
         c2.gridwidth = 1;
         //issue 183
@@ -392,14 +329,14 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c4.fill = GridBagConstraints.HORIZONTAL;
         panel4.add(new JLabel("Encryption:"), c4);
         //c4.gridwidth = GridBagConstraints.REMAINDER;
-        encryption = new JComboBox<String>();
+        encryption = new TGComboBoxWithHelp<String>();
         encryption.addItem("None");
         encryption.addItem("Software Encryption");
         encryption.addItem("Hardware Security Module");
         encryption.setSelectedIndex(node.getEncryption());
         panel4.add(encryption, c4);
-        //issue 183
-        addHelpButton(14, panel4, c4);
+        encryption.makeEndHelpButton(helpStrings[14], mgui, mgui.getHelpManager(), panel4, c4);
+
 
         c4.weighty = 1.0;
         c4.weightx = 1.0;
@@ -419,7 +356,7 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c4.gridwidth = 1;
         panel4.add(new JLabel("CPU Extension Construct:"), c4);
         //c4.gridwidth = GridBagConstraints.REMAINDER; //end row
-        MECTypeCB = new JComboBox<String>( ArchUnitMEC.stringTypes );
+        MECTypeCB = new TGComboBoxWithHelp<String>( ArchUnitMEC.stringTypes );
         if( MECType == null )   {
             MECTypeCB.setSelectedIndex( 0 );
         }
@@ -428,8 +365,7 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         }
         MECTypeCB.addActionListener(this);
         panel4.add( MECTypeCB, c4);
-
-        addHelpButton(15, panel4, c4);
+        MECTypeCB.makeEndHelpButton(helpStrings[15], mgui, mgui.getHelpManager(), panel4, c4);
 
 
         TraceManager.addDev("Transactions size=" + transactions.size());
@@ -468,15 +404,6 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
     }
 
     public void actionPerformed(ActionEvent evt)  {
-        /* if (evt.getSource() == typeBox) {
-           boolean b = ((Boolean)(initValues.elementAt(typeBox.getSelectedIndex()))).booleanValue();
-           initialValue.setEnabled(b);
-           return;
-           }*/
-
-//        if (evt.getSource() == tracemode) {
-//            selectedTracemode = tracemode.getSelectedIndex();
-//        }
 
         String command = evt.getActionCommand();
 
@@ -601,14 +528,6 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         }
     }
 
-    private void addHelpButton(int index, JPanel panel, GridBagConstraints c) {
-        //issue 183
-        c.weighty = 0.5;
-        c.weightx = 0.5;
-        c.gridwidth = GridBagConstraints.REMAINDER;
-        if (buttons != null)
-            panel.add(buttons.get(index), c);
-    }
     
     class MyFrame extends JPanel implements MouseMotionListener, MouseListener{
         Map<Range, String> toolMap = new HashMap<Range, String>();
