@@ -39,9 +39,6 @@
 
 package tmltranslator.tonetwork;
 
-import myutil.Conversion;
-import myutil.FileException;
-import myutil.FileUtils;
 import myutil.TraceManager;
 import tmltranslator.*;
 
@@ -74,6 +71,8 @@ public class TMAP2Network<E>  {
     public final static int WEST = 2;
     public final static int EAST = 3;
     public final static int DOMAIN = 4;
+
+    public final static String[] PORT_NAME = {"North", "South", "West", "East", "Internal"};
 
 
     public TMAP2Network(TMLMapping<?> _tmlmapping, int nocSize) {
@@ -294,81 +293,70 @@ public class TMAP2Network<E>  {
             }
         }
 
+        // Create routers around
+        tmlmodeling = tmlmapping.getTMLModeling();
+
         // *** Create links and update routers accordingly
-        // For each router, I consider all routers that are around the considered on
+        // For each router, I consider all routers that are around the considered one
         for(i=0; i<nocSize; i++) {
             for(j=0; j<nocSize; j++) {
                 for(int k=0; k< DOMAIN; k++) {
 
                     // NORTH?
-                    if (i>0) {
+                    if ((i>0) && (k == NORTH)) {
                         // There is a north router
                         // link to next
-                        if (routers[i][j].toNextRouters[k] != null) {
+                        if (routers[i][j].playingTheRoleOfPrevious[k] == null) {
                             Link to = new Link(tmlmodeling, routers[i][j], routers[i-1][j], nbOfVCs);
-                            routers[i][j].toNextRouters[k] = to;
-                            routers[i-1][j].fromPreviousRouters[getFrom(k)] = to;
+                            routers[i][j].playingTheRoleOfPrevious[k] = to;
+                            routers[i-1][j].playingTheRoleOfNext[getFrom(k)] = to;
                         }
-                        // Link to previous
-                        if (routers[i][j].fromPreviousRouters[k] != null) {
-                            Link from = new Link(tmlmodeling, routers[i][j], routers[i-1][j], nbOfVCs);
-                            routers[i][j].fromPreviousRouters[k] = from;
-                            routers[i-1][j].toNextRouters[getFrom(k)] = from;
-                        }
+
                     }
 
                     // SOUTH?
-                    if (i<nocSize-1) {
+                    if ((i<nocSize-1) && (k == SOUTH)) {
                         // There is a south router
                         // link to next
-                        if (routers[i][j].toNextRouters[k] != null) {
+                        if (routers[i][j].playingTheRoleOfPrevious[k] == null) {
                             Link to = new Link(tmlmodeling, routers[i][j], routers[i+1][j], nbOfVCs);
-                            routers[i][j].toNextRouters[k] = to;
-                            routers[i+1][j].fromPreviousRouters[getFrom(k)] = to;
-                        }
-                        // Link to previous
-                        if (routers[i][j].fromPreviousRouters[k] != null) {
-                            Link from = new Link(tmlmodeling, routers[i][j], routers[i+1][j], nbOfVCs);
-                            routers[i][j].fromPreviousRouters[k] = from;
-                            routers[i+1][j].toNextRouters[getFrom(k)] = from;
+                            routers[i][j].playingTheRoleOfPrevious[k] = to;
+                            routers[i+1][j].playingTheRoleOfNext[getFrom(k)] = to;
                         }
                     }
 
                     // EAST?
-                    if (j<nocSize-1) {
+                    if ((j<nocSize-1) && (k == EAST)) {
                         // There is an east router
                         // link to next
-                        if (routers[i][j].toNextRouters[k] != null) {
-                            Link to = new Link(tmlmodeling, routers[i][j+1], routers[i][j+1], nbOfVCs);
-                            routers[i][j].toNextRouters[k] = to;
-                            routers[i][j+1].fromPreviousRouters[getFrom(k)] = to;
+                        if (routers[i][j].playingTheRoleOfPrevious[k] == null) {
+                            Link to = new Link(tmlmodeling, routers[i][j], routers[i][j+1], nbOfVCs);
+                            routers[i][j].playingTheRoleOfPrevious[k] = to;
+                            routers[i][j+1].playingTheRoleOfNext[getFrom(k)] = to;
                         }
-                        // Link to previous
-                        if (routers[i][j].fromPreviousRouters[k] != null) {
-                            Link from = new Link(tmlmodeling, routers[i][j], routers[i][j+1], nbOfVCs);
-                            routers[i][j].fromPreviousRouters[k] = from;
-                            routers[i][j+1].toNextRouters[getFrom(k)] = from;
-                        }
+
                     }
 
                     // WEST?
-                    if (j>0) {
+                    if ((j>0) && (k == WEST)) {
                         // There is an east router
                         // link to next
-                        if (routers[i][j].toNextRouters[k] != null) {
-                            Link to = new Link(tmlmodeling, routers[i][j+1], routers[i][j-1], nbOfVCs);
-                            routers[i][j].toNextRouters[k] = to;
-                            routers[i][j-1].fromPreviousRouters[getFrom(k)] = to;
+                        if (routers[i][j].playingTheRoleOfPrevious[k] == null) {
+                            Link to = new Link(tmlmodeling, routers[i][j], routers[i][j-1], nbOfVCs);
+                            routers[i][j].playingTheRoleOfPrevious[k] = to;
+                            routers[i][j-1].playingTheRoleOfNext[getFrom(k)] = to;
                         }
-                        // Link to previous
-                        if (routers[i][j].fromPreviousRouters[k] != null) {
-                            Link from = new Link(tmlmodeling, routers[i][j], routers[i][j-1], nbOfVCs);
-                            routers[i][j].fromPreviousRouters[k] = from;
-                            routers[i][j-1].toNextRouters[getFrom(k)] = from;
-                        }
+
                     }
 
                 }
+            }
+        }
+
+        // Printing routers
+        for(i=0; i<nocSize; i++) {
+            for(j=0; j<nocSize; j++) {
+                TraceManager.addDev(routers[i][j].toString() + "\n");
             }
         }
 

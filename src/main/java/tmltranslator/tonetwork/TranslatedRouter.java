@@ -42,21 +42,19 @@ package tmltranslator.tonetwork;
 import myutil.TraceManager;
 import tmltranslator.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
 
 /**
- * Class TaskINForVC
+ * Class TranslatedRouter
  * Creation: 17/01/2019
  *
  * @author Ludovic Apvrille
  * @version 1.0 17/01/2019
  */
 public class TranslatedRouter<E> {
-
 
     private final int NB_OF_PORTS = 5;
     private final int CHANNEL_SIZE = 4;
@@ -78,23 +76,24 @@ public class TranslatedRouter<E> {
     // Events and channels with other routers
 
     // Between  IN and INVC
-    TMLEvent[][] pktInEvtsVCs; // position, vc
-    TMLChannel[][] pktInChsVCs; // position, vc
+    private TMLEvent[][] pktInEvtsVCs; // position, vc
+    private TMLChannel[][] pktInChsVCs; // position, vc
 
     // Between INVC and OUTVC
-    TMLEvent[][][] routeEvtVCs; // Task, vc, destination id
-    TMLEvent[][][] routeEvtVCsFeedback; // Task, vc, destination id
+    private TMLEvent[][][] routeEvtVCs; // Task, vc, destination id
+    private TMLEvent[][][] routeEvtVCsFeedback; // Task, vc, destination id
 
     // Between OUTVC and OUT
-    TMLEvent[][] evtOutVCs; // position, vc
-    TMLEvent[][] evtSelectVC; // position, vc
+    private TMLEvent[][] evtOutVCs; // position, vc
+    private TMLEvent[][] evtSelectVC; // position, vc
 
 
     // Links to other routers
-    public Link[] toNextRouters;
-    public Link[] fromPreviousRouters;
+    public Link[] playingTheRoleOfPrevious;
+    public Link[] playingTheRoleOfNext;
 
-    // OUt of the NoC
+    // Out of the NoC
+    FakeTaskOut fto;
 
 
     public TranslatedRouter(TMAP2Network<?> main, TMLMapping<?> tmlmap, HwNoC noc, List<TMLChannel> channelsViaNoc, int nbOfVCs, int xPos, int yPos) {
@@ -106,16 +105,16 @@ public class TranslatedRouter<E> {
         this.yPos = yPos;
         this.tmlmap = tmlmap;
 
-        toNextRouters = new Link[NB_OF_PORTS];
-        fromPreviousRouters = new Link[NB_OF_PORTS];
+        playingTheRoleOfPrevious = new Link[NB_OF_PORTS];
+        playingTheRoleOfNext = new Link[NB_OF_PORTS];
     }
 
     public void setLinkFromPreviousRouter(int index, Link l) {
-        fromPreviousRouters[index] = l;
+        playingTheRoleOfNext[index] = l;
     }
 
     public void setLinkToNextRouter(int index, Link l) {
-        toNextRouters[index] = l;
+        playingTheRoleOfPrevious[index] = l;
     }
 
     public int getXPos() {
@@ -228,23 +227,25 @@ public class TranslatedRouter<E> {
         tmlm.addTask(tniIn);
 
         // One TMLEvent for feedback for each VC
-        Vector<TMLEvent> feedbackEventsNIINs = new Vector<>();
+        /*Vector<TMLEvent> feedbackEventsNIINs = new Vector<>();
         for (i = 0; i < nbOfVCs; i++) {
             TMLEvent eventFeedback = new TMLEvent("EventBetweenNI_IN_ANd_IN_for_" + nameOfExecNode,
                     null, 8, true);
             feedbackEventsNIINs.add(eventFeedback);
             tmlm.addEvent(eventFeedback);
+        }*/
+        // Using the feedback of router
+        Vector<TMLEvent> feedbackEventsNIINs = new Vector<>();
+        for (i = 0; i < nbOfVCs; i++) {
+            feedbackEventsNIINs.add(playingTheRoleOfNext[NB_OF_PORTS-1].feedbackPerVC[i]);
+            (playingTheRoleOfNext[NB_OF_PORTS-1].feedbackPerVC[i]).setDestinationTask(tniIn);
         }
 
-        TMLEvent outputFromNIINtoIN = new TMLEvent("EventBetweenNI_IN_to_IN_for_" + nameOfExecNode,
-                null, 8, true);
-        tmlm.addEvent(outputFromNIINtoIN);
-        TMLChannel outputChannelFromNIINtoIN = new TMLChannel("channelBetweenNI_IN_to_IN_for_" + nameOfExecNode,
-                null);
-        outputChannelFromNIINtoIN.setSize(4);
-        outputChannelFromNIINtoIN.setMax(8);
+        TMLEvent outputFromNIINtoIN = playingTheRoleOfNext[NB_OF_PORTS-1].packetOut;
+        outputFromNIINtoIN.setOriginTask(tniIn);
+
+        TMLChannel outputChannelFromNIINtoIN = playingTheRoleOfNext[NB_OF_PORTS-1].chOutToIN;
         outputChannelFromNIINtoIN.setOriginTask(tniIn);
-        tmlm.addChannel(outputChannelFromNIINtoIN);
 
         tniIn.generate(nbOfVCs, feedbackEventsNIINs, inputEventsFromMUX, outputFromNIINtoIN, outputChannelFromNIINtoIN);
 
@@ -256,7 +257,7 @@ public class TranslatedRouter<E> {
         HashMap<Integer, TaskINForDispatch> dispatchIns = new HashMap<>();
 
         for (int portNb = 0; portNb < NB_OF_PORTS; portNb++) {
-            if (fromPreviousRouters[portNb] != null) {
+            if (playingTheRoleOfNext[portNb] != null) {
 
                 TaskINForDispatch inDispatch = new TaskINForDispatch("IN_" + nameOfExecNode, null,
                         null);
@@ -270,19 +271,19 @@ public class TranslatedRouter<E> {
 
                     TMLChannel ch = pktInChsVCs[portNb][vcN];
                     ch.setOriginTask(inDispatch);
+                    tmlm.addChannel(ch);
                     listOfOutChannels.add(ch);
                 }
-                if (portNb == NB_OF_PORTS) { // From Network Interface?
-
+                if (portNb == NB_OF_PORTS-1) { // From Network Interface?
                     inDispatch.generate(nbOfVCs, outputFromNIINtoIN, outputChannelFromNIINtoIN, listOfOutEvents,
                             listOfOutChannels);
                     outputFromNIINtoIN.setDestinationTask(inDispatch);
                     outputChannelFromNIINtoIN.setDestinationTask(inDispatch);
                 } else {
                     // We have to use events / channels coming from another router
-                    TMLEvent toInEvt = fromPreviousRouters[portNb].packetOut;
+                    TMLEvent toInEvt = playingTheRoleOfNext[portNb].packetOut;
                     toInEvt.setDestinationTask(inDispatch);
-                    TMLChannel toInCh = fromPreviousRouters[portNb].chOutToIN;
+                    TMLChannel toInCh = playingTheRoleOfNext[portNb].chOutToIN;
                     toInCh.setDestinationTask(inDispatch);
 
                     inDispatch.generate(nbOfVCs, toInEvt, toInCh, listOfOutEvents,
@@ -297,7 +298,7 @@ public class TranslatedRouter<E> {
         // IN VC
         TaskINForVC[][] dispatchInVCs = new TaskINForVC[NB_OF_PORTS][nbOfVCs];
         for (int portNb = 0; portNb < NB_OF_PORTS; portNb++) {
-            if (fromPreviousRouters[portNb] != null) {
+            if (playingTheRoleOfNext[portNb] != null) {
                 for (int vcNb = 0; vcNb < nbOfVCs; vcNb++) {
 
                     TaskINForVC taskINForVC = new TaskINForVC("INVC_" + nameOfExecNode + "___" + portNb + "_" + vcNb, null,
@@ -323,7 +324,7 @@ public class TranslatedRouter<E> {
                         evt.setOriginTask(taskINForVC);
                     }
 
-                    TMLEvent feedback = fromPreviousRouters[portNb].feedbackPerVC[vcNb];
+                    TMLEvent feedback = playingTheRoleOfNext[portNb].feedbackPerVC[vcNb];
                     feedback.setOriginTask(taskINForVC);
 
                     taskINForVC.generate(pktInEvtsVCs[portNb][vcNb], inFeedbacks, inChannel,
@@ -373,7 +374,7 @@ public class TranslatedRouter<E> {
         // We need one output channel for each exit and one output event per VC
         HashMap<Integer, TaskOUTForDispatch> dispatchOuts = new HashMap<>();
         for (int portNb = 0; portNb < NB_OF_PORTS; portNb++) {
-            if (toNextRouters[portNb] != null) {
+            if (playingTheRoleOfPrevious[portNb] != null) {
 
                 TaskOUTForDispatch outDispatch = new TaskOUTForDispatch("OUT_" + nameOfExecNode, null,
                         null);
@@ -391,19 +392,35 @@ public class TranslatedRouter<E> {
                     evtOutVCs[portNb][nvc].setDestinationTask(outDispatch);
                     outSelectEvents.add(evtSelectVC[portNb][nvc]);
                     evtSelectVC[portNb][nvc].setOriginTask(outDispatch);
-                    inFeedbackEvents.add(toNextRouters[portNb].feedbackPerVC[nvc]);
-                    toNextRouters[portNb].feedbackPerVC[nvc].setDestinationTask(outDispatch);
+                    inFeedbackEvents.add(playingTheRoleOfPrevious[portNb].feedbackPerVC[nvc]);
+                    playingTheRoleOfPrevious[portNb].feedbackPerVC[nvc].setDestinationTask(outDispatch);
                 }
 
-                outPktEvent = toNextRouters[portNb].packetOut;
+                outPktEvent = playingTheRoleOfPrevious[portNb].packetOut;
                 outPktEvent.setOriginTask(outDispatch);
-                outPkt = toNextRouters[portNb].chOutToIN;
+                outPkt = playingTheRoleOfPrevious[portNb].chOutToIN;
                 outPkt.setOriginTask(outDispatch);
 
                 outDispatch.generate(inPacketEvents, inFeedbackEvents, outSelectEvents, outPktEvent, outPkt);
 
                 dispatchOuts.put(new Integer(portNb), outDispatch);
 
+            } else {
+                // We need to use a fake out
+                EmptyTMLTask emptyTask = new EmptyTMLTask("EmptyTaskOfOutput_" + portNb + "_OfRouter_" + xPos + "_" + yPos, null, null);
+                Vector<TMLEvent> inPacketEvents = new Vector<TMLEvent>();
+                Vector<TMLEvent> outSelectEvents = new Vector<TMLEvent>();
+                TMLEvent outPktEvent;
+                TMLChannel outPkt;
+
+                for (int nvc = 0; nvc < nbOfVCs; nvc++) {
+                    inPacketEvents.add(evtOutVCs[portNb][nvc]);
+                    evtOutVCs[portNb][nvc].setDestinationTask(emptyTask);
+                    outSelectEvents.add(evtSelectVC[portNb][nvc]);
+                    evtSelectVC[portNb][nvc].setOriginTask(emptyTask);
+                }
+
+                emptyTask.generate();
             }
         }
 
@@ -413,22 +430,35 @@ public class TranslatedRouter<E> {
                 null);
         tmlm.addTask(tniOut);
 
-        outputFromNIINtoIN.setOriginTask(tniOut);
 
-        TMLChannel chOfOut = toNextRouters[NB_OF_PORTS-1].chOutToIN;
+        TMLChannel chOfOut = playingTheRoleOfPrevious[NB_OF_PORTS-1].chOutToIN;
         chOfOut.setDestinationTask(tniOut);
 
         Vector<TMLEvent> feedbackPerVC = new Vector<TMLEvent>();
         for(i=0; i<nbOfVCs; i++) {
-            feedbackPerVC.add(toNextRouters[NB_OF_PORTS-1].feedbackPerVC[i]);
-            toNextRouters[NB_OF_PORTS-1].feedbackPerVC[i].setOriginTask(tniOut);
+            feedbackPerVC.add(playingTheRoleOfPrevious[NB_OF_PORTS-1].feedbackPerVC[i]);
+            playingTheRoleOfPrevious[NB_OF_PORTS-1].feedbackPerVC[i].setOriginTask(tniOut);
         }
 
-        TMLEvent pktout = toNextRouters[NB_OF_PORTS-1].packetOut;
-        pktout.setDestinationTask(tniOut);
+        TMLEvent pktoutFromOut = playingTheRoleOfPrevious[NB_OF_PORTS-1].packetOut;
+        pktoutFromOut.setDestinationTask(tniOut);
 
+        TMLEvent packetOut = new TMLEvent("evtPktOutToAppFromOut__" + xPos + "_" + yPos,
+                null, 8, true);
+        packetOut.addParam(new TMLType(TMLType.NATURAL));
+        packetOut.addParam(new TMLType(TMLType.NATURAL));
+        packetOut.addParam(new TMLType(TMLType.NATURAL));
+        packetOut.addParam(new TMLType(TMLType.NATURAL));
+        tmlm.addEvent(packetOut);
+        packetOut.setOriginTask(tniOut);
 
-        tniOut.generate(nbOfVCs, feedbackPerVC, pktout, outputFromNIINtoIN, chOfOut);
+        tniOut.generate(nbOfVCs, feedbackPerVC, pktoutFromOut, packetOut, chOfOut);
+
+        // Fake task out
+        fto = new FakeTaskOut("FakeTaskOutOfRouter_" + xPos + "_" + yPos, null, null);
+        tmlm.addTask(fto);
+        packetOut.setDestinationTask(fto);
+        fto.generate(packetOut);
 
     }
 
@@ -457,7 +487,7 @@ public class TranslatedRouter<E> {
                         null);
                 pktInChsVCs[i][j].setSize(4);
                 pktInChsVCs[i][j].setMax(8);
-                tmlm.addChannel(pktInChsVCs[i][j]);
+                //tmlm.addChannel(pktInChsVCs[i][j]);
             }
         }
 
@@ -493,12 +523,37 @@ public class TranslatedRouter<E> {
         }
 
         // Must create the internal links
-        //network in
-        Link networkInterfaceIn = new Link(tmlm, this, this, nbOfVCs);
-        fromPreviousRouters[NB_OF_PORTS-1] = networkInterfaceIn;
-        //network out
-        Link networkInterfaceOut = new Link(tmlm, this, this, nbOfVCs);
-        toNextRouters[NB_OF_PORTS-1] = networkInterfaceOut;
+        // Network in: from apps to router
+        Link networkInterfaceIn = new Link(tmlm, this, this, nbOfVCs, "INRouter");
+        playingTheRoleOfNext[NB_OF_PORTS-1] = networkInterfaceIn;
+
+        // Network out: from router to apps
+        Link networkInterfaceOut = new Link(tmlm, this, this, nbOfVCs, "OUTRouter");
+        playingTheRoleOfPrevious[NB_OF_PORTS-1] = networkInterfaceOut;
+    }
+
+
+    public String toString() {
+        String ret = "Router at " + xPos + " " + yPos + "\n";
+        for(int i = 0; i< playingTheRoleOfPrevious.length; i++) {
+            ret += "\tOutput port " + TMAP2Network.PORT_NAME[i] + " is ";
+            if (playingTheRoleOfPrevious[i] == null) {
+                ret += " NO ROUTER";
+            } else {
+                ret += playingTheRoleOfPrevious[i].getNaming();
+            }
+            ret += "\n";
+        }
+        for(int i = 0; i< playingTheRoleOfNext.length; i++) {
+            ret += "\tInput port " + TMAP2Network.PORT_NAME[i] + " is ";
+            if (playingTheRoleOfNext[i] == null) {
+                ret += " NO ROUTER";
+            } else {
+                ret += playingTheRoleOfNext[i].getNaming();
+            }
+            ret += "\n";
+        }
+        return ret;
     }
 
 }

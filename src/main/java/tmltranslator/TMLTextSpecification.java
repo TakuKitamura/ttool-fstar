@@ -294,6 +294,14 @@ public class TMLTextSpecification<E> {
             if (!evt.isInfinite()) {
                 sb += SP + evt.getMaxSize();
             }
+
+            TraceManager.addDev("Handing Event:" + evt.getName());
+            if (evt.getOriginTask() == null) {
+                TraceManager.addDev("Missing origin Task in " + evt.getName());
+            }
+            if (evt.getDestinationTask() == null) {
+                TraceManager.addDev("Missing destination Task in " + evt.getName());
+            }
             sb += SP + evt.getOriginTask().getName() + SP + evt.getDestinationTask().getName();
 
             sb += CR;
