@@ -220,11 +220,14 @@ void SchedulableDevice::drawPieChart(std::ofstream& myfile) const {
     _maxEndTime=max(_maxEndTime,_endTime);
   }
   std::map <TMLTask*, double > transPercentage;
+  
+
   for( TransactionList::const_iterator i = _transactList.begin(); i!= _transactList.end(); ++i){
       
     transPercentage[(*i)-> getCommand()->getTask()]+=(double)((*i)->getEndTime()-(*i)->getStartTime())/_maxEndTime;      
       
   }
+ 
   std::map <TMLTask*, double>::iterator iter = transPercentage.begin();
   myfile << "     var chart" << _ID << "= new CanvasJS.Chart(\"chartContainer" << _ID <<"\"," << std::endl;
   myfile <<  SCHED_HTML_JS_CONTENT2 << "Average load is " << averageLoad() <<  SCHED_HTML_JS_CONTENT3 << std::endl;

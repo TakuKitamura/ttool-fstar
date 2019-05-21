@@ -277,72 +277,70 @@ void FPGA::schedule(){
 }
 
 void FPGA::getNextSignalChange(bool iInit, SignalChangeData* oSigData){
-  if (iInit){
-   
-    _posTrasactListVCD=_transactList.begin();
-    std::cout<<"init "<<(*_posTrasactListVCD)->toShortString()<<std::endl;
-    _previousTransEndTime=0;
-    _vcdOutputState = END_IDLE_FPGA;
-    if (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTime()!=0){
-      new (oSigData) SignalChangeData(END_IDLE_FPGA, 0, this);
-      return;
-    }
-  }
+  std::cout<<"getNextSignalChangemulticore!!!---------"<<std::endl;
+  for( TransactionList::iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
+    
+    // std::cout<<"transaction core number is "<<  (*i)->getTransFpgaNumber()<<std::endl;
+    // std::cout<<"cpu core number "<< oSigData->_transNumberVcd<<std::endl;
+    if((*i)-> getCommand()->getTask() == oSigData->_taskFPGA){
+      
+      std::cout<<"bingo!!"<<(*i)->toShortString()<<std::endl;
 
-  if (_posTrasactListVCD == _transactList.end()){
-    std::cout<<"end trans"<<std::endl;
-    new (oSigData) SignalChangeData(END_IDLE_FPGA, _previousTransEndTime, this);
-  }
-  else{
-    TMLTransaction* aCurrTrans=*_posTrasactListVCD;
-    std::cout<<"current trans is "<<aCurrTrans->toShortString()<<std::endl;
-    switch (_vcdOutputState){
-    case END_TASK_FPGA:
-      std::cout<<"END_TASK_FPGA"<<std::endl;
-      do{
-        _previousTransEndTime=(*_posTrasactListVCD)->getEndTime();
-        _posTrasactListVCD++;
-      }while (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTimeOperation()==_previousTransEndTime);
-      if (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTime()==_previousTransEndTime){
-        //outp << VCD_PREFIX << vcdValConvert(END_PENALTY_FPGA) << "FPGA" << _ID;
-        _vcdOutputState=END_PENALTY_FPGA;
-	std::cout<<"why???"<<std::endl;
-        new (oSigData) SignalChangeData(END_PENALTY_FPGA, _previousTransEndTime, this);
-      }else{
-        //outp << VCD_PREFIX << vcdValConvert(END_IDLE_FPGA) << "FPGA" << _ID;
-        _vcdOutputState=END_IDLE_FPGA;
-        //if (_posTrasactListVCD == _transactList.end()) oNoMoreTrans=true;
-        new (oSigData) SignalChangeData(END_IDLE_FPGA, _previousTransEndTime, this);
+      if (iInit){
+	_posTrasactListVCD= i;
+	_previousTransEndTime=0;
+	std::cout<<"init start time "<<(*_posTrasactListVCD)->getStartTime()<<std::endl;
+	if (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTime()!=0){
+	  std::cout<<"next idle"<<std::endl;
+	  new (oSigData) SignalChangeData(END_IDLE_TRANS, 0, this);
+	  (*i)->setTransVcdOutPutState(END_IDLE_TRANS);
+	  return;
+	}
       }
-      //oSigChange=outp.str();
-      //return _previousTransEndTime;
-      break;
-    case END_PENALTY_FPGA:
-      std::cout<<"END_PENALTY_FPGA"<<std::endl;
-      //outp << VCD_PREFIX << vcdValConvert(END_TASK_FPGA) << "FPGA" << _ID;
-      //oSigChange=outp.str();
-      _vcdOutputState=END_TASK_FPGA;
-      //return aCurrTrans->getStartTimeOperation();
-      new (oSigData) SignalChangeData(END_TASK_FPGA, aCurrTrans->getStartTimeOperation(), this);
-      break;
-    case END_IDLE_FPGA:
-      std::cout<<"END_IDLE_FPGA"<<std::endl;
-      if (aCurrTrans->getPenalties()==0){
-        //outp << VCD_PREFIX << vcdValConvert(END_TASK_FPGA) << "FPGA" << _ID;
-        _vcdOutputState=END_TASK_FPGA;
-        new (oSigData) SignalChangeData(END_TASK_FPGA, aCurrTrans->getStartTime(), this);
+      if ((*i)->getEndState() == true){
+        std::cout<<"end trans"<<(*i)->getEndTime()<<std::endl;
+	new (oSigData) SignalChangeData(END_IDLE_TRANS, (*i)->getEndTime(), this);
+        break;
       }else{
-        //outp << VCD_PREFIX << vcdValConvert(END_PENALTY_FPGA) << "FPGA" << _ID;
-        _vcdOutputState=END_PENALTY_FPGA;
-        new (oSigData) SignalChangeData(END_PENALTY_FPGA, aCurrTrans->getStartTime(), this);
+	_posTrasactListVCD = i;
+	TMLTransaction* aCurrTrans=*_posTrasactListVCD;
+       switch (aCurrTrans->getTransVcdOutPutState()){
+	case END_TASK_TRANS: 
+          
+	  std::cout<<"END_TASK_CPU"<<std::endl;
+	  do{
+	    _previousTransEndTime=(*_posTrasactListVCD)->getEndTime();
+	    _posTrasactListVCD++;	  
+	    while(_posTrasactListVCD != _transactList.end()){
+	      if((*_posTrasactListVCD)->getCommand()->getTask() == oSigData->_taskFPGA)
+		  break;
+		else
+		  _posTrasactListVCD++;
+	      }
+	  }while (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTimeOperation()==_previousTransEndTime);
+	 
+	  aCurrTrans->setTransVcdOutPutState(END_IDLE_TRANS);
+	  std::cout<<"what is previous time "<<_previousTransEndTime<<std::endl;
+	  std::cout<<"and this??"<<oSigData->_time<<std::endl;
+	  new (oSigData) SignalChangeData(END_IDLE_TRANS, _previousTransEndTime, this); 
+	  if (_posTrasactListVCD == _transactList.end()) {aCurrTrans->setEndState(true);std::cout<<"hahaha"<<std::endl;}
+	  
+          _transactList.erase(i);
+	  break;
+	case END_IDLE_TRANS:
+	  std::cout<<"END_IDLE_CPU"<<std::endl;
+	  
+	  aCurrTrans->setTransVcdOutPutState(END_TASK_TRANS);
+	  new (oSigData) SignalChangeData(END_TASK_TRANS, aCurrTrans->getStartTime(), this);
+	
+	  break;
+       }
       }
-      //oSigChange=outp.str();
-      //return aCurrTrans->getStartTime();
       break;
     }
-  
+   
   }
-  //return 0;
+   
 }
 
 
@@ -436,34 +434,36 @@ double FPGA::averageLoad (TMLTask* currTask) const{
 void FPGA::drawPieChart(std::ofstream& myfile) const {
   std::cout<<"fpga draw pie chart"<<std::endl;
    TMLTime _maxEndTime=0;
-   for(TaskList::const_iterator j =_taskList.begin(); j != _taskList.end(); ++j){
-     for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
-       if( (*i)-> getCommand()->getTask() == (*j) ){
-	 TMLTime _endTime= (*i)->getEndTime();
-	 _maxEndTime=max(_maxEndTime,_endTime);
-       }
+   
+   for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
+     if( (*i)-> getCommand()->getTask() ==  _htmlCurrTask ){
+       TMLTime _endTime= (*i)->getEndTime();
+       _maxEndTime=max(_maxEndTime,_endTime);
      }
-     std::cout<<"max end time is "<<_maxEndTime<<std::endl;
-     std::map <TMLTask*, double > transPercentage;
-     for( TransactionList::const_iterator i = _transactList.begin(); i!= _transactList.end(); ++i){
-       if( (*i)-> getCommand()->getTask() == (*j) ){
-	 transPercentage[(*i)-> getCommand()->getTask()]+=(double)((*i)->getEndTime()-(*i)->getStartTime())/_maxEndTime;      
-       }
-     }
-     std::map <TMLTask*, double>::iterator iter = transPercentage.begin();
-     myfile << "     var chart" << _ID << "_" << (*j)->toShortString() << "= new CanvasJS.Chart(\"chartContainer" << _ID << "_" <<  (*j)->toShortString() <<"\"," << std::endl;
-     myfile <<  SCHED_HTML_JS_CONTENT2 << "Average load is " << averageLoad(*j) <<  SCHED_HTML_JS_CONTENT3 << std::endl;
-     double idle=1;
-     while( iter != transPercentage.end()){
-       myfile << "                { y:" << (iter->second)*100 << ", indexLabel: \"" << iter->first->toString() << "\" }," << std::endl;
-       idle-=iter->second;
-       ++iter;  
-     }
-     myfile << "                { y:" << idle*100 << ", indexLabel: \"idle time\"" << " }" << std::endl;
-     myfile << std::endl;
-     myfile << SCHED_HTML_PIE_END;
-     myfile << "chart" << _ID << "_" <<  (*j)->toShortString() << ".render();" << std::endl;
    }
+   std::cout<<"max end time is "<<_maxEndTime<<std::endl;
+   std::map <TMLTask*, double > transPercentage;
+ 
+   for( TransactionList::const_iterator i = _transactList.begin(); i!= _transactList.end(); ++i){
+     if( (*i)-> getCommand()->getTask() ==  _htmlCurrTask ){
+       transPercentage[(*i)-> getCommand()->getTask()]+=(double)((*i)->getEndTime()-(*i)->getStartTime())/_maxEndTime;      
+     }
+   }
+  
+   std::map <TMLTask*, double>::iterator iter = transPercentage.begin();
+   myfile << "     var chart" << _ID << "_" <<  _htmlCurrTask->toShortString() << "= new CanvasJS.Chart(\"chartContainer" << _ID << "_" <<   _htmlCurrTask->toShortString() <<"\"," << std::endl;
+   myfile <<  SCHED_HTML_JS_CONTENT2 << "Average load is " << averageLoad( _htmlCurrTask) <<  SCHED_HTML_JS_CONTENT3 << std::endl;
+   double idle=1;
+   while( iter != transPercentage.end()){
+     myfile << "                { y:" << (iter->second)*100 << ", indexLabel: \"" << iter->first->toString() << "\" }," << std::endl;
+     idle-=iter->second;
+     ++iter;  
+   }
+   myfile << "                { y:" << idle*100 << ", indexLabel: \"idle time\"" << " }" << std::endl;
+   myfile << std::endl;
+   myfile << SCHED_HTML_PIE_END;
+   myfile << "chart" << _ID << "_" <<   _htmlCurrTask->toShortString() << ".render();" << std::endl;
+   
   
 }
 
@@ -501,12 +501,15 @@ void FPGA::schedule2HTML(std::ofstream& myfile)  {
     myfile << "<table>" << std::endl << "<tr>";
 
     TMLTime aCurrTime = 0;
-
+    unsigned int taskOccurTime = 0;
     for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
       std::cout <<  (*i)-> getCommand()->getTask()->toString() <<std::endl;
       std::cout<< _htmlCurrTask->toString()<<std::endl;
       if( (*i)-> getCommand()->getTask() == _htmlCurrTask ){
-	_currTaskNumber++;
+	if(taskOccurTime==0){
+	  _currTaskNumber++;
+	  taskOccurTime++;
+	}
 	std::cout<<"in!!"<<_htmlCurrTask->toString()<<std::endl;
 	TMLTransaction* aCurrTrans = *i;
 	unsigned int aBlanks = aCurrTrans->getStartTime() - aCurrTime;
@@ -546,7 +549,10 @@ void FPGA::schedule2HTML(std::ofstream& myfile)  {
     }
 
     myfile << "</tr>" << std::endl << "</table>" << std::endl;
+    std::cout<<"_taskNumer is ------------------------------------"<<_taskNumber<<std::endl;
+    std::cout<<"curr task number is ------------------------"<<_currTaskNumber<<std::endl;
     if(_currTaskNumber == _taskNumber){
+      std::cout<<" i am showing the name of tasks!!!----------------------------------------------------------------------------------!"<<std::endl;
       myfile  << "<table>" << std::endl << "<tr>" << std::endl;
       for( std::map<TMLTask*, std::string>::iterator taskColIt = taskCellClasses.begin(); taskColIt != taskCellClasses.end(); ++taskColIt ) {
 	TMLTask* task = (*taskColIt).first;

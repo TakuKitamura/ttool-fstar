@@ -143,6 +143,19 @@ void TMLTask::getNextSignalChange(bool iInit, SignalChangeData* oSigData){
 		TMLTransaction* aCurrTrans=*_posTrasactListVCD;
 		//oNoMoreTrans=false;
 		switch (_vcdOutputState){
+		  	case START_TRANS:
+				//outp << VCD_PREFIX << vcdValConvert(RUNNING) << "ta" << _ID;
+				//oSigChange=outp.str();
+				do{
+					_previousTransEndTime=(*_posTrasactListVCD)->getEndTime();
+					_posTrasactListVCD++;
+				}while (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTimeOperation()==_previousTransEndTime);
+				_vcdOutputState=END_TRANS;
+				//return aCurrTrans->getStartTimeOperation();
+				if( aCurrTrans->getStartTimeOperation() ){
+				  new (oSigData) SignalChangeData(RUNNING, aCurrTrans->getStartTimeOperation(), this);
+				  break;
+				}
 			case END_TRANS:
 				if (aCurrTrans->getRunnableTime()==_previousTransEndTime){
 					//outp << VCD_PREFIX << vcdValConvert(RUNNABLE) << "ta" << _ID;
@@ -168,21 +181,12 @@ void TMLTask::getNextSignalChange(bool iInit, SignalChangeData* oSigData){
 				//return aCurrTrans->getRunnableTime();
 				new (oSigData) SignalChangeData(RUNNABLE, aCurrTrans->getRunnableTime(), this);
 			break;
-			case START_TRANS:
-				//outp << VCD_PREFIX << vcdValConvert(RUNNING) << "ta" << _ID;
-				//oSigChange=outp.str();
-				do{
-					_previousTransEndTime=(*_posTrasactListVCD)->getEndTime();
-					_posTrasactListVCD++;
-				}while (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTimeOperation()==_previousTransEndTime);
-				_vcdOutputState=END_TRANS;
-				//return aCurrTrans->getStartTimeOperation();
-				new (oSigData) SignalChangeData(RUNNING, aCurrTrans->getStartTimeOperation(), this);
-			break;
+		
 		}
 	}
 	//return 0;
 }
+
 
 std::ostream& TMLTask::writeObject(std::ostream& s){
 	ID aCurrCmd;

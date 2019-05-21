@@ -424,7 +424,10 @@ std::cout<<"schedule2HTML--------------------------------------*****************
       (*i)->drawPieChart(myfile);
     }
     for(FPGAList::const_iterator i=_simComp->getFPGAList().begin(); i != _simComp->getFPGAList().end(); ++i){
-      (*i)->drawPieChart(myfile);
+      for(TaskList::const_iterator j = (*i)->getTaskList().begin(); j != (*i)->getTaskList().end(); ++j){
+      	(*i)->setHtmlCurrTask(*j);
+	(*i)->drawPieChart(myfile);
+      }
     }
     for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
       (*j)->drawPieChart(myfile);
@@ -524,10 +527,10 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
       //std::cout << "in 1st loop " << a << std::endl;
       //std::cout << "device: " << (*i)->toString() << std::endl;
       //myfile << "$var integer 3 " << (*i)->toShortString() << " " << (*i)->toString() << " $end\n";
-      
+    
       if ((*i)->toShortString().substr(0,3) == "cpu"){
 	for(unsigned int j = 0; j < (dynamic_cast<CPU*>(*i))->getAmoutOfCore(); j++) {
-	  myfile << "$var wire 1 " << (*i)->toShortString() << "_core" << j << " " << (*i)->toString() <<"_Core"<<j<< " $end\n";
+	  myfile << "$var wire 1 " << (*i)->toShortString() << "_core" << j << " " << (*i)->toString() << "_Core" << j << " $end\n";
 	  aTopElement = new SignalChangeData();
 	  aTopElement->_coreNumberVcd=j;
 	  (*i)->getNextSignalChange(true, aTopElement);
@@ -536,6 +539,18 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
 	  // (dynamic_cast<CPU*>(*i))->setCycleTime( (dynamic_cast<CPU*>(*i))->getCycleTime()+1);
 	}	 
       }
+       else if((*i)->toShortString().substr(0,4) == "fpga"){
+	 for(TaskList::const_iterator j = _simComp->getTaskList().begin(); j != _simComp->getTaskList().end(); j++){
+	   aTopElement = new SignalChangeData();
+	   aTopElement->_taskFPGA=(*j);
+	   (*i)->getNextSignalChange(true, aTopElement);
+	   if(aTopElement->_device){
+	     std::cout<<"name of fpga is : "<< (*i)->toShortString() << "_" << (*j)->toString() << std::endl;
+	     myfile << "$var wire 1 " << (*i)->toShortString() << "_" << (*j)->toString() << " " << (*i)->toString() << "_" << (*j)->toString() << " $end\n";
+	     aQueue.push(aTopElement);
+	   }
+	 }	 
+       }
       else{
 	if(((*i)->toShortString().substr(0,2) == "ta"))
 	  myfile << "$var wire 2 " << (*i)->toShortString() << " " << (*i)->toString() << " $end\n";
@@ -559,6 +574,8 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
       aTopElement=aQueue.top();
       if( aTopElement->_device->toShortString().substr(0,3) == "cpu")
         std::cout<<"the member of queue is "<<aTopElement->_device->toShortString()<< "_core" << aTopElement->_coreNumberVcd<<std::endl;
+      else if( aTopElement->_device->toShortString().substr(0,4) == "fpga")
+        std::cout<<"the member of queue is "<<aTopElement->_device->toShortString()<< "_" << aTopElement->_taskFPGA->toString()<<std::endl;
       else 
         std::cout<<"the member of queue is "<<aTopElement->_device->toShortString() <<std::endl;
 
@@ -579,10 +596,15 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
 	aNextClockEvent+=CLOCK_INC;
       }
       //myfile << aTopElement->_sigChange << "\n";
-      if( aTopElement->_device->toShortString().substr(0,3) == "cpu")
+      if( aTopElement->_device->toShortString().substr(0,3) == "cpu" )
 	myfile << vcdValConvert(aTopElement->_sigChange) << aTopElement->_device->toShortString() << "_core" << aTopElement->_coreNumberVcd << "\n"; 
-      else if(aTopElement->_device->toShortString().substr(0,2) == "ta")
+      
+      else if( aTopElement->_device->toShortString().substr(0,4) == "fpga")
+	myfile << vcdValConvert(aTopElement->_sigChange) << aTopElement->_device->toShortString() << "_" << aTopElement->_taskFPGA->toString() << "\n";
+      
+      else if( aTopElement->_device->toShortString().substr(0,2) == "ta" )
 	myfile <<"b"<< vcdTaskValConvert(aTopElement->_sigChange) <<" "<< aTopElement->_device->toShortString() << "\n";
+      
       else myfile << vcdValConvert(aTopElement->_sigChange) << aTopElement->_device->toShortString() << "\n";
       aQueue.pop();
       TMLTime aTime = aTopElement->_time;
@@ -615,7 +637,12 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
 	for (unsigned int j = 0; j < (dynamic_cast<CPU*>(*i))->getAmoutOfCore();j++){
 	  myfile << "0" << (*i)->toShortString() << "\n";
 	}
-      }	  
+      }	
+       else if((*i)->toShortString().substr(0,4) == "FPGA"){
+	for(TaskList::const_iterator j=_simComp->getTaskList().begin(); j!=_simComp->getTaskList().end();j++){
+	   myfile << "0" << (*i)->toShortString() << "\n";
+	}
+       }
       //myfile << VCD_PREFIX << "100 " << (*i)->toShortString() << "\n";
       else  myfile << "0" << (*i)->toShortString() << "\n";
       //std::cout << "Utilization of component " << (*i)->toString() << ": " << ((float)(*i)->getBusyCycles()) / ((float)aCurrTime) << std::endl;
