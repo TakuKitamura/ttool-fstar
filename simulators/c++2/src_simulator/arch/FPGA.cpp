@@ -403,8 +403,79 @@ void FPGA::latencies2XML(std::ostringstream& glob, unsigned int id1, unsigned in
   return;
 }
 
-void FPGA::schedule2HTML(std::ofstream& myfile) const {  
-  myfile << "<h2><span>Scheduling for device: "<< _name << "</span></h2>" << std::endl;
+
+double FPGA::averageLoad (TMLTask* currTask) const{
+  double _averageLoad=0;
+  TMLTime _maxEndTime=0;
+  for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
+    if( (*i)-> getCommand()->getTask() == currTask ){
+      TMLTime _endTime= (*i)->getEndTime();
+      _maxEndTime=max(_maxEndTime,_endTime);
+    }
+  }
+  for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
+     if( (*i)-> getCommand()->getTask() == currTask ){
+      _averageLoad += (*i)->getEndTime() - (*i)->getStartTime();
+    }
+  }
+  if(_maxEndTime == 0)
+    return 0;
+  else {
+    _averageLoad = (double)_averageLoad/_maxEndTime;
+    return _averageLoad;
+  }
+  /*if( _maxEndTime == 0 ) 
+    myfile << "average load is 0" << "<br>";
+  else
+  myfile<<" average load is "<<(double)_averageLoad/_maxEndTime<<"<br>";*/
+ 
+}
+
+
+void FPGA::drawPieChart(std::ofstream& myfile) const {
+  std::cout<<"fpga draw pie chart"<<std::endl;
+   TMLTime _maxEndTime=0;
+   for(TaskList::const_iterator j =_taskList.begin(); j != _taskList.end(); ++j){
+     for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
+       if( (*i)-> getCommand()->getTask() == (*j) ){
+	 TMLTime _endTime= (*i)->getEndTime();
+	 _maxEndTime=max(_maxEndTime,_endTime);
+       }
+     }
+     std::cout<<"max end time is "<<_maxEndTime<<std::endl;
+     std::map <TMLTask*, double > transPercentage;
+     for( TransactionList::const_iterator i = _transactList.begin(); i!= _transactList.end(); ++i){
+       if( (*i)-> getCommand()->getTask() == (*j) ){
+	 transPercentage[(*i)-> getCommand()->getTask()]+=(double)((*i)->getEndTime()-(*i)->getStartTime())/_maxEndTime;      
+       }
+     }
+     std::map <TMLTask*, double>::iterator iter = transPercentage.begin();
+     myfile << "     var chart" << _ID << "_" << (*j)->toShortString() << "= new CanvasJS.Chart(\"chartContainer" << _ID << "_" <<  (*j)->toShortString() <<"\"," << std::endl;
+     myfile <<  SCHED_HTML_JS_CONTENT2 << "Average load is " << averageLoad(*j) <<  SCHED_HTML_JS_CONTENT3 << std::endl;
+     double idle=1;
+     while( iter != transPercentage.end()){
+       myfile << "                { y:" << (iter->second)*100 << ", indexLabel: \"" << iter->first->toString() << "\" }," << std::endl;
+       idle-=iter->second;
+       ++iter;  
+     }
+     myfile << "                { y:" << idle*100 << ", indexLabel: \"idle time\"" << " }" << std::endl;
+     myfile << std::endl;
+     myfile << SCHED_HTML_PIE_END;
+     myfile << "chart" << _ID << "_" <<  (*j)->toShortString() << ".render();" << std::endl;
+   }
+  
+}
+
+
+void FPGA::showPieChart(std::ofstream& myfile) const{
+  myfile << SCHED_HTML_JS_DIV_ID << _ID << "_" << _htmlCurrTask->toShortString() << SCHED_HTML_JS_DIV_END << "<br>";
+}
+
+  
+void FPGA::schedule2HTML(std::ofstream& myfile) const {    
+  if(_startFlagHTML == true){
+    myfile << "<h2><span>Scheduling for device: "<< _name << "</span></h2>" << std::endl;
+  }
 
   if ( _transactList.size() == 0 ) {
     myfile << "<h4>Device never activated</h4>" << std::endl;
@@ -500,7 +571,3 @@ void FPGA::schedule2HTML(std::ofstream& myfile) const {
    }
   std::cout<<"end in!!!"<<std::endl;
 }
-
-
-
-

@@ -413,8 +413,10 @@ std::cout<<"schedule2HTML--------------------------------------*****************
     myfile << SCHED_HTML_END_HEAD; // </head>\n
     myfile << SCHED_HTML_BEG_BODY; // <body>\n
     
-    myfile<<"model name: "<< _simComp->getModelName(); //name of model
-    myfile << " date: " << asctime(aTimeinfo)<<std::endl; //date and time
+    myfile << "<ul>\n";
+    myfile << "<li>Model name: "<< _simComp->getModelName() << "</li><br>\n"; //name of model
+    myfile << "<li> Date: " << asctime(aTimeinfo) << "</li>\n"; //date and time
+    myfile << "</ul>\n";
     
     myfile << SCHED_HTML_JS_TYPE;
     myfile << SCHED_HTML_JS_CONTENT1;
@@ -451,13 +453,19 @@ std::cout<<"schedule2HTML--------------------------------------*****************
     
     
     for(FPGAList::const_iterator j=_simComp->getFPGAList().begin(); j != _simComp->getFPGAList().end(); ++j){     
+      (*j)->setStartFlagHTML(true);
       for(TaskList::const_iterator i = (*j)->getTaskList().begin(); i != (*j)->getTaskList().end(); ++i){
       	(*j)->setHtmlCurrTask(*i);
 	std::cout<<"begin fpga html "<<(*j)->toShortString()<<std::endl;
+	std::cout<<"task is !!!!!"<<(*i)->toString()<<std::endl;
 	(*j)->schedule2HTML(myfile);
-	std::cout<<"end fpga html "<<(*j)->toShortString()<<std::endl;
+	(*j)->setStartFlagHTML(false);
       }
-      (*j)->showPieChart(myfile);
+      for(TaskList::const_iterator i = (*j)->getTaskList().begin(); i != (*j)->getTaskList().end(); ++i){
+	(*j)->setHtmlCurrTask(*i);
+	(*j)->showPieChart(myfile);
+      }
+      
     }
     
     for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){

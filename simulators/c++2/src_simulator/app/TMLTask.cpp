@@ -48,7 +48,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 unsigned int TMLTask::_instanceCount=1;
 
-TMLTask::TMLTask(ID iID, Priority iPriority, std::string iName, CPU** iCPU, unsigned int iNoOfCPUs): WorkloadSource(iPriority), _ID(iID), _name(iName), _endLastTransaction(0), _currCommand(0), _firstCommand(0), _currentCPU(0), _cpus(iCPU), _noOfCPUs(iNoOfCPUs), _comment(0), _busyCycles(0), _CPUContentionDelay(0), _noCPUTransactions(0), _justStarted(true), _myInstance(_instanceCount), /*_isScheduled(false),*/ _stateHash(0, 30) , _liveVarList(0), _hashInvalidated(true){
+TMLTask::TMLTask(ID iID, Priority iPriority, std::string iName, CPU** iCPU, unsigned int iNoOfCPUs): WorkloadSource(iPriority), _ID(iID), _name(iName), _endLastTransaction(0), _currCommand(0), _firstCommand(0), _currentCPU(0), _cpus(iCPU), _noOfCPUs(iNoOfCPUs), _nextCellIndex(0), _comment(0), _busyCycles(0), _CPUContentionDelay(0), _noCPUTransactions(0), _justStarted(true), _myInstance(_instanceCount), /*_isScheduled(false),*/ _stateHash(0, 30) , _liveVarList(0), _hashInvalidated(true){
 	for (unsigned int i=0; i< _noOfCPUs; i++)
 		_cpus[i]->registerTask(this);
 #ifdef ADD_COMMENTS
@@ -59,7 +59,7 @@ TMLTask::TMLTask(ID iID, Priority iPriority, std::string iName, CPU** iCPU, unsi
 	if (_noOfCPUs==1) _currentCPU = _cpus[0];
 }
 
-TMLTask::TMLTask(ID iID, Priority iPriority, std::string iName, FPGA** iFPGA, unsigned int iNoOfFPGAs): WorkloadSource(iPriority), _ID(iID), _name(iName), _endLastTransaction(0), _currCommand(0), _firstCommand(0), _currentFPGA(0), _fpgas(iFPGA), _noOfFPGAs(iNoOfFPGAs), _comment(0), _busyCycles(0), _FPGAContentionDelay(0), _noFPGATransactions(0), _justStarted(true), _myInstance(_instanceCount), 
+TMLTask::TMLTask(ID iID, Priority iPriority, std::string iName, FPGA** iFPGA, unsigned int iNoOfFPGAs): WorkloadSource(iPriority), _ID(iID), _name(iName), _endLastTransaction(0), _currCommand(0), _firstCommand(0), _currentFPGA(0), _fpgas(iFPGA), _noOfFPGAs(iNoOfFPGAs), _nextCellIndex(0),_comment(0), _busyCycles(0), _FPGAContentionDelay(0), _noFPGATransactions(0), _justStarted(true), _myInstance(_instanceCount), 
  _stateHash(0, 30) , _liveVarList(0), _hashInvalidated(true){
 	for (unsigned int i=0; i< _noOfFPGAs; i++)
 		_fpgas[i]->registerTask(this);
