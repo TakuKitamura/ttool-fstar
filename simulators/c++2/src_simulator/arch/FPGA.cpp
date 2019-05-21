@@ -307,7 +307,7 @@ void FPGA::getNextSignalChange(bool iInit, SignalChangeData* oSigData){
        switch (aCurrTrans->getTransVcdOutPutState()){
 	case END_TASK_TRANS: 
           
-	  std::cout<<"END_TASK_CPU"<<std::endl;
+	  std::cout<<"END_TASK_FPGA"<<std::endl;
 	  do{
 	    _previousTransEndTime=(*_posTrasactListVCD)->getEndTime();
 	    _posTrasactListVCD++;	  
@@ -328,7 +328,7 @@ void FPGA::getNextSignalChange(bool iInit, SignalChangeData* oSigData){
           _transactList.erase(i);
 	  break;
 	case END_IDLE_TRANS:
-	  std::cout<<"END_IDLE_CPU"<<std::endl;
+	  std::cout<<"END_IDLE_FPGA"<<std::endl;
 	  
 	  aCurrTrans->setTransVcdOutPutState(END_TASK_TRANS);
 	  new (oSigData) SignalChangeData(END_TASK_TRANS, aCurrTrans->getStartTime(), this);

@@ -527,7 +527,6 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
       //std::cout << "in 1st loop " << a << std::endl;
       //std::cout << "device: " << (*i)->toString() << std::endl;
       //myfile << "$var integer 3 " << (*i)->toShortString() << " " << (*i)->toString() << " $end\n";
-    
       if ((*i)->toShortString().substr(0,3) == "cpu"){
 	for(unsigned int j = 0; j < (dynamic_cast<CPU*>(*i))->getAmoutOfCore(); j++) {
 	  myfile << "$var wire 1 " << (*i)->toShortString() << "_core" << j << " " << (*i)->toString() << "_Core" << j << " $end\n";
@@ -535,11 +534,11 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
 	  aTopElement->_coreNumberVcd=j;
 	  (*i)->getNextSignalChange(true, aTopElement);
 	  aQueue.push(aTopElement);
-
 	  // (dynamic_cast<CPU*>(*i))->setCycleTime( (dynamic_cast<CPU*>(*i))->getCycleTime()+1);
-	}	 
+	}
       }
        else if((*i)->toShortString().substr(0,4) == "fpga"){
+	 std::cout<<"444"<<std::endl;
 	 for(TaskList::const_iterator j = _simComp->getTaskList().begin(); j != _simComp->getTaskList().end(); j++){
 	   aTopElement = new SignalChangeData();
 	   aTopElement->_taskFPGA=(*j);
