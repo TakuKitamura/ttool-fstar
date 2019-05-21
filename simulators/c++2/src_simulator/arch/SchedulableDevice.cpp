@@ -309,7 +309,6 @@ void SchedulableDevice::schedule2HTML(std::ofstream& myfile) const {
 		}
 
 		myfile << "</tr>" << std::endl << "</table>" << std::endl << "<table>" << std::endl << "<tr>";
-
 		for( std::map<TMLTask*, std::string>::iterator taskColIt = taskCellClasses.begin(); taskColIt != taskCellClasses.end(); ++taskColIt ) {
 			TMLTask* task = (*taskColIt).first;
 			// Unset the default td max-width of 5px. For some reason setting the max-with on a specific t style does not work

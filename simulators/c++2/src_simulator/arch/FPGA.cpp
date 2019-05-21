@@ -61,7 +61,8 @@ FPGA::FPGA(    ID iID,
 					      ,_cyclesBeforeIdle(iCyclesBeforeIdle)
 					      ,_cyclesPerExeci(iCyclesPerExeci)
 					      ,_cyclesPerExecc(iCyclesPerExecc)
-					      ,_transNumber(0)
+					      ,_taskNumber(0)
+					      ,_currTaskNumber(0)
 					     
 {}
 
@@ -471,8 +472,21 @@ void FPGA::showPieChart(std::ofstream& myfile) const{
   myfile << SCHED_HTML_JS_DIV_ID << _ID << "_" << _htmlCurrTask->toShortString() << SCHED_HTML_JS_DIV_END << "<br>";
 }
 
-  
-void FPGA::schedule2HTML(std::ofstream& myfile) const {    
+std::string FPGA::determineHTMLCellClass(unsigned int &nextColor ) {
+	std::map<TMLTask*, std::string>::const_iterator it = taskCellClasses.find( _htmlCurrTask );
+
+	if ( it == taskCellClasses.end() ) {
+		unsigned int aColor = nextColor % NB_HTML_COLORS;
+		std::ostringstream cellClass;
+		cellClass << "t" << aColor;
+		taskCellClasses[  _htmlCurrTask ] = cellClass.str();
+		nextColor++;
+	}
+
+	return taskCellClasses[  _htmlCurrTask ];
+}
+
+void FPGA::schedule2HTML(std::ofstream& myfile)  {    
   if(_startFlagHTML == true){
     myfile << "<h2><span>Scheduling for device: "<< _name << "</span></h2>" << std::endl;
   }
@@ -483,14 +497,13 @@ void FPGA::schedule2HTML(std::ofstream& myfile) const {
    else {
     myfile << "<table>" << std::endl << "<tr>";
 
-    std::map<TMLTask*, std::string> taskCellClasses;
-    unsigned int nextCellClassIndex = 0;
     TMLTime aCurrTime = 0;
 
     for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
       std::cout <<  (*i)-> getCommand()->getTask()->toString() <<std::endl;
       std::cout<< _htmlCurrTask->toString()<<std::endl;
       if( (*i)-> getCommand()->getTask() == _htmlCurrTask ){
+	_currTaskNumber++;
 	std::cout<<"in!!"<<_htmlCurrTask->toString()<<std::endl;
 	TMLTransaction* aCurrTrans = *i;
 	unsigned int aBlanks = aCurrTrans->getStartTime() - aCurrTime;
@@ -505,7 +518,7 @@ void FPGA::schedule2HTML(std::ofstream& myfile) const {
 	// Issue #4
 	TMLTask* task = aCurrTrans->getCommand()->getTask();
 	std::cout<<"what is this task?"<<task->toString()<<std::endl;
-	const std::string cellClass = determineHTMLCellClass( taskCellClasses, task, nextCellClassIndex );
+	const std::string cellClass = determineHTMLCellClass(  nextCellClassIndex );
 
 	writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString() );
 
@@ -529,45 +542,19 @@ void FPGA::schedule2HTML(std::ofstream& myfile) const {
       //myfile << "<td colspan=\"5\" class=\"sc\">" << aLength << "</td>";
     }
 
-    myfile << "</tr>" << std::endl << "</table>" << std::endl << "<table>" << std::endl << "<tr>";
-
-    for( std::map<TMLTask*, std::string>::iterator taskColIt = taskCellClasses.begin(); taskColIt != taskCellClasses.end(); ++taskColIt ) {
-      TMLTask* task = (*taskColIt).first;
-      // Unset the default td max-width of 5px. For some reason setting the max-with on a specific t style does not work
-      myfile << "<td class=\"" << taskCellClasses[ task ] << "\"></td><td style=\"max-width: unset;\">" << task->toString() << "</td><td class=\"space\"></td>";
-    }
-
-    myfile << "</tr>" << std::endl;
-
-#ifdef ADD_COMMENTS
-    bool aMoreComments = true, aInit = true;
-    Comment* aComment;
-
-    while ( aMoreComments ) {
-      aMoreComments = false;
-      myfile << "<tr>";
-
+    myfile << "</tr>" << std::endl << "</table>" << std::endl;
+    if(_currTaskNumber == _taskNumber){
+      myfile  << "<table>" << std::endl << "<tr>" << std::endl;
       for( std::map<TMLTask*, std::string>::iterator taskColIt = taskCellClasses.begin(); taskColIt != taskCellClasses.end(); ++taskColIt ) {
-	//for(TaskList::const_iterator j=_taskList.begin(); j != _taskList.end(); ++j){
 	TMLTask* task = (*taskColIt).first;
-	std::string aCommentString = task->getNextComment( aInit, aComment );
-
-	if ( aComment == 0 ) {
-	  myfile << "<td></td><td></td><td class=\"space\"></td>";
-	}
-	else {
-	  replaceAll(aCommentString,"<","&lt;");
-	  replaceAll(aCommentString,">","&gt;");
-	  aMoreComments = true;
-	  myfile << "<td style=\"max-width: unset;\">" << aComment->_time << "</td><td><pre>" << aCommentString << "</pre></td><td class=\"space\"></td>";
-	}
+	// Unset the default td max-width of 5px. For some reason setting the max-with on a specific t style does not work
+	myfile << "<td class=\"" << taskCellClasses[ task ] << "\"></td><td style=\"max-width: unset;\">" << task->toString() << "</td><td class=\"space\"></td>";
       }
-
-      aInit = false;
       myfile << "</tr>" << std::endl;
+      myfile << "</table>" << std::endl;
     }
-#endif
-    myfile << "</table>" << std::endl;
+
+   
    }
   std::cout<<"end in!!!"<<std::endl;
 }
