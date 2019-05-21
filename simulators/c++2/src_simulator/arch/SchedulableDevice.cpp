@@ -243,7 +243,7 @@ void SchedulableDevice::drawPieChart(std::ofstream& myfile) const {
 
 
 void SchedulableDevice::showPieChart(std::ofstream& myfile) const{
-  myfile << SCHED_HTML_JS_DIV_ID << _ID << SCHED_HTML_JS_DIV_END << "<br>";
+  myfile << SCHED_HTML_JS_DIV_ID << _ID << SCHED_HTML_JS_DIV_ID_END << "<br>";
 }
   
 

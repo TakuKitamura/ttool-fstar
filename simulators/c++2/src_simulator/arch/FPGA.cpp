@@ -469,7 +469,10 @@ void FPGA::drawPieChart(std::ofstream& myfile) const {
 
 
 void FPGA::showPieChart(std::ofstream& myfile) const{
-  myfile << SCHED_HTML_JS_DIV_ID << _ID << "_" << _htmlCurrTask->toShortString() << SCHED_HTML_JS_DIV_END << "<br>";
+  if(_taskNumber==1)
+    myfile << SCHED_HTML_JS_DIV_ID << _ID << "_" << _htmlCurrTask->toShortString() << SCHED_HTML_JS_DIV_ID_END <<std::endl;
+  else
+    myfile << SCHED_HTML_JS_DIV_ID << _ID << "_" << _htmlCurrTask->toShortString() << SCHED_HTML_JS_DIV_ID_END_FPGA <<std::endl;
 }
 
 std::string FPGA::determineHTMLCellClass(unsigned int &nextColor ) {
