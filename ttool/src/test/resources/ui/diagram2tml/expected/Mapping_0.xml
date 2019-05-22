@@ -265,14 +265,14 @@
 <NEXTACTIVITYELEMENT id="4" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLReadChannel" value="" id="2" name="read channel">
-<CUSTOM  nbOfSamples="size"  channels="Zigbee_TX__cwl_ch_out__cwpQ_ch_in__cwpI_ch_in "  />
+<CUSTOM  nbOfSamples="size"  channels="FORKCHANNEL_S_1_S_Zigbee_TX__cwl_ch_out__cwpQ_ch_in__cwpI_ch_in "  />
 <NEXTACTIVITYELEMENT id="1" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLStopState" value="" id="3" name="stop state">
 <CUSTOM  />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLWriteChannel" value="" id="4" name="write channel">
-<CUSTOM  nbOfSamples="size"  channels="Zigbee_TX__cwpI_ch_out__cwpQ_ch_out__sink_ch_in "  />
+<CUSTOM  nbOfSamples="size"  channels="JOINCHANNEL_S_0__Zigbee_TX__cwpI_ch_out__cwpQ_ch_out__sink_ch_in "  />
 <NEXTACTIVITYELEMENT id="3" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLActionState" value="" id="5" name="action reading args">
@@ -294,14 +294,14 @@
 <NEXTACTIVITYELEMENT id="4" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLReadChannel" value="" id="2" name="read channel">
-<CUSTOM  nbOfSamples="size"  channels="Zigbee_TX__cwl_ch_out__cwpQ_ch_in__cwpI_ch_in "  />
+<CUSTOM  nbOfSamples="size"  channels="FORKCHANNEL_S_0_S_Zigbee_TX__cwl_ch_out__cwpQ_ch_in__cwpI_ch_in "  />
 <NEXTACTIVITYELEMENT id="1" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLStopState" value="" id="3" name="stop state">
 <CUSTOM  />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLWriteChannel" value="" id="4" name="write channel">
-<CUSTOM  nbOfSamples="size"  channels="Zigbee_TX__cwpI_ch_out__cwpQ_ch_out__sink_ch_in "  />
+<CUSTOM  nbOfSamples="size"  channels="JOINCHANNEL_S_1__Zigbee_TX__cwpI_ch_out__cwpQ_ch_out__sink_ch_in "  />
 <NEXTACTIVITYELEMENT id="3" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLActionState" value="" id="5" name="action reading args">
@@ -368,11 +368,79 @@
 </ACTIVITYELEMENT>
 </ACTIVITY>
 </TASK>
+<TASK name="FORKTASK_S_Zigbee_TX__cwl_ch_out__cwpQ_ch_in__cwpI_ch_in" priority="0" >
+<ATTRIBUTE type="1" name="i" initialValue="0"/>
+<ACTIVITY first="0">
+<ACTIVITYELEMENT type="tmltranslator.TMLStartState" value="" id="0" name="startOfFork">
+<CUSTOM  />
+<NEXTACTIVITYELEMENT id="3" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLStopState" value="" id="1" name="stopOfFork">
+<CUSTOM  />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLStopState" value="" id="2" name="stop2OfFork">
+<CUSTOM  />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLForLoop" value="" id="3" name="junctionOfFork">
+<CUSTOM  init="i=0" condition="i&lt;1" increment="i=i" isInfinite="false"  />
+<NEXTACTIVITYELEMENT id="4" />
+<NEXTACTIVITYELEMENT id="2" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLReadChannel" value="" id="4" name="ReadOfFork">
+<CUSTOM  nbOfSamples="1"  channels="Zigbee_TX__cwl_ch_out__cwpQ_ch_in__cwpI_ch_in "  />
+<NEXTACTIVITYELEMENT id="5" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLWriteChannel" value="" id="5" name="WriteOfFork_S_0">
+<CUSTOM  nbOfSamples="1"  channels="FORKCHANNEL_S_0_S_Zigbee_TX__cwl_ch_out__cwpQ_ch_in__cwpI_ch_in "  />
+<NEXTACTIVITYELEMENT id="6" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLWriteChannel" value="" id="6" name="WriteOfFork_S_1">
+<CUSTOM  nbOfSamples="1"  channels="FORKCHANNEL_S_1_S_Zigbee_TX__cwl_ch_out__cwpQ_ch_in__cwpI_ch_in "  />
+<NEXTACTIVITYELEMENT id="1" />
+</ACTIVITYELEMENT>
+</ACTIVITY>
+</TASK>
+<TASK name="JOINTASK_S_Zigbee_TX__cwpI_ch_out__cwpQ_ch_out__sink_ch_in" priority="0" >
+<ATTRIBUTE type="1" name="i" initialValue="0"/>
+<ACTIVITY first="0">
+<ACTIVITYELEMENT type="tmltranslator.TMLStartState" value="" id="0" name="startOfJoin">
+<CUSTOM  />
+<NEXTACTIVITYELEMENT id="3" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLStopState" value="" id="1" name="stopOfJoin">
+<CUSTOM  />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLStopState" value="" id="2" name="stop2OfFork">
+<CUSTOM  />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLForLoop" value="" id="3" name="junctionOfJoin">
+<CUSTOM  init="i=0" condition="i&lt;1" increment="i=i" isInfinite="false"  />
+<NEXTACTIVITYELEMENT id="5" />
+<NEXTACTIVITYELEMENT id="2" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLWriteChannel" value="" id="4" name="WriteOfJoin">
+<CUSTOM  nbOfSamples="1"  channels="Zigbee_TX__cwpI_ch_out__cwpQ_ch_out__sink_ch_in "  />
+<NEXTACTIVITYELEMENT id="1" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLReadChannel" value="" id="5" name="ReadOfJoin_S_0">
+<CUSTOM  nbOfSamples="1"  channels="JOINCHANNEL_S_0__Zigbee_TX__cwpI_ch_out__cwpQ_ch_out__sink_ch_in "  />
+<NEXTACTIVITYELEMENT id="6" />
+</ACTIVITYELEMENT>
+<ACTIVITYELEMENT type="tmltranslator.TMLReadChannel" value="" id="6" name="ReadOfJoin_S_1">
+<CUSTOM  nbOfSamples="1"  channels="JOINCHANNEL_S_1__Zigbee_TX__cwpI_ch_out__cwpQ_ch_out__sink_ch_in "  />
+<NEXTACTIVITYELEMENT id="4" />
+</ACTIVITYELEMENT>
+</ACTIVITY>
+</TASK>
 <TMLCHANNEL name="Zigbee_TX__Source_ch_out__Zigbee_TX__symbol2ChipSeq_ch_in" origintask="Zigbee_TX__X_Source" originport="Source_ch_out" destinationtask="Zigbee_TX__X_Symbol2ChipSeq" destinationport="symbol2ChipSeq_ch_in" dataFlowType="uint_16" isLossy="false" lossPercentage="0" maxNbOfLoss="0" type="BRBW" size="4" max="8"  />
 <TMLCHANNEL name="Zigbee_TX__chip2octet_ch_out__Zigbee_TX__cwl_ch_in" origintask="Zigbee_TX__X_Chip2Octet" originport="chip2octet_ch_out" destinationtask="Zigbee_TX__X_CWL" destinationport="cwl_ch_in" dataFlowType="uint_16" isLossy="false" lossPercentage="0" maxNbOfLoss="0" type="BRBW" size="4" max="8"  />
-<TMLCHANNEL name="Zigbee_TX__cwpI_ch_out__cwpQ_ch_out__sink_ch_in" destinationtask="Zigbee_TX__X_Sink" destinationport="sink_ch_in" origintask="Zigbee_TX__X_CWP_I;Zigbee_TX__X_CWP_Q;" originport="cwpI_ch_out;cwpQ_ch_out;" dataFlowType="uint_16" isLossy="false" lossPercentage="0" maxNbOfLoss="0" type="BRBW" size="4" max="8"  />
-<TMLCHANNEL name="Zigbee_TX__cwl_ch_out__cwpQ_ch_in__cwpI_ch_in" origintask="Zigbee_TX__X_CWL" originport="cwl_ch_out" destinationtask="Zigbee_TX__X_CWP_Q;Zigbee_TX__X_CWP_I;" destinationport="cwpQ_ch_in;cwpI_ch_in;" dataFlowType="uint_16" isLossy="false" lossPercentage="0" maxNbOfLoss="0" type="BRBW" size="4" max="8"  />
+<TMLCHANNEL name="Zigbee_TX__cwpI_ch_out__cwpQ_ch_out__sink_ch_in" origintask="JOINTASK_S_Zigbee_TX__cwpI_ch_out__cwpQ_ch_out__sink_ch_in" originport="JOINPORTORIGIN_S_Zigbee_TX__cwpI_ch_out__cwpQ_ch_out__sink_ch_in" destinationtask="Zigbee_TX__X_Sink" destinationport="sink_ch_in" dataFlowType="uint_16" isLossy="false" lossPercentage="0" maxNbOfLoss="0" type="BRBW" size="4" max="8"  />
+<TMLCHANNEL name="Zigbee_TX__cwl_ch_out__cwpQ_ch_in__cwpI_ch_in" origintask="Zigbee_TX__X_CWL" originport="cwl_ch_out" destinationtask="FORKTASK_S_Zigbee_TX__cwl_ch_out__cwpQ_ch_in__cwpI_ch_in" destinationport="FORKPORTDESTINATION_S_Zigbee_TX__cwl_ch_out__cwpQ_ch_in__cwpI_ch_in" dataFlowType="uint_16" isLossy="false" lossPercentage="0" maxNbOfLoss="0" type="BRBW" size="4" max="8"  />
 <TMLCHANNEL name="Zigbee_TX__symbol2ChipSeq_ch_out__Zigbee_TX__chip2octet_ch_in" origintask="Zigbee_TX__X_Symbol2ChipSeq" originport="symbol2ChipSeq_ch_out" destinationtask="Zigbee_TX__X_Chip2Octet" destinationport="chip2octet_ch_in" dataFlowType="uint_16" isLossy="false" lossPercentage="0" maxNbOfLoss="0" type="BRBW" size="4" max="8"  />
+<TMLCHANNEL name="FORKCHANNEL_S_0_S_Zigbee_TX__cwl_ch_out__cwpQ_ch_in__cwpI_ch_in" origintask="FORKTASK_S_Zigbee_TX__cwl_ch_out__cwpQ_ch_in__cwpI_ch_in" originport="FORKPORTORIGIN_S_0_S_Zigbee_TX__cwl_ch_out__cwpQ_ch_in__cwpI_ch_in" destinationtask="Zigbee_TX__X_CWP_Q" destinationport="cwpQ_ch_in" dataFlowType="uint_16" isLossy="false" lossPercentage="0" maxNbOfLoss="0" type="BRBW" size="4" max="8"  />
+<TMLCHANNEL name="FORKCHANNEL_S_1_S_Zigbee_TX__cwl_ch_out__cwpQ_ch_in__cwpI_ch_in" origintask="FORKTASK_S_Zigbee_TX__cwl_ch_out__cwpQ_ch_in__cwpI_ch_in" originport="FORKPORTORIGIN_S_1_S_Zigbee_TX__cwl_ch_out__cwpQ_ch_in__cwpI_ch_in" destinationtask="Zigbee_TX__X_CWP_I" destinationport="cwpI_ch_in" dataFlowType="uint_16" isLossy="false" lossPercentage="0" maxNbOfLoss="0" type="BRBW" size="4" max="8"  />
+<TMLCHANNEL name="JOINCHANNEL_S_0__Zigbee_TX__cwpI_ch_out__cwpQ_ch_out__sink_ch_in" origintask="Zigbee_TX__X_CWP_I" originport="cwpI_ch_out" destinationtask="JOINTASK_S_Zigbee_TX__cwpI_ch_out__cwpQ_ch_out__sink_ch_in" destinationport="JOINPORTDESTINATION_S_0_S_Zigbee_TX__cwpI_ch_out__cwpQ_ch_out__sink_ch_in" dataFlowType="uint_16" isLossy="false" lossPercentage="0" maxNbOfLoss="0" type="BRBW" size="4" max="8"  />
+<TMLCHANNEL name="JOINCHANNEL_S_1__Zigbee_TX__cwpI_ch_out__cwpQ_ch_out__sink_ch_in" origintask="Zigbee_TX__X_CWP_Q" originport="cwpQ_ch_out" destinationtask="JOINTASK_S_Zigbee_TX__cwpI_ch_out__cwpQ_ch_out__sink_ch_in" destinationport="JOINPORTDESTINATION_S_1_S_Zigbee_TX__cwpI_ch_out__cwpQ_ch_out__sink_ch_in" dataFlowType="uint_16" isLossy="false" lossPercentage="0" maxNbOfLoss="0" type="BRBW" size="4" max="8"  />
 <TMLREQUEST name="Zigbee_TX__sink_req" destinationtask="Zigbee_TX__X_Sink" isLossy="false" lossPercentage="0" maxNbOfLoss="0"  >
 <ORIGINTASK name="Zigbee_TX__F_Sink" /> <PARAM type="int" /></TMLREQUEST>
 <TMLREQUEST name="Zigbee_TX__source_req" destinationtask="Zigbee_TX__X_Source" isLossy="false" lossPercentage="0" maxNbOfLoss="0"  >
@@ -470,6 +538,8 @@
 <TASKMAP node="FEP_PSS" task="Zigbee_TX__X_CWP_Q" />
 <TASKMAP node="FEP_PSS" task="Zigbee_TX__X_CWL" />
 <TASKMAP node="MAPPER_PSS" task="Zigbee_TX__X_Symbol2ChipSeq" />
+<TASKMAP node="FEP_PSS" task="FORKTASK_S_Zigbee_TX__cwl_ch_out__cwpQ_ch_in__cwpI_ch_in" />
+<TASKMAP node="ADAIF_PSS" task="JOINTASK_S_Zigbee_TX__cwpI_ch_out__cwpQ_ch_out__sink_ch_in" />
 <TMLCPLIB name="CP_Symbol2ChipSeq_Chips2Octet::DMA_transfer" cpMECType="1" typeName="DMA_transfer">
 <TMLCPLIBARTIFACT taskName="Zigbee_TX::chip2octet_ch_in" portName="chip2octet_ch_in" memoryName="INTL_MSS" priority="5" >
 <BUFFERPARAMETERS param="3" />
