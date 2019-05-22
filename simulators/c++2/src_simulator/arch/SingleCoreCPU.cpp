@@ -461,10 +461,9 @@ void SingleCoreCPU::latencies2XML(std::ostringstream& glob, unsigned int id1, un
 }
 
 void SingleCoreCPU::getNextSignalChange(bool iInit, SignalChangeData* oSigData){
-  if (iInit){
-   
+  if (iInit){ 
     _posTrasactListVCD=_transactList.begin();
-    std::cout<<"init "<<(*_posTrasactListVCD)->toShortString()<<std::endl;
+    // std::cout<<"init "<<(*_posTrasactListVCD)->toShortString()<<std::endl;
     _previousTransEndTime=0;
     _vcdOutputState = END_IDLE_CPU;
     if (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTime()!=0){

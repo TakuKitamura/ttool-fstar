@@ -260,8 +260,12 @@ using std::max;
 #define SCHED_HTML_JS_TYPE "<script type=\"text/javascript\">\n"
 #define SCHED_HTML_END_JS "</script>\n"
 #define SCHED_HTML_JS_LINK "<script type=\"text/javascript\" src=\"https://canvasjs.com/assets/script/canvasjs.min.js\">"
+#define SCHED_HTML_JS_DIV_BEGIN "<div>"
+#define SCHED_HTML_JS_DIV_END "</div>"
 #define SCHED_HTML_JS_DIV_ID "<div id=\"chartContainer"
-#define SCHED_HTML_JS_DIV_END "\" style=\"height: 300px; width: 0%;\"></div>\n"
+#define SCHED_HTML_JS_DIV_ID_END "\" style=\"height: 300px; width: 300px;\"></div>\n"
+#define SCHED_HTML_JS_DIV_ID_END_FPGA "\" style=\"height: 300px; width: 300px;float:left;margin-right:40px;\"></div>\n"
+#define SCHED_HTML_JS_CLEAR "<div class = \"clear\"></div>"
 #define NB_HTML_COLORS 15
 #define SCHED_HTML_JS_CONTENT1 "window.onload = function () {\n"
 #define SCHED_HTML_JS_CONTENT2 "{\n \
@@ -526,8 +530,10 @@ h2 span {\n \
 .t14last {\n \
 	background-color: LightGoldenRodYellow;\n \
 	border-style: solid solid solid none;\n \
+}\n \
+.clear {\n \
+	clear:both\n \
 }"
-
 
 #define SCHED_HTML_SCRIPT_CONTENT
 
@@ -728,7 +734,7 @@ public:
 	SignalChangeData(unsigned int iSigChange, TMLTime iTime, TraceableDevice* iDevice):_sigChange(iSigChange),_time(iTime),_device(iDevice){
 		//std::cout << _sigChange << " " << _time << " " << _device << " " << " constructor***\n";
 	}
-	SignalChangeData():_sigChange(0),_time(0),_device(0),_coreNumberVcd(0){
+	SignalChangeData():_sigChange(0),_time(0),_device(0),_coreNumberVcd(0),_taskFPGA(0){
 	}
 	///String representation of the signal change in VCD format
 	//std::string _sigChange;
@@ -739,6 +745,7 @@ public:
 	TraceableDevice* _device;
         ///for cpu,the correspond core number
         unsigned int _coreNumberVcd;
+	TMLTask* _taskFPGA;
 };
 
 ///Function object for the comparison of the runnable time of two transaction

@@ -125,13 +125,21 @@ public:
     	*/
 	virtual void registerTask(TMLTask* iTask){
 		_taskList.push_back(iTask);
+		_taskNumber++;
 		if (_scheduler!=0) _scheduler->addWorkloadSource(iTask);
 	}
-	inline void setTransNumber(unsigned int num) { _transNumber=num;}
-	inline unsigned int getTransNumber() { return _transNumber;}
-	void schedule2HTML(std::ofstream& myfile) const;
+	///inline void setTransNumber(unsigned int num) { _transNumber=num;}
+	///inline unsigned int getTransNumber() { return _transNumber;}
+	inline void setCurrTaskNumber(unsigned int num) { _currTaskNumber=num;}
+	void schedule2HTML(std::ofstream& myfile) ;
 	inline const TaskList& getTaskList() const{return _taskList;}
 	inline void setHtmlCurrTask(TMLTask *t) { _htmlCurrTask=t;}
+	inline void setStartFlagHTML(bool s) {_startFlagHTML=s;}
+	inline void setEndFlagHTML(bool s) {_endFlagHTML=s;}
+	double averageLoad (TMLTask* currTask) const;
+	void drawPieChart(std::ofstream& myfile) const;
+	void showPieChart(std::ofstream& myfile) const;
+	std::string determineHTMLCellClass(unsigned int &nextColor );
 protected:
 	///List of all tasks running on the FPGA
 	TaskList _taskList;
@@ -177,8 +185,14 @@ protected:
 	TMLTime _timeBeforeIdle;
 	///Time needed to switch into idle mode
 	TMLTime _changeIdleModeTime;
-	unsigned int _transNumber;
- 		
+	bool _startFlagHTML;
+	bool _endFlagHTML;
+	//number of tasks executed on FPGA
+	unsigned int _taskNumber;
+	//current number of tasks executed on FPGA
+	unsigned int _currTaskNumber;
+	unsigned int nextCellClassIndex;
+ 	std::map<TMLTask*, std::string> taskCellClasses;	
 	///State variable for the VCD output
 	vcdFPGAVisState _vcdOutputState;
 };

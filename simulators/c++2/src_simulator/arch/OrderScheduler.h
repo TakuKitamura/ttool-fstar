@@ -37,8 +37,8 @@ Ludovic Apvrille, Renaud Pacalet
  * knowledge of the CeCILL license and that you accept its terms.
  *
  */
-#ifndef PrioSchedulerH
-#define PrioSchedulerH
+#ifndef OrderSchedulerH
+#define OrderSchedulerH
 #include <WorkloadSource.h>
 
 class TMLTransaction;
