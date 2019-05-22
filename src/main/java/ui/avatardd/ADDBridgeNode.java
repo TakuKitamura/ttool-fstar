@@ -135,7 +135,7 @@ public class ADDBridgeNode extends ADDCommunicationNode implements WithAttribute
 		// Icon
 		//g.drawImage(IconManager.imgic1104.getImage(), x + width - 20, y + 4, null);
 		g.drawImage(IconManager.imgic1104.getImage(), x + 4, y + 4, null);
-		g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
+		//g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
     }
     
     @Override

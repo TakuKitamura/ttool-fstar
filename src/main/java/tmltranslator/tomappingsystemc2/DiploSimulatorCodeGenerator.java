@@ -938,7 +938,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
     private List<HwCommunicationNode> getBridgesConnectedToBus(List<HwCommunicationNode> _commNodes, HwBus _bus) {
         List<HwCommunicationNode> resultList = new LinkedList<HwCommunicationNode>();
         for (HwCommunicationNode commNode : _commNodes) {
-            if (commNode instanceof HwBridge) {
+            if ((commNode instanceof HwBridge) || (commNode instanceof HwNoC)){
                 if (tmlmapping.getTMLArchitecture().isNodeConnectedToBus(commNode, _bus)) resultList.add(commNode);
             }
         }

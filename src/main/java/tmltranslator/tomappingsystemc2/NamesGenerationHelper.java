@@ -279,6 +279,10 @@ public class NamesGenerationHelper {
             return bridgeInstanceName((HwBridge) element);
         }
 
+        if (element instanceof HwNoC) {
+            return hwNoCInstanceName((HwNoC) element);
+        }
+
         throw new UnsupportedOperationException();
     }
 
@@ -363,7 +367,15 @@ public class NamesGenerationHelper {
         return normalize(bridgeName(element));
     }
 
+    String hwNoCInstanceName(final HwNoC element) {
+        return normalize(hwNocName(element));
+    }
+
     String bridgeName(final HwBridge element) {
+        return element.getName();
+    }
+
+    String hwNocName(final HwNoC element) {
         return element.getName();
     }
 

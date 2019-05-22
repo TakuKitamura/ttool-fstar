@@ -92,6 +92,9 @@ public class TranslatedRouter<E> {
     public Link[] playingTheRoleOfPrevious;
     public Link[] playingTheRoleOfNext;
 
+    // All my tasks
+    Vector<TMLTask> allTasks;
+
     // Out of the NoC
     FakeTaskOut fto;
 
@@ -107,6 +110,8 @@ public class TranslatedRouter<E> {
 
         playingTheRoleOfPrevious = new Link[NB_OF_PORTS];
         playingTheRoleOfNext = new Link[NB_OF_PORTS];
+
+        allTasks = new Vector<>();
     }
 
     public void setLinkFromPreviousRouter(int index, Link l) {
@@ -208,6 +213,7 @@ public class TranslatedRouter<E> {
             tmlm.addTask(muxTask);
             muxTask.generate(inputEventsOfMUX, eventForMUX_and_NI_IN);
             muxTasks.add(muxTask);
+            allTasks.add(muxTask);
         }
 
 
@@ -215,7 +221,7 @@ public class TranslatedRouter<E> {
         // the corresponding local memory
 
 
-        // NETWORK INTERFACE IN
+        // NETWORK INTERFACE IN - Internal domain
         // We must first gathers events from must task
         Vector<TMLEvent> inputEventsFromMUX = new Vector<>();
         for (TaskMUXAppDispatch tmux : muxTasks) {
@@ -225,16 +231,8 @@ public class TranslatedRouter<E> {
         TaskNetworkInterface tniIn = new TaskNetworkInterface("NI_IN_" + nameOfExecNode, null,
                 null);
         tmlm.addTask(tniIn);
+        allTasks.add(tniIn);
 
-        // One TMLEvent for feedback for each VC
-        /*Vector<TMLEvent> feedbackEventsNIINs = new Vector<>();
-        for (i = 0; i < nbOfVCs; i++) {
-            TMLEvent eventFeedback = new TMLEvent("EventBetweenNI_IN_ANd_IN_for_" + nameOfExecNode,
-                    null, 8, true);
-            feedbackEventsNIINs.add(eventFeedback);
-            tmlm.addEvent(eventFeedback);
-        }*/
-        // Using the feedback of router
         Vector<TMLEvent> feedbackEventsNIINs = new Vector<>();
         for (i = 0; i < nbOfVCs; i++) {
             feedbackEventsNIINs.add(playingTheRoleOfNext[NB_OF_PORTS-1].feedbackPerVC[i]);
@@ -252,26 +250,24 @@ public class TranslatedRouter<E> {
 
         // IN NOC - One for each input
         // We need one output channel per VC and one output event per VC
-        // A task only create the output, never the input
 
         HashMap<Integer, TaskINForDispatch> dispatchIns = new HashMap<>();
-
         for (int portNb = 0; portNb < NB_OF_PORTS; portNb++) {
             if (playingTheRoleOfNext[portNb] != null) {
-
-                TaskINForDispatch inDispatch = new TaskINForDispatch("IN_" + nameOfExecNode, null,
+                TaskINForDispatch inDispatch = new TaskINForDispatch("IN_" + nameOfExecNode + "_" + portNb, null,
                         null);
                 tmlm.addTask(inDispatch);
                 Vector<TMLEvent> listOfOutEvents = new Vector<TMLEvent>();
                 Vector<TMLChannel> listOfOutChannels = new Vector<TMLChannel>();
                 for (int vcN = 0; vcN < nbOfVCs; vcN++) {
                     TMLEvent evt = pktInEvtsVCs[portNb][vcN];
+                    //tmlm.addEvent(evt);
                     listOfOutEvents.add(evt);
                     evt.setOriginTask(inDispatch);
 
                     TMLChannel ch = pktInChsVCs[portNb][vcN];
                     ch.setOriginTask(inDispatch);
-                    tmlm.addChannel(ch);
+                    //tmlm.addChannel(ch);
                     listOfOutChannels.add(ch);
                 }
                 if (portNb == NB_OF_PORTS-1) { // From Network Interface?
@@ -291,7 +287,7 @@ public class TranslatedRouter<E> {
 
                 }
                 dispatchIns.put(new Integer(portNb), inDispatch);
-
+                allTasks.add(inDispatch);
             }
         }
 
@@ -304,6 +300,7 @@ public class TranslatedRouter<E> {
                     TaskINForVC taskINForVC = new TaskINForVC("INVC_" + nameOfExecNode + "___" + portNb + "_" + vcNb, null,
                             null);
                     tmlm.addTask(taskINForVC);
+                    allTasks.add(taskINForVC);
                     dispatchInVCs[portNb][vcNb] = taskINForVC;
 
                     pktInEvtsVCs[portNb][vcNb].setDestinationTask(taskINForVC);
@@ -338,13 +335,14 @@ public class TranslatedRouter<E> {
         // OUT VC
         TaskOUTForVC[][] dispatchOutVCs = new TaskOUTForVC[NB_OF_PORTS][nbOfVCs];
         for (int portNb = 0; portNb < NB_OF_PORTS; portNb++) {
-            for (int vcNb = 0; vcNb < nbOfVCs; vcNb++) {
-                TranslatedRouter routerToConnectWith = main.getRouterFrom(xPos, yPos, portNb);
-                if (routerToConnectWith != null) {
-                    if (TMAP2Network.hasRouterAt(xPos, yPos, portNb, noc.size)) {
-                        TaskOUTForVC taskOUTForVC = new TaskOUTForVC("OUTVC_" + nameOfExecNode + "_" + vcNb, null,
+            if (playingTheRoleOfPrevious[portNb] != null) {
+                //TraceManager.addDev("I have a router after me at port =" + portNb);
+                for (int vcNb = 0; vcNb < nbOfVCs; vcNb++) {
+
+                        TaskOUTForVC taskOUTForVC = new TaskOUTForVC("OUTVC_" + nameOfExecNode + "__" + portNb + "_" + vcNb, null,
                                 null);
                         tmlm.addTask(taskOUTForVC);
+                        allTasks.add(taskOUTForVC);
                         dispatchOutVCs[portNb][vcNb] = taskOUTForVC;
 
                         Vector<TMLEvent> inPackets = new Vector<>();
@@ -358,14 +356,15 @@ public class TranslatedRouter<E> {
 
                         }
 
+                        TraceManager.addDev("xPos=" + xPos + " yPos=" + yPos + " portNb=" + portNb + " vnNb=" + vcNb);
                         TMLEvent vcSelect = evtSelectVC[portNb][vcNb];
                         vcSelect.setDestinationTask(taskOUTForVC);
 
                         TMLEvent outVCEvt = evtOutVCs[portNb][vcNb];
-                        outVCEvt.setDestinationTask(taskOUTForVC);
+                        outVCEvt.setOriginTask(taskOUTForVC);
 
                         taskOUTForVC.generate(inPackets, vcSelect, outFeedbacks, outVCEvt);
-                    }
+
                 }
             }
         }
@@ -376,10 +375,10 @@ public class TranslatedRouter<E> {
         for (int portNb = 0; portNb < NB_OF_PORTS; portNb++) {
             if (playingTheRoleOfPrevious[portNb] != null) {
 
-                TaskOUTForDispatch outDispatch = new TaskOUTForDispatch("OUT_" + nameOfExecNode, null,
+                TaskOUTForDispatch outDispatch = new TaskOUTForDispatch("OUT_" + nameOfExecNode + "_" + portNb, null,
                         null);
                 tmlm.addTask(outDispatch);
-
+                allTasks.add(outDispatch);
 
                 Vector<TMLEvent> inPacketEvents = new Vector<TMLEvent>();
                 Vector<TMLEvent> inFeedbackEvents = new Vector<TMLEvent>();
@@ -407,11 +406,12 @@ public class TranslatedRouter<E> {
 
             } else {
                 // We need to use a fake out
-                EmptyTMLTask emptyTask = new EmptyTMLTask("EmptyTaskOfOutput_" + portNb + "_OfRouter_" + xPos + "_" + yPos, null, null);
+                /*EmptyTMLTask emptyTask = new EmptyTMLTask("EmptyTaskOfOutput_" + portNb + "_OfRouter_" + xPos + "_" + yPos, null, null);
                 Vector<TMLEvent> inPacketEvents = new Vector<TMLEvent>();
                 Vector<TMLEvent> outSelectEvents = new Vector<TMLEvent>();
                 TMLEvent outPktEvent;
                 TMLChannel outPkt;
+                allTasks.add(emptyTask);
 
                 for (int nvc = 0; nvc < nbOfVCs; nvc++) {
                     inPacketEvents.add(evtOutVCs[portNb][nvc]);
@@ -420,7 +420,7 @@ public class TranslatedRouter<E> {
                     evtSelectVC[portNb][nvc].setOriginTask(emptyTask);
                 }
 
-                emptyTask.generate();
+                emptyTask.generate();*/
             }
         }
 
@@ -429,7 +429,7 @@ public class TranslatedRouter<E> {
         TaskNetworkInterfaceOUT tniOut = new TaskNetworkInterfaceOUT("NI_OUT_" + nameOfExecNode, null,
                 null);
         tmlm.addTask(tniOut);
-
+        allTasks.add(tniOut);
 
         TMLChannel chOfOut = playingTheRoleOfPrevious[NB_OF_PORTS-1].chOutToIN;
         chOfOut.setDestinationTask(tniOut);
@@ -457,8 +457,10 @@ public class TranslatedRouter<E> {
         // Fake task out
         fto = new FakeTaskOut("FakeTaskOutOfRouter_" + xPos + "_" + yPos, null, null);
         tmlm.addTask(fto);
+        allTasks.add(fto);
         packetOut.setDestinationTask(fto);
         fto.generate(packetOut);
+
 
     }
 
@@ -477,32 +479,36 @@ public class TranslatedRouter<E> {
         pktInEvtsVCs = new TMLEvent[NB_OF_PORTS][nbOfVCs];
         pktInChsVCs = new TMLChannel[NB_OF_PORTS][nbOfVCs];
 
-        for (int i = 0; i < TMAP2Network.DOMAIN + 1; i++) {
-            for (int j = 0; j < nbOfVCs; j++) {
-                pktInEvtsVCs[i][j] = new TMLEvent("evt_pktin" + i + "_vc" + j + "_" + xPos + "_" + yPos,
-                        null, 8, true);
-                tmlm.addEvent(pktInEvtsVCs[i][j]);
+        for (int i = 0; i < NB_OF_PORTS; i++) {
+            if ((playingTheRoleOfNext[i] != null) || (i == NB_OF_PORTS - 1)) {
+                for (int j = 0; j < nbOfVCs; j++) {
+                    pktInEvtsVCs[i][j] = new TMLEvent("evt_pktin" + i + "_vc" + j + "_" + xPos + "_" + yPos,
+                            null, 8, true);
+                    tmlm.addEvent(pktInEvtsVCs[i][j]);
 
-                pktInChsVCs[i][j] = new TMLChannel("ch_pktin" + i + "_vc" + j + "_" + xPos + "_" + yPos,
-                        null);
-                pktInChsVCs[i][j].setSize(4);
-                pktInChsVCs[i][j].setMax(8);
-                //tmlm.addChannel(pktInChsVCs[i][j]);
+                    pktInChsVCs[i][j] = new TMLChannel("ch_pktin" + i + "_vc" + j + "_" + xPos + "_" + yPos,
+                            null);
+                    pktInChsVCs[i][j].setSize(4);
+                    pktInChsVCs[i][j].setMax(8);
+                    tmlm.addChannel(pktInChsVCs[i][j]);
+                }
             }
         }
 
         // Between INVC and OUTVC
-        routeEvtVCs = new TMLEvent[TMAP2Network.DOMAIN + 1][nbOfVCs][TMAP2Network.DOMAIN + 1];
-        routeEvtVCsFeedback = new TMLEvent[TMAP2Network.DOMAIN + 1][nbOfVCs][TMAP2Network.DOMAIN + 1];
+        routeEvtVCs = new TMLEvent[NB_OF_PORTS][nbOfVCs][NB_OF_PORTS];
+        routeEvtVCsFeedback = new TMLEvent[NB_OF_PORTS][nbOfVCs][NB_OF_PORTS];
         for (int i = 0; i < TMAP2Network.DOMAIN + 1; i++) {
-            for (int j = 0; j < nbOfVCs; j++) {
-                for (int k = 0; k < TMAP2Network.DOMAIN + 1; k++) {
-                    routeEvtVCs[i][j][k] = new TMLEvent("evtroute_" + i + "_vc" + j + "_" + k + "_" +
-                            xPos + "_" + yPos, null, 8, true);
-                    tmlm.addEvent(routeEvtVCs[i][j][k]);
-                    routeEvtVCsFeedback[i][j][k] = new TMLEvent("evtfeedback_" + i + "_vc" + j + "_" + k + "_" +
-                            xPos + "_" + yPos, null, 8, true);
-                    tmlm.addEvent(routeEvtVCsFeedback[i][j][k]);
+            if ((playingTheRoleOfNext[i] != null) || (i == NB_OF_PORTS - 1)) {
+                for (int j = 0; j < nbOfVCs; j++) {
+                    for (int k = 0; k < TMAP2Network.DOMAIN + 1; k++) {
+                        routeEvtVCs[i][j][k] = new TMLEvent("evtroute_" + i + "_vc" + j + "_" + k + "_" +
+                                xPos + "_" + yPos, null, 8, true);
+                        tmlm.addEvent(routeEvtVCs[i][j][k]);
+                        routeEvtVCsFeedback[i][j][k] = new TMLEvent("evtfeedback_" + i + "_vc" + j + "_" + k + "_" +
+                                xPos + "_" + yPos, null, 8, true);
+                        tmlm.addEvent(routeEvtVCsFeedback[i][j][k]);
+                    }
                 }
             }
         }
@@ -512,13 +518,17 @@ public class TranslatedRouter<E> {
         evtOutVCs = new TMLEvent[TMAP2Network.DOMAIN + 1][nbOfVCs];
         evtSelectVC = new TMLEvent[TMAP2Network.DOMAIN + 1][nbOfVCs];
         for (int i = 0; i < TMAP2Network.DOMAIN + 1; i++) {
-            for (int j = 0; j < nbOfVCs; j++) {
-                evtOutVCs[i][j] = new TMLEvent("evt_out" + i + "_vc" + j + "_" + xPos + "_" + yPos,
-                        null, 8, true);
-                tmlm.addEvent(evtOutVCs[i][j]);
-                evtSelectVC[i][j] = new TMLEvent("evt_vcselect" + i + "_vc" + j + "_" + xPos + "_" + yPos,
-                        null, 8, true);
-                tmlm.addEvent(evtSelectVC[i][j]);
+            if ((playingTheRoleOfPrevious[i] != null) || (i == NB_OF_PORTS - 1)) {
+                for (int j = 0; j < nbOfVCs; j++) {
+                    evtOutVCs[i][j] = new TMLEvent("evt_out" + i + "_vc" + j + "_" + xPos + "_" + yPos,
+                            null, 8, true);
+                    tmlm.addEvent(evtOutVCs[i][j]);
+                    evtSelectVC[i][j] = new TMLEvent("evt_vcselect" + i + "_vc" + j + "_" + xPos + "_" + yPos,
+                            null, 8, true);
+                    tmlm.addEvent(evtSelectVC[i][j]);
+                }
+            } else {
+                TraceManager.addDev("xPos=" + xPos + " yPos=" + yPos + " is not playing the role of previous for port=" + i);
             }
         }
 
@@ -535,6 +545,12 @@ public class TranslatedRouter<E> {
 
     public String toString() {
         String ret = "Router at " + xPos + " " + yPos + "\n";
+        //Printing internal tasks;
+        for(TMLTask t: allTasks) {
+            ret += "\t Task " + t.getName() + "\n";
+        }
+
+        // Connections to other routers
         for(int i = 0; i< playingTheRoleOfPrevious.length; i++) {
             ret += "\tOutput port " + TMAP2Network.PORT_NAME[i] + " is ";
             if (playingTheRoleOfPrevious[i] == null) {

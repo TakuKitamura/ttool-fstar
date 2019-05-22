@@ -455,6 +455,7 @@ public class TMLTextSpecification<E> {
             for (int k = 0; k < tmlch.getNbOfChannels(); k++) {
                 code = code + tmlch.getChannel(k).getName() + SP;
             }
+            TraceManager.addDev("Nb Of of samples in task " + task.getName() + " = " + tmlch.getNbOfSamples());
             code = code + modifyString(tmlch.getNbOfSamples());
             if (elt.securityPattern != null) {
                 code = code + SP + elt.securityPattern.name + CR;
@@ -2904,6 +2905,9 @@ public class TMLTextSpecification<E> {
     }
 
     private static String prepareString(String s) {
+        if (s == null) {
+            return null;
+        }
         return s.replaceAll("\\s", "");
     }
 

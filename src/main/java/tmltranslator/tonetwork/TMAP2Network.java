@@ -353,12 +353,7 @@ public class TMAP2Network<E>  {
             }
         }
 
-        // Printing routers
-        for(i=0; i<nocSize; i++) {
-            for(j=0; j<nocSize; j++) {
-                TraceManager.addDev(routers[i][j].toString() + "\n");
-            }
-        }
+
 
 
         // Make internal channels & events of routers
@@ -374,6 +369,13 @@ public class TMAP2Network<E>  {
             for(j=0; j<nocSize; j++) {
                 // We must find the number of apps connected on this router
                 routers[i][j].makeRouter();
+            }
+        }
+
+        // Printing routers
+        for(i=0; i<nocSize; i++) {
+            for(j=0; j<nocSize; j++) {
+                TraceManager.addDev(routers[i][j].toString() + "\n");
             }
         }
 

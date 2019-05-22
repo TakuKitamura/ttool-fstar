@@ -146,7 +146,7 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
         // Icon
         //g.drawImage(IconManager.imgic1102.getImage(), x + width - 20, y + 4, null);
         g.drawImage(IconManager.imgic1102.getImage(), x + 4, y + 4, null);
-        g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
+        //g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
     }
 
     @Override
