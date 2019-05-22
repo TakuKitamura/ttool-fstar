@@ -76,7 +76,7 @@ public class TaskOUTForDispatch extends TMLTask {
         this.addAttribute(vc);
         TMLAttribute eop = new TMLAttribute("eop", "eop", new TMLType(TMLType.NATURAL), "0");
         this.addAttribute(eop);
-        TMLAttribute nEvt = new TMLAttribute("nevt", "nevt", new TMLType(TMLType.NATURAL), "0");
+        TMLAttribute nEvt = new TMLAttribute("nEvt", "nEvt", new TMLType(TMLType.NATURAL), "0");
         this.addAttribute(nEvt);
         TMLAttribute loopExit = new TMLAttribute("loopExit", "loopExit", new TMLType(TMLType.NATURAL), "0");
         this.addAttribute(loopExit);
@@ -111,7 +111,7 @@ public class TaskOUTForDispatch extends TMLTask {
             if (mainChoice == null) {
                 TMLNotifiedEvent notified = new TMLNotifiedEvent("NotificationOfEvent"+i, referenceObject);
                 notified.setEvent(inPacketEvents.get(i));
-                notified.addParam("nEvt");
+                notified.setVariable("nEvt");
                 if (mainChoice == null) {
                     activity.addLinkElement(loop, notified);
                 } else {
@@ -131,7 +131,7 @@ public class TaskOUTForDispatch extends TMLTask {
 
                 TMLNotifiedEvent notifiedFeedback = new TMLNotifiedEvent("FeedbackNotifiedEvt"+i, referenceObject);
                 notifiedFeedback.setEvent(outSelectEvents.get(i));
-                notifiedFeedback.addParam("feedback");
+                notifiedFeedback.setVariable("feedback");
                 activity.addLinkElement(loopInside, notifiedFeedback);
 
                 TMLChoice internalChoice = new TMLChoice("InternalChoice"+i, referenceObject);

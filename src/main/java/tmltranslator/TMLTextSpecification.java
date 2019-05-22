@@ -431,10 +431,15 @@ public class TMLTextSpecification<E> {
 
         } else if (elt instanceof TMLForLoop) {
             tmlfl = (TMLForLoop) elt;
-            code = "FOR(" + tmlfl.getInit() + SC + SP;
-            code += tmlfl.getCondition() + SC + SP;
-            code += tmlfl.getIncrement() + ")" + CR;
+            if (tmlfl.isInfinite()) {
+                code = "FOR( " + SC + " " + SC + " )" + CR;
+            } else {
+                code = "FOR(" + tmlfl.getInit() + SC + SP;
+                code += tmlfl.getCondition() + SC + SP;
+                code += tmlfl.getIncrement() + ")" + CR;
+            }
             code += makeBehavior(task, elt.getNextElement(0));
+
             return code + "ENDFOR" + CR + makeBehavior(task, elt.getNextElement(1));
 
         } else if (elt instanceof TMLRandom) {

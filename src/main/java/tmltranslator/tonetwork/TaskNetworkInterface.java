@@ -239,6 +239,7 @@ public class TaskNetworkInterface extends TMLTask {
             // Feedback present
             TMLWriteChannel sendingSample = new TMLWriteChannel("SendingSample", referenceObject);
             sendingSample.addChannel(outputChannel);
+            sendingSample.setNbOfSamples("1");
             addElement(testOnFeedback, sendingSample);
             testOnFeedback.addGuard("feedback > 0");
 
