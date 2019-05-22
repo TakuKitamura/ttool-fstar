@@ -88,7 +88,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
 
 
 
-    DiploSimulatorCodeGenerator(TMLModeling<?> _tmlm) {
+    public DiploSimulatorCodeGenerator(TMLModeling<?> _tmlm) {
         this(_tmlm.getDefaultMapping());
 
         tmlmodeling = _tmlm;
@@ -97,7 +97,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         //        tepeTranslator = new  SystemCTEPE(new ArrayList<TEPE>(), this);
     }
 
-    DiploSimulatorCodeGenerator(TMLMapping<?> _tmlmapping) {
+    public DiploSimulatorCodeGenerator(TMLMapping<?> _tmlmapping) {
         //        tmlmapping = _tmlmapping;
         //      tmlmapping.handleCPs();
         //      tmlmapping.removeForksAndJoins();
@@ -782,7 +782,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         return -masterCount;
     }
 
-    private String determineRouting(HwNode startNode, HwNode destNode, TMLElement commElemToRoute) {
+    public String determineRouting(HwNode startNode, HwNode destNode, TMLElement commElemToRoute) {
 
         /*TraceManager.addDev( "******** -------> ROUTING ROUTING ROUTING\nDetermine routing from " + startNode.getName() + " to " + destNode.getName
                 () );*/

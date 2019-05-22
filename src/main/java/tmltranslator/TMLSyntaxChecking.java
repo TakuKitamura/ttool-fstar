@@ -45,6 +45,7 @@ import compiler.tmlparser.TMLExprParser;
 import compiler.tmlparser.TokenMgrError;
 import myutil.Conversion;
 import myutil.TraceManager;
+import tmltranslator.tomappingsystemc2.DiploSimulatorCodeGenerator;
 
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -80,6 +81,7 @@ public class TMLSyntaxChecking {
     private final String TOO_MANY_MEMORIES = "Channel is mapped on more than one memory";
     private final String INVALID_CHANNEL_PATH = "Channel path is invalid";
     private final String INVALID_BUS_PATH = "Bus path is invalid for channel"; // Should be a warning only
+    private final String INVALID_ROUTING = "No possible routing for channel"; // Should be a warning only
 
     private final String DUPLICATE_PATH_TO_BUS = "Path to bus is duplicated"; // Should be a warning only
     private final String ONLY_ONE_NOC = "Only one NoC can be used"; // Should be a warning only
@@ -136,6 +138,7 @@ public class TMLSyntaxChecking {
             checkPathValidity();
             checkNonDuplicatePathToBuses();
             checkOneNOC();
+            checkRouting();
 
             // Check that if their is a memory for a channel, the memory is connected to the path
         }
@@ -822,6 +825,18 @@ public class TMLSyntaxChecking {
             return;
         }
 
+    }
+
+    private void checkRouting() {
+        DiploSimulatorCodeGenerator gen = new DiploSimulatorCodeGenerator(mapping);
+        for(TMLChannel ch: mapping.getTMLModeling().getChannels()) {
+            String s = gen.determineRouting(mapping.getHwNodeOf(ch.getOriginTask()),
+                    mapping.getHwNodeOf(ch.getDestinationTask()), ch);
+            if (s == null) {
+                addError(ch.getOriginTask(), null, INVALID_ROUTING + ": " + ch.getName() + " between " + ch.getOriginTask().getName() + " and " +
+                        ch.getDestinationTask().getName(), TMLError.ERROR_STRUCTURE);
+            }
+        }
     }
 
 
