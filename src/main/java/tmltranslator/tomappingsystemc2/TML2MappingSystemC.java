@@ -129,7 +129,7 @@ public class TML2MappingSystemC implements IDiploSimulatorCodeGenerator {
         return mainFile;
     }
 
-    public void generateSystemC(boolean _debug, boolean _optimize) {
+    public String generateSystemC(boolean _debug, boolean _optimize) {
         debug = _debug;
         optimize = _optimize;
         tmlmapping.removeAllRandomSequences();
@@ -140,6 +140,8 @@ public class TML2MappingSystemC implements IDiploSimulatorCodeGenerator {
         //generateEBRDDs();
         generateMainFile();
         generateMakefileSrc();
+
+        return null;
     }
 
     private void generateMainFile() {
