@@ -53,7 +53,7 @@ public class TMLForLoop extends TMLActivityElement {
     //next #0 -> inside the loop
     //next #1 -> after the loop
     
-    private String init, condition, increment;
+    private String init = "", condition="", increment="";
 
     private boolean isInfinite;
     

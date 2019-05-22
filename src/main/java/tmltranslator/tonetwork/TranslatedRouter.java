@@ -375,7 +375,7 @@ public class TranslatedRouter<E> {
         for (int portNb = 0; portNb < NB_OF_PORTS; portNb++) {
             if (playingTheRoleOfPrevious[portNb] != null) {
 
-                TaskOUTForDispatch outDispatch = new TaskOUTForDispatch("OUT_" + nameOfExecNode + "_" + portNb, null,
+                TaskOUTForDispatch outDispatch = new TaskOUTForDispatch("OUT_" + xPos + "_" + yPos + "_" + portNb, null,
                         null);
                 tmlm.addTask(outDispatch);
                 allTasks.add(outDispatch);
