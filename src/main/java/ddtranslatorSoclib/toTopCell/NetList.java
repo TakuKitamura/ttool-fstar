@@ -1035,36 +1035,34 @@ public class NetList
 		    "sc_trace(tf,signal_vci_ethernett ,\"signal_vci_ethernett\");"
 		    + CR;
 
-		for (i = 0; i < TopCellGenerator.avatardd.getNb_init (); i++)
+		//for (i = 0; i < TopCellGenerator.avatardd.getNb_init (); i++)
+		i= 0;
+		for (AvatarCPU cpi:TopCellGenerator.avatardd.getAllCPU())
 		    {
 			netlist +=
 			    "sc_trace(tf,signal_vci_m[" + i +
-			    "] ,\"signal_vci_m[" + i + "]\");" + CR;
+			    "] ,\"signal_vci_m[" + i + "]\");" + CR;			
+			i++;
 		    }
 
 		i = 0;
 		for (AvatarTTY tty:TopCellGenerator.avatardd.
 			 getAllTTY ())
 		    {
-
 			netlist +=
 			    "sc_trace(tf,signal_vci_tty" + tty.getIndex () +
-			    ",\"TTY" + tty.getIndex () + "\");" + CR;
-			netlist +=
-			    "sc_trace(tf,signal_xicu_irq[" + i +
-			    "] ,\"signal_xicu_irq[" + i + "]\");" + CR;
-			i++;
+			    ",\"TTY" + tty.getIndex () + "\");" + CR;		
 		    }
+		
+		for(i=0;i<5;i++){
+		netlist +=
+		    "sc_trace(tf,signal_xicu_irq[" + i +
+		    "] ,\"signal_xicu_irq[" + i + "]\");" + CR;
+		}
 
-		netlist +=
+		/*	netlist +=
 		    "sc_trace(tf,signal_xicu_irq[" + i +
-		    "] ,\"signal_xicu_irq[" + i + "]\");" + CR;
-		netlist +=
-		    "sc_trace(tf,signal_xicu_irq[" + i +
-		    "] ,\"signal_xicu_irq[" + i + "]\");" + CR;
-		netlist +=
-		    "sc_trace(tf,signal_xicu_irq[" + i +
-		    "] ,\"signal_xicu_irq[" + i + "]\");" + CR;
+		    "] ,\"signal_xicu_irq[" + i + "]\");" + CR;*/
 
 		for (AvatarRAM ram:TopCellGenerator.avatardd.getAllRAM ())
 		    {

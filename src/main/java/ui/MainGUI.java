@@ -4022,8 +4022,10 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                 } else {
                     if (!automatic) {
                         JOptionPane.showMessageDialog(frame,
-                                "The SystemC-AMS design contains several errors",
-                                "Syntax analysis failed",
+						      //     "The SystemC-AMS design contains several errors",
+						      //"Syntax analysis failed",
+				"Syntax analysis not executed",
+				"Not available for SystemC-AMS panel",		      
                                 JOptionPane.INFORMATION_MESSAGE);
                     }
                 }
