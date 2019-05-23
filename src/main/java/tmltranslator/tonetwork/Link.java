@@ -58,6 +58,7 @@ import java.util.Vector;
 public class Link {
     private int nbOfVCs;
     private TMLModeling tmlm;
+    private TMLArchitecture tarch;
 
     // Routers
     private TranslatedRouter previousRouter;
@@ -71,12 +72,15 @@ public class Link {
 
     private String add = "";
 
+    HwBus busBetweenRouters;
 
-    public Link(TMLModeling tmlm, TranslatedRouter previous, TranslatedRouter next, int nbOfVCs) {
+
+    public Link(TMLArchitecture tarch, TMLModeling tmlm, TranslatedRouter previous, TranslatedRouter next, int nbOfVCs) {
         previousRouter = previous;
         nextRouter = next;
         this.nbOfVCs = nbOfVCs;
         this.tmlm = tmlm;
+        this.tarch = tarch;
 
         TraceManager.addDev("Adding link between previous (" + previousRouter.getXPos() + "," + previousRouter.getYPos() +
         ") and next (" + nextRouter.getXPos() + "," + nextRouter.getYPos() + ")");
@@ -108,8 +112,7 @@ public class Link {
     }
 
 
-
-    public void generateLinks() {
+    private void generateLinks() {
 
         packetOut = new TMLEvent("evtPktOut__" + getNaming(),
                 null, 8, true);
@@ -131,6 +134,12 @@ public class Link {
                     null, 8, true);
             tmlm.addEvent(feedbackPerVC[i]);
         }
+    }
+
+    private void generateHwComponents() {
+            busBetweenRouters = new HwBus("Bus_From_" + previousRouter.getYPos() + "_" + previousRouter.getXPos() + "_to_" + nextRouter.getYPos() + "_" +
+                    nextRouter.getXPos());
+            tarch.addHwNode(busBetweenRouters);
     }
 
     public String getNaming() {
