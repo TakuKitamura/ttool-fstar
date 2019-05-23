@@ -232,6 +232,8 @@ public:
 	void schedule2TXT(std::ostream& myfile) const;
 	int hasRunnableTrans(CPU* iCPU);
 	int hasRunnableTrans(FPGA* iFPGA);
+	void setNextCellIndex(unsigned int n) {_nextCellIndex=n;}
+	unsigned int getNextCellIndex() const {return _nextCellIndex;}
 protected:
 	///ID of the task
 	ID _ID;
@@ -255,6 +257,7 @@ protected:
 	FPGA** _fpgas;
 	///Number of cores assigned to the task
 	unsigned int _noOfFPGAs;
+	unsigned int _nextCellIndex;
 #ifdef ADD_COMMENTS
 	///Comment list
 	CommentList _commentList;

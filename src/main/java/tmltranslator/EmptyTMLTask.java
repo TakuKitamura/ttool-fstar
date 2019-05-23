@@ -37,49 +37,42 @@
  */
 
 
-
-
 package tmltranslator;
 
-import myutil.*;
+import tmltranslator.*;
+
+import java.util.Vector;
+
 
 /**
- * Class TMLForLoop
- * Creation: 23/11/2005
- * @version 1.0 23/11/2005
- * @author Ludovic APVRILLE
+ * Class EmptyTMLTask
+ * Creation: 21/05/2019
+ *
+ * @author Ludovic Apvrille
+ * @version 1.0 21/05/2019
  */
-public class TMLForLoop extends TMLActivityElement {
-    //next #0 -> inside the loop
-    //next #1 -> after the loop
-    
-    private String init = "", condition="", increment="";
+public class EmptyTMLTask extends TMLTask {
 
-    private boolean isInfinite;
-    
-    public TMLForLoop(String _name, Object _referenceObject) {
-         super(_name, _referenceObject);   
-    }
-    
-    public void setInit(String _init) { init = _init; }
-    public void setCondition(String _condition) { condition = _condition; }
-    public void setIncrement(String _increment) { increment = _increment; }
-    
-    public String getInit() { return init;}
-    public String getCondition() { return condition;}
-    public String getIncrement() { return increment;}
-
-    public void setInfinite(boolean b) {
-	isInfinite = b;
+    public EmptyTMLTask(String name, Object referenceToClass, Object referenceToActivityDiagram) {
+        super(name, referenceToClass, referenceToActivityDiagram);
     }
 
-    public boolean isInfinite() {
-	return isInfinite;
+    public void generate() {
+
+
+        // Attributes
+
+
+        // Events
+
+        // Activity Diagram
+        TMLStartState start = new TMLStartState("mainStart", referenceObject);
+        activity.setFirst(start);
+
+
+        TMLStopState stopMain = new TMLStopState("mainStop", referenceObject);
+        addElement(start, stopMain);
+
     }
 
-    public String customExtraToXML() {
-	    return " init=\"" + Conversion.transformToXMLString(init) + "\" condition=\"" + Conversion.transformToXMLString(condition) + "\" increment=\"" + Conversion.transformToXMLString(increment) + "\" isInfinite=\"" + isInfinite + "\" ";
-    }
-    
- 
 }

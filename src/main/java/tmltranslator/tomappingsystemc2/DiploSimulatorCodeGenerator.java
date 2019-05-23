@@ -88,7 +88,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
 
 
 
-    DiploSimulatorCodeGenerator(TMLModeling<?> _tmlm) {
+    public DiploSimulatorCodeGenerator(TMLModeling<?> _tmlm) {
         this(_tmlm.getDefaultMapping());
 
         tmlmodeling = _tmlm;
@@ -97,7 +97,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         //        tepeTranslator = new  SystemCTEPE(new ArrayList<TEPE>(), this);
     }
 
-    DiploSimulatorCodeGenerator(TMLMapping<?> _tmlmapping) {
+    public DiploSimulatorCodeGenerator(TMLMapping<?> _tmlmapping) {
         //        tmlmapping = _tmlmapping;
         //      tmlmapping.handleCPs();
         //      tmlmapping.removeForksAndJoins();
@@ -144,7 +144,8 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         return mainFile;
     }
 
-    public void generateSystemC(boolean _debug, boolean _optimize) {
+    // If String is non-null, returns an error
+    public String generateSystemC(boolean _debug, boolean _optimize) {
 
         TraceManager.addDev("Generate SystemC code from DiploSimulatorCodeGenerator");
 
@@ -156,16 +157,30 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         tasks = new ArrayList<MappedSystemCTask>();
         //generateSystemCTasks();
         //generateEBRDDs();
-        generateMainFile();
+        String error = generateMainFile();
+        if (error != null) {
+            return error;
+        }
+
         generateMakefileSrc();
+
+        return null;
     }
 
-    private void generateMainFile() {
+    // If String is non-null, returns an error
+    private String generateMainFile() {
         makeHeader();
-        makeDeclarations();
+
+        String error = makeDeclarations();
+        if (error != null) {
+            return error;
+        }
+
         header += tepeTranslator.getEqFuncDeclaration() + "\n";
         mainFile = header + declaration;
         mainFile = Conversion.indentString(mainFile, 4);
+
+        return null;
     }
 
     private void generateMakefileSrc() {
@@ -202,7 +217,8 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         header += CR;
     }
 
-    private void makeDeclarations() {
+    // If String is non-null, returns an error
+    private String  makeDeclarations() {
         declaration = "class CurrentComponents: public SimComponents{\npublic:\nCurrentComponents():SimComponents(" + tmlmapping.getHashCode() + "){\n";
 
         // Declaration of HW nodes
@@ -423,7 +439,16 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
                         param = "";
                 }
 
-                declaration += determineRouting(tmlmapping.getHwNodeOf(channel.getOriginTask()), tmlmapping.getHwNodeOf(channel.getDestinationTask()), elem) + param + "," + channel.getPriority();
+                String ret =  determineRouting(tmlmapping.getHwNodeOf(channel.getOriginTask()),
+                        tmlmapping.getHwNodeOf(channel.getDestinationTask()), elem);
+                //TraceManager.addDev("------> Routing = " + ret);
+                if (ret == null) {
+                    return "Could not determine  routing between " +  channel.getOriginTask().getName() + " and " + channel.getDestinationTask()
+                            .getName() +
+                            " for channel " + channel.getName();
+                }
+                ret = ret + param + "," + channel.getPriority();
+                declaration += ret ;
 
                 if (channel.isLossy() && channel.getType() != TMLChannel.NBRNBW) {
                     declaration += "," + channel.getLossPercentage() + "," + channel.getMaxNbOfLoss();
@@ -459,7 +484,13 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
 
             if (tmlmapping.isCommNodeMappedOn(evt, null)) {
                 //TraceManager.addDev("Evt: " + evt.getName());
-                declaration += eventTypeName + "* " + eventInstName + " = new " + eventTypeName + "(" + evt.getID() + ",\"" + eventName + "\"," + determineRouting(tmlmapping.getHwNodeOf(evt.getOriginTask()), tmlmapping.getHwNodeOf(evt.getDestinationTask()), evt) + param;
+                String ret = determineRouting(tmlmapping.getHwNodeOf(evt.getOriginTask()), tmlmapping.getHwNodeOf(evt.getDestinationTask()), evt);
+                if (ret == null) {
+                    return "Could not determine routing between " +  evt.getOriginTask().getName() + " and " + evt.getDestinationTask().getName() +
+                            " for event " + evt.getName();
+                }
+                declaration += eventTypeName + "* " + eventInstName + " = new " + eventTypeName + "(" + evt.getID() + ",\"" + eventName + "\"," +
+                         ret + param;
 
             } else {
                 declaration += eventTypeName + "* " + eventInstName + " = new " + eventTypeName + "(" + evt.getID() + ",\"" + eventName + "\",0,0,0" + param;   ///old command
@@ -485,10 +516,16 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
 
                 if (tmlmapping.isCommNodeMappedOn(req, null)) {
                     //TraceManager.addDev("Request: " + req.getName());
+                    String ret =  determineRouting(tmlmapping.getHwNodeOf(req.getOriginTasks().get(0)), //tmlmapping.getHwNodeOf(req.getDestinationTask()), req) + ",0," + req.getNbOfParams() + ",true)" + SCCR;
+                            tmlmapping.getHwNodeOf(req.getDestinationTask()), req) + ",0,true,false";
+                    if (ret == null) {
+                        return "Could not determine routing between " +  req.getOriginTasks().get(0).getName() + " and " + req.getDestinationTask()
+                                .getName() +
+                                " for request " + req.getName();
+                    }
                     declaration += "TMLEventBChannel<ParamType," + req.getNbOfParams() + ">* " + reqChannelInstName + " = new TMLEventBChannel<ParamType," + req.getNbOfParams() + ">(" +
-                            req.getID() + ",\"" + reqChannelInstName + "\"," +
-                            determineRouting(tmlmapping.getHwNodeOf(req.getOriginTasks().get(0)), //tmlmapping.getHwNodeOf(req.getDestinationTask()), req) + ",0," + req.getNbOfParams() + ",true)" + SCCR;
-                                    tmlmapping.getHwNodeOf(req.getDestinationTask()), req) + ",0,true,false";
+                            req.getID() + ",\"" + reqChannelInstName + "\"," + ret;
+
                 } else {
                     declaration += "TMLEventBChannel<ParamType," + req.getNbOfParams() + ">* " + reqChannelInstName + " = new TMLEventBChannel<ParamType," + req.getNbOfParams() + ">(" + //req.getID() + ",\"reqChannel"+ task.getName() + "\",0,0,0,0," + req.getNbOfParams() + ",true)" + SCCR;
                             req.getID() + ",\"" + reqChannelInstName + "\",0,0,0,0,true,false";
@@ -673,6 +710,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
           declaration += ebrdd.getName() + "* ebrdd__" + ebrdd.getName() + " = new " + ebrdd.getName() + "(0, \""+ ebrdd.getName() + "\");\n";
           declaration += "addEBRDD(ebrdd__"+ ebrdd.getName() +")"+ SCCR;
           }*/
+        return null;
     }
 
     private int extractPath(final List<HwCommunicationNode> path,
@@ -744,9 +782,10 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         return -masterCount;
     }
 
-    private String determineRouting(HwNode startNode, HwNode destNode, TMLElement commElemToRoute) {
+    public String determineRouting(HwNode startNode, HwNode destNode, TMLElement commElemToRoute) {
 
-        //TraceManager.addDev( "Determine routing from " + startNode.getName() + " to " + destNode.getName() );
+        /*TraceManager.addDev( "******** -------> ROUTING ROUTING ROUTING\nDetermine routing from " + startNode.getName() + " to " + destNode.getName
+                () );*/
         StrWrap masters = new StrWrap();
         StrWrap slaves = new StrWrap();
 
@@ -797,6 +836,12 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         //TraceManager.addDev("number of elements: " + hopNum);
         //TraceManager.addDev("masters: " + masters.str);
         //TraceManager.addDev("slaves: " + slaves.str);
+
+        if (masters.str.length() == 0) {
+            return null;
+        }
+
+        //TraceManager.addDev("Going to return:" + hopNum + ",array(" + hopNum + masters.str + "),array(" + hopNum + slaves.str + ")");
 
         return hopNum + ",array(" + hopNum + masters.str + "),array(" + hopNum + slaves.str + ")";
     }
@@ -867,7 +912,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         for (HwCommunicationNode commNode : _commNodes) {
             if (commNode instanceof HwMemory) {
                 if (_bus != null) {
-                    //TraceManager.addDev(commNode.getName() + " connected to bus " + _bus.getName() + ": " + tmlmapping.getTMLArchitecture().isNodeConnectedToBus(commNode, _bus));
+                    TraceManager.addDev(commNode.getName() + " connected to bus " + _bus.getName() + ": " + tmlmapping.getTMLArchitecture().isNodeConnectedToBus(commNode, _bus));
                 }
                 //TraceManager.addDev(_channel.getName() + " is mapped onto " + commNode.getName() + ": " + tmlmapping.isCommNodeMappedOn(_channel, commNode));
                 if ((_bus == null || tmlmapping.getTMLArchitecture().isNodeConnectedToBus(commNode, _bus))
@@ -893,7 +938,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
     private List<HwCommunicationNode> getBridgesConnectedToBus(List<HwCommunicationNode> _commNodes, HwBus _bus) {
         List<HwCommunicationNode> resultList = new LinkedList<HwCommunicationNode>();
         for (HwCommunicationNode commNode : _commNodes) {
-            if (commNode instanceof HwBridge) {
+            if ((commNode instanceof HwBridge) || (commNode instanceof HwNoC)){
                 if (tmlmapping.getTMLArchitecture().isNodeConnectedToBus(commNode, _bus)) resultList.add(commNode);
             }
         }

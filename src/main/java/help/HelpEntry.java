@@ -288,6 +288,10 @@ public class HelpEntry implements GenericTree {
         }
     }
 
+    public boolean hasMasterKeyword(String word) {
+        return masterKeyword.compareTo(word) == 0;
+    }
+
     public int hasSimilarWords(String[] words) {
         int result = 0;
         for(String s:words) {

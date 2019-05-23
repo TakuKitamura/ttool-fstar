@@ -3,12 +3,15 @@ package ui;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import myutil.FileUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import tmltranslator.TMLMapping;
 import tmltranslator.TMLModeling;
 import tmltranslator.TMLTask;
+
+import java.io.File;
 
 public class TestGTMLModeling extends AbstractUITest {
 	
@@ -77,6 +80,13 @@ public class TestGTMLModeling extends AbstractUITest {
 	public void testTranslateToTMLModelingZigbeeTX()
 	throws MalformedTMLDesignException {
 		final String actualCode = translateToTMLModelingXMLZigBeeTutorial( DIAG_ZIGBEE_TX );
+
+		File f = new File("actual.xml");
+		try {
+            FileUtils.saveFile(f, actualCode);
+        } catch (Exception e) {
+
+        }
 	
 		checkResultXml( actualCode, DIAG_ZIGBEE_TX );
 	}
@@ -86,6 +96,13 @@ public class TestGTMLModeling extends AbstractUITest {
 	throws MalformedTMLDesignException {
 		final String diagramName = "Mapping_0";
 		final String actualCode = translateToTMLMappingXMLZigBeeTutorial( diagramName );
+
+        File f = new File("mapping0.xml");
+        try {
+            FileUtils.saveFile(f, actualCode);
+        } catch (Exception e) {
+
+        }
 		
 		checkResultXml( actualCode, diagramName );
 	}

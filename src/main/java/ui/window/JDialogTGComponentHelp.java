@@ -11,7 +11,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class TGComponentHelp extends JDialog implements ActionListener {
+public class JDialogTGComponentHelp extends JDialog implements ActionListener {
 
     MainGUI mainGUI;
     HelpEntry helpEntry;
@@ -20,7 +20,7 @@ public class TGComponentHelp extends JDialog implements ActionListener {
     JEditorPane pane;
 
 
-    public TGComponentHelp(MainGUI _mgui, HelpEntry _he) {
+    public JDialogTGComponentHelp(MainGUI _mgui, HelpEntry _he) {
         mainGUI = _mgui;
         helpEntry = _he;
 
@@ -36,7 +36,7 @@ public class TGComponentHelp extends JDialog implements ActionListener {
         setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
         Container framePanel = getContentPane();
         framePanel.setLayout(new BorderLayout());
-        Font f = new Font("Courrier", Font.BOLD, 12);
+        //Font f = new Font("Courrier", Font.BOLD, 12);
 
         JPanel helpPanel = new JPanel();
         helpPanel.setLayout(new BorderLayout());

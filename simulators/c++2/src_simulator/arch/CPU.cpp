@@ -105,7 +105,7 @@ void CPU::drawPieChart(std::ofstream& myfile) const {
 }
 
 void CPU::showPieChart(std::ofstream& myfile) const{
-  myfile << SCHED_HTML_JS_DIV_ID << _ID << "_" << this->_cycleTime << SCHED_HTML_JS_DIV_END << "<br>";
+  myfile << SCHED_HTML_JS_DIV_ID << _ID << "_" << this->_cycleTime << SCHED_HTML_JS_DIV_ID_END << std::endl;
 }
   
    

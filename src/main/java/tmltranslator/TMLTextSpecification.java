@@ -294,6 +294,14 @@ public class TMLTextSpecification<E> {
             if (!evt.isInfinite()) {
                 sb += SP + evt.getMaxSize();
             }
+
+            TraceManager.addDev("Handing Event:" + evt.getName());
+            if (evt.getOriginTask() == null) {
+                TraceManager.addDev("Missing origin Task in " + evt.getName());
+            }
+            if (evt.getDestinationTask() == null) {
+                TraceManager.addDev("Missing destination Task in " + evt.getName());
+            }
             sb += SP + evt.getOriginTask().getName() + SP + evt.getDestinationTask().getName();
 
             sb += CR;
@@ -423,10 +431,15 @@ public class TMLTextSpecification<E> {
 
         } else if (elt instanceof TMLForLoop) {
             tmlfl = (TMLForLoop) elt;
-            code = "FOR(" + tmlfl.getInit() + SC + SP;
-            code += tmlfl.getCondition() + SC + SP;
-            code += tmlfl.getIncrement() + ")" + CR;
+            if (tmlfl.isInfinite()) {
+                code = "FOR( " + SC + " " + SC + " )" + CR;
+            } else {
+                code = "FOR(" + tmlfl.getInit() + SC + SP;
+                code += tmlfl.getCondition() + SC + SP;
+                code += tmlfl.getIncrement() + ")" + CR;
+            }
             code += makeBehavior(task, elt.getNextElement(0));
+
             return code + "ENDFOR" + CR + makeBehavior(task, elt.getNextElement(1));
 
         } else if (elt instanceof TMLRandom) {
@@ -447,6 +460,7 @@ public class TMLTextSpecification<E> {
             for (int k = 0; k < tmlch.getNbOfChannels(); k++) {
                 code = code + tmlch.getChannel(k).getName() + SP;
             }
+            TraceManager.addDev("Nb Of of samples in task " + task.getName() + " = " + tmlch.getNbOfSamples());
             code = code + modifyString(tmlch.getNbOfSamples());
             if (elt.securityPattern != null) {
                 code = code + SP + elt.securityPattern.name + CR;
@@ -2896,6 +2910,9 @@ public class TMLTextSpecification<E> {
     }
 
     private static String prepareString(String s) {
+        if (s == null) {
+            return null;
+        }
         return s.replaceAll("\\s", "");
     }
 

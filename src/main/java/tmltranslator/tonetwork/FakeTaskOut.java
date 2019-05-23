@@ -37,49 +37,64 @@
  */
 
 
+package tmltranslator.tonetwork;
 
+import tmltranslator.*;
 
-package tmltranslator;
+import java.util.Vector;
 
-import myutil.*;
 
 /**
- * Class TMLForLoop
- * Creation: 23/11/2005
- * @version 1.0 23/11/2005
- * @author Ludovic APVRILLE
+ * Class FakeTaskOut
+ * Creation: 21/05/2019
+ *
+ * @author Ludovic Apvrille
+ * @version 1.0 21/05/2019
  */
-public class TMLForLoop extends TMLActivityElement {
-    //next #0 -> inside the loop
-    //next #1 -> after the loop
-    
-    private String init = "", condition="", increment="";
+public class FakeTaskOut extends TMLTask {
 
-    private boolean isInfinite;
-    
-    public TMLForLoop(String _name, Object _referenceObject) {
-         super(_name, _referenceObject);   
-    }
-    
-    public void setInit(String _init) { init = _init; }
-    public void setCondition(String _condition) { condition = _condition; }
-    public void setIncrement(String _increment) { increment = _increment; }
-    
-    public String getInit() { return init;}
-    public String getCondition() { return condition;}
-    public String getIncrement() { return increment;}
-
-    public void setInfinite(boolean b) {
-	isInfinite = b;
+    public FakeTaskOut(String name, Object referenceToClass, Object referenceToActivityDiagram) {
+        super(name, referenceToClass, referenceToActivityDiagram);
     }
 
-    public boolean isInfinite() {
-	return isInfinite;
+    // Output Channels are given in the order of VCs
+
+    public void generate(TMLEvent packetIn) {
+
+
+        // Attributes
+        TMLAttribute pktlen = new TMLAttribute("pktlen", "pktlen", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(pktlen);
+        TMLAttribute dst = new TMLAttribute("dst", "dst", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(dst);
+        TMLAttribute vc = new TMLAttribute("vc", "vc", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(vc);
+        TMLAttribute eop = new TMLAttribute("eop", "eop", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(eop);
+
+        // Events
+        addTMLEvent(packetIn);
+
+
+        // Activity Diagram
+        TMLStartState start = new TMLStartState("mainStart", referenceObject);
+        activity.setFirst(start);
+
+        TMLForLoop loop = new TMLForLoop("mainLoop", referenceObject);
+        loop.setInfinite(true);
+        addElement(start, loop);
+
+        TMLWaitEvent waitingForPacketFromOUT = new TMLWaitEvent("waitingForPacketFromOUT", referenceObject);
+        waitingForPacketFromOUT.setEvent(packetIn);
+        waitingForPacketFromOUT.addParam("pktlen");
+        waitingForPacketFromOUT.addParam("dst");
+        waitingForPacketFromOUT.addParam("vc");
+        waitingForPacketFromOUT.addParam("eop");
+        addElement(loop, waitingForPacketFromOUT);
+
+        TMLStopState stopMain = new TMLStopState("ReturnToInfiniteLoop", referenceObject);
+        addElement(waitingForPacketFromOUT, stopMain);
+
     }
 
-    public String customExtraToXML() {
-	    return " init=\"" + Conversion.transformToXMLString(init) + "\" condition=\"" + Conversion.transformToXMLString(condition) + "\" increment=\"" + Conversion.transformToXMLString(increment) + "\" isInfinite=\"" + isInfinite + "\" ";
-    }
-    
- 
 }

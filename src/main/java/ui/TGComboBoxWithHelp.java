@@ -39,47 +39,44 @@
 
 
 
-package tmltranslator;
+package ui;
 
-import myutil.*;
+import help.HelpEntry;
+import help.HelpManager;
+import myutil.TraceManager;
+import ui.util.IconManager;
+import ui.window.JDialogTGComponentHelp;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Vector;
 
 /**
- * Class TMLForLoop
- * Creation: 23/11/2005
- * @version 1.0 23/11/2005
+ * Class TGComboBoxWithHelp
+ * Combo box with Help
+ * Creation: 21/05/2019
+ * @version 1.1 21/05/2019
  * @author Ludovic APVRILLE
  */
-public class TMLForLoop extends TMLActivityElement {
-    //next #0 -> inside the loop
-    //next #1 -> after the loop
-    
-    private String init = "", condition="", increment="";
+public class TGComboBoxWithHelp<E> extends JComboBox<E> {
+    public  TGHelpButton myButton;
 
-    private boolean isInfinite;
-    
-    public TMLForLoop(String _name, Object _referenceObject) {
-         super(_name, _referenceObject);   
-    }
-    
-    public void setInit(String _init) { init = _init; }
-    public void setCondition(String _condition) { condition = _condition; }
-    public void setIncrement(String _increment) { increment = _increment; }
-    
-    public String getInit() { return init;}
-    public String getCondition() { return condition;}
-    public String getIncrement() { return increment;}
-
-    public void setInfinite(boolean b) {
-	isInfinite = b;
+    public TGComboBoxWithHelp() {
+        super();
     }
 
-    public boolean isInfinite() {
-	return isInfinite;
+    public TGComboBoxWithHelp(Vector<E> v) {
+        super(v);
     }
 
-    public String customExtraToXML() {
-	    return " init=\"" + Conversion.transformToXMLString(init) + "\" condition=\"" + Conversion.transformToXMLString(condition) + "\" increment=\"" + Conversion.transformToXMLString(increment) + "\" isInfinite=\"" + isInfinite + "\" ";
+    // helpword can reference a HTML file or a master keyword
+    public void makeEndHelpButton(String helpWord, MainGUI mgui, HelpManager hm, JPanel panel, GridBagConstraints c) {
+        Icon myIcon = IconManager.imgic32;
+        myButton = new TGHelpButton(myIcon, helpWord, mgui, hm);
+        myButton.addToPanel(panel, c);
     }
-    
- 
+
+
 }

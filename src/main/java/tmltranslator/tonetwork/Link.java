@@ -69,6 +69,8 @@ public class Link {
     TMLChannel chOutToIN;
     TMLEvent feedbackPerVC[];
 
+    private String add = "";
+
 
     public Link(TMLModeling tmlm, TranslatedRouter previous, TranslatedRouter next, int nbOfVCs) {
         previousRouter = previous;
@@ -76,7 +78,33 @@ public class Link {
         this.nbOfVCs = nbOfVCs;
         this.tmlm = tmlm;
 
+        TraceManager.addDev("Adding link between previous (" + previousRouter.getXPos() + "," + previousRouter.getYPos() +
+        ") and next (" + nextRouter.getXPos() + "," + nextRouter.getYPos() + ")");
+
+        if (tmlm ==null) {
+            TraceManager.addDev("null modeling");
+        }
+
         generateLinks();
+    }
+
+    public Link(TMLModeling tmlm, TranslatedRouter previous, TranslatedRouter next, int nbOfVCs, String add) {
+        previousRouter = previous;
+        nextRouter = next;
+        this.nbOfVCs = nbOfVCs;
+        this.tmlm = tmlm;
+        this.add = "_" + add;
+
+        TraceManager.addDev("Adding link between previous (" + previousRouter.getXPos() + "," + previousRouter.getYPos() +
+                ") and next (" + nextRouter.getXPos() + "," + nextRouter.getYPos() + ")" + " with add=" + add);
+
+        if (tmlm ==null) {
+            TraceManager.addDev("null modeling");
+        }
+
+
+        generateLinks();
+
     }
 
 
@@ -105,9 +133,11 @@ public class Link {
         }
     }
 
-    private String getNaming() {
+    public String getNaming() {
         return "P_" + previousRouter.getXPos() + "_" + previousRouter.getYPos() +
-                "_N_" + nextRouter.getXPos() + "_" + nextRouter.getYPos();
+                "_N_" + nextRouter.getXPos() + "_" + nextRouter.getYPos() + add;
     }
+
+
 
 }

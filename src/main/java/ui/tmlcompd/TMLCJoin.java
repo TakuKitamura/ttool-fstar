@@ -44,6 +44,7 @@ package ui.tmlcompd;
 import myutil.GraphicLib;
 import ui.*;
 import ui.util.IconManager;
+import ui.window.JDialogMultiString;
 
 import javax.swing.*;
 import java.awt.*;
@@ -148,14 +149,25 @@ public class TMLCJoin extends TMLCChannelFacility implements WithAttributes {
     public boolean editOndoubleClick(JFrame frame) {
         if (isChannel) {
             String oldValue = value;
-            String s = (String) JOptionPane.showInputDialog(frame, "Nb of samples (positive int): ",
-                    "Nb of samples per round", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101, null,
-                    getValue());
-            if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
+            String[] labels = new String[1];
+            labels[0] = "Nb of samples (positive int): ";
+            String[] values = new String[1];
+            values[0] = "" + value;
+            String[] keywords = new String[1];
+            keywords[0] = "join" ;
+
+
+            JDialogMultiString jdms = new JDialogMultiString(getTDiagramPanel().getMainGUI().getFrame(), "Join attribute", 1,
+                    labels, values, keywords, getTDiagramPanel().getMainGUI().getHelpManager(), getTDiagramPanel().getMainGUI());
+            GraphicLib.centerOnParent(jdms, 400, 250);
+            jdms.setVisible(true);
+
+            if (jdms.hasBeenSet()) {
+                String tmp = jdms.getString(0).trim();
                 try {
-                    int testI = Integer.decode(s).intValue();
-                    if (testI > 0) {
-                        value = s;
+                    int val = Integer.decode(tmp);
+                    if (val > 0) {
+                        value = tmp;
                     } else {
                         JOptionPane.showMessageDialog(frame,
                                 "Could not change the number of samples: the number must be >0",
@@ -163,17 +175,15 @@ public class TMLCJoin extends TMLCChannelFacility implements WithAttributes {
                                 JOptionPane.INFORMATION_MESSAGE);
                         return false;
                     }
-
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(frame,
-                            "Could not change the number of samples: " + s + " is not a number",
+                            "Could not change the number of samples: " + tmp + " is not a number",
                             "Error",
                             JOptionPane.INFORMATION_MESSAGE);
                     return false;
                 }
-
+                return true;
             }
-            return true;
         } else {
             JOptionPane.showMessageDialog(frame,
                     "Only correctly connected join can be configured",
@@ -181,10 +191,9 @@ public class TMLCJoin extends TMLCChannelFacility implements WithAttributes {
                     JOptionPane.INFORMATION_MESSAGE);
             return true;
         }
+        return true;
 
     }
-
-
 
 
 

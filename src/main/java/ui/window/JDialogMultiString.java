@@ -38,16 +38,13 @@
 
 package ui.window;
 
-import help.HelpEntry;
 import help.HelpManager;
-import myutil.TraceManager;
 import ui.MainGUI;
-import ui.util.IconManager;
+import ui.TGTextFieldWithHelp;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,9 +67,6 @@ public class JDialogMultiString extends JDialogBase implements ActionListener {
     // Help
     private String[] helpKeywords;
     private HelpManager hm;
-    private List<JButton>  buttons;
-    private List<HelpEntry> helpEntries;
-    private TGComponentHelp cpuHelp;
     private MainGUI mgui;
 
     private int nbString;
@@ -147,29 +141,8 @@ public class JDialogMultiString extends JDialogBase implements ActionListener {
 
 
 
-//    private void myInitComponents() {
-//    }
-
     private void initComponents() {
 
-        if (hm != null) {
-            if(!hm.loadEntries()) {
-                hm = null;
-            } else {
-                buttons = new ArrayList<>();
-                helpEntries = new ArrayList<>();
-                for(int i=0; i<helpKeywords.length; i++) {
-                    TraceManager.addDev("Getting help entry with:" + helpKeywords[i]);
-                    HelpEntry he = hm.getHelpEntryWithHTMLFile(helpKeywords[i]);
-                    helpEntries.add(he);
-                    Icon myIcon = IconManager.imgic32;
-                    JButton but = new JButton(myIcon);
-                    setButton(but);
-                    buttonClick(but, he);
-                    buttons.add(but);
-                }
-            }
-        }
 
 
         inserts = new JButton[labels.length];
@@ -230,9 +203,9 @@ public class JDialogMultiString extends JDialogBase implements ActionListener {
                 }
             }
             if ((helpKeywords != null) && (helpKeywords[i] != null)) {
-                texts[i] = new JTextField(values[i], 15);
+                texts[i] = new TGTextFieldWithHelp(values[i], 15);
                 panel1.add(texts[i], c1);
-                addHelpButton(i, panel1, c1);
+                ((TGTextFieldWithHelp)texts[i]).makeEndHelpButton(helpKeywords[i], mgui, hm, panel1, c1);
             } else {
                 c1.gridwidth = GridBagConstraints.REMAINDER; //end row
                 texts[i] = new JTextField(values[i], 15);
@@ -255,43 +228,6 @@ public class JDialogMultiString extends JDialogBase implements ActionListener {
         c0.fill = GridBagConstraints.HORIZONTAL;
 
         initButtons(c0, c, this);
-    }
-
-    private void setButton(JButton button) {
-        button.setOpaque(false);
-        button.setFocusPainted(false);
-        button.setContentAreaFilled(false);
-        button.setBorderPainted(false);
-        button.setPreferredSize(new Dimension(20,20));
-    }
-
-    private void buttonClick(JButton but, HelpEntry he) {
-        but.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(cpuHelp == null) {
-                    TraceManager.addDev("Null CPU help");
-                    cpuHelp = new TGComponentHelp(mgui, he);
-                    cpuHelp.setLocationHelpWindow(but);
-                } else {
-                    if(!cpuHelp.isVisible()) {
-                        cpuHelp = new TGComponentHelp(mgui, he);
-                        cpuHelp.setLocationHelpWindow(but);
-                    } else{
-                        cpuHelp.setVisible(false);
-                    }
-                }
-            }
-        });
-    }
-
-    private void addHelpButton(int index, JPanel panel, GridBagConstraints c) {
-        //issue 183
-        c.weighty = 0.5;
-        c.weightx = 0.5;
-        c.gridwidth = GridBagConstraints.REMAINDER;
-        if (buttons != null)
-            panel.add(buttons.get(index), c);
     }
 
 

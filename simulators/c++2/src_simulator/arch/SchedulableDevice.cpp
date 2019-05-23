@@ -220,11 +220,14 @@ void SchedulableDevice::drawPieChart(std::ofstream& myfile) const {
     _maxEndTime=max(_maxEndTime,_endTime);
   }
   std::map <TMLTask*, double > transPercentage;
+  
+
   for( TransactionList::const_iterator i = _transactList.begin(); i!= _transactList.end(); ++i){
       
     transPercentage[(*i)-> getCommand()->getTask()]+=(double)((*i)->getEndTime()-(*i)->getStartTime())/_maxEndTime;      
       
   }
+ 
   std::map <TMLTask*, double>::iterator iter = transPercentage.begin();
   myfile << "     var chart" << _ID << "= new CanvasJS.Chart(\"chartContainer" << _ID <<"\"," << std::endl;
   myfile <<  SCHED_HTML_JS_CONTENT2 << "Average load is " << averageLoad() <<  SCHED_HTML_JS_CONTENT3 << std::endl;
@@ -243,7 +246,7 @@ void SchedulableDevice::drawPieChart(std::ofstream& myfile) const {
 
 
 void SchedulableDevice::showPieChart(std::ofstream& myfile) const{
-  myfile << SCHED_HTML_JS_DIV_ID << _ID << SCHED_HTML_JS_DIV_END << "<br>";
+  myfile << SCHED_HTML_JS_DIV_ID << _ID << SCHED_HTML_JS_DIV_ID_END << "<br>";
 }
   
 
@@ -309,7 +312,6 @@ void SchedulableDevice::schedule2HTML(std::ofstream& myfile) const {
 		}
 
 		myfile << "</tr>" << std::endl << "</table>" << std::endl << "<table>" << std::endl << "<tr>";
-
 		for( std::map<TMLTask*, std::string>::iterator taskColIt = taskCellClasses.begin(); taskColIt != taskCellClasses.end(); ++taskColIt ) {
 			TMLTask* task = (*taskColIt).first;
 			// Unset the default td max-width of 5px. For some reason setting the max-with on a specific t style does not work

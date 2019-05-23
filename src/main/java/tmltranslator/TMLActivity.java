@@ -663,7 +663,7 @@ public class TMLActivity extends TMLElement {
                         return -1;
                     }
                     // Get the value exec value
-                    String value = ((TMLExecI) (currentElement)).getAction().trim();
+                    String value = ((TMLExecIInterval) (currentElement)).getMaxDelay().trim();
                     int index = value.indexOf(" ");
                     if (index != -1) {
                         value = value.substring(index+1, value.length());

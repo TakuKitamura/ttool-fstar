@@ -148,8 +148,7 @@ public class TMLCFork extends TMLCChannelFacility implements WithAttributes {
 
             JDialogMultiString jdms = new JDialogMultiString(getTDiagramPanel().getMainGUI().getFrame(), "Fork attribute", 1,
                     labels, values, keywords, getTDiagramPanel().getMainGUI().getHelpManager(), getTDiagramPanel().getMainGUI());
-            jdms.setSize(500, 450);
-            GraphicLib.centerOnParent(jdms, 500, 450);
+            GraphicLib.centerOnParent(jdms, 400, 250);
             jdms.setVisible(true);
 
             if (jdms.hasBeenSet()) {

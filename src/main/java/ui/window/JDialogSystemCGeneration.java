@@ -804,7 +804,13 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
 
                 try {
                     tml2systc.setModelName(mgui.getModelFileFullPath() + " / " + mgui.getCurrentJTabbedPane().getTitleAt(0));
-                    tml2systc.generateSystemC(debugmode.isSelected(), optimizemode.isSelected());
+                    String error = tml2systc.generateSystemC(debugmode.isSelected(), optimizemode.isSelected());
+                    if (error != null) {
+                        jta.append("Error identified during code generation:\n" + error + "\nCode generation was cancelled");
+                        setError();
+                        return;
+                    }
+
                     testGo();
                     jta.append("Simulator code generation done\n");
 
