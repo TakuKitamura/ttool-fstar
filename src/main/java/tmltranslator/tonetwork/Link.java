@@ -90,6 +90,7 @@ public class Link {
         }
 
         generateLinks();
+        generateHwComponents();
     }
 
     public Link(TMLModeling tmlm, TranslatedRouter previous, TranslatedRouter next, int nbOfVCs, String add) {

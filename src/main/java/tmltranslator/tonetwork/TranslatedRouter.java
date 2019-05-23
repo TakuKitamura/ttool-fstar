@@ -222,6 +222,11 @@ public class TranslatedRouter<E> {
             muxTask.generate(inputEventsOfMUX, eventForMUX_and_NI_IN);
             muxTasks.add(muxTask);
             allTasks.add(muxTask);
+
+            // We now need to modify the corresponding input tasks
+            // The channel is modified to NBRNBW
+            // Once the sample has been sent, the outputEventOfMux is sent
+
         }
 
 
@@ -477,7 +482,6 @@ public class TranslatedRouter<E> {
     public void makeOutputEventsChannels() {
         TMLModeling tmlm = tmlmap.getTMLModeling();
 
-
         // Internal events and channels
 
         // Between IN and INVC
@@ -588,9 +592,14 @@ public class TranslatedRouter<E> {
     // ALSO: initial, last tasks
     public void makeHwArchitectureAndMapping(HwExecutionNode execNode, HwBus busToInternalDomain) {
         TMLArchitecture tmla = tmlmap.getTMLArchitecture();
+
         int i, j, k;
 
         // We first need a bridge for the internal domain
+        if (busToInternalDomain == null) {
+            TraceManager.addDev("NULL bus");
+        }
+
         HwBridge mainBridge = new HwBridge("BridgeIntennal" + getPositionNaming());
         tmla.addHwNode(mainBridge);
         tmla.makeHwLink(busToInternalDomain, mainBridge);
@@ -730,7 +739,10 @@ public class TranslatedRouter<E> {
         tmla.addHwNode(busOUTToMainBridge);
         tmla.makeHwLink(busOUTToMainBridge, memNIOUT);
         tmla.makeHwLink(busOUTToMainBridge, mainBridge);
-        
+
+        // fake task on CPU
+        tmlmap.addTaskToHwExecutionNode(fto, node);
+
 
     }
 

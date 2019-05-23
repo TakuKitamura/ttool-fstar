@@ -130,8 +130,11 @@ public class TMLArchitecture {
         return null;
     }
 
-    public void makeHwLink(HwCommunicationNode bus, HwNode node) {
-        HwLink link = new HwLink(bus.getName() + "__" + node.getName());
+    public void makeHwLink(HwBus bus, HwNode node) {
+        String busName = bus.getName();
+        String nodeName = node.getName();
+        HwLink link = new HwLink(busName + "__" + nodeName);
+        link.setNodes(bus, node);
         addHwLink(link);
     }
 

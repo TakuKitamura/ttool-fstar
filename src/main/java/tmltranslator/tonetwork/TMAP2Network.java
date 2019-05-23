@@ -412,7 +412,9 @@ public class TMAP2Network<E>  {
                 } else {
                     node = tmlarchi.getHwExecutionNodeByName(s);
                     bus = tmla.getHwBusByName(node.getName() + "__bus");
+                    TraceManager.addDev("Found bus=" + bus);
                 }
+                TraceManager.addDev("Using bus=" + bus + " name=" + bus.getName());
                 routers[i][j].makeHwArchitectureAndMapping(node, bus);
             }
         }
