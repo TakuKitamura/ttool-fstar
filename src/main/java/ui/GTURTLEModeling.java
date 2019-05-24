@@ -803,8 +803,8 @@ public class GTURTLEModeling {
         //Check if a path between two tasks uses firewallnode
         boolean secure = true;
         List<HwLink> links = map.getTMLArchitecture().getHwLinks();
-        HwExecutionNode node1 = (HwExecutionNode) map.getHwNodeOf(t1);
-        HwExecutionNode node2 = (HwExecutionNode) map.getHwNodeOf(t2);
+        HwExecutionNode node1 =  map.getHwNodeOf(t1);
+        HwExecutionNode node2 =  map.getHwNodeOf(t2);
         List<HwNode> found = new ArrayList<HwNode>();
         List<HwNode> done = new ArrayList<HwNode>();
         List<HwNode> path = new ArrayList<HwNode>();
@@ -870,7 +870,7 @@ public class GTURTLEModeling {
         List<HwNode> done = new ArrayList<HwNode>();
         //List<HwNode> path = new ArrayList<HwNode>();
 
-        HwExecutionNode node1 = (HwExecutionNode) map.getHwNodeOf(t1);
+        HwExecutionNode node1 =  map.getHwNodeOf(t1);
 
         //Map<HwNode, List<HwNode>> pathMap = new HashMap<HwNode, List<HwNode>>();
         for (HwLink link : links) {
@@ -1666,8 +1666,8 @@ public class GTURTLEModeling {
         //Check if a path between two tasks is secure
         boolean secure = true;
         List<HwLink> links = map.getTMLArchitecture().getHwLinks();
-        HwExecutionNode node1 = (HwExecutionNode) map.getHwNodeOf(t1);
-        HwExecutionNode node2 = (HwExecutionNode) map.getHwNodeOf(t2);
+        HwExecutionNode node1 = map.getHwNodeOf(t1);
+        HwExecutionNode node2 = map.getHwNodeOf(t2);
         List<HwNode> found = new ArrayList<HwNode>();
         List<HwNode> done = new ArrayList<HwNode>();
         List<HwNode> path = new ArrayList<HwNode>();
@@ -1746,7 +1746,7 @@ public class GTURTLEModeling {
                 for (TMLTask t : tmlm.securityTaskMap.get(sp)) {
                     ArrayList<HwMemory> mems = new ArrayList<HwMemory>();
                     boolean keyFound = false;
-                    HwExecutionNode node1 = (HwExecutionNode) tmap.getHwNodeOf(t);
+                    HwExecutionNode node1 = tmap.getHwNodeOf(t);
                     //Try to find memory using only private buses
                     List<HwNode> toVisit = new ArrayList<HwNode>();
                     //  List<HwNode> toMemory = new ArrayList<HwNode>();
@@ -1815,7 +1815,7 @@ public class GTURTLEModeling {
                 for (TMLTask t : tmlm.securityTaskMap.get(sp)) {
                     ArrayList<HwMemory> mems = new ArrayList<HwMemory>();
                     boolean keyFound = false;
-                    HwExecutionNode node1 = (HwExecutionNode) tmap.getHwNodeOf(t);
+                    HwExecutionNode node1 = tmap.getHwNodeOf(t);
                     //Try to find memory using only private buses
                     List<HwNode> toVisit = new ArrayList<HwNode>();
                     //  List<HwNode> toMemory = new ArrayList<HwNode>();

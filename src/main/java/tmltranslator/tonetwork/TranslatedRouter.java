@@ -60,15 +60,14 @@ public class TranslatedRouter<E> {
     private final int CHANNEL_SIZE = 4;
     private final int CHANNEL_MAX = 8;
 
-    private int nbOfVCs, xPos, yPos, nbOfApps;
+    private int nbOfVCs, xPos, yPos;
+    private HwExecutionNode myHwExecutionNode;
 
     private TMAP2Network<?> main;
 
     private HwNoC noc;
     private List<TMLChannel> channelsViaNoc;
 
-    private Vector<TMLEvent> pktins;
-    private Vector<TMLTask> dispatchers;
 
     private TMLMapping<?> tmlmap;
 
@@ -104,10 +103,15 @@ public class TranslatedRouter<E> {
     private TaskNetworkInterfaceOUT tniOut;
     private FakeTaskOut fto;
 
+
+    // Connection channels and events
+    private HashMap<TMLChannel, TMLEvent> mapOfAllOutputChannels;
+
     // Hw
     HwExecutionNode node;
 
-    public TranslatedRouter(TMAP2Network<?> main, TMLMapping<?> tmlmap, HwNoC noc, List<TMLChannel> channelsViaNoc, int nbOfVCs, int xPos, int yPos) {
+    public TranslatedRouter(TMAP2Network<?> main, TMLMapping<?> tmlmap, HwNoC noc, List<TMLChannel> channelsViaNoc,
+                            int nbOfVCs, int xPos, int yPos, HwExecutionNode myHwExecutionNode) {
         this.main = main;
         this.nbOfVCs = nbOfVCs;
         this.noc = noc;
@@ -115,6 +119,7 @@ public class TranslatedRouter<E> {
         this.xPos = xPos;
         this.yPos = yPos;
         this.tmlmap = tmlmap;
+        this.myHwExecutionNode = myHwExecutionNode;
 
         playingTheRoleOfPrevious = new Link[NB_OF_PORTS];
         playingTheRoleOfNext = new Link[NB_OF_PORTS];
@@ -197,16 +202,18 @@ public class TranslatedRouter<E> {
 
         // We can create the MUX task: one mux task for each VC
         muxTasks = new Vector<>();
+        mapOfAllOutputChannels = new HashMap<>();
         for (i = 0; i < nbOfVCs; i++) {
             // Now that we know all channels, we can generate the MUX tasks
             // We need one event par outputChannel
-            HashMap<TMLChannel, TMLEvent> mapOfOutputChannels = new HashMap<>();
+            //HashMap<TMLChannel, TMLEvent> mapOfOutputChannels = new HashMap<>();
             Vector<TMLEvent> inputEventsOfMUX = new Vector<>();
             for (TMLChannel chan : outputChannels) {
                 if (chan.getVC() == i) {
                     TMLEvent outputEventOfMux = new TMLEvent("EventMUXof" + chan.getName(), null, 8,
                             true);
-                    mapOfOutputChannels.put(chan, outputEventOfMux);
+                    //mapOfOutputChannels.put(chan, outputEventOfMux);
+                    mapOfAllOutputChannels.put(chan, outputEventOfMux);
                     inputEventsOfMUX.add(outputEventOfMux);
                     tmlm.addEvent(outputEventOfMux);
                 }
@@ -222,11 +229,6 @@ public class TranslatedRouter<E> {
             muxTask.generate(inputEventsOfMUX, eventForMUX_and_NI_IN);
             muxTasks.add(muxTask);
             allTasks.add(muxTask);
-
-            // We now need to modify the corresponding input tasks
-            // The channel is modified to NBRNBW
-            // Once the sample has been sent, the outputEventOfMux is sent
-
         }
 
 
@@ -588,8 +590,8 @@ public class TranslatedRouter<E> {
     }
 
 
-    // DANGER: also make th emapping of channels
-    // ALSO: initial, last tasks
+    // DANGER: also make the mapping of channels
+    // ALSO: initial, last tasks: connections
     public void makeHwArchitectureAndMapping(HwExecutionNode execNode, HwBus busToInternalDomain) {
         TMLArchitecture tmla = tmlmap.getTMLArchitecture();
 
@@ -619,7 +621,6 @@ public class TranslatedRouter<E> {
             tmla.addHwNode(bus);
 
             tmla.makeHwLink(bus, mainBridge);
-
             tmla.makeHwLink(busNIIN, cpu);
         }
 
@@ -631,6 +632,7 @@ public class TranslatedRouter<E> {
 
         HwMemory memNIIN = new HwMemory("MemNetworkiInterfaceIN" + getPositionNaming());
         tmla.addHwNode(memNIIN);
+        tmlmap.addCommToHwCommNode(playingTheRoleOfPrevious[NB_OF_PORTS-1].chOutToIN, memNIIN);
 
         HwBridge bridgeNIIN = new HwBridge("BridgeNetworkiInterfaceIN" + getPositionNaming());
 
@@ -666,6 +668,7 @@ public class TranslatedRouter<E> {
                     tmlmap.addTaskToHwExecutionNode(dispatchInVCs[portNb][i], cpuINVC);
                     HwMemory memINVC = new HwMemory("memINVC" + portNb + "_" + i+ getPositionNaming());
                     tmla.addHwNode(memINVC);
+                    tmlmap.addCommToHwCommNode(pktInChsVCs[portNb][i], memINVC);
                     HwBus busINVC = new HwBus("busINVC" + portNb + "_" + i + getPositionNaming());
                     tmla.addHwNode(busINVC);
                     tmla.makeHwLink(busINVC, cpuINVC);
@@ -693,7 +696,7 @@ public class TranslatedRouter<E> {
                 } else {
                     // internal
                     outForExit = cpuOUT;
-                    HwBus busInternalOUT = new HwBus("BusInternalOUTternal" + getPositionNaming());
+                    HwBus busInternalOUT = new HwBus("BusInternalOUT" + getPositionNaming());
                     tmla.addHwNode((busInternalOUT));
                     tmla.makeHwLink(busInternalOUT, bridgeNIOUT);
                     tmla.makeHwLink(busInternalOUT, cpuOUT);
@@ -742,6 +745,26 @@ public class TranslatedRouter<E> {
 
         // fake task on CPU
         tmlmap.addTaskToHwExecutionNode(fto, node);
+
+
+        // We now need to modify the corresponding input tasks
+        // The channel is modified to NBRNBW
+        // Once the sample has been sent, the outputEventOfMux is sent
+        // It is mapped to the HW node mem
+
+        // For all channels whose origin task is mapped on the CPU of the router
+
+
+        for(TMLChannel ch: tmlmap.getTMLModeling().getChannels()) {
+            TMLTask t = ch.getOriginTask();
+            HwExecutionNode mappedOn = tmlmap.getHwNodeOf(t);
+            if (mappedOn == myHwExecutionNode) {
+                TraceManager.addDev("Found HwNode of task " + t.getTaskName() + " for channel " + ch.getName());
+                // We must rework the channel of the task.
+            }
+        }
+
+
 
 
     }

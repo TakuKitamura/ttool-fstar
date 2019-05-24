@@ -289,7 +289,7 @@ public class TMAP2Network<E>  {
             for(j=0; j<nocSize; j++) {
                 // We must find the number of apps connected on this router
                 TranslatedRouter tr = new TranslatedRouter<>(this, tmlmapping, noc, channelsCommunicatingViaNoc,
-                        nbOfVCs, i, j);
+                        nbOfVCs, i, j, (HwExecutionNode)(tmla.getHwNodeByName(noc.getHwExecutionNode(i, j))));
                 routers[i][j] = tr;
             }
         }
