@@ -2253,7 +2253,7 @@ public class TMLModeling<E> {
         for(TMLTask task: tasks) {
             result += "\tTask " + task.getTaskName() + ":" + task.getWorstCaseIComplexity() + "\n";
         }
-        TraceManager.addDev("Worst Case I Complexity:\n" + result);
+        //TraceManager.addDev("Worst Case I Complexity:\n" + result);
     }
 
 

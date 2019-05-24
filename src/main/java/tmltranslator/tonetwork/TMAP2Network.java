@@ -285,6 +285,7 @@ public class TMAP2Network<E>  {
         }
 
         // *** Create routers
+        Vector<HwExecutionNode> fakeCPUs = new Vector<>();
         for(i=0; i<nocSize; i++) {
             for(j=0; j<nocSize; j++) {
                 // We must find the number of apps connected on this router
@@ -296,6 +297,7 @@ public class TMAP2Network<E>  {
                     HwCPU missingCPU = new HwCPU("EmptyCPUForDomain" + i + "_" + j);
                     tmla.addHwNode(missingCPU);
                     hwExecNode = missingCPU;
+                    fakeCPUs.add(missingCPU);
                 }
 
                 TranslatedRouter tr = new TranslatedRouter<>(this, tmlmapping, noc, channelsCommunicatingViaNoc,
@@ -384,12 +386,7 @@ public class TMAP2Network<E>  {
             }
         }
 
-        // Printing routers
-        for(i=0; i<nocSize; i++) {
-            for(j=0; j<nocSize; j++) {
-                TraceManager.addDev(routers[i][j].toString() + "\n");
-            }
-        }
+
 
 
 
@@ -397,39 +394,39 @@ public class TMAP2Network<E>  {
         for(i=0; i<nocSize; i++) {
             for(j=0; j<nocSize; j++) {
                 // We must find the number of apps connected on this router
-                String s = noc.getHwExecutionNode(i, j);
-                HwExecutionNode node = null;
+                HwExecutionNode node = routers[i][j].getHwExecutionNode();
                 HwBus bus;
-                if (s == null) {
-                    TraceManager.addDev(("No HwExecutionNode for " + i + "_" + j));
-                    HwCPU cpu = new HwCPU("CPUfor_" + i + "_" + j);
-                    tmla.addHwNode(cpu);
-                    node = cpu;
-
-                    bus = new HwBus(cpu.getName() + "__bus");
-                    HwMemory mem = new HwMemory(cpu.getName() + "__mem");
+                if (fakeCPUs.contains(node)) {
+                    bus = new HwBus(node.getName() + "__bus");
+                    HwMemory mem = new HwMemory(node.getName() + "__mem");
                     tmla.addHwNode(bus);
                     tmla.addHwNode(mem);
 
-                    HwLink cpuToBus = new HwLink(cpu.getName() + "__tocpu");
-                    cpuToBus.setNodes(bus, cpu);
+                    HwLink cpuToBus = new HwLink(node.getName() + "__tocpu");
+                    cpuToBus.setNodes(bus, node);
                     tmla.addHwLink(cpuToBus);
 
-                    HwLink memToBus = new HwLink(cpu.getName() + "__tomem");
+                    HwLink memToBus = new HwLink(node.getName() + "__tomem");
                     memToBus.setNodes(bus, mem);
                     tmla.addHwLink(memToBus);
 
                 } else {
-                    node = tmlarchi.getHwExecutionNodeByName(s);
                     bus = tmla.getHwBusByName(node.getName() + "__bus");
-                    TraceManager.addDev("Found bus=" + bus);
+                    //TraceManager.addDev("Found bus=" + bus);
                 }
-                TraceManager.addDev("Using bus=" + bus + " name=" + bus.getName());
+                //TraceManager.addDev("Using bus=" + bus + " name=" + bus.getName());
                 routers[i][j].makeHwArchitectureAndMapping(node, bus);
             }
         }
 
 
+
+        // Printing routers
+        for(i=0; i<nocSize; i++) {
+            for(j=0; j<nocSize; j++) {
+                TraceManager.addDev(routers[i][j].toString() + "\n");
+            }
+        }
 
 
 

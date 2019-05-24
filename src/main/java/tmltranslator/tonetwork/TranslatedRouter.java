@@ -143,6 +143,9 @@ public class TranslatedRouter<E> {
         return yPos;
     }
 
+    public HwExecutionNode getHwExecutionNode() {
+        return myHwExecutionNode;
+    }
 
     private String getInfo() {
         return "__R" + xPos + "_" + yPos;
@@ -158,7 +161,7 @@ public class TranslatedRouter<E> {
         // MUX for the different writing tasks
         // For each writing channel of the corresponding CPU, we need MUX to be created.
         // We first get the corresponding CPU
-        String nameOfExecNode = noc.getHwExecutionNode(xPos, yPos);
+        /*String nameOfExecNode = noc.getHwExecutionNode(xPos, yPos);
         if (nameOfExecNode == null) {
             nameOfExecNode = "fakeCPU_" + xPos + "_" + yPos;
         } else {
@@ -169,7 +172,9 @@ public class TranslatedRouter<E> {
             } else {
                 TraceManager.addDev("Found an exec node for (" + xPos + "," + yPos + "): " + execNode.getName());
             }
-        }
+        }*/
+        execNode = myHwExecutionNode;
+        String nameOfExecNode = execNode.getName();
 
         // Then, we need to find the channels starting from/arriving to a task mapped on this execNode
         Vector<TMLChannel> inputChannels = new Vector<>();
@@ -371,7 +376,7 @@ public class TranslatedRouter<E> {
 
                         }
 
-                        TraceManager.addDev("xPos=" + xPos + " yPos=" + yPos + " portNb=" + portNb + " vnNb=" + vcNb);
+                        //TraceManager.addDev("xPos=" + xPos + " yPos=" + yPos + " portNb=" + portNb + " vnNb=" + vcNb);
                         TMLEvent vcSelect = evtSelectVC[portNb][vcNb];
                         vcSelect.setDestinationTask(taskOUTForVC);
 
@@ -542,7 +547,7 @@ public class TranslatedRouter<E> {
                     tmlm.addEvent(evtSelectVC[i][j]);
                 }
             } else {
-                TraceManager.addDev("xPos=" + xPos + " yPos=" + yPos + " is not playing the role of previous for port=" + i);
+                //TraceManager.addDev("xPos=" + xPos + " yPos=" + yPos + " is not playing the role of previous for port=" + i);
             }
         }
 

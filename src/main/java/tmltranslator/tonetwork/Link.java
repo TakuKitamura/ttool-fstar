@@ -82,8 +82,8 @@ public class Link {
         this.tmlm = tmlm;
         this.tarch = tarch;
 
-        TraceManager.addDev("Adding link between previous (" + previousRouter.getXPos() + "," + previousRouter.getYPos() +
-        ") and next (" + nextRouter.getXPos() + "," + nextRouter.getYPos() + ")");
+        //TraceManager.addDev("Adding link between previous (" + previousRouter.getXPos() + "," + previousRouter.getYPos() +
+        //") and next (" + nextRouter.getXPos() + "," + nextRouter.getYPos() + ")");
 
         if (tmlm ==null) {
             TraceManager.addDev("null modeling");
@@ -100,8 +100,8 @@ public class Link {
         this.tmlm = tmlm;
         this.add = "_" + add;
 
-        TraceManager.addDev("Adding link between previous (" + previousRouter.getXPos() + "," + previousRouter.getYPos() +
-                ") and next (" + nextRouter.getXPos() + "," + nextRouter.getYPos() + ")" + " with add=" + add);
+        //TraceManager.addDev("Adding link between previous (" + previousRouter.getXPos() + "," + previousRouter.getYPos() +
+         //       ") and next (" + nextRouter.getXPos() + "," + nextRouter.getYPos() + ")" + " with add=" + add);
 
         if (tmlm ==null) {
             TraceManager.addDev("null modeling");
