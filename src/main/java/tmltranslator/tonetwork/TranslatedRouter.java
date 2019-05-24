@@ -644,7 +644,7 @@ public class TranslatedRouter<E> {
         // IN and INVC
         for (int portNb = 0; portNb < NB_OF_PORTS; portNb++) {
             if (playingTheRoleOfNext[portNb] != null) {
-                // We have an IN on that port. Connects on the bus of the correcponding link
+                // We have an IN on that port. Connects on the bus of the corresponding link
                 HwCPU cpuIN = new HwCPU("cpuIN_" + portNb + getPositionNaming());
                 tmla.addHwNode(cpuIN);
                 tmlmap.addTaskToHwExecutionNode(dispatchIns.get(portNb), cpuIN);
@@ -653,6 +653,11 @@ public class TranslatedRouter<E> {
                 if (portNb < NB_OF_PORTS-1) {
                     // external
                     tmla.makeHwLink(playingTheRoleOfNext[portNb].busBetweenRouters, cpuIN);
+                    HwMemory memIN = new HwMemory("mem_IN"  + portNb + getPositionNaming());
+                    tmla.addHwNode(memIN);
+                    tmla.makeHwLink(playingTheRoleOfNext[portNb].busBetweenRouters, memIN);
+                    tmlmap.addCommToHwCommNode(playingTheRoleOfNext[portNb].chOutToIN, memIN);
+
                 } else {
                     // internal
                     HwBus busInternalIN = new HwBus("BusInternalINternal" + getPositionNaming());

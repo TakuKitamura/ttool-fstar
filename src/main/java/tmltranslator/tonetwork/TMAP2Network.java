@@ -278,7 +278,7 @@ public class TMAP2Network<E>  {
                 HwNode bus = tmla.getHwNodeByName(originNode.getName() + "__bus");
                 HwNode mem = tmla.getHwNodeByName(originNode.getName() + "__mem");
                 if (bus != null ) tmlmapping.addCommToHwCommNode(chan, (HwCommunicationNode)bus);
-                if (bus != null ) tmlmapping.addCommToHwCommNode(chan, (HwCommunicationNode)mem);
+                if (mem != null ) tmlmapping.addCommToHwCommNode(chan, (HwCommunicationNode)mem);
             } else {
                 channelsCommunicatingViaNoc.add(chan);
             }
@@ -288,8 +288,18 @@ public class TMAP2Network<E>  {
         for(i=0; i<nocSize; i++) {
             for(j=0; j<nocSize; j++) {
                 // We must find the number of apps connected on this router
+                HwExecutionNode hwExecNode = null;
+                String s = noc.getHwExecutionNode(i, j);
+                if (s != null)
+                    hwExecNode = (HwExecutionNode)(tmla.getHwNodeByName(s));
+                if (hwExecNode == null) {
+                    HwCPU missingCPU = new HwCPU("EmptyCPUForDomain" + i + "_" + j);
+                    tmla.addHwNode(missingCPU);
+                    hwExecNode = missingCPU;
+                }
+
                 TranslatedRouter tr = new TranslatedRouter<>(this, tmlmapping, noc, channelsCommunicatingViaNoc,
-                        nbOfVCs, i, j, (HwExecutionNode)(tmla.getHwNodeByName(noc.getHwExecutionNode(i, j))));
+                        nbOfVCs, i, j, hwExecNode);
                 routers[i][j] = tr;
             }
         }
