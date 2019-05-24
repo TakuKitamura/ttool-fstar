@@ -771,6 +771,10 @@ public class TranslatedRouter<E> {
             if (mappedOn == myHwExecutionNode) {
                 TraceManager.addDev("Found HwNode of task " + t.getTaskName() + " for channel " + ch.getName());
                 // We must rework the channel of the task.
+                // The channel is modified to a NBRNBW with the same task has sender / receiver
+                // The channel is mapped to the local mem
+                // Once the sample has been sent, an event is sent to the input task of the router
+                // For a receiver, the event is first waited for, and then the read in the new channel is performed
             }
         }
 
