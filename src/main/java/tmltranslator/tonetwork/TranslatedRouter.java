@@ -839,7 +839,7 @@ public class TranslatedRouter<E> {
                             TMLSendEvent tse = new TMLSendEvent("EvtForSending__" + ch.getName(), ch.getReferenceObject());
                             newElements.add(tse);
                             tse.setEvent(mapOfAllOutputChannels.get(ch));
-                            tse.addParam("pktlen");
+                            tse.addParam("" + ch.getSize());
                             tse.addParam("dst");
                             tse.addParam("vc");
                             tse.addParam("eop");
@@ -930,7 +930,7 @@ public class TranslatedRouter<E> {
                                 TMLWaitEvent twe = new TMLWaitEvent("EvtForReceiving__" + ch.getName(), ch.getReferenceObject());
                                 newElements.add(twe);
                                 twe.setEvent(mapOfAllInputChannels.get(ch));
-                                twe.addParam("pktlen");
+                                twe.addParam("" + ch.getSize());
                                 twe.addParam("dst");
                                 twe.addParam("vc");
                                 twe.addParam("eop");
