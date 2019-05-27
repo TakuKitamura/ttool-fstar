@@ -89,6 +89,7 @@ import ui.tmldd.TMLArchiCrossbarNode;
 import ui.tmldd.TMLArchiDMANode;
 import ui.tmldd.TMLArchiEventArtifact;
 import ui.tmldd.TMLArchiFPGANode;
+import ui.tmldd.TMLArchiAnalogNode;
 import ui.tmldd.TMLArchiFirewallNode;
 import ui.tmldd.TMLArchiHWANode;
 import ui.tmldd.TMLArchiKey;
@@ -2780,6 +2781,7 @@ public class GTMLModeling {
 
         TMLArchiCPUNode node;
         TMLArchiFPGANode fpgaNode;
+	TMLArchiAnalogNode analogNode;
         TMLArchiHWANode hwanode;
         TMLArchiBUSNode busnode;
         TMLArchiVGMNNode vgmnnode;
@@ -2791,6 +2793,7 @@ public class GTMLModeling {
         TMLArchiRouterNode routerNode;
         HwCPU cpu;
         HwFPGA fpga;
+	HwAnalog analog;
         HwA hwa;
         HwBus bus;
         HwVGMN vgmn;
@@ -2867,6 +2870,36 @@ public class GTMLModeling {
                 }
             }
 
+	    if (tgc instanceof TMLArchiAnalogNode) {
+                analogNode = (TMLArchiAnalogNode) tgc;
+                if (nameInUse(names, analogNode.getName())) {
+                    // Node with the same name
+                    UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Two nodes have the same name: " + analogNode.getName());
+                    ce.setTDiagramPanel(tmlap.tmlap);
+                    ce.setTGComponent(analogNode);
+                    checkingErrors.add(ce);
+                } else {
+                    names.add(analogNode.getName());
+                    analog = new HwAnalog(analogNode.getName());
+                    analog.capacity = analogNode.getCapacity();
+                    analog.byteDataSize = analogNode.getByteDataSize();
+                    analog.mappingPenalty = analogNode.getMappingPenalty();
+                    analog.goIdleTime = analogNode.getGoIdleTime();
+                    analog.maxConsecutiveIdleCycles = analogNode.getMaxConsecutiveIdleCycles();
+                    analog.reconfigurationTime = analogNode.getReconfigurationTime();
+                    analog.execiTime = analogNode.getExeciTime();
+                    analog.execcTime = analogNode.getExeccTime();
+                    analog.clockRatio = analogNode.getClockRatio();
+                    analog.setOperation(analogNode.getOperation());
+                    analog.setScheduling(analogNode.getScheduling());
+
+                    listE.addCor(analog, analogNode);
+                    archi.addHwNode(analog);
+                    //TraceManager.addDev("Analog node added: " + analogNode.getName());
+                }
+            }
+
+	    
             if (tgc instanceof TMLArchiHWANode) {
                 hwanode = (TMLArchiHWANode) tgc;
                 if (nameInUse(names, hwanode.getName())) {
