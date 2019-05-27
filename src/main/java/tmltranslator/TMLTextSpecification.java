@@ -233,7 +233,7 @@ public class TMLTextSpecification<E> {
                 if (!ch.isInfinite()) {
                     sb += SP + ch.getMax();
                 }
-                TraceManager.addDev("Declaration. Handling channel " + ch.getName());
+                //TraceManager.addDev("Declaration. Handling channel " + ch.getName());
                 if (ch.getOriginTask() == null) {
                     TraceManager.addDev("Missing origin Task in " + ch.getName());
                 }
@@ -295,7 +295,7 @@ public class TMLTextSpecification<E> {
                 sb += SP + evt.getMaxSize();
             }
 
-            TraceManager.addDev("Handing Event:" + evt.getName());
+            //TraceManager.addDev("Handing Event:" + evt.getName());
             if (evt.getOriginTask() == null) {
                 TraceManager.addDev("Missing origin Task in " + evt.getName());
             }
@@ -460,7 +460,7 @@ public class TMLTextSpecification<E> {
             for (int k = 0; k < tmlch.getNbOfChannels(); k++) {
                 code = code + tmlch.getChannel(k).getName() + SP;
             }
-            TraceManager.addDev("Nb Of of samples in task " + task.getName() + " = " + tmlch.getNbOfSamples());
+            //TraceManager.addDev("Nb of samples in task " + task.getName() + " = " + tmlch.getNbOfSamples());
             code = code + modifyString(tmlch.getNbOfSamples());
             if (elt.securityPattern != null) {
                 code = code + SP + elt.securityPattern.name + CR;

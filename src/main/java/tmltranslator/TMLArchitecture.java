@@ -130,6 +130,14 @@ public class TMLArchitecture {
         return null;
     }
 
+    public void makeHwLink(HwBus bus, HwNode node) {
+        String busName = bus.getName();
+        String nodeName = node.getName();
+        HwLink link = new HwLink(busName + "__" + nodeName);
+        link.setNodes(bus, node);
+        addHwLink(link);
+    }
+
 
     public boolean hasCPU() {
         for (HwNode node : hwnodes) {

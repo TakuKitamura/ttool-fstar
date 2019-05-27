@@ -57,6 +57,7 @@ import java.util.List;
 public class TMAP2Network<E>  {
 
     private TMLModeling<?> tmlmodeling;
+    private TMLArchitecture tmlarchi;
     private TMLMapping<?> tmlmapping;
 
     private boolean debug;
@@ -277,24 +278,37 @@ public class TMAP2Network<E>  {
                 HwNode bus = tmla.getHwNodeByName(originNode.getName() + "__bus");
                 HwNode mem = tmla.getHwNodeByName(originNode.getName() + "__mem");
                 if (bus != null ) tmlmapping.addCommToHwCommNode(chan, (HwCommunicationNode)bus);
-                if (bus != null ) tmlmapping.addCommToHwCommNode(chan, (HwCommunicationNode)mem);
+                if (mem != null ) tmlmapping.addCommToHwCommNode(chan, (HwCommunicationNode)mem);
             } else {
                 channelsCommunicatingViaNoc.add(chan);
             }
         }
 
         // *** Create routers
+        Vector<HwExecutionNode> fakeCPUs = new Vector<>();
         for(i=0; i<nocSize; i++) {
             for(j=0; j<nocSize; j++) {
                 // We must find the number of apps connected on this router
+                HwExecutionNode hwExecNode = null;
+                String s = noc.getHwExecutionNode(i, j);
+                if (s != null)
+                    hwExecNode = (HwExecutionNode)(tmla.getHwNodeByName(s));
+                if (hwExecNode == null) {
+                    HwCPU missingCPU = new HwCPU("EmptyCPUForDomain" + i + "_" + j);
+                    tmla.addHwNode(missingCPU);
+                    hwExecNode = missingCPU;
+                    fakeCPUs.add(missingCPU);
+                }
+
                 TranslatedRouter tr = new TranslatedRouter<>(this, tmlmapping, noc, channelsCommunicatingViaNoc,
-                        nbOfVCs, i, j);
+                        nbOfVCs, i, j, hwExecNode);
                 routers[i][j] = tr;
             }
         }
 
         // Create routers around
         tmlmodeling = tmlmapping.getTMLModeling();
+        tmlarchi = tmlmapping.getTMLArchitecture();
 
         // *** Create links and update routers accordingly
         // For each router, I consider all routers that are around the considered one
@@ -307,7 +321,7 @@ public class TMAP2Network<E>  {
                         // There is a north router
                         // link to next
                         if (routers[i][j].playingTheRoleOfPrevious[k] == null) {
-                            Link to = new Link(tmlmodeling, routers[i][j], routers[i-1][j], nbOfVCs);
+                            Link to = new Link(tmlarchi, tmlmodeling, routers[i][j], routers[i-1][j], nbOfVCs);
                             routers[i][j].playingTheRoleOfPrevious[k] = to;
                             routers[i-1][j].playingTheRoleOfNext[getFrom(k)] = to;
                         }
@@ -319,7 +333,7 @@ public class TMAP2Network<E>  {
                         // There is a south router
                         // link to next
                         if (routers[i][j].playingTheRoleOfPrevious[k] == null) {
-                            Link to = new Link(tmlmodeling, routers[i][j], routers[i+1][j], nbOfVCs);
+                            Link to = new Link(tmlarchi, tmlmodeling, routers[i][j], routers[i+1][j], nbOfVCs);
                             routers[i][j].playingTheRoleOfPrevious[k] = to;
                             routers[i+1][j].playingTheRoleOfNext[getFrom(k)] = to;
                         }
@@ -330,7 +344,7 @@ public class TMAP2Network<E>  {
                         // There is an east router
                         // link to next
                         if (routers[i][j].playingTheRoleOfPrevious[k] == null) {
-                            Link to = new Link(tmlmodeling, routers[i][j], routers[i][j+1], nbOfVCs);
+                            Link to = new Link(tmlarchi, tmlmodeling, routers[i][j], routers[i][j+1], nbOfVCs);
                             routers[i][j].playingTheRoleOfPrevious[k] = to;
                             routers[i][j+1].playingTheRoleOfNext[getFrom(k)] = to;
                         }
@@ -342,7 +356,7 @@ public class TMAP2Network<E>  {
                         // There is an east router
                         // link to next
                         if (routers[i][j].playingTheRoleOfPrevious[k] == null) {
-                            Link to = new Link(tmlmodeling, routers[i][j], routers[i][j-1], nbOfVCs);
+                            Link to = new Link(tmlarchi, tmlmodeling, routers[i][j], routers[i][j-1], nbOfVCs);
                             routers[i][j].playingTheRoleOfPrevious[k] = to;
                             routers[i][j-1].playingTheRoleOfNext[getFrom(k)] = to;
                         }
@@ -372,6 +386,41 @@ public class TMAP2Network<E>  {
             }
         }
 
+
+
+
+
+        // Integrate into the TMLMapping
+        for(i=0; i<nocSize; i++) {
+            for(j=0; j<nocSize; j++) {
+                // We must find the number of apps connected on this router
+                HwExecutionNode node = routers[i][j].getHwExecutionNode();
+                HwBus bus;
+                if (fakeCPUs.contains(node)) {
+                    bus = new HwBus(node.getName() + "__bus");
+                    HwMemory mem = new HwMemory(node.getName() + "__mem");
+                    tmla.addHwNode(bus);
+                    tmla.addHwNode(mem);
+
+                    HwLink cpuToBus = new HwLink(node.getName() + "__tocpu");
+                    cpuToBus.setNodes(bus, node);
+                    tmla.addHwLink(cpuToBus);
+
+                    HwLink memToBus = new HwLink(node.getName() + "__tomem");
+                    memToBus.setNodes(bus, mem);
+                    tmla.addHwLink(memToBus);
+
+                } else {
+                    bus = tmla.getHwBusByName(node.getName() + "__bus");
+                    //TraceManager.addDev("Found bus=" + bus);
+                }
+                //TraceManager.addDev("Using bus=" + bus + " name=" + bus.getName());
+                routers[i][j].makeHwArchitectureAndMapping(node, bus);
+            }
+        }
+
+
+
         // Printing routers
         for(i=0; i<nocSize; i++) {
             for(j=0; j<nocSize; j++) {
@@ -379,14 +428,10 @@ public class TMAP2Network<E>  {
             }
         }
 
-        // Make their routing
 
-        // Integrate into the TMLMapping
+
 
         // Connect channels to the NoC
-
-
-
         // A bridge is put with the same position as the router as to allow classical paths not
         // to use the router
 

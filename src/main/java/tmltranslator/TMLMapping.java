@@ -598,7 +598,7 @@ public class TMLMapping<E> {
         return (mappedtasks.contains(_task));
     }
 
-    public HwNode getHwNodeOf(TMLTask _task) {
+    public HwExecutionNode getHwNodeOf(TMLTask _task) {
         int index = mappedtasks.indexOf(_task);
         if (index == -1) {
             return null;
@@ -830,7 +830,7 @@ public class TMLMapping<E> {
                     if (chan != null) {
                         TMLTask origin = chan.getOriginTask();
                         if ((origin != null) && (isTaskMapped(origin))) {
-                            HwExecutionNode node = (HwExecutionNode) (getHwNodeOf(origin));
+                            HwExecutionNode node =  getHwNodeOf(origin);
                             if (node != null) {
                                 TraceManager.addDev("\n\nMapping fork task " + task.getName() + " to " + node.getName());
                                 addTaskToHwExecutionNode(task, node);
@@ -842,7 +842,7 @@ public class TMLMapping<E> {
                         if (evt != null) {
                             TMLTask origin = evt.getOriginTask();
                             if ((origin != null) && (isTaskMapped(origin))) {
-                                HwExecutionNode node = (HwExecutionNode) (getHwNodeOf(origin));
+                                HwExecutionNode node = getHwNodeOf(origin);
                                 if (node != null) {
                                     TraceManager.addDev("\n\nMapping fork task " + task.getName() + " to " + node.getName());
                                     addTaskToHwExecutionNode(task, node);
@@ -864,7 +864,7 @@ public class TMLMapping<E> {
                     if (chan != null) {
                         TMLTask destination = chan.getDestinationTask();
                         if ((destination != null) && (isTaskMapped(destination))) {
-                            HwExecutionNode node = (HwExecutionNode) (getHwNodeOf(destination));
+                            HwExecutionNode node = getHwNodeOf(destination);
                             if (node != null) {
                                 TraceManager.addDev("\n\nMapping join task " + task.getName() + " to " + node.getName());
                                 addTaskToHwExecutionNode(task, node);
