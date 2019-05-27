@@ -85,6 +85,8 @@ public class TaskMUXAppDispatch extends TMLTask {
         this.addAttribute(vc);
         TMLAttribute eop = new TMLAttribute("eop", "eop", new TMLType(TMLType.NATURAL), "0");
         this.addAttribute(eop);
+        TMLAttribute chid = new TMLAttribute("chid", "chid", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(eop);
 
         // Events and channels
         for(TMLEvent evt: inputEvents) {
@@ -115,6 +117,7 @@ public class TaskMUXAppDispatch extends TMLTask {
             waitEvt.addParam("dst");
             waitEvt.addParam("vc");
             waitEvt.addParam("eop");
+             waitEvt.addParam("chid");
             activity.addElement(waitEvt);
              selectEvt.addNext(waitEvt);
 
@@ -124,6 +127,7 @@ public class TaskMUXAppDispatch extends TMLTask {
              sendEvt.addParam("dst");
              sendEvt.addParam("vc");
              sendEvt.addParam("eop");
+             sendEvt.addParam("chid");
              activity.addElement(sendEvt);
             waitEvt.addNext(sendEvt);
 

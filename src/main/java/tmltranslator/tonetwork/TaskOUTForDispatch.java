@@ -76,6 +76,8 @@ public class TaskOUTForDispatch extends TMLTask {
         this.addAttribute(vc);
         TMLAttribute eop = new TMLAttribute("eop", "eop", new TMLType(TMLType.NATURAL), "0");
         this.addAttribute(eop);
+        TMLAttribute chid = new TMLAttribute("chid", "chid", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(chid);
         TMLAttribute nEvt = new TMLAttribute("nEvt", "nEvt", new TMLType(TMLType.NATURAL), "0");
         this.addAttribute(nEvt);
         TMLAttribute loopExit = new TMLAttribute("loopExit", "loopExit", new TMLType(TMLType.NATURAL), "0");
@@ -149,6 +151,7 @@ public class TaskOUTForDispatch extends TMLTask {
                 waitEvt.addParam("dst");
                 waitEvt.addParam("vc");
                 waitEvt.addParam("eop");
+                waitEvt.addParam("chid");
                 activity.addLinkElement(sendEvt, waitEvt);
 
                 TMLActionState reqOut = new TMLActionState("ExitLoop" + i, referenceObject);
@@ -161,6 +164,7 @@ public class TaskOUTForDispatch extends TMLTask {
                 sendEvt.addParam("dst");
                 sendEvt.addParam("vc");
                 sendEvt.addParam("eop");
+                waitEvt.addParam("chid");
                 activity.addLinkElement(reqOut, sendEvt);
 
                 TMLWriteChannel write = new TMLWriteChannel("WriteChannel" + i, referenceObject);

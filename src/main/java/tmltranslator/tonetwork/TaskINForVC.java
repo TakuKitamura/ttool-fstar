@@ -74,6 +74,8 @@ public class TaskINForVC extends TMLTask {
         this.addAttribute(vc);
         TMLAttribute eop = new TMLAttribute("eop", "eop", new TMLType(TMLType.NATURAL), "0");
         this.addAttribute(eop);
+        TMLAttribute chid = new TMLAttribute("chid", "chid", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(chid);
         TMLAttribute feedbackDownstr = new TMLAttribute("feedbackDownstr", "feedbackDownstr", new TMLType(TMLType.NATURAL), "0");
         this.addAttribute(feedbackDownstr);
         TMLAttribute bufferSize = new TMLAttribute("bufferSize", "bufferSize", new TMLType(TMLType.NATURAL), "2");
@@ -191,10 +193,6 @@ public class TaskINForVC extends TMLTask {
 
 
 
-
-
-
-
         // Main choice : second branch of secondSeq
         TMLChoice mainChoice = new TMLChoice("mainChoice", referenceObject);
         activity.addLinkElement(secondSeq, mainChoice);
@@ -215,6 +213,7 @@ public class TaskINForVC extends TMLTask {
             sendEvt.addParam("dst");
             sendEvt.addParam("vc");
             sendEvt.addParam("eop");
+            sendEvt.addParam("chid");
             activity.addLinkElement(packetLoop, sendEvt);
 
             waitEvt = new TMLWaitEvent("FeedbackDownEvent", referenceObject);
@@ -236,6 +235,7 @@ public class TaskINForVC extends TMLTask {
             waitEvt.addParam("dst");
             waitEvt.addParam("vc");
             waitEvt.addParam("eop");
+            waitEvt.addParam("chid");
             activity.addLinkElement(read, waitEvt);
 
             stop = new TMLStopState("StopStateInLoop", referenceObject);
@@ -248,6 +248,7 @@ public class TaskINForVC extends TMLTask {
             sendEvt.addParam("dst");
             sendEvt.addParam("vc");
             sendEvt.addParam("eop");
+            sendEvt.addParam("chid");
             activity.addLinkElement(loop, sendEvt);
 
             waitEvt = new TMLWaitEvent("FeedbackDownEventO", referenceObject);

@@ -84,7 +84,7 @@ public class TMLChannel extends TMLCommunicationElement {
     private String SP = " ";
     private int priority;
 
-    private int vc = -1;
+    private int vc = 0;
     
     public ArrayList<TMLTask> originalOriginTasks = new ArrayList<TMLTask>(); 
     public ArrayList<TMLTask> originalDestinationTasks = new ArrayList<TMLTask>(); 
@@ -191,6 +191,7 @@ public class TMLChannel extends TMLCommunicationElement {
     public int getNumberOfSamples() { return nbOfSamples;}
 
     public void setVC(int vc) {
+        TraceManager.addDev("Setting VC to " + vc + " for channel " + getName());
         this.vc = vc;
     }
 

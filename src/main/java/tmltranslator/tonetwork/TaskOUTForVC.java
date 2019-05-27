@@ -75,6 +75,8 @@ public class TaskOUTForVC extends TMLTask {
         this.addAttribute(vc);
         TMLAttribute eop = new TMLAttribute("eop", "eop", new TMLType(TMLType.NATURAL), "0");
         this.addAttribute(eop);
+        TMLAttribute chid = new TMLAttribute("chid", "chid", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(chid);
         TMLAttribute j = new TMLAttribute("j", "j", new TMLType(TMLType.NATURAL), "0");
         this.addAttribute(j);
 
@@ -105,6 +107,7 @@ public class TaskOUTForVC extends TMLTask {
             waitEvt.addParam("dst");
             waitEvt.addParam("vc");
             waitEvt.addParam("eop");
+            waitEvt.addParam("chid");
             activity.addLinkElement(select, waitEvt);
 
             // loop on packet size
@@ -121,6 +124,7 @@ public class TaskOUTForVC extends TMLTask {
             sendEvt.addParam("dst");
             sendEvt.addParam("vc");
             sendEvt.addParam("eop");
+            waitEvt.addParam("chid");
             activity.addLinkElement(packetLoop, sendEvt);
 
             waitEvt = new TMLWaitEvent("ReturnFromVC", referenceObject);

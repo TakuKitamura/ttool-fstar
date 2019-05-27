@@ -111,6 +111,8 @@ public class TaskNetworkInterface extends TMLTask {
             this.addAttribute(dst);
             TMLAttribute vci = new TMLAttribute("vc"+i, "vc"+i, new TMLType(TMLType.NATURAL), ""+i);
             this.addAttribute(vci);
+            TMLAttribute chid = new TMLAttribute("chid"+i, "chid"+i, new TMLType(TMLType.NATURAL), ""+i);
+            this.addAttribute(chid);
         }
 
 
@@ -192,6 +194,7 @@ public class TaskNetworkInterface extends TMLTask {
             waitingForStartPacket.addParam("dst" + i);
             waitingForStartPacket.addParam("vc");
             waitingForStartPacket.addParam("eop");
+            waitingForStartPacket.addParam("chid" + i);
             addElement(ispktChoice, waitingForStartPacket);
             ispktChoice.addGuard("ispkt == 0");
 
@@ -261,6 +264,7 @@ public class TaskNetworkInterface extends TMLTask {
                 sendEvtpktin.addParam("dst" + i);
                 sendEvtpktin.addParam("vc" + i);
                 sendEvtpktin.addParam("0");
+                sendEvtpktin.addParam("chid"+i);
                 addElement(packetLengthChoice, sendEvtpktin);
                 packetLengthChoice.addGuard("i" + i + " < pktlen" + i + " - 1");
 
@@ -292,6 +296,7 @@ public class TaskNetworkInterface extends TMLTask {
                 sendEvtpktinRB.addParam("dst" + i);
                 sendEvtpktinRB.addParam("vc" + i);
                 sendEvtpktinRB.addParam("1");
+                sendEvtpktinRB.addParam("chid"+i);
                 addElement(packetLengthChoice, sendEvtpktinRB);
                 packetLengthChoice.addGuard("i" + i + " == pktlen" + i + " - 1");
 
@@ -334,6 +339,7 @@ public class TaskNetworkInterface extends TMLTask {
                 sendEvtpktin1.addParam("dst" + i);
                 sendEvtpktin1.addParam("vc" + i);
                 sendEvtpktin1.addParam("0");
+                sendEvtpktin1.addParam("chid"+i);
                 addElement(choiceLBSeq, sendEvtpktin1);
                 choiceLBSeq.addGuard("i" + i + " < pktlen" + i + " - 1");
 
@@ -350,6 +356,7 @@ public class TaskNetworkInterface extends TMLTask {
                 sendEvtpktinRB1.addParam("dst" + i);
                 sendEvtpktinRB1.addParam("vc" + i);
                 sendEvtpktinRB1.addParam("1");
+                sendEvtpktinRB1.addParam("chid"+i);
                 addElement(choiceLBSeq, sendEvtpktinRB1);
                 choiceLBSeq.addGuard("i" + i + " == pktlen" + i + " - 1");
 

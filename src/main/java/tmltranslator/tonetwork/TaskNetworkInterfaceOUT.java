@@ -53,6 +53,7 @@ import java.util.Vector;
  */
 public class TaskNetworkInterfaceOUT extends TMLTask {
     protected int nbOfVCs;
+    private TMLChoice packetChoice;
 
     public TaskNetworkInterfaceOUT(String name, Object referenceToClass, Object referenceToActivityDiagram) {
         super(name, referenceToClass, referenceToActivityDiagram);
@@ -62,7 +63,7 @@ public class TaskNetworkInterfaceOUT extends TMLTask {
     // inputEvt, channels: one per task
     // outputChannel, output event: only one, common: this is a network interface, only one exit!
     public void generate(int nbOfVCs, Vector<TMLEvent> outputFeedbackEvents, TMLEvent packetOutFromOUT,
-                         TMLEvent packetAvailable, TMLChannel outputChannelFromOUT) {
+                        TMLChannel outputChannelFromOUT) {
         int i;
 
         this.nbOfVCs = nbOfVCs;
@@ -76,6 +77,8 @@ public class TaskNetworkInterfaceOUT extends TMLTask {
         this.addAttribute(vc);
         TMLAttribute eop = new TMLAttribute("eop", "eop", new TMLType(TMLType.NATURAL), "0");
         this.addAttribute(eop);
+        TMLAttribute chid = new TMLAttribute("chid", "chid", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(chid);
         TMLAttribute memSpace = new TMLAttribute("memSpace", "memSpace", new TMLType(TMLType.NATURAL), "4096");
         this.addAttribute(memSpace);
 
@@ -85,7 +88,7 @@ public class TaskNetworkInterfaceOUT extends TMLTask {
             addTMLEvent(evt);
         }
         addTMLEvent(packetOutFromOUT);
-        addTMLEvent(packetAvailable);
+
 
         addReadTMLChannel(outputChannelFromOUT);
 
@@ -142,17 +145,14 @@ public class TaskNetworkInterfaceOUT extends TMLTask {
         addElement(internalSeq, testingEOP);
 
         // Left branch of choice: eop==1
-        TMLSendEvent sendEvtPktAvailable = new TMLSendEvent("sendEvtPktAvailable", referenceObject);
-        sendEvtPktAvailable.setEvent(packetAvailable);
-        sendEvtPktAvailable.addParam("pktlen");
-        sendEvtPktAvailable.addParam("dst");
-        sendEvtPktAvailable.addParam("vc");
-        sendEvtPktAvailable.addParam("eop");
-        addElement(testingEOP, sendEvtPktAvailable);
+        //New choice on all possible destination depending on chid
+        packetChoice = new TMLChoice("testingPacket", referenceObject);
+        addElement(testingEOP, packetChoice);
         testingEOP.addGuard("eop == 1");
 
-        TMLStopState stopOfLeftBranchOfChoice = new TMLStopState("stopOfLeftBranchOfChoice", referenceObject);
-        addElement(sendEvtPktAvailable, stopOfLeftBranchOfChoice);
+
+
+
 
         // Right branch of choice
         TMLStopState stopOfRightBranchOfChoice = new TMLStopState("stopOfRightBranchOfChoice", referenceObject);
@@ -175,7 +175,37 @@ public class TaskNetworkInterfaceOUT extends TMLTask {
         }
 
 
+    }
 
+
+    public void postProcessing(Vector<TMLEvent> packetsAvailable, Vector<String> channelIDs) {
+        if (packetsAvailable.size() == 0) {
+            TMLStopState stopOfLeftBranchOfChoice = new TMLStopState("stopNoDestinationTask", referenceObject);
+            addElement(packetChoice, stopOfLeftBranchOfChoice);
+            return;
+        }
+
+
+
+        for (TMLEvent packetAvailable: packetsAvailable) {
+            addTMLEvent(packetAvailable);
+        }
+
+        int i = 0;
+        for(TMLEvent packetAvailable: packetsAvailable) {
+            TMLSendEvent sendEvtPktAvailable = new TMLSendEvent("sendEvtPktAvailable", referenceObject);
+            sendEvtPktAvailable.setEvent(packetAvailable);
+            sendEvtPktAvailable.addParam("pktlen");
+            sendEvtPktAvailable.addParam("dst");
+            sendEvtPktAvailable.addParam("vc");
+            sendEvtPktAvailable.addParam("eop");
+            sendEvtPktAvailable.addParam("chid");
+            addElement(packetChoice, sendEvtPktAvailable);
+            packetChoice.addGuard("chid == " + channelIDs.get(i));
+            TMLStopState stopOfLeftBranchOfChoice = new TMLStopState("stopOfLeftBranchOfChoice__" + channelIDs.get(i), referenceObject);
+            addElement(sendEvtPktAvailable, stopOfLeftBranchOfChoice);
+            i++;
+        }
 
     }
 

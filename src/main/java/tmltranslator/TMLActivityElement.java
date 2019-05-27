@@ -50,7 +50,7 @@ import java.util.Vector;
    * @version 1.0 23/11/2005
    * @author Ludovic APVRILLE
  */
-public abstract class TMLActivityElement extends TMLElement{
+public abstract class TMLActivityElement extends TMLElement {
     protected Vector<TMLActivityElement> nexts;
     public SecurityPattern securityPattern;
     private String value="";

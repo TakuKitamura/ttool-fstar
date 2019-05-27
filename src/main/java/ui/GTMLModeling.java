@@ -908,6 +908,7 @@ public class GTMLModeling {
                                 channel.setMax(port1.getMax());
                                 channel.ports.add(port1);
                                 channel.ports.add(port2);
+                                TraceManager.addDev("Adding channel with port1 vc=" + port1.getVC());
                                 channel.setVC(port1.getVC());
                                 if (port1.isBlocking() && port2.isBlocking()) {
                                     channel.setType(TMLChannel.BRBW);

@@ -75,11 +75,22 @@ public class TMAP2Network<E>  {
 
     public final static String[] PORT_NAME = {"North", "South", "West", "East", "Internal"};
 
+    private HashMap<TMLChannel, String> IDsOfChannels;
+
+
 
     public TMAP2Network(TMLMapping<?> _tmlmapping, int nocSize) {
         tmlmapping = _tmlmapping;
         routers = new TranslatedRouter[nbOfVCs][nbOfVCs];
         this.nocSize = nocSize;
+    }
+
+    public String getChannelID(TMLChannel ch) {
+        return IDsOfChannels.get(ch);
+    }
+
+    public void putTMLChannelID(TMLChannel ch, String id) {
+        IDsOfChannels.put(ch, "" + id);
     }
 
     public TMLMapping<?> getTMLMapping() {
@@ -369,6 +380,12 @@ public class TMAP2Network<E>  {
 
 
 
+        // Associate an id to all channels
+        int id = 0;
+        IDsOfChannels = new HashMap<>();
+        for(TMLChannel ch: tmlmodeling.getChannels()) {
+            IDsOfChannels.put(ch, "" + id);
+        }
 
         // Make internal channels & events of routers
         for(i=0; i<nocSize; i++) {
@@ -385,8 +402,6 @@ public class TMAP2Network<E>  {
                 routers[i][j].makeRouter();
             }
         }
-
-
 
 
 
@@ -419,24 +434,38 @@ public class TMAP2Network<E>  {
             }
         }
 
-
-
-        // Printing routers
+        // Handling origin channels
         for(i=0; i<nocSize; i++) {
             for(j=0; j<nocSize; j++) {
-                TraceManager.addDev(routers[i][j].toString() + "\n");
+                routers[i][j].makeOriginChannels();
+            }
+        }
+
+        // Handling destination channels
+        for(i=0; i<nocSize; i++) {
+            for(j=0; j<nocSize; j++) {
+                routers[i][j].makeDestinationChannels();
+            }
+        }
+
+        // Post processing of routers
+        for(i=0; i<nocSize; i++) {
+            for(j=0; j<nocSize; j++) {
+                routers[i][j].postProcessing();
             }
         }
 
 
 
+        // Printing routers
+        for(i=0; i<nocSize; i++) {
+            for(j=0; j<nocSize; j++) {
+                //TraceManager.addDev(routers[i][j].toString() + "\n");
+            }
+        }
 
-        // Connect channels to the NoC
-        // A bridge is put with the same position as the router as to allow classical paths not
-        // to use the router
 
-
-        return null; // all ok
+        return null; // That's all folks!
     }
 
 }
