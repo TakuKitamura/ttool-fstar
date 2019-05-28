@@ -518,9 +518,13 @@ public class TMLChannel extends TMLCommunicationElement {
         String s = TAB + "CHANNEL" + SP + name + CR;
         if (isBasicChannel()) {
             s += TAB2 + "Origin task: " + originTask.getName() + CR;
-            s += TAB2 + "Origin port: " + originPort.getName() + CR;
+            if (originPort != null) {
+                s += TAB2 + "Destination port: " + originPort.getName() + CR;
+            }
             s += TAB2 + "Destination task: " + destinationTask.getName() + CR;
-            s += TAB2 + "Destination port: " + destinationPort.getName() + CR;
+            if (destinationPort != null) {
+                s += TAB2 + "Destination port: " + destinationPort.getName() + CR;
+            }
         }
         if (isAForkChannel()) {
             s += TAB2 + "Origin task: " + originTasks.get(0).getName() + CR;

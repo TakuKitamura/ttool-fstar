@@ -333,8 +333,14 @@ public class JDialogNoCManagement extends JDialog implements ActionListener, Lis
         outputText.append("\nGenerating TML\n");
 
         TMLMapping<?> mapping = t2n.getTMLMapping();
+
+        mgui.gtm.setTMLMapping(mapping);
+
         TMLMappingTextSpecification ts = new TMLMappingTextSpecification<>("noNoc");
         ts.toTextFormat(mapping);
+
+
+
         String dir = SpecConfigTTool.TMLCodeDirectory;
         try {
             ts.saveFile(SpecConfigTTool.TMLCodeDirectory, "NoNoC");

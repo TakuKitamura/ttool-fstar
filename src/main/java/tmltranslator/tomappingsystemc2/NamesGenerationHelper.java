@@ -39,6 +39,7 @@
 
 package tmltranslator.tomappingsystemc2;
 
+import myutil.TraceManager;
 import tmltranslator.*;
 
 import java.util.Arrays;
@@ -390,6 +391,18 @@ public class NamesGenerationHelper {
     String busMasterInstanceName(final HwNode element,
                                  final int indexCore,
                                  final HwBus linkBus) {
+        if (element == null) {
+            TraceManager.addDev("NULL Hw element");
+        } else {
+            TraceManager.addDev("Hw element=" + element.getName());
+        }
+
+        if (linkBus == null) {
+            TraceManager.addDev("NULL linkBus element");
+        } else {
+            TraceManager.addDev("linkBus element=" + linkBus.getName());
+        }
+
         return normalize(busMasterName(element, indexCore, linkBus));
     }
 

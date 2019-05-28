@@ -611,8 +611,7 @@ public class TranslatedRouter<E> {
     }
 
 
-    // DANGER: also make the mapping of channels
-    // ALSO: initial, last tasks: connections
+
     public void makeHwArchitectureAndMapping(HwExecutionNode execNode, HwBus busToInternalDomain) {
         TMLArchitecture tmla = tmlmap.getTMLArchitecture();
 
@@ -629,7 +628,7 @@ public class TranslatedRouter<E> {
 
 
         // NIIN bus
-        HwBus busNIIN = new HwBus("BusNetworkiInterfaceIN" + getPositionNaming());
+        HwBus busNIIN = new HwBus("BusNetworkInterfaceIN" + getPositionNaming());
         tmla.addHwNode(busNIIN);
 
         // For each VC, we create a bus and a cpu. The bus connects to the main bridge
@@ -647,15 +646,16 @@ public class TranslatedRouter<E> {
 
         // Network interface IN common to all MUX VCs
         // Processor, mem, bus and bridge
-        HwCPU cpuNIIN = new HwCPU("CPUNetworkiInterfaceIN" + getPositionNaming());
+        HwCPU cpuNIIN = new HwCPU("CPUNetworkInterfaceIN" + getPositionNaming());
         tmla.addHwNode(cpuNIIN);
         tmlmap.addTaskToHwExecutionNode(tniIn, cpuNIIN);
 
-        HwMemory memNIIN = new HwMemory("MemNetworkiInterfaceIN" + getPositionNaming());
+        HwMemory memNIIN = new HwMemory("MemNetworkInterfaceIN" + getPositionNaming());
         tmla.addHwNode(memNIIN);
         tmlmap.addCommToHwCommNode(playingTheRoleOfPrevious[NB_OF_PORTS - 1].chOutToIN, memNIIN);
 
-        HwBridge bridgeNIIN = new HwBridge("BridgeNetworkiInterfaceIN" + getPositionNaming());
+        HwBridge bridgeNIIN = new HwBridge("BridgeNetworkInterfaceIN" + getPositionNaming());
+        tmla.addHwNode(bridgeNIIN);
 
         tmla.makeHwLink(busNIIN, cpuNIIN);
         tmla.makeHwLink(busNIIN, memNIIN);
@@ -674,6 +674,7 @@ public class TranslatedRouter<E> {
                 if (portNb < NB_OF_PORTS - 1) {
                     // external
                     tmla.makeHwLink(playingTheRoleOfNext[portNb].busBetweenRouters, cpuIN);
+
                     HwMemory memIN = new HwMemory("mem_IN" + portNb + getPositionNaming());
                     tmla.addHwNode(memIN);
                     tmla.makeHwLink(playingTheRoleOfNext[portNb].busBetweenRouters, memIN);
@@ -681,7 +682,7 @@ public class TranslatedRouter<E> {
 
                 } else {
                     // internal
-                    HwBus busInternalIN = new HwBus("BusInternalINternal" + getPositionNaming());
+                    HwBus busInternalIN = new HwBus("BusInternalIN" + getPositionNaming());
                     tmla.addHwNode((busInternalIN));
                     tmla.makeHwLink(busInternalIN, bridgeNIIN);
                     tmla.makeHwLink(busInternalIN, cpuIN);
@@ -704,7 +705,7 @@ public class TranslatedRouter<E> {
             }
         }
 
-        HwBridge bridgeNIOUT = new HwBridge("BridgeNetworkiInterfaceOUT" + getPositionNaming());
+        //HwBridge bridgeNIOUT = new HwBridge("BridgeNetworkiInterfaceOUT" + getPositionNaming());
         HwCPU outForExit = null;
 
         // OUTVC and OUT
@@ -722,10 +723,11 @@ public class TranslatedRouter<E> {
                 } else {
                     // internal
                     outForExit = cpuOUT;
-                    HwBus busInternalOUT = new HwBus("BusInternalOUT" + getPositionNaming());
-                    tmla.addHwNode((busInternalOUT));
-                    tmla.makeHwLink(busInternalOUT, bridgeNIOUT);
-                    tmla.makeHwLink(busInternalOUT, cpuOUT);
+                   // HwBus busInternalOUT = new HwBus("BusInternalOUT" + getPositionNaming());
+                    //tmla.addHwNode((busInternalOUT));
+
+                    //tmla.makeHwLink(busInternalOUT, bridgeNIOUT);
+                    //tmla.makeHwLink(busInternalOUT, cpuOUT);
                 }
 
                 // For each IN VC, we do the Hw Arch: bus, cpu, mem
@@ -747,13 +749,13 @@ public class TranslatedRouter<E> {
         // Network interface out
         // Basically connects to the main bridge
 
-        // NIIN bus
+        // NIOUT bus
         HwBus busNIOUT = new HwBus("BusNetworkiInterfaceOUT" + getPositionNaming());
         tmla.addHwNode(busNIOUT);
 
         HwCPU cpuNIOUT = new HwCPU("CPUNetworkiInterfaceOUT" + getPositionNaming());
         tmla.addHwNode(cpuNIOUT);
-        tmlmap.addTaskToHwExecutionNode(tniIn, cpuNIOUT);
+        tmlmap.addTaskToHwExecutionNode(tniOut, cpuNIOUT);
 
         HwMemory memNIOUT = new HwMemory("MemNetworkiInterfaceOUT" + getPositionNaming());
         tmla.addHwNode(memNIOUT);
