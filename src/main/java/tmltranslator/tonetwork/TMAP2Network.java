@@ -78,7 +78,6 @@ public class TMAP2Network<E>  {
     private HashMap<TMLChannel, String> IDsOfChannels;
 
 
-
     public TMAP2Network(TMLMapping<?> _tmlmapping, int nocSize) {
         tmlmapping = _tmlmapping;
         routers = new TranslatedRouter[nbOfVCs][nbOfVCs];
@@ -455,6 +454,12 @@ public class TMAP2Network<E>  {
             }
         }
 
+        // Removing useless channels i.e. channels routed by the router
+        // The ones in channelID
+        // We indeed assume all channels go to the NoC
+        for(TMLChannel ch: IDsOfChannels.keySet()) {
+            tmlm.removeChannel(ch);
+        }
 
 
         // Printing routers

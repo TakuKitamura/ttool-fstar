@@ -330,15 +330,34 @@ public class JDialogNoCManagement extends JDialog implements ActionListener, Lis
         }
 
         outputText.append("\nNoC removed\n");
-        outputText.append("\nGenerating TML\n");
 
+        outputText.append("\nChecking syntax of the specification\n");
         TMLMapping<?> mapping = t2n.getTMLMapping();
 
         mgui.gtm.setTMLMapping(mapping);
+        TMLSyntaxChecking tmlsc = new TMLSyntaxChecking(mapping);
+        mapping.forceMakeAutomata();
+        tmlsc.checkSyntax();
+
+        outputText.append("\n" + tmlsc.hasErrors() + " errors, " + tmlsc.hasWarnings() + "  warnings:\n");
+        if (tmlsc.hasErrors() > 0) {
+            for (TMLError err :tmlsc.getErrors()) {
+                outputText.append("Error:" + err.toString() + "\n");
+            }
+        }
+        if (tmlsc.hasWarnings() > 0) {
+            for (TMLError err :tmlsc.getWarnings()) {
+                outputText.append("Warning:" + err.toString() + "\n");
+            }
+        }
+
+
+        outputText.append("\nGenerating TML\n");
+
+
 
         TMLMappingTextSpecification ts = new TMLMappingTextSpecification<>("noNoc");
         ts.toTextFormat(mapping);
-
 
 
         String dir = SpecConfigTTool.TMLCodeDirectory;
@@ -352,22 +371,9 @@ public class JDialogNoCManagement extends JDialog implements ActionListener, Lis
 
         outputText.append("\nSpecification generated in " + dir + "\n");
 
-        outputText.append("\nChecking syntax of the specification\n");
 
-        TMLSyntaxChecking tmlsc = new TMLSyntaxChecking(mapping);
-        tmlsc.checkSyntax();
 
-        outputText.append("\n" + tmlsc.hasErrors() + " errrors, " + tmlsc.hasWarnings() + "  warnings:\n");
-        if (tmlsc.hasErrors() > 0) {
-            for (TMLError err :tmlsc.getErrors()) {
-                outputText.append("Error:" + err.toString() + "\n");
-            }
-        }
-        if (tmlsc.hasWarnings() > 0) {
-            for (TMLError err :tmlsc.getWarnings()) {
-                outputText.append("Warning:" + err.toString() + "\n");
-            }
-        }
+
 
 
         outputText.append("\nAll done\n");

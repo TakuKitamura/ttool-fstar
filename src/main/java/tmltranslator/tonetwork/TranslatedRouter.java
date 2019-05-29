@@ -110,8 +110,6 @@ public class TranslatedRouter<E> {
     private Vector<TMLChannel> handledChannels;
 
 
-    private Vector<TMLChannel> destChannels;
-
     public TranslatedRouter(TMAP2Network<?> main, TMLMapping<?> tmlmap, HwNoC noc, List<TMLChannel> channelsViaNoc,
                             int nbOfVCs, int xPos, int yPos, HwExecutionNode myHwExecutionNode) {
         this.main = main;
@@ -775,6 +773,7 @@ public class TranslatedRouter<E> {
     }
 
     public void makeOriginChannels() {
+        Vector<TMLChannel> newChannels = new Vector<>();
 
         // We now need to modify the corresponding input tasks
         // The channel is modified to NBRNBW
@@ -783,132 +782,35 @@ public class TranslatedRouter<E> {
 
         // For all channels whose origin task is mapped on the CPU of the router
 
-        destChannels = new Vector<>();
         for(TMLChannel ch: tmlmap.getTMLModeling().getChannels()) {
-            TMLTask t = ch.getOriginTask();
-            HwExecutionNode mappedOn = tmlmap.getHwNodeOf(t);
-            if (mappedOn == myHwExecutionNode) {
-                TraceManager.addDev("Found HwNode of origin task " + t.getTaskName() + " for channel " + ch.getName());
-                // We must rework the channel of the task.
-                // The channel is modified to a NBRNBW with the same task has sender / receiver
-                // The channel is mapped to the local mem
-                // Once the sample has been sent, an event is sent to the input task of the router
-                // For a receiver, the event is first waited for, and then the read in the new channel is performed
-
-                handledChannels.add(ch);
-
-                ch.setType(TMLChannel.NBRNBW);
-                TMLTask dest = ch.getDestinationTask();
-
-                TMLChannel channelForDestination = new TMLChannel(ch.getName() + "_dest", ch.getReferenceObject());
-                channelForDestination.setType(TMLChannel.NBRNBW);
-                channelForDestination.setDestinationTask(dest);
-                channelForDestination.setOriginTask(dest);
-                destChannels.add(channelForDestination);
-                main.putTMLChannelID(channelForDestination, main.getChannelID(ch));
-
-                ch.setDestinationTask(t);
-
-                // Map modify channel to the right memory
-                HwMemory mem = tmlmap.getTMLArchitecture().getHwMemoryByName(myHwExecutionNode.getName() + "__mem");
-                if (mem != null) {
-                    TraceManager.addDev("Mapping channel " + ch.getName() + " on mem " + mem.getName());
-                    tmlmap.addCommToHwCommNode(ch, mem);
-                }
-
-                // Must now modify the source app
-                TMLAttribute pktlen = new TMLAttribute("pktlen", "pktlen", new TMLType(TMLType.NATURAL), "0");
-                t.addAttributeIfApplicable(pktlen);
-                TMLAttribute dst = new TMLAttribute("dst", "dst", new TMLType(TMLType.NATURAL), "0");
-                t.addAttributeIfApplicable(dst);
-                TMLAttribute vc = new TMLAttribute("vc", "vc", new TMLType(TMLType.NATURAL), "0");
-                t.addAttributeIfApplicable(vc);
-                TMLAttribute eop = new TMLAttribute("eop", "eop", new TMLType(TMLType.NATURAL), "1");
-                t.addAttributeIfApplicable(eop);
-                TMLAttribute chid = new TMLAttribute("chid", "chid", new TMLType(TMLType.NATURAL),
-                        ""+main.getChannelID(ch));
-                t.addAttributeIfApplicable(chid);
-
-                TMLActivity activity = t.getActivityDiagram();
-                Vector<TMLActivityElement> newElements = new Vector<>();
-                TMLWriteChannel twc;
-                for(TMLElement elt: activity.getElements()) {
-                    if (elt  instanceof TMLWriteChannel) {
-                        twc = (TMLWriteChannel) elt;
-                        if (twc.getChannel(0) == ch) {
-                            TraceManager.addDev("Modifying write ch of task " + t.getTaskName());
-                            TMLSendEvent tse = new TMLSendEvent("EvtForSending__" + ch.getName(), ch.getReferenceObject());
-                            newElements.add(tse);
-                            tse.setEvent(mapOfAllOutputChannels.get(ch));
-                            tse.addParam("" + ch.getSize());
-                            tse.addParam("dst");
-                            tse.addParam("vc");
-                            tse.addParam("eop");
-                            tse.addParam("chid");
-                            tse.addNext(twc.getNextElement(0));
-                            twc.setNewNext(twc.getNextElement(0), tse);
-
-                        }
-                    }
-                }
-                for(TMLActivityElement newElt: newElements) {
-                    activity.addElement(newElt);
-                }
-            }
-        }
-
-        // Handling of destination part of channels
-        for(TMLChannel chd: destChannels) {
-            tmlmap.getTMLModeling().addChannel(chd);
-        }
-    }
-
-    public void makeDestinationChannels() {
-
-        TMLModeling tmlm = tmlmap.getTMLModeling();
-
-        Vector<TMLEvent> events = new Vector<>();
-        Vector<String> ids = new Vector<>();
-
-        for(TMLChannel ch: destChannels) {
-            TMLTask t = ch.getDestinationTask();
-            HwExecutionNode mappedOn = tmlmap.getHwNodeOf(t);
-            if (mappedOn == myHwExecutionNode) {
-                TMLEvent packetOut = new TMLEvent("evtPktOutToAppFromOut__" + xPos + "_" + yPos,
-                        null, 8, true);
-                packetOut.addParam(new TMLType(TMLType.NATURAL));
-                packetOut.addParam(new TMLType(TMLType.NATURAL));
-                packetOut.addParam(new TMLType(TMLType.NATURAL));
-                packetOut.addParam(new TMLType(TMLType.NATURAL));
-                packetOut.addParam(new TMLType(TMLType.NATURAL));
-                tmlm.addEvent(packetOut);
-                packetOut.setOriginTask(tniOut);
-                packetOut.setDestinationTask(ch.getDestinationTask());
-                events.add(packetOut);
-                ids.add(main.getChannelID(ch));
-            }
-        }
-
-        tniOut.postProcessing(events, ids);
-
-
-
-        for(TMLChannel ch: tmlmap.getTMLModeling().getChannels()) {
-            if (!handledChannels.contains(ch)) {
-
-                TMLTask t = ch.getDestinationTask();
+            if (main.getChannelID(ch) != null) {
+                TMLTask t = ch.getOriginTask();
                 HwExecutionNode mappedOn = tmlmap.getHwNodeOf(t);
                 if (mappedOn == myHwExecutionNode) {
-                    TraceManager.addDev("Found HwNode of destination task " + t.getTaskName() + " for channel " + ch.getName());
+                    TraceManager.addDev("Found HwNode of origin task " + t.getTaskName() + " for channel " + ch.getName());
+                    // We must rework the channel of the task.
+                    // The channel is modified to a NBRNBW with the same task has sender / receiver
+                    // The channel is mapped to the local mem
+                    // Once the sample has been sent, an event is sent to the input task of the router
+                    // For a receiver, the event is first waited for, and then the read in the new channel is performed
+
+                    TMLChannel newChannel = new TMLChannel(ch.getName() + "__origin", ch.getReferenceObject());
+                    newChannel.setType(TMLChannel.NBRNBW);
+                    newChannel.setOriginTask(t);
+                    newChannel.setDestinationTask(t);
+                    newChannel.setSize(ch.getSize());
+                    newChannel.setVC(ch.getVC());
+                    newChannels.add(newChannel);
+
 
                     // Map modify channel to the right memory
                     HwMemory mem = tmlmap.getTMLArchitecture().getHwMemoryByName(myHwExecutionNode.getName() + "__mem");
                     if (mem != null) {
                         TraceManager.addDev("Mapping channel " + ch.getName() + " on mem " + mem.getName());
-                        tmlmap.addCommToHwCommNode(ch, mem);
+                        tmlmap.addCommToHwCommNode(newChannel, mem);
                     }
 
-                    // Must now modify the dest app
+                    // Must now modify the source app
                     TMLAttribute pktlen = new TMLAttribute("pktlen", "pktlen", new TMLType(TMLType.NATURAL), "0");
                     t.addAttributeIfApplicable(pktlen);
                     TMLAttribute dst = new TMLAttribute("dst", "dst", new TMLType(TMLType.NATURAL), "0");
@@ -917,7 +819,117 @@ public class TranslatedRouter<E> {
                     t.addAttributeIfApplicable(vc);
                     TMLAttribute eop = new TMLAttribute("eop", "eop", new TMLType(TMLType.NATURAL), "1");
                     t.addAttributeIfApplicable(eop);
-                    TMLAttribute chid = new TMLAttribute("chid", "chid", new TMLType(TMLType.NATURAL), "0");
+                    TMLAttribute chid = new TMLAttribute("chid", "chid", new TMLType(TMLType.NATURAL),
+                            "" + main.getChannelID(ch));
+                    t.addAttributeIfApplicable(chid);
+
+                    TMLActivity activity = t.getActivityDiagram();
+                    Vector<TMLActivityElement> newElements = new Vector<>();
+                    TMLWriteChannel twc;
+                    for (TMLElement elt : activity.getElements()) {
+                        if (elt instanceof TMLWriteChannel) {
+                            twc = (TMLWriteChannel) elt;
+                            if (twc.getChannel(0) == ch) {
+                                TraceManager.addDev("Modifying write ch of task " + t.getTaskName());
+                                TMLSendEvent tse = new TMLSendEvent("EvtForSending__" + ch.getName(), ch.getReferenceObject());
+                                twc.replaceChannelWith(ch, newChannel);
+                                newElements.add(tse);
+                                tse.setEvent(mapOfAllOutputChannels.get(ch));
+                                tse.addParam("" + newChannel.getSize());
+                                tse.addParam("dst");
+                                tse.addParam("" + newChannel.getVC());
+                                tse.addParam("eop");
+                                tse.addParam(""+main.getChannelID(ch));
+                                tse.addNext(twc.getNextElement(0));
+                                twc.setNewNext(twc.getNextElement(0), tse);
+                            }
+                        }
+                    }
+                    for (TMLActivityElement newElt : newElements) {
+                        activity.addElement(newElt);
+                    }
+                }
+            }
+        }
+
+        for(TMLChannel ch: newChannels) {
+            tmlmap.getTMLModeling().addChannel(ch);
+        }
+
+    }
+
+    public void makeDestinationChannels() {
+
+        Vector<TMLChannel> newChannels = new Vector<>();
+        mapOfAllInputChannels = new HashMap<>();
+
+        TMLModeling tmlm = tmlmap.getTMLModeling();
+
+        Vector<TMLEvent> events = new Vector<>();
+        Vector<String> ids = new Vector<>();
+
+        for(TMLChannel ch: tmlmap.getTMLModeling().getChannels()) {
+            if (main.getChannelID(ch) != null) {
+                TMLTask t = ch.getDestinationTask();
+                HwExecutionNode mappedOn = tmlmap.getHwNodeOf(t);
+                if (mappedOn == myHwExecutionNode) {
+                    TMLEvent packetOut = new TMLEvent("evtPktOutToAppFromOut__" + xPos + "_" + yPos,
+                            null, 8, true);
+                    packetOut.addParam(new TMLType(TMLType.NATURAL));
+                    packetOut.addParam(new TMLType(TMLType.NATURAL));
+                    packetOut.addParam(new TMLType(TMLType.NATURAL));
+                    packetOut.addParam(new TMLType(TMLType.NATURAL));
+                    packetOut.addParam(new TMLType(TMLType.NATURAL));
+                    tmlm.addEvent(packetOut);
+                    packetOut.setOriginTask(tniOut);
+                    packetOut.setDestinationTask(ch.getDestinationTask());
+                    events.add(packetOut);
+                    ids.add(main.getChannelID(ch));
+                    mapOfAllInputChannels.put(ch, packetOut);
+                }
+            }
+        }
+
+        tniOut.postProcessing(events, ids);
+
+        for(TMLChannel ch: tmlmap.getTMLModeling().getChannels()) {
+            if (main.getChannelID(ch) != null) {
+                TMLTask t = ch.getDestinationTask();
+                HwExecutionNode mappedOn = tmlmap.getHwNodeOf(t);
+                if (mappedOn == myHwExecutionNode) {
+                    TraceManager.addDev("Found HwNode of origin task " + t.getTaskName() + " for channel " + ch.getName());
+                    // We must rework the channel of the task.
+                    // The channel is modified to a NBRNBW with the same task has sender / receiver
+                    // The channel is mapped to the local mem
+                    // Once the sample has been sent, an event is sent to the input task of the router
+                    // For a receiver, the event is first waited for, and then the read in the new channel is performed
+
+                    TMLChannel newChannel = new TMLChannel(ch.getName() + "__origin", ch.getReferenceObject());
+                    newChannel.setType(TMLChannel.NBRNBW);
+                    newChannel.setOriginTask(t);
+                    newChannel.setDestinationTask(t);
+                    newChannel.setSize(ch.getSize());
+                    newChannel.setVC(ch.getVC());
+                    newChannels.add(newChannel);
+
+                    // Map modify channel to the right memory
+                    HwMemory mem = tmlmap.getTMLArchitecture().getHwMemoryByName(myHwExecutionNode.getName() + "__mem");
+                    if (mem != null) {
+                        TraceManager.addDev("Mapping channel " + ch.getName() + " on mem " + mem.getName());
+                        tmlmap.addCommToHwCommNode(newChannel, mem);
+                    }
+
+                    // Must now modify the source app
+                    TMLAttribute pktlen = new TMLAttribute("pktlen", "pktlen", new TMLType(TMLType.NATURAL), "0");
+                    t.addAttributeIfApplicable(pktlen);
+                    TMLAttribute dst = new TMLAttribute("dst", "dst", new TMLType(TMLType.NATURAL), "0");
+                    t.addAttributeIfApplicable(dst);
+                    TMLAttribute vc = new TMLAttribute("vc", "vc", new TMLType(TMLType.NATURAL), "0");
+                    t.addAttributeIfApplicable(vc);
+                    TMLAttribute eop = new TMLAttribute("eop", "eop", new TMLType(TMLType.NATURAL), "1");
+                    t.addAttributeIfApplicable(eop);
+                    TMLAttribute chid = new TMLAttribute("chid", "chid", new TMLType(TMLType.NATURAL),
+                            "" + main.getChannelID(ch));
                     t.addAttributeIfApplicable(chid);
 
                     TMLActivity activity = t.getActivityDiagram();
@@ -929,15 +941,15 @@ public class TranslatedRouter<E> {
                             if (trc.getChannel(0) == ch) {
                                 TraceManager.addDev("Modifying read ch of task " + t.getTaskName() + " for channel " + ch.getName());
                                 // TODO TODO
-                                //trc.replaceChannelWith(ch, );
+                                trc.replaceChannelWith(ch, newChannel);
                                 TMLWaitEvent twe = new TMLWaitEvent("EvtForReceiving__" + ch.getName(), ch.getReferenceObject());
                                 newElements.add(twe);
                                 twe.setEvent(mapOfAllInputChannels.get(ch));
-                                twe.addParam("" + ch.getSize());
+                                twe.addParam("pktlen");
                                 twe.addParam("dst");
                                 twe.addParam("vc");
                                 twe.addParam("eop");
-                                twe.addParam("" + main.getChannelID(ch));
+                                twe.addParam("chid");
                                 activity.replaceAllNext(trc, twe);
                                 twe.addNext(trc);
                             }
@@ -949,6 +961,12 @@ public class TranslatedRouter<E> {
                 }
             }
         }
+
+        for(TMLChannel ch: newChannels) {
+            tmlmap.getTMLModeling().addChannel(ch);
+        }
+
+
 
     }
 

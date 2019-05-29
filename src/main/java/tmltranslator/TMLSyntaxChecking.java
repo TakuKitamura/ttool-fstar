@@ -341,12 +341,16 @@ public class TMLSyntaxChecking {
                 }
 
                 if (elt instanceof TMLSendEvent) {
-
                     evt = ((TMLSendEvent) elt).getEvent();
-                    if (evt.isBasicEvent()) {
-                        //TraceManager.addDev("send evt= " + evt.getName() + " task=" + t.getName() + " origin=" + evt.getOriginTask().getName());
-                        if (evt.getOriginTask() != t) {
-                            addError(t, elt, evt.getName() + ": " + WRONG_ORIGIN_EVENT, TMLError.ERROR_BEHAVIOR);
+                    //TraceManager.addDev("In Task " + t.getName() + " = " + evt);
+                    if (evt == null) {
+                        addError(t, elt, "Null event in SendEvt of Task " + t.getName(), TMLError.ERROR_BEHAVIOR);
+                    } else {
+                        if (evt.isBasicEvent()) {
+                            //TraceManager.addDev("send evt= " + evt.getName() + " task=" + t.getName() + " origin=" + evt.getOriginTask().getName());
+                            if (evt.getOriginTask() != t) {
+                                addError(t, elt, evt.getName() + ": " + WRONG_ORIGIN_EVENT, TMLError.ERROR_BEHAVIOR);
+                            }
                         }
                     }
                 }
@@ -454,7 +458,9 @@ public class TMLSyntaxChecking {
                     tmlase = (TMLSendEvent) elt;
                     evt = tmlase.getEvent();
 
-                    if (tmlase.getNbOfParams() != evt.getNbOfParams()) {
+                    if (evt == null) {
+                        addError(t, elt, "Empty event in Sendevent of task " + t.getTaskName(), TMLError.ERROR_BEHAVIOR);
+                    } else if (tmlase.getNbOfParams() != evt.getNbOfParams()) {
                         addError(t, elt, WRONG_PARAMS + " between event " + evt.getName() +
                                 " (nb:" + evt.getNbOfParams() +
                                 ") and send event (nb:" + tmlase.getNbOfParams() + ") in task " + t.getTaskName(), TMLError.ERROR_BEHAVIOR);
@@ -758,12 +764,13 @@ public class TMLSyntaxChecking {
         // Then we find the corresponding CPUs
         for (TMLTask task : tasks) {
             //We collect all the CPUs
-            //TraceManager.addDev("Collecting all CPUs of task: " + task.getTaskName());
+            TraceManager.addDev("Collecting all CPUs of task: " + task.getTaskName());
             for (HwExecutionNode origin : mapping.getAllHwExecutionNodesOfTask(task)) {
                 // And then we check the paths between node and all the nodes of ch
                 for (HwCommunicationNode destination : mapping.getAllCommunicationNodesOfChannel(ch)) {
-                    //TraceManager.addDev("Computing path between " + origin + " and " + destination);
+                    TraceManager.addDev("Computing path between " + origin.getName() + " and " + destination.getName());
                     if (!mapping.checkPath(origin, destination)) {
+                        TraceManager.addDev("Checking checkPathToMemoryFromCPU: Adding error");
                         addError(null, null, INVALID_CHANNEL_PATH + ": " + ch.getName(), TMLError.ERROR_STRUCTURE);
                         return;
                     }
@@ -774,11 +781,13 @@ public class TMLSyntaxChecking {
     }
 
     private void checkPathToMemoryFromAllHwCommNode(TMLChannel ch) {
+        TraceManager.addDev("Checking checkPathToMemoryFromAllHwCommNode");
         HwMemory mem = mapping.getMemoryOfChannel(ch);
         if (mem != null) {
             for (HwCommunicationNode origin : mapping.getAllCommunicationNodesOfChannel(ch)) {
                 if (origin != mem) {
                     if (!mapping.checkPath(origin, mem)) {
+                        TraceManager.addDev("Checking checkPathToMemoryFromAllHwCommNode: Adding error");
                         addError(null, null, INVALID_CHANNEL_PATH + ": " + ch.getName(), TMLError.ERROR_STRUCTURE);
                         return;
                     }

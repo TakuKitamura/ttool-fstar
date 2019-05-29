@@ -147,7 +147,7 @@ public class TaskOUTForDispatch extends TMLTask {
                 internalChoice.addGuard("feedback > 0");
 
                 waitEvt = new TMLWaitEvent("PacketEventInLoop", referenceObject);
-                TraceManager.addDev("Nb Of params of " + inPacketEvents.get(i).getName() + " = " + inPacketEvents.get(i).getNbOfParams());
+                //TraceManager.addDev("Nb Of params of " + inPacketEvents.get(i).getName() + " = " + inPacketEvents.get(i).getNbOfParams());
                 waitEvt.setEvent(inPacketEvents.get(i));
                 waitEvt.addParam("pktlen");
                 waitEvt.addParam("dst");
