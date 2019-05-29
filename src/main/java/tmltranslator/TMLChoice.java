@@ -62,7 +62,7 @@ public class TMLChoice extends TMLActivityElement{
         if(!(g.startsWith("["))) {
             g = "[" + g;
         }
-        if(!(g.endsWith("["))) {
+        if(!(g.endsWith("]"))) {
             g = g + "]";
         }
         guards.add(g);
