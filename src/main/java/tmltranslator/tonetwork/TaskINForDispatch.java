@@ -111,11 +111,10 @@ public class TaskINForDispatch extends TMLTask {
         waitEvt.addParam("vc");
         waitEvt.addParam("eop");
         waitEvt.addParam("chid");
-        activity.addElement(waitEvt);
-        loop.addNext(waitEvt);
+        activity.addLinkElement(loop, waitEvt);
 
         TMLChoice choice = new TMLChoice("MainChoice", referenceObject);
-        activity.addElement(choice);
+        activity.addLinkElement(waitEvt, choice);
 
         for(int i=0; i<nbOfVCs; i++) {
             TMLSendEvent sendEvt = new TMLSendEvent("SendEvtToVC" + i, referenceObject);
@@ -124,7 +123,7 @@ public class TaskINForDispatch extends TMLTask {
             sendEvt.addParam("dst");
             sendEvt.addParam("vc");
             sendEvt.addParam("eop");
-            waitEvt.addParam("chid");
+            sendEvt.addParam("chid");
             activity.addElement(sendEvt);
             choice.addNext(sendEvt);
             choice.addGuard("vc == " + i);

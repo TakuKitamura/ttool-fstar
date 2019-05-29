@@ -128,6 +128,7 @@ public class TaskNetworkInterfaceOUT extends TMLTask {
         waitingForPacketFromOUT.addParam("dst");
         waitingForPacketFromOUT.addParam("vc");
         waitingForPacketFromOUT.addParam("eop");
+        waitingForPacketFromOUT.addParam("chid");
         addElement(loop, waitingForPacketFromOUT);
 
         // Reading on channel

@@ -113,6 +113,16 @@ public class TMLTask extends TMLElement {
         attributes.add(_tmla);
     }
 
+
+    public void addAttributeIfApplicable(TMLAttribute _tmla) {
+        for(TMLAttribute att: attributes) {
+            if (att.getName().compareTo(_tmla.getName()) == 0) {
+                return;
+            }
+        }
+        attributes.add(_tmla);
+    }
+
     public List<TMLAttribute> getAttributes() {
         return attributes;
     }

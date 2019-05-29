@@ -39,6 +39,7 @@
 
 package tmltranslator.tonetwork;
 
+import myutil.TraceManager;
 import tmltranslator.*;
 
 import java.util.Vector;
@@ -132,7 +133,7 @@ public class TaskOUTForDispatch extends TMLTask {
                 mainChoice.addGuard("nEvt > 0");
 
                 TMLNotifiedEvent notifiedFeedback = new TMLNotifiedEvent("FeedbackNotifiedEvt"+i, referenceObject);
-                notifiedFeedback.setEvent(outSelectEvents.get(i));
+                notifiedFeedback.setEvent(feedbackEvents.get(i));
                 notifiedFeedback.setVariable("feedback");
                 activity.addLinkElement(loopInside, notifiedFeedback);
 
@@ -140,12 +141,13 @@ public class TaskOUTForDispatch extends TMLTask {
                 activity.addLinkElement(notifiedFeedback, internalChoice);
 
                 // Left branch of internal choice
-                sendEvt = new TMLSendEvent("feedbackUpEvent", referenceObject);
+                sendEvt = new TMLSendEvent("SelectEvent", referenceObject);
                 sendEvt.setEvent(outSelectEvents.get(i));
                 activity.addLinkElement(internalChoice, sendEvt);
                 internalChoice.addGuard("feedback > 0");
 
                 waitEvt = new TMLWaitEvent("PacketEventInLoop", referenceObject);
+                TraceManager.addDev("Nb Of params of " + inPacketEvents.get(i).getName() + " = " + inPacketEvents.get(i).getNbOfParams());
                 waitEvt.setEvent(inPacketEvents.get(i));
                 waitEvt.addParam("pktlen");
                 waitEvt.addParam("dst");
@@ -164,7 +166,7 @@ public class TaskOUTForDispatch extends TMLTask {
                 sendEvt.addParam("dst");
                 sendEvt.addParam("vc");
                 sendEvt.addParam("eop");
-                waitEvt.addParam("chid");
+                sendEvt.addParam("chid");
                 activity.addLinkElement(reqOut, sendEvt);
 
                 TMLWriteChannel write = new TMLWriteChannel("WriteChannel" + i, referenceObject);

@@ -391,7 +391,7 @@ public class NamesGenerationHelper {
     String busMasterInstanceName(final HwNode element,
                                  final int indexCore,
                                  final HwBus linkBus) {
-        if (element == null) {
+        /*if (element == null) {
             TraceManager.addDev("NULL Hw element");
         } else {
             TraceManager.addDev("Hw element=" + element.getName());
@@ -401,7 +401,7 @@ public class NamesGenerationHelper {
             TraceManager.addDev("NULL linkBus element");
         } else {
             TraceManager.addDev("linkBus element=" + linkBus.getName());
-        }
+        }*/
 
         return normalize(busMasterName(element, indexCore, linkBus));
     }

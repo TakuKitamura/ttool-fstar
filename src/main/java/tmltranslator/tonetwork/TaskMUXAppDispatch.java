@@ -86,7 +86,7 @@ public class TaskMUXAppDispatch extends TMLTask {
         TMLAttribute eop = new TMLAttribute("eop", "eop", new TMLType(TMLType.NATURAL), "0");
         this.addAttribute(eop);
         TMLAttribute chid = new TMLAttribute("chid", "chid", new TMLType(TMLType.NATURAL), "0");
-        this.addAttribute(eop);
+        this.addAttribute(chid);
 
         // Events and channels
         for(TMLEvent evt: inputEvents) {
@@ -107,6 +107,12 @@ public class TaskMUXAppDispatch extends TMLTask {
         TMLSelectEvt selectEvt = new TMLSelectEvt("selectEvent", referenceObject);
         activity.addElement(selectEvt);
         loop.addNext(selectEvt);
+
+        if (inputEvents.size() == 0) {
+            activity.addLinkElement(selectEvt, new TMLStopState("StopNoEvent", referenceObject));
+            return ;
+        }
+
 
         // Branch for each app
 

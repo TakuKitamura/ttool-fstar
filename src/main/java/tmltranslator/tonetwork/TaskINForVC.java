@@ -146,15 +146,16 @@ public class TaskINForVC extends TMLTask {
         // Second activity after sequence
         TMLForLoop loop2 = new TMLForLoop("mainLoop", referenceObject);
         loop2.setInfinite(true);
-        activity.addElement(loop2);
-        seq.addNext(loop2);
+        activity.addLinkElement(seq, loop2);
 
-        TMLWaitEvent waitEvt = new TMLWaitEvent("PacketEvent", referenceObject);
+
+        TMLWaitEvent waitEvt = new TMLWaitEvent("PacketEventBeforeSecondSeq", referenceObject);
         waitEvt.setEvent(inPacketEvent);
         waitEvt.addParam("pktlen");
         waitEvt.addParam("dst");
         waitEvt.addParam("vc");
         waitEvt.addParam("eop");
+        waitEvt.addParam("chid");
         activity.addLinkElement(loop2, waitEvt);
 
         TMLSequence secondSeq = new TMLSequence("SecondSeq", referenceObject);
@@ -174,20 +175,39 @@ public class TaskINForVC extends TMLTask {
         activity.addLinkElement(computexd, firstRoutingChoice);
 
         TMLActionState requested3 = new TMLActionState("requested3", referenceObject);
-        requested3.setAction("requested_output = 3");
+        requested3.setAction("requestedOutput = 3");
         activity.addLinkElement(firstRoutingChoice, requested3);
-        firstRoutingChoice.addGuard("xd > x");
+        firstRoutingChoice.addGuard("xd>x");
         activity.addLinkElement(requested3, new TMLStopState("stopOfRequest3", referenceObject));
 
         TMLActionState requested2 = new TMLActionState("requested2", referenceObject);
-        requested2.setAction("requested_output = 2");
+        requested2.setAction("requestedOutput = 2");
         activity.addLinkElement(firstRoutingChoice, requested2);
-        firstRoutingChoice.addGuard("xd < x");
+        firstRoutingChoice.addGuard("xd<x");
         activity.addLinkElement(requested2, new TMLStopState("stopOfRequest2", referenceObject));
 
         TMLChoice secondRoutingChoice = new TMLChoice("secondRoutingChoice", referenceObject);
         activity.addLinkElement(firstRoutingChoice, secondRoutingChoice);
-        firstRoutingChoice.addGuard("xd == x");
+        firstRoutingChoice.addGuard("xd==x");
+
+        TMLActionState requested0 = new TMLActionState("requested0", referenceObject);
+        requested0.setAction("requestedOutput = 0");
+        activity.addLinkElement(secondRoutingChoice, requested0);
+        firstRoutingChoice.addGuard("yd<y");
+        activity.addLinkElement(requested0, new TMLStopState("stopOfRequest0", referenceObject));
+
+        TMLActionState requested4 = new TMLActionState("requested4", referenceObject);
+        requested4.setAction("requestedOutput = 4");
+        activity.addLinkElement(secondRoutingChoice, requested4);
+        firstRoutingChoice.addGuard("yd==y");
+        activity.addLinkElement(requested4, new TMLStopState("stopOfRequest4", referenceObject));
+
+        TMLActionState requested1 = new TMLActionState("requested1", referenceObject);
+        requested1.setAction("requestedOutput = 4");
+        activity.addLinkElement(secondRoutingChoice, requested1);
+        firstRoutingChoice.addGuard("yd<y");
+        activity.addLinkElement(requested1, new TMLStopState("stopOfRequest1", referenceObject));
+
 
 
 
@@ -265,7 +285,7 @@ public class TaskINForVC extends TMLTask {
             activity.addLinkElement(sendEvt, read);
 
             stop = new TMLStopState("StopStateOutLoop", referenceObject);
-            activity.addLinkElement(waitEvt, stop);
+            activity.addLinkElement(read, stop);
 
         }
 

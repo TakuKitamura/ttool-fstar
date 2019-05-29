@@ -137,7 +137,7 @@ public class TaskNetworkInterface extends TMLTask {
         addElement(start, loop);
 
         TMLActionState state = new TMLActionState("LoopExitSetting", referenceObject);
-        state.setAction("loopexit = 2");
+        state.setAction("loopExit = 2");
         addElement(loop, state);
 
         TMLSequence mainSequence = new TMLSequence("mainSequence", referenceObject);
@@ -146,14 +146,14 @@ public class TaskNetworkInterface extends TMLTask {
         for(i=0; i<nbOfVCs; i++) {
             TMLChoice testOnLoopExit = null;
             if (i>0) {
-                //Test on loopexit
+                //Test on loop exit
                 testOnLoopExit = new TMLChoice("testOnLoopExit", referenceObject);
                 addElement(mainSequence, testOnLoopExit);
 
                 // Right branch
                 TMLStopState endOfLoopExit = new TMLStopState("endOfLoopExit", referenceObject);
                 addElement(testOnLoopExit, endOfLoopExit);
-                testOnLoopExit.addGuard("loopexit == 1");
+                testOnLoopExit.addGuard("loopExit == 1");
 
             } else {
                 testOnLoopExit = null;
@@ -166,7 +166,7 @@ public class TaskNetworkInterface extends TMLTask {
                 addElement(mainSequence, notifiedEvent);
             } else {
                 addElement(testOnLoopExit, notifiedEvent);
-                testOnLoopExit.addGuard("loopexit == 2");
+                testOnLoopExit.addGuard("loopExit == 2");
             }
 
             TMLChoice testingEvt = new TMLChoice("testingEvtVC", referenceObject);
@@ -196,10 +196,10 @@ public class TaskNetworkInterface extends TMLTask {
             waitingForStartPacket.addParam("eop");
             waitingForStartPacket.addParam("chid" + i);
             addElement(ispktChoice, waitingForStartPacket);
-            ispktChoice.addGuard("ispkt == 0");
+            ispktChoice.addGuard("ispkt" + i + " == 0");
 
             TMLActionState ispktSetting = new TMLActionState("ispktSetting", referenceObject);
-            ispktSetting.setAction("ispkt = 1");
+            ispktSetting.setAction("ispkt" + i + " = 1");
             addElement(waitingForStartPacket, ispktSetting);
 
             TMLActionState iSetting = new TMLActionState("iSetting", referenceObject);
@@ -211,9 +211,9 @@ public class TaskNetworkInterface extends TMLTask {
 
             // Right branch of intermediate seq
             TMLForLoop loopOfRightBranch = new TMLForLoop("LoopOfRightBranch", referenceObject);
-            loopOfRightBranch.setInit("loopexit = 0");
-            loopOfRightBranch.setCondition("loopexit < 1");
-            loopOfRightBranch.setIncrement("loopexit = loopexit");
+            loopOfRightBranch.setInit("loopExit = 0");
+            loopOfRightBranch.setCondition("loopExit < 1");
+            loopOfRightBranch.setIncrement("loopExit = loopExit");
             addElement(intermediateSeq, loopOfRightBranch);
 
             TMLNotifiedEvent feedbackNotified = new TMLNotifiedEvent("WaitingForFeedback", referenceObject);
@@ -231,7 +231,7 @@ public class TaskNetworkInterface extends TMLTask {
 
             // No feedback
             TMLActionState noFeedbackAction = new TMLActionState("noFeedbackAction", referenceObject);
-            noFeedbackAction.setAction("loopexit = 2");
+            noFeedbackAction.setAction("loopExit = 2");
             addElement(testOnFeedback, noFeedbackAction);
             testOnFeedback.addGuard("else");
 
@@ -269,7 +269,7 @@ public class TaskNetworkInterface extends TMLTask {
                 packetLengthChoice.addGuard("i" + i + " < pktlen" + i + " - 1");
 
                 TMLActionState asOnI = new TMLActionState("ActionstateOnI", referenceObject);
-                asOnI.setAction("i" + i + " = i" + i + " 1");
+                asOnI.setAction("i" + i + " = i" + i + " + 1");
                 addElement(sendEvtpktin, asOnI);
 
                 TMLStopState endOfLB = new TMLStopState("EndOfLB", referenceObject);
@@ -277,7 +277,7 @@ public class TaskNetworkInterface extends TMLTask {
 
                 // Middle branch
                 TMLActionState loopExitMB = new TMLActionState("loopExitMB", referenceObject);
-                loopExitMB.setAction("loopexit = 1");
+                loopExitMB.setAction("loopExit = 1");
                 addElement(packetLengthChoice, loopExitMB);
                 packetLengthChoice.addGuard("i" + i + " == pktlen" + i);
 
@@ -301,7 +301,7 @@ public class TaskNetworkInterface extends TMLTask {
                 packetLengthChoice.addGuard("i" + i + " == pktlen" + i + " - 1");
 
                 TMLActionState asOnIRB = new TMLActionState("asOnIRB", referenceObject);
-                asOnIRB.setAction("i" + i + " = i" + i + " 1");
+                asOnIRB.setAction("i" + i + " = i" + i + "+ 1");
                 addElement(sendEvtpktinRB, asOnIRB);
 
                 TMLStopState endOfRB = new TMLStopState("endOfRB", referenceObject);
@@ -312,9 +312,9 @@ public class TaskNetworkInterface extends TMLTask {
 
                 // Right branch
                 TMLActionState loopexitTo1= new TMLActionState("loopexitTo1", referenceObject);
-                loopexitTo1.setAction("loopexit = 1");
+                loopexitTo1.setAction("loopExit = 1");
                 addElement(packetLengthChoice1, loopexitTo1);
-                packetLengthChoice1.addGuard("i" + i + " = pktlen" + i);
+                packetLengthChoice1.addGuard("i" + i + " == pktlen" + i);
 
 
                 TMLActionState ispktResetAction = new TMLActionState("ispktResetAction", referenceObject);
@@ -344,7 +344,7 @@ public class TaskNetworkInterface extends TMLTask {
                 choiceLBSeq.addGuard("i" + i + " < pktlen" + i + " - 1");
 
                 TMLActionState asOnI1 = new TMLActionState("ActionstateOnI1", referenceObject);
-                asOnI1.setAction("i" + i + " = i" + i + " 1");
+                asOnI1.setAction("i" + i + " = i" + i + " + 1");
                 addElement(sendEvtpktin1, asOnI1);
 
                 TMLStopState endOfLB1 = new TMLStopState("endOfLB1", referenceObject);
@@ -361,7 +361,7 @@ public class TaskNetworkInterface extends TMLTask {
                 choiceLBSeq.addGuard("i" + i + " == pktlen" + i + " - 1");
 
                 TMLActionState asOnIRB1 = new TMLActionState("asOnIRB1", referenceObject);
-                asOnIRB1.setAction("i" + i + " = i" + i + " 1");
+                asOnIRB1.setAction("i" + i + " = i" + i + "+ 1");
                 addElement(sendEvtpktinRB1, asOnIRB1);
 
                 TMLStopState endOfRB1SEQ = new TMLStopState("endOfRB1SEQ", referenceObject);
@@ -370,21 +370,21 @@ public class TaskNetworkInterface extends TMLTask {
                 // Right branch of seq
                 TMLNotifiedEvent notifiedEventPrio = new TMLNotifiedEvent("notifiedEventPrio", referenceObject);
                 notifiedEventPrio.setEvent(inputEventsFromMUX.get(i-1));
-                notifiedEventPrio.setVariable("higher_prio");
+                notifiedEventPrio.setVariable("higherPrio");
                 addElement(seqLB, notifiedEventPrio);
 
                 TMLChoice testPrio = new TMLChoice("testPrio", referenceObject);
                 addElement(notifiedEventPrio, testPrio);
 
                 TMLActionState loopexitPrio= new TMLActionState("loopexitPrio", referenceObject);
-                loopexitPrio.setAction("loopexit = 1");
+                loopexitPrio.setAction("loopExit = 1");
                 addElement(testPrio, loopexitPrio);
-                testPrio.addGuard("higher_prio > 0");
+                testPrio.addGuard("higherPrio > 0");
 
                 addElement(loopexitPrio, new TMLStopState("EndOfHigherPrio", referenceObject));
 
                 addElement(testPrio, new TMLStopState("NoHigherPrio", referenceObject));
-                testPrio.addGuard("higher_prio == 0");
+                testPrio.addGuard("higherPrio == 0");
 
             }
 

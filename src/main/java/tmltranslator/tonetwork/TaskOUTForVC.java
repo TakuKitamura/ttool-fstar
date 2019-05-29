@@ -124,7 +124,7 @@ public class TaskOUTForVC extends TMLTask {
             sendEvt.addParam("dst");
             sendEvt.addParam("vc");
             sendEvt.addParam("eop");
-            waitEvt.addParam("chid");
+            sendEvt.addParam("chid");
             activity.addLinkElement(packetLoop, sendEvt);
 
             waitEvt = new TMLWaitEvent("ReturnFromVC", referenceObject);
@@ -145,6 +145,7 @@ public class TaskOUTForVC extends TMLTask {
             waitEvt.addParam("dst");
             waitEvt.addParam("vc");
             waitEvt.addParam("eop");
+            waitEvt.addParam("chid");
             activity.addLinkElement(choice, waitEvt);
             choice.addGuard("eop == 0");
 

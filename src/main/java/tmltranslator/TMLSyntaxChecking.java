@@ -77,6 +77,7 @@ public class TMLSyntaxChecking {
     private final String TIME_UNIT_ERROR = "unknown time unit";
     private final String NO_NEXT_OPERATOR_ERROR = "No next operator";
     private final String SAME_PORT_NAME = "Two ports have the same name";
+    private final String WRONG_PARAMS = "The number of params is not compatible";
 
     private final String TOO_MANY_MEMORIES = "Channel is mapped on more than one memory";
     private final String INVALID_CHANNEL_PATH = "Channel path is invalid";
@@ -452,14 +453,22 @@ public class TMLSyntaxChecking {
                 } else if (elt instanceof TMLSendEvent) {
                     tmlase = (TMLSendEvent) elt;
                     evt = tmlase.getEvent();
-                    for (j = 0; j < tmlase.getNbOfParams(); j++) {
-                        action = tmlase.getParam(j);
-                        if ((action != null) && (action.length() > 0)) {
-                            type = evt.getType(j);
-                            if ((type == null) || (type.getType() == TMLType.NATURAL)) {
-                                parsing(t, elt, "actionnat", action);
-                            } else {
-                                parsing(t, elt, "actionbool", action);
+
+                    if (tmlase.getNbOfParams() != evt.getNbOfParams()) {
+                        addError(t, elt, WRONG_PARAMS + " between event " + evt.getName() +
+                                " (nb:" + evt.getNbOfParams() +
+                                ") and send event (nb:" + tmlase.getNbOfParams() + ") in task " + t.getTaskName(), TMLError.ERROR_BEHAVIOR);
+                    } else {
+
+                        for (j = 0; j < tmlase.getNbOfParams(); j++) {
+                            action = tmlase.getParam(j);
+                            if ((action != null) && (action.length() > 0)) {
+                                type = evt.getType(j);
+                                if ((type == null) || (type.getType() == TMLType.NATURAL)) {
+                                    parsing(t, elt, "actionnat", action);
+                                } else {
+                                    parsing(t, elt, "actionbool", action);
+                                }
                             }
                         }
                     }
@@ -467,26 +476,35 @@ public class TMLSyntaxChecking {
                 } else if (elt instanceof TMLWaitEvent) {
                     tmlwe = (TMLWaitEvent) elt;
                     evt = tmlwe.getEvent();
-                    //TraceManager.addDev("Nb of params of wait event:" + tmlwe.getNbOfParams());
-                    for (j = 0; j < tmlwe.getNbOfParams(); j++) {
-                        action = tmlwe.getParam(j).trim();
-                        if ((action != null) && (action.length() > 0)) {
-                            if (!(Conversion.isId(action))) {
-                                addError(t, elt, SYNTAX_ERROR_VARIABLE_EXPECTED + " in expression " + action, TMLError.ERROR_BEHAVIOR);
-                            } else {
-                                // Declared variable?
-                                attr = t.getAttributeByName(action);
-                                if (attr == null) {
-                                    addError(t, elt, UNDECLARED_VARIABLE + ": " + action + " in expression " + action, TMLError.ERROR_BEHAVIOR);
-                                    TraceManager.addDev("1 In task: " + t.getName() + " extended name:" + t.getNameExtension());
+                    //TraceManager.addDev("Nb of params of wait event:" + tmlwe.getNbOfParams() + " task=" + t.getTaskName());
+
+
+                    if (tmlwe.getNbOfParams() != evt.getNbOfParams()) {
+                        addError(t, elt, WRONG_PARAMS + " between event " + evt.getName() +
+                                " (nb:" + evt.getNbOfParams() +
+                                ") and wait event (nb:" + tmlwe.getNbOfParams() + ") in task " + t.getTaskName(), TMLError.ERROR_BEHAVIOR);
+                    } else {
+
+                        for (j = 0; j < tmlwe.getNbOfParams(); j++) {
+                            action = tmlwe.getParam(j).trim();
+                            if ((action != null) && (action.length() > 0)) {
+                                if (!(Conversion.isId(action))) {
+                                    addError(t, elt, SYNTAX_ERROR_VARIABLE_EXPECTED + " in expression " + action, TMLError.ERROR_BEHAVIOR);
                                 } else {
-                                    //TraceManager.addDev("Nb of params:" + tmlwe.getEvent().getNbOfParams() + " j:" + j);
-                                    if (tmlwe.getEvent().getType(j).getType() == 0) {
-                                        TraceManager.addDev("0");
-                                    }
-                                    if (attr.getType().getType() != tmlwe.getEvent().getType(j).getType()) {
-                                        TraceManager.addDev("Type0:" + attr.getType().getType() + " type1:" + tmlwe.getEvent().getType(j).getType());
-                                        addError(t, elt, VARIABLE_ERROR + " :" + action + " in expression " + action, TMLError.ERROR_BEHAVIOR);
+                                    // Declared variable?
+                                    attr = t.getAttributeByName(action);
+                                    if (attr == null) {
+                                        addError(t, elt, UNDECLARED_VARIABLE + ": " + action + " in expression " + action, TMLError.ERROR_BEHAVIOR);
+                                        TraceManager.addDev("1 In task: " + t.getName() + " extended name:" + t.getNameExtension());
+                                    } else {
+                                        //TraceManager.addDev("Nb of params:" + tmlwe.getEvent().getNbOfParams() + " j:" + j);
+                                        if (tmlwe.getEvent().getType(j).getType() == 0) {
+                                            TraceManager.addDev("0");
+                                        }
+                                        if (attr.getType().getType() != tmlwe.getEvent().getType(j).getType()) {
+                                            TraceManager.addDev("Type0:" + attr.getType().getType() + " type1:" + tmlwe.getEvent().getType(j).getType());
+                                            addError(t, elt, VARIABLE_ERROR + " :" + action + " in expression " + action, TMLError.ERROR_BEHAVIOR);
+                                        }
                                     }
                                 }
                             }

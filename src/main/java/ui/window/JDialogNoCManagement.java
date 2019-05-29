@@ -352,6 +352,24 @@ public class JDialogNoCManagement extends JDialog implements ActionListener, Lis
 
         outputText.append("\nSpecification generated in " + dir + "\n");
 
+        outputText.append("\nChecking syntax of the specification\n");
+
+        TMLSyntaxChecking tmlsc = new TMLSyntaxChecking(mapping);
+        tmlsc.checkSyntax();
+
+        outputText.append("\n" + tmlsc.hasErrors() + " errrors, " + tmlsc.hasWarnings() + "  warnings:\n");
+        if (tmlsc.hasErrors() > 0) {
+            for (TMLError err :tmlsc.getErrors()) {
+                outputText.append("Error:" + err.toString() + "\n");
+            }
+        }
+        if (tmlsc.hasWarnings() > 0) {
+            for (TMLError err :tmlsc.getWarnings()) {
+                outputText.append("Warning:" + err.toString() + "\n");
+            }
+        }
+
+
         outputText.append("\nAll done\n");
 
         stopProcess();

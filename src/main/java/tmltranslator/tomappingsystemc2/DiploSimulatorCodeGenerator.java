@@ -657,6 +657,8 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
             final List<TMLEvent> events = new ArrayList<TMLEvent>(tmlmodeling.getEvents(task));
             final List<TMLRequest> requests = new ArrayList<TMLRequest>(tmlmodeling.getRequests(task));
 
+            //TraceManager.addDev("Handling task=" + task.getTaskName());
+
             final MappedSystemCTask mst = new MappedSystemCTask(task, channels, events, requests, tmlmapping, mappedChannels, mappedOnCPU);
             tasks.add(mst);
 
@@ -731,14 +733,14 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         for(HwCommunicationNode nodeS: path){
             pathS += nodeS.getName() + " ";
         }
-        TraceManager.addDev("Path=" + pathS);
+        //TraceManager.addDev("Path=" + pathS);
 
         if (reverseIn) {
             slaves.str += ",static_cast<Slave*>(0)";
         } else {
             //firstPart=startNode.getName() + "0";
             firstNode = startNode;
-            TraceManager.addDev("1. First node=" + firstNode);
+            //TraceManager.addDev("1. First node=" + firstNode);
         }
 
         for (final HwCommunicationNode commElem : path) {
@@ -747,14 +749,14 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
                 final String memoryInstName = namesGen.memoryInstanceName((HwMemory) commElem);
                 slaves.str += ",static_cast<Slave*>(" + memoryInstName + "),static_cast<Slave*>(" + memoryInstName + ")";
                 firstNode = null;
-                TraceManager.addDev("2. First node=" + firstNode);
+                //TraceManager.addDev("2. First node=" + firstNode);
                 // firstPart = "";
             } else {
                 if (reverse) {
                     if (firstNode == null) {
                         //                    if ( firstPart.length()==0 ){
                         firstNode = commElem;
-                        TraceManager.addDev("3. First node=" + firstNode);
+                        //TraceManager.addDev("3. First node=" + firstNode);
                         //                        firstPart=commElem.getName();
                     } else {
                         masters.str += "," + namesGen.busMasterInstanceName(commElem, 0, (HwBus) firstNode);
@@ -762,14 +764,14 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
                         masterCount++;
                         slaves.str += ",static_cast<Slave*>(" + namesGen.communicationNodeInstanceName(commElem, 0) + ")";
                         firstNode = null;
-                        TraceManager.addDev("4. First node=" + firstNode);
+                        //TraceManager.addDev("4. First node=" + firstNode);
                         //firstPart="";
                     }
                 } else {
                     if (firstNode == null) {
                         //                  if ( firstPart.length()==0 ){
                         firstNode = commElem;
-                        TraceManager.addDev("5. First node=" + firstNode);
+                        //TraceManager.addDev("5. First node=" + firstNode);
                         slaves.str += ",static_cast<Slave*>(" + namesGen.communicationNodeInstanceName(commElem, 0) + ")";
                         //                        firstPart = commElem.getName();
                         //                        slaves.str+= ",static_cast<Slave*>(" + firstPart + ")";
@@ -778,7 +780,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
                         //                        masters.str+= "," + firstPart + "_" + commElem.getName() + "_Master";
                         masterCount++;
                         firstNode = null;
-                        TraceManager.addDev("6. First node=" + firstNode);
+                        //TraceManager.addDev("6. First node=" + firstNode);
                         //                        firstPart="";
                     }
                 }
@@ -786,7 +788,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         }
 
         if (reverse) {
-            TraceManager.addDev("REVERSE. First node=" + firstNode);
+            //TraceManager.addDev("REVERSE. First node=" + firstNode);
             masters.str += "," + namesGen.busMasterInstanceName(destNode, 0, (HwBus) firstNode);
             //            masters.str+= "," + destNode.getName() + "0_" + firstPart + "_Master";
 
@@ -799,7 +801,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
     }
 
     public String determineRouting(HwNode startNode, HwNode destNode, TMLElement commElemToRoute) {
-        if (startNode == null) {
+        /*if (startNode == null) {
             TraceManager.addDev( "Null start node");
         } else {
             TraceManager.addDev( "Start node:" + startNode.getName());
@@ -812,7 +814,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         }
 
         TraceManager.addDev( "******** -------> ROUTING ROUTING ROUTING\nDetermine routing from " + startNode.getName() + " to " + destNode.getName
-                () );
+                () );*/
         StrWrap masters = new StrWrap();
         StrWrap slaves = new StrWrap();
 
@@ -839,8 +841,11 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         } else {
             final List<HwCommunicationNode> commNodes2 = new LinkedList<HwCommunicationNode>(commNodes);
 
+            //TraceManager.addDev("Explore bus from " + startNode.getName() + " to memory " + memory.getName());
+
+
             if (!exploreBuses(0, commNodes, path, startNode, memory, commElemToRoute)) {
-                TraceManager.addDev("NO route to " + memory.getName() + "found!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                TraceManager.addDev("NO route to " + memory.getName() + " found!!!!!!!!!!!!!!!!!!!!!!!!!!");
             }
 
             path.add(memory);
@@ -854,21 +859,21 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
             hopNum = extractPath(path, masters, slaves, destNode, destNode, true) - hopNum;
         }
 
-        TraceManager.addDev(commElemToRoute.getName() + " is mapped on:");
+        /*TraceManager.addDev(commElemToRoute.getName() + " is mapped on:");
 
         for (HwCommunicationNode commElem : path) {
             TraceManager.addDev(commElem.getName());
-        }
+        }*/
 
-        TraceManager.addDev("number of elements: " + hopNum);
-        TraceManager.addDev("masters: " + masters.str);
-        TraceManager.addDev("slaves: " + slaves.str);
+        //TraceManager.addDev("number of elements: " + hopNum);
+        //TraceManager.addDev("masters: " + masters.str);
+        //TraceManager.addDev("slaves: " + slaves.str);
 
         if (masters.str.length() == 0) {
             return null;
         }
 
-        TraceManager.addDev("Going to return:" + hopNum + ",array(" + hopNum + masters.str + "),array(" + hopNum + slaves.str + ")");
+        //TraceManager.addDev("Going to return:" + hopNum + ",array(" + hopNum + masters.str + "),array(" + hopNum + slaves.str + ")");
 
         return hopNum + ",array(" + hopNum + masters.str + "),array(" + hopNum + slaves.str + ")";
     }

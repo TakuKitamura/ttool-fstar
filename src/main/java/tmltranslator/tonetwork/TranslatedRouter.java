@@ -479,8 +479,6 @@ public class TranslatedRouter<E> {
         TMLEvent pktoutFromOut = playingTheRoleOfPrevious[NB_OF_PORTS-1].packetOut;
         pktoutFromOut.setDestinationTask(tniOut);
 
-
-
         tniOut.generate(nbOfVCs, feedbackPerVC, pktoutFromOut, chOfOut);
 
     }
@@ -652,7 +650,7 @@ public class TranslatedRouter<E> {
 
         HwMemory memNIIN = new HwMemory("MemNetworkInterfaceIN" + getPositionNaming());
         tmla.addHwNode(memNIIN);
-        tmlmap.addCommToHwCommNode(playingTheRoleOfPrevious[NB_OF_PORTS - 1].chOutToIN, memNIIN);
+        tmlmap.addCommToHwCommNode(playingTheRoleOfNext[NB_OF_PORTS - 1].chOutToIN, memNIIN);
 
         HwBridge bridgeNIIN = new HwBridge("BridgeNetworkInterfaceIN" + getPositionNaming());
         tmla.addHwNode(bridgeNIIN);
@@ -750,15 +748,16 @@ public class TranslatedRouter<E> {
         // Basically connects to the main bridge
 
         // NIOUT bus
-        HwBus busNIOUT = new HwBus("BusNetworkiInterfaceOUT" + getPositionNaming());
+        HwBus busNIOUT = new HwBus("BusNetworkInterfaceOUT" + getPositionNaming());
         tmla.addHwNode(busNIOUT);
 
-        HwCPU cpuNIOUT = new HwCPU("CPUNetworkiInterfaceOUT" + getPositionNaming());
+        HwCPU cpuNIOUT = new HwCPU("CPUNetworkInterfaceOUT" + getPositionNaming());
         tmla.addHwNode(cpuNIOUT);
         tmlmap.addTaskToHwExecutionNode(tniOut, cpuNIOUT);
 
-        HwMemory memNIOUT = new HwMemory("MemNetworkiInterfaceOUT" + getPositionNaming());
+        HwMemory memNIOUT = new HwMemory("MemNetworkInterfaceOUT" + getPositionNaming());
         tmla.addHwNode(memNIOUT);
+        tmlmap.addCommToHwCommNode(playingTheRoleOfPrevious[NB_OF_PORTS-1].chOutToIN, memNIOUT);
 
         tmla.makeHwLink(busNIOUT, outForExit);
         tmla.makeHwLink(busNIOUT, cpuNIOUT);
@@ -819,16 +818,16 @@ public class TranslatedRouter<E> {
 
                 // Must now modify the source app
                 TMLAttribute pktlen = new TMLAttribute("pktlen", "pktlen", new TMLType(TMLType.NATURAL), "0");
-                t.addAttribute(pktlen);
+                t.addAttributeIfApplicable(pktlen);
                 TMLAttribute dst = new TMLAttribute("dst", "dst", new TMLType(TMLType.NATURAL), "0");
-                t.addAttribute(dst);
+                t.addAttributeIfApplicable(dst);
                 TMLAttribute vc = new TMLAttribute("vc", "vc", new TMLType(TMLType.NATURAL), "0");
-                t.addAttribute(vc);
+                t.addAttributeIfApplicable(vc);
                 TMLAttribute eop = new TMLAttribute("eop", "eop", new TMLType(TMLType.NATURAL), "1");
-                t.addAttribute(eop);
+                t.addAttributeIfApplicable(eop);
                 TMLAttribute chid = new TMLAttribute("chid", "chid", new TMLType(TMLType.NATURAL),
                         ""+main.getChannelID(ch));
-                t.addAttribute(chid);
+                t.addAttributeIfApplicable(chid);
 
                 TMLActivity activity = t.getActivityDiagram();
                 Vector<TMLActivityElement> newElements = new Vector<>();
@@ -911,15 +910,15 @@ public class TranslatedRouter<E> {
 
                     // Must now modify the dest app
                     TMLAttribute pktlen = new TMLAttribute("pktlen", "pktlen", new TMLType(TMLType.NATURAL), "0");
-                    t.addAttribute(pktlen);
+                    t.addAttributeIfApplicable(pktlen);
                     TMLAttribute dst = new TMLAttribute("dst", "dst", new TMLType(TMLType.NATURAL), "0");
-                    t.addAttribute(dst);
+                    t.addAttributeIfApplicable(dst);
                     TMLAttribute vc = new TMLAttribute("vc", "vc", new TMLType(TMLType.NATURAL), "0");
-                    t.addAttribute(vc);
+                    t.addAttributeIfApplicable(vc);
                     TMLAttribute eop = new TMLAttribute("eop", "eop", new TMLType(TMLType.NATURAL), "1");
-                    t.addAttribute(eop);
+                    t.addAttributeIfApplicable(eop);
                     TMLAttribute chid = new TMLAttribute("chid", "chid", new TMLType(TMLType.NATURAL), "0");
-                    t.addAttribute(chid);
+                    t.addAttributeIfApplicable(chid);
 
                     TMLActivity activity = t.getActivityDiagram();
                     Vector<TMLActivityElement> newElements = new Vector<>();
@@ -928,7 +927,9 @@ public class TranslatedRouter<E> {
                         if (elt instanceof TMLReadChannel) {
                             trc = (TMLReadChannel) elt;
                             if (trc.getChannel(0) == ch) {
-                                TraceManager.addDev("Modifying write ch of task " + t.getTaskName());
+                                TraceManager.addDev("Modifying read ch of task " + t.getTaskName() + " for channel " + ch.getName());
+                                // TODO TODO
+                                //trc.replaceChannelWith(ch, );
                                 TMLWaitEvent twe = new TMLWaitEvent("EvtForReceiving__" + ch.getName(), ch.getReferenceObject());
                                 newElements.add(twe);
                                 twe.setEvent(mapOfAllInputChannels.get(ch));
