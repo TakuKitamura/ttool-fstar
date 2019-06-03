@@ -132,7 +132,7 @@ public class Link {
 
         feedbackPerVC = new TMLEvent[nbOfVCs];
         for(int i=0; i<nbOfVCs; i++) {
-            feedbackPerVC[i] = new TMLEvent("Feedback__" + getNaming(),
+            feedbackPerVC[i] = new TMLEvent("Feedback__" + getNaming() + "_" + i,
                     null, 8, true);
             tmlm.addEvent(feedbackPerVC[i]);
         }

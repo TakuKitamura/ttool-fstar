@@ -389,9 +389,9 @@ public class TMLTask extends TMLElement {
         writeTMLChannelsList.add(_ch);
     }
 
-    public List<TMLChannel> getTMLChannels() {
+    /*public List<TMLChannel> getTMLChannels() {
         return new ArrayList<TMLChannel>(channelsList);
-    }
+    }*/
 
     public List<TMLChannel> getReadTMLChannels() {
         return new ArrayList<TMLChannel>(readTMLChannelsList);

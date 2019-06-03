@@ -64,8 +64,9 @@ public class TaskINForDispatch extends TMLTask {
 
         this.nbOfVCs = nbOfVCs;
 
-        inputEvent.setDestinationTask(this);
-        inputChannel.setDestinationTask(this);
+        //inputEvent.setDestinationTask(this);
+        //inputChannel.setDestinationTask(this);
+
         for(TMLEvent evt: outputEvents) {
             evt.setOriginTask(this);
         }
@@ -90,6 +91,7 @@ public class TaskINForDispatch extends TMLTask {
         for(TMLEvent evt: outputEvents) {
             addTMLEvent(evt);
         }
+
         addReadTMLChannel(inputChannel);
         for(TMLChannel ch: outputChannels) {
             addWriteTMLChannel(ch);

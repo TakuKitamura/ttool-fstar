@@ -214,7 +214,7 @@ public class TranslatedRouter<E> {
             // We need one event par outputChannel
             Vector<TMLEvent> inputEventsOfMUX = new Vector<>();
             for (TMLChannel chan : outputChannels) {
-                TraceManager.addDev("Output Channel:" + chan.getName() + " VC=" + chan.getVC());
+                //TraceManager.addDev("Output Channel:" + chan.getName() + " VC=" + chan.getVC());
                 if (chan.getVC() == i) {
                     TMLEvent outputEventOfMux = new TMLEvent("EventMUXof__" + chan.getName(), null, 8,
                             true);
@@ -234,7 +234,7 @@ public class TranslatedRouter<E> {
             }
 
             // We also need an output event for MUX / NI_IN
-            TMLEvent eventForMUX_and_NI_IN = new TMLEvent("EventBetweenMUXandNI_IN_for_" + nameOfExecNode,
+            TMLEvent eventForMUX_and_NI_IN = new TMLEvent("EventBetweenMUXandNI_IN_for_" + nameOfExecNode + "_" + i,
                     null, 8, true);
             tmlm.addEvent(eventForMUX_and_NI_IN);
             eventForMUX_and_NI_IN.addParam(new TMLType(TMLType.NATURAL));
@@ -288,7 +288,8 @@ public class TranslatedRouter<E> {
         dispatchIns = new HashMap<>();
         for (int portNb = 0; portNb < NB_OF_PORTS; portNb++) {
             if (playingTheRoleOfNext[portNb] != null) {
-                TaskINForDispatch inDispatch = new TaskINForDispatch("IN_" + nameOfExecNode + "_" + portNb, null,
+                TaskINForDispatch inDispatch = new TaskINForDispatch("IN_" + nameOfExecNode + "_" + portNb +
+                        "_x" + xPos + "_y" + yPos, null,
                         null);
                 tmlm.addTask(inDispatch);
                 Vector<TMLEvent> listOfOutEvents = new Vector<TMLEvent>();
@@ -313,8 +314,10 @@ public class TranslatedRouter<E> {
                     // We have to use events / channels coming from another router
                     TMLEvent toInEvt = playingTheRoleOfNext[portNb].packetOut;
                     toInEvt.setDestinationTask(inDispatch);
+                    //tmlm.addEvent(toInEvt);
                     TMLChannel toInCh = playingTheRoleOfNext[portNb].chOutToIN;
                     toInCh.setDestinationTask(inDispatch);
+                    tmlm.addChannel(toInCh);
 
                     inDispatch.generate(nbOfVCs, toInEvt, toInCh, listOfOutEvents,
                             listOfOutChannels);
@@ -574,7 +577,7 @@ public class TranslatedRouter<E> {
     }
 
     public String getPositionNaming() {
-        return "_" + xPos + "_" + yPos;
+        return "_x" + xPos + "_y" + yPos;
     }
 
     public String toString() {
@@ -618,7 +621,7 @@ public class TranslatedRouter<E> {
             TraceManager.addDev("NULL bus");
         }
 
-        HwBridge mainBridge = new HwBridge("BridgeIntennal" + getPositionNaming());
+        HwBridge mainBridge = new HwBridge("BridgeInternal_" + getPositionNaming());
         tmla.addHwNode(mainBridge);
         tmla.makeHwLink(busToInternalDomain, mainBridge);
 
@@ -692,7 +695,7 @@ public class TranslatedRouter<E> {
                     HwMemory memINVC = new HwMemory("memINVC" + portNb + "_" + i + getPositionNaming());
                     tmla.addHwNode(memINVC);
                     tmlmap.addCommToHwCommNode(pktInChsVCs[portNb][i], memINVC);
-                    HwBus busINVC = new HwBus("busINVC" + portNb + "_" + i + getPositionNaming());
+                    HwBus busINVC = new HwBus("busINVC_p" + portNb + "_vc" + i + getPositionNaming());
                     tmla.addHwNode(busINVC);
                     tmla.makeHwLink(busINVC, cpuINVC);
                     tmla.makeHwLink(busINVC, memINVC);
@@ -707,7 +710,7 @@ public class TranslatedRouter<E> {
         // OUTVC and OUT
         for (int portNb = 0; portNb < NB_OF_PORTS; portNb++) {
             if (playingTheRoleOfPrevious[portNb] != null) {
-                // We have an IN on that port. Connects on the bus of the correcponding link
+                // We have an IN on that port. Connects on the bus of the corresponding link
                 HwCPU cpuOUT = new HwCPU("cpuOUT_" + portNb + getPositionNaming());
                 tmla.addHwNode(cpuOUT);
                 tmlmap.addTaskToHwExecutionNode(dispatchOuts.get(portNb), cpuOUT);
@@ -904,7 +907,7 @@ public class TranslatedRouter<E> {
                     // Once the sample has been sent, an event is sent to the input task of the router
                     // For a receiver, the event is first waited for, and then the read in the new channel is performed
 
-                    TMLChannel newChannel = new TMLChannel(ch.getName() + "__origin", ch.getReferenceObject());
+                    TMLChannel newChannel = new TMLChannel(ch.getName() + "__destination", ch.getReferenceObject());
                     newChannel.setType(TMLChannel.NBRNBW);
                     newChannel.setOriginTask(t);
                     newChannel.setDestinationTask(t);

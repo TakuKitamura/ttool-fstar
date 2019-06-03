@@ -104,6 +104,14 @@ public class TaskMUXAppDispatch extends TMLTask {
         activity.addElement(loop);
         start.addNext(loop);
 
+
+        if (inputEvents.size() == 0) {
+            TMLStopState stopNoEvent = new TMLStopState("StopNoEvent", referenceObject);
+            activity.addElement(stopNoEvent);
+            loop.addNext(stopNoEvent);
+            return;
+        }
+
         TMLSelectEvt selectEvt = new TMLSelectEvt("selectEvent", referenceObject);
         activity.addElement(selectEvt);
         loop.addNext(selectEvt);

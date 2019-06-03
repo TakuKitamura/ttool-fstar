@@ -697,6 +697,37 @@ public class TMLModeling<E> {
         return null;
     }
 
+
+    public List<TMLElement> getAllElementsWithName(String name) {
+        Vector<TMLElement> elts = new Vector<>();
+
+        for(TMLTask task: tasks) {
+            if (task.getName().compareTo(name) == 0) {
+                elts.add(task);
+            }
+        }
+
+        for(TMLChannel ch: channels) {
+            if (ch.getName().compareTo(name) == 0) {
+                elts.add(ch);
+            }
+        }
+
+        for(TMLEvent evt: events) {
+            if (evt.getName().compareTo(name) == 0) {
+                elts.add(evt);
+            }
+        }
+
+        for(TMLRequest req: requests) {
+            if (req.getName().compareTo(name) == 0) {
+                elts.add(req);
+            }
+        }
+
+        return elts;
+    }
+
     public List<TMLTask> getTasks() {
         return tasks;
     }
@@ -753,7 +784,7 @@ public class TMLModeling<E> {
                 list.add(ch);
             }
             for (TMLTask task: ch.getOriginTasks()){
-            	if (task ==t){
+            	if (task == t){
             		list.add(ch);
             	}
             }

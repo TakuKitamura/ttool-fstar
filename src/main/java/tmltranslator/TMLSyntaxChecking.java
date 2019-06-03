@@ -48,10 +48,7 @@ import myutil.TraceManager;
 import tmltranslator.tomappingsystemc2.DiploSimulatorCodeGenerator;
 
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -78,6 +75,7 @@ public class TMLSyntaxChecking {
     private final String NO_NEXT_OPERATOR_ERROR = "No next operator";
     private final String SAME_PORT_NAME = "Two ports have the same name";
     private final String WRONG_PARAMS = "The number of params is not compatible";
+    private final String DUPLICATE_NAMES = "Two elements have the same name";
 
     private final String TOO_MANY_MEMORIES = "Channel is mapped on more than one memory";
     private final String INVALID_CHANNEL_PATH = "Channel path is invalid";
@@ -118,6 +116,7 @@ public class TMLSyntaxChecking {
 
         TraceManager.addDev("Checking syntax of TML Mapping/ Modeling");
         if (!syntaxCheckForMappingOnly) {
+            checkDuplicateNames();
 
             checkReadAndWriteInChannelsEventsAndRequests();
 
@@ -206,6 +205,41 @@ public class TMLSyntaxChecking {
                 }
             }
         }
+    }
+
+
+    public void checkDuplicateNames() {
+        List<TMLElement> elts;
+
+        for(TMLTask task: tmlm.getTasks()) {
+            elts = tmlm.getAllElementsWithName(task.getName());
+            if (elts.size() > 1) {
+                addError(null, null, DUPLICATE_NAMES + ": invalid task name " + task.getName(), TMLError.ERROR_STRUCTURE);
+            }
+        }
+
+        for(TMLChannel ch: tmlm.getChannels()) {
+            elts = tmlm.getAllElementsWithName(ch.getName());
+            if (elts.size() > 1) {
+                addError(null, null, DUPLICATE_NAMES + ": invalid channel name " + ch.getName(), TMLError.ERROR_STRUCTURE);
+            }
+        }
+
+        for(TMLEvent evt: tmlm.getEvents()) {
+            elts = tmlm.getAllElementsWithName(evt.getName());
+            if (elts.size() > 1) {
+                addError(null, null, DUPLICATE_NAMES + ": invalid event name " + evt.getName(), TMLError.ERROR_STRUCTURE);
+            }
+        }
+
+        for(TMLRequest req: tmlm.getRequests()) {
+            elts = tmlm.getAllElementsWithName(req.getName());
+            if (elts.size() > 1) {
+                addError(null, null, DUPLICATE_NAMES + ": invalid request name " + req.getName(), TMLError.ERROR_STRUCTURE);
+            }
+        }
+
+
     }
 
     //added by minh hiep
