@@ -203,7 +203,7 @@ public class TaskINForVC extends TMLTask {
         activity.addLinkElement(requested4, new TMLStopState("stopOfRequest4", referenceObject));
 
         TMLActionState requested1 = new TMLActionState("requested1", referenceObject);
-        requested1.setAction("requestedOutput = 4");
+        requested1.setAction("requestedOutput = 1");
         activity.addLinkElement(secondRoutingChoice, requested1);
         firstRoutingChoice.addGuard("yd<y");
         activity.addLinkElement(requested1, new TMLStopState("stopOfRequest1", referenceObject));

@@ -306,7 +306,9 @@ public class TaskNetworkInterface extends TMLTask {
 
                 TMLStopState endOfRB = new TMLStopState("endOfRB", referenceObject);
                 addElement(asOnIRB, endOfRB);
+
             } else {
+                
                 TMLChoice packetLengthChoice1 = new TMLChoice("PacketLengthChoice1", referenceObject);
                 addElement(waitingForFeedback, packetLengthChoice1);
 
