@@ -89,7 +89,6 @@ public class TaskNetworkInterfaceOUT extends TMLTask {
         }
         addTMLEvent(packetOutFromOUT);
 
-
         addReadTMLChannel(outputChannelFromOUT);
 
 
@@ -151,8 +150,9 @@ public class TaskNetworkInterfaceOUT extends TMLTask {
         addElement(testingEOP, packetChoice);
         testingEOP.addGuard("eop == 1");
 
-
-
+        TMLStopState stopInvalid = new TMLStopState("InvalidCHID", referenceObject);
+        addElement(packetChoice, stopInvalid);
+        packetChoice.addGuard("chid == (0-1)");
 
 
         // Right branch of choice
