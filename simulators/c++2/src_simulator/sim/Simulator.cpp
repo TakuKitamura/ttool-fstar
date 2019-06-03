@@ -674,10 +674,10 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 #endif
   _simComp->setStopFlag(false,"");
   for(TaskList::const_iterator i=_simComp->getTaskList().begin(); i!=_simComp->getTaskList().end();i++){
-    std::cout << "task preparation:" << (*i)->toString() << std::endl;
-    if ((*i)->getCurrCommand()!=0) std::cout<<(*i)->getCurrCommand()->toString() << std::endl;
+    //std::cout << "task preparation:" << (*i)->toString() << std::endl;
+    //if ((*i)->getCurrCommand()!=0) std::cout<<(*i)->getCurrCommand()->toString() << std::endl;
     if ((*i)->getCurrCommand()!=0) (*i)->getCurrCommand()->prepare(true);
-    std::cout << "task preparation done:" << (*i)->toString() << std::endl;
+    //std::cout << "task preparation done:" << (*i)->toString() << std::endl;
   }
 #ifdef EBRDD_ENABLED
   for(EBRDDList::const_iterator i=_simComp->getEBRDDIterator(false); i!=_simComp->getEBRDDIterator(true);i++){
