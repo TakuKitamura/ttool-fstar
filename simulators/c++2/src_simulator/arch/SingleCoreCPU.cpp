@@ -88,7 +88,7 @@ SingleCoreCPU::~SingleCoreCPU(){
 }
 
 TMLTransaction* SingleCoreCPU::getNextTransaction(){
-std::cout<<"getNextTransaction!!!!!"<<std::endl;
+  //std::cout<<"getNextTransaction!!!!!"<<std::endl;
 #ifdef BUS_ENABLED
   if (_masterNextTransaction==0 || _nextTransaction==0){
     return _nextTransaction;
@@ -120,23 +120,23 @@ void SingleCoreCPU::calcStartTimeLength(TMLTime iTimeSlice){
   std::cout << "CPU:calcSTL: scheduling decision of CPU " << _name << ": " << _nextTransaction->toString() << std::endl;
 #endif
 #ifdef BUS_ENABLED
-  std::cout << "CPU:calcSTL: scheduling decision of CPU " << _name << ": " << _nextTransaction->toString() << std::endl;
-  std::cout << "get channel " << std::endl;
+  //std::cout << "CPU:calcSTL: scheduling decision of CPU " << _name << ": " << _nextTransaction->toString() << std::endl;
+  //std::cout << "get channel " << std::endl;
   TMLChannel* aChannel=_nextTransaction->getCommand()->getChannel(0);
-  std::cout << "after get channel " << std::endl;
+  //std::cout << "after get channel " << std::endl;
   if (aChannel==0) {
     //std::cout << "no channel " << std::endl;
     _masterNextTransaction=0;
   } else {
-    std::cout << "get bus " << std::endl;
+    //std::cout << "get bus " << std::endl;
     _masterNextTransaction= getMasterForBus(aChannel->getFirstMaster(_nextTransaction));
-    std::cout << "after get first bus " << std::endl;
+    //std::cout << "after get first bus " << std::endl;
     if (_masterNextTransaction!=0){
-      std::cout << "before register transaction at bus " << _masterNextTransaction->toString() << std::endl;
+      //std::cout << "before register transaction at bus " << _masterNextTransaction->toString() << std::endl;
       _masterNextTransaction->registerTransaction(_nextTransaction);
-      std::cout << "Transaction registered at bus " << _masterNextTransaction->toString() << std::endl;
+      //std::cout << "Transaction registered at bus " << _masterNextTransaction->toString() << std::endl;
     } else {
-      std::cout << "                          NO MASTER NEXT TRANSACTION " << std::endl;
+      //std::cout << "                          NO MASTER NEXT TRANSACTION " << std::endl;
     }
   }
 #endif
@@ -144,7 +144,7 @@ void SingleCoreCPU::calcStartTimeLength(TMLTime iTimeSlice){
   TMLTime aStartTime = max(_endSchedule,_nextTransaction->getRunnableTime());
   TMLTime aReminder = aStartTime % _timePerCycle;
   if (aReminder!=0) aStartTime+=_timePerCycle - aReminder;
-  std::cout << "CPU: set start time in CPU=" << aStartTime << " Reminder=" << aReminder <<"\n";
+  //std::cout << "CPU: set start time in CPU=" << aStartTime << " Reminder=" << aReminder <<"\n";
 
   _nextTransaction->setStartTime(aStartTime);
 
@@ -174,7 +174,7 @@ void SingleCoreCPU::calcStartTimeLength(TMLTime iTimeSlice){
 }
 
 void SingleCoreCPU::truncateAndAddNextTransAt(TMLTime iTime){ 
-  std::cout<<"cpu truncatenextTransct"<<std::endl;
+  //std::cout<<"cpu truncatenextTransct"<<std::endl;
   //std::cout << "CPU:schedule BEGIN " << _name << "+++++++++++++++++++++++++++++++++\n";
   //return truncateNextTransAt(iTime);
   //not a problem if scheduling does not take place at time when transaction is actually truncated, tested
@@ -234,10 +234,10 @@ TMLTime SingleCoreCPU::truncateNextTransAt(TMLTime iTime){
 }
 
 bool SingleCoreCPU::addTransaction(TMLTransaction* iTransToBeAdded){
-std::cout<<"addTransaction"<<std::endl;
+  //std::cout<<"addTransaction"<<std::endl;
   bool aFinish;
   //TMLTransaction* aTransCopy=0;
-  std::cout << "*************** LOOKING for master of" << _nextTransaction->toString() << std::endl;
+  //std::cout << "*************** LOOKING for master of" << _nextTransaction->toString() << std::endl;
   if (_masterNextTransaction==0){
     aFinish=true;
 #ifdef DEBUG_CPU
@@ -251,31 +251,31 @@ std::cout<<"addTransaction"<<std::endl;
     //std::cout << "*************** LOOKING for master of" << _nextTransaction->toString() << std::endl;
     BusMaster* aFollowingMaster =_nextTransaction->getChannel()->getNextMaster(_nextTransaction);
     if (aFollowingMaster==0){
-      std::cout << "1\n";
+      //std::cout << "1\n";
       aFinish=true;
       //aTransCopy = new TMLTransaction(*_nextTransaction);
       //_nextTransaction = aTransCopy;
       BusMaster* aTempMaster = getMasterForBus(_nextTransaction->getChannel()->getFirstMaster(_nextTransaction));
-      std::cout << "2\n";
+      //std::cout << "2\n";
       Slave* aTempSlave= _nextTransaction->getChannel()->getNextSlave(_nextTransaction);
-      std::cout << "3\n";
+      //std::cout << "3\n";
       aTempMaster->addBusContention(_nextTransaction->getStartTime()-max(_endSchedule,_nextTransaction->getRunnableTime()));
       while (aTempMaster!=0){
-        std::cout << "3a\n";
+        //std::cout << "3a\n";
         aTempMaster->addTransaction(_nextTransaction);
-        std::cout << "3b\n";
+        //std::cout << "3b\n";
         //if (aTempSlave!=0) aTempSlave->addTransaction(_nextTransaction);
         if (aTempSlave!=0) aTempSlave->addTransaction(_nextTransaction);  //NEW
-        std::cout << "4\n";
+        //std::cout << "4\n";
         aTempMaster =_nextTransaction->getChannel()->getNextMaster(_nextTransaction);
-        std::cout << "5\n";
+        //std::cout << "5\n";
         aTempSlave= _nextTransaction->getChannel()->getNextSlave(_nextTransaction);
       }
-      std::cout << "6\n";
+      //std::cout << "6\n";
     } else {
-      std::cout << _name << " bus transaction next round" << std::endl;
+      //std::cout << _name << " bus transaction next round" << std::endl;
       _masterNextTransaction=aFollowingMaster;
-      std::cout << "7\n";
+      //std::cout << "7\n";
       _masterNextTransaction->registerTransaction(_nextTransaction);
       aFinish=false;
     }
@@ -311,7 +311,7 @@ std::cout<<"addTransaction"<<std::endl;
 
 void SingleCoreCPU::schedule(){
   //std::cout <<"Hello\n";
-  std::cout << "CPU:schedule BEGIN " << _name << "+++++++++++++++++++++++++++++++++\n";
+  //std::cout << "CPU:schedule BEGIN " << _name << "+++++++++++++++++++++++++++++++++\n";
   TMLTime aTimeSlice = _scheduler->schedule(_endSchedule);
   //_schedulingNeeded=false;  05/05/11
   //std::cout << "1\n";
@@ -334,7 +334,7 @@ void SingleCoreCPU::schedule(){
   }
   //std::cout << "5\n";
   if (_nextTransaction!=0 && aOldTransaction != _nextTransaction) calcStartTimeLength(aTimeSlice);
-  std::cout << "CPU:schedule END " << _name << "+++++++++++++++++++++++++++++++++\n";
+  //std::cout << "CPU:schedule END " << _name << "+++++++++++++++++++++++++++++++++\n";
 }
 
 //std::string SingleCoreCPU::toString() const{
@@ -542,7 +542,7 @@ void SingleCoreCPU::streamBenchmarks(std::ostream& s) const{
   s << TAG_CPUo << " id=\"" << _ID << "\" name=\"" << _name << "\">" << std::endl;
   if (_simulatedTime!=0) s << TAG_UTILo << (static_cast<float>(_busyCycles)/static_cast<float>(_simulatedTime)) << TAG_UTILc;
   s << TAG_ENERGYo << ( (_simulatedTime/_timePerCycle)*_static_consumPerCycle) + ((_busyCycles/_timePerCycle)*_dynamic_consumPerCycle) << TAG_ENERGYc;
-  std::cout<< "power consumption "<< ((_simulatedTime/_timePerCycle)*_static_consumPerCycle) + ((_busyCycles/_timePerCycle)*_dynamic_consumPerCycle)<< std::endl;
+  //std::cout<< "power consumption "<< ((_simulatedTime/_timePerCycle)*_static_consumPerCycle) + ((_busyCycles/_timePerCycle)*_dynamic_consumPerCycle)<< std::endl;
   for(BusMasterList::const_iterator i=_busMasterList.begin(); i != _busMasterList.end(); ++i) (*i)->streamBenchmarks(s);
 
   s << TAG_CPUc;

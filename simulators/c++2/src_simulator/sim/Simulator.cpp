@@ -443,7 +443,7 @@ std::cout<<"schedule2HTML--------------------------------------*****************
     //for(CPUList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
     for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
       for(unsigned int j = 0; j < (*i)->getAmoutOfCore(); j++) {
-        std::cout<<"core number is "<<(*i)->getAmoutOfCore()<<std::endl;
+        //std::cout<<"core number is "<<(*i)->getAmoutOfCore()<<std::endl;
 	(*i)->schedule2HTML(myfile);
        	(*i)->showPieChart(myfile);
 	(*i)->setCycleTime((*i)->getCycleTime()+1);
@@ -459,8 +459,8 @@ std::cout<<"schedule2HTML--------------------------------------*****************
       (*j)->setStartFlagHTML(true);
       for(TaskList::const_iterator i = (*j)->getTaskList().begin(); i != (*j)->getTaskList().end(); ++i){
       	(*j)->setHtmlCurrTask(*i);
-	std::cout<<"begin fpga html "<<(*j)->toShortString()<<std::endl;
-	std::cout<<"task is !!!!!"<<(*i)->toString()<<std::endl;
+	//std::cout<<"begin fpga html "<<(*j)->toShortString()<<std::endl;
+	//std::cout<<"task is !!!!!"<<(*i)->toString()<<std::endl;
 	(*j)->schedule2HTML(myfile);
 	(*j)->setStartFlagHTML(false);
       }
@@ -675,14 +675,16 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
   _simComp->setStopFlag(false,"");
   for(TaskList::const_iterator i=_simComp->getTaskList().begin(); i!=_simComp->getTaskList().end();i++){
     std::cout << "task preparation:" << (*i)->toString() << std::endl;
+    if ((*i)->getCurrCommand()!=0) std::cout<<(*i)->getCurrCommand()->toString() << std::endl;
     if ((*i)->getCurrCommand()!=0) (*i)->getCurrCommand()->prepare(true);
+    std::cout << "task preparation done:" << (*i)->toString() << std::endl;
   }
 #ifdef EBRDD_ENABLED
   for(EBRDDList::const_iterator i=_simComp->getEBRDDIterator(false); i!=_simComp->getEBRDDIterator(true);i++){
     if ((*i)->getCurrCommand()!=0) (*i)->getCurrCommand()->prepare();
   }
 #endif
-  std::cout<<"simulate"<<std::endl;
+  //std::cout<<"simulate"<<std::endl;
   for_each(_simComp->getCPUList().begin(), _simComp->getCPUList().end(),std::mem_fun(&CPU::schedule));
 
   for_each(_simComp->getFPGAList().begin(), _simComp->getFPGAList().end(),std::mem_fun(&FPGA::schedule));
@@ -694,15 +696,15 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 #endif
   while ( transLET!=0 && !_simComp->getStopFlag()){
     
-      std::cout<<"come in cpu"<<std::endl;
+    //std::cout<<"come in cpu"<<std::endl;
 #ifdef DEBUG_KERNEL
       std::cout << "kernel:simulate: scheduling decision: " <<  transLET->toString() << std::endl;
 #endif
 
 	commandLET=transLET->getCommand();
-	std::cout<<"device is "<<deviceLET->getName()<<std::endl;
+	//std::cout<<"device is "<<deviceLET->getName()<<std::endl;
         bool x = deviceLET->addTransaction(0);
-	std::cout<<"in simulator end addTransactin"<<std::endl;
+	//std::cout<<"in simulator end addTransactin"<<std::endl;
 #ifdef DEBUG_KERNEL
       std::cout << "kernel:simulate: AFTER add trans: " << x << std::endl;
 #endif
@@ -720,7 +722,7 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 	  depFPGA=depTask->getFPGA();
 	  
 	  if(depCPU){
-	    std::cout<<"lets start cpu"<<std::endl;
+	    //std::cout<<"lets start cpu"<<std::endl;
 	    if (depCPU!=deviceLET){
 #ifdef DEBUG_KERNEL
 	      std::cout << "kernel:simulate: Tasks running on different CPUs" << std::endl;
@@ -818,7 +820,7 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 #endif
       }
       oLastTrans=transLET;
-      std::cout<<"task is !!!!!"<<oLastTrans->toString()<<std::endl;
+      //std::cout<<"task is !!!!!"<<oLastTrans->toString()<<std::endl;
 	transLET=getTransLowestEndTime(deviceLET);	
     }
 

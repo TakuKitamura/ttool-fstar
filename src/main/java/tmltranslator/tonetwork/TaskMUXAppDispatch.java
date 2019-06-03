@@ -42,7 +42,6 @@ package tmltranslator.tonetwork;
 import tmltranslator.*;
 
 import java.util.List;
-import java.util.Vector;
 
 
 /**
@@ -71,7 +70,7 @@ public class TaskMUXAppDispatch extends TMLTask {
         this.outputEvent = outputEvent;
 
 
-        for(TMLEvent evt: inputEvents) {
+        for (TMLEvent evt : inputEvents) {
             evt.setDestinationTask(this);
         }
         outputEvent.setOriginTask(this);
@@ -89,7 +88,7 @@ public class TaskMUXAppDispatch extends TMLTask {
         this.addAttribute(chid);
 
         // Events and channels
-        for(TMLEvent evt: inputEvents) {
+        for (TMLEvent evt : inputEvents) {
             addTMLEvent(evt);
         }
         addTMLEvent(outputEvent);
@@ -99,56 +98,50 @@ public class TaskMUXAppDispatch extends TMLTask {
         TMLStartState start = new TMLStartState("mainStart", referenceObject);
         activity.setFirst(start);
 
+        if (inputEvents.size() == 0) {
+            TMLStopState stopNoEvent = new TMLStopState("StopNoEvent", referenceObject);
+            activity.addLinkElement(start, stopNoEvent);
+            return;
+        }
+
         TMLForLoop loop = new TMLForLoop("mainLoop", referenceObject);
         loop.setInfinite(true);
         activity.addElement(loop);
         start.addNext(loop);
 
 
-        if (inputEvents.size() == 0) {
-            TMLStopState stopNoEvent = new TMLStopState("StopNoEvent", referenceObject);
-            activity.addElement(stopNoEvent);
-            loop.addNext(stopNoEvent);
-            return;
-        }
-
         TMLSelectEvt selectEvt = new TMLSelectEvt("selectEvent", referenceObject);
         activity.addElement(selectEvt);
         loop.addNext(selectEvt);
 
-        if (inputEvents.size() == 0) {
-            activity.addLinkElement(selectEvt, new TMLStopState("StopNoEvent", referenceObject));
-            return ;
-        }
-
 
         // Branch for each app
 
-         for(int i=0; i< inputEvents.size(); i++) {
-             TMLWaitEvent waitEvt = new TMLWaitEvent("PacketEvent" + i, referenceObject);
+        for (int i = 0; i < inputEvents.size(); i++) {
+            TMLWaitEvent waitEvt = new TMLWaitEvent("PacketEvent" + i, referenceObject);
             waitEvt.setEvent(inputEvents.get(i));
             waitEvt.addParam("pktlen");
             waitEvt.addParam("dst");
             waitEvt.addParam("vc");
             waitEvt.addParam("eop");
-             waitEvt.addParam("chid");
+            waitEvt.addParam("chid");
             activity.addElement(waitEvt);
-             selectEvt.addNext(waitEvt);
+            selectEvt.addNext(waitEvt);
 
-             TMLSendEvent sendEvt = new TMLSendEvent("SendEvtToNI" + i, referenceObject);
-             sendEvt.setEvent(outputEvent);
-             sendEvt.addParam("pktlen");
-             sendEvt.addParam("dst");
-             sendEvt.addParam("vc");
-             sendEvt.addParam("eop");
-             sendEvt.addParam("chid");
-             activity.addElement(sendEvt);
+            TMLSendEvent sendEvt = new TMLSendEvent("SendEvtToNI" + i, referenceObject);
+            sendEvt.setEvent(outputEvent);
+            sendEvt.addParam("pktlen");
+            sendEvt.addParam("dst");
+            sendEvt.addParam("vc");
+            sendEvt.addParam("eop");
+            sendEvt.addParam("chid");
+            activity.addElement(sendEvt);
             waitEvt.addNext(sendEvt);
 
-             TMLStopState stopL = new TMLStopState("EndOfSelectForApp" + i, referenceObject);
-             activity.addElement(stopL);
-             sendEvt.addNext(stopL);
-         }
+            TMLStopState stopL = new TMLStopState("EndOfSelectForApp" + i, referenceObject);
+            activity.addElement(stopL);
+            sendEvt.addNext(stopL);
+        }
 
 
     }
