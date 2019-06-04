@@ -280,7 +280,6 @@ public class TGComponentManager {
     public static final int TMLARCHI_CROSSBARNODE = 1113;
     public static final int TMLARCHI_FIREWALL = 1114;
     public static final int TMLARCHI_FPGANODE = 1116;
-    public static final int TMLARCHI_ANALOGNODE = 5720;
     public static final int TMLARCHI_ROUTERNODE = 1117;
 
     public static final int TMLCTD_CCOMPONENT = 1200;
@@ -1241,9 +1240,6 @@ public class TGComponentManager {
             case TMLARCHI_FPGANODE:
                 tgc = new TMLArchiFPGANode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
-		case TMLARCHI_ANALOGNODE:
-                tgc = new TMLArchiAnalogNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-                break;
             case TMLARCHI_BUSNODE:
                 tgc = new TMLArchiBUSNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
@@ -2164,8 +2160,6 @@ public class TGComponentManager {
             return TMLARCHI_CPUNODE;
         } else if (tgc instanceof TMLArchiFPGANode) {
             return TMLARCHI_FPGANODE;
-	 } else if (tgc instanceof TMLArchiAnalogNode) {
-            return TMLARCHI_ANALOGNODE;    
         } else if (tgc instanceof TMLArchiBUSNode) {
             return TMLARCHI_BUSNODE;
         } else if (tgc instanceof TMLArchiVGMNNode) {
