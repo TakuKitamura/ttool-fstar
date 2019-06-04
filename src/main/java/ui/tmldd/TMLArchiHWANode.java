@@ -197,7 +197,7 @@ public class TMLArchiHWANode extends TMLArchiNode implements SwallowTGComponent,
                 error = true;
                 errors += "Name of the node  ";
             } else {
-                name = tmpName;
+                updateCPNodeConfigAfterRenamingHWNode(tmpName);
             }
         }
 
