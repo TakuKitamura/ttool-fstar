@@ -136,6 +136,7 @@ public:
 	inline void setHtmlCurrTask(TMLTask *t) { _htmlCurrTask=t;}
 	inline void setStartFlagHTML(bool s) {_startFlagHTML=s;}
 	inline void setEndFlagHTML(bool s) {_endFlagHTML=s;}
+	//inline void setMaxEndTime(TMLTime t) {_maxEndTime=t;}
 	double averageLoad (TMLTask* currTask) const;
 	void drawPieChart(std::ofstream& myfile) const;
 	void showPieChart(std::ofstream& myfile) const;
@@ -191,10 +192,13 @@ protected:
 	unsigned int _taskNumber;
 	//current number of tasks executed on FPGA
 	unsigned int _currTaskNumber;
+	unsigned int _reconfigNumber;
+	TMLTime _maxEndTime;
 	unsigned int nextCellClassIndex;
  	std::map<TMLTask*, std::string> taskCellClasses;	
 	///State variable for the VCD output
 	vcdFPGAVisState _vcdOutputState;
+
 };
 
 #endif
