@@ -65,12 +65,16 @@ public class FakeTaskOut extends TMLTask {
         // Attributes
         TMLAttribute pktlen = new TMLAttribute("pktlen", "pktlen", new TMLType(TMLType.NATURAL), "0");
         this.addAttribute(pktlen);
-        TMLAttribute dst = new TMLAttribute("dst", "dst", new TMLType(TMLType.NATURAL), "0");
-        this.addAttribute(dst);
+        TMLAttribute dstX = new TMLAttribute("dstX", "dstX", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(dstX);
+        TMLAttribute dstY = new TMLAttribute("dstY", "dstY", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(dstY);
         TMLAttribute vc = new TMLAttribute("vc", "vc", new TMLType(TMLType.NATURAL), "0");
         this.addAttribute(vc);
         TMLAttribute eop = new TMLAttribute("eop", "eop", new TMLType(TMLType.NATURAL), "0");
         this.addAttribute(eop);
+        TMLAttribute chid = new TMLAttribute("chid", "chid", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(chid);
 
         // Events
         addTMLEvent(packetIn);
@@ -87,9 +91,11 @@ public class FakeTaskOut extends TMLTask {
         TMLWaitEvent waitingForPacketFromOUT = new TMLWaitEvent("waitingForPacketFromOUT", referenceObject);
         waitingForPacketFromOUT.setEvent(packetIn);
         waitingForPacketFromOUT.addParam("pktlen");
-        waitingForPacketFromOUT.addParam("dst");
+        waitingForPacketFromOUT.addParam("dstX");
+        waitingForPacketFromOUT.addParam("dstY");
         waitingForPacketFromOUT.addParam("vc");
         waitingForPacketFromOUT.addParam("eop");
+        waitingForPacketFromOUT.addParam("chid");
         addElement(loop, waitingForPacketFromOUT);
 
         TMLStopState stopMain = new TMLStopState("ReturnToInfiniteLoop", referenceObject);

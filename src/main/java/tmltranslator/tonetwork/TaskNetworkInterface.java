@@ -107,8 +107,10 @@ public class TaskNetworkInterface extends TMLTask {
             this.addAttribute(ispkt);
             TMLAttribute eopi = new TMLAttribute("eop"+i, "eop"+i, new TMLType(TMLType.NATURAL), "0");
             this.addAttribute(eopi);
-            TMLAttribute dst = new TMLAttribute("dst"+i, "dst"+i, new TMLType(TMLType.NATURAL), "0");
-            this.addAttribute(dst);
+            TMLAttribute dstX = new TMLAttribute("dstX"+i, "dstX"+i, new TMLType(TMLType.NATURAL), "0");
+            this.addAttribute(dstX);
+            TMLAttribute dstY = new TMLAttribute("dstY"+i, "dstY"+i, new TMLType(TMLType.NATURAL), "0");
+            this.addAttribute(dstY);
             TMLAttribute vci = new TMLAttribute("vc"+i, "vc"+i, new TMLType(TMLType.NATURAL), ""+i);
             this.addAttribute(vci);
             TMLAttribute chid = new TMLAttribute("chid"+i, "chid"+i, new TMLType(TMLType.NATURAL), ""+i);
@@ -191,7 +193,8 @@ public class TaskNetworkInterface extends TMLTask {
             TMLWaitEvent waitingForStartPacket = new TMLWaitEvent("WaitingStartPacket", referenceObject);
             waitingForStartPacket.setEvent(inputEventsFromMUX.get(i));
             waitingForStartPacket.addParam("pktlen" + i);
-            waitingForStartPacket.addParam("dst" + i);
+            waitingForStartPacket.addParam("dstX" + i);
+            waitingForStartPacket.addParam("dstY" + i);
             waitingForStartPacket.addParam("vc");
             waitingForStartPacket.addParam("eop");
             waitingForStartPacket.addParam("chid" + i);
@@ -261,7 +264,8 @@ public class TaskNetworkInterface extends TMLTask {
                 TMLSendEvent sendEvtpktin = new TMLSendEvent("SendEvtPktin", referenceObject);
                 sendEvtpktin.setEvent(outputEvent);
                 sendEvtpktin.addParam("pktlen" + i);
-                sendEvtpktin.addParam("dst" + i);
+                sendEvtpktin.addParam("dstX" + i);
+                sendEvtpktin.addParam("dstY" + i);
                 sendEvtpktin.addParam("vc" + i);
                 sendEvtpktin.addParam("0");
                 sendEvtpktin.addParam("chid"+i);
@@ -293,7 +297,8 @@ public class TaskNetworkInterface extends TMLTask {
                 TMLSendEvent sendEvtpktinRB = new TMLSendEvent("sendEvtpktinRB", referenceObject);
                 sendEvtpktinRB.setEvent(outputEvent);
                 sendEvtpktinRB.addParam("pktlen" + i);
-                sendEvtpktinRB.addParam("dst" + i);
+                sendEvtpktinRB.addParam("dstX" + i);
+                sendEvtpktinRB.addParam("dstY" + i);
                 sendEvtpktinRB.addParam("vc" + i);
                 sendEvtpktinRB.addParam("1");
                 sendEvtpktinRB.addParam("chid"+i);
@@ -338,7 +343,8 @@ public class TaskNetworkInterface extends TMLTask {
                 TMLSendEvent sendEvtpktin1 = new TMLSendEvent("sendEvtpktin1", referenceObject);
                 sendEvtpktin1.setEvent(outputEvent);
                 sendEvtpktin1.addParam("pktlen" + i);
-                sendEvtpktin1.addParam("dst" + i);
+                sendEvtpktin1.addParam("dstX" + i);
+                sendEvtpktin1.addParam("dstY" + i);
                 sendEvtpktin1.addParam("vc" + i);
                 sendEvtpktin1.addParam("0");
                 sendEvtpktin1.addParam("chid"+i);
@@ -355,7 +361,8 @@ public class TaskNetworkInterface extends TMLTask {
                 TMLSendEvent sendEvtpktinRB1 = new TMLSendEvent("sendEvtpktinRB1", referenceObject);
                 sendEvtpktinRB1.setEvent(outputEvent);
                 sendEvtpktinRB1.addParam("pktlen" + i);
-                sendEvtpktinRB1.addParam("dst" + i);
+                sendEvtpktinRB1.addParam("dstX" + i);
+                sendEvtpktinRB1.addParam("dstY" + i);
                 sendEvtpktinRB1.addParam("vc" + i);
                 sendEvtpktinRB1.addParam("1");
                 sendEvtpktinRB1.addParam("chid"+i);
@@ -389,13 +396,7 @@ public class TaskNetworkInterface extends TMLTask {
                 testPrio.addGuard("higherPrio == 0");
 
             }
-
-
-
         }
-
-
-
     }
 
 }

@@ -69,8 +69,10 @@ public class TaskOUTForVC extends TMLTask {
         // Attributes
         TMLAttribute pktlen = new TMLAttribute("pktlen", "pktlen", new TMLType(TMLType.NATURAL), "0");
         this.addAttribute(pktlen);
-        TMLAttribute dst = new TMLAttribute("dst", "dst", new TMLType(TMLType.NATURAL), "0");
-        this.addAttribute(dst);
+        TMLAttribute dstX = new TMLAttribute("dstX", "dstX", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(dstX);
+        TMLAttribute dstY = new TMLAttribute("dstY", "dstY", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(dstY);
         TMLAttribute vc = new TMLAttribute("vc", "vc", new TMLType(TMLType.NATURAL), "0");
         this.addAttribute(vc);
         TMLAttribute eop = new TMLAttribute("eop", "eop", new TMLType(TMLType.NATURAL), "0");
@@ -104,7 +106,8 @@ public class TaskOUTForVC extends TMLTask {
             waitEvt = new TMLWaitEvent("PacketEvent", referenceObject);
             waitEvt.setEvent(inPacketEvents.get(i));
             waitEvt.addParam("pktlen");
-            waitEvt.addParam("dst");
+            waitEvt.addParam("dstX");
+            waitEvt.addParam("dstY");
             waitEvt.addParam("vc");
             waitEvt.addParam("eop");
             waitEvt.addParam("chid");
@@ -121,7 +124,8 @@ public class TaskOUTForVC extends TMLTask {
             sendEvt = new TMLSendEvent("PacketInfo", referenceObject);
             sendEvt.setEvent(outVCEvent);
             sendEvt.addParam("pktlen");
-            sendEvt.addParam("dst");
+            sendEvt.addParam("dstX");
+            sendEvt.addParam("dstY");
             sendEvt.addParam("vc");
             sendEvt.addParam("eop");
             sendEvt.addParam("chid");
@@ -142,7 +146,8 @@ public class TaskOUTForVC extends TMLTask {
             waitEvt = new TMLWaitEvent("PacketEvent", referenceObject);
             waitEvt.setEvent(inPacketEvents.get(i));
             waitEvt.addParam("pktlen");
-            waitEvt.addParam("dst");
+            waitEvt.addParam("dstX");
+            waitEvt.addParam("dstY");
             waitEvt.addParam("vc");
             waitEvt.addParam("eop");
             waitEvt.addParam("chid");

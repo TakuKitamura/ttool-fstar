@@ -42,6 +42,7 @@ package tmltranslator.tonetwork;
 import myutil.TraceManager;
 import tmltranslator.*;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
@@ -225,6 +226,7 @@ public class TranslatedRouter<E> {
                     outputEventOfMux.addParam(new TMLType(TMLType.NATURAL));
                     outputEventOfMux.addParam(new TMLType(TMLType.NATURAL));
                     outputEventOfMux.addParam(new TMLType(TMLType.NATURAL));
+                    outputEventOfMux.addParam(new TMLType(TMLType.NATURAL));
 
                     //mapOfOutputChannels.put(chan, outputEventOfMux);
                     mapOfAllOutputChannels.put(chan, outputEventOfMux);
@@ -237,6 +239,7 @@ public class TranslatedRouter<E> {
             TMLEvent eventForMUX_and_NI_IN = new TMLEvent("EventBetweenMUXandNI_IN_for_" + nameOfExecNode + "_" + i,
                     null, 8, true);
             tmlm.addEvent(eventForMUX_and_NI_IN);
+            eventForMUX_and_NI_IN.addParam(new TMLType(TMLType.NATURAL));
             eventForMUX_and_NI_IN.addParam(new TMLType(TMLType.NATURAL));
             eventForMUX_and_NI_IN.addParam(new TMLType(TMLType.NATURAL));
             eventForMUX_and_NI_IN.addParam(new TMLType(TMLType.NATURAL));
@@ -509,6 +512,7 @@ public class TranslatedRouter<E> {
                     pktInEvtsVCs[i][j].addParam(new TMLType(TMLType.NATURAL));
                     pktInEvtsVCs[i][j].addParam(new TMLType(TMLType.NATURAL));
                     pktInEvtsVCs[i][j].addParam(new TMLType(TMLType.NATURAL));
+                    pktInEvtsVCs[i][j].addParam(new TMLType(TMLType.NATURAL));
 
                     pktInChsVCs[i][j] = new TMLChannel("ch_pktin" + i + "_vc" + j + "_" + xPos + "_" + yPos,
                             null);
@@ -533,6 +537,7 @@ public class TranslatedRouter<E> {
                         routeEvtVCs[i][j][k].addParam(new TMLType(TMLType.NATURAL));
                         routeEvtVCs[i][j][k].addParam(new TMLType(TMLType.NATURAL));
                         routeEvtVCs[i][j][k].addParam(new TMLType(TMLType.NATURAL));
+                        routeEvtVCs[i][j][k].addParam(new TMLType(TMLType.NATURAL));
                         tmlm.addEvent(routeEvtVCs[i][j][k]);
                         routeEvtVCsFeedback[i][j][k] = new TMLEvent("evtfeedback_" + i + "_vc" + j + "_" + k + "_" +
                                 xPos + "_" + yPos, null, 8, true);
@@ -551,6 +556,7 @@ public class TranslatedRouter<E> {
                 for (int j = 0; j < nbOfVCs; j++) {
                     evtOutVCs[i][j] = new TMLEvent("evt_out" + i + "_vc" + j + "_" + xPos + "_" + yPos,
                             null, 8, true);
+                    evtOutVCs[i][j].addParam(new TMLType(TMLType.NATURAL));
                     evtOutVCs[i][j].addParam(new TMLType(TMLType.NATURAL));
                     evtOutVCs[i][j].addParam(new TMLType(TMLType.NATURAL));
                     evtOutVCs[i][j].addParam(new TMLType(TMLType.NATURAL));
@@ -816,8 +822,10 @@ public class TranslatedRouter<E> {
                     // Must now modify the source app
                     TMLAttribute pktlen = new TMLAttribute("pktlen", "pktlen", new TMLType(TMLType.NATURAL), "0");
                     t.addAttributeIfApplicable(pktlen);
-                    TMLAttribute dst = new TMLAttribute("dst", "dst", new TMLType(TMLType.NATURAL), "0");
-                    t.addAttributeIfApplicable(dst);
+                    TMLAttribute dstX = new TMLAttribute("dstX", "dstX", new TMLType(TMLType.NATURAL), "0");
+                    t.addAttributeIfApplicable(dstX);
+                    TMLAttribute dstY = new TMLAttribute("dstY", "dstY", new TMLType(TMLType.NATURAL), "0");
+                    t.addAttributeIfApplicable(dstY);
                     TMLAttribute vc = new TMLAttribute("vc", "vc", new TMLType(TMLType.NATURAL), "0");
                     t.addAttributeIfApplicable(vc);
                     TMLAttribute eop = new TMLAttribute("eop", "eop", new TMLType(TMLType.NATURAL), "1");
@@ -833,18 +841,22 @@ public class TranslatedRouter<E> {
                         if (elt instanceof TMLWriteChannel) {
                             twc = (TMLWriteChannel) elt;
                             if (twc.getChannel(0) == ch) {
-                                TraceManager.addDev("Modifying write ch of task " + t.getTaskName());
-                                TMLSendEvent tse = new TMLSendEvent("EvtForSending__" + ch.getName(), ch.getReferenceObject());
-                                twc.replaceChannelWith(ch, newChannel);
-                                newElements.add(tse);
-                                tse.setEvent(mapOfAllOutputChannels.get(ch));
-                                tse.addParam("" + newChannel.getSize());
-                                tse.addParam("dst");
-                                tse.addParam("" + newChannel.getVC());
-                                tse.addParam("eop");
-                                tse.addParam(""+main.getChannelID(ch));
-                                tse.addNext(twc.getNextElement(0));
-                                twc.setNewNext(twc.getNextElement(0), tse);
+                                Point p = main.getChannelDstXY(ch);
+                                if (p != null) {
+                                    TraceManager.addDev("Modifying write ch of task " + t.getTaskName());
+                                    TMLSendEvent tse = new TMLSendEvent("EvtForSending__" + ch.getName(), ch.getReferenceObject());
+                                    twc.replaceChannelWith(ch, newChannel);
+                                    newElements.add(tse);
+                                    tse.setEvent(mapOfAllOutputChannels.get(ch));
+                                    tse.addParam("" + newChannel.getSize());
+                                    tse.addParam("" + (int)(p.getX()));
+                                    tse.addParam("" + (int)(p.getY()));
+                                    tse.addParam("" + newChannel.getVC());
+                                    tse.addParam("eop");
+                                    tse.addParam("" + main.getChannelID(ch));
+                                    tse.addNext(twc.getNextElement(0));
+                                    twc.setNewNext(twc.getNextElement(0), tse);
+                                }
                             }
                         }
                     }
@@ -878,6 +890,7 @@ public class TranslatedRouter<E> {
                 if (mappedOn == myHwExecutionNode) {
                     TMLEvent packetOut = new TMLEvent("evtPktOutToAppFromOut__" + xPos + "_" + yPos,
                             null, 8, true);
+                    packetOut.addParam(new TMLType(TMLType.NATURAL));
                     packetOut.addParam(new TMLType(TMLType.NATURAL));
                     packetOut.addParam(new TMLType(TMLType.NATURAL));
                     packetOut.addParam(new TMLType(TMLType.NATURAL));
@@ -925,8 +938,10 @@ public class TranslatedRouter<E> {
                     // Must now modify the source app
                     TMLAttribute pktlen = new TMLAttribute("pktlen", "pktlen", new TMLType(TMLType.NATURAL), "0");
                     t.addAttributeIfApplicable(pktlen);
-                    TMLAttribute dst = new TMLAttribute("dst", "dst", new TMLType(TMLType.NATURAL), "0");
-                    t.addAttributeIfApplicable(dst);
+                    TMLAttribute dstX = new TMLAttribute("dstX", "dstX", new TMLType(TMLType.NATURAL), "0");
+                    t.addAttributeIfApplicable(dstX);
+                    TMLAttribute dstY = new TMLAttribute("dstY", "dstY", new TMLType(TMLType.NATURAL), "0");
+                    t.addAttributeIfApplicable(dstY);
                     TMLAttribute vc = new TMLAttribute("vc", "vc", new TMLType(TMLType.NATURAL), "0");
                     t.addAttributeIfApplicable(vc);
                     TMLAttribute eop = new TMLAttribute("eop", "eop", new TMLType(TMLType.NATURAL), "1");
@@ -949,7 +964,8 @@ public class TranslatedRouter<E> {
                                 newElements.add(twe);
                                 twe.setEvent(mapOfAllInputChannels.get(ch));
                                 twe.addParam("pktlen");
-                                twe.addParam("dst");
+                                twe.addParam("dstX");
+                                twe.addParam("dstY");
                                 twe.addParam("vc");
                                 twe.addParam("eop");
                                 twe.addParam("chid");

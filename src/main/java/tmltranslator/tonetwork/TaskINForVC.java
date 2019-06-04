@@ -68,8 +68,10 @@ public class TaskINForVC extends TMLTask {
         // Attributes
         TMLAttribute pktlen = new TMLAttribute("pktlen", "pktlen", new TMLType(TMLType.NATURAL), "0");
         this.addAttribute(pktlen);
-        TMLAttribute dst = new TMLAttribute("dst", "dst", new TMLType(TMLType.NATURAL), "0");
-        this.addAttribute(dst);
+        TMLAttribute dstX = new TMLAttribute("dstX", "dstX", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(dstX);
+        TMLAttribute dstY = new TMLAttribute("dstY", "dstY", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(dstY);
         TMLAttribute vc = new TMLAttribute("vc", "vc", new TMLType(TMLType.NATURAL), "0");
         this.addAttribute(vc);
         TMLAttribute eop = new TMLAttribute("eop", "eop", new TMLType(TMLType.NATURAL), "0");
@@ -152,7 +154,8 @@ public class TaskINForVC extends TMLTask {
         TMLWaitEvent waitEvt = new TMLWaitEvent("PacketEventBeforeSecondSeq", referenceObject);
         waitEvt.setEvent(inPacketEvent);
         waitEvt.addParam("pktlen");
-        waitEvt.addParam("dst");
+        waitEvt.addParam("dstX");
+        waitEvt.addParam("dstY");
         waitEvt.addParam("vc");
         waitEvt.addParam("eop");
         waitEvt.addParam("chid");
@@ -163,49 +166,42 @@ public class TaskINForVC extends TMLTask {
 
 
         // Routing : first branch of secondSeq
-        TMLActionState computeyd = new TMLActionState("computeyd", referenceObject);
-        computeyd.setAction("yd = dst/noc_xsize");
-        activity.addLinkElement(secondSeq, computeyd);
-
-        TMLActionState computexd = new TMLActionState("computexd", referenceObject);
-        computexd.setAction("xd = dst - yd * noc_xsize");
-        activity.addLinkElement(computeyd, computexd);
 
         TMLChoice firstRoutingChoice = new TMLChoice("firstRoutingChoice", referenceObject);
-        activity.addLinkElement(computexd, firstRoutingChoice);
+        activity.addLinkElement(secondSeq, firstRoutingChoice);
 
         TMLActionState requested3 = new TMLActionState("requested3", referenceObject);
         requested3.setAction("requestedOutput = 3");
         activity.addLinkElement(firstRoutingChoice, requested3);
-        firstRoutingChoice.addGuard("xd>x");
+        firstRoutingChoice.addGuard("dstX>x");
         activity.addLinkElement(requested3, new TMLStopState("stopOfRequest3", referenceObject));
 
         TMLActionState requested2 = new TMLActionState("requested2", referenceObject);
         requested2.setAction("requestedOutput = 2");
         activity.addLinkElement(firstRoutingChoice, requested2);
-        firstRoutingChoice.addGuard("xd<x");
+        firstRoutingChoice.addGuard("dstX<x");
         activity.addLinkElement(requested2, new TMLStopState("stopOfRequest2", referenceObject));
 
         TMLChoice secondRoutingChoice = new TMLChoice("secondRoutingChoice", referenceObject);
         activity.addLinkElement(firstRoutingChoice, secondRoutingChoice);
-        firstRoutingChoice.addGuard("xd==x");
+        firstRoutingChoice.addGuard("dstX==x");
 
         TMLActionState requested0 = new TMLActionState("requested0", referenceObject);
-        requested0.setAction("requestedOutput = 0");
+        requested0.setAction("requestedOutput = 1");
         activity.addLinkElement(secondRoutingChoice, requested0);
-        firstRoutingChoice.addGuard("yd<y");
+        firstRoutingChoice.addGuard("dstY<y");
         activity.addLinkElement(requested0, new TMLStopState("stopOfRequest0", referenceObject));
 
         TMLActionState requested4 = new TMLActionState("requested4", referenceObject);
         requested4.setAction("requestedOutput = 4");
         activity.addLinkElement(secondRoutingChoice, requested4);
-        firstRoutingChoice.addGuard("yd==y");
+        firstRoutingChoice.addGuard("dstY==y");
         activity.addLinkElement(requested4, new TMLStopState("stopOfRequest4", referenceObject));
 
         TMLActionState requested1 = new TMLActionState("requested1", referenceObject);
-        requested1.setAction("requestedOutput = 1");
+        requested1.setAction("requestedOutput = 0");
         activity.addLinkElement(secondRoutingChoice, requested1);
-        firstRoutingChoice.addGuard("yd<y");
+        firstRoutingChoice.addGuard("dstY<y");
         activity.addLinkElement(requested1, new TMLStopState("stopOfRequest1", referenceObject));
 
 
@@ -230,7 +226,8 @@ public class TaskINForVC extends TMLTask {
             sendEvt = new TMLSendEvent("info on packet", referenceObject);
             sendEvt.setEvent(outVCEvents.get(i));
             sendEvt.addParam("pktlen");
-            sendEvt.addParam("dst");
+            sendEvt.addParam("dstX");
+            sendEvt.addParam("dstY");
             sendEvt.addParam("vc");
             sendEvt.addParam("eop");
             sendEvt.addParam("chid");
@@ -252,7 +249,8 @@ public class TaskINForVC extends TMLTask {
             waitEvt = new TMLWaitEvent("PacketEventInLoop", referenceObject);
             waitEvt.setEvent(inPacketEvent);
             waitEvt.addParam("pktlen");
-            waitEvt.addParam("dst");
+            waitEvt.addParam("dstX");
+            waitEvt.addParam("dstY");
             waitEvt.addParam("vc");
             waitEvt.addParam("eop");
             waitEvt.addParam("chid");
@@ -265,7 +263,8 @@ public class TaskINForVC extends TMLTask {
             sendEvt = new TMLSendEvent("infoOnPacketO", referenceObject);
             sendEvt.setEvent(outVCEvents.get(i));
             sendEvt.addParam("pktlen");
-            sendEvt.addParam("dst");
+            sendEvt.addParam("dstX");
+            sendEvt.addParam("dstY");
             sendEvt.addParam("vc");
             sendEvt.addParam("eop");
             sendEvt.addParam("chid");
