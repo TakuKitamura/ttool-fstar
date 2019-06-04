@@ -236,7 +236,8 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
                 error = true;
                 errors += "Name of the node  ";
             } else {
-                name = tmpName;
+                updateCPNodeConfigAfterRenamingHWNode(tmpName);
+                //name = tmpName;
             }
         }
 
