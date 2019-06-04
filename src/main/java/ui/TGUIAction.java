@@ -251,7 +251,8 @@ public class TGUIAction extends AbstractAction {
     public static final int TMLARCHI_KEY = 435;
     public static final int TMLARCHI_FIREWALL = 436;
     public static final int TMLARCHI_FPGANODE = 474;
-
+    public static final int TMLARCHI_ANALOGNODE = 519;
+    
     public static final int TMLCP_EDIT = 378;
     public static final int TMLCP_CONNECTOR = 379;
     public static final int TMLCP_REF_SD = 380;
@@ -673,7 +674,7 @@ public class TGUIAction extends AbstractAction {
     public static final int MOVE_ENABLED = 463;
     public static final int FIRST_DIAGRAM = 464;
     
-    public static final int NB_ACTION = 519;
+    public static final int NB_ACTION = 520;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -1137,6 +1138,7 @@ public class TGUIAction extends AbstractAction {
         actions[TMLARCHI_LINK] = new TAction("add-tmlarchi-link", "Add a link", IconManager.imgic202, IconManager.imgic202, "Link", "Add a link between two nodes of the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_CPUNODE] = new TAction("add-tmlarchi-cpunode", "Add a CPU node", IconManager.imgic1100, IconManager.imgic1100, "CPU node", "Add a cpu node to the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_FPGANODE] = new TAction("add-tmlarchi-fpganode", "Add a FPGA node", IconManager.imgic1120, IconManager.imgic1120, "FPGA node", "Add a fpga node to the currently opened DIPLODOCUS architecture diagram", 0);
+	 actions[TMLARCHI_ANALOGNODE] = new TAction("add-tmlarchi-analognode", "Add an analog  node", IconManager.imgic8006, IconManager.imgic8006, "Analog node", "Add an analog node to the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_BUSNODE] = new TAction("add-tmlarchi-busnode", "Add a Bus node", IconManager.imgic1102, IconManager.imgic1102, "Bus node", "Add a bus node to the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_CPNODE] = new TAction("add-tmlarchi-cpnode", "Add a Communication pattern node", IconManager.imgic1102, IconManager.imgic1102, "CP node", "Add a communication pattern node to the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_ARTIFACT] = new TAction("add-tmlarchi-artifact", "Map a task", IconManager.imgic702, IconManager.imgic702, "Map a task", "Map a task onto a node in the currently opened DIPLODOCUS architecture diagram", 0);

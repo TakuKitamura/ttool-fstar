@@ -857,7 +857,10 @@ public class ActionPerformer {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_CPUNODE);
         } else if (command.equals(mgui.actions[TGUIAction.TMLARCHI_FPGANODE].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_FPGANODE);
-        } else if (command.equals(mgui.actions[TGUIAction.TMLARCHI_BUSNODE].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.TMLARCHI_ANALOGNODE].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_ANALOGNODE);
+        }
+	else if (command.equals(mgui.actions[TGUIAction.TMLARCHI_BUSNODE].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_BUSNODE);
         } else if (command.equals(mgui.actions[TGUIAction.TMLARCHI_CPNODE].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_CPNODE);
