@@ -21,24 +21,8 @@ int my_clock_gettime(struct timespec *tp) {
 
 #else
 
-int clock_gettime(struct timespec *ts) {
-  //struct timeval tv;
-  //time(NULL);time since epoch in seconds
-  //people also use the variable localtime
-  //Dont understand the difference between this function and the other one
-  ts->tv_sec = time(NULL);
-  ts->tv_nsec = 0;
-  return 0;
-}
-
 int my_clock_gettime(struct timespec *tp) {
-  
-  return clock_gettime(tp);
-  //this functions justs gives back the real time since epoch,
-  //is it the same as time()???
-  //return clock_gettime(CLOCK_REALTIME, tp);
-  //printf("Led1 encendido, led2 apagado, %d\n",seconds);
-
+  return clock_gettime(CLOCK_REALTIME, tp);
 }
 
 #endif
@@ -118,11 +102,7 @@ void waitFor(long minDelay, long maxDelay) {
   delayToTimeSpec(&tssrc, delay);
 
   debugLong("............. waiting For", delay);
-  if(tssrc.tv_nsec > tsret.tv_nsec){
-    wait_us(tsret.tv_nsec/1000);
-  }else{
-    wait_us(tssrc.tv_nsec/1000);
-  }
+  nanosleep(&tssrc, &tsret);
   debugLong("............. waiting Done for: ", delay);
 }
 

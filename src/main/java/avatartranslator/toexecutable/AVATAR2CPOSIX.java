@@ -681,7 +681,7 @@ public class AVATAR2CPOSIX {
             AvatarActionOnSignal aaos = (AvatarActionOnSignal) _asme;
             ret += makeSignalAction(aaos, 0, false, "", "");
             AvatarSignal as = aaos.getSignal();
-            AvatarRelation ar = avspec.getAvatarRelationWithSignal(as);
+            //AvatarRelation ar = avspec.getAvatarRelationWithSignal(as);
             ret += executeOneRequest("__req0");
             ret += traceRequest();
         }
