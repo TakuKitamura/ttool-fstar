@@ -239,18 +239,19 @@ std::cout<<"fpga addTransaction"<<std::endl;
     std::cout<<"I am in finish!!!"<<std::endl;
 #endif
     //_endSchedule=0;
-    // _maxEndTime=max(_maxEndTime,_nextTransaction->getEndTime());
-#ifdef DEBUG_FPGA
-    std::cout<<"_maxEndTime is "<<_maxEndTime<<std::endl;
-#endif
-    
+    // _maxEndTime=max(_maxEndTime,_nextTransaction->getEndTime())
+    //std::cout<<"end schedule is ~~~~~~~"<<_endSchedule<<std::endl;
+    if(_endSchedule == 0) _maxEndTime=max(_maxEndTime,_nextTransaction->getEndTime());
     if(_reconfigNumber>0)
       _endSchedule=_maxEndTime+_reconfigNumber*_reconfigTime;
     else{
       _endSchedule=0;
-      _maxEndTime=max(_maxEndTime,_nextTransaction->getEndTime());
+      
     }
 #ifdef DEBUG_FPGA
+    
+    std::cout<<"_maxEndTime is "<<_maxEndTime<<std::endl;
+    
     std::cout<<"endschedule is!! "<<_endSchedule<<std::endl;
 #endif
     _simulatedTime=max(_simulatedTime,_endSchedule);
