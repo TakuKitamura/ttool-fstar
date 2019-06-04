@@ -56,6 +56,7 @@ public class SysCAMSPortDE extends SysCAMSPrimitivePort {
 //	private String time;
 //	private int rate;
 //	private int delay;
+        private int nbits;//DG
 	private String DEType;
 	private boolean sensitive;
 	private String sensitiveMethod;
@@ -110,7 +111,11 @@ public class SysCAMSPortDE extends SysCAMSPrimitivePort {
 	public boolean getSensitive() {
 		return sensitive;
 	}
-
+    
+	public int getNbits() {
+		return nbits;
+	}
+    
 	public void setSensitive(boolean _sensitive) {
 		sensitive = _sensitive;
 	}

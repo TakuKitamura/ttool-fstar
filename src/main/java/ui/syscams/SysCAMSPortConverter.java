@@ -55,6 +55,7 @@ public class SysCAMSPortConverter extends SysCAMSPrimitivePort {
 	private double period;
 	private String time;
 	private int rate;
+        private int nbits;
 	private int delay;
 	private String convType;
 	
@@ -81,7 +82,10 @@ public class SysCAMSPortConverter extends SysCAMSPrimitivePort {
 	public int getRate() {
 		return rate;
 	}
-
+    
+        public int getNbits() {
+		return nbits;
+	}
 	public void setRate(int rate) {
 		this.rate = rate;
 	}

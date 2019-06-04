@@ -140,6 +140,7 @@ public class SysCAMSPanelTranslator {
 //					String time = portDE.getTime();
 //					int rate = portDE.getRate();
 //					int delay = portDE.getDelay();
+					int nbits = portDE.getNbits();//DG
 					String type = portDE.getDEType();
 					int origin = portDE.getOrigin();
 					boolean sensitive = portDE.getSensitive();
@@ -220,7 +221,8 @@ public class SysCAMSPanelTranslator {
                         } else if (time.equals("\u03BCs")) {
                             time = "us";
                         }
-						int rate = portConverter.getRate();
+			int rate = portConverter.getRate();
+			int nbits = portConverter.getNbits();//DG
 						int delay = portConverter.getDelay();
 						String type = portConverter.getConvType();
 						int origin = portConverter.getOrigin();
