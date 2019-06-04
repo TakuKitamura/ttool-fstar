@@ -63,6 +63,7 @@ public class JDialogSysCAMSPortDE extends JDialog implements ActionListener {
 	// private JComboBox<String> periodComboBoxString;
 	// private JTextField rateTextField;
 	// private JTextField delayTextField;
+        private JTextField nbitsTextField;
 	private ArrayList<String> listArrayTypeString;
 	private JComboBox<String> typeComboBoxString;
 	private String listOriginString[];
@@ -124,25 +125,26 @@ public class JDialogSysCAMSPortDE extends JDialog implements ActionListener {
 		gridBag.setConstraints(nameTextField, constraints);
 		boxPanel.add(nameTextField);
 
-		// JLabel periodLabel = new JLabel("Period Tp : ");
-		// constraints = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
-		// GridBagConstraints.CENTER,
-		// GridBagConstraints.BOTH,
-		// new Insets(5, 10, 5, 10), 0, 0);
-		// gridBag.setConstraints(periodLabel, constraints);
-		// boxPanel.add(periodLabel);
-		//
-		// if (port.getPeriod() == -1) {
-		// periodTextField = new JTextField(10);
-		// } else {
-		// periodTextField = new JTextField("" + port.getPeriod(), 10);
-		// }
-		// constraints = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
-		// GridBagConstraints.CENTER,
-		// GridBagConstraints.BOTH,
-		// new Insets(5, 10, 5, 10), 0, 0);
-		// gridBag.setConstraints(periodTextField, constraints);
-		// boxPanel.add(periodTextField);
+		JLabel nbitsLabel = new JLabel("Nbits : ");
+	        constraints = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0,
+		GridBagConstraints.CENTER,
+	        GridBagConstraints.BOTH,
+		new Insets(5, 10, 5, 10), 0, 0);
+		gridBag.setConstraints(nbitsLabel, constraints);
+	        boxPanel.add(nbitsLabel);
+		
+		 if (port.getNbits() == -1) {
+		 nbitsTextField = new JTextField(10);
+		 } else {
+		 nbitsTextField = new JTextField("" + port.getNbits(), 10);
+		 }
+		 constraints = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
+		 GridBagConstraints.CENTER,
+		 GridBagConstraints.BOTH,
+		 new Insets(5, 10, 5, 10), 0, 0);
+		 gridBag.setConstraints(nbitsTextField, constraints);
+		 boxPanel.add(nbitsTextField);
+		 
 		//
 		// listPeriodString = new String[3];
 		// listPeriodString[0] = "us";
@@ -206,7 +208,7 @@ public class JDialogSysCAMSPortDE extends JDialog implements ActionListener {
 		// boxPanel.add(delayTextField);
 
 		JLabel typeLabel = new JLabel("Type : ");
-		constraints = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+		constraints = new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 				new Insets(5, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(typeLabel, constraints);
 		boxPanel.add(typeLabel);
@@ -215,7 +217,7 @@ public class JDialogSysCAMSPortDE extends JDialog implements ActionListener {
 		listArrayTypeString.add("int");
 		listArrayTypeString.add("bool");
 		listArrayTypeString.add("double");
-        listArrayTypeString.add("sc_uint<32>");
+        listArrayTypeString.add("sc_uint<N>");
 		if (port.getFather() != null) {
 			if (port.getFather() instanceof SysCAMSBlockDE) {
 				if (!((SysCAMSBlockDE) port.getFather()).getListTypedef().isEmpty()) {
@@ -244,7 +246,7 @@ public class JDialogSysCAMSPortDE extends JDialog implements ActionListener {
 			}
 		}
 		typeComboBoxString.addActionListener(this);
-		constraints = new GridBagConstraints(1, 1, 2, 1, 1.0, 1.0,
+		constraints = new GridBagConstraints(1, 2, 2, 1, 1.0, 1.0,
 				GridBagConstraints.CENTER,
 				GridBagConstraints.BOTH,
 				new Insets(5, 10, 5, 10), 0, 0);
@@ -252,7 +254,7 @@ public class JDialogSysCAMSPortDE extends JDialog implements ActionListener {
 		boxPanel.add(typeComboBoxString); 
 
 		JLabel orginLabel = new JLabel("Origin : ");
-		constraints = new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+		constraints = new GridBagConstraints(0, 3, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 				new Insets(5, 10, 15, 10), 0, 0);
 		gridBag.setConstraints(orginLabel, constraints);
 		boxPanel.add(orginLabel);
@@ -268,7 +270,7 @@ public class JDialogSysCAMSPortDE extends JDialog implements ActionListener {
 		}
 		originComboBoxString.setActionCommand("origin");
 		originComboBoxString.addActionListener(this);
-		constraints = new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+		constraints = new GridBagConstraints(1, 3, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 				new Insets(5, 10, 15, 10), 0, 0);
 		gridBag.setConstraints(originComboBoxString, constraints);
 		boxPanel.add(originComboBoxString);
@@ -287,7 +289,7 @@ public class JDialogSysCAMSPortDE extends JDialog implements ActionListener {
 		JLabel sensitiveLabel = new JLabel("Sensitive");
 		sensitivePanel.add(sensitiveLabel);
 
-		constraints = new GridBagConstraints(0, 3, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+		constraints = new GridBagConstraints(0, 4, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 				new Insets(15, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(sensitivePanel, constraints);
 		boxPanel.add(sensitivePanel);
@@ -307,7 +309,7 @@ public class JDialogSysCAMSPortDE extends JDialog implements ActionListener {
 		sensitiveComboBoxString.setActionCommand("Sensitive_method");
 		sensitiveComboBoxString.setEnabled(port.getSensitive());
 		sensitiveComboBoxString.addActionListener(this);
-		constraints = new GridBagConstraints(1, 3, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+		constraints = new GridBagConstraints(1, 4, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 				new Insets(15, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(sensitiveComboBoxString, constraints);
 		boxPanel.add(sensitiveComboBoxString);
@@ -345,6 +347,25 @@ public class JDialogSysCAMSPortDE extends JDialog implements ActionListener {
 		if ("Save_Close".equals(e.getActionCommand())) {
 			port.setPortName(new String(nameTextField.getText()));
 
+			if (!(nbitsTextField.getText().isEmpty())) {
+				Boolean nbitsValueInteger = false;
+				try {
+					Integer.parseInt(nbitsTextField.getText());
+				} catch (NumberFormatException e1) {
+					JDialog msg = new JDialog(this);
+					msg.setLocationRelativeTo(null);
+					JOptionPane.showMessageDialog(msg, "Nbits is not a Integer", "Warning !",
+							JOptionPane.WARNING_MESSAGE);
+					nbitsValueInteger = true;
+				}
+				/*	if (nbitsValueInteger == false) {
+					port.setNbits(Integer.parseInt(nbitsTextField.getText()));
+				}
+			} else {
+				port.setNbits(-1);
+				}*/
+
+			}
 			// if (!(periodTextField.getText().isEmpty())) {
 			// Boolean periodValueInteger = false;
 			// try {
@@ -398,9 +419,17 @@ public class JDialogSysCAMSPortDE extends JDialog implements ActionListener {
 			// } else {
 			// port.setDelay(-1);
 			// }
+
+
+		
+			if(typeComboBoxString.getSelectedItem()=="sc_uint"){
+				port.setDEType("sc_uint<"+nbitsTextField.getText()+">");
+			}		
+			else{
 			port.setDEType((String) typeComboBoxString.getSelectedItem());
 			// port.setTime((String) periodComboBoxString.getSelectedItem());
-
+			}
+			
 			if ((String) originComboBoxString.getSelectedItem() == "Output") {
 				port.setOrigin(1);
 			} else {

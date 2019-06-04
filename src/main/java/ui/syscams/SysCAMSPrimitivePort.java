@@ -556,11 +556,18 @@ public class SysCAMSPrimitivePort extends TGCScalableWithInternalComponent imple
         	sb.append("\" type=\"" + encode(((SysCAMSPortDE) this).getDEType()));
         	sb.append("\" sensitive=\"" + ((SysCAMSPortDE) this).getSensitive());
         	sb.append("\" sensitive_method=\"" + ((SysCAMSPortDE) this).getSensitiveMethod());
+		sb.append("\" nbits=\"" + ((SysCAMSPortDE) this).getNbits());//DG
         }
         if (this instanceof SysCAMSPortConverter) {
         	sb.append("\" period=\"" + ((SysCAMSPortConverter) this).getPeriod());
         	sb.append("\" time=\"" + ((SysCAMSPortConverter) this).getTime());
         	sb.append("\" rate=\"" + ((SysCAMSPortConverter) this).getRate());
+	       	sb.append("\" nbits=\"" + ((SysCAMSPortConverter) this).getNbits());//DG
+        }
+        if (this instanceof SysCAMSPortConverter) {
+        	sb.append("\" period=\"" + ((SysCAMSPortConverter) this).getPeriod());
+        	sb.append("\" time=\"" + ((SysCAMSPortConverter) this).getTime());
+        	sb.append("\" nbits=\"" + ((SysCAMSPortConverter) this).getNbits());//DG
         	sb.append("\" delay=\"" + ((SysCAMSPortConverter) this).getDelay());
         	sb.append("\" type=\"" + encode(((SysCAMSPortConverter) this).getConvType()));
         }
