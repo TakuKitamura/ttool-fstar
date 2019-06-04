@@ -205,8 +205,7 @@ public class TMLArchiFPGANode extends TMLArchiNode implements SwallowTGComponent
                 error = true;
                 errors += "Name of the node  ";
             } else {
-                updateCPNodeConfigAfterRenamingHWNode(tmpName);
-                //name = tmpName;
+                name = tmpName;
             }
         }
 

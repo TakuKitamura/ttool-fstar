@@ -52,7 +52,10 @@ import ui.tmlad.TMLActivityDiagramPanel;
 import ui.tmlcd.TMLTaskDiagramPanel;
 import ui.tmlcompd.TMLCPrimitiveComponent;
 import ui.tmlcompd.TMLComponentTaskDiagramPanel;
-import ui.tmldd.*;
+import ui.tmldd.TMLArchiArtifact;
+import ui.tmldd.TMLArchiCPUNode;
+import ui.tmldd.TMLArchiDiagramPanel;
+import ui.tmldd.TMLArchiFirewallNode;
 import ui.util.IconManager;
 
 import javax.swing.*;
@@ -3525,33 +3528,5 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
             tgctmp = tgctmp.getFather();
         }
         return tgctmp == mainTgc;
-    }
-
-    //#issue 196
-    //update the mapping configuration of Communication Pattern in Architecture Diagram
-    public void updateCPNodeConfigAfterRenamingHWNode(String nodeName) {
-        for (TGComponent _tgc: tdp.getComponentList()) {
-            if (_tgc instanceof TMLArchiCPNode) {
-                Vector<String> tmpMappedUnits = ((TMLArchiCPNode)_tgc).getMappedUnits();
-                for(String ss: tmpMappedUnits) {
-                    int index = ss.indexOf(":");
-                    int indexOfss = tmpMappedUnits.indexOf(ss);
-                    if (index > -1) {
-                        String[] tabOfNames = ss.substring(index+1, ss.length()).trim().split(",");
-                        for (int i=0; i<tabOfNames.length; i++) {
-                            String s = tabOfNames[i].trim();
-                            if (s.length() > 0) {
-                                if (s.equals(name)) {
-                                    ss = ss.replaceAll(" " + s, " " + nodeName);
-                                }
-                            }
-                        }
-                    }
-                    tmpMappedUnits.set(indexOfss,ss);
-                    ((TMLArchiCPNode)_tgc).setMappedUnits(tmpMappedUnits);
-                }
-            }
-        }
-        name = nodeName;
     }
 }
