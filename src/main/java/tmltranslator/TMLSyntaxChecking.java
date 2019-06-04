@@ -48,10 +48,7 @@ import myutil.TraceManager;
 import tmltranslator.tomappingsystemc2.DiploSimulatorCodeGenerator;
 
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -77,6 +74,8 @@ public class TMLSyntaxChecking {
     private final String TIME_UNIT_ERROR = "unknown time unit";
     private final String NO_NEXT_OPERATOR_ERROR = "No next operator";
     private final String SAME_PORT_NAME = "Two ports have the same name";
+    private final String WRONG_PARAMS = "The number of params is not compatible";
+    private final String DUPLICATE_NAMES = "Two elements have the same name";
 
     private final String TOO_MANY_MEMORIES = "Channel is mapped on more than one memory";
     private final String INVALID_CHANNEL_PATH = "Channel path is invalid";
@@ -117,6 +116,7 @@ public class TMLSyntaxChecking {
 
         TraceManager.addDev("Checking syntax of TML Mapping/ Modeling");
         if (!syntaxCheckForMappingOnly) {
+            checkDuplicateNames();
 
             checkReadAndWriteInChannelsEventsAndRequests();
 
@@ -205,6 +205,41 @@ public class TMLSyntaxChecking {
                 }
             }
         }
+    }
+
+
+    public void checkDuplicateNames() {
+        List<TMLElement> elts;
+
+        for(TMLTask task: tmlm.getTasks()) {
+            elts = tmlm.getAllElementsWithName(task.getName());
+            if (elts.size() > 1) {
+                addError(null, null, DUPLICATE_NAMES + ": invalid task name " + task.getName(), TMLError.ERROR_STRUCTURE);
+            }
+        }
+
+        for(TMLChannel ch: tmlm.getChannels()) {
+            elts = tmlm.getAllElementsWithName(ch.getName());
+            if (elts.size() > 1) {
+                addError(null, null, DUPLICATE_NAMES + ": invalid channel name " + ch.getName(), TMLError.ERROR_STRUCTURE);
+            }
+        }
+
+        for(TMLEvent evt: tmlm.getEvents()) {
+            elts = tmlm.getAllElementsWithName(evt.getName());
+            if (elts.size() > 1) {
+                addError(null, null, DUPLICATE_NAMES + ": invalid event name " + evt.getName(), TMLError.ERROR_STRUCTURE);
+            }
+        }
+
+        for(TMLRequest req: tmlm.getRequests()) {
+            elts = tmlm.getAllElementsWithName(req.getName());
+            if (elts.size() > 1) {
+                addError(null, null, DUPLICATE_NAMES + ": invalid request name " + req.getName(), TMLError.ERROR_STRUCTURE);
+            }
+        }
+
+
     }
 
     //added by minh hiep
@@ -340,12 +375,16 @@ public class TMLSyntaxChecking {
                 }
 
                 if (elt instanceof TMLSendEvent) {
-
                     evt = ((TMLSendEvent) elt).getEvent();
-                    if (evt.isBasicEvent()) {
-                        //TraceManager.addDev("send evt= " + evt.getName() + " task=" + t.getName() + " origin=" + evt.getOriginTask().getName());
-                        if (evt.getOriginTask() != t) {
-                            addError(t, elt, evt.getName() + ": " + WRONG_ORIGIN_EVENT, TMLError.ERROR_BEHAVIOR);
+                    //TraceManager.addDev("In Task " + t.getName() + " = " + evt);
+                    if (evt == null) {
+                        addError(t, elt, "Null event in SendEvt of Task " + t.getName(), TMLError.ERROR_BEHAVIOR);
+                    } else {
+                        if (evt.isBasicEvent()) {
+                            //TraceManager.addDev("send evt= " + evt.getName() + " task=" + t.getName() + " origin=" + evt.getOriginTask().getName());
+                            if (evt.getOriginTask() != t) {
+                                addError(t, elt, evt.getName() + ": " + WRONG_ORIGIN_EVENT, TMLError.ERROR_BEHAVIOR);
+                            }
                         }
                     }
                 }
@@ -452,14 +491,24 @@ public class TMLSyntaxChecking {
                 } else if (elt instanceof TMLSendEvent) {
                     tmlase = (TMLSendEvent) elt;
                     evt = tmlase.getEvent();
-                    for (j = 0; j < tmlase.getNbOfParams(); j++) {
-                        action = tmlase.getParam(j);
-                        if ((action != null) && (action.length() > 0)) {
-                            type = evt.getType(j);
-                            if ((type == null) || (type.getType() == TMLType.NATURAL)) {
-                                parsing(t, elt, "actionnat", action);
-                            } else {
-                                parsing(t, elt, "actionbool", action);
+
+                    if (evt == null) {
+                        addError(t, elt, "Empty event in Sendevent of task " + t.getTaskName(), TMLError.ERROR_BEHAVIOR);
+                    } else if (tmlase.getNbOfParams() != evt.getNbOfParams()) {
+                        addError(t, elt, WRONG_PARAMS + " between event " + evt.getName() +
+                                " (nb:" + evt.getNbOfParams() +
+                                ") and send event (nb:" + tmlase.getNbOfParams() + ") in task " + t.getTaskName(), TMLError.ERROR_BEHAVIOR);
+                    } else {
+
+                        for (j = 0; j < tmlase.getNbOfParams(); j++) {
+                            action = tmlase.getParam(j);
+                            if ((action != null) && (action.length() > 0)) {
+                                type = evt.getType(j);
+                                if ((type == null) || (type.getType() == TMLType.NATURAL)) {
+                                    parsing(t, elt, "actionnat", action);
+                                } else {
+                                    parsing(t, elt, "actionbool", action);
+                                }
                             }
                         }
                     }
@@ -467,26 +516,35 @@ public class TMLSyntaxChecking {
                 } else if (elt instanceof TMLWaitEvent) {
                     tmlwe = (TMLWaitEvent) elt;
                     evt = tmlwe.getEvent();
-                    //TraceManager.addDev("Nb of params of wait event:" + tmlwe.getNbOfParams());
-                    for (j = 0; j < tmlwe.getNbOfParams(); j++) {
-                        action = tmlwe.getParam(j).trim();
-                        if ((action != null) && (action.length() > 0)) {
-                            if (!(Conversion.isId(action))) {
-                                addError(t, elt, SYNTAX_ERROR_VARIABLE_EXPECTED + " in expression " + action, TMLError.ERROR_BEHAVIOR);
-                            } else {
-                                // Declared variable?
-                                attr = t.getAttributeByName(action);
-                                if (attr == null) {
-                                    addError(t, elt, UNDECLARED_VARIABLE + ": " + action + " in expression " + action, TMLError.ERROR_BEHAVIOR);
-                                    TraceManager.addDev("1 In task: " + t.getName() + " extended name:" + t.getNameExtension());
+                    //TraceManager.addDev("Nb of params of wait event:" + tmlwe.getNbOfParams() + " task=" + t.getTaskName());
+
+
+                    if (tmlwe.getNbOfParams() != evt.getNbOfParams()) {
+                        addError(t, elt, WRONG_PARAMS + " between event " + evt.getName() +
+                                " (nb:" + evt.getNbOfParams() +
+                                ") and wait event (nb:" + tmlwe.getNbOfParams() + ") in task " + t.getTaskName(), TMLError.ERROR_BEHAVIOR);
+                    } else {
+
+                        for (j = 0; j < tmlwe.getNbOfParams(); j++) {
+                            action = tmlwe.getParam(j).trim();
+                            if ((action != null) && (action.length() > 0)) {
+                                if (!(Conversion.isId(action))) {
+                                    addError(t, elt, SYNTAX_ERROR_VARIABLE_EXPECTED + " in expression " + action, TMLError.ERROR_BEHAVIOR);
                                 } else {
-                                    //TraceManager.addDev("Nb of params:" + tmlwe.getEvent().getNbOfParams() + " j:" + j);
-                                    if (tmlwe.getEvent().getType(j).getType() == 0) {
-                                        TraceManager.addDev("0");
-                                    }
-                                    if (attr.getType().getType() != tmlwe.getEvent().getType(j).getType()) {
-                                        TraceManager.addDev("Type0:" + attr.getType().getType() + " type1:" + tmlwe.getEvent().getType(j).getType());
-                                        addError(t, elt, VARIABLE_ERROR + " :" + action + " in expression " + action, TMLError.ERROR_BEHAVIOR);
+                                    // Declared variable?
+                                    attr = t.getAttributeByName(action);
+                                    if (attr == null) {
+                                        addError(t, elt, UNDECLARED_VARIABLE + ": " + action + " in expression " + action, TMLError.ERROR_BEHAVIOR);
+                                        TraceManager.addDev("1 In task: " + t.getName() + " extended name:" + t.getNameExtension());
+                                    } else {
+                                        //TraceManager.addDev("Nb of params:" + tmlwe.getEvent().getNbOfParams() + " j:" + j);
+                                        if (tmlwe.getEvent().getType(j).getType() == 0) {
+                                            TraceManager.addDev("0");
+                                        }
+                                        if (attr.getType().getType() != tmlwe.getEvent().getType(j).getType()) {
+                                            TraceManager.addDev("Type0:" + attr.getType().getType() + " type1:" + tmlwe.getEvent().getType(j).getType());
+                                            addError(t, elt, VARIABLE_ERROR + " :" + action + " in expression " + action, TMLError.ERROR_BEHAVIOR);
+                                        }
                                     }
                                 }
                             }
@@ -740,12 +798,13 @@ public class TMLSyntaxChecking {
         // Then we find the corresponding CPUs
         for (TMLTask task : tasks) {
             //We collect all the CPUs
-            //TraceManager.addDev("Collecting all CPUs of task: " + task.getTaskName());
+            TraceManager.addDev("Collecting all CPUs of task: " + task.getTaskName());
             for (HwExecutionNode origin : mapping.getAllHwExecutionNodesOfTask(task)) {
                 // And then we check the paths between node and all the nodes of ch
                 for (HwCommunicationNode destination : mapping.getAllCommunicationNodesOfChannel(ch)) {
-                    //TraceManager.addDev("Computing path between " + origin + " and " + destination);
+                    TraceManager.addDev("Computing path between " + origin.getName() + " and " + destination.getName());
                     if (!mapping.checkPath(origin, destination)) {
+                        TraceManager.addDev("Checking checkPathToMemoryFromCPU: Adding error");
                         addError(null, null, INVALID_CHANNEL_PATH + ": " + ch.getName(), TMLError.ERROR_STRUCTURE);
                         return;
                     }
@@ -756,11 +815,13 @@ public class TMLSyntaxChecking {
     }
 
     private void checkPathToMemoryFromAllHwCommNode(TMLChannel ch) {
+        TraceManager.addDev("Checking checkPathToMemoryFromAllHwCommNode");
         HwMemory mem = mapping.getMemoryOfChannel(ch);
         if (mem != null) {
             for (HwCommunicationNode origin : mapping.getAllCommunicationNodesOfChannel(ch)) {
                 if (origin != mem) {
                     if (!mapping.checkPath(origin, mem)) {
+                        TraceManager.addDev("Checking checkPathToMemoryFromAllHwCommNode: Adding error");
                         addError(null, null, INVALID_CHANNEL_PATH + ": " + ch.getName(), TMLError.ERROR_STRUCTURE);
                         return;
                     }

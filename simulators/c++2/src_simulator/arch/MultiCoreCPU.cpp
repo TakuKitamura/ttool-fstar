@@ -110,13 +110,13 @@ void MultiCoreCPU::initCore(){
 TMLTime MultiCoreCPU::getMinEndSchedule(){
   TMLTime minTime=multiCore[0];
   for( TMLTime i = 0; i < multiCore.size(); i++){
-    std::cout<<"core number is: "<<i<<" end schedule is "<<multiCore[i]<<std::endl;
+    //std::cout<<"core number is: "<<i<<" end schedule is "<<multiCore[i]<<std::endl;
     if( minTime >= multiCore[i]){
       minTime=multiCore[i];
       coreNumber=i;
       } 
   }
-  std::cout<<"in getMinEndSchedule core number is "<<coreNumber<<std::endl;
+  //std::cout<<"in getMinEndSchedule core number is "<<coreNumber<<std::endl;
   return minTime;
 }
     
@@ -149,12 +149,12 @@ std::cout<<"getNextTransaction"<<_name<<std::endl;
 }
 
 void MultiCoreCPU::calcStartTimeLength(TMLTime iTimeSlice){
-std::cout<<"calcStartTimeLength"<<_name<<std::endl;
+  //std::cout<<"calcStartTimeLength"<<_name<<std::endl;
 #ifdef DEBUG_CPU
   std::cout << "CPU:calcSTL: scheduling decision of CPU " << _name << ": " << _nextTransaction->toString() << std::endl;
 #endif
 #ifdef BUS_ENABLED
-std::cout << "CPU:calcSTL: scheduling decision of CPU " << _name << ": " << _nextTransaction->toString() << std::endl;
+  std::cout << "CPU:calcSTL: scheduling decision of CPU " << _name << ": " << _nextTransaction->toString() << std::endl;
   //std::cout << " " << std::endl;
   TMLChannel* aChannel=_nextTransaction->getCommand()->getChannel(0);
   //std::cout << "after get channel " << std::endl;

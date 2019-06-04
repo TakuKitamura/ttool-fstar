@@ -817,7 +817,7 @@ public class GTMLModeling {
                             tmltt = new TMLType(request.getType(j).getType());
                             tmlattr = new TMLAttribute(attname, tmltt);
                             tmlattr.initialValue = tmlattr.getDefaultInitialValue();
-                            TraceManager.addDev("Adding " + tmlattr.getName() + " to " + task.getName() + "with value =" + tmlattr.initialValue);
+                            //TraceManager.addDev("Adding " + tmlattr.getName() + " to " + task.getName() + "with value =" + tmlattr.initialValue);
                             task.addAttribute(tmlattr);
                         }
                     }
@@ -909,6 +909,7 @@ public class GTMLModeling {
                                 channel.setMax(port1.getMax());
                                 channel.ports.add(port1);
                                 channel.ports.add(port2);
+                                TraceManager.addDev("Adding channel with port1 vc=" + port1.getVC());
                                 channel.setVC(port1.getVC());
                                 if (port1.isBlocking() && port2.isBlocking()) {
                                     channel.setType(TMLChannel.BRBW);
@@ -1522,7 +1523,7 @@ public class GTMLModeling {
                             tmltt = new TMLType(request.getType(j).getType());
                             tmlattr = new TMLAttribute(attname, tmltt);
                             tmlattr.initialValue = tmlattr.getDefaultInitialValue();
-                            //TraceManager.addDev("Adding " + tmlattr.getName() + " to " + tt1.getName() + "with value =" + tmlattr.initialValue);
+                            TraceManager.addDev("Adding " + tmlattr.getName() + " to " + tt1.getName() + "with value =" + tmlattr.initialValue);
                             tt1.addAttribute(tmlattr);
                         }
                     }

@@ -1537,6 +1537,11 @@ public class GTURTLEModeling {
         return map;
     }
 
+    @SuppressWarnings("unchecked")
+    public void setTMLMapping(TMLMapping tmap) {
+        this.tmap = tmap;
+    }
+
 
     public HashMap<String, HashSet<String>> getCPUTaskMap() {
         HashMap<String, HashSet<String>> cpuTaskMap = new HashMap<String, HashSet<String>>();

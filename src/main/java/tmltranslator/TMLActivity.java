@@ -149,7 +149,7 @@ public class TMLActivity extends TMLElement {
         return found;
     }
 
-    private void replaceAllNext(TMLActivityElement _oldE, TMLActivityElement _newE) {
+    public void replaceAllNext(TMLActivityElement _oldE, TMLActivityElement _newE) {
         TMLActivityElement tmlae;
         for (int i = 0; i < elements.size(); i++) {
             tmlae = elements.elementAt(i);

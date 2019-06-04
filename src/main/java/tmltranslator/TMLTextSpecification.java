@@ -353,6 +353,9 @@ public class TMLTextSpecification<E> {
         String sb = "";
         sb += "//Local variables" + CR;
 
+        //TraceManager.addDev("Making activity of task:" + task.getTaskName());
+
+
         for (TMLAttribute attr : task.getAttributes()) {
             sb += TMLType.getStringType(attr.getType().getType()) + SP + attr.getName();
             if ((attr.getInitialValue() != null) && (attr.getInitialValue().length() > 0)) {

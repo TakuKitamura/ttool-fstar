@@ -56,8 +56,7 @@ import java.util.List;
  */
 public class TMAP2Network<E>  {
 
-    private TMLModeling<?> tmlmodeling;
-    private TMLArchitecture tmlarchi;
+
     private TMLMapping<?> tmlmapping;
 
     private boolean debug;
@@ -75,11 +74,21 @@ public class TMAP2Network<E>  {
 
     public final static String[] PORT_NAME = {"North", "South", "West", "East", "Internal"};
 
+    private HashMap<TMLChannel, String> IDsOfChannels;
+
 
     public TMAP2Network(TMLMapping<?> _tmlmapping, int nocSize) {
         tmlmapping = _tmlmapping;
         routers = new TranslatedRouter[nbOfVCs][nbOfVCs];
         this.nocSize = nocSize;
+    }
+
+    public String getChannelID(TMLChannel ch) {
+        return IDsOfChannels.get(ch);
+    }
+
+    public void putTMLChannelID(TMLChannel ch, String id) {
+        IDsOfChannels.put(ch, "" + id);
     }
 
     public TMLMapping<?> getTMLMapping() {
@@ -214,7 +223,8 @@ public class TMAP2Network<E>  {
         for(HwNode node: tmla.getHwNodes()) {
             if (node instanceof HwExecutionNode) {
                 nbOfHwExecutionNode ++;
-                newList.add(node);
+                //newList.add(node);
+
                 HwBus bus = new HwBus(node.getName() + "__bus");
                 HwMemory mem = new HwMemory(node.getName() + "__mem");
                 newList.add(bus);
@@ -229,6 +239,7 @@ public class TMAP2Network<E>  {
                 tmla.addHwLink(memToBus);
             }
         }
+
         for(HwNode node: newList) {
             tmla.addHwNode(node);
         }
@@ -307,8 +318,8 @@ public class TMAP2Network<E>  {
         }
 
         // Create routers around
-        tmlmodeling = tmlmapping.getTMLModeling();
-        tmlarchi = tmlmapping.getTMLArchitecture();
+        //tmlmodeling = tmlmapping.getTMLModeling();
+        //tmlarchi = tmlmapping.getTMLArchitecture();
 
         // *** Create links and update routers accordingly
         // For each router, I consider all routers that are around the considered one
@@ -321,7 +332,7 @@ public class TMAP2Network<E>  {
                         // There is a north router
                         // link to next
                         if (routers[i][j].playingTheRoleOfPrevious[k] == null) {
-                            Link to = new Link(tmlarchi, tmlmodeling, routers[i][j], routers[i-1][j], nbOfVCs);
+                            Link to = new Link(tmla, tmlm, routers[i][j], routers[i-1][j], nbOfVCs);
                             routers[i][j].playingTheRoleOfPrevious[k] = to;
                             routers[i-1][j].playingTheRoleOfNext[getFrom(k)] = to;
                         }
@@ -333,7 +344,7 @@ public class TMAP2Network<E>  {
                         // There is a south router
                         // link to next
                         if (routers[i][j].playingTheRoleOfPrevious[k] == null) {
-                            Link to = new Link(tmlarchi, tmlmodeling, routers[i][j], routers[i+1][j], nbOfVCs);
+                            Link to = new Link(tmla, tmlm, routers[i][j], routers[i+1][j], nbOfVCs);
                             routers[i][j].playingTheRoleOfPrevious[k] = to;
                             routers[i+1][j].playingTheRoleOfNext[getFrom(k)] = to;
                         }
@@ -344,7 +355,7 @@ public class TMAP2Network<E>  {
                         // There is an east router
                         // link to next
                         if (routers[i][j].playingTheRoleOfPrevious[k] == null) {
-                            Link to = new Link(tmlarchi, tmlmodeling, routers[i][j], routers[i][j+1], nbOfVCs);
+                            Link to = new Link(tmla, tmlm, routers[i][j], routers[i][j+1], nbOfVCs);
                             routers[i][j].playingTheRoleOfPrevious[k] = to;
                             routers[i][j+1].playingTheRoleOfNext[getFrom(k)] = to;
                         }
@@ -356,7 +367,7 @@ public class TMAP2Network<E>  {
                         // There is an east router
                         // link to next
                         if (routers[i][j].playingTheRoleOfPrevious[k] == null) {
-                            Link to = new Link(tmlarchi, tmlmodeling, routers[i][j], routers[i][j-1], nbOfVCs);
+                            Link to = new Link(tmla, tmlm, routers[i][j], routers[i][j-1], nbOfVCs);
                             routers[i][j].playingTheRoleOfPrevious[k] = to;
                             routers[i][j-1].playingTheRoleOfNext[getFrom(k)] = to;
                         }
@@ -369,6 +380,12 @@ public class TMAP2Network<E>  {
 
 
 
+        // Associate an id to all channels
+        int id = 0;
+        IDsOfChannels = new HashMap<>();
+        for(TMLChannel ch: tmlm.getChannels()) {
+            IDsOfChannels.put(ch, "" + id);
+        }
 
         // Make internal channels & events of routers
         for(i=0; i<nocSize; i++) {
@@ -385,8 +402,6 @@ public class TMAP2Network<E>  {
                 routers[i][j].makeRouter();
             }
         }
-
-
 
 
 
@@ -419,24 +434,44 @@ public class TMAP2Network<E>  {
             }
         }
 
+        // Handling origin channels
+        for(i=0; i<nocSize; i++) {
+            for(j=0; j<nocSize; j++) {
+                routers[i][j].makeOriginChannels();
+            }
+        }
+
+        // Handling destination channels
+        for(i=0; i<nocSize; i++) {
+            for(j=0; j<nocSize; j++) {
+                routers[i][j].makeDestinationChannels();
+            }
+        }
+
+        // Post processing of routers
+        for(i=0; i<nocSize; i++) {
+            for(j=0; j<nocSize; j++) {
+                routers[i][j].postProcessing();
+            }
+        }
+
+        // Removing useless channels i.e. channels routed by the router
+        // The ones in channelID
+        // We indeed assume all channels go to the NoC
+        for(TMLChannel ch: IDsOfChannels.keySet()) {
+            tmlm.removeChannel(ch);
+        }
 
 
         // Printing routers
         for(i=0; i<nocSize; i++) {
             for(j=0; j<nocSize; j++) {
-                TraceManager.addDev(routers[i][j].toString() + "\n");
+                //TraceManager.addDev(routers[i][j].toString() + "\n");
             }
         }
 
 
-
-
-        // Connect channels to the NoC
-        // A bridge is put with the same position as the router as to allow classical paths not
-        // to use the router
-
-
-        return null; // all ok
+        return null; // That's all folks!
     }
 
 }

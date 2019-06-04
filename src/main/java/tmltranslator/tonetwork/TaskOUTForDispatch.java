@@ -39,6 +39,7 @@
 
 package tmltranslator.tonetwork;
 
+import myutil.TraceManager;
 import tmltranslator.*;
 
 import java.util.Vector;
@@ -76,6 +77,8 @@ public class TaskOUTForDispatch extends TMLTask {
         this.addAttribute(vc);
         TMLAttribute eop = new TMLAttribute("eop", "eop", new TMLType(TMLType.NATURAL), "0");
         this.addAttribute(eop);
+        TMLAttribute chid = new TMLAttribute("chid", "chid", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(chid);
         TMLAttribute nEvt = new TMLAttribute("nEvt", "nEvt", new TMLType(TMLType.NATURAL), "0");
         this.addAttribute(nEvt);
         TMLAttribute loopExit = new TMLAttribute("loopExit", "loopExit", new TMLType(TMLType.NATURAL), "0");
@@ -130,7 +133,7 @@ public class TaskOUTForDispatch extends TMLTask {
                 mainChoice.addGuard("nEvt > 0");
 
                 TMLNotifiedEvent notifiedFeedback = new TMLNotifiedEvent("FeedbackNotifiedEvt"+i, referenceObject);
-                notifiedFeedback.setEvent(outSelectEvents.get(i));
+                notifiedFeedback.setEvent(feedbackEvents.get(i));
                 notifiedFeedback.setVariable("feedback");
                 activity.addLinkElement(loopInside, notifiedFeedback);
 
@@ -138,17 +141,19 @@ public class TaskOUTForDispatch extends TMLTask {
                 activity.addLinkElement(notifiedFeedback, internalChoice);
 
                 // Left branch of internal choice
-                sendEvt = new TMLSendEvent("feedbackUpEvent", referenceObject);
+                sendEvt = new TMLSendEvent("SelectEvent", referenceObject);
                 sendEvt.setEvent(outSelectEvents.get(i));
                 activity.addLinkElement(internalChoice, sendEvt);
                 internalChoice.addGuard("feedback > 0");
 
                 waitEvt = new TMLWaitEvent("PacketEventInLoop", referenceObject);
+                //TraceManager.addDev("Nb Of params of " + inPacketEvents.get(i).getName() + " = " + inPacketEvents.get(i).getNbOfParams());
                 waitEvt.setEvent(inPacketEvents.get(i));
                 waitEvt.addParam("pktlen");
                 waitEvt.addParam("dst");
                 waitEvt.addParam("vc");
                 waitEvt.addParam("eop");
+                waitEvt.addParam("chid");
                 activity.addLinkElement(sendEvt, waitEvt);
 
                 TMLActionState reqOut = new TMLActionState("ExitLoop" + i, referenceObject);
@@ -161,6 +166,7 @@ public class TaskOUTForDispatch extends TMLTask {
                 sendEvt.addParam("dst");
                 sendEvt.addParam("vc");
                 sendEvt.addParam("eop");
+                sendEvt.addParam("chid");
                 activity.addLinkElement(reqOut, sendEvt);
 
                 TMLWriteChannel write = new TMLWriteChannel("WriteChannel" + i, referenceObject);

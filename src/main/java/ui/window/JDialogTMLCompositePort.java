@@ -578,7 +578,7 @@ public class JDialogTMLCompositePort extends JDialogBase implements ActionListen
         panel5.add(lossPercentageLabel, c5);
         c5.gridwidth = GridBagConstraints.REMAINDER; //end row
         vcText = new JTextField("" + vc);
-        panel5.add(lossPercentageText, c5);
+        panel5.add(vcText, c5);
 
 
 
@@ -844,7 +844,7 @@ public class JDialogTMLCompositePort extends JDialogBase implements ActionListen
         try {
             return Integer.decode(vcText.getText().trim());
         } catch (Exception e) {
-            return -1;
+            return 0;
         }
     }
 }

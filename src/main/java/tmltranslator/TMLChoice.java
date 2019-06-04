@@ -58,7 +58,14 @@ public class TMLChoice extends TMLActivityElement{
     }
 
     public void addGuard(String _g) {
-        guards.add(_g);
+        String g = _g.trim();
+        if(!(g.startsWith("["))) {
+            g = "[" + g;
+        }
+        if(!(g.endsWith("]"))) {
+            g = g + "]";
+        }
+        guards.add(g);
     }
 
     public int getNbGuard() {

@@ -244,9 +244,11 @@ public class MappedSystemCTask {
             constSig = reference + "(ID iID, Priority iPriority, std::string iName, FPGA** iCPUs, unsigned int iNumOfCPUs" + CR;
         }
 
+        TraceManager.addDev("\n***** Task name:" + task.getName());
 
 
         for (TMLChannel ch : channels) {
+            TraceManager.addDev("Adding ch " + ch.getExtendedName());
             constSig += ", TMLChannel* " + ch.getExtendedName() + CR;
         }
         for (TMLEvent evt : events) {

@@ -84,7 +84,7 @@ public class TMLChannel extends TMLCommunicationElement {
     private String SP = " ";
     private int priority;
 
-    private int vc = -1;
+    private int vc = 0;
     
     public ArrayList<TMLTask> originalOriginTasks = new ArrayList<TMLTask>(); 
     public ArrayList<TMLTask> originalDestinationTasks = new ArrayList<TMLTask>(); 
@@ -191,6 +191,7 @@ public class TMLChannel extends TMLCommunicationElement {
     public int getNumberOfSamples() { return nbOfSamples;}
 
     public void setVC(int vc) {
+        TraceManager.addDev("Setting VC to " + vc + " for channel " + getName());
         this.vc = vc;
     }
 
@@ -517,9 +518,13 @@ public class TMLChannel extends TMLCommunicationElement {
         String s = TAB + "CHANNEL" + SP + name + CR;
         if (isBasicChannel()) {
             s += TAB2 + "Origin task: " + originTask.getName() + CR;
-            s += TAB2 + "Origin port: " + originPort.getName() + CR;
+            if (originPort != null) {
+                s += TAB2 + "Destination port: " + originPort.getName() + CR;
+            }
             s += TAB2 + "Destination task: " + destinationTask.getName() + CR;
-            s += TAB2 + "Destination port: " + destinationPort.getName() + CR;
+            if (destinationPort != null) {
+                s += TAB2 + "Destination port: " + destinationPort.getName() + CR;
+            }
         }
         if (isAForkChannel()) {
             s += TAB2 + "Origin task: " + originTasks.get(0).getName() + CR;

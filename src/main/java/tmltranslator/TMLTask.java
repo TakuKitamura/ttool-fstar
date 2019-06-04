@@ -113,6 +113,16 @@ public class TMLTask extends TMLElement {
         attributes.add(_tmla);
     }
 
+
+    public void addAttributeIfApplicable(TMLAttribute _tmla) {
+        for(TMLAttribute att: attributes) {
+            if (att.getName().compareTo(_tmla.getName()) == 0) {
+                return;
+            }
+        }
+        attributes.add(_tmla);
+    }
+
     public List<TMLAttribute> getAttributes() {
         return attributes;
     }
@@ -379,9 +389,9 @@ public class TMLTask extends TMLElement {
         writeTMLChannelsList.add(_ch);
     }
 
-    public List<TMLChannel> getTMLChannels() {
+    /*public List<TMLChannel> getTMLChannels() {
         return new ArrayList<TMLChannel>(channelsList);
-    }
+    }*/
 
     public List<TMLChannel> getReadTMLChannels() {
         return new ArrayList<TMLChannel>(readTMLChannelsList);

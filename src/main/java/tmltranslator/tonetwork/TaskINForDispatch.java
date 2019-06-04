@@ -64,8 +64,9 @@ public class TaskINForDispatch extends TMLTask {
 
         this.nbOfVCs = nbOfVCs;
 
-        inputEvent.setDestinationTask(this);
-        inputChannel.setDestinationTask(this);
+        //inputEvent.setDestinationTask(this);
+        //inputChannel.setDestinationTask(this);
+
         for(TMLEvent evt: outputEvents) {
             evt.setOriginTask(this);
         }
@@ -82,12 +83,15 @@ public class TaskINForDispatch extends TMLTask {
         this.addAttribute(vc);
         TMLAttribute eop = new TMLAttribute("eop", "eop", new TMLType(TMLType.NATURAL), "0");
         this.addAttribute(eop);
+        TMLAttribute chid = new TMLAttribute("chid", "chid", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(chid);
 
         // Events and channels
         addTMLEvent(inputEvent);
         for(TMLEvent evt: outputEvents) {
             addTMLEvent(evt);
         }
+
         addReadTMLChannel(inputChannel);
         for(TMLChannel ch: outputChannels) {
             addWriteTMLChannel(ch);
@@ -108,11 +112,11 @@ public class TaskINForDispatch extends TMLTask {
         waitEvt.addParam("dst");
         waitEvt.addParam("vc");
         waitEvt.addParam("eop");
-        activity.addElement(waitEvt);
-        loop.addNext(waitEvt);
+        waitEvt.addParam("chid");
+        activity.addLinkElement(loop, waitEvt);
 
         TMLChoice choice = new TMLChoice("MainChoice", referenceObject);
-        activity.addElement(choice);
+        activity.addLinkElement(waitEvt, choice);
 
         for(int i=0; i<nbOfVCs; i++) {
             TMLSendEvent sendEvt = new TMLSendEvent("SendEvtToVC" + i, referenceObject);
@@ -121,6 +125,7 @@ public class TaskINForDispatch extends TMLTask {
             sendEvt.addParam("dst");
             sendEvt.addParam("vc");
             sendEvt.addParam("eop");
+            sendEvt.addParam("chid");
             activity.addElement(sendEvt);
             choice.addNext(sendEvt);
             choice.addGuard("vc == " + i);

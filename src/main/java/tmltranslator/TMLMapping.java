@@ -855,7 +855,7 @@ public class TMLMapping<E> {
                     TraceManager.addDev("\n\nFORKTASK is  mapped: " + task.getName());
                 }
             } else {
-                TraceManager.addDev("Non fork task found: " + task.getName());
+                //TraceManager.addDev("Non fork task found: " + task.getName());
             }
             if (task.getName().startsWith("JOINTASK_")) {
                 if (!isTaskMapped(task)) {
