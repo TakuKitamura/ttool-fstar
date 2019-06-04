@@ -63,6 +63,9 @@ FPGA::FPGA(    ID iID,
 					      ,_cyclesPerExecc(iCyclesPerExecc)
 					      ,_taskNumber(0)
 					      ,_currTaskNumber(0)
+					      ,_reconfigNumber(0)
+					      ,_maxEndTime(0)
+					     
 					     
 {}
 
@@ -80,11 +83,15 @@ void FPGA::streamBenchmarks(std::ostream& s) const{
 }
 
 TMLTransaction* FPGA::getNextTransaction(){
+#ifdef DEBUG_FPGA
  std::cout<<"fpga getNextTransaction"<<_name<<" ";
-  #ifdef BUS_ENABLED
+#endif
+#ifdef BUS_ENABLED
   if (_masterNextTransaction==0 || _nextTransaction==0){
+#ifdef DEBUG_FPGA
     if(_masterNextTransaction == 0) std::cout<<"master is 0"<<std::endl;
     if(_nextTransaction==0) std::cout<<"nexttrans is 0"<<std::endl;
+#endif
     //if(_nextTransaction)  std::cout<<_nextTransaction->toString()<<std::endl;
      return _nextTransaction;
      //return 0;
@@ -101,7 +108,9 @@ TMLTransaction* FPGA::getNextTransaction(){
       aResult = aTempMaster->accessGranted();
       // std::cout << "5" << std::endl;
     }
+#ifdef DEBUG_FPGA
     if(_nextTransaction)std::cout<<"haha1"<<_nextTransaction->toString()<<std::endl;
+#endif
     return (aResult)?_nextTransaction:0;
   }
 #else
@@ -112,7 +121,9 @@ TMLTransaction* FPGA::getNextTransaction(){
  }
 
 void FPGA::calcStartTimeLength(){
+#ifdef DEBUG_FPGA
   std::cout<<"fpga calStartTimeLength "<<std::endl;
+#endif
   
 #ifdef BUS_ENABLED
   
@@ -133,11 +144,12 @@ void FPGA::calcStartTimeLength(){
 #endif
   //round to full cycles!!!
 
-  TMLTime aStartTime = _nextTransaction->getRunnableTime();
+  TMLTime aStartTime = max(_endSchedule,_nextTransaction->getRunnableTime());
+#ifdef DEBUG_FPGA
   std::cout<<"start time !!!!!!!!!!"<<_nextTransaction->toShortString()<<"is "<<aStartTime<<std::endl;
+#endif
   //or setStartTime(0)???
   _nextTransaction->setStartTime(aStartTime);
-
 #ifdef BUS_ENABLED
   if (_masterNextTransaction==0){
 #endif  
@@ -184,7 +196,9 @@ std::cout<<"fpga truncateNextTransAt"<<std::endl;
 
 
 bool FPGA::addTransaction(TMLTransaction* iTransToBeAdded){
+#ifdef DEBUG_FPGA
 std::cout<<"fpga addTransaction"<<std::endl;
+#endif
   bool aFinish;
   std::cout << "*************** LOOKING for master of" << _nextTransaction->toString() << std::endl;
   if (_masterNextTransaction==0){
@@ -221,15 +235,30 @@ std::cout<<"fpga addTransaction"<<std::endl;
   }
  
   if (aFinish){
-    //std::cout<<"I am in finish!!!"<<std::endl;
-    _endSchedule=0;
+#ifdef DEBUG_FPGA
+    std::cout<<"I am in finish!!!"<<std::endl;
+#endif
+    //_endSchedule=0;
+    // _maxEndTime=max(_maxEndTime,_nextTransaction->getEndTime());
+#ifdef DEBUG_FPGA
+    std::cout<<"_maxEndTime is "<<_maxEndTime<<std::endl;
+#endif
+    
+    if(_reconfigNumber>0)
+      _endSchedule=_maxEndTime+_reconfigNumber*_reconfigTime;
+    else{
+      _endSchedule=0;
+      _maxEndTime=max(_maxEndTime,_nextTransaction->getEndTime());
+    }
+#ifdef DEBUG_FPGA
+    std::cout<<"endschedule is!! "<<_endSchedule<<std::endl;
+#endif
     _simulatedTime=max(_simulatedTime,_endSchedule);
     _overallTransNo++; //NEW!!!!!!!!
     _overallTransSize+=_nextTransaction->getOperationLength();  //NEW!!!!!!!!
     //std::cout << "lets crash execute\n";
 
     // std::cout<<_nextTransaction->toString()<<std::endl;
-    if(_nextTransaction->getCommand()==0) std::cout<<"d"<<std::endl;
      _nextTransaction->getCommand()->execute();  //NEW!!!!
     //std::cout << "not crashed\n";
 #ifdef TRANSLIST_ENABLED
@@ -249,23 +278,10 @@ std::cout<<"fpga addTransaction"<<std::endl;
 
 void FPGA::schedule(){ 
   std::cout << "fpga:schedule BEGIN " << _name << "+++++++++++++++++++++++++++++++++\n";
-  _scheduler->schedule(_endSchedule);
-  TMLTransaction* aOldTransaction = _nextTransaction;
+  _reconfigNumber=_scheduler->schedule(_endSchedule);
+  TMLTransaction* aOldTransaction = _nextTransaction; 
   _nextTransaction=_scheduler->getNextTransaction(_endSchedule);
-  /* TaskList::const_iterator iter_task=_taskList.begin();
-  std::advance(iter_task,_transNumber);
-   if(iter_task!=_taskList.end()){    
-     _nextTransaction=(*iter_task)->getNextTransaction(_endSchedule);
-    if(_nextTransaction!=0 && _nextTransaction->getVirtualLength()==0){
-      _nextTransaction=0;
-      _transNumber=0;
-    }
-    else if(++iter_task==_taskList.end())
-      _transNumber=0;
-    else if(_nextTransaction->getCommand()->getProgress()==_nextTransaction->getLength())
-      _transNumber++;
-   }
-  */
+  
   if (aOldTransaction!=0 && aOldTransaction!=_nextTransaction){ //NEW 
     if (_masterNextTransaction!=0) {
       _masterNextTransaction->registerTransaction(0);
@@ -441,7 +457,9 @@ void FPGA::drawPieChart(std::ofstream& myfile) const {
        _maxEndTime=max(_maxEndTime,_endTime);
      }
    }
+#ifdef DEBUG_FPGA
    std::cout<<"max end time is "<<_maxEndTime<<std::endl;
+#endif
    std::map <TMLTask*, double > transPercentage;
  
    for( TransactionList::const_iterator i = _transactList.begin(); i!= _transactList.end(); ++i){
@@ -503,17 +521,21 @@ void FPGA::schedule2HTML(std::ofstream& myfile)  {
     TMLTime aCurrTime = 0;
     unsigned int taskOccurTime = 0;
     for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
+#ifdef DEBUG_FPGA
       std::cout <<  (*i)-> getCommand()->getTask()->toString() <<std::endl;
       std::cout<< _htmlCurrTask->toString()<<std::endl;
+#endif
       if( (*i)-> getCommand()->getTask() == _htmlCurrTask ){
 	if(taskOccurTime==0){
 	  _currTaskNumber++;
 	  taskOccurTime++;
 	}
+#ifdef DEBUG_FPGA
 	std::cout<<"in!!"<<_htmlCurrTask->toString()<<std::endl;
+#endif
 	TMLTransaction* aCurrTrans = *i;
 	unsigned int aBlanks = aCurrTrans->getStartTime() - aCurrTime;
-	std::cout<<"blank is "<<aBlanks<<std::endl;
+	//std::cout<<"blank is "<<aBlanks<<std::endl;
 	if ( aBlanks > 0 ) {
 	  writeHTMLColumn( myfile, aBlanks, "not", "idle time" );
 	}
@@ -523,7 +545,7 @@ void FPGA::schedule2HTML(std::ofstream& myfile)  {
 
 	// Issue #4
 	TMLTask* task = aCurrTrans->getCommand()->getTask();
-	std::cout<<"what is this task?"<<task->toString()<<std::endl;
+	//	std::cout<<"what is this task?"<<task->toString()<<std::endl;
 	const std::string cellClass = determineHTMLCellClass(  nextCellClassIndex );
 
 	writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString() );
@@ -549,10 +571,14 @@ void FPGA::schedule2HTML(std::ofstream& myfile)  {
     }
 
     myfile << "</tr>" << std::endl << "</table>" << std::endl;
+#ifdef DEBUG_FPGA
     std::cout<<"_taskNumer is ------------------------------------"<<_taskNumber<<std::endl;
     std::cout<<"curr task number is ------------------------"<<_currTaskNumber<<std::endl;
+#endif
     if(_currTaskNumber == _taskNumber){
+#ifdef DEBUG_FPGA
       std::cout<<" i am showing the name of tasks!!!----------------------------------------------------------------------------------!"<<std::endl;
+#endif
       myfile  << "<table>" << std::endl << "<tr>" << std::endl;
       for( std::map<TMLTask*, std::string>::iterator taskColIt = taskCellClasses.begin(); taskColIt != taskCellClasses.end(); ++taskColIt ) {
 	TMLTask* task = (*taskColIt).first;
@@ -565,5 +591,7 @@ void FPGA::schedule2HTML(std::ofstream& myfile)  {
 
    
    }
+#ifdef DEBUG_FPGA
   std::cout<<"end in!!!"<<std::endl;
+#endif
 }

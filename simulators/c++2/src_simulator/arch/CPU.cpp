@@ -51,7 +51,7 @@ double CPU::averageLoad (unsigned int n) const{
       _maxEndTime=max(_maxEndTime,_endTime);
     }
   }
-  //std::cout<<"max end time is "<<_maxEndTime<<std::endl;
+  std::cout<<"max end time is "<<_maxEndTime<<std::endl;
   for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
     if( (*i)->getTransactCoreNumber() == n ){
       _averageLoad += (*i)->getEndTime() - (*i)->getStartTime();
@@ -124,8 +124,8 @@ void CPU::schedule2HTML(std::ofstream& myfile) const {
     TMLTime aCurrTime = 0;
 
     for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
-      //std::cout<<"get transaction core number is: "<<(*i)->getTransactCoreNumber()<<std::endl;
-      //std::cout<<"time : "<<_cycleTime<<std::endl;
+      std::cout<<"get transaction core number is: "<<(*i)->getTransactCoreNumber()<<std::endl;
+      std::cout<<"time : "<<_cycleTime<<std::endl;
       //std::cout << "CPU:calcSTL: html of CPU " << _name << ": " << (*i)->toString() << std::endl;
       if( (*i)->getTransactCoreNumber() == this->_cycleTime ){
 	TMLTransaction* aCurrTrans = *i;

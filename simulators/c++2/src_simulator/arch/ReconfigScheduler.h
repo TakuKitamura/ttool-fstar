@@ -37,59 +37,47 @@ Ludovic Apvrille, Renaud Pacalet
  * knowledge of the CeCILL license and that you accept its terms.
  *
  */
-#include<OrderScheduler.h>
-#include <TMLTransaction.h>
+#ifndef ReconfigSchedulerH
+#define ReconfigSchedulerH
+#include <WorkloadSource.h>
 
-OrderScheduler::OrderScheduler(const std::string& iName, Priority iPrio): WorkloadSource(iPrio), _name(iName), _nextTransaction(0) {
-}
+class TMLTransaction;
+class FPGA;
 
-OrderScheduler::OrderScheduler(const std::string& iName, Priority iPrio, WorkloadSource** aSourceArray, unsigned int iNbOfSources): WorkloadSource(iPrio, aSourceArray, iNbOfSources), _name(iName), _nextTransaction(0), _lastSource(0) {
-}
-
-TMLTime OrderScheduler::schedule(TMLTime iEndSchedule){
-  std::cout<<"order scheduler "<<std::endl;
-	TaskList::iterator i;
-	TMLTransaction *aMarkerPast=0, *aMarkerFuture=0,*aTempTrans;
-	TMLTime aTransTimeFuture=-1,aRunnableTime;
-	WorkloadSource *aSourcePast=0, *aSourceFuture=0;  //NEW
-	for(WorkloadList::iterator i=_workloadList.begin(); i != _workloadList.end(); ++i){
-		aTempTrans=(*i)->getNextTransaction(iEndSchedule);
-		if (aTempTrans!=0 && aTempTrans->getVirtualLength()!=0){
-			aRunnableTime=aTempTrans->getRunnableTime();	
-			if (aRunnableTime<=iEndSchedule){
-			  //Past
-
-			  aMarkerPast=aTempTrans;
-			  aSourcePast=*i; //NEW
-		        
-			}else{
-			  //Future
-		        
-			  aTransTimeFuture=aRunnableTime;
-			  aMarkerFuture=aTempTrans;
-			  aSourceFuture=*i; //NEW
-		        
-				
-			}
-		}
-		     
-	}
-	if (aMarkerPast==0){
-		_nextTransaction=aMarkerFuture;
-		_lastSource=aSourceFuture; //NEW
-	}else{
-		_nextTransaction=aMarkerPast;
-		_lastSource=aSourcePast; //NEW
-	}
-	std::cout<<"end order scheduler"<<std::endl;
-	return 0;
-}
-
-OrderScheduler::~OrderScheduler(){
-	std::cout << _name << ": Scheduler deleted\n";
-}
-
-void OrderScheduler::reset(){
-	WorkloadSource::reset();
-	_nextTransaction=0;
-}
+///Fixed priority based scheduler
+class ReconfigScheduler: public WorkloadSource{
+public:
+	///Constructor
+    	/**
+	\param iName Name of the scheduler
+      	\param iPrio Priority of the scheduler
+    	*/
+	ReconfigScheduler(const std::string& iName, Priority iPrio, const std::string iTaskOrder);
+	///Constructor
+    	/**
+	\param iName Name of the scheduler
+      	\param iPrio Priority of the scheduler
+	\param aSourceArray Array of pointers to workload ressources from which transactions may be received
+	\param iNbOfSources Length of the array
+    	*/
+	ReconfigScheduler(const std::string& iName, Priority iPrio, WorkloadSource** aSourceArray, unsigned int iNbOfSources, const std::string iTaskOrder);
+	~ReconfigScheduler();
+	TMLTime schedule(TMLTime iEndSchedule);
+	inline TMLTransaction* getNextTransaction(TMLTime iEndSchedule) const {return _nextTransaction;}
+	inline std::string toString() const {return _name;}
+	void reset();
+	//void transWasScheduled(SchedulableDevice* iDevice);
+protected:
+	///Name of the scheduler
+	std::string _name;
+	//task order decided by users
+	std::string _taskOrder;
+	///Next transaction to be executed
+	TMLTransaction* _nextTransaction;
+	///Last workload source to which ressource access was granted
+	WorkloadSource* _lastSource;
+	WorkloadList _tempWorkloadList;
+	
+	
+};
+#endif

@@ -348,7 +348,9 @@ void Simulator::latencies2XML(std::ostringstream& glob, int id1, int id2) {
 }
 
 void Simulator::schedule2HTML(std::string& iTraceFileName) const {
+#ifdef DEBUG_HTML
 std::cout<<"schedule2HTML--------------------------------------******************"<<std::endl;
+#endif
   struct timeval aBegin,aEnd;
   time_t aRawtime;
   struct tm * aTimeinfo;
@@ -370,12 +372,11 @@ std::cout<<"schedule2HTML--------------------------------------*****************
     myfile << SCHED_HTML_DOC; // <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n
     myfile << SCHED_HTML_BEG_HTML; // <html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n
     myfile << SCHED_HTML_BEG_HEAD; // <head>\n
-
     const std::string::size_type findSlash = iTraceFileName.find_last_of( "/" );
     unsigned int indexSlash;
 
     if ( findSlash == std::string::npos ) {
-      indexSlash = 0;
+      indexSlash = -1;
       //myfile<<"indexSlash=0\n";
     }
     else {
@@ -397,7 +398,7 @@ std::cout<<"schedule2HTML--------------------------------------*****************
       cssfile.close();
 
       myfile << SCHED_HTML_CSS_BEG_LINK;
-      myfile << cssFullFileName;     
+      myfile << cssFileName;     
       myfile << SCHED_HTML_CSS_END_LINK;
     }
     else {
@@ -459,8 +460,10 @@ std::cout<<"schedule2HTML--------------------------------------*****************
       (*j)->setStartFlagHTML(true);
       for(TaskList::const_iterator i = (*j)->getTaskList().begin(); i != (*j)->getTaskList().end(); ++i){
       	(*j)->setHtmlCurrTask(*i);
-	//std::cout<<"begin fpga html "<<(*j)->toShortString()<<std::endl;
-	//std::cout<<"task is !!!!!"<<(*i)->toString()<<std::endl;
+#ifdef DEBUG_HTML
+	std::cout<<"begin fpga html "<<(*j)->toShortString()<<std::endl;
+	std::cout<<"task is !!!!!"<<(*i)->toString()<<std::endl;
+#endif
 	(*j)->schedule2HTML(myfile);
 	(*j)->setStartFlagHTML(false);
       }
@@ -492,7 +495,9 @@ std::cout<<"schedule2HTML--------------------------------------*****************
   std::cout << "The HTML output took " << getTimeDiff(aBegin,aEnd) << "usec. File: " << iTraceFileName << std::endl;
 }
 void Simulator::schedule2VCD(std::string& iTraceFileName) const{
+#ifdef DEBUG_VCD
   std::cout<<"schedule2VCD~~~~~~~~~~~~"<<std::endl;
+#endif
   time_t aRawtime;
   struct tm * aTimeinfo;
   struct timeval aBegin,aEnd;
@@ -538,13 +543,14 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
 	}
       }
        else if((*i)->toShortString().substr(0,4) == "fpga"){
-	 std::cout<<"444"<<std::endl;
 	 for(TaskList::const_iterator j = _simComp->getTaskList().begin(); j != _simComp->getTaskList().end(); j++){
 	   aTopElement = new SignalChangeData();
 	   aTopElement->_taskFPGA=(*j);
 	   (*i)->getNextSignalChange(true, aTopElement);
 	   if(aTopElement->_device){
+#ifdef DEBUG_VCD
 	     std::cout<<"name of fpga is : "<< (*i)->toShortString() << "_" << (*j)->toString() << std::endl;
+#endif
 	     myfile << "$var wire 1 " << (*i)->toShortString() << "_" << (*j)->toString() << " " << (*i)->toString() << "_" << (*j)->toString() << " $end\n";
 	     aQueue.push(aTopElement);
 	   }
@@ -569,14 +575,14 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
     myfile << "$upscope $end\n$enddefinitions  $end\n\n";
     
     while (!aQueue.empty()){
-      std::cout<<"this is queue"<<std::endl;
+      // std::cout<<"this is queue"<<std::endl;
       aTopElement=aQueue.top();
       if( aTopElement->_device->toShortString().substr(0,3) == "cpu")
-        std::cout<<"the member of queue is "<<aTopElement->_device->toShortString()<< "_core" << aTopElement->_coreNumberVcd<<std::endl;
+	std::cout<<"the member of queue is "<<aTopElement->_device->toShortString()<< "_core" << aTopElement->_coreNumberVcd<<std::endl;
       else if( aTopElement->_device->toShortString().substr(0,4) == "fpga")
         std::cout<<"the member of queue is "<<aTopElement->_device->toShortString()<< "_" << aTopElement->_taskFPGA->toString()<<std::endl;
       else 
-        std::cout<<"the member of queue is "<<aTopElement->_device->toShortString() <<std::endl;
+	 std::cout<<"the member of queue is "<<aTopElement->_device->toShortString() <<std::endl;
 
       
       while (aNextClockEvent < aTopElement->_time){
@@ -608,15 +614,17 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
       aQueue.pop();
       TMLTime aTime = aTopElement->_time;
       aTopElement->_device->getNextSignalChange(false, aTopElement);
+#ifdef DEBUG_VCD
       std::cout<<"aTime is "<<aTime<<std::endl;
       std::cout<<"top element time is "<<aTopElement->_time<<std::endl;
+#endif
       if (aTopElement->_time == aTime){
 	delete aTopElement;
-	std::cout<<"delete"<<std::endl;
+	//	std::cout<<"delete"<<std::endl;
       }
       else{
 	aQueue.push(aTopElement);
-	std::cout<<"no delete"<<std::endl;
+	//std::cout<<"no delete"<<std::endl;
       }
     }
   
@@ -674,17 +682,16 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 #endif
   _simComp->setStopFlag(false,"");
   for(TaskList::const_iterator i=_simComp->getTaskList().begin(); i!=_simComp->getTaskList().end();i++){
-    //std::cout << "task preparation:" << (*i)->toString() << std::endl;
-    //if ((*i)->getCurrCommand()!=0) std::cout<<(*i)->getCurrCommand()->toString() << std::endl;
     if ((*i)->getCurrCommand()!=0) (*i)->getCurrCommand()->prepare(true);
-    //std::cout << "task preparation done:" << (*i)->toString() << std::endl;
   }
 #ifdef EBRDD_ENABLED
   for(EBRDDList::const_iterator i=_simComp->getEBRDDIterator(false); i!=_simComp->getEBRDDIterator(true);i++){
     if ((*i)->getCurrCommand()!=0) (*i)->getCurrCommand()->prepare();
   }
 #endif
-  //std::cout<<"simulate"<<std::endl;
+#ifdef DEBUG_SIMULATE
+  std::cout<<"simulate"<<std::endl;
+#endif
   for_each(_simComp->getCPUList().begin(), _simComp->getCPUList().end(),std::mem_fun(&CPU::schedule));
 
   for_each(_simComp->getFPGAList().begin(), _simComp->getFPGAList().end(),std::mem_fun(&FPGA::schedule));
@@ -695,16 +702,21 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
   _wasReset=false;
 #endif
   while ( transLET!=0 && !_simComp->getStopFlag()){
-    
-    //std::cout<<"come in cpu"<<std::endl;
+#ifdef DEBUG_SIMULATE
+      std::cout<<"come in cpu"<<std::endl;
+#endif
 #ifdef DEBUG_KERNEL
       std::cout << "kernel:simulate: scheduling decision: " <<  transLET->toString() << std::endl;
 #endif
 
 	commandLET=transLET->getCommand();
-	//std::cout<<"device is "<<deviceLET->getName()<<std::endl;
+#ifdef DEBUG_SIMULATE
+	std::cout<<"device is "<<deviceLET->getName()<<std::endl;
+#endif
         bool x = deviceLET->addTransaction(0);
-	//std::cout<<"in simulator end addTransactin"<<std::endl;
+#ifdef DEBUG_SIMULATE
+	std::cout<<"in simulator end addTransactin"<<std::endl;
+#endif
 #ifdef DEBUG_KERNEL
       std::cout << "kernel:simulate: AFTER add trans: " << x << std::endl;
 #endif
@@ -722,7 +734,9 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 	  depFPGA=depTask->getFPGA();
 	  
 	  if(depCPU){
-	    //std::cout<<"lets start cpu"<<std::endl;
+#ifdef DEBUG_SIMULATE
+	    std::cout<<"lets start cpu"<<std::endl;
+#endif
 	    if (depCPU!=deviceLET){
 #ifdef DEBUG_KERNEL
 	      std::cout << "kernel:simulate: Tasks running on different CPUs" << std::endl;
@@ -766,7 +780,9 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 	    }
 	  }
 	  else{
+#ifdef DEBUG_SIMULATE
 	    std::cout<<"lets start fpga"<<std::endl;
+#endif
 	    if (depFPGA!=deviceLET){
 #ifdef DEBUG_KERNEL
 	      std::cout << "kernel:simulate: Tasks running on different FPGAs" << std::endl;
@@ -820,7 +836,9 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 #endif
       }
       oLastTrans=transLET;
-      //std::cout<<"task is !!!!!"<<oLastTrans->toString()<<std::endl;
+#ifdef DEBUG_SIMULATE
+      std::cout<<"task is !!!!!"<<oLastTrans->toString()<<std::endl;
+#endif
 	transLET=getTransLowestEndTime(deviceLET);	
     }
 

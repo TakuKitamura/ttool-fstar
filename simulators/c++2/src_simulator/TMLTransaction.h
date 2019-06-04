@@ -81,7 +81,7 @@ class TMLTransaction {
   /**
      \return Start time
   */
-  inline TMLTime getStartTime() const {return _startTime;}
+ inline TMLTime getStartTime() const {return _startTime;}
   ///Returns the start time of the operational part of the transaction
   /**
      \return Start time of the operational part
@@ -278,6 +278,7 @@ class TMLTransaction {
   vcdTransVisState _transVcdOutputState;
   //state of transaction for VCD output
   bool _endState;
+
   ///previous end time for the cpu VCD output
  // unsigned int _previousTransEndTime;
   //device executes the current device
@@ -298,6 +299,7 @@ class TMLTransaction {
   static MemPoolNoDel<TMLTransaction> memPool;
   ///Current Transaction ID
   static ID _ID;
+
 };
 
 #endif
