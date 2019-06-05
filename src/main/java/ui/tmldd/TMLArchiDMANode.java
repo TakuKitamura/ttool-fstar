@@ -195,7 +195,7 @@ public class TMLArchiDMANode extends TMLArchiCommunicationNode implements Swallo
                 error = true;
                 errors += "Name of the node  ";
             } else {
-                updateCPNodeConfigAfterRenamingHWNode(tmpName);
+                name = tmpName;
             }
         }
 
@@ -338,7 +338,7 @@ public class TMLArchiDMANode extends TMLArchiCommunicationNode implements Swallo
     }
 
     public int getComponentType()       {
-        return CONTROLLER;
+        return TRANSFER;
     }
 
 }
