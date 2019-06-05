@@ -216,7 +216,7 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
                 error = true;
                 errors += "Name of the node  ";
             } else {
-                name = tmpName;
+                updateCPNodeConfigAfterRenamingHWNode(tmpName);
             }
         }
        // TraceManager.addDev("CPU core 3");

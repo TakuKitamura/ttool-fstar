@@ -437,6 +437,11 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         return mappedUnits;
     }
 
+    //#issue 196
+    public void setMappedUnits(Vector<String> newMappedUnits) {
+        mappedUnits = newMappedUnits;
+    }
+
     public int getCPMEC()       {
         if( cpMEC.equals( "Memory Copy" ) )     {
             return CPMEC.CPU_MEMORY_COPY_MEC;
