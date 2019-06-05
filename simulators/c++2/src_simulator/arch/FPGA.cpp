@@ -253,14 +253,19 @@ std::cout<<"fpga addTransaction"<<std::endl;
     std::cout<<"_maxEndTime is "<<_maxEndTime<<std::endl;
     
     std::cout<<"endschedule is!! "<<_endSchedule<<std::endl;
+    if(_nextTransaction==0) std::cout<<"000"<<std::endl;
 #endif
     _simulatedTime=max(_simulatedTime,_endSchedule);
     _overallTransNo++; //NEW!!!!!!!!
     _overallTransSize+=_nextTransaction->getOperationLength();  //NEW!!!!!!!!
     //std::cout << "lets crash execute\n";
-
     // std::cout<<_nextTransaction->toString()<<std::endl;
+    if(_nextTransaction->getCommand()==0)
+      std::cout<<"111"<<std::endl;
+    else 
+      std::cout<<"333"<<std::endl;
      _nextTransaction->getCommand()->execute();  //NEW!!!!
+     std::cout<<"222"<<std::endl;
     //std::cout << "not crashed\n";
 #ifdef TRANSLIST_ENABLED
     _transactList.push_back(_nextTransaction);

@@ -88,6 +88,7 @@ using std::max;
 #undef DEBUG_SERIALIZE
 
 #define DEBUG_FPGA
+#define DEBUG_SIMULATE
 //enables mapping of DIPLODOCUS channels onto buses
 #define BUS_ENABLED
 //cost of a send/wait command
