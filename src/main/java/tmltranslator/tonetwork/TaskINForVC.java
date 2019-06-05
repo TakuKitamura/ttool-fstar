@@ -171,13 +171,13 @@ public class TaskINForVC extends TMLTask {
         activity.addLinkElement(secondSeq, firstRoutingChoice);
 
         TMLActionState requested3 = new TMLActionState("requested3", referenceObject);
-        requested3.setAction("requestedOutput = 3");
+        requested3.setAction("requestedOutput = 1");
         activity.addLinkElement(firstRoutingChoice, requested3);
         firstRoutingChoice.addGuard("dstX>x");
         activity.addLinkElement(requested3, new TMLStopState("stopOfRequest3", referenceObject));
 
         TMLActionState requested2 = new TMLActionState("requested2", referenceObject);
-        requested2.setAction("requestedOutput = 2");
+        requested2.setAction("requestedOutput = 0");
         activity.addLinkElement(firstRoutingChoice, requested2);
         firstRoutingChoice.addGuard("dstX<x");
         activity.addLinkElement(requested2, new TMLStopState("stopOfRequest2", referenceObject));
@@ -187,7 +187,7 @@ public class TaskINForVC extends TMLTask {
         firstRoutingChoice.addGuard("dstX==x");
 
         TMLActionState requested0 = new TMLActionState("requested0", referenceObject);
-        requested0.setAction("requestedOutput = 1");
+        requested0.setAction("requestedOutput = 3");
         activity.addLinkElement(secondRoutingChoice, requested0);
         firstRoutingChoice.addGuard("dstY<y");
         activity.addLinkElement(requested0, new TMLStopState("stopOfRequest0", referenceObject));
@@ -199,7 +199,7 @@ public class TaskINForVC extends TMLTask {
         activity.addLinkElement(requested4, new TMLStopState("stopOfRequest4", referenceObject));
 
         TMLActionState requested1 = new TMLActionState("requested1", referenceObject);
-        requested1.setAction("requestedOutput = 0");
+        requested1.setAction("requestedOutput = 2");
         activity.addLinkElement(secondRoutingChoice, requested1);
         firstRoutingChoice.addGuard("dstY<y");
         activity.addLinkElement(requested1, new TMLStopState("stopOfRequest1", referenceObject));
