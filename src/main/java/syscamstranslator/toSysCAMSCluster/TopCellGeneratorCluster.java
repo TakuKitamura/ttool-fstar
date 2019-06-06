@@ -139,7 +139,7 @@ public class TopCellGeneratorCluster {
 				System.err.println(path + GENERATED_PATH2 + t.getName() + "_tdf.h");
 				System.err.println(path + t.getName() + "_tdf.h");
 				if(standalone==true){
-				    //System.out.println("@@@ TDF Cluster standalone");
+				
 				    fw = new FileWriter(path + "/" + t.getName() + "_tdf.h");
 				}
 				
@@ -147,8 +147,7 @@ public class TopCellGeneratorCluster {
 				    fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + "_tdf.h");
 				headerTDF = HeaderCluster.getPrimitiveHeaderTDF(t);
 				fw.write(headerTDF);
-				codeTDF = PrimitiveCodeCluster.getPrimitiveCodeTDF(t);
-				//if(standalone==false)
+				codeTDF = PrimitiveCodeCluster.getPrimitiveCodeTDF(t);			
 				codeTDF = codeTDF + "#endif"+ CR;
 				fw.write(codeTDF);
 				fw.close();
@@ -164,15 +163,14 @@ public class TopCellGeneratorCluster {
  	
 				if(standalone==true)
 				    {
-					//System.out.println("@@@ DE Cluster standalone");	
+				
 					fw = new FileWriter(path +"/" + t.getName() + "_tdf.h");}
 				else
 				    fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + "_tdf.h");
 				
 				headerDE = HeaderCluster.getPrimitiveHeaderDE(t);
 				fw.write(headerDE);
-				codeDE = PrimitiveCodeCluster.getPrimitiveCodeDE(t);
-				//if(standalone==false)
+				codeDE = PrimitiveCodeCluster.getPrimitiveCodeDE(t);			
 				codeDE = codeDE + "#endif "+ CR;
 				fw.write(codeDE);
 				fw.close();

@@ -40,54 +40,81 @@ package syscamstranslator;
 
 import java.util.LinkedList;
 
-/**
- * Class SysCAMSTCluster
- * Parameters of a SystemC-AMS cluster
- * Creation: 19/05/2018
- * @version 1.0 19/05/2018
- * @author Irina Kit Yan LEE
+import javax.swing.DefaultListModel;
+
+/** 
+ * Class SysCAMSTClock
 */
 
-public class SysCAMSTCluster extends SysCAMSTComponent {
-	private String clusterName;
+public class SysCAMSTClock extends SysCAMSTComponent{
+    private String name;
+    private String frequency;
+    private String unit;
+    private String dutyCycle;
+    private String startTime;
+    private String posFirst;
 	
-	private LinkedList<SysCAMSTBlockTDF> blockTDF;
-	private LinkedList<SysCAMSTBlockDE> blockDE;
-    	private LinkedList<SysCAMSTClock> clock;
-	
-	public SysCAMSTCluster(String _clusterName) {
-		clusterName = _clusterName;
-		blockTDF = new LinkedList<SysCAMSTBlockTDF>();
-		blockDE = new LinkedList<SysCAMSTBlockDE>();
-		clock = new LinkedList<SysCAMSTClock>();
+    public SysCAMSTClock(String _name, String _frequency,  String _unit, String _dutyCycle, String _startTime, String _posFirst) {
+     
+    	name = _name;
+	frequency	= _frequency;
+	unit	= _unit;
+	dutyCycle	= _dutyCycle;
+	startTime	= _startTime;
+	posFirst	= _posFirst; 
+    }
+
+
+	public String getName() {
+		return name;
 	}
 
-	public String getClusterName() {
-		return clusterName;
+    	public String getFrequency() {
+		return frequency;
 	}
 
-	public LinkedList<SysCAMSTBlockTDF> getBlockTDF(){
-		return blockTDF;
+	public String getUnit() {
+		return unit;
 	}
 
-	public void addBlockTDF(SysCAMSTBlockTDF _blockTDF){
-		blockTDF.add(_blockTDF);
-	}
-	
-	public LinkedList<SysCAMSTBlockDE> getBlockDE(){
-		return blockDE;
+        public String getDutyCycle() {
+		return dutyCycle;
 	}
 
-	public void addBlockDE(SysCAMSTBlockDE _blockDE){
-		blockDE.add(_blockDE);
+    public String getStartTime() {
+		return startTime;
 	}
     
-	public LinkedList<SysCAMSTClock> getClock(){
-		return clock;
+    
+    	public String getPosFirst() {
+		return posFirst;
 	}
 
-	public void addBlockDE(SysCAMSTClock _clock){
-		clock.add(_clock);
+    
+	public void setName(String _name) {
+		name = _name;
+	}
+ 
+    	public void setFrequency(String _frequency) {
+		 frequency = _frequency;
+	}
+
+	public void setUnit(String _unit) {
+		unit = _unit;
+	}
+
+        public void setDutyCycle(String _dutyCycle) {
+		dutyCycle = _dutyCycle;
+	}
+
+
+        public void setStartTime(String _startTime) {
+	       startTime = _startTime;
 	}
     
+    
+    	public void setPosFirst(String _posFirst) {
+		posFirst = _posFirst;
+	}
+      
 }
