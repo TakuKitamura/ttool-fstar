@@ -110,18 +110,20 @@ void MultiCoreCPU::initCore(){
 TMLTime MultiCoreCPU::getMinEndSchedule(){
   TMLTime minTime=multiCore[0];
   for( TMLTime i = 0; i < multiCore.size(); i++){
-    //std::cout<<"core number is: "<<i<<" end schedule is "<<multiCore[i]<<std::endl;
+    // std::cout<<"core number is: "<<i<<" end schedule is "<<multiCore[i]<<std::endl;
     if( minTime >= multiCore[i]){
       minTime=multiCore[i];
       coreNumber=i;
       } 
   }
-  //std::cout<<"in getMinEndSchedule core number is "<<coreNumber<<std::endl;
+  // std::cout<<"in getMinEndSchedule core number is "<<coreNumber<<std::endl;
   return minTime;
 }
     
 TMLTransaction* MultiCoreCPU::getNextTransaction(){
+#ifdef DEBUG_CPU
 std::cout<<"getNextTransaction"<<_name<<std::endl;
+#endif
 #ifdef BUS_ENABLED
   if (_masterNextTransaction == 0 || _nextTransaction == 0){
     return _nextTransaction;
@@ -149,12 +151,12 @@ std::cout<<"getNextTransaction"<<_name<<std::endl;
 }
 
 void MultiCoreCPU::calcStartTimeLength(TMLTime iTimeSlice){
-  //std::cout<<"calcStartTimeLength"<<_name<<std::endl;
 #ifdef DEBUG_CPU
+std::cout<<"calcStartTimeLength"<<_name<<std::endl;
   std::cout << "CPU:calcSTL: scheduling decision of CPU " << _name << ": " << _nextTransaction->toString() << std::endl;
 #endif
 #ifdef BUS_ENABLED
-  std::cout << "CPU:calcSTL: scheduling decision of CPU " << _name << ": " << _nextTransaction->toString() << std::endl;
+std::cout << "CPU:calcSTL: scheduling decision of CPU " << _name << ": " << _nextTransaction->toString() << std::endl;
   //std::cout << " " << std::endl;
   TMLChannel* aChannel=_nextTransaction->getCommand()->getChannel(0);
   //std::cout << "after get channel " << std::endl;
@@ -283,7 +285,9 @@ TMLTime MultiCoreCPU::truncateNextTransAt(TMLTime iTime){
 }
 
 bool MultiCoreCPU::addTransaction(TMLTransaction* iTransToBeAdded){
+#ifdef DEBUG_CPU
 std::cout<<"addTransaction"<<_name<<std::endl;
+#endif
   bool aFinish;
   //TMLTransaction* aTransCopy=0;
   if (_masterNextTransaction==0){
@@ -339,22 +343,21 @@ std::cout << "CPU:calcSTL: addtransaction of CPU " << _name << ": " << _nextTran
     ////test///
    // unsigned int iCoreNumber=getCoreNumber();
     static unsigned int time=0;
-    std::cout<<"multicore number "<<coreNumber<<" end schedule "<<_endSchedule<<std::endl;
+    // std::cout<<"multicore number "<<coreNumber<<" end schedule "<<_endSchedule<<std::endl;
     multiCore[coreNumber]=_endSchedule;
   //  std::cout<<"cycle time is "<<_cycleTime<<std::endl;
     if (time < amountOfCore -1){
 	  _endSchedule=0;
 	  _nextTransaction->setTransactCoreNumber(coreNumber);
 	  ++coreNumber;
-	  std::cout<<"haha1: "<<coreNumber<<std::endl;
+	 
      }else {
 	  _nextTransaction->setTransactCoreNumber(coreNumber);
 	  _endSchedule=getMinEndSchedule();
- 	  std::cout<<"haha2: "<<coreNumber<<std::endl;	
+ 	 	
     }
     time++;
-    std::cout <<"test transaction core number !!!! "<<_nextTransaction->getTransactCoreNumber()<<std::endl;
-    std::cout << "set end schedule CPU: " << _endSchedule << "\n";
+
     _simulatedTime=max(_simulatedTime,_endSchedule);
     _overallTransNo++; //NEW!!!!!!!!
     _overallTransSize+=_nextTransaction->getOperationLength();  //NEW!!!!!!!!
@@ -398,7 +401,7 @@ void MultiCoreCPU::schedule(){
   //std::cout << "5\n";
   if (_nextTransaction!=0 && aOldTransaction != _nextTransaction) calcStartTimeLength(aTimeSlice);
   //std::cout << "CPU:schedule END " << _name << "+++++++++++++++++++++++++++++++++\n";
-  else std::cout<<"no need calcStartTimeLength"<<std::endl;
+ 
  std::cout << "CPU:schedule END " << _name << "+++++++++++++++++++++++++++++++++\n";
 }
 
@@ -541,21 +544,20 @@ void MultiCoreCPU::latencies2XML(std::ostringstream& glob, unsigned int id1, uns
 
 void MultiCoreCPU::getNextSignalChange(bool iInit, SignalChangeData* oSigData){
   //static bool _end=false;
-  std::cout<<"getNextSignalChangemulticore!!!---------"<<std::endl;
+
   for( TransactionList::iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
     
-    std::cout<<"transaction core number is "<<  (*i)->getTransactCoreNumber()<<std::endl;
-    std::cout<<"cpu core number "<< oSigData->_coreNumberVcd<<std::endl;
+ 
     if( (*i)->getTransactCoreNumber() == oSigData->_coreNumberVcd){
       
-      std::cout<<"bingo!!"<<(*i)->toShortString()<<std::endl;
-      //if(_transactList.end()==0) std::cout<<"what???"<<std::endl;
+  
+      
       //std::cout<<(*_transactList.end())->toShortString()<<std::endl;
       if (iInit){
 	_posTrasactListVCD= i;
 	_previousTransEndTime=0;
 	(*i)->setTransVcdOutPutState(END_IDLE_TRANS);
-	std::cout<<"init"<<std::endl;
+	//std::cout<<"init"<<std::endl;
 	if (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTime()!=0){
 	  //outp << VCD_PREFIX << vcdValConvert(END_IDLE_CPU) << "cpu" << _ID;
 	  //oSigChange=outp.str();
@@ -580,7 +582,7 @@ void MultiCoreCPU::getNextSignalChange(bool iInit, SignalChangeData* oSigData){
        switch (aCurrTrans->getTransVcdOutPutState()){
 	case END_TASK_TRANS: 
           
-	  std::cout<<"END_TASK_CPU"<<std::endl;
+	  //std::cout<<"END_TASK_CPU"<<std::endl;
 	  do{
 	    _previousTransEndTime=(*_posTrasactListVCD)->getEndTime();
 	    _posTrasactListVCD++;	  
@@ -594,16 +596,12 @@ void MultiCoreCPU::getNextSignalChange(bool iInit, SignalChangeData* oSigData){
 	  //  std::cout<<"4444"<<std::endl;
 	  if (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTime()==_previousTransEndTime){
 	    //outp << VCD_PREFIX << vcdValConvert(END_PENALTY_CPU) << "cpu" << _ID;
-	    std::cout<<"!!!~~~"<<(*_posTrasactListVCD)->toShortString()<<std::endl;
 	    (*_posTrasactListVCD)->setTransVcdOutPutState(END_PENALTY_TRANS);  
-            std::cout<<"almost!!!"<<std::endl;
 	    new (oSigData) SignalChangeData(END_PENALTY_TRANS, _previousTransEndTime, this);
 	  }else{
 	    //outp << VCD_PREFIX << vcdValConvert(END_IDLE_CPU) << "cpu" << _ID;
 	    aCurrTrans->setTransVcdOutPutState(END_IDLE_TRANS);
 	    //if (_posTrasactListVCD == _transactList.end()) oNoMoreTrans=true;
-            std::cout<<"what is previous time "<<_previousTransEndTime<<std::endl;
-	    std::cout<<"and this??"<<oSigData->_time<<std::endl;
 	    // if(oSigData->_time != _previousTransEndTime)  new (oSigData) SignalChangeData(END_PENALTY_TRANS, _previousTransEndTime, this);
 	    new (oSigData) SignalChangeData(END_IDLE_TRANS, _previousTransEndTime, this);
             //_posTrasactListVCD = _transactList.end();
@@ -617,16 +615,15 @@ void MultiCoreCPU::getNextSignalChange(bool iInit, SignalChangeData* oSigData){
 	  break;
 	case END_PENALTY_TRANS:
          
-	  std::cout<<"END_PENALTY_CPU"<<std::endl;
+	  // std::cout<<"END_PENALTY_CPU"<<std::endl;
 	  //outp << VCD_PREFIX << vcdValConvert(END_TASK_CPU) << "cpu" << _ID;
 	  //oSigChange=outp.str();
 	  aCurrTrans->setTransVcdOutPutState(END_TASK_TRANS);
 	  //return aCurrTrans->getStartTimeOperation();
-	  std::cout<<"time in penalty is "<< aCurrTrans->getStartTimeOperation()<<std::endl;
 	  new (oSigData) SignalChangeData(END_TASK_TRANS, aCurrTrans->getStartTimeOperation(), this);
 	  break;
 	case END_IDLE_TRANS:
-	  std::cout<<"END_IDLE_CPU"<<std::endl;
+	  // std::cout<<"END_IDLE_CPU"<<std::endl;
 	  if (aCurrTrans->getPenalties()==0){
 	    //outp << VCD_PREFIX << vcdValConvert(END_TASK_CPU) << "cpu" << _ID;
 	    aCurrTrans->setTransVcdOutPutState(END_TASK_TRANS);

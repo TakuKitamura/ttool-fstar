@@ -251,7 +251,6 @@ public abstract class TURTLEPanel implements GenericTree, DraggableTabbedPaneCal
     }
 
     public void reorderTabs(String tabs, int startIndex) {
-
         TraceManager.addDev("tabs=" + tabs);
         if (tabs != null) {
             String[] splitTabs = tabs.split("\\$");
@@ -291,6 +290,10 @@ public abstract class TURTLEPanel implements GenericTree, DraggableTabbedPaneCal
         Color fg = tabbedPane.getForegroundAt(src);
         Color bg = tabbedPane.getBackgroundAt(src);
 
+        Object o = panels.elementAt(src);
+        panels.removeElementAt(src);
+        panels.insertElementAt((TDiagramPanel) o, dst);
+
         // Remove the tab
         tabbedPane.remove(src);
 
@@ -304,11 +307,7 @@ public abstract class TURTLEPanel implements GenericTree, DraggableTabbedPaneCal
         tabbedPane.setDisplayedMnemonicIndexAt(dst, mnemonicLoc);
         tabbedPane.setForegroundAt(dst, fg);
         tabbedPane.setBackgroundAt(dst, bg);
-
-        Object o = panels.elementAt(src);
-        panels.removeElementAt(src);
-        panels.insertElementAt((TDiagramPanel) o, dst);
-
+        
         tabbedPane.setSelectedIndex(dst);
     }
 

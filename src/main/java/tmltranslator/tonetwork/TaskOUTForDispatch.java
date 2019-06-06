@@ -71,8 +71,10 @@ public class TaskOUTForDispatch extends TMLTask {
         // Attributes
         TMLAttribute pktlen = new TMLAttribute("pktlen", "pktlen", new TMLType(TMLType.NATURAL), "0");
         this.addAttribute(pktlen);
-        TMLAttribute dst = new TMLAttribute("dst", "dst", new TMLType(TMLType.NATURAL), "0");
-        this.addAttribute(dst);
+        TMLAttribute dstX = new TMLAttribute("dstX", "dstX", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(dstX);
+        TMLAttribute dstY = new TMLAttribute("dstY", "dstY", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(dstY);
         TMLAttribute vc = new TMLAttribute("vc", "vc", new TMLType(TMLType.NATURAL), "0");
         this.addAttribute(vc);
         TMLAttribute eop = new TMLAttribute("eop", "eop", new TMLType(TMLType.NATURAL), "0");
@@ -150,7 +152,8 @@ public class TaskOUTForDispatch extends TMLTask {
                 //TraceManager.addDev("Nb Of params of " + inPacketEvents.get(i).getName() + " = " + inPacketEvents.get(i).getNbOfParams());
                 waitEvt.setEvent(inPacketEvents.get(i));
                 waitEvt.addParam("pktlen");
-                waitEvt.addParam("dst");
+                waitEvt.addParam("dstX");
+                waitEvt.addParam("dstY");
                 waitEvt.addParam("vc");
                 waitEvt.addParam("eop");
                 waitEvt.addParam("chid");
@@ -163,7 +166,8 @@ public class TaskOUTForDispatch extends TMLTask {
                 sendEvt = new TMLSendEvent("infoOnPacket"+i, referenceObject);
                 sendEvt.setEvent(outPktEvent);
                 sendEvt.addParam("pktlen");
-                sendEvt.addParam("dst");
+                sendEvt.addParam("dstX");
+                sendEvt.addParam("dstY");
                 sendEvt.addParam("vc");
                 sendEvt.addParam("eop");
                 sendEvt.addParam("chid");

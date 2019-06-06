@@ -58,6 +58,7 @@ public class TMAP2Network<E>  {
 
 
     private TMLMapping<?> tmlmapping;
+    private HwNoC noc;
 
     private boolean debug;
     private boolean optimize;
@@ -85,6 +86,15 @@ public class TMAP2Network<E>  {
 
     public String getChannelID(TMLChannel ch) {
         return IDsOfChannels.get(ch);
+    }
+
+    public Point getChannelDstXY(TMLChannel ch) {
+        if (noc == null) {
+            return null;
+        }
+        TMLTask t = ch.getDestinationTask();
+        HwExecutionNode mappedOn = tmlmapping.getHwNodeOf(t);
+        return noc.placementMap.get(mappedOn.getName());
     }
 
     public void putTMLChannelID(TMLChannel ch, String id) {
@@ -208,7 +218,7 @@ public class TMAP2Network<E>  {
         // use the bus
 
         // So, from the initial archi, we keep only the HwExecutionNodes and the NoC
-        HwNoC noc = tmla.getHwNoC();
+        noc = tmla.getHwNoC();
         if (noc == null) {
             return "No NoC in the architecture";
         }
@@ -380,12 +390,15 @@ public class TMAP2Network<E>  {
 
 
 
-        // Associate an id to all channels
+        // Associate an id to all channels and a dest
         int id = 0;
         IDsOfChannels = new HashMap<>();
         for(TMLChannel ch: tmlm.getChannels()) {
             IDsOfChannels.put(ch, "" + id);
         }
+
+
+
 
         // Make internal channels & events of routers
         for(i=0; i<nocSize; i++) {

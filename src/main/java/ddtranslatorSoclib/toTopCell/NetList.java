@@ -1086,29 +1086,6 @@ public class NetList
                 "sc_trace(tf,signal_from_ams" + amsCluster.getNo_amsCluster () +
                 ",\"signal_from_ams" + amsCluster.getNo_amsCluster () + "\");" + CR;
             }
-
-  //Call trace function from the AMS cluster.
-	    int tracefile_present=0;//only one trace file for all AMS clusters
-            for (AvatarAmsCluster amsCluster:TopCellGenerator.avatardd.getAllAmsCluster())
-		{
-		if(tracefile_present==0){
-		  
-                netlist += CR +
-		    "sca_util::sca_trace_file *tfp = sca_util::sca_create_tabular_trace_file(\"my_trace_analog\");" + CR;tracefile_present=1;}
-                netlist +=
-                "sca_util::sca_trace(tfp,signal_to_ams" + amsCluster.getNo_amsCluster() +
-                ",\"signal_to_ams" + amsCluster.getNo_amsCluster() + "\");" + CR;
-                netlist +=
-                "sca_util::sca_trace(tfp,signal_from_ams" + amsCluster.getNo_amsCluster() +
-                ",\"signal_from_ams" + amsCluster.getNo_amsCluster() + "\");" + CR;
-                
-                netlist +=
-                amsCluster.getAmsClusterName() + amsCluster.getNo_amsCluster() +
-                ".trace_" + amsCluster.getAmsClusterName() + "(tfp);" + CR;
-            }
-            
-            netlist += CR;
-	    
 	    }
 
 	netlist =
@@ -1123,7 +1100,6 @@ public class NetList
 	if (tracing)
 	    {
 		netlist += "sc_close_vcd_trace_file(tf);" + CR;
-		netlist += "sca_util::sca_close_tabular_trace_file(tfp);" + CR;
 	    }
 	netlist = netlist + CR + "  return EXIT_SUCCESS;" + CR;
 	netlist = netlist + "}" + CR;

@@ -64,7 +64,7 @@ public:
 	WorkloadSource(Priority iPriority, WorkloadSource** aSourceArray, unsigned int iNbOfSources): _priority(iPriority), _srcArraySpecified(true){
 		for (unsigned int i=0;i<iNbOfSources;i++){
 			addWorkloadSource(aSourceArray[i]);
-			//std::cout << "Workload source added " << aSourceArray[i]->toString() << "\n";
+			std::cout << "Workload source added " << aSourceArray[i]->toString() << "\n";
 		}
 		delete[] aSourceArray;
 	}

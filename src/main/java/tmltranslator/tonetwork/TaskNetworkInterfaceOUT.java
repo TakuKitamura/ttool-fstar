@@ -69,8 +69,10 @@ public class TaskNetworkInterfaceOUT extends TMLTask {
         this.nbOfVCs = nbOfVCs;
 
         // Attributes
-        TMLAttribute dst = new TMLAttribute("dst", "dst", new TMLType(TMLType.NATURAL), "0");
-        this.addAttribute(dst);
+        TMLAttribute dstX = new TMLAttribute("dstX", "dstX", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(dstX);
+        TMLAttribute dstY = new TMLAttribute("dstY", "dstY", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(dstY);
         TMLAttribute pktlen = new TMLAttribute("pktlen", "pktlen", new TMLType(TMLType.NATURAL), "0");
         this.addAttribute(pktlen);
         TMLAttribute vc = new TMLAttribute("vc", "vc", new TMLType(TMLType.NATURAL), "0");
@@ -124,7 +126,8 @@ public class TaskNetworkInterfaceOUT extends TMLTask {
         TMLWaitEvent waitingForPacketFromOUT = new TMLWaitEvent("waitingForPacketFromOUT", referenceObject);
         waitingForPacketFromOUT.setEvent(packetOutFromOUT);
         waitingForPacketFromOUT.addParam("pktlen");
-        waitingForPacketFromOUT.addParam("dst");
+        waitingForPacketFromOUT.addParam("dstX");
+        waitingForPacketFromOUT.addParam("dstY");
         waitingForPacketFromOUT.addParam("vc");
         waitingForPacketFromOUT.addParam("eop");
         waitingForPacketFromOUT.addParam("chid");
@@ -197,7 +200,8 @@ public class TaskNetworkInterfaceOUT extends TMLTask {
             TMLSendEvent sendEvtPktAvailable = new TMLSendEvent("sendEvtPktAvailable", referenceObject);
             sendEvtPktAvailable.setEvent(packetAvailable);
             sendEvtPktAvailable.addParam("pktlen");
-            sendEvtPktAvailable.addParam("dst");
+            sendEvtPktAvailable.addParam("dstX");
+            sendEvtPktAvailable.addParam("dstY");
             sendEvtPktAvailable.addParam("vc");
             sendEvtPktAvailable.addParam("eop");
             sendEvtPktAvailable.addParam("chid");

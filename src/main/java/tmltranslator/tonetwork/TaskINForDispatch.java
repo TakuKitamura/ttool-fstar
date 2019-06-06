@@ -77,8 +77,10 @@ public class TaskINForDispatch extends TMLTask {
         // Attributes
         TMLAttribute pktlen = new TMLAttribute("pktlen", "pktlen", new TMLType(TMLType.NATURAL), "0");
         this.addAttribute(pktlen);
-        TMLAttribute dst = new TMLAttribute("dst", "dst", new TMLType(TMLType.NATURAL), "0");
-        this.addAttribute(dst);
+        TMLAttribute dstX = new TMLAttribute("dstX", "dstX", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(dstX);
+        TMLAttribute dstY = new TMLAttribute("dstY", "dstY", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(dstY);
         TMLAttribute vc = new TMLAttribute("vc", "vc", new TMLType(TMLType.NATURAL), "0");
         this.addAttribute(vc);
         TMLAttribute eop = new TMLAttribute("eop", "eop", new TMLType(TMLType.NATURAL), "0");
@@ -109,7 +111,8 @@ public class TaskINForDispatch extends TMLTask {
         TMLWaitEvent waitEvt = new TMLWaitEvent("PacketEvent", referenceObject);
         waitEvt.setEvent(inputEvent);
         waitEvt.addParam("pktlen");
-        waitEvt.addParam("dst");
+        waitEvt.addParam("dstX");
+        waitEvt.addParam("dstY");
         waitEvt.addParam("vc");
         waitEvt.addParam("eop");
         waitEvt.addParam("chid");
@@ -122,7 +125,8 @@ public class TaskINForDispatch extends TMLTask {
             TMLSendEvent sendEvt = new TMLSendEvent("SendEvtToVC" + i, referenceObject);
             sendEvt.setEvent(outputEvents.get(i));
             sendEvt.addParam("pktlen");
-            sendEvt.addParam("dst");
+            sendEvt.addParam("dstX");
+            sendEvt.addParam("dstY");
             sendEvt.addParam("vc");
             sendEvt.addParam("eop");
             sendEvt.addParam("chid");
