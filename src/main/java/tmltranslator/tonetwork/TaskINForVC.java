@@ -170,39 +170,39 @@ public class TaskINForVC extends TMLTask {
         TMLChoice firstRoutingChoice = new TMLChoice("firstRoutingChoice", referenceObject);
         activity.addLinkElement(secondSeq, firstRoutingChoice);
 
-        TMLActionState requested3 = new TMLActionState("requested3", referenceObject);
-        requested3.setAction("requestedOutput = 1");
-        activity.addLinkElement(firstRoutingChoice, requested3);
+        TMLActionState requested1 = new TMLActionState("requested1", referenceObject);
+        requested1.setAction("requestedOutput = 1");
+        activity.addLinkElement(firstRoutingChoice, requested1);
         firstRoutingChoice.addGuard("dstX>x");
-        activity.addLinkElement(requested3, new TMLStopState("stopOfRequest3", referenceObject));
+        activity.addLinkElement(requested1, new TMLStopState("stopOfRequest1", referenceObject));
 
-        TMLActionState requested2 = new TMLActionState("requested2", referenceObject);
-        requested2.setAction("requestedOutput = 0");
-        activity.addLinkElement(firstRoutingChoice, requested2);
+        TMLActionState requested0 = new TMLActionState("requested0", referenceObject);
+        requested0.setAction("requestedOutput = 0");
+        activity.addLinkElement(firstRoutingChoice, requested0);
         firstRoutingChoice.addGuard("dstX<x");
-        activity.addLinkElement(requested2, new TMLStopState("stopOfRequest2", referenceObject));
+        activity.addLinkElement(requested0, new TMLStopState("stopOfRequest0", referenceObject));
 
         TMLChoice secondRoutingChoice = new TMLChoice("secondRoutingChoice", referenceObject);
         activity.addLinkElement(firstRoutingChoice, secondRoutingChoice);
         firstRoutingChoice.addGuard("dstX==x");
 
-        TMLActionState requested0 = new TMLActionState("requested0", referenceObject);
-        requested0.setAction("requestedOutput = 3");
-        activity.addLinkElement(secondRoutingChoice, requested0);
-        firstRoutingChoice.addGuard("dstY<y");
-        activity.addLinkElement(requested0, new TMLStopState("stopOfRequest0", referenceObject));
+        TMLActionState requested3 = new TMLActionState("requested3", referenceObject);
+        requested3.setAction("requestedOutput = 3");
+        activity.addLinkElement(secondRoutingChoice, requested3);
+        secondRoutingChoice.addGuard("dstY<y");
+        activity.addLinkElement(requested3, new TMLStopState("stopOfRequest3", referenceObject));
 
         TMLActionState requested4 = new TMLActionState("requested4", referenceObject);
         requested4.setAction("requestedOutput = 4");
         activity.addLinkElement(secondRoutingChoice, requested4);
-        firstRoutingChoice.addGuard("dstY==y");
+        secondRoutingChoice.addGuard("dstY==y");
         activity.addLinkElement(requested4, new TMLStopState("stopOfRequest4", referenceObject));
 
-        TMLActionState requested1 = new TMLActionState("requested1", referenceObject);
-        requested1.setAction("requestedOutput = 2");
-        activity.addLinkElement(secondRoutingChoice, requested1);
-        firstRoutingChoice.addGuard("dstY<y");
-        activity.addLinkElement(requested1, new TMLStopState("stopOfRequest1", referenceObject));
+        TMLActionState requested2 = new TMLActionState("requested2", referenceObject);
+        requested2.setAction("requestedOutput = 2");
+        activity.addLinkElement(secondRoutingChoice, requested2);
+        secondRoutingChoice.addGuard("dstY<y");
+        activity.addLinkElement(requested2, new TMLStopState("stopOfRequest2", referenceObject));
 
 
 
