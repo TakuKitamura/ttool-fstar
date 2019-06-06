@@ -674,11 +674,7 @@ public class TGUIAction extends AbstractAction {
     public static final int MOVE_ENABLED = 463;
     public static final int FIRST_DIAGRAM = 464;
     
-<<<<<<< HEAD
     public static final int NB_ACTION = 521;
-=======
-    public static final int NB_ACTION = 519;
->>>>>>> 14c4b7d0b06ed583c0aa2e61813fcc733bef2b69
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 
