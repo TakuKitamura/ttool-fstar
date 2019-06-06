@@ -928,6 +928,11 @@ public class MappedSystemCTask {
                 functions += "ss << \"(\"";
                 for(int p=0; p<nbOfParams; p++) {
                     functions += " << " + paramArray[p];
+                    if (!(paramArray[p].matches("^[-+]?\\d+(\\.\\d+)?$"))) {
+                        if ((paramArray[p].compareTo("true") != 0) &&  (paramArray[p].compareTo("false") != 0)) {
+                            functions += " << \"(" + paramArray[p] + ")\"";
+                        }
+                    }
                     if (p < nbOfParams - 1) {
                         functions += " << \",\"";
                     }
