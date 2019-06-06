@@ -307,7 +307,7 @@ public abstract class TURTLEPanel implements GenericTree, DraggableTabbedPaneCal
         tabbedPane.setDisplayedMnemonicIndexAt(dst, mnemonicLoc);
         tabbedPane.setForegroundAt(dst, fg);
         tabbedPane.setBackgroundAt(dst, bg);
-        
+
         tabbedPane.setSelectedIndex(dst);
     }
 

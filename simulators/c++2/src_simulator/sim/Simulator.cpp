@@ -1418,13 +1418,13 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
     if (aChannel==0){
       aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
       anErrorCode=2;
-    }else{
+    } else {
       aInpStream >> aParam1;
       TMLEventChannel* anEventChannel = dynamic_cast<TMLEventChannel*>(aChannel);
       if (anEventChannel==0){
         //aChannel->insertSamples(aParam1, anInsertParam);
         aChannel->insertSamples(aParam1, 0);
-      }else{
+      } else {
         //Parameter<ParamType> anInsertParam((dynamic_cast<TMLEventChannel*>(aChannel))->getParamNo());
         Parameter* anInsertParam = anEventChannel->buildParameter();
         aInpStream >> anInsertParam;

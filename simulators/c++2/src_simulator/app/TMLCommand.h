@@ -224,6 +224,9 @@ public:
 	static unsigned int getBranchCoverage();
 	///Reset coverage related state variables
 	static void clearCoverageVars();
+
+	std::string lastParams; // Exchanged params
+	
 protected:
 	///ID of the command
 	ID _ID;

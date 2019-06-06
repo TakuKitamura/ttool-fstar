@@ -922,9 +922,20 @@ public class MappedSystemCTask {
             functions += "Parameter* " + reference + "::" + cmdName + "_func(Parameter* ioParam){" + CR;
             if (wait)
                 functions += "ioParam->getP(" + concatParams + ")" + SCCR + "return 0" + SCCR;
-            else
+            else {
                 //functions += "return new Parameter<ParamType>(" + nbOfParams + "," + concatParams + ")" + SCCR;
+                functions += "std::ostringstream ss" + SCCR + "\n";
+                functions += "ss << \"(\"";
+                for(int p=0; p<nbOfParams; p++) {
+                    functions += " << " + paramArray[p];
+                    if (p < nbOfParams - 1) {
+                        functions += " << \",\"";
+                    }
+                }
+                functions += " << \")\"" + SCCR;
+                functions += cmdName + ".lastParams  = ss.str()" + SCCR + "\n";
                 functions += "return new SizedParameter<ParamType," + nbOfParams + ">(" + concatParams + ")" + SCCR;
+            }
             functions += "}\n\n";
             //}
         }
