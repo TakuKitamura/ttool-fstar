@@ -469,6 +469,21 @@ public class SysCAMSComponentTaskDiagramPanel extends TDiagramPanel implements T
 		return null;
 	}
 
+    public SysCAMSClock getClockComponentByName(String _name) {
+		TGComponent tgc;
+		Iterator<TGComponent> iterator = componentList.listIterator();
+
+		while (iterator.hasNext()) {
+			tgc = iterator.next();
+			if (tgc instanceof SysCAMSClock) {
+				if (tgc.getValue().equals(_name)) {
+					return ((SysCAMSClock) tgc);
+				}
+			}
+		}
+		return null;
+	}
+    
 	public void updateReferenceToSysCAMSCompositeComponent(SysCAMSCompositeComponent syscamscc) {
 		Iterator<TGComponent> iterator = componentList.listIterator();
 		TGComponent tgc;
@@ -574,12 +589,15 @@ public class SysCAMSComponentTaskDiagramPanel extends TDiagramPanel implements T
 			if (tgc instanceof SysCAMSBlockDE) {
 				deports.addAll(((SysCAMSBlockDE) tgc).getAllInternalPortsDE());
 			}
+			if (tgc instanceof SysCAMSClock) {
+				deports.addAll(((SysCAMSClock) tgc).getAllInternalPortsDE());
+			}
 			if (tgc instanceof SysCAMSPortTDF) {
 				tdfports.add((SysCAMSPortTDF) tgc);
 			}
 			if (tgc instanceof SysCAMSPortDE) {
 				deports.add((SysCAMSPortDE) tgc);
-			}
+			}			
 		}
 
 		// We take each primitive ports individually and we go thru the graph

@@ -2732,6 +2732,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                     || (o instanceof TMLTaskInterface && this.checkTMLTaskInterface((TMLTaskInterface) o, name))
                     || (o instanceof SysCAMSBlockTDF && this.checkSysCAMSBlockTDFComponent((SysCAMSBlockTDF) o, name))
                     || (o instanceof SysCAMSBlockDE && this.checkSysCAMSBlockDEComponent((SysCAMSBlockDE) o, name))
+		    || (o instanceof SysCAMSClock && this.checkSysCAMSClockComponent((SysCAMSClock) o, name))
                     || (o instanceof SysCAMSCompositeComponent && this.checkSysCAMSCompositeComponent((SysCAMSCompositeComponent) o, name))
                     || (o instanceof ELNCluster && this.checkELNCluster((ELNCluster) o, name))
                     || (o instanceof ELNModule && this.checkELNModule((ELNModule) o, name))
@@ -2811,6 +2812,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
         
         public boolean checkSysCAMSBlockDEComponent(SysCAMSBlockDE o, String name) {
+        	return false;
+        }
+
+	 public boolean checkSysCAMSClockComponent(SysCAMSClock o, String name) {
         	return false;
         }
         
@@ -3099,6 +3104,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     		}
     		
     		public boolean checkSysCAMSBlockDEComponent(SysCAMSBlockDE o, String name) {
+    			return o.getValue().equals(name);
+    		}
+
+		public boolean checkSysCAMSClockComponent(SysCAMSClock o, String name) {
     			return o.getValue().equals(name);
     		}
     		

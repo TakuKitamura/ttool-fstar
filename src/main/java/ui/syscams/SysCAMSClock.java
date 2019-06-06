@@ -238,8 +238,8 @@ public class SysCAMSClock extends TGCScalableWithInternalComponent implements Sw
 			return false;
 		}
 
-		JDialogSysCAMSClock jde = new JDialogSysCAMSClock(this);
-		jde.setVisible(true);
+		JDialogSysCAMSClock jclk = new JDialogSysCAMSClock(this);
+		jclk.setVisible(true);
 		rescaled = true;
 		return true;
 	}
@@ -517,7 +517,7 @@ public class SysCAMSClock extends TGCScalableWithInternalComponent implements Sw
 		return ret;
 	}
 
-	public java.util.List<SysCAMSPortDE> getAllInternalPortsClock() {
+	public java.util.List<SysCAMSPortDE> getAllInternalPortsDE() {
 		java.util.List<SysCAMSPortDE> list = new ArrayList<SysCAMSPortDE>();
 		for(int i=0; i<nbInternalTGComponent; i++) {
 			if (tgcomponent[i] instanceof SysCAMSPortDE) {

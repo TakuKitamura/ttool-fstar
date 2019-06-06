@@ -107,6 +107,11 @@ public class SysCAMSComponentDesignPanel extends TURTLEPanel {
 		return syscamsctdp.getBlockDEComponentByName(_name);
 	}
 
+       public SysCAMSClock getClockComponentByName(String _name) {
+		return syscamsctdp.getClockComponentByName(_name);
+	}
+
+    
 	public java.util.List<String> getAllCompositeComponent(String _name) {
 		return syscamsctdp.getAllCompositeComponent(_name);
 	}
