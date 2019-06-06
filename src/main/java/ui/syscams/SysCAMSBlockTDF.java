@@ -320,11 +320,11 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 		sb.append("<Attribute period=\"" + getPeriod());
 		sb.append("\" time=\"" + getTime());
 		sb.append("\" processCode=\"" + encode(getProcessCode()));
-        sb.append("\" constructorCode=\"" + encode(getConstructorCode()));
+                sb.append("\" constructorCode=\"" + encode(getConstructorCode()));
 		sb.append("\" listStruct=\"" + splitParameters(getListStruct()));
 		sb.append("\" nameTemplate=\"" + getNameTemplate());
 		sb.append("\" typeTemplate=\"" + getTypeTemplate());
-        sb.append("\" valueTemplate=\"" + getValueTemplate());
+                sb.append("\" valueTemplate=\"" + getValueTemplate());
 		sb.append("\" listTypedef=\"" + splitParameters(getListTypedef()));
 		sb.append("\" />\n");
 		sb.append("</extraparam>\n");

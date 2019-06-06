@@ -60,8 +60,7 @@ import java.util.LinkedList;
  */
 
 public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent {
-//	private int period;
-//	private String time;
+
 	private String nameFn;
 	private String code;
 	private DefaultListModel<String> listStruct;
@@ -307,7 +306,7 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 		sb.append("\" listStruct=\"" + splitParameters(getListStruct()));
 		sb.append("\" nameTemplate=\"" + getNameTemplate());
 		sb.append("\" typeTemplate=\"" + getTypeTemplate());
-        sb.append("\" valueTemplate=\"" + getValueTemplate());
+		sb.append("\" valueTemplate=\"" + getValueTemplate());
 		sb.append("\" listTypedef=\"" + splitParameters(getListTypedef()));
 		sb.append("\" />\n");
 		sb.append("</extraparam>\n");
@@ -523,22 +522,6 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 		}
 		return list;
 	}
-
-//	public int getPeriod() {
-//		return period;
-//	}
-//
-//	public void setPeriod(int _period) {
-//		period = _period;
-//	}
-//
-//	public String getTime() {
-//		return time;
-//	}
-//
-//	public void setTime(String _time) {
-//		time = _time;
-//	}
 
 	public void setNameFn(String nameFn) {
 		this.nameFn = nameFn;

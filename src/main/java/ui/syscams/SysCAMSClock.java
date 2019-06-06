@@ -64,11 +64,14 @@ public class SysCAMSClock extends TGCScalableWithInternalComponent implements Sw
 	private String code;
 	private DefaultListModel<String> listStruct;
 	private String nameTemplate;
-	private String unitTemplate;
-        private String frequencyTemplate;
-        private String dutyCycleTemplate;
-        private String startTimeTemplate;
-        private String posFirstTemplate;
+    	private String typeTemplate;
+        private String valueTemplate;
+        private String name;
+        private String unit;
+        private String frequency;
+        private String dutyCycle;
+        private String startTime;
+        private String posFirst;
 	private DefaultListModel<String> listTypedef;
 
 	private int maxFontSize = 14;
@@ -109,8 +112,6 @@ public class SysCAMSClock extends TGCScalableWithInternalComponent implements Sw
 		value = tdp.findSysCAMSPrimitiveComponentName("Clock");
 		name = "Primitive component - Clock";
 
-//		setPeriod(-1);
-//		setTime("");
 		setNameFn("");
 		setCode("");
 		setListStruct(new DefaultListModel<String>());
@@ -306,11 +307,12 @@ public class SysCAMSClock extends TGCScalableWithInternalComponent implements Sw
 		sb.append("\" code=\"" + encode(getCode()));
 		sb.append("\" listStruct=\"" + splitParameters(getListStruct()));
 		sb.append("\" nameTemplate=\"" + getNameTemplate());
-		sb.append("\" nameTemplate=\"" + getFrequencyTemplate());
-		sb.append("\" nameTemplate=\"" + getUnitTemplate());
-			sb.append("\" nameTemplate=\"" + getDutyCycleTemplate());
-		sb.append("\" nameTemplate=\"" + getStartTimeTemplate());
-		sb.append("\" nameTemplate=\"" + getPosFirstTemplate());			
+		sb.append("\" name=\"" + getName());
+		sb.append("\" frequency =\"" + getFrequency());
+		sb.append("\" unit=\"" + getUnit());
+		sb.append("\" dutyCycle=\"" + getDutyCycle());
+		sb.append("\" startTime=\"" + getStartTime());
+		sb.append("\" posFirst =\"" + getPosFirst());			
 		sb.append("\" listTypedef=\"" + splitParameters(getListTypedef()));
 		sb.append("\" />\n");
 		sb.append("</extraparam>\n");
@@ -447,20 +449,18 @@ public class SysCAMSClock extends TGCScalableWithInternalComponent implements Sw
 						if (n2.getNodeType() == Node.ELEMENT_NODE) {
 							elt = (Element) n2;
 							if (elt.getTagName().equals("Attribute")) {
-//								period = Integer.decode(elt.getAttribute("period")).intValue();
-//								time = elt.getAttribute("time");
-								code = elt.getAttribute("code");
-								nameFn = elt.getAttribute("name_function");
+//							unit = elt.getAttribute("unit");
+								unit = elt.getAttribute("unit");
+								frequency = elt.getAttribute("frequency");
+								posFirst = elt.getAttribute("posFirst");
+								dutyCycle = elt.getAttribute("dutyCycle");
+								startTime = elt.getAttribute("startTime");
 								listStruct = elt.getAttribute("listStruct");
 								nameTemplate = elt.getAttribute("nameTemplate");
 								typeTemplate = elt.getAttribute("typeTemplate");
-                                valueTemplate = elt.getAttribute("valueTemplate");
+								valueTemplate = elt.getAttribute("valueTemplate");
 								listTypedef = elt.getAttribute("listTypedef");
-//								setPeriod(period);
-//								setTime(time);
-								setNameFn(nameFn);
-								code = decode(code).toString();
-								setCode(code);
+//							
 								String[] splita = listStruct.split("\\|");
 								DefaultListModel<String> lista = new DefaultListModel<String>();
 								for (String s : splita) {
@@ -527,21 +527,6 @@ public class SysCAMSClock extends TGCScalableWithInternalComponent implements Sw
 		return list;
 	}
 
-//	public int getPeriod() {
-//		return period;
-//	}
-//
-//	public void setPeriod(int _period) {
-//		period = _period;
-//	}
-//
-//	public String getTime() {
-//		return time;
-//	}
-//
-//	public void setTime(String _time) {
-//		time = _time;
-//	}
 
 	public void setNameFn(String nameFn) {
 		this.nameFn = nameFn;
@@ -567,55 +552,84 @@ public class SysCAMSClock extends TGCScalableWithInternalComponent implements Sw
 		listStruct = _listStruct;
 	}
 
+    /*	public String getName() {
+		return name;
+		}*/
+
+    	public String getFrequency() {
+		return frequency;
+	}
+
+	public String getUnit() {
+		return unit;
+	}
+
+        public String getDutyCycle() {
+	    return dutyCycle;
+	}
+
+    public String getStartTime() {
+		return startTime;
+	}
+    
+    
+    	public String getPosFirst() {
+		return posFirst;
+	}
+    
+	public void setName(String _name) {
+		name = _name;
+	}
+
+
+	public void setStartTime(String _startTime) {
+		startTime = _startTime;
+	}
+   
+    	public void setFrequency(String _frequency) {
+		 frequency = _frequency;
+	}
+
+	public void setUnit(String _unit) {
+		unit = _unit;
+	}
+
+        public void setDutyCycle(String _dutyCycle) {
+		dutyCycle = _dutyCycle;
+	}
+       
+    	public void setPosFirst(String _posFirst) {
+		posFirst = _posFirst;
+	}
+
+
+
 	public String getNameTemplate() {
 		return nameTemplate;
 	}
 
-    	public String getFrequencyTemplate() {
-		return frequencyTemplate;
-	}
-
-	public String getUnitTemplate() {
-		return unitTemplate;
-	}
-
-        public String getDutyCycleTemplate() {
-		return dutyCycleTemplate;
-	}
-
-    public String getStartTimeTemplate() {
-		return startTimeTemplate;
-	}
-    
-    
-    	public String getPosFirstTemplate() {
-		return posFirstTemplate;
-	}
-    
 	public void setNameTemplate(String _nameTemplate) {
 		nameTemplate = _nameTemplate;
 	}
 
-
-	public void setStartTimeTemplate(String _startTimeTemplate) {
-		startTimeTemplate = _startTimeTemplate;
-	}
-   
-    	public void setFrequencyTemplate(String _frequencyTemplate) {
-		 frequencyTemplate = _frequencyTemplate;
+    
+	public String getTypeTemplate() {
+		return typeTemplate;
 	}
 
-	public void setUnitTemplate(String _unitTemplate) {
-		unitTemplate = _unitTemplate;
+	public void setTypeTemplate(String _typeTemplate) {
+		typeTemplate = _typeTemplate;
+	}
+    
+    public String getValueTemplate() {
+        return valueTemplate;
+    }
+    
+    public void setValueTemplate(String _valueTemplate) {
+		valueTemplate = _valueTemplate;
 	}
 
-        public void setDutyCycleTemplate(String _dutyCycleTemplate) {
-		dutyCycleTemplate = _dutyCycleTemplate;
-	}
-       
-    	public void setPosFirstTemplate(String _posFirstTemplate) {
-		posFirstTemplate = _posFirstTemplate;
-	}
+
     
 	public DefaultListModel<String> getListTypedef() {
 		return listTypedef;

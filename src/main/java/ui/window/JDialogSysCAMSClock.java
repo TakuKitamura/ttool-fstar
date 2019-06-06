@@ -163,13 +163,13 @@ public class JDialogSysCAMSClock extends JDialog implements ActionListener {
 		listUnitString[2] = "\u03BCs";
 		listUnitString[3] = "ns";
 		unitComboBoxString = new JComboBox<String>(listUnitString);
-		if (clock.getUnitTemplate().equals("") || clock.getUnitTemplate().equals("s")) {
+		if (clock.getUnit().equals("") || clock.getUnit().equals("s")) {
 			unitComboBoxString.setSelectedIndex(0);
-		} else if (clock.getUnitTemplate().equals("ms")){
+		} else if (clock.getUnit().equals("ms")){
 			unitComboBoxString.setSelectedIndex(1);
-		} else if (clock.getUnitTemplate().equals("\u03BCs")){
+		} else if (clock.getUnit().equals("\u03BCs")){
 			unitComboBoxString.setSelectedIndex(2);
-		} else if (clock.getUnitTemplate().equals("ns")){
+		} else if (clock.getUnit().equals("ns")){
 			unitComboBoxString.setSelectedIndex(3);
 		}
 		unitComboBoxString.setActionCommand("unit");
@@ -186,9 +186,9 @@ public class JDialogSysCAMSClock extends JDialog implements ActionListener {
 		posFirstString[1] = "false";
 	
 		posFirstComboBoxString = new JComboBox<String>(posFirstString);
-		if (clock.getPosFirstTemplate().equals("") || clock.getPosFirstTemplate().equals("true")) {
+		if (clock.getPosFirst().equals("") || clock.getPosFirst().equals("true")) {
 			posFirstComboBoxString.setSelectedIndex(0);
-		} else if (clock.getPosFirstTemplate().equals("false")){
+		} else if (clock.getPosFirst().equals("false")){
 			posFirstComboBoxString.setSelectedIndex(1);
 		}
 		posFirstComboBoxString.setActionCommand("positive edge first");
@@ -226,12 +226,12 @@ public class JDialogSysCAMSClock extends JDialog implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-	    clock.setNameTemplate(nameTextField.getText());		
-	    clock.setFrequencyTemplate(frequencyTextField.getText());
-	    clock.setDutyCycleTemplate(dutyCycleTextField.getText());
-	    clock.setStartTimeTemplate(startTimeTextField.getText());
-	    clock.setPosFirstTemplate((String) posFirstComboBoxString.getSelectedItem());
-	    clock.setUnitTemplate((String) unitComboBoxString.getSelectedItem());
+	    clock.setName(nameTextField.getText());		
+	    clock.setFrequency(frequencyTextField.getText());
+	    clock.setDutyCycle(dutyCycleTextField.getText());
+	    clock.setStartTime(startTimeTextField.getText());
+	    clock.setPosFirst((String) posFirstComboBoxString.getSelectedItem());
+	    clock.setUnit((String) unitComboBoxString.getSelectedItem());
 	    
 		if ("Save_Close".equals(e.getActionCommand())) {
 			clock.setValue(new String(nameTextField.getText()));
