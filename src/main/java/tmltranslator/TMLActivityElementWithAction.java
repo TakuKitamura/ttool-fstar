@@ -67,8 +67,8 @@ public class TMLActivityElementWithAction extends TMLActivityElement {
     }
 
     public String customExtraToXML() {
-	String s = " action=\"" + getAction() + "\"";
-	return s;
+	    String s = " action=\"" + getAction() + "\"";
+	    return s;
     }
 
 }

@@ -77,9 +77,9 @@ void Bus::schedule(){
 	_schedulingNeeded=false;
 #ifdef DEBUG_BUS
 	if (_nextTransaction==0)
-		 std::cout << "Bus:schedule: decision of BUS " << _name << ": no transaction" << std::endl;
+	  std::cout << "Bus:schedule: decision of BUS " << _name << ": no transaction" << std::endl;
 	else
-		std::cout << "Bus:schedule: decision of BUS " << _name << ": " << _nextTransaction->toString() << std::endl;
+	  std::cout << "Bus:schedule: decision of BUS " << _name << ": " << _nextTransaction->toString() << std::endl;
 #endif
 }
 
@@ -91,7 +91,7 @@ void Bus::schedule(){
 
 //Adds the transaction determined by the scheduling algorithm to the internal list of scheduled transactions
 bool Bus::addTransaction(TMLTransaction* iTransToBeAdded){
-	std::cout << "Bus add trans ####" << _nextTransaction << "\n";
+  //std::cout << "Bus add trans ####" << _nextTransaction << "\n";
 	_endSchedule = _nextTransaction->getEndTime();
 	//std::cout << "set end time to " << _endSchedule << "\n";
 	//_transactList.push_back(_nextTransaction);
@@ -107,7 +107,7 @@ bool Bus::addTransaction(TMLTransaction* iTransToBeAdded){
 #endif
 	_nextTransaction = 0;
 	_schedulingNeeded=true;
-	std::cout << "End Bus add trans\n";
+	//std::cout << "End Bus add trans\n";
 	return true;
 }
 

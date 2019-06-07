@@ -67,7 +67,7 @@ BusMaster* TMLChannel::getNextMaster(TMLTransaction* iTrans){
 }
 
 BusMaster* TMLChannel::getFirstMaster(TMLTransaction* iTrans){
-  std::cout<<"get First master"<<std::endl;
+  //std::cout<<"get First master"<<std::endl;
   //if (iTrans->getCommand()->getTask()==_writeTask){
   //std::cout << "fima 1\n";
   if (_masters==0 || _slaves==0 || _numberOfHops==0 ) {return 0;}
