@@ -151,6 +151,6 @@ std::string TMLSelectCommand::toString() const{
 
 std::string TMLSelectCommand::toShortString() const{
 	std::ostringstream outp;
-	outp << _task->toString() << ": SelectEvent";
+	outp << _task->toString() << ": SelectEvent" << " params:" << lastParams;
 	return outp.str();
 }
