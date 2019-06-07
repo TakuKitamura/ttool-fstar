@@ -358,10 +358,12 @@ public class TranslatedRouter<E> {
                     inChannel.setDestinationTask(taskINForVC);
 
                     Vector<TMLEvent> listOfOutVCEvents = new Vector<TMLEvent>();
+                    Vector<Integer> listOfIndexes = new Vector<>();
                     for (int dom = 0; dom < NB_OF_PORTS; dom++) {
                         if (playingTheRoleOfPrevious[dom] != null) {
                             TMLEvent evt = routeEvtVCs[portNb][vcNb][dom];
                             listOfOutVCEvents.add(evt);
+                            listOfIndexes.add(new Integer(dom));
                             evt.setOriginTask(taskINForVC);
                         }
                     }
@@ -370,7 +372,7 @@ public class TranslatedRouter<E> {
                     feedback.setOriginTask(taskINForVC);
 
                     taskINForVC.generate(pktInEvtsVCs[portNb][vcNb], inFeedbacks, inChannel,
-                            feedback, listOfOutVCEvents, noc.size, xPos, yPos);
+                            feedback, listOfOutVCEvents, listOfIndexes, noc.size, xPos, yPos);
 
 
                 }

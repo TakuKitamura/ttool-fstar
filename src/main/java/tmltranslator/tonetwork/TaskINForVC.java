@@ -60,7 +60,7 @@ public class TaskINForVC extends TMLTask {
     // Output Channels are given in the order of VCs
 
     public void generate(TMLEvent inPacketEvent, Vector<TMLEvent> inFeedbackEvents, TMLChannel inChannel,
-                         TMLEvent outFeedbackEvent, Vector<TMLEvent> outVCEvents, int nocSize, int xPos, int yPos) {
+                         TMLEvent outFeedbackEvent, Vector<TMLEvent> outVCEvents, Vector<Integer> outIndexes, int nocSize, int xPos, int yPos) {
 
         TMLSendEvent sendEvt;
         TMLStopState stop;
@@ -206,21 +206,21 @@ public class TaskINForVC extends TMLTask {
 
 
 
-
-
+        
 
         // Main choice : second branch of secondSeq
         TMLChoice mainChoice = new TMLChoice("mainChoice", referenceObject);
         activity.addLinkElement(secondSeq, mainChoice);
 
         // Each link to an output for a given packet
-        for (int i = 0; i < outVCEvents.size(); i++) {
+        for (int i = 0; i < outIndexes.size(); i++) {
+            int index = outIndexes.get(i);
             TMLForLoop packetLoop = new TMLForLoop("packetLoop", referenceObject);
             packetLoop.setInit("j=0");
             packetLoop.setCondition("j<pktlen-1");
             packetLoop.setIncrement("j=j+1");
             activity.addLinkElement(mainChoice, packetLoop);
-            mainChoice.addGuard("requestedOutput == " + i);
+            mainChoice.addGuard("requestedOutput == " + index);
 
             // Inside packetloop
             sendEvt = new TMLSendEvent("info on packet", referenceObject);
