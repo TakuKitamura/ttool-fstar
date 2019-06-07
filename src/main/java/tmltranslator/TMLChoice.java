@@ -339,7 +339,7 @@ public class TMLChoice extends TMLActivityElement{
     public String customExtraToXML() {
     	String g = "";
     	for(String s: guards) {
-    		g += s + ";";
+    		g += Conversion.transformToXMLString(s) + ";";
     	}
     	return " guards=\"" + g + "\" ";
     }

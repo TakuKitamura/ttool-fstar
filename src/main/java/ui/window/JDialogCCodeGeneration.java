@@ -61,10 +61,11 @@ import java.util.*;
  * Class JDialogCCodeGeneration
  * Dialog for managing the generation and compilation of SystemC code
  * Creation: 27/04/2005
- * @version 1.2 27/04/2015
+ *
  * @author Andrea ENRICI, Ludovic APVRILLE
+ * @version 1.2 27/04/2015
  */
-public class JDialogCCodeGeneration extends JDialog implements ActionListener, Runnable  {
+public class JDialogCCodeGeneration extends JDialog implements ActionListener, Runnable {
 
     protected MainGUI mgui;
 
@@ -139,7 +140,7 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
 
 
     /* Creates new form  */
-    public JDialogCCodeGeneration(Frame f, MainGUI _mgui, String title, String _pathCode, String _pathCompiler, GTURTLEModeling _gtm ) {
+    public JDialogCCodeGeneration(Frame f, MainGUI _mgui, String title, String _pathCode, String _pathCompiler, GTURTLEModeling _gtm) {
 
         super(f, title, true);
 
@@ -147,7 +148,7 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
         gtm = _gtm;
 
         pathCode = _pathCode;
-        
+
         pathCompiler = _pathCompiler;
 
         initComponents();
@@ -304,7 +305,6 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
         jp1.add("Compile", jp02);
 
 
-
         c.add(jp1, BorderLayout.NORTH);
         if (automatic > 0) {
             GraphicLib.enableComponents(jp1, false);
@@ -336,7 +336,6 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
         stop.addActionListener(this);
 
 
-
         close = new JButton("Close", IconManager.imgic27);
         close.setPreferredSize(new Dimension(100, 30));
         close.addActionListener(this);
@@ -361,11 +360,11 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
     }
 
     @Override
-    public void actionPerformed(ActionEvent evt)  {
+    public void actionPerformed(ActionEvent evt) {
         String command = evt.getActionCommand();
         // Compare the action command to the known actions.
 
-        if (command.equals("Start"))  {
+        if (command.equals("Start")) {
             startProcess();
         } else if (command.equals("Stop")) {
             stopProcess();
@@ -391,16 +390,16 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
     //    }
 
     public void stopProcess() {
-	
+
         try {
-	    if (rshc != null) {
-		rshc.stopCommand();
-	    }
+            if (rshc != null) {
+                rshc.stopCommand();
+            }
         } catch (LauncherException le) {
 
         }
         rshc = null;
-        mode =  STOPPED;
+        mode = STOPPED;
         setButtons();
         go = false;
     }
@@ -435,27 +434,25 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
         hasError = false;
 
         try {
-            if (automatic > 0)  {
+            if (automatic > 0) {
                 hasError = generateCode();
                 testGo();
                 compileCode();
                 testGo();
-            }
-            else        {
-                if( jp1.getSelectedIndex() == 0 )       {       //Code generation
+            } else {
+                if (jp1.getSelectedIndex() == 0) {       //Code generation
                     hasError = generateCode();
                 }
                 testGo();
                 // Compilation
-                if( jp1.getSelectedIndex() == 1 )       {
+                if (jp1.getSelectedIndex() == 1) {
                     compileCode();
                 }
-                if( ( hasError == false ) && ( jp1.getSelectedIndex() < 1 ) )   {
-                    jp1.setSelectedIndex( jp1.getSelectedIndex() + 1 );
+                if ((hasError == false) && (jp1.getSelectedIndex() < 1)) {
+                    jp1.setSelectedIndex(jp1.getSelectedIndex() + 1);
                 }
             }
-        }
-        catch( InterruptedException ie )        {
+        } catch (InterruptedException ie) {
             jta.append("Process interrupted!\n");
         }
         jta.append("\n\nReady to process next command...\n");
@@ -470,64 +467,59 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
         // int cycle = 0;
         boolean error = false;
 
-        jta.append( "Generating C code...\n\n" );
-        if( removeCppFiles.isSelected() )       {
-            jta.append( "Removing all .h files...\n" );
-            list = FileUtils.deleteFiles( code1.getText(), ".h" );
-            if( list.length() == 0 )    {
+        jta.append("Generating C code...\n\n");
+        if (removeCppFiles.isSelected()) {
+            jta.append("Removing all .h files...\n");
+            list = FileUtils.deleteFiles(code1.getText(), ".h");
+            if (list.length() == 0) {
                 jta.append("No files were deleted\n");
-            }
-            else        {
+            } else {
                 jta.append("Files deleted:\n" + list + "\n");
             }
             jta.append("\nRemoving all .c files...\n");
-            list = FileUtils.deleteFiles( code1.getText(), ".c" );
-            if( list.length() == 0 )    {
-                jta.append( "No files were deleted\n" );
-            }
-            else        {
+            list = FileUtils.deleteFiles(code1.getText(), ".c");
+            if (list.length() == 0) {
+                jta.append("No files were deleted\n");
+            } else {
                 jta.append("Files deleted:\n" + list + "\n");
             }
             jta.append("\nRemoving all .o files...\n");
-            list = FileUtils.deleteFiles( code1.getText(), ".o" );
-            if( list.length() == 0 )    {
-                jta.append( "No files were deleted\n" );
-            }
-            else        {
-                jta.append( "Files deleted:\n" + list + "\n" );
+            list = FileUtils.deleteFiles(code1.getText(), ".o");
+            if (list.length() == 0) {
+                jta.append("No files were deleted\n");
+            } else {
+                jta.append("Files deleted:\n" + list + "\n");
             }
         }
         if (removeXFiles.isSelected()) {
-            jta.append( "\nRemoving all .x files...\n" );
-            list = FileUtils.deleteFiles( code1.getText(), ".x" );
-            if( list.length() == 0 )    {
+            jta.append("\nRemoving all .x files...\n");
+            list = FileUtils.deleteFiles(code1.getText(), ".x");
+            if (list.length() == 0) {
                 jta.append("No files were deleted\n");
-            }
-            else        {
+            } else {
                 jta.append("Files deleted:\n" + list + "\n");
             }
         }
         testGo();
         if (generatorsBox.getSelectedIndex() == 0) {
-            error = gtm.generateCCode( code1.getText(), codeOpt.getText() );
-            if( !error )    {
-                File dir = new File( code1.getText() );
+            error = gtm.generateCCode(code1.getText(), codeOpt.getText());
+            if (!error) {
+                File dir = new File(code1.getText());
                 StringBuffer s = new StringBuffer();
-                jta.append( "\nSource files successfully generated:\n" );
-                for( File f: dir.listFiles() )      {
-                    try     {
-                        if( f.getCanonicalPath().contains(".c") || f.getCanonicalPath().contains(".h") )    {
-                            s.append( f.getCanonicalPath() + "\n" );
+                jta.append("\nSource files successfully generated:\n");
+                for (File f : dir.listFiles()) {
+                    try {
+                        if (f.getCanonicalPath().contains(".c") || f.getCanonicalPath().contains(".h")) {
+                            s.append(f.getCanonicalPath() + "\n");
                         }
-                    }
-                    catch( IOException ioe )        {
+                    } catch (IOException ioe) {
                         jta.append("Error: " + ioe.getMessage() + "\n");
                         mode = STOPPED;
                         setButtons();
                         return true;
                     }
                 }
-                jta.append( s.toString() );
+                jta.append(s.toString());
             }
         } else {
             // Code generation by plugin!
@@ -535,7 +527,7 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
             int cpt = 0;
             Plugin foundPlugin = null;
             LinkedList<Plugin> listP = PluginManager.pluginManager.getPluginDiplodocusCodeGenerator();
-            for(Plugin p: listP) {
+            for (Plugin p : listP) {
                 String desc = p.getDiplodocusCodeGeneratorIdentifier();
                 if (desc != null) {
                     if (index == cpt) {
@@ -557,7 +549,12 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
                     jta.append("Invalid mapping\n");
                 } else {
                     String XML = tmap.toXML();
+
                     try {
+                        //debug?
+                        if (TraceManager.devPolicy == TraceManager.TO_CONSOLE) {
+                            FileUtils.saveFile(code1.getText() + "/info.xml", XML);
+                        }
                         Object instance = foundPlugin.getClassDiplodocusCodeGenerator().newInstance();
                         if (instance == null) {
                             jta.append("Invalid plugin: could not create an instance\n");
@@ -588,7 +585,7 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
         // Command
         try {
             processCmd(cmd, jta);
-        } catch( Exception e ) {
+        } catch (Exception e) {
             jta.append("**** ERROR ****\n" + e.getMessage() + "\n");
             mode = STOPPED;
             setButtons();
@@ -596,19 +593,19 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
         }
     }
 
-    protected void processCmd( String cmd, JTextArea _jta ) throws Exception    {
+    protected void processCmd(String cmd, JTextArea _jta) throws Exception {
 
         String s;
         Process p;
-        p = Runtime.getRuntime().exec( cmd );
-        BufferedReader br = new BufferedReader( new InputStreamReader( p.getInputStream() ) );
-        while( ( s = br.readLine() ) != null )  {
-            _jta.append( s + "\n" );
+        p = Runtime.getRuntime().exec(cmd);
+        BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        while ((s = br.readLine()) != null) {
+            _jta.append(s + "\n");
         }
         p.waitFor();
         p.destroy();
-        if( p.exitValue() != 0 )        {
-            throw new Exception( "Make exit status: " + p.exitValue() );
+        if (p.exitValue() != 0) {
+            throw new Exception("Make exit status: " + p.exitValue());
         }
     }
 
@@ -618,26 +615,26 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
 
     protected void setButtons() {
         if (automatic == 0) {
-            switch(mode) {
-            case NOT_STARTED:
-                start.setEnabled(true);
-                stop.setEnabled(false);
-                close.setEnabled(true);
-                getGlassPane().setVisible(false);
-                break;
-            case STARTED:
-                start.setEnabled(false);
-                stop.setEnabled(true);
-                close.setEnabled(false);
-                getGlassPane().setVisible(true);
-                break;
-            case STOPPED:
-            default:
-                start.setEnabled(false);
-                stop.setEnabled(false);
-                close.setEnabled(true);
-                getGlassPane().setVisible(false);
-                break;
+            switch (mode) {
+                case NOT_STARTED:
+                    start.setEnabled(true);
+                    stop.setEnabled(false);
+                    close.setEnabled(true);
+                    getGlassPane().setVisible(false);
+                    break;
+                case STARTED:
+                    start.setEnabled(false);
+                    stop.setEnabled(true);
+                    close.setEnabled(false);
+                    getGlassPane().setVisible(true);
+                    break;
+                case STOPPED:
+                default:
+                    start.setEnabled(false);
+                    stop.setEnabled(false);
+                    close.setEnabled(true);
+                    getGlassPane().setVisible(false);
+                    break;
             }
         } else {
             close.setEnabled(true);
@@ -655,7 +652,7 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
     public void fillGeneratorsWithPlugins(Vector<String> v) {
 
         LinkedList<Plugin> list = PluginManager.pluginManager.getPluginDiplodocusCodeGenerator();
-        for(Plugin p: list) {
+        for (Plugin p : list) {
             String desc = p.getDiplodocusCodeGeneratorIdentifier();
             if (desc != null) {
                 v.add(desc);
