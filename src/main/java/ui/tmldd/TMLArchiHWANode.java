@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmldd;
 
 import myutil.GraphicLib;
@@ -62,10 +59,15 @@ import java.util.Vector;
    * @author Ludovic APVRILLE
  */
 public class TMLArchiHWANode extends TMLArchiNode implements SwallowTGComponent, WithAttributes, TMLArchiElementInterface {
-    private int textY1 = 15;
-    private int textY2 = 30;
-    private int derivationx = 2;
-    private int derivationy = 3;
+
+	// Issue #31
+	private static final int DERIVATION_X = 2;
+	private static final int DERIVATION_Y = 3;
+	private static final int MARGIN_Y_2 = 30;
+//    private int textY1 = 15;
+//    private int textY2 = 30;
+//    private int derivationx = 2;
+//    private int derivationy = 3;
     private String stereotype = "HWA";
 
     private int byteDataSize = HwCPU.DEFAULT_BYTE_DATA_SIZE;
@@ -76,10 +78,12 @@ public class TMLArchiHWANode extends TMLArchiNode implements SwallowTGComponent,
     public TMLArchiHWANode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        width = 200;
-        height = 200;
+        // Issue #31
+//        width = 200;
+//        height = 200;
         minWidth = 100;
         minHeight = 100;
+        textY = 15;
 
         nbConnectingPoint = 16;
         connectingPoint = new TGConnectingPoint[16];
@@ -103,6 +107,8 @@ public class TMLArchiHWANode extends TMLArchiNode implements SwallowTGComponent,
         connectingPoint[15] = new TMLArchiConnectingPoint(this, 0, 0, false, true, 0.75, 1.0);
 
         addTGConnectingPointsComment();
+        
+        initScaling( 200, 200 );
 
         nbInternalTGComponent = 0;
 
@@ -117,19 +123,23 @@ public class TMLArchiHWANode extends TMLArchiNode implements SwallowTGComponent,
         myImageIcon = IconManager.imgic700;
     }
 
-    public void internalDrawing(Graphics g) {
+    @Override
+    protected void internalDrawing(Graphics g) {
         Color c = g.getColor();
         g.draw3DRect(x, y, width, height, true);
 
 
         // Top lines
-        g.drawLine(x, y, x + derivationx, y - derivationy);
-        g.drawLine(x + width, y, x + width + derivationx, y - derivationy);
-        g.drawLine(x + derivationx, y - derivationy, x + width + derivationx, y - derivationy);
+        // Issue #31
+		final int derivationX = scale( DERIVATION_X );
+		final int derivationY = scale( DERIVATION_Y );
+        g.drawLine(x, y, x + derivationX, y - derivationY);
+        g.drawLine(x + width, y, x + width + derivationX, y - derivationY);
+        g.drawLine(x + derivationX, y - derivationY, x + width + derivationX, y - derivationY);
 
         // Right lines
-        g.drawLine(x + width, y + height, x + width + derivationx, y - derivationy + height);
-        g.drawLine(x + derivationx + width, y - derivationy, x + width + derivationx, y - derivationy + height);
+        g.drawLine(x + width, y + height, x + width + derivationX, y - derivationY + height);
+        g.drawLine(x + derivationX + width, y - derivationY, x + width + derivationX, y - derivationY + height);
 
         // Filling color
         g.setColor(ColorManager.HWA_BOX);
@@ -141,20 +151,29 @@ public class TMLArchiHWANode extends TMLArchiNode implements SwallowTGComponent,
         int w  = g.getFontMetrics().stringWidth(ster);
         Font f = g.getFont();
         g.setFont(f.deriveFont(Font.BOLD));
-        g.drawString(ster, x + (width - w)/2, y + textY1);
+        g.drawString(ster, x + (width - w)/2, y + textY ); // Issue #31
         g.setFont(f);
         w  = g.getFontMetrics().stringWidth(name);
-        g.drawString(name, x + (width - w)/2, y + textY2);
+
+        // Issue #31
+        final int marginY2 = scale( MARGIN_Y_2 );
+        g.drawString(name, x + (width - w)/2, y + marginY2 );
 
         // Icon
-        g.drawImage(IconManager.imgic1106.getImage(), x + 4, y + 4, null);
-        g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
+        // Issue #31
+		final int iconMargin = scale( 4 );
+        g.drawImage( scale( IconManager.imgic1106.getImage() ), x + iconMargin /*4*/, y + iconMargin/*4*/, null);
+        g.drawImage( scale( IconManager.img9 ), x + width - scale( 20 ), y + iconMargin/*4*/, null);
     }
 
+    @Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
-
         Polygon pol = new Polygon();
         pol.addPoint(x, y);
+
+        // Issue #31
+		final int derivationx = scale( DERIVATION_X );
+		final int derivationy = scale( DERIVATION_Y );
         pol.addPoint(x + derivationx, y - derivationy);
         pol.addPoint(x + derivationx + width, y - derivationy);
         pol.addPoint(x + derivationx + width, y + height - derivationy);
@@ -175,6 +194,7 @@ public class TMLArchiHWANode extends TMLArchiNode implements SwallowTGComponent,
         return name;
     }
 
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
         boolean error = false;
         String errors = "";
@@ -260,16 +280,18 @@ public class TMLArchiHWANode extends TMLArchiNode implements SwallowTGComponent,
         return true;
     }
 
-
+    @Override
     public int getType() {
         return TGComponentManager.TMLARCHI_HWANODE;
     }
 
+    @Override
     public boolean acceptSwallowedTGComponent(TGComponent tgc) {
         return (tgc instanceof TMLArchiArtifact) && (nbInternalTGComponent == 0);
 
     }
 
+    @Override
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
         if ((tgc instanceof TMLArchiArtifact) && (nbInternalTGComponent == 0)){
             tgc.setFather(this);
@@ -282,10 +304,10 @@ public class TMLArchiHWANode extends TMLArchiNode implements SwallowTGComponent,
         return false;
     }
 
+    @Override
     public void removeSwallowedTGComponent(TGComponent tgc) {
         removeInternalComponent(tgc);
     }
-
 
     public Vector<TMLArchiArtifact> getArtifactList() {
         Vector<TMLArchiArtifact> v = new Vector<TMLArchiArtifact>();
@@ -298,15 +320,17 @@ public class TMLArchiHWANode extends TMLArchiNode implements SwallowTGComponent,
         return v;
     }
 
-    public void hasBeenResized() {
-        for(int i=0; i<nbInternalTGComponent; i++) {
-            if (tgcomponent[i] instanceof TMLArchiArtifact) {
-                tgcomponent[i].resizeWithFather();
-            }
-        }
+    // Issue #31
+//    public void hasBeenResized() {
+//        for(int i=0; i<nbInternalTGComponent; i++) {
+//            if (tgcomponent[i] instanceof TMLArchiArtifact) {
+//                tgcomponent[i].resizeWithFather();
+//            }
+//        }
+//
+//    }
 
-    }
-
+    @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<info stereotype=\"" + stereotype + "\" nodeName=\"" + name);
@@ -330,7 +354,7 @@ public class TMLArchiHWANode extends TMLArchiNode implements SwallowTGComponent,
             Element elt;
          //   int t1id;
             String sstereotype = null, snodeName = null;
-            String operationTypesTmp;
+         //   String operationTypesTmp;
 
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
@@ -370,10 +394,11 @@ public class TMLArchiHWANode extends TMLArchiNode implements SwallowTGComponent,
             }
 
         } catch (Exception e) {
-            throw new MalformedModelingException();
+            throw new MalformedModelingException( e );
         }
     }
 
+    @Override
     public int getDefaultConnector() {
         return TGComponentManager.CONNECTOR_NODE_TMLARCHI;
     }
@@ -390,7 +415,7 @@ public class TMLArchiHWANode extends TMLArchiNode implements SwallowTGComponent,
         return operation;
     }
 
-
+    @Override
     public String getAttributes() {
         String attr = "";
         attr += "Data size (in byte) = " + byteDataSize + "\n";
@@ -400,8 +425,8 @@ public class TMLArchiHWANode extends TMLArchiNode implements SwallowTGComponent,
         return attr;
     }
 
+    @Override
     public int getComponentType()       {
         return CONTROLLER;
     }
-
 }

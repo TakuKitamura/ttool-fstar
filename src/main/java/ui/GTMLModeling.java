@@ -3931,7 +3931,7 @@ public class GTMLModeling {
                         }
                     }
                     //Map keys
-                    ArrayList<TMLArchiKey> keys = ((TMLArchiCommunicationNode) (tgc)).getKeyList();
+                    List<TMLArchiKey> keys = ((TMLArchiCommunicationNode) (tgc)).getKeyList();
                     for (TMLArchiKey key : keys) {
                         //TraceManager.addDev("Exploring key " + key.getValue());
                         SecurityPattern sp = tmlm.getSecurityPattern(key.getValue());

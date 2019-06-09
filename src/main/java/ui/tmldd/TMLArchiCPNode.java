@@ -36,10 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui.tmldd;
 
 import myutil.GraphicLib;
@@ -55,8 +51,13 @@ import ui.util.IconManager;
 import ui.window.JDialogCommPatternMapping;
 
 import javax.swing.*;
-import java.awt.*;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Polygon;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ListIterator;
 import java.util.Vector;
 
@@ -69,10 +70,11 @@ import java.util.Vector;
  */
 public class TMLArchiCPNode extends TMLArchiCommunicationNode implements SwallowTGComponent, WithAttributes, TMLArchiCPInterface {
     // Graphical attributes
-    private int textY1 = 15;
-    private int textY2 = 30;
-    private int derivationx = 2;
-    private int derivationy = 3;
+	// Issue #31
+//    private int textY1 = 15;
+//    private int textY2 = 30;
+//    private int derivationx = 2;
+//    private int derivationy = 3;
     private String stereotype = "CP";
     private String reference="";
 
@@ -89,10 +91,13 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
     public TMLArchiCPNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        width = 250;
-        height = 50;
+        // Issue #31
+//        width = 250;
+//        height = 50;
+        textY = 15;
         minWidth = 100;
         minHeight = 50;
+        initScaling( 250, 50 );
 
         nbConnectingPoint = 0;
         connectingPoint = new TGConnectingPoint[0];
@@ -113,19 +118,22 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
     }
 
     @Override
-    public void internalDrawing(Graphics g) {
+    protected void internalDrawing(Graphics g) {
         Color c = g.getColor();
         g.draw3DRect(x, y, width, height, true);
 
+        // Issue #31
+        final int derivationX = scale( DERIVATION_X );
+        final int derivationY = scale( DERIVATION_Y );
 
         // Top lines
-        g.drawLine(x, y, x + derivationx, y - derivationy);
-        g.drawLine(x + width, y, x + width + derivationx, y - derivationy);
-        g.drawLine(x + derivationx, y - derivationy, x + width + derivationx, y - derivationy);
+        g.drawLine(x, y, x + derivationX, y - derivationY);
+        g.drawLine(x + width, y, x + width + derivationX, y - derivationY);
+        g.drawLine(x + derivationX, y - derivationY, x + width + derivationX, y - derivationY);
 
         // Right lines
-        g.drawLine(x + width, y + height, x + width + derivationx, y - derivationy + height);
-        g.drawLine(x + derivationx + width, y - derivationy, x + width + derivationx, y - derivationy + height);
+        g.drawLine(x + width, y + height, x + width + derivationX, y - derivationY + height);
+        g.drawLine(x + derivationX + width, y - derivationY, x + width + derivationX, y - derivationY + height);
 
         // Filling color
         g.setColor(ColorManager.BUS_BOX);
@@ -137,7 +145,7 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         int w  = g.getFontMetrics().stringWidth(ster);
         Font f = g.getFont();
         g.setFont(f.deriveFont(Font.BOLD));
-        g.drawString(ster, x + (width - w)/2, y + textY1);
+        g.drawString(ster, x + (width - w)/2, y + textY); // Issue #31
         g.setFont(f);
 
         // Complete name is derived
@@ -146,12 +154,13 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
 //        String val = name + "::" + reference;
 //        completeName = val;
         w  = g.getFontMetrics().stringWidth(val);
-        g.drawString(val, x + (width - w)/2, y + textY2);
+        g.drawString(val, x + (width - w)/2, y + 2 * textY ); // Issue #31
 
         // Icon
-        //g.drawImage(IconManager.imgic1102.getImage(), x + width - 20, y + 4, null);
-        g.drawImage(IconManager.imgic1102.getImage(), x + 4, y + 4, null);
-        g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
+        // Issue #31
+        final int iconMargin = scale( 4 );
+        g.drawImage( scale( IconManager.imgic1102.getImage() ), x + iconMargin/*4*/, y + iconMargin/*4*/, null);
+        g.drawImage( scale( IconManager.img9 ), x + width - scale( 20 ), y + iconMargin/*4*/, null);
 
         // Link to mapped units
         if (c == ColorManager.POINTER_ON_ME_0) {
@@ -188,12 +197,15 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
 
     @Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
-
         Polygon pol = new Polygon();
         pol.addPoint(x, y);
-        pol.addPoint(x + derivationx, y - derivationy);
-        pol.addPoint(x + derivationx + width, y - derivationy);
-        pol.addPoint(x + derivationx + width, y + height - derivationy);
+
+        // Issue #31
+        final int derivationX =  scale( DERIVATION_X );
+        final int derivationY =  scale( DERIVATION_Y );
+        pol.addPoint(x + derivationX, y - derivationY);
+        pol.addPoint(x + derivationX + width, y - derivationY);
+        pol.addPoint(x + derivationX + width, y + height - derivationY);
         pol.addPoint(x + width, y + height);
         pol.addPoint(x, y + height);
 
@@ -421,8 +433,8 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         }
     }
 
-    public java.util.List<TMLArchiPortArtifact> getPortArtifactList() {
-        java.util.List<TMLArchiPortArtifact> v = new ArrayList<TMLArchiPortArtifact>();
+    public List<TMLArchiPortArtifact> getPortArtifactList() {
+        List<TMLArchiPortArtifact> v = new ArrayList<TMLArchiPortArtifact>();
 
         for( int i = 0; i < nbInternalTGComponent; i++ )        {
             if( tgcomponent[i] instanceof TMLArchiPortArtifact )        {
@@ -487,8 +499,8 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         return vectorToReturn;
     }
 
-    public java.util.List<Integer> getTransferTypes()        {
-        java.util.List<Integer> transferTypes = new ArrayList<Integer>();
+    public List<Integer> getTransferTypes()        {
+        List<Integer> transferTypes = new ArrayList<Integer>();
         transferTypes.add( transferType1 );
         transferTypes.add( transferType2 );
 

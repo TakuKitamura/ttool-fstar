@@ -36,24 +36,36 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmldd;
 
-import myutil.GraphicLib;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Polygon;
+import java.util.Vector;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import myutil.GraphicLib;
 import tmltranslator.HwBus;
-import ui.*;
+import ui.ColorManager;
+import ui.LinkedReference;
+import ui.MalformedModelingException;
+import ui.SwallowTGComponent;
+import ui.TAttribute;
+import ui.TDiagramPanel;
+import ui.TGComponent;
+import ui.TGComponentManager;
+import ui.TGConnectingPoint;
+import ui.WithAttributes;
+import ui.atd.ATDAttack;
 import ui.util.IconManager;
 import ui.window.JDialogBUSNode;
-import ui.atd.ATDAttack;
-
-import javax.swing.*;
-import java.awt.*;
-import java.util.Vector;
 
 /**
    * Class TMLArchiBUSNode
@@ -63,11 +75,16 @@ import java.util.Vector;
    * @author Ludovic APVRILLE
  */
 public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements SwallowTGComponent, LinkedReference, WithAttributes, TMLArchiElementInterface {
-    private int textY1 = 15;
-    private int textY2 = 30;
-    private int derivationx = 2;
-    private int derivationy = 3;
-    private static String stereotype = "Bus";
+
+	// Issue #31
+//    private int textY1 = 15;
+//    private int textY2 = 30;
+//    private int derivationx = 2;
+//    private int derivationy = 3;
+	private static final int[] PRIVATE_ICON_OFFSETS_X = new int[]{ 4, 7, 10, 13, 16, 19, 22, 22, 13, 4 };
+	private static final int[] PRIVATE_ICON_OFFSETS_Y = new int[]{ 18, 22, 22, 18, 22, 22,18, 35, 43, 35 };
+
+	private /*static Issue #31 why is this static??*/ String stereotype = "Bus";
 
     private int byteDataSize = HwBus.DEFAULT_BYTE_DATA_SIZE;
     private int pipelineSize = HwBus.DEFAULT_PIPELINE_SIZE;
@@ -80,11 +97,14 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
     public TMLArchiBUSNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        width = 250;
-        height = 50;
+    	// Issue #31
+//        width = 250;
+//        height = 50;
+        textY = 15;
         minWidth = 100;
         minHeight = 50;
-
+        initScaling( 250, 50 );
+        
         nbConnectingPoint = 16;
         connectingPoint = new TGConnectingPoint[16];
 
@@ -121,19 +141,23 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
         myImageIcon = IconManager.imgic700;
     }
 
-    public void internalDrawing(Graphics g) {
+    @Override
+    protected void internalDrawing(Graphics g) {
         Color c = g.getColor();
         g.draw3DRect(x, y, width, height, true);
 
+        // Issue #31
+        final int derivationX = scale( DERIVATION_X );
+        final int derivationY = scale( DERIVATION_Y );
 
         // Top lines
-        g.drawLine(x, y, x + derivationx, y - derivationy);
-        g.drawLine(x + width, y, x + width + derivationx, y - derivationy);
-        g.drawLine(x + derivationx, y - derivationy, x + width + derivationx, y - derivationy);
+        g.drawLine(x, y, x + derivationX, y - derivationY);
+        g.drawLine(x + width, y, x + width + derivationX, y - derivationY);
+        g.drawLine(x + derivationX, y - derivationY, x + width + derivationX, y - derivationY);
 
         // Right lines
-        g.drawLine(x + width, y + height, x + width + derivationx, y - derivationy + height);
-        g.drawLine(x + derivationx + width, y - derivationy, x + width + derivationx, y - derivationy + height);
+        g.drawLine(x + width, y + height, x + width + derivationX, y - derivationY + height);
+        g.drawLine(x + derivationX + width, y - derivationY, x + width + derivationX, y - derivationY + height);
 
         // Filling color
         g.setColor(ColorManager.BUS_BOX);
@@ -145,46 +169,54 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
         int w  = g.getFontMetrics().stringWidth(ster);
         Font f = g.getFont();
         g.setFont(f.deriveFont(Font.BOLD));
-        g.drawString(ster, x + (width - w)/2, y + textY1);
+        g.drawString(ster, x + (width - w)/2, y + textY); // Issue #31
         g.setFont(f);
         w  = g.getFontMetrics().stringWidth(name);
-        g.drawString(name, x + (width - w)/2, y + textY2);
+        g.drawString(name, x + (width - w)/2, y + 2 * textY ); // Issue #31
 
         // Icon
-        //g.drawImage(IconManager.imgic1102.getImage(), x + width - 20, y + 4, null);
-        g.drawImage(IconManager.imgic1102.getImage(), x + 4, y + 4, null);
-        //g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
+        // Issue #31
+        final int imgOffset = scale( 4 );
+        g.drawImage( scale( IconManager.imgic1102.getImage() ), x + imgOffset/*4*/, y + imgOffset/*4*/, null);
 
         c = g.getColor();
 
         //Draw bus privacy
-        if (privacy== HwBus.BUS_PUBLIC){
-
-        }
-        else {
-            int[] xps = new int[]{x+4, x+7, x+10, x+13, x+16, x+19, x+22, x+22, x+13, x+4};
-            int[] yps = new int[]{y+18, y+22, y+22, y+18, y+22, y+22,y+18, y+35, y+43, y+35};
+        if (privacy != HwBus.BUS_PUBLIC){
+            final int[] xps = computePoints( x, PRIVATE_ICON_OFFSETS_X );// Issue #31 new int[]{x+4, x+7, x+10, x+13, x+16, x+19, x+22, x+22, x+13, x+4};
+            final int[] yps = computePoints( y, PRIVATE_ICON_OFFSETS_Y );// Issue #31 new int[]{y+18, y+22, y+22, y+18, y+22, y+22,y+18, y+35, y+43, y+35};
             g.setColor(Color.green);
             g.fillPolygon(xps, yps,10);
-
-            // g.drawOval(x+6, y+19, 12, 18);
-
-            //    g.fillRect(x+4, y+25, 18, 14);
             g.setColor(c);
             g.drawPolygon(xps, yps,10);
-            //  g.drawRect(x+4, y+25, 18, 14);
         }
     }
+    
+    private static int[] computePoints( final int coordinate,
+    										final int[] offsets ) {
+    	final int[] pointsX = new int[ offsets.length ];
+    	
+    	for ( int index = 0; index < offsets.length; index++ ) {
+    		pointsX[ index ] = coordinate + offsets[ index ];
+    	}
+    	
+    	return pointsX;
+    }
 
+    @Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
-
         Polygon pol = new Polygon();
         pol.addPoint(x, y);
-        pol.addPoint(x + derivationx, y - derivationy);
-        pol.addPoint(x + derivationx + width, y - derivationy);
-        pol.addPoint(x + derivationx + width, y + height - derivationy);
+
+        // Issue #31
+        final int derivationX = scale( DERIVATION_X );
+        final int derivationY = scale( DERIVATION_Y );
+        pol.addPoint(x + derivationX, y - derivationY);
+        pol.addPoint(x + derivationX + width, y - derivationY);
+        pol.addPoint(x + derivationX + width, y + height - derivationY);
         pol.addPoint(x + width, y + height);
         pol.addPoint(x, y + height);
+
         if (pol.contains(x1, y1)) {
             return this;
         }
@@ -205,6 +237,7 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
         return name;
     }
 
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
         boolean error = false;
         String errors = "";
@@ -328,11 +361,12 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
         return true;
     }
 
-
+    @Override
     public int getType() {
         return TGComponentManager.TMLARCHI_BUSNODE;
     }
 
+    @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<info stereotype=\"" + stereotype + "\" nodeName=\"" + name);
@@ -398,10 +432,9 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
             }
 
         } catch (Exception e) {
-            throw new MalformedModelingException();
+            throw new MalformedModelingException( e );
         }
     }
-
 
     public int getByteDataSize(){
         return byteDataSize;
@@ -422,10 +455,11 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
         return privacy;
     }
 
-
     public void setPrivacy(int p){
         privacy=p;
     }
+
+    @Override
     public String getAttributes() {
         String attr = "";
         attr += "Data size (in byte) = " + byteDataSize + "\n";
@@ -440,8 +474,8 @@ public class TMLArchiBUSNode extends TMLArchiCommunicationNode implements Swallo
         return attr;
     }
 
-    public int getComponentType()       {
+    @Override
+    public int getComponentType() {
         return TRANSFER;
     }
-
 }

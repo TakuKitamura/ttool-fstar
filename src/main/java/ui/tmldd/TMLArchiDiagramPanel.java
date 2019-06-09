@@ -37,9 +37,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmldd;
 
 import myutil.TraceManager;
@@ -70,8 +67,6 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
 
     protected int view = 31;
 
-  
-
     public  TMLArchiDiagramPanel(MainGUI mgui, TToolBar _ttb) {
         super(mgui, _ttb);
         /*TDiagramMouseManager tdmm = new TDiagramMouseManager(this);
@@ -79,6 +74,7 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
           addMouseMotionListener(tdmm);*/
     }
 
+    @Override
     public boolean actionOnDoubleClick(TGComponent tgc) {
         //
         /*if (tgc instanceof TCDTClass) {
@@ -99,6 +95,7 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
         return false;
     }
 
+    @Override
     public boolean actionOnAdd(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {
           TCDTClass tgcc = (TCDTClass)(tgc);
@@ -109,6 +106,7 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
         return false;
     }
 
+    @Override
     public boolean actionOnRemove(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {
           TCDTClass tgcc = (TCDTClass)(tgc);
@@ -118,7 +116,6 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
           }*/
         return false;
     }
-    
     
 	public void replaceArchComponent(TGComponent tgc, TGComponent newtgc){
 		fatherOfRemoved = tgc.getFather();
@@ -155,10 +152,9 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
        actionOnRemove(newtgc);
        newtgc.actionOnRemove();
        return;
-         
-        
 	}
 
+    @Override
     public boolean actionOnValueChanged(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {
           return actionOnDoubleClick(tgc);
@@ -174,26 +170,32 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
         masterClockFrequency = _masterClockFrequency;
     }
 
+    @Override
     public String getXMLHead() {
-        return "<TMLArchiDiagramPanel name=\"" + name + "\"" + sizeParam() + displayParam() + displayClock() + " >";
+        return "<TMLArchiDiagramPanel name=\"" + name + "\"" + sizeParam() + displayParam() + displayClock() + zoomParam() + " >"; // Issue #31
     }
 
+    @Override
     public String getXMLTail() {
         return "</TMLArchiDiagramPanel>";
     }
 
+    @Override
     public String getXMLSelectedHead() {
         return "<TMLArchiDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
     }
 
+    @Override
     public String getXMLSelectedTail() {
         return "</TMLArchiDiagramPanelCopy>";
     }
 
+    @Override
     public String getXMLCloneHead() {
         return "<TMLArchiDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
     }
 
+    @Override
     public String getXMLCloneTail() {
         return "</TMLArchiDiagramPanelCopy>";
     }
@@ -275,9 +277,9 @@ public class TMLArchiDiagramPanel extends TDiagramPanel implements TDPWithAttrib
                 ll.add( (TMLArchiCommunicationNode) tgc );
             }
 
-	    if (tgc instanceof TGComponentPlugin) {
-		ll.add(tgc);
-	    }
+		    if (tgc instanceof TGComponentPlugin) {
+		    	ll.add(tgc);
+		    }
         }
 
         return ll;

@@ -1731,7 +1731,7 @@ public class GTURTLEModeling {
                                 if (link.hwnode instanceof HwMemory) {
                                     mems.add((HwMemory) link.hwnode);
                                     TMLArchiMemoryNode memNode = (TMLArchiMemoryNode) listE.getTG(link.hwnode);
-                                    ArrayList<TMLArchiKey> keys = memNode.getKeyList();
+                                    List<TMLArchiKey> keys = memNode.getKeyList();
                                     String patternString = "";
                                     for (TMLArchiKey key : keys) {
                                         if (key.getValue().equals(sp.name)) {
@@ -1799,7 +1799,7 @@ public class GTURTLEModeling {
                                 if (link.hwnode instanceof HwMemory) {
                                     mems.add((HwMemory) link.hwnode);
                                     TMLArchiMemoryNode memNode = (TMLArchiMemoryNode) listE.getTG(link.hwnode);
-                                    ArrayList<TMLArchiKey> keys = memNode.getKeyList();
+                                    List<TMLArchiKey> keys = memNode.getKeyList();
                                     String patternString = "";
                                     for (TMLArchiKey key : keys) {
                                         if (key.getValue().equals(sp.name)) {

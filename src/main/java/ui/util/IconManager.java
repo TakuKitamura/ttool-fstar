@@ -733,7 +733,10 @@ public class IconManager {
         if (imgic8 != null) {
             img8 = imgic8.getImage();
         }
-        if (img9 != null) {
+        
+        // Issue #31: Need to check imgic9 not img9!
+        if ( imgic9 == null) {
+//        if (img9 != null) {
             img9 = imgic9.getImage();
         }
 

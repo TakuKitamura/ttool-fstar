@@ -36,6 +36,7 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 		
 		rescaled = false;
+		oldScaleFactor = tdp.getZoom();
 
 		textX = 15;
         textY = 15;
@@ -258,7 +259,11 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
     }
     
     protected Image scale( final Image image ) {
-    	return scale( image, width );
+    	if ( image == null ) {
+    		return image;
+    	}
+    	
+    	return scale( image, scale( image.getWidth( null ) ) );
     }
     
     protected Image scale( 	final Image image,

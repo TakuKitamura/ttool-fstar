@@ -42,6 +42,7 @@
 package tmltranslator;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -55,7 +56,7 @@ public class HwBridge extends HwCommunicationNode  {
     public static final int DEFAULT_BUFFER_BYTE_DATA_SIZE = 4;
     
     public boolean isFirewall;
-    public ArrayList<String> firewallRules = new ArrayList<String>();
+    public List<String> firewallRules = new ArrayList<String>();
     public int latency = 0;
     public int bufferByteSize = DEFAULT_BUFFER_BYTE_DATA_SIZE; // In bytes. Should more than 0
     

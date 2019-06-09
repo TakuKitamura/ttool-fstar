@@ -58,14 +58,20 @@ import java.awt.*;
    * @author Ludovic APVRILLE
  */
 public class TMLArchiArtifact extends TGCWithoutInternalComponent implements SwallowedTGComponent, WithAttributes, TMLArchiTaskInterface {
-    protected int lineLength = 5;
-    protected int textX =  5;
-    protected int textY =  15;
-    protected int textY2 =  35;
-    protected int space = 5;
-    protected int fileX = 20;
-    protected int fileY = 25;
-    protected int cran = 5;
+
+	// Issue #31
+	private static final int SPACE = 5;
+	private static final int CRAN = 5;
+	private static final int FILE_X = 20;
+	private static final int FILE_Y = 25;
+//    protected int lineLength = 5;
+//    protected int textX =  5;
+//    protected int textY =  15;
+//    protected int textY2 =  35;
+//    protected int space = 5;
+//    protected int fileX = 20;
+//    protected int fileY = 25;
+//    protected int cran = 5;
 
     protected String oldValue = "";
     protected String referenceTaskName = "referenceToTask";
@@ -78,12 +84,17 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
 
     public String status="";
     public String lastTransaction="";
+    
     public TMLArchiArtifact(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        width = 100;
-        height = 40;
+        // Issue #31
+		textX = 5;
+        textY = 15;
+//        width = 100;
+//        height = 40;
         minWidth = 100;
+        initScaling( 100, 40 );
 
         nbConnectingPoint = 0;
         addTGConnectingPointsComment();
@@ -101,17 +112,18 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
         myImageIcon = IconManager.imgic702;
     }
 
+    @Override
     public boolean isHidden() {
-	//TraceManager.addDev("Archi task artifact: Am I hidden?" + getValue());
-	boolean ret = false;
-	if (tdp != null) {
-	    if (tdp instanceof TMLArchiDiagramPanel) {
-		ret = !(((TMLArchiDiagramPanel)(tdp)).inCurrentView(this));
-		
-	    }
-	}
-	//TraceManager.addDev("Hidden? -> " + ret);
-	return ret;
+		//TraceManager.addDev("Archi task artifact: Am I hidden?" + getValue());
+		boolean ret = false;
+		if (tdp != null) {
+		    if (tdp instanceof TMLArchiDiagramPanel) {
+			ret = !(((TMLArchiDiagramPanel)(tdp)).inCurrentView(this));
+			
+		    }
+		}
+		//TraceManager.addDev("Hidden? -> " + ret);
+		return ret;
     }
 
     public int getPriority() {
@@ -122,11 +134,12 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
       return operation;
       }*/
 
-    public void internalDrawing(Graphics g) {
-
+    @Override
+    protected void internalDrawing(Graphics g) {
         if (oldValue.compareTo(value) != 0) {
             setValue(value, g);
         }
+
         g.drawRect(x, y, width, height);
         Color c = g.getColor();
 
@@ -144,23 +157,28 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
         g.fillRect(x+1, y+1, width-1, height-1);
         g.setColor(c);
 
-        //g.drawRoundRect(x, y, width, height, arc, arc);
-        g.drawLine(x+width-space-fileX, y + space, x+width-space-fileX, y+space+fileY);
-        g.drawLine(x+width-space-fileX, y + space, x+width-space-cran, y+space);
-        g.drawLine(x+width-space-cran, y+space, x+width-space, y+space + cran);
-        g.drawLine(x+width-space, y+space + cran, x+width-space, y+space+fileY);
-        g.drawLine(x+width-space, y+space+fileY, x+width-space-fileX, y+space+fileY);
-        g.drawLine(x+width-space-cran, y+space, x+width-space-cran, y+space+cran);
-        g.drawLine(x+width-space-cran, y+space+cran, x + width-space, y+space+cran);
+        // Issue #31
+        final int space = scale( SPACE );
+        final int marginFileX = scale( SPACE + FILE_X );
+        final int marginFileY = scale( SPACE + FILE_Y );
+        final int marginCran = scale( SPACE + CRAN );
+        
+        g.drawLine(x+width- marginFileX /*space-fileX*/, y + space, x+width- marginFileX /*space-fileX*/, y+ marginFileY/*space+fileY*/);
+        g.drawLine(x+width- marginFileX/*space-fileX*/, y + space, x+width-marginCran/*space-cran*/, y+space);
+        g.drawLine(x+width-marginCran/*space-cran*/, y+space, x+width-space, y+ marginCran/*space + cran*/);
+        g.drawLine(x+width-space, y+ marginCran/*space + cran*/, x+width-space, y+ marginFileY/*space+fileY*/);
+        g.drawLine(x+width-space, y+ marginFileY/*space+fileY*/, x+width-marginFileX/*space-fileX*/, y+ marginFileY/*space+fileY*/);
+        g.drawLine(x+width- marginCran /*space-cran*/, y+space, x+width- marginCran/*space-cran*/, y+ marginCran/*space+cran*/);
+        g.drawLine(x+width- marginCran/*space-cran*/, y+ marginCran/*space+cran*/, x + width-space, y+marginCran /*space+cran*/);
         g.drawString(value, x + textX , y + textY);
-        //g.drawImage(IconManager.img9, x+width-space-fileX + 3, y + space + 7, null);
-
     }
 
     public void setValue(String val, Graphics g) {
         oldValue = value;
         int w  = g.getFontMetrics().stringWidth(value);
-        int w1 = Math.max(minWidth, w + 2 * textX + fileX + space);
+        
+        final int marginFileX = scale( SPACE + FILE_X );
+        int w1 = Math.max(minWidth, w + 2 * textX + marginFileX/*fileX + space*/);
 
         //
         if (w1 != width) {
@@ -170,6 +188,7 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
         //
     }
 
+    @Override
     public void resizeWithFather() {
         if ((father != null) && ((father instanceof TMLArchiCPUNode) || (father instanceof TMLArchiHWANode))) {
             //
@@ -179,7 +198,7 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
         }
     }
 
-
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
         String tmp;
         boolean error = false;
@@ -227,13 +246,13 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
         makeFullValue();
 
         return !error;
-
     }
 
     private void makeFullValue() {
         value = referenceTaskName + "::" + taskName;
     }
 
+    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -241,10 +260,12 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
         return null;
     }
 
+    @Override
     public int getType() {
         return TGComponentManager.TMLARCHI_ARTIFACT;
     }
 
+    @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append( "<info value=\"" + value + "\" taskName=\"" + taskName + "\" referenceTaskName=\"" );
@@ -314,7 +335,7 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
             }
 
         } catch (Exception e) {
-            throw new MalformedModelingException();
+            throw new MalformedModelingException( e );
         }
         makeFullValue();
     }
@@ -351,7 +372,6 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
     public String getOperationMEC() {
         return operationMEC;
     }
-
 
     public int getOperationType()       {
 
@@ -402,6 +422,4 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
     public ArchUnitMEC getArchUnitMEC() {
         return fatherArchUnitMECType;
     }
-
-
 }

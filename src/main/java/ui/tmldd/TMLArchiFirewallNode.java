@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmldd;
 
 import myutil.GraphicLib;
@@ -50,32 +47,44 @@ import ui.util.IconManager;
 import ui.window.JDialogFirewallNode;
 
 import javax.swing.*;
-import java.awt.*;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Polygon;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class TMLArchiFirewallNode
  * Node. To be used in TML architecture diagrams.
  * Creation: 17/10/2016
  * @version 1.0 17/10/2016
- * @author Letitia LI
+ * @author Letitia LI <3
  */
 public class TMLArchiFirewallNode extends TMLArchiCommunicationNode implements SwallowTGComponent, WithAttributes, TMLArchiSecurityInterface {
-    private int textY1 = 15;
-    private int textY2 = 30;
-    private int derivationx = 2;
-    private int derivationy = 3;
+
+	// Issue #31
+	private static final int DERIVATION_X = 2;
+	private static final int DERIVATION_Y = 3;
+	private static final int MARGIN_Y_2 = 30;
+//    private int textY1 = 15;
+//    private int textY2 = 30;
+//    private int derivationx = 2;
+//    private int derivationy = 3;
     private String stereotype = "FIREWALL";
-    private ArrayList<String> rules = new ArrayList<String>();
+    private List<String> rules = new ArrayList<String>();
 	private int latency = 10;
     
     public TMLArchiFirewallNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        width = 250;
-        height = 100;
+
+        // Issue #31
+//        width = 250;
+//        height = 100;
         minWidth = 100;
         minHeight = 35;
+        textY = 15;
+        initScaling( 250, 100 );
         
         nbConnectingPoint = 16;
         connectingPoint = new TGConnectingPoint[16];
@@ -113,11 +122,15 @@ public class TMLArchiFirewallNode extends TMLArchiCommunicationNode implements S
         myImageIcon = IconManager.imgic700;
     }
     
-    public void internalDrawing(Graphics g) {
+    @Override
+    protected void internalDrawing(Graphics g) {
 		Color c = g.getColor();
 		g.draw3DRect(x, y, width, height, true);
 		
         // Top lines
+        // Issue #31
+		final int derivationx = scale( DERIVATION_X );
+		final int derivationy = scale( DERIVATION_Y );
         g.drawLine(x, y, x + derivationx, y - derivationy);
         g.drawLine(x + width, y, x + width + derivationx, y - derivationy);
         g.drawLine(x + derivationx, y - derivationy, x + width + derivationx, y - derivationy);
@@ -134,25 +147,33 @@ public class TMLArchiFirewallNode extends TMLArchiCommunicationNode implements S
         // Strings
         String ster = "<<" + stereotype + ">>";
         int w  = g.getFontMetrics().stringWidth(ster);
-        g.drawString(ster, x + (width - w)/2, y + textY1);
+        g.drawString(ster, x + (width - w)/2, y + textY);
         w  = g.getFontMetrics().stringWidth(name);
-        g.drawString(name, x + (width - w)/2, y + textY2);
+        
+        // Issue #31
+        final int marginY2 = scale( MARGIN_Y_2 );
+        g.drawString(name, x + (width - w)/2, y + marginY2 );
 		
 		// Icon
-		
-		g.drawImage(IconManager.imgic7001.getImage(), x + 4, y + 4, null);
-		//g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
+        // Issue #31
+		final int iconMargin = scale( 4 );
+		g.drawImage( scale( IconManager.imgic7001.getImage() ), x + iconMargin/*4*/, y + iconMargin/*4*/, null);
     }
     
+    @Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
-        
         Polygon pol = new Polygon();
         pol.addPoint(x, y);
+
+        // Issue #31
+		final int derivationx = scale( DERIVATION_X );
+		final int derivationy = scale( DERIVATION_Y );
         pol.addPoint(x + derivationx, y - derivationy);
         pol.addPoint(x + derivationx + width, y - derivationy);
         pol.addPoint(x + derivationx + width, y + height - derivationy);
         pol.addPoint(x + width, y + height);
         pol.addPoint(x, y + height);
+        
         if (pol.contains(x1, y1)) {
             return this;
         }
@@ -162,13 +183,13 @@ public class TMLArchiFirewallNode extends TMLArchiCommunicationNode implements S
     
     public String getStereotype() {
         return stereotype;
-        
     }
     
     public String getNodeName() {
         return name;
     }
     
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
 		boolean error = false;
 		String errors = "";
@@ -209,23 +230,24 @@ public class TMLArchiFirewallNode extends TMLArchiCommunicationNode implements S
         return true;
     }
     
-    
+    @Override
     public int getType() {
         return TGComponentManager.TMLARCHI_FIREWALL;
     }
     
+    @Override
     protected String translateExtraParam() {
-        StringBuffer sb = new StringBuffer("<extraparam>\n");
-        sb.append("<info stereotype=\"" + stereotype + "\" nodeName=\"" + name);
-        sb.append("\" />\n");
-	sb.append("<attributes latency=\"" + latency + "\" ");
-        sb.append("/>\n");
-	for (String rule:rules){
-	sb.append("<rule value=\"" + rule + "\" ");
-        sb.append("/>\n");
-	}
-        sb.append("</extraparam>\n");
-        return new String(sb);
+    	StringBuffer sb = new StringBuffer("<extraparam>\n");
+    	sb.append("<info stereotype=\"" + stereotype + "\" nodeName=\"" + name);
+    	sb.append("\" />\n");
+    	sb.append("<attributes latency=\"" + latency + "\" ");
+    	sb.append("/>\n");
+    	for (String rule:rules){
+    		sb.append("<rule value=\"" + rule + "\" ");
+    		sb.append("/>\n");
+    	}
+    	sb.append("</extraparam>\n");
+    	return new String(sb);
     }
     
     @Override
@@ -275,26 +297,27 @@ public class TMLArchiFirewallNode extends TMLArchiCommunicationNode implements S
             }
             
         } catch (Exception e) {
-            throw new MalformedModelingException();
+            throw new MalformedModelingException( e );
         }
     }
-    
-	  
-	  public int getLatency(){
-		  return latency;
-	  }
-	public ArrayList<String> getRules(){
-	    return rules;
-	}
-	  public String getAttributes() {
-		  String attr = "";
-		  attr += "latency = " + latency + "\n";
-		  return attr;
-	  }
-	   
-	public int getComponentType()	{
-		return TRANSFER;
-	}
-	  
-    
+
+    public int getLatency(){
+    	return latency;
+    }
+
+    public List<String> getRules(){
+    	return rules;
+    }
+
+    @Override
+    public String getAttributes() {
+    	String attr = "";
+    	attr += "latency = " + latency + "\n";
+    	return attr;
+    }
+
+    @Override
+    public int getComponentType() {
+    	return TRANSFER;
+    }
 }
