@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package ui.window;
 
 import java.awt.BorderLayout;
@@ -67,6 +66,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -114,7 +114,6 @@ import ui.TURTLEPanel;
 import ui.interactivesimulation.JFrameSimulationSDPanel;
 import ui.util.IconManager;
 
-
 /**
  * Class JDialogProverifVerification
  * Dialog for managing the generation of ProVerif code and execution of
@@ -145,15 +144,13 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
     public final static int REACHABILITY_SELECTED = 2;
     public final static int REACHABILITY_NONE = 3;
 
-
     TURTLEPanel currPanel;
 
     int mode;
 
-
     //Security
-    HashMap<String, HashSet<String>> cpuTaskMap = new HashMap<String, HashSet<String>>();
-    HashMap<String, String> taskCpuMap = new HashMap<String, String>();
+    Map<String, HashSet<String>> cpuTaskMap = new HashMap<String, HashSet<String>>();
+    Map<String, String> taskCpuMap = new HashMap<String, String>();
     Vector<String> selectedTasks = new Vector<String>();
     Vector<String> ignoredTasks = new Vector<String>();
     JList<String> listSelected;
@@ -167,7 +164,7 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
 
     //components
     protected JPanel jta;
-    protected JButton start;
+    private JButton startButton;
     protected JButton stop;
     protected JButton close;
     private JPopupMenu popup;
@@ -185,8 +182,7 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
 
     protected JCheckBox removeForkAndJoin;
 
-
-    Map<JCheckBox, ArrayList<JCheckBox>> cpuTaskObjs = new HashMap<JCheckBox, ArrayList<JCheckBox>>();
+    private Map<JCheckBox, List<JCheckBox>> cpuTaskObjs = new HashMap<JCheckBox, List<JCheckBox>>();
 
     private class MyMenuItem extends JMenuItem {
         /**
@@ -203,7 +199,6 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
     }
 
     private MyMenuItem menuItem;
-
 
     private JTextField code1, exe2, loopLimit;
     protected JScrollPane jsp;
@@ -222,7 +217,6 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
     protected RshClient rshc;
 
     protected JTabbedPane jp1;
-
 
     private class ProVerifVerificationException extends Exception {
         /**
@@ -483,14 +477,10 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
             //removeForkAndJoin.addActionListener(this);
         }*/
 
-       
-
-
         JPanel jp01 = new JPanel();
         gridbag01 = new GridBagLayout();
         jp01.setLayout(gridbag01);
         jp01.setBorder(new javax.swing.border.TitledBorder("Verification options"));
-
 
         JLabel gen = new JLabel("Generate ProVerif code in: ");
 
@@ -500,7 +490,6 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
         code1.setPreferredSize(new Dimension(100, 10));
         addComponent(jp01, code1, 1, curY, 3, GridBagConstraints.EAST, GridBagConstraints.BOTH);
         curY++;
-
 
         JLabel exe = new JLabel("Execute ProVerif as: ");
         addComponent(jp01, exe, 0, curY, 1, GridBagConstraints.EAST, GridBagConstraints.BOTH);
@@ -555,25 +544,26 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
         jta.setBorder(new javax.swing.border.TitledBorder("Results"));
         Font f = new Font("Courrier", Font.BOLD, 12);
         jta.setFont(f);
+
         jsp = new JScrollPane(jta, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         jsp.setPreferredSize(new Dimension(300, 300));
         c.add(jsp, BorderLayout.CENTER);
 
         //	addComponent(jp01, jsp, 1, curY, 2, GridBagConstraints.CENTER, GridBagConstraints.BOTH);
-        start = new JButton("Start", IconManager.imgic53);
+        startButton = new JButton("Start", IconManager.imgic53);
         stop = new JButton("Stop", IconManager.imgic55);
         close = new JButton("Close", IconManager.imgic27);
 
-        start.setPreferredSize(new Dimension(100, 30));
+        startButton.setPreferredSize(new Dimension(100, 30));
         stop.setPreferredSize(new Dimension(100, 30));
         close.setPreferredSize(new Dimension(120, 30));
 
-        start.addActionListener(this);
+        startButton.addActionListener(this);
         stop.addActionListener(this);
         close.addActionListener(this);
 
         JPanel jp2 = new JPanel();
-        jp2.add(start);
+        jp2.add(startButton);
         jp2.add(stop);
         jp2.add(close);
 
@@ -597,7 +587,6 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
         //
 
     }
-
 
     private void addOneIgnored() {
         int[] list = listSelected.getSelectedIndices();
@@ -648,7 +637,7 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
         setButtons();
     }
 
-
+    @Override
     public void actionPerformed(ActionEvent evt) {
         String command = evt.getActionCommand();
 
@@ -759,7 +748,7 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
         }
     }
 
-    public void closeDialog() {
+    private void closeDialog() {
         if (this.pvoa != null) {
             this.pvoa.removeListener(this);
         }
@@ -769,7 +758,7 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
         dispose();
     }
 
-    public void stopProcess() {
+    private void stopProcess() {
         if (rshc != null) {
             try {
                 rshc.stopCommand();
@@ -782,7 +771,7 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
         go = false;
     }
 
-    public void startProcess() {
+    private void startProcess() {
         Thread t = new Thread(this);
         mode = STARTED;
         setButtons();
@@ -796,21 +785,22 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
         }
     }
 
-    class ProVerifResultSection {
+    private class ProVerifResultSection {
         String title;
-        LinkedList<AvatarPragma> results;
+        List<AvatarPragma> results;
         JList<AvatarPragma> jlist;
 
-        ProVerifResultSection(String title, LinkedList<AvatarPragma> results) {
+        ProVerifResultSection(String title, List<AvatarPragma> results) {
             this.title = title;
             this.results = results;
         }
     }
 
+    @Override
     public void run() {
         TraceManager.addDev("Thread started");
         File testFile;
-        Map<String, java.util.List<String>> selectedCpuTasks = new HashMap<String, java.util.List<String>>();
+        Map<String, List<String>> selectedCpuTasks = new HashMap<String, java.util.List<String>>();
         try {
             if (jp1.getSelectedIndex() == 1) {
             	if (autoSec.isSelected()){
@@ -844,6 +834,8 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
                 else if (autoMapKeys.isSelected()) {
                     mgui.gtm.autoMapKeys();
                 }
+            	
+                jta.removeAll();
                 JLabel label = new JLabel("Security Generation Complete");
             	label.setAlignmentX(Component.LEFT_ALIGNMENT);
             	this.jta.add(label, this.createGbc(0));
@@ -934,20 +926,20 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
     protected void setButtons() {
         switch (mode) {
             case NOT_STARTED:
-                start.setEnabled(true);
+                startButton.setEnabled(true);
                 stop.setEnabled(false);
                 close.setEnabled(true);
                 getGlassPane().setVisible(false);
                 break;
             case STARTED:
-                start.setEnabled(false);
+                startButton.setEnabled(false);
                 stop.setEnabled(true);
                 close.setEnabled(false);
                 getGlassPane().setVisible(true);
                 break;
             case STOPPED:
             default:
-                start.setEnabled(false);
+                startButton.setEnabled(false);
                 stop.setEnabled(false);
                 close.setEnabled(true);
                 getGlassPane().setVisible(false);
@@ -1121,6 +1113,4 @@ public class JDialogProverifVerification extends JDialog implements ActionListen
         this.repaint();
         this.revalidate();
     }
-    
-    
 }
