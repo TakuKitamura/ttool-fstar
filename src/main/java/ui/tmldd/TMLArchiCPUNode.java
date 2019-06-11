@@ -63,7 +63,8 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  * @version 1.1 21/05/2008
  */
-public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent, WithAttributes, TMLArchiElementInterface {
+public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent, WithAttributes,
+        TMLArchiElementInterface, TMLArchiElementWithArtifactList {
     private int textY1 = 15;
     private int textY2 = 30;
     private int derivationx = 2;
