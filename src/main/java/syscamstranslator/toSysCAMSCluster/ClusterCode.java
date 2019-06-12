@@ -69,7 +69,9 @@ public class ClusterCode {
 			LinkedList<SysCAMSTBlockTDF> tdf = cluster.getBlockTDF();
 			LinkedList<SysCAMSTBlockDE> de = cluster.getBlockDE();
 			
-                        
+			LinkedList<SysCAMSTClock> clock = cluster.getClock();
+
+			
             corpsCluster = "template <typename vci_param>" + CR +
                           "class " +cluster.getClusterName()+ " : public sc_core::sc_module { "+ CR;
                           
@@ -146,7 +148,15 @@ public class ClusterCode {
                 } else {
                     names.add("gpio_sig" + nb_con);
                 } 
-			}
+	    }
+
+	    //DG
+	    for (SysCAMSTClock clk : clock) {
+                corpsCluster = corpsCluster + "sc_clock"+ clk.getName()+ "("+clk.getName()+", "+clk.getFrequency()+", "+clk.getUnit()+", "+clk.getDutyCycle()+", "+clk.getStartTime()+", "+clk.getUnit()+", "+clk.getPosFirst()+");" + CR;
+		    }
+	    //fin ajoute DG
+
+	    
 
 			corpsCluster = corpsCluster + CR + "\t// Instantiate cluster's modules." + CR;
             for (SysCAMSTBlockTDF t : tdf) {

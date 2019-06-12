@@ -346,7 +346,7 @@ public class TGComponentManager {
     public static final int CAMS_PORT_CONVERTER = 1606;
     public static final int CAMS_CLUSTER = 1607;
     public static final int CAMS_BLOCK_GPIO2VCI = 1608;
-
+    public static final int CAMS_CLOCK = 5721;
     // ELN
     public static final int ELN_CONNECTOR = 1610;
     public static final int ELN_RESISTOR = 1611;
@@ -558,12 +558,12 @@ public class TGComponentManager {
     public static final int CONNECTOR = 1;
 
 
-    public static LinkedList<ADDConnector> addconnectors = new LinkedList<ADDConnector>(); //DG 21.02.
+    public static LinkedList<ADDConnector> addconnectors = new LinkedList<ADDConnector>();
 
 
     public static LinkedList<ADDConnector> getAllADDConnectors() {
         return addconnectors;
-    }//DG 21.02.
+    }
 
     public final static TGComponent addComponent(int x, int y, int id, TDiagramPanel tdp) {
         TGComponent tgc = null;
@@ -1307,6 +1307,9 @@ public class TGComponentManager {
             case CAMS_BLOCK_GPIO2VCI:
             	tgc = new SysCAMSBlockGPIO2VCI(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             	break;
+	case CAMS_CLOCK:
+            	tgc = new SysCAMSClock(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;
             // ELN
             case ELN_RESISTOR:
             	tgc = new ELNComponentResistor(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -1786,7 +1789,8 @@ public class TGComponentManager {
         	return CAMS_CLUSTER;
         } else if (tgc instanceof SysCAMSBlockGPIO2VCI) {
         	return CAMS_BLOCK_GPIO2VCI;
-
+	} else if (tgc instanceof SysCAMSClock) {
+        	return CAMS_CLOCK;
         	// ELN
         } else if (tgc instanceof ELNConnector) {
         	return ELN_CONNECTOR;	

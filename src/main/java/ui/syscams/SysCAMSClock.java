@@ -44,29 +44,34 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import ui.*;
 import ui.util.IconManager;
-import ui.window.JDialogSysCAMSBlockTDF;
+import ui.window.JDialogSysCAMSClock;
 import javax.swing.*;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
- * Class SysCAMSBlockTDF
+ * Class SysCAMSClock
  * Primitive Component. To be used in SystemC-AMS diagrams
- * Creation: 14/05/2018
- * @version 1.0 14/05/2018
- * @author Irina Kit Yan LEE
+ * Creation: 13/05/2018
+ * @version 1.0 04/06/2019
+ * @author Daniela GENIUS
  */
 
-public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent {
-	private double period;
-	private String time;
-	private String processCode;
-    private String constructorCode;
+public class SysCAMSClock extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent {
+	private String nameFn;
+	private String code;
 	private DefaultListModel<String> listStruct;
 	private String nameTemplate;
-	private String typeTemplate;
-    private String valueTemplate;
+    	private String typeTemplate;
+        private String valueTemplate;
+        private String name;
+        private String unit;
+        private String frequency;
+        private String dutyCycle;
+        private String startTime;
+        private String posFirst;
 	private DefaultListModel<String> listTypedef;
 
 	private int maxFontSize = 14;
@@ -79,7 +84,7 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 
 	public String oldValue;
 
-	public SysCAMSBlockTDF(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+	public SysCAMSClock(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
 		initScaling(200, 150);
@@ -104,18 +109,15 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 		removable = true;
 		userResizable = true;
 
-		value = tdp.findSysCAMSPrimitiveComponentName("blockTDF");
-		oldValue = value;
-		name = "Primitive component - Block TDF";
+		value = tdp.findSysCAMSPrimitiveComponentName("Clock");
+		name = "Primitive component - Clock";
 
-		setPeriod(-1);
-		setTime("");
-		setProcessCode("void processing() {\n\n}");
-        setConstructorCode("");
+		setNameFn("");
+		setCode("");
 		setListStruct(new DefaultListModel<String>());
 		setNameTemplate("");
-		setTypeTemplate("");
-        setValueTemplate("");
+		//	setTypeTemplate("");
+		//setValueTemplate("");
 		setListTypedef(new DefaultListModel<String>());
 
 		myImageIcon = IconManager.imgic1202;
@@ -129,7 +131,7 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 		Font fold = f;
 
 		if (myColor == null) {
-			myColor = Color.lightGray;
+			myColor = Color.white;
 		}
 
 		if (this.rescaled && !this.tdp.isScaled()) {
@@ -171,19 +173,19 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 			g.setFont(f.deriveFont(Font.BOLD));
 			g.drawString(value, x + textX + 1, y + currentFontSize + textX);
 			g.setFont(f.deriveFont(Font.PLAIN));
-			if (this.getPeriod() != -1) { 
-				String s = "Tm = " + this.getPeriod() + " " + this.getTime();
-				g.drawString(s, x + textX + 1, y + height - currentFontSize - textX);
-			}
+//			if (this.getPeriod() != -1) { 
+//				String s = "Tm = " + this.getPeriod() + " " + this.getTime();
+//				g.drawString(s, x + textX + 1, y + height - currentFontSize - textX);
+//			}
 		} else {
 			g.setFont(f.deriveFont(Font.BOLD));
 			g.drawString(value, x + (width - w)/2, y + currentFontSize + textX);
 			g.setFont(f.deriveFont(Font.PLAIN));
-			if (this.getPeriod() != -1) { 
-				String s = "Tm = " + this.getPeriod() + " " + this.getTime();
-				w = g.getFontMetrics().stringWidth(s);
-				g.drawString(s, x + (width - w)/2, y + height - currentFontSize - textX);
-			}
+//			if (this.getPeriod() != -1) { 
+//				String s = "Tm = " + this.getPeriod() + " " + this.getTime();
+//				w = g.getFontMetrics().stringWidth(s);
+//				g.drawString(s, x + (width - w)/2, y + height - currentFontSize - textX);
+//			}
 		}
 
 		g.setFont(fold);
@@ -212,7 +214,6 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 					null,
 					getValue());
 			if ((s != null) && (s.length() > 0)) {
-
 				if (!TAttribute.isAValidId(s, false, false, false)) {
 					JOptionPane.showMessageDialog(frame,
 							"Could not change the name of the component: the new name is not a valid name",
@@ -238,14 +239,14 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 			return false;
 		}
 
-		JDialogSysCAMSBlockTDF jtdf = new JDialogSysCAMSBlockTDF(this);
-		jtdf.setVisible(true);
+		JDialogSysCAMSClock jclk = new JDialogSysCAMSClock(this);
+		jclk.setVisible(true);
 		rescaled = true;
 		return true;
 	}
 
 	public int getType() {
-		return TGComponentManager.CAMS_BLOCK_TDF;
+		return TGComponentManager.CAMS_CLOCK;
 	}
 
 	public void wasSwallowed() {
@@ -260,24 +261,11 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 	}
 
 	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
-		if (tgc instanceof SysCAMSPortTDF) {
-			return tgc instanceof SysCAMSPortTDF;
-		} else if (tgc instanceof SysCAMSPortConverter) {
-			return tgc instanceof SysCAMSPortConverter;
-		} else {
-			return true;
-		}
+		return tgc instanceof SysCAMSClock;
 	}
 
 	public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
-		if (tgc instanceof SysCAMSPortTDF) {
-			tgc.setFather(this);
-			tgc.setDrawingZone(true);
-			tgc.resizeWithFather();
-			addInternalComponent(tgc, 0);
-			return true;
-		}
-		if (tgc instanceof SysCAMSPortConverter) {
+		if (tgc instanceof SysCAMSClock) {
 			tgc.setFather(this);
 			tgc.setDrawingZone(true);
 			tgc.resizeWithFather();
@@ -294,10 +282,7 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 	public void hasBeenResized() {
 		rescaled = true;
 		for(int i=0; i<nbInternalTGComponent; i++) {
-			if (tgcomponent[i] instanceof SysCAMSPortTDF) {
-				tgcomponent[i].resizeWithFather();
-			}
-			if (tgcomponent[i] instanceof SysCAMSPortConverter) {
+			if (tgcomponent[i] instanceof SysCAMSClock) {
 				tgcomponent[i].resizeWithFather();
 			}
 		}
@@ -317,14 +302,17 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 
 	protected String translateExtraParam() {
 		StringBuffer sb = new StringBuffer("<extraparam>\n");
-		sb.append("<Attribute period=\"" + getPeriod());
-		sb.append("\" time=\"" + getTime());
-		sb.append("\" processCode=\"" + encode(getProcessCode()));
-                sb.append("\" constructorCode=\"" + encode(getConstructorCode()));
+		sb.append("<Attribute name_function=\"" + getNameFn());
+	
+		sb.append("\" code=\"" + encode(getCode()));
 		sb.append("\" listStruct=\"" + splitParameters(getListStruct()));
 		sb.append("\" nameTemplate=\"" + getNameTemplate());
-		sb.append("\" typeTemplate=\"" + getTypeTemplate());
-                sb.append("\" valueTemplate=\"" + getValueTemplate());
+		sb.append("\" name=\"" + getName());
+		sb.append("\" frequency =\"" + getFrequency());
+		sb.append("\" unit=\"" + getUnit());
+		sb.append("\" dutyCycle=\"" + getDutyCycle());
+		sb.append("\" startTime=\"" + getStartTime());
+		sb.append("\" posFirst =\"" + getPosFirst());			
 		sb.append("\" listTypedef=\"" + splitParameters(getListTypedef()));
 		sb.append("\" />\n");
 		sb.append("</extraparam>\n");
@@ -343,7 +331,7 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 		}
 		return s;
 	}
-
+	
 	public StringBuffer encode(String data) {
 		StringBuffer databuf = new StringBuffer(data);
 		StringBuffer buffer = new StringBuffer("");
@@ -364,9 +352,6 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 				break;
 			case '>' :  
 				buffer.append("&gt;");        
-				break;
-			case '\u03BC':
-				buffer.append("&#x3BC;");
 				break;
 			default :   
 				buffer.append(databuf.charAt(pos)); 
@@ -453,8 +438,7 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 			Node n1, n2;
 			Element elt;
 
-			double period;
-			String time, processCode, constructorCode, listStruct, nameTemplate, typeTemplate, valueTemplate, listTypedef;
+			String code, nameFn, listStruct, nameTemplate, typeTemplate, valueTemplate, listTypedef;
 
 			for(int i=0; i<nl.getLength(); i++) {
 				n1 = nl.item(i);
@@ -465,21 +449,18 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 						if (n2.getNodeType() == Node.ELEMENT_NODE) {
 							elt = (Element) n2;
 							if (elt.getTagName().equals("Attribute")) {
-								period = Double.valueOf(elt.getAttribute("period")).doubleValue();
-								time = elt.getAttribute("time");
-								processCode = elt.getAttribute("processCode");
-                                constructorCode = elt.getAttribute("constructorCode");
+//							unit = elt.getAttribute("unit");
+								unit = elt.getAttribute("unit");
+								frequency = elt.getAttribute("frequency");
+								posFirst = elt.getAttribute("posFirst");
+								dutyCycle = elt.getAttribute("dutyCycle");
+								startTime = elt.getAttribute("startTime");
 								listStruct = elt.getAttribute("listStruct");
 								nameTemplate = elt.getAttribute("nameTemplate");
 								typeTemplate = elt.getAttribute("typeTemplate");
-                                valueTemplate = elt.getAttribute("valueTemplate");
+								valueTemplate = elt.getAttribute("valueTemplate");
 								listTypedef = elt.getAttribute("listTypedef");
-								setPeriod(period);
-								setTime(time);
-								processCode = decode(processCode).toString();
-								setProcessCode(processCode);
-                                constructorCode = decode(constructorCode).toString();
-                                setConstructorCode(constructorCode);
+//							
 								String[] splita = listStruct.split("\\|");
 								DefaultListModel<String> lista = new DefaultListModel<String>();
 								for (String s : splita) {
@@ -489,8 +470,8 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 								}
 								setListStruct(lista);
 								setNameTemplate(nameTemplate);
-								setTypeTemplate(typeTemplate);
-                                setValueTemplate(valueTemplate);
+								//setTypeTemplate(typeTemplate);
+								//setValueTemplate(valueTemplate);
 								String[] splitb = listTypedef.split("\\|");
 								DefaultListModel<String> listb = new DefaultListModel<String>();
 								for (String s : splitb) {
@@ -513,29 +494,21 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 		return currentFontSize;
 	}
 
-	public java.util.List<SysCAMSPortTDF> getAllTDFOriginPorts() {
-		return getAllTDFPorts(0, 1);
+	public java.util.List<SysCAMSPortDE> getAllDEOriginPorts() {
+		return getAllPorts(1, 1);
 	}
 
-	public java.util.List<SysCAMSPortTDF> getAllTDFDestinationPorts() {
-		return getAllTDFPorts(0, 0);
+	public java.util.List<SysCAMSPortDE> getAllDEDestinationPorts() {
+		return getAllPorts(1, 0);
 	}
 
-	public java.util.List<SysCAMSPortConverter> getAllConvOriginPorts() {
-		return getAllConvPorts(0, 1);
-	}
-
-	public java.util.List<SysCAMSPortConverter> getAllConvDestinationPorts() {
-		return getAllConvPorts(0, 0);
-	}
-
-	public java.util.List<SysCAMSPortTDF> getAllTDFPorts(int _type, int _isOrigin) {
-		java.util.List<SysCAMSPortTDF> ret = new LinkedList<SysCAMSPortTDF>();
-		SysCAMSPortTDF port;
+	public java.util.List<SysCAMSPortDE> getAllPorts(int _type, int _isOrigin) {
+		java.util.List<SysCAMSPortDE> ret = new LinkedList<SysCAMSPortDE>();
+		SysCAMSPortDE port;
 
 		for(int i=0; i<nbInternalTGComponent; i++) {
-			if (tgcomponent[i] instanceof SysCAMSPortTDF) {
-				port = (SysCAMSPortTDF)tgcomponent[i];
+		    if (tgcomponent[i] instanceof SysCAMSPortDE) {
+				port = (SysCAMSPortDE)tgcomponent[i];
 				if ((port.getPortType() == _type) && (port.getOrigin() == _isOrigin)) {
 					ret.add(port);
 				}
@@ -544,71 +517,31 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 		return ret;
 	}
 
-	public java.util.List<SysCAMSPortConverter> getAllConvPorts(int _type, int _isOrigin) {
-		java.util.List<SysCAMSPortConverter> ret = new LinkedList<SysCAMSPortConverter>();
-		SysCAMSPortConverter port;
-
+	public java.util.List<SysCAMSPortDE> getAllInternalPortsDE() {
+		java.util.List<SysCAMSPortDE> list = new ArrayList<SysCAMSPortDE>();
 		for(int i=0; i<nbInternalTGComponent; i++) {
-			if (tgcomponent[i] instanceof SysCAMSPortConverter) {
-				port = (SysCAMSPortConverter)tgcomponent[i];
-				if ((port.getPortType() == _type) && (port.getOrigin() == _isOrigin)) {
-					ret.add(port);
-				}
-			}
-		}
-		return ret;
-	}
-
-	public java.util.List<SysCAMSPortTDF> getAllInternalPortsTDF() {
-		java.util.List<SysCAMSPortTDF> list = new ArrayList<SysCAMSPortTDF>();
-		for(int i=0; i<nbInternalTGComponent; i++) {
-			if (tgcomponent[i] instanceof SysCAMSPortTDF) {
-				list.add((SysCAMSPortTDF)(tgcomponent[i]));
+			if (tgcomponent[i] instanceof SysCAMSPortDE) {
+				list.add((SysCAMSPortDE)(tgcomponent[i]));
 			}
 		}
 		return list;
 	}
 
-	public java.util.List<SysCAMSPortConverter> getAllInternalPortsConv() {
-		java.util.List<SysCAMSPortConverter> list = new ArrayList<SysCAMSPortConverter>();
-		for(int i=0; i<nbInternalTGComponent; i++) {
-			if (tgcomponent[i] instanceof SysCAMSPortConverter) {
-				list.add((SysCAMSPortConverter)(tgcomponent[i]));
-			}
-		}
-		return list;
+
+	public void setNameFn(String nameFn) {
+		this.nameFn = nameFn;
 	}
 
-	public double getPeriod() {
-		return period;
+	public void setCode(String _code) {
+		code = _code;
+	}
+	
+	public String getCode() {
+		return code;
 	}
 
-	public void setPeriod(double _period) {
-		period = _period;
-	}
-
-	public String getTime() {
-		return time;
-	}
-
-	public void setTime(String _time) {
-		time = _time;
-	}
-
-	public String getProcessCode() {
-		return processCode;
-	}
-
-	public void setProcessCode(String _processCode) {
-		processCode = _processCode;
-	}
-
-    public String getConstructorCode() {
-		return constructorCode;
-	}
-    
-    public void setConstructorCode(String _constructorCode) {
-		constructorCode = _constructorCode;
+	public String getNameFn() {
+		return nameFn;
 	}
 	
 	public DefaultListModel<String> getListStruct() {
@@ -619,6 +552,58 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 		listStruct = _listStruct;
 	}
 
+    /*	public String getName() {
+		return name;
+		}*/
+
+    	public String getFrequency() {
+		return frequency;
+	}
+
+	public String getUnit() {
+		return unit;
+	}
+
+        public String getDutyCycle() {
+	    return dutyCycle;
+	}
+
+    public String getStartTime() {
+		return startTime;
+	}
+    
+    
+    	public String getPosFirst() {
+		return posFirst;
+	}
+    
+	public void setName(String _name) {
+		name = _name;
+	}
+
+
+	public void setStartTime(String _startTime) {
+		startTime = _startTime;
+	}
+   
+    	public void setFrequency(String _frequency) {
+		 frequency = _frequency;
+	}
+
+	public void setUnit(String _unit) {
+		unit = _unit;
+	}
+
+        public void setDutyCycle(String _dutyCycle) {
+		dutyCycle = _dutyCycle;
+	}
+       
+    	public void setPosFirst(String _posFirst) {
+		posFirst = _posFirst;
+	}
+
+
+
 	public String getNameTemplate() {
 		return nameTemplate;
 	}
@@ -626,6 +611,7 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 	public void setNameTemplate(String _nameTemplate) {
 		nameTemplate = _nameTemplate;
 	}
+
     
 	public String getTypeTemplate() {
 		return typeTemplate;
@@ -643,6 +629,8 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 		valueTemplate = _valueTemplate;
 	}
 
+
+    
 	public DefaultListModel<String> getListTypedef() {
 		return listTypedef;
 	}

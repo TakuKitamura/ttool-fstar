@@ -91,7 +91,6 @@ public class SysCAMSSpecification{
 		for (SysCAMSTComponent blockGPIO2VCI : components) {
 			if (blockGPIO2VCI instanceof SysCAMSTBlockGPIO2VCI) {
 				blocksGPIO2VCI.add((SysCAMSTBlockGPIO2VCI) blockGPIO2VCI);
-				//System.out.println("@@@@@GPIO block found in spec");
 			}
 		}
 		return blocksGPIO2VCI;
@@ -135,6 +134,17 @@ public class SysCAMSSpecification{
 		}
 		return portsDE;
 	}
+
+	public LinkedList<SysCAMSTClock> getAllClock(){
+		LinkedList<SysCAMSTClock> clocks = new LinkedList<SysCAMSTClock>();
+		for (SysCAMSTComponent clock : components) {
+			if (clock instanceof SysCAMSTClock) {
+				clocks.add((SysCAMSTClock) clock);
+			}
+		}
+		return clocks;
+	}
+    
 
 	public LinkedList<SysCAMSTConnector> getAllConnectorCluster(){
 		LinkedList<SysCAMSTConnector> cons = new LinkedList<SysCAMSTConnector>();
@@ -275,4 +285,8 @@ public class SysCAMSSpecification{
 	public int getNbConnectorCluster(){
 		return (getAllConnectorCluster()).size();
 	}
+
+    /*  public int getNbClocks(){
+		return (getAllClocks()).size();
+		}*/
 }
