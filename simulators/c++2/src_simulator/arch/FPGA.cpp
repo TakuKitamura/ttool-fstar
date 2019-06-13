@@ -476,7 +476,7 @@ void FPGA::drawPieChart(std::ofstream& myfile) const {
   
    std::map <TMLTask*, double>::iterator iter = transPercentage.begin();
    myfile << "     var chart" << _ID << "_" <<  _htmlCurrTask->toShortString() << "= new CanvasJS.Chart(\"chartContainer" << _ID << "_" <<   _htmlCurrTask->toShortString() <<"\"," << std::endl;
-   myfile <<  SCHED_HTML_JS_CONTENT2 << "Average load is " << averageLoad( _htmlCurrTask) <<  SCHED_HTML_JS_CONTENT3 << std::endl;
+   myfile <<  SCHED_HTML_JS_CONTENT2 << "Average load is " << averageLoad( _htmlCurrTask) <<  SCHED_HTML_JS_CONTENT2 << std::endl;
    double idle=1;
    while( iter != transPercentage.end()){
      myfile << "                { y:" << (iter->second)*100 << ", indexLabel: \"" << iter->first->toString() << "\" }," << std::endl;

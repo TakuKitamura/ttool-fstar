@@ -230,7 +230,7 @@ void SchedulableDevice::drawPieChart(std::ofstream& myfile) const {
  
   std::map <TMLTask*, double>::iterator iter = transPercentage.begin();
   myfile << "     var chart" << _ID << "= new CanvasJS.Chart(\"chartContainer" << _ID <<"\"," << std::endl;
-  myfile <<  SCHED_HTML_JS_CONTENT2 << "Average load is " << averageLoad() <<  SCHED_HTML_JS_CONTENT3 << std::endl;
+  myfile <<  SCHED_HTML_JS_CONTENT2 << "Average load is " << averageLoad() <<  SCHED_HTML_JS_CONTENT2 << std::endl;
   double idle=1;
   while( iter != transPercentage.end()){
     myfile << "                { y:" << (iter->second)*100 << ", indexLabel: \"" << iter->first->toString() << "\" }," << std::endl;

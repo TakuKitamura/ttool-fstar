@@ -70,42 +70,80 @@ double CPU::averageLoad (unsigned int n) const{
  
 }
 
-
 void CPU::drawPieChart(std::ofstream& myfile) const {
  
-   TMLTime _maxEndTime=0;
-   for(unsigned int j = 0; j < amountOfCore ; ++j){
-     for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
-       if( (*i)->getTransactCoreNumber() == j ){
-	 TMLTime _endTime= (*i)->getEndTime();
-	 _maxEndTime=max(_maxEndTime,_endTime);
-       }
-     }
-     std::map <TMLTask*, double > transPercentage;
-     for( TransactionList::const_iterator i = _transactList.begin(); i!= _transactList.end(); ++i){
-       if( (*i)->getTransactCoreNumber() == j ){
-	 transPercentage[(*i)-> getCommand()->getTask()]+=(double)((*i)->getEndTime()-(*i)->getStartTime())/_maxEndTime;      
-       }
-     }
-     std::map <TMLTask*, double>::iterator iter = transPercentage.begin();
-     myfile << "     var chart" << _ID << "_" << j << "= new CanvasJS.Chart(\"chartContainer" << _ID << "_" << j <<"\"," << std::endl;
-     myfile <<  SCHED_HTML_JS_CONTENT2 << "Average load is " << averageLoad(j) <<  SCHED_HTML_JS_CONTENT3 << std::endl;
-     double idle=1;
-     while( iter != transPercentage.end()){
+  TMLTime _maxEndTime=0;
+  for(unsigned int j = 0; j < amountOfCore ; ++j){
+    for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
+      if( (*i)->getTransactCoreNumber() == j ){
+	TMLTime _endTime= (*i)->getEndTime();
+	_maxEndTime=max(_maxEndTime,_endTime);
+      }
+    }
+    std::map <TMLTask*, double > transPercentage;
+    for( TransactionList::const_iterator i = _transactList.begin(); i!= _transactList.end(); ++i){
+      if( (*i)->getTransactCoreNumber() == j ){
+	transPercentage[(*i)-> getCommand()->getTask()]+=(double)((*i)->getEndTime()-(*i)->getStartTime())/_maxEndTime;      
+      }
+    }
+    std::map <TMLTask*, double>::iterator iter = transPercentage.begin();
+    myfile << SCHED_HTML_JS_WINDOW << std::endl;
+    myfile << "   var ctx" << _ID << "_"  << j << "= $(\"#pie-chartcanvas-" << _ID << "_" << j << "\");\n";
+    myfile << "   var data" << _ID << "_" << j << " = { \n";
+    myfile << "           labels : [";
+    double idle=1;
+    while( iter != transPercentage.end()){
+      myfile << " \"" << iter->first->toString() << "\",";
+      idle-=iter->second;
+      ++iter;
+    }
+    myfile << "\"idle time\"],\n";
+    myfile << "            datasets : [ \n" << "             {\n";
+    iter = transPercentage.begin();
+    myfile << "                     data : [";
+    while( iter != transPercentage.end()){
+      myfile << iter->second << ",";
+      ++iter;
+    }
+    myfile << idle << "],\n";
+  
+    myfile << SCHED_HTML_PIE_END << std::endl;
+    myfile << SCHED_HTML_JS_CONTENT1 << "Average load is " << averageLoad(j) << SCHED_HTML_JS_CONTENT2 << std::endl; 
+    myfile << "    var chart" << _ID << "_" << this->_cycleTime << " = new Chart( "<<
+      "ctx" << _ID << "_" << j << ", {\n \
+              type : \"pie\",\n";
+    myfile << "               data : data" << _ID << "_" << j <<",\n";
+    myfile << "               " << SCHED_HTML_JS_CONTENT3 << std::endl;
+  }
+	 
+      
+     //myfile << "     var chart" << _ID << "_" << j << "= new CanvasJS.Chart(\"chartContainer" << _ID << "_" << j <<"\"," << std::endl;
+     //myfile <<  SCHED_HTML_JS_CONTENT2 << "Average load is " << averageLoad(j) <<  SCHED_HTML_JS_CONTENT3 << std::endl;
+     /*double idle=1;
+       while( iter != transPercentage.end()){
        myfile << "                { y:" << (iter->second)*100 << ", indexLabel: \"" << iter->first->toString() << "\" }," << std::endl;
        idle-=iter->second;
        ++iter;  
-     }
-     myfile << "                { y:" << idle*100 << ", indexLabel: \"idle time\"" << " }" << std::endl;
-     myfile << std::endl;
-     myfile << SCHED_HTML_PIE_END;
-     myfile << "chart" << _ID << "_" << j << ".render();" << std::endl; 
-   }
+       }
+       myfile << "                { y:" << idle*100 << ", indexLabel: \"idle time\"" << " }" << std::endl;
+       myfile << std::endl;
+       myfile << SCHED_HTML_PIE_END;
+       myfile << "chart" << _ID << "_" << j << ".render();" << std::endl; 
+       }*/
   
 }
 
 void CPU::showPieChart(std::ofstream& myfile) const{
-  myfile << SCHED_HTML_JS_DIV_ID << _ID << "_" << this->_cycleTime << SCHED_HTML_JS_DIV_ID_END << std::endl;
+  //myfile << SCHED_HTML_JS_DIV_ID << _ID << "_" << this->_cycleTime << SCHED_HTML_JS_DIV_ID_END << std::endl;
+  /* myfile << "    var chart" << _ID << "_" << this->_cycleTime << " = new Chart( "<<
+    "ctx" << _ID << "_" << this->_cycleTime << ", {\n \
+    type : \"pie\",\n";
+  myfile << "data : data " << _ID << this->_cycleTime <<",\n";
+  myfile << SCHED_HTML_JS_CONTENT2 << std::endl;*/
+  myfile << SCHED_HTML_JS_DIV_BEGIN << std::endl;
+  myfile << SCHED_HTML_JS_BEGIN_CANVAS << _ID << "_" << this->_cycleTime << SCHED_HTML_JS_END_CANVAS <<std::endl;
+  myfile << SCHED_HTML_JS_DIV_END << std::endl;
+    
 }
   
    
