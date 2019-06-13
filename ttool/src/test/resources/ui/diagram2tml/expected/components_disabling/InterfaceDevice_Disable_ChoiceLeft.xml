@@ -9,7 +9,7 @@
 <NEXTACTIVITYELEMENT id="11" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLChoice" value="" id="2" name="choice">
-<CUSTOM  guards="[ true ];[ x>0 ];"  />
+<CUSTOM  guards="[ true ];[ x&gt;0 ];"  />
 <NEXTACTIVITYELEMENT id="12" />
 <NEXTACTIVITYELEMENT id="14" />
 </ACTIVITYELEMENT>
@@ -18,27 +18,27 @@
 <NEXTACTIVITYELEMENT id="4" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLSendEvent" value="" id="4" name="send event">
-<CUSTOM  event="AppC__reset__AppC__reset" params=""  />
+<CUSTOM  event="AppC__reset__AppC__reset" params=""  blocking="false"  />
 <NEXTACTIVITYELEMENT id="5" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLWaitEvent" value="" id="5" name="wait event">
-<CUSTOM  event="AppC__answerToReset__AppC__answerToReset" params=""  />
+<CUSTOM  event="AppC__answerToReset__AppC__answerToReset" params=""  blocking="false"  />
 <NEXTACTIVITYELEMENT id="6" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLSendEvent" value="" id="6" name="send event">
-<CUSTOM  event="AppC__pTS__AppC__pTS" params=""  />
+<CUSTOM  event="AppC__pTS__AppC__pTS" params=""  blocking="false"  />
 <NEXTACTIVITYELEMENT id="7" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLWaitEvent" value="" id="7" name="wait event">
-<CUSTOM  event="AppC__pTSConfirm__AppC__pTSConfirm" params=""  />
+<CUSTOM  event="AppC__pTSConfirm__AppC__pTSConfirm" params=""  blocking="false"  />
 <NEXTACTIVITYELEMENT id="16" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLWriteChannel" value="" id="8" name="write channel">
-<CUSTOM  nbOfSamples="1"  channels="AppC__fromDtoSC "  />
+<CUSTOM  nbOfSamples="1"  channels="AppC__fromDtoSC "  type="1"  />
 <NEXTACTIVITYELEMENT id="9" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLSendEvent" value="" id="9" name="send event">
-<CUSTOM  event="AppC__data_Ready__AppC__data_Ready" params="x,b"  />
+<CUSTOM  event="AppC__data_Ready__AppC__data_Ready" params="x,b"  blocking="false"  />
 <NEXTACTIVITYELEMENT id="10" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLStopState" value="" id="10" name="stop state">
@@ -52,11 +52,11 @@
 <CUSTOM  />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLReadChannel" value="" id="13" name="read channel">
-<CUSTOM  nbOfSamples="1"  channels="AppC__fromSCtoD "  />
+<CUSTOM  nbOfSamples="1"  channels="AppC__fromSCtoD "  type="1"  />
 <NEXTACTIVITYELEMENT id="15" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLWaitEvent" value="" id="14" name="wait event">
-<CUSTOM  event="AppC__data_Ready_SC__AppC__data_Ready_SC" params=""  />
+<CUSTOM  event="AppC__data_Ready_SC__AppC__data_Ready_SC" params=""  blocking="false"  />
 <NEXTACTIVITYELEMENT id="13" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLStopState" value="" id="15" name="stop state">

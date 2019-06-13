@@ -37,8 +37,6 @@
  */
 
 
-
-
 package tmltranslator;
 
 import java.util.ArrayList;
@@ -47,19 +45,20 @@ import java.util.ArrayList;
 /**
  * Class TMLReadChannel
  * Creation: 23/11/2005
- * @version 1.1 18/02/2015
+ *
  * @author Ludovic APVRILLE
+ * @version 1.1 18/02/2015
  */
 public class TMLActivityElementChannel extends TMLActivityElement {
     protected ArrayList<TMLChannel> channels;
     protected String nbOfSamples;
-	private boolean isAttacker;
-	protected boolean isEncForm; //If the Cryptographic 
+    private boolean isAttacker;
+    protected boolean isEncForm; //If the Cryptographic
 
     public TMLActivityElementChannel(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
         channels = new ArrayList<TMLChannel>();
-		isAttacker=false;
+        isAttacker = false;
     }
 
     public void addChannel(TMLChannel _channel) {
@@ -74,13 +73,13 @@ public class TMLActivityElementChannel extends TMLActivityElement {
         return channels.get(_index);
     }
 
-	public boolean isAttacker(){
-		return isAttacker;
-	}
+    public boolean isAttacker() {
+        return isAttacker;
+    }
 
-	public void setAttacker(boolean attacker){
-		isAttacker=attacker;
-	}
+    public void setAttacker(boolean attacker) {
+        isAttacker = attacker;
+    }
 
     public void setNbOfSamples(String _nbOfSamples) {
         nbOfSamples = _nbOfSamples;
@@ -89,14 +88,15 @@ public class TMLActivityElementChannel extends TMLActivityElement {
     public String getNbOfSamples() {
         return nbOfSamples;
     }
-    
-    public boolean getEncForm(){
-    	return isEncForm;
+
+    public boolean getEncForm() {
+        return isEncForm;
     }
-	public void setEncForm(boolean form){
-		isEncForm = form;
-	}
-	
+
+    public void setEncForm(boolean form) {
+        isEncForm = form;
+    }
+
     public void replaceChannelWith(TMLChannel oldChan, TMLChannel newChan) {
         if (channels.contains(oldChan)) {
             channels.remove(oldChan);
@@ -105,12 +105,15 @@ public class TMLActivityElementChannel extends TMLActivityElement {
     }
 
     public String customExtraToXML() {
-	String s= " nbOfSamples=\"" + nbOfSamples +"\" " ;
-	String chan= "";
-	for(TMLChannel ch: channels) {
-	    chan += ch.getName() + " ";
-	}
-	s += " channels=\"" + chan + "\" ";
-	return s;
+        String s = " nbOfSamples=\"" + nbOfSamples + "\" ";
+        String chan = "";
+        String chanType = "0";
+        for (TMLChannel ch : channels) {
+            chan += ch.getName() + " ";
+            chanType = "" + ch.getType();
+        }
+        s += " channels=\"" + chan + "\" ";
+        s += " type=\"" + chanType + "\" ";
+        return s;
     }
 }

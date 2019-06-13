@@ -46,7 +46,7 @@ package tmltranslator;
 /**
  * Class TMLWaitEvent
  * Creation: 23/11/2005
- * @version 1.0 23/11/2005
+ * @version 1.1 13/06/2019
  * @author Ludovic APVRILLE
  */
 public class TMLWaitEvent extends TMLActivityElementEvent {
@@ -60,7 +60,9 @@ public class TMLWaitEvent extends TMLActivityElementEvent {
     }
 
     public String customExtraToXML() {
-	return " event=\"" + event.getName() +  "\" params=\"" + getAllParams() + "\" ";
+	    String ret = " event=\"" + event.getName() +  "\" params=\"" + getAllParams() + "\" ";
+        ret += " blocking=\"" + event.isBlocking() + "\" ";
+        return ret;
     }
 
 }
