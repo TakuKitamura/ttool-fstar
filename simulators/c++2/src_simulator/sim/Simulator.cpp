@@ -82,6 +82,8 @@ TMLTransaction* Simulator::getTransLowestEndTime(SchedulableDevice*& oResultDevi
   //for(CPUList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
   for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
     aTempDevice=*i;
+
+    //std::cout << "Preparing next transaction" << aTempDevice->toString() << "\n";
     aTempTrans=aTempDevice->getNextTransaction();
     if (aTempTrans!=0 && aTempTrans->getVirtualLength()>0){
 #ifdef DEBUG_KERNEL
