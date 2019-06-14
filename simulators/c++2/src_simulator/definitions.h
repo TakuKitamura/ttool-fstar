@@ -269,16 +269,25 @@ using std::max;
 #define SCHED_HTML_END_JS "</script>\n"
 #define SCHED_HTML_JS_BEGIN_CANVAS "     <canvas id=\"pie-chartcanvas-"
 #define SCHED_HTML_JS_END_CANVAS "\"></canvas>"
-#define SCHED_HTML_JS_WINDOW "window.onload = function () {"
+#define SCHED_HTML_JS_WINDOW "window.onload = function () {\n"
 #define SCHED_HTML_JS_DIV_BEGIN "<div class=\"wrapper\">"
+#define SCHED_HTML_JS_DIV_BEGIN2 "<div class=\"pie-chart-container\">"
 #define SCHED_HTML_JS_DIV_END "</div>"
-#define SCHED_HTML_JS_DIV_ID "<div id=\"chartContainer"
-#define SCHED_HTML_JS_DIV_ID_END "\" style=\"height: 300px; width: 300px;\"></div>\n"
-#define SCHED_HTML_JS_DIV_ID_END_FPGA "\" style=\"height: 300px; width: 300px;float:left;margin-right:40px;\"></div>\n"
 #define SCHED_HTML_JS_CLEAR "<div class = \"clear\"></div>"
 #define NB_HTML_COLORS 15
 
-#define SCHED_HTML_JS_CONTENT1 "var options = {\n \
+#define SCHED_HTML_JS_FUNCTION "= function() {\n \
+		var r = Math.floor(Math.random() * 255);\n \
+		var g = Math.floor(Math.random() * 255);\n \
+		var b = Math.floor(Math.random() * 255);\n \
+		return \"rgb(\" + r + \",\" + g + \",\" + b + \")\";\n \
+	};\n"
+
+
+#define SCHED_HTML_JS_CONTENT1 "  }\n \
+	]\n \
+};\n \
+	var options = {\n \
 		title : {\n \
 			display : true,\n \
 			position : \"top\",\n \
@@ -549,6 +558,11 @@ h2 span {\n \
 .wrapper {\n \
 	width: 256px;\n \
 	height: 256px;\n \
+}\n \
+.pie-chart-container {\n \
+	width : 256px;\n \
+	height : 256px;\n \
+	float : left;\n \
 }\n \
 .clear {\n \
 	clear:both\n \

@@ -425,6 +425,8 @@ std::cout<<"schedule2HTML--------------------------------------*****************
     myfile << SCHED_HTML_JS_LINK1 << SCHED_HTML_END_JS << std::endl;
     myfile << SCHED_HTML_JS_LINK2 << SCHED_HTML_END_JS << std::endl;
     myfile << SCHED_HTML_BEGIN_JS << std::endl;
+    
+    myfile << SCHED_HTML_JS_WINDOW;
     for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
       (*i)->drawPieChart(myfile);
       }
@@ -435,7 +437,7 @@ std::cout<<"schedule2HTML--------------------------------------*****************
       }
     }
     for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
-      // (*j)->drawPieChart(myfile);
+       (*j)->drawPieChart(myfile);
     }
        
     myfile << "}" <<std::endl;
@@ -471,18 +473,16 @@ std::cout<<"schedule2HTML--------------------------------------*****************
 	(*j)->schedule2HTML(myfile);
 	(*j)->setStartFlagHTML(false);
       }
-      myfile << SCHED_HTML_JS_DIV_BEGIN << std::endl;
       for(TaskList::const_iterator i = (*j)->getTaskList().begin(); i != (*j)->getTaskList().end(); ++i){
 	(*j)->setHtmlCurrTask(*i);
 	(*j)->showPieChart(myfile);
       }
-      myfile << SCHED_HTML_JS_DIV_END <<std::endl;
       myfile << SCHED_HTML_JS_CLEAR <<std::endl;
     }
     
     for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
       (*j)->schedule2HTML(myfile);     
-      // (*j)->showPieChart(myfile);
+      (*j)->showPieChart(myfile);
     }
     //for_each(iCPUlist.begin(), iCPUlist.end(),std::bind2nd(std::mem_fun(&CPU::schedule2HTML),myfile));
 

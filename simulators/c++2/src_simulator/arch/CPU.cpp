@@ -87,49 +87,46 @@ void CPU::drawPieChart(std::ofstream& myfile) const {
       }
     }
     std::map <TMLTask*, double>::iterator iter = transPercentage.begin();
-    myfile << SCHED_HTML_JS_WINDOW << std::endl;
     myfile << "   var ctx" << _ID << "_"  << j << "= $(\"#pie-chartcanvas-" << _ID << "_" << j << "\");\n";
+    
+    double idle=1;
+    myfile << "     var data" << _ID << "_" << j << " = new Array (";
+    while( iter != transPercentage.end()){
+      myfile << "\"" << iter->second << "\",";
+      idle-=iter->second;
+      ++iter;
+    }
+    myfile << "\"" << idle << "\");\n";
+    
+    myfile << "    var efficiency" << _ID << "_" << j << " = [];" << std::endl;
+    myfile << "    var coloR" << _ID << "_" << j << " = [];" << std::endl;
+    myfile << "    var dynamicColors" << _ID << "_" << j << SCHED_HTML_JS_FUNCTION;
+    
+    myfile << "    for (var i in data" << _ID << "_" << j << "){\n";
+    myfile << "             efficiency" << _ID << "_" << j << ".push(data" << _ID << "_" << j << "[i]);\n";
+    myfile << "             coloR" << _ID << "_" << j << ".push(dynamicColors" << _ID << "_" << j << "());\n";
+    myfile << "}" << std::endl;
+    
     myfile << "   var data" << _ID << "_" << j << " = { \n";
     myfile << "           labels : [";
-    double idle=1;
+    iter = transPercentage.begin();
     while( iter != transPercentage.end()){
       myfile << " \"" << iter->first->toString() << "\",";
       idle-=iter->second;
       ++iter;
-    }
+    }        
     myfile << "\"idle time\"],\n";
-    myfile << "            datasets : [ \n" << "             {\n";
-    iter = transPercentage.begin();
-    myfile << "                     data : [";
-    while( iter != transPercentage.end()){
-      myfile << iter->second << ",";
-      ++iter;
-    }
-    myfile << idle << "],\n";
-  
-    myfile << SCHED_HTML_PIE_END << std::endl;
+    myfile << "          datasets : [\n \
+                                     {\n \
+                                           data : efficiency" << _ID << "_" << j << ",\n";
+    myfile << "                            backgroundColor : coloR" << _ID << "_" << j << std::endl;
     myfile << SCHED_HTML_JS_CONTENT1 << "Average load is " << averageLoad(j) << SCHED_HTML_JS_CONTENT2 << std::endl; 
-    myfile << "    var chart" << _ID << "_" << this->_cycleTime << " = new Chart( "<<
+    myfile << "    var chart" << _ID << "_" << j << " = new Chart( "<<
       "ctx" << _ID << "_" << j << ", {\n \
               type : \"pie\",\n";
     myfile << "               data : data" << _ID << "_" << j <<",\n";
     myfile << "               " << SCHED_HTML_JS_CONTENT3 << std::endl;
   }
-	 
-      
-     //myfile << "     var chart" << _ID << "_" << j << "= new CanvasJS.Chart(\"chartContainer" << _ID << "_" << j <<"\"," << std::endl;
-     //myfile <<  SCHED_HTML_JS_CONTENT2 << "Average load is " << averageLoad(j) <<  SCHED_HTML_JS_CONTENT3 << std::endl;
-     /*double idle=1;
-       while( iter != transPercentage.end()){
-       myfile << "                { y:" << (iter->second)*100 << ", indexLabel: \"" << iter->first->toString() << "\" }," << std::endl;
-       idle-=iter->second;
-       ++iter;  
-       }
-       myfile << "                { y:" << idle*100 << ", indexLabel: \"idle time\"" << " }" << std::endl;
-       myfile << std::endl;
-       myfile << SCHED_HTML_PIE_END;
-       myfile << "chart" << _ID << "_" << j << ".render();" << std::endl; 
-       }*/
   
 }
 
