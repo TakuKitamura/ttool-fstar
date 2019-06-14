@@ -3715,10 +3715,19 @@ public class GTURTLEModeling {
         return str;
     }
 
+
+    private String header() {
+        String head = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGMODELING version=\"" + DefaultText.getVersion() + "\"";
+        //head += ModelParameter.toXML();
+        head += ">\n\n";
+        return head;
+
+    }
+
     public String makeOneDiagramXMLFromGraphicalModel(TURTLEPanel tp, int indexOfDiagram) {
         StringBuffer sb = new StringBuffer();
         //sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGMODELING>\n\n");
-        sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGMODELING version=\"" + DefaultText.getVersion() + "\">\n\n");
+        sb.append(header());
 
         StringBuffer s;
         String str;
@@ -3745,7 +3754,7 @@ public class GTURTLEModeling {
     public String makeXMLFromTurtleModeling(int index, String extensionToName) {
         StringBuffer sb = new StringBuffer();
         //sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGMODELING>\n\n");
-        sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGMODELING version=\"" + DefaultText.getVersion() + "\">\n\n");
+        sb.append(header());
 
         StringBuffer s;
         String str;
@@ -5439,7 +5448,7 @@ public class GTURTLEModeling {
             return null;
         }
 
-        sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGMODELING version=\"" + DefaultText.getVersion() + "\">\n\n");
+        sb.append(header());
 
         if (index2 > -1) {
             sb.append("<Modeling type=\"Analysis\" nameTab=\"Analysis\" >\n");

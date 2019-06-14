@@ -172,7 +172,7 @@ public class TaskNetworkInterfaceOUT extends TMLTask {
             TMLSendEvent sendEvtFeedback = new TMLSendEvent("sendEvtFeedback_VC" + i, referenceObject);
             sendEvtFeedback.setEvent(outputFeedbackEvents.get(i));
             addElement(testingVC, sendEvtFeedback);
-            testingEOP.addGuard("vc == " + i);
+            testingVC.addGuard("vc == " + i);
 
             TMLStopState stopVC = new TMLStopState("stopVC" + i, referenceObject);
             addElement(sendEvtFeedback, stopVC);
