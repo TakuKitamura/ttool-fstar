@@ -77,6 +77,8 @@ public class TMLSyntaxChecking {
     private final String WRONG_PARAMS = "The number of params is not compatible";
     private final String DUPLICATE_NAMES = "Two elements have the same name";
 
+    private final String INVALID_NB_OF_GUARD = "The number of guards is not equal to the number of next elements";
+
     private final String TOO_MANY_MEMORIES = "Channel is mapped on more than one memory";
     private final String INVALID_CHANNEL_PATH = "Channel path is invalid";
     private final String INVALID_BUS_PATH = "Bus path is invalid for channel"; // Should be a warning only
@@ -123,6 +125,8 @@ public class TMLSyntaxChecking {
             checkActionSyntax();
 
             checkNextActions();
+
+            checkChoices();
 
             checkPortName();
 
@@ -201,6 +205,21 @@ public class TMLSyntaxChecking {
                 if (!(elt instanceof TMLStopState)) {
                     if (elt.getNbNext() == 0) {
                         addError(t, elt, elt.getName() + ": " + NO_NEXT_OPERATOR_ERROR, TMLError.ERROR_BEHAVIOR);
+                    }
+                }
+            }
+        }
+    }
+
+    public void checkChoices() {
+        for (TMLTask t : tmlm.getTasks()) {
+            TMLActivity tactivity = t.getActivityDiagram();
+            int n = tactivity.nElements();
+            for (int i = 0; i < n; i++) {
+                TMLActivityElement elt = tactivity.get(i);
+                if (elt instanceof TMLChoice) {
+                    if (elt.getNbNext() != ((TMLChoice) elt).getNbGuard()) {
+                        addError(t, elt, elt.getName() + ": " + INVALID_NB_OF_GUARD, TMLError.ERROR_BEHAVIOR);
                     }
                 }
             }

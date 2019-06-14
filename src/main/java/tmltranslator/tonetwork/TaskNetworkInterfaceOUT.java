@@ -186,6 +186,7 @@ public class TaskNetworkInterfaceOUT extends TMLTask {
         if (packetsAvailable.size() == 0) {
             TMLStopState stopOfLeftBranchOfChoice = new TMLStopState("stopNoDestinationTask", referenceObject);
             addElement(packetChoice, stopOfLeftBranchOfChoice);
+            packetChoice.addGuard("");
             return;
         }
 

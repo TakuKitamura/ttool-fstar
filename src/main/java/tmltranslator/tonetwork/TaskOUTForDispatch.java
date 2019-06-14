@@ -137,7 +137,7 @@ public class TaskOUTForDispatch extends TMLTask {
         mainChoice = new TMLChoice("ChoiceOf" + i, referenceObject);
         activity.addLinkElement(notified, mainChoice);
 
-        activity.addLinkElement(notified, new TMLStopState("StopAfterMainChoice", referenceObject));
+        activity.addLinkElement(mainChoice, new TMLStopState("StopAfterMainChoice", referenceObject));
         mainChoice.addGuard("nEvt == 0");
 
         TMLForLoop loopInside = new TMLForLoop("LoopInside" + i, referenceObject);
