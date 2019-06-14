@@ -784,7 +784,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         animateWithInfo.setSelected(true);
         openDiagram = new JCheckBox("Automatically open active task diagram");
         jp01.add(openDiagram, c01);
-        openDiagram.setSelected(true);
+        openDiagram.setSelected(false);
         update = new JCheckBox("Automatically update information (task, CPU, etc.)");
         jp01.add(update, c01);
         update.addItemListener(this);

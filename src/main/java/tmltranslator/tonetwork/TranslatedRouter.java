@@ -338,7 +338,8 @@ public class TranslatedRouter<E> {
             if (playingTheRoleOfNext[portNb] != null) {
                 for (int vcNb = 0; vcNb < nbOfVCs; vcNb++) {
 
-                    TaskINForVC taskINForVC = new TaskINForVC("INVC_" + nameOfExecNode + "___" + portNb + "_" + vcNb, null,
+                    TaskINForVC taskINForVC = new TaskINForVC("INVC_" + nameOfExecNode +
+                            "___p" + portNb + "_vc" + vcNb, null,
                             null);
                     tmlm.addTask(taskINForVC);
                     allTasks.add(taskINForVC);

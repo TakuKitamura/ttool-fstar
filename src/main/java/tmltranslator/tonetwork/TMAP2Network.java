@@ -315,7 +315,7 @@ public class TMAP2Network<E>  {
                 if (s != null)
                     hwExecNode = (HwExecutionNode)(tmla.getHwNodeByName(s));
                 if (hwExecNode == null) {
-                    HwCPU missingCPU = new HwCPU("EmptyCPUForDomain" + i + "_" + j);
+                    HwCPU missingCPU = new HwCPU("EmptyCPUForDomain_x" + i + "_y" + j);
                     tmla.addHwNode(missingCPU);
                     hwExecNode = missingCPU;
                     fakeCPUs.add(missingCPU);

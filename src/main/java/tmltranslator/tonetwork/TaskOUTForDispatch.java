@@ -137,6 +137,9 @@ public class TaskOUTForDispatch extends TMLTask {
         mainChoice = new TMLChoice("ChoiceOf" + i, referenceObject);
         activity.addLinkElement(notified, mainChoice);
 
+        activity.addLinkElement(notified, new TMLStopState("StopAfterMainChoice", referenceObject));
+        mainChoice.addGuard("nEvt == 0");
+
         TMLForLoop loopInside = new TMLForLoop("LoopInside" + i, referenceObject);
         loopInside.setInit("loopExit=0");
         loopInside.setCondition("loopExit<1");
@@ -197,7 +200,7 @@ public class TaskOUTForDispatch extends TMLTask {
 
         // Right branch of internal choice
         TMLActionState actionEnd = new TMLActionState("MustExitLoop" + i, referenceObject);
-        actionEnd.setAction("loopExit = 1");
+        actionEnd.setAction("loopExit = 2");
         activity.addLinkElement(internalChoice, actionEnd);
         internalChoice.addGuard("feedback == 0");
 
@@ -307,7 +310,7 @@ public class TaskOUTForDispatch extends TMLTask {
 
             // Right branch of internal choice
             actionEnd = new TMLActionState("MustExitLoop" + i, referenceObject);
-            actionEnd.setAction("loopExit = 1");
+            actionEnd.setAction("loopExit = 2");
             activity.addLinkElement(internalChoice, actionEnd);
             internalChoice.addGuard("feedback == 0");
 
