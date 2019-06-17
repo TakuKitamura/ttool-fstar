@@ -266,6 +266,8 @@ using std::max;
 #define SCHED_HTML_JS_LINK2 "<script src=\"Chart.min.js\">"
 #define SCHED_HTML_BEGIN_JS "<script>\n"
 #define SCHED_HTML_END_JS "</script>\n"
+#define SCHED_HTML_JS_TABLE_BEGIN "<table>"
+#define SCHED_HTML_JS_TABLE_END "</table>"
 #define SCHED_HTML_JS_BEGIN_CANVAS "     <canvas id=\"pie-chartcanvas-"
 #define SCHED_HTML_JS_END_CANVAS "\"></canvas>"
 #define SCHED_HTML_JS_WINDOW "window.onload = function () {\n"

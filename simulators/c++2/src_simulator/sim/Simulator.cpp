@@ -474,7 +474,9 @@ std::cout<<"schedule2HTML--------------------------------------*****************
 	(*j)->schedule2HTML(myfile);
 	(*j)->setStartFlagHTML(false);
       }
+      myfile << SCHED_HTML_JS_TABLE_BEGIN << std::endl;
       myfile << SCHED_HTML_JS_BUTTON1 << (*j)->getID()  << SCHED_HTML_JS_BUTTON2 << std::endl;
+      myfile << SCHED_HTML_JS_TABLE_END << std::endl;
       for(TaskList::const_iterator i = (*j)->getTaskList().begin(); i != (*j)->getTaskList().end(); ++i){
 	(*j)->setHtmlCurrTask(*i);
 	(*j)->showPieChart(myfile);
