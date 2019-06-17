@@ -518,6 +518,10 @@ public class TMLTextSpecification<E> {
                 int nb = Math.max(choice.nbOfNonDeterministicGuard(), choice.nbOfStochasticGuard());
                 if (nb > 0) {
                     // Assumed to be a non deterministic choice
+                    TraceManager.addDev("Non determinitic choice in task " + task.getTaskName()+ " nb=" + nb +
+                                    " NonDeterministic:" + choice.nbOfNonDeterministicGuard()
+                                    + " nbOfStochastic:" + choice.nbOfStochasticGuard()
+                                    + " nbOfGuards:" + choice.getNbGuard() + " choice=" + choice.customExtraToXML());
                     code += "RAND" + CR;
                 }
                 nb = 0;

@@ -239,6 +239,10 @@ public class TaskOUTForDispatch extends TMLTask {
             activity.addLinkElement(mainChoice, loopInside);
             mainChoice.addGuard("nEvt > 0");
 
+            activity.addLinkElement(mainChoice, new TMLStopState("NoEvtOUTInVC" + i, referenceObject));
+            mainChoice.addGuard("else");
+
+
             notifiedFeedback = new TMLNotifiedEvent("FeedbackNotifiedEvt" + i, referenceObject);
             notifiedFeedback.setEvent(feedbackEvents.get(i));
             notifiedFeedback.setVariable("feedback");

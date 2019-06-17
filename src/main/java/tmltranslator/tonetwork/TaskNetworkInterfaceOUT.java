@@ -153,10 +153,6 @@ public class TaskNetworkInterfaceOUT extends TMLTask {
         addElement(testingEOP, packetChoice);
         testingEOP.addGuard("eop == 1");
 
-        TMLStopState stopInvalid = new TMLStopState("InvalidCHID", referenceObject);
-        addElement(packetChoice, stopInvalid);
-        packetChoice.addGuard("else");
-      
 
         // Right branch of choice
         TMLStopState stopOfRightBranchOfChoice = new TMLStopState("stopOfRightBranchOfChoice", referenceObject);
@@ -186,7 +182,7 @@ public class TaskNetworkInterfaceOUT extends TMLTask {
         if (packetsAvailable.size() == 0) {
             TMLStopState stopOfLeftBranchOfChoice = new TMLStopState("stopNoDestinationTask", referenceObject);
             addElement(packetChoice, stopOfLeftBranchOfChoice);
-            packetChoice.addGuard("");
+            packetChoice.addGuard("chid == (0-1)");
             return;
         }
 
