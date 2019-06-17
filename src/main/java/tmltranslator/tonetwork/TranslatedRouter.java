@@ -387,7 +387,7 @@ public class TranslatedRouter<E> {
                 //TraceManager.addDev("I have a router after me at port =" + portNb);
                 for (int vcNb = 0; vcNb < nbOfVCs; vcNb++) {
 
-                        TaskOUTForVC taskOUTForVC = new TaskOUTForVC("OUTVC_" + nameOfExecNode + "__" + portNb + "_" + vcNb, null,
+                        TaskOUTForVC taskOUTForVC = new TaskOUTForVC("OUTVC_" + nameOfExecNode + "__p" + portNb + "_vc" + vcNb, null,
                                 null);
                         tmlm.addTask(taskOUTForVC);
                         allTasks.add(taskOUTForVC);

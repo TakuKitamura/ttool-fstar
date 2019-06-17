@@ -155,13 +155,13 @@ public class TaskNetworkInterfaceOUT extends TMLTask {
 
         TMLStopState stopInvalid = new TMLStopState("InvalidCHID", referenceObject);
         addElement(packetChoice, stopInvalid);
-        packetChoice.addGuard("chid == (0-1)");
-
+        packetChoice.addGuard("else");
+      
 
         // Right branch of choice
         TMLStopState stopOfRightBranchOfChoice = new TMLStopState("stopOfRightBranchOfChoice", referenceObject);
         addElement(testingEOP, stopOfRightBranchOfChoice);
-        testingEOP.addGuard("not(eop == 1)");
+        testingEOP.addGuard("else");
 
         // Right branch of internal seg
         // Test on vc
