@@ -258,7 +258,8 @@ void SchedulableDevice::drawPieChart(std::ofstream& myfile) const {
                                      {\n \
                                            data : efficiency" << _ID << ",\n";
   myfile << "                            backgroundColor : coloR" << _ID << std::endl;
-  myfile << SCHED_HTML_JS_CONTENT1 << "Average load is " << averageLoad() << SCHED_HTML_JS_CONTENT2 << std::endl; 
+  myfile << SCHED_HTML_JS_CONTENT1 << "Average load is " << averageLoad() << SCHED_HTML_JS_CONTENT2 << std::endl;
+   myfile << "$(\"#" << _ID << "\").click(function() {\n";
   myfile << "    var chart" << _ID << " = new Chart( "<<
     "ctx" << _ID << ", {\n \
               type : \"pie\",\n";
@@ -269,6 +270,7 @@ void SchedulableDevice::drawPieChart(std::ofstream& myfile) const {
 
 
 void SchedulableDevice::showPieChart(std::ofstream& myfile) const{
+  myfile << SCHED_HTML_JS_BUTTON1 << _ID  << SCHED_HTML_JS_BUTTON2 << std::endl;
   myfile << SCHED_HTML_JS_DIV_BEGIN << std::endl;
   myfile << SCHED_HTML_JS_BEGIN_CANVAS << _ID << SCHED_HTML_JS_END_CANVAS <<std::endl;
   myfile << SCHED_HTML_JS_DIV_END << std::endl;
