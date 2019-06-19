@@ -900,7 +900,7 @@ public class TranslatedRouter<E> {
                 TMLTask t = ch.getDestinationTask();
                 HwExecutionNode mappedOn = tmlmap.getHwNodeOf(t);
                 if (mappedOn == myHwExecutionNode) {
-                    TMLEvent packetOut = new TMLEvent("evtPktOutToAppFromOut__" + xPos + "_" + yPos,
+                    TMLEvent packetOut = new TMLEvent("evtPktOutToAppFromOut__" + xPos + "_" + yPos + "_chid" + main.getChannelID(ch),
                             null, 8, true);
                     packetOut.addParam(new TMLType(TMLType.NATURAL));
                     packetOut.addParam(new TMLType(TMLType.NATURAL));

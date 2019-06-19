@@ -395,6 +395,7 @@ public class TMAP2Network<E>  {
         IDsOfChannels = new HashMap<>();
         for(TMLChannel ch: tmlm.getChannels()) {
             IDsOfChannels.put(ch, "" + id);
+            id ++;
         }
 
 
