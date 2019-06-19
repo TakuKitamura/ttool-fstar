@@ -40,7 +40,6 @@ package ui.interactivesimulation;
 
 import common.ConfigurationTTool;
 import common.SpecConfigTTool;
-import ddtranslatorSoclib.toTopCell.Simulation;
 import launcher.LauncherException;
 import launcher.RshClient;
 import myutil.*;
@@ -770,28 +769,35 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         jp01.add(new JLabel(" "), c01);
         latex = new JCheckBox("Generate info in Latex format");
         jp01.add(latex, c01);
+
         debug = new JCheckBox("Print messages received from server");
         jp01.add(debug, c01);
+
         animate = new JCheckBox("Animate UML diagrams");
         jp01.add(animate, c01);
+
         diploids = new JCheckBox("Show DIPLO IDs on UML diagrams");
         jp01.add(diploids, c01);
         diploids.addItemListener(this);
         diploids.setSelected(false);
+
         animateWithInfo = new JCheckBox("Show transaction progression on UML diagrams");
         jp01.add(animateWithInfo, c01);
         animateWithInfo.addItemListener(this);
-        animateWithInfo.setSelected(true);
+        animateWithInfo.setSelected(ModelParameters.getBooleanValueFromID("ANIMATE_WITH_INFO_DIPLO_SIM"));
+
         openDiagram = new JCheckBox("Automatically open active task diagram");
         jp01.add(openDiagram, c01);
-        openDiagram.setSelected(false);
+        openDiagram.setSelected(ModelParameters.getBooleanValueFromID("OPEN_DIAG_DIPLO_SIM"));
+        openDiagram.addItemListener(this);
+
         update = new JCheckBox("Automatically update information (task, CPU, etc.)");
         jp01.add(update, c01);
         update.addItemListener(this);
-        update.setSelected(true);
+        update.setSelected(ModelParameters.getBooleanValueFromID("UPDATE_INFORMATION_DIPLO_SIM"));
 
         animate.addItemListener(this);
-        animate.setSelected(true);
+        animate.setSelected(ModelParameters.getBooleanValueFromID("ANIMATE_INTERACTIVE_SIMULATION"));
 
 
         TableSorter sorterPI;
@@ -3303,14 +3309,20 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 
     public void itemStateChanged(ItemEvent e) {
         if (e.getSource() == animate) {
+            ModelParameters.setValueForID("ANIMATE_INTERACTIVE_SIMULATION", "" + animate.isSelected());
             mgui.setDiploAnimate(animate.isSelected());
             diploids.setEnabled(animate.isSelected());
             animateWithInfo.setEnabled(animate.isSelected());
             openDiagram.setEnabled(animate.isSelected());
         } else if (e.getSource() == diploids) {
             mgui.setDiploIDs(diploids.isSelected());
-        }else if (e.getSource() == animateWithInfo) {
+        } else if (e.getSource() == animateWithInfo) {
             mgui.setTransationProgression(animateWithInfo.isSelected());
+            ModelParameters.setValueForID("ANIMATE_WITH_INFO_DIPLO_SIM", "" + animateWithInfo.isSelected());
+        } else if (e.getSource() == update) {
+            ModelParameters.setValueForID("UPDATE_INFORMATION_DIPLO_SIM", "" + update.isSelected());
+        } else if (e.getSource() == debug) {
+            ModelParameters.setValueForID("OPEN_DIAG_DIPLO_SIM", "" + debug.isSelected());
         }
     }
 

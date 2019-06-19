@@ -3718,7 +3718,7 @@ public class GTURTLEModeling {
 
     private String header() {
         String head = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGMODELING version=\"" + DefaultText.getVersion() + "\"";
-        //head += ModelParameter.toXML();
+        head += ModelParameters.toXML();
         head += ">\n\n";
         return head;
 
@@ -5519,6 +5519,16 @@ public class GTURTLEModeling {
                 return;
 
             }
+
+            // Loading header
+
+            try {
+                TraceManager.addDev("Loading model parameters");
+                ModelParameters.loadValuesFromXML(doc.getElementsByTagName("TURTLEGMODELING").item(0));
+            } catch (Exception e) {
+                TraceManager.addDev("Exception when loading model parameters:" + e.getMessage());
+            }
+
             //designPanelNl = doc.getElementsByTagName("Design");
             //analysisNl = doc.getElementsByTagName("Analysis");
 
