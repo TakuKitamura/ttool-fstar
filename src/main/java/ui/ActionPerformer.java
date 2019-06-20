@@ -930,6 +930,8 @@ public class ActionPerformer {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.CAMS_BLOCK_TDF);
         } else if (command.equals(mgui.actions[TGUIAction.CAMS_BLOCK_DE].getActionCommand())) {
         	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.CAMS_BLOCK_DE);
+	}else if (command.equals(mgui.actions[TGUIAction.CAMS_CLOCK].getActionCommand())) {
+        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.CAMS_CLOCK);        
         } else if (command.equals(mgui.actions[TGUIAction.CAMS_CONNECTOR].getActionCommand())) {
         	mgui.actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.CAMS_CONNECTOR);
         } else if (command.equals(mgui.actions[TGUIAction.CAMS_PORT_TDF].getActionCommand())) {

@@ -125,6 +125,7 @@ public class ColorManager {
     public static  Color MEMORY_BOX_2 = new Color(172, 226, 211);
     public static  Color DMA_BOX = new Color(172, 234, 211);
     public static  Color HWA_BOX = new Color(144, 201, 211);
+    public static  Color CAMS_BOX = new Color(153, 153, 255);
 
     public static  Color TML_COMPOSITE_COMPONENT = new Color(239, 212, 176, 125);
 
@@ -308,6 +309,7 @@ public class ColorManager {
         MEMORY_BOX = Color.white;
         DMA_BOX = Color.white;
         HWA_BOX = Color.white;
+	CAMS_BOX = Color.white;
         ATD_BLOCK = Color.white;
         ATD_ATTACK = Color.white;
         ATD_ROOT_ATTACK = Color.white;

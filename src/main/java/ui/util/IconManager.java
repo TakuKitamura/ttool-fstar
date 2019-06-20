@@ -126,7 +126,7 @@ public class IconManager {
     public static Image img1410, img1412, img1414;
 
     // TMLDD
-    public static ImageIcon imgic1100, imgic1102, imgic1104, imgic1106, imgic1108;
+    public static ImageIcon imgic1100, imgic1102, imgic1104, imgic1106,  imgic1107, imgic1108;
     public static ImageIcon imgic1110, imgic1112, imgic1114, imgic1116, imgic1118;
     public static ImageIcon imgic1120;
 
@@ -530,6 +530,7 @@ public class IconManager {
     private static String icon1102 = "tmlbusnode.gif";
     private static String icon1104 = "tmlbridgenode.gif";
     private static String icon1106 = "tmlhwanode.gif";
+    private static String icon1107 = "tmlcamsnode.gif";
     private static String icon1108 = "tmlmemorynode.gif";
     private static String icon1110 = "tmldmanode.gif";
     private static String icon1118 = "tmlkey.gif";
@@ -679,7 +680,7 @@ public class IconManager {
     private static String icon8004 = "camstdfblock.gif";
     private static String icon8005 = "camsdeblock.gif";
     private static String icon8006 = "camsgpio2vciblock.gif";
-    private static String icon999 = "clock.gif";
+    private static String icon999 = "clocksignal.gif";
     // ELN
     private static String icon8010 = "elnresistor.gif";
     private static String icon8011 = "elncapacitor.gif";

@@ -1264,6 +1264,9 @@ public class TGComponentManager {
             case TMLARCHI_HWANODE:
                 tgc = new TMLArchiHWANode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
+	case TMLARCHI_CAMSNODE:
+                tgc = new TMLArchiCAMSNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
             case TMLARCHI_MEMORYNODE:
                 tgc = new TMLArchiMemoryNode(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
@@ -2182,6 +2185,8 @@ public class TGComponentManager {
             return AVATAR_FIREWALL;
         } else if (tgc instanceof TMLArchiHWANode) {
             return TMLARCHI_HWANODE;
+	} else if (tgc instanceof TMLArchiCAMSNode) {
+            return TMLARCHI_CAMSNODE;
         } else if (tgc instanceof TMLArchiMemoryNode) {
             return TMLARCHI_MEMORYNODE;
         } else if (tgc instanceof TMLArchiDMANode) {
