@@ -65,7 +65,7 @@ public class NetList
     private static boolean tracing;
  
     public static String getNetlist (AvatarddSpecification dd,String icn, boolean _tracing)
-    {
+    {	
 	int nb_clusters = TopCellGenerator.avatardd.getAllCrossbar().size ();
 	int coproc_count = 0;
 	avatardd = dd;
@@ -277,9 +277,9 @@ public class NetList
 			"  vgmn.p_to_target[3](signal_vci_vcisimhelper);" + CR2;
 		    
 		    netlist =
-			netlist + "  vgmn.p_to_target[4](signal_vci_vcirttimer);" + CR2;
+			netlist + "  vgmn.p_to_target[5](signal_vci_vcirttimer);" + CR2;
 		    netlist =
-			netlist + "  vgmn.p_to_target[5](signal_vci_xicu);" + CR;
+			netlist + "  vgmn.p_to_target[4](signal_vci_xicu);" + CR;
 		    netlist =
 			netlist + "  vgmn.p_to_target[6](signal_vci_dma);" + CR;
 		    netlist =
@@ -319,7 +319,9 @@ public class NetList
 			netlist + "  vgsb.p_to_target[5](signal_vci_vcirttimer);" +
 			CR2;
 		    netlist =
-			netlist + "  vgsb.p_to_target[6](signal_vci_vcifdtrom);" +
+			netlist + "  vgsb.p_to_target[6](signal_vci_dma);" + CR;//DG 14.2.19.
+		    netlist =
+			netlist + "  vgsb.p_to_target[7](signal_vci_vcifdtrom);" +
 			CR2;
 		    netlist =
 			netlist +
@@ -331,6 +333,10 @@ public class NetList
 		    netlist =
 			netlist +
 			"  vgsb.p_to_initiator[cpus.size()+2](signal_vci_etherneti);"
+			+ CR2;
+		    netlist =
+			netlist +
+			"  vgsb.p_to_initiator[cpus.size()+3](signal_vci_dmai);"
 			+ CR2;
 		}
 	}
@@ -528,10 +534,13 @@ public class NetList
 			netlist + tty.getTTYName () + ".p_vci(signal_vci_tty" + TopCellGenerator.getCrossbarIndex(tty) +"_"+tty.getIndex() +
 			");" + CR2;
 		}
+
+	
 		if (nb_clusters == 0)
 		    {
-			if (icn == "vgmn")
-			    {
+
+				if (icn == "vgmn")
+				    {
 				netlist =
 				    netlist +
 				    "vcifdtrom.begin_device_node(\"vci_multi_tty" +
@@ -545,9 +554,10 @@ public class NetList
 				    netlist + tty.getTTYName () +
 				    ".p_irq[0](signal_xicu_irq[" + no_irq_tty +
 				    "]);" + CR2;
-			    }
-			else
-			    {	netlist =
+				    }
+				else
+				    {
+				netlist =
 				    netlist +
 				    "vcifdtrom.begin_device_node(\"vci_multi_tty" +
 				    i + "\",\"soclib:vci_multi_tty"  + tty.getIndex() + "\");" +
@@ -560,7 +570,7 @@ public class NetList
 				    netlist + tty.getTTYName () +
 				    ".p_irq[0](signal_xicu_irq[" + no_irq_tty +
 				    "]);" + CR2;
-			       	
+				
 				/*	netlist =
 				    netlist +
 				    "vcifdtrom.begin_device_node(\"vci_multi_tty" +
@@ -876,7 +886,7 @@ public class NetList
 	    j = 0;
 	}
 
-	if(nb_clusters==0){
+	if(nb_clusters>0){
 	    i = 0;
 	    for (AvatarRAM ram:TopCellGenerator.avatardd.getAllRAM ())
 		{
@@ -1035,36 +1045,38 @@ public class NetList
 		    "sc_trace(tf,signal_vci_ethernett ,\"signal_vci_ethernett\");"
 		    + CR;
 
-		//for (i = 0; i < TopCellGenerator.avatardd.getNb_init (); i++)
-		i= 0;
-		for (AvatarCPU cpi:TopCellGenerator.avatardd.getAllCPU())
+		for (i = 0; i < TopCellGenerator.avatardd.getNb_init (); i++)
 		    {
 			netlist +=
 			    "sc_trace(tf,signal_vci_m[" + i +
-			    "] ,\"signal_vci_m[" + i + "]\");" + CR;			
-			i++;
+			    "] ,\"signal_vci_m[" + i + "]\");" + CR;
 		    }
 
 		i = 0;
 		for (AvatarTTY tty:TopCellGenerator.avatardd.
 			 getAllTTY ())
 		    {
+
 			netlist +=
 			    "sc_trace(tf,signal_vci_tty" + tty.getIndex () +
-			    ",\"TTY" + tty.getIndex () + "\");" + CR;		
+			    ",\"TTY" + tty.getIndex () + "\");" + CR;
+			netlist +=
+			    "sc_trace(tf,signal_xicu_irq[" + i +
+			    "] ,\"signal_xicu_irq[" + i + "]\");" + CR;
+			i++;
 		    }
-		
-		for(i=0;i<5;i++){
+
 		netlist +=
 		    "sc_trace(tf,signal_xicu_irq[" + i +
 		    "] ,\"signal_xicu_irq[" + i + "]\");" + CR;
-		}
-
-		/*	netlist +=
+		netlist +=
 		    "sc_trace(tf,signal_xicu_irq[" + i +
-		    "] ,\"signal_xicu_irq[" + i + "]\");" + CR;*/
+		    "] ,\"signal_xicu_irq[" + i + "]\");" + CR;
+		netlist +=
+		    "sc_trace(tf,signal_xicu_irq[" + i +
+		    "] ,\"signal_xicu_irq[" + i + "]\");" + CR;
 
-		for (AvatarRAM ram:TopCellGenerator.avatardd.getAllRAM ())
+            for (AvatarRAM ram:TopCellGenerator.avatardd.getAllRAM ())
 		    {
 			if (ram.getMonitored () == 0)
 			    {
@@ -1074,18 +1086,38 @@ public class NetList
 				    ram.getIndex () + "\");" + CR;
 			    }
 		    }
-            for (AvatarAmsCluster amsCluster:TopCellGenerator.avatardd.getAllAmsCluster ())
+            for (AvatarAmsCluster amsCluster:TopCellGenerator.avatardd.getAllAmsCluster())
             {
                 netlist +=
-                "sc_trace(tf,signal_vci_gpio2vci" + amsCluster.getNo_amsCluster () +
-                ",\"signal_vci_gpio2vci" + amsCluster.getNo_amsCluster () + "\");" + CR;
+                "sc_trace(tf,signal_vci_gpio2vci" + amsCluster.getNo_amsCluster() +
+                ",\"signal_vci_gpio2vci" + amsCluster.getNo_amsCluster() + "\");" + CR;
                 netlist +=
                 "sc_trace(tf,signal_to_ams" + amsCluster.getNo_amsCluster () +
-                ",\"signal_to_ams" + amsCluster.getNo_amsCluster () + "\");" + CR;
+                ",\"signal_to_ams" + amsCluster.getNo_amsCluster() + "\");" + CR;
                 netlist +=
                 "sc_trace(tf,signal_from_ams" + amsCluster.getNo_amsCluster () +
-                ",\"signal_from_ams" + amsCluster.getNo_amsCluster () + "\");" + CR;
+                ",\"signal_from_ams" + amsCluster.getNo_amsCluster() + "\");" + CR;
             }
+            //Call trace function from the AMS cluster.
+	    int tracefile_present=0;//only one trace file for all AMS clusters
+            for (AvatarAmsCluster amsCluster:TopCellGenerator.avatardd.getAllAmsCluster())
+		{
+		if(tracefile_present==0){
+                netlist += CR +
+		    "sca_util::sca_trace_file *tfp = sca_util::sca_create_tabular_trace_file(\"my_trace_analog\");" + CR;tracefile_present=1;}
+                netlist +=
+                "sca_util::sca_trace(tfp,signal_to_ams" + amsCluster.getNo_amsCluster() +
+                ",\"signal_to_ams" + amsCluster.getNo_amsCluster() + "\");" + CR;
+                netlist +=
+                "sca_util::sca_trace(tfp,signal_from_ams" + amsCluster.getNo_amsCluster() +
+                ",\"signal_from_ams" + amsCluster.getNo_amsCluster() + "\");" + CR;
+                
+                netlist +=
+                amsCluster.getAmsClusterName() + amsCluster.getNo_amsCluster() +
+                ".trace_" + amsCluster.getAmsClusterName() + "(tfp);" + CR;
+            }
+            
+            netlist += CR;
 	    }
 
 	netlist =
@@ -1099,10 +1131,12 @@ public class NetList
 	netlist = netlist + "  sc_core::sc_start();" + CR;
 	if (tracing)
 	    {
-		netlist += "sc_close_vcd_trace_file(tf);" + CR;
+		netlist += CR + "sc_close_vcd_trace_file(tf);" + CR;
+        netlist += "sca_util::sca_close_tabular_trace_file(tfp);" + CR;
 	    }
 	netlist = netlist + CR + "  return EXIT_SUCCESS;" + CR;
 	netlist = netlist + "}" + CR;
+	
 
 	return netlist;
     }
