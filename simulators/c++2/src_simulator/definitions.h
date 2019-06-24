@@ -87,6 +87,8 @@ using std::max;
 #undef DEBUG_BUS
 #undef DEBUG_SERIALIZE
 
+#define DEBUG_FPGA
+#define DEBUG_SIMULATE
 //enables mapping of DIPLODOCUS channels onto buses
 #define BUS_ENABLED
 //cost of a send/wait command
@@ -257,36 +259,58 @@ using std::max;
 #define SCHED_HTML_END_STYLE "</style>\n"
 #define SCHED_HTML_CSS_BEG_LINK "<link rel=\"stylesheet\" type=\"text/css\" href=\""
 #define SCHED_HTML_CSS_END_LINK "\" />\n"
-#define SCHED_HTML_JS_TYPE "<script type=\"text/javascript\">\n"
+
+
+
+
+#define SCHED_HTML_JS_LINK1 "<script src=\"jquery.min.js\">"
+#define SCHED_HTML_JS_LINK2 "<script src=\"Chart.min.js\">"
+#define SCHED_HTML_BEGIN_JS "<script>\n"
 #define SCHED_HTML_END_JS "</script>\n"
-#define SCHED_HTML_JS_LINK "<script type=\"text/javascript\" src=\"https://canvasjs.com/assets/script/canvasjs.min.js\">"
-#define SCHED_HTML_JS_DIV_BEGIN "<div>"
+#define SCHED_HTML_JS_BEGIN_CANVAS "     <canvas id=\"pie-chartcanvas-"
+#define SCHED_HTML_JS_END_CANVAS "\"></canvas>"
+#define SCHED_HTML_JS_WINDOW "window.onload = function () {\n"
+#define SCHED_HTML_JS_DIV_BEGIN "<div class=\"wrapper\">"
+#define SCHED_HTML_JS_DIV_BEGIN2 "<div class=\"pie-chart-container\">"
 #define SCHED_HTML_JS_DIV_END "</div>"
-#define SCHED_HTML_JS_DIV_ID "<div id=\"chartContainer"
-#define SCHED_HTML_JS_DIV_ID_END "\" style=\"height: 300px; width: 300px;\"></div>\n"
-#define SCHED_HTML_JS_DIV_ID_END_FPGA "\" style=\"height: 300px; width: 300px;float:left;margin-right:40px;\"></div>\n"
 #define SCHED_HTML_JS_CLEAR "<div class = \"clear\"></div>"
 #define NB_HTML_COLORS 15
-#define SCHED_HTML_JS_CONTENT1 "window.onload = function () {\n"
-#define SCHED_HTML_JS_CONTENT2 "{\n \
-		title:{\n \
-			text: \""
-#define SCHED_HTML_JS_CONTENT3 "\"\n \
+
+#define SCHED_HTML_JS_FUNCTION "= function() {\n \
+		var r = Math.floor(Math.random() * 255);\n \
+		var g = Math.floor(Math.random() * 255);\n \
+		var b = Math.floor(Math.random() * 255);\n \
+		return \"rgb(\" + r + \",\" + g + \",\" + b + \")\";\n \
+	};\n"
+
+
+#define SCHED_HTML_JS_CONTENT1 "  }\n \
+	]\n \
+};\n \
+	var options = {\n \
+		title : {\n \
+			display : true,\n \
+			position : \"top\",\n \
+			text : \""
+
+#define SCHED_HTML_JS_CONTENT2 "\", \n \
+			fontSize : 18,\n \
+			fontColor : \"#111\"\n \
 		},\n \
-		legend: {\n \
-			maxWidth: 350,\n \
-			itemWidth: 120\n \
-		},\n \
-		data: [\n \
-		{\n \
-			type: \"pie\",\n \
-			showInLegend: true,\n \
-			legendText: \"{indexLabel}\",\n \
-			dataPoints: [ \n"
-#define SCHED_HTML_PIE_END "]\n \
+		legend : {\n \
+			display : true,\n \
+			position : \"bottom\"\n \
 		}\n \
-		]\n \
-	});\n"
+	};\n"
+
+#define SCHED_HTML_JS_CONTENT3 "options : options\n \
+			});"
+
+
+#define SCHED_HTML_PIE_END "}\n \
+		]\n\
+	};\n"		
+	
 
 #define SCHED_HTML_CSS_CONTENT "table{\n \
 	border-collapse: collapse;\n \
@@ -530,6 +554,15 @@ h2 span {\n \
 .t14last {\n \
 	background-color: LightGoldenRodYellow;\n \
 	border-style: solid solid solid none;\n \
+}\n \
+.wrapper {\n \
+	width: 256px;\n \
+	height: 256px;\n \
+}\n \
+.pie-chart-container {\n \
+	width : 256px;\n \
+	height : 256px;\n \
+	float : left;\n \
 }\n \
 .clear {\n \
 	clear:both\n \

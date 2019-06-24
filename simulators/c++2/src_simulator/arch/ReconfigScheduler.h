@@ -77,6 +77,8 @@ protected:
 	///Last workload source to which ressource access was granted
 	WorkloadSource* _lastSource;
 	WorkloadList _tempWorkloadList;
+	unsigned int _indexMark;
+	unsigned int _reconfigNumber;
 	
 	
 };

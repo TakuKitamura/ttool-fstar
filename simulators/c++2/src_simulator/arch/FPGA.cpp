@@ -239,27 +239,33 @@ std::cout<<"fpga addTransaction"<<std::endl;
     std::cout<<"I am in finish!!!"<<std::endl;
 #endif
     //_endSchedule=0;
-    // _maxEndTime=max(_maxEndTime,_nextTransaction->getEndTime());
-#ifdef DEBUG_FPGA
-    std::cout<<"_maxEndTime is "<<_maxEndTime<<std::endl;
-#endif
-    
+    // _maxEndTime=max(_maxEndTime,_nextTransaction->getEndTime())
+    //std::cout<<"end schedule is ~~~~~~~"<<_endSchedule<<std::endl;
+    if(_endSchedule == 0) _maxEndTime=max(_maxEndTime,_nextTransaction->getEndTime());
     if(_reconfigNumber>0)
       _endSchedule=_maxEndTime+_reconfigNumber*_reconfigTime;
     else{
       _endSchedule=0;
-      _maxEndTime=max(_maxEndTime,_nextTransaction->getEndTime());
+      
     }
 #ifdef DEBUG_FPGA
+    
+    std::cout<<"_maxEndTime is "<<_maxEndTime<<std::endl;
+    
     std::cout<<"endschedule is!! "<<_endSchedule<<std::endl;
+    if(_nextTransaction==0) std::cout<<"000"<<std::endl;
 #endif
     _simulatedTime=max(_simulatedTime,_endSchedule);
     _overallTransNo++; //NEW!!!!!!!!
     _overallTransSize+=_nextTransaction->getOperationLength();  //NEW!!!!!!!!
     //std::cout << "lets crash execute\n";
-
     // std::cout<<_nextTransaction->toString()<<std::endl;
+    if(_nextTransaction->getCommand()==0)
+      std::cout<<"111"<<std::endl;
+    else 
+      std::cout<<"333"<<std::endl;
      _nextTransaction->getCommand()->execute();  //NEW!!!!
+     std::cout<<"222"<<std::endl;
     //std::cout << "not crashed\n";
 #ifdef TRANSLIST_ENABLED
     _transactList.push_back(_nextTransaction);
@@ -447,50 +453,76 @@ double FPGA::averageLoad (TMLTask* currTask) const{
 }
 
 
-void FPGA::drawPieChart(std::ofstream& myfile) const {
-  std::cout<<"fpga draw pie chart"<<std::endl;
-   TMLTime _maxEndTime=0;
-   
-   for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
-     if( (*i)-> getCommand()->getTask() ==  _htmlCurrTask ){
-       TMLTime _endTime= (*i)->getEndTime();
-       _maxEndTime=max(_maxEndTime,_endTime);
-     }
-   }
-#ifdef DEBUG_FPGA
-   std::cout<<"max end time is "<<_maxEndTime<<std::endl;
-#endif
-   std::map <TMLTask*, double > transPercentage;
- 
-   for( TransactionList::const_iterator i = _transactList.begin(); i!= _transactList.end(); ++i){
-     if( (*i)-> getCommand()->getTask() ==  _htmlCurrTask ){
-       transPercentage[(*i)-> getCommand()->getTask()]+=(double)((*i)->getEndTime()-(*i)->getStartTime())/_maxEndTime;      
-     }
-   }
-  
-   std::map <TMLTask*, double>::iterator iter = transPercentage.begin();
-   myfile << "     var chart" << _ID << "_" <<  _htmlCurrTask->toShortString() << "= new CanvasJS.Chart(\"chartContainer" << _ID << "_" <<   _htmlCurrTask->toShortString() <<"\"," << std::endl;
-   myfile <<  SCHED_HTML_JS_CONTENT2 << "Average load is " << averageLoad( _htmlCurrTask) <<  SCHED_HTML_JS_CONTENT3 << std::endl;
-   double idle=1;
-   while( iter != transPercentage.end()){
-     myfile << "                { y:" << (iter->second)*100 << ", indexLabel: \"" << iter->first->toString() << "\" }," << std::endl;
-     idle-=iter->second;
-     ++iter;  
-   }
-   myfile << "                { y:" << idle*100 << ", indexLabel: \"idle time\"" << " }" << std::endl;
-   myfile << std::endl;
-   myfile << SCHED_HTML_PIE_END;
-   myfile << "chart" << _ID << "_" <<   _htmlCurrTask->toShortString() << ".render();" << std::endl;
-   
-  
+void FPGA::drawPieChart(std::ofstream& myfile) const {      
+  TMLTime _maxEndTime=0;
+
+  for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
+    if( (*i)-> getCommand()->getTask() ==  _htmlCurrTask ){
+      TMLTime _endTime= (*i)->getEndTime();
+      _maxEndTime=max(_maxEndTime,_endTime);
+    }
+  }
+  std::map <TMLTask*, double > transPercentage;
+  for( TransactionList::const_iterator i = _transactList.begin(); i!= _transactList.end(); ++i){
+    if( (*i)-> getCommand()->getTask() ==  _htmlCurrTask ){
+      transPercentage[(*i)-> getCommand()->getTask()]+=(double)((*i)->getEndTime()-(*i)->getStartTime())/_maxEndTime;      
+    }
+  }
+  std::map <TMLTask*, double>::iterator iter = transPercentage.begin();
+  myfile << "   var ctx" << _ID << "_"  << _htmlCurrTask->toShortString() << "= $(\"#pie-chartcanvas-" << _ID << "_" << _htmlCurrTask->toShortString() << "\");\n";
+    
+  double idle=1;
+  myfile << "     var data" << _ID << "_" << _htmlCurrTask->toShortString() << " = new Array (";
+  while( iter != transPercentage.end()){
+    myfile << "\"" << iter->second << "\",";
+    idle-=iter->second;
+    ++iter;
+  }
+  myfile << "\"" << idle << "\");\n";
+    
+  myfile << "    var efficiency" << _ID << "_" << _htmlCurrTask->toShortString() << " = [];" << std::endl;
+  myfile << "    var coloR" << _ID << "_" << _htmlCurrTask->toShortString() << " = [];" << std::endl;
+  myfile << "    var dynamicColors" << _ID << "_" << _htmlCurrTask->toShortString() << SCHED_HTML_JS_FUNCTION;
+    
+  myfile << "    for (var i in data" << _ID << "_" << _htmlCurrTask->toShortString() << "){\n";
+  myfile << "             efficiency" << _ID << "_" << _htmlCurrTask->toShortString() << ".push(data" << _ID << "_" << _htmlCurrTask->toShortString() << "[i]);\n";
+  myfile << "             coloR" << _ID << "_" << _htmlCurrTask->toShortString() << ".push(dynamicColors" << _ID << "_" << _htmlCurrTask->toShortString() << "());\n";
+  myfile << "}" << std::endl;
+    
+  myfile << "   var data" << _ID << "_" << _htmlCurrTask->toShortString() << " = { \n";
+  myfile << "           labels : [";
+  iter = transPercentage.begin();
+  while( iter != transPercentage.end()){
+    myfile << " \"" << iter->first->toString() << "\",";
+    idle-=iter->second;
+    ++iter;
+  }        
+  myfile << "\"idle time\"],\n";
+  myfile << "          datasets : [\n \
+                                     {\n \
+                                           data : efficiency" << _ID << "_" << _htmlCurrTask->toShortString() << ",\n";
+  myfile << "                            backgroundColor : coloR" << _ID << "_" << _htmlCurrTask->toShortString() << std::endl;
+  myfile << SCHED_HTML_JS_CONTENT1 << "Average load is " << averageLoad(_htmlCurrTask) << SCHED_HTML_JS_CONTENT2 << std::endl; 
+  myfile << "    var chart" << _ID << "_" << _htmlCurrTask->toShortString() << " = new Chart( "<<
+    "ctx" << _ID << "_" << _htmlCurrTask->toShortString() << ", {\n \
+              type : \"pie\",\n";
+  myfile << "               data : data" << _ID << "_" << _htmlCurrTask->toShortString() <<",\n";
+  myfile << "               " << SCHED_HTML_JS_CONTENT3 << std::endl;
+     
 }
 
 
 void FPGA::showPieChart(std::ofstream& myfile) const{
-  if(_taskNumber==1)
+  /* if(_taskNumber==1)
     myfile << SCHED_HTML_JS_DIV_ID << _ID << "_" << _htmlCurrTask->toShortString() << SCHED_HTML_JS_DIV_ID_END <<std::endl;
   else
-    myfile << SCHED_HTML_JS_DIV_ID << _ID << "_" << _htmlCurrTask->toShortString() << SCHED_HTML_JS_DIV_ID_END_FPGA <<std::endl;
+  myfile << SCHED_HTML_JS_DIV_ID << _ID << "_" << _htmlCurrTask->toShortString() << SCHED_HTML_JS_DIV_ID_END_FPGA <<std::endl;*/
+  if( _taskNumber == 1)
+    myfile << SCHED_HTML_JS_DIV_BEGIN << std::endl;
+  else
+    myfile << SCHED_HTML_JS_DIV_BEGIN2 << std::endl;
+  myfile << SCHED_HTML_JS_BEGIN_CANVAS << _ID << "_" << _htmlCurrTask->toShortString() << SCHED_HTML_JS_END_CANVAS <<std::endl;
+  myfile << SCHED_HTML_JS_DIV_END << std::endl;
 }
 
 std::string FPGA::determineHTMLCellClass(unsigned int &nextColor ) {
