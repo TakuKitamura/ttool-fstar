@@ -89,6 +89,7 @@ import ui.tmldd.TMLArchiCrossbarNode;
 import ui.tmldd.TMLArchiDMANode;
 import ui.tmldd.TMLArchiEventArtifact;
 import ui.tmldd.TMLArchiFPGANode;
+import ui.tmldd.TMLArchiCAMSNode;
 import ui.tmldd.TMLArchiFirewallNode;
 import ui.tmldd.TMLArchiHWANode;
 import ui.tmldd.TMLArchiKey;
@@ -2781,6 +2782,7 @@ public class GTMLModeling {
 
         TMLArchiCPUNode node;
         TMLArchiFPGANode fpgaNode;
+	TMLArchiCAMSNode camsnode;
         TMLArchiHWANode hwanode;
         TMLArchiBUSNode busnode;
         TMLArchiVGMNNode vgmnnode;
@@ -2792,6 +2794,7 @@ public class GTMLModeling {
         TMLArchiRouterNode routerNode;
         HwCPU cpu;
         HwFPGA fpga;
+	HwCams cams;
         HwA hwa;
         HwBus bus;
         HwVGMN vgmn;
@@ -2867,6 +2870,30 @@ public class GTMLModeling {
                     //TraceManager.addDev("FPGA node added: " + fpgaNode.getName());
                 }
             }
+
+	     if (tgc instanceof TMLArchiCAMSNode) {
+                camsnode = (TMLArchiCAMSNode) tgc;
+                if (nameInUse(names, camsnode.getName())) {
+                    // Node with the same name
+                    UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Two nodes have the same name: " + camsnode.getName());
+                    ce.setTDiagramPanel(tmlap.tmlap);
+                    ce.setTGComponent(camsnode);
+                    checkingErrors.add(ce);
+                } else {
+                    names.add(camsnode.getName());
+                    cams = new HwCams(camsnode.getName());
+                    cams.byteDataSize = camsnode.getByteDataSize();
+                    cams.execiTime = camsnode.getExeciTime();
+                    cams.clockRatio = camsnode.getClockRatio();
+                    cams.setOperation(camsnode.getOperation());
+
+                    listE.addCor(cams, camsnode);
+                    archi.addHwNode(cams);
+                    //TraceManager.addDev("CAMS node added: " + cams.getName());
+                }
+            }
+
+	  
 
             if (tgc instanceof TMLArchiHWANode) {
                 hwanode = (TMLArchiHWANode) tgc;

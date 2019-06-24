@@ -113,6 +113,21 @@ public class SysCAMSComponentTaskDiagramPanel extends TDiagramPanel implements T
 					}
 				}
 			}
+			if (tgc instanceof SysCAMSClock) {
+				SysCAMSClock comp = (SysCAMSClock) tgc;
+				List<SysCAMSPortDE> cps = comp.getAllDEOriginPorts();
+				for (SysCAMSPortDE port : cps) {
+					if (port.commName.equals(name)) {
+						ports.add(port);
+					}
+				}
+				cps = comp.getAllDEDestinationPorts();
+				for (SysCAMSPortDE port : cps) {
+					if (port.commName.equals(name)) {
+						ports.add(port);
+					}
+				}
+			}
 		}
 		return ports;
 	}
