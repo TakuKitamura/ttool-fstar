@@ -262,16 +262,19 @@ using std::max;
 
 
 
-
 #define SCHED_HTML_JS_LINK1 "<script src=\"jquery.min.js\">"
 #define SCHED_HTML_JS_LINK2 "<script src=\"Chart.min.js\">"
 #define SCHED_HTML_BEGIN_JS "<script>\n"
 #define SCHED_HTML_END_JS "</script>\n"
+#define SCHED_HTML_JS_TABLE_BEGIN "<table>"
+#define SCHED_HTML_JS_TABLE_END "</table>"
 #define SCHED_HTML_JS_BEGIN_CANVAS "     <canvas id=\"pie-chartcanvas-"
 #define SCHED_HTML_JS_END_CANVAS "\"></canvas>"
 #define SCHED_HTML_JS_WINDOW "window.onload = function () {\n"
 #define SCHED_HTML_JS_DIV_BEGIN "<div class=\"wrapper\">"
 #define SCHED_HTML_JS_DIV_BEGIN2 "<div class=\"pie-chart-container\">"
+#define SCHED_HTML_JS_BUTTON1 "<button id=\""
+#define SCHED_HTML_JS_BUTTON2 "\" type=\"button\"> Show Pie Chart </button>"
 #define SCHED_HTML_JS_DIV_END "</div>"
 #define SCHED_HTML_JS_CLEAR "<div class = \"clear\"></div>"
 #define NB_HTML_COLORS 15
@@ -304,7 +307,8 @@ using std::max;
 	};\n"
 
 #define SCHED_HTML_JS_CONTENT3 "options : options\n \
-			});"
+			});\n \
+        });"
 
 
 #define SCHED_HTML_PIE_END "}\n \

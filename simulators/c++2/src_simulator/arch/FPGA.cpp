@@ -503,12 +503,21 @@ void FPGA::drawPieChart(std::ofstream& myfile) const {
                                            data : efficiency" << _ID << "_" << _htmlCurrTask->toShortString() << ",\n";
   myfile << "                            backgroundColor : coloR" << _ID << "_" << _htmlCurrTask->toShortString() << std::endl;
   myfile << SCHED_HTML_JS_CONTENT1 << "Average load is " << averageLoad(_htmlCurrTask) << SCHED_HTML_JS_CONTENT2 << std::endl; 
-  myfile << "    var chart" << _ID << "_" << _htmlCurrTask->toShortString() << " = new Chart( "<<
-    "ctx" << _ID << "_" << _htmlCurrTask->toShortString() << ", {\n \
-              type : \"pie\",\n";
-  myfile << "               data : data" << _ID << "_" << _htmlCurrTask->toShortString() <<",\n";
-  myfile << "               " << SCHED_HTML_JS_CONTENT3 << std::endl;
+ 
      
+}
+
+void FPGA::buttonPieChart(std::ofstream& myfile) const{
+  myfile << "$(\"#" << _ID << "\").click(function() {\n";
+  for(TaskList::const_iterator i = _taskList.begin(); i!= _taskList.end(); ++i){ 
+    myfile << "    var chart" << _ID << "_" << (*i)->toShortString() << " = new Chart( "<<
+      "ctx" << _ID << "_" << (*i)->toShortString() << ", {\n \
+              type : \"pie\",\n";
+    myfile << "               data : data" << _ID << "_" << (*i)->toShortString() <<",\n";
+    myfile << "               options : options\n" << "                   });" << std::endl;
+  
+  }
+  myfile << "});" << std::endl;
 }
 
 
@@ -517,6 +526,7 @@ void FPGA::showPieChart(std::ofstream& myfile) const{
     myfile << SCHED_HTML_JS_DIV_ID << _ID << "_" << _htmlCurrTask->toShortString() << SCHED_HTML_JS_DIV_ID_END <<std::endl;
   else
   myfile << SCHED_HTML_JS_DIV_ID << _ID << "_" << _htmlCurrTask->toShortString() << SCHED_HTML_JS_DIV_ID_END_FPGA <<std::endl;*/
+ 
   if( _taskNumber == 1)
     myfile << SCHED_HTML_JS_DIV_BEGIN << std::endl;
   else
