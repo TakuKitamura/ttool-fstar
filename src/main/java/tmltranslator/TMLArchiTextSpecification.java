@@ -77,7 +77,7 @@ public class TMLArchiTextSpecification {
     private String fpgaparameters[] = {"capacity", "byteDataSize", "mappingPenalty", "goIdleTime",
             "maxConsecutiveIdleCycles", "reconfigurationTime", "execiTime", "execcTime", "scheduling"};
     private String linkparameters[] = {"bus", "node", "priority"};
-    private String hwaparameters[] = {"byteDataSize", "execiTime", "execTime"};
+    private String hwaparameters[] = {"byteDataSize", "execiTime", "execcTime"};
     private String busparameters[] = {"byteDataSize", "pipelineSize", "arbitration"};
     private String bridgeparameters[] = {"bufferByteSize"};
     private String memoryparameters[] = {"byteDataSize"};
