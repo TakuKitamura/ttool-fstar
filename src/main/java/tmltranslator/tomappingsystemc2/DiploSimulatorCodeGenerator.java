@@ -291,8 +291,8 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
                 final String schedulerInstName = namesGen.rrSchedulerInstanceName(hwFpgaNode);
                 final String schedulerName = namesGen.rrSchedulerName(hwFpgaNode);
                 if (hwFpgaNode.getScheduling().trim().length() > 0) {
-                    declaration += "ReconfigScheduler* " + schedulerInstName + " = new ReconfigSchedulerScheduler(\"" +
-                            schedulerName + "\", 0, + " + hwFpgaNode.getScheduling().trim() + ") " + SCCR;
+                    declaration += "ReconfigScheduler* " + schedulerInstName + " = new ReconfigScheduler(\"" +
+                            schedulerName + "\", 0, \"" + hwFpgaNode.getScheduling().trim() + "\") " + SCCR;
                 } else {
                     declaration += "OrderScheduler* " + schedulerInstName + " = new OrderScheduler(\"" + schedulerName + "\", 0) " + SCCR;
                 }
