@@ -877,7 +877,7 @@ public class NetList
 	    j = 0;
 	}
 
-	if(nb_clusters==0){
+	if(nb_clusters>0){
 	    i = 0;
 	    for (AvatarRAM ram:TopCellGenerator.avatardd.getAllRAM ())
 		{
