@@ -201,6 +201,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         header += "#include <TimeTConstraint.h>\n";
         header += "#include <CPU.h>\n#include <SingleCoreCPU.h>\n#include <MultiCoreCPU.h>\n#include <FPGA.h>\n#include <RRScheduler.h>\n#include " +
                 "<RRPrioScheduler.h>\n" + "#include <OrderScheduler.h>\n" + "#include <PrioScheduler.h>\n#include <Bus.h>\n";
+        header += "#include <ReconfigScheduler.h>\n";
         header += "#include <Bridge.h>\n#include <Memory.h>\n#include <TMLbrbwChannel.h>\n#include <TMLnbrnbwChannel.h>\n";
         header += "#include <TMLbrnbwChannel.h>\n#include <TMLEventBChannel.h>\n#include <TMLEventFChannel.h>\n#include <TMLEventFBChannel.h>\n";
         header += "#include <TMLTransaction.h>\n#include <TMLCommand.h>\n#include <TMLTask.h>\n";
@@ -289,7 +290,13 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
                 final HwFPGA hwFpgaNode = (HwFPGA) node;
                 final String schedulerInstName = namesGen.rrSchedulerInstanceName(hwFpgaNode);
                 final String schedulerName = namesGen.rrSchedulerName(hwFpgaNode);
-                declaration += "OrderScheduler* " + schedulerInstName + " = new OrderScheduler(\"" + schedulerName + "\", 0) " + SCCR;
+                if (hwFpgaNode.getScheduling().trim().length() > 0) {
+                    declaration += "ReconfigScheduler* " + schedulerInstName + " = new ReconfigSchedulerScheduler(\"" +
+                            schedulerName + "\", 0, + " + hwFpgaNode.getScheduling().trim() + ") " + SCCR;
+                } else {
+                    declaration += "OrderScheduler* " + schedulerInstName + " = new OrderScheduler(\"" + schedulerName + "\", 0) " + SCCR;
+                }
+
 
 
                 final String hwFpgaInstName = namesGen.hwFpgaInstanceName(hwFpgaNode);
