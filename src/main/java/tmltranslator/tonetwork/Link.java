@@ -133,7 +133,7 @@ public class Link {
 
         feedbackPerVC = new TMLEvent[nbOfVCs];
         for(int i=0; i<nbOfVCs; i++) {
-            feedbackPerVC[i] = new TMLEvent("Feedback__" + getNaming() + "_" + i,
+            feedbackPerVC[i] = new TMLEvent("Feedback__" + getNaming() + "_vc" + i,
                     null, 8, true);
             tmlm.addEvent(feedbackPerVC[i]);
         }
@@ -146,8 +146,8 @@ public class Link {
     }
 
     public String getNaming() {
-        return "P_" + previousRouter.getXPos() + "_" + previousRouter.getYPos() +
-                "_N_" + nextRouter.getXPos() + "_" + nextRouter.getYPos() + add;
+        return "P_x" + previousRouter.getXPos() + "_y" + previousRouter.getYPos() +
+                "_N_x" + nextRouter.getXPos() + "_y" + nextRouter.getYPos() + add;
     }
 
 

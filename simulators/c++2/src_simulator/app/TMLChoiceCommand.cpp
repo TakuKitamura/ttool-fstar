@@ -51,17 +51,22 @@ TMLChoiceCommand::TMLChoiceCommand(ID iID, TMLTask* iTask, RangeFuncPointer iRan
 TMLCommand* TMLChoiceCommand::getNextCommand() const{
 	ParamType aMin, aMax;
 	//return _nextCommand[(_task->*_rangeFunc)(aMin, aMax)];
+	//	std::cout << "In choice command" << "\n";
+	//std::cout << toString() << "\n";
 	unsigned int aNextIndex = (_task->*_rangeFunc)(aMin, aMax);
 	_coveredBranchMap |= (1 << aNextIndex);
 	return _nextCommand[aNextIndex];
 }
 
 TMLCommand* TMLChoiceCommand::prepareNextTransaction(){
+
+  //std::cout << "Preparing next transaction in choice\n";
 	if (_simComp->getStopFlag()){
 		_simComp->setStoppedOnAction();
 		_task->setCurrCommand(this);
 		return this;  //for command which generates transactions this is returned anyway by prepareTransaction
 	}
+	//std::cout << "Preparing next command in choice" << "\n";
 	TMLCommand* aNextCommand=getNextCommand();
 	_task->setCurrCommand(aNextCommand);
 	_execTimes++;

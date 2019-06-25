@@ -142,8 +142,13 @@ public class TaskNetworkInterface extends TMLTask {
         state.setAction("loopExit = 2");
         addElement(loop, state);
 
+        TMLExecI execI = new TMLExecI("ExecI", referenceObject);
+        execI.setAction("1");
+        addElement(state, execI);
+
+
         TMLSequence mainSequence = new TMLSequence("mainSequence", referenceObject);
-        addElement(state, mainSequence);
+        addElement(execI, mainSequence);
 
         for(i=0; i<nbOfVCs; i++) {
             TMLChoice testOnLoopExit = null;

@@ -130,6 +130,7 @@ public:
 	}
 	///inline void setTransNumber(unsigned int num) { _transNumber=num;}
 	///inline unsigned int getTransNumber() { return _transNumber;}
+        inline unsigned int getID () { return _ID;}
 	inline void setCurrTaskNumber(unsigned int num) { _currTaskNumber=num;}
 	void schedule2HTML(std::ofstream& myfile) ;
 	inline const TaskList& getTaskList() const{return _taskList;}
@@ -139,6 +140,7 @@ public:
 	//inline void setMaxEndTime(TMLTime t) {_maxEndTime=t;}
 	double averageLoad (TMLTask* currTask) const;
 	void drawPieChart(std::ofstream& myfile) const;
+	void buttonPieChart(std::ofstream& myfile) const;
 	void showPieChart(std::ofstream& myfile) const;
 	std::string determineHTMLCellClass(unsigned int &nextColor );
 protected:

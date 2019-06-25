@@ -76,6 +76,10 @@ public abstract class TURTLEPanel implements GenericTree, DraggableTabbedPaneCal
         panels = new Vector<TDiagramPanel>();
     }
 
+    public String getNameOfTab() {
+        return mgui.getTabName(this);
+    }
+
     public abstract void init();
 
     public abstract String saveHeaderInXml(String extensionToName);
@@ -307,7 +311,7 @@ public abstract class TURTLEPanel implements GenericTree, DraggableTabbedPaneCal
         tabbedPane.setDisplayedMnemonicIndexAt(dst, mnemonicLoc);
         tabbedPane.setForegroundAt(dst, fg);
         tabbedPane.setBackgroundAt(dst, bg);
-        
+
         tabbedPane.setSelectedIndex(dst);
     }
 

@@ -153,15 +153,11 @@ public class TaskNetworkInterfaceOUT extends TMLTask {
         addElement(testingEOP, packetChoice);
         testingEOP.addGuard("eop == 1");
 
-        TMLStopState stopInvalid = new TMLStopState("InvalidCHID", referenceObject);
-        addElement(packetChoice, stopInvalid);
-        packetChoice.addGuard("chid == (0-1)");
-
 
         // Right branch of choice
         TMLStopState stopOfRightBranchOfChoice = new TMLStopState("stopOfRightBranchOfChoice", referenceObject);
         addElement(testingEOP, stopOfRightBranchOfChoice);
-        testingEOP.addGuard("not(eop == 1)");
+        testingEOP.addGuard("else");
 
         // Right branch of internal seg
         // Test on vc
@@ -172,7 +168,7 @@ public class TaskNetworkInterfaceOUT extends TMLTask {
             TMLSendEvent sendEvtFeedback = new TMLSendEvent("sendEvtFeedback_VC" + i, referenceObject);
             sendEvtFeedback.setEvent(outputFeedbackEvents.get(i));
             addElement(testingVC, sendEvtFeedback);
-            testingEOP.addGuard("vc == " + i);
+            testingVC.addGuard("vc == " + i);
 
             TMLStopState stopVC = new TMLStopState("stopVC" + i, referenceObject);
             addElement(sendEvtFeedback, stopVC);
@@ -186,6 +182,7 @@ public class TaskNetworkInterfaceOUT extends TMLTask {
         if (packetsAvailable.size() == 0) {
             TMLStopState stopOfLeftBranchOfChoice = new TMLStopState("stopNoDestinationTask", referenceObject);
             addElement(packetChoice, stopOfLeftBranchOfChoice);
+            packetChoice.addGuard("chid == (0-1)");
             return;
         }
 

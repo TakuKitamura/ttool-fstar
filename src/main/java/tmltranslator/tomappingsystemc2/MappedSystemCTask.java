@@ -1,26 +1,26 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- * 
+ *
  * ludovic.apvrille AT enst.fr
- * 
+ *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- * 
+ *
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- * 
+ *
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- * 
+ *
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -31,7 +31,7 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- * 
+ *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
@@ -240,7 +240,7 @@ public class MappedSystemCTask {
 
         if (mappedOnCPU) {
             constSig = reference + "(ID iID, Priority iPriority, std::string iName, CPU** iCPUs, unsigned int iNumOfCPUs" + CR;
-        }  else {
+        } else {
             constSig = reference + "(ID iID, Priority iPriority, std::string iName, FPGA** iCPUs, unsigned int iNumOfCPUs" + CR;
         }
 
@@ -797,11 +797,23 @@ public class MappedSystemCTask {
                         functions += "Parameter* " + reference + "::" + cmdName + "_func_" + i + "(Parameter* ioParam){" + CR;
 
                         paramList += ",(ParamFuncPointer)&" + reference + "::" + cmdName + "_func_" + i + CR;
+                        functions += "std::ostringstream ss" + SCCR + "\n";
                         functions += "ioParam->getP(&" + ((TMLSelectEvt) currElem).getParam(i, 0);
-                        for (int j = 1; j < evt.getNbOfParams(); j++) {
-                            functions += ", &" + ((TMLSelectEvt) currElem).getParam(i, j);
+                            for (int j = 1; j < evt.getNbOfParams(); j++) {
+                                functions += ", &" + ((TMLSelectEvt) currElem).getParam(i, j);
+                            }
+                        functions += ");\n";
+                        functions += "ss << \"(\"";
+                        for (int p = 0; p < evt.getNbOfParams(); p++) {
+                            functions += " << " + ((TMLSelectEvt) currElem).getParam(i, p) + " << " + "\"(" + ((TMLSelectEvt) currElem).getParam
+                                    (i, p) + ")\"";
+                            if (p < evt.getNbOfParams() - 1) {
+                                functions += " << \",\"";
+                            }
                         }
-                        functions += ");\nreturn 0;\n}\n\n";
+                        functions += " << \")\"" + SCCR;
+                        functions += cmdName + ".lastParams  = ss.str()" + SCCR + "\n";
+                        functions += "return 0" + SCCR + "\n\n}";
                     }
                     nextCommand += ",(TMLCommand*)" + makeCommands(currElem.getNextElement(i), true, retElement, null);
                 }
@@ -920,14 +932,43 @@ public class MappedSystemCTask {
             //functions+="Parameter<ParamType>* " + reference + "::" + cmdName +  "_func(Parameter<ParamType>* ioParam){" + CR;
             functionSig += "Parameter* " + cmdName + "_func(Parameter* ioParam)" + SCCR;
             functions += "Parameter* " + reference + "::" + cmdName + "_func(Parameter* ioParam){" + CR;
-            if (wait)
-                functions += "ioParam->getP(" + concatParams + ")" + SCCR + "return 0" + SCCR;
-            else
+            if (wait) {
+                functions += "std::ostringstream ss" + SCCR + "\n";
+                functions += "ioParam->getP(" + concatParams + ")" + SCCR;
+                functions += "ss << \"(\"";
+                for (int p = 0; p < nbOfParams; p++) {
+                    functions += " << " + paramArray[p] + " << " + "\"(" + paramArray[p] + ")\"";
+                    if (p < nbOfParams - 1) {
+                        functions += " << \",\"";
+                    }
+                }
+                functions += " << \")\"" + SCCR;
+                functions += cmdName + ".lastParams  = ss.str()" + SCCR + "\n";
+                functions += "return 0" + SCCR;
+
+            } else {
                 //functions += "return new Parameter<ParamType>(" + nbOfParams + "," + concatParams + ")" + SCCR;
+                functions += "std::ostringstream ss" + SCCR + "\n";
+                functions += "ss << \"(\"";
+                for (int p = 0; p < nbOfParams; p++) {
+                    functions += " << " + paramArray[p];
+                    if (!(paramArray[p].matches("^[-+]?\\d+(\\.\\d+)?$"))) {
+                        if ((paramArray[p].compareTo("true") != 0) && (paramArray[p].compareTo("false") != 0)) {
+                            functions += " << \"(" + paramArray[p] + ")\"";
+                        }
+                    }
+                    if (p < nbOfParams - 1) {
+                        functions += " << \",\"";
+                    }
+                }
+                functions += " << \")\"" + SCCR;
+                functions += cmdName + ".lastParams  = ss.str()" + SCCR + "\n";
                 functions += "return new SizedParameter<ParamType," + nbOfParams + ">(" + concatParams + ")" + SCCR;
+            }
             functions += "}\n\n";
             //}
         }
+
     }
 
     private void makeEndClassH() {

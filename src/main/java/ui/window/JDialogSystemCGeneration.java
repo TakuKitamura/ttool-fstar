@@ -51,6 +51,7 @@ import tmltranslator.tomappingsystemc2.Penalties;
 import ui.AvatarRequirementPanelTranslator;
 import ui.JTextAreaWriter;
 import ui.MainGUI;
+import ui.ModelParameters;
 import ui.avatarpd.AvatarPDPanel;
 import ui.util.IconManager;
 
@@ -59,7 +60,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.text.BadLocationException;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -111,7 +111,6 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
 
     protected static boolean interactiveSimulationSelected = true;
     protected static boolean optimizeModeSelected = true;
-    protected static boolean activatePenaltiesSelected = true;
 
     protected final static int NOT_STARTED = 1;
     protected final static int STARTED = 2;
@@ -347,7 +346,7 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
         help.setPreferredSize(new Dimension(30, 30));
 
         activatePenalties = new JCheckBox("Activate penalties (task switching time, cache miss, miss branching prediction)");
-        activatePenalties.setSelected(activatePenaltiesSelected);
+        activatePenalties.setSelected(ModelParameters.getBooleanValueFromID("ACTIVATE_PENALTIES"));
         jp01.add(activatePenalties, c01);
 
         jp01.add(new JLabel("Simulator used:"), c01);
@@ -600,7 +599,7 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
 
         updateStaticList();
         optimizeModeSelected = optimizemode.isSelected();
-        activatePenaltiesSelected = activatePenalties.isSelected();
+        ModelParameters.setValueForID("ACTIVATE_PENALTIES", "" + activatePenalties.isSelected());
         // wasClosed = true;
         dispose();
     }
@@ -973,7 +972,7 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
             case ANIMATION:
                 updateStaticList();
                 optimizeModeSelected = optimizemode.isSelected();
-                activatePenaltiesSelected = activatePenalties.isSelected();
+                ModelParameters.setValueForID("ACTIVATE_PENALTIES", "" + activatePenalties.isSelected());
                 dispose();
                 mgui.interactiveSimulationSystemC(getPathInteractiveExecute());
                 break;

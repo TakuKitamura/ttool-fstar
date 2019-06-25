@@ -39,30 +39,18 @@
 
 
 
-package tmltranslator;
+package ui.tmldd;
 
 
+import java.util.Vector;
 
 /**
- * Class TMLWaitEvent
- * Creation: 23/11/2005
- * @version 1.1 13/06/2019
- * @author Ludovic APVRILLE
+   * Class TMLArchiElementWithArtifactList
+   * Interface of  an architecture element
+   * Creation: 11/06/2019
+   * @version 1.0 11/06/2019
+   * @author Ludovic APVRILLE
  */
-public class TMLWaitEvent extends TMLActivityElementEvent {
- 
-    public TMLWaitEvent(String _name, Object _referenceObject) {
-        super(_name, _referenceObject);
-    }
-    
-    public String toString() {
-	return "Wait event: " + event.getName() + "(" + getAllParams() +")";
-    }
-
-    public String customExtraToXML() {
-	    String ret = " event=\"" + event.getName() +  "\" params=\"" + getAllParams() + "\" ";
-        ret += " blocking=\"" + event.isBlocking() + "\" ";
-        return ret;
-    }
-
+public interface TMLArchiElementWithArtifactList  {
+    Vector<TMLArchiArtifact> getArtifactList();
 }

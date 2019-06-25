@@ -241,3 +241,15 @@ table{
  	background-color: LightGoldenRodYellow;
  	border-style: solid solid solid none;
  }
+ .wrapper {
+ 	width: 256px;
+ 	height: 256px;
+ }
+ .pie-chart-container {
+ 	width : 256px;
+ 	height : 256px;
+ 	float : left;
+ }
+ .clear {
+ 	clear:both
+ }

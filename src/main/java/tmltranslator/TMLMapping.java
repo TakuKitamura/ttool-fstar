@@ -212,14 +212,17 @@ public class TMLMapping<E> {
             bus = new HwBus("defaultBus");
             mem = new HwMemory("defaultMemory");
             tmla.addHwNode(bus);
+            tmla.addHwNode(mem);
             // Connect all possible nodes to that bus
             cpt = 0;
             for (HwNode node : tmla.getHwNodes()) {
-                link0 = new HwLink("to_bus_" + cpt);
-                cpt++;
-                link0.bus = bus;
-                link0.hwnode = node;
-                tmla.addHwLink(link0);
+                if (node != bus) {
+                    link0 = new HwLink("link_" + node.getName() + "_to_" + bus.getName());
+                    cpt++;
+                    link0.bus = bus;
+                    link0.hwnode = node;
+                    tmla.addHwLink(link0);
+                }
             }
 
             // Add all channels on that bus

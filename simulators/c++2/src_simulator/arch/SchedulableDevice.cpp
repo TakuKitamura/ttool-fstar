@@ -211,42 +211,69 @@ double SchedulableDevice::averageLoad() const{
   
 }
 
-void SchedulableDevice::drawPieChart(std::ofstream& myfile) const {
- 
+void SchedulableDevice::drawPieChart(std::ofstream& myfile) const { 
   TMLTime _maxEndTime=0;
 
   for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
     TMLTime _endTime= (*i)->getEndTime();
     _maxEndTime=max(_maxEndTime,_endTime);
   }
+   
   std::map <TMLTask*, double > transPercentage;
-  
-
-  for( TransactionList::const_iterator i = _transactList.begin(); i!= _transactList.end(); ++i){
-      
-    transPercentage[(*i)-> getCommand()->getTask()]+=(double)((*i)->getEndTime()-(*i)->getStartTime())/_maxEndTime;      
-      
+  for( TransactionList::const_iterator i = _transactList.begin(); i!= _transactList.end(); ++i){     
+    transPercentage[(*i)-> getCommand()->getTask()]+=(double)((*i)->getEndTime()-(*i)->getStartTime())/_maxEndTime;           
   }
- 
+    
   std::map <TMLTask*, double>::iterator iter = transPercentage.begin();
-  myfile << "     var chart" << _ID << "= new CanvasJS.Chart(\"chartContainer" << _ID <<"\"," << std::endl;
-  myfile <<  SCHED_HTML_JS_CONTENT2 << "Average load is " << averageLoad() <<  SCHED_HTML_JS_CONTENT3 << std::endl;
+  myfile << "   var ctx" << _ID << "= $(\"#pie-chartcanvas-" << _ID << "\");\n";
+    
   double idle=1;
+  myfile << "     var data" << _ID << " = new Array (";
   while( iter != transPercentage.end()){
-    myfile << "                { y:" << (iter->second)*100 << ", indexLabel: \"" << iter->first->toString() << "\" }," << std::endl;
+    myfile << "\"" << iter->second << "\",";
     idle-=iter->second;
-    ++iter;  
+    ++iter;
   }
-  myfile << "                { y:" << idle*100 << ", indexLabel: \"idle time\"" << " }" << std::endl;
-  myfile << std::endl;
-  myfile << SCHED_HTML_PIE_END;
-  myfile << "chart" << _ID  << ".render();" << std::endl; 
+  myfile << "\"" << idle << "\");\n";
+    
+  myfile << "    var efficiency" << _ID << " = [];" << std::endl;
+  myfile << "    var coloR" << _ID << " = [];" << std::endl;
+  myfile << "    var dynamicColors" << _ID << SCHED_HTML_JS_FUNCTION;
+    
+  myfile << "    for (var i in data" << _ID << "){\n";
+  myfile << "             efficiency" << _ID << ".push(data" << _ID << "[i]);\n";
+  myfile << "             coloR" << _ID << ".push(dynamicColors" << _ID << "());\n";
+  myfile << "}" << std::endl;
+    
+  myfile << "   var data" << _ID << " = { \n";
+  myfile << "           labels : [";
+  iter = transPercentage.begin();
+  while( iter != transPercentage.end()){
+    myfile << " \"" << iter->first->toString() << "\",";
+    idle-=iter->second;
+    ++iter;
+  }        
+  myfile << "\"idle time\"],\n";
+  myfile << "          datasets : [\n \
+                                     {\n \
+                                           data : efficiency" << _ID << ",\n";
+  myfile << "                            backgroundColor : coloR" << _ID << std::endl;
+  myfile << SCHED_HTML_JS_CONTENT1 << "Average load is " << averageLoad() << SCHED_HTML_JS_CONTENT2 << std::endl;
+   myfile << "$(\"#" << _ID << "\").click(function() {\n";
+  myfile << "    var chart" << _ID << " = new Chart( "<<
+    "ctx" << _ID << ", {\n \
+              type : \"pie\",\n";
+  myfile << "               data : data" << _ID << ",\n";
+  myfile << "               " << SCHED_HTML_JS_CONTENT3 << std::endl;
 }
   
 
 
 void SchedulableDevice::showPieChart(std::ofstream& myfile) const{
-  myfile << SCHED_HTML_JS_DIV_ID << _ID << SCHED_HTML_JS_DIV_ID_END << "<br>";
+  myfile << SCHED_HTML_JS_BUTTON1 << _ID  << SCHED_HTML_JS_BUTTON2 << std::endl;
+  myfile << SCHED_HTML_JS_DIV_BEGIN << std::endl;
+  myfile << SCHED_HTML_JS_BEGIN_CANVAS << _ID << SCHED_HTML_JS_END_CANVAS <<std::endl;
+  myfile << SCHED_HTML_JS_DIV_END << std::endl;
 }
   
 

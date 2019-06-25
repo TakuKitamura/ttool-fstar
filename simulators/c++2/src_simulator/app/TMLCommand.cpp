@@ -111,7 +111,7 @@ TMLCommand* TMLCommand::prepare(bool iInit){
     _task->setCurrCommand(aNextCommand);
     if (aNextCommand==0){
       return 0;
-    }else{
+    } else {
       //std::cout << "Prepare command, prepare next command" << std::endl;
       return aNextCommand->prepare(false);
     }

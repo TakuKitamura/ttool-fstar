@@ -124,7 +124,9 @@ public class JDialogTMLTaskArtifact extends JDialogBase implements ActionListene
     	c1.fill = GridBagConstraints.HORIZONTAL;
     	panel2.add(new JLabel("Task:"), c1);
     	//c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-    	Vector<String> list = artifact.getTDiagramPanel().getMGUI().getAllNonMappedTMLTaskNames((TMLArchiDiagramPanel)(artifact.getTDiagramPanel()), artifact.getReferenceTaskName(), artifact.getTaskName());
+    	Vector<String> list = artifact.getTDiagramPanel().getMGUI().
+				getAllNonMappedTMLTaskNames((TMLArchiDiagramPanel)(
+						artifact.getTDiagramPanel()), artifact.getReferenceTaskName(), artifact.getTaskName());
     	int index = 0;
     	if (list.size() == 0) {
     		list.add("No more task to map");
