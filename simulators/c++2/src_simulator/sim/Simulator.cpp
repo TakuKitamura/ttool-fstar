@@ -451,6 +451,8 @@ std::cout<<"schedule2HTML--------------------------------------*****************
     //myfile << SCHED_HTML_END_JS;
     
     //for(CPUList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
+        
+    myfile << SCHED_HTML_TITLE_HW << std::endl;
     for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
       for(unsigned int j = 0; j < (*i)->getAmoutOfCore(); j++) {
         //std::cout<<"core number is "<<(*i)->getAmoutOfCore()<<std::endl;
@@ -463,8 +465,7 @@ std::cout<<"schedule2HTML--------------------------------------*****************
 	   (*i)->setCycleTime(0);
     }
     jsfile.close();
-    
-    
+
     for(FPGAList::const_iterator j=_simComp->getFPGAList().begin(); j != _simComp->getFPGAList().end(); ++j){     
       (*j)->setStartFlagHTML(true);
       for(TaskList::const_iterator i = (*j)->getTaskList().begin(); i != (*j)->getTaskList().end(); ++i){

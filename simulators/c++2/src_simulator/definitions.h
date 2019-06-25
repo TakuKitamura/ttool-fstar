@@ -259,7 +259,7 @@ using std::max;
 #define SCHED_HTML_END_STYLE "</style>\n"
 #define SCHED_HTML_CSS_BEG_LINK "<link rel=\"stylesheet\" type=\"text/css\" href=\""
 #define SCHED_HTML_CSS_END_LINK "\" />\n"
-
+#define SCHED_HTML_TITLE_HW "<h1> Summary HW </h1>"
 
 
 #define SCHED_HTML_JS_LINK1 "<script src=\"jquery.min.js\">"
