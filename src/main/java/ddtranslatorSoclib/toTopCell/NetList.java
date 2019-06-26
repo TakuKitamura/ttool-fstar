@@ -68,6 +68,7 @@ public class NetList
     {
 	int nb_clusters = TopCellGenerator.avatardd.getAllCrossbar().size ();
 	int coproc_count = 0;
+	int tracefile_present=0;
 	avatardd = dd;
 	tracing = _tracing;
 
@@ -876,7 +877,7 @@ public class NetList
 	    j = 0;
 	}
 
-	if(nb_clusters==0){
+	if(nb_clusters>0){
 	    i = 0;
 	    for (AvatarRAM ram:TopCellGenerator.avatardd.getAllRAM ())
 		{
@@ -1088,7 +1089,7 @@ public class NetList
             }
 
   //Call trace function from the AMS cluster.
-	    int tracefile_present=0;//only one trace file for all AMS clusters
+	  //only one trace file for all AMS clusters
             for (AvatarAmsCluster amsCluster:TopCellGenerator.avatardd.getAllAmsCluster())
 		{
 		if(tracefile_present==0){
@@ -1123,6 +1124,7 @@ public class NetList
 	if (tracing)
 	    {
 		netlist += "sc_close_vcd_trace_file(tf);" + CR;
+		if(tracefile_present==1)//there is an analog trace file
 		netlist += "sca_util::sca_close_tabular_trace_file(tfp);" + CR;
 	    }
 	netlist = netlist + CR + "  return EXIT_SUCCESS;" + CR;
