@@ -1,5 +1,6 @@
 package tmltranslator;
 
+import graph.AUTGraph;
 import myutil.FileUtils;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -25,6 +26,11 @@ public class DiplodocusSimulatorTest extends AbstractUITest {
 
 
     final String [] MODELS = {"scp"};
+    final int [] NB_Of_STATES = {131};
+    final int [] NB_Of_TRANSTIONS = {130};
+    final int [] MIN_CYCLES = {59};
+    final int [] MAX_CYCLEs = {130};
+
 
     private String SIM_DIR;
 
@@ -50,7 +56,8 @@ public class DiplodocusSimulatorTest extends AbstractUITest {
 
     @Test
     public void testSimulationGraph() throws Exception {
-        for(String s: MODELS) {
+        for(int i=0; i<MODELS.length; i++) {
+            String s = MODELS[i];
             // Load the TML
             TMLMappingTextSpecification tmts = new TMLMappingTextSpecification(s);
             File f = new File(RESOURCES_DIR + s + ".tmap");
@@ -150,8 +157,29 @@ public class DiplodocusSimulatorTest extends AbstractUITest {
                 return;
             }
 
-            // Compare results
+            // Compare results with expected ones
+            // Must load the graph
+            File graphFile = new File("testgraph_" + s + ".aut");
+            String graphData = "";
+            try {
+                graphData = FileUtils.loadFileData(graphFile);
+            } catch (Exception e) {
+                assertTrue(false);
+            }
 
+            AUTGraph graph = new AUTGraph();
+            graph.buildGraph(graphData);
+
+            // States and transitions
+            System.out.println("executing: nb of states " + graph.getNbOfStates());
+            assertTrue(NB_Of_STATES[i] == graph.getNbOfStates());
+            System.out.println("executing: nb of transitions " + graph.getNbOfTransitions());
+            assertTrue(NB_Of_TRANSTIONS[i] == graph.getNbOfTransitions());
+
+            // Min and max cycles
+            int minValue = graph.getMinValue("allCPUsTerminated");
+            System.out.println("executing: minvalue " + minValue);
+            assertTrue(MIN_CYCLES[i] == minValue);
 
         }
 
