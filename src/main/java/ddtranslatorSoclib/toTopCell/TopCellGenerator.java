@@ -273,6 +273,13 @@ public class TopCellGenerator
 		Signal.getSignal(avatardd) +
 		NetList.getNetlist(avatardd,icn,tracing) +
 		Simulation.getSimulation();
+	    System.out.println(Header.getHeader());
+	    System.out.println(Code.getCode());
+	    System.out.println(MappingTable.getMappingTable(avatardd));
+	    System.out.println(Loader.getLoader(avspec));
+	    System.out.println(Declaration.getDeclarations(avatardd,avspec));
+	    System.out.println(Signal.getSignal(avatardd));
+	    System.out.println(NetList.getNetlist(avatardd,icn,tracing));	       
 	    return (top);
     }	
     

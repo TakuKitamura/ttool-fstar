@@ -184,7 +184,13 @@ public class JDialogTMLTaskArtifact extends JDialogBase implements ActionListene
     	}
     	else if( MECType instanceof CpuMEC )	{
     		String tmp = (String)(referenceTaskName.getSelectedItem());
-    		operationsListS.add( tmp.split("::")[1] );
+    		String tmpS [] = tmp.split("::");
+    		//TraceManager.addDev("TMP=" + tmp);
+    		if (tmpS.length > 1) {
+                operationsListS.add(tmpS[1]);
+            } else {
+                operationsListS.add(tmpS[0]);
+            }
     		indexOp = operationsListS.indexOf( operation );
     	}
     	else	{

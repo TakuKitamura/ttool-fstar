@@ -1,0 +1,20 @@
+TMLSPEC
+    #include "spec.tml"
+ENDTMLSPEC
+
+TMLARCHI
+    #include "spec.tarchi"
+ENDTMLARCHI
+
+TMLMAPPING
+    MAP CPU1 AppC__InterfaceDevice
+    SET AppC__InterfaceDevice priority 0
+    MAP CPU0 AppC__TCPIP
+    SET AppC__TCPIP priority 0
+    MAP CPU0 AppC__Application
+    SET AppC__Application priority 0
+    MAP CPU0 AppC__SmartCard
+    SET AppC__SmartCard priority 0
+    MAP HWA0 AppC__Timer
+    SET AppC__Timer priority 0
+ENDTMLMAPPING
