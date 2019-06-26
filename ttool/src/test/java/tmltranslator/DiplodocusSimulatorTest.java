@@ -25,11 +25,11 @@ import static org.junit.Assert.*;
 public class DiplodocusSimulatorTest extends AbstractUITest {
 
 
-    final String [] MODELS = {"scp"};
-    final int [] NB_Of_STATES = {131};
-    final int [] NB_Of_TRANSTIONS = {130};
-    final int [] MIN_CYCLES = {57};
-    final int [] MAX_CYCLES = {82};
+    final String [] MODELS = {"scp", "ssdf"};
+    final int [] NB_Of_STATES = {131, 1824};
+    final int [] NB_Of_TRANSTIONS = {130, 1823};
+    final int [] MIN_CYCLES = {57, 4106};
+    final int [] MAX_CYCLES = {82, 4106};
 
 
     private String SIM_DIR;
@@ -59,21 +59,25 @@ public class DiplodocusSimulatorTest extends AbstractUITest {
         for(int i=0; i<MODELS.length; i++) {
             String s = MODELS[i];
             // Load the TML
+            System.out.println("executing: loading " + s);
             TMLMappingTextSpecification tmts = new TMLMappingTextSpecification(s);
             File f = new File(RESOURCES_DIR + s + ".tmap");
+            System.out.println("executing: new file loaded " + s);
             String spec = null;
             try {
                 spec = FileUtils.loadFileData(f);
             } catch (Exception e) {
+                System.out.println("Exception executing: loading " + s);
                 assertTrue(false);
             }
+            System.out.println("executing: testing spec " + s);
             assertTrue(spec != null);
+            System.out.println("executing: testing parsed " + s);
             boolean parsed = tmts.makeTMLMapping(spec, RESOURCES_DIR);
-
             assertTrue(parsed);
 
 
-
+            System.out.println("executing: checking syntax " + s);
             // Checking syntax
             TMLMapping tmap = tmts.getTMLMapping();
 
@@ -83,6 +87,7 @@ public class DiplodocusSimulatorTest extends AbstractUITest {
             assertTrue(syntax.hasErrors() == 0);
 
             // Generate SystemC code
+            System.out.println("executing: sim code gen for " + s);
             final IDiploSimulatorCodeGenerator tml2systc;
             List<EBRDD> al = new ArrayList<EBRDD>();
             List<TEPE> alTepe = new ArrayList<TEPE>();
@@ -182,7 +187,7 @@ public class DiplodocusSimulatorTest extends AbstractUITest {
             assertTrue(MIN_CYCLES[i] == minValue);
 
             int maxValue = graph.getMaxValue("allCPUsTerminated");
-            System.out.println("executing: maxvalue " + minValue);
+            System.out.println("executing: maxvalue " + maxValue);
             assertTrue(MAX_CYCLES[i] == maxValue);
 
         }

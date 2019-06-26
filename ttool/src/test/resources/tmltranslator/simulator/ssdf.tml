@@ -1,0 +1,166 @@
+// TML Application - FORMAT 0.1
+// Application: /Users/localapvrille/TToolgit/TTool/modeling/DIPLODOCUS/simpleSDF.xml
+// Generated: Wed Jun 26 16:24:54 CEST 2019
+
+// Channels
+CHANNEL Application__chFromT4__chFromT5__chtoDst BRBW 4 500 OUT JOINTASK_S_Application__chFromT4__chFromT5__chtoDst IN Application__Dst
+VCCHANNEL Application__chFromT4__chFromT5__chtoDst 0
+CHANNEL Application__chToT1 BRBW 4 500 OUT Application__Src IN Application__T1
+VCCHANNEL Application__chToT1 0
+CHANNEL Application__chToT2 BRBW 4 8 OUT Application__T1 IN Application__T2
+VCCHANNEL Application__chToT2 0
+CHANNEL Application__chToT3T5__chToT3__chToT5 BRBW 4 500 OUT Application__T2 IN FORKTASK_S_Application__chToT3T5__chToT3__chToT5
+VCCHANNEL Application__chToT3T5__chToT3__chToT5 0
+CHANNEL Application__chToT4 BRBW 4 500 OUT Application__T3 IN Application__T4
+VCCHANNEL Application__chToT4 0
+CHANNEL FORKCHANNEL_S_0_S_Application__chToT3T5__chToT3__chToT5 BRBW 4 500 OUT FORKTASK_S_Application__chToT3T5__chToT3__chToT5 IN Application__T3
+VCCHANNEL FORKCHANNEL_S_0_S_Application__chToT3T5__chToT3__chToT5 0
+CHANNEL FORKCHANNEL_S_1_S_Application__chToT3T5__chToT3__chToT5 BRBW 4 500 OUT FORKTASK_S_Application__chToT3T5__chToT3__chToT5 IN Application__T5
+VCCHANNEL FORKCHANNEL_S_1_S_Application__chToT3T5__chToT3__chToT5 0
+CHANNEL JOINCHANNEL_S_0__Application__chFromT4__chFromT5__chtoDst BRBW 4 500 OUT Application__T4 IN JOINTASK_S_Application__chFromT4__chFromT5__chtoDst
+VCCHANNEL JOINCHANNEL_S_0__Application__chFromT4__chFromT5__chtoDst 0
+CHANNEL JOINCHANNEL_S_1__Application__chFromT4__chFromT5__chtoDst BRBW 4 500 OUT Application__T5 IN JOINTASK_S_Application__chFromT4__chFromT5__chtoDst
+VCCHANNEL JOINCHANNEL_S_1__Application__chFromT4__chFromT5__chtoDst 0
+
+// Events
+EVENT Application__evtFromT4__Application__evtFromT4(int) NIB 2 Application__T4 Application__Dst
+EVENT Application__evtFromT5__Application__evtFromT5(int) NIB 2 Application__T5 Application__Dst
+EVENT Application__evtToT1__Application__evtToT1(int) NIB 2 Application__Src Application__T1
+EVENT Application__evtToT2__Application__evtToT2(int) NIB 2 Application__T1 Application__T2
+EVENT Application__evtToT3T5__evtToT3__evtToT5(int) NIB 2 Application__T2 FORKTASK_S_EVT_S_Application__evtToT3T5__evtToT3__evtToT5
+EVENT Application__evtToT4__Application__evtToT4(int) NIB 2 Application__T3 Application__T4
+EVENT FORKEVENT_S_0_S_Application__evtToT3T5__evtToT3__evtToT5(int) NIB 2 FORKTASK_S_EVT_S_Application__evtToT3T5__evtToT3__evtToT5 Application__T3
+EVENT FORKEVENT_S_1_S_Application__evtToT3T5__evtToT3__evtToT5(int) NIB 2 FORKTASK_S_EVT_S_Application__evtToT3T5__evtToT3__evtToT5 Application__T5
+
+// Requests
+
+TASK Application__Dst
+    TASKOP
+    //Local variables
+    int size
+    int size1
+    int size2
+    
+    //Behavior
+    WAIT Application__evtFromT4__Application__evtFromT4 size1
+    WAIT Application__evtFromT5__Application__evtFromT5 size2
+    READ Application__chFromT4__chFromT5__chtoDst (size1+size2)/2
+    size=size1+size2
+    EXECI size
+ENDTASK
+
+TASK Application__Src
+    TASKOP
+    //Local variables
+    int size = 100
+    
+    //Behavior
+    NOTIFY Application__evtToT1__Application__evtToT1 size
+    WRITE Application__chToT1 size
+ENDTASK
+
+TASK Application__T1
+    TASKOP
+    //Local variables
+    int size
+    
+    //Behavior
+    WAIT Application__evtToT1__Application__evtToT1 size
+    READ Application__chToT1 size
+    EXECI size
+    NOTIFY Application__evtToT2__Application__evtToT2 size
+    WRITE Application__chToT2 size
+ENDTASK
+
+TASK Application__T2
+    TASKOP
+    //Local variables
+    int size
+    
+    //Behavior
+    WAIT Application__evtToT2__Application__evtToT2 size
+    READ Application__chToT2 size
+    EXECI size
+    NOTIFY Application__evtToT3T5__evtToT3__evtToT5 size
+    WRITE Application__chToT3T5__chToT3__chToT5 size
+ENDTASK
+
+TASK Application__T3
+    TASKOP
+    //Local variables
+    int size
+    
+    //Behavior
+    WAIT FORKEVENT_S_0_S_Application__evtToT3T5__evtToT3__evtToT5 size
+    READ FORKCHANNEL_S_0_S_Application__chToT3T5__chToT3__chToT5 size
+    EXECI size
+    NOTIFY Application__evtToT4__Application__evtToT4 size
+    WRITE Application__chToT4 size
+ENDTASK
+
+TASK Application__T4
+    TASKOP
+    //Local variables
+    int size
+    
+    //Behavior
+    WAIT Application__evtToT4__Application__evtToT4 size
+    READ Application__chToT4 size
+    EXECI size
+    NOTIFY Application__evtFromT4__Application__evtFromT4 size
+    WRITE JOINCHANNEL_S_0__Application__chFromT4__chFromT5__chtoDst size
+ENDTASK
+
+TASK Application__T5
+    TASKOP
+    //Local variables
+    int size
+    
+    //Behavior
+    WAIT FORKEVENT_S_1_S_Application__evtToT3T5__evtToT3__evtToT5 size
+    READ FORKCHANNEL_S_1_S_Application__chToT3T5__chToT3__chToT5 size
+    EXECI size
+    NOTIFY Application__evtFromT5__Application__evtFromT5 size
+    WRITE JOINCHANNEL_S_1__Application__chFromT4__chFromT5__chtoDst size
+ENDTASK
+
+TASK FORKTASK_S_Application__chToT3T5__chToT3__chToT5
+    TASKOP
+    //Local variables
+    int i = 0
+    
+    //Behavior
+    FOR(i=0; i<1; i=i)
+        READ Application__chToT3T5__chToT3__chToT5 1
+        WRITE FORKCHANNEL_S_0_S_Application__chToT3T5__chToT3__chToT5 1
+        WRITE FORKCHANNEL_S_1_S_Application__chToT3T5__chToT3__chToT5 1
+    ENDFOR
+ENDTASK
+
+TASK FORKTASK_S_EVT_S_Application__evtToT3T5__evtToT3__evtToT5
+    TASKOP
+    //Local variables
+    int attr_0
+    int fork_S_i = 0
+    
+    //Behavior
+    FOR(fork_S_i=0; fork_S_i<1; fork_S_i=0)
+        WAIT Application__evtToT3T5__evtToT3__evtToT5 attr_0
+        NOTIFY FORKEVENT_S_0_S_Application__evtToT3T5__evtToT3__evtToT5 attr_0
+        NOTIFY FORKEVENT_S_1_S_Application__evtToT3T5__evtToT3__evtToT5 attr_0
+    ENDFOR
+ENDTASK
+
+TASK JOINTASK_S_Application__chFromT4__chFromT5__chtoDst
+    TASKOP
+    //Local variables
+    int i = 0
+    
+    //Behavior
+    FOR(i=0; i<1; i=i)
+        READ JOINCHANNEL_S_0__Application__chFromT4__chFromT5__chtoDst 1
+        READ JOINCHANNEL_S_1__Application__chFromT4__chFromT5__chtoDst 1
+        WRITE Application__chFromT4__chFromT5__chtoDst 1
+    ENDFOR
+ENDTASK
+

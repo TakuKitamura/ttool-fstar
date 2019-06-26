@@ -635,7 +635,7 @@ public class TMLArchiTextSpecification {
                 if (node instanceof HwFPGA) {
                     HwFPGA fpga = (HwFPGA) node;
 
-                    if (!checkParameter("SET", _split, 2, 3, _lineNb)) {
+                    if (!checkParameter("SET", _split, 2, 13, _lineNb)) {
                         return -1;
                     }
 
@@ -940,7 +940,12 @@ public class TMLArchiTextSpecification {
                     if (!isIncluded(_split[_parameter], memoryparameters)) {
                         err = true;
                     }
+                case 13:
+                    if (!isIncluded(_split[_parameter], fpgaparameters)) {
+                        err = true;
+                    }
                     break;
+
             }
         } else {
             err = true;
