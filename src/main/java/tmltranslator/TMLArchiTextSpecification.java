@@ -857,6 +857,7 @@ public class TMLArchiTextSpecification {
     // Type 10: HWA parameter
     // Type 11: BRIDGE parameter
     // Type 12: MEMORY parameter
+    // Type 13: FPGA parameter
 
     public boolean checkParameter(String _inst, String[] _split, int _parameter, int _type, int _lineNb) {
         boolean err = false;
@@ -940,6 +941,7 @@ public class TMLArchiTextSpecification {
                     if (!isIncluded(_split[_parameter], memoryparameters)) {
                         err = true;
                     }
+                    break;
                 case 13:
                     if (!isIncluded(_split[_parameter], fpgaparameters)) {
                         err = true;
