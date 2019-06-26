@@ -1581,7 +1581,7 @@ public class AUTGraph implements myutil.Graph {
                         int indexE = valS.indexOf(">");
                         if (indexE > 0) {
                             valS = valS.substring(0, indexE);
-                            System.out.println("executing. valS " + valS);
+                            System.out.println("executing. max valS " + valS);
                             int val = Integer.decode(valS);
                             if (val < minValue) {
                                 minValue = val;
@@ -1592,6 +1592,37 @@ public class AUTGraph implements myutil.Graph {
             }
         }
         return minValue;
+    }
+
+    public int getMaxValue(String nameOfTransition) {
+        int maxValue = -1;
+        //System.out.println("executing. min value");
+        for (AUTTransition tr: transitions) {
+            //System.out.println("executing. Dealing with " + tr.transition);
+            if (tr.transition.length() > 3) {
+                String trans = tr.transition.substring(2, tr.transition.length()-1);
+                //System.out.println("executing. trans " + trans);
+                int index = trans.indexOf("<");
+                if (index > 0) {
+                    String trName = trans.substring(0, index);
+                    //System.out.println("executing. trName " + trName);
+                    if (trName.equals(nameOfTransition)) {
+                        String valS = trans.substring(index + 1);
+                        //System.out.println("executing. valS " + valS);
+                        int indexE = valS.indexOf(">");
+                        if (indexE > 0) {
+                            valS = valS.substring(0, indexE);
+                            System.out.println("executing. min valS " + valS);
+                            int val = Integer.decode(valS);
+                            if (val > maxValue) {
+                                maxValue = val;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return maxValue;
     }
 
 

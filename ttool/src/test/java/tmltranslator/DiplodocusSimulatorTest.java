@@ -28,8 +28,8 @@ public class DiplodocusSimulatorTest extends AbstractUITest {
     final String [] MODELS = {"scp"};
     final int [] NB_Of_STATES = {131};
     final int [] NB_Of_TRANSTIONS = {130};
-    final int [] MIN_CYCLES = {59};
-    final int [] MAX_CYCLEs = {130};
+    final int [] MIN_CYCLES = {57};
+    final int [] MAX_CYCLES = {82};
 
 
     private String SIM_DIR;
@@ -180,6 +180,10 @@ public class DiplodocusSimulatorTest extends AbstractUITest {
             int minValue = graph.getMinValue("allCPUsTerminated");
             System.out.println("executing: minvalue " + minValue);
             assertTrue(MIN_CYCLES[i] == minValue);
+
+            int maxValue = graph.getMaxValue("allCPUsTerminated");
+            System.out.println("executing: maxvalue " + minValue);
+            assertTrue(MAX_CYCLES[i] == maxValue);
 
         }
 
