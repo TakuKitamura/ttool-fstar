@@ -472,7 +472,7 @@ void FPGA::drawPieChart(std::ofstream& myfile) const {
   myfile << "   var ctx" << _ID << "_"  << _htmlCurrTask->toShortString() << "= $(\"#pie-chartcanvas-" << _ID << "_" << _htmlCurrTask->toShortString() << "\");\n";
     
   double idle=1;
-  myfile << "     var data" << _ID << "_" << _htmlCurrTask->toShortString() << " = new Array (";
+  myfile << "   var data" << _ID << "_" << _htmlCurrTask->toShortString() << " = new Array (";
   while( iter != transPercentage.end()){
     myfile << "\"" << iter->second << "\",";
     idle-=iter->second;
@@ -502,22 +502,24 @@ void FPGA::drawPieChart(std::ofstream& myfile) const {
                                      {\n \
                                            data : efficiency" << _ID << "_" << _htmlCurrTask->toShortString() << ",\n";
   myfile << "                            backgroundColor : coloR" << _ID << "_" << _htmlCurrTask->toShortString() << std::endl;
-  myfile << SCHED_HTML_JS_CONTENT1 << "Average load is " << averageLoad(_htmlCurrTask) << SCHED_HTML_JS_CONTENT2 << std::endl; 
- 
+  // myfile << SCHED_HTML_JS_CONTENT1 << "Average load is " << averageLoad(_htmlCurrTask) << SCHED_HTML_JS_CONTENT2 << std::endl; 
+  myfile << SCHED_HTML_JS_CONTENT1;
+  myfile << "  var options" << _ID << "_" << _htmlCurrTask->toShortString() << SCHED_HTML_JS_CONTENT3;
+  myfile << _name << "_" << _htmlCurrTask->toShortString() << ": Average load is " << averageLoad(_htmlCurrTask) << SCHED_HTML_JS_CONTENT2 << std::endl; 
      
 }
 
 void FPGA::buttonPieChart(std::ofstream& myfile) const{
-  myfile << "$(\"#" << _ID << "\").click(function() {\n";
+  //  myfile << "$(\"#" << _ID << "\").click(function() {\n";
   for(TaskList::const_iterator i = _taskList.begin(); i!= _taskList.end(); ++i){ 
     myfile << "    var chart" << _ID << "_" << (*i)->toShortString() << " = new Chart( "<<
       "ctx" << _ID << "_" << (*i)->toShortString() << ", {\n \
               type : \"pie\",\n";
     myfile << "               data : data" << _ID << "_" << (*i)->toShortString() <<",\n";
-    myfile << "               options : options\n" << "                   });" << std::endl;
+    myfile << "               options : options" << _ID << "_" << (*i)->toShortString() << std::endl;
+    myfile << "                   });" << std::endl;
   
   }
-  myfile << "});" << std::endl;
 }
 
 
@@ -527,10 +529,10 @@ void FPGA::showPieChart(std::ofstream& myfile) const{
   else
   myfile << SCHED_HTML_JS_DIV_ID << _ID << "_" << _htmlCurrTask->toShortString() << SCHED_HTML_JS_DIV_ID_END_FPGA <<std::endl;*/
  
-  if( _taskNumber == 1)
-    myfile << SCHED_HTML_JS_DIV_BEGIN << std::endl;
-  else
-    myfile << SCHED_HTML_JS_DIV_BEGIN2 << std::endl;
+  //if( _taskNumber == 1)
+  //  myfile << SCHED_HTML_JS_DIV_BEGIN << std::endl;
+  // else
+  myfile << SCHED_HTML_JS_DIV_BEGIN2 << std::endl;
   myfile << SCHED_HTML_JS_BEGIN_CANVAS << _ID << "_" << _htmlCurrTask->toShortString() << SCHED_HTML_JS_END_CANVAS <<std::endl;
   myfile << SCHED_HTML_JS_DIV_END << std::endl;
 }
@@ -551,15 +553,18 @@ std::string FPGA::determineHTMLCellClass(unsigned int &nextColor ) {
 
 void FPGA::schedule2HTML(std::ofstream& myfile)  {    
   if(_startFlagHTML == true){
-    myfile << "<h2><span>Scheduling for device: "<< _name << "</span></h2>" << std::endl;
+    //myfile << "<h2><span>Scheduling for device: "<< _name << "</span></h2>" << std::endl;
+    myfile << SCHED_HTML_JS_DIV_BEGIN3 << SCHED_HTML_BOARD;
+    myfile << _name << END_TD << "</tr>" << std::endl;
+    myfile << SCHED_HTML_JS_TABLE_END << std::endl << SCHED_HTML_JS_DIV_END << std::endl;
+    myfile << SCHED_HTML_JS_DIV_BEGIN3  << std::endl;
   }
 
   if ( _transactList.size() == 0 ) {
     myfile << "<h4>Device never activated</h4>" << std::endl;
   }
    else {
-    myfile << "<table>" << std::endl << "<tr>";
-
+     myfile << "<table>" << std::endl << "<tr>";
     TMLTime aCurrTime = 0;
     unsigned int taskOccurTime = 0;
     for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
@@ -612,7 +617,7 @@ void FPGA::schedule2HTML(std::ofstream& myfile)  {
       //myfile << "<td colspan=\"5\" class=\"sc\">" << aLength << "</td>";
     }
 
-    myfile << "</tr>" << std::endl << "</table>" << std::endl;
+    //myfile << "</tr>" << std::endl << "</table>" << std::endl;
 #ifdef DEBUG_FPGA
     std::cout<<"_taskNumer is ------------------------------------"<<_taskNumber<<std::endl;
     std::cout<<"curr task number is ------------------------"<<_currTaskNumber<<std::endl;
@@ -621,14 +626,16 @@ void FPGA::schedule2HTML(std::ofstream& myfile)  {
 #ifdef DEBUG_FPGA
       std::cout<<" i am showing the name of tasks!!!----------------------------------------------------------------------------------!"<<std::endl;
 #endif
-      myfile  << "<table>" << std::endl << "<tr>" << std::endl;
-      for( std::map<TMLTask*, std::string>::iterator taskColIt = taskCellClasses.begin(); taskColIt != taskCellClasses.end(); ++taskColIt ) {
+      myfile << "</tr>" << std::endl << "</table>" << std::endl << SCHED_HTML_JS_DIV_END << std::endl;
+      myfile << SCHED_HTML_JS_CLEAR << std::endl;
+      // myfile  << "<table>" << std::endl << "<tr>" << std::endl;
+      /* for( std::map<TMLTask*, std::string>::iterator taskColIt = taskCellClasses.begin(); taskColIt != taskCellClasses.end(); ++taskColIt ) {
 	TMLTask* task = (*taskColIt).first;
 	// Unset the default td max-width of 5px. For some reason setting the max-with on a specific t style does not work
 	myfile << "<td class=\"" << taskCellClasses[ task ] << "\"></td><td style=\"max-width: unset;\">" << task->toString() << "</td><td class=\"space\"></td>";
       }
       myfile << "</tr>" << std::endl;
-      myfile << "</table>" << std::endl;
+      myfile << "</table>" << std::endl;*/
     }
 
    

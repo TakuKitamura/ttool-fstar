@@ -437,19 +437,30 @@ std::cout<<"schedule2HTML--------------------------------------*****************
       	(*i)->setHtmlCurrTask(*j);
 	(*i)->drawPieChart(myfile);
       }
-      (*i)->buttonPieChart(myfile);
+      // (*i)->buttonPieChart(myfile);
     }
     for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
        (*j)->drawPieChart(myfile);
     }
        
-    myfile << "}" <<std::endl;
-  
+    
+    myfile << "$(\"#0\").click(function() {\n";
+    for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
+      (*i)->buttonPieChart(myfile);
+    }
+    for(FPGAList::const_iterator i=_simComp->getFPGAList().begin(); i != _simComp->getFPGAList().end(); ++i){
+      (*i)->buttonPieChart(myfile);
+    }
+    for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
+      (*j)->buttonPieChart(myfile);
+    }
+    myfile << "     });" << std::endl << "}" << std::endl;
+    
     myfile << SCHED_HTML_END_JS << std::endl; //<script>
     // myfile << SCHED_HTML_END_JS;
     //myfile << SCHED_HTML_JS_LINK;
     //myfile << SCHED_HTML_END_JS;
-    
+    jsfile.close();
     //for(CPUList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
         
     myfile << SCHED_HTML_TITLE_HW << std::endl;
@@ -457,14 +468,13 @@ std::cout<<"schedule2HTML--------------------------------------*****************
       for(unsigned int j = 0; j < (*i)->getAmoutOfCore(); j++) {
         //std::cout<<"core number is "<<(*i)->getAmoutOfCore()<<std::endl;
 	(*i)->schedule2HTML(myfile);
-       	(*i)->showPieChart(myfile);
+	//(*i)->showPieChart(myfile);
 	(*i)->setCycleTime((*i)->getCycleTime()+1);
 	
       }
         if((*i)->getAmoutOfCore() == 1)
 	   (*i)->setCycleTime(0);
-    }
-    jsfile.close();
+    }   
 
     for(FPGAList::const_iterator j=_simComp->getFPGAList().begin(); j != _simComp->getFPGAList().end(); ++j){     
       (*j)->setStartFlagHTML(true);
@@ -477,21 +487,40 @@ std::cout<<"schedule2HTML--------------------------------------*****************
 	(*j)->schedule2HTML(myfile);
 	(*j)->setStartFlagHTML(false);
       }
-      myfile << SCHED_HTML_JS_TABLE_BEGIN << std::endl;
-      myfile << SCHED_HTML_JS_BUTTON1 << (*j)->getID()  << SCHED_HTML_JS_BUTTON2 << std::endl;
-      myfile << SCHED_HTML_JS_TABLE_END << std::endl;
+      //  myfile << SCHED_HTML_JS_TABLE_BEGIN << std::endl;
+      //   myfile << SCHED_HTML_JS_BUTTON1 << (*j)->getID()  << SCHED_HTML_JS_BUTTON2 << std::endl;
+      // myfile << SCHED_HTML_JS_TABLE_END << std::endl;
+      for(TaskList::const_iterator i = (*j)->getTaskList().begin(); i != (*j)->getTaskList().end(); ++i){
+	(*j)->setHtmlCurrTask(*i);
+	//(*j)->showPieChart(myfile);
+      }
+    }
+    // myfile << SCHED_HTML_JS_TABLE_END << std::endl << "</tr>" << std::endl;
+    //  myfile << SCHED_HTML_JS_CLEAR <<std::endl;
+    
+     
+    for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
+      (*j)->schedule2HTML(myfile);     
+      // (*j)->showPieChart(myfile);
+    }
+    //for_each(iCPUlist.begin(), iCPUlist.end(),std::bind2nd(std::mem_fun(&CPU::schedule2HTML),myfile));
+   
+    myfile << SCHED_HTML_JS_TABLE_BEGIN << std::endl;
+     myfile << SCHED_HTML_JS_BUTTON << std::endl;
+     myfile << SCHED_HTML_JS_TABLE_END << std::endl;
+     
+     for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
+      (*i)->showPieChart(myfile);
+    }
+    for(FPGAList::const_iterator j=_simComp->getFPGAList().begin(); j != _simComp->getFPGAList().end(); ++j){
       for(TaskList::const_iterator i = (*j)->getTaskList().begin(); i != (*j)->getTaskList().end(); ++i){
 	(*j)->setHtmlCurrTask(*i);
 	(*j)->showPieChart(myfile);
       }
-      myfile << SCHED_HTML_JS_CLEAR <<std::endl;
     }
-    
     for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
-      (*j)->schedule2HTML(myfile);     
       (*j)->showPieChart(myfile);
     }
-    //for_each(iCPUlist.begin(), iCPUlist.end(),std::bind2nd(std::mem_fun(&CPU::schedule2HTML),myfile));
 
     myfile << SCHED_HTML_END_BODY; // </body>\n
     myfile << SCHED_HTML_END_HTML; // </html>\n

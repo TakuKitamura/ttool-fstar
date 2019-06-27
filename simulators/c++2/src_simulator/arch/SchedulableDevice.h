@@ -75,6 +75,7 @@ public:
     	*/
 	virtual TMLTransaction* getNextTransaction() { return _nextTransaction; }
 	double averageLoad() const;
+	void buttonPieChart(std::ofstream& myfile) const;
 	void drawPieChart(std::ofstream& myfile) const;
 	void showPieChart(std::ofstream& myfile) const;
 	
