@@ -444,7 +444,7 @@ std::cout<<"schedule2HTML--------------------------------------*****************
     }
        
     
-    myfile << "$(\"#0\").click(function() {\n";
+    myfile << "$(\"#button\").click(function() {\n";
     for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
       (*i)->buttonPieChart(myfile);
     }
@@ -521,7 +521,18 @@ std::cout<<"schedule2HTML--------------------------------------*****************
     for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
       (*j)->showPieChart(myfile);
     }
-
+    myfile << SCHED_HTML_JS_CLEAR << std::endl;
+    myfile << SCHED_HTML_TITLE_TASK << std::endl;
+    for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
+      for(TaskList::const_iterator j = (*i)->getTaskList().begin(); j != (*i)->getTaskList().end(); ++j){
+	(*j)->schedule2HTML(myfile);
+      }
+    }
+    for(FPGAList::const_iterator i=_simComp->getFPGAList().begin(); i != _simComp->getFPGAList().end(); ++i){
+      for(TaskList::const_iterator j = (*i)->getTaskList().begin(); j != (*i)->getTaskList().end(); ++j){
+	(*j)->schedule2HTML(myfile);
+      }
+    }
     myfile << SCHED_HTML_END_BODY; // </body>\n
     myfile << SCHED_HTML_END_HTML; // </html>\n
 

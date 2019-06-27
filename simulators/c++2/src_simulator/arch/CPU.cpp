@@ -122,7 +122,7 @@ void CPU::drawPieChart(std::ofstream& myfile) const {
     myfile << "                            backgroundColor : coloR" << _ID << "_" << j << std::endl;
     myfile << SCHED_HTML_JS_CONTENT1;
     myfile << "  var options" << _ID << "_" << j << SCHED_HTML_JS_CONTENT3;
-    myfile << _name << "_core_" << this->_cycleTime << ": Average load is " << averageLoad(j) << SCHED_HTML_JS_CONTENT2 << std::endl; 
+    myfile << _name << "_core_" << this->_cycleTime << ": Average load is " << std::setprecision(2) << averageLoad(j) << SCHED_HTML_JS_CONTENT2 << std::endl; 
   }
   
 }
@@ -136,7 +136,8 @@ void CPU::buttonPieChart(std::ofstream& myfile) const{
               type : \"pie\",\n";
     myfile << "               data : data" << _ID << "_" << this->_cycleTime <<",\n";
     myfile << "               options : options" << _ID << "_" << this->_cycleTime << std::endl << "                   });" << std::endl;
-
+    myfile << "   chart" << _ID << "_" << this->_cycleTime << SCHED_HTML_JS_HIDE;
+    myfile << "   chart" << _ID << "_" << this->_cycleTime << ".update();" << std::endl;
 }
 
 
@@ -164,6 +165,7 @@ void CPU::schedule2HTML(std::ofstream& myfile) const {
   myfile << SCHED_HTML_BOARD2 << std::endl;
   if ( _transactList.size() == 0 ) {
     myfile << "<h4>Device never activated</h4>" << std::endl;
+    myfile << SCHED_HTML_JS_CLEAR << std::endl;
   }
   else {
     //myfile << "<table>" << std::endl << "<tr>";
@@ -197,8 +199,10 @@ void CPU::schedule2HTML(std::ofstream& myfile) const {
 	// Issue #4
 	TMLTask* task = aCurrTrans->getCommand()->getTask();
 	const std::string cellClass = determineHTMLCellClass( taskCellClasses, task, nextCellClassIndex );
-
-	writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString() );
+	std::string aCurrTransName=aCurrTrans->toShortString();
+	unsigned int indexTrans=aCurrTransName.find_first_of(":");
+	std::string aCurrContent=aCurrTransName.substr(indexTrans+1,2);
+	writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString(), aCurrContent );
 
 	aCurrTime = aCurrTrans->getEndTime();
       }

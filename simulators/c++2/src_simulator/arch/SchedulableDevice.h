@@ -154,7 +154,6 @@ public:
 	static TMLTime getOverallTransSize() { return _overallTransSize; }
 	inline void setCycleTime (unsigned int t) { _cycleTime =t; }
         inline unsigned int getCycleTime() { return _cycleTime; }
-	
 	inline std::string getName() {return _name;}
 protected:
 	///Unique ID of the device
@@ -188,11 +187,16 @@ protected:
 									const unsigned int colSpan,
 									const std::string cellClass );
 
-	
 	static void writeHTMLColumn(	std::ofstream& myfile,
 									const unsigned int colSpan,
 									const std::string cellClass,
 									const std::string title );
+	
+	static void writeHTMLColumn(	std::ofstream& myfile,
+									const unsigned int colSpan,
+									const std::string cellClass,
+									const std::string title,
+									const std::string content );
 	
 
 	static void writeHTMLColumn(	std::ofstream& myfile,

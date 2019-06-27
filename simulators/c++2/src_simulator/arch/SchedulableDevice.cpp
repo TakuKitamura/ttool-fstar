@@ -93,28 +93,36 @@ TMLTransaction* SchedulableDevice::getTransactions1By1(bool iInit){
 
 // Issue #4: Some browsers (like Firefox) do not support column spans of more than 1000 columns
 void SchedulableDevice::writeHTMLColumn(	std::ofstream& myfile,
-											const unsigned int colSpan,
-											const std::string cellClass ) {
+						const unsigned int colSpan,
+						const std::string cellClass ) {
 	writeHTMLColumn( myfile, colSpan, cellClass, "" );
 }
 
 
+void SchedulableDevice::writeHTMLColumn(	std::ofstream& myfile,
+						const unsigned int colSpan,
+						const std::string cellClass,
+						const std::string title) {
+	writeHTMLColumn( myfile, colSpan, cellClass, title, "", true );
+}
+
 
 void SchedulableDevice::writeHTMLColumn(	std::ofstream& myfile,
-											const unsigned int colSpan,
-											const std::string cellClass,
-											const std::string title ) {
-	writeHTMLColumn( myfile, colSpan, cellClass, title, "", true );
+						const unsigned int colSpan,
+						const std::string cellClass,
+						const std::string title,
+						const std::string content) {
+	writeHTMLColumn( myfile, colSpan, cellClass, title, content, true );
 }
 
 
 
 void SchedulableDevice::writeHTMLColumn(	std::ofstream& myfile,
-											const unsigned int colSpan,
-											const std::string cellClass,
-											const std::string title,
-											const std::string content,
-											const bool endline ) {
+						const unsigned int colSpan,
+						const std::string cellClass,
+						const std::string title,
+						const std::string content,
+						const bool endline ) {
 	std::string begLine( START_TD );
 
 	if ( !title.empty() ) {
@@ -260,7 +268,7 @@ void SchedulableDevice::drawPieChart(std::ofstream& myfile) const {
   myfile << "                            backgroundColor : coloR" << _ID << std::endl;
   myfile << SCHED_HTML_JS_CONTENT1;
   myfile << "  var options" << _ID << SCHED_HTML_JS_CONTENT3;
-  myfile << _name << ": Average load is " <<  averageLoad() << SCHED_HTML_JS_CONTENT2 << std::endl; 
+  myfile << _name << ": Average load is " <<  std::setprecision(2) << averageLoad() << SCHED_HTML_JS_CONTENT2 << std::endl; 
  
 }
   
@@ -280,6 +288,8 @@ void SchedulableDevice::buttonPieChart(std::ofstream& myfile) const{
               type : \"pie\",\n";
     myfile << "               data : data" << _ID << ",\n";
     myfile << "               options : options" << _ID << std::endl << "                   });" << std::endl;
+    myfile << "   chart" << _ID << SCHED_HTML_JS_HIDE;
+    myfile << "   chart" << _ID << ".update();" << std::endl;
 }
 
 
@@ -291,6 +301,7 @@ void SchedulableDevice::schedule2HTML(std::ofstream& myfile) const {
   myfile << SCHED_HTML_BOARD2 << std::endl;
   if ( _transactList.size() == 0 ) {
     myfile << "<h4>Device never activated</h4>" << std::endl;
+    myfile << SCHED_HTML_JS_CLEAR << std::endl;
   }
   else {
     //myfile << "<table>" << std::endl << "<tr>";
@@ -324,8 +335,11 @@ void SchedulableDevice::schedule2HTML(std::ofstream& myfile) const {
       // Issue #4
       TMLTask* task = aCurrTrans->getCommand()->getTask();
       const std::string cellClass = determineHTMLCellClass( taskCellClasses, task, nextCellClassIndex );
-
-      writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString() );
+      std::string aCurrTransName=aCurrTrans->toShortString();
+      unsigned int indexTrans=aCurrTransName.find_first_of(":");
+      std::string aCurrContent=aCurrTransName.substr(indexTrans+1,2);
+     
+      writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString(), aCurrContent);
 
       aCurrTime = aCurrTrans->getEndTime();
       // }

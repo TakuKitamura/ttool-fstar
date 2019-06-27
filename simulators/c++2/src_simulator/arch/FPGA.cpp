@@ -505,7 +505,7 @@ void FPGA::drawPieChart(std::ofstream& myfile) const {
   // myfile << SCHED_HTML_JS_CONTENT1 << "Average load is " << averageLoad(_htmlCurrTask) << SCHED_HTML_JS_CONTENT2 << std::endl; 
   myfile << SCHED_HTML_JS_CONTENT1;
   myfile << "  var options" << _ID << "_" << _htmlCurrTask->toShortString() << SCHED_HTML_JS_CONTENT3;
-  myfile << _name << "_" << _htmlCurrTask->toShortString() << ": Average load is " << averageLoad(_htmlCurrTask) << SCHED_HTML_JS_CONTENT2 << std::endl; 
+  myfile << _name << "_" << _htmlCurrTask->toShortString() << ": Average load is " << std::setprecision(2) << averageLoad(_htmlCurrTask) << SCHED_HTML_JS_CONTENT2 << std::endl; 
      
 }
 
@@ -518,6 +518,8 @@ void FPGA::buttonPieChart(std::ofstream& myfile) const{
     myfile << "               data : data" << _ID << "_" << (*i)->toShortString() <<",\n";
     myfile << "               options : options" << _ID << "_" << (*i)->toShortString() << std::endl;
     myfile << "                   });" << std::endl;
+    myfile << "   chart" << _ID << "_" << (*i)->toShortString() << SCHED_HTML_JS_HIDE;
+    myfile << "   chart" << _ID << "_" << (*i)->toShortString() << ".update();" << std::endl;
   
   }
 }
@@ -562,6 +564,7 @@ void FPGA::schedule2HTML(std::ofstream& myfile)  {
 
   if ( _transactList.size() == 0 ) {
     myfile << "<h4>Device never activated</h4>" << std::endl;
+    myfile << SCHED_HTML_JS_CLEAR << std::endl;
   }
    else {
      myfile << "<table>" << std::endl << "<tr>";
@@ -594,8 +597,10 @@ void FPGA::schedule2HTML(std::ofstream& myfile)  {
 	TMLTask* task = aCurrTrans->getCommand()->getTask();
 	//	std::cout<<"what is this task?"<<task->toString()<<std::endl;
 	const std::string cellClass = determineHTMLCellClass(  nextCellClassIndex );
-
-	writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString() );
+	std::string aCurrTransName=aCurrTrans->toShortString();
+	unsigned int indexTrans=aCurrTransName.find_first_of(":");
+	std::string aCurrContent=aCurrTransName.substr(indexTrans+1,2);
+	writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString(), aCurrContent );
 
 	aCurrTime = aCurrTrans->getEndTime();
       }

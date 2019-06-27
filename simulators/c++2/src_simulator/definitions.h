@@ -71,7 +71,6 @@ Ludovic Apvrille, Renaud Pacalet
 #include <sys/time.h>
 #include <sys/resource.h>
 #include <unistd.h>
-
 #include "penalties.h"
 
 #define WRITE_STREAM(s,v) s.write((char*) &v,sizeof(v)); 
@@ -260,8 +259,8 @@ using std::max;
 #define SCHED_HTML_CSS_BEG_LINK "<link rel=\"stylesheet\" type=\"text/css\" href=\""
 #define SCHED_HTML_CSS_END_LINK "\" />\n"
 #define SCHED_HTML_TITLE_HW "<h1> Summary HW </h1>"
-
-#define SCHED_HTML_BOARD "<table width=\"150px\" style=\"float: left\">\n \
+#define SCHED_HTML_TITLE_TASK "<h1> Summary tasks </h1>"
+#define SCHED_HTML_BOARD "<table width=\"170px\" style=\"float: left\">\n \
 <tr><td>"
 #define SCHED_HTML_BOARD2 "<table style=\"float: left\">"
 
@@ -278,7 +277,7 @@ using std::max;
 #define SCHED_HTML_JS_DIV_BEGIN "<div class=\"wrapper\">"
 #define SCHED_HTML_JS_DIV_BEGIN2 "<div class=\"pie-chart-container\">"
 #define SCHED_HTML_JS_DIV_BEGIN3 "<div style=\"float: left\">"
-#define SCHED_HTML_JS_BUTTON "<button id=\"0\" type=\"button\"> Show Pie Chart </button>"
+#define SCHED_HTML_JS_BUTTON "<button id=\"button\"> Show/Hide Pie Chart </button>"
 #define SCHED_HTML_JS_DIV_END "</div>"
 #define SCHED_HTML_JS_CLEAR "<div class = \"clear\"></div>"
 #define NB_HTML_COLORS 15
@@ -314,6 +313,9 @@ using std::max;
 		]\n\
 	};\n"		
 	
+#define SCHED_HTML_JS_HIDE " .data.datasets.forEach(function(ds){\n \
+        ds.hidden=!ds.hidden;\n \
+	});\n"
 
 #define SCHED_HTML_CSS_CONTENT "table{\n \
 	border-collapse: collapse;\n \
@@ -567,6 +569,7 @@ h2 span {\n \
 	width : 256px;\n \
 	height : 256px;\n \
 	float : left;\n \
+	margin-left : 2em;\n \
 }\n \
 .clear {\n \
 	clear:both\n \

@@ -234,6 +234,7 @@ public:
 	int hasRunnableTrans(FPGA* iFPGA);
 	void setNextCellIndex(unsigned int n) {_nextCellIndex=n;}
 	unsigned int getNextCellIndex() const {return _nextCellIndex;}
+	void schedule2HTML(std::ofstream& myfile) const;
 protected:
 	///ID of the task
 	ID _ID;
@@ -301,6 +302,33 @@ protected:
 	HashAlgo _stateHash;
 	const char* _liveVarList;
 	bool _hashInvalidated;
+	static void writeHTMLColumn(	std::ofstream& myfile,
+									const unsigned int colSpan,
+									const std::string cellClass );
+
+	
+	static void writeHTMLColumn(	std::ofstream& myfile,
+									const unsigned int colSpan,
+									const std::string cellClass,
+									const std::string title );
+		
+	static void writeHTMLColumn(	std::ofstream& myfile,
+									const unsigned int colSpan,
+									const std::string cellClass,
+									const std::string title, 
+									const std::string content);
+	
+
+
+	static void writeHTMLColumn(	std::ofstream& myfile,
+									const unsigned int colSpan,
+									const std::string cellClass,
+									const std::string title,
+									const std::string content,
+									const bool endline );
+	static std::string determineHTMLCellClass( 	std::map<TMLTask*, std::string> &taskColors,
+												TMLTask* task,
+												unsigned int &nextColor );
 };
 
 #endif
