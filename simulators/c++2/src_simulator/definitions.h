@@ -350,7 +350,6 @@ h2 span {\n \
 	background-color: #ddd;\n \
 }\n \
 .space{border-style: none;}\n \
-.somespace{float : left;}\n \
 .not{background-color: white;}\n \
 .notfirst {\n \
 	background-color: white;\n \
