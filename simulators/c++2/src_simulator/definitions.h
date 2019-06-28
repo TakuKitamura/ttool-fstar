@@ -237,6 +237,7 @@ using std::max;
 #define EXT_HTML ".html"
 #define EXT_CSS ".css"
 #define EXT_JS ".js"
+#define EXT_XML ".xml"
 
 // Issue #4 HTML Trace Constants
 #define MAX_COL_SPAN 1000

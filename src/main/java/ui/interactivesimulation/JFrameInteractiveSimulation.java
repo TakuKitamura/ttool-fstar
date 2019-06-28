@@ -2625,7 +2625,9 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
     private void saveTraceText() {
     	sendSaveTraceCommand( manageFileExtension( saveFileName.getText(), ".txt" ), "2" );
     }
-    
+    private void saveTraceXml() {
+    	sendSaveTraceCommand( manageFileExtension( saveFileName.getText(), ".xml" ), "3" );
+    }
     private String manageFileExtension( String filename,
     									final String extension ) {
     	filename = filename.trim();
@@ -2672,8 +2674,11 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                 type = SimulationTrace.VCD_DIPLO;
             } else if (format.compareTo("1") == 0) {
 	            type = SimulationTrace.HTML_DIPLO;
-            } else {
+            } else  if (format.compareTo("2") == 0){
 	            type = SimulationTrace.TXT_DIPLO;
+            } else
+            {
+            	 type = SimulationTrace.XML_DIPLO;
             }
 	        SimulationTrace st = new SimulationTrace(original, type, filename);
             mgui.addSimulationTrace(st);
@@ -3383,6 +3388,8 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             saveTraceHTML();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_SAVE_TXT].getActionCommand()))  {
             saveTraceText();
+        } else if (command.equals(actions[InteractiveSimulationActions.ACT_SAVE_XML].getActionCommand())) {
+        	saveTraceXml();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_SAVE_STATE].getActionCommand()))  {
             sendSaveStateCommand();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_RESTORE_STATE].getActionCommand()))  {

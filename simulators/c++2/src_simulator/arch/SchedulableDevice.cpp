@@ -405,3 +405,11 @@ void SchedulableDevice::schedule2HTML(std::ofstream& myfile) const {
   }
 }
 
+void SchedulableDevice::schedule2XML(std::ostringstream& glob,std::ofstream& myfile) const{
+  for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
+      (*i)->toXML(glob, 0, _name, _ID);
+     // myfile << glob.str() << std::endl;
+
+  }
+}
+

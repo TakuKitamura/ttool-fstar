@@ -260,6 +260,7 @@ public:
 	*/
 	void schedule2TXT(std::string& iTraceFileName) const;
 
+	void schedule2XML(std::ostringstream& glob,std::string& iTraceFileName) const;
 	/**
 	\param glob Stream on which the XML answer shall be send to
 	*/

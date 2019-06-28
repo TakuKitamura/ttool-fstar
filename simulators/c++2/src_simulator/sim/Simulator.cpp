@@ -325,6 +325,46 @@ void Simulator::schedule2TXT(std::string& iTraceFileName) const{
   std::cout << "The text output took " << getTimeDiff(aBegin,aEnd) << "usec. File: " << iTraceFileName << std::endl;
 }
 
+
+void Simulator::schedule2XML(std::ostringstream& glob,std::string& iTraceFileName) const{
+  struct timeval aBegin,aEnd;
+  gettimeofday(&aBegin,NULL);
+
+  if ( !ends_with( iTraceFileName, EXT_XML ) ) {
+    iTraceFileName.append( EXT_XML );
+  }
+
+  std::ofstream myfile(iTraceFileName.c_str());
+  if (myfile.is_open()){
+
+      glob << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << TAG_MSGo << "Simulator status notification" << TAG_MSGc << TAG_ERRNOo << 0 << TAG_ERRNOc << std::endl;
+          //if (_busy) aMessage << SIM_BUSY; else aMessage << SIM_READY;
+
+    //for(CPUList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
+    for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
+      (*i)->schedule2XML(glob,myfile);
+    }
+    for(FPGAList::const_iterator i=_simComp->getFPGAList().begin(); i != _simComp->getFPGAList().end(); ++i){
+      (*i)->schedule2XML(glob,myfile);
+    }
+    //for(BusList::const_iterator j=_simComp->getBusIterator(false); j != _simComp->getBusIterator(true); ++j){
+    for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
+      (*j)->schedule2XML(glob,myfile);
+    }
+
+    glob << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;
+
+    myfile << glob.str() << std::endl;
+    myfile.close();
+  }
+  else {
+    std::cout << "Unable to open text output file." << std::endl;
+  }
+
+  gettimeofday(&aEnd,NULL);
+  std::cout << "The text output took " << getTimeDiff(aBegin,aEnd) << "usec. File: " << iTraceFileName << std::endl;
+}
+
 int Simulator::allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const{
   int total = 0;
   //glob << TAG_TRANSo << "Transaction" << TAG_TRANSc << std::endl;
@@ -1504,6 +1544,9 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
       aGlobMsg << TAG_MSGo << "Schedule output in TXT format" << TAG_MSGc << std::endl;
       schedule2TXT(aStrParam);
       break;
+    case 3: //XML
+      aGlobMsg << TAG_MSGo << "Schedule output in XML format" << TAG_MSGc << std::endl;
+      schedule2XML(anEntityMsg,aStrParam);
     default:
       aGlobMsg << TAG_MSGo << MSG_CMDNFOUND<< TAG_MSGc << std::endl;
       anErrorCode=3;

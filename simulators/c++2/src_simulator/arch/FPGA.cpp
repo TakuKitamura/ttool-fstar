@@ -381,6 +381,14 @@ void FPGA::schedule2TXT(std::ofstream& myfile) const{
   std::cout<<"txt end========================"<<std::endl;
 }
 
+void FPGA::schedule2XML(std::ostringstream& glob,std::ofstream& myfile) const{
+  for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
+      (*i)->toXML(glob, 0, _name, _ID);
+   //   myfile << glob.str() << std::endl;
+
+  }
+}
+
 BusMaster* FPGA::getMasterForBus(BusMaster* iDummy){
   if (iDummy!=0){
     SchedulableCommDevice* aBus = iDummy->getBus();
