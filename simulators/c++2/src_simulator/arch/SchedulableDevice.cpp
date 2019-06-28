@@ -276,7 +276,13 @@ void SchedulableDevice::showPieChart(std::ofstream& myfile) const{
   myfile << SCHED_HTML_JS_DIV_END << std::endl;
 }
   
+void SchedulableDevice::schedule2XML(std::ostringstream& glob,std::ofstream& myfile) const{
+  for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
+      (*i)->toXML(glob, 0, _name, _ID);
+     // myfile << glob.str() << std::endl;
 
+  }
+}
 void SchedulableDevice::schedule2HTML(std::ofstream& myfile) const {    
 	myfile << "<h2><span>Scheduling for device: "<< _name << "</span></h2>" << std::endl;
 

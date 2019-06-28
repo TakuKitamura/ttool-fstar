@@ -89,6 +89,7 @@ public:
       	\param myfile Reference to the ofstream object representing the output file
     	*/
 	virtual void schedule2TXT(std::ofstream& myfile) const =0;
+	void schedule2XML(std::ostringstream& glob,std::ofstream& myfile) const;
 
 	/**
       	\param glob references the output stream object 

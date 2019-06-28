@@ -119,6 +119,7 @@ public:
 	void drawPieChart(std::ofstream& myfile) const;
 	void showPieChart(std::ofstream& myfile) const;
 	void schedule2HTML(std::ofstream& myfile) const;
+	void schedule2XML(std::ostringstream& glob,std::ofstream& myfile) const;
 	
 protected:
 	///List of all tasks running on the CPU
