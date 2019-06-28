@@ -2544,6 +2544,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         actions[InteractiveSimulationActions.ACT_SAVE_VCD].setEnabled(b);
         actions[InteractiveSimulationActions.ACT_SAVE_HTML].setEnabled(b);
         actions[InteractiveSimulationActions.ACT_SAVE_TXT].setEnabled(b);
+        actions[InteractiveSimulationActions.ACT_SAVE_XML].setEnabled(b);
         actions[InteractiveSimulationActions.ACT_PRINT_BENCHMARK].setEnabled(b);
         actions[InteractiveSimulationActions.ACT_SAVE_BENCHMARK].setEnabled(b);
         actions[InteractiveSimulationActions.ACT_SAVE_STATE].setEnabled(b);
