@@ -71,6 +71,10 @@ public class JDialogAttribute extends JDialogBase implements ActionListener, Lis
     
     protected String attrib; // "Attributes", "Gates", etc.
 
+    // Daemon task?
+    protected boolean isDaemon;
+    protected JCheckBox daemonBox;
+
     // Operation type
     protected String operation;
     protected JPanel panelOperation;
@@ -87,10 +91,11 @@ public class JDialogAttribute extends JDialogBase implements ActionListener, Lis
     protected JButton upButton;
     protected JButton downButton;
     protected JButton removeButton;
+
     
     /* Creates new form  */
     public JDialogAttribute(java.util.List<TAttribute> _attributes, java.util.List<TAttribute>_forbidden, Frame f,
-                            String title, String attrib, String _operation) {
+                            String title, String attrib, String _operation, boolean _isDaemon) {
         super(f, title, true);
         frame = f;
         attributesPar = _attributes;
@@ -98,6 +103,7 @@ public class JDialogAttribute extends JDialogBase implements ActionListener, Lis
         initValues = new LinkedList<Boolean> ();
         this.attrib = attrib;
         this.operation = _operation;
+        this.isDaemon = _isDaemon;
         
         attributes = new LinkedList<TAttribute> ();
         
@@ -251,12 +257,30 @@ public class JDialogAttribute extends JDialogBase implements ActionListener, Lis
             //panelOperation.setPreferredSize(new Dimension(500, 70));
 
             cOp.weighty = 1.0;
-            cOp.weightx = 1.0;
-            cOp.gridwidth = GridBagConstraints.REMAINDER; //end row
+            cOp.weightx = 2.0;
+            cOp.gridwidth = 4;
             cOp.fill = GridBagConstraints.BOTH;
             cOp.gridheight = 3;
             operationField = new JTextField(operation);
             panelOperation.add(operationField, cOp);
+
+            c0.weighty = 1.0;
+            c0.weightx = 1.0;
+            c0.fill = GridBagConstraints.BOTH;
+            c0.gridwidth = 4;
+            c.add(panelOperation, c0);
+
+
+            gbOp = new GridBagLayout();
+            cOp = new GridBagConstraints();
+            panelOperation = new JPanel();
+            panelOperation.setLayout(gbOp);
+            panelOperation.setBorder(new javax.swing.border.TitledBorder("System termination"));
+            cOp.weightx = 1.0;
+            cOp.gridwidth = GridBagConstraints.REMAINDER; //end row
+            daemonBox = new JCheckBox("Daemon task?");
+            daemonBox.setSelected(isDaemon);
+            panelOperation.add(daemonBox, cOp);
 
             c0.weighty = 1.0;
             c0.weightx = 1.0;
@@ -505,6 +529,10 @@ public class JDialogAttribute extends JDialogBase implements ActionListener, Lis
                 return;
             }
         }
+    }
+
+    public boolean isDaemon() {
+        return daemonBox.isSelected();
     }
 
     public String getOperation() {
