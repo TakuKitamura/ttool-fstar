@@ -71,7 +71,6 @@ Ludovic Apvrille, Renaud Pacalet
 #include <sys/time.h>
 #include <sys/resource.h>
 #include <unistd.h>
-
 #include "penalties.h"
 
 #define WRITE_STREAM(s,v) s.write((char*) &v,sizeof(v)); 
@@ -259,8 +258,11 @@ using std::max;
 #define SCHED_HTML_END_STYLE "</style>\n"
 #define SCHED_HTML_CSS_BEG_LINK "<link rel=\"stylesheet\" type=\"text/css\" href=\""
 #define SCHED_HTML_CSS_END_LINK "\" />\n"
-
-
+#define SCHED_HTML_TITLE_HW "<h1> Summary HW </h1>"
+#define SCHED_HTML_TITLE_TASK "<h1> Summary tasks </h1>"
+#define SCHED_HTML_BOARD "<table width=\"170px\" style=\"float: left\">\n \
+<tr><td>"
+#define SCHED_HTML_BOARD2 "<table style=\"float: left\">"
 
 #define SCHED_HTML_JS_LINK1 "<script src=\"jquery.min.js\">"
 #define SCHED_HTML_JS_LINK2 "<script src=\"Chart.min.js\">"
@@ -271,10 +273,11 @@ using std::max;
 #define SCHED_HTML_JS_BEGIN_CANVAS "     <canvas id=\"pie-chartcanvas-"
 #define SCHED_HTML_JS_END_CANVAS "\"></canvas>"
 #define SCHED_HTML_JS_WINDOW "window.onload = function () {\n"
+#define SCHED_HTML_DIV "<div>\n"
 #define SCHED_HTML_JS_DIV_BEGIN "<div class=\"wrapper\">"
 #define SCHED_HTML_JS_DIV_BEGIN2 "<div class=\"pie-chart-container\">"
-#define SCHED_HTML_JS_BUTTON1 "<button id=\""
-#define SCHED_HTML_JS_BUTTON2 "\" type=\"button\"> Show Pie Chart </button>"
+#define SCHED_HTML_JS_DIV_BEGIN3 "<div style=\"float: left\">"
+#define SCHED_HTML_JS_BUTTON "<button id=\"button\"> Show/Hide Pie Chart </button>"
 #define SCHED_HTML_JS_DIV_END "</div>"
 #define SCHED_HTML_JS_CLEAR "<div class = \"clear\"></div>"
 #define NB_HTML_COLORS 15
@@ -287,17 +290,17 @@ using std::max;
 	};\n"
 
 
-#define SCHED_HTML_JS_CONTENT1 "  }\n \
-	]\n \
-};\n \
-	var options = {\n \
-		title : {\n \
+#define SCHED_HTML_JS_CONTENT1 "  }]\n \
+};\n"
+
+#define SCHED_HTML_JS_CONTENT3 " = {\n \
+			title : {\n \
 			display : true,\n \
 			position : \"top\",\n \
 			text : \""
 
 #define SCHED_HTML_JS_CONTENT2 "\", \n \
-			fontSize : 18,\n \
+			fontSize : 14,\n \
 			fontColor : \"#111\"\n \
 		},\n \
 		legend : {\n \
@@ -306,15 +309,13 @@ using std::max;
 		}\n \
 	};\n"
 
-#define SCHED_HTML_JS_CONTENT3 "options : options\n \
-			});\n \
-        });"
-
-
 #define SCHED_HTML_PIE_END "}\n \
 		]\n\
 	};\n"		
 	
+#define SCHED_HTML_JS_HIDE " .data.datasets.forEach(function(ds){\n \
+        ds.hidden=!ds.hidden;\n \
+	});\n"
 
 #define SCHED_HTML_CSS_CONTENT "table{\n \
 	border-collapse: collapse;\n \
@@ -567,6 +568,7 @@ h2 span {\n \
 	width : 256px;\n \
 	height : 256px;\n \
 	float : left;\n \
+	margin-left : 2em;\n \
 }\n \
 .clear {\n \
 	clear:both\n \
