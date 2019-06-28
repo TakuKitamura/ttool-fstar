@@ -2674,8 +2674,11 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                 type = SimulationTrace.VCD_DIPLO;
             } else if (format.compareTo("1") == 0) {
 	            type = SimulationTrace.HTML_DIPLO;
-            } else {
+            } else  if (format.compareTo("2") == 0){
 	            type = SimulationTrace.TXT_DIPLO;
+            } else
+            {
+            	 type = SimulationTrace.XML_DIPLO;
             }
 	        SimulationTrace st = new SimulationTrace(original, type, filename);
             mgui.addSimulationTrace(st);
