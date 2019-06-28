@@ -77,6 +77,7 @@ public class InteractiveSimulationActions extends AbstractAction {
     public static final int ACT_SAVE_VCD = 10;
     public static final int ACT_SAVE_HTML = 11;
     public static final int ACT_SAVE_TXT = 12;
+    public static final int ACT_SAVE_XML = 40;
 
     public static final int ACT_PRINT_BENCHMARK = 26;
     public static final int ACT_SAVE_BENCHMARK = 27;
@@ -110,7 +111,7 @@ public class InteractiveSimulationActions extends AbstractAction {
     public static final int ACT_SAVE_SD_SVG = 38;
 
     public static final int ACT_SAVE_SD_PNG = 39;
-    public static final int NB_ACTION = 40;
+    public static final int NB_ACTION = 41;
 
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
@@ -168,6 +169,7 @@ public class InteractiveSimulationActions extends AbstractAction {
         actions[ACT_SAVE_VCD] = new TAction("save-vcd", "Save trace in VCD format", IconManager.imgic1310, IconManager.imgic1310, "Save trace in VCD format", "Save trace in VCD format", 'R');
         actions[ACT_SAVE_HTML] = new TAction("save-html", "Save trace in HTML format", IconManager.imgic1312, IconManager.imgic1312, "Save trace in HTML format", "Save trace in HTML format", 'R');
         actions[ACT_SAVE_TXT] = new TAction("save-txt", "Save trace in TXT format", IconManager.imgic1314, IconManager.imgic1314, "Save trace in TXT format", "Save trace in TXT format", 'R');
+        actions[ACT_SAVE_XML] = new TAction("save-xml", "Save trace in XML format", IconManager.imgic1314, IconManager.imgic1314, "Save trace in XML format", "Save trace in XML format", 'R');
 
         actions[ACT_SAVE_STATE] = new TAction("save-state", "Save simulation state in File", IconManager.imgic341, IconManager.imgic341, "Save simulation state in File", "Save simulation state in File", 'R');
         actions[ACT_RESTORE_STATE] = new TAction("restore-state", "Restore simulation state from File", IconManager.imgic339, IconManager.imgic339, "Restore simulation state from File", "Restore simulation state from File", 'R');

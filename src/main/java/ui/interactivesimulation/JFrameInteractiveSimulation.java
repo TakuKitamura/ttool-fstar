@@ -2625,7 +2625,9 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
     private void saveTraceText() {
     	sendSaveTraceCommand( manageFileExtension( saveFileName.getText(), ".txt" ), "2" );
     }
-    
+    private void saveTraceXml() {
+    	sendSaveTraceCommand( manageFileExtension( saveFileName.getText(), ".xml" ), "3" );
+    }
     private String manageFileExtension( String filename,
     									final String extension ) {
     	filename = filename.trim();
@@ -3383,6 +3385,8 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             saveTraceHTML();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_SAVE_TXT].getActionCommand()))  {
             saveTraceText();
+        } else if (command.equals(actions[InteractiveSimulationActions.ACT_SAVE_XML].getActionCommand())) {
+        	saveTraceXml();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_SAVE_STATE].getActionCommand()))  {
             sendSaveStateCommand();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_RESTORE_STATE].getActionCommand()))  {
