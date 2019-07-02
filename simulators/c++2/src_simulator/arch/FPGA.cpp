@@ -561,7 +561,7 @@ std::string FPGA::determineHTMLCellClass(unsigned int &nextColor ) {
 	return taskCellClasses[  _htmlCurrTask ];
 }
 
-void FPGA::schedule2HTML(std::ofstream& myfile)  {    
+void FPGA::HW2HTML(std::ofstream& myfile)  {    
   if(_startFlagHTML == true){
     //myfile << "<h2><span>Scheduling for device: "<< _name << "</span></h2>" << std::endl;
     myfile << SCHED_HTML_JS_DIV_BEGIN3 << SCHED_HTML_BOARD;
@@ -632,23 +632,103 @@ void FPGA::schedule2HTML(std::ofstream& myfile)  {
 
     //myfile << "</tr>" << std::endl << "</table>" << std::endl;
 #ifdef DEBUG_FPGA
-    std::cout<<"_taskNumer is ------------------------------------"<<_taskNumber<<std::endl;
-    std::cout<<"curr task number is ------------------------"<<_currTaskNumber<<std::endl;
+    std::cout<<"_taskNumer is "<<_taskNumber<<std::endl;
+    std::cout<<"curr task number is "<<_currTaskNumber<<std::endl;
 #endif
     if(_currTaskNumber == _taskNumber){
 #ifdef DEBUG_FPGA
-      std::cout<<" i am showing the name of tasks!!!----------------------------------------------------------------------------------!"<<std::endl;
+      std::cout<<" i am showing the name of tasks"<<std::endl;
 #endif
       myfile << "</tr>" << std::endl << "</table>" << std::endl << SCHED_HTML_JS_DIV_END << std::endl;
       myfile << SCHED_HTML_JS_CLEAR << std::endl;
-      // myfile  << "<table>" << std::endl << "<tr>" << std::endl;
-      /* for( std::map<TMLTask*, std::string>::iterator taskColIt = taskCellClasses.begin(); taskColIt != taskCellClasses.end(); ++taskColIt ) {
+     
+    }   
+   }
+#ifdef DEBUG_FPGA
+  std::cout<<"end in!!!"<<std::endl;
+#endif
+}
+
+void FPGA::schedule2HTML(std::ofstream& myfile)  {    
+  if(_startFlagHTML == true){
+    myfile << "<h2><span>Scheduling for device: "<< _name << "</span></h2>" << std::endl;
+  }
+
+  if ( _transactList.size() == 0 ) {
+    myfile << "<h4>Device never activated</h4>" << std::endl;
+  }
+   else {
+    myfile << "<table>" << std::endl << "<tr>";
+
+    TMLTime aCurrTime = 0;
+    unsigned int taskOccurTime = 0;
+    for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
+#ifdef DEBUG_FPGA
+      std::cout <<  (*i)-> getCommand()->getTask()->toString() <<std::endl;
+      std::cout<< _htmlCurrTask->toString()<<std::endl;
+#endif
+      if( (*i)-> getCommand()->getTask() == _htmlCurrTask ){
+	if(taskOccurTime==0){
+	  _currTaskNumber++;
+	  taskOccurTime++;
+	}
+#ifdef DEBUG_FPGA
+	std::cout<<"in!!"<<_htmlCurrTask->toString()<<std::endl;
+#endif
+	TMLTransaction* aCurrTrans = *i;
+	unsigned int aBlanks = aCurrTrans->getStartTime() - aCurrTime;
+	//std::cout<<"blank is "<<aBlanks<<std::endl;
+	if ( aBlanks > 0 ) {
+	  writeHTMLColumn( myfile, aBlanks, "not", "idle time" );
+	}
+
+	unsigned int aLength = aCurrTrans->getOperationLength();
+
+
+	// Issue #4
+	TMLTask* task = aCurrTrans->getCommand()->getTask();
+	//	std::cout<<"what is this task?"<<task->toString()<<std::endl;
+	const std::string cellClass = determineHTMLCellClass(  nextCellClassIndex );
+
+	writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString() );
+
+	aCurrTime = aCurrTrans->getEndTime();
+      }
+    }
+		
+
+    myfile << "</tr>" << std::endl << "<tr>";
+
+    for ( unsigned int aLength = 0; aLength < aCurrTime; aLength++ ) {
+      myfile << "<th></th>";
+    }
+
+    myfile << "</tr>" << std::endl << "<tr>";
+
+    for ( unsigned int aLength = 0; aLength <= aCurrTime; aLength += 5 ) {
+      std::ostringstream spanVal;
+      spanVal << aLength;
+      writeHTMLColumn( myfile, 5, "sc", "", spanVal.str(), false );
+      //myfile << "<td colspan=\"5\" class=\"sc\">" << aLength << "</td>";
+    }
+
+    myfile << "</tr>" << std::endl << "</table>" << std::endl;
+#ifdef DEBUG_FPGA
+    std::cout<<"_taskNumer is"<<_taskNumber<<std::endl;
+    std::cout<<"curr task number is "<<_currTaskNumber<<std::endl;
+#endif
+    if(_currTaskNumber == _taskNumber){
+#ifdef DEBUG_FPGA
+      std::cout<<" i am showing the name of tasks!"<<std::endl;
+#endif
+      myfile  << "<table>" << std::endl << "<tr>" << std::endl;
+      for( std::map<TMLTask*, std::string>::iterator taskColIt = taskCellClasses.begin(); taskColIt != taskCellClasses.end(); ++taskColIt ) {
 	TMLTask* task = (*taskColIt).first;
 	// Unset the default td max-width of 5px. For some reason setting the max-with on a specific t style does not work
 	myfile << "<td class=\"" << taskCellClasses[ task ] << "\"></td><td style=\"max-width: unset;\">" << task->toString() << "</td><td class=\"space\"></td>";
       }
       myfile << "</tr>" << std::endl;
-      myfile << "</table>" << std::endl;*/
+      myfile << "</table>" << std::endl;
     }
 
    

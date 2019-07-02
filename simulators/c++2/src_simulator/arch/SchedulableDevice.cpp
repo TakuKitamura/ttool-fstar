@@ -293,7 +293,7 @@ void SchedulableDevice::buttonPieChart(std::ofstream& myfile) const{
 }
 
 
-void SchedulableDevice::schedule2HTML(std::ofstream& myfile) const {    
+void SchedulableDevice::HW2HTML(std::ofstream& myfile) const {    
   //	myfile << "<h2><span>Scheduling for device: "<< _name << "</span></h2>" << std::endl;
   myfile << SCHED_HTML_DIV << SCHED_HTML_BOARD;
   myfile << _name  << END_TD << "</tr>" << std::endl;
@@ -363,48 +363,10 @@ void SchedulableDevice::schedule2HTML(std::ofstream& myfile) const {
 
     myfile << "</tr>" << std::endl << "</table>" << std::endl << SCHED_HTML_JS_DIV_END << std::endl;
     myfile << SCHED_HTML_JS_CLEAR << std::endl;
-    
-    //  myfile << "</tr>" << std::endl << "</table>" << std::endl << "<table>" << std::endl << "<tr>";
-    /* for( std::map<TMLTask*, std::string>::iterator taskColIt = taskCellClasses.begin(); taskColIt != taskCellClasses.end(); ++taskColIt ) {
-      TMLTask* task = (*taskColIt).first;
-      // Unset the default td max-width of 5px. For some reason setting the max-with on a specific t style does not work
-      myfile << "<td class=\"" << taskCellClasses[ task ] << "\"></td><td style=\"max-width: unset;\">" << task->toString() << "</td><td class=\"space\"></td>";
-      }*/
-
-    //myfile << "</tr>" << std::endl;
-
-#ifdef ADD_COMMENTS
-    bool aMoreComments = true, aInit = true;
-    Comment* aComment;
-
-    while ( aMoreComments ) {
-      aMoreComments = false;
-      myfile << "<tr>";
-
-      for( std::map<TMLTask*, std::string>::iterator taskColIt = taskCellClasses.begin(); taskColIt != taskCellClasses.end(); ++taskColIt ) {
-	//for(TaskList::const_iterator j=_taskList.begin(); j != _taskList.end(); ++j){
-	TMLTask* task = (*taskColIt).first;
-	std::string aCommentString = task->getNextComment( aInit, aComment );
-
-	if ( aComment == 0 ) {
-	  myfile << "<td></td><td></td><td class=\"space\"></td>";
-	}
-	else {
-	  replaceAll(aCommentString,"<","&lt;");
-	  replaceAll(aCommentString,">","&gt;");
-	  aMoreComments = true;
-	  myfile << "<td style=\"max-width: unset;\">" << aComment->_time << "</td><td><pre>" << aCommentString << "</pre></td><td class=\"space\"></td>";
-	}
-      }
-
-      aInit = false;
-      myfile << "</tr>" << std::endl;
-    }
-#endif
-    // myfile << "</table>" << std::endl;
   }
 }
 
+  
 void SchedulableDevice::schedule2XML(std::ostringstream& glob,std::ofstream& myfile) const{
   for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
       (*i)->toXML(glob, 0, _name, _ID);
@@ -412,4 +374,107 @@ void SchedulableDevice::schedule2XML(std::ostringstream& glob,std::ofstream& myf
 
   }
 }
+
+void SchedulableDevice::schedule2HTML(std::ofstream& myfile) const {    
+	myfile << "<h2><span>Scheduling for device: "<< _name << "</span></h2>" << std::endl;
+
+	if ( _transactList.size() == 0 ) {
+		myfile << "<h4>Device never activated</h4>" << std::endl;
+	}
+	else {
+		myfile << "<table>" << std::endl << "<tr>";
+
+		std::map<TMLTask*, std::string> taskCellClasses;
+		unsigned int nextCellClassIndex = 0;
+		TMLTime aCurrTime = 0;
+
+		for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
+		  std::cout<<"get transaction core number is: "<<(*i)->getTransactCoreNumber()<<std::endl;
+		  std::cout<<"time : "<<_cycleTime<<std::endl;
+		  std::cout << "CPU:calcSTL: html of CPU " << _name << ": " << (*i)->toString() << std::endl;
+		  //if( (*i)->getTransactCoreNumber() == this->_cycleTime ){
+			TMLTransaction* aCurrTrans = *i;
+			unsigned int aBlanks = aCurrTrans->getStartTime() - aCurrTime;
+
+			if ( aBlanks > 0 ) {
+				writeHTMLColumn( myfile, aBlanks, "not", "idle time" );
+			}
+
+			unsigned int aLength = aCurrTrans->getPenalties();
+
+			if ( aLength != 0 ) {
+				std::ostringstream title;
+				title << "idle:" << aCurrTrans->getIdlePenalty() << " switch:" << aCurrTrans->getTaskSwitchingPenalty();
+				writeHTMLColumn( myfile, aLength, "not", title.str() );
+			}
+
+			aLength = aCurrTrans->getOperationLength();
+
+			// Issue #4
+			TMLTask* task = aCurrTrans->getCommand()->getTask();
+			const std::string cellClass = determineHTMLCellClass( taskCellClasses, task, nextCellClassIndex );
+
+			writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString() );
+
+			aCurrTime = aCurrTrans->getEndTime();
+		 // }
+		}
+		
+
+		myfile << "</tr>" << std::endl << "<tr>";
+
+		for ( unsigned int aLength = 0; aLength < aCurrTime; aLength++ ) {
+			myfile << "<th></th>";
+		}
+
+		myfile << "</tr>" << std::endl << "<tr>";
+
+		for ( unsigned int aLength = 0; aLength <= aCurrTime; aLength += 5 ) {
+			std::ostringstream spanVal;
+			spanVal << aLength;
+			writeHTMLColumn( myfile, 5, "sc", "", spanVal.str(), false );
+			//myfile << "<td colspan=\"5\" class=\"sc\">" << aLength << "</td>";
+		}
+
+		myfile << "</tr>" << std::endl << "</table>" << std::endl << "<table>" << std::endl << "<tr>";
+		for( std::map<TMLTask*, std::string>::iterator taskColIt = taskCellClasses.begin(); taskColIt != taskCellClasses.end(); ++taskColIt ) {
+			TMLTask* task = (*taskColIt).first;
+			// Unset the default td max-width of 5px. For some reason setting the max-with on a specific t style does not work
+			myfile << "<td class=\"" << taskCellClasses[ task ] << "\"></td><td style=\"max-width: unset;\">" << task->toString() << "</td><td class=\"space\"></td>";
+		}
+
+		myfile << "</tr>" << std::endl;
+
+#ifdef ADD_COMMENTS
+		bool aMoreComments = true, aInit = true;
+		Comment* aComment;
+
+		while ( aMoreComments ) {
+			aMoreComments = false;
+			myfile << "<tr>";
+
+			for( std::map<TMLTask*, std::string>::iterator taskColIt = taskCellClasses.begin(); taskColIt != taskCellClasses.end(); ++taskColIt ) {
+			//for(TaskList::const_iterator j=_taskList.begin(); j != _taskList.end(); ++j){
+				TMLTask* task = (*taskColIt).first;
+			    std::string aCommentString = task->getNextComment( aInit, aComment );
+
+				if ( aComment == 0 ) {
+					myfile << "<td></td><td></td><td class=\"space\"></td>";
+				}
+				else {
+					replaceAll(aCommentString,"<","&lt;");
+					replaceAll(aCommentString,">","&gt;");
+					aMoreComments = true;
+					myfile << "<td style=\"max-width: unset;\">" << aComment->_time << "</td><td><pre>" << aCommentString << "</pre></td><td class=\"space\"></td>";
+				}
+			}
+
+			aInit = false;
+			myfile << "</tr>" << std::endl;
+		}
+#endif
+		myfile << "</table>" << std::endl;
+	}
+}
+
 

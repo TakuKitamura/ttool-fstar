@@ -507,7 +507,7 @@ std::cout<<"schedule2HTML--------------------------------------*****************
     for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
       for(unsigned int j = 0; j < (*i)->getAmoutOfCore(); j++) {
         //std::cout<<"core number is "<<(*i)->getAmoutOfCore()<<std::endl;
-	(*i)->schedule2HTML(myfile);
+	(*i)->HW2HTML(myfile);
 	//(*i)->showPieChart(myfile);
 	(*i)->setCycleTime((*i)->getCycleTime()+1);
 	
@@ -524,7 +524,7 @@ std::cout<<"schedule2HTML--------------------------------------*****************
 	std::cout<<"begin fpga html "<<(*j)->toShortString()<<std::endl;
 	std::cout<<"task is !!!!!"<<(*i)->toString()<<std::endl;
 #endif
-	(*j)->schedule2HTML(myfile);
+	(*j)->HW2HTML(myfile);
 	(*j)->setStartFlagHTML(false);
       }
       //  myfile << SCHED_HTML_JS_TABLE_BEGIN << std::endl;
@@ -540,14 +540,14 @@ std::cout<<"schedule2HTML--------------------------------------*****************
     
      
     for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
-      (*j)->schedule2HTML(myfile);     
+      (*j)->HW2HTML(myfile);     
       // (*j)->showPieChart(myfile);
     }
     //for_each(iCPUlist.begin(), iCPUlist.end(),std::bind2nd(std::mem_fun(&CPU::schedule2HTML),myfile));
    
     myfile << SCHED_HTML_JS_TABLE_BEGIN << std::endl;
-     myfile << SCHED_HTML_JS_BUTTON << std::endl;
-     myfile << SCHED_HTML_JS_TABLE_END << std::endl;
+    myfile << SCHED_HTML_JS_BUTTON << std::endl;
+    myfile << SCHED_HTML_JS_TABLE_END << std::endl;
      
      for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
       (*i)->showPieChart(myfile);
@@ -573,6 +573,30 @@ std::cout<<"schedule2HTML--------------------------------------*****************
 	(*j)->schedule2HTML(myfile);
       }
     }
+    myfile << SCHED_HTML_TITLE_DEVICE << std::endl;
+    for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
+      for(unsigned int j = 0; j < (*i)->getAmoutOfCore(); j++) {
+	(*i)->schedule2HTML(myfile);
+	(*i)->setCycleTime((*i)->getCycleTime()+1);
+	
+      }
+      if((*i)->getAmoutOfCore() == 1)
+	(*i)->setCycleTime(0);
+    }   
+     for(FPGAList::const_iterator j=_simComp->getFPGAList().begin(); j != _simComp->getFPGAList().end(); ++j){     
+      (*j)->setStartFlagHTML(true);
+      for(TaskList::const_iterator i = (*j)->getTaskList().begin(); i != (*j)->getTaskList().end(); ++i){
+      	(*j)->setHtmlCurrTask(*i);
+	(*j)->schedule2HTML(myfile);
+	(*j)->setStartFlagHTML(false);
+      }
+      for(TaskList::const_iterator i = (*j)->getTaskList().begin(); i != (*j)->getTaskList().end(); ++i){
+	(*j)->setHtmlCurrTask(*i);
+      }
+    }
+    for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
+      (*j)->schedule2HTML(myfile);     
+    }
     myfile << SCHED_HTML_END_BODY; // </body>\n
     myfile << SCHED_HTML_END_HTML; // </html>\n
 
@@ -585,6 +609,8 @@ std::cout<<"schedule2HTML--------------------------------------*****************
   gettimeofday(&aEnd,NULL);
   std::cout << "The HTML output took " << getTimeDiff(aBegin,aEnd) << "usec. File: " << iTraceFileName << std::endl;
 }
+
+
 void Simulator::schedule2VCD(std::string& iTraceFileName) const{
 #ifdef DEBUG_VCD
   std::cout<<"schedule2VCD~~~~~~~~~~~~"<<std::endl;
