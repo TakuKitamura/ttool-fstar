@@ -206,9 +206,47 @@ public class TaskNetworkInterface extends TMLTask {
             addElement(ispktChoice, waitingForStartPacket);
             ispktChoice.addGuard("ispkt" + i + " == 0");
 
+            // Check if packet length is 1 
+            TMLChoice pktLength = new TMLChoice("ChoiceOnPacketLength", referenceObject);
+            addElement(waitingForStartPacket, pktLength);
+
+            // First branch of pktlen choice: pktlen == 1
+            // Send event for the first flit with eop=1
+            TMLSendEvent sendEvtSingleFlit = new TMLSendEvent("SendSingleFlit", referenceObject);
+            sendEvtSingleFlit.setEvent(outputEvent);
+            sendEvtSingleFlit.addParam("pktlen" + i);
+            sendEvtSingleFlit.addParam("dstX" + i);
+            sendEvtSingleFlit.addParam("dstY" + i);
+            sendEvtSingleFlit.addParam("vc" + i);
+            sendEvtSingleFlit.addParam("1");
+            sendEvtSingleFlit.addParam("chid"+i);
+            addElement(pktLength, sendEvtSingleFlit);
+            pktLength.addGuard("pktlen" + i + " == 1");
+
+            // Set i to 1
+            TMLActionState iSettingSingleFlit = new TMLActionState("iSetting", referenceObject);
+            iSettingSingleFlit.setAction("i" + i + " = 1");
+            addElement(sendEvtSingleFlit, iSettingSingleFlit);
+            // Stop
+            TMLStopState endOfSingleFlit = new TMLStopState("endOfSingleFlit", referenceObject);
+            addElement(iSettingSingleFlit, endOfSingleFlit);
+
+            // Second branch of pktlen choice: pktlen > 1
+            // Send event for the first flit with eop=0
+            TMLSendEvent sendEvtFirstFlit = new TMLSendEvent("SendFirstFlit", referenceObject);
+            sendEvtFirstFlit.setEvent(outputEvent);
+            sendEvtFirstFlit.addParam("pktlen" + i);
+            sendEvtFirstFlit.addParam("dstX" + i);
+            sendEvtFirstFlit.addParam("dstY" + i);
+            sendEvtFirstFlit.addParam("vc" + i);
+            sendEvtFirstFlit.addParam("0");
+            sendEvtFirstFlit.addParam("chid"+i);
+            addElement(pktLength, sendEvtFirstFlit);
+            pktLength.addGuard("pktlen" + i + " > 1");
+
             TMLActionState ispktSetting = new TMLActionState("ispktSetting", referenceObject);
             ispktSetting.setAction("ispkt" + i + " = 1");
-            addElement(waitingForStartPacket, ispktSetting);
+            addElement(sendEvtFirstFlit, ispktSetting);
 
             TMLActionState iSetting = new TMLActionState("iSetting", referenceObject);
             iSetting.setAction("i" + i + " = 1");
