@@ -812,8 +812,11 @@ public class MappedSystemCTask {
                             }
                         }
                         functions += " << \")\"" + SCCR;
-                        //functions += "if(" + cmdName + ".myTransaction != NULL) " +  cmdName + ".myTransaction->lastParams  = ss.str()" + SCCR + 
+                        //functions += "if(" + cmdName + ".myTransaction != NULL) " +  cmdName + ".myTransaction->lastParams  = ss.str()" + SCCR +
                         // "\n";
+                        functions += "if(" + cmdName + ".getCurrTransaction() != NULL) " + cmdName + ".getCurrTransaction()->lastParams = ss.str" +
+                                "()" +
+                                SCCR + "\n";
                         functions += "return 0" + SCCR + "\n\n}";
                     }
                     nextCommand += ",(TMLCommand*)" + makeCommands(currElem.getNextElement(i), true, retElement, null);
@@ -944,7 +947,8 @@ public class MappedSystemCTask {
                     }
                 }
                 functions += " << \")\"" + SCCR;
-                //functions += "if(" + cmdName + ".myTransaction != NULL) " + cmdName + ".myTransaction->lastParams = ss.str()" + SCCR + "\n";
+                functions += "if(" + cmdName + ".getCurrTransaction() != NULL) " + cmdName + ".getCurrTransaction()->lastParams = ss.str()" +
+                        SCCR + "\n";
                 functions += "return 0" + SCCR;
 
             } else {
@@ -964,6 +968,8 @@ public class MappedSystemCTask {
                 }
                 functions += " << \")\"" + SCCR;
                 //functions += "if(" + cmdName + ".myTransaction != NULL) " + cmdName + ".myTransaction->lastParams  = ss.str()" + SCCR + "\n";
+                functions += "if(" + cmdName + ".getCurrTransaction() != NULL) " + cmdName + ".getCurrTransaction()->lastParams = ss.str()" +
+                        SCCR + "\n";
                 functions += "return new SizedParameter<ParamType," + nbOfParams + ">(" + concatParams + ")" + SCCR;
             }
             functions += "}\n\n";
