@@ -167,20 +167,29 @@ TMLTransaction* Simulator::getTransLowestEndTimeFPGA(SchedulableDevice*& oResult
 */
 
 ID Simulator::schedule2GraphAUT(std::ostream& iAUTFile, ID iStartState, unsigned int& oTransCounter) const{
+  std::cout<<"schedule graph aut!"<<std::endl;
   CPUList::iterator i;
   //std::cout << "entry graph output\n";
   GraphTransactionQueue aQueue;
   TMLTransaction* aTrans, *aTopElement;
   ID aStartState=iStartState, aEndState=0;
   for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
-    aTrans = (*i)->getTransactions1By1(true);
-    if (aTrans!=0) aQueue.push(aTrans);
+    for(unsigned int j = 0; j < (*i)->getAmoutOfCore(); j++) {
+      aTrans = (*i)->getTransactions1By1(true);
+      if (aTrans!=0) aQueue.push(aTrans);
+    }
+  }
+  for(FPGAList::const_iterator i=_simComp->getFPGAList().begin(); i != _simComp->getFPGAList().end(); ++i){
+      aTrans = (*i)->getTransactions1By1(true);
+      if (aTrans!=0) aQueue.push(aTrans);
   }
   //std::ostringstream aOutp;
   while (!aQueue.empty()){
     CPU* aCPU;
+    FPGA* aFPGA;
     aTopElement = aQueue.top();
     aCPU = aTopElement->getCommand()->getTask()->getCPU();
+    aFPGA = aTopElement->getCommand()->getTask()->getFPGA();
     aEndState = aTopElement->getStateID();
     if (aEndState==0){
       aEndState=TMLTransaction::getID();
@@ -190,19 +199,30 @@ ID Simulator::schedule2GraphAUT(std::ostream& iAUTFile, ID iStartState, unsigned
     oTransCounter++;
     //(20,"i(CPU0__test1__TMLTask_1__wr__test1__ch<4 ,4>)", 24)
     //std::cout << "(" << aStartState << "," << "\"i(" << aCPU->toString() << "__" << aTopElement->getCommand()->getTask()->toString() << "__" << aTopElement->getCommand()->getCommandStr();
-    iAUTFile << "(" << aStartState << "," << "\"i(" << aCPU->toString() << "__" << aTopElement->getCommand()->getTask()->toString() << "__" << aTopElement->getCommand()->getCommandStr();
+    if(aCPU){
+      if(aCPU->getAmoutOfCore()>1)
+	iAUTFile << "(" << aStartState << "," << "\"i(" << aCPU->toString() << "_core_" << aCPU->getCycleTime() << "__" << aTopElement->getCommand()->getTask()->toString() << "__" << aTopElement->getCommand()->getCommandStr();
+      else 
+	iAUTFile << "(" << aStartState << "," << "\"i(" << aCPU->toString() << "__" << aTopElement->getCommand()->getTask()->toString() << "__" << aTopElement->getCommand()->getCommandStr();
+    }
+    else if(aFPGA)
+      iAUTFile << "(" << aStartState << "," << "\"i(" << aFPGA->toString() << "__" << aTopElement->getCommand()->getTask()->toString() << "__" << aTopElement->getCommand()->getCommandStr();
+    // std::cout << "(" << aStartState << "," << "\"i(" << aCPU->toString() << "__" << aTopElement->getCommand()->getTask()->toString() << "__" << aTopElement->getCommand()->getCommandStr();
     if (aTopElement->getChannel()!=0){
       iAUTFile << "__" << aTopElement->getChannel()->toShortString();
-      //std::cout << "__" << aTopElement->getChannel()->toShortString();
+      std::cout << "__" << aTopElement->getChannel()->toShortString();
     }
     iAUTFile << "<" << aTopElement->getVirtualLength() << ">)\"," << aEndState <<")\n";
-    //std::cout << "<" << aTopElement->getVirtualLength() << ">)\"," << aEndState <<")\n";
+    std::cout << "<" << aTopElement->getVirtualLength() << ">)\"," << aEndState <<")\n";
     aStartState = aEndState;
     aQueue.pop();
-    aTrans = aCPU->getTransactions1By1(false);
+    if(aCPU)
+      aTrans = aCPU->getTransactions1By1(false);
+    else if(aFPGA)
+      aTrans = aFPGA->getTransactions1By1(false);
     if (aTrans!=0) aQueue.push(aTrans);
   }
-  //std::cout << "exit graph output\n";
+  std::cout << "exit graph output\n";
   return aStartState;
 }
 
@@ -250,6 +270,7 @@ ID Simulator::schedule2GraphDOT(std::ostream& iDOTFile, std::ostream& iAUTFile, 
 }
 
 void Simulator::schedule2Graph(std::string& iTraceFileName) const{
+  std::cout<<"schedule graph"<<std::endl;
   struct timeval aBegin,aEnd;
   gettimeofday(&aBegin,NULL);
   std::ofstream myfile (iTraceFileName.c_str());
@@ -800,6 +821,7 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
   _simComp->setStopFlag(false,"");
   for(TaskList::const_iterator i=_simComp->getTaskList().begin(); i!=_simComp->getTaskList().end();i++){
     if ((*i)->getCurrCommand()!=0) (*i)->getCurrCommand()->prepare(true);
+    std::cout<<"in prepare"<<std::endl;
   }
 #ifdef EBRDD_ENABLED
   for(EBRDDList::const_iterator i=_simComp->getEBRDDIterator(false); i!=_simComp->getEBRDDIterator(true);i++){
@@ -813,7 +835,7 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 
   for_each(_simComp->getFPGAList().begin(), _simComp->getFPGAList().end(),std::mem_fun(&FPGA::schedule));
 
-    transLET=getTransLowestEndTime(deviceLET);
+  transLET=getTransLowestEndTime(deviceLET);
 #ifdef LISTENERS_ENABLED
   if (_wasReset) NOTIFY_SIM_STARTED();
   _wasReset=false;
@@ -830,7 +852,9 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 #ifdef DEBUG_SIMULATE
 	std::cout<<"device is "<<deviceLET->getName()<<std::endl;
 #endif
+	std::cout<<"111flag "<<_simComp->getStopFlag()<<std::endl;
         bool x = deviceLET->addTransaction(0);
+	std::cout<<"222flag "<<_simComp->getStopFlag()<<std::endl;
 #ifdef DEBUG_SIMULATE
 	std::cout<<"in simulator end addTransactin"<<std::endl;
 #endif
@@ -956,7 +980,10 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 #ifdef DEBUG_SIMULATE
       std::cout<<"task is !!!!!"<<oLastTrans->toString()<<std::endl;
 #endif
-	transLET=getTransLowestEndTime(deviceLET);	
+	transLET=getTransLowestEndTime(deviceLET);
+	if(transLET==0) std::cout<<"translet is 0~~~"<<std::endl;
+	if(_simComp->getStopFlag()==true) std::cout<<"stop flag is true"<<std::endl;
+	else std::cout<<"stop flag is false"<<std::endl;
     }
 
   bool aSimCompleted = ( transLET==0  && !_simComp->getStoppedOnAction());
@@ -1101,6 +1128,7 @@ ServerIF* Simulator::run(int iLen, char ** iArgs){
 }
 
 void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
+  std::cout<<"decodeCommand"<<std::endl;
   //std::cout << "Not crashed. I: " << iCmd << std::endl;
   //std::cout << iCmd << std::endl;
   unsigned int aCmd, aParam1, aParam2, anErrorCode=0;
@@ -1373,6 +1401,22 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
       std::cout << "End Run until condition is satisfied." << std::endl;
       break;
     }
+    case 15:{//Run until FPGA x executes
+      std::cout << "Run until FPGA x executes." << std::endl;
+      aInpStream >> aStrParam;
+      //ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (_simComp->getFPGAByName(aStrParam));
+      SchedulableDevice* aFPGA=_simComp->getFPGAByName(aStrParam);
+      if (aFPGA!=0){
+        //_currCmdListener=new RunTillTransOnDevice(_simComp, aSubject);
+        aGlobMsg << TAG_MSGo << "Created listener on FPGA " << aStrParam << TAG_MSGc << std::endl;
+        _simTerm=runToCPUTrans(aFPGA, oLastTrans);
+      }else{
+        aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
+        anErrorCode=2;
+      }
+      std::cout << "End Run until FPGA x executes." << std::endl;
+      break;
+    }
     default:
       aGlobMsg << TAG_MSGo << MSG_CMDNFOUND<< TAG_MSGc << std::endl;
       anErrorCode=3;
@@ -1481,6 +1525,14 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
       TraceableDevice* aDevice = dynamic_cast<TraceableDevice*>(_simComp->getTaskByName(aStrParam));
       if (aDevice!=0) {
         std::cout << "Print information about Task: " <<  _simComp->getTaskByName(aStrParam) << std::endl;
+        aDevice->streamStateXML(anEntityMsg);
+      } else anErrorCode=2;
+      break;
+    }
+    case 6: {//FPGA
+      TraceableDevice* aDevice = dynamic_cast<TraceableDevice*>(_simComp->getFPGAByName(aStrParam));
+      if (aDevice!=0) {
+        std::cout << "Print information about FPGA: " << _simComp->getFPGAByName(aStrParam) << std::endl;
         aDevice->streamStateXML(anEntityMsg);
       } else anErrorCode=2;
       break;
@@ -1858,6 +1910,13 @@ bool Simulator::runToCPUTrans(SchedulableDevice* iCPU, TMLTransaction*& oLastTra
   return simulate(oLastTrans);
 }
 
+bool Simulator::runToFPGATrans(SchedulableDevice* iFPGA, TMLTransaction*& oLastTrans){
+  //ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (iFPGA);
+  ListenerSubject<GeneralListener>* aSubject= static_cast<ListenerSubject<GeneralListener>* > (iFPGA);
+  RunTillTransOnDevice aListener(_simComp, aSubject);
+  return simulate(oLastTrans);
+}
+
 bool Simulator::runToTaskTrans(TMLTask* iTask, TMLTransaction*& oLastTrans){
   //ListenerSubject<TaskListener>* aSubject= static_cast<ListenerSubject<TaskListener>* > (iTask);
   ListenerSubject<GeneralListener>* aSubject= static_cast<ListenerSubject<GeneralListener>* > (iTask);
@@ -1899,7 +1958,7 @@ bool Simulator::runUntilCondition(std::string& iCond, TMLTask* iTask, TMLTransac
 }
 
 void Simulator::exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iAUTFile, unsigned int& oTransCounter){
-
+  std::cout<<"explore tree"<<std::endl;
   TMLTransaction* aLastTrans;
   //if (iDepth<RECUR_DEPTH){
   ID aLastID;
@@ -1909,23 +1968,23 @@ void Simulator::exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iAUT
   //std::cout << "Command coverage current:"<<  TMLCommand::getCmdCoverage() << " to reach:" << _commandCoverage << " nbOfBranchesExplored:"<< _nbOfBranchesExplored << " nbOfBranchesToExplore:" << _nbOfBranchesToExplore << " branch coverage:" <<_branchCoverage <<std::endl;
 
   do{
-    //std::cout << "simulation step" << std::endl;
+    std::cout << "simulation step" << std::endl;
     aSimTerminated=runToNextRandomCommand(aLastTrans);
-    //std::cout << "run to next done" << std::endl;
+    std::cout << "run to next done" << std::endl;
     aRandomCmd = _simComp->getCurrentRandomCmd();
     //std::cout << "Random command:" << aRandomCmd <<std::endl;
   }while (!aSimTerminated && aRandomCmd==0 && _simComp->wasKnownStateReached()==0);
 #ifdef EXPLOGRAPH_ENABLED
-  //std::cout << "Explo graph AUT" << std::endl;
+  std::cout << "Explo graph AUT" << std::endl;
   aLastID = schedule2GraphAUT(iAUTFile, iPrevID,oTransCounter);
 #endif
   if(aSimTerminated){
-    //std::cout << "simulation terminatd" << std::endl;
+    std::cout << "simulation terminatd" << std::endl;
     oTransCounter++;
     //#ifdef DOT_GRAPH_ENABLED
     //#else
     //(21,"i(allCPUsTerminated)", 25)
-    iAUTFile << "(" << aLastID << "," << "\"i(allCPUsTerminated<" << SchedulableDevice::getSimulatedTime() << ">)\"," << TMLTransaction::getID() << ")\n";
+    iAUTFile << "(" << aLastID << "," << "\"i(allCPUsFPGAsTerminated<" << SchedulableDevice::getSimulatedTime() << ">)\"," << TMLTransaction::getID() << ")\n";
     _nbOfBranchesExplored ++;
     //#endif
     TMLTransaction::incID();
@@ -1961,7 +2020,7 @@ void Simulator::exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iAUT
         //for (unsigned int aBranch=0; aBranch<aNbNextCmds && !_syncInfo->_terminate; aBranch++){
         for (unsigned int aBranch=0; aBranch<aNbNextCmds && !_terminateExplore; aBranch++){
           //for (unsigned int aBranch=0; aBranch<aNbNextCmds; aBranch++){
-          //std::cout << "1. Exploring branch #" << aBranch << " from " << iPrevID << std::endl;
+          std::cout << "1. Exploring branch #" << aBranch << " from " << iPrevID << std::endl;
           _simComp->reset();
           aStreamBuffer.str(aStringBuffer);
           //std::cout << "Read 1 in exploreTree\n";
@@ -1978,7 +2037,7 @@ void Simulator::exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iAUT
         //while (aNbNextCmds!=0 && !_syncInfo->_terminate){
         while (aNbNextCmds!=0 && !_terminateExplore){
           //while (aNbNextCmds!=0){
-          //std::cout << "2. Exploring branch #" << aNbNextCmds << " from " << iPrevID << std::endl;
+          std::cout << "2. Exploring branch #" << aNbNextCmds << " from " << iPrevID << std::endl;
           if ((aNbNextCmds & 1)!=0){
             //_nbOfBranchesToExplore += 1;
             _simComp->reset();
@@ -2015,6 +2074,7 @@ void Simulator::exploreTree(unsigned int iDepth, ID iPrevID, std::ofstream& iAUT
 
 
 void Simulator::exploreTreeDOT(unsigned int iDepth, ID iPrevID, std::ofstream& iDOTFile, std::ofstream& iAUTFile, unsigned int& oTransCounter){
+  std::cout<<"explore dot"<<std::endl;
   TMLTransaction* aLastTrans;
   //if (iDepth<RECUR_DEPTH){
   ID aLastID;
@@ -2102,6 +2162,7 @@ void Simulator::exploreTreeDOT(unsigned int iDepth, ID iPrevID, std::ofstream& i
 }
 
 bool Simulator::execAsyncCmd(const std::string& iCmd){
+  std::cout<<"exe comd"<<std::endl;
   unsigned int aCmd;
   std::istringstream aInpStream(iCmd);
   std::string aStrParam;
