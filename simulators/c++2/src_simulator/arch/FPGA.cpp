@@ -585,8 +585,8 @@ void FPGA::HW2HTML(std::ofstream& myfile)  {
 #endif
       if( (*i)-> getCommand()->getTask() == _htmlCurrTask ){
 	if(taskOccurTime==0){
-	  _currTaskNumber++;
 	  taskOccurTime++;
+	  _currTaskNumber++;
 	}
 #ifdef DEBUG_FPGA
 	std::cout<<"in!!"<<_htmlCurrTask->toString()<<std::endl;
@@ -631,27 +631,21 @@ void FPGA::HW2HTML(std::ofstream& myfile)  {
     }
 
     //myfile << "</tr>" << std::endl << "</table>" << std::endl;
-#ifdef DEBUG_FPGA
-    std::cout<<"_taskNumer is "<<_taskNumber<<std::endl;
-    std::cout<<"curr task number is "<<_currTaskNumber<<std::endl;
-#endif
+
     if(_currTaskNumber == _taskNumber){
-#ifdef DEBUG_FPGA
-      std::cout<<" i am showing the name of tasks"<<std::endl;
-#endif
+
       myfile << "</tr>" << std::endl << "</table>" << std::endl << SCHED_HTML_JS_DIV_END << std::endl;
       myfile << SCHED_HTML_JS_CLEAR << std::endl;
      
     }   
    }
-#ifdef DEBUG_FPGA
-  std::cout<<"end in!!!"<<std::endl;
-#endif
 }
 
 void FPGA::schedule2HTML(std::ofstream& myfile)  {    
+  std::cout<<"*********FPGA scheduling***********"<<std::endl;
   if(_startFlagHTML == true){
     myfile << "<h2><span>Scheduling for device: "<< _name << "</span></h2>" << std::endl;
+    _currTaskNumber=0;
   }
 
   if ( _transactList.size() == 0 ) {
@@ -718,9 +712,9 @@ void FPGA::schedule2HTML(std::ofstream& myfile)  {
     std::cout<<"curr task number is "<<_currTaskNumber<<std::endl;
 #endif
     if(_currTaskNumber == _taskNumber){
-#ifdef DEBUG_FPGA
+      //#ifdef DEBUG_FPGA
       std::cout<<" i am showing the name of tasks!"<<std::endl;
-#endif
+      //#endif
       myfile  << "<table>" << std::endl << "<tr>" << std::endl;
       for( std::map<TMLTask*, std::string>::iterator taskColIt = taskCellClasses.begin(); taskColIt != taskCellClasses.end(); ++taskColIt ) {
 	TMLTask* task = (*taskColIt).first;
