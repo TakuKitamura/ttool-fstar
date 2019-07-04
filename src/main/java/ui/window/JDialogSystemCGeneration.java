@@ -479,7 +479,7 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
         exe.addActionListener(this);
         exegroup.add(exe);
         jp03.add(exe, c03);
-        
+
 
         exe2 = new JTextField(pathExecute, 100);
         jp03.add(exe2, c02);

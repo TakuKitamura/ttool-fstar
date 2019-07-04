@@ -4914,7 +4914,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         JDialogNoCManagement jdsenm = new JDialogNoCManagement(frame, this, "Removing NoC", map);
         //   jdsez3.setSize(600,800);
         GraphicLib.centerOnParent(jdsenm, 700, 800);
-        if (automatic) {
+        if (!automatic) {
             jdsenm.setVisible(true);
         } else {
             jdsenm.startProcess();
