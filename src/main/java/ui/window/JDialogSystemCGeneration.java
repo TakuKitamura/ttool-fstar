@@ -94,6 +94,7 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
     private static String textSysC1 = "Generate C++ simulator code in";
     private static String textSysC2 = "Compile C++ simulator  code in";
     private static String textSysC4 = "Run simulation to completion:";
+    private static String textSysC4bis = "Run simulation for x cycles:";
     private static String textSysC5 = "Run interactive simulation:";
     private static String textSysC6 = "Run formal verification:";
 
@@ -106,6 +107,7 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
     protected static String pathCode;
     protected static String pathCompiler;
     protected static String pathExecute;
+    protected static String pathXCycle;
     protected static String pathInteractiveExecute;
     protected static String pathFormalExecute;
 
@@ -125,10 +127,10 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
     protected JButton stop;
     protected JButton close;
 
-    protected JRadioButton exe, exeint, exeformal;
+    protected JRadioButton exe, exeBis, exeint, exeformal;
     protected ButtonGroup exegroup;
     protected JLabel gen, comp;
-    protected JTextField code1, code2, unitcycle, compiler1, exe1, exe2, exe3, exe2int, exe2formal;
+    protected JTextField code1, code2, unitcycle, compiler1, exe1, exe2, exe2Bis, exe3, exe2int, exe2formal;
     protected JTabbedPane tabbedPane;
     protected JScrollPane jsp;
     protected JCheckBox removeCppFiles, removeXFiles, debugmode, optimizemode, activatePenalties;
@@ -166,6 +168,7 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
     public final static int ONE_TRACE = 1;
     public final static int ANIMATION = 2;
     public final static int FORMAL_VERIFICATION = 3;
+    public final static int ONE_TRACE_CYCLE = 4;
 
     private int automatic;
     //  private boolean wasClosed = false;
@@ -175,7 +178,7 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
      * Creates new form
      */
     public JDialogSystemCGeneration(Frame f, MainGUI _mgui, String title, String _simulatorHost, String _pathCode,
-                                    String _pathCompiler, String _pathExecute, String _pathInteractiveExecute,
+                                    String _pathCompiler, String _pathExecute, String _pathXCycle, String _pathInteractiveExecute,
                                     String _graphPath, int _automatic) {
         super(f, title, true);
 
@@ -194,6 +197,7 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
         }
 
         pathExecute = _pathExecute;
+        pathXCycle = _pathXCycle;
 
         if (_graphPath != null) {
             _pathInteractiveExecute += " -gpath " + _graphPath;
@@ -475,9 +479,18 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
         exe.addActionListener(this);
         exegroup.add(exe);
         jp03.add(exe, c03);
+        
 
         exe2 = new JTextField(pathExecute, 100);
         jp03.add(exe2, c02);
+
+        exeBis = new JRadioButton(textSysC4bis, false);
+        exe.addActionListener(this);
+        exegroup.add(exeBis);
+        jp03.add(exeBis, c03);
+
+        exe2Bis = new JTextField(pathXCycle, 100);
+        jp03.add(exe2Bis, c02);
 
 
         exeint = new JRadioButton(textSysC5, true);
@@ -559,6 +572,7 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
     public void updateInteractiveSimulation() {
         if (automatic == 0) {
             exe2.setEnabled(exe.isSelected());
+            exe2Bis.setEnabled(exeBis.isSelected());
             exe2int.setEnabled(exeint.isSelected());
             exe2formal.setEnabled(exeformal.isSelected());
         }
@@ -955,7 +969,9 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
         if (toDo == 0) {
             if (exe.isSelected()) {
                 toDo = ONE_TRACE;
-            } else if (exeint.isSelected()) {
+            } else if (exeBis.isSelected()) {
+                toDo = ONE_TRACE_CYCLE;
+            } if (exeint.isSelected()) {
                 toDo = ANIMATION;
             } else {
                 toDo = FORMAL_VERIFICATION;
@@ -967,6 +983,12 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
                 executeSimulationCmd(exe2.getText(), "Generating one simulation trace");
                 String[] tab = exe2.getText().split(" ");
                 SpecConfigTTool.lastVCD = tab[2];
+                //SpecConfigTTool.ExternalCommand1 = "gtkwave " + SpecConfigTTool.lastVCD;
+                break;
+            case ONE_TRACE_CYCLE:
+                executeSimulationCmd(exe2.getText(), "Executing one simulation trace for a limited duration");
+                String[] tab1 = exe2.getText().split(" ");
+                SpecConfigTTool.lastVCD = tab1[2];
                 //SpecConfigTTool.ExternalCommand1 = "gtkwave " + SpecConfigTTool.lastVCD;
                 break;
             case ANIMATION:

@@ -217,7 +217,8 @@ public class TaskINForVC extends TMLTask {
             int index = outIndexes.get(i);
             TMLForLoop packetLoop = new TMLForLoop("packetLoop", referenceObject);
             packetLoop.setInit("j=0");
-            packetLoop.setCondition("j<pktlen-1");
+            packetLoop.setCondition("j<pktlen");
+            //packetLoop.setCondition("j<pktlen-1");
             packetLoop.setIncrement("j=j+1");
             activity.addLinkElement(mainChoice, packetLoop);
             mainChoice.addGuard("requestedOutput == " + index);
@@ -233,58 +234,80 @@ public class TaskINForVC extends TMLTask {
             sendEvt.addParam("chid");
             activity.addLinkElement(packetLoop, sendEvt);
 
-            waitEvt = new TMLWaitEvent("FeedbackDownEvent", referenceObject);
-            waitEvt.setEvent(inFeedbackEvents.get(i));
-            activity.addLinkElement(sendEvt, waitEvt);
+            //waitEvt = new TMLWaitEvent("FeedbackDownEvent", referenceObject);
+            //waitEvt.setEvent(inFeedbackEvents.get(i));
+            //activity.addLinkElement(sendEvt, waitEvt);
+            // Rewrite of the 3 lines above:
+            TMLWaitEvent waitFeedback = new TMLWaitEvent("FeedbackDownEvent", referenceObject);
+            waitFeedback.setEvent(inFeedbackEvents.get(i));
+            activity.addLinkElement(sendEvt, waitFeedback);
 
-            sendEvt = new TMLSendEvent("feedbackUpEvent", referenceObject);
-            sendEvt.setEvent(outFeedbackEvent);
-            activity.addLinkElement(waitEvt, sendEvt);
-
+            // EDITED: swapped the 2 next steps and updated addLink() calls for
+            // 3next steps
             TMLReadChannel read = new TMLReadChannel("ReadFlit" + i, referenceObject);
             read.addChannel(inChannel);
             read.setNbOfSamples("1");
-            activity.addLinkElement(sendEvt, read);
+            activity.addLinkElement(waitFeedback, read);
 
-            waitEvt = new TMLWaitEvent("PacketEventInLoop", referenceObject);
-            waitEvt.setEvent(inPacketEvent);
-            waitEvt.addParam("pktlen");
-            waitEvt.addParam("dstX");
-            waitEvt.addParam("dstY");
-            waitEvt.addParam("vc");
-            waitEvt.addParam("eop");
-            waitEvt.addParam("chid");
-            activity.addLinkElement(read, waitEvt);
+            sendEvt = new TMLSendEvent("feedbackUpEvent", referenceObject);
+            sendEvt.setEvent(outFeedbackEvent);
+            activity.addLinkElement(read, sendEvt);
+
+            TMLChoice lastFlitTransmited = new TMLChoice("lastFlitTransmited", referenceObject);
+            activity.addLinkElement(sendEvt, lastFlitTransmited);
+
+            // if current flit is the last one, exit
+            TMLStopState stopAfterLastFlit = new TMLStopState("StopLastFlit", referenceObject);
+            activity.addLinkElement(lastFlitTransmited, stopAfterLastFlit);
+            lastFlitTransmited.addGuard("eop == 1");
+
+            // if current flit is not the last one, wait for next flit event
+            // TODO: link with TMLChoice
+            TMLWaitEvent waitNextFlit = new TMLWaitEvent("PacketEventInLoop", referenceObject);
+            waitNextFlit.setEvent(inPacketEvent);
+            waitNextFlit.addParam("pktlen");
+            waitNextFlit.addParam("dstX");
+            waitNextFlit.addParam("dstY");
+            waitNextFlit.addParam("vc");
+            waitNextFlit.addParam("eop");
+            waitNextFlit.addParam("chid");
+            activity.addLinkElement(lastFlitTransmited, waitNextFlit);
+            lastFlitTransmited.addGuard("eop == 0");
 
             stop = new TMLStopState("StopStateInLoop", referenceObject);
-            activity.addLinkElement(waitEvt, stop);
+            activity.addLinkElement(waitNextFlit, stop);
 
-            // After packetloop
-            sendEvt = new TMLSendEvent("infoOnPacketO", referenceObject);
-            sendEvt.setEvent(outVCEvents.get(i));
-            sendEvt.addParam("pktlen");
-            sendEvt.addParam("dstX");
-            sendEvt.addParam("dstY");
-            sendEvt.addParam("vc");
-            sendEvt.addParam("eop");
-            sendEvt.addParam("chid");
-            activity.addLinkElement(loop, sendEvt);
 
-            waitEvt = new TMLWaitEvent("FeedbackDownEventO", referenceObject);
-            waitEvt.setEvent(inFeedbackEvents.get(i));
-            activity.addLinkElement(sendEvt, waitEvt);
+            //// After packetloop
+            //sendEvt = new TMLSendEvent("infoOnPacketO", referenceObject);
+            //sendEvt.setEvent(outVCEvents.get(i));
+            //sendEvt.addParam("pktlen");
+            //sendEvt.addParam("dstX");
+            //sendEvt.addParam("dstY");
+            //sendEvt.addParam("vc");
+            //sendEvt.addParam("eop");
+            //sendEvt.addParam("chid");
+            //activity.addLinkElement(loop, sendEvt); // <<< BUG HERE -- `loop`
+            //                                        // should be `packetLoop`
 
-            sendEvt = new TMLSendEvent("feedbackUpEventO", referenceObject);
-            sendEvt.setEvent(outFeedbackEvent);
-            activity.addLinkElement(waitEvt, sendEvt);
+            //waitEvt = new TMLWaitEvent("FeedbackDownEventO", referenceObject);
+            //waitEvt.setEvent(inFeedbackEvents.get(i));
+            //activity.addLinkElement(sendEvt, waitEvt);
 
-            read = new TMLReadChannel("ReadFlitO" + i, referenceObject);
-            read.addChannel(inChannel);
-            read.setNbOfSamples("1");
-            activity.addLinkElement(sendEvt, read);
+            //// EDITED: swapped the 2 next steps and updated addLink() calls for
+            //// 3next steps
+            //read = new TMLReadChannel("ReadFlitO" + i, referenceObject);
+            //read.addChannel(inChannel);
+            //read.setNbOfSamples("1");
+            //activity.addLinkElement(waitEvt, read);
 
+            //sendEvt = new TMLSendEvent("feedbackUpEventO", referenceObject);
+            //sendEvt.setEvent(outFeedbackEvent);
+            //activity.addLinkElement(read, sendEvt);
+
+            // EDITED to connect to loop
             stop = new TMLStopState("StopStateOutLoop", referenceObject);
-            activity.addLinkElement(read, stop);
+            activity.addLinkElement(packetLoop, stop);
 
         }
 
