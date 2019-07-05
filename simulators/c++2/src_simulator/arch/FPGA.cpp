@@ -294,6 +294,7 @@ void FPGA::schedule(){
 
     }
   }
+  //if(_nextTransaction!=0) std::cout<<"nextTransaction is~~~~ "<< _nextTransaction->toShortString()<<std::endl;
   if (_nextTransaction!=0 && aOldTransaction != _nextTransaction)  calcStartTimeLength();
   std::cout << "fpga:schedule END " << _name << "+++++++++++++++++++++++++++++++++\n";
 }

@@ -180,16 +180,16 @@ ID Simulator::schedule2GraphAUT(std::ostream& iAUTFile, ID iStartState, unsigned
       }
   }
   for(FPGAList::const_iterator i=_simComp->getFPGAList().begin(); i != _simComp->getFPGAList().end(); ++i){
-    //  for(TaskList::const_iterator j = _simComp->getTaskList().begin(); j != _simComp->getTaskList().end(); j++){
        aTrans = (*i)->getTransactions1By1(true);
        if (aTrans!=0) aQueue.push(aTrans);
-       //  }
   }
   //std::ostringstream aOutp;
   while (!aQueue.empty()){
     CPU* aCPU;
+    FPGA* aFPGA;
     aTopElement = aQueue.top();
     aCPU = aTopElement->getCommand()->getTask()->getCPU();
+    aFPGA = aTopElement->getCommand()->getTask()->getFPGA();
     aEndState = aTopElement->getStateID();
     if (aEndState==0){
       aEndState=TMLTransaction::getID();
@@ -209,6 +209,9 @@ ID Simulator::schedule2GraphAUT(std::ostream& iAUTFile, ID iStartState, unsigned
 	std::cout << "(" << aStartState << "," << "\"i(" << aCPU->toString() << "__" << aTopElement->getCommand()->getTask()->toString() << "__" << aTopElement->getCommand()->getCommandStr();
       }
     }
+    else if(aFPGA){
+      iAUTFile << "(" << aStartState << "," << "\"i(" << aFPGA->toString() << "_core_" << aTopElement->toShortString() << "__" << aTopElement->getCommand()->getTask()->toString() << "__" << aTopElement->getCommand()->getCommandStr() << "_Endtime<" << aTopElement->getEndTime() << ">";
+    }
     if (aTopElement->getChannel()!=0){
       iAUTFile << "__" << aTopElement->getChannel()->toShortString();
       std::cout << "__" << aTopElement->getChannel()->toShortString();
@@ -219,6 +222,8 @@ ID Simulator::schedule2GraphAUT(std::ostream& iAUTFile, ID iStartState, unsigned
     aQueue.pop();
     if(aCPU)
       aTrans = aCPU->getTransactions1By1(false);
+    else if(aFPGA)
+      aTrans = aFPGA->getTransactions1By1(false);
     if (aTrans!=0) aQueue.push(aTrans);
   }
   std::cout << "exit graph output\n";
@@ -813,14 +818,14 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
   TMLTask* depTask;
   SchedulableDevice* deviceLET;
   CPU* depCPU;
-  FPGA *depFPGA;
+  FPGA* depFPGA;
 #ifdef DEBUG_KERNEL
   std::cout << "kernel:simulate: first schedule" << std::endl;
 #endif
   _simComp->setStopFlag(false,"");
   for(TaskList::const_iterator i=_simComp->getTaskList().begin(); i!=_simComp->getTaskList().end();i++){
     if ((*i)->getCurrCommand()!=0) (*i)->getCurrCommand()->prepare(true);
-    std::cout<<"in prepare"<<std::endl;
+    std::cout<<"in prepare"<< (*i)->toString() << std::endl;
   }
 #ifdef EBRDD_ENABLED
   for(EBRDDList::const_iterator i=_simComp->getEBRDDIterator(false); i!=_simComp->getEBRDDIterator(true);i++){
