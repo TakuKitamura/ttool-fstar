@@ -867,7 +867,7 @@ public class TranslatedRouter<E> {
                                     twc.replaceChannelWith(ch, newChannel);
                                     newElements.add(tse);
                                     tse.setEvent(mapOfAllOutputChannels.get(ch));
-                                    tse.addParam("" + newChannel.getSize());
+                                    tse.addParam("" + twc.getNbOfSamples() + 1); // +1 for the header
                                     tse.addParam("" + (int)(p.getX()));
                                     tse.addParam("" + (int)(p.getY()));
                                     tse.addParam("" + newChannel.getVC());
@@ -932,7 +932,7 @@ public class TranslatedRouter<E> {
                 TMLTask t = ch.getDestinationTask();
                 HwExecutionNode mappedOn = tmlmap.getHwNodeOf(t);
                 if (mappedOn == myHwExecutionNode) {
-                    TraceManager.addDev("Found HwNode of origin task " + t.getTaskName() + " for channel " + ch.getName());
+                    //TraceManager.addDev("Found HwNode of origin task " + t.getTaskName() + " for channel " + ch.getName());
                     // We must rework the channel of the task.
                     // The channel is modified to a NBRNBW with the same task has sender / receiver
                     // The channel is mapped to the local mem
