@@ -867,7 +867,7 @@ public class TranslatedRouter<E> {
                                     twc.replaceChannelWith(ch, newChannel);
                                     newElements.add(tse);
                                     tse.setEvent(mapOfAllOutputChannels.get(ch));
-                                    tse.addParam("" + twc.getNbOfSamples() + 1); // +1 for the header
+                                    tse.addParam("" + twc.getNbOfSamples() + " + 1" ); // +1 for the header
                                     tse.addParam("" + (int)(p.getX()));
                                     tse.addParam("" + (int)(p.getY()));
                                     tse.addParam("" + newChannel.getVC());
