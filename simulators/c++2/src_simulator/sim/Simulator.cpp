@@ -168,28 +168,28 @@ TMLTransaction* Simulator::getTransLowestEndTimeFPGA(SchedulableDevice*& oResult
 
 ID Simulator::schedule2GraphAUT(std::ostream& iAUTFile, ID iStartState, unsigned int& oTransCounter) const{
   std::cout<<"schedule graph aut!"<<std::endl;
-  CPUList::iterator i;
+  // CPUList::iterator i;
   //std::cout << "entry graph output\n";
   GraphTransactionQueue aQueue;
   TMLTransaction* aTrans, *aTopElement;
   ID aStartState=iStartState, aEndState=0;
   for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
-    for(unsigned int j = 0; j < (*i)->getAmoutOfCore(); j++) {
       aTrans = (*i)->getTransactions1By1(true);
-      if (aTrans!=0) aQueue.push(aTrans);
-    }
+      if (aTrans!=0) {
+	aQueue.push(aTrans);
+      }
   }
   for(FPGAList::const_iterator i=_simComp->getFPGAList().begin(); i != _simComp->getFPGAList().end(); ++i){
-      aTrans = (*i)->getTransactions1By1(true);
-      if (aTrans!=0) aQueue.push(aTrans);
+    //  for(TaskList::const_iterator j = _simComp->getTaskList().begin(); j != _simComp->getTaskList().end(); j++){
+       aTrans = (*i)->getTransactions1By1(true);
+       if (aTrans!=0) aQueue.push(aTrans);
+       //  }
   }
   //std::ostringstream aOutp;
   while (!aQueue.empty()){
     CPU* aCPU;
-    FPGA* aFPGA;
     aTopElement = aQueue.top();
     aCPU = aTopElement->getCommand()->getTask()->getCPU();
-    aFPGA = aTopElement->getCommand()->getTask()->getFPGA();
     aEndState = aTopElement->getStateID();
     if (aEndState==0){
       aEndState=TMLTransaction::getID();
@@ -198,16 +198,17 @@ ID Simulator::schedule2GraphAUT(std::ostream& iAUTFile, ID iStartState, unsigned
     //13 -> 17 [label = "i(CPU0__test1__TMLTask_1__wro__test1__ch<4 ,4>)"];
     oTransCounter++;
     //(20,"i(CPU0__test1__TMLTask_1__wr__test1__ch<4 ,4>)", 24)
-    //std::cout << "(" << aStartState << "," << "\"i(" << aCPU->toString() << "__" << aTopElement->getCommand()->getTask()->toString() << "__" << aTopElement->getCommand()->getCommandStr();
+    //std::cout << "(" << aStartState<< "," << "\"i(" << aCPU->toString() << "__" << aTopElement->getCommand()->getTask()->toString() << "__" << aTopElement->getCommand()->getCommandStr();
     if(aCPU){
-      if(aCPU->getAmoutOfCore()>1)
-	iAUTFile << "(" << aStartState << "," << "\"i(" << aCPU->toString() << "_core_" << aCPU->getCycleTime() << "__" << aTopElement->getCommand()->getTask()->toString() << "__" << aTopElement->getCommand()->getCommandStr();
-      else 
-	iAUTFile << "(" << aStartState << "," << "\"i(" << aCPU->toString() << "__" << aTopElement->getCommand()->getTask()->toString() << "__" << aTopElement->getCommand()->getCommandStr();
+      if(aCPU->getAmoutOfCore()>1){
+	iAUTFile << "(" << aStartState << "," << "\"i(" << aCPU->toString() << "_core_" << aTopElement->getTransactCoreNumber() << "__" << aTopElement->getCommand()->getTask()->toString() << "__" << aTopElement->getCommand()->getCommandStr() << "_Endtime<" << aTopElement->getEndTime() << ">";
+	std::cout << "(" << aStartState << "," << "\"i(" << aCPU->toString() << "_core_" << aTopElement->getTransactCoreNumber() << "__" << aTopElement->getCommand()->getTask()->toString() << "__" << aTopElement->getCommand()->getCommandStr();
+      }
+      else {
+	iAUTFile << "(" << aStartState << "," << "\"i(" << aCPU->toString() << "__" << aTopElement->getCommand()->getTask()->toString() << "__" << aTopElement->getCommand()->getCommandStr() << "_Endtime<" << aTopElement->getEndTime() << ">";
+	std::cout << "(" << aStartState << "," << "\"i(" << aCPU->toString() << "__" << aTopElement->getCommand()->getTask()->toString() << "__" << aTopElement->getCommand()->getCommandStr();
+      }
     }
-    else if(aFPGA)
-      iAUTFile << "(" << aStartState << "," << "\"i(" << aFPGA->toString() << "__" << aTopElement->getCommand()->getTask()->toString() << "__" << aTopElement->getCommand()->getCommandStr();
-    // std::cout << "(" << aStartState << "," << "\"i(" << aCPU->toString() << "__" << aTopElement->getCommand()->getTask()->toString() << "__" << aTopElement->getCommand()->getCommandStr();
     if (aTopElement->getChannel()!=0){
       iAUTFile << "__" << aTopElement->getChannel()->toShortString();
       std::cout << "__" << aTopElement->getChannel()->toShortString();
@@ -218,8 +219,6 @@ ID Simulator::schedule2GraphAUT(std::ostream& iAUTFile, ID iStartState, unsigned
     aQueue.pop();
     if(aCPU)
       aTrans = aCPU->getTransactions1By1(false);
-    else if(aFPGA)
-      aTrans = aFPGA->getTransactions1By1(false);
     if (aTrans!=0) aQueue.push(aTrans);
   }
   std::cout << "exit graph output\n";
