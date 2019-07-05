@@ -23,10 +23,6 @@
 <LOTOSPath data="../lotos" />
 <GGraphPath data="../graphs" />
 <TGraphPath data="../graphs" />
-<TToolUpdateURL data="" data1="http://labsoc.comelec.enst.fr/turtle/ttoolversion.html" />
-<TToolUpdateProxy data="false" />
-<TToolUpdateProxyPort data="8080" />
-<TToolUpdateProxyHost data="To Be Completed" />
 <JavaCodeDirectory data="../javacode" />
 <JavaCompilerPath data="/usr/bin/javac" />
 <TToolClassPath data="../javacode" />
@@ -35,7 +31,8 @@
 <SystemCCodeDirectory data="../simulators/c++2/" />
 <SystemCHost data="localhost"/>
 <SystemCCodeCompileCommand data="make -C ../simulators/c++2/" />
-<SystemCCodeExecuteCommand data="../simulators/c++2/run.x -ovcd ../simulators/c++2/vcddump.vcd" />
+<SystemCCodeExecuteCommand data="../simulators/c++2/run.x -ovcd vcddump.vcd" />
+<SystemCCodeExecuteCommand data="../simulators/c++2/run.x -cmd '1 6 500; 7 2 simu.txt'" />
 <SystemCCodeInteractiveExecuteCommand data="../simulators/c++2/run.x -server" />
 <TMLCodeDirectory data="../tmlcode/" />
 <CCodeDirectory data="../CCode" />
