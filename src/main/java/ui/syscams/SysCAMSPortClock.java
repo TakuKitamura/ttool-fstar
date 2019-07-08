@@ -36,104 +36,95 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-package syscamstranslator;
+package ui.syscams;
 
-import java.util.LinkedList;
+import java.awt.Graphics;
 
-import javax.swing.DefaultListModel;
+import ui.TDiagramPanel;
+import ui.TGComponent;
 
-/** 
- * Class SysCAMSTClock 
- * Parameters of a SystemC-AMS Clock
- * Creation: 08/07/2019
- * @version 1.0 08/07/2019
- * @author Daniela Genius
+/**
+ * Class SysCAMSPortClock
+ * Primitive port. To be used in SystemC-AMS diagrams
+ * Creation: 14/05/2018
+ * @version 1.0 14/05/2018
+ * @author Irina Kit Yan LEE
 */
 
-public class SysCAMSTClock extends SysCAMSTComponent{
-    private String name;
-    private String frequency;
-    private String unit;
-    private String dutyCycle;
-    private String startTime;
-    private String posFirst;
+public class SysCAMSPortClock extends SysCAMSPrimitivePort {
+//	private int period;
+//	private String time;
+//	private int rate;
+//	private int delay;
+        private int nbits;//DG
+	private String ClockType;
+	private boolean sensitive;
+	private String sensitiveMethod;
 	
-    //private SysCAMSTCluster cluster;	
-    private LinkedList<SysCAMSTPortClock> portClock;
-
-    
-    public SysCAMSTClock(String _name, String _frequency,  String _unit, String _dutyCycle, String _startTime, String _posFirst) {
-     
-    	name = _name;
-	frequency	= _frequency;
-	unit	= _unit;
-	dutyCycle	= _dutyCycle;
-	startTime	= _startTime;
-	posFirst	= _posFirst;
-	//cluster = _cluster;
-	portClock = new LinkedList<SysCAMSTPortClock>();
-    }
-
-
-	public String getName() {
-		return name;
+	public SysCAMSPortClock(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
+		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 	}
 
-    	public String getFrequency() {
-		return frequency;
+//	public int getPeriod() {
+//		return period;
+//	}
+//
+//	public void setPeriod(int period) {
+//		this.period = period;
+//	}
+//
+//	public String getTime() {
+//		return time;
+//	}
+//
+//	public void setTime(String time) {
+//		this.time = time;
+//	}
+//
+//	public int getRate() {
+//		return rate;
+//	}
+//
+//	public void setRate(int rate) {
+//		this.rate = rate;
+//	}
+//
+//	public int getDelay() {
+//		return delay;
+//	}
+//
+//	public void setDelay(int delay) {
+//		this.delay = delay;
+//	}
+
+	public void drawParticularity(Graphics g) {
 	}
 
-	public String getUnit() {
-		return unit;
+	public String getClockType() {
+		return ClockType;
 	}
 
-        public String getDutyCycle() {
-		return dutyCycle;
+	public void setClockType(String _ClockType) {
+		ClockType = _ClockType;
 	}
-
-    public String getStartTime() {
-		return startTime;
-	}
-    
-    
-    	public String getPosFirst() {
-		return posFirst;
-	}
-
-    
-	public void setName(String _name) {
-		name = _name;
-	}
- 
-    	public void setFrequency(String _frequency) {
-		 frequency = _frequency;
-	}
-
-	public void setUnit(String _unit) {
-		unit = _unit;
-	}
-
-        public void setDutyCycle(String _dutyCycle) {
-		dutyCycle = _dutyCycle;
-	}
-
-
-        public void setStartTime(String _startTime) {
-	       startTime = _startTime;
+	
+	public boolean getSensitive() {
+		return sensitive;
 	}
     
+	public int getNbits() {
+		return nbits;
+	}
     
-    	public void setPosFirst(String _posFirst) {
-		posFirst = _posFirst;
+	public void setSensitive(boolean _sensitive) {
+		sensitive = _sensitive;
 	}
 
-	public LinkedList<SysCAMSTPortClock> getPortClock(){
-		return portClock;
+	public String getSensitiveMethod() {
+		return sensitiveMethod;
 	}
 
-	public void addPortClock(SysCAMSTPortClock cl){
-		portClock.add(cl);
-	}
-
-    
+	public void setSensitiveMethod(String _sensitiveMethod) {
+		sensitiveMethod = _sensitiveMethod;
+	}	
 }

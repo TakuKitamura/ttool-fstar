@@ -73,6 +73,7 @@ public class ClusterCode {
 		if (cluster != null) {
 			LinkedList<SysCAMSTBlockTDF> tdf = cluster.getBlockTDF();
 			LinkedList<SysCAMSTBlockDE> de = cluster.getBlockDE();
+				LinkedList<SysCAMSTClock> clock = cluster.getClock();
 
 			corpsCluster = "// Simulation entry point." + CR + "int sc_main(int argc, char *argv[]) {" + CR2 
 					+ "\tusing namespace sc_core;" + CR + "\tusing namespace sca_util;" + CR2;
@@ -202,6 +203,52 @@ public class ClusterCode {
 				nb_block++;
 			}
 
+
+
+
+			//ajoute DG
+
+
+
+			for (SysCAMSTClock t : clock) {
+			    corpsCluster = corpsCluster + "\t  sc_clock " + t.getName() + " (\"" + t.getName() + "\"," + t.getFrequency()+","+ t.getUnit()+","+ t.getDutyCycle()+","+ t.getStartTime()+","+ t.getUnit()+","+ t.getPosFirst()+");" + CR;
+				
+				LinkedList<SysCAMSTPortClock> portClock = t.getPortClock();
+
+				for (SysCAMSTPortClock p : portClock) {
+					for (int i = 0; i < connectors.size(); i++) {
+						if (connectors.get(i).get_p1().getComponent() instanceof SysCAMSTPortClock && connectors.get(i).get_p2().getComponent() instanceof SysCAMSTPortClock) {
+							if (((SysCAMSTPortClock) connectors.get(i).get_p1().getComponent()).getName().equals(p.getName()) && ((SysCAMSTPortClock) connectors.get(i).get_p1().getComponent()).getClock().getName().equals(t.getName())) {
+								corpsCluster = corpsCluster + "\t" + t.getName() + "_" + nb_block + "." + p.getName() + "(" + names.get(i) + ");" + CR;
+							} else if (((SysCAMSTPortClock) connectors.get(i).get_p2().getComponent()).getName().equals(p.getName()) && ((SysCAMSTPortClock) connectors.get(i).get_p2().getComponent()).getClock().getName().equals(t.getName())) {
+								corpsCluster = corpsCluster + "\t" + t.getName() + "_" + nb_block + "." + p.getName() + "(" + names.get(i) + ");" + CR;
+							}
+						} else if (connectors.get(i).get_p1().getComponent() instanceof SysCAMSTPortConverter && connectors.get(i).get_p2().getComponent() instanceof SysCAMSTPortClock) {
+							if (((SysCAMSTPortConverter) connectors.get(i).get_p1().getComponent()).getName().equals(p.getName()) && ((SysCAMSTPortConverter) connectors.get(i).get_p1().getComponent()).getBlockTDF().getName().equals(t.getName())) {
+								corpsCluster = corpsCluster + "\t" + t.getName() + "_" + nb_block + "." + p.getName() + "(" + names.get(i) + ");" + CR;
+							} else if (((SysCAMSTPortClock) connectors.get(i).get_p2().getComponent()).getName().equals(p.getName()) && ((SysCAMSTPortClock) connectors.get(i).get_p2().getComponent()).getClock().getName().equals(t.getName())) {
+								corpsCluster = corpsCluster + "\t" + t.getName() + "_" + nb_block + "." + p.getName() + "(" + names.get(i) + ");" + CR;
+							}
+						} else if (connectors.get(i).get_p2().getComponent() instanceof SysCAMSTPortConverter && connectors.get(i).get_p1().getComponent() instanceof SysCAMSTPortClock) {
+							if (((SysCAMSTPortConverter) connectors.get(i).get_p2().getComponent()).getName().equals(p.getName()) && ((SysCAMSTPortConverter) connectors.get(i).get_p2().getComponent()).getBlockTDF().getName().equals(t.getName())) {
+								corpsCluster = corpsCluster + "\t" + t.getName() + "_" + nb_block + "." + p.getName() + "(" + names.get(i) + ");" + CR;
+							} else if (((SysCAMSTPortClock) connectors.get(i).get_p1().getComponent()).getName().equals(p.getName()) && ((SysCAMSTPortClock) connectors.get(i).get_p1().getComponent()).getClock().getName().equals(t.getName())) {
+								corpsCluster = corpsCluster + "\t" + t.getName() + "_" + nb_block + "." + p.getName() + "(" + names.get(i) + ");" + CR;
+							}
+						}
+					}
+				}
+				corpsCluster = corpsCluster + CR;
+				nb_block++;
+			}
+
+			
+			//fin ajoute DG
+
+
+
+
+			
 			corpsCluster = corpsCluster + "\t// Configure signal tracing." + CR 
 					+ "\tsca_trace_file* tfp = sca_create_tabular_trace_file(\"" + cluster.getClusterName() + "_tb\");" + CR;
 
