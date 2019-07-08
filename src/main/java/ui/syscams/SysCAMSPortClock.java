@@ -46,85 +46,66 @@ import ui.TGComponent;
 /**
  * Class SysCAMSPortClock
  * Primitive port. To be used in SystemC-AMS diagrams
- * Creation: 14/05/2018
- * @version 1.0 14/05/2018
- * @author Irina Kit Yan LEE
+ * Creation: 08/07/2019
+ * @version 1.0 08/07/2019
+ * @author Daniela Genius
 */
 
 public class SysCAMSPortClock extends SysCAMSPrimitivePort {
-//	private int period;
-//	private String time;
-//	private int rate;
-//	private int delay;
-        private int nbits;//DG
-	private String ClockType;
-	private boolean sensitive;
-	private String sensitiveMethod;
+    private double frequency;
+    private String unit;
+    private double startTime;
+    private double dutyCycle;
+    private boolean posFirst;
 	
 	public SysCAMSPortClock(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 	}
 
-//	public int getPeriod() {
-//		return period;
-//	}
-//
-//	public void setPeriod(int period) {
-//		this.period = period;
-//	}
-//
-//	public String getTime() {
-//		return time;
-//	}
-//
-//	public void setTime(String time) {
-//		this.time = time;
-//	}
-//
-//	public int getRate() {
-//		return rate;
-//	}
-//
-//	public void setRate(int rate) {
-//		this.rate = rate;
-//	}
-//
-//	public int getDelay() {
-//		return delay;
-//	}
-//
-//	public void setDelay(int delay) {
-//		this.delay = delay;
-//	}
+    /*	public double getFrequency() {
+		return frequency;
+	}
 
+	public void setFrequency(double frequency) {
+		this.frequency = frequency;
+	}
+
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		 this.unit = unit ;
+	}
+    
+	public double getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
+	}
+
+	public double getDutyCycle() {
+		return dutyCycle;
+	}
+
+	public void setDutyCycle() {
+		this.dutyCycle = dutyCycle;
+	}
+    
+	public boolean getPosFirst() {
+		return posFirst;
+	}
+
+        public void setPosFirst(boolean posFirst) {
+		this.posFirst = posFirst;
+	}
+    
+	public void setSensitive(boolean posFirst) {
+	    this.posFirst = posFirst;
+	    }*/
+    
 	public void drawParticularity(Graphics g) {
 	}
-
-	public String getClockType() {
-		return ClockType;
-	}
-
-	public void setClockType(String _ClockType) {
-		ClockType = _ClockType;
-	}
-	
-	public boolean getSensitive() {
-		return sensitive;
-	}
-    
-	public int getNbits() {
-		return nbits;
-	}
-    
-	public void setSensitive(boolean _sensitive) {
-		sensitive = _sensitive;
-	}
-
-	public String getSensitiveMethod() {
-		return sensitiveMethod;
-	}
-
-	public void setSensitiveMethod(String _sensitiveMethod) {
-		sensitiveMethod = _sensitiveMethod;
-	}	
 }

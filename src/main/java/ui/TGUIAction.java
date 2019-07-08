@@ -282,6 +282,7 @@ public class TGUIAction extends AbstractAction {
     public static final int CAMS_GENCODE = 482;
     public static final int CAMS_BLOCK_GPIO2VCI = 497;
      public static final int CAMS_CLOCK = 520;
+    public static final int CAMS_PORT_CLOCK = 521;
     
     // ELN
     public static final int ELN_EDIT = 483;
@@ -674,7 +675,7 @@ public class TGUIAction extends AbstractAction {
     public static final int MOVE_ENABLED = 463;
     public static final int FIRST_DIAGRAM = 464;
     
-    public static final int NB_ACTION = 521;
+    public static final int NB_ACTION = 522;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -1183,6 +1184,7 @@ public class TGUIAction extends AbstractAction {
         actions[CAMS_CONNECTOR] = new TAction("C-AMS-connector", "Add a connection", IconManager.imgic202, IconManager.imgic202, "Connector", "Connects two block of the currently opened SystemC-AMS Diagram", 0);
         actions[CAMS_PORT_TDF] = new TAction("C-AMS-port-TDF", "Add a TDF port", IconManager.imgic8000, IconManager.imgic8000, "TDF port", "Add a TDF port to the currently opened SystemC-AMS Diagram", 0);
         actions[CAMS_PORT_DE] = new TAction("C-AMS-port-DE", "Add a DE port", IconManager.imgic8001, IconManager.imgic8001, "DE port", "Add a DE port to the currently opened SystemC-AMS Diagram", 0);
+	 actions[CAMS_PORT_CLOCK] = new TAction("C-AMS-port-Clock", "Add a Clock port", IconManager.imgic8001, IconManager.imgic8001, "Clock port", "Add a Clock port to the currently opened SystemC-AMS Diagram", 0);
         actions[CAMS_PORT_CONVERTER] = new TAction("C-AMS-port-converter", "Add a converter port", IconManager.imgic8002, IconManager.imgic8002, "Converter port", "Add a converter port to the currently opened SystemC-AMS Diagram", 0);
         actions[CAMS_CLUSTER] = new TAction("C-AMS-cluster", "Add a cluster", IconManager.imgic8003, IconManager.imgic8003, "Cluster", "Add a cluster to the currently opened SystemC-AMS Diagram", 0);
         actions[CAMS_GENCODE] = new TAction("C-AMS-gencode", "SystemC-AMS code generation",IconManager.imgic94, IconManager.imgic94, "Generate SystemC-AMS code", "SystemC-AMS diagram without check syntax", 0);

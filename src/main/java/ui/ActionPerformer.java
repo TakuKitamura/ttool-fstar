@@ -938,7 +938,10 @@ public class ActionPerformer {
         	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.CAMS_PORT_TDF);
         } else if (command.equals(mgui.actions[TGUIAction.CAMS_PORT_DE].getActionCommand())) {
         	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.CAMS_PORT_DE);
-        } else if (command.equals(mgui.actions[TGUIAction.CAMS_PORT_CONVERTER].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.CAMS_PORT_CLOCK].getActionCommand())) {
+        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.CAMS_PORT_CLOCK);
+        }
+       else if (command.equals(mgui.actions[TGUIAction.CAMS_PORT_CONVERTER].getActionCommand())) {
         	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.CAMS_PORT_CONVERTER);
         } else if (command.equals(mgui.actions[TGUIAction.CAMS_CLUSTER].getActionCommand())) {
         	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.CAMS_CLUSTER);

@@ -68,7 +68,6 @@ public class SysCAMSComponentTaskDiagramToolBar extends TToolBar {
 		mgui.actions[TGUIAction.CAMS_BLOCK_DE].setEnabled(b);
 		mgui.actions[TGUIAction.CAMS_PORT_TDF].setEnabled(b);
 		mgui.actions[TGUIAction.CAMS_PORT_DE].setEnabled(b);
-		mgui.actions[TGUIAction.CAMS_PORT_CLOCK].setEnabled(b);
 		mgui.actions[TGUIAction.CAMS_PORT_CONVERTER].setEnabled(b);
 		mgui.actions[TGUIAction.CAMS_CLUSTER].setEnabled(b);
 		mgui.actions[TGUIAction.CAMS_GENCODE].setEnabled(b);
@@ -125,9 +124,6 @@ public class SysCAMSComponentTaskDiagramToolBar extends TToolBar {
 		button = this.add(mgui.actions[TGUIAction.CAMS_PORT_DE]);
 		button.addMouseListener(mgui.mouseHandler);
 
-		button = this.add(mgui.actions[TGUIAction.CAMS_PORT_CLOCK]);
-		button.addMouseListener(mgui.mouseHandler);
-		
 		button = this.add(mgui.actions[TGUIAction.CAMS_CLOCK]);
 		button.addMouseListener(mgui.mouseHandler);
 		

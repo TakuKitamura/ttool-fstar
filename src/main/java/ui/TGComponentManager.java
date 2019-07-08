@@ -343,6 +343,7 @@ public class TGComponentManager {
     public static final int CAMS_BLOCK_DE = 1603;
     public static final int CAMS_PORT_TDF = 1604;
     public static final int CAMS_PORT_DE = 1605;
+    public static final int CAMS_PORT_CLOCK = 5722;
     public static final int CAMS_PORT_CONVERTER = 1606;
     public static final int CAMS_CLUSTER = 1607;
     public static final int CAMS_BLOCK_GPIO2VCI = 1608;
@@ -1295,11 +1296,17 @@ public class TGComponentManager {
             case CAMS_BLOCK_DE:
             	tgc = new SysCAMSBlockDE(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             	break;
+		 case CAMS_CLOCK:
+            	tgc = new SysCAMSClock(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;
             case CAMS_PORT_TDF:
             	tgc = new SysCAMSPortTDF(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             	break;
             case CAMS_PORT_DE:
             	tgc = new SysCAMSPortDE(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+            	break;
+	case CAMS_PORT_CLOCK:
+            	tgc = new SysCAMSPortClock(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             	break;
             case CAMS_PORT_CONVERTER:
             	tgc = new SysCAMSPortConverter(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -1309,9 +1316,6 @@ public class TGComponentManager {
             	break;
             case CAMS_BLOCK_GPIO2VCI:
             	tgc = new SysCAMSBlockGPIO2VCI(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
-            	break;
-	case CAMS_CLOCK:
-            	tgc = new SysCAMSClock(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             	break;
             // ELN
             case ELN_RESISTOR:
@@ -1782,18 +1786,20 @@ public class TGComponentManager {
         	return CAMS_BLOCK_TDF;
         } else if (tgc instanceof SysCAMSBlockDE) {
         	return CAMS_BLOCK_DE;
+	} else if (tgc instanceof SysCAMSClock) {
+        	return CAMS_CLOCK;
         } else if (tgc instanceof SysCAMSPortTDF) {
         	return CAMS_PORT_TDF;
         } else if (tgc instanceof SysCAMSPortDE) {
         	return CAMS_PORT_DE;
+	} else if (tgc instanceof SysCAMSPortClock) {
+        	return CAMS_PORT_CLOCK;
         } else if (tgc instanceof SysCAMSPortConverter) {
         	return CAMS_PORT_CONVERTER;
         } else if (tgc instanceof SysCAMSCompositeComponent) {
         	return CAMS_CLUSTER;
         } else if (tgc instanceof SysCAMSBlockGPIO2VCI) {
         	return CAMS_BLOCK_GPIO2VCI;
-	} else if (tgc instanceof SysCAMSClock) {
-        	return CAMS_CLOCK;
         	// ELN
         } else if (tgc instanceof ELNConnector) {
         	return ELN_CONNECTOR;	

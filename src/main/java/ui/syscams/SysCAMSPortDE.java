@@ -49,13 +49,10 @@ import ui.TGComponent;
  * Creation: 14/05/2018
  * @version 1.0 14/05/2018
  * @author Irina Kit Yan LEE
+ * @revision 8/7/2019 Daniela Genius
 */
 
 public class SysCAMSPortDE extends SysCAMSPrimitivePort {
-//	private int period;
-//	private String time;
-//	private int rate;
-//	private int delay;
         private int nbits;//DG
 	private String DEType;
 	private boolean sensitive;
@@ -64,38 +61,6 @@ public class SysCAMSPortDE extends SysCAMSPrimitivePort {
 	public SysCAMSPortDE(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 	}
-
-//	public int getPeriod() {
-//		return period;
-//	}
-//
-//	public void setPeriod(int period) {
-//		this.period = period;
-//	}
-//
-//	public String getTime() {
-//		return time;
-//	}
-//
-//	public void setTime(String time) {
-//		this.time = time;
-//	}
-//
-//	public int getRate() {
-//		return rate;
-//	}
-//
-//	public void setRate(int rate) {
-//		this.rate = rate;
-//	}
-//
-//	public int getDelay() {
-//		return delay;
-//	}
-//
-//	public void setDelay(int delay) {
-//		this.delay = delay;
-//	}
 
 	public void drawParticularity(Graphics g) {
 	}
