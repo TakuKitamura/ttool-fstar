@@ -456,10 +456,10 @@ public class CommandParser {
         params = new int[2];
         paramNames = new String[2];
         params[0] = 1;
-        paramNames[0] = "File format: 0-> VCD, 1->HTML, 2->TXT";
+        paramNames[0] = "File format: 0-> VCD, 1->HTML, 2->TXT, 3->XML";
         params[1] = 2;
         paramNames[1] = "File name";
-        sc = new SimulationCommand("save-trace-in-file", "stif", "7", params, paramNames, "Saves the current trace of the simulation in a VCD, HTML or TXT file");
+        sc = new SimulationCommand("save-trace-in-file", "stif", "7", params, paramNames, "Saves the current trace of the simulation in a VCD, HTML, TXT or XML file");
         commandList.add(sc);
 
         // set-variable

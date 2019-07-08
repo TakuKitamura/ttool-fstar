@@ -151,7 +151,7 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         // Icon
         //g.drawImage(IconManager.imgic1102.getImage(), x + width - 20, y + 4, null);
         g.drawImage(IconManager.imgic1102.getImage(), x + 4, y + 4, null);
-        g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
+        //g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
 
         // Link to mapped units
         if (c == ColorManager.POINTER_ON_ME_0) {

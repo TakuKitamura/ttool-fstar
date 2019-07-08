@@ -114,11 +114,14 @@ public:
 		return os;
 	}
 	inline unsigned int getAmoutOfCore(){ return amountOfCore;} 
+	inline const TaskList& getTaskList() const{return _taskList;}
 	double averageLoad(unsigned int n) const;
 	//void drawTabCell(std::ofstream& myfile);
 	void drawPieChart(std::ofstream& myfile) const;
+	void buttonPieChart(std::ofstream& myfile) const;
 	void showPieChart(std::ofstream& myfile) const;
 	void schedule2HTML(std::ofstream& myfile) const;
+	void schedule2XML(std::ostringstream& glob,std::ofstream& myfile) const;
 	
 protected:
 	///List of all tasks running on the CPU

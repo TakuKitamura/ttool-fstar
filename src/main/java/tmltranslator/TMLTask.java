@@ -63,6 +63,7 @@ public class TMLTask extends TMLElement {
     private Set<TMLEvent> eventsList;
     private int operationType;
     private String operation = "";
+    private boolean isDaemon;
     private String operationMEC;
     private boolean isAttacker;
 
@@ -80,6 +81,12 @@ public class TMLTask extends TMLElement {
     public void setRequested(boolean _b) {
         isRequested = _b;
     }
+
+    public void setDaemon(boolean _b) {
+        isDaemon = _b;
+    }
+
+    public boolean isDaemon() {return isDaemon;}
 
     public void setPriority(int _priority) {
         priority = _priority;

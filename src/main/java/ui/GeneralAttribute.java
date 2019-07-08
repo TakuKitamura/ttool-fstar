@@ -37,47 +37,79 @@
  */
 
 
-package ui.util;
+package ui;
 
+import tmltranslator.TMLTextSpecification;
+import translator.JKeyword;
+import translator.RTLOTOSKeyword;
+import translator.UPPAALKeyword;
+
+import java.util.List;
 
 /**
- * Class DefaultText
- * Text of some windows
- * Creation: 01/12/2003
+ * Class GeneralAttribute
+ * Definition of a general attribute
+ * Creation: 03/07/2019
  *
  * @author Ludovic APVRILLE
- * @version 1.2 21/06/2018
+ * @version 1.0 03/07/2019
  */
-public class DefaultText {
+public class GeneralAttribute {
 
-    public static String BUILD = "13096";
-    public static String DATE = "2019/07/08 03:02:15 CET";
+    private String id;
+    private String initialValue;
+    private String type;
 
-    public static StringBuffer sbAbout = makeAbout();
 
-    public static String getAboutText() {
-        return new String(sbAbout);
+    public GeneralAttribute(String _id, String _initialValue, String _type) {
+        id = new String(_id);
+        initialValue = new String(_initialValue);
+        type = new String(_type);
     }
 
-    public static String getVersion() {
-        return "1.0beta"; /* Set new release Nov. 16th, 2017 */
+
+
+    public String getId() {
+        return id;
     }
 
-    public static String getFullVersion() {
-        return getVersion() + " -- build: " + DefaultText.BUILD + " date: " + DefaultText.DATE;
+    public String getInitialValue() {
+        return initialValue;
     }
 
-    private static StringBuffer makeAbout() {
-        StringBuffer sb = new StringBuffer();
-        sb.append("TTool version " + getFullVersion() + "\n");
-        sb.append("Copyright IMT - Telecom ParisTech / Ludovic Apvrille \n");
-        sb.append("\nContact: ludovic.apvrille@telecom-paristech.fr\n");
-        sb.append("\nProgrammers\n\tTelecom ParisTech: Ludovic Apvrille, Dominique Blouin, Fabien Tessier, \n\tDaniel Knorreck, Florian Lugou, Letitia Li\n");
-        sb.append("\n\tNokia: Andrea Enrici\n");
-        sb.append("\n\tLIP6: Daniela Genius\n");
-        sb.append("\nFor more information:\n");
-        sb.append("http://ttool.telecom-paristech.fr/\n\n");
-        return sb;
+    public String getType() {
+        return type;
     }
+
+    public void setId(String _id) {
+        id = _id;
+    }
+
+    public void setInitialValue(String _initialValue) {
+        initialValue = _initialValue;
+    }
+
+    public void setType(String _type) {
+        type = _type;
+    }
+
+
+    public String toString() {
+        String ret = "";
+        if (id != null) ret += id;
+        if ((initialValue != null) && (initialValue.length() > 0)) {
+            ret += " = " + initialValue;
+        }
+        if ((type != null) && (type.length() > 0)) {
+            ret += " : " + type;
+        }
+
+        return ret;
+    }
+
+    public GeneralAttribute makeClone() {
+        return new GeneralAttribute(id, initialValue, type);
+    }
+
 
 }

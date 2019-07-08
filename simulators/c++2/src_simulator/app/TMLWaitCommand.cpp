@@ -77,6 +77,6 @@ std::string TMLWaitCommand::toString() const{
 
 std::string TMLWaitCommand::toShortString() const{
 	std::ostringstream outp;
-	outp << _task->toString() << ": Wait " << _channel->toShortString() << " params:" << lastParams;
+	outp << _task->toString() << ": Wait " << _channel->toShortString();
 	return outp.str();
 }

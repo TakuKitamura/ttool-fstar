@@ -182,16 +182,22 @@ public class TranslatedRouter<E> {
         // Then, we need to find the channels starting from/arriving to a task mapped on this execNode
         Vector<TMLChannel> inputChannels = new Vector<>();
         Vector<TMLChannel> outputChannels = new Vector<>();
+
+        TraceManager.addDev("Considered exec node:" + execNode.getName());
         if (execNode != null) {
             for (TMLChannel ch : channelsViaNoc) {
                 TMLTask origin = ch.getOriginTask();
                 TMLTask destination = ch.getDestinationTask();
 
                 if (origin != null) {
-                    // find on which CPU is mapped this task
+                    // Find on which CPU is mapped this task
                     HwNode cpuOfOrigin = tmlmap.getHwNodeOf(origin);
+
+                    TraceManager.addDev("CPU of origin=" + cpuOfOrigin.getName());
+
                     if (cpuOfOrigin == execNode) {
-                        TraceManager.addDev("Found an output channel:" + ch.getName());
+                        TraceManager.addDev("Found an output channel:" + ch.getName() + " in exec node:" + execNode.getName() + " origin=" +
+                                origin.getName() + " dest=" + destination.getName());
                         outputChannels.add(ch);
                     }
                 }
@@ -200,7 +206,8 @@ public class TranslatedRouter<E> {
                     // find on which CPU is mapped this task
                     HwNode cpuOfDestination = tmlmap.getHwNodeOf(destination);
                     if (cpuOfDestination == execNode) {
-                        TraceManager.addDev("Found an input channel:" + ch.getName());
+                        TraceManager.addDev("Found an input channel:" + ch.getName() + " in exec node:" + execNode.getName()+ " origin=" +
+                                origin.getName() + " dest=" + destination.getName());
                         inputChannels.add(ch);
                     }
                 }
@@ -208,14 +215,14 @@ public class TranslatedRouter<E> {
         }
 
 
-        // We can create the MUX task: one mux task for each VC
+        // We can create the MUX task: one mux task for each VC and for each chan
         muxTasks = new Vector<>();
         mapOfAllOutputChannels = new HashMap<>();
         for (i = 0; i < nbOfVCs; i++) {
             // Now that we know all channels, we can generate the MUX tasks
             // We need one event par outputChannel
             Vector<TMLEvent> inputEventsOfMUX = new Vector<>();
-            for (TMLChannel chan : outputChannels) {
+            for (TMLChannel chan: outputChannels) {
                 //TraceManager.addDev("Output Channel:" + chan.getName() + " VC=" + chan.getVC());
                 if (chan.getVC() == i) {
                     TMLEvent outputEventOfMux = new TMLEvent("EventMUXof__" + chan.getName(), null, 8,
@@ -860,7 +867,7 @@ public class TranslatedRouter<E> {
                                     twc.replaceChannelWith(ch, newChannel);
                                     newElements.add(tse);
                                     tse.setEvent(mapOfAllOutputChannels.get(ch));
-                                    tse.addParam("" + newChannel.getSize());
+                                    tse.addParam("" + twc.getNbOfSamples() + " + 1" ); // +1 for the header
                                     tse.addParam("" + (int)(p.getX()));
                                     tse.addParam("" + (int)(p.getY()));
                                     tse.addParam("" + newChannel.getVC());
@@ -925,7 +932,7 @@ public class TranslatedRouter<E> {
                 TMLTask t = ch.getDestinationTask();
                 HwExecutionNode mappedOn = tmlmap.getHwNodeOf(t);
                 if (mappedOn == myHwExecutionNode) {
-                    TraceManager.addDev("Found HwNode of origin task " + t.getTaskName() + " for channel " + ch.getName());
+                    //TraceManager.addDev("Found HwNode of origin task " + t.getTaskName() + " for channel " + ch.getName());
                     // We must rework the channel of the task.
                     // The channel is modified to a NBRNBW with the same task has sender / receiver
                     // The channel is mapped to the local mem

@@ -45,10 +45,15 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import ui.*;
 import ui.util.IconManager;
+import ui.window.JDialogAttribute;
+import ui.window.JDialogGeneralAttribute;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -57,7 +62,7 @@ import java.util.LinkedList;
  * Creation: 31/08/2011
  *
  * @author Ludovic APVRILLE
- * @version 1.1 31/08/2011
+ * @version 1.2 03/07/2019
  */
 public class AvatarCDBlock extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent {
     private int textY1 = 3;
@@ -72,6 +77,10 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
     private int limitName = -1;
     private int limitAttr = -1;
     private int limitMethod = -1;
+
+    protected List<GeneralAttribute> myAttributes;
+
+    protected Map<GeneralAttribute, Integer> attrLocMap = new HashMap<GeneralAttribute, Integer>();
 
     // Icon
     //private int iconSize = 15;
@@ -128,10 +137,207 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
 
         myImageIcon = IconManager.imgic700;
 
+        this.myAttributes = new LinkedList<GeneralAttribute>();
+
         actionOnAdd();
     }
 
-    public void internalDrawing(Graphics g) {
+    @Override
+    public void internalDrawing(Graphics graph) {
+        Font font = graph.getFont();
+        this.internalDrawingAux(graph);
+        graph.setFont(font);
+    }
+
+    private void internalDrawingAux(Graphics graph) {
+
+        //TraceManager.addDev("Block drawing aux = " + this);
+
+        // Draw outer rectangle (for border)
+        Color c = graph.getColor();
+        graph.drawRect(this.x, this.y, this.width, this.height);
+
+        // Draw inner rectangle
+        //graph.setColor(ColorManager.AVATAR_BLOCK);
+
+        //TraceManager.addDev("type stereotype=" + typeStereotype);
+
+        //graph.setColor(BLOCK_TYPE_COLOR.get(typeStereotype));
+        graph.setColor(ColorManager.AVATAR_BLOCK);
+        graph.fillRect(this.x + 1, this.y + 1, this.width - 1, this.height - 1);
+        graph.setColor(c);
+
+        // limits
+        this.limitName = -1;
+        this.limitAttr = -1;
+
+        // h retains the coordinate along X where an element was last drawn
+        int h = 0;
+
+        int textY1 = (int) (this.textY1 * this.tdp.getZoom());
+        int textX = (int) (this.textX * this.tdp.getZoom());
+
+        // Draw icon
+        /*this.iconIsDrawn = this.width > IconManager.iconSize + 2 * textX && height > IconManager.iconSize + 2 * textX;
+        if (this.iconIsDrawn)
+            graph.drawImage(IconManager.img5100, this.x + this.width - IconManager.iconSize - textX, this.y + textX, null);
+*/
+
+        Font font = graph.getFont();
+
+
+        //String ster = BLOCK_TYPE_STR.get(typeStereotype);
+        String ster = stereotype;
+
+        //TraceManager.addDev("My ster=" + ster);
+
+        if (this.rescaled && !this.tdp.isScaled()) {
+            this.rescaled = false;
+            // Must set the font size...
+            // Incrementally find the biggest font not greater than max_font size
+            // If font is less than min_font, no text is displayed
+
+            // This is the maximum font size possible
+            int maxCurrentFontSize = Math.max(0, Math.min(this.height, (int) (this.maxFontSize * this.tdp.getZoom())));
+            font = font.deriveFont((float) maxCurrentFontSize);
+
+            // Try to decrease font size until we get below the minimum
+            while (maxCurrentFontSize > (this.minFontSize * this.tdp.getZoom() - 1)) {
+                // Compute width of name of the function
+                int w0 = graph.getFontMetrics(font).stringWidth(this.value);
+                // Compute width of string stereotype
+                int w1 = graph.getFontMetrics(font).stringWidth(ster);
+
+                // if one of the two width is small enough use this font size
+                if (Math.min(w0, w1) < this.width - (2 * this.textX))
+                    break;
+
+                // Decrease font size
+                maxCurrentFontSize--;
+                // Scale the font
+                font = font.deriveFont((float) maxCurrentFontSize);
+            }
+
+            // Box is too damn small
+            if (this.currentFontSize < this.minFontSize * this.tdp.getZoom()) {
+                maxCurrentFontSize++;
+                // Scale the font
+                font = font.deriveFont((float) maxCurrentFontSize);
+            }
+
+            // Use this font
+            graph.setFont(font);
+            this.currentFontSize = maxCurrentFontSize;
+        } else
+            font = font.deriveFont(this.currentFontSize);
+
+        graph.setFont(font.deriveFont(Font.BOLD));
+        h = graph.getFontMetrics().getAscent() + graph.getFontMetrics().getLeading() + textY1;
+
+        if (h + graph.getFontMetrics().getDescent() + textY1 >= this.height)
+            return;
+
+        // Write stereotype if small enough
+        int w = graph.getFontMetrics().stringWidth(ster);
+        if (w + 2 * textX < this.width)
+            graph.drawString(ster, this.x + (this.width - w) / 2, this.y + h);
+        else {
+            // try to draw with "..." instead
+
+
+            for (int stringLength = ster.length() - 1; stringLength >= 0; stringLength--) {
+                String abbrev = "<<" + ster.substring(0, stringLength) + "...>>";
+                w = graph.getFontMetrics().stringWidth(abbrev);
+                if (w + 2 * textX < this.width) {
+                    graph.drawString(abbrev, this.x + (this.width - w) / 2, this.y + h);
+                    break;
+                }
+            }
+        }
+
+        // Write value if small enough
+        graph.setFont(font);
+        h += graph.getFontMetrics().getHeight() + textY1;
+        if (h + graph.getFontMetrics().getDescent() + textY1 >= this.height)
+            return;
+
+        w = graph.getFontMetrics().stringWidth(this.value);
+        if (w + 2 * textX < this.width)
+            graph.drawString(this.value, this.x + (this.width - w) / 2, this.y + h);
+        else {
+            // try to draw with "..." instead
+            for (int stringLength = this.value.length() - 1; stringLength >= 0; stringLength--) {
+                String abbrev = this.value.substring(0, stringLength) + "...";
+                w = graph.getFontMetrics().stringWidth(abbrev);
+                if (w + 2 * textX < this.width) {
+                    graph.drawString(abbrev, this.x + (this.width - w) / 2, this.y + h);
+                    break;
+                }
+            }
+        }
+
+        h += graph.getFontMetrics().getDescent() + textY1;
+
+        // Update lower bound of text
+        this.limitName = this.y + h;
+
+        if (h + textY1 >= this.height)
+            return;
+
+        // Draw separator
+        graph.drawLine(this.x, this.y + h, this.x + this.width, this.y + h);
+
+        if (!this.tdp.areAttributesVisible())
+            return;
+
+        // Set font size
+        // int attributeFontSize = Math.min (12, this.currentFontSize - 2);
+        int attributeFontSize = this.currentFontSize * 5 / 6;
+        graph.setFont(font.deriveFont((float) attributeFontSize));
+        int step = graph.getFontMetrics().getHeight();
+
+        h += textY1;
+
+        // Attributes
+        limitAttr = limitName;
+        for (GeneralAttribute attr : this.myAttributes) {
+            h += step;
+            if (h >= this.height - textX) {
+                this.limitAttr = this.y + this.height;
+                return;
+            }
+
+            // Get the string for this parameter
+            String attrString = attr.toString();
+
+            // Try to draw it
+            w = graph.getFontMetrics().stringWidth(attrString);
+
+            attrLocMap.put(attr, this.y + h);
+            if (w + 2 * textX < this.width) {
+                graph.drawString(attrString, this.x + textX, this.y + h);
+                //this.drawConfidentialityVerification(attr.getConfidentialityVerification(), graph, this.x, this.y + h);
+            } else {
+                // If we can't, try to draw with "..." instead
+                int stringLength;
+                for (stringLength = attrString.length() - 1; stringLength >= 0; stringLength--) {
+                    String abbrev = attrString.substring(0, stringLength) + "...";
+                    w = graph.getFontMetrics().stringWidth(abbrev);
+                    if (w + 2 * textX < this.width) {
+                        graph.drawString(abbrev, this.x + textX, this.y + h);
+                        //this.drawConfidentialityVerification(attr.getConfidentialityVerification(), graph, this.x, this.y + h);
+                        break;
+                    }
+                }
+
+                if (stringLength < 0)
+                    // skip attribute
+                    h -= step;
+            }
+        }
+    }
+
+    /*public void internalDrawing(Graphics g) {
         String ster = "<<" + stereotype + ">>";
         Font f = g.getFont();
         Font fold = f;
@@ -234,13 +440,13 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
 			iconIsDrawn = false;
 		}*/
 
-        g.setFont(fold);
+        //g.setFont(fold);
 
 
         // Icon
         //g.drawImage(IconManager.imgic1100.getImage(), x + 4, y + 4, null);
         //g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
-    }
+    //}
 
 
     public TGComponent isOnOnlyMe(int x1, int y1) {
@@ -262,13 +468,23 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
 
     public boolean editOndoubleClick(JFrame frame) {
 
-        oldValue = getStereotype() + "/" + getValue();
+        JDialogGeneralAttribute jda = new JDialogGeneralAttribute(myAttributes, null, frame,
+                "Setting attributes of " + value, "Attribute", stereotype + "/" + value);
+        //setJDialogOptions(jda);
+        // jda.setSize(650, 375);
+        GraphicLib.centerOnParent(jda, 750, 375);
+        jda.setVisible(true); // blocked until dialog has been closed
+
+        rescaled = true;
+
+        String oldValue = getStereotype() + "/" + getValue();
 
         //String text = getName() + ": ";
-        String s = (String) JOptionPane.showInputDialog(frame, "Stereotype / identifier",
-                "Setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
-                null,
-                getStereotype() + "/" + getValue());
+        String s = jda.getValue();
+
+        if (s == null) {
+            return false;
+        }
 
         if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
             //boolean b;
@@ -507,6 +723,15 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<stereotype value=\"" + GTURTLEModeling.transformString(getStereotype()));
         sb.append("\" />\n");
+        for (GeneralAttribute a : this.myAttributes) {
+            sb.append("<Attribute id=\"");
+            sb.append(a.getId());
+            sb.append("\" value=\"");
+            sb.append(a.getInitialValue());
+            sb.append("\" type=\"");
+            sb.append(a.getType());
+            sb.append("\" />\n");
+        }
         sb.append("</extraparam>\n");
         return new String(sb);
     }
@@ -523,6 +748,7 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
 //            String sdescription = null;
 //            String prio;
 //            String isRoot = null;
+            String type, id, valueAtt;
 
             for (int i = 0; i < nl.getLength(); i++) {
                 n1 = nl.item(i);
@@ -537,6 +763,21 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
                             if (elt.getTagName().equals("stereotype")) {
                                 stereotype = elt.getAttribute("value");
                             }
+
+                            if (elt.getTagName().equals("Attribute")) {
+                                //
+                                type = elt.getAttribute("type");
+                                id = elt.getAttribute("id");
+                                valueAtt = elt.getAttribute("value");
+
+                                if (valueAtt.equals("null")) {
+                                    valueAtt = "";
+                                }
+
+                                GeneralAttribute ga = new GeneralAttribute(id, valueAtt, type);
+                                this.myAttributes.add(ga);
+
+                            }
                         }
                     }
                 }
@@ -545,6 +786,43 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
         } catch (Exception e) {
             throw new MalformedModelingException();
         }
+    }
+
+
+    // Main Tree
+    public int getChildCount() {
+        //TraceManager.addDev("Counting childs!");
+        return this.myAttributes.size()  + nbInternalTGComponent;
+    }
+
+    public Object getChild(int index) {
+
+        int sa = nbInternalTGComponent;
+
+        if (sa > index) {
+            return tgcomponent[index];
+        }
+
+        index = index - nbInternalTGComponent;
+
+        return this.myAttributes.get(index);
+    }
+
+    public int getIndexOfChild(Object child) {
+        if (child instanceof AvatarCDBlock) {
+            for (int i = 0; i < nbInternalTGComponent; i++) {
+                if (tgcomponent[i] == child) {
+                    return i;
+                }
+            }
+        }
+
+        if (child instanceof TAttribute) {
+            return this.myAttributes.indexOf(child) + nbInternalTGComponent;
+        }
+
+
+        return -1;
     }
 
 }

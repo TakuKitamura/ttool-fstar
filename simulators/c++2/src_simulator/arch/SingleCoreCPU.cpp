@@ -438,6 +438,13 @@ void SingleCoreCPU::schedule2TXT(std::ofstream& myfile) const{
   }
 }
 
+void SingleCoreCPU::schedule2XML(std::ostringstream& glob,std::ofstream& myfile) const{
+ for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
+      (*i)->toXML(glob, 0, _name, _ID);
+   //   myfile << glob << std::endl;
+
+  }
+}
 int SingleCoreCPU::allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const {
   int size = _transactList.size();
   int begining = size - maxNbOfTrans;

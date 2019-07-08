@@ -21,7 +21,8 @@
 <SystemCCodeDirectory data="../simulators/c++2/" />
 <SystemCHost data="localhost"/>
 <SystemCCodeCompileCommand data="make" />
-<SystemCCodeExecuteCommand data="../simulators/c++2/run.x -ovcd ../simulators/c++2/vcddump.vcd" />
+<SystemCCodeExecuteCommand data="../simulators/c++2/run.x -ovcd vcddump.vcd" />
+<SystemCCodeExecuteXCycle data="../simulators/c++2/run.x -cmd  '1 6 500; 7 2 simu.txt'" />
 <SystemCCodeInteractiveExecuteCommand data="../simulators/c++2/run.x -server" />
 <TMLCodeDirectory data="../tmlcode/" />
 <GTKWavePath data="/usr/bin/gtkwave" />

@@ -75,6 +75,7 @@ public:
     	*/
 	virtual TMLTransaction* getNextTransaction() { return _nextTransaction; }
 	double averageLoad() const;
+	void buttonPieChart(std::ofstream& myfile) const;
 	void drawPieChart(std::ofstream& myfile) const;
 	void showPieChart(std::ofstream& myfile) const;
 	
@@ -89,6 +90,7 @@ public:
       	\param myfile Reference to the ofstream object representing the output file
     	*/
 	virtual void schedule2TXT(std::ofstream& myfile) const =0;
+	void schedule2XML(std::ostringstream& glob,std::ofstream& myfile) const;
 
 	/**
       	\param glob references the output stream object 
@@ -153,7 +155,6 @@ public:
 	static TMLTime getOverallTransSize() { return _overallTransSize; }
 	inline void setCycleTime (unsigned int t) { _cycleTime =t; }
         inline unsigned int getCycleTime() { return _cycleTime; }
-	
 	inline std::string getName() {return _name;}
 protected:
 	///Unique ID of the device
@@ -187,11 +188,16 @@ protected:
 									const unsigned int colSpan,
 									const std::string cellClass );
 
-	
 	static void writeHTMLColumn(	std::ofstream& myfile,
 									const unsigned int colSpan,
 									const std::string cellClass,
 									const std::string title );
+	
+	static void writeHTMLColumn(	std::ofstream& myfile,
+									const unsigned int colSpan,
+									const std::string cellClass,
+									const std::string title,
+									const std::string content );
 	
 
 	static void writeHTMLColumn(	std::ofstream& myfile,

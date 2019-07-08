@@ -77,7 +77,7 @@ public class TMLArchiTextSpecification {
     private String fpgaparameters[] = {"capacity", "byteDataSize", "mappingPenalty", "goIdleTime",
             "maxConsecutiveIdleCycles", "reconfigurationTime", "execiTime", "execcTime", "scheduling"};
     private String linkparameters[] = {"bus", "node", "priority"};
-    private String hwaparameters[] = {"byteDataSize", "execiTime", "execTime"};
+    private String hwaparameters[] = {"byteDataSize", "execiTime", "execcTime"};
     private String busparameters[] = {"byteDataSize", "pipelineSize", "arbitration"};
     private String bridgeparameters[] = {"bufferByteSize"};
     private String memoryparameters[] = {"byteDataSize"};
@@ -635,7 +635,7 @@ public class TMLArchiTextSpecification {
                 if (node instanceof HwFPGA) {
                     HwFPGA fpga = (HwFPGA) node;
 
-                    if (!checkParameter("SET", _split, 2, 3, _lineNb)) {
+                    if (!checkParameter("SET", _split, 2, 13, _lineNb)) {
                         return -1;
                     }
 
@@ -857,6 +857,7 @@ public class TMLArchiTextSpecification {
     // Type 10: HWA parameter
     // Type 11: BRIDGE parameter
     // Type 12: MEMORY parameter
+    // Type 13: FPGA parameter
 
     public boolean checkParameter(String _inst, String[] _split, int _parameter, int _type, int _lineNb) {
         boolean err = false;
@@ -941,6 +942,12 @@ public class TMLArchiTextSpecification {
                         err = true;
                     }
                     break;
+                case 13:
+                    if (!isIncluded(_split[_parameter], fpgaparameters)) {
+                        err = true;
+                    }
+                    break;
+
             }
         } else {
             err = true;

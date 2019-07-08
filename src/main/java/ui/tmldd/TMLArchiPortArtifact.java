@@ -164,7 +164,7 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         g.drawLine(x+width-space-cran, y+space, x+width-space-cran, y+space+cran);
         g.drawLine(x+width-space-cran, y+space+cran, x + width-space, y+space+cran);
 
-        g.drawImage(IconManager.img9, x+width-space-fileX + 3, y + space + 7, null);
+        //g.drawImage(IconManager.img9, x+width-space-fileX + 3, y + space + 7, null);
 
         g.drawString(value, x + textX , y + textY);
 

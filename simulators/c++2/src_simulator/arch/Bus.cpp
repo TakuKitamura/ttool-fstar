@@ -222,7 +222,13 @@ void Bus::schedule2TXT(std::ofstream& myfile) const{
 		myfile << (*i)->toShortString() << std::endl;
 	}
 }
+void Bus::schedule2XML(std::ostringstream& glob,std::ofstream& myfile) const{
+ for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
+      (*i)->toXML(glob, 0, _name, _ID);
+   //   myfile << glob.str() << std::endl;
 
+  }
+}
 int Bus::allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const {
   int size = _transactList.size();
   int begining = size - maxNbOfTrans;

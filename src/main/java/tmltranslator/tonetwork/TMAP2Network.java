@@ -80,7 +80,7 @@ public class TMAP2Network<E>  {
 
     public TMAP2Network(TMLMapping<?> _tmlmapping, int nocSize) {
         tmlmapping = _tmlmapping;
-        routers = new TranslatedRouter[nbOfVCs][nbOfVCs];
+        routers = new TranslatedRouter[nocSize][nocSize];
         this.nocSize = nocSize;
     }
 

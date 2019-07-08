@@ -101,6 +101,7 @@ public class ConfigurationTTool {
     public static String CCodeDirectory = "";
     public static String SystemCCodeCompileCommand = "";
     public static String SystemCCodeExecuteCommand = "";
+    public static String SystemCCodeExecuteXCycle = "";
     public static String SystemCCodeInteractiveExecuteCommand = "";
     public static String SystemCHost = "";
     public static String VCDPath = "";
@@ -473,6 +474,7 @@ public class ConfigurationTTool {
             sb.append("SystemCHost: " + SystemCHost + "\n");
             sb.append("SystemCCodeCompileCommand: " + SystemCCodeCompileCommand + "\n");
             sb.append("SystemCCodeExecuteCommand: " + SystemCCodeExecuteCommand + "\n");
+            sb.append("SystemCCodeExecuteXCycle: " + SystemCCodeExecuteXCycle + "\n");
             sb.append("SystemCCodeInteractiveExecuteCommand: " + SystemCCodeInteractiveExecuteCommand + "\n");
             sb.append("GTKWavePath: " + GTKWavePath + "\n");
             // TML
@@ -728,6 +730,9 @@ public class ConfigurationTTool {
                 nl = doc.getElementsByTagName("SystemCCodeExecuteCommand");
                 if (nl.getLength() > 0)
                     SystemCCodeExecuteCommand(nl);
+                nl = doc.getElementsByTagName("SystemCCodeExecuteXCycle");
+                if (nl.getLength() > 0)
+                    SystemCCodeExecuteXCycle(nl);
                 nl = doc.getElementsByTagName("SystemCCodeInteractiveExecuteCommand");
                 if (nl.getLength() > 0)
                     SystemCCodeInteractiveExecuteCommand(nl);
@@ -1221,6 +1226,15 @@ public class ConfigurationTTool {
         try {
             Element elt = (Element) (nl.item(0));
             SystemCCodeExecuteCommand = elt.getAttribute("data");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+
+    private static void SystemCCodeExecuteXCycle(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element) (nl.item(0));
+            SystemCCodeExecuteXCycle = elt.getAttribute("data");
         } catch (Exception e) {
             throw new MalformedConfigurationException(e.getMessage());
         }

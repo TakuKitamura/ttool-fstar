@@ -570,6 +570,7 @@ public class GTMLModeling {
                 }
                 tmlt = new TMLTask(makeName(tgc, tmlcpc.getValue()), tmlcpc, tmladp);
                 tmlt.addOperation(tmlcpc.getOperation());
+                tmlt.setDaemon(tmlcpc.isDaemon());
                 tmlt.setAttacker(tmlcpc.isAttacker());
                 //TraceManager.addDev("Task added:" + tmlt.getName() + " with tadp=" + tmladp + " major=" + tmladp.getMGUI().getMajorTitle(tmladp));
                 listE.addCor(tmlt, tgc);

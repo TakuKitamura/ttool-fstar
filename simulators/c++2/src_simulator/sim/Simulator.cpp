@@ -325,6 +325,46 @@ void Simulator::schedule2TXT(std::string& iTraceFileName) const{
   std::cout << "The text output took " << getTimeDiff(aBegin,aEnd) << "usec. File: " << iTraceFileName << std::endl;
 }
 
+
+void Simulator::schedule2XML(std::ostringstream& glob,std::string& iTraceFileName) const{
+  struct timeval aBegin,aEnd;
+  gettimeofday(&aBegin,NULL);
+
+  if ( !ends_with( iTraceFileName, EXT_XML ) ) {
+    iTraceFileName.append( EXT_XML );
+  }
+
+  std::ofstream myfile(iTraceFileName.c_str());
+  if (myfile.is_open()){
+
+      glob << TAG_HEADER << std::endl << TAG_STARTo << std::endl << TAG_GLOBALo << std::endl << TAG_MSGo << "Simulator status notification" << TAG_MSGc << TAG_ERRNOo << 0 << TAG_ERRNOc << std::endl;
+          //if (_busy) aMessage << SIM_BUSY; else aMessage << SIM_READY;
+
+    //for(CPUList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
+    for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
+      (*i)->schedule2XML(glob,myfile);
+    }
+    for(FPGAList::const_iterator i=_simComp->getFPGAList().begin(); i != _simComp->getFPGAList().end(); ++i){
+      (*i)->schedule2XML(glob,myfile);
+    }
+    //for(BusList::const_iterator j=_simComp->getBusIterator(false); j != _simComp->getBusIterator(true); ++j){
+    for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
+      (*j)->schedule2XML(glob,myfile);
+    }
+
+    glob << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;
+
+    myfile << glob.str() << std::endl;
+    myfile.close();
+  }
+  else {
+    std::cout << "Unable to open text output file." << std::endl;
+  }
+
+  gettimeofday(&aEnd,NULL);
+  std::cout << "The text output took " << getTimeDiff(aBegin,aEnd) << "usec. File: " << iTraceFileName << std::endl;
+}
+
 int Simulator::allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const{
   int total = 0;
   //glob << TAG_TRANSo << "Transaction" << TAG_TRANSc << std::endl;
@@ -437,34 +477,45 @@ std::cout<<"schedule2HTML--------------------------------------*****************
       	(*i)->setHtmlCurrTask(*j);
 	(*i)->drawPieChart(myfile);
       }
-      (*i)->buttonPieChart(myfile);
+      // (*i)->buttonPieChart(myfile);
     }
     for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
        (*j)->drawPieChart(myfile);
     }
        
-    myfile << "}" <<std::endl;
-  
+    
+    myfile << "$(\"#button\").click(function() {\n";
+    for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
+      (*i)->buttonPieChart(myfile);
+    }
+    for(FPGAList::const_iterator i=_simComp->getFPGAList().begin(); i != _simComp->getFPGAList().end(); ++i){
+      (*i)->buttonPieChart(myfile);
+    }
+    for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
+      (*j)->buttonPieChart(myfile);
+    }
+    myfile << "     });" << std::endl << "}" << std::endl;
+    
     myfile << SCHED_HTML_END_JS << std::endl; //<script>
     // myfile << SCHED_HTML_END_JS;
     //myfile << SCHED_HTML_JS_LINK;
     //myfile << SCHED_HTML_END_JS;
-    
+    jsfile.close();
     //for(CPUList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
+        
+    myfile << SCHED_HTML_TITLE_HW << std::endl;
     for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
       for(unsigned int j = 0; j < (*i)->getAmoutOfCore(); j++) {
         //std::cout<<"core number is "<<(*i)->getAmoutOfCore()<<std::endl;
 	(*i)->schedule2HTML(myfile);
-       	(*i)->showPieChart(myfile);
+	//(*i)->showPieChart(myfile);
 	(*i)->setCycleTime((*i)->getCycleTime()+1);
 	
       }
         if((*i)->getAmoutOfCore() == 1)
 	   (*i)->setCycleTime(0);
-    }
-    jsfile.close();
-    
-    
+    }   
+
     for(FPGAList::const_iterator j=_simComp->getFPGAList().begin(); j != _simComp->getFPGAList().end(); ++j){     
       (*j)->setStartFlagHTML(true);
       for(TaskList::const_iterator i = (*j)->getTaskList().begin(); i != (*j)->getTaskList().end(); ++i){
@@ -476,22 +527,52 @@ std::cout<<"schedule2HTML--------------------------------------*****************
 	(*j)->schedule2HTML(myfile);
 	(*j)->setStartFlagHTML(false);
       }
-      myfile << SCHED_HTML_JS_TABLE_BEGIN << std::endl;
-      myfile << SCHED_HTML_JS_BUTTON1 << (*j)->getID()  << SCHED_HTML_JS_BUTTON2 << std::endl;
-      myfile << SCHED_HTML_JS_TABLE_END << std::endl;
+      //  myfile << SCHED_HTML_JS_TABLE_BEGIN << std::endl;
+      //   myfile << SCHED_HTML_JS_BUTTON1 << (*j)->getID()  << SCHED_HTML_JS_BUTTON2 << std::endl;
+      // myfile << SCHED_HTML_JS_TABLE_END << std::endl;
+      for(TaskList::const_iterator i = (*j)->getTaskList().begin(); i != (*j)->getTaskList().end(); ++i){
+	(*j)->setHtmlCurrTask(*i);
+	//(*j)->showPieChart(myfile);
+      }
+    }
+    // myfile << SCHED_HTML_JS_TABLE_END << std::endl << "</tr>" << std::endl;
+    //  myfile << SCHED_HTML_JS_CLEAR <<std::endl;
+    
+     
+    for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
+      (*j)->schedule2HTML(myfile);     
+      // (*j)->showPieChart(myfile);
+    }
+    //for_each(iCPUlist.begin(), iCPUlist.end(),std::bind2nd(std::mem_fun(&CPU::schedule2HTML),myfile));
+   
+    myfile << SCHED_HTML_JS_TABLE_BEGIN << std::endl;
+     myfile << SCHED_HTML_JS_BUTTON << std::endl;
+     myfile << SCHED_HTML_JS_TABLE_END << std::endl;
+     
+     for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
+      (*i)->showPieChart(myfile);
+    }
+    for(FPGAList::const_iterator j=_simComp->getFPGAList().begin(); j != _simComp->getFPGAList().end(); ++j){
       for(TaskList::const_iterator i = (*j)->getTaskList().begin(); i != (*j)->getTaskList().end(); ++i){
 	(*j)->setHtmlCurrTask(*i);
 	(*j)->showPieChart(myfile);
       }
-      myfile << SCHED_HTML_JS_CLEAR <<std::endl;
     }
-    
     for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
-      (*j)->schedule2HTML(myfile);     
       (*j)->showPieChart(myfile);
     }
-    //for_each(iCPUlist.begin(), iCPUlist.end(),std::bind2nd(std::mem_fun(&CPU::schedule2HTML),myfile));
-
+    myfile << SCHED_HTML_JS_CLEAR << std::endl;
+    myfile << SCHED_HTML_TITLE_TASK << std::endl;
+    for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
+      for(TaskList::const_iterator j = (*i)->getTaskList().begin(); j != (*i)->getTaskList().end(); ++j){
+	(*j)->schedule2HTML(myfile);
+      }
+    }
+    for(FPGAList::const_iterator i=_simComp->getFPGAList().begin(); i != _simComp->getFPGAList().end(); ++i){
+      for(TaskList::const_iterator j = (*i)->getTaskList().begin(); j != (*i)->getTaskList().end(); ++j){
+	(*j)->schedule2HTML(myfile);
+      }
+    }
     myfile << SCHED_HTML_END_BODY; // </body>\n
     myfile << SCHED_HTML_END_HTML; // </html>\n
 
@@ -1463,6 +1544,9 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
       aGlobMsg << TAG_MSGo << "Schedule output in TXT format" << TAG_MSGc << std::endl;
       schedule2TXT(aStrParam);
       break;
+    case 3: //XML
+      aGlobMsg << TAG_MSGo << "Schedule output in XML format" << TAG_MSGc << std::endl;
+      schedule2XML(anEntityMsg,aStrParam);
     default:
       aGlobMsg << TAG_MSGo << MSG_CMDNFOUND<< TAG_MSGc << std::endl;
       anErrorCode=3;

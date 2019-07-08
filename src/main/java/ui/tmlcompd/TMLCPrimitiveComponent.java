@@ -71,6 +71,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
     private Color myColor;
 
     private boolean isAttacker = false;
+    private boolean isDaemon = false;
     // Icon
     private int iconSize = 15;
     private boolean iconIsDrawn = false;
@@ -291,6 +292,10 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         return isAttacker;
     }
 
+    public boolean isDaemon() {
+        return isDaemon;
+    }
+
     public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
         // On the icon?
         if (iconIsDrawn) {
@@ -343,7 +348,8 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         }
 
         // And so -> attributes!
-        JDialogAttribute jda = new JDialogAttribute(myAttributes, null, frame, "Setting attributes of " + value, "Attribute", operation);
+        JDialogAttribute jda = new JDialogAttribute(myAttributes, null, frame,
+                "Setting attributes of " + value, "Attribute", operation, isDaemon);
         setJDialogOptions(jda);
         // jda.setSize(650, 375);
         GraphicLib.centerOnParent(jda, 750, 375);
@@ -353,6 +359,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         //return false;
         //}
         operation = jda.getOperation();
+        isDaemon = jda.isDaemon();
         rescaled = true;
         return true;
 
@@ -503,6 +510,8 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<Data isAttacker=\"");
         sb.append(isAttacker() ? "Yes" : "No");
+        sb.append("\" daemon=\"");
+        sb.append(isDaemon);
         sb.append("\" Operation=\"");
         sb.append(operation);
         sb.append("\" />\n");
@@ -552,11 +561,20 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
                             elt = (Element) n2;
                             if (elt.getTagName().equals("Data")) {
                                 isAttacker = elt.getAttribute("isAttacker").equals("Yes");
+
                                 String tmpO = elt.getAttribute("Operation");
                                 if (tmpO == null) {
                                     operation = "";
                                 }  else {
                                     operation = tmpO;
+                                }
+
+
+                                tmpO = elt.getAttribute("daemon");
+                                if (tmpO == null) {
+                                    isDaemon = false;
+                                }  else {
+                                    isDaemon = tmpO.equals("true");
                                 }
                             }
                             if (elt.getTagName().equals("Attribute")) {

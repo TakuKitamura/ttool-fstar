@@ -90,7 +90,7 @@ void CPU::drawPieChart(std::ofstream& myfile) const {
     myfile << "   var ctx" << _ID << "_"  << j << "= $(\"#pie-chartcanvas-" << _ID << "_" << j << "\");\n";
     
     double idle=1;
-    myfile << "     var data" << _ID << "_" << j << " = new Array (";
+    myfile << "   var data" << _ID << "_" << j << " = new Array (";
     while( iter != transPercentage.end()){
       myfile << "\"" << iter->second << "\",";
       idle-=iter->second;
@@ -120,16 +120,26 @@ void CPU::drawPieChart(std::ofstream& myfile) const {
                                      {\n \
                                            data : efficiency" << _ID << "_" << j << ",\n";
     myfile << "                            backgroundColor : coloR" << _ID << "_" << j << std::endl;
-    myfile << SCHED_HTML_JS_CONTENT1 << "Average load is " << averageLoad(j) << SCHED_HTML_JS_CONTENT2 << std::endl; 
-    myfile << "$(\"#" << _ID << "_" << j << "\").click(function() {\n";
-    myfile << "    var chart" << _ID << "_" << j << " = new Chart( "<<
-      "ctx" << _ID << "_" << j << ", {\n \
-              type : \"pie\",\n";
-    myfile << "               data : data" << _ID << "_" << j <<",\n";
-    myfile << "               " << SCHED_HTML_JS_CONTENT3 << std::endl;
+    myfile << SCHED_HTML_JS_CONTENT1;
+    myfile << "  var options" << _ID << "_" << j << SCHED_HTML_JS_CONTENT3;
+    myfile << _name << "_core_" << this->_cycleTime << ": Average load is " << std::setprecision(2) << averageLoad(j) << SCHED_HTML_JS_CONTENT2 << std::endl; 
   }
   
 }
+
+
+void CPU::buttonPieChart(std::ofstream& myfile) const{
+  // myfile << "$(\"#" << _ID << "\").click(function() {\n";
+ 
+    myfile << "    var chart" << _ID << "_" << this->_cycleTime << " = new Chart( "<<
+      "ctx" << _ID << "_" << this->_cycleTime << ", {\n \
+              type : \"pie\",\n";
+    myfile << "               data : data" << _ID << "_" << this->_cycleTime <<",\n";
+    myfile << "               options : options" << _ID << "_" << this->_cycleTime << std::endl << "                   });" << std::endl;
+    myfile << "   chart" << _ID << "_" << this->_cycleTime << SCHED_HTML_JS_HIDE;
+    myfile << "   chart" << _ID << "_" << this->_cycleTime << ".update();" << std::endl;
+}
+
 
 void CPU::showPieChart(std::ofstream& myfile) const{
   //myfile << SCHED_HTML_JS_DIV_ID << _ID << "_" << this->_cycleTime << SCHED_HTML_JS_DIV_ID_END << std::endl;
@@ -138,24 +148,34 @@ void CPU::showPieChart(std::ofstream& myfile) const{
     type : \"pie\",\n";
   myfile << "data : data " << _ID << this->_cycleTime <<",\n";
   myfile << SCHED_HTML_JS_CONTENT2 << std::endl;*/
-  myfile << SCHED_HTML_JS_BUTTON1 << _ID << "_" << this->_cycleTime << SCHED_HTML_JS_BUTTON2 << std::endl;
-  myfile << SCHED_HTML_JS_DIV_BEGIN << std::endl;
+  //myfile << SCHED_HTML_JS_BUTTON1 << _ID << "_" << this->_cycleTime << SCHED_HTML_JS_BUTTON2 << std::endl;
+  myfile << SCHED_HTML_JS_DIV_BEGIN2 << std::endl;
   myfile << SCHED_HTML_JS_BEGIN_CANVAS << _ID << "_" << this->_cycleTime << SCHED_HTML_JS_END_CANVAS << std::endl;
   myfile << SCHED_HTML_JS_DIV_END << std::endl;
     
 }
   
-   
+void CPU::schedule2XML(std::ostringstream& glob,std::ofstream& myfile) const{
+ for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
+      (*i)->toXML(glob, 0, _name, _ID);
+    //  myfile << glob.str() << std::endl;
+
+  }
+}
 
 void CPU::schedule2HTML(std::ofstream& myfile) const {  
-  myfile << "<h2><span>Scheduling for device: "<< _name <<"_core_"<<this->_cycleTime<< "</span></h2>" << std::endl;
-
+  // myfile << "<h2><span>Scheduling for device: "<< _name <<"_core_"<<this->_cycleTime<< "</span></h2>" << std::endl;
+  myfile << SCHED_HTML_DIV << SCHED_HTML_BOARD;
+  myfile << _name << "_core_" << this->_cycleTime << END_TD << "</tr>" << std::endl;
+  myfile << SCHED_HTML_JS_TABLE_END << std::endl;
+  myfile << SCHED_HTML_BOARD2 << std::endl;
   if ( _transactList.size() == 0 ) {
     myfile << "<h4>Device never activated</h4>" << std::endl;
+    myfile << SCHED_HTML_JS_CLEAR << std::endl;
   }
   else {
-    myfile << "<table>" << std::endl << "<tr>";
-
+    //myfile << "<table>" << std::endl << "<tr>";
+    myfile  << "<tr>";
     std::map<TMLTask*, std::string> taskCellClasses;
     unsigned int nextCellClassIndex = 0;
     TMLTime aCurrTime = 0;
@@ -185,8 +205,10 @@ void CPU::schedule2HTML(std::ofstream& myfile) const {
 	// Issue #4
 	TMLTask* task = aCurrTrans->getCommand()->getTask();
 	const std::string cellClass = determineHTMLCellClass( taskCellClasses, task, nextCellClassIndex );
-
-	writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString() );
+	std::string aCurrTransName=aCurrTrans->toShortString();
+	unsigned int indexTrans=aCurrTransName.find_first_of(":");
+	std::string aCurrContent=aCurrTransName.substr(indexTrans+1,2);
+	writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString(), aCurrContent );
 
 	aCurrTime = aCurrTrans->getEndTime();
       }
@@ -208,15 +230,16 @@ void CPU::schedule2HTML(std::ofstream& myfile) const {
       //myfile << "<td colspan=\"5\" class=\"sc\">" << aLength << "</td>";
     }
 
-    myfile << "</tr>" << std::endl << "</table>" << std::endl << "<table>" << std::endl << "<tr>";
-
-    for( std::map<TMLTask*, std::string>::iterator taskColIt = taskCellClasses.begin(); taskColIt != taskCellClasses.end(); ++taskColIt ) {
+    myfile << "</tr>" << std::endl << "</table>" << std::endl << SCHED_HTML_JS_DIV_END << std::endl;
+    myfile << SCHED_HTML_JS_CLEAR << std::endl;
+  
+    /* for( std::map<TMLTask*, std::string>::iterator taskColIt = taskCellClasses.begin(); taskColIt != taskCellClasses.end(); ++taskColIt ) {
       TMLTask* task = (*taskColIt).first;
       // Unset the default td max-width of 5px. For some reason setting the max-with on a specific t style does not work
       myfile << "<td class=\"" << taskCellClasses[ task ] << "\"></td><td style=\"max-width: unset;\">" << task->toString() << "</td><td class=\"space\"></td>";
-    }
+      }*/
 
-    myfile << "</tr>" << std::endl;
+    //myfile << "</tr>" << std::endl;
 
 #ifdef ADD_COMMENTS
     bool aMoreComments = true, aInit = true;
@@ -246,6 +269,6 @@ void CPU::schedule2HTML(std::ofstream& myfile) const {
       myfile << "</tr>" << std::endl;
     }
 #endif
-    myfile << "</table>" << std::endl;
+    //  myfile << "</table>" << std::endl;
   }
 }
