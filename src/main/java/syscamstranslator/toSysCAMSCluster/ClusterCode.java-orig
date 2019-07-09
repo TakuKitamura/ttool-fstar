@@ -74,17 +74,7 @@ public class ClusterCode {
 			
             corpsCluster = "template <typename vci_param>" + CR +
                           "class " +cluster.getClusterName()+ " : public sc_core::sc_module { "+ CR;
-
-
-
-
-			for (SysCAMSTClock t : clock) {
-			    corpsCluster = corpsCluster + "\t  sc_clock " + t.getName() + " (\"" + t.getName() + "\"," + t.getFrequency()+","+ t.getUnit()+","+ t.getDutyCycle()+","+ t.getStartTime()+","+ t.getUnit()+","+ t.getPosFirst()+");" + CR;
-			}
-			//ToDo 9.7.2019: add lines for reading (several) clock ports and sensitivity lists
-
-
-	    
+                          
             for (SysCAMSTBlockTDF t : tdf) {
                 if (!t.getListTypedef().isEmpty()) {
                     for (int i = 0; i < t.getListTypedef().getSize(); i++) {
@@ -311,7 +301,7 @@ public class ClusterCode {
 				corpsCluster = corpsCluster + CR;
 				nb_block++;
 			}
-			
+            
             corpsCluster = corpsCluster + "\t}" + CR2;
 			
 			corpsCluster = corpsCluster + "\t// Configure signal tracing." + CR;

@@ -73,8 +73,6 @@ public class ClusterCode {
 		if (cluster != null) {
 			LinkedList<SysCAMSTBlockTDF> tdf = cluster.getBlockTDF();
 			LinkedList<SysCAMSTBlockDE> de = cluster.getBlockDE();
-			LinkedList<SysCAMSTClock> clock = cluster.getClock();
-			
 
 			corpsCluster = "// Simulation entry point." + CR + "int sc_main(int argc, char *argv[]) {" + CR2 
 					+ "\tusing namespace sc_core;" + CR + "\tusing namespace sca_util;" + CR2;
@@ -133,17 +131,6 @@ public class ClusterCode {
 
 			corpsCluster = corpsCluster + CR + "\t// Instantiate headers files as well as bind their ports to the signal." + CR;
 
-
-
-
-			for (SysCAMSTClock t : clock) {
-			    corpsCluster = corpsCluster + "\t  sc_clock " + t.getName() + " (\"" + t.getName() + "\"," + t.getFrequency()+","+ t.getUnit()+","+ t.getDutyCycle()+","+ t.getStartTime()+","+ t.getUnit()+","+ t.getPosFirst()+");" + CR;
-			}
-			//ToDo 9.7.2019: add lines for reading (several) clock ports and sensitivity lists
-
-
-
-			
 			for (SysCAMSTBlockTDF t : tdf) {
 				corpsCluster = corpsCluster + "\t" + t.getName() + " " + t.getName() + "_" + nb_block + "(\"" + t.getName() + "_" + nb_block + "\");" + CR;
 
@@ -214,9 +201,6 @@ public class ClusterCode {
 				corpsCluster = corpsCluster + CR;
 				nb_block++;
 			}
-
-
-			
 
 			corpsCluster = corpsCluster + "\t// Configure signal tracing." + CR 
 					+ "\tsca_trace_file* tfp = sca_create_tabular_trace_file(\"" + cluster.getClusterName() + "_tb\");" + CR;

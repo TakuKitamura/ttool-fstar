@@ -120,13 +120,6 @@ public class SysCAMSPrimitivePort extends TGCScalableWithInternalComponent imple
         	((SysCAMSPortDE) this).setOrigin(0);
         	((SysCAMSPortDE) this).setSensitive(false);
         	((SysCAMSPortDE) this).setSensitiveMethod("");
-	} else if (this instanceof SysCAMSPortClock) {
-	    //((SysCAMSPortClock) this).setFrequency(-1);
-	    //	((SysCAMSPortClock) this).setUnit("");
-	    //	((SysCAMSPortClock) this).setStartTime(-1);
-	    //	((SysCAMSPortClock) this).setDutyCycle(-1);
-	    //	((SysCAMSPortClock) this).setPosFirst(true);
-		((SysCAMSPortClock) this).setOrigin(1);
         } else if (this instanceof SysCAMSPortConverter) {
         	((SysCAMSPortConverter) this).setPeriod(-1);
         	((SysCAMSPortConverter) this).setTime("");
@@ -556,24 +549,20 @@ public class SysCAMSPrimitivePort extends TGCScalableWithInternalComponent imple
         	sb.append("\" type=\"" + encode(((SysCAMSPortTDF) this).getTDFType()));
         }
         if (this instanceof SysCAMSPortDE) {
+//        	sb.append("\" period=\"" + ((SysCAMSPortDE) this).getPeriod());
+//        	sb.append("\" time=\"" + ((SysCAMSPortDE) this).getTime());
+//        	sb.append("\" rate=\"" + ((SysCAMSPortDE) this).getRate());
+//        	sb.append("\" delay=\"" + ((SysCAMSPortDE) this).getDelay());
         	sb.append("\" type=\"" + encode(((SysCAMSPortDE) this).getDEType()));
         	sb.append("\" sensitive=\"" + ((SysCAMSPortDE) this).getSensitive());
         	sb.append("\" sensitive_method=\"" + ((SysCAMSPortDE) this).getSensitiveMethod());
 		sb.append("\" nbits=\"" + ((SysCAMSPortDE) this).getNbits());//DG
         }
-	if (this instanceof SysCAMSPortClock) {
-	    /*	sb.append("\" =\"" + encode(((SysCAMSPortClock) this).getFrequency()));
-        	sb.append("\" =\"" + ((SysCAMSPortClock) this).getUnit());
-        	sb.append("\" =\"" + ((SysCAMSPortClock) this).getDutyCycle());
-		sb.append("\" =\"" + ((SysCAMSPortClock) this).getStartTime());
-		sb.append("\" \"" + ((SysCAMSPortClock) this).getPosFirst());*/
-        }
-	
         if (this instanceof SysCAMSPortConverter) {
         	sb.append("\" period=\"" + ((SysCAMSPortConverter) this).getPeriod());
         	sb.append("\" time=\"" + ((SysCAMSPortConverter) this).getTime());
         	sb.append("\" rate=\"" + ((SysCAMSPortConverter) this).getRate());
-	       	sb.append("\" nbits=\"" + ((SysCAMSPortConverter) this).getNbits());
+	       	sb.append("\" nbits=\"" + ((SysCAMSPortConverter) this).getNbits());//DG
       
         	sb.append("\" delay=\"" + ((SysCAMSPortConverter) this).getDelay());
         	sb.append("\" type=\"" + encode(((SysCAMSPortConverter) this).getConvType()));
@@ -589,10 +578,10 @@ public class SysCAMSPrimitivePort extends TGCScalableWithInternalComponent imple
             Node n1, n2;
             Element elt;
             
-            double period, frequency, dutyCycle, startTime;
+            double period;
             int rate, delay;
             String type, time, sensitiveMethod; 
-            Boolean sensitive, posFirst;
+            Boolean sensitive;
 
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
@@ -619,19 +608,16 @@ public class SysCAMSPrimitivePort extends TGCScalableWithInternalComponent imple
 									((SysCAMSPortTDF) this).setDelay(delay);
 									((SysCAMSPortTDF) this).setTDFType(type);
 								} else if (this instanceof SysCAMSPortDE) {
-								        type = elt.getAttribute("type");
+									// ((SysCAMSPortDE)this).setPeriod(period);
+									// ((SysCAMSPortDE)this).setTime(time);
+									// ((SysCAMSPortDE)this).setRate(rate);
+									// ((SysCAMSPortDE)this).setDelay(delay);
+									type = elt.getAttribute("type");
 									sensitive = Boolean.parseBoolean(elt.getAttribute("sensitive"));
 									sensitiveMethod = elt.getAttribute("sensitive_method");
 									((SysCAMSPortDE) this).setDEType(type);
 									((SysCAMSPortDE) this).setSensitive(sensitive);
 									((SysCAMSPortDE) this).setSensitiveMethod(sensitiveMethod);
-								} else if (this instanceof SysCAMSPortClock) {
-								        type = elt.getAttribute("type");
-									/*	((SysCAMSPortClock) this).setFrequency(frequency);
-									((SysCAMSPortClock) this).setUnit(unit);
-									((SysCAMSPortClock) this).setStartTime(startTime);
-									((SysCAMSPortClock) this).setDutyCycle(dutyCycle);
-									((SysCAMSPortClock) this).setPosFirst(posFirst);*/
 								} else if (this instanceof SysCAMSPortConverter) {
 									period = Double.valueOf(elt.getAttribute("period")).doubleValue();
 									time = elt.getAttribute("time");
@@ -678,9 +664,6 @@ public class SysCAMSPrimitivePort extends TGCScalableWithInternalComponent imple
         	return "Port DE";
         } else if (this instanceof SysCAMSPortConverter) {
         	return "Port Converter";
-        }
-	else if (this instanceof SysCAMSPortClock) {
-        	return "Port Clock";
         } 
         return "";
     }

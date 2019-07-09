@@ -71,6 +71,8 @@ public class ClusterCodeSoclib {
 		if (cluster != null) {
 			LinkedList<SysCAMSTBlockTDF> tdf = cluster.getBlockTDF();
 			LinkedList<SysCAMSTBlockDE> de = cluster.getBlockDE();
+
+			LinkedList<SysCAMSTClock> clock = cluster.getClock();
 			
 			System.out.println("Number of AMS connectors: " + connectors.size());
                         
@@ -101,6 +103,16 @@ public class ClusterCodeSoclib {
 			}
 
 			corpsCluster = corpsCluster + CR + "\t// Instantiate cluster's modules." + CR;
+
+
+
+			for (SysCAMSTClock t : clock) {
+			    corpsCluster = corpsCluster + "\t  sc_clock " + t.getName() + " (\"" + t.getName() + "\"," + t.getFrequency()+","+ t.getUnit()+","+ t.getDutyCycle()+","+ t.getStartTime()+","+ t.getUnit()+","+ t.getPosFirst()+");" + CR;
+			}
+			//ToDo 9.7.2019: add lines for reading (several) clock ports and sensitivity lists
+
+
+			
             for (SysCAMSTBlockTDF t : tdf) {
                 corpsCluster = corpsCluster + "\t" + t.getName() + " " +
                   t.getName() + "_" + nb_block + ";" + CR;

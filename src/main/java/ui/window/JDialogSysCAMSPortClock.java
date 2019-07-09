@@ -111,7 +111,7 @@ public class JDialogSysCAMSPortClock extends JDialog implements ActionListener {
 				new Insets(15, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(nameTextField, constraints);
 		boxPanel.add(nameTextField);
-
+		box.add(boxPanel);
 
 		
 		// -- Button -- //

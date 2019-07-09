@@ -63,6 +63,7 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 
 	private String nameFn;
 	private String code;
+        private String clock;
 	private DefaultListModel<String> listStruct;
 	private String nameTemplate;
 	private String typeTemplate;
@@ -523,6 +524,14 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 		return list;
 	}
 
+	public void setClockName(String _clock) {
+		clock = _clock;
+	}
+	
+	public String getClockName() {
+		return clock;
+	}
+    
 	public void setNameFn(String nameFn) {
 		this.nameFn = nameFn;
 	}

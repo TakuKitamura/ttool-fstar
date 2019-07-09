@@ -43,35 +43,25 @@ import java.util.LinkedList;
 import javax.swing.DefaultListModel;
 
 /** 
- * Class SysCAMSTClock 
- * Parameters of a SystemC-AMS Clock
- * Creation: 08/07/2019
- * @version 1.0 08/07/2019
- * @author Daniela Genius
+ * Class SysCAMSTClock
 */
 
 public class SysCAMSTClock extends SysCAMSTComponent{
     private String name;
-    private String frequency;
+    private double frequency;
     private String unit;
-    private String dutyCycle;
-    private String startTime;
-    private String posFirst;
+    private double dutyCycle;
+    private double startTime;
+    private boolean posFirst;
 	
-    //private SysCAMSTCluster cluster;	
-    private LinkedList<SysCAMSTPortClock> portClock;
-
-    
-    public SysCAMSTClock(String _name, String _frequency,  String _unit, String _dutyCycle, String _startTime, String _posFirst) {
+    public SysCAMSTClock(String _name, double _frequency,  String _unit, double _dutyCycle, double _startTime, boolean _posFirst) {
      
     	name = _name;
 	frequency	= _frequency;
 	unit	= _unit;
 	dutyCycle	= _dutyCycle;
 	startTime	= _startTime;
-	posFirst	= _posFirst;
-	//cluster = _cluster;
-	portClock = new LinkedList<SysCAMSTPortClock>();
+	posFirst	= _posFirst; 
     }
 
 
@@ -79,7 +69,7 @@ public class SysCAMSTClock extends SysCAMSTComponent{
 		return name;
 	}
 
-    	public String getFrequency() {
+    	public double getFrequency() {
 		return frequency;
 	}
 
@@ -87,16 +77,16 @@ public class SysCAMSTClock extends SysCAMSTComponent{
 		return unit;
 	}
 
-        public String getDutyCycle() {
+        public double getDutyCycle() {
 		return dutyCycle;
 	}
 
-    public String getStartTime() {
+    public double getStartTime() {
 		return startTime;
 	}
     
     
-    	public String getPosFirst() {
+    	public boolean getPosFirst() {
 		return posFirst;
 	}
 
@@ -105,7 +95,7 @@ public class SysCAMSTClock extends SysCAMSTComponent{
 		name = _name;
 	}
  
-    	public void setFrequency(String _frequency) {
+    	public void setFrequency(double _frequency) {
 		 frequency = _frequency;
 	}
 
@@ -113,27 +103,18 @@ public class SysCAMSTClock extends SysCAMSTComponent{
 		unit = _unit;
 	}
 
-        public void setDutyCycle(String _dutyCycle) {
+        public void setDutyCycle(double _dutyCycle) {
 		dutyCycle = _dutyCycle;
 	}
 
 
-        public void setStartTime(String _startTime) {
+        public void setStartTime(double _startTime) {
 	       startTime = _startTime;
 	}
     
     
-    	public void setPosFirst(String _posFirst) {
+    public void setPosFirst(boolean _posFirst) {
 		posFirst = _posFirst;
 	}
-
-	public LinkedList<SysCAMSTPortClock> getPortClock(){
-		return portClock;
-	}
-
-	public void addPortClock(SysCAMSTPortClock cl){
-		portClock.add(cl);
-	}
-
-    
+      
 }
