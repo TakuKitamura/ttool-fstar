@@ -258,6 +258,8 @@ class TMLTransaction {
   inline vcdTransVisState getTransVcdOutPutState() {return _transVcdOutputState;}
   inline void setEndState (bool f) { _endState=f;}
   inline bool getEndState () {return _endState;}
+  inline void setReconfigState (bool t) {_reconfigState=t;}
+  inline bool getReconfigState () {return _reconfigState;}
   void toXML(std::ostringstream& glob, int deviceID, std::string deviceName, ID uniqueID) const;
 
 
@@ -278,7 +280,7 @@ class TMLTransaction {
   vcdTransVisState _transVcdOutputState;
   //state of transaction for VCD output
   bool _endState;
-
+  bool _reconfigState;
   ///previous end time for the cpu VCD output
  // unsigned int _previousTransEndTime;
   //device executes the current device

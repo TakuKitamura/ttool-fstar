@@ -105,6 +105,7 @@ public:
 		return os;
 	}
 	virtual std::string toString() const =0;
+	virtual std::string getTaskOrder() {return 0;}
 	///Signals that the last scheduled transaction has been selected by the given device
 	/**
 	\param iDevice Pointer to the device

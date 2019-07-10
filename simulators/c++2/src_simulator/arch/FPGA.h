@@ -144,6 +144,7 @@ public:
 	void buttonPieChart(std::ofstream& myfile) const;
 	void showPieChart(std::ofstream& myfile) const;
 	std::string determineHTMLCellClass(unsigned int &nextColor );
+        inline unsigned int getReconfigNumber() {return _reconfigNumber;}
 protected:
 	///List of all tasks running on the FPGA
 	TaskList _taskList;

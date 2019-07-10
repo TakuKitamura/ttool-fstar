@@ -137,9 +137,10 @@ TMLTime ReconfigScheduler::schedule(TMLTime iEndSchedule){
 	if(_tempWorkloadList.empty()){
 	  _taskOrder=_taskOrder.substr(_indexMark+1, _taskOrder.length());
 #ifdef DEBUG_FPGA
-	  std::cout<<"_taskOrder is "<<_taskOrder<<std::endl;
+	  std::cout<<"_taskOrder is "<<_taskOrder<<"  "<<_nextTransaction->toShortString()<<std::endl;
 #endif	  
 	  ++_reconfigNumber;
+	  _nextTransaction->setReconfigState(true);
 	}
 
 #ifdef DEBUG_FPGA
