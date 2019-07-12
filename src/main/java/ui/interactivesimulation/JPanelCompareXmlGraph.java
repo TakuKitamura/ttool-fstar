@@ -14,9 +14,14 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
 
 import javafx.collections.FXCollections;
 import javafx.scene.Scene;
@@ -25,15 +30,26 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 
-public class JPanelCompareXmlGraph extends JPanel {
+public class JPanelCompareXmlGraph extends JPanel implements TableModelListener {
 
 	private int[] graphSource;
+	static JTable table, tableUpdated;
 
 	private boolean DEBUG = false;
+	private String[] columnNames;
+	private Object[][] data;
+	static JScrollPane scrollPane = new JScrollPane();
 
 	public JPanelCompareXmlGraph(Vector<SimulationTransaction> transFile1, Vector<SimulationTransaction> transFile2) {
+
 		super(new GridLayout(1, 0));
 
+		if (transFile1.isEmpty() || transFile2.isEmpty()) {
+			return;
+		}
+
+		System.out.println("transFile1*****************" + transFile1.size());
+		System.out.println("transFile2*******************" + transFile2.size());
 		int maxTime = -1;
 
 		int rowIndex = 0;
@@ -83,8 +99,8 @@ public class JPanelCompareXmlGraph extends JPanel {
 		}
 		System.out.println("-------------------------- " + "all devices Done" + " ---------------------------------");
 
-		String[] columnNames = new String[maxTime + 2];
-		Object[][] data = new Object[deviceNames1.size() + deviceNames2.size()][maxTime + 2];
+		columnNames = new String[maxTime + 2];
+		data = new Object[deviceNames1.size() + deviceNames2.size()][maxTime + 2];
 
 		columnNames[0] = "Device Name";
 		columnNames[1] = "Trace Name";
@@ -151,46 +167,32 @@ public class JPanelCompareXmlGraph extends JPanel {
 
 		}
 
-		final JTable table = new JTable(data, columnNames);
-		table.setPreferredScrollableViewportSize(new Dimension(500, 70));
+		// TODO Auto-generated method stub
+		table = new JTable(data, columnNames);
+		// table.setPreferredScrollableViewportSize(new Dimension(500, 70));
 		table.setFillsViewportHeight(true);
 		// table.setBackground(Color.YELLOW);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		TableRenderer tr = new TableRenderer();
 		int nrows = table.getRowCount();
 		int ncols = table.getColumnCount();
-		
-		 TableColumnModel tcm = table.getColumnModel ();
 
-		   // For each table column, sets its renderer to the previously 
-		   // created table renderer.
+		table.getModel().addTableModelListener(this);
 
-			System.out.println("ncols :  " + ncols );
+		TableColumnModel tcm = table.getColumnModel();
 
-		   for (int c = 0; c < ncols; c++)
-		   {
-		      TableColumn tc = tcm.getColumn (c);
-		      tc.setCellRenderer (tr);
-		   }
+		// For each table column, sets its renderer to the previously
+		// created table renderer.
+
+		System.out.println("ncols :  " + ncols);
+
+		for (int c = 0; c < ncols; c++) {
+			TableColumn tc = tcm.getColumn(c);
+			tc.setCellRenderer(tr);
+		}
 
 		// table.getCellRenderer(1, 3).setCellRenderer(ColorRenderer());
 
-		// Create the scroll pane and add the table to it.
-		JScrollPane scrollPane = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-
-		// Add the scroll pane to this panel.
-
-		// scrollPane.setBackground(Color.blue);
-
-		scrollPane.setVisible(true);
-		add(scrollPane);
-		System.out.println("table added :");
-	}
-
-	private TableCellRenderer ColorRenderer() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	private void printDebugData(JTable table) {
@@ -207,6 +209,145 @@ public class JPanelCompareXmlGraph extends JPanel {
 			System.out.println();
 		}
 		System.out.println("--------------------------");
+	}
+
+	void showDifference() {
+		// TODO Auto-generated method stub
+
+		int numRows = table.getRowCount();
+		int numCols = table.getColumnCount();
+
+		System.out.println("Value of data: ");
+
+		for (int j = 2; j < numCols; j++) {
+
+			for (int i = 0; i < numRows; i++) {
+				for (int k = 0; k < numRows; k++) {
+
+					if (table.getValueAt(i, 0).equals(table.getValueAt(k, 0)))
+
+					{
+
+						if (i != k && table.getValueAt(i, j) != null && table.getValueAt(k, j) != null
+								&& table.getValueAt(i, j).equals(table.getValueAt(k, j))) {
+
+							System.out.print(table.getValueAt(i, j) + " ==" + table.getValueAt(k, j));
+							table.setValueAt(null, k, j);
+							table.setValueAt(null, i, j);
+
+						}
+					}
+
+				}
+				// System.out.print(" row " + i + ":");
+
+				// System.out.println();
+			}
+
+		}
+
+		numRows = table.getRowCount();
+		numCols = table.getColumnCount();
+
+		table.repaint();
+		table.revalidate();
+		scrollPane.setViewportView(table);
+		// SwingUtilities.updateComponentTreeUI(scrollPane);
+		scrollPane.setVisible(true);
+		// add(scrollPane);
+		// table.revalidate();
+		// table.repaint();
+
+		scrollPane.revalidate();
+		scrollPane.repaint();
+
+		System.out.println("similar eraised" + numRows + "---" + numCols);
+
+	}
+
+	public void drawTable() {
+		// Create the scroll pane and add the table to it.
+		// scrollPane = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+		/// JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+		// Add the scroll pane to this panel.
+
+		// scrollPane.setBackground(Color.blue);
+		scrollPane.setViewportView(table);
+
+		scrollPane.setVisible(true);
+		add(scrollPane);
+		System.out.println("table added :");
+
+	}
+
+	public void updateTable() {
+
+		// table.setModel(new DefaultTableModel());
+
+		// table.tableChanged(new TableModelEvent(table.getModel()));
+
+		scrollPane.setViewportView(table);
+		// SwingUtilities.updateComponentTreeUI(scrollPane);
+		scrollPane.setVisible(true);
+		// add(scrollPane);
+		// table.revalidate();
+		// table.repaint();
+
+		scrollPane.revalidate();
+		scrollPane.repaint();
+		// scrollPane.setVisible(true);
+		System.out.println("revalidated");
+
+	}
+
+	@Override
+	public void tableChanged(TableModelEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public Vector<Object> loadTransacationsDropDown(Object object) {
+
+		
+		System.out.println(object);
+		Vector<Object> allTransacions = new Vector();;
+
+		int numRows = table.getRowCount();
+		int numCols = table.getColumnCount();
+		javax.swing.table.TableModel model = table.getModel();
+
+		for (int i = 0; i < numRows; i++) {
+			for (int j = 0; j < numCols; j++) {
+
+				if (table.getValueAt(i, j) != null && !allTransacions.contains(table.getValueAt(i, j)) && table.getValueAt(i, 0).equals(object)) {
+					allTransacions.add(table.getValueAt(i, j));
+				}
+			}
+			System.out.println();
+		}
+
+		return allTransacions;
+	}
+
+	public Vector<Object> loadDevicesDropDown() {
+		Vector<Object> allDevices = new Vector();;
+
+		int numRows = table.getRowCount();
+		//int numCols = table.getColumnCount();
+		javax.swing.table.TableModel model = table.getModel();
+
+		for (int i = 0; i < numRows; i++) {
+			
+
+				if (table.getValueAt(i, 0) != null && !allDevices.contains(table.getValueAt(i, 0))) {
+					allDevices.add(table.getValueAt(i, 0));
+				
+			}
+			System.out.println();
+		}
+
+		return allDevices;
 	}
 
 }
