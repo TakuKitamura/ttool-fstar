@@ -76,6 +76,8 @@ import java.util.HashMap;
 import java.util.List;
 import myutil.TraceManager;
 
+import static myutil.FileUtils.saveFile;
+
 
 /**
  * Class JDialogNoCManagement
@@ -359,7 +361,6 @@ public class JDialogNoCManagement extends JDialog implements ActionListener, Lis
         TMLMappingTextSpecification ts = new TMLMappingTextSpecification<>("noNoc");
         ts.toTextFormat(mapping);
 
-
         String dir = SpecConfigTTool.TMLCodeDirectory;
         try {
             ts.saveFile(SpecConfigTTool.TMLCodeDirectory, "NoNoC");
@@ -373,6 +374,18 @@ public class JDialogNoCManagement extends JDialog implements ActionListener, Lis
 
 
 
+        outputText.append("\nGenerating XML\n");
+        String XML = mapping.toXML();
+        dir = SpecConfigTTool.TMLCodeDirectory;
+        try {
+            saveFile(SpecConfigTTool.TMLCodeDirectory + "/NoNoC.xml", XML);
+        } catch (Exception e) {
+            outputText.append("\nException when generating XML file\n");
+            stopProcess();
+            return;
+        }
+
+        outputText.append("\nSpecification generated in " + dir + "/NoNoC.xml\n");
 
 
 
