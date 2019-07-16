@@ -1,0 +1,755 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" type="text/css" href="2.css" />
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" />
+<title>Scheduling</title>
+</head>
+<body>
+<ul>
+<li>Model name: /home/niusiyuan/test/TTool/modeling/DIPLODOCUS/SmartCardProtocol.xml / DIPLODOCUS architecture and mapping Diagram</li><br>
+<li> Date: Mon Jul 15 18:15:08 2019
+</li>
+</ul>
+<script src="jquery.min.js"></script>
+
+<script src="Chart.min.js"></script>
+
+<script>
+
+window.onload = function () {
+   var ctx3_0= $("#pie-chartcanvas-3_0");
+   var data3_0 = new Array ("0.466667","0.533333");
+    var efficiency3_0 = [];
+    var coloR3_0 = [];
+    var dynamicColors3_0= function() {
+ 		var r = Math.floor(Math.random() * 255);
+ 		var g = Math.floor(Math.random() * 255);
+ 		var b = Math.floor(Math.random() * 255);
+ 		return "rgb(" + r + "," + g + "," + b + ")";
+ 	};
+    for (var i in data3_0){
+             efficiency3_0.push(data3_0[i]);
+             coloR3_0.push(dynamicColors3_0());
+}
+   var data3_0 = { 
+           labels : [ "AppC__InterfaceDevice","idle time"],
+          datasets : [
+                                      {
+                                            data : efficiency3_0,
+                            backgroundColor : coloR3_0
+  }]
+ };
+  var options3_0 = {
+ 			title : {
+ 			display : true,
+ 			position : "top",
+ 			text : "CPU1_1_core_0: Average load is 0.47", 
+ 			fontSize : 14,
+ 			fontColor : "#111"
+ 		},
+ 		legend : {
+ 			display : true,
+ 			position : "bottom"
+ 		}
+ 	};
+
+   var ctx4_0= $("#pie-chartcanvas-4_0");
+   var data4_0 = new Array ("0.22","0.17","0.51","0.1");
+    var efficiency4_0 = [];
+    var coloR4_0 = [];
+    var dynamicColors4_0= function() {
+ 		var r = Math.floor(Math.random() * 255);
+ 		var g = Math.floor(Math.random() * 255);
+ 		var b = Math.floor(Math.random() * 255);
+ 		return "rgb(" + r + "," + g + "," + b + ")";
+ 	};
+    for (var i in data4_0){
+             efficiency4_0.push(data4_0[i]);
+             coloR4_0.push(dynamicColors4_0());
+}
+   var data4_0 = { 
+           labels : [ "AppC__TCPIP", "AppC__Application", "AppC__SmartCard","idle time"],
+          datasets : [
+                                      {
+                                            data : efficiency4_0,
+                            backgroundColor : coloR4_0
+  }]
+ };
+  var options4_0 = {
+ 			title : {
+ 			display : true,
+ 			position : "top",
+ 			text : "CPU0_1_core_0: Average load is 0.9", 
+ 			fontSize : 14,
+ 			fontColor : "#111"
+ 		},
+ 		legend : {
+ 			display : true,
+ 			position : "bottom"
+ 		}
+ 	};
+
+   var ctx5_0= $("#pie-chartcanvas-5_0");
+   var data5_0 = new Array ("0.024","0.98");
+    var efficiency5_0 = [];
+    var coloR5_0 = [];
+    var dynamicColors5_0= function() {
+ 		var r = Math.floor(Math.random() * 255);
+ 		var g = Math.floor(Math.random() * 255);
+ 		var b = Math.floor(Math.random() * 255);
+ 		return "rgb(" + r + "," + g + "," + b + ")";
+ 	};
+    for (var i in data5_0){
+             efficiency5_0.push(data5_0[i]);
+             coloR5_0.push(dynamicColors5_0());
+}
+   var data5_0 = { 
+           labels : [ "AppC__Timer","idle time"],
+          datasets : [
+                                      {
+                                            data : efficiency5_0,
+                            backgroundColor : coloR5_0
+  }]
+ };
+  var options5_0 = {
+ 			title : {
+ 			display : true,
+ 			position : "top",
+ 			text : "HWA0_core_0: Average load is 0.024", 
+ 			fontSize : 14,
+ 			fontColor : "#111"
+ 		},
+ 		legend : {
+ 			display : true,
+ 			position : "bottom"
+ 		}
+ 	};
+
+   var ctx2= $("#pie-chartcanvas-2");
+   var data2 = new Array ("0.047","0.016","0.32","0.62");
+    var efficiency2 = [];
+    var coloR2 = [];
+    var dynamicColors2= function() {
+ 		var r = Math.floor(Math.random() * 255);
+ 		var g = Math.floor(Math.random() * 255);
+ 		var b = Math.floor(Math.random() * 255);
+ 		return "rgb(" + r + "," + g + "," + b + ")";
+ 	};
+    for (var i in data2){
+             efficiency2.push(data2[i]);
+             coloR2.push(dynamicColors2());
+}
+   var data2 = { 
+           labels : [ "AppC__TCPIP", "AppC__Application", "AppC__SmartCard","idle time"],
+          datasets : [
+                                      {
+                                            data : efficiency2,
+                            backgroundColor : coloR2
+  }]
+ };
+  var options2 = {
+ 			title : {
+ 			display : true,
+ 			position : "top",
+ 			text : "Bus0_0: Average load is 0.38", 
+ 			fontSize : 14,
+ 			fontColor : "#111"
+ 		},
+ 		legend : {
+ 			display : true,
+ 			position : "bottom"
+ 		}
+ 	};
+
+$("#button").click(function() {
+    var chart3_0 = new Chart( ctx3_0, {
+               type : "pie",
+               data : data3_0,
+               options : options3_0
+                   });
+   chart3_0 .data.datasets.forEach(function(ds){
+         ds.hidden=!ds.hidden;
+ 	});
+   chart3_0.update();
+    var chart4_0 = new Chart( ctx4_0, {
+               type : "pie",
+               data : data4_0,
+               options : options4_0
+                   });
+   chart4_0 .data.datasets.forEach(function(ds){
+         ds.hidden=!ds.hidden;
+ 	});
+   chart4_0.update();
+    var chart5_0 = new Chart( ctx5_0, {
+               type : "pie",
+               data : data5_0,
+               options : options5_0
+                   });
+   chart5_0 .data.datasets.forEach(function(ds){
+         ds.hidden=!ds.hidden;
+ 	});
+   chart5_0.update();
+    var chart2 = new Chart( ctx2, {
+               type : "pie",
+               data : data2,
+               options : options2
+                   });
+   chart2 .data.datasets.forEach(function(ds){
+         ds.hidden=!ds.hidden;
+ 	});
+   chart2.update();
+     });
+}
+</script>
+
+<h1> Summary HW </h1>
+<table width="170px" style="float: left">
+ <tr><td>CPU1_1_core_0</td></tr>
+</table>
+<table style="float: left">
+<tr><td title="AppC__InterfaceDevice: Request reqChannel_AppC__SmartCard t:0 l:2 (vl:1) Ch: reqChannel_AppC__SmartCard" class="t0" colspan="2"> R</td>
+<td title="AppC__InterfaceDevice: Send AppC__reset__AppC__reset(evtF) len:1 content:0 params: t:2 l:2 (vl:1) Ch: AppC__reset__AppC__reset" class="t0" colspan="2"> S</td>
+<td title="idle time" class="not" colspan="8"></td>
+<td title="AppC__InterfaceDevice: Wait AppC__answerToReset__AppC__answerToReset params: t:12 l:2 (vl:1) Ch: AppC__answerToReset__AppC__answerToReset" class="t0" colspan="2"> W</td>
+<td title="AppC__InterfaceDevice: Send AppC__pTS__AppC__pTS(evtF) len:1 content:0 params: t:14 l:2 (vl:1) Ch: AppC__pTS__AppC__pTS" class="t0" colspan="2"> S</td>
+<td title="idle time" class="not" colspan="8"></td>
+<td title="AppC__InterfaceDevice: Wait AppC__pTSConfirm__AppC__pTSConfirm params: t:24 l:2 (vl:1) Ch: AppC__pTSConfirm__AppC__pTSConfirm" class="t0" colspan="2"> W</td>
+<td title="AppC__InterfaceDevice: Notified AppC__data_Ready_SC__AppC__data_Ready_SC t:26 l:2 (vl:1) Ch: AppC__data_Ready_SC__AppC__data_Ready_SC" class="t0" colspan="2"> N</td>
+<td title="AppC__InterfaceDevice: Send AppC__end__AppC__end(evtF) len:1 content:0 params: t:28 l:2 (vl:1) Ch: AppC__end__AppC__end" class="t0" colspan="2"> S</td>
+</tr>
+<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+<tr><td class="sc" colspan="5">0</td><td class="sc" colspan="5">5</td><td class="sc" colspan="5">10</td><td class="sc" colspan="5">15</td><td class="sc" colspan="5">20</td><td class="sc" colspan="5">25</td><td class="sc" colspan="5">30</td></tr>
+</table>
+<div class = "clear"></div>
+<table width="170px" style="float: left">
+ <tr><td>CPU0_1_core_0</td></tr>
+</table>
+<table style="float: left">
+<tr><td title="idle time" class="not" colspan="3"></td>
+<td title="AppC__SmartCard: Wait reqChannel_AppC__SmartCard params: t:3 l:3 (vl:1) Ch: reqChannel_AppC__SmartCard" class="t0" colspan="3"> W</td>
+<td title="AppC__SmartCard: Wait AppC__reset__AppC__reset params: t:6 l:3 (vl:1) Ch: AppC__reset__AppC__reset" class="t0" colspan="3"> W</td>
+<td title="AppC__SmartCard: Send AppC__answerToReset__AppC__answerToReset(evtF) len:1 content:0 params: t:9 l:3 (vl:1) Ch: AppC__answerToReset__AppC__answerToReset" class="t0" colspan="3"> S</td>
+<td title="idle time" class="not" colspan="6"></td>
+<td title="AppC__SmartCard: Wait AppC__pTS__AppC__pTS params: t:18 l:3 (vl:1) Ch: AppC__pTS__AppC__pTS" class="t0" colspan="3"> W</td>
+<td title="AppC__SmartCard: Send AppC__pTSConfirm__AppC__pTSConfirm(evtF) len:1 content:0 params: t:21 l:3 (vl:1) Ch: AppC__pTSConfirm__AppC__pTSConfirm" class="t0" colspan="3"> S</td>
+<td title="AppC__SmartCard: Request reqChannel_AppC__TCPIP t:24 l:3 (vl:1) Ch: reqChannel_AppC__TCPIP" class="t0" colspan="3"> R</td>
+<td title="AppC__SmartCard: Request reqChannel_AppC__Application t:27 l:3 (vl:1) Ch: reqChannel_AppC__Application" class="t0" colspan="3"> R</td>
+<td title="AppC__TCPIP: Wait reqChannel_AppC__TCPIP params: t:30 l:3 (vl:1) Ch: reqChannel_AppC__TCPIP" class="t1" colspan="3"> W</td>
+<td title="AppC__TCPIP: Notified AppC__abort__AppC__abort t:33 l:3 (vl:1) Ch: AppC__abort__AppC__abort" class="t1" colspan="3"> N</td>
+<td title="AppC__Application: Wait reqChannel_AppC__Application params: t:36 l:3 (vl:1) Ch: reqChannel_AppC__Application" class="t2" colspan="3"> W</td>
+<td title="AppC__Application: Send AppC__open__AppC__open(evtF) len:1 content:0 params: t:39 l:3 (vl:1) Ch: AppC__open__AppC__open" class="t2" colspan="3"> S</td>
+<td title="AppC__TCPIP: SelectEvent params: t:42 l:3 (vl:1) Ch: AppC__open__AppC__open" class="t1" colspan="3"> S</td>
+<td title="AppC__TCPIP: Send AppC__opened__AppC__opened(evtB) content:0 params: t:45 l:3 (vl:1) Ch: AppC__opened__AppC__opened" class="t1" colspan="3"> S</td>
+<td title="AppC__TCPIP: Notified AppC__abort__AppC__abort t:48 l:3 (vl:1) Ch: AppC__abort__AppC__abort" class="t1" colspan="3"> N</td>
+<td title="AppC__Application: Wait AppC__opened__AppC__opened params: t:51 l:3 (vl:1) Ch: AppC__opened__AppC__opened" class="t2" colspan="3"> W</td>
+<td title="AppC__Application: Send AppC__connectionOpened__AppC__connectionOpened(evtFB) len:8 content:0 params: t:54 l:3 (vl:1) Ch: AppC__connectionOpened__AppC__connectionOpened" class="t2" colspan="3"> S</td>
+<td title="AppC__Application: Execi 10 t:57 l:30 (vl:10)" class="t2" colspan="30"> E</td>
+<td title="AppC__Application: Write 4,AppC__fromAtoT t:87 l:5 (vl:4) Ch: AppC__fromAtoT" class="t2" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__Application: Send AppC__send_TCP__AppC__send_TCP(evtB) content:0 params: t:93 l:3 (vl:1) Ch: AppC__send_TCP__AppC__send_TCP" class="t2" colspan="3"> S</td>
+<td title="AppC__Application: Send AppC__close__AppC__close(evtF) len:1 content:0 params: t:96 l:3 (vl:1) Ch: AppC__close__AppC__close" class="t2" colspan="3"> S</td>
+<td title="AppC__SmartCard: Wait AppC__connectionOpened__AppC__connectionOpened params: t:99 l:3 (vl:1) Ch: AppC__connectionOpened__AppC__connectionOpened" class="t0" colspan="3"> W</td>
+<td title="AppC__SmartCard: SelectEvent params: t:102 l:3 (vl:1) Ch: AppC__end__AppC__end" class="t0" colspan="3"> S</td>
+<td title="AppC__TCPIP: SelectEvent params: t:105 l:3 (vl:1) Ch: AppC__send_TCP__AppC__send_TCP" class="t1" colspan="3"> S</td>
+<td title="AppC__TCPIP: Write 4,AppC__fromTtoP t:108 l:5 (vl:4) Ch: AppC__fromTtoP" class="t1" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__TCPIP: Send AppC__send__AppC__send(evtB) content:0 params: t:114 l:3 (vl:1) Ch: AppC__send__AppC__send" class="t1" colspan="3"> S</td>
+<td title="AppC__TCPIP: Request reqChannel_AppC__Timer t:117 l:3 (vl:1) Ch: reqChannel_AppC__Timer" class="t1" colspan="3"> R</td>
+<td title="AppC__TCPIP: Write 4,AppC__temp t:120 l:5 (vl:4) Ch: AppC__temp" class="t1" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__TCPIP: Notified AppC__abort__AppC__abort t:126 l:3 (vl:1) Ch: AppC__abort__AppC__abort" class="t1" colspan="3"> N</td>
+<td title="AppC__TCPIP: SelectEvent params: t:129 l:3 (vl:1) Ch: AppC__timeOut__AppC__timeOut" class="t1" colspan="3"> S</td>
+<td title="AppC__TCPIP: Read 4,AppC__temp t:132 l:12 (vl:4) Ch: AppC__temp" class="t1" colspan="12"> R</td>
+<td title="AppC__TCPIP: Write 4,AppC__fromTtoP t:144 l:5 (vl:4) Ch: AppC__fromTtoP" class="t1" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__TCPIP: Send AppC__send__AppC__send(evtB) content:0 params: t:150 l:3 (vl:1) Ch: AppC__send__AppC__send" class="t1" colspan="3"> S</td>
+<td title="AppC__TCPIP: Notified AppC__abort__AppC__abort t:153 l:3 (vl:1) Ch: AppC__abort__AppC__abort" class="t1" colspan="3"> N</td>
+<td title="AppC__TCPIP: SelectEvent params: t:156 l:3 (vl:1) Ch: AppC__close__AppC__close" class="t1" colspan="3"> S</td>
+<td title="AppC__TCPIP: Notified AppC__abort__AppC__abort t:159 l:3 (vl:1) Ch: AppC__abort__AppC__abort" class="t1" colspan="3"> N</td>
+<td title="AppC__SmartCard: SelectEvent params: t:162 l:3 (vl:1) Ch: AppC__send__AppC__send" class="t0" colspan="3"> S</td>
+<td title="AppC__SmartCard: Read 4,AppC__fromTtoP t:165 l:12 (vl:4) Ch: AppC__fromTtoP" class="t0" colspan="12"> R</td>
+<td title="AppC__SmartCard: Send AppC__data_Ready_SC__AppC__data_Ready_SC(evtB) content:2 params: t:177 l:3 (vl:1) Ch: AppC__data_Ready_SC__AppC__data_Ready_SC" class="t0" colspan="3"> S</td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:180 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:186 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:192 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:198 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:204 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:210 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:216 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:222 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:228 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:234 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: SelectEvent params: t:240 l:3 (vl:1) Ch: AppC__send__AppC__send" class="t0" colspan="3"> S</td>
+<td title="AppC__SmartCard: Read 4,AppC__fromTtoP t:243 l:12 (vl:4) Ch: AppC__fromTtoP" class="t0" colspan="12"> R</td>
+<td title="AppC__SmartCard: Send AppC__data_Ready_SC__AppC__data_Ready_SC(evtB) content:2 params: t:255 l:3 (vl:1) Ch: AppC__data_Ready_SC__AppC__data_Ready_SC" class="t0" colspan="3"> S</td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:258 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:264 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:270 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:276 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:282 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:288 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:294 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:300 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:306 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:312 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+</tr>
+<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+<tr><td class="sc" colspan="5">0</td><td class="sc" colspan="5">5</td><td class="sc" colspan="5">10</td><td class="sc" colspan="5">15</td><td class="sc" colspan="5">20</td><td class="sc" colspan="5">25</td><td class="sc" colspan="5">30</td><td class="sc" colspan="5">35</td><td class="sc" colspan="5">40</td><td class="sc" colspan="5">45</td><td class="sc" colspan="5">50</td><td class="sc" colspan="5">55</td><td class="sc" colspan="5">60</td><td class="sc" colspan="5">65</td><td class="sc" colspan="5">70</td><td class="sc" colspan="5">75</td><td class="sc" colspan="5">80</td><td class="sc" colspan="5">85</td><td class="sc" colspan="5">90</td><td class="sc" colspan="5">95</td><td class="sc" colspan="5">100</td><td class="sc" colspan="5">105</td><td class="sc" colspan="5">110</td><td class="sc" colspan="5">115</td><td class="sc" colspan="5">120</td><td class="sc" colspan="5">125</td><td class="sc" colspan="5">130</td><td class="sc" colspan="5">135</td><td class="sc" colspan="5">140</td><td class="sc" colspan="5">145</td><td class="sc" colspan="5">150</td><td class="sc" colspan="5">155</td><td class="sc" colspan="5">160</td><td class="sc" colspan="5">165</td><td class="sc" colspan="5">170</td><td class="sc" colspan="5">175</td><td class="sc" colspan="5">180</td><td class="sc" colspan="5">185</td><td class="sc" colspan="5">190</td><td class="sc" colspan="5">195</td><td class="sc" colspan="5">200</td><td class="sc" colspan="5">205</td><td class="sc" colspan="5">210</td><td class="sc" colspan="5">215</td><td class="sc" colspan="5">220</td><td class="sc" colspan="5">225</td><td class="sc" colspan="5">230</td><td class="sc" colspan="5">235</td><td class="sc" colspan="5">240</td><td class="sc" colspan="5">245</td><td class="sc" colspan="5">250</td><td class="sc" colspan="5">255</td><td class="sc" colspan="5">260</td><td class="sc" colspan="5">265</td><td class="sc" colspan="5">270</td><td class="sc" colspan="5">275</td><td class="sc" colspan="5">280</td><td class="sc" colspan="5">285</td><td class="sc" colspan="5">290</td><td class="sc" colspan="5">295</td><td class="sc" colspan="5">300</td><td class="sc" colspan="5">305</td><td class="sc" colspan="5">310</td><td class="sc" colspan="5">315</td></tr>
+</table>
+<div class = "clear"></div>
+<table width="170px" style="float: left">
+ <tr><td>HWA0_core_0</td></tr>
+</table>
+<table style="float: left">
+<tr><td title="idle time" class="not" colspan="120"></td>
+<td title="AppC__Timer: Wait reqChannel_AppC__Timer params: t:120 l:1 (vl:1) Ch: reqChannel_AppC__Timer" class="t0"></td>
+<td title="AppC__Timer: Notified AppC__stop__AppC__stop t:121 l:1 (vl:1) Ch: AppC__stop__AppC__stop" class="t0"></td>
+<td title="AppC__Timer: Send AppC__timeOut__AppC__timeOut(evtF) len:1 content:0 params: t:122 l:1 (vl:1) Ch: AppC__timeOut__AppC__timeOut" class="t0"></td>
+</tr>
+<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+<tr><td class="sc" colspan="5">0</td><td class="sc" colspan="5">5</td><td class="sc" colspan="5">10</td><td class="sc" colspan="5">15</td><td class="sc" colspan="5">20</td><td class="sc" colspan="5">25</td><td class="sc" colspan="5">30</td><td class="sc" colspan="5">35</td><td class="sc" colspan="5">40</td><td class="sc" colspan="5">45</td><td class="sc" colspan="5">50</td><td class="sc" colspan="5">55</td><td class="sc" colspan="5">60</td><td class="sc" colspan="5">65</td><td class="sc" colspan="5">70</td><td class="sc" colspan="5">75</td><td class="sc" colspan="5">80</td><td class="sc" colspan="5">85</td><td class="sc" colspan="5">90</td><td class="sc" colspan="5">95</td><td class="sc" colspan="5">100</td><td class="sc" colspan="5">105</td><td class="sc" colspan="5">110</td><td class="sc" colspan="5">115</td><td class="sc" colspan="5">120</td></tr>
+</table>
+<div class = "clear"></div>
+<table width="170px" style="float: left">
+ <tr><td>Bus0_0</td></tr>
+</table>
+<table style="float: left">
+<tr><td title="idle time" class="not" colspan="87"></td>
+<td title="AppC__Application: Write 4,AppC__fromAtoT t:87 l:5 (vl:4) Ch: AppC__fromAtoT" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not" colspan="16"></td>
+<td title="AppC__TCPIP: Write 4,AppC__fromTtoP t:108 l:5 (vl:4) Ch: AppC__fromTtoP" class="t1" colspan="5"> W</td>
+<td title="idle time" class="not" colspan="7"></td>
+<td title="AppC__TCPIP: Write 4,AppC__temp t:120 l:5 (vl:4) Ch: AppC__temp" class="t1" colspan="5"> W</td>
+<td title="idle time" class="not" colspan="19"></td>
+<td title="AppC__TCPIP: Write 4,AppC__fromTtoP t:144 l:5 (vl:4) Ch: AppC__fromTtoP" class="t1" colspan="5"> W</td>
+<td title="idle time" class="not" colspan="31"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:180 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:186 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:192 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:198 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:204 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:210 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:216 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:222 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:228 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:234 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"> W</td>
+<td title="idle time" class="not" colspan="19"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:258 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:264 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:270 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:276 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:282 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:288 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:294 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:300 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:306 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:312 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"> W</td>
+</tr>
+<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+<tr><td class="sc" colspan="5">0</td><td class="sc" colspan="5">5</td><td class="sc" colspan="5">10</td><td class="sc" colspan="5">15</td><td class="sc" colspan="5">20</td><td class="sc" colspan="5">25</td><td class="sc" colspan="5">30</td><td class="sc" colspan="5">35</td><td class="sc" colspan="5">40</td><td class="sc" colspan="5">45</td><td class="sc" colspan="5">50</td><td class="sc" colspan="5">55</td><td class="sc" colspan="5">60</td><td class="sc" colspan="5">65</td><td class="sc" colspan="5">70</td><td class="sc" colspan="5">75</td><td class="sc" colspan="5">80</td><td class="sc" colspan="5">85</td><td class="sc" colspan="5">90</td><td class="sc" colspan="5">95</td><td class="sc" colspan="5">100</td><td class="sc" colspan="5">105</td><td class="sc" colspan="5">110</td><td class="sc" colspan="5">115</td><td class="sc" colspan="5">120</td><td class="sc" colspan="5">125</td><td class="sc" colspan="5">130</td><td class="sc" colspan="5">135</td><td class="sc" colspan="5">140</td><td class="sc" colspan="5">145</td><td class="sc" colspan="5">150</td><td class="sc" colspan="5">155</td><td class="sc" colspan="5">160</td><td class="sc" colspan="5">165</td><td class="sc" colspan="5">170</td><td class="sc" colspan="5">175</td><td class="sc" colspan="5">180</td><td class="sc" colspan="5">185</td><td class="sc" colspan="5">190</td><td class="sc" colspan="5">195</td><td class="sc" colspan="5">200</td><td class="sc" colspan="5">205</td><td class="sc" colspan="5">210</td><td class="sc" colspan="5">215</td><td class="sc" colspan="5">220</td><td class="sc" colspan="5">225</td><td class="sc" colspan="5">230</td><td class="sc" colspan="5">235</td><td class="sc" colspan="5">240</td><td class="sc" colspan="5">245</td><td class="sc" colspan="5">250</td><td class="sc" colspan="5">255</td><td class="sc" colspan="5">260</td><td class="sc" colspan="5">265</td><td class="sc" colspan="5">270</td><td class="sc" colspan="5">275</td><td class="sc" colspan="5">280</td><td class="sc" colspan="5">285</td><td class="sc" colspan="5">290</td><td class="sc" colspan="5">295</td><td class="sc" colspan="5">300</td><td class="sc" colspan="5">305</td><td class="sc" colspan="5">310</td><td class="sc" colspan="5">315</td></tr>
+</table>
+</div>
+<div class = "clear"></div>
+<table>
+<button id="button"> Show/Hide Pie Chart </button>
+</table>
+<div class="pie-chart-container">
+     <canvas id="pie-chartcanvas-3_0"></canvas>
+</div>
+<div class="pie-chart-container">
+     <canvas id="pie-chartcanvas-4_0"></canvas>
+</div>
+<div class="pie-chart-container">
+     <canvas id="pie-chartcanvas-5_0"></canvas>
+</div>
+<div class="pie-chart-container">
+     <canvas id="pie-chartcanvas-2"></canvas>
+</div>
+<div class = "clear"></div>
+<h1> Summary tasks </h1>
+<div>
+<table width="170px" style="float: left">
+ <tr><td>AppC__InterfaceDevice</td></tr>
+</table>
+<table style="float: left">
+<tr><td title="AppC__InterfaceDevice: Request reqChannel_AppC__SmartCard t:0 l:2 (vl:1) Ch: reqChannel_AppC__SmartCard" class="t0" colspan="2"> R</td>
+<td title="AppC__InterfaceDevice: Send AppC__reset__AppC__reset(evtF) len:1 content:0 params: t:2 l:2 (vl:1) Ch: AppC__reset__AppC__reset" class="t0" colspan="2"> S</td>
+<td title="idle time" class="not" colspan="8"></td>
+<td title="AppC__InterfaceDevice: Wait AppC__answerToReset__AppC__answerToReset params: t:12 l:2 (vl:1) Ch: AppC__answerToReset__AppC__answerToReset" class="t0" colspan="2"> W</td>
+<td title="AppC__InterfaceDevice: Send AppC__pTS__AppC__pTS(evtF) len:1 content:0 params: t:14 l:2 (vl:1) Ch: AppC__pTS__AppC__pTS" class="t0" colspan="2"> S</td>
+<td title="idle time" class="not" colspan="8"></td>
+<td title="AppC__InterfaceDevice: Wait AppC__pTSConfirm__AppC__pTSConfirm params: t:24 l:2 (vl:1) Ch: AppC__pTSConfirm__AppC__pTSConfirm" class="t0" colspan="2"> W</td>
+<td title="AppC__InterfaceDevice: Notified AppC__data_Ready_SC__AppC__data_Ready_SC t:26 l:2 (vl:1) Ch: AppC__data_Ready_SC__AppC__data_Ready_SC" class="t0" colspan="2"> N</td>
+<td title="AppC__InterfaceDevice: Send AppC__end__AppC__end(evtF) len:1 content:0 params: t:28 l:2 (vl:1) Ch: AppC__end__AppC__end" class="t0" colspan="2"> S</td>
+</tr>
+<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+<tr><td class="sc" colspan="5">0</td><td class="sc" colspan="5">5</td><td class="sc" colspan="5">10</td><td class="sc" colspan="5">15</td><td class="sc" colspan="5">20</td><td class="sc" colspan="5">25</td><td class="sc" colspan="5">30</td></tr>
+</table>
+</div>
+<div class = "clear"></div>
+<div>
+<table width="170px" style="float: left">
+ <tr><td>AppC__TCPIP</td></tr>
+</table>
+<table style="float: left">
+<tr><td title="idle time" class="not" colspan="30"></td>
+<td title="AppC__TCPIP: Wait reqChannel_AppC__TCPIP params: t:30 l:3 (vl:1) Ch: reqChannel_AppC__TCPIP" class="t0" colspan="3"> W</td>
+<td title="AppC__TCPIP: Notified AppC__abort__AppC__abort t:33 l:3 (vl:1) Ch: AppC__abort__AppC__abort" class="t0" colspan="3"> N</td>
+<td title="idle time" class="not" colspan="6"></td>
+<td title="AppC__TCPIP: SelectEvent params: t:42 l:3 (vl:1) Ch: AppC__open__AppC__open" class="t0" colspan="3"> S</td>
+<td title="AppC__TCPIP: Send AppC__opened__AppC__opened(evtB) content:0 params: t:45 l:3 (vl:1) Ch: AppC__opened__AppC__opened" class="t0" colspan="3"> S</td>
+<td title="AppC__TCPIP: Notified AppC__abort__AppC__abort t:48 l:3 (vl:1) Ch: AppC__abort__AppC__abort" class="t0" colspan="3"> N</td>
+<td title="idle time" class="not" colspan="54"></td>
+<td title="AppC__TCPIP: SelectEvent params: t:105 l:3 (vl:1) Ch: AppC__send_TCP__AppC__send_TCP" class="t0" colspan="3"> S</td>
+<td title="AppC__TCPIP: Write 4,AppC__fromTtoP t:108 l:5 (vl:4) Ch: AppC__fromTtoP" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__TCPIP: Send AppC__send__AppC__send(evtB) content:0 params: t:114 l:3 (vl:1) Ch: AppC__send__AppC__send" class="t0" colspan="3"> S</td>
+<td title="AppC__TCPIP: Request reqChannel_AppC__Timer t:117 l:3 (vl:1) Ch: reqChannel_AppC__Timer" class="t0" colspan="3"> R</td>
+<td title="AppC__TCPIP: Write 4,AppC__temp t:120 l:5 (vl:4) Ch: AppC__temp" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__TCPIP: Notified AppC__abort__AppC__abort t:126 l:3 (vl:1) Ch: AppC__abort__AppC__abort" class="t0" colspan="3"> N</td>
+<td title="AppC__TCPIP: SelectEvent params: t:129 l:3 (vl:1) Ch: AppC__timeOut__AppC__timeOut" class="t0" colspan="3"> S</td>
+<td title="AppC__TCPIP: Read 4,AppC__temp t:132 l:12 (vl:4) Ch: AppC__temp" class="t0" colspan="12"> R</td>
+<td title="AppC__TCPIP: Write 4,AppC__fromTtoP t:144 l:5 (vl:4) Ch: AppC__fromTtoP" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__TCPIP: Send AppC__send__AppC__send(evtB) content:0 params: t:150 l:3 (vl:1) Ch: AppC__send__AppC__send" class="t0" colspan="3"> S</td>
+<td title="AppC__TCPIP: Notified AppC__abort__AppC__abort t:153 l:3 (vl:1) Ch: AppC__abort__AppC__abort" class="t0" colspan="3"> N</td>
+<td title="AppC__TCPIP: SelectEvent params: t:156 l:3 (vl:1) Ch: AppC__close__AppC__close" class="t0" colspan="3"> S</td>
+<td title="AppC__TCPIP: Notified AppC__abort__AppC__abort t:159 l:3 (vl:1) Ch: AppC__abort__AppC__abort" class="t0" colspan="3"> N</td>
+</tr>
+<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+<tr><td class="sc" colspan="5">0</td><td class="sc" colspan="5">5</td><td class="sc" colspan="5">10</td><td class="sc" colspan="5">15</td><td class="sc" colspan="5">20</td><td class="sc" colspan="5">25</td><td class="sc" colspan="5">30</td><td class="sc" colspan="5">35</td><td class="sc" colspan="5">40</td><td class="sc" colspan="5">45</td><td class="sc" colspan="5">50</td><td class="sc" colspan="5">55</td><td class="sc" colspan="5">60</td><td class="sc" colspan="5">65</td><td class="sc" colspan="5">70</td><td class="sc" colspan="5">75</td><td class="sc" colspan="5">80</td><td class="sc" colspan="5">85</td><td class="sc" colspan="5">90</td><td class="sc" colspan="5">95</td><td class="sc" colspan="5">100</td><td class="sc" colspan="5">105</td><td class="sc" colspan="5">110</td><td class="sc" colspan="5">115</td><td class="sc" colspan="5">120</td><td class="sc" colspan="5">125</td><td class="sc" colspan="5">130</td><td class="sc" colspan="5">135</td><td class="sc" colspan="5">140</td><td class="sc" colspan="5">145</td><td class="sc" colspan="5">150</td><td class="sc" colspan="5">155</td><td class="sc" colspan="5">160</td></tr>
+</table>
+</div>
+<div class = "clear"></div>
+<div>
+<table width="170px" style="float: left">
+ <tr><td>AppC__Application</td></tr>
+</table>
+<table style="float: left">
+<tr><td title="idle time" class="not" colspan="36"></td>
+<td title="AppC__Application: Wait reqChannel_AppC__Application params: t:36 l:3 (vl:1) Ch: reqChannel_AppC__Application" class="t0" colspan="3"> W</td>
+<td title="AppC__Application: Send AppC__open__AppC__open(evtF) len:1 content:0 params: t:39 l:3 (vl:1) Ch: AppC__open__AppC__open" class="t0" colspan="3"> S</td>
+<td title="idle time" class="not" colspan="9"></td>
+<td title="AppC__Application: Wait AppC__opened__AppC__opened params: t:51 l:3 (vl:1) Ch: AppC__opened__AppC__opened" class="t0" colspan="3"> W</td>
+<td title="AppC__Application: Send AppC__connectionOpened__AppC__connectionOpened(evtFB) len:8 content:0 params: t:54 l:3 (vl:1) Ch: AppC__connectionOpened__AppC__connectionOpened" class="t0" colspan="3"> S</td>
+<td title="AppC__Application: Execi 10 t:57 l:30 (vl:10)" class="t0" colspan="30"> E</td>
+<td title="AppC__Application: Write 4,AppC__fromAtoT t:87 l:5 (vl:4) Ch: AppC__fromAtoT" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__Application: Send AppC__send_TCP__AppC__send_TCP(evtB) content:0 params: t:93 l:3 (vl:1) Ch: AppC__send_TCP__AppC__send_TCP" class="t0" colspan="3"> S</td>
+<td title="AppC__Application: Send AppC__close__AppC__close(evtF) len:1 content:0 params: t:96 l:3 (vl:1) Ch: AppC__close__AppC__close" class="t0" colspan="3"> S</td>
+</tr>
+<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+<tr><td class="sc" colspan="5">0</td><td class="sc" colspan="5">5</td><td class="sc" colspan="5">10</td><td class="sc" colspan="5">15</td><td class="sc" colspan="5">20</td><td class="sc" colspan="5">25</td><td class="sc" colspan="5">30</td><td class="sc" colspan="5">35</td><td class="sc" colspan="5">40</td><td class="sc" colspan="5">45</td><td class="sc" colspan="5">50</td><td class="sc" colspan="5">55</td><td class="sc" colspan="5">60</td><td class="sc" colspan="5">65</td><td class="sc" colspan="5">70</td><td class="sc" colspan="5">75</td><td class="sc" colspan="5">80</td><td class="sc" colspan="5">85</td><td class="sc" colspan="5">90</td><td class="sc" colspan="5">95</td></tr>
+</table>
+</div>
+<div class = "clear"></div>
+<div>
+<table width="170px" style="float: left">
+ <tr><td>AppC__SmartCard</td></tr>
+</table>
+<table style="float: left">
+<tr><td title="idle time" class="not" colspan="3"></td>
+<td title="AppC__SmartCard: Wait reqChannel_AppC__SmartCard params: t:3 l:3 (vl:1) Ch: reqChannel_AppC__SmartCard" class="t0" colspan="3"> W</td>
+<td title="AppC__SmartCard: Wait AppC__reset__AppC__reset params: t:6 l:3 (vl:1) Ch: AppC__reset__AppC__reset" class="t0" colspan="3"> W</td>
+<td title="AppC__SmartCard: Send AppC__answerToReset__AppC__answerToReset(evtF) len:1 content:0 params: t:9 l:3 (vl:1) Ch: AppC__answerToReset__AppC__answerToReset" class="t0" colspan="3"> S</td>
+<td title="idle time" class="not" colspan="6"></td>
+<td title="AppC__SmartCard: Wait AppC__pTS__AppC__pTS params: t:18 l:3 (vl:1) Ch: AppC__pTS__AppC__pTS" class="t0" colspan="3"> W</td>
+<td title="AppC__SmartCard: Send AppC__pTSConfirm__AppC__pTSConfirm(evtF) len:1 content:0 params: t:21 l:3 (vl:1) Ch: AppC__pTSConfirm__AppC__pTSConfirm" class="t0" colspan="3"> S</td>
+<td title="AppC__SmartCard: Request reqChannel_AppC__TCPIP t:24 l:3 (vl:1) Ch: reqChannel_AppC__TCPIP" class="t0" colspan="3"> R</td>
+<td title="AppC__SmartCard: Request reqChannel_AppC__Application t:27 l:3 (vl:1) Ch: reqChannel_AppC__Application" class="t0" colspan="3"> R</td>
+<td title="idle time" class="not" colspan="69"></td>
+<td title="AppC__SmartCard: Wait AppC__connectionOpened__AppC__connectionOpened params: t:99 l:3 (vl:1) Ch: AppC__connectionOpened__AppC__connectionOpened" class="t0" colspan="3"> W</td>
+<td title="AppC__SmartCard: SelectEvent params: t:102 l:3 (vl:1) Ch: AppC__end__AppC__end" class="t0" colspan="3"> S</td>
+<td title="idle time" class="not" colspan="57"></td>
+<td title="AppC__SmartCard: SelectEvent params: t:162 l:3 (vl:1) Ch: AppC__send__AppC__send" class="t0" colspan="3"> S</td>
+<td title="AppC__SmartCard: Read 4,AppC__fromTtoP t:165 l:12 (vl:4) Ch: AppC__fromTtoP" class="t0" colspan="12"> R</td>
+<td title="AppC__SmartCard: Send AppC__data_Ready_SC__AppC__data_Ready_SC(evtB) content:2 params: t:177 l:3 (vl:1) Ch: AppC__data_Ready_SC__AppC__data_Ready_SC" class="t0" colspan="3"> S</td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:180 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:186 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:192 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:198 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:204 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:210 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:216 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:222 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:228 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:234 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: SelectEvent params: t:240 l:3 (vl:1) Ch: AppC__send__AppC__send" class="t0" colspan="3"> S</td>
+<td title="AppC__SmartCard: Read 4,AppC__fromTtoP t:243 l:12 (vl:4) Ch: AppC__fromTtoP" class="t0" colspan="12"> R</td>
+<td title="AppC__SmartCard: Send AppC__data_Ready_SC__AppC__data_Ready_SC(evtB) content:2 params: t:255 l:3 (vl:1) Ch: AppC__data_Ready_SC__AppC__data_Ready_SC" class="t0" colspan="3"> S</td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:258 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:264 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:270 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:276 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:282 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:288 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:294 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:300 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:306 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:312 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"> W</td>
+</tr>
+<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+<tr><td class="sc" colspan="5">0</td><td class="sc" colspan="5">5</td><td class="sc" colspan="5">10</td><td class="sc" colspan="5">15</td><td class="sc" colspan="5">20</td><td class="sc" colspan="5">25</td><td class="sc" colspan="5">30</td><td class="sc" colspan="5">35</td><td class="sc" colspan="5">40</td><td class="sc" colspan="5">45</td><td class="sc" colspan="5">50</td><td class="sc" colspan="5">55</td><td class="sc" colspan="5">60</td><td class="sc" colspan="5">65</td><td class="sc" colspan="5">70</td><td class="sc" colspan="5">75</td><td class="sc" colspan="5">80</td><td class="sc" colspan="5">85</td><td class="sc" colspan="5">90</td><td class="sc" colspan="5">95</td><td class="sc" colspan="5">100</td><td class="sc" colspan="5">105</td><td class="sc" colspan="5">110</td><td class="sc" colspan="5">115</td><td class="sc" colspan="5">120</td><td class="sc" colspan="5">125</td><td class="sc" colspan="5">130</td><td class="sc" colspan="5">135</td><td class="sc" colspan="5">140</td><td class="sc" colspan="5">145</td><td class="sc" colspan="5">150</td><td class="sc" colspan="5">155</td><td class="sc" colspan="5">160</td><td class="sc" colspan="5">165</td><td class="sc" colspan="5">170</td><td class="sc" colspan="5">175</td><td class="sc" colspan="5">180</td><td class="sc" colspan="5">185</td><td class="sc" colspan="5">190</td><td class="sc" colspan="5">195</td><td class="sc" colspan="5">200</td><td class="sc" colspan="5">205</td><td class="sc" colspan="5">210</td><td class="sc" colspan="5">215</td><td class="sc" colspan="5">220</td><td class="sc" colspan="5">225</td><td class="sc" colspan="5">230</td><td class="sc" colspan="5">235</td><td class="sc" colspan="5">240</td><td class="sc" colspan="5">245</td><td class="sc" colspan="5">250</td><td class="sc" colspan="5">255</td><td class="sc" colspan="5">260</td><td class="sc" colspan="5">265</td><td class="sc" colspan="5">270</td><td class="sc" colspan="5">275</td><td class="sc" colspan="5">280</td><td class="sc" colspan="5">285</td><td class="sc" colspan="5">290</td><td class="sc" colspan="5">295</td><td class="sc" colspan="5">300</td><td class="sc" colspan="5">305</td><td class="sc" colspan="5">310</td><td class="sc" colspan="5">315</td></tr>
+</table>
+</div>
+<div class = "clear"></div>
+<div>
+<table width="170px" style="float: left">
+ <tr><td>AppC__Timer</td></tr>
+</table>
+<table style="float: left">
+<tr><td title="idle time" class="not" colspan="120"></td>
+<td title="AppC__Timer: Wait reqChannel_AppC__Timer params: t:120 l:1 (vl:1) Ch: reqChannel_AppC__Timer" class="t0"></td>
+<td title="AppC__Timer: Notified AppC__stop__AppC__stop t:121 l:1 (vl:1) Ch: AppC__stop__AppC__stop" class="t0"></td>
+<td title="AppC__Timer: Send AppC__timeOut__AppC__timeOut(evtF) len:1 content:0 params: t:122 l:1 (vl:1) Ch: AppC__timeOut__AppC__timeOut" class="t0"></td>
+</tr>
+<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+<tr><td class="sc" colspan="5">0</td><td class="sc" colspan="5">5</td><td class="sc" colspan="5">10</td><td class="sc" colspan="5">15</td><td class="sc" colspan="5">20</td><td class="sc" colspan="5">25</td><td class="sc" colspan="5">30</td><td class="sc" colspan="5">35</td><td class="sc" colspan="5">40</td><td class="sc" colspan="5">45</td><td class="sc" colspan="5">50</td><td class="sc" colspan="5">55</td><td class="sc" colspan="5">60</td><td class="sc" colspan="5">65</td><td class="sc" colspan="5">70</td><td class="sc" colspan="5">75</td><td class="sc" colspan="5">80</td><td class="sc" colspan="5">85</td><td class="sc" colspan="5">90</td><td class="sc" colspan="5">95</td><td class="sc" colspan="5">100</td><td class="sc" colspan="5">105</td><td class="sc" colspan="5">110</td><td class="sc" colspan="5">115</td><td class="sc" colspan="5">120</td></tr>
+</table>
+</div>
+<div class = "clear"></div>
+<h1> Device scheduling </h1>
+<h2><span>Scheduling for device: CPU1_1_core_0</span></h2>
+<table>
+<tr><td title="AppC__InterfaceDevice: Request reqChannel_AppC__SmartCard t:0 l:2 (vl:1) Ch: reqChannel_AppC__SmartCard" class="t0" colspan="2"></td>
+<td title="AppC__InterfaceDevice: Send AppC__reset__AppC__reset(evtF) len:1 content:0 params: t:2 l:2 (vl:1) Ch: AppC__reset__AppC__reset" class="t0" colspan="2"></td>
+<td title="idle time" class="not" colspan="8"></td>
+<td title="AppC__InterfaceDevice: Wait AppC__answerToReset__AppC__answerToReset params: t:12 l:2 (vl:1) Ch: AppC__answerToReset__AppC__answerToReset" class="t0" colspan="2"></td>
+<td title="AppC__InterfaceDevice: Send AppC__pTS__AppC__pTS(evtF) len:1 content:0 params: t:14 l:2 (vl:1) Ch: AppC__pTS__AppC__pTS" class="t0" colspan="2"></td>
+<td title="idle time" class="not" colspan="8"></td>
+<td title="AppC__InterfaceDevice: Wait AppC__pTSConfirm__AppC__pTSConfirm params: t:24 l:2 (vl:1) Ch: AppC__pTSConfirm__AppC__pTSConfirm" class="t0" colspan="2"></td>
+<td title="AppC__InterfaceDevice: Notified AppC__data_Ready_SC__AppC__data_Ready_SC t:26 l:2 (vl:1) Ch: AppC__data_Ready_SC__AppC__data_Ready_SC" class="t0" colspan="2"></td>
+<td title="AppC__InterfaceDevice: Send AppC__end__AppC__end(evtF) len:1 content:0 params: t:28 l:2 (vl:1) Ch: AppC__end__AppC__end" class="t0" colspan="2"></td>
+</tr>
+<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+<tr><td class="sc" colspan="5">0</td><td class="sc" colspan="5">5</td><td class="sc" colspan="5">10</td><td class="sc" colspan="5">15</td><td class="sc" colspan="5">20</td><td class="sc" colspan="5">25</td><td class="sc" colspan="5">30</td></tr>
+</table>
+<table>
+<tr><td class="t0"></td><td style="max-width: unset;">AppC__InterfaceDevice</td><td class="space"></td></tr>
+</table>
+<h2><span>Scheduling for device: CPU0_1_core_0</span></h2>
+<table>
+<tr><td title="idle time" class="not" colspan="3"></td>
+<td title="AppC__SmartCard: Wait reqChannel_AppC__SmartCard params: t:3 l:3 (vl:1) Ch: reqChannel_AppC__SmartCard" class="t0" colspan="3"></td>
+<td title="AppC__SmartCard: Wait AppC__reset__AppC__reset params: t:6 l:3 (vl:1) Ch: AppC__reset__AppC__reset" class="t0" colspan="3"></td>
+<td title="AppC__SmartCard: Send AppC__answerToReset__AppC__answerToReset(evtF) len:1 content:0 params: t:9 l:3 (vl:1) Ch: AppC__answerToReset__AppC__answerToReset" class="t0" colspan="3"></td>
+<td title="idle time" class="not" colspan="6"></td>
+<td title="AppC__SmartCard: Wait AppC__pTS__AppC__pTS params: t:18 l:3 (vl:1) Ch: AppC__pTS__AppC__pTS" class="t0" colspan="3"></td>
+<td title="AppC__SmartCard: Send AppC__pTSConfirm__AppC__pTSConfirm(evtF) len:1 content:0 params: t:21 l:3 (vl:1) Ch: AppC__pTSConfirm__AppC__pTSConfirm" class="t0" colspan="3"></td>
+<td title="AppC__SmartCard: Request reqChannel_AppC__TCPIP t:24 l:3 (vl:1) Ch: reqChannel_AppC__TCPIP" class="t0" colspan="3"></td>
+<td title="AppC__SmartCard: Request reqChannel_AppC__Application t:27 l:3 (vl:1) Ch: reqChannel_AppC__Application" class="t0" colspan="3"></td>
+<td title="AppC__TCPIP: Wait reqChannel_AppC__TCPIP params: t:30 l:3 (vl:1) Ch: reqChannel_AppC__TCPIP" class="t1" colspan="3"></td>
+<td title="AppC__TCPIP: Notified AppC__abort__AppC__abort t:33 l:3 (vl:1) Ch: AppC__abort__AppC__abort" class="t1" colspan="3"></td>
+<td title="AppC__Application: Wait reqChannel_AppC__Application params: t:36 l:3 (vl:1) Ch: reqChannel_AppC__Application" class="t2" colspan="3"></td>
+<td title="AppC__Application: Send AppC__open__AppC__open(evtF) len:1 content:0 params: t:39 l:3 (vl:1) Ch: AppC__open__AppC__open" class="t2" colspan="3"></td>
+<td title="AppC__TCPIP: SelectEvent params: t:42 l:3 (vl:1) Ch: AppC__open__AppC__open" class="t1" colspan="3"></td>
+<td title="AppC__TCPIP: Send AppC__opened__AppC__opened(evtB) content:0 params: t:45 l:3 (vl:1) Ch: AppC__opened__AppC__opened" class="t1" colspan="3"></td>
+<td title="AppC__TCPIP: Notified AppC__abort__AppC__abort t:48 l:3 (vl:1) Ch: AppC__abort__AppC__abort" class="t1" colspan="3"></td>
+<td title="AppC__Application: Wait AppC__opened__AppC__opened params: t:51 l:3 (vl:1) Ch: AppC__opened__AppC__opened" class="t2" colspan="3"></td>
+<td title="AppC__Application: Send AppC__connectionOpened__AppC__connectionOpened(evtFB) len:8 content:0 params: t:54 l:3 (vl:1) Ch: AppC__connectionOpened__AppC__connectionOpened" class="t2" colspan="3"></td>
+<td title="AppC__Application: Execi 10 t:57 l:30 (vl:10)" class="t2" colspan="30"></td>
+<td title="AppC__Application: Write 4,AppC__fromAtoT t:87 l:5 (vl:4) Ch: AppC__fromAtoT" class="t2" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__Application: Send AppC__send_TCP__AppC__send_TCP(evtB) content:0 params: t:93 l:3 (vl:1) Ch: AppC__send_TCP__AppC__send_TCP" class="t2" colspan="3"></td>
+<td title="AppC__Application: Send AppC__close__AppC__close(evtF) len:1 content:0 params: t:96 l:3 (vl:1) Ch: AppC__close__AppC__close" class="t2" colspan="3"></td>
+<td title="AppC__SmartCard: Wait AppC__connectionOpened__AppC__connectionOpened params: t:99 l:3 (vl:1) Ch: AppC__connectionOpened__AppC__connectionOpened" class="t0" colspan="3"></td>
+<td title="AppC__SmartCard: SelectEvent params: t:102 l:3 (vl:1) Ch: AppC__end__AppC__end" class="t0" colspan="3"></td>
+<td title="AppC__TCPIP: SelectEvent params: t:105 l:3 (vl:1) Ch: AppC__send_TCP__AppC__send_TCP" class="t1" colspan="3"></td>
+<td title="AppC__TCPIP: Write 4,AppC__fromTtoP t:108 l:5 (vl:4) Ch: AppC__fromTtoP" class="t1" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__TCPIP: Send AppC__send__AppC__send(evtB) content:0 params: t:114 l:3 (vl:1) Ch: AppC__send__AppC__send" class="t1" colspan="3"></td>
+<td title="AppC__TCPIP: Request reqChannel_AppC__Timer t:117 l:3 (vl:1) Ch: reqChannel_AppC__Timer" class="t1" colspan="3"></td>
+<td title="AppC__TCPIP: Write 4,AppC__temp t:120 l:5 (vl:4) Ch: AppC__temp" class="t1" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__TCPIP: Notified AppC__abort__AppC__abort t:126 l:3 (vl:1) Ch: AppC__abort__AppC__abort" class="t1" colspan="3"></td>
+<td title="AppC__TCPIP: SelectEvent params: t:129 l:3 (vl:1) Ch: AppC__timeOut__AppC__timeOut" class="t1" colspan="3"></td>
+<td title="AppC__TCPIP: Read 4,AppC__temp t:132 l:12 (vl:4) Ch: AppC__temp" class="t1" colspan="12"></td>
+<td title="AppC__TCPIP: Write 4,AppC__fromTtoP t:144 l:5 (vl:4) Ch: AppC__fromTtoP" class="t1" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__TCPIP: Send AppC__send__AppC__send(evtB) content:0 params: t:150 l:3 (vl:1) Ch: AppC__send__AppC__send" class="t1" colspan="3"></td>
+<td title="AppC__TCPIP: Notified AppC__abort__AppC__abort t:153 l:3 (vl:1) Ch: AppC__abort__AppC__abort" class="t1" colspan="3"></td>
+<td title="AppC__TCPIP: SelectEvent params: t:156 l:3 (vl:1) Ch: AppC__close__AppC__close" class="t1" colspan="3"></td>
+<td title="AppC__TCPIP: Notified AppC__abort__AppC__abort t:159 l:3 (vl:1) Ch: AppC__abort__AppC__abort" class="t1" colspan="3"></td>
+<td title="AppC__SmartCard: SelectEvent params: t:162 l:3 (vl:1) Ch: AppC__send__AppC__send" class="t0" colspan="3"></td>
+<td title="AppC__SmartCard: Read 4,AppC__fromTtoP t:165 l:12 (vl:4) Ch: AppC__fromTtoP" class="t0" colspan="12"></td>
+<td title="AppC__SmartCard: Send AppC__data_Ready_SC__AppC__data_Ready_SC(evtB) content:2 params: t:177 l:3 (vl:1) Ch: AppC__data_Ready_SC__AppC__data_Ready_SC" class="t0" colspan="3"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:180 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:186 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:192 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:198 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:204 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:210 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:216 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:222 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:228 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:234 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: SelectEvent params: t:240 l:3 (vl:1) Ch: AppC__send__AppC__send" class="t0" colspan="3"></td>
+<td title="AppC__SmartCard: Read 4,AppC__fromTtoP t:243 l:12 (vl:4) Ch: AppC__fromTtoP" class="t0" colspan="12"></td>
+<td title="AppC__SmartCard: Send AppC__data_Ready_SC__AppC__data_Ready_SC(evtB) content:2 params: t:255 l:3 (vl:1) Ch: AppC__data_Ready_SC__AppC__data_Ready_SC" class="t0" colspan="3"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:258 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:264 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:270 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:276 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:282 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:288 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:294 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:300 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:306 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:312 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t0" colspan="5"></td>
+</tr>
+<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+<tr><td class="sc" colspan="5">0</td><td class="sc" colspan="5">5</td><td class="sc" colspan="5">10</td><td class="sc" colspan="5">15</td><td class="sc" colspan="5">20</td><td class="sc" colspan="5">25</td><td class="sc" colspan="5">30</td><td class="sc" colspan="5">35</td><td class="sc" colspan="5">40</td><td class="sc" colspan="5">45</td><td class="sc" colspan="5">50</td><td class="sc" colspan="5">55</td><td class="sc" colspan="5">60</td><td class="sc" colspan="5">65</td><td class="sc" colspan="5">70</td><td class="sc" colspan="5">75</td><td class="sc" colspan="5">80</td><td class="sc" colspan="5">85</td><td class="sc" colspan="5">90</td><td class="sc" colspan="5">95</td><td class="sc" colspan="5">100</td><td class="sc" colspan="5">105</td><td class="sc" colspan="5">110</td><td class="sc" colspan="5">115</td><td class="sc" colspan="5">120</td><td class="sc" colspan="5">125</td><td class="sc" colspan="5">130</td><td class="sc" colspan="5">135</td><td class="sc" colspan="5">140</td><td class="sc" colspan="5">145</td><td class="sc" colspan="5">150</td><td class="sc" colspan="5">155</td><td class="sc" colspan="5">160</td><td class="sc" colspan="5">165</td><td class="sc" colspan="5">170</td><td class="sc" colspan="5">175</td><td class="sc" colspan="5">180</td><td class="sc" colspan="5">185</td><td class="sc" colspan="5">190</td><td class="sc" colspan="5">195</td><td class="sc" colspan="5">200</td><td class="sc" colspan="5">205</td><td class="sc" colspan="5">210</td><td class="sc" colspan="5">215</td><td class="sc" colspan="5">220</td><td class="sc" colspan="5">225</td><td class="sc" colspan="5">230</td><td class="sc" colspan="5">235</td><td class="sc" colspan="5">240</td><td class="sc" colspan="5">245</td><td class="sc" colspan="5">250</td><td class="sc" colspan="5">255</td><td class="sc" colspan="5">260</td><td class="sc" colspan="5">265</td><td class="sc" colspan="5">270</td><td class="sc" colspan="5">275</td><td class="sc" colspan="5">280</td><td class="sc" colspan="5">285</td><td class="sc" colspan="5">290</td><td class="sc" colspan="5">295</td><td class="sc" colspan="5">300</td><td class="sc" colspan="5">305</td><td class="sc" colspan="5">310</td><td class="sc" colspan="5">315</td></tr>
+</table>
+<table>
+<tr><td class="t1"></td><td style="max-width: unset;">AppC__TCPIP</td><td class="space"></td><td class="t2"></td><td style="max-width: unset;">AppC__Application</td><td class="space"></td><td class="t0"></td><td style="max-width: unset;">AppC__SmartCard</td><td class="space"></td></tr>
+</table>
+<h2><span>Scheduling for device: HWA0_core_0</span></h2>
+<table>
+<tr><td title="idle time" class="not" colspan="120"></td>
+<td title="AppC__Timer: Wait reqChannel_AppC__Timer params: t:120 l:1 (vl:1) Ch: reqChannel_AppC__Timer" class="t0"></td>
+<td title="AppC__Timer: Notified AppC__stop__AppC__stop t:121 l:1 (vl:1) Ch: AppC__stop__AppC__stop" class="t0"></td>
+<td title="AppC__Timer: Send AppC__timeOut__AppC__timeOut(evtF) len:1 content:0 params: t:122 l:1 (vl:1) Ch: AppC__timeOut__AppC__timeOut" class="t0"></td>
+</tr>
+<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+<tr><td class="sc" colspan="5">0</td><td class="sc" colspan="5">5</td><td class="sc" colspan="5">10</td><td class="sc" colspan="5">15</td><td class="sc" colspan="5">20</td><td class="sc" colspan="5">25</td><td class="sc" colspan="5">30</td><td class="sc" colspan="5">35</td><td class="sc" colspan="5">40</td><td class="sc" colspan="5">45</td><td class="sc" colspan="5">50</td><td class="sc" colspan="5">55</td><td class="sc" colspan="5">60</td><td class="sc" colspan="5">65</td><td class="sc" colspan="5">70</td><td class="sc" colspan="5">75</td><td class="sc" colspan="5">80</td><td class="sc" colspan="5">85</td><td class="sc" colspan="5">90</td><td class="sc" colspan="5">95</td><td class="sc" colspan="5">100</td><td class="sc" colspan="5">105</td><td class="sc" colspan="5">110</td><td class="sc" colspan="5">115</td><td class="sc" colspan="5">120</td></tr>
+</table>
+<table>
+<tr><td class="t0"></td><td style="max-width: unset;">AppC__Timer</td><td class="space"></td></tr>
+</table>
+<h2><span>Scheduling for device: Bus0_0</span></h2>
+<table>
+<tr><td title="idle time" class="not" colspan="87"></td>
+<td title="AppC__Application: Write 4,AppC__fromAtoT t:87 l:5 (vl:4) Ch: AppC__fromAtoT" class="t0" colspan="5"></td>
+<td title="idle time" class="not" colspan="16"></td>
+<td title="AppC__TCPIP: Write 4,AppC__fromTtoP t:108 l:5 (vl:4) Ch: AppC__fromTtoP" class="t1" colspan="5"></td>
+<td title="idle time" class="not" colspan="7"></td>
+<td title="AppC__TCPIP: Write 4,AppC__temp t:120 l:5 (vl:4) Ch: AppC__temp" class="t1" colspan="5"></td>
+<td title="idle time" class="not" colspan="19"></td>
+<td title="AppC__TCPIP: Write 4,AppC__fromTtoP t:144 l:5 (vl:4) Ch: AppC__fromTtoP" class="t1" colspan="5"></td>
+<td title="idle time" class="not" colspan="31"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:180 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:186 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:192 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:198 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:204 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:210 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:216 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:222 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:228 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:234 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"></td>
+<td title="idle time" class="not" colspan="19"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:258 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:264 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:270 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:276 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:282 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:288 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:294 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:300 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:306 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"></td>
+<td title="idle time" class="not"></td>
+<td title="AppC__SmartCard: Write 40,AppC__fromSCtoD t:312 l:5 (vl:4) Ch: AppC__fromSCtoD" class="t2" colspan="5"></td>
+</tr>
+<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+<tr><td class="sc" colspan="5">0</td><td class="sc" colspan="5">5</td><td class="sc" colspan="5">10</td><td class="sc" colspan="5">15</td><td class="sc" colspan="5">20</td><td class="sc" colspan="5">25</td><td class="sc" colspan="5">30</td><td class="sc" colspan="5">35</td><td class="sc" colspan="5">40</td><td class="sc" colspan="5">45</td><td class="sc" colspan="5">50</td><td class="sc" colspan="5">55</td><td class="sc" colspan="5">60</td><td class="sc" colspan="5">65</td><td class="sc" colspan="5">70</td><td class="sc" colspan="5">75</td><td class="sc" colspan="5">80</td><td class="sc" colspan="5">85</td><td class="sc" colspan="5">90</td><td class="sc" colspan="5">95</td><td class="sc" colspan="5">100</td><td class="sc" colspan="5">105</td><td class="sc" colspan="5">110</td><td class="sc" colspan="5">115</td><td class="sc" colspan="5">120</td><td class="sc" colspan="5">125</td><td class="sc" colspan="5">130</td><td class="sc" colspan="5">135</td><td class="sc" colspan="5">140</td><td class="sc" colspan="5">145</td><td class="sc" colspan="5">150</td><td class="sc" colspan="5">155</td><td class="sc" colspan="5">160</td><td class="sc" colspan="5">165</td><td class="sc" colspan="5">170</td><td class="sc" colspan="5">175</td><td class="sc" colspan="5">180</td><td class="sc" colspan="5">185</td><td class="sc" colspan="5">190</td><td class="sc" colspan="5">195</td><td class="sc" colspan="5">200</td><td class="sc" colspan="5">205</td><td class="sc" colspan="5">210</td><td class="sc" colspan="5">215</td><td class="sc" colspan="5">220</td><td class="sc" colspan="5">225</td><td class="sc" colspan="5">230</td><td class="sc" colspan="5">235</td><td class="sc" colspan="5">240</td><td class="sc" colspan="5">245</td><td class="sc" colspan="5">250</td><td class="sc" colspan="5">255</td><td class="sc" colspan="5">260</td><td class="sc" colspan="5">265</td><td class="sc" colspan="5">270</td><td class="sc" colspan="5">275</td><td class="sc" colspan="5">280</td><td class="sc" colspan="5">285</td><td class="sc" colspan="5">290</td><td class="sc" colspan="5">295</td><td class="sc" colspan="5">300</td><td class="sc" colspan="5">305</td><td class="sc" colspan="5">310</td><td class="sc" colspan="5">315</td></tr>
+</table>
+<table>
+<tr><td class="t1"></td><td style="max-width: unset;">AppC__TCPIP</td><td class="space"></td><td class="t0"></td><td style="max-width: unset;">AppC__Application</td><td class="space"></td><td class="t2"></td><td style="max-width: unset;">AppC__SmartCard</td><td class="space"></td></tr>
+</table>
+</body>
+</html>

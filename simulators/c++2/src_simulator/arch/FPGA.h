@@ -125,7 +125,7 @@ public:
     	*/
 	virtual void registerTask(TMLTask* iTask){
 		_taskList.push_back(iTask);
-		_taskNumber++;
+		//_taskNumber++;
 		if (_scheduler!=0) _scheduler->addWorkloadSource(iTask);
 	}
 	///inline void setTransNumber(unsigned int num) { _transNumber=num;}
@@ -144,7 +144,7 @@ public:
 	void buttonPieChart(std::ofstream& myfile) const;
 	void showPieChart(std::ofstream& myfile) const;
 	std::string determineHTMLCellClass(unsigned int &nextColor );
-        inline unsigned int getReconfigNumber() {return _reconfigNumber;}
+	void scheduleBlank(std::ofstream& myfile);
 protected:
 	///List of all tasks running on the FPGA
 	TaskList _taskList;

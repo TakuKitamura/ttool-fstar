@@ -66,7 +66,6 @@ public:
 	inline TMLTransaction* getNextTransaction(TMLTime iEndSchedule) const {return _nextTransaction;}
 	inline std::string toString() const {return _name;}
 	void reset();
-	std::string getTaskOrder() {return _taskOrder;}
 	//void transWasScheduled(SchedulableDevice* iDevice);
 protected:
 	///Name of the scheduler

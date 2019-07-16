@@ -86,7 +86,7 @@ using std::max;
 #undef DEBUG_BUS
 #undef DEBUG_SERIALIZE
 
-#define DEBUG_FPGA
+#undef DEBUG_FPGA
 #undef DEBUG_SIMULATE
 //enables mapping of DIPLODOCUS channels onto buses
 #define BUS_ENABLED

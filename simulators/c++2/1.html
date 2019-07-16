@@ -1,0 +1,464 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" type="text/css" href="1.css" />
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" />
+<title>Scheduling</title>
+</head>
+<body>
+<ul>
+<li>Model name: /home/niusiyuan/test/TTool/modeling/DIPLODOCUS/SmartCardProtocol.xml / DIPLODOCUS architecture and mapping Diagram</li><br>
+<li> Date: Mon Jul 15 17:34:35 2019
+</li>
+</ul>
+<script src="jquery.min.js"></script>
+
+<script src="Chart.min.js"></script>
+
+<script>
+
+window.onload = function () {
+   var ctx3_0= $("#pie-chartcanvas-3_0");
+   var data3_0 = new Array ("1","0");
+    var efficiency3_0 = [];
+    var coloR3_0 = [];
+    var dynamicColors3_0= function() {
+ 		var r = Math.floor(Math.random() * 255);
+ 		var g = Math.floor(Math.random() * 255);
+ 		var b = Math.floor(Math.random() * 255);
+ 		return "rgb(" + r + "," + g + "," + b + ")";
+ 	};
+    for (var i in data3_0){
+             efficiency3_0.push(data3_0[i]);
+             coloR3_0.push(dynamicColors3_0());
+}
+   var data3_0 = { 
+           labels : [ "AppC__InterfaceDevice","idle time"],
+          datasets : [
+                                      {
+                                            data : efficiency3_0,
+                            backgroundColor : coloR3_0
+  }]
+ };
+  var options3_0 = {
+ 			title : {
+ 			display : true,
+ 			position : "top",
+ 			text : "CPU1_1_core_0: Average load is 1", 
+ 			fontSize : 14,
+ 			fontColor : "#111"
+ 		},
+ 		legend : {
+ 			display : true,
+ 			position : "bottom"
+ 		}
+ 	};
+
+   var ctx4_0= $("#pie-chartcanvas-4_0");
+   var data4_0 = new Array ("1");
+    var efficiency4_0 = [];
+    var coloR4_0 = [];
+    var dynamicColors4_0= function() {
+ 		var r = Math.floor(Math.random() * 255);
+ 		var g = Math.floor(Math.random() * 255);
+ 		var b = Math.floor(Math.random() * 255);
+ 		return "rgb(" + r + "," + g + "," + b + ")";
+ 	};
+    for (var i in data4_0){
+             efficiency4_0.push(data4_0[i]);
+             coloR4_0.push(dynamicColors4_0());
+}
+   var data4_0 = { 
+           labels : ["idle time"],
+          datasets : [
+                                      {
+                                            data : efficiency4_0,
+                            backgroundColor : coloR4_0
+  }]
+ };
+  var options4_0 = {
+ 			title : {
+ 			display : true,
+ 			position : "top",
+ 			text : "HWA0_core_0: Average load is 0", 
+ 			fontSize : 14,
+ 			fontColor : "#111"
+ 		},
+ 		legend : {
+ 			display : true,
+ 			position : "bottom"
+ 		}
+ 	};
+
+   var ctx5_ta16= $("#pie-chartcanvas-5_ta16");
+   var data5_ta16 = new Array ("1");
+    var efficiency5_ta16 = [];
+    var coloR5_ta16 = [];
+    var dynamicColors5_ta16= function() {
+ 		var r = Math.floor(Math.random() * 255);
+ 		var g = Math.floor(Math.random() * 255);
+ 		var b = Math.floor(Math.random() * 255);
+ 		return "rgb(" + r + "," + g + "," + b + ")";
+ 	};
+    for (var i in data5_ta16){
+             efficiency5_ta16.push(data5_ta16[i]);
+             coloR5_ta16.push(dynamicColors5_ta16());
+}
+   var data5_ta16 = { 
+           labels : ["idle time"],
+          datasets : [
+                                      {
+                                            data : efficiency5_ta16,
+                            backgroundColor : coloR5_ta16
+  }]
+ };
+  var options5_ta16 = {
+ 			title : {
+ 			display : true,
+ 			position : "top",
+ 			text : "FPGA0_ta16: Average load is 0", 
+ 			fontSize : 14,
+ 			fontColor : "#111"
+ 		},
+ 		legend : {
+ 			display : true,
+ 			position : "bottom"
+ 		}
+ 	};
+
+   var ctx5_ta18= $("#pie-chartcanvas-5_ta18");
+   var data5_ta18 = new Array ("0.071","0.93");
+    var efficiency5_ta18 = [];
+    var coloR5_ta18 = [];
+    var dynamicColors5_ta18= function() {
+ 		var r = Math.floor(Math.random() * 255);
+ 		var g = Math.floor(Math.random() * 255);
+ 		var b = Math.floor(Math.random() * 255);
+ 		return "rgb(" + r + "," + g + "," + b + ")";
+ 	};
+    for (var i in data5_ta18){
+             efficiency5_ta18.push(data5_ta18[i]);
+             coloR5_ta18.push(dynamicColors5_ta18());
+}
+   var data5_ta18 = { 
+           labels : [ "AppC__SmartCard","idle time"],
+          datasets : [
+                                      {
+                                            data : efficiency5_ta18,
+                            backgroundColor : coloR5_ta18
+  }]
+ };
+  var options5_ta18 = {
+ 			title : {
+ 			display : true,
+ 			position : "top",
+ 			text : "FPGA0_ta18: Average load is 0.071", 
+ 			fontSize : 14,
+ 			fontColor : "#111"
+ 		},
+ 		legend : {
+ 			display : true,
+ 			position : "bottom"
+ 		}
+ 	};
+
+   var ctx5_ta29= $("#pie-chartcanvas-5_ta29");
+   var data5_ta29 = new Array ("1");
+    var efficiency5_ta29 = [];
+    var coloR5_ta29 = [];
+    var dynamicColors5_ta29= function() {
+ 		var r = Math.floor(Math.random() * 255);
+ 		var g = Math.floor(Math.random() * 255);
+ 		var b = Math.floor(Math.random() * 255);
+ 		return "rgb(" + r + "," + g + "," + b + ")";
+ 	};
+    for (var i in data5_ta29){
+             efficiency5_ta29.push(data5_ta29[i]);
+             coloR5_ta29.push(dynamicColors5_ta29());
+}
+   var data5_ta29 = { 
+           labels : ["idle time"],
+          datasets : [
+                                      {
+                                            data : efficiency5_ta29,
+                            backgroundColor : coloR5_ta29
+  }]
+ };
+  var options5_ta29 = {
+ 			title : {
+ 			display : true,
+ 			position : "top",
+ 			text : "FPGA0_ta29: Average load is 0", 
+ 			fontSize : 14,
+ 			fontColor : "#111"
+ 		},
+ 		legend : {
+ 			display : true,
+ 			position : "bottom"
+ 		}
+ 	};
+
+   var ctx2= $("#pie-chartcanvas-2");
+   var data2 = new Array ("1");
+    var efficiency2 = [];
+    var coloR2 = [];
+    var dynamicColors2= function() {
+ 		var r = Math.floor(Math.random() * 255);
+ 		var g = Math.floor(Math.random() * 255);
+ 		var b = Math.floor(Math.random() * 255);
+ 		return "rgb(" + r + "," + g + "," + b + ")";
+ 	};
+    for (var i in data2){
+             efficiency2.push(data2[i]);
+             coloR2.push(dynamicColors2());
+}
+   var data2 = { 
+           labels : ["idle time"],
+          datasets : [
+                                      {
+                                            data : efficiency2,
+                            backgroundColor : coloR2
+  }]
+ };
+  var options2 = {
+ 			title : {
+ 			display : true,
+ 			position : "top",
+ 			text : "Bus0_0: Average load is 0", 
+ 			fontSize : 14,
+ 			fontColor : "#111"
+ 		},
+ 		legend : {
+ 			display : true,
+ 			position : "bottom"
+ 		}
+ 	};
+
+$("#button").click(function() {
+    var chart3_0 = new Chart( ctx3_0, {
+               type : "pie",
+               data : data3_0,
+               options : options3_0
+                   });
+   chart3_0 .data.datasets.forEach(function(ds){
+         ds.hidden=!ds.hidden;
+ 	});
+   chart3_0.update();
+    var chart4_0 = new Chart( ctx4_0, {
+               type : "pie",
+               data : data4_0,
+               options : options4_0
+                   });
+   chart4_0 .data.datasets.forEach(function(ds){
+         ds.hidden=!ds.hidden;
+ 	});
+   chart4_0.update();
+    var chart5_ta16 = new Chart( ctx5_ta16, {
+               type : "pie",
+               data : data5_ta16,
+               options : options5_ta16
+                   });
+   chart5_ta16 .data.datasets.forEach(function(ds){
+         ds.hidden=!ds.hidden;
+ 	});
+   chart5_ta16.update();
+    var chart5_ta18 = new Chart( ctx5_ta18, {
+               type : "pie",
+               data : data5_ta18,
+               options : options5_ta18
+                   });
+   chart5_ta18 .data.datasets.forEach(function(ds){
+         ds.hidden=!ds.hidden;
+ 	});
+   chart5_ta18.update();
+    var chart5_ta29 = new Chart( ctx5_ta29, {
+               type : "pie",
+               data : data5_ta29,
+               options : options5_ta29
+                   });
+   chart5_ta29 .data.datasets.forEach(function(ds){
+         ds.hidden=!ds.hidden;
+ 	});
+   chart5_ta29.update();
+    var chart2 = new Chart( ctx2, {
+               type : "pie",
+               data : data2,
+               options : options2
+                   });
+   chart2 .data.datasets.forEach(function(ds){
+         ds.hidden=!ds.hidden;
+ 	});
+   chart2.update();
+     });
+}
+</script>
+
+<h1> Summary HW </h1>
+<table width="170px" style="float: left">
+ <tr><td>CPU1_1_core_0</td></tr>
+</table>
+<table style="float: left">
+<tr><td title="AppC__InterfaceDevice: Request reqChannel_AppC__SmartCard t:0 l:2 (vl:1) Ch: reqChannel_AppC__SmartCard" class="t0" colspan="2"> R</td>
+<td title="AppC__InterfaceDevice: Send AppC__reset__AppC__reset(evtF) len:1 content:1 params: t:2 l:2 (vl:1) Ch: AppC__reset__AppC__reset" class="t0" colspan="2"> S</td>
+</tr>
+<tr><th></th><th></th><th></th><th></th></tr>
+<tr><td class="sc" colspan="5">0</td></tr>
+</table>
+<div class = "clear"></div>
+<table width="170px" style="float: left">
+ <tr><td>HWA0_core_0</td></tr>
+</table>
+<table style="float: left">
+<h4>Device never activated</h4>
+</table>
+<div class = "clear"></div>
+<table width="170px" style="float: left">
+ <tr><td>FPGA0</td></tr>
+</table>
+<div style="float: left">
+<table>
+<tr></tr>
+<tr></tr>
+<tr><td class="sc" colspan="5">0</td><table>
+<tr><td title="idle time" class="not" colspan="13"></td>
+<td title="AppC__SmartCard: Request reqChannel_AppC__Application t:13 l:1 (vl:1) Ch: reqChannel_AppC__Application" class="t0"></td>
+</tr>
+<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+<tr><td class="sc" colspan="5">0</td><td class="sc" colspan="5">5</td><td class="sc" colspan="5">10</td><table>
+<tr></tr>
+<tr></tr>
+<tr><td class="sc" colspan="5">0</td><table width="170px" style="float: left">
+ <tr><td>Bus0_0</td></tr>
+</table>
+<table style="float: left">
+<h4>Device never activated</h4>
+</table>
+<div class = "clear"></div>
+<table>
+<button id="button"> Show/Hide Pie Chart </button>
+</table>
+<div class="pie-chart-container">
+     <canvas id="pie-chartcanvas-3_0"></canvas>
+</div>
+<div class="pie-chart-container">
+     <canvas id="pie-chartcanvas-4_0"></canvas>
+</div>
+<div class="pie-chart-container">
+     <canvas id="pie-chartcanvas-5_ta16"></canvas>
+</div>
+<div class="pie-chart-container">
+     <canvas id="pie-chartcanvas-5_ta18"></canvas>
+</div>
+<div class="pie-chart-container">
+     <canvas id="pie-chartcanvas-5_ta29"></canvas>
+</div>
+<div class="pie-chart-container">
+     <canvas id="pie-chartcanvas-2"></canvas>
+</div>
+<div class = "clear"></div>
+<h1> Summary tasks </h1>
+<div>
+<table width="170px" style="float: left">
+ <tr><td>AppC__InterfaceDevice</td></tr>
+</table>
+<table style="float: left">
+<tr><td title="AppC__InterfaceDevice: Request reqChannel_AppC__SmartCard t:0 l:2 (vl:1) Ch: reqChannel_AppC__SmartCard" class="t0" colspan="2"> R</td>
+<td title="AppC__InterfaceDevice: Send AppC__reset__AppC__reset(evtF) len:1 content:1 params: t:2 l:2 (vl:1) Ch: AppC__reset__AppC__reset" class="t0" colspan="2"> S</td>
+</tr>
+<tr><th></th><th></th><th></th><th></th></tr>
+<tr><td class="sc" colspan="5">0</td></tr>
+</table>
+</div>
+<div class = "clear"></div>
+<div>
+<table width="170px" style="float: left">
+ <tr><td>AppC__Timer</td></tr>
+</table>
+<table style="float: left">
+<h4>Task never executed</h4>
+</table>
+<div class = "clear"></div>
+<div>
+<table width="170px" style="float: left">
+ <tr><td>AppC__Application</td></tr>
+</table>
+<table style="float: left">
+<h4>Task never executed</h4>
+</table>
+<div class = "clear"></div>
+<div>
+<table width="170px" style="float: left">
+ <tr><td>AppC__SmartCard</td></tr>
+</table>
+<table style="float: left">
+<tr><td title="AppC__InterfaceDevice: Wait AppC__answerToReset__AppC__answerToReset params: t:0 l:0 (vl:0) Ch: AppC__answerToReset__AppC__answerToReset" class="t0" colspan="0"> W</td>
+<td title="idle time" class="not" colspan="32"></td>
+<td title="AppC__InterfaceDevice: Write 40,AppC__fromDtoSC t:32 l:5 (vl:4) Ch: AppC__fromDtoSC" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not" colspan="7"></td>
+<td title="AppC__InterfaceDevice: Write 40,AppC__fromDtoSC t:44 l:5 (vl:4) Ch: AppC__fromDtoSC" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__InterfaceDevice: Write 40,AppC__fromDtoSC t:50 l:5 (vl:4) Ch: AppC__fromDtoSC" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not" colspan="13"></td>
+<td title="AppC__InterfaceDevice: Write 40,AppC__fromDtoSC t:68 l:5 (vl:4) Ch: AppC__fromDtoSC" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not"></td>
+<td title="AppC__InterfaceDevice: Send AppC__data_Ready__AppC__data_Ready(evtB) content:0 params:(0(x),0(b)) t:74 l:2 (vl:1) Ch: AppC__data_Ready__AppC__data_Ready" class="t0" colspan="2"> S</td>
+<td title="idle time" class="not" colspan="-63"></td>
+<td title="AppC__SmartCard: Request reqChannel_AppC__Application t:13 l:1 (vl:1) Ch: reqChannel_AppC__Application" class="t1"></td>
+</tr>
+<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+<tr><td class="sc" colspan="5">0</td><td class="sc" colspan="5">5</td><td class="sc" colspan="5">10</td></tr>
+</table>
+</div>
+<div class = "clear"></div>
+<div>
+<table width="170px" style="float: left">
+ <tr><td>AppC__TCPIP</td></tr>
+</table>
+<table style="float: left">
+<tr><td title="idle time" class="not" colspan="20"></td>
+<td title="AppC__InterfaceDevice: Write 40,AppC__fromDtoSC t:20 l:5 (vl:4) Ch: AppC__fromDtoSC" class="t0" colspan="5"> W</td>
+<td title="idle time" class="not" colspan="-23"></td>
+<td title="AppC__InterfaceDevice: Send AppC__reset__AppC__reset(evtF) len:1 content:1 params: t:2 l:2 (vl:1) Ch: AppC__reset__AppC__reset" class="t0" colspan="2"> S</td>
+</tr>
+<tr><th></th><th></th><th></th><th></th></tr>
+<tr><td class="sc" colspan="5">0</td></tr>
+</table>
+</div>
+<div class = "clear"></div>
+<h1> Device scheduling </h1>
+<h2><span>Scheduling for device: CPU1_1_core_0</span></h2>
+<table>
+<tr><td title="AppC__InterfaceDevice: Request reqChannel_AppC__SmartCard t:0 l:2 (vl:1) Ch: reqChannel_AppC__SmartCard" class="t0" colspan="2"></td>
+<td title="AppC__InterfaceDevice: Send AppC__reset__AppC__reset(evtF) len:1 content:1 params: t:2 l:2 (vl:1) Ch: AppC__reset__AppC__reset" class="t0" colspan="2"></td>
+</tr>
+<tr><th></th><th></th><th></th><th></th></tr>
+<tr><td class="sc" colspan="5">0</td></tr>
+</table>
+<table>
+<tr><td class="t0"></td><td style="max-width: unset;">AppC__InterfaceDevice</td><td class="space"></td></tr>
+</table>
+<h2><span>Scheduling for device: HWA0_core_0</span></h2>
+<h4>Device never activated</h4>
+<h2><span>Scheduling for device: FPGA0</span></h2>
+<table>
+<tr></tr>
+<tr></tr>
+<tr><td class="sc" colspan="5">0</td></tr>
+</table>
+<table>
+<tr><td title="idle time" class="not" colspan="13"></td>
+<td title="AppC__SmartCard: Request reqChannel_AppC__Application t:13 l:1 (vl:1) Ch: reqChannel_AppC__Application" class="t0"></td>
+</tr>
+<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+<tr><td class="sc" colspan="5">0</td><td class="sc" colspan="5">5</td><td class="sc" colspan="5">10</td></tr>
+</table>
+<table>
+<tr></tr>
+<tr></tr>
+<tr><td class="sc" colspan="5">0</td></tr>
+</table>
+<h2><span>Scheduling for device: Bus0_0</span></h2>
+<h4>Device never activated</h4>
+</body>
+</html>

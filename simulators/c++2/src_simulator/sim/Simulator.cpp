@@ -118,7 +118,7 @@ TMLTransaction* Simulator::getTransLowestEndTime(SchedulableDevice*& oResultDevi
       std::cout<<aTempTrans->toShortString()<<"getEndtime is "<<aTempTrans->getEndTime()<<std::endl;
       std::cout<<"alowest time is "<<aLowestTime<<std::endl;
       if (aTempTrans->getEndTime() < aLowestTime){
-	//	std::cout<<"in!!!"<<std::endl;
+	std::cout<<"in!!!"<<std::endl;
         aMarker=aTempTrans;
         aLowestTime=aTempTrans->getEndTime();
         oResultDevice=aTempDevice;     
@@ -498,15 +498,11 @@ std::cout<<"schedule2HTML--------------------------------------*****************
       (*i)->drawPieChart(myfile);
       }
     for(FPGAList::const_iterator i=_simComp->getFPGAList().begin(); i != _simComp->getFPGAList().end(); ++i){
-      if((*i)->getReconfigNumber()==0){
-	for(TaskList::const_iterator j = (*i)->getTaskList().begin(); j != (*i)->getTaskList().end(); ++j){
-	  (*i)->setHtmlCurrTask(*j);
-	  (*i)->drawPieChart(myfile);
-	}
-      }
-      else{
+      for(TaskList::const_iterator j = (*i)->getTaskList().begin(); j != (*i)->getTaskList().end(); ++j){
+      	(*i)->setHtmlCurrTask(*j);
 	(*i)->drawPieChart(myfile);
       }
+      // (*i)->buttonPieChart(myfile);
     }
     for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
        (*j)->drawPieChart(myfile);
@@ -543,23 +539,24 @@ std::cout<<"schedule2HTML--------------------------------------*****************
       }
         if((*i)->getAmoutOfCore() == 1)
 	   (*i)->setCycleTime(0);
+	(*i)->setCycleTime(0);
     }   
 
     for(FPGAList::const_iterator j=_simComp->getFPGAList().begin(); j != _simComp->getFPGAList().end(); ++j){     
       (*j)->setStartFlagHTML(true);
-      if((*j)->getReconfigNumber()==0){
-	for(TaskList::const_iterator i = (*j)->getTaskList().begin(); i != (*j)->getTaskList().end(); ++i){
-	  (*j)->setHtmlCurrTask(*i);
-	  (*j)->HW2HTML(myfile);
-	  (*j)->setStartFlagHTML(false);
-	}
+      for(TaskList::const_iterator i = (*j)->getTaskList().begin(); i != (*j)->getTaskList().end(); ++i){
+      	(*j)->setHtmlCurrTask(*i);
+#ifdef DEBUG_HTML
+	std::cout<<"begin fpga html "<<(*j)->toShortString()<<std::endl;
+	std::cout<<"task is !!!!!"<<(*i)->toString()<<std::endl;
+#endif
+	(*j)->HW2HTML(myfile);
+	(*j)->setStartFlagHTML(false);
       }
-      else{
-	 (*j)->HW2HTML(myfile);
-	 (*j)->setStartFlagHTML(false);
-      }
+      myfile << "</tr>" << std::endl << "</table>" << std::endl << SCHED_HTML_JS_DIV_END << std::endl;
+      myfile << SCHED_HTML_JS_CLEAR << std::endl;
     }
-   
+
     
      
     for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
@@ -576,13 +573,8 @@ std::cout<<"schedule2HTML--------------------------------------*****************
       (*i)->showPieChart(myfile);
     }
     for(FPGAList::const_iterator j=_simComp->getFPGAList().begin(); j != _simComp->getFPGAList().end(); ++j){
-      if((*j)->getReconfigNumber()==0){
-	for(TaskList::const_iterator i = (*j)->getTaskList().begin(); i != (*j)->getTaskList().end(); ++i){
-	  (*j)->setHtmlCurrTask(*i);
-	  (*j)->showPieChart(myfile);
-	}
-      }
-      else{
+      for(TaskList::const_iterator i = (*j)->getTaskList().begin(); i != (*j)->getTaskList().end(); ++i){
+	(*j)->setHtmlCurrTask(*i);
 	(*j)->showPieChart(myfile);
       }
     }
@@ -613,17 +605,12 @@ std::cout<<"schedule2HTML--------------------------------------*****************
     }   
      for(FPGAList::const_iterator j=_simComp->getFPGAList().begin(); j != _simComp->getFPGAList().end(); ++j){     
       (*j)->setStartFlagHTML(true);
-      if((*j)->getReconfigNumber()==0){
-	for(TaskList::const_iterator i = (*j)->getTaskList().begin(); i != (*j)->getTaskList().end(); ++i){
-	  (*j)->setHtmlCurrTask(*i);
-	  (*j)->schedule2HTML(myfile);
-	  (*j)->setStartFlagHTML(false);
-	}
-      }
-      else{
+      for(TaskList::const_iterator i = (*j)->getTaskList().begin(); i != (*j)->getTaskList().end(); ++i){
+      	(*j)->setHtmlCurrTask(*i);
 	(*j)->schedule2HTML(myfile);
 	(*j)->setStartFlagHTML(false);
-      }	
+      }
+      (*j)->scheduleBlank(myfile);
     }
     for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
       (*j)->schedule2HTML(myfile);     
@@ -831,7 +818,7 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
   _simComp->setStopFlag(false,"");
   for(TaskList::const_iterator i=_simComp->getTaskList().begin(); i!=_simComp->getTaskList().end();i++){
     if ((*i)->getCurrCommand()!=0) (*i)->getCurrCommand()->prepare(true);
-    // std::cout<<"in prepare"<< (*i)->toString() << std::endl;
+    std::cout<<"in prepare"<< (*i)->toString() << std::endl;
   }
 #ifdef EBRDD_ENABLED
   for(EBRDDList::const_iterator i=_simComp->getEBRDDIterator(false); i!=_simComp->getEBRDDIterator(true);i++){
@@ -862,9 +849,7 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 #ifdef DEBUG_SIMULATE
 	std::cout<<"device is "<<deviceLET->getName()<<std::endl;
 #endif
-	//	std::cout<<"111flag "<<_simComp->getStopFlag()<<std::endl;
         bool x = deviceLET->addTransaction(0);
-	//std::cout<<"222flag "<<_simComp->getStopFlag()<<std::endl;
 #ifdef DEBUG_SIMULATE
 	std::cout<<"in simulator end addTransactin"<<std::endl;
 #endif
@@ -991,9 +976,9 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
       std::cout<<"task is !!!!!"<<oLastTrans->toString()<<std::endl;
 #endif
 	transLET=getTransLowestEndTime(deviceLET);
-	if(transLET==0) std::cout<<"translet is 0~~~"<<std::endl;
-	if(_simComp->getStopFlag()==true) std::cout<<"stop flag is true"<<std::endl;
-	else std::cout<<"stop flag is false"<<std::endl;
+	//	if(transLET==0) std::cout<<"translet is 0~~~"<<std::endl;
+	//	if(_simComp->getStopFlag()==true) std::cout<<"stop flag is true"<<std::endl;
+	//	else std::cout<<"stop flag is false"<<std::endl;
     }
 
   bool aSimCompleted = ( transLET==0  && !_simComp->getStoppedOnAction());

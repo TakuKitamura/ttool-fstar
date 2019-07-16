@@ -47,7 +47,6 @@ MemPoolNoDel<TMLTransaction> TMLTransaction::memPool(BLOCK_SIZE_TRANS);
 
 
 TMLTransaction::TMLTransaction():_runnableTime(0), _startTime(0), _length(0), _virtualLength(0), _command(0),_transactCoreNumber(0),_transVcdOutputState(END_IDLE_TRANS),_endState(false),
-				 _reconfigState(false),
 				 /*_previousTransEndTime(0),*/
 #ifdef PENALTIES_ENABLED
                                  _idlePenalty(0), _taskSwitchingPenalty(0), //, _branchingPenalty(0),
@@ -57,7 +56,7 @@ TMLTransaction::TMLTransaction():_runnableTime(0), _startTime(0), _length(0), _v
   
 }
 
-TMLTransaction::TMLTransaction(TMLCommand* iCommand, TMLLength iVirtualLength, TMLTime iRunnableTime, TMLChannel* iChannel):_runnableTime(iRunnableTime), _startTime(0), _length(0), _virtualLength(iVirtualLength), _command(iCommand),_endState(false), _reconfigState(false),
+TMLTransaction::TMLTransaction(TMLCommand* iCommand, TMLLength iVirtualLength, TMLTime iRunnableTime, TMLChannel* iChannel):_runnableTime(iRunnableTime), _startTime(0), _length(0), _virtualLength(iVirtualLength), _command(iCommand),
 #ifdef PENALTIES_ENABLED
                                                                                                                             _idlePenalty(0), _taskSwitchingPenalty(0), //, _branchingPenalty(0),
 #endif

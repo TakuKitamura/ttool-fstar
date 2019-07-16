@@ -165,7 +165,7 @@ void CPU::schedule2XML(std::ostringstream& glob,std::ofstream& myfile) const{
 
 void CPU::HW2HTML(std::ofstream& myfile) const {  
   // myfile << "<h2><span>Scheduling for device: "<< _name <<"_core_"<<this->_cycleTime<< "</span></h2>" << std::endl;
-  myfile << SCHED_HTML_DIV << SCHED_HTML_BOARD;
+  myfile << SCHED_HTML_BOARD;
   myfile << _name << "_core_" << this->_cycleTime << END_TD << "</tr>" << std::endl;
   myfile << SCHED_HTML_JS_TABLE_END << std::endl;
   myfile << SCHED_HTML_BOARD2 << std::endl;
@@ -230,7 +230,7 @@ void CPU::HW2HTML(std::ofstream& myfile) const {
       //myfile << "<td colspan=\"5\" class=\"sc\">" << aLength << "</td>";
     }
 
-    myfile << "</tr>" << std::endl << "</table>" << std::endl << SCHED_HTML_JS_DIV_END << std::endl;
+    myfile << "</tr>" << std::endl << "</table>" << std::endl;
     myfile << SCHED_HTML_JS_CLEAR << std::endl;
   }
 }

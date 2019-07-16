@@ -246,8 +246,8 @@ std::cout<<"fpga addTransaction"<<std::endl;
       _endSchedule=_maxEndTime+_reconfigNumber*_reconfigTime;
     else{
       _endSchedule=0;
+      
     }
-    std::cout<<"in add trans reconfig number is ----"<<_reconfigNumber<<std::endl;
 #ifdef DEBUG_FPGA
     
     std::cout<<"_maxEndTime is "<<_maxEndTime<<std::endl;
@@ -280,7 +280,6 @@ std::cout<<"fpga addTransaction"<<std::endl;
 void FPGA::schedule(){ 
   std::cout << "fpga:schedule BEGIN " << _name << "+++++++++++++++++++++++++++++++++\n";
   _reconfigNumber=_scheduler->schedule(_endSchedule);
-  std::cout<<"in schedule reconfig number is ---"<<_reconfigNumber<<std::endl;
   TMLTransaction* aOldTransaction = _nextTransaction; 
   _nextTransaction=_scheduler->getNextTransaction(_endSchedule);
   
@@ -460,29 +459,24 @@ double FPGA::averageLoad (TMLTask* currTask) const{
 
 void FPGA::drawPieChart(std::ofstream& myfile) const {      
   TMLTime _maxEndTime=0;
-  std::cout<<"drawPieChart!!!!"<<std::endl;
+
   for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
-    if( (*i)-> getCommand()->getTask() ==  _htmlCurrTask || _reconfigNumber !=0){
+    if( (*i)-> getCommand()->getTask() ==  _htmlCurrTask ){
       TMLTime _endTime= (*i)->getEndTime();
       _maxEndTime=max(_maxEndTime,_endTime);
     }
   }
-  
   std::map <TMLTask*, double > transPercentage;
   for( TransactionList::const_iterator i = _transactList.begin(); i!= _transactList.end(); ++i){
-    if( (*i)-> getCommand()->getTask() ==  _htmlCurrTask || _reconfigNumber != 0){
+    if( (*i)-> getCommand()->getTask() ==  _htmlCurrTask ){
       transPercentage[(*i)-> getCommand()->getTask()]+=(double)((*i)->getEndTime()-(*i)->getStartTime())/_maxEndTime;      
     }
   }
-  
-  std::string pieName;
-  if(_reconfigNumber == 0 && _htmlCurrTask != 0)
-    pieName = "_"+_htmlCurrTask->toShortString();
   std::map <TMLTask*, double>::iterator iter = transPercentage.begin();
-  myfile << "   var ctx" << _ID << pieName  << "= $(\"#pie-chartcanvas-" << _ID << pieName << "\");\n";
+  myfile << "   var ctx" << _ID << "_"  << _htmlCurrTask->toShortString() << "= $(\"#pie-chartcanvas-" << _ID << "_" << _htmlCurrTask->toShortString() << "\");\n";
     
   double idle=1;
-  myfile << "   var data" << _ID << pieName << " = new Array (";
+  myfile << "   var data" << _ID << "_" << _htmlCurrTask->toShortString() << " = new Array (";
   while( iter != transPercentage.end()){
     myfile << "\"" << iter->second << "\",";
     idle-=iter->second;
@@ -490,16 +484,16 @@ void FPGA::drawPieChart(std::ofstream& myfile) const {
   }
   myfile << "\"" << idle << "\");\n";
     
-  myfile << "    var efficiency" << _ID << pieName << " = [];" << std::endl;
-  myfile << "    var coloR" << _ID << pieName << " = [];" << std::endl;
-  myfile << "    var dynamicColors" << _ID << pieName << SCHED_HTML_JS_FUNCTION;
+  myfile << "    var efficiency" << _ID << "_" << _htmlCurrTask->toShortString() << " = [];" << std::endl;
+  myfile << "    var coloR" << _ID << "_" << _htmlCurrTask->toShortString() << " = [];" << std::endl;
+  myfile << "    var dynamicColors" << _ID << "_" << _htmlCurrTask->toShortString() << SCHED_HTML_JS_FUNCTION;
     
-  myfile << "    for (var i in data" << _ID << pieName << "){\n";
-  myfile << "             efficiency" << _ID << pieName << ".push(data" << _ID << pieName << "[i]);\n";
-  myfile << "             coloR" << _ID << pieName << ".push(dynamicColors" << _ID << pieName << "());\n";
+  myfile << "    for (var i in data" << _ID << "_" << _htmlCurrTask->toShortString() << "){\n";
+  myfile << "             efficiency" << _ID << "_" << _htmlCurrTask->toShortString() << ".push(data" << _ID << "_" << _htmlCurrTask->toShortString() << "[i]);\n";
+  myfile << "             coloR" << _ID << "_" << _htmlCurrTask->toShortString() << ".push(dynamicColors" << _ID << "_" << _htmlCurrTask->toShortString() << "());\n";
   myfile << "}" << std::endl;
     
-  myfile << "   var data" << _ID << pieName << " = { \n";
+  myfile << "   var data" << _ID << "_" << _htmlCurrTask->toShortString() << " = { \n";
   myfile << "           labels : [";
   iter = transPercentage.begin();
   while( iter != transPercentage.end()){
@@ -510,39 +504,27 @@ void FPGA::drawPieChart(std::ofstream& myfile) const {
   myfile << "\"idle time\"],\n";
   myfile << "          datasets : [\n \
                                      {\n \
-                                           data : efficiency" << _ID << pieName << ",\n";
-  myfile << "                            backgroundColor : coloR" << _ID << pieName << std::endl;
+                                           data : efficiency" << _ID << "_" << _htmlCurrTask->toShortString() << ",\n";
+  myfile << "                            backgroundColor : coloR" << _ID << "_" << _htmlCurrTask->toShortString() << std::endl;
   // myfile << SCHED_HTML_JS_CONTENT1 << "Average load is " << averageLoad(_htmlCurrTask) << SCHED_HTML_JS_CONTENT2 << std::endl; 
   myfile << SCHED_HTML_JS_CONTENT1;
-  myfile << "  var options" << _ID << pieName << SCHED_HTML_JS_CONTENT3;
-  myfile << _name << pieName << ": Average load is " << std::setprecision(2) << averageLoad(_htmlCurrTask) << SCHED_HTML_JS_CONTENT2 << std::endl; 
+  myfile << "  var options" << _ID << "_" << _htmlCurrTask->toShortString() << SCHED_HTML_JS_CONTENT3;
+  myfile << _name << "_" << _htmlCurrTask->toShortString() << ": Average load is " << std::setprecision(2) << averageLoad(_htmlCurrTask) << SCHED_HTML_JS_CONTENT2 << std::endl; 
      
 }
 
 void FPGA::buttonPieChart(std::ofstream& myfile) const{
   //  myfile << "$(\"#" << _ID << "\").click(function() {\n";
-  if(_reconfigNumber == 0){
-    for(TaskList::const_iterator i = _taskList.begin(); i!= _taskList.end(); ++i){ 
-      myfile << "    var chart" << _ID << "_" << (*i)->toShortString() << " = new Chart( "<<
-	"ctx" << _ID << "_" << (*i)->toShortString() << ", {\n \
+  for(TaskList::const_iterator i = _taskList.begin(); i!= _taskList.end(); ++i){ 
+    myfile << "    var chart" << _ID << "_" << (*i)->toShortString() << " = new Chart( "<<
+      "ctx" << _ID << "_" << (*i)->toShortString() << ", {\n \
               type : \"pie\",\n";
-      myfile << "               data : data" << _ID << "_" << (*i)->toShortString() <<",\n";
-      myfile << "               options : options" << _ID << "_" << (*i)->toShortString() << std::endl;
-      myfile << "                   });" << std::endl;
-      myfile << "   chart" << _ID << "_" << (*i)->toShortString() << SCHED_HTML_JS_HIDE;
-      myfile << "   chart" << _ID <<"_" << (*i)->toShortString() << ".update();" << std::endl;
-  
-    }
-  }
-  else{
-    myfile << "    var chart" << _ID << " = new Chart( "<<
-      "ctx" << _ID << ", {\n \
-              type : \"pie\",\n";
-    myfile << "               data : data" << _ID << ",\n";
-    myfile << "               options : options" << _ID << std::endl;
+    myfile << "               data : data" << _ID << "_" << (*i)->toShortString() <<",\n";
+    myfile << "               options : options" << _ID << "_" << (*i)->toShortString() << std::endl;
     myfile << "                   });" << std::endl;
-    myfile << "   chart" << _ID << SCHED_HTML_JS_HIDE;
-    myfile << "   chart" << _ID << ".update();" << std::endl;  
+    myfile << "   chart" << _ID << "_" << (*i)->toShortString() << SCHED_HTML_JS_HIDE;
+    myfile << "   chart" << _ID << "_" << (*i)->toShortString() << ".update();" << std::endl;
+  
   }
 }
 
@@ -556,12 +538,8 @@ void FPGA::showPieChart(std::ofstream& myfile) const{
   //if( _taskNumber == 1)
   //  myfile << SCHED_HTML_JS_DIV_BEGIN << std::endl;
   // else
-  std::string pieName;
-  if(_reconfigNumber == 0 && _htmlCurrTask != 0)
-    pieName = "_"+_htmlCurrTask->toShortString();
-    
   myfile << SCHED_HTML_JS_DIV_BEGIN2 << std::endl;
-  myfile << SCHED_HTML_JS_BEGIN_CANVAS << _ID << pieName << SCHED_HTML_JS_END_CANVAS <<std::endl;
+  myfile << SCHED_HTML_JS_BEGIN_CANVAS << _ID << "_" << _htmlCurrTask->toShortString() << SCHED_HTML_JS_END_CANVAS <<std::endl;
   myfile << SCHED_HTML_JS_DIV_END << std::endl;
 }
 
@@ -579,13 +557,12 @@ std::string FPGA::determineHTMLCellClass(unsigned int &nextColor ) {
 	return taskCellClasses[  _htmlCurrTask ];
 }
 
-void FPGA::HW2HTML(std::ofstream& myfile)  {   
-    std::cout<<"reconfig number is !!!!!--------------"<< _reconfigNumber <<std::endl;
+void FPGA::HW2HTML(std::ofstream& myfile)  {    
   if(_startFlagHTML == true){
     //myfile << "<h2><span>Scheduling for device: "<< _name << "</span></h2>" << std::endl;
-    myfile << SCHED_HTML_JS_DIV_BEGIN3 << SCHED_HTML_BOARD;
+    myfile << SCHED_HTML_BOARD;
     myfile << _name << END_TD << "</tr>" << std::endl;
-    myfile << SCHED_HTML_JS_TABLE_END << std::endl << SCHED_HTML_JS_DIV_END << std::endl;
+    myfile << SCHED_HTML_JS_TABLE_END << std::endl;
     myfile << SCHED_HTML_JS_DIV_BEGIN3  << std::endl;
   }
 
@@ -598,15 +575,13 @@ void FPGA::HW2HTML(std::ofstream& myfile)  {
     TMLTime aCurrTime = 0;
     unsigned int taskOccurTime = 0;
     for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
-      std::cout<<"trans HW name " << (*i)->toShortString()<<"  "<< (*i)->getReconfigState()<<std::endl;
-
-      if(_reconfigNumber != 0)
-	_htmlCurrTask = (*i)->getCommand()->getTask();//NEW!!!
-      
+#ifdef DEBUG_FPGA
+      std::cout <<  (*i)-> getCommand()->getTask()->toString() <<std::endl;
+      std::cout<< _htmlCurrTask->toString()<<std::endl;
+#endif
       if( (*i)-> getCommand()->getTask() == _htmlCurrTask ){
-	if(taskOccurTime==0){
+	if(taskOccurTime==0){ 
 	  taskOccurTime++;
-	  _currTaskNumber++;
 	}
 #ifdef DEBUG_FPGA
 	std::cout<<"in!!"<<_htmlCurrTask->toString()<<std::endl;
@@ -622,6 +597,7 @@ void FPGA::HW2HTML(std::ofstream& myfile)  {
 
 
 	// Issue #4
+	TMLTask* task = aCurrTrans->getCommand()->getTask();
 	//	std::cout<<"what is this task?"<<task->toString()<<std::endl;
 	const std::string cellClass = determineHTMLCellClass(  nextCellClassIndex );
 	std::string aCurrTransName=aCurrTrans->toShortString();
@@ -630,19 +606,8 @@ void FPGA::HW2HTML(std::ofstream& myfile)  {
 	writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString(), aCurrContent );
 
 	aCurrTime = aCurrTrans->getEndTime();
-
-	if(aCurrTrans->getReconfigState()==true){
-	  //if(aCurrTrans->getReconfigState()==true){
-	  if(++i == _transactList.end()){
-	    break;
-	  }
-	  --i;
-	  writeHTMLColumn(myfile, _reconfigTime, "not", "Reconfiguration time", "Reconfiguration time");
-	  aCurrTime+=_reconfigTime;
-	}
       }
-    }
-		
+    }	
 
     myfile << "</tr>" << std::endl << "<tr>";
 
@@ -658,15 +623,6 @@ void FPGA::HW2HTML(std::ofstream& myfile)  {
       writeHTMLColumn( myfile, 5, "sc", "", spanVal.str(), false );
       //myfile << "<td colspan=\"5\" class=\"sc\">" << aLength << "</td>";
     }
-
-    //myfile << "</tr>" << std::endl << "</table>" << std::endl;
-
-    if(_currTaskNumber == _taskNumber || _reconfigNumber != 0){
-
-      myfile << "</tr>" << std::endl << "</table>" << std::endl << SCHED_HTML_JS_DIV_END << std::endl;
-      myfile << SCHED_HTML_JS_CLEAR << std::endl;
-     
-    }   
    }
 }
 
@@ -686,17 +642,14 @@ void FPGA::schedule2HTML(std::ofstream& myfile)  {
     TMLTime aCurrTime = 0;
     unsigned int taskOccurTime = 0;
     for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
-#ifdef DEBUG_FPGA
+      //#ifdef DEBUG_FPGA
       std::cout <<  (*i)-> getCommand()->getTask()->toString() <<std::endl;
       std::cout<< _htmlCurrTask->toString()<<std::endl;
-#endif
-      if(_reconfigNumber != 0)
-	_htmlCurrTask = (*i)->getCommand()->getTask();//NEW!!!
-      
+      //#endif
       if( (*i)-> getCommand()->getTask() == _htmlCurrTask ){
 	if(taskOccurTime==0){
-	  _currTaskNumber++;
 	  taskOccurTime++;
+	  _currTaskNumber++;
 	}
 #ifdef DEBUG_FPGA
 	std::cout<<"in!!"<<_htmlCurrTask->toString()<<std::endl;
@@ -712,23 +665,13 @@ void FPGA::schedule2HTML(std::ofstream& myfile)  {
 
 
 	// Issue #4
+	TMLTask* task = aCurrTrans->getCommand()->getTask();
 	//	std::cout<<"what is this task?"<<task->toString()<<std::endl;
 	const std::string cellClass = determineHTMLCellClass(  nextCellClassIndex );
 
 	writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString() );
 
 	aCurrTime = aCurrTrans->getEndTime();
-	
-	if(aCurrTrans->getReconfigState()==true){
-	  //if(aCurrTrans->getReconfigState()==true){
-	  if(++i == _transactList.end()){
-	    break;
-	  }
-	  --i;
-	  writeHTMLColumn(myfile, _reconfigTime, "not", "Reconfiguration time", "Reconfiguration time");
-	  aCurrTime+=_reconfigTime;
-	}
-	
       }
     }
 		
@@ -753,10 +696,7 @@ void FPGA::schedule2HTML(std::ofstream& myfile)  {
     std::cout<<"_taskNumer is"<<_taskNumber<<std::endl;
     std::cout<<"curr task number is "<<_currTaskNumber<<std::endl;
 #endif
-    if(_currTaskNumber == _taskNumber || _reconfigNumber != 0){
-      //#ifdef DEBUG_FPGA
-      std::cout<<" i am showing the name of tasks!"<<std::endl;
-      //#endif
+    /*  if(_currTaskNumber == _taskNumber){
       myfile  << "<table>" << std::endl << "<tr>" << std::endl;
       for( std::map<TMLTask*, std::string>::iterator taskColIt = taskCellClasses.begin(); taskColIt != taskCellClasses.end(); ++taskColIt ) {
 	TMLTask* task = (*taskColIt).first;
@@ -766,10 +706,21 @@ void FPGA::schedule2HTML(std::ofstream& myfile)  {
       myfile << "</tr>" << std::endl;
       myfile << "</table>" << std::endl;
     }
-
+    */
    
    }
 #ifdef DEBUG_FPGA
   std::cout<<"end in!!!"<<std::endl;
 #endif
+}
+
+void FPGA::scheduleBlank(std::ofstream& myfile){ 
+  myfile  << "<table>" << std::endl << "<tr>" << std::endl;
+  for( std::map<TMLTask*, std::string>::iterator taskColIt = taskCellClasses.begin(); taskColIt != taskCellClasses.end(); ++taskColIt ) {
+    TMLTask* task = (*taskColIt).first;
+    // Unset the default td max-width of 5px. For some reason setting the max-with on a specific t style does not work
+    myfile << "<td class=\"" << taskCellClasses[ task ] << "\"></td><td style=\"max-width: unset;\">" << task->toString() << "</td><td class=\"space\"></td>";
+  }
+  myfile << "</tr>" << std::endl;
+  myfile << "</table>" << std::endl;
 }

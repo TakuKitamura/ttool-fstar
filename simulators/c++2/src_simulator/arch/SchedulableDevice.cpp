@@ -295,7 +295,7 @@ void SchedulableDevice::buttonPieChart(std::ofstream& myfile) const{
 
 void SchedulableDevice::HW2HTML(std::ofstream& myfile) const {    
   //	myfile << "<h2><span>Scheduling for device: "<< _name << "</span></h2>" << std::endl;
-  myfile << SCHED_HTML_DIV << SCHED_HTML_BOARD;
+  myfile << SCHED_HTML_BOARD;
   myfile << _name  << END_TD << "</tr>" << std::endl;
   myfile << SCHED_HTML_JS_TABLE_END << std::endl;
   myfile << SCHED_HTML_BOARD2 << std::endl;
