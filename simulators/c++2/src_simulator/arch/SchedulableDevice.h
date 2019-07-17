@@ -78,7 +78,7 @@ public:
 	void buttonPieChart(std::ofstream& myfile) const;
 	void drawPieChart(std::ofstream& myfile) const;
 	void showPieChart(std::ofstream& myfile) const;
-	void HW2HTML(std::ofstream& myfile) const;
+	
 	///Writes a HTML representation of the schedule to an output file
 	/**
       	\param myfile Reference to the ofstream object representing the output file

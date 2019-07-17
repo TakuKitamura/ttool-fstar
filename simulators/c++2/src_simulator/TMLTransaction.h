@@ -259,6 +259,7 @@ class TMLTransaction {
   inline void setEndState (bool f) { _endState=f;}
   inline bool getEndState () {return _endState;}
   void toXML(std::ostringstream& glob, int deviceID, std::string deviceName, ID uniqueID) const;
+
   // Params of the transaction
   std::string lastParams;
 

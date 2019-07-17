@@ -138,7 +138,6 @@ TMLCommand* TMLCommand::prepare(bool iInit){
       if (_progress==0){
 #ifdef LISTENERS_ENABLED
         NOTIFY_CMD_ENTERED(this);
-	std::cout<<"command is------"<<this->toString()<<std::endl;
 #else
 #ifdef EXPLO_ENABLED
         if (dynamic_cast<IndeterminismSource*>(this)!=0) NOTIFY_CMD_ENTERED(this);

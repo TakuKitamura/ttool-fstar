@@ -205,7 +205,6 @@ RunTillNextRandomChoice::RunTillNextRandomChoice(SimComponents* iSimComp):_simCo
 }
 
 void RunTillNextRandomChoice::commandEntered(TMLCommand* iComm, ID iID){
-  std::cout<<"run ill next random choice!!!stop change"<<std::endl;
 	IndeterminismSource* aChoice=dynamic_cast<IndeterminismSource*>(iComm);
 	if (_enabled && aChoice!=0 ){
 		_simComp->setStopFlag(true, MSG_RANDOMCHOICE);
