@@ -74,7 +74,7 @@ std::string TMLTransaction::toString() const{
   std::ostringstream outp;
   //std::cout << "kernel:transaction: toString" << std::endl;
   //std::cout << "kernel:transaction: toString" << _command->toString() << std::endl;
-  outp << _command->toString() << std::endl << "Transaction runnable:" << _runnableTime << " len:" << _length << " start:" << _startTime << " vLength:" << _virtualLength << " params:" << lastParams ;
+  outp << _command->toString() << std::endl << "Transaction runnable:" << _runnableTime << " len:" << _length << " start:" << _startTime << " vLength:" << _virtualLength;
   if (_channel!=0) outp << " Ch: " << _channel->toShortString();
   return outp.str();
 }
@@ -84,7 +84,7 @@ std::string TMLTransaction::toShortString() const{
   if (_command==0)
     outp << "System State ID: " <<  _virtualLength;
   else{
-    outp << _command->toShortString() << " t:" << _startTime << " l:" << _length << " (vl:"<<  _virtualLength << ")" << " params:" << lastParams ;
+    outp << _command->toShortString() << " t:" << _startTime << " l:" << _length << " (vl:"<<  _virtualLength << ")";
     if (_channel!=0) outp << " Ch: " << _channel->toShortString();
   }
   return outp.str();
