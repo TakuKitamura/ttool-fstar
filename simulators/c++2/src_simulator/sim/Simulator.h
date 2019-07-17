@@ -169,13 +169,6 @@ public:
 	\return Return value of simulate() function
 	*/
 	bool runToCPUTrans(SchedulableDevice* iCPU, TMLTransaction*& oLastTrans);
-	///Runs the simulation until a transaction on iFPGA is executed
-	/**
-	\param iFPGA Pointer to the FPGA
-	\param oLastTrans Returns the last transaction executed during a simulation
-	\return Return value of simulate() function
-	*/
-	bool runToFPGATrans(SchedulableDevice* iFPGA, TMLTransaction*& oLastTrans);
 	///Runs the simulation until a transaction of iTask is executed
 	/**
 	\param iTask Pointer to the task

@@ -1,4 +1,0 @@
-des(0,3,4)
-(0,"i(CPU0_1__Application__T0__wr_Endtime<61>__Application__S2__Application__R2<4>)",1)
-(1,"i(CPU1_1__Application__T3__rd_Endtime<95>__Application__S2__Application__R2<4>)",2)
-(2,"i(allCPUsFPGAsTerminated<95>)",3)

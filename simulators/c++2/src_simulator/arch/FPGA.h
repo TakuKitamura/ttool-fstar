@@ -125,14 +125,13 @@ public:
     	*/
 	virtual void registerTask(TMLTask* iTask){
 		_taskList.push_back(iTask);
-		//_taskNumber++;
+		_taskNumber++;
 		if (_scheduler!=0) _scheduler->addWorkloadSource(iTask);
 	}
 	///inline void setTransNumber(unsigned int num) { _transNumber=num;}
 	///inline unsigned int getTransNumber() { return _transNumber;}
         inline unsigned int getID () { return _ID;}
 	inline void setCurrTaskNumber(unsigned int num) { _currTaskNumber=num;}
-	void HW2HTML(std::ofstream& myfile) ;
 	void schedule2HTML(std::ofstream& myfile) ;
 	inline const TaskList& getTaskList() const{return _taskList;}
 	inline void setHtmlCurrTask(TMLTask *t) { _htmlCurrTask=t;}
@@ -144,7 +143,6 @@ public:
 	void buttonPieChart(std::ofstream& myfile) const;
 	void showPieChart(std::ofstream& myfile) const;
 	std::string determineHTMLCellClass(unsigned int &nextColor );
-	void scheduleBlank(std::ofstream& myfile);
 protected:
 	///List of all tasks running on the FPGA
 	TaskList _taskList;
