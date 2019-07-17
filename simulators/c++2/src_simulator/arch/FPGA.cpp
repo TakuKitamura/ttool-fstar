@@ -587,7 +587,6 @@ void FPGA::HW2HTML(std::ofstream& myfile)  {
 
 
 	// Issue #4
-	TMLTask* task = aCurrTrans->getCommand()->getTask();
 	//	std::cout<<"what is this task?"<<task->toString()<<std::endl;
 	const std::string cellClass = determineHTMLCellClass(  nextCellClassIndex );
 	std::string aCurrTransName=aCurrTrans->toShortString();
