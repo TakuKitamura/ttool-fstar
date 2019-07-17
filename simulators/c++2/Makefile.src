@@ -1,0 +1,1 @@
+SRCS = AppC__InterfaceDevice.cpp AppC__Timer.cpp AppC__TCPIP.cpp AppC__SmartCard.cpp AppC__Application.cpp appmodel.cpp

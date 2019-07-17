@@ -1,0 +1,407 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" type="text/css" href="3.html.css" />
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1" />
+<title>Scheduling</title>
+</head>
+<body>
+<ul>
+<li>Model name: /home/niusiyuan/test/TTool/modeling/explo_test2l.xml / DIPLODOCUS architecture and mapping Diagram</li><br>
+<li> Date: Mon Jul 15 18:13:51 2019
+</li>
+</ul>
+<script src="jquery.min.js"></script>
+
+<script src="Chart.min.js"></script>
+
+<script>
+
+window.onload = function () {
+   var ctx4_0= $("#pie-chartcanvas-4_0");
+   var data4_0 = new Array ("1","0");
+    var efficiency4_0 = [];
+    var coloR4_0 = [];
+    var dynamicColors4_0= function() {
+ 		var r = Math.floor(Math.random() * 255);
+ 		var g = Math.floor(Math.random() * 255);
+ 		var b = Math.floor(Math.random() * 255);
+ 		return "rgb(" + r + "," + g + "," + b + ")";
+ 	};
+    for (var i in data4_0){
+             efficiency4_0.push(data4_0[i]);
+             coloR4_0.push(dynamicColors4_0());
+}
+   var data4_0 = { 
+           labels : [ "Application__T4","idle time"],
+          datasets : [
+                                      {
+                                            data : efficiency4_0,
+                            backgroundColor : coloR4_0
+  }]
+ };
+  var options4_0 = {
+ 			title : {
+ 			display : true,
+ 			position : "top",
+ 			text : "CPU0_2_core_0: Average load is 1", 
+ 			fontSize : 14,
+ 			fontColor : "#111"
+ 		},
+ 		legend : {
+ 			display : true,
+ 			position : "bottom"
+ 		}
+ 	};
+
+   var ctx4_1= $("#pie-chartcanvas-4_1");
+   var data4_1 = new Array ("0.11","0.89");
+    var efficiency4_1 = [];
+    var coloR4_1 = [];
+    var dynamicColors4_1= function() {
+ 		var r = Math.floor(Math.random() * 255);
+ 		var g = Math.floor(Math.random() * 255);
+ 		var b = Math.floor(Math.random() * 255);
+ 		return "rgb(" + r + "," + g + "," + b + ")";
+ 	};
+    for (var i in data4_1){
+             efficiency4_1.push(data4_1[i]);
+             coloR4_1.push(dynamicColors4_1());
+}
+   var data4_1 = { 
+           labels : [ "Application__T1","idle time"],
+          datasets : [
+                                      {
+                                            data : efficiency4_1,
+                            backgroundColor : coloR4_1
+  }]
+ };
+  var options4_1 = {
+ 			title : {
+ 			display : true,
+ 			position : "top",
+ 			text : "CPU0_2_core_0: Average load is 1", 
+ 			fontSize : 14,
+ 			fontColor : "#111"
+ 		},
+ 		legend : {
+ 			display : true,
+ 			position : "bottom"
+ 		}
+ 	};
+
+   var ctx1_ta5= $("#pie-chartcanvas-1_ta5");
+   var data1_ta5 = new Array ("0.27","0.73");
+    var efficiency1_ta5 = [];
+    var coloR1_ta5 = [];
+    var dynamicColors1_ta5= function() {
+ 		var r = Math.floor(Math.random() * 255);
+ 		var g = Math.floor(Math.random() * 255);
+ 		var b = Math.floor(Math.random() * 255);
+ 		return "rgb(" + r + "," + g + "," + b + ")";
+ 	};
+    for (var i in data1_ta5){
+             efficiency1_ta5.push(data1_ta5[i]);
+             coloR1_ta5.push(dynamicColors1_ta5());
+}
+   var data1_ta5 = { 
+           labels : [ "Application__T3","idle time"],
+          datasets : [
+                                      {
+                                            data : efficiency1_ta5,
+                            backgroundColor : coloR1_ta5
+  }]
+ };
+  var options1_ta5 = {
+ 			title : {
+ 			display : true,
+ 			position : "top",
+ 			text : "FPGA0_ta5: Average load is 0.27", 
+ 			fontSize : 14,
+ 			fontColor : "#111"
+ 		},
+ 		legend : {
+ 			display : true,
+ 			position : "bottom"
+ 		}
+ 	};
+
+   var ctx1_ta7= $("#pie-chartcanvas-1_ta7");
+   var data1_ta7 = new Array ("1");
+    var efficiency1_ta7 = [];
+    var coloR1_ta7 = [];
+    var dynamicColors1_ta7= function() {
+ 		var r = Math.floor(Math.random() * 255);
+ 		var g = Math.floor(Math.random() * 255);
+ 		var b = Math.floor(Math.random() * 255);
+ 		return "rgb(" + r + "," + g + "," + b + ")";
+ 	};
+    for (var i in data1_ta7){
+             efficiency1_ta7.push(data1_ta7[i]);
+             coloR1_ta7.push(dynamicColors1_ta7());
+}
+   var data1_ta7 = { 
+           labels : ["idle time"],
+          datasets : [
+                                      {
+                                            data : efficiency1_ta7,
+                            backgroundColor : coloR1_ta7
+  }]
+ };
+  var options1_ta7 = {
+ 			title : {
+ 			display : true,
+ 			position : "top",
+ 			text : "FPGA0_ta7: Average load is 0", 
+ 			fontSize : 14,
+ 			fontColor : "#111"
+ 		},
+ 		legend : {
+ 			display : true,
+ 			position : "bottom"
+ 		}
+ 	};
+
+   var ctx3= $("#pie-chartcanvas-3");
+   var data3 = new Array ("0.091","0.91");
+    var efficiency3 = [];
+    var coloR3 = [];
+    var dynamicColors3= function() {
+ 		var r = Math.floor(Math.random() * 255);
+ 		var g = Math.floor(Math.random() * 255);
+ 		var b = Math.floor(Math.random() * 255);
+ 		return "rgb(" + r + "," + g + "," + b + ")";
+ 	};
+    for (var i in data3){
+             efficiency3.push(data3[i]);
+             coloR3.push(dynamicColors3());
+}
+   var data3 = { 
+           labels : [ "Application__T1","idle time"],
+          datasets : [
+                                      {
+                                            data : efficiency3,
+                            backgroundColor : coloR3
+  }]
+ };
+  var options3 = {
+ 			title : {
+ 			display : true,
+ 			position : "top",
+ 			text : "Bus0_0: Average load is 0.091", 
+ 			fontSize : 14,
+ 			fontColor : "#111"
+ 		},
+ 		legend : {
+ 			display : true,
+ 			position : "bottom"
+ 		}
+ 	};
+
+$("#button").click(function() {
+    var chart4_0 = new Chart( ctx4_0, {
+               type : "pie",
+               data : data4_0,
+               options : options4_0
+                   });
+   chart4_0 .data.datasets.forEach(function(ds){
+         ds.hidden=!ds.hidden;
+ 	});
+   chart4_0.update();
+    var chart1_ta5 = new Chart( ctx1_ta5, {
+               type : "pie",
+               data : data1_ta5,
+               options : options1_ta5
+                   });
+   chart1_ta5 .data.datasets.forEach(function(ds){
+         ds.hidden=!ds.hidden;
+ 	});
+   chart1_ta5.update();
+    var chart1_ta7 = new Chart( ctx1_ta7, {
+               type : "pie",
+               data : data1_ta7,
+               options : options1_ta7
+                   });
+   chart1_ta7 .data.datasets.forEach(function(ds){
+         ds.hidden=!ds.hidden;
+ 	});
+   chart1_ta7.update();
+    var chart3 = new Chart( ctx3, {
+               type : "pie",
+               data : data3,
+               options : options3
+                   });
+   chart3 .data.datasets.forEach(function(ds){
+         ds.hidden=!ds.hidden;
+ 	});
+   chart3.update();
+     });
+}
+</script>
+
+<h1> Summary HW </h1>
+<table width="170px" style="float: left">
+ <tr><td>CPU0_2_core_0</td></tr>
+</table>
+<table style="float: left">
+<tr><td title="Application__T4: Execi 100 t:0 l:100 (vl:100)" class="t0" colspan="100"> E</td>
+</tr>
+<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+<tr><td class="sc" colspan="5">0</td><td class="sc" colspan="5">5</td><td class="sc" colspan="5">10</td><td class="sc" colspan="5">15</td><td class="sc" colspan="5">20</td><td class="sc" colspan="5">25</td><td class="sc" colspan="5">30</td><td class="sc" colspan="5">35</td><td class="sc" colspan="5">40</td><td class="sc" colspan="5">45</td><td class="sc" colspan="5">50</td><td class="sc" colspan="5">55</td><td class="sc" colspan="5">60</td><td class="sc" colspan="5">65</td><td class="sc" colspan="5">70</td><td class="sc" colspan="5">75</td><td class="sc" colspan="5">80</td><td class="sc" colspan="5">85</td><td class="sc" colspan="5">90</td><td class="sc" colspan="5">95</td><td class="sc" colspan="5">100</td></tr>
+</table>
+<div class = "clear"></div>
+<table width="170px" style="float: left">
+ <tr><td>CPU0_2_core_1</td></tr>
+</table>
+<table style="float: left">
+<tr><td title="Application__T1: Execi 10 t:0 l:10 (vl:10)" class="t0" colspan="10"> E</td>
+<td title="Application__T1: Write 4,Application__S2__Application__R2 t:10 l:1 (vl:4) Ch: Application__S2__Application__R2" class="t0"></td>
+</tr>
+<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+<tr><td class="sc" colspan="5">0</td><td class="sc" colspan="5">5</td><td class="sc" colspan="5">10</td></tr>
+</table>
+<div class = "clear"></div>
+<table width="170px" style="float: left">
+ <tr><td>FPGA0</td></tr>
+</table>
+<div style="float: left">
+<table>
+<tr><td title="idle time" class="not" colspan="11"></td>
+<td title="Application__T3: Read 4,Application__S2__Application__R2 t:11 l:4 (vl:4) Ch: Application__S2__Application__R2" class="t0" colspan="4"> R</td>
+</tr>
+<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+<tr><td class="sc" colspan="5">0</td><td class="sc" colspan="5">5</td><td class="sc" colspan="5">10</td><td class="sc" colspan="5">15</td><table>
+<tr></tr>
+<tr></tr>
+<tr><td class="sc" colspan="5">0</td></tr>
+</table>
+</div>
+<div class = "clear"></div>
+<table width="170px" style="float: left">
+ <tr><td>Bus0_0</td></tr>
+</table>
+<table style="float: left">
+<tr><td title="idle time" class="not" colspan="10"></td>
+<td title="Application__T1: Write 4,Application__S2__Application__R2 t:10 l:1 (vl:4) Ch: Application__S2__Application__R2" class="t0"></td>
+</tr>
+<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+<tr><td class="sc" colspan="5">0</td><td class="sc" colspan="5">5</td><td class="sc" colspan="5">10</td></tr>
+</table>
+</div>
+<div class = "clear"></div>
+<table>
+<button id="button"> Show/Hide Pie Chart </button>
+</table>
+<div class="pie-chart-container">
+     <canvas id="pie-chartcanvas-4_0"></canvas>
+</div>
+<div class="pie-chart-container">
+     <canvas id="pie-chartcanvas-1_ta5"></canvas>
+</div>
+<div class="pie-chart-container">
+     <canvas id="pie-chartcanvas-1_ta7"></canvas>
+</div>
+<div class="pie-chart-container">
+     <canvas id="pie-chartcanvas-3"></canvas>
+</div>
+<div class = "clear"></div>
+<h1> Summary tasks </h1>
+<div>
+<table width="170px" style="float: left">
+ <tr><td>Application__T4</td></tr>
+</table>
+<table style="float: left">
+<tr><td title="Application__T4: Execi 100 t:0 l:100 (vl:100)" class="t0" colspan="100"> E</td>
+</tr>
+<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+<tr><td class="sc" colspan="5">0</td><td class="sc" colspan="5">5</td><td class="sc" colspan="5">10</td><td class="sc" colspan="5">15</td><td class="sc" colspan="5">20</td><td class="sc" colspan="5">25</td><td class="sc" colspan="5">30</td><td class="sc" colspan="5">35</td><td class="sc" colspan="5">40</td><td class="sc" colspan="5">45</td><td class="sc" colspan="5">50</td><td class="sc" colspan="5">55</td><td class="sc" colspan="5">60</td><td class="sc" colspan="5">65</td><td class="sc" colspan="5">70</td><td class="sc" colspan="5">75</td><td class="sc" colspan="5">80</td><td class="sc" colspan="5">85</td><td class="sc" colspan="5">90</td><td class="sc" colspan="5">95</td><td class="sc" colspan="5">100</td></tr>
+</table>
+</div>
+<div class = "clear"></div>
+<div>
+<table width="170px" style="float: left">
+ <tr><td>Application__T1</td></tr>
+</table>
+<table style="float: left">
+<tr><td title="Application__T1: Execi 10 t:0 l:10 (vl:10)" class="t0" colspan="10"> E</td>
+<td title="Application__T1: Write 4,Application__S2__Application__R2 t:10 l:1 (vl:4) Ch: Application__S2__Application__R2" class="t0"></td>
+</tr>
+<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+<tr><td class="sc" colspan="5">0</td><td class="sc" colspan="5">5</td><td class="sc" colspan="5">10</td></tr>
+</table>
+</div>
+<div class = "clear"></div>
+<div>
+<table width="170px" style="float: left">
+ <tr><td>Application__T3</td></tr>
+</table>
+<table style="float: left">
+<tr><td title="idle time" class="not" colspan="11"></td>
+<td title="Application__T3: Read 4,Application__S2__Application__R2 t:11 l:4 (vl:4) Ch: Application__S2__Application__R2" class="t0" colspan="4"> R</td>
+</tr>
+<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+<tr><td class="sc" colspan="5">0</td><td class="sc" colspan="5">5</td><td class="sc" colspan="5">10</td><td class="sc" colspan="5">15</td></tr>
+</table>
+</div>
+<div class = "clear"></div>
+<div>
+<table width="170px" style="float: left">
+ <tr><td>Application__T2</td></tr>
+</table>
+<table style="float: left">
+<h4>Task never executed</h4>
+</table>
+<div class = "clear"></div>
+<h1> Device scheduling </h1>
+<h2><span>Scheduling for device: CPU0_2_core_0</span></h2>
+<table>
+<tr><td title="Application__T4: Execi 100 t:0 l:100 (vl:100)" class="t0" colspan="100"></td>
+</tr>
+<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+<tr><td class="sc" colspan="5">0</td><td class="sc" colspan="5">5</td><td class="sc" colspan="5">10</td><td class="sc" colspan="5">15</td><td class="sc" colspan="5">20</td><td class="sc" colspan="5">25</td><td class="sc" colspan="5">30</td><td class="sc" colspan="5">35</td><td class="sc" colspan="5">40</td><td class="sc" colspan="5">45</td><td class="sc" colspan="5">50</td><td class="sc" colspan="5">55</td><td class="sc" colspan="5">60</td><td class="sc" colspan="5">65</td><td class="sc" colspan="5">70</td><td class="sc" colspan="5">75</td><td class="sc" colspan="5">80</td><td class="sc" colspan="5">85</td><td class="sc" colspan="5">90</td><td class="sc" colspan="5">95</td><td class="sc" colspan="5">100</td></tr>
+</table>
+<table>
+<tr><td class="t0"></td><td style="max-width: unset;">Application__T4</td><td class="space"></td></tr>
+</table>
+<h2><span>Scheduling for device: CPU0_2_core_1</span></h2>
+<table>
+<tr><td title="Application__T1: Execi 10 t:0 l:10 (vl:10)" class="t0" colspan="10"></td>
+<td title="Application__T1: Write 4,Application__S2__Application__R2 t:10 l:1 (vl:4) Ch: Application__S2__Application__R2" class="t0"></td>
+</tr>
+<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+<tr><td class="sc" colspan="5">0</td><td class="sc" colspan="5">5</td><td class="sc" colspan="5">10</td></tr>
+</table>
+<table>
+<tr><td class="t0"></td><td style="max-width: unset;">Application__T1</td><td class="space"></td></tr>
+</table>
+<h2><span>Scheduling for device: FPGA0</span></h2>
+<table>
+<tr><td title="idle time" class="not" colspan="11"></td>
+<td title="Application__T3: Read 4,Application__S2__Application__R2 t:11 l:4 (vl:4) Ch: Application__S2__Application__R2" class="t0" colspan="4"></td>
+</tr>
+<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+<tr><td class="sc" colspan="5">0</td><td class="sc" colspan="5">5</td><td class="sc" colspan="5">10</td><td class="sc" colspan="5">15</td></tr>
+</table>
+<table>
+<tr></tr>
+<tr></tr>
+<tr><td class="sc" colspan="5">0</td></tr>
+</table>
+<table>
+<tr>
+<td class="t0"></td><td style="max-width: unset;">Application__T3</td><td class="space"></td></tr>
+</table>
+<h2><span>Scheduling for device: Bus0_0</span></h2>
+<table>
+<tr><td title="idle time" class="not" colspan="10"></td>
+<td title="Application__T1: Write 4,Application__S2__Application__R2 t:10 l:1 (vl:4) Ch: Application__S2__Application__R2" class="t0"></td>
+</tr>
+<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+<tr><td class="sc" colspan="5">0</td><td class="sc" colspan="5">5</td><td class="sc" colspan="5">10</td></tr>
+</table>
+<table>
+<tr><td class="t0"></td><td style="max-width: unset;">Application__T1</td><td class="space"></td></tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,6 @@
+========= Scheduling for device: CPU0_1 =========
+Application__T1: Execi 50 t:0 l:54 (vl:50)
+========= Scheduling for device: FPGA0 =========
+Application__T2: Execi 100 t:0 l:100 (vl:100)
+Application__T3: Execi 60 t:0 l:60 (vl:60)
+========= Scheduling for device: Bus0_0 =========
