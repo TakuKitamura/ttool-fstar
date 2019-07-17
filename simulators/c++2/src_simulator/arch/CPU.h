@@ -72,7 +72,7 @@ public:
 	\param iScheduler Pointer to the scheduler object
 	*/
 	CPU(ID iID, std::string iName, WorkloadSource* iScheduler, unsigned int iAmountOfCore): SchedulableDevice(iID, iName, iScheduler), _lastTransaction(0),
-        amountOfCore(iAmountOfCore), _coreNumberGraph(0)/*,_schedulingNeeded(false)*/{
+        amountOfCore(iAmountOfCore)/*,_schedulingNeeded(false)*/{
 	}
 	///Destructor
 	virtual ~CPU(){
@@ -120,11 +120,9 @@ public:
 	void drawPieChart(std::ofstream& myfile) const;
 	void buttonPieChart(std::ofstream& myfile) const;
 	void showPieChart(std::ofstream& myfile) const;
-	void HW2HTML(std::ofstream& myfile) const;
 	void schedule2HTML(std::ofstream& myfile) const;
 	void schedule2XML(std::ostringstream& glob,std::ofstream& myfile) const;
-	inline void setCoreNumberGraph(unsigned int n){ _coreNumberGraph=n;}
-	inline unsigned int getCoreNumberGraph(){ return _coreNumberGraph;}
+	
 protected:
 	///List of all tasks running on the CPU
 	TaskList _taskList;
@@ -134,7 +132,6 @@ protected:
 	BusMasterList _busMasterList;
 	///Amount of cores
 	unsigned int amountOfCore; 
-	unsigned int _coreNumberGraph;
 	///Dirty flag of the current scheduling decision
 	//bool _schedulingNeeded;
 	
