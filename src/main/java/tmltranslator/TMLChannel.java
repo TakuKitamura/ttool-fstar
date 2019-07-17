@@ -612,6 +612,7 @@ public class TMLChannel extends TMLCommunicationElement {
         }
         s += "size=\"" + size + "\" ";
         s += "max=\"" + max + "\" ";
+        s += "vc=\"" + vc + "\" ";
         s += " />\n";
         return s;
     }

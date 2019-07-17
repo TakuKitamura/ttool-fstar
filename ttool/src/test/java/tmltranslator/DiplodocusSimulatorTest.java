@@ -50,7 +50,6 @@ public class DiplodocusSimulatorTest extends AbstractUITest {
     @Before
     public void setUp() throws Exception {
         SIM_DIR = getBaseResourcesDir() + "../../../../simulators/c++2/";
-
     }
 
 
