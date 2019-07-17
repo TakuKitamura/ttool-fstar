@@ -1,39 +1,20 @@
 package ui.interactivesimulation;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridLayout;
-import java.awt.Rectangle;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.Vector;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.SwingUtilities;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableModel;
-
-import javafx.collections.FXCollections;
-import javafx.scene.Scene;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
 
 public class JPanelCompareXmlGraph extends JPanel implements TableModelListener {
 
 	private int[] graphSource;
-	static JTable table, tableUpdated;
+	public static JTable table, tableUpdated;
 
 	private boolean DEBUG = false;
 	private String[] columnNames;
@@ -48,8 +29,8 @@ public class JPanelCompareXmlGraph extends JPanel implements TableModelListener 
 			return;
 		}
 
-		System.out.println("transFile1*****************" + transFile1.size());
-		System.out.println("transFile2*******************" + transFile2.size());
+		// System.out.println("transFile1*****************" + transFile1.size());
+		// System.out.println("transFile2*******************" + transFile2.size());
 		int maxTime = -1;
 
 		int rowIndex = 0;
@@ -97,7 +78,8 @@ public class JPanelCompareXmlGraph extends JPanel implements TableModelListener 
 			}
 
 		}
-		System.out.println("-------------------------- " + "all devices Done" + " ---------------------------------");
+		// System.out.println("-------------------------- " + "all devices Done" + "
+		// ---------------------------------");
 
 		columnNames = new String[maxTime + 2];
 		data = new Object[deviceNames1.size() + deviceNames2.size()][maxTime + 2];
@@ -116,8 +98,39 @@ public class JPanelCompareXmlGraph extends JPanel implements TableModelListener 
 
 					for (int i = 0; i < Integer.parseInt(st.length); i++) {
 
+						// String[] sentences2 = st.command.split("__");
+						// for (int j = 0; j < sentences2.length; j++) {
+						// String s1 = sentences2[j];
+						// System.out.println("st.command : " + st.command);
+						// System.out.println("sentences2 : " + sentences2);
+						// System.out.println("substring : " + s1);
+
+						// }
+						String[] sentences2 = null;
+
+						sentences2 = st.command.split("__");
+
+						if (sentences2[0].contains(",") && sentences2.length > 1)
+
+						{
+
+							String[] writeCommand = sentences2[0].split(",");
+
+							st.command = writeCommand[0] + " " + sentences2[1];
+
+						} else if (sentences2[0].contains(" ") && sentences2.length > 1)
+
+						{
+
+							String[] writeCommand = sentences2[0].split(" ");
+
+							st.command = writeCommand[0] + " " + sentences2[1];
+
+						}
+
 						data[allDevices.indexOf(dName.concat("1"))][Integer.parseInt(st.startTime) + i
 								+ 2] = st.command;
+						;
 						data[allDevices.indexOf(dName.concat("1"))][1] = "transFile 1";
 					}
 				}
@@ -125,8 +138,9 @@ public class JPanelCompareXmlGraph extends JPanel implements TableModelListener 
 			}
 
 		}
-		System.out.println(
-				"-------------------------- " + "all transactions 1 Done" + " ---------------------------------");
+		// System.out.println(
+		// "-------------------------- " + "all transactions 1 Done" + "
+		// ---------------------------------");
 
 		for (SimulationTransaction st : transFile2) {
 
@@ -136,6 +150,28 @@ public class JPanelCompareXmlGraph extends JPanel implements TableModelListener 
 					// maxTime = Integer.parseInt(st.endTime);
 
 					for (int i = 0; i < Integer.parseInt(st.length); i++) {
+
+						String[] sentences2 = null;
+
+						sentences2 = st.command.split("__");
+
+						if (sentences2[0].contains(",") && sentences2.length > 1)
+
+						{
+
+							String[] writeCommand = sentences2[0].split(",");
+
+							st.command = writeCommand[0] + " " + sentences2[1];
+
+						} else if (sentences2[0].contains(" ") && sentences2.length > 1)
+
+						{
+
+							String[] writeCommand = sentences2[0].split(" ");
+
+							st.command = writeCommand[0] + " " + sentences2[1];
+
+						}
 
 						data[allDevices.indexOf(dName.concat("2"))][Integer.parseInt(st.startTime) + i
 								+ 2] = st.command;
@@ -147,19 +183,19 @@ public class JPanelCompareXmlGraph extends JPanel implements TableModelListener 
 
 		}
 
-		System.out.println(
-				"-------------------------- " + "all transactions 2 Done" + " ---------------------------------");
-
 		for (String dName : allDevices) {
 			data[allDevices.indexOf(dName)][0] = dName.substring(0, dName.length() - 1);
 			;
 		}
 
-		System.out.println("-------------------------- " + maxTime + " ---------------------------------");
+		// System.out.println("-------------------------- " + maxTime + "
+		// ---------------------------------");
 
-		System.out.println("-------------------------- " + deviceNames1 + " ---------------------------------");
+		// System.out.println("-------------------------- " + deviceNames1 + "
+		// ---------------------------------");
 
-		System.out.println("----------*****---------------- " + deviceNames2 + " ---------------------------------");
+		// System.out.println("----------*****---------------- " + deviceNames2 + "
+		// ---------------------------------");
 
 		for (int i = 2; i < maxTime + 2; i++) {
 
@@ -184,7 +220,7 @@ public class JPanelCompareXmlGraph extends JPanel implements TableModelListener 
 		// For each table column, sets its renderer to the previously
 		// created table renderer.
 
-		System.out.println("ncols :  " + ncols);
+		// System.out.println("ncols : " + ncols);
 
 		for (int c = 0; c < ncols; c++) {
 			TableColumn tc = tcm.getColumn(c);
@@ -200,24 +236,24 @@ public class JPanelCompareXmlGraph extends JPanel implements TableModelListener 
 		int numCols = table.getColumnCount();
 		javax.swing.table.TableModel model = table.getModel();
 
-		System.out.println("Value of data: ");
+		// System.out.println("Value of data: ");
 		for (int i = 0; i < numRows; i++) {
 			System.out.print("    row " + i + ":");
 			for (int j = 0; j < numCols; j++) {
-				System.out.print("  " + model.getValueAt(i, j));
+				// System.out.print(" " + model.getValueAt(i, j));
 			}
-			System.out.println();
+			// System.out.println();
 		}
-		System.out.println("--------------------------");
+		// System.out.println("--------------------------");
 	}
 
-	void showDifference() {
+	public void showDifference() {
 		// TODO Auto-generated method stub
 
 		int numRows = table.getRowCount();
 		int numCols = table.getColumnCount();
 
-		System.out.println("Value of data: ");
+		// System.out.println("Value of data: ");
 
 		for (int j = 2; j < numCols; j++) {
 
@@ -231,7 +267,7 @@ public class JPanelCompareXmlGraph extends JPanel implements TableModelListener 
 						if (i != k && table.getValueAt(i, j) != null && table.getValueAt(k, j) != null
 								&& table.getValueAt(i, j).equals(table.getValueAt(k, j))) {
 
-							System.out.print(table.getValueAt(i, j) + " ==" + table.getValueAt(k, j));
+							// System.out.print(table.getValueAt(i, j) + " ==" + table.getValueAt(k, j));
 							table.setValueAt(null, k, j);
 							table.setValueAt(null, i, j);
 
@@ -261,7 +297,7 @@ public class JPanelCompareXmlGraph extends JPanel implements TableModelListener 
 		scrollPane.revalidate();
 		scrollPane.repaint();
 
-		System.out.println("similar eraised" + numRows + "---" + numCols);
+		// System.out.println("similar eraised" + numRows + "---" + numCols);
 
 	}
 
@@ -277,7 +313,7 @@ public class JPanelCompareXmlGraph extends JPanel implements TableModelListener 
 
 		scrollPane.setVisible(true);
 		add(scrollPane);
-		System.out.println("table added :");
+		// System.out.println("table added :");
 
 	}
 
@@ -297,7 +333,7 @@ public class JPanelCompareXmlGraph extends JPanel implements TableModelListener 
 		scrollPane.revalidate();
 		scrollPane.repaint();
 		// scrollPane.setVisible(true);
-		System.out.println("revalidated");
+		// System.out.println("revalidated");
 
 	}
 
@@ -309,45 +345,51 @@ public class JPanelCompareXmlGraph extends JPanel implements TableModelListener 
 
 	public Vector<Object> loadTransacationsDropDown(Object object) {
 
-		
-		System.out.println(object);
-		Vector<Object> allTransacions = new Vector();;
+		// System.out.println(object);
+		Vector<Object> allTransacions = new Vector();
+		;
 
 		int numRows = table.getRowCount();
 		int numCols = table.getColumnCount();
 		javax.swing.table.TableModel model = table.getModel();
 
 		for (int i = 0; i < numRows; i++) {
-			for (int j = 0; j < numCols; j++) {
+			for (int j = 2; j < numCols; j++) {
 
-				if (table.getValueAt(i, j) != null && !allTransacions.contains(table.getValueAt(i, j)) && table.getValueAt(i, 0).equals(object)) {
+				if (table.getValueAt(i, j) != null && !allTransacions.contains(table.getValueAt(i, j))
+						&& table.getValueAt(i, 0).equals(object)) {
 					allTransacions.add(table.getValueAt(i, j));
 				}
 			}
-			System.out.println();
+			// System.out.println();
 		}
 
 		return allTransacions;
 	}
 
 	public Vector<Object> loadDevicesDropDown() {
-		Vector<Object> allDevices = new Vector();;
+		Vector<Object> allDevices = new Vector();
+		;
 
 		int numRows = table.getRowCount();
-		//int numCols = table.getColumnCount();
+		// int numCols = table.getColumnCount();
 		javax.swing.table.TableModel model = table.getModel();
 
 		for (int i = 0; i < numRows; i++) {
-			
 
-				if (table.getValueAt(i, 0) != null && !allDevices.contains(table.getValueAt(i, 0))) {
-					allDevices.add(table.getValueAt(i, 0));
-				
+			if (table.getValueAt(i, 0) != null && !allDevices.contains(table.getValueAt(i, 0))) {
+				allDevices.add(table.getValueAt(i, 0));
+
 			}
-			System.out.println();
+			// System.out.println();
 		}
 
 		return allDevices;
+	}
+
+	public JTable getTable() {
+		return table;
+
 	}
 
 }

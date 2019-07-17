@@ -26,6 +26,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.Popup;
@@ -60,7 +61,24 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
 	private JFileChooser fc;
 	private File file;
 	private SimulationTrace selectedST;
-	private Vector<SimulationTransaction> transFile1;
+	private static Vector<SimulationTransaction> transFile1;
+
+	public Vector<SimulationTransaction> getTransFile1() {
+		return transFile1;
+	}
+
+	public void setTransFile1(Vector<SimulationTransaction> transFile1) {
+		this.transFile1 = transFile1;
+	}
+
+	public Vector<SimulationTransaction> getTransFile2() {
+		return transFile2;
+	}
+
+	public void setTransFile2(Vector<SimulationTransaction> transFile2) {
+		this.transFile2 = transFile2;
+	}
+
 	private Vector<SimulationTransaction> transFile2;
 	private SimulationTransaction st = new SimulationTransaction();
 	private JTextField file2 = new JTextField();
@@ -75,7 +93,6 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
 
 		super(_title);
 
-		System.out.println("in hereee");
 		this.selectedST = sST;
 		GridLayout myLayout = new GridLayout(3, 1);
 
@@ -88,7 +105,7 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		// setIconImage(IconManager.img5100);
 		// setBackground(Color.WHITE);
-		System.out.println("in main");
+
 		fc = new JFileChooser();
 
 		JPanel buttonPanel = new JPanel(new GridBagLayout()); // use FlowLayout
@@ -103,6 +120,7 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
 		c.gridy = 0;
 		c.weightx = 1;
 		c.weighty = 1;
+		c.anchor = GridBagConstraints.WEST;
 		buttonPanel.add(lab1, c);
 
 		JLabel lab2 = new JLabel("Secound Simulation Traces File ", JLabel.LEFT);
@@ -112,6 +130,7 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
 		c.gridy = 1;
 		c.weightx = 1;
 		c.weighty = 1;
+		c.anchor = GridBagConstraints.WEST;
 		buttonPanel.add(lab2, c);
 
 		file1.setEditable(false);
@@ -121,7 +140,7 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
 		c.fill = GridBagConstraints.NORTHWEST;
 		c.gridx = 1;
 		c.gridy = 0;
-		c.weightx = 1;
+		c.weightx = 2;
 		c.weighty = 1;
 		buttonPanel.add(file1, c);
 
@@ -152,7 +171,7 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
 		c.fill = GridBagConstraints.NORTHWEST;
 		c.gridx = 3;
 		c.gridy = 2;
-		c.weightx = 1;
+		c.weightx = 5;
 		c.weighty = 1;
 		buttonPanel.add(parse, c);
 
@@ -161,7 +180,7 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
 		c.fill = GridBagConstraints.NORTHWEST;
 		c.gridx = 3;
 		c.gridy = 3;
-		c.weightx = 1;
+		c.weightx = 5;
 		c.weighty = 1;
 		buttonPanel.add(difference, c);
 
@@ -202,7 +221,7 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		System.out.println(e.getActionCommand());
+		// System.out.println(e.getActionCommand());
 		if (e.getSource() == browse) {
 			// Handle open button action.
 
@@ -216,11 +235,12 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
 		} else if (e.getSource() == parse) {
 			// Handle open button action.
 
-			System.out.println("Time to parse");
-			System.out.println(selectedST.getFullPath());
-			System.out.println(file.getPath());
+			// System.out.println("Time to parse");
+			// System.out.println(selectedST.getFullPath());
+			// System.out.println(file.getPath());
 			try {
 				int x = parseXML(selectedST.getFullPath(), file.getPath());
+				DrawSimulationResults(transFile1, transFile2);
 
 			} catch (SAXException e1) {
 				// TODO Auto-generated catch block
@@ -234,12 +254,17 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
 			}
 
 		} else if (e.getSource() == latencyDetails) {
-			System.out.println("Time for latency analysis");
+			//System.out.println("Time for latency analysis");
+			JTable table = newContentPane.getTable();
+
+			JFrameShowLatencyDetails showLatencyDetails = new JFrameShowLatencyDetails(transFile1, transFile2,
+					devicesDropDownCombo1.getSelectedItem(), tracesCombo1.getSelectedItem(),
+					devicesDropDownCombo2.getSelectedItem(), tracesCombo2.getSelectedItem());
 
 		} else if (e.getSource() == difference) {
 			// Handle open button action.
 
-			System.out.println("Time to show the difference");
+			//System.out.println("Time to show the difference");
 
 			newContentPane.showDifference();
 			// this.add(newContentPane);
@@ -249,9 +274,9 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
 			Vector<Object> transacationsDropDown1 = newContentPane
 					.loadTransacationsDropDown(devicesDropDownCombo1.getSelectedItem());
 
-			System.out.println("Time to show the difference" + transacationsDropDown1.size());
+			//System.out.println("Time to show the difference" + transacationsDropDown1.size());
 
-			System.out.println("Time to show the difference" + tracesCombo1.getSelectedIndex());
+			//System.out.println("Time to show the difference" + tracesCombo1.getSelectedIndex());
 
 			final DefaultComboBoxModel<Object> model = new DefaultComboBoxModel<Object>(transacationsDropDown1);
 
@@ -261,9 +286,9 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
 			Vector<Object> transacationsDropDown2 = newContentPane
 					.loadTransacationsDropDown(devicesDropDownCombo2.getSelectedItem());
 
-			System.out.println("Time to show the difference" + transacationsDropDown2.size());
+		//	System.out.println("Time to show the difference" + transacationsDropDown2.size());
 
-			System.out.println("Time to show the difference" + tracesCombo2.getSelectedIndex());
+		//	System.out.println("Time to show the difference" + tracesCombo2.getSelectedIndex());
 
 			final DefaultComboBoxModel<Object> model = new DefaultComboBoxModel<Object>(transacationsDropDown2);
 
@@ -273,7 +298,7 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
 	}
 
 	// Returns the currentY position
-	private int parseXML(String file1Path, String file2Path)
+	public int parseXML(String file1Path, String file2Path)
 			throws SAXException, IOException, ParserConfigurationException {
 
 		if (file1Path.length() == 0 || file2Path.length() == 0)
@@ -290,9 +315,8 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
 
 		saxParser.parse(new File(file2Path), handler);
 		transFile2 = handler.getStList();
-		System.out.println("transFile1 :" + transFile1.size());
-		System.out.println("transFile2 :" + transFile2.size());
-		DrawSimulationResults(transFile1, transFile2);
+		//System.out.println("transFile1 :" + transFile1.size());
+	//	System.out.println("transFile2 :" + transFile2.size());
 
 		/*
 		 * // Print all employees. for (SimulationTransaction st1 : transFile2) {
@@ -324,7 +348,7 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
 			// this.repaint();
 
 			// this.add(newContentPane);
-			System.out.println(" rewrite table");
+		//	System.out.println(" rewrite table");
 
 		} else {
 
@@ -333,7 +357,7 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
 
 			newContentPane.drawTable();
 
-			System.out.println(" New table");
+		//	System.out.println(" New table");
 			this.add(newContentPane);
 
 			DrawLatencyPanel();
@@ -348,21 +372,17 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
 	}
 
 	private void DrawLatencyPanel() {
+		
+		
 
 		JPanel latencyPanel = new JPanel(new GridBagLayout()); // use FlowLayout
 		GridBagConstraints c = new GridBagConstraints();
+		latencyPanel.setBorder(new javax.swing.border.TitledBorder("Latency for Simulation Traces File"));
 		c.fill = GridBagConstraints.NORTHWEST;
 
 		JTextField file1 = new JTextField();
 
-		JLabel lab1 = new JLabel("Latency for Simulation Traces File ", JLabel.LEFT);
-		c.fill = GridBagConstraints.NORTHWEST;
-		c.gridx = 0;
-		c.gridy = 0;
-		// c.weightx = 0;
-		// c.weighty = 0;
-		latencyPanel.add(lab1, c);
-
+		
 		Vector<Object> devicesDropDown1 = newContentPane.loadDevicesDropDown();
 
 		devicesDropDownCombo1 = new JComboBox<Object>(devicesDropDown1);
@@ -373,9 +393,10 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
 
 		c.fill = GridBagConstraints.NORTHWEST;
 		c.gridx = 0;
-		c.gridy = 1;
-		// c.weightx = 0;
-		// c.weighty = 1;
+		c.gridy = 0;
+		c.weightx = 1;
+		c.weighty = 1;
+		c.anchor = GridBagConstraints.WEST;
 		latencyPanel.add(devicesDropDownCombo1, c);
 
 		// String[] choices2 = { "CHOICE 1","CHOICE 2", "CHOICE 3","CHOICE 4","CHOICE
@@ -383,9 +404,9 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
 
 		c.fill = GridBagConstraints.NORTHWEST;
 		c.gridx = 0;
-		c.gridy = 2;
-		// c.weightx = 0;
-		// c.weighty =2;
+		c.gridy = 1;
+		c.weightx = 1;
+		c.weighty = 1;
 		latencyPanel.add(tracesCombo1, c);
 		this.add(latencyPanel);
 
@@ -401,7 +422,7 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
 
 		c.fill = GridBagConstraints.NORTHWEST;
 		c.gridx = 1;
-		c.gridy = 1;
+		c.gridy = 0;
 		// c.weightx = 1;
 		// c.weighty = 1;
 		latencyPanel.add(devicesDropDownCombo2, c);
@@ -411,7 +432,7 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
 
 		c.fill = GridBagConstraints.NORTHWEST;
 		c.gridx = 1;
-		c.gridy = 2;
+		c.gridy = 1;
 		// c.weightx = 0;
 		// c.weighty =2;
 		latencyPanel.add(tracesCombo2, c);
@@ -422,8 +443,8 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
 		latencyDetails = new JButton("latency Details");
 		latencyDetails.addActionListener(this);
 		c.fill = GridBagConstraints.NORTHWEST;
-		c.gridx = 2;
-		c.gridy = 2;
+		c.gridx = 1;
+		c.gridy = 3;
 		c.weightx = 1;
 		c.weighty = 1;
 		latencyPanel.add(latencyDetails, c);
