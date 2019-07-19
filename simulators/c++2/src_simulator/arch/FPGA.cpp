@@ -236,9 +236,7 @@ std::cout<<"fpga addTransaction"<<std::endl;
 #ifdef DEBUG_FPGA
     std::cout<<"I am in finish!!!"<<std::endl;
 #endif
-    //_endSchedule=0;
-    // _maxEndTime=max(_maxEndTime,_nextTransaction->getEndTime())
-    //std::cout<<"end schedule is ~~~~~~~"<<_endSchedule<<std::endl;
+ 
     if(_endSchedule == 0) _maxEndTime=max(_maxEndTime,_nextTransaction->getEndTime());
     if(_reconfigNumber>0)
       _endSchedule=_maxEndTime+_reconfigNumber*_reconfigTime;
@@ -253,7 +251,7 @@ std::cout<<"fpga addTransaction"<<std::endl;
     std::cout<<"endschedule is!! "<<_endSchedule<<std::endl;
     if(_nextTransaction==0) std::cout<<"000"<<std::endl;
 #endif
-    _simulatedTime=max(_simulatedTime,_endSchedule);
+    _simulatedTime=max(_simulatedTime,_nextTransaction->getEndTime());
     _overallTransNo++; //NEW!!!!!!!!
     _overallTransSize+=_nextTransaction->getOperationLength();  //NEW!!!!!!!!
     //std::cout << "lets crash execute\n";
