@@ -73,14 +73,14 @@ public class TMLArchiTextSpecification {
     private String keywords[] = {"NODE", "CPU", "FPGA", "SET", "BUS", "LINK", "BRIDGE", "ROUTER", "MEMORY", "MASTERCLOCKFREQUENCY", "DMA"};
     private String nodetypes[] = {"CPU", "FPGA", "BUS", "LINK", "BRIDGE", "ROUTER", "MEMORY", "HWA", "DMA"};
     private String cpuparameters[] = {"nbOfCores", "byteDataSize", "pipelineSize", "goIdleTime", "maxConsecutiveIdleCycles", "taskSwitchingTime",
-            "branchingPredictionPenalty", "cacheMiss", "schedulingPolicy", "sliceTime", "execiTime", "execcTime", "operation"};
+            "branchingPredictionPenalty", "cacheMiss", "schedulingPolicy", "sliceTime", "execiTime", "execcTime", "operation", "clockDivider"};
     private String fpgaparameters[] = {"capacity", "byteDataSize", "mappingPenalty", "goIdleTime",
-            "maxConsecutiveIdleCycles", "reconfigurationTime", "execiTime", "execcTime", "scheduling"};
+            "maxConsecutiveIdleCycles", "reconfigurationTime", "execiTime", "execcTime", "scheduling", "clockDivider"};
     private String linkparameters[] = {"bus", "node", "priority"};
-    private String hwaparameters[] = {"byteDataSize", "execiTime", "execcTime"};
-    private String busparameters[] = {"byteDataSize", "pipelineSize", "arbitration"};
-    private String bridgeparameters[] = {"bufferByteSize"};
-    private String memoryparameters[] = {"byteDataSize"};
+    private String hwaparameters[] = {"byteDataSize", "execiTime", "execcTime", "clockDivider"};
+    private String busparameters[] = {"byteDataSize", "pipelineSize", "arbitration", "clockDivider"};
+    private String bridgeparameters[] = {"bufferByteSize", "clockDivider"};
+    private String memoryparameters[] = {"byteDataSize", "clockDivider"};
     //  private String dmaparameters[] = {"byteDataSize", "nbOfChannels"};
 
 
@@ -263,6 +263,8 @@ public class TMLArchiTextSpecification {
                 code += set + "byteDataSize " + dma.byteDataSize + CR;
                 code += set + "nbOfChannels " + dma.nbOfChannels + CR;
             }
+
+            code += "SET " + prepareString(node.getName()) + " " + "clockDivider " + node.clockRatio + "\n";
 
             code += CR;
 
@@ -622,6 +624,10 @@ public class TMLArchiTextSpecification {
                         cpu.execcTime = Integer.decode(_split[3]).intValue();
                     }
 
+                    if (_split[2].toUpperCase().equals("CLOCKDIVIDER")) {
+                        cpu.clockRatio = Integer.decode(_split[3]).intValue();
+                    }
+
                     if (_split[2].toUpperCase().equals("OPERATION")) {
                         String tmpOp = "";
                         for (int i=3; i<_split.length; i++) {
@@ -676,6 +682,10 @@ public class TMLArchiTextSpecification {
                         fpga.execcTime = Integer.decode(_split[3]).intValue();
                     }
 
+                    if (_split[2].toUpperCase().equals("CLOCKDIVIDER")) {
+                        fpga.clockRatio = Integer.decode(_split[3]).intValue();
+                    }
+
                     if (_split[2].toUpperCase().equals("OPERATION")) {
                         String tmpOp = "";
                         for (int i=3; i<_split.length; i++) {
@@ -723,6 +733,10 @@ public class TMLArchiTextSpecification {
                         hwa.execcTime = Integer.decode(_split[3]).intValue();
                     }
 
+                    if (_split[2].toUpperCase().equals("CLOCKDIVIDER")) {
+                        hwa.clockRatio = Integer.decode(_split[3]).intValue();
+                    }
+
                     if (_split[2].toUpperCase().equals("OPERATION")) {
                         String tmpOp = "";
                         for (int i=3; i<_split.length; i++) {
@@ -755,6 +769,10 @@ public class TMLArchiTextSpecification {
                     if (_split[2].toUpperCase().equals("ARBITRATION")) {
                         bus.arbitration = Integer.decode(_split[3]).intValue();
                     }
+
+                    if (_split[2].toUpperCase().equals("CLOCKDIVIDER")) {
+                        bus.clockRatio = Integer.decode(_split[3]).intValue();
+                    }
                 }
 
                 if (node instanceof HwBridge) {
@@ -770,6 +788,10 @@ public class TMLArchiTextSpecification {
 
                     if (_split[2].toUpperCase().equals("BUFFERBYTESIZE")) {
                         bridge.bufferByteSize = Integer.decode(_split[3]).intValue();
+                    }
+
+                    if (_split[2].toUpperCase().equals("CLOCKDIVIDER")) {
+                        bridge.clockRatio = Integer.decode(_split[3]).intValue();
                     }
                 }
 
@@ -791,6 +813,11 @@ public class TMLArchiTextSpecification {
                     if (_split[2].toUpperCase().equals("NOCSIZE")) {
                         router.size = Integer.decode(_split[3]).intValue();
                     }
+
+                    if (_split[2].toUpperCase().equals("CLOCKDIVIDER")) {
+                        router.clockRatio = Integer.decode(_split[3]).intValue();
+                    }
+
                 }
 
                 if (node instanceof HwMemory) {
@@ -806,6 +833,10 @@ public class TMLArchiTextSpecification {
 
                     if (_split[2].toUpperCase().equals("BYTEDATASIZE")) {
                         memory.byteDataSize = Integer.decode(_split[3]).intValue();
+                    }
+
+                    if (_split[2].toUpperCase().equals("CLOCKDIVIDER")) {
+                        memory.clockRatio = Integer.decode(_split[3]).intValue();
                     }
                 }
 
@@ -826,6 +857,10 @@ public class TMLArchiTextSpecification {
 
                     if (_split[2].toUpperCase().equals("NBOFCHANNELS")) {
                         dma.nbOfChannels = Integer.decode(_split[3]).intValue();
+                    }
+
+                    if (_split[2].toUpperCase().equals("CLOCKDIVIDER")) {
+                        dma.clockRatio = Integer.decode(_split[3]).intValue();
                     }
 
                 }

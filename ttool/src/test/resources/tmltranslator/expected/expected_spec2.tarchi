@@ -4,14 +4,17 @@ MASTERCLOCKFREQUENCY 200
 NODE DMA DMA0
 SET DMA0 byteDataSize 4
 SET DMA0 nbOfChannels 1
+SET DMA0 clockDivider 1
 
 NODE BUS Bus0
 SET Bus0 byteDataSize 4
 SET Bus0 pipelineSize 1
 SET Bus0 arbitration 0
+SET Bus0 clockDivider 1
 
 NODE MEMORY Memory0
 SET Memory0 byteDataSize 4
+SET Memory0 clockDivider 1
 
 NODE CPU CPU0
 SET CPU0 nbOfCores 1
@@ -26,6 +29,7 @@ SET CPU0 schedulingPolicy 0
 SET CPU0 sliceTime 10000
 SET CPU0 execiTime 1
 SET CPU0 execcTime 1
+SET CPU0 clockDivider 1
 
 NODE CPU CPU2
 SET CPU2 nbOfCores 1
@@ -40,6 +44,7 @@ SET CPU2 schedulingPolicy 0
 SET CPU2 sliceTime 10000
 SET CPU2 execiTime 1
 SET CPU2 execcTime 1
+SET CPU2 clockDivider 1
 
 NODE CPU CPU1
 SET CPU1 nbOfCores 1
@@ -54,6 +59,7 @@ SET CPU1 schedulingPolicy 0
 SET CPU1 sliceTime 10000
 SET CPU1 execiTime 1
 SET CPU1 execcTime 1
+SET CPU1 clockDivider 1
 
 NODE LINK link_CPU0_to_Bus0
 SET link_CPU0_to_Bus0 node CPU0
