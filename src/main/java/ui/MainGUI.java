@@ -72,7 +72,6 @@ import ui.ebrdd.EBRDDPanel;
 import ui.eln.ELNDiagramPanel;
 import ui.file.*;
 import ui.ftd.FaultTreeDiagramPanel;
-import ui.interactivesimulation.JFrameCompareSimulationTraces;
 import ui.interactivesimulation.JFrameInteractiveSimulation;
 import ui.interactivesimulation.SimulationTransaction;
 import ui.iod.InteractionOverviewDiagramPanel;
@@ -331,7 +330,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     private ConcurrentHashMap<String, String> statusMap = new ConcurrentHashMap<String, String>();
     private JFrameInteractiveSimulation jfis;
     private JFrameAvatarInteractiveSimulation jfais;
-    private JFrameCompareSimulationTraces cSimTrace;
+
     // Help
     private HelpManager helpManager;
     private JFrameHelp helpFrame;
@@ -4896,8 +4895,11 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         dtree.toBeUpdated();
     }
 
-
     public void removeNoC() {
+        removeNoC(false);
+    }
+
+    public void removeNoC(boolean automatic) {
         //TraceManager.addDev("Design space exploration with Z3");
         if (gtm == null) {
             return;
@@ -4912,7 +4914,11 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         JDialogNoCManagement jdsenm = new JDialogNoCManagement(frame, this, "Removing NoC", map);
         //   jdsez3.setSize(600,800);
         GraphicLib.centerOnParent(jdsenm, 700, 800);
-        jdsenm.setVisible(true);
+        if (!automatic) {
+            jdsenm.setVisible(true);
+        } else {
+            jdsenm.startProcess();
+        }
         dtree.toBeUpdated();
     }
 
@@ -5050,7 +5056,8 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             }
         }
 
-        JDialogJavaGeneration jgen = new JDialogJavaGeneration(frame, this, "Java code generation and compilation", ConfigurationTTool.JavaCodeDirectory, ConfigurationTTool.JavaCompilerPath, ConfigurationTTool.TToolClassPath, ConfigurationTTool.JavaExecutePath, ConfigurationTTool.JavaHeader);
+        JDialogJavaGeneration jgen = new JDialogJavaGeneration(frame, this, "Java code generation and compilation", ConfigurationTTool.JavaCodeDirectory, ConfigurationTTool.JavaCompilerPath, ConfigurationTTool.TToolClassPath,
+                ConfigurationTTool.JavaExecutePath, ConfigurationTTool.JavaHeader);
         //  jgen.setSize(450, 600);
         GraphicLib.centerOnParent(jgen, 450, 600);
         jgen.setVisible(true);
@@ -5085,7 +5092,8 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         } else if ((tp instanceof TMLDesignPanel) || (tp instanceof TMLComponentDesignPanel) || (tp instanceof TMLArchiPanel)) {
             JDialogSystemCGeneration jgen = new JDialogSystemCGeneration(frame, this, "Simulation Code Generation and Compilation",
                     ConfigurationTTool.SystemCHost, SpecConfigTTool.SystemCCodeDirectory, SpecConfigTTool.SystemCCodeCompileCommand,
-                    SpecConfigTTool.SystemCCodeExecuteCommand, SpecConfigTTool.SystemCCodeInteractiveExecuteCommand, SpecConfigTTool.GGraphPath, _mode);
+                    SpecConfigTTool.SystemCCodeExecuteCommand, SpecConfigTTool.SystemCCodeExecuteXCycle, SpecConfigTTool
+                    .SystemCCodeInteractiveExecuteCommand, SpecConfigTTool.GGraphPath, _mode);
             //jgen.setSize(500, 750);
             GraphicLib.centerOnParent(jgen, 700, 750);
             jgen.setVisible(true);
@@ -5106,18 +5114,23 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         List<Point> points = getListOfBreakPoints();
 
         if (gtm == null) {
-            jfis = new JFrameInteractiveSimulation(frame, this, "Interactive simulation", ConfigurationTTool.SystemCHost, executePath, null, points);
+            jfis = new JFrameInteractiveSimulation(frame, this, "Interactive simulation", ConfigurationTTool.SystemCHost, executePath,
+                     null,
+                    points);
         } else {
             //TraceManager.addDev("toto1");
             if (gtm.getTMLMapping() != null) {
-                jfis = new JFrameInteractiveSimulation(frame, this, "Interactive simulation", ConfigurationTTool.SystemCHost, executePath, gtm.getTMLMapping(), points);
+                jfis = new JFrameInteractiveSimulation(frame, this, "Interactive simulation", ConfigurationTTool.SystemCHost,
+                        executePath,  gtm.getTMLMapping(), points);
             } else {
                 //TraceManager.addDev("toto2");
                 if (gtm.getArtificialTMLMapping() != null) {
-                    jfis = new JFrameInteractiveSimulation(frame, this, "Interactive simulation", ConfigurationTTool.SystemCHost, executePath, gtm.getArtificialTMLMapping(), points);
+                    jfis = new JFrameInteractiveSimulation(frame, this, "Interactive simulation", ConfigurationTTool.SystemCHost,
+                            executePath,  gtm.getArtificialTMLMapping(), points);
                 } else {
                     //TraceManager.addDev("toto3");
-                    jfis = new JFrameInteractiveSimulation(frame, this, "Interactive simulation", ConfigurationTTool.SystemCHost, executePath, null, points);
+                    jfis = new JFrameInteractiveSimulation(frame, this, "Interactive simulation", ConfigurationTTool.SystemCHost,
+                             executePath, null, points);
                 }
             }
         }
@@ -9706,6 +9719,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         //frame.repaint();
 
     }
+
     public void compareSimulationTraces(SimulationTrace selectedST, boolean b) {
 		// TODO Auto-generated method stub
 		//System.out.println("Maysam : compare Function");
@@ -9722,6 +9736,4 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 	}
 
 
-
 } // Class MainGUI
-
