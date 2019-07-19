@@ -95,7 +95,6 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
     protected JMenuItem jmiShowInFinder;
     protected JMenuItem jmiShowST;
     protected JMenuItem jmiShowInFinderST;
-    protected JMenuItem jmiCompareST;
     protected JPopupMenu popupTree;
     protected JPopupMenu popupTreeST;
     protected RG selectedRG;
@@ -249,22 +248,14 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
                 } else {
                     jmiShowST = new JMenuItem("Show (default app)");
                 }
-                               
                 jmiShowST.addActionListener(this);
                 popupTreeST.add(jmiShowST);
                 if(selectedST.hasFile()) {
                     jmiShowInFinderST = new JMenuItem("Show in File Explorer");
                     jmiShowInFinderST.addActionListener(this);
                 }
-               
 
                 popupTreeST.add(jmiShowInFinderST);
-                
-                if (selectedST.getType() == SimulationTrace.XML_DIPLO) {
-                	jmiCompareST = new JMenuItem("Compare");
-                	jmiCompareST.addActionListener(this);
-                }
-                popupTreeST.add(jmiCompareST);
 
             //}
             popupTreeST.show(tree, x, y);
@@ -512,10 +503,6 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
             } else if (ae.getSource() == jmiShowInFinderST) {
                mgui.showInFinder(selectedST, true);
             }
-            else if (ae.getSource() == jmiCompareST) {
-                mgui.compareSimulationTraces(selectedST, true);
-               
-             }
         }
 
         if (selectedGT != null) {
