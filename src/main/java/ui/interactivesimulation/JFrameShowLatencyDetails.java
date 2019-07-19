@@ -1,3 +1,40 @@
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+ * 
+ * ludovic.apvrille AT enst.fr
+ * 
+ * This software is a computer program whose purpose is to allow the
+ * edition of TURTLE analysis, design and deployment diagrams, to
+ * allow the generation of RT-LOTOS or Java code from this diagram,
+ * and at last to allow the analysis of formal validation traces
+ * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
+ * from INRIA Rhone-Alpes.
+ * 
+ * This software is governed by the CeCILL  license under French law and
+ * abiding by the rules of distribution of free software.  You can  use,
+ * modify and/ or redistribute the software under the terms of the CeCILL
+ * license as circulated by CEA, CNRS and INRIA at the following URL
+ * "http://www.cecill.info".
+ * 
+ * As a counterpart to the access to the source code and  rights to copy,
+ * modify and redistribute granted by the license, users are provided only
+ * with a limited warranty  and the software's author,  the holder of the
+ * economic rights,  and the successive licensors  have only  limited
+ * liability.
+ * 
+ * In this respect, the user's attention is drawn to the risks associated
+ * with loading,  using,  modifying and/or developing or reproducing the
+ * software by the user in light of its specific status of free software,
+ * that may mean  that it is complicated to manipulate,  and  that  also
+ * therefore means  that it is reserved for developers  and  experienced
+ * professionals having in-depth computer knowledge. Users are therefore
+ * encouraged to load and test the software's suitability as regards their
+ * requirements in conditions enabling the security of their systems and/or
+ * data to be ensured and,  more generally, to use and operate it in the
+ * same conditions as regards security.
+ * 
+ * The fact that you are presently reading this means that you have had
+ * knowledge of the CeCILL license and that you accept its terms.
+ */
 package ui.interactivesimulation;
 
 import java.awt.Color;
@@ -15,6 +52,18 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+/**
+ * Class JFrameShowLatencyDetails : open the latency popup with all the related
+ * tables for the chosen transactions, these tables include the start time and
+ * end time for every row in the table.
+ * 
+ * a simple function will subtract the end from start time when you click on the
+ * table cells
+ * 
+ * Creation: 19/07/2019
+ * 
+ * @author Maysam ZOOR
+ */
 public class JFrameShowLatencyDetails extends JFrame {
 	private String[] columnNames = new String[3];
 	private Object[][] dataTrans1Run1;
@@ -173,7 +222,8 @@ public class JFrameShowLatencyDetails extends JFrame {
 					labEnd.setText(value);
 				}
 
-				if (!labStart.getText().equals(null) && !labEnd.getText().equals(null)&& !labEnd.getText().isEmpty()&& !labStart.getText().isEmpty()) {
+				if (!labStart.getText().equals(null) && !labEnd.getText().equals(null) && !labEnd.getText().isEmpty()
+						&& !labStart.getText().isEmpty()) {
 					int difference = Integer.parseInt(labEnd.getText()) - Integer.parseInt(labStart.getText());
 					labTotal.setText(Integer.toString(difference));
 				}
@@ -196,7 +246,8 @@ public class JFrameShowLatencyDetails extends JFrame {
 					labEnd.setText(value);
 				}
 
-				if (!labStart.getText().equals(null) && !labEnd.getText().equals(null)&& !labEnd.getText().isEmpty()&& !labStart.getText().isEmpty()) {
+				if (!labStart.getText().equals(null) && !labEnd.getText().equals(null) && !labEnd.getText().isEmpty()
+						&& !labStart.getText().isEmpty()) {
 					int difference = Integer.parseInt(labEnd.getText()) - Integer.parseInt(labStart.getText());
 					labTotal.setText(Integer.toString(difference));
 				}
@@ -218,7 +269,8 @@ public class JFrameShowLatencyDetails extends JFrame {
 					labEnd.setText(value);
 				}
 
-				if (!labStart.getText().equals(null) && !labEnd.getText().equals(null)&& !labEnd.getText().isEmpty()&& !labStart.getText().isEmpty()) {
+				if (!labStart.getText().equals(null) && !labEnd.getText().equals(null) && !labEnd.getText().isEmpty()
+						&& !labStart.getText().isEmpty()) {
 					int difference = Integer.parseInt(labEnd.getText()) - Integer.parseInt(labStart.getText());
 					labTotal.setText(Integer.toString(difference));
 				}
@@ -241,7 +293,8 @@ public class JFrameShowLatencyDetails extends JFrame {
 					labEnd.setText(value);
 				}
 
-				if (!labStart.getText().equals(null) && !labEnd.getText().equals(null)&& !labEnd.getText().isEmpty()&& !labStart.getText().isEmpty()) {
+				if (!labStart.getText().equals(null) && !labEnd.getText().equals(null) && !labEnd.getText().isEmpty()
+						&& !labStart.getText().isEmpty()) {
 					int difference = Integer.parseInt(labEnd.getText()) - Integer.parseInt(labStart.getText());
 					labTotal.setText(Integer.toString(difference));
 				}
@@ -289,7 +342,6 @@ public class JFrameShowLatencyDetails extends JFrame {
 		JPanel timePanel = new JPanel(new GridBagLayout()); // use FlowLayout
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.NORTHWEST;
-		
 
 		JLabel startTime = new JLabel("Start Time", JLabel.LEFT);
 
@@ -300,8 +352,7 @@ public class JFrameShowLatencyDetails extends JFrame {
 		c.weighty = 1;
 		c.anchor = GridBagConstraints.WEST;
 		timePanel.add(startTime, c);
-		
-		
+
 		labStart = new JLabel("", JLabel.LEFT);
 		c.fill = GridBagConstraints.NORTHWEST;
 		c.gridx = 1;
@@ -310,8 +361,7 @@ public class JFrameShowLatencyDetails extends JFrame {
 		c.weighty = 1;
 		c.anchor = GridBagConstraints.WEST;
 		timePanel.add(labStart, c);
-		
-		
+
 		JLabel endTime = new JLabel("End Time", JLabel.LEFT);
 
 		c.fill = GridBagConstraints.NORTHWEST;
@@ -331,7 +381,6 @@ public class JFrameShowLatencyDetails extends JFrame {
 		c.anchor = GridBagConstraints.WEST;
 		timePanel.add(labEnd, c);
 
-		
 		JLabel diffTime = new JLabel("Time Difference", JLabel.LEFT);
 
 		c.fill = GridBagConstraints.NORTHWEST;
@@ -341,7 +390,7 @@ public class JFrameShowLatencyDetails extends JFrame {
 		c.weighty = 1;
 		c.anchor = GridBagConstraints.WEST;
 		timePanel.add(diffTime, c);
-		
+
 		labTotal = new JLabel("", JLabel.LEFT);
 		c.fill = GridBagConstraints.NORTHWEST;
 		c.gridx = 1;
@@ -350,9 +399,7 @@ public class JFrameShowLatencyDetails extends JFrame {
 		c.weighty = 1;
 		c.anchor = GridBagConstraints.WEST;
 		timePanel.add(labTotal, c);
-		
 
-		
 		this.add(timePanel);
 		this.pack();
 		this.setVisible(true);

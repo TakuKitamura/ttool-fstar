@@ -1,21 +1,53 @@
+/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+ * 
+ * ludovic.apvrille AT enst.fr
+ * 
+ * This software is a computer program whose purpose is to allow the
+ * edition of TURTLE analysis, design and deployment diagrams, to
+ * allow the generation of RT-LOTOS or Java code from this diagram,
+ * and at last to allow the analysis of formal validation traces
+ * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
+ * from INRIA Rhone-Alpes.
+ * 
+ * This software is governed by the CeCILL  license under French law and
+ * abiding by the rules of distribution of free software.  You can  use,
+ * modify and/ or redistribute the software under the terms of the CeCILL
+ * license as circulated by CEA, CNRS and INRIA at the following URL
+ * "http://www.cecill.info".
+ * 
+ * As a counterpart to the access to the source code and  rights to copy,
+ * modify and redistribute granted by the license, users are provided only
+ * with a limited warranty  and the software's author,  the holder of the
+ * economic rights,  and the successive licensors  have only  limited
+ * liability.
+ * 
+ * In this respect, the user's attention is drawn to the risks associated
+ * with loading,  using,  modifying and/or developing or reproducing the
+ * software by the user in light of its specific status of free software,
+ * that may mean  that it is complicated to manipulate,  and  that  also
+ * therefore means  that it is reserved for developers  and  experienced
+ * professionals having in-depth computer knowledge. Users are therefore
+ * encouraged to load and test the software's suitability as regards their
+ * requirements in conditions enabling the security of their systems and/or
+ * data to be ensured and,  more generally, to use and operate it in the
+ * same conditions as regards security.
+ * 
+ * The fact that you are presently reading this means that you have had
+ * knowledge of the CeCILL license and that you accept its terms.
+ */
+
 package ui.interactivesimulation;
 
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Label;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.Random;
 import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
@@ -25,32 +57,29 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.Popup;
-import javax.swing.PopupFactory;
-import javax.swing.Timer;
 import javax.swing.border.LineBorder;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import avatartranslator.AvatarSpecification;
-import myutil.GraphicLib;
 import myutil.TraceManager;
 import ui.MainGUI;
 import ui.SimulationTrace;
-import ui.util.IconManager;
+
+/**
+ * Class JFrameCompareSimulationTraces : open the compare popup with all the
+ * related functionality (browse for second file, difference in simulation
+ * traces and latency calculation button )
+ * 
+ * Creation: 19/07/2019
+ * 
+ * @author Maysam ZOOR
+ */
 
 public class JFrameCompareSimulationTraces extends JFrame implements ActionListener, WindowListener {
 
@@ -254,7 +283,7 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
 			}
 
 		} else if (e.getSource() == latencyDetails) {
-			//System.out.println("Time for latency analysis");
+			// System.out.println("Time for latency analysis");
 			JTable table = newContentPane.getTable();
 
 			JFrameShowLatencyDetails showLatencyDetails = new JFrameShowLatencyDetails(transFile1, transFile2,
@@ -264,7 +293,7 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
 		} else if (e.getSource() == difference) {
 			// Handle open button action.
 
-			//System.out.println("Time to show the difference");
+			// System.out.println("Time to show the difference");
 
 			newContentPane.showDifference();
 			// this.add(newContentPane);
@@ -274,9 +303,11 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
 			Vector<Object> transacationsDropDown1 = newContentPane
 					.loadTransacationsDropDown(devicesDropDownCombo1.getSelectedItem());
 
-			//System.out.println("Time to show the difference" + transacationsDropDown1.size());
+			// System.out.println("Time to show the difference" +
+			// transacationsDropDown1.size());
 
-			//System.out.println("Time to show the difference" + tracesCombo1.getSelectedIndex());
+			// System.out.println("Time to show the difference" +
+			// tracesCombo1.getSelectedIndex());
 
 			final DefaultComboBoxModel<Object> model = new DefaultComboBoxModel<Object>(transacationsDropDown1);
 
@@ -286,9 +317,11 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
 			Vector<Object> transacationsDropDown2 = newContentPane
 					.loadTransacationsDropDown(devicesDropDownCombo2.getSelectedItem());
 
-		//	System.out.println("Time to show the difference" + transacationsDropDown2.size());
+			// System.out.println("Time to show the difference" +
+			// transacationsDropDown2.size());
 
-		//	System.out.println("Time to show the difference" + tracesCombo2.getSelectedIndex());
+			// System.out.println("Time to show the difference" +
+			// tracesCombo2.getSelectedIndex());
 
 			final DefaultComboBoxModel<Object> model = new DefaultComboBoxModel<Object>(transacationsDropDown2);
 
@@ -306,17 +339,17 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
 
 		SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
 		SAXParser saxParser = saxParserFactory.newSAXParser();
-		SAXParserHandler handler = new SAXParserHandler();
+		SimulationTransactionParser handler = new SimulationTransactionParser();
 
 		saxParser.parse(new File(file1Path), handler);
 		transFile1 = handler.getStList();
 
-		handler = new SAXParserHandler();
+		handler = new SimulationTransactionParser();
 
 		saxParser.parse(new File(file2Path), handler);
 		transFile2 = handler.getStList();
-		//System.out.println("transFile1 :" + transFile1.size());
-	//	System.out.println("transFile2 :" + transFile2.size());
+		// System.out.println("transFile1 :" + transFile1.size());
+		// System.out.println("transFile2 :" + transFile2.size());
 
 		/*
 		 * // Print all employees. for (SimulationTransaction st1 : transFile2) {
@@ -348,7 +381,7 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
 			// this.repaint();
 
 			// this.add(newContentPane);
-		//	System.out.println(" rewrite table");
+			// System.out.println(" rewrite table");
 
 		} else {
 
@@ -357,7 +390,7 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
 
 			newContentPane.drawTable();
 
-		//	System.out.println(" New table");
+			// System.out.println(" New table");
 			this.add(newContentPane);
 
 			DrawLatencyPanel();
@@ -372,8 +405,6 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
 	}
 
 	private void DrawLatencyPanel() {
-		
-		
 
 		JPanel latencyPanel = new JPanel(new GridBagLayout()); // use FlowLayout
 		GridBagConstraints c = new GridBagConstraints();
@@ -382,7 +413,6 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
 
 		JTextField file1 = new JTextField();
 
-		
 		Vector<Object> devicesDropDown1 = newContentPane.loadDevicesDropDown();
 
 		devicesDropDownCombo1 = new JComboBox<Object>(devicesDropDown1);
