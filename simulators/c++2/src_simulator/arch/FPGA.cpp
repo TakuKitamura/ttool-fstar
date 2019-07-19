@@ -61,8 +61,6 @@ FPGA::FPGA(    ID iID,
 					      ,_cyclesBeforeIdle(iCyclesBeforeIdle)
 					      ,_cyclesPerExeci(iCyclesPerExeci)
 					      ,_cyclesPerExecc(iCyclesPerExecc)
-					      ,_taskNumber(0)
-					      ,_currTaskNumber(0)
 					      ,_reconfigNumber(0)
 					      ,_maxEndTime(0)
 					     
@@ -260,12 +258,7 @@ std::cout<<"fpga addTransaction"<<std::endl;
     _overallTransSize+=_nextTransaction->getOperationLength();  //NEW!!!!!!!!
     //std::cout << "lets crash execute\n";
     // std::cout<<_nextTransaction->toString()<<std::endl;
-    if(_nextTransaction->getCommand()==0)
-      std::cout<<"111"<<std::endl;
-    else 
-      std::cout<<"333"<<std::endl;
      _nextTransaction->getCommand()->execute();  //NEW!!!!
-     std::cout<<"222"<<std::endl;
     //std::cout << "not crashed\n";
 #ifdef TRANSLIST_ENABLED
     _transactList.push_back(_nextTransaction);
@@ -294,6 +287,7 @@ void FPGA::schedule(){
 
     }
   }
+  //if(_nextTransaction!=0) std::cout<<"nextTransaction is~~~~ "<< _nextTransaction->toShortString()<<std::endl;
   if (_nextTransaction!=0 && aOldTransaction != _nextTransaction)  calcStartTimeLength();
   std::cout << "fpga:schedule END " << _name << "+++++++++++++++++++++++++++++++++\n";
 }
@@ -534,14 +528,6 @@ void FPGA::buttonPieChart(std::ofstream& myfile) const{
 
 
 void FPGA::showPieChart(std::ofstream& myfile) const{
-  /* if(_taskNumber==1)
-    myfile << SCHED_HTML_JS_DIV_ID << _ID << "_" << _htmlCurrTask->toShortString() << SCHED_HTML_JS_DIV_ID_END <<std::endl;
-  else
-  myfile << SCHED_HTML_JS_DIV_ID << _ID << "_" << _htmlCurrTask->toShortString() << SCHED_HTML_JS_DIV_ID_END_FPGA <<std::endl;*/
- 
-  //if( _taskNumber == 1)
-  //  myfile << SCHED_HTML_JS_DIV_BEGIN << std::endl;
-  // else
   myfile << SCHED_HTML_JS_DIV_BEGIN2 << std::endl;
   myfile << SCHED_HTML_JS_BEGIN_CANVAS << _ID << "_" << _htmlCurrTask->toShortString() << SCHED_HTML_JS_END_CANVAS <<std::endl;
   myfile << SCHED_HTML_JS_DIV_END << std::endl;
@@ -561,18 +547,18 @@ std::string FPGA::determineHTMLCellClass(unsigned int &nextColor ) {
 	return taskCellClasses[  _htmlCurrTask ];
 }
 
-void FPGA::schedule2HTML(std::ofstream& myfile)  {    
+void FPGA::HW2HTML(std::ofstream& myfile)  {    
   if(_startFlagHTML == true){
     //myfile << "<h2><span>Scheduling for device: "<< _name << "</span></h2>" << std::endl;
-    myfile << SCHED_HTML_JS_DIV_BEGIN3 << SCHED_HTML_BOARD;
+    myfile << SCHED_HTML_BOARD;
     myfile << _name << END_TD << "</tr>" << std::endl;
-    myfile << SCHED_HTML_JS_TABLE_END << std::endl << SCHED_HTML_JS_DIV_END << std::endl;
+    myfile << SCHED_HTML_JS_TABLE_END << std::endl;
     myfile << SCHED_HTML_JS_DIV_BEGIN3  << std::endl;
   }
 
   if ( _transactList.size() == 0 ) {
     myfile << "<h4>Device never activated</h4>" << std::endl;
-    myfile << SCHED_HTML_JS_CLEAR << std::endl;
+    myfile << SCHED_HTML_JS_TABLE_END << std::endl << SCHED_HTML_JS_CLEAR << std::endl;
   }
    else {
      myfile << "<table>" << std::endl << "<tr>";
@@ -584,8 +570,72 @@ void FPGA::schedule2HTML(std::ofstream& myfile)  {
       std::cout<< _htmlCurrTask->toString()<<std::endl;
 #endif
       if( (*i)-> getCommand()->getTask() == _htmlCurrTask ){
+	if(taskOccurTime==0){ 
+	  taskOccurTime++;
+	}
+#ifdef DEBUG_FPGA
+	std::cout<<"in!!"<<_htmlCurrTask->toString()<<std::endl;
+#endif
+	TMLTransaction* aCurrTrans = *i;
+	unsigned int aBlanks = aCurrTrans->getStartTime() - aCurrTime;
+	//std::cout<<"blank is "<<aBlanks<<std::endl;
+	if ( aBlanks > 0 ) {
+	  writeHTMLColumn( myfile, aBlanks, "not", "idle time" );
+	}
+
+	unsigned int aLength = aCurrTrans->getOperationLength();
+
+
+	// Issue #4
+	//	std::cout<<"what is this task?"<<task->toString()<<std::endl;
+	const std::string cellClass = determineHTMLCellClass(  nextCellClassIndex );
+	std::string aCurrTransName=aCurrTrans->toShortString();
+	unsigned int indexTrans=aCurrTransName.find_first_of(":");
+	std::string aCurrContent=aCurrTransName.substr(indexTrans+1,2);
+	writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString(), aCurrContent );
+
+	aCurrTime = aCurrTrans->getEndTime();
+      }
+    }	
+
+    myfile << "</tr>" << std::endl << "<tr>";
+
+    for ( unsigned int aLength = 0; aLength < aCurrTime; aLength++ ) {
+      myfile << "<th></th>";
+    }
+
+    myfile << "</tr>" << std::endl << "<tr>";
+
+    for ( unsigned int aLength = 0; aLength <= aCurrTime; aLength += 5 ) {
+      std::ostringstream spanVal;
+      spanVal << aLength;
+      writeHTMLColumn( myfile, 5, "sc", "", spanVal.str(), false );
+      //myfile << "<td colspan=\"5\" class=\"sc\">" << aLength << "</td>";
+    }
+   }
+}
+
+void FPGA::schedule2HTML(std::ofstream& myfile)  {    
+  std::cout<<"*********FPGA scheduling***********"<<std::endl;
+  if(_startFlagHTML == true){
+    myfile << "<h2><span>Scheduling for device: "<< _name << "</span></h2>" << std::endl;
+  }
+
+  if ( _transactList.size() == 0 ) {
+    myfile << "<h4>Device never activated</h4>" << std::endl;
+  }
+   else {
+    myfile << "<table>" << std::endl << "<tr>";
+
+    TMLTime aCurrTime = 0;
+    unsigned int taskOccurTime = 0;
+    for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
+      //#ifdef DEBUG_FPGA
+      std::cout <<  (*i)-> getCommand()->getTask()->toString() <<std::endl;
+      std::cout<< _htmlCurrTask->toString()<<std::endl;
+      //#endif
+      if( (*i)-> getCommand()->getTask() == _htmlCurrTask ){
 	if(taskOccurTime==0){
-	  _currTaskNumber++;
 	  taskOccurTime++;
 	}
 #ifdef DEBUG_FPGA
@@ -605,10 +655,8 @@ void FPGA::schedule2HTML(std::ofstream& myfile)  {
 	TMLTask* task = aCurrTrans->getCommand()->getTask();
 	//	std::cout<<"what is this task?"<<task->toString()<<std::endl;
 	const std::string cellClass = determineHTMLCellClass(  nextCellClassIndex );
-	std::string aCurrTransName=aCurrTrans->toShortString();
-	unsigned int indexTrans=aCurrTransName.find_first_of(":");
-	std::string aCurrContent=aCurrTransName.substr(indexTrans+1,2);
-	writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString(), aCurrContent );
+
+	writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString() );
 
 	aCurrTime = aCurrTrans->getEndTime();
       }
@@ -630,30 +678,21 @@ void FPGA::schedule2HTML(std::ofstream& myfile)  {
       //myfile << "<td colspan=\"5\" class=\"sc\">" << aLength << "</td>";
     }
 
-    //myfile << "</tr>" << std::endl << "</table>" << std::endl;
-#ifdef DEBUG_FPGA
-    std::cout<<"_taskNumer is ------------------------------------"<<_taskNumber<<std::endl;
-    std::cout<<"curr task number is ------------------------"<<_currTaskNumber<<std::endl;
-#endif
-    if(_currTaskNumber == _taskNumber){
-#ifdef DEBUG_FPGA
-      std::cout<<" i am showing the name of tasks!!!----------------------------------------------------------------------------------!"<<std::endl;
-#endif
-      myfile << "</tr>" << std::endl << "</table>" << std::endl << SCHED_HTML_JS_DIV_END << std::endl;
-      myfile << SCHED_HTML_JS_CLEAR << std::endl;
-      // myfile  << "<table>" << std::endl << "<tr>" << std::endl;
-      /* for( std::map<TMLTask*, std::string>::iterator taskColIt = taskCellClasses.begin(); taskColIt != taskCellClasses.end(); ++taskColIt ) {
-	TMLTask* task = (*taskColIt).first;
-	// Unset the default td max-width of 5px. For some reason setting the max-with on a specific t style does not work
-	myfile << "<td class=\"" << taskCellClasses[ task ] << "\"></td><td style=\"max-width: unset;\">" << task->toString() << "</td><td class=\"space\"></td>";
-      }
-      myfile << "</tr>" << std::endl;
-      myfile << "</table>" << std::endl;*/
-    }
-
+    myfile << "</tr>" << std::endl << "</table>" << std::endl;
    
    }
 #ifdef DEBUG_FPGA
   std::cout<<"end in!!!"<<std::endl;
 #endif
+}
+
+void FPGA::scheduleBlank(std::ofstream& myfile){ 
+  myfile  << "<table>" << std::endl << "<tr>" << std::endl;
+  for( std::map<TMLTask*, std::string>::iterator taskColIt = taskCellClasses.begin(); taskColIt != taskCellClasses.end(); ++taskColIt ) {
+    TMLTask* task = (*taskColIt).first;
+    // Unset the default td max-width of 5px. For some reason setting the max-with on a specific t style does not work
+    myfile << "<td class=\"" << taskCellClasses[ task ] << "\"></td><td style=\"max-width: unset;\">" << task->toString() << "</td><td class=\"space\"></td>";
+  }
+  myfile << "</tr>" << std::endl;
+  myfile << "</table>" << std::endl;
 }

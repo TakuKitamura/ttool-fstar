@@ -54,7 +54,8 @@ TMLTime OrderScheduler::schedule(TMLTime iEndSchedule){
 	WorkloadSource *aSourcePast=0, *aSourceFuture=0;  //NEW
 	for(WorkloadList::iterator i=_workloadList.begin(); i != _workloadList.end(); ++i){
 		aTempTrans=(*i)->getNextTransaction(iEndSchedule);
-		if (aTempTrans!=0 && aTempTrans->getVirtualLength()!=0){
+		if(aTempTrans) std::cout<<"show temp trans"<<aTempTrans->toShortString()<<std::endl;
+		if (aTempTrans!=0 && aTempTrans->getVirtualLength()!=0 && aTempTrans->getCommand()->getTask()->getFPGA()){
 			aRunnableTime=aTempTrans->getRunnableTime();	
 			if (aRunnableTime<=iEndSchedule){
 			  //Past
@@ -81,6 +82,8 @@ TMLTime OrderScheduler::schedule(TMLTime iEndSchedule){
 		_nextTransaction=aMarkerPast;
 		_lastSource=aSourcePast; //NEW
 	}
+	if(_nextTransaction) std::cout<<"order next trans is "<<_nextTransaction->toShortString()<<std::endl;
+	else std::cout<<"order next trans is 0"<<std::endl;
 	std::cout<<"end order scheduler"<<std::endl;
 	return 0;
 }
