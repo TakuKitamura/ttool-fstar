@@ -86,8 +86,8 @@ using std::max;
 #undef DEBUG_BUS
 #undef DEBUG_SERIALIZE
 
-#define DEBUG_FPGA
-#define DEBUG_SIMULATE
+#undef DEBUG_FPGA
+#undef DEBUG_SIMULATE
 //enables mapping of DIPLODOCUS channels onto buses
 #define BUS_ENABLED
 //cost of a send/wait command
@@ -261,6 +261,7 @@ using std::max;
 #define SCHED_HTML_CSS_END_LINK "\" />\n"
 #define SCHED_HTML_TITLE_HW "<h1> Summary HW </h1>"
 #define SCHED_HTML_TITLE_TASK "<h1> Summary tasks </h1>"
+#define SCHED_HTML_TITLE_DEVICE "<h1> Device scheduling </h1>"
 #define SCHED_HTML_BOARD "<table width=\"170px\" style=\"float: left\">\n \
 <tr><td>"
 #define SCHED_HTML_BOARD2 "<table style=\"float: left\">"

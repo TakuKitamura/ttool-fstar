@@ -78,8 +78,6 @@ public:
 	///Updates the inner state of the command as well as the state of all dependent objects (channel, bus,...)
 	virtual void execute()=0;
 	///Assigns a value to the pointer referencing the array of next commands
-
-	
 	/**
 	\param iNextCommand Pointer to an array of pointers to the next commands
 	*/
@@ -94,7 +92,6 @@ public:
 	\return Pointer to the current transaction
 	*/
 	inline TMLTransaction* getCurrTransaction() const {return _currTransaction;}
-	
 	///Returns a pointer to the task which could be unblocked by the command
 	/**
 	\param iIndex Index of the task

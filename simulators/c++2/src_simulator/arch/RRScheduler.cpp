@@ -71,6 +71,7 @@ TMLTime RRScheduler::schedule(TMLTime iEndSchedule){
 	if (!aSameTaskFound){
 		//std::cout << _name << ": Second if\n";
 		for(WorkloadList::iterator i=_workloadList.begin(); i != _workloadList.end(); ++i){
+		
 			//std::cout << "Loop\n";
 			//if (*i!=aScheduledSource)
 			 (*i)->schedule(iEndSchedule);

@@ -536,7 +536,7 @@ void TMLTask::schedule2HTML(std::ofstream& myfile) const {
   myfile << SCHED_HTML_BOARD2 << std::endl;
   if ( _transactList.size() == 0 ) {
     myfile << "<h4>Task never executed</h4>" << std::endl;
-    myfile << SCHED_HTML_JS_CLEAR << std::endl;
+    myfile << SCHED_HTML_JS_TABLE_END << std::endl << SCHED_HTML_JS_CLEAR << std::endl;
   }
   else {
     //myfile << "<table>" << std::endl << "<tr>";
