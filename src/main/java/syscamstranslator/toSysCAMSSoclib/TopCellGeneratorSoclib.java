@@ -44,9 +44,11 @@
 /* authors: v1.0 Raja GATGOUT 2014
             v2.0 Daniela GENIUS, Julien HENON 2015 */
 
-package syscamstranslator.toSysCAMS;
+package syscamstranslator.toSysCAMSSoclib;
 
 import syscamstranslator.*;
+import syscamstranslator.toSysCAMS.TopCellGenerator;
+
 import java.io.*;
 import java.util.LinkedList;
 
