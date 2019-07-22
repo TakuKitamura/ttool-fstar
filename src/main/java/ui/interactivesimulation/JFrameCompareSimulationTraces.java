@@ -81,7 +81,7 @@ import ui.SimulationTrace;
  * @author Maysam ZOOR
  */
 
-@SuppressWarnings("serial")
+
 public class JFrameCompareSimulationTraces extends JFrame implements ActionListener, WindowListener {
 
 	private JButton browse, parse, difference, latencyDetails;

@@ -64,7 +64,7 @@ import javax.swing.event.ListSelectionListener;
  * 
  * @author Maysam ZOOR
  */
-@SuppressWarnings("serial")
+
 public class JFrameShowLatencyDetails extends JFrame {
 	private String[] columnNames = new String[3];
 	private Object[][] dataTrans1Run1;
