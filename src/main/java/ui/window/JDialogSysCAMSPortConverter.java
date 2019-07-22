@@ -268,7 +268,7 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 			if (port.getConvType().equals(listArrayTypeString.get(i))) {
 				typeComboBoxString.setSelectedIndex(i);
 			}
-			if (port.getConvType().equals("sc_uint") {
+			if (port.getConvType().equals("sc_uint")) {
 				typeComboBoxString.setSelectedIndex(3);
 			}
 		}

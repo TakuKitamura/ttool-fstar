@@ -77,17 +77,10 @@ public class TMLArchiTextSpecification {
     private String fpgaparameters[] = {"capacity", "byteDataSize", "mappingPenalty", "goIdleTime",
             "maxConsecutiveIdleCycles", "reconfigurationTime", "execiTime", "execcTime", "scheduling", "clockDivider"};
     private String linkparameters[] = {"bus", "node", "priority"};
-<<<<<<< HEAD
-    private String hwaparameters[] = {"byteDataSize", "execiTime", "execTime"};
-    private String busparameters[] = {"byteDataSize", "pipelineSize", "arbitration"};
-    private String bridgeparameters[] = {"bufferByteSize"};
-    private String memoryparameters[] = {"byteDataSize"};
-=======
     private String hwaparameters[] = {"byteDataSize", "execiTime", "execcTime", "clockDivider"};
     private String busparameters[] = {"byteDataSize", "pipelineSize", "arbitration", "clockDivider"};
     private String bridgeparameters[] = {"bufferByteSize", "clockDivider"};
     private String memoryparameters[] = {"byteDataSize", "clockDivider"};
->>>>>>> 6fa0b96ee3ece8fdea804a6a7e4ffe9704e4a8dd
     //  private String dmaparameters[] = {"byteDataSize", "nbOfChannels"};
 
 
@@ -648,7 +641,7 @@ public class TMLArchiTextSpecification {
                 if (node instanceof HwFPGA) {
                     HwFPGA fpga = (HwFPGA) node;
 
-                    if (!checkParameter("SET", _split, 2, 3, _lineNb)) {
+                    if (!checkParameter("SET", _split, 2, 13, _lineNb)) {
                         return -1;
                     }
 
@@ -899,6 +892,7 @@ public class TMLArchiTextSpecification {
     // Type 10: HWA parameter
     // Type 11: BRIDGE parameter
     // Type 12: MEMORY parameter
+    // Type 13: FPGA parameter
 
     public boolean checkParameter(String _inst, String[] _split, int _parameter, int _type, int _lineNb) {
         boolean err = false;
@@ -983,6 +977,12 @@ public class TMLArchiTextSpecification {
                         err = true;
                     }
                     break;
+                case 13:
+                    if (!isIncluded(_split[_parameter], fpgaparameters)) {
+                        err = true;
+                    }
+                    break;
+
             }
         } else {
             err = true;
