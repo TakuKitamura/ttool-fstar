@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<TURTLEGMODELING version="1.0beta">
+<TURTLEGMODELING version="1.0beta" ANIMATE_INTERACTIVE_SIMULATION="true" ACTIVATE_PENALTIES="false" UPDATE_INFORMATION_DIPLO_SIM="false" ANIMATE_WITH_INFO_DIPLO_SIM="true" OPEN_DIAG_DIPLO_SIM="false">
 
 <Modeling type="TML Component Design" nameTab="Application" tabs="TML Component Task Diagram$PrimitiveComp2$PrimitiveComp1$PrimitiveComp3$PrimitiveComp4$PrimitiveComp5$PrimitiveComp6" >
 <TMLComponentTaskDiagramPanel name="TML Component Task Diagram" minX="10" maxX="2500" minY="10" maxY="1500" channels="true" events="true" requests="true" zoom="1.0" >
@@ -78,7 +78,7 @@
 <TGConnectingPoint num="6" id="16" />
 <TGConnectingPoint num="7" id="17" />
 <extraparam>
-<Data isAttacker="No" Operation="" />
+<Data isAttacker="No" daemon="false" Operation="" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1203" id="7" >
@@ -131,7 +131,7 @@
 <TGConnectingPoint num="6" id="29" />
 <TGConnectingPoint num="7" id="30" />
 <extraparam>
-<Data isAttacker="No" Operation="" />
+<Data isAttacker="No" daemon="false" Operation="" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1203" id="20" >
@@ -203,7 +203,7 @@
 <TGConnectingPoint num="6" id="42" />
 <TGConnectingPoint num="7" id="43" />
 <extraparam>
-<Data isAttacker="No" Operation="" />
+<Data isAttacker="No" daemon="false" Operation="" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1203" id="33" >
@@ -256,7 +256,7 @@
 <TGConnectingPoint num="6" id="53" />
 <TGConnectingPoint num="7" id="54" />
 <extraparam>
-<Data isAttacker="No" Operation="" />
+<Data isAttacker="No" daemon="false" Operation="" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1203" id="46" >
@@ -292,7 +292,7 @@
 <TGConnectingPoint num="6" id="64" />
 <TGConnectingPoint num="7" id="65" />
 <extraparam>
-<Data isAttacker="No" Operation="" />
+<Data isAttacker="No" daemon="false" Operation="" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1203" id="57" >
@@ -328,7 +328,7 @@
 <TGConnectingPoint num="6" id="95" />
 <TGConnectingPoint num="7" id="96" />
 <extraparam>
-<Data isAttacker="No" Operation="" />
+<Data isAttacker="No" daemon="false" Operation="" />
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="1203" id="86" >

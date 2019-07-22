@@ -551,10 +551,16 @@ public class TMLChannel extends TMLCommunicationElement {
         s += "name=\"" + name + "\" ";
         if (isBasicChannel()) {
             s += "origintask=\"" + originTask.getName() + "\" ";
-            s += "originport=\"" + originPort.getName() + "\" ";
+            if (originPort != null) {
+                s += "originport=\"" + originPort.getName() + "\" ";
+            }
             s += "destinationtask=\"" + destinationTask.getName() + "\" ";
-            s += "destinationport=\"" + destinationPort.getName() + "\" ";
-            s += "dataFlowType=\"" + originPort.getDataFlowType() + "\" ";
+            if (destinationPort != null) {
+                s += "destinationport=\"" + destinationPort.getName() + "\" ";
+            }
+            if (originPort != null) {
+                s += "dataFlowType=\"" + originPort.getDataFlowType() + "\" ";
+            }
         }
         if (isAForkChannel()) {
             s += "origintask=\"" + originTasks.get(0).getName() + "\" ";
@@ -606,6 +612,7 @@ public class TMLChannel extends TMLCommunicationElement {
         }
         s += "size=\"" + size + "\" ";
         s += "max=\"" + max + "\" ";
+        s += "vc=\"" + vc + "\" ";
         s += " />\n";
         return s;
     }

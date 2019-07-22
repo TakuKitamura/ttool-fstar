@@ -598,6 +598,8 @@ public class GTURTLEModeling {
                 TMLTextSpecification<TGComponent> spec = new TMLTextSpecification<>(_title);
                 spec.toTextFormat(tmlm);        //TMLModeling
                 try {
+                    String XMLSpecTML = tmlm.toXML();
+                    FileUtils.saveFile(SpecConfigTTool.TMLCodeDirectory + "spec.xml", XMLSpecTML);
                     spec.saveFile(SpecConfigTTool.TMLCodeDirectory, "spec.tml");
                 } catch (Exception e) {
                     TraceManager.addError("File could not be saved: " + e.getMessage());

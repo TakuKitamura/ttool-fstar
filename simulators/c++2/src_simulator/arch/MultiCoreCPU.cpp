@@ -358,7 +358,7 @@ std::cout << "CPU:calcSTL: addtransaction of CPU " << _name << ": " << _nextTran
     }
     time++;
 
-    _simulatedTime=max(_simulatedTime,_endSchedule);
+    _simulatedTime=max(_simulatedTime,_nextTransaction->getEndTime());
     _overallTransNo++; //NEW!!!!!!!!
     _overallTransSize+=_nextTransaction->getOperationLength();  //NEW!!!!!!!!
     //std::cout << "lets crash execute\n";

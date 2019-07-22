@@ -68,7 +68,15 @@ public class HwNoC extends HwCommunicationNode  {
     }
 
     public String toXML() {
-        String s = "<ROUTER name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  bufferByteSize=\"" + bufferByteSize + "\" />\n";
+        String s = "<NOC name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  bufferByteSize=\"" + bufferByteSize + "\"";
+        s += " infos=\"";
+        String infos = "";
+        for (String elt: placementMap.keySet()) {
+            Point p = placementMap.get(elt);
+            infos += elt + "[" + p.getX() + "," + p.getY() + "] ; ";
+        }
+        s += infos + "\"";
+        s += "/>\n";
         return s;
     }
 

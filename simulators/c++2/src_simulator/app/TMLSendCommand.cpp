@@ -72,14 +72,14 @@ TMLCommand* TMLSendCommand::prepareNextTransaction(){
 
 std::string TMLSendCommand::toString() const{
 	std::ostringstream outp;
-	outp << "Send in " << TMLCommand::toString() << " " << _channel->toString();
+	outp << "Send in " << TMLCommand::toString() << " " << _channel->toString() << " params=" << lastParams;
 	return outp.str();
 }
 
 std::string TMLSendCommand::toShortString() const{
   //  std::cout << "TMLSendCommand::short string params:" << lastParams.str() << "\n";
 	std::ostringstream outp;
-	outp << _task->toString() << ": Send " << _channel->toString();
+	outp << _task->toString() << ": Send " << _channel->toString() << " params:" << lastParams;
 	return outp.str();
 }
 

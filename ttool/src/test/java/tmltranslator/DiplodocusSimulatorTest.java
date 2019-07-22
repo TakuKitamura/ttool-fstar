@@ -26,10 +26,10 @@ public class DiplodocusSimulatorTest extends AbstractUITest {
 
 
     final String [] MODELS = {"scp", "ssdf"};
-    final int [] NB_Of_STATES = {131, 1824};
-    final int [] NB_Of_TRANSTIONS = {130, 1823};
-    final int [] MIN_CYCLES = {57, 4106};
-    final int [] MAX_CYCLES = {82, 4106};
+    final int [] NB_Of_STATES = {177, 1824};
+    final int [] NB_Of_TRANSTIONS = {176, 1823};
+    final int [] MIN_CYCLES = {210, 4106};
+    final int [] MAX_CYCLES = {318, 4106};
 
 
     private String SIM_DIR;
@@ -50,7 +50,6 @@ public class DiplodocusSimulatorTest extends AbstractUITest {
     @Before
     public void setUp() throws Exception {
         SIM_DIR = getBaseResourcesDir() + "../../../../simulators/c++2/";
-
     }
 
 
@@ -182,11 +181,11 @@ public class DiplodocusSimulatorTest extends AbstractUITest {
             assertTrue(NB_Of_TRANSTIONS[i] == graph.getNbOfTransitions());
 
             // Min and max cycles
-            int minValue = graph.getMinValue("allCPUsTerminated");
+            int minValue = graph.getMinValue("allCPUsFPGAsTerminated");
             System.out.println("executing: minvalue " + minValue);
             assertTrue(MIN_CYCLES[i] == minValue);
 
-            int maxValue = graph.getMaxValue("allCPUsTerminated");
+            int maxValue = graph.getMaxValue("allCPUsFPGAsTerminated");
             System.out.println("executing: maxvalue " + maxValue);
             assertTrue(MAX_CYCLES[i] == maxValue);
 

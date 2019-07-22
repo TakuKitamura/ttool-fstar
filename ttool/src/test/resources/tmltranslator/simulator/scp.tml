@@ -1,6 +1,6 @@
 // TML Application - FORMAT 0.1
-// Application: /Users/ludovicapvrille/TTool/modeling/DIPLODOCUS/SmartCardProtocol.xml
-// Generated: Tue Jun 25 14:16:04 CEST 2019
+// Application: /Users/localapvrille/TToolgit/TTool/modeling/DIPLODOCUS/SmartCardProtocol.xml
+// Generated: Fri Jul 19 10:32:01 CEST 2019
 
 // Channels
 CHANNEL AppC__fromAtoT BRNBW 4 OUT AppC__Application IN AppC__TCPIP

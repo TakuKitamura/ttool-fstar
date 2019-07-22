@@ -76,6 +76,8 @@ import java.util.HashMap;
 import java.util.List;
 import myutil.TraceManager;
 
+import static myutil.FileUtils.saveFile;
+
 
 /**
  * Class JDialogNoCManagement
@@ -307,6 +309,22 @@ public class JDialogNoCManagement extends JDialog implements ActionListener, Lis
 
 
         TraceManager.addDev("Thread started");
+
+        outputText.append("\nGenerating XML With NoC\n");
+        String XML = map.toXML();
+        String dir = SpecConfigTTool.TMLCodeDirectory;
+        try {
+            saveFile(SpecConfigTTool.TMLCodeDirectory + "/WithNoC.xml", XML);
+        } catch (Exception e) {
+            outputText.append("\nException when generating XML file\n");
+            stopProcess();
+            return;
+        }
+
+        outputText.append("\nSpecification generated in " + dir + "/WithNoC.xml\n");
+
+
+
         outputText.append("\nPreparing model\n");
 
         int size = map.getTMLArchitecture().getSizeOfNoC();
@@ -359,8 +377,7 @@ public class JDialogNoCManagement extends JDialog implements ActionListener, Lis
         TMLMappingTextSpecification ts = new TMLMappingTextSpecification<>("noNoc");
         ts.toTextFormat(mapping);
 
-
-        String dir = SpecConfigTTool.TMLCodeDirectory;
+        dir = SpecConfigTTool.TMLCodeDirectory;
         try {
             ts.saveFile(SpecConfigTTool.TMLCodeDirectory, "NoNoC");
         } catch (Exception e) {
@@ -373,6 +390,18 @@ public class JDialogNoCManagement extends JDialog implements ActionListener, Lis
 
 
 
+        outputText.append("\nGenerating XML without NoC\n");
+        XML = mapping.toXML();
+        dir = SpecConfigTTool.TMLCodeDirectory;
+        try {
+            saveFile(SpecConfigTTool.TMLCodeDirectory + "/NoNoC.xml", XML);
+        } catch (Exception e) {
+            outputText.append("\nException when generating XML file\n");
+            stopProcess();
+            return;
+        }
+
+        outputText.append("\nSpecification generated in " + dir + "/NoNoC.xml\n");
 
 
 

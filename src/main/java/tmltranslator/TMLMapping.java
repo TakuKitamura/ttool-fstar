@@ -1696,7 +1696,8 @@ public class TMLMapping<E> {
     public String toXML() {
         String s = "<TMLMAPPING>\n";
         s += tmlm.toXML();
-        s += tmla.toXML();
+        s += tmla.toXML() + "\n";
+
         for (int i = 0; i < onnodes.size(); i++) {
             HwExecutionNode node = onnodes.get(i);
             TMLTask task = mappedtasks.get(i);
@@ -1704,6 +1705,7 @@ public class TMLMapping<E> {
         }
         for (int i = 0; i < oncommnodes.size(); i++) {
             HwCommunicationNode node = oncommnodes.get(i);
+
             TMLElement elt = mappedcommelts.get(i);
             s += "<COMMMAP node=\"" + node.getName() + "\" elt=\"" + elt.getName() + "\" />\n";
         }
