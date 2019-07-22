@@ -38,16 +38,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-<<<<<<< HEAD
 package syscamstranslator.toSysCAMS;
-=======
-/* this class produces the lines containing essentially the initial #includes; we include all potential components event if they are not used in the deployment diagram*/
-
-/* authors: v1.0 Raja GATGOUT 2014
-            v2.0 Daniela GENIUS, Julien HENON 2015 */
-
-package syscamstranslator.toSysCAMSSoclib;
->>>>>>> 6fa0b96ee3ece8fdea804a6a7e4ffe9704e4a8dd
 
 import java.util.LinkedList;
 
