@@ -9723,8 +9723,6 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     }
 
     public void compareSimulationTraces(SimulationTrace selectedST, boolean b) {
-		// TODO Auto-generated method stub
-		//System.out.println("Maysam : compare Function");
 		cSimTrace = new JFrameCompareSimulationTraces( this, "Compare Simulation simulation",selectedST);
 	       
 		cSimTrace.setIconImage(IconManager.img9);

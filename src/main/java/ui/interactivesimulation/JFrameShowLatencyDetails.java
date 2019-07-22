@@ -64,6 +64,7 @@ import javax.swing.event.ListSelectionListener;
  * 
  * @author Maysam ZOOR
  */
+
 public class JFrameShowLatencyDetails extends JFrame {
 	private String[] columnNames = new String[3];
 	private Object[][] dataTrans1Run1;
@@ -94,12 +95,8 @@ public class JFrameShowLatencyDetails extends JFrame {
 		return table22;
 	}
 
-	private JTable tableTrans1Run1, tableTrans1Run2, tableTrans2Run1, tableTrans2Run2;
-
 	public JFrameShowLatencyDetails(Vector<SimulationTransaction> transFile1, Vector<SimulationTransaction> transFile2,
 			Object selectedDevice1, Object selectedTrans1, Object selectedDevice2, Object selectedTrans2) {
-
-		// TODO Auto-generated constructor stub
 
 		super("Simulation Latency ");
 
@@ -108,18 +105,6 @@ public class JFrameShowLatencyDetails extends JFrame {
 		this.setBackground(Color.RED);
 		this.setLayout(myLayout);
 
-		// System.out.println("transFile1" + transFile1.size());
-		// System.out.println("transFile2" + transFile2.size());
-		// System.out.println("selectedDevice1: " + selectedDevice1);
-		// System.out.println("selectedTrans1 :" + selectedTrans1);
-		// System.out.println("selectedDevice2:" + selectedDevice2);
-		// System.out.println("selectedTrans2: " + selectedTrans2);
-
-//		int numRows = table.getRowCount();
-//		int numCols = table.getColumnCount();
-//		javax.swing.table.TableModel model = table.getModel();
-
-		// System.out.println("Value of data: ");
 		columnNames[0] = "transaction ";
 		columnNames[1] = "Start Time ";
 		columnNames[2] = "End Time ";
@@ -190,19 +175,12 @@ public class JFrameShowLatencyDetails extends JFrame {
 
 		}
 
-		// System.out.println("-----------" + num11 + "-------" + num21 + "---------" +
-		// num12 + "----------" + num22);
 		table11 = new JTable(dataTrans1Run1, columnNames);
 
 		table12 = new JTable(dataTrans1Run2, columnNames);
 		table21 = new JTable(dataTrans2Run1, columnNames);
 
 		table22 = new JTable(dataTrans2Run2, columnNames);
-
-		// JPanel table11Panel = new JPanel(new GridBagLayout()); // use FlowLayout
-		// table11Panel.add(table11);
-		// this.add(table11Panel);
-
 		table11.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table12.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table21.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -210,7 +188,6 @@ public class JFrameShowLatencyDetails extends JFrame {
 
 		table11.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
-				String selectedData = null;
 				int column = table11.getSelectedColumn();
 				int row = table11.getSelectedRow();
 				String value = table11.getModel().getValueAt(row, column).toString();
@@ -227,14 +204,13 @@ public class JFrameShowLatencyDetails extends JFrame {
 					int difference = Integer.parseInt(labEnd.getText()) - Integer.parseInt(labStart.getText());
 					labTotal.setText(Integer.toString(difference));
 				}
-				// System.out.println("Selected: " + selectedData);
+
 			}
 
 		});
 
 		table12.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
-				String selectedData = null;
 				int column = table12.getSelectedColumn();
 				int row = table12.getSelectedRow();
 				String value = table12.getModel().getValueAt(row, column).toString();
@@ -251,13 +227,13 @@ public class JFrameShowLatencyDetails extends JFrame {
 					int difference = Integer.parseInt(labEnd.getText()) - Integer.parseInt(labStart.getText());
 					labTotal.setText(Integer.toString(difference));
 				}
-				// System.out.println("Selected: " + selectedData);
+
 			}
 
 		});
 		table21.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
-				String selectedData = null;
+
 				int column = table21.getSelectedColumn();
 				int row = table21.getSelectedRow();
 				String value = table21.getModel().getValueAt(row, column).toString();
@@ -274,14 +250,13 @@ public class JFrameShowLatencyDetails extends JFrame {
 					int difference = Integer.parseInt(labEnd.getText()) - Integer.parseInt(labStart.getText());
 					labTotal.setText(Integer.toString(difference));
 				}
-				// System.out.println("Selected: " + selectedData);
 
 			}
 
 		});
 		table22.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
-				String selectedData = null;
+
 				int column = table22.getSelectedColumn();
 				int row = table22.getSelectedRow();
 				String value = table22.getModel().getValueAt(row, column).toString();
@@ -298,7 +273,7 @@ public class JFrameShowLatencyDetails extends JFrame {
 					int difference = Integer.parseInt(labEnd.getText()) - Integer.parseInt(labStart.getText());
 					labTotal.setText(Integer.toString(difference));
 				}
-				// System.out.println("Selected: " + selectedData);
+
 			}
 
 		});
@@ -326,18 +301,6 @@ public class JFrameShowLatencyDetails extends JFrame {
 		scrollPane22.setVisible(true);
 		scrollPane22.setBorder(new javax.swing.border.TitledBorder("Second Model: " + selectedTrans2.toString()));
 		add(scrollPane22);
-
-		/*
-		 * JPanel table12Panel = new JPanel(new GridBagLayout()); // use FlowLayout
-		 * table12Panel.add(table12); this.add(table12Panel);
-		 * 
-		 * JPanel table21Panel = new JPanel(new GridBagLayout()); // use FlowLayout
-		 * table21Panel.add(table21); this.add(table21Panel);
-		 * 
-		 * 
-		 * JPanel table22Panel = new JPanel(new GridBagLayout()); // use FlowLayout
-		 * table22Panel.add(table22); this.add(table22Panel);
-		 */
 
 		JPanel timePanel = new JPanel(new GridBagLayout()); // use FlowLayout
 		GridBagConstraints c = new GridBagConstraints();
@@ -405,31 +368,5 @@ public class JFrameShowLatencyDetails extends JFrame {
 		this.setVisible(true);
 
 	}
-
-	/*
-	 * public void actionPerformed(ActionEvent e) {
-	 * 
-	 * //System.out.println(e.getActionCommand()); if (e.getSource() ==
-	 * tableTrans1Run1) { //System.out.println("row clicked");
-	 * 
-	 * } }
-	 */
-	/*
-	 * public void valueChanged(ListSelectionEvent e) { ListSelectionModel lsm =
-	 * (ListSelectionModel)e.getSource();
-	 * 
-	 * if (!e.getValueIsAdjusting()) {
-	 * 
-	 * //System.out.println("value changed clicked" + e.getSource()); int column =
-	 * table11.getSelectedColumn(); int row = table11.getSelectedRow(); String value
-	 * = table11.getModel().getValueAt(row, column).toString();
-	 * System.out.println("value : " + value); labStart.setText(value);
-	 * labEnd.setText(value); labTotal.setText(value);
-	 * 
-	 * }
-	 * 
-	 * 
-	 * }
-	 */
 
 }

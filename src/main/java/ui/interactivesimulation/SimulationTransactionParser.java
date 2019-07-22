@@ -90,16 +90,11 @@ public class SimulationTransactionParser extends DefaultHandler {
 				}
 			}
 
-			// TraceManager.addDev("Command handled");
 			st.startTime = attributes.getValue("starttime");
 			st.endTime = attributes.getValue("endtime");
-			String taskId = attributes.getValue("id");
-
 			st.length = attributes.getValue("length");
 			st.virtualLength = attributes.getValue("virtuallength");
 			st.channelName = attributes.getValue("ch");
-
-			// initialize list
 
 			if (trans == null) {
 				trans = new Vector<SimulationTransaction>();
@@ -108,7 +103,6 @@ public class SimulationTransactionParser extends DefaultHandler {
 
 		}
 
-		// create the data container
 		data = new StringBuilder();
 
 	}
