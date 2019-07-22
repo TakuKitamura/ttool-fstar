@@ -38,7 +38,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-package syscamstranslator.toSysCAMS;
+package syscamstranslator.toSysCAMSSoclib;
 
 import java.util.LinkedList;
 

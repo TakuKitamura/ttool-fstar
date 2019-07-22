@@ -47,8 +47,6 @@
 package syscamstranslator.toSysCAMSSoclib;
 
 import syscamstranslator.*;
-import syscamstranslator.toSysCAMS.TopCellGenerator;
-
 import java.io.*;
 import java.util.LinkedList;
 
