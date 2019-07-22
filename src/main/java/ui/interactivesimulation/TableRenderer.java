@@ -9,7 +9,7 @@ import javax.swing.JTable;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableCellRenderer;
 
-
+@SuppressWarnings("serial")
 class TableRenderer extends DefaultTableCellRenderer {
 	private Vector<Object> allCommands = new Vector<Object>();
 	private Vector<Color> allColors = new Vector<Color>();

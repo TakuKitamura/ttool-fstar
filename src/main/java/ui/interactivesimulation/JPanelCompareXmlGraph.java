@@ -58,7 +58,7 @@ import javax.swing.table.TableColumnModel;
  * 
  * @author Maysam ZOOR
  */
-
+@SuppressWarnings("serial")
 public class JPanelCompareXmlGraph extends JPanel implements TableModelListener {
 
 	public static JTable table, tableUpdated;
