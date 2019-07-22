@@ -9,13 +9,18 @@ import javax.swing.JTable;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableCellRenderer;
 
-
 class TableRenderer extends DefaultTableCellRenderer {
+
+	private int row, col;
+
 	private Vector<Object> allCommands = new Vector<Object>();
 	private Vector<Color> allColors = new Vector<Color>();
 
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column) {
+
+		this.row = row;
+		this.col = column;
 
 		// Allow superclass to return rendering component.
 
@@ -28,7 +33,7 @@ class TableRenderer extends DefaultTableCellRenderer {
 
 		if (v == null) {
 			setForeground(UIManager.getColor("Table.foreground"));
-
+			setBackground(UIManager.getColor("Table.background"));
 			return;
 		} else if (!allCommands.contains(v)) {
 			allCommands.add(v);
@@ -56,7 +61,7 @@ class TableRenderer extends DefaultTableCellRenderer {
 			setBackground(allColors.get(allCommands.indexOf(v)));
 		} else {
 			setForeground(UIManager.getColor("Table.foreground"));
-
+			setBackground(UIManager.getColor("Table.background"));
 		}
 	}
 }
