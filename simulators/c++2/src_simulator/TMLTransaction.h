@@ -166,6 +166,7 @@ class TMLTransaction {
     return _startTime  + _length;
 #endif
   }
+
   ///Returns the idle panalty of the transaction
   /**
      \return Idle penalty
