@@ -295,7 +295,7 @@ public class JDialogSysCAMSClock extends JDialog implements ActionListener {
 		gridBag.setConstraints(dutyCycleTextField, constraints);
 		attributesBoxPanel.add(dutyCycleTextField);
 
-		listDutyCycleString = new String[4];
+		/*	listDutyCycleString = new String[4];
 		listDutyCycleString[0] = "s";
 		listDutyCycleString[1] = "ms";
 		listDutyCycleString[2] = "\u03BCs";
@@ -314,7 +314,7 @@ public class JDialogSysCAMSClock extends JDialog implements ActionListener {
 		constraints = new GridBagConstraints(2, 2, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 				new Insets(5, 10, 15, 10), 0, 0);
 		gridBag.setConstraints(dutyCycleComboBoxString, constraints);
-		attributesBoxPanel.add(dutyCycleComboBoxString);
+		attributesBoxPanel.add(dutyCycleComboBoxString); */
 		//
 
 			JLabel startTimeLabel = new JLabel("StartTime Tm : ");
@@ -369,12 +369,12 @@ public class JDialogSysCAMSClock extends JDialog implements ActionListener {
 		}
 		constraints = new GridBagConstraints(1, 4, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 				new Insets(5, 10, 15, 10), 0, 0);
-		gridBag.setConstraints(posFirstTextField, constraints);
-		attributesBoxPanel.add(posFirstTextField);
+		//gridBag.setConstraints(posFirstTextField, constraints);
+		//attributesBoxPanel.add(posFirstTextField);
 
 		listPosFirstString = new String[2];
-		listPosFirstString[0] = "no";
-		listPosFirstString[1] = "yes";
+		listPosFirstString[0] = "false";
+		listPosFirstString[1] = "true";
 	
 		posFirstComboBoxString = new JComboBox<String>(listPosFirstString);
 		if (clock.getUnit().equals("") || clock.getUnit().equals("no")) {
@@ -388,408 +388,10 @@ public class JDialogSysCAMSClock extends JDialog implements ActionListener {
 		gridBag.setConstraints(posFirstComboBoxString, constraints);
 		attributesBoxPanel.add(posFirstComboBoxString);
 		//
-		//
-		
-		
+			
 		attributesBox.add(attributesBoxPanel); 
 		attributesMainPanel.add(attributesBox, BorderLayout.NORTH); 
-		// --- Parameters ---//
-		/*	parametersMainPanel.setLayout(new BorderLayout());
-
-		Box parametersBox = Box.createVerticalBox();
-		parametersBox.setBorder(BorderFactory.createTitledBorder("Setting TDF clock parameters"));
-
-		JPanel clockPanel = new JPanel(new GridLayout(3, 1));
-
-		// Struct
-		JPanel structPanel = new JPanel();
-		structPanel.setFont(new Font("Helvetica", Font.PLAIN, 14));
-		GridBagLayout gridBagParameter = new GridBagLayout();
-		GridBagConstraints constraintParameter = new GridBagConstraints();
-		structPanel.setLayout(gridBagParameter);
-		TitledBorder border = new TitledBorder("Struct :");
-		border.setTitleJustification(TitledBorder.CENTER);
-		border.setTitlePosition(TitledBorder.TOP);
-		structPanel.setBorder(border);
-
-		JLabel nameParameterLabel = new JLabel("identifier");
-		constraintParameter = new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(5, 10, 5, 10), 0, 0);
-		gridBagParameter.setConstraints(nameParameterLabel, constraintParameter);
-		structPanel.add(nameParameterLabel);
-
-		nameStructTextField = new JTextField();
-		constraintParameter = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(5, 10, 5, 10), 0, 0);
-		gridBagParameter.setConstraints(nameStructTextField, constraintParameter);
-		structPanel.add(nameStructTextField);
-
-		JLabel egalLabel = new JLabel("=");
-		constraintParameter = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(5, 10, 5, 10), 0, 0);
-		gridBagParameter.setConstraints(egalLabel, constraintParameter);
-		structPanel.add(egalLabel);
-
-		JLabel valueParameterLabel = new JLabel("value");
-		constraintParameter = new GridBagConstraints(2, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(5, 10, 5, 10), 0, 0);
-		gridBagParameter.setConstraints(valueParameterLabel, constraintParameter);
-		structPanel.add(valueParameterLabel);
-
-		valueStructTextField = new JTextField();
-		constraintParameter = new GridBagConstraints(2, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(5, 10, 5, 10), 0, 0);
-		gridBagParameter.setConstraints(valueStructTextField, constraintParameter);
-		structPanel.add(valueStructTextField);
-
-		JLabel pointsLabel = new JLabel(":");
-		constraintParameter = new GridBagConstraints(3, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(5, 10, 5, 10), 0, 0);
-		gridBagParameter.setConstraints(pointsLabel, constraintParameter);
-		structPanel.add(pointsLabel);
-
-		JLabel constantLabel = new JLabel("const");
-		constraintParameter = new GridBagConstraints(4, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(5, 10, 5, 10), 0, 0);
-		gridBagParameter.setConstraints(constantLabel, constraintParameter);
-		structPanel.add(constantLabel);
-
-		constantStructRadioButton = new JRadioButton();
-		constantStructRadioButton.setActionCommand("Const");
-		constantStructRadioButton.setSelected(false);
-		constantStructRadioButton.addActionListener(this);
-		constraintParameter = new GridBagConstraints(4, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(5, 10, 5, 10), 0, 0);
-		gridBagParameter.setConstraints(constantStructRadioButton, constraintParameter);
-		structPanel.add(constantStructRadioButton);
-
-		JLabel typeParameterLabel = new JLabel("type");
-		constraintParameter = new GridBagConstraints(5, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(5, 10, 5, 10), 0, 0);
-		gridBagParameter.setConstraints(typeParameterLabel, constraintParameter);
-		structPanel.add(typeParameterLabel);
-
-		listTypeStructString = new String[6];
-		listTypeStructString[0] = "bool";
-		listTypeStructString[1] = "double";
-		listTypeStructString[2] = "float";
-		listTypeStructString[3] = "int";
-		listTypeStructString[4] = "long";
-		listTypeStructString[5] = "short";
-		typeStructComboBoxString = new JComboBox<String>(listTypeStructString);
-		typeStructComboBoxString.setSelectedIndex(0);
-		typeStructComboBoxString.addActionListener(this);
-		constraintParameter = new GridBagConstraints(5, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(5, 10, 5, 10), 0, 0);
-		gridBagParameter.setConstraints(typeStructComboBoxString, constraintParameter);
-		structPanel.add(typeStructComboBoxString);
-
-		JButton addModifyButton = new JButton("Add / Modify parameter");
-		addModifyButton.setActionCommand("Add_Modify_Struct");
-		addModifyButton.addActionListener(this);
-		constraintParameter = new GridBagConstraints(0, 2, 6, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(5, 10, 5, 10), 0, 0);
-		gridBagParameter.setConstraints(addModifyButton, constraintParameter);
-		structPanel.add(addModifyButton);
-
-		clockPanel.add(structPanel);
-
-		// Template
-		JPanel templatePanel = new JPanel();
-		templatePanel.setFont(new Font("Helvetica", Font.PLAIN, 14));
-		GridBagLayout templateGridBag = new GridBagLayout();
-		GridBagConstraints templateConstraint = new GridBagConstraints();
-		templatePanel.setLayout(templateGridBag);
-		TitledBorder templateBorder = new TitledBorder("Template :");
-		templateBorder.setTitleJustification(TitledBorder.CENTER);
-		templateBorder.setTitlePosition(TitledBorder.TOP);
-		templatePanel.setBorder(templateBorder);
-
-		JLabel nameTemplateLabel = new JLabel("identifier");
-		templateConstraint = new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(5, 10, 5, 10), 0, 0);
-		templateGridBag.setConstraints(nameTemplateLabel, templateConstraint);
-		templatePanel.add(nameTemplateLabel);
-
-		nameTemplateTextField = new JTextField(clock.getNameTemplate());
-		templateConstraint = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(5, 10, 5, 10), 0, 0);
-		templateGridBag.setConstraints(nameTemplateTextField, templateConstraint);
-		templatePanel.add(nameTemplateTextField);
-        
-        //CHANGES
-        JLabel egalTemplateLabel = new JLabel("=");
-		templateConstraint = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(5, 10, 5, 10), 0, 0);
-		templateGridBag.setConstraints(egalTemplateLabel, templateConstraint);
-		templatePanel.add(egalTemplateLabel);
-
-		JLabel valueTemplateLabel = new JLabel("value");
-		templateConstraint = new GridBagConstraints(2, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(5, 10, 5, 10), 0, 0);
-		templateGridBag.setConstraints(valueTemplateLabel, templateConstraint);
-		templatePanel.add(valueTemplateLabel);
-
-		valueTemplateTextField = new JTextField(clock.getValueTemplate());
-		templateConstraint = new GridBagConstraints(2, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(5, 10, 5, 10), 0, 0);
-		templateGridBag.setConstraints(valueTemplateTextField, templateConstraint);
-		templatePanel.add(valueTemplateTextField);
-        //CHANGES
-
-		JLabel pointsTemplateLabel = new JLabel(":");
-		templateConstraint = new GridBagConstraints(3, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(5, 10, 5, 10), 0, 0);
-		templateGridBag.setConstraints(pointsTemplateLabel, templateConstraint);
-		templatePanel.add(pointsTemplateLabel);
-
-		JLabel typeTemplateLabel = new JLabel("type");
-		templateConstraint = new GridBagConstraints(4, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(5, 10, 5, 10), 0, 0);
-		templateGridBag.setConstraints(typeTemplateLabel, templateConstraint);
-		templatePanel.add(typeTemplateLabel);
-
-		listTypeTemplateString = new String[1];
-		listTypeTemplateString[0] = "int";
-		typeTemplateComboBoxString = new JComboBox<String>(listTypeTemplateString);
-		if (clock.getTypeTemplate().equals("int") || clock.getTypeTemplate().equals("")) {
-			typeTemplateComboBoxString.setSelectedIndex(0);
-		}
-		typeTemplateComboBoxString.addActionListener(this);
-		templateConstraint = new GridBagConstraints(4, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(5, 10, 5, 10), 0, 0);
-		templateGridBag.setConstraints(typeTemplateComboBoxString, templateConstraint);
-		templatePanel.add(typeTemplateComboBoxString);
-
-		JButton OKButton = new JButton("OK");
-		OKButton.setActionCommand("OK");
-		OKButton.addActionListener(this);
-		templateConstraint = new GridBagConstraints(0, 2, 3, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(5, 10, 5, 10), 0, 0);
-		templateGridBag.setConstraints(OKButton, templateConstraint);
-		templatePanel.add(OKButton);
-
-		clockPanel.add(templatePanel);
-
-		// Typedef
-		JPanel typedefPanel = new JPanel();
-		typedefPanel.setFont(new Font("Helvetica", Font.PLAIN, 14));
-		GridBagLayout typedefGridBag = new GridBagLayout();
-		GridBagConstraints typedefConstraint = new GridBagConstraints();
-		typedefPanel.setLayout(typedefGridBag);
-		TitledBorder typedefBorder = new TitledBorder("Typedef :");
-		typedefBorder.setTitleJustification(TitledBorder.CENTER);
-		typedefBorder.setTitlePosition(TitledBorder.TOP);
-		typedefPanel.setBorder(typedefBorder);
-
-		JLabel nameTypedefLabel = new JLabel("identifier");
-		typedefConstraint = new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(5, 10, 5, 10), 0, 0);
-		typedefGridBag.setConstraints(nameTypedefLabel, typedefConstraint);
-		typedefPanel.add(nameTypedefLabel);
-
-		nameTypedefTextField = new JTextField();
-		if (clock.getListTypedef().isEmpty()) {
-			nameTypedefTextField.setEditable(false);
-		} else {
-			nameTypedefTextField.setEditable(true);
-		}
-		typedefConstraint = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(5, 10, 5, 10), 0, 0);
-		typedefGridBag.setConstraints(nameTypedefTextField, typedefConstraint);
-		typedefPanel.add(nameTypedefTextField);
-
-		JLabel pointsTypedefLabel = new JLabel(":");
-		typedefConstraint = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(5, 10, 5, 10), 0, 0);
-		typedefGridBag.setConstraints(pointsTypedefLabel, typedefConstraint);
-		typedefPanel.add(pointsTypedefLabel);
-
-		JLabel typeTypedefLabel = new JLabel("type");
-		typedefConstraint = new GridBagConstraints(2, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(5, 10, 5, 10), 0, 0);
-		typedefGridBag.setConstraints(typeTypedefLabel, typedefConstraint);
-		typedefPanel.add(typeTypedefLabel);
-
-		listTypeTypedefString = new String[1];
-		listTypeTypedefString[0] = "sc_dt::sc_int";
-		typeTypedefComboBoxString = new JComboBox<String>(listTypeTypedefString);
-		typeTypedefComboBoxString.setSelectedIndex(0);
-		if (clock.getListTypedef().isEmpty()) {
-			typeTypedefComboBoxString.setEnabled(false);
-		} else {
-			typeTypedefComboBoxString.setEnabled(true);
-		}
-		typeTypedefComboBoxString.addActionListener(this);
-		typedefConstraint = new GridBagConstraints(2, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(5, 10, 5, 10), 0, 0);
-		typedefGridBag.setConstraints(typeTypedefComboBoxString, typedefConstraint);
-		typedefPanel.add(typeTypedefComboBoxString);
-
-		addModifyTypedefButton = new JButton("Add / Modify typedef");
-		addModifyTypedefButton.setActionCommand("Add_Modify_Typedef");
-		addModifyTypedefButton.addActionListener(this);
-		if (clock.getListTypedef().isEmpty()) {
-			addModifyTypedefButton.setEnabled(false);
-		} else {
-			addModifyTypedefButton.setEnabled(true);
-		}
-		typedefConstraint = new GridBagConstraints(0, 2, 3, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(5, 10, 5, 10), 0, 0);
-		typedefGridBag.setConstraints(addModifyTypedefButton, typedefConstraint);
-		typedefPanel.add(addModifyTypedefButton);
-
-		clockPanel.add(typedefPanel);
-
-		parametersBox.add(clockPanel); 
-		parametersMainPanel.add(parametersBox, BorderLayout.WEST); 
-
-		Box managingParametersBox = Box.createVerticalBox();
-
-		JPanel managingParameterBoxPanel = new JPanel(new GridLayout(3, 1));
-		managingParameterBoxPanel.setFont(new Font("Helvetica", Font.PLAIN, 14));
-
-		JPanel listStructPanel = new JPanel();
-		TitledBorder listStructBorder = new TitledBorder("Managing struct :");
-		listStructBorder.setTitleJustification(TitledBorder.CENTER);
-		listStructBorder.setTitlePosition(TitledBorder.TOP);
-		listStructPanel.setBorder(listStructBorder);
-
-		structListModel = clock.getListStruct();
-		structList = new JList<String>(structListModel);
-		structList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		structList.setLayoutOrientation(JList.VERTICAL);
-		structList.setSelectedIndex(-1);
-		structList.setVisibleRowCount(5);
-		structList.addListSelectionListener(this);
-		JScrollPane scrollPane = new JScrollPane(structList);
-		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		scrollPane.setPreferredSize(new Dimension(300, 100));
-		listStructPanel.add(scrollPane);
-		managingParameterBoxPanel.add(listStructPanel);
-
-		JPanel listTypedefPanel = new JPanel();
-		TitledBorder listTypedefBorder = new TitledBorder("Managing typedef :");
-		listTypedefBorder.setTitleJustification(TitledBorder.CENTER);
-		listTypedefBorder.setTitlePosition(TitledBorder.TOP);
-		listTypedefPanel.setBorder(listTypedefBorder);
-
-		typedefListModel = clock.getListTypedef();
-		typedefList = new JList<String>(typedefListModel);
-		typedefList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		typedefList.setLayoutOrientation(JList.VERTICAL);
-		typedefList.setSelectedIndex(-1);
-		typedefList.setVisibleRowCount(5);
-		typedefList.addListSelectionListener(this);
-		JScrollPane typedefScrollPane = new JScrollPane(typedefList);
-		typedefScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		typedefScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		typedefScrollPane.setPreferredSize(new Dimension(300, 100));
-		listTypedefPanel.add(typedefScrollPane);
-		managingParameterBoxPanel.add(listTypedefPanel);
-
-		GridBagLayout buttonGridBag = new GridBagLayout();
-		GridBagConstraints buttonconstraints = new GridBagConstraints();
-		JPanel buttonPanel = new JPanel();
-		buttonPanel.setFont(new Font("Helvetica", Font.PLAIN, 14));
-		buttonPanel.setLayout(buttonGridBag);
-
-		upButton = new JButton("Up");
-		upButton.setActionCommand("Up");
-		upButton.setEnabled(false);
-		upButton.addActionListener(this);
-		buttonconstraints = new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(5, 10, 5, 10), 0, 0);
-		buttonGridBag.setConstraints(upButton, buttonconstraints);
-		buttonPanel.add(upButton);
-
-		downButton = new JButton("Down");
-		downButton.setActionCommand("Down");
-		downButton.setEnabled(false);
-		downButton.addActionListener(this);
-		buttonconstraints = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(5, 10, 5, 10), 0, 0);
-		buttonGridBag.setConstraints(downButton, buttonconstraints);
-		buttonPanel.add(downButton);
-
-		removeButton = new JButton("Remove parameter");
-		removeButton.setActionCommand("Remove");
-		removeButton.setEnabled(false);
-		removeButton.addActionListener(this);
-		buttonconstraints = new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-				new Insets(5, 10, 15, 10), 0, 0);
-		buttonGridBag.setConstraints(removeButton, buttonconstraints);
-		buttonPanel.add(removeButton);
-
-		managingParameterBoxPanel.add(buttonPanel);
-
-		managingParametersBox.add(managingParameterBoxPanel); 
-		parametersMainPanel.add(managingParametersBox, BorderLayout.EAST); 
-
-		// --- ProcessCode ---//
-		processMainPanel.setLayout(new BorderLayout());
-
-		Box codeBox = Box.createVerticalBox();
-		codeBox.setBorder(BorderFactory.createTitledBorder("Behavior function of TDF clock"));
-
-		JPanel codeBoxPanel = new JPanel(new BorderLayout());
-
-		StringBuffer stringbuf = encode(clock.getProcessCode());
-		String beginString = stringbuf.toString();
-		finalString = beginString.replaceAll("\t}", "}");
-
-		processCodeTextArea = new JTextArea(finalString);
-		processCodeTextArea.setSize(100, 100);
-		processCodeTextArea.setTabSize(2);
-
-		processCodeTextArea.setFont(new Font("Arial", Font.PLAIN, 16));
-		processCodeTextArea.setLineWrap(true);
-		processCodeTextArea.setWrapStyleWord(true);
-
-		JScrollPane processScrollPane = new JScrollPane(processCodeTextArea);
-		processScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		processScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		processScrollPane.setPreferredSize(new Dimension(200, 300));
-		processScrollPane.setBorder(new EmptyBorder(15, 10, 15, 10));
-
-		codeBoxPanel.add(processScrollPane, BorderLayout.SOUTH);
-
-		codeBox.add(codeBoxPanel);
-		processMainPanel.add(codeBox, BorderLayout.PAGE_START);
-        
-        // --- ContructorCode --- //
-        contructorMainPanel.setLayout(new BorderLayout());
-
-		Box codeBox2 = Box.createVerticalBox();
-		codeBox2.setBorder(BorderFactory.createTitledBorder("Contructor code of TDF clock"));
-
-		JPanel codeBoxPanel2 = new JPanel(new BorderLayout());
-        
-        //StringBuffer stringbuf2 = encode(clock.getConstructorCode());
-		//String beginString2 = stringbuf2.toString();
-		//finalString = beginString2.replaceAll("\t}", "}");
-        finalString = clock.getConstructorCode();
-
-		constructorCodeTextArea = new JTextArea(finalString);
-		constructorCodeTextArea.setSize(100, 100);
-		constructorCodeTextArea.setTabSize(2);
-
-		constructorCodeTextArea.setFont(new Font("Arial", Font.PLAIN, 16));
-		constructorCodeTextArea.setLineWrap(true);
-		constructorCodeTextArea.setWrapStyleWord(true);
-
-		JScrollPane constructorScrollPane = new JScrollPane(constructorCodeTextArea);
-		constructorScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		constructorScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		constructorScrollPane.setPreferredSize(new Dimension(200, 300));
-		constructorScrollPane.setBorder(new EmptyBorder(15, 10, 15, 10));
-
-		codeBoxPanel2.add(constructorScrollPane, BorderLayout.SOUTH);
-
-		codeBox2.add(codeBoxPanel2);
-		contructorMainPanel.add(codeBox2, BorderLayout.PAGE_START);
-		*/
+	
 		// --- Button --- //
 		JPanel downPanel = new JPanel(new FlowLayout());
 
@@ -815,11 +417,14 @@ public class JDialogSysCAMSClock extends JDialog implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 	    clock.setName(nameTextField.getText());		
-	    // clock.setFrequency(frequencyTextField.getText());
-	    //clock.setDutyCycle(dutyCycleTextField.getText());
-	    //clock.setStartTime(startTimeTextField.getText());
-	    clock.setPosFirst((boolean)posFirstComboBoxString.getSelectedItem()); //ToDo boolean
-	    clock.setUnit((String) unitComboBoxString.getSelectedItem());
+	 	    
+	    if(posFirstComboBoxString.getSelectedIndex()==0){
+		clock.setPosFirst(false);
+	    }
+	    else{
+		clock.setPosFirst(true);
+	    }
+	    //	    clock.setUnit((String) unitComboBoxString.getSelectedItem()); ToDo
 
 
             if ("Save_Close".equals(e.getActionCommand())) {
@@ -858,11 +463,11 @@ public class JDialogSysCAMSClock extends JDialog implements ActionListener {
 				}
 				if (dutyCycleValueInteger == false) {
 					clock.setDutyCycle(Double.parseDouble(dutyCycleTextField.getText()));
-					clock.setUnit((String) dutyCycleComboBoxString.getSelectedItem());
+					//clock.setUnit((String) dutyCycleComboBoxString.getSelectedItem());
 				}
 			} else {
 				clock.setDutyCycle(-1);
-				clock.setUnit("");
+				//clock.setUnit("");
 			}
 
 				if (!(startTimeTextField.getText().isEmpty())) {
@@ -876,34 +481,34 @@ public class JDialogSysCAMSClock extends JDialog implements ActionListener {
 							JOptionPane.WARNING_MESSAGE);
 					startTimeValueInteger = true;
 				}
-				if (startTimeValueInteger == false) {
+					if (startTimeValueInteger == false) {
 					clock.setStartTime(Double.parseDouble(startTimeTextField.getText()));
 					clock.setUnit((String) startTimeComboBoxString.getSelectedItem());
 				}
 			} else {
 				clock.setStartTime(-1);
-				clock.setUnit("");
-			}	
+				clock.setUnitStartTime("");
+				}	
 
 				//clock.setProcessCode(processCodeTextArea.getText());
 			// clock.setConstructorCode(constructorCodeTextArea.getText());
 			clock.setListStruct(structListModel);
-			clock.setNameTemplate(nameTemplateTextField.getText());
-			clock.setTypeTemplate((String) typeTemplateComboBoxString.getSelectedItem());
-            clock.setValueTemplate(valueTemplateTextField.getText());
-			clock.setListTypedef(typedefListModel);
+			//clock.setNameTemplate(nameTemplateTextField.getText());
+			//clock.setTypeTemplate((String) typeTemplateComboBoxString.getSelectedItem());
+			//clock.setValueTemplate(valueTemplateTextField.getText());
+			//clock.setListTypedef(typedefListModel);
 
 			this.dispose();
 		}
 
 	    
-	    /*	if ("Save_Close".equals(e.getActionCommand())) {
+	    	if ("Save_Close".equals(e.getActionCommand())) {
 			clock.setValue(new String(nameTextField.getText()));
 			this.dispose();
-		}*
+		}
 
 		if ("Cancel".equals(e.getActionCommand())) {
 			this.dispose();
-			}*/
+			}
 	}
 }

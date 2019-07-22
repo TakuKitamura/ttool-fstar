@@ -268,6 +268,9 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 			if (port.getConvType().equals(listArrayTypeString.get(i))) {
 				typeComboBoxString.setSelectedIndex(i);
 			}
+			if (port.getConvType().equals("sc_uint") {
+				typeComboBoxString.setSelectedIndex(3);
+			}
 		}
 		typeComboBoxString.addActionListener(this);
 		constraints = new GridBagConstraints(1, 5, 2, 1, 1.0, 1.0,
@@ -275,6 +278,7 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 				GridBagConstraints.BOTH,
 				new Insets(5, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(typeComboBoxString, constraints);
+		//	System.out.println("@@@@@ Converter port type " +typeComboBoxString);
 		boxPanel.add(typeComboBoxString); 
 
 		JLabel orginLabel = new JLabel("Origin : ");
@@ -377,12 +381,12 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 							JOptionPane.WARNING_MESSAGE);
 					nbitsValueInteger = true;
 				}
-				/*	if (nbitsValueInteger == false) {
+				//if (nbitsValueInteger == false) {
 					port.setNbits(Integer.parseInt(nbitsTextField.getText()));
-				}
-			} else {
-				port.setNbits(-1);
-				}*/
+					//}
+					//	} else {
+					//	port.setNbits(-1);
+					//	}
 
 			}
 
@@ -404,13 +408,21 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 				port.setDelay(-1);
 			}
 			
-			if(typeComboBoxString.getSelectedItem()=="sc_uint"){
-				port.setConvType("sc_uint<"+nbitsTextField.getText()+">");
-			}		
-			else{
+			if(typeComboBoxString.getSelectedItem()=="sc_uint<N>"){
+			 port.setConvType((String)"sc_uint<"+nbitsTextField.getText()+"> ");
+				     port.setConvType((String)"sc_uint");
+				     port.setNbits(Integer.parseInt(nbitsTextField.getText()));
+				     // System.out.println("@@@@@@@@@"+port.getConvType());
+				     //     System.out.println("@@@@@@@@@"+port.getNbits());
+					
+				}		
+				else{
 			port.setConvType((String) typeComboBoxString.getSelectedItem());
-			// port.setTime((String) periodComboBoxString.getSelectedItem());
-			}
+			port.setNbits(Integer.parseInt(nbitsTextField.getText()));
+			//System.out.println("@@@@@@@@@"+port.getConvType());
+			//System.out.println("@@@@@@@@@"+port.getNbits());
+			port.setTime((String) periodComboBoxString.getSelectedItem());
+				}
 		
 			port.setTime((String) periodComboBoxString.getSelectedItem());
 

@@ -87,15 +87,15 @@ public class ClusterCodeSoclib {
                 if ( !((connectors.get(i).get_p1().getComponent() instanceof SysCAMSTPortDE && ((SysCAMSTPortDE) connectors.get(i).get_p1().getComponent()).getBlockGPIO2VCI() != null) 
                 || (connectors.get(i).get_p2().getComponent() instanceof SysCAMSTPortDE && ((SysCAMSTPortDE) connectors.get(i).get_p2().getComponent()).getBlockGPIO2VCI() != null)) ) {
                     if (connectors.get(i).get_p1().getComponent() instanceof SysCAMSTPortTDF) {
-                        corpsCluster = corpsCluster + "\tsca_tdf::sca_signal<" + ((SysCAMSTPortTDF) connectors.get(i).get_p1().getComponent()).getTDFType() + "> " 
+                        corpsCluster = corpsCluster + "\tsca_tdf::sca_signal<" + ((SysCAMSTPortTDF) connectors.get(i).get_p1().getComponent()).getTDFType() + " > " 
                         + "sig_" + nb_con + ";" + CR;
                         //nb_con++;
                     } else if (connectors.get(i).get_p1().getComponent() instanceof SysCAMSTPortConverter) {
-                        corpsCluster = corpsCluster + "\tsc_core::sc_signal<" + ((SysCAMSTPortConverter) connectors.get(i).get_p1().getComponent()).getConvType() + "> " 
+                        corpsCluster = corpsCluster + "\tsc_core::sc_signal<" + ((SysCAMSTPortConverter) connectors.get(i).get_p1().getComponent()).getConvType() + " > " 
                         + "sig_" + nb_con + ";" + CR;
                         //nb_con++;
                     } else if (connectors.get(i).get_p1().getComponent() instanceof SysCAMSTPortDE) {
-                        corpsCluster = corpsCluster + "\tsc_core::sc_signal<" + ((SysCAMSTPortDE) connectors.get(i).get_p1().getComponent()).getDEType() + "> " 
+                        corpsCluster = corpsCluster + "\tsc_core::sc_signal<" + ((SysCAMSTPortDE) connectors.get(i).get_p1().getComponent()).getDEType() + " > " 
                         + "sig_" + nb_con + ";" + CR;
                         //nb_con++;
                     }

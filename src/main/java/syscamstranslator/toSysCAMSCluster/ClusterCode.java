@@ -79,6 +79,7 @@ public class ClusterCode {
 
 
 			for (SysCAMSTClock t : clock) {
+			    System.out.println("Cluster clock");
 			    corpsCluster = corpsCluster + "\t  sc_clock " + t.getName() + " (\"" + t.getName() + "\"," + t.getFrequency()+","+ t.getUnit()+","+ t.getDutyCycle()+","+ t.getStartTime()+","+ t.getUnit()+","+ t.getPosFirst()+");" + CR;
 			}
 			//ToDo 9.7.2019: add lines for reading (several) clock ports and sensitivity lists

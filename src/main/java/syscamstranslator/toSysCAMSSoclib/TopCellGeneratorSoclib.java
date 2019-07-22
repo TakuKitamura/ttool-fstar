@@ -56,6 +56,8 @@ import java.util.LinkedList;
  * Creation: 14/05/2018
  * @version 1.0 14/05/2018
  * @author Irina Kit Yan LEE
+ * @version 1.1 12/07/2019
+ * @author Irina Kit Yan LEE, Daniela Genius
 */
 
 public class TopCellGeneratorSoclib {
@@ -106,11 +108,7 @@ public class TopCellGeneratorSoclib {
 		try {
 			// Save file .cpp
 			System.err.println(path + GENERATED_PATH1 + cluster.getClusterName() + "_tdf.h");
-			System.err.println(path + cluster.getClusterName() + "_tdf.h");
-		
-			if(standalone==true)
-			    fw = new FileWriter(path + cluster.getClusterName() + "_tdf.h");
-			else
+			System.err.println(path + cluster.getClusterName() + "_tdf.h");				
 			    fw = new FileWriter(path + GENERATED_PATH1 + "/" + cluster.getClusterName() + "_tdf.h");
 			top = generateTopCell(cluster, connectors);
 			fw.write(top);
@@ -132,20 +130,13 @@ public class TopCellGeneratorSoclib {
 		for (SysCAMSTBlockTDF t : tdf) {
 			try {
 				System.err.println(path + GENERATED_PATH2 + t.getName() + "_tdf.h");
-				System.err.println(path + t.getName() + "_tdf.h");//DG
-			
-				if(standalone==true){
-				    //System.out.println("@@@@@TDF Soclib version standalone");
-				    fw = new FileWriter(path + t.getName() + "_tdf.h");}
-				else
+				System.err.println(path + t.getName() + "_tdf.h");						
 				    fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + "_tdf.h");
 				    
 				headerTDF = HeaderSoclib.getPrimitiveHeaderTDF(t);
 				fw.write(headerTDF);
 			
-				codeTDF = PrimitiveCodeSoclib.getPrimitiveCodeTDF(t);
-				//	if(standalone==false)
-				//   codeTDF = codeTDF + CR + "};" + CR2 + "#endif"+CR;//DG				
+				codeTDF = PrimitiveCodeSoclib.getPrimitiveCodeTDF(t);					
 				fw.write(codeTDF);
 			
 				fw.close();
@@ -156,19 +147,12 @@ public class TopCellGeneratorSoclib {
 		}
 		for (SysCAMSTBlockDE t : de) {
 			try {
-				System.err.println(path + GENERATED_PATH2 + t.getName() + "_tdf.h");
-			
-				if(standalone==true){
-				    //System.out.println("@@@@@DE Soclib version standalone");
-				    fw = new FileWriter(path + t.getName() + "_tdf.h");}
-				else
-				    fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + "_tdf.h"); 
+				System.err.println(path + GENERATED_PATH2 + t.getName() + "_tdf.h");			
+				fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + "_tdf.h"); 
 				headerDE = HeaderSoclib.getPrimitiveHeaderDE(t);
 				fw.write(headerDE);
 			
-				codeDE = PrimitiveCodeSoclib.getPrimitiveCodeDE(t);
-				//if(standalone==false)
-				//   codeDE = codeDE + CR + "};" + CR2 + "#endif" +CR;
+				codeDE = PrimitiveCodeSoclib.getPrimitiveCodeDE(t);			
 				fw.write(codeDE);
 				fw.close();
 			
