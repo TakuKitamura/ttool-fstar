@@ -70,8 +70,8 @@ public class DefaultText {
     private static StringBuffer makeAbout() {
         StringBuffer sb = new StringBuffer();
         sb.append("TTool version " + getFullVersion() + "\n");
-        sb.append("Copyright IMT - Telecom ParisTech / Ludovic Apvrille \n");
-        sb.append("\nContact: ludovic.apvrille@telecom-paristech.fr\n");
+        sb.append("Copyright IMT - Telecom Paris / Ludovic Apvrille \n");
+        sb.append("\nContact: ludovic.apvrille@telecom-paris.fr\n");
         sb.append("\nProgrammers\n\tTelecom ParisTech: Ludovic Apvrille, Dominique Blouin, Fabien Tessier, \n\tDaniel Knorreck, Florian Lugou, Letitia Li\n");
         sb.append("\n\tNokia: Andrea Enrici\n");
         sb.append("\n\tLIP6: Daniela Genius\n");

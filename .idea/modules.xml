@@ -2,18 +2,25 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/graphminimize/src/main/graphminimize.iml" filepath="$PROJECT_DIR$/graphminimize/src/main/graphminimize.iml" />
-      <module fileurl="file://$PROJECT_DIR$/graphshow/src/main/graphshow.iml" filepath="$PROJECT_DIR$/graphshow/src/main/graphshow.iml" />
-      <module fileurl="file://$PROJECT_DIR$/launcher/src/main/launcher.iml" filepath="$PROJECT_DIR$/launcher/src/main/launcher.iml" />
-      <module fileurl="file://$PROJECT_DIR$/simulationcontrol/src/main/remotesimulator.iml" filepath="$PROJECT_DIR$/simulationcontrol/src/main/remotesimulator.iml" />
-      <module fileurl="file://$PROJECT_DIR$/rundse/src/main/rundse.iml" filepath="$PROJECT_DIR$/rundse/src/main/rundse.iml" />
-      <module fileurl="file://$PROJECT_DIR$/src/main/shared.iml" filepath="$PROJECT_DIR$/src/main/shared.iml" />
-      <module fileurl="file://$PROJECT_DIR$/tiftranslator/src/main/tiftranslator.iml" filepath="$PROJECT_DIR$/tiftranslator/src/main/tiftranslator.iml" />
-      <module fileurl="file://$PROJECT_DIR$/tmltranslator/src/main/tmltranslator.iml" filepath="$PROJECT_DIR$/tmltranslator/src/main/tmltranslator.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ttool/src/main/ttool.iml" filepath="$PROJECT_DIR$/ttool/src/main/ttool.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ttool-cli/ttool-cli.iml" filepath="$PROJECT_DIR$/ttool-cli/ttool-cli.iml" />
-      <module fileurl="file://$PROJECT_DIR$/webcrawler/client/src/main/webcrawler-client.iml" filepath="$PROJECT_DIR$/webcrawler/client/src/main/webcrawler-client.iml" />
-      <module fileurl="file://$PROJECT_DIR$/webcrawler/server/src/main/webcrawler-server.iml" filepath="$PROJECT_DIR$/webcrawler/server/src/main/webcrawler-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TTool.iml" filepath="$PROJECT_DIR$/TTool.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android/android.iml" filepath="$PROJECT_DIR$/android/android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/executablecode/executablecode.iml" filepath="$PROJECT_DIR$/executablecode/executablecode.iml" />
+      <module fileurl="file://$PROJECT_DIR$/extra/extra.iml" filepath="$PROJECT_DIR$/extra/extra.iml" />
+      <module fileurl="file://$PROJECT_DIR$/graphminimize/src/main/main.iml" filepath="$PROJECT_DIR$/graphminimize/src/main/main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/launcher/src/main/main1.iml" filepath="$PROJECT_DIR$/launcher/src/main/main1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/webcrawler/client/src/main/main10.iml" filepath="$PROJECT_DIR$/webcrawler/client/src/main/main10.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jttool/src/main/main11.iml" filepath="$PROJECT_DIR$/jttool/src/main/main11.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tmltranslator/src/main/main12.iml" filepath="$PROJECT_DIR$/tmltranslator/src/main/main12.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rundse/src/main/main2.iml" filepath="$PROJECT_DIR$/rundse/src/main/main2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tiftranslator/src/main/main3.iml" filepath="$PROJECT_DIR$/tiftranslator/src/main/main3.iml" />
+      <module fileurl="file://$PROJECT_DIR$/src/main/main4.iml" filepath="$PROJECT_DIR$/src/main/main4.iml" />
+      <module fileurl="file://$PROJECT_DIR$/graphshow/src/main/main5.iml" filepath="$PROJECT_DIR$/graphshow/src/main/main5.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ttool-cli/src/main/main6.iml" filepath="$PROJECT_DIR$/ttool-cli/src/main/main6.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ttool/src/main/main7.iml" filepath="$PROJECT_DIR$/ttool/src/main/main7.iml" />
+      <module fileurl="file://$PROJECT_DIR$/simulationcontrol/src/main/main8.iml" filepath="$PROJECT_DIR$/simulationcontrol/src/main/main8.iml" />
+      <module fileurl="file://$PROJECT_DIR$/webcrawler/server/src/main/main9.iml" filepath="$PROJECT_DIR$/webcrawler/server/src/main/main9.iml" />
+      <module fileurl="file://$PROJECT_DIR$/plugins/plugins.iml" filepath="$PROJECT_DIR$/plugins/plugins.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ttool/src/test/test.iml" filepath="$PROJECT_DIR$/ttool/src/test/test.iml" />
     </modules>
   </component>
 </project>

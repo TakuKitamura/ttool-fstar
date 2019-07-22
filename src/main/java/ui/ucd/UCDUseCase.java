@@ -80,14 +80,25 @@ public class UCDUseCase extends TGCScalableWithoutInternalComponent {
         connectingPoint = new TGConnectingPoint[nbConnectingPoint];
         while(index < 16) {
             connectingPoint[index] = new TGConnectingPointUCD(this, 0, 0, true, true, 0.5, 0.0);
-            index ++;
+            index++;
             connectingPoint[index] = new TGConnectingPointUCD(this, 0, 0, true, true, 0.0, 0.5);
-            index ++;
+            index++;
             connectingPoint[index] = new TGConnectingPointUCD(this, 0, 0, true, true, 1.0, 0.5);
-            index ++;
+            index++;
             connectingPoint[index] = new TGConnectingPointUCD(this, 0, 0, true, true, 0.5, 1.0);
-            index ++;
+            index++;
+
+            //while(index < 16) {
+            connectingPoint[index] = new TGConnectingPointUCD(this, 0, 0, true, true, 0.25, 0.06);
+            index++;
+            connectingPoint[index] = new TGConnectingPointUCD(this, 0, 0, true, true, 0.25, 0.94);
+            index++;
+            connectingPoint[index] = new TGConnectingPointUCD(this, 0, 0, true, true, 0.75, 0.06);
+            index++;
+            connectingPoint[index] = new TGConnectingPointUCD(this, 0, 0, true, true, 0.75, 0.94);
+            index++;
         }
+       // }
         addTGConnectingPointsComment();
            
         moveable = true;
