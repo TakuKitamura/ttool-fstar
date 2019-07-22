@@ -12,7 +12,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 class TableRenderer extends DefaultTableCellRenderer {
 
 	private int row, col;
-
+	
 	private Vector<Object> allCommands = new Vector<Object>();
 	private Vector<Color> allColors = new Vector<Color>();
 
