@@ -77,22 +77,22 @@ public class TopCellGeneratorSoclib {
 		if (c == null) {
 			System.out.println("***Warning: require at least one cluster***");
 		}
-		if (TopCellGenerator.syscams.getNbBlockTDF() == 0) {
+		if (TopCellGeneratorSoclib.syscams.getNbBlockTDF() == 0) {
 			System.out.println("***Warning: require at least one TDF block***");
 		}
-		if (TopCellGenerator.syscams.getNbPortTDF() == 0) {
+		if (TopCellGeneratorSoclib.syscams.getNbPortTDF() == 0) {
 			System.out.println("***Warning: require at least one TDF port***");
 		}
-		if (TopCellGenerator.syscams.getNbBlockDE() == 0) {
+		if (TopCellGeneratorSoclib.syscams.getNbBlockDE() == 0) {
 			System.out.println("***Warning: require at least one DE block***");
 		}
-		if (TopCellGenerator.syscams.getNbPortDE() == 0) {
+		if (TopCellGeneratorSoclib.syscams.getNbPortDE() == 0) {
 			System.out.println("***Warning: require at least one DE port***");
 		}
-		if (TopCellGenerator.syscams.getNbPortConverter() == 0) {
+		if (TopCellGeneratorSoclib.syscams.getNbPortConverter() == 0) {
 			System.out.println("***Warning: require at least one converter port***");
 		}
-		if (TopCellGenerator.syscams.getNbConnectorCluster() == 0) {
+		if (TopCellGeneratorSoclib.syscams.getNbConnectorCluster() == 0) {
 			System.out.println("***Warning: require at least one connector***");
 		}
 		String top = HeaderSoclib.getClusterHeader(c) + ClusterCodeSoclib.getClusterCode(c, connectors);
@@ -100,8 +100,8 @@ public class TopCellGeneratorSoclib {
 	}
 
     public void saveFile(String path, Boolean standalone) {
-		SysCAMSTCluster cluster = TopCellGenerator.syscams.getCluster();
-		LinkedList<SysCAMSTConnector> connectors = TopCellGenerator.syscams.getAllConnectorCluster();
+		SysCAMSTCluster cluster = TopCellGeneratorSoclib.syscams.getCluster();
+		LinkedList<SysCAMSTConnector> connectors = TopCellGeneratorSoclib.syscams.getAllConnectorCluster();
 		FileWriter fw;
 		String top;
 
