@@ -6943,10 +6943,10 @@ the smart card and the terminal
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="1606" >
 <father id="1631" num="0" />
-<cdparam x="49" y="276" />
-<sizeparam width="172" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="56" y="276" />
+<sizeparam width="163" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="-7" minY="0" maxY="86" />
+<cdrectangleparam minX="0" maxX="2" minY="0" maxY="86" />
 <infoparam name="TGComponent" value="AppC::InterfaceDevice" />
 <TGConnectingPoint num="0" id="1598" />
 <TGConnectingPoint num="1" id="1599" />
@@ -6999,9 +6999,9 @@ the smart card and the terminal
 <SUBCOMPONENT type="1101" id="1640" >
 <father id="1683" num="0" />
 <cdparam x="387" y="123" />
-<sizeparam width="141" height="37" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="136" height="37" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="131" minY="0" maxY="124" />
+<cdrectangleparam minX="0" maxX="136" minY="0" maxY="124" />
 <infoparam name="TGComponent" value="AppC::SmartCard" />
 <TGConnectingPoint num="0" id="1632" />
 <TGConnectingPoint num="1" id="1633" />
@@ -7018,9 +7018,9 @@ the smart card and the terminal
 <SUBCOMPONENT type="1101" id="1649" >
 <father id="1683" num="1" />
 <cdparam x="288" y="169" />
-<sizeparam width="144" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="139" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="128" minY="0" maxY="121" />
+<cdrectangleparam minX="0" maxX="133" minY="0" maxY="121" />
 <infoparam name="TGComponent" value="AppC::Application" />
 <TGConnectingPoint num="0" id="1641" />
 <TGConnectingPoint num="1" id="1642" />
@@ -7037,9 +7037,9 @@ the smart card and the terminal
 <SUBCOMPONENT type="1101" id="1658" >
 <father id="1683" num="2" />
 <cdparam x="272" y="94" />
-<sizeparam width="109" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="108" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="163" minY="0" maxY="121" />
+<cdrectangleparam minX="0" maxX="164" minY="0" maxY="121" />
 <infoparam name="TGComponent" value="AppC::TCPIP" />
 <TGConnectingPoint num="0" id="1650" />
 <TGConnectingPoint num="1" id="1651" />
@@ -7276,10 +7276,10 @@ the smart card and the terminal
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="1780" >
 <father id="1805" num="0" />
-<cdparam x="49" y="281" />
-<sizeparam width="172" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="56" y="281" />
+<sizeparam width="163" height="40" minWidth="75" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="-7" minY="0" maxY="86" />
+<cdrectangleparam minX="0" maxX="2" minY="0" maxY="86" />
 <infoparam name="TGComponent" value="AppC::InterfaceDevice" />
 <TGConnectingPoint num="0" id="1772" />
 <TGConnectingPoint num="1" id="1773" />
@@ -7387,9 +7387,9 @@ the smart card and the terminal
 <SUBCOMPONENT type="1101" id="1848" >
 <father id="1891" num="0" />
 <cdparam x="340" y="180" />
-<sizeparam width="109" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="108" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="204" minY="0" maxY="161" />
+<cdrectangleparam minX="0" maxX="205" minY="0" maxY="161" />
 <infoparam name="TGComponent" value="AppC::TCPIP" />
 <TGConnectingPoint num="0" id="1840" />
 <TGConnectingPoint num="1" id="1841" />
@@ -7406,9 +7406,9 @@ the smart card and the terminal
 <SUBCOMPONENT type="1101" id="1857" >
 <father id="1891" num="1" />
 <cdparam x="277" y="125" />
-<sizeparam width="141" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="136" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="172" minY="0" maxY="161" />
+<cdrectangleparam minX="0" maxX="177" minY="0" maxY="161" />
 <infoparam name="TGComponent" value="AppC::SmartCard" />
 <TGConnectingPoint num="0" id="1849" />
 <TGConnectingPoint num="1" id="1850" />
@@ -7425,9 +7425,9 @@ the smart card and the terminal
 <SUBCOMPONENT type="1101" id="1866" >
 <father id="1891" num="2" />
 <cdparam x="270" y="75" />
-<sizeparam width="144" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="139" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="169" minY="0" maxY="161" />
+<cdrectangleparam minX="0" maxX="174" minY="0" maxY="161" />
 <infoparam name="TGComponent" value="AppC::Application" />
 <TGConnectingPoint num="0" id="1858" />
 <TGConnectingPoint num="1" id="1859" />
