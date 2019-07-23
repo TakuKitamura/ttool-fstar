@@ -42,8 +42,10 @@
 package ui.ucd;
 
 
+import myutil.TraceManager;
 import ui.CDElement;
 import ui.TGComponentManager;
+import ui.TGConnectingPoint;
 import ui.TGConnectingPointWidthHeight;
 
 /**
@@ -60,6 +62,9 @@ public class TGConnectingPointUCD extends  TGConnectingPointWidthHeight{
 	}
     
     public boolean isCompatibleWith(int type) {
+
+        //TraceManager.addDev("is compatible with");
+
         //
         if ((type == TGComponentManager.CONNECTOR_ACTOR_UCD) ||(type == TGComponentManager.CONNECTOR_INCLUDE_UCD) || (type == TGComponentManager.CONNECTOR_SPECIA_UCD) || (type == TGComponentManager.CONNECTOR_EXTEND_UCD)) {
             //
@@ -67,5 +72,25 @@ public class TGConnectingPointUCD extends  TGConnectingPointWidthHeight{
         }
         //
         return false;
-    }   
+    }
+
+    public boolean isCompatibleWith(int type, TGConnectingPoint outPoint) {
+
+	    //TraceManager.addDev("NEW is compatible with "  + outPoint);
+
+	    if (outPoint != null) {
+	        if ((outPoint.getFather() instanceof UCDUseCase) && (getFather() instanceof UCDUseCase)) {
+	            return false;
+            }
+            if ((outPoint.getFather() instanceof UCDActor) && (getFather() instanceof UCDActor)) {
+                return false;
+            }
+        }
+
+	    return isCompatibleWith(type);
+
+
+    }
+
+
 }

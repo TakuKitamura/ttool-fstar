@@ -1980,11 +1980,20 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
         return getTopFather().getFromTopFreeTGConnectingPointAtAndCompatible(x, y, type);
     }
 
+    public TGConnectingPoint getFreeTGConnectingPointAtAndCompatible(int x, int y, int type, TGConnectingPoint outPoint) {
+        return getTopFather().getFromTopFreeTGConnectingPointAtAndCompatible(x, y, type, outPoint);
+    }
+
     public TGConnectingPoint getFromTopFreeTGConnectingPointAtAndCompatible(int x, int y, int type) {
+        return getFromTopFreeTGConnectingPointAtAndCompatible(x, y, type, null);
+    }
+
+    public TGConnectingPoint getFromTopFreeTGConnectingPointAtAndCompatible(int x, int y, int type, TGConnectingPoint outPoint) {
         //TraceManager.addDev("Getting TGConnecting point");
 
         for (int i = 0; i < nbConnectingPoint; i++) {
-            if ((Math.abs(connectingPoint[i].getX() - x) < 4) && (Math.abs(connectingPoint[i].getY() - y) < 4) && (connectingPoint[i].isFree()) && (connectingPoint[i].isCompatibleWith(type))) {
+            if ((Math.abs(connectingPoint[i].getX() - x) < 4) && (Math.abs(connectingPoint[i].getY() - y) < 4) &&
+                    (connectingPoint[i].isFree()) && (connectingPoint[i].isCompatibleWith(type, outPoint))) {
                 return connectingPoint[i];
             }
         }
