@@ -1,6 +1,21 @@
 // Master clock frequency - in MHz
 MASTERCLOCKFREQUENCY 200
 
+NODE CPU CPU01
+SET CPU01 nbOfCores 1
+SET CPU01 byteDataSize 4
+SET CPU01 pipelineSize 5
+SET CPU01 goIdleTime 10
+SET CPU01 maxConsecutiveIdleCycles 10
+SET CPU01 taskSwitchingTime 20
+SET CPU01 branchingPredictionPenalty 2
+SET CPU01 cacheMiss 5
+SET CPU01 schedulingPolicy 0
+SET CPU01 sliceTime 10000
+SET CPU01 execiTime 1
+SET CPU01 execcTime 1
+SET CPU01 clockDivider 1
+
 NODE BUS Bus00
 SET Bus00 byteDataSize 4
 SET Bus00 pipelineSize 1
@@ -22,53 +37,6 @@ SET CPU00 execiTime 1
 SET CPU00 execcTime 1
 SET CPU00 clockDivider 1
 
-NODE CPU CPU12
-SET CPU12 nbOfCores 1
-SET CPU12 byteDataSize 4
-SET CPU12 pipelineSize 5
-SET CPU12 goIdleTime 10
-SET CPU12 maxConsecutiveIdleCycles 10
-SET CPU12 taskSwitchingTime 20
-SET CPU12 branchingPredictionPenalty 2
-SET CPU12 cacheMiss 5
-SET CPU12 schedulingPolicy 0
-SET CPU12 sliceTime 10000
-SET CPU12 execiTime 1
-SET CPU12 execcTime 1
-SET CPU12 clockDivider 1
-
-NODE NOC NoC0
-SET NoC0 bufferByteSize 2
-SET NoC0 NoCSize 3
-SET NoC0 clockDivider 1
-
-NODE BUS Bus12
-SET Bus12 byteDataSize 4
-SET Bus12 pipelineSize 1
-SET Bus12 arbitration 0
-SET Bus12 clockDivider 1
-
-NODE CPU CPU20
-SET CPU20 nbOfCores 1
-SET CPU20 byteDataSize 4
-SET CPU20 pipelineSize 5
-SET CPU20 goIdleTime 10
-SET CPU20 maxConsecutiveIdleCycles 10
-SET CPU20 taskSwitchingTime 20
-SET CPU20 branchingPredictionPenalty 2
-SET CPU20 cacheMiss 5
-SET CPU20 schedulingPolicy 0
-SET CPU20 sliceTime 10000
-SET CPU20 execiTime 1
-SET CPU20 execcTime 1
-SET CPU20 clockDivider 1
-
-NODE BUS Bus20
-SET Bus20 byteDataSize 4
-SET Bus20 pipelineSize 1
-SET Bus20 arbitration 0
-SET Bus20 clockDivider 1
-
 NODE CPU CPU11
 SET CPU11 nbOfCores 1
 SET CPU11 byteDataSize 4
@@ -84,57 +52,68 @@ SET CPU11 execiTime 1
 SET CPU11 execcTime 1
 SET CPU11 clockDivider 1
 
+NODE CPU CPU10
+SET CPU10 nbOfCores 1
+SET CPU10 byteDataSize 4
+SET CPU10 pipelineSize 5
+SET CPU10 goIdleTime 10
+SET CPU10 maxConsecutiveIdleCycles 10
+SET CPU10 taskSwitchingTime 20
+SET CPU10 branchingPredictionPenalty 2
+SET CPU10 cacheMiss 5
+SET CPU10 schedulingPolicy 0
+SET CPU10 sliceTime 10000
+SET CPU10 execiTime 1
+SET CPU10 execcTime 1
+SET CPU10 clockDivider 1
+
+NODE NOC NoC0
+SET NoC0 bufferByteSize 2
+SET NoC0 NoCSize 2
+SET NoC0 clockDivider 1
+
+NODE BUS Bus10
+SET Bus10 byteDataSize 4
+SET Bus10 pipelineSize 1
+SET Bus10 arbitration 0
+SET Bus10 clockDivider 1
+
 NODE BUS Bus11
 SET Bus11 byteDataSize 4
 SET Bus11 pipelineSize 1
 SET Bus11 arbitration 0
 SET Bus11 clockDivider 1
 
-NODE CPU CPU22
-SET CPU22 nbOfCores 1
-SET CPU22 byteDataSize 4
-SET CPU22 pipelineSize 5
-SET CPU22 goIdleTime 10
-SET CPU22 maxConsecutiveIdleCycles 10
-SET CPU22 taskSwitchingTime 20
-SET CPU22 branchingPredictionPenalty 2
-SET CPU22 cacheMiss 5
-SET CPU22 schedulingPolicy 0
-SET CPU22 sliceTime 10000
-SET CPU22 execiTime 1
-SET CPU22 execcTime 1
-SET CPU22 clockDivider 1
+NODE BUS Bus01
+SET Bus01 byteDataSize 4
+SET Bus01 pipelineSize 1
+SET Bus01 arbitration 0
+SET Bus01 clockDivider 1
 
-NODE BUS Bus22
-SET Bus22 byteDataSize 4
-SET Bus22 pipelineSize 1
-SET Bus22 arbitration 0
-SET Bus22 clockDivider 1
-
-NODE LINK link_CPU22_to_Bus22
-SET link_CPU22_to_Bus22 node CPU22
-SET link_CPU22_to_Bus22 bus Bus22
-SET link_CPU22_to_Bus22 priority 0
-NODE LINK link_NoC0_to_Bus22
-SET link_NoC0_to_Bus22 node NoC0
-SET link_NoC0_to_Bus22 bus Bus22
-SET link_NoC0_to_Bus22 priority 0
+NODE LINK link_NoC0_to_Bus01
+SET link_NoC0_to_Bus01 node NoC0
+SET link_NoC0_to_Bus01 bus Bus01
+SET link_NoC0_to_Bus01 priority 0
+NODE LINK link_CPU01_to_Bus01
+SET link_CPU01_to_Bus01 node CPU01
+SET link_CPU01_to_Bus01 bus Bus01
+SET link_CPU01_to_Bus01 priority 0
 NODE LINK link_NoC0_to_Bus11
 SET link_NoC0_to_Bus11 node NoC0
 SET link_NoC0_to_Bus11 bus Bus11
 SET link_NoC0_to_Bus11 priority 0
-NODE LINK link_NoC0_to_Bus20
-SET link_NoC0_to_Bus20 node NoC0
-SET link_NoC0_to_Bus20 bus Bus20
-SET link_NoC0_to_Bus20 priority 0
-NODE LINK link_CPU12_to_Bus12
-SET link_CPU12_to_Bus12 node CPU12
-SET link_CPU12_to_Bus12 bus Bus12
-SET link_CPU12_to_Bus12 priority 0
-NODE LINK link_NoC0_to_Bus12
-SET link_NoC0_to_Bus12 node NoC0
-SET link_NoC0_to_Bus12 bus Bus12
-SET link_NoC0_to_Bus12 priority 0
+NODE LINK link_CPU11_to_Bus11
+SET link_CPU11_to_Bus11 node CPU11
+SET link_CPU11_to_Bus11 bus Bus11
+SET link_CPU11_to_Bus11 priority 0
+NODE LINK link_CPU10_to_Bus10
+SET link_CPU10_to_Bus10 node CPU10
+SET link_CPU10_to_Bus10 bus Bus10
+SET link_CPU10_to_Bus10 priority 0
+NODE LINK link_NoC0_to_Bus10
+SET link_NoC0_to_Bus10 node NoC0
+SET link_NoC0_to_Bus10 bus Bus10
+SET link_NoC0_to_Bus10 priority 0
 NODE LINK link_NoC0_to_Bus00
 SET link_NoC0_to_Bus00 node NoC0
 SET link_NoC0_to_Bus00 bus Bus00
@@ -143,11 +122,3 @@ NODE LINK link_CPU00_to_Bus00
 SET link_CPU00_to_Bus00 node CPU00
 SET link_CPU00_to_Bus00 bus Bus00
 SET link_CPU00_to_Bus00 priority 0
-NODE LINK link_CPU20_to_Bus20
-SET link_CPU20_to_Bus20 node CPU20
-SET link_CPU20_to_Bus20 bus Bus20
-SET link_CPU20_to_Bus20 priority 0
-NODE LINK link_CPU11_to_Bus11
-SET link_CPU11_to_Bus11 node CPU11
-SET link_CPU11_to_Bus11 bus Bus11
-SET link_CPU11_to_Bus11 priority 0

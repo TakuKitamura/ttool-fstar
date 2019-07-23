@@ -27,7 +27,7 @@ public class DiplodocusNoCTest extends AbstractUITest {
 
 
     final String MODEL = "spec";
-    final int NB_OF_NOCS = 1;
+    final int SIZE_OF_NOCS = 2;
     final int NB_Of_SIM_CYCLES = 300;
     final String[] SIM_ACTION = {};
 
@@ -88,22 +88,35 @@ public class DiplodocusNoCTest extends AbstractUITest {
         // Check if models contain the expected nb of NoCs
         int size = tmap.getTMLArchitecture().getSizeOfNoC();
 
-        assertEquals(size, NB_OF_NOCS);
+        //System.out.println("SIZE=" + size);
+
+        assertEquals(size, SIZE_OF_NOCS);
 
         // Remove Noc
         TMAP2Network t2n = new TMAP2Network<>(tmap, size);
         String error = t2n.removeAllRouterNodes();
 
-        assertNotNull(error);
+        //System.out.println("NOC error=" + error);
+
+        assertNull(error);
 
         // Check syntax of the new mapping
         syntax = new TMLSyntaxChecking(tmap);
+        tmap.forceMakeAutomata();
         syntax.checkSyntax();
+
+        if (syntax.hasErrors() > 0) {
+            for(TMLError er: syntax.getErrors()) {
+              System.out.println("NOC error:" + er.toString());
+            }
+
+        }
+
         assertEquals(syntax.hasErrors(), 0);
 
 
         // Generate SystemC code
-        System.out.println("executing: sim code gen for " + s);
+        System.out.println("NOC executing: sim code gen for " + s);
         final IDiploSimulatorCodeGenerator tml2systc;
         List<EBRDD> al = new ArrayList<EBRDD>();
         List<TEPE> alTepe = new ArrayList<TEPE>();
@@ -145,7 +158,7 @@ public class DiplodocusNoCTest extends AbstractUITest {
             }
         }
 
-        System.out.println("executing: " + "make -C " + SIM_DIR);
+        System.out.println("NOC executing: " + "make -C " + SIM_DIR);
         try {
 
             proc = Runtime.getRuntime().exec("make -C " + SIM_DIR + "");
@@ -164,6 +177,7 @@ public class DiplodocusNoCTest extends AbstractUITest {
 
         // Run the simulator
         try {
+            System.out.println("NOC executing simulation in " + SIM_DIR);
             proc = Runtime.getRuntime().exec("./" + SIM_DIR + "run.x -cmd '1 6 " + NB_Of_SIM_CYCLES + "; 7 2 " + s + ".txt'");
             proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 

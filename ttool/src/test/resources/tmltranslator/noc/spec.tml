@@ -1,76 +1,64 @@
 // TML Application - FORMAT 0.1
 // Application: /Users/ludovicapvrille/TTool/modeling/ISAE/noc_test_vcs_periodic.xml
-// Generated: Tue Jul 23 21:17:52 CEST 2019
+// Generated: Tue Jul 23 22:14:38 CEST 2019
 
 // Channels
-CHANNEL noc_3x3_periodic_flows__tx_00__noc_3x3_periodic_flows__rx_0 BRBW 4 8 OUT noc_3x3_periodic_flows__FunctionPeriodicSend0 IN noc_3x3_periodic_flows__FunctionPeriodicReceive0
-VCCHANNEL noc_3x3_periodic_flows__tx_00__noc_3x3_periodic_flows__rx_0 0
-CHANNEL noc_3x3_periodic_flows__tx_01__noc_3x3_periodic_flows__rx2 BRBW 4 8 OUT noc_3x3_periodic_flows__FunctionPeriodicSend0 IN noc_3x3_periodic_flows__FunctionPeriodicReceive2
-VCCHANNEL noc_3x3_periodic_flows__tx_01__noc_3x3_periodic_flows__rx2 1
-CHANNEL noc_3x3_periodic_flows__tx_1__noc_3x3_periodic_flows__rx_1 BRBW 4 8 OUT noc_3x3_periodic_flows__FunctionPeriodicSend1 IN noc_3x3_periodic_flows__FunctionPeriodicReceive1
-VCCHANNEL noc_3x3_periodic_flows__tx_1__noc_3x3_periodic_flows__rx_1 0
+CHANNEL noc_2x2_3flows__tx0_0__noc_2x2_3flows__rx0_0 BRBW 4 8 OUT noc_2x2_3flows__FunctionSend0_0 IN noc_2x2_3flows__FunctionReceive0_0
+VCCHANNEL noc_2x2_3flows__tx0_0__noc_2x2_3flows__rx0_0 0
+CHANNEL noc_2x2_3flows__tx0_1__noc_2x2_3flows__rx0_1 BRBW 4 8 OUT noc_2x2_3flows__FunctionSend0_1 IN noc_2x2_3flows__FunctionReceive0_1
+VCCHANNEL noc_2x2_3flows__tx0_1__noc_2x2_3flows__rx0_1 0
+CHANNEL noc_2x2_3flows__tx0_2__noc_2x2_3flows__rx0_2 BRBW 4 8 OUT noc_2x2_3flows__FunctionSend0_2 IN noc_2x2_3flows__FunctionReceive0_2
+VCCHANNEL noc_2x2_3flows__tx0_2__noc_2x2_3flows__rx0_2 0
 
 // Events
 
 // Requests
 
-TASK noc_3x3_periodic_flows__FunctionPeriodicReceive0
+TASK noc_2x2_3flows__FunctionReceive0_0
     TASKOP
     //Local variables
-    int payload = 3
     
     //Behavior
-    FOR( ; ; )
-        READ noc_3x3_periodic_flows__tx_00__noc_3x3_periodic_flows__rx_0 payload
-    ENDFOR
+    READ noc_2x2_3flows__tx0_0__noc_2x2_3flows__rx0_0 3
 ENDTASK
 
-TASK noc_3x3_periodic_flows__FunctionPeriodicReceive1
+TASK noc_2x2_3flows__FunctionReceive0_1
     TASKOP
     //Local variables
-    int payload = 3
     
     //Behavior
-    FOR( ; ; )
-        READ noc_3x3_periodic_flows__tx_1__noc_3x3_periodic_flows__rx_1 payload
-    ENDFOR
+    READ noc_2x2_3flows__tx0_1__noc_2x2_3flows__rx0_1 3
 ENDTASK
 
-TASK noc_3x3_periodic_flows__FunctionPeriodicReceive2
+TASK noc_2x2_3flows__FunctionReceive0_2
     TASKOP
     //Local variables
-    int payload = 3
     
     //Behavior
-    FOR( ; ; )
-        READ noc_3x3_periodic_flows__tx_01__noc_3x3_periodic_flows__rx2 payload
-    ENDFOR
+    READ noc_2x2_3flows__tx0_2__noc_2x2_3flows__rx0_2 3
 ENDTASK
 
-TASK noc_3x3_periodic_flows__FunctionPeriodicSend0
+TASK noc_2x2_3flows__FunctionSend0_0
     TASKOP
     //Local variables
-    int period = 500
-    int payload = 3
     
     //Behavior
-    FOR( ; ; )
-        WRITE noc_3x3_periodic_flows__tx_00__noc_3x3_periodic_flows__rx_0 payload
-        WRITE noc_3x3_periodic_flows__tx_01__noc_3x3_periodic_flows__rx2 payload
-        DELAY period ns
-    ENDFOR
+    WRITE noc_2x2_3flows__tx0_0__noc_2x2_3flows__rx0_0 3
 ENDTASK
 
-TASK noc_3x3_periodic_flows__FunctionPeriodicSend1
+TASK noc_2x2_3flows__FunctionSend0_1
     TASKOP
     //Local variables
-    int period = 500
-    int payload = 3
     
     //Behavior
-    FOR( ; ; )
-        WRITE noc_3x3_periodic_flows__tx_1__noc_3x3_periodic_flows__rx_1 payload
-        DELAY period ns
-    ENDFOR
+    WRITE noc_2x2_3flows__tx0_1__noc_2x2_3flows__rx0_1 3
+ENDTASK
+
+TASK noc_2x2_3flows__FunctionSend0_2
+    TASKOP
+    //Local variables
+    
+    //Behavior
+    WRITE noc_2x2_3flows__tx0_2__noc_2x2_3flows__rx0_2 3
 ENDTASK
 
