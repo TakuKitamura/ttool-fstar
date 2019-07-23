@@ -56,6 +56,7 @@ public class TaskNetworkInterface extends TMLTask {
 
     public TaskNetworkInterface(String name, Object referenceToClass, Object referenceToActivityDiagram) {
         super(name, referenceToClass, referenceToActivityDiagram);
+        setDaemon(true);
     }
 
     // feedbackEvents: one per vc
