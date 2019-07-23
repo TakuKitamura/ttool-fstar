@@ -1,0 +1,20 @@
+TMLSPEC
+    #include "spec.tml"
+ENDTMLSPEC
+
+TMLARCHI
+    #include "spec.tarchi"
+ENDTMLARCHI
+
+TMLMAPPING
+    MAP CPU00 noc_3x3_periodic_flows__FunctionPeriodicSend0
+    SET noc_3x3_periodic_flows__FunctionPeriodicSend0 priority 0
+    MAP CPU12 noc_3x3_periodic_flows__FunctionPeriodicReceive0
+    SET noc_3x3_periodic_flows__FunctionPeriodicReceive0 priority 0
+    MAP CPU20 noc_3x3_periodic_flows__FunctionPeriodicSend1
+    SET noc_3x3_periodic_flows__FunctionPeriodicSend1 priority 0
+    MAP CPU11 noc_3x3_periodic_flows__FunctionPeriodicReceive1
+    SET noc_3x3_periodic_flows__FunctionPeriodicReceive1 priority 0
+    MAP CPU22 noc_3x3_periodic_flows__FunctionPeriodicReceive2
+    SET noc_3x3_periodic_flows__FunctionPeriodicReceive2 priority 0
+ENDTMLMAPPING

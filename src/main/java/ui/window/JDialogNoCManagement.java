@@ -327,6 +327,7 @@ public class JDialogNoCManagement extends JDialog implements ActionListener, Lis
 
         outputText.append("\nPreparing model\n");
 
+
         int size = map.getTMLArchitecture().getSizeOfNoC();
 
         if (size < 0) {
@@ -410,6 +411,8 @@ public class JDialogNoCManagement extends JDialog implements ActionListener, Lis
         stopProcess();
 
     }
+
+
 
 
 
