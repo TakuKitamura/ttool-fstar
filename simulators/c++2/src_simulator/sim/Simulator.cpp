@@ -808,7 +808,7 @@ bool Simulator::channelImpactsCommand(TMLChannel* iCh, TMLCommand* iCmd){
 bool Simulator::simulate(TMLTransaction*& oLastTrans){
   TMLTransaction* depTransaction,*depNextTrans,*transLET;
   TMLCommand* commandLET,*depCommand,*depNextCommand;
-  TMLTask* depTask;
+  TMLTask* depTask,*lastNonDaemonTask=0;
   SchedulableDevice* deviceLET;
   CPU* depCPU;
   FPGA* depFPGA;
@@ -844,8 +844,23 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 #ifdef DEBUG_KERNEL
       std::cout << "kernel:simulate: scheduling decision: " <<  transLET->toString() << std::endl;
 #endif
-
 	commandLET=transLET->getCommand();
+
+	if(commandLET->getTask()->getIsDaemon()==false){
+	  lastNonDaemonTask=commandLET->getTask();
+	}
+
+	std::cout<<"transLET is********"<<transLET->toString()<<std::endl;
+	if(transLET!=0 && transLET->getCommand()->getTask()->getIsDaemon()==true){
+	  if(transLET->getStartTime() >= deviceLET->getSimulatedTime()){
+	    if(lastNonDaemonTask!=0 && lastNonDaemonTask->getNextTransaction(0)!=0)
+	      std::cout<<"next trans no 0********** "<< lastNonDaemonTask->getNextTransaction(0)->toString()<<std::endl;
+	    if(lastNonDaemonTask!=0 && lastNonDaemonTask->getNextTransaction(0)==0){
+	      break;
+	    }
+	  }
+	}
+       		
 #ifdef DEBUG_SIMULATE
 	std::cout<<"device is "<<deviceLET->getName()<<std::endl;
 #endif
@@ -856,6 +871,7 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 #ifdef DEBUG_KERNEL
       std::cout << "kernel:simulate: AFTER add trans: " << x << std::endl;
 #endif
+    
       if (x){
 #ifdef DEBUG_KERNEL
 	std::cout << "kernel:simulate: add transaction 0" << commandLET->toString() << std::endl;
@@ -975,11 +991,9 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 #ifdef DEBUG_SIMULATE
       std::cout<<"task is !!!!!"<<oLastTrans->toString()<<std::endl;
 #endif
-	transLET=getTransLowestEndTime(deviceLET);
-	//	if(transLET==0) std::cout<<"translet is 0~~~"<<std::endl;
-	//	if(_simComp->getStopFlag()==true) std::cout<<"stop flag is true"<<std::endl;
-	//	else std::cout<<"stop flag is false"<<std::endl;
-    }
+    
+      transLET=getTransLowestEndTime(deviceLET);
+  }
 
   bool aSimCompleted = ( transLET==0  && !_simComp->getStoppedOnAction());
 

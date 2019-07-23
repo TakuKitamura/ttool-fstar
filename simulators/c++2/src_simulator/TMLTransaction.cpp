@@ -56,7 +56,7 @@ TMLTransaction::TMLTransaction():_runnableTime(0), _startTime(0), _length(0), _v
   
 }
 
-TMLTransaction::TMLTransaction(TMLCommand* iCommand, TMLLength iVirtualLength, TMLTime iRunnableTime, TMLChannel* iChannel):_runnableTime(iRunnableTime), _startTime(0), _length(0), _virtualLength(iVirtualLength), _command(iCommand),
+TMLTransaction::TMLTransaction(TMLCommand* iCommand, TMLLength iVirtualLength, TMLTime iRunnableTime, TMLChannel* iChannel):_runnableTime(iRunnableTime), _startTime(0), _length(0), _virtualLength(iVirtualLength), _command(iCommand),_endState(false),
 #ifdef PENALTIES_ENABLED
                                                                                                                             _idlePenalty(0), _taskSwitchingPenalty(0), //, _branchingPenalty(0),
 #endif

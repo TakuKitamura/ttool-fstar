@@ -236,8 +236,11 @@ std::cout<<"fpga addTransaction"<<std::endl;
 #ifdef DEBUG_FPGA
     std::cout<<"I am in finish!!!"<<std::endl;
 #endif
- 
-    if(_endSchedule == 0) _maxEndTime=max(_maxEndTime,_nextTransaction->getEndTime());
+    //_endSchedule=0;
+    // _maxEndTime=max(_maxEndTime,_nextTransaction->getEndTime())
+    //std::cout<<"end schedule is ~~~~~~~"<<_endSchedule<<std::endl;
+    if(_endSchedule == 0 && (!(_nextTransaction->getCommand()->getTask()->getIsDaemon()==true && _nextTransaction->getCommand()->getTask()->getNextTransaction(0)==0))) 
+      _maxEndTime=max(_maxEndTime,_nextTransaction->getEndTime());
     if(_reconfigNumber>0)
       _endSchedule=_maxEndTime+_reconfigNumber*_reconfigTime;
     else{
@@ -592,7 +595,10 @@ void FPGA::HW2HTML(std::ofstream& myfile)  {
 	std::string aCurrContent=aCurrTransName.substr(indexTrans+1,2);
 	writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString(), aCurrContent );
 
-	aCurrTime = aCurrTrans->getEndTime();
+	if(aCurrTrans->getCommand()->getTask()->getIsDaemon() == true && aCurrTrans->getEndTime() > _simulatedTime)
+	  aCurrTime = _simulatedTime;
+	else
+	  aCurrTime = aCurrTrans->getEndTime();
       }
     }	
 
@@ -656,7 +662,10 @@ void FPGA::schedule2HTML(std::ofstream& myfile)  {
 
 	writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString() );
 
-	aCurrTime = aCurrTrans->getEndTime();
+	if(aCurrTrans->getCommand()->getTask()->getIsDaemon() == true && aCurrTrans->getEndTime() > _simulatedTime)
+	  aCurrTime = _simulatedTime;
+	else
+	  aCurrTime = aCurrTrans->getEndTime();
       }
     }
 		
