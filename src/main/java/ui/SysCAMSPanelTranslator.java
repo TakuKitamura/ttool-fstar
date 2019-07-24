@@ -51,6 +51,7 @@ import javax.swing.DefaultListModel;
  * Creation: 19/05/2018
  * @version 1.0 19/05/2018
  * @author Irina Kit Yan LEE
+ * @version 1.1 10/07/2019 Daniela GENIUS
  */
 
 public class SysCAMSPanelTranslator {
@@ -104,10 +105,11 @@ public class SysCAMSPanelTranslator {
 					String portName = portDE.getPortName();
 					String type = portDE.getDEType();
 					int origin = portDE.getOrigin();
+					int nbits = portDE.getNbits();
 					boolean sensitive = portDE.getSensitive();
 					String sensitiveMethod = portDE.getSensitiveMethod();
 
-					SysCAMSTPortDE syscamsPortDE = new SysCAMSTPortDE(portName, origin, type, sensitive, sensitiveMethod, syscamsBlockGPIO2VCI);
+					SysCAMSTPortDE syscamsPortDE = new SysCAMSTPortDE(portName, origin, nbits, type, sensitive, sensitiveMethod, syscamsBlockGPIO2VCI);
 
 					syscamsMap.put(portDE, syscamsPortDE);
 					syscamsBlockGPIO2VCI.addPortDE(syscamsPortDE);
@@ -120,6 +122,7 @@ public class SysCAMSPanelTranslator {
 				SysCAMSBlockDE blockDE = (SysCAMSBlockDE) dp;
 
 				String blockDEName = blockDE.getValue();
+				String clockName = blockDE.getClockName();
 //				int periodBlock = blockDE.getPeriod();
 //				String time = blockDE.getTime();
 //				String nameFn = blockDE.getNameFn();
@@ -129,7 +132,7 @@ public class SysCAMSPanelTranslator {
 //				String typeTemplate = blockDE.getTypeTemplate();
 //				DefaultListModel<String> listTypedef = blockDE.getListTypedef();
 
-				SysCAMSTBlockDE syscamsBlockDE = new SysCAMSTBlockDE(blockDEName, "", "", null, "", "", "", null, null);
+				SysCAMSTBlockDE syscamsBlockDE = new SysCAMSTBlockDE(blockDEName, clockName, "", "", null, "", "", "", null, null);
 
 				List<SysCAMSPortDE> portsDE = blockDE.getAllInternalPortsDE();
 				for (int i = 0; i < portsDE.size(); i++) {
@@ -143,10 +146,11 @@ public class SysCAMSPanelTranslator {
 					int nbits = portDE.getNbits();//DG
 					String type = portDE.getDEType();
 					int origin = portDE.getOrigin();
+					
 					boolean sensitive = portDE.getSensitive();
 					String sensitiveMethod = portDE.getSensitiveMethod();
 
-					SysCAMSTPortDE syscamsPortDE = new SysCAMSTPortDE(portName, origin, type, sensitive, sensitiveMethod, syscamsBlockDE);
+					SysCAMSTPortDE syscamsPortDE = new SysCAMSTPortDE(portName, origin, nbits, type, sensitive, sensitiveMethod, syscamsBlockDE);
 
 					syscamsMap.put(portDE, syscamsPortDE);
 					syscamsBlockDE.addPortDE(syscamsPortDE);
@@ -156,6 +160,25 @@ public class SysCAMSPanelTranslator {
 				syscamsMap.put(blockDE, syscamsBlockDE);
 				//	System.out.println("@@@ DE block put in map @@@");
 				syscamsComponents.add(syscamsBlockDE);
+
+			} else if (dp instanceof SysCAMSClock) {
+				SysCAMSClock clock = (SysCAMSClock) dp;
+
+				String clockName = clock.getName();
+				double frequency = clock.getFrequency();			
+				String unit = clock.getUnit();
+				double dutyCycle = clock.getDutyCycle();
+				double startTime = clock.getStartTime();
+				String unitStartTime = clock.getUnitStartTime();
+				boolean posFirst = clock.getPosFirst();
+				
+				SysCAMSTClock syscamsClock = new SysCAMSTClock(clockName, frequency, unit, dutyCycle, startTime, unitStartTime, posFirst);
+			
+		       
+				syscamsMap.put(clock, syscamsClock);
+				//System.out.println("@@@ Clock put in map @@@");
+				syscamsComponents.add(syscamsClock);
+								
 			} else if (dp instanceof SysCAMSCompositeComponent) {
 				SysCAMSCompositeComponent cluster = (SysCAMSCompositeComponent) dp;
 
@@ -165,6 +188,8 @@ public class SysCAMSPanelTranslator {
 
 				List<SysCAMSBlockTDF> blocksTDF = cluster.getAllBlockTDFComponents();
 				List<SysCAMSBlockDE> blocksDE = cluster.getAllBlockDEComponents();
+				List<SysCAMSClock> clocks = cluster.getAllClockComponents();
+				
 				for (int i = 0; i < blocksTDF.size(); i++) {
 					SysCAMSBlockTDF blockTDF = blocksTDF.get(i);
 
@@ -227,32 +252,29 @@ public class SysCAMSPanelTranslator {
 						String type = portConverter.getConvType();
 						int origin = portConverter.getOrigin();
 
-						SysCAMSTPortConverter syscamsPortConverter = new SysCAMSTPortConverter(portName, periodPort, time, rate, delay, origin, type, syscamsBlockTDF);
+						SysCAMSTPortConverter syscamsPortConverter = new SysCAMSTPortConverter(portName, periodPort, time, rate, delay, origin, nbits, type, syscamsBlockTDF);
 
 						syscamsMap.put(portConverter, syscamsPortConverter);
 						syscamsBlockTDF.addPortConverter(syscamsPortConverter);
 						syscamsComponents.add(syscamsPortConverter);
 					}
-					syscamsMap.put(blockTDF, syscamsBlockTDF);
-					//System.out.println("@@@ TDF block put in map @@@");
+					syscamsMap.put(blockTDF, syscamsBlockTDF);				       
 					syscamsCluster.addBlockTDF(syscamsBlockTDF);
 					syscamsComponents.add(syscamsBlockTDF);
 				}
 				for (int i = 0; i < blocksDE.size(); i++) {
 					SysCAMSBlockDE blockDE = blocksDE.get(i);
 					
-					String blockDEName = blockDE.getValue();
-//					int periodBlock = blockDE.getPeriod();
-//					String time = blockDE.getTime();
+					String blockDEName = blockDE.getValue();					String clockName = blockDE.getClockName();
 					String nameFn = blockDE.getNameFn();
 					String code = blockDE.getCode();
 					DefaultListModel<String> listStruct = blockDE.getListStruct();
 					String nameTemplate = blockDE.getNameTemplate();
 					String typeTemplate = blockDE.getTypeTemplate();
-                    String valueTemplate = blockDE.getValueTemplate();
+					String valueTemplate = blockDE.getValueTemplate();
 					DefaultListModel<String> listTypedef = blockDE.getListTypedef();
 
-					SysCAMSTBlockDE syscamsBlockDE = new SysCAMSTBlockDE(blockDEName, nameFn, code, listStruct, nameTemplate, typeTemplate, valueTemplate, listTypedef, syscamsCluster);
+					SysCAMSTBlockDE syscamsBlockDE = new SysCAMSTBlockDE(blockDEName, clockName, nameFn, code, listStruct, nameTemplate, typeTemplate, valueTemplate, listTypedef, syscamsCluster);
 
 					List<SysCAMSPortDE> portsDE = blockDE.getAllInternalPortsDE();
 					for (int j = 0; j < portsDE.size(); j++) {
@@ -265,10 +287,11 @@ public class SysCAMSPanelTranslator {
 //						int delay = portDE.getDelay();
 						String type = portDE.getDEType();
 						int origin = portDE.getOrigin();
+						int nbits = portDE.getNbits();
 						boolean sensitive = portDE.getSensitive();
 						String sensitiveMethod = portDE.getSensitiveMethod();
 
-						SysCAMSTPortDE syscamsPortDE = new SysCAMSTPortDE(portName, origin, type, sensitive, sensitiveMethod, syscamsBlockDE);
+						SysCAMSTPortDE syscamsPortDE = new SysCAMSTPortDE(portName, origin, nbits, type, sensitive, sensitiveMethod, syscamsBlockDE);
 
 						syscamsMap.put(portDE, syscamsPortDE);
 						syscamsBlockDE.addPortDE(syscamsPortDE);
@@ -278,6 +301,26 @@ public class SysCAMSPanelTranslator {
 					syscamsCluster.addBlockDE(syscamsBlockDE);
 					syscamsComponents.add(syscamsBlockDE);
 				}
+
+
+				for (int i = 0; i < clocks.size(); i++) {
+					SysCAMSClock clock = clocks.get(i);
+
+					String clockName = clock.getName();
+					double frequency = clock.getFrequency();			
+					String unit = clock.getUnit();
+					double dutyCycle = clock.getDutyCycle();
+					double startTime = clock.getStartTime();
+					String unitStartTime = clock.getUnitStartTime();
+					boolean posFirst = clock.getPosFirst();
+				
+					SysCAMSTClock syscamsClock = new SysCAMSTClock(clockName, frequency, unit, dutyCycle, startTime, unitStartTime, posFirst);
+
+					syscamsMap.put(clock, syscamsClock);
+					syscamsCluster.addClock(syscamsClock);
+					syscamsComponents.add(syscamsClock);
+				}
+				
 				syscamsMap.put(cluster, syscamsCluster);
 				syscamsComponents.add(syscamsCluster);
 			} else if (dp instanceof SysCAMSPortConnector) {
