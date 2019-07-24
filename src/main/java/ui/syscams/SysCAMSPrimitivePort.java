@@ -565,7 +565,7 @@ public class SysCAMSPrimitivePort extends TGCScalableWithInternalComponent imple
 	       	sb.append("\" nbits=\"" + ((SysCAMSPortConverter) this).getNbits());//DG
       
         	sb.append("\" delay=\"" + ((SysCAMSPortConverter) this).getDelay());
-        	sb.append("\" type=\"" + encode(((SysCAMSPortConverter) this).getConvType()));	
+        	sb.append("\" type=\"" + encode(((SysCAMSPortConverter) this).getConvType()));
         }
         sb.append("\" />\n");
         sb.append("</extraparam>\n");
@@ -579,9 +579,9 @@ public class SysCAMSPrimitivePort extends TGCScalableWithInternalComponent imple
             Element elt;
             
             double period;
-            int rate, delay, nbits;
+            int rate, delay;
             String type, time, sensitiveMethod; 
-            Boolean sensitive, posFirst;
+            Boolean sensitive;
 
             for(int i=0; i<nl.getLength(); i++) {
                 n1 = nl.item(i);
@@ -608,27 +608,27 @@ public class SysCAMSPrimitivePort extends TGCScalableWithInternalComponent imple
 									((SysCAMSPortTDF) this).setDelay(delay);
 									((SysCAMSPortTDF) this).setTDFType(type);
 								} else if (this instanceof SysCAMSPortDE) {
+									// ((SysCAMSPortDE)this).setPeriod(period);
+									// ((SysCAMSPortDE)this).setTime(time);
+									// ((SysCAMSPortDE)this).setRate(rate);
+									// ((SysCAMSPortDE)this).setDelay(delay);
 									type = elt.getAttribute("type");
 									sensitive = Boolean.parseBoolean(elt.getAttribute("sensitive"));
-									nbits = Integer.decode(elt.getAttribute("nbits")).intValue();
 									sensitiveMethod = elt.getAttribute("sensitive_method");
 									((SysCAMSPortDE) this).setDEType(type);
 									((SysCAMSPortDE) this).setSensitive(sensitive);
 									((SysCAMSPortDE) this).setSensitiveMethod(sensitiveMethod);
-									((SysCAMSPortDE) this).setNbits(nbits);
 								} else if (this instanceof SysCAMSPortConverter) {
 									period = Double.valueOf(elt.getAttribute("period")).doubleValue();
 									time = elt.getAttribute("time");
 									rate = Integer.decode(elt.getAttribute("rate")).intValue();
 									delay = Integer.decode(elt.getAttribute("delay")).intValue();
 									type = elt.getAttribute("type");
-									nbits = Integer.decode(elt.getAttribute("nbits")).intValue();
 									((SysCAMSPortConverter) this).setPeriod(period);
 									((SysCAMSPortConverter) this).setTime(time);
 									((SysCAMSPortConverter) this).setRate(rate);
-									((SysCAMSPortConverter) this).setNbits(nbits);
-									((SysCAMSPortConverter)this).setDelay(delay);
-									((SysCAMSPortConverter)this).setConvType(type);
+                                	((SysCAMSPortConverter)this).setDelay(delay);
+                                	((SysCAMSPortConverter)this).setConvType(type);
                                 }
                             }
                             makeValue();

@@ -115,11 +115,6 @@ public class SysCAMSPortDE extends SysCAMSPrimitivePort {
 	public int getNbits() {
 		return nbits;
 	}
-
-        public void setNbits(int _nbits) {
-		nbits = _nbits;
-	}
-
     
 	public void setSensitive(boolean _sensitive) {
 		sensitive = _sensitive;
