@@ -409,18 +409,15 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 			}
 			
 			if(typeComboBoxString.getSelectedItem()=="sc_uint<N>"){
-			 port.setConvType((String)"sc_uint<"+nbitsTextField.getText()+"> ");
-				     port.setConvType((String)"sc_uint");
+			 port.setConvType("sc_uint<"+nbitsTextField.getText()+"> ");
+				     port.setConvType("sc_uint");
 				     port.setNbits(Integer.parseInt(nbitsTextField.getText()));
-				     // System.out.println("@@@@@@@@@"+port.getConvType());
-				     //     System.out.println("@@@@@@@@@"+port.getNbits());
+			
 					
 				}		
 				else{
 			port.setConvType((String) typeComboBoxString.getSelectedItem());
 			port.setNbits(Integer.parseInt(nbitsTextField.getText()));
-			//System.out.println("@@@@@@@@@"+port.getConvType());
-			//System.out.println("@@@@@@@@@"+port.getNbits());
 			port.setTime((String) periodComboBoxString.getSelectedItem());
 				}
 		

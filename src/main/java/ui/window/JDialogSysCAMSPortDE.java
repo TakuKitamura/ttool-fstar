@@ -435,17 +435,16 @@ public class JDialogSysCAMSPortDE extends JDialog implements ActionListener {
 		
 				if(typeComboBoxString.getSelectedItem()=="sc_uint<N>"){
 			    //	port.setDEType((String)"sc_uint<"+nbitsTextField.getText()+"> ");
-			    port.setDEType((String)"sc_uint");
+			    port.setDEType("sc_uint");
 				 
-			    //	System.out.println("@@@@@@@@@1"+port.getDEType());
+			 
 			    	}		
 			   	else{
 			    	port.setDEType((String) typeComboBoxString.getSelectedItem());
 
-				//	System.out.println("@@@@@@@@@1"+port.getDEType());
 				}
 				
-				// port.setTime((String) periodComboBoxString.getSelectedItem());
+			
 			       
 			
 			if ((String) originComboBoxString.getSelectedItem() == "Output") {
