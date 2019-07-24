@@ -58,17 +58,53 @@ import javax.swing.*;
 public class JDialogSysCAMSClock extends JDialog implements ActionListener {
 
 	private JTextField nameTextField;
-        private JTextField frequencyTextField;
-        private JTextField unitTextField;
-        private JTextField dutyCycleTextField;
     
-	private JTextField startTimeTextField;
-	private String listUnitString[];
-        private String posFirstString[];
         private JComboBox<String> unitComboBoxString;
+
+        private JTextField posFirstTextField;
+	private String listPosFirstString[];
         private JComboBox<String> posFirstComboBoxString;
+    
+        private JTextField frequencyTextField;
+	private String listFrequencyString[];
+	private JComboBox<String> frequencyComboBoxString;
+
+        private JTextField dutyCycleTextField;
+	private String listDutyCycleString[];
+	private JComboBox<String> dutyCycleComboBoxString;
+
+        private JTextField startTimeTextField;
+	private String listStartTimeString[];
+	private JComboBox<String> startTimeComboBoxString;
+    
+	private JTextField nameStructTextField;
+	private JTextField valueStructTextField;
+	private JRadioButton constantStructRadioButton;
+	private String listTypeStructString[];
+	private JComboBox<String> typeStructComboBoxString;
+	private ArrayList<String> listTmpStruct;
+	private JList<String> structList;
+	private DefaultListModel<String> structListModel;
+	private boolean structBool = false;
+	private JTextField nameTemplateTextField;
+        private JTextField valueTemplateTextField;
+	private String listTypeTemplateString[];
+	private JComboBox<String> typeTemplateComboBoxString;
+	private JTextField nameTypedefTextField;
+	private String listTypeTypedefString[];
+	private JComboBox<String> typeTypedefComboBoxString;
+	private JButton addModifyTypedefButton;
+	private ArrayList<String> listTmpTypedef;
+	private JList<String> typedefList;
+	private DefaultListModel<String> typedefListModel;
+	private boolean typedefBool = false;
+
+	private JButton upButton, downButton, removeButton;
+    
+    
 	private SysCAMSClock clock;
 
+   
 	public JDialogSysCAMSClock(SysCAMSClock clock) {
 		this.setTitle("Setting Clock Attributes");
 		this.setLocationRelativeTo(null);
@@ -88,17 +124,100 @@ public class JDialogSysCAMSClock extends JDialog implements ActionListener {
 		dialog();
 	}
 
-	public void dialog() {
+
+	public StringBuffer encode(String data) {
+		StringBuffer databuf = new StringBuffer(data);
+		StringBuffer buffer = new StringBuffer("");
+		int endline = 0;
+		int nb_arobase = 0;
+		int condition = 0;
+
+		for (int pos = 0; pos != data.length(); pos++) {
+			char c = databuf.charAt(pos);
+			switch (c) {
+			case '\n':
+				break;
+			case '\t':
+				break;
+			case '{':
+				buffer.append("{\n");
+				endline = 1;
+				nb_arobase++;
+				break;
+			case '}':
+				if (nb_arobase == 1) {
+					buffer.append("}\n");
+					endline = 0;
+				} else {
+					int i = nb_arobase;
+					while (i >= 1) {
+						buffer.append("\t");
+						i--;
+					}
+					buffer.append("}\n");
+					endline = 1;
+				}
+				nb_arobase--;
+				break;
+			case ';':
+				if (condition == 1) {
+					buffer.append(";");
+				} else {
+					buffer.append(";\n");
+					endline = 1;
+				}
+				break;
+			case ' ':
+				if (endline == 0) {
+					buffer.append(databuf.charAt(pos));
+				}
+				break;
+			case '(':
+				buffer.append("(");
+				condition = 1;
+				break;
+			case ')':
+				buffer.append(")");
+				condition = 0;
+				break;
+			default:
+				if (endline == 1) {
+					endline = 0;
+					int i = nb_arobase;
+					while (i >= 1) {
+						buffer.append("\t");
+						i--;
+					}
+				}
+				buffer.append(databuf.charAt(pos));
+				break;
+			}
+		}
+		return buffer;
+	}
+
+
+    	public void dialog() {
 		JPanel mainPanel = new JPanel(new BorderLayout());
 		this.add(mainPanel);
 
+		JTabbedPane tabbedPane = new JTabbedPane();
 		JPanel attributesMainPanel = new JPanel();
-		mainPanel.add(attributesMainPanel, BorderLayout.NORTH); 
+		JPanel parametersMainPanel = new JPanel();
+		JPanel processMainPanel = new JPanel();
+        JPanel contructorMainPanel = new JPanel();
+		tabbedPane.add("Attributes", attributesMainPanel);
+		//	tabbedPane.add("Parameters", parametersMainPanel);
+		//tabbedPane.add("Process Code", processMainPanel);
+		//tabbedPane.add("Constructor Code", contructorMainPanel);
 
+		mainPanel.add(tabbedPane, BorderLayout.NORTH); 
+
+		// --- Attributes ---//
 		attributesMainPanel.setLayout(new BorderLayout());
 
 		Box attributesBox = Box.createVerticalBox();
-		attributesBox.setBorder(BorderFactory.createTitledBorder("Setting clock attributes"));
+		attributesBox.setBorder(BorderFactory.createTitledBorder("Setting Clock attributes"));
 
 		GridBagLayout gridBag = new GridBagLayout();
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -112,98 +231,168 @@ public class JDialogSysCAMSClock extends JDialog implements ActionListener {
 		gridBag.setConstraints(labelName, constraints);
 		attributesBoxPanel.add(labelName);
 
-		if (clock.getValue().toString().equals("")) {
+		if (clock.getValue().toString().equals("")) { 
 			nameTextField = new JTextField(10);
 		} else {
-			nameTextField = new JTextField(clock.getValue().toString(), 10); 
+			nameTextField = new JTextField(clock.getValue().toString(), 10);
 		}
 		constraints = new GridBagConstraints(1, 0, 2, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 				new Insets(15, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(nameTextField, constraints);
 		attributesBoxPanel.add(nameTextField);
 
-
-		
-		JLabel labelFrequency = new JLabel("Frequency : ");
+		JLabel frequencyLabel = new JLabel("Frequency Tm : ");
 		constraints = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(15, 10, 5, 10), 0, 0);
-		gridBag.setConstraints(labelFrequency, constraints);
-		attributesBoxPanel.add(labelFrequency);
+				new Insets(5, 10, 15, 10), 0, 0);
+		gridBag.setConstraints(frequencyLabel, constraints);
+		attributesBoxPanel.add(frequencyLabel);
 
-		if (clock.getValue().toString().equals("")) {
-			nameTextField = new JTextField(10);
+		if (clock.getFrequency() == -1) { 
+			frequencyTextField = new JTextField(10);
 		} else {
-			frequencyTextField = new JTextField(clock.getValue().toString(), 10); 
+			frequencyTextField = new JTextField("" + clock.getFrequency(), 10); 
 		}
-		constraints = new GridBagConstraints(1, 1, 2, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(15, 10, 5, 10), 0, 0);
+		constraints = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(5, 10, 15, 10), 0, 0);
 		gridBag.setConstraints(frequencyTextField, constraints);
 		attributesBoxPanel.add(frequencyTextField);
 
-
-		JLabel labelDutyCycle = new JLabel("DutyCycle : ");
-		constraints = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(15, 10, 5, 10), 0, 0);
-		gridBag.setConstraints(labelDutyCycle, constraints);
-		attributesBoxPanel.add(labelDutyCycle);
-
-		if (clock.getValue().toString().equals("")) {
-			nameTextField = new JTextField(10);
-		} else {
-			frequencyTextField = new JTextField(clock.getValue().toString(), 10); 
-		}
-		constraints = new GridBagConstraints(1, 1, 2, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(15, 10, 5, 10), 0, 0);
-		gridBag.setConstraints(frequencyTextField, constraints);
-		attributesBoxPanel.add(frequencyTextField);
-		
-		listUnitString = new String[4];
-		listUnitString[0] = "s";
-		listUnitString[1] = "ms";
-		listUnitString[2] = "\u03BCs";
-		listUnitString[3] = "ns";
-		unitComboBoxString = new JComboBox<String>(listUnitString);
+		listFrequencyString = new String[4];
+		listFrequencyString[0] = "s";
+		listFrequencyString[1] = "ms";
+		listFrequencyString[2] = "\u03BCs";
+		listFrequencyString[3] = "ns";
+		frequencyComboBoxString = new JComboBox<String>(listFrequencyString);
 		if (clock.getUnit().equals("") || clock.getUnit().equals("s")) {
-			unitComboBoxString.setSelectedIndex(0);
-		} else if (clock.getUnit().equals("ms")){
-			unitComboBoxString.setSelectedIndex(1);
-		} else if (clock.getUnit().equals("\u03BCs")){
-			unitComboBoxString.setSelectedIndex(2);
-		} else if (clock.getUnit().equals("ns")){
-			unitComboBoxString.setSelectedIndex(3);
+			frequencyComboBoxString.setSelectedIndex(0);
+		} else if (clock.getUnit().equals("ms")) {
+			frequencyComboBoxString.setSelectedIndex(1);
+		} else if (clock.getUnit().equals("\u03BCs")) {
+			frequencyComboBoxString.setSelectedIndex(2);
+		} else if (clock.getUnit().equals("ns")) {
+			frequencyComboBoxString.setSelectedIndex(3);
 		}
-		unitComboBoxString.setActionCommand("unit");
-		unitComboBoxString.addActionListener(this);
-		constraints = new GridBagConstraints(2, 1, 1, 1, 1.0, 1.0,
-				GridBagConstraints.CENTER,
-				GridBagConstraints.BOTH,
-				new Insets(5, 10, 5, 10), 0, 0);
-		gridBag.setConstraints(unitComboBoxString, constraints);
-		attributesBoxPanel.add(unitComboBoxString);
+		frequencyComboBoxString.addActionListener(this);
+		constraints = new GridBagConstraints(2, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(5, 10, 15, 10), 0, 0);
+		gridBag.setConstraints(frequencyComboBoxString, constraints);
+		attributesBoxPanel.add(frequencyComboBoxString);
+		//
 
-		posFirstString = new String[2];
-		posFirstString[0] = "true";
-		posFirstString[1] = "false";
+	JLabel dutyCycleLabel = new JLabel("DutyCycle Tm : ");
+		constraints = new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(5, 10, 15, 10), 0, 0);
+		gridBag.setConstraints(dutyCycleLabel, constraints);
+		attributesBoxPanel.add(dutyCycleLabel);
+
+		if (clock.getDutyCycle() == -1) { 
+			dutyCycleTextField = new JTextField(10);
+		} else {
+			dutyCycleTextField = new JTextField("" + clock.getDutyCycle(), 10); 
+		}
+		constraints = new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(5, 10, 15, 10), 0, 0);
+		gridBag.setConstraints(dutyCycleTextField, constraints);
+		attributesBoxPanel.add(dutyCycleTextField);
+
+		/*	listDutyCycleString = new String[4];
+		listDutyCycleString[0] = "s";
+		listDutyCycleString[1] = "ms";
+		listDutyCycleString[2] = "\u03BCs";
+		listDutyCycleString[3] = "ns";
+		dutyCycleComboBoxString = new JComboBox<String>(listDutyCycleString);
+		if (clock.getUnit().equals("") || clock.getUnit().equals("s")) {
+			dutyCycleComboBoxString.setSelectedIndex(0);
+		} else if (clock.getUnit().equals("ms")) {
+			dutyCycleComboBoxString.setSelectedIndex(1);
+		} else if (clock.getUnit().equals("\u03BCs")) {
+			dutyCycleComboBoxString.setSelectedIndex(2);
+		} else if (clock.getUnit().equals("ns")) {
+			dutyCycleComboBoxString.setSelectedIndex(3);
+		}
+		dutyCycleComboBoxString.addActionListener(this);
+		constraints = new GridBagConstraints(2, 2, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(5, 10, 15, 10), 0, 0);
+		gridBag.setConstraints(dutyCycleComboBoxString, constraints);
+		attributesBoxPanel.add(dutyCycleComboBoxString); */
+		//
+
+			JLabel startTimeLabel = new JLabel("StartTime Tm : ");
+		constraints = new GridBagConstraints(0, 3, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(5, 10, 15, 10), 0, 0);
+		gridBag.setConstraints(startTimeLabel, constraints);
+		attributesBoxPanel.add(startTimeLabel);
+
+		if (clock.getStartTime() == -1) { 
+			startTimeTextField = new JTextField(10);
+		} else {
+			startTimeTextField = new JTextField("" + clock.getStartTime(), 10); 
+		}
+		constraints = new GridBagConstraints(1, 3, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(5, 10, 15, 10), 0, 0);
+		gridBag.setConstraints(startTimeTextField, constraints);
+		attributesBoxPanel.add(startTimeTextField);
+
+		listStartTimeString = new String[4];
+		listStartTimeString[0] = "s";
+		listStartTimeString[1] = "ms";
+		listStartTimeString[2] = "\u03BCs";
+		listStartTimeString[3] = "ns";
+		startTimeComboBoxString = new JComboBox<String>(listStartTimeString);
+		if (clock.getUnit().equals("") || clock.getUnit().equals("s")) {
+			startTimeComboBoxString.setSelectedIndex(0);
+		} else if (clock.getUnit().equals("ms")) {
+			startTimeComboBoxString.setSelectedIndex(1);
+		} else if (clock.getUnit().equals("\u03BCs")) {
+			startTimeComboBoxString.setSelectedIndex(2);
+		} else if (clock.getUnit().equals("ns")) {
+			startTimeComboBoxString.setSelectedIndex(3);
+		}
+		startTimeComboBoxString.addActionListener(this);
+		constraints = new GridBagConstraints(2, 3, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(5, 10, 15, 10), 0, 0);
+		gridBag.setConstraints(startTimeComboBoxString, constraints);
+		attributesBoxPanel.add(startTimeComboBoxString);
+
+
+		//
+		JLabel posFirstLabel = new JLabel("PosFirst Tm : ");
+		constraints = new GridBagConstraints(0, 4, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(5, 10, 15, 10), 0, 0);
+		gridBag.setConstraints(posFirstLabel, constraints);
+		attributesBoxPanel.add(posFirstLabel);
+
+		if (clock.getPosFirst() == false) { 
+			posFirstTextField = new JTextField(10);
+		} else {
+			posFirstTextField = new JTextField("" + clock.getPosFirst(), 10); 
+		}
+		constraints = new GridBagConstraints(1, 4, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(5, 10, 15, 10), 0, 0);
+		//gridBag.setConstraints(posFirstTextField, constraints);
+		//attributesBoxPanel.add(posFirstTextField);
+
+		listPosFirstString = new String[2];
+		listPosFirstString[0] = "false";
+		listPosFirstString[1] = "true";
 	
-		posFirstComboBoxString = new JComboBox<String>(posFirstString);
-		if (clock.getPosFirst().equals("") || clock.getPosFirst().equals("true")) {
+		posFirstComboBoxString = new JComboBox<String>(listPosFirstString);
+		if (clock.getUnit().equals("") || clock.getUnit().equals("no")) {
 			posFirstComboBoxString.setSelectedIndex(0);
-		} else if (clock.getPosFirst().equals("false")){
+		} else if (clock.getUnit().equals("yes")) {
 			posFirstComboBoxString.setSelectedIndex(1);
 		}
-		posFirstComboBoxString.setActionCommand("positive edge first");
 		posFirstComboBoxString.addActionListener(this);
-		constraints = new GridBagConstraints(2, 1, 1, 1, 1.0, 1.0,
-				GridBagConstraints.CENTER,
-				GridBagConstraints.BOTH,
-				new Insets(5, 10, 5, 10), 0, 0);
+		constraints = new GridBagConstraints(2, 4, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(5, 10, 15, 10), 0, 0);
 		gridBag.setConstraints(posFirstComboBoxString, constraints);
 		attributesBoxPanel.add(posFirstComboBoxString);
-		
-		attributesBox.add(attributesBoxPanel);
-
+		//
+			
+		attributesBox.add(attributesBoxPanel); 
 		attributesMainPanel.add(attributesBox, BorderLayout.NORTH); 
-
+	
+		// --- Button --- //
 		JPanel downPanel = new JPanel(new FlowLayout());
 
 		JButton saveCloseButton = new JButton("Save and close");
@@ -225,21 +414,101 @@ public class JDialogSysCAMSClock extends JDialog implements ActionListener {
 		this.getRootPane().setDefaultButton(saveCloseButton);
 	}
 
+
 	public void actionPerformed(ActionEvent e) {
 	    clock.setName(nameTextField.getText());		
-	    clock.setFrequency(frequencyTextField.getText());
-	    clock.setDutyCycle(dutyCycleTextField.getText());
-	    clock.setStartTime(startTimeTextField.getText());
-	    clock.setPosFirst((String) posFirstComboBoxString.getSelectedItem());
-	    clock.setUnit((String) unitComboBoxString.getSelectedItem());
+	 	    
+	    if(posFirstComboBoxString.getSelectedIndex()==0){
+		clock.setPosFirst(false);
+	    }
+	    else{
+		clock.setPosFirst(true);
+	    }
+	    //	    clock.setUnit((String) unitComboBoxString.getSelectedItem()); ToDo
+
+
+            if ("Save_Close".equals(e.getActionCommand())) {
+			clock.setValue(new String(nameTextField.getText()));
+
+			if (!(frequencyTextField.getText().isEmpty())) {
+				Boolean frequencyValueInteger = false;
+				try {
+					Double.parseDouble(frequencyTextField.getText());
+				} catch (NumberFormatException e1) {
+					JDialog msg = new JDialog(this);
+					msg.setLocationRelativeTo(null);
+					JOptionPane.showMessageDialog(msg, "Frequency is not a Double", "Warning !",
+							JOptionPane.WARNING_MESSAGE);
+					frequencyValueInteger = true;
+				}
+				if (frequencyValueInteger == false) {
+					clock.setFrequency(Double.parseDouble(frequencyTextField.getText()));
+					clock.setUnit((String) frequencyComboBoxString.getSelectedItem());
+				}
+			} else {
+				clock.setFrequency(-1);
+				clock.setUnit("");
+			}
+
+				if (!(dutyCycleTextField.getText().isEmpty())) {
+				Boolean dutyCycleValueInteger = false;
+				try {
+					Double.parseDouble(dutyCycleTextField.getText());
+				} catch (NumberFormatException e1) {
+					JDialog msg = new JDialog(this);
+					msg.setLocationRelativeTo(null);
+					JOptionPane.showMessageDialog(msg, "DutyCycle is not a Double", "Warning !",
+							JOptionPane.WARNING_MESSAGE);
+					dutyCycleValueInteger = true;
+				}
+				if (dutyCycleValueInteger == false) {
+					clock.setDutyCycle(Double.parseDouble(dutyCycleTextField.getText()));
+					//clock.setUnit((String) dutyCycleComboBoxString.getSelectedItem());
+				}
+			} else {
+				clock.setDutyCycle(-1);
+				//clock.setUnit("");
+			}
+
+				if (!(startTimeTextField.getText().isEmpty())) {
+				Boolean startTimeValueInteger = false;
+				try {
+					Double.parseDouble(startTimeTextField.getText());
+				} catch (NumberFormatException e1) {
+					JDialog msg = new JDialog(this);
+					msg.setLocationRelativeTo(null);
+					JOptionPane.showMessageDialog(msg, "StartTime is not a Double", "Warning !",
+							JOptionPane.WARNING_MESSAGE);
+					startTimeValueInteger = true;
+				}
+					if (startTimeValueInteger == false) {
+					clock.setStartTime(Double.parseDouble(startTimeTextField.getText()));
+					clock.setUnit((String) startTimeComboBoxString.getSelectedItem());
+				}
+			} else {
+				clock.setStartTime(-1);
+				clock.setUnitStartTime("");
+				}	
+
+				//clock.setProcessCode(processCodeTextArea.getText());
+			// clock.setConstructorCode(constructorCodeTextArea.getText());
+			clock.setListStruct(structListModel);
+			//clock.setNameTemplate(nameTemplateTextField.getText());
+			//clock.setTypeTemplate((String) typeTemplateComboBoxString.getSelectedItem());
+			//clock.setValueTemplate(valueTemplateTextField.getText());
+			//clock.setListTypedef(typedefListModel);
+
+			this.dispose();
+		}
+
 	    
-		if ("Save_Close".equals(e.getActionCommand())) {
+	    	if ("Save_Close".equals(e.getActionCommand())) {
 			clock.setValue(new String(nameTextField.getText()));
 			this.dispose();
 		}
 
 		if ("Cancel".equals(e.getActionCommand())) {
 			this.dispose();
-		}
+			}
 	}
 }

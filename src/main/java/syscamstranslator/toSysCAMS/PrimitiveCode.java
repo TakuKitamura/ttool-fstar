@@ -38,11 +38,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-/* this class produces the lines containing essentially the initial #includes; we include all potential components event if they are not used in the deployment diagram*/
-
-/* authors: v1.0 Raja GATGOUT 2014
-            v2.0 Daniela GENIUS, Julien HENON 2015 */
-
 package syscamstranslator.toSysCAMS;
 
 import java.util.LinkedList;
@@ -55,6 +50,8 @@ import syscamstranslator.*;
  * Creation: 14/05/2018
  * @version 1.0 14/05/2018
  * @author Irina Kit Yan LEE
+ * @version 1.1 12/07/2019
+ * @author Irina Kit Yan LEE, Daniela GENIUS
  */
 
 public class PrimitiveCode {
@@ -67,7 +64,7 @@ public class PrimitiveCode {
 
 	public static String getPrimitiveCodeTDF(SysCAMSTBlockTDF tdf) {
 		corpsPrimitiveTDF = "";
-		
+		System.out.println("TDF block");
 		if (tdf != null) {
 			LinkedList<SysCAMSTPortTDF> tdfports = tdf.getPortTDF();
 			LinkedList<SysCAMSTPortConverter> convports = tdf.getPortConverter();
@@ -131,30 +128,36 @@ public class PrimitiveCode {
 						corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t, " + identifier + "(" + value + ")" + CR;
 					} 
 					if (i == tdf.getListStruct().getSize()-1 && i != 0) {
-						corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t, " + identifier + "(" + value + ")" + CR + "\t\t{}" + CR;
+					    //	corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t, " + identifier + "(" + value + ")" + CR + "\t\t{}" + CR;
+					    corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t, " + identifier + "(" + value + ")" + CR;
 					} else {
-						corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t{}" + CR;
+					    //corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t{}" + CR;
 					}
 				}
+				corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t{}" + CR;//correction DG
 				corpsPrimitiveTDF = corpsPrimitiveTDF + "\t};" + CR2;
 			}
 
 			if (!tdfports.isEmpty()) {
 				for (SysCAMSTPortTDF t : tdfports) {
 					if (t.getOrigin() == 0) {
-						corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_in<" + t.getTDFType() + "> " + t.getName() + ";" + CR;
+						corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_in <" + t.getTDFType() + "> " + t.getName() + ";" + CR;
 					} else if (t.getOrigin() == 1) {
-						corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_out<" + t.getTDFType() + "> " + t.getName() + ";" + CR;
+						corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_out <" + t.getTDFType() + "> " + t.getName() + ";" + CR;
 					}
 				}
 			}
+			//	System.out.println("@@@@@ Conv ports empty?");
 			if (!convports.isEmpty()) {
+			    // System.out.println("@@@@@ Conv ports non empty");
 				for (SysCAMSTPortConverter conv : convports) {
 					if (conv.getOrigin() == 0) {
-						corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_de::sca_in<" + conv.getConvType() + "> " + conv.getName() + ";" + CR;
+					    corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_de::sca_in <" + conv.getConvType()+"<" + conv.getNbits()+"> > " + conv.getName() + ";" + CR;//	System.out.println("@@@@@@@@@@@@@@@@@@2conv"+conv.getConvType()+conv.getNbits());
+					    
 					} else if (conv.getOrigin() == 1) {
-						corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_de::sca_out<" + conv.getConvType() + "> " + conv.getName() + ";" + CR;
+					    corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_de::sca_out <" + conv.getConvType()+"<" + conv.getNbits()+"> > "+ conv.getName() + ";" + CR;	//System.out.println("@@@@@@@@@@@@@@@2conv"+conv.getConvType()+conv.getNbits());
 					}
+				
 				}
 			}
 
@@ -379,7 +382,7 @@ public class PrimitiveCode {
 	
 	public static String getPrimitiveCodeDE(SysCAMSTBlockDE de) {
 		corpsPrimitiveDE = "";
-		
+		System.out.println("DE block");
 		if (de != null) {
 			LinkedList<SysCAMSTPortDE> deports = de.getPortDE();
 			int cpt = 0;
@@ -441,21 +444,29 @@ public class PrimitiveCode {
 					if ((i > 0) && (i < de.getListStruct().getSize()-1)) {
 						corpsPrimitiveDE = corpsPrimitiveDE + "\t\t, " + identifier + "(" + value + ")" + CR;
 					} 
-					if (i == de.getListStruct().getSize()-1 && i != 0) {
-						corpsPrimitiveDE = corpsPrimitiveDE + "\t\t, " + identifier + "(" + value + ")" + CR + "\t\t{}" + CR;
-					} else {
-						corpsPrimitiveDE = corpsPrimitiveDE + "\t\t{}" + CR;
-					}
+					//	if (i == de.getListStruct().getSize()-1 && i != 0) {
+					corpsPrimitiveDE = corpsPrimitiveDE + "\t\t, " + identifier + "(" + value + ")" + CR;//DG
+					//	} else {
+					//	corpsPrimitiveDE = corpsPrimitiveDE + "\t\t{}" + CR;
+						//	}
 				}
+					corpsPrimitiveDE = corpsPrimitiveDE + "\t\t{}" + CR;//correction DG
 				corpsPrimitiveDE = corpsPrimitiveDE + "\t};" + CR2;
 			}
 
+			//DG modified, was sca:core
+			//System.out.println("@@@@@@@@@DE ports empty?");
 			if (!deports.isEmpty()) {
+			    //System.out.println("@@@@@@@@@DE ports non empty");
 				for (SysCAMSTPortDE t : deports) {
 					if (t.getOrigin() == 0) {
-						corpsPrimitiveDE = corpsPrimitiveDE + "\tsca_core::sca_in<" + t.getDEType() + "> " + t.getName() + ";" + CR;
+						corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_in <" + t.getDEType() + "<"+t.getNbits()+"> >" + t.getName() + ";" + CR;
+					 
+						//System.out.println("@@@@@@@@@2DE "+t.getDEType()+t.getNbits());		
 					} else if (t.getOrigin() == 1) {
-						corpsPrimitiveDE = corpsPrimitiveDE + "\tsca_core::sca_out<" + t.getDEType() + "> " + t.getName() + ";" + CR;
+					    corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_out <" + t.getDEType() + "<"+t.getNbits() +"> >"+ t.getName() + ";" + CR;
+		 
+					    //System.out.println("@@@@@@@@@2DE "+t.getDEType()+t.getNbits());					
 					}
 				}
 			}
@@ -533,8 +544,10 @@ public class PrimitiveCode {
 				corpsPrimitiveDE = corpsPrimitiveDE + "\t{}" + CR2;
 			}
 			
-			corpsPrimitiveDE = corpsPrimitiveDE + "private:" + CR;
-			
+			corpsPrimitiveDE = corpsPrimitiveDE + "private:" + CR +CR;
+			if(de.getClockName()!=""){
+			    corpsPrimitiveDE = corpsPrimitiveDE +"sc_in<bool> "+de.getClockName()+";"+CR;
+			}
 			if (de.getListStruct().getSize() != 0) {
 				String identifier, type, constant;
 				for (int i = 0; i < de.getListStruct().size(); i++) {

@@ -54,6 +54,8 @@ import syscamstranslator.*;
  * 
  * @version 1.0 02/06/2018
  * @author Irina Kit Yan LEE
+ * @version 1.1 10/07/2019
+ * @author Daniela GENIUS
  */
 
 public class MakefileCode {
@@ -93,11 +95,11 @@ public class MakefileCode {
 						+ clusters.get(i).getClusterName() + "_tb.cpp";
 
 				for (SysCAMSTBlockTDF t : tdf) {
-					corpsMakefile = corpsMakefile + " " + t.getName() + ".h";
+					corpsMakefile = corpsMakefile+ " generated_H/" + t.getName() + ".h";
 				}
 
 				for (SysCAMSTBlockDE t : de) {
-					corpsMakefile = corpsMakefile + " " + t.getName() + ".h";
+					corpsMakefile = corpsMakefile + " generated_H/" + t.getName() + ".h";
 				}
 				corpsMakefile = corpsMakefile + CR
 						+ "\t$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $< -lsystemc-ams -lsystemc | c++filt" + CR2;
