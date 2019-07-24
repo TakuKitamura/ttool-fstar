@@ -36,48 +36,76 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+package ui.syscams;
 
-package ui.util;
+import java.awt.Graphics;
 
+import ui.TDiagramPanel;
+import ui.TGComponent;
 
 /**
- * Class DefaultText
- * Text of some windows
- * Creation: 01/12/2003
- *
- * @author Ludovic APVRILLE
- * @version 1.2 21/06/2018
- */
-public class DefaultText {
+ * Class SysCAMSPortClock
+ * Primitive port. To be used in SystemC-AMS diagrams
+ * Creation: 08/07/2019
+ * @version 1.0 08/07/2019
+ * @author Daniela Genius
+*/
 
-    public static String BUILD = "13112";
-    public static String DATE = "2019/07/24 03:02:17 CET";
+public class SysCAMSPortClock extends SysCAMSPrimitivePort {
+    private double frequency;
+    private String unit;
+    private double startTime;
+    private double dutyCycle;
+    private boolean posFirst;
+	
+	public SysCAMSPortClock(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
+		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+	}
 
-    public static StringBuffer sbAbout = makeAbout();
+    /*	public double getFrequency() {
+		return frequency;
+	}
 
-    public static String getAboutText() {
-        return new String(sbAbout);
-    }
+	public void setFrequency(double frequency) {
+		this.frequency = frequency;
+	}
 
-    public static String getVersion() {
-        return "1.0beta"; /* Set new release Nov. 16th, 2017 */
-    }
+	public String getUnit() {
+		return unit;
+	}
 
-    public static String getFullVersion() {
-        return getVersion() + " -- build: " + DefaultText.BUILD + " date: " + DefaultText.DATE;
-    }
+	public void setUnit(String unit) {
+		 this.unit = unit ;
+	}
+    
+	public double getStartTime() {
+		return startTime;
+	}
 
-    private static StringBuffer makeAbout() {
-        StringBuffer sb = new StringBuffer();
-        sb.append("TTool version " + getFullVersion() + "\n");
-        sb.append("Copyright IMT - Telecom Paris / Ludovic Apvrille \n");
-        sb.append("\nContact: ludovic.apvrille@telecom-paris.fr\n");
-        sb.append("\nProgrammers\n\tTelecom ParisTech: Ludovic Apvrille, Dominique Blouin, Fabien Tessier, \n\tDaniel Knorreck, Florian Lugou, Letitia Li\n");
-        sb.append("\n\tNokia: Andrea Enrici\n");
-        sb.append("\n\tLIP6: Daniela Genius\n");
-        sb.append("\nFor more information:\n");
-        sb.append("http://ttool.telecom-paristech.fr/\n\n");
-        return sb;
-    }
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
+	}
 
+	public double getDutyCycle() {
+		return dutyCycle;
+	}
+
+	public void setDutyCycle() {
+		this.dutyCycle = dutyCycle;
+	}
+    
+	public boolean getPosFirst() {
+		return posFirst;
+	}
+
+        public void setPosFirst(boolean posFirst) {
+		this.posFirst = posFirst;
+	}
+    
+	public void setSensitive(boolean posFirst) {
+	    this.posFirst = posFirst;
+	    }*/
+    
+	public void drawParticularity(Graphics g) {
+	}
 }

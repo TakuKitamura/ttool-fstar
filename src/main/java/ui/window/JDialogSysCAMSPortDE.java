@@ -214,10 +214,11 @@ public class JDialogSysCAMSPortDE extends JDialog implements ActionListener {
 		boxPanel.add(typeLabel);
 
 		listArrayTypeString = new ArrayList<String>();
-		listArrayTypeString.add("int");
-		listArrayTypeString.add("bool");
-		listArrayTypeString.add("double");
-        listArrayTypeString.add("sc_uint<N>");
+			listArrayTypeString.add("int");
+			listArrayTypeString.add("bool");
+			listArrayTypeString.add("double");
+		listArrayTypeString.add("sc_uint<N>");
+		
 		if (port.getFather() != null) {
 			if (port.getFather() instanceof SysCAMSBlockDE) {
 				if (!((SysCAMSBlockDE) port.getFather()).getListTypedef().isEmpty()) {
@@ -239,11 +240,18 @@ public class JDialogSysCAMSPortDE extends JDialog implements ActionListener {
 		}
 		for (int i = 0; i < listArrayTypeString.size(); i++) {
 			if (port.getDEType().equals("")) {
+			 
 				typeComboBoxString.setSelectedIndex(0);
 			}
 			if (port.getDEType().equals(listArrayTypeString.get(i))) {
 				typeComboBoxString.setSelectedIndex(i);
+			
 			}
+			if (port.getDEType().equals("sc_uint")) {
+				typeComboBoxString.setSelectedIndex(3);
+			
+			}
+			
 		}
 		typeComboBoxString.addActionListener(this);
 		constraints = new GridBagConstraints(1, 2, 2, 1, 1.0, 1.0,
@@ -251,6 +259,7 @@ public class JDialogSysCAMSPortDE extends JDialog implements ActionListener {
 				GridBagConstraints.BOTH,
 				new Insets(5, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(typeComboBoxString, constraints);
+		//	System.out.println("@@@@@ DE port type " +typeComboBoxString);
 		boxPanel.add(typeComboBoxString); 
 
 		JLabel orginLabel = new JLabel("Origin : ");
@@ -358,12 +367,13 @@ public class JDialogSysCAMSPortDE extends JDialog implements ActionListener {
 							JOptionPane.WARNING_MESSAGE);
 					nbitsValueInteger = true;
 				}
-				/*	if (nbitsValueInteger == false) {
+				//	if (nbitsValueInteger == false) {
 					port.setNbits(Integer.parseInt(nbitsTextField.getText()));
-				}
-			} else {
-				port.setNbits(-1);
-				}*/
+					//System.out.println("@@@@@@@@@1"+port.getNbits());
+					//	}
+					//	} else {
+					//		port.setNbits(-1);
+					//	}*/
 
 			}
 			// if (!(periodTextField.getText().isEmpty())) {
@@ -421,14 +431,22 @@ public class JDialogSysCAMSPortDE extends JDialog implements ActionListener {
 			// }
 
 
+		       
 		
-			if(typeComboBoxString.getSelectedItem()=="sc_uint"){
-				port.setDEType("sc_uint<"+nbitsTextField.getText()+">");
-			}		
-			else{
-			port.setDEType((String) typeComboBoxString.getSelectedItem());
-			// port.setTime((String) periodComboBoxString.getSelectedItem());
-			}
+				if(typeComboBoxString.getSelectedItem()=="sc_uint<N>"){
+			    //	port.setDEType((String)"sc_uint<"+nbitsTextField.getText()+"> ");
+			    port.setDEType((String)"sc_uint");
+				 
+			    //	System.out.println("@@@@@@@@@1"+port.getDEType());
+			    	}		
+			   	else{
+			    	port.setDEType((String) typeComboBoxString.getSelectedItem());
+
+				//	System.out.println("@@@@@@@@@1"+port.getDEType());
+				}
+				
+				// port.setTime((String) periodComboBoxString.getSelectedItem());
+			       
 			
 			if ((String) originComboBoxString.getSelectedItem() == "Output") {
 				port.setOrigin(1);
