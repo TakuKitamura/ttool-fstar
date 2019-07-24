@@ -43,6 +43,7 @@ package ui.ucd;
 
 import ui.CDElement;
 import ui.TGComponentManager;
+import ui.TGConnectingPoint;
 import ui.TGConnectingPointWidthHeight;
 
 /**
@@ -52,13 +53,46 @@ import ui.TGConnectingPointWidthHeight;
  * @version 1.0 18/02/2005
  * @author Ludovic APVRILLE
  */
-public class TGConnectingPointActorUCD extends  TGConnectingPointWidthHeight{
+public class TGConnectingPointActorUCD extends  TGConnectingPointWidthHeight {
 
-	public TGConnectingPointActorUCD(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
-		super(_container, _x, _y, _in, _out, _w, _h);
-	}
-    
+    public TGConnectingPointActorUCD(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
+        super(_container, _x, _y, _in, _out, _w, _h);
+    }
+
     public boolean isCompatibleWith(int type) {
         return (type == TGComponentManager.CONNECTOR_ACTOR_UCD) || (type == TGComponentManager.CONNECTOR_SPECIA_UCD);
+    }
+
+
+    public boolean isCompatibleWith(int type, TGConnectingPoint outPoint) {
+
+        //TraceManager.addDev("NEW is compatible with "  + outPoint);
+
+        if (outPoint != null) {
+            if ((outPoint.getFather() instanceof UCDUseCase) && (getFather() instanceof UCDUseCase)) {
+                return false;
+            }
+            if ((outPoint.getFather() instanceof UCDActor) && (getFather() instanceof UCDActor)) {
+                return false;
+            }
+
+            if ((outPoint.getFather() instanceof UCDActorBox) && (getFather() instanceof UCDActorBox)) {
+                return false;
+            }
+
+            if ((outPoint.getFather() instanceof UCDActor) && (getFather() instanceof UCDActorBox)) {
+                return false;
+            }
+
+            if ((outPoint.getFather() instanceof UCDActorBox) && (getFather() instanceof UCDActor)) {
+                return false;
+            }
+
+
+        }
+
+        return isCompatibleWith(type);
+
+
     }
 }

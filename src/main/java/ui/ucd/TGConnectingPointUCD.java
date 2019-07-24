@@ -85,6 +85,20 @@ public class TGConnectingPointUCD extends  TGConnectingPointWidthHeight{
             if ((outPoint.getFather() instanceof UCDActor) && (getFather() instanceof UCDActor)) {
                 return false;
             }
+
+            if ((outPoint.getFather() instanceof UCDActorBox) && (getFather() instanceof UCDActorBox)) {
+                return false;
+            }
+
+            if ((outPoint.getFather() instanceof UCDActor) && (getFather() instanceof UCDActorBox)) {
+                return false;
+            }
+
+            if ((outPoint.getFather() instanceof UCDActorBox) && (getFather() instanceof UCDActor)) {
+                return false;
+            }
+
+
         }
 
 	    return isCompatibleWith(type);

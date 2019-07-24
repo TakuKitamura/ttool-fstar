@@ -1,14 +1,11 @@
 package tmltranslator;
 
-import graph.AUTGraph;
 import myutil.FileUtils;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import req.ebrdd.EBRDD;
 import tepe.TEPE;
-import tmltranslator.TMLSyntaxChecking;
-import tmltranslator.TMLTextSpecification;
 import tmltranslator.tomappingsystemc2.DiploSimulatorFactory;
 import tmltranslator.tomappingsystemc2.IDiploSimulatorCodeGenerator;
 import tmltranslator.tomappingsystemc2.Penalties;
@@ -22,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
+
+
 
 public class DiplodocusNoCTest extends AbstractUITest {
 
@@ -204,8 +203,6 @@ public class DiplodocusNoCTest extends AbstractUITest {
         for(String act: SIM_ACTION) {
             assertTrue(simData.indexOf(act) > -1);
         }
-
     }
-
 
 }
