@@ -1,5 +1,7 @@
 package tmltranslator;
 
+import common.ConfigurationTTool;
+import common.SpecConfigTTool;
 import myutil.FileUtils;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -26,6 +28,7 @@ public class DiplodocusNoCTest extends AbstractUITest {
 
 
     final String MODEL = "spec";
+    final String DIR_GEN = "test_spec_noc/";
     final int SIZE_OF_NOCS = 2;
     final int NB_Of_SIM_CYCLES = 300;
     final String[] SIM_ACTION = {};
@@ -42,12 +45,13 @@ public class DiplodocusNoCTest extends AbstractUITest {
 
     public DiplodocusNoCTest() {
         super();
-        //mainGUI.openProjectFromFile(new File(RESOURCES_DIR));
     }
 
     @Before
     public void setUp() throws Exception {
-        SIM_DIR = getBaseResourcesDir() + "../../../../simulators/c++2/";
+        //SIM_DIR = getBaseResourcesDir() + "/" + DIR_GEN;
+        //SIM_DIR = getBaseResourcesDir() +  "../../../../simulators/c++2/" + DIR_GEN;
+        SIM_DIR =  DIR_GEN;
     }
 
 
@@ -115,7 +119,7 @@ public class DiplodocusNoCTest extends AbstractUITest {
 
 
         // Generate SystemC code
-        System.out.println("NOC executing: sim code gen for " + s);
+        System.out.println("NOC executing: sim code generation for " + s);
         final IDiploSimulatorCodeGenerator tml2systc;
         List<EBRDD> al = new ArrayList<EBRDD>();
         List<TEPE> alTepe = new ArrayList<TEPE>();
@@ -124,10 +128,26 @@ public class DiplodocusNoCTest extends AbstractUITest {
         error = tml2systc.generateSystemC(false, true);
         assertNull(error);
 
+        File directory = new File(SIM_DIR);
+        if (! directory.exists()){
+            directory.mkdirs();
+        }
+
+        // Putting sim files
+        System.out.println("NOC executing: sim lib code copying for " + s);
+        ConfigurationTTool.SystemCCodeDirectory = getBaseResourcesDir() +  "../../../../simulators/c++2/";
+        boolean simFiles = SpecConfigTTool.checkAndCreateSystemCDir(SIM_DIR);
+
+        System.out.println("NOC executing: sim lib code copying done with result " + simFiles);
+        assertTrue(simFiles);
+
+        System.out.println("NOC Saving file in: " + SIM_DIR);
         tml2systc.saveFile(SIM_DIR, "appmodel");
 
+
+
         // Compile it
-        System.out.println("executing: compile");
+        System.out.println("NOC executing: compile");
         Process proc;
         BufferedReader proc_in;
         String str;
@@ -172,27 +192,35 @@ public class DiplodocusNoCTest extends AbstractUITest {
             System.out.println("FAILED: executing: " + "make -C " + SIM_DIR);
             return;
         }
-        System.out.println("SUCCESS: executing: " + "make -C " + SIM_DIR);
+        System.out.println("NOC SUCCESS: executing: " + "make -C " + SIM_DIR);
 
         // Run the simulator
         try {
-            System.out.println("NOC executing simulation in " + SIM_DIR);
-            proc = Runtime.getRuntime().exec("./" + SIM_DIR + "run.x -cmd '1 6 " + NB_Of_SIM_CYCLES + "; 7 2 " + s + ".txt'");
+            System.out.println("NOC executing simulation in " + SIM_DIR +  " and gen file in " + s + ".txt");
+            String[] params = new String [3];
+
+            params[0] = "./" + SIM_DIR + "run.x";
+            params[1] = "-cmd";
+            params[2] = "1 6 " + NB_Of_SIM_CYCLES + "; 7 2 " + DIR_GEN + s + ".txt";
+            proc = Runtime.getRuntime().exec(params);
             proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 
             while ((str = proc_in.readLine()) != null) {
                 // TraceManager.addDev( "Sending " + str + " from " + port + " to client..." );
-                System.out.println("executing: " + str);
+                System.out.println("NOC executing: " + str);
             }
         } catch (Exception e) {
             // Probably make is not installed
             System.out.println("FAILED: executing simulation");
+            assertTrue(false);
             return;
         }
 
+        System.out.println("NOC Simulation executed");
+
         // Compare results with expected ones
         // Must load the file data
-        File simFile = new File(s + ".txt");
+        File simFile = new File(DIR_GEN + s + ".txt");
         String simData = "";
         try {
             simData = FileUtils.loadFileData(simFile);
@@ -203,6 +231,9 @@ public class DiplodocusNoCTest extends AbstractUITest {
         for(String act: SIM_ACTION) {
             assertTrue(simData.indexOf(act) > -1);
         }
+
+        assertTrue(true);
+        System.out.println("NOC Done");
     }
 
 }
