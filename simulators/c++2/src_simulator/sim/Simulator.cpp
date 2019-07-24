@@ -844,8 +844,27 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 #ifdef DEBUG_KERNEL
       std::cout << "kernel:simulate: scheduling decision: " <<  transLET->toString() << std::endl;
 #endif
-
 	commandLET=transLET->getCommand();
+
+
+	if(transLET!=0 && transLET->getCommand()->getTask()->getIsDaemon()==true){
+	  if(transLET->getStartTime() >= deviceLET->getSimulatedTime()){
+	    // std::cout<<"bigger time"<<std::endl;
+	    bool isFinish=true;
+	    for(TaskList::const_iterator i=_simComp->getNonDaemonTaskList().begin(); i != _simComp->getNonDaemonTaskList().end(); ++i){	 
+	      //  std::cout<<"non dameon task"<<(*i)->toString()<<" state is "<<(*i)->getState()<<std::endl;
+	      if((*i)->getState()!=3 && (*i)->getState()!=0){
+		//	std::cout<<"not stop"<<std::endl;
+		isFinish=false;
+		break;	 
+	      }
+	    }
+	    if(isFinish==true)
+	      break;	      
+	  }
+	}
+	
+       		
 #ifdef DEBUG_SIMULATE
 	std::cout<<"device is "<<deviceLET->getName()<<std::endl;
 #endif
@@ -856,6 +875,7 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 #ifdef DEBUG_KERNEL
       std::cout << "kernel:simulate: AFTER add trans: " << x << std::endl;
 #endif
+    
       if (x){
 #ifdef DEBUG_KERNEL
 	std::cout << "kernel:simulate: add transaction 0" << commandLET->toString() << std::endl;
@@ -975,11 +995,9 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 #ifdef DEBUG_SIMULATE
       std::cout<<"task is !!!!!"<<oLastTrans->toString()<<std::endl;
 #endif
-	transLET=getTransLowestEndTime(deviceLET);
-	//	if(transLET==0) std::cout<<"translet is 0~~~"<<std::endl;
-	//	if(_simComp->getStopFlag()==true) std::cout<<"stop flag is true"<<std::endl;
-	//	else std::cout<<"stop flag is false"<<std::endl;
-    }
+    
+      transLET=getTransLowestEndTime(deviceLET);
+  }
 
   bool aSimCompleted = ( transLET==0  && !_simComp->getStoppedOnAction());
 

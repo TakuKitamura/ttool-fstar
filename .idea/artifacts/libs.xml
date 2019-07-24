@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact name="libs">
-    <output-path>$PROJECT_DIR$/bin/</output-path>
-    <root id="root">
-      <element id="library" level="project" name="libs" />
-    </root>
-  </artifact>
-</component>

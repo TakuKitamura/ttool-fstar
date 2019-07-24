@@ -999,6 +999,7 @@ public class TMLMapping<E> {
 
         // New DMATask
         TMLTask dmaTask = new TMLTask("DMATask__" + chan.getName(), chan, null);
+        dmaTask.setDaemon(true);
         tmlm.addTask(dmaTask);
         TMLChannel fromOriginToDMA = new TMLChannel("toDMATask__" + chan.getName(), chan);
         addCommToHwCommNode(fromOriginToDMA, mem1);
@@ -1203,7 +1204,9 @@ public class TMLMapping<E> {
 
         // New DMATask1
         TMLTask dmaTask1 = new TMLTask("DMATask1__" + chan.getName(), chan, null);
+        dmaTask1.setDaemon(true);
         TMLTask dmaTask2 = new TMLTask("DMATask2__" + chan.getName(), chan, null);
+        dmaTask2.setDaemon(true);
         tmlm.addTask(dmaTask1);
         TMLChannel fromOriginToDMA1 = new TMLChannel("toDMATask1__" + chan.getName(), chan);
         addCommToHwCommNode(fromOriginToDMA1, mem11);
@@ -1471,6 +1474,7 @@ public class TMLMapping<E> {
         // We create a new Task mapped on CPUController, with a new channel
         TMLTask origin = chan.getOriginTask();
         TMLTask ctrl = new TMLTask("MemCpyController__" + chan.getName(), chan, null);
+        ctrl.setDaemon(true);
         tmlm.addTask(ctrl);
         addTaskToHwExecutionNode(ctrl, node);
         TMLChannel fromOriginToCTRL = new TMLChannel("toCTRL__" + chan.getName(), chan);

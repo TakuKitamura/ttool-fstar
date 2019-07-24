@@ -53,6 +53,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <unistd.h>
 
 TMLTime SchedulableDevice::_simulatedTime=0;
+TMLTime SchedulableDevice::_nonDaemonSimulatedTime=0;
 TMLTime SchedulableDevice::_overallTransNo=0;
 TMLTime SchedulableDevice::_overallTransSize=0;
 ID TMLTransaction::_ID=1;

@@ -2337,6 +2337,7 @@ public class TMLModeling<E> {
 		}
         // Create the new task and its activity diagram
         TMLTask forkTask = new TMLTask("FORKTASK" + SEP1 + _ch.getName(), _ch.getReferenceObject(), null);
+		forkTask.setDaemon(true);
         TMLActivity forkActivity = forkTask.getActivityDiagram();
         addTask(forkTask);
 
@@ -2545,6 +2546,7 @@ public class TMLModeling<E> {
 		}
         // Create the new task and its activity diagram
         TMLTask joinTask = new TMLTask("JOINTASK" + SEP1 + _ch.getName(), _ch.getReferenceObject(), null);
+		joinTask.setDaemon(true);
         TMLActivity joinActivity = joinTask.getActivityDiagram();
         addTask(joinTask);
 

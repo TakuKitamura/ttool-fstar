@@ -87,7 +87,6 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
     private final NamesGenerationHelper namesGen;
 
 
-
     public DiploSimulatorCodeGenerator(TMLModeling<?> _tmlm) {
         this(_tmlm.getDefaultMapping());
 
@@ -219,7 +218,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
     }
 
     // If String is non-null, returns an error
-    private String  makeDeclarations() {
+    private String makeDeclarations() {
         declaration = "class CurrentComponents: public SimComponents{\npublic:\nCurrentComponents():SimComponents(" + tmlmapping.getHashCode() + "){\n";
 
         // Declaration of HW nodes
@@ -250,22 +249,22 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
                     if (cores != 0) {
                         declaration += cpuInstName + "->setScheduler(" + schedulerInstName + ",false)" + SCCR;
 			}*/
-		final String cpuInstName = namesGen.cpuInstanceName(exNode, exNode.nbOfCores);
-		if (exNode.nbOfCores == 1) {
-		    declaration += "CPU* " + exNode.getName() + "_" + exNode.nbOfCores + " = new SingleCoreCPU(" + exNode.getID() + ", \"" + exNode.getName() + "_" + exNode.nbOfCores + "\", " 
-			+ exNode.getName() + "_scheduler" + ", ";
-		    
-                    declaration += exNode.clockRatio + ", " + exNode.execiTime + ", " + exNode.execcTime + ", " + exNode.pipelineSize + ", " 
-			+ exNode.taskSwitchingTime + ", " + exNode.branchingPredictionPenalty + ", " + exNode.goIdleTime + ", " + exNode.maxConsecutiveIdleCycles + ", " + exNode.byteDataSize + ")" + SCCR;
-		} else {
-		    declaration += "CPU* " + exNode.getName() + "_" + exNode.nbOfCores + " = new MultiCoreCPU(" + exNode.getID() + ", \"" + exNode.getName() + "_" + exNode.nbOfCores + "\", " + exNode.getName() + "_scheduler" + ", ";
-		    
-                    declaration += exNode.clockRatio + ", " + exNode.execiTime + ", " + exNode.execcTime + ", " + exNode.pipelineSize + ", " + exNode.taskSwitchingTime + ", " + exNode.branchingPredictionPenalty + ", " + exNode.goIdleTime + ", " + exNode.maxConsecutiveIdleCycles + ", " + exNode.byteDataSize +", " + exNode.nbOfCores + ")" + SCCR;
-		}
-		
-		
-                    declaration += "addCPU(" + cpuInstName + ")" + SCCR;
-		    //}
+                final String cpuInstName = namesGen.cpuInstanceName(exNode, exNode.nbOfCores);
+                if (exNode.nbOfCores == 1) {
+                    declaration += "CPU* " + exNode.getName() + "_" + exNode.nbOfCores + " = new SingleCoreCPU(" + exNode.getID() + ", \"" + exNode.getName() + "_" + exNode.nbOfCores + "\", "
+                            + exNode.getName() + "_scheduler" + ", ";
+
+                    declaration += exNode.clockRatio + ", " + exNode.execiTime + ", " + exNode.execcTime + ", " + exNode.pipelineSize + ", "
+                            + exNode.taskSwitchingTime + ", " + exNode.branchingPredictionPenalty + ", " + exNode.goIdleTime + ", " + exNode.maxConsecutiveIdleCycles + ", " + exNode.byteDataSize + ")" + SCCR;
+                } else {
+                    declaration += "CPU* " + exNode.getName() + "_" + exNode.nbOfCores + " = new MultiCoreCPU(" + exNode.getID() + ", \"" + exNode.getName() + "_" + exNode.nbOfCores + "\", " + exNode.getName() + "_scheduler" + ", ";
+
+                    declaration += exNode.clockRatio + ", " + exNode.execiTime + ", " + exNode.execcTime + ", " + exNode.pipelineSize + ", " + exNode.taskSwitchingTime + ", " + exNode.branchingPredictionPenalty + ", " + exNode.goIdleTime + ", " + exNode.maxConsecutiveIdleCycles + ", " + exNode.byteDataSize + ", " + exNode.nbOfCores + ")" + SCCR;
+                }
+
+
+                declaration += "addCPU(" + cpuInstName + ")" + SCCR;
+                //}
             } else if (node instanceof HwA) {
                 final HwA hwaNode = (HwA) node;
                 final String schedulerInstName = namesGen.rrSchedulerInstanceName(hwaNode);
@@ -298,13 +297,12 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
                 }
 
 
-
                 final String hwFpgaInstName = namesGen.hwFpgaInstanceName(hwFpgaNode);
                 declaration += "FPGA* " + hwFpgaInstName + " = new FPGA(" + hwFpgaNode.getID() + ", \"" + namesGen.hwFpgaName(hwFpgaNode) + "\", "
                         + schedulerInstName + ", ";
 
                 declaration += hwFpgaNode.reconfigurationTime + ", " + hwFpgaNode.goIdleTime + ", " +
-                        hwFpgaNode.maxConsecutiveIdleCycles + ", " +  hwFpgaNode.execiTime + ", " +
+                        hwFpgaNode.maxConsecutiveIdleCycles + ", " + hwFpgaNode.execiTime + ", " +
                         hwFpgaNode.execcTime + ")" + SCCR;
 
                 // DB: Issue #21 TODO: Should there be a scheduler?? Given the for loop, cores is always 0 so this code is never executed
@@ -319,11 +317,11 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
 
         declaration += CR;
 
-	// Declaration of Model Name 
-	declaration += "//Declaration of Model Name" + CR;
+        // Declaration of Model Name
+        declaration += "//Declaration of Model Name" + CR;
         declaration += "std::string msg=" + "\"" + modelName + "\"" + SCCR;
         declaration += "addModelName(" + "\"" + modelName + "\"" + ")" + SCCR;
-  
+
 
         // Declaration of Buses
         declaration += "//Declaration of Buses" + CR;
@@ -393,26 +391,26 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
                     }
 
                     //for (int cores = 0; cores < noOfCores; cores++) {
-                        final String nodeInstanceName;
+                    final String nodeInstanceName;
 
-                        if (node instanceof HwCPU || node instanceof HwA || node instanceof HwFPGA) {
-                            nodeInstanceName = namesGen.executionNodeInstanceName((HwExecutionNode) node, noOfCores);
-                        } else {
-                            nodeInstanceName = namesGen.bridgeInstanceName((HwBridge) node);
-                        }
+                    if (node instanceof HwCPU || node instanceof HwA || node instanceof HwFPGA) {
+                        nodeInstanceName = namesGen.executionNodeInstanceName((HwExecutionNode) node, noOfCores);
+                    } else {
+                        nodeInstanceName = namesGen.bridgeInstanceName((HwBridge) node);
+                    }
 
-                        final String busMasterInstName = namesGen.busMasterInstanceName(node, 0, link.bus);
+                    final String busMasterInstName = namesGen.busMasterInstanceName(node, 0, link.bus);
 
-                        declaration += "BusMaster* " + busMasterInstName + " = new BusMaster(\"" + namesGen.busMasterName(node, 0, link.bus) + "\", " + link.getPriority() + ", " + link.bus.pipelineSize + ", array(" + link.bus.pipelineSize;
+                    declaration += "BusMaster* " + busMasterInstName + " = new BusMaster(\"" + namesGen.busMasterName(node, 0, link.bus) + "\", " + link.getPriority() + ", " + link.bus.pipelineSize + ", array(" + link.bus.pipelineSize;
 
-                        for (int i = 0; i < link.bus.pipelineSize; i++) {
-                            declaration += ", (SchedulableCommDevice*) " + namesGen.schedComDeviceInstanceName(link.bus, i);
-                        }
+                    for (int i = 0; i < link.bus.pipelineSize; i++) {
+                        declaration += ", (SchedulableCommDevice*) " + namesGen.schedComDeviceInstanceName(link.bus, i);
+                    }
 
-                        declaration += "))" + SCCR;
+                    declaration += "))" + SCCR;
 
-                        declaration += nodeInstanceName + "->addBusMaster(" + busMasterInstName + ")" + SCCR;
-			//}
+                    declaration += nodeInstanceName + "->addBusMaster(" + busMasterInstName + ")" + SCCR;
+                    //}
                 }
             }
         }
@@ -449,16 +447,16 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
                 TraceManager.addDev("\nDetermining routing of " + channel.getName() + ":");
                 TraceManager.addDev(channel.toString());
 
-                String ret =  determineRouting(tmlmapping.getHwNodeOf(channel.getOriginTask()),
+                String ret = determineRouting(tmlmapping.getHwNodeOf(channel.getOriginTask()),
                         tmlmapping.getHwNodeOf(channel.getDestinationTask()), elem);
                 //TraceManager.addDev("------> Routing = " + ret);
                 if (ret == null) {
-                    return "Could not determine  routing between " +  channel.getOriginTask().getName() + " and " + channel.getDestinationTask()
+                    return "Could not determine  routing between " + channel.getOriginTask().getName() + " and " + channel.getDestinationTask()
                             .getName() +
                             " for channel " + channel.getName();
                 }
                 ret = ret + param + "," + channel.getPriority();
-                declaration += ret ;
+                declaration += ret;
 
                 if (channel.isLossy() && channel.getType() != TMLChannel.NBRNBW) {
                     declaration += "," + channel.getLossPercentage() + "," + channel.getMaxNbOfLoss();
@@ -496,11 +494,11 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
                 //TraceManager.addDev("Evt: " + evt.getName());
                 String ret = determineRouting(tmlmapping.getHwNodeOf(evt.getOriginTask()), tmlmapping.getHwNodeOf(evt.getDestinationTask()), evt);
                 if (ret == null) {
-                    return "Could not determine routing between " +  evt.getOriginTask().getName() + " and " + evt.getDestinationTask().getName() +
+                    return "Could not determine routing between " + evt.getOriginTask().getName() + " and " + evt.getDestinationTask().getName() +
                             " for event " + evt.getName();
                 }
                 declaration += eventTypeName + "* " + eventInstName + " = new " + eventTypeName + "(" + evt.getID() + ",\"" + eventName + "\"," +
-                         ret + param;
+                        ret + param;
 
             } else {
                 declaration += eventTypeName + "* " + eventInstName + " = new " + eventTypeName + "(" + evt.getID() + ",\"" + eventName + "\",0,0,0" + param;   ///old command
@@ -526,10 +524,10 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
 
                 if (tmlmapping.isCommNodeMappedOn(req, null)) {
                     //TraceManager.addDev("Request: " + req.getName());
-                    String ret =  determineRouting(tmlmapping.getHwNodeOf(req.getOriginTasks().get(0)), //tmlmapping.getHwNodeOf(req.getDestinationTask()), req) + ",0," + req.getNbOfParams() + ",true)" + SCCR;
+                    String ret = determineRouting(tmlmapping.getHwNodeOf(req.getOriginTasks().get(0)), //tmlmapping.getHwNodeOf(req.getDestinationTask()), req) + ",0," + req.getNbOfParams() + ",true)" + SCCR;
                             tmlmapping.getHwNodeOf(req.getDestinationTask()), req) + ",0,true,false";
                     if (ret == null) {
-                        return "Could not determine routing between " +  req.getOriginTasks().get(0).getName() + " and " + req.getDestinationTask()
+                        return "Could not determine routing between " + req.getOriginTasks().get(0).getName() + " and " + req.getDestinationTask()
                                 .getName() +
                                 " for request " + req.getName();
                     }
@@ -574,8 +572,8 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
                                     devices += ", (WorkloadSource*) " + namesGen.workloadSourceInstanceName(cpu, cores, bus);
                                     numDevices++;
 				    }*/
-				devices += ", (WorkloadSource*) " + namesGen.workloadSourceInstanceName(cpu, 0, bus);
-				numDevices ++;
+                                devices += ", (WorkloadSource*) " + namesGen.workloadSourceInstanceName(cpu, 0, bus);
+                                numDevices++;
                             } else {
                                 devices += ", (WorkloadSource*) " + namesGen.workloadSourceInstanceName(link.hwnode, 0, bus);
                                 numDevices++;
@@ -618,7 +616,8 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
             boolean mappedOnCPU = true;
 
             final String taskClassName = namesGen.taskTypeName(task);
-            declaration += taskClassName + "* " + namesGen.taskInstanceName(task) + " = new " + taskClassName + "(" + task.getID() + "," + task.getPriority() + ",\"" + namesGen.taskName(task) + "\", array(";
+            declaration += taskClassName + "* " + namesGen.taskInstanceName(task) + " = new " + taskClassName + "(" + task.getID() + "," +
+                    task.getPriority() + ",\"" + namesGen.taskName(task) + "\", array(";
 
             if (node instanceof HwCPU) {
                 final HwCPU hwCpu = (HwCPU) node;
@@ -627,7 +626,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
                 /*for (int cores = 0; cores < hwCpu.nbOfCores; cores++) {
                     declaration += "," + namesGen.cpuInstanceName(hwCpu, cores);
 		    }*/
-		 declaration += "," + namesGen.cpuInstanceName(hwCpu, hwCpu.nbOfCores);
+                declaration += "," + namesGen.cpuInstanceName(hwCpu, hwCpu.nbOfCores);
                 //                declaration+= "),1" + CR;
             } else if (node instanceof HwA) {
                 final HwA hwAcc = (HwA) node;
@@ -642,23 +641,29 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
                 //
                 //                declaration+= ")," + ((HwCPU)node).nbOfCores + CR;
             } else if (node instanceof HwFPGA) {
-                    final HwFPGA hwFpga = (HwFPGA) node;
-                    declaration += "1 ," + namesGen.hwFpgaInstanceName(hwFpga);
-                    mappedOnCPU = false;
+                final HwFPGA hwFpga = (HwFPGA) node;
+                declaration += "1 ," + namesGen.hwFpgaInstanceName(hwFpga);
+                mappedOnCPU = false;
 
-                    // DB Issue #22: copy paste error?? This causes class cast exception
-                    //              declaration+= ((HwCPU)node).nbOfCores;
-                    //
-                    //                for (int cores=0; cores< ((HwCPU)node).nbOfCores; cores++){
-                    //                    declaration+= "," + node.getName()+cores;
-                    //                }
-                    //
-                    //                declaration+= ")," + ((HwCPU)node).nbOfCores + CR;
+                // DB Issue #22: copy paste error?? This causes class cast exception
+                //              declaration+= ((HwCPU)node).nbOfCores;
+                //
+                //                for (int cores=0; cores< ((HwCPU)node).nbOfCores; cores++){
+                //                    declaration+= "," + node.getName()+cores;
+                //                }
+                //
+                //                declaration+= ")," + ((HwCPU)node).nbOfCores + CR;
             } else {
                 throw new UnsupportedOperationException("Not implemented for " + node.getClass().getSimpleName() + "!");
             }
 
             declaration += "), 1" + CR;
+
+            if (task.isDaemon()) {
+                declaration += ", true";
+            } else {
+                declaration += ", false";
+            }
 
             final List<TMLChannel> channels = new ArrayList<TMLChannel>(tmlmodeling.getChannels(task));
             final List<TMLEvent> events = new ArrayList<TMLEvent>(tmlmodeling.getEvents(task));
@@ -737,7 +742,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         boolean reverse = reverseIn;
 
         String pathS = "";
-        for(HwCommunicationNode nodeS: path){
+        for (HwCommunicationNode nodeS : path) {
             pathS += nodeS.getName() + " ";
         }
         //TraceManager.addDev("Path=" + pathS);
@@ -977,7 +982,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
     private List<HwCommunicationNode> getBridgesConnectedToBus(List<HwCommunicationNode> _commNodes, HwBus _bus) {
         List<HwCommunicationNode> resultList = new LinkedList<HwCommunicationNode>();
         for (HwCommunicationNode commNode : _commNodes) {
-            if ((commNode instanceof HwBridge) || (commNode instanceof HwNoC)){
+            if ((commNode instanceof HwBridge) || (commNode instanceof HwNoC)) {
                 if (tmlmapping.getTMLArchitecture().isNodeConnectedToBus(commNode, _bus)) resultList.add(commNode);
             }
         }

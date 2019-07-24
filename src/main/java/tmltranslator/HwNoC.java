@@ -68,12 +68,15 @@ public class HwNoC extends HwCommunicationNode  {
     }
 
     public String toXML() {
-        String s = "<NOC name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  bufferByteSize=\"" + bufferByteSize + "\"";
+        String s = "<NOC name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  size=\"" + size +
+                "\"  bufferByteSize=\"" + bufferByteSize + "\"";
         s += " infos=\"";
         String infos = "";
-        for (String elt: placementMap.keySet()) {
-            Point p = placementMap.get(elt);
-            infos += elt + "[" + p.getX() + "," + p.getY() + "] ; ";
+        if( placementMap != null) {
+            for (String elt : placementMap.keySet()) {
+                Point p = placementMap.get(elt);
+                infos += elt + "[" + p.getX() + "," + p.getY() + "] ; ";
+            }
         }
         s += infos + "\"";
         s += "/>\n";

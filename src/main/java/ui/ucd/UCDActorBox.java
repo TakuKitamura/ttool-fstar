@@ -37,8 +37,6 @@
  */
 
 
-
-
 package ui.ucd;
 
 import myutil.GraphicLib;
@@ -48,11 +46,12 @@ import ui.util.IconManager;
 import java.awt.*;
 
 /**
-   * Class UCDActorBox
-   * Actor in a box
-   * Creation: 04/01/2011
-   * @version 1.0 04/01/2011
-   * @author Ludovic APVRILLE
+ * Class UCDActorBox
+ * Actor in a box
+ * Creation: 04/01/2011
+ *
+ * @author Ludovic APVRILLE
+ * @version 1.0 04/01/2011
  */
 public class UCDActorBox extends TGCScalableWithoutInternalComponentOneLineText {
     /*protected int lineLength = 5;
@@ -63,25 +62,25 @@ public class UCDActorBox extends TGCScalableWithoutInternalComponentOneLineText 
     protected final static String STEREOTYPE = "<<Actor>>";
     protected int space = 4;
 
-    public UCDActorBox(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+    public UCDActorBox(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-	width = (int)(40 * tdp.getZoom());
-        height = (int)(50 * tdp.getZoom());
-	minWidth = (int)(40 * tdp.getZoom());
-	oldScaleFactor = tdp.getZoom();
+        width = (int) (40 * tdp.getZoom());
+        height = (int) (50 * tdp.getZoom());
+        minWidth = (int) (40 * tdp.getZoom());
+        oldScaleFactor = tdp.getZoom();
 
         nbConnectingPoint = 24;
         connectingPoint = new TGConnectingPoint[nbConnectingPoint];
         int i;
-        for(int j=0; j<24; j = j + 12) {
-            for(i=0; i<5; i++) {
-                connectingPoint[i + j] = new TGConnectingPointActorUCD(this, 0, 0, true, true, 0.0, ((double)(i))/4);
+        for (int j = 0; j < 24; j = j + 12) {
+            for (i = 0; i < 5; i++) {
+                connectingPoint[i + j] = new TGConnectingPointActorUCD(this, 0, 0, true, true, 0.0, ((double) (i)) / 4);
             }
-            connectingPoint[5+j] = new TGConnectingPointActorUCD(this, 0, 0, true, true, 0.5, 0.0);
-            connectingPoint[6+j] = new TGConnectingPointActorUCD(this, 0, 0, true, true, 0.5, 1.0);
-            for(i=0; i<5; i++) {
-                connectingPoint[i+7+j] = new TGConnectingPointActorUCD(this, 0, 0, true, true, 1.0, ((double)i)/4);
+            connectingPoint[5 + j] = new TGConnectingPointActorUCD(this, 0, 0, true, true, 0.5, 0.0);
+            connectingPoint[6 + j] = new TGConnectingPointActorUCD(this, 0, 0, true, true, 0.5, 1.0);
+            for (i = 0; i < 5; i++) {
+                connectingPoint[i + 7 + j] = new TGConnectingPointActorUCD(this, 0, 0, true, true, 1.0, ((double) i) / 4);
             }
         }
         addTGConnectingPointsComment();
@@ -90,7 +89,7 @@ public class UCDActorBox extends TGCScalableWithoutInternalComponentOneLineText 
         editable = true;
         removable = true;
 
-	super.oldScaleFactor = tdp.getZoom();
+        super.oldScaleFactor = tdp.getZoom();
 
         value = "Actor";
         name = "actor";
@@ -99,14 +98,14 @@ public class UCDActorBox extends TGCScalableWithoutInternalComponentOneLineText 
     }
 
     public void internalDrawing(Graphics g) {
-        w  = g.getFontMetrics().stringWidth(value);
-        int w1  = g.getFontMetrics().stringWidth(STEREOTYPE);
+        w = g.getFontMetrics().stringWidth(value);
+        int w1 = g.getFontMetrics().stringWidth(STEREOTYPE);
         if (!tdp.isScaled()) {
             width = Math.max(Math.max(w, w1) + space, minWidth);
         }
         h = g.getFontMetrics().getHeight();
-        g.drawString(STEREOTYPE, x + ((width - w1) / 2), y + h + space/2);
-        g.drawString(value, x + ((width - w) / 2) , y + height - h);
+        g.drawString(STEREOTYPE, x + ((width - w1) / 2), y + h + space / 2);
+        g.drawString(value, x + ((width - w) / 2), y + height - h);
         g.drawRect(x, y, width, height);
     }
 

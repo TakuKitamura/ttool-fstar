@@ -270,6 +270,10 @@ public class TGConnectingPoint extends AbstractCDElement /*implements CDElement*
         return true;
     }
 
+    public boolean isCompatibleWith(int type, TGConnectingPoint outPoint) {
+        return isCompatibleWith(type);
+    }
+
     protected String saveInXML(int num) {
         return "<TGConnectingPoint num=\"" + num + "\" id=\"" + getId() + "\" />\n";
     }

@@ -56,6 +56,7 @@ public class TaskINForDispatch extends TMLTask {
 
     public TaskINForDispatch(String name, Object referenceToClass, Object referenceToActivityDiagram) {
         super(name, referenceToClass, referenceToActivityDiagram);
+        setDaemon(true);
     }
 
     // Output Channels are given in the order of VCs

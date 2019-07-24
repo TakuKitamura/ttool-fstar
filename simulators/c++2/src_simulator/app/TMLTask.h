@@ -74,8 +74,8 @@ public:
 	\param iCPU Pointer to the CPUs the task is mapped onto
 	\param iNoOfCPUs Number of CPUs
     	*/
-	TMLTask(ID iID, Priority iPriority, std::string iName, CPU** iCPU, unsigned int iNoOfCPUs);
-	TMLTask(ID iID, Priority iPriority, std::string iName, FPGA** iFPGA, unsigned int iNoOfFPGAs);
+	TMLTask(ID iID, Priority iPriority, std::string iName, CPU** iCPU, unsigned int iNoOfCPUs, bool isDaemon);
+	TMLTask(ID iID, Priority iPriority, std::string iName, FPGA** iFPGA, unsigned int iNoOfFPGAs, bool isDaemon);
 	///Destructor
 	virtual ~TMLTask();
 	///Returns the priority of the task
@@ -235,6 +235,7 @@ public:
 	void setNextCellIndex(unsigned int n) {_nextCellIndex=n;}
 	unsigned int getNextCellIndex() const {return _nextCellIndex;}
 	void schedule2HTML(std::ofstream& myfile) const;
+	bool getIsDaemon() {return _isDaemon;};
 protected:
 	///ID of the task
 	ID _ID;
@@ -258,7 +259,9 @@ protected:
 	FPGA** _fpgas;
 	///Number of cores assigned to the task
 	unsigned int _noOfFPGAs;
+	bool _isDaemon;
 	unsigned int _nextCellIndex;
+
 #ifdef ADD_COMMENTS
 	///Comment list
 	CommentList _commentList;

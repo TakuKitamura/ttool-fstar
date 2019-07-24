@@ -172,22 +172,23 @@ public class TMLTranslator  {
 
     private static boolean loadMapping(String title, String path) {
         boolean ret;
-        //System.out.println("load");
+        System.out.println("Loading mapping");
         TMLMappingTextSpecification<Object> spec = new TMLMappingTextSpecification<>(title);
         ret = spec.makeTMLMapping(inputData, path);
-        System.out.println("load ended");
+        System.out.println("load ended:");
         List<TMLError> warnings;
 
         if (!ret) {
+            System.out.println("\n\n*** TML Modeling *** \n");
             System.out.println("Compilation:\n" + spec.printSummary());
         }
 
         if (ret) {
-            //System.out.println("Format OK");
+            System.out.println("Format OK");
             tmap = spec.getTMLMapping();
             tmlm = tmap.getTMLModeling();
 
-            //System.out.println("\n\n*** TML Modeling *** \n");
+
             //TMLTextSpecification textspec = new TMLTextSpecification("toto");
             //String s = textspec.toTextFormat(tmlm);
             //System.out.println(s);
@@ -484,6 +485,10 @@ public class TMLTranslator  {
           System.out.println("toto=" + s);
           s = s.trim();
           System.out.println("toto=" + s);*/
+
+        if (tmap != null) {
+            System.out.println("Mapping: " + tmap.toXML());
+        }
 
         switch(conversionType) {
             case 0:

@@ -58,6 +58,7 @@ public class TaskMUXAppDispatch extends TMLTask {
 
     public TaskMUXAppDispatch(String name, Object referenceToClass, Object referenceToActivityDiagram) {
         super(name, referenceToClass, referenceToActivityDiagram);
+        setDaemon(true);
     }
 
     public TMLEvent getOutputEvent() {

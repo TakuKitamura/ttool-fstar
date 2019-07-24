@@ -295,9 +295,17 @@ std::cout<<"addTransaction"<<std::endl;
     //#endif
     //_nextTransaction->getCommand()->execute();  //NEW!!!!
     //std::cout << "CPU:addt: to be started" << std::endl;
-    _endSchedule=_nextTransaction->getEndTime();
+     _endSchedule=_nextTransaction->getEndTime();
+    std::cout<<"end schedule is"<<_endSchedule<<std::endl;
+ 
+    std::cout<<"simulated time is ---------"<<_simulatedTime<<std::endl;
+    
     //std::cout << "set end schedule CPU: " << _endSchedule << " startTime of trans:" << _nextTransaction->getStartTime() << " length of trans=" << _nextTransaction->getLength() <<"\n";
-    _simulatedTime=max(_simulatedTime,_endSchedule);
+    
+    if(!(_nextTransaction->getCommand()->getTask()->getIsDaemon()==true && _nextTransaction->getCommand()->getTask()->getNextTransaction(0)==0))
+      _simulatedTime=max(_simulatedTime,_endSchedule);
+    // else
+    //  _nextTransaction->setEndTime(_simulatedTime);
     _overallTransNo++; //NEW!!!!!!!!
     _overallTransSize+=_nextTransaction->getOperationLength();  //NEW!!!!!!!!
     //std::cout << "lets crash execute\n";

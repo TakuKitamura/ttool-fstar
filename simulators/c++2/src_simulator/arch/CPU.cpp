@@ -209,8 +209,10 @@ void CPU::HW2HTML(std::ofstream& myfile) const {
 	unsigned int indexTrans=aCurrTransName.find_first_of(":");
 	std::string aCurrContent=aCurrTransName.substr(indexTrans+1,2);
 	writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString(), aCurrContent );
-
-	aCurrTime = aCurrTrans->getEndTime();
+        if(aCurrTrans->getCommand()->getTask()->getIsDaemon() == true && aCurrTrans->getEndTime() > _simulatedTime)
+	  aCurrTime = _simulatedTime;
+	else
+	  aCurrTime = aCurrTrans->getEndTime();
       }
     }
 		
@@ -276,7 +278,10 @@ void CPU::schedule2HTML(std::ofstream& myfile) const {
 
 	writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString() );
 
-	aCurrTime = aCurrTrans->getEndTime();
+	if(aCurrTrans->getCommand()->getTask()->getIsDaemon() == true && aCurrTrans->getEndTime() > _simulatedTime)
+	  aCurrTime = _simulatedTime;
+	else
+	  aCurrTime = aCurrTrans->getEndTime();
       }
     }
 		

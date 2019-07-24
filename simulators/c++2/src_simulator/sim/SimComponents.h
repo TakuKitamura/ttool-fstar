@@ -271,6 +271,7 @@ public:
 	\return Const iterator for task list
 	*/
 	inline const TaskList& getTaskList() const{return _taskList;}
+	inline const TaskList& getNonDaemonTaskList() const{return _nonDaemonTaskList;}
 #ifdef EBRDD_ENABLED
 	///Returns an iterator for the internal EBRDD list
 	/**
@@ -334,6 +335,8 @@ protected:
 	SlaveList _slList;
 	///List holding tasks
 	TaskList _taskList;
+	///List holding non daemon tasks
+        TaskList _nonDaemonTaskList;
 	///List holding channels
 	ChannelList _channelList;
 	///TEPE listener listener

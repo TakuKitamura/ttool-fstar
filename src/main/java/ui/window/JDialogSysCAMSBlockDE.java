@@ -60,7 +60,6 @@ import javax.swing.event.*;
 public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener, ListSelectionListener {
 
 	private JTextField nameTextField;
-        private JTextField clockTextField;
 //	private JTextField periodTextField;
 //	private String listPeriodString[];
 //	private JComboBox<String> periodComboBoxString;
@@ -269,30 +268,6 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener, Li
 //		gridBag.setConstraints(periodComboBoxString, constraints);
 //		attributesBoxPanel.add(periodComboBoxString);
 
-
-		/*GridBagLayout gridBag = new GridBagLayout();
-		GridBagConstraints constraints = new GridBagConstraints();
-		JPanel attributesBoxPanel = new JPanel();
-		attributesBoxPanel.setFont(new Font("Helvetica", Font.PLAIN, 14));
-		attributesBoxPanel.setLayout(gridBag);*/
-
-		JLabel labelClock = new JLabel("Clock : ");
-		constraints = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(15, 10, 5, 10), 0, 0);
-		gridBag.setConstraints(labelClock, constraints);
-		attributesBoxPanel.add(labelClock);
-
-		if (block.getValue().toString().equals("")) {
-			clockTextField = new JTextField(10);
-		} else {
-			clockTextField = new JTextField(block.getClockName().toString(), 10); 
-		}
-		constraints = new GridBagConstraints(1, 1, 2, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(15, 10, 5, 10), 0, 0);
-		gridBag.setConstraints(clockTextField, constraints);
-		attributesBoxPanel.add(clockTextField);
-
-		
 		attributesBox.add(attributesBoxPanel);
 		attributesMainPanel.add(attributesBox, BorderLayout.NORTH); 
 
@@ -724,11 +699,6 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener, Li
 						JOptionPane.WARNING_MESSAGE);
 			}
 		}
-		
-		if (!(clockTextField.getText().isEmpty())) {
-		    block.setClockName(clockTextField.getText());
-		}
-		
 		if (block.getFather() != null) {
 			if ("OK".equals(e.getActionCommand())) {
 				nameTypedefTextField.setEditable(true);

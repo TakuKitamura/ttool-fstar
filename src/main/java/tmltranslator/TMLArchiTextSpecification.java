@@ -70,8 +70,8 @@ public class TMLArchiTextSpecification {
     private ArrayList<TMLTXTError> errors;
     private ArrayList<TMLTXTError> warnings;
 
-    private String keywords[] = {"NODE", "CPU", "FPGA", "SET", "BUS", "LINK", "BRIDGE", "ROUTER", "MEMORY", "MASTERCLOCKFREQUENCY", "DMA"};
-    private String nodetypes[] = {"CPU", "FPGA", "BUS", "LINK", "BRIDGE", "ROUTER", "MEMORY", "HWA", "DMA"};
+    private String keywords[] = {"NODE", "CPU", "FPGA", "SET", "BUS", "LINK", "BRIDGE", "NOC", "MEMORY", "MASTERCLOCKFREQUENCY", "DMA"};
+    private String nodetypes[] = {"CPU", "FPGA", "BUS", "LINK", "BRIDGE", "NOC", "MEMORY", "HWA", "DMA"};
     private String cpuparameters[] = {"nbOfCores", "byteDataSize", "pipelineSize", "goIdleTime", "maxConsecutiveIdleCycles", "taskSwitchingTime",
             "branchingPredictionPenalty", "cacheMiss", "schedulingPolicy", "sliceTime", "execiTime", "execcTime", "operation", "clockDivider"};
     private String fpgaparameters[] = {"capacity", "byteDataSize", "mappingPenalty", "goIdleTime",
@@ -81,6 +81,7 @@ public class TMLArchiTextSpecification {
     private String busparameters[] = {"byteDataSize", "pipelineSize", "arbitration", "clockDivider"};
     private String bridgeparameters[] = {"bufferByteSize", "clockDivider"};
     private String memoryparameters[] = {"byteDataSize", "clockDivider"};
+    private String nocparameters[] = {"bufferbytesize", "nocSize", "clockdivider"};
     //  private String dmaparameters[] = {"byteDataSize", "nbOfChannels"};
 
 
@@ -148,7 +149,7 @@ public class TMLArchiTextSpecification {
         HwA hwa;
         HwBus bus;
         HwBridge bridge;
-        HwNoC router;
+        HwNoC noc;
         HwMemory memory;
         HwDMA dma;
 
@@ -235,14 +236,14 @@ public class TMLArchiTextSpecification {
                 code += set + "bufferByteSize " + bridge.bufferByteSize + CR;
             }
 
-            // Router
+            // NoC
             if (node instanceof HwNoC) {
-                router = (HwNoC) node;
+                noc = (HwNoC) node;
                 name = prepareString(node.getName());
                 set = "SET " + name + " ";
-                code += "NODE ROUTER " + name + CR;
-                code += set + "bufferByteSize " + router.bufferByteSize + CR;
-                code += set + "NoCSize " + router.size + CR;
+                code += "NODE NOC " + name + CR;
+                code += set + "bufferByteSize " + noc.bufferByteSize + CR;
+                code += set + "NoCSize " + noc.size + CR;
             }
 
             // Memory
@@ -476,9 +477,9 @@ public class TMLArchiTextSpecification {
             } else if (_split[1].equals("BRIDGE")) {
                 HwBridge bridge = new HwBridge(_split[2]);
                 tmla.addHwNode(bridge);
-            } else if (_split[1].equals("ROUTER")) {
-                HwNoC router = new HwNoC(_split[2]);
-                tmla.addHwNode(router);
+            } else if (_split[1].equals("NOC")) {
+                HwNoC noc = new HwNoC(_split[2]);
+                tmla.addHwNode(noc);
             } else if (_split[1].equals("HWA")) {
                 HwA hwa = new HwA(_split[2]);
                 tmla.addHwNode(hwa);
@@ -796,9 +797,9 @@ public class TMLArchiTextSpecification {
                 }
 
                 if (node instanceof HwNoC) {
-                    HwNoC router = (HwNoC) node;
+                    HwNoC noc = (HwNoC) node;
 
-                    if (!checkParameter("SET", _split, 2, 11, _lineNb)) {
+                    if (!checkParameter("SET", _split, 2, 14, _lineNb)) {
                         return -1;
                     }
 
@@ -807,15 +808,15 @@ public class TMLArchiTextSpecification {
                     }
 
                     if (_split[2].toUpperCase().equals("BUFFERBYTESIZE")) {
-                        router.bufferByteSize = Integer.decode(_split[3]).intValue();
+                        noc.bufferByteSize = Integer.decode(_split[3]).intValue();
                     }
 
                     if (_split[2].toUpperCase().equals("NOCSIZE")) {
-                        router.size = Integer.decode(_split[3]).intValue();
+                        noc.size = Integer.decode(_split[3]).intValue();
                     }
 
                     if (_split[2].toUpperCase().equals("CLOCKDIVIDER")) {
-                        router.clockRatio = Integer.decode(_split[3]).intValue();
+                        noc.clockRatio = Integer.decode(_split[3]).intValue();
                     }
 
                 }
@@ -979,6 +980,11 @@ public class TMLArchiTextSpecification {
                     break;
                 case 13:
                     if (!isIncluded(_split[_parameter], fpgaparameters)) {
+                        err = true;
+                    }
+                    break;
+                case 14:
+                    if (!isIncluded(_split[_parameter], nocparameters)) {
                         err = true;
                     }
                     break;

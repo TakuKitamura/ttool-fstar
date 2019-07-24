@@ -106,7 +106,7 @@ public:
 	\return Number of simulated clock cycles
 	*/
 	static TMLTime getSimulatedTime() { return _simulatedTime; }
-
+	static TMLTime getNonDaemonSimulatedTime() { return _nonDaemonSimulatedTime;}
 	///Sets the number of simulated clock cycles
 	/**
 	\param iSimulatedTime Number of simulated clock cycles
@@ -163,6 +163,7 @@ protected:
 	std::string _name;
 	///Class variable holding the simulation time
 	static TMLTime _simulatedTime;
+	static TMLTime _nonDaemonSimulatedTime;
 	///End time of the last scheduled transaction
 	TMLTime _endSchedule;
 
