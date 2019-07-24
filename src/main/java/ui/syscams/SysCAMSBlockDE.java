@@ -63,12 +63,10 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 
 	private String nameFn;
 	private String code;
-        private String clock;
-        private String clockName;
 	private DefaultListModel<String> listStruct;
 	private String nameTemplate;
 	private String typeTemplate;
-        private String valueTemplate;
+    private String valueTemplate;
 	private DefaultListModel<String> listTypedef;
 
 	private int maxFontSize = 14;
@@ -304,7 +302,6 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 		sb.append("<Attribute name_function=\"" + getNameFn());
 //		sb.append(getPeriod());
 //		sb.append("\" time=\"" + getTime());
-		sb.append("\" clockName=\"" + getClockName());
 		sb.append("\" code=\"" + encode(getCode()));
 		sb.append("\" listStruct=\"" + splitParameters(getListStruct()));
 		sb.append("\" nameTemplate=\"" + getNameTemplate());
@@ -448,15 +445,13 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 							if (elt.getTagName().equals("Attribute")) {
 //								period = Integer.decode(elt.getAttribute("period")).intValue();
 //								time = elt.getAttribute("time");
-							    	clockName = elt.getAttribute("clockName");
 								code = elt.getAttribute("code");
 								nameFn = elt.getAttribute("name_function");
 								listStruct = elt.getAttribute("listStruct");
 								nameTemplate = elt.getAttribute("nameTemplate");
 								typeTemplate = elt.getAttribute("typeTemplate");
-								valueTemplate = elt.getAttribute("valueTemplate");
+                                valueTemplate = elt.getAttribute("valueTemplate");
 								listTypedef = elt.getAttribute("listTypedef");
-								setClockName(clockName);
 //								setPeriod(period);
 //								setTime(time);
 								setNameFn(nameFn);
@@ -472,7 +467,7 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 								setListStruct(lista);
 								setNameTemplate(nameTemplate);
 								setTypeTemplate(typeTemplate);
-								setValueTemplate(valueTemplate);
+                                setValueTemplate(valueTemplate);
 								String[] splitb = listTypedef.split("\\|");
 								DefaultListModel<String> listb = new DefaultListModel<String>();
 								for (String s : splitb) {
@@ -528,14 +523,6 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 		return list;
 	}
 
-	public void setClockName(String _clock) {
-		clock = _clock;
-	}
-	
-	public String getClockName() {
-		return clock;
-	}
-    
 	public void setNameFn(String nameFn) {
 		this.nameFn = nameFn;
 	}

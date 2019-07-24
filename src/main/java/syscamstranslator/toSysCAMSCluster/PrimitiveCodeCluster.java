@@ -38,6 +38,11 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+/* this class produces the lines containing essentially the initial #includes; we include all potential components event if they are not used in the deployment diagram*/
+
+/* authors: v1.0 Raja GATGOUT 2014
+            v2.0 Daniela GENIUS, Julien HENON 2015 */
+
 package syscamstranslator.toSysCAMSCluster;
 
 import java.util.LinkedList;
@@ -50,8 +55,6 @@ import syscamstranslator.*;
  * Creation: 14/05/2018
  * @version 1.0 14/05/2018
  * @author Irina Kit Yan LEE
- * @version 1.1 12/07/2019
- * @author Irina Kit Yan LEE, Daniela GENIUS
  */
 
 public class PrimitiveCodeCluster {
@@ -127,11 +130,10 @@ public class PrimitiveCodeCluster {
 					if ((i > 0)) {
 						corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t, " + identifier + "(" + value + ")" + CR;
 					} 
-					// if (i == tdf.getListStruct().getSize()-1) {
-					// corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t{}" + CR;
-					//  }//deleted DG
+                    if (i == tdf.getListStruct().getSize()-1) {
+                        corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t{}" + CR;
+                    }
 				}
-				corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t{}" + CR;//moved DG
 				corpsPrimitiveTDF = corpsPrimitiveTDF + "\t};" + CR2;
 			}
 
@@ -438,9 +440,9 @@ public class PrimitiveCodeCluster {
 					if ((i > 0)) {
 						corpsPrimitiveDE = corpsPrimitiveDE + "\t\t, " + identifier + "(" + value + ")" + CR;
 					} 
-					if (i == de.getListStruct().getSize()-1) {
-					    corpsPrimitiveDE = corpsPrimitiveDE + "\t\t{}" + CR;
-					}
+                    if (i == de.getListStruct().getSize()-1) {
+                        corpsPrimitiveDE = corpsPrimitiveDE + "\t\t{}" + CR;
+                    }
 				}
 				corpsPrimitiveDE = corpsPrimitiveDE + "\t};" + CR2;
 			}
@@ -531,10 +533,6 @@ public class PrimitiveCodeCluster {
 			}
 			
 			corpsPrimitiveDE = corpsPrimitiveDE + "private:" + CR;
-
-			if(de.getClockName()!=""){
-			    corpsPrimitiveDE = corpsPrimitiveDE +"sc_in<bool> "+de.getClockName()+";"+CR;
-			}
 			
 			if (de.getListStruct().getSize() != 0) {
 				String identifier, type, constant;
