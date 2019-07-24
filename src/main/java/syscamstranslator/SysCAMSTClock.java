@@ -48,21 +48,19 @@ import javax.swing.DefaultListModel;
 
 public class SysCAMSTClock extends SysCAMSTComponent{
     private String name;
-    private double frequency;
+    private String frequency;
     private String unit;
-    private double dutyCycle;
-    private double startTime;
-    private String unitStartTime;
-    private boolean posFirst;
+    private String dutyCycle;
+    private String startTime;
+    private String posFirst;
 	
-    public SysCAMSTClock(String _name, double _frequency,  String _unit, double _dutyCycle, double _startTime, String _unitStartTime, boolean _posFirst) {
+    public SysCAMSTClock(String _name, String _frequency,  String _unit, String _dutyCycle, String _startTime, String _posFirst) {
      
     	name = _name;
 	frequency	= _frequency;
 	unit	= _unit;
 	dutyCycle	= _dutyCycle;
 	startTime	= _startTime;
-	unitStartTime	= _unitStartTime;
 	posFirst	= _posFirst; 
     }
 
@@ -71,7 +69,7 @@ public class SysCAMSTClock extends SysCAMSTComponent{
 		return name;
 	}
 
-    	public double getFrequency() {
+    	public String getFrequency() {
 		return frequency;
 	}
 
@@ -79,20 +77,16 @@ public class SysCAMSTClock extends SysCAMSTComponent{
 		return unit;
 	}
 
-	public String getUnitStartTime() {
-		return unitStartTime;
-	}
-    
-        public double getDutyCycle() {
+        public String getDutyCycle() {
 		return dutyCycle;
 	}
 
-    public double getStartTime() {
+    public String getStartTime() {
 		return startTime;
 	}
     
     
-    	public boolean getPosFirst() {
+    	public String getPosFirst() {
 		return posFirst;
 	}
 
@@ -101,7 +95,7 @@ public class SysCAMSTClock extends SysCAMSTComponent{
 		name = _name;
 	}
  
-    	public void setFrequency(double _frequency) {
+    	public void setFrequency(String _frequency) {
 		 frequency = _frequency;
 	}
 
@@ -109,21 +103,17 @@ public class SysCAMSTClock extends SysCAMSTComponent{
 		unit = _unit;
 	}
 
-       public void setUnitStartTime(String _unitStartTime) {
-		unitStartTime = _unitStartTime;
-	}
-
-        public void setDutyCycle(double _dutyCycle) {
+        public void setDutyCycle(String _dutyCycle) {
 		dutyCycle = _dutyCycle;
 	}
 
 
-        public void setStartTime(double _startTime) {
+        public void setStartTime(String _startTime) {
 	       startTime = _startTime;
 	}
     
     
-    public void setPosFirst(boolean _posFirst) {
+    	public void setPosFirst(String _posFirst) {
 		posFirst = _posFirst;
 	}
       
