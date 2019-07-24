@@ -172,7 +172,7 @@ public class MappedSystemCTask {
         makeHeaderClassH();
         makeEndClassH();
 
-        cppcode += reference + "::" + makeConstructorSignature() + ":TMLTask(iID, iPriority,iName,iCPUs,iNumOfCPUs)" + CR + makeAttributesCode();
+        cppcode += reference + "::" + makeConstructorSignature() + ":TMLTask(iID, iPriority,iName,iCPUs,iNumOfCPUs, isDaemon)" + CR + makeAttributesCode();
         cppcode += initCommand + CR + "{" + CR;
         if (commentNum != 0) cppcode += "_comment = new std::string[" + commentNum + "]" + SCCR + commentText + CR;
         cppcode += "//generate task variable look-up table" + CR;
@@ -239,9 +239,9 @@ public class MappedSystemCTask {
         String constSig;
 
         if (mappedOnCPU) {
-            constSig = reference + "(ID iID, Priority iPriority, std::string iName, CPU** iCPUs, unsigned int iNumOfCPUs" + CR;
+            constSig = reference + "(ID iID, Priority iPriority, std::string iName, CPU** iCPUs, unsigned int iNumOfCPUs, bool isDaemon" + CR;
         } else {
-            constSig = reference + "(ID iID, Priority iPriority, std::string iName, FPGA** iCPUs, unsigned int iNumOfCPUs" + CR;
+            constSig = reference + "(ID iID, Priority iPriority, std::string iName, FPGA** iCPUs, unsigned int iNumOfCPUs, bool isDaemon" + CR;
         }
 
         TraceManager.addDev("\n***** Task name:" + task.getName());

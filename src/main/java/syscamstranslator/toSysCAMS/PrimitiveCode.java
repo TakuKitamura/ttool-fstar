@@ -147,15 +147,15 @@ public class PrimitiveCode {
 					}
 				}
 			}
-			System.out.println("@@@@@ Conv ports empty?");
+			//	System.out.println("@@@@@ Conv ports empty?");
 			if (!convports.isEmpty()) {
-			    System.out.println("@@@@@ Conv ports non empty");
+			    // System.out.println("@@@@@ Conv ports non empty");
 				for (SysCAMSTPortConverter conv : convports) {
 					if (conv.getOrigin() == 0) {
-					    corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_de::sca_in <" + conv.getConvType()+"<" + conv.getNbits()+"> > " + conv.getName() + ";" + CR;	System.out.println("@@@@@@@@@@@@@@@@@@2conv"+conv.getConvType()+conv.getNbits());
+					    corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_de::sca_in <" + conv.getConvType()+"<" + conv.getNbits()+"> > " + conv.getName() + ";" + CR;//	System.out.println("@@@@@@@@@@@@@@@@@@2conv"+conv.getConvType()+conv.getNbits());
 					    
 					} else if (conv.getOrigin() == 1) {
-					    corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_de::sca_out <" + conv.getConvType()+"<" + conv.getNbits()+"> > "+ conv.getName() + ";" + CR;	System.out.println("@@@@@@@@@@@@@@@2conv"+conv.getConvType()+conv.getNbits());
+					    corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_de::sca_out <" + conv.getConvType()+"<" + conv.getNbits()+"> > "+ conv.getName() + ";" + CR;	//System.out.println("@@@@@@@@@@@@@@@2conv"+conv.getConvType()+conv.getNbits());
 					}
 				
 				}
@@ -455,18 +455,18 @@ public class PrimitiveCode {
 			}
 
 			//DG modified, was sca:core
-			 System.out.println("@@@@@@@@@DE ports empty?");
+			//System.out.println("@@@@@@@@@DE ports empty?");
 			if (!deports.isEmpty()) {
-			    System.out.println("@@@@@@@@@DE ports non empty");
+			    //System.out.println("@@@@@@@@@DE ports non empty");
 				for (SysCAMSTPortDE t : deports) {
 					if (t.getOrigin() == 0) {
 						corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_in <" + t.getDEType() + "<"+t.getNbits()+"> >" + t.getName() + ";" + CR;
 					 
-						System.out.println("@@@@@@@@@2DE "+t.getDEType()+t.getNbits());		
+						//System.out.println("@@@@@@@@@2DE "+t.getDEType()+t.getNbits());		
 					} else if (t.getOrigin() == 1) {
 					    corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_out <" + t.getDEType() + "<"+t.getNbits() +"> >"+ t.getName() + ";" + CR;
 		 
-				System.out.println("@@@@@@@@@2DE "+t.getDEType()+t.getNbits());					
+					    //System.out.println("@@@@@@@@@2DE "+t.getDEType()+t.getNbits());					
 					}
 				}
 			}
