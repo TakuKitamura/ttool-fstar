@@ -285,7 +285,7 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener, Li
 		if (block.getValue().toString().equals("")) {
 			clockTextField = new JTextField(10);
 		} else {
-			clockTextField = new JTextField(block.getValue().toString(), 10); 
+			clockTextField = new JTextField(block.getClockName().toString(), 10); 
 		}
 		constraints = new GridBagConstraints(1, 1, 2, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 				new Insets(15, 10, 5, 10), 0, 0);
