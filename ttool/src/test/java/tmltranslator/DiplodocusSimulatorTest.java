@@ -153,6 +153,8 @@ public class DiplodocusSimulatorTest extends AbstractUITest {
                 proc = Runtime.getRuntime().exec("make -C " + SIM_DIR + "");
                 proc_in = new BufferedReader( new InputStreamReader( proc.getInputStream() ) );
 
+                monitorError(proc);
+
                 while ( ( str = proc_in.readLine() ) != null ) {
 	                    // TraceManager.addDev( "Sending " + str + " from " + port + " to client..." );
 	                    System.out.println("executing: " + str);
@@ -177,6 +179,8 @@ public class DiplodocusSimulatorTest extends AbstractUITest {
                 proc = Runtime.getRuntime().exec(params);
                 //proc = Runtime.getRuntime().exec("./" + SIM_DIR + "run.x -explo -gname testgraph_" + s);
                 proc_in = new BufferedReader( new InputStreamReader( proc.getInputStream() ) );
+
+                monitorError(proc);
 
                 while ( ( str = proc_in.readLine() ) != null ) {
                     // TraceManager.addDev( "Sending " + str + " from " + port + " to client..." );

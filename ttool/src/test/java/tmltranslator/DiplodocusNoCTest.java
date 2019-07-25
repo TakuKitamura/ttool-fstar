@@ -189,22 +189,8 @@ public class DiplodocusNoCTest extends AbstractUITest {
 
             proc = Runtime.getRuntime().exec(params);
             proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-            proc_err = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
 
-            new Thread() {
-                @Override public void run() {
-                    String line;
-                    try {
-                        while ((line = proc_err.readLine()) != null) {
-                            System.out.println("NOC executing err: " + line);
-                        }
-                    } catch (Exception e) {
-                        System.out.println("NOC FAILED: executing: " + "make -C " + SIM_DIR);
-                        return;
-                    }
-
-                }
-            }.start();
+            monitorError(proc);
 
             while ((str = proc_in.readLine()) != null) {
                 System.out.println("NOC executing: " + str);
@@ -226,6 +212,8 @@ public class DiplodocusNoCTest extends AbstractUITest {
             params[2] = "1 6 " + NB_Of_SIM_CYCLES + "; 7 2 " + DIR_GEN + s + ".txt";
             proc = Runtime.getRuntime().exec(params);
             proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+
+            monitorError(proc);
 
             while ((str = proc_in.readLine()) != null) {
                 // TraceManager.addDev( "Sending " + str + " from " + port + " to client..." );
