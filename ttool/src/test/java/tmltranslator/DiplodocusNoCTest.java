@@ -151,6 +151,7 @@ public class DiplodocusNoCTest extends AbstractUITest {
         System.out.println("NOC executing: compile");
         Process proc;
         BufferedReader proc_in;
+        BufferedReader proc_err;
         String str;
         boolean mustRecompileAll;
         Penalties penalty = new Penalties(SIM_DIR + File.separator + "src_simulator");
@@ -180,9 +181,30 @@ public class DiplodocusNoCTest extends AbstractUITest {
 
         System.out.println("NOC executing: " + "make -C " + SIM_DIR);
         try {
+            String[] params = new String [3];
 
-            proc = Runtime.getRuntime().exec("make -C " + SIM_DIR + "");
+            params[0] = "make";
+            params[1] = "-C";
+            params[2] = SIM_DIR;
+
+            proc = Runtime.getRuntime().exec(params);
             proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+            proc_err = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
+
+            new Thread() {
+                @Override public void run() {
+                    String line;
+                    try {
+                        while ((line = proc_err.readLine()) != null) {
+                            System.out.println("NOC executing err: " + line);
+                        }
+                    } catch (Exception e) {
+                        System.out.println("NOC FAILED: executing: " + "make -C " + SIM_DIR);
+                        return;
+                    }
+
+                }
+            }.start();
 
             while ((str = proc_in.readLine()) != null) {
                 System.out.println("NOC executing: " + str);
