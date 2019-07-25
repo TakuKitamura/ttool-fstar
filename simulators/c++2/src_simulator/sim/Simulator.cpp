@@ -812,7 +812,6 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
   SchedulableDevice* deviceLET;
   CPU* depCPU;
   FPGA* depFPGA;
-  bool isFinish=true;
 #ifdef DEBUG_KERNEL
   std::cout << "kernel:simulate: first schedule" << std::endl;
 #endif
@@ -846,28 +845,22 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
       std::cout << "kernel:simulate: scheduling decision: " <<  transLET->toString() << std::endl;
 #endif
 	commandLET=transLET->getCommand();
-	/*	if(transLET!=0 && transLET->getCommand()->getTask()->getIsDaemon()==false){
-	   for(TaskList::const_iterator i=_simComp->getNonDaemonTaskList().begin(); i != _simComp->getNonDaemonTaskList().end(); ++i){	 
-	      std::cout<<"non dameon task"<<(*i)->toString()<<" state is "<<(*i)->getState()<<std::endl;
-	   }
-	   }*/
+
 
 	if(transLET!=0 && transLET->getCommand()->getTask()->getIsDaemon()==true){
 	  if(transLET->getStartTime() >= deviceLET->getSimulatedTime()){
 	    // std::cout<<"bigger time"<<std::endl;
-	    if(_simComp->getNonDaemonTaskList().empty())
-	      isFinish=false;
+	    bool isFinish=true;
 	    for(TaskList::const_iterator i=_simComp->getNonDaemonTaskList().begin(); i != _simComp->getNonDaemonTaskList().end(); ++i){	 
 	      //  std::cout<<"non dameon task"<<(*i)->toString()<<" state is "<<(*i)->getState()<<std::endl;
-	      if((*i)->getState()!=3){
-		// 	std::cout<<"not stop"<<std::endl;
+	      if((*i)->getState()!=3 && (*i)->getState()!=0){
+		//	std::cout<<"not stop"<<std::endl;
 		isFinish=false;
 		break;	 
 	      }
 	    }
-	    if(isFinish==true){
-	      break;	 
-	    }
+	    if(isFinish==true)
+	      break;	      
 	  }
 	}
 	
@@ -1007,8 +1000,6 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
   }
 
   bool aSimCompleted = ( transLET==0  && !_simComp->getStoppedOnAction());
-  if(isFinish==true)
-    aSimCompleted = true;
 
   if (aSimCompleted){
 #ifdef LISTENERS_ENABLED
