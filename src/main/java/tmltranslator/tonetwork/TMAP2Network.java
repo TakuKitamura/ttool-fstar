@@ -56,6 +56,7 @@ import java.util.List;
  */
 public class TMAP2Network<E>  {
 
+    public final static boolean DAEMON = false;
 
     private TMLMapping<?> tmlmapping;
     private HwNoC noc;

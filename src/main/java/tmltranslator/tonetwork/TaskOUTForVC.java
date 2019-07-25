@@ -56,7 +56,7 @@ public class TaskOUTForVC extends TMLTask {
 
     public TaskOUTForVC(String name, Object referenceToClass, Object referenceToActivityDiagram) {
         super(name, referenceToClass, referenceToActivityDiagram);
-        setDaemon(true);
+        setDaemon(TMAP2Network.DAEMON);
     }
 
     // Output Channels are given in the order of VCs
