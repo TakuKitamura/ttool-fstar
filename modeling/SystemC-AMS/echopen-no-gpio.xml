@@ -94,11 +94,11 @@
 <Attribute name_function="" clockName="my_clk" code="void adcre_main() {
 	adcregisteroutput.write(adcregisterinput.read());
 }
-           SC_CTOR(adcre) {
+             SC_CTOR(adcre) {
 	SC_METHOD (adcre_main);
 	//sensitive &lt;&lt;clockffp.pos();
 }
-           " listStruct="" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
+             " listStruct="" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1605" id="17" >
@@ -162,7 +162,7 @@
 	// actual time                     out1.write(2000.99 * std::sin( 2.0 * M_PI * freqoftheprobe * t ) );
 	//probesample.write(1);
 }
-                                      " constructorCode="" listStruct="Ts = 1.0 : double|freqoftheprobe = 1000.0 : double" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
+                                        " constructorCode="" listStruct="Ts = 1.0 : double|freqoftheprobe = 1000.0 : double" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1604" id="46" >
@@ -210,7 +210,7 @@
 		}
 	}
 }
-         " constructorCode="" listStruct="addition = 0 : int" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
+           " constructorCode="" listStruct="addition = 0 : int" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1606" id="65" >
@@ -269,7 +269,9 @@
 <TGConnectingPoint num="6" id="131" />
 <TGConnectingPoint num="7" id="132" />
 <extraparam>
-<Attribute name_function="comparator_main" clockName="null" code="  void comparator_main(){
+<Attribute name_function="comparator_main" clockName="my_clk" code="  int counter;
+sc_uint&lt;12&gt; inr,inr1;
+void comparator_main(){
 	if (enable.read()==0){
 		counter=0;
 		inr1=0;
@@ -296,7 +298,7 @@
 		}
 	}
 }
-                                   " listStruct="" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
+                                     " listStruct="" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1605" id="94" >
@@ -316,7 +318,7 @@
 <TGConnectingPoint num="7" id="92" />
 <TGConnectingPoint num="8" id="93" />
 <extraparam>
-<Prop commName="outputmax" commType="0" origin="1" type="int" sensitive="true" sensitive_method="positive" nbits="12" />
+<Prop commName="outputmax" commType="0" origin="1" type="sc_uint" sensitive="true" sensitive_method="positive" nbits="12" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1605" id="104" >
@@ -356,7 +358,7 @@
 <TGConnectingPoint num="7" id="112" />
 <TGConnectingPoint num="8" id="113" />
 <extraparam>
-<Prop commName="inputfromabs" commType="0" origin="0" type="int" sensitive="false" sensitive_method="" nbits="12" />
+<Prop commName="inputfromabs" commType="0" origin="0" type="sc_uint" sensitive="false" sensitive_method="" nbits="12" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1605" id="124" >
@@ -395,10 +397,7 @@
 <TGConnectingPoint num="6" id="160" />
 <TGConnectingPoint num="7" id="161" />
 <extraparam>
-<Attribute name_function="" clockName="null" code="  //sc_out &lt;sc_uint&lt;12&gt; &gt; fpgaoutput[30];
-sc_out &lt;sc_uint&lt;12&gt; &gt; fpgaoutput;
-sc_out &lt;bool&gt; fpgaoutready;
-sc_in &lt;bool&gt; enable1;
+<Attribute name_function="" clockName="my_clk" code="  //sc_out &lt;sc_uint&lt;12&gt; &gt; fpgaoutput[30];
 sc_uint&lt;12&gt; inr1[30];
 int counter;
 void spi_main() {
@@ -413,14 +412,14 @@ void spi_main() {
 	outputvector.write(insideregister);
 	count =  0;
 }
-            if(counter==30){
+              if(counter==30){
 	for(int i=0;i&lt;30;i++) {
 		//DG serialized    //fpgaoutput[i].write(inr1[i]);
 		fpgaoutput.write(inr1[i]);
 	}
 	counter=0;
 }
-            ///800               }
+              ///800               }
 " listStruct="" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
 </extraparam>
 </SUBCOMPONENT>
@@ -480,15 +479,15 @@ void spi_main() {
 <TGConnectingPoint num="6" id="179" />
 <TGConnectingPoint num="7" id="180" />
 <extraparam>
-<Attribute name_function="" clockName="null" code=" SC_MODULE(pulse_gen){
+<Attribute name_function="" clockName="my_clk" code="  sc_uint&lt;12&gt; inr;
+void pulse_gen_main(){
+	inr=rand()%4096;
 	sc_uint&lt;12&gt; inr;
-	void pulse_gen_main(){
-		inr=rand()%4096;
-		outpready.write(1);
-		genout.write(inr) ;
-		//  expo[j].write((i3));
-	}
-" listStruct="" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
+	outpready.write(1);
+	genout.write(inr) ;
+	//  expo[j].write((i3));
+}
+" listStruct="inr = 12 : int" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1605" id="172" >
@@ -527,7 +526,7 @@ void spi_main() {
 <TGConnectingPoint num="6" id="208" />
 <TGConnectingPoint num="7" id="209" />
 <extraparam>
-<Attribute name_function="" clockName="abscalc1" code="   //------------Local Variables Here---------------------         sc_uint&lt;12&gt; inr;
+<Attribute name_function="" clockName="my_clk" code="   //------------Local Variables Here---------------------//         sc_uint&lt;12&gt; inr;
 sc_uint&lt;12&gt;   inr4;
 sc_uint&lt;12&gt;   inr3,inr1,inr2;
 sc_uint&lt;12&gt;   he1;
@@ -547,7 +546,7 @@ int asdf;
 	}
 	absoutput.write(inr1);
 }
-           " listStruct="" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
+             " listStruct="" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1605" id="191" >
@@ -587,7 +586,7 @@ int asdf;
 <TGConnectingPoint num="7" id="199" />
 <TGConnectingPoint num="8" id="200" />
 <extraparam>
-<Prop commName="absoutput" commType="0" origin="1" type="int" sensitive="true" sensitive_method="positive" nbits="12" />
+<Prop commName="absoutput" commType="0" origin="1" type="sc_uint" sensitive="true" sensitive_method="positive" nbits="12" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5721" id="219" >
