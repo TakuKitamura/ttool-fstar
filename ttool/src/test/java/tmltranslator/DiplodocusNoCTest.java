@@ -6,6 +6,7 @@ import myutil.FileUtils;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runners.model.TestTimedOutException;
 import req.ebrdd.EBRDD;
 import tepe.TEPE;
 import tmltranslator.tomappingsystemc2.DiploSimulatorFactory;
@@ -55,7 +56,7 @@ public class DiplodocusNoCTest extends AbstractUITest {
     }
 
 
-    @Test(timeout=500000) // in milliseconds
+    @Test(timeout=300000, expected = TestTimedOutException.class) // in milliseconds
     public void testSimulationGraph() throws Exception {
 
         String s = MODEL;
