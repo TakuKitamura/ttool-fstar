@@ -488,11 +488,11 @@ public class PrimitiveCode {
 				   else {
 
 if (t.getOrigin() == 0) {
-						corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_in <" + t.getDEType() + "<"+t.getNbits()+"> >" + t.getName() + ";" + CR;
+						corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_in <" + t.getDEType() + "<"+t.getNbits()+"> > " + t.getName() + ";" + CR;
 					 
 						//System.out.println("@@@@@@@@@2DE "+t.getDEType()+t.getNbits());		
 					} else if (t.getOrigin() == 1) {
-					    corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_out <" + t.getDEType() + "<"+t.getNbits() +"> >"+ t.getName() + ";" + CR;
+					    corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_out <" + t.getDEType() + "<"+t.getNbits() +"> > "+ t.getName() + ";" + CR;
 		 
 					    //System.out.println("@@@@@@@@@2DE "+t.getDEType()+t.getNbits());					
 					}
