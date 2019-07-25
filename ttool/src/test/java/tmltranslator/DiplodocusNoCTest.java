@@ -56,7 +56,7 @@ public class DiplodocusNoCTest extends AbstractUITest {
     }
 
 
-    @Test(timeout=300000, expected = TestTimedOutException.class) // in milliseconds
+    @Test(timeout=300000) // in milliseconds
     public void testSimulationGraph() throws Exception {
 
         String s = MODEL;
@@ -185,12 +185,11 @@ public class DiplodocusNoCTest extends AbstractUITest {
             proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 
             while ((str = proc_in.readLine()) != null) {
-                // TraceManager.addDev( "Sending " + str + " from " + port + " to client..." );
-                System.out.println("executing: " + str);
+                System.out.println("NOC executing: " + str);
             }
         } catch (Exception e) {
             // Probably make is not installed
-            System.out.println("FAILED: executing: " + "make -C " + SIM_DIR);
+            System.out.println("NOC FAILED: executing: " + "make -C " + SIM_DIR);
             return;
         }
         System.out.println("NOC SUCCESS: executing: " + "make -C " + SIM_DIR);
