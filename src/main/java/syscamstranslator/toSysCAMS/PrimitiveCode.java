@@ -151,12 +151,24 @@ public class PrimitiveCode {
 			if (!convports.isEmpty()) {
 			    // System.out.println("@@@@@ Conv ports non empty");
 				for (SysCAMSTPortConverter conv : convports) {
-					if (conv.getOrigin() == 0) {
-					    corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_de::sca_in <" + conv.getConvType()+"<" + conv.getNbits()+"> > " + conv.getName() + ";" + CR;//	System.out.println("@@@@@@@@@@@@@@@@@@2conv"+conv.getConvType()+conv.getNbits());
+
+				    if(conv.getConvType() !="sc_uint") {
+				if (conv.getOrigin() == 0) {
+					    corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_de::sca_in <" + conv.getConvType()+"> " + conv.getName() + ";" + CR;
 					    
 					} else if (conv.getOrigin() == 1) {
-					    corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_de::sca_out <" + conv.getConvType()+"<" + conv.getNbits()+"> > "+ conv.getName() + ";" + CR;	//System.out.println("@@@@@@@@@@@@@@@2conv"+conv.getConvType()+conv.getNbits());
+					    corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_de::sca_out <" + conv.getConvType()+"> "+ conv.getName() + ";" + CR;
 					}
+			}
+
+				else	{
+				    if (conv.getOrigin() == 0) {
+					    corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_de::sca_in <" + conv.getConvType()+"<" + conv.getNbits()+"> > " + conv.getName() + ";" + CR;
+					    
+					} else if (conv.getOrigin() == 1) {
+					    corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_de::sca_out <" + conv.getConvType()+"<" + conv.getNbits()+"> > "+ conv.getName() + ";" + CR;	
+					}
+				}					
 				
 				}
 			}
