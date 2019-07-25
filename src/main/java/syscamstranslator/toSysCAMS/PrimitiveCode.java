@@ -152,7 +152,8 @@ public class PrimitiveCode {
 			    // System.out.println("@@@@@ Conv ports non empty");
 				for (SysCAMSTPortConverter conv : convports) {
 
-				    if(conv.getConvType() !="sc_uint") {
+				    //   if(conv.getConvType() !="sc_uint") {
+				    if(conv.getNbits()==0){
 				if (conv.getOrigin() == 0) {
 					    corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_de::sca_in <" + conv.getConvType()+"> " + conv.getName() + ";" + CR;
 					    
@@ -471,7 +472,22 @@ public class PrimitiveCode {
 			if (!deports.isEmpty()) {
 			    //System.out.println("@@@@@@@@@DE ports non empty");
 				for (SysCAMSTPortDE t : deports) {
-					if (t.getOrigin() == 0) {
+
+
+				    if(t.getNbits()==0)	    
+				    {	if (t.getOrigin() == 0) {
+						corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_in <" + t.getDEType() + ">"  + t.getName() + ";" + CR;
+					 
+						//System.out.println("@@@@@@@@@2DE "+t.getDEType()+t.getNbits());		
+					} else if (t.getOrigin() == 1) {
+					    corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_out <" + t.getDEType() + "> "+ t.getName() + ";" + CR;
+		 
+					    //System.out.println("@@@@@@@@@2DE "+t.getDEType()+t.getNbits());					
+					}
+				}
+				   else {
+
+if (t.getOrigin() == 0) {
 						corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_in <" + t.getDEType() + "<"+t.getNbits()+"> >" + t.getName() + ";" + CR;
 					 
 						//System.out.println("@@@@@@@@@2DE "+t.getDEType()+t.getNbits());		
@@ -480,6 +496,10 @@ public class PrimitiveCode {
 		 
 					    //System.out.println("@@@@@@@@@2DE "+t.getDEType()+t.getNbits());					
 					}
+
+				       
+				    }
+					
 				}
 			}
 

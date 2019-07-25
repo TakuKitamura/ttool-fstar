@@ -150,7 +150,8 @@ public class PrimitiveCodeSoclib {
 			if (!convports.isEmpty()) {
 				for (SysCAMSTPortConverter conv : convports) {
 
-				    if(conv.getConvType()!="sc_uint")
+				    //if(conv.getConvType()!="sc_uint")
+				    if(conv.getNbits()==0)
 				    { 
 					if (conv.getOrigin() == 0) {
 					   
@@ -161,7 +162,8 @@ public class PrimitiveCodeSoclib {
 					}
 
 				}
-				    else{	if (conv.getOrigin() == 0) {
+				    else{
+					if (conv.getOrigin() == 0) {
 					  
 					   corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_de::sca_in <" + conv.getConvType()+"<" + conv.getNbits()+"> > " + conv.getName() + ";" + CR;
 					} else if (conv.getOrigin() == 1) {
