@@ -56,6 +56,8 @@ import java.util.LinkedList;
  * Creation: 14/05/2018
  * @version 1.0 14/05/2018
  * @author Irina Kit Yan LEE
+ * @version 1.1 12/07/2018
+ * @author Irina Kit Yan LEE, Daniela GENIUS
 */
 
 public class TopCellGenerator {
@@ -105,13 +107,9 @@ public class TopCellGenerator {
 		try {
 			// Save file .cpp
 			System.err.println(path + GENERATED_PATH1 + cluster.getClusterName() + ".cpp");
-			System.err.println(path + cluster.getClusterName() + ".cpp");
-			if(standalone==true){
-			    //System.out.println("@@@@ topcell standalone @@@@");
-			    fw = new FileWriter(path + "/" + cluster.getClusterName() + "_tb.cpp");}
-			else{
+			System.err.println(path + cluster.getClusterName() + ".cpp");			
 			    fw = new FileWriter(path + GENERATED_PATH1 + "/" + cluster.getClusterName() + "_tb.cpp");
-			}
+			    //}
 			fw = new FileWriter(path + "/" + cluster.getClusterName() + "_tb.cpp");
 			top = generateTopCell(cluster, connectors);
 			fw.write(top);
@@ -132,18 +130,13 @@ public class TopCellGenerator {
 		for (SysCAMSTBlockTDF t : tdf) {
 			try {
 				System.err.println(path + GENERATED_PATH2 + t.getName() + ".h");
-				System.err.println(path + t.getName() + ".h"); 		
-				if(standalone==true){
-				    //System.out.println("@@@@ TDF standalone @@@@");
-				    fw = new FileWriter(path + "/" + t.getName() + ".h");}
-			else
+				System.err.println(path + t.getName() + ".h"); 						
 			    fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + ".h");
 			
 				headerTDF = Header.getPrimitiveHeaderTDF(t);
 				fw.write(headerTDF);
 				codeTDF = PrimitiveCode.getPrimitiveCodeTDF(t);
-				//	if(standalone==false)
-				// codeTDF = codeTDF + CR + "};" + CR2 + "#endif";
+			
 				fw.write(codeTDF);
 				fw.close();
 			
@@ -154,18 +147,13 @@ public class TopCellGenerator {
 		for (SysCAMSTBlockDE t : de) {
 			try {
 				System.err.println(path + GENERATED_PATH2 + t.getName() + ".h");
-				System.err.println(path + t.getName() + ".h");//ajoute DG
-				
-				if(standalone==true){
-				    //System.out.println("@@@@ DE standalone @@@@");
-				    fw = new FileWriter(path + "/" + t.getName() + ".h");}
-				else
+				System.err.println(path + t.getName() + ".h");
+							
 				    fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + ".h");
 				headerDE = Header.getPrimitiveHeaderDE(t);
 				fw.write(headerDE);
 				codeDE = PrimitiveCode.getPrimitiveCodeDE(t);
-				//	if(standalone==false)
-				//  codeDE = codeDE + CR + "};" + CR2 + "#endif";//DG
+			
 				fw.write(codeDE);
 				fw.close();
 			

@@ -81,13 +81,13 @@ public class SysCAMSTCluster extends SysCAMSTComponent {
 	public void addBlockDE(SysCAMSTBlockDE _blockDE){
 		blockDE.add(_blockDE);
 	}
+
+    	public void addClock(SysCAMSTClock _clock){
+		clock.add(_clock);
+	}
     
 	public LinkedList<SysCAMSTClock> getClock(){
 		return clock;
 	}
 
-	public void addBlockDE(SysCAMSTClock _clock){
-		clock.add(_clock);
-	}
-    
 }

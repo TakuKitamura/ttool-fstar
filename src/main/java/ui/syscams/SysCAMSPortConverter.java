@@ -86,6 +86,11 @@ public class SysCAMSPortConverter extends SysCAMSPrimitivePort {
         public int getNbits() {
 		return nbits;
 	}
+
+        public void setNbits(int nbits) {
+		this.nbits = nbits;
+	}
+    
 	public void setRate(int rate) {
 		this.rate = rate;
 	}
