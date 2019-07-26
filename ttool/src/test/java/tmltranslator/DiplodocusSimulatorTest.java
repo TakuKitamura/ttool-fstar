@@ -1,5 +1,7 @@
 package tmltranslator;
 
+import common.ConfigurationTTool;
+import common.SpecConfigTTool;
 import graph.AUTGraph;
 import myutil.FileUtils;
 import org.junit.Before;
@@ -26,6 +28,7 @@ public class DiplodocusSimulatorTest extends AbstractUITest {
 
 
     final String [] MODELS = {"scp", "ssdf"};
+    final String DIR_GEN = "test_diplo_simulator/";
     final int [] NB_Of_STATES = {177, 1824};
     final int [] NB_Of_TRANSTIONS = {176, 1823};
     final int [] MIN_CYCLES = {210, 4106};
@@ -57,6 +60,7 @@ public class DiplodocusSimulatorTest extends AbstractUITest {
     public void testSimulationGraph() throws Exception {
         for(int i=0; i<MODELS.length; i++) {
             String s = MODELS[i];
+            SIM_DIR = DIR_GEN + s + "/";
             // Load the TML
             System.out.println("executing: loading " + s);
             TMLMappingTextSpecification tmts = new TMLMappingTextSpecification(s);
@@ -95,7 +99,22 @@ public class DiplodocusSimulatorTest extends AbstractUITest {
             String error = tml2systc.generateSystemC(false, true);
             assertTrue(error == null);
 
+            File directory = new File(SIM_DIR);
+            if (! directory.exists()){
+                directory.mkdirs();
+            }
+
+            // Putting sim files
+            System.out.println("SIM executing: sim lib code copying for " + s);
+            ConfigurationTTool.SystemCCodeDirectory = getBaseResourcesDir() +  "../../../../simulators/c++2/";
+            boolean simFiles = SpecConfigTTool.checkAndCreateSystemCDir(SIM_DIR);
+
+            System.out.println("SIM executing: sim lib code copying done with result " + simFiles);
+            assertTrue(simFiles);
+
+            System.out.println("SIM Saving file in: " + SIM_DIR);
             tml2systc.saveFile(SIM_DIR, "appmodel");
+
 
             // Compile it
             System.out.println("executing: compile");
@@ -134,6 +153,8 @@ public class DiplodocusSimulatorTest extends AbstractUITest {
                 proc = Runtime.getRuntime().exec("make -C " + SIM_DIR + "");
                 proc_in = new BufferedReader( new InputStreamReader( proc.getInputStream() ) );
 
+                monitorError(proc);
+
                 while ( ( str = proc_in.readLine() ) != null ) {
 	                    // TraceManager.addDev( "Sending " + str + " from " + port + " to client..." );
 	                    System.out.println("executing: " + str);
@@ -146,10 +167,20 @@ public class DiplodocusSimulatorTest extends AbstractUITest {
             System.out.println("SUCCESS: executing: " + "make -C " + SIM_DIR);
 
             // Run the simulator
+            String graphPath = SIM_DIR + "testgraph_" + s;
             try {
 
-                proc = Runtime.getRuntime().exec("./" + SIM_DIR + "run.x -explo -gname testgraph_" + s);
+                String[] params = new String [4];
+
+                params[0] = "./" + SIM_DIR + "run.x";
+                params[1] = "-explo";
+                params[2] = "-gname";
+                params[3] = graphPath;
+                proc = Runtime.getRuntime().exec(params);
+                //proc = Runtime.getRuntime().exec("./" + SIM_DIR + "run.x -explo -gname testgraph_" + s);
                 proc_in = new BufferedReader( new InputStreamReader( proc.getInputStream() ) );
+
+                monitorError(proc);
 
                 while ( ( str = proc_in.readLine() ) != null ) {
                     // TraceManager.addDev( "Sending " + str + " from " + port + " to client..." );
@@ -163,7 +194,7 @@ public class DiplodocusSimulatorTest extends AbstractUITest {
 
             // Compare results with expected ones
             // Must load the graph
-            File graphFile = new File("testgraph_" + s + ".aut");
+            File graphFile = new File(graphPath + ".aut");
             String graphData = "";
             try {
                 graphData = FileUtils.loadFileData(graphFile);

@@ -57,7 +57,7 @@ public class TaskNetworkInterfaceOUT extends TMLTask {
 
     public TaskNetworkInterfaceOUT(String name, Object referenceToClass, Object referenceToActivityDiagram) {
         super(name, referenceToClass, referenceToActivityDiagram);
-        setDaemon(true);
+        setDaemon(TMAP2Network.DAEMON);
     }
 
     // feedbackEvents: one per vc
