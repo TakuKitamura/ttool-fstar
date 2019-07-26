@@ -243,7 +243,8 @@ public class TMLAttributeBox extends TGCWithoutInternalComponent {
     public boolean editOndoubleClick(JFrame frame) {
         String oldValue = value;
         JDialogAttribute jda = new JDialogAttribute(myAttributes, forbiddenNames, frame,
-                "Setting " + attributeText + "s of " + father.getValue(), attributeText, null, false);
+                "Setting " + attributeText + "s of " + father.getValue(), attributeText,
+                null, false, null);
         setJDialogOptions(jda);
   //      jda.setSize(650, 375);
         GraphicLib.centerOnParent(jda, 650, 375);

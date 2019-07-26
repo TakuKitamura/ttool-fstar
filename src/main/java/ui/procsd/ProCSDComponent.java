@@ -517,7 +517,8 @@ public class ProCSDComponent extends TGCWithInternalComponent implements Swallow
 		if (e.getActionCommand().equals("edit attributes")) {
 			JDialogAttribute dialog = new JDialogAttribute(myAttributes,
 					new LinkedList<TAttribute> (), tdp.getGUI().getFrame(),
-					"Setting attributes for this component", "Attribute", null, false);
+					"Setting attributes for this component", "Attribute",
+					null, false, null);
 			dialog.addAccess("-");
 			dialog.addType("Natural");
 			// must see in GProactiveDesign for bool params

@@ -213,7 +213,7 @@ public class EBRDDAttributeBox extends TGCWithoutInternalComponent  {
     public boolean editOndoubleClick(JFrame frame) {
         String oldValue = value;
         JDialogAttribute jda = new JDialogAttribute(myAttributes, forbiddenNames, frame,
-                "Setting variables", attributeText, null, false);
+                "Setting variables", attributeText, null, false, null);
         setJDialogOptions(jda);
       //  jda.setSize(650, 375);
         GraphicLib.centerOnParent(jda, 650, 375);

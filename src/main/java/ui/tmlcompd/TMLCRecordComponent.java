@@ -292,7 +292,7 @@ public class TMLCRecordComponent extends TGCScalableWithInternalComponent implem
 		
 		// And so -> attributes!
 		JDialogAttribute jda = new JDialogAttribute(myAttributes, null, frame,
-				"Setting fields of " + value, "Field", null, false);
+				"Setting fields of " + value, "Field", null, false, null);
         setJDialogOptions(jda);
       //  jda.setSize(650, 375);
         GraphicLib.centerOnParent(jda, 650, 375);

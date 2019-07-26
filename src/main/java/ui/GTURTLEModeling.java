@@ -5497,6 +5497,8 @@ public class GTURTLEModeling {
 
         prepareErrors();
 
+        int selectedTab = 0;
+
         try {
             // building nodes from xml String
             Document doc = db.parse(bais);
@@ -5530,6 +5532,7 @@ public class GTURTLEModeling {
             } catch (Exception e) {
                 TraceManager.addDev("Exception when loading model parameters:" + e.getMessage());
             }
+            selectedTab = ModelParameters.getIntegerValueFromID("LAST_SELECTED_MAIN_TAB");
 
             //designPanelNl = doc.getElementsByTagName("Design");
             //analysisNl = doc.getElementsByTagName("Analysis");
@@ -5572,6 +5575,11 @@ public class GTURTLEModeling {
         makeLastLoad();
         makeLovelyIds();
         //TraceManager.addDev("IDs done");
+
+
+        // Selecting last tab
+        TraceManager.addDev("Selecting tab:" + selectedTab);
+        mgui.selectTab(new Point(selectedTab, 0));
     }
 
     /*public void loadModeling(Node node) throws MalformedModelingException, SAXException {

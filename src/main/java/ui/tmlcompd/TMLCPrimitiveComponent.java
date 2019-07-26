@@ -312,7 +312,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         }
 
         // On the name ?
-        if ((displayText) && (_y <= (y + currentFontSize + textX))) {
+        /*if ((displayText) && (_y <= (y + currentFontSize + textX))) {
             //TraceManager.addDev("Edit on double click x=" + _x + " y=" + _y);
             oldValue = value;
             String s = (String) JOptionPane.showInputDialog(frame, "Name:", "Setting component name",
@@ -350,11 +350,12 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 
             }
             return false;
-        }
+        }*/
 
         // And so -> attributes!
+        String oldName = getValue();
         JDialogAttribute jda = new JDialogAttribute(myAttributes, null, frame,
-                "Setting attributes of " + value, "Attribute", operation, isDaemon);
+                "Setting attributes of " + value, "Attribute", operation, isDaemon, getValue());
         setJDialogOptions(jda);
         // jda.setSize(650, 375);
         GraphicLib.centerOnParent(jda, 750, 375);
@@ -365,8 +366,46 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         //}
         operation = jda.getOperation();
         isDaemon = jda.isDaemon();
-        rescaled = true;
-        return true;
+
+        String s = jda.getName();
+        if (oldName.compareTo(s) == 0) {
+            rescaled = false;
+            return true;
+        }
+
+        if ((s != null) && (s.length() > 0)) {
+            // Check whether this name is already in use, or not
+
+            if (!TAttribute.isAValidId(s, false, true, false)) {
+                JOptionPane.showMessageDialog(frame,
+                        "Could not change the name of the component: the new name is not a valid name",
+                        "Error",
+                        JOptionPane.INFORMATION_MESSAGE);
+                return false;
+            }
+            if (oldValue.compareTo(s) != 0) {
+                if (((TMLComponentTaskDiagramPanel) (tdp)).namePrimitiveComponentInUse(oldValue, s)) {
+                    JOptionPane.showMessageDialog(frame,
+                            "Error: the name is already in use",
+                            "Name modification",
+                            JOptionPane.ERROR_MESSAGE);
+                    return false;
+                }
+            }
+
+
+            //TraceManager.addDev("Set value with change");
+            setComponentName(s);
+            setValueWithChange(s);
+            isAttacker = s.contains("Attacker");
+            rescaled = true;
+            //TraceManager.addDev("return true");
+            return true;
+
+        }
+        return false;
+
+
 
     }
 

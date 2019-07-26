@@ -61,9 +61,10 @@ public class ModelParameters  {
             "ACTIVATE_PENALTIES", // Diplodocus penalties in C++ simulation
             "UPDATE_INFORMATION_DIPLO_SIM", // Diplo simulator
             "ANIMATE_WITH_INFO_DIPLO_SIM", // Diplo simulator
-            "OPEN_DIAG_DIPLO_SIM" // Diplo simulator
+            "OPEN_DIAG_DIPLO_SIM", // Diplo simulator
+            "LAST_SELECTED_MAIN_TAB"
     };
-    private static String[] values = {"true", "true", "true", "true", "false"};
+    private static String[] values = {"true", "true", "true", "true", "false", "0"};
 
     public static boolean getBooleanValueFromID(String value) {
         for(int i=0; i<ids.length; i++) {
@@ -72,6 +73,15 @@ public class ModelParameters  {
             }
         }
         return false;
+    }
+
+    public static int getIntegerValueFromID(String value) {
+        for(int i=0; i<ids.length; i++) {
+            if (ids[i].compareTo(value) == 0) {
+                return Integer.decode(values[i]);
+            }
+        }
+        return 0;
     }
 
     public static String toXML() {

@@ -1774,6 +1774,8 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         ChangeListener cl = new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
+                //TraceManager.addDev("State Changed in main tabbed pane");
+                ModelParameters.setValueForID("LAST_SELECTED_MAIN_TAB", ""+mainTabbedPane.getSelectedIndex());
                 paneAction(e);
             }
         };
@@ -2902,7 +2904,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             makeLotosFile();
 
             // Issue #41: Reselect the last tab
-            mainTabbedPane.setSelectedIndex(mainTabbedPane.getTabCount() - 1);
+            //mainTabbedPane.setSelectedIndex(mainTabbedPane.getTabCount() - 1);
 
             if (gtm.getCheckingErrors().size() > 0) {
                 JOptionPane.showMessageDialog(frame, "Modeling could not be correctly " + actionMessage, "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);

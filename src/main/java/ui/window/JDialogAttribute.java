@@ -71,6 +71,11 @@ public class JDialogAttribute extends JDialogBase implements ActionListener, Lis
     
     protected String attrib; // "Attributes", "Gates", etc.
 
+    // Name of task
+    protected String name;
+    protected JPanel panelName;
+    protected JTextField nameField;
+
     // Daemon task?
     protected boolean isDaemon;
     protected JCheckBox daemonBox;
@@ -95,7 +100,7 @@ public class JDialogAttribute extends JDialogBase implements ActionListener, Lis
     
     /* Creates new form  */
     public JDialogAttribute(java.util.List<TAttribute> _attributes, java.util.List<TAttribute>_forbidden, Frame f,
-                            String title, String attrib, String _operation, boolean _isDaemon) {
+                            String title, String attrib, String _operation, boolean _isDaemon, String name) {
         super(f, title, true);
         frame = f;
         attributesPar = _attributes;
@@ -104,6 +109,7 @@ public class JDialogAttribute extends JDialogBase implements ActionListener, Lis
         this.attrib = attrib;
         this.operation = _operation;
         this.isDaemon = _isDaemon;
+        this.name = name;
         
         attributes = new LinkedList<TAttribute> ();
         
@@ -246,6 +252,31 @@ public class JDialogAttribute extends JDialogBase implements ActionListener, Lis
         removeButton = new JButton("Remove " + attrib);
         removeButton.addActionListener(this);
         panel2.add(removeButton, c2);
+
+
+        //Name panel
+        if (name != null) {
+            GridBagLayout gbOp = new GridBagLayout();
+            GridBagConstraints cOp = new GridBagConstraints();
+            panelName = new JPanel();
+            panelName.setLayout(gbOp);
+            panelName.setBorder(new javax.swing.border.TitledBorder("Name"));
+            //panelOperation.setPreferredSize(new Dimension(500, 70));
+
+            cOp.weighty = 1.0;
+            cOp.weightx = 2.0;
+            cOp.gridwidth = GridBagConstraints.REMAINDER;
+            cOp.fill = GridBagConstraints.BOTH;
+            cOp.gridheight = 3;
+            nameField = new JTextField(name);
+            panelName.add(nameField, cOp);
+
+            c0.weighty = 1.0;
+            c0.weightx = 1.0;
+            c0.fill = GridBagConstraints.BOTH;
+            c0.gridwidth = GridBagConstraints.REMAINDER;
+            c.add(panelName, c0);
+        }
 
         // Operation panel
         if (operation != null) {
@@ -538,6 +569,13 @@ public class JDialogAttribute extends JDialogBase implements ActionListener, Lis
     public String getOperation() {
         if (operationField != null) {
             return operationField.getText().trim();
+        }
+        return "";
+    }
+
+    public String getName() {
+        if (nameField != null) {
+            return nameField.getText().trim();
         }
         return "";
     }
