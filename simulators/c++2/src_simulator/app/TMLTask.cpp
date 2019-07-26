@@ -327,7 +327,6 @@ void TMLTask::finished(){
 }
 
 unsigned int TMLTask::getState() const{
-	std::cout<<"getState"<<std::endl;
 	/*if (!_transactList.empty() && _transactList.back()->getEndTime()==SchedulableDevice::getSimulatedTime()){
 		return RUNNING;
 	}else{
