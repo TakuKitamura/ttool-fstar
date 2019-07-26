@@ -303,6 +303,7 @@ public class SysCAMSClock extends TGCScalableWithInternalComponent implements Sw
 		sb.append("\" unit=\"" + getUnit());
 		sb.append("\" dutyCycle=\"" + getDutyCycle());
 		sb.append("\" startTime=\"" + getStartTime());
+		sb.append("\" unitStartTime=\"" + getUnitStartTime());
 		sb.append("\" posFirst =\"" + getPosFirst());			
 		//sb.append("\" listTypedef=\"" + splitParameters(getListTypedef()));
 		sb.append("\" />\n");
@@ -553,14 +554,17 @@ public class SysCAMSClock extends TGCScalableWithInternalComponent implements Sw
     //		}
 
     	public double getFrequency() {
+	    //	    System.out.println("@@@"+frequency);
 		return frequency;
 	}
 
 	public String getUnit() {
+	    //  System.out.println("@@@ clock unit "+unit);
 		return unit;
 	}
 
 	public String getUnitStartTime() {
+	    //  System.out.println("@@@ clock unit start time "+unitStartTime);
 		return unitStartTime;
 	}
 
