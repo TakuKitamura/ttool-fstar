@@ -62,9 +62,10 @@ public class ModelParameters  {
             "UPDATE_INFORMATION_DIPLO_SIM", // Diplo simulator
             "ANIMATE_WITH_INFO_DIPLO_SIM", // Diplo simulator
             "OPEN_DIAG_DIPLO_SIM", // Diplo simulator
-            "LAST_SELECTED_MAIN_TAB"
+            "LAST_SELECTED_MAIN_TAB",
+            "LAST_SELECTED_SUB_TAB"
     };
-    private static String[] values = {"true", "true", "true", "true", "false", "0"};
+    private static String[] values = {"true", "true", "true", "true", "false", "0", "0"};
 
     public static boolean getBooleanValueFromID(String value) {
         for(int i=0; i<ids.length; i++) {

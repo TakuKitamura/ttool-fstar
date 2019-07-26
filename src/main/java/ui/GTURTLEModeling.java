@@ -3720,6 +3720,7 @@ public class GTURTLEModeling {
 
     private String header() {
         String head = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGMODELING version=\"" + DefaultText.getVersion() + "\"";
+        ModelParameters.setValueForID("LAST_SELECTED_SUB_TAB", ""+mgui.getCurrentJTabbedPane().getSelectedIndex());
         head += ModelParameters.toXML();
         head += ">\n\n";
         return head;
@@ -5433,6 +5434,10 @@ public class GTURTLEModeling {
         } else {
             throw new MalformedModelingException();
         }
+
+
+        //Select first tab of current tab
+        mgui.getCurrentJTabbedPane().setSelectedIndex(0);
     }
 
 
@@ -5498,6 +5503,7 @@ public class GTURTLEModeling {
         prepareErrors();
 
         int selectedTab = 0;
+        int selectedSubTab = -1;
 
         try {
             // building nodes from xml String
@@ -5533,6 +5539,7 @@ public class GTURTLEModeling {
                 TraceManager.addDev("Exception when loading model parameters:" + e.getMessage());
             }
             selectedTab = ModelParameters.getIntegerValueFromID("LAST_SELECTED_MAIN_TAB");
+            selectedSubTab = ModelParameters.getIntegerValueFromID("LAST_SELECTED_SUB_TAB");
 
             //designPanelNl = doc.getElementsByTagName("Design");
             //analysisNl = doc.getElementsByTagName("Analysis");
@@ -5579,7 +5586,7 @@ public class GTURTLEModeling {
 
         // Selecting last tab
         TraceManager.addDev("Selecting tab:" + selectedTab);
-        mgui.selectTab(new Point(selectedTab, 0));
+        mgui.selectTab(new Point(selectedTab, selectedSubTab));
     }
 
     /*public void loadModeling(Node node) throws MalformedModelingException, SAXException {
