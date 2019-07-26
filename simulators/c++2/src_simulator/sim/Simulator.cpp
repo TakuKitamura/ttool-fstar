@@ -859,9 +859,8 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 	if(transLET!=0 && transLET->getCommand()->getTask()->getIsDaemon()==true){
 	  if(transLET->getStartTime() >= deviceLET->getSimulatedTime()){
 	    // std::cout<<"bigger time"<<std::endl;
-	    bool isFinish=true;
 	    if(_simComp->getNonDaemonTaskList().empty())
-	      isFinish=false;
+	      break;
 	    for(TaskList::const_iterator i=_simComp->getNonDaemonTaskList().begin(); i != _simComp->getNonDaemonTaskList().end(); ++i){	 
 	      //  std::cout<<"non dameon task"<<(*i)->toString()<<" state is "<<(*i)->getState()<<(*i)->getCurrCommand()->toString()<<std::endl;
 	      if((*i)->getState()!=3){
@@ -1011,8 +1010,10 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
   }
 
   bool aSimCompleted = ( transLET==0  && !_simComp->getStoppedOnAction());
-  if(isFinish==true)
+  if(isFinish==true){
+    // std::cout<<"terminated!!!"<<std::endl;
     aSimCompleted = true;
+  }
 
   if (aSimCompleted){
 #ifdef LISTENERS_ENABLED
