@@ -32,7 +32,9 @@ public class DiplodocusNoCTest extends AbstractUITest {
     final String DIR_GEN = "test_spec_noc/";
     final int SIZE_OF_NOCS = 2;
     final int NB_Of_SIM_CYCLES = 300;
-    final String[] SIM_ACTION = {};
+    final String[] SIM_ACTIONS = {"INVC_CPU01___p3_vc0: Read 4,ch_pktin3_vc0_0_0",
+            "NI_OUT_CPU01: Read 4,channelBetweenOUTToIN__P_x0_y0_N_x0_y0_OUTRouter",
+            "NI_OUT_CPU11: Read 4,channelBetweenOUTToIN__P_x1_y0_N_x1_y0_OUTRouter"};
 
 
     private String SIM_DIR;
@@ -238,7 +240,7 @@ public class DiplodocusNoCTest extends AbstractUITest {
             assertTrue(false);
         }
 
-        for(String act: SIM_ACTION) {
+        for(String act: SIM_ACTIONS) {
             assertTrue(simData.indexOf(act) > -1);
         }
 

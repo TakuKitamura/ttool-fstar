@@ -26,13 +26,13 @@ import static org.junit.Assert.*;
 
 public class DiplodocusSimulatorTest extends AbstractUITest {
 
-
+    //final String [] MODELS = {"scp"};
     final String [] MODELS = {"scp", "ssdf"};
     final String DIR_GEN = "test_diplo_simulator/";
-    final int [] NB_Of_STATES = {177, 1824};
-    final int [] NB_Of_TRANSTIONS = {176, 1823};
+    final int [] NB_Of_STATES = {173, 1824};
+    final int [] NB_Of_TRANSTIONS = {172, 1823};
     final int [] MIN_CYCLES = {210, 4106};
-    final int [] MAX_CYCLES = {318, 4106};
+    final int [] MAX_CYCLES = {315, 4106};
 
 
     private String SIM_DIR;
