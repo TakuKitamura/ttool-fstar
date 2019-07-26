@@ -858,7 +858,6 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 	  
 	if(transLET!=0 && transLET->getCommand()->getTask()->getIsDaemon()==true){
 	  if(transLET->getStartTime() >= deviceLET->getSimulatedTime()){
-	    // std::cout<<"bigger time"<<std::endl;
 	    if(_simComp->getNonDaemonTaskList().empty())
 	      break;
 	    for(TaskList::const_iterator i=_simComp->getNonDaemonTaskList().begin(); i != _simComp->getNonDaemonTaskList().end(); ++i){	 
