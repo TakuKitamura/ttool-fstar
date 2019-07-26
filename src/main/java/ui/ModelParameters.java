@@ -105,7 +105,7 @@ public class ModelParameters  {
                 try {
                     tmp = elt.getAttribute(ids[i]);
                     if ((tmp != null) && (tmp.length() > 0)){
-                        TraceManager.addDev("Setting value " + tmp + " to id " + ids[i]);
+                        //TraceManager.addDev("Setting value " + tmp + " to id " + ids[i]);
                         values[i] = tmp;
                     }
                 } catch (Exception e) {

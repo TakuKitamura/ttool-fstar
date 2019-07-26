@@ -2897,6 +2897,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         gtm.enableUndo(false);
 
         TraceManager.addDev("Loading model");
+
         // load the new TTool modeling
         try {
             gtm.loadModelingFromXML(xmlModel);
@@ -2907,11 +2908,13 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             //mainTabbedPane.setSelectedIndex(mainTabbedPane.getTabCount() - 1);
 
             if (gtm.getCheckingErrors().size() > 0) {
-                JOptionPane.showMessageDialog(frame, "Modeling could not be correctly " + actionMessage, "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Model " + file.getAbsolutePath() + " could not be correctly " + actionMessage,
+                        "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
 
             }
         } catch (Exception mme) {
-            JOptionPane.showMessageDialog(frame, "Modeling could not be correctly " + actionMessage, "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Model " + file.getAbsolutePath() + " could not be correctly " + actionMessage,
+                    "Error when loading modeling", JOptionPane.INFORMATION_MESSAGE);
             frame.setTitle("TTool: unnamed project");
         }
 
@@ -2932,25 +2935,25 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     }
 
     public void saveAsLibrary(String data) {
-        File libfile;
+        File libFile;
 
         int returnVal = jfclib.showDialog(frame, "Export library");
         if (returnVal != JFileChooser.APPROVE_OPTION) {
             return;
         }
 
-        libfile = jfclib.getSelectedFile();
-        libfile = FileUtils.addFileExtensionIfMissing(libfile, TLibFilter.getExtension());
+        libFile = jfclib.getSelectedFile();
+        libFile = FileUtils.addFileExtensionIfMissing(libFile, TLibFilter.getExtension());
 
-        if (checkFileForSave(libfile)) {
+        if (checkFileForSave(libFile)) {
             try {
                 if (data == null) {
                     throw new Exception("Selected data corrupted");
                 }
-                FileOutputStream fos = new FileOutputStream(libfile);
+                FileOutputStream fos = new FileOutputStream(libFile);
                 fos.write(data.getBytes());
                 fos.close();
-                JOptionPane.showMessageDialog(frame, "Modeling was correctly saved under a TTool library named " + libfile.getName(), "Saving", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Modeling was correctly saved under a TTool library named " + libFile.getName(), "Saving", JOptionPane.INFORMATION_MESSAGE);
                 return;
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(frame, "File could not be saved because " + e.getMessage(), "File Error", JOptionPane.INFORMATION_MESSAGE);
@@ -8576,10 +8579,18 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     }
 
     public TDiagramPanel selectTab(Point p) {
-        mainTabbedPane.setSelectedIndex(p.x);
-        TURTLEPanel tp = tabs.elementAt(p.x);
-        tp.tabbedPane.setSelectedIndex(p.y);
-        return tp.panels.elementAt(p.y);
+        if (mainTabbedPane.getTabCount() > 0 ) {
+            mainTabbedPane.setSelectedIndex(p.x);
+            TURTLEPanel tp = tabs.elementAt(p.x);
+            TraceManager.addDev("Got TP");
+            if (tp != null) {
+                if (tp.tabbedPane.getTabCount() > 0) {
+                    tp.tabbedPane.setSelectedIndex(p.y);
+                    return tp.panels.elementAt(p.y);
+                }
+            }
+        }
+        return null;
 
     }
 

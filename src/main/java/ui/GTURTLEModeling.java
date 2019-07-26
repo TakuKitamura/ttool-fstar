@@ -5436,8 +5436,13 @@ public class GTURTLEModeling {
         }
 
 
-        //Select first tab of current tab
-        mgui.getCurrentJTabbedPane().setSelectedIndex(0);
+        //Select first tab of current tab if it exists
+        if (mgui != null) {
+            if (mgui.getCurrentJTabbedPane() != null) {
+                if (mgui.getCurrentJTabbedPane().getTabCount() > 0)
+                    mgui.getCurrentJTabbedPane().setSelectedIndex(0);
+            }
+        }
     }
 
 
@@ -5533,7 +5538,7 @@ public class GTURTLEModeling {
             // Loading header
 
             try {
-                TraceManager.addDev("Loading model parameters");
+                //TraceManager.addDev("Loading model parameters");
                 ModelParameters.loadValuesFromXML(doc.getElementsByTagName("TURTLEGMODELING").item(0));
             } catch (Exception e) {
                 TraceManager.addDev("Exception when loading model parameters:" + e.getMessage());
@@ -5541,22 +5546,26 @@ public class GTURTLEModeling {
             selectedTab = ModelParameters.getIntegerValueFromID("LAST_SELECTED_MAIN_TAB");
             selectedSubTab = ModelParameters.getIntegerValueFromID("LAST_SELECTED_SUB_TAB");
 
+            //TraceManager.addDev("End loading values");
+
             //designPanelNl = doc.getElementsByTagName("Design");
             //analysisNl = doc.getElementsByTagName("Analysis");
 
             pendingConnectors = new ArrayList<TGConnectorInfo>();
 
-            //TraceManager.addDev("nb de design=" + designPanelNl.getLength() + " nb d'analyse=" + analysisNl.getLength());
             boolean error = false;
             for (i = 0; i < panelNl.getLength(); i++) {
                 node = panelNl.item(i);
-                //TraceManager.addDev("Node = " + dnd);
+                //TraceManager.addDev("Node = " + node);
 
                 if (node.getNodeType() == Node.ELEMENT_NODE) {
                     // create design, and get an index for it
                     try {
+                        //TraceManager.addDev("Loading Node");
                         loadModeling(node);
+                        //TraceManager.addDev("Node loaded = ");
                     } catch (MalformedModelingException mme) {
+                        TraceManager.addError("Error when loading diagram");
                         Element elt = (Element) node;
                         String type = elt.getAttribute("type");
                         TraceManager.addError("Error when loading diagram: " + elt + " " + type, mme);
@@ -5564,7 +5573,9 @@ public class GTURTLEModeling {
                     }
                 }
             }
+
             if (error == true) {
+                //TraceManager.addDev("ERROR FOUND");
                 throw new MalformedModelingException();
             }
 
@@ -5581,12 +5592,14 @@ public class GTURTLEModeling {
         //TraceManager.addDev("making IDs");
         makeLastLoad();
         makeLovelyIds();
-        //TraceManager.addDev("IDs done");
+        TraceManager.addDev("IDs done");
 
 
         // Selecting last tab
-        TraceManager.addDev("Selecting tab:" + selectedTab);
+        //TraceManager.addDev("Selecting tab:" + selectedTab);
         mgui.selectTab(new Point(selectedTab, selectedSubTab));
+        //TraceManager.addDev("Tabs selected");
+
     }
 
     /*public void loadModeling(Node node) throws MalformedModelingException, SAXException {
