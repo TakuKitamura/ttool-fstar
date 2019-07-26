@@ -82,12 +82,12 @@ using std::min;
 using std::max;
 
 #undef DEBUG_KERNEL
-#undef DEBUG_CPU
+#define DEBUG_CPU
 #undef DEBUG_BUS
 #undef DEBUG_SERIALIZE
 
 #undef DEBUG_FPGA
-#undef DEBUG_SIMULATE
+#define DEBUG_SIMULATE
 //enables mapping of DIPLODOCUS channels onto buses
 #define BUS_ENABLED
 //cost of a send/wait command
