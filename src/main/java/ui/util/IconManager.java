@@ -161,7 +161,7 @@ public class IconManager {
     public static ImageIcon imgic5070, imgic5072, imgic5074;
 
     public static ImageIcon imgic5100, imgic5102, imgic5104, imgic5106, imgic5108;
-    public static ImageIcon imgic5110, imgic5112, imgic5113, imgic5114;
+    public static ImageIcon imgic5110, imgic5112, imgic5113, imgic5114, imgic5116;
     public static ImageIcon imgic5200;
 
     //pragmas
@@ -646,6 +646,7 @@ public class IconManager {
     private static String icon5112 = "invariantbig.gif";
     private static String icon5113 = "toolbarButtonGraphics/general/Search16_E.gif";
     private static String icon5114 = "toolbarButtonGraphics/general/Search16_I.gif";
+    private static String icon5116 = "daemon16.png";
 
     // Avatar DD
     private static String icon5200 = "search-ideogram-25px.png";
@@ -1171,6 +1172,7 @@ public class IconManager {
         imgic5112 = getIcon(icon5112);
         imgic5113 = getIcon(icon5113);
         imgic5114 = getIcon(icon5114);
+        imgic5116 = getIcon(icon5116);
 
         imgic5200 = getIcon(icon5200);
         if (imgic5200 != null) {

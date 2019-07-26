@@ -229,8 +229,9 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
         // Draw icon
         this.iconIsDrawn = this.width > IconManager.iconSize + 2 * textX && height > IconManager.iconSize + 2 * textX;
-        if (this.iconIsDrawn)
+        if (this.iconIsDrawn) {
             graph.drawImage(IconManager.img5100, this.x + this.width - IconManager.iconSize - textX, this.y + textX, null);
+        }
 
 
         Font font = graph.getFont();

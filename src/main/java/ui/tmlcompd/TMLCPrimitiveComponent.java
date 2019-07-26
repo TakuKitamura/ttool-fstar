@@ -200,12 +200,16 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         if ((width > 30) && (height > (iconSize + 2 * textX))) {
             iconIsDrawn = true;
             g.drawImage(IconManager.imgic1200.getImage(), x + width - iconSize - textX, y + textX, null);
+            if (isAttacker) {
+                g.drawImage(IconManager.imgic7008.getImage(), x + width - 2 * iconSize - textX, y + 2 * textX, null);
+            }
+            if (isDaemon) {
+                g.drawImage(IconManager.imgic5116.getImage(), x + textX, y + textX, null);
+            }
         } else {
             iconIsDrawn = false;
         }
-        if (isAttacker) {
-            g.drawImage(IconManager.imgic7008.getImage(), x + width - 2 * iconSize - textX, y + 2 * textX, null);
-        }
+
 
         // Attributes
         if (tdp.areAttributesVisible()) {
