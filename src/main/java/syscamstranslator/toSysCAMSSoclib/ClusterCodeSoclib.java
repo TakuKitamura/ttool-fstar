@@ -71,6 +71,8 @@ public class ClusterCodeSoclib {
 		if (cluster != null) {
 			LinkedList<SysCAMSTBlockTDF> tdf = cluster.getBlockTDF();
 			LinkedList<SysCAMSTBlockDE> de = cluster.getBlockDE();
+
+			LinkedList<SysCAMSTClock> clock = cluster.getClock();
 			
 			System.out.println("Number of AMS connectors: " + connectors.size());
                         
@@ -85,15 +87,15 @@ public class ClusterCodeSoclib {
                 if ( !((connectors.get(i).get_p1().getComponent() instanceof SysCAMSTPortDE && ((SysCAMSTPortDE) connectors.get(i).get_p1().getComponent()).getBlockGPIO2VCI() != null) 
                 || (connectors.get(i).get_p2().getComponent() instanceof SysCAMSTPortDE && ((SysCAMSTPortDE) connectors.get(i).get_p2().getComponent()).getBlockGPIO2VCI() != null)) ) {
                     if (connectors.get(i).get_p1().getComponent() instanceof SysCAMSTPortTDF) {
-                        corpsCluster = corpsCluster + "\tsca_tdf::sca_signal<" + ((SysCAMSTPortTDF) connectors.get(i).get_p1().getComponent()).getTDFType() + "> " 
+                        corpsCluster = corpsCluster + "\tsca_tdf::sca_signal<" + ((SysCAMSTPortTDF) connectors.get(i).get_p1().getComponent()).getTDFType() + " > " 
                         + "sig_" + nb_con + ";" + CR;
                         //nb_con++;
                     } else if (connectors.get(i).get_p1().getComponent() instanceof SysCAMSTPortConverter) {
-                        corpsCluster = corpsCluster + "\tsc_core::sc_signal<" + ((SysCAMSTPortConverter) connectors.get(i).get_p1().getComponent()).getConvType() + "> " 
+                        corpsCluster = corpsCluster + "\tsc_core::sc_signal<" + ((SysCAMSTPortConverter) connectors.get(i).get_p1().getComponent()).getConvType() + " > " 
                         + "sig_" + nb_con + ";" + CR;
                         //nb_con++;
                     } else if (connectors.get(i).get_p1().getComponent() instanceof SysCAMSTPortDE) {
-                        corpsCluster = corpsCluster + "\tsc_core::sc_signal<" + ((SysCAMSTPortDE) connectors.get(i).get_p1().getComponent()).getDEType() + "> " 
+                        corpsCluster = corpsCluster + "\tsc_core::sc_signal<" + ((SysCAMSTPortDE) connectors.get(i).get_p1().getComponent()).getDEType() + " > " 
                         + "sig_" + nb_con + ";" + CR;
                         //nb_con++;
                     }
@@ -101,6 +103,16 @@ public class ClusterCodeSoclib {
 			}
 
 			corpsCluster = corpsCluster + CR + "\t// Instantiate cluster's modules." + CR;
+
+
+
+			for (SysCAMSTClock t : clock) {
+			    corpsCluster = corpsCluster + "\t  sc_clock " + t.getName() + " (\"" + t.getName() + "\"," + t.getFrequency()+","+ t.getUnit()+","+ t.getDutyCycle()+","+ t.getStartTime()+","+ t.getUnit()+","+ t.getPosFirst()+");" + CR;
+			}
+			//ToDo 9.7.2019: add lines for reading (several) clock ports and sensitivity lists
+
+
+			
             for (SysCAMSTBlockTDF t : tdf) {
                 corpsCluster = corpsCluster + "\t" + t.getName() + " " +
                   t.getName() + "_" + nb_block + ";" + CR;

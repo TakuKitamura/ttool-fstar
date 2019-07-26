@@ -52,6 +52,7 @@ import javax.swing.DefaultListModel;
 
 public class SysCAMSTBlockDE extends SysCAMSTComponent {
 	private String name;
+    	private String clockName;
 //	private int period;
 //	private String time;
 	private String nameFn;
@@ -66,8 +67,9 @@ public class SysCAMSTBlockDE extends SysCAMSTComponent {
 	
 	private LinkedList<SysCAMSTPortDE> portDE;
 	
-	public SysCAMSTBlockDE(String _name, String _nameFn, String _code, DefaultListModel<String> _listStruct, String _nameTemplate, String _typeTemplate, String _valueTemplate, DefaultListModel<String> _listTypedef, SysCAMSTCluster _cluster) {
+	public SysCAMSTBlockDE(String _name, String _clockName, String _nameFn, String _code, DefaultListModel<String> _listStruct, String _nameTemplate, String _typeTemplate, String _valueTemplate, DefaultListModel<String> _listTypedef, SysCAMSTCluster _cluster) {
 		name = _name;
+		clockName = _clockName;
 //		period = _period;
 //		time = _time;
 		nameFn = _nameFn;
@@ -93,6 +95,11 @@ public class SysCAMSTBlockDE extends SysCAMSTComponent {
 		return name;
 	}
 
+	public String getClockName() {
+		return clockName;
+	}
+
+    
 	public String getNameFn() {
 		return nameFn;
 	}

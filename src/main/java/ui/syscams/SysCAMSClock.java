@@ -68,10 +68,11 @@ public class SysCAMSClock extends TGCScalableWithInternalComponent implements Sw
         private String valueTemplate;
         private String name;
         private String unit;
-        private String frequency;
-        private String dutyCycle;
-        private String startTime;
-        private String posFirst;
+        private String unitStartTime;
+        private double frequency;
+        private double dutyCycle;
+        private double startTime;
+        private boolean posFirst;
 	private DefaultListModel<String> listTypedef;
 
 	private int maxFontSize = 14;
@@ -116,8 +117,7 @@ public class SysCAMSClock extends TGCScalableWithInternalComponent implements Sw
 		setCode("");
 		setListStruct(new DefaultListModel<String>());
 		setNameTemplate("");
-		//	setTypeTemplate("");
-		//setValueTemplate("");
+	
 		setListTypedef(new DefaultListModel<String>());
 
 		myImageIcon = IconManager.imgic1202;
@@ -173,19 +173,10 @@ public class SysCAMSClock extends TGCScalableWithInternalComponent implements Sw
 			g.setFont(f.deriveFont(Font.BOLD));
 			g.drawString(value, x + textX + 1, y + currentFontSize + textX);
 			g.setFont(f.deriveFont(Font.PLAIN));
-//			if (this.getPeriod() != -1) { 
-//				String s = "Tm = " + this.getPeriod() + " " + this.getTime();
-//				g.drawString(s, x + textX + 1, y + height - currentFontSize - textX);
-//			}
 		} else {
 			g.setFont(f.deriveFont(Font.BOLD));
 			g.drawString(value, x + (width - w)/2, y + currentFontSize + textX);
-			g.setFont(f.deriveFont(Font.PLAIN));
-//			if (this.getPeriod() != -1) { 
-//				String s = "Tm = " + this.getPeriod() + " " + this.getTime();
-//				w = g.getFontMetrics().stringWidth(s);
-//				g.drawString(s, x + (width - w)/2, y + height - currentFontSize - textX);
-//			}
+			g.setFont(f.deriveFont(Font.PLAIN));	
 		}
 
 		g.setFont(fold);
@@ -304,16 +295,17 @@ public class SysCAMSClock extends TGCScalableWithInternalComponent implements Sw
 		StringBuffer sb = new StringBuffer("<extraparam>\n");
 		sb.append("<Attribute name_function=\"" + getNameFn());
 	
-		sb.append("\" code=\"" + encode(getCode()));
-		sb.append("\" listStruct=\"" + splitParameters(getListStruct()));
+		//sb.append("\" code=\"" + encode(getCode()));
+		//sb.append("\" listStruct=\"" + splitParameters(getListStruct()));
 		sb.append("\" nameTemplate=\"" + getNameTemplate());
-		sb.append("\" name=\"" + getName());
+		//sb.append("\" name=\"" + getName());
 		sb.append("\" frequency =\"" + getFrequency());
 		sb.append("\" unit=\"" + getUnit());
 		sb.append("\" dutyCycle=\"" + getDutyCycle());
 		sb.append("\" startTime=\"" + getStartTime());
+		sb.append("\" unitStartTime=\"" + getUnitStartTime());
 		sb.append("\" posFirst =\"" + getPosFirst());			
-		sb.append("\" listTypedef=\"" + splitParameters(getListTypedef()));
+		//sb.append("\" listTypedef=\"" + splitParameters(getListTypedef()));
 		sb.append("\" />\n");
 		sb.append("</extraparam>\n");
 		return new String(sb);
@@ -438,6 +430,8 @@ public class SysCAMSClock extends TGCScalableWithInternalComponent implements Sw
 			Node n1, n2;
 			Element elt;
 
+			double frequency, dutyCycle, startTime;
+			
 			String code, nameFn, listStruct, nameTemplate, typeTemplate, valueTemplate, listTypedef;
 
 			for(int i=0; i<nl.getLength(); i++) {
@@ -449,37 +443,40 @@ public class SysCAMSClock extends TGCScalableWithInternalComponent implements Sw
 						if (n2.getNodeType() == Node.ELEMENT_NODE) {
 							elt = (Element) n2;
 							if (elt.getTagName().equals("Attribute")) {
-//							unit = elt.getAttribute("unit");
-								unit = elt.getAttribute("unit");
-								frequency = elt.getAttribute("frequency");
-								posFirst = elt.getAttribute("posFirst");
-								dutyCycle = elt.getAttribute("dutyCycle");
-								startTime = elt.getAttribute("startTime");
-								listStruct = elt.getAttribute("listStruct");
-								nameTemplate = elt.getAttribute("nameTemplate");
-								typeTemplate = elt.getAttribute("typeTemplate");
-								valueTemplate = elt.getAttribute("valueTemplate");
-								listTypedef = elt.getAttribute("listTypedef");
 //							
-								String[] splita = listStruct.split("\\|");
-								DefaultListModel<String> lista = new DefaultListModel<String>();
-								for (String s : splita) {
+								unit = elt.getAttribute("unit");
+								unit = elt.getAttribute("unitStartTime");
+							
+								frequency = Double.valueOf(elt.getAttribute("frequency")).doubleValue();
+								dutyCycle = Double.valueOf(elt.getAttribute("dutyCycle")).doubleValue();
+								startTime = Double.valueOf(elt.getAttribute("startTime")).doubleValue();
+								posFirst = Boolean.valueOf(elt.getAttribute("posFirst")).booleanValue();
+								nameTemplate = elt.getAttribute("nameTemplate");
+								
+								setFrequency(frequency);
+								setDutyCycle(dutyCycle);
+								setStartTime(startTime);
+								setPosFirst(posFirst);
+								//String[] splita = listStruct.split("\\|");
+								//DefaultListModel<String> lista = new DefaultListModel<String>();
+								/*	for (String s : splita) {
 									if (!s.equals("")) {
 										lista.addElement(s);
 									}
 								}
-								setListStruct(lista);
+								setListStruct(lista);*/
 								setNameTemplate(nameTemplate);
+								
 								//setTypeTemplate(typeTemplate);
 								//setValueTemplate(valueTemplate);
-								String[] splitb = listTypedef.split("\\|");
-								DefaultListModel<String> listb = new DefaultListModel<String>();
-								for (String s : splitb) {
+								//String[] splitb = listTypedef.split("\\|");
+								//DefaultListModel<String> listb = new DefaultListModel<String>();
+								/*for (String s : splitb) {
 									if (!s.equals("")) {
 										listb.addElement(s);
 									}
 								}
-								setListTypedef(listb);
+								setListTypedef(listb);*/
 							}
 						}
 					}
@@ -552,28 +549,36 @@ public class SysCAMSClock extends TGCScalableWithInternalComponent implements Sw
 		listStruct = _listStruct;
 	}
 
-    /*	public String getName() {
-		return name;
-		}*/
+    //public String getName() {
+    //		return name;
+    //		}
 
-    	public String getFrequency() {
+    	public double getFrequency() {
+	    //	    System.out.println("@@@"+frequency);
 		return frequency;
 	}
 
 	public String getUnit() {
+	    //  System.out.println("@@@ clock unit "+unit);
 		return unit;
 	}
 
-        public String getDutyCycle() {
+	public String getUnitStartTime() {
+	    //  System.out.println("@@@ clock unit start time "+unitStartTime);
+		return unitStartTime;
+	}
+
+    
+        public double getDutyCycle() {
 	    return dutyCycle;
 	}
 
-    public String getStartTime() {
+    public double getStartTime() {
 		return startTime;
 	}
     
     
-    	public String getPosFirst() {
+    	public boolean getPosFirst() {
 		return posFirst;
 	}
     
@@ -582,11 +587,11 @@ public class SysCAMSClock extends TGCScalableWithInternalComponent implements Sw
 	}
 
 
-	public void setStartTime(String _startTime) {
+	public void setStartTime(double _startTime) {
 		startTime = _startTime;
 	}
    
-    	public void setFrequency(String _frequency) {
+    	public void setFrequency(double _frequency) {
 		 frequency = _frequency;
 	}
 
@@ -594,11 +599,15 @@ public class SysCAMSClock extends TGCScalableWithInternalComponent implements Sw
 		unit = _unit;
 	}
 
-        public void setDutyCycle(String _dutyCycle) {
+    	public void setUnitStartTime(String _unitStartTime) {
+		unitStartTime = _unitStartTime;
+	}
+
+        public void setDutyCycle(double _dutyCycle) {
 		dutyCycle = _dutyCycle;
 	}
        
-    	public void setPosFirst(String _posFirst) {
+    	public void setPosFirst(boolean _posFirst) {
 		posFirst = _posFirst;
 	}
 

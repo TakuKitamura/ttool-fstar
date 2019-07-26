@@ -54,18 +54,20 @@ public class SysCAMSTPortConverter extends SysCAMSTComponent {
 	private int rate;
 	private int delay;
 	private int origin;
+    	private int nbits;
 	private String ConvType;
     private boolean recompute;
 	
 	private SysCAMSTBlockTDF blockTDF;
 	
-	public SysCAMSTPortConverter(String _name, double _period, String _time, int _rate, int _delay, int _origin, String _ConvType, SysCAMSTBlockTDF _blockTDF) {
+	public SysCAMSTPortConverter(String _name, double _period, String _time, int _rate, int _delay, int _origin, int _nbits, String _ConvType, SysCAMSTBlockTDF _blockTDF) {
 		name = _name;
 		period = _period;
 		time = _time;
 		rate = _rate;
 		delay = _delay;
 		origin = _origin;
+		nbits = _nbits;
 		ConvType = _ConvType;
 		blockTDF = _blockTDF;
         recompute = false;
@@ -90,6 +92,11 @@ public class SysCAMSTPortConverter extends SysCAMSTComponent {
 	public int getRate() {
 		return rate;
 	}
+
+	public int getNbits() {
+		return nbits;
+	}
+    
     
     public void setRate(int _rate) {
 		rate = _rate;
@@ -117,6 +124,10 @@ public class SysCAMSTPortConverter extends SysCAMSTComponent {
 
 	public String getConvType() {
 		return ConvType;
+	}
+
+    public void setConvType(String _ConvType) {
+	ConvType = _ConvType;
 	}
 
 	public SysCAMSTBlockTDF getBlockTDF() {

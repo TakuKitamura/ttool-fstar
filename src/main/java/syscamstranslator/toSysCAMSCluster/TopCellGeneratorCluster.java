@@ -38,11 +38,7 @@
   knowledge of the CeCILL license and that you accept its terms.
 */
 
-/* Generator of the top cell for simulation with SoCLib virtual component 
-   library */
-
-/* authors: v1.0 Raja GATGOUT 2014
-            v2.0 Daniela GENIUS, Julien HENON 2015 */
+/* Generator of the top cell for simulation with SystemC-AMS */
 
 package syscamstranslator.toSysCAMSCluster;
 
@@ -57,7 +53,9 @@ import java.util.LinkedList;
  * @version 1.0 14/05/2018
  * @author Irina Kit Yan LEE
  * @version 1.1 30/07/2018
- * @author Rodrigo CORTES PORTO
+ * @author Irina Kit Yan LEE, Rodrigo CORTES PORTO
+ * @version 1.2 12/07/2019
+ * @author Irina Kit Yan LEE, Rodrigo CORTES PORTO, Daniela GENIUS
 */
 
 public class TopCellGeneratorCluster {
@@ -76,25 +74,7 @@ public class TopCellGeneratorCluster {
 	public String generateTopCell(SysCAMSTCluster c, LinkedList<SysCAMSTConnector> connectors) {
 		if (c == null) {
 			System.out.println("***Warning: require at least one cluster***");
-		}
-		/*if (TopCellGeneratorCluster.syscams.getNbBlockTDF() == 0) {
-			System.out.println("***Warning: require at least one TDF block***");
-		}
-		if (TopCellGeneratorCluster.syscams.getNbPortTDF() == 0) {
-			System.out.println("***Warning: require at least one TDF port***");
-		}
-		if (TopCellGeneratorCluster.syscams.getNbBlockDE() == 0) {
-			System.out.println("***Warning: require at least one DE block***");
-		}
-		if (TopCellGeneratorCluster.syscams.getNbPortDE() == 0) {
-			System.out.println("***Warning: require at least one DE port***");
-		}
-		if (TopCellGeneratorCluster.syscams.getNbPortConverter() == 0) {
-			System.out.println("***Warning: require at least one converter port***");
-		}
-		if (TopCellGeneratorCluster.syscams.getNbConnectorCluster() == 0) {
-			System.out.println("***Warning: require at least one connector***");
-		}*/
+		}       	
 		String top = HeaderCluster.getClusterHeader(c) + ClusterCode.getClusterCode(c, connectors);
 		return (top);
 	}
@@ -108,13 +88,8 @@ public class TopCellGeneratorCluster {
 		try {
 			// Save file .cpp
 			System.err.println(path + GENERATED_PATH1 + cluster.getClusterName() + "_tdf.h");
-			System.err.println(path + cluster.getClusterName() + "_tdf.h");
-			if(standalone==true){
-			    //System.out.println("@@@ Cluster standalone");
-			    fw = new FileWriter(path   + cluster.getClusterName() + "_tdf.h");
-			}
-			else
-			    fw = new FileWriter(path + GENERATED_PATH1 + "/" + cluster.getClusterName() + "_tdf.h");
+			System.err.println(path + cluster.getClusterName() + "_tdf.h");		
+			fw = new FileWriter(path + GENERATED_PATH1 + "/" + cluster.getClusterName() + "_tdf.h");
 		
 			top = generateTopCell(cluster, connectors);
 			fw.write(top);
@@ -137,13 +112,7 @@ public class TopCellGeneratorCluster {
 		for (SysCAMSTBlockTDF t : tdf) {
 			try {
 				System.err.println(path + GENERATED_PATH2 + t.getName() + "_tdf.h");
-				System.err.println(path + t.getName() + "_tdf.h");
-				if(standalone==true){
-				
-				    fw = new FileWriter(path + "/" + t.getName() + "_tdf.h");
-				}
-				
-				else
+				System.err.println(path + t.getName() + "_tdf.h");			
 				    fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + "_tdf.h");
 				headerTDF = HeaderCluster.getPrimitiveHeaderTDF(t);
 				fw.write(headerTDF);
@@ -158,15 +127,9 @@ public class TopCellGeneratorCluster {
 		}
 		for (SysCAMSTBlockDE t : de) {
 			try {
-				System.err.println(path + GENERATED_PATH2 + t.getName() + "_tdf.h");	System.err.println(path + GENERATED_PATH2 + t.getName() + "_tdf.h");
+				System.err.println(path + GENERATED_PATH2 + t.getName() + "_tdf.h");	System.err.println(path + GENERATED_PATH2 + t.getName() + "_tdf.h");		       	
 			
- 	
-				if(standalone==true)
-				    {
-				
-					fw = new FileWriter(path +"/" + t.getName() + "_tdf.h");}
-				else
-				    fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + "_tdf.h");
+				fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + "_tdf.h");
 				
 				headerDE = HeaderCluster.getPrimitiveHeaderDE(t);
 				fw.write(headerDE);
