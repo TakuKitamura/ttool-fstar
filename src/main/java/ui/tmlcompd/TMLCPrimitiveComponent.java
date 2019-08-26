@@ -41,6 +41,7 @@
 package ui.tmlcompd;
 
 import myutil.GraphicLib;
+import myutil.TraceManager;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -354,6 +355,8 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 
         // And so -> attributes!
         String oldName = getValue();
+        oldValue = getValue();
+
         JDialogAttribute jda = new JDialogAttribute(myAttributes, null, frame,
                 "Setting attributes of " + value, "Attribute", operation, isDaemon, getValue());
         setJDialogOptions(jda);
@@ -367,6 +370,8 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         operation = jda.getOperation();
         isDaemon = jda.isDaemon();
 
+        TraceManager.addDev("PC1");
+
         String s = jda.getName();
         if (oldName.compareTo(s) == 0) {
             rescaled = false;
@@ -376,6 +381,8 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         if ((s != null) && (s.length() > 0)) {
             // Check whether this name is already in use, or not
 
+            //TraceManager.addDev("PC2");
+
             if (!TAttribute.isAValidId(s, false, true, false)) {
                 JOptionPane.showMessageDialog(frame,
                         "Could not change the name of the component: the new name is not a valid name",
@@ -383,6 +390,9 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
                         JOptionPane.INFORMATION_MESSAGE);
                 return false;
             }
+
+            //TraceManager.addDev("PC3");
+
             if (oldValue.compareTo(s) != 0) {
                 if (((TMLComponentTaskDiagramPanel) (tdp)).namePrimitiveComponentInUse(oldValue, s)) {
                     JOptionPane.showMessageDialog(frame,
@@ -393,13 +403,20 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
                 }
             }
 
+            TraceManager.addDev("PC4");
+
 
             //TraceManager.addDev("Set value with change");
             setComponentName(s);
+            //TraceManager.addDev("PC4.1 oldvalue=" + oldName + " s=" + s);
             setValueWithChange(s);
+            //TraceManager.addDev("PC4.2");
             isAttacker = s.contains("Attacker");
             rescaled = true;
             //TraceManager.addDev("return true");
+
+            //TraceManager.addDev("PC5");
+
             return true;
 
         }

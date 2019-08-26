@@ -173,7 +173,9 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
         //TraceManager.addDev("Action on value changed on component:" + tgc);
         if (tgc instanceof TMLCPrimitiveComponent) {
             TMLCPrimitiveComponent t = (TMLCPrimitiveComponent) tgc;
+            //TraceManager.addDev("Adding new name in mgui oldvalue=" + t.oldValue + " new value=" + t.getValue());
             mgui.newTMLTaskName(tp, t.oldValue, t.getValue());
+            //TraceManager.addDev("Done adding new name in mgui");
             return true;
         }
         if (tgc instanceof TMLCCompositeComponent) {
