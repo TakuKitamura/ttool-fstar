@@ -48,7 +48,7 @@ Ludovic Apvrille, Renaud Pacalet
 #define NOTIFY_TASK_FINISHED(iTrans) {if (!this->_listeners.empty()){this->listenersLock(); for(std::list<GeneralListener*>::const_iterator i=this->_listeners.begin(); i != this->_listeners.end(); ++i) (*i)->taskFinished(iTrans,this->_ID); this->listenersUnLock();}}
 #define NOTIFY_TASK_STARTED(iTrans) {if (!this->_listeners.empty()){this->listenersLock(); for(std::list<GeneralListener*>::const_iterator i=this->_listeners.begin(); i != this->_listeners.end(); ++i) (*i)->taskStarted(iTrans,this->_ID); this->listenersUnLock();}}
 #define NOTIFY_TRANS_EXECUTED(iTrans) {if (!this->_listeners.empty()){this->listenersLock(); for(std::list<GeneralListener*>::const_iterator i=this->_listeners.begin(); i != this->_listeners.end(); ++i) (*i)->transExecuted(iTrans,this->_ID); this->listenersUnLock();}}
-#define NOTIFY_CMD_ENTERED(iComm) {if (!this->_listeners.empty()){std::cout<<"55555"<<std::endl;this->listenersLock(); for(std::list<GeneralListener*>::const_iterator i=this->_listeners.begin(); i != this->_listeners.end(); ++i) (*i)->commandEntered(iComm,this->_ID); this->listenersUnLock();}}
+#define NOTIFY_CMD_ENTERED(iComm) {if (!this->_listeners.empty()){this->listenersLock(); for(std::list<GeneralListener*>::const_iterator i=this->_listeners.begin(); i != this->_listeners.end(); ++i) (*i)->commandEntered(iComm,this->_ID); this->listenersUnLock();}}
 
 
 #define NOTIFY_CMD_EXECUTED(iTrans) {if (!this->_listeners.empty()){this->listenersLock();for(std::list<GeneralListener*>::const_iterator i=this->_listeners.begin(); i != this->_listeners.end(); ++i) (*i)->transExecuted(iTrans,this->_ID); this->listenersUnLock();}}

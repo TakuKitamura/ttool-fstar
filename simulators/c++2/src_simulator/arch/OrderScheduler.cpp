@@ -91,7 +91,7 @@ TMLTime OrderScheduler::schedule(TMLTime iEndSchedule){
 }
 
 OrderScheduler::~OrderScheduler(){
-	std::cout << _name << ": Scheduler deleted\n";
+  //std::cout << _name << ": Scheduler deleted\n";
 }
 
 void OrderScheduler::reset(){

@@ -148,7 +148,7 @@ void RRPrioScheduler::reset(){
 //}
 
 RRPrioScheduler::~RRPrioScheduler(){
-	std::cout << _name << ": Scheduler deleted\n";
+  //std::cout << _name << ": Scheduler deleted\n";
 }
 
 std::istream& RRPrioScheduler::readObject(std::istream &is){

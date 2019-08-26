@@ -67,7 +67,7 @@ public:
 	
 	///Destructor
 	~BusMaster(){
-		std::cout << _name << ": Bus Master deleted\n";
+	  //std::cout << _name << ": Bus Master deleted\n";
 		delete[] _busArray;
 		delete[] _busSortArray;
 	}

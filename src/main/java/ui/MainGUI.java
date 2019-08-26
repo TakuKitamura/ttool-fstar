@@ -8266,7 +8266,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                 return true;
             }
         }
-        
+
         // internal error
         ErrorGUI.exit(ErrorGUI.ERROR_TAB);
         return false;

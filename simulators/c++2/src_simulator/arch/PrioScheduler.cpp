@@ -103,7 +103,7 @@ TMLTime PrioScheduler::schedule(TMLTime iEndSchedule){
 //}
 
 PrioScheduler::~PrioScheduler(){
-	std::cout << _name << ": Scheduler deleted\n";
+  //std::cout << _name << ": Scheduler deleted\n";
 }
 
 void PrioScheduler::reset(){

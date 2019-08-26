@@ -546,7 +546,7 @@ public class TMLChannel extends TMLCommunicationElement {
     }
 
     public String toXML() {
-        TraceManager.addDev("Channel:" + this.toString());
+        //TraceManager.addDev("Channel:" + this.toString());
         String s = "<TMLCHANNEL ";
         s += "name=\"" + name + "\" ";
         if (isBasicChannel()) {

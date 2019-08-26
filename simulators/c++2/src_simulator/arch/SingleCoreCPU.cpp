@@ -239,22 +239,22 @@ TMLTime SingleCoreCPU::truncateNextTransAt(TMLTime iTime){
 }
 
 bool SingleCoreCPU::addTransaction(TMLTransaction* iTransToBeAdded){
-  //#ifdef DEBUG_CPU
-std::cout<<"addTransaction"<<std::endl;
-//#endif
+#ifdef DEBUG_CPU
+  std::cout<<"addTransaction"<<std::endl;
+#endif
  
   bool aFinish;
   //TMLTransaction* aTransCopy=0;
   //std::cout << "*************** LOOKING for master of" << _nextTransaction->toString() << std::endl;
   if (_masterNextTransaction==0){
     aFinish=true;
-    //#ifdef DEBUG_CPU
+    #ifdef DEBUG_CPU
     std::cout << _name << "CPU:addT: non bus transaction added" << std::endl;
-    //#endif
+    #endif
   }else{
-    //#ifdef DEBUG_CPU
+    #ifdef DEBUG_CPU
     std::cout << _name << "CPU:addT: handling bus transaction" << std::endl;
-    //#endif
+    #endif
     //Slave* aLastSlave=_nextTransaction->getChannel()->getNextSlave(_nextTransaction);
     //std::cout << "*************** LOOKING for master of" << _nextTransaction->toString() << std::endl;
     BusMaster* aFollowingMaster =_nextTransaction->getChannel()->getNextMaster(_nextTransaction);
@@ -290,15 +290,15 @@ std::cout<<"addTransaction"<<std::endl;
     //std::cout << "8\n";
   }
   if (aFinish){
-    //#ifdef DEBUG_CPU
+    #ifdef DEBUG_CPU
     std::cout << "CPU:addt: " << _name << " finalizing transaction " << _nextTransaction->toString() << std::endl;
-    //#endif
+    #endif
     //_nextTransaction->getCommand()->execute();  //NEW!!!!
     //std::cout << "CPU:addt: to be started" << std::endl;
      _endSchedule=_nextTransaction->getEndTime();
-    std::cout<<"end schedule is"<<_endSchedule<<std::endl;
+     //std::cout<<"end schedule is"<<_endSchedule<<std::endl;
  
-    std::cout<<"simulated time is ---------"<<_simulatedTime<<std::endl;
+     //std::cout<<"simulated time is ---------"<<_simulatedTime<<std::endl;
     
     //std::cout << "set end schedule CPU: " << _endSchedule << " startTime of trans:" << _nextTransaction->getStartTime() << " length of trans=" << _nextTransaction->getLength() <<"\n";
     

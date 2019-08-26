@@ -143,7 +143,7 @@ void RRScheduler::reset(){
 //}
 
 RRScheduler::~RRScheduler(){
-	std::cout << _name << ": Scheduler deleted\n";
+  //std::cout << _name << ": Scheduler deleted\n";
 }
 
 std::istream& RRScheduler::readObject(std::istream &is){

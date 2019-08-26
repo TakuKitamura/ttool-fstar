@@ -152,7 +152,9 @@ TMLTime ReconfigScheduler::schedule(TMLTime iEndSchedule){
 }
 
 ReconfigScheduler::~ReconfigScheduler(){
+  #ifdef DEBUG_FPGA
 	std::cout << _name << ": Scheduler deleted\n";
+#endif	
 }
 
 void ReconfigScheduler::reset(){

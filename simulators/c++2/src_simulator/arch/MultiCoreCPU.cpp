@@ -178,7 +178,7 @@ std::cout << "CPU:calcSTL: scheduling decision of CPU " << _name << ": " << _nex
   TMLTime aStartTime = max(_endSchedule,_nextTransaction->getRunnableTime());
   TMLTime aReminder = aStartTime % _timePerCycle;
   if (aReminder!=0) aStartTime+=_timePerCycle - aReminder;
-  std::cout << _name << "CPU: set starttime in CPU=" << aStartTime << "\n";
+  //std::cout << _name << "CPU: set starttime in CPU=" << aStartTime << "\n";
 
   _nextTransaction->setStartTime(aStartTime);
 
@@ -252,7 +252,7 @@ TMLTime MultiCoreCPU::truncateNextTransAt(TMLTime iTime){
   if (_masterNextTransaction==0){
 #ifdef PENALTIES_ENABLED
 
-    std::cout << "CPU:nt.startTime: " << _nextTransaction->getStartTime() << std::endl;
+    //std::cout << "CPU:nt.startTime: " << _nextTransaction->getStartTime() << std::endl;
     if (iTime < _nextTransaction->getStartTime()) {
       return 0;
     }
@@ -337,8 +337,8 @@ std::cout<<"addTransaction"<<_name<<std::endl;
     std::cout << "CPU:addt: " << _name << " finalizing transaction next:" << _nextTransaction->toString() << " (enf of next) " << std::endl;
 #endif
     //_nextTransaction->getCommand()->execute();  //NEW!!!!
-    std::cout << "CPU:addt: to be started" << std::endl;
-std::cout << "CPU:calcSTL: addtransaction of CPU " << _name << ": " << _nextTransaction->toString() << std::endl;
+    //    std::cout << "CPU:addt: to be started" << std::endl;
+    //std::cout << "CPU:calcSTL: addtransaction of CPU " << _name << ": " << _nextTransaction->toString() << std::endl;
     _endSchedule=_nextTransaction->getEndTime();
     ////test///
    // unsigned int iCoreNumber=getCoreNumber();
