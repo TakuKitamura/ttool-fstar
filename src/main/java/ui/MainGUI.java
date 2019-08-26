@@ -73,6 +73,7 @@ import ui.ebrdd.EBRDDPanel;
 import ui.eln.ELNDiagramPanel;
 import ui.file.*;
 import ui.ftd.FaultTreeDiagramPanel;
+import ui.interactivesimulation.JFrameCompareSimulationTraces;
 import ui.interactivesimulation.JFrameInteractiveSimulation;
 import ui.interactivesimulation.SimulationTransaction;
 import ui.iod.InteractionOverviewDiagramPanel;
@@ -331,6 +332,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     private ConcurrentHashMap<String, String> statusMap = new ConcurrentHashMap<String, String>();
     private JFrameInteractiveSimulation jfis;
     private JFrameAvatarInteractiveSimulation jfais;
+    private JFrameCompareSimulationTraces cSimTrace;
 
     // Help
     private HelpManager helpManager;
@@ -9734,6 +9736,18 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
     }
 
+    public void compareSimulationTraces(SimulationTrace selectedST, boolean b) {
+		cSimTrace = new JFrameCompareSimulationTraces( this, "Compare Simulation simulation",selectedST);
+	       
+		cSimTrace.setIconImage(IconManager.img9);
+        
+        GraphicLib.centerOnParent(cSimTrace, 900, 600);
+        cSimTrace.setVisible(true);
+        
+        
+        
+        
+	}
+
 
 } // Class MainGUI
-
