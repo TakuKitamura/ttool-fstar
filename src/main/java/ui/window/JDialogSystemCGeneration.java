@@ -317,7 +317,7 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
         jp01.add(new JLabel("cycle"), c01);
 
         removeCppFiles = new JCheckBox("Remove old .h / .cpp  files");
-        removeCppFiles.setSelected(true);
+        removeCppFiles.setSelected(false);
         jp01.add(removeCppFiles, c01);
 
         removeXFiles = new JCheckBox("Remove old .x files");

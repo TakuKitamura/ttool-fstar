@@ -46,6 +46,7 @@ import myutil.FileUtils;
 import myutil.TraceManager;
 import tmltranslator.*;
 
+import java.io.File;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -110,8 +111,81 @@ public class MappedSystemCTask {
     }
 
     public void saveInFiles(String path) throws FileException {
-        FileUtils.saveFile(path + reference + DOTH, getHCode());
-        FileUtils.saveFile(path + reference + DOTCPP, getCPPCode());
+        saveInFilesWithFileSize(path);
+
+    }
+
+    public void saveInFilesWithFileSize(String path) throws FileException {
+        boolean generateH = true;
+        boolean generateCPP = true;
+
+        try {
+            long sizeh = new File(path + reference + DOTH).length();
+            long sizecpp = new File(path + reference + DOTCPP).length();
+
+            TraceManager.addDev("Computing length of " + path + reference + DOTH + ": " + sizeh);
+            TraceManager.addDev("Computing length of " + path + reference + DOTCPP + ": " + sizeh);
+
+
+            if (sizeh == getHCode().length()) {
+                generateH = false;
+            }
+
+            if (sizecpp == getCPPCode().length()) {
+                generateCPP = false;
+            }
+
+
+        } catch (Exception e) {}
+
+        if (generateH) {
+            FileUtils.saveFile(path + reference + DOTH, getHCode());
+        }
+
+        if (generateCPP) {
+            FileUtils.saveFile(path + reference + DOTCPP, getCPPCode());
+        }
+    }
+
+    public void saveInFilesWithSha1(String path) throws FileException {
+        String sha1cpp, sha1h;
+        boolean generateH = true;
+        boolean generateCPP = true;
+
+        //TraceManager.addDev("Computing sha1 of " + path + reference + DOTH);
+        sha1h = FileUtils.SHA1(new File(path + reference + DOTH));
+        //TraceManager.addDev("Computing sha1 of " + path + reference + DOTCPP);
+        //TraceManager.addDev("Computing sha1 of " + path + reference + DOTCPP);
+        sha1cpp = FileUtils.SHA1(new File(path + reference + DOTCPP));
+
+        //if (sha1h != null) {
+        //    TraceManager.addDev("Sha1 of " + path + reference + DOTH + ": " + sha1h);
+        //}
+        //if (sha1cpp != null) {
+        //    TraceManager.addDev("Sha1 of " + path + reference + DOTCPP + ": " + sha1cpp);
+        //}
+
+        if (sha1h != null) {
+            String tmp = Conversion.toSHA1(getHCode());
+            if (tmp.equals(sha1h)) {
+                generateH = false;
+            }
+        }
+
+        if (sha1cpp != null) {
+            String tmp = Conversion.toSHA1(getCPPCode());
+            if (tmp.equals(sha1cpp)) {
+                generateCPP = false;
+            }
+        }
+
+        if (generateH) {
+            FileUtils.saveFile(path + reference + DOTH, getHCode());
+        }
+
+        if (generateCPP) {
+            FileUtils.saveFile(path + reference + DOTCPP, getCPPCode());
+        }
     }
 
     public TMLTask getTMLTask() {

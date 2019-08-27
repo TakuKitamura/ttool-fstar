@@ -37,10 +37,10 @@
  */
 
 
-
-
 package myutil;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -50,8 +50,9 @@ import java.util.regex.Pattern;
 /**
  * Class Conversion
  * Creation: 01/12/2003
- * @version 1.2 25/03/2016
+ *
  * @author Ludovic APVRILLE
+ * @version 1.2 25/03/2016
  */
 public class Conversion {
 
@@ -71,9 +72,9 @@ public class Conversion {
         int cpt = 0;
         int index;
 
-        while( (index = s.indexOf(c)) != -1) {
-            s = s.substring(index +1);
-            cpt ++;
+        while ((index = s.indexOf(c)) != -1) {
+            s = s.substring(index + 1);
+            cpt++;
         }
 
         return cpt;
@@ -90,7 +91,7 @@ public class Conversion {
     public static String replaceAllChar(String s, char c, String snew) {
         int index;
         String output = "";
-        while((index = s.indexOf(c)) > -1 ) {
+        while ((index = s.indexOf(c)) > -1) {
             output += s.substring(0, index) + snew;
             s = s.substring(index + 1);
         }
@@ -103,7 +104,7 @@ public class Conversion {
         }
         int index;
         String output = "";
-        while((index = s.indexOf(sold)) > -1 ) {
+        while ((index = s.indexOf(sold)) > -1) {
             output += s.substring(0, index) + snew;
             s = s.substring(index + sold.length());
         }
@@ -123,7 +124,7 @@ public class Conversion {
 
     public static String replaceRecursiveAllString(String s, String input, String snew) {
         int index;
-        while((index = s.indexOf(input)) > -1 ) {
+        while ((index = s.indexOf(input)) > -1) {
             s = s.substring(0, index) + snew + s.substring(index + input.length(), s.length());
         }
         return s;
@@ -143,19 +144,19 @@ public class Conversion {
         }
 
         //TraceManager.addDev("\nMust analyze:" + s);
-        while((index = s.indexOf(input)) > -1 ) {
+        while ((index = s.indexOf(input)) > -1) {
             //TraceManager.addDev("Analyzing:" + s);
             if (index == 0) {
                 b1 = false;
             } else {
                 //TraceManager.addDev("substring = " + s.substring(index-1, index));
-                b1 = s.substring(index-1, index).matches("\\w*");
+                b1 = s.substring(index - 1, index).matches("\\w*");
             }
-            if ((index+input.length()) == s.length()) {
+            if ((index + input.length()) == s.length()) {
                 b2 = false;
             } else {
                 //TraceManager.addDev("substring = " + s.substring(index+1, index+2));
-                b2 = s.substring(index+input.length(), index+input.length()+1).matches("\\w*");
+                b2 = s.substring(index + input.length(), index + input.length() + 1).matches("\\w*");
             }
 
             if (!b1 && !b2) {
@@ -163,7 +164,7 @@ public class Conversion {
                 s = s.substring(index + input.length());
                 //TraceManager.addDev("modifying");
             } else {
-                output += s.substring(0, index+input.length());
+                output += s.substring(0, index + input.length());
                 s = s.substring(index + input.length());
             }
         }
@@ -183,7 +184,7 @@ public class Conversion {
             index2 = extractLastParenthesis(index1, _input, _binary);
             s2 = _input.substring(extractComma(index1, _input, _binary) + 1, index2);
             //TraceManager.addDev("s2=" + s2);
-            _input = _input.substring(0, index1) + "((" + s1 + ")" + _unary + "(" + s2 + "))" + _input.substring(index2+1,_input.length());
+            _input = _input.substring(0, index1) + "((" + s1 + ")" + _unary + "(" + s2 + "))" + _input.substring(index2 + 1, _input.length());
         }
 
         return _input;
@@ -196,43 +197,43 @@ public class Conversion {
         int paren = 0;
         char c;
 
-        while(cpt < _input.length()) {
+        while (cpt < _input.length()) {
             c = _input.charAt(cpt);
             //TraceManager.addDev("c=" + c + " cpt=" + cpt);
             if (c == '(') {
-                paren ++;
+                paren++;
             }
             if (c == ')') {
-                paren --;
+                paren--;
             }
             if ((c == ',') && (paren == 0)) {
                 return cpt;
             }
 
-            cpt ++;
+            cpt++;
         }
 
         return -1;
     }
 
     public static int extractLastParenthesis(int index, String _input, String _binary) {
-        int dep =  extractComma(index, _input, _binary);
+        int dep = extractComma(index, _input, _binary);
         int cpt = dep;
         int paren = 0;
         char c;
 
-        while(cpt < _input.length()) {
+        while (cpt < _input.length()) {
             c = _input.charAt(cpt);
             if ((c == ')') && (paren == 0)) {
                 return cpt;
             }
             if (c == '(') {
-                paren ++;
+                paren++;
             }
             if (c == ')') {
-                paren --;
+                paren--;
             }
-            cpt ++;
+            cpt++;
         }
 
         return -1;
@@ -246,12 +247,12 @@ public class Conversion {
 
         //TraceManager.addDev("locate");
 
-        if ((index = _input.indexOf(_binary+"(")) > -1) {
+        if ((index = _input.indexOf(_binary + "(")) > -1) {
             //TraceManager.addDev("May have found one " + _binary + " in " + _input);
             if (index == 0) {
                 b1 = false;
             } else {
-                b1 = _input.substring(index-1, index).matches("\\w*");
+                b1 = _input.substring(index - 1, index).matches("\\w*");
             }
 
             if (!b1) {
@@ -259,7 +260,7 @@ public class Conversion {
             } else {
                 //TraceManager.addDev("Wrong one");
                 cpt = index + _binary.length();
-                _input = _input.substring(index+_binary.length(), _input.length());
+                _input = _input.substring(index + _binary.length(), _input.length());
             }
         }
         return -1;
@@ -267,23 +268,23 @@ public class Conversion {
 
     public static String insertAfterAll(String s, char c, String snew) {
         int index;
-        String result="";
-        while((index = s.indexOf(c)) > -1 ) {
-            result += s.substring(0, index+1) + snew;
-            s = s.substring(index+1, s.length());
+        String result = "";
+        while ((index = s.indexOf(c)) > -1) {
+            result += s.substring(0, index + 1) + snew;
+            s = s.substring(index + 1, s.length());
         }
         return result + s;
     }
 
     public static String[] wrapText(String text) {
-        text = text.replace('\r', '\n') ;
+        text = text.replace('\r', '\n');
         return text.split("\n");
     }
 
     public static String cutSection(String s, char c1, char c2) {
         String s1;
         int index1, index2;
-        while((index1 =  s.indexOf(c1)) != -1) {
+        while ((index1 = s.indexOf(c1)) != -1) {
             s1 = s.substring(index1);
             index2 = s1.indexOf(c2);
             if (index2 == -1) {
@@ -296,14 +297,14 @@ public class Conversion {
     }
 
     public static String[] cutIntoSectionsBeginningWith(String s, char c) {
-        int nb = nbOf(s,c);
+        int nb = nbOf(s, c);
         String[] result = new String[nb];
         int index, index1;
 
-        for(int i=0; i<nb; i++) {
+        for (int i = 0; i < nb; i++) {
             //TraceManager.addDev("1 c.s=" + s);
             index = s.indexOf(c);
-            s = s.substring(index+1, s.length());
+            s = s.substring(index + 1, s.length());
             //TraceManager.addDev("2 c.s=" + s);
             index1 = s.indexOf(c);
             if (index1 == -1) {
@@ -317,21 +318,20 @@ public class Conversion {
     }
 
     public static double ro(double x, double y) {
-        return Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
+        return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
     }
 
     public static double theta(double x, double y) {
         if (x == 0) {
             if (y < 0)
-                return -Math.PI/2;
+                return -Math.PI / 2;
             else
-                return Math.PI/2;
-        }
-        else {
-            if (x <0)
-                return Math.atan(y/x) + Math.PI;
+                return Math.PI / 2;
+        } else {
+            if (x < 0)
+                return Math.atan(y / x) + Math.PI;
             else
-                return Math.atan(y/x);
+                return Math.atan(y / x);
         }
 
     }
@@ -340,28 +340,27 @@ public class Conversion {
         //TraceManager.addDev("Replace op s=" + s + " from=" + from + " to=" + to);
         int fromIndex = 0;
         int index;
-    //    int len;
+        //    int len;
         boolean b1, b2;
         String s1, s2;
 
-	
-	
-        while ( (index = s.indexOf(from, fromIndex)) != -1) {
+
+        while ((index = s.indexOf(from, fromIndex)) != -1) {
             // Wrong data or not ? Nb or character just before or just after ?
             if (index == 0) {
-		b1 = false;
+                b1 = false;
             } else {
-		s1 = s.substring(index-1, index + from.length());
-		b1 = s1.matches("\\w*");
+                s1 = s.substring(index - 1, index + from.length());
+                b1 = s1.matches("\\w*");
             }
 
-	    //TraceManager.addDev("s1=" + s1);
+            //TraceManager.addDev("s1=" + s1);
 
             if (index == (s.length() - from.length() - 1)) {
-		b2 = false;
+                b2 = false;
             } else {
                 s2 = s.substring(index, Math.min(index + from.length() + 1, s.length()));
-		b2 = s2.matches("\\w*");
+                b2 = s2.matches("\\w*");
             }
             TraceManager.addDev("s=" + s + " b1 = " + b1 + " b2 = " + b2);
 
@@ -378,7 +377,7 @@ public class Conversion {
 
 
         return s;
-	}
+    }
 
     public static String indentString(String _input, int _nbDec) {
         int dec = 0;
@@ -388,10 +387,10 @@ public class Conversion {
         int nbOpen = 0;
         int nbClose = 0;
 
-        while ( (indexEnd = _input.indexOf('\n')) > -1) {
-            tmp = _input.substring(0, indexEnd+1);
+        while ((indexEnd = _input.indexOf('\n')) > -1) {
+            tmp = _input.substring(0, indexEnd + 1);
             try {
-                _input = _input.substring(indexEnd+1, _input.length());
+                _input = _input.substring(indexEnd + 1, _input.length());
             } catch (Exception e) {
                 _input = "";
             }
@@ -410,9 +409,9 @@ public class Conversion {
 
     public static int nbOf(String _input, char _c) {
         int total = 0;
-        for(int i=0; i<_input.length(); i++) {
+        for (int i = 0; i < _input.length(); i++) {
             if (_input.charAt(i) == _c) {
-                total ++;
+                total++;
             }
         }
         return total;
@@ -421,7 +420,7 @@ public class Conversion {
     public static int nbOf(String _input, String _s) {
         int total = 0;
         char c = _s.charAt(0);
-        for(int i=0; i<_input.length(); i++) {
+        for (int i = 0; i < _input.length(); i++) {
             if (_input.charAt(i) == c) {
                 if (_input.substring(i, _input.length()).startsWith(_s)) {
                     total++;
@@ -433,24 +432,24 @@ public class Conversion {
 
     public static String addHead(String _input, char _c, int _nb) {
         String output = "";
-        while(_nb >0) {
+        while (_nb > 0) {
             output = output + _c;
-            _nb --;
+            _nb--;
         }
         return output + _input;
     }
 
-    public static boolean containsStringInList( List<String> ll, String s) {
+    public static boolean containsStringInList(List<String> ll, String s) {
         Iterator<String> iterator = ll.listIterator();
         String o;
 
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             o = iterator.next();
             //if (o instanceof String) {
-                if (s.compareTo(o) == 0) {
-                    return true;
-                }
-           // }
+            if (s.compareTo(o) == 0) {
+                return true;
+            }
+            // }
         }
 
         return false;
@@ -476,16 +475,16 @@ public class Conversion {
         boolean inQuote = false;
         boolean isSlashed = false;
         boolean isEscaped = false;
-      //  boolean inStarComment = false;
+        //  boolean inStarComment = false;
 //        boolean inLineComment = false;
         String ret = "";
         char c;
 
-        while(index<input.length()) {
+        while (index < input.length()) {
             c = input.charAt(index);
-            index ++;
+            index++;
 
-            if(c == '\"') {
+            if (c == '\"') {
                 if (isEscaped) {
                     isEscaped = false;
                 } else {
@@ -494,7 +493,7 @@ public class Conversion {
                 //TraceManager.addDev("Found guillemet: instring=" + inString);
             }
 
-            if((c == '\'') && (inString == false)){
+            if ((c == '\'') && (inString == false)) {
                 if (isEscaped) {
                     isEscaped = false;
                 } else {
@@ -509,17 +508,17 @@ public class Conversion {
                 isEscaped = false;
             }
 
-            if ((c == '*') && (!inString) && (!inQuote)){
+            if ((c == '*') && (!inString) && (!inQuote)) {
                 if (isSlashed) {
                     // Beginning of star comment
-                    ret += input.substring(0, index-2);
+                    ret += input.substring(0, index - 2);
                     input = input.substring(index, input.length());
 
                     index1 = input.indexOf("*/");
                     if (index1 == -1) {
                         return ret;
                     }
-                    input = input.substring(index1+2, input.length());
+                    input = input.substring(index1 + 2, input.length());
                     index = 0;
                 }
                 isSlashed = false;
@@ -530,7 +529,7 @@ public class Conversion {
                     isSlashed = true;
                 } else {
                     // Beginning of line comment
-                    ret += input.substring(0, index-2);
+                    ret += input.substring(0, index - 2);
                     input = input.substring(index, input.length());
                     //TraceManager.addDev("ret=" + ret);
                     //TraceManager.addDev("beg of input=" + input.substring(0, Math.min(5, input.length())));
@@ -557,15 +556,15 @@ public class Conversion {
         //TraceManager.addDev("Putting variable value = " + value + " of " + variableName + " in " + expr);
 
         // Escaping variableName and value in case there are special characters
-        String in = Pattern.quote (variableName);
-        String out = Matcher.quoteReplacement (value);
+        String in = Pattern.quote(variableName);
+        String out = Matcher.quoteReplacement(value);
 
         // Creating the pattern that matches words equal to variableName
-        Pattern pattern = Pattern.compile ("(\\b" + in + "\\b)");
-        Matcher matcher = pattern.matcher (expr);
+        Pattern pattern = Pattern.compile("(\\b" + in + "\\b)");
+        Matcher matcher = pattern.matcher(expr);
 
         // Replacing all the matches by the replacement value
-        return matcher.replaceAll (out).trim ();
+        return matcher.replaceAll(out).trim();
 
         /*
           String ret = " " + expr + " ";
@@ -591,9 +590,9 @@ public class Conversion {
 
     public static String removeAllActionOps(String[] ops, String input, String replacementValue) {
         String ret = input;
-        for (String op: ops) {
-            String out = new String (new char[op.length ()]).replace("\0", replacementValue);
-            ret = ret.replace (op, out);
+        for (String op : ops) {
+            String out = new String(new char[op.length()]).replace("\0", replacementValue);
+            ret = ret.replace(op, out);
         }
         return ret;
 
@@ -618,27 +617,28 @@ public class Conversion {
     /**
      * Returns the index of the corresponding closing parenthesis.
      * indexFirst corresponds to the indexd of the open parenthesis
-     * @param closePar      : closing parenthesis
-     * @param expr          : string
-     * @param indexFirst    : index of the corresponding open parenthesis
-     * @param openPar       : open parenthesis
-     * @return              : index of the corresponding closing parenthesis
+     *
+     * @param closePar   : closing parenthesis
+     * @param expr       : string
+     * @param indexFirst : index of the corresponding open parenthesis
+     * @param openPar    : open parenthesis
+     * @return : index of the corresponding closing parenthesis
      */
     public static int findMatchingParenthesis(String expr, int indexFirst, char openPar, char closePar) {
         int index = indexFirst + 1;
-    //    boolean found = true;
+        //    boolean found = true;
         int total = 0;
-        while(index < expr.length()) {
+        while (index < expr.length()) {
             if (expr.charAt(index) == openPar) {
-                total ++;
+                total++;
             } else if (expr.charAt(index) == closePar) {
                 if (total == 0) {
                     // found!!
                     return index;
                 }
-                total --;
+                total--;
             }
-            index ++;
+            index++;
         }
 
         return -1;
@@ -655,7 +655,7 @@ public class Conversion {
 
     public static boolean isId(String s) {
         s = s.trim();
-        boolean b1 = (s.substring(0,1)).matches("[a-zA-Z]");
+        boolean b1 = (s.substring(0, 1)).matches("[a-zA-Z]");
         boolean b2 = s.matches("\\w*");
         return (b1 && b2);
     }
@@ -750,7 +750,7 @@ public class Conversion {
       }*/
 
 
-    public static void quickSort(int arr[], int left, int right, int ind[]){
+    public static void quickSort(int arr[], int left, int right, int ind[]) {
         int i = left, j = right;
         int tmp;
 
@@ -813,6 +813,27 @@ public class Conversion {
       quick_srt(array, lo == low ? lo+1 : lo, n, index);
       }*/
 
+
+    public static String toSHA1(String input) {
+        try {
+
+            MessageDigest md = MessageDigest.getInstance("SHA-1");
+            byte[] hashInBytes = md.digest(input.getBytes(StandardCharsets.UTF_8));
+
+            // bytes to hex
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hashInBytes) {
+                sb.append(String.format("%02x", b));
+            }
+            //TraceManager.addDev("SHA1 computed");
+            return sb.toString();
+
+        } catch (Exception e) {
+            TraceManager.addDev("Exception during sha1 computation:" + e.getMessage());
+            return null;
+        }
+
+    }
 
 
 } // Class Conversion

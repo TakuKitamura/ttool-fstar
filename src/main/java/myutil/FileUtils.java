@@ -134,6 +134,18 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
         return true;
     }
 
+
+    public static String SHA1(File file) {
+        String fileData = loadFileData(file);
+        if (fileData == null) {
+            //TraceManager.addDev("Null data in SHA1 for file=" + file);
+            return null;
+        }
+
+        String sha1 = Conversion.toSHA1(fileData);
+        return sha1;
+    }
+
     public static String loadFileData(File file) {
         char[] ba;
         try {

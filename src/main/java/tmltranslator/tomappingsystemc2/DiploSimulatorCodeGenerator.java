@@ -444,8 +444,8 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
                         param = "";
                 }
 
-                TraceManager.addDev("\nDetermining routing of " + channel.getName() + ":");
-                TraceManager.addDev(channel.toString());
+                //TraceManager.addDev("\nDetermining routing of " + channel.getName() + ":");
+                //TraceManager.addDev(channel.toString());
 
                 String ret = determineRouting(tmlmapping.getHwNodeOf(channel.getOriginTask()),
                         tmlmapping.getHwNodeOf(channel.getDestinationTask()), elem);
