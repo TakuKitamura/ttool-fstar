@@ -40,11 +40,7 @@ package avatartranslator;
 
 import myutil.TraceManager;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * AvatarLibraryFunction is used to represent a library function that can be further used in state machine diagrams.
@@ -570,13 +566,22 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
             TraceManager.addDev("NULL maxD in block " + arg.block.getName() + " for delay " + _asme.getMinDelay ());
         }
 
+
         if ((minD != null) && (maxD != null)) {
-            TraceManager.addDev("minD: " + minD.getName() + " maxD:" + maxD.getName());
+            TraceManager.addDev("BEFORE REPLACE/ minD: " + minD.getName() + " maxD:" + maxD.getName());
+
+            Set<AvatarAttribute> setAt = arg.placeholdersMapping.keySet();
+            for (AvatarAttribute aa: setAt) {
+               AvatarAttribute bb = arg.placeholdersMapping.get(aa);
+               if (bb != null) {
+                   TraceManager.addDev("Mapping of attr: " + aa.getName() + " -> " + bb.getName());
+               }
+            }
 
             minD.replaceAttributes(arg.placeholdersMapping);
             maxD.replaceAttributes(arg.placeholdersMapping);
 
-            TraceManager.addDev("minD: " + minD.getName() + " maxD:" + maxD.getName());
+            TraceManager.addDev("AFTER REPLACE/ minD: " + minD.getName() + " maxD:" + maxD.getName());
 
             asme.setDelays(minD.getName(), maxD.getName());
         } else {
