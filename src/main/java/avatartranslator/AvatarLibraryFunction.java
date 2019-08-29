@@ -557,11 +557,11 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
         asme.setGuard (guard);
 
         // TODO: replace attributes
-        AvatarTerm minD = AvatarTerm.createFromString(arg.block, _asme.getMinDelay ());
+        /*AvatarArithmeticOp minD = AvatarArithmeticOp.createFromString(arg.block, _asme.getMinDelay ());
         if (minD == null) {
             TraceManager.addDev("NULL minD in block " + arg.block.getName() + " for delay " + _asme.getMinDelay ());
         }
-        AvatarTerm maxD = AvatarTerm.createFromString(arg.block, _asme.getMaxDelay ());
+        AvatarArithmeticOp maxD = AvatarArithmeticOp.createFromString(arg.block, _asme.getMaxDelay ());
         if (maxD == null) {
             TraceManager.addDev("NULL maxD in block " + arg.block.getName() + " for delay " + _asme.getMinDelay ());
         }
@@ -569,6 +569,8 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
 
         if ((minD != null) && (maxD != null)) {
             TraceManager.addDev("BEFORE REPLACE/ minD: " + minD.getName() + " maxD:" + maxD.getName());
+            TraceManager.addDev("class of minD:" + minD.getClass().getCanonicalName());
+            TraceManager.addDev("class of maxD:" + maxD.getClass().getCanonicalName());
 
             Set<AvatarAttribute> setAt = arg.placeholdersMapping.keySet();
             for (AvatarAttribute aa: setAt) {
@@ -578,6 +580,7 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
                }
             }
 
+
             minD.replaceAttributes(arg.placeholdersMapping);
             maxD.replaceAttributes(arg.placeholdersMapping);
 
@@ -586,8 +589,20 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
             asme.setDelays(minD.getName(), maxD.getName());
         } else {
             asme.setDelays( _asme.getMinDelay (), _asme.getMaxDelay ());
-        }
-        asme.setComputes (_asme.getMinCompute (), _asme.getMaxCompute ());
+        }*/
+
+        //TraceManager.addDev("minD:" + _asme.getMinDelay() + " in block " + arg.block.getName());
+        String minD = replaceAttributesInExpr(_asme.getMinDelay(), _arg);
+        //TraceManager.addDev("minD:" + minD);
+
+        //TraceManager.addDev("maxD:" + _asme.getMaxDelay() + " in block " + arg.block.getName());
+        String maxD = replaceAttributesInExpr(_asme.getMaxDelay(), _arg);
+        //TraceManager.addDev("maxD:" + maxD);
+
+        asme.setDelays(minD, maxD);
+
+        asme.setComputes (replaceAttributesInExpr(_asme.getMinCompute (), _arg),
+                replaceAttributesInExpr(_asme.getMaxCompute (), _arg));
 
         for (AvatarAction _action: _asme.getActions ()) {
             AvatarAction action = _action.clone ();
@@ -625,7 +640,7 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
         TranslatorArgument arg = (TranslatorArgument) _arg;
 
         AvatarRandom asme = new AvatarRandom (this.name + "_" + arg.counter + "__" + _asme.getName (), arg.referenceObject);
-        asme.setValues (_asme.getMinValue (), _asme.getMaxValue ());
+        asme.setValues (replaceAttributesInExpr(_asme.getMinValue (), _arg), replaceAttributesInExpr(_asme.getMaxValue (), _arg));
         asme.setFunctionId (_asme.getFunctionId ());
         asme.setVariable (arg.placeholdersMapping.get (this.getAvatarAttributeWithName (_asme.getVariable ())).getName ());
 
@@ -674,5 +689,50 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
         this.asm.advancedClone(result.getStateMachine(), result);
 
         return result;
+    }
+
+
+    private String replaceAttributesInExpr(String expr, Object _arg) {
+        if (expr == null) {
+            return null;
+        }
+
+        expr = expr.trim();
+
+        if (expr.length() == 0) {
+            return expr;
+        }
+
+        TranslatorArgument arg = (TranslatorArgument) _arg;
+        AvatarTerm term = AvatarTerm.createFromString(arg.block, expr);
+
+        if (term == null) {
+            TraceManager.addDev("NULL term in /" + expr + "/ of block /" + arg.block.getName() + "/");
+        }
+
+        if (term instanceof AvatarAttribute) {
+            AvatarAttribute ret = arg.placeholdersMapping.get(term);
+            if (ret == null) {
+                for(AvatarAttribute atbis: arg.placeholdersMapping.keySet()) {
+                    if (atbis.getName().equals(term.getName())) {
+                        ret = arg.placeholdersMapping.get(atbis);
+                        break;
+                    }
+                }
+
+                if (ret == null) {
+                    TraceManager.addDev("NULL correspondance");
+                    return expr;
+                }
+            }
+            TraceManager.addDev("Ok correspondance");
+            return ret.getName();
+        }
+
+
+        term.replaceAttributes(arg.placeholdersMapping);
+
+        return term.toString();
+
     }
 }

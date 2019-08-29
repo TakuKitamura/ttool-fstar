@@ -38,6 +38,8 @@
 
 package avatartranslator;
 
+import myutil.TraceManager;
+
 import java.util.Map;
 
 /**
@@ -112,10 +114,40 @@ public class AvatarArithmeticOp extends AvatarTerm {
 
     @Override
     public void replaceAttributes( Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
-        if (this.term1 instanceof AvatarAttribute)
-            this.term1 = attributesMapping.get (this.term1);
-        else
-            this.term1.replaceAttributes (attributesMapping);
+
+        //TraceManager.addDev("Replace Attributes term1="
+        //        + term1.getClass().getCanonicalName() + " / " + term1.getName());
+
+        if (this.term1 instanceof AvatarAttribute) {
+            //TraceManager.addDev("Found an attribute: " + this.term1.getName());
+
+            AvatarAttribute at = attributesMapping.get(this.term1);
+            if (at == null) {
+                // Search by name
+               for(AvatarAttribute atbis: attributesMapping.keySet()) {
+                   if (atbis.getName().equals(this.term1.getName())) {
+                       at = attributesMapping.get(atbis);
+                       break;
+                   }
+               }
+
+
+            }
+
+            if (at == null) {
+                //TraceManager.addDev("No correspondance for " + this.term1.getName());
+            } else {
+                //TraceManager.addDev("Replaced with: " + at.getClass().getCanonicalName() +
+                //        " / " + at.getName());
+                this.term1 = at;
+                //TraceManager.addDev("Next expr " + this.toString() + " name of var=" + this.term1.getName());
+            }
+
+
+        }
+        else {
+            this.term1.replaceAttributes(attributesMapping);
+        }
 
         if (this.term2 instanceof AvatarAttribute)
             this.term2 = attributesMapping.get (this.term2);

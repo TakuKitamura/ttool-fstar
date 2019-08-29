@@ -38,7 +38,10 @@
 
 package avatartranslator;
 
+import myutil.TraceManager;
+
 import java.util.Map;
+import java.util.Set;
 
 /**
    * Class AvatarTerm
@@ -70,7 +73,21 @@ public class AvatarConstant extends AvatarTerm {
     }
 
     @Override
-    public void replaceAttributes( Map<AvatarAttribute, AvatarAttribute> attributesMapping) { }
+    public void replaceAttributes( Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
+        name = name.trim();
+        Set<AvatarAttribute> setAt = attributesMapping.keySet();
+        for (AvatarAttribute aa: setAt) {
+            if (name.equals(aa.getName())) {
+                AvatarAttribute bb = attributesMapping.get(aa);
+                if (bb != null) {
+                   name = bb.getName();
+                   return;
+                }
+            }
+
+        }
+
+    }
 
     @Override
     public String toString() {

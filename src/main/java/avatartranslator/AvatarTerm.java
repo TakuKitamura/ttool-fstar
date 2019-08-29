@@ -194,4 +194,5 @@ public abstract class AvatarTerm extends AvatarElement {
      *      The mapping used to replace the attributes of the term. All the attributes of the block should be present as keys.
      */
     public abstract void replaceAttributes( Map<AvatarAttribute, AvatarAttribute> attributesMapping);
+
 }
