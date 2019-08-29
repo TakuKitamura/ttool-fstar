@@ -140,6 +140,10 @@ public abstract class AvatarTerm extends AvatarElement {
             // This should be an assignment
             AvatarTerm leftHand = AvatarTerm.createFromString (block, toParse.substring (0, indexEq));
             AvatarTerm rightHand = AvatarTerm.createFromString (block, toParse.substring (indexEq + 1));
+
+            //TraceManager.addDev("right hand of /" + toParse + "/ : >" + rightHand + "<");
+
+
             if (leftHand != null && rightHand != null && leftHand.isLeftHand ())
 
                 result = new AvatarActionAssignment ((AvatarLeftHand) leftHand, rightHand);

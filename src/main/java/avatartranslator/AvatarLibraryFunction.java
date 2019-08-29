@@ -38,6 +38,8 @@
 
 package avatartranslator;
 
+import myutil.TraceManager;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -314,6 +316,9 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
             AvatarAttribute attr = block.getAvatarAttributeWithName (name);
             if (attr == null) {
                 attr = new AvatarAttribute (name, attribute.getType (), block, block.getReferenceObject ());
+                if (attribute.getInitialValue() != null) {
+                    attr.setInitialValue(attribute.getInitialValue());
+                }
                 block.addAttribute (attr);
             }
 
@@ -555,7 +560,28 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
         guard.replaceAttributes (arg.placeholdersMapping);
         asme.setGuard (guard);
 
-        asme.setDelays (_asme.getMinDelay (), _asme.getMaxDelay ());
+        // TODO: replace attributes
+        AvatarTerm minD = AvatarTerm.createFromString(arg.block, _asme.getMinDelay ());
+        if (minD == null) {
+            TraceManager.addDev("NULL minD in block " + arg.block.getName() + " for delay " + _asme.getMinDelay ());
+        }
+        AvatarTerm maxD = AvatarTerm.createFromString(arg.block, _asme.getMaxDelay ());
+        if (maxD == null) {
+            TraceManager.addDev("NULL maxD in block " + arg.block.getName() + " for delay " + _asme.getMinDelay ());
+        }
+
+        if ((minD != null) && (maxD != null)) {
+            TraceManager.addDev("minD: " + minD.getName() + " maxD:" + maxD.getName());
+
+            minD.replaceAttributes(arg.placeholdersMapping);
+            maxD.replaceAttributes(arg.placeholdersMapping);
+
+            TraceManager.addDev("minD: " + minD.getName() + " maxD:" + maxD.getName());
+
+            asme.setDelays(minD.getName(), maxD.getName());
+        } else {
+            asme.setDelays( _asme.getMinDelay (), _asme.getMaxDelay ());
+        }
         asme.setComputes (_asme.getMinCompute (), _asme.getMaxCompute ());
 
         for (AvatarAction _action: _asme.getActions ()) {
