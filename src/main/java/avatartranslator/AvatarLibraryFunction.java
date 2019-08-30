@@ -451,9 +451,11 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
      *
      * @return The last element of the state machine created.
      */
-    public AvatarState translateASMWithMapping( Map<AvatarAttribute, AvatarAttribute> placeholdersMapping, Map<AvatarSignal, AvatarSignal> signalsMapping, AvatarStateMachineElement firstElement, AvatarBlock block, Object referenceObject, int counter) {
+    public AvatarState translateASMWithMapping( Map<AvatarAttribute, AvatarAttribute> placeholdersMapping, Map<AvatarSignal, AvatarSignal> signalsMapping,
+                                                AvatarStateMachineElement firstElement, AvatarBlock block, Object referenceObject, int counter) {
         /* Create the last state */
         AvatarState lastState = new AvatarState ("exit_" + this.name + "_" + counter, referenceObject);
+        block.getStateMachine().addElement(lastState);
 
         /* Create the argument object that will be passed to translation functions */
         Object arg = new TranslatorArgument (
@@ -490,7 +492,7 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
         arg.elementsMapping.put (placeholder, asme);
 
         // Must be added to the state machine as well?
-        //asm.addElement(asme);
+        arg.block.getStateMachine().addElement(asme);
 
         /* If there is no next element, consider this as an end state */
         if (placeholder.nbOfNexts () == 0) {

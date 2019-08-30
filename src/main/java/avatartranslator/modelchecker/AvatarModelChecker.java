@@ -1110,8 +1110,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             return _ase;
         }
 
-        //TraceManager.addDev("Handling Empty transition of previous= 4 " + _ase.getName() + " trans=" + at.getName() + " delay=" + at.getMinDelay());
-
+        //TraceManager.addDev("Handling Empty transition of previous= 4 " + _ase.getName() + " trans=" + at.getName() + " delay=" + at.getMinDelay() + " guard=" + at.getGuard() + " next=" + at.getNext(0));
 
         AvatarStateElement ase = (AvatarStateElement) (at.getNext(0));
         checkElement(ase, _ss);

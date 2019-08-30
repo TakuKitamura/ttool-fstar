@@ -498,6 +498,9 @@ public class AvatarSpecification extends AvatarElement {
 
             asm.removeLibraryFunctionCalls (block);
         }
+
+
+        //TraceManager.addDev("\n\nNew spec:" + this.toString() + "\n");
     }
 
     public boolean hasLossyChannel() {

@@ -1501,21 +1501,30 @@ public class AvatarStateMachine extends AvatarElement {
 
             if (curAsme instanceof AvatarLibraryFunctionCall) {
                 AvatarLibraryFunctionCall alfc = (AvatarLibraryFunctionCall) curAsme;
+
                 /* Create a state that will be used as an entry point for the sub-state machine */
                 AvatarState firstState = new AvatarState("entry_" + alfc.getLibraryFunction().getName() + "_" + alfc.getCounter(), curAsme.getReferenceObject());
+                elements.add(firstState);
 
                 /* Add this state to the mapping so that future state can use it to replace their next element */
                 callsTranslated.put(alfc, firstState);
 
                 /* inline the function call */
                 AvatarStateMachineElement lastState = alfc.inlineFunctionCall(block, firstState);
+                TraceManager.addDev("LAST STATE IS " + lastState + " class=" + lastState.getClass().getCanonicalName());
 
                 /* Add the next elements to the newly created last state */
                 for (AvatarStateMachineElement asme : curAsme.getNexts())
                     lastState.addNext(asme);
 
+                /* Remove the call in the list of elements */
+                elements.remove(curAsme);
+
+
                 /* Use the translated function call's first element as current element */
                 curAsme = firstState;
+
+
             }
 
             /* Add current element to the visited set */
