@@ -190,7 +190,7 @@ public class AvatarAttribute extends AvatarLeftHand {
 
     @Override
     public void replaceAttributes( Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
-        //TraceManager.addDev("!!! ERROR !!! (replaceAttributes in AvatarAttribute)");
+        TraceManager.addDev("!!! ERROR !!! (replaceAttributes in AvatarAttribute)");
         /* !!! We should never arrive here !!! */
     }
 

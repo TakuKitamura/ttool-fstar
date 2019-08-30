@@ -454,24 +454,35 @@ public class AvatarSpecification extends AvatarElement {
 
     public void removeElseGuards() {
         for (AvatarBlock block: blocks) {
-            AvatarStateMachine asm = block.getStateMachine ();
-            if (asm == null)
+            removeElseGuards(block.getStateMachine ());
+        }
+        for (AvatarLibraryFunction function: libraryFunctions) {
+            removeElseGuards(function.getStateMachine ());
+        }
+    }
+
+
+    private void removeElseGuards(AvatarStateMachine asm) {
+        if (asm == null)
+            return;
+
+        for (AvatarStateMachineElement asme: asm.getListOfElements ()) {
+            if (! (asme instanceof AvatarState))
                 continue;
-            for (AvatarStateMachineElement asme: asm.getListOfElements ()) {
-                if (! (asme instanceof AvatarState))
+
+            //TraceManager.addDev("Working with state " + asme.getNiceName());
+            for (AvatarStateMachineElement next: asme.getNexts ()) {
+                if (! (next instanceof AvatarTransition))
+                    continue;
+                AvatarTransition at = (AvatarTransition) next;
+                AvatarGuard ancientGuard = at.getGuard ();
+
+                if (ancientGuard == null)
                     continue;
 
-                for (AvatarStateMachineElement next: asme.getNexts ()) {
-                    if (! (next instanceof AvatarTransition))
-                        continue;
-                    AvatarTransition at = (AvatarTransition) next;
-                    AvatarGuard ancientGuard = at.getGuard ();
-
-                    if (ancientGuard == null)
-                        continue;
-
-                    at.setGuard (ancientGuard.getRealGuard (asme));
-                }
+                //TraceManager.addDev("[[[[[[[[[[[[[[[ Guard before: " + ancientGuard.toString());
+                at.setGuard (ancientGuard.getRealGuard (asme));
+                //TraceManager.addDev("]]]]]]]]]]]]]]] Guard after: " + at.getGuard().toString());
             }
         }
     }

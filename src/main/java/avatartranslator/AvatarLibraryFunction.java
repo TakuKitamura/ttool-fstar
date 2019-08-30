@@ -483,8 +483,14 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
      *      The object containing the arguments to pass to the translation functions.
      */
     private void translateNext (AvatarStateMachineElement asme, AvatarStateMachineElement placeholder, TranslatorArgument arg) {
+
+        //TraceManager.addDev("TRANSLATION of:" + asme.getExtendedName());
+
         arg.previousElement.addNext (asme);
         arg.elementsMapping.put (placeholder, asme);
+
+        // Must be added to the state machine as well?
+        //asm.addElement(asme);
 
         /* If there is no next element, consider this as an end state */
         if (placeholder.nbOfNexts () == 0) {
@@ -550,46 +556,14 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
     public void translateTransition (AvatarTransition _asme, Object _arg) {
         TranslatorArgument arg = (TranslatorArgument) _arg;
 
+
+        //printCorrespondance(_arg);
+
         AvatarTransition asme = new AvatarTransition (arg.block, this.name + "_" + arg.counter + "__" + _asme.getName (), arg.referenceObject);
 
         AvatarGuard guard = _asme.getGuard ().clone ();
         guard.replaceAttributes (arg.placeholdersMapping);
         asme.setGuard (guard);
-
-        // TODO: replace attributes
-        /*AvatarArithmeticOp minD = AvatarArithmeticOp.createFromString(arg.block, _asme.getMinDelay ());
-        if (minD == null) {
-            TraceManager.addDev("NULL minD in block " + arg.block.getName() + " for delay " + _asme.getMinDelay ());
-        }
-        AvatarArithmeticOp maxD = AvatarArithmeticOp.createFromString(arg.block, _asme.getMaxDelay ());
-        if (maxD == null) {
-            TraceManager.addDev("NULL maxD in block " + arg.block.getName() + " for delay " + _asme.getMinDelay ());
-        }
-
-
-        if ((minD != null) && (maxD != null)) {
-            TraceManager.addDev("BEFORE REPLACE/ minD: " + minD.getName() + " maxD:" + maxD.getName());
-            TraceManager.addDev("class of minD:" + minD.getClass().getCanonicalName());
-            TraceManager.addDev("class of maxD:" + maxD.getClass().getCanonicalName());
-
-            Set<AvatarAttribute> setAt = arg.placeholdersMapping.keySet();
-            for (AvatarAttribute aa: setAt) {
-               AvatarAttribute bb = arg.placeholdersMapping.get(aa);
-               if (bb != null) {
-                   TraceManager.addDev("Mapping of attr: " + aa.getName() + " -> " + bb.getName());
-               }
-            }
-
-
-            minD.replaceAttributes(arg.placeholdersMapping);
-            maxD.replaceAttributes(arg.placeholdersMapping);
-
-            TraceManager.addDev("AFTER REPLACE/ minD: " + minD.getName() + " maxD:" + maxD.getName());
-
-            asme.setDelays(minD.getName(), maxD.getName());
-        } else {
-            asme.setDelays( _asme.getMinDelay (), _asme.getMaxDelay ());
-        }*/
 
         //TraceManager.addDev("minD:" + _asme.getMinDelay() + " in block " + arg.block.getName());
         String minD = replaceAttributesInExpr(_asme.getMinDelay(), _arg);
@@ -604,9 +578,14 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
         asme.setComputes (replaceAttributesInExpr(_asme.getMinCompute (), _arg),
                 replaceAttributesInExpr(_asme.getMaxCompute (), _arg));
 
+
+
+
         for (AvatarAction _action: _asme.getActions ()) {
             AvatarAction action = _action.clone ();
+            //TraceManager.addDev("\n*** Action BEFORE replace:" + action.toString() + " " + action.getClass().getCanonicalName());
             action.replaceAttributes (arg.placeholdersMapping);
+            //TraceManager.addDev("Action AFTER replace:" + action.getName() + "\n");
             asme.addAction (action);
         }
 
@@ -733,6 +712,16 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
         term.replaceAttributes(arg.placeholdersMapping);
 
         return term.toString();
+
+    }
+
+
+    private void printCorrespondance(Object _arg) {
+        TranslatorArgument arg = (TranslatorArgument) _arg;
+        for(AvatarAttribute elt1: arg.placeholdersMapping.keySet()) {
+            AvatarAttribute elt2 = arg.placeholdersMapping.get(elt1);
+            TraceManager.addDev("Correspondance " + elt1 + " --> " + elt2);
+        }
 
     }
 }
