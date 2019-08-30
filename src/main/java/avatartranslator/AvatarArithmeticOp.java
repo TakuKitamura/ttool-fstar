@@ -149,9 +149,32 @@ public class AvatarArithmeticOp extends AvatarTerm {
             this.term1.replaceAttributes(attributesMapping);
         }
 
-        if (this.term2 instanceof AvatarAttribute)
-            this.term2 = attributesMapping.get (this.term2);
-        else
-            this.term2.replaceAttributes (attributesMapping);
+        if (this.term2 instanceof AvatarAttribute) {
+            AvatarAttribute at = attributesMapping.get(this.term1);
+            if (at == null) {
+                // Search by name
+                for(AvatarAttribute atbis: attributesMapping.keySet()) {
+                    if (atbis.getName().equals(this.term2.getName())) {
+                        at = attributesMapping.get(atbis);
+                        break;
+                    }
+                }
+
+
+            }
+
+            if (at == null) {
+                //TraceManager.addDev("No correspondance for " + this.term1.getName());
+            } else {
+                //TraceManager.addDev("Replaced with: " + at.getClass().getCanonicalName() +
+                //        " / " + at.getName());
+                this.term2 = at;
+                //TraceManager.addDev("Next expr " + this.toString() + " name of var=" + this.term1.getName());
+            }
+            //this.term2 = attributesMapping.get(this.term2);
+        }
+        else {
+            this.term2.replaceAttributes(attributesMapping);
+        }
     }
 }
