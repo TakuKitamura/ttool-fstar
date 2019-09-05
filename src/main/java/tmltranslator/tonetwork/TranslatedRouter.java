@@ -130,13 +130,7 @@ public class TranslatedRouter<E> {
         handledChannels = new Vector<>();
     }
 
-    public void setLinkFromPreviousRouter(int index, Link l) {
-        playingTheRoleOfNext[index] = l;
-    }
 
-    public void setLinkToNextRouter(int index, Link l) {
-        playingTheRoleOfPrevious[index] = l;
-    }
 
     public int getXPos() {
         return xPos;
@@ -513,8 +507,6 @@ public class TranslatedRouter<E> {
 
         // Between IN and INVC
 
-
-
         pktInEvtsVCs = new TMLEvent[NB_OF_PORTS][nbOfVCs];
         pktInChsVCs = new TMLChannel[NB_OF_PORTS][nbOfVCs];
 
@@ -592,12 +584,12 @@ public class TranslatedRouter<E> {
         }
 
         // Must create the internal links
-        // Network in: from apps to router
-        Link networkInterfaceIn = new Link(tmlm, this, this, nbOfVCs, "INRouter");
+        // Network in: from networkin interface in  to router
+        Link networkInterfaceIn = new Link(tmlm, this, this, nbOfVCs, "INRouter", true);
         playingTheRoleOfNext[NB_OF_PORTS-1] = networkInterfaceIn;
 
-        // Network out: from router to apps
-        Link networkInterfaceOut = new Link(tmlm, this, this, nbOfVCs, "OUTRouter");
+        // Network out: from router to network interface out
+        Link networkInterfaceOut = new Link(tmlm, this, this, nbOfVCs, "OUTRouter", true);
         playingTheRoleOfPrevious[NB_OF_PORTS-1] = networkInterfaceOut;
     }
 

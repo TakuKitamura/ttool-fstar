@@ -112,8 +112,31 @@ public class Link {
 
     }
 
+    public Link(TMLModeling tmlm, TranslatedRouter previous, TranslatedRouter next, int nbOfVCs, String add, boolean isInfinite) {
+        previousRouter = previous;
+        nextRouter = next;
+        this.nbOfVCs = nbOfVCs;
+        this.tmlm = tmlm;
+        this.add = "_" + add;
+
+        //TraceManager.addDev("Adding link between previous (" + previousRouter.getXPos() + "," + previousRouter.getYPos() +
+        //       ") and next (" + nextRouter.getXPos() + "," + nextRouter.getYPos() + ")" + " with add=" + add);
+
+        if (tmlm ==null) {
+            TraceManager.addDev("null modeling");
+        }
+
+
+        generateLinks(isInfinite);
+
+    }
 
     private void generateLinks() {
+        generateLinks(false);
+    }
+
+
+    private void generateLinks(boolean isInfinite) {
 
         packetOut = new TMLEvent("evtPktOut__" + getNaming(),
                 null, 8, true);
@@ -128,7 +151,14 @@ public class Link {
         chOutToIN = new TMLChannel("channelBetweenOUTToIN__" + getNaming(),
                 null);
         chOutToIN.setSize(4);
-        chOutToIN.setMax(8);
+        if (isInfinite) {
+            chOutToIN.setMax(Integer.MAX_VALUE);
+            chOutToIN.setType(TMLChannel.BRNBW);
+        } else {
+            chOutToIN.setMax(8);
+            chOutToIN.setType(TMLChannel.BRBW);
+        }
+
         tmlm.addChannel(chOutToIN);
 
         feedbackPerVC = new TMLEvent[nbOfVCs];
