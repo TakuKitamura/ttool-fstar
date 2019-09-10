@@ -261,8 +261,9 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
                 if (selectedST.getType() == SimulationTrace.XML_DIPLO) {
                 	jmiCompareST = new JMenuItem("Compare");
                 	jmiCompareST.addActionListener(this);
+                    popupTreeST.add(jmiCompareST);
                 }
-                popupTreeST.add(jmiCompareST);
+
 
 
             //}
