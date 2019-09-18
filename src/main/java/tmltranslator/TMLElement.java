@@ -77,7 +77,7 @@ public class TMLElement extends DIPLOElement {
 	public void prefixName(String _prefix) {
 		name = _prefix + name;
 	}
-	
+
 
 	/* When a TMLCP object is instantiated the name and reference object might not be known */
 	public void setName( String _name )	{

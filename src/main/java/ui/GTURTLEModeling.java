@@ -5507,7 +5507,7 @@ public class GTURTLEModeling {
 
         prepareErrors();
 
-        int selectedTab = 0;
+        int selectedTab = -1;
         int selectedSubTab = -1;
 
         try {
