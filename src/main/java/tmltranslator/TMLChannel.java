@@ -44,6 +44,7 @@ import ui.tmlcompd.TMLCPrimitivePort;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Class TMLChannel
@@ -616,4 +617,19 @@ public class TMLChannel extends TMLCommunicationElement {
         s += " />\n";
         return s;
     }
+
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof TMLChannel)) return false;
+        if (!super.equalSpec(o)) return false;
+        TMLChannel channel = (TMLChannel) o;
+        return checkConf == channel.checkConf &&
+                checkAuth == channel.checkAuth &&
+                size == channel.size &&
+                type == channel.type &&
+                max == channel.max &&
+                vc == channel.vc &&
+                nbOfSamples == channel.getNumberOfSamples() &&
+                priority == channel.priority;
+    }
+
 }

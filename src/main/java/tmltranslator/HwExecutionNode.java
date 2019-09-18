@@ -41,6 +41,8 @@
 package tmltranslator;
 
 
+import java.util.Objects;
+
 /**
  * Class HwExecutionNode
  * Creation: 23/11/2007
@@ -95,6 +97,16 @@ public abstract class HwExecutionNode extends HwNode  {
         }
 
         return false;
+    }
+
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof HwExecutionNode)) return false;
+        if(!super.equalSpec(o)) return false;
+        HwExecutionNode that = (HwExecutionNode) o;
+        return maximumNbOfTasks == that.maximumNbOfTasks &&
+                execiTime == that.execiTime &&
+                execcTime == that.execcTime &&
+                operation.equals(that.operation);
     }
 
 }

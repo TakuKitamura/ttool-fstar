@@ -43,9 +43,8 @@ package tmltranslator;
 
 import ui.tmlcompd.TMLCPrimitivePort;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
+
 import myutil.*;
 
 /**
@@ -337,6 +336,18 @@ public class TMLEvent extends TMLCommunicationElement {
 	}
         s += "</TMLEVENT>\n";
 	return s;
+    }
+
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof TMLEvent)) return false;
+        if (!super.equalSpec(o)) return false;
+        TMLEvent event = (TMLEvent) o;
+        if(!(new HashSet<>(params).equals(new HashSet<>(event.params))))
+            return false;
+        return maxEvt == event.maxEvt &&
+                isBlocking == event.isBlocking &&
+                checkAuth == event.checkAuth &&
+                checkConf == event.checkConf;
     }
 
 }

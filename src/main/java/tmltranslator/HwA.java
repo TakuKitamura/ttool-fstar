@@ -41,6 +41,8 @@
 
 package tmltranslator;
 
+import java.util.Objects;
+
 /**
  * Class HwA
  * Creation: 23/11/2007
@@ -75,5 +77,11 @@ public class HwA extends HwExecutionNode  {
 	return s;
     }
 
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof HwA)) return false;
+        if (!super.equalSpec(o)) return false;
+        HwA hwA = (HwA) o;
+        return byteDataSize == hwA.byteDataSize;
+    }
 
 }

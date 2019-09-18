@@ -465,4 +465,16 @@ public class TMLTask extends TMLElement {
         return activity.getWorstCaseIComplexity();
     }
 
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof TMLTask)) return false;
+        if (!super.equalSpec(o)) return false;
+        TMLTask tmlTask = (TMLTask) o;
+        if(!(new HashSet<>(attributes).equals(new HashSet<>(tmlTask.attributes))))
+            return false;
+        return operationType == tmlTask.operationType &&
+                isDaemon == tmlTask.isDaemon &&
+                isAttacker == tmlTask.isAttacker &&
+                operation.equals(tmlTask.operation) &&
+                operationMEC.equals(tmlTask.operationMEC);
+    }
 }

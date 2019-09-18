@@ -42,6 +42,7 @@
 package tmltranslator;
 
 
+import java.util.Objects;
 
 /**
  * Class TMLElement
@@ -91,4 +92,12 @@ public class TMLElement extends DIPLOElement {
 	public void setReferenceObject( Object _referenceObject )	{
 		this.referenceObject = _referenceObject;
 	}
+
+	public boolean equalSpec(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		TMLElement that = (TMLElement) o;
+		return name.equals(that.getName());
+	}
+
 }

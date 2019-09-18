@@ -41,6 +41,8 @@
 
 package tmltranslator;
 
+import java.util.Objects;
+
 /**
  * Class HwMemory
  * Creation: 23/11/2007
@@ -66,6 +68,14 @@ public class HwMemory extends HwCommunicationNode  {
 	String s = "<MEMORY name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize + "\" memorySize=\"" + memorySize + "\"  bufferType=\"" + bufferType + "\" />\n";
 	return s;
     }
-    
+
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof HwMemory)) return false;
+        if(!super.equalSpec(o)) return false;
+        HwMemory hwMemory = (HwMemory) o;
+        return bufferType == hwMemory.bufferType &&
+                byteDataSize == hwMemory.byteDataSize &&
+                memorySize == hwMemory.memorySize;
+    }
 
 }

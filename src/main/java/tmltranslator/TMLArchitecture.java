@@ -41,8 +41,7 @@ package tmltranslator;
 
 import myutil.TraceManager;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Class TMLArchitecture
@@ -502,4 +501,77 @@ public class TMLArchitecture {
         HwNoC noc = getHwNoC();
         return (noc == null ? -1 : noc.size);
     }
+
+    public boolean equalSpec(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TMLArchitecture that = (TMLArchitecture) o;
+
+        if (!isHwNodeListEquals(hwnodes, that.hwnodes)) return false;
+
+        if(!isHwlinkListEquals(hwlinks, that.hwlinks)) return false;
+
+        return masterClockFrequency == that.masterClockFrequency;
+    }
+
+    public  boolean isHwNodeListEquals(List<HwNode> list1, List<HwNode> list2){
+        if (list1 == null && list2 == null) {
+            return true;
+        }
+        //Only one of them is null
+        else if(list1 == null || list2 == null) {
+            return false;
+        }
+        else if(list1.size() != list2.size()) {
+            return false;
+        }
+
+        //copying to avoid rearranging original lists
+        list1 = new ArrayList<>(list1);
+        list2 = new ArrayList<>(list2);
+
+        Collections.sort(list1, Comparator.comparing(HwNode::getName));
+        Collections.sort(list2, Comparator.comparing(HwNode::getName));
+        
+        boolean test;
+
+        for (int i = 0; i < list1.size(); i++) {
+           test =  list1.get(i).equalSpec(list2.get(i));
+           if (!test) return false;
+        }
+
+        return true;
+    }
+
+
+    public  boolean isHwlinkListEquals(List<HwLink> list1, List<HwLink> list2){
+        if (list1 == null && list2 == null) {
+            return true;
+        }
+        //Only one of them is null
+        else if(list1 == null || list2 == null) {
+            return false;
+        }
+        else if(list1.size() != list2.size()) {
+            return false;
+        }
+
+        //copying to avoid rearranging original lists
+        list1 = new ArrayList<>(list1);
+        list2 = new ArrayList<>(list2);
+
+        Collections.sort(list1, Comparator.comparing(HwLink::getName));
+        Collections.sort(list2, Comparator.comparing(HwLink::getName));
+
+        boolean test;
+
+        for (int i = 0; i < list1.size(); i++) {
+            test =  list1.get(i).equalSpec(list2.get(i));
+            if (!test) return false;
+        }
+
+        return true;
+    }
+
 }

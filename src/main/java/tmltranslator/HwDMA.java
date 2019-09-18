@@ -41,6 +41,8 @@
 
 package tmltranslator;
 
+import java.util.Objects;
+
 /**
  * Class HwDMA
  * Creation: 26/09/2011
@@ -63,4 +65,14 @@ public class HwDMA extends HwCommunicationNode  {
 	String s = "<DMA name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize + "\"  nbOfChannels=\"" + nbOfChannels + "\" execiTime=\"" + "1" + "\" execcTime=\"" + "1"  +"\" />\n";
 	return s;
     }
+
+
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof HwDMA)) return false;
+        if (!super.equalSpec(o)) return false;
+        HwDMA hwDMA = (HwDMA) o;
+        return byteDataSize == hwDMA.byteDataSize &&
+                nbOfChannels == hwDMA.nbOfChannels;
+    }
+
 }

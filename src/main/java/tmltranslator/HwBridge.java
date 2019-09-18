@@ -42,6 +42,7 @@
 package tmltranslator;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 /**
@@ -66,6 +67,14 @@ public class HwBridge extends HwCommunicationNode  {
     public String toXML() {
 	String s = "<BRIDGE name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  bufferByteSize=\"" + bufferByteSize + "\" />\n";
 	return s;
+    }
+
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof HwBridge)) return false;
+        if (!super.equalSpec(o)) return false;
+        HwBridge hwBridge = (HwBridge) o;
+        return latency == hwBridge.latency &&
+                bufferByteSize == hwBridge.bufferByteSize;
     }
 
 }

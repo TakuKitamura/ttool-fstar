@@ -42,6 +42,8 @@
 package tmltranslator;
 
 
+import java.util.Objects;
+
 /**
  * Class HwCommunicationNode
  * Creation: 23/11/2007
@@ -59,4 +61,12 @@ public abstract class HwCommunicationNode extends HwNode  {
     public HwCommunicationNode(String _name) {
 		super(_name);
     }
+
+    public boolean equalSpec(Object o) {
+        if(!(o instanceof HwCommunicationNode)) return false;
+        if (!super.equalSpec(o)) return false;
+        HwCommunicationNode that = (HwCommunicationNode) o;
+        return privacy == that.privacy;
+    }
+
 }
