@@ -577,9 +577,11 @@ if (t.getOrigin() == 0) {
 			}
 			
 			corpsPrimitiveDE = corpsPrimitiveDE + "private:" + CR +CR;
-			if(de.getClockName()!=""){
-			    corpsPrimitiveDE = corpsPrimitiveDE +"sc_in<bool> "+de.getClockName()+";"+CR;
-			}
+		        
+			//	if((de.getClockName()!="null")&&(de.getClockName()!="toto\n")){
+			
+			//	    corpsPrimitiveDE = corpsPrimitiveDE +"sc_in<bool> "+de.getClockName()+";"+CR;
+			//	}
 			if (de.getListStruct().getSize() != 0) {
 				String identifier, type, constant;
 				for (int i = 0; i < de.getListStruct().size(); i++) {
