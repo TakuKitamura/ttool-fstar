@@ -79,6 +79,9 @@ public class TDiagramPanelCloneTest extends AbstractUITest {
     public void testCloneCompositeComponentWithNullFather() throws Exception{
         CompareTML compTML = new CompareTML();
         diagramPanel.cloneComponent(tgComponent1);
+       // diagramPanel.cloneComponent(tgComponent2);
+        //diagramPanel.cloneComponent(tgComponent3);
+        //diagramPanel.cloneComponent(tgComponent4);
         mainGUI.checkModelingSyntax(true);
         mainGUI.generateTMLTxt();
         File f1 = new File(EXPECTED_FILE1);

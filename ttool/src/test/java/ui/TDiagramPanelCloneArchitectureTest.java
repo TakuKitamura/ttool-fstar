@@ -51,7 +51,6 @@ import static org.junit.Assert.*;
 
 
 /**
- * #issue 186
  * Testing the clone function on architecture
  * author : Minh Hiep
  * update test : 18/10/2019
@@ -74,10 +73,7 @@ public class TDiagramPanelCloneArchitectureTest extends AbstractUITest {
     static TGComponent Memory_Cl;
 
 
-    static TGComponent mapChannel;
-
     final static String EXPECTED_FILE_MODEL = getBaseResourcesDir() + "/ui/diagram2tml/expected/Expected_CloneArchitecture.xml";
-
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
@@ -129,9 +125,6 @@ public class TDiagramPanelCloneArchitectureTest extends AbstractUITest {
         assertNotNull(architecture_clone);
 
         for (TGComponent tgc : architecture_clone.getAllComponentList()) {
-            if (tgc.getValue().equals("Application::PrimitiveComp1")) {
-                mapChannel = tgc;
-            }
 
             if (tgc.getName().equals("CPU1")) {
                 CPU_Cl = tgc;
