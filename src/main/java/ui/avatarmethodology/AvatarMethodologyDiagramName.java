@@ -49,7 +49,6 @@ import ui.util.IconManager;
 import javax.swing.*;
 import java.awt.*;
 
-//import java.awt.geom.*;
 
 /**
  * Class AvatarMethodologyDiagramName
@@ -65,7 +64,6 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
     public final static int X_MARGIN = 5;
     public final static int Y_MARGIN = 3;
     
-    
     protected final static int SIM_ANIM = 0;
     protected final static int UPP = 1;
     protected final static int PROVERIF = 2;
@@ -75,7 +73,8 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
 	
 	protected final String[] SHORT_ACTION_NAMES = {
 	"simu", "upp", "proverif", "inv", 
-	"code-gen"};
+	"code-gen"
+	};
 	
 	protected final String[] LONG_ACTION_NAMES = {
 	/*0*/ "Simulation and animate the model", 
@@ -107,132 +106,98 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
         
         name = "value ";
         
-        
-        
         initScaling(10, 10);
-        
-        
+
         myImageIcon = IconManager.imgic302;
     }
     
     public void internalDrawing(Graphics g) {
     	boolean onMe = false;
     	
-    	if (tdp.componentPointed() == this) {
+    	if (tdp.componentPointed() == this)
     		onMe = true;
-    	}
-    	
-    	if ((y+Y_MARGIN) > (getFather().getY()+getFather().getHeight())) {
+   
+    	if ((y+Y_MARGIN) > (getFather().getY()+getFather().getHeight()))
     		return;
-    	}
     	
-    	//TraceManager.addDev("Internal drawing ...");
-    	int currentMaxX;
     	String val = value;
         int w = g.getFontMetrics().stringWidth(value);
         int wf = getFather().getWidth();
-        int w1;
-        int saveCurrentMaxX;
-        boolean oneWritten;
-        
+
         if (wf < w+(2*X_MARGIN)) {
         	val = ".";
         }
-        
-        int curWidth = myWidth;
-        
-        
-        
+
         Font f = g.getFont();
         
-        if (onMe && indexOnMe == -1) {
+        if (onMe && indexOnMe == -1)
         	g.setFont(f.deriveFont(Font.BOLD));
-        }
+        
         widthAppli = g.getFontMetrics().stringWidth(val);
+        int curWidth = myWidth;
         curWidth = Math.max(widthAppli, curWidth);
         g.drawString(val, x, y);
         g.setFont(f);
         
-        if (validations == null) {
-        	if (getFather() instanceof AvatarMethodologyDiagramReference) {
+        if (validations == null)
+        	if (getFather() instanceof AvatarMethodologyDiagramReference)
         		((AvatarMethodologyDiagramReference)(getFather())).makeValidationInfos(this);
-        	}
-        }
+
         
         if ((validations != null) && (valMinX == null)) {
         	valMinX = new int[validations.length];
         	valMaxX = new int[validations.length];
-        }
+        } 
         
-        /*if (validations == null) {
-        TraceManager.addDev("null validation");
-        } else {
-        TraceManager.addDev("Validation size=" + validations.length);
-        }*/
-        
-        currentMaxX = wf + x - 2*(X_MARGIN);
-        saveCurrentMaxX = currentMaxX;
+        int currentMaxX = wf + x - 2 * (X_MARGIN);
+        int saveCurrentMaxX = currentMaxX;
         
         if (wf < w+(2*X_MARGIN)) {
         	makeScale(g, w+(2*X_MARGIN));
         	return;
         }
-        
-        //TraceManager.addDev("Tracing validation Validation size=" + validations.length);
-        oneWritten = false;
-        
-        
+
+        boolean oneWritten = false;
+        int w1 = 0;
         g.setFont(f.deriveFont(Font.ITALIC));
+        
         if ((validations != null) & (validations.length >0)) {
-			for(int i=validations.length-1; i>=0; i--) {
-				//TraceManager.addDev("Validations[" + i + "] = " + validations[i]);
-				
+			for (int i = validations.length - 1; i >= 0; i--) {
 				w1 = g.getFontMetrics().stringWidth(SHORT_ACTION_NAMES[validations[i]]);
+
+				if ((onMe && indexOnMe == i))
+					g.setFont(f.deriveFont(Font.ITALIC));
 				
-				
-				if ((onMe && indexOnMe == i)) {
-				g.setFont(f.deriveFont(Font.ITALIC));
-				}
-				
-				if ((currentMaxX - w1) > (x + w)) {
-					if ((onMe && indexOnMe == i)) {
+				if ((currentMaxX - w1) > (x + w)) 
+				{
+					if ((onMe && indexOnMe == i))
 						g.setFont(f.deriveFont(Font.BOLD));
-					}
+				
 					g.drawString(SHORT_ACTION_NAMES[validations[i]], currentMaxX - w1, y);
 					g.setFont(f.deriveFont(Font.ITALIC));
 					valMinX[i] = currentMaxX-w1;
 					valMaxX[i] = currentMaxX;
 					oneWritten = true;
 					currentMaxX = currentMaxX - w1 - 5;
-				} else {
+				} else
 					break;
-				}
-				
 			}
         }
-        
-        
-        
         g.setFont(f);
-        
-        if (oneWritten) {
+        if (oneWritten)
         	makeScale(g, saveCurrentMaxX - x);
-        } else {
+        else
         	makeScale(g, w);
-        }
-        
-        //TraceManager.addDev("current width=" + curWidth);
         if (onMe)
-        	
         	g.drawRect(x-2, y-12, curWidth+5, 15);
         
-        return;
-        
-        
+        return; 
     }
     
-    private void makeScale(Graphics g, int _size) {
-    	if (!tdp.isScaled()) {
+    private void makeScale(Graphics g, int _size)
+    {
+    	if (!tdp.isScaled()) 
+    	{
             myWidth = _size;
             myHeight = g.getFontMetrics().getHeight();
         }
@@ -241,76 +206,79 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
     
     public TGComponent isOnMe(int _x, int _y) {
     	int oldIndex = indexOnMe;
-        if (GraphicLib.isInRectangle(_x, _y, x, y - height, Math.max(myWidth, minWidth), myHeight)) {
+        if (GraphicLib.isInRectangle(_x, _y, x, y - height, Math.max(myWidth, minWidth), myHeight)) 
+        {
         	indexOnMe = -2;
-        	
-        	if (_x <= (x+widthAppli)) {
+        	if (_x <= (x + widthAppli)) 
+        	{
         		indexOnMe = -1;
         		tdp.getMGUI().setStatusBarText("Open the " + value + " model");
         	}
-        	if ((validations != null) && (validations.length > 0)) {
-        		for(int i=0; i<validations.length; i++) {
-        			if ((_x >= valMinX[i]) && (_x <= valMaxX[i])) {
+        	if ((validations != null) && (validations.length > 0))
+        	{
+        		for (int i = 0; i < validations.length; i++) 
+        		{
+        			if ((_x >= valMinX[i]) && (_x <= valMaxX[i]))
+        			{
         				indexOnMe = i;
         				tdp.getMGUI().setStatusBarText(LONG_ACTION_NAMES[validations[i]]);
-        				//TraceManager.addDev("Index on " + indexOnMe);
         				break;
         			}
         		}
         	}
         	
-        	if (oldIndex != indexOnMe) {
+        	if (oldIndex != indexOnMe)
         		tdp.repaint();
-        	}
-        	
-        	
             return this;
         }
         return null;
     }
     
-    public boolean editOndoubleClick(JFrame frame) {
-    	
+    public boolean editOndoubleClick(JFrame frame) 
+    {
         if (indexOnMe == -1) {
         	// Opening the diagram
-        	if (!tdp.getMGUI().selectMainTab(value)) {
+        	if (!tdp.getMGUI().selectMainTab(value))
+        	{
         		TraceManager.addDev("Diagram removed?");
         		return false;
         	}
-        	
         }
-        
-        
-        if (indexOnMe > -1) {
+
+        if (indexOnMe > -1)
+        {
         	AvatarMethodologyDiagramReference ref = ((AvatarMethodologyDiagramReference)(getFather()));
         	ref.makeCall(value, indexOnMe);
-        }
-        
-         
+        } 
         return true;
     }
     
-    
-    public  int getType() {
+    public  int getType() 
+    {
         return TGComponentManager.AVATARMETHODOLOGY_DIAGRAM_NAME;
     }
     
-   	public int getDefaultConnector() {
+   	public int getDefaultConnector() 
+   	{
       return TGComponentManager.AVATARMETHODOLOGY_CONNECTOR;
     }
     
-    public void setValidationsNumber(int size) {
+    public void setValidationsNumber(int size) 
+    {
     	validations = new int[size];
     }
     
-    public void setValidationsInfo(int _index, int _val) {
+    public void setValidationsInfo(int _index, int _val) 
+    {
     	validations[_index] = _val;
     }
     
-    public void rescale(double scaleFactor){
-		
-		if ((valMinX != null) && (valMinX.length > 0)) {
-			for(int i=0; i<valMinX.length; i++) {
+    public void rescale(double scaleFactor)
+    {
+		if ((valMinX != null) && (valMinX.length > 0)) 
+		{
+			for (int i = 0; i < valMinX.length; i++) 
+			{
 				valMinX[i] = (int)(valMinX[i] / oldScaleFactor * scaleFactor);
 				valMaxX[i] = (int)(valMaxX[i] / oldScaleFactor * scaleFactor);
 			}
