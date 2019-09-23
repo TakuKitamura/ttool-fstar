@@ -56,12 +56,13 @@ public class TGConnectingPointWidthHeight extends TGConnectingPoint {
         w = _w;
         h = _h;
     }
-
+    /* From Interface ui.CDElement*/
     @Override
     public int getX() {
         return scaledX() + container.getX() + (int)(container.getWidth() * w );
     }
-
+    
+    /* From Interface ui.CDElement*/
     @Override
     public int getY() {
         return scaledY() + container.getY() + (int)(container.getHeight() * h);
