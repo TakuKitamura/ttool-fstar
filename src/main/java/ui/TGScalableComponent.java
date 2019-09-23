@@ -48,15 +48,31 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
     	displayText = true;
 	}
 
+	/*
+	 * Scale from a value and a factor
+	 * @param value
+	 * @param factor
+	 * @return scaling value of param: value and factor
+	 * */
 	public static int scale( 	final int value,
 								final double factor ) {
 		return (int) ( value * factor );
 	}
 
+	/*
+	 * Scale from a value and the oldScaleFactor previously saved
+	 * @param value
+	 * @return scaling value of param: value and oldScaleFactor
+	 * */
 	protected int scale( final int value ) {
 		return scale( value, oldScaleFactor );
 	}
 
+	/*
+	 * init the scaling values
+	 * @param w (width)
+	 * @param h (height)
+	 * */
     protected void initScaling(int w, int h) {
         oldScaleFactor = tdp.getZoom();
 
@@ -118,6 +134,11 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
         rescaled = true;
     }
 
+	/*
+	 * Rescale with the help of a scaleFactor
+	 * @param scaleFactor
+	 * 
+	 * */
     @Override
     public void rescale( final double scaleFactor ) {
         rescaled = true;
@@ -243,6 +264,12 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
     	return checkWidth( graphics, value );
     }
     
+	/*
+	 * Check the Width
+	 * @param graphics
+	 * @param text
+	 * @return textWidth
+	 * */
     protected int checkWidth( 	final Graphics graphics,
     							final String text ) {
         // Issue #31: This is just to increase the width in case the actual width is not enough to display the text. 
@@ -258,6 +285,11 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
         return textWidth;
     }
     
+	/*
+	 * Scale an image directly
+	 * @param image
+	 * @return the scaled image
+	 * */
     protected Image scale( final Image image ) {
     	if ( image == null ) {
     		return image;
@@ -266,6 +298,12 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
     	return scale( image, scale( image.getWidth( null ) ) );
     }
     
+	/*
+	 * Scale an image directly with a custom width
+	 * @param image
+	 * @param width
+	 * @return the scaled image
+	 * */
     protected Image scale( 	final Image image,
     						final int width ) {
     	return new ImageIcon( image.getScaledInstance( width, - 1, Image.SCALE_SMOOTH ) ).getImage();
