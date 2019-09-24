@@ -51,7 +51,7 @@ import java.util.Vector;
 
 /**
    * Class TGConnectorWithCommentConnectingPoints
-   * Generic
+   * Generic (abstract class)
    * Creation: 25/05/2011
    * @version 1.0 25/05/2011
    * @author Ludovic APVRILLE

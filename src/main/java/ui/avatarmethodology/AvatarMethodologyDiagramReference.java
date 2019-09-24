@@ -136,8 +136,8 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
         actionOnAdd();
     }
 
-    /*From abstract class ui.TGComponent: declaration of abstract method*/
-	/*
+    /**
+     * From abstract class ui.TGComponent: declaration of abstract method
 	 * InternalDrawing
 	 * @param g
 	 * */
@@ -191,7 +191,7 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
         }
     }
     
-	/*
+	/**
 	 * editOndoubleClick: permits edition of the element on double click
 	 * by simply calling adddiagramReference
 	 * @param frame
@@ -258,7 +258,7 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
           return editAttributes();*/
 
     }
-    /*
+    /**
      * Rescale: rescale the element with the help of a scaleFactor
      * From abstract class TGScalableComponent
      * @param scaleFactor
@@ -275,7 +275,7 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
         super.rescale(scaleFactor);
     }
    
-	/*
+	/**
 	 * isOnOnlyMe, Coming from Abstract Method From TGCWithInternalComponent (Abstract Class) 
 	 * @param x1
 	 * @param y1
@@ -288,7 +288,7 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
         return null;
     }
 
-	/*
+	/**
 	 * addActionToPopupMenu
 	 * @param componentMenu
 	 * @param menuAL
@@ -305,7 +305,7 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
         componentMenu.add(diagramReference);
     }
 
-	/*
+	/**
 	 * eventOnPopup
 	 * @param e
 	 * @return boolean true
@@ -322,7 +322,7 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
         return true;
     }
 
-	/*
+	/**
 	 * addDiagramReference: permits to pop a new window???
 	 * @param frame
 	 * */
@@ -401,7 +401,7 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
 
     public abstract void makeValidationInfos(AvatarMethodologyDiagramName dn);
 
-    /*
+    /**
      * hasAvatarMethodologyDiagramName
      * @param s
      * @return boolean denoting if the string s is in the tgcomponent list
@@ -413,7 +413,7 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
         return false;
     }
 
-    /*
+    /**
      * fillIgnoredSelectedFromInternalComponents
      * @param ignored
      * @param selected
@@ -465,7 +465,7 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
 
     public abstract boolean isAValidPanelType(TURTLEPanel panel);
     
-    /*
+    /**
      * Permits to know if tgc is an instance of AvatarMethodologyDiagramName
      * @param tgc
      * @return boolean
@@ -474,7 +474,7 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
         return tgc instanceof AvatarMethodologyDiagramName;
     }
 
-    /*
+    /**
      * addSwallowedTGComponent
      * @param tgc
      * @param x
@@ -488,7 +488,7 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
         return true;
     }
 
-    /*
+    /**
      * removeSwallowedTGComponent
      * @param tgc
      * */
@@ -498,7 +498,7 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
 
     public abstract boolean makeCall(String diagramName, int index);
 
-    /*
+    /**
      * openDiagram
      * @param tabName
      * @return boolean
@@ -511,7 +511,7 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
         return true;
     }
 
-    /*
+    /**
      * giveInformation
      * @param info
      * 

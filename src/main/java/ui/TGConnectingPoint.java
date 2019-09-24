@@ -98,7 +98,7 @@ public class TGConnectingPoint extends AbstractCDElement /*implements CDElement*
         y = _y;
         in = _in;
         out = _out;
-
+        /*
         if (in) {
             if (out) {
                 myColor = INOUT;
@@ -111,7 +111,17 @@ public class TGConnectingPoint extends AbstractCDElement /*implements CDElement*
             } else {
                 myColor = NO;
             }
-        }
+        }*/
+        
+        // Factorization of above commented text for more readability
+        if (in && out)
+        	myColor = INOUT;
+        else if (in)
+        	myColor = IN;
+        else if (out)
+        	myColor = OUT;
+        else
+        	myColor = NO;
 
         id = TGComponent.getGeneralId();
         TGComponent.setGeneralId(id + 1);
@@ -183,7 +193,7 @@ public class TGConnectingPoint extends AbstractCDElement /*implements CDElement*
         int my = getY();
         return GraphicLib.isInRectangle(_x, _y, mx - width /2, my - height /2, width, height);
     }
-
+    
     public void setCdX(int _x) {
         x = _x;
     }
@@ -191,19 +201,20 @@ public class TGConnectingPoint extends AbstractCDElement /*implements CDElement*
     public void setCdY(int _y) {
         y = _y;
     }
-
+    
+    @Override
     public void setCd(int x, int y) {
         this.x = x;
         this.y = y;
     }
-
+    @Override
     public int getX() {
         if (container != null) {
             return scaledX() + container.getX();
         }
         return scaledX();
     }
-
+    @Override
     public int getY() {
         if (container != null) {
             return scaledY() + container.getY();
@@ -214,11 +225,12 @@ public class TGConnectingPoint extends AbstractCDElement /*implements CDElement*
     public int getId() {
         return id;
     }
-
+    @Override
     public int getWidth() {
         return width;
     }
-
+    
+    @Override
     public int getHeight() {
         return height;
     }
@@ -277,7 +289,8 @@ public class TGConnectingPoint extends AbstractCDElement /*implements CDElement*
             cpg.setFree(b);
         }
     }
-
+    
+    @Override
     public String getName() {
         return container.getName();
     }
