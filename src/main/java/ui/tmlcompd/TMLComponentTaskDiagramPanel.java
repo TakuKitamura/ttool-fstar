@@ -241,10 +241,18 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
                     return true;
                 }
             }
-        }else {
-            for (TMLCPrimitivePort dp : destinationPPorts) {
-                if (dp.getPortName().equalsIgnoreCase(newName)) {
-                    return true;
+        } else {
+            if (tmlcpp.getPortType() != 2) {
+                for (TMLCPrimitivePort dp : destinationPPorts) {
+                    if (dp.getPortName().equalsIgnoreCase(newName)) {
+                        return true;
+                    }
+                }
+            } else {
+                for (TMLCPrimitivePort dp : destinationPPorts) {
+                    if ((dp.getPortName().equalsIgnoreCase(newName)) && (dp.getFather() != tmlcpp.getFather()))  {
+                        return true;
+                    }
                 }
             }
         }
