@@ -285,6 +285,25 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
 
                 declaration += "addCPU(" + hwaInstName + ")" + SCCR;
                 //}
+
+		//ajoute DG 24.09.2019		
+  } else if (node instanceof HwCams) {
+                final HwCams hwCamsNode = (HwCams) node;
+                final String schedulerInstName = namesGen.rrSchedulerInstanceName(hwCamsNode);
+                final String schedulerName = namesGen.rrSchedulerName(hwCamsNode);
+                declaration += "RRScheduler* " + schedulerInstName + " = new RRScheduler(\"" + schedulerName + "\", 0, " + (tmlmapping.getTMLArchitecture().getMasterClockFrequency() * HwCams.DEFAULT_SLICE_TIME) + ", " + (int) Math.ceil((float) (hwCamsNode.clockRatio * Math.max(hwCamsNode.execiTime, hwCamsNode.execcTime) * (HwCams.DEFAULT_BRANCHING_PREDICTION_PENALTY * HwCams.DEFAULT_PIPELINE_SIZE + 100 - HwCams.DEFAULT_BRANCHING_PREDICTION_PENALTY)) / 100) + " ) " + SCCR;
+
+                // DB: Issue #21 Why a for loop???
+                //for (int cores=0; cores<1; cores++){
+                final String hwCamsInstName = namesGen.hwCamsInstanceName(hwCamsNode);
+                declaration += "CPU* " + hwCamsInstName + " = new SingleCoreCPU(" + hwCamsNode.getID() + ", \"" + namesGen.hwCamsName(hwCamsNode) + "\", " + schedulerInstName + ", ";
+
+                declaration += hwCamsNode.clockRatio + ", " + hwCamsNode.execiTime + ", " + hwCamsNode.execcTime + ", " + HwCams.DEFAULT_PIPELINE_SIZE + ", " + HwCams.DEFAULT_TASK_SWITCHING_TIME + ", " + HwCams.DEFAULT_BRANCHING_PREDICTION_PENALTY + ", " + HwCams.DEFAULT_GO_IDLE_TIME + ", " + HwCams.DEFAULT_MAX_CONSECUTIVE_IDLE_CYCLES + ", " + hwCamsNode.byteDataSize + ")" + SCCR;
+                
+                declaration += "addCPU(" + hwCamsInstName + ")" + SCCR;
+                //}
+		//fin ajoute DG
+		
             } else if (node instanceof HwFPGA) {
                 final HwFPGA hwFpgaNode = (HwFPGA) node;
                 final String schedulerInstName = namesGen.rrSchedulerInstanceName(hwFpgaNode);
@@ -393,7 +412,8 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
                     //for (int cores = 0; cores < noOfCores; cores++) {
                     final String nodeInstanceName;
 
-                    if (node instanceof HwCPU || node instanceof HwA || node instanceof HwFPGA) {
+		    //  if (node instanceof HwCPU || node instanceof HwA || node instanceof HwFPGA) {
+		    if (node instanceof HwCPU || node instanceof HwA || node instanceof HwFPGA || node instanceof HwCams) {	// DG 23.09.2019
                         nodeInstanceName = namesGen.executionNodeInstanceName((HwExecutionNode) node, noOfCores);
                     } else {
                         nodeInstanceName = namesGen.bridgeInstanceName((HwBridge) node);
@@ -644,7 +664,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
                 final HwFPGA hwFpga = (HwFPGA) node;
                 declaration += "1 ," + namesGen.hwFpgaInstanceName(hwFpga);
                 mappedOnCPU = false;
-
+	    }
                 // DB Issue #22: copy paste error?? This causes class cast exception
                 //              declaration+= ((HwCPU)node).nbOfCores;
                 //
@@ -653,6 +673,13 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
                 //                }
                 //
                 //                declaration+= ")," + ((HwCPU)node).nbOfCores + CR;
+
+	    else if (node instanceof HwCams) {
+                final HwCams hwCams = (HwCams) node;
+                declaration += "1 ," + namesGen.hwCamsInstanceName(hwCams);
+                mappedOnCPU = false;
+
+		
             } else {
                 throw new UnsupportedOperationException("Not implemented for " + node.getClass().getSimpleName() + "!");
             }
