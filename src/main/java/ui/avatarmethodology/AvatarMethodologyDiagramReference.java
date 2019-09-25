@@ -179,7 +179,8 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
         //g.fillRect(x+1, y+1+lineHeight, width-1, height-1-lineHeight);
         ColorManager.setColor(g, getState(), 0);
         if ((lineHeight > 23) && (width > 23)){
-            g.drawImage(IconManager.img5100, x + width - iconSize + 1, y + 3, Color.yellow, null);
+            //g.drawImage(IconManager.img5100, x + width - iconSize + 1, y + 3, Color.yellow, null);
+        	g.drawImage( scale( IconManager.img5100 ), x + width - scale(iconSize + 1 ), y + scale( 3 ), Color.yellow, null);
         }
 
         if (displayText) {
