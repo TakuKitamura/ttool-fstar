@@ -532,10 +532,11 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
             for(JCheckBox cb: customChecks) {
                 nb = cb.isSelected() ? nb + 1 : nb ;
             }
-            boolean check = nb < customChecks.size()/2;
+            boolean check = (nb * 2) < customChecks.size();
             for(JCheckBox cb: customChecks) {
                 cb.setSelected(check);
             }
+            setButtons();
         }
     }
 
