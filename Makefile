@@ -410,6 +410,7 @@ $(BASERELEASE:.tgz=.tar): $(JTTOOL_BINARY) $(TTOOL_BINARY) $(LAUNCHER_BINARY) $(
 	@mkdir -p $(TTOOL_TARGET)/simulators/c++2/src_simulator/sim
 	@mkdir -p $(TTOOL_TARGET)/simulators/c++2/src_simulator/TEPE
 	@mkdir -p $(TTOOL_TARGET)/simulators/c++2/lib
+	@mkdir -p $(TTOOL_TARGET)/simulators/c++2/javascript_libs
 	@cp  $(TTOOL_SIMULATORS)/c++2/lib/README $(TTOOL_TARGET)/simulators/c++2/lib/
 	@cp  $(TTOOL_SIMULATORS)/c++2/Makefile $(TTOOL_TARGET)/simulators/c++2
 	@cp  $(TTOOL_SIMULATORS)/c++2/Makefile.defs $(TTOOL_TARGET)/simulators/c++2
@@ -427,6 +428,7 @@ $(BASERELEASE:.tgz=.tar): $(JTTOOL_BINARY) $(TTOOL_BINARY) $(LAUNCHER_BINARY) $(
 	@cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/sim/*.h $(TTOOL_TARGET)/simulators/c++2/src_simulator/sim
 	@cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/TEPE/*.cpp $(TTOOL_TARGET)/simulators/c++2/src_simulator/TEPE
 	@cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/TEPE/*.h $(TTOOL_TARGET)/simulators/c++2/src_simulator/TEPE
+	@cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/javascript_libs/*.js $(TTOOL_TARGET)/simulators/c++2/src_simulator/javascript_libs
 # Licenses
 	@cp $(RELEASE_STD_FILES_LICENSES) $(TTOOL_TARGET)
 # Main readme

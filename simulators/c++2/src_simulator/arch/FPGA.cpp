@@ -521,7 +521,13 @@ void FPGA::buttonPieChart(std::ofstream& myfile) const{
     myfile << "               data : data" << _ID << "_" << (*i)->toShortString() <<",\n";
     myfile << "               options : options" << _ID << "_" << (*i)->toShortString() << std::endl;
     myfile << "                   });" << std::endl;
-    myfile << "   chart" << _ID << "_" << (*i)->toShortString() << SCHED_HTML_JS_HIDE;
+    // myfile << "   chart" << _ID << "_" << (*i)->toShortString() << SCHED_HTML_JS_HIDE;
+    myfile << "   if(!" << SHOW_PIE_CHART << "){\n \t"
+        << "      document.getElementById(\"pie-chartcanvas-" << _ID << "_" << (*i)->toShortString() << "\"" << ").style.display = \"none\";\n \t"
+        << "   }\n \t"
+        << "   else {\n \t"
+        << "      document.getElementById(\"pie-chartcanvas-" << _ID << "_" << (*i)->toShortString() << "\"" << ").style.display = \"block\";\n \t"
+        << "   }\n \t";
     myfile << "   chart" << _ID << "_" << (*i)->toShortString() << ".update();" << std::endl;
   
   }
