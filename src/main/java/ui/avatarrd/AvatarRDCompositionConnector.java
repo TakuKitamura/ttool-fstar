@@ -51,7 +51,7 @@ import java.util.Vector;
 
 /**
  * Class AvatarRDCompositionConnector
- * Connector to be used in Avatar RD. Connects two requirements
+ * Connector to be used in Avatar RD (Requirement Diagram). Connects two requirements
  * Creation: 20/04/2010
  * @version 1.0 20/04/2010
  * @author Ludovic APVRILLE

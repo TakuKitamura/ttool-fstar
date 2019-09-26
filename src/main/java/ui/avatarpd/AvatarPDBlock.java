@@ -42,11 +42,13 @@
 package ui.avatarpd;
 
 import myutil.GraphicLib;
+import myutil.TraceManager;
 import ui.*;
 import ui.util.IconManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.ImageObserver;
 import java.util.LinkedList;
 import java.util.Vector;
 
@@ -131,17 +133,16 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
     }
     
     public void internalDrawing(Graphics g) {
+    	//TraceManager.addDev("Hello this is AvatarPDBlock ---- ");
 		String ster = "<<" + stereotype + ">>";
 		Font f = g.getFont();
 		Font fold = f;
 		
-		//
-		
-		if ((rescaled) && (!tdp.isScaled())) {
-			
-			if (currentFontSize == -1) {
+		if ((rescaled) && (!tdp.isScaled())) 
+		{
+			if (currentFontSize == -1)
 				currentFontSize = f.getSize();
-			}
+			
 			rescaled = false;
 			// Must set the font size ..
 			// Find the biggest font not greater than max_font size
@@ -180,7 +181,7 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
 		//
 		
 		Color c = g.getColor();
-		
+		//contour rectangle
 		g.draw3DRect(x, y, width, height, true);
 		
 		//g.setColor(ColorManager.AVATAR_BLOCK);
@@ -195,40 +196,47 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
 		int w;
 		h = 0;
 		if (displayText) {
-			f = f.deriveFont((float)currentFontSize);
+			f = f.deriveFont((float)(currentFontSize));
 			Font f0 = g.getFont();
 			g.setFont(f.deriveFont(Font.BOLD));
 			
+			//this part is the top text between << >> in an avatar PD diagrams
 			w = g.getFontMetrics().stringWidth(ster);
-			h =  currentFontSize + (int)(textY1 * tdp.getZoom());
-			if ((w < (2*textX + width)) && (h < height)) {
+			h =  currentFontSize + (int)(textY1 * tdp.getZoom()); //zoom i suppose
+			if ((w < (2*textX + width)) && (h < height)) 
 				g.drawString(ster, x + (width - w)/2, y +h);
-			}
+			
+			// this part is the line just under the << >> 
+			//FIXME:this text zooms glitch, 
+			//when clicking on zoom the diagrams indeed zooms 
+			//but the text only take its zoomed form after the user click on the screen
 			g.setFont(f0);
 			w  = g.getFontMetrics().stringWidth(value);
-			h = 2* (currentFontSize + (int)(textY1 * tdp.getZoom()));
+			h = 2 * (currentFontSize + (int)(textY1 * tdp.getZoom()));
 			if ((w < (2*textX + width)) && (h < height)) {
-				g.drawString(value, x + (width - w)/2, y + h);
+				int middle = x + (width - w)/2;
+				g.drawString(value, middle, y + h);
 			}
 			limitName = y + h;
-		} else {
+		} else
 			limitName = -1;
-		}
 		
-		g.setFont(fold);
 		
-		h = h +2;
+		//g.setFont(fold);
+		
+		h = h + 4;
 		if (h < height) {
 			//g.drawLine(x, y+h, x+width, y+h);
 			g.setColor(new Color(avat.getRed(), avat.getGreen(), avat.getBlue() + (getMyDepth() * 10)));
-			g.fill3DRect(x+1, y+h, width-1, height-1-h, true);
+			g.fill3DRect(x+1, y+h-2, width-1, height-1-h, true);
 			g.setColor(c);
 		}
 		
 		// Icon
-		if ((width>30) && (height > (iconSize + 2*textX))) {
+		if ((width > 30) && (height > (iconSize + 2*textX))) {
 			iconIsDrawn = true;
-			g.drawImage(IconManager.img5100, x + width - iconSize - textX, y + textX, null);
+			g.drawImage( scale(IconManager.img5100), x + width - scale( iconSize + 3 ), y + scale( 3 ), Color.yellow, null);
+			//g.drawImage(IconManager.img5100, x + width - iconSize - textX, y + textX, null);
 		} else {
 			iconIsDrawn = false;
 		}

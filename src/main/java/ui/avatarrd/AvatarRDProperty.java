@@ -43,6 +43,7 @@ package ui.avatarrd;
 
 
 import myutil.GraphicLib;
+import myutil.TraceManager;
 import ui.*;
 import ui.util.IconManager;
 
@@ -64,7 +65,7 @@ public class AvatarRDProperty extends TGCScalableWithInternalComponent implement
     private double dlineHeight = 0.0;
     //protected int startFontSize = 10;
     protected Graphics graphics;
-    //protected int iconSize = 30;
+    
 
     private Font myFont, myFontB;
     private int maxFontSize = 30;
@@ -136,32 +137,28 @@ public class AvatarRDProperty extends TGCScalableWithInternalComponent implement
 
         actionOnAdd();
     }
-
-
+    
     public void internalDrawing(Graphics g) {
         Font f = g.getFont();
-        Font fold = f;
-        int w, c;
-        int size;
-
+        
+        //Font fold = f; FIXME: unused 
+        //int w, c; FIXME: unused 
         if (!tdp.isScaled()) {
             graphics = g;
         }
 
         if (((rescaled) && (!tdp.isScaled())) || myFont == null) {
             currentFontSize = tdp.getFontSize();
-            //
             myFont = f.deriveFont((float)currentFontSize);
             myFontB = myFont.deriveFont(Font.BOLD);
 
-            if (rescaled) {
+            if (rescaled)
                 rescaled = false;
-            }
         }
 
         displayText = currentFontSize >= minFontSize;
 
-        int h  = g.getFontMetrics().getHeight();
+        //int h  = g.getFontMetrics().getHeight(); FIXME: unused ?
 
         g.drawRect(x, y, width, height);
 
@@ -175,13 +172,15 @@ public class AvatarRDProperty extends TGCScalableWithInternalComponent implement
             g.drawImage(IconManager.img5100, x + width - iconSize + 1, y + 3, Color.yellow, null);
         }
 
+        int size;
         if (displayText) {
-            size = currentFontSize - 2;
+            //size = currentFontSize - 2;
+        	size = 50;
             g.setFont(myFont.deriveFont((float)(myFont.getSize() - 2)));
             drawLimitedString(g, PROPERTY, x, y + size, width, 1);
             size += currentFontSize;
             g.setFont(myFontB);
-            w = g.getFontMetrics().stringWidth(value);
+            //w = g.getFontMetrics().stringWidth(value); FIXME: unused 
             drawLimitedString(g, value, x, y + size, width, 1);
 
         }
@@ -199,7 +198,7 @@ public class AvatarRDProperty extends TGCScalableWithInternalComponent implement
           }*/
         g.setFont(f);
     }
-
+    @Override
     public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
         oldValue = value;
 

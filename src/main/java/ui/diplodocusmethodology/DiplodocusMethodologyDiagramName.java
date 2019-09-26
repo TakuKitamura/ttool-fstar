@@ -185,7 +185,7 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
         saveCurrentMaxX = currentMaxX;
 
         if (wf < w+(2*X_MARGIN)) {
-            makeScale(g, w+(2*X_MARGIN));
+            makeScale(g, w + (2 * X_MARGIN));
             return;
         }
 
