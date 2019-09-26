@@ -1087,16 +1087,18 @@ public class JDialogAvatarExecutableCodeGeneration extends javax.swing.JFrame im
 
     public void showSimulationTrace() {
         JFrameSimulationSDPanel jfssdp = new JFrameSimulationSDPanel(f, mgui, "Simulation trace of " + simulationTraceFile.getText());
+        jfssdp.setLimitEntity(false);
         jfssdp.setIconImage(IconManager.img8);
         // jfssdp.setSize(600, 600);
         GraphicLib.centerOnParent(jfssdp, 800, 600);
         if (selectedViewTrace == 0) {
+            //TraceManager.addDev("Selecting avatarcposix file reference");
             jfssdp.setFileReference(simulationTraceFile.getText());
         } else {
             jfssdp.setFileReference(simulationsoclibTraceFile.getText());
         }
         jfssdp.setVisible(true);
-        TraceManager.addDev("Ok JFrame");
+        //TraceManager.addDev("Ok JFrame");
     }
 
 

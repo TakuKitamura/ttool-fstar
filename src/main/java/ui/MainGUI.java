@@ -8582,6 +8582,13 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     }
 
     public TDiagramPanel selectTab(Point p) {
+        if (p.x < 0) {
+            return null;
+        }
+        if (p.y < 0){
+            return null;
+        }
+
         if (mainTabbedPane.getTabCount() > 0 ) {
             mainTabbedPane.setSelectedIndex(p.x);
             TURTLEPanel tp = tabs.elementAt(p.x);
