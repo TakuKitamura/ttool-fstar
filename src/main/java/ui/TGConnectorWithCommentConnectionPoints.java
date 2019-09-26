@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui;
 
 import myutil.TraceManager;
@@ -51,14 +48,17 @@ import java.util.Vector;
 
 /**
    * Class TGConnectorWithCommentConnectingPoints
-   * Generic (abstract class)
+   * Generic (abstract class) Connector With Comment
    * Creation: 25/05/2011
    * @version 1.0 25/05/2011
    * @author Ludovic APVRILLE
  */
 public abstract class TGConnectorWithCommentConnectionPoints extends TGConnector {
     protected TGConnectingPointGroup tg;
-
+    /**
+     * Fills the points array witht the current points, 
+     * P1 = initial point, P2 = destination point 
+     * */
     public TGConnectorWithCommentConnectionPoints(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
         super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
 
@@ -69,13 +69,13 @@ public abstract class TGConnectorWithCommentConnectionPoints extends TGConnector
         getTGCPointOfConnectors(points);
         //Connecting points have cd relatives to 2 component
         connectingPoint = new TGConnectingPointTwoFathers[nbConnectingPoint];
-        if (nbConnectingPoint == 1) {
+        if (nbConnectingPoint == 1)
             connectingPoint[0] = new TGConnectingPointCommentConnector(p1, p2, 0, 0, true, true);
-        } else {
+        else 
+        {
             connectingPoint[0] = new TGConnectingPointCommentConnector(p1, points[0], 0, 0, true, true);
-            for(int i=1; i<nbInternalTGComponent; i++) {
+            for (int i = 1; i < nbInternalTGComponent; i++)
                 connectingPoint[i] = new TGConnectingPointCommentConnector(points[i-1], points[i], 0, 0, true, true);
-            }
             connectingPoint[nbInternalTGComponent] = new TGConnectingPointCommentConnector(points[nbInternalTGComponent-1], p2, 0, 0, true, true);
         }
 
@@ -84,21 +84,32 @@ public abstract class TGConnectorWithCommentConnectionPoints extends TGConnector
 
         //myImageIcon = IconManager.imgic102;
     }
-
+    /**
+     * setP1: initial point 
+     * @param p TGConnectingPoint
+     * */
+    @Override
     public void setP1(TGConnectingPoint p) {
         p1 = p;
         if (nbConnectingPoint > 0) {
             connectingPoint[0].setFather(p);
         }
     }
-
+    /**
+     * setP2: destination point
+     * @param TGConnectingPoint p
+     */
+    @Override
     public void setP2(TGConnectingPoint p) {
         p2 = p;
         if (nbConnectingPoint > 0) {
             ((TGConnectingPointCommentConnector)(connectingPoint[getNbInternalPoints()])).setFather2(p);
         }
     }
-
+    /**
+     *  @param tgc TGCPointOfConnector
+     */
+    @Override
     public void pointHasBeenRemoved(TGCPointOfConnector tgc) {
         TraceManager.addDev("Internal Points:" + nbInternalTGComponent);
 
@@ -111,7 +122,7 @@ public abstract class TGConnectorWithCommentConnectionPoints extends TGConnector
         // I.e. we remove the point which father1 is tgc
 
         // Looking for the connecting point that has been removed
-        for(i=0; i<nbConnectingPoint; i++) {
+        for (i = 0; i < nbConnectingPoint; i++) {
             if (connectingPoint[i].getFather() == tgc) {
                 index = i;
                 found = true;
@@ -152,7 +163,7 @@ public abstract class TGConnectorWithCommentConnectionPoints extends TGConnector
         nbConnectingPoint --;
 
     }
-
+    @Override
     public void pointHasBeenAdded(TGCPointOfConnector tgc, int index, int indexCon) {
         int ind = index + indexCon;
         CDElement tg1, tg2;

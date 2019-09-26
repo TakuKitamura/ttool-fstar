@@ -265,15 +265,14 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
     }
     
 	/*
-	 * Check the Width
+	 * Issue #31: Check the Width, increase the width in case the actual width is not enough to display the text.
+	 * Used when a component is created
 	 * @param graphics
 	 * @param text
 	 * @return textWidth
 	 * */
     protected int checkWidth( 	final Graphics graphics,
     							final String text ) {
-        // Issue #31: This is just to increase the width in case the actual width is not enough to display the text. 
-        // It is typically used when a component is created
     	final int textWidth = graphics.getFontMetrics().stringWidth( text );
         final int textWidthBorder = Math.max( minWidth, textWidth + 2 * textX );
         
