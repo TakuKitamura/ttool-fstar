@@ -631,6 +631,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
         int[] aStatistics = new int[8];
         Set<Integer> mappedChannels = new HashSet<Integer>();
 
+	//DG 24.09. no mapping for tasks mapped on HwCAMS?
         for (final TMLTask task : tmlmapping.getMappedTasks()) {
             node = iterator.next();
             boolean mappedOnCPU = true;
@@ -677,7 +678,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
 	    else if (node instanceof HwCams) {
                 final HwCams hwCams = (HwCams) node;
                 declaration += "1 ," + namesGen.hwCamsInstanceName(hwCams);
-                mappedOnCPU = false;
+                mappedOnCPU = true;//DG
 
 		
             } else {
