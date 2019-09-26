@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<TURTLEGMODELING version="1.0beta" ANIMATE_INTERACTIVE_SIMULATION="true" ACTIVATE_PENALTIES="false" UPDATE_INFORMATION_DIPLO_SIM="false" ANIMATE_WITH_INFO_DIPLO_SIM="true" OPEN_DIAG_DIPLO_SIM="false" LAST_SELECTED_MAIN_TAB="6" LAST_SELECTED_SUB_TAB="5">
+<TURTLEGMODELING version="1.0beta" ANIMATE_INTERACTIVE_SIMULATION="true" ACTIVATE_PENALTIES="false" UPDATE_INFORMATION_DIPLO_SIM="false" ANIMATE_WITH_INFO_DIPLO_SIM="true" OPEN_DIAG_DIPLO_SIM="false" LAST_SELECTED_MAIN_TAB="4" LAST_SELECTED_SUB_TAB="1">
 
 <Modeling type="Avatar Requirement" nameTab="Requirements" >
 <AvatarRDPanel name="RequirementsSystemView" minX="10" maxX="2500" minY="10" maxY="1500" zoom="1.0" >
@@ -9692,7 +9692,7 @@
 </CONNECTOR>
 <COMPONENT type="303" id="3555" >
 <cdparam x="443" y="462" />
-<sizeparam width="460" height="240" minWidth="80" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="427" height="240" minWidth="80" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="UPPAAL Pragma" value="A[] MainController.currentPressure &lt; 20
@@ -10081,7 +10081,7 @@ PressureSensor.SendingPressure --&gt; MainController.HighPressure
 </SUBCOMPONENT>
 <SUBCOMPONENT type="-1" id="3703" >
 <father id="3709" num="4" />
-<cdparam x="637" y="259" />
+<cdparam x="665" y="244" />
 <sizeparam width="99" height="15" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
@@ -10152,7 +10152,7 @@ PressureSensor.SendingPressure --&gt; MainController.HighPressure
 </SUBCOMPONENT>
 <SUBCOMPONENT type="-1" id="3718" >
 <father id="3724" num="4" />
-<cdparam x="195" y="289" />
+<cdparam x="135" y="241" />
 <sizeparam width="95" height="15" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
@@ -10366,8 +10366,8 @@ PressureSensor.SendingPressure --&gt; MainController.HighPressure
 </COMPONENT>
 
 <COMPONENT type="5104" id="3838" >
-<cdparam x="538" y="206" />
-<sizeparam width="80" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="540" y="206" />
+<sizeparam width="76" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -10385,8 +10385,8 @@ PressureSensor.SendingPressure --&gt; MainController.HighPressure
 </COMPONENT>
 
 <COMPONENT type="5104" id="3849" >
-<cdparam x="323" y="208" />
-<sizeparam width="80" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="326" y="208" />
+<sizeparam width="75" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -10824,8 +10824,8 @@ PressureSensor.SendingPressure --&gt; MainController.HighPressure
 </COMPONENT>
 
 <COMPONENT type="5108" id="4016" >
-<cdparam x="527" y="449" />
-<sizeparam width="195" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="530" y="449" />
+<sizeparam width="188" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -10838,8 +10838,8 @@ PressureSensor.SendingPressure --&gt; MainController.HighPressure
 </COMPONENT>
 
 <COMPONENT type="5103" id="4027" >
-<cdparam x="464" y="578" />
-<sizeparam width="167" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="471" y="578" />
+<sizeparam width="152" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -11174,7 +11174,7 @@ PressureSensor.SendingPressure --&gt; MainController.HighPressure
 </SUBCOMPONENT>
 <SUBCOMPONENT type="-1" id="4156" >
 <father id="4159" num="1" />
-<cdparam x="315" y="348" />
+<cdparam x="326" y="341" />
 <sizeparam width="194" height="15" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
@@ -11294,7 +11294,7 @@ PressureSensor.SendingPressure --&gt; MainController.HighPressure
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="4185" >
 <father id="4187" num="0" />
-<cdparam x="616" y="342" />
+<cdparam x="614" y="329" />
 <sizeparam width="44" height="15" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
@@ -11417,8 +11417,8 @@ PressureSensor.SendingPressure --&gt; MainController.HighPressure
 </COMPONENT>
 
 <COMPONENT type="5103" id="4280" >
-<cdparam x="662" y="389" />
-<sizeparam width="103" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="667" y="389" />
+<sizeparam width="92" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -11459,8 +11459,8 @@ PressureSensor.SendingPressure --&gt; MainController.HighPressure
 </COMPONENT>
 
 <COMPONENT type="5104" id="4307" >
-<cdparam x="451" y="275" />
-<sizeparam width="221" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="461" y="275" />
+<sizeparam width="200" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -11982,8 +11982,8 @@ PressureSensor.SendingPressure --&gt; MainController.HighPressure
 </SUBCOMPONENT>
 
 <COMPONENT type="5103" id="4461" >
-<cdparam x="435" y="257" />
-<sizeparam width="72" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="438" y="257" />
+<sizeparam width="67" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -12001,8 +12001,8 @@ PressureSensor.SendingPressure --&gt; MainController.HighPressure
 </COMPONENT>
 
 <COMPONENT type="5103" id="4472" >
-<cdparam x="538" y="477" />
-<sizeparam width="72" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="540" y="477" />
+<sizeparam width="68" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -12020,8 +12020,8 @@ PressureSensor.SendingPressure --&gt; MainController.HighPressure
 </COMPONENT>
 
 <COMPONENT type="5109" id="4483" >
-<cdparam x="208" y="506" />
-<sizeparam width="236" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="215" y="506" />
+<sizeparam width="222" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -12039,8 +12039,8 @@ PressureSensor.SendingPressure --&gt; MainController.HighPressure
 </COMPONENT>
 
 <COMPONENT type="5110" id="4494" >
-<cdparam x="265" y="449" />
-<sizeparam width="122" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="269" y="449" />
+<sizeparam width="114" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -12058,8 +12058,8 @@ PressureSensor.SendingPressure --&gt; MainController.HighPressure
 </COMPONENT>
 
 <COMPONENT type="5104" id="4505" >
-<cdparam x="271" y="397" />
-<sizeparam width="111" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="276" y="397" />
+<sizeparam width="100" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -12077,8 +12077,8 @@ PressureSensor.SendingPressure --&gt; MainController.HighPressure
 </COMPONENT>
 
 <COMPONENT type="5111" id="4516" >
-<cdparam x="506" y="398" />
-<sizeparam width="137" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="508" y="398" />
+<sizeparam width="132" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -12147,8 +12147,8 @@ PressureSensor.SendingPressure --&gt; MainController.HighPressure
 </COMPONENT>
 
 <COMPONENT type="5109" id="4568" >
-<cdparam x="353" y="215" />
-<sizeparam width="236" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="360" y="215" />
+<sizeparam width="222" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -12166,8 +12166,8 @@ PressureSensor.SendingPressure --&gt; MainController.HighPressure
 </COMPONENT>
 
 <COMPONENT type="5104" id="4579" >
-<cdparam x="416" y="182" />
-<sizeparam width="111" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="421" y="182" />
+<sizeparam width="100" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -14904,7 +14904,7 @@ PressureSensor.SendingPressure --&gt; MainController.HighPressure
 <MainCode value=""/>
 <MainCode value="}"/>
 <Optimized value="true" />
-<Validated value="AlarmActuator;PressureSensor;PressureController;AlarmManager;MainController;" />
+<Validated value="" />
 <Ignored value="" />
 
 <CONNECTOR type="5002" id="5607" >
@@ -17274,8 +17274,8 @@ PressureSensor.SendingPressure --&gt; MainController.HighPressure
 </SUBCOMPONENT>
 
 <COMPONENT type="5103" id="6551" >
-<cdparam x="435" y="257" />
-<sizeparam width="72" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="438" y="257" />
+<sizeparam width="67" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -17293,8 +17293,8 @@ PressureSensor.SendingPressure --&gt; MainController.HighPressure
 </COMPONENT>
 
 <COMPONENT type="5103" id="6562" >
-<cdparam x="538" y="477" />
-<sizeparam width="72" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="540" y="477" />
+<sizeparam width="68" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -17312,8 +17312,8 @@ PressureSensor.SendingPressure --&gt; MainController.HighPressure
 </COMPONENT>
 
 <COMPONENT type="5109" id="6573" >
-<cdparam x="208" y="506" />
-<sizeparam width="236" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="215" y="506" />
+<sizeparam width="222" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -17331,8 +17331,8 @@ PressureSensor.SendingPressure --&gt; MainController.HighPressure
 </COMPONENT>
 
 <COMPONENT type="5110" id="6584" >
-<cdparam x="265" y="449" />
-<sizeparam width="122" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="269" y="449" />
+<sizeparam width="114" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -17350,8 +17350,8 @@ PressureSensor.SendingPressure --&gt; MainController.HighPressure
 </COMPONENT>
 
 <COMPONENT type="5104" id="6595" >
-<cdparam x="271" y="397" />
-<sizeparam width="111" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="276" y="397" />
+<sizeparam width="100" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -17369,8 +17369,8 @@ PressureSensor.SendingPressure --&gt; MainController.HighPressure
 </COMPONENT>
 
 <COMPONENT type="5111" id="6606" >
-<cdparam x="506" y="398" />
-<sizeparam width="137" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="508" y="398" />
+<sizeparam width="132" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -17439,8 +17439,8 @@ PressureSensor.SendingPressure --&gt; MainController.HighPressure
 </COMPONENT>
 
 <COMPONENT type="5109" id="6658" >
-<cdparam x="353" y="215" />
-<sizeparam width="236" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="360" y="215" />
+<sizeparam width="222" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -17458,8 +17458,8 @@ PressureSensor.SendingPressure --&gt; MainController.HighPressure
 </COMPONENT>
 
 <COMPONENT type="5104" id="6669" >
-<cdparam x="416" y="182" />
-<sizeparam width="111" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="421" y="182" />
+<sizeparam width="100" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
