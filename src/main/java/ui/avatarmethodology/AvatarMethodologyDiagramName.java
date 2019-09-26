@@ -112,21 +112,17 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
     }
     
     public void internalDrawing(Graphics g) {
-    	boolean onMe = false;
-    	
-    	if (tdp.componentPointed() == this)
-    		onMe = true;
-   
-    	if ((y+Y_MARGIN) > (getFather().getY()+getFather().getHeight()))
+    	if ((y + Y_MARGIN) > (getFather().getY() + getFather().getHeight()))
     		return;
+    	
+    	boolean onMe = tdp.componentPointed() == this ? true : false;
     	
     	String val = value;
         int w = g.getFontMetrics().stringWidth(value);
         int wf = getFather().getWidth();
 
-        if (wf < w+(2*X_MARGIN)) {
+        if (wf < w + (2 * X_MARGIN))
         	val = ".";
-        }
 
         Font f = g.getFont();
         
@@ -134,15 +130,13 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
         	g.setFont(f.deriveFont(Font.BOLD));
         
         widthAppli = g.getFontMetrics().stringWidth(val);
-        int curWidth = myWidth;
-        curWidth = Math.max(widthAppli, curWidth);
+        int curWidth = Math.max(width, myWidth); //int curWidth = myWidth; curWidth = Math.max(widthAppli, curWidth);
         g.drawString(val, x, y);
         g.setFont(f);
         
         if (validations == null)
         	if (getFather() instanceof AvatarMethodologyDiagramReference)
         		((AvatarMethodologyDiagramReference)(getFather())).makeValidationInfos(this);
-
         
         if ((validations != null) && (valMinX == null)) {
         	valMinX = new int[validations.length];
@@ -152,8 +146,8 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
         int currentMaxX = wf + x - 2 * (X_MARGIN);
         int saveCurrentMaxX = currentMaxX;
         
-        if (wf < w+(2*X_MARGIN)) {
-        	makeScale(g, w+(2*X_MARGIN));
+        if (wf < w + (2 * X_MARGIN)) {
+        	makeScale(g, w + (2 * X_MARGIN));
         	return;
         }
 
@@ -161,7 +155,7 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
         int w1 = 0;
         g.setFont(f.deriveFont(Font.ITALIC));
         
-        if ((validations != null) & (validations.length >0)) {
+        if ((validations != null) & (validations.length > 0)) {
 			for (int i = validations.length - 1; i >= 0; i--) {
 				w1 = g.getFontMetrics().stringWidth(SHORT_ACTION_NAMES[validations[i]]);
 
@@ -196,6 +190,7 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
     
     private void makeScale(Graphics g, int _size)
     {
+    	TraceManager.addDev("----- Make SCale ----");
     	if (!tdp.isScaled()) 
     	{
             myWidth = _size;
@@ -233,7 +228,7 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
         }
         return null;
     }
-    
+    @Override
     public boolean editOndoubleClick(JFrame frame) 
     {
         if (indexOnMe == -1) {
@@ -252,12 +247,12 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
         } 
         return true;
     }
-    
+    @Override
     public  int getType() 
     {
         return TGComponentManager.AVATARMETHODOLOGY_DIAGRAM_NAME;
     }
-    
+    @Override
    	public int getDefaultConnector() 
    	{
       return TGComponentManager.AVATARMETHODOLOGY_CONNECTOR;
@@ -273,6 +268,7 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
     	validations[_index] = _val;
     }
     
+    @Override
     public void rescale(double scaleFactor)
     {
 		if ((valMinX != null) && (valMinX.length > 0)) 
@@ -283,7 +279,6 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
 				valMaxX[i] = (int)(valMaxX[i] / oldScaleFactor * scaleFactor);
 			}
 		}
-		
 		super.rescale(scaleFactor);
 	}
 }
