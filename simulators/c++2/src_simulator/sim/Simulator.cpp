@@ -489,8 +489,12 @@ std::cout<<"schedule2HTML--------------------------------------*****************
     // myfile << SCHED_HTML_JS_DIV_SUB_BEGIN;
     // myfile << SCHED_HTML_JS_TYPE;
     // myfile << SCHED_HTML_JS_CONTENT1;
-    myfile << SCHED_HTML_JS_LINK1 << SCHED_HTML_END_JS << std::endl;
-    myfile << SCHED_HTML_JS_LINK2 << SCHED_HTML_END_JS << std::endl;
+    // find current directory
+    std::string currDirectory = _simComp->getModelName();
+    std::size_t pos = currDirectory.find(".ttool");
+    currDirectory = currDirectory.substr(0, pos+6);
+    myfile << "<script src=\"" << currDirectory << "/c++_code/jquery.min.js\">" << SCHED_HTML_END_JS << std::endl;
+    myfile << "<script src=\"" << currDirectory << "/c++_code/Chart.min.js\">" << SCHED_HTML_END_JS << std::endl;
     myfile << SCHED_HTML_BEGIN_JS << std::endl;
     
     myfile << SCHED_HTML_JS_WINDOW;
@@ -508,8 +512,9 @@ std::cout<<"schedule2HTML--------------------------------------*****************
        (*j)->drawPieChart(myfile);
     }
        
-    
+    myfile << "var " << SHOW_PIE_CHART << " = false;" << std::endl;
     myfile << "$(\"#button\").click(function() {\n";
+    myfile << "    " << SHOW_PIE_CHART << "=!" << SHOW_PIE_CHART << std::endl;
     for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
       (*i)->buttonPieChart(myfile);
     }

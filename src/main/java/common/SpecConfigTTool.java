@@ -399,6 +399,8 @@ public class SpecConfigTTool {
             File lic = new File(ConfigurationTTool.SystemCCodeDirectory + "/LICENSE");
             File liceng = new File(ConfigurationTTool.SystemCCodeDirectory + "/LICENSE_CECILL_ENG");
             File licfr = new File(ConfigurationTTool.SystemCCodeDirectory + "/LICENSE_CECILL_FR");
+            File chartjs = new File(ConfigurationTTool.SystemCCodeDirectory + "/javascript_libs/Chart.min.js");
+            File jquerrymin = new File(ConfigurationTTool.SystemCCodeDirectory + "/javascript_libs/jquery.min.js");
 
             FileUtils.copyFileToDirectory(make, f, false);
             FileUtils.copyFileToDirectory(defs, f, false);
@@ -406,6 +408,8 @@ public class SpecConfigTTool {
             FileUtils.copyFileToDirectory(lic, f, false);
             FileUtils.copyFileToDirectory(liceng, f, false);
             FileUtils.copyFileToDirectory(licfr, f, false);
+            FileUtils.copyFileToDirectory(chartjs, f, false);
+            FileUtils.copyFileToDirectory(jquerrymin, f, false);
 
 
         } catch (Exception e) {
