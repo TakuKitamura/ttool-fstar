@@ -61,22 +61,22 @@ import java.util.Vector;
 * @author Ludovic APVRILLE
  */
 public class AvatarPDBlock extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent {
-    private int textY1 = 3;
+    //private int textY1 = 3;
     private String stereotype = "block";
 	
 	private int maxFontSize = 12;
 	private int minFontSize = 4;
-	private int currentFontSize = -1;
+	//private int currentFontSize = -1;
 	private boolean displayText = true;
-	private int textX = 7;
+	//private int textX = 7;
 	
-	private int limitName = -1;
-	private int limitAttr = -1;
-	private int limitMethod = -1;
+//	private int limitName = -1;
+//	private int limitAttr = -1;
+//	private int limitMethod = -1;
 	
 	// Icon
 	private int iconSize = 15;
-	private boolean iconIsDrawn = false;
+//	private boolean iconIsDrawn = false;
 	
 	
 	public String oldValue;
@@ -84,10 +84,16 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
     public AvatarPDBlock(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-        width = 250;
-        height = 200;
+        // Issue #31
+        textY = 3;
+        textX = 7;
         minWidth = 5;
         minHeight = 2;
+        initScaling(250, 200);
+
+        //        width = 250;
+        //        height = 200;
+
         
         nbConnectingPoint = 16;
         connectingPoint = new TGConnectingPoint[16];
@@ -124,51 +130,53 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
 		setValue(name);
 		oldValue = value;
 		
-		currentFontSize = maxFontSize;
+		//currentFontSize = maxFontSize;
 		oldScaleFactor = tdp.getZoom();
         
         myImageIcon = IconManager.imgic700;
 		
 		actionOnAdd();
     }
-    
+    @Override
     public void internalDrawing(Graphics g) {
     	//TraceManager.addDev("Hello this is AvatarPDBlock ---- ");
 		String ster = "<<" + stereotype + ">>";
 		Font f = g.getFont();
 		Font fold = f;
-		
-		if ((rescaled) && (!tdp.isScaled())) 
+		int currentFontSize = f.getSize();
+		if (/*(rescaled) &&*/ (!tdp.isScaled())) 
 		{
-			if (currentFontSize == -1)
-				currentFontSize = f.getSize();
+			//if (currentFontSize == -1)
+			//	currentFontSize = f.getSize();
 			
-			rescaled = false;
+			//rescaled = false;
 			// Must set the font size ..
 			// Find the biggest font not greater than max_font size
 			// By Increment of 1
 			// Or decrement of 1
 			// If font is less than 4, no text is displayed
 			
-			int maxCurrentFontSize = Math.max(0, Math.min(height, maxFontSize));
+			int maxTextSize = Math.max(0, Math.min(height, maxFontSize));
 			int w0, w1, w2;
-			f = f.deriveFont((float)maxCurrentFontSize);
-			g.setFont(f);
-			//
-			while(maxCurrentFontSize > (minFontSize-1)) {
+			//f = f.deriveFont((float)maxCurrentFontSize);
+			//g.setFont(f);
+			
+			while(maxTextSize > (minFontSize-1)) {
 				w0 = g.getFontMetrics().stringWidth(value);
 				w1 = g.getFontMetrics().stringWidth(ster);
 				w2 = Math.min(w0, w1);
 				if (w2 < (width - (2*textX))) {
 					break;
 				}
-				maxCurrentFontSize --;
-				f = f.deriveFont((float)maxCurrentFontSize);
+				maxTextSize--;
+				f = f.deriveFont((float)maxTextSize);
 				g.setFont(f);
 			}
-			currentFontSize = maxCurrentFontSize;
+			currentFontSize = maxTextSize;
+			f = f.deriveFont((float)maxTextSize);
+			g.setFont(f);
 			
-			if(currentFontSize <minFontSize) {
+			if (currentFontSize <minFontSize) {
 				displayText = false;
 			} else {
 				displayText = true;
@@ -186,15 +194,17 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
 		
 		//g.setColor(ColorManager.AVATAR_BLOCK);
 		Color avat = ColorManager.AVATAR_BLOCK;
-		int h;
-		h = 2* (currentFontSize + (int)(textY1 * tdp.getZoom())) + 2;
+		int compartmentHeight = 2 *( currentFontSize + textY )+ scale(2);
+		//compartmentHeight = 2* (currentFontSize + (int)(textY * tdp.getZoom())) + 2;
+		
 		g.setColor(new Color(avat.getRed(), avat.getGreen(), avat.getBlue() + (getMyDepth() * 10)));
-		g.fill3DRect(x+1, y+1, width-1, Math.min(h, height)-1, true);
+		g.fill3DRect(x+1, y+1,
+				width-1, Math.min(compartmentHeight, height)-1, true);
 		g.setColor(c);
         
         // Strings
 		int w;
-		h = 0;
+		compartmentHeight = displayText ? 0: compartmentHeight;
 		if (displayText) {
 			f = f.deriveFont((float)(currentFontSize));
 			Font f0 = g.getFont();
@@ -202,9 +212,11 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
 			
 			//this part is the top text between << >> in an avatar PD diagrams
 			w = g.getFontMetrics().stringWidth(ster);
-			h =  currentFontSize + (int)(textY1 * tdp.getZoom()); //zoom i suppose
-			if ((w < (2*textX + width)) && (h < height)) 
-				g.drawString(ster, x + (width - w)/2, y +h);
+			compartmentHeight =  currentFontSize + textY;
+			//compartmentHeight =  currentFontSize + (int)(textY * tdp.getZoom()); //zoom i suppose
+			
+			if ((w < (2*textX + width)) && (compartmentHeight < height)) 
+				g.drawString(ster, x + (width - w)/2, y +compartmentHeight);
 			
 			// this part is the line just under the << >> 
 			//FIXME:this text zooms glitch, 
@@ -212,33 +224,34 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
 			//but the text only take its zoomed form after the user click on the screen
 			g.setFont(f0);
 			w  = g.getFontMetrics().stringWidth(value);
-			h = 2 * (currentFontSize + (int)(textY1 * tdp.getZoom()));
-			if ((w < (2*textX + width)) && (h < height)) {
+			// already done upper
+			//compartmentHeight = 2 * (currentFontSize + (int)(textY * tdp.getZoom()));
+			if ((w < (2*textX + width)) && (compartmentHeight < height)) {
 				int middle = x + (width - w)/2;
-				g.drawString(value, middle, y + h);
+				g.drawString(value, middle, y + compartmentHeight);
 			}
-			limitName = y + h;
+			//limitName = y + compartmentHeight;
 		} else
-			limitName = -1;
+			//limitName = -1;
 		
 		
 		//g.setFont(fold);
 		
-		h = h + 4;
-		if (h < height) {
+		compartmentHeight = compartmentHeight + scale(4);
+		if (compartmentHeight < height) {
 			//g.drawLine(x, y+h, x+width, y+h);
 			g.setColor(new Color(avat.getRed(), avat.getGreen(), avat.getBlue() + (getMyDepth() * 10)));
-			g.fill3DRect(x+1, y+h-2, width-1, height-1-h, true);
+			g.fill3DRect(x+1, y+compartmentHeight-2, width-1, height-1-compartmentHeight, true);
 			g.setColor(c);
 		}
 		
 		// Icon
-		if ((width > 30) && (height > (iconSize + 2*textX))) {
-			iconIsDrawn = true;
+		if ((width > scale(30)) && (height > (scale(iconSize) + 2*textX))) {
+			//iconIsDrawn = true;
 			g.drawImage( scale(IconManager.img5100), x + width - scale( iconSize + 3 ), y + scale( 3 ), Color.yellow, null);
 			//g.drawImage(IconManager.img5100, x + width - iconSize - textX, y + textX, null);
 		} else {
-			iconIsDrawn = false;
+			//iconIsDrawn = false;
 		}
 		
 		/*int cpt = h;
