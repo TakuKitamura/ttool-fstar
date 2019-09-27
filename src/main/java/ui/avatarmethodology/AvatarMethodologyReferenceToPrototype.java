@@ -69,22 +69,22 @@ public class AvatarMethodologyReferenceToPrototype extends AvatarMethodologyDiag
         addTGConnectingPointsCommentTop();
 
     }
-
+    @Override
     public  int getType() {
         return TGComponentManager.AVATARMETHODOLOGY_REF_PROTOTYPE;
     }
-
+    @Override
     public boolean isAValidPanelType(TURTLEPanel panel) {
         return panel instanceof AvatarDesignPanel;
 
     }
-
+    @Override
     public void makeValidationInfos(AvatarMethodologyDiagramName dn) {
         dn.setValidationsNumber(1);
 
         dn.setValidationsInfo(0, AvatarMethodologyDiagramName.PROTO);
     }
-
+    @Override
     public boolean makeCall(String diagramName, int index) {
         switch(index) {
         case 0:

@@ -72,16 +72,16 @@ public class DiplodocusMethodologyDiagramReferenceToApplication extends Diplodoc
 
     }
 
-
+    @Override
     public  int getType() {
         return TGComponentManager.DIPLODODUSMETHODOLOGY_REF_APPLICATION;
     }
-
+    @Override
     public boolean isAValidPanelType(TURTLEPanel panel) {
         return (panel instanceof TMLDesignPanel) || (panel instanceof TMLComponentDesignPanel);
 
     }
-
+    @Override
     public void makeValidationInfos(DiplodocusMethodologyDiagramName dn) {
         dn.setValidationsNumber(5);
         dn.setValidationsInfo(0, DiplodocusMethodologyDiagramName.SIM_ANIM_APP_DIPLO);

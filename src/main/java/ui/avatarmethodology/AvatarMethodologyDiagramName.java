@@ -110,7 +110,7 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
 
         myImageIcon = IconManager.imgic302;
     }
-    
+    @Override
     public void internalDrawing(Graphics g) {
     	if ((y + Y_MARGIN) > (getFather().getY() + getFather().getHeight()))
     		return;

@@ -117,14 +117,11 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
 
         name = "value ";
 
-
-
         initScaling(10, 10);
-
-
+        
         myImageIcon = IconManager.imgic302;
     }
-
+    @Override
     public void internalDrawing(Graphics g) {
         boolean onMe = false;
 
@@ -132,13 +129,13 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
             onMe = true;
         }
 
-	if (getFather() == null) {
-	    return;
-	}
-	
-	if ((y+Y_MARGIN) > (getFather().getY()+getFather().getHeight())) {
-	    return;
-	}
+		if (getFather() == null) {
+		    return;
+		}
+		
+		if ((y+Y_MARGIN) > (getFather().getY()+getFather().getHeight())) {
+		    return;
+		}
 	
 
         //TraceManager.addDev("Internal drawing ...");
