@@ -64,21 +64,21 @@ import java.util.Vector;
  */
 public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithInternalComponent implements SwallowTGComponent  {
     public String oldValue; 
-    protected int textX = 5; //FIXME already extended from TGScalableComponent, should be textX = 5
-    protected int textY = 22; //FIXME already extended from TGScalableComponent, should be textY =  22
-    protected int lineHeight = 30;
-    protected double dlineHeight = 0.0;
-    //protected int reqType = 0;
+    //protected int textX = 5; //FIXME already extended from TGScalableComponent, should be textX = 5
+//    protected int textY = 22; //FIXME already extended from TGScalableComponent, should be textY =  22
+//    protected int lineHeight = 30;
+//    protected double dlineHeight = 0.0;
+//    protected int reqType = 0;
     // 0: normal, 1: formal, 2: security
     //protected int startFontSize = 10;
-    protected Graphics graphics;
-    protected int iconSize = 30;
-
+    //protected Graphics graphics;
+    //protected int iconSize = 30;
+    private static final int ICON_SIZE = 30;
     protected Font myFont, myFontB;
     protected int maxFontSize = 30;
     protected int minFontSize = 4;
-    protected int currentFontSize = -1;
-    protected boolean displayText = true;
+    //protected int currentFontSize = -1;
+    //protected boolean displayText = true;
 
     protected int typeOfReference;
 
@@ -102,15 +102,24 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
 
     public AvatarMethodologyDiagramReference(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-
-        initScaling(200, 120);
-        oldScaleFactor = tdp.getZoom();
-        dlineHeight = lineHeight * oldScaleFactor;
-        lineHeight = (int)dlineHeight;
-        dlineHeight = dlineHeight - lineHeight;
-
+        
+        // Issue #31
+        lineLength = 30;
+        textX = 5;
+        textY = 22;
+    
         minWidth = 10;
-        minHeight = lineHeight;
+        minHeight = lineLength;
+        
+        initScaling(200, 120);
+        // Issue #31
+//        oldScaleFactor = tdp.getZoom();
+//        dlineHeight = lineHeight * oldScaleFactor;
+//        lineHeight = (int)dlineHeight;
+//        dlineHeight = dlineHeight - lineHeight;
+//
+//        minWidth = 10;
+//        minHeight = lineLength;
 
         addTGConnectingPointsCommentTop();
 
@@ -146,26 +155,27 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
         Font f = g.getFont();
         //  Font fold = f;
         //    int w, c;
-        int size;
+        //int size;
 
         value = TYPE_STR[typeOfReference];
 
-        if (!tdp.isScaled()) {
-            graphics = g;
-        }
-
-        if (((rescaled) && (!tdp.isScaled())) || myFont == null) {
-            currentFontSize = tdp.getFontSize();
-            //
-            myFont = f.deriveFont((float)currentFontSize);
-            myFontB = myFont.deriveFont(Font.BOLD);
-
-            if (rescaled) {
-                rescaled = false;
-            }
-        }
-
-        displayText = currentFontSize >= minFontSize;
+//        if (!tdp.isScaled()) {
+//            graphics = g;
+//        }
+        // Issue #31 The font is already managed when drawing the panel
+//        if (((rescaled) && (!tdp.isScaled())) || myFont == null) {
+//            currentFontSize = tdp.getFontSize();
+//            //
+//            myFont = f.deriveFont((float)currentFontSize);
+//            myFontB = myFont.deriveFont(Font.BOLD);
+//
+//            if (rescaled) {
+//                rescaled = false;
+//            }
+//        }
+        final int fontSize = g.getFont().getSize();
+        displayText = fontSize >= minFontSize;
+        //issue #31 displayText = currentFontSize >= minFontSize;
 
         g.setColor(ColorManager.AVATAR_REQUIREMENT_TOP);
         g.fillRect(x, y, width, height);
@@ -178,16 +188,16 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
         //g.setColor(ColorManager.AVATAR_REQUIREMENT_TOP);
         //g.fillRect(x+1, y+1+lineHeight, width-1, height-1-lineHeight);
         ColorManager.setColor(g, getState(), 0);
-        if ((lineHeight > 23) && (width > 23)){
+        //if ((lineLength > 23) && (width > 23)){
             //g.drawImage(IconManager.img5100, x + width - iconSize + 1, y + 3, Color.yellow, null);
-        	g.drawImage( scale( IconManager.img5100 ), x + width - scale(iconSize + 1 ), y + scale( 3 ), Color.yellow, null);
-        }
+        g.drawImage( scale( IconManager.img5100 ), x + width - scale(ICON_SIZE + 1 ), y + scale( 3 ), Color.yellow, null);
+        //}
 
         if (displayText) {
-            size = currentFontSize - 2;
-            g.setFont(myFontB);
+            //size = currentFontSize - 2;
+            //g.setFont(myFontB);
 
-            drawLimitedString(g, value, x, y + size + 3, width, 1);
+            drawLimitedString(g, value, x, y + fontSize + 3, width, 1);
             g.setFont(f);
         }
     }
@@ -265,16 +275,17 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
      * @param scaleFactor
      * 
      * */
-    @Override
-    public void rescale(double scaleFactor){
-        dlineHeight = (lineHeight + dlineHeight) / oldScaleFactor * scaleFactor;
-        lineHeight = (int)(dlineHeight);
-        dlineHeight = dlineHeight - lineHeight;
-
-        minHeight = lineHeight;
-
-        super.rescale(scaleFactor);
-    }
+    // Issue #31 
+//    @Override
+//    public void rescale(double scaleFactor){
+//        dlineHeight = (lineLength + dlineHeight) / oldScaleFactor * scaleFactor;
+//        lineLength = (int)(dlineHeight);
+//        dlineHeight = dlineHeight - lineLength;
+//
+//        minHeight = lineLength;
+//
+//        super.rescale(scaleFactor);
+//    }
    
 	/**
 	 * isOnOnlyMe, Coming from Abstract Method From TGCWithInternalComponent (Abstract Class) 
