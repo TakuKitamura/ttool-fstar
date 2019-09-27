@@ -61,7 +61,10 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -342,7 +345,7 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
         help.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-               help();
+                help();
             }
         });
         menuBar.add(help);
@@ -485,7 +488,7 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
         jp03.add(exe2, c02);
 
         exeBis = new JRadioButton(textSysC4bis, false);
-        exe.addActionListener(this);
+        exeBis.addActionListener(this);
         exegroup.add(exeBis);
         jp03.add(exeBis, c03);
 
@@ -870,7 +873,6 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
         }
 
 
-
     }   //End of method generateCode()
 
     private boolean validateData() {
@@ -969,10 +971,13 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
         if (toDo == 0) {
             if (exe.isSelected()) {
                 toDo = ONE_TRACE;
+
             } else if (exeBis.isSelected()) {
                 toDo = ONE_TRACE_CYCLE;
-            } if (exeint.isSelected()) {
+
+            } else if (exeint.isSelected()) {
                 toDo = ANIMATION;
+
             } else {
                 toDo = FORMAL_VERIFICATION;
             }
@@ -986,9 +991,9 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
                 //SpecConfigTTool.ExternalCommand1 = "gtkwave " + SpecConfigTTool.lastVCD;
                 break;
             case ONE_TRACE_CYCLE:
-                executeSimulationCmd(exe2.getText(), "Executing one simulation trace for a limited duration");
-                String[] tab1 = exe2.getText().split(" ");
-                SpecConfigTTool.lastVCD = tab1[2];
+                executeSimulationCmd(exe2Bis.getText(), "Executing one simulation trace for a limited duration");
+                //String[] tab1 = exe2Bis.getText().split(" ");
+                //SpecConfigTTool.lastVCD = tab1[2];
                 //SpecConfigTTool.ExternalCommand1 = "gtkwave " + SpecConfigTTool.lastVCD;
                 break;
             case ANIMATION:
