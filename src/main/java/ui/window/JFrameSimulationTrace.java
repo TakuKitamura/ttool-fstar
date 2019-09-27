@@ -41,6 +41,7 @@
 
 package ui.window;
 
+import myutil.TraceManager;
 import translator.Gate;
 import translator.GroupOfGates;
 import translator.MasterGateManager;
@@ -76,22 +77,20 @@ public	class JFrameSimulationTrace extends JFrame	implements ActionListener {
     
     private int type = 0; // 1 -> function of time  // 2-> ordering
     
-    
-    public JFrameSimulationTrace(String title, String _simuData) {
-        super(title);
-        type = 1;
-        makeTraceSimu(_simuData);
-        makeComponents();
-    }
+
     
     public JFrameSimulationTrace(String title, String _simuData, int _type) {
         super(title);
+
         type = _type;
         makeTraceSimu(_simuData);
         makeComponents();
     }
     
     public boolean makeTraceSimu(String simuData) {
+
+        //TraceManager.addDev("New simulation trace with" + simuData);
+
         trace = new Vector<>();
         
         StringReader sr = new StringReader(simuData);

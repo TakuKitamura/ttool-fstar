@@ -181,19 +181,19 @@ public	class JFrameSimulationSDPanel extends JFrame implements ActionListener {
     
     public void setFileReference(String _fileReference) {
         if (sdpanel != null) {
-            TraceManager.addDev("Resetting file");
+            //TraceManager.addDev("Setting file:" + _fileReference);
             sdpanel.setFileReference(_fileReference);
         } else {
-            TraceManager.addDev("Null SD Panel");
+            //TraceManager.addDev("Null SD Panel");
         }
     }
 
     public void setFileReference(BufferedReader inputStream) {
         if (sdpanel != null) {
-            TraceManager.addDev("Setting input stream");
+            //TraceManager.addDev("Setting input stream");
             sdpanel.setFileReference(inputStream);
         } else {
-            TraceManager.addDev("Null SD Panel");
+            //TraceManager.addDev("Null SD Panel");
         }
     }
 	

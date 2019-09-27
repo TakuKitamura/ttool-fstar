@@ -130,7 +130,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
     protected int lossPercentage;
     protected int maxNbOfLoss; //-1 means no max
 
-    //Security Verification
+    // Security Verification
     public int checkConfStatus;
 
     public int checkSecConfStatus;
