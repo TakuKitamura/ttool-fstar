@@ -42,6 +42,8 @@
 package tmltranslator;
 
 
+import java.util.Objects;
+
 /**
  * Class TMLRandom
  * Creation: 10/06/2008
@@ -72,5 +74,15 @@ public class TMLRandom extends TMLActivityElement {
 	return " politics=\"" + functionId + "\" variable=\"" + variable + "\" minValue=\"" + minValue + "\" maxValue=\"" + maxValue + "\" ";
     }
 
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof TMLRandom)) return false;
+        if (!super.equalSpec(o)) return false;
+
+        TMLRandom tmlRandom = (TMLRandom) o;
+        return Objects.equals(variable, tmlRandom.getVariable()) &&
+                Objects.equals(minValue, tmlRandom.getMinValue()) &&
+                Objects.equals(maxValue, tmlRandom.getMaxValue()) &&
+                functionId == tmlRandom.getFunctionId();
+    }
 
 }

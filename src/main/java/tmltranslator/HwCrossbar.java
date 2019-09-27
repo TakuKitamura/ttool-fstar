@@ -63,6 +63,10 @@ public class HwCrossbar extends HwCommunicationNode  {
 	return s;
     }
 
-    
-
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof HwCrossbar)) return false;
+        if (!super.equalSpec(o)) return false;
+        HwCrossbar hwCrossbar = (HwCrossbar) o;
+        return byteDataSize == hwCrossbar.byteDataSize;
+    }
 }

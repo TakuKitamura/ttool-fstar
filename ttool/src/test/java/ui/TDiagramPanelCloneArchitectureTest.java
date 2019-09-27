@@ -56,28 +56,27 @@ import static org.junit.Assert.*;
  * update test : 18/10/2019
  */
 public class TDiagramPanelCloneArchitectureTest extends AbstractUITest {
-    
-    static TDiagramPanel architecture_clone;
-    static TDiagramPanel architecture_Exp;
 
+    private static final String PATH_TO_EXPECTED_MODEL = "/ui/diagram2tml/expected/Expected_CloneArchitecture.xml";
+    private static final String PATH_TO_SOURCE_MODEL = "/ui/diagram2tml/input/CloneCompositeComponentTest.xml";
+    private static String EXPECTED_FILE_MODEL;
 
-    static TMLMapping tmlMapping_clone;
-    static TMLMapping tmlMapping_exp;
+    private TMLMapping tmlMapping_clone;
+    private TMLMapping tmlMapping_exp;
+    private TDiagramPanel architecture_clone;
+    private TGComponent CPU_Cl;
+    private TGComponent DMA_Cl;
+    private TGComponent FPGA_Cl;
+    private TGComponent HWA_Cl;
+    private TGComponent Bus_Cl;
+    private TGComponent Bridge_Cl;
+    private TGComponent Memory_Cl;
 
-    static TGComponent CPU_Cl;
-    static TGComponent DMA_Cl;
-    static TGComponent FPGA_Cl;
-    static TGComponent HWA_Cl;
-    static TGComponent Bus_Cl;
-    static TGComponent Bridge_Cl;
-    static TGComponent Memory_Cl;
-
-
-    final static String EXPECTED_FILE_MODEL = getBaseResourcesDir() + "/ui/diagram2tml/expected/Expected_CloneArchitecture.xml";
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
-        RESOURCES_DIR = getBaseResourcesDir() + "/ui/diagram2tml/input/CloneCompositeComponentTest.xml";
+        RESOURCES_DIR = getBaseResourcesDir() + PATH_TO_SOURCE_MODEL;
+        EXPECTED_FILE_MODEL = getBaseResourcesDir() + PATH_TO_EXPECTED_MODEL;
     }
 
     public TDiagramPanelCloneArchitectureTest() {
@@ -90,7 +89,6 @@ public class TDiagramPanelCloneArchitectureTest extends AbstractUITest {
             if(_tab instanceof TMLArchiPanel) {
                 for (TDiagramPanel tdp : _tab.getPanels()) {
                     if (tdp instanceof TMLArchiDiagramPanel) {
-                        architecture_Exp = tdp;
                         mainGUI.selectTab(tdp);
                         break;
                     }
@@ -220,13 +218,9 @@ public class TDiagramPanelCloneArchitectureTest extends AbstractUITest {
 
     @Test
     public void testTMLMapping() {
-
         cloneHwNodesOfTestingModel();
-
         mainGUI.checkModelingSyntax(true);
-
         tmlMapping_clone = mainGUI.gtm.getTMLMapping();
-
         assertTrue(tmlMapping_clone.equalSpec(tmlMapping_exp));
     }
 

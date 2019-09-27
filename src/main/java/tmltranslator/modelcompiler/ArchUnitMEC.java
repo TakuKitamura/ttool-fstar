@@ -102,19 +102,10 @@ public abstract class ArchUnitMEC       {
     public boolean equalSpec(Object o) {
         if (!(o instanceof ArchUnitMEC)) return false;
         ArchUnitMEC that = (ArchUnitMEC) o;
-        return index == that.index;
+        return index == that.getIndex() &&
+                Objects.equals(initCtxRoutine, that.getCtxInitCode()) &&
+                Objects.equals(ctxCleanupRoutine, that.getCtxCleanupCode()) &&
+                Objects.equals(localMemoryPointer, getLocalMemoryPointer());
     }
 
-    /*@Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ArchUnitMEC that = (ArchUnitMEC) o;
-        return index == that.index;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(index);
-    }*/
 }       //End of class

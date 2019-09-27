@@ -42,6 +42,7 @@
 package tmltranslator;
 
 
+import java.util.Objects;
 
 /**
  * Class TMLActivityElementWithIntervalAction
@@ -74,6 +75,16 @@ public class TMLActivityElementWithIntervalAction extends TMLActivityElement {
 
     public String customExtraToXML() {
 	return " min=\"" + minDelay +  "\" max=\"" + maxDelay + "\" ";
+    }
+
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof TMLActivityElementWithIntervalAction)) return false;
+        if (!super.equalSpec(o)) return false;
+
+        TMLActivityElementWithIntervalAction tmlAEIAction = (TMLActivityElementWithIntervalAction) o;
+        return Objects.equals(minDelay, tmlAEIAction.getMinDelay()) &&
+                Objects.equals(maxDelay, tmlAEIAction.getMaxDelay());
+
     }
 
 }

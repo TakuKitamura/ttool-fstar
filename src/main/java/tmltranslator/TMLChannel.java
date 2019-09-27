@@ -622,6 +622,26 @@ public class TMLChannel extends TMLCommunicationElement {
         if (!(o instanceof TMLChannel)) return false;
         if (!super.equalSpec(o)) return false;
         TMLChannel channel = (TMLChannel) o;
+        TMLComparingMethod comp = new TMLComparingMethod();
+
+        if (originPort != null) {
+            if (!originPort.equalSpec(channel.getOriginPort()))
+                return false;
+        }
+
+        if (destinationPort != null) {
+            if (!destinationPort.equalSpec(channel.getDestinationPort())) return false;
+        }
+
+        if (originTask != null) {
+            if (!originTask.equalSpec(channel.getOriginTask()))
+                return false;
+        }
+
+        if (destinationTask != null) {
+            if (!destinationTask.equalSpec(channel.getDestinationTask())) return false;
+        }
+
         return checkConf == channel.checkConf &&
                 checkAuth == channel.checkAuth &&
                 size == channel.size &&
@@ -629,7 +649,11 @@ public class TMLChannel extends TMLCommunicationElement {
                 max == channel.max &&
                 vc == channel.vc &&
                 nbOfSamples == channel.getNumberOfSamples() &&
-                priority == channel.priority;
+                priority == channel.priority &&
+                comp.isTasksListEquals(originTasks, channel.getOriginTasks()) &&
+                comp.isTasksListEquals(destinationTasks, channel.getDestinationTasks()) &&
+                comp.isPortListEquals(originPorts, channel.getOriginPorts()) &&
+                comp.isPortListEquals(destinationPorts, channel.getDestinationPorts());
     }
 
 }

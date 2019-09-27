@@ -52,6 +52,7 @@ import tmltranslator.toproverif.TML2ProVerif;
 import ui.CorrespondanceTGElement;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Class TMLMapping
@@ -530,7 +531,7 @@ public class TMLMapping<E> {
     }
 
     public List<HwCommunicationNode> getCommunicationNodes() {
-        return oncommnodes;
+        return this.oncommnodes;
     }
 
     public List<TMLElement> getMappedCommunicationElement() {
@@ -1835,106 +1836,30 @@ public class TMLMapping<E> {
     public boolean equalSpec(Object o) {
         if (!(o instanceof  TMLMapping)) return false;
         TMLMapping<?> that = (TMLMapping<?>) o;
+        TMLComparingMethod comp = new TMLComparingMethod();
 
-        if(!isOncommondesListEquals(oncommnodes, that.oncommnodes))
+        if(!comp.isOncommondesListEquals(oncommnodes, that.getCommunicationNodes()))
             return false;
 
-        if(!isMappedcommeltsListEquals(mappedcommelts, that.mappedcommelts))
+        if(!comp.isMappedcommeltsListEquals(mappedcommelts, that.getMappedCommunicationElement()))
             return false;
 
-        if(!isMappedtasksListEquals(mappedtasks, that.mappedtasks))
+        if(!comp.isTasksListEquals(mappedtasks, that.getMappedTasks()))
             return false;
 
+        if(!comp.isOnExecutionNodeListEquals(onnodes, that.getNodes()))
+            return false;
+
+        if(!comp.isListOfStringArrayEquals(pragmas, that.getPragmas()))
+            return false;
+
+        if(!comp.isSecurityPatternMapEquals(mappedSecurity, that.mappedSecurity))
+            return false;
 
         return tmlm.equalSpec(that.tmlm) &&
-                tmla.equalSpec(that.tmla);
+                tmla.equalSpec(that.tmla) &&
+                firewall == that.firewall;
     }
 
-    public  boolean isOncommondesListEquals(List<HwCommunicationNode> list1, List<HwCommunicationNode> list2){
-        if (list1 == null && list2 == null) {
-            return true;
-        }
-        //Only one of them is null
-        else if(list1 == null || list2 == null) {
-            return false;
-        }
-        else if(list1.size() != list2.size()) {
-            return false;
-        }
-
-        //copying to avoid rearranging original lists
-        list1 = new ArrayList<>(list1);
-        list2 = new ArrayList<>(list2);
-
-        Collections.sort(list1, Comparator.comparing(HwCommunicationNode::getName));
-        Collections.sort(list2, Comparator.comparing(HwCommunicationNode::getName));
-
-        boolean test;
-
-        for (int i = 0; i < list1.size(); i++) {
-            test =  list1.get(i).equalSpec(list2.get(i));
-            if (!test) return false;
-        }
-
-        return true;
-    }
-
-    public  boolean isMappedcommeltsListEquals(List<TMLElement> list1, List<TMLElement> list2){
-        if (list1 == null && list2 == null) {
-            return true;
-        }
-        //Only one of them is null
-        else if(list1 == null || list2 == null) {
-            return false;
-        }
-        else if(list1.size() != list2.size()) {
-            return false;
-        }
-
-        //copying to avoid rearranging original lists
-        list1 = new ArrayList<>(list1);
-        list2 = new ArrayList<>(list2);
-
-        Collections.sort(list1, Comparator.comparing(TMLElement::getID));
-        Collections.sort(list2, Comparator.comparing(TMLElement::getID));
-
-        boolean test;
-
-        for (int i = 0; i < list1.size(); i++) {
-            test =  list1.get(i).equalSpec(list2.get(i));
-            if (!test) return false;
-        }
-
-        return true;
-    }
-
-    public  boolean isMappedtasksListEquals(List<TMLTask> list1, List<TMLTask> list2){
-        if (list1 == null && list2 == null) {
-            return true;
-        }
-        //Only one of them is null
-        else if(list1 == null || list2 == null) {
-            return false;
-        }
-        else if(list1.size() != list2.size()) {
-            return false;
-        }
-
-        //copying to avoid rearranging original lists
-        list1 = new ArrayList<>(list1);
-        list2 = new ArrayList<>(list2);
-
-        Collections.sort(list1, Comparator.comparing(TMLTask::getName));
-        Collections.sort(list2, Comparator.comparing(TMLTask::getName));
-
-        boolean test;
-
-        for (int i = 0; i < list1.size(); i++) {
-            test =  list1.get(i).equalSpec(list2.get(i));
-            if (!test) return false;
-        }
-
-        return true;
-    }
 
 }

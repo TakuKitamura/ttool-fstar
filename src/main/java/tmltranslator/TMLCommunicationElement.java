@@ -87,6 +87,12 @@ public abstract class TMLCommunicationElement extends TMLElement {
         return maxNbOfLoss;
     }
 
+    public void configLossy(boolean _isLossy, int _percentage, int _maxNbOfLoss) {
+        isLossy = _isLossy;
+        lossPercentage = _percentage;
+        maxNbOfLoss = _maxNbOfLoss;
+    }
+
     public boolean equalSpec(Object o) {
         if (!(o instanceof TMLCommunicationElement)) return false;
         if (!super.equalSpec(o)) return false;

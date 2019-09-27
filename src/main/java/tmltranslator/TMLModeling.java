@@ -2749,8 +2749,12 @@ public class  TMLModeling<E> {
         if(!isChannelListEquals(channels, that.channels))
             return false;
 
-        return true;
+        if(!isSecurityPatternListEquals(secPatterns, that.secPatterns))
+            return false;
+
+        return (new HashSet<>(securityPatterns).equals(new HashSet<>(that.securityPatterns)));
     }
+
 
     public  boolean isTaskListEquals(List<TMLTask> list1, List<TMLTask> list2){
         if (list1 == null && list2 == null) {
@@ -2857,6 +2861,34 @@ public class  TMLModeling<E> {
 
         Collections.sort(list1, Comparator.comparing(TMLEvent::getName));
         Collections.sort(list2, Comparator.comparing(TMLEvent::getName));
+
+        boolean test;
+
+        for (int i = 0; i < list1.size(); i++) {
+            test = list1.get(i).equalSpec(list2.get(i));
+            if (!test) return false;
+        }
+
+        return true;
+    }
+
+    public boolean isSecurityPatternListEquals(List<SecurityPattern> list1, List<SecurityPattern> list2) {
+        if (list1 == null && list2 == null) {
+            return true;
+        }
+        //Only one of them is null
+        else if (list1 == null || list2 == null) {
+            return false;
+        } else if (list1.size() != list2.size()) {
+            return false;
+        }
+
+        //copying to avoid rearranging original lists
+        list1 = new ArrayList<>(list1);
+        list2 = new ArrayList<>(list2);
+
+        Collections.sort(list1, Comparator.comparing(SecurityPattern::getName));
+        Collections.sort(list2, Comparator.comparing(SecurityPattern::getName));
 
         boolean test;
 
