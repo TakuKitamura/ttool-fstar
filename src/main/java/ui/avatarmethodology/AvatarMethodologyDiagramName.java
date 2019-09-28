@@ -111,6 +111,87 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
         myImageIcon = IconManager.imgic302;
     }
     
+    private boolean canTextGoIntoTheFatherBox(Graphics g)
+    {
+        int widthText = g.getFontMetrics().stringWidth(value);
+        int widthFather = getFather().getWidth();
+        return widthFather >= widthText + (2 * X_MARGIN);
+    }
+
+    public void internalDrawing(Graphics g) 
+    {
+        	if ((y + Y_MARGIN) > (getFather().getY() + getFather().getHeight()))
+        		return;
+
+        	String textInTheBox = value;
+            int widthText = g.getFontMetrics().stringWidth(value);
+            int widthFather = getFather().getWidth();
+            if (!canTextGoIntoTheFatherBox(g))
+                textInTheBox = ".";
+     
+            Font font = g.getFont();
+            boolean onMe = tdp.componentPointed() == this ? true : false;
+            if (onMe && indexOnMe == -1)
+            	g.setFont(font.deriveFont(Font.BOLD));
+
+            int curWidth = Math.max(width, myWidth); //int curWidth = myWidth; curWidth = Math.max(widthAppli, curWidth);
+            g.drawString(textInTheBox, x, y);
+            g.setFont(font);
+            
+            if (validations == null)
+            	if (getFather() instanceof AvatarMethodologyDiagramReference)
+            		((AvatarMethodologyDiagramReference)(getFather())).makeValidationInfos(this);
+            
+            if ((validations != null) && (valMinX == null)) {
+            	valMinX = new int[validations.length];
+            	valMaxX = new int[validations.length];
+            } 
+            
+            int currentMaxX = widthFather + x - 2 * (X_MARGIN);
+            int saveCurrentMaxX = currentMaxX;
+            
+            if (!canTextGoIntoTheFatherBox(g)) {
+            	makeScale(g, widthText + (2 * X_MARGIN));
+            	return;
+            }
+
+            boolean oneWritten = false;
+            int saveWidth = 0;
+            g.setFont(font.deriveFont(Font.ITALIC));
+            
+            if ((validations != null) & (validations.length > 0)) {
+    			for (int i = validations.length - 1; i >= 0; i--) {
+    				saveWidth = g.getFontMetrics().stringWidth(SHORT_ACTION_NAMES[validations[i]]);
+
+    				if ((onMe && indexOnMe == i))
+    					g.setFont(font.deriveFont(Font.ITALIC));
+    				
+    				if ((currentMaxX - saveWidth) > (x + widthText)) 
+    				{
+    					if ((onMe && indexOnMe == i))
+    						g.setFont(font.deriveFont(Font.BOLD));
+    				
+    					g.drawString(SHORT_ACTION_NAMES[validations[i]], currentMaxX - saveWidth, y);
+    					g.setFont(font.deriveFont(Font.ITALIC));
+    					valMinX[i] = currentMaxX-saveWidth;
+    					valMaxX[i] = currentMaxX;
+    					oneWritten = true;
+    					currentMaxX = currentMaxX - saveWidth - 5;
+    				} else
+    					break;
+    			}
+            }
+            g.setFont(font);
+            if (oneWritten)
+            	makeScale(g, saveCurrentMaxX - x);
+            else
+            	makeScale(g, widthText);
+            if (onMe)
+            	g.drawRect(x - 2, y - 12, curWidth + 5, 15);
+            
+            return; 
+        }
+    /* Issue #31
     public void internalDrawing(Graphics g) {
     	if ((y + Y_MARGIN) > (getFather().getY() + getFather().getHeight()))
     		return;
@@ -187,7 +268,7 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
         
         return; 
     }
-    
+    */
     private void makeScale(Graphics g, int _size)
     {
     	TraceManager.addDev("----- Make SCale ----");
