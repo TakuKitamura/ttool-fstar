@@ -44,7 +44,6 @@ package ui.diplodocusmethodology;
 import myutil.GraphicLib;
 import myutil.TraceManager;
 import ui.*;
-import ui.avatarmethodology.AvatarMethodologyDiagramName;
 import ui.util.IconManager;
 
 import javax.swing.*;
@@ -122,18 +121,6 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
         
         myImageIcon = IconManager.imgic302;
     }
-    /*
-    @Override
-    public void internalDrawing(Graphics g)
-    {
-    	String textDiagramRef = value;
-    	Font font = g.getFont();
-    	g.drawString(textDiagramRef, x, y);
-    	
-    	//GGestionOfValidations(g, font);
-    	
-    }*/
-    
     @Override
     public void internalDrawing(Graphics g) {
         boolean onMe = false;
