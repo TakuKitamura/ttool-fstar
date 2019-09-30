@@ -1002,7 +1002,9 @@ public class TranslatedRouter<E> {
 
 
     public void postProcessing() {
+        TraceManager.addDev("Post processing of  " + myHwExecutionNode.getName());
         TMLArchitecture arch = tmlmap.getTMLArchitecture();
+
         // Split multicores in mono cores
         if (myHwExecutionNode instanceof HwCPU) {
             HwCPU myCPU = (HwCPU)myHwExecutionNode;
@@ -1010,18 +1012,22 @@ public class TranslatedRouter<E> {
             // add Mono-core CPUs
             int cpt = 0;
             while(myCPU.nbOfCores > 1) {
+                TraceManager.addDev("Removing core from " + myCPU.getName());
                 HwCPU newCPU = myCPU.clone();
                 newCPU.nbOfCores = 1;
                 myCPU.nbOfCores = myCPU.nbOfCores - 1;
-                arch.addHwNode(newCPU);
+                newCPU.setName(myCPU.getName() + "__" + cpt);
                 HwBus bus = arch.getHwBusByName(myCPU.getName() + "__bus");
                 if (bus != null) {
+                    arch.addHwNode(newCPU);
+                    TraceManager.addDev("Bus found for " + myCPU.getName());
                     HwLink link = new HwLink(myCPU.getName() + "__link" + cpt);
                     arch.addHwLink(link);
                     link.setNodes(bus, newCPU);
                     cpt ++;
 
                     tmlmap.remap(myCPU, newCPU);
+                    TraceManager.addDev("Remap done " + myCPU.getName());
                 }
             }
 

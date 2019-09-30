@@ -77,4 +77,8 @@ public abstract class HwNode extends DIPLOElement  {
 
     public abstract String toXML();
 
+    public void setName(String _name) {
+        name = _name;
+    }
+
 }
