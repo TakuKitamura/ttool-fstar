@@ -62,10 +62,11 @@ import java.util.Vector;
  * @version 1.0 12/03/2008
  */
 public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent, WithAttributes {
-    private int maxFontSize = 14;
+    // #FIXME Debugging
+	private int maxFontSize = 14;
     private int minFontSize = 4;
-    
     private int currentFontSize = -1;
+	
     //private boolean displayText = true;
     //    private int spacePt = 3;
     private Color myColor;
@@ -93,8 +94,10 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
         // Issue #31
-        minWidth = 1;
-        minHeight = 1;
+        //minWidth = 1;
+        //minHeight = 1;
+        minWidth = 150;
+        minHeight = 100;
         initScaling(200, 150);
 
         // Issue #31
@@ -125,7 +128,58 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 
         actionOnAdd();
     }
+    /*
+    private Color choosingColor()
+    {
+        if (ColorManager.TML_COMPOSITE_COMPONENT == Color.white) 
+            return Color.white;
+        else 
+            return new Color(201, 243, 188 - (getMyDepth() * 10), 200);
+    }*/
 
+    @Override
+    public void internalDrawing(Graphics g)
+    {
+    	//rectangle + Filling color
+    	Color c = g.getColor();
+    	if (myColor == null) {
+            if (ColorManager.TML_COMPOSITE_COMPONENT == Color.white)
+                myColor = Color.white;
+            else 
+                myColor = new Color(201, 243, 188 - (getMyDepth() * 10), 200);
+        }
+    	g.drawRect(x, y, width, height);
+    	g.setColor(myColor);
+    	g.fill3DRect(x, y, width, height, true);
+    	g.setColor(c);
+    	
+    	//String
+    	int stringWidth = g.getFontMetrics().stringWidth(value);
+    	int centerOfBox = (width - stringWidth) / 2;
+    	g.drawString(value, x + centerOfBox, y + currentFontSize + textY);
+    	
+    	// Icon
+    	g.drawImage(scale(IconManager.imgic1200.getImage()), x + width - scale(iconSize) - textX, y + textX, null);
+        if (isAttacker)
+            g.drawImage(scale(IconManager.imgic7008.getImage()), x + width - scale(2 * iconSize) - textX, y + 2 * textX, null);
+        
+        // Attributes
+        if (tdp.areAttributesVisible())
+        {
+        	TAttribute attribute;
+        	String attributeStr;
+        	for (int i = 0; i < myAttributes.size(); i++)
+        	{
+                attribute = myAttributes.get(i);
+                attributeStr = attribute.toString();
+                g.drawString(attributeStr, x + textX, y + currentFontSize + textY);
+                //g.drawString(attributeStr, x + textX, y + currentFontSize);
+                drawVerification(g, x + textX, y + currentFontSize, attribute.getConfidentialityVerification());
+            }
+        }
+    	
+    }
+/*
     @Override
     public void internalDrawing(Graphics g) {
         int w;
@@ -251,7 +305,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         }
 
         g.setFont(fold);
-    }
+    }*/
 
     public void drawVerification(Graphics g, int x, int y, int checkConfStatus) {
         Color c = g.getColor();
