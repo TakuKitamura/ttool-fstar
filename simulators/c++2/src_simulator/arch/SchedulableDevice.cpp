@@ -288,7 +288,13 @@ void SchedulableDevice::buttonPieChart(std::ofstream& myfile) const{
               type : \"pie\",\n";
     myfile << "               data : data" << _ID << ",\n";
     myfile << "               options : options" << _ID << std::endl << "                   });" << std::endl;
-    myfile << "   chart" << _ID << SCHED_HTML_JS_HIDE;
+    // myfile << "   chart" << _ID << SCHED_HTML_JS_HIDE;
+    myfile << "   if(!" << SHOW_PIE_CHART << "){\n \t"
+        << "      document.getElementById(\"pie-chartcanvas-" << _ID << "\"" << ").style.display = \"none\";\n \t"
+        << "   }\n \t"
+        << "   else {\n \t"
+        << "      document.getElementById(\"pie-chartcanvas-"<< _ID << "\"" << ").style.display = \"block\"; \n \t"
+        << "   }\n \t";
     myfile << "   chart" << _ID << ".update();" << std::endl;
 }
 
