@@ -131,6 +131,78 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
         	g.setFont(font.deriveFont(fontStyle));
     }
     
+    private void GestionOfValidations(Graphics g, Font font)
+    {
+        int widthText = g.getFontMetrics().stringWidth(value);
+        int widthFather = getFather().getWidth();
+        int curWidth = Math.max(width, myWidth);
+        
+    	if (validations == null)
+        	if (getFather() instanceof AvatarMethodologyDiagramReference)
+        		((AvatarMethodologyDiagramReference)(getFather())).makeValidationInfos(this);
+        
+        if ((validations != null) && (valMinX == null)) {
+        	valMinX = new int[validations.length];
+        	valMaxX = new int[validations.length];
+        } 
+        
+        int currentMaxWidthX = widthFather + x - 2 * (X_MARGIN);
+        int saveCurrentMaxX = currentMaxWidthX;
+    	boolean oneWritten = false;
+        int saveWidth = 0;
+        g.setFont(font.deriveFont(Font.ITALIC));
+        boolean pointerIsOnMe = tdp.componentPointed() == this ? true : false;
+        
+        if ((validations != null) & (validations.length > 0)) {
+			for (int i = validations.length - 1; i >= 0; i--) {
+				saveWidth = g.getFontMetrics().stringWidth(SHORT_ACTION_NAMES[validations[i]]);
+
+//				if ((pointerIsOnMe && indexOnMe == i))
+//					g.setFont(font.deriveFont(Font.ITALIC));
+				setFontStyleWhenPointerIsOnMe(g,Font.ITALIC, pointerIsOnMe, font, i);
+				if ((currentMaxWidthX - saveWidth) > (x + widthText)) 
+				{
+					//if ((pointerIsOnMe && indexOnMe == i))
+					//	g.setFont(font.deriveFont(Font.BOLD));
+					setFontStyleWhenPointerIsOnMe(g, Font.BOLD, pointerIsOnMe, font, i);
+					g.drawString(SHORT_ACTION_NAMES[validations[i]], currentMaxWidthX - saveWidth, y);
+					g.setFont(font.deriveFont(Font.ITALIC));
+					valMinX[i] = currentMaxWidthX-saveWidth;
+					valMaxX[i] = currentMaxWidthX;
+					oneWritten = true;
+					currentMaxWidthX = currentMaxWidthX - saveWidth - 5;
+				} else
+					break;
+			}
+        }
+        g.setFont(font);
+        if (oneWritten)
+        	makeScale(g, saveCurrentMaxX - x);
+        else
+        	makeScale(g, widthText);
+        if (pointerIsOnMe) //Issue #31: The rectangle was not around the text when zoom: with scale it works better
+        	//g.drawRect(x - 2, y - 12, curWidth + 5, 15);
+        	g.drawRect(x - 2, y - scale(15), curWidth + 5, scale(15));
+        
+        return; 
+    	
+    }
+    /** Issue #31: Refactored internalDrawing for more comprehension
+     * Draws the text of the diagram references and the eventual validations
+     * @param g
+     */
+    @Override
+    public void internalDrawing(Graphics g)
+    {
+    	// Strings
+    	String textDiagramRef = value;
+    	Font f = g.getFont();
+    	g.drawString(textDiagramRef, x, y);
+    	
+    	//validation and String
+    	GestionOfValidations(g, f);
+    }
+    /*
     @Override
     public void internalDrawing(Graphics g) 
     {
@@ -146,8 +218,8 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
 
             Font font = g.getFont();
             boolean pointerIsOnMe = tdp.componentPointed() == this ? true : false;
-            /*if (pointerIsonMe && indexOnMe == -1)
-            	g.setFont(font.deriveFont(Font.BOLD));*/
+            //if (pointerIsonMe && indexOnMe == -1)
+            //	g.setFont(font.deriveFont(Font.BOLD));
             setFontStyleWhenPointerIsOnMe(g, Font.BOLD, pointerIsOnMe, font, -1);
             int curWidth = Math.max(width, myWidth); //int curWidth = myWidth; curWidth = Math.max(widthAppli, curWidth);
             g.drawString(diagramRefTextName, x, y);
@@ -206,6 +278,7 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
             
             return; 
         }
+    */
     /* Issue #31
     public void internalDrawing(Graphics g) {
     	if ((y + Y_MARGIN) > (getFather().getY() + getFather().getHeight()))
