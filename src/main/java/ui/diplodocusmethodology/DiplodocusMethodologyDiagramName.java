@@ -121,6 +121,83 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
         
         myImageIcon = IconManager.imgic302;
     }
+    
+    
+    @Override
+    public void internalDrawing(Graphics g)
+    {
+    	// Strings
+    	String textDiagramRef = value;
+    	Font f = g.getFont();
+    	g.drawString(textDiagramRef, x, y);
+    	
+    	//validation and their strings
+    	GestionOfValidations(g, f);
+    }
+    
+    private void setFontStyleWhenPointerIsOnMe(Graphics g, int fontStyle, boolean pointerOnMe, Font font, int index) {
+    	if (pointerOnMe && indexOnMe == index)
+        	g.setFont(font.deriveFont(fontStyle));
+    }
+    
+    private void GestionOfValidations(Graphics g, Font f) {
+        if (validations == null) {
+            if (getFather() instanceof DiplodocusMethodologyDiagramReference) {
+                ((DiplodocusMethodologyDiagramReference)(getFather())).makeValidationInfos(this);
+            }
+        }
+        
+        if ((validations != null) && (valMinX == null)) {
+            valMinX = new int[validations.length];
+            valMaxX = new int[validations.length];
+        }
+        int widthText = g.getFontMetrics().stringWidth(value);
+        int widthFather = getFather().getWidth();
+        int curWidth = Math.max(width, myWidth);
+        int currentMaxWidthX = widthFather + x - 2 * (X_MARGIN);
+        int saveCurrentMaxX = currentMaxWidthX;
+        boolean oneWritten = false;
+        int saveWidth = 0;
+        g.setFont(f.deriveFont(Font.ITALIC));
+        boolean pointerIsOnMe = tdp.componentPointed() == this ? true : false;
+        
+        if ((validations != null) & (validations.length >0)) {
+            for (int i = validations.length-1; i >= 0; i--) {
+                saveWidth = g.getFontMetrics().stringWidth(SHORT_ACTION_NAMES[validations[i]]);
+
+                if ((currentMaxWidthX - saveWidth) > (x + widthText)) {
+//                    if ((onMe && indexOnMe == i)) {
+//                        g.setFont(f.deriveFont(Font.BOLD));
+//                    } Issue #31
+                	setFontStyleWhenPointerIsOnMe(g, Font.BOLD, pointerIsOnMe, f, i);
+                    g.drawString(SHORT_ACTION_NAMES[validations[i]], currentMaxWidthX - saveWidth, y);
+                    g.setFont(f.deriveFont(Font.ITALIC));
+                    valMinX[i] = currentMaxWidthX - saveWidth;
+                    valMaxX[i] = currentMaxWidthX;
+                    oneWritten = true;
+                    currentMaxWidthX = currentMaxWidthX - saveWidth - 5;
+                } else 
+                    break;
+            }
+        }
+
+        g.setFont(f);
+
+        if (oneWritten) {
+            makeScale(g, saveCurrentMaxX - x);
+        } else {
+            makeScale(g, widthText);
+        }
+        // Issue #31: Same as in Avatar Diagram Name: rectangle size error on zoom
+//        if (onMe)
+//            g.drawRect(x-2, y-12, myWidth+4, 15);
+        if (pointerIsOnMe)
+        	g.drawRect(x - 2, y - scale(15), curWidth +  4, scale(15));
+    
+	}
+
+
+	/*
     @Override
     public void internalDrawing(Graphics g) {
         boolean onMe = false;
@@ -226,7 +303,7 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
 //            g.drawRect(x-2, y-12, myWidth+4, 15);
         if (onMe)
         	g.drawRect(x - 2, y - scale(15), myWidth +  4, scale(15));
-    }
+    }*/
 
     private void makeScale(Graphics g, int _size) {
         if (!tdp.isScaled()) {
