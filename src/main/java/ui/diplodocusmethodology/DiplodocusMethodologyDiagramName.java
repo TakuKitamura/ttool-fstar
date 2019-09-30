@@ -44,6 +44,7 @@ package ui.diplodocusmethodology;
 import myutil.GraphicLib;
 import myutil.TraceManager;
 import ui.*;
+import ui.avatarmethodology.AvatarMethodologyDiagramName;
 import ui.util.IconManager;
 
 import javax.swing.*;
@@ -121,6 +122,18 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
         
         myImageIcon = IconManager.imgic302;
     }
+    /*
+    @Override
+    public void internalDrawing(Graphics g)
+    {
+    	String textDiagramRef = value;
+    	Font font = g.getFont();
+    	g.drawString(textDiagramRef, x, y);
+    	
+    	//GGestionOfValidations(g, font);
+    	
+    }*/
+    
     @Override
     public void internalDrawing(Graphics g) {
         boolean onMe = false;
@@ -172,11 +185,11 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
             valMaxX = new int[validations.length];
         }
 
-        /*if (validations == null) {
-          TraceManager.addDev("null validation");
-          } else {
-          TraceManager.addDev("Validation size=" + validations.length);
-          }*/
+//        if (validations == null) {
+//          TraceManager.addDev("null validation");
+//          } else {
+//          TraceManager.addDev("Validation size=" + validations.length);
+//          }
 
         currentMaxX = wf + x - 2*(X_MARGIN);
         saveCurrentMaxX = currentMaxX;
@@ -221,13 +234,11 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
         } else {
             makeScale(g, w);
         }
-
+        // Issue #31: Same as in Avatar Diagram Name: rectangle size error on zoom
+//        if (onMe)
+//            g.drawRect(x-2, y-12, myWidth+4, 15);
         if (onMe)
-            g.drawRect(x-2, y-12, myWidth+4, 15);
-
-        return;
-
-
+        	g.drawRect(x - 2, y - scale(15), myWidth +  4, scale(15));
     }
 
     private void makeScale(Graphics g, int _size) {
@@ -237,7 +248,7 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
         }
     }
 
-
+    @Override
     public TGComponent isOnMe(int _x, int _y) {
         int oldIndex = indexOnMe;
         if (GraphicLib.isInRectangle(_x, _y, x, y - height, Math.max(myWidth, minWidth), myHeight)) {
@@ -267,7 +278,8 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
         }
         return null;
     }
-
+    
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
 
         if (indexOnMe == -1) {
@@ -289,11 +301,12 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
         return true;
     }
 
-
+    @Override
     public  int getType() {
         return TGComponentManager.DIPLODODUSMETHODOLOGY_DIAGRAM_NAME;
     }
-
+    
+    @Override
     public int getDefaultConnector() {
         return TGComponentManager.DIPLODOCUSMETHODOLOGY_CONNECTOR;
     }
@@ -305,7 +318,8 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
     public void setValidationsInfo(int _index, int _val) {
         validations[_index] = _val;
     }
-
+    
+    @Override
     public void rescale(double scaleFactor){
 
         if ((valMinX != null) && (valMinX.length > 0)) {
