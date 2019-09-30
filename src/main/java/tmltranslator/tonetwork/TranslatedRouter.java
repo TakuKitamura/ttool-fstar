@@ -830,6 +830,16 @@ public class TranslatedRouter<E> {
                         tmlmap.addCommToHwCommNode(newChannel, mem);
                     }
 
+                    HwBus bus =  tmlmap.getTMLArchitecture().getHwBusByName(myHwExecutionNode.getName() + "__bus");
+                    if (bus != null) {
+                        //tmlmap.addCommToHwCommNode(newChannel, bus);
+                        /*if (mem != null) {
+                            HwLink link = new HwLink(myHwExecutionNode.getName() + "__linkFromMemOri");
+                            tmlmap.getTMLArchitecture().addHwLink(link);
+                            link.setNodes(bus, mem);
+                        }*/
+                    }
+
                     // Must now modify the source app
                     TMLAttribute pktlen = new TMLAttribute("pktlen", "pktlen", new TMLType(TMLType.NATURAL), "0");
                     t.addAttributeIfApplicable(pktlen);
@@ -946,6 +956,16 @@ public class TranslatedRouter<E> {
                         tmlmap.addCommToHwCommNode(newChannel, mem);
                     }
 
+                    HwBus bus =  tmlmap.getTMLArchitecture().getHwBusByName(myHwExecutionNode.getName() + "__bus");
+                    if (bus != null) {
+                        tmlmap.addCommToHwCommNode(newChannel, bus);
+                        /*if (mem != null) {
+                            HwLink link = new HwLink(myHwExecutionNode.getName() + "__linkFromMemDest");
+                            tmlmap.getTMLArchitecture().addHwLink(link);
+                            link.setNodes(bus, mem);
+                        }*/
+                    }
+
                     // Must now modify the source app
                     TMLAttribute pktlen = new TMLAttribute("pktlen", "pktlen", new TMLType(TMLType.NATURAL), "0");
                     t.addAttributeIfApplicable(pktlen);
@@ -1003,7 +1023,7 @@ public class TranslatedRouter<E> {
 
     public void postProcessing() {
         TraceManager.addDev("Post processing of  " + myHwExecutionNode.getName());
-        TMLArchitecture arch = tmlmap.getTMLArchitecture();
+        /*TMLArchitecture arch = tmlmap.getTMLArchitecture();
 
         // Split multicores in mono cores
         if (myHwExecutionNode instanceof HwCPU) {
@@ -1031,7 +1051,7 @@ public class TranslatedRouter<E> {
                 }
             }
 
-        }
+        }*/
 
 
     }

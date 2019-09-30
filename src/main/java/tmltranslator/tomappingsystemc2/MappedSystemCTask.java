@@ -123,8 +123,8 @@ public class MappedSystemCTask {
             long sizeh = new File(path + reference + DOTH).length();
             long sizecpp = new File(path + reference + DOTCPP).length();
 
-            TraceManager.addDev("Computing length of " + path + reference + DOTH + ": " + sizeh);
-            TraceManager.addDev("Computing length of " + path + reference + DOTCPP + ": " + sizeh);
+            //TraceManager.addDev("Computing length of " + path + reference + DOTH + ": " + sizeh);
+            //TraceManager.addDev("Computing length of " + path + reference + DOTCPP + ": " + sizeh);
 
 
             if (sizeh == getHCode().length()) {
