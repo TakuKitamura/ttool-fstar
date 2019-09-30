@@ -118,6 +118,18 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
         int widthFather = getFather().getWidth();
         return widthFather >= widthText + (2 * X_MARGIN);
     }
+    /**
+     * Set the font style to "fontStyle" when the boolean "pointerOnMe" is true and indexOnMe is equal to the index
+     * @param g
+     * @param fontStyle
+     * @param pointerOnMe
+     * @param font
+     * @param index
+     */
+    private void setFontStyleWhenPointerIsOnMe(Graphics g, int fontStyle, boolean pointerOnMe, Font font, int index) {
+    	if (pointerOnMe && indexOnMe == index)
+        	g.setFont(font.deriveFont(fontStyle));
+    }
     
     @Override
     public void internalDrawing(Graphics g) 
@@ -125,19 +137,20 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
         	if ((y + Y_MARGIN) > (getFather().getY() + getFather().getHeight()))
         		return;
 
-        	String textInTheBox = value;
             int widthText = g.getFontMetrics().stringWidth(value);
             int widthFather = getFather().getWidth();
-            if (!canTextGoIntoTheFatherBox(g))
-                textInTheBox = ".";
-     
-            Font font = g.getFont();
-            boolean onMe = tdp.componentPointed() == this ? true : false;
-            if (onMe && indexOnMe == -1)
-            	g.setFont(font.deriveFont(Font.BOLD));
+            //String diagramRefTextName = value;
+            //if (!canTextGoIntoTheFatherBox(g))
+            //    diagramRefTextName = ".";
+            String diagramRefTextName = canTextGoIntoTheFatherBox(g) ? value : ".";
 
+            Font font = g.getFont();
+            boolean pointerIsOnMe = tdp.componentPointed() == this ? true : false;
+            /*if (pointerIsonMe && indexOnMe == -1)
+            	g.setFont(font.deriveFont(Font.BOLD));*/
+            setFontStyleWhenPointerIsOnMe(g, Font.BOLD, pointerIsOnMe, font, -1);
             int curWidth = Math.max(width, myWidth); //int curWidth = myWidth; curWidth = Math.max(widthAppli, curWidth);
-            g.drawString(textInTheBox, x, y);
+            g.drawString(diagramRefTextName, x, y);
             g.setFont(font);
             
             if (validations == null)
@@ -149,8 +162,8 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
             	valMaxX = new int[validations.length];
             } 
             
-            int currentMaxX = widthFather + x - 2 * (X_MARGIN);
-            int saveCurrentMaxX = currentMaxX;
+            int currentMaxWidthX = widthFather + x - 2 * (X_MARGIN);
+            int saveCurrentMaxX = currentMaxWidthX;
             
             if (!canTextGoIntoTheFatherBox(g)) {
             	makeScale(g, widthText + (2 * X_MARGIN));
@@ -165,20 +178,20 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
     			for (int i = validations.length - 1; i >= 0; i--) {
     				saveWidth = g.getFontMetrics().stringWidth(SHORT_ACTION_NAMES[validations[i]]);
 
-    				if ((onMe && indexOnMe == i))
-    					g.setFont(font.deriveFont(Font.ITALIC));
-    				
-    				if ((currentMaxX - saveWidth) > (x + widthText)) 
+//    				if ((pointerIsOnMe && indexOnMe == i))
+//    					g.setFont(font.deriveFont(Font.ITALIC));
+    				setFontStyleWhenPointerIsOnMe(g,Font.ITALIC, pointerIsOnMe, font, i);
+    				if ((currentMaxWidthX - saveWidth) > (x + widthText)) 
     				{
-    					if ((onMe && indexOnMe == i))
-    						g.setFont(font.deriveFont(Font.BOLD));
-    				
-    					g.drawString(SHORT_ACTION_NAMES[validations[i]], currentMaxX - saveWidth, y);
+    					//if ((pointerIsOnMe && indexOnMe == i))
+    					//	g.setFont(font.deriveFont(Font.BOLD));
+    					setFontStyleWhenPointerIsOnMe(g, Font.BOLD, pointerIsOnMe, font, i);
+    					g.drawString(SHORT_ACTION_NAMES[validations[i]], currentMaxWidthX - saveWidth, y);
     					g.setFont(font.deriveFont(Font.ITALIC));
-    					valMinX[i] = currentMaxX-saveWidth;
-    					valMaxX[i] = currentMaxX;
+    					valMinX[i] = currentMaxWidthX-saveWidth;
+    					valMaxX[i] = currentMaxWidthX;
     					oneWritten = true;
-    					currentMaxX = currentMaxX - saveWidth - 5;
+    					currentMaxWidthX = currentMaxWidthX - saveWidth - 5;
     				} else
     					break;
     			}
@@ -188,7 +201,7 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
             	makeScale(g, saveCurrentMaxX - x);
             else
             	makeScale(g, widthText);
-            if (onMe)
+            if (pointerIsOnMe)
             	g.drawRect(x - 2, y - 12, curWidth + 5, 15);
             
             return; 
@@ -273,7 +286,7 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
     */
     private void makeScale(Graphics g, int _size)
     {
-    	TraceManager.addDev("----- Make SCale ----");
+    	//TraceManager.addDev("----- Make SCale ----");
     	if (!tdp.isScaled()) 
     	{
             myWidth = _size;

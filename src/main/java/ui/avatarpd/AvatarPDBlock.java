@@ -137,6 +137,7 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
 		
 		actionOnAdd();
     }
+    
     @Override
     public void internalDrawing(Graphics g) {
     	//TraceManager.addDev("Hello this is AvatarPDBlock ---- ");
@@ -409,7 +410,7 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
 		//g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
     }
 	
-    
+    @Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
         
         if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
@@ -427,6 +428,7 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
         return name;
     }
     
+    @Override
 	public boolean editOndoubleClick(JFrame frame) {
 		
 		oldValue = value;
@@ -469,9 +471,9 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
 			}
 		}
 		return false;
-		
     }
-	
+    
+    @Override
 	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
 		if (tgc instanceof AvatarPDBlock) {
 			return true;
@@ -485,11 +487,12 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
 
     }
     
-    
+    @Override
     public int getType() {
         return TGComponentManager.APD_BLOCK;
     }
     
+    @Override
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
 		boolean swallowed = false;
 		
@@ -552,6 +555,7 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
 		return true;
     }
     
+    @Override
     public void removeSwallowedTGComponent(TGComponent tgc) {
 		removeMyInternalComponent(tgc, false);
 	}
@@ -598,7 +602,7 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
     }
     
 	
-    
+	@Override
     public void hasBeenResized() {
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof AvatarPDBlock) {
@@ -617,7 +621,7 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
 		}
         
     }
-	
+	@Override
 	public void resizeWithFather() {
         if ((father != null) && (father instanceof AvatarPDBlock)) {
 			// Too large to fit in the father? -> resize it!
@@ -684,7 +688,7 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
 	}
 	
 	
-    
+	@Override
    	public int getDefaultConnector() {
         return TGComponentManager.APD_COMPOSITION_CONNECTOR;
 	}
