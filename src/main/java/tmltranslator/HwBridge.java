@@ -42,6 +42,8 @@
 package tmltranslator;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Objects;
 
 
@@ -74,7 +76,9 @@ public class HwBridge extends HwCommunicationNode  {
         if (!super.equalSpec(o)) return false;
         HwBridge hwBridge = (HwBridge) o;
         return latency == hwBridge.latency &&
-                bufferByteSize == hwBridge.bufferByteSize;
+                bufferByteSize == hwBridge.bufferByteSize &&
+                isFirewall == hwBridge.isFirewall &&
+                (new HashSet<>(firewallRules).equals(new HashSet<>(hwBridge.firewallRules)));
     }
 
 }
