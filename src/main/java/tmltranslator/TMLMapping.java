@@ -1831,4 +1831,18 @@ public class TMLMapping<E> {
         }
         return cpt;
     }
+
+    public void remap(HwExecutionNode src, HwExecutionNode dst) {
+        int cpt = 0;
+        for(int i=0; i<onnodes.size(); i++) {
+            HwExecutionNode node = onnodes.get(i);
+            if (node == src) {
+                TMLTask task = mappedtasks.get(i);
+                onnodes.remove(i);
+                mappedtasks.remove(i);
+                addTaskToHwExecutionNode(task, dst);
+                return;
+            }
+        }
+    }
 }

@@ -1002,7 +1002,30 @@ public class TranslatedRouter<E> {
 
 
     public void postProcessing() {
+        TMLArchitecture arch = tmlmap.getTMLArchitecture();
+        // Split multicores in mono cores
+        if (myHwExecutionNode instanceof HwCPU) {
+            HwCPU myCPU = (HwCPU)myHwExecutionNode;
 
+            // add Mono-core CPUs
+            int cpt = 0;
+            while(myCPU.nbOfCores > 1) {
+                HwCPU newCPU = myCPU.clone();
+                newCPU.nbOfCores = 1;
+                myCPU.nbOfCores = myCPU.nbOfCores - 1;
+                arch.addHwNode(newCPU);
+                HwBus bus = arch.getHwBusByName(myCPU.getName() + "__bus");
+                if (bus != null) {
+                    HwLink link = new HwLink(myCPU.getName() + "__link" + cpt);
+                    arch.addHwLink(link);
+                    link.setNodes(bus, newCPU);
+                    cpt ++;
+
+                    tmlmap.remap(myCPU, newCPU);
+                }
+            }
+
+        }
 
 
     }
