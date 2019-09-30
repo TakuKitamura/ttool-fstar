@@ -64,8 +64,8 @@ import java.util.Vector;
  */
 public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithInternalComponent implements SwallowTGComponent  {
     public String oldValue; 
-    //protected int textX = 5; //FIXME already extended from TGScalableComponent, should be textX = 5
-//    protected int textY = 22; //FIXME already extended from TGScalableComponent, should be textY =  22
+    //protected int textX = 5; 
+//    protected int textY = 22; 
 //    protected int lineHeight = 30;
 //    protected double dlineHeight = 0.0;
 //    protected int reqType = 0;
@@ -307,6 +307,7 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
 	 * @param x
 	 * @param y
 	 * */
+    @Override
     public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
 
         componentMenu.addSeparator();
@@ -322,6 +323,7 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
 	 * @param e
 	 * @return boolean true
 	 * */
+    @Override
     public boolean eventOnPopup(ActionEvent e) {
         //   String s = e.getActionCommand();
 
@@ -482,6 +484,7 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
      * @param tgc
      * @return boolean
      * */
+    @Override
     public boolean acceptSwallowedTGComponent(TGComponent tgc) {
         return tgc instanceof AvatarMethodologyDiagramName;
     }
@@ -493,6 +496,7 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
      * @param y
      * @return boolean
      * */
+    @Override
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
         tgc.setFather(this);
         addInternalComponent(tgc, 0);
@@ -504,6 +508,7 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
      * removeSwallowedTGComponent
      * @param tgc
      * */
+    @Override
     public void removeSwallowedTGComponent(TGComponent tgc) {
         removeInternalComponent(tgc);
     }

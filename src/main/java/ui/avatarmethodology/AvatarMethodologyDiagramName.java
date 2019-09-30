@@ -111,13 +111,13 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
         myImageIcon = IconManager.imgic302;
     }
 
-    
+    /*Issue #31 Was used in the previous internalDrawing refactoring that was done, now its useless
     private boolean canTextGoIntoTheFatherBox(Graphics g)
     {
         int widthText = g.getFontMetrics().stringWidth(value);
         int widthFather = getFather().getWidth();
         return widthFather >= widthText + (2 * X_MARGIN);
-    }
+    }*/
     /**
      * Set the font style to "fontStyle" when the boolean "pointerOnMe" is true and indexOnMe is equal to the index
      * @param g
@@ -183,9 +183,6 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
         if (pointerIsOnMe) //Issue #31: The rectangle was not around the text when zoom: with scale it works better
         	//g.drawRect(x - 2, y - 12, curWidth + 5, 15);
         	g.drawRect(x - 2, y - scale(15), curWidth + 5, scale(15));
-        
-        return; 
-    	
     }
     /** Issue #31: Refactored internalDrawing for more comprehension
      * Draws the text of the diagram references and the eventual validations
@@ -357,6 +354,7 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
         return; 
     }
     */
+    
     private void makeScale(Graphics g, int _size)
     {
     	//TraceManager.addDev("----- Make SCale ----");
@@ -367,7 +365,7 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
         }
     }
     
-    
+    @Override
     public TGComponent isOnMe(int _x, int _y) {
     	int oldIndex = indexOnMe;
         if (GraphicLib.isInRectangle(_x, _y, x, y - height, Math.max(myWidth, minWidth), myHeight)) 
@@ -397,6 +395,7 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
         }
         return null;
     }
+    
     @Override
     public boolean editOndoubleClick(JFrame frame) 
     {
@@ -416,11 +415,13 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
         } 
         return true;
     }
+    
     @Override
     public  int getType() 
     {
         return TGComponentManager.AVATARMETHODOLOGY_DIAGRAM_NAME;
     }
+    
     @Override
    	public int getDefaultConnector() 
    	{
