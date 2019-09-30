@@ -1023,7 +1023,7 @@ public class TranslatedRouter<E> {
 
     public void postProcessing() {
         TraceManager.addDev("Post processing of  " + myHwExecutionNode.getName());
-        /*TMLArchitecture arch = tmlmap.getTMLArchitecture();
+        TMLArchitecture arch = tmlmap.getTMLArchitecture();
 
         // Split multicores in mono cores
         if (myHwExecutionNode instanceof HwCPU) {
@@ -1051,7 +1051,7 @@ public class TranslatedRouter<E> {
                 }
             }
 
-        }*/
+        }
 
 
     }
