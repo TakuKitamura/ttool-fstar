@@ -114,7 +114,7 @@ public class ClusterCode {
 				    }
 
 					else{//sc_uint
-					     //corpsCluster +="2"+CR;
+					    //  corpsCluster +="@@@2"+CR;
 			    corpsCluster = corpsCluster + "\tsca_tdf::sca_signal<" + ((SysCAMSTPortConverter) c.get_p1().getComponent()).getConvType()+ "<"+ ((SysCAMSTPortConverter) c.get_p1().getComponent()).getNbits()+"> " + "> " 
 				+ c.getName() + ";" + CR;
 			    names.add(c.getName());
@@ -124,21 +124,23 @@ public class ClusterCode {
 		    
 			        }			
 		    } else if ((c.get_p2().getComponent() instanceof SysCAMSTPortConverter && c.get_p1().getComponent() instanceof SysCAMSTPortDE)) {
-		if (c.getName().equals("")) {// corpsCluster +="0"+CR;
-			corpsCluster = corpsCluster + "\tsca_tdf::sca_signal<" + ((SysCAMSTPortConverter) c.get_p2().getComponent()).getConvType() + " > " 
-			    + "sig_" + nb_con + ";" + CR;
+		    if (c.getName().equals("")) { corpsCluster +="@@@0"+CR;
+			//	corpsCluster = corpsCluster + "\tsca_tdf::sca_signal<" + ((SysCAMSTPortConverter) c.get_p2().getComponent()).getConvType() + " > " 			    + "sig_" + nb_con + ";" + CR;
+
+		 corpsCluster = corpsCluster + "\tsc_core::sc_signal<" + ((SysCAMSTPortConverter) c.get_p2().getComponent()).getConvType() + "> " + "sig_" + nb_con + ";" + CR;//DG 30.09 sca-> sc	
+
 			names.add("sig_" + nb_con);
 			nb_con++;
 		    } else {
 				if( ((SysCAMSTPortConverter) c.get_p2().getComponent()).getNbits()==0 )
-				    {
+				    { //corpsCluster +="@@@1"+CR;
 				corpsCluster = corpsCluster + "\tsca_tdf::sca_signal<" + ((SysCAMSTPortConverter) c.get_p2().getComponent()).getConvType() + "> " 
 				    + c.getName() + ";" + CR;
 				names.add(c.getName());
 			    }
 
 		    	else{//sc_uint
-			    //corpsCluster +="1"+CR;
+			    //corpsCluster +="@@@4"+CR;
 			    corpsCluster = corpsCluster + "\tsca_tdf::sca_signal<" + ((SysCAMSTPortConverter) c.get_p2().getComponent()).getConvType()+ "<"+((SysCAMSTPortConverter) c.get_p2().getComponent()).getNbits() + "> > " 
 				+ c.getName() + ";" + CR;
 			    names.add(c.getName());
