@@ -170,7 +170,7 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
 		}
 		
 		// Icon
-		int border = scale(3);
+		int border = scale(5);
 		g.drawImage( scale(IconManager.img5100), x + width - scale(iconSize) - border, y + border, Color.yellow, null);
 			
 		//String Title + Stereotype
