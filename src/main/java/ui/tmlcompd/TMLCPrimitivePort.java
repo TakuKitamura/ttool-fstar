@@ -353,14 +353,15 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         int w;
         Font f = g.getFont();
         Font fold = f;
-
-        int si = Math.min(8, (int)((float)ft - 2));
-        f = f.deriveFont((float)si);
-        g.setFont(f);
-        w = g.getFontMetrics().stringWidth(commName);
-        if (w < ((int)(width * 1.5))) {
-            g.drawString(commName, x, y-1);
-        }
+        // Issue #31: The commName was not zooming 
+        //int si = Math.min(8, (int)((float)ft - 2));
+        //f = f.deriveFont((float)si);
+        //g.setFont(f);
+        //w = g.getFontMetrics().stringWidth(commName);
+        //if (w < ((int)(width * 1.5))) {
+        //    g.drawString(commName, x, y-1);
+        //}
+        g.drawString(commName, x, y -1);
 
         if (checkConf && isOrigin){
             drawConfVerification(g);
