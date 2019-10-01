@@ -74,7 +74,7 @@ public class  TMLModeling<E> {
     private List<TMLEvent> events;
     private List<String[]> pragmas;
     
-    private TMLElement correspondance[];
+    private TMLElement correspondance[]; // Link to graphical components
 
     // Security
     public List<String> securityPatterns;

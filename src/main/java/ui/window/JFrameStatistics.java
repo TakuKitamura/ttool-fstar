@@ -101,7 +101,7 @@ public class JFrameStatistics extends JFrame implements ActionListener, Stoppabl
     //shortest paths
     //JComboBox combo1, combo2, combo3, combo4;
     JTextField combo1, combo2, combo3, combo4;
-    JTextField text1, text2;
+    JTextArea text1, text2;
     JButton goPath, goPathL, savePath, savePathL;
     private JButton showGraph;
 
@@ -425,7 +425,7 @@ public class JFrameStatistics extends JFrame implements ActionListener, Stoppabl
 
         jp2.add(jp1, BorderLayout.NORTH);
 
-        text1 = new JTextField(300);
+        text1 = new JTextArea();
         JScrollPane jspText = new JScrollPane(text1);
         jspText.setWheelScrollingEnabled(true);
         jspText.getVerticalScrollBar().setUnitIncrement(10);
@@ -513,7 +513,7 @@ public class JFrameStatistics extends JFrame implements ActionListener, Stoppabl
 
         jp4.add(jp3, BorderLayout.NORTH);
 
-        text2 = new JTextField(300);
+        text2 = new JTextArea();
         jspText = new JScrollPane(text2);
         jspText.setWheelScrollingEnabled(true);
         jspText.getVerticalScrollBar().setUnitIncrement(10);
@@ -622,7 +622,7 @@ public class JFrameStatistics extends JFrame implements ActionListener, Stoppabl
 
         int from;
         int to;
-        JTextField text;
+        JTextArea text;
 
         if (idFunc == 1) {
             text = text1;
@@ -712,7 +712,7 @@ public class JFrameStatistics extends JFrame implements ActionListener, Stoppabl
     public void computeFunction(int id) {
         int from;
         int to;
-        JTextField text;
+        JTextArea text;
 
         if (!cycleComputed) {
             hasCycle = GraphAlgorithms.hasCycle(graph);
@@ -773,11 +773,11 @@ public class JFrameStatistics extends JFrame implements ActionListener, Stoppabl
         for (int j = 0; j < dss[to].path.length; j++) {
             path = path + "[" + dss[to].path[j] + "]";
             if (j < size - 1) {
-                path = path + " -- " + graph.getActionTransition(dss[to].path[j], dss[to].path[j + 1]) + " --> ";
+                path = path + "\t" + graph.getActionTransition(dss[to].path[j], dss[to].path[j + 1]) + "\n";
             }
         }
 
-        path = "Length=" + (size - 1) + " / path=" + path;
+        path = "Length=" + (size - 1) + "\n" + path;
         setPath(path, id);
 
         Automata automata = new Automata();

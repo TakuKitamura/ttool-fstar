@@ -58,14 +58,14 @@ public class TMLChannel extends TMLCommunicationElement {
     public static final int BRBW = 0;
     public static final int BRNBW = 1;
     public static final int NBRNBW = 2;
-    public int confStatus;
+
     public boolean checkConf;
     public boolean checkAuth;
     private int size; // width of the channel i.e. nb of bytes of each sample
     private int type;
     private int max; // Maximum number of samples
     public TMLCPrimitivePort port;
-    public TMLCPrimitivePort port2;
+    //public TMLCPrimitivePort port2;
     public ArrayList<TMLCPrimitivePort> ports;
 
     // Used on for 1 -> 1 channel

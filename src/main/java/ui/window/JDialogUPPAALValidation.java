@@ -127,6 +127,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
     protected JButton stop;
     protected JButton close;
     protected JButton eraseAll;
+    protected JButton checkUncheckAllPragmas;
 
     protected JCheckBox deadlockE, deadlockA, generateTrace, custom, showDetails;
     protected JRadioButton stateR_None, stateR_Selected, stateR_All;
@@ -388,31 +389,59 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         cadvanced.weightx = 1.0;
         jpadvanced.setLayout(gridbagadvanced);
         jpadvanced.setBorder(new javax.swing.border.TitledBorder("Advanced properties"));
-        cbasic.fill = GridBagConstraints.BOTH;
+        cadvanced.fill = GridBagConstraints.BOTH;
 
-        cadvanced.gridwidth = GridBagConstraints.REMAINDER;
+        cadvanced.gridwidth = 1; //GridBagConstraints.REMAINDER;
         custom = new JCheckBox("Safety pragmas");
         custom.addActionListener(this);
         if ((customQueries != null) && (customQueries.size() > 0)) {
             jpadvanced.add(custom, cadvanced);
             custom.setSelected(customChecked);
         }
+
+        cadvanced.gridwidth = GridBagConstraints.REMAINDER;
+        checkUncheckAllPragmas = new JButton("Check / uncheck all");
+        checkUncheckAllPragmas.addActionListener(this);
+
+        if ((customQueries != null) && (customQueries.size() > 0)) {
+            cadvanced.fill = GridBagConstraints.VERTICAL;
+            jpadvanced.add(checkUncheckAllPragmas, cadvanced);
+        }
+
+
+
+
         //jp1.add(custom, c1);
         //custom.setSelected(customChecked);
         if (customQueries != null) {
+            JPanel jpadvancedQ = new JPanel();
+            GridBagConstraints cadvancedQ = new GridBagConstraints();
+            GridBagLayout gridbagadvancedQ = new GridBagLayout();
+            cadvancedQ.anchor = GridBagConstraints.WEST;
+            cadvancedQ.gridheight = 1;
+            cadvancedQ.weighty = 1.0;
+            cadvancedQ.weightx = 1.0;
+            jpadvancedQ.setLayout(gridbagadvancedQ);
+            cadvancedQ.fill = GridBagConstraints.BOTH;
+
+
             for (String s : customQueries) {
-                cadvanced.gridwidth = GridBagConstraints.RELATIVE;
+                cadvancedQ.gridwidth = GridBagConstraints.RELATIVE;
                 JLabel space = new JLabel("   ");
-                cadvanced.weightx = 0.0;
-                jpadvanced.add(space, cadvanced);
-                cadvanced.gridwidth = GridBagConstraints.REMAINDER; //end row
+                cadvancedQ.weightx = 0.0;
+                jpadvancedQ.add(space, cadvancedQ);
+                cadvancedQ.gridwidth = GridBagConstraints.REMAINDER; //end row
                 JCheckBox cqb = new JCheckBox(s);
                 cqb.addActionListener(this);
-                cadvanced.weightx = 1.0;
-                jpadvanced.add(cqb, cadvanced);
+                cadvancedQ.weightx = 1.0;
+                jpadvancedQ.add(cqb, cadvancedQ);
                 customChecks.add(cqb);
 
             }
+            JScrollPane jsp = new JScrollPane(jpadvancedQ, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+            jsp.setPreferredSize(new Dimension(500, 150));
+            cadvanced.gridheight = 10;
+            jpadvanced.add(jsp, cadvanced);
         }
         jp1.add(jpadvanced, c1);
         /*  jp1.add(new JLabel("Custom formula to translate = "), c1);
@@ -468,6 +497,8 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         jp2.add(close);
         jp2.add(eraseAll);
         c.add(jp2, BorderLayout.SOUTH);
+
+
     }
 
     @Override
@@ -477,6 +508,8 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         // Compare the action command to the known actions.
         if (evt.getSource() == eraseAll) {
             eraseTextArea();
+        } else if (evt.getSource() == checkUncheckAllPragmas) {
+            checkUncheckAllPragmas();
         } else if (command.equals("Start")) {
             startProcess();
         } else if (command.equals("Stop")) {
@@ -492,6 +525,21 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
     public void eraseTextArea() {
         jta.setText("");
     }
+
+    private void checkUncheckAllPragmas() {
+        if (customChecks != null) {
+            int nb = 0;
+            for(JCheckBox cb: customChecks) {
+                nb = cb.isSelected() ? nb + 1 : nb ;
+            }
+            boolean check = (nb * 2) < customChecks.size();
+            for(JCheckBox cb: customChecks) {
+                cb.setSelected(check);
+            }
+            setButtons();
+        }
+    }
+
 
     public void closeDialog() {
         if (mode == STARTED) {

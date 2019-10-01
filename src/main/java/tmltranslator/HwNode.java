@@ -88,6 +88,9 @@ public abstract class HwNode extends DIPLOElement  {
         return maximumNbOfMappedElement == hwNode.maximumNbOfMappedElement &&
                 clockRatio == hwNode.clockRatio &&
                 name.equals(hwNode.getName());
+
+    public void setName(String _name) {
+        name = _name;
     }
 
 }

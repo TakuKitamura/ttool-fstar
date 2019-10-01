@@ -79,7 +79,7 @@ public class TGConnectingPointUCD extends  TGConnectingPointWidthHeight{
 	    //TraceManager.addDev("NEW is compatible with "  + outPoint);
 
 	    if (outPoint != null) {
-	        if ((outPoint.getFather() instanceof UCDUseCase) && (getFather() instanceof UCDUseCase)) {
+	        if ((outPoint.getFather() instanceof UCDUseCase) && (getFather() instanceof UCDUseCase) && (type == TGComponentManager.CONNECTOR_ACTOR_UCD)) {
 	            return false;
             }
             if ((outPoint.getFather() instanceof UCDActor) && (getFather() instanceof UCDActor)) {

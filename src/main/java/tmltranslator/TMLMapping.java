@@ -582,16 +582,33 @@ public class TMLMapping<E> {
     }
 
     public int getNbOfMemoriesOfChannel(TMLChannel _ch) {
+        int n = 0;
         int cpt = 0;
         for (TMLElement elt : mappedcommelts) {
             if (elt == _ch) {
                 HwCommunicationNode node = oncommnodes.get(cpt);
                 if (node instanceof HwMemory) {
-                    cpt++;
+                    n++;
                 }
             }
+            cpt++;
         }
-        return cpt;
+        return n;
+    }
+
+    public String getStringOfMemoriesOfChannel(TMLChannel _ch) {
+        String ret = "";
+        int cpt = 0;
+        for (TMLElement elt : mappedcommelts) {
+            if (elt == _ch) {
+                HwCommunicationNode node = oncommnodes.get(cpt);
+                if (node instanceof HwMemory) {
+                   ret += node.getName() + " ; ";
+                }
+            }
+            cpt ++;
+        }
+        return ret;
     }
 
     public TMLElement getCommunicationElementByName(String _name) {
@@ -1862,4 +1879,17 @@ public class TMLMapping<E> {
     }
 
 
+    public void remap(HwExecutionNode src, HwExecutionNode dst) {
+        int cpt = 0;
+        for(int i=0; i<onnodes.size(); i++) {
+            HwExecutionNode node = onnodes.get(i);
+            if (node == src) {
+                TMLTask task = mappedtasks.get(i);
+                onnodes.remove(i);
+                mappedtasks.remove(i);
+                addTaskToHwExecutionNode(task, dst);
+                return;
+            }
+        }
+    }
 }

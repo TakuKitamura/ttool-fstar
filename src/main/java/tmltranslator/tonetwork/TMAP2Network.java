@@ -237,6 +237,7 @@ public class TMAP2Network<E>  {
                 //newList.add(node);
 
                 HwBus bus = new HwBus(node.getName() + "__bus");
+                bus.arbitration = HwBus.PRIORITY_BASED;
                 HwMemory mem = new HwMemory(node.getName() + "__mem");
                 newList.add(bus);
                 newList.add(mem);

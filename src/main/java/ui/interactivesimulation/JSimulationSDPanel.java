@@ -185,6 +185,9 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
         int oldMaxX = maxX;
 
         boolean mustDraw = tryToGetExclu();
+
+        //TraceManager.addDev("JSimulationDSPanel MustDraw? " + mustDraw);
+
         if (mustDraw) {
             if (!spaceBetweenLifeLinesComputed) {
                 computeSpaceBetweenLifeLines(g);
@@ -225,6 +228,9 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 
     // Returns the currentY position
     private int paintTopElements(Graphics g, int currentX, int currentY) {
+
+        //TraceManager.addDev("Painting n top elements. n= " + entityNames.size());
+
         int w;
 
         for(String name : entityNames) {
@@ -935,12 +941,15 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
         try {
             // Open the file that is the first
             // command line parameter
+            //TraceManager.addDev("setfilereference in JSimulationSDPanel");
             this.fileReference = _fileReference;
             this.mode = FILE_MODE;
             FileInputStream fstream = new FileInputStream(_fileReference);
             BufferedReader br = new BufferedReader(new InputStreamReader(new DataInputStream(fstream)));
             // Get the object of DataInputStream
+
             this.setFileReference(br, _fileReference);
+
         } catch(FileNotFoundException e) {
             TraceManager.addDev("File " + _fileReference + " not found.");
         } catch(SecurityException e) {
@@ -974,11 +983,13 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
     }
 
     public void run() {
-        //TraceManager.addDev("Reading file");
+        //TraceManager.addDev("Reading file 1");
 
         if (mode == NO_MODE) {
             return;
         }
+
+        //TraceManager.addDev("Reading file 2");
 
         if ((this.mode == FILE_MODE || this.mode == STREAM_MODE) && this.inputStream != null) {
             // Read the content of the file
@@ -990,6 +1001,7 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
                 String strLine;
                 //Read File Line By Line
                 while ((strLine = this.inputStream.readLine()) != null)   {
+                    //TraceManager.addDev("Reading transaction: " + strLine);
                     addGenericTransaction(strLine);
                 }
                 //Close the input stream
@@ -1033,6 +1045,7 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
         // Adding the ID
         index0 = trans.indexOf(" ");
         if (index0 == -1) {
+            //TraceManager.addDev("addtranse 0 No space");
             return;
         }
         tmp = trans.substring(1, index0);
@@ -1042,7 +1055,7 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
         }
 
 
-        //TraceManager.addDev("1");
+        //TraceManager.addDev("addtrans 1");
 
         // Time
         tmp = extract(trans, "time");
@@ -1055,7 +1068,7 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
         try {
             index0 = tmp.indexOf('.');
             if (index0 == -1) {
-                TraceManager.addDev("Invalid time value");
+                //TraceManager.addDev("Invalid time value");
                 return;
             }
             tmp1 = tmp.substring(0, index0);
@@ -1080,6 +1093,7 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
         // Name of the block
         tmp = extract(trans, "block");
         if (tmp == null) {
+            //TraceManager.addDev("addtrans no block");
             return;
         }
 
@@ -1088,10 +1102,13 @@ public class JSimulationSDPanel extends JPanel implements MouseMotionListener, R
 //        addEntityNameIfApplicable(tmp);
 
         if (!entityNames.contains(tmp)){
+            //TraceManager.addDev("addtrans New entity");
 			if (limitEntity){
+                //TraceManager.addDev("addtrans limitEntity");
 	        	return;
 			}
 			else {
+                //TraceManager.addDev("addtrans ADDING ENTITY NAME");
 				addEntityNameIfApplicable(tmp);
 			}
         }
