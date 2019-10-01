@@ -138,6 +138,19 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
             return new Color(201, 243, 188 - (getMyDepth() * 10), 200);
     }
 
+    private boolean canTextGoInTheBox(Graphics g, int fontSize, String text)
+    {
+    	int txtWidth = g.getFontMetrics().stringWidth(text) + (textX * 2);
+    	int spaceTakenByIcon = iconSize + textX;
+    	return (fontSize + (textY * 2) < height) // enough space in height
+    			&& (txtWidth + spaceTakenByIcon < width) // enough space in width
+    			;
+    }
+    /** 
+     * Function which is drawing the box, the text and icon 
+     * Issue #31: Fixed zoom on texts and icon + made sure that if the text can't go into the box is does not get drawn
+     * @param g
+     */
     @Override
     public void internalDrawing(Graphics g)
     {
@@ -154,7 +167,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
     	int centerOfBox = (width - stringWidth) / 2;
     	Font f = g.getFont();
     	currentFontSize = f.getSize();
-    	if (currentFontSize + (textY * 2) < height)
+    	if (canTextGoInTheBox(g, currentFontSize, value))
     	{
 	    	//put title in bold before drawing then set back to normal after
 	    	g.setFont(f.deriveFont(Font.BOLD));
@@ -162,12 +175,12 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 	    	g.setFont(f);
     	}
     	
-    	// Icon
-    	g.drawImage(scale(IconManager.imgic1200.getImage()), x + width - scale(iconSize) - textX, y + textX, null);
+    	// Scaled ICON drawing
+    	g.drawImage(scale(IconManager.imgic1200.getImage()), x + width - iconSize - textX, y + textX, null);
         if (isAttacker)
-            g.drawImage(scale(IconManager.imgic7008.getImage()), x + width - scale(2 * iconSize) - textX, y + 2 * textX, null);
+            g.drawImage(scale(IconManager.imgic7008.getImage()), x + width - 2 * iconSize - textX, y + 2 * textX, null);
         
-        // Attributes
+        // Attributes printing
         if (tdp.areAttributesVisible())
         {
         	//spaces permits the attributes to not override each other
@@ -178,10 +191,15 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         	{
         		attribute = myAttributes.get(i);
         		spaces += currentFontSize;
-                attributeStr = attribute.toString();
-                g.drawString(attributeStr, x + textX, y + spaces);
-                drawVerification(g, x + textX, y + spaces, attribute.getConfidentialityVerification());
-            }
+        		attributeStr = attribute.toString();
+        		if (canTextGoInTheBox(g, spaces, attributeStr))
+        		{
+	                g.drawString(attributeStr, x + textX, y + spaces);
+	                drawVerification(g, x + textX, y + spaces, attribute.getConfidentialityVerification());
+        		}
+        		else // if we could not display some attributes it will show a ...
+        			g.drawString("...", x + textX, y + height - 15);
+        	}
         }
     }
 /*
