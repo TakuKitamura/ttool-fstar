@@ -41,8 +41,7 @@ package tmltranslator;
 
 import myutil.TraceManager;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Class TMLArchitecture
@@ -501,5 +500,20 @@ public class TMLArchitecture {
     public int getSizeOfNoC() {
         HwNoC noc = getHwNoC();
         return (noc == null ? -1 : noc.size);
+    }
+
+    public boolean equalSpec(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TMLArchitecture that = (TMLArchitecture) o;
+
+        TMLComparingMethod comp = new TMLComparingMethod();
+
+        if (!comp.isHwNodeListEquals(hwnodes, that.hwnodes)) return false;
+
+        if(!comp.isHwlinkListEquals(hwlinks, that.hwlinks)) return false;
+
+        return masterClockFrequency == that.masterClockFrequency;
     }
 }

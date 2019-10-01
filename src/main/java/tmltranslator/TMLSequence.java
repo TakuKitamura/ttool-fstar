@@ -39,6 +39,7 @@
 
 package tmltranslator;
 
+import java.util.HashSet;
 import java.util.Vector;
 
 
@@ -94,5 +95,17 @@ public class TMLSequence extends TMLActivityElement {
 
     public String customExtraToXML() {
         return "";
+    }
+
+    public Vector<Integer> getIndexes () {
+        return indexes;
+    }
+
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof TMLSequence)) return false;
+        if (!super.equalSpec(o)) return false;
+
+        TMLSequence tmlSequence = (TMLSequence) o;
+        return (new HashSet<>(indexes)).equals(new HashSet<>(tmlSequence.getIndexes()));
     }
 }

@@ -41,6 +41,8 @@
 
 package tmltranslator;
 
+import java.util.Objects;
+
 /**
  * Class TMLActivityElementWithAction
  * Creation: 23/11/2005
@@ -69,6 +71,13 @@ public class TMLActivityElementWithAction extends TMLActivityElement {
     public String customExtraToXML() {
 	    String s = " action=\"" + getAction() + "\"";
 	    return s;
+    }
+
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof TMLActivityElementWithAction)) return false;
+        if (!super.equalSpec(o)) return false;
+        TMLActivityElementWithAction tmlActivityElementWithAction = (TMLActivityElementWithAction) o;
+        return Objects.equals(action, tmlActivityElementWithAction.getAction());
     }
 
 }

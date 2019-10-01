@@ -52,6 +52,7 @@ import tmltranslator.toproverif.TML2ProVerif;
 import ui.CorrespondanceTGElement;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Class TMLMapping
@@ -530,7 +531,7 @@ public class TMLMapping<E> {
     }
 
     public List<HwCommunicationNode> getCommunicationNodes() {
-        return oncommnodes;
+        return this.oncommnodes;
     }
 
     public List<TMLElement> getMappedCommunicationElement() {
@@ -1848,6 +1849,35 @@ public class TMLMapping<E> {
         }
         return cpt;
     }
+
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof  TMLMapping)) return false;
+        TMLMapping<?> that = (TMLMapping<?>) o;
+        TMLComparingMethod comp = new TMLComparingMethod();
+
+        if(!comp.isOncommondesListEquals(oncommnodes, that.getCommunicationNodes()))
+            return false;
+
+        if(!comp.isMappedcommeltsListEquals(mappedcommelts, that.getMappedCommunicationElement()))
+            return false;
+
+        if(!comp.isTasksListEquals(mappedtasks, that.getMappedTasks()))
+            return false;
+
+        if(!comp.isOnExecutionNodeListEquals(onnodes, that.getNodes()))
+            return false;
+
+        if(!comp.isListOfStringArrayEquals(pragmas, that.getPragmas()))
+            return false;
+
+        if(!comp.isSecurityPatternMapEquals(mappedSecurity, that.mappedSecurity))
+            return false;
+
+        return tmlm.equalSpec(that.tmlm) &&
+                tmla.equalSpec(that.tmla) &&
+                firewall == that.firewall;
+    }
+
 
     public void remap(HwExecutionNode src, HwExecutionNode dst) {
         int cpt = 0;
