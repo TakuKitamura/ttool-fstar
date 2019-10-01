@@ -129,26 +129,21 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 
         actionOnAdd();
     }
-    /*
+    
     private Color choosingColor()
     {
         if (ColorManager.TML_COMPOSITE_COMPONENT == Color.white) 
             return Color.white;
         else 
             return new Color(201, 243, 188 - (getMyDepth() * 10), 200);
-    }*/
+    }
 
     @Override
     public void internalDrawing(Graphics g)
     {
     	//rectangle + Filling color
     	Color c = g.getColor();
-    	if (myColor == null) {
-            if (ColorManager.TML_COMPOSITE_COMPONENT == Color.white)
-                myColor = Color.white;
-            else 
-                myColor = new Color(201, 243, 188 - (getMyDepth() * 10), 200);
-        }
+    	myColor = choosingColor();
     	g.drawRect(x, y, width, height);
     	g.setColor(myColor);
     	g.fill3DRect(x, y, width, height, true);
@@ -159,7 +154,6 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
     	int centerOfBox = (width - stringWidth) / 2;
     	Font f = g.getFont();
     	currentFontSize = f.getSize();
-
     	if (currentFontSize + (textY * 2) < height)
     	{
 	    	//put title in bold before drawing then set back to normal after
@@ -167,6 +161,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 	    	g.drawString(value, x + centerOfBox, y + currentFontSize + textY);
 	    	g.setFont(f);
     	}
+    	
     	// Icon
     	g.drawImage(scale(IconManager.imgic1200.getImage()), x + width - scale(iconSize) - textX, y + textX, null);
         if (isAttacker)
@@ -179,7 +174,6 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         	int spaces = currentFontSize + textY * 2; 
         	TAttribute attribute;
         	String attributeStr;
-        	int cpt = 0;
         	for (int i = 0; i < myAttributes.size(); i++)
         	{
         		attribute = myAttributes.get(i);
