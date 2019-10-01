@@ -38,6 +38,8 @@
 
 package ui;
 
+import java.awt.Graphics;
+
 /**
    * Class TGCScalableWithInternalComponent
    * Graphical component that contains one or more internal components, and which is scalable
@@ -52,6 +54,19 @@ public abstract class TGCScalableWithInternalComponent extends TGCWithInternalCo
 
     public TGCScalableWithInternalComponent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+    }
+    
+    // Issue #31
+    /**
+     * With the graphic and the string it will calculate the center of the box to draw 
+     * @param g
+     * @param str
+     * @return
+     */
+    protected int getCenterOfBox(Graphics g, String str)
+    {
+    	int stringWidth = g.getFontMetrics().stringWidth(str);
+    	return x + (width - stringWidth)/2;
     }
 //
 //    @Override

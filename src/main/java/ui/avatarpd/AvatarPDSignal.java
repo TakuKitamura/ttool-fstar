@@ -107,7 +107,30 @@ public class AvatarPDSignal extends TGCScalableWithInternalComponent implements 
         
         myImageIcon = IconManager.imgic702;
     }
+    // Issue #31
+    @Override
+    public void internalDrawing(Graphics g)
+    {
+    	//Rectangle + Filling
+    	Color c = g.getColor();
+		g.draw3DRect(x, y, width, height, true);
+		g.setColor(ColorManager.AVATARPD_SIGNAL);
+		g.fill3DRect(x+1, y+1, width-1, height-1, true);
+		g.setColor(c);
+    	
+		//Strings: Title and stereotype
+		currentFontSize = g.getFont().getSize();
+		String ster = "<<" + stereotype + ">>";
+		g.setFont(g.getFont().deriveFont(Font.BOLD));
+		g.drawString(ster,  getCenterOfBox(g, ster), y + currentFontSize);
+		
+		g.setFont(g.getFont().deriveFont(Font.PLAIN));
+		g.drawString(value, getCenterOfBox(g, value), y + (currentFontSize * 2) + textX);
+    }
     
+    
+/*
+ * 	@Override
     public void internalDrawing(Graphics g) {
 		String ster;
 		ster = "<<" + stereotype + ">>";
@@ -206,7 +229,7 @@ public class AvatarPDSignal extends TGCScalableWithInternalComponent implements 
 		
 		g.setFont(fold);
         
-    }
+    }*/
     
    public void setValue(String val, Graphics g) {
         oldValue = value;

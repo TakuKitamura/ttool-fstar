@@ -146,11 +146,7 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
      * @param str
      * @return
      */
-    private int getCenterOfBox(Graphics g, String str)
-    {
-    	int stringWidth = g.getFontMetrics().stringWidth(str);
-    	return x + (width - stringWidth)/2;
-    }
+
     
     @Override
     public void internalDrawing(Graphics g)
@@ -164,14 +160,13 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
 			Color avatarColor = ColorManager.AVATAR_BLOCK;
 			g.setColor(new Color(avatarColor.getRed(), avatarColor.getGreen(), avatarColor.getBlue() + (getMyDepth() * 10)));
 			g.fill3DRect(x + 1, y + compartmentHeight, width - 1, height - compartmentHeight, true);
-			
 			g.fill3DRect(x + 1, y + 1, width - 1, compartmentHeight - 1, true);
 			g.setColor(savecurrColor);
 		}
 		
 		// Icon
 		int border = scale(5);
-		g.drawImage( scale(IconManager.img5100), x + width - scale(iconSize) - border, y + border, Color.yellow, null);
+		g.drawImage(scale(IconManager.img5100), x + width - scale(iconSize) - border, y + border, Color.yellow, null);
 			
 		//String Title + Stereotype
 		Font f = g.getFont();
