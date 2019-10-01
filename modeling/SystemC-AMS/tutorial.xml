@@ -8,8 +8,8 @@
 <cdparam x="359" y="149" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="" />
-<P1  x="359" y="149" id="21" />
-<P2  x="424" y="151" id="2" />
+<P1  x="359" y="149" id="2" />
+<P2  x="424" y="151" id="21" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <COMPONENT type="1607" id="48" >
@@ -29,11 +29,11 @@
 </COMPONENT>
 <SUBCOMPONENT type="1602" id="20" >
 <father id="48" num="0" />
-<cdparam x="434" y="70" />
+<cdparam x="149" y="69" />
 <sizeparam width="200" height="150" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="338" minY="0" maxY="71" />
-<infoparam name="Primitive component - Block TDF" value="blockTDF1" />
+<infoparam name="Primitive component - Block TDF" value="blockTDF0" />
 <TGConnectingPoint num="0" id="12" />
 <TGConnectingPoint num="1" id="13" />
 <TGConnectingPoint num="2" id="14" />
@@ -43,19 +43,20 @@
 <TGConnectingPoint num="6" id="18" />
 <TGConnectingPoint num="7" id="19" />
 <extraparam>
-<Attribute period="2.0" time="ms" processCode="void processing() {
-	std::cout &lt;&lt; &quot;value read from in port &quot; &lt;&lt; in.read() &lt;&lt; std::endl;
+<Attribute period="4.0" time="ms" processCode="void processing() {
+	out.write(1);
+	std::cout&lt;&lt;&quot;written data to out port&quot;&lt;&lt; std::endl;
 }
-    " constructorCode="" listStruct="" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
+ " constructorCode="" listStruct="" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1604" id="11" >
 <father id="20" num="0" />
-<cdparam x="424" y="141" />
+<cdparam x="339" y="139" />
 <sizeparam width="20" height="20" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-10" maxX="190" minY="-10" maxY="140" />
-<infoparam name="Primitive port - Port TDF" value="in" />
+<infoparam name="Primitive port - Port TDF" value="out" />
 <TGConnectingPoint num="0" id="2" />
 <TGConnectingPoint num="1" id="3" />
 <TGConnectingPoint num="2" id="4" />
@@ -66,16 +67,16 @@
 <TGConnectingPoint num="7" id="9" />
 <TGConnectingPoint num="8" id="10" />
 <extraparam>
-<Prop commName="in" commType="0" origin="0" period="-1.0" time="s" rate="-1" delay="-1" type="double" />
+<Prop commName="out" commType="0" origin="1" period="2.0" time="ms" rate="2" delay="-1" type="int" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1602" id="39" >
 <father id="48" num="1" />
-<cdparam x="149" y="69" />
+<cdparam x="434" y="70" />
 <sizeparam width="200" height="150" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="338" minY="0" maxY="71" />
-<infoparam name="Primitive component - Block TDF" value="blockTDF0" />
+<infoparam name="Primitive component - Block TDF" value="blockTDF1" />
 <TGConnectingPoint num="0" id="31" />
 <TGConnectingPoint num="1" id="32" />
 <TGConnectingPoint num="2" id="33" />
@@ -85,23 +86,19 @@
 <TGConnectingPoint num="6" id="37" />
 <TGConnectingPoint num="7" id="38" />
 <extraparam>
-<Attribute period="4.0" time="ms" processCode="void processing() {
-	double x= 0.0;
-	for(x=0.0;x&lt;1000;x+=0.1){
-		out.write(std::sin(x*M_PI));
-		std::cout&lt;&lt;&quot;written data to out port&quot;&lt;&lt; std::sin(x*M_PI)&lt;&lt;  std::endl;
-	}
+<Attribute period="2.0" time="ms" processCode="void processing() {
+	std::cout &lt;&lt; &quot;read from in port &quot; &lt;&lt; in.read() &lt;&lt; std::endl;
 }
-    " constructorCode="" listStruct="" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
+ " constructorCode="" listStruct="" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1604" id="30" >
 <father id="39" num="0" />
-<cdparam x="339" y="139" />
+<cdparam x="424" y="141" />
 <sizeparam width="20" height="20" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-10" maxX="190" minY="-10" maxY="140" />
-<infoparam name="Primitive port - Port TDF" value="out" />
+<infoparam name="Primitive port - Port TDF" value="in" />
 <TGConnectingPoint num="0" id="21" />
 <TGConnectingPoint num="1" id="22" />
 <TGConnectingPoint num="2" id="23" />
@@ -112,7 +109,7 @@
 <TGConnectingPoint num="7" id="28" />
 <TGConnectingPoint num="8" id="29" />
 <extraparam>
-<Prop commName="out" commType="0" origin="1" period="2.0" time="ms" rate="2" delay="-1" type="double" />
+<Prop commName="in" commType="0" origin="0" period="-1.0" time="s" rate="-1" delay="-1" type="int" />
 </extraparam>
 </SUBCOMPONENT>
 
