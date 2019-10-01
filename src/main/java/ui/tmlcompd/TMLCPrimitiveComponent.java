@@ -63,8 +63,8 @@ import java.util.Vector;
  */
 public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent, WithAttributes {
     // #FIXME Debugging
-	private int maxFontSize = 14;
-    private int minFontSize = 4;
+	//private int maxFontSize = 14;
+    //private int minFontSize = 4;
     private int currentFontSize = -1;
 	
     //private boolean displayText = true;
@@ -98,6 +98,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         //minHeight = 1;
         minWidth = 150;
         minHeight = 100;
+        
         initScaling(200, 150);
 
         // Issue #31
@@ -156,8 +157,16 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
     	//String
     	int stringWidth = g.getFontMetrics().stringWidth(value);
     	int centerOfBox = (width - stringWidth) / 2;
-    	g.drawString(value, x + centerOfBox, y + currentFontSize + textY);
-    	
+    	Font f = g.getFont();
+    	currentFontSize = f.getSize();
+
+    	if (currentFontSize + (textY * 2) < height)
+    	{
+	    	//put title in bold before drawing then set back to normal after
+	    	g.setFont(f.deriveFont(Font.BOLD));
+	    	g.drawString(value, x + centerOfBox, y + currentFontSize + textY);
+	    	g.setFont(f);
+    	}
     	// Icon
     	g.drawImage(scale(IconManager.imgic1200.getImage()), x + width - scale(iconSize) - textX, y + textX, null);
         if (isAttacker)
@@ -166,18 +175,20 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         // Attributes
         if (tdp.areAttributesVisible())
         {
+        	//spaces permits the attributes to not override each other
+        	int spaces = currentFontSize + textY * 2; 
         	TAttribute attribute;
         	String attributeStr;
+        	int cpt = 0;
         	for (int i = 0; i < myAttributes.size(); i++)
         	{
-                attribute = myAttributes.get(i);
+        		attribute = myAttributes.get(i);
+        		spaces += currentFontSize;
                 attributeStr = attribute.toString();
-                g.drawString(attributeStr, x + textX, y + currentFontSize + textY);
-                //g.drawString(attributeStr, x + textX, y + currentFontSize);
-                drawVerification(g, x + textX, y + currentFontSize, attribute.getConfidentialityVerification());
+                g.drawString(attributeStr, x + textX, y + spaces);
+                drawVerification(g, x + textX, y + spaces, attribute.getConfidentialityVerification());
             }
         }
-    	
     }
 /*
     @Override
