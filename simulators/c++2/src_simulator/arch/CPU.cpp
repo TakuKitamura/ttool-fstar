@@ -136,7 +136,13 @@ void CPU::buttonPieChart(std::ofstream& myfile) const{
               type : \"pie\",\n";
     myfile << "               data : data" << _ID << "_" << this->_cycleTime <<",\n";
     myfile << "               options : options" << _ID << "_" << this->_cycleTime << std::endl << "                   });" << std::endl;
-    myfile << "   chart" << _ID << "_" << this->_cycleTime << SCHED_HTML_JS_HIDE;
+    // myfile << "   chart" << _ID << "_" << this->_cycleTime << SCHED_HTML_JS_HIDE;
+    myfile << "   if(!" << SHOW_PIE_CHART << "){\n \t"
+        << "      document.getElementById(\"pie-chartcanvas-" << _ID << "_" << this->_cycleTime << "\"" << ").style.display = \"none\";\n \t"
+        << "   }\n \t"
+        << "   else {\n \t"
+        << "      document.getElementById(\"pie-chartcanvas-"<< _ID << "_" << this->_cycleTime << "\"" << ").style.display = \"block\"; \n \t"
+        << "   }\n \t";
     myfile << "   chart" << _ID << "_" << this->_cycleTime << ".update();" << std::endl;
 }
 
