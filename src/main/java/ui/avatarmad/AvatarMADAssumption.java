@@ -229,7 +229,12 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
         if ((lineHeight > 23) && (width > 23)){
             g.drawImage(scale(IconManager.img5100), x + width - scale(iconSize + 1), y + scale(3), Color.yellow, null);
         }
-
+        
+        //issue #31 text must be readable to be displayed
+    	int fontSize = g.getFont().getSize();
+        if (!isTextReadable(g) || !canTextGoInTheBox(g, fontSize, value, iconSize))
+    		return;
+    
         if (displayText) {
             size = currentFontSize - 2;
             g.setFont(myFont.deriveFont((float)(myFont.getSize() - 2)));

@@ -184,6 +184,18 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
         	//g.drawRect(x - 2, y - 12, curWidth + 5, 15);
         	g.drawRect(x - 2, y - scale(15), curWidth + 5, scale(15));
     }
+    
+    @Override
+    protected boolean canTextGoInTheBox(Graphics g, int fontSize, String text, int iconSize) 
+    {
+    	myHeight = g.getFontMetrics().getHeight();
+    	int txtWidth = g.getFontMetrics().stringWidth(text) + (X_MARGIN * 2);
+    	int spaceTakenByIcon = iconSize + X_MARGIN;
+    	return (fontSize + (Y_MARGIN * 2) < myHeight); // enough space in height
+    			//&& (txtWidth + spaceTakenByIcon < myWidth) // enough space in width
+    			//;
+    }
+    
     /** Issue #31: Refactored internalDrawing for more comprehension
      * Draws the text of the diagram references and the eventual validations
      * @param g
@@ -193,6 +205,10 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
     {
     	// Strings
     	String textDiagramRef = value;
+    	int fontSize = g.getFont().getSize();
+    	boolean tooBig = !canTextGoInTheBox(g, fontSize, textDiagramRef, 0);
+    	if (!isTextReadable(g) /*||  canTextGoInTheBox(g, fontSize, textDiagramRef, 0)*/)
+    		return;
     	Font f = g.getFont();
     	g.drawString(textDiagramRef, x, y);
     	

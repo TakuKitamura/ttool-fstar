@@ -192,7 +192,8 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
             //g.drawImage(IconManager.img5100, x + width - iconSize + 1, y + 3, Color.yellow, null);
         g.drawImage( scale( IconManager.img5100 ), x + width - scale(ICON_SIZE + 1 ), y + scale( 3 ), Color.yellow, null);
         //}
-
+    	if (!isTextReadable(g))
+    		return;
         if (displayText) {
             //size = currentFontSize - 2;
             //g.setFont(myFontB);
