@@ -274,7 +274,7 @@ using std::max;
 #define SCHED_HTML_JS_TABLE_BEGIN "<table>"
 #define SCHED_HTML_JS_TABLE_END "</table>"
 #define SCHED_HTML_JS_BEGIN_CANVAS "     <canvas id=\"pie-chartcanvas-"
-#define SCHED_HTML_JS_END_CANVAS "\" width=\"256\" height=\"256\"></canvas>"
+#define SCHED_HTML_JS_END_CANVAS "\"></canvas>"
 #define SCHED_HTML_JS_WINDOW "window.onload = function () {\n"
 #define SCHED_HTML_DIV "<div>\n"
 #define SCHED_HTML_JS_DIV_BEGIN "<div class=\"wrapper\">"
@@ -284,7 +284,6 @@ using std::max;
 #define SCHED_HTML_JS_DIV_END "</div>"
 #define SCHED_HTML_JS_CLEAR "<div class = \"clear\"></div>"
 #define NB_HTML_COLORS 15
-#define SHOW_PIE_CHART  "ShowPie"
 
 #define SCHED_HTML_JS_FUNCTION "= function() {\n \
 		var r = Math.floor(Math.random() * 255);\n \

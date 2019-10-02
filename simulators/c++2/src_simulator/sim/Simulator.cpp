@@ -508,9 +508,8 @@ std::cout<<"schedule2HTML--------------------------------------*****************
        (*j)->drawPieChart(myfile);
     }
        
-    myfile << "var " << SHOW_PIE_CHART << " = false;" << std::endl;
+    
     myfile << "$(\"#button\").click(function() {\n";
-    myfile << "    " << SHOW_PIE_CHART << "=!" << SHOW_PIE_CHART << std::endl;
     for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
       (*i)->buttonPieChart(myfile);
     }
