@@ -83,11 +83,12 @@ public abstract class HwNode extends DIPLOElement  {
         if (!(o instanceof HwNode))
             return false;
         HwNode hwNode = (HwNode) o;
-        if(mec != null && (!mec.equalSpec(hwNode.getArchUnitMEC())))
+        if (mec != null && (!mec.equalSpec(hwNode.getArchUnitMEC())))
             return false;
         return maximumNbOfMappedElement == hwNode.maximumNbOfMappedElement &&
                 clockRatio == hwNode.clockRatio &&
                 name.equals(hwNode.getName());
+    }
 
     public void setName(String _name) {
         name = _name;
