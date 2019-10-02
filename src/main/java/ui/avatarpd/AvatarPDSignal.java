@@ -56,19 +56,19 @@ import java.awt.*;
  * @author Ludovic APVRILLE
  */
 public class AvatarPDSignal extends TGCScalableWithInternalComponent implements SwallowedTGComponent  {
-    private int textY1 = 3;
-    private int textY2 = 3;
+    //private int textY1 = 3;
+    //private int textY2 = 3;
 	//private int textX = 10;
 	
     protected String oldValue = "";
     protected String description = "";
 	private String stereotype = "signal";
-	private boolean isRootAttack = false;
+	//private boolean isRootAttack = false;
 	 
 	private int maxFontSize = 12;
-	private int minFontSize = 4;
+	//private int minFontSize = 4;
 	private int currentFontSize = -1;
-	private boolean displayText = true;
+	//private boolean displayText = true;
 	private int textX = 2;
     
     public AvatarPDSignal(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
@@ -121,11 +121,17 @@ public class AvatarPDSignal extends TGCScalableWithInternalComponent implements 
 		//Strings: Title and stereotype
 		currentFontSize = g.getFont().getSize();
 		String ster = "<<" + stereotype + ">>";
-		g.setFont(g.getFont().deriveFont(Font.BOLD));
-		g.drawString(ster,  getCenterOfBox(g, ster), y + currentFontSize);
+		if (isTextReadable(g))
+		{
+			g.setFont(g.getFont().deriveFont(Font.BOLD));
+			g.drawString(ster,  getCenterOfBox(g, ster), y + currentFontSize);
+		}
 		
-		g.setFont(g.getFont().deriveFont(Font.PLAIN));
-		g.drawString(value, getCenterOfBox(g, value), y + (currentFontSize * 2) + textX);
+		if (isTextReadable(g))
+		{
+			g.setFont(g.getFont().deriveFont(Font.PLAIN));
+			g.drawString(value, getCenterOfBox(g, value), y + (currentFontSize * 2) + textX);
+		}
     }
     
     

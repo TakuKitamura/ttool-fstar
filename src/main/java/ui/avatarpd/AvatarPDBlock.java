@@ -64,10 +64,10 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
     //private int textY1 = 3;
     private String stereotype = "block";
 	
-	private int maxFontSize = 12;
-	private int minFontSize = 4;
+	//private int maxFontSize = 12;
+	//private int minFontSize = 4;
 	private int currentFontSize = -1;
-	private boolean displayText = true;
+	//private boolean displayText = true;
 	//private int textX = 7;
 	
 //	private int limitName = -1;
@@ -169,12 +169,20 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
 		g.drawImage(scale(IconManager.img5100), x + width - scale(iconSize) - border, y + border, Color.yellow, null);
 			
 		//String Title + Stereotype
+		//Issue #31: isTextReadable and canTextgointheBox function are used to make sure the display is going to be correct
 		Font f = g.getFont();
-		g.setFont(f.deriveFont(Font.BOLD));
-		g.drawString(value, getCenterOfBox(g, value), y + currentFontSize);
+		int fontSize = f.getSize();
+		if (isTextReadable(g) && canTextGoInTheBox(g, fontSize, value, iconSize))
+		{
+			g.setFont(f.deriveFont(Font.BOLD));
+			g.drawString(value, getCenterOfBox(g, value), y + currentFontSize);
+		}
 		String ster ="<<stereotype>>";
-		g.setFont(f.deriveFont(Font.PLAIN));
-		g.drawString(ster, getCenterOfBox(g, ster), y + currentFontSize * 2 + textY);
+		if (isTextReadable(g) && canTextGoInTheBox(g, fontSize, ster, 0))
+		{
+			g.setFont(f.deriveFont(Font.PLAIN));
+			g.drawString(ster, getCenterOfBox(g, ster), y + currentFontSize * 2 + textY);
+	    }
     }
     
 //    

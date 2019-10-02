@@ -48,7 +48,49 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
     	displayText = true;
 	}
 
-	/*
+    //Issue #31:
+    /**
+     * Verifies that the text is readable if its not it shall not be drawn
+     * fontsize 8 is the limit that is set to be "readable". It can be changed
+     * @param iconSize
+     * @return
+     */
+    protected boolean isTextReadable(Graphics g)
+    {
+    	int textSize = g.getFont().getSize();
+    	return textSize > 7;
+    }
+    
+    /**
+     * Gets the center of the rectangle/box
+     * @param g
+     * @param str
+     * @return
+     */
+    protected int getCenter(Graphics g, String str)
+    {
+    	int w  = g.getFontMetrics().stringWidth(str);
+    	return x + (width - w)/2;
+    }
+    /**
+     * Verifies that the text is small enough to be drawn into the box
+     * If The actual box does not have an icon, make sure call the function as following:
+     * canTextGoInTheBox(g, fontSize, text, 0);
+     * @param g
+     * @param fontSize
+     * @param text
+     * @param iconSize
+     * @return a boolean indicating that the txt can or not be drawn
+     */
+    protected boolean canTextGoInTheBox(Graphics g, int fontSize, String text, int iconSize)
+    {
+    	int txtWidth = g.getFontMetrics().stringWidth(text) + (textX * 2);
+    	int spaceTakenByIcon = iconSize + textX;
+    	return (fontSize + (textY * 2) < height) // enough space in height
+    			&& (txtWidth + spaceTakenByIcon < width) // enough space in width
+    			;
+    }
+	/**
 	 * Scale from a value and a factor
 	 * @param value
 	 * @param factor
@@ -59,7 +101,7 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
 		return (int) ( value * factor );
 	}
 
-	/*
+	/**
 	 * Scale from a value and the oldScaleFactor previously saved
 	 * @param value
 	 * @return scaling value of param: value and oldScaleFactor
@@ -68,7 +110,7 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
 		return scale( value, oldScaleFactor );
 	}
 
-	/*
+	/**
 	 * init the scaling values
 	 * @param w (width)
 	 * @param h (height)
@@ -134,7 +176,7 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
         rescaled = true;
     }
 
-	/*
+	/**
 	 * Rescale with the help of a scaleFactor
 	 * @param scaleFactor
 	 * 
@@ -264,7 +306,7 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
     	return checkWidth( graphics, value );
     }
     
-	/*
+	/**
 	 * Issue #31: Check the Width, increase the width in case the actual width is not enough to display the text.
 	 * Used when a component is created
 	 * @param graphics
@@ -284,7 +326,7 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
         return textWidth;
     }
     
-	/*
+	/**
 	 * Scale an image directly
 	 * @param image
 	 * @return the scaled image
@@ -297,7 +339,7 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
     	return scale( image, scale( image.getWidth( null ) ) );
     }
     
-	/*
+	/**
 	 * Scale an image directly with a custom width
 	 * @param image
 	 * @param width

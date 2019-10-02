@@ -138,14 +138,14 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
             return new Color(201, 243, 188 - (getMyDepth() * 10), 200);
     }
 
-    private boolean canTextGoInTheBox(Graphics g, int fontSize, String text)
-    {
-    	int txtWidth = g.getFontMetrics().stringWidth(text) + (textX * 2);
-    	int spaceTakenByIcon = iconSize + textX;
-    	return (fontSize + (textY * 2) < height) // enough space in height
-    			&& (txtWidth + spaceTakenByIcon < width) // enough space in width
-    			;
-    }
+//    private boolean canTextGoInTheBox(Graphics g, int fontSize, String text)
+//    {
+//    	int txtWidth = g.getFontMetrics().stringWidth(text) + (textX * 2);
+//    	int spaceTakenByIcon = iconSize + textX;
+//    	return (fontSize + (textY * 2) < height) // enough space in height
+//    			&& (txtWidth + spaceTakenByIcon < width) // enough space in width
+//    			;
+//    }
     /** 
      * Function which is drawing the box, the text and icon 
      * Issue #31: Fixed zoom on texts and icon + made sure that if the text can't go into the box is does not get drawn
@@ -167,7 +167,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
     	int centerOfBox = (width - stringWidth) / 2;
     	Font f = g.getFont();
     	currentFontSize = f.getSize();
-    	if (canTextGoInTheBox(g, currentFontSize, value))
+    	if (canTextGoInTheBox(g, currentFontSize, value, iconSize))
     	{
 	    	//put title in bold before drawing then set back to normal after
 	    	g.setFont(f.deriveFont(Font.BOLD));
@@ -192,7 +192,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         		attribute = myAttributes.get(i);
         		spaces += currentFontSize;
         		attributeStr = attribute.toString();
-        		if (canTextGoInTheBox(g, spaces, attributeStr))
+        		if (canTextGoInTheBox(g, spaces, attributeStr, iconSize))
         		{
 	                g.drawString(attributeStr, x + textX, y + spaces);
 	                drawVerification(g, x + textX, y + spaces, attribute.getConfidentialityVerification());
