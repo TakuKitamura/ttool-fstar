@@ -58,6 +58,9 @@
 #include <EBRDDCommand.h>
 #include <ERC.h>
 #endif
+#include <stdio.h>
+#include <unistd.h>
+#define GetCurrentDir getcwd
 class CurrentComponents;
 
 Simulator::Simulator(SimServSyncInfo* iSyncInfo):_syncInfo(iSyncInfo), _simComp(_syncInfo->_simComponents), _busy(false), _simTerm(false),  _randChoiceBreak(_syncInfo->_simComponents), _wasReset(true), _longRunTime(0), _shortRunTime(-1), _replyToServer(true), _branchCoverage(60), _commandCoverage(100), _terminateExplore(false), _simDuration(0){
@@ -489,8 +492,20 @@ std::cout<<"schedule2HTML--------------------------------------*****************
     // myfile << SCHED_HTML_JS_DIV_SUB_BEGIN;
     // myfile << SCHED_HTML_JS_TYPE;
     // myfile << SCHED_HTML_JS_CONTENT1;
-    myfile << SCHED_HTML_JS_LINK1 << SCHED_HTML_END_JS << std::endl;
-    myfile << SCHED_HTML_JS_LINK2 << SCHED_HTML_END_JS << std::endl;
+    char cCurrentPath[FILENAME_MAX];
+    GetCurrentDir(cCurrentPath, sizeof(cCurrentPath));
+    cCurrentPath[sizeof(cCurrentPath) - 1] = '\0';
+    std::string str = cCurrentPath;
+    std::size_t pos = str.find("c++_code"); /*pos = position of "c++_code" if we working with open project*/
+    std::size_t pos1 = str.find("/bin"); /*pos1 = position of "bin" if we working with open model*/
+    if(pos != std::string::npos){
+      myfile << "<script src=\"" << str << "/src_simulator/jquery.min.js\">" << SCHED_HTML_END_JS << std::endl;
+      myfile << "<script src=\"" << str << "/src_simulator/Chart.min.js\">" << SCHED_HTML_END_JS << std::endl;
+    }
+    else if (pos1 != std::string::npos){
+      myfile << "<script src=\"" << str.substr(0,pos1) << "/simulators/c++2/src_simulator/jquery.min.js\">" << SCHED_HTML_END_JS << std::endl;
+      myfile << "<script src=\"" << str.substr(0,pos1) << "/simulators/c++2/src_simulator/Chart.min.js\">" << SCHED_HTML_END_JS << std::endl;
+    }
     myfile << SCHED_HTML_BEGIN_JS << std::endl;
     
     myfile << SCHED_HTML_JS_WINDOW;
@@ -508,8 +523,9 @@ std::cout<<"schedule2HTML--------------------------------------*****************
        (*j)->drawPieChart(myfile);
     }
        
-    
+    myfile << "var " << SHOW_PIE_CHART << " = false;" << std::endl;
     myfile << "$(\"#button\").click(function() {\n";
+    myfile << "    " << SHOW_PIE_CHART << "=!" << SHOW_PIE_CHART << std::endl;
     for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
       (*i)->buttonPieChart(myfile);
     }
