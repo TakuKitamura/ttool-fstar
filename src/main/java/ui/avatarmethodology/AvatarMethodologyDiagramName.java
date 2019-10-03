@@ -206,7 +206,7 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
     	// Strings
     	String textDiagramRef = value;
     	int fontSize = g.getFont().getSize();
-    	boolean tooBig = !canTextGoInTheBox(g, fontSize, textDiagramRef, 0);
+    	//boolean tooBig = !canTextGoInTheBox(g, fontSize, textDiagramRef, 0);
     	if (!isTextReadable(g) /*||  canTextGoInTheBox(g, fontSize, textDiagramRef, 0)*/)
     		return;
     	Font f = g.getFont();

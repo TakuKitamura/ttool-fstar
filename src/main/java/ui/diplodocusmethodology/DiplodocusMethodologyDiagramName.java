@@ -126,6 +126,8 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
     @Override
     public void internalDrawing(Graphics g)
     {
+    	if (!isTextReadable(g))
+    		return;
     	// Strings
     	String textDiagramRef = value;
     	Font f = g.getFont();

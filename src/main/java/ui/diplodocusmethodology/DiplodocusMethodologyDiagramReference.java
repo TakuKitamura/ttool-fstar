@@ -159,7 +159,7 @@ public abstract class DiplodocusMethodologyDiagramReference extends TGCScalableW
 //        }
 
         final int fontSize = g.getFont().getSize();
-        displayText = fontSize /*currentFontSize*/ >= minFontSize;
+        //displayText = fontSize /*currentFontSize*/ >= minFontSize;
 
      //   int h  = g.getFontMetrics().getHeight();
 
@@ -175,18 +175,19 @@ public abstract class DiplodocusMethodologyDiagramReference extends TGCScalableW
         //g.fillRect(x+1, y+1+lineHeight, width-1, height-1-lineHeight);
         ColorManager.setColor(g, getState(), 0);
         //if ((lineLength > 23) && (width > 23)){
-        
+        if (!isTextReadable(g))
+    		return;
         // Issue #31
         g.drawImage( scale( IconManager.img5100 ), x + width - scale( ICON_SIZE + 1 ), y + scale( 3 ), Color.yellow, null);
         //}
-
-        if (displayText) {
+        
+       
            // size = currentFontSize - 2;
            // g.setFont(myFontB);
 
-            drawLimitedString(g, value, x, y + fontSize + 1 /*size + 3*/, width, 1);
-            g.setFont(f);
-        }
+        drawLimitedString(g, value, x, y + fontSize + 1 /*size + 3*/, width, 1);
+        g.setFont(f);
+        
 
         /*if (displayText) {
           size = currentFontSize - 2;
