@@ -188,12 +188,15 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
         //g.setColor(ColorManager.AVATAR_REQUIREMENT_TOP);
         //g.fillRect(x+1, y+1+lineHeight, width-1, height-1-lineHeight);
         ColorManager.setColor(g, getState(), 0);
+        //if (!isTextReadable(g))
+    	//	return;
+        if (!isTextReadable(g) || !canTextGoInTheBox(g, fontSize, value, ICON_SIZE))
+    		return;
         //if ((lineLength > 23) && (width > 23)){
             //g.drawImage(IconManager.img5100, x + width - iconSize + 1, y + 3, Color.yellow, null);
         g.drawImage( scale( IconManager.img5100 ), x + width - scale(ICON_SIZE + 1 ), y + scale( 3 ), Color.yellow, null);
         //}
-    	if (!isTextReadable(g))
-    		return;
+    	
         if (displayText) {
             //size = currentFontSize - 2;
             //g.setFont(myFontB);

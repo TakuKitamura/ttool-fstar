@@ -64,8 +64,8 @@ import java.awt.*;
  */
 public class AvatarMADAssumption extends TGCScalableWithInternalComponent implements WithAttributes, TGAutoAdjust {
     public String oldValue;
-    protected int textX = 5;
-    protected int textY = 22;
+    //protected int textX = 5;
+    //protected int textY = 22;
     protected int lineHeight = 30;
     private double dlineHeight = 0.0;
     //protected int reqType = 0;
@@ -110,7 +110,8 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
 
     public AvatarMADAssumption(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-
+        textX = 5;
+        textY = 22;
         initScaling(200, 120);
         oldScaleFactor = tdp.getZoom();
         dlineHeight = lineHeight * oldScaleFactor;
@@ -229,12 +230,9 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
         if ((lineHeight > 23) && (width > 23)){
             g.drawImage(scale(IconManager.img5100), x + width - scale(iconSize + 1), y + scale(3), Color.yellow, null);
         }
-        
-        //issue #31 text must be readable to be displayed
+
     	int fontSize = g.getFont().getSize();
-        if (!isTextReadable(g) || !canTextGoInTheBox(g, fontSize, value, iconSize))
-    		return;
-    
+
         if (displayText) {
             size = currentFontSize - 2;
             g.setFont(myFont.deriveFont((float)(myFont.getSize() - 2)));
