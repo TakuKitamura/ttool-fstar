@@ -110,9 +110,11 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
 
     public AvatarMADAssumption(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+        
         textX = 5;
         textY = 22;
         initScaling(200, 120);
+        
         oldScaleFactor = tdp.getZoom();
         dlineHeight = lineHeight * oldScaleFactor;
         lineHeight = (int)dlineHeight;
@@ -189,157 +191,229 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
     public void makeValue() {
         texts = Conversion.wrapText(text);
     }
-
-    public void internalDrawing(Graphics g) {
-        Font f = g.getFont();
- //       Font fold = f;
-   //     int w, c;
-        int size;
-
-        if (texts == null) {
-            makeValue();
-        }
-
-        if (!tdp.isScaled()) {
-            graphics = g;
-        }
-
-        if (((rescaled) && (!tdp.isScaled())) || myFont == null) {
-            currentFontSize = tdp.getFontSize();
-            //
-            myFont = f.deriveFont((float)currentFontSize);
-            myFontB = myFont.deriveFont(Font.BOLD);
-
-            if (rescaled) {
-                rescaled = false;
-            }
-        }
-
-        displayText = currentFontSize >= minFontSize;
-
-     //   int h  = g.getFontMetrics().getHeight();
-
-        g.drawRect(x, y, width, height);
-
-        g.drawLine(x, y+lineHeight, x+width, y+lineHeight);
+    
+    /**
+     * Issue #31
+     * @param g
+     */
+    public void internalDrawing(Graphics g)
+    {
+    	// Rectangle
+    	Font font = g.getFont();
+    	g.drawRect(x, y, width, height);
+        g.drawLine(x, y + lineHeight, x + width, y + lineHeight);
+        
+        //Filling
         g.setColor(ColorManager.AVATAR_ASSUMPTION_TOP);
         g.fillRect(x+1, y+1, width-1, lineHeight-1);
         g.setColor(ColorManager.AVATAR_ASSUMPTION_ATTRIBUTES);
         g.fillRect(x+1, y+1+lineHeight, width-1, height-1-lineHeight);
         ColorManager.setColor(g, getState(), 0);
-        if ((lineHeight > 23) && (width > 23)){
-            g.drawImage(scale(IconManager.img5100), x + width - scale(iconSize + 1), y + scale(3), Color.yellow, null);
+        
+        //check readability
+        if (!isTextReadable(g))
+        	return;
+        
+        //Strings titles
+        currentFontSize = font.getSize();
+        drawLimitedString(g, ASSUMPTION_TYPE_STR[type], x, y + currentFontSize , width, 1);
+        g.setFont(font.deriveFont(Font.PLAIN));
+        drawLimitedString(g, value, x, y + currentFontSize * 2, width, 1);
+        
+        int current = lineHeight;
+        for (int i = 0; i < texts.length; i++) {
+        	if (current > height - 5)
+        		return;
+        	current += currentFontSize;
+            displayOnTheNextLine(g, i, current); //display texts
+        }
+        
+        //Other strings
+        current += currentFontSize;
+        if (current < (height - 2)) {
+        	drawLimitedString(g, "Durability=\"" + DURABILITY_TYPE[durability] + "\"", x + textX, y + current, width, 0);
+        	current += currentFontSize;
+        	if (current < (height - 2)) {
+        		drawLimitedString(g, "Source=\"" + SOURCE_TYPE[source] + "\"", x + textX, y + current, width, 0);
+        		current += currentFontSize;
+        		if (current < (height - 2)) {
+        			drawLimitedString(g, "Status=\"" + STATUS_TYPE[status] + "\"", x + textX, y + current, width, 0);
+        			current += currentFontSize;
+        			if (current < (height - 2)) {
+        				drawLimitedString(g, "Scope=\"" + LIMITATION_TYPE[limitation] + "\"", x + textX, y + current, width, 0);
+        				current += currentFontSize;
+        			}
+        		}
+        	}
         }
 
-    	int fontSize = g.getFont().getSize();
-
-        if (displayText) {
-            size = currentFontSize - 2;
-            g.setFont(myFont.deriveFont((float)(myFont.getSize() - 2)));
-
-            drawLimitedString(g, ASSUMPTION_TYPE_STR[type], x, y + size, width, 1);
-
-            size += currentFontSize;
-            g.setFont(myFontB);
-    //        w = g.getFontMetrics().stringWidth(value);
-            drawLimitedString(g, value, x, y + size, width, 1);
-
-        }
-
-        /*if (verified) {
-          if (satisfied) {
-          Color tmp = g.getColor();
-          GraphicLib.setMediumStroke(g);
-          g.setColor(Color.green);
-          g.drawLine(x+width-2, y-6+lineHeight, x+width-6, y-2+lineHeight);
-          g.drawLine(x+width-6, y-3+lineHeight, x+width-8, y-6+lineHeight);
-          g.setColor(tmp);
-          GraphicLib.setNormalStroke(g);
-          } else {
-          //g.drawString("acc", x + width - 10, y+height-10);
-          Color tmp = g.getColor();
-          GraphicLib.setMediumStroke(g);
-          g.setColor(Color.red);
-          g.drawLine(x+width-2, y-2+lineHeight, x+width-8, y-8+lineHeight);
-          g.drawLine(x+width-8, y-2+lineHeight, x+width-2, y-8+lineHeight);
-          g.setColor(tmp);
-          GraphicLib.setNormalStroke(g);
-          }
-          }*/
-
-        g.setFont(myFont);
-        String texti = "Text";
-        String s ;
-        int i;
-        size = lineHeight + currentFontSize;
-
-        //ID
-        /*if (size < (height - 2)) {
-          drawLimitedString(g, "ID=" + id, x + textX, y + size, width, 0);
-          }
-          size += currentFontSize;*/
-
-        //text
-        for(i=0; i<texts.length; i++) {
-            if (size < (height - 2)) {
-                s = texts[i];
-                if (i == 0) {
-                    s = texti + "=\"" + s;
-                }
-                if (i == (texts.length - 1)) {
-                    s = s + "\"";
-                }
-                drawLimitedString(g, s, x + textX, y + size, width, 0);
-            }
-            size += currentFontSize;
-
-        }
-        if (size < (height - 2)) {
-            drawLimitedString(g, "Durability=\"" + DURABILITY_TYPE[durability] + "\"", x + textX, y + size, width, 0);
-            size += currentFontSize;
-            if (size < (height - 2)) {
-                drawLimitedString(g, "Source=\"" + SOURCE_TYPE[source] + "\"", x + textX, y + size, width, 0);
-                size += currentFontSize;
-                if (size < (height - 2)) {
-                    drawLimitedString(g, "Status=\"" + STATUS_TYPE[status] + "\"", x + textX, y + size, width, 0);
-                    size += currentFontSize;
-                    if (size < (height - 2)) {
-                        drawLimitedString(g, "Scope=\"" + LIMITATION_TYPE[limitation] + "\"", x + textX, y + size, width, 0);
-                        size += currentFontSize;
-                    }
-                }
-            }
-        }
-
-        // Type and risk
-        /*if (size < (height - 2)) {
-          drawLimitedString(g, "Kind=\"" + kind + "\"", x + textX, y + size, width, 0);
-          size += currentFontSize;
-          if (size < (height - 2)) {
-          drawLimitedString(g, "Risk=\"" + criticality + "\"", x + textX, y + size, width, 0);
-          size += currentFontSize;
-          if (size < (height - 2)) {
-
-          drawLimitedString(g, "Reference elements=\"" + referenceElements + "\"", x + textX, y + size, width, 0);
-
-          size += currentFontSize;
-          if (size < (height - 2)) {
-
-          if (reqType == SECURITY_REQ) {
-          drawLimitedString(g, "Targeted attacks=\"" + attackTreeNode + "\"", x + textX, y + size, width, 0);
-          }
-
-          if (reqType == SAFETY_REQ) {
-          drawLimitedString(g, "Violated action=\"" + violatedAction + "\"", x + textX, y + size, width, 0);
-          }
-          }
-          }
-          }
-          }*/
-
-
-        g.setFont(f);
+        //Icon
+        g.drawImage(scale(IconManager.img5100), x + width - scale(iconSize + 2), y + scale(3), Color.yellow, null);    
     }
+    
+    private void displayOnTheNextLine(Graphics g, int i, int current)
+    {
+    	String s = texts[i];
+    	if (i == 0)
+    		s = "Text=\"" + s;
+    	if (i == (texts.length - 1))
+    		s += "\"";
+    	drawLimitedString(g, s, x + textX, y + current, width, 0);
+    }
+    
+//    @Override
+//    public void internalDrawing(Graphics g) {
+//        Font f = g.getFont();
+// //       Font fold = f;
+//   //     int w, c;
+//        int size;
+//
+//        if (texts == null) {
+//            makeValue();
+//        }
+//
+//        if (!tdp.isScaled()) {
+//            graphics = g;
+//        }
+//
+//        if (((rescaled) && (!tdp.isScaled())) || myFont == null) {
+//            currentFontSize = tdp.getFontSize();
+//            //
+//            myFont = f.deriveFont((float)currentFontSize);
+//            myFontB = myFont.deriveFont(Font.BOLD);
+//
+//            if (rescaled) {
+//                rescaled = false;
+//            }
+//        }
+//
+//        displayText = currentFontSize >= minFontSize;
+//
+//     //   int h  = g.getFontMetrics().getHeight();
+//
+//        g.drawRect(x, y, width, height);
+//
+//        g.drawLine(x, y+lineHeight, x+width, y+lineHeight);
+//        g.setColor(ColorManager.AVATAR_ASSUMPTION_TOP);
+//        g.fillRect(x+1, y+1, width-1, lineHeight-1);
+//        g.setColor(ColorManager.AVATAR_ASSUMPTION_ATTRIBUTES);
+//        g.fillRect(x+1, y+1+lineHeight, width-1, height-1-lineHeight);
+//        ColorManager.setColor(g, getState(), 0);
+//        if ((lineHeight > 23) && (width > 23)){
+//            g.drawImage(scale(IconManager.img5100), x + width - scale(iconSize + 1), y + scale(3), Color.yellow, null);
+//        }
+//
+//    	int fontSize = g.getFont().getSize();
+//
+//        if (displayText) {
+//            size = currentFontSize - 2;
+//            g.setFont(myFont.deriveFont((float)(myFont.getSize() - 2)));
+//
+//            drawLimitedString(g, ASSUMPTION_TYPE_STR[type], x, y + size, width, 1);
+//
+//            size += currentFontSize;
+//            g.setFont(myFontB);
+//    //        w = g.getFontMetrics().stringWidth(value);
+//            drawLimitedString(g, value, x, y + size, width, 1);
+//
+//        }
+//
+//        /*if (verified) {
+//          if (satisfied) {
+//          Color tmp = g.getColor();
+//          GraphicLib.setMediumStroke(g);
+//          g.setColor(Color.green);
+//          g.drawLine(x+width-2, y-6+lineHeight, x+width-6, y-2+lineHeight);
+//          g.drawLine(x+width-6, y-3+lineHeight, x+width-8, y-6+lineHeight);
+//          g.setColor(tmp);
+//          GraphicLib.setNormalStroke(g);
+//          } else {
+//          //g.drawString("acc", x + width - 10, y+height-10);
+//          Color tmp = g.getColor();
+//          GraphicLib.setMediumStroke(g);
+//          g.setColor(Color.red);
+//          g.drawLine(x+width-2, y-2+lineHeight, x+width-8, y-8+lineHeight);
+//          g.drawLine(x+width-8, y-2+lineHeight, x+width-2, y-8+lineHeight);
+//          g.setColor(tmp);
+//          GraphicLib.setNormalStroke(g);
+//          }
+//          }*/
+//
+//        g.setFont(myFont);
+//        String texti = "Text";
+//        String s ;
+//        int i;
+//        size = lineHeight + currentFontSize;
+//
+//        //ID
+//        /*if (size < (height - 2)) {
+//          drawLimitedString(g, "ID=" + id, x + textX, y + size, width, 0);
+//          }
+//          size += currentFontSize;*/
+//
+//        //text
+//        
+//        for(i=0; i<texts.length; i++) {
+//            if (size < (height - 2)) {
+//                s = texts[i];
+//                if (i == 0) {
+//                    s = texti + "=\"" + s;
+//                }
+//                if (i == (texts.length - 1)) {
+//                    s = s + "\"";
+//                }
+//                drawLimitedString(g, s, x + textX, y + size, width, 0);
+//            }
+//            size += currentFontSize;
+//
+//        }
+//    
+//        if (size < (height - 2)) {
+//            drawLimitedString(g, "Durability=\"" + DURABILITY_TYPE[durability] + "\"", x + textX, y + size, width, 0);
+//            size += currentFontSize;
+//            if (size < (height - 2)) {
+//                drawLimitedString(g, "Source=\"" + SOURCE_TYPE[source] + "\"", x + textX, y + size, width, 0);
+//                size += currentFontSize;
+//                if (size < (height - 2)) {
+//                    drawLimitedString(g, "Status=\"" + STATUS_TYPE[status] + "\"", x + textX, y + size, width, 0);
+//                    size += currentFontSize;
+//                    if (size < (height - 2)) {
+//                        drawLimitedString(g, "Scope=\"" + LIMITATION_TYPE[limitation] + "\"", x + textX, y + size, width, 0);
+//                        size += currentFontSize;
+//                    }
+//                }
+//            }
+//        }
+//
+//        // Type and risk
+//        /*if (size < (height - 2)) {
+//          drawLimitedString(g, "Kind=\"" + kind + "\"", x + textX, y + size, width, 0);
+//          size += currentFontSize;
+//          if (size < (height - 2)) {
+//          drawLimitedString(g, "Risk=\"" + criticality + "\"", x + textX, y + size, width, 0);
+//          size += currentFontSize;
+//          if (size < (height - 2)) {
+//
+//          drawLimitedString(g, "Reference elements=\"" + referenceElements + "\"", x + textX, y + size, width, 0);
+//
+//          size += currentFontSize;
+//          if (size < (height - 2)) {
+//
+//          if (reqType == SECURITY_REQ) {
+//          drawLimitedString(g, "Targeted attacks=\"" + attackTreeNode + "\"", x + textX, y + size, width, 0);
+//          }
+//
+//          if (reqType == SAFETY_REQ) {
+//          drawLimitedString(g, "Violated action=\"" + violatedAction + "\"", x + textX, y + size, width, 0);
+//          }
+//          }
+//          }
+//          }
+//          }*/
+//
+//
+//        g.setFont(f);
+//    }
 
     public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
 

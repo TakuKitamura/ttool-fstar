@@ -1,5 +1,6 @@
 package ui;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 
@@ -72,6 +73,7 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
     	int w  = g.getFontMetrics().stringWidth(str);
     	return x + (width - w)/2;
     }
+    
     /**
      * Verifies that the text is small enough to be drawn into the box
      * If The actual box does not have an icon, make sure call the function as following:
@@ -90,6 +92,27 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
     			&& (txtWidth + spaceTakenByIcon < width) // enough space in width
     			;
     }
+    /**
+     * Draw a box of two rectangle: one for the title and one for the content of the box
+     * lineHeight defines the height of the first box
+     * @param g
+     * @param lineHeight
+     */
+    protected void drawDoubleRectangleBoxType(Graphics g, int lineHeight, Color c)
+    {
+    	//Rectangle
+    	g.drawRect(x, y, width, height);
+        g.drawLine(x, y+lineHeight, x+width, y+lineHeight);
+        
+        //Filling
+        //FIXME: need to find a way to set the color in function of the type...
+        //g.setColor(c);// for example: ColorManager.AVATAR_ASSUMPTION_TOP);
+        g.fillRect(x+1, y+1, width-1, lineHeight-1);
+        //g.setColor(ColorManager.AVATAR_ASSUMPTION_ATTRIBUTES);
+        g.fillRect(x+1, y+1+lineHeight, width-1, height-1-lineHeight);
+        ColorManager.setColor(g, getState(), 0);
+    }
+    
 	/**
 	 * Scale from a value and a factor
 	 * @param value
