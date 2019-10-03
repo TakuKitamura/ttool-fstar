@@ -99,7 +99,6 @@ public abstract class DiplodocusMethodologyDiagramReference extends TGCScalableW
         lineLength = 30;
         textX = 5;
         textY = 22;
-        minWidth = 10;
         minHeight = lineLength;
 
         initScaling(200, 120);

@@ -65,7 +65,6 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
     public final static int X_MARGIN = 5;
     public final static int Y_MARGIN = 3;
 
-
     protected final static int SIM_TRACE_APP_DIPLO = 0;
     protected final static int SIM_ANIM_APP_DIPLO = 7;
     protected final static int UPP_APP_DIPLO = 1;
@@ -107,6 +106,10 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
     public DiplodocusMethodologyDiagramName(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y,  _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
+        minWidth = 10;
+        minHeight = lineLength;
+        initScaling(10, 10);
+        
         nbConnectingPoint = 0;
         minWidth = 10;
         nbInternalTGComponent = 0;
@@ -117,8 +120,6 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
 
         name = "value ";
 
-        initScaling(10, 10);
-        
         myImageIcon = IconManager.imgic302;
     }
     
