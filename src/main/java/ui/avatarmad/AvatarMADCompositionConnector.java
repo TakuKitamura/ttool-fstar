@@ -115,6 +115,7 @@ public  class AvatarMADCompositionConnector extends TGConnectorWithCommentConnec
         return null;
     }*/
     
+    @Override
     public int getType() {
         return TGComponentManager.AVATARMAD_COMPOSITION_CONNECTOR;
     }

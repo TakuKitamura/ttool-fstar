@@ -71,7 +71,8 @@ public  class AvatarMADBelongsToCompositionConnector extends TGConnectorWithComm
 //        oldScaleFactor = tdp.getZoom();
 //        rescaled = true;
     }
-
+    
+    @Override
     protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
         if ((p == null) || (rescaled) || (xp1 != x1) || (xp2 != x2) || (yp1 != y1) || (yp2 != y2)){
             p = new Polygon();

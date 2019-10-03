@@ -136,7 +136,7 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
         	g.setFont(font.deriveFont(fontStyle));
     }
     
-    private void GestionOfValidations(Graphics g, Font font)
+    private void manageValidations(Graphics g, Font font)
     {
         int widthText = g.getFontMetrics().stringWidth(value);
         int widthFather = getFather().getWidth();
@@ -194,8 +194,8 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
     protected boolean canTextGoInTheBox(Graphics g, int fontSize, String text, int iconSize) 
     {
     	myHeight = g.getFontMetrics().getHeight();
-    	int txtWidth = g.getFontMetrics().stringWidth(text) + (X_MARGIN * 2);
-    	int spaceTakenByIcon = iconSize + X_MARGIN;
+    	//int txtWidth = g.getFontMetrics().stringWidth(text) + (X_MARGIN * 2);
+    	//int spaceTakenByIcon = iconSize + X_MARGIN;
     	return (fontSize + (Y_MARGIN * 2) < myHeight); // enough space in height
     			//&& (txtWidth + spaceTakenByIcon < myWidth) // enough space in width
     			//;
@@ -210,7 +210,7 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
     {
     	// Strings
     	String textDiagramRef = value;
-    	int fontSize = g.getFont().getSize();
+    	//int fontSize = g.getFont().getSize();
     	//boolean tooBig = !canTextGoInTheBox(g, fontSize, textDiagramRef, 0);
     	if (!isTextReadable(g) /*||  canTextGoInTheBox(g, fontSize, textDiagramRef, 0)*/)
     		return;
@@ -218,7 +218,7 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
     	g.drawString(textDiagramRef, x, y);
     	
     	//validation and String
-    	GestionOfValidations(g, f);
+    	manageValidations(g, f);
     }
     /*
     @Override
