@@ -67,7 +67,7 @@ public  class AvatarRDCompositionConnector extends TGConnectorWithCommentConnect
         myImageIcon = IconManager.imgic1012;
     }
 
-
+    @Override
     protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
 
         //g.drawLine(x1, y1, x2, y2);
@@ -119,7 +119,7 @@ public  class AvatarRDCompositionConnector extends TGConnectorWithCommentConnect
       }
       return null;
       }*/
-
+    @Override
     public int getType() {
         return TGComponentManager.AVATARRD_COMPOSITION_CONNECTOR;
     }
