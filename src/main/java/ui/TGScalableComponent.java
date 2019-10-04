@@ -6,6 +6,8 @@ import java.awt.Image;
 
 import javax.swing.ImageIcon;
 
+import ui.util.IconManager;
+
 /**
  * Issue #31
  * @author dblouin
@@ -98,22 +100,61 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
      * @param g
      * @param lineHeight
      */
-    protected void drawDoubleRectangleBoxType(Graphics g, int lineHeight, Color c)
+    protected void drawDoubleRectangleBoxType(Graphics g, int lineHeight, Color cbefore, Color cafter)
     {
     	//Rectangle
-    	g.drawRect(x, y, width, height);
+    	drawSimpleRectangle(g);//g.drawRect(x, y, width, height);
         g.drawLine(x, y+lineHeight, x+width, y+lineHeight);
         
         //Filling
-        //FIXME: need to find a way to set the color in function of the type...
-        //g.setColor(c);// for example: ColorManager.AVATAR_ASSUMPTION_TOP);
+        g.setColor(cbefore); // for example: ColorManager.AVATAR_ASSUMPTION_TOP
         g.fillRect(x+1, y+1, width-1, lineHeight-1);
-        //g.setColor(ColorManager.AVATAR_ASSUMPTION_ATTRIBUTES);
+        g.setColor(cafter);
         g.fillRect(x+1, y+1+lineHeight, width-1, height-1-lineHeight);
         ColorManager.setColor(g, getState(), 0);
     }
+    /**
+     * Draw one box without any color filling
+     * @param g
+     */
+    protected void drawSimpleRectangle(Graphics g)
+    {
+    	g.drawRect(x, y, width, height);
+    }
+    /**
+     * used to draw the icon "icon" at position x = x + width - scale(iconsize) - borders
+     * and y = y + borders
+     * @param g
+     * @param icon
+     * @param iconSize
+     */
+    protected void drawIcon(Graphics g, Image icon, int iconSize) {
+    	if (!isTextReadable(g))
+    		return;
+    	int borders = scale(3);
+    	g.drawImage(scale(icon), x + width - scale(iconSize ) - borders, y + borders, Color.yellow, null);
+    }
     
-	/**
+    /**
+     * draw two string one under another:
+     * 
+     * @param g
+     * @param topText
+     * @param bottomText
+     */
+    protected void drawDoubleStringTitle(Graphics g, String topText, String bottomText)
+    {
+    	if (!isTextReadable(g))
+    		return;
+    	int currentFontSize = g.getFont().getSize();
+    	
+    	drawLimitedString(g, topText, x, y + currentFontSize + textY, width, 1);
+    	drawLimitedString(g, bottomText, x, y + currentFontSize * 2 + textY, width, 1);
+    }
+    
+    // END Issue #31
+	
+    /**
 	 * Scale from a value and a factor
 	 * @param value
 	 * @param factor
