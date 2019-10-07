@@ -62,7 +62,8 @@ public class AvatarMADToolBar extends TToolBar {
         super(_mgui);
 
     }
-
+    
+    @Override
     protected void setActive(boolean b) {
         mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
         mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
@@ -88,7 +89,8 @@ public class AvatarMADToolBar extends TToolBar {
           mgui.actions[TGUIAction.ACT_ENHANCE].setEnabled(b);*/
 
     }
-
+    
+    @Override
     protected void setButtons() {
         JButton button;
 

@@ -181,9 +181,9 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
     	
     	int currentFontSize = f.getSize();
     	g.setFont(f.deriveFont(Font.BOLD));
-    	drawLimitedString(g, topText, getCenter(g, topText), y + currentFontSize + textY, width, 1);
+    	drawLimitedString(g, topText, x, y + currentFontSize + textY, width, 1);
     	g.setFont(f.deriveFont(Font.PLAIN));
-    	drawLimitedString(g, bottomText, getCenter(g, bottomText), y + currentFontSize * 2 + textY, width, 1);
+    	drawLimitedString(g, bottomText, y, y + currentFontSize * 2 + textY, width, 1);
     }
     
     /**

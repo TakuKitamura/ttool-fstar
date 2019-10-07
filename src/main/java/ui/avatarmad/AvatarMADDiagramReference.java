@@ -82,7 +82,7 @@ public class AvatarMADDiagramReference extends TGCScalableWithInternalComponent 
     public AvatarMADDiagramReference(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        initScaling(150, lineHeight);
+//        initScaling(150, lineHeight);
         oldScaleFactor = tdp.getZoom();
         dlineHeight = lineHeight * oldScaleFactor;
         lineHeight = (int)dlineHeight;
@@ -90,6 +90,8 @@ public class AvatarMADDiagramReference extends TGCScalableWithInternalComponent 
 
         minWidth = 10;
         minHeight = lineHeight;
+        textY = 2;
+        initScaling(150, lineHeight);
 
         nbConnectingPoint = 24;
         connectingPoint = new TGConnectingPoint[nbConnectingPoint];
@@ -148,8 +150,8 @@ public class AvatarMADDiagramReference extends TGCScalableWithInternalComponent 
         actionOnAdd();
     }
     
-    //FIXME: Find which diagram it is before continuing this func
-    public void internalDrawin(Graphics g) {
+    //FIXME: glitches
+    public void internalDrawing(Graphics g) {
     	//Rectangle
     	g.drawRect(x, y, width, height);
         g.drawLine(x, y+lineHeight, x+width, y+lineHeight);
@@ -166,23 +168,24 @@ public class AvatarMADDiagramReference extends TGCScalableWithInternalComponent 
         	return;
         
         //Strings
-        int currentpos = currentFontSize - 2;
-        g.setFont(myFont.deriveFont((float)(myFont.getSize() - 2)));
-        drawLimitedString(g, DIAGRAM_REFERENCE, x, y + currentpos, width, 1);
-        currentpos += currentFontSize;
-        g.setFont(myFontB);
-        //int strWidth = g.getFontMetrics().stringWidth(value);
-        drawLimitedString(g, value, x, y + currentpos, width, 1);
+        Font f = g.getFont();
+        //g.setFont(myFont.deriveFont((float)(myFont.getSize() - 2)));
+//        drawLimitedString(g, DIAGRAM_REFERENCE, x, y + currentpos, width, 1);
+        g.setFont(f.deriveFont(Font.BOLD));
+        drawSingleLimitedString(g, DIAGRAM_REFERENCE, x, y + f.getSize() , width, 1);
+        
+        g.setFont(f.deriveFont(Font.PLAIN));
+        drawSingleLimitedString(g, value, x, y + f.getSize()*2, width, 1);
         
         //Icon
         g.drawImage(scale(IconManager.img5100), x + width - scale(iconSize + 1), y + scale(3), Color.yellow, null);
 
     }
     
-    public void internalDrawing(Graphics g) {
+    public void internalDrawin(Graphics g) {
         Font f = g.getFont();
 //        Font fold = f;
-        int w, c;
+//        int w, c;
         int size;
 
         if (!tdp.isScaled()) {
@@ -202,7 +205,7 @@ public class AvatarMADDiagramReference extends TGCScalableWithInternalComponent 
 
         displayText = currentFontSize >= minFontSize;
 
-        int h  = g.getFontMetrics().getHeight();
+        //int h  = g.getFontMetrics().getHeight();
 
         g.drawRect(x, y, width, height);
 
@@ -222,7 +225,7 @@ public class AvatarMADDiagramReference extends TGCScalableWithInternalComponent 
             drawLimitedString(g, DIAGRAM_REFERENCE, x, y + size, width, 1);
             size += currentFontSize;
             g.setFont(myFontB);
-            w = g.getFontMetrics().stringWidth(value);
+            //int w = g.getFontMetrics().stringWidth(value);
             drawLimitedString(g, value, x, y + size, width, 1);
 
         }
@@ -326,7 +329,7 @@ public class AvatarMADDiagramReference extends TGCScalableWithInternalComponent 
         Font f2 = f.deriveFont((float)(currentFontSize - 2));
 
         // Must find for both modes which width is desirable
-        String s0, s1;
+        String s0;
 
         s0 = DIAGRAM_REFERENCE;
 

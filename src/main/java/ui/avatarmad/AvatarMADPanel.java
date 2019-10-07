@@ -62,10 +62,12 @@ public class AvatarMADPanel extends TDiagramPanel implements TDPWithAttributes {
         addMouseMotionListener(tdmm);*/
     }
     
+    @Override
     public boolean actionOnDoubleClick(TGComponent tgc) {
         return false;
     }
     
+    @Override
     public boolean actionOnAdd(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {
             TCDTClass tgcc = (TCDTClass)(tgc);
@@ -75,6 +77,7 @@ public class AvatarMADPanel extends TDiagramPanel implements TDPWithAttributes {
         return false;
     }
     
+    @Override
     public boolean actionOnRemove(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {
             TCDTClass tgcc = (TCDTClass)(tgc);
@@ -85,6 +88,7 @@ public class AvatarMADPanel extends TDiagramPanel implements TDPWithAttributes {
         return false;
     }
     
+    @Override
     public boolean actionOnValueChanged(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {
             return actionOnDoubleClick(tgc);
@@ -92,26 +96,32 @@ public class AvatarMADPanel extends TDiagramPanel implements TDPWithAttributes {
         return false;
     }
     
+    @Override
     public String getXMLHead() {
         return "<AvatarMADPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
     }
     
+    @Override
     public String getXMLTail() {
         return "</AvatarMADPanel>";
     }
     
+    @Override
     public String getXMLSelectedHead() {
         return "<AvatarMADPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
     }
     
+    @Override
     public String getXMLSelectedTail() {
         return "</AvatarMADPanelCopy>";
     }
     
+    @Override
     public String getXMLCloneHead() {
         return "<AvatarMADPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
     }
     
+    @Override
     public String getXMLCloneTail() {
         return "</AvatarMADPanelCopy>";
     }
@@ -120,7 +130,8 @@ public class AvatarMADPanel extends TDiagramPanel implements TDPWithAttributes {
     public void makePostLoadingProcessing() throws MalformedModelingException {
         
     }
-	
+    
+    @Override
 	public void enhance() {
 		autoAdjust();
     }

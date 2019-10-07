@@ -74,11 +74,11 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
     protected Graphics graphics;
     //protected int iconSize = 30;
 
-    private Font myFont, myFontB;
+//    private Font myFont, myFontB;
   //  private int maxFontSize = 30;
-    private int minFontSize = 4;
+//    private int minFontSize = 4;
     private int currentFontSize = -1;
-    private boolean displayText = true;
+//    private boolean displayText = true;
 
     public final static String[] ASSUMPTION_TYPE_STR = {"<<System Assumption>>", "<<Environment Assumption>>"};
 
@@ -196,6 +196,7 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
      * Issue #31
      * @param g
      */
+    @Override
     public void internalDrawing(Graphics g)
     {
     	// Rectangle
@@ -219,6 +220,9 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
         drawLimitedString(g, ASSUMPTION_TYPE_STR[type], x, y + currentFontSize , width, 1);
         g.setFont(font.deriveFont(Font.PLAIN));
         drawLimitedString(g, value, x, y + currentFontSize * 2, width, 1);
+        
+        if (texts == null)
+            makeValue();
         
         int current = lineHeight;
         for (int i = 0; i < texts.length; i++) {
@@ -415,6 +419,7 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
 //        g.setFont(f);
 //    }
 
+    @Override
     public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
 
         JDialogAssumption jda = new JDialogAssumption(tdp.getGUI().getFrame(), "Setting attributes of Assumption " + getAssumptionName(), getAssumptionName(), text, type, durability, source, status, limitation);
@@ -474,6 +479,7 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
     }
 
 
+    @Override
     public void rescale(double scaleFactor){
         dlineHeight = (lineHeight + dlineHeight) / oldScaleFactor * scaleFactor;
         lineHeight = (int)(dlineHeight);
@@ -485,6 +491,7 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
     }
 
 
+    @Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
         if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
             return this;
@@ -504,6 +511,7 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
         return ret;
     }
 
+    @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
 
@@ -701,6 +709,7 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
       }
       }*/
 
+    @Override
     public String getAttributes() {
         String attr = "";
         attr += "Text= " + text + "\n";
@@ -708,6 +717,7 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
         return attr;
     }
 
+    @Override
     public void autoAdjust(int mode) {
         //
 

@@ -58,17 +58,17 @@ import java.awt.*;
  */
 public class AvatarMADElementReference extends TGCScalableWithInternalComponent implements TGAutoAdjust {
     public String oldValue;
-    protected int textX = 5;
-    protected int textY = 22;
+//    protected int textX = 5;
+//    protected int textY = 22;
 	protected int lineHeight = 30;
 	private double dlineHeight = 0.0;
     //protected int startFontSize = 10;
     protected Graphics graphics;
     //protected int iconSize = 30;
 	
-	private Font myFont, myFontB;
-	private int maxFontSize = 30;
-	private int minFontSize = 4;
+//	private Font myFont, myFontB;
+//	private int maxFontSize = 30;
+//	private int minFontSize = 4;
 	private int currentFontSize = -1;
 	private boolean displayText = true;
 	
@@ -77,11 +77,12 @@ public class AvatarMADElementReference extends TGCScalableWithInternalComponent 
 	protected String diagramText;
 	
 	private int iconSize = 18;
-	private boolean iconIsDrawn = false;
+//	private boolean iconIsDrawn = false;
     
     public AvatarMADElementReference(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
+        textX = 5;
+        textY = 22;
         initScaling(150, lineHeight);
 		oldScaleFactor = tdp.getZoom();
 		dlineHeight = lineHeight * oldScaleFactor;
@@ -123,7 +124,7 @@ public class AvatarMADElementReference extends TGCScalableWithInternalComponent 
         nbInternalTGComponent = 0;
         //tgcomponent = new TGComponent[nbInternalTGComponent];
         
-        int h = 1;
+//        int h = 1;
         //TAttributeRequirement tgc0;
         //tgc0 = new TAttributeRequirement(x, y+height+h, 0, 0, height + h, height+h, true, this, _tdp);
         //tgcomponent[0] = tgc0;
@@ -147,33 +148,11 @@ public class AvatarMADElementReference extends TGCScalableWithInternalComponent 
         actionOnAdd();
     }
 	
-    
-	public void internalDrawing(Graphics g) {
-		Font f = g.getFont();
-		Font fold = f;
-		int w, c;
-		int size;
-		
-        if (!tdp.isScaled()) {
-            graphics = g;
-        }
-		
-		if (((rescaled) && (!tdp.isScaled())) || myFont == null) {
-			currentFontSize = tdp.getFontSize();
-			//
-			myFont = f.deriveFont((float)currentFontSize);
-			myFontB = myFont.deriveFont(Font.BOLD);
-			
-			if (rescaled) {
-				rescaled = false;
-			}
-		}
-
-        displayText = currentFontSize >= minFontSize;
-		
-		int h  = g.getFontMetrics().getHeight();
-        
-		g.drawRect(x, y, width, height);
+    @Override
+    public void internalDrawing(Graphics g)
+    {
+    	//Rectangle
+    	g.drawRect(x, y, width, height);
         
 		g.drawLine(x, y+lineHeight, x+width, y+lineHeight);
 		g.setColor(ColorManager.AVATAR_ASSUMPTION_TOP);
@@ -181,35 +160,79 @@ public class AvatarMADElementReference extends TGCScalableWithInternalComponent 
 		g.setColor(ColorManager.AVATAR_ASSUMPTION_ATTRIBUTES);
 		g.fillRect(x+1, y+1+lineHeight, width-1, height-1-lineHeight);
 		ColorManager.setColor(g, getState(), 0);
-		if ((lineHeight > 23) && (width > 23)){
-			g.drawImage(scale(IconManager.img5100), x + width - scale(iconSize + 1), y + scale(3), Color.yellow, null);
-		}
-		
-		if (displayText) {
-			size = currentFontSize - 2;
-			g.setFont(myFont.deriveFont((float)(myFont.getSize() - 2)));
-			drawLimitedString(g, ELEMENT_REFERENCE, x, y + size, width, 1);
-			size += currentFontSize;
-			g.setFont(myFontB);
-			w = g.getFontMetrics().stringWidth(value);
-			drawLimitedString(g, value, x, y + size, width, 1);
-			
-		}
-		
-		/*g.setFont(myFont);
-		
-		size = lineHeight + currentFontSize;
-		if (size < (height - 2)) {
-			drawLimitedString(g, "Diagram=\"" + diagramText + "\"", x + textX, y + size, width, 0);
-			size += currentFontSize;
-			// Violated action
-			if (size < (height - 2)) {
-				drawLimitedString(g, "Violated_Action=\"" + violatedAction + "\"", x + textX, y + size, width, 0);
-			}
-		}*/
-        g.setFont(f);
+    	//Strings
+    	Font f = g.getFont();
+    	drawSingleLimitedString(g, ELEMENT_REFERENCE, x, y + f.getSize(), width, 1);
+    	drawSingleLimitedString(g, value, x, y + f.getSize() * 2, width, 1);
+    	
+    	//ICon
+    	g.drawImage(scale(IconManager.img5100), x + width - scale(iconSize + 1), y + scale(3), Color.yellow, null);
+    	
     }
     
+//	public void internalDrawin(Graphics g) {
+//		Font f = g.getFont();
+////		Font fold = f;
+////		int w, C;
+//		int size;
+//		
+//        if (!tdp.isScaled()) {
+//            graphics = g;
+//        }
+//		
+//		if (((rescaled) && (!tdp.isScaled())) || myFont == null) {
+//			currentFontSize = tdp.getFontSize();
+//			//
+//			myFont = f.deriveFont((float)currentFontSize);
+//			myFontB = myFont.deriveFont(Font.BOLD);
+//			
+//			if (rescaled) {
+//				rescaled = false;
+//			}
+//		}
+//
+//        displayText = currentFontSize >= minFontSize;
+//		
+////		int h  = g.getFontMetrics().getHeight();
+//        
+//		g.drawRect(x, y, width, height);
+//        
+//		g.drawLine(x, y+lineHeight, x+width, y+lineHeight);
+//		g.setColor(ColorManager.AVATAR_ASSUMPTION_TOP);
+//        g.fillRect(x+1, y+1, width-1, lineHeight-1);
+//		g.setColor(ColorManager.AVATAR_ASSUMPTION_ATTRIBUTES);
+//		g.fillRect(x+1, y+1+lineHeight, width-1, height-1-lineHeight);
+//		ColorManager.setColor(g, getState(), 0);
+//		if ((lineHeight > 23) && (width > 23)){
+//			g.drawImage(scale(IconManager.img5100), x + width - scale(iconSize + 1), y + scale(3), Color.yellow, null);
+//		}
+//		
+//		if (displayText) {
+//			size = currentFontSize - 2;
+//			g.setFont(myFont.deriveFont((float)(myFont.getSize() - 2)));
+//			drawLimitedString(g, ELEMENT_REFERENCE, x, y + size, width, 1);
+//			size += currentFontSize;
+//			g.setFont(myFontB);
+////			w = g.getFontMetrics().stringWidth(value);
+//			drawLimitedString(g, value, x, y + size, width, 1);
+//			
+//		}
+//		
+//		/*g.setFont(myFont);
+//		
+//		size = lineHeight + currentFontSize;
+//		if (size < (height - 2)) {
+//			drawLimitedString(g, "Diagram=\"" + diagramText + "\"", x + textX, y + size, width, 0);
+//			size += currentFontSize;
+//			// Violated action
+//			if (size < (height - 2)) {
+//				drawLimitedString(g, "Violated_Action=\"" + violatedAction + "\"", x + textX, y + size, width, 0);
+//			}
+//		}*/
+//        g.setFont(f);
+//    }
+    
+    @Override
     public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
         oldValue = value;
         
@@ -251,7 +274,7 @@ public class AvatarMADElementReference extends TGCScalableWithInternalComponent 
     }
 	
 
-	
+	@Override
 	public void rescale(double scaleFactor){
 		dlineHeight = (lineHeight + dlineHeight) / oldScaleFactor * scaleFactor;
 		lineHeight = (int)(dlineHeight);
@@ -260,28 +283,28 @@ public class AvatarMADElementReference extends TGCScalableWithInternalComponent 
 		
 		super.rescale(scaleFactor);
 	}
-    
-    
+
+	@Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
         if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
             return this;
         }
         return null;
     }
-    
-    
-    
+
+	@Override
     public  int getType() {
         return TGComponentManager.AVATARMAD_ELEMENT_REFERENCE;
     }
     
-	
-    
+
+	@Override
     public String toString() {
         String ret =  getValue() + ELEMENT_REFERENCE;
         return ret;
     }
-	
+
+	@Override
 	public void autoAdjust(int mode) {
 		//
 		
@@ -295,9 +318,7 @@ public class AvatarMADElementReference extends TGCScalableWithInternalComponent 
 		Font f2 = f.deriveFont((float)(currentFontSize - 2));
 		
 		// Must find for both modes which width is desirable
-		String s0, s1;
-		
-		s0 = ELEMENT_REFERENCE;
+		String s0 = ELEMENT_REFERENCE;
 		
 		graphics.setFont(f2);
 		int w0 = graphics.getFontMetrics().stringWidth(s0);
