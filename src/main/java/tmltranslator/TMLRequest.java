@@ -41,11 +41,10 @@
 
 package tmltranslator;
 
+import cli.TML;
 import ui.tmlcompd.TMLCPrimitivePort;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
 
 /**
  * Class TMLRequest
@@ -171,5 +170,27 @@ public class TMLRequest extends TMLCommunicationElement {
 	}
         s += "</TMLREQUEST>\n";
 	return s;
+    }
+
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof TMLRequest)) return false;
+        if (!super.equalSpec(o)) return false;
+        TMLRequest request = (TMLRequest) o;
+        TMLComparingMethod comp = new TMLComparingMethod();
+
+        if (destinationTask != null) {
+            if (!destinationTask.equalSpec(request.getDestinationTask())) return false;
+        }
+
+        if(!(new HashSet<>(params).equals(new HashSet<>(request.params))))
+            return false;
+
+        if(!(new HashSet<>(paramNames).equals(new HashSet<>(request.paramNames))))
+            return false;
+
+        return confStatus == request.confStatus &&
+                checkConf == request.checkConf &&
+                checkAuth == request.checkAuth &&
+                comp.isTasksListEquals(originTasks, request.getOriginTasks());
     }
 }

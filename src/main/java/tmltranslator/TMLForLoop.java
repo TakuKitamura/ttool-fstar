@@ -43,6 +43,8 @@ package tmltranslator;
 
 import myutil.*;
 
+import java.util.Objects;
+
 /**
  * Class TMLForLoop
  * Creation: 23/11/2005
@@ -80,6 +82,14 @@ public class TMLForLoop extends TMLActivityElement {
     public String customExtraToXML() {
 	    return " init=\"" + Conversion.transformToXMLString(init) + "\" condition=\"" + Conversion.transformToXMLString(condition) + "\" increment=\"" + Conversion.transformToXMLString(increment) + "\" isInfinite=\"" + isInfinite + "\" ";
     }
-    
- 
+
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof TMLForLoop)) return false;
+        if(!super.equalSpec(o)) return false;
+        TMLForLoop tmlForLoop = (TMLForLoop) o;
+        return Objects.equals(init, tmlForLoop.getInit()) &&
+                Objects.equals(condition, tmlForLoop.getCondition()) &&
+                Objects.equals(increment, tmlForLoop.getIncrement()) &&
+                isInfinite == tmlForLoop.isInfinite();
+    }
 }

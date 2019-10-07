@@ -41,7 +41,9 @@
 
 package tmltranslator;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Vector;
 
 
@@ -131,7 +133,16 @@ public abstract class TMLActivityElementEvent extends TMLActivityElement {
         }
     }
 
-    
+    public Vector<String> getDatas() {
+        return datas;
+    }
 
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof TMLActivityElementEvent)) return false;
+        if (!super.equalSpec(o)) return false;
+        TMLActivityElementEvent tmlActivityElementEvent = (TMLActivityElementEvent) o;
 
+        return (new HashSet<>(datas)).equals(new HashSet<>(tmlActivityElementEvent.getDatas())) &&
+                Objects.equals(variable, tmlActivityElementEvent.getVariable());
+    }
 }

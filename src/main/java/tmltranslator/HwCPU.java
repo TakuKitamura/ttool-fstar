@@ -37,27 +37,28 @@
  */
 
 
-
-
 package tmltranslator;
 
 import tmltranslator.modelcompiler.ArchUnitMEC;
 import tmltranslator.modelcompiler.CpuMEC;
 
+import java.util.Objects;
+
 
 /**
  * Class HwCPU
  * Creation: 05/09/2007
- * @version 1.0 05/09/2007
+ *
  * @author Ludovic APVRILLE
+ * @version 1.0 05/09/2007
  */
-public class HwCPU extends HwExecutionNode  {
+public class HwCPU extends HwExecutionNode {
 
     public static final int BASIC_ROUND_ROBIN = 0;
     public static final int ROUND_ROBIN_PRIORITY_BASED = 1;
-    public static final int ENCRYPTION_NONE= 0;
-    public static final int ENCRYPTION_SW= 1;
-    public static final int ENCRYPTION_HW= 2;
+    public static final int ENCRYPTION_NONE = 0;
+    public static final int ENCRYPTION_SW = 1;
+    public static final int ENCRYPTION_HW = 2;
     public static final int DEFAULT_NB_OF_CORES = 1;
     public static final int DEFAULT_BYTE_DATA_SIZE = 4;
     public static final int DEFAULT_PIPELINE_SIZE = 5;
@@ -70,7 +71,7 @@ public class HwCPU extends HwExecutionNode  {
     public static final int DEFAULT_SLICE_TIME = 10000; // in microseconds
     public static final ArchUnitMEC DEFAULT_MODEL_EXTENSION_CONSTRUCT = new CpuMEC();
 
-    public int encryption  = 0;
+    public int encryption = 0;
     public int nbOfCores = DEFAULT_NB_OF_CORES; // Should be equal or greater than 1
     public int byteDataSize = DEFAULT_BYTE_DATA_SIZE; // Should be greater than 0
     public int pipelineSize = DEFAULT_PIPELINE_SIZE; // Should be greater than 0
@@ -89,21 +90,55 @@ public class HwCPU extends HwExecutionNode  {
     }
 
     public String getType() {
-        switch(schedulingPolicy) {
-        case ROUND_ROBIN_PRIORITY_BASED:
-            return "CPURRPB";
-        case BASIC_ROUND_ROBIN:
-        default:
-            return "CPURR";
+        switch (schedulingPolicy) {
+            case ROUND_ROBIN_PRIORITY_BASED:
+                return "CPURRPB";
+            case BASIC_ROUND_ROBIN:
+            default:
+                return "CPURR";
         }
     }
 
-    public String toXML() {
-	String s = "<CPU name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize + "\" execiTime=\"" + execiTime + "\" execcTime=\"" + execcTime + "\" pipelineSize=\"";
-	s += pipelineSize + "\" goIdleTime=\"" + goIdleTime + "\" maxConsecutiveIdleCycles=\"" + maxConsecutiveIdleCycles + "\" taskSwitchingTime=\"" + taskSwitchingTime + "\" cacheMiss=\"" +cacheMiss + "\"  schedulingPolicy=\"" + schedulingPolicy + "\" sliceTime=\"" + sliceTime + "\" MEC=\"" + MEC.typeToString() +"\" />\n";
-	return s;
+    public HwCPU clone() {
+        HwCPU cpu = new HwCPU(name);
+        cpu.encryption = encryption;
+        cpu.nbOfCores = nbOfCores;
+        cpu.byteDataSize = byteDataSize;
+        cpu.pipelineSize = pipelineSize;
+        cpu.goIdleTime = goIdleTime;
+        cpu.maxConsecutiveIdleCycles = maxConsecutiveIdleCycles;
+        cpu.taskSwitchingTime = taskSwitchingTime;
+        cpu.branchingPredictionPenalty = branchingPredictionPenalty;
+        cpu.cacheMiss = cacheMiss;
+        cpu.schedulingPolicy = schedulingPolicy;
+        cpu.sliceTime = sliceTime;
+        cpu.MEC = MEC;
+        return cpu;
     }
 
-    
+    public String toXML() {
+        String s = "<CPU name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize + "\" execiTime=\"" + execiTime + "\" execcTime=\"" + execcTime + "\" pipelineSize=\"";
+        s += pipelineSize + "\" goIdleTime=\"" + goIdleTime + "\" maxConsecutiveIdleCycles=\"" + maxConsecutiveIdleCycles + "\" taskSwitchingTime=\"" + taskSwitchingTime + "\" cacheMiss=\"" + cacheMiss + "\"  schedulingPolicy=\"" + schedulingPolicy + "\" sliceTime=\"" + sliceTime + "\" MEC=\"" + MEC.typeToString() + "\" />\n";
+        return s;
+    }
+
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof HwCPU)) return false;
+        if (!super.equalSpec(o)) return false;
+        HwCPU hwCPU = (HwCPU) o;
+        return encryption == hwCPU.encryption &&
+                nbOfCores == hwCPU.nbOfCores &&
+                byteDataSize == hwCPU.byteDataSize &&
+                pipelineSize == hwCPU.pipelineSize &&
+                goIdleTime == hwCPU.goIdleTime &&
+                maxConsecutiveIdleCycles == hwCPU.maxConsecutiveIdleCycles &&
+                taskSwitchingTime == hwCPU.taskSwitchingTime &&
+                branchingPredictionPenalty == hwCPU.branchingPredictionPenalty &&
+                cacheMiss == hwCPU.cacheMiss &&
+                schedulingPolicy == hwCPU.schedulingPolicy &&
+                sliceTime == hwCPU.sliceTime &&
+                MEC.equalSpec(hwCPU.MEC);
+    }
+
 
 }

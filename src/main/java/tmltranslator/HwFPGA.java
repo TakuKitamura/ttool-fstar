@@ -41,6 +41,8 @@ package tmltranslator;
 
 import tmltranslator.modelcompiler.ArchUnitMEC;
 
+import java.util.Objects;
+
 
 /**
  * Class HwFPGA
@@ -87,5 +89,16 @@ public class HwFPGA extends HwExecutionNode {
         return s;
     }
 
-
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof HwFPGA)) return false;
+        if(!super.equalSpec(o)) return false;
+        HwFPGA hwFPGA = (HwFPGA) o;
+        return byteDataSize == hwFPGA.byteDataSize &&
+                goIdleTime == hwFPGA.goIdleTime &&
+                maxConsecutiveIdleCycles == hwFPGA.maxConsecutiveIdleCycles &&
+                capacity == hwFPGA.capacity &&
+                mappingPenalty == hwFPGA.mappingPenalty &&
+                reconfigurationTime == hwFPGA.reconfigurationTime &&
+                scheduling.equals(hwFPGA.scheduling);
+    }
 }

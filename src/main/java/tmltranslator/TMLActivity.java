@@ -41,7 +41,7 @@ package tmltranslator;
 import myutil.Conversion;
 import myutil.TraceManager;
 
-import java.util.Vector;
+import java.util.*;
 
 /**
  * Class TMLActivity
@@ -685,5 +685,19 @@ public class TMLActivity extends TMLElement {
         }
 
         return result;
+    }
+
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof TMLActivity)) return false;
+        if(!super.equalSpec(o)) return false;
+        TMLActivity tmlActivity = (TMLActivity) o;
+        TMLComparingMethod comp = new TMLComparingMethod();
+
+        if (first != null) {
+            if (!first.equalSpec(tmlActivity.getFirst())) return false;
+        } else {
+            if (tmlActivity.getFirst() != null) return false;
+        }
+        return  comp.isTMLActivityEltListEquals(elements, tmlActivity.getElements());
     }
 }

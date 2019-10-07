@@ -52,6 +52,7 @@ import tmltranslator.toproverif.TML2ProVerif;
 import ui.CorrespondanceTGElement;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Class TMLMapping
@@ -530,7 +531,7 @@ public class TMLMapping<E> {
     }
 
     public List<HwCommunicationNode> getCommunicationNodes() {
-        return oncommnodes;
+        return this.oncommnodes;
     }
 
     public List<TMLElement> getMappedCommunicationElement() {
@@ -581,16 +582,33 @@ public class TMLMapping<E> {
     }
 
     public int getNbOfMemoriesOfChannel(TMLChannel _ch) {
+        int n = 0;
         int cpt = 0;
         for (TMLElement elt : mappedcommelts) {
             if (elt == _ch) {
                 HwCommunicationNode node = oncommnodes.get(cpt);
                 if (node instanceof HwMemory) {
-                    cpt++;
+                    n++;
                 }
             }
+            cpt++;
         }
-        return cpt;
+        return n;
+    }
+
+    public String getStringOfMemoriesOfChannel(TMLChannel _ch) {
+        String ret = "";
+        int cpt = 0;
+        for (TMLElement elt : mappedcommelts) {
+            if (elt == _ch) {
+                HwCommunicationNode node = oncommnodes.get(cpt);
+                if (node instanceof HwMemory) {
+                   ret += node.getName() + " ; ";
+                }
+            }
+            cpt ++;
+        }
+        return ret;
     }
 
     public TMLElement getCommunicationElementByName(String _name) {
@@ -1830,5 +1848,48 @@ public class TMLMapping<E> {
             }
         }
         return cpt;
+    }
+
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof  TMLMapping)) return false;
+        TMLMapping<?> that = (TMLMapping<?>) o;
+        TMLComparingMethod comp = new TMLComparingMethod();
+
+        if(!comp.isOncommondesListEquals(oncommnodes, that.getCommunicationNodes()))
+            return false;
+
+        if(!comp.isMappedcommeltsListEquals(mappedcommelts, that.getMappedCommunicationElement()))
+            return false;
+
+        if(!comp.isTasksListEquals(mappedtasks, that.getMappedTasks()))
+            return false;
+
+        if(!comp.isOnExecutionNodeListEquals(onnodes, that.getNodes()))
+            return false;
+
+        if(!comp.isListOfStringArrayEquals(pragmas, that.getPragmas()))
+            return false;
+
+        if(!comp.isSecurityPatternMapEquals(mappedSecurity, that.mappedSecurity))
+            return false;
+
+        return tmlm.equalSpec(that.tmlm) &&
+                tmla.equalSpec(that.tmla) &&
+                firewall == that.firewall;
+    }
+
+
+    public void remap(HwExecutionNode src, HwExecutionNode dst) {
+        int cpt = 0;
+        for(int i=0; i<onnodes.size(); i++) {
+            HwExecutionNode node = onnodes.get(i);
+            if (node == src) {
+                TMLTask task = mappedtasks.get(i);
+                onnodes.remove(i);
+                mappedtasks.remove(i);
+                addTaskToHwExecutionNode(task, dst);
+                return;
+            }
+        }
     }
 }

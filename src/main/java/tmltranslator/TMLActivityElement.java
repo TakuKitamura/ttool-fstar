@@ -41,6 +41,7 @@
 
 package tmltranslator;
 
+import java.util.Objects;
 import java.util.Vector;
 
 
@@ -139,4 +140,13 @@ public abstract class TMLActivityElement extends TMLElement {
     }
     
     public abstract String customExtraToXML();
+
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof TMLActivityElement)) return false;
+        if(!super.equalSpec(o)) return false;
+        TMLActivityElement tmlActEtls = (TMLActivityElement) o;
+        TMLComparingMethod comp = new TMLComparingMethod();
+        return Objects.equals(value,tmlActEtls.getValue()) &&
+                comp.isTMLActivityEltListEquals(nexts,tmlActEtls.getNexts());
+    }
 }

@@ -792,7 +792,8 @@ public class TMLSyntaxChecking {
             int n = mapping.getNbOfMemoriesOfChannel(ch);
             if (n > 1) {
                 // Too many memories
-                addError(null, null, TOO_MANY_MEMORIES + ": " + ch.getName(), TMLError.ERROR_STRUCTURE);
+                String s = mapping.getStringOfMemoriesOfChannel(ch);
+                addError(null, null, TOO_MANY_MEMORIES + ": " + ch.getName() + " mapped in " + s, TMLError.ERROR_STRUCTURE);
             }
         }
     }

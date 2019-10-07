@@ -65,7 +65,7 @@ import java.util.*;
  * @version 1.0 21/11/2005
  * @author Ludovic APVRILLE
  */
-public class TMLModeling<E> {
+public class  TMLModeling<E> {
     public final String SEP1 = "_S_";
 
     private List<TMLTask> tasks;
@@ -2731,5 +2731,173 @@ public class TMLModeling<E> {
 	s += "</TMLMODELING>\n";
 	return s;
     }
-    
+
+    public boolean equalSpec(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TMLModeling<?> that = (TMLModeling<?>) o;
+
+        if(!isTaskListEquals(tasks, that.tasks))
+            return false;
+
+        if(!isRequestListEquals(requests, that.requests))
+            return false;
+
+        if(!isEventListEquals(events, that.events))
+            return false;
+
+        if(!isChannelListEquals(channels, that.channels))
+            return false;
+
+        if(!isSecurityPatternListEquals(secPatterns, that.secPatterns))
+            return false;
+
+        return (new HashSet<>(securityPatterns).equals(new HashSet<>(that.securityPatterns)));
+    }
+
+
+    public  boolean isTaskListEquals(List<TMLTask> list1, List<TMLTask> list2){
+        if (list1 == null && list2 == null) {
+            return true;
+        }
+        //Only one of them is null
+        else if(list1 == null || list2 == null) {
+            return false;
+        }
+        else if(list1.size() != list2.size()) {
+            return false;
+        }
+
+        //copying to avoid rearranging original lists
+        list1 = new ArrayList<>(list1);
+        list2 = new ArrayList<>(list2);
+
+        Collections.sort(list1, Comparator.comparing(TMLTask::getName));
+        Collections.sort(list2, Comparator.comparing(TMLTask::getName));
+
+        boolean test;
+
+        for (int i = 0; i < list1.size(); i++) {
+            test =  list1.get(i).equalSpec(list2.get(i));
+            if (!test) return false;
+        }
+
+        return true;
+    }
+
+    public  boolean isRequestListEquals(List<TMLRequest> list1, List<TMLRequest> list2){
+        if (list1 == null && list2 == null) {
+            return true;
+        }
+        //Only one of them is null
+        else if(list1 == null || list2 == null) {
+            return false;
+        }
+        else if(list1.size() != list2.size()) {
+            return false;
+        }
+
+        //copying to avoid rearranging original lists
+        list1 = new ArrayList<>(list1);
+        list2 = new ArrayList<>(list2);
+
+        Collections.sort(list1, Comparator.comparing(TMLRequest::getName));
+        Collections.sort(list2, Comparator.comparing(TMLRequest::getName));
+
+        boolean test;
+
+        for (int i = 0; i < list1.size(); i++) {
+            test =  list1.get(i).equalSpec(list2.get(i));
+            if (!test) return false;
+        }
+
+        return true;
+    }
+
+
+    public  boolean isChannelListEquals(List<TMLChannel> list1, List<TMLChannel> list2){
+        if (list1 == null && list2 == null) {
+            return true;
+        }
+        //Only one of them is null
+        else if(list1 == null || list2 == null) {
+            return false;
+        }
+        else if(list1.size() != list2.size()) {
+            return false;
+        }
+
+        //copying to avoid rearranging original lists
+        list1 = new ArrayList<>(list1);
+        list2 = new ArrayList<>(list2);
+
+        Collections.sort(list1, Comparator.comparing(TMLChannel::getName));
+        Collections.sort(list2, Comparator.comparing(TMLChannel::getName));
+
+        boolean test;
+
+        for (int i = 0; i < list1.size(); i++) {
+            test =  list1.get(i).equalSpec(list2.get(i));
+            if (!test) return false;
+        }
+
+        return true;
+    }
+
+    public  boolean isEventListEquals(List<TMLEvent> list1, List<TMLEvent> list2) {
+        if (list1 == null && list2 == null) {
+            return true;
+        }
+        //Only one of them is null
+        else if (list1 == null || list2 == null) {
+            return false;
+        } else if (list1.size() != list2.size()) {
+            return false;
+        }
+
+        //copying to avoid rearranging original lists
+        list1 = new ArrayList<>(list1);
+        list2 = new ArrayList<>(list2);
+
+        Collections.sort(list1, Comparator.comparing(TMLEvent::getName));
+        Collections.sort(list2, Comparator.comparing(TMLEvent::getName));
+
+        boolean test;
+
+        for (int i = 0; i < list1.size(); i++) {
+            test = list1.get(i).equalSpec(list2.get(i));
+            if (!test) return false;
+        }
+
+        return true;
+    }
+
+    public boolean isSecurityPatternListEquals(List<SecurityPattern> list1, List<SecurityPattern> list2) {
+        if (list1 == null && list2 == null) {
+            return true;
+        }
+        //Only one of them is null
+        else if (list1 == null || list2 == null) {
+            return false;
+        } else if (list1.size() != list2.size()) {
+            return false;
+        }
+
+        //copying to avoid rearranging original lists
+        list1 = new ArrayList<>(list1);
+        list2 = new ArrayList<>(list2);
+
+        Collections.sort(list1, Comparator.comparing(SecurityPattern::getName));
+        Collections.sort(list2, Comparator.comparing(SecurityPattern::getName));
+
+        boolean test;
+
+        for (int i = 0; i < list1.size(); i++) {
+            test = list1.get(i).equalSpec(list2.get(i));
+            if (!test) return false;
+        }
+
+        return true;
+    }
+
 }

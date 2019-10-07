@@ -465,4 +465,50 @@ public class TMLTask extends TMLElement {
         return activity.getWorstCaseIComplexity();
     }
 
+    public Set<TMLChannel> getChannelSet() {
+        return channelsList;
+    }
+
+    public Set<TMLChannel> getReadTMLChannelSet() {
+        return readTMLChannelsList;
+    }
+
+    public Set<TMLChannel> getWriteTMLChannelSet() {
+        return writeTMLChannelsList;
+    }
+
+    public Set<TMLEvent> getEventSet() {
+        return eventsList;
+    }
+
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof TMLTask)) return false;
+        if (!super.equalSpec(o)) return false;
+        TMLTask tmlTask = (TMLTask) o;
+        TMLComparingMethod comp = new TMLComparingMethod();
+        if (request != null) {
+            if (!request.equalSpec(tmlTask.getRequest())) return false;
+        } else {
+            if (tmlTask.getRequest() != null) return false;
+        }
+
+        if(!(new HashSet<>(attributes).equals(new HashSet<>(tmlTask.attributes))))
+            return false;
+        return operationType == tmlTask.operationType &&
+                isDaemon == tmlTask.isDaemon &&
+                isRequested == tmlTask.isRequested() &&
+                isAttacker == tmlTask.isAttacker &&
+                priority == tmlTask.getPriority() &&
+                Objects.equals(operation, tmlTask.operation) &&
+                Objects.equals(operationMEC, tmlTask.operationMEC) &&
+                mustExit == tmlTask.exits() &&
+                activity.equalSpec(tmlTask.activity) &&
+                comp.isTMLChannelSetEquals(channelsList, tmlTask.getChannelSet()) &&
+                comp.isTMLChannelSetEquals(readTMLChannelsList, tmlTask.getReadTMLChannelSet()) &&
+                comp.isTMLChannelSetEquals(writeTMLChannelsList, tmlTask.getWriteTMLChannelSet()) &&
+                comp.isTMLEventSetEquals(eventsList, tmlTask.getEventSet());
+    }
+
+
+
 }

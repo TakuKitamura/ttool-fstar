@@ -213,6 +213,21 @@ public class HwNoC extends HwCommunicationNode  {
     }
 
 
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof HwNoC)) return false;
+        if (!super.equalSpec(o)) return false;
+        HwNoC hwNoC = (HwNoC) o;
+
+        if (placementMap != null) {
+            if (!placementMap.equals(hwNoC.placementMap)) return false;
+        } else {
+            if (hwNoC.placementMap != null)
+                return false;
+        }
+         return bufferByteSize == hwNoC.bufferByteSize &&
+                 size == hwNoC.size &&
+                 latency == hwNoC.latency;
+    }
 
 
 

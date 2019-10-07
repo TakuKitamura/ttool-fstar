@@ -41,7 +41,9 @@ package tmltranslator;
 import myutil.Conversion;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Class TMLChoice
@@ -342,5 +344,15 @@ public class TMLChoice extends TMLActivityElement{
     		g += Conversion.transformToXMLString(s) + ";";
     	}
     	return " guards=\"" + g + "\" ";
+    }
+
+    private  List<String> getGuards () {
+        return guards;
+    }
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof TMLChoice)) return false;
+        if (!super.equalSpec(o)) return false;
+        TMLChoice tmlChoice = (TMLChoice) o;
+        return (new HashSet<>(guards)).equals(new HashSet<>(tmlChoice.getGuards()));
     }
 }

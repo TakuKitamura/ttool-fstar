@@ -40,6 +40,7 @@
 package tmltranslator;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 /**
@@ -115,5 +116,15 @@ public class TMLActivityElementChannel extends TMLActivityElement {
         s += " channels=\"" + chan + "\" ";
         s += " type=\"" + chanType + "\" ";
         return s;
+    }
+
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof TMLActivityElementChannel)) return false;
+        if (!super.equalSpec(o)) return false;
+        TMLActivityElementChannel tmlActEltChannel = (TMLActivityElementChannel) o;
+        return Objects.equals(nbOfSamples, ((TMLActivityElementChannel) o).getNbOfSamples()) &&
+                isAttacker == tmlActEltChannel.isAttacker() &&
+                isEncForm == tmlActEltChannel.getEncForm();
+
     }
 }

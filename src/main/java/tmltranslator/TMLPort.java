@@ -52,6 +52,8 @@ package tmltranslator;
 
 import ui.tmlcompd.TMLCPrimitivePort;
 
+import java.util.Objects;
+
 
 public class TMLPort extends TMLElement {
 
@@ -98,5 +100,20 @@ public class TMLPort extends TMLElement {
 
     public String getDataFlowType() {
         return dataFlowType;
+    }
+
+    public void setDataFlowType (String _dataFlowType) {
+        dataFlowType = _dataFlowType;
+    }
+
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof TMLPort)) return false;
+        if (!super.equalSpec(o)) return false;
+
+        TMLPort tmlPort = (TMLPort) o;
+        return prex == tmlPort.isPrex() &&
+                postex == tmlPort.isPostex() &&
+                Objects.equals(associatedEvent, tmlPort.getAssociatedEvent()) &&
+                Objects.equals(dataFlowType, tmlPort.getDataFlowType());
     }
 }

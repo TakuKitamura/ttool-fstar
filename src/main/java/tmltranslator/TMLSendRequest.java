@@ -41,6 +41,7 @@
 
 package tmltranslator;
 
+import java.util.HashSet;
 import java.util.Vector;
 
 
@@ -110,6 +111,18 @@ public class TMLSendRequest extends TMLActivityElement  {
 
     public String customExtraToXML() {
 	return " request=\"" + request.getName() +  "\" params=\"" + getAllParams() + "\" ";
+    }
+
+    public Vector<String> getDatas() {
+        return datas;
+    }
+
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof TMLSendRequest)) return false;
+        if (!super.equalSpec(o)) return false;
+
+        TMLSendRequest tmlSendRequest = (TMLSendRequest) o;
+        return (new HashSet<>(datas)).equals(new HashSet<>(tmlSendRequest.getDatas()));
     }
 
 }
