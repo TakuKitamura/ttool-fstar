@@ -64,18 +64,20 @@ public class AvatarPDPropertyRelation extends TGCScalableWithInternalComponent i
 	
     protected String oldValue = "";
 	
-	private int maxFontSize = 12;
-	private int minFontSize = 4;
+//	private int maxFontSize = 12;
+//	private int minFontSize = 4;
 	private int currentFontSize = -1;
-	private boolean displayText = true;
-	private int textX = 1;
+//	private boolean displayText = true;
+//	private int textX = 1;
     
     public AvatarPDPropertyRelation(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-        width = (int)(80* tdp.getZoom());
-        height = (int)(40 * tdp.getZoom());
+        width = 80;
+        height = 40;
         minWidth = 75;
+        textY = 5;
+        textX = 1;
         //Issue #31
         initScaling(80,40);
         
@@ -116,8 +118,8 @@ public class AvatarPDPropertyRelation extends TGCScalableWithInternalComponent i
         
         value = "OR";
 		
-		currentFontSize = maxFontSize;
-		oldScaleFactor = tdp.getZoom();
+//		currentFontSize = maxFontSize;
+//		oldScaleFactor = tdp.getZoom();
         
         myImageIcon = IconManager.imgic1078;
     }

@@ -71,20 +71,23 @@ public class AvatarPDProperty extends TGCScalableWithInternalComponent implement
     private int kind = 0; //0: liveness, 1 reachability, 2 safety
     private boolean not = false; // Negation of property
 
-    private int maxFontSize = 12;
-    private int minFontSize = 4;
-    private int currentFontSize = -1;
-    private boolean displayText = true;
-    private int textX = 2;
-    private int sizeBetweenNameAndLiveness = 6;
+//    private int maxFontSize = 12;
+//    private int minFontSize = 4;
+//    private int currentFontSize = -1;
+//    private boolean displayText = true;
+//    private int textX = 2;
+//    private int sizeBetweenNameAndLiveness = 6;
 
     public AvatarPDProperty(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+        
+        //Issue #31
         textY = 5;
         width = 125;
-        height = (int)(55 * tdp.getZoom());
+        height = 55;
         minWidth = 100;
         initScaling(125, 55);
+        
         nbConnectingPoint = 4;
         connectingPoint = new TGConnectingPoint[4];
 
@@ -101,8 +104,8 @@ public class AvatarPDProperty extends TGCScalableWithInternalComponent implement
         value = "prop01";
         description = "blah blah blah";
 
-        currentFontSize = maxFontSize;
-        oldScaleFactor = tdp.getZoom();
+//        currentFontSize = maxFontSize;
+//        oldScaleFactor = tdp.getZoom();
 
         myImageIcon = IconManager.imgic702;
     }
@@ -131,6 +134,7 @@ public class AvatarPDProperty extends TGCScalableWithInternalComponent implement
 	    g.setFont(f.deriveFont(Font.BOLD));
     	g.drawString(ster, getCenter(g, ster), y + fontSize);
     	g.setFont(f.deriveFont(Font.PLAIN));
+    	//drawDoubleString(g, value, ster);
     	// Liveness
         
 		String state;
@@ -146,8 +150,10 @@ public class AvatarPDProperty extends TGCScalableWithInternalComponent implement
 		if (not)
 	      state = "not " + state;
 		g.setFont(f.deriveFont(Font.ITALIC));
-	    g.drawString(state, getCenter(g, state), y + fontSize * 3 + textY*2);
-		}
+	    //g.drawString(state, getCenter(g, state), y + fontSize * 3 + textY*2);
+		drawSingleString(g, state, getCenter(g, state), y + fontSize * 3 + textY*2);
+		
+    }
 //    public void internalDrawing(Graphics g) {
 //        String ster;
 //        ster = "<<" + stereotype + ">>";

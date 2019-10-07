@@ -56,7 +56,7 @@ import java.awt.*;
  * @author Ludovic APVRILLE
  */
 public class AvatarPDTemporalConstraint extends TGCScalableWithInternalComponent implements ConstraintListInterface {
-    private int textY1 = 5;
+//    private int textY1 = 5;
     //private int textY2 = 30;
 	
 	public static final String[] STEREOTYPES = {"<<TC>>"}; 
@@ -67,14 +67,18 @@ public class AvatarPDTemporalConstraint extends TGCScalableWithInternalComponent
 	private int minFontSize = 4;
 	private int currentFontSize = -1;
 	private boolean displayText = true;
-	private int textX = 1;
+//	private int textX = 1;
     
     public AvatarPDTemporalConstraint(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-        width = (int)(60* tdp.getZoom());
-        height = (int)(100 * tdp.getZoom());
+        //Issue #31
+        width = 60;
+        height = 100;
         minWidth = 50;
+        textY = 5;
+        textX = 1;
+        initScaling(60, 100);
         
         nbConnectingPoint = 12;
         connectingPoint = new TGConnectingPoint[12];
@@ -109,84 +113,95 @@ public class AvatarPDTemporalConstraint extends TGCScalableWithInternalComponent
         myImageIcon = IconManager.imgic1078;
     }
     
- public void internalDrawing(Graphics g) {
-        
-		Font f = g.getFont();
-		Font fold = f;
-		
-		if ((rescaled) && (!tdp.isScaled())) {
-			
-			if (currentFontSize == -1) {
-				currentFontSize = f.getSize();
-			}
-			rescaled = false;
-			// Must set the font size ..
-			// Find the biggest font not greater than max_font size
-			// By Increment of 1
-			// Or decrement of 1
-			// If font is less than 4, no text is displayed
-			
-			int maxCurrentFontSize = Math.max(0, Math.min(height, maxFontSize));
-			int w0;
-			f = f.deriveFont((float)maxCurrentFontSize);
-			g.setFont(f);
-			//
-			while(maxCurrentFontSize > (minFontSize-1)) {
-				w0 = g.getFontMetrics().stringWidth(value);
-				w0 = Math.max(w0, g.getFontMetrics().stringWidth(STEREOTYPES[0]));
-				if (w0 < (width - (2*textX))) {
-					break;
-				}
-				maxCurrentFontSize --;
-				f = f.deriveFont((float)maxCurrentFontSize);
-				g.setFont(f);
-			}
-			currentFontSize = maxCurrentFontSize;
-			
-			if(currentFontSize <minFontSize) {
-				displayText = false;
-			} else {
-				displayText = true;
-				f = f.deriveFont((float)currentFontSize);
-				g.setFont(f);
-			}
-			
-		}
-		
-        /*Color c = g.getColor();
-		
-		g.setColor(ColorManager.AVATARPD_LOGICAL_CONSTRAINT);
-		//g.fill3DRect(x+1, y+1, width-1, height-1, true);
-		//Graphics2D graphics2 = (Graphics2D) g;
-        //RoundRectangle2D roundedRectangle = new RoundRectangle2D.Float(x, y, width, height, arc, arc);
-        //graphics2.draw(roundedRectangle);
-		//g.fillRoundRect(x, y, width, height, arc, arc);
-		//g.fill3DRect(x+arc, y+1, width-(2*arc), height-1, true);
-		//g.fill3DRect(x+1, y+arc, width-1, height-(2*arc), true);
-		g.fillRoundRect(x, y, width, height, AvatarPDPanel.ARC, AvatarPDPanel.ARC);
-		g.setColor(ColorManager.AVATARPD_LOGICAL_CONSTRAINT.brighter());
-		g.drawLine(x+1, y+, x+1, y+height-(AvatarPDPanel.ARC/2));
-		g.drawLine(x+(AvatarPDPanel.ARC/2), y+(AvatarPDPanel.ARC/2), x+1, y+height-(AvatarPDPanel.ARC/2));
-		g.setColor(ColorManager.AVATARPD_LOGICAL_CONSTRAINT.darker());
-		g.drawLine(x+width-1, y+(AvatarPDPanel.ARC/2), x+width-1, y+height-(AvatarPDPanel.ARC/2));
-		g.setColor(c);
-		g.drawRoundRect(x, y, width, height, AvatarPDPanel.ARC, AvatarPDPanel.ARC);*/
-		GraphicLib.draw3DRoundRectangle(g, x, y, width, height, AvatarPDPanel.ARC, ColorManager.AVATARPD_TEMPORAL_CONSTRAINT, g.getColor());
-		
-        
-		Font f0 = g.getFont();
-		if (displayText) {
-			f = f.deriveFont((float)currentFontSize);
-			g.setFont(f.deriveFont(Font.BOLD));
-			int w  = g.getFontMetrics().stringWidth(STEREOTYPES[0]);
-			g.drawString(STEREOTYPES[0], x + (width - w)/2, y + currentFontSize + (int)(textY1*tdp.getZoom()));
-			g.setFont(f.deriveFont(Font.ITALIC));
-			w = g.getFontMetrics().stringWidth(value);
-			g.drawString(value, x + (width - w)/2, y + (2*currentFontSize) + (int)(textY1*tdp.getZoom()));
-			g.setFont(f0);
-		}
-        
+   @Override
+    public void internalDrawing(Graphics g)
+    {
+    	//Rectangle
+    	GraphicLib.draw3DRoundRectangle(g, x, y, width, height, AvatarPDPanel.ARC, ColorManager.AVATARPD_TEMPORAL_CONSTRAINT, g.getColor());
+    	
+    	//strings
+    	String ster = STEREOTYPES[0];
+    	drawDoubleString(g, ster, value);
     }
+    
+//    public void internalDrawing(Graphics g) {
+//        
+//		Font f = g.getFont();
+////		Font fold = f;
+//		
+//		if ((rescaled) && (!tdp.isScaled())) {
+//			
+//			if (currentFontSize == -1) {
+//				currentFontSize = f.getSize();
+//			}
+//			rescaled = false;
+//			// Must set the font size ..
+//			// Find the biggest font not greater than max_font size
+//			// By Increment of 1
+//			// Or decrement of 1
+//			// If font is less than 4, no text is displayed
+//			
+//			int maxCurrentFontSize = Math.max(0, Math.min(height, maxFontSize));
+//			int w0;
+//			f = f.deriveFont((float)maxCurrentFontSize);
+//			g.setFont(f);
+//			//
+//			while(maxCurrentFontSize > (minFontSize-1)) {
+//				w0 = g.getFontMetrics().stringWidth(value);
+//				w0 = Math.max(w0, g.getFontMetrics().stringWidth(STEREOTYPES[0]));
+//				if (w0 < (width - (2*textX))) {
+//					break;
+//				}
+//				maxCurrentFontSize --;
+//				f = f.deriveFont((float)maxCurrentFontSize);
+//				g.setFont(f);
+//			}
+//			currentFontSize = maxCurrentFontSize;
+//			
+//			if(currentFontSize <minFontSize) {
+//				displayText = false;
+//			} else {
+//				displayText = true;
+//				f = f.deriveFont((float)currentFontSize);
+//				g.setFont(f);
+//			}
+//			
+//		}
+//		
+//        /*Color c = g.getColor();
+//		
+//		g.setColor(ColorManager.AVATARPD_LOGICAL_CONSTRAINT);
+//		//g.fill3DRect(x+1, y+1, width-1, height-1, true);
+//		//Graphics2D graphics2 = (Graphics2D) g;
+//        //RoundRectangle2D roundedRectangle = new RoundRectangle2D.Float(x, y, width, height, arc, arc);
+//        //graphics2.draw(roundedRectangle);
+//		//g.fillRoundRect(x, y, width, height, arc, arc);
+//		//g.fill3DRect(x+arc, y+1, width-(2*arc), height-1, true);
+//		//g.fill3DRect(x+1, y+arc, width-1, height-(2*arc), true);
+//		g.fillRoundRect(x, y, width, height, AvatarPDPanel.ARC, AvatarPDPanel.ARC);
+//		g.setColor(ColorManager.AVATARPD_LOGICAL_CONSTRAINT.brighter());
+//		g.drawLine(x+1, y+, x+1, y+height-(AvatarPDPanel.ARC/2));
+//		g.drawLine(x+(AvatarPDPanel.ARC/2), y+(AvatarPDPanel.ARC/2), x+1, y+height-(AvatarPDPanel.ARC/2));
+//		g.setColor(ColorManager.AVATARPD_LOGICAL_CONSTRAINT.darker());
+//		g.drawLine(x+width-1, y+(AvatarPDPanel.ARC/2), x+width-1, y+height-(AvatarPDPanel.ARC/2));
+//		g.setColor(c);
+//		g.drawRoundRect(x, y, width, height, AvatarPDPanel.ARC, AvatarPDPanel.ARC);*/
+//		GraphicLib.draw3DRoundRectangle(g, x, y, width, height, AvatarPDPanel.ARC, ColorManager.AVATARPD_TEMPORAL_CONSTRAINT, g.getColor());
+//		
+//        
+//		Font f0 = g.getFont();
+//		if (displayText) {
+//			f = f.deriveFont((float)currentFontSize);
+//			g.setFont(f.deriveFont(Font.BOLD));
+//			int w  = g.getFontMetrics().stringWidth(STEREOTYPES[0]);
+//			g.drawString(STEREOTYPES[0], x + (width - w)/2, y + currentFontSize + (int)(textY*tdp.getZoom()));
+//			g.setFont(f.deriveFont(Font.ITALIC));
+//			w = g.getFontMetrics().stringWidth(value);
+//			g.drawString(value, x + (width - w)/2, y + (2*currentFontSize) + (int)(textY*tdp.getZoom()));
+//			g.setFont(f0);
+//		}
+//        
+//    }
     
    /* public void setValue(String val, Graphics g) {
         oldValue = value;
@@ -200,10 +215,8 @@ public class AvatarPDTemporalConstraint extends TGCScalableWithInternalComponent
         }
         //
     }*/
-    
 
-    
-    
+    @Override
      public boolean editOndoubleClick(JFrame frame) {
 		/*String tmp;
 		boolean error = false;
@@ -246,7 +259,8 @@ public class AvatarPDTemporalConstraint extends TGCScalableWithInternalComponent
 		
 		return false;
     }
-    
+
+    @Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
         
         if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
@@ -254,15 +268,18 @@ public class AvatarPDTemporalConstraint extends TGCScalableWithInternalComponent
         }
         return null;
     }
-    
+
+    @Override
     public int getType() {
         return TGComponentManager.APD_TEMPORAL_CONSTRAINT;
     }
-	
+
+    @Override
 	public String[] getConstraintList() {
 		return STEREOTYPES;
 	}
-	
+
+    @Override
 	public String getCurrentConstraint() {
 		return value;
 	}

@@ -1,6 +1,7 @@
 package ui;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 
@@ -171,16 +172,40 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
      * @param topText
      * @param bottomText
      */
-    protected void drawDoubleStringTitle(Graphics g, String topText, String bottomText)
+    protected void drawDoubleLimitedString(Graphics g, String topText, String bottomText)
     {
     	if (!isTextReadable(g))
     		return;
-    	int currentFontSize = g.getFont().getSize();
     	
-    	drawLimitedString(g, topText, x, y + currentFontSize + textY, width, 1);
-    	drawLimitedString(g, bottomText, x, y + currentFontSize * 2 + textY, width, 1);
+    	Font f = g.getFont();
+    	
+    	int currentFontSize = f.getSize();
+    	g.setFont(f.deriveFont(Font.BOLD));
+    	drawLimitedString(g, topText, getCenter(g, topText), y + currentFontSize + textY, width, 1);
+    	g.setFont(f.deriveFont(Font.PLAIN));
+    	drawLimitedString(g, bottomText, getCenter(g, bottomText), y + currentFontSize * 2 + textY, width, 1);
     }
     
+    /**
+     * draw two string one under another:
+     * 
+     * @param g
+     * @param topText
+     * @param bottomText
+     */
+    protected void drawDoubleString(Graphics g, String topText, String bottomText)
+    {
+    	if (!isTextReadable(g))
+    		return;
+    	
+    	Font f = g.getFont();
+    	
+    	int currentFontSize = f.getSize();
+    	g.setFont(f.deriveFont(Font.BOLD));
+    	g.drawString(topText, getCenter(g, topText), y + currentFontSize + textY);
+    	g.setFont(f.deriveFont(Font.PLAIN));
+    	g.drawString(bottomText, getCenter(g, bottomText), y + currentFontSize * 2 + textY);
+    }
     // END Issue #31
 	
     /**

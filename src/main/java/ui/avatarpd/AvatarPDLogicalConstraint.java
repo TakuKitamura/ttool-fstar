@@ -57,24 +57,24 @@ import java.awt.*;
  * @author Ludovic APVRILLE
  */
 public class AvatarPDLogicalConstraint extends TGCScalableWithInternalComponent implements ConstraintListInterface {
-    private int textY1 = 5;
+    //private int textY1 = 5;
     //private int textY2 = 30;
 	
 	public static final String[] STEREOTYPES = {"<<LC>>", "<<LS>>"}; 
 	
     protected String oldValue = "";
 	
-	private int maxFontSize = 12;
-	private int minFontSize = 4;
-	private int currentFontSize = -1;
-	private boolean displayText = true;
-	private int textX = 1;
+//	private int maxFontSize = 12;
+//	private int minFontSize = 4;
+//	private int currentFontSize = -1;
+//	private boolean displayText = true;
+//	private int textX = 1;
     
     public AvatarPDLogicalConstraint(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-        width = (int)(60* tdp.getZoom());
-        height = (int)(100 * tdp.getZoom());
+        width = 60;
+        height = 100;
         minWidth = 50;
         textY = 5;
         initScaling(60, 100);
@@ -114,8 +114,8 @@ public class AvatarPDLogicalConstraint extends TGCScalableWithInternalComponent 
         
         value = STEREOTYPES[0];
 		
-		currentFontSize = maxFontSize;
-		oldScaleFactor = tdp.getZoom();
+//		currentFontSize = maxFontSize;
+//		oldScaleFactor = tdp.getZoom();
         
         myImageIcon = IconManager.imgic1078;
     }
@@ -129,14 +129,18 @@ public class AvatarPDLogicalConstraint extends TGCScalableWithInternalComponent 
     	//Issue #31: String
     	//int fontSize = g.getFont().getSize();
     	Font f =g.getFont();
-    	if (isTextReadable(g))
-		{
-    		int strwidth  = g.getFontMetrics().stringWidth(value);
-    		int center = x + (width - strwidth)/2;
-    		g.setFont(f.deriveFont(Font.BOLD));
-    		g.drawString(value, center, y + scale(currentFontSize + 3));
-    		g.setFont(f.deriveFont(Font.PLAIN));
-		}
+//    	if (isTextReadable(g))
+//		{
+//    		int currentFontSize = f.getSize();
+//    		int strwidth  = g.getFontMetrics().stringWidth(value);
+//    		int center = x + (width - strwidth)/2;
+//    		g.setFont(f.deriveFont(Font.BOLD));
+//    		g.drawString(value, center, y + scale(currentFontSize + 3));
+//    		g.setFont(f.deriveFont(Font.PLAIN));
+//		}
+    	g.setFont(f.deriveFont(Font.BOLD));
+    	drawSingleString(g, value, getCenter(g, value), y + f.getSize());
+    	g.setFont(f.deriveFont(Font.PLAIN));
     }
 	
 //    public void internalDrawing(Graphics g) {

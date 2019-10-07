@@ -42,13 +42,13 @@
 package ui.avatarpd;
 
 import myutil.GraphicLib;
-import myutil.TraceManager;
+
 import ui.*;
 import ui.util.IconManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.ImageObserver;
+//import java.awt.image.ImageObserver;import myutil.TraceManager;
 import java.util.LinkedList;
 import java.util.Vector;
 
@@ -165,24 +165,27 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
 		}
 		
 		// Icon
-		int border = scale(5);
-		g.drawImage(scale(IconManager.img5100), x + width - scale(iconSize) - border, y + border, Color.yellow, null);
-			
+		//int border = scale(5);
+		//g.drawImage(scale(IconManager.img5100), x + width - scale(iconSize) - border, y + border, Color.yellow, null);
+		drawIcon(g, IconManager.img5100, iconSize);	
 		//String Title + Stereotype
 		//Issue #31: isTextReadable and canTextgointheBox function are used to make sure the display is going to be correct
 		Font f = g.getFont();
 		int fontSize = f.getSize();
-		if (isTextReadable(g) && canTextGoInTheBox(g, fontSize, value, iconSize))
-		{
-			g.setFont(f.deriveFont(Font.BOLD));
-			g.drawString(value, getCenterOfBox(g, value), y + currentFontSize);
-		}
+//		if (isTextReadable(g) && canTextGoInTheBox(g, fontSize, value, iconSize))
+//		{
+//			g.setFont(f.deriveFont(Font.BOLD));
+//			g.drawString(value, getCenterOfBox(g, value), y + currentFontSize);
+//		}
+		g.setFont(f.deriveFont(Font.BOLD));
+		drawSingleString(g, value, getCenterOfBox(g, value), y + currentFontSize);
 		String ster ="<<stereotype>>";
 		if (isTextReadable(g) && canTextGoInTheBox(g, fontSize, ster, 0))
 		{
 			g.setFont(f.deriveFont(Font.PLAIN));
-			g.drawString(ster, getCenterOfBox(g, ster), y + currentFontSize * 2 + textY);
-	    }
+			//g.drawString(ster, getCenterOfBox(g, ster), y + currentFontSize * 2 + textY);
+			drawSingleString(g, ster, getCenterOfBox(g, ster), y + currentFontSize * 2 + textY);
+		}
     }
     
 //    

@@ -261,8 +261,8 @@ public class AvatarPDSignal extends TGCScalableWithInternalComponent implements 
     
     
      public boolean editOndoubleClick(JFrame frame) {
-		String tmp;
-		boolean error = false;
+//		String tmp;
+//		boolean error = false;
 		
 		//String text = getName() + ": ";
 		String s = (String)JOptionPane.showInputDialog(frame, "Signal name",
