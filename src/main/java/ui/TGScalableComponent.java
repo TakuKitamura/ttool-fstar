@@ -132,7 +132,20 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
     	if (!isTextReadable(g))
     		return;
     	int borders = scale(3);
-    	g.drawImage(scale(icon), x + width - scale(iconSize ) - borders, y + borders, Color.yellow, null);
+    	g.drawImage(scale(icon), x + width - scale(iconSize) - borders, y + borders, Color.yellow, null);
+    }
+    
+    /**
+     * Draw string if text is readable
+     * @param g
+     * @param s
+     */
+    protected void drawSingleString(Graphics g, String s)
+    {
+    	if (!isTextReadable(g))
+    		return;
+    	int currentFontSize = g.getFont().getSize();
+    	drawLimitedString(g, s, x, y + currentFontSize, width, 1);
     }
     
     /**
