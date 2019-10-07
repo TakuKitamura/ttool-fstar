@@ -170,7 +170,9 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
 					//if ((pointerIsOnMe && indexOnMe == i))
 					//	g.setFont(font.deriveFont(Font.BOLD));
 					setFontStyleWhenPointerIsOnMe(g, Font.BOLD, pointerIsOnMe, font, i);
-					g.drawString(SHORT_ACTION_NAMES[validations[i]], currentMaxWidthX - saveWidth, y);
+//					g.drawString(SHORT_ACTION_NAMES[validations[i]], currentMaxWidthX - saveWidth, y);
+					drawSingleString(g, SHORT_ACTION_NAMES[validations[i]], currentMaxWidthX - saveWidth, y);
+					
 					g.setFont(font.deriveFont(Font.ITALIC));
 					valMinX[i] = currentMaxWidthX-saveWidth;
 					valMaxX[i] = currentMaxWidthX;
@@ -212,11 +214,11 @@ public class AvatarMethodologyDiagramName extends TGCScalableWithoutInternalComp
     	String textDiagramRef = value;
     	//int fontSize = g.getFont().getSize();
     	//boolean tooBig = !canTextGoInTheBox(g, fontSize, textDiagramRef, 0);
-    	if (!isTextReadable(g) /*||  canTextGoInTheBox(g, fontSize, textDiagramRef, 0)*/)
-    		return;
+//    	if (!isTextReadable(g) /*||  canTextGoInTheBox(g, fontSize, textDiagramRef, 0)*/)
+//    		return;
     	Font f = g.getFont();
-    	g.drawString(textDiagramRef, x, y);
-    	
+    	//g.drawString(textDiagramRef, x, y);
+    	drawSingleString(g, textDiagramRef, x, y);
     	//validation and String
     	manageValidations(g, f);
     }

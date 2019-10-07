@@ -140,12 +140,12 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
      * @param g
      * @param s
      */
-    protected void drawSingleString(Graphics g, String s)
+    protected void drawSingleString(Graphics g, String s, int xpos, int ypos)
     {
     	if (!isTextReadable(g))
     		return;
-    	int currentFontSize = g.getFont().getSize();
-    	drawLimitedString(g, s, x, y + currentFontSize, width, 1);
+    	//int currentFontSize = setCurrentFontSize ? g.getFont().getSize() : 0;
+    	g.drawString(s, xpos, ypos);
     }
     
     /**

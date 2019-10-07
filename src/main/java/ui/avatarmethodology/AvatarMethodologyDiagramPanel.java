@@ -61,10 +61,12 @@ public class AvatarMethodologyDiagramPanel extends TDiagramPanel implements TDPW
         addMouseMotionListener(tdmm);*/
     }
     
+    @Override
     public boolean actionOnDoubleClick(TGComponent tgc) {
         return true;
     }
     
+    @Override
     public boolean actionOnAdd(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {
             TCDTClass tgcc = (TCDTClass)(tgc);
@@ -74,6 +76,7 @@ public class AvatarMethodologyDiagramPanel extends TDiagramPanel implements TDPW
         return false;
     }
     
+    @Override
     public boolean actionOnRemove(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {
             TCDTClass tgcc = (TCDTClass)(tgc);
@@ -84,6 +87,7 @@ public class AvatarMethodologyDiagramPanel extends TDiagramPanel implements TDPW
         return false;
     }
     
+    @Override
     public boolean actionOnValueChanged(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {
             return actionOnDoubleClick(tgc);
@@ -91,26 +95,32 @@ public class AvatarMethodologyDiagramPanel extends TDiagramPanel implements TDPW
         return false;
     }
     
+    @Override
     public String getXMLHead() {
         return "<AvatarMethodologyDiagramPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
     }
     
+    @Override
     public String getXMLTail() {
         return "</AvatarMethodologyDiagramPanel>";
     }
     
+    @Override
     public String getXMLSelectedHead() {
         return "<AvatarMethodologyDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
     }
     
+    @Override
     public String getXMLSelectedTail() {
         return "</AvatarMethodologyDiagramPanelCopy>";
     }
     
+    @Override
     public String getXMLCloneHead() {
         return "<AvatarMethodologyDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
     }
     
+    @Override
     public String getXMLCloneTail() {
         return "</AvatarMethodologyDiagramPanelCopy>";
     }
@@ -120,6 +130,7 @@ public class AvatarMethodologyDiagramPanel extends TDiagramPanel implements TDPW
         
     }
 	
+    @Override
 	public void enhance() {
 		autoAdjust();
     }
