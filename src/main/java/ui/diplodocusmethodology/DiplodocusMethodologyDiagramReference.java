@@ -184,7 +184,9 @@ public abstract class DiplodocusMethodologyDiagramReference extends TGCScalableW
            // size = currentFontSize - 2;
            // g.setFont(myFontB);
 
-        drawLimitedString(g, value, x, y + fontSize + 1 /*size + 3*/, width, 1);
+        //drawLimitedString(g, value, x, y + fontSize + 1 /*size + 3*/, width, 1);
+        drawSingleLimitedString(g, value, x, y + fontSize + 1 /*size + 3*/, width, 1);
+        
         g.setFont(f);
         
 

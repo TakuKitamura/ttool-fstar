@@ -91,7 +91,8 @@ public class DiplodocusMethodologyDiagramReferenceToApplication extends Diplodoc
 	dn.setValidationsInfo(3, DiplodocusMethodologyDiagramName.PROVERIF_DIPLO);
         dn.setValidationsInfo(4, DiplodocusMethodologyDiagramName.TML_APP_DIPLO);
     }
-
+    
+    @Override
     public boolean makeCall(String diagramName, int index) {
         String tmp;
 
@@ -175,9 +176,4 @@ public class DiplodocusMethodologyDiagramReferenceToApplication extends Diplodoc
         return true;
 
     }
-
-
-
-
-
 }

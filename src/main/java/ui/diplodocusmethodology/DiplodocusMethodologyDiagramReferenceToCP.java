@@ -71,20 +71,24 @@ public class DiplodocusMethodologyDiagramReferenceToCP extends DiplodocusMethodo
     }
 
 
+    @Override
     public  int getType() {
         return TGComponentManager.DIPLODODUSMETHODOLOGY_REF_CP;
     }
 
 
+    @Override
     public boolean isAValidPanelType(TURTLEPanel panel) {
         return panel instanceof TMLCommunicationPatternPanel;
 
     }
 
+    @Override
     public void makeValidationInfos(DiplodocusMethodologyDiagramName dn) {
         dn.setValidationsNumber(0);
     }
 
+    @Override
     public boolean makeCall(String diagramName, int index) {
         return true;
     }

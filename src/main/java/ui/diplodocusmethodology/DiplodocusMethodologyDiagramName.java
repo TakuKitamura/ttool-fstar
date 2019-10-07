@@ -123,17 +123,17 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
         myImageIcon = IconManager.imgic302;
     }
     
-    
+    //Issue #31: Factorisation with isTextReadable included into a new function: drawSingleString
     @Override
     public void internalDrawing(Graphics g)
     {
-    	if (!isTextReadable(g))
-    		return;
+//    	if (!isTextReadable(g))
+//    		return;
     	// Strings
     	String textDiagramRef = value;
     	Font f = g.getFont();
-    	g.drawString(textDiagramRef, x, y);
-    	
+    	//g.drawString(textDiagramRef, x, y);
+    	drawSingleString(g, textDiagramRef, x, y);
     	//validation and their strings
     	GestionOfValidations(g, f);
     }
@@ -173,8 +173,10 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
 //                        g.setFont(f.deriveFont(Font.BOLD));
 //                    } Issue #31
                 	setFontStyleWhenPointerIsOnMe(g, Font.BOLD, pointerIsOnMe, f, i);
-                    g.drawString(SHORT_ACTION_NAMES[validations[i]], currentMaxWidthX - saveWidth, y);
-                    g.setFont(f.deriveFont(Font.ITALIC));
+                    //g.drawString(SHORT_ACTION_NAMES[validations[i]], currentMaxWidthX - saveWidth, y);
+                	drawSingleString(g, SHORT_ACTION_NAMES[validations[i]], currentMaxWidthX - saveWidth, y);
+                    
+                	g.setFont(f.deriveFont(Font.ITALIC));
                     valMinX[i] = currentMaxWidthX - saveWidth;
                     valMaxX[i] = currentMaxWidthX;
                     oneWritten = true;

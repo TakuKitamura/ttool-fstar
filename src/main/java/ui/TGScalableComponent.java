@@ -149,6 +149,22 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
     }
     
     /**
+     * Same as drawSingleString
+     * @param g
+     * @param s
+     * @param xpos
+     * @param ypos
+     * @param maxWidth
+     * @param pos
+     */
+    protected void drawSingleLimitedString(Graphics g, String s, int xpos, int ypos, int maxWidth, int pos)
+    {
+    	if (!isTextReadable(g))
+    		return;
+    	drawLimitedString(g, s, xpos, ypos, maxWidth, pos);
+    }
+    
+    /**
      * draw two string one under another:
      * 
      * @param g
