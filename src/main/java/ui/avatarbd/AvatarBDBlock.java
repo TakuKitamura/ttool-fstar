@@ -87,19 +87,19 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
     private static String GLOBAL_CODE_INFO = "(block code)";
 
-    private int textY1 = 3;
-
+//    private int textY1 = 3;
+//    private int textX = 7;
+    
     private static String stereotype = "block";
-    private static String stereotypeCrypto = "cryptoblock";
+//    private static String stereotypeCrypto = "cryptoblock";
 
     protected static List<String> BLOCK_TYPE_STR = new ArrayList<String>(Arrays.asList("block", "cryptoblock"));
     protected static List<Color> BLOCK_TYPE_COLOR = new ArrayList<Color>(Arrays.asList(ColorManager.AVATAR_BLOCK, ColorManager.AVATAR_BLOCK));
     private int typeStereotype = 0; // <<block>> by default
 
     private int maxFontSize = 12;
-    private int minFontSize = 4;
+//    private int minFontSize = 4;
     private int currentFontSize = -1;
-    private int textX = 7;
 
     private int limitName = -1;
     private int limitAttr = -1;
@@ -131,6 +131,10 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         height = 200;
         minWidth = 5;
         minHeight = 2;
+        textY = 3;
+        textX = 7;
+        initScaling(250,200);
+        
 
         nbConnectingPoint = 16;
         connectingPoint = new TGConnectingPoint[16];
@@ -197,160 +201,54 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
     public void addSignal(AvatarSignal sig) {
         this.mySignals.add(sig);
     }
-
-    private void internalDrawingAux(Graphics graph) {
-
-        //TraceManager.addDev("Block drawing aux = " + this);
-
-        // Draw outer rectangle (for border)
-        Color c = graph.getColor();
+    /**
+     * Issue #31: text disappearance
+     * @param graph
+     */
+    private void internalDrawingAux(Graphics graph)
+    {
+    	//Rectangle
+    	Color c = graph.getColor();
         graph.drawRect(this.x, this.y, this.width, this.height);
-
-        // Draw inner rectangle
-        //graph.setColor(ColorManager.AVATAR_BLOCK);
-
-        //TraceManager.addDev("type stereotype=" + typeStereotype);
-
         graph.setColor(BLOCK_TYPE_COLOR.get(typeStereotype));
         graph.fillRect(this.x + 1, this.y + 1, this.width - 1, this.height - 1);
         graph.setColor(c);
+        
+        //string
+        int h = graph.getFontMetrics().getAscent() + graph.getFontMetrics().getLeading() + textY;
 
-        // limits
-        this.limitName = -1;
-        this.limitAttr = -1;
-        this.limitMethod = -1;
-        this.limitSignal = y + height;
-
-        // h retains the coordinate along X where an element was last drawn
-        int h = 0;
-
-        int textY1 = (int) (this.textY1 * this.tdp.getZoom());
-        int textX = (int) (this.textX * this.tdp.getZoom());
-
-        // Draw icon
-        this.iconIsDrawn = this.width > IconManager.iconSize + 2 * textX && height > IconManager.iconSize + 2 * textX;
-        if (this.iconIsDrawn)
-            graph.drawImage(scale(IconManager.img5100), this.x + this.width - scale(IconManager.iconSize) - textX, this.y + textX, null);
-
-
-        Font font = graph.getFont();
-
-
+        if (h + graph.getFontMetrics().getDescent() + textY >= this.height)
+            return;
+        Font f = graph.getFont();
         String ster = BLOCK_TYPE_STR.get(typeStereotype);
-
-        //TraceManager.addDev("My ster=" + ster);
-
-        if (this.rescaled && !this.tdp.isScaled()) {
-            this.rescaled = false;
-            // Must set the font size...
-            // Incrementally find the biggest font not greater than max_font size
-            // If font is less than min_font, no text is displayed
-
-            // This is the maximum font size possible
-            int maxCurrentFontSize = Math.max(0, Math.min(this.height, (int) (this.maxFontSize * this.tdp.getZoom())));
-            font = font.deriveFont((float) maxCurrentFontSize);
-
-            // Try to decrease font size until we get below the minimum
-            while (maxCurrentFontSize > (this.minFontSize * this.tdp.getZoom() - 1)) {
-                // Compute width of name of the function
-                int w0 = graph.getFontMetrics(font).stringWidth(this.value);
-                // Compute width of string stereotype
-                int w1 = graph.getFontMetrics(font).stringWidth(ster);
-
-                // if one of the two width is small enough use this font size
-                if (Math.min(w0, w1) < this.width - (2 * this.textX))
-                    break;
-
-                // Decrease font size
-                maxCurrentFontSize--;
-                // Scale the font
-                font = font.deriveFont((float) maxCurrentFontSize);
-            }
-
-            // Box is too damn small
-            if (this.currentFontSize < this.minFontSize * this.tdp.getZoom()) {
-                maxCurrentFontSize++;
-                // Scale the font
-                font = font.deriveFont((float) maxCurrentFontSize);
-            }
-
-            // Use this font
-            graph.setFont(font);
-            this.currentFontSize = maxCurrentFontSize;
-        } else
-            font = font.deriveFont(this.currentFontSize);
-
-        graph.setFont(font.deriveFont(Font.BOLD));
-        h = graph.getFontMetrics().getAscent() + graph.getFontMetrics().getLeading() + textY1;
-
-        if (h + graph.getFontMetrics().getDescent() + textY1 >= this.height)
-            return;
-
-        // Write stereotype if small enough
         int w = graph.getFontMetrics().stringWidth(ster);
+         h = graph.getFontMetrics().getAscent() + graph.getFontMetrics().getLeading() + textY;
+        graph.setFont(f.deriveFont(Font.BOLD));
         if (w + 2 * textX < this.width)
-            graph.drawString(ster, this.x + (this.width - w) / 2, this.y + h);
-        else {
-            // try to draw with "..." instead
-            if (!this.isCryptoBlock())
-                ster = stereotype;
-            else
-                ster = stereotypeCrypto;
-
-            for (int stringLength = ster.length() - 1; stringLength >= 0; stringLength--) {
-                String abbrev = "<<" + ster.substring(0, stringLength) + "...>>";
-                w = graph.getFontMetrics().stringWidth(abbrev);
-                if (w + 2 * textX < this.width) {
-                    graph.drawString(abbrev, this.x + (this.width - w) / 2, this.y + h);
-                    break;
-                }
-            }
-        }
-
-        // Write value if small enough
-        graph.setFont(font);
-        h += graph.getFontMetrics().getHeight() + textY1;
-        if (h + graph.getFontMetrics().getDescent() + textY1 >= this.height)
-            return;
-
-        w = graph.getFontMetrics().stringWidth(this.value);
+        	drawSingleString(graph, ster, getCenter(graph, ster), this.y + h);
+        h += graph.getFontMetrics().getHeight() + textY;
+        w = graph.getFontMetrics().stringWidth(value);
+        graph.setFont(f.deriveFont(Font.PLAIN));
         if (w + 2 * textX < this.width)
-            graph.drawString(this.value, this.x + (this.width - w) / 2, this.y + h);
-        else {
-            // try to draw with "..." instead
-            for (int stringLength = this.value.length() - 1; stringLength >= 0; stringLength--) {
-                String abbrev = this.value.substring(0, stringLength) + "...";
-                w = graph.getFontMetrics().stringWidth(abbrev);
-                if (w + 2 * textX < this.width) {
-                    graph.drawString(abbrev, this.x + (this.width - w) / 2, this.y + h);
-                    break;
-                }
-            }
-        }
-
-        h += graph.getFontMetrics().getDescent() + textY1;
-
-        // Update lower bound of text
+        	drawSingleString(graph, this.value, getCenter(graph, value), this.y + h);
+        
+        //draw separator
         this.limitName = this.y + h;
 
-        if (h + textY1 >= this.height)
+        if (h + textY >= this.height)
             return;
-
-        // Draw separator
+        h += graph.getFontMetrics().getDescent() + textY;
+        if (canTextGoInTheBox(graph, h, "line", 0));
         graph.drawLine(this.x, this.y + h, this.x + this.width, this.y + h);
-
+        h += textY;
+        
+        //Attributes
         if (!this.tdp.areAttributesVisible())
             return;
-
-        // Set font size
-        // int attributeFontSize = Math.min (12, this.currentFontSize - 2);
-        int attributeFontSize = this.currentFontSize * 5 / 6;
-        graph.setFont(font.deriveFont((float) attributeFontSize));
+        int attributeFontSize = f.getSize() * 5 / 6;
+        graph.setFont(f.deriveFont((float) attributeFontSize));
         int step = graph.getFontMetrics().getHeight();
-
-        h += textY1;
-
-        // Attributes
+        h += textY;
         limitAttr = limitName;
         for (TAttribute attr : this.myAttributes) {
             h += step;
@@ -361,47 +259,31 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
             // Get the string for this parameter
             String attrString = attr.toAvatarString();
-
-            // Try to draw it
             w = graph.getFontMetrics().stringWidth(attrString);
-            
             attrLocMap.put(attr,this.y+h);
             if (w + 2 * textX < this.width) {
-                graph.drawString(attrString, this.x + textX, this.y + h);
+                //graph.drawString(attrString, this.x + textX, this.y + h);
+            	drawSingleString(graph, attrString, this.x + textX, this.y + h);
                 this.drawConfidentialityVerification(attr.getConfidentialityVerification(), graph, this.x, this.y + h);
-            } else {
-                // If we can't, try to draw with "..." instead
-                int stringLength;
-                for (stringLength = attrString.length() - 1; stringLength >= 0; stringLength--) {
-                    String abbrev = attrString.substring(0, stringLength) + "...";
-                    w = graph.getFontMetrics().stringWidth(abbrev);
-                    if (w + 2 * textX < this.width) {
-                        graph.drawString(abbrev, this.x + textX, this.y + h);
-                        this.drawConfidentialityVerification(attr.getConfidentialityVerification(), graph, this.x, this.y + h);
-                        break;
-                    }
-                }
-
-                if (stringLength < 0)
-                    // skip attribute
-                    h -= step;
             }
         }
-
-        h += graph.getFontMetrics().getDescent() + textY1;
-
+        
+        //ICON
+        drawImageWithCheck(graph, IconManager.img5100, this.x + this.width - scale(IconManager.iconSize) - textX, this.y + textX);
+    
+        
         // Remember the end of attributes
         this.limitAttr = this.y + h;
-
-        if (h + textY1 >= this.height)
+        if (h + textY >= this.height)
             return;
 
         graph.drawLine(this.x, this.y + h, this.x + this.width, this.y + h);
-        h += textY1;
+        h += textY;
 
         // Methods
         limitMethod = limitAttr;
         limitSignal = limitAttr;
+        
         for (AvatarMethod method : this.myMethods) {
             h += step;
             if (h >= this.height - textX) {
@@ -434,9 +316,9 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
             }
         }
 
-        h += graph.getFontMetrics().getDescent() + textY1;
+        h += graph.getFontMetrics().getDescent() + textY;
 
-        if (h + textY1 >= this.height) {
+        if (h + textY >= this.height) {
             limitMethod = this.y + this.height;
             limitSignal = this.y + this.height;
             return;
@@ -447,7 +329,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         this.limitSignal = this.y + h;
 
         graph.drawLine(this.x, this.y + h, this.x + this.width, this.y + h);
-        h += textY1;
+        h += textY;
 
         // Signals
         for (AvatarSignal signal : this.mySignals) {
@@ -460,7 +342,8 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
             String signalString = "~ " + signal.toString();
             w = graph.getFontMetrics().stringWidth(signalString);
             if (w + 2 * textX < this.width) {
-                graph.drawString(signalString, this.x + textX, this.y + h);
+//                graph.drawString(signalString, this.x + textX, this.y + h);
+            	drawSingleString(graph, signalString, this.x + textX, this.y + h);
                 drawInfoAttachement(signal, graph, x, y + h);
 
             } else {
@@ -470,10 +353,9 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                     String abbrev = signalString.substring(0, stringLength) + "...";
                     w = graph.getFontMetrics().stringWidth(abbrev);
                     if (w + 2 * textX < this.width) {
-                        graph.drawString(abbrev, this.x + textX, this.y + h);
+                        //graph.drawString(abbrev, this.x + textX, this.y + h);
+                    	drawSingleString(graph, abbrev, this.x + textX, this.y + h);
                         drawInfoAttachement(signal, graph, x, y + h);
-
-
                         break;
                     }
                 }
@@ -484,9 +366,9 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
             }
         }
 
-        h += graph.getFontMetrics().getDescent() + textY1;
+        h += graph.getFontMetrics().getDescent() + textY;
 
-        if (h + textY1 >= this.height) {
+        if (h + textY >= this.height) {
             limitSignal = this.height + this.y;
             return;
         }
@@ -494,18 +376,331 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         // Global code
         limitSignal = this.y + h;
         if (hasGlobalCode()) {
-            if (h + textY1 + step >= this.height - textX)
+            if (h + textY + step >= this.height - textX)
                 return;
             graph.drawLine(this.x, this.y + h, this.x + this.width, this.y + h);
-            h += textY1 + step;
+            h += textY + step;
 
             w = graph.getFontMetrics().stringWidth(GLOBAL_CODE_INFO);
             if (w + 2 * textX < this.width)
-                graph.drawString(GLOBAL_CODE_INFO, this.x + (this.width - w) / 2, this.y + h);
+            	drawSingleString(graph, GLOBAL_CODE_INFO, this.x + (this.width - w) / 2, this.y + h);
+//                graph.drawString(GLOBAL_CODE_INFO, this.x + (this.width - w) / 2, this.y + h);
         } else {
             limitSignal = height;
-        }
+        }   
+            
     }
+    
+//    private void internalDrawingAu(Graphics graph) {
+//
+//        //TraceManager.addDev("Block drawing aux = " + this);
+//
+//        // Draw outer rectangle (for border)
+//        Color c = graph.getColor();
+//        graph.drawRect(this.x, this.y, this.width, this.height);
+//
+//        // Draw inner rectangle
+//        //graph.setColor(ColorManager.AVATAR_BLOCK);
+//
+//        //TraceManager.addDev("type stereotype=" + typeStereotype);
+//
+//        graph.setColor(BLOCK_TYPE_COLOR.get(typeStereotype));
+//        graph.fillRect(this.x + 1, this.y + 1, this.width - 1, this.height - 1);
+//        graph.setColor(c);
+//
+//        // limits
+//        this.limitName = -1;
+//        this.limitAttr = -1;
+//        this.limitMethod = -1;
+//        this.limitSignal = y + height;
+//
+//        // h retains the coordinate along X where an element was last drawn
+//        int h = 0;
+//
+////        int textY1 = (int) (this.textY1 * this.tdp.getZoom());
+////        int textX = (int) (this.textX * this.tdp.getZoom());
+//
+//        // Draw icon
+//        this.iconIsDrawn = this.width > IconManager.iconSize + 2 * textX && height > IconManager.iconSize + 2 * textX;
+//        if (this.iconIsDrawn)
+//            graph.drawImage(scale(IconManager.img5100), this.x + this.width - scale(IconManager.iconSize) - textX, this.y + textX, null);
+//
+//
+//        Font font = graph.getFont();
+//
+//
+//        String ster = BLOCK_TYPE_STR.get(typeStereotype);
+//
+//        //TraceManager.addDev("My ster=" + ster);
+//
+//        if (this.rescaled && !this.tdp.isScaled()) {
+//            this.rescaled = false;
+//            // Must set the font size...
+//            // Incrementally find the biggest font not greater than max_font size
+//            // If font is less than min_font, no text is displayed
+//
+//            // This is the maximum font size possible
+//            int maxCurrentFontSize = Math.max(0, Math.min(this.height, (int) (this.maxFontSize * this.tdp.getZoom())));
+//            font = font.deriveFont((float) maxCurrentFontSize);
+//
+//            // Try to decrease font size until we get below the minimum
+//            while (maxCurrentFontSize > (this.minFontSize * this.tdp.getZoom() - 1)) {
+//                // Compute width of name of the function
+//                int w0 = graph.getFontMetrics(font).stringWidth(this.value);
+//                // Compute width of string stereotype
+//                int w1 = graph.getFontMetrics(font).stringWidth(ster);
+//
+//                // if one of the two width is small enough use this font size
+//                if (Math.min(w0, w1) < this.width - (2 * this.textX))
+//                    break;
+//
+//                // Decrease font size
+//                maxCurrentFontSize--;
+//                // Scale the font
+//                font = font.deriveFont((float) maxCurrentFontSize);
+//            }
+//
+//            // Box is too damn small
+//            if (this.currentFontSize < this.minFontSize * this.tdp.getZoom()) {
+//                maxCurrentFontSize++;
+//                // Scale the font
+//                font = font.deriveFont((float) maxCurrentFontSize);
+//            }
+//
+//            // Use this font
+//            graph.setFont(font);
+//            this.currentFontSize = maxCurrentFontSize;
+//        } else
+//            font = font.deriveFont(this.currentFontSize);
+//
+//        graph.setFont(font.deriveFont(Font.BOLD));
+//        h = graph.getFontMetrics().getAscent() + graph.getFontMetrics().getLeading() + textY;
+//
+//        if (h + graph.getFontMetrics().getDescent() + textY >= this.height)
+//            return;
+//
+//        // Write stereotype if small enough
+//        int w = graph.getFontMetrics().stringWidth(ster);
+//        if (w + 2 * textX < this.width)
+////            graph.drawString(ster, this.x + (this.width - w) / 2, this.y + h);
+//        	drawSingleString(graph, ster, this.x + (this.width - w) / 2, this.y + h);
+//        else {
+//            // try to draw with "..." instead
+//            if (!this.isCryptoBlock())
+//                ster = stereotype;
+//            else
+//                ster = stereotypeCrypto;
+//
+//            for (int stringLength = ster.length() - 1; stringLength >= 0; stringLength--) {
+//                String abbrev = "<<" + ster.substring(0, stringLength) + "...>>";
+//                w = graph.getFontMetrics().stringWidth(abbrev);
+//                if (w + 2 * textX < this.width) {
+////                    graph.drawString(abbrev, this.x + (this.width - w) / 2, this.y + h);
+//                	drawSingleString(graph, abbrev, this.x + (this.width - w) / 2, this.y + h);
+//                    break;
+//                }
+//            }
+//        }
+//
+//        // Write value if small enough
+//        graph.setFont(font);
+//        h += graph.getFontMetrics().getHeight() + textY;
+//        if (h + graph.getFontMetrics().getDescent() + textY >= this.height)
+//            return;
+//
+//        w = graph.getFontMetrics().stringWidth(this.value);
+//        if (w + 2 * textX < this.width)
+//            graph.drawString(this.value, this.x + (this.width - w) / 2, this.y + h);
+//        else {
+//            // try to draw with "..." instead
+//            for (int stringLength = this.value.length() - 1; stringLength >= 0; stringLength--) {
+//                String abbrev = this.value.substring(0, stringLength) + "...";
+//                w = graph.getFontMetrics().stringWidth(abbrev);
+//                if (w + 2 * textX < this.width) {
+//                    graph.drawString(abbrev, this.x + (this.width - w) / 2, this.y + h);
+//                    break;
+//                }
+//            }
+//        }
+//
+//        h += graph.getFontMetrics().getDescent() + textY;
+//
+//        // Update lower bound of text
+//        this.limitName = this.y + h;
+//
+//        if (h + textY >= this.height)
+//            return;
+//
+//        // Draw separator
+//        graph.drawLine(this.x, this.y + h, this.x + this.width, this.y + h);
+//
+//        if (!this.tdp.areAttributesVisible())
+//            return;
+//
+//        // Set font size
+//        // int attributeFontSize = Math.min (12, this.currentFontSize - 2);
+//        int attributeFontSize = this.currentFontSize * 5 / 6;
+//        graph.setFont(font.deriveFont((float) attributeFontSize));
+//        int step = graph.getFontMetrics().getHeight();
+//
+//        h += textY;
+//
+//        // Attributes
+//        limitAttr = limitName;
+//        for (TAttribute attr : this.myAttributes) {
+//            h += step;
+//            if (h >= this.height - textX) {
+//                this.limitAttr = this.y + this.height;
+//                return;
+//            }
+//
+//            // Get the string for this parameter
+//            String attrString = attr.toAvatarString();
+//
+//            // Try to draw it
+//            w = graph.getFontMetrics().stringWidth(attrString);
+//            
+//            attrLocMap.put(attr,this.y+h);
+//            if (w + 2 * textX < this.width) {
+//                graph.drawString(attrString, this.x + textX, this.y + h);
+//                this.drawConfidentialityVerification(attr.getConfidentialityVerification(), graph, this.x, this.y + h);
+//            } else {
+//                // If we can't, try to draw with "..." instead
+//                int stringLength;
+//                for (stringLength = attrString.length() - 1; stringLength >= 0; stringLength--) {
+//                    String abbrev = attrString.substring(0, stringLength) + "...";
+//                    w = graph.getFontMetrics().stringWidth(abbrev);
+//                    if (w + 2 * textX < this.width) {
+//                        graph.drawString(abbrev, this.x + textX, this.y + h);
+//                        this.drawConfidentialityVerification(attr.getConfidentialityVerification(), graph, this.x, this.y + h);
+//                        break;
+//                    }
+//                }
+//
+//                if (stringLength < 0)
+//                    // skip attribute
+//                    h -= step;
+//            }
+//        }
+//
+//        h += graph.getFontMetrics().getDescent() + textY;
+//
+//        // Remember the end of attributes
+//        this.limitAttr = this.y + h;
+//
+//        if (h + textY >= this.height)
+//            return;
+//
+//        graph.drawLine(this.x, this.y + h, this.x + this.width, this.y + h);
+//        h += textY;
+//
+//        // Methods
+//        limitMethod = limitAttr;
+//        limitSignal = limitAttr;
+//        for (AvatarMethod method : this.myMethods) {
+//            h += step;
+//            if (h >= this.height - textX) {
+//                this.limitMethod = this.y + this.height;
+//                this.limitSignal = limitMethod;
+//                return;
+//            }
+//
+//            // Get the string for this method
+//            String methodString = "- " + method.toString();
+//
+//            w = graph.getFontMetrics().stringWidth(methodString);
+//            if (w + 2 * textX < this.width)
+//                graph.drawString(methodString, this.x + textX, this.y + h);
+//            else {
+//                // If we can't, try to draw with "..." instead
+//                int stringLength;
+//                for (stringLength = methodString.length() - 1; stringLength >= 0; stringLength--) {
+//                    String abbrev = methodString.substring(0, stringLength) + "...";
+//                    w = graph.getFontMetrics().stringWidth(abbrev);
+//                    if (w + 2 * textX < this.width) {
+//                        graph.drawString(abbrev, this.x + textX, this.y + h);
+//                        break;
+//                    }
+//                }
+//
+//                if (stringLength < 0)
+//                    // skip method
+//                    h -= step;
+//            }
+//        }
+//
+//        h += graph.getFontMetrics().getDescent() + textY;
+//
+//        if (h + textY >= this.height) {
+//            limitMethod = this.y + this.height;
+//            limitSignal = this.y + this.height;
+//            return;
+//        }
+//
+//        // Remember limit of methods
+//        this.limitMethod = this.y + h;
+//        this.limitSignal = this.y + h;
+//
+//        graph.drawLine(this.x, this.y + h, this.x + this.width, this.y + h);
+//        h += textY;
+//
+//        // Signals
+//        for (AvatarSignal signal : this.mySignals) {
+//            h += step;
+//            if (h >= this.height - textX) {
+//                limitSignal = this.height + this.y;
+//                return;
+//            }
+//
+//            String signalString = "~ " + signal.toString();
+//            w = graph.getFontMetrics().stringWidth(signalString);
+//            if (w + 2 * textX < this.width) {
+//                graph.drawString(signalString, this.x + textX, this.y + h);
+//                drawInfoAttachement(signal, graph, x, y + h);
+//
+//            } else {
+//                // If we can't, try to draw with "..." instead
+//                int stringLength;
+//                for (stringLength = signalString.length() - 1; stringLength >= 0; stringLength--) {
+//                    String abbrev = signalString.substring(0, stringLength) + "...";
+//                    w = graph.getFontMetrics().stringWidth(abbrev);
+//                    if (w + 2 * textX < this.width) {
+//                        graph.drawString(abbrev, this.x + textX, this.y + h);
+//                        drawInfoAttachement(signal, graph, x, y + h);
+//
+//
+//                        break;
+//                    }
+//                }
+//
+//                if (stringLength < 0)
+//                    // skip signal
+//                    h -= step;
+//            }
+//        }
+//
+//        h += graph.getFontMetrics().getDescent() + textY;
+//
+//        if (h + textY >= this.height) {
+//            limitSignal = this.height + this.y;
+//            return;
+//        }
+//
+//        // Global code
+//        limitSignal = this.y + h;
+//        if (hasGlobalCode()) {
+//            if (h + textY + step >= this.height - textX)
+//                return;
+//            graph.drawLine(this.x, this.y + h, this.x + this.width, this.y + h);
+//            h += textY + step;
+//
+//            w = graph.getFontMetrics().stringWidth(GLOBAL_CODE_INFO);
+//            if (w + 2 * textX < this.width)
+//                graph.drawString(GLOBAL_CODE_INFO, this.x + (this.width - w) / 2, this.y + h);
+//        } else {
+//            limitSignal = height;
+//        }
+//    }
 
     private void drawInfoAttachement(AvatarSignal _as, Graphics g, int _x, int _y) {
         if (_as.attachedToARelation) {

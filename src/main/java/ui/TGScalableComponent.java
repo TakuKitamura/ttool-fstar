@@ -136,6 +136,11 @@ public abstract class TGScalableComponent extends TGComponent implements Scalabl
     	g.drawImage(scale(icon), x + width - scale(iconSize) - borders, y + borders, Color.yellow, null);
     }
     
+    protected void drawImageWithCheck(Graphics g, Image image, int xpos, int ypos) {
+    	if (!isTextReadable(g))
+    		return;
+    	g.drawImage(scale(image), xpos, ypos, null);
+    }
     /**
      * Draw string if text is readable
      * @param g
