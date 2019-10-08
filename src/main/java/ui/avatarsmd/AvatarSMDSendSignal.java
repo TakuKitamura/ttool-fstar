@@ -76,8 +76,8 @@ import ui.window.JDialogAvatarSignal;
  */
 public class AvatarSMDSendSignal extends AvatarSMDBasicCanBeDisabledComponent /* Issue #69 AvatarSMDBasicComponent*/ implements CheckableAccessibility, LinkedReference, CheckableLatency, BasicErrorHighlight, PartOfInvariant {
     protected int lineLength = 5;
-    protected int textX =  5;
-    protected int textY =  15;
+//    protected int textX =  5;
+//    protected int textY =  15;
     protected int arc = 5;
     protected int linebreak = 10;
 
@@ -96,6 +96,9 @@ public class AvatarSMDSendSignal extends AvatarSMDBasicCanBeDisabledComponent /*
         width = 30;
         height = 20;
         minWidth = 30;
+        textX = 5;
+        textY = 15;
+        initScaling(30,20);
 
         nbConnectingPoint = 2;
         connectingPoint = new TGConnectingPoint[2];
@@ -191,7 +194,8 @@ public class AvatarSMDSendSignal extends AvatarSMDBasicCanBeDisabledComponent /*
 
 
         //g.drawString("sig()", x+(width-w) / 2, y);
-        g.drawString(value, x + (width - w) / 2 , y + textY);
+//        g.drawString(value, x + (width - w) / 2 , y + textY);
+        drawSingleString(g, value, x + (width - w) / 2 , y + textY);
 		//g.drawString("Reference " + reference, x-latencyX/2, y+latencyY/2);
 		
         if (getCheckLatency()){
@@ -204,7 +208,8 @@ public class AvatarSMDSendSignal extends AvatarSMDBasicCanBeDisabledComponent /*
 		if (reference!=null){
 			if (reference instanceof AvatarRDRequirement){
 				AvatarRDRequirement refReq = (AvatarRDRequirement) reference;
-				g.drawString("ref: "+ refReq.getValue(), x, y+height1+textY);
+//				g.drawString("ref: "+ refReq.getValue(), x, y+height1+textY);
+				drawSingleString(g, "ref: "+ refReq.getValue(), x, y+height1+textY);
 			}
 		}
     }
@@ -309,7 +314,8 @@ public class AvatarSMDSendSignal extends AvatarSMDBasicCanBeDisabledComponent /*
 				}
 			}
 			
-			g.drawString(latencyVals.get(s), x-latencyX/2, y-latencyY*index/2);
+//			g.drawString(latencyVals.get(s), x-latencyX/2, y-latencyY*index/2);
+			drawSingleString(g, latencyVals.get(s), x-latencyX/2, y-latencyY*index/2);
 			g.setColor(c);
 			index++;
 		}

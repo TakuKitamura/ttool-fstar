@@ -55,8 +55,8 @@ import java.awt.geom.Line2D;
  */
 public class AvatarADAcceptEventAction extends  AvatarADBasicCanBeDisabledComponent/* Issue #69 AvatarADBasicComponent*/ implements EmbeddedComment, BasicErrorHighlight {
     protected int lineLength = 5;
-    protected int textX =  6;
-    protected int textY =  15;
+//    protected int textX =  6;
+//    protected int textY =  15;
     protected int linebreak = 10;
     protected int textX1 = 2;
 
@@ -66,7 +66,10 @@ public class AvatarADAcceptEventAction extends  AvatarADBasicCanBeDisabledCompon
     public AvatarADAcceptEventAction(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
+        textY = 15;
+        textX = 6;
         initScaling(30, 20);
+        
         minWidth = (int)(30* tdp.getZoom());
         oldScaleFactor = tdp.getZoom();
 

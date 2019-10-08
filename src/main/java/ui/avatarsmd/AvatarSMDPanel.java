@@ -65,45 +65,57 @@ public class AvatarSMDPanel extends TDiagramPanel implements TDPWithAttributes {
         attributesOn = NORMAL;
     }
     
+    @Override
     public boolean actionOnDoubleClick(TGComponent tgc) {
         return false;
     }
     
+    @Override
     public boolean actionOnAdd(TGComponent tgc) {
         return false;
     }
+    
+    @Override
     public boolean actionOnValueChanged(TGComponent tgc) {
         return false;
     }
     
+    @Override
     public  boolean actionOnRemove(TGComponent tgc) {
         return false;
     }
     
+    @Override
     public String getXMLHead() {
         return "<AVATARStateMachineDiagramPanel name=\"" + name + "\"" + sizeParam() + " >";
     }
     
+    @Override
     public String getXMLTail() {
         return "</AVATARStateMachineDiagramPanel>";
     }
     
+    @Override
     public String getXMLSelectedHead() {
         return "<AVATARStateMachineDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
     }
     
+    @Override
     public String getXMLSelectedTail() {
         return "</AVATARStateMachineDiagramPanelCopy>";
     }
     
+    @Override
     public String getXMLCloneHead() {
         return "<AVATARStateMachineDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
     }
     
+    @Override
     public String getXMLCloneTail() {
         return "</AVATARStateMachineDiagramPanelCopy>";
     }
     
+
     public void makeGraphicalOptimizations() {
         // Segments of connector that mask components
         
@@ -112,6 +124,7 @@ public class AvatarSMDPanel extends TDiagramPanel implements TDPWithAttributes {
         // Position correctly guards of choice
     }
     
+    @Override
     public void enhance() {
         //TraceManager.addDev("Enhance");
         Vector<TGComponent> v = new Vector<TGComponent>();
@@ -191,7 +204,8 @@ public class AvatarSMDPanel extends TDiagramPanel implements TDPWithAttributes {
 			componentList.add(tgc1);
 		}
 	}
-	
+    
+    @Override
     public boolean hasAutoConnect() {
 		return true;
 	}
@@ -212,7 +226,8 @@ public class AvatarSMDPanel extends TDiagramPanel implements TDPWithAttributes {
         
 		return list;
 	}
-	
+    
+    @Override
 	public void autoConnect(TGComponent added) {
 		boolean cond = hasAutoConnect();
 		

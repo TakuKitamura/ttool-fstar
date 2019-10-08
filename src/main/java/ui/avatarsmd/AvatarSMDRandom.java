@@ -59,8 +59,8 @@ import java.awt.geom.Line2D;
  */
 public class AvatarSMDRandom extends  AvatarSMDBasicCanBeDisabledComponent /* Issue #69 AvatarSMDBasicComponent*/ implements EmbeddedComment, BasicErrorHighlight {
     protected int lineLength = 5;
-    protected int textX =  5;
-    protected int textY =  15;
+//    protected int textX =  5;
+//    protected int textY =  15;
     protected int arc = 5;
     protected String valueRandom = "";
     protected String variable;
@@ -76,6 +76,9 @@ public class AvatarSMDRandom extends  AvatarSMDBasicCanBeDisabledComponent /* Is
         width = 30;
         height = 20;
         minWidth = 30;
+        textX = 5;
+        textY = 15;
+        initScaling(30,20);
 
         nbConnectingPoint = 2;
         connectingPoint = new TGConnectingPoint[2];
@@ -142,8 +145,9 @@ public class AvatarSMDRandom extends  AvatarSMDBasicCanBeDisabledComponent /* Is
     	g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
         //g.drawLine(x+width, y+height/2, x+width +lineLength, y+height/2);
-
-        g.drawString(valueRandom, x + (width - w) / 2 , y + textY);
+//			Issue #31:
+//        g.drawString(valueRandom, x + (width - w) / 2 , y + textY);
+    	drawSingleString(g, valueRandom, getCenter(g, valueRandom), y + height - scale(5));
     }
 
 	@Override

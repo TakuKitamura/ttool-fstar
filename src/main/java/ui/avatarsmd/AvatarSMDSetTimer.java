@@ -70,8 +70,8 @@ import ui.window.JDialogAvatarTimer;
  */
 public class AvatarSMDSetTimer extends AvatarSMDBasicCanBeDisabledComponent /* Issue #69 AvatarSMDBasicComponent*/ implements BasicErrorHighlight, PartOfInvariant {
     protected int lineLength = 5;
-    protected int textX =  5;
-    protected int textY =  15;
+//    protected int textX =  5;
+//    protected int textY =  15;
     protected int arc = 5;
     protected int linebreak = 10;
 	
@@ -87,6 +87,9 @@ public class AvatarSMDSetTimer extends AvatarSMDBasicCanBeDisabledComponent /* I
         width = 30;
         height = 20;
         minWidth = 30;
+        textX = 5;
+        textY = 15;
+        initScaling(30,20);
         
         nbConnectingPoint = 2;
         connectingPoint = new TGConnectingPoint[2];
@@ -186,7 +189,8 @@ public class AvatarSMDSetTimer extends AvatarSMDBasicCanBeDisabledComponent /* I
 		g.drawLine(x+width+hourglassSpace, y+height, x+width+hourglassSpace + hourglassWidth, y);
 		
         //g.drawString("sig()", x+(width-w) / 2, y);
-        g.drawString(value, x + (width - w) / 2 , y + textY);
+//        g.drawString(value, x + (width - w) / 2 , y + textY);
+		drawSingleString(g, value, x + (width - w) / 2 , y + textY);
     }
     
     @Override

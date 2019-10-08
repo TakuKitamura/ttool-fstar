@@ -72,9 +72,9 @@ public class AvatarSMDExpireTimer extends AvatarSMDBasicCanBeDisabledComponent /
     
 	protected int lineLength = 5;
     
-	protected int textX =  5;
-    
-	protected int textY =  15;
+//	protected int textX =  5;
+//    
+//	protected int textY =  15;
     
 	protected int arc = 5;
     
@@ -92,6 +92,9 @@ public class AvatarSMDExpireTimer extends AvatarSMDBasicCanBeDisabledComponent /
         width = 30;
         height = 20;
         minWidth = 30;
+        textX =  5;
+        textY =  15;
+        initScaling(30, 20);
 
         nbConnectingPoint = 2;
         connectingPoint = new TGConnectingPoint[2];
@@ -192,7 +195,8 @@ public class AvatarSMDExpireTimer extends AvatarSMDBasicCanBeDisabledComponent /
         g.drawLine(x+width+hourglassSpace, y+height, x+width+hourglassSpace + hourglassWidth, y);
 
         //g.drawString("sig()", x+(width-w) / 2, y);
-        g.drawString(value, x + (width - w) / 2  + textX, y + textY);
+//        g.drawString(value, x + (width - w) / 2  + textX, y + textY);
+        drawSingleString(g, value, x + (width - w) / 2  + textX, y + textY);
     }
 
     @Override
