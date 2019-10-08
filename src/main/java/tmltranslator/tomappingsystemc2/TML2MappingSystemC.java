@@ -229,6 +229,21 @@ public class TML2MappingSystemC implements IDiploSimulatorCodeGenerator {
                 }
 
             }
+	    if (node instanceof HwCams) { //ajoute DG
+                HwCams hwCamsNode = (HwCams) node;
+                declaration += "RRScheduler* " + hwCamsNode.getName() + "_scheduler = new RRScheduler(\"" + hwCamsNode.getName() + "_RRSched\", 0, " + (tmlmapping.getTMLArchitecture().getMasterClockFrequency() * HwCams.DEFAULT_SLICE_TIME) + ", " + (int) Math.ceil((float) (hwCamsNode.clockRatio * Math.max(hwCamsNode.execiTime, hwCamsNode.execcTime) * (HwCams.DEFAULT_BRANCHING_PREDICTION_PENALTY * HwCams.DEFAULT_PIPELINE_SIZE + 100 - HwCams.DEFAULT_BRANCHING_PREDICTION_PENALTY)) / 100) + " ) " + SCCR;
+                for (int cores = 0; cores < 1; cores++) {
+                    //if (tmlmapping.isAUsedHwNode(node)) {
+                    declaration += "CPU* " + hwCamsNode.getName() + cores + " = new SingleCoreCPU(" + hwCamsNode.getID() + ", \"" + hwCamsNode.getName() + "_" + cores + "\", " + hwCamsNode.getName() + "_scheduler" + ", ";
+
+                    declaration += hwCamsNode.clockRatio + ", " + hwCamsNode.execiTime + ", " + hwCamsNode.execcTime + ", " + HwCams.DEFAULT_PIPELINE_SIZE + ", " + HwCams.DEFAULT_TASK_SWITCHING_TIME + ", " + HwCams.DEFAULT_BRANCHING_PREDICTION_PENALTY + ", " + HwCams.DEFAULT_GO_IDLE_TIME + ", " + HwCams.DEFAULT_MAX_CONSECUTIVE_IDLE_CYCLES + ", " + hwCamsNode.byteDataSize + ")" + SCCR;
+                    if (cores != 0)
+                        declaration += node.getName() + cores + "->setScheduler(" + hwCamsNode.getName() + "_scheduler,false)" + SCCR;
+                    declaration += "addCPU(" + node.getName() + cores + ")" + SCCR;
+                }
+
+            }
+
         }
         declaration += CR;
 

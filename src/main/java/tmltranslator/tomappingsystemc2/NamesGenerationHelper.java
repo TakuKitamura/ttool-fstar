@@ -325,6 +325,10 @@ public class NamesGenerationHelper {
             return hwFpgaInstanceName((HwFPGA) element);
         }
 
+	 if (element instanceof HwCams) {
+            return hwCamsInstanceName((HwCams) element);
+        }
+
         throw new UnsupportedOperationException("Unknown execution node type: " + String.valueOf(element));
     }
 
@@ -343,6 +347,14 @@ public class NamesGenerationHelper {
     }
 
     String hwAccName(final HwA element) {
+        return element.getName();
+    }
+
+    String hwCamsInstanceName(final HwCams element) {
+        return normalize(hwCamsName(element));
+    }
+
+    String hwCamsName(final HwCams element) {
         return element.getName();
     }
 

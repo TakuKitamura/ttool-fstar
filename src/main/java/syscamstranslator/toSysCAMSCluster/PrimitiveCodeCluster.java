@@ -532,9 +532,9 @@ public class PrimitiveCodeCluster {
 			
 			corpsPrimitiveDE = corpsPrimitiveDE + "private:" + CR;
 
-			if(de.getClockName()!=""){
-			    corpsPrimitiveDE = corpsPrimitiveDE +"sc_in<bool> "+de.getClockName()+";"+CR;
-			}
+			//if((de.getClockName()!="")&&(de.getClockName()!="")){
+			//    corpsPrimitiveDE = corpsPrimitiveDE +"sc_in<bool> "+de.getClockName()+";"+CR;
+			//	}
 			
 			if (de.getListStruct().getSize() != 0) {
 				String identifier, type, constant;

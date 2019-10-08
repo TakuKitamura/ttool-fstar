@@ -755,9 +755,10 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
                 		jta.append("Error: No SYSCAMS specification\n");
                 	} else {
                 		System.err.println("**SYSCAMS TOPCELL found");
-
-                		TopCellGenerator topCellGenerator = new TopCellGenerator(syscalsspec);
-                        TopCellGeneratorCluster topCellGeneratorCluster = new TopCellGeneratorCluster(syscalsspec);
+				//if(standalone){
+				TopCellGenerator topCellGenerator = new TopCellGenerator(syscalsspec);//}
+			//else{
+			TopCellGeneratorCluster topCellGeneratorCluster = new TopCellGeneratorCluster(syscalsspec);//}
                 		testGo();
                 		jta.append("Generation of TopCell \"" + syscalsspec.getCluster().getClusterName() + "\" executable code: done\n");
 
@@ -767,9 +768,12 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
                 			pathCode = code2.getText();
 
                 			System.err.println("SYSCAMS TOPCELL : " + syscalsspec.getCluster().getClusterName() + " saved in " + code2.getText());
+					//DG 16.09.2019 separate standalone from with-Soclib versions
+					if(standalone){
                 			topCellGenerator.saveFile(pathCode, standalone);
+					}else{
 					topCellGeneratorCluster.saveFile(pathCode, standalone);
-
+					}
                 			jta.append("Code saved\n");
                 		} catch (Exception e) {
                 			jta.append("Could not generate files\n");

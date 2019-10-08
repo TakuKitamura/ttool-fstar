@@ -405,8 +405,9 @@ public class PrimitiveCode {
 				corpsPrimitiveDE = corpsPrimitiveDE + "template<" + de.getTypeTemplate() + " " + de.getNameTemplate() + ">" + CR;
 			}
 			//corpsPrimitive = "SCA_TDF_MODULE(" + de.getName() + ") {" + CR2;
-			corpsPrimitiveDE = corpsPrimitiveDE + "class " + de.getName() + " : public sca_core::sca_module {" + CR2 + "public:" + CR;
-
+			//DG 19.09. corrected sca->sc
+			//	corpsPrimitiveDE = corpsPrimitiveDE + "class " + de.getName() + " : public sca_core::sca_module {" + CR2 + "public:" + CR;
+	corpsPrimitiveDE = corpsPrimitiveDE + "class " + de.getName() + " : public sc_core::sc_module {" + CR2 + "public:" + CR;
 			if (!de.getListTypedef().isEmpty()) {
 				for (int i = 0; i < de.getListTypedef().getSize(); i++) {
 					String select = de.getListTypedef().get(i);
@@ -577,9 +578,11 @@ if (t.getOrigin() == 0) {
 			}
 			
 			corpsPrimitiveDE = corpsPrimitiveDE + "private:" + CR +CR;
-			if(de.getClockName()!=""){
-			    corpsPrimitiveDE = corpsPrimitiveDE +"sc_in<bool> "+de.getClockName()+";"+CR;
-			}
+		        
+			//	if((de.getClockName()!="null")&&(de.getClockName()!="toto\n")){
+			
+			//	    corpsPrimitiveDE = corpsPrimitiveDE +"sc_in<bool> "+de.getClockName()+";"+CR;
+			//	}
 			if (de.getListStruct().getSize() != 0) {
 				String identifier, type, constant;
 				for (int i = 0; i < de.getListStruct().size(); i++) {

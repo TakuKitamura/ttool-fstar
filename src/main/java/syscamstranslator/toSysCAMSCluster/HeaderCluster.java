@@ -68,7 +68,7 @@ public class HeaderCluster {
 		if (tdf != null) {
 			headerPrimitiveTDF = "#ifndef " + tdf.getName().toUpperCase() + "_TDF_H"+ CR 
 					+ "#define " + tdf.getName().toUpperCase() + "_TDF_H" + CR2
-					+ "#include <cmath>" + CR + "#include <iostream>" + CR + "#include <systemc-ams.h>" + CR2;
+					+ "#include <cmath>" + CR + "#include <iostream>" + CR + "#include <systemc-ams>" + CR2;
 		} else {
 			headerPrimitiveTDF = "";
 		}
@@ -93,7 +93,7 @@ public class HeaderCluster {
 
              headerCluster = "#ifndef " + cluster.getClusterName().toUpperCase() + "_TDF_H"+ CR 
                     + "#define " + cluster.getClusterName().toUpperCase() + "_TDF_H" + CR2;
-             headerCluster += "#include <systemc-ams.h>" + CR;
+             headerCluster += "#include <systemc-ams>" + CR;
              
              for (SysCAMSTBlockTDF b : tdf) {
                  headerCluster = headerCluster + "#include \"" + b.getName() + "_tdf.h\"" + CR;
