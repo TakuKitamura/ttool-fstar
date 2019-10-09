@@ -90,7 +90,7 @@ public class TMLOperationBox extends TGCWithoutInternalComponent {
         g.fillRect(x+1, y+1, width-1, height-1);
         ColorManager.setColor(g, getState(), 0);
         if (value.length() > 0) {
-            g.drawString(value, x + textX, y + textY);
+            drawSingleString(g,value, x + textX, y + textY);
         }
     }
     

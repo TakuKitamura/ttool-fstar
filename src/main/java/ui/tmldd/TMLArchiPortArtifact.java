@@ -178,11 +178,11 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
 
         g.drawImage( scale( IconManager.img9 ), x+width - scale( space + fileX - 3 ), y + scale( SPACE + 7 ), null);
 
-        g.drawString(value, x + textX , y + textY);
+        drawSingleString(g,value, x + textX , y + textY);
 
         Font f = g.getFont();
         g.setFont(f.deriveFont(Font.ITALIC));
-        g.drawString(typeName, x + textX , y + textY + 20);
+        drawSingleString(g,typeName, x + textX , y + textY + 20);
         g.setFont(f);
 
         // Link to selected memory

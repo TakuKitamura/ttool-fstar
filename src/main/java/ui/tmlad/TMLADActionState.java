@@ -132,7 +132,7 @@ public class TMLADActionState extends TADActionState/* Issue #69 TGCOneLineText 
         g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
         
-        g.drawString(value, x + (width - w) / 2 , y + textY);
+        drawSingleString(g,value, x + (width - w) / 2 , y + textY);
     }
     
 //    public TGComponent isOnMe(int _x, int _y) {

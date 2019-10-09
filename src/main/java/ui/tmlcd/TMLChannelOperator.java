@@ -81,7 +81,7 @@ public class TMLChannelOperator extends TMLCompositionOperator {
             //g.drawImage(IconManager.img8, x + width - 20, y + 3, ColorManager.COMPOSITION_OPERATOR, null);
             ColorManager.setColor(g, getState(), 0);
             g.setFont((g.getFont()).deriveFont(Font.BOLD));
-            g.drawString(value, x + textX, y + textY);
+            drawSingleString(g,value, x + textX, y + textY);
             g.setFont((g.getFont()).deriveFont(Font.PLAIN));
         }
     }

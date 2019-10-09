@@ -144,10 +144,10 @@ public class TMLArchiDMANode extends TMLArchiCommunicationNode implements Swallo
         int w  = g.getFontMetrics().stringWidth(ster);
         Font f = g.getFont();
         g.setFont(f.deriveFont(Font.BOLD));
-        g.drawString(ster, x + (width - w)/2, y + textY );
+        drawSingleString(g,ster, x + (width - w)/2, y + textY );
         w  = g.getFontMetrics().stringWidth(name);
         g.setFont(f);
-        g.drawString(name, x + (width - w)/2, y + 2* textY );
+        drawSingleString(g,name, x + (width - w)/2, y + 2* textY );
 
         // Icon
         // Issue #31

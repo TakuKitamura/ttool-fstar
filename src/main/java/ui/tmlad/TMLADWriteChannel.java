@@ -191,17 +191,17 @@ public class TMLADWriteChannel extends TADComponentWithoutSubcomponents/* Issue 
         g.drawLine(x + width - linebreak, y, x + width, y + height / 2);
         g.drawLine(x + width - linebreak, y + height, x + width, y + height / 2);
         if (isAttacker) {
-            g.drawString("attack", x + (width - w) / 2, y);
+            drawSingleString(g,"attack", x + (width - w) / 2, y);
         } else {
-            g.drawString("chl", x + (width - w) / 2, y);
+            drawSingleString(g,"chl", x + (width - w) / 2, y);
         }
-        g.drawString(value, x + (width - w) / 2, y + textY);
+        drawSingleString(g,value, x + (width - w) / 2, y + textY);
         if (!securityContext.equals("")) {
 	        c = g.getColor();
 	        if (!isEncForm){
 	        	g.setColor(Color.RED);
 	        }
-            g.drawString("sec:" + securityContext, x + 3 * width / 4, y + height + textY - scale( 4 ) );
+            drawSingleString(g,"sec:" + securityContext, x + 3 * width / 4, y + height + textY - scale( 4 ) );
             g.setColor(c);
         }
 
@@ -221,10 +221,10 @@ public class TMLADWriteChannel extends TADComponentWithoutSubcomponents/* Issue 
         int index = 1;
         for (String s : latencyVals.keySet()) {
             int w = g.getFontMetrics().stringWidth(s);
-            g.drawString(s, x - latencyX - w + 1, y - latencyY * index - 2);
+            drawSingleString(g,s, x - latencyX - w + 1, y - latencyY * index - 2);
             g.drawRect(x - latencyX - w, y - latencyY * index - textHeight, w + 4, textHeight);
             g.drawLine(x, y, x - latencyX, y - latencyY * index);
-            g.drawString(latencyVals.get(s), x - latencyX / 2, y - latencyY * index / 2);
+            drawSingleString(g,latencyVals.get(s), x - latencyX / 2, y - latencyY * index / 2);
             index++;
         }
     }

@@ -170,8 +170,8 @@ public class TMLADSendRequest extends TADComponentWithoutSubcomponents/* Issue #
         g.drawLine(x+width-linebreak, y, x+width, y+height/2);
         g.drawLine(x+width-linebreak, y+height, x+width, y+height/2);
 
-        g.drawString("req", x+(width-w) / 2, y);
-        g.drawString(value, x + (width - w) / 2 , y + textY);
+        drawSingleString(g,"req", x+(width-w) / 2, y);
+        drawSingleString(g,value, x + (width - w) / 2 , y + textY);
 
         drawReachabilityInformation(g);
     }

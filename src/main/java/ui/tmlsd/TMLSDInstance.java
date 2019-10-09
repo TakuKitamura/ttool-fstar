@@ -130,7 +130,7 @@ public abstract class TMLSDInstance extends TGCWithInternalComponent implements 
         	scaledHText = scale( hText );
         }
 
-		g.drawString(name, x - (scaledWText / 2) + width/2, y - 3); // Issue #31
+		drawSingleString(g,name, x - (scaledWText / 2) + width/2, y - 3); // Issue #31
 		g.drawLine(x - (scaledWText / 2) + width/2, y-2, x + (scaledWText / 2) + width/2, y-2); // Issue #31
 		g.drawLine(x+(width/2), y, x+(width/2), y +height);
 		

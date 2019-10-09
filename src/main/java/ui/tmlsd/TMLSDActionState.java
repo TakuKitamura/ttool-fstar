@@ -93,7 +93,7 @@ public class TMLSDActionState extends TGCOneLineText implements SwallowedTGCompo
 //        }
         g.drawRoundRect(x - width/2, y, width, height, arc, arc);
         
-        g.drawString(value, x - w / 2 , y + textY);
+        drawSingleString(g,value, x - w / 2 , y + textY);
     }
     
     @Override

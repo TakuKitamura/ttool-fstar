@@ -148,8 +148,8 @@ public class TMLADNotifiedEvent extends TADComponentWithoutSubcomponents/* Issue
         g.drawLine(x, y, x+linebreak, y+height/2);
         g.drawLine(x, y+height, x+linebreak, y+height/2);
         
-        g.drawString("evt", x+(width-w) / 2, y);
-        g.drawString(value, x + linebreak + scale( 2 ), y + textY);
+        drawSingleString(g,"evt", x+(width-w) / 2, y);
+        drawSingleString(g,value, x + linebreak + scale( 2 ), y + textY);
     }
     
     @Override

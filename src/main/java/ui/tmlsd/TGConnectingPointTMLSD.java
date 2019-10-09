@@ -59,7 +59,7 @@ public class TGConnectingPointTMLSD extends  TGConnectingPoint{
     public TGConnectingPointTMLSD(CDElement _container, int _x, int _y, boolean _in, boolean _out) {
         super(_container, _x, _y, _in, _out);
     }
-    
+    @Override
     public boolean isCompatibleWith(int type) {
         //
         if ((type == TGComponentManager.CONNECTOR_MESSAGE_ASYNC_TMLSD)) {

@@ -190,18 +190,18 @@ public class TMLADEncrypt extends TADComponentWithoutSubcomponents/* Issue #69 T
         }
         
         //Draw security pattern
-        g.drawString("sec:" + securityContext, x + 3 * width / 2, y + height / 2);
+        drawSingleString(g,"sec:" + securityContext, x + 3 * width / 2, y + height / 2);
         
         final int scaledSecIconHeight = scale( SEC_ICON_HIGHT );
         
         //Draw nonce if it exists
         if (!nonce.isEmpty()) {
-            g.drawString("nonce:" + nonce, x + 3 * width / 2, y + height / 2 + scaledSecIconHeight );
+            drawSingleString(g,"nonce:" + nonce, x + 3 * width / 2, y + height / 2 + scaledSecIconHeight );
         }
         
         //Draw key if it exists
         if (!key.isEmpty()) {
-            g.drawString("key:" + key, x + 3 * width / 2, y + height / 2 + 2 * scaledSecIconHeight );
+            drawSingleString(g,"key:" + key, x + 3 * width / 2, y + height / 2 + 2 * scaledSecIconHeight );
         }
         
         g.drawImage( scale( IconManager.imgic7000.getImage() ), x - scale( 22 ), y + height / 2, null );

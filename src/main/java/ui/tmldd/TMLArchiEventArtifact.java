@@ -141,11 +141,11 @@ public class TMLArchiEventArtifact extends TGCWithoutInternalComponent implement
 
         g.drawImage( scale( IconManager.img9 ), x+width- scale( SPACE + FILE_X - 3 )/*space-fileX*/ + 3, y + scale( SPACE + 7 )/*space + 7*/, null);// Issue #31
 
-        g.drawString(value, x + textX , y + textY);
+        drawSingleString(g,value, x + textX , y + textY);
 
         Font f = g.getFont();
         g.setFont(f.deriveFont(Font.ITALIC));
-        g.drawString(typeName, x + textX , y + textY + scale( 20 ) );// Issue #31
+        drawSingleString(g,typeName, x + textX , y + textY + scale( 20 ) );// Issue #31
         g.setFont(f);
     }
 

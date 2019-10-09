@@ -145,7 +145,7 @@ public class TMLADDecrypt extends TADComponentWithoutSubcomponents/* Issue #69 T
 
         g.drawImage( scale( IconManager.imgic7000.getImage() ), x - scale( 22 ), y + height / 2, null );
         
-        g.drawString("sec:" + securityContext, x + 3 * width / 2, y + height / 2);
+        drawSingleString(g,"sec:" + securityContext, x + 3 * width / 2, y + height / 2);
     }
 
     @Override

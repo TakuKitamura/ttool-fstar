@@ -170,7 +170,7 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
         g.drawLine(x+width-space, y+ marginFileY/*space+fileY*/, x+width-marginFileX/*space-fileX*/, y+ marginFileY/*space+fileY*/);
         g.drawLine(x+width- marginCran /*space-cran*/, y+space, x+width- marginCran/*space-cran*/, y+ marginCran/*space+cran*/);
         g.drawLine(x+width- marginCran/*space-cran*/, y+ marginCran/*space+cran*/, x + width-space, y+marginCran /*space+cran*/);
-        g.drawString(value, x + textX , y + textY);
+        drawSingleString(g,value, x + textX , y + textY);
     }
 
     public void setValue(String val, Graphics g) {

@@ -151,13 +151,13 @@ public class TMLArchiHWANode extends TMLArchiNode implements SwallowTGComponent,
         int w  = g.getFontMetrics().stringWidth(ster);
         Font f = g.getFont();
         g.setFont(f.deriveFont(Font.BOLD));
-        g.drawString(ster, x + (width - w)/2, y + textY ); // Issue #31
+        drawSingleString(g,ster, x + (width - w)/2, y + textY ); // Issue #31
         g.setFont(f);
         w  = g.getFontMetrics().stringWidth(name);
 
         // Issue #31
         final int marginY2 = scale( MARGIN_Y_2 );
-        g.drawString(name, x + (width - w)/2, y + marginY2 );
+        drawSingleString(g,name, x + (width - w)/2, y + marginY2 );
 
         // Icon
         // Issue #31

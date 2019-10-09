@@ -137,11 +137,11 @@ public class TMLADForStaticLoop extends TADForLoop /* Issue #69 TGCWithoutIntern
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
         //g.drawLine(x+width, y+height/2, x+width +lineLength, y+height/2);
 
-        g.drawString(valueLoop, x + (width - w) / 2 , y + textY);
+        drawSingleString(g,valueLoop, x + (width - w) / 2 , y + textY);
 
         //info on loops
-		g.drawString(IN_LOOP, x+width+2, y+height/2);
-		g.drawString(EXIT_LOOP, x+width/2+2, y+height+ scale( 10 ) );
+		drawSingleString(g,IN_LOOP, x+width+2, y+height/2);
+		drawSingleString(g,EXIT_LOOP, x+width/2+2, y+height+ scale( 10 ) );
     }
 
     @Override

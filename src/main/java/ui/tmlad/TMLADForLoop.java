@@ -151,14 +151,14 @@ public class TMLADForLoop extends TADForLoop /* Issue #69 TGCWithoutInternalComp
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
         //g.drawLine(x+width, y+height/2, x+width +lineLength, y+height/2);
 
-        g.drawString(value, x + (width - w) / 2 , y + textY);
+        drawSingleString(g,value, x + (width - w) / 2 , y + textY);
 
 		// Info on loops
-		g.drawString(IN_LOOP, x+width+2, y+height/2);
+		drawSingleString(g,IN_LOOP, x+width+2, y+height/2);
 		//int wTmp =  g.getFontMetrics().stringWidth(EXIT_LOOP);
 		
 		// Issue #31
-		g.drawString(EXIT_LOOP, (int) (x+width/2+ 2 * oldScaleFactor), (int) (y+height+ scale( 10 ) ) );
+		drawSingleString(g,EXIT_LOOP, (int) (x+width/2+ 2 * oldScaleFactor), (int) (y+height+ scale( 10 ) ) );
     }
 
     @Override

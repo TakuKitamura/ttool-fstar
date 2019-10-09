@@ -96,7 +96,7 @@ public class TMLEventProperties extends TGCWithoutInternalComponent {
             ColorManager.setColor(g, getState(), 0);
             //
             h = g.getFontMetrics().getHeight();
-            g.drawString(valueOCL, x, y + h);
+            drawSingleString(g,valueOCL, x, y + h);
             
             if (!tdp.isScaled()) {
                 width = g.getFontMetrics().stringWidth(valueOCL);

@@ -197,18 +197,18 @@ public class TMLADReadChannel extends TADComponentWithoutSubcomponents/* Issue #
         g.drawLine(x, y, x + linebreak, y + height / 2);
         g.drawLine(x, y + height, x + linebreak, y + height / 2);
         if (isAttacker) {
-            g.drawString("attack", x + (width - w) / 2, y + textY); // Issue #31
+            drawSingleString(g,"attack", x + (width - w) / 2, y + textY); // Issue #31
         } else {
-            g.drawString("chl", x + (width - w) / 2, y + textY); // Issue #31
+            drawSingleString(g,"chl", x + (width - w) / 2, y + textY); // Issue #31
         }
-        g.drawString(value, x + linebreak + scale( textX0 ), y + scale( textY1 ) ); // Issue #31
+        drawSingleString(g,value, x + linebreak + scale( textX0 ), y + scale( textY1 ) ); // Issue #31
 
         if (!securityContext.equals("")) {
         	c = g.getColor();
 	        if (!isEncForm){
 	        	g.setColor(Color.RED);
 	        }
-            g.drawString("sec:" + securityContext, x + 3 * width / 4, y + height + textY1 - decSec);
+            drawSingleString(g,"sec:" + securityContext, x + 3 * width / 4, y + height + textY1 - decSec);
             g.setColor(c);
         }
         drawReachabilityInformation(g);
@@ -232,10 +232,10 @@ public class TMLADReadChannel extends TADComponentWithoutSubcomponents/* Issue #
             latencyY = scale( latencyY );
             textHeight = scale( textHeight );
             
-            g.drawString(s, x - latencyX - w + 1, y - latencyY * index - 2); 
+            drawSingleString(g,s, x - latencyX - w + 1, y - latencyY * index - 2); 
             g.drawRect(x - latencyX - w, y - latencyY * index - textHeight, w + 4, textHeight);
             g.drawLine(x, y, x - latencyX, y - latencyY * index);
-            g.drawString(latencyVals.get(s), x - latencyX / 2, y - latencyY * index / 2);
+            drawSingleString(g,latencyVals.get(s), x - latencyX / 2, y - latencyY * index / 2);
             index++;
         }
     }

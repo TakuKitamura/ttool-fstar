@@ -142,9 +142,9 @@ public class TMLArchiBridgeNode extends TMLArchiCommunicationNode implements Swa
         // Strings
         String ster = "<<" + stereotype + ">>";
         int w  = g.getFontMetrics().stringWidth(ster);
-        g.drawString(ster, x + (width - w)/2, y + textY ); // Issue #31
+        drawSingleString(g,ster, x + (width - w)/2, y + textY ); // Issue #31
         w  = g.getFontMetrics().stringWidth(name);
-        g.drawString(name, x + (width - w)/2, y + 2 * textY ); // Issue #31
+        drawSingleString(g,name, x + (width - w)/2, y + 2 * textY ); // Issue #31
 
         // Icon
         // Issue #31

@@ -186,8 +186,8 @@ public class TMLADSendEvent extends TADComponentWithoutSubcomponents implements 
         g.drawLine(x + width - linebreak, y + height, x + width, y + height / 2);
 
 
-        g.drawString("evt", x + (width - w) / 2, y);
-        g.drawString(value, x + (width - w) / 2, y + textY);
+        drawSingleString(g,"evt", x + (width - w) / 2, y);
+        drawSingleString(g,value, x + (width - w) / 2, y + textY);
 
         drawReachabilityInformation(g);
     }

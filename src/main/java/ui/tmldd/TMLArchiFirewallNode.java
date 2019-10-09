@@ -147,12 +147,12 @@ public class TMLArchiFirewallNode extends TMLArchiCommunicationNode implements S
         // Strings
         String ster = "<<" + stereotype + ">>";
         int w  = g.getFontMetrics().stringWidth(ster);
-        g.drawString(ster, x + (width - w)/2, y + textY);
+        drawSingleString(g,ster, x + (width - w)/2, y + textY);
         w  = g.getFontMetrics().stringWidth(name);
         
         // Issue #31
         final int marginY2 = scale( MARGIN_Y_2 );
-        g.drawString(name, x + (width - w)/2, y + marginY2 );
+        drawSingleString(g,name, x + (width - w)/2, y + marginY2 );
 		
 		// Icon
         // Issue #31

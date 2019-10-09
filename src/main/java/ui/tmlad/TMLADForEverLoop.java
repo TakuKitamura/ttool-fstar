@@ -130,7 +130,7 @@ public class TMLADForEverLoop extends TADForLoop /* Issue #69 TGCWithoutInternal
         //g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
         //g.drawLine(x+width, y+height/2, x+width +lineLength, y+height/2);
         
-        g.drawString(value, x + (width - w) / 2 , y + textY);
+        drawSingleString(g,value, x + (width - w) / 2 , y + textY);
     }
 	
 	/*public boolean editOndoubleClick(JFrame frame) {

@@ -226,7 +226,8 @@ public class TMLCPPanel extends TDiagramPanel {
        //mgui.changeMade(mgui.getSequenceDiagramPanel(name), TDiagramPanel.NEW_COMPONENT);
        return b;
    }
-   
+    
+   @Override
    public void enhance() {
         //
         Vector<TGComponent> v = new Vector<>();

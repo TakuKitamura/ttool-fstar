@@ -130,7 +130,7 @@ public class TMLADSelectEvt extends TADComponentWithoutSubcomponents/* Issue #69
         g.drawLine(x + width, y + height/2, x+ width + scaledLineOutLength, y + height/2); // Issue #31
         g.drawLine(x+(width/2), y + height, x+(width/2), y + height + scaledLineOutLength); // Issue #31
         
-        g.drawString("evt", x + scale( 5 ), y + height/2 + scale( 3 ) ); // Issue #31
+        drawSingleString(g,"evt", x + scale( 5 ), y + height/2 + scale( 3 ) ); // Issue #31
     }
     
     @Override

@@ -145,7 +145,7 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         int w  = g.getFontMetrics().stringWidth(ster);
         Font f = g.getFont();
         g.setFont(f.deriveFont(Font.BOLD));
-        g.drawString(ster, x + (width - w)/2, y + textY); // Issue #31
+        drawSingleString(g,ster, x + (width - w)/2, y + textY); // Issue #31
         g.setFont(f);
 
         // Complete name is derived
@@ -154,7 +154,7 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
 //        String val = name + "::" + reference;
 //        completeName = val;
         w  = g.getFontMetrics().stringWidth(val);
-        g.drawString(val, x + (width - w)/2, y + 2 * textY ); // Issue #31
+        drawSingleString(g,val, x + (width - w)/2, y + 2 * textY ); // Issue #31
 
         // Icon
         // Issue #31
@@ -508,6 +508,7 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
     }
 
     // Display the mapping of instances onto platform units
+    @Override
     public String getAttributes()   {
         String attr = "";
 
