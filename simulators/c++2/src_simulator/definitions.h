@@ -267,8 +267,8 @@ using std::max;
 <tr><td>"
 #define SCHED_HTML_BOARD2 "<table style=\"float: left\">"
 
-#define SCHED_HTML_JS_LINK1 "<script src=\"jquery.min.js\">"
-#define SCHED_HTML_JS_LINK2 "<script src=\"Chart.min.js\">"
+#define SCHED_HTML_JS_LINK1 "<script src=\"https://code.jquery.com/jquery-3.4.1.min.js\">"
+#define SCHED_HTML_JS_LINK2 "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js\">"
 #define SCHED_HTML_BEGIN_JS "<script>\n"
 #define SCHED_HTML_END_JS "</script>\n"
 #define SCHED_HTML_JS_TABLE_BEGIN "<table>"
