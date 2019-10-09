@@ -60,18 +60,19 @@ import java.util.LinkedList;
  * @version 1.1 31/08/2011
  */
 public class AvatarCDBlock extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent {
-    private int textY1 = 3;
+//    private int textY1 = 3;
+//    private int textX = 7;
     private String stereotype = "block";
 
     private int maxFontSize = 12;
     private int minFontSize = 4;
     private int currentFontSize = -1;
     private boolean displayText = true;
-    private int textX = 7;
+    
 
-    private int limitName = -1;
-    private int limitAttr = -1;
-    private int limitMethod = -1;
+//    private int limitName = -1;
+//    private int limitAttr = -1;
+//    private int limitMethod = -1;
 
     // Icon
     //private int iconSize = 15;
@@ -83,10 +84,13 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
     public AvatarCDBlock(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
+        textY = 3;
+        textX = 7;
         width = 250;
         height = 200;
         minWidth = 5;
         minHeight = 2;
+        initScaling(250,200);
 
         nbConnectingPoint = 16;
         connectingPoint = new TGConnectingPoint[16];
@@ -130,8 +134,48 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
 
         actionOnAdd();
     }
+    
+    /**
+     * Internal Drawing function of AvatarCDBlock
+     * draws the rectangle, fills it with color and writes the texts where it needs to be
+     * @param g
+     */
+    public void internalDrawing(Graphics g)
+    {
+    	//Rectangle
+        Color c = g.getColor();
+        g.draw3DRect(x, y, width, height, true);
 
-    public void internalDrawing(Graphics g) {
+        Color avat = ColorManager.AVATAR_BLOCK;
+        Font f = g.getFont();
+        int currentHeight = f.getSize() * 2;
+        g.setColor(new Color(avat.getRed(), avat.getGreen(), Math.min(255, avat.getBlue() + (getMyDepth() * 10))));
+        g.fill3DRect(x + 1, y + 1, width - 1, Math.min(currentHeight, height) - 1, true);
+        g.setColor(c);
+        
+        //Strings
+        String ster = "<<" + stereotype + ">>";
+        g.setFont(f.deriveFont(Font.BOLD));
+        currentHeight = f.getSize();
+        drawSingleString(g, ster, getCenter(g, ster), y + currentHeight);
+        
+        
+        g.setFont(f);
+//        strWidth = g.getFontMetrics().stringWidth(value);
+        currentHeight = 2 * f.getSize();
+        drawSingleString(g, value, getCenter(g, value), y + currentHeight);
+        
+     
+        if (currentHeight < height) {
+            //g.drawLine(x, y+h, x+width, y+h);
+            g.setColor(new Color(avat.getRed(), avat.getGreen(), Math.min(255, avat.getBlue() + (getMyDepth() * 10))));
+            g.fill3DRect(x + 1, y + currentHeight, width - 1, height - 1 - currentHeight, true);
+            g.setColor(c);
+        }
+    }
+    
+//    @Override
+    public void internalDrawin(Graphics g) {
         String ster = "<<" + stereotype + ">>";
         Font f = g.getFont();
         Font fold = f;
@@ -187,7 +231,7 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
         //g.setColor(ColorManager.AVATAR_BLOCK);
         Color avat = ColorManager.AVATAR_BLOCK;
         int h;
-        h = 2 * (currentFontSize + (int) (textY1 * tdp.getZoom())) + 2;
+        h = 2 * (currentFontSize + (int) (textY * tdp.getZoom())) + 2;
         g.setColor(new Color(avat.getRed(), avat.getGreen(), Math.min(255, avat.getBlue() + (getMyDepth() * 10))));
         g.fill3DRect(x + 1, y + 1, width - 1, Math.min(h, height) - 1, true);
         g.setColor(c);
@@ -201,19 +245,19 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
             g.setFont(f.deriveFont(Font.BOLD));
 
             w = g.getFontMetrics().stringWidth(ster);
-            h = currentFontSize + (int) (textY1 * tdp.getZoom());
+            h = currentFontSize + (int) (textY * tdp.getZoom());
             if ((w < (2 * textX + width)) && (h < height)) {
                 drawSingleString(g, ster, x + (width - w) / 2, y + h);
             }
             g.setFont(f0);
             w = g.getFontMetrics().stringWidth(value);
-            h = 2 * (currentFontSize + (int) (textY1 * tdp.getZoom()));
+            h = 2 * (currentFontSize + (int) (textY * tdp.getZoom()));
             if ((w < (2 * textX + width)) && (h < height)) {
                 drawSingleString(g, value, x + (width - w) / 2, y + h);
             }
-            limitName = y + h;
+//            limitName = y + h;
         } else {
-            limitName = -1;
+//            limitName = -1;
         }
 
         g.setFont(fold);
@@ -242,7 +286,8 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
         //g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
     }
 
-
+    
+    @Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
 
         if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
@@ -259,7 +304,8 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
     public String getNodeName() {
         return name;
     }
-
+    
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
 
         oldValue = getStereotype() + "/" + getValue();
@@ -340,17 +386,19 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
         return false;
 
     }
-
+    
+    @Override
     public boolean acceptSwallowedTGComponent(TGComponent tgc) {
         return tgc instanceof AvatarCDBlock;
 
     }
-
-
+    
+    @Override
     public int getType() {
         return TGComponentManager.ACD_BLOCK;
     }
-
+    
+    @Override
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
         boolean swallowed = false;
 
@@ -396,7 +444,8 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
 
         return true;
     }
-
+    
+    @Override
     public void removeSwallowedTGComponent(TGComponent tgc) {
         removeMyInternalComponent(tgc, false);
     }
@@ -442,7 +491,8 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
         return value;
     }
 
-
+    
+    @Override
     public void hasBeenResized() {
         for (int i = 0; i < nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof AvatarCDBlock) {
@@ -455,7 +505,8 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
         }
 
     }
-
+    
+    @Override
     public void resizeWithFather() {
         if ((father != null) && (father instanceof AvatarCDBlock)) {
             // Too large to fit in the father? -> resize it!
@@ -498,11 +549,13 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
         return false;
     }
 
-
+    
+    @Override
     public int getDefaultConnector() {
         return TGComponentManager.ACD_COMPOSITION_CONNECTOR;
     }
-
+    
+    @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<stereotype value=\"" + GTURTLEModeling.transformString(getStereotype()));
