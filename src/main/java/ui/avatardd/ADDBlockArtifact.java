@@ -116,7 +116,7 @@ public class ADDBlockArtifact extends TGCWithoutInternalComponent implements Swa
 		
 		g.drawImage(IconManager.img9, x+width-space-fileX + 3, y + space + 7, null);
         
-        g.drawString(value, x + textX , y + textY);
+        drawSingleString(g, value, x + textX , y + textY);
         
     }
     

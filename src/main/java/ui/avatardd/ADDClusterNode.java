@@ -135,10 +135,10 @@ public class ADDClusterNode extends ADDNode implements WithAttributes {
 		int w  = g.getFontMetrics().stringWidth(ster);
 		Font f = g.getFont();
 		g.setFont(f.deriveFont(Font.BOLD));
-		g.drawString(ster, x + (width - w)/2, y + textY1);
+		drawSingleString(g, ster, x + (width - w)/2, y + textY1);
 		g.setFont(f);
 		w  = g.getFontMetrics().stringWidth(name);
-		g.drawString(name, x + (width - w)/2, y + textY2);
+		drawSingleString(g, name, x + (width - w)/2, y + textY2);
 
 		// Icon
 		g.drawImage(IconManager.imgic8006.getImage(), x + 4, y + 4, null);

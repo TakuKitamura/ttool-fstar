@@ -128,9 +128,9 @@ public class ADDBridgeNode extends ADDCommunicationNode implements WithAttribute
         // Strings
         String ster = "<<" + stereotype + ">>";
         int w  = g.getFontMetrics().stringWidth(ster);
-        g.drawString(ster, x + (width - w)/2, y + textY1);
+        drawSingleString(g, ster, x + (width - w)/2, y + textY1);
         w  = g.getFontMetrics().stringWidth(name);
-        g.drawString(name, x + (width - w)/2, y + textY2);
+        drawSingleString(g, name, x + (width - w)/2, y + textY2);
 		
 		// Icon
 		//g.drawImage(IconManager.imgic1104.getImage(), x + width - 20, y + 4, null);

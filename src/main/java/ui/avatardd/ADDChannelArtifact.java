@@ -117,7 +117,7 @@ public class ADDChannelArtifact extends TGCWithoutInternalComponent implements S
 
         g.drawImage(IconManager.img9, x+width-space-fileX + 3, y + space + 7, null);
 
-        g.drawString(value, x + textX , y + textY);
+        drawSingleString(g, value, x + textX , y + textY);
     }
 
     public void setValue(String val, Graphics g) {
