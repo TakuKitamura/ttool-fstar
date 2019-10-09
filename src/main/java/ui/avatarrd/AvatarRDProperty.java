@@ -43,7 +43,7 @@ package ui.avatarrd;
 
 
 import myutil.GraphicLib;
-import myutil.TraceManager;
+//import myutil.TraceManager;
 import ui.*;
 import ui.util.IconManager;
 
@@ -67,9 +67,9 @@ public class AvatarRDProperty extends TGCScalableWithInternalComponent implement
     protected Graphics graphics;
     
 
-    private Font myFont, myFontB;
+//    private Font myFont, myFontB;
     //private int maxFontSize = 30;
-    private int minFontSize = 4;
+//    private int minFontSize = 4;
     private int currentFontSize = -1;
     private boolean displayText = true;
 
