@@ -209,9 +209,9 @@ public class TMLCCompositeComponent extends TGCScalableWithInternalComponent imp
 //			w = g.getFontMetrics().stringWidth(value);
 //			
 //			if (!(w < (width - 2 * (iconSize + textX)))) {
-//				g.drawString(value, x + textX + 1, y + currentFontSize + textX);
+//				drawSingleString(g, value, x + textX + 1, y + currentFontSize + textX);
 //			} else {
-//				g.drawString(value, x + (width - w)/2, y + currentFontSize + textX);
+//				drawSingleString(g, value, x + (width - w)/2, y + currentFontSize + textX);
 //			}
 //		}
 //		

@@ -61,8 +61,8 @@ import java.awt.*;
  */
 public class UCDUseCase extends TGCScalableWithoutInternalComponent {
     protected int lineLength = 5;
-    protected int textX =  5;
-    protected int textY =  15;
+//    protected int textX =  5;
+//    protected int textY =  15;
     protected int arc = 5;
     protected int w, h, w1, w2; //w1;
     
@@ -71,9 +71,12 @@ public class UCDUseCase extends TGCScalableWithoutInternalComponent {
     public UCDUseCase(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-	width = (int)(50 * tdp.getZoom());
+        width = (int)(50 * tdp.getZoom());
         height = (int)(40 * tdp.getZoom());
         //minWidth = 30;
+        textY =  15;
+        textX =  5;
+        
         
         nbConnectingPoint = 16;
         int index = 0;
@@ -103,6 +106,7 @@ public class UCDUseCase extends TGCScalableWithoutInternalComponent {
         myImageIcon = IconManager.imgic602;
     }
     
+    @Override
     public void internalDrawing(Graphics g) {
 		if (extension.length() > 0) {
 			w1  = g.getFontMetrics().stringWidth(value);
@@ -125,11 +129,11 @@ public class UCDUseCase extends TGCScalableWithoutInternalComponent {
         //name of use case
         
         if (extension.length() > 0) {
-			g.drawString(value, x + width / 2 - w1 / 2 , y + height/2 + h / 2 - 8);
+			drawSingleString(g, value, x + width / 2 - w1 / 2 , y + height/2 + h / 2 - 8);
 	        g.drawLine(x + width / 2 - w / 2, y + height/2 + h / 2 -6, x + width / 2 + w / 2, y + height/2 + h / 2 - 6);
-	        g.drawString(extension, x + width / 2 - w2 / 2 , y + height/2 + h / 2 + 5);
+	        drawSingleString(g, extension, x + width / 2 - w2 / 2 , y + height/2 + h / 2 + 5);
         } else {
-			g.drawString(value, x + width / 2 - w / 2 , y + height/2 + h / 2 - 3);
+			drawSingleString(g, value, x + width / 2 - w / 2 , y + height/2 + h / 2 - 3);
 		}
     }
     
@@ -149,11 +153,13 @@ public class UCDUseCase extends TGCScalableWithoutInternalComponent {
         return extension;
     }
     
- 
+	    
+	@Override
     public int getType() {
         return TGComponentManager.UCD_USECASE;
     } 
     
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
 //        boolean error = false;
 //		String errors = "";
@@ -179,7 +185,8 @@ public class UCDUseCase extends TGCScalableWithoutInternalComponent {
 		
         return true;
     }
-	
+    
+    @Override
 	protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<info extension=\"" + extension + "\" ");

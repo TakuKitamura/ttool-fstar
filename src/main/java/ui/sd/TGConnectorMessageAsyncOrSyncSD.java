@@ -86,7 +86,7 @@ public  class TGConnectorMessageAsyncOrSyncSD extends TGConnectorMessageSD {
                 heightValue = g.getFontMetrics().getHeight();
             }
 
-            g.drawString(value, ((p1.getX() + p2.getX()) / 2)-widthValue/2, ((p1.getY() + p2.getY()) / 2) - 5);
+            drawSingleString(g, value, ((p1.getX() + p2.getX()) / 2)-widthValue/2, ((p1.getY() + p2.getY()) / 2) - 5);
         } else {
             if (Point2D.distance(x1, y1, x2, y2) < GraphicLib.longueur * 1.5) {
                 g.drawLine(x1, y1, x2, y2);
@@ -99,8 +99,8 @@ public  class TGConnectorMessageAsyncOrSyncSD extends TGConnectorMessageSD {
                 heightValue = g.getFontMetrics().getHeight();
             }
 
-            //g.drawString(value, (p1.getX() + p2.getX()) / 2, ((p1.getY() + p2.getY()) / 2) - 5);
-            g.drawString(value, ((p1.getX() + p2.getX()) / 2)-widthValue/2, ((p1.getY() + p2.getY()) / 2) - 5);
+            //drawSingleString(g, value, (p1.getX() + p2.getX()) / 2, ((p1.getY() + p2.getY()) / 2) - 5);
+            drawSingleString(g, value, ((p1.getX() + p2.getX()) / 2)-widthValue/2, ((p1.getY() + p2.getY()) / 2) - 5);
         }
     }
 

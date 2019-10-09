@@ -63,7 +63,8 @@ public class HwBridge extends HwCommunicationNode  {
     public HwBridge(String _name) {
         super(_name);
     }
-
+    
+    @Override
     public String toXML() {
 	String s = "<BRIDGE name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  bufferByteSize=\"" + bufferByteSize + "\" />\n";
 	return s;

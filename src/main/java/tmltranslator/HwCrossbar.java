@@ -57,7 +57,8 @@ public class HwCrossbar extends HwCommunicationNode  {
     public HwCrossbar(String _name) {
         super(_name);
     }
-
+    
+    @Override
     public String toXML() {
 	String s = "<CROSSBAR name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize + "\" />\n";
 	return s;

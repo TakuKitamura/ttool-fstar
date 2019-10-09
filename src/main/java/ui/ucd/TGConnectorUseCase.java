@@ -62,13 +62,13 @@ public  class TGConnectorUseCase extends TGConnector {
         myImageIcon = IconManager.imgic604;
     }
     
-    
+    @Override
     protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
         g.drawLine(x1, y1, x2, y2);
     }
+      
     
-    
-    
+    @Override
     public int getType() {
         return TGComponentManager.CONNECTOR_ACTOR_UCD;
     }

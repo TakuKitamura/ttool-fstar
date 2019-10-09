@@ -71,7 +71,8 @@ public class HwLink implements Comparable<HwLink> {
     public void setPriority(int _priority) {
         priority = _priority;
     }
-
+    
+    @Override
     public int compareTo(HwLink o) {
         if (priority > o.getPriority()) return 1;
         if (priority < o.getPriority()) return -1;

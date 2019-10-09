@@ -61,7 +61,8 @@ public class HwRouter extends HwCommunicationNode  {
     public HwRouter(String _name) {
         super(_name);
     }
-
+    
+    @Override
     public String toXML() {
         String s = "<ROUTER name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  bufferByteSize=\"" + bufferByteSize + "\" />\n";
         return s;

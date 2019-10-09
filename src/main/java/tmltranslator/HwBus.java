@@ -67,7 +67,8 @@ public class HwBus extends HwCommunicationNode {
     public HwBus(String _name) {
         super(_name);
     }
-
+    
+    @Override
     public String toXML() {
         String s = "<BUS name=\"" + getName() + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize + "\"  pipelineSize=\"" + pipelineSize + "\" arbitration=\"" + arbitration + "\" sliceTime=\"" + sliceTime + "\" />\n";
         return s;

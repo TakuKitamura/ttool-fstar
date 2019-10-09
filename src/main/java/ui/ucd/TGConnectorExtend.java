@@ -62,7 +62,7 @@ public  class TGConnectorExtend extends TGConnectorUC {
         myImageIcon = IconManager.imgic608;
     }
     
-
+    @Override
     public int getType() {
         return TGComponentManager.CONNECTOR_EXTEND_UCD;
     }

@@ -89,7 +89,7 @@ public class SDActionState extends TGCOneLineText implements SwallowedTGComponen
         }
         g.drawRoundRect(x - width/2, y, width, height, arc, arc);
         
-        g.drawString(value, x - w / 2 , y + textY);
+        drawSingleString(g, value, x - w / 2 , y + textY);
     }
     
     public TGComponent isOnMe(int _x, int _y) {

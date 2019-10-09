@@ -155,10 +155,11 @@ public class UCDActor extends TGCScalableWithoutInternalComponentOneLineText {
         //right leg
         graph.drawLine(x+width/2, y+height-width/2, x+width, y+height);
         //name of actor
-        graph.drawString(value, x + width / 2 - w / 2 , y + height + h);
+        drawSingleString(graph, value, x + width / 2 - w / 2 , y + height + h);
         height = height + h;
     }
     
+    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -169,11 +170,13 @@ public class UCDActor extends TGCScalableWithoutInternalComponentOneLineText {
         return null;
     }
     
+    @Override
     public int getMyCurrentMinX() {
         return Math.min(x + width / 2 - w / 2, x);
 
     }
     
+    @Override
     public int getMyCurrentMaxX() {
         return Math.max(x + width / 2 + w / 2, x + width);
     }
@@ -183,6 +186,7 @@ public class UCDActor extends TGCScalableWithoutInternalComponentOneLineText {
     }
     
     
+    @Override
     public int getType() {
         return TGComponentManager.UCD_ACTOR;
     }

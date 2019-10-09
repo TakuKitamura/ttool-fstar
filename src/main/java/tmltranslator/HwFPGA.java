@@ -71,11 +71,13 @@ public class HwFPGA extends HwExecutionNode {
     public HwFPGA(String _name) {
         super(_name);
     }
-
+    
+    @Override
     public String getType() {
         return "FPGA";
     }
-
+    
+    @Override
     public String toXML() {
         String s = "<FPGA name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize + "\" execiTime=\"" + execiTime + "\" execcTime=\"" + execcTime + "\" pipelineSize=\"";
         s +=  "\" capacity=\"" + capacity + "\" mappingPenalty=\"" + mappingPenalty + "\" reconfigurationTime=\"" + reconfigurationTime + "\" />\n";

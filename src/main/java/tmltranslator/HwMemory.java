@@ -62,6 +62,7 @@ public class HwMemory extends HwCommunicationNode  {
     }
 
     
+    @Override
     public String toXML() {
 	String s = "<MEMORY name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize + "\" memorySize=\"" + memorySize + "\"  bufferType=\"" + bufferType + "\" />\n";
 	return s;

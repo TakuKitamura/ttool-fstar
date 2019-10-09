@@ -97,7 +97,8 @@ public class UCDActorBox extends TGCScalableWithoutInternalComponentOneLineText 
 
         myImageIcon = IconManager.imgic600;
     }
-
+    
+    @Override
     public void internalDrawing(Graphics g) {
         w  = g.getFontMetrics().stringWidth(value);
         int w1  = g.getFontMetrics().stringWidth(STEREOTYPE);
@@ -105,11 +106,12 @@ public class UCDActorBox extends TGCScalableWithoutInternalComponentOneLineText 
             width = Math.max(Math.max(w, w1) + space, minWidth);
         }
         h = g.getFontMetrics().getHeight();
-        g.drawString(STEREOTYPE, x + ((width - w1) / 2), y + h + space/2);
-        g.drawString(value, x + ((width - w) / 2) , y + height - h);
+        drawSingleString(g, STEREOTYPE, x + ((width - w1) / 2), y + h + space/2);
+        drawSingleString(g, value, x + ((width - w) / 2) , y + height - h);
         g.drawRect(x, y, width, height);
     }
-
+    
+    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -119,12 +121,14 @@ public class UCDActorBox extends TGCScalableWithoutInternalComponentOneLineText 
           }*/
         return null;
     }
-
+    
+    @Override
     public int getMyCurrentMinX() {
         return Math.min(x + width / 2 - w / 2, x);
 
     }
-
+    
+    @Override
     public int getMyCurrentMaxX() {
         return Math.max(x + width / 2 + w / 2, x + width);
     }
@@ -133,7 +137,8 @@ public class UCDActorBox extends TGCScalableWithoutInternalComponentOneLineText 
         return value;
     }
 
-
+    
+    @Override
     public int getType() {
         return TGComponentManager.UCD_ACTORBOX;
     }

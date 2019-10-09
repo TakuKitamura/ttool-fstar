@@ -58,7 +58,8 @@ public class HwDMA extends HwCommunicationNode  {
     public HwDMA(String _name) {
         super(_name);
     }
-
+    
+    @Override
     public String toXML() {
 	String s = "<DMA name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize + "\"  nbOfChannels=\"" + nbOfChannels + "\" execiTime=\"" + "1" + "\" execcTime=\"" + "1"  +"\" />\n";
 	return s;
