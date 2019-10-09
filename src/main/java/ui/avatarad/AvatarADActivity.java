@@ -63,13 +63,14 @@ public class AvatarADActivity extends TGCScalableWithInternalComponent implement
   //  private int minFontSize = 4;
     //private int currentFontSize = -1;
     private boolean displayText = true;
-    private int textX = 7;
+//    private int textX = 7;
 
     public String oldValue;
 
     public AvatarADActivity(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-
+        
+        textX = 7;
         initScaling(100, 50);
         minWidth = (int)(40* tdp.getZoom());
         minHeight = (int)(30* tdp.getZoom());
@@ -204,7 +205,7 @@ public class AvatarADActivity extends TGCScalableWithInternalComponent implement
             g.drawLine(x, y+decY, x+decY, y+decY);
             g.drawLine(x+decY, y+decY, x+decX, y+decY-5);
             g.drawLine(x+decX, y+decY-5, x+decX, y);
-            g.drawString("act", x+1, y+decY-2);
+            drawSingleString(g, "act", x+1, y+decY-2);
         }
         //g.drawRoundRect(x, y, width, height, 5, 5);
 
@@ -221,7 +222,7 @@ public class AvatarADActivity extends TGCScalableWithInternalComponent implement
 	    h = g.getFontMetrics().getHeight();
             //h =  currentFontSize + (int)(textY1 * tdp.getZoom());
             if ((w < (2*textX + width)) && (h < height)) {
-                g.drawString(value, x + (width - w)/2, y+h+1);
+                drawSingleString(g, value, x + (width - w)/2, y+h+1);
             }
             //g.setFont(f0);
         }
