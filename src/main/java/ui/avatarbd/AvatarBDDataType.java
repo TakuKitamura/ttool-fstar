@@ -62,14 +62,14 @@ import java.util.LinkedList;
  * @version 1.1 18/06/2010
  */
 public class AvatarBDDataType extends TGCScalableWithInternalComponent implements GenericTree {
-    private int textY1 = 3;
+//    private int textY1 = 3;
     private String stereotype = "datatype";
 
     private int maxFontSize = 12;
     private int minFontSize = 4;
     private int currentFontSize = -1;
     private boolean displayText = true;
-    private int textX = 7;
+//    private int textX = 7;
 
     private int limitName = -1;
     //   private int limitAttr = -1;
@@ -87,11 +87,14 @@ public class AvatarBDDataType extends TGCScalableWithInternalComponent implement
 
     public AvatarBDDataType(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-
+        
+        textY = 3;
+        textX = 7;
         width = 250;
         height = 200;
         minWidth = 5;
         minHeight = 2;
+        initScaling(250, 200);
 
         nbConnectingPoint = 0;
         connectingPoint = new TGConnectingPoint[0];
@@ -119,13 +122,93 @@ public class AvatarBDDataType extends TGCScalableWithInternalComponent implement
 
         actionOnAdd();
     }
-
+    
+    @Override
     public void internalDrawing(Graphics g) {
+        //Rectangle
+    	Color c = g.getColor();
+        g.draw3DRect(x, y, width, height, true);
+
+        g.setColor(ColorManager.AVATAR_DATATYPE);
+        g.fill3DRect(x + 1, y + 1, width - 1, height - 1, true);
+        g.setColor(c);
+
+    	//Strings
+    	String ster = "<<" + stereotype + ">>";
+        Font f = g.getFont();
+
+        g.setFont(f.deriveFont(Font.BOLD));
+
+        int strWidth = g.getFontMetrics().stringWidth(ster);
+        int currentHeight = f.getSize();
+        if ((strWidth < (2 * textX + width)) && (currentHeight < height)) {
+            drawSingleString(g, ster, x + (width - strWidth) / 2, y + currentHeight);
+        }
+
+        g.setFont(f.deriveFont(Font.PLAIN));
+        strWidth = g.getFontMetrics().stringWidth(value);
+        currentHeight = 2 * (currentFontSize + (int) (textY * tdp.getZoom()));
+        if ((strWidth < (2 * textX + width)) && (currentHeight < height)) {
+            drawSingleString(g, value, x + (width - strWidth) / 2, y + currentHeight);
+        }
+        limitName = y + currentHeight;
+    
+        currentHeight = currentHeight + 2;
+        if (currentHeight < height) {
+            g.drawLine(x, y + currentHeight, x + width, y + currentHeight);
+        }
+
+        // Icon
+        if ((width > 30) && (height > (iconSize + 2 * textX))) {
+            g.drawImage(scale(IconManager.img5100), x + width - scale(iconSize) - textX, y + textX, null);
+        }
+
+        int cpt = currentHeight;
+        g.setFont(f.deriveFont(Font.PLAIN));
+        // Attributes
+        if (tdp.areAttributesVisible()) {
+            //  limitAttr = -1;
+            int index = 0;
+            String attr;
+
+            TAttribute a;
+
+            int si = Math.min(12, (int) ((float) currentFontSize - 2));
+
+            f = g.getFont();
+            f = f.deriveFont((float) si);
+            g.setFont(f);
+            int step = si + 2;
+
+            while (index < myAttributes.size()) {
+                cpt += step;
+                if (cpt >= (height - textX)) {
+                    break;
+                }
+                a = myAttributes.get(index);
+                attr = a.toString();
+                strWidth = g.getFontMetrics().stringWidth(attr);
+                if ((strWidth + (2 * textX) + 1) < width) {
+                    drawSingleString(g, attr, x + textX, y + cpt);
+                } else {
+                    attr = "...";
+                    strWidth = g.getFontMetrics().stringWidth(attr);
+                    if ((strWidth + textX + 2) < width) {
+                        drawSingleString(g, attr, x + textX + 1, y + cpt);
+                    } else {
+                        cpt -= step; //skip attrib
+                    }
+                }
+                index++;
+            }
+        }
+    
+    }
+//    @Override
+    public void internalDrawin(Graphics g) {
         String ster = "<<" + stereotype + ">>";
         Font f = g.getFont();
         Font fold = f;
-
-        //
 
         if ((rescaled) && (!tdp.isScaled())) {
 
@@ -185,15 +268,15 @@ public class AvatarBDDataType extends TGCScalableWithInternalComponent implement
             g.setFont(f.deriveFont(Font.BOLD));
 
             w = g.getFontMetrics().stringWidth(ster);
-            h = currentFontSize + (int) (textY1 * tdp.getZoom());
+            h = currentFontSize + (int) (textY * tdp.getZoom());
             if ((w < (2 * textX + width)) && (h < height)) {
-                g.drawString(ster, x + (width - w) / 2, y + h);
+                drawSingleString(g, ster, x + (width - w) / 2, y + h);
             }
             g.setFont(f0);
             w = g.getFontMetrics().stringWidth(value);
-            h = 2 * (currentFontSize + (int) (textY1 * tdp.getZoom()));
+            h = 2 * (currentFontSize + (int) (textY * tdp.getZoom()));
             if ((w < (2 * textX + width)) && (h < height)) {
-                g.drawString(value, x + (width - w) / 2, y + h);
+                drawSingleString(g, value, x + (width - w) / 2, y + h);
             }
             limitName = y + h;
         } else {
@@ -241,13 +324,13 @@ public class AvatarBDDataType extends TGCScalableWithInternalComponent implement
                 attr = a.toString();
                 w = g.getFontMetrics().stringWidth(attr);
                 if ((w + (2 * textX) + 1) < width) {
-                    g.drawString(attr, x + textX, y + cpt);
+                    drawSingleString(g, attr, x + textX, y + cpt);
                     //   limitAttr = y + cpt;
                 } else {
                     attr = "...";
                     w = g.getFontMetrics().stringWidth(attr);
                     if ((w + textX + 2) < width) {
-                        g.drawString(attr, x + textX + 1, y + cpt);
+                        drawSingleString(g, attr, x + textX + 1, y + cpt);
                         //     limitAttr = y + cpt;
                     } else {
                         // skip attribute
@@ -270,6 +353,7 @@ public class AvatarBDDataType extends TGCScalableWithInternalComponent implement
     }
 
 
+    @Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
 
         if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
@@ -287,6 +371,7 @@ public class AvatarBDDataType extends TGCScalableWithInternalComponent implement
         return name;
     }
 
+    @Override
     public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
         // On the name ?
         if ((((limitName == -1) && (displayText) && (_y <= (y + 2 * currentFontSize)))) || ((displayText) && (_y < limitName))) {
@@ -360,11 +445,12 @@ public class AvatarBDDataType extends TGCScalableWithInternalComponent implement
         _jdab.enableUPPAALKeyword(false);
     }
 
-
+    @Override
     public int getType() {
         return TGComponentManager.AVATARBD_DATATYPE;
     }
 
+    @Override
     protected String translateExtraParam() {
         TAttribute a;
 
@@ -454,6 +540,7 @@ public class AvatarBDDataType extends TGCScalableWithInternalComponent implement
         return value;
     }
 
+    @Override
     public int getDefaultConnector() {
         return TGComponentManager.AVATARBD_PORT_CONNECTOR;
     }
@@ -466,20 +553,24 @@ public class AvatarBDDataType extends TGCScalableWithInternalComponent implement
         myAttributes.add(ta);
     }
 
+    @Override
     public String toString() {
         return "Data type: " + getValue();
     }
 
+    @Override
     public int getChildCount() {
         //TraceManager.addDev("Counting childs!");
         return this.myAttributes.size();
     }
 
+    @Override
     public Object getChild(int index) {
 
         return this.myAttributes.get(index);
     }
 
+    @Override
     public int getIndexOfChild(Object child) {
         if (child instanceof TAttribute) {
             return this.myAttributes.indexOf(child);

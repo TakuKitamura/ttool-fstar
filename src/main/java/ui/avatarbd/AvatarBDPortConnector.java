@@ -210,29 +210,29 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
         if (((g.getColor() == ColorManager.POINTER_ON_ME_0) && (tdp.getAttributeState() == tdp.PARTIAL)) || (tdp.getAttributeState() == tdp.FULL)) {
             // Signals at origin
             if (inSignalsAtOrigin.size() > 0) {
-                //g.drawString("in:", p1.getX() + decX, p1.getY() + h);
+                //drawSingleString(g, "in:", p1.getX() + decX, p1.getY() + h);
                 for (String iso : inSignalsAtOrigin) {
                     h += step;
                     s = getShortName(iso);
                     if (p1.getX() <= p2.getX()) {
-                        g.drawString(s, p1.getX() + decX, p1.getY() + h);
+                        drawSingleString(g, s, p1.getX() + decX, p1.getY() + h);
                     } else {
                         w = g.getFontMetrics().stringWidth(s);
-                        g.drawString(s, p1.getX() - decX - w, p1.getY() + h);
+                        drawSingleString(g, s, p1.getX() - decX - w, p1.getY() + h);
                     }
                 }
             }
             if (outSignalsAtOrigin.size() > 0) {
                 //h += step;
-                //g.drawString("out:", p1.getX() + decX, p1.getY() + h);
+                //drawSingleString(g, "out:", p1.getX() + decX, p1.getY() + h);
                 for (String oso : outSignalsAtOrigin) {
                     h += step;
                     s = getShortName(oso);
                     if (p1.getX() <= p2.getX()) {
-                        g.drawString(s, p1.getX() + decX, p1.getY() + h);
+                        drawSingleString(g, s, p1.getX() + decX, p1.getY() + h);
                     } else {
                         w = g.getFontMetrics().stringWidth(s);
-                        g.drawString(s, p1.getX() - decX - w, p1.getY() + h);
+                        drawSingleString(g, s, p1.getX() - decX - w, p1.getY() + h);
                     }
                 }
             }
@@ -240,28 +240,28 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
             h = -decY;
             if (outSignalsAtDestination.size() > 0) {
                 //h += step;
-                //g.drawString("out:", p2.getX() + decX, p2.getY() + h);
+                //drawSingleString(g, "out:", p2.getX() + decX, p2.getY() + h);
                 for (String osd : outSignalsAtDestination) {
                     h += step;
                     s = getShortName(osd);
                     if (p1.getX() > p2.getX()) {
-                        g.drawString(s, p2.getX() + decX, p2.getY() + h);
+                        drawSingleString(g, s, p2.getX() + decX, p2.getY() + h);
                     } else {
                         w = g.getFontMetrics().stringWidth(s);
-                        g.drawString(s, p2.getX() - decX - w, p2.getY() + h);
+                        drawSingleString(g, s, p2.getX() - decX - w, p2.getY() + h);
                     }
                 }
             }
             if (inSignalsAtDestination.size() > 0) {
-                //g.drawString("in:", p2.getX() + decX, p2.getY() + h);
+                //drawSingleString(g, "in:", p2.getX() + decX, p2.getY() + h);
                 for (String isd : inSignalsAtDestination) {
                     h += step;
                     s = getShortName(isd);
                     if (p1.getX() > p2.getX()) {
-                        g.drawString(s, p2.getX() + decX, p2.getY() + h);
+                        drawSingleString(g, s, p2.getX() + decX, p2.getY() + h);
                     } else {
                         w = g.getFontMetrics().stringWidth(s);
-                        g.drawString(s, p2.getX() - decX - w, p2.getY() + h);
+                        drawSingleString(g, s, p2.getX() - decX - w, p2.getY() + h);
                     }
                 }
             }
@@ -275,7 +275,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
           Font f0 =  f.deriveFont((float)(fontSize*tdp.getZoom()));
           g.setFont(f0);
           }
-          g.drawString(value, x2-(cz/2), y2-(cz/2)-1);
+          drawSingleString(g, value, x2-(cz/2), y2-(cz/2)-1);
           g.setFont(f);
           }*/
 
@@ -286,11 +286,11 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
             if (messageInformation != null) {
                 if (messageInformation[0] != null) {
                     g.setColor(Color.BLUE);
-                    g.drawString(messageInformation[0], p1.getX() + decX, p1.getY());
+                    drawSingleString(g, messageInformation[0], p1.getX() + decX, p1.getY());
                 }
                 if (messageInformation[1] != null) {
                     g.setColor(Color.BLUE);
-                    g.drawString(messageInformation[1], p2.getX() + decX, p2.getY());
+                    drawSingleString(g, messageInformation[1], p2.getX() + decX, p2.getY());
                 }
                 g.setColor(Color.BLACK);
             }

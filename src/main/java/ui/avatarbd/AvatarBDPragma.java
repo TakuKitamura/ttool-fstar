@@ -238,11 +238,11 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
         int i = 1;
         Font heading = new Font("heading", Font.BOLD, this.tdp.getFontSize() * 7 / 6);
         g.setFont(heading);
-        g.drawString("Security features", x + textX, y + textY + currentFontSize);
+        drawSingleString(g, "Security features", x + textX, y + textY + currentFontSize);
         g.setFont(fold);
         for (String s : models) {
             pragmaLocMap.put(s, y + textY + (i + 1) * currentFontSize);
-            g.drawString(s, x + textX, y + textY + (i + 1) * currentFontSize);
+            drawSingleString(g, s, x + textX, y + textY + (i + 1) * currentFontSize);
             if (syntaxErrors.contains(s)) {
                 Color ctmp = g.getColor();
                 g.setColor(Color.red);
@@ -254,11 +254,11 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
         }
         // FIXME: why the empty string ? 
         //I forget...
-        g.drawString(" ", x + textX, y + textY + (i + 1) * currentFontSize);
+        drawSingleString(g, " ", x + textX, y + textY + (i + 1) * currentFontSize);
         i++;
         g.drawLine(x, y + textY / 2 + i * currentFontSize, x + width, y + textY / 2 + i * currentFontSize);
         g.setFont(heading);
-        g.drawString("Security Property", x + textX, y + textY + (i + 1) * currentFontSize);
+        drawSingleString(g, "Security Property", x + textX, y + textY + (i + 1) * currentFontSize);
         g.setFont(fold);
         i++;
 //		
@@ -268,7 +268,7 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
                 drawConfidentialityVerification(s, g, x + lockX, y + lockY + (i + 1) * currentFontSize);
                 g.setFont(fold);
             }
-            g.drawString(s, x + textX, y + textY + (i + 1) * currentFontSize);
+            drawSingleString(g, s, x + textX, y + textY + (i + 1) * currentFontSize);
             pragmaLocMap.put(s, y + textY + i * currentFontSize);
             if (syntaxErrors.contains(s)) {
                 Color ctmp = g.getColor();
@@ -282,7 +282,7 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
 
 /*        for (int i = 0; i<values.length; i++) {
             //TraceManager.addDev("x+texX=" + (x + textX) + " y+textY=" + y + textY + i* h + ": " + values[i]);
-            g.drawString(values[i], x + textX, y + textY + (i+1)* currentFontSize);
+            drawSingleString(g, values[i], x + textX, y + textY + (i+1)* currentFontSize);
         }
 */
         g.setColor(c);
@@ -383,10 +383,10 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
 //        g.drawRect(_x+4, _y-7, 18, 14);
         g.drawPolygon(xps, yps, 3);
         g.drawPolygon(xpw, ypw, 3);
-        g.drawString("S", _x + 6, _y + 2);
-        g.drawString("W", _x + 13, _y - 2);
+        drawSingleString(g, "S", _x + 6, _y + 2);
+        drawSingleString(g, "W", _x + 13, _y - 2);
 //	if (c1==Color.gray){
-//	    g.drawString("?", _x+4, _y+2);
+//	    drawSingleString(g, "?", _x+4, _y+2);
 //	}
     }
 

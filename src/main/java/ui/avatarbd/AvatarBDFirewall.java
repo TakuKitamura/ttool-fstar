@@ -61,7 +61,7 @@ import java.util.ArrayList;
  * @author Letitia LI
  */
 public class AvatarBDFirewall extends TGCScalableWithoutInternalComponent {
-    private int textY1 = 15;
+//    private int textY1 = 15;
     private int textY2 = 30;
     private int derivationx = 2;
     private int derivationy = 3;
@@ -72,10 +72,13 @@ public class AvatarBDFirewall extends TGCScalableWithoutInternalComponent {
     public AvatarBDFirewall(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
+        textY = 15;
+       
         width = 250;
         height = 100;
         minWidth = 100;
         minHeight = 35;
+        initScaling(250, 100);
         
         nbConnectingPoint = 16;
         connectingPoint = new TGConnectingPoint[16];
@@ -111,7 +114,8 @@ public class AvatarBDFirewall extends TGCScalableWithoutInternalComponent {
         
         myImageIcon = IconManager.imgic700;
     }
-    
+
+    @Override
     public void internalDrawing(Graphics g) {
 		Color c = g.getColor();
 		g.draw3DRect(x, y, width, height, true);
@@ -133,9 +137,9 @@ public class AvatarBDFirewall extends TGCScalableWithoutInternalComponent {
         // Strings
         String ster = "<<" + stereotype + ">>";
         int w  = g.getFontMetrics().stringWidth(ster);
-        g.drawString(ster, x + (width - w)/2, y + textY1);
+        drawSingleString(g, ster, x + (width - w)/2, y + textY);
         w  = g.getFontMetrics().stringWidth(name);
-        g.drawString(name, x + (width - w)/2, y + textY2);
+        drawSingleString(g, name, x + (width - w)/2, y + textY2);
 		
 		// Icon
 		
@@ -168,6 +172,7 @@ public class AvatarBDFirewall extends TGCScalableWithoutInternalComponent {
         return name;
     }
     
+    @Override	
     public boolean editOndoubleClick(JFrame frame) {
 		boolean error = false;
 		String errors = "";
@@ -208,10 +213,12 @@ public class AvatarBDFirewall extends TGCScalableWithoutInternalComponent {
     }
     
     
+    @Override
     public int getType() {
         return TGComponentManager.TMLARCHI_FIREWALL;
     }
     
+    @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<info stereotype=\"" + stereotype + "\" nodeName=\"" + name);
@@ -287,7 +294,8 @@ public class AvatarBDFirewall extends TGCScalableWithoutInternalComponent {
 		  return attr;
 	  }
 	   
-
+	    
+	    @Override
 	public TGComponent isOnMe(int x1, int y1) {
         if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
             return this;

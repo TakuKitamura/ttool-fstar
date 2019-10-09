@@ -177,31 +177,38 @@ public class AvatarBDPanel extends TDiagramPanel {
         }
         return false;
     }
-
+    
+    @Override
     public boolean areAttributesVisible() {
         return attributesVisible;
     }
-
+    
+    @Override
     public String getXMLHead() {
         return "<AVATARBlockDiagramPanel name=\"" + name + "\"" + sizeParam()  + zoomParam() + " >\n" + displayParam();
     }
-
+    
+    @Override
     public String getXMLTail() {
         return "</AVATARBlockDiagramPanel>";
     }
-
+    
+    @Override
     public String getXMLSelectedHead() {
         return "<AVATARBlockDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
     }
-
+    
+    @Override
     public String getXMLSelectedTail() {
         return "</AVATARBlockDiagramPanelCopy>";
     }
-
+    
+    @Override
     public String getXMLCloneHead() {
         return "<AVATARBlockDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
     }
-
+    
+    @Override
     public String getXMLCloneTail() {
         return "</AVATARBlockDiagramPanelCopy>";
     }

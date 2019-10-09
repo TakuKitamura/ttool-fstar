@@ -70,8 +70,8 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
 
     protected String[] values;
     protected List<String> properties;
-    protected int textX = 40;
-    protected int textY = 5;
+//    protected int textX = 40;
+//    protected int textY = 5;
     protected int marginY = 20;
     protected int marginX = 20;
     protected int limit = 15;
@@ -93,10 +93,15 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
 
     public AvatarBDPerformancePragma(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+       
+        textY = 5;
+        textX = 40;
         width = 200;
         height = 30;
         minWidth = 80;
         minHeight = 10;
+        initScaling(200, 30);
+        
         properties = new LinkedList<String>();
         oldScaleFactor = tdp.getZoom();
 
@@ -136,8 +141,64 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
         return properties;
     }
 
-    @Override
-    public void internalDrawing(Graphics g) {
+    public void internalDrawing(Graphics g)
+    {
+    	//check
+        if (values == null) {
+            makeValue();
+        }
+    	//Rectangle
+    	Color c = g.getColor();
+        g.drawLine(x, y, x + width, y);
+        g.drawLine(x, y, x, y + height);
+        g.drawLine(x, y + height, x + width - limit, y + height);
+        g.drawLine(x + width, y, x + width, y + height - limit);
+
+        g.setColor(ColorManager.PERFORMANCE_PRAGMA_BG);
+        int[] px1 = {x + 1, x + width, x + width, x + width - limit, x + 1};
+        int[] py1 = {y + 1, y + 1, y + height - limit, y + height, y + height};
+        g.fillPolygon(px1, py1, 5);
+        g.setColor(c);
+
+        int[] px = {x + width, x + width - 4, x + width - 10, x + width - limit};
+        int[] py = {y + height - limit, y + height - limit + 3, y + height - limit + 2, y + height};
+        g.drawPolygon(px, py, 4);
+
+        if (g.getColor() == ColorManager.NORMAL_0) {
+            g.setColor(ColorManager.PRAGMA);
+        }
+        g.fillPolygon(px, py, 4);
+        g.setColor(Color.black);
+    	
+        //Strings
+    	Font f = g.getFont();
+    	int i = 1;
+//        Font heading = new Font("heading", Font.BOLD, 14);
+
+    	int currentH = scale(7);
+        drawSingleString(g, "Performance Pragmas", getCenter(g, "Performance Pragmas")/*x + textX*/, y + textY + currentFontSize + currentH);
+        //g.setFont(fold);
+        g.setFont(f.deriveFont(f.getSize() - 10));
+        for (String s : properties) {
+        	currentH += f.getSize();
+//        	if (canTextGoInTheBox(g, s, ))
+            drawSingleString(g, s, x, y + textY + (i + 1) * currentFontSize + currentH);
+            drawVerification(s, g, x + textX, y + textY + (i + 1) * currentFontSize + currentH);
+            if (syntaxErrors.contains(s)) {
+                Color ctmp = g.getColor();
+                g.setColor(Color.red);
+                g.drawLine(x + textX / 2, y + textY * 3 / 2 + i * currentFontSize, x + width - textX / 2, y + textY * 3 / 2 + (i + 1) * currentFontSize);
+                g.drawLine(x + width - textX / 2, y + textY * 3 / 2 + i * currentFontSize, x + textX / 2, y + textY * 3 / 2 + (i + 1) * currentFontSize);
+                g.setColor(ctmp);
+            }
+            i++;
+        }
+       g.setColor(c);
+
+    }
+    
+//    @Override
+    public void internalDrawin(Graphics g) {
         Font f = g.getFont();
         Font fold = f;
 
@@ -145,16 +206,16 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
           graphics = g;
           }*/
 
-        if (((rescaled) && (!tdp.isScaled())) || myFont == null) {
-            currentFontSize = tdp.getFontSize() + 1;
-            //
-            //            myFont = f.deriveFont((float)currentFontSize);
-            //myFontB = myFont.deriveFont(Font.BOLD);
-
-            if (rescaled) {
-                rescaled = false;
-            }
-        }
+//        if (((rescaled) && (!tdp.isScaled())) || myFont == null) {
+//            currentFontSize = tdp.getFontSize() + 1;
+//            //
+//            //            myFont = f.deriveFont((float)currentFontSize);
+//            //myFontB = myFont.deriveFont(Font.BOLD);
+//
+//            if (rescaled) {
+//                rescaled = false;
+//            }
+//        }
 
         if (values == null) {
             makeValue();
@@ -163,7 +224,7 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
         //  int h  = g.getFontMetrics().getHeight();
         Color c = g.getColor();
 
-        if (!(this.tdp.isScaled())) {
+//        if (!(this.tdp.isScaled())) {
             int desiredWidth = minWidth;
             desiredWidth = Math.max(desiredWidth, 2 * g.getFontMetrics().stringWidth("Performance Pragma") + marginX + textX);
 
@@ -178,7 +239,7 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
             if ((desiredWidth != width) || (desiredHeight != height)) {
                 resize(desiredWidth, desiredHeight);
             }
-        }
+//        }
 
         g.drawLine(x, y, x + width, y);
         g.drawLine(x, y, x, y + height);
@@ -205,10 +266,10 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
         int i = 1;
         Font heading = new Font("heading", Font.BOLD, 14);
         g.setFont(heading);
-        g.drawString("Performance Pragmas", x + textX, y + textY + currentFontSize);
+        drawSingleString(g, "Performance Pragmas", x + textX, y + textY + currentFontSize);
         g.setFont(fold);
         for (String s : properties) {
-            g.drawString(s, x + textX, y + textY + (i + 1) * currentFontSize);
+            drawSingleString(g, s, x + textX, y + textY + (i + 1) * currentFontSize);
             drawVerification(s, g, x + textX, y + textY + (i + 1) * currentFontSize);
             if (syntaxErrors.contains(s)) {
                 Color ctmp = g.getColor();
@@ -222,7 +283,7 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
 
 /*        for (int i = 0; i<values.length; i++) {
             //TraceManager.addDev("x+texX=" + (x + textX) + " y+textY=" + y + textY + i* h + ": " + values[i]);
-            g.drawString(values[i], x + textX, y + textY + (i+1)* currentFontSize);
+            drawSingleString(g, values[i], x + textX, y + textY + (i+1)* currentFontSize);
         }
 */
         g.setColor(c);
@@ -281,7 +342,8 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
         }
         return false;
     }
-
+    
+    @Override
     public TGComponent isOnMe(int x1, int y1) {
         if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
             return this;
@@ -338,7 +400,7 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
             } else if (status.equals("PROVED_ERROR")) {
                 Font f = g.getFont();
                 g.setFont(new Font("TimesRoman", Font.BOLD, 14));
-                g.drawString("?", _x - 30, _y);
+                drawSingleString(g, "?", _x - 30, _y);
                 g.setFont(f);
             } else if (status.equals("PROVED_FALSE")) {
                 g.setColor(Color.red);
@@ -351,7 +413,7 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
             } else {
                 Font f = g.getFont();
                 g.setFont(new Font("TimesRoman", Font.BOLD, 10));
-                g.drawString(status, _x - 35, _y);
+                drawSingleString(g, status, _x - 35, _y);
                 g.setFont(f);
             }
         }
