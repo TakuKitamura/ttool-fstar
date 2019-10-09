@@ -220,9 +220,9 @@ public class TMLCRemoteCompositeComponent extends TGCScalableWithInternalCompone
 			w = g.getFontMetrics().stringWidth(value);
 			//TraceManager.addDev("Display text: Font size=" + currentFontSize + " w=" + w + " value=" + value);
 			if (!(w < (width - 2 * (iconSize + textX)))) {
-				g.drawString(value, x + textX + 1, y + currentFontSize + textX);
+				drawSingleString(g,value, x + textX + 1, y + currentFontSize + textX);
 			} else {
-				g.drawString(value, x + (width - w)/2, y + currentFontSize + textX);
+				drawSingleString(g,value, x + (width - w)/2, y + currentFontSize + textX);
 			}
 		}
 		

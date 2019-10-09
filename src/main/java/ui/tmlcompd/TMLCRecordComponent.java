@@ -177,9 +177,9 @@ public class TMLCRecordComponent extends TGCScalableWithInternalComponent implem
 			g.setFont(f);
 			w = g.getFontMetrics().stringWidth(value);
 			if (w > (width - 2 * (iconSize + textX))) {
-				g.drawString(value, x + textX + 1, y + currentFontSize + textX);
+				drawSingleString(g,value, x + textX + 1, y + currentFontSize + textX);
 			} else {
-				g.drawString(value, x + (width - w)/2, y + currentFontSize + textX);
+				drawSingleString(g,value, x + (width - w)/2, y + currentFontSize + textX);
 			}
 		}
 		
@@ -216,12 +216,12 @@ public class TMLCRecordComponent extends TGCScalableWithInternalComponent implem
 				attr = a.toString();
 				w = g.getFontMetrics().stringWidth(attr);
 				if ((w + (2 * textX) + 1) < width) {
-					g.drawString(attr, x + textX, y + cpt);
+					drawSingleString(g,attr, x + textX, y + cpt);
 				} else {
 					attr = "...";
 					w = g.getFontMetrics().stringWidth(attr);
 					if ((w + textX + 2) < width) {
-						g.drawString(attr, x + textX + 1, y + cpt);
+						drawSingleString(g,attr, x + textX + 1, y + cpt);
 					} else {
 						// skip attribute
 						cpt -= step;

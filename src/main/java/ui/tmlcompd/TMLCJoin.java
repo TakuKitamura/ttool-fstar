@@ -97,7 +97,7 @@ public class TMLCJoin extends TMLCChannelFacility implements WithAttributes {
 
         myImageIcon = IconManager.imgic1204;
     }
-
+    @Override
     public void internalDrawing(Graphics g) {
 
 	radius = width / 2;
@@ -105,17 +105,12 @@ public class TMLCJoin extends TMLCChannelFacility implements WithAttributes {
         if (rescaled) {
             rescaled = false;
         }
-
         calculatePortColor();
-
-
 
         // Draw arrow showing the connection if necessary
         //if (outp != null ){
         //      
         //}
-
-
 
         // Zoom is assumed to be computed
         Color c = g.getColor();
@@ -144,7 +139,8 @@ public class TMLCJoin extends TMLCChannelFacility implements WithAttributes {
           g.drawString(value, x+radius-(w/2), y+radius+(currentFontSize/2));*/
 
     }
-
+    
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
         if (isChannel) {
             String oldValue = value;
@@ -185,9 +181,8 @@ public class TMLCJoin extends TMLCChannelFacility implements WithAttributes {
     }
 
 
-
-
-
+    
+    @Override
     public int getType() {
         return TGComponentManager.TMLCTD_JOIN;
     }

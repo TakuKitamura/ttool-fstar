@@ -171,7 +171,8 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
     	{
 	    	//put title in bold before drawing then set back to normal after
 	    	g.setFont(f.deriveFont(Font.BOLD));
-	    	g.drawString(value, x + centerOfBox, y + currentFontSize + textY);
+//	    	drawSingleString(g,value, x + centerOfBox, y + currentFontSize + textY);
+	    	drawSingleString(g, value, x + centerOfBox, y + currentFontSize + textY);
 	    	g.setFont(f);
     	}
     	
@@ -194,11 +195,11 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         		attributeStr = attribute.toString();
         		if (canTextGoInTheBox(g, spaces, attributeStr, iconSize))
         		{
-	                g.drawString(attributeStr, x + textX, y + spaces);
+	                drawSingleString(g,attributeStr, x + textX, y + spaces);
 	                drawVerification(g, x + textX, y + spaces, attribute.getConfidentialityVerification());
         		}
         		else // if we could not display some attributes it will show a ...
-        			g.drawString("...", x + textX, y + height - 15);
+        			drawSingleString(g,"...", x + textX, y + height - 15);
         	}
         }
     }
@@ -270,9 +271,9 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
             w = g.getFontMetrics().stringWidth(value);
             
             if (w > (width - 2 * (iconSize + textX))) {
-                g.drawString(value, x + textX + 1, y + currentFontSize + textX);
+                drawSingleString(g,value, x + textX + 1, y + currentFontSize + textX);
             } else {
-                g.drawString(value, x + (width - w) / 2, y + currentFontSize + textX);
+                drawSingleString(g,value, x + (width - w) / 2, y + currentFontSize + textX);
             }
         }
 
@@ -311,13 +312,13 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
                 attr = a.toString();
                 w = g.getFontMetrics().stringWidth(attr);
                 if ((w + (2 * textX) + 1) < width) {
-                    g.drawString(attr, x + textX, y + cpt);
+                    drawSingleString(g,attr, x + textX, y + cpt);
                     drawVerification(g, x + textX, y + cpt, a.getConfidentialityVerification());
                 } else {
                     attr = "...";
                     w = g.getFontMetrics().stringWidth(attr);
                     if ((w + textX + 2) < width) {
-                        g.drawString(attr, x + textX + 1, y + cpt);
+                        drawSingleString(g,attr, x + textX + 1, y + cpt);
                     } else {
                         // skip attribute
                         cpt -= step;

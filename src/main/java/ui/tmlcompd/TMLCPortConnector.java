@@ -129,7 +129,7 @@ public  class TMLCPortConnector extends TGConnector implements /* Issue #31 Scal
                     Font fold = g.getFont();
                     Font f = fold.deriveFont(Font.ITALIC, (float)(tdp.getFontSize()));
                     g.setFont(f);
-                    g.drawString(name1, (x1 + x2 - w)/2, (y1 + y2)/2);
+                    drawSingleString(g,name1, (x1 + x2 - w)/2, (y1 + y2)/2);
                     g.setFont(fold);
                 }
             }
@@ -175,11 +175,13 @@ public  class TMLCPortConnector extends TGConnector implements /* Issue #31 Scal
         return TGComponentManager.CONNECTOR_PORT_TMLC;
     }
 
+    @Override
     public void specificActionAfterAdd() {
         //
         ((TMLComponentTaskDiagramPanel)tdp).updatePorts();
     }
 
+    @Override
     public void specificActionAfterMove() {
         //
         ((TMLComponentTaskDiagramPanel)tdp).updatePorts();
