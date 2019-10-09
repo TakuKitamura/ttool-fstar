@@ -203,13 +203,13 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
             w = g.getFontMetrics().stringWidth(ster);
             h = currentFontSize + (int) (textY1 * tdp.getZoom());
             if ((w < (2 * textX + width)) && (h < height)) {
-                g.drawString(ster, x + (width - w) / 2, y + h);
+                drawSingleString(g, ster, x + (width - w) / 2, y + h);
             }
             g.setFont(f0);
             w = g.getFontMetrics().stringWidth(value);
             h = 2 * (currentFontSize + (int) (textY1 * tdp.getZoom()));
             if ((w < (2 * textX + width)) && (h < height)) {
-                g.drawString(value, x + (width - w) / 2, y + h);
+                drawSingleString(g, value, x + (width - w) / 2, y + h);
             }
             limitName = y + h;
         } else {

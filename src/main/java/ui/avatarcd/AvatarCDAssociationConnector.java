@@ -69,7 +69,7 @@ public  class AvatarCDAssociationConnector extends TGConnectorWithCommentConnect
         // Indicate semantics 
         //w  = g.getFontMetrics().stringWidth(value);
         //h = g.getFontMetrics().getHeight();
-        //g.drawString(value, (p1.getX() + p2.getX() - w) / 2, (p1.getY() + p2.getY())/2);
+        //drawSingleString(g, value, (p1.getX() + p2.getX() - w) / 2, (p1.getY() + p2.getY())/2);
     }
     
     /*protected void drawMiddleSegment(Graphics g, int x1, int y1, int x2, int y2) {

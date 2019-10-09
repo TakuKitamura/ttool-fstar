@@ -103,8 +103,8 @@ public class AvatarCDActorBox extends TGCScalableOneLineText {
             width = Math.max(Math.max(w, w1) + space, minWidth);
         }
         h = g.getFontMetrics().getHeight();
-        g.drawString(STEREOTYPE, x + ((width - w1) / 2), y + h + space/2);
-        g.drawString(value, x + ((width - w) / 2) , y + height - h);
+        drawSingleString(g, STEREOTYPE, x + ((width - w1) / 2), y + h + space/2);
+        drawSingleString(g, value, x + ((width - w) / 2) , y + height - h);
         g.drawRect(x, y, width, height);
     }
 

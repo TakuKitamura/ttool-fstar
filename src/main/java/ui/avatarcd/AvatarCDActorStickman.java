@@ -109,7 +109,7 @@ public class AvatarCDActorStickman extends TGCScalableOneLineText {
         //right leg
         g.drawLine(x+width/2, y+height-width/2, x+width, y+height);
         //name of actor
-        g.drawString(value, x + width / 2 - w / 2 , y + height + h);
+        drawSingleString(g, value, x + width / 2 - w / 2 , y + height + h);
         height = height + h;
     }
     
