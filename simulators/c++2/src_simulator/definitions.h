@@ -263,8 +263,7 @@ using std::max;
 #define SCHED_HTML_TITLE_HW "<h1> Summary HW </h1>"
 #define SCHED_HTML_TITLE_TASK "<h1> Summary tasks </h1>"
 #define SCHED_HTML_TITLE_DEVICE "<h1> Device scheduling </h1>"
-#define SCHED_HTML_BOARD "<table width=\"170px\" style=\"float: left\">\n \
-<tr><td>"
+#define SCHED_HTML_BOARD "<table width=\"170px\" style=\"float: left\">\n \<tr><td style=\"max-width: unset;\">"
 #define SCHED_HTML_BOARD2 "<table style=\"float: left\">"
 
 #define SCHED_HTML_JS_LINK1 "<script src=\"https://code.jquery.com/jquery-3.4.1.min.js\">"
