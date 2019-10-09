@@ -146,7 +146,7 @@ public class TMLCPForLoop extends TADForLoop /* Issue #69 TGCWithoutInternalComp
         // Issue #31 Useless line
         //g.drawLine(x + width, y + height / 2, x + width + lineLength, y + height / 2);
 
-        g.drawString(value, x + (width - textWidth) / 2, y + textY);
+        drawSingleString(g,value, x + (width - textWidth) / 2, y + textY);
     }
 
     @Override

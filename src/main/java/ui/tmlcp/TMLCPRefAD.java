@@ -115,12 +115,12 @@ public class TMLCPRefAD extends TADOneLineText /* Issue #69 TGCOneLineText*/ {
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
 
         final int offset = scale( 15 );
-        g.drawString(name, x + (width - w) / 2, y + textY + offset /* 15 Issue #31 */ );
+        drawSingleString(g,name, x + (width - w) / 2, y + textY + offset /* 15 Issue #31 */ );
         
         // Issue #31
         final int adOffsetX = scale( 3 );
         final int adOffsetY = scale( 12 );
-        g.drawString("ad", x + adOffsetX /*3*/, y + adOffsetY );
+        drawSingleString(g,"ad", x + adOffsetX /*3*/, y + adOffsetY );
         g.drawLine(x, y + offset /*15*/, x + offset /* 15 */, y+ offset /*15 Issue #31 */);
        
         final int adBoxOffsetX = scale( 25 );

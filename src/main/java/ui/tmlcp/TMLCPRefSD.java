@@ -125,11 +125,11 @@ public class TMLCPRefSD extends TADOneLineText /* Issue #69 TGCOneLineText*/ {
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
         
         final int offsetDefault = scale( 15 );
-        g.drawString(name, x + (width - w) / 2, y + textY + offsetDefault /*15*/);
+        drawSingleString(g,name, x + (width - w) / 2, y + textY + offsetDefault /*15*/);
 
         final int sdOffsetX = scale( 3 );
         final int sdOffsetY = scale( 12 );
-        g.drawString("sd", x + sdOffsetX /*3*/, y + sdOffsetY /*12*/);
+        drawSingleString(g,"sd", x + sdOffsetX /*3*/, y + sdOffsetY /*12*/);
         g.drawLine(x, y + offsetDefault /*15*/, x + offsetDefault /*15*/, y + offsetDefault /*15*/);
 
         final int sdBoxOffsetX = scale( 25 );
