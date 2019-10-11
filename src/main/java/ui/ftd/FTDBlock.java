@@ -58,24 +58,27 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  */
 public class FTDBlock extends TGCScalableWithInternalComponent implements SwallowTGComponent {
-    private int textY1 = 3;
+//    private int textY1 = 3;
     private String stereotype = "block";
 
     private int maxFontSize = 12;
     private int minFontSize = 4;
     private int currentFontSize = -1;
     private boolean displayText = true;
-    private int textX = 1;
+//    private int textX = 1;
 
 
     public FTDBlock(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-
+        
+        textY = 3;
+        textX = 1;
         width = 250;
         height = 200;
         minWidth = 5;
         minHeight = 2;
-
+        initScaling(250, 200);
+        
         nbConnectingPoint = 16;
         connectingPoint = new TGConnectingPoint[16];
 
@@ -114,8 +117,37 @@ public class FTDBlock extends TGCScalableWithInternalComponent implements Swallo
 
         myImageIcon = IconManager.imgic700;
     }
+    
+    public void internalDrawing(Graphics g)
+    {
+    	//Rectangle
+    	Color c = g.getColor();
+        g.draw3DRect(x, y, width, height, true);
 
-    public void internalDrawing(Graphics g) {
+        g.setColor(ColorManager.FTD_BLOCK);
+        g.fill3DRect(x+1, y+1, width-1, height-1, true);
+        g.setColor(c);
+        
+    	//Strings
+        String ster = "<<" + stereotype + ">>";
+        Font f = g.getFont();
+        Font f0 = g.getFont();
+        g.setFont(f.deriveFont(Font.BOLD));
+
+        int w = g.getFontMetrics().stringWidth(ster);
+        int h =  f.getSize();
+        if ((w < (2*textX + width)) && (h < height)) {
+            g.drawString(ster, x + (width - w)/2, y +h);
+        }
+        g.setFont(f0);
+        w  = g.getFontMetrics().stringWidth(value);
+        h = 2 * f.getSize();
+        if ((w < (2*textX + width)) && (h < height)) {
+            drawSingleString(g, value, x + (width - w)/2, y + h);
+        }
+    }
+    //@Override
+    public void internalDrawin(Graphics g) {
         String ster = "<<" + stereotype + ">>";
         Font f = g.getFont();
         Font fold = f;
@@ -179,15 +211,15 @@ public class FTDBlock extends TGCScalableWithInternalComponent implements Swallo
             g.setFont(f.deriveFont(Font.BOLD));
 
             w = g.getFontMetrics().stringWidth(ster);
-            int h =  currentFontSize + (int)(textY1 * tdp.getZoom());
+            int h =  currentFontSize + (int)(textY * tdp.getZoom());
             if ((w < (2*textX + width)) && (h < height)) {
-                g.drawString(ster, x + (width - w)/2, y +h);
+                drawSingleString(g, ster, x + (width - w)/2, y +h);
             }
             g.setFont(f0);
             w  = g.getFontMetrics().stringWidth(value);
-            h = 2* (currentFontSize + (int)(textY1 * tdp.getZoom()));
+            h = 2* (currentFontSize + (int)(textY * tdp.getZoom()));
             if ((w < (2*textX + width)) && (h < height)) {
-                g.drawString(value, x + (width - w)/2, y + h);
+                drawSingleString(g, value, x + (width - w)/2, y + h);
             }
         }
 
@@ -204,7 +236,8 @@ public class FTDBlock extends TGCScalableWithInternalComponent implements Swallo
         //g.drawImage(IconManager.imgic1100.getImage(), x + 4, y + 4, null);
         //g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
     }
-
+    
+    @Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
 
         if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
@@ -221,7 +254,8 @@ public class FTDBlock extends TGCScalableWithInternalComponent implements Swallo
     public String getNodeName() {
         return name;
     }
-
+    
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
         String oldValue = value;
 
@@ -267,16 +301,19 @@ public class FTDBlock extends TGCScalableWithInternalComponent implements Swallo
         return false;
     }
 
-
+    
+    @Override
     public int getType() {
         return TGComponentManager.FTD_BLOCK;
     }
-
+    
+    @Override
     public boolean acceptSwallowedTGComponent(TGComponent tgc) {
         return tgc instanceof FTDFault;
 
     }
-
+    
+    @Override
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
         if (tgc instanceof FTDFault) {
             tgc.setFather(this);
@@ -304,7 +341,8 @@ public class FTDBlock extends TGCScalableWithInternalComponent implements Swallo
 
         return false;
     }
-
+    
+    @Override
     public void removeSwallowedTGComponent(TGComponent tgc) {
         removeInternalComponent(tgc);
     }
@@ -319,7 +357,8 @@ public class FTDBlock extends TGCScalableWithInternalComponent implements Swallo
         }
         return v;
     }
-
+    
+    @Override
     public void hasBeenResized() {
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof FTDFault) {
@@ -328,7 +367,8 @@ public class FTDBlock extends TGCScalableWithInternalComponent implements Swallo
         }
 
     }
-
+    
+    @Override
     public int getDefaultConnector() {
         return TGComponentManager.FTD_COMPOSITION_CONNECTOR;
     }
