@@ -141,7 +141,7 @@ public class AvatarADSendSignalAction extends AvatarADBasicCanBeDisabledComponen
         g.drawLine(x+width-linebreak, y+height, x+width, y+height/2);
 
         //drawSingleString(g, "sig", x+(width-w) / 2, y);
-        drawSingleString(g, value, x + (width - w) / 2 , y + (int)((textY*tdp.getZoom())));
+        drawSingleString(g, value, x + (width - w) / 2 , y + textY);
     }
 
     @Override

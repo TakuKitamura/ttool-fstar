@@ -58,7 +58,7 @@ public class AvatarADAcceptEventAction extends  AvatarADBasicCanBeDisabledCompon
 //    protected int textX =  6;
 //    protected int textY =  15;
     protected int linebreak = 10;
-    protected int textX1 = 2;
+//    protected int textX1 = 2;
 
 
     protected int stateOfError = 0; // Not yet checked
@@ -139,7 +139,7 @@ public class AvatarADAcceptEventAction extends  AvatarADBasicCanBeDisabledCompon
         g.drawLine(x, y+height, x+linebreak, y+height/2);
 
         //drawSingleString(g, "evt", x+(width-w) / 2, y);
-        drawSingleString(g, value, x + linebreak + textX1, y + (int)((textY*tdp.getZoom())));
+        drawSingleString(g, value, x + scale(linebreak) , y + textY);
 
     }
 

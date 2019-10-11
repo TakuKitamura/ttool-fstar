@@ -69,6 +69,7 @@ public class AvatarADAction extends AvatarADBasicCanBeDisabledComponent/* Issue 
         textX =  5;
         textY =  15;
         initScaling(30, 20);
+        
         minWidth = (int)(30* tdp.getZoom());
         oldScaleFactor = tdp.getZoom();
 
@@ -86,7 +87,7 @@ public class AvatarADAction extends AvatarADBasicCanBeDisabledComponent/* Issue 
 
         myImageIcon = IconManager.imgic204;
     }
-
+    
     @Override
     public void internalDrawing(Graphics g) {
         int w  = g.getFontMetrics().stringWidth(value);
@@ -114,7 +115,7 @@ public class AvatarADAction extends AvatarADBasicCanBeDisabledComponent/* Issue 
         g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
 
-        drawSingleString(g, value, x + (width - w) / 2 , y + (int)((textY*tdp.getZoom())));
+        drawSingleString(g, value, x + (width - w) / 2 , y + textY);
 
     }
 

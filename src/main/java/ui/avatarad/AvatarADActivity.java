@@ -62,7 +62,7 @@ public class AvatarADActivity extends TGCScalableWithInternalComponent implement
     //private int maxFontSize = 12;
   //  private int minFontSize = 4;
     //private int currentFontSize = -1;
-    private boolean displayText = true;
+//    private boolean displayText = true;
 //    private int textX = 7;
 
     public String oldValue;
@@ -213,19 +213,19 @@ public class AvatarADActivity extends TGCScalableWithInternalComponent implement
 
         // Strings
         int w;
-        if (displayText) {
+//        if (displayText) {
             //f = f.deriveFont((float)currentFontSize);
             //Font f0 = g.getFont();
             //g.setFont(f.deriveFont(Font.BOLD));
 
-            w = g.getFontMetrics().stringWidth(value);
-	    h = g.getFontMetrics().getHeight();
-            //h =  currentFontSize + (int)(textY1 * tdp.getZoom());
-            if ((w < (2*textX + width)) && (h < height)) {
-                drawSingleString(g, value, x + (width - w)/2, y+h+1);
-            }
-            //g.setFont(f0);
+        w = g.getFontMetrics().stringWidth(value);
+        h = g.getFontMetrics().getHeight();
+        //h =  currentFontSize + (int)(textY1 * tdp.getZoom());
+        if ((w < (2*textX + width)) && (h < height)) {
+            drawSingleString(g, value, x + (width - w)/2, y+h+1);
         }
+            //g.setFont(f0);
+//        }
 
         g.setFont(fold);
     }

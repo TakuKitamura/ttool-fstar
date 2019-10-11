@@ -103,8 +103,8 @@ public class  AvatarADStopState extends TADStopState  implements EmbeddedComment
     public int getType() {
         return TGComponentManager.AAD_STOP_STATE;
     }
-//
-//    public int getDefaultConnector() {
-//        return TGComponentManager.AAD_ASSOCIATION_CONNECTOR;
-//    }
+
+    public int getDefaultConnector() {
+        return TGComponentManager.AAD_ASSOCIATION_CONNECTOR;
+    }
 }
