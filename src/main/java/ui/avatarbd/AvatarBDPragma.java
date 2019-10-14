@@ -71,8 +71,8 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
     protected List<String> models;
     protected List<String> properties;
     public List<String> syntaxErrors;
-    protected int textX = 25;
-    protected int textY = 5;
+//    protected int textX = 25;
+//    protected int textY = 5;
     protected int marginY = 20;
     protected int marginX = 20;
     protected int limit = 15;
@@ -102,11 +102,15 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
 
     public AvatarBDPragma(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-
+        
+        textX = 25;
+        textY = 5;
         width = 200;
         height = 30;
         minWidth = 80;
         minHeight = 10;
+        initScaling(200, 30);
+        
         models = new LinkedList<String>();
         properties = new LinkedList<String>();
         authStrongMap = new HashMap<String, Integer>();
@@ -166,16 +170,16 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
           graphics = g;
           }*/
 
-        if (((rescaled) && (!tdp.isScaled())) || myFont == null) {
-            currentFontSize = tdp.getFontSize() + 1;
-            //
-            //            myFont = f.deriveFont((float)currentFontSize);
-            //myFontB = myFont.deriveFont(Font.BOLD);
-
-            if (rescaled) {
-                rescaled = false;
-            }
-        }
+//        if (((rescaled) && (!tdp.isScaled())) || myFont == null) {
+//            currentFontSize = tdp.getFontSize() + 1;
+//            //
+//            //            myFont = f.deriveFont((float)currentFontSize);
+//            //myFontB = myFont.deriveFont(Font.BOLD);
+//
+//            if (rescaled) {
+//                rescaled = false;
+//            }
+//        }
 
         if (values == null) {
             makeValue();
@@ -254,6 +258,8 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
         }
         // FIXME: why the empty string ? 
         //I forget...
+        //FIXME: issue #31 without the f.getSize it would glitch
+        currentFontSize = f.getSize();
         drawSingleString(g, " ", x + textX, y + textY + (i + 1) * currentFontSize);
         i++;
         g.drawLine(x, y + textY / 2 + i * currentFontSize, x + width, y + textY / 2 + i * currentFontSize);

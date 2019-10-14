@@ -82,7 +82,7 @@ public class AvatarBDPerformancePragma extends TGCScalableWithoutInternalCompone
 
     protected Color myColor;
 
-    private Font myFont;//, myFontB;
+//    private Font myFont;//, myFontB;
     //    private int maxFontSize = 30;
 //    private int minFontSize = 4;
     private int currentFontSize = -1;

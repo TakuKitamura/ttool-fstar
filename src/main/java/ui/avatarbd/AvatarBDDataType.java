@@ -147,13 +147,13 @@ public class AvatarBDDataType extends TGCScalableWithInternalComponent implement
 
         g.setFont(f.deriveFont(Font.PLAIN));
         strWidth = g.getFontMetrics().stringWidth(value);
-        currentHeight = 2 * (currentFontSize + (int) (textY * tdp.getZoom()));
+        currentHeight = 2 * f.getSize();
         if ((strWidth < (2 * textX + width)) && (currentHeight < height)) {
             drawSingleString(g, value, x + (width - strWidth) / 2, y + currentHeight);
         }
         limitName = y + currentHeight;
     
-        currentHeight = currentHeight + 2;
+        currentHeight = currentHeight + 3;
         if (currentHeight < height) {
             g.drawLine(x, y + currentHeight, x + width, y + currentHeight);
         }

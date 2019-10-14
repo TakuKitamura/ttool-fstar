@@ -97,7 +97,8 @@ public class AvatarBDToolBar extends TToolBar {
         mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
 
     }
-
+    
+    @Override
     protected void setButtons() {
         JButton button;
 
