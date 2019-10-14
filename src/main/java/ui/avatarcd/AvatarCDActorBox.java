@@ -1,3 +1,4 @@
+
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
  * 
  * ludovic.apvrille AT enst.fr
@@ -68,7 +69,7 @@ public class AvatarCDActorBox extends TGCScalableOneLineText {
         //issue #31
         width = 40;
         height = 50;
-        minWidth = (int)(40 * tdp.getZoom());
+        minWidth = 40; //(int)(40 * tdp.getZoom());
         oldScaleFactor = tdp.getZoom();
         initScaling(40,50);
         

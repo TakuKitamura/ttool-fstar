@@ -64,10 +64,10 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
 //    private int textX = 7;
     private String stereotype = "block";
 
-    private int maxFontSize = 12;
-    private int minFontSize = 4;
-    private int currentFontSize = -1;
-    private boolean displayText = true;
+//    private int maxFontSize = 12;
+//    private int minFontSize = 4;
+//    private int currentFontSize = -1;
+//    private boolean displayText = true;
     
 
 //    private int limitName = -1;
@@ -127,7 +127,7 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
         setValue(name);
         oldValue = value;
 
-        currentFontSize = maxFontSize;
+//        currentFontSize = maxFontSize;
         oldScaleFactor = tdp.getZoom();
 
         myImageIcon = IconManager.imgic700;
@@ -174,117 +174,117 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
         }
     }
     
-//    @Override
-    public void internalDrawin(Graphics g) {
-        String ster = "<<" + stereotype + ">>";
-        Font f = g.getFont();
-        Font fold = f;
-
-        //
-
-        if ((rescaled) && (!tdp.isScaled())) {
-
-            if (currentFontSize == -1) {
-                currentFontSize = f.getSize();
-            }
-            rescaled = false;
-            // Must set the font size ..
-            // Find the biggest font not greater than max_font size
-            // By Increment of 1
-            // Or decrement of 1
-            // If font is less than 4, no text is displayed
-
-            int maxCurrentFontSize = Math.max(0, Math.min(height, maxFontSize));
-            int w0, w1, w2;
-            f = f.deriveFont((float) maxCurrentFontSize);
-            g.setFont(f);
-            //
-            while (maxCurrentFontSize > (minFontSize - 1)) {
-                w0 = g.getFontMetrics().stringWidth(value);
-                w1 = g.getFontMetrics().stringWidth(ster);
-                w2 = Math.min(w0, w1);
-                if (w2 < (width - (2 * textX))) {
-                    break;
-                }
-                maxCurrentFontSize--;
-                f = f.deriveFont((float) maxCurrentFontSize);
-                g.setFont(f);
-            }
-            currentFontSize = maxCurrentFontSize;
-
-            if (currentFontSize < minFontSize) {
-                displayText = false;
-            } else {
-                displayText = true;
-                f = f.deriveFont((float) currentFontSize);
-                g.setFont(f);
-            }
-
-        }
-
-        //
-
-        Color c = g.getColor();
-
-        g.draw3DRect(x, y, width, height, true);
-
-        //g.setColor(ColorManager.AVATAR_BLOCK);
-        Color avat = ColorManager.AVATAR_BLOCK;
-        int h;
-        h = 2 * (currentFontSize + (int) (textY * tdp.getZoom())) + 2;
-        g.setColor(new Color(avat.getRed(), avat.getGreen(), Math.min(255, avat.getBlue() + (getMyDepth() * 10))));
-        g.fill3DRect(x + 1, y + 1, width - 1, Math.min(h, height) - 1, true);
-        g.setColor(c);
-
-        // Strings
-        int w;
-        h = 0;
-        if (displayText) {
-            f = f.deriveFont((float) currentFontSize);
-            Font f0 = g.getFont();
-            g.setFont(f.deriveFont(Font.BOLD));
-
-            w = g.getFontMetrics().stringWidth(ster);
-            h = currentFontSize + (int) (textY * tdp.getZoom());
-            if ((w < (2 * textX + width)) && (h < height)) {
-                drawSingleString(g, ster, x + (width - w) / 2, y + h);
-            }
-            g.setFont(f0);
-            w = g.getFontMetrics().stringWidth(value);
-            h = 2 * (currentFontSize + (int) (textY * tdp.getZoom()));
-            if ((w < (2 * textX + width)) && (h < height)) {
-                drawSingleString(g, value, x + (width - w) / 2, y + h);
-            }
-//            limitName = y + h;
-        } else {
-//            limitName = -1;
-        }
-
-        g.setFont(fold);
-
-        h = h + 2;
-        if (h < height) {
-            //g.drawLine(x, y+h, x+width, y+h);
-            g.setColor(new Color(avat.getRed(), avat.getGreen(), Math.min(255, avat.getBlue() + (getMyDepth() * 10))));
-            g.fill3DRect(x + 1, y + h, width - 1, height - 1 - h, true);
-            g.setColor(c);
-        }
-
-        // Icon
-        /*if ((width>30) && (height > (iconSize + 2*textX))) {
-			iconIsDrawn = true;
-			g.drawImage(IconManager.img5100, x + width - iconSize - textX, y + textX, null);
-		} else {
-			iconIsDrawn = false;
-		}*/
-
-        g.setFont(fold);
-
-
-        // Icon
-        //g.drawImage(IconManager.imgic1100.getImage(), x + 4, y + 4, null);
-        //g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
-    }
+////    @Override
+//    public void internalDrawin(Graphics g) {
+//        String ster = "<<" + stereotype + ">>";
+//        Font f = g.getFont();
+//        Font fold = f;
+//
+//        //
+//
+//        if ((rescaled) && (!tdp.isScaled())) {
+//
+//            if (currentFontSize == -1) {
+//                currentFontSize = f.getSize();
+//            }
+//            rescaled = false;
+//            // Must set the font size ..
+//            // Find the biggest font not greater than max_font size
+//            // By Increment of 1
+//            // Or decrement of 1
+//            // If font is less than 4, no text is displayed
+//
+//            int maxCurrentFontSize = Math.max(0, Math.min(height, maxFontSize));
+//            int w0, w1, w2;
+//            f = f.deriveFont((float) maxCurrentFontSize);
+//            g.setFont(f);
+//            //
+//            while (maxCurrentFontSize > (minFontSize - 1)) {
+//                w0 = g.getFontMetrics().stringWidth(value);
+//                w1 = g.getFontMetrics().stringWidth(ster);
+//                w2 = Math.min(w0, w1);
+//                if (w2 < (width - (2 * textX))) {
+//                    break;
+//                }
+//                maxCurrentFontSize--;
+//                f = f.deriveFont((float) maxCurrentFontSize);
+//                g.setFont(f);
+//            }
+//            currentFontSize = maxCurrentFontSize;
+//
+//            if (currentFontSize < minFontSize) {
+//                displayText = false;
+//            } else {
+//                displayText = true;
+//                f = f.deriveFont((float) currentFontSize);
+//                g.setFont(f);
+//            }
+//
+//        }
+//
+//        //
+//
+//        Color c = g.getColor();
+//
+//        g.draw3DRect(x, y, width, height, true);
+//
+//        //g.setColor(ColorManager.AVATAR_BLOCK);
+//        Color avat = ColorManager.AVATAR_BLOCK;
+//        int h;
+//        h = 2 * (currentFontSize + (int) (textY * tdp.getZoom())) + 2;
+//        g.setColor(new Color(avat.getRed(), avat.getGreen(), Math.min(255, avat.getBlue() + (getMyDepth() * 10))));
+//        g.fill3DRect(x + 1, y + 1, width - 1, Math.min(h, height) - 1, true);
+//        g.setColor(c);
+//
+//        // Strings
+//        int w;
+//        h = 0;
+//        if (displayText) {
+//            f = f.deriveFont((float) currentFontSize);
+//            Font f0 = g.getFont();
+//            g.setFont(f.deriveFont(Font.BOLD));
+//
+//            w = g.getFontMetrics().stringWidth(ster);
+//            h = currentFontSize + (int) (textY * tdp.getZoom());
+//            if ((w < (2 * textX + width)) && (h < height)) {
+//                drawSingleString(g, ster, x + (width - w) / 2, y + h);
+//            }
+//            g.setFont(f0);
+//            w = g.getFontMetrics().stringWidth(value);
+//            h = 2 * (currentFontSize + (int) (textY * tdp.getZoom()));
+//            if ((w < (2 * textX + width)) && (h < height)) {
+//                drawSingleString(g, value, x + (width - w) / 2, y + h);
+//            }
+////            limitName = y + h;
+//        } else {
+////            limitName = -1;
+//        }
+//
+//        g.setFont(fold);
+//
+//        h = h + 2;
+//        if (h < height) {
+//            //g.drawLine(x, y+h, x+width, y+h);
+//            g.setColor(new Color(avat.getRed(), avat.getGreen(), Math.min(255, avat.getBlue() + (getMyDepth() * 10))));
+//            g.fill3DRect(x + 1, y + h, width - 1, height - 1 - h, true);
+//            g.setColor(c);
+//        }
+//
+//        // Icon
+//        /*if ((width>30) && (height > (iconSize + 2*textX))) {
+//			iconIsDrawn = true;
+//			g.drawImage(IconManager.img5100, x + width - iconSize - textX, y + textX, null);
+//		} else {
+//			iconIsDrawn = false;
+//		}*/
+//
+//        g.setFont(fold);
+//
+//
+//        // Icon
+//        //g.drawImage(IconManager.imgic1100.getImage(), x + 4, y + 4, null);
+//        //g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
+//    }
 
     
     @Override
