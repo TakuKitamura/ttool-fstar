@@ -74,8 +74,8 @@ public class AvatarPDSignal extends TGCScalableWithInternalComponent implements 
     public AvatarPDSignal(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-        width = (int)(125* tdp.getZoom());
-        height = (int)(40 * tdp.getZoom());
+        width = 125;//(int)(125* tdp.getZoom());
+        height = 40;//(int)(40 * tdp.getZoom());
         minWidth = 100;
         
         nbConnectingPoint = 12;

@@ -63,10 +63,10 @@ public class AvatarPDTemporalConstraint extends TGCScalableWithInternalComponent
 	
     protected String oldValue = "";
 	
-	private int maxFontSize = 12;
-	private int minFontSize = 4;
-	private int currentFontSize = -1;
-	private boolean displayText = true;
+//	private int maxFontSize = 12;
+//	private int minFontSize = 4;
+//	private int currentFontSize = -1;
+//	private boolean displayText = true;
 //	private int textX = 1;
     
     public AvatarPDTemporalConstraint(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
@@ -107,8 +107,8 @@ public class AvatarPDTemporalConstraint extends TGCScalableWithInternalComponent
         
         value = "=0";
 		
-		currentFontSize = maxFontSize;
-		oldScaleFactor = tdp.getZoom();
+//		currentFontSize = maxFontSize;
+//		oldScaleFactor = tdp.getZoom();
         
         myImageIcon = IconManager.imgic1078;
     }

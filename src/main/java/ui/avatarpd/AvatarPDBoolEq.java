@@ -73,8 +73,8 @@ public class AvatarPDBoolEq extends AvatarPDToggle implements ConstraintListInte
     public AvatarPDBoolEq(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-        width = (int)(125* tdp.getZoom());
-        height = (int)(50 * tdp.getZoom());
+        width = 125;//(int)(125* tdp.getZoom());
+        height = 50;//(int)(50 * tdp.getZoom());
         minWidth = 100;
         //Issue #31
         textY = 3;
