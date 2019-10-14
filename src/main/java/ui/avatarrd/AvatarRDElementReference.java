@@ -66,7 +66,7 @@ public class AvatarRDElementReference extends TGCScalableWithInternalComponent i
     protected Graphics graphics;
     //protected int iconSize = 30;
 
-    private Font myFont, myFontB;
+//    private Font myFont, myFontB;
 //    private int maxFontSize = 30;
    // private int minFontSize = 4;
     private int currentFontSize = -1;
@@ -89,7 +89,7 @@ public class AvatarRDElementReference extends TGCScalableWithInternalComponent i
         textY = 22;
         initScaling(150, lineHeight);
         
-        oldScaleFactor = tdp.getZoom();
+//        oldScaleFactor = tdp.getZoom();
         dlineHeight = lineHeight * oldScaleFactor;
         lineHeight = (int)dlineHeight;
         dlineHeight = dlineHeight - lineHeight;
@@ -316,7 +316,7 @@ public class AvatarRDElementReference extends TGCScalableWithInternalComponent i
         Font f2 = f.deriveFont((float)(currentFontSize - 2));
 
         // Must find for both modes which width is desirable
-        String s0, s1;
+        String s0; //, s1;
 
         s0 = ELEMENT_REFERENCE;
 

@@ -59,8 +59,8 @@ import java.awt.*;
  */
 public class AvatarRDProperty extends TGCScalableWithInternalComponent implements TGAutoAdjust {
     public String oldValue;
-    protected int textX = 5;
-    protected int textY = 22;
+//    protected int textX = 5;
+//    protected int textY = 22;
     protected int lineHeight = 30;
     private double dlineHeight = 0.0;
     //protected int startFontSize = 10;
