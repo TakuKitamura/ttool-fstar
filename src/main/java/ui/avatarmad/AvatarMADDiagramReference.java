@@ -66,9 +66,9 @@ public class AvatarMADDiagramReference extends TGCScalableWithInternalComponent 
     protected Graphics graphics;
     //protected int iconSize = 30;
 
-    private Font myFont, myFontB;
+//    private Font myFont, myFontB;
 //    private int maxFontSize = 30;
-    private int minFontSize = 4;
+//    private int minFontSize = 4;
     private int currentFontSize = -1;
     private boolean displayText = true;
 
@@ -182,67 +182,67 @@ public class AvatarMADDiagramReference extends TGCScalableWithInternalComponent 
 
     }
     
-    public void internalDrawin(Graphics g) {
-        Font f = g.getFont();
-//        Font fold = f;
-//        int w, c;
-        int size;
-
-        if (!tdp.isScaled()) {
-            graphics = g;
-        }
-
-        if (((rescaled) && (!tdp.isScaled())) || myFont == null) {
-            currentFontSize = tdp.getFontSize();
-            //
-            myFont = f.deriveFont((float)currentFontSize);
-            myFontB = myFont.deriveFont(Font.BOLD);
-
-            if (rescaled) {
-                rescaled = false;
-            }
-        }
-
-        displayText = currentFontSize >= minFontSize;
-
-        //int h  = g.getFontMetrics().getHeight();
-
-        g.drawRect(x, y, width, height);
-
-        g.drawLine(x, y+lineHeight, x+width, y+lineHeight);
-        g.setColor(ColorManager.AVATAR_ASSUMPTION_TOP);
-        g.fillRect(x+1, y+1, width-1, lineHeight-1);
-        g.setColor(ColorManager.AVATAR_ASSUMPTION_ATTRIBUTES);
-        g.fillRect(x+1, y+1+lineHeight, width-1, height-1-lineHeight);
-        ColorManager.setColor(g, getState(), 0);
-        if ((lineHeight > 23) && (width > 23)){
-            g.drawImage(scale(IconManager.img5100), x + width - scale(iconSize + 1), y + scale(3), Color.yellow, null);
-        }
-
-        if (displayText) {
-            size = currentFontSize - 2;
-            g.setFont(myFont.deriveFont((float)(myFont.getSize() - 2)));
-            drawLimitedString(g, DIAGRAM_REFERENCE, x, y + size, width, 1);
-            size += currentFontSize;
-            g.setFont(myFontB);
-            //int w = g.getFontMetrics().stringWidth(value);
-            drawLimitedString(g, value, x, y + size, width, 1);
-
-        }
-
-        /*g.setFont(myFont);
-
-          size = lineHeight + currentFontSize;
-          if (size < (height - 2)) {
-          drawLimitedString(g, "Diagram=\"" + diagramText + "\"", x + textX, y + size, width, 0);
-          size += currentFontSize;
-          // Violated action
-          if (size < (height - 2)) {
-          drawLimitedString(g, "Violated_Action=\"" + violatedAction + "\"", x + textX, y + size, width, 0);
-          }
-          }*/
-        g.setFont(f);
-    }
+//    public void internalDrawin(Graphics g) {
+//        Font f = g.getFont();
+////        Font fold = f;
+////        int w, c;
+//        int size;
+//
+//        if (!tdp.isScaled()) {
+//            graphics = g;
+//        }
+//
+//        if (((rescaled) && (!tdp.isScaled())) || myFont == null) {
+//            currentFontSize = tdp.getFontSize();
+//            //
+//            myFont = f.deriveFont((float)currentFontSize);
+//            myFontB = myFont.deriveFont(Font.BOLD);
+//
+//            if (rescaled) {
+//                rescaled = false;
+//            }
+//        }
+//
+//        displayText = currentFontSize >= minFontSize;
+//
+//        //int h  = g.getFontMetrics().getHeight();
+//
+//        g.drawRect(x, y, width, height);
+//
+//        g.drawLine(x, y+lineHeight, x+width, y+lineHeight);
+//        g.setColor(ColorManager.AVATAR_ASSUMPTION_TOP);
+//        g.fillRect(x+1, y+1, width-1, lineHeight-1);
+//        g.setColor(ColorManager.AVATAR_ASSUMPTION_ATTRIBUTES);
+//        g.fillRect(x+1, y+1+lineHeight, width-1, height-1-lineHeight);
+//        ColorManager.setColor(g, getState(), 0);
+//        if ((lineHeight > 23) && (width > 23)){
+//            g.drawImage(scale(IconManager.img5100), x + width - scale(iconSize + 1), y + scale(3), Color.yellow, null);
+//        }
+//
+//        if (displayText) {
+//            size = currentFontSize - 2;
+//            g.setFont(myFont.deriveFont((float)(myFont.getSize() - 2)));
+//            drawLimitedString(g, DIAGRAM_REFERENCE, x, y + size, width, 1);
+//            size += currentFontSize;
+//            g.setFont(myFontB);
+//            //int w = g.getFontMetrics().stringWidth(value);
+//            drawLimitedString(g, value, x, y + size, width, 1);
+//
+//        }
+//
+//        /*g.setFont(myFont);
+//
+//          size = lineHeight + currentFontSize;
+//          if (size < (height - 2)) {
+//          drawLimitedString(g, "Diagram=\"" + diagramText + "\"", x + textX, y + size, width, 0);
+//          size += currentFontSize;
+//          // Violated action
+//          if (size < (height - 2)) {
+//          drawLimitedString(g, "Violated_Action=\"" + violatedAction + "\"", x + textX, y + size, width, 0);
+//          }
+//          }*/
+//        g.setFont(f);
+//    }
 
     @Override
     public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
