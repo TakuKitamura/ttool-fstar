@@ -97,7 +97,13 @@ TMLTime RRScheduler::schedule(TMLTime iEndSchedule){
 			}
 		}
 	}
-
+	if (aSourcePast==0){
+		_nextTransaction=(aSourceFuture==0)? 0 : aSourceFuture->getNextTransaction(iEndSchedule);
+		_lastSource=aSourceFuture;
+	}else{
+		_nextTransaction=aSourcePast->getNextTransaction(iEndSchedule);
+		_lastSource=aSourcePast;
+	}
 	if (aSameTaskFound){
 		//std::cout << _name << ": Same source found " << _lastSource->toString() << "\n";
 		//if (_nextTransaction!=anOldTransaction){
@@ -106,28 +112,6 @@ TMLTime RRScheduler::schedule(TMLTime iEndSchedule){
 			//_elapsedTime +=  anOldTransaction->getBranchingPenalty() + anOldTransaction->getOperationLength();
 			_elapsedTime +=  anOldTransaction->getOperationLength();
 		}
-		for(WorkloadList::iterator i=_workloadList.begin(); i != _workloadList.end(); ++i){
-             (*i)->schedule(iEndSchedule);
-            //std::cout << _name << " schedules, before getCurrTransaction " << std::endl;
-            aTempTrans=(*i)->getNextTransaction(iEndSchedule);
-            //std::cout << "after getCurrTransaction " << std::endl;
-            if (aTempTrans!=0 && aTempTrans->getVirtualLength()!=0){
-                aRunnableTime=aTempTrans->getRunnableTime();
-                if (aRunnableTime<=iEndSchedule){
-                    //Past
-                    if (aRunnableTime<aLowestRunnableTimePast){
-                        aLowestRunnableTimePast=aRunnableTime;
-                        aSourcePast=*i;
-                    }
-                }else{
-                    //Future
-                    if(aRunnableTime<aLowestRunnableTimeFuture){
-                        aLowestRunnableTimeFuture=aRunnableTime;
-                        aSourceFuture=*i;
-                    }
-                }
-            }
-        }
 		//std::cout << "Not crashed\n" ;
 	}else{
 		//if (_lastSource==0)
@@ -136,13 +120,6 @@ TMLTime RRScheduler::schedule(TMLTime iEndSchedule){
 			//std::cout << _name << ": New  source found " << _lastSource->toString() << "\n";
 		 _elapsedTime=0;
 	}
-	if (aSourcePast==0){
-    	_nextTransaction=(aSourceFuture==0)? 0 : aSourceFuture->getNextTransaction(iEndSchedule);
-    	_lastSource=aSourceFuture;
-    }else{
-    	_nextTransaction=aSourcePast->getNextTransaction(iEndSchedule);
-    	_lastSource=aSourcePast;
-    }
 	//if (_nextTransaction!=0){
 	//	_nextTransaction->setLength(min(_nextTransaction->getOperationLength(), _timeSlice-_elapsedTime));
 	//}
