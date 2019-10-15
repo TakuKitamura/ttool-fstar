@@ -30,14 +30,14 @@ public class DiplodocusSimulatorTest extends AbstractUITest {
     //final String [] MODELS = {"scp"};
     final String [] MODELS = {"scp", "ssdf"};
     final String DIR_GEN = "test_diplo_simulator/";
-    final int [] NB_Of_STATES = {173, 1824};
-    final int [] NB_Of_TRANSTIONS = {172, 1823};
-    final int [] MIN_CYCLES = {210, 4106};
-    final int [] MAX_CYCLES = {315, 4106};
+    final int [] NB_Of_STATES = {422, 1824};
+    final int [] NB_Of_TRANSTIONS = {421, 1823};
+    final int [] MIN_CYCLES = {209, 4106};
+    final int [] MAX_CYCLES = {864, 4106};
     //model for daemon task
     final String [] MODELS_DAEMON = {"daemontest1", "daemontest2"};
-    final int [] NB_Of_DAEMON_STATES = {12, 124};
-    final int [] NB_Of_DAEMON_TRANSTIONS = {11, 123};
+    final int [] NB_Of_DAEMON_STATES = {12, 114};
+    final int [] NB_Of_DAEMON_TRANSTIONS = {11, 113};
     final int [] MIN_DAEMON_CYCLES = {181, 2743};
     final int [] MAX_DAEMON_CYCLES = {181, 2743};
 
