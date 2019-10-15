@@ -41,6 +41,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <TMLCommand.h>
 #include <TMLTask.h>
+#include <CPU.h>
 
 RRScheduler::RRScheduler(const std::string& iName, Priority iPrio, TMLTime iTimeSlice ,TMLTime iMinSliceSize): WorkloadSource(iPrio), _name(iName), _nextTransaction(0), _timeSlice(iTimeSlice), _minSliceSize(iMinSliceSize), _elapsedTime(0), _lastSource(0){
 }
@@ -50,6 +51,7 @@ RRScheduler::RRScheduler(const std::string& iName, Priority iPrio, TMLTime iTime
 
 TMLTime RRScheduler::schedule(TMLTime iEndSchedule){
 	TaskList::iterator i;
+	CPU* aCPU;
 	//std::cout << _name << ": Schedule called \n";
 	TMLTransaction *anOldTransaction=_nextTransaction, *aTempTrans;
 	TMLTime aLowestRunnableTimeFuture=-1,aRunnableTime, aLowestRunnableTimePast=-1;
@@ -60,11 +62,15 @@ TMLTime RRScheduler::schedule(TMLTime iEndSchedule){
 		//aScheduledSource=_lastSource;
 		_lastSource->schedule(iEndSchedule);
 		if (_lastSource->getNextTransaction(iEndSchedule)!=0 && _lastSource->getNextTransaction(iEndSchedule)->getVirtualLength()!=0){
-			//if (anOldTransaction==0 || _lastSource->getNextTransaction(iEndSchedule)==anOldTransaction || _timeSlice >=_elapsedTime +  anOldTransaction->getBranchingPenalty() + anOldTransaction->getOperationLength() + _minSliceSize){
+			aCPU = _lastSource->getNextTransaction(iEndSchedule)->getCommand()->getTask()->getCPU();
 			if (anOldTransaction==0 || _lastSource->getNextTransaction(iEndSchedule)==anOldTransaction || _timeSlice >=_elapsedTime +  anOldTransaction->getOperationLength() + _minSliceSize){
 				//std::cout << "Select same task, remaining: " << _timeSlice - anOldTransaction->getOperationLength() << "\n";
 				aSourcePast=_lastSource;
-				aSameTaskFound=true;
+				if (aCPU->getAmoutOfCore()>1){
+				    aSameTaskFound=false;
+				}else{
+				    aSameTaskFound=true;
+				}
 			}
 		}
 	}
