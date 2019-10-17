@@ -66,7 +66,7 @@ public class SysCAMSPanelTranslator {
 
 		syscamsComponents = new LinkedList<SysCAMSTComponent>();
 		syscamsConnectors = new LinkedList<SysCAMSTConnector>();
-
+System.out.println("@@@ Panel Translator ");
 		MakeListOfComponent(_syscamsDiagramPanel);
 	}
 
@@ -158,25 +158,31 @@ public class SysCAMSPanelTranslator {
 				}
 			
 				syscamsMap.put(blockDE, syscamsBlockDE);
+			
 				//	System.out.println("@@@ DE block put in map @@@");
 				syscamsComponents.add(syscamsBlockDE);
-
+	System.out.println("@@@ Panel Translator BlockDE name @@@ "+blockDEName);
+				
 			} else if (dp instanceof SysCAMSClock) {
-				SysCAMSClock clock = (SysCAMSClock) dp;
 
-				String clockName = clock.getName();
+			    SysCAMSClock clock = (SysCAMSClock) dp;
+			
+				//String clockName = clock.getName();
+				String clockName = clock.getValue();
 				double frequency = clock.getFrequency();			
 				String unit = clock.getUnit();
 				double dutyCycle = clock.getDutyCycle();
 				double startTime = clock.getStartTime();
 				String unitStartTime = clock.getUnitStartTime();
 				boolean posFirst = clock.getPosFirst();
+
+				System.out.println("@@@ Panel Translator clock name @@@ "+clockName);
 				
 				SysCAMSTClock syscamsClock = new SysCAMSTClock(clockName, frequency, unit, dutyCycle, startTime, unitStartTime, posFirst);
 			
 		       
 				syscamsMap.put(clock, syscamsClock);
-				//System.out.println("@@@ Clock put in map @@@");
+				System.out.println("@@@ Clock put in map @@@");
 				syscamsComponents.add(syscamsClock);
 								
 			} else if (dp instanceof SysCAMSCompositeComponent) {
@@ -306,7 +312,8 @@ public class SysCAMSPanelTranslator {
 				for (int i = 0; i < clocks.size(); i++) {
 					SysCAMSClock clock = clocks.get(i);
 
-					String clockName = clock.getName();
+					//	String clockName = clock.getName();
+					String clockName = clock.getValue();
 					double frequency = clock.getFrequency();			
 					String unit = clock.getUnit();
 					double dutyCycle = clock.getDutyCycle();
