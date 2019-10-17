@@ -119,6 +119,7 @@ public:
 	virtual void addBusMaster(BusMaster* iMaster){
 		_busMasterList.push_back(iMaster);
 	}
+    virtual void reset();
 	///Stores a new task in the internal task list
 	/**
       	\param iTask Pointer to the task to add
