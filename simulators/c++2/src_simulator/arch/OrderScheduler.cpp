@@ -49,39 +49,41 @@ OrderScheduler::OrderScheduler(const std::string& iName, Priority iPrio, Workloa
 TMLTime OrderScheduler::schedule(TMLTime iEndSchedule){
   std::cout<<"order scheduler "<<std::endl;
 	TaskList::iterator i;
-	TMLTransaction *aMarkerPast=0, *aMarkerFuture=0,*aTempTrans;
-	TMLTime aTransTimeFuture=-1,aRunnableTime;
-	WorkloadSource *aSourcePast=0, *aSourceFuture=0;  //NEW
-	for(WorkloadList::iterator i=_workloadList.begin(); i != _workloadList.end(); ++i){
-		aTempTrans=(*i)->getNextTransaction(iEndSchedule);
-		//	if(aTempTrans) std::cout<<"show temp trans"<<aTempTrans->toShortString()<<std::endl;
-		if (aTempTrans!=0 && aTempTrans->getVirtualLength()!=0 && aTempTrans->getCommand()->getTask()->getFPGA()){
-			aRunnableTime=aTempTrans->getRunnableTime();	
-			if (aRunnableTime<=iEndSchedule){
-			  //Past
 
-			  aMarkerPast=aTempTrans;
-			  aSourcePast=*i; //NEW
-		        
-			}else{
-			  //Future
-		        
-			  aTransTimeFuture=aRunnableTime;
-			  aMarkerFuture=aTempTrans;
-			  aSourceFuture=*i; //NEW
-		        
-				
-			}
-		}
-		     
-	}
-	if (aMarkerPast==0){
-		_nextTransaction=aMarkerFuture;
-		_lastSource=aSourceFuture; //NEW
-	}else{
-		_nextTransaction=aMarkerPast;
-		_lastSource=aSourcePast; //NEW
-	}
+    //std::cout << _name << ": Schedule called \n";
+    TMLTransaction *anOldTransaction = _nextTransaction, *aTempTrans;
+    TMLTime aLowestRunnableTimeFuture=-1, aRunnableTime, aLowestRunnableTimePast=-1;
+    WorkloadSource *aSourcePast=0, *aSourceFuture=0;
+        //std::cout << _name << ": Second if\n";
+        for(WorkloadList::iterator i=_workloadList.begin(); i != _workloadList.end(); ++i){
+             (*i)->schedule(iEndSchedule);
+            //std::cout << _name << " schedules, before getCurrTransaction " << std::endl;
+            aTempTrans=(*i)->getNextTransaction(iEndSchedule);
+            //std::cout << "after getCurrTransaction " << std::endl;
+            if (aTempTrans!=0 && aTempTrans->getVirtualLength()!=0){
+                aRunnableTime=aTempTrans->getRunnableTime();
+                if (aRunnableTime<=iEndSchedule){
+                    //Past
+                    if (aRunnableTime<aLowestRunnableTimePast){
+                        aLowestRunnableTimePast=aRunnableTime;
+                        aSourcePast=*i;
+                    }
+                }else{
+                    //Future
+                    if(aRunnableTime<aLowestRunnableTimeFuture){
+                        aLowestRunnableTimeFuture=aRunnableTime;
+                        aSourceFuture=*i;
+                    }
+                }
+            }
+        }
+    	if (aSourcePast==0){
+    		_nextTransaction=(aSourceFuture==0)? 0 : aSourceFuture->getNextTransaction(iEndSchedule);
+    		_lastSource=aSourceFuture;
+    	}else{
+    		_nextTransaction=aSourcePast->getNextTransaction(iEndSchedule);
+    		_lastSource=aSourcePast;
+    	}
 #ifdef DEBUG_FPGA
 	if(_nextTransaction) std::cout<<"order next trans is "<<_nextTransaction->toShortString()<<std::endl;
 	else std::cout<<"order next trans is 0"<<std::endl;
