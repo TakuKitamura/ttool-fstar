@@ -166,7 +166,7 @@ public class ClusterCode {
 		corpsCluster = corpsCluster + CR + "\t// Instantiate clocks." + CR;
 			
 		for (SysCAMSTClock t : clock) {
-		    System.out.println("@@@@@@@@@@@@@@@@@@@@@ "+t.getName());
+		   
 		    corpsCluster = corpsCluster + "\t  sc_clock " + t.getName() + " (\"" + t.getName() + "\"," + t.getFrequency()+","+ t.getUnit()+","+ t.getDutyCycle()+","+ t.getStartTime()+","+ t.getUnitStartTime()+","+ t.getPosFirst()+");" + CR;
 		}
 					      		

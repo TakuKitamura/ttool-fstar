@@ -299,6 +299,25 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener, Li
 		attributesBoxPanel.add(clockTextField);
 
 
+JPanel sensitivePanel = new JPanel(new FlowLayout());
+
+		sensitiveRadioButton = new JRadioButton();
+		sensitiveRadioButton.setActionCommand("Sensitive");
+		sensitiveRadioButton.setSelected(block.getSensitive());
+		sensitiveRadioButton.addActionListener(this);
+		sensitivePanel.add(sensitiveRadioButton);
+
+		JLabel sensitiveLabel = new JLabel("Sensitive");
+		sensitivePanel.add(sensitiveLabel);
+
+		constraints = new GridBagConstraints(0, 4, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(15, 10, 5, 10), 0, 0);
+		gridBag.setConstraints(sensitivePanel, constraints);
+		attributesBoxPanel.add(sensitivePanel);
+
+		
+		//JLabel labelClock = new JLabel("Clock sensitivity : ");
+	
 	listSensitiveString = new String[3];
 		listSensitiveString[0] = "";
         listSensitiveString[1] = "positive";

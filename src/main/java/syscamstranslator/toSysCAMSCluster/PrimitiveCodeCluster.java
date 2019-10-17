@@ -445,6 +445,11 @@ public class PrimitiveCodeCluster {
 				corpsPrimitiveDE = corpsPrimitiveDE + "\t};" + CR2;
 			}
 
+			//DG 17.10.
+			if(de.getClockName()!="")
+			corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_in <bool>"  + de.getClockName() + ";" + CR;
+
+			
 			if (!deports.isEmpty()) {
 				for (SysCAMSTPortDE t : deports) {
 					if (t.getOrigin() == 0) {
@@ -507,6 +512,21 @@ public class PrimitiveCodeCluster {
 				corpsPrimitiveDE = corpsPrimitiveDE + "\t{" + CR + "\t\tSC_METHOD(" + de.getNameFn() + ");" + CR;
 				method = true;
 			} 
+
+
+
+//DG 17.10.
+			if(de.getClockName()!=""){
+			    corpsPrimitiveDE = corpsPrimitiveDE + "\t\tsensitive << " + de.getClockName()  + ".";
+					if (de.getClockSensitiveMethod().equals("positive")) {
+						corpsPrimitiveDE = corpsPrimitiveDE + "pos();" + CR;
+					} else if (de.getClockSensitiveMethod().equals("negative")) {
+						corpsPrimitiveDE = corpsPrimitiveDE + "neg();" + CR;						
+					}
+			}
+			//fin ajoute DG
+
+
 			
 			for (SysCAMSTPortDE t : deports) {
 				if (t.getSensitive() == true) {
