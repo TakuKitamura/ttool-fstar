@@ -468,6 +468,10 @@ public class PrimitiveCode {
 				corpsPrimitiveDE = corpsPrimitiveDE + "\t};" + CR2;
 			}
 
+			//DG 17.10.
+			if(de.getClockName()!="")
+			corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_in <bool>"  + de.getClockName() + ";" + CR;
+			
 			//DG modified, was sca:core
 			//System.out.println("@@@@@@@@@DE ports empty?");
 			if (!deports.isEmpty()) {
@@ -557,7 +561,7 @@ if (t.getOrigin() == 0) {
 				method = true;
 			} 
 			
-			for (SysCAMSTPortDE t : deports) {
+			/*	for (SysCAMSTPortDE t : deports) {
 				if (t.getSensitive() == true) {
 					if (method == false) {
 						corpsPrimitiveDE = corpsPrimitiveDE + "\t{" + CR;
@@ -570,7 +574,35 @@ if (t.getOrigin() == 0) {
 					}
 					sensitive = true;
 				}
+				}*/
+
+
+//DG 17.10.
+			if(de.getClockName()!=""){
+			    corpsPrimitiveDE = corpsPrimitiveDE + "\t\tsensitive << " + de.getClockName()  + ".";
+					if (de.getClockSensitiveMethod().equals("positive")) {
+						corpsPrimitiveDE = corpsPrimitiveDE + "pos();" + CR;
+					} else if (de.getClockSensitiveMethod().equals("negative")) {
+						corpsPrimitiveDE = corpsPrimitiveDE + "neg();" + CR;						
+					}
 			}
+			//fin ajoute DG
+			
+			for (SysCAMSTPortDE t : deports) {
+				if (t.getSensitive() == true) {
+					if (method == false) {
+						corpsPrimitiveDE = corpsPrimitiveDE + "\t{" + CR;
+					} 
+					corpsPrimitiveDE = corpsPrimitiveDE + "\t\tsensitive << " + t.getName() + ";";
+					if (t.getSensitiveMethod().equals("positive")) {
+						corpsPrimitiveDE = corpsPrimitiveDE + "pos();" + CR;
+					} else if (t.getSensitiveMethod().equals("negative")) {
+						corpsPrimitiveDE = corpsPrimitiveDE + "neg();" + CR;						
+						}
+					sensitive = true;
+				}
+				}
+			
 			if (sensitive == true || method == true) {
 				corpsPrimitiveDE = corpsPrimitiveDE + "\t}" + CR2;
 			} else {
@@ -583,6 +615,7 @@ if (t.getOrigin() == 0) {
 			
 			//	    corpsPrimitiveDE = corpsPrimitiveDE +"sc_in<bool> "+de.getClockName()+";"+CR;
 			//	}
+			
 			if (de.getListStruct().getSize() != 0) {
 				String identifier, type, constant;
 				for (int i = 0; i < de.getListStruct().size(); i++) {

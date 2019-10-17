@@ -65,6 +65,8 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 	private String code;
         private String clock;
         private String clockName;
+        private String clockSensitivityMethod;
+    	private boolean sensitive;
 	private DefaultListModel<String> listStruct;
 	private String nameTemplate;
 	private String typeTemplate;
@@ -305,6 +307,7 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 //		sb.append(getPeriod());
 //		sb.append("\" time=\"" + getTime());
 		sb.append("\" clockName=\"" + getClockName());
+		sb.append("\" clockSensitivityMethod\"" + getClockSensitivityMethod());
 		sb.append("\" code=\"" + encode(getCode()));
 		sb.append("\" listStruct=\"" + splitParameters(getListStruct()));
 		sb.append("\" nameTemplate=\"" + getNameTemplate());
@@ -449,6 +452,7 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 //								period = Integer.decode(elt.getAttribute("period")).intValue();
 //								time = elt.getAttribute("time");
 							    	clockName = elt.getAttribute("clockName");
+								clockSensitivityMethod = elt.getAttribute("clockSensitivityMethod");					
 								code = elt.getAttribute("code");
 								nameFn = elt.getAttribute("name_function");
 								listStruct = elt.getAttribute("listStruct");
@@ -535,6 +539,23 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 	public String getClockName() {
 		return clock;
 	}
+
+	public boolean getSensitive() {
+		return sensitive;
+	}
+    
+	public void setSensitive(boolean _sensitive) {
+		sensitive = _sensitive;
+	}
+    
+        public String getClockSensitivityMethod() {
+		return clockSensitivityMethod;
+	}
+
+    
+	public void setClockSensitivityMethod(String _clockSensitivityMethod) {
+		clockSensitivityMethod = _clockSensitivityMethod;
+	}	
     
 	public void setNameFn(String nameFn) {
 		this.nameFn = nameFn;

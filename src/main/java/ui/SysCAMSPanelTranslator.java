@@ -123,6 +123,7 @@ System.out.println("@@@ Panel Translator ");
 
 				String blockDEName = blockDE.getValue();
 				String clockName = blockDE.getClockName();
+				String clockSensitivityMethod = blockDE.getClockSensitivityMethod();
 //				int periodBlock = blockDE.getPeriod();
 //				String time = blockDE.getTime();
 //				String nameFn = blockDE.getNameFn();
@@ -132,7 +133,7 @@ System.out.println("@@@ Panel Translator ");
 //				String typeTemplate = blockDE.getTypeTemplate();
 //				DefaultListModel<String> listTypedef = blockDE.getListTypedef();
 
-				SysCAMSTBlockDE syscamsBlockDE = new SysCAMSTBlockDE(blockDEName, clockName, "", "", null, "", "", "", null, null);
+				SysCAMSTBlockDE syscamsBlockDE = new SysCAMSTBlockDE(blockDEName, clockName, clockSensitivityMethod, "", "", null, "", "", "", null, null);
 
 				List<SysCAMSPortDE> portsDE = blockDE.getAllInternalPortsDE();
 				for (int i = 0; i < portsDE.size(); i++) {
@@ -272,6 +273,7 @@ System.out.println("@@@ Panel Translator ");
 					SysCAMSBlockDE blockDE = blocksDE.get(i);
 					
 					String blockDEName = blockDE.getValue();					String clockName = blockDE.getClockName();
+					String clockSensitivityMethod = blockDE.getClockSensitivityMethod();
 					String nameFn = blockDE.getNameFn();
 					String code = blockDE.getCode();
 					DefaultListModel<String> listStruct = blockDE.getListStruct();
@@ -280,7 +282,7 @@ System.out.println("@@@ Panel Translator ");
 					String valueTemplate = blockDE.getValueTemplate();
 					DefaultListModel<String> listTypedef = blockDE.getListTypedef();
 
-					SysCAMSTBlockDE syscamsBlockDE = new SysCAMSTBlockDE(blockDEName, clockName, nameFn, code, listStruct, nameTemplate, typeTemplate, valueTemplate, listTypedef, syscamsCluster);
+					SysCAMSTBlockDE syscamsBlockDE = new SysCAMSTBlockDE(blockDEName, clockName, clockSensitivityMethod, nameFn, code, listStruct, nameTemplate, typeTemplate, valueTemplate, listTypedef, syscamsCluster);
 
 					List<SysCAMSPortDE> portsDE = blockDE.getAllInternalPortsDE();
 					for (int j = 0; j < portsDE.size(); j++) {

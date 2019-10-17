@@ -61,6 +61,7 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener, Li
 
 	private JTextField nameTextField;
         private JTextField clockTextField;
+    
 //	private JTextField periodTextField;
 //	private String listPeriodString[];
 //	private JComboBox<String> periodComboBoxString;
@@ -82,7 +83,8 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener, Li
 	private JTextField nameTypedefTextField;
 	private String listTypeTypedefString[];
 	private JComboBox<String> typeTypedefComboBoxString;
-	private JButton addModifyTypedefButton;
+
+    private JButton addModifyTypedefButton;
 	private ArrayList<String> listTmpTypedef;
 	private JList<String> typedefList;
 	private DefaultListModel<String> typedefListModel;
@@ -95,7 +97,11 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener, Li
 	private JButton nameFnButton;
 	private JTextArea codeTextArea;
 	private String finalString;
-
+    
+        private JRadioButton sensitiveRadioButton;  
+	private String listSensitiveString[];
+	private JComboBox<String> sensitiveComboBoxString;
+    
 	private SysCAMSBlockDE block;
 
 	public JDialogSysCAMSBlockDE(SysCAMSBlockDE block) {
@@ -292,6 +298,27 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener, Li
 		gridBag.setConstraints(clockTextField, constraints);
 		attributesBoxPanel.add(clockTextField);
 
+
+	listSensitiveString = new String[3];
+		listSensitiveString[0] = "";
+        listSensitiveString[1] = "positive";
+		listSensitiveString[2] = "negative";
+		sensitiveComboBoxString = new JComboBox<String>(listSensitiveString);
+		if (block.getClockSensitivityMethod().equals("")) {
+			sensitiveComboBoxString.setSelectedIndex(0);
+        } else if (block.getClockSensitivityMethod().equals("positive")) {
+            sensitiveComboBoxString.setSelectedIndex(1);
+		} else if (block.getClockSensitivityMethod().equals("negative")) {
+			sensitiveComboBoxString.setSelectedIndex(2);
+		}
+		sensitiveComboBoxString.setActionCommand("Sensitive_method");
+		sensitiveComboBoxString.setEnabled(block.getSensitive());
+		sensitiveComboBoxString.addActionListener(this);
+		constraints = new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(15, 10, 5, 10), 0, 0);
+		gridBag.setConstraints(sensitiveComboBoxString, constraints);
+		//boxPanel.add(sensitiveComboBoxString);
+		attributesBoxPanel.add(sensitiveComboBoxString);
 		
 		attributesBox.add(attributesBoxPanel);
 		attributesMainPanel.add(attributesBox, BorderLayout.NORTH); 
@@ -714,6 +741,13 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener, Li
 	}
 
 	public void actionPerformed(ActionEvent e) {
+	    	if ("Sensitive".equals(e.getActionCommand())) {
+			if (sensitiveRadioButton.isSelected() == true) {
+				sensitiveComboBoxString.setEnabled(true);
+			} else {
+				sensitiveComboBoxString.setEnabled(false);
+			}
+		}
 		if ("Name_OK".equals(e.getActionCommand())) {
 			if (!nameFnTextField.getText().equals("")) {
 				codeTextArea.setText("void " + nameFnTextField.getText() + "() {\n\n}");
@@ -1062,6 +1096,9 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener, Li
 				block.setCode(codeTextArea.getText());
 			}
 
+			block.setSensitive(sensitiveRadioButton.isSelected());
+			block.setClockSensitivityMethod((String) sensitiveComboBoxString.getSelectedItem());
+			
 			this.dispose();
 		}
 
