@@ -109,8 +109,9 @@ public class ClusterCode {
 				    }
 
 					else{
-			    corpsCluster = corpsCluster + "\tsca_tdf::sca_signal<" + ((SysCAMSTPortConverter) c.get_p1().getComponent()).getConvType()+ "<"+ ((SysCAMSTPortConverter) c.get_p1().getComponent()).getNbits()+"> " + "> " 
-				+ c.getName() + ";" + CR;
+					    // corpsCluster = corpsCluster + "\tsca_tdf::sca_signal<" + ((SysCAMSTPortConverter) c.get_p1().getComponent()).getConvType()+ "<"+ ((SysCAMSTPortConverter) c.get_p1().getComponent()).getNbits()+"> " + "> "
+					 corpsCluster = corpsCluster + "\tsc_core::sc_signal<" + ((SysCAMSTPortConverter) c.get_p1().getComponent()).getConvType()+ "<"+ ((SysCAMSTPortConverter) c.get_p1().getComponent()).getNbits()+"> " + "> "    
+					     + c.getName() + ";" + CR; //DG 18.10.
 			    names.add(c.getName());
 			    }
 		    
@@ -125,14 +126,15 @@ public class ClusterCode {
 		    } else {
 				if( ((SysCAMSTPortConverter) c.get_p2().getComponent()).getNbits()==0 )
 				    { 
-				corpsCluster = corpsCluster + "\tsca_tdf::sca_signal<" + ((SysCAMSTPortConverter) c.get_p2().getComponent()).getConvType() + "> " 
-				    + c.getName() + ";" + CR;
+					//	corpsCluster = corpsCluster + "\tsca_tdf::sca_signal<" + ((SysCAMSTPortConverter) c.get_p2().getComponent()).getConvType() + "> "   + c.getName() + ";" + CR;
+					corpsCluster = corpsCluster + "\tsc_core::sc_signal<" + ((SysCAMSTPortConverter) c.get_p2().getComponent()).getConvType() + "> "   + c.getName() + ";" + CR;	//DG 18.10.
 				names.add(c.getName());
 			    }
 
 		    	else{			   
-			    corpsCluster = corpsCluster + "\tsca_tdf::sca_signal<" + ((SysCAMSTPortConverter) c.get_p2().getComponent()).getConvType()+ "<"+((SysCAMSTPortConverter) c.get_p2().getComponent()).getNbits() + "> > " 
-				+ c.getName() + ";" + CR;
+			    //	    corpsCluster = corpsCluster + "\tsca_tdf::sca_signal<" + ((SysCAMSTPortConverter) c.get_p2().getComponent()).getConvType()+ "<"+((SysCAMSTPortConverter) c.get_p2().getComponent()).getNbits() + "> > " 	+ c.getName() + ";" + CR;
+			    corpsCluster = corpsCluster + "\tsc_core::sc_signal<" + ((SysCAMSTPortConverter) c.get_p2().getComponent()).getConvType()+ "<"+((SysCAMSTPortConverter) c.get_p2().getComponent()).getNbits() + "> > " 	+ c.getName() + ";" + CR;
+			    //DG 18.10.
 			    names.add(c.getName());
 			    } 
 			
@@ -167,7 +169,8 @@ public class ClusterCode {
 			
 		for (SysCAMSTClock t : clock) {
 		   
-		    corpsCluster = corpsCluster + "\t  sc_clock " + t.getName() + " (\"" + t.getName() + "\"," + t.getFrequency()+","+ t.getUnit()+","+ t.getDutyCycle()+","+ t.getStartTime()+","+ t.getUnitStartTime()+","+ t.getPosFirst()+");" + CR;
+		    //	    corpsCluster = corpsCluster + "\t  sc_clock " + t.getName() + " (\"" + t.getName() + "\"," + t.getFrequency()+","+ t.getUnit()+","+ t.getDutyCycle()+","+ t.getStartTime()+","+ t.getUnitStartTime()+","+ t.getPosFirst()+");" + CR;
+	 corpsCluster = corpsCluster + "\t  sc_clock " + t.getName() + " (\"" + t.getName() + "\"," + t.getFrequency()+", SC_MS,"+ t.getDutyCycle()+","+ t.getStartTime()+", SC_MS,"+ t.getPosFirst()+");" + CR;	    
 		}
 					      		
 		nb_block=0;

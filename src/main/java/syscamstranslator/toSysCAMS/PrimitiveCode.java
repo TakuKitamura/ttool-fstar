@@ -556,10 +556,12 @@ if (t.getOrigin() == 0) {
 			}
 
 			boolean sensitive = false, method = false;
-			if (!de.getCode().equals("")) {
-				corpsPrimitiveDE = corpsPrimitiveDE + "\t{" + CR + "\t\tSC_METHOD(" + de.getNameFn() + ");" + CR;
+			//if (!de.getCode().equals("")) {
+			    corpsPrimitiveDE = corpsPrimitiveDE + "\t{"+CR;
+			    //	corpsPrimitiveDE = corpsPrimitiveDE + "\t{" + CR + "\t\tSC_METHOD(" + de.getNameFn() + ");" + CR;
+			    if (!de.getCode().equals("")) {
 				method = true;
-			} 
+					} 
 			
 			/*	for (SysCAMSTPortDE t : deports) {
 				if (t.getSensitive() == true) {
@@ -579,31 +581,28 @@ if (t.getOrigin() == 0) {
 
 //DG 17.10.
 			if(de.getClockName()!=""){
-			    corpsPrimitiveDE = corpsPrimitiveDE + "\t\tsensitive << " + de.getClockName()  + ".";
-					if (de.getClockSensitiveMethod().equals("positive")) {
+			    corpsPrimitiveDE = corpsPrimitiveDE + "\t\tsensitive << " + de.getClockName()  + ".pos();"+CR;
+			    /*	if (de.getClockSensitiveMethod().equals("positive")) {
 						corpsPrimitiveDE = corpsPrimitiveDE + "pos();" + CR;
 					} else if (de.getClockSensitiveMethod().equals("negative")) {
 						corpsPrimitiveDE = corpsPrimitiveDE + "neg();" + CR;						
-					}
+						}*/
+			 	sensitive = true;   
 			}
 			//fin ajoute DG
 			
-			for (SysCAMSTPortDE t : deports) {
+			/*for (SysCAMSTPortDE t : deports) {
 				if (t.getSensitive() == true) {
 					if (method == false) {
-						corpsPrimitiveDE = corpsPrimitiveDE + "\t{" + CR;
+						corpsPrimitiveDE = corpsPrimitiveDE + "\t" + CR;
 					} 
-					corpsPrimitiveDE = corpsPrimitiveDE + "\t\tsensitive << " + t.getName() + ";";
-					if (t.getSensitiveMethod().equals("positive")) {
-						corpsPrimitiveDE = corpsPrimitiveDE + "pos();" + CR;
-					} else if (t.getSensitiveMethod().equals("negative")) {
-						corpsPrimitiveDE = corpsPrimitiveDE + "neg();" + CR;						
-						}
+					corpsPrimitiveDE = corpsPrimitiveDE + "\t\tsensitive << " + t.getName() + ";"+ CR;						
+				}
 					sensitive = true;
-				}
-				}
+					}*/
+		
 			
-			if (sensitive == true || method == true) {
+				if (sensitive == true || method == true) {
 				corpsPrimitiveDE = corpsPrimitiveDE + "\t}" + CR2;
 			} else {
 				corpsPrimitiveDE = corpsPrimitiveDE + "\t{}" + CR2;
