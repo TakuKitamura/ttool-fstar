@@ -1,0 +1,9 @@
+set model ./../modeling/AVATAR/PressureController.xml
+#print The model to be opened is: $model
+action start
+wait 2
+action open $model
+wait 10
+action checksyntax
+print tabs
+action quit
