@@ -56,7 +56,7 @@ import java.awt.*;
  * @author Ludovic APVRILLE
  */
 public class ADDBridgeNode extends ADDCommunicationNode implements WithAttributes {
-    private int textY1 = 15;
+//    private int textY1 = 15;
     private int textY2 = 30;
     private int derivationx = 2;
     private int derivationy = 3;
@@ -65,10 +65,13 @@ public class ADDBridgeNode extends ADDCommunicationNode implements WithAttribute
     public ADDBridgeNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
+        //Issue #31
+        textY = 15;
         width = 250;
         height = 100;
         minWidth = 100;
         minHeight = 35;
+        initScaling(250,100);
         
         nbConnectingPoint = 16;
         connectingPoint = new TGConnectingPoint[16];
@@ -128,14 +131,15 @@ public class ADDBridgeNode extends ADDCommunicationNode implements WithAttribute
         // Strings
         String ster = "<<" + stereotype + ">>";
         int w  = g.getFontMetrics().stringWidth(ster);
-        drawSingleString(g, ster, x + (width - w)/2, y + textY1);
+        drawSingleString(g, ster, x + (width - w)/2, y + textY);
         w  = g.getFontMetrics().stringWidth(name);
         drawSingleString(g, name, x + (width - w)/2, y + textY2);
 		
 		// Icon
 		//g.drawImage(IconManager.imgic1104.getImage(), x + width - 20, y + 4, null);
-		g.drawImage(IconManager.imgic1104.getImage(), x + 4, y + 4, null);
-		g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
+        int borders = scale(4);
+		g.drawImage(scale(IconManager.imgic1104.getImage()), x + borders, y + borders, null);
+		g.drawImage(scale(IconManager.img9), x + width - scale(20), y + borders, null);
     }
     
     @Override
@@ -298,6 +302,7 @@ public class ADDBridgeNode extends ADDCommunicationNode implements WithAttribute
         }
     }
 
+    @Override
     public String getAttributes() {
     	String attr = "";
     	//attr += "Buffer size (in byte) = " + bufferByteDataSize + "\n";

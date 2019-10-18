@@ -57,7 +57,7 @@ import java.awt.*;
    * @author Ludovic APVRILLE
  */
 public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
-    private int textY1 = 15;
+//    private int textY1 = 15;
     private int textY2 = 30;
     private int derivationx = 2;
     private int derivationy = 3;
@@ -71,12 +71,15 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
 
     public ADDBusNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-
+        
+        //issue #31
+        textY = 15;
         width = 250;
         height = 50;
         minWidth = 100;
         minHeight = 50;
-
+        initScaling(250, 50);
+        
         nbConnectingPoint = 16;
         connectingPoint = new TGConnectingPoint[16];
 
@@ -138,15 +141,16 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
         int w  = g.getFontMetrics().stringWidth(ster);
         Font f = g.getFont();
         g.setFont(f.deriveFont(Font.BOLD));
-        drawSingleString(g, ster, x + (width - w)/2, y + textY1);
+        drawSingleString(g, ster, x + (width - w)/2, y + textY);
         g.setFont(f);
         w  = g.getFontMetrics().stringWidth(name);
         drawSingleString(g, name, x + (width - w)/2, y + textY2);
 
         // Icon
         //g.drawImage(IconManager.imgic1102.getImage(), x + width - 20, y + 4, null);
-        g.drawImage(IconManager.imgic1102.getImage(), x + 4, y + 4, null);
-        g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
+        int borders = scale(4);
+        g.drawImage(scale(IconManager.imgic1102.getImage()), x + borders, y + borders, null);
+        g.drawImage(scale(IconManager.img9), x + width - scale(20), y + borders, null);
     }
 
     @Override
@@ -360,6 +364,7 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
         }
     }
 
+    @Override
     public String getAttributes() {
         String attr = "";
         attr += "index = " + index + "\n";
