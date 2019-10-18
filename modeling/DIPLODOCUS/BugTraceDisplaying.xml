@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<TURTLEGMODELING version="1.0beta" ANIMATE_INTERACTIVE_SIMULATION="true" ACTIVATE_PENALTIES="true" UPDATE_INFORMATION_DIPLO_SIM="false" ANIMATE_WITH_INFO_DIPLO_SIM="true" OPEN_DIAG_DIPLO_SIM="false" LAST_SELECTED_MAIN_TAB="0" LAST_SELECTED_SUB_TAB="2">
+<TURTLEGMODELING version="1.0beta" ANIMATE_INTERACTIVE_SIMULATION="true" ACTIVATE_PENALTIES="true" UPDATE_INFORMATION_DIPLO_SIM="false" ANIMATE_WITH_INFO_DIPLO_SIM="true" OPEN_DIAG_DIPLO_SIM="false" LAST_SELECTED_MAIN_TAB="0" LAST_SELECTED_SUB_TAB="1">
 
 <Modeling type="TML Component Design" nameTab="TestCycleEvt_wait" tabs="TML Component Task Diagram$C1$C0" >
 <TMLComponentTaskDiagramPanel name="TML Component Task Diagram" minX="10" maxX="2500" minY="10" maxY="1500" channels="true" events="true" requests="true" zoom="1.0" >
@@ -100,8 +100,8 @@
 </COMPONENT>
 
 <COMPONENT type="1010" id="28" >
-<cdparam x="496" y="185" />
-<sizeparam width="49" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="497" y="185" />
+<sizeparam width="46" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -115,8 +115,8 @@
 </COMPONENT>
 
 <COMPONENT type="1030" id="31" >
-<cdparam x="364" y="113" />
-<sizeparam width="92" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="367" y="113" />
+<sizeparam width="87" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -146,7 +146,7 @@
 <cdparam x="456" y="127" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
-<P1  x="456" y="127" id="30" />
+<P1  x="454" y="127" id="30" />
 <P2  x="520" y="180" id="26" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -175,7 +175,7 @@
 <SUBCOMPONENT type="-1" id="37" >
 <father id="40" num="0" />
 <cdparam x="566" y="258" />
-<sizeparam width="28" height="15" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="26" height="15" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-75" maxX="30" minY="10" maxY="30" />
 <infoparam name="value of the delay" value="1 us" />
@@ -185,8 +185,8 @@
 </SUBCOMPONENT>
 
 <COMPONENT type="1030" id="43" >
-<cdparam x="374" y="88" />
-<sizeparam width="92" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="377" y="88" />
+<sizeparam width="87" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -205,8 +205,8 @@
 </COMPONENT>
 
 <COMPONENT type="1011" id="48" >
-<cdparam x="494" y="170" />
-<sizeparam width="66" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="493" y="170" />
+<sizeparam width="68" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -216,8 +216,8 @@
 </COMPONENT>
 
 <COMPONENT type="1008" id="51" >
-<cdparam x="488" y="122" />
-<sizeparam width="45" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="489" y="122" />
+<sizeparam width="42" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -259,7 +259,7 @@
 <cdparam x="479" y="139" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
-<P1  x="466" y="102" id="42" />
+<P1  x="464" y="102" id="42" />
 <P2  x="510" y="117" id="49" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -393,16 +393,16 @@
 <TGConnectingPoint num="23" id="150" />
 <extraparam>
 <info stereotype="CPURR" nodeName="CPU0" />
-<attributes nbOfCores="2" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10000"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" operation="" MECType="0" encryption="0"/>
+<attributes nbOfCores="1" byteDataSize="4"  schedulingPolicy="0"  sliceTime="10"  goIdleTime="10"  maxConsecutiveIdleCycles="10"  pipelineSize="5"  taskSwitchingTime="20"  branchingPredictionPenalty="2"  cacheMiss="5" execiTime="1" execcTime="1" clockRatio="1" operation="" MECType="0" encryption="0"/>
 </extraparam>
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="117" >
 <father id="151" num="0" />
-<cdparam x="317" y="152" />
-<sizeparam width="168" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="278" y="111" />
+<sizeparam width="160" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="177" minY="0" maxY="192" />
-<infoparam name="TGComponent" value="TestCycleEvt_wait::C0" />
+<cdrectangleparam minX="0" maxX="185" minY="0" maxY="192" />
+<infoparam name="TGComponent" value="TestCycleEvt_wait::C1" />
 <TGConnectingPoint num="0" id="109" />
 <TGConnectingPoint num="1" id="110" />
 <TGConnectingPoint num="2" id="111" />
@@ -412,16 +412,16 @@
 <TGConnectingPoint num="6" id="115" />
 <TGConnectingPoint num="7" id="116" />
 <extraparam>
-<info value="TestCycleEvt_wait::C0" taskName="C0" referenceTaskName="TestCycleEvt_wait" priority="0" operationMEC="C0" fatherComponentMECType="0" />
+<info value="TestCycleEvt_wait::C1" taskName="C1" referenceTaskName="TestCycleEvt_wait" priority="0" operationMEC="C1" fatherComponentMECType="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="126" >
 <father id="151" num="1" />
-<cdparam x="324" y="174" />
-<sizeparam width="168" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="317" y="152" />
+<sizeparam width="160" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="177" minY="0" maxY="192" />
-<infoparam name="TGComponent" value="TestCycleEvt_wait::C1" />
+<cdrectangleparam minX="0" maxX="185" minY="0" maxY="192" />
+<infoparam name="TGComponent" value="TestCycleEvt_wait::C0" />
 <TGConnectingPoint num="0" id="118" />
 <TGConnectingPoint num="1" id="119" />
 <TGConnectingPoint num="2" id="120" />
@@ -431,7 +431,7 @@
 <TGConnectingPoint num="6" id="124" />
 <TGConnectingPoint num="7" id="125" />
 <extraparam>
-<info value="TestCycleEvt_wait::C1" taskName="C1" referenceTaskName="TestCycleEvt_wait" priority="0" operationMEC="C1" fatherComponentMECType="0" />
+<info value="TestCycleEvt_wait::C0" taskName="C0" referenceTaskName="TestCycleEvt_wait" priority="0" operationMEC="C0" fatherComponentMECType="0" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -506,11 +506,11 @@
 </COMPONENT>
 <SUBCOMPONENT type="1101" id="162" >
 <father id="196" num="0" />
-<cdparam x="120" y="210" />
-<sizeparam width="168" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="128" y="271" />
+<sizeparam width="160" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="82" minY="0" maxY="160" />
-<infoparam name="TGComponent" value="TestCycleEvt_wait::C1" />
+<cdrectangleparam minX="0" maxX="90" minY="0" maxY="160" />
+<infoparam name="TGComponent" value="TestCycleEvt_wait::C0" />
 <TGConnectingPoint num="0" id="154" />
 <TGConnectingPoint num="1" id="155" />
 <TGConnectingPoint num="2" id="156" />
@@ -520,16 +520,16 @@
 <TGConnectingPoint num="6" id="160" />
 <TGConnectingPoint num="7" id="161" />
 <extraparam>
-<info value="TestCycleEvt_wait::C1" taskName="C1" referenceTaskName="TestCycleEvt_wait" priority="0" operationMEC="C1" fatherComponentMECType="0" />
+<info value="TestCycleEvt_wait::C0" taskName="C0" referenceTaskName="TestCycleEvt_wait" priority="0" operationMEC="C0" fatherComponentMECType="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1101" id="171" >
 <father id="196" num="1" />
-<cdparam x="128" y="271" />
-<sizeparam width="168" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="120" y="210" />
+<sizeparam width="160" height="40" minWidth="100" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="0" maxX="82" minY="0" maxY="160" />
-<infoparam name="TGComponent" value="TestCycleEvt_wait::C0" />
+<cdrectangleparam minX="0" maxX="90" minY="0" maxY="160" />
+<infoparam name="TGComponent" value="TestCycleEvt_wait::C1" />
 <TGConnectingPoint num="0" id="163" />
 <TGConnectingPoint num="1" id="164" />
 <TGConnectingPoint num="2" id="165" />
@@ -539,7 +539,7 @@
 <TGConnectingPoint num="6" id="169" />
 <TGConnectingPoint num="7" id="170" />
 <extraparam>
-<info value="TestCycleEvt_wait::C0" taskName="C0" referenceTaskName="TestCycleEvt_wait" priority="0" operationMEC="C0" fatherComponentMECType="0" />
+<info value="TestCycleEvt_wait::C1" taskName="C1" referenceTaskName="TestCycleEvt_wait" priority="0" operationMEC="C1" fatherComponentMECType="0" />
 </extraparam>
 </SUBCOMPONENT>
 
