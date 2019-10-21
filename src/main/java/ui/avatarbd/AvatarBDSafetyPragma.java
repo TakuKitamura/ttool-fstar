@@ -267,12 +267,14 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
     public boolean editOndoubleClick(JFrame frame) {
         String oldValue = value;
 
-        JDialogSafetyPragma jdn = new JDialogSafetyPragma(frame, "Setting the safety pragmas", value);
+        AvatarBDPanel abdp = (AvatarBDPanel) tdp;
+        Map<String, List<String>> blockAttributeMap = abdp.getBlockStrings(true, true, true);
+        JDialogSafetyPragma jdn = new JDialogSafetyPragma(frame, "Setting the safety pragmas", value, blockAttributeMap);
         //jdn.setLocation(200, 150);
         jdn.setSize(500, 500);
         GraphicLib.centerOnParent(jdn);
-        AvatarBDPanel abdp = (AvatarBDPanel) tdp;
-        jdn.blockAttributeMap = abdp.getBlockStrings(true, true, true);
+
+        //jdn.blockAttributeMap = abdp.getBlockStrings(true, true, true);
         jdn.setVisible(true); // blocked until dialog has been closed
 
         String s = jdn.getText();
