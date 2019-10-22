@@ -3,7 +3,8 @@ set model ./../modeling/AVATAR/PressureController.xml
 action start
 wait 2
 action open $model
-wait 10
-action checksyntax
+wait 5
+action check-syntax
 print tabs
+wait 5
 action quit
