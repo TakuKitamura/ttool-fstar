@@ -469,9 +469,10 @@ public class PrimitiveCode {
 			}
 
 			//DG 17.10.
-			if(de.getClockName()!="")
+			if(de.getClockName()!=""){
 			corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_in <bool>"  + de.getClockName() + ";" + CR;
-			
+			//System.out.println("@@@@@@@@@ " + de.getClockName());
+			}
 			//DG modified, was sca:core
 			//System.out.println("@@@@@@@@@DE ports empty?");
 			if (!deports.isEmpty()) {
@@ -556,9 +557,10 @@ if (t.getOrigin() == 0) {
 			}
 
 			boolean sensitive = false, method = false;
-			//if (!de.getCode().equals("")) {
+			if (!de.getCode().equals("")) {
 			    corpsPrimitiveDE = corpsPrimitiveDE + "\t{"+CR;
 			    //	corpsPrimitiveDE = corpsPrimitiveDE + "\t{" + CR + "\t\tSC_METHOD(" + de.getNameFn() + ");" + CR;
+			}
 			    if (!de.getCode().equals("")) {
 				method = true;
 					} 

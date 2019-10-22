@@ -780,6 +780,8 @@ JPanel sensitivePanel = new JPanel(new FlowLayout());
 		
 		if (!(clockTextField.getText().isEmpty())) {
 		    block.setClockName(clockTextField.getText());
+		}else{
+		    block.setClockName("");
 		}
 		
 		if (block.getFather() != null) {
