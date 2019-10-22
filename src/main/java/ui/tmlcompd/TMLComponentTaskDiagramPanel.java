@@ -285,6 +285,23 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
         return ll;
     }
 
+    public List<TMLPragma> getPragmaList() {
+        List<TMLPragma> ll = new LinkedList<TMLPragma>();
+        TGComponent tgc;
+
+        Iterator<TGComponent> iterator = componentList.listIterator();
+
+        while (iterator.hasNext()) {
+            tgc = iterator.next();
+
+            if (tgc instanceof TMLPragma) {
+                ll.add((TMLPragma) tgc);
+            }
+        }
+
+        return ll;
+    }
+
     public List<TMLCPrimitiveComponent> getPrimitiveComponentList() {
         List<TMLCPrimitiveComponent> ll = new LinkedList<TMLCPrimitiveComponent>();
         TGComponent tgc;

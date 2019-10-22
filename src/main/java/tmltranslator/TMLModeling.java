@@ -55,6 +55,7 @@ import ui.TAttribute;
 import ui.tmlcompd.TMLCPrimitiveComponent;
 import ui.tmlcompd.TMLCPrimitivePort;
 import ui.TGComponent;
+import ui.tmlcompd.TMLPragma;
 
 import java.util.*;
 
@@ -72,7 +73,7 @@ public class  TMLModeling<E> {
     private List<TMLChannel> channels;
     private List<TMLRequest> requests;
     private List<TMLEvent> events;
-    private List<String[]> pragmas;
+    private List<String> pragmas;
     
     private TMLElement correspondance[]; // Link to graphical components
 
@@ -177,15 +178,12 @@ public class  TMLModeling<E> {
     }
 
     private void init() {
-        /*tasks = new LinkedList();
-          channels = new LinkedList();
-          requests = new LinkedList();
-          events = new LinkedList();*/
+
         tasks = new ArrayList<TMLTask>();
         channels = new ArrayList<TMLChannel>();
         events = new ArrayList<TMLEvent>();
         requests = new ArrayList<TMLRequest>();
-        pragmas = new ArrayList<String[]>();
+        pragmas = new ArrayList<String>();
 	
 	securityPatterns = new ArrayList<String>();
 	secPatterns = new ArrayList<SecurityPattern>();
@@ -199,7 +197,8 @@ public class  TMLModeling<E> {
     public void addTask(TMLTask task) {
         tasks.add(task);
     }
-    public void addPragma(String[] s){
+
+    public void addPragma(String s){
         pragmas.add(s);
     }
     public void addChannel(TMLChannel channel) {
@@ -742,9 +741,10 @@ public class  TMLModeling<E> {
 		return attackers;
 	}
 	
-    public List<String[]> getPragmas(){
+    public List<String> getPragmas(){
         return pragmas;
     }
+
     public Iterator<TMLTask> getListIteratorTasks() {
         return tasks.listIterator();
     }
@@ -2720,6 +2720,9 @@ public class  TMLModeling<E> {
 	for (TMLTask t: tasks) {
 	    s += t.toXML();
 	}
+	for(String p: pragmas) {
+	    s += "<PRAGMA value=\"" + p + "\" />\n";
+    }
 	for (TMLChannel c: channels) {
 	    s += c.toXML();
 	}

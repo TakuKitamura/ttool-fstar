@@ -100,7 +100,7 @@ public class TMLTextSpecification<E> {
             "SELECTEVT", "CASE", "ENDSELECTEVT", "ENDCASE", "WRITE", "READ", "WAIT", "NOTIFY", "NOTIFIED", "NOTIFYREQUEST", "RAND", "CASERAND",
             "ENDRAND",
             "ENDCASERAND", "EXECI", "EXECC", "DELAY", "RANDOM",
-            "RANDOMSEQ", "ENDRANDOMSEQ", "SEQ", "ENDSEQ"};
+            "RANDOMSEQ", "ENDRANDOMSEQ", "SEQ", "ENDSEQ", "PRAGMA"};
 
     private String channeltypes[] = {"BRBW", "NBRNBW", "BRNBW"};
     private String eventtypes[] = {"INF", "NIB", "NINB"};
@@ -222,9 +222,15 @@ public class TMLTextSpecification<E> {
     public String makeDeclarations(TMLModeling<E> tmlm) {
         int i;
         String sb = "";
-        sb += "// TML Application - FORMAT 0.1" + CR;
+        sb += "// TML Application - FORMAT 0.2" + CR;
         sb += "// Application: " + title + CR;
         sb += "// Generated: " + new Date().toString() + CR2;
+
+        sb += "// PRAGMAS" + CR;
+        for(String s: tmlm.getPragmas()) {
+            sb += "PRAGMA " + s + CR;
+        }
+        sb += CR;
 
         sb += "// Channels" + CR;
         for (TMLChannel ch : tmlm.getChannels()) {
@@ -808,6 +814,28 @@ public class TMLTextSpecification<E> {
                 return -1;
             }
         }
+
+        // PRAGMA
+        if (isInstruction("PRAGMA", _split[0])) {
+            if (!inDec) {
+                error = "A pragma must not be declared outside of the declaration part of a TML specification";
+                addError(0, _lineNb, 0, error);
+                return -1;
+            }
+
+            if (_split.length < 2) {
+                error = "A pragma instruction must contain a pragma";
+                addError(0, _lineNb, 0, error);
+                return -1;
+            }
+
+            String pragma = "";
+            for (int cpt=1; cpt<_split.length; cpt++) {
+                pragma += _split[cpt] + " ";
+            }
+            tmlm.addPragma(pragma);
+        }
+
 
         // CHANNEL
         if (isInstruction("CHANNEL", _split[0])) {
