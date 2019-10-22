@@ -472,7 +472,7 @@ public class TMLTask extends TMLElement {
             return -1;
         }
         //TraceManager.addDev("Handling task:" + getTaskName());
-        return activity.getWorstCaseDataSending(c);
+        return activity.getWorstCaseDataSending(c) * c.getSize();
     }
 
     // returns -1 if the WC cannot be computed
@@ -482,7 +482,7 @@ public class TMLTask extends TMLElement {
             return -1;
         }
         //TraceManager.addDev("Handling task:" + getTaskName());
-        return activity.getWorstCaseDataReceiving(c);
+        return activity.getWorstCaseDataReceiving(c) * c.getSize();
     }
 
 
