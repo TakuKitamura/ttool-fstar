@@ -2279,10 +2279,11 @@ public class  TMLModeling<E> {
     }
 
 
+
     public void printWCETOfTasks() {
         String result = "";
         for(TMLTask task: tasks) {
-            result += "\tTask " + task.getTaskName() + ":" + task.getWorstCaseIComplexity() + "\n";
+            result += "\tTask " + task.getTaskName() + ". IComplexity: " + task.getWorstCaseIComplexity() + "\n";
         }
         //TraceManager.addDev("Worst Case I Complexity:\n" + result);
     }

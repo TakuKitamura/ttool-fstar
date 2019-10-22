@@ -456,7 +456,7 @@ public class TMLTask extends TMLElement {
 
 
     // returns -1 if the WC cannot be computed
-    // The function follows one path randomly and concatenate ExecI operators
+    // Loops are executed only one time
     public int getWorstCaseIComplexity() {
         if (activity == null) {
             return -1;
@@ -464,6 +464,27 @@ public class TMLTask extends TMLElement {
         //TraceManager.addDev("Handling task:" + getTaskName());
         return activity.getWorstCaseIComplexity();
     }
+
+    // returns -1 if the WC cannot be computed
+    //  Loops are executed only one time
+    public int getWorstCaseDataSending(TMLChannel c) {
+        if (activity == null) {
+            return -1;
+        }
+        //TraceManager.addDev("Handling task:" + getTaskName());
+        return activity.getWorstCaseDataSending(c);
+    }
+
+    // returns -1 if the WC cannot be computed
+    //  Loops are executed only one time
+    public int getWorstCaseDataReceiving(TMLChannel c) {
+        if (activity == null) {
+            return -1;
+        }
+        //TraceManager.addDev("Handling task:" + getTaskName());
+        return activity.getWorstCaseDataReceiving(c);
+    }
+
 
     public Set<TMLChannel> getChannelSet() {
         return channelsList;
