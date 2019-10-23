@@ -347,6 +347,7 @@ public class TGComponentManager {
     public static final int CAMS_CLUSTER = 1607;
     public static final int CAMS_BLOCK_GPIO2VCI = 1608;
     public static final int CAMS_CLOCK = 5721;
+    //public static final int CAMS_CLOCK = 1609;
     // ELN
     public static final int ELN_CONNECTOR = 1610;
     public static final int ELN_RESISTOR = 1611;
@@ -1292,7 +1293,8 @@ public class TGComponentManager {
             case CAMS_BLOCK_TDF:
                 tgc = new SysCAMSBlockTDF(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
-            case CAMS_BLOCK_DE:
+	case CAMS_BLOCK_DE:
+	    //  System.out.println("@@@@@@@@@@block reconnu@@@@@@@@@@@@@@@@");
             	tgc = new SysCAMSBlockDE(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             	break;
             case CAMS_PORT_TDF:
@@ -1311,6 +1313,7 @@ public class TGComponentManager {
             	tgc = new SysCAMSBlockGPIO2VCI(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             	break;
 	case CAMS_CLOCK:
+	    //System.out.println("@@@@@@@@@@Clock reconnu  2 @@@@@@@@@@@@@@@@");
             	tgc = new SysCAMSClock(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             	break;
             // ELN
@@ -1781,6 +1784,7 @@ public class TGComponentManager {
         } else if (tgc instanceof SysCAMSBlockTDF) {
         	return CAMS_BLOCK_TDF;
         } else if (tgc instanceof SysCAMSBlockDE) {
+	    //System.out.println("@@@@@@@@@@Block DE reconnu@@@@@@@@@@@@@@@@");
         	return CAMS_BLOCK_DE;
         } else if (tgc instanceof SysCAMSPortTDF) {
         	return CAMS_PORT_TDF;
@@ -1793,6 +1797,7 @@ public class TGComponentManager {
         } else if (tgc instanceof SysCAMSBlockGPIO2VCI) {
         	return CAMS_BLOCK_GPIO2VCI;
 	} else if (tgc instanceof SysCAMSClock) {
+	    //System.out.println("@@@@@@@@@@Clock reconnu  1 @@@@@@@@@@@@@@@@");
         	return CAMS_CLOCK;
         	// ELN
         } else if (tgc instanceof ELNConnector) {
