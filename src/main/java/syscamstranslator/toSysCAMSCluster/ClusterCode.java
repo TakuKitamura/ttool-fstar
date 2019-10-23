@@ -75,15 +75,32 @@ public class ClusterCode {
             corpsCluster = "template <typename vci_param>" + CR +
                           "class " +cluster.getClusterName()+ " : public sc_core::sc_module { "+ CR;
 
+	for (SysCAMSTClock t : clock) {
+		   
+		    //   corpsCluster = corpsCluster + "\t  sc_clock " + t.getName() + " (\"" + t.getName() + "\"," + t.getFrequency()+","+ t.getUnit()+","+ t.getDutyCycle()+","+ t.getStartTime()+","+ t.getUnitStartTime()+","+ t.getPosFirst()+");" + CR;
+		    
+		    String unitString="";
+		    String unitStartTimeString="";
+		    //System.out.println("@@@@@@@ unit  "+t.getUnit());
+		    //System.out.println("@@@@@@@ unit StartTime  "+t.getUnitStartTime());
+		    if(t.getUnit()=="s")unitString="SC_SEC";
+		    if(t.getUnitStartTime()=="s")unitStartTimeString="SC_SEC";
+		    if(t.getUnit()=="ms")unitString="SC_MS";
+		    if(t.getUnitStartTime()=="ms")unitStartTimeString="SC_MS";
+		    if(t.getUnit()=="\u03BCs")unitString="SC_US";
+		    if(t.getUnitStartTime()=="\u03BCs")unitStartTimeString="SC_US";
+		    if(t.getUnit()=="ns")unitString="SC_NS";
+		    if(t.getUnitStartTime()=="ns")unitStartTimeString="SC_NS";
+		     
+		    corpsCluster = corpsCluster + "\t  sc_clock " + t.getName() + " (\"" + t.getName() + "\"," + t.getFrequency()+","+ unitString+","+ t.getDutyCycle()+","+ t.getStartTime()+","+unitStartTimeString+","+ t.getPosFirst()+");" + CR;    		}
 
+	    
 
-
-			for (SysCAMSTClock t : clock) {
+	    /*			for (SysCAMSTClock t : clock) {
 			    System.out.println("Cluster clock");
 			    corpsCluster = corpsCluster + "\t  sc_clock " + t.getName() + " (\"" + t.getName() + "\"," + t.getFrequency()+","+ t.getUnit()+","+ t.getDutyCycle()+","+ t.getStartTime()+","+ t.getUnit()+","+ t.getPosFirst()+");" + CR;
-			}
-			//ToDo 9.7.2019: add lines for reading (several) clock ports and sensitivity lists
-
+			    }*/
+		
 
 	    
             for (SysCAMSTBlockTDF t : tdf) {
