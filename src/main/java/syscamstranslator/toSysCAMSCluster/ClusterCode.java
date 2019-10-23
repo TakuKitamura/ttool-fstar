@@ -146,9 +146,18 @@ public class ClusterCode {
                                     + "sig_" + nb_con + ";" + CR;
                             names.add("sig_" + nb_con);
                         } else {
+			    if(((SysCAMSTPortConverter) connectors.get(i).get_p1().getComponent()).getNbits()==0){
                             corpsCluster = corpsCluster + "\tsc_core::sc_signal<" + ((SysCAMSTPortConverter) connectors.get(i).get_p1().getComponent()).getConvType() + "> " 
                                     + connectors.get(i).getName() + ";" + CR;
                             names.add(connectors.get(i).getName());
+			    } else {
+
+ corpsCluster = corpsCluster + "\tsc_core::sc_signal<" + ((SysCAMSTPortConverter) connectors.get(i).get_p1().getComponent()).getConvType() + "<"+ ((SysCAMSTPortConverter) connectors.get(i).get_p1().getComponent()).getNbits()+"> " +"> " 
+                                    + connectors.get(i).getName() + ";" + CR;
+                            names.add(connectors.get(i).getName());
+			    
+				
+			    }
                         }
                     } else if ((connectors.get(i).get_p2().getComponent() instanceof SysCAMSTPortConverter && connectors.get(i).get_p1().getComponent() instanceof SysCAMSTPortDE)) {
                         if (connectors.get(i).getName().equals("")) {
@@ -156,10 +165,20 @@ public class ClusterCode {
                                     + "sig_" + nb_con + ";" + CR;
                             names.add("sig_" + nb_con);
                         } else {
+			    if(((SysCAMSTPortConverter) connectors.get(i).get_p1().getComponent()).getNbits()==0){
                             corpsCluster = corpsCluster + "\tsc_core::sc_signal<" + ((SysCAMSTPortConverter) connectors.get(i).get_p2().getComponent()).getConvType() + "> " 
                                     + connectors.get(i).getName() + ";" + CR;
                             names.add(connectors.get(i).getName());
+			}
+			else{
+
+                            corpsCluster = corpsCluster + "\tsc_core::sc_signal<" + ((SysCAMSTPortConverter) connectors.get(i).get_p2().getComponent()).getConvType() + "<"+ ((SysCAMSTPortConverter) connectors.get(i).get_p1().getComponent()).getNbits()+"> " + "> " 
+                                    + connectors.get(i).getName() + ";" + CR;
+                            names.add(connectors.get(i).getName());
+			    
+			}
                         }
+			
                     } else if ((connectors.get(i).get_p1().getComponent() instanceof SysCAMSTPortDE && connectors.get(i).get_p2().getComponent() instanceof SysCAMSTPortDE) 
                             || (connectors.get(i).get_p2().getComponent() instanceof SysCAMSTPortDE && connectors.get(i).get_p1 ().getComponent() instanceof SysCAMSTPortDE)) {
                         if (connectors.get(i).getName().equals("")) {
@@ -167,9 +186,20 @@ public class ClusterCode {
                                     + "sig_" + nb_con + ";" + CR;
                             names.add("sig_" + nb_con);
                         } else {
+	if(((SysCAMSTPortDE) connectors.get(i).get_p2().getComponent()).getNbits()==0 )
+			    {
+			    
                             corpsCluster = corpsCluster + "\tsc_core::sc_signal<" + ((SysCAMSTPortDE) connectors.get(i).get_p1().getComponent()).getDEType() + "> " 
                                     + connectors.get(i).getName() + ";" + CR;
                             names.add(connectors.get(i).getName());
+			    }
+	else {
+			    
+                            corpsCluster = corpsCluster + "\tsc_core::sc_signal<" + ((SysCAMSTPortDE) connectors.get(i).get_p1().getComponent()).getDEType()  + "<"+ ((SysCAMSTPortDE) connectors.get(i).get_p1().getComponent()).getNbits()+"> " + "> " 
+                                    + connectors.get(i).getName() + ";" + CR;
+                            names.add(connectors.get(i).getName());
+			    }
+			    
                         }
                     }
 
