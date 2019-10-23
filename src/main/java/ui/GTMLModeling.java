@@ -40,20 +40,9 @@
 
 package ui;
 
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
-
 import avatartranslator.AvatarSpecification;
 import myutil.TraceManager;
 import tmltranslator.*;
-import tmltranslator.HwNoC;
 import tmltranslator.modelcompiler.ArchUnitMEC;
 import tmltranslator.tmlcp.TMLCPElement;
 import tmltranslator.tmlcp.TMLSDAction;
@@ -68,39 +57,16 @@ import ui.tmlcd.TMLChannelOperator;
 import ui.tmlcd.TMLEventOperator;
 import ui.tmlcd.TMLRequestOperator;
 import ui.tmlcd.TMLTaskOperator;
-import ui.tmlcompd.TMLCChannelOutPort;
-import ui.tmlcompd.TMLCFork;
-import ui.tmlcompd.TMLCJoin;
-import ui.tmlcompd.TMLCPath;
-import ui.tmlcompd.TMLCPortConnector;
-import ui.tmlcompd.TMLCPrimitiveComponent;
-import ui.tmlcompd.TMLCPrimitivePort;
-import ui.tmlcompd.TMLCRecordComponent;
-import ui.tmldd.TMLArchiArtifact;
-import ui.tmldd.TMLArchiBUSNode;
-import ui.tmldd.TMLArchiBridgeNode;
-import ui.tmldd.TMLArchiRouterNode;
-import ui.tmldd.TMLArchiCPNode;
-import ui.tmldd.TMLArchiCPUNode;
-import ui.tmldd.TMLArchiCommunicationArtifact;
-import ui.tmldd.TMLArchiCommunicationNode;
-import ui.tmldd.TMLArchiConnectorNode;
-import ui.tmldd.TMLArchiCrossbarNode;
-import ui.tmldd.TMLArchiDMANode;
-import ui.tmldd.TMLArchiEventArtifact;
-import ui.tmldd.TMLArchiFPGANode;
-import ui.tmldd.TMLArchiCAMSNode;
-import ui.tmldd.TMLArchiFirewallNode;
-import ui.tmldd.TMLArchiHWANode;
-import ui.tmldd.TMLArchiKey;
-import ui.tmldd.TMLArchiMemoryNode;
-import ui.tmldd.TMLArchiNode;
-import ui.tmldd.TMLArchiPortArtifact;
-import ui.tmldd.TMLArchiVGMNNode;
+import ui.tmlcompd.*;
+import ui.tmldd.*;
 import ui.tmlsd.TGConnectorMessageTMLSD;
 import ui.tmlsd.TMLSDControllerInstance;
 import ui.tmlsd.TMLSDStorageInstance;
 import ui.tmlsd.TMLSDTransferInstance;
+
+import java.awt.*;
+import java.util.*;
+import java.util.List;
 
 /**
  * Class GTMLModeling
@@ -119,6 +85,7 @@ public class GTMLModeling {
     private List<? extends TGComponent> tasksToTakeIntoAccount;
     private List<? extends TGComponent> componentsToTakeIntoAccount;
     private List<? extends TGComponent> components;
+    private List<? extends TGComponent> pragmas;
     private List<String> removedChannels, removedRequests, removedEvents;
     private static CorrespondanceTGElement listE;
     private Map<String, String> table;
@@ -313,13 +280,11 @@ public class GTMLModeling {
             removedEvents = new LinkedList<String>();
 
             try {
-
-
                 addTMLTasks();
                 addTMLChannels();
                 addTMLEvents();
                 addTMLRequests();
-                //addTMLPragmas();
+                addTMLPragmas();
                 //TraceManager.addDev("At line 151");
                 generateTasksActivityDiagrams();
                 removeActionsWithDollars();
@@ -372,6 +337,8 @@ public class GTMLModeling {
                 }
             }
 
+            pragmas = tmlcdp.tmlctdp.getPragmaList();
+
             removedChannels = new LinkedList<String>();
             removedRequests = new LinkedList<String>();
             removedEvents = new LinkedList<String>();
@@ -401,6 +368,9 @@ public class GTMLModeling {
                 //TraceManager.addDev("Processing attacker");
                 processAttacker();
                 //TraceManager.addDev("Adding channels");
+
+                addTMLPragmas();
+
                 addTMLCChannels();
                 //TraceManager.addDev("Adding events");
                 addTMLCEvents();
@@ -481,24 +451,33 @@ public class GTMLModeling {
     }
 
     //
-    //    private void addTMLPragmas(){
-    //  TGComponent tgc;
-    //  components = tmlap.tmlap.getComponentList();
-    //  ListIterator iterator = components.listIterator();
-    //  while(iterator.hasNext()) {
-    //      tgc = (TGComponent)(iterator.next());
-    //      if (tgc instanceof TGCNote){
-    //          TGCNote note = (TGCNote) tgc;
-    //          String[] vals = note.getValues();
-    //          for (String s: vals){
-    //              TraceManager.addDev("Val " + s);
-    //              if (s.contains("#") && s.contains(" ")){
-    //                          map.addPragma(s.split(" "));
-    //              }
-    //          }
-    //      }
-    //        }
-    //    }
+    private void addTMLPragmas() {
+        TGComponent tgc;
+
+        TraceManager.addDev("ADDING PRAGMA");
+        if(pragmas == null) return;
+
+        Iterator<? extends TGComponent> iterator = pragmas.listIterator();
+        while (iterator.hasNext()) {
+            tgc = iterator.next();
+            if (tgc instanceof TMLPragma) {
+                TraceManager.addDev("TML PRAGMA FOUND");
+                TMLPragma pragma = (TMLPragma) tgc;
+                String[] vals = pragma.getValues();
+                TraceManager.addDev("PRAGMA Vals " + vals);
+                for (String s : vals) {
+                    TraceManager.addDev("Val " + s);
+                    s = s.trim();
+                    if (s.length() > 0) {
+                        TraceManager.addDev("ADDING PRAGMA " + s);
+                        tmlm.addPragma(s);
+                    }
+                }
+            }
+        }
+    }
+
+
     private void addTMLTasks() throws MalformedTMLDesignException {
         TGComponent tgc;
         TMLTask tmlt;
@@ -942,7 +921,6 @@ public class GTMLModeling {
                                     channel.setTasks(tt1, tt2);
 
 
-
                                     // Complex channels are used only for transformation towards the simulator
                                     TMLPort tmlport1, tmlport2;
                                     tmlport1 = new TMLPort(port1.getPortName(), port1);
@@ -1119,7 +1097,7 @@ public class GTMLModeling {
                     if (!(alreadyConsidered.contains(port1))) {
                         portstome = tmlcdp.tmlctdp.getPortsConnectedTo(port1, componentsToTakeIntoAccount);
                         //TraceManager.addDev("Considering port1 = " +port1.getPortName() + " size of connecting ports:" + portstome.size());
-                       // Iterator<?> ite = portstome.listIterator();
+                        // Iterator<?> ite = portstome.listIterator();
                         /*while(ite.hasNext()) {
                             TraceManager.addDev("port=" + ((TMLCPrimitivePort)(ite.next())).getPortName());
                         }*/
@@ -1697,16 +1675,16 @@ public class GTMLModeling {
             tmltask = iterator.next();
 
             // Issue #69: Component  disabling
-            ActivityDiagram2TMLTranslator.INSTANCE.generateTaskActivityDiagrams(	tmltask,
-																            		checkingErrors,
-																					warnings,
-																					listE,
-																					tmlm,
-																					securityPatterns,
-																					table,
-																					removedChannels,
-																					removedEvents,
-																					removedRequests );
+            ActivityDiagram2TMLTranslator.INSTANCE.generateTaskActivityDiagrams(tmltask,
+                    checkingErrors,
+                    warnings,
+                    listE,
+                    tmlm,
+                    securityPatterns,
+                    table,
+                    removedChannels,
+                    removedEvents,
+                    removedRequests);
 //            generateTaskActivityDiagrams(tmltask);
         }
         //TraceManager.addDev( "errors: " + checkingErrors.size() );
@@ -2632,7 +2610,7 @@ public class GTMLModeling {
     }
 
     // public SystemCAMSPanel<TGComponent> translateToSystemCAMS() { //ajout CD 04/07 FIXME
-	/*tous est a changé et a créé ici*/
+    /*tous est a changé et a créé ici*/
     // tmlm = new TMLModeling<>(true);
     // archi = new TMLArchitecture();  //filled by makeArchitecture
     // cams = new TMLSystemCAMS<>(tmlm, archi, false);
@@ -2783,7 +2761,7 @@ public class GTMLModeling {
 
         TMLArchiCPUNode node;
         TMLArchiFPGANode fpgaNode;
-	TMLArchiCAMSNode camsnode;
+        TMLArchiCAMSNode camsnode;
         TMLArchiHWANode hwanode;
         TMLArchiBUSNode busnode;
         TMLArchiVGMNNode vgmnnode;
@@ -2795,7 +2773,7 @@ public class GTMLModeling {
         TMLArchiRouterNode routerNode;
         HwCPU cpu;
         HwFPGA fpga;
-	HwCams cams;
+        HwCams cams;
         HwA hwa;
         HwBus bus;
         HwVGMN vgmn;
@@ -2872,7 +2850,7 @@ public class GTMLModeling {
                 }
             }
 
-	     if (tgc instanceof TMLArchiCAMSNode) {
+            if (tgc instanceof TMLArchiCAMSNode) {
                 camsnode = (TMLArchiCAMSNode) tgc;
                 if (nameInUse(names, camsnode.getName())) {
                     // Node with the same name
@@ -2894,7 +2872,6 @@ public class GTMLModeling {
                 }
             }
 
-	  
 
             if (tgc instanceof TMLArchiHWANode) {
                 hwanode = (TMLArchiHWANode) tgc;
@@ -3215,7 +3192,7 @@ public class GTMLModeling {
             throws MalformedTMLDesignException {
         tmltranslator.tmlcp.TMLCPStart start;
         tmltranslator.tmlcp.TMLCPStop stop;
-      //  tmltranslator.tmlcp.TMLCPJunction junction;
+        //  tmltranslator.tmlcp.TMLCPJunction junction;
         tmltranslator.tmlcp.TMLCPJoin join;
         tmltranslator.tmlcp.TMLCPFork fork;
         tmltranslator.tmlcp.TMLCPChoice choice;
@@ -3505,7 +3482,7 @@ public class GTMLModeling {
         Vector<Vector<TGComponent>> taskss = new Vector<Vector<TGComponent>>();
         Vector<TMLCPrimitiveComponent> allcomp = new Vector<TMLCPrimitiveComponent>();
         int index;
-	//	System.out.println("nodes " + nodesToTakeIntoAccount);
+        //	System.out.println("nodes " + nodesToTakeIntoAccount);
         if (nodesToTakeIntoAccount == null) {
             components = tmlap.tmlap.getComponentList();
         } else {
@@ -3857,7 +3834,7 @@ public class GTMLModeling {
                     //TraceManager.addDev("3) Trying to get task named:" + s);
                     task = tmlm.getTMLTaskByName(s);
                     if (task != null) {
-                        if (operationType !=  -1) {
+                        if (operationType != -1) {
                             task.addOperationType(operationType);
                         }
                         //TraceManager.addDev("Putting operation " + operationType + "/" + operationMEC + " to task " + task.getTaskName());

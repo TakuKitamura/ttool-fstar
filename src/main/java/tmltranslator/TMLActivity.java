@@ -687,6 +687,163 @@ public class TMLActivity extends TMLElement {
         return result;
     }
 
+
+    // returns -1 if the WC cannot be computed
+    // The function follows execution paths and concatenate ExecI values
+    // Loops are assumed to be executed only once
+    public int getWorstCaseDataSending(TMLChannel ch) {
+        return getWorstCaseDataSending(getFirst(), ch);
+    }
+
+    public int getWorstCaseDataSending(TMLActivityElement tae, TMLChannel ch) {
+        //TraceManager.addDev("Handling op:" + tae);
+        TMLActivityElement currentElement = tae;
+        int result = 0;
+        int ret;
+
+        if (tae == null) {
+            return 0;
+        }
+
+        try {
+
+
+            if ((currentElement instanceof TMLForLoop) || (currentElement instanceof TMLSequence) ||
+                    (currentElement instanceof TMLRandomSequence)) {
+                // We consider each next independently
+                for (TMLActivityElement elt : currentElement.getNexts()) {
+                    ret = getWorstCaseDataSending(elt, ch);
+                    if (ret == -1) {
+                        //TraceManager.addDev("1. -1 in Handling op:" + tae);
+                        return -1;
+                    } else {
+                        result += ret;
+                    }
+                }
+
+            } else if ((currentElement instanceof TMLChoice) || (currentElement instanceof TMLSelectEvt)) {
+                for (TMLActivityElement elt : currentElement.getNexts()) {
+                    ret = getWorstCaseDataSending(elt, ch);
+                    if (ret == -1) {
+                        //TraceManager.addDev("2. -1 in Handling op:" + tae);
+                        return -1;
+                    } else {
+                        result = Math.max(ret, result);
+                    }
+                }
+
+            } else if (currentElement instanceof TMLWriteChannel) {
+                ret = getWorstCaseDataSending(currentElement.getNextElement(0), ch);
+                if (ret == -1) {
+                    //TraceManager.addDev("3. -1 in Handling op:" + tae);
+                    return -1;
+                }
+                // Get the nb of samples
+                TMLWriteChannel twc = (TMLWriteChannel)currentElement;
+                if (!twc.hasChannel(ch)) {
+                    return ret;
+                }
+
+                String value = twc.getNbOfSamples();
+                int val = Integer.decode(value);
+                if (val > 0) {
+                    result = ret + val;
+                } else {
+                    result = ret;
+                }
+
+
+            } else {
+                return getWorstCaseDataSending(currentElement.getNextElement(0), ch);
+            }
+        } catch (Exception e) {
+            TraceManager.addDev("Exception in write channel:" + e.getMessage());
+            return -1;
+        }
+
+        return result;
+    }
+
+    // returns -1 if the WC cannot be computed
+    // The function follows execution paths and concatenate ExecI values
+    // Loops are assumed to be executed only once
+    public int getWorstCaseDataReceiving(TMLChannel ch) {
+        return getWorstCaseDataReceiving(getFirst(), ch);
+    }
+
+    public int getWorstCaseDataReceiving(TMLActivityElement tae, TMLChannel ch) {
+        //TraceManager.addDev("Handling op:" + tae);
+        TMLActivityElement currentElement = tae;
+        int result = 0;
+        int ret;
+
+        if (tae == null) {
+            return 0;
+        }
+
+        try {
+
+
+            if ((currentElement instanceof TMLForLoop) || (currentElement instanceof TMLSequence) ||
+                    (currentElement instanceof TMLRandomSequence)) {
+                // We consider each next independently
+                for (TMLActivityElement elt : currentElement.getNexts()) {
+                    ret = getWorstCaseDataReceiving(elt, ch);
+                    if (ret == -1) {
+                        //TraceManager.addDev("1. -1 in Handling op:" + tae);
+                        return -1;
+                    } else {
+                        result += ret;
+                    }
+                }
+
+            } else if ((currentElement instanceof TMLChoice) || (currentElement instanceof TMLSelectEvt)) {
+                for (TMLActivityElement elt : currentElement.getNexts()) {
+                    ret = getWorstCaseDataReceiving(elt, ch);
+                    if (ret == -1) {
+                        //TraceManager.addDev("2. -1 in Handling op:" + tae);
+                        return -1;
+                    } else {
+                        result = Math.max(ret, result);
+                    }
+                }
+
+            } else if (currentElement instanceof TMLReadChannel) {
+                ret = getWorstCaseDataReceiving(currentElement.getNextElement(0), ch);
+                if (ret == -1) {
+                    //TraceManager.addDev("3. -1 in Handling op:" + tae);
+                    return -1;
+                }
+                // Get the nb of samples
+                TMLReadChannel trc = (TMLReadChannel)currentElement;
+                if (!trc.hasChannel(ch)) {
+                    return ret;
+                }
+
+                String value = trc.getNbOfSamples();
+                int val = Integer.decode(value);
+                if (val > 0) {
+                    result = ret + val;
+                } else {
+                    result = ret;
+                }
+
+
+            } else {
+                return getWorstCaseDataReceiving(currentElement.getNextElement(0), ch);
+            }
+        } catch (Exception e) {
+            TraceManager.addDev("Exception in read channel:" + e.getMessage());
+            return -1;
+        }
+
+        return result;
+    }
+
+
+
+
+
     public boolean equalSpec(Object o) {
         if (!(o instanceof TMLActivity)) return false;
         if(!super.equalSpec(o)) return false;

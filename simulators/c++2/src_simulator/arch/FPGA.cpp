@@ -367,6 +367,16 @@ std::string FPGA::toShortString() const{
   return outp.str();
 }
 
+void FPGA::reset(){
+  SchedulableDevice::reset();
+  _scheduler->reset();
+  _transactList.clear();
+  _nextTransaction=0;
+  _lastTransaction=0;
+  _masterNextTransaction=0;
+  _busyCycles=0;
+}
+
 void FPGA::schedule2TXT(std::ofstream& myfile) const{
   myfile << "========= Scheduling for device: "<< _name << " =========\n" ;
   for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){

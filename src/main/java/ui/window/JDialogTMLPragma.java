@@ -66,7 +66,7 @@ import java.util.Map;
  * @author Ludovic APVRILLE, Letitia LI
  * @version 1.0 06/12/2003
  */
-public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
+public class JDialogTMLPragma extends JDialogBase implements ActionListener {
 
     protected String text;
 
@@ -77,25 +77,23 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
     protected JMenuBar menuBar;
     protected JMenu help;
     protected JPopupMenu helpPopup;
-    private Map<String, List<String>> blockAttributeMap;
+    //public Map<String, List<String>> blockAttributeMap = new HashMap<String, List<String>>();
 
     /*
      * Creates new form
      */
-    public JDialogSafetyPragma(Frame f, String title, String _text, Map<String, List<String>> blockAttributeMap) {
+    public JDialogTMLPragma(Frame f, String title, String _text) {
         super(f, title, true);
         text = _text;
-        this.blockAttributeMap = blockAttributeMap;
 
         initComponents();
         pack();
     }
-//Suggestion Panel code from: http://stackoverflow.com/questions/10873748/how-to-show-autocomplete-as-i-type-in-jtextarea
+    //Suggestion Panel code from: http://stackoverflow.com/questions/10873748/how-to-show-autocomplete-as-i-type-in-jtextarea
 
     public class SuggestionPanel {
-        private final String[] pragma = {"A[]", "E<>", "A<>", "E[]", "min(", "max("};
         //Form list of all blocks
-        //For each block, create a list of all attribute strings and states
+        //For each block, create a list of all states and signals
 
         private JList<String> list;
         private JPopupMenu popupMenu;
@@ -126,29 +124,8 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
 
         private JList<String> createSuggestionList(int linePosition, final int position, final String subWord) {
             List<String> matches = new ArrayList<String>();
-            if (linePosition < 3) {
-                for (String p : pragma) {
-                    if (p.startsWith(subWord)) {
-                        matches.add(p);
-                    }
-                }
-            }
-
-            if (!subWord.contains(".")) {
-                for (String block : blockAttributeMap.keySet()) {
-                    if (block.startsWith(subWord)) {
-                        matches.add(block);
-                    }
-                }
-            } else {
-                String block = subWord.split("\\.")[0];
-                if (blockAttributeMap.containsKey(block)) {
-                    for (String attr : blockAttributeMap.get(block)) {
-                        if (attr.startsWith(subWord.split("\\.")[1])) {
-                            matches.add(block + "." + attr);
-                        }
-                    }
-                }
+            if (linePosition < 6) {
+                matches.add("PERIOD ");
             }
             String[] data = new String[matches.size()];
             data = matches.toArray(data);
@@ -168,7 +145,6 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
             return list;
         }
 
-
         public boolean insertSelection() {
             //Note that it will not add if the selection will not fit on the current line
             if (!popupMenu.isVisible()) {
@@ -176,7 +152,7 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
             }
             if (list.getSelectedValue() != null) {
                 try {
-                    final String selectedSuggestion = ( list.getSelectedValue()).substring(subWord.length());
+                    final String selectedSuggestion = (list.getSelectedValue()).substring(subWord.length());
                     textarea.getDocument().insertString(insertionPosition, selectedSuggestion, null);
                     return true;
                 } catch (BadLocationException e1) {
@@ -234,7 +210,7 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
         String text = textarea.getText();
         int start = Math.max(0, position - 1);
         while (start > 0) {
-            if (!Character.isWhitespace(text.charAt(start))) {
+            if (!text.substring(start, start + 1).equals("(") && !text.substring(start, start + 1).equals(")") && !text.substring(start, start + 1).equals(",")) {
                 start--;
             } else {
                 start++;
@@ -280,12 +256,35 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
         setFont(f);
         c.setLayout(new BorderLayout());
         //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	
+
         helpPopup = new JPopupMenu();
+        //JTextArea jft = new JTextArea("UPPAAL pragmas");
+        //helpPopup.add(jft);
+        JLabel t = new JLabel("");
+        JLabel header = new JLabel(" 	TML Pragma");
+        Font headerFont = new Font(t.getFont().getName(), Font.BOLD, t.getFont().getSize() + 2);
+        header.setFont(headerFont);
+        helpPopup.add(header);
+        //Text
+        helpPopup.add(new JLabel(" TML Pragmas allow us to set general properties: "));
+        helpPopup.add(new JLabel(" - the period of the whole application"));
 
+        JLabel example = new JLabel(" Examples:");
+        example.setFont(headerFont);
+        helpPopup.add(example);
 
-        helpPopup.add(new JLabel(IconManager.imgic7009));
+        Font exFont = new Font(t.getFont().getName(), Font.ITALIC, t.getFont().getSize());
+        JLabel t1 = new JLabel(" PERIOD 50ms");
+        t1.setFont(exFont);
+        helpPopup.add(t1);
 
-        helpPopup.setPreferredSize(new Dimension(600, 900));
+        JLabel t2 = new JLabel(" PERIOD 10000cycles");
+        t2.setFont(exFont);
+        helpPopup.add(t2);
+
+        helpPopup.add(new JLabel(" PERIOD 10000ns"));
+        helpPopup.setPreferredSize(new Dimension(400, 150));
+
         textarea = new JTextArea();
 
         textarea.setEditable(true);
@@ -293,7 +292,7 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
         textarea.setTabSize(3);
         textarea.append(text);
         textarea.setFont(new Font("times", Font.PLAIN, 12));
-        menuBar = new JMenuBar();
+        JMenuBar menuBar = new JMenuBar();
         menuBar.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
         help = new JMenu("?");
         menuBar.add(help);
@@ -380,16 +379,16 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
         jp.add(close);
 
         c.add(jp, BorderLayout.SOUTH);
+
     }
 
-    @Override
     public void actionPerformed(ActionEvent evt) {
-        String command = evt.getActionCommand();
+        //String command = evt.getActionCommand();
 
         // Compare the action command to the known actions.
-        if (command.equals("Cancel")) {
+        if (evt.getSource() == cancel) {
             cancel();
-        } else if (command.equals("Ok")) {
+        } else if (evt.getSource() == close) {
             close();
         }
     }

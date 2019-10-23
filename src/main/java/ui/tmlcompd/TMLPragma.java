@@ -36,60 +36,58 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-package ui.avatarbd;
+package ui.tmlcompd;
 
-import myutil.*;
+import myutil.Conversion;
 import myutil.GraphicLib;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import ui.*;
 import ui.util.IconManager;
-import ui.window.JDialogSafetyPragma;
+import ui.window.JDialogTMLPragma;
 
 import javax.swing.*;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
- * Class Pragma
+ * Class TMLPragma
  * Like a Note but with Pragma
- * Creation: 06/12/2003
+ * Creation: 22/10/2019
  *
- * @author Ludovic APVRILLE, Letitia LI
- * @version 1.0 06/12/2003
+ * @author Ludovic APVRILLE
+ * @version 1.0 22/10/2019
  */
-public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
+public class TMLPragma extends TGCScalableWithoutInternalComponent {
 
     protected String[] values;
     protected List<String> properties;
-    protected int textX = 25;
+    protected int textX = 10;
     protected int textY = 5;
-    protected int marginY = 20;
-    protected int marginX = 20;
+    //protected int marginY = 20;
+    protected int marginX = 10;
     protected int limit = 15;
-    protected int lockX = 1;
-    protected int lockY = 5;
-    protected Graphics myg;
     public List<String> syntaxErrors;
+    protected Graphics myg;
+
     protected Color myColor;
 
     private Font myFont;//, myFontB;
     //    private int maxFontSize = 30;
 //    private int minFontSize = 4;
-    public final static int PROVED_TRUE = 1;
-    public final static int PROVED_FALSE = 0;
-    public final static int PROVED_ERROR = 2;
     private int currentFontSize = -1;
-    private final String[] pPragma = {"A[]", "A<>", "E[]", "E<>"};
-    public Map<String, Integer> verifMap = new HashMap<String, Integer>();
+   // private final String[] pPragma = {"A[]", "A<>", "E[]", "E<>"};
+    //public Map<String, String> verifMap = new HashMap<String, String>();
 
     protected Graphics graphics;
 
-    public AvatarBDSafetyPragma(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
+    public TMLPragma(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         width = 200;
         height = 30;
@@ -118,8 +116,9 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
         moveable = true;
         editable = true;
         removable = true;
+
+        name = "Pragma";
         syntaxErrors = new ArrayList<String>();
-        name = "UPPAAL Pragma";
         value = "";
 
         myImageIcon = IconManager.imgic6000;
@@ -162,7 +161,7 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
 
         if (!(this.tdp.isScaled())) {
             int desiredWidth = minWidth;
-            desiredWidth = Math.max(desiredWidth, 2 * g.getFontMetrics().stringWidth("Safety Pragmas") + marginX + textX);
+            desiredWidth = Math.max(desiredWidth, 2 * g.getFontMetrics().stringWidth("Performance Pragma") + marginX + textX);
 
             for (int i = 0; i < values.length; i++) {
                 desiredWidth = Math.max(desiredWidth, g.getFontMetrics().stringWidth(values[i]) + marginX + textX);
@@ -177,13 +176,12 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
             }
         }
 
-        //TraceManager.addDev("x+Width=" + (x+width));
         g.drawLine(x, y, x + width, y);
         g.drawLine(x, y, x, y + height);
         g.drawLine(x, y + height, x + width - limit, y + height);
         g.drawLine(x + width, y, x + width, y + height - limit);
 
-        g.setColor(ColorManager.SAFETY_PRAGMA_BG);
+        g.setColor(ColorManager.PRAGMA_BG);
         int[] px1 = {x + 1, x + width, x + width, x + width - limit, x + 1};
         int[] py1 = {y + 1, y + 1, y + height - limit, y + height, y + height};
         g.fillPolygon(px1, py1, 5);
@@ -203,10 +201,11 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
         int i = 1;
         Font heading = new Font("heading", Font.BOLD, 14);
         g.setFont(heading);
-        g.drawString("Safety Pragmas", x + textX, y + textY + currentFontSize);
+        g.drawString("Pragmas", x + textX, y + textY + currentFontSize);
         g.setFont(fold);
         for (String s : properties) {
             g.drawString(s, x + textX, y + textY + (i + 1) * currentFontSize);
+            //drawVerification(s, g, x + textX, y + textY + (i + 1) * currentFontSize);
             if (syntaxErrors.contains(s)) {
                 Color ctmp = g.getColor();
                 g.setColor(Color.red);
@@ -214,7 +213,6 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
                 g.drawLine(x + width - textX / 2, y + textY * 3 / 2 + i * currentFontSize, x + textX / 2, y + textY * 3 / 2 + (i + 1) * currentFontSize);
                 g.setColor(ctmp);
             }
-            drawVerification(s, g, x + textX, y + textY + (i + 1) * currentFontSize);
             i++;
         }
 
@@ -233,51 +231,26 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
         for (String s : values) {
             if (s.isEmpty()) {
                 //Ignore
-            } else if (Arrays.asList(pPragma).contains(s.split(" ")[0])) {
-                properties.add(s);
-            } else if (s.contains("-->")) {
-                properties.add(s);
             } else {
-                properties.add(s);
                 //Warning Message
-                //Never show this: JOptionPane.showMessageDialog(null, s + " is not a valid pragma.", "Invalid Pragma",
-                //                       JOptionPane.INFORMATION_MESSAGE);
+                properties.add(s);
             }
         }
         //checkMySize();
     }
 
-    /*public void checkMySize() {
-      if (myg == null) {
-      return;
-      }
-      int desiredWidth = minWidth;
-      for(int i=0; i< values.length; i++) {
-      desiredWidth = Math.max(desiredWidth, myg.getFontMetrics().stringWidth(values[i]) + marginX);
-      }
-
-      int desiredHeight = values.length * myg.getFontMetrics().getHeight() + marginY;
-
-      if ((desiredWidth != width) || (desiredHeight != height)) {
-      resize(desiredWidth, desiredHeight);
-      }
-      }*/
 
     @Override
     public boolean editOndoubleClick(JFrame frame) {
         String oldValue = value;
 
-        AvatarBDPanel abdp = (AvatarBDPanel) tdp;
-        Map<String, List<String>> blockAttributeMap = abdp.getBlockStrings(true, true, true);
-        JDialogSafetyPragma jdn = new JDialogSafetyPragma(frame, "Setting the safety pragmas", value, blockAttributeMap);
+        JDialogTMLPragma jdp = new JDialogTMLPragma(frame, "Setting the pragmas", value);
         //jdn.setLocation(200, 150);
-        jdn.setSize(500, 500);
-        GraphicLib.centerOnParent(jdn);
+        GraphicLib.centerOnParent(jdp);
 
-        //jdn.blockAttributeMap = abdp.getBlockStrings(true, true, true);
-        jdn.setVisible(true); // blocked until dialog has been closed
+        jdp.setVisible(true); // blocked until dialog has been closed
 
-        String s = jdn.getText();
+        String s = jdp.getText();
         if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
             //String tmp = s;
             setValue(s);
@@ -287,10 +260,7 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
         return false;
     }
 
-    @Override
     public TGComponent isOnMe(int x1, int y1) {
-        //TraceManager.addDev("x+width=" + (x+width) + " x1=" + x1);
-        //TraceManager.addDev("y+height=" + (y+height) + " y1=" + y1);
         if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
             return this;
         }
@@ -299,11 +269,6 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
 
     @Override
     public void rescale(double scaleFactor) {
-        /*dlineHeight = (lineHeight + dlineHeight) / oldScaleFactor * scaleFactor;
-          lineHeight = (int)(dlineHeight);
-          dlineHeight = dlineHeight - lineHeight;
-          minHeight = lineHeight;*/
-
         values = null;
 
         super.rescale(scaleFactor);
@@ -311,7 +276,7 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
 
     @Override
     public int getType() {
-        return TGComponentManager.SAFETY_PRAGMA;
+        return TGComponentManager.TML_PRAGMA;
     }
 
     @Override
@@ -329,37 +294,6 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
         return new String(sb);
     }
 
-    private void drawVerification(String s, Graphics g, int _x, int _y) {
-        Color c = g.getColor();
-        //   Color c1;
-        int status;
-        if (verifMap.containsKey(s)) {
-            status = verifMap.get(s);
-            if (status == PROVED_TRUE) {
-                g.setColor(Color.green);
-                int[] xp1 = new int[]{_x - 20, _x - 18, _x - 12, _x - 14};
-                int[] yp1 = new int[]{_y - 3, _y - 5, _y - 1, _y + 1};
-                int[] xp2 = new int[]{_x - 14, _x - 12, _x - 3, _x - 5};
-                int[] yp2 = new int[]{_y - 1, _y + 1, _y - 8, _y - 10};
-                g.fillPolygon(xp1, yp1, 4);
-                g.fillPolygon(xp2, yp2, 4);
-            } else if (status == PROVED_ERROR) {
-                Font f = g.getFont();
-                g.setFont(new Font("TimesRoman", Font.BOLD, 14));
-                g.drawString("?", _x - 15, _y);
-                g.setFont(f);
-            } else {
-                g.setColor(Color.red);
-                int[] xp1 = new int[]{_x - 17, _x - 15, _x - 6, _x - 8};
-                int[] yp1 = new int[]{_y - 12, _y - 10, _y - 2, _y};
-                int[] xp2 = new int[]{_x - 15, _x - 17, _x - 8, _x - 6};
-                int[] yp2 = new int[]{_y, _y - 2, _y - 12, _y - 10};
-                g.fillPolygon(xp1, yp1, 4);
-                g.fillPolygon(xp2, yp2, 4);
-            }
-        }
-        g.setColor(c);
-    }
 
     @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {

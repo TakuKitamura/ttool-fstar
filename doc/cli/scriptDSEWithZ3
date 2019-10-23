@@ -1,0 +1,7 @@
+set model ./../tmlcode/specz3.tmap
+tml load $model
+tml checksyntax
+tml loadz3lib /opt/z3/bin/libz3.dylib:/opt/z3/bin/libz3java.dylib
+tml z3opt
+tml save-result ../tmlcode/z3result
+tml save-result-tml-mapping ../tmlcode/z3result

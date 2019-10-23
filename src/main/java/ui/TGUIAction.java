@@ -598,6 +598,7 @@ public class TGUIAction extends AbstractAction {
     public static final int SAFETY_PRAGMA = 425;
     public static final int PERFORMANCE_PRAGMA = 438;
     public static final int AVATAR_FIREWALL = 437;
+    public static final int TML_PRAGMA = 521;
 
     public static final int ACT_CUT = 44;
     public static final int ACT_COPY = 45;
@@ -675,7 +676,7 @@ public class TGUIAction extends AbstractAction {
     public static final int MOVE_ENABLED = 463;
     public static final int FIRST_DIAGRAM = 464;
     
-    public static final int NB_ACTION = 521;
+    public static final int NB_ACTION = 522;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -993,6 +994,7 @@ public class TGUIAction extends AbstractAction {
         actions[UML_NOTE] = new TAction("edit-note", "Add a note to a diagram", IconManager.imgic320, IconManager.imgic321, "Add a comment", "Add a comment to the currently opened TTool diagram", 0);
         actions[PRAGMA] = new TAction("pragma", "Security pragmas", IconManager.imgic6000, IconManager.imgic6001, "Security pragmas", "Add security pragmas to the currently opened TTool diagram", 0);
         actions[SAFETY_PRAGMA] = new TAction("safety_pragma", "Add a safety (UPPAAL) property to a diagram", IconManager.imgic6002, IconManager.imgic6003, "Safety property (UPPAAL)", "Add a safety (UPPAAL) property to the currently opened TTool diagram", 0);
+        actions[TML_PRAGMA] = new TAction("tml_pragma", "Add a TML pragma", IconManager.imgic6006, IconManager.imgic6007,"TML pragma", "Add a TML pragma to the currently opened TTool diagram", 0);
         actions[PERFORMANCE_PRAGMA] = new TAction("performance_pragma", "Add a performance property to a diagram", IconManager.imgic6004, IconManager.imgic6005, "Performance property", "Add a performance property to the currently opened TTool diagram", 0);
         actions[AVATAR_FIREWALL] = new TAction("avatar_firewall", "Add an avatar firewall to a diagram", IconManager.imgic7001, IconManager.imgic7001, "Add an avatar firewall", "Add an avatar firewall to the currently opened TTool diagram", 0);
 

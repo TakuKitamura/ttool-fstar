@@ -463,6 +463,7 @@ public class AvatarBDPanel extends TDiagramPanel {
 	public Map<String, List<String>> getBlockStrings(boolean addAttributes, boolean addStates, boolean addSignals){
 		Map<String,List<String>> blockStringMap = new HashMap<String, List<String>>();
 		for (AvatarBDBlock block: getFullBlockList()){
+		    //TraceManager.addDev("Got block:" + block.getBlockName());
 			List<String> strs = new ArrayList<String>();
 			if (addAttributes){
 				for (TAttribute attr: getAllAttributesOfBlock(block.getBlockName())){

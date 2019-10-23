@@ -44,7 +44,7 @@ import java.util.Objects;
 
 
 /**
- * Class TMLReadChannel
+* Class TMLActivityElementChannel
  * Creation: 23/11/2005
  *
  * @author Ludovic APVRILLE
@@ -68,6 +68,10 @@ public class TMLActivityElementChannel extends TMLActivityElement {
 
     public int getNbOfChannels() {
         return channels.size();
+    }
+
+    public boolean hasChannel(TMLChannel ch) {
+        return channels.contains(ch);
     }
 
     public TMLChannel getChannel(int _index) {

@@ -166,6 +166,7 @@ public class IconManager {
 
     //pragmas
     public static ImageIcon imgic6000, imgic6001, imgic6002, imgic6003, imgic6004, imgic6005;
+    public static ImageIcon imgic6006, imgic6007;
 
     //Security
     public static ImageIcon imgic7000, imgic7001;
@@ -658,6 +659,8 @@ public class IconManager {
     private static String icon6003 = "toolbarButtonGraphics/general/safepragma24.gif";
     private static String icon6004 = "toolbarButtonGraphics/general/performancepragma16.gif";
     private static String icon6005 = "toolbarButtonGraphics/general/performancepragma24.gif";
+    private static String icon6006 = "toolbarButtonGraphics/general/tmlpragma16.gif";
+    private static String icon6007 = "toolbarButtonGraphics/general/tmlpragma24.gif";
 
     //Security stuff
     private static String icon7000 = "tmlcrypto.gif";
@@ -1185,6 +1188,8 @@ public class IconManager {
         imgic6003 = getIcon(icon6003);
         imgic6004 = getIcon(icon6004);
         imgic6005 = getIcon(icon6005);
+        imgic6006 = getIcon(icon6006);
+        imgic6007 = getIcon(icon6007);
 
 
         imgic7000 = getIcon(icon7000);

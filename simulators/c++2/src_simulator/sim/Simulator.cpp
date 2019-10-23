@@ -455,12 +455,12 @@ std::cout<<"schedule2HTML--------------------------------------*****************
 
     const std::string ext( EXT_HTML );
     const std::string cssFileName = iTraceFileName.substr( indexSlash + 1, iTraceFileName.length() - indexSlash - ext.length() - 1 ) + EXT_CSS; 
-    const std::string jsFileName = iTraceFileName.substr( indexSlash + 1, iTraceFileName.length() - indexSlash - ext.length() - 1 ) + EXT_JS;
+    //const std::string jsFileName = iTraceFileName.substr( indexSlash + 1, iTraceFileName.length() - indexSlash - ext.length() - 1 ) + EXT_JS;
     //myfile<<"length is "<< iTraceFileName.length() - indexSlash - ext.length() - 1<<std::endl;
     const std::string cssFullFileName = iTraceFileName.substr( 0, indexSlash + 1 ) + cssFileName;
-    const std::string jsFullFileName =  iTraceFileName.substr( 0, indexSlash + 1 ) + jsFileName;
+    //const std::string jsFullFileName =  iTraceFileName.substr( 0, indexSlash + 1 ) + jsFileName;
     std::ofstream cssfile( cssFullFileName.c_str() );
-    std::ofstream jsfile( jsFullFileName.c_str() );
+    //std::ofstream jsfile( jsFullFileName.c_str() );
     
     //myfile<<"full name is "<<cssFullFileName<<std::endl;
     if ( cssfile.is_open() ) {
@@ -506,6 +506,10 @@ std::cout<<"schedule2HTML--------------------------------------*****************
       myfile << "<script src=\"" << str.substr(0,pos1) << "/simulators/c++2/src_simulator/jquery.min.js\">" << SCHED_HTML_END_JS << std::endl;
       myfile << "<script src=\"" << str.substr(0,pos1) << "/simulators/c++2/src_simulator/Chart.min.js\">" << SCHED_HTML_END_JS << std::endl;
     }
+    else {
+      myfile << SCHED_HTML_JS_LINK1 << SCHED_HTML_END_JS << std::endl;
+      myfile << SCHED_HTML_JS_LINK2 << SCHED_HTML_END_JS << std::endl;
+    }
     myfile << SCHED_HTML_BEGIN_JS << std::endl;
     
     myfile << SCHED_HTML_JS_WINDOW;
@@ -541,7 +545,7 @@ std::cout<<"schedule2HTML--------------------------------------*****************
     // myfile << SCHED_HTML_END_JS;
     //myfile << SCHED_HTML_JS_LINK;
     //myfile << SCHED_HTML_END_JS;
-    jsfile.close();
+    //jsfile.close();
     //for(CPUList::const_iterator i=_simComp->getCPUIterator(false); i != _simComp->getCPUIterator(true); ++i){
         
     myfile << SCHED_HTML_TITLE_HW << std::endl;
@@ -874,18 +878,24 @@ bool Simulator::simulate(TMLTransaction*& oLastTrans){
 	  
 	if(transLET!=0 && transLET->getCommand()->getTask()->getIsDaemon()==true){
 	  if(transLET->getStartTime() >= deviceLET->getSimulatedTime()){
-	    if(_simComp->getNonDaemonTaskList().empty())
+	    if(_simComp->getNonDaemonTaskList().empty()){
+	      isFinish = true;
 	      break;
+	      }
+	    int cnt = 0;
+        int cnt1 = 0;
 	    for(TaskList::const_iterator i=_simComp->getNonDaemonTaskList().begin(); i != _simComp->getNonDaemonTaskList().end(); ++i){	 
 	      //  std::cout<<"non dameon task"<<(*i)->toString()<<" state is "<<(*i)->getState()<<(*i)->getCurrCommand()->toString()<<std::endl;
-	      if((*i)->getState()!=3){
+	       cnt ++;
+	       if((*i)->getState()==3){
 		//	std::cout<<"not stop"<<std::endl;
-		isFinish=false;
-		break;	 
+            cnt1 ++;
 	      }
 	    }
-	    if(isFinish==true)
-	      break;	      
+	    if(cnt1>=cnt){
+           isFinish = true;
+           break;
+	    }
 	  }
 	}
 	else
