@@ -66,7 +66,6 @@ public class SysCAMSPanelTranslator {
 
 		syscamsComponents = new LinkedList<SysCAMSTComponent>();
 		syscamsConnectors = new LinkedList<SysCAMSTConnector>();
-System.out.println("@@@ Panel Translator ");
 		MakeListOfComponent(_syscamsDiagramPanel);
 	}
 

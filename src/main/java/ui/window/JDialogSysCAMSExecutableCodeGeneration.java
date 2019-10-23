@@ -72,6 +72,8 @@ import java.util.Arrays;
  * @author Irina Kit Yan LEE, 
  * @version 1.1 06/08/2018
  * @author Rodrigo CORTES PORTO
+ * @version 1.2 22/10/2019
+ * @author Rodrigo CORTES PORTO, Daniela GENIUS
  */
 
 @SuppressWarnings("serial")
@@ -84,17 +86,6 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
     private String textSysC1 = "Base directory of code generation:";
     private String textSysC7 = "Base directory of topcell generation:";
     private String textSysC8 = "Base directory of Makefile:";
-//    private String textSysC2 = "Compile SystemC-AMS executable with"; // compile
-//    private String textSysC4 = "Run code in soclib / mutekh:";
-//    private String textSysC5 = "Show AVATAR trace from file w/o hardware:";
-//    private String textSysC6 = "Show cycle accurate trace from MPSoC file:";
-
-//    private static String[] codes = {"AVATAR SOCLIB"};
-
-//    private static int selectedRun = 1;
-//    private static int selectedCompile = 0;
-//    private static int selectedViewTrace = 0;
-//    private static boolean static_putUserCode = true;
 
     protected static String pathCode;
     protected static String pathSoclibTraceFile;
@@ -537,8 +528,7 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
                                 nbPorts += deBlock.getPortDE().size();
                             } 
                             for(SysCAMSTBlockGPIO2VCI gpioBlock : gpioBlocks) {
-				has_GPIO=true;//DG
-				//System.out.println("@@@@ I got here @@@");
+				has_GPIO=true;
                                 nbPorts += gpioBlock.getPortDE().size();
                             }
 			    if(has_GPIO==true)

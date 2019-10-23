@@ -169,9 +169,22 @@ public class ClusterCode {
 			
 		for (SysCAMSTClock t : clock) {
 		   
-		    //	    corpsCluster = corpsCluster + "\t  sc_clock " + t.getName() + " (\"" + t.getName() + "\"," + t.getFrequency()+","+ t.getUnit()+","+ t.getDutyCycle()+","+ t.getStartTime()+","+ t.getUnitStartTime()+","+ t.getPosFirst()+");" + CR;
-	 corpsCluster = corpsCluster + "\t  sc_clock " + t.getName() + " (\"" + t.getName() + "\"," + t.getFrequency()+", SC_MS,"+ t.getDutyCycle()+","+ t.getStartTime()+", SC_MS,"+ t.getPosFirst()+");" + CR;	    
-		}
+		    //   corpsCluster = corpsCluster + "\t  sc_clock " + t.getName() + " (\"" + t.getName() + "\"," + t.getFrequency()+","+ t.getUnit()+","+ t.getDutyCycle()+","+ t.getStartTime()+","+ t.getUnitStartTime()+","+ t.getPosFirst()+");" + CR;
+		    
+		    String unitString="";
+		    String unitStartTimeString="";
+		    //System.out.println("@@@@@@@ unit  "+t.getUnit());
+		    //System.out.println("@@@@@@@ unit StartTime  "+t.getUnitStartTime());
+		    if(t.getUnit()=="s")unitString="SC_SEC";
+		    if(t.getUnitStartTime()=="s")unitStartTimeString="SC_SEC";
+		    if(t.getUnit()=="ms")unitString="SC_MS";
+		    if(t.getUnitStartTime()=="ms")unitStartTimeString="SC_MS";
+		    if(t.getUnit()=="\u03BCs")unitString="SC_US";
+		    if(t.getUnitStartTime()=="\u03BCs")unitStartTimeString="SC_US";
+		    if(t.getUnit()=="ns")unitString="SC_NS";
+		    if(t.getUnitStartTime()=="ns")unitStartTimeString="SC_NS";
+		     
+		    corpsCluster = corpsCluster + "\t  sc_clock " + t.getName() + " (\"" + t.getName() + "\"," + t.getFrequency()+","+ unitString+","+ t.getDutyCycle()+","+ t.getStartTime()+","+unitStartTimeString+","+ t.getPosFirst()+");" + CR;    		}
 					      		
 		nb_block=0;
 				corpsCluster = corpsCluster + CR + "\t// Instantiate cluster's modules." + CR;	

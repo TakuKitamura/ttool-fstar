@@ -583,6 +583,7 @@ if (t.getOrigin() == 0) {
 
 //DG 17.10.
 			if(de.getClockName()!=""){
+			    if(!method)corpsPrimitiveDE = corpsPrimitiveDE + "\t{";
 			    corpsPrimitiveDE = corpsPrimitiveDE + "\t\tsensitive << " + de.getClockName()  + ".pos();"+CR;
 			    /*	if (de.getClockSensitiveMethod().equals("positive")) {
 						corpsPrimitiveDE = corpsPrimitiveDE + "pos();" + CR;
