@@ -207,16 +207,9 @@ public class ClusterCode {
                     names.add("gpio_sig" + nb_con);
                 } 
 	    }
+   
 
-	    //DG
-	    for (SysCAMSTClock clk : clock) {
-                corpsCluster = corpsCluster + "sc_clock"+ clk.getName()+ "("+clk.getName()+", "+clk.getFrequency()+", "+clk.getUnit()+", "+clk.getDutyCycle()+", "+clk.getStartTime()+", "+clk.getUnit()+", "+clk.getPosFirst()+");" + CR;
-		    }
-	    //fin ajoute DG
-
-	    
-
-			corpsCluster = corpsCluster + CR + "\t// Instantiate cluster's modules." + CR;
+	    corpsCluster = corpsCluster + CR + "\t// Instantiate cluster's modules." + CR;
             for (SysCAMSTBlockTDF t : tdf) {
                 corpsCluster = corpsCluster + "\t" + t.getName();
                 if (!t.getListTypedef().isEmpty()) {
