@@ -230,6 +230,7 @@ public class MappedSystemCTask {
         code += "#include <TMLActionCommand.h>\n#include <TMLChoiceCommand.h>\n#include <TMLRandomChoiceCommand.h>\n#include <TMLExeciCommand.h>\n";
         code += "#include <TMLSelectCommand.h>\n#include <TMLReadCommand.h>\n#include <TMLNotifiedCommand.h>\n#include <TMLExeciRangeCommand.h>\n";
         code += "#include <TMLRequestCommand.h>\n#include <TMLSendCommand.h>\n#include <TMLWaitCommand.h>\n";
+        code += "#include <TMLDelayCommand.h>\n";
         code += "#include <TMLWriteCommand.h>\n#include <TMLStopCommand.h>\n#include <TMLWriteMultCommand.h>\n#include <TMLRandomCommand.h>\n\n";
         code += "extern \"C\" bool condFunc(TMLTask* _ioTask_);\n";
         return code;
@@ -524,11 +525,30 @@ public class MappedSystemCTask {
             //functionSig+="void " + cmdName + "_func(ParamType & oMin, ParamType& oMax)" + SCCR;
 
         } else if (currElem instanceof TMLActionState || currElem instanceof TMLDelay) {
-            String action, comment;
+            String action, comment, delayLen;
             if (currElem instanceof TMLActionState) {
                 //if (debug) TraceManager.addDev("Checking Action\n");
                 action = formatAction(((TMLActionState) currElem).getAction());
                 comment = action;
+                String elemName = currElem.getName(), idString;
+                if (elemName.charAt(0) == '#') {
+                    int pos = elemName.indexOf('\\');
+                    idString = elemName.substring(1, pos);
+                    //TraceManager.addDev(elemName + "***" + pos + "***" + idString + "***"+ elemName.length());
+                    cmdName = "_" + elemName.substring(pos + 1) + idString;
+                } else {
+                    cmdName = "_action" + currElem.getID();
+                    idString = String.valueOf(currElem.getID());
+                }
+                hcode += "TMLActionCommand " + cmdName + SCCR;
+                initCommand += "," + cmdName + "(" + idString + ",this,(ActionFuncPointer)&" + reference + "::" + cmdName + "_func, " + getFormattedLiveVarStr(currElem) + ")" + CR;
+                nextCommand = cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0), false, retElement, null) + "));\n";
+                functions += "void " + reference + "::" + cmdName + "_func(){\n#ifdef ADD_COMMENTS\naddComment(new Comment(_endLastTransaction,0," + commentNum + "));\n#endif\n" + modifyString(addSemicolonIfNecessary(action)) + CR;
+                //functions+="return 0"+ SCCR;
+                functions += "}" + CR2;
+                commentText += "_comment[" + commentNum + "]=std::string(\"Action " + comment + "\");\n";
+                commentNum++;
+                functionSig += "void " + cmdName + "_func()" + SCCR;
             } else {
                 //if (debug) TraceManager.addDev("Checking Delay\n");
                 int masterClockFreq = tmlmapping.getTMLArchitecture().getMasterClockFrequency();
@@ -537,32 +557,36 @@ public class MappedSystemCTask {
                 comment = action;
                 action += "\nif (tmpDelayxy==0) tmpDelayxy=1;\n";
                 if (delay.getMinDelay().equals(delay.getMaxDelay())) {
-                    action += "_endLastTransaction+=tmpDelayxy";
+                    action += "_endLastTransaction+=0";
+                    delayLen = delay.getMaxDelay() + "*" + masterClockFreq + delay.getMasterClockFactor();
                 } else {
                     action += "TMLTime tmpDelayxx = " + delay.getMinDelay() + "*" + masterClockFreq + delay.getMasterClockFactor() + ";\nif (tmpDelayxx==0) tmpDelayxx=1;\n";
-                    action += "_endLastTransaction+=myrand(tmpDelayxx,tmpDelayxy)";
+                    action += "_endLastTransaction+= 0";
+                    delayLen = delay.getMinDelay() + "*" + masterClockFreq + delay.getMasterClockFactor();
                 }
+                String elemName = currElem.getName(), idString;
+                if (elemName.charAt(0) == '#') {
+                    int pos = elemName.indexOf('\\');
+                    idString = elemName.substring(1, pos);
+                    //TraceManager.addDev(elemName + "***" + pos + "***" + idString + "***"+ elemName.length());
+                    cmdName = "_" + elemName.substring(pos + 1) + idString;
+                } else {
+                    cmdName = "_delay" + currElem.getID();
+                    idString = String.valueOf(currElem.getID());
+                }
+                hcode += "TMLDelayCommand " + cmdName + SCCR;
+                initCommand += "," + cmdName + "(" + idString + ",this,"+ delayLen +",(ActionFuncPointer)&" + reference + "::" + cmdName + "_func, " + getFormattedLiveVarStr(currElem) + ")" + CR;
+                nextCommand = cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0), false, retElement, null) + "));\n";
+                functions += "void " + reference + "::" + cmdName + "_func(){\n#ifdef ADD_COMMENTS\naddComment(new Comment(_endLastTransaction,0," + commentNum + "));\n#endif\n" + modifyString(addSemicolonIfNecessary(action)) + CR;
+                //functions+="return 0"+ SCCR;
+//                functions += "std::ostringstream ss" + SCCR + "\n";
+//                functions += "if(" + cmdName + ".getCurrTransaction() != NULL) " + cmdName + ".getCurrTransaction()->lastParams = ss.str()" +
+//                        SCCR + "\n";
+                functions += "}" + CR2;
+                commentText += "_comment[" + commentNum + "]=std::string(\"Delay " + comment + "\");\n";
+                commentNum++;
+                functionSig += "void " + cmdName + "_func()" + SCCR;
             }
-            //cmdName= "_action" + currElem.getID();
-            String elemName = currElem.getName(), idString;
-            if (elemName.charAt(0) == '#') {
-                int pos = elemName.indexOf('\\');
-                idString = elemName.substring(1, pos);
-                //TraceManager.addDev(elemName + "***" + pos + "***" + idString + "***"+ elemName.length());
-                cmdName = "_" + elemName.substring(pos + 1) + idString;
-            } else {
-                cmdName = "_action" + currElem.getID();
-                idString = String.valueOf(currElem.getID());
-            }
-            hcode += "TMLActionCommand " + cmdName + SCCR;
-            initCommand += "," + cmdName + "(" + idString + ",this,(ActionFuncPointer)&" + reference + "::" + cmdName + "_func, " + getFormattedLiveVarStr(currElem) + ")" + CR;
-            nextCommand = cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0), false, retElement, null) + "));\n";
-            functions += "void " + reference + "::" + cmdName + "_func(){\n#ifdef ADD_COMMENTS\naddComment(new Comment(_endLastTransaction,0," + commentNum + "));\n#endif\n" + modifyString(addSemicolonIfNecessary(action)) + CR;
-            //functions+="return 0"+ SCCR;
-            functions += "}" + CR2;
-            commentText += "_comment[" + commentNum + "]=std::string(\"Action " + comment + "\");\n";
-            commentNum++;
-            functionSig += "void " + cmdName + "_func()" + SCCR;
 
         } else if (currElem instanceof TMLExecI) {
             //if (debug) TraceManager.addDev("Checking Execi\n");

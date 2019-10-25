@@ -194,7 +194,7 @@ public class TML2MappingSystemC implements IDiploSimulatorCodeGenerator {
             if (node instanceof HwCPU) {
                 HwCPU exNode = (HwCPU) node;
                 if (exNode.getType().equals("CPURRPB"))
-                    declaration += "PrioScheduler* " + exNode.getName() + "_scheduler = new PrioScheduler(\"" + exNode.getName() + "_PrioSched\",0)" + SCCR;
+                    declaration += "RRPrioScheduler* " + exNode.getName() + "_scheduler = new RRPrioScheduler(\"" + exNode.getName() + "_PrioSched" + "\",0, " + (tmlmapping.getTMLArchitecture().getMasterClockFrequency() * exNode.sliceTime) + ", " + (int) Math.ceil((float) (exNode.clockRatio * Math.max(exNode.execiTime, exNode.execcTime) * (exNode.branchingPredictionPenalty * exNode.pipelineSize + 100 - exNode.branchingPredictionPenalty)) / 100) + " ) " + SCCR;
                 else
                     //tmlmapping.getTMLArchitecture().getMasterClockFrequency() * exNode.sliceTime
                     //declaration += "RRScheduler* " + exNode.getName() + "_scheduler = new RRScheduler(\"" + exNode.getName() + "_RRSched\", 0, 5, " + (int) Math.ceil(((float)exNode.execiTime)*(1+((float)exNode.branchingPredictionPenalty)/100)) + " ) " + SCCR;

@@ -52,6 +52,7 @@
 #include <SimComponents.h>
 #include <TMLStopCommand.h>
 #include <TMLRandomCommand.h>
+#include <TMLDelayCommand.h>
 
 std::list<TMLCommand*> TMLCommand::_instanceList;
 SimComponents* TMLCommand::_simComp=0;

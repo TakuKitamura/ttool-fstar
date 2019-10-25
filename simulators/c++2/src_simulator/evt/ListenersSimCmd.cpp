@@ -44,6 +44,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLCommand.h>
 #include <TMLRandomChoiceCommand.h>
 #include <TMLActionCommand.h>
+#include <TMLDelayCommand.h>
 #include <TMLNotifiedCommand.h>
 #include <TMLWaitCommand.h>
 #include <TMLTask.h>
