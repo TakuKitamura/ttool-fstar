@@ -744,7 +744,7 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
                 	if (syscalsspec == null) {
                 		jta.append("Error: No SYSCAMS specification\n");
                 	} else {
-                		System.err.println("**SYSCAMS TOPCELL found");
+			    //System.err.println("**SYSCAMS TOPCELL found");
 				//if(standalone){
 				TopCellGenerator topCellGenerator = new TopCellGenerator(syscalsspec);//}
 			//else{

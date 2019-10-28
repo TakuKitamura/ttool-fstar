@@ -51,7 +51,7 @@ import javax.swing.DefaultListModel;
  * Creation: 19/05/2018
  * @version 1.0 19/05/2018
  * @author Irina Kit Yan LEE
- * @version 1.1 10/07/2019 Daniela GENIUS
+ * @version 1.1 28/10/2019 Daniela GENIUS
  */
 
 public class SysCAMSPanelTranslator {
@@ -159,9 +159,9 @@ public class SysCAMSPanelTranslator {
 			
 				syscamsMap.put(blockDE, syscamsBlockDE);
 			
-				//	System.out.println("@@@ DE block put in map @@@");
+			
 				syscamsComponents.add(syscamsBlockDE);
-	System.out.println("@@@ Panel Translator BlockDE name @@@ "+blockDEName);
+			
 				
 			} else if (dp instanceof SysCAMSClock) {
 
@@ -176,13 +176,13 @@ public class SysCAMSPanelTranslator {
 				String unitStartTime = clock.getUnitStartTime();
 				boolean posFirst = clock.getPosFirst();
 
-				System.out.println("@@@ Panel Translator clock name @@@ "+clockName);
+				//System.out.println("@@@ Panel Translator clock unit @@@ "+unit);
 				
 				SysCAMSTClock syscamsClock = new SysCAMSTClock(clockName, frequency, unit, dutyCycle, startTime, unitStartTime, posFirst);
 			
 		       
 				syscamsMap.put(clock, syscamsClock);
-				System.out.println("@@@ Clock put in map @@@");
+				//	System.out.println("@@@ Clock put in map @@@");
 				syscamsComponents.add(syscamsClock);
 								
 			} else if (dp instanceof SysCAMSCompositeComponent) {
@@ -309,21 +309,21 @@ public class SysCAMSPanelTranslator {
 					syscamsComponents.add(syscamsBlockDE);
 				}
 
-
+			
 				for (int i = 0; i < clocks.size(); i++) {
 					SysCAMSClock clock = clocks.get(i);
 
 					//	String clockName = clock.getName();
 					String clockName = clock.getValue();
 					double frequency = clock.getFrequency();			
-					String unit = clock.getUnit();
+					String unit = clock.getUnit();									
 					double dutyCycle = clock.getDutyCycle();
 					double startTime = clock.getStartTime();
-					String unitStartTime = clock.getUnitStartTime();
+					String unitStartTime = clock.getUnitStartTime();	                      
 					boolean posFirst = clock.getPosFirst();
 				
 					SysCAMSTClock syscamsClock = new SysCAMSTClock(clockName, frequency, unit, dutyCycle, startTime, unitStartTime, posFirst);
-
+				
 					syscamsMap.put(clock, syscamsClock);
 					syscamsCluster.addClock(syscamsClock);
 					syscamsComponents.add(syscamsClock);

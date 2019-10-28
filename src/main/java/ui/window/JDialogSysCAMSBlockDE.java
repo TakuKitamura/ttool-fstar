@@ -53,6 +53,8 @@ import javax.swing.event.*;
  * Creation: 26/04/2018
  * @version 1.0 26/04/2018
  * @author Irina Kit Yan LEE
+ * @version 1.1 27/10/2019
+ * @author Daniela Genius
  */
 
 @SuppressWarnings("serial")
@@ -239,48 +241,6 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener, Li
 				new Insets(15, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(nameTextField, constraints);
 		attributesBoxPanel.add(nameTextField);
-
-//		JLabel periodLabel = new JLabel("Period Tm : ");
-//		constraints = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-//				new Insets(5, 10, 15, 10), 0, 0);
-//		gridBag.setConstraints(periodLabel, constraints);
-//		attributesBoxPanel.add(periodLabel);
-//
-//		if (block.getPeriod() == -1) { 
-//			periodTextField = new JTextField(10);
-//		} else {
-//			periodTextField = new JTextField("" + block.getPeriod(), 10);
-//		}
-//		constraints = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-//				new Insets(5, 10, 15, 10), 0, 0);
-//		gridBag.setConstraints(periodTextField, constraints);
-//		attributesBoxPanel.add(periodTextField);
-//
-//		listPeriodString = new String[3];
-//		listPeriodString[0] = "us";
-//		listPeriodString[1] = "ms";
-//		listPeriodString[2] = "s";
-//		periodComboBoxString = new JComboBox<String>(listPeriodString);
-//		if (block.getTime().equals("") || block.getTime().equals("us")) {
-//			periodComboBoxString.setSelectedIndex(0);
-//		} else if (block.getTime().equals("ms")) {
-//			periodComboBoxString.setSelectedIndex(1);
-//		} else if (block.getTime().equals("s")) {
-//			periodComboBoxString.setSelectedIndex(2);
-//		}
-//		periodComboBoxString.setActionCommand("time");
-//		periodComboBoxString.addActionListener(this);
-//		constraints = new GridBagConstraints(2, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-//				new Insets(5, 10, 15, 10), 0, 0);
-//		gridBag.setConstraints(periodComboBoxString, constraints);
-//		attributesBoxPanel.add(periodComboBoxString);
-
-
-		/*GridBagLayout gridBag = new GridBagLayout();
-		GridBagConstraints constraints = new GridBagConstraints();
-		JPanel attributesBoxPanel = new JPanel();
-		attributesBoxPanel.setFont(new Font("Helvetica", Font.PLAIN, 14));
-		attributesBoxPanel.setLayout(gridBag);*/
 
 		JLabel labelClock = new JLabel("Clock : ");
 		constraints = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -1086,26 +1046,6 @@ JPanel sensitivePanel = new JPanel(new FlowLayout());
 		
 		if ("Save_Close".equals(e.getActionCommand())) {
 			block.setValue(new String(nameTextField.getText()));
-
-//			if (!(periodTextField.getText().isEmpty())) {
-//				Boolean periodValueInteger = false;
-//				try {
-//					Integer.parseInt(periodTextField.getText());
-//				} catch (NumberFormatException e1) {
-//					JDialog msg = new JDialog(this);
-//					msg.setLocationRelativeTo(null);
-//					JOptionPane.showMessageDialog(msg, "Period Tm is not a Integer", "Warning !",
-//							JOptionPane.WARNING_MESSAGE);
-//					periodValueInteger = true;
-//				}
-//				if (periodValueInteger == false) {
-//					block.setPeriod(Integer.parseInt(periodTextField.getText()));
-//					block.setTime((String) periodComboBoxString.getSelectedItem());
-//				}
-//			} else {
-//				block.setPeriod(-1);
-//				block.setTime("");
-//			}
 
 			if (block.getFather() != null) {
 				block.setListStruct(structListModel);
