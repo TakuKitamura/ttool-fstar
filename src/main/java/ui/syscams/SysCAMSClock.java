@@ -113,6 +113,10 @@ public class SysCAMSClock extends TGCScalableWithInternalComponent implements Sw
 		value = tdp.findSysCAMSPrimitiveComponentName("Clock");
 		name = "Primitive component - Clock";
 
+		setFrequency(-1);
+		setUnit("");
+		setStartTime(-1);
+		setUnitStartTime("");
 		setNameFn("");
 		setCode("");
 		setListStruct(new DefaultListModel<String>());
@@ -462,6 +466,7 @@ public class SysCAMSClock extends TGCScalableWithInternalComponent implements Sw
 								listTypedef = elt.getAttribute("listTypedef");
 								
 								setFrequency(frequency);
+								
 								setUnit(unit);
 								setDutyCycle(dutyCycle);
 								setStartTime(startTime);
@@ -569,12 +574,12 @@ public class SysCAMSClock extends TGCScalableWithInternalComponent implements Sw
 	}
 
 	public String getUnit() {
-	    //System.out.println("@@@ clock unit "+unit);
+	    //System.out.println("@@@ clock unit get "+unit);
 		return unit;
 	}
 
 	public String getUnitStartTime() {
-	    // System.out.println("@@@ clock unit start time "+unitStartTime);
+	    //System.out.println("@@@ clock unit start time get "+unitStartTime);
 		return unitStartTime;
 	}
 
@@ -606,11 +611,11 @@ public class SysCAMSClock extends TGCScalableWithInternalComponent implements Sw
 	}
 
 	public void setUnit(String _unit) {
-		unit = _unit;
+	    unit = _unit;// System.out.println("@@@ clock unit "+unit);
 	}
 
     	public void setUnitStartTime(String _unitStartTime) {
-		unitStartTime = _unitStartTime; System.out.println("@@@ clock unit start time "+unitStartTime);
+	    unitStartTime = _unitStartTime; //System.out.println("@@@ clock unit start time "+unitStartTime);
 	}
 
         public void setDutyCycle(double _dutyCycle) {
