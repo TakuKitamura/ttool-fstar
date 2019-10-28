@@ -77,31 +77,22 @@ public class ClusterCode {
 
 	for (SysCAMSTClock t : clock) {
 		   
-		    //   corpsCluster = corpsCluster + "\t  sc_clock " + t.getName() + " (\"" + t.getName() + "\"," + t.getFrequency()+","+ t.getUnit()+","+ t.getDutyCycle()+","+ t.getStartTime()+","+ t.getUnitStartTime()+","+ t.getPosFirst()+");" + CR;
 		    
-		    String unitString="";
-		    String unitStartTimeString="";
-		    //System.out.println("@@@@@@@ unit  "+t.getUnit());
-		    //System.out.println("@@@@@@@ unit StartTime  "+t.getUnitStartTime());
-		    if(t.getUnit()=="s")unitString="SC_SEC";
-		    if(t.getUnitStartTime()=="s")unitStartTimeString="SC_SEC";
-		    if(t.getUnit()=="ms")unitString="SC_MS";
-		    if(t.getUnitStartTime()=="ms")unitStartTimeString="SC_MS";
-		    if(t.getUnit()=="\u03BCs")unitString="SC_US";
-		    if(t.getUnitStartTime()=="\u03BCs")unitStartTimeString="SC_US";
-		    if(t.getUnit()=="ns")unitString="SC_NS";
-		    if(t.getUnitStartTime()=="ns")unitStartTimeString="SC_NS";
-		     
+		    String unitString="SC_SEC";
+		    String unitStartTimeString="SC_SEC";
+		   
+		     if(t.getUnit().equals("s"))unitString="SC_SEC";
+		     if(t.getUnitStartTime().equals("s"))unitStartTimeString="SC_SEC";
+		     if(t.getUnit().equals("ms"))unitString="SC_MS";
+		     if(t.getUnitStartTime().equals("ms"))unitStartTimeString="SC_MS";
+		     if(t.getUnit().equals("\u03BCs"))unitString="SC_US";
+		     if(t.getUnitStartTime().equals("\u03BCs"))unitStartTimeString="SC_US";
+		     if(t.getUnit().equals("ns"))unitString="SC_NS";
+		     if(t.getUnitStartTime().equals("ns"))unitStartTimeString="SC_NS";		   		    
 		    corpsCluster = corpsCluster + "\t  sc_clock " + t.getName() + " (\"" + t.getName() + "\"," + t.getFrequency()+","+ unitString+","+ t.getDutyCycle()+","+ t.getStartTime()+","+unitStartTimeString+","+ t.getPosFirst()+");" + CR;    		}
-
 	    
-
-	    /*			for (SysCAMSTClock t : clock) {
-			    System.out.println("Cluster clock");
-			    corpsCluster = corpsCluster + "\t  sc_clock " + t.getName() + " (\"" + t.getName() + "\"," + t.getFrequency()+","+ t.getUnit()+","+ t.getDutyCycle()+","+ t.getStartTime()+","+ t.getUnit()+","+ t.getPosFirst()+");" + CR;
-			    }*/
-		
-
+	nb_block=0;
+	corpsCluster = corpsCluster + CR + "\t// Instantiate cluster's modules." + CR;
 	    
             for (SysCAMSTBlockTDF t : tdf) {
                 if (!t.getListTypedef().isEmpty()) {
