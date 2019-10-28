@@ -895,6 +895,7 @@ public class AUTGraph implements myutil.Graph {
         //TraceManager.addDev(toFullString());
 
         // Remove all non reachable state
+        TraceManager.addDev("Remove all non reachable states");
         removeAllNonReachableStates();
 
 
@@ -994,18 +995,21 @@ public class AUTGraph implements myutil.Graph {
 
         while (statesToConsider.size() > 0) {
             nextStatesToConsider.clear();
-            for (AUTState st : statesToConsider) {
+            for (AUTState st: statesToConsider) {
                 st.met = true;
                 cpt++;
                 for (AUTTransition tr : st.outTransitions) {
                     AUTState s = states.get(tr.destination);
                     if (!(s.met)) {
-                        nextStatesToConsider.add(s);
+                        if (!nextStatesToConsider.contains(s)) {
+                            nextStatesToConsider.add(s);
+                        }
                     }
                 }
             }
             statesToConsider.clear();
             statesToConsider.addAll(nextStatesToConsider);
+            //TraceManager.addDev("Size of states to consider:" + statesToConsider.size());
         }
 
         //TraceManager.addDev("Found " + cpt + " reachable states");
@@ -1113,6 +1117,7 @@ public class AUTGraph implements myutil.Graph {
 
     @SuppressWarnings("unchecked")
     public AUTGraph reduceGraph() {
+        TraceManager.addDev("Factorize");
         factorizeNonTauTransitions();
 
         Automaton a = toAutomaton();
@@ -1125,9 +1130,12 @@ public class AUTGraph implements myutil.Graph {
         TraceManager.addDev("Aut with no tau / epsilon:" +  newA.toString());*/
         Automaton newA = a;
 
+
+        TraceManager.addDev("Reduce");
         newA = new Reducer<String, Transition<String>, TransitionBuilder<String>>().transform(newA);
         //TraceManager.addDev("Error in reduce graph:" +  newA);
         //TraceManager.addDev("New Aut:" +  newA.toString());
+        TraceManager.addDev("Reduce done");
         return fromAutomaton(newA);
     }
 
