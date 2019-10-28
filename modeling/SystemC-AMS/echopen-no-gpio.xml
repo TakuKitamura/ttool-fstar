@@ -91,7 +91,7 @@
 <TGConnectingPoint num="6" id="14" />
 <TGConnectingPoint num="7" id="15" />
 <extraparam>
-<Attribute name_function="" nameTemplate="" frequency ="0.001" unit="s" dutyCycle="1.0" startTime="1.0" unitStartTime="s" posFirst ="false" />
+<Attribute name_function="" nameTemplate="" frequency ="0.001" unit="ms" dutyCycle="1.0" startTime="1.0" unitStartTime="ms" posFirst ="false" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5721" id="25" >
@@ -110,7 +110,7 @@
 <TGConnectingPoint num="6" id="23" />
 <TGConnectingPoint num="7" id="24" />
 <extraparam>
-<Attribute name_function="" nameTemplate="" frequency ="0.002" unit="s" dutyCycle="0.5" startTime="0.001" unitStartTime="s" posFirst ="false" />
+<Attribute name_function="" nameTemplate="" frequency ="0.002" unit="ms" dutyCycle="0.5" startTime="0.001" unitStartTime="ms" posFirst ="false" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1603" id="54" >
@@ -149,7 +149,7 @@ void abs_calc () {
 	}
 	absoutput.write(inr1);
 }
-                                      " listStruct="" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
+                                        " listStruct="" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1605" id="35" >
@@ -215,7 +215,7 @@ void pulse_gen_main(){
 	//genout.write(inr) ;
 	//  expo[j].write((i3));
 }
-                         " listStruct="" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
+                           " listStruct="" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1605" id="64" >
@@ -260,7 +260,7 @@ int counter;
 void spi_main() {
 	//if (enable1.read()==0){
 		//counter=0;
-		//      	}
+		//        	}
 	if (compinenable.read()==1 ) {
 		inr1[counter]=comparatorinput;
 		counter=counter+1;
@@ -269,14 +269,14 @@ void spi_main() {
 	//outputvector.write(insideregister);
 	//count =  0;
 	//}
-                                       if(counter==30){
+                                         if(counter==30){
 	for(int i=0;i&lt;30;i++) {
 		//fpgaoutput[i].write(inr1[i]);
 		//fpgaoutput.write(inr1[i]);
 	}
 	counter=0;
 }
-  }
+    }
 " listStruct="" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
 </extraparam>
 </SUBCOMPONENT>
@@ -365,7 +365,7 @@ void comparator_main(){
 		}
 	}
 }
-                                                              " listStruct="" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
+                                                                " listStruct="" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1605" id="112" >
@@ -473,7 +473,7 @@ void comparator_main(){
 		}
 	}
 }
-                                    " constructorCode="" listStruct="addition = 0 : int" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
+                                      " constructorCode="" listStruct="addition = 0 : int" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1604" id="161" >
@@ -537,7 +537,7 @@ void comparator_main(){
 	// actual time                     out1.write(2000.99 * std::sin( 2.0 * M_PI * freqoftheprobe * t ) );
 	//probesample.write(1);
 }
-                                                                 " constructorCode="" listStruct="Ts = 1.0 : double|freqoftheprobe = 1000.0 : double" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
+                                                                   " constructorCode="" listStruct="Ts = 1.0 : double|freqoftheprobe = 1000.0 : double" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1604" id="190" >
@@ -579,7 +579,7 @@ void comparator_main(){
 <Attribute name_function="" clockName="my_clk" clockSensitivityMethod="" code="void adcre_main() {
 	adcregisteroutput.write(adcregisterinput.read());
 }
-                                      //sensitive &lt;&lt;clockffp.pos();
+                                        //sensitive &lt;&lt;clockffp.pos();
 " listStruct="" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
 </extraparam>
 </SUBCOMPONENT>

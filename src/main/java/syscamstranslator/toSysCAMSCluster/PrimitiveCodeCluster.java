@@ -161,10 +161,10 @@ public class PrimitiveCodeCluster {
 				    //   if(conv.getConvType() !="sc_uint") {
 				    if(conv.getNbits()==0){
 				if (conv.getOrigin() == 0) {
-					    corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_de::sca_in <" + conv.getConvType()+"> " + conv.getName() + ";" + CR;
+					    corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_de::sca_in <" + conv.getConvType()+" > " + conv.getName() + ";" + CR;
 					    
 					} else if (conv.getOrigin() == 1) {
-					    corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_de::sca_out <" + conv.getConvType()+"> "+ conv.getName() + ";" + CR;
+					    corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_de::sca_out <" + conv.getConvType()+" > "+ conv.getName() + ";" + CR;
 					}
 			}
 
@@ -496,11 +496,12 @@ public class PrimitiveCodeCluster {
 
 				    if(t.getNbits()==0)	    
 				    {	if (t.getOrigin() == 0) {
-						corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_in <" + t.getDEType() + ">"  + t.getName() + ";" + CR;
-					 
+					    	corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_in <" + t.getDEType() + " >"  + t.getName() + ";" + CR;
+	
+					    
 						//System.out.println("@@@@@@@@@2DE "+t.getDEType()+t.getNbits());		
 					} else if (t.getOrigin() == 1) {
-					    corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_out <" + t.getDEType() + "> "+ t.getName() + ";" + CR;
+					      corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_out <" + t.getDEType() + " > "+ t.getName() + ";" + CR;
 		 
 					    //System.out.println("@@@@@@@@@2DE "+t.getDEType()+t.getNbits());					
 					}
@@ -508,11 +509,13 @@ public class PrimitiveCodeCluster {
 				   else {
 
 if (t.getOrigin() == 0) {
-						corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_in <" + t.getDEType() + "<"+t.getNbits()+"> > " + t.getName() + ";" + CR;
+    	corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_in <" + t.getDEType() + "<"+t.getNbits()+"> > " + t.getName() + ";" + CR;
+    	//corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_in <sc_uint <"+t.getNbits()+"> > " + t.getName() + ";" + CR;
 					 
 						//System.out.println("@@@@@@@@@2DE "+t.getDEType()+t.getNbits());		
 					} else if (t.getOrigin() == 1) {
-					    corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_out <" + t.getDEType() + "<"+t.getNbits() +"> > "+ t.getName() + ";" + CR;
+      corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_out <" + t.getDEType() + "<"+t.getNbits() +"> > "+ t.getName() + ";" + CR;
+      //corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_out <sc_uint <"+t.getNbits() +"> > "+ t.getName() + ";" + CR;
 		 
 					    //System.out.println("@@@@@@@@@2DE "+t.getDEType()+t.getNbits());					
 					}
@@ -573,7 +576,8 @@ if (t.getOrigin() == 0) {
 
 			boolean sensitive = false, method = false;
 			if (!de.getCode().equals("")) {
-				corpsPrimitiveDE = corpsPrimitiveDE + "\t{" + CR + "\t\tSC_METHOD(" + de.getNameFn() + ");" + CR;
+			    corpsPrimitiveDE = corpsPrimitiveDE + "\t{" + CR ;
+			    //	corpsPrimitiveDE = corpsPrimitiveDE + "\t{" + CR + "\t\tSC_METHOD(" + de.getNameFn() + ");" + CR;
 				method = true;
 			} 
 
@@ -592,7 +596,7 @@ if (t.getOrigin() == 0) {
 
 
 			
-			for (SysCAMSTPortDE t : deports) {
+			/*for (SysCAMSTPortDE t : deports) {
 				if (t.getSensitive() == true) {
 					if (method == false) {
 						corpsPrimitiveDE = corpsPrimitiveDE + "\t{" + CR;
@@ -607,7 +611,7 @@ if (t.getOrigin() == 0) {
                     }
 					sensitive = true;
 				}
-			}
+			}*/
 			if (sensitive == true || method == true) {
 				corpsPrimitiveDE = corpsPrimitiveDE + "\t}" + CR2;
 			} else {
