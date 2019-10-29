@@ -804,6 +804,7 @@ public class AUTGraph implements myutil.Graph {
         }
     }
 
+
     // Removes all tau transition of a state, replacing them with reachable non tau transitions
     // A tau transition reaching an end state cannot be removed but can be replaced with a unique transition
     private void factorizeNonTauTransitions() {
@@ -987,28 +988,30 @@ public class AUTGraph implements myutil.Graph {
             st1.met = false;
         }
 
-        int cpt = 0;
+        //int cpt = 0;
 
-        LinkedList<AUTState> statesToConsider = new LinkedList<AUTState>();
+        long startTime = System.nanoTime();
+
+                AUTState[] statesToConsider = new AUTState[1];
         LinkedList<AUTState> nextStatesToConsider = new LinkedList<AUTState>();
-        statesToConsider.add(states.get(0));
+        statesToConsider[0] = states.get(0);
+        states.get(0).met = true;
 
-        while (statesToConsider.size() > 0) {
+        for(int cpt=0; cpt<statesToConsider.length; cpt++){
             nextStatesToConsider.clear();
             for (AUTState st: statesToConsider) {
-                st.met = true;
-                cpt++;
+                //st.met = true;
+                //cpt++;
                 for (AUTTransition tr : st.outTransitions) {
                     AUTState s = states.get(tr.destination);
                     if (!(s.met)) {
-                        if (!nextStatesToConsider.contains(s)) {
-                            nextStatesToConsider.add(s);
-                        }
+                        s.met = true;
+                        nextStatesToConsider.add(s);
                     }
                 }
             }
-            statesToConsider.clear();
-            statesToConsider.addAll(nextStatesToConsider);
+            statesToConsider = nextStatesToConsider.toArray(new AUTState[nextStatesToConsider.size()]);
+            cpt = -1;
             //TraceManager.addDev("Size of states to consider:" + statesToConsider.size());
         }
 
@@ -1021,9 +1024,18 @@ public class AUTGraph implements myutil.Graph {
             }
         }
 
+        long time1 = System.nanoTime();
+
         //TraceManager.addDev(toFullString());
+
         removeStates(toRemoveStates);
         //TraceManager.addDev(toFullString());
+        long endTime = System.nanoTime();
+
+
+        TraceManager.addDev("First part: " + (time1-startTime)/1000000000 +
+                "  Second part: " + (endTime - time1)/1000000000);
+
 
         //statesComputed = false;
         //states = null;
@@ -1117,8 +1129,8 @@ public class AUTGraph implements myutil.Graph {
 
     @SuppressWarnings("unchecked")
     public AUTGraph reduceGraph() {
-        TraceManager.addDev("Factorize");
-        factorizeNonTauTransitions();
+        //TraceManager.addDev("Factorize");
+        //factorizeNonTauTransitions();
 
         Automaton a = toAutomaton();
         //TraceManager.addDev("Initial AUT:" +  a.toString());
