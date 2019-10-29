@@ -65,14 +65,27 @@ public class ClusterCode {
         
         LinkedList<String> names = new LinkedList<String>();
 		
-		if (cluster != null) {
-			LinkedList<SysCAMSTBlockTDF> tdf = cluster.getBlockTDF();
-			LinkedList<SysCAMSTBlockDE> de = cluster.getBlockDE();
+	if (cluster != null) {
+	    LinkedList<SysCAMSTBlockTDF> tdf = cluster.getBlockTDF();
+	    LinkedList<SysCAMSTBlockDE> de = cluster.getBlockDE();
+	    LinkedList<SysCAMSTClock> clock = cluster.getClock();
+	    corpsCluster ="";
+	    for (SysCAMSTClock t : clock) {
+		   		  
+		     String unitString="SC_SEC";
+		     String unitStartTimeString="SC_SEC";
+		   
+		     if(t.getUnit().equals("s"))unitString="SC_SEC";
+		     if(t.getUnitStartTime().equals("s"))unitStartTimeString="SC_SEC";
+		     if(t.getUnit().equals("ms"))unitString="SC_MS";
+		     if(t.getUnitStartTime().equals("ms"))unitStartTimeString="SC_MS";
+		     if(t.getUnit().equals("\u03BCs"))unitString="SC_US";
+		     if(t.getUnitStartTime().equals("\u03BCs"))unitStartTimeString="SC_US";
+		     if(t.getUnit().equals("ns"))unitString="SC_NS";
+		     if(t.getUnitStartTime().equals("ns"))unitStartTimeString="SC_NS";		   		    
+		    corpsCluster += "\t  sc_clock " + t.getName() + " (\"" + t.getName() + "\"," + t.getFrequency()+","+ unitString+","+ t.getDutyCycle()+","+ t.getStartTime()+","+unitStartTimeString+","+ t.getPosFirst()+");" + CR;    		}
 			
-			LinkedList<SysCAMSTClock> clock = cluster.getClock();
-
-			
-            corpsCluster = "template <typename vci_param>" + CR +
+            corpsCluster += "template <typename vci_param>" + CR +
                           "class " +cluster.getClusterName()+ " : public sc_core::sc_module { "+ CR;
 
 	    //  corpsCluster = corpsCluster + "using namespace sc_core;"+CR+
@@ -205,27 +218,13 @@ public class ClusterCode {
                 corpsCluster += " " + t.getName() + "_" + nb_block + ";" + CR;
                 nb_block++;
             }
-            
+	    for (SysCAMSTClock t : clock) {		   	    
+		corpsCluster = corpsCluster + "\t  sc_clock " + t.getName()+";"+CR;
+	    }
             corpsCluster = corpsCluster + "public:" + CR;
             corpsCluster = corpsCluster + "\tsc_in< typename vci_param::data_t > in_ams;" + CR;
             corpsCluster = corpsCluster + "\tsc_out< typename vci_param::data_t > out_ams;" + CR2;	  
-
-	for (SysCAMSTClock t : clock) {
-		   
-		    
-		    String unitString="SC_SEC";
-		    String unitStartTimeString="SC_SEC";
-		   
-		     if(t.getUnit().equals("s"))unitString="SC_SEC";
-		     if(t.getUnitStartTime().equals("s"))unitStartTimeString="SC_SEC";
-		     if(t.getUnit().equals("ms"))unitString="SC_MS";
-		     if(t.getUnitStartTime().equals("ms"))unitStartTimeString="SC_MS";
-		     if(t.getUnit().equals("\u03BCs"))unitString="SC_US";
-		     if(t.getUnitStartTime().equals("\u03BCs"))unitStartTimeString="SC_US";
-		     if(t.getUnit().equals("ns"))unitString="SC_NS";
-		     if(t.getUnitStartTime().equals("ns"))unitStartTimeString="SC_NS";		   		    
-		    corpsCluster = corpsCluster + "\t  sc_clock " + t.getName() + " (\"" + t.getName() + "\"," + t.getFrequency()+","+ unitString+","+ t.getDutyCycle()+","+ t.getStartTime()+","+unitStartTimeString+","+ t.getPosFirst()+");" + CR;    		}	    
-  
+	     
             nb_block = 0;
             corpsCluster = corpsCluster + "\tSC_CTOR(" +cluster.getClusterName()+ ") :" + CR;
 	    
@@ -301,6 +300,9 @@ public class ClusterCode {
 			
 			for (SysCAMSTBlockDE t : de) {
 				//corpsCluster = corpsCluster + "\t" + t.getName() + " " + t.getName() + "_" + nb_block + "(\"" + t.getName() + "_" + nb_block + "\");" + CR;
+			    if(t.getClockName()!="")
+				corpsCluster = corpsCluster + "\t\t" + t.getName() + "_" + nb_block +"." + t.getClockName() + "(" + t.getClockName() + ");"+ CR;
+
 				
 				LinkedList<SysCAMSTPortDE> portDE = t.getPortDE();
 			

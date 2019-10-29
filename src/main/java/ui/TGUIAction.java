@@ -1190,7 +1190,7 @@ public class TGUIAction extends AbstractAction {
         actions[CAMS_CLUSTER] = new TAction("C-AMS-cluster", "Add a cluster", IconManager.imgic8003, IconManager.imgic8003, "Cluster", "Add a cluster to the currently opened SystemC-AMS Diagram", 0);
         actions[CAMS_GENCODE] = new TAction("C-AMS-gencode", "SystemC-AMS code generation",IconManager.imgic94, IconManager.imgic94, "Generate SystemC-AMS code", "SystemC-AMS diagram without check syntax", 0);
         actions[CAMS_BLOCK_GPIO2VCI] = new TAction("C-AMS-block-GPIO2VCI", "Add a block GPIO2VCI",IconManager.imgic8006, IconManager.imgic8006, "GPIO2VCI block", "Add a GPIO2VCI block to the currently opened SystemC-AMS Diagram", 0);
-	actions[CAMS_CLOCK] = new TAction("C-AMS-Clock", "Clock", IconManager.imgic999, IconManager.imgic999, "Clock", "Add a clock to the currently opened SystemC-AMS diagram", 0);
+	actions[CAMS_CLOCK] = new TAction("C-AMS-Clock", "Clock", IconManager.imgic8007, IconManager.imgic8007, "Clock", "Add a clock to the currently opened SystemC-AMS diagram", 0);
         // ELN
         actions[ELN_EDIT] = new TAction("add-action-eln", "Action state", IconManager.imgic100, IconManager.imgic101, "Action state", "Add an action state to the currently opened ELN diagram", 0);
         actions[ELN_CONNECTOR] = new TAction("eln-connector", "Add a connection", IconManager.imgic202, IconManager.imgic202, "Connector", "Connects two block of the currently opened ELN Diagram", 0);

@@ -153,6 +153,7 @@ public class JDialogSysCAMSPortDE extends JDialog implements ActionListener {
 		listArrayTypeString.add("bool");
 		listArrayTypeString.add("double");
 		listArrayTypeString.add("sc_int<N>");
+		listArrayTypeString.add("sc_uint<32>");
 		
 		if (port.getFather() != null) {
 			if (port.getFather() instanceof SysCAMSBlockDE) {
@@ -184,7 +185,9 @@ public class JDialogSysCAMSPortDE extends JDialog implements ActionListener {
 			}
 			if (port.getDEType().equals("sc_dt::sc_int")) {
 				typeComboBoxString.setSelectedIndex(3);
-			
+			}
+			if (port.getDEType().equals("sc_dt::sc_uint<32>")) {
+				typeComboBoxString.setSelectedIndex(3);		      
 			}
 			
 		}
@@ -312,12 +315,18 @@ public class JDialogSysCAMSPortDE extends JDialog implements ActionListener {
 			    port.setDEType("sc_dt::sc_int");
 				 
 			 
-			    	}		
+			    	}
+				else{
+				   	if(typeComboBoxString.getSelectedItem()=="sc_uint<32>"){
+			    //	port.setDEType((String)"sc_int<"+nbitsTextField.getText()+"> ");
+			    port.setDEType("sc_dt::sc_uint<32>");				 			 
+			    	} 
+				
 			   	else{
 			    	port.setDEType((String) typeComboBoxString.getSelectedItem());
 
 				}
-				
+				}
 			
 			       
 			

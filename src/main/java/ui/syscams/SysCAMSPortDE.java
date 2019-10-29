@@ -49,6 +49,8 @@ import ui.TGComponent;
  * Creation: 14/05/2018
  * @version 1.0 14/05/2018
  * @author Irina Kit Yan LEE
+ * @version 1.1 10/06/2019
+ * @author Irina Kit Yan LEE, Daniela GENIUS
 */
 
 public class SysCAMSPortDE extends SysCAMSPrimitivePort {

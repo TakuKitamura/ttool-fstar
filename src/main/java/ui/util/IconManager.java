@@ -185,7 +185,7 @@ public class IconManager {
     public static ImageIcon imgic2111; //New icon created by Solange
     
     // SystemC-AMS
-    public static ImageIcon imgic8000, imgic8001, imgic8002, imgic8003, imgic8004, imgic8005, imgic8006, imgic999;
+    public static ImageIcon imgic8000, imgic8001, imgic8002, imgic8003, imgic8004, imgic8005, imgic8006, imgic8007;
 
     // ELN
     public static ImageIcon imgic8010, imgic8011, imgic8012, imgic8013, imgic8014, imgic8015, imgic8016, imgic8017, imgic8018, imgic8019, 
@@ -685,7 +685,7 @@ public class IconManager {
     private static String icon8004 = "camstdfblock.gif";
     private static String icon8005 = "camsdeblock.gif";
     private static String icon8006 = "camsgpio2vciblock.gif";
-    private static String icon999 = "clocksignal.gif";
+    private static String icon8007 = "clocksignal.gif";
     // ELN
     private static String icon8010 = "elnresistor.gif";
     private static String icon8011 = "elncapacitor.gif";
@@ -1210,6 +1210,7 @@ public class IconManager {
         imgic8004 = getIcon(icon8004);
         imgic8005 = getIcon(icon8005);
         imgic8006 = getIcon(icon8006);
+	imgic8007 = getIcon(icon8007);
 
         imgic8010 = getIcon(icon8010);
         imgic8011 = getIcon(icon8011);

@@ -499,11 +499,11 @@ public class PrimitiveCodeCluster {
 					    	corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_in <" + t.getDEType() + " >"  + t.getName() + ";" + CR;
 	
 					    
-						//System.out.println("@@@@@@@@@2DE "+t.getDEType()+t.getNbits());		
+						//	System.out.println("@@@@@@@@@2DE "+t.getDEType()+t.getNbits());		
 					} else if (t.getOrigin() == 1) {
 					      corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_out <" + t.getDEType() + " > "+ t.getName() + ";" + CR;
 		 
-					    //System.out.println("@@@@@@@@@2DE "+t.getDEType()+t.getNbits());					
+					      // System.out.println("@@@@@@@@@3DE "+t.getDEType()+t.getNbits());					
 					}
 				}
 				   else {
@@ -512,12 +512,12 @@ if (t.getOrigin() == 0) {
     	corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_in <" + t.getDEType() + "<"+t.getNbits()+"> > " + t.getName() + ";" + CR;
     	//corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_in <sc_uint <"+t.getNbits()+"> > " + t.getName() + ";" + CR;
 					 
-						//System.out.println("@@@@@@@@@2DE "+t.getDEType()+t.getNbits());		
+	//	System.out.println("@@@@@@@@@4DE "+t.getDEType()+t.getNbits());		
 					} else if (t.getOrigin() == 1) {
       corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_out <" + t.getDEType() + "<"+t.getNbits() +"> > "+ t.getName() + ";" + CR;
       //corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_out <sc_uint <"+t.getNbits() +"> > "+ t.getName() + ";" + CR;
 		 
-					    //System.out.println("@@@@@@@@@2DE "+t.getDEType()+t.getNbits());					
+      // System.out.println("@@@@@@@@@5DE "+t.getDEType()+t.getNbits());					
 					}
 
 				       

@@ -108,7 +108,7 @@
 <TGConnectingPoint num="7" id="17" />
 <TGConnectingPoint num="8" id="18" />
 <extraparam>
-<Prop commName="to_echopen" commType="0" origin="1" type="int" sensitive="false" sensitive_method="" nbits="32" />
+<Prop commName="to_echopen" commType="0" origin="1" type="int" sensitive="false" sensitive_method="" nbits="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1605" id="29" >
@@ -128,7 +128,7 @@
 <TGConnectingPoint num="7" id="27" />
 <TGConnectingPoint num="8" id="28" />
 <extraparam>
-<Prop commName="from_echopen" commType="0" origin="0" type="int" sensitive="false" sensitive_method="" nbits="32" />
+<Prop commName="from_echopen" commType="0" origin="0" type="int" sensitive="false" sensitive_method="" nbits="0" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -221,7 +221,7 @@ void abs_calc () {
 	}
 	absoutput.write(inr1);
 }
-                                                " listStruct="" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
+                                                      " listStruct="" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1605" id="66" >
@@ -287,7 +287,7 @@ void pulse_gen_main(){
 	//genout.write(inr) ;
 	//  expo[j].write((i3));
 }
-                                   " listStruct="" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
+                                         " listStruct="" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1605" id="95" >
@@ -337,12 +337,13 @@ void spi_main() {
 		}
 		if(counter==30){
 			for(i=0;i&lt;30;i++) {
-				to_GPIO.write(inr1[i]);
+				to_GPIO.write(1);
 			}
 			counter=0;
 		}
 	}
-" listStruct="" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
+}
+  " listStruct="" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1605" id="114" >
@@ -402,7 +403,7 @@ void spi_main() {
 <TGConnectingPoint num="7" id="132" />
 <TGConnectingPoint num="8" id="133" />
 <extraparam>
-<Prop commName="to_GPIO" commType="0" origin="1" type="sc_dt::sc_int" sensitive="false" sensitive_method="" nbits="32" />
+<Prop commName="to_GPIO" commType="0" origin="1" type="sc_dt::sc_uint&lt;32&gt;" sensitive="false" sensitive_method="" nbits="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1605" id="144" >
@@ -422,7 +423,7 @@ void spi_main() {
 <TGConnectingPoint num="7" id="142" />
 <TGConnectingPoint num="8" id="143" />
 <extraparam>
-<Prop commName="from_GPIO" commType="0" origin="0" type="sc_dt::sc_int" sensitive="false" sensitive_method="" nbits="32" />
+<Prop commName="from_GPIO" commType="0" origin="0" type="sc_dt::sc_uint&lt;32&gt;" sensitive="false" sensitive_method="" nbits="0" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1603" id="202" >
@@ -442,7 +443,8 @@ void spi_main() {
 <TGConnectingPoint num="7" id="201" />
 <extraparam>
 <Attribute name_function="comparator_main" clockName="my_clk" clockSensitivityMethod="positive" code=" int counter;
-sc_dt::sc_uint&lt;12&gt; inr,inr1;
+sc_dt::sc_int&lt;12&gt; inr;
+sc_dt::sc_int&lt;12&gt; inr1;
 void comparator_main(){
 	if (enable.read()==0){
 		counter=0;
@@ -470,7 +472,7 @@ void comparator_main(){
 		}
 	}
 }
-                                                                        " listStruct="" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
+                                                                              " listStruct="" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1605" id="163" >
@@ -578,7 +580,7 @@ void comparator_main(){
 		}
 	}
 }
-                                              " constructorCode="" listStruct="addition = 0 : int" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
+                                                    " constructorCode="" listStruct="addition = 0 : int" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1604" id="212" >
@@ -642,7 +644,7 @@ void comparator_main(){
 	// actual time                     out1.write(2000.99 * std::sin( 2.0 * M_PI * freqoftheprobe * t ) );
 	//probesample.write(1);
 }
-                                                                           " constructorCode="" listStruct="Ts = 1.0 : double|freqoftheprobe = 1000.0 : double" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
+                                                                                 " constructorCode="" listStruct="Ts = 1.0 : double|freqoftheprobe = 1000.0 : double" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1604" id="241" >
@@ -684,7 +686,7 @@ void comparator_main(){
 <Attribute name_function="" clockName="my_clk1" clockSensitivityMethod="positive" code="void adcre_main() {
 	adcregisteroutput.write(adcregisterinput.read());
 }
-                                                //sensitive &lt;&lt;clockffp.pos();
+                                                      //sensitive &lt;&lt;clockffp.pos();
 " listStruct="" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
 </extraparam>
 </SUBCOMPONENT>
