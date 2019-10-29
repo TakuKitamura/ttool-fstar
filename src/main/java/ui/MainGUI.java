@@ -4623,6 +4623,26 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return;
     }
 
+    public void clearBacktracing() {
+        TURTLEPanel tp = getCurrentTURTLEPanel();
+        if (tp == null) {
+            return;
+        }
+
+        tp.resetReachability();
+
+        if (tp instanceof AvatarDesignPanel) {
+            AvatarDesignPanel adp = (AvatarDesignPanel) tp;
+            adp.resetModelBacktracingProVerif();
+            adp.resetMetElements();
+            getCurrentTDiagramPanel().repaint();
+        } else if (tp instanceof TMLArchiPanel) {
+            gtm.getTMLMapping().getTMLModeling().clearBacktracing();
+        } else if (tp instanceof TMLComponentDesignPanel) {
+            gtm.getTMLMapping().getTMLModeling().clearBacktracing();
+        }
+    }
+
     public void modelBacktracingUPPAAL(Map<String, Integer> verifMap) {
         TURTLEPanel tp = getCurrentTURTLEPanel();
         if (tp == null) {
@@ -9371,7 +9391,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
         private JMenuItem rename, remove, moveRight, moveLeft, newDesign, newAnalysis, newDeployment, newRequirement/*, newTMLDesign*/, newTMLComponentDesign, newTMLArchi, newProactiveDesign, newTURTLEOSDesign,
                 newNCDesign, sort, clone, newAttackTree, newFaultTree, newAVATARBD, newAVATARRequirement, newMAD, newTMLCP, newTMLMethodo,
-                newAvatarMethodo, newAVATARDD, newSysmlsecMethodo, newSysCAMS, newELN, newVerificationProperty;
+                newAvatarMethodo, newAVATARDD, newSysmlsecMethodo, newSysCAMS, newELN, newVerificationProperty, clearVerificationInformation;
         private JMenuItem newAVATARAnalysis;
 
         public PopupListener(MainGUI _mgui) {
@@ -9442,6 +9462,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             newAvatarMethodo = createMenuItem("New AVATAR Methodology");
             newSysmlsecMethodo = createMenuItem("New SysML-Sec Methodology");
             newVerificationProperty = createMenuItem("New Verification Tracking");
+            clearVerificationInformation = createMenuItem("Clear Verification Backtracing");
 
 
             menu = new JPopupMenu("Views");
@@ -9544,6 +9565,9 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                 menu.addSeparator();
                 menu.add(newVerificationProperty);
             }
+
+            menu.addSeparator();
+            menu.add(clearVerificationInformation);
 
 
         }
@@ -9683,6 +9707,8 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                 } else if (e.getSource() == newVerificationProperty) {
                     ModeManager.setMode(CREATE_NEW_PANEL, actions, mainBar, mgui);
                     mgui.newVerificationPropertyPanel();
+                } else if (e.getSource() == clearVerificationInformation) {
+                    mgui.clearBacktracing();
                 }
             }
         };

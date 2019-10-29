@@ -17,6 +17,9 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{listings}
+
+\usepackage{syntax}
+
 \usepackage[a4paper,bindingoffset=0.2in,headsep=0.5cm,left=1in,right=1in,bottom=3cm,top=2cm,headheight=2cm]{geometry}
 \usepackage{hyperref}
 \usepackage{listings}
@@ -36,7 +39,7 @@
 
 \begin{center}
 
-\includegraphics[width=0.2\textwidth]{fig/logotpt}
+\includegraphics[width=0.2\textwidth]{fig/tp}
 \vspace{10 pt}\\
 \Huge TTool \\
 \vspace{10 pt}
@@ -87,6 +90,8 @@ Ludovic APVRILLE} &
 Modifications} & \textbf{Sections Modified} \\
 \hhline{----}
 1.0 & July 7, 2018 & First draft &  \\ 
+\hline
+1.1 & Oct 29, 2019 & Adding safety pragmas &  \\ 
 \hline
 \end{tabular}
 \end{adjustbox}
@@ -570,6 +575,25 @@ Using as reference what was already indicated in the block diagram, we will dete
 \includegraphics[width=0.99\textwidth]{fig/rg.png}
 \caption{Reachability graph} \label{fig:rg}
 \end{figure*}
+
+\subsection{Safety pragmas}
+Safety pragmas can be inserted in the model. These pragmas follow the following grammar.
+
+\setlength{\grammarparsep}{20pt plus 1pt minus 1pt} % increase separation between rules
+\setlength{\grammarindent}{12em} % increase separation between LHS/RHS 
+
+\begin{grammar}
+
+<pragma> ::= <path> <state> <property> 
+\alt <property> <leadsto> <property> 
+
+<path> ::=  `A'  |   `E' 
+
+<state> ::=  `<>'  |   `[]' 
+
+<leadsto> ::=  `-->'  
+
+\end{grammar}
 
 \subsection{Latency Analysis}
 

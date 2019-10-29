@@ -161,7 +161,7 @@ public class ConfigurationTTool {
     //public static String[] PLUGIN_GRAPHICAL_COMPONENT = new String[0];
 
     // URL for models
-    public static String URL_MODEL = "http://ttool.telecom-paristech.fr/networkmodels/models.txt";
+    public static String URL_MODEL = "http://ttool.telecom-paris.fr/networkmodels/models.txt";
 
     // Others
     public static String RGStyleSheet = "";
