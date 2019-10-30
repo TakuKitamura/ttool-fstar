@@ -306,10 +306,15 @@ public class Mouse extends Command {
             return Interpreter.BAD;
         }
 
-        int x = Integer.decode(cd.substring(0, indexSpace));
-        int y = Integer.decode(cd.substring(indexSpace+1, cd.length()));
+        try {
+            int x = Integer.decode(cd.substring(0, indexSpace));
+            int y = Integer.decode(cd.substring(indexSpace + 1, cd.length()));
+            robot.mouseMove(x, y);
+        } catch (Exception e) {
+            return Interpreter.BAD;
+        }
 
-        robot.mouseMove(x, y);
+
 
         return null;
     }
@@ -321,6 +326,7 @@ public class Mouse extends Command {
             return Interpreter.BAD;
         }
 
+        try {
         int x = Integer.decode(cd.substring(0, indexSpace));
         int y = Integer.decode(cd.substring(indexSpace+1, cd.length()));
 
@@ -329,6 +335,9 @@ public class Mouse extends Command {
         robot.mouseMove((int)(pi.getLocation().getX()) + x, (int)(pi.getLocation().getY()) + y);
 
         robot.mouseMove(x, y);
+        } catch (Exception e) {
+            return Interpreter.BAD;
+        }
 
         return null;
     }

@@ -109,7 +109,9 @@ public class Interpreter implements Runnable, TerminalProviderInterface {
         String line;
         currentLine = 0;
         while ((line = term.getNextCommand()) != null) {
-            executeLine(line, currentLine, false);
+            for(String subCommand: line.split(";")) {
+                executeLine(subCommand, currentLine, false);
+            }
             currentLine++;
         }
     }
@@ -143,7 +145,10 @@ public class Interpreter implements Runnable, TerminalProviderInterface {
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
             currentLine++;
-            executeLine(line, currentLine, true);
+
+            for(String subCommand: line.split(";")) {
+                executeLine(subCommand, currentLine, true);
+            }
 
         }
         scanner.close();
