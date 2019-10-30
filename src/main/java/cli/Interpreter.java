@@ -59,7 +59,7 @@ import java.util.Vector;
 public class Interpreter implements Runnable, TerminalProviderInterface {
 
     public final static Command[] commands = {new Action(), new Help(), new History(), new Print(), new Quit(),
-            new TestSpecific(), new TML(), new Set(), new Wait(), new Mouse()};
+            new TestSpecific(), new TML(), new Set(), new Wait(), new Robot()};
 
     // Errors
     public final static String UNKNOWN = "Unknown command";

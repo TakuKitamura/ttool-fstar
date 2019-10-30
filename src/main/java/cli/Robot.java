@@ -52,7 +52,10 @@ import ui.window.JDialogSystemCGeneration;
 import ui.*;
 
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.BitSet;
 import java.util.*;
@@ -60,23 +63,27 @@ import java.util.List;
 
 /**
  * Class Mouse
- * Creation: 30/10/2018
- * Version 1.0 30/10/2018
+ * Creation: 30/10/2019
+ * Version 1.0 30/10/2019
  *
  * @author Ludovic APVRILLE
  */
-public class Mouse extends Command {
+public class Robot extends Command {
     // Action commands
+    private final static String DOUBLE_CLICK = "leftclick";
     private final static String LCLICK = "leftclick";
     private final static String RCLICK = "rightclick";
     private final static String MOVEA_LCLICK = "moveleftclick";
     private final static String MOVEA_RCLICK = "moverightclick";
     private final static String MOVE_ABS = "movea";
     private final static String MOVE_REL = "mover";
+    private final static String ENTER_KEY = "key";
+    private final static String ENTER_KEYS = "keys";
+    private final static String ENTER_TEXT = "text";
 
-    private Robot robot;
+    private java.awt.Robot robot;
 
-    public Mouse() {
+    public Robot() {
     }
 
     public List<Command> getListOfSubCommands() {
@@ -103,6 +110,35 @@ public class Mouse extends Command {
 
 
     public void fillSubCommands() {
+        // Double click
+        Command dclick = new Command() {
+            public String getCommand() {
+                return DOUBLE_CLICK;
+            }
+
+            public String getShortCommand() {
+                return "dc";
+            }
+
+            public String getDescription() {
+                return "Double click at current location";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                String ret; if ((ret = checkRobot()) != null) return ret;
+
+                click(InputEvent.BUTTON1_DOWN_MASK);
+                click(InputEvent.BUTTON1_DOWN_MASK);
+
+                return null;
+            }
+        };
+
+
         // Left Click
         Command lclick = new Command() {
             public String getCommand() {
@@ -270,24 +306,125 @@ public class Mouse extends Command {
             }
         };
 
+        // entering x key event
+        Command keys = new Command() {
+            public String getCommand() {
+                return ENTER_KEYS;
+            }
+
+            public String getShortCommand() {
+                return "ks";
+            }
+
+            public String getDescription() {
+                return "Enter x times key at current location: <x> then DEL|TAB|SPACE|ENTER|BACKSPACE|UP|DOWN|LEFT|RIGHT";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                String ret; if ((ret = checkRobot()) != null) return ret;
+
+                // Find how many times the key must be entered
+                String[] split = command.trim().split(" ");
+                if (split.length < 2) {
+                    return Interpreter.BAD;
+                }
+
+                int nbOfTimes;
+
+                try {
+                    nbOfTimes = Integer.decode(split[0]);
+                } catch (Exception e) {
+                    return Interpreter.BAD;
+                }
+
+                if (nbOfTimes < 0) {
+                    return Interpreter.BAD;
+                }
+
+                for (int i=0; i<nbOfTimes; i++) {
+                    if ((ret = key(split[1])) != null) return ret;
+                }
+
+                return null;
+            }
+        };
+
+        // entering key event
+        Command key = new Command() {
+            public String getCommand() {
+                return ENTER_KEY;
+            }
+
+            public String getShortCommand() {
+                return "k";
+            }
+
+            public String getDescription() {
+                return "Enter key at current location: DEL|TAB|SPACE|ENTER|BACKSPACE|UP|DOWN|LEFT|RIGHT";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                String ret; if ((ret = checkRobot()) != null) return ret;
+
+                if ((ret = key(command)) != null) return ret;
+
+                return null;
+            }
+        };
+
+        // Entering text
+        Command text = new Command() {
+            public String getCommand() {
+                return ENTER_TEXT;
+            }
+
+            public String getShortCommand() {
+                return "t";
+            }
+
+            public String getDescription() {
+                return "Enter text at current location";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                String ret; if ((ret = checkRobot()) != null) return ret;
+
+                if ((ret = text(command)) != null) return ret;
+
+                return null;
+            }
+        };
+
+        addAndSortSubcommand(dclick);
         addAndSortSubcommand(lclick);
         addAndSortSubcommand(rclick);
         addAndSortSubcommand(movea);
         addAndSortSubcommand(mover);
         addAndSortSubcommand(movealc);
         addAndSortSubcommand(movearc);
+        addAndSortSubcommand(keys);
+        addAndSortSubcommand(key);
+        addAndSortSubcommand(text);
 
     }
 
-
-
-
-    // Helper commands
-
+    // Needed basic commands
     public String checkRobot() {
         if (robot == null) {
             try {
-                robot = new Robot();
+                robot = new java.awt.Robot();
                 robot.setAutoDelay(50);
             } catch (AWTException e) {
                 return Interpreter.ROBOT_EXCEPTION + ": " + e.getMessage();
@@ -342,5 +479,65 @@ public class Mouse extends Command {
 
         return null;
     }
+
+    public String key(String k) {
+
+        int code = stringToKeyEventCode(k);
+
+        if (code < 0) {
+            return Interpreter.BAD;
+        }
+
+        robot.keyPress(code);
+        robot.keyRelease(code);
+
+
+        return null;
+    }
+
+    public String text(String t) {
+        StringSelection stringSelection = new StringSelection(t);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(stringSelection, stringSelection);
+
+        robot.keyPress(KeyEvent.VK_CONTROL);
+        robot.keyPress(KeyEvent.VK_V);
+        robot.keyRelease(KeyEvent.VK_V);
+        robot.keyRelease(KeyEvent.VK_CONTROL);
+
+        return null;
+    }
+
+
+    public int stringToKeyEventCode(String key) {
+        key = key.trim();
+        key = key.toUpperCase();
+
+        TraceManager.addDev("Selected key: " + key);
+
+
+        if (key.equals("DEL")) {
+            return KeyEvent.VK_DELETE;
+        } else if (key.equals("TAB")) {
+            return KeyEvent.VK_TAB;
+        } else if (key.equals("SPACE")) {
+            return KeyEvent.VK_SPACE;
+        } else if (key.equals("ENTER")) {
+            return KeyEvent.VK_ENTER;
+        } else if (key.equals("BACKSPACE")) {
+            return KeyEvent.VK_BACK_SPACE;
+        } else if (key.equals("UP")) {
+            return KeyEvent.VK_UP;
+        } else if (key.equals("DOWN")) {
+            return KeyEvent.VK_DOWN;
+        } else if (key.equals("LEFT")) {
+            return KeyEvent.VK_DOWN;
+        } else if (key.equals("RIGHT")) {
+            return KeyEvent.VK_DOWN;
+        }
+
+        return -1;
+    }
+
 
 }
