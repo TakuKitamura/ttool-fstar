@@ -84,19 +84,19 @@ public class Mouse extends Command {
     }
 
     public String getCommand() {
-        return "mouse";
+        return "robot";
     }
 
     public String getShortCommand() {
-        return "m";
+        return "r";
     }
 
     public String getUsage() {
-        return "mouse <subcommand> <options>";
+        return "robot <subcommand> <options>";
     }
 
     public String getDescription() {
-        return "Can be used to perform mouse actions in TTool";
+        return "Can be used to perform actions with a mouse/key robot in TTool";
     }
 
 
@@ -288,6 +288,7 @@ public class Mouse extends Command {
         if (robot == null) {
             try {
                 robot = new Robot();
+                robot.setAutoDelay(50);
             } catch (AWTException e) {
                 return Interpreter.ROBOT_EXCEPTION + ": " + e.getMessage();
             }
