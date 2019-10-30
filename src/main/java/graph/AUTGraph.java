@@ -60,9 +60,13 @@ import rationals.transformations.*;
  */
 public class AUTGraph implements myutil.Graph {
 
+    // Graph is defined with this only
     protected ArrayList<AUTTransition> transitions;
-    protected ArrayList<AUTState> states;
     protected int nbState;
+
+    // Can be built with computeStates()
+    protected ArrayList<AUTState> states;
+
     protected BufferedReader br;
     protected long nbTransition;
     protected int percentage;
