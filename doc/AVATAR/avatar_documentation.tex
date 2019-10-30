@@ -593,6 +593,37 @@ Safety pragmas can be inserted in the model. These pragmas follow the following 
 
 <leadsto> ::=  `-->'  
 
+<property> ::= <stateproperty>
+\alt <intproperty>
+\alt <boolproperty>
+\alt <property> <binaryop> <property>
+
+<stateproperty> ::= `BlockName.stateName' 
+
+<intproperty> ::= <intexpr> <intcomparator> <intexpr>
+
+<boolproperty> ::= <boolexpr> <boolcomparator> <boolexpr>
+\alt <boolexpr>
+
+
+
+<intexpr> ::= `BlockName.integerattribute' 
+\alt <intvalue>
+
+<intexpr> ::= `BlockName.booleanattribute' 
+\alt <booleanvalue>
+
+
+<binaryop>  ::=  `&&'  |   `||' 
+
+<intvalue> :: <integer>
+
+<booleanvalue> :: `true' | `false'
+
+<intcomparator>  ::=  `<'  |   `>'  | `=='  |   `!=' 
+
+<boolcomparator> ::=  `=='  |   `!=' 
+
 \end{grammar}
 
 \subsection{Latency Analysis}

@@ -59,7 +59,7 @@ import java.util.Vector;
 public class Interpreter implements Runnable, TerminalProviderInterface {
 
     public final static Command[] commands = {new Action(), new Help(), new History(), new Print(), new Quit(),
-            new TestSpecific(), new TML(), new Set(), new Wait()};
+            new TestSpecific(), new TML(), new Set(), new Wait(), new Robot()};
 
     // Errors
     public final static String UNKNOWN = "Unknown command";
@@ -71,6 +71,7 @@ public class Interpreter implements Runnable, TerminalProviderInterface {
     public final static String TTOOL_NOT_STARTED = "TTool is not yet started. Cannot execute command.";
     public final static String TTOOL_ALREADY_STARTED = "TTool is already started. Cannot execute command.";
     public final static String BAD_COMMAND_NAME = "The provided command is invalid";
+    public final static String ROBOT_EXCEPTION = "Robot could not be started";
 
 
     private String script;
@@ -108,7 +109,9 @@ public class Interpreter implements Runnable, TerminalProviderInterface {
         String line;
         currentLine = 0;
         while ((line = term.getNextCommand()) != null) {
-            executeLine(line, currentLine, false);
+            for(String subCommand: line.split(";")) {
+                executeLine(subCommand, currentLine, false);
+            }
             currentLine++;
         }
     }
@@ -142,7 +145,10 @@ public class Interpreter implements Runnable, TerminalProviderInterface {
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
             currentLine++;
-            executeLine(line, currentLine, true);
+
+            for(String subCommand: line.split(";")) {
+                executeLine(subCommand, currentLine, true);
+            }
 
         }
         scanner.close();
