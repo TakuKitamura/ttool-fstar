@@ -240,9 +240,11 @@ public class TGComponentManager {
     public static final int TMLTD_REQUEST_OPERATOR = 1004;
     public static final int TMLTD_EVENT_OPERATOR = 1005;
     public static final int TMLAD_WRITE_CHANNEL = 1006;
+    public static final int TMLAD_WRITE_CAMS = 1037;
     public static final int TMLAD_SEND_REQUEST = 1007;
     public static final int TMLAD_SEND_EVENT = 1008;
     public static final int TMLAD_READ_CHANNEL = 1009;
+    public static final int TMLAD_READ_CAMS = 1038;
     public static final int TMLAD_WAIT_EVENT = 1010;
     public static final int TMLAD_NOTIFIED_EVENT = 1017;
     public static final int TMLAD_ACTION_STATE = 1011;
@@ -1133,6 +1135,12 @@ public class TGComponentManager {
                 break;
             case TMLAD_READ_CHANNEL:
                 tgc = new TMLADReadChannel(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+	    case TMLAD_WRITE_CAMS:
+                tgc = new TMLADWriteCAMS(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLAD_READ_CAMS:
+                tgc = new TMLADReadCAMS(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
             case TMLAD_SEND_REQUEST:
                 tgc = new TMLADSendRequest(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -2095,6 +2103,11 @@ public class TGComponentManager {
             return TMLAD_WRITE_CHANNEL;
         } else if (tgc instanceof TMLADReadChannel) {
             return TMLAD_READ_CHANNEL;
+	}    else if (tgc instanceof TMLADWriteCAMS) {
+            return TMLAD_WRITE_CAMS;
+        } else if (tgc instanceof TMLADReadCAMS) {
+            return TMLAD_READ_CAMS;
+        
         } else if (tgc instanceof TMLADSendRequest) {
             return TMLAD_SEND_REQUEST;
         } else if (tgc instanceof TMLADSendEvent) {

@@ -786,8 +786,11 @@ public class ActionPerformer {
         } else if (command.equals(mgui.actions[TGUIAction.TMLCTD_EDIT].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.EDIT, -1);
         } else if (command.equals(mgui.actions[TGUIAction.TMLAD_WRITE_CHANNEL].getActionCommand())) {
-            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_WRITE_CHANNEL);
-        } else if (command.equals(mgui.actions[TGUIAction.TMLAD_SEND_REQUEST].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_WRITE_CHANNEL);	    
+        }  else if (command.equals(mgui.actions[TGUIAction.TMLAD_WRITE_CAMS].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_WRITE_CAMS);
+        }
+	else if (command.equals(mgui.actions[TGUIAction.TMLAD_SEND_REQUEST].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_SEND_REQUEST);
         } else if (command.equals(mgui.actions[TGUIAction.TMLAD_READ_REQUEST_ARG].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_READ_REQUEST_ARG);
@@ -799,9 +802,11 @@ public class ActionPerformer {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_NOTIFIED_EVENT);
         } else if (command.equals(mgui.actions[TGUIAction.TMLAD_READ_CHANNEL].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_READ_CHANNEL);
-        }  else if (command.equals(mgui.actions[TGUIAction.TMLAD_ACTION_STATE].getActionCommand())) {
+	} else if (command.equals(mgui.actions[TGUIAction.TMLAD_READ_CAMS].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_READ_CAMS);       
+        } else if (command.equals(mgui.actions[TGUIAction.TMLAD_ACTION_STATE].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_ACTION_STATE);
-        }  else if (command.equals(mgui.actions[TGUIAction.TMLAD_CHOICE].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.TMLAD_CHOICE].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_CHOICE);
         } else if (command.equals(mgui.actions[TGUIAction.TMLAD_EXECI].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_EXECI);
