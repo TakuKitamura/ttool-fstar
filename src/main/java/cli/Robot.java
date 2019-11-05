@@ -77,6 +77,8 @@ public class Robot extends Command {
     private final static String MOVEA_RCLICK = "moverightclick";
     private final static String MOVE_ABS = "movea";
     private final static String MOVE_REL = "mover";
+    private final static String DRAG_ABS = "draga";
+    private final static String DRAG_REL = "dragr";
     private final static String ENTER_KEY = "key";
     private final static String ENTER_KEYS = "keys";
     private final static String ENTER_TEXT = "text";
@@ -306,6 +308,64 @@ public class Robot extends Command {
             }
         };
 
+        // drag tp abs coordinates
+        Command draga = new Command() {
+            public String getCommand() {
+                return DRAG_ABS;
+            }
+
+            public String getShortCommand() {
+                return "da";
+            }
+
+            public String getDescription() {
+                return "Drag mouse from current to a new absolute location";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                String ret; if ((ret = checkRobot()) != null) return ret;
+
+                robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+                if ((ret = moveAbsolute(command)) != null) return ret;
+                robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+
+                return null;
+            }
+        };
+
+        // drag tp abs coordinates
+        Command dragr = new Command() {
+            public String getCommand() {
+                return DRAG_REL;
+            }
+
+            public String getShortCommand() {
+                return "dr";
+            }
+
+            public String getDescription() {
+                return "Drag mouse from current to a new relative location";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                String ret; if ((ret = checkRobot()) != null) return ret;
+
+                robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+                if ((ret = moveRelative(command)) != null) return ret;
+                robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+
+                return null;
+            }
+        };
+
         // entering x key event
         Command keys = new Command() {
             public String getCommand() {
@@ -414,6 +474,8 @@ public class Robot extends Command {
         addAndSortSubcommand(mover);
         addAndSortSubcommand(movealc);
         addAndSortSubcommand(movearc);
+        addAndSortSubcommand(draga);
+        addAndSortSubcommand(dragr);
         addAndSortSubcommand(keys);
         addAndSortSubcommand(key);
         addAndSortSubcommand(text);
@@ -471,8 +533,7 @@ public class Robot extends Command {
         PointerInfo pi = MouseInfo.getPointerInfo();
 
         robot.mouseMove((int)(pi.getLocation().getX()) + x, (int)(pi.getLocation().getY()) + y);
-
-        robot.mouseMove(x, y);
+            
         } catch (Exception e) {
             return Interpreter.BAD;
         }
