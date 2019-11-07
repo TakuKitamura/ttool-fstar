@@ -533,7 +533,7 @@ public class Robot extends Command {
         PointerInfo pi = MouseInfo.getPointerInfo();
 
         robot.mouseMove((int)(pi.getLocation().getX()) + x, (int)(pi.getLocation().getY()) + y);
-            
+
         } catch (Exception e) {
             return Interpreter.BAD;
         }

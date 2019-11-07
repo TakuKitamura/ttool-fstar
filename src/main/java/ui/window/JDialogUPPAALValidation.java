@@ -60,6 +60,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.*;
 
 /**
@@ -75,6 +76,10 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
     // Issue #35: Handle the different output message labels of different versions of UPPAAL
     private static final java.util.Set<String> PROP_VERIFIED_LABELS = new HashSet<String>();
     private static final java.util.Set<String> PROP_NOT_VERIFIED_LABELS = new HashSet<String>();
+
+    private static final String UPPAAL_INSTALATION_ERROR ="The verifier of UPPAAL could not be started.\nProbably, " +
+            "UPPAAL is badly installed, or TTool is badly configured:\nCheck " +
+            "for UPPAALVerifierPath and UPPAALVerifierHost configurations.";
 
     static {
         for (final String label : ConfigurationTTool.UPPAALPropertyVerifMessage.split(",")) {
@@ -616,8 +621,23 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         RshClient rshctmp = rshc;
 
         try {
+            // checking UPPAAL installation
+            File uppaalVerifier= new File(cmdVerifyta);
+            if (!uppaalVerifier.exists()) {
+                jta.append(UPPAAL_INSTALATION_ERROR);
+
+                mode = NOT_STARTED;
+                setButtons();
+
+                return;
+            }
+
+
             id = rshc.getId();
-            jta.append("Session id on launcher=" + id + "\n");
+            //jta.append("Session id on launcher=" + id + "\n");
+
+
+
 
             fn = fileName.substring(0, fileName.length() - 4) + "_" + id;
 
@@ -938,7 +958,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         if (mode != NOT_STARTED) {
             if (data.trim().length() == 0) {
                 //jta.append("The verifier of UPPAAL could not be started: error\n");
-                throw new LauncherException("The verifier of UPPAAL could not be started.\nProbably, UPPAAL is badly installed, or TTool is badly configured:\nCheck for UPPAALVerifierPath and UPPAALVerifierHost configurations.");
+                throw new LauncherException(UPPAAL_INSTALATION_ERROR);
             }
 
 
