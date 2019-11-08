@@ -2250,7 +2250,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         if (nextSelectedComponent() != null) {
             removeAllSelectedComponents();
         } else if (componentPointed != null) {
-            removeComponent(componentPointed);
+            if (componentPointed.isRemovable()) {
+                removeComponent(componentPointed);
+            }
         } else {
             return;
         }
@@ -2326,7 +2328,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     private void removeAllSelectedComponents() {
         TGComponent tgc = nextSelectedComponent();
         while (tgc != null) {
-            removeComponent(tgc);
+            if (tgc.isRemovable()) {
+                removeComponent(tgc);
+            }
             tgc = nextSelectedComponent();
         }
     }

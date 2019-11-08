@@ -77,7 +77,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
     private static final java.util.Set<String> PROP_VERIFIED_LABELS = new HashSet<String>();
     private static final java.util.Set<String> PROP_NOT_VERIFIED_LABELS = new HashSet<String>();
 
-    private static final String UPPAAL_INSTALATION_ERROR ="The verifier of UPPAAL could not be started.\nProbably, " +
+    private static final String UPPAAL_INSTALLATION_ERROR ="The verifier of UPPAAL could not be started.\nProbably, " +
             "UPPAAL is badly installed, or TTool is badly configured:\nCheck " +
             "for UPPAALVerifierPath and UPPAALVerifierHost configurations.";
 
@@ -624,7 +624,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
             // checking UPPAAL installation
             File uppaalVerifier= new File(cmdVerifyta);
             if (!uppaalVerifier.exists()) {
-                jta.append(UPPAAL_INSTALATION_ERROR);
+                jta.append(UPPAAL_INSTALLATION_ERROR);
 
                 mode = NOT_STARTED;
                 setButtons();
@@ -635,9 +635,6 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
 
             id = rshc.getId();
             //jta.append("Session id on launcher=" + id + "\n");
-
-
-
 
             fn = fileName.substring(0, fileName.length() - 4) + "_" + id;
 
@@ -958,7 +955,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         if (mode != NOT_STARTED) {
             if (data.trim().length() == 0) {
                 //jta.append("The verifier of UPPAAL could not be started: error\n");
-                throw new LauncherException(UPPAAL_INSTALATION_ERROR);
+                throw new LauncherException(UPPAAL_INSTALLATION_ERROR);
             }
 
 
