@@ -330,6 +330,11 @@ public class PrimitiveCodeCluster {
 				}
 			}
 
+			if(tdf.getDynamic().equals(true)){
+			    corpsPrimitiveTDF = corpsPrimitiveTDF+"allow_dynamic_tfd();"+CR;
+			    cpt2++;
+			}
+
 			if (cpt2 > 0) {
 				corpsPrimitiveTDF = corpsPrimitiveTDF + "\t}" + CR2;
 			}
