@@ -2246,13 +2246,19 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public void makeDelete() {
-        //TraceManager.addDev("make delete");
+        //TraceManager.addDev("make DELETE");
         if (nextSelectedComponent() != null) {
+            //TraceManager.addDev("make DELETE SELECTED");
             removeAllSelectedComponents();
         } else if (componentPointed != null) {
-            if (componentPointed.isRemovable()) {
-                removeComponent(componentPointed);
+            //TraceManager.addDev("make DELETE POINTED component=" + componentPointed.getName() + " removable?" + componentPointed.isRemovable());
+            if(!componentPointed.isRemovable()) {
+                return;
             }
+
+                //TraceManager.addDev("make DELETE REMOVABLE");
+                removeComponent(componentPointed);
+
         } else {
             return;
         }
