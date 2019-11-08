@@ -3720,7 +3720,9 @@ public class GTURTLEModeling {
 
     private String header() {
         String head = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGMODELING version=\"" + DefaultText.getVersion() + "\"";
-        ModelParameters.setValueForID("LAST_SELECTED_SUB_TAB", ""+mgui.getCurrentJTabbedPane().getSelectedIndex());
+        if (mgui.getCurrentJTabbedPane() != null) {
+            ModelParameters.setValueForID("LAST_SELECTED_SUB_TAB", "" + mgui.getCurrentJTabbedPane().getSelectedIndex());
+        }
         head += ModelParameters.toXML();
         head += ">\n\n";
         return head;
