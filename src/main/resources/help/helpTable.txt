@@ -9,6 +9,7 @@
 --- cpu cpu processor cpu os
 ----cpuname cpu_name cpu name
 ----schedulingpolicy scheduling_policy scheduling policy cpu
+----activedelay active_delay delay consumes cycles
 ----slicetime slice_time slice time cpu
 ----numbercores number_of_core number core cpu
 ----datasize data_size data size cpu
