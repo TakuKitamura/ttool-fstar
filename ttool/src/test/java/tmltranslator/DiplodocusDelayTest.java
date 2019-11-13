@@ -30,17 +30,17 @@ public class DiplodocusDelayTest extends AbstractUITest {
     final String DIR_GEN = "test_diplo_simulator/";
 
     //model for Delay task without penalties
-    final String [] MODELS_DELAY = {"mono-RR", "mono-RRPB","multi-RR","multi-RRPB","fpgaTest"};
-    final int [] NB_Of_DELAY_STATES = {402, 402, 402, 402, 302};
-    final int [] NB_Of_DELAY_TRANSTIONS = {401, 401, 401, 401, 301};
-    final int [] MIN_DELAY_CYCLES = {20200, 20200, 20100, 20100, 20100};
-    final int [] MAX_DELAY_CYCLES = {20200, 20200, 20100, 20100, 20100};
+    final String [] MODELS_DELAY = {"mono-RR", "mono-RRPB","multi-RR","multi-RRPB","fpgaTest","delay-idle"};
+    final int [] NB_Of_DELAY_STATES = {42, 42, 42, 42, 32, 22};
+    final int [] NB_Of_DELAY_TRANSTIONS = {41, 41, 41, 41, 31, 21};
+    final int [] MIN_DELAY_CYCLES = {2020, 2020, 2010, 2010, 2010, 1820};
+    final int [] MAX_DELAY_CYCLES = {2020, 2020, 2010, 2010, 2010, 1820};
 
     //model for Delay task with penalties
-    final int [] NB_Of_DELAY_STATES_PENALTIES = {410, 410, 410, 410, 302};
-    final int [] NB_Of_DELAY_TRANSTIONS_PENALTIES = {409, 409, 409, 409, 301};
-    final int [] MIN_DELAY_CYCLES_PENALTIES = {25718, 25718, 26588, 26588, 20100};
-    final int [] MAX_DELAY_CYCLES_PENALTIES = {25718, 25718, 26588, 26588, 20100};
+    final int [] NB_Of_DELAY_STATES_PENALTIES = {42, 42, 42, 42, 32, 22};
+    final int [] NB_Of_DELAY_TRANSTIONS_PENALTIES = {41, 41, 41, 41, 31, 21};
+    final int [] MIN_DELAY_CYCLES_PENALTIES = {2590, 2590, 2670, 2670, 2010, 1950};
+    final int [] MAX_DELAY_CYCLES_PENALTIES = {2590, 2590, 2670, 2670, 2010, 1950};
 
 
     private String SIM_DIR;
