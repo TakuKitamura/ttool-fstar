@@ -2841,7 +2841,7 @@
 <MainCode value="void __user_init() {"/>
 <MainCode value="}"/>
 <Optimized value="true" />
-<Validated value="" />
+<Validated value="Clock;Main;P1;P0;P3;P2;" />
 <Ignored value="" />
 
 <CONNECTOR type="118" id="1116" >
@@ -3076,7 +3076,7 @@ there is a unique sink
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
 <Attribute access="0" id="h" value="0" type="8" typeOther="" />
-<Attribute access="0" id="step" value="5" type="8" typeOther="" />
+<Attribute access="0" id="step" value="1" type="8" typeOther="" />
 <Signal value="out tick(int step)" attached="true" />
 <Signal value="out allFinished(int clockValue)" attached="true" />
 </extraparam>
@@ -3115,6 +3115,8 @@ there is a unique sink
 <extraparam>
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
+<Attribute access="0" id="nbHWTasks" value="3" type="8" typeOther="" />
+<Attribute access="0" id="durationDR" value="15" type="8" typeOther="" />
 <Attribute access="0" id="step" value="" type="8" typeOther="" />
 <Attribute access="0" id="nbHW" value="100" type="8" typeOther="" />
 <Attribute access="0" id="remainHW" value="100" type="8" typeOther="" />
@@ -3128,7 +3130,6 @@ there is a unique sink
 <Attribute access="0" id="runningHW" value="" type="8" typeOther="" />
 <Attribute access="0" id="currentDR" value="0" type="8" typeOther="" />
 <Attribute access="0" id="finalClockValue" value="" type="8" typeOther="" />
-<Attribute access="0" id="durationDR" value="30" type="8" typeOther="" />
 <Signal value="in finishedP1()" attached="true" />
 <Signal value="out selectP1()" attached="true" />
 <Signal value="out preemptP1()" attached="true" />
@@ -3275,7 +3276,7 @@ there is a unique sink
 <extraparam>
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
-<Attribute access="0" id="duration" value="30" type="8" typeOther="" />
+<Attribute access="0" id="duration" value="10" type="8" typeOther="" />
 <Attribute access="0" id="step" value="" type="8" typeOther="" />
 <Signal value="in selectP()" attached="true" />
 <Signal value="in stepP(int x)" attached="true" />
@@ -3336,6 +3337,56 @@ there is a unique sink
 </AVATARBlockDiagramPanel>
 
 <AVATARStateMachineDiagramPanel name="Main" minX="10" maxX="2500" minY="10" maxY="3500" >
+<CONNECTOR type="5102" id="4280" >
+<cdparam x="178" y="1279" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<infoparam name="connector" value="null" />
+<TGConnectingPoint num="0" id="4283" />
+<TGConnectingPoint num="1" id="4284" />
+<TGConnectingPoint num="2" id="4285" />
+<P1  x="178" y="1279" id="2389" />
+<P2  x="281" y="2237" id="1915" />
+<Point x="40" y="1678" />
+<Point x="194" y="2113" />
+<AutomaticDrawing  data="true" />
+</CONNECTOR><SUBCOMPONENT type="-1" id="4281" >
+<father id="4280" num="0" />
+<cdparam x="40" y="1678" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="3500" />
+<infoparam name="point " value="null" />
+</SUBCOMPONENT>
+<SUBCOMPONENT type="-1" id="4282" >
+<father id="4280" num="1" />
+<cdparam x="194" y="2113" />
+<sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="3500" />
+<infoparam name="point " value="null" />
+</SUBCOMPONENT>
+<SUBCOMPONENT type="-1" id="4286" >
+<father id="4280" num="2" />
+<cdparam x="21" y="1357" />
+<sizeparam width="122" height="30" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<enabled value="true" />
+<cdrectangleparam minX="10" maxX="2500" minY="10" maxY="3500" />
+<infoparam name="List of all parameters of an Avatar SMD transition" value="" />
+<TGConnectingPoint num="0" id="4287" />
+<TGConnectingPoint num="1" id="4288" />
+<TGConnectingPoint num="2" id="4289" />
+<TGConnectingPoint num="3" id="4290" />
+<extraparam>
+<guard value="[ nbHWTasks == 0]" enabled="true"/>
+<afterMin value="1" enabled="true"/>
+<afterMax value="" enabled="true"/>
+<computeMin value="" enabled="true"/>
+<computeMax value="" enabled="true"/>
+<probability value="" enabled="true"/>
+</extraparam>
+</SUBCOMPONENT>
+
 <CONNECTOR type="5102" id="1312" >
 <cdparam x="1294" y="2454" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
@@ -3622,7 +3673,7 @@ there is a unique sink
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
 <TGConnectingPoint num="0" id="1371" />
-<P1  x="319" y="2534" id="1867" />
+<P1  x="308" y="2531" id="1867" />
 <P2  x="352" y="2589" id="2599" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="1370" >
@@ -3653,7 +3704,7 @@ there is a unique sink
 <infoparam name="connector" value="null" />
 <TGConnectingPoint num="0" id="1378" />
 <P1  x="316" y="2452" id="2660" />
-<P2  x="319" y="2504" id="1866" />
+<P2  x="308" y="2501" id="1866" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="1377" >
 <father id="1379" num="0" />
@@ -4008,7 +4059,7 @@ there is a unique sink
 <TGConnectingPoint num="3" id="1453" />
 <extraparam>
 <guard value="[ currentDR == 0]" enabled="true"/>
-<afterMin value="1" enabled="true"/>
+<afterMin value="2" enabled="true"/>
 <afterMax value="" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
@@ -4148,8 +4199,8 @@ there is a unique sink
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="1489" >
 <father id="1491" num="0" />
-<cdparam x="638" y="636" />
-<sizeparam width="174" height="30" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="634" y="612" />
+<sizeparam width="182" height="45" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -4167,6 +4218,7 @@ there is a unique sink
 <probability value="" enabled="true"/>
 <actions value="rescheduleSW = true" enabled="true"/>
 <actions value="runningHW = runningHW - 1" enabled="true"/>
+<actions value="nbHWTasks = nbHWTasks - 1" enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -4211,7 +4263,7 @@ there is a unique sink
 </CONNECTOR><SUBCOMPONENT type="-1" id="1503" >
 <father id="1505" num="0" />
 <cdparam x="105" y="684" />
-<sizeparam width="174" height="30" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="182" height="45" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -4229,6 +4281,7 @@ there is a unique sink
 <probability value="" enabled="true"/>
 <actions value="rescheduleSW = true" enabled="true"/>
 <actions value="runningHW = runningHW - 1" enabled="true"/>
+<actions value="nbHWTasks = nbHWTasks - 1" enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -4425,7 +4478,7 @@ there is a unique sink
 </CONNECTOR><SUBCOMPONENT type="-1" id="1552" >
 <father id="1554" num="0" />
 <cdparam x="313" y="690" />
-<sizeparam width="174" height="30" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="182" height="45" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -4443,6 +4496,7 @@ there is a unique sink
 <probability value="" enabled="true"/>
 <actions value="rescheduleSW = true" enabled="true"/>
 <actions value="runningHW = runningHW - 1" enabled="true"/>
+<actions value="nbHWTasks = nbHWTasks - 1" enabled="true"/>
 </extraparam>
 </SUBCOMPONENT>
 
@@ -4618,7 +4672,7 @@ there is a unique sink
 <TGConnectingPoint num="3" id="1590" />
 <extraparam>
 <guard value="[ currentDR &gt; 0]" enabled="true"/>
-<afterMin value="1" enabled="true"/>
+<afterMin value="2" enabled="true"/>
 <afterMax value="" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
@@ -4735,7 +4789,7 @@ there is a unique sink
 <infoparam name="connector" value="null" />
 <TGConnectingPoint num="0" id="1624" />
 <P1  x="184" y="2452" id="2637" />
-<P2  x="174" y="2517" id="1877" />
+<P2  x="169" y="2502" id="1877" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="1623" >
 <father id="1625" num="0" />
@@ -4764,7 +4818,7 @@ there is a unique sink
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
 <TGConnectingPoint num="0" id="1631" />
-<P1  x="174" y="2547" id="1878" />
+<P1  x="169" y="2532" id="1878" />
 <P2  x="222" y="2589" id="2607" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="1630" >
@@ -5411,7 +5465,7 @@ there is a unique sink
 </COMPONENT>
 
 <COMPONENT type="5103" id="1876" >
-<cdparam x="273" y="2509" />
+<cdparam x="262" y="2506" />
 <sizeparam width="92" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
@@ -5430,7 +5484,7 @@ there is a unique sink
 </COMPONENT>
 
 <COMPONENT type="5103" id="1887" >
-<cdparam x="128" y="2522" />
+<cdparam x="123" y="2507" />
 <sizeparam width="92" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
