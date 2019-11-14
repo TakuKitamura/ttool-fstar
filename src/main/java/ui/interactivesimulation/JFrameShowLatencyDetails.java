@@ -96,13 +96,13 @@ public class JFrameShowLatencyDetails extends JFrame {
 	}
 
 	public JFrameShowLatencyDetails(Vector<SimulationTransaction> transFile1, Vector<SimulationTransaction> transFile2,
-			Object selectedDevice1, Object selectedTrans1, Object selectedDevice2, Object selectedTrans2) {
+			Object selectedDevice1, Object selectedTrans1, Object selectedDevice2, Object selectedTrans2,Boolean Visible) {
 
 		super("Simulation Latency ");
 
 		GridLayout myLayout = new GridLayout(4, 1);
 
-		this.setBackground(Color.RED);
+		//this.setBackground(Color.RED);
 		this.setLayout(myLayout);
 
 		columnNames[0] = "transaction ";
@@ -365,7 +365,7 @@ public class JFrameShowLatencyDetails extends JFrame {
 
 		this.add(timePanel);
 		this.pack();
-		this.setVisible(true);
+		this.setVisible(Visible);
 
 	}
 

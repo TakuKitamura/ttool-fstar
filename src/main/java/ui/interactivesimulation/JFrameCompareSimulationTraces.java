@@ -61,12 +61,14 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.xml.sax.SAXException;
 
+import common.ConfigurationTTool;
 import myutil.TraceManager;
 import ui.MainGUI;
 import ui.SimulationTrace;
@@ -115,20 +117,31 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
 	private JComboBox<Object> devicesDropDownCombo2 = new JComboBox<Object>();
 	private JComboBox<Object> tracesCombo1, tracesCombo2;
 
-	public JFrameCompareSimulationTraces(MainGUI _mgui, String _title, SimulationTrace sST) {
+	public JFrameCompareSimulationTraces(MainGUI _mgui, String _title, SimulationTrace sST,boolean visible) {
 
 		super(_title);
 
 		this.selectedST = sST;
 		GridLayout myLayout = new GridLayout(3, 1);
 
-		this.setBackground(Color.RED);
+		//this.setBackground(Color.RED);
 		this.setLayout(myLayout);
 
 		addWindowListener(this);
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
-		fc = new JFileChooser();
+			
+
+		if (ConfigurationTTool.SystemCCodeDirectory.length() > 0) {
+			fc = new JFileChooser(ConfigurationTTool.SystemCCodeDirectory);
+		} else {
+			fc = new JFileChooser();
+		}
+
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("XML files", "xml");
+		fc.setFileFilter(filter);
+		
+		
 
 		JPanel buttonPanel = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -207,7 +220,7 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
 		this.add(buttonPanel);
 
 		this.pack();
-		this.setVisible(true);
+		this.setVisible(visible);
 
 	}
 
@@ -245,7 +258,7 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
 
 			new JFrameShowLatencyDetails(transFile1, transFile2, devicesDropDownCombo1.getSelectedItem(),
 					tracesCombo1.getSelectedItem(), devicesDropDownCombo2.getSelectedItem(),
-					tracesCombo2.getSelectedItem());
+					tracesCombo2.getSelectedItem(),true);
 
 		} else if (e.getSource() == difference) {
 
