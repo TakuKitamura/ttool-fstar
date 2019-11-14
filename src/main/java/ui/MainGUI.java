@@ -69,6 +69,7 @@ import ui.avatarrd.AvatarRDPanel;
 import ui.avatarsmd.AvatarSMDPanel;
 import ui.cd.TClassDiagramPanel;
 import ui.diplodocusmethodology.DiplodocusMethodologyDiagramPanel;
+import ui.directedgraph.JFrameLatencyDetailedAnalysis;
 import ui.ebrdd.EBRDDPanel;
 import ui.eln.ELNDiagramPanel;
 import ui.file.*;
@@ -89,7 +90,9 @@ import ui.tmlcd.TMLTaskDiagramPanel;
 import ui.tmlcompd.TMLCCompositeComponent;
 import ui.tmlcompd.TMLComponentTaskDiagramPanel;
 import ui.tmlcp.TMLCPPanel;
+import ui.tmldd.TMLArchiArtifact;
 import ui.tmldd.TMLArchiDiagramPanel;
+import ui.tmldd.TMLArchiNode;
 import ui.tmlsd.TMLSDPanel;
 import ui.tree.DiagramTreeModel;
 import ui.tree.DiagramTreeRenderer;
@@ -333,6 +336,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     private JFrameInteractiveSimulation jfis;
     private JFrameAvatarInteractiveSimulation jfais;
     private JFrameCompareSimulationTraces cSimTrace;
+    private JFrameLatencyDetailedAnalysis latencyDetailedAnalysis;
 
     // Help
     private HelpManager helpManager;
@@ -9782,7 +9786,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     }
 
     public void compareSimulationTraces(SimulationTrace selectedST, boolean b) {
-		cSimTrace = new JFrameCompareSimulationTraces( this, "Compare Simulation simulation",selectedST);
+		cSimTrace = new JFrameCompareSimulationTraces( this, "Compare Simulation simulation",selectedST,true);
 	       
 		cSimTrace.setIconImage(IconManager.img9);
         
@@ -9792,6 +9796,100 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         
         
         
+	}
+	public void latencyDetailedAnalysis() {
+
+		Vector<TGComponent> tmlNodesToValidate = new Vector<TGComponent>();
+		List<TMLComponentDesignPanel> cpanels;
+		TMLComponentDesignPanel compdp;
+
+		TURTLEPanel tp = getCurrentTURTLEPanel();
+
+		// tmlap = (TMLArchiPanel) tp;
+
+		if (gtm == null) {
+
+		} else {
+
+			if (gtm.getTMLMapping() != null) {
+				TMLMapping<TGComponent> map = gtm.getTMLMapping();
+
+				for (TGComponent component : tmlap.tmlap.getComponentList()) {
+					tmlNodesToValidate.add(component);
+				}
+
+				TGComponent tgc;
+				List<TMLArchiArtifact> artifacts;
+				String namePanel;
+				TURTLEPanel tup;
+				Iterator<? extends TGComponent> iterator = tmlNodesToValidate.listIterator();
+				cpanels = new ArrayList<TMLComponentDesignPanel>();
+
+				while (iterator.hasNext()) {
+					tgc = iterator.next();
+
+					if (tgc instanceof TMLArchiNode) {
+
+						artifacts = ((TMLArchiNode) (tgc)).getAllTMLArchiArtifacts();
+						for (TMLArchiArtifact artifact : artifacts) {
+							namePanel = artifact.getReferenceTaskName();
+
+							try {
+								tup = getTURTLEPanel(namePanel);
+
+								if (tup instanceof TMLComponentDesignPanel) {
+									compdp = (TMLComponentDesignPanel) (tup);
+									if (!cpanels.contains(compdp)) {
+										cpanels.add(compdp);
+									}
+								}
+
+							} catch (Exception e) {
+								// Just in case the mentionned panel is not a TML design Panel
+							}
+
+						}
+					}
+				}
+
+				latencyDetailedAnalysis = new JFrameLatencyDetailedAnalysis(map, cpanels);
+
+				latencyDetailedAnalysis.setIconImage(IconManager.img9);
+
+				GraphicLib.centerOnParent(latencyDetailedAnalysis, 900, 600);
+				latencyDetailedAnalysis.setVisible(true);
+
+			} else {
+
+				if (gtm.getArtificialTMLMapping() != null) {
+
+					TMLMapping<TGComponent> map = gtm.getArtificialTMLMapping();
+
+					TMLComponentDesignPanel tmlcdp = (TMLComponentDesignPanel) tp;
+
+					cpanels = new ArrayList<TMLComponentDesignPanel>();
+					cpanels.add(tmlcdp);
+
+					latencyDetailedAnalysis = new JFrameLatencyDetailedAnalysis(map, cpanels);
+
+					latencyDetailedAnalysis.setIconImage(IconManager.img9);
+
+					GraphicLib.centerOnParent(latencyDetailedAnalysis, 900, 600);
+					latencyDetailedAnalysis.setVisible(true);
+
+				} else {
+
+				}
+			}
+		}
+
+		// dp.getPanels();
+
+
+	}
+
+	public JFrameLatencyDetailedAnalysis getLatencyDetailedAnalysis() {
+		return latencyDetailedAnalysis;
 	}
 
 

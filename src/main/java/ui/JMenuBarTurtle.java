@@ -646,6 +646,11 @@ public class JMenuBarTurtle extends JMenuBar {
         menuItem.setName("CodeG Executable");
         menuItem.addMouseListener(mgui.mouseHandler);
 
+        vAndV.addSeparator();
+        menuItem = vAndV.add(mgui.actions[TGUIAction.ACT_GEN_LATENCY_GRAPH]);
+        menuItem.setName("latency Detailed Analysis");
+        menuItem.addMouseListener(mgui.mouseHandler);
+        
         // View
         menuItem = view.add(mgui.actions[TGUIAction.ACT_VIEW_BIRDEYES_EMB]);
         menuItem.setName("View Hide Birdeye");

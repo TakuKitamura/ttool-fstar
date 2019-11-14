@@ -1892,4 +1892,30 @@ public class TMLMapping<E> {
             }
         }
     }
+    
+    public HashSet<TMLTask> getLisMappedTasks(HwNode node) {
+
+		HashSet<TMLTask> tasks = new HashSet<TMLTask>();
+		int i = 0;
+		for (HwExecutionNode ex : onnodes) {
+			if (ex == node) {
+				tasks.add(mappedtasks.get(i));
+			}
+			i++;
+		}
+		return tasks;
+	}
+    
+    public HashSet<TMLElement> getLisMappedChannels(HwNode node) {
+
+		HashSet<TMLElement> mappedcomm = new HashSet<TMLElement>();
+		int i = 0;
+		for (HwCommunicationNode ex : oncommnodes) {
+			if (ex == node) {
+				mappedcomm.add(mappedcommelts.get(i));
+			}
+			i++;
+		}
+		return mappedcomm;
+	}
 }

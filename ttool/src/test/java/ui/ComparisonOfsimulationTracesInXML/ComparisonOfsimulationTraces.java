@@ -55,7 +55,7 @@ public class ComparisonOfsimulationTraces extends AbstractUITest {
 	@Test
 	public void parseXMLTest() throws SAXException, IOException, ParserConfigurationException {
 
-		cSimTrace = new JFrameCompareSimulationTraces(mainGUI, "Compare Simulation simulation", selectedST1);
+		cSimTrace = new JFrameCompareSimulationTraces(mainGUI, "Compare Simulation simulation", selectedST1,false);
 		cSimTrace.setVisible(false);
 		cSimTrace.parseXML(STfilePath1, STfilePath2);
 
@@ -77,7 +77,7 @@ public class ComparisonOfsimulationTraces extends AbstractUITest {
 	@Test
 	public void latencyTest() throws SAXException, IOException, ParserConfigurationException {
 		JFrameShowLatencyDetails showLatencyDetails = new JFrameShowLatencyDetails(cSimTrace.getTransFile1(),
-				cSimTrace.getTransFile2(), "CPU1_1", "Request SmartCard", "CPU1_1", "Send end");
+				cSimTrace.getTransFile2(), "CPU1_1", "Request SmartCard", "CPU1_1", "Send end",false);
 
 		showLatencyDetails.setVisible(false);
 
