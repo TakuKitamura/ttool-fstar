@@ -67,7 +67,7 @@ public class SysCAMSTClock extends SysCAMSTComponent{
     }
 
 
-	public String getName() {
+	public String getName() {	   
 		return name;
 	}
 
@@ -98,6 +98,7 @@ public class SysCAMSTClock extends SysCAMSTComponent{
 
     
 	public void setName(String _name) {
+	    System.out.println("@@@@@ setName "+_name);
 		name = _name;
 	}
  

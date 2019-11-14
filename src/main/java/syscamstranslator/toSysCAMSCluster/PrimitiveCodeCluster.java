@@ -144,7 +144,7 @@ public class PrimitiveCodeCluster {
 					}
 				}
 			}
-			if (!convports.isEmpty()) {
+			/*	if (!convports.isEmpty()) {
 				for (SysCAMSTPortConverter conv : convports) {
 					if (conv.getOrigin() == 0) {
 						corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_de::sca_in< " + conv.getConvType() + " > " + conv.getName() + ";" + CR;
@@ -152,7 +152,34 @@ public class PrimitiveCodeCluster {
 						corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_de::sca_out< " + conv.getConvType() + " > " + conv.getName() + ";" + CR;
 					}
 				}
+				}*/
+
+				if (!convports.isEmpty()) {
+			    // System.out.println("@@@@@ Conv ports non empty");
+				for (SysCAMSTPortConverter conv : convports) {
+
+				    //   if(conv.getConvType() !="sc_uint") {
+				    if(conv.getNbits()==0){
+				if (conv.getOrigin() == 0) {
+					    corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_de::sca_in <" + conv.getConvType()+" > " + conv.getName() + ";" + CR;
+					    
+					} else if (conv.getOrigin() == 1) {
+					    corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_de::sca_out <" + conv.getConvType()+" > "+ conv.getName() + ";" + CR;
+					}
 			}
+
+				else	{
+				    if (conv.getOrigin() == 0) {
+					    corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_de::sca_in <" + conv.getConvType()+"<" + conv.getNbits()+"> > " + conv.getName() + ";" + CR;
+					    
+					} else if (conv.getOrigin() == 1) {
+					    corpsPrimitiveTDF = corpsPrimitiveTDF + "\tsca_tdf::sca_de::sca_out <" + conv.getConvType()+"<" + conv.getNbits()+"> > "+ conv.getName() + ";" + CR;	
+					}
+				}					
+				
+				}
+			}
+
 
 			//corpsPrimitive = corpsPrimitive + CR + "\t// Constructor" + CR + "\tSCA_CTOR(" + tdf.getName() + ")" + CR;
 			corpsPrimitiveTDF = corpsPrimitiveTDF + CR + "\texplicit " + tdf.getName() + "(sc_core::sc_module_name nm";
@@ -445,7 +472,12 @@ public class PrimitiveCodeCluster {
 				corpsPrimitiveDE = corpsPrimitiveDE + "\t};" + CR2;
 			}
 
-			if (!deports.isEmpty()) {
+			//DG 17.10.
+			if(de.getClockName()!="")
+			corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_in <bool>"  + de.getClockName() + ";" + CR;
+
+			
+			/*	if (!deports.isEmpty()) {
 				for (SysCAMSTPortDE t : deports) {
 					if (t.getOrigin() == 0) {
 						corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_in< " + t.getDEType() + " > " + t.getName() + ";" + CR;
@@ -453,7 +485,47 @@ public class PrimitiveCodeCluster {
 						corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_out< " + t.getDEType() + " > " + t.getName() + ";" + CR;
 					}
 				}
+			}*/
+
+
+
+	if (!deports.isEmpty()) {
+			    //System.out.println("@@@@@@@@@DE ports non empty");
+				for (SysCAMSTPortDE t : deports) {
+
+
+				    if(t.getNbits()==0)	    
+				    {	if (t.getOrigin() == 0) {
+					    	corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_in <" + t.getDEType() + " >"  + t.getName() + ";" + CR;
+	
+					    
+						//	System.out.println("@@@@@@@@@2DE "+t.getDEType()+t.getNbits());		
+					} else if (t.getOrigin() == 1) {
+					      corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_out <" + t.getDEType() + " > "+ t.getName() + ";" + CR;
+		 
+					      // System.out.println("@@@@@@@@@3DE "+t.getDEType()+t.getNbits());					
+					}
+				}
+				   else {
+
+if (t.getOrigin() == 0) {
+    	corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_in <" + t.getDEType() + "<"+t.getNbits()+"> > " + t.getName() + ";" + CR;
+    	//corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_in <sc_uint <"+t.getNbits()+"> > " + t.getName() + ";" + CR;
+					 
+	//	System.out.println("@@@@@@@@@4DE "+t.getDEType()+t.getNbits());		
+					} else if (t.getOrigin() == 1) {
+      corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_out <" + t.getDEType() + "<"+t.getNbits() +"> > "+ t.getName() + ";" + CR;
+      //corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_out <sc_uint <"+t.getNbits() +"> > "+ t.getName() + ";" + CR;
+		 
+      // System.out.println("@@@@@@@@@5DE "+t.getDEType()+t.getNbits());					
+					}
+
+				       
+				    }
+					
+				}
 			}
+			
 
 			corpsPrimitiveDE = corpsPrimitiveDE + CR + "\tSC_HAS_PROCESS(" + de.getName() + ");" + CR + 
 			"\texplicit " + de.getName() + "(sc_core::sc_module_name nm";
@@ -504,11 +576,27 @@ public class PrimitiveCodeCluster {
 
 			boolean sensitive = false, method = false;
 			if (!de.getCode().equals("")) {
-				corpsPrimitiveDE = corpsPrimitiveDE + "\t{" + CR + "\t\tSC_METHOD(" + de.getNameFn() + ");" + CR;
+			    corpsPrimitiveDE = corpsPrimitiveDE + "\t{" + CR ;
+			    //	corpsPrimitiveDE = corpsPrimitiveDE + "\t{" + CR + "\t\tSC_METHOD(" + de.getNameFn() + ");" + CR;
 				method = true;
 			} 
+
+
+
+//DG 17.10.
+			if(de.getClockName()!=""){
+			    corpsPrimitiveDE = corpsPrimitiveDE + "\t\tsensitive << " + de.getClockName()  + ".";
+					if (de.getClockSensitiveMethod().equals("positive")) {
+						corpsPrimitiveDE = corpsPrimitiveDE + "pos();" + CR;
+					} else if (de.getClockSensitiveMethod().equals("negative")) {
+						corpsPrimitiveDE = corpsPrimitiveDE + "neg();" + CR;						
+					}
+			}
+			//fin ajoute DG
+
+
 			
-			for (SysCAMSTPortDE t : deports) {
+			/*for (SysCAMSTPortDE t : deports) {
 				if (t.getSensitive() == true) {
 					if (method == false) {
 						corpsPrimitiveDE = corpsPrimitiveDE + "\t{" + CR;
@@ -523,7 +611,7 @@ public class PrimitiveCodeCluster {
                     }
 					sensitive = true;
 				}
-			}
+			}*/
 			if (sensitive == true || method == true) {
 				corpsPrimitiveDE = corpsPrimitiveDE + "\t}" + CR2;
 			} else {

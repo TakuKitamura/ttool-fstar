@@ -240,9 +240,11 @@ public class TGComponentManager {
     public static final int TMLTD_REQUEST_OPERATOR = 1004;
     public static final int TMLTD_EVENT_OPERATOR = 1005;
     public static final int TMLAD_WRITE_CHANNEL = 1006;
+    public static final int TMLAD_WRITE_CAMS = 1037;
     public static final int TMLAD_SEND_REQUEST = 1007;
     public static final int TMLAD_SEND_EVENT = 1008;
     public static final int TMLAD_READ_CHANNEL = 1009;
+    public static final int TMLAD_READ_CAMS = 1038;
     public static final int TMLAD_WAIT_EVENT = 1010;
     public static final int TMLAD_NOTIFIED_EVENT = 1017;
     public static final int TMLAD_ACTION_STATE = 1011;
@@ -348,6 +350,7 @@ public class TGComponentManager {
     public static final int CAMS_CLUSTER = 1607;
     public static final int CAMS_BLOCK_GPIO2VCI = 1608;
     public static final int CAMS_CLOCK = 5721;
+    //public static final int CAMS_CLOCK = 1609;
     // ELN
     public static final int ELN_CONNECTOR = 1610;
     public static final int ELN_RESISTOR = 1611;
@@ -1133,6 +1136,12 @@ public class TGComponentManager {
             case TMLAD_READ_CHANNEL:
                 tgc = new TMLADReadChannel(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
+	    case TMLAD_WRITE_CAMS:
+                tgc = new TMLADWriteCAMS(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case TMLAD_READ_CAMS:
+                tgc = new TMLADReadCAMS(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
             case TMLAD_SEND_REQUEST:
                 tgc = new TMLADSendRequest(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
@@ -1296,7 +1305,8 @@ public class TGComponentManager {
             case CAMS_BLOCK_TDF:
                 tgc = new SysCAMSBlockTDF(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
-            case CAMS_BLOCK_DE:
+	case CAMS_BLOCK_DE:
+	    //  System.out.println("@@@@@@@@@@block reconnu@@@@@@@@@@@@@@@@");
             	tgc = new SysCAMSBlockDE(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             	break;
             case CAMS_PORT_TDF:
@@ -1315,6 +1325,7 @@ public class TGComponentManager {
             	tgc = new SysCAMSBlockGPIO2VCI(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             	break;
 	case CAMS_CLOCK:
+	    //System.out.println("@@@@@@@@@@Clock reconnu  2 @@@@@@@@@@@@@@@@");
             	tgc = new SysCAMSClock(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
             	break;
             // ELN
@@ -1785,6 +1796,7 @@ public class TGComponentManager {
         } else if (tgc instanceof SysCAMSBlockTDF) {
         	return CAMS_BLOCK_TDF;
         } else if (tgc instanceof SysCAMSBlockDE) {
+	    //System.out.println("@@@@@@@@@@Block DE reconnu@@@@@@@@@@@@@@@@");
         	return CAMS_BLOCK_DE;
         } else if (tgc instanceof SysCAMSPortTDF) {
         	return CAMS_PORT_TDF;
@@ -1797,6 +1809,7 @@ public class TGComponentManager {
         } else if (tgc instanceof SysCAMSBlockGPIO2VCI) {
         	return CAMS_BLOCK_GPIO2VCI;
 	} else if (tgc instanceof SysCAMSClock) {
+	    //System.out.println("@@@@@@@@@@Clock reconnu  1 @@@@@@@@@@@@@@@@");
         	return CAMS_CLOCK;
         	// ELN
         } else if (tgc instanceof ELNConnector) {
@@ -2090,6 +2103,11 @@ public class TGComponentManager {
             return TMLAD_WRITE_CHANNEL;
         } else if (tgc instanceof TMLADReadChannel) {
             return TMLAD_READ_CHANNEL;
+	}    else if (tgc instanceof TMLADWriteCAMS) {
+            return TMLAD_WRITE_CAMS;
+        } else if (tgc instanceof TMLADReadCAMS) {
+            return TMLAD_READ_CAMS;
+        
         } else if (tgc instanceof TMLADSendRequest) {
             return TMLAD_SEND_REQUEST;
         } else if (tgc instanceof TMLADSendEvent) {

@@ -228,6 +228,7 @@ public class TML2MappingSystemC implements IDiploSimulatorCodeGenerator {
                     declaration += "addCPU(" + node.getName() + cores + ")" + SCCR;
                 }
 
+		
             }
 	    if (node instanceof HwCams) { //ajoute DG
                 HwCams hwCamsNode = (HwCams) node;
@@ -243,7 +244,6 @@ public class TML2MappingSystemC implements IDiploSimulatorCodeGenerator {
                 }
 
             }
-
         }
         declaration += CR;
 

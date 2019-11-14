@@ -220,6 +220,8 @@ public class TGUIAction extends AbstractAction {
     public static final int TMLAD_SEND_REQUEST = 143;
     public static final int TMLAD_SEND_EVENT = 144;
     public static final int TMLAD_WAIT_EVENT = 145;
+    public static final int TMLAD_WRITE_CAMS = 523;
+    public static final int TMLAD_READ_CAMS = 524;
     public static final int TMLAD_NOTIFIED_EVENT = 203;
     public static final int TMLAD_READ_CHANNEL = 146;
     public static final int TMLAD_FOR_LOOP = 147;
@@ -676,7 +678,7 @@ public class TGUIAction extends AbstractAction {
     public static final int MOVE_ENABLED = 463;
     public static final int FIRST_DIAGRAM = 464;
     
-    public static final int NB_ACTION = 522;
+    public static final int NB_ACTION = 525;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -1105,8 +1107,11 @@ public class TGUIAction extends AbstractAction {
         actions[TMLAD_WRITE_CHANNEL] = new TAction("add-tmladd-write-channel", "Write in channel", IconManager.imgic900, IconManager.imgic900, "Write in channel", "Add a write to channel operator opened TML activity diagram", 0);
         actions[TMLAD_SEND_REQUEST] = new TAction("add-tmladd-send-request", "Send request", IconManager.imgic902, IconManager.imgic902, "Send request", "Add a send request operator to the currently opened TML activity diagram", 0);
         actions[TMLAD_SEND_EVENT] = new TAction("add-tmladd-send-event", "Send event", IconManager.imgic904, IconManager.imgic904, "Send event", "Add a send event operator to the currently opened TML activity diagram", 0);
-        actions[TMLAD_WAIT_EVENT] = new TAction("add-tmladd-wait-event", "Wait event", IconManager.imgic908, IconManager.imgic908, "Wait event", "Add a wait event operator to the currently opened TML activity diagram", 0);
+        actions[TMLAD_WAIT_EVENT] = new TAction("add-tmladd-wait-event", "Wait event", IconManager.imgic908, IconManager.imgic908, "Wait event", "Add a wait event operator to the currently opened TML activity diagram", 0);      
         actions[TMLAD_NOTIFIED_EVENT] = new TAction("add-tmladd-notified-event", "Notified event", IconManager.imgic918, IconManager.imgic918, "Notified event", "Add a notified event operator to the currently opened TML activity diagram", 0);
+	 actions[TMLAD_WRITE_CAMS] = new TAction("add-tmladd-write-cams", "Write to CAMS", IconManager.imgic904, IconManager.imgic905, "Write to CAMS", "Add a write CAMS operator to the currently opened TML activity diagram", 0);
+        actions[TMLAD_READ_CAMS] = new TAction("add-tmladd-read-cams", "Read CAMS", IconManager.imgic908, IconManager.imgic907, "Read CAMS", "Add a read CAMS operator to the currently opened TML activity diagram", 0);
+	
         actions[TMLAD_READ_CHANNEL] = new TAction("add-tmladd-read-channel", "Read in channel", IconManager.imgic906, IconManager.imgic906, "Read in channel", "Add a read to channel operator opened TML activity diagram", 0);
         actions[TMLAD_FOR_LOOP] = new TAction("add-tmlad-for-loop", "Loop (for)", IconManager.imgic912, IconManager.imgic912, "Loop (for)", "Add a for loop to the currently opened TML activity diagram", 0);
         actions[TMLAD_FOR_STATIC_LOOP] = new TAction("add-tmlad-for-static-loop", "Static loop (for)", IconManager.imgic912, IconManager.imgic912, "Static loop (for)", "Add a static for loop to the currently opened TML activity diagram", 0);
@@ -1190,7 +1195,7 @@ public class TGUIAction extends AbstractAction {
         actions[CAMS_CLUSTER] = new TAction("C-AMS-cluster", "Add a cluster", IconManager.imgic8003, IconManager.imgic8003, "Cluster", "Add a cluster to the currently opened SystemC-AMS Diagram", 0);
         actions[CAMS_GENCODE] = new TAction("C-AMS-gencode", "SystemC-AMS code generation",IconManager.imgic94, IconManager.imgic94, "Generate SystemC-AMS code", "SystemC-AMS diagram without check syntax", 0);
         actions[CAMS_BLOCK_GPIO2VCI] = new TAction("C-AMS-block-GPIO2VCI", "Add a block GPIO2VCI",IconManager.imgic8006, IconManager.imgic8006, "GPIO2VCI block", "Add a GPIO2VCI block to the currently opened SystemC-AMS Diagram", 0);
-	actions[CAMS_CLOCK] = new TAction("C-AMS-Clock", "Clock", IconManager.imgic999, IconManager.imgic999, "Clock", "Add a clock to the currently opened SystemC-AMS diagram", 0);
+	actions[CAMS_CLOCK] = new TAction("C-AMS-Clock", "Clock", IconManager.imgic8007, IconManager.imgic8007, "Clock", "Add a clock to the currently opened SystemC-AMS diagram", 0);
         // ELN
         actions[ELN_EDIT] = new TAction("add-action-eln", "Action state", IconManager.imgic100, IconManager.imgic101, "Action state", "Add an action state to the currently opened ELN diagram", 0);
         actions[ELN_CONNECTOR] = new TAction("eln-connector", "Add a connection", IconManager.imgic202, IconManager.imgic202, "Connector", "Connects two block of the currently opened ELN Diagram", 0);

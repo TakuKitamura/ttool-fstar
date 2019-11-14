@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<TURTLEGMODELING version="1.0beta" ANIMATE_INTERACTIVE_SIMULATION="true" ACTIVATE_PENALTIES="true" UPDATE_INFORMATION_DIPLO_SIM="true" ANIMATE_WITH_INFO_DIPLO_SIM="true" OPEN_DIAG_DIPLO_SIM="false">
+<TURTLEGMODELING version="1.0beta" ANIMATE_INTERACTIVE_SIMULATION="true" ACTIVATE_PENALTIES="true" UPDATE_INFORMATION_DIPLO_SIM="true" ANIMATE_WITH_INFO_DIPLO_SIM="true" OPEN_DIAG_DIPLO_SIM="false" LAST_SELECTED_MAIN_TAB="0" LAST_SELECTED_SUB_TAB="0">
 
 <Modeling type="SystemC-AMS" nameTab="SystemC_AMS" >
 <SysCAMSComponentTaskDiagramPanel name="SystemC-AMS Component Diagram" minX="10" maxX="2500" minY="10" maxY="1500" TDF="true" DE="true" zoom="1.0" >
@@ -91,14 +91,11 @@
 <TGConnectingPoint num="6" id="34" />
 <TGConnectingPoint num="7" id="35" />
 <extraparam>
-<Attribute name_function="" clockName="my_clk" code="void adcre_main() {
+<Attribute name_function="" clockName="my_clk" clockSensitivityMethod="" code="void adcre_main() {
 	adcregisteroutput.write(adcregisterinput.read());
 }
-                   SC_CTOR(adcre1) {
-	SC_METHOD (adcre1_main);
-	//sensitive &lt;&lt;clockffp.pos();
-}
-                   " listStruct="" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
+                                         //sensitive &lt;&lt;clockffp.pos();
+" listStruct="" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1605" id="17" >
@@ -118,7 +115,7 @@
 <TGConnectingPoint num="7" id="15" />
 <TGConnectingPoint num="8" id="16" />
 <extraparam>
-<Prop commName="adcregisteroutput" commType="0" origin="1" type="sc_uint" sensitive="true" sensitive_method="positive" nbits="12" />
+<Prop commName="adcregisteroutput" commType="0" origin="1" type="sc_dt::sc_int" sensitive="true" sensitive_method="positive" nbits="12" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1605" id="27" >
@@ -138,7 +135,7 @@
 <TGConnectingPoint num="7" id="25" />
 <TGConnectingPoint num="8" id="26" />
 <extraparam>
-<Prop commName="adcregisterinput" commType="0" origin="0" type="sc_uint" sensitive="true" sensitive_method="positive" nbits="12" />
+<Prop commName="adcregisterinput" commType="0" origin="0" type="sc_dt::sc_int" sensitive="true" sensitive_method="positive" nbits="12" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1602" id="55" >
@@ -162,7 +159,7 @@
 	// actual time                     out1.write(2000.99 * std::sin( 2.0 * M_PI * freqoftheprobe * t ) );
 	//probesample.write(1);
 }
-                                              " constructorCode="" listStruct="Ts = 1.0 : double|freqoftheprobe = 1000.0 : double" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
+                                                                    " constructorCode="" listStruct="Ts = 1.0 : double|freqoftheprobe = 1000.0 : double" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1604" id="46" >
@@ -210,7 +207,7 @@
 		}
 	}
 }
-                 " constructorCode="" listStruct="addition = 0 : int" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
+                                       " constructorCode="" listStruct="addition = 0 : int" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1606" id="65" >
@@ -230,7 +227,7 @@
 <TGConnectingPoint num="7" id="63" />
 <TGConnectingPoint num="8" id="64" />
 <extraparam>
-<Prop commName="outputonepoint" commType="0" origin="1" period="5.0E-4" time="ms" rate="-1" nbits="12" delay="-1" type="sc_uint" />
+<Prop commName="outputonepoint" commType="0" origin="1" period="5.0E-4" time="ms" rate="-1" nbits="12" delay="-1" type="sc_dt::sc_int" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1604" id="75" >
@@ -269,8 +266,8 @@
 <TGConnectingPoint num="6" id="131" />
 <TGConnectingPoint num="7" id="132" />
 <extraparam>
-<Attribute name_function="comparator_main" clockName="my_clk" code="  int counter;
-sc_uint&lt;12&gt; inr,inr1;
+<Attribute name_function="comparator_main" clockName="my_clk" clockSensitivityMethod="" code=" int counter;
+sc_dt::sc_int&lt;12&gt; inr,inr1;
 void comparator_main(){
 	if (enable.read()==0){
 		counter=0;
@@ -294,11 +291,11 @@ void comparator_main(){
 		}
 		else {
 			outputmax.write(0);
-			copmienable.write(0);
+			compienable.write(0);
 		}
 	}
 }
-                                           " listStruct="" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
+                                                                 " listStruct="" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1605" id="94" >
@@ -318,7 +315,7 @@ void comparator_main(){
 <TGConnectingPoint num="7" id="92" />
 <TGConnectingPoint num="8" id="93" />
 <extraparam>
-<Prop commName="outputmax" commType="0" origin="1" type="sc_uint" sensitive="true" sensitive_method="positive" nbits="12" />
+<Prop commName="outputmax" commType="0" origin="1" type="sc_dt::sc_int" sensitive="true" sensitive_method="positive" nbits="12" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1605" id="104" >
@@ -358,7 +355,7 @@ void comparator_main(){
 <TGConnectingPoint num="7" id="112" />
 <TGConnectingPoint num="8" id="113" />
 <extraparam>
-<Prop commName="inputfromabs" commType="0" origin="0" type="sc_uint" sensitive="false" sensitive_method="" nbits="12" />
+<Prop commName="inputfromabs" commType="0" origin="0" type="sc_dt::sc_int" sensitive="false" sensitive_method="" nbits="12" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1605" id="124" >
@@ -397,29 +394,14 @@ void comparator_main(){
 <TGConnectingPoint num="6" id="160" />
 <TGConnectingPoint num="7" id="161" />
 <extraparam>
-<Attribute name_function="" clockName="my_clk" code="  //sc_out &lt;sc_uint&lt;12&gt; &gt; fpgaoutput[30];
-sc_uint&lt;12&gt; inr1[30];
+<Attribute name_function="" clockName="my_clk" clockSensitivityMethod="" code=" sc_dt::sc_int&lt;12&gt; inr1[30];
 int counter;
 void spi_main() {
-	if (enable1.read()==0){
-		counter=0;
-	}
 	if (compinenable.read()==1 ) {
 		inr1[counter]=comparatorinput;
 		counter=counter+1;
 	}
-	//outputready.write(1);
-	outputvector.write(insideregister);
-	count =  0;
-}
-                    if(counter==30){
-	for(int i=0;i&lt;30;i++) {
-		//DG serialized    //fpgaoutput[i].write(inr1[i]);
-		fpgaoutput.write(inr1[i]);
-	}
-	counter=0;
-}
-                    ///800               }
+     }
 " listStruct="" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
 </extraparam>
 </SUBCOMPONENT>
@@ -460,7 +442,7 @@ void spi_main() {
 <TGConnectingPoint num="7" id="151" />
 <TGConnectingPoint num="8" id="152" />
 <extraparam>
-<Prop commName="comparatorinput" commType="0" origin="0" type="int" sensitive="true" sensitive_method="positive" nbits="12" />
+<Prop commName="comparatorinput" commType="0" origin="0" type="sc_dt::sc_int" sensitive="true" sensitive_method="positive" nbits="12" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1603" id="181" >
@@ -479,15 +461,14 @@ void spi_main() {
 <TGConnectingPoint num="6" id="179" />
 <TGConnectingPoint num="7" id="180" />
 <extraparam>
-<Attribute name_function="" clockName="my_clk" code="  sc_uint&lt;12&gt; inr;
+<Attribute name_function="" clockName="my_clk" clockSensitivityMethod="" code=" sc_dt::sc_int&lt;12&gt; inr;
 void pulse_gen_main(){
 	inr=rand()%4096;
-	sc_uint&lt;12&gt; inr;
 	outpready.write(1);
-	genout.write(inr) ;
+	//genout.write(inr) ;
 	//  expo[j].write((i3));
 }
-      " listStruct="inr = 12 : int" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
+                            " listStruct="" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1605" id="172" >
@@ -526,13 +507,13 @@ void pulse_gen_main(){
 <TGConnectingPoint num="6" id="208" />
 <TGConnectingPoint num="7" id="209" />
 <extraparam>
-<Attribute name_function="" clockName="my_clk" code="           sc_uint&lt;12&gt; inr;
-sc_uint&lt;12&gt;   inr4;
-sc_uint&lt;12&gt;   inr3,inr1,inr2;
-sc_uint&lt;12&gt;   he1;
-sc_uint&lt;1&gt;    q;
+<Attribute name_function="" clockName="my_clk" clockSensitivityMethod="" code=" sc_dt::sc_int&lt;12&gt; inr;
+sc_dt::sc_int&lt;12&gt;   inr4;
+sc_dt::sc_int&lt;12&gt;   inr3,inr1,inr2;
+sc_dt::sc_int&lt;12&gt;   he1;
+sc_dt::sc_int&lt;1&gt;    q;
 int asdf;
-//------------Code Starts Here-------------------------   // Below function implements actual counter logic   void abs_calc () {
+void abs_calc () {
 	q=inr[11];
 	inr4=(inputfromadc.read());
 	//hel=abs(inr4);
@@ -546,7 +527,7 @@ int asdf;
 	}
 	absoutput.write(inr1);
 }
-                   " listStruct="" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
+                                         " listStruct="" nameTemplate="" typeTemplate="int" valueTemplate="" listTypedef="" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1605" id="191" >
@@ -566,7 +547,7 @@ int asdf;
 <TGConnectingPoint num="7" id="189" />
 <TGConnectingPoint num="8" id="190" />
 <extraparam>
-<Prop commName="inputfromadc" commType="0" origin="0" type="sc_uint" sensitive="true" sensitive_method="positive" nbits="12" />
+<Prop commName="inputfromadc" commType="0" origin="0" type="sc_dt::sc_int" sensitive="true" sensitive_method="positive" nbits="12" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="1605" id="201" >
@@ -586,7 +567,7 @@ int asdf;
 <TGConnectingPoint num="7" id="199" />
 <TGConnectingPoint num="8" id="200" />
 <extraparam>
-<Prop commName="absoutput" commType="0" origin="1" type="sc_uint" sensitive="true" sensitive_method="positive" nbits="12" />
+<Prop commName="absoutput" commType="0" origin="1" type="sc_dt::sc_int" sensitive="true" sensitive_method="positive" nbits="12" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5721" id="219" >
@@ -595,7 +576,7 @@ int asdf;
 <sizeparam width="200" height="150" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="873" minY="0" maxY="554" />
-<infoparam name="TGComponent" value="my_clk" />
+<infoparam name="TGComponent" value="my_clk1" />
 <TGConnectingPoint num="0" id="211" />
 <TGConnectingPoint num="1" id="212" />
 <TGConnectingPoint num="2" id="213" />
@@ -605,7 +586,7 @@ int asdf;
 <TGConnectingPoint num="6" id="217" />
 <TGConnectingPoint num="7" id="218" />
 <extraparam>
-<Attribute name_function="" nameTemplate="" frequency ="0.002" unit="ms" dutyCycle="0.5" startTime="0.001" posFirst ="false" />
+<Attribute name_function="" nameTemplate="" frequency ="0.002" unit="ms" dutyCycle="0.5" startTime="0.001" unitStartTime="ms" posFirst ="false" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5721" id="228" >
@@ -614,7 +595,7 @@ int asdf;
 <sizeparam width="200" height="150" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="873" minY="0" maxY="554" />
-<infoparam name="TGComponent" value="my_clk1" />
+<infoparam name="TGComponent" value="my_clk" />
 <TGConnectingPoint num="0" id="220" />
 <TGConnectingPoint num="1" id="221" />
 <TGConnectingPoint num="2" id="222" />
@@ -624,7 +605,7 @@ int asdf;
 <TGConnectingPoint num="6" id="226" />
 <TGConnectingPoint num="7" id="227" />
 <extraparam>
-<Attribute name_function="" nameTemplate="" frequency ="0.001" unit="ms" dutyCycle="1.0" startTime="1.0" posFirst ="false" />
+<Attribute name_function="" nameTemplate="" frequency ="0.001" unit="ms" dutyCycle="1.0" startTime="1.0" unitStartTime="ms" posFirst ="false" />
 </extraparam>
 </SUBCOMPONENT>
 

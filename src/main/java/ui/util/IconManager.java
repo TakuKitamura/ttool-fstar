@@ -108,7 +108,7 @@ public class IconManager {
     public static ImageIcon imgic700, imgic702;
 
     public static ImageIcon imgic800, imgic802, imgic804, imgic806, imgic808, imgic810, imgic812;
-    public static ImageIcon imgic900, imgic902, imgic904, imgic906, imgic908, imgic910, imgic912, imgic914, imgic916, imgic918;
+    public static ImageIcon imgic900, imgic902, imgic904, imgic905, imgic906,  imgic907, imgic908, imgic910, imgic912, imgic914, imgic916, imgic918;
     public static ImageIcon imgic920, imgic922, imgic924, imgic926, imgic928, imgic930;
     public static ImageIcon imgic940, imgic941;
     // Requirement diagrams
@@ -185,7 +185,7 @@ public class IconManager {
     public static ImageIcon imgic2111; //New icon created by Solange
     
     // SystemC-AMS
-    public static ImageIcon imgic8000, imgic8001, imgic8002, imgic8003, imgic8004, imgic8005, imgic8006, imgic999;
+    public static ImageIcon imgic8000, imgic8001, imgic8002, imgic8003, imgic8004, imgic8005, imgic8006, imgic8007;
 
     // ELN
     public static ImageIcon imgic8010, imgic8011, imgic8012, imgic8013, imgic8014, imgic8015, imgic8016, imgic8017, imgic8018, imgic8019, 
@@ -468,7 +468,9 @@ public class IconManager {
     private static String icon900 = "tmladwrch.gif";
     private static String icon902 = "tmladsendreq.gif";
     private static String icon904 = "tmladsendevt.gif";
+    private static String icon905 = "tmladwritecams.gif";
     private static String icon906 = "tmladrdch.gif";
+    private static String icon907 = "tmladreadcams.gif";
     private static String icon908 = "tmladwaitevt.gif";
     private static String icon910 = "tmladexeci.gif";
     private static String icon912 = "tmladforloop.gif";
@@ -685,7 +687,7 @@ public class IconManager {
     private static String icon8004 = "camstdfblock.gif";
     private static String icon8005 = "camsdeblock.gif";
     private static String icon8006 = "camsgpio2vciblock.gif";
-    private static String icon999 = "clocksignal.gif";
+    private static String icon8007 = "clocksignal.gif";
     // ELN
     private static String icon8010 = "elnresistor.gif";
     private static String icon8011 = "elncapacitor.gif";
@@ -977,7 +979,9 @@ public class IconManager {
         imgic900 = getIcon(icon900);
         imgic902 = getIcon(icon902);
         imgic904 = getIcon(icon904);
+	imgic905 = getIcon(icon905);
         imgic906 = getIcon(icon906);
+	imgic907 = getIcon(icon907);
         imgic908 = getIcon(icon908);
         imgic910 = getIcon(icon910);
         imgic912 = getIcon(icon912);
@@ -1210,6 +1214,7 @@ public class IconManager {
         imgic8004 = getIcon(icon8004);
         imgic8005 = getIcon(icon8005);
         imgic8006 = getIcon(icon8006);
+	imgic8007 = getIcon(icon8007);
 
         imgic8010 = getIcon(icon8010);
         imgic8011 = getIcon(icon8011);

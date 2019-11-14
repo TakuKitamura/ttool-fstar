@@ -468,6 +468,11 @@ public class PrimitiveCode {
 				corpsPrimitiveDE = corpsPrimitiveDE + "\t};" + CR2;
 			}
 
+			//DG 17.10.
+			if(de.getClockName()!=""){
+			corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_in <bool>"  + de.getClockName() + ";" + CR;
+			//System.out.println("@@@@@@@@@ " + de.getClockName());
+			}
 			//DG modified, was sca:core
 			//System.out.println("@@@@@@@@@DE ports empty?");
 			if (!deports.isEmpty()) {
@@ -553,11 +558,14 @@ if (t.getOrigin() == 0) {
 
 			boolean sensitive = false, method = false;
 			if (!de.getCode().equals("")) {
-				corpsPrimitiveDE = corpsPrimitiveDE + "\t{" + CR + "\t\tSC_METHOD(" + de.getNameFn() + ");" + CR;
+			    corpsPrimitiveDE = corpsPrimitiveDE + "\t{"+CR;
+			    //	corpsPrimitiveDE = corpsPrimitiveDE + "\t{" + CR + "\t\tSC_METHOD(" + de.getNameFn() + ");" + CR;
+			}
+			    if (!de.getCode().equals("")) {
 				method = true;
-			} 
+					} 
 			
-			for (SysCAMSTPortDE t : deports) {
+			/*	for (SysCAMSTPortDE t : deports) {
 				if (t.getSensitive() == true) {
 					if (method == false) {
 						corpsPrimitiveDE = corpsPrimitiveDE + "\t{" + CR;
@@ -570,8 +578,34 @@ if (t.getOrigin() == 0) {
 					}
 					sensitive = true;
 				}
+				}*/
+
+
+//DG 17.10.
+			if(de.getClockName()!=""){
+			    if(!method)corpsPrimitiveDE = corpsPrimitiveDE + "\t{";
+			    corpsPrimitiveDE = corpsPrimitiveDE + "\t\tsensitive << " + de.getClockName()  + ".pos();"+CR;
+			    /*	if (de.getClockSensitiveMethod().equals("positive")) {
+						corpsPrimitiveDE = corpsPrimitiveDE + "pos();" + CR;
+					} else if (de.getClockSensitiveMethod().equals("negative")) {
+						corpsPrimitiveDE = corpsPrimitiveDE + "neg();" + CR;						
+						}*/
+			 	sensitive = true;   
 			}
-			if (sensitive == true || method == true) {
+			//fin ajoute DG
+			
+			/*for (SysCAMSTPortDE t : deports) {
+				if (t.getSensitive() == true) {
+					if (method == false) {
+						corpsPrimitiveDE = corpsPrimitiveDE + "\t" + CR;
+					} 
+					corpsPrimitiveDE = corpsPrimitiveDE + "\t\tsensitive << " + t.getName() + ";"+ CR;						
+				}
+					sensitive = true;
+					}*/
+		
+			
+				if (sensitive == true || method == true) {
 				corpsPrimitiveDE = corpsPrimitiveDE + "\t}" + CR2;
 			} else {
 				corpsPrimitiveDE = corpsPrimitiveDE + "\t{}" + CR2;
@@ -583,6 +617,7 @@ if (t.getOrigin() == 0) {
 			
 			//	    corpsPrimitiveDE = corpsPrimitiveDE +"sc_in<bool> "+de.getClockName()+";"+CR;
 			//	}
+			
 			if (de.getListStruct().getSize() != 0) {
 				String identifier, type, constant;
 				for (int i = 0; i < de.getListStruct().size(); i++) {

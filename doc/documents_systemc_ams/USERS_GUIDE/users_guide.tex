@@ -1,0 +1,135 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Inlucudings:                      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%{{{%
+\documentclass[11pt,english,a4paper,chapterprefix]{scrartcl}
+\usepackage[T1]{fontenc}
+\usepackage[bigcaptions]{listing}
+\usepackage[utf8]{inputenc}
+\usepackage[small,bf,hang]{caption}
+\usepackage[english]{babel}
+%\usepackage{epsfig}
+\usepackage{wrapfig}
+%\usepackage{caption}
+\usepackage{psfrag}
+\usepackage[rflt]{floatflt}
+\usepackage[usenames]{color}
+\usepackage{graphicx}
+\emergencystretch = 10pt
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{setspace}
+\usepackage{algpseudocode}
+\usepackage{listing}
+\usepackage{listings}
+\usepackage{trsym}
+\usepackage{trfsigns}
+\usepackage{minted}
+\usepackage{dirtree}
+\setcounter{secnumdepth}{5}
+\setcounter{tocdepth}{5} 
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%}}}%
+% New Commands and Configurations:  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%{{{%
+%\setkomafont{section}{\Large\rmfamily}
+%\setkomafont{subsection}{\large\rmfamily}
+%\setkomafont{subsubsection}{\normalsize\rmfamily}
+\setkomafont{paragraph}{\footnotesize}
+\numberwithin{table}{section}
+\numberwithin{listing}{section}
+\setlength\textheight{24cm}
+\definecolor{orange}{rgb}{1 , 0.5 , 0}
+\definecolor{blue}{rgb}{0, 0 , 1}
+\definecolor{green}{rgb}{0, 1 ,0}
+\newcommand{\cb}{\textcolor{blue}}
+\newcommand{\subsubsubsection}{\paragraph}
+\newcommand{\subsubsubsubsection}{\subparagraph}
+\clubpenalty = 10000
+\widowpenalty = 10000
+\displaywidowpenalty = 10000
+\parindent0pt % No Indent
+\setlength{\parskip}{1em}
+%\makenomenclature
+% Document Head
+\begin{document}
+%\restylefloat{figure}
+%\pagestyle{fancy}
+%\rhead{} 
+
+\definecolor{light-gray}{gray}{0.90}
+
+\newminted{perl}{linenos, bgcolor=light-gray, fontsize=\scriptsize}
+\newminted{cpp}{bgcolor=light-gray, fontsize=\scriptsize}
+\newminted{tcl}{bgcolor=light-gray, fontsize=\scriptsize}
+\newminted{sh}{bgcolor=light-gray, fontsize=\scriptsize}
+\newminted{basemake}{bgcolor=light-gray, fontsize=\scriptsize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%}}}%
+% fancy nomenclautur:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%{{{%
+%\setlength{\nomlabelwidth}{.20\hsize}
+%\renewcommand{\nomlabel}[1]{#1 \dotfill}
+
+%<*sample05>
+\def\@@@nomenclature[#1]#2#3{%
+ \def\@tempa{#2}\def\@tempb{#3}%
+ \protected@write\@nomenclaturefile{}%
+  {\string\nomenclatureentry{#1\nom@verb\@tempa @[{\nom@verb\@tempa}]%
+    |nompageref{\begingroup\nom@verb\@tempb\protect\nomeqref{\theequation}}}%
+    {\thepage}}%
+ \endgroup
+ \@esphack}
+%\def\nompageref#1#2{%
+%  \if@printpageref\pagedeclaration{#2}\else\null\fi
+%  \linebreak#1\nomentryend\endgroup}
+\def\pagedeclaration#1{\dotfill\nobreakspace ~#1}
+%\def\nomentryend{.}
+\def\nomlabel#1{\textbf{#1}\hfil}
+\makeatletter 
+\renewcommand*\dotfill{\leavevmode% 
+  \leaders\hbox{$\m@th 
+  \mkern \@dotsep mu\hbox{.}\mkern \@dotsep 
+  mu$}\hfill\kern\z@} 
+\makeatother
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%}}}%
+% Abbr Commands!
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%{{{%
+\newcommand{\abbr}[2]{\textit{#2} (#1)\nomenclature{#1}{#2 \nomrefpage}}
+\newcommand{\shortabbr}[2]{\nomenclature{#1}{#2 \nomrefpage}}
+\newcommand{\revabbr}[2]{#1 (\textit{#2})\nomenclature{#1}{#2 \nomrefpage}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%}}}%
+% Titlepage                         %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%{{{%
+\input{titlepage}
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%}}}%
+% Table of Contents                 %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%{{{%
+\tableofcontents
+\thispagestyle{empty}
+\addtocontents{toc}{\protect\thispagestyle{empty}}
+\newpage
+\setcounter{page}{1}
+\newpage
+%\setcounter{page}{1}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%}}}%
+% Chapters                          %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%{{{%
+
+
+
+\newpage
+\clearpage
+
+%clear headers
+%\fancyhead{}
+%\fancyfoot{}
+%\fancyfoot[CO, CE] {\thepage}
+
+\input{document_ams}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%}}}%
+\end{document}

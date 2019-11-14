@@ -52,17 +52,14 @@ import javax.swing.*;
  * Creation: 07/05/2018
  * @version 1.0 07/05/2018
  * @author Irina Kit Yan LEE
+ * @version 1.0 27/10/2019
+ * @author Daniela GENIUS
  */
 
 @SuppressWarnings("serial")
 
 public class JDialogSysCAMSPortDE extends JDialog implements ActionListener {
 	private JTextField nameTextField;
-	// private JTextField periodTextField;
-	// private String listPeriodString[];
-	// private JComboBox<String> periodComboBoxString;
-	// private JTextField rateTextField;
-	// private JTextField delayTextField;
         private JTextField nbitsTextField;
 	private ArrayList<String> listArrayTypeString;
 	private JComboBox<String> typeComboBoxString;
@@ -144,69 +141,7 @@ public class JDialogSysCAMSPortDE extends JDialog implements ActionListener {
 		 new Insets(5, 10, 5, 10), 0, 0);
 		 gridBag.setConstraints(nbitsTextField, constraints);
 		 boxPanel.add(nbitsTextField);
-		 
-		//
-		// listPeriodString = new String[3];
-		// listPeriodString[0] = "us";
-		// listPeriodString[1] = "ms";
-		// listPeriodString[2] = "s";
-		// periodComboBoxString = new JComboBox<String>(listPeriodString);
-		// if (port.getTime().equals("") || port.getTime().equals("us")) {
-		// periodComboBoxString.setSelectedIndex(0);
-		// } else if (port.getTime().equals("ms")){
-		// periodComboBoxString.setSelectedIndex(1);
-		// } else {
-		// periodComboBoxString.setSelectedIndex(2);
-		// }
-		// periodComboBoxString.setActionCommand("time");
-		// periodComboBoxString.addActionListener(this);
-		// constraints = new GridBagConstraints(2, 1, 1, 1, 1.0, 1.0,
-		// GridBagConstraints.CENTER,
-		// GridBagConstraints.BOTH,
-		// new Insets(5, 10, 5, 10), 0, 0);
-		// gridBag.setConstraints(periodComboBoxString, constraints);
-		// boxPanel.add(periodComboBoxString);
-		//
-		// JLabel rateLabel = new JLabel("Rate : ");
-		// constraints = new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0,
-		// GridBagConstraints.CENTER,
-		// GridBagConstraints.BOTH,
-		// new Insets(5, 10, 5, 10), 0, 0);
-		// gridBag.setConstraints(rateLabel, constraints);
-		// boxPanel.add(rateLabel);
-		//
-		// if (port.getRate() == -1) {
-		// rateTextField = new JTextField(10);
-		// } else {
-		// rateTextField = new JTextField("" + port.getRate(), 10);
-		// }
-		// constraints = new GridBagConstraints(1, 2, 2, 1, 1.0, 1.0,
-		// GridBagConstraints.CENTER,
-		// GridBagConstraints.BOTH,
-		// new Insets(5, 10, 5, 10), 0, 0);
-		// gridBag.setConstraints(rateTextField, constraints);
-		// boxPanel.add(rateTextField);
-		//
-		// JLabel delayLabel = new JLabel("Delay : ");
-		// constraints = new GridBagConstraints(0, 3, 1, 1, 1.0, 1.0,
-		// GridBagConstraints.CENTER,
-		// GridBagConstraints.BOTH,
-		// new Insets(5, 10, 5, 10), 0, 0);
-		// gridBag.setConstraints(delayLabel, constraints);
-		// boxPanel.add(delayLabel);
-		//
-		// if (port.getDelay() == -1) {
-		// delayTextField = new JTextField(10);
-		// } else {
-		// delayTextField = new JTextField("" + port.getDelay(), 10);
-		// }
-		// constraints = new GridBagConstraints(1, 3, 2, 1, 1.0, 1.0,
-		// GridBagConstraints.CENTER,
-		// GridBagConstraints.BOTH,
-		// new Insets(5, 10, 5, 10), 0, 0);
-		// gridBag.setConstraints(delayTextField, constraints);
-		// boxPanel.add(delayTextField);
-
+		         
 		JLabel typeLabel = new JLabel("Type : ");
 		constraints = new GridBagConstraints(0, 2, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 				new Insets(5, 10, 5, 10), 0, 0);
@@ -214,10 +149,11 @@ public class JDialogSysCAMSPortDE extends JDialog implements ActionListener {
 		boxPanel.add(typeLabel);
 
 		listArrayTypeString = new ArrayList<String>();
-			listArrayTypeString.add("int");
-			listArrayTypeString.add("bool");
-			listArrayTypeString.add("double");
+		listArrayTypeString.add("int");
+		listArrayTypeString.add("bool");
+		listArrayTypeString.add("double");
 		listArrayTypeString.add("sc_int<N>");
+		listArrayTypeString.add("sc_uint<32>");
 		
 		if (port.getFather() != null) {
 			if (port.getFather() instanceof SysCAMSBlockDE) {
@@ -249,7 +185,9 @@ public class JDialogSysCAMSPortDE extends JDialog implements ActionListener {
 			}
 			if (port.getDEType().equals("sc_dt::sc_int")) {
 				typeComboBoxString.setSelectedIndex(3);
-			
+			}
+			if (port.getDEType().equals("sc_dt::sc_uint<32>")) {
+				typeComboBoxString.setSelectedIndex(3);		      
 			}
 			
 		}
@@ -259,7 +197,7 @@ public class JDialogSysCAMSPortDE extends JDialog implements ActionListener {
 				GridBagConstraints.BOTH,
 				new Insets(5, 10, 5, 10), 0, 0);
 		gridBag.setConstraints(typeComboBoxString, constraints);
-		//	System.out.println("@@@@@ DE port type " +typeComboBoxString);
+	
 		boxPanel.add(typeComboBoxString); 
 
 		JLabel orginLabel = new JLabel("Origin : ");
@@ -368,82 +306,27 @@ public class JDialogSysCAMSPortDE extends JDialog implements ActionListener {
 					nbitsValueInteger = true;
 				}
 				//	if (nbitsValueInteger == false) {
-					port.setNbits(Integer.parseInt(nbitsTextField.getText()));
-					//System.out.println("@@@@@@@@@1"+port.getNbits());
-					//	}
-					//	} else {
-					//		port.setNbits(-1);
-					//	}*/
-
+					port.setNbits(Integer.parseInt(nbitsTextField.getText()));				
 			}
-			// if (!(periodTextField.getText().isEmpty())) {
-			// Boolean periodValueInteger = false;
-			// try {
-			// Integer.parseInt(periodTextField.getText());
-			// } catch (NumberFormatException e1) {
-			// JDialog msg = new JDialog(this);
-			// msg.setLocationRelativeTo(null);
-			// JOptionPane.showMessageDialog(msg, "Period is not a Integer", "Warning !",
-			// JOptionPane.WARNING_MESSAGE);
-			// periodValueInteger = true;
-			// }
-			// if (periodValueInteger == false) {
-			// port.setPeriod(Integer.parseInt(periodTextField.getText()));
-			// }
-			// } else {
-			// port.setPeriod(-1);
-			// }
-			//
-			// if (!(rateTextField.getText().isEmpty())) {
-			// Boolean rateValueInteger = false;
-			// try {
-			// Integer.parseInt(rateTextField.getText());
-			// } catch (NumberFormatException e1) {
-			// JDialog msg = new JDialog(this);
-			// msg.setLocationRelativeTo(null);
-			// JOptionPane.showMessageDialog(msg, "Rate is not a Integer", "Warning !",
-			// JOptionPane.WARNING_MESSAGE);
-			// rateValueInteger = true;
-			// }
-			// if (rateValueInteger == false) {
-			// port.setRate(Integer.parseInt(rateTextField.getText()));
-			// }
-			// } else {
-			// port.setRate(-1);
-			// }
-			//
-			// if (!(delayTextField.getText().isEmpty())) {
-			// Boolean delayValueInteger = false;
-			// try {
-			// Integer.parseInt(delayTextField.getText());
-			// } catch (NumberFormatException e1) {
-			// JDialog msg = new JDialog(this);
-			// msg.setLocationRelativeTo(null);
-			// JOptionPane.showMessageDialog(msg, "Delay is not a Integer", "Warning !",
-			// JOptionPane.WARNING_MESSAGE);
-			// delayValueInteger = true;
-			// }
-			// if (delayValueInteger == false) {
-			// port.setDelay(Integer.parseInt(delayTextField.getText()));
-			// }
-			// } else {
-			// port.setDelay(-1);
-			// }
-
-
-		       
+	        		       
 		
 				if(typeComboBoxString.getSelectedItem()=="sc_int<N>"){
 			    //	port.setDEType((String)"sc_int<"+nbitsTextField.getText()+"> ");
 			    port.setDEType("sc_dt::sc_int");
 				 
 			 
-			    	}		
+			    	}
+				else{
+				   	if(typeComboBoxString.getSelectedItem()=="sc_uint<32>"){
+			    //	port.setDEType((String)"sc_int<"+nbitsTextField.getText()+"> ");
+			    port.setDEType("sc_dt::sc_uint<32>");				 			 
+			    	} 
+				
 			   	else{
 			    	port.setDEType((String) typeComboBoxString.getSelectedItem());
 
 				}
-				
+				}
 			
 			       
 			
