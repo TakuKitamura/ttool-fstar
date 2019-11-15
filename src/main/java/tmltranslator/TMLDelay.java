@@ -53,7 +53,6 @@ import java.util.Objects;
 public class TMLDelay extends TMLActivityElementWithIntervalAction {
     
 	private String timeUnit = "ns"; // Shall be either "ns" or "us" or "ms" or "s"
-	private boolean isActiveDelay = false;
     public TMLDelay(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
     }
@@ -92,10 +91,6 @@ public class TMLDelay extends TMLActivityElementWithIntervalAction {
 		}
 		return "";
 	}
-
-	public void setActiveDelay(boolean _b){
-		isActiveDelay = _b;}
-	public boolean getActiveDelay(){return isActiveDelay;}
 
 	public boolean equalSpec(Object o) {
     	if (! (o instanceof TMLDelay)) return false;
