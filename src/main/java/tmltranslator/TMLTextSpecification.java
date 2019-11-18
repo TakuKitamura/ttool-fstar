@@ -2643,13 +2643,13 @@ public class TMLTextSpecification<E> {
             inTaskDec = false;
             //       inTaskBehavior = true;
 
-            if ((_split.length < 4) || (_split.length > 6)) {
-                error = "A DELAY operation must be declared with 4 or 5 parameters, and not " + (_split.length - 1);
+            if ((_split.length < 3) || (_split.length > 6)) {
+                error = "A DELAY operation must be declared with 2, 3, 4 or 5 parameters, and not " + (_split.length - 1);
                 addError(0, _lineNb, 0, error);
                 return -1;
             }
 
-            if (_split.length == 5) {
+            if (_split.length == 3 || _split.length == 5) {
                 if (!checkParameter("DELAY", _split, 2, 0, _lineNb)) {
                     error = "A DELAY operation must be specified with a valid time unit (ns, us, ms, s))";
                     addError(0, _lineNb, 0, error);
@@ -2657,7 +2657,7 @@ public class TMLTextSpecification<E> {
                 }
             }
 
-            if (_split.length == 6) {
+            if (_split.length == 4 || _split.length == 6) {
                 if (!checkParameter("DELAY", _split, 3, 0, _lineNb)) {
                     error = "A DELAY operation must be specified with a valid time unit (ns, us, ms, s))";
                     addError(0, _lineNb, 0, error);
@@ -2667,7 +2667,13 @@ public class TMLTextSpecification<E> {
 
             TMLDelay delay = new TMLDelay("delay", null);
             delay.setMinDelay(_split[1]);
-            if (_split.length == 5) {
+            if (_split.length == 3) {
+                delay.setMaxDelay(_split[1]);
+                delay.setUnit(_split[2]); // DELAY min unit - this is for old format
+            } else if (_split.length == 4) {
+                delay.setMaxDelay(_split[2]);
+                delay.setUnit(_split[3]); // DELAY min max unit - this is for old format
+            } else if (_split.length == 5) {
                 delay.setMaxDelay(_split[1]);
                 delay.setUnit(_split[2]);
                 delay.setActiveDelay(Boolean.valueOf(_split[4])); // DELAY min unit isActivedelay boolean
