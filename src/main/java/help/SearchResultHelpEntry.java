@@ -102,7 +102,7 @@ public class SearchResultHelpEntry extends HelpEntry {
             for (HelpEntry he : entries) {
                 s += "<li> ";
                 int score = (int)(scores.get(cpt).intValue() * 100.0/maxScore);
-                s += "<a href=\"file://" + he.getMasterKeyword() + ".html\"/>" +  he.getMasterKeyword
+                s += "<a href=\"file://" + he.getPathToHTMLFile() + "\"/>" +  he.getMasterKeyword
                         () + "</a>  " +  "(" + score + "%)  " +
                 he.getKeywords();
                 s += " </li>\n<br>\n";

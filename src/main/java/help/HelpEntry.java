@@ -86,6 +86,10 @@ public class HelpEntry implements GenericTree {
         return masterKeyword;
     }
 
+    public String getPathToHTMLFile() {
+        return pathToHTMLFile;
+    }
+
     // Infos are: file of name, master key, list of keywords
     public boolean fillInfos(String infos) {
         infos = infos.trim();
@@ -98,10 +102,12 @@ public class HelpEntry implements GenericTree {
         }
 
         pathToHTMLFile = splitted[0] + ".html";
-        masterKeyword = splitted[1];
+
+        masterKeyword = splitted[1].replaceAll("_", " ");
+
         keywords = new String[splitted.length - 1];
         for (int i = 0; i < splitted.length - 1; i++) {
-            keywords[i] = splitted[i + 1];
+            keywords[i] = splitted[i + 1].replaceAll("_", " ");;
         }
 
         //TraceManager.addDev("Infos ok");

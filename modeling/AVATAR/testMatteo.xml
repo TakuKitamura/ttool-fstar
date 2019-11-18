@@ -2849,7 +2849,7 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
 <P1  x="1312" y="436" id="1270" />
-<P2  x="1336" y="359" id="1141" />
+<P2  x="1342" y="359" id="1141" />
 <AutomaticDrawing  data="false" />
 </CONNECTOR>
 <CONNECTOR type="5002" id="1118" >
@@ -3012,7 +3012,7 @@
 </CONNECTOR>
 <COMPONENT type="301" id="1151" >
 <cdparam x="1255" y="320" />
-<sizeparam width="162" height="39" minWidth="20" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="175" height="39" minWidth="20" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="UML Note" value="The model assumes that
