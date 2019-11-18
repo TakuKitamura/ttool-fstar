@@ -175,6 +175,13 @@ public	class JFrameHelp extends JFrame implements ActionListener {
 
 
     public void setHelpEntry(HelpEntry he) {
+        TraceManager.addDev("Set Help Entry to " + he.getPathToHTMLFile());
+        if(visitedEntries.size() > 0) {
+            if (currentHEPointer < visitedEntries.size() - 1) {
+                visitedEntries.subList(currentHEPointer+1, visitedEntries.size()).clear();
+            }
+        }
+
         visitedEntries.add(he);
         currentHEPointer = visitedEntries.size() - 1;
         this.he = he;
@@ -182,6 +189,7 @@ public	class JFrameHelp extends JFrame implements ActionListener {
     }
 
     private void updatePanel() {
+        TraceManager.addDev("Update panel");
         back.setEnabled(currentHEPointer != 0);
         forward.setEnabled(currentHEPointer < visitedEntries.size()-1);
         up.setEnabled(he.getFather() != null);
