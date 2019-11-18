@@ -39,19 +39,12 @@
 
 package help;
 
-import myutil.GenericTree;
 import myutil.TraceManager;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
-import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 
 /**
@@ -64,13 +57,13 @@ import java.util.stream.Collectors;
 public class SearchResultHelpEntry extends HelpEntry {
     public static String SEARCH_HEADER = "<h1>Search result</h1>\n<br>\n";
 
-    private Vector<AtomicInteger> scores;
+    public Vector<ScoredHelpEntry> scores;
 
     public SearchResultHelpEntry() {
 
     }
 
-    public void setScores(Vector<AtomicInteger> _scores) {
+    public void setScores(Vector<ScoredHelpEntry> _scores) {
         scores = _scores;
     }
 
@@ -82,8 +75,8 @@ public class SearchResultHelpEntry extends HelpEntry {
         int index1 = ret.indexOf("<body>");
         if (index1 > -1) {
             index1 += 6;
-            ret = ret.substring(0, index1) + "\n" + SEARCH_HEADER + getNbOfKids() + " result(s) found:<br>\n" +
-                    kids + ret.substring(index1+1, ret.length());
+            ret = ret.substring(0, index1) + "\n" + SEARCH_HEADER + scores.size() + " result(s) found:<br>\n" +
+                    kids + ret.substring(index1 + 1, ret.length());
         }
 
         //TraceManager.addDev("Resulting HTML of search:" + ret);
@@ -96,17 +89,14 @@ public class SearchResultHelpEntry extends HelpEntry {
         String s = "";
         int maxScore = getMaxScore();
 
-
-        if (entries != null) {
-            int cpt = 0;
-            for (HelpEntry he : entries) {
+        if (scores != null) {
+            for (ScoredHelpEntry entry: scores) {
                 s += "<li> ";
-                int score = (int)(scores.get(cpt).intValue() * 100.0/maxScore);
-                s += "<a href=\"file://" + he.getPathToHTMLFile() + "\"/>" +  he.getMasterKeyword
-                        () + "</a>  " +  "(" + score + "%)  " +
-                he.getKeywords();
+                int score = (int) (entry.score * 100.0 / maxScore);
+                s += "<a href=\"file://" + entry.he.getPathToHTMLFile() + "\"/>" + entry.he.getMasterKeyword
+                        () + "</a>  " + "(" + score + "%)  " +
+                        entry.he.getKeywords();
                 s += " </li>\n<br>\n";
-                cpt ++;
             }
         }
 
@@ -118,10 +108,9 @@ public class SearchResultHelpEntry extends HelpEntry {
         if (scores == null) {
             return maxScore;
         }
-        for(AtomicInteger i: scores) {
-            int val = i.intValue();
-            if (val > maxScore) {
-                maxScore = val;
+        for (ScoredHelpEntry score: scores) {
+            if (score.score > maxScore) {
+                maxScore = score.score;
             }
         }
         return maxScore;
@@ -129,50 +118,39 @@ public class SearchResultHelpEntry extends HelpEntry {
 
     public void mergeResults() {
         // Find duplicate sons, and compute final scores for sons
-        Vector<HelpEntry> tmp = new Vector<>();
-        Vector<AtomicInteger> tmpScores = new Vector<>();
+        //Vector<HelpEntry> tmp = new Vector<>();
+        HashMap<HelpEntry, ScoredHelpEntry> mergeMap = new HashMap<>();
+        Vector<ScoredHelpEntry> tmpScores = new Vector<>();
         int cpt = 0;
 
-        if (entries != null) {
-            for (HelpEntry he : entries) {
-                int indexOriginal = tmp.indexOf(he);
-                if (indexOriginal > -1) {
-                    AtomicInteger right = tmpScores.get(indexOriginal);
-                    right.addAndGet(scores.get(cpt).intValue());
+        if (scores != null) {
+            for (ScoredHelpEntry score: scores) {
+                ScoredHelpEntry sc = mergeMap.get(score.he);
+                if (sc == null) {
+                    mergeMap.put(score.he, score);
                 } else {
-                    tmp.add(he);
-                    tmpScores.add(new AtomicInteger(scores.get(cpt).intValue()));
+                    // An entry already exists: accumulate score
+                    sc.score += score.score;
                 }
-                cpt++;
+
             }
         }
-        scores = tmpScores;
-        entries = tmp;
+
+        // Compute a mergedList
+        scores = new Vector<>(mergeMap.values());
     }
 
     public void sortResults() {
-        HashMap<AtomicInteger, HelpEntry> mapScore = new HashMap<>();
-
-        for(int i=0; i<scores.size(); i++) {
-            mapScore.put(scores.get(i), entries.get(i));
-        }
-        Vector<Integer> vect = new Vector<>();
-        HashMap<Integer, AtomicInteger> mapInt = new HashMap<>();
-        for(int i=0; i<scores.size(); i++) {
-            Integer newInt = new Integer(scores.get(i).intValue());
-            vect.add(newInt);
-            mapInt.put(newInt, scores.get(i));
-        }
-
-        Collections.sort(vect, Collections.reverseOrder());
-        Vector<HelpEntry> tmp = new Vector<>();
-        Vector<AtomicInteger> tmpScores = new Vector<>();
-        for(int i=0; i<vect.size(); i++) {
-            AtomicInteger ai = mapInt.get(vect.get(i));
-            tmpScores.add(ai);
-            tmp.add(mapScore.get(ai));
-        }
-        scores = tmpScores;
-        entries = tmp;
+        Collections.sort(scores, Collections.reverseOrder());
     }
+
+    public String toString() {
+        StringBuffer sb = new StringBuffer("");
+        for(ScoredHelpEntry he: scores) {
+            sb.append(he.score + ": " + he.he.getPathToHTMLFile() + "\n");
+        }
+        return sb.toString();
+    }
+
+
 }

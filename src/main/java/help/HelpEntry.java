@@ -365,11 +365,11 @@ public class HelpEntry implements GenericTree {
         return s;
     }
 
-    public void searchInKeywords(String [] words, HelpEntry father, Vector<AtomicInteger> scores) {
+    public void searchInKeywords(String [] words, HelpEntry father, Vector<ScoredHelpEntry> scores) {
         int score = hasSimilarWords(words);
         if (score > 0) {
-            father.addKid(this);
-            scores.add(new AtomicInteger(KEYWORD_SEARCH_IMPORTANCE * score));
+            //father.addKid(this);
+            scores.add(new ScoredHelpEntry(KEYWORD_SEARCH_IMPORTANCE * score, this));
             //TraceManager.addDev("Found in keyword:" + toString() + " score=" + score);
         }
 
@@ -380,11 +380,11 @@ public class HelpEntry implements GenericTree {
         }
     }
 
-    public void searchInContent(String [] words, HelpEntry father, Vector<AtomicInteger> scores) {
+    public void searchInContent(String [] words, HelpEntry father, Vector<ScoredHelpEntry> scores) {
         int score = hasInContent(words);
         if (score > 0) {
-            father.addKid(this);
-            scores.add(new AtomicInteger(score));
+            //father.addKid(this);
+            scores.add(new ScoredHelpEntry(KEYWORD_SEARCH_IMPORTANCE * score, this));
             //TraceManager.addDev("Found in content:" + toString() + " score=" + score);
         }
 
