@@ -1,0 +1,7 @@
+How to specify a new entry?
+
+1) name of html file
+2) master keyword
+3) other keywords
+
+If keywords have multiple words, all words must be separated with "_"
