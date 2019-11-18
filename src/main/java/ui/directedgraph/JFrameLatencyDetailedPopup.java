@@ -83,374 +83,363 @@ import ui.interactivesimulation.SimulationTransaction;
  */
 public class JFrameLatencyDetailedPopup extends JFrame implements TableModelListener {
 
-	private String[] columnByTaskNames = new String[5];
-	private String[] columnByHWNames = new String[5];
-	JScrollPane scrollPane12, scrollPane13, scrollPane14;
-	public static JTable taskNames, hardwareNames;
-	private Object[][] dataDetailedByTask;
-	private String[] columnNames;
-	List<String> onPathBehavior = new ArrayList<String>();
-	List<String> offPathBehavior = new ArrayList<String>();
-
-	public Object[][] getDataDetailedByTask() {
-		return dataDetailedByTask;
-	}
-
-	public Object[][] getDataHWDelayByTask() {
-		return dataHWDelayByTask;
-	}
-
-	private Object[][] dataHWDelayByTask;
-
-	public JFrameLatencyDetailedPopup(DirectedGraphTranslator dgraph, int row, boolean firstTable) {
-
-		super("Detailed Latency By Row");
-
-		GridLayout myLayout = new GridLayout(3, 1);
-
-		this.setLayout(myLayout);
-
-		columnByTaskNames[0] = "Transaction List";
-		columnByTaskNames[1] = "Transaction Diagram Name ";
-		columnByTaskNames[2] = "Hardware ";
-		columnByTaskNames[3] = "Start Time";
-		columnByTaskNames[4] = "End Time ";
-
-		JPanel jp04 = new JPanel(new BorderLayout());
-		if (firstTable) {
-
-			dataDetailedByTask = dgraph.getTaskByRowDetails(row);
-
-		} else {
-			dgraph.getRowDetailsMinMax(row);
-
-			dataDetailedByTask = dgraph.getTasksByRowMinMax(row);
-
-		}
-		DefaultTableModel model = new DefaultTableModel(dataDetailedByTask, columnByTaskNames) {
-			@Override
-			public Class getColumnClass(int column) {
-				switch (column) {
-				case 0:
-					return String.class;
-				case 1:
-					return String.class;
-				case 2:
-					return String.class;
-				case 3:
-					return Integer.class;
-				case 4:
-					return Integer.class;
-				default:
-					return Integer.class;
-				}
-			}
-		};
-
-		// taskNames = new JTable(dataDetailedByTask, columnByTaskNames);
-
-		JTable taskNames = new JTable(model);
-		taskNames.setAutoCreateRowSorter(true);
-		scrollPane12 = new JScrollPane(taskNames, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-				JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+    private String[] columnByTaskNames = new String[5];
+    private String[] columnByHWNames = new String[5];
+    JScrollPane scrollPane12, scrollPane13, scrollPane14;
+    public static JTable taskNames, hardwareNames;
+    private Object[][] dataDetailedByTask;
+    private String[] columnNames;
+    List<String> onPathBehavior = new ArrayList<String>();
+    List<String> offPathBehavior = new ArrayList<String>();
+
+    public Object[][] getDataDetailedByTask() {
+        return dataDetailedByTask;
+    }
+
+    public Object[][] getDataHWDelayByTask() {
+        return dataHWDelayByTask;
+    }
+
+    private Object[][] dataHWDelayByTask;
+
+    public JFrameLatencyDetailedPopup(DirectedGraphTranslator dgraph, int row, boolean firstTable) {
+
+        super("Detailed Latency By Row");
+
+        GridLayout myLayout = new GridLayout(3, 1);
+
+        this.setLayout(myLayout);
+
+        columnByTaskNames[0] = "Transaction List";
+        columnByTaskNames[1] = "Transaction Diagram Name ";
+        columnByTaskNames[2] = "Hardware ";
+        columnByTaskNames[3] = "Start Time";
+        columnByTaskNames[4] = "End Time ";
+
+        JPanel jp04 = new JPanel(new BorderLayout());
+        if (firstTable) {
+
+            dataDetailedByTask = dgraph.getTaskByRowDetails(row);
+
+        } else {
+            dgraph.getRowDetailsMinMax(row);
+
+            dataDetailedByTask = dgraph.getTasksByRowMinMax(row);
+
+        }
+        DefaultTableModel model = new DefaultTableModel(dataDetailedByTask, columnByTaskNames) {
+            @Override
+            public Class getColumnClass(int column) {
+                switch (column) {
+                case 0:
+                    return String.class;
+                case 1:
+                    return String.class;
+                case 2:
+                    return String.class;
+                case 3:
+                    return Integer.class;
+                case 4:
+                    return Integer.class;
+                default:
+                    return Integer.class;
+                }
+            }
+        };
+
+        // taskNames = new JTable(dataDetailedByTask, columnByTaskNames);
+
+        JTable taskNames = new JTable(model);
+        taskNames.setAutoCreateRowSorter(true);
+        scrollPane12 = new JScrollPane(taskNames, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
-		scrollPane12.setVisible(true);
+        scrollPane12.setVisible(true);
 
-		this.add(scrollPane12);
+        this.add(scrollPane12);
 
-		columnByHWNames[0] = "Task on Same device";
-		columnByHWNames[1] = "Transaction Diagram Name ";
-		columnByHWNames[2] = "Hardware ";
-		columnByHWNames[3] = "Start Time";
-		columnByHWNames[4] = "End Time ";
+        columnByHWNames[0] = "Task on Same device";
+        columnByHWNames[1] = "Transaction Diagram Name ";
+        columnByHWNames[2] = "Hardware ";
+        columnByHWNames[3] = "Start Time";
+        columnByHWNames[4] = "End Time ";
 
-		if (firstTable) {
+        if (firstTable) {
 
-			dataHWDelayByTask = dgraph.getTaskHWByRowDetails(row);
+            dataHWDelayByTask = dgraph.getTaskHWByRowDetails(row);
 
-		} else {
-			dataHWDelayByTask = dgraph.getTaskHWByRowDetailsMinMax(row);
-		}
+        } else {
+            dataHWDelayByTask = dgraph.getTaskHWByRowDetailsMinMax(row);
+        }
 
-		DefaultTableModel model2 = new DefaultTableModel(dataHWDelayByTask, columnByHWNames) {
-			@Override
-			public Class getColumnClass(int column) {
-				switch (column) {
-				case 0:
-					return String.class;
-				case 1:
-					return String.class;
-				case 2:
-					return String.class;
-				case 3:
-					return Integer.class;
-				case 4:
-					return Integer.class;
-				default:
-					return Integer.class;
-				}
-			}
-		};
+        DefaultTableModel model2 = new DefaultTableModel(dataHWDelayByTask, columnByHWNames) {
+            @Override
+            public Class getColumnClass(int column) {
+                switch (column) {
+                case 0:
+                    return String.class;
+                case 1:
+                    return String.class;
+                case 2:
+                    return String.class;
+                case 3:
+                    return Integer.class;
+                case 4:
+                    return Integer.class;
+                default:
+                    return Integer.class;
+                }
+            }
+        };
 
-		JTable hardwareNames = new JTable(model2);
-		hardwareNames.setAutoCreateRowSorter(true);
+        JTable hardwareNames = new JTable(model2);
+        hardwareNames.setAutoCreateRowSorter(true);
 
-		scrollPane13 = new JScrollPane(hardwareNames, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-				JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        scrollPane13 = new JScrollPane(hardwareNames, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
-		scrollPane13.setVisible(true);
-		this.add(scrollPane13);
+        scrollPane13.setVisible(true);
+        this.add(scrollPane13);
 
-		int maxTime = -1;
+        int maxTime = -1;
 
-		int minTime = Integer.MAX_VALUE;
+        int minTime = Integer.MAX_VALUE;
 
-		Vector<String> deviceNames1 = new Vector<String>();
+        Vector<String> deviceNames1 = new Vector<String>();
 
-		if (firstTable) {
+        if (firstTable) {
 
-			for (SimulationTransaction st : dgraph.getRowDetailsTaks(row)) {
-				if (Integer.parseInt(st.endTime) > maxTime) {
-					maxTime = Integer.parseInt(st.endTime);
-				}
-				if (Integer.parseInt(st.startTime) < minTime) {
-					minTime = Integer.parseInt(st.startTime);
-				}
-				if (!deviceNames1.contains(st.deviceName)) {
-					deviceNames1.add(st.deviceName);
+            for (SimulationTransaction st : dgraph.getRowDetailsTaks(row)) {
+                if (Integer.parseInt(st.endTime) > maxTime) {
+                    maxTime = Integer.parseInt(st.endTime);
+                }
+                if (Integer.parseInt(st.startTime) < minTime) {
+                    minTime = Integer.parseInt(st.startTime);
+                }
+                if (!deviceNames1.contains(st.deviceName)) {
+                    deviceNames1.add(st.deviceName);
 
-				}
+                }
 
-			}
+            }
 
-			for (SimulationTransaction st : dgraph.getRowDetailsByHW(row)) {
-				if (Integer.parseInt(st.endTime) > maxTime) {
-					maxTime = Integer.parseInt(st.endTime);
-				}
-				if (Integer.parseInt(st.startTime) < minTime) {
-					minTime = Integer.parseInt(st.startTime);
-				}
-				if (!deviceNames1.contains(st.deviceName)) {
-					deviceNames1.add(st.deviceName);
+            for (SimulationTransaction st : dgraph.getRowDetailsByHW(row)) {
+                if (Integer.parseInt(st.endTime) > maxTime) {
+                    maxTime = Integer.parseInt(st.endTime);
+                }
+                if (Integer.parseInt(st.startTime) < minTime) {
+                    minTime = Integer.parseInt(st.startTime);
+                }
+                if (!deviceNames1.contains(st.deviceName)) {
+                    deviceNames1.add(st.deviceName);
 
-				}
+                }
 
-			}
+            }
 
-			int timeInterval = (maxTime - minTime);
-			columnNames = new String[timeInterval + 1];
+            int timeInterval = (maxTime - minTime);
+            columnNames = new String[timeInterval + 1];
 
-			columnNames[0] = "Device Name";
-			for (int i = 0; i < timeInterval; i++) {
+            columnNames[0] = "Device Name";
+            for (int i = 0; i < timeInterval; i++) {
 
-				columnNames[i + 1] = Integer.toString(minTime + i);
+                columnNames[i + 1] = Integer.toString(minTime + i);
 
-				
+            }
 
-			}
+            dataDetailedByTask = new Object[deviceNames1.size()][timeInterval + 1];
 
-			dataDetailedByTask = new Object[deviceNames1.size()][timeInterval + 1];
+            for (SimulationTransaction st : dgraph.getRowDetailsTaks(row)) {
 
-			for (SimulationTransaction st : dgraph.getRowDetailsTaks(row)) {
+                for (String dName : deviceNames1) {
 
-				for (String dName : deviceNames1) {
+                    if (st.deviceName.equals(dName)) {
 
-					if (st.deviceName.equals(dName)) {
+                        for (int i = 0; i < Integer.parseInt(st.length); i++) {
 
-						for (int i = 0; i < Integer.parseInt(st.length); i++) {
+                            int columnnmber = Integer.parseInt(st.endTime) - minTime - i;
+                            dataDetailedByTask[deviceNames1.indexOf(dName)][columnnmber] = dgraph.getNameIDTaskList().get(st.id);
+                            ;
 
-							int columnnmber = Integer.parseInt(st.endTime) - minTime - i;
-							dataDetailedByTask[deviceNames1.indexOf(dName)][columnnmber] = dgraph.getNameIDTaskList()
-									.get(st.id);
-							;
+                            onPathBehavior.add(dgraph.getNameIDTaskList().get(st.id) + columnNames[columnnmber]);
 
-							onPathBehavior.add(dgraph.getNameIDTaskList().get(st.id) + columnNames[columnnmber]);
+                        }
+                    }
 
-						}
-					}
+                }
 
-				}
+            }
 
-			}
+            for (SimulationTransaction st : dgraph.getRowDetailsByHW(row)) {
 
-			for (SimulationTransaction st : dgraph.getRowDetailsByHW(row)) {
+                for (String dName : deviceNames1) {
 
-				for (String dName : deviceNames1) {
+                    if (st.deviceName.equals(dName)) {
 
-					if (st.deviceName.equals(dName)) {
+                        for (int i = 0; i < Integer.parseInt(st.length); i++) {
 
-						for (int i = 0; i < Integer.parseInt(st.length); i++) {
+                            int columnnmber = Integer.parseInt(st.endTime) - minTime - i;
+                            dataDetailedByTask[deviceNames1.indexOf(dName)][columnnmber] = dgraph.getNameIDTaskList().get(st.id);
+                            ;
 
-							int columnnmber = Integer.parseInt(st.endTime) - minTime - i;
-							dataDetailedByTask[deviceNames1.indexOf(dName)][columnnmber] = dgraph.getNameIDTaskList()
-									.get(st.id);
-							;
+                            offPathBehavior.add(dgraph.getNameIDTaskList().get(st.id) + columnNames[columnnmber]);
 
-							offPathBehavior.add(dgraph.getNameIDTaskList().get(st.id) + columnNames[columnnmber]);
+                        }
+                    }
 
-						}
-					}
+                }
 
-				}
+            }
 
-			}
+            for (String dName : deviceNames1) {
+                dataDetailedByTask[deviceNames1.indexOf(dName)][0] = dName;
+                ;
+            }
+        } else {
+            // min/max table row selected
 
-			for (String dName : deviceNames1) {
-				dataDetailedByTask[deviceNames1.indexOf(dName)][0] = dName;
-				;
-			}
-		} else {
-			// min/max table row selected
+            for (SimulationTransaction st : dgraph.getMinMaxTasksByRow(row)) {
+                if (Integer.parseInt(st.endTime) > maxTime) {
+                    maxTime = Integer.parseInt(st.endTime);
+                }
+                if (Integer.parseInt(st.startTime) < minTime) {
+                    minTime = Integer.parseInt(st.startTime);
+                }
+                if (!deviceNames1.contains(st.deviceName)) {
+                    deviceNames1.add(st.deviceName);
 
-			for (SimulationTransaction st : dgraph.getMinMaxTasksByRow(row)) {
-				if (Integer.parseInt(st.endTime) > maxTime) {
-					maxTime = Integer.parseInt(st.endTime);
-				}
-				if (Integer.parseInt(st.startTime) < minTime) {
-					minTime = Integer.parseInt(st.startTime);
-				}
-				if (!deviceNames1.contains(st.deviceName)) {
-					deviceNames1.add(st.deviceName);
+                }
 
-				}
+            }
 
-			}
+            for (SimulationTransaction st : dgraph.getTaskMinMaxHWByRowDetails(row)) {
+                if (Integer.parseInt(st.endTime) > maxTime) {
+                    maxTime = Integer.parseInt(st.endTime);
+                }
+                if (Integer.parseInt(st.startTime) < minTime) {
+                    minTime = Integer.parseInt(st.startTime);
+                }
+                if (!deviceNames1.contains(st.deviceName)) {
+                    deviceNames1.add(st.deviceName);
 
-			for (SimulationTransaction st : dgraph.getTaskMinMaxHWByRowDetails(row)) {
-				if (Integer.parseInt(st.endTime) > maxTime) {
-					maxTime = Integer.parseInt(st.endTime);
-				}
-				if (Integer.parseInt(st.startTime) < minTime) {
-					minTime = Integer.parseInt(st.startTime);
-				}
-				if (!deviceNames1.contains(st.deviceName)) {
-					deviceNames1.add(st.deviceName);
+                }
 
-				}
+            }
 
-			}
+            int timeInterval = (maxTime - minTime);
+            columnNames = new String[timeInterval + 1];
 
-			int timeInterval = (maxTime - minTime);
-			columnNames = new String[timeInterval + 1];
+            columnNames[0] = "Device Name";
+            for (int i = 0; i < timeInterval; i++) {
 
-			columnNames[0] = "Device Name";
-			for (int i = 0; i < timeInterval; i++) {
+                columnNames[i + 1] = Integer.toString(minTime + i);
 
-				columnNames[i + 1] = Integer.toString(minTime + i);
+            }
 
-				
+            dataDetailedByTask = new Object[deviceNames1.size()][timeInterval + 1];
 
-			}
+            for (SimulationTransaction st : dgraph.getMinMaxTasksByRow(row)) {
 
-			dataDetailedByTask = new Object[deviceNames1.size()][timeInterval + 1];
+                for (String dName : deviceNames1) {
 
-			for (SimulationTransaction st : dgraph.getMinMaxTasksByRow(row)) {
+                    if (st.deviceName.equals(dName)) {
 
-				for (String dName : deviceNames1) {
+                        for (int i = 0; i < Integer.parseInt(st.length); i++) {
 
-					if (st.deviceName.equals(dName)) {
+                            int columnnmber = Integer.parseInt(st.endTime) - minTime - i;
+                            dataDetailedByTask[deviceNames1.indexOf(dName)][columnnmber] = dgraph.getNameIDTaskList().get(st.id);
+                            ;
 
-						for (int i = 0; i < Integer.parseInt(st.length); i++) {
+                            onPathBehavior.add(dgraph.getNameIDTaskList().get(st.id) + columnNames[columnnmber]);
 
-							int columnnmber = Integer.parseInt(st.endTime) - minTime - i;
-							dataDetailedByTask[deviceNames1.indexOf(dName)][columnnmber] = dgraph.getNameIDTaskList()
-									.get(st.id);
-							;
+                        }
+                    }
 
-							onPathBehavior.add(dgraph.getNameIDTaskList().get(st.id) + columnNames[columnnmber]);
+                }
 
-						}
-					}
+            }
 
-				}
+            for (SimulationTransaction st : dgraph.getTaskMinMaxHWByRowDetails(row)) {
 
-			}
+                for (String dName : deviceNames1) {
 
-			for (SimulationTransaction st : dgraph.getTaskMinMaxHWByRowDetails(row)) {
+                    if (st.deviceName.equals(dName)) {
 
-				for (String dName : deviceNames1) {
+                        for (int i = 0; i < Integer.parseInt(st.length); i++) {
 
-					if (st.deviceName.equals(dName)) {
+                            int columnnmber = Integer.parseInt(st.endTime) - minTime - i;
+                            dataDetailedByTask[deviceNames1.indexOf(dName)][columnnmber] = dgraph.getNameIDTaskList().get(st.id);
+                            ;
 
-						for (int i = 0; i < Integer.parseInt(st.length); i++) {
+                            offPathBehavior.add(dgraph.getNameIDTaskList().get(st.id) + columnNames[columnnmber]);
 
-							int columnnmber = Integer.parseInt(st.endTime) - minTime - i;
-							dataDetailedByTask[deviceNames1.indexOf(dName)][columnnmber] = dgraph.getNameIDTaskList()
-									.get(st.id);
-							;
+                        }
+                    }
 
-							offPathBehavior.add(dgraph.getNameIDTaskList().get(st.id) + columnNames[columnnmber]);
+                }
 
-						}
-					}
+            }
 
-				}
+            for (String dName : deviceNames1) {
+                dataDetailedByTask[deviceNames1.indexOf(dName)][0] = dName;
+                ;
+            }
 
-			}
+        }
 
-			for (String dName : deviceNames1) {
-				dataDetailedByTask[deviceNames1.indexOf(dName)][0] = dName;
-				;
-			}
+        JTable table = new JTable(dataDetailedByTask, columnNames);
+        table.setFillsViewportHeight(true);
 
-		}
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-		JTable table = new JTable(dataDetailedByTask, columnNames);
-		table.setFillsViewportHeight(true);
+        table.setAutoCreateRowSorter(true);
 
-		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        TableRenderer tr = new TableRenderer(onPathBehavior, offPathBehavior);
+        int ncols = table.getColumnCount();
 
-		table.setAutoCreateRowSorter(true);
+        table.getModel().addTableModelListener(this);
 
-		TableRenderer tr = new TableRenderer(onPathBehavior, offPathBehavior);
-		int ncols = table.getColumnCount();
+        TableColumnModel tcm = table.getColumnModel();
 
-		table.getModel().addTableModelListener(this);
+        for (int c = 0; c < ncols; c++) {
+            TableColumn tc = tcm.getColumn(c);
+            tc.setCellRenderer(tr);
+        }
 
-		TableColumnModel tcm = table.getColumnModel();
+        for (int column = 0; column < table.getColumnCount(); column++) {
+            TableColumn tableColumn = table.getColumnModel().getColumn(column);
+            int preferredWidth = 100 + tableColumn.getMinWidth();
+            int maxWidth = tableColumn.getMaxWidth();
 
-		for (int c = 0; c < ncols; c++) {
-			TableColumn tc = tcm.getColumn(c);
-			tc.setCellRenderer(tr);
-		}
+            for (int row1 = 0; row1 < table.getRowCount(); row1++) {
+                TableCellRenderer cellRenderer = table.getCellRenderer(row1, column);
+                Component c = table.prepareRenderer(cellRenderer, row1, column);
+                int width = c.getPreferredSize().width + table.getIntercellSpacing().width;
+                preferredWidth = Math.max(preferredWidth, width);
 
-		for (int column = 0; column < table.getColumnCount(); column++) {
-			TableColumn tableColumn = table.getColumnModel().getColumn(column);
-			int preferredWidth = 100 + tableColumn.getMinWidth();
-			int maxWidth = tableColumn.getMaxWidth();
+                // We've exceeded the maximum width, no need to check other rows
 
-			for (int row1 = 0; row1 < table.getRowCount(); row1++) {
-				TableCellRenderer cellRenderer = table.getCellRenderer(row1, column);
-				Component c = table.prepareRenderer(cellRenderer, row1, column);
-				int width = c.getPreferredSize().width + table.getIntercellSpacing().width;
-				preferredWidth = Math.max(preferredWidth, width);
+                if (preferredWidth >= maxWidth) {
+                    preferredWidth = maxWidth;
+                    break;
+                }
+            }
 
-				// We've exceeded the maximum width, no need to check other rows
+            tableColumn.setPreferredWidth(preferredWidth);
+        }
 
-				if (preferredWidth >= maxWidth) {
-					preferredWidth = maxWidth;
-					break;
-				}
-			}
+        scrollPane14 = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
-			tableColumn.setPreferredWidth(preferredWidth);
-		}
+        scrollPane14.setVisible(true);
+        this.add(scrollPane14);
 
-		scrollPane14 = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-				JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        this.pack();
+        this.setVisible(true);
+        // TODO Auto-generated constructor stub
+    }
 
-		scrollPane14.setVisible(true);
-		this.add(scrollPane14);
+    @Override
+    public void tableChanged(TableModelEvent e) {
+        // TODO Auto-generated method stub
 
-		this.pack();
-		this.setVisible(true);
-		// TODO Auto-generated constructor stub
-	}
-
-	@Override
-	public void tableChanged(TableModelEvent e) {
-		// TODO Auto-generated method stub
-
-	}
+    }
 
 }

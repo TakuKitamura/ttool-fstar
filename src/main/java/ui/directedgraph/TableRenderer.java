@@ -12,60 +12,57 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 class TableRenderer extends DefaultTableCellRenderer {
 
-	private int row, col;
-	Color randomColour;
-	boolean colorCell = true;
+    private int row, col;
+    Color randomColour;
+    boolean colorCell = true;
 
-	private Vector<Object> allCommands = new Vector<Object>();
-	private Vector<Color> allColors = new Vector<Color>();
-	List<String> onPathBehaviors;
-	List<String> offPathBehaviors;
-	public TableRenderer(List<String> onPathBehavior, List<String> offPathBehavior) {
+    private Vector<Object> allCommands = new Vector<Object>();
+    private Vector<Color> allColors = new Vector<Color>();
+    List<String> onPathBehaviors;
+    List<String> offPathBehaviors;
 
-		this.onPathBehaviors = onPathBehavior;
-		this.offPathBehaviors = offPathBehavior;
-	}
+    public TableRenderer(List<String> onPathBehavior, List<String> offPathBehavior) {
 
-	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-			int row, int column) {
+        this.onPathBehaviors = onPathBehavior;
+        this.offPathBehaviors = offPathBehavior;
+    }
 
-		this.row = row;
-		this.col = column;
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 
-		if (this.col == 0) {
-			this.colorCell = false;
-		} else {
-			this.colorCell = true;
-		}
+        this.row = row;
+        this.col = column;
 
-		
-		if (value != null && value != "") {
-			if (onPathBehaviors.contains(value.toString() + table.getColumnName(column))) {
-				this.colorCell = true;
-				randomColour = Color.green;
-			} else if (offPathBehaviors.contains(value.toString() + table.getColumnName(column))) {
-				randomColour = Color.red;
-			}
-		}
-		else
-		{
-			this.colorCell = false;
-		}
-		// Allow superclass to return rendering component.
+        if (this.col == 0) {
+            this.colorCell = false;
+        } else {
+            this.colorCell = true;
+        }
 
-		return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-	}
+        if (value != null && value != "") {
+            if (onPathBehaviors.contains(value.toString() + table.getColumnName(column))) {
+                this.colorCell = true;
+                randomColour = Color.green;
+            } else if (offPathBehaviors.contains(value.toString() + table.getColumnName(column))) {
+                randomColour = Color.red;
+            }
+        } else {
+            this.colorCell = false;
+        }
+        // Allow superclass to return rendering component.
 
-	protected void setValue(Object v) {
+        return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+    }
 
-		super.setValue(v);
+    protected void setValue(Object v) {
 
-		if (this.colorCell) {
-			setBackground(randomColour);
-		} else {
-			setForeground(UIManager.getColor("Table.foreground"));
-			setBackground(UIManager.getColor("Table.background"));
-		}
+        super.setValue(v);
 
-	}
+        if (this.colorCell) {
+            setBackground(randomColour);
+        } else {
+            setForeground(UIManager.getColor("Table.foreground"));
+            setBackground(UIManager.getColor("Table.background"));
+        }
+
+    }
 }
