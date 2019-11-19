@@ -36,80 +36,51 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-package ui.interactivesimulation;
+package ui.directedgraph;
 
-import java.util.Vector;
+import javax.swing.JButton;
 
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
+import ui.interactivesimulation.InteractiveSimulationActions;
+import ui.interactivesimulation.InteractiveSimulationBar;
+import ui.interactivesimulation.JFrameInteractiveSimulation;
+
+//import java.awt.*;
+//import java.awt.event.*;
 
 /**
- * Class SimulationTransactionParser Parse simulation traces
+ * Class SaveGraphToolBar: toolbar used to save the directed graph in different
+ * formats
  * 
- * Creation: 19/07/2019
- * 
- * @author Maysam ZOOR
+ * 23/09/2019
+ *
+ * @author Maysam Zoor
  */
+public class SaveGraphToolBar extends LatencyDetailedAnalysisBar {
 
-public class SimulationTransactionParser extends DefaultHandler {
+    public SaveGraphToolBar(JFrameLatencyDetailedAnalysis _jflda) {
+        super(_jflda);
+    }
 
-	private Vector<SimulationTransaction> trans;
-	private SimulationTransaction st = new SimulationTransaction();
+    protected void setActive(boolean b) {
+        jflda.actions[LatencyDetailedAnalysisActions.ACT_SAVE_TRACE_PNG].setEnabled(b);
+        jflda.actions[LatencyDetailedAnalysisActions.ACT_SAVE_TRACE_GRAPHML].setEnabled(b);
+        jflda.actions[LatencyDetailedAnalysisActions.ACT_Import_ANALYSIS].setEnabled(b);
 
-	private StringBuilder data = null;
+    }
 
-	public Vector<SimulationTransaction> getStList() {
-		return trans;
-	}
+    protected void setButtons() {
+        JButton button;
 
-	@Override
-	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+        button = this.add(jflda.actions[LatencyDetailedAnalysisActions.ACT_SAVE_TRACE_PNG]);
+        // button.addMouseListener(jflda.mouseHandler);
 
-		if (qName.equals("transinfo")) {
+        this.addSeparator();
 
-			st = new SimulationTransaction();
-			st.nodeType = attributes.getValue("deviceid");
+        button = this.add(jflda.actions[LatencyDetailedAnalysisActions.ACT_SAVE_TRACE_GRAPHML]);
+        // this.addSeparator();
 
-			try {
-				st.uniqueID = new Integer(attributes.getValue("uniqueid"));
-			} catch (Exception e) {
+        // button =
+        // this.add(jflda.actions[LatencyDetailedAnalysisActions.ACT_Import_ANALYSIS]);
 
-			}
-
-			st.deviceName = attributes.getValue("devicename");
-			String commandT = attributes.getValue("command");
-			if (commandT != null) {
-				int index = commandT.indexOf(": ");
-				if (index == -1) {
-					st.taskName = "Unknown";
-					st.command = commandT;
-				} else {
-					st.taskName = commandT.substring(0, index).trim();
-					st.command = commandT.substring(index + 1, commandT.length()).trim();
-				}
-			}
-
-			st.startTime = attributes.getValue("starttime");
-			st.endTime = attributes.getValue("endtime");
-			st.length = attributes.getValue("length");
-			st.virtualLength = attributes.getValue("virtuallength");
-			st.channelName = attributes.getValue("ch");
-			st.id = attributes.getValue("id");
-
-			if (trans == null) {
-				trans = new Vector<SimulationTransaction>();
-			}
-			trans.add(st);
-
-		}
-
-		data = new StringBuilder();
-
-	}
-
-	@Override
-	public void characters(char ch[], int start, int length) throws SAXException {
-		data.append(new String(ch, start, length));
-	}
-}
+    }
+} // Class

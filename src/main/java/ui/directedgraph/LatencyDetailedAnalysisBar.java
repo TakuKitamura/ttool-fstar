@@ -36,80 +36,33 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-package ui.interactivesimulation;
+package ui.directedgraph;
 
-import java.util.Vector;
-
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
+import javax.swing.JToolBar;
+import javax.swing.SwingConstants;
 
 /**
- * Class SimulationTransactionParser Parse simulation traces
+ * Class LatencyDetailedAnalysisBar: toolbar used for latency detail analysis
+ * and directed graph generation
  * 
- * Creation: 19/07/2019
- * 
- * @author Maysam ZOOR
+ * 23/09/2019
+ *
+ * @author Maysam Zoor
  */
+public abstract class LatencyDetailedAnalysisBar extends JToolBar {
+    protected JFrameLatencyDetailedAnalysis jflda;
 
-public class SimulationTransactionParser extends DefaultHandler {
+    public LatencyDetailedAnalysisBar(JFrameLatencyDetailedAnalysis _jflda) {
+        super();
+        jflda = _jflda;
+        setOrientation(SwingConstants.HORIZONTAL);
+        setFloatable(true);
+        setButtons();
+    }
 
-	private Vector<SimulationTransaction> trans;
-	private SimulationTransaction st = new SimulationTransaction();
+    // asbtract operations
+    protected abstract void setButtons();
 
-	private StringBuilder data = null;
+    protected abstract void setActive(boolean b);
 
-	public Vector<SimulationTransaction> getStList() {
-		return trans;
-	}
-
-	@Override
-	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-
-		if (qName.equals("transinfo")) {
-
-			st = new SimulationTransaction();
-			st.nodeType = attributes.getValue("deviceid");
-
-			try {
-				st.uniqueID = new Integer(attributes.getValue("uniqueid"));
-			} catch (Exception e) {
-
-			}
-
-			st.deviceName = attributes.getValue("devicename");
-			String commandT = attributes.getValue("command");
-			if (commandT != null) {
-				int index = commandT.indexOf(": ");
-				if (index == -1) {
-					st.taskName = "Unknown";
-					st.command = commandT;
-				} else {
-					st.taskName = commandT.substring(0, index).trim();
-					st.command = commandT.substring(index + 1, commandT.length()).trim();
-				}
-			}
-
-			st.startTime = attributes.getValue("starttime");
-			st.endTime = attributes.getValue("endtime");
-			st.length = attributes.getValue("length");
-			st.virtualLength = attributes.getValue("virtuallength");
-			st.channelName = attributes.getValue("ch");
-			st.id = attributes.getValue("id");
-
-			if (trans == null) {
-				trans = new Vector<SimulationTransaction>();
-			}
-			trans.add(st);
-
-		}
-
-		data = new StringBuilder();
-
-	}
-
-	@Override
-	public void characters(char ch[], int start, int length) throws SAXException {
-		data.append(new String(ch, start, length));
-	}
-}
+} // Class

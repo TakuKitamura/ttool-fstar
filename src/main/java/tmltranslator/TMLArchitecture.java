@@ -36,7 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package tmltranslator;
 
 import myutil.TraceManager;
@@ -44,8 +43,7 @@ import myutil.TraceManager;
 import java.util.*;
 
 /**
- * Class TMLArchitecture
- * Creation: 05/09/2007
+ * Class TMLArchitecture Creation: 05/09/2007
  *
  * @author Ludovic APVRILLE
  * @version 1.1 19/05/2008
@@ -59,7 +57,6 @@ public class TMLArchitecture {
     private int hashCode;
     private boolean hashCodeComputed = false;
 
-
     public TMLArchitecture() {
         init();
     }
@@ -70,10 +67,10 @@ public class TMLArchitecture {
     }
 
     private void computeHashCode() {
-        TMLArchiTextSpecification architxt = new TMLArchiTextSpecification(/*"spec.tarchi"*/);
+        TMLArchiTextSpecification architxt = new TMLArchiTextSpecification(/* "spec.tarchi" */);
         String s = architxt.toTextFormat(this);
         hashCode = s.hashCode();
-        //TraceManager.addDev("TARCHI hashcode = " + hashCode);
+        // TraceManager.addDev("TARCHI hashcode = " + hashCode);
     }
 
     public int getHashCode() {
@@ -92,7 +89,6 @@ public class TMLArchitecture {
     public int getMasterClockFrequency() {
         return masterClockFrequency;
     }
-
 
     public void addHwNode(HwNode _node) {
         hwnodes.add(_node);
@@ -137,7 +133,6 @@ public class TMLArchitecture {
         addHwLink(link);
     }
 
-
     public boolean hasCPU() {
         for (HwNode node : hwnodes) {
             if (node instanceof HwCPU) {
@@ -149,7 +144,7 @@ public class TMLArchitecture {
 
     public boolean hasHwExecutionNode() {
         for (HwNode node : hwnodes) {
-            if ((node instanceof HwCPU)|| (node instanceof HwA)|| (node instanceof HwFPGA)) {
+            if ((node instanceof HwCPU) || (node instanceof HwA) || (node instanceof HwFPGA)) {
                 return true;
             }
         }
@@ -258,7 +253,6 @@ public class TMLArchitecture {
         return list;
     }
 
-
     public int getNbOfCPU() {
         int cpt = 0;
         for (HwNode node : hwnodes) {
@@ -278,7 +272,6 @@ public class TMLArchitecture {
         }
         return cpt;
     }
-
 
     public int getNbOfMem() {
         int cpt = 0;
@@ -300,9 +293,9 @@ public class TMLArchitecture {
 
     public HwNode getHwNodeByName(String _name) {
         for (HwNode node : hwnodes) {
-            //TraceManager.addDev("Comparing >" + node.getName() + "< vs >" + _name + "<");
+            // TraceManager.addDev("Comparing >" + node.getName() + "< vs >" + _name + "<");
             if (node.getName().compareTo(_name) == 0) {
-                //TraceManager.addDev("Returning node " + node.getName());
+                // TraceManager.addDev("Returning node " + node.getName());
                 return node;
             }
         }
@@ -389,7 +382,8 @@ public class TMLArchitecture {
         List<HwLink> tempList = new ArrayList<HwLink>();
 
         for (HwLink link : hwlinks) {
-            if (link.hwnode == node) tempList.add(link);
+            if (link.hwnode == node)
+                tempList.add(link);
         }
 
         return tempList;
@@ -406,7 +400,8 @@ public class TMLArchitecture {
 
     public boolean isNodeConnectedToBus(HwNode node, HwBus bus) {
         for (HwLink link : hwlinks) {
-            if (node == link.hwnode && bus == link.bus) return true;
+            if (node == link.hwnode && bus == link.bus)
+                return true;
         }
         return false;
     }
@@ -415,7 +410,8 @@ public class TMLArchitecture {
         List<HwLink> tempList = new ArrayList<HwLink>();
 
         for (HwLink link : hwlinks) {
-            if (link.bus == bus) tempList.add(link);
+            if (link.bus == bus)
+                tempList.add(link);
         }
 
         return tempList;
@@ -430,17 +426,17 @@ public class TMLArchitecture {
             if (node instanceof HwCPU) {
                 HwCPU cpu = (HwCPU) node;
                 complexity += cpu.nbOfCores * cpu.byteDataSize * cpu.pipelineSize;
-                //TraceManager.addDev("complexity CPU= " + complexity);
+                // TraceManager.addDev("complexity CPU= " + complexity);
             }
 
             if (node instanceof HwBus) {
                 HwBus bus = (HwBus) node;
                 complexity += bus.byteDataSize * bus.pipelineSize;
-                //TraceManager.addDev("complexity bus= " + complexity);
+                // TraceManager.addDev("complexity bus= " + complexity);
             }
         }
 
-        //TraceManager.addDev("Complexity = " + complexity);
+        // TraceManager.addDev("Complexity = " + complexity);
 
         return complexity;
     }
@@ -476,11 +472,10 @@ public class TMLArchitecture {
         return false;
     }
 
-
     // For NoC manipulation
     public void removeAllNonHwExecutionNodes() {
         List<HwNode> newList = new ArrayList<HwNode>();
-        for(HwNode node: hwnodes) {
+        for (HwNode node : hwnodes) {
             if (node instanceof HwExecutionNode) {
                 newList.add(node);
             }
@@ -489,9 +484,9 @@ public class TMLArchitecture {
     }
 
     public HwNoC getHwNoC() {
-        for(HwNode node: hwnodes) {
+        for (HwNode node : hwnodes) {
             if (node instanceof HwNoC) {
-                return ((HwNoC)node);
+                return ((HwNoC) node);
             }
         }
         return null;
@@ -503,17 +498,60 @@ public class TMLArchitecture {
     }
 
     public boolean equalSpec(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
 
         TMLArchitecture that = (TMLArchitecture) o;
 
         TMLComparingMethod comp = new TMLComparingMethod();
 
-        if (!comp.isHwNodeListEquals(hwnodes, that.hwnodes)) return false;
+        if (!comp.isHwNodeListEquals(hwnodes, that.hwnodes))
+            return false;
 
-        if(!comp.isHwlinkListEquals(hwlinks, that.hwlinks)) return false;
+        if (!comp.isHwlinkListEquals(hwlinks, that.hwlinks))
+            return false;
 
         return masterClockFrequency == that.masterClockFrequency;
     }
+
+    public List<HwNode> getBUSs() {
+        List<HwNode> buss = new ArrayList<HwNode>();
+
+        for (HwNode node : hwnodes) {
+            if (node instanceof HwBus) {
+                buss.add(node);
+            }
+        }
+
+        return buss;
+    }
+
+    public List<HwMemory> getMemories() {
+        List<HwMemory> list = new ArrayList<HwMemory>();
+
+        for (HwNode node : hwnodes) {
+            if (node instanceof HwMemory) {
+                HwMemory memory = (HwMemory) node;
+                list.add(memory);
+            }
+        }
+        return list;
+    }
+
+    public List<HwBridge> getHwBridge() {
+        List<HwBridge> bridgeList = new ArrayList<HwBridge>();
+
+        for (HwNode node : hwnodes) {
+            if (node instanceof HwBridge) {
+                HwBridge bridge = (HwBridge) node;
+                bridgeList.add(bridge);
+
+            }
+        }
+
+        return bridgeList;
+    }
+
 }

@@ -37,10 +37,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
 
 import common.ConfigurationTTool;
@@ -60,12 +56,12 @@ import java.awt.event.ActionEvent;
 public class ActionPerformer {
 
     public static void actionPerformed(MainGUI mgui, ActionEvent evt, String command, TDiagramPanel tdp1) {
-	
+
         // Compare the action command to the known actions.
-        if (command.equals(mgui.actions[TGUIAction.ACT_NEW].getActionCommand()))  {
-        	mgui.newProject();
-        } else if (command.equals(mgui.actions[TGUIAction.ACT_NEW_PROJECT].getActionCommand()))  {
-        	mgui.newProjectDir();
+        if (command.equals(mgui.actions[TGUIAction.ACT_NEW].getActionCommand())) {
+            mgui.newProject();
+        } else if (command.equals(mgui.actions[TGUIAction.ACT_NEW_PROJECT].getActionCommand())) {
+            mgui.newProjectDir();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_NEW_DESIGN].getActionCommand())) {
             mgui.newDesign();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_NEW_ANALYSIS].getActionCommand())) {
@@ -136,7 +132,7 @@ public class ActionPerformer {
             mgui.backDiag();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_NEXT_DIAG].getActionCommand())) {
             mgui.nextDiag();
-        }  else if (command.equals(mgui.actions[TGUIAction.ACT_LAST_DIAG].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.ACT_LAST_DIAG].getActionCommand())) {
             mgui.lastDiag();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_ABOUT].getActionCommand())) {
             mgui.aboutVersion();
@@ -144,13 +140,13 @@ public class ActionPerformer {
             mgui.showIntegratedHelp();
         } else if (command.equals(mgui.actions[TGUIAction.FIRST_DIAGRAM].getActionCommand())) {
             mgui.firstDiag();
-        //@author: Huy TRUONG.
-        //open a external search box for ACT_EXTERNAL_SEARCH
-	}  else if (command.equals(mgui.actions[TGUIAction.ACT_EXTERNAL_SEARCH].getActionCommand())) {
-            mgui.showExternalSearch();}
-        else if (command.equals(mgui.actions[TGUIAction.ACT_INTERNAL_SEARCH].getActionCommand())) {
+            // @author: Huy TRUONG.
+            // open a external search box for ACT_EXTERNAL_SEARCH
+        } else if (command.equals(mgui.actions[TGUIAction.ACT_EXTERNAL_SEARCH].getActionCommand())) {
+            mgui.showExternalSearch();
+        } else if (command.equals(mgui.actions[TGUIAction.ACT_INTERNAL_SEARCH].getActionCommand())) {
             mgui.doInternalSearch();
-            //--
+            // --
 
         } else if (command.equals(mgui.actions[TGUIAction.ACT_TTOOL_CONFIGURATION].getActionCommand())) {
             mgui.showTToolConfiguration();
@@ -181,7 +177,7 @@ public class ActionPerformer {
         } else if (command.equals(mgui.actions[TGUIAction.ACT_DSE].getActionCommand())) {
             mgui.dse();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_REMOVENOC].getActionCommand())) {
-                mgui.removeNoC();
+            mgui.removeNoC();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER].getActionCommand())) {
             mgui.avatarModelChecker();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_GEN_JAVA].getActionCommand())) {
@@ -210,7 +206,7 @@ public class ActionPerformer {
             mgui.oneClickRTLOTOSRG();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_PROJECTION].getActionCommand())) {
             mgui.projection();
-        }  else if (command.equals(mgui.actions[TGUIAction.ACT_GRAPH_MODIFICATION].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.ACT_GRAPH_MODIFICATION].getActionCommand())) {
             mgui.modifyGraph();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_BISIMULATION].getActionCommand())) {
             mgui.bisimulation();
@@ -222,11 +218,11 @@ public class ActionPerformer {
             mgui.seekDeadlockSavedAUT();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_VIEW_STAT_AUT].getActionCommand())) {
             mgui.statAUT();
-        }  else if (command.equals(mgui.actions[TGUIAction.ACT_VIEW_STAT_AUTDIPLODOCUS].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.ACT_VIEW_STAT_AUTDIPLODOCUS].getActionCommand())) {
             mgui.statAUTDiplodocus();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_VIEW_STAT_AUTPROJ].getActionCommand())) {
             mgui.statAUTProj();
-        }  else if (command.equals(mgui.actions[TGUIAction.ACT_VIEW_STAT_SAVED_AUT].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.ACT_VIEW_STAT_SAVED_AUT].getActionCommand())) {
             mgui.statSavedAUT();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_VIEW_PM_AUT].getActionCommand())) {
             mgui.pmAUT();
@@ -248,13 +244,13 @@ public class ActionPerformer {
             mgui.showSuggestedDesign();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_VIEW_SIM].getActionCommand())) {
             mgui.showSimulationTrace();
-        }  else if (command.equals(mgui.actions[TGUIAction.ACT_VIEW_SIM_CHRONO].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.ACT_VIEW_SIM_CHRONO].getActionCommand())) {
             mgui.showSimulationTraceChrono();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_VIEW_DTADOT].getActionCommand())) {
             mgui.showDTA();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_VIEW_RGDOT].getActionCommand())) {
             mgui.showRG();
-        }  else if (command.equals(mgui.actions[TGUIAction.ACT_VIEW_TLSADOT].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.ACT_VIEW_TLSADOT].getActionCommand())) {
             mgui.showTLSA();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_VIEW_RGAUTDOT].getActionCommand())) {
             mgui.showRGAut();
@@ -306,7 +302,7 @@ public class ActionPerformer {
             mgui.toggleRequests();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_TOGGLE_JAVA].getActionCommand())) {
             mgui.toggleJava();
-        }  else if (command.equals(mgui.actions[TGUIAction.ACT_TOGGLE_INTERNAL_COMMENT].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.ACT_TOGGLE_INTERNAL_COMMENT].getActionCommand())) {
             mgui.toggleInternalComment();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_TOGGLE_ATTR].getActionCommand())) {
             mgui.toggleAttr();
@@ -314,6 +310,8 @@ public class ActionPerformer {
             mgui.enhanceDiagram();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_NC].getActionCommand())) {
             mgui.NC();
+        } else if (command.equals(mgui.actions[TGUIAction.ACT_GEN_LATENCY_GRAPH].getActionCommand())) {
+            mgui.latencyDetailedAnalysis();
         } else if (command.equals(mgui.actions[TGUIAction.EXTERNAL_ACTION_1].getActionCommand())) {
             mgui.executeUserCommand(ConfigurationTTool.ExternalCommand1Host, SpecConfigTTool.ExternalCommand1);
         } else if (command.equals(mgui.actions[TGUIAction.EXTERNAL_ACTION_2].getActionCommand())) {
@@ -520,13 +518,12 @@ public class ActionPerformer {
         } else if (command.equals(mgui.actions[TGUIAction.ADD_EDIT].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.EDIT, -1);
 
-            // julien  --------------------------------------------------------------
-        } else if (command.equals(mgui.actions[TGUIAction.DEPLOY_AVATAR_DIAGRAM].getActionCommand())){
+            // julien --------------------------------------------------------------
+        } else if (command.equals(mgui.actions[TGUIAction.DEPLOY_AVATAR_DIAGRAM].getActionCommand())) {
             mgui.avatarddExecutableCodeGeneration();
-        } else if  (command.equals(mgui.actions[TGUIAction.EXTRAC_DEPLOY_PARAM_TO_FILE].getActionCommand())){
+        } else if (command.equals(mgui.actions[TGUIAction.EXTRAC_DEPLOY_PARAM_TO_FILE].getActionCommand())) {
             mgui.extracDeploymentDiagramToFile();
             // -------------------------------------------------------------------------
-
 
         } else if (command.equals(mgui.actions[TGUIAction.ADD_LINK].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.ADD_CONNECTOR);
@@ -534,34 +531,31 @@ public class ActionPerformer {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_CPUNODE);
         } else if (command.equals(mgui.actions[TGUIAction.ADD_BUSNODE].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_BUSNODE);
-        }
-        else if (command.equals(mgui.actions[TGUIAction.ADD_VGMNNODE].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.ADD_VGMNNODE].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_VGMNNODE);
-        }
-        else if (command.equals(mgui.actions[TGUIAction.ADD_CROSSBARNODE].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.ADD_CROSSBARNODE].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_CROSSBARNODE);
-        }
-        else if (command.equals(mgui.actions[TGUIAction.ADD_BRIDGENODE].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.ADD_BRIDGENODE].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_BRIDGENODE);
-        }  else if (command.equals(mgui.actions[TGUIAction.ADD_TTYNODE].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.ADD_TTYNODE].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_TTYNODE);
-        }  else if (command.equals(mgui.actions[TGUIAction.ADD_RAMNODE].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.ADD_RAMNODE].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_RAMNODE);
-        }  else if (command.equals(mgui.actions[TGUIAction.ADD_ROMNODE].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.ADD_ROMNODE].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_ROMNODE);
-        }  else if (command.equals(mgui.actions[TGUIAction.ADD_DMANODE].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.ADD_DMANODE].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_DMANODE);
-        }  else if (command.equals(mgui.actions[TGUIAction.ADD_ICUNODE].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.ADD_ICUNODE].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_ICUNODE);
-        }  else if (command.equals(mgui.actions[TGUIAction.ADD_COPROMWMRNODE].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.ADD_COPROMWMRNODE].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_COPROMWMRNODE);
-        }  else if (command.equals(mgui.actions[TGUIAction.ADD_TIMERNODE].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.ADD_TIMERNODE].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_TIMERNODE);
-        }  else if (command.equals(mgui.actions[TGUIAction.ADD_BLOCKARTIFACT].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.ADD_BLOCKARTIFACT].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_ARTIFACT);
-        }  else if (command.equals(mgui.actions[TGUIAction.ADD_CHANNELARTIFACT].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.ADD_CHANNELARTIFACT].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_CHANNELARTIFACT);
-        }  else if (command.equals(mgui.actions[TGUIAction.ADD_CLUSTERNODE].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.ADD_CLUSTERNODE].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ADD_CLUSTERNODE);
 
         } else if (command.equals(mgui.actions[TGUIAction.TCD_ASSOCIATION].getActionCommand())) {
@@ -625,7 +619,7 @@ public class ActionPerformer {
         } else if (command.equals(mgui.actions[TGUIAction.IOD_EDIT].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.EDIT, -1);
         } else if (command.equals(mgui.actions[TGUIAction.IOD_CONNECTOR].getActionCommand())) {
-            //TraceManager.addDev("Connector interaction");
+            // TraceManager.addDev("Connector interaction");
             mgui.actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.CONNECTOR_INTERACTION);
         } else if (command.equals(mgui.actions[TGUIAction.IOD_START].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.IOD_START_STATE);
@@ -675,7 +669,7 @@ public class ActionPerformer {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.SD_COREGION);
         } else if (command.equals(mgui.actions[TGUIAction.SD_ALIGN_INSTANCES].getActionCommand())) {
             mgui.alignInstances();
-	} else if (command.equals(mgui.actions[TGUIAction.SDZV_EDIT].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.SDZV_EDIT].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.EDIT, -1);
         } else if (command.equals(mgui.actions[TGUIAction.SDZV_INSTANCE].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.SDZV_INSTANCE);
@@ -786,11 +780,10 @@ public class ActionPerformer {
         } else if (command.equals(mgui.actions[TGUIAction.TMLCTD_EDIT].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.EDIT, -1);
         } else if (command.equals(mgui.actions[TGUIAction.TMLAD_WRITE_CHANNEL].getActionCommand())) {
-            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_WRITE_CHANNEL);	    
-        }  else if (command.equals(mgui.actions[TGUIAction.TMLAD_WRITE_CAMS].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_WRITE_CHANNEL);
+        } else if (command.equals(mgui.actions[TGUIAction.TMLAD_WRITE_CAMS].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_WRITE_CAMS);
-        }
-	else if (command.equals(mgui.actions[TGUIAction.TMLAD_SEND_REQUEST].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.TMLAD_SEND_REQUEST].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_SEND_REQUEST);
         } else if (command.equals(mgui.actions[TGUIAction.TMLAD_READ_REQUEST_ARG].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_READ_REQUEST_ARG);
@@ -802,8 +795,8 @@ public class ActionPerformer {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_NOTIFIED_EVENT);
         } else if (command.equals(mgui.actions[TGUIAction.TMLAD_READ_CHANNEL].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_READ_CHANNEL);
-	} else if (command.equals(mgui.actions[TGUIAction.TMLAD_READ_CAMS].getActionCommand())) {
-            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_READ_CAMS);       
+        } else if (command.equals(mgui.actions[TGUIAction.TMLAD_READ_CAMS].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_READ_CAMS);
         } else if (command.equals(mgui.actions[TGUIAction.TMLAD_ACTION_STATE].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLAD_ACTION_STATE);
         } else if (command.equals(mgui.actions[TGUIAction.TMLAD_CHOICE].getActionCommand())) {
@@ -871,17 +864,17 @@ public class ActionPerformer {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_CPNODE);
         } else if (command.equals(mgui.actions[TGUIAction.TMLARCHI_BRIDGENODE].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_BRIDGENODE);
-        }  else if (command.equals(mgui.actions[TGUIAction.TMLARCHI_ROUTERNODE].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.TMLARCHI_ROUTERNODE].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_ROUTERNODE);
-        }  else if (command.equals(mgui.actions[TGUIAction.TMLARCHI_HWANODE].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.TMLARCHI_HWANODE].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_HWANODE);
-	}  else if (command.equals(mgui.actions[TGUIAction.TMLARCHI_CAMSNODE].getActionCommand())) {
-            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_CAMSNODE); 
-        }  else if (command.equals(mgui.actions[TGUIAction.TMLARCHI_MEMORYNODE].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.TMLARCHI_CAMSNODE].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_CAMSNODE);
+        } else if (command.equals(mgui.actions[TGUIAction.TMLARCHI_MEMORYNODE].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_MEMORYNODE);
-        }  else if (command.equals(mgui.actions[TGUIAction.TMLARCHI_DMANODE].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.TMLARCHI_DMANODE].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_DMANODE);
-        }  else if (command.equals(mgui.actions[TGUIAction.TMLARCHI_ARTIFACT].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.TMLARCHI_ARTIFACT].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_ARTIFACT);
         } else if (command.equals(mgui.actions[TGUIAction.TMLARCHI_COMMUNICATION_ARTIFACT].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_COMMUNICATION_ARTIFACT);
@@ -891,8 +884,6 @@ public class ActionPerformer {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_FIREWALL);
         } else if (command.equals(mgui.actions[TGUIAction.TMLARCHI_PORT_ARTIFACT].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLARCHI_PORT_ARTIFACT);
-
-
 
             // Communication patterns
         } else if (command.equals(mgui.actions[TGUIAction.TMLCP_EDIT].getActionCommand())) {
@@ -913,7 +904,7 @@ public class ActionPerformer {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLCP_START_STATE);
         } else if (command.equals(mgui.actions[TGUIAction.TMLCP_STOP].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLCP_STOP_STATE);
-        // Issue #69 Removed unused TMLCPJunction
+            // Issue #69 Removed unused TMLCPJunction
 //        } else if (command.equals(mgui.actions[TGUIAction.TMLCP_JUNCTION].getActionCommand())) {
 //            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLCP_JUNCTION);
         } else if (command.equals(mgui.actions[TGUIAction.TMLCP_FOR_LOOP].getActionCommand())) {
@@ -931,98 +922,98 @@ public class ActionPerformer {
         } else if (command.equals(mgui.actions[TGUIAction.TMLSD_ACTION_STATE].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TMLSD_ACTION_STATE);
 
-	    	// SystemC-AMS
+            // SystemC-AMS
         } else if (command.equals(mgui.actions[TGUIAction.CAMS_EDIT].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.EDIT, -1);
         } else if (command.equals(mgui.actions[TGUIAction.CAMS_BLOCK_TDF].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.CAMS_BLOCK_TDF);
         } else if (command.equals(mgui.actions[TGUIAction.CAMS_BLOCK_DE].getActionCommand())) {
-        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.CAMS_BLOCK_DE);
-	}else if (command.equals(mgui.actions[TGUIAction.CAMS_CLOCK].getActionCommand())) {
-        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.CAMS_CLOCK);        
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.CAMS_BLOCK_DE);
+        } else if (command.equals(mgui.actions[TGUIAction.CAMS_CLOCK].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.CAMS_CLOCK);
         } else if (command.equals(mgui.actions[TGUIAction.CAMS_CONNECTOR].getActionCommand())) {
-        	mgui.actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.CAMS_CONNECTOR);
+            mgui.actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.CAMS_CONNECTOR);
         } else if (command.equals(mgui.actions[TGUIAction.CAMS_PORT_TDF].getActionCommand())) {
-        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.CAMS_PORT_TDF);
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.CAMS_PORT_TDF);
         } else if (command.equals(mgui.actions[TGUIAction.CAMS_PORT_DE].getActionCommand())) {
-        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.CAMS_PORT_DE);
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.CAMS_PORT_DE);
         } else if (command.equals(mgui.actions[TGUIAction.CAMS_PORT_CONVERTER].getActionCommand())) {
-        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.CAMS_PORT_CONVERTER);
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.CAMS_PORT_CONVERTER);
         } else if (command.equals(mgui.actions[TGUIAction.CAMS_CLUSTER].getActionCommand())) {
-        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.CAMS_CLUSTER);
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.CAMS_CLUSTER);
         } else if (command.equals(mgui.actions[TGUIAction.CAMS_BLOCK_GPIO2VCI].getActionCommand())) {
-        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.CAMS_BLOCK_GPIO2VCI);
-        } else if (command.equals(mgui.actions[TGUIAction.CAMS_GENCODE].getActionCommand())){
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.CAMS_BLOCK_GPIO2VCI);
+        } else if (command.equals(mgui.actions[TGUIAction.CAMS_GENCODE].getActionCommand())) {
             mgui.syscamsExecutableCodeGeneration();
 
-		// ELN
-        } else if (command.equals(mgui.actions[TGUIAction.ELN_EDIT].getActionCommand())){
-        	mgui.actionOnButton(TGComponentManager.EDIT, -1);
-        } else if (command.equals(mgui.actions[TGUIAction.ELN_CONNECTOR].getActionCommand())){
+            // ELN
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_EDIT].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.EDIT, -1);
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_CONNECTOR].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.ELN_CONNECTOR);
-        } else if (command.equals(mgui.actions[TGUIAction.ELN_RESISTOR].getActionCommand())){
-        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_RESISTOR);
-        } else if (command.equals(mgui.actions[TGUIAction.ELN_CAPACITOR].getActionCommand())){
-        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_CAPACITOR);
-        } else if (command.equals(mgui.actions[TGUIAction.ELN_INDUCTOR].getActionCommand())){
-        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_INDUCTOR);
-        } else if (command.equals(mgui.actions[TGUIAction.ELN_VOLTAGE_CONTROLLED_VOLTAGE_SOURCE].getActionCommand())){
-        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_VOLTAGE_CONTROLLED_VOLTAGE_SOURCE);
-        } else if (command.equals(mgui.actions[TGUIAction.ELN_VOLTAGE_CONTROLLED_CURRENT_SOURCE].getActionCommand())){
-        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_VOLTAGE_CONTROLLED_CURRENT_SOURCE);
-        } else if (command.equals(mgui.actions[TGUIAction.ELN_IDEAL_TRANSFORMER].getActionCommand())){
-        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_IDEAL_TRANSFORMER);
-        } else if (command.equals(mgui.actions[TGUIAction.ELN_TRANSMISSION_LINE].getActionCommand())){
-        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_TRANSMISSION_LINE);
-        } else if (command.equals(mgui.actions[TGUIAction.ELN_INDEPENDENT_VOLTAGE_SOURCE].getActionCommand())){
-        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_INDEPENDENT_VOLTAGE_SOURCE);
-        } else if (command.equals(mgui.actions[TGUIAction.ELN_INDEPENDENT_CURRENT_SOURCE].getActionCommand())){
-        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_INDEPENDENT_CURRENT_SOURCE);
-        } else if (command.equals(mgui.actions[TGUIAction.ELN_NODE_REF].getActionCommand())){
-        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_NODE_REF);
-        } else if (command.equals(mgui.actions[TGUIAction.ELN_TDF_VOLTAGE_SINK].getActionCommand())){
-        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_TDF_VOLTAGE_SINK);
-        } else if (command.equals(mgui.actions[TGUIAction.ELN_TDF_CURRENT_SINK].getActionCommand())){
-        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_TDF_CURRENT_SINK);
-        } else if (command.equals(mgui.actions[TGUIAction.ELN_MODULE].getActionCommand())){
-        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_MODULE);
-        } else if (command.equals(mgui.actions[TGUIAction.ELN_MODULE_TERMINAL].getActionCommand())){
-        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_MODULE_TERMINAL);
-        } else if (command.equals(mgui.actions[TGUIAction.ELN_TOGGLE_ATTR].getActionCommand())){
-        	mgui.toggleELN();
-        } else if (command.equals(mgui.actions[TGUIAction.ELN_TDF_VOLTAGE_SOURCE].getActionCommand())){
-        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_TDF_VOLTAGE_SOURCE);
-        } else if (command.equals(mgui.actions[TGUIAction.ELN_TDF_CURRENT_SOURCE].getActionCommand())){
-        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_TDF_CURRENT_SOURCE);
-        } else if (command.equals(mgui.actions[TGUIAction.ELN_CLUSTER].getActionCommand())){
-        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_CLUSTER);
-        } else if (command.equals(mgui.actions[TGUIAction.ELN_GENCODE].getActionCommand())){
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_RESISTOR].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_RESISTOR);
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_CAPACITOR].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_CAPACITOR);
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_INDUCTOR].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_INDUCTOR);
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_VOLTAGE_CONTROLLED_VOLTAGE_SOURCE].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_VOLTAGE_CONTROLLED_VOLTAGE_SOURCE);
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_VOLTAGE_CONTROLLED_CURRENT_SOURCE].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_VOLTAGE_CONTROLLED_CURRENT_SOURCE);
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_IDEAL_TRANSFORMER].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_IDEAL_TRANSFORMER);
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_TRANSMISSION_LINE].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_TRANSMISSION_LINE);
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_INDEPENDENT_VOLTAGE_SOURCE].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_INDEPENDENT_VOLTAGE_SOURCE);
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_INDEPENDENT_CURRENT_SOURCE].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_INDEPENDENT_CURRENT_SOURCE);
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_NODE_REF].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_NODE_REF);
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_TDF_VOLTAGE_SINK].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_TDF_VOLTAGE_SINK);
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_TDF_CURRENT_SINK].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_TDF_CURRENT_SINK);
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_MODULE].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_MODULE);
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_MODULE_TERMINAL].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_MODULE_TERMINAL);
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_TOGGLE_ATTR].getActionCommand())) {
+            mgui.toggleELN();
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_TDF_VOLTAGE_SOURCE].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_TDF_VOLTAGE_SOURCE);
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_TDF_CURRENT_SOURCE].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_TDF_CURRENT_SOURCE);
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_CLUSTER].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_CLUSTER);
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_GENCODE].getActionCommand())) {
             mgui.elnExecutableCodeGeneration();
-        } else if (command.equals(mgui.actions[TGUIAction.ELN_MODULE_PORT_DE].getActionCommand())){
-        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_MODULE_PORT_DE);
-        } else if (command.equals(mgui.actions[TGUIAction.ELN_MODULE_PORT_TDF].getActionCommand())){
-        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_MODULE_PORT_TDF);
-        } else if (command.equals(mgui.actions[TGUIAction.ELN_CLUSTER_TERMINAL].getActionCommand())){
-        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_CLUSTER_TERMINAL);
-        } else if (command.equals(mgui.actions[TGUIAction.ELN_CLUSTER_PORT_DE].getActionCommand())){
-        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_CLUSTER_PORT_DE);
-        } else if (command.equals(mgui.actions[TGUIAction.ELN_CLUSTER_PORT_TDF].getActionCommand())){
-        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_CLUSTER_PORT_TDF);
-        } else if (command.equals(mgui.actions[TGUIAction.ELN_DE_CURRENT_SINK].getActionCommand())){
-        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_DE_CURRENT_SINK);
-        } else if (command.equals(mgui.actions[TGUIAction.ELN_DE_CURRENT_SOURCE].getActionCommand())){
-        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_DE_CURRENT_SOURCE);
-        } else if (command.equals(mgui.actions[TGUIAction.ELN_DE_VOLTAGE_SINK].getActionCommand())){
-        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_DE_VOLTAGE_SINK);
-        } else if (command.equals(mgui.actions[TGUIAction.ELN_DE_VOLTAGE_SOURCE].getActionCommand())){
-        	mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_DE_VOLTAGE_SOURCE);
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_MODULE_PORT_DE].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_MODULE_PORT_DE);
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_MODULE_PORT_TDF].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_MODULE_PORT_TDF);
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_CLUSTER_TERMINAL].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_CLUSTER_TERMINAL);
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_CLUSTER_PORT_DE].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_CLUSTER_PORT_DE);
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_CLUSTER_PORT_TDF].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_CLUSTER_PORT_TDF);
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_DE_CURRENT_SINK].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_DE_CURRENT_SINK);
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_DE_CURRENT_SOURCE].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_DE_CURRENT_SOURCE);
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_DE_VOLTAGE_SINK].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_DE_VOLTAGE_SINK);
+        } else if (command.equals(mgui.actions[TGUIAction.ELN_DE_VOLTAGE_SOURCE].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ELN_DE_VOLTAGE_SOURCE);
 
             // Attack Tree Diagrams
         } else if (command.equals(mgui.actions[TGUIAction.ATD_BLOCK].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ATD_BLOCK);
         } else if (command.equals(mgui.actions[TGUIAction.ATD_ATTACK].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ATD_ATTACK);
-	} else if (command.equals(mgui.actions[TGUIAction.ATD_COUNTERMEASURE].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.ATD_COUNTERMEASURE].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ATD_COUNTERMEASURE);
         } else if (command.equals(mgui.actions[TGUIAction.ATD_CONSTRAINT].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.ATD_CONSTRAINT);
@@ -1030,15 +1021,15 @@ public class ActionPerformer {
             mgui.actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.ATD_COMPOSITION_CONNECTOR);
         } else if (command.equals(mgui.actions[TGUIAction.ATD_ATTACK_CONNECTOR].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.ATD_ATTACK_CONNECTOR);
-	} else if (command.equals(mgui.actions[TGUIAction.ATD_COUNTERMEASURE_CONNECTOR].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.ATD_COUNTERMEASURE_CONNECTOR].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.ATD_COUNTERMEASURE_CONNECTOR);
 
-	    // Fault Tree Diagrams
+            // Fault Tree Diagrams
         } else if (command.equals(mgui.actions[TGUIAction.FTD_BLOCK].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.FTD_BLOCK);
         } else if (command.equals(mgui.actions[TGUIAction.FTD_FAULT].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.FTD_FAULT);
-	} else if (command.equals(mgui.actions[TGUIAction.FTD_COUNTERMEASURE].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.FTD_COUNTERMEASURE].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.FTD_COUNTERMEASURE);
         } else if (command.equals(mgui.actions[TGUIAction.FTD_CONSTRAINT].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.FTD_CONSTRAINT);
@@ -1046,7 +1037,7 @@ public class ActionPerformer {
             mgui.actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.FTD_COMPOSITION_CONNECTOR);
         } else if (command.equals(mgui.actions[TGUIAction.FTD_FAULT_CONNECTOR].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.FTD_FAULT_CONNECTOR);
-	} else if (command.equals(mgui.actions[TGUIAction.FTD_COUNTERMEASURE_CONNECTOR].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.FTD_COUNTERMEASURE_CONNECTOR].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.FTD_COUNTERMEASURE_CONNECTOR);
 
             // TURTLE-OS
@@ -1078,7 +1069,6 @@ public class ActionPerformer {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TOSAD_STOP_STATE);
         } else if (command.equals(mgui.actions[TGUIAction.TOSAD_TIME_INTERVAL].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.TOSAD_TIME_INTERVAL);
-
 
             // Ontologies
         } else if (command.equals(mgui.actions[TGUIAction.ACT_GENERATE_ONTOLOGIES_CURRENT_DIAGRAM].getActionCommand())) {
@@ -1123,41 +1113,42 @@ public class ActionPerformer {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.PROSMD_ACTION);
         } else if (command.equals(mgui.actions[TGUIAction.PROSMD_EDIT].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.EDIT, -1);
-        }  else if (command.equals(mgui.actions[TGUIAction.PROSMD_PARALLEL].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.PROSMD_PARALLEL].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.PROSMD_PARALLEL);
-        }  else if (command.equals(mgui.actions[TGUIAction.PROSMD_STATE].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.PROSMD_STATE].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.PROSMD_STATE);
-        }  else if (command.equals(mgui.actions[TGUIAction.PROCSD_COMPONENT].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.PROCSD_COMPONENT].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.PROCSD_COMPONENT);
-            //Delegate ports removed, by Solange
+            // Delegate ports removed, by Solange
             /*
-              } else if (command.equals(mgui.actions[TGUIAction.PROCSD_DELEGATE_PORT].getActionCommand())) {
-              mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.PROCSD_DELEGATE_PORT);
-            */
+             * } else if (command.equals(mgui.actions[TGUIAction.PROCSD_DELEGATE_PORT].
+             * getActionCommand())) { mgui.actionOnButton(TGComponentManager.COMPONENT,
+             * TGComponentManager.PROCSD_DELEGATE_PORT);
+             */
         } else if (command.equals(mgui.actions[TGUIAction.PROCSD_IN_PORT].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.PROCSD_IN_PORT);
         } else if (command.equals(mgui.actions[TGUIAction.PROCSD_OUT_PORT].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.PROCSD_OUT_PORT);
         } else if (command.equals(mgui.actions[TGUIAction.PROCSD_EDIT].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.EDIT, -1);
-        }  else if (command.equals(mgui.actions[TGUIAction.PROCSD_CONNECTOR].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.PROCSD_CONNECTOR].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.CONNECTOR_PROCSD);
-        }
-        else if (command.equals(mgui.actions[TGUIAction.PROCSD_CONNECTOR_PORT_INTERFACE].getActionCommand())) {
-            mgui.actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.CONNECTOR_PROCSD_PORT_INTERFACE);}
-        else if (command.equals(mgui.actions[TGUIAction.PROCSD_CONNECTOR_DELEGATE].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.PROCSD_CONNECTOR_PORT_INTERFACE].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.CONNECTOR_PROCSD_PORT_INTERFACE);
+        } else if (command.equals(mgui.actions[TGUIAction.PROCSD_CONNECTOR_DELEGATE].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.CONNECTOR, TGComponentManager.CONNECTOR_DELEGATE_PROCSD);
-        }  else if (command.equals(mgui.actions[TGUIAction.PROCSD_INTERFCE].getActionCommand())) {
+        } else if (command.equals(mgui.actions[TGUIAction.PROCSD_INTERFCE].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.PROCSD_INTERFACE);
             // Command for the action created by Solange. Window appears.
-        }   else if (command.equals(mgui.actions[TGUIAction.PRUEBA_1].getActionCommand())) {
-            JOptionPane.showMessageDialog(mgui.getFrame(), "In Port: Color CYAN\nOut Port: Color LIGHT GRAY", "Help color of the ports", JOptionPane.INFORMATION_MESSAGE);
-        }   else if (command.endsWith(".dot")) {
+        } else if (command.equals(mgui.actions[TGUIAction.PRUEBA_1].getActionCommand())) {
+            JOptionPane.showMessageDialog(mgui.getFrame(), "In Port: Color CYAN\nOut Port: Color LIGHT GRAY", "Help color of the ports",
+                    JOptionPane.INFORMATION_MESSAGE);
+        } else if (command.endsWith(".dot")) {
             mgui.viewAutomata(command);
 
             // Last open
         } else {
-            for(int i=0; i<mgui.actionsLast.length; i++) {
+            for (int i = 0; i < mgui.actionsLast.length; i++) {
                 if (command.equals(mgui.actionsLast[i].getActionCommand())) {
                     mgui.openLastProject(i);
                     break;
