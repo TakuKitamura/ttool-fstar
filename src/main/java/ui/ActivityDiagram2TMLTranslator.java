@@ -291,7 +291,6 @@ public class ActivityDiagram2TMLTranslator {
 		            tmldelay.setMinDelay(modifyString(((TMLADDelay)tgc).getDelayValue()));
 		            tmldelay.setMaxDelay(modifyString(((TMLADDelay)tgc).getDelayValue()));
 		            tmldelay.setUnit(((TMLADDelay)tgc).getUnit());
-		            tmldelay.setActiveDelay(((TMLADDelay)tgc).getActiveDelayEnable());
 		            activity.addElement(tmldelay);
 		            ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 		            corrTgElement.addCor(tmldelay, tgc);
@@ -301,7 +300,6 @@ public class ActivityDiagram2TMLTranslator {
 		            tmldelay.setMinDelay(modifyString(((TMLADDelayInterval)tgc).getMinDelayValue()));
 		            tmldelay.setMaxDelay(modifyString(((TMLADDelayInterval)tgc).getMaxDelayValue()));
 		            tmldelay.setUnit(((TMLADDelayInterval)tgc).getUnit());
-					tmldelay.setActiveDelay(((TMLADDelayInterval)tgc).getActiveDelayEnableValue());
 		            activity.addElement(tmldelay);
 		            ((BasicErrorHighlight)tgc).setStateAction(ErrorHighlight.OK);
 		            corrTgElement.addCor(tmldelay, tgc);

@@ -6,7 +6,6 @@
 ----fork fork channel functional view diplodocus
 ----join join channel functional view diplodocus
 --- activitydiagram activity_diagram activity diagram function view tasks
-----activedelay active_delay delay consumes cycles
 -- architecture architecture hardware os operating system
 --- cpu cpu processor cpu os
 ----cpuname cpu_name cpu name
