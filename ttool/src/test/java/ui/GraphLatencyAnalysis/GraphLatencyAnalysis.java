@@ -53,8 +53,7 @@ public class GraphLatencyAnalysis extends AbstractUITest {
 
         while (latencyDetailedAnalysis.graphStatus() != Thread.State.TERMINATED) {
             dgt = latencyDetailedAnalysis.getDgraph();
-        }
-        
+        }        
 
     }
 
