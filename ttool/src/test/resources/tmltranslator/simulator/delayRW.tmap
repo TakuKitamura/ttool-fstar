@@ -1,0 +1,14 @@
+TMLSPEC
+    #include "delayRW.tml"
+ENDTMLSPEC
+
+TMLARCHI
+    #include "delayRW.tarchi"
+ENDTMLARCHI
+
+TMLMAPPING
+    MAP CPU0 TestCycleEvt_wait__C0
+    SET TestCycleEvt_wait__C0 priority 1
+    MAP CPU0 TestCycleEvt_wait__C1
+    SET TestCycleEvt_wait__C1 priority 9
+ENDTMLMAPPING
