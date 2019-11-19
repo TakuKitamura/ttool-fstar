@@ -53,7 +53,7 @@ import java.util.Objects;
 public class TMLDelay extends TMLActivityElementWithIntervalAction {
     
 	private String timeUnit = "ns"; // Shall be either "ns" or "us" or "ms" or "s"
-
+	
     public TMLDelay(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
     }

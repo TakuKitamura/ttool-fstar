@@ -1,6 +1,6 @@
 // TML Application - FORMAT 0.1
-// Application: /home/levan/Desktop/TTool/ttool/src/test/resources/ui/diagram2tml/input/CloneCompositeComponentTest.xml
-// Generated: Fri Nov 15 15:15:40 CET 2019
+// Application: /home/pham/Documents/TToolDev/TTool/ttool/src/test/resources/ui/diagram2tml/input/CloneCompositeComponentTest.xml
+// Generated: Fri Sep 27 17:17:01 CEST 2019
 
 // Channels
 CHANNEL Application__channel BRBW 4 8 OUT Application__PrimitiveComp1 IN Application__PrimitiveComp2
@@ -120,10 +120,10 @@ TASK Application__PrimitiveComp5
     WRITE Application__channel3 1
     EXECI 10
     EXECI 10 20
-    DELAY 10 ms isActiveDelay false
+    DELAY 10 ms
     EXECC 100 encryption1 ADV 100 100 0 0
     EXECC 100 encryption1 ADV 100 100 0 0
-    DELAY 10 20 ms isActiveDelay false
+    DELAY 10 20 ms
     RANDOM 0 attr1 0 10
     FOR( ; ; )
         FOR(loop__0 = 0; loop__0<10; loop__0 = loop__0 + 1)
@@ -154,10 +154,10 @@ TASK Application__PrimitiveComp5_0
     WRITE Application__channel3_0 1
     EXECI 10
     EXECI 10 20
-    DELAY 10 ms isActiveDelay false
+    DELAY 10 ms
     EXECC 100 encryption1 ADV 100 100 0 0
     EXECC 100 encryption1 ADV 100 100 0 0
-    DELAY 10 20 ms isActiveDelay false
+    DELAY 10 20 ms
     RANDOM 0 attr1 0 10
     FOR( ; ; )
         FOR(loop__0 = 0; loop__0<10; loop__0 = loop__0 + 1)
