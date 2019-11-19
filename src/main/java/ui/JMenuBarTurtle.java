@@ -36,6 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
+
 package ui;
 
 import common.ConfigurationTTool;
@@ -47,16 +48,19 @@ import javax.swing.*;
 //import java.awt.*;
 //import java.awt.event.*;
 
+
 /**
- * Class JMenuBarTurtle Creation: 09/12/2003 Version 1.0 09/12/2003 Version 1.5
- * 11/10/2018
+ * Class JMenuBarTurtle
+ * Creation: 09/12/2003
+ * Version 1.0 09/12/2003
+ * Version 1.5 11/10/2018
  * 
  * @author Ludovic APVRILLE, Arthur VUAGNIAUX
  */
 public class JMenuBarTurtle extends JMenuBar {
     private JMenu menugraph;
 
-    // Menu
+    //Menu
     private JMenu file, saveLastGraph, diagram, cd, ad, iod, ucd, sd, edit, vAndV, codeG, view, tool, capture, ontologies, help;
 
     public JMenuBarTurtle(MainGUI mgui) {
@@ -75,6 +79,7 @@ public class JMenuBarTurtle extends JMenuBar {
         menuItem.addMouseListener(mgui.mouseHandler);
         menuItem.addActionListener(mgui);
     }
+
 
     public void makeFileMenu(MainGUI mgui) {
         JMenuItem menuItem;
@@ -167,9 +172,8 @@ public class JMenuBarTurtle extends JMenuBar {
 
         if (ConfigurationTTool.LastOpenFileDefined) {
             file.addSeparator();
-            for (int i = 0; i < ConfigurationTTool.LastOpenFiles.length; i++) {
-                // TraceManager.addDev("Considering last open file: " +
-                // ConfigurationTTool.LastOpenFiles[i]);
+            for(int i=0; i<ConfigurationTTool.LastOpenFiles.length;i++){
+                //TraceManager.addDev("Considering last open file: " + ConfigurationTTool.LastOpenFiles[i]);
                 if ((ConfigurationTTool.LastOpenFiles[i] != null) && (ConfigurationTTool.LastOpenFiles[i].length() > 0)) {
                     menuItem = file.add(mgui.actionsLast[i]);
                     menuItem.addMouseListener(mgui.mouseHandler);
@@ -199,7 +203,7 @@ public class JMenuBarTurtle extends JMenuBar {
         JMenuItem menuItem;
         makeFileMenu(mgui);
 
-        // Edit
+        //Edit
         menuItem = edit.add(mgui.actions[TGUIAction.ACT_CUT]);
         menuItem.setName("Edit Cut");
         menuItem.addMouseListener(mgui.mouseHandler);
@@ -286,12 +290,10 @@ public class JMenuBarTurtle extends JMenuBar {
         menuItem = iod.add(mgui.actions[TGUIAction.IOD_PARALLEL]);
         menuItem.setName("Iod Parallel");
         menuItem.addMouseListener(mgui.mouseHandler);
-        /*
-         * menuItem = iod.add(mgui.actions[TGUIAction.IOD_SEQUENCE]);
-         * menuItem.addMouseListener(mgui.mouseHandler); menuItem =
-         * iod.add(mgui.actions[TGUIAction.IOD_PREEMPTION]);
-         * menuItem.addMouseListener(mgui.mouseHandler);
-         */
+        /*menuItem = iod.add(mgui.actions[TGUIAction.IOD_SEQUENCE]);
+          menuItem.addMouseListener(mgui.mouseHandler);
+          menuItem = iod.add(mgui.actions[TGUIAction.IOD_PREEMPTION]);
+          menuItem.addMouseListener(mgui.mouseHandler);*/
         menuItem = iod.add(mgui.actions[TGUIAction.IOD_CHOICE]);
         menuItem.setName("Iod Choice");
         menuItem.addMouseListener(mgui.mouseHandler);
@@ -515,7 +517,7 @@ public class JMenuBarTurtle extends JMenuBar {
         menuItem.setName("Ad Time Limited Latency");
         menuItem.addMouseListener(mgui.mouseHandler);
 
-        // V&V
+        // V&V 
         menuItem = vAndV.add(mgui.actions[TGUIAction.ACT_MODEL_CHECKING]);
         menuItem.setName("V&V Syntax Analysis");
         menuItem.addMouseListener(mgui.mouseHandler);
@@ -525,6 +527,7 @@ public class JMenuBarTurtle extends JMenuBar {
         menuItem = vAndV.add(mgui.actions[TGUIAction.ACT_GEN_RTLOTOS]);
         menuItem.setName("V&V Gen RTLOTOS");
         menuItem.addMouseListener(mgui.mouseHandler);
+
 
         if (MainGUI.lotosOn) {
             menuItem = vAndV.add(mgui.actions[TGUIAction.ACT_GEN_LOTOS]);
@@ -544,12 +547,10 @@ public class JMenuBarTurtle extends JMenuBar {
         menuItem.setName("V&V Gen Design");
         menuItem.addMouseListener(mgui.mouseHandler);
 
-        /*
-         * vAndV.addSeparator();
-         * 
-         * menuItem = vAndV.add(mgui.actions[TGUIAction.ACT_GEN_JAVA]);
-         * menuItem.addMouseListener(mgui.mouseHandler);
-         */
+        /*vAndV.addSeparator();
+
+          menuItem = vAndV.add(mgui.actions[TGUIAction.ACT_GEN_JAVA]);
+          menuItem.addMouseListener(mgui.mouseHandler);*/
 
         vAndV.addSeparator();
 
@@ -591,15 +592,13 @@ public class JMenuBarTurtle extends JMenuBar {
         menuItem.setName("V&V Saved Aut");
         menuItem.addMouseListener(mgui.mouseHandler);
 
-        /*
-         * vAndV.addSeparator(); menuItem =
-         * vAndV.add(mgui.actions[TGUIAction.ACT_VIEW_PM_AUT]);
-         * menuItem.addMouseListener(mgui.mouseHandler); menuItem =
-         * vAndV.add(mgui.actions[TGUIAction.ACT_VIEW_PM_AUTPROJ]);
-         * menuItem.addMouseListener(mgui.mouseHandler); menuItem =
-         * vAndV.add(mgui.actions[TGUIAction.ACT_VIEW_PM_SAVED_AUT]);
-         * menuItem.addMouseListener(mgui.mouseHandler);
-         */
+        /*vAndV.addSeparator();
+        menuItem = vAndV.add(mgui.actions[TGUIAction.ACT_VIEW_PM_AUT]);
+        menuItem.addMouseListener(mgui.mouseHandler);
+        menuItem = vAndV.add(mgui.actions[TGUIAction.ACT_VIEW_PM_AUTPROJ]);
+        menuItem.addMouseListener(mgui.mouseHandler);
+        menuItem = vAndV.add(mgui.actions[TGUIAction.ACT_VIEW_PM_SAVED_AUT]);
+        menuItem.addMouseListener(mgui.mouseHandler);*/
 
         vAndV.addSeparator();
         menuItem = vAndV.add(mgui.actions[TGUIAction.ACT_AVATAR_SIM]);
@@ -615,13 +614,13 @@ public class JMenuBarTurtle extends JMenuBar {
         menuItem.setName("V&V Avatar Static Analysis");
         menuItem.addMouseListener(mgui.mouseHandler);
 
-        /*
-         * vAndV.addSeparator(); menuItem =
-         * vAndV.add(mgui.actions[TGUIAction.ACT_DEADLOCK_SEEKER_AUT]);
-         * menuItem.addMouseListener(mgui.mouseHandler); menuItem =
-         * vAndV.add(mgui.actions[TGUIAction.ACT_DEADLOCK_SEEKER_SAVED_AUT]);
-         * menuItem.addMouseListener(mgui.mouseHandler);
-         */
+
+
+        /*vAndV.addSeparator();
+          menuItem = vAndV.add(mgui.actions[TGUIAction.ACT_DEADLOCK_SEEKER_AUT]);
+          menuItem.addMouseListener(mgui.mouseHandler);
+          menuItem = vAndV.add(mgui.actions[TGUIAction.ACT_DEADLOCK_SEEKER_SAVED_AUT]);
+          menuItem.addMouseListener(mgui.mouseHandler);*/
 
         // Code generation
 
@@ -646,13 +645,6 @@ public class JMenuBarTurtle extends JMenuBar {
         menuItem = codeG.add(mgui.actions[TGUIAction.ACT_AVATAR_EXECUTABLE_GENERATION]);
         menuItem.setName("CodeG Executable");
         menuItem.addMouseListener(mgui.mouseHandler);
-
-        if (mgui.isExperimentalOn()) {
-            vAndV.addSeparator();
-            menuItem = vAndV.add(mgui.actions[TGUIAction.ACT_GEN_LATENCY_GRAPH]);
-            menuItem.setName("Latency Detailed Analysis");
-            menuItem.addMouseListener(mgui.mouseHandler);
-        }
 
         // View
         menuItem = view.add(mgui.actions[TGUIAction.ACT_VIEW_BIRDEYES_EMB]);
@@ -712,12 +704,14 @@ public class JMenuBarTurtle extends JMenuBar {
         menuItem.setName("View Saved Graph");
         menuItem.addMouseListener(mgui.mouseHandler);
 
-        /*
-         * if (MainGUI.systemcOn) { view.addSeparator(); menuItem =
-         * view.add(mgui.actions[TGUIAction.ACT_VIEW_WAVE]);
-         * menuItem.addMouseListener(mgui.mouseHandler); view.addSeparator(); menugraph
-         * = new JMenu("View generated automata"); view.add(menugraph); }
-         */
+        /*if (MainGUI.systemcOn) {
+          view.addSeparator();
+          menuItem = view.add(mgui.actions[TGUIAction.ACT_VIEW_WAVE]);
+          menuItem.addMouseListener(mgui.mouseHandler);
+          view.addSeparator();
+          menugraph = new JMenu("View generated automata");
+          view.add(menugraph);
+          }*/
 
         // Tool
         capture = new JMenu("Capture");
@@ -744,6 +738,7 @@ public class JMenuBarTurtle extends JMenuBar {
         menuItem = capture.add(mgui.actions[TGUIAction.ACT_SELECTED_CAPTURE]);
         menuItem.setName("Capture Selected");
         menuItem.addMouseListener(mgui.mouseHandler);
+
 
         ontologies = new JMenu("Ontologies");
         tool.add(ontologies);
@@ -782,6 +777,7 @@ public class JMenuBarTurtle extends JMenuBar {
         menuItem.setName("Tool Search");
         menuItem.addMouseListener(mgui.mouseHandler);
 
+
         // HELP
         menuItem = help.add(mgui.actions[TGUIAction.ACT_INTEGRATED_HELP]);
         menuItem.setName("Help");
@@ -810,14 +806,14 @@ public class JMenuBarTurtle extends JMenuBar {
         // MenuBar
         add(file);
         add(edit);
-        // add(diagram);
+        //add(diagram);
         add(vAndV);
         add(codeG);
         add(view);
         add(tool);
         add(help);
-
-        // menuItem.setName("Menu Item");
-
+        
+        //menuItem.setName("Menu Item");
+        
     }
 } // Class

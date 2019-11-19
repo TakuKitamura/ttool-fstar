@@ -95,7 +95,6 @@ public class SimulationTransactionParser extends DefaultHandler {
 			st.length = attributes.getValue("length");
 			st.virtualLength = attributes.getValue("virtuallength");
 			st.channelName = attributes.getValue("ch");
-			st.id = attributes.getValue("id");
 
 			if (trans == null) {
 				trans = new Vector<SimulationTransaction>();
