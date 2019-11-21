@@ -66,7 +66,6 @@ public class TGCTimeDelay extends TGCWithoutInternalComponent{
     private String maxDelay = "";
 	private String unit = "ns"; // can be "ns" or "us" or "ms" or "s";
 	private boolean hasMaxDelay;
-	private boolean isActiveDelay;
     
     public TGCTimeDelay(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y,  _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -145,13 +144,11 @@ public class TGCTimeDelay extends TGCWithoutInternalComponent{
 		}
         array[0] = getMinDelay(); array[1] = getMaxDelay(); array[2] = getUnit();
         
-        JDialogTimeIntervalUnit jdti = new JDialogTimeIntervalUnit(getTDiagramPanel().getMainGUI(), frame, array, hasMaxDelay, isActiveDelay,
-                "Setting time parameters", ind,
-                "max");
+        JDialogTimeIntervalUnit jdti = new JDialogTimeIntervalUnit(frame, array, hasMaxDelay, "Setting time parameters", ind, "max");
         //jdti.setSize(350, 250);
         GraphicLib.centerOnParent(jdti, 350, 250);
         jdti.setVisible( true ); // blocked until dialog has been closed
-        isActiveDelay = jdti.isActiveDelay();
+        
         minDelay = array[0]; maxDelay = array[1]; unit = array[2];
         
 		if (hasMaxDelay) {
@@ -183,12 +180,6 @@ public class TGCTimeDelay extends TGCWithoutInternalComponent{
 	public void setHasMaxValue(boolean b) {
 		hasMaxDelay = b;
 	}
-    public void setActiveDelay(boolean b) {
-        isActiveDelay = b;
-    }
-    public boolean getActiveDelay() {
-       return isActiveDelay;
-    }
     
     public void setMinDelay(String del) {
         minDelay = del;
@@ -216,8 +207,6 @@ public class TGCTimeDelay extends TGCWithoutInternalComponent{
         sb.append(getMaxDelay());
 		sb.append("\" hasMaxDelay=\"");
 		sb.append(hasMaxDelay);
-        sb.append("\" isActiveDelay=\"");
-        sb.append(isActiveDelay);
 		sb.append("\" unit=\"");
 		sb.append(getUnit());
         sb.append("\" />\n");
@@ -247,9 +236,6 @@ public class TGCTimeDelay extends TGCWithoutInternalComponent{
 								if (elt.getAttribute("hasMaxDelay") != null) {
                                     hasMaxDelay = elt.getAttribute("hasMaxDelay").compareTo("true") == 0;
 								}
-                                if (elt.getAttribute("isActiveDelay") != null) {
-                                    isActiveDelay = elt.getAttribute("isActiveDelay").compareTo("true") == 0;
-                                }
 								unit = elt.getAttribute("unit");
                             }
                         }

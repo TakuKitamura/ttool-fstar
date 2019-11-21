@@ -43,13 +43,9 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <SimComponents.h>
 //#include <CommandListener.h>
-TMLDelayCommand::TMLDelayCommand(ID iID, TMLTask* iTask,TMLLength iStatLength, ActionFuncPointer iActionFunc, const char* iLiveVarList, bool iCheckpoint, bool isActiveDelay):TMLCommand(iID, iTask, 1, 1, iLiveVarList, iCheckpoint),_actionFunc(iActionFunc){
-	if (!isActiveDelay){
-	    _isActiveDelay = false;
-	}else {
-	    _length = iStatLength;
-	    _isActiveDelay = true;
-	}
+
+TMLDelayCommand::TMLDelayCommand(ID iID, TMLTask* iTask,TMLLength iStatLength, ActionFuncPointer iActionFunc, const char* iLiveVarList, bool iCheckpoint):TMLCommand(iID, iTask, 1, 1, iLiveVarList, iCheckpoint),_actionFunc(iActionFunc){
+	_length = iStatLength;
 	_type=ACT;
 }
 void TMLDelayCommand::execute(){
@@ -66,46 +62,28 @@ TMLCommand* TMLDelayCommand::prepareNextTransaction(){
 		_task->setCurrCommand(this);
 		return this;  //for command which generates transactions this is returned anyway by prepareTransaction
 	}
-    if(_isActiveDelay){
-        if (_progress==0){
-        (_task->*_actionFunc)();
-        _execTimes++;
-                if (_length==0){
-                    //std::cout << "ExeciCommand len==0 " << std::endl;
-                    TMLCommand* aNextCommand=getNextCommand();
-                    #ifdef STATE_HASH_ENABLED
-                        if (_liveVarList!=0) _task->refreshStateHash(_liveVarList);
-                    #endif
-                    _task->setCurrCommand(aNextCommand);
-                        //FOR_EACH_CMDLISTENER (*i)->commandFinished(this);
-                    #ifdef LISTENERS_ENABLED
-                        NOTIFY_CMD_FINISHED(this);
-                        //NOTIFY_CMD_FINISHED(0);
-                    #endif
-                    if (aNextCommand!=0) return aNextCommand->prepare(false);
-                }
-            }
 
-        _currTransaction = new TMLTransaction(this, _length-_progress,_task->getEndLastTransaction());
-        return this;
-    }
-    else {
-        TMLCommand* aNextCommand=getNextCommand();
-        (_task->*_actionFunc)();
-        _execTimes++;
-        #ifdef STATE_HASH_ENABLED
-        	if (_liveVarList!=0) _task->refreshStateHash(_liveVarList);
-        #endif
-        	_task->setCurrCommand(aNextCommand);
-        	//FOR_EACH_CMDLISTENER (*i)->commandFinished(this);
-        #ifdef LISTENERS_ENABLED
-        	NOTIFY_CMD_FINISHED(this);
-        	//NOTIFY_CMD_FINISHED(0);
-        #endif
-        	if (aNextCommand!=0) return aNextCommand->prepare(false);
-        	return 0;
-    }
-//    return 0;
+	if (_progress==0){
+	(_task->*_actionFunc)();
+    _execTimes++;
+    		if (_length==0){
+    			//std::cout << "ExeciCommand len==0 " << std::endl;
+    			TMLCommand* aNextCommand=getNextCommand();
+    			#ifdef STATE_HASH_ENABLED
+                    if (_liveVarList!=0) _task->refreshStateHash(_liveVarList);
+                #endif
+                _task->setCurrCommand(aNextCommand);
+                    //FOR_EACH_CMDLISTENER (*i)->commandFinished(this);
+                #ifdef LISTENERS_ENABLED
+                    NOTIFY_CMD_FINISHED(this);
+                    //NOTIFY_CMD_FINISHED(0);
+                #endif
+    			if (aNextCommand!=0) return aNextCommand->prepare(false);
+    		}
+    	}
+
+    _currTransaction = new TMLTransaction(this, _length-_progress,_task->getEndLastTransaction());
+    return this;
 }
 
 std::string TMLDelayCommand::toString() const{
