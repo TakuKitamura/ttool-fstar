@@ -8,8 +8,8 @@
 <cdparam x="442" y="295" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
-<P1  x="443" y="245" id="13" />
-<P2  x="626" y="264" id="2" />
+<P1  x="456" y="258" id="13" />
+<P2  x="613" y="277" id="2" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <COMPONENT type="1202" id="12" >
@@ -172,12 +172,12 @@
 </COMPONENT>
 
 <COMPONENT type="1020" id="42" >
-<cdparam x="378" y="98" />
-<sizeparam width="98" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="374" y="98" />
+<sizeparam width="106" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
-<infoparam name="for loop" value="10" />
+<infoparam name="for loop" value="100" />
 <TGConnectingPoint num="0" id="39" />
 <TGConnectingPoint num="1" id="40" />
 <TGConnectingPoint num="2" id="41" />
@@ -201,7 +201,7 @@
 <cdrectangleparam minX="-75" maxX="30" minY="10" maxY="30" />
 <infoparam name="value of the delay" value="1 us" />
 <extraparam>
-<TimeDelay minDelay="1" maxDelay="nope" hasMaxDelay="false" isActiveDelay="true" unit="us" />
+<TimeDelay minDelay="1" maxDelay="nope" hasMaxDelay="false" unit="us" />
 </extraparam>
 </SUBCOMPONENT>
 
@@ -285,7 +285,7 @@
 <cdparam x="476" y="99" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
-<P1  x="476" y="112" id="40" />
+<P1  x="480" y="112" id="40" />
 <P2  x="510" y="117" id="52" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>

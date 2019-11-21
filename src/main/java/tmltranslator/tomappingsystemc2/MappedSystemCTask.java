@@ -557,22 +557,12 @@ public class MappedSystemCTask {
                 comment = action;
                 action += "\nif (tmpDelayxy==0) tmpDelayxy=1;\n";
                 if (delay.getMinDelay().equals(delay.getMaxDelay())) {
-                    if (!delay.getActiveDelay()){
-                        action += "_endLastTransaction+=tmpDelayxy"; // Take all delay totally idle for x units of time
-                    } else {
-                        action += "_endLastTransaction+=0"; //consumes cycles
-                    }
-
+                    action += "_endLastTransaction+=0";
                     delayLen = delay.getMaxDelay() + "*" + masterClockFreq + delay.getMasterClockFactor();
                 } else {
                     action += "TMLTime tmpDelayxx = " + delay.getMinDelay() + "*" + masterClockFreq + delay.getMasterClockFactor() + ";\nif (tmpDelayxx==0) tmpDelayxx=1;\n";
-                    if (!delay.getActiveDelay()){
-                        action += "_endLastTransaction+= myrand(tmpDelayxx,tmpDelayxy)"; // Take all delay totally idle for x units of time
-                    } else {
-                        action += "_endLastTransaction+=0"; //consumes cycles
-                    }
-                    java.util.Random r = new  java.util.Random();
-                    delayLen = String.valueOf(r.nextInt(Integer.valueOf(delay.getMaxDelay())-Integer.valueOf(delay.getMinDelay())) + Integer.valueOf(delay.getMinDelay())) + "*" + masterClockFreq + delay.getMasterClockFactor();
+                    action += "_endLastTransaction+= 0";
+                    delayLen = delay.getMinDelay() + "*" + masterClockFreq + delay.getMasterClockFactor();
                 }
                 String elemName = currElem.getName(), idString;
                 if (elemName.charAt(0) == '#') {
@@ -585,7 +575,7 @@ public class MappedSystemCTask {
                     idString = String.valueOf(currElem.getID());
                 }
                 hcode += "TMLDelayCommand " + cmdName + SCCR;
-                initCommand += "," + cmdName + "(" + idString + ",this,"+ delayLen +",(ActionFuncPointer)&" + reference + "::" + cmdName + "_func, " + getFormattedLiveVarStr(currElem) + ", " + delay.getActiveDelay() + ")" + CR;
+                initCommand += "," + cmdName + "(" + idString + ",this,"+ delayLen +",(ActionFuncPointer)&" + reference + "::" + cmdName + "_func, " + getFormattedLiveVarStr(currElem) + ")" + CR;
                 nextCommand = cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0), false, retElement, null) + "));\n";
                 functions += "void " + reference + "::" + cmdName + "_func(){\n#ifdef ADD_COMMENTS\naddComment(new Comment(_endLastTransaction,0," + commentNum + "));\n#endif\n" + modifyString(addSemicolonIfNecessary(action)) + CR;
                 //functions+="return 0"+ SCCR;

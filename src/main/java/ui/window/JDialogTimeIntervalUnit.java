@@ -41,9 +41,6 @@
 
 package ui.window;
 
-import help.HelpManager;
-import ui.MainGUI;
-import ui.TGHelpButton;
 import ui.util.IconManager;
 
 import javax.swing.*;
@@ -62,17 +59,15 @@ public class JDialogTimeIntervalUnit extends JDialogBase implements ActionListen
     
     private String[] arrayDelay;
 	private boolean hasMaxDelay;
-    private boolean isActiveDelay;
     
     private JPanel panel1;
     
     // Panel1
     private JTextField text1, text2;
 	private JComboBox<String> unit;
-    private JCheckBox wait_delay;
+    
     private String id1, id2;
-    private MainGUI mgui;
-    public TGHelpButton myButton;
+    
     /* Creates new form  */
     // arrayDelay: [0] -> minDelay ; [1] -> maxDelay
     public JDialogTimeIntervalUnit(Frame f, String[] _arrayDelay, boolean _hasMaxDelay, String title) {
@@ -85,25 +80,16 @@ public class JDialogTimeIntervalUnit extends JDialogBase implements ActionListen
         pack();
     }
     
-    public JDialogTimeIntervalUnit(MainGUI _mgui, Frame f, String[] _arrayDelay, boolean _hasMaxDelay, boolean _isActiveDelay, String title,
-                                   String _id1,
-                                   String _id2) {
+    public JDialogTimeIntervalUnit(Frame f, String[] _arrayDelay, boolean _hasMaxDelay, String title, String _id1, String _id2) {
         
         super(f, title, true);
-        mgui =_mgui;
         arrayDelay = _arrayDelay;
 		hasMaxDelay = _hasMaxDelay;
-        isActiveDelay = _isActiveDelay;
         id1 = _id1;
         id2 = _id2;
         initComponents();
         myInitComponents();
         pack();
-    }
-    private void makeEndHelpButton(String helpWord, MainGUI mgui, HelpManager hm, JPanel panel, GridBagConstraints c) {
-        Icon myIcon = IconManager.imgic32;
-        myButton = new TGHelpButton(myIcon, helpWord, mgui, hm);
-        myButton.addToPanel(panel, c);
     }
     
     private void myInitComponents() {
@@ -129,7 +115,7 @@ public class JDialogTimeIntervalUnit extends JDialogBase implements ActionListen
             panel1.setBorder(new javax.swing.border.TitledBorder("setting min and max delays"));
         }
         panel1.setPreferredSize(new Dimension(300, 150));
-
+        
         // first line panel1
         c1.weighty = 1.0;
         c1.weightx = 1.0;
@@ -137,7 +123,7 @@ public class JDialogTimeIntervalUnit extends JDialogBase implements ActionListen
         c1.fill = GridBagConstraints.BOTH;
         c1.gridheight = 1;
         panel1.add(new JLabel(" "), c1);
-
+        
         // second line panel1
         c1.gridwidth = 1;
         c1.gridheight = 1;
@@ -180,14 +166,7 @@ public class JDialogTimeIntervalUnit extends JDialogBase implements ActionListen
 		unit.addItem("s");
 		unit.setSelectedItem(arrayDelay[2]);
 		panel1.add(unit, c1);
-        c1.gridwidth = 1;
-        if ((id1 != null) && (id2 != null)){
-            wait_delay = new JCheckBox("Active Delay");
-            wait_delay.setSelected(isActiveDelay);
-            panel1.add(wait_delay,c1);
-            c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-            makeEndHelpButton("activedelay.html", mgui, mgui.getHelpManager(), panel1, c1);
-        }
+        
         // main panel;
         c0.gridwidth = 1;
         c0.gridheight = 10;
@@ -203,9 +182,7 @@ public class JDialogTimeIntervalUnit extends JDialogBase implements ActionListen
         
         initButtons(c0, c, this);
     }
-    public boolean isActiveDelay() {
-        return wait_delay.isSelected();
-    }
+    
     public void	actionPerformed(ActionEvent evt)  {
         String command = evt.getActionCommand();
         

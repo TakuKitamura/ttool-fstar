@@ -56,8 +56,7 @@ public:
 	\param iLiveVarList Bitmap of live variables
 	\param iCheckpoint Checkpoint Flag
     	*/
-    bool _isActiveDelay;
-	TMLDelayCommand(ID iID, TMLTask* iTask, TMLLength iStatLength, ActionFuncPointer iActionFunc, const char* iLiveVarList, bool iCheckpoint, bool isActiveDelay);
+	TMLDelayCommand(ID iID, TMLTask* iTask, TMLLength iStatLength, ActionFuncPointer iActionFunc, const char* iLiveVarList, bool iCheckpoint);
 	void execute();
 	//TMLTask* getDependentTask() const;
 	std::string toString() const;
