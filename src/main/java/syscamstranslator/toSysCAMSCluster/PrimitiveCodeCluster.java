@@ -331,7 +331,7 @@ public class PrimitiveCodeCluster {
 			}
 
 			if(tdf.getDynamic().equals(true)){
-			    corpsPrimitiveTDF = corpsPrimitiveTDF+"allow_dynamic_tfd();"+CR;
+			    corpsPrimitiveTDF = corpsPrimitiveTDF+"\t allow_dynamic_tdf();"+CR;
 			    cpt2++;
 			}
 
@@ -581,8 +581,8 @@ if (t.getOrigin() == 0) {
 
 			boolean sensitive = false, method = false;
 			if (!de.getCode().equals("")) {
-			    corpsPrimitiveDE = corpsPrimitiveDE + "\t{" + CR ;
-			    //	corpsPrimitiveDE = corpsPrimitiveDE + "\t{" + CR + "\t\tSC_METHOD(" + de.getNameFn() + ");" + CR;
+			    //  corpsPrimitiveDE = corpsPrimitiveDE + "\t{" + CR ;
+			    	corpsPrimitiveDE = corpsPrimitiveDE + "\t{" + CR + "\t\tSC_METHOD(" + de.getNameFn() + ");" + CR;
 				method = true;
 			} 
 
