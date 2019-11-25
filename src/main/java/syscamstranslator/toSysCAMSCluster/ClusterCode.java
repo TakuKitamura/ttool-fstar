@@ -64,6 +64,7 @@ public class ClusterCode {
 		int nb_block = 0;
         
         LinkedList<String> names = new LinkedList<String>();
+	LinkedList<String> clocknames = new LinkedList<String>();
 		
 	if (cluster != null) {
 	    LinkedList<SysCAMSTBlockTDF> tdf = cluster.getBlockTDF();
@@ -83,7 +84,9 @@ public class ClusterCode {
 		     if(t.getUnitStartTime().equals("\u03BCs"))unitStartTimeString="SC_US";
 		     if(t.getUnit().equals("ns"))unitString="SC_NS";
 		     if(t.getUnitStartTime().equals("ns"))unitStartTimeString="SC_NS";		   		    
-		    corpsCluster += "\t  sc_clock " + t.getName() + " (\"" + t.getName() + "\"," + t.getFrequency()+","+ unitString+","+ t.getDutyCycle()+","+ t.getStartTime()+","+unitStartTimeString+","+ t.getPosFirst()+");" + CR;    		}
+		    corpsCluster += "\t  sc_clock " + t.getName() + " (\"" + t.getName() + "\"," + t.getFrequency()+","+ unitString+","+ t.getDutyCycle()+","+ t.getStartTime()+","+unitStartTimeString+","+ t.getPosFirst()+");" + CR;
+		    clocknames.add(t.getName());
+	    }
 			
             corpsCluster += "template <typename vci_param>" + CR +
                           "class " +cluster.getClusterName()+ " : public sc_core::sc_module { "+ CR;
@@ -115,6 +118,10 @@ public class ClusterCode {
             }
 			
 			corpsCluster = corpsCluster + CR + "\t// Declare signals to interconnect." + CR;
+
+			for (int i = 0; i <clock.size(); i++) {
+		    corpsCluster = corpsCluster + "\tsca_trace(tfp, "+ clocknames.get(i) + ", \"" + clocknames.get(i) + "\");" + CR;
+		}
 			
             for (int i = 0; i < connectors.size(); i++) {
                 nb_con = i;
