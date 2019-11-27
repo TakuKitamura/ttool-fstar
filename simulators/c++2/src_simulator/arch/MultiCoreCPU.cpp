@@ -430,8 +430,9 @@ void MultiCoreCPU::schedule2HTML(std::ofstream& myfile) const{
     aCurrTrans=*i;
     //if (aCurrTrans->getVirtualLength()==0) continue;
     aBlanks=aCurrTrans->getStartTime()-aCurrTime;
-    
-    if (aBlanks>0){
+    if ( aBlanks >= 0 && (!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction()) )
+        myfile << "<td colspan=\""<< aBlanks+1 <<"\" title=\"idle time\" class=\"not\"></td>\n";
+    else if (aBlanks>0){
       if (aBlanks==1)
         myfile << "<td title=\"idle time\" class=\"not\"></td>\n";
       else
@@ -444,18 +445,20 @@ void MultiCoreCPU::schedule2HTML(std::ofstream& myfile) const{
       if (aLength==1){
         //myfile << "<td title=\""<< aCurrTrans->toShortString() << "\" class=\"t15\"></td>\n";
         //myfile << "<td title=\" idle:" << aCurrTrans->getIdlePenalty() << " switch:" << aCurrTrans->getTaskSwitchingPenalty() << " bran:" << aCurrTrans->getBranchingPenalty() << "\" class=\"t15\"></td>\n";
-        myfile << "<td title=\" idle:" << aCurrTrans->getIdlePenalty() << " switch:" << aCurrTrans->getTaskSwitchingPenalty() << "\" class=\"t15\"></td>\n";
+        myfile << "<td title=\" idle:" << aCurrTrans->getIdlePenalty() << " switching penalty:" << aCurrTrans->getTaskSwitchingPenalty() << "\" class=\"t15\"></td>\n";
       }else{
         //myfile << "<td colspan=\"" << aLength << "\" title=\" idle:" << aCurrTrans->getIdlePenalty() << " switch:" << aCurrTrans->getTaskSwitchingPenalty() << " bran:" << aCurrTrans->getBranchingPenalty() << "\" class=\"t15\"></td>\n";
-        myfile << "<td colspan=\"" << aLength << "\" title=\" idle:" << aCurrTrans->getIdlePenalty() << " switch:" << aCurrTrans->getTaskSwitchingPenalty() << "\" class=\"t15\"></td>\n";
+        myfile << "<td colspan=\"" << aLength << "\" title=\" idle:" << aCurrTrans->getIdlePenalty() << " switching penalty:" << aCurrTrans->getTaskSwitchingPenalty() << "\" class=\"t15\"></td>\n";
       }
     }
     aLength=aCurrTrans->getOperationLength();
     aColor=aCurrTrans->getCommand()->getTask()->getInstanceNo() & 15;
-    if (aLength==1)
-      myfile << "<td title=\""<< aCurrTrans->toShortString() << "\" class=\"t"<< aColor <<"\"></td>\n";
-    else
-      myfile << "<td colspan=\"" << aLength << "\" title=\"" << aCurrTrans->toShortString() << "\" class=\"t"<< aColor <<"\"></td>\n";
+    if(!(!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction())){
+      if (aLength==1)
+        myfile << "<td title=\""<< aCurrTrans->toShortString() << "\" class=\"t"<< aColor <<"\"></td>\n";
+      else
+        myfile << "<td colspan=\"" << aLength << "\" title=\"" << aCurrTrans->toShortString() << "\" class=\"t"<< aColor <<"\"></td>\n";
+    }
 
 
     aCurrTime=aCurrTrans->getEndTime();
