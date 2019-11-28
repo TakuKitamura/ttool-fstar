@@ -3103,7 +3103,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     public String findSysCAMSPrimitiveComponentName(String name) {
     	return this.findGoodName(name, new NameChecker() {
-    		public boolean checkSysCAMSBlockTDFComponent(SysCAMSBlockTDF o, String name) {
+    		public boolean checkSysCAMSBlockTDFComponent(SysCAMSBlockTDF o, String name) {		  
     			return o.getValue().equals(name);
     		}
     		
@@ -3111,7 +3111,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     			return o.getValue().equals(name);
     		}
 
-		public boolean checkSysCAMSClockComponent(SysCAMSClock o, String name) {
+		public boolean checkSysCAMSClockComponent(SysCAMSClock o, String name) {//System.out.println("@@@@@@@ Clock Name :" + o.getValue());
+		    // if(o.getValue().equals(name)){System.out.println("@@@@@@@OK");}else{System.out.println("@@@@@@@KO");}
     			return o.getValue().equals(name);
     		}
     		
