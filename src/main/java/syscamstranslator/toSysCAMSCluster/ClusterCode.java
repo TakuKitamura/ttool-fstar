@@ -50,6 +50,8 @@ import syscamstranslator.*;
  * Creation: 30/07/2018
  * @version 1.0 30/07/2018
  * @author Rodrigo CORTES PORTO
+ * @version 2.0 28/11/2019
+ * @author Daniela GENIUS, Rodrigo CORTES PORTO
 */
 
 public class ClusterCode {
@@ -209,24 +211,12 @@ public class ClusterCode {
                 corpsCluster += " " + t.getName() + "_" + nb_block + ";" + CR;
                 nb_block++;
             }
-	    
- for (SysCAMSTClock t : clock) {
-		   		  
-		     String unitString="SC_SEC";
-		     String unitStartTimeString="SC_SEC";
-		   
-		     if(t.getUnit().equals("s"))unitString="SC_SEC";
-		     if(t.getUnitStartTime().equals("s"))unitStartTimeString="SC_SEC";
-		     if(t.getUnit().equals("ms"))unitString="SC_MS";
-		     if(t.getUnitStartTime().equals("ms"))unitStartTimeString="SC_MS";
-		     if(t.getUnit().equals("\u03BCs"))unitString="SC_US";
-		     if(t.getUnitStartTime().equals("\u03BCs"))unitStartTimeString="SC_US";
-		     if(t.getUnit().equals("ns"))unitString="SC_NS";
-		     if(t.getUnitStartTime().equals("ns"))unitStartTimeString="SC_NS";		   		    
-		    corpsCluster += "\t  sc_clock " + t.getName() + " (\"" + t.getName() + "\"," + t.getFrequency()+","+ unitString+","+ t.getDutyCycle()+","+ t.getStartTime()+","+unitStartTimeString+","+ t.getPosFirst()+");" + CR;
-		    clocknames.add(t.getName());
+
+	    for (SysCAMSTClock t : clock) {
+		corpsCluster += "sc_clock "+t.getName()+";"+CR;
 	    }
 	    
+		    
             corpsCluster = corpsCluster + "public:" + CR;
             corpsCluster = corpsCluster + "\tsc_in< typename vci_param::data_t > in_ams;" + CR;
             corpsCluster = corpsCluster + "\tsc_out< typename vci_param::data_t > out_ams;" + CR2;	  
@@ -242,9 +232,14 @@ public class ClusterCode {
                 corpsCluster = corpsCluster + "\t" + t.getName() + "_" + nb_block + "(\"" + t.getName() + "_" + nb_block + "\")," + CR;
                 nb_block++;
             }
+
+	    for (SysCAMSTClock t : clock) {
+		corpsCluster +=t.getName()+"\""+t.getName()+"\");"+CR;
+	    }	    
+	    
             corpsCluster = corpsCluster + "\tin_ams(\"in_ams\")," + CR;
             corpsCluster = corpsCluster + "\tout_ams(\"out_ams\") {" + CR;
-            
+	 
             nb_block = 0;
 			for (SysCAMSTBlockTDF t : tdf) {
 				//corpsCluster = corpsCluster + "\t" + t.getName() + " " + t.getName() + "_" + nb_block + "(\"" + t.getName() + "_" + nb_block + "\");" + CR;
