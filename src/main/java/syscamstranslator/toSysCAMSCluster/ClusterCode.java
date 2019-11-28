@@ -212,9 +212,9 @@ public class ClusterCode {
                 nb_block++;
             }
 
-	    for (SysCAMSTClock t : clock) {
+	    	    for (SysCAMSTClock t : clock) {
 		corpsCluster += "sc_clock "+t.getName()+";"+CR;
-	    }
+		}
 	    
 		    
             corpsCluster = corpsCluster + "public:" + CR;
@@ -234,7 +234,7 @@ public class ClusterCode {
             }
 
 	    for (SysCAMSTClock t : clock) {
-		corpsCluster +=t.getName()+"\""+t.getName()+"\");"+CR;
+		corpsCluster +=t.getName()+"(\""+t.getName()+"\"),"+CR;
 	    }	    
 	    
             corpsCluster = corpsCluster + "\tin_ams(\"in_ams\")," + CR;
@@ -354,12 +354,12 @@ public class ClusterCode {
             corpsCluster = corpsCluster + "\t}" + CR2;
 			
 			corpsCluster = corpsCluster + "\t// Configure signal tracing." + CR;
-            corpsCluster += "\tvoid trace_" + cluster.getClusterName() +"(sca_util::sca_trace_file* tf) {" + CR;
-
-
-		for (int i = 0; i <clock.size(); i++) {
+			corpsCluster += "\tvoid trace_" + cluster.getClusterName() +"(sca_util::sca_trace_file* tf) {" + CR;
+		
+	    
+			/*	for (int i = 0; i <clock.size(); i++) {
 		    corpsCluster = corpsCluster + "\tsca_trace(tf, "+ clocknames.get(i) + ", \"" + clocknames.get(i) + "\");" + CR;
-		    }
+		    }*/
 	    
             for (int i = 0; i < connectors.size(); i++) {
                 if ( !((connectors.get(i).get_p1().getComponent() instanceof SysCAMSTPortDE && ((SysCAMSTPortDE) connectors.get(i).get_p1().getComponent()).getBlockGPIO2VCI() != null) 
