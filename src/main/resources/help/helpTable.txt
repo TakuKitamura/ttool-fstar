@@ -5,6 +5,7 @@
 --- channel channel functional view diplodocus
 ----fork fork channel functional view diplodocus
 ----join join channel functional view diplodocus
+--- activitydiagram activity_diagram activity diagram function view tasks
 -- architecture architecture hardware os operating system
 --- cpu cpu processor cpu os
 ----cpuname cpu_name cpu name

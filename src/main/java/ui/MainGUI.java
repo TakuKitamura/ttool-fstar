@@ -7782,6 +7782,17 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     }
 
     public JTabbedPane getCurrentJTabbedPane() {
+        if (tabs == null) {
+            return null;
+        }
+        if (mainTabbedPane == null) {
+            return null;
+        }
+
+        if (mainTabbedPane.getSelectedIndex() < 0) {
+            return null;
+        }
+
         return tabs.elementAt(mainTabbedPane.getSelectedIndex()).tabbedPane;
     }
 

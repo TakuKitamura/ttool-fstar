@@ -37,47 +37,44 @@
  */
 
 
-package ui.util;
+package help;
+
+import myutil.Conversion;
+import myutil.GenericTree;
+import myutil.TraceManager;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
+import java.util.Vector;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 
 /**
- * Class DefaultText
- * Text of some windows
- * Creation: 01/12/2003
+ * Class ScoredHelpEntry
+ * Creation: 18/11/2019
+ * Version 2.0 18/11/2019
  *
  * @author Ludovic APVRILLE
- * @version 1.2 21/06/2018
  */
-public class DefaultText {
+public class ScoredHelpEntry implements Comparable<ScoredHelpEntry> {
 
-    public static String BUILD = "13244";
-    public static String DATE = "2019/11/28 03:07:12 CET";
+   public int score;
+   public HelpEntry he;
 
-    public static StringBuffer sbAbout = makeAbout();
-
-    public static String getAboutText() {
-        return new String(sbAbout);
+    public ScoredHelpEntry(int score, HelpEntry he) {
+        this.score = score;
+        this.he = he;
     }
 
-    public static String getVersion() {
-        return "1.0beta"; /* Set new release Nov. 16th, 2017 */
+    public int compareTo(ScoredHelpEntry compareEntry) {
+        // descending order
+        return this.score - compareEntry.score;
     }
 
-    public static String getFullVersion() {
-        return getVersion() + " -- build: " + DefaultText.BUILD + " date: " + DefaultText.DATE;
-    }
 
-    private static StringBuffer makeAbout() {
-        StringBuffer sb = new StringBuffer();
-        sb.append("TTool version " + getFullVersion() + "\n");
-        sb.append("Copyright IMT - Telecom Paris / Ludovic Apvrille \n");
-        sb.append("\nContact: ludovic.apvrille@telecom-paris.fr\n");
-        sb.append("\nProgrammers\n\tTelecom ParisTech: Ludovic Apvrille, Dominique Blouin, Fabien Tessier, \n\tDaniel Knorreck, Florian Lugou, Letitia Li\n");
-        sb.append("\n\tNokia: Andrea Enrici\n");
-        sb.append("\n\tLIP6: Daniela Genius\n");
-        sb.append("\nFor more information:\n");
-        sb.append("http://ttool.telecom-paristech.fr/\n\n");
-        return sb;
-    }
 
 }

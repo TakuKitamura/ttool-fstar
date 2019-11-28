@@ -86,6 +86,10 @@ public class HelpEntry implements GenericTree {
         return masterKeyword;
     }
 
+    public String getPathToHTMLFile() {
+        return pathToHTMLFile;
+    }
+
     // Infos are: file of name, master key, list of keywords
     public boolean fillInfos(String infos) {
         infos = infos.trim();
@@ -98,10 +102,12 @@ public class HelpEntry implements GenericTree {
         }
 
         pathToHTMLFile = splitted[0] + ".html";
-        masterKeyword = splitted[1];
+
+        masterKeyword = splitted[1].replaceAll("_", " ");
+
         keywords = new String[splitted.length - 1];
         for (int i = 0; i < splitted.length - 1; i++) {
-            keywords[i] = splitted[i + 1];
+            keywords[i] = splitted[i + 1].replaceAll("_", " ");;
         }
 
         //TraceManager.addDev("Infos ok");
@@ -359,11 +365,11 @@ public class HelpEntry implements GenericTree {
         return s;
     }
 
-    public void searchInKeywords(String [] words, HelpEntry father, Vector<AtomicInteger> scores) {
+    public void searchInKeywords(String [] words, HelpEntry father, Vector<ScoredHelpEntry> scores) {
         int score = hasSimilarWords(words);
         if (score > 0) {
-            father.addKid(this);
-            scores.add(new AtomicInteger(KEYWORD_SEARCH_IMPORTANCE * score));
+            //father.addKid(this);
+            scores.add(new ScoredHelpEntry(KEYWORD_SEARCH_IMPORTANCE * score, this));
             //TraceManager.addDev("Found in keyword:" + toString() + " score=" + score);
         }
 
@@ -374,11 +380,11 @@ public class HelpEntry implements GenericTree {
         }
     }
 
-    public void searchInContent(String [] words, HelpEntry father, Vector<AtomicInteger> scores) {
+    public void searchInContent(String [] words, HelpEntry father, Vector<ScoredHelpEntry> scores) {
         int score = hasInContent(words);
         if (score > 0) {
-            father.addKid(this);
-            scores.add(new AtomicInteger(score));
+            //father.addKid(this);
+            scores.add(new ScoredHelpEntry(KEYWORD_SEARCH_IMPORTANCE * score, this));
             //TraceManager.addDev("Found in content:" + toString() + " score=" + score);
         }
 

@@ -44,6 +44,7 @@ package ui.window;
 
 import help.HelpEntry;
 import help.HelpManager;
+import help.ScoredHelpEntry;
 import help.SearchResultHelpEntry;
 import myutil.TraceManager;
 import ui.MainGUI;
@@ -174,6 +175,13 @@ public	class JFrameHelp extends JFrame implements ActionListener {
 
 
     public void setHelpEntry(HelpEntry he) {
+        TraceManager.addDev("Set Help Entry to " + he.getPathToHTMLFile());
+        if(visitedEntries.size() > 0) {
+            if (currentHEPointer < visitedEntries.size() - 1) {
+                visitedEntries.subList(currentHEPointer+1, visitedEntries.size()).clear();
+            }
+        }
+
         visitedEntries.add(he);
         currentHEPointer = visitedEntries.size() - 1;
         this.he = he;
@@ -181,6 +189,7 @@ public	class JFrameHelp extends JFrame implements ActionListener {
     }
 
     private void updatePanel() {
+        TraceManager.addDev("Update panel");
         back.setEnabled(currentHEPointer != 0);
         forward.setEnabled(currentHEPointer < visitedEntries.size()-1);
         up.setEnabled(he.getFather() != null);
@@ -261,14 +270,21 @@ public	class JFrameHelp extends JFrame implements ActionListener {
         srhe.fillInfos("searchresult search help list index");
 
 
-        Vector<AtomicInteger> scores = new Vector<>();
+        Vector<ScoredHelpEntry> scores = new Vector<>();
 
         hm.searchInKeywords(test.split(" "), srhe, scores);
         hm.searchInContent(test.split(" "), srhe, scores);
         srhe.setScores(scores);
 
+        TraceManager.addDev("search help: " + srhe.toString());
+
         srhe.mergeResults();
+
+        TraceManager.addDev("search help after merge: " + srhe.toString());
+
         srhe.sortResults();
+
+        TraceManager.addDev("search help after sort: " + srhe.toString());
 
 
         TraceManager.addDev("Setting new help entry with search results ");
