@@ -324,15 +324,16 @@ void SchedulableDevice::HW2HTML(std::ofstream& myfile) const {
       TMLTransaction* aCurrTrans = *i;
       unsigned int aBlanks = aCurrTrans->getStartTime() - aCurrTime;
 
-      if ( aBlanks > 0 ) {
-	writeHTMLColumn( myfile, aBlanks, "not", "idle time" );
-      }
+      if ( aBlanks >= 0 && (!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction()) )
+          writeHTMLColumn( myfile, aBlanks+1, "not", "idle time" );
+      else if ( aBlanks > 0 )
+          writeHTMLColumn( myfile, aBlanks, "not", "idle time" );
 
       unsigned int aLength = aCurrTrans->getPenalties();
 
       if ( aLength != 0 ) {
 	std::ostringstream title;
-	title << "idle:" << aCurrTrans->getIdlePenalty() << " switch:" << aCurrTrans->getTaskSwitchingPenalty();
+	title << "idle:" << aCurrTrans->getIdlePenalty() << " switching penalty:" << aCurrTrans->getTaskSwitchingPenalty();
 	writeHTMLColumn( myfile, aLength, "not", title.str() );
       }
 
@@ -402,15 +403,16 @@ void SchedulableDevice::schedule2HTML(std::ofstream& myfile) const {
 			TMLTransaction* aCurrTrans = *i;
 			unsigned int aBlanks = aCurrTrans->getStartTime() - aCurrTime;
 
-			if ( aBlanks > 0 ) {
-				writeHTMLColumn( myfile, aBlanks, "not", "idle time" );
-			}
+            if ( aBlanks >= 0 && (!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction()) )
+                writeHTMLColumn( myfile, aBlanks+1, "not", "idle time" );
+            else if ( aBlanks > 0 )
+                writeHTMLColumn( myfile, aBlanks, "not", "idle time" );
 
 			unsigned int aLength = aCurrTrans->getPenalties();
 
 			if ( aLength != 0 ) {
 				std::ostringstream title;
-				title << "idle:" << aCurrTrans->getIdlePenalty() << " switch:" << aCurrTrans->getTaskSwitchingPenalty();
+				title << "idle:" << aCurrTrans->getIdlePenalty() << " switching penalty:" << aCurrTrans->getTaskSwitchingPenalty();
 				writeHTMLColumn( myfile, aLength, "not", title.str() );
 			}
 
@@ -419,8 +421,9 @@ void SchedulableDevice::schedule2HTML(std::ofstream& myfile) const {
 			// Issue #4
 			TMLTask* task = aCurrTrans->getCommand()->getTask();
 			const std::string cellClass = determineHTMLCellClass( taskCellClasses, task, nextCellClassIndex );
-
-			writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString() );
+            if(!(!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction())){
+              writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString() );
+            }
 
 			aCurrTime = aCurrTrans->getEndTime();
 		 // }

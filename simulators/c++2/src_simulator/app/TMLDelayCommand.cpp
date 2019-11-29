@@ -43,9 +43,13 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <SimComponents.h>
 //#include <CommandListener.h>
-
-TMLDelayCommand::TMLDelayCommand(ID iID, TMLTask* iTask,TMLLength iStatLength, ActionFuncPointer iActionFunc, const char* iLiveVarList, bool iCheckpoint):TMLCommand(iID, iTask, 1, 1, iLiveVarList, iCheckpoint),_actionFunc(iActionFunc){
-	_length = iStatLength;
+TMLDelayCommand::TMLDelayCommand(ID iID, TMLTask* iTask,TMLLength iStatLength, ActionFuncPointer iActionFunc, const char* iLiveVarList, bool iCheckpoint, bool isActiveDelay):TMLCommand(iID, iTask, 1, 1, iLiveVarList, iCheckpoint),_actionFunc(iActionFunc){
+	if (!isActiveDelay){
+	    _isActiveDelay = false;
+	}else {
+	    _length = iStatLength;
+	    _isActiveDelay = true;
+	}
 	_type=ACT;
 }
 void TMLDelayCommand::execute(){
