@@ -63,8 +63,8 @@ public:
 	void execute();
 	//TMLTask* getDependentTask() const;
 	std::string toString() const;
-	inline std::string toShortString() const {return "Delay";}
-	inline std::string getCommandStr() const {return "act";}
+	std::string toShortString() const;
+	inline std::string getCommandStr() const {return "DL";}
 protected:
 	///Member function pointer to the action function
 	ActionFuncPointer _actionFunc;

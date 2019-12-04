@@ -659,9 +659,12 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
                         g.setColor(ColorManager.TML_PORT_CHANNEL);
                         commandName="DL";
                     }
-                    else {
+                    else if (tran.command.contains("Execi")){
                         commandName="EX";
                         g.setColor(ColorManager.EXEC);
+                    }
+                    else {
+                        continue;
                     }
                     int start = 30*tranList.indexOf(tran)+70;
                     g.fillRect(start, i*50+40, 30, 20);
