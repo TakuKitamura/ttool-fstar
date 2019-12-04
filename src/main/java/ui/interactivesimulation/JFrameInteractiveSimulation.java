@@ -1787,6 +1787,12 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 					simtraces.add(trace);
 				}
 			}
+            else if (command.contains("Delay")){
+                String trace="time="+tran.endTime+ " block=" + tran.taskName + " type=state_entering state=delay" + tran.length;
+                if (!simtraces.contains(trace)){
+                    simtraces.add(trace);
+                }
+            }
 			else {
 				//TraceManager.addDev("UNHANDLED COMMAND " + tran.command + " " + tran.deviceName + " " + tran.nodeType);
 			}

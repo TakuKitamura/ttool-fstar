@@ -92,6 +92,9 @@ TMLCommand* TMLDelayCommand::prepareNextTransaction(){
 
 std::string TMLDelayCommand::toString() const{
 	std::ostringstream outp;
-	outp << "Delay in " << TMLCommand::toString();
+	if(_isActiveDelay)
+	    outp << "Delay in " << TMLCommand::toString();
+	else
+	    outp << "IdleDL in " << TMLCommand::toString();
 	return outp.str();
 }

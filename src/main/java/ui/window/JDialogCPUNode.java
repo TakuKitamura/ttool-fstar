@@ -655,6 +655,10 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
                         g.setColor(ColorManager.TML_PORT_REQUEST);
                         commandName="REQ";
                     }
+                    else if (tran.command.contains("Delay")){
+                        g.setColor(ColorManager.TML_PORT_CHANNEL);
+                        commandName="DL";
+                    }
                     else {
                         commandName="EX";
                         g.setColor(ColorManager.EXEC);
