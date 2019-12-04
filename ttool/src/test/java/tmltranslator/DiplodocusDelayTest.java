@@ -606,7 +606,7 @@ public class DiplodocusDelayTest extends AbstractUITest {
             assertTrue(MIN_DELAY_RW_CYCLES[i] == minValue);
 
             int maxValue = graph.getMaxValue("allCPUsFPGAsTerminated");
-            System.out.println("executing: maxvalue of levan " + s + " " + maxValue);
+            System.out.println("executing: maxvalue of " + s + " " + maxValue);
             assertTrue(MAX_DELAY_RW_CYCLES[i] == maxValue);
 
         }
