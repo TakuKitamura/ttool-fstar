@@ -630,6 +630,21 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
                 }
             }
             String commandName="";
+            TreeSet<Integer> tree = new TreeSet<>();
+            for(int j = 0; j < tranList.size(); j++) {
+                tree.add(Integer.valueOf(tranList.get(j).startTime));
+            }
+            Integer[] arr = new Integer[tree.size()];
+            tree.toArray(arr);
+            for (int t = 0; t < tranList.size(); t ++){
+                for (int k = 0; k < arr.length; k++){
+                    if(tranList.get(t).startTime.equals(String.valueOf(arr[k]))){
+                        tranList.get(t).index = k;
+                        break;
+                    }
+                }
+            }
+
             for (String s:tasks){
                 i++;
                 g.drawString(s.split("__")[1],0, i*50+50);
@@ -666,7 +681,7 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
                     else {
                         continue;
                     }
-                    int start = 30*tranList.indexOf(tran)+70;
+                    int start = 30*tran.index+70;
                     g.fillRect(start, i*50+40, 30, 20);
                     g.setColor(Color.black);
                     g.drawRect(start, i*50+40, 30, 20);

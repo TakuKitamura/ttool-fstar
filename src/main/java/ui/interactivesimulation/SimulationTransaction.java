@@ -64,6 +64,7 @@ public class SimulationTransaction  {
     public String channelName;
 	public String id;
 	public long uniqueID = -1;
+	public int index = 0;
 
 	public SimulationTransaction() {
     }
