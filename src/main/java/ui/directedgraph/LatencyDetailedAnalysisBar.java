@@ -36,39 +36,33 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-package ui.interactivesimulation;
+package ui.directedgraph;
+
+import javax.swing.JToolBar;
+import javax.swing.SwingConstants;
 
 /**
- * Class SimulationTransaction Transaction as defined by the simulation engine
- * Creation: 20/05/2016
+ * Class LatencyDetailedAnalysisBar: toolbar used for latency detail analysis
+ * and directed graph generation
  * 
- * @version 1.0 20/05/2016
- * @author Ludovic APVRILLE
+ * 23/09/2019
+ *
+ * @author Maysam Zoor
  */
-public class SimulationTransaction {
+public abstract class LatencyDetailedAnalysisBar extends JToolBar {
+    protected JFrameLatencyDetailedAnalysis jflda;
 
-    public final static int NODE_TYPE_CPU = 0;
-    public final static int NOTE_TYPE_BUS = 1;
-
-    public String nodeType;
-    public String deviceName;
-    public String taskName;
-    public String command;
-    public String startTime;
-    public String endTime;
-    public String length; /* Used for identifiying asynchronous messages */
-    public String virtualLength;
-    public String channelName;
-	public String id;
-	public long uniqueID = -1;
-	public int index = 0;
-	public String runnableTime;
-
-    public SimulationTransaction() {
+    public LatencyDetailedAnalysisBar(JFrameLatencyDetailedAnalysis _jflda) {
+        super();
+        jflda = _jflda;
+        setOrientation(SwingConstants.HORIZONTAL);
+        setFloatable(true);
+        setButtons();
     }
 
-    public String toString() {
-        return "ID=" + uniqueID + " nodeType=" + nodeType + " name= " + deviceName + " id=" + id + " command=" + command;
-    }
+    // asbtract operations
+    protected abstract void setButtons();
 
-}
+    protected abstract void setActive(boolean b);
+
+} // Class
