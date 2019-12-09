@@ -59,10 +59,9 @@ public class SimulationTransaction {
     public String length; /* Used for identifiying asynchronous messages */
     public String virtualLength;
     public String channelName;
-    public String id;
-    public long uniqueID = -1;
-
-    public String runnableTime;
+	public String id;
+	public long uniqueID = -1;
+	public int index = 0;
 
     public SimulationTransaction() {
     }

@@ -689,7 +689,7 @@ public class Foo {
 
 Do ensure your file is correctly indented before committing/pushing it.
 Preferably, configure your code editor so that these guidelines are
-automatically enforced.
+automatically enforced. Also, for guidelines not given here, please apply the ones given in \href{https://google.github.io/styleguide/javaguide.html}{Java coding styles}.
 
 
 \subsubsection{How to output debug information}
@@ -889,8 +889,8 @@ public class TToolUtilTestsRunner  {
     public static void main(String[] args) {
         Result result = JUnitCore.runClasses(TestRshClient.class);
 
-        for ( final Failure failure : result.getFailures() ) { 
-            System.err.println( "Test failed : " + failure.toString() );
+        for ( final Failure failure: result.getFailures() ) { 
+            System.err.println( "Test failed: " + failure.toString() );
         }
  		
         if ( result.wasSuccessful() ) {

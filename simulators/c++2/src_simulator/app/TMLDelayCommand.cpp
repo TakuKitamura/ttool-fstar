@@ -43,9 +43,13 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <SimComponents.h>
 //#include <CommandListener.h>
-
-TMLDelayCommand::TMLDelayCommand(ID iID, TMLTask* iTask,TMLLength iStatLength, ActionFuncPointer iActionFunc, const char* iLiveVarList, bool iCheckpoint):TMLCommand(iID, iTask, 1, 1, iLiveVarList, iCheckpoint),_actionFunc(iActionFunc){
-	_length = iStatLength;
+TMLDelayCommand::TMLDelayCommand(ID iID, TMLTask* iTask,TMLLength iStatLength, ActionFuncPointer iActionFunc, const char* iLiveVarList, bool iCheckpoint, bool isActiveDelay):TMLCommand(iID, iTask, 1, 1, iLiveVarList, iCheckpoint),_actionFunc(iActionFunc){
+	if (!isActiveDelay){
+	    _isActiveDelay = false;
+	}else {
+	    _length = iStatLength;
+	    _isActiveDelay = true;
+	}
 	_type=ACT;
 }
 void TMLDelayCommand::execute(){
@@ -65,7 +69,7 @@ TMLCommand* TMLDelayCommand::prepareNextTransaction(){
 
 	if (_progress==0){
 	(_task->*_actionFunc)();
-    _execTimes++;
+//    _execTimes++;  this will recognize delay transaction one more time so remove it
     		if (_length==0){
     			//std::cout << "ExeciCommand len==0 " << std::endl;
     			TMLCommand* aNextCommand=getNextCommand();
@@ -88,6 +92,18 @@ TMLCommand* TMLDelayCommand::prepareNextTransaction(){
 
 std::string TMLDelayCommand::toString() const{
 	std::ostringstream outp;
-	outp << "Delay in " << TMLCommand::toString();
-	return outp.str();
+    if(_isActiveDelay)
+        outp << ": Delay in "  << TMLCommand::toString();
+    else
+        outp << ": IdleDL in "  << TMLCommand::toString();
+    return outp.str();
 }
+std::string TMLDelayCommand::toShortString() const{
+	std::ostringstream outp;
+    if(_isActiveDelay)
+        outp << _task->toString() << ": Delay in "  << TMLCommand::toString();
+    else
+        outp << _task->toString() << ": IdleDL in "  << TMLCommand::toString();
+    return outp.str();
+}
+
