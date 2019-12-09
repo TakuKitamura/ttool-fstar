@@ -139,7 +139,7 @@ public class TMLMapping<E> {
 
     public List<SecurityPattern> getMappedPatterns(HwMemory mem) {
         List<SecurityPattern> l = new ArrayList<SecurityPattern>();
-        for (SecurityPattern sp : mappedSecurity.keySet()) {
+        for (SecurityPattern sp:mappedSecurity.keySet()) {
             if (mappedSecurity.get(sp).contains(mem)) {
                 l.add(sp);
             }
@@ -148,7 +148,7 @@ public class TMLMapping<E> {
     }
 
     public SecurityPattern getSecurityPatternByName(String name) {
-        for (SecurityPattern sp : tmlm.secPatterns) {
+        for (SecurityPattern sp:tmlm.secPatterns) {
             if (sp.name.equals(name)) {
                 return sp;
             }
@@ -212,7 +212,7 @@ public class TMLMapping<E> {
             tmla.addHwNode(mem);
             // Connect all possible nodes to that bus
             cpt = 0;
-            for (HwNode node : tmla.getHwNodes()) {
+            for (HwNode node:tmla.getHwNodes()) {
                 if (node != bus) {
                     link0 = new HwLink("link_" + node.getName() + "_to_" + bus.getName());
                     cpt++;
@@ -279,10 +279,10 @@ public class TMLMapping<E> {
 
         int index;
         boolean mapped;
-        for (TMLChannel cha : tmlm.getChannels()) {
+        for (TMLChannel cha:tmlm.getChannels()) {
             index = 0;
             mapped = false;
-            for (TMLElement el : mappedcommelts) {
+            for (TMLElement el:mappedcommelts) {
                 if (el == cha) {
                     if (oncommnodes.get(index) instanceof HwBus) {
                         mapped = true;
@@ -556,7 +556,7 @@ public class TMLMapping<E> {
 
     public HwMemory getMemoryOfChannel(TMLChannel _ch) {
         int cpt = 0;
-        for (TMLElement elt : mappedcommelts) {
+        for (TMLElement elt:mappedcommelts) {
             if (elt == _ch) {
                 HwCommunicationNode node = oncommnodes.get(cpt);
                 if (node instanceof HwMemory) {
@@ -571,7 +571,7 @@ public class TMLMapping<E> {
     public int getNbOfMemoriesOfChannel(TMLChannel _ch) {
         int n = 0;
         int cpt = 0;
-        for (TMLElement elt : mappedcommelts) {
+        for (TMLElement elt:mappedcommelts) {
             if (elt == _ch) {
                 HwCommunicationNode node = oncommnodes.get(cpt);
                 if (node instanceof HwMemory) {
@@ -586,7 +586,7 @@ public class TMLMapping<E> {
     public String getStringOfMemoriesOfChannel(TMLChannel _ch) {
         String ret = "";
         int cpt = 0;
-        for (TMLElement elt : mappedcommelts) {
+        for (TMLElement elt:mappedcommelts) {
             if (elt == _ch) {
                 HwCommunicationNode node = oncommnodes.get(cpt);
                 if (node instanceof HwMemory) {
@@ -668,7 +668,7 @@ public class TMLMapping<E> {
         }
 
         index = 0;
-        for (HwCommunicationNode node : oncommnodes) {
+        for (HwCommunicationNode node:oncommnodes) {
             if (node instanceof HwBus) {
                 if (mappedcommelts.get(index) == _tmle) {
                     return (HwBus) node;
@@ -683,11 +683,11 @@ public class TMLMapping<E> {
 
     public int getMaxClockRatio() {
         int ret = 1;
-        for (HwCommunicationNode node : oncommnodes) {
+        for (HwCommunicationNode node:oncommnodes) {
             ret = Math.max(node.clockRatio, ret);
         }
 
-        for (HwExecutionNode node1 : onnodes) {
+        for (HwExecutionNode node1:onnodes) {
             ret = Math.max(node1.clockRatio, ret);
         }
 
@@ -706,7 +706,7 @@ public class TMLMapping<E> {
     public LinkedList<HwCommunicationNode> findNodesForElement(TMLElement _elementToFind) {
         LinkedList<HwCommunicationNode> list = new LinkedList<HwCommunicationNode>();
         int index = 0;
-        for (TMLElement tmlelem : mappedcommelts) {
+        for (TMLElement tmlelem:mappedcommelts) {
             if (tmlelem == _elementToFind)
                 list.add(oncommnodes.get(index));
             index++;
@@ -716,7 +716,7 @@ public class TMLMapping<E> {
 
     public HwNode getHwNodeByTask(TMLTask cmpTask) {
         int i = 0;
-        for (TMLTask task : mappedtasks) {
+        for (TMLTask task:mappedtasks) {
             if (task == cmpTask)
                 break;
             else
@@ -734,7 +734,7 @@ public class TMLMapping<E> {
     public HashSet<String> getMappedTasks(HwNode node) {
         HashSet<String> tasks = new HashSet<String>();
         int i = 0;
-        for (HwExecutionNode ex : onnodes) {
+        for (HwExecutionNode ex:onnodes) {
             if (ex == node) {
                 tasks.add(mappedtasks.get(i).getName().split("__")[mappedtasks.get(i).getName().split("__").length - 1]);
             }
@@ -749,12 +749,12 @@ public class TMLMapping<E> {
         int cpt = 0;
         int found = 0;
 
-        for (HwNode node : tmla.getHwNodes()) {
+        for (HwNode node:tmla.getHwNodes()) {
             if (node instanceof HwCPU) {
                 sb.append(node.getName() + "(");
                 found = 0;
                 cpt = 0;
-                for (HwExecutionNode ex : onnodes) {
+                for (HwExecutionNode ex:onnodes) {
                     if (ex == node) {
                         if (found > 0) {
                             sb.append(", ");
@@ -785,12 +785,12 @@ public class TMLMapping<E> {
         int cpt = 0;
         int found = 0;
 
-        for (HwNode node : tmla.getHwNodes()) {
+        for (HwNode node:tmla.getHwNodes()) {
             if (node instanceof HwCommunicationNode) {
                 sb.append(node.getName() + "(");
                 found = 0;
                 cpt = 0;
-                for (HwCommunicationNode ex : oncommnodes) {
+                for (HwCommunicationNode ex:oncommnodes) {
                     if (ex == node) {
                         if (found > 0) {
                             sb.append(", ");
@@ -830,7 +830,7 @@ public class TMLMapping<E> {
 
         // We map the forked tasks to their origin node, and the join ones to their
         // destination node
-        for (TMLTask task : tmlm.getTasks()) {
+        for (TMLTask task:tmlm.getTasks()) {
             if (task.getName().startsWith("FORKTASK_")) {
                 if (!isTaskMapped(task)) {
                     TraceManager.addDev("\n\nFORKTASK is NOT mapped: " + task.getName());
@@ -890,7 +890,7 @@ public class TMLMapping<E> {
         // Remove the CPLib with new tasks, channels, HW components
         TraceManager.addDev("\n\n**** HANDLING CPs:");
 
-        for (TMLCPLib cp : mappedCPLibs) {
+        for (TMLCPLib cp:mappedCPLibs) {
             // TraceManager.addDev(" Found cp:" + cp.getName() + " ref=" +
             // cp.getTypeName());
             if (cp.isDMATransfer()) {
@@ -913,20 +913,20 @@ public class TMLMapping<E> {
     }
 
     private void handleCPDMA(TMLCPLib _cp) {
-        for (TMLCPLibArtifact arti : _cp.getArtifacts()) {
+        for (TMLCPLibArtifact arti:_cp.getArtifacts()) {
             handleCPDMAArtifact(_cp, arti);
         }
     }
 
     private void handleCPDoubleDMA(TMLCPLib _cp) {
         TraceManager.addDev(" Found double DMA cp:" + _cp.getName() + " ref=" + _cp.getTypeName());
-        for (TMLCPLibArtifact arti : _cp.getArtifacts()) {
+        for (TMLCPLibArtifact arti:_cp.getArtifacts()) {
             handleCPDoubleDMAArtifact(_cp, arti);
         }
     }
 
     private void handleCPMemoryCopy(TMLCPLib _cp) {
-        for (TMLCPLibArtifact arti : _cp.getArtifacts()) {
+        for (TMLCPLibArtifact arti:_cp.getArtifacts()) {
             handleCPMemoryCopyArtifact(_cp, arti);
         }
     }
@@ -1097,7 +1097,7 @@ public class TMLMapping<E> {
 
     public String getMappedTasksString() {
         String tasks = "";
-        for (TMLTask task : mappedtasks) {
+        for (TMLTask task:mappedtasks) {
             tasks += task.getName() + " ";
         }
         return tasks;
@@ -1559,9 +1559,9 @@ public class TMLMapping<E> {
             while (iterator.hasNext()) {
                 TMLTask task = iterator.next();
 
-                for (TMLReadChannel readCh : task.getReadChannels()) {
+                for (TMLReadChannel readCh:task.getReadChannels()) {
                     String readChName = readCh.toString().split(": ")[1];
-                    for (TMLChannel ch : tmlm.getChannels()) {
+                    for (TMLChannel ch:tmlm.getChannels()) {
                         if (ch.getName().equals(readChName)) {
                             task.addTMLChannel(ch);
                             task.addReadTMLChannel(ch);
@@ -1569,9 +1569,9 @@ public class TMLMapping<E> {
                     }
                 }
 
-                for (TMLWriteChannel writeCh : task.getWriteChannels()) {
+                for (TMLWriteChannel writeCh:task.getWriteChannels()) {
                     String writeChName = writeCh.toString().split(": ")[1];
-                    for (TMLChannel ch : tmlm.getChannels()) {
+                    for (TMLChannel ch: tmlm.getChannels()) {
                         if (ch.getName().equals(writeChName)) {
                             task.addTMLChannel(ch);
                             task.addWriteTMLChannel(ch);
@@ -1591,18 +1591,18 @@ public class TMLMapping<E> {
             while (iterator.hasNext()) {
                 TMLTask task = iterator.next();
 
-                for (TMLSendEvent sendEvt : task.getSendEvents()) {
+                for (TMLSendEvent sendEvt:task.getSendEvents()) {
                     String sendEvtName = sendEvt.toString().split(":")[1].split("\\(")[0];
-                    for (TMLEvent evt : tmlm.getEvents()) {
+                    for (TMLEvent evt:tmlm.getEvents()) {
                         if (evt.getName().equals(sendEvtName)) {
                             task.addTMLEvent(evt);
                         }
                     }
                 }
 
-                for (TMLWaitEvent waitEvt : task.getWaitEvents()) {
+                for (TMLWaitEvent waitEvt:task.getWaitEvents()) {
                     String waitEvtName = waitEvt.toString().split(":")[1].split("\\(")[0];
-                    for (TMLEvent evt : tmlm.getEvents()) {
+                    for (TMLEvent evt:tmlm.getEvents()) {
                         if (evt.getName().equals(waitEvtName)) {
                             task.addTMLEvent(evt);
                         }
@@ -1616,9 +1616,9 @@ public class TMLMapping<E> {
         TMLTask orig = chan.getOriginTask();
         TMLTask dest = chan.getDestinationTask();
         List<HwNode> path = getPath(orig, dest);
-        for (HwNode node : path) {
+        for (HwNode node:path) {
             if (node instanceof HwBridge) {
-                for (String rule : ((HwBridge) node).firewallRules) {
+                for (String rule:((HwBridge) node).firewallRules) {
                     String t1 = rule.split("->")[0];
                     String t2 = rule.split("->")[1];
                     if (t1.equals(orig.getName().replaceAll("__", "::")) || t1.equals("*")) {
@@ -1646,7 +1646,7 @@ public class TMLMapping<E> {
             List<HwNode> found = new ArrayList<HwNode>();
             List<HwNode> done = new ArrayList<HwNode>();
             Map<HwNode, List<HwNode>> pathMap = new HashMap<HwNode, List<HwNode>>();
-            for (HwLink link : links) {
+            for (HwLink link:links) {
                 if (link.hwnode == node1) {
                     found.add(link.bus);
                     List<HwNode> tmp = new ArrayList<HwNode>();
@@ -1656,7 +1656,7 @@ public class TMLMapping<E> {
             }
             outerloop: while (found.size() > 0) {
                 HwNode curr = found.remove(0);
-                for (HwLink link : links) {
+                for (HwLink link:links) {
                     if (curr == link.bus) {
                         if (link.hwnode == node2) {
                             path = pathMap.get(curr);
@@ -1687,7 +1687,7 @@ public class TMLMapping<E> {
         TMLTask orig = chan.getSystemOriginTask();
         TMLTask dest = chan.getSystemDestinationTask();
         List<HwNode> path = getPath(orig, dest);
-        for (HwNode node : path) {
+        for (HwNode node:path) {
             if (node instanceof HwBus) {
                 HwBus bus = (HwBus) node;
                 if (bus.privacy == HwCommunicationNode.BUS_PUBLIC) {
@@ -1714,10 +1714,10 @@ public class TMLMapping<E> {
             TMLElement elt = mappedcommelts.get(i);
             s += "<COMMMAP node=\"" + node.getName() + "\" elt=\"" + elt.getName() + "\" />\n";
         }
-        for (TMLCPLib cplib : mappedCPLibs) {
+        for (TMLCPLib cplib:mappedCPLibs) {
             s += cplib.toXML();
         }
-        for (String val : customValues) {
+        for (String val:customValues) {
             s += "<CUSTOMVALUE value=\"" + val + "\" />\n";
         }
         s += "</TMLMAPPING>\n";
@@ -1741,7 +1741,7 @@ public class TMLMapping<E> {
         ArrayList<AUTTransition> transitions = new ArrayList<AUTTransition>();
 
         // Make a state for each hardware node
-        for (HwNode node : tmla.getHwNodes()) {
+        for (HwNode node:tmla.getHwNodes()) {
             AUTState st = new AUTState(id);
             states.add(st);
             id++;
@@ -1753,7 +1753,7 @@ public class TMLMapping<E> {
         }
 
         // Making links
-        for (HwLink link : tmla.getHwLinks()) {
+        for (HwLink link:tmla.getHwLinks()) {
             HwNode node1 = link.bus;
             HwNode node2 = link.hwnode;
 
@@ -1823,7 +1823,7 @@ public class TMLMapping<E> {
         }
 
         int cpt = 0;
-        for (HwNode node : tmla.getHwNodes()) {
+        for (HwNode node:tmla.getHwNodes()) {
             if (node instanceof HwNoC) {
                 cpt++;
             }
@@ -1876,7 +1876,7 @@ public class TMLMapping<E> {
 
         HashSet<TMLTask> tasks = new HashSet<TMLTask>();
         int i = 0;
-        for (HwExecutionNode ex : onnodes) {
+        for (HwExecutionNode ex:onnodes) {
             if (ex == node) {
                 tasks.add(mappedtasks.get(i));
             }
@@ -1889,7 +1889,7 @@ public class TMLMapping<E> {
 
         HashSet<TMLElement> mappedcomm = new HashSet<TMLElement>();
         int i = 0;
-        for (HwCommunicationNode ex : oncommnodes) {
+        for (HwCommunicationNode ex:oncommnodes) {
             if (ex == node) {
                 mappedcomm.add(mappedcommelts.get(i));
             }
