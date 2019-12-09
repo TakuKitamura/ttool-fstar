@@ -677,7 +677,7 @@ public class TGUIAction extends AbstractAction {
 
     public static final int MOVE_ENABLED = 463;
     public static final int FIRST_DIAGRAM = 464;
-    public static final int ACT_GEN_LATENCY_GRAPH = 519;
+    
     public static final int NB_ACTION = 525;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
@@ -1405,7 +1405,6 @@ public class TGUIAction extends AbstractAction {
 
         actions[MOVE_ENABLED] = new TAction("Move", "Move enabled", IconManager.imgic780, IconManager.imgic780, "Move enabled (shift + arrow)", "Move", 0);
         actions[FIRST_DIAGRAM] = new TAction("FirstDiagram", "First Diagram", IconManager.imgic142, IconManager.imgic142, "Switch the the first diagram", "Switch to the first diagram", 0);
-        actions[ACT_GEN_LATENCY_GRAPH] = new TAction("generate-latency-graph", "Analyze Latency Graph", IconManager.imgic1118, IconManager.imgic1118, "Analyze Latency Graph", "Analyze Latency Graph", '0');
     }
 
     public String getActionCommand()  {
