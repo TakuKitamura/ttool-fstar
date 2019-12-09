@@ -26,6 +26,10 @@ dependencies {
     compile name:'jautomata-core'
     compile name:'com.microsoft.z3'
     compileOnly name: 'jna-3.3.0'
+    compile name: 'jgrapht-core-1.3.0'
+    compile name: 'jgrapht-ext-1.3.0'
+    compile name: 'jgrapht-io-1.3.0'
+    compile name: 'jgraphx-3.4.1.3'
 }
 
 jar {
