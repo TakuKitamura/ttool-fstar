@@ -713,7 +713,7 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
        }
       else{
 	if(((*i)->toShortString().substr(0,2) == "ta"))
-	  myfile << "$var wire 2 " << (*i)->toShortString() << " " << (*i)->toString() << " $end\n";
+	  myfile << "$var wire 1 " << (*i)->toShortString() << " " << (*i)->toString() << " $end\n";
 	else
 	  myfile << "$var wire 1 " << (*i)->toShortString() << " " << (*i)->toString() << " $end\n";
  	aTopElement = new SignalChangeData();
