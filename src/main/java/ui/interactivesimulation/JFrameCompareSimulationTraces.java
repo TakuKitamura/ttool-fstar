@@ -47,10 +47,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
@@ -64,24 +61,12 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultDirectedGraph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.io.Attribute;
-import org.jgrapht.io.EdgeProvider;
-import org.jgrapht.io.GmlImporter;
-import org.jgrapht.io.GraphImporter;
-import org.jgrapht.io.GraphMLImporter;
-import org.jgrapht.io.ImportException;
-import org.jgrapht.io.VertexProvider;
 import org.xml.sax.SAXException;
 
-import common.ConfigurationTTool;
 import myutil.TraceManager;
 import ui.MainGUI;
 import ui.SimulationTrace;
@@ -96,429 +81,357 @@ import ui.SimulationTrace;
  * @author Maysam ZOOR
  */
 
+
 public class JFrameCompareSimulationTraces extends JFrame implements ActionListener, WindowListener {
 
-    private JButton browse, parse, difference, latencyDetails, graph;
-    private JFileChooser fc, fc2;
-    private File file;
-    private SimulationTrace selectedST;
-    private static Vector<SimulationTransaction> transFile1;
-
-    public Vector<SimulationTransaction> getTransFile1() {
-        return transFile1;
-    }
-
-    public void setTransFile1(Vector<SimulationTransaction> transFile1) {
-        this.transFile1 = transFile1;
-    }
-
-    public Vector<SimulationTransaction> getTransFile2() {
-        return transFile2;
-    }
-
-    public void setTransFile2(Vector<SimulationTransaction> transFile2) {
-        this.transFile2 = transFile2;
-    }
-
-    private Vector<SimulationTransaction> transFile2;
-    private SimulationTransaction st = new SimulationTransaction();
-    private JTextField file2 = new JTextField();
-    private boolean panelAdded = false;
-    private static JPanelCompareXmlGraph newContentPane;
-    private JComboBox<Object> devicesDropDownCombo1 = new JComboBox<Object>();
-    private JComboBox<Object> devicesDropDownCombo2 = new JComboBox<Object>();
-    private JComboBox<Object> tracesCombo1, tracesCombo2;
-
-    public JFrameCompareSimulationTraces(MainGUI _mgui, String _title, SimulationTrace sST, boolean visible) {
-
-        super(_title);
-
-        this.selectedST = sST;
-        GridLayout myLayout = new GridLayout(3, 1);
-
-        // this.setBackground(Color.RED);
-        this.setLayout(myLayout);
-
-        addWindowListener(this);
-        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-
-        if (ConfigurationTTool.SystemCCodeDirectory.length() > 0) {
-            fc = new JFileChooser(ConfigurationTTool.SystemCCodeDirectory);
-        } else {
-            fc = new JFileChooser();
-        }
-
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("XML files", "xml");
-        fc.setFileFilter(filter);
-
-        JPanel buttonPanel = new JPanel(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
-        c.fill = GridBagConstraints.NORTHWEST;
-
-        JTextField file1 = new JTextField();
-
-        JLabel lab1 = new JLabel("First Simulation Traces File ", JLabel.LEFT);
-        c.fill = GridBagConstraints.NORTHWEST;
-        c.gridx = 0;
-        c.gridy = 0;
-        c.weightx = 1;
-        c.weighty = 1;
-        c.anchor = GridBagConstraints.WEST;
-        buttonPanel.add(lab1, c);
-
-        JLabel lab2 = new JLabel("Secound Simulation Traces File ", JLabel.LEFT);
-
-        c.fill = GridBagConstraints.NORTHWEST;
-        c.gridx = 0;
-        c.gridy = 1;
-        c.weightx = 1;
-        c.weighty = 1;
-        c.anchor = GridBagConstraints.WEST;
-        buttonPanel.add(lab2, c);
-
-        file1.setEditable(false);
-        file1.setBorder(new LineBorder(Color.BLACK));
-        file1.setText(selectedST.getFullPath());
-
-        c.fill = GridBagConstraints.NORTHWEST;
-        c.gridx = 1;
-        c.gridy = 0;
-        c.weightx = 2;
-        c.weighty = 1;
-        buttonPanel.add(file1, c);
-
-        file2.setEditable(false);
-        file2.setText("file 2 name");
-        file2.setBorder(new LineBorder(Color.BLACK));
-
-        c.fill = GridBagConstraints.NORTHWEST;
-        c.gridx = 1;
-        c.gridy = 1;
-        c.weightx = 1;
-        c.weighty = 1;
-        buttonPanel.add(file2, c);
-
-        JLabel lab3 = new JLabel("Secound Graph ", JLabel.LEFT);
-
-        c.fill = GridBagConstraints.NORTHWEST;
-        c.gridx = 0;
-        c.gridy = 2;
-        c.weightx = 1;
-        c.weighty = 1;
-        c.anchor = GridBagConstraints.WEST;
-        buttonPanel.add(lab3, c);
+	private JButton browse, parse, difference, latencyDetails;
+	private JFileChooser fc;
+	private File file;
+	private SimulationTrace selectedST;
+	private static Vector<SimulationTransaction> transFile1;
+
+	public Vector<SimulationTransaction> getTransFile1() {
+		return transFile1;
+	}
+
+	public void setTransFile1(Vector<SimulationTransaction> transFile1) {
+		this.transFile1 = transFile1;
+	}
+
+	public Vector<SimulationTransaction> getTransFile2() {
+		return transFile2;
+	}
+
+	public void setTransFile2(Vector<SimulationTransaction> transFile2) {
+		this.transFile2 = transFile2;
+	}
+
+	private Vector<SimulationTransaction> transFile2;
+	private SimulationTransaction st = new SimulationTransaction();
+	private JTextField file2 = new JTextField();
+	private boolean panelAdded = false;
+	private static JPanelCompareXmlGraph newContentPane;
+	private JComboBox<Object> devicesDropDownCombo1 = new JComboBox<Object>();
+	private JComboBox<Object> devicesDropDownCombo2 = new JComboBox<Object>();
+	private JComboBox<Object> tracesCombo1, tracesCombo2;
+
+	public JFrameCompareSimulationTraces(MainGUI _mgui, String _title, SimulationTrace sST) {
+
+		super(_title);
+
+		this.selectedST = sST;
+		GridLayout myLayout = new GridLayout(3, 1);
+
+		this.setBackground(Color.RED);
+		this.setLayout(myLayout);
+
+		addWindowListener(this);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
+		fc = new JFileChooser();
+
+		JPanel buttonPanel = new JPanel(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.NORTHWEST;
+
+		JTextField file1 = new JTextField();
+
+		JLabel lab1 = new JLabel("First Simulation Traces File ", JLabel.LEFT);
+		c.fill = GridBagConstraints.NORTHWEST;
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 1;
+		c.weighty = 1;
+		c.anchor = GridBagConstraints.WEST;
+		buttonPanel.add(lab1, c);
+
+		JLabel lab2 = new JLabel("Secound Simulation Traces File ", JLabel.LEFT);
+
+		c.fill = GridBagConstraints.NORTHWEST;
+		c.gridx = 0;
+		c.gridy = 1;
+		c.weightx = 1;
+		c.weighty = 1;
+		c.anchor = GridBagConstraints.WEST;
+		buttonPanel.add(lab2, c);
+
+		file1.setEditable(false);
+		file1.setBorder(new LineBorder(Color.BLACK));
+		file1.setText(selectedST.getFullPath());
+
+		c.fill = GridBagConstraints.NORTHWEST;
+		c.gridx = 1;
+		c.gridy = 0;
+		c.weightx = 2;
+		c.weighty = 1;
+		buttonPanel.add(file1, c);
+
+		file2.setEditable(false);
+		file2.setText("file 2 name");
+		file2.setBorder(new LineBorder(Color.BLACK));
 
-        graph = new JButton("Graph");
-        graph.addActionListener(this);
-        c.fill = GridBagConstraints.NORTHWEST;
-        c.gridx = 0;
-        c.gridy = 3;
-        c.weightx = 1;
-        c.weighty = 1;
-        buttonPanel.add(graph, c);
+		c.fill = GridBagConstraints.NORTHWEST;
+		c.gridx = 1;
+		c.gridy = 1;
+		c.weightx = 1;
+		c.weighty = 1;
+		buttonPanel.add(file2, c);
 
-        browse = new JButton("Browse");
-        browse.addActionListener(this);
-        c.fill = GridBagConstraints.NORTHWEST;
-        c.gridx = 1;
-        c.gridy = 3;
-        c.weightx = 1;
-        c.weighty = 1;
-        buttonPanel.add(browse, c);
+		browse = new JButton("Browse");
+		browse.addActionListener(this);
+		c.fill = GridBagConstraints.NORTHWEST;
+		c.gridx = 1;
+		c.gridy = 2;
+		c.weightx = 1;
+		c.weighty = 1;
+		buttonPanel.add(browse, c);
 
-        parse = new JButton("parse");
-        parse.addActionListener(this);
-        c.fill = GridBagConstraints.NORTHWEST;
-        c.gridx = 3;
-        c.gridy = 3;
-        c.weightx = 5;
-        c.weighty = 1;
-        buttonPanel.add(parse, c);
+		parse = new JButton("parse");
+		parse.addActionListener(this);
+		c.fill = GridBagConstraints.NORTHWEST;
+		c.gridx = 3;
+		c.gridy = 2;
+		c.weightx = 5;
+		c.weighty = 1;
+		buttonPanel.add(parse, c);
 
-        difference = new JButton("difference");
-        difference.addActionListener(this);
-        c.fill = GridBagConstraints.NORTHWEST;
-        c.gridx = 3;
-        c.gridy = 4;
-        c.weightx = 5;
-        c.weighty = 1;
-        buttonPanel.add(difference, c);
+		difference = new JButton("difference");
+		difference.addActionListener(this);
+		c.fill = GridBagConstraints.NORTHWEST;
+		c.gridx = 3;
+		c.gridy = 3;
+		c.weightx = 5;
+		c.weighty = 1;
+		buttonPanel.add(difference, c);
 
-        this.add(buttonPanel);
+		this.add(buttonPanel);
 
-        this.pack();
-        this.setVisible(visible);
+		this.pack();
+		this.setVisible(true);
 
-    }
+	}
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
+	@Override
+	public void actionPerformed(ActionEvent e) {
 
-        if (e.getSource() == browse) {
+		if (e.getSource() == browse) {
 
-            FileNameExtensionFilter filter = new FileNameExtensionFilter("XML files", "xml");
-            fc.setFileFilter(filter);
+			int returnVal = fc.showOpenDialog(JFrameCompareSimulationTraces.this);
 
-            int returnVal = fc.showOpenDialog(JFrameCompareSimulationTraces.this);
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				file = fc.getSelectedFile();
+				file2.setText(file.getPath());
 
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
-                file = fc.getSelectedFile();
-                file2.setText(file.getPath());
+			}
+		} else if (e.getSource() == parse) {
 
-            }
-        } else if (e.getSource() == parse) {
+			try {
+				parseXML(selectedST.getFullPath(), file.getPath());
+				DrawSimulationResults(transFile1, transFile2);
 
-            try {
-                parseXML(selectedST.getFullPath(), file.getPath());
-                DrawSimulationResults(transFile1, transFile2);
+			} catch (SAXException e1) {
 
-            } catch (SAXException e1) {
+				e1.printStackTrace();
+			} catch (IOException e1) {
 
-                e1.printStackTrace();
-            } catch (IOException e1) {
+				e1.printStackTrace();
+			} catch (ParserConfigurationException e1) {
 
-                e1.printStackTrace();
-            } catch (ParserConfigurationException e1) {
+				e1.printStackTrace();
+			}
 
-                e1.printStackTrace();
-            }
+		} else if (e.getSource() == latencyDetails) {
+			newContentPane.getTable();
 
-        } else if (e.getSource() == latencyDetails) {
-            newContentPane.getTable();
+			new JFrameShowLatencyDetails(transFile1, transFile2, devicesDropDownCombo1.getSelectedItem(),
+					tracesCombo1.getSelectedItem(), devicesDropDownCombo2.getSelectedItem(),
+					tracesCombo2.getSelectedItem());
 
-            new JFrameShowLatencyDetails(transFile1, transFile2, devicesDropDownCombo1.getSelectedItem(), tracesCombo1.getSelectedItem(),
-                    devicesDropDownCombo2.getSelectedItem(), tracesCombo2.getSelectedItem(), true);
+		} else if (e.getSource() == difference) {
 
-        } else if (e.getSource() == difference) {
+			newContentPane.showDifference();
 
-            newContentPane.showDifference();
+			this.pack();
+			this.setVisible(true);
+		} else if (e.getSource() == devicesDropDownCombo1) {
+			Vector<Object> transacationsDropDown1 = newContentPane
+					.loadTransacationsDropDown(devicesDropDownCombo1.getSelectedItem());
 
-            this.pack();
-            this.setVisible(true);
-        } else if (e.getSource() == devicesDropDownCombo1) {
-            Vector<Object> transacationsDropDown1 = newContentPane.loadTransacationsDropDown(devicesDropDownCombo1.getSelectedItem());
+			final DefaultComboBoxModel<Object> model = new DefaultComboBoxModel<Object>(transacationsDropDown1);
 
-            final DefaultComboBoxModel<Object> model = new DefaultComboBoxModel<Object>(transacationsDropDown1);
+			tracesCombo1.setModel(model);
 
-            tracesCombo1.setModel(model);
+		} else if (e.getSource() == devicesDropDownCombo2) {
+			Vector<Object> transacationsDropDown2 = newContentPane
+					.loadTransacationsDropDown(devicesDropDownCombo2.getSelectedItem());
 
-        } else if (e.getSource() == devicesDropDownCombo2) {
-            Vector<Object> transacationsDropDown2 = newContentPane.loadTransacationsDropDown(devicesDropDownCombo2.getSelectedItem());
+			final DefaultComboBoxModel<Object> model = new DefaultComboBoxModel<Object>(transacationsDropDown2);
 
-            final DefaultComboBoxModel<Object> model = new DefaultComboBoxModel<Object>(transacationsDropDown2);
+			tracesCombo2.setModel(model);
 
-            tracesCombo2.setModel(model);
+		}
+	}
 
-        } else if (e.getSource() == graph) {
+	public int parseXML(String file1Path, String file2Path)
+			throws SAXException, IOException, ParserConfigurationException {
 
-            if (ConfigurationTTool.SystemCCodeDirectory.length() > 0) {
-                fc2 = new JFileChooser(ConfigurationTTool.SystemCCodeDirectory);
-            } else {
-                fc2 = new JFileChooser();
-            }
+		if (file1Path.length() == 0 || file2Path.length() == 0)
+			throw new RuntimeException("The name of the XML file is required!");
 
-            FileNameExtensionFilter filter = new FileNameExtensionFilter("graphml files", "graphml");
-            fc2.setFileFilter(filter);
+		SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+		SAXParser saxParser = saxParserFactory.newSAXParser();
+		SimulationTransactionParser handler = new SimulationTransactionParser();
 
-            int returnVal = fc2.showOpenDialog(JFrameCompareSimulationTraces.this);
+		saxParser.parse(new File(file1Path), handler);
+		transFile1 = handler.getStList();
 
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
-                file = fc2.getSelectedFile();
-                // file2.setText(file.getPath());
+		handler = new SimulationTransactionParser();
 
-            }
+		saxParser.parse(new File(file2Path), handler);
+		transFile2 = handler.getStList();
 
-            FileReader ps = null;
-            try {
-                ps = new FileReader(file);
-            } catch (FileNotFoundException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            }
+		return 1;
 
-            VertexProvider<String> vertexProvider = (id, attributes) -> {
-                String cv = new String(id);
-                cv.replaceAll("\\s+", "");
-                cv.replaceAll("(", "");
-                cv.replaceAll(")", "");
-                return cv;
+	}
 
-            };
+	private void DrawSimulationResults(Vector<SimulationTransaction> transFile1,
+			Vector<SimulationTransaction> transFile2) {
 
-            EdgeProvider<String, DefaultEdge> edgeProvider = (from, to, label, attributes) -> new DefaultEdge();
+		if (panelAdded == true) {
 
-            GraphMLImporter<String, DefaultEdge> importer = new GraphMLImporter<String, DefaultEdge>(vertexProvider, edgeProvider);
+			newContentPane = new JPanelCompareXmlGraph(transFile1, transFile2);
+			newContentPane.setOpaque(true);
 
-            try {
-                Graph<String, DefaultEdge> importedGraph = new DefaultDirectedGraph<>(DefaultEdge.class);
-                ;
-                importer.importGraph(importedGraph, ps);
-                System.out.print(importedGraph.vertexSet().size());
-            } catch (ImportException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            }
+			newContentPane.updateTable();
 
-        }
+		} else {
 
-    }
+			newContentPane = new JPanelCompareXmlGraph(transFile1, transFile2);
+			newContentPane.setOpaque(true);
 
-    public int parseXML(String file1Path, String file2Path) throws SAXException, IOException, ParserConfigurationException {
+			newContentPane.drawTable();
 
-        if (file1Path.length() == 0 || file2Path.length() == 0)
-            throw new RuntimeException("The name of the XML file is required!");
+			this.add(newContentPane);
 
-        SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
-        SAXParser saxParser = saxParserFactory.newSAXParser();
-        SimulationTransactionParser handler = new SimulationTransactionParser();
+			DrawLatencyPanel();
 
-        saxParser.parse(new File(file1Path), handler);
-        transFile1 = handler.getStList();
+			panelAdded = true;
+		}
 
-        handler = new SimulationTransactionParser();
+		this.pack();
+		this.setVisible(true);
+	}
 
-        saxParser.parse(new File(file2Path), handler);
-        transFile2 = handler.getStList();
+	private void DrawLatencyPanel() {
 
-        return 1;
+		JPanel latencyPanel = new JPanel(new GridBagLayout()); // use FlowLayout
+		GridBagConstraints c = new GridBagConstraints();
+		latencyPanel.setBorder(new javax.swing.border.TitledBorder("Latency for Simulation Traces File"));
+		c.fill = GridBagConstraints.NORTHWEST;
 
-    }
+		new JTextField();
 
-    private void DrawSimulationResults(Vector<SimulationTransaction> transFile1, Vector<SimulationTransaction> transFile2) {
+		Vector<Object> devicesDropDown1 = newContentPane.loadDevicesDropDown();
 
-        if (panelAdded == true) {
+		devicesDropDownCombo1 = new JComboBox<Object>(devicesDropDown1);
 
-            newContentPane = new JPanelCompareXmlGraph(transFile1, transFile2);
-            newContentPane.setOpaque(true);
+		Vector<Object> transacationsDropDown1 = newContentPane
+				.loadTransacationsDropDown(devicesDropDownCombo1.getSelectedItem());
+		tracesCombo1 = new JComboBox<Object>(transacationsDropDown1);
 
-            newContentPane.updateTable();
+		c.fill = GridBagConstraints.NORTHWEST;
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 1;
+		c.weighty = 1;
+		c.anchor = GridBagConstraints.WEST;
+		latencyPanel.add(devicesDropDownCombo1, c);
 
-        } else {
+		c.fill = GridBagConstraints.NORTHWEST;
+		c.gridx = 0;
+		c.gridy = 1;
+		c.weightx = 1;
+		c.weighty = 1;
+		latencyPanel.add(tracesCombo1, c);
+		this.add(latencyPanel);
 
-            newContentPane = new JPanelCompareXmlGraph(transFile1, transFile2);
-            newContentPane.setOpaque(true);
+		devicesDropDownCombo1.addActionListener(this);
 
-            newContentPane.drawTable();
+		Vector<Object> devicesDropDown2 = newContentPane.loadDevicesDropDown();
 
-            this.add(newContentPane);
+		devicesDropDownCombo2 = new JComboBox<Object>(devicesDropDown2);
 
-            DrawLatencyPanel();
+		Vector<Object> transacationsDropDown2 = newContentPane
+				.loadTransacationsDropDown(devicesDropDownCombo2.getSelectedItem());
+		tracesCombo2 = new JComboBox<Object>(transacationsDropDown2);
 
-            panelAdded = true;
-        }
+		c.fill = GridBagConstraints.NORTHWEST;
+		c.gridx = 1;
+		c.gridy = 0;
 
-        this.pack();
-        this.setVisible(true);
-    }
+		latencyPanel.add(devicesDropDownCombo2, c);
 
-    private void DrawLatencyPanel() {
+		c.fill = GridBagConstraints.NORTHWEST;
+		c.gridx = 1;
+		c.gridy = 1;
 
-        JPanel latencyPanel = new JPanel(new GridBagLayout()); // use FlowLayout
-        GridBagConstraints c = new GridBagConstraints();
-        latencyPanel.setBorder(new javax.swing.border.TitledBorder("Latency for Simulation Traces File"));
-        c.fill = GridBagConstraints.NORTHWEST;
+		latencyPanel.add(tracesCombo2, c);
+		this.add(latencyPanel);
 
-        new JTextField();
+		devicesDropDownCombo2.addActionListener(this);
 
-        Vector<Object> devicesDropDown1 = newContentPane.loadDevicesDropDown();
+		latencyDetails = new JButton("latency Details");
+		latencyDetails.addActionListener(this);
+		c.fill = GridBagConstraints.NORTHWEST;
+		c.gridx = 1;
+		c.gridy = 3;
+		c.weightx = 1;
+		c.weighty = 1;
+		latencyPanel.add(latencyDetails, c);
+	}
 
-        devicesDropDownCombo1 = new JComboBox<Object>(devicesDropDown1);
+	@Override
+	public void windowOpened(WindowEvent e) {
 
-        Vector<Object> transacationsDropDown1 = newContentPane.loadTransacationsDropDown(devicesDropDownCombo1.getSelectedItem());
-        tracesCombo1 = new JComboBox<Object>(transacationsDropDown1);
+	}
 
-        c.fill = GridBagConstraints.NORTHWEST;
-        c.gridx = 0;
-        c.gridy = 0;
-        c.weightx = 1;
-        c.weighty = 1;
-        c.anchor = GridBagConstraints.WEST;
-        latencyPanel.add(devicesDropDownCombo1, c);
+	@Override
+	public void windowClosing(WindowEvent e) {
+		TraceManager.addDev("Windows closed!");
+		close();
 
-        c.fill = GridBagConstraints.NORTHWEST;
-        c.gridx = 0;
-        c.gridy = 1;
-        c.weightx = 1;
-        c.weighty = 1;
-        latencyPanel.add(tracesCombo1, c);
-        this.add(latencyPanel);
+	}
 
-        devicesDropDownCombo1.addActionListener(this);
+	@Override
+	public void windowClosed(WindowEvent e) {
 
-        Vector<Object> devicesDropDown2 = newContentPane.loadDevicesDropDown();
+	}
 
-        devicesDropDownCombo2 = new JComboBox<Object>(devicesDropDown2);
+	@Override
+	public void windowIconified(WindowEvent e) {
 
-        Vector<Object> transacationsDropDown2 = newContentPane.loadTransacationsDropDown(devicesDropDownCombo2.getSelectedItem());
-        tracesCombo2 = new JComboBox<Object>(transacationsDropDown2);
+	}
 
-        c.fill = GridBagConstraints.NORTHWEST;
-        c.gridx = 1;
-        c.gridy = 0;
+	@Override
+	public void windowDeiconified(WindowEvent e) {
 
-        latencyPanel.add(devicesDropDownCombo2, c);
+	}
 
-        c.fill = GridBagConstraints.NORTHWEST;
-        c.gridx = 1;
-        c.gridy = 1;
+	@Override
+	public void windowActivated(WindowEvent e) {
 
-        latencyPanel.add(tracesCombo2, c);
-        this.add(latencyPanel);
+	}
 
-        devicesDropDownCombo2.addActionListener(this);
+	@Override
+	public void windowDeactivated(WindowEvent e) {
 
-        latencyDetails = new JButton("latency Details");
-        latencyDetails.addActionListener(this);
-        c.fill = GridBagConstraints.NORTHWEST;
-        c.gridx = 1;
-        c.gridy = 3;
-        c.weightx = 1;
-        c.weighty = 1;
-        latencyPanel.add(latencyDetails, c);
-    }
+	}
 
-    @Override
-    public void windowOpened(WindowEvent e) {
+	public void close() {
 
-    }
+		dispose();
+		setVisible(false);
 
-    @Override
-    public void windowClosing(WindowEvent e) {
-        TraceManager.addDev("Windows closed!");
-        close();
-
-    }
-
-    @Override
-    public void windowClosed(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowIconified(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowDeiconified(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowActivated(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowDeactivated(WindowEvent e) {
-
-    }
-
-    public void close() {
-
-        dispose();
-        setVisible(false);
-
-    }
+	}
 
 }
