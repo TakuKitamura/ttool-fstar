@@ -51,10 +51,18 @@ TMLTime ReconfigScheduler::schedule(TMLTime iEndSchedule){
 	TaskList::iterator i;
 	TMLTransaction *aMarkerPast=0, *aMarkerFuture=0,*aTempTrans;
 	TMLTask* aTempTask;
-	TMLTime aTransTimeFuture=-1,aRunnableTime;
+	TMLTime aTransTimeFuture=-1,aRunnableTime,aLowestRunnableTimePast=-1;;
 	WorkloadSource *aSourcePast=0, *aSourceFuture=0;  //NEW
-      
-	if( _tempWorkloadList.empty()){
+	std::vector<std::string> getTaskOrder;
+    std::string _tempTaskOrder, taskOrderCopy;
+    taskOrderCopy = _taskOrder.substr(0,_taskOrder.length());
+    while (taskOrderCopy.find_first_of(";") != std::string::npos){
+        _indexMark=taskOrderCopy.find_first_of(";");
+        _tempTaskOrder = taskOrderCopy.substr(0,_indexMark);
+        taskOrderCopy=taskOrderCopy.substr(_indexMark+1, taskOrderCopy.length());
+        getTaskOrder.push_back(_tempTaskOrder);
+    }
+     getTaskOrder.push_back(taskOrderCopy);
 	  for(WorkloadList::iterator i=_workloadList.begin(); i != _workloadList.end(); ++i){
 #ifdef DEBUG_FPGA
 	    std::cout<<"temp for"<<std::endl;
@@ -68,32 +76,36 @@ TMLTime ReconfigScheduler::schedule(TMLTime iEndSchedule){
 	    std::string taskName=aTempTask->toString();
 	    unsigned int indexTask=taskName.find_last_of("_");
 	    unsigned int taskNameLength=taskName.length()-indexTask;
-	    _indexMark=_taskOrder.find_first_of(";");
-	    std::string _tempTaskOrder=_taskOrder.substr(0,_indexMark);
 #ifdef DEBUG_FPGA
 	    std::cout<<"taskName "<<taskName.substr(indexTask+1,taskNameLength)<<std::endl;
 #endif
-	    std::string::size_type position=_tempTaskOrder.find(taskName.substr(indexTask+1,taskNameLength));
-	    if(position!=_tempTaskOrder.npos){
-	       _tempWorkloadList.push_back(aTempTask);
-#ifdef DEBUG_FPGA
-	      std::cout<<"add task"<<std::endl;
-#endif
-	    }
-	    else
-	      continue;
-	  }
-	  
-	}
-	if(_tempWorkloadList.empty()){
-	  _nextTransaction=0;
-	  return _reconfigNumber ;
-	}
+        // set priority to task base on order of user
+        for(int z = 0; z < getTaskOrder.size(); z++){
+             std::string::size_type position=getTaskOrder[z].find(taskName.substr(indexTask+1,taskNameLength));
+                    if(position!=_tempTaskOrder.npos){
+                        (*i)->setPriority(z);
 
-	for(WorkloadList::iterator i=_tempWorkloadList.begin(); i != _tempWorkloadList.end(); ++i){
+             #ifdef DEBUG_FPGA
+                        std::cout<<"add task"<<std::endl;
+             #endif
+                        break;
+                    }
+
+        }
+        std::string::size_type position1=_taskOrder.find(taskName.substr(indexTask+1,taskNameLength));
+        //if task is not in order list, make it has lowest priority
+        if(position1 == std::string::npos){
+            (*i)->setPriority(getTaskOrder.size());
+        }
+
+	  }
+    _workloadList.sort(sortByPriority);//very importance
+      Priority aHighestPrioPast=-1;
+	for(WorkloadList::iterator i=_workloadList.begin(); i != _workloadList.end(); ++i){
 #ifdef DEBUG_FPGA
 	  std::cout<<"schedule for"<<std::endl;
 #endif
+	  (*i)->schedule(iEndSchedule);
 	  aTempTrans=(*i)->getNextTransaction(iEndSchedule);
 #ifdef DEBUG_FPGA
 	  if(aTempTrans==0) std::cout<<"temp trans is 0"<<std::endl;
@@ -104,27 +116,26 @@ TMLTime ReconfigScheduler::schedule(TMLTime iEndSchedule){
 	    aRunnableTime=aTempTrans->getRunnableTime();	
 	    if (aRunnableTime<=iEndSchedule){
 	      //Past
-
-	      aMarkerPast=aTempTrans;
-	      aSourcePast=*i; //NEW
-		        
+            if ((*i)->getPriority()<aHighestPrioPast || ((*i)->getPriority()==aHighestPrioPast && aRunnableTime<aLowestRunnableTimePast)){
+                aHighestPrioPast=(*i)->getPriority();
+                aLowestRunnableTimePast=aRunnableTime;
+                aMarkerPast=aTempTrans;
+                aSourcePast=*i;
+            }
 	    }else{
 	      //Future
-		        
-	      aTransTimeFuture=aRunnableTime;
-	      aMarkerFuture=aTempTrans;
-	      aSourceFuture=*i; //NEW
-		        
-				
+            if(aRunnableTime<aTransTimeFuture){
+                aTransTimeFuture=aRunnableTime;
+                aMarkerFuture=aTempTrans;
+                aSourceFuture=*i;
+            }
 	    }
 #ifdef DEBUG_FPGA
 	    std::cout<<"erase"<<std::endl;
 #endif
-	    _tempWorkloadList.erase(i);
-      
 	    break;
 	  }
-		     
+
 	}
 	if (aMarkerPast==0){
 	  _nextTransaction=aMarkerFuture;
@@ -133,14 +144,7 @@ TMLTime ReconfigScheduler::schedule(TMLTime iEndSchedule){
 	  _nextTransaction=aMarkerPast;
 	  _lastSource=aSourcePast; //NEW
 	}
-	
-	if(_tempWorkloadList.empty()){
-	  _taskOrder=_taskOrder.substr(_indexMark+1, _taskOrder.length());
-#ifdef DEBUG_FPGA
-	  std::cout<<"_taskOrder is "<<_taskOrder<<std::endl;
-#endif	  
-	  ++_reconfigNumber;
-	}
+    ++_reconfigNumber;
 
 #ifdef DEBUG_FPGA
 	std::cout<<"end order scheduler"<<std::endl;

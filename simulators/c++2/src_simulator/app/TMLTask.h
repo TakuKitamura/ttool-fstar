@@ -87,6 +87,9 @@ public:
 	/**
       	\return End of transaction
     	*/
+    inline void setPriority(int priority) {
+      _priority = priority;
+    }
 	inline TMLTime getEndLastTransaction() const {return _endLastTransaction;}
 	///Returns a pointer to the current command of the task
 	/**
