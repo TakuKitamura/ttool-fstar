@@ -42,3 +42,4 @@ jar {
 }
 
 mainClassName = 'RunDSE'
+
