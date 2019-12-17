@@ -1114,7 +1114,6 @@ std::vector<std::string> readFromFile(std::string& filename){
     }
 
     while (inFile >> x) {
-        std::cout<< "hellboy read: " << x << std::endl;
         parameters.push_back(x);
     }
     inFile.close();
@@ -1161,7 +1160,6 @@ ServerIF* Simulator::run(int iLen, char ** iArgs){
     addSignalToTask();
     std::ifstream inFile1(aArgString.c_str());
     int lineNumber =  std::count(std::istreambuf_iterator<char>(inFile1), std::istreambuf_iterator<char>(), '\n');
-    std::cout << "hellboy lineNumber " << lineNumber << std::endl;
     std::vector<std::string> parameters = readFromFile(aArgString);
     std::string aNewCmd;
     int previousTransTime = 0;
@@ -1169,19 +1167,21 @@ ServerIF* Simulator::run(int iLen, char ** iArgs){
 
         std::string channelName = "Application__" + parameters[i*4+1] + "__Application__" + parameters[i*4+1];
         TMLChannel* t = _simComp->getChannelByName(channelName);
-        std::cout<< "hellboy TTTTTTT: " << t->toShortString() << "ID = " << t->getID() <<std::endl;
         int timeToRun;
         std::istringstream (parameters[i*4]) >> timeToRun;
         timeToRun = timeToRun - previousTransTime;
         std::istringstream (parameters[i*4]) >> previousTransTime;
         if(t != 0){
-            aNewCmd += "1 6 " + to_string(timeToRun) + "; 6 " + to_string(t->getID()) + " 1";
+            aNewCmd += "1 6 " + to_string(timeToRun) + "; 6 " + to_string(t->getID()) + " 1 " + parameters[i*4+3];
+        }
+        else {
+            std::cout << "Error: Wrong channel name";
         }
         if(i + 1 != lineNumber) aNewCmd += ";";
 
     }
-    aNewCmd += ";1 0; 7 1 test.html";
-    std::cout<<"hellboy decodeCommand "<< aNewCmd << std::endl;
+    aNewCmd += ";1 0; 7 1 test.html;  1 7 100 100 test";
+    std::cout<<"DecodeCommand "<< aNewCmd << std::endl;
     std::ofstream aXmlOutFile1;
     std::string aXmlFileName1 = getArgs("-oxml", "reply.xml", iLen, iArgs);
     if (aXmlFileName1.empty()) aXmlOutFile1.open("/dev/null"); else aXmlOutFile1.open(aXmlFileName1.c_str());
@@ -1715,17 +1715,11 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
       aInpStream >> aParam1;
       TMLEventChannel* anEventChannel = dynamic_cast<TMLEventChannel*>(aChannel);
       if (anEventChannel==0){
-        //aChannel->insertSamples(aParam1, anInsertParam);
-        int x = 1;
-
-        Parameter* anInsertParam = new SizedParameter<ParamType,1>(x);
-        aInpStream >> anInsertParam;
-        aChannel->insertSamples(aParam1, anInsertParam);
+        aChannel->insertSamples(aParam1, 0);
       } else {
         //Parameter<ParamType> anInsertParam((dynamic_cast<TMLEventChannel*>(aChannel))->getParamNo());
         Parameter* anInsertParam = anEventChannel->buildParameter();
         aInpStream >> anInsertParam;
-        //aChannel->insertSamples(aParam1, anInsertParam);
         aChannel->insertSamples(aParam1, anInsertParam);
       }
       aGlobMsg << TAG_MSGo << "Write data/event to channel." << TAG_MSGc << std::endl;

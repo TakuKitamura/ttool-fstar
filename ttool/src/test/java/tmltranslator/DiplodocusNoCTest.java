@@ -58,7 +58,7 @@ public class DiplodocusNoCTest extends AbstractUITest {
     }
 
 
-    @Test(timeout=300000) // in milliseconds
+    @Test(timeout=600000) // in milliseconds
     public void testSimulationGraph() throws Exception {
 
         String s = MODEL;

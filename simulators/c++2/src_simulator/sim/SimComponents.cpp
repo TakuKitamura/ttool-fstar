@@ -344,8 +344,8 @@ TMLChannel* SimComponents::getChannelByID(ID iID) const{
 
 void SimComponents::getChannelList(){
     for(ChannelList::const_iterator i=_channelList.begin(); i != _channelList.end(); ++i){
-        std::cout << "hellboy channel ID " << (*i)->getID() << std::endl;
-        std::cout << "hellboy channel name " << (*i)->toShortString() << std::endl;
+        std::cout << "Channel ID " << (*i)->getID() << std::endl;
+        std::cout << "Channel name " << (*i)->toShortString() << std::endl;
     }
 }
 
