@@ -265,6 +265,7 @@ public:
 	/**
 	\param iTraceFileName Name of the output trace file
 	*/
+    void addSignalToTask();
 	void schedule2TXT(std::string& iTraceFileName) const;
 
 	void schedule2XML(std::ostringstream& glob,std::string& iTraceFileName) const;

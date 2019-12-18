@@ -342,6 +342,13 @@ TMLChannel* SimComponents::getChannelByID(ID iID) const{
 	return NULL;
 }
 
+void SimComponents::getChannelList(){
+    for(ChannelList::const_iterator i=_channelList.begin(); i != _channelList.end(); ++i){
+        std::cout << "Channel ID " << (*i)->getID() << std::endl;
+        std::cout << "Channel name " << (*i)->toShortString() << std::endl;
+    }
+}
+
 /*TMLChoiceCommand* SimComponents::getCurrentChoiceCmd(){
 	TMLChoiceCommand* aResult;
 	for(TaskList::const_iterator i=_taskList.begin(); i != _taskList.end(); ++i){

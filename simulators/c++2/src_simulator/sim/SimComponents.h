@@ -316,6 +316,7 @@ public:
 	ListenerSubject<GeneralListener>* getListenerByID(ID iID);
 	virtual void generateTEPEs()=0;
 	void showTaskStates();
+    void getChannelList();
 	bool couldCPUBeIdle(CPU* iCPU);
 	bool couldFPGABeIdle(FPGA* iFPGA);
 protected:
