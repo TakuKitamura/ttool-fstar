@@ -48,6 +48,8 @@ public class GraphLatencyAnalysis extends AbstractUITest {
 
         if (panel == null) {
             System.out.println("NULL Panel");
+        } else {
+            System.out.println("Non NULL Panel");
         }
 
         mainGUI.checkModelingSyntax(panel, true);
