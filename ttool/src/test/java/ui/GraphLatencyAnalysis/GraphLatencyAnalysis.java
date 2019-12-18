@@ -44,7 +44,7 @@ public class GraphLatencyAnalysis extends AbstractUITest {
         mainGUI.openProjectFromFile(new File(getBaseResourcesDir() + modelPath));
         // mainGUI.openProjectFromFile(new File( modelPath));
         try {
-            Thread.currentThread().sleep(2000);
+            Thread.currentThread().sleep(5000);
         } catch (Exception e) {
             System.out.println("Interrupted");
         }
