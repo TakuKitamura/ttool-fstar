@@ -48,8 +48,14 @@ public class GraphLatencyAnalysis extends AbstractUITest {
 
         mainGUI.checkModelingSyntax(panel, true);
         mainGUI.latencyDetailedAnalysis();
-        mainGUI.getLatencyDetailedAnalysis().setVisible(false);
+
         latencyDetailedAnalysis = mainGUI.getLatencyDetailedAnalysis();
+        if (latencyDetailedAnalysis == null) {
+            return;
+        }
+
+        mainGUI.getLatencyDetailedAnalysis().setVisible(false);
+
 
         while (latencyDetailedAnalysis.graphStatus() != Thread.State.TERMINATED) {
             dgt = latencyDetailedAnalysis.getDgraph();
@@ -59,6 +65,8 @@ public class GraphLatencyAnalysis extends AbstractUITest {
 
     @Test
     public void parseFile() {
+
+        assertNotNull(latencyDetailedAnalysis);
 
         int graphsize = dgt.getGraphsize();
 
