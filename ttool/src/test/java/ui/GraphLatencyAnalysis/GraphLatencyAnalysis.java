@@ -50,15 +50,11 @@ public class GraphLatencyAnalysis extends AbstractUITest {
         mainGUI.latencyDetailedAnalysis();
 
         latencyDetailedAnalysis = mainGUI.getLatencyDetailedAnalysis();
-        if (latencyDetailedAnalysis == null) {
-            return;
-        }
-
-        mainGUI.getLatencyDetailedAnalysis().setVisible(false);
-
-
-        while (latencyDetailedAnalysis.graphStatus() != Thread.State.TERMINATED) {
-            dgt = latencyDetailedAnalysis.getDgraph();
+        if (latencyDetailedAnalysis != null) {
+            latencyDetailedAnalysis.setVisible(false);
+            while (latencyDetailedAnalysis.graphStatus() != Thread.State.TERMINATED) {
+                dgt = latencyDetailedAnalysis.getDgraph();
+            }
         }
 
     }
