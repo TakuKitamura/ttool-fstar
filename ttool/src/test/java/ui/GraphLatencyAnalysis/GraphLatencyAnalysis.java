@@ -18,8 +18,8 @@ import ui.interactivesimulation.SimulationTransaction;
 
 public class GraphLatencyAnalysis extends AbstractUITest {
 
-    private static final String simulationTracePath = "/ui/graphLatencyAnalysis/input/graphTest.xml";
-    private static final String modelPath = "/ui/graphLatencyAnalysis/input/GraphTest.xml";
+    private static final String simulationTracePath = "/ui/graphLatencyAnalysis/input/graphTestSimulationTrace.xml";
+    private static final String modelPath = "/ui/graphLatencyAnalysis/input/GraphTestModel.xml";
     // private static final String simulationTracePath =
     // "/home/maysam/eclipse/TTool/ttool/src/test/resources/ui/graphLatencyAnalysis/input/graphTest.xml";
     // private static final String modelPath =
