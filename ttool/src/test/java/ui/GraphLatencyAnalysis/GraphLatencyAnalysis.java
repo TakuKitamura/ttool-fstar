@@ -46,6 +46,10 @@ public class GraphLatencyAnalysis extends AbstractUITest {
 
         final TMLArchiPanel panel = findArchiPanel(mappingDiagName);
 
+        if (panel == null) {
+            System.out.println("NULL Panel");
+        }
+
         mainGUI.checkModelingSyntax(panel, true);
         mainGUI.latencyDetailedAnalysis();
 
