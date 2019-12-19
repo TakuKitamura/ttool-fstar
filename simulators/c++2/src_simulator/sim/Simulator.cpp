@@ -1119,16 +1119,23 @@ std::vector<std::string> readFromFile(std::string& filename){
     inFile.close();
     return parameters;
 }
-void Simulator::addSignalToTask(){
-    _simComp->getChannelList();
-}
+
 template < typename T > std::string to_string( const T& n )
     {
         std::ostringstream stm ;
         stm << n ;
         return stm.str() ;
     }
+int countLineNumber(std::string& filename){
+    int number_of_lines = 0;
+    std::string line;
+    std::ifstream myfile(filename.c_str());
 
+    while (std::getline(myfile, line))
+        ++number_of_lines;
+    std::cout << "Number of lines in text file: " << number_of_lines << std::endl;
+    return number_of_lines;
+}
 ServerIF* Simulator::run(int iLen, char ** iArgs){
   std::string aArgString;
   std::string graphName = "";
@@ -1157,46 +1164,48 @@ ServerIF* Simulator::run(int iLen, char ** iArgs){
   _replyToServer = false;
   aArgString=getArgs("-signals", "signals.txt", iLen, iArgs);
   if (!aArgString.empty()) {
-    addSignalToTask();
-    std::ifstream inFile1(aArgString.c_str());
-    int lineNumber =  std::count(std::istreambuf_iterator<char>(inFile1), std::istreambuf_iterator<char>(), '\n');
+    int lineNumber =  countLineNumber(aArgString);
     std::vector<std::string> parameters = readFromFile(aArgString);
     std::string aNewCmd;
     int previousTransTime = 0;
-    for (int i = 0; i < lineNumber; i++){
-
-        std::string channelName = "Application__" + parameters[i*4+1] + "__Application__" + parameters[i*4+1];
-        TMLChannel* t = _simComp->getChannelByName(channelName);
-        int timeToRun;
-        std::istringstream (parameters[i*4]) >> timeToRun;
-        timeToRun = timeToRun - previousTransTime;
-        std::istringstream (parameters[i*4]) >> previousTransTime;
-        if(t != 0){
-            aNewCmd += "1 6 " + to_string(timeToRun) + "; 6 " + to_string(t->getID()) + " 1 " + parameters[i*4+3];
+    if(lineNumber != 0){
+        for (int i = 0; i < lineNumber; i++){
+            std::string channelName =_simComp->getChannelList(parameters[i*4+1]);
+            TMLChannel* t = _simComp->getChannelByName(channelName);
+            if(t != 0){
+                aNewCmd += "1 5 " + parameters[i*4] + "; 6 " + to_string(t->getID()) + " 1 " + parameters[i*4+3] + "; ";
+            }
+            else {
+                std::cout << "Error: Wrong channel name\n";
+                previousTransTime++;
+            }
         }
-        else {
-            std::cout << "Error: Wrong channel name";
+        if(previousTransTime != lineNumber){
+            aNewCmd += "1 0; 7 1 test.html;  1 7 100 100 test";
+        } else {
+            aNewCmd = "1 0; 7 1 test.html;  1 7 100 100 test";
         }
-        if(i + 1 != lineNumber) aNewCmd += ";";
 
-    }
-    aNewCmd += ";1 0; 7 1 test.html;  1 7 100 100 test";
-    std::cout<<"DecodeCommand "<< aNewCmd << std::endl;
-    std::ofstream aXmlOutFile1;
-    std::string aXmlFileName1 = getArgs("-oxml", "reply.xml", iLen, iArgs);
-    if (aXmlFileName1.empty()) aXmlOutFile1.open("/dev/null"); else aXmlOutFile1.open(aXmlFileName1.c_str());
-    if (aXmlOutFile1.is_open()){
-    std::string aNextCmd1;
-    std::istringstream iss1(aNewCmd+";");
-    getline(iss1, aNextCmd1, ';');
-    while (!(iss1.eof() || aNextCmd1.empty())){
-      std::cout << "next cmd to execute: \"" << aNextCmd1 << "\"\n";
-      decodeCommand(aNextCmd1, aXmlOutFile1);
-      getline(iss1, aNextCmd1, ';');
-    }
-    aXmlOutFile1.close();
-  }else
-    std::cout << "XML output file could not be opened, aborting.\n";
+        std::cout<<"DecodeCommand "<< aNewCmd << std::endl;
+        std::ofstream aXmlOutFile1;
+        std::string aXmlFileName1 = getArgs("-oxml", "reply.xml", iLen, iArgs);
+        if (aXmlFileName1.empty()) aXmlOutFile1.open("/dev/null"); else aXmlOutFile1.open(aXmlFileName1.c_str());
+        if (aXmlOutFile1.is_open()){
+        std::string aNextCmd1;
+        std::istringstream iss1(aNewCmd+";");
+        getline(iss1, aNextCmd1, ';');
+        while (!(iss1.eof() || aNextCmd1.empty())){
+          std::cout << "next cmd to execute: \"" << aNextCmd1 << "\"\n";
+          decodeCommand(aNextCmd1, aXmlOutFile1);
+          getline(iss1, aNextCmd1, ';');
+        }
+        aXmlOutFile1.close();
+      } else{
+            std::cout << "XML output file could not be opened, aborting.\n";
+        }
+      } else {
+         std::cout << "Signal file contains nothing, aborting.\n";
+      }
   }
   aArgString =getArgs("-help", "help", iLen, iArgs);
   if (aArgString.empty()){
