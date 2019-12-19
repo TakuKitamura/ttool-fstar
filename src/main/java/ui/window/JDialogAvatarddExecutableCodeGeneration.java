@@ -559,8 +559,11 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
                         pathCode = code2.getText();
 
                         TraceManager.addDev("AVATAR TOPCELL saved in " + code2.getText());
-                        topCellGenerator.saveFile(pathCode,listsyscamspanel); // DG 28.11.2019
-
+			//if (!listsyscamspanel.isEmpty())
+			if (listsyscamspanel==null)topCellGenerator.saveFile(pathCode);
+                        //topCellGenerator.saveFile(pathCode,listsyscamspanel); // DG 13.12.2019
+			else //topCellGenerator.saveFile(pathCode);
+topCellGenerator.saveFile(pathCode,listsyscamspanel); // DG 13.12.2019
                         jta.append("Code saved\n");
                     } catch (Exception e) {
                         jta.append("Could not generate files\n");

@@ -101,9 +101,14 @@ public class Simulation {
 		 simulation =simulation+"int sc_main (int argc, char *argv[])" + CR + "{" + CR;
 
 
-		 /*loop over all panels all clocks */
+		 /*loop over all panels and all clocks */
 
 		 // Vector<SysCAMSComponentTaskDiagramPanel> syscamsDiagramPanels = mgui.getListSysCAMSPanel();
+
+  
+		 
+		 if(listsyscamspanel!=null){
+		 
 		 for (SysCAMSComponentTaskDiagramPanel syscamsDiagramPanel : listsyscamspanel) {
 		     SysCAMSPanelTranslator syscamspaneltranslator = new SysCAMSPanelTranslator(syscamsDiagramPanel);
 		     SysCAMSSpecification syscalsspec = syscamspaneltranslator.getSysCAMSSpecification();
@@ -125,7 +130,7 @@ public class Simulation {
 			 simulation =simulation+ "\t  sc_clock " + t.getName() + " (\"" + t.getName() + "\"," + t.getFrequency()+","+ unitString+","+ t.getDutyCycle()+","+ t.getStartTime()+","+unitStartTimeString+","+ t.getPosFirst()+");" + CR;	
 		     }
 		 }
- 
+		 }
 
 		 
 		 simulation = simulation +"       try {" + CR +"         return _main(argc, argv);" + CR + "    }" + CR2;

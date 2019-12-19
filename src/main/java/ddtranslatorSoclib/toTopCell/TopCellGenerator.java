@@ -246,11 +246,6 @@ public class TopCellGenerator
 		}
 	    }
 	    
-	    /* Central interconnect or local crossbars */
-	    
-	    /* if(TopCellGenerator.avatardd.getNbCrossbar()>0){
-		
-	       }*/
 	    makeVCIparameters();
 	    makeConfig();
 	    String top = Header.getHeader() + 
@@ -283,7 +278,25 @@ public class TopCellGenerator
 		return mappingLines;
 	}
 
+
+      public void saveFile(String path) {
+	  //System.out.println("save file 1 **********");
+		try {
+          System.err.println(path + GENERATED_PATH + "top.cc");
+			FileWriter fw = new FileWriter(path + GENERATED_PATH + "/top.cc");
+			top = generateTopCell(null);
+			fw.write(top);
+			fw.close();
+		} catch (IOException ex) {
+		}
+		saveFileDeploy(path);
+		saveFilePlatform(path);
+		saveFileProcinfo(path);
+		saveFileNBproc(path);
+	}
+
     public void saveFile(String path, Vector<SysCAMSComponentTaskDiagramPanel> listsyscamspanel) {
+	//System.out.println("save file 2 **********");
 		try {
           System.err.println(path + GENERATED_PATH + "top.cc");
 			FileWriter fw = new FileWriter(path + GENERATED_PATH + "/top.cc");
