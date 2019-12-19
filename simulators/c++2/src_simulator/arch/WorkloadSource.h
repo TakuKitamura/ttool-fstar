@@ -84,6 +84,9 @@ public:
 	/**
 	\param iSource Pointer to workload source
 	*/
+    inline void setPriority(int priority) {
+      _priority = priority;
+    }
 	inline void addWorkloadSource(WorkloadSource* iSource){
 		for(WorkloadList::iterator i=_workloadList.begin(); i != _workloadList.end(); ++i)
 			if (*i==iSource) return;

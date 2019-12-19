@@ -1,4 +1,3 @@
-UNAME := $(shell uname -s)
 CC     = /usr/bin/gcc
 #CC     = test2.sh
 #CC = /packages/gcc_3.2.2/bin/g++32
@@ -6,7 +5,7 @@ OPT    = -O1 -pthread
 # Solaris
 #LOPT   = -O1 -pthread -ldl -lnsl -lsocket
 #Linux
-LOPT_UNIX   = -O1 -pthread -ldl -lrt
+LOPT_UNIX   = -O1 -pthread -ldl -lrt -lm -lev3dev
 LOPT_MAC = -O1 -pthread -ldl
 
 DEBUG  = -g
@@ -29,4 +28,4 @@ OBJS = $(SRCS:%.c=lib/%.o)
 
 include Makefile.defs
 
-include Makefile.forsoclib
+

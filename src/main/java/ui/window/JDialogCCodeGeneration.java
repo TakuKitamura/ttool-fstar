@@ -468,6 +468,12 @@ public class JDialogCCodeGeneration extends JDialog implements ActionListener, R
         boolean error = false;
 
         jta.append("Generating C code...\n\n");
+
+        // First create the corresponding directory
+        String dirD = code1.getText();
+        File newDir = new File(dirD);
+        newDir.mkdir();
+
         if (removeCppFiles.isSelected()) {
             jta.append("Removing all .h files...\n");
             list = FileUtils.deleteFiles(code1.getText(), ".h");

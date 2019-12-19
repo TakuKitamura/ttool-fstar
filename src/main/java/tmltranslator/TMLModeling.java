@@ -2138,7 +2138,7 @@ public class  TMLModeling<E> {
                     del1 = (TMLDelay)elt1;
                     del0 = (TMLDelay)elt0;
 
-                    if (del1.getUnit().equals(del0.getUnit())) {
+                    if (del1.getUnit().equals(del0.getUnit()) && (del1.getActiveDelay() == del0.getActiveDelay())) {
                         // We delete the second i.e. elt1
                         activity.removeElement(elt1);
 

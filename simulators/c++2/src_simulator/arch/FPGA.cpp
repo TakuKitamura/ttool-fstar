@@ -596,9 +596,10 @@ void FPGA::HW2HTML(std::ofstream& myfile)  {
 	TMLTransaction* aCurrTrans = *i;
 	unsigned int aBlanks = aCurrTrans->getStartTime() - aCurrTime;
 	//std::cout<<"blank is "<<aBlanks<<std::endl;
-	if ( aBlanks > 0 ) {
-	  writeHTMLColumn( myfile, aBlanks, "not", "idle time" );
-	}
+	if ( aBlanks >= 0 && (!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction()) )
+	    writeHTMLColumn( myfile, aBlanks+1, "not", "idle time" );
+	else if ( aBlanks > 0 )
+	    writeHTMLColumn( myfile, aBlanks, "not", "idle time" );
 
 	unsigned int aLength = aCurrTrans->getOperationLength();
 
@@ -609,8 +610,9 @@ void FPGA::HW2HTML(std::ofstream& myfile)  {
 	std::string aCurrTransName=aCurrTrans->toShortString();
 	unsigned int indexTrans=aCurrTransName.find_first_of(":");
 	std::string aCurrContent=aCurrTransName.substr(indexTrans+1,2);
-	writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString(), aCurrContent );
-
+	if(!(!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction())){
+      writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString(), aCurrContent );
+    }
 	if(aCurrTrans->getCommand()->getTask()->getIsDaemon() == true && aCurrTrans->getEndTime() > _simulatedTime)
 	  aCurrTime = _simulatedTime;
 	else
@@ -664,9 +666,10 @@ void FPGA::schedule2HTML(std::ofstream& myfile)  {
 	TMLTransaction* aCurrTrans = *i;
 	unsigned int aBlanks = aCurrTrans->getStartTime() - aCurrTime;
 	//std::cout<<"blank is "<<aBlanks<<std::endl;
-	if ( aBlanks > 0 ) {
-	  writeHTMLColumn( myfile, aBlanks, "not", "idle time" );
-	}
+	if ( aBlanks >= 0 && (!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction()) )
+	    writeHTMLColumn( myfile, aBlanks+1, "not", "idle time" );
+	else if ( aBlanks > 0 )
+	    writeHTMLColumn( myfile, aBlanks, "not", "idle time" );
 
 	unsigned int aLength = aCurrTrans->getOperationLength();
 
@@ -675,8 +678,9 @@ void FPGA::schedule2HTML(std::ofstream& myfile)  {
 	TMLTask* task = aCurrTrans->getCommand()->getTask();
 	//	std::cout<<"what is this task?"<<task->toString()<<std::endl;
 	const std::string cellClass = determineHTMLCellClass(  nextCellClassIndex );
-
-	writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString() );
+    if(!(!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction())){
+      writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString() );
+    }
 
 	if(aCurrTrans->getCommand()->getTask()->getIsDaemon() == true && aCurrTrans->getEndTime() > _simulatedTime)
 	  aCurrTime = _simulatedTime;

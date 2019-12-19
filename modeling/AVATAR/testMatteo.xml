@@ -2841,7 +2841,7 @@
 <MainCode value="void __user_init() {"/>
 <MainCode value="}"/>
 <Optimized value="true" />
-<Validated value="Clock;Main;P1;P0;P3;P2;" />
+<Validated value="" />
 <Ignored value="" />
 
 <CONNECTOR type="118" id="1116" >

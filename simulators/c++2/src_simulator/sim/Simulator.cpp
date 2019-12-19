@@ -713,7 +713,7 @@ void Simulator::schedule2VCD(std::string& iTraceFileName) const{
        }
       else{
 	if(((*i)->toShortString().substr(0,2) == "ta"))
-	  myfile << "$var wire 2 " << (*i)->toShortString() << " " << (*i)->toString() << " $end\n";
+	  myfile << "$var wire 1 " << (*i)->toShortString() << " " << (*i)->toString() << " $end\n";
 	else
 	  myfile << "$var wire 1 " << (*i)->toShortString() << " " << (*i)->toString() << " $end\n";
  	aTopElement = new SignalChangeData();
@@ -1080,6 +1080,7 @@ void Simulator::printHelp(){
     "-explo                 generate the reachability graph                 \n"
     "-cmd \'c1 p1 p2;c2\'     execute commands c1 with parameters p1 and p2 and c2\n"
     "-oxml ofile            xml reply is written to ofile, in case the -cmd option is used\n"
+    "-signals ofile         generates signals from declared file \n"
     "***************************************************************************\n\n";
 }
 
@@ -1101,6 +1102,40 @@ void Simulator::run(){
   std::cout << "Simulator loop terminated." << std::endl;
 }
 
+std::vector<std::string> readFromFile(std::string& filename){
+    std::string x;
+    std::vector<std::string> parameters;
+    std::ifstream inFile(filename.c_str());
+
+//    inFile.open(filename);
+    if (!inFile) {
+        std::cout << "Unable to open file";
+        exit(1); // terminate with error
+    }
+
+    while (inFile >> x) {
+        parameters.push_back(x);
+    }
+    inFile.close();
+    return parameters;
+}
+
+template < typename T > std::string to_string( const T& n )
+    {
+        std::ostringstream stm ;
+        stm << n ;
+        return stm.str() ;
+    }
+int countLineNumber(std::string& filename){
+    int number_of_lines = 0;
+    std::string line;
+    std::ifstream myfile(filename.c_str());
+
+    while (std::getline(myfile, line))
+        ++number_of_lines;
+    std::cout << "Number of lines in text file: " << number_of_lines << std::endl;
+    return number_of_lines;
+}
 ServerIF* Simulator::run(int iLen, char ** iArgs){
   std::string aArgString;
   std::string graphName = "";
@@ -1127,6 +1162,51 @@ ServerIF* Simulator::run(int iLen, char ** iArgs){
   //if (!aArgString.empty()) return new ServerExplore();
   std::cout << "Running in command line mode.\n";
   _replyToServer = false;
+  aArgString=getArgs("-signals", "signals.txt", iLen, iArgs);
+  if (!aArgString.empty()) {
+    int lineNumber =  countLineNumber(aArgString);
+    std::vector<std::string> parameters = readFromFile(aArgString);
+    std::string aNewCmd;
+    int previousTransTime = 0;
+    if(lineNumber != 0){
+        for (int i = 0; i < lineNumber; i++){
+            std::string channelName =_simComp->getChannelList(parameters[i*4+1]);
+            TMLChannel* t = _simComp->getChannelByName(channelName);
+            if(t != 0){
+                aNewCmd += "1 5 " + parameters[i*4] + "; 6 " + to_string(t->getID()) + " 1 " + parameters[i*4+3] + "; ";
+            }
+            else {
+                std::cout << "Error: Wrong channel name\n";
+                previousTransTime++;
+            }
+        }
+        if(previousTransTime != lineNumber){
+            aNewCmd += "1 0; 7 1 test.html;  1 7 100 100 test";
+        } else {
+            aNewCmd = "1 0; 7 1 test.html;  1 7 100 100 test";
+        }
+
+        std::cout<<"DecodeCommand "<< aNewCmd << std::endl;
+        std::ofstream aXmlOutFile1;
+        std::string aXmlFileName1 = getArgs("-oxml", "reply.xml", iLen, iArgs);
+        if (aXmlFileName1.empty()) aXmlOutFile1.open("/dev/null"); else aXmlOutFile1.open(aXmlFileName1.c_str());
+        if (aXmlOutFile1.is_open()){
+        std::string aNextCmd1;
+        std::istringstream iss1(aNewCmd+";");
+        getline(iss1, aNextCmd1, ';');
+        while (!(iss1.eof() || aNextCmd1.empty())){
+          std::cout << "next cmd to execute: \"" << aNextCmd1 << "\"\n";
+          decodeCommand(aNextCmd1, aXmlOutFile1);
+          getline(iss1, aNextCmd1, ';');
+        }
+        aXmlOutFile1.close();
+      } else{
+            std::cout << "XML output file could not be opened, aborting.\n";
+        }
+      } else {
+         std::cout << "Signal file contains nothing, aborting.\n";
+      }
+  }
   aArgString =getArgs("-help", "help", iLen, iArgs);
   if (aArgString.empty()){
     //aArgString =getArgs("-explo", "explo", iLen, iArgs);
@@ -1644,13 +1724,11 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
       aInpStream >> aParam1;
       TMLEventChannel* anEventChannel = dynamic_cast<TMLEventChannel*>(aChannel);
       if (anEventChannel==0){
-        //aChannel->insertSamples(aParam1, anInsertParam);
         aChannel->insertSamples(aParam1, 0);
       } else {
         //Parameter<ParamType> anInsertParam((dynamic_cast<TMLEventChannel*>(aChannel))->getParamNo());
         Parameter* anInsertParam = anEventChannel->buildParameter();
         aInpStream >> anInsertParam;
-        //aChannel->insertSamples(aParam1, anInsertParam);
         aChannel->insertSamples(aParam1, anInsertParam);
       }
       aGlobMsg << TAG_MSGo << "Write data/event to channel." << TAG_MSGc << std::endl;

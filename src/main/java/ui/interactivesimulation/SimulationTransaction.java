@@ -36,26 +36,23 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.interactivesimulation;
 
 /**
-   * Class SimulationTransaction
-   * Transaction as defined by the simulation engine
-   * Creation: 20/05/2016
-   * @version 1.0 20/05/2016
-   * @author Ludovic APVRILLE
+ * Class SimulationTransaction Transaction as defined by the simulation engine
+ * Creation: 20/05/2016
+ * 
+ * @version 1.0 20/05/2016
+ * @author Ludovic APVRILLE
  */
-public class SimulationTransaction  {
+public class SimulationTransaction {
 
     public final static int NODE_TYPE_CPU = 0;
     public final static int NOTE_TYPE_BUS = 1;
 
     public String nodeType;
     public String deviceName;
-    public String taskName; 
+    public String taskName;
     public String command;
     public String startTime;
     public String endTime;
@@ -64,12 +61,14 @@ public class SimulationTransaction  {
     public String channelName;
 	public String id;
 	public long uniqueID = -1;
+	public int index = 0;
+	public String runnableTime;
 
-	public SimulationTransaction() {
+    public SimulationTransaction() {
     }
 
     public String toString() {
-	    return "ID=" + uniqueID + " nodeType=" + nodeType + " name= " + deviceName + " id=" + id + " command=" + command;
+        return "ID=" + uniqueID + " nodeType=" + nodeType + " name= " + deviceName + " id=" + id + " command=" + command;
     }
 
 }

@@ -156,7 +156,9 @@ public class TMLADDelayInterval extends TADComponentWithSubcomponents /* Issue #
     public void setMaxValue(String val) {
         ((TGCTimeDelay)(tgcomponent[0])).setMaxDelay(val);
     }
-    
+
+    public boolean getActiveDelayEnableValue(){return  ((TGCTimeDelay)tgcomponent[0]).getActiveDelay(); }
+
     @Override
     public int getType() {
         return TGComponentManager.TMLAD_INTERVAL_DELAY;
