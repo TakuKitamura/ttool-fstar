@@ -230,7 +230,7 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
                             if (isOut) {
                                 tdp.highlightOutAndFreeConnectingPoint(e.getX(), e.getY(), tgc.getType());
                             } else {
-                                tdp.highlightInAndFreeConnectingPoint(e.getX(), e.getY(), tgc.getType());
+                                tdp.highlightInAndFreeConnectingPoint(e.getX(), e.getY(), tgc.getType(), tgco.p1);
                             }
                             oldx = cde[0].getX();
                             oldy = cde[0].getY();
@@ -606,7 +606,7 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
         }
 
         if ((selected == TGComponentManager.CONNECTOR) && (tdp.mode == TDiagramPanel.ADDING_CONNECTOR)) {
-            tdp.highlightInAndFreeConnectingPoint(e.getX(), e.getY(), tdp.getMGUI().getIdButtonSelected());
+            tdp.highlightInAndFreeConnectingPoint(e.getX(), e.getY(), tdp.getMGUI().getIdButtonSelected(), cp);
             tdp.setAddingTGConnector(e.getX(), e.getY());
             tdp.repaint();
         }
@@ -654,7 +654,7 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
             if (isOut) {
                 tdp.highlightOutAndFreeConnectingPoint(e.getX(), e.getY(), tgc.getType());
             } else {
-                tdp.highlightInAndFreeConnectingPoint(e.getX(), e.getY(), tgc.getType());
+                tdp.highlightInAndFreeConnectingPoint(e.getX(), e.getY(), tgc.getType(), cp);
             }
             tdp.repaint();
         }

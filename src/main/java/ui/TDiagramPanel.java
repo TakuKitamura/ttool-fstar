@@ -627,8 +627,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         mode = NORMAL;
     }
 
-    public StringBuffer saveSelectedInXML() {
-        StringBuffer s = componentsInXML(true);
+    public StringBuffer saveSelectedInXML(boolean cloneEvenIfNonNullFather) {
+        StringBuffer s = componentsInXML(true, cloneEvenIfNonNullFather);
         if (s == null) {
             return null;
         }
@@ -638,7 +638,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         sb.append("\n");
         sb.append(getXMLSelectedTail());
 
-        //TraceManager.addDev("xml of selected components:" + sb);
+        //TraceManager.addDev("XML of selected components:" + sb);
 
         return sb;
     }
@@ -654,6 +654,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         sb.append(s);
         sb.append("\n");
         sb.append(getXMLTail());
+
         return sb;
     }
 
@@ -663,28 +664,40 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         sb.append(tgc.saveInXML());
         sb.append("\n");
         sb.append(getXMLCloneTail());
-        //TraceManager.addDev("sb=\n" + sb);
+        TraceManager.addDev("sb=\n" + sb);
         return sb;
     }
 
     private StringBuffer componentsInXML(boolean selected) {
+        return componentsInXML(selected, false);
+    }
+
+    private StringBuffer componentsInXML(boolean selected, boolean cloneEvenIfNonNullFather) {
         StringBuffer sb = new StringBuffer();
         StringBuffer s;
 
         //Added by Solange to see the components in the list
         //    LinkedList<TGComponent> ruteoList = this.componentList;
         //
-        for (TGComponent tgc : this.componentList) {
+
+        for (TGComponent tgc : this.getAllComponentList()){
+        //for (TGComponent tgc : this.componentList) {
             if ((selected == false) || (tgc.isSelected())) {
-                s = tgc.saveInXML();
-                if (s == null) {
-                    return null;
-                }
-                sb.append(s);
-                sb.append("\n");
+               if((tgc.getFather() == null) || (cloneEvenIfNonNullFather)) {
+                   //TraceManager.addDev("Cloning:" + tgc);
+                   s = tgc.saveInXML(true, cloneEvenIfNonNullFather);
+                   //TraceManager.addDev("Saving component in xml:" + s);
+                   if (s == null) {
+                       return null;
+                   }
+                   sb.append(s);
+                   sb.append("\n");
+               }
             }
         }
-
+        if (cloneEvenIfNonNullFather) {
+            TraceManager.addDev("sb=\n" + sb);
+        }
         return sb;
     }
 
@@ -926,7 +939,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         return b;
     }
 
-    public boolean highlightInAndFreeConnectingPoint(int x, int y, int type) {
+    public boolean highlightInAndFreeConnectingPoint(int x, int y, int type, TGConnectingPoint outPoint) {
+
+        //TraceManager.addDev(" highlightInAndFreeConnectingPoint");
+
         TGConnectingPoint cp;
         //   int state;
         boolean b = false;
@@ -938,8 +954,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                 b = tgc.setStateTGConnectingPoint(TGConnectingPoint.NORMAL) || b;
             }
             if (pointedElementFound == false) {
-                cp = tgc.getFreeTGConnectingPointAtAndCompatible(x, y, type);
+                cp = tgc.getFreeTGConnectingPointAtAndCompatible(x, y, type, outPoint);
                 if ((cp != null) && (cp.isIn()) && (cp.isFree())) {
+                    //TraceManager.addDev("Got selected cp");
                     selectedConnectingPoint = cp;
                     pointedElementFound = true;
                     b = cp.setState(TGConnectingPoint.SELECTED) || b;
@@ -1050,6 +1067,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
         return ll;
     }
+
 
     // Adding connector
     public void addingTGConnector() {
@@ -1361,23 +1379,27 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         return v;
     }
 
+
+    //issue 186
     public Vector<TMLCPrimitiveComponent> selectedCPrimitiveComponent() {
         Vector<TMLCPrimitiveComponent> v = null;
 
-        for (TGComponent tgc : this.componentList)
+        for (TGComponent tgc : this.getAllComponentList()){
             if (tgc.isSelected()) {
                 if (tgc instanceof TMLCPrimitiveComponent) {
                     if (v == null)
                         v = new Vector<TMLCPrimitiveComponent>();
                     v.addElement((TMLCPrimitiveComponent) tgc);
                 }
-
                 if (tgc instanceof TMLCCompositeComponent) {
                     if (v == null)
                         v = new Vector<TMLCPrimitiveComponent>();
                     v.addAll(((TMLCCompositeComponent) (tgc)).getAllPrimitiveComponents());
                 }
             }
+
+
+        }
 
         return v;
     }
@@ -1707,7 +1729,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
 
         if (e.getSource() == clone) {
-            cloneComponent(componentPopup.getTopFather());
+            //issue 186
+            cloneComponent(componentPopup, true);
             repaint();
             return;
         }
@@ -1901,7 +1924,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
         if (e.getSource() == breakpoint) {
             if (componentPopup instanceof AllowedBreakpoint) {
+                //TraceManager.addDev("hasBreakpoint?" + componentPopup.getBreakpoint());
+
                 componentPopup.setBreakpoint(!componentPopup.getBreakpoint());
+
                 if (componentPopup.getDIPLOID() != -1) {
                     if (componentPopup.getBreakpoint()) {
                         mgui.addBreakPoint(componentPopup.getDIPLOID());
@@ -1909,6 +1935,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                         mgui.removeBreakPoint(componentPopup.getDIPLOID());
                     }
                 }
+
+                repaint();
+
+                //TraceManager.addDev("hasBreakpoint?" + componentPopup.getBreakpoint());
             }
         }
 
@@ -2191,7 +2221,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public void makeCut() {
-        copyData = mgui.gtm.makeXMLFromSelectedComponentOfADiagram(this, getMaxIdSelected(), xSel, ySel);
+        copyData = mgui.gtm.makeXMLFromSelectedComponentOfADiagram(this, getMaxIdSelected(), xSel, ySel, false);
         removeAllSelectedComponents();
         mgui.changeMade(this, REMOVE_COMPONENT);
         mode = NORMAL;
@@ -2200,13 +2230,13 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public void makeCopy() {
-        copyData = mgui.gtm.makeXMLFromSelectedComponentOfADiagram(this, getMaxIdSelected(), xSel, ySel);
+        copyData = mgui.gtm.makeXMLFromSelectedComponentOfADiagram(this, getMaxIdSelected(), xSel, ySel, false);
         mgui.setMode(MainGUI.PASTE_OK);
         return;
     }
 
     public void saveAsLibrary() {
-        String data = mgui.gtm.makeXMLFromSelectedComponentOfADiagram(this, getMaxIdSelected(), xSel, ySel);
+        String data = mgui.gtm.makeXMLFromSelectedComponentOfADiagram(this, getMaxIdSelected(), xSel, ySel, false);
         mgui.saveAsLibrary(data);
         return;
     }
@@ -2216,11 +2246,19 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }
 
     public void makeDelete() {
-        //TraceManager.addDev("make delete");
+        //TraceManager.addDev("make DELETE");
         if (nextSelectedComponent() != null) {
+            //TraceManager.addDev("make DELETE SELECTED");
             removeAllSelectedComponents();
         } else if (componentPointed != null) {
-            removeComponent(componentPointed);
+            //TraceManager.addDev("make DELETE POINTED component=" + componentPointed.getName() + " removable?" + componentPointed.isRemovable());
+            if(!componentPointed.isRemovable()) {
+                return;
+            }
+
+                //TraceManager.addDev("make DELETE REMOVABLE");
+                removeComponent(componentPointed);
+
         } else {
             return;
         }
@@ -2296,7 +2334,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     private void removeAllSelectedComponents() {
         TGComponent tgc = nextSelectedComponent();
         while (tgc != null) {
-            removeComponent(tgc);
+            if (tgc.isRemovable()) {
+                removeComponent(tgc);
+            }
             tgc = nextSelectedComponent();
         }
     }
@@ -2371,11 +2411,16 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
     }
 
+
+    public void cloneComponent(TGComponent _tgc) {
+        cloneComponent(_tgc, true);
+    }
+
     /*
      * #issue 82
      * new cloneComponent added by Minh Hiep
      */
-    public void cloneComponent(TGComponent _tgc) {
+    public void cloneComponent(TGComponent _tgc, boolean cloneEvenIfNonNullFather) {
         String clone;
 
         Vector<TGComponent> connectorList = new Vector<>();
@@ -2398,7 +2443,8 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             }
         }
 
-        clone = mgui.gtm.makeXMLFromSelectedComponentOfADiagram(this, getMaxIdSelected(), _tgc.getX(), _tgc.getY());
+        clone = mgui.gtm.makeXMLFromSelectedComponentOfADiagram(this, getMaxIdSelected(), _tgc.getX(), _tgc.getY(), cloneEvenIfNonNullFather);
+        //TraceManager.addDev(clone);
 
         _tgc.select(false);
         for(int i = 0; i < connectorList.size(); i++){
@@ -2414,7 +2460,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             JOptionPane.showMessageDialog(mgui.getFrame(), "Clone creation failed", "Exception", JOptionPane.INFORMATION_MESSAGE);
         }
 
-        bringToBack(_tgc);
+        bringToBack(_tgc.getTopFather());
         for (int i = 0; i < componentList.size(); i ++){
             if (componentList.get(i) instanceof TGConnector) {
                 TGComponent t = componentList.get(i);
@@ -2536,10 +2582,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 
     public int getMaxIdSelected() {
         int ret = 0;
-        for (TGComponent tgc : this.componentList)
+        //issue 186
+        for (TGComponent tgc : this.getAllComponentList())
             if (tgc.isSelected())
                 ret = Math.max(ret, tgc.getMaxId());
-
         return ret;
     }
 
@@ -2700,6 +2746,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                     || (o instanceof TMLTaskInterface && this.checkTMLTaskInterface((TMLTaskInterface) o, name))
                     || (o instanceof SysCAMSBlockTDF && this.checkSysCAMSBlockTDFComponent((SysCAMSBlockTDF) o, name))
                     || (o instanceof SysCAMSBlockDE && this.checkSysCAMSBlockDEComponent((SysCAMSBlockDE) o, name))
+		    || (o instanceof SysCAMSClock && this.checkSysCAMSClockComponent((SysCAMSClock) o, name))
                     || (o instanceof SysCAMSCompositeComponent && this.checkSysCAMSCompositeComponent((SysCAMSCompositeComponent) o, name))
                     || (o instanceof ELNCluster && this.checkELNCluster((ELNCluster) o, name))
                     || (o instanceof ELNModule && this.checkELNModule((ELNModule) o, name))
@@ -2779,6 +2826,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
         
         public boolean checkSysCAMSBlockDEComponent(SysCAMSBlockDE o, String name) {
+        	return false;
+        }
+
+	 public boolean checkSysCAMSClockComponent(SysCAMSClock o, String name) {
         	return false;
         }
         
@@ -3067,6 +3118,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     		}
     		
     		public boolean checkSysCAMSBlockDEComponent(SysCAMSBlockDE o, String name) {
+    			return o.getValue().equals(name);
+    		}
+
+		public boolean checkSysCAMSClockComponent(SysCAMSClock o, String name) {
     			return o.getValue().equals(name);
     		}
     		

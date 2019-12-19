@@ -39,6 +39,7 @@
 
 package tmltranslator.tomappingsystemc2;
 
+import myutil.TraceManager;
 import tmltranslator.*;
 
 import java.util.Arrays;
@@ -279,6 +280,10 @@ public class NamesGenerationHelper {
             return bridgeInstanceName((HwBridge) element);
         }
 
+        if (element instanceof HwNoC) {
+            return hwNoCInstanceName((HwNoC) element);
+        }
+
         throw new UnsupportedOperationException();
     }
 
@@ -316,6 +321,14 @@ public class NamesGenerationHelper {
             return hwAccInstanceName((HwA) element);
         }
 
+        if (element instanceof HwFPGA) {
+            return hwFpgaInstanceName((HwFPGA) element);
+        }
+
+	 if (element instanceof HwCams) {
+            return hwCamsInstanceName((HwCams) element);
+        }
+
         throw new UnsupportedOperationException("Unknown execution node type: " + String.valueOf(element));
     }
 
@@ -337,6 +350,22 @@ public class NamesGenerationHelper {
         return element.getName();
     }
 
+    String hwCamsInstanceName(final HwCams element) {
+        return normalize(hwCamsName(element));
+    }
+
+    String hwCamsName(final HwCams element) {
+        return element.getName();
+    }
+
+    String hwFpgaInstanceName(final HwFPGA element) {
+        return normalize(hwFpgaName(element));
+    }
+
+    String hwFpgaName(final HwFPGA element) {
+        return element.getName();
+    }
+
     String busInstanceName(final HwBus element,
                            final int pipelineIndex) {
         return normalize(busName(element, pipelineIndex));
@@ -351,7 +380,15 @@ public class NamesGenerationHelper {
         return normalize(bridgeName(element));
     }
 
+    String hwNoCInstanceName(final HwNoC element) {
+        return normalize(hwNocName(element));
+    }
+
     String bridgeName(final HwBridge element) {
+        return element.getName();
+    }
+
+    String hwNocName(final HwNoC element) {
         return element.getName();
     }
 
@@ -366,6 +403,18 @@ public class NamesGenerationHelper {
     String busMasterInstanceName(final HwNode element,
                                  final int indexCore,
                                  final HwBus linkBus) {
+        /*if (element == null) {
+            TraceManager.addDev("NULL Hw element");
+        } else {
+            TraceManager.addDev("Hw element=" + element.getName());
+        }
+
+        if (linkBus == null) {
+            TraceManager.addDev("NULL linkBus element");
+        } else {
+            TraceManager.addDev("linkBus element=" + linkBus.getName());
+        }*/
+
         return normalize(busMasterName(element, indexCore, linkBus));
     }
 

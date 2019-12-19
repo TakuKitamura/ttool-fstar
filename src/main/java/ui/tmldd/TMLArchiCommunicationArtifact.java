@@ -151,7 +151,10 @@ public class TMLArchiCommunicationArtifact extends TGCWithoutInternalComponent i
         g.drawLine(x+width- marginCran/*space-cran*/, y+space, x+width- marginCran/*space-cran*/, y+ marginCran/*space+cran*/);
         g.drawLine(x+width- marginCran/*space-cran*/, y+ marginCran/*space+cran*/, x + width-space, y+ marginCran/*space+cran*/);
 
+
         g.drawImage( scale( IconManager.img9 ), x+width- scale( SPACE + FILE_X - 3 )/*space-fileX + 3*/, y + scale( SPACE + 7 )/*space + 7*/, null);
+        //g.drawImage(IconManager.img9, x+width-space-fileX + 3, y + space + 7, null);
+
 
         g.drawString(value, x + textX , y + textY);
 

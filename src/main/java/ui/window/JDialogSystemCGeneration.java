@@ -51,6 +51,7 @@ import tmltranslator.tomappingsystemc2.Penalties;
 import ui.AvatarRequirementPanelTranslator;
 import ui.JTextAreaWriter;
 import ui.MainGUI;
+import ui.ModelParameters;
 import ui.avatarpd.AvatarPDPanel;
 import ui.util.IconManager;
 
@@ -59,9 +60,11 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.text.BadLocationException;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -94,6 +97,7 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
     private static String textSysC1 = "Generate C++ simulator code in";
     private static String textSysC2 = "Compile C++ simulator  code in";
     private static String textSysC4 = "Run simulation to completion:";
+    private static String textSysC4bis = "Run simulation for x cycles:";
     private static String textSysC5 = "Run interactive simulation:";
     private static String textSysC6 = "Run formal verification:";
 
@@ -106,12 +110,12 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
     protected static String pathCode;
     protected static String pathCompiler;
     protected static String pathExecute;
+    protected static String pathXCycle;
     protected static String pathInteractiveExecute;
     protected static String pathFormalExecute;
 
     protected static boolean interactiveSimulationSelected = true;
     protected static boolean optimizeModeSelected = true;
-    protected static boolean activatePenaltiesSelected = true;
 
     protected final static int NOT_STARTED = 1;
     protected final static int STARTED = 2;
@@ -126,10 +130,10 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
     protected JButton stop;
     protected JButton close;
 
-    protected JRadioButton exe, exeint, exeformal;
+    protected JRadioButton exe, exeBis, exeint, exeformal;
     protected ButtonGroup exegroup;
     protected JLabel gen, comp;
-    protected JTextField code1, code2, unitcycle, compiler1, exe1, exe2, exe3, exe2int, exe2formal;
+    protected JTextField code1, code2, unitcycle, compiler1, exe1, exe2, exe2Bis, exe3, exe2int, exe2formal;
     protected JTabbedPane tabbedPane;
     protected JScrollPane jsp;
     protected JCheckBox removeCppFiles, removeXFiles, debugmode, optimizemode, activatePenalties;
@@ -167,6 +171,7 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
     public final static int ONE_TRACE = 1;
     public final static int ANIMATION = 2;
     public final static int FORMAL_VERIFICATION = 3;
+    public final static int ONE_TRACE_CYCLE = 4;
 
     private int automatic;
     //  private boolean wasClosed = false;
@@ -176,7 +181,7 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
      * Creates new form
      */
     public JDialogSystemCGeneration(Frame f, MainGUI _mgui, String title, String _simulatorHost, String _pathCode,
-                                    String _pathCompiler, String _pathExecute, String _pathInteractiveExecute,
+                                    String _pathCompiler, String _pathExecute, String _pathXCycle, String _pathInteractiveExecute,
                                     String _graphPath, int _automatic) {
         super(f, title, true);
 
@@ -195,6 +200,7 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
         }
 
         pathExecute = _pathExecute;
+        pathXCycle = _pathXCycle;
 
         if (_graphPath != null) {
             _pathInteractiveExecute += " -gpath " + _graphPath;
@@ -339,7 +345,7 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
         help.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-               help();
+                help();
             }
         });
         menuBar.add(help);
@@ -347,7 +353,7 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
         help.setPreferredSize(new Dimension(30, 30));
 
         activatePenalties = new JCheckBox("Activate penalties (task switching time, cache miss, miss branching prediction)");
-        activatePenalties.setSelected(activatePenaltiesSelected);
+        activatePenalties.setSelected(ModelParameters.getBooleanValueFromID("ACTIVATE_PENALTIES"));
         jp01.add(activatePenalties, c01);
 
         jp01.add(new JLabel("Simulator used:"), c01);
@@ -477,8 +483,17 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
         exegroup.add(exe);
         jp03.add(exe, c03);
 
+
         exe2 = new JTextField(pathExecute, 100);
         jp03.add(exe2, c02);
+
+        exeBis = new JRadioButton(textSysC4bis, false);
+        exeBis.addActionListener(this);
+        exegroup.add(exeBis);
+        jp03.add(exeBis, c03);
+
+        exe2Bis = new JTextField(pathXCycle, 100);
+        jp03.add(exe2Bis, c02);
 
 
         exeint = new JRadioButton(textSysC5, true);
@@ -560,6 +575,7 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
     public void updateInteractiveSimulation() {
         if (automatic == 0) {
             exe2.setEnabled(exe.isSelected());
+            exe2Bis.setEnabled(exeBis.isSelected());
             exe2int.setEnabled(exeint.isSelected());
             exe2formal.setEnabled(exeformal.isSelected());
         }
@@ -600,7 +616,7 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
 
         updateStaticList();
         optimizeModeSelected = optimizemode.isSelected();
-        activatePenaltiesSelected = activatePenalties.isSelected();
+        ModelParameters.setValueForID("ACTIVATE_PENALTIES", "" + activatePenalties.isSelected());
         // wasClosed = true;
         dispose();
     }
@@ -803,7 +819,14 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
                 }
 
                 try {
-                    tml2systc.generateSystemC(debugmode.isSelected(), optimizemode.isSelected());
+                    tml2systc.setModelName(mgui.getModelFileFullPath() + " / " + mgui.getCurrentJTabbedPane().getTitleAt(0));
+                    String error = tml2systc.generateSystemC(debugmode.isSelected(), optimizemode.isSelected());
+                    if (error != null) {
+                        jta.append("Error identified during code generation:\n" + error + "\nCode generation was cancelled");
+                        setError();
+                        return;
+                    }
+
                     testGo();
                     jta.append("Simulator code generation done\n");
 
@@ -848,7 +871,6 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
                 break;
             }
         }
-
 
 
     }   //End of method generateCode()
@@ -949,8 +971,13 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
         if (toDo == 0) {
             if (exe.isSelected()) {
                 toDo = ONE_TRACE;
+
+            } else if (exeBis.isSelected()) {
+                toDo = ONE_TRACE_CYCLE;
+
             } else if (exeint.isSelected()) {
                 toDo = ANIMATION;
+
             } else {
                 toDo = FORMAL_VERIFICATION;
             }
@@ -963,10 +990,16 @@ public class JDialogSystemCGeneration extends JDialog implements ActionListener,
                 SpecConfigTTool.lastVCD = tab[2];
                 //SpecConfigTTool.ExternalCommand1 = "gtkwave " + SpecConfigTTool.lastVCD;
                 break;
+            case ONE_TRACE_CYCLE:
+                executeSimulationCmd(exe2Bis.getText(), "Executing one simulation trace for a limited duration");
+                //String[] tab1 = exe2Bis.getText().split(" ");
+                //SpecConfigTTool.lastVCD = tab1[2];
+                //SpecConfigTTool.ExternalCommand1 = "gtkwave " + SpecConfigTTool.lastVCD;
+                break;
             case ANIMATION:
                 updateStaticList();
                 optimizeModeSelected = optimizemode.isSelected();
-                activatePenaltiesSelected = activatePenalties.isSelected();
+                ModelParameters.setValueForID("ACTIVATE_PENALTIES", "" + activatePenalties.isSelected());
                 dispose();
                 mgui.interactiveSimulationSystemC(getPathInteractiveExecute());
                 break;

@@ -114,6 +114,9 @@ public class TML2MappingSystemC implements IDiploSimulatorCodeGenerator {
         //tepeTranslator.generateTEPEs();
     }
 
+    public void setModelName(String _modelName) {
+    }
+
     public void saveFile(String path, String filename) throws FileException {
         generateTaskFiles(path);
         FileUtils.saveFile(path + filename + ".cpp", getFullCode());
@@ -126,7 +129,7 @@ public class TML2MappingSystemC implements IDiploSimulatorCodeGenerator {
         return mainFile;
     }
 
-    public void generateSystemC(boolean _debug, boolean _optimize) {
+    public String generateSystemC(boolean _debug, boolean _optimize) {
         debug = _debug;
         optimize = _optimize;
         tmlmapping.removeAllRandomSequences();
@@ -137,6 +140,8 @@ public class TML2MappingSystemC implements IDiploSimulatorCodeGenerator {
         //generateEBRDDs();
         generateMainFile();
         generateMakefileSrc();
+
+        return null;
     }
 
     private void generateMainFile() {
@@ -163,7 +168,7 @@ public class TML2MappingSystemC implements IDiploSimulatorCodeGenerator {
         header += "#include <AliasConstraint.h>\n#include <EqConstraint.h>\n#include <LogConstraint.h>\n#include <PropLabConstraint.h>\n";
         header += "#include <PropRelConstraint.h>\n#include <SeqConstraint.h>\n#include <SignalConstraint.h>\n#include <TimeMMConstraint.h>\n";
         header += "#include <TimeTConstraint.h>\n";
-        header += "#include <CPU.h>\n#include <SingleCoreCPU.h>\n#include <RRScheduler.h>\n#include <RRPrioScheduler.h>\n#include <PrioScheduler.h>\n#include <Bus.h>\n";
+        header += "#include <CPU.h>\n#include <SingleCoreCPU.h>\n#include <MultiCoreCPU.h>\n#include <RRScheduler.h>\n#include <RRPrioScheduler.h>\n#include <PrioScheduler.h>\n#include <Bus.h>\n";
         header += "#include <Bridge.h>\n#include <Memory.h>\n#include <TMLbrbwChannel.h>\n#include <TMLnbrnbwChannel.h>\n";
         header += "#include <TMLbrnbwChannel.h>\n#include <TMLEventBChannel.h>\n#include <TMLEventFChannel.h>\n#include <TMLEventFBChannel.h>\n";
         header += "#include <TMLTransaction.h>\n#include <TMLCommand.h>\n#include <TMLTask.h>\n";
@@ -189,22 +194,26 @@ public class TML2MappingSystemC implements IDiploSimulatorCodeGenerator {
             if (node instanceof HwCPU) {
                 HwCPU exNode = (HwCPU) node;
                 if (exNode.getType().equals("CPURRPB"))
-                    declaration += "PrioScheduler* " + exNode.getName() + "_scheduler = new PrioScheduler(\"" + exNode.getName() + "_PrioSched\",0)" + SCCR;
+                    declaration += "RRPrioScheduler* " + exNode.getName() + "_scheduler = new RRPrioScheduler(\"" + exNode.getName() + "_PrioSched" + "\",0, " + (tmlmapping.getTMLArchitecture().getMasterClockFrequency() * exNode.sliceTime) + ", " + (int) Math.ceil((float) (exNode.clockRatio * Math.max(exNode.execiTime, exNode.execcTime) * (exNode.branchingPredictionPenalty * exNode.pipelineSize + 100 - exNode.branchingPredictionPenalty)) / 100) + " ) " + SCCR;
                 else
                     //tmlmapping.getTMLArchitecture().getMasterClockFrequency() * exNode.sliceTime
                     //declaration += "RRScheduler* " + exNode.getName() + "_scheduler = new RRScheduler(\"" + exNode.getName() + "_RRSched\", 0, 5, " + (int) Math.ceil(((float)exNode.execiTime)*(1+((float)exNode.branchingPredictionPenalty)/100)) + " ) " + SCCR;
                     declaration += "RRScheduler* " + exNode.getName() + "_scheduler = new RRScheduler(\"" + exNode.getName() + "_RRSched\", 0, " + (tmlmapping.getTMLArchitecture().getMasterClockFrequency() * exNode.sliceTime) + ", " + (int) Math.ceil((float) (exNode.clockRatio * Math.max(exNode.execiTime, exNode.execcTime) * (exNode.branchingPredictionPenalty * exNode.pipelineSize + 100 - exNode.branchingPredictionPenalty)) / 100) + " ) " + SCCR;
                 //TraceManager.addDev("cores " + exNode.nbOfCores);
-                for (int cores = 0; cores < exNode.nbOfCores; cores++) {
-                    //for(int cores=0; cores<1; cores++){
-                    //if (tmlmapping.isAUsedHwNode(node)) {
-                    declaration += "CPU* " + exNode.getName() + cores + " = new SingleCoreCPU(" + exNode.getID() + ", \"" + exNode.getName() + "_" + cores + "\", " + exNode.getName() + "_scheduler" + ", ";
-
+		if (exNode.nbOfCores == 1) {
+		    declaration += "CPU* " + exNode.getName() + exNode.nbOfCores + " = new SingleCoreCPU(" + exNode.getID() + ", \"" + exNode.getName() + "_" + exNode.nbOfCores + "\", " 
+			+ exNode.getName() + "_scheduler" + ", ";
+		    
+                    declaration += exNode.clockRatio + ", " + exNode.execiTime + ", " + exNode.execcTime + ", " + exNode.pipelineSize + ", " 
+			+ exNode.taskSwitchingTime + ", " + exNode.branchingPredictionPenalty + ", " + exNode.goIdleTime + ", " + exNode.maxConsecutiveIdleCycles + ", " + exNode.byteDataSize + ")" + SCCR;
+		} else {
+		    declaration += "CPU* " + exNode.getName() + exNode.nbOfCores + " = new MultiCoreCPU(" + exNode.getID() + ", \"" + exNode.getName() + "_" + exNode.nbOfCores + "\", " + exNode.getName() + "_scheduler" + ", ";
+		    
                     declaration += exNode.clockRatio + ", " + exNode.execiTime + ", " + exNode.execcTime + ", " + exNode.pipelineSize + ", " + exNode.taskSwitchingTime + ", " + exNode.branchingPredictionPenalty + ", " + exNode.goIdleTime + ", " + exNode.maxConsecutiveIdleCycles + ", " + exNode.byteDataSize + ")" + SCCR;
-                    if (cores != 0)
-                        declaration += node.getName() + cores + "->setScheduler(" + exNode.getName() + "_scheduler,false)" + SCCR;
-                    declaration += "addCPU(" + node.getName() + cores + ")" + SCCR;
-                }
+		}
+		
+		declaration += "addCPU(" + node.getName() + exNode.nbOfCores + ")" + SCCR;
+		
             }
             if (node instanceof HwA) {
                 HwA hwaNode = (HwA) node;
@@ -216,6 +225,21 @@ public class TML2MappingSystemC implements IDiploSimulatorCodeGenerator {
                     declaration += hwaNode.clockRatio + ", " + hwaNode.execiTime + ", " + hwaNode.execcTime + ", " + HwA.DEFAULT_PIPELINE_SIZE + ", " + HwA.DEFAULT_TASK_SWITCHING_TIME + ", " + HwA.DEFAULT_BRANCHING_PREDICTION_PENALTY + ", " + HwA.DEFAULT_GO_IDLE_TIME + ", " + HwA.DEFAULT_MAX_CONSECUTIVE_IDLE_CYCLES + ", " + hwaNode.byteDataSize + ")" + SCCR;
                     if (cores != 0)
                         declaration += node.getName() + cores + "->setScheduler(" + hwaNode.getName() + "_scheduler,false)" + SCCR;
+                    declaration += "addCPU(" + node.getName() + cores + ")" + SCCR;
+                }
+
+		
+            }
+	    if (node instanceof HwCams) { //ajoute DG
+                HwCams hwCamsNode = (HwCams) node;
+                declaration += "RRScheduler* " + hwCamsNode.getName() + "_scheduler = new RRScheduler(\"" + hwCamsNode.getName() + "_RRSched\", 0, " + (tmlmapping.getTMLArchitecture().getMasterClockFrequency() * HwCams.DEFAULT_SLICE_TIME) + ", " + (int) Math.ceil((float) (hwCamsNode.clockRatio * Math.max(hwCamsNode.execiTime, hwCamsNode.execcTime) * (HwCams.DEFAULT_BRANCHING_PREDICTION_PENALTY * HwCams.DEFAULT_PIPELINE_SIZE + 100 - HwCams.DEFAULT_BRANCHING_PREDICTION_PENALTY)) / 100) + " ) " + SCCR;
+                for (int cores = 0; cores < 1; cores++) {
+                    //if (tmlmapping.isAUsedHwNode(node)) {
+                    declaration += "CPU* " + hwCamsNode.getName() + cores + " = new SingleCoreCPU(" + hwCamsNode.getID() + ", \"" + hwCamsNode.getName() + "_" + cores + "\", " + hwCamsNode.getName() + "_scheduler" + ", ";
+
+                    declaration += hwCamsNode.clockRatio + ", " + hwCamsNode.execiTime + ", " + hwCamsNode.execcTime + ", " + HwCams.DEFAULT_PIPELINE_SIZE + ", " + HwCams.DEFAULT_TASK_SWITCHING_TIME + ", " + HwCams.DEFAULT_BRANCHING_PREDICTION_PENALTY + ", " + HwCams.DEFAULT_GO_IDLE_TIME + ", " + HwCams.DEFAULT_MAX_CONSECUTIVE_IDLE_CYCLES + ", " + hwCamsNode.byteDataSize + ")" + SCCR;
+                    if (cores != 0)
+                        declaration += node.getName() + cores + "->setScheduler(" + hwCamsNode.getName() + "_scheduler,false)" + SCCR;
                     declaration += "addCPU(" + node.getName() + cores + ")" + SCCR;
                 }
 
@@ -278,16 +302,16 @@ public class TML2MappingSystemC implements IDiploSimulatorCodeGenerator {
                         if (node instanceof HwCPU) noOfCores = ((HwCPU) node).nbOfCores;
                         else noOfCores = 1;
                         //noOfCores=2;
-                        for (int cores = 0; cores < noOfCores; cores++) {
+                        //for (int cores = 0; cores < noOfCores; cores++) {
                             String nodeName = node.getName();
-                            if ((node instanceof HwCPU) || (node instanceof HwA))
-                                nodeName += cores;
+                            if (node instanceof HwCPU)
+                                nodeName += ((HwCPU)node).nbOfCores;
                             declaration += "BusMaster* " + nodeName + "_" + link.bus.getName() + "_Master = new BusMaster(\"" + nodeName + "_" + link.bus.getName() + "_Master\", " + link.getPriority() + ", " + link.bus.pipelineSize + ", array(" + link.bus.pipelineSize;
                             for (int i = 0; i < link.bus.pipelineSize; i++)
                                 declaration += ", (SchedulableCommDevice*)" + link.bus.getName() + "_" + i;
                             declaration += "))" + SCCR;
                             declaration += nodeName + "->addBusMaster(" + nodeName + "_" + link.bus.getName() + "_Master)" + SCCR;
-                        }
+			    //}
                     }
                 }
             }
@@ -460,7 +484,7 @@ public class TML2MappingSystemC implements IDiploSimulatorCodeGenerator {
             events = new ArrayList<TMLEvent>(tmlmodeling.getEvents(task));
             requests = new ArrayList<TMLRequest>(tmlmodeling.getRequests(task));
 
-            mst = new MappedSystemCTask(task, channels, events, requests, tmlmapping, mappedChannels);
+            mst = new MappedSystemCTask(task, channels, events, requests, tmlmapping, mappedChannels, true);
             //mst.generateSystemC(debug, optimize, dependencies);
             //mst.generateSystemC(debug, optimize);
             tasks.add(mst);

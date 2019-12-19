@@ -135,6 +135,17 @@ public class SysCAMSSpecification{
 		return portsDE;
 	}
 
+	public LinkedList<SysCAMSTClock> getAllClock(){
+		LinkedList<SysCAMSTClock> clocks = new LinkedList<SysCAMSTClock>();
+		for (SysCAMSTComponent clock : components) {
+			if (clock instanceof SysCAMSTClock) {
+				clocks.add((SysCAMSTClock) clock);
+			}
+		}
+		return clocks;
+	}
+    
+
 	public LinkedList<SysCAMSTConnector> getAllConnectorCluster(){
 		LinkedList<SysCAMSTConnector> cons = new LinkedList<SysCAMSTConnector>();
 		for (SysCAMSTConnector con : connectors) {
@@ -238,6 +249,14 @@ public class SysCAMSSpecification{
         }
         return cons;
     }
+    
+    public LinkedList<SysCAMSTConnector> getAllConnectors(){
+        LinkedList<SysCAMSTConnector> cons = new LinkedList<SysCAMSTConnector>();
+        for (SysCAMSTConnector con : connectors) {
+            cons.add(con);
+        }
+        return cons;
+    }
 
 	public int getNbBlockTDF(){
 		return (getAllBlockTDF()).size();
@@ -266,4 +285,8 @@ public class SysCAMSSpecification{
 	public int getNbConnectorCluster(){
 		return (getAllConnectorCluster()).size();
 	}
+
+    /*  public int getNbClocks(){
+		return (getAllClocks()).size();
+		}*/
 }

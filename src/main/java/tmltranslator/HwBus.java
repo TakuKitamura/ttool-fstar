@@ -39,6 +39,8 @@
 
 package tmltranslator;
 
+import java.util.Objects;
+
 /**
  * Class HwBus
  * Creation: 05/09/2007
@@ -73,5 +75,16 @@ public class HwBus extends HwCommunicationNode {
         String s = "<BUS name=\"" + getName() + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize + "\"  pipelineSize=\"" + pipelineSize + "\" arbitration=\"" + arbitration + "\" sliceTime=\"" + sliceTime + "\" />\n";
         return s;
     }
+
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof HwBus)) return false;
+        if (!super.equalSpec(o)) return false;
+        HwBus hwBus = (HwBus) o;
+        return byteDataSize == hwBus.byteDataSize &&
+                pipelineSize == hwBus.pipelineSize &&
+                arbitration == hwBus.arbitration &&
+                sliceTime == hwBus.sliceTime;
+    }
+
 
 }

@@ -17,6 +17,9 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{listings}
+
+\usepackage{syntax}
+
 \usepackage[a4paper,bindingoffset=0.2in,headsep=0.5cm,left=1in,right=1in,bottom=3cm,top=2cm,headheight=2cm]{geometry}
 \usepackage{hyperref}
 \usepackage{listings}
@@ -36,11 +39,11 @@
 
 \begin{center}
 
-\includegraphics[width=0.2\textwidth]{fig/logotpt}
+\includegraphics[width=0.2\textwidth]{fig/tp}
 \vspace{10 pt}\\
 \Huge TTool \\
 \vspace{10 pt}
-\Large \url{ttool.telecom-paristech.fr}
+\Large \url{ttool.telecom-paris.fr}
 \vspace{20 pt}\\
 \underline{\Large Use of TTool explained through the creation of a coffee machine.}
 \vspace{30 pt}
@@ -58,7 +61,7 @@
 Ludovic APVRILLE} &
 \multirow{2}{*}{Ludovic APVRILLE} \\
 \hhline{--~~}
-\textbf{Contact} & ludovic.apvrille@telecom-paristech.fr &  &  \\ 
+\textbf{Contact} & ludovic.apvrille@telecom-paris.fr &  &  \\ 
 \hhline{--~~}
 \textbf{Date} & \today &  &  \\ 
 \hline
@@ -87,6 +90,8 @@ Ludovic APVRILLE} &
 Modifications} & \textbf{Sections Modified} \\
 \hhline{----}
 1.0 & July 7, 2018 & First draft &  \\ 
+\hline
+1.1 & Oct 29, 2019 & Adding safety pragmas &  \\ 
 \hline
 \end{tabular}
 \end{adjustbox}
@@ -129,7 +134,7 @@ Editor} & \textbf{Year}
 \newpage
 \section{Introduction}
 
-TTool is an open-source toolkit dedicated to the design of embedded systems based on UML and SysML diagrams. The source files of TTool can be downloaded from the website: http://ttool.telecom-paristech.fr/download.html
+TTool is an open-source toolkit dedicated to the design of embedded systems based on UML and SysML diagrams. The source files of TTool can be downloaded from the website: http://ttool.telecom-paris.fr/download.html
 after having accepted the license agreement. To install the tool, simply unpack the archive in your home directory and follow the installation process of your operating system.
 
 \section{Getting Started}
@@ -571,6 +576,56 @@ Using as reference what was already indicated in the block diagram, we will dete
 \caption{Reachability graph} \label{fig:rg}
 \end{figure*}
 
+\subsection{Safety pragmas}
+Safety pragmas can be inserted in the model. These pragmas follow the following grammar.
+
+\setlength{\grammarparsep}{20pt plus 1pt minus 1pt} % increase separation between rules
+\setlength{\grammarindent}{12em} % increase separation between LHS/RHS 
+
+\begin{grammar}
+
+<pragma> ::= <path> <state> <property> 
+\alt <property> <leadsto> <property> 
+
+<path> ::=  `A'  |   `E' 
+
+<state> ::=  `<>'  |   `[]' 
+
+<leadsto> ::=  `-->'  
+
+<property> ::= <stateproperty>
+\alt <intproperty>
+\alt <boolproperty>
+\alt <property> <binaryop> <property>
+
+<stateproperty> ::= `BlockName.stateName' 
+
+<intproperty> ::= <intexpr> <intcomparator> <intexpr>
+
+<boolproperty> ::= <boolexpr> <boolcomparator> <boolexpr>
+\alt <boolexpr>
+
+
+
+<intexpr> ::= `BlockName.integerattribute' 
+\alt <intvalue>
+
+<intexpr> ::= `BlockName.booleanattribute' 
+\alt <booleanvalue>
+
+
+<binaryop>  ::=  `&&'  |   `||' 
+
+<intvalue> :: <integer>
+
+<booleanvalue> :: `true' | `false'
+
+<intcomparator>  ::=  `<'  |   `>'  | `=='  |   `!=' 
+
+<boolcomparator> ::=  `=='  |   `!=' 
+
+\end{grammar}
+
 \subsection{Latency Analysis}
 
 
@@ -591,7 +646,7 @@ The operators relating to this requirement are the last `getCoin(x)' and the idl
 \begin{figure*}[htbp]
 \centering
 \includegraphics[width=0.99\textwidth]{build/latencycheckpoint-svg.pdf}
-\caption{Latency Checkpoints on Activity Diagram} \label{fig:latencycheckpoint}
+\caption{Latency Checkpoints in State Machine Diagrams} \label{fig:latencycheckpoint}
 \end{figure*}
 
 

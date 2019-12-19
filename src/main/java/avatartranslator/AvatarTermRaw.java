@@ -38,6 +38,8 @@
 
 package avatartranslator;
 
+import myutil.TraceManager;
+
 import java.util.Map;
 
 /**
@@ -74,5 +76,8 @@ public class AvatarTermRaw extends AvatarTerm {
     }
 
     @Override
-    public void replaceAttributes( Map<AvatarAttribute, AvatarAttribute> attributesMapping) { }
+    public void replaceAttributes( Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
+        //TraceManager.addDev("Replace attributes in AvatarTermRaw");
+    }
+
 }

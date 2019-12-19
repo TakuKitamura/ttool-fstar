@@ -74,7 +74,11 @@ public:
       	\return Pointer to transaction
     	*/
 	virtual TMLTransaction* getNextTransaction() { return _nextTransaction; }
-
+	double averageLoad() const;
+	void buttonPieChart(std::ofstream& myfile) const;
+	void drawPieChart(std::ofstream& myfile) const;
+	void showPieChart(std::ofstream& myfile) const;
+	void HW2HTML(std::ofstream& myfile) const;
 	///Writes a HTML representation of the schedule to an output file
 	/**
       	\param myfile Reference to the ofstream object representing the output file
@@ -86,6 +90,7 @@ public:
       	\param myfile Reference to the ofstream object representing the output file
     	*/
 	virtual void schedule2TXT(std::ofstream& myfile) const =0;
+	void schedule2XML(std::ostringstream& glob,std::ofstream& myfile) const;
 
 	/**
       	\param glob references the output stream object 
@@ -101,7 +106,7 @@ public:
 	\return Number of simulated clock cycles
 	*/
 	static TMLTime getSimulatedTime() { return _simulatedTime; }
-
+	static TMLTime getNonDaemonSimulatedTime() { return _nonDaemonSimulatedTime;}
 	///Sets the number of simulated clock cycles
 	/**
 	\param iSimulatedTime Number of simulated clock cycles
@@ -148,7 +153,9 @@ public:
 	static TMLTime getOverallTransNo() { return _overallTransNo; }
 	
 	static TMLTime getOverallTransSize() { return _overallTransSize; }
-	
+	inline void setCycleTime (unsigned int t) { _cycleTime =t; }
+        inline unsigned int getCycleTime() { return _cycleTime; }
+	inline std::string getName() {return _name;}
 protected:
 	///Unique ID of the device
 	ID _ID;
@@ -156,8 +163,11 @@ protected:
 	std::string _name;
 	///Class variable holding the simulation time
 	static TMLTime _simulatedTime;
+	static TMLTime _nonDaemonSimulatedTime;
 	///End time of the last scheduled transaction
 	TMLTime _endSchedule;
+
+
 	///Scheduler
 	WorkloadSource* _scheduler;
 	///List containing all already scheduled transactions
@@ -171,10 +181,10 @@ protected:
 	///Busy cycles since simulation start
 	TMLTime _busyCycles;
 	unsigned int _static_consumPerCycle; 
-    unsigned int _dynamic_consumPerCycle;
+   	unsigned int _dynamic_consumPerCycle;
 	static TMLTime _overallTransNo;
 	static TMLTime _overallTransSize;
-
+	unsigned int _cycleTime;
 	static void writeHTMLColumn(	std::ofstream& myfile,
 									const unsigned int colSpan,
 									const std::string cellClass );
@@ -183,6 +193,13 @@ protected:
 									const unsigned int colSpan,
 									const std::string cellClass,
 									const std::string title );
+	
+	static void writeHTMLColumn(	std::ofstream& myfile,
+									const unsigned int colSpan,
+									const std::string cellClass,
+									const std::string title,
+									const std::string content );
+	
 
 	static void writeHTMLColumn(	std::ofstream& myfile,
 									const unsigned int colSpan,
@@ -190,7 +207,6 @@ protected:
 									const std::string title,
 									const std::string content,
 									const bool endline );
-
 	static std::string determineHTMLCellClass( 	std::map<TMLTask*, std::string> &taskColors,
 												TMLTask* task,
 												unsigned int &nextColor );

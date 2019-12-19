@@ -1,1 +1,1 @@
-SRCS = generated_src/main.c generated_src/AlarmActuator.c generated_src/PressureSensor.c generated_src/PressureController.c generated_src/AlarmManager.c generated_src/MainController.c generated_src/Timer__alarmTimer__AlarmManager.c 
+SRCS = generated_src/main.c generated_src/Controller.c generated_src/Motor_1.c 

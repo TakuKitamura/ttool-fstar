@@ -70,6 +70,7 @@ public class SysCAMSComponentTaskDiagramToolBar extends TToolBar {
 		mgui.actions[TGUIAction.CAMS_GENCODE].setEnabled(b);
 		mgui.actions[TGUIAction.CAMS_BLOCK_GPIO2VCI].setEnabled(b);
 		mgui.actions[TGUIAction.CAMS_CONNECTOR].setEnabled(b);
+		mgui.actions[TGUIAction.CAMS_CLOCK].setEnabled(b);
 		
 		mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
 		mgui.actions[TGUIAction.ACT_ONECLICK_LOTOS_RG].setEnabled(b);
@@ -123,6 +124,9 @@ public class SysCAMSComponentTaskDiagramToolBar extends TToolBar {
 		button = this.add(mgui.actions[TGUIAction.CAMS_PORT_DE]);
 		button.addMouseListener(mgui.mouseHandler);
 
+		button = this.add(mgui.actions[TGUIAction.CAMS_CLOCK]);
+		button.addMouseListener(mgui.mouseHandler);
+		
 		this.addSeparator();
 		
 		button = this.add(mgui.actions[TGUIAction.CAMS_GENCODE]);

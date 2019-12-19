@@ -108,7 +108,7 @@ public class TML2Avatar {
             List<SecurityPattern> keys = new ArrayList<SecurityPattern>();
             accessKeys.put(t1, keys);
 
-            HwExecutionNode node1 = (HwExecutionNode) tmlmap.getHwNodeOf(t1);
+            HwExecutionNode node1 = tmlmap.getHwNodeOf(t1);
             //Try to find memory using only private buses from origin
             List<HwNode> toVisit = new ArrayList<HwNode>();
             //List<HwNode> toMemory = new ArrayList<HwNode>();
@@ -148,7 +148,7 @@ public class TML2Avatar {
 
 
             for (TMLTask t2 : tmlmodel.getTasks()) {
-                HwExecutionNode node2 = (HwExecutionNode) tmlmap.getHwNodeOf(t2);
+                HwExecutionNode node2 =  tmlmap.getHwNodeOf(t2);
                 if (!memory) {
                     //There is no path to a private memory
                     originDestMap.put(t1.getName() + "__" + t2.getName(), channelPublic);
@@ -235,7 +235,7 @@ public class TML2Avatar {
 					a=channel.getOriginTasks().get(0);
 					destinations.addAll(channel.getDestinationTasks());
 				}  
-				HwExecutionNode node1 = (HwExecutionNode) tmlmap.getHwNodeOf(a);
+				HwExecutionNode node1 = tmlmap.getHwNodeOf(a);
 				for (TMLTask t: destinations){
 					//List<HwBus> buses = new ArrayList<HwBus>();
 					HwNode node2 = tmlmap.getHwNodeOf(t);
@@ -1514,8 +1514,8 @@ public class TML2Avatar {
         	TMLTask task = chan.getOriginTask();
         	
         	TMLTask task2 = chan.getDestinationTask();
-        	HwExecutionNode node = (HwExecutionNode) tmlmap.getHwNodeOf(task);
-        	HwExecutionNode node2 = (HwExecutionNode) tmlmap.getHwNodeOf(task2);
+        	HwExecutionNode node =  tmlmap.getHwNodeOf(task);
+        	HwExecutionNode node2 = tmlmap.getHwNodeOf(task2);
         	if (node==null){
         		tmlmap.addTaskToHwExecutionNode(task, node2);
         	}

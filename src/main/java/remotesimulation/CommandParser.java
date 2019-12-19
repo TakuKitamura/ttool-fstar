@@ -213,6 +213,16 @@ public class CommandParser {
         sc = new SimulationCommand("add-breakpoint", "abp", "11", params, paramNames, "Set a breakpoint in task which id is the first parameter on the command provided as the second parameter");
         commandList.add(sc);
 
+        // Get latencies
+        params = new int[2];
+        paramNames = new String[2];
+        params[0] = 1;
+        paramNames[0] = "Checkpoint 1 id";
+        params[1] = 1;
+        paramNames[1] = "Checkpoint2 id";
+        sc = new SimulationCommand("calculate-latencies", "cl", "23", params, paramNames, "Calculate latencies between checkpoints");
+        commandList.add(sc);
+
         // choose-branh
         params = new int[3];
         paramNames = new String[3];
@@ -224,6 +234,8 @@ public class CommandParser {
         paramNames[2] = "branch ID";
         sc = new SimulationCommand("choose-branch", "cb", "12", params, paramNames, "Chooses the branch of the given command of a task");
         commandList.add(sc);
+
+
 
 
         // get-breakpoint-list
@@ -266,7 +278,7 @@ public class CommandParser {
         params = new int[2];
         paramNames = new String[2];
         params[0] = 1;
-        paramNames[0] = "0: CPU; 1:Bus; 2: Mem; 3: Bridge; 4: Channel";
+        paramNames[0] = "0: CPU; 1:Bus; 2: Mem; 3: Bridge; 4: Channel; 5: Task";
         params[1] = 1;
         paramNames[1] = "id";
         sc = new SimulationCommand("get-info-on-hw", "gioh", "4", params, paramNames, "Returns information on hardware nodes of the architecture");
@@ -298,6 +310,14 @@ public class CommandParser {
         params = new int[0];
         paramNames = new String[0];
         sc = new SimulationCommand("kill", "kill", "0", params, paramNames, "Terminates the remote simulator");
+        commandList.add(sc);
+
+        // Get transactions
+        params = new int[1];
+        paramNames = new String[1];
+        params[0] = 2;
+        paramNames[0] = "Max. nb of transactions";
+        sc = new SimulationCommand("list-transactions", "lt", "22", params, paramNames, "Get the most recent transactions");
         commandList.add(sc);
 
         // rm-breakpoint
@@ -436,10 +456,10 @@ public class CommandParser {
         params = new int[2];
         paramNames = new String[2];
         params[0] = 1;
-        paramNames[0] = "File format: 0-> VCD, 1->HTML, 2->TXT";
+        paramNames[0] = "File format: 0-> VCD, 1->HTML, 2->TXT, 3->XML";
         params[1] = 2;
         paramNames[1] = "File name";
-        sc = new SimulationCommand("save-trace-in-file", "stif", "7", params, paramNames, "Saves the current trace of the simulation in a VCD, HTML or TXT file");
+        sc = new SimulationCommand("save-trace-in-file", "stif", "7", params, paramNames, "Saves the current trace of the simulation in a VCD, HTML, TXT or XML file");
         commandList.add(sc);
 
         // set-variable
@@ -471,24 +491,10 @@ public class CommandParser {
         commandList.add(sc);
 
 
-        // Get transactions
-        params = new int[1];
-        paramNames = new String[1];
-        params[0] = 2;
-        paramNames[0] = "Max. nb of transactions";
-        sc = new SimulationCommand("list-transactions", "lt", "22", params, paramNames, "Get the most recent transactions");
-        commandList.add(sc);
 
 
-        // Get latencies
-        params = new int[2];
-        paramNames = new String[2];
-        params[0] = 1;
-        paramNames[0] = "Checkpoint 1 id";
-        params[1] = 1;
-        paramNames[1] = "Checkpoint2 id";
-        sc = new SimulationCommand("calculate-latencies", "cl", "23", params, paramNames, "Calculate latencies between checkpoints");
-        commandList.add(sc);
+
+
 
     }
 

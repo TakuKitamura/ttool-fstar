@@ -60,9 +60,13 @@ import rationals.transformations.*;
  */
 public class AUTGraph implements myutil.Graph {
 
+    // Graph is defined with this only
     protected ArrayList<AUTTransition> transitions;
-    protected ArrayList<AUTState> states;
     protected int nbState;
+
+    // Can be built with computeStates()
+    protected ArrayList<AUTState> states;
+
     protected BufferedReader br;
     protected long nbTransition;
     protected int percentage;
@@ -804,6 +808,7 @@ public class AUTGraph implements myutil.Graph {
         }
     }
 
+
     // Removes all tau transition of a state, replacing them with reachable non tau transitions
     // A tau transition reaching an end state cannot be removed but can be replaced with a unique transition
     private void factorizeNonTauTransitions() {
@@ -895,6 +900,7 @@ public class AUTGraph implements myutil.Graph {
         //TraceManager.addDev(toFullString());
 
         // Remove all non reachable state
+        TraceManager.addDev("Remove all non reachable states");
         removeAllNonReachableStates();
 
 
@@ -986,26 +992,31 @@ public class AUTGraph implements myutil.Graph {
             st1.met = false;
         }
 
-        int cpt = 0;
+        //int cpt = 0;
 
-        LinkedList<AUTState> statesToConsider = new LinkedList<AUTState>();
+        long startTime = System.nanoTime();
+
+                AUTState[] statesToConsider = new AUTState[1];
         LinkedList<AUTState> nextStatesToConsider = new LinkedList<AUTState>();
-        statesToConsider.add(states.get(0));
+        statesToConsider[0] = states.get(0);
+        states.get(0).met = true;
 
-        while (statesToConsider.size() > 0) {
+        for(int cpt=0; cpt<statesToConsider.length; cpt++){
             nextStatesToConsider.clear();
-            for (AUTState st : statesToConsider) {
-                st.met = true;
-                cpt++;
+            for (AUTState st: statesToConsider) {
+                //st.met = true;
+                //cpt++;
                 for (AUTTransition tr : st.outTransitions) {
                     AUTState s = states.get(tr.destination);
                     if (!(s.met)) {
+                        s.met = true;
                         nextStatesToConsider.add(s);
                     }
                 }
             }
-            statesToConsider.clear();
-            statesToConsider.addAll(nextStatesToConsider);
+            statesToConsider = nextStatesToConsider.toArray(new AUTState[nextStatesToConsider.size()]);
+            cpt = -1;
+            //TraceManager.addDev("Size of states to consider:" + statesToConsider.size());
         }
 
         //TraceManager.addDev("Found " + cpt + " reachable states");
@@ -1017,9 +1028,18 @@ public class AUTGraph implements myutil.Graph {
             }
         }
 
+        long time1 = System.nanoTime();
+
         //TraceManager.addDev(toFullString());
+
         removeStates(toRemoveStates);
         //TraceManager.addDev(toFullString());
+        long endTime = System.nanoTime();
+
+
+        TraceManager.addDev("First part: " + (time1-startTime)/1000000000 +
+                "  Second part: " + (endTime - time1)/1000000000);
+
 
         //statesComputed = false;
         //states = null;
@@ -1113,7 +1133,8 @@ public class AUTGraph implements myutil.Graph {
 
     @SuppressWarnings("unchecked")
     public AUTGraph reduceGraph() {
-        factorizeNonTauTransitions();
+        //TraceManager.addDev("Factorize");
+        //factorizeNonTauTransitions();
 
         Automaton a = toAutomaton();
         //TraceManager.addDev("Initial AUT:" +  a.toString());
@@ -1125,9 +1146,12 @@ public class AUTGraph implements myutil.Graph {
         TraceManager.addDev("Aut with no tau / epsilon:" +  newA.toString());*/
         Automaton newA = a;
 
+
+        TraceManager.addDev("Reduce");
         newA = new Reducer<String, Transition<String>, TransitionBuilder<String>>().transform(newA);
         //TraceManager.addDev("Error in reduce graph:" +  newA);
         //TraceManager.addDev("New Aut:" +  newA.toString());
+        TraceManager.addDev("Reduce done");
         return fromAutomaton(newA);
     }
 
@@ -1560,6 +1584,69 @@ public class AUTGraph implements myutil.Graph {
         }
         TraceManager.addDev(sb.toString());
 
+    }
+
+
+    public int getMinValue(String nameOfTransition) {
+        int minValue = Integer.MAX_VALUE;
+        //System.out.println("executing. min value");
+        for (AUTTransition tr: transitions) {
+            //System.out.println("executing. Dealing with " + tr.transition);
+            if (tr.transition.length() > 3) {
+                String trans = tr.transition.substring(2, tr.transition.length()-1);
+                //System.out.println("executing. trans " + trans);
+                int index = trans.indexOf("<");
+                if (index > 0) {
+                    String trName = trans.substring(0, index);
+                    //System.out.println("executing. trName " + trName);
+                    if (trName.equals(nameOfTransition)) {
+                        String valS = trans.substring(index + 1);
+                        //System.out.println("executing. valS " + valS);
+                        int indexE = valS.indexOf(">");
+                        if (indexE > 0) {
+                            valS = valS.substring(0, indexE);
+                            System.out.println("executing. max valS " + valS);
+                            int val = Integer.decode(valS);
+                            if (val < minValue) {
+                                minValue = val;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return minValue;
+    }
+
+    public int getMaxValue(String nameOfTransition) {
+        int maxValue = -1;
+        //System.out.println("executing. min value");
+        for (AUTTransition tr: transitions) {
+            //System.out.println("executing. Dealing with " + tr.transition);
+            if (tr.transition.length() > 3) {
+                String trans = tr.transition.substring(2, tr.transition.length()-1);
+                //System.out.println("executing. trans " + trans);
+                int index = trans.indexOf("<");
+                if (index > 0) {
+                    String trName = trans.substring(0, index);
+                    //System.out.println("executing. trName " + trName);
+                    if (trName.equals(nameOfTransition)) {
+                        String valS = trans.substring(index + 1);
+                        //System.out.println("executing. valS " + valS);
+                        int indexE = valS.indexOf(">");
+                        if (indexE > 0) {
+                            valS = valS.substring(0, indexE);
+                            System.out.println("executing. min valS " + valS);
+                            int val = Integer.decode(valS);
+                            if (val > maxValue) {
+                                maxValue = val;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return maxValue;
     }
 
 

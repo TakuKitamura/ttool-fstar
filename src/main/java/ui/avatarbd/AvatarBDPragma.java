@@ -207,18 +207,18 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
                 desiredWidth = Math.max(desiredWidth, this.tdp.stringWidth(g, values[i]) + marginX + textX);
 
             //	currentFontSize= 5;
-            int desiredHeight = ((models.size() + properties.size() + 4) * currentFontSize) + textY + 1;
+//            int desiredHeight = ((models.size() + properties.size() + 4) * currentFontSize) + textY + 1;
 
             //TraceManager.addDev("resize: " + desiredWidth + "," + desiredHeight);
 
-            if ((desiredWidth != width) || (desiredHeight != height)) {
-                resize(desiredWidth, desiredHeight);
-            }
+//            if ((desiredWidth != width) || (desiredHeight != height)) {
+//                resize(desiredWidth, desiredHeight);
+//            }
         }
 
         g.drawLine(x, y, x + width, y);
         g.drawLine(x, y, x, y + height);
-        g.drawLine(x, y + height, x + width - limit, y + height);
+        g.drawLine(x, y + height, x + width - limit, y + height); //down
         g.drawLine(x + width, y, x + width, y + height - limit);
 
         g.setColor(ColorManager.PRAGMA_BG);

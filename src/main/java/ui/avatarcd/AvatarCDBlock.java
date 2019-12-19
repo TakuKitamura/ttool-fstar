@@ -45,10 +45,15 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import ui.*;
 import ui.util.IconManager;
+import ui.window.JDialogAttribute;
+import ui.window.JDialogGeneralAttribute;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -57,7 +62,7 @@ import java.util.LinkedList;
  * Creation: 31/08/2011
  *
  * @author Ludovic APVRILLE
- * @version 1.1 31/08/2011
+ * @version 1.2 03/07/2019
  */
 public class AvatarCDBlock extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent {
 //    private int textY1 = 3;
@@ -73,6 +78,10 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
 //    private int limitName = -1;
 //    private int limitAttr = -1;
 //    private int limitMethod = -1;
+
+    protected List<GeneralAttribute> myAttributes;
+
+    protected Map<GeneralAttribute, Integer> attrLocMap = new HashMap<GeneralAttribute, Integer>();
 
     // Icon
     //private int iconSize = 15;
@@ -131,6 +140,8 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
         oldScaleFactor = tdp.getZoom();
 
         myImageIcon = IconManager.imgic700;
+
+        this.myAttributes = new LinkedList<GeneralAttribute>();
 
         actionOnAdd();
     }
@@ -304,7 +315,27 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
     public String getNodeName() {
         return name;
     }
-    
+    /*
+     *     public boolean editOndoubleClick(JFrame frame) {
+
+        JDialogGeneralAttribute jda = new JDialogGeneralAttribute(myAttributes, null, frame,
+                "Setting attributes of " + value, "Attribute", stereotype + "/" + value);
+        //setJDialogOptions(jda);
+        // jda.setSize(650, 375);
+        GraphicLib.centerOnParent(jda, 750, 375);
+        jda.setVisible(true); // blocked until dialog has been closed
+
+        rescaled = true;
+
+        String oldValue = getStereotype() + "/" + getValue();
+
+        //String text = getName() + ": ";
+        String s = jda.getValue();
+		
+        if (s == null) {
+            return false;
+        }
+     * */
     @Override
     public boolean editOndoubleClick(JFrame frame) {
 
@@ -560,6 +591,15 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<stereotype value=\"" + GTURTLEModeling.transformString(getStereotype()));
         sb.append("\" />\n");
+        for (GeneralAttribute a : this.myAttributes) {
+            sb.append("<Attribute id=\"");
+            sb.append(a.getId());
+            sb.append("\" value=\"");
+            sb.append(a.getInitialValue());
+            sb.append("\" type=\"");
+            sb.append(a.getType());
+            sb.append("\" />\n");
+        }
         sb.append("</extraparam>\n");
         return new String(sb);
     }
@@ -576,6 +616,7 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
 //            String sdescription = null;
 //            String prio;
 //            String isRoot = null;
+            String type, id, valueAtt;
 
             for (int i = 0; i < nl.getLength(); i++) {
                 n1 = nl.item(i);
@@ -590,6 +631,21 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
                             if (elt.getTagName().equals("stereotype")) {
                                 stereotype = elt.getAttribute("value");
                             }
+							//stay or no ?? FIXME
+                            if (elt.getTagName().equals("Attribute")) {
+                                //
+                                type = elt.getAttribute("type");
+                                id = elt.getAttribute("id");
+                                valueAtt = elt.getAttribute("value");
+
+                                if (valueAtt.equals("null")) {
+                                    valueAtt = "";
+                                }
+
+                                GeneralAttribute ga = new GeneralAttribute(id, valueAtt, type);
+                                this.myAttributes.add(ga);
+
+                            }//FIXME end 
                         }
                     }
                 }
@@ -598,6 +654,43 @@ public class AvatarCDBlock extends TGCScalableWithInternalComponent implements S
         } catch (Exception e) {
             throw new MalformedModelingException();
         }
+    }
+
+
+    // Main Tree
+    public int getChildCount() {
+        //TraceManager.addDev("Counting childs!");
+        return this.myAttributes.size()  + nbInternalTGComponent;
+    }
+
+    public Object getChild(int index) {
+
+        int sa = nbInternalTGComponent;
+
+        if (sa > index) {
+            return tgcomponent[index];
+        }
+
+        index = index - nbInternalTGComponent;
+
+        return this.myAttributes.get(index);
+    }
+
+    public int getIndexOfChild(Object child) {
+        if (child instanceof AvatarCDBlock) {
+            for (int i = 0; i < nbInternalTGComponent; i++) {
+                if (tgcomponent[i] == child) {
+                    return i;
+                }
+            }
+        }
+
+        if (child instanceof TAttribute) {
+            return this.myAttributes.indexOf(child) + nbInternalTGComponent;
+        }
+
+
+        return -1;
     }
 
 }

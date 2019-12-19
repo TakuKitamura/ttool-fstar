@@ -91,6 +91,11 @@ public:
 	/**
 	\return Pointer to the current transaction
 	*/
+
+	virtual bool getActiveDelay(){return false;}
+
+	virtual bool isDelayTransaction(){return false;}
+
 	inline TMLTransaction* getCurrTransaction() const {return _currTransaction;}
 	///Returns a pointer to the task which could be unblocked by the command
 	/**
@@ -224,6 +229,9 @@ public:
 	static unsigned int getBranchCoverage();
 	///Reset coverage related state variables
 	static void clearCoverageVars();
+
+	std::string lastParams; // Exchanged params
+	
 protected:
 	///ID of the command
 	ID _ID;

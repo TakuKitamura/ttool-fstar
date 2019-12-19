@@ -53,11 +53,13 @@ public class SysCAMSTCluster extends SysCAMSTComponent {
 	
 	private LinkedList<SysCAMSTBlockTDF> blockTDF;
 	private LinkedList<SysCAMSTBlockDE> blockDE;
+    	private LinkedList<SysCAMSTClock> clock;
 	
 	public SysCAMSTCluster(String _clusterName) {
 		clusterName = _clusterName;
 		blockTDF = new LinkedList<SysCAMSTBlockTDF>();
 		blockDE = new LinkedList<SysCAMSTBlockDE>();
+		clock = new LinkedList<SysCAMSTClock>();
 	}
 
 	public String getClusterName() {
@@ -79,4 +81,13 @@ public class SysCAMSTCluster extends SysCAMSTComponent {
 	public void addBlockDE(SysCAMSTBlockDE _blockDE){
 		blockDE.add(_blockDE);
 	}
+
+    	public void addClock(SysCAMSTClock _clock){
+		clock.add(_clock);
+	}
+    
+	public LinkedList<SysCAMSTClock> getClock(){
+		return clock;
+	}
+
 }

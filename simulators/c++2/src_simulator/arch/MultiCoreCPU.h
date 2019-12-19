@@ -77,7 +77,7 @@ public:
 	\param iCyclesBeforeIdle Idle cycles which elapse before entering idle mode
 	\param ibyteDataSize Machine word length
     	*/
-	MultiCoreCPU(ID iID, std::string iName, WorkloadSource* iScheduler, WorkloadSource* iScheduler2,TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize);
+	MultiCoreCPU(ID iID, std::string iName, WorkloadSource* iScheduler,TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize, unsigned int iAmountOfCore);
 	///Destructor
 	virtual ~MultiCoreCPU();
 	///Determines the next CPU transaction to be executed
@@ -145,6 +145,20 @@ protected:
 	BusMaster* _masterNextTransaction;
 	///1/Processor frequency
 	TMLTime _timePerCycle;
+	///test////
+	unsigned int coreNumber;
+	//first parameter is the core number
+	///second parameter is the end schedule in the core
+	std::map <unsigned int, unsigned int> multiCore;
+	///initialization of all cores
+	void initCore();
+	///get the avaliable core
+	unsigned int getCoreNumber();
+	//inline void setCoreNumber(unsigned int n) { coreNumber=n;}
+	///return the minimum time of the end schedule in all cores
+	TMLTime getMinEndSchedule();
+	///end
+
 #ifdef PENALTIES_ENABLED
 	///Pipeline size
 	unsigned int _pipelineSize;
@@ -170,7 +184,7 @@ protected:
 	TMLTime _changeIdleModeTime;
 #endif
 	///State variable for the VCD output
-	vcdCPUVisState _vcdOutputState;
+	//vcdCPUVisState _vcdOutputState;
 };
 
 #endif

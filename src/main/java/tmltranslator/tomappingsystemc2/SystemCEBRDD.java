@@ -604,7 +604,17 @@ public class SystemCEBRDD {
                 }
             }
             return idtype;
-        }
+        }//ajoute DG
+	if (lnodeName.equals("allhwcams")) {
+            idtype.type = 7;
+            for (HwNode node : tmlmapping.getTMLArchitecture().getHwNodes()) {
+                if (node instanceof HwCams) {
+                    idtype.id += ", (unsigned int)" + node.getID();
+                    idtype.nbOfIDs++;
+                }
+            }
+            return idtype;
+        }//fin ajoute DG
         if (lnodeName.equals("allchannels")) {
             idtype.type = 4;
             idtype.nbOfIDs = tmlmodeling.getChannels().size();

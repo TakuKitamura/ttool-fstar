@@ -38,6 +38,8 @@
 
 package avatartranslator;
 
+import myutil.TraceManager;
+
 import java.util.Map;
 
 /**
@@ -51,7 +53,7 @@ public class AvatarArithmeticOp extends AvatarTerm {
     AvatarTerm term2;
     String operator;
 
-    private static final String [] knownOp = {"+", "-"};
+    private static final String [] knownOp = {"+", "-", "*"};
 
     public AvatarArithmeticOp (AvatarTerm _term1, AvatarTerm _term2, String _operator, Object _referenceObject) {
         super (_term1.getName () + _operator + _term2.getName (), _referenceObject);
@@ -112,14 +114,69 @@ public class AvatarArithmeticOp extends AvatarTerm {
 
     @Override
     public void replaceAttributes( Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
-        if (this.term1 instanceof AvatarAttribute)
-            this.term1 = attributesMapping.get (this.term1);
-        else
-            this.term1.replaceAttributes (attributesMapping);
 
-        if (this.term2 instanceof AvatarAttribute)
-            this.term2 = attributesMapping.get (this.term2);
-        else
-            this.term2.replaceAttributes (attributesMapping);
+        //TraceManager.addDev("Replace Attribute term1="  + term1.getClass().getCanonicalName() + " / " + term1.getName());
+
+        if (this.term1 instanceof AvatarAttribute) {
+            //TraceManager.addDev("Found an attribute: " + this.term1.getName());
+
+            AvatarAttribute at = attributesMapping.get(this.term1);
+            if (at == null) {
+                // Search by name
+               for(AvatarAttribute atbis: attributesMapping.keySet()) {
+                   if (atbis.getName().equals(this.term1.getName())) {
+                       at = attributesMapping.get(atbis);
+                       break;
+                   }
+               }
+
+            }
+
+            if (at == null) {
+                //TraceManager.addDev("No correspondance for " + this.term1.getName());
+            } else {
+                //TraceManager.addDev("Replaced with: " + at.getClass().getCanonicalName() +
+                //        " / " + at.getName());
+                this.term1 = at;
+                name = this.toString();
+                //TraceManager.addDev("Next expr " + this.toString() + " name of var=" + this.term1.getName());
+            }
+
+
+        }
+        else {
+            this.term1.replaceAttributes(attributesMapping);
+        }
+
+        //TraceManager.addDev("Replace Attribute term2=" + term2.getClass().getCanonicalName() + " / " + term2.getName());
+
+        if (this.term2 instanceof AvatarAttribute) {
+            AvatarAttribute at = attributesMapping.get(this.term2);
+            if (at == null) {
+                // Search by name
+                for(AvatarAttribute atbis: attributesMapping.keySet()) {
+                    if (atbis.getName().equals(this.term2.getName())) {
+                        at = attributesMapping.get(atbis);
+                        break;
+                    }
+                }
+            }
+
+            if (at == null) {
+                //TraceManager.addDev("No correspondance for " + this.term2.getName());
+            } else {
+                //TraceManager.addDev("Replaced with: " + at.getClass().getCanonicalName() +
+                //        " / " + at.getName());
+                this.term2 = at;
+                name = this.toString();
+                //TraceManager.addDev("Next expr " + this.toString() + " name of var=" + this.term2.getName());
+            }
+
+        }
+        else {
+            this.term2.replaceAttributes(attributesMapping);
+        }
+
+        //TraceManager.addDev("Expr: " + this.toString());
     }
 }

@@ -46,7 +46,8 @@
 MemPoolNoDel<TMLTransaction> TMLTransaction::memPool(BLOCK_SIZE_TRANS);
 
 
-TMLTransaction::TMLTransaction():_runnableTime(0), _startTime(0), _length(0), _virtualLength(0), _command(0),
+TMLTransaction::TMLTransaction():_runnableTime(0), _startTime(0), _length(0), _virtualLength(0), _command(0),_transactCoreNumber(0),_transVcdOutputState(END_IDLE_TRANS),_endState(false),
+				 /*_previousTransEndTime(0),*/
 #ifdef PENALTIES_ENABLED
                                  _idlePenalty(0), _taskSwitchingPenalty(0), //, _branchingPenalty(0),
 #endif
@@ -55,7 +56,7 @@ TMLTransaction::TMLTransaction():_runnableTime(0), _startTime(0), _length(0), _v
   
 }
 
-TMLTransaction::TMLTransaction(TMLCommand* iCommand, TMLLength iVirtualLength, TMLTime iRunnableTime, TMLChannel* iChannel):_runnableTime(iRunnableTime), _startTime(0), _length(0), _virtualLength(iVirtualLength), _command(iCommand),
+TMLTransaction::TMLTransaction(TMLCommand* iCommand, TMLLength iVirtualLength, TMLTime iRunnableTime, TMLChannel* iChannel):_runnableTime(iRunnableTime), _startTime(0), _length(0), _virtualLength(iVirtualLength), _command(iCommand),_endState(false),
 #ifdef PENALTIES_ENABLED
                                                                                                                             _idlePenalty(0), _taskSwitchingPenalty(0), //, _branchingPenalty(0),
 #endif
@@ -73,7 +74,7 @@ std::string TMLTransaction::toString() const{
   std::ostringstream outp;
   //std::cout << "kernel:transaction: toString" << std::endl;
   //std::cout << "kernel:transaction: toString" << _command->toString() << std::endl;
-  outp << _command->toString() << std::endl << "Transaction runnable:" << _runnableTime << " len:" << _length << " start:" << _startTime << " vLength:" << _virtualLength;
+  outp << _command->toString() << std::endl << "Transaction runnable:" << _runnableTime << " len:" << _length << " start:" << _startTime << " vLength:" << _virtualLength << " params:" << lastParams ;
   if (_channel!=0) outp << " Ch: " << _channel->toShortString();
   return outp.str();
 }
@@ -83,23 +84,22 @@ std::string TMLTransaction::toShortString() const{
   if (_command==0)
     outp << "System State ID: " <<  _virtualLength;
   else{
-    outp << _command->toShortString() << " t:" << _startTime << " l:" << _length << " (vl:"<<  _virtualLength << ")";
+    outp << _command->toShortString() << " t:" << _startTime << " l:" << _length << " (vl:"<<  _virtualLength << ")" << " params:" << lastParams ;
     if (_channel!=0) outp << " Ch: " << _channel->toShortString();
   }
   return outp.str();
 }
 
 
-void TMLTransaction::toXML(std::ostringstream& glob, int deviceID, std::string deviceName) const {
+void TMLTransaction::toXML(std::ostringstream& glob, int deviceID, std::string deviceName, ID uniqueID) const {
   if (_command==0) {
-    glob << TAG_TRANSo << " deviceid=\"" << deviceID << "\" devicename=\"" << deviceName << "\" id=\"" << _command->getID() << "\" command=\"0\"";
+    glob << TAG_TRANSo << " uniqueid=\"" << uniqueID  << "\" deviceid=\"" << deviceID << "\" devicename=\"" << deviceName << "\" id=\"" << _command->getID() << "\" runnableTime=\"" << _runnableTime  << "\" command=\"0\"";
   } else {
-    glob << TAG_TRANSo << " deviceid=\"" << deviceID << "\" devicename=\"" << deviceName << "\" command=\"" << _command->toShortString() << "\"";
+    glob << TAG_TRANSo << " uniqueid=\"" << uniqueID  << "\" deviceid=\"" << deviceID << "\" devicename=\"" << deviceName << "\" command=\"" << _command->toShortString() << "\"";
     std::cout << "Info transaction:" <<  " starttime=\"" << _startTime << "\" endtime=\"" << getEndTime() << " length" << _length << "\" virtuallength=" <<  _virtualLength << " getStartTime:" << getStartTime() << "\n"; 
-    glob << " starttime=\"" << _startTime << "\" endtime=\"" << getEndTime() << "\" length=\"" << _length << "\" virtuallength=\"" <<  _virtualLength << "\" id=\"" << _command->getID() << "\""; 
-    if (_channel!=0) glob << " ch=\"" << _channel->toShortString() << "\"";
+    glob << " starttime=\"" << _startTime << "\" endtime=\"" << getEndTime() << "\" length=\"" << _length << "\" virtuallength=\"" <<  _virtualLength << "\" id=\"" << _command->getID() << "\""<< " runnableTime=\"" << _runnableTime <<  "\"" ;
+    if (_channel!=0) glob << " ch=\"" << _channel->toShortString() <<  "\""  ;
   }
-
 
   
   glob <<  TAG_TRANSc << "\n";

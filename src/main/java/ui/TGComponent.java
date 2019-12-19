@@ -52,10 +52,7 @@ import ui.tmlad.TMLActivityDiagramPanel;
 import ui.tmlcd.TMLTaskDiagramPanel;
 import ui.tmlcompd.TMLCPrimitiveComponent;
 import ui.tmlcompd.TMLComponentTaskDiagramPanel;
-import ui.tmldd.TMLArchiArtifact;
-import ui.tmldd.TMLArchiCPUNode;
-import ui.tmldd.TMLArchiDiagramPanel;
-import ui.tmldd.TMLArchiFirewallNode;
+import ui.tmldd.*;
 import ui.util.IconManager;
 
 import javax.swing.*;
@@ -1132,16 +1129,17 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
             g.drawString("Mutual exclusion with " + nameOfMasterStateMutex, x + width + 1, y + 12);
         }
 
+        if (breakpoint) {
+            //TraceManager.addDev("breakpoint");
+            g.setColor(ColorManager.BREAKPOINT);
+            Font f = g.getFont();
+            g.setFont(f.deriveFont(Font.BOLD));
+            g.drawString("bk", x + width, y + 3);
+            g.setFont(f);
+        }
+
 
         if (TDiagramPanel.DIPLO_ANIMATE_ON) {
-            if (breakpoint) {
-                //TraceManager.addDev("breakpoint");
-                g.setColor(ColorManager.BREAKPOINT);
-                Font f = g.getFont();
-                g.setFont(f.deriveFont(Font.BOLD));
-                g.drawString("bk", x + width, y + 3);
-                g.setFont(f);
-            }
             if (!((this instanceof TGConnector) || (this instanceof TGCNote) || (this instanceof TMLArchiFirewallNode))) {
                 if (tdp instanceof TMLActivityDiagramPanel) {
                     if (getFather() == null) {
@@ -1192,6 +1190,11 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
                             drawLoadDiploID(g, li);
                         }
                         List<SimulationTransaction> ts = tdp.getMGUI().getTransactions(getDIPLOID());
+                        if (ts == null) {
+                            //TraceManager.addDev("Null transactions for " + getDIPLOID());
+                        } else {
+                            //TraceManager.addDev("Number of transactions for id " + getDIPLOID() + " = " + ts.size());
+                        }
                         if (ts != null && ts.size() > 0) {
                             transactions = new ArrayList<SimulationTransaction>(ts);
                             transaction = transactions.get(transactions.size() - 1).taskName + ":" + transactions.get(transactions.size() - 1).command;
@@ -2013,11 +2016,20 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
         return getTopFather().getFromTopFreeTGConnectingPointAtAndCompatible(x, y, type);
     }
 
+    public TGConnectingPoint getFreeTGConnectingPointAtAndCompatible(int x, int y, int type, TGConnectingPoint outPoint) {
+        return getTopFather().getFromTopFreeTGConnectingPointAtAndCompatible(x, y, type, outPoint);
+    }
+
     public TGConnectingPoint getFromTopFreeTGConnectingPointAtAndCompatible(int x, int y, int type) {
+        return getFromTopFreeTGConnectingPointAtAndCompatible(x, y, type, null);
+    }
+
+    public TGConnectingPoint getFromTopFreeTGConnectingPointAtAndCompatible(int x, int y, int type, TGConnectingPoint outPoint) {
         //TraceManager.addDev("Getting TGConnecting point");
 
         for (int i = 0; i < nbConnectingPoint; i++) {
-            if ((Math.abs(connectingPoint[i].getX() - x) < 4) && (Math.abs(connectingPoint[i].getY() - y) < 4) && (connectingPoint[i].isFree()) && (connectingPoint[i].isCompatibleWith(type))) {
+            if ((Math.abs(connectingPoint[i].getX() - x) < 4) && (Math.abs(connectingPoint[i].getY() - y) < 4) &&
+                    (connectingPoint[i].isFree()) && (connectingPoint[i].isCompatibleWith(type, outPoint))) {
                 return connectingPoint[i];
             }
         }
@@ -2811,23 +2823,30 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
         repaint = true;
     }
 
+
+
+
     /**
      * Rename all reference of a primitive component.
      *
-     * @param s new name
+     * @param taskName new name
      * @author Fabien Tessier
      */
-    public void setComponentName(String s) {
+    public void setComponentName(String taskName) {
         for (TURTLEPanel tp : tdp.mgui.tabs)
             for (TDiagramPanel t : tp.getPanels()) {
                 for (TGComponent t2 : t.componentList) {
-                    if (t2 instanceof TMLArchiCPUNode) {
-                        TMLArchiCPUNode tcpu = (TMLArchiCPUNode) t2;
+                    if (t2 instanceof TMLArchiElementWithArtifactList) {
+                        TMLArchiElementWithArtifactList tcpu = (TMLArchiElementWithArtifactList) t2;
                         for (TMLArchiArtifact art : tcpu.getArtifactList()) {
-                            if (art.getTaskName().equals(value))
-                                art.setTaskName(s);
-                            String tmp = art.getValue().replaceAll("(?i)" + value + "$", s);
-                            art.setValue(tmp);
+                            if (art.getTaskName().equals(value)) {
+                                //TraceManager.addDev("Comparing:" + tdp.getName() + " with " + art.getReferenceTaskName());
+                                if (art.getReferenceTaskName().equals(tdp.tp.getNameOfTab())) {
+                                    art.setTaskName(taskName);
+                                    String tmp = art.getValue().replaceAll("(?i)" + value + "$", taskName);
+                                    art.setValue(tmp);
+                                }
+                            }
                         }
                     }
                 }
@@ -2947,6 +2966,17 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
             }
         }
         return false;
+    }
+
+
+    public boolean removeAllInternalComponents() {
+        for(TGComponent tgc: tgcomponent) {
+            tgc.actionOnRemove();
+            tdp.actionOnRemove(tgc);
+        }
+        tgcomponent = new TGComponent[0];
+        nbInternalTGComponent = 0;
+        return true;
     }
 
     public boolean removeInternalComponent(TGComponent t) {
@@ -3112,12 +3142,12 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
 
     // saving
     public StringBuffer saveInXML() {
-        return saveInXML(true);
+        return saveInXML(true, false);
     }
 
-    protected StringBuffer saveInXML(boolean saveSubComponents) {
+    protected StringBuffer saveInXML(boolean saveSubComponents, boolean saveAsComponentEvenIfNonNullFather) {
         StringBuffer sb = null;
-        boolean b = (father == null);
+        boolean b = (father == null) || saveAsComponentEvenIfNonNullFather;
         if (b) {
             sb = new StringBuffer(XML_HEAD);
         } else {
@@ -3395,7 +3425,7 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
     }
 
     public void searchForText(String text, Vector<Object> elements) {
-        String save = saveInXML(false).toString().toLowerCase();
+        String save = saveInXML(false, false).toString().toLowerCase();
         if (save.indexOf(text) >= 0) {
             //TraceManager.addDev("Found " + this);
             elements.add(this);

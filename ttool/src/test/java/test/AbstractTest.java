@@ -51,6 +51,8 @@ public abstract class AbstractTest {
 									final String fileName ) {
 		try {
 			final String expectedCode = FileUtils.loadFile( EXPECTED_CODE_DIR + fileName + XML_EXT );
+
+			//FileUtils.saveFile(EXPECTED_CODE_DIR + fileName + XML_EXT, actualCode);
 			
 			if ( !compareXml( actualCode, expectedCode ) ) {
 				saveActualResults( fileName + XML_EXT, actualCode );

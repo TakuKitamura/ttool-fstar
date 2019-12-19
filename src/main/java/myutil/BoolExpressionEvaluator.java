@@ -749,7 +749,7 @@ public class BoolExpressionEvaluator {
         while ((index = _expr.indexOf("not(")) != -1) {
             indexPar = Conversion.findMatchingParenthesis(_expr, index + 3, '(', ')');
             if (indexPar == -1) {
-                errorMessage = "Parenthesis not maching at index " + (index + 3) + " in expression: " + _expr;
+                errorMessage = "Parenthesis not matching at index " + (index + 3) + " in expression: " + _expr;
                 return false;
             }
 
@@ -1608,6 +1608,9 @@ public class BoolExpressionEvaluator {
     public boolean getResultOfWithIntExpr(String _expr) {
         int index, indexPar;
 
+
+        //TraceManager.addDev("Going to evaluate: " + _expr);
+
         String tmp = Conversion.replaceAllString(_expr, "==", "$").trim();
         tmp = Conversion.replaceAllString(tmp, "!=", "$").trim();
         tmp = Conversion.replaceAllString(tmp, ">=", ":").trim();
@@ -1632,7 +1635,7 @@ public class BoolExpressionEvaluator {
         while ((index = _expr.indexOf("not(")) != -1) {
             indexPar = Conversion.findMatchingParenthesis(_expr, index + 3, '(', ')');
             if (indexPar == -1) {
-                errorMessage = "Parenthesis not maching at index " + (index + 3) + " in expression: " + _expr;
+                errorMessage = "Parenthesis not matching at index " + (index + 3) + " in expression: " + _expr;
                 return false;
             }
 

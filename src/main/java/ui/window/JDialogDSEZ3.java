@@ -52,6 +52,7 @@ import tmltranslator.TMLModeling;
 import tmltranslator.dsez3engine.InputInstance;
 import tmltranslator.dsez3engine.OptimizationModel;
 import tmltranslator.dsez3engine.OptimizationResult;
+import ui.TGComponent;
 import ui.util.IconManager;
 import ui.MainGUI;
 
@@ -96,7 +97,8 @@ public class JDialogDSEZ3 extends JDialog implements ActionListener, ListSelecti
     int mode;
 
 
-
+    protected  static boolean generateGraphicalMappingSelected;
+    protected JCheckBox generateGraphicalMapping;
     protected JButton start;
     protected JButton stop;
     protected JButton close;
@@ -113,7 +115,7 @@ public class JDialogDSEZ3 extends JDialog implements ActionListener, ListSelecti
 
     protected RshClient rshc;
 
-    private TMLMapping map;
+    private TMLMapping<TGComponent> map;
     private InputInstance inputInstance;
     private OptimizationModel optimizationModel;
 
@@ -121,7 +123,7 @@ public class JDialogDSEZ3 extends JDialog implements ActionListener, ListSelecti
     /*
      * Creates new form
      */
-    public JDialogDSEZ3(Frame f, MainGUI _mgui, String title, TMLMapping map, String dir) {
+    public JDialogDSEZ3(Frame f, MainGUI _mgui, String title, TMLMapping<TGComponent> map, String dir) {
         super(f, title, true);
 
         mgui = _mgui;
@@ -164,7 +166,10 @@ public class JDialogDSEZ3 extends JDialog implements ActionListener, ListSelecti
         c03.fill = GridBagConstraints.BOTH;
         c03.gridheight = 1;
 
-
+        generateGraphicalMapping = new JCheckBox("Generate a graphical mapping if a solution is found");
+        generateGraphicalMapping.setSelected(generateGraphicalMappingSelected);
+        generateGraphicalMapping.addActionListener(this);
+        jp03.add(generateGraphicalMapping, c03);
 
 
         JPanel jp04 = new JPanel();
@@ -220,7 +225,6 @@ public class JDialogDSEZ3 extends JDialog implements ActionListener, ListSelecti
         jp2.add(stop);
         jp2.add(close);
 
-
         c.add(jp2, BorderLayout.SOUTH);
 
 
@@ -261,6 +265,8 @@ public class JDialogDSEZ3 extends JDialog implements ActionListener, ListSelecti
             stopProcess();
         } else if (evt.getSource() == close) {
             closeDialog();
+        } else if (evt.getSource() == generateGraphicalMapping) {
+            generateGraphicalMappingSelected = generateGraphicalMapping.isSelected();
         }
     }
 
@@ -310,7 +316,7 @@ public class JDialogDSEZ3 extends JDialog implements ActionListener, ListSelecti
          outputText.append("\nPreparing input model for Z3\n");
         //   File testFile;
         TMLArchitecture tmla = map.getTMLArchitecture();
-        TMLModeling tmlm = map.getTMLModeling();
+        TMLModeling<TGComponent> tmlm = map.getTMLModeling();
 
         /*
         for(Object task : tmlm.getTasks()){
@@ -352,8 +358,17 @@ public class JDialogDSEZ3 extends JDialog implements ActionListener, ListSelecti
                 outputText.append("ERROR: " + result.error);
             } else {
                 if (result.mappingFound) {
-                    outputText.append("Optimized mapping found");
+                    outputText.append("Optimized mapping found\n");
                     outputText.append(result.result);
+                    if (generateGraphicalMappingSelected) {
+                        outputText.append("\nGenerating graphical mapping\n");
+                        boolean b = mgui.gtm.generateGraphicalMapping(result.resultingMapping);
+                        if (!b) {
+                            outputText.append("*Error* when creating graphical model\n");
+                        } else {
+                            outputText.append("Graphical model created\n");
+                        }
+                    }
                 } else {
                     outputText.append("No suitable mapping could be found");
                 }

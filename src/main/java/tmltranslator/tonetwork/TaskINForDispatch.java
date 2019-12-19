@@ -56,30 +56,45 @@ public class TaskINForDispatch extends TMLTask {
 
     public TaskINForDispatch(String name, Object referenceToClass, Object referenceToActivityDiagram) {
         super(name, referenceToClass, referenceToActivityDiagram);
+        setDaemon(TMAP2Network.DAEMON);
     }
 
     // Output Channels are given in the order of VCs
-
-    public void generate(int nbOfVCs, TMLEvent inputEvent, TMLChannel inputChannel, Vector<TMLEvent> outputEvents, Vector<TMLChannel> outputChannels) {
+    public void generate(int nbOfVCs, TMLEvent inputEvent, TMLChannel inputChannel,
+                         Vector<TMLEvent> outputEvents, Vector<TMLChannel> outputChannels) {
 
         this.nbOfVCs = nbOfVCs;
 
+        //inputEvent.setDestinationTask(this);
+        //inputChannel.setDestinationTask(this);
+
+        for(TMLEvent evt: outputEvents) {
+            evt.setOriginTask(this);
+        }
+        for(TMLChannel ch: outputChannels) {
+            ch.setOriginTask(this);
+        }
 
         // Attributes
         TMLAttribute pktlen = new TMLAttribute("pktlen", "pktlen", new TMLType(TMLType.NATURAL), "0");
         this.addAttribute(pktlen);
-        TMLAttribute dst = new TMLAttribute("dst", "dst", new TMLType(TMLType.NATURAL), "0");
-        this.addAttribute(dst);
+        TMLAttribute dstX = new TMLAttribute("dstX", "dstX", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(dstX);
+        TMLAttribute dstY = new TMLAttribute("dstY", "dstY", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(dstY);
         TMLAttribute vc = new TMLAttribute("vc", "vc", new TMLType(TMLType.NATURAL), "0");
         this.addAttribute(vc);
         TMLAttribute eop = new TMLAttribute("eop", "eop", new TMLType(TMLType.NATURAL), "0");
         this.addAttribute(eop);
+        TMLAttribute chid = new TMLAttribute("chid", "chid", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(chid);
 
         // Events and channels
         addTMLEvent(inputEvent);
         for(TMLEvent evt: outputEvents) {
             addTMLEvent(evt);
         }
+
         addReadTMLChannel(inputChannel);
         for(TMLChannel ch: outputChannels) {
             addWriteTMLChannel(ch);
@@ -97,22 +112,25 @@ public class TaskINForDispatch extends TMLTask {
         TMLWaitEvent waitEvt = new TMLWaitEvent("PacketEvent", referenceObject);
         waitEvt.setEvent(inputEvent);
         waitEvt.addParam("pktlen");
-        waitEvt.addParam("dst");
+        waitEvt.addParam("dstX");
+        waitEvt.addParam("dstY");
         waitEvt.addParam("vc");
         waitEvt.addParam("eop");
-        activity.addElement(waitEvt);
-        loop.addNext(waitEvt);
+        waitEvt.addParam("chid");
+        activity.addLinkElement(loop, waitEvt);
 
         TMLChoice choice = new TMLChoice("MainChoice", referenceObject);
-        activity.addElement(choice);
+        activity.addLinkElement(waitEvt, choice);
 
         for(int i=0; i<nbOfVCs; i++) {
             TMLSendEvent sendEvt = new TMLSendEvent("SendEvtToVC" + i, referenceObject);
             sendEvt.setEvent(outputEvents.get(i));
             sendEvt.addParam("pktlen");
-            sendEvt.addParam("dst");
+            sendEvt.addParam("dstX");
+            sendEvt.addParam("dstY");
             sendEvt.addParam("vc");
             sendEvt.addParam("eop");
+            sendEvt.addParam("chid");
             activity.addElement(sendEvt);
             choice.addNext(sendEvt);
             choice.addGuard("vc == " + i);

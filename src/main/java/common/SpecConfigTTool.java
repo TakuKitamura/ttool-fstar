@@ -1,3 +1,5 @@
+
+
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
  *
  * ludovic.apvrille AT enst.fr
@@ -68,6 +70,7 @@ public class SpecConfigTTool {
     public static String SystemCCodeDirectory = "";
     public static String SystemCCodeCompileCommand = "";
     public static String SystemCCodeExecuteCommand = "";
+    public static String SystemCCodeExecuteXCycle = "";
     public static String SystemCCodeInteractiveExecuteCommand = "";
 
     public static String CCodeDirectory = "";
@@ -124,6 +127,7 @@ public class SpecConfigTTool {
         SystemCCodeDirectory = ConfigurationTTool.SystemCCodeDirectory;
         SystemCCodeCompileCommand = ConfigurationTTool.SystemCCodeCompileCommand;
         SystemCCodeExecuteCommand = ConfigurationTTool.SystemCCodeExecuteCommand;
+        SystemCCodeExecuteXCycle = ConfigurationTTool.SystemCCodeExecuteXCycle;
         SystemCCodeInteractiveExecuteCommand = ConfigurationTTool.SystemCCodeInteractiveExecuteCommand;
 
         CCodeDirectory = ConfigurationTTool.CCodeDirectory;
@@ -179,6 +183,9 @@ public class SpecConfigTTool {
                 ConfigurationTTool.SystemCCodeDirectory, SystemCCodeDirectory);
         //TraceManager.addDev("After replace SystemCCodeCompileCommand:" + SystemCCodeCompileCommand);
         SystemCCodeExecuteCommand = ConfigurationTTool.SystemCCodeExecuteCommand.replace(ConfigurationTTool.SystemCCodeDirectory, SystemCCodeDirectory);
+        SystemCCodeExecuteXCycle = ConfigurationTTool.SystemCCodeExecuteXCycle.replace(ConfigurationTTool.SystemCCodeDirectory,
+                SystemCCodeDirectory);
+
         SystemCCodeInteractiveExecuteCommand = ConfigurationTTool.SystemCCodeInteractiveExecuteCommand.replace(ConfigurationTTool.SystemCCodeDirectory, SystemCCodeDirectory);
 
         AVATARExecutableCodeExecuteCommand = ConfigurationTTool.AVATARExecutableCodeExecuteCommand.replace(ConfigurationTTool.AVATARExecutableCodeDirectory, AVATARExecutableCodeDirectory);
@@ -549,6 +556,7 @@ public class SpecConfigTTool {
             sb.append("SystemCCodeDirectory: " + SystemCCodeDirectory + "\n");
             sb.append("SystemCCodeCompileCommand: " + SystemCCodeCompileCommand + "\n");
             sb.append("SystemCCodeExecuteCommand: " + SystemCCodeExecuteCommand + "\n");
+            sb.append("SystemCCodeExecuteXCycleCommand: " + SystemCCodeExecuteXCycle + "\n");
             sb.append("SystemCCodeInteractiveExecuteCommand: " + SystemCCodeInteractiveExecuteCommand + "\n");
             // TML
             sb.append("TMLCodeDirectory: " + TMLCodeDirectory + "\n");

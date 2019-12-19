@@ -55,7 +55,7 @@ import java.util.Vector;
 
 /**
  * Class JDialogTMLConnectorNode
- * Dialog for managing atributes of connectors between nodes
+ * Dialog for managing attributes of connectors between nodes
  * Creation: 22/11/2007
  * @version 1.0 22/11/2007
  * @author Ludovic APVRILLE
@@ -132,6 +132,7 @@ public class JDialogTMLConnectorNode extends JDialogBase implements ActionListen
 		panel2.add(taskName, c1);*/
         
         // main panel;
+        c0.fill = GridBagConstraints.BOTH;
         c0.gridheight = 10;
         c0.weighty = 1.0;
         c0.weightx = 1.0;
@@ -140,9 +141,10 @@ public class JDialogTMLConnectorNode extends JDialogBase implements ActionListen
         
         c0.gridwidth = 1;
         c0.gridheight = 1;
-        c0.fill = GridBagConstraints.HORIZONTAL;
         
         initButtons(c0, c, this);
+
+        pack();
     }
     
     public void	actionPerformed(ActionEvent evt)  {

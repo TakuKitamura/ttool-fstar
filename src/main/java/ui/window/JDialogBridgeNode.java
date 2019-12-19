@@ -142,6 +142,7 @@ public class JDialogBridgeNode extends JDialogBase implements ActionListener  {
         c0.weighty = 1.0;
         c0.weightx = 1.0;
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
+        c0.fill = GridBagConstraints.BOTH;
         c.add(panel2, c0);
 
         c0.gridwidth = 1;

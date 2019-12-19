@@ -2,6 +2,7 @@ package tmltranslator.dsez3engine;
 
 import myutil.TraceManager;
 import tmltranslator.*;
+import ui.TGComponent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,9 +11,9 @@ import java.util.List;
 public class InputInstance {
 
     private TMLArchitecture architecture;
-    private TMLModeling modeling;
+    private TMLModeling<TGComponent> modeling;
 
-    public InputInstance(TMLArchitecture architecture, TMLModeling modeling) {
+    public InputInstance(TMLArchitecture architecture, TMLModeling<TGComponent> modeling) {
         this.architecture = architecture;
         this.modeling = modeling;
     }
@@ -25,13 +26,8 @@ public class InputInstance {
         for (HwNode hwNode : architecture.getHwNodes()) {
             if (hwNode instanceof HwExecutionNode) {
 
-                /*for (String operationType : ((HwExecutionNode) hwNode).getOperationTypes()) {
-                    if (operationType.equals(tmlTask.getOperation())) {
-                        feasibleCPUs.add((HwExecutionNode) hwNode);
-                        break;
-                    }
-                }*/
-                feasibleCPUs.add((HwExecutionNode) hwNode);
+                if ((((HwExecutionNode) hwNode).supportOperation(tmlTask.getOperation()) ) || (((HwExecutionNode) hwNode).getOperation().equals(" ")))
+                    feasibleCPUs.add((HwExecutionNode) hwNode);
 
             }
 
@@ -45,7 +41,7 @@ public class InputInstance {
 
         int bin = 0;
         for (TMLReadChannel tmlReadChannel : tmlTask.getReadChannels()) {
-                bin = bin + Integer.valueOf(tmlReadChannel.getNbOfSamples());
+            bin = bin + Integer.valueOf(tmlReadChannel.getNbOfSamples());
         }
 
         return bin;
@@ -97,17 +93,17 @@ public class InputInstance {
 
     //TODO this supposes that we have one single final task
 
-    public TMLTask getFinalTask(TMLModeling tmlm){
+    public TMLTask getFinalTask(TMLModeling tmlm) {
         TMLTask finalTask = null;
 
-        for (Object tmlTask :  tmlm.getTasks()){
-            TMLTask taskCast = (TMLTask)tmlTask;
+        for (Object tmlTask : tmlm.getTasks()) {
+            TMLTask taskCast = (TMLTask) tmlTask;
 
-            if  ((taskCast.getWriteChannels().isEmpty()) && (!taskCast.getReadChannels().isEmpty()))
+            if ((taskCast.getWriteChannels().isEmpty()) && (!taskCast.getReadChannels().isEmpty()))
                 finalTask = taskCast;
         }
 
-       // TraceManager.addDev("final task is" + finalTask.getName());
+        // TraceManager.addDev("final task is" + finalTask.getName());
 
         return finalTask;
     }
@@ -117,7 +113,7 @@ public class InputInstance {
         return architecture;
     }
 
-    public TMLModeling getModeling() {
+    public TMLModeling<TGComponent> getModeling() {
         return modeling;
     }
 }

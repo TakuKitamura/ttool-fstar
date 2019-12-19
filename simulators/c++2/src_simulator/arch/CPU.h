@@ -50,6 +50,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTask.h>
 #include <TMLCommand.h>
 
+
 class TMLTask;
 class TMLTransaction;
 class Bus;
@@ -70,7 +71,8 @@ public:
 	\param iName Name of the device
 	\param iScheduler Pointer to the scheduler object
 	*/
-	CPU(ID iID, std::string iName, WorkloadSource* iScheduler): SchedulableDevice(iID, iName, iScheduler), _lastTransaction(0)/*,_schedulingNeeded(false)*/{
+	CPU(ID iID, std::string iName, WorkloadSource* iScheduler, unsigned int iAmountOfCore): SchedulableDevice(iID, iName, iScheduler), _lastTransaction(0),
+        amountOfCore(iAmountOfCore), _coreNumberGraph(0)/*,_schedulingNeeded(false)*/{
 	}
 	///Destructor
 	virtual ~CPU(){
@@ -111,53 +113,18 @@ public:
 		SchedulableDevice::writeObject(os);
 		return os;
 	}
-	///Invalidate schedule of CPU
-	/*void setRescheduleFlag(){
-		_schedulingNeeded=true;
-		//std::cout <<" CPU " << _name << " forwards to scheduler\n";
-		_scheduler->resetScheduledFlag();
-	}*/
-
-	///Truncates current transaction if schedule is invalid
-	/**
-	\param iTime Truncation time
-	*/
-	/*void truncateIfNecessary(TMLTime iTime){
-		if(_schedulingNeeded && getNextTransaction()!=0){
-			//std::cout << "truncateIfNecessary for CPU " << _name << "\n";
-			_schedulingNeeded=false;	
-			truncateAndAddNextTransAt(iTime);
-			//std::cout << "truncateIfNecessary end\n";
-		}
-	}*/
-
-	///Reschedules CPU if schedule is invalid
-	/*void rescheduleIfNecessary(){
-		if(_schedulingNeeded){
-			//std::cout << "rescheduleIfNecessary for CPU " << _name << "\n";
-			_schedulingNeeded=false;
-			schedule();
-			//std::cout << "rescheduleIfNecessary end\n";
-		}
-	}*/
-	
-	/*void truncateAndRescheduleIfNecessary(TMLTime iTime){  commented out
-		std::cout << "truncateAndRescheduleIfNecessary for CPU " << _name << " started\n";
-		if(_schedulingNeeded){
-			_schedulingNeeded=false;
-			//if(_nextTransaction==0)
-			//std::cout << "shouldn't be raw >\n";
-			if(getNextTransaction()==0){
-				//std::cout << "shouldn't be raw <\n";		
-				schedule();
-			}else
-				
-			std::cout << "truncateAndRescheduleIfNecessary " << _name <<  " scheduled\n";
-		}else
-			std::cout << "truncateAndRescheduleIfNecessary " << _name <<  " no scheduling needed\n";
-		std::cout << "Current Trans " << _name << ": ";
-		if (_nextTransaction==0) std::cout << "0\n"; else std::cout << _nextTransaction->toString() << "\n";  
-	}*/
+	inline unsigned int getAmoutOfCore(){ return amountOfCore;} 
+	inline const TaskList& getTaskList() const{return _taskList;}
+	double averageLoad(unsigned int n) const;
+	//void drawTabCell(std::ofstream& myfile);
+	void drawPieChart(std::ofstream& myfile) const;
+	void buttonPieChart(std::ofstream& myfile) const;
+	void showPieChart(std::ofstream& myfile) const;
+	void HW2HTML(std::ofstream& myfile) const;
+	void schedule2HTML(std::ofstream& myfile) const;
+	void schedule2XML(std::ostringstream& glob,std::ofstream& myfile) const;
+	inline void setCoreNumberGraph(unsigned int n){ _coreNumberGraph=n;}
+	inline unsigned int getCoreNumberGraph(){ return _coreNumberGraph;}
 protected:
 	///List of all tasks running on the CPU
 	TaskList _taskList;
@@ -165,8 +132,12 @@ protected:
 	TMLTransaction* _lastTransaction;
 	///List of bus masters
 	BusMasterList _busMasterList;
+	///Amount of cores
+	unsigned int amountOfCore; 
+	unsigned int _coreNumberGraph;
 	///Dirty flag of the current scheduling decision
 	//bool _schedulingNeeded;
+	
 };
 
 #endif

@@ -169,6 +169,13 @@ public:
 	\return Return value of simulate() function
 	*/
 	bool runToCPUTrans(SchedulableDevice* iCPU, TMLTransaction*& oLastTrans);
+	///Runs the simulation until a transaction on iFPGA is executed
+	/**
+	\param iFPGA Pointer to the FPGA
+	\param oLastTrans Returns the last transaction executed during a simulation
+	\return Return value of simulate() function
+	*/
+	bool runToFPGATrans(SchedulableDevice* iFPGA, TMLTransaction*& oLastTrans);
 	///Runs the simulation until a transaction of iTask is executed
 	/**
 	\param iTask Pointer to the task
@@ -260,6 +267,7 @@ public:
 	*/
 	void schedule2TXT(std::string& iTraceFileName) const;
 
+	void schedule2XML(std::ostringstream& glob,std::string& iTraceFileName) const;
 	/**
 	\param glob Stream on which the XML answer shall be send to
 	*/
@@ -294,6 +302,12 @@ protected:
 	\return Pointer to transaction with lowest end time
 	*/
 	TMLTransaction* getTransLowestEndTime(SchedulableDevice*& oResultDevice) const;
+	///Returns a pointer to the transaction with the lowest end time proposed by FPGA schedulers
+	/**
+	\param oResultDevice Pointer to the FPGA which is running the returned transaction
+	\return Pointer to transaction with lowest end time
+	*/
+	//TMLTransaction* getTransLowestEndTimeFPGA(SchedulableDevice*& oResultDevice) const;
 	///Decodes a simulation command
 	/**
 	\param iCmd Pointer to the command
@@ -370,5 +384,6 @@ protected:
 	long _nbOfBranchesToExplore;
 	long _nbOfBranchesExplored;
 	std::string _end;
+       
 };
 #endif

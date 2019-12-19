@@ -178,9 +178,13 @@ public class AVATAR2CPOSIX {
         mainFile = new MainFile("main", plugin);
         taskFiles = new Vector<TaskFile>();
 
+        TraceManager.addDev("AVATAR2CPOSIX avspec=" + avspec);
+
         avspec.removeCompositeStates();
         avspec.removeLibraryFunctionCalls();
         avspec.removeTimers();
+
+        //TraceManager.addDev("AVATAR2CPOSIX avspec=" + avspec);
 
 
         if (avspec.hasApplicationCode() && includeUserCode) {
@@ -590,6 +594,7 @@ public class AVATAR2CPOSIX {
                 }
 
                 if (_asme.nbOfNexts() == 1) {
+                    TraceManager.addDev("Only one next in state " + _asme.getNiceName() + " in block " + _block.getName());
                     return ret + makeBehaviourFromElement(_block, _asme.getNext(0), false);
                 }
 
@@ -597,7 +602,7 @@ public class AVATAR2CPOSIX {
                 // Put in list all
 
 
-                // 1) Only immediatly executable transitions
+                // 1) Only immediately executable transitions
                 for (i = 0; i < _asme.nbOfNexts(); i++) {
                     if (_asme.getNext(i) instanceof AvatarTransition) {
                         AvatarTransition at = (AvatarTransition) (_asme.getNext(i));
@@ -609,6 +614,7 @@ public class AVATAR2CPOSIX {
                                 ret += makeSignalAction(at, i);
                             } else {
                                 // nothing special to do : immediate choice
+                                TraceManager.addDev("Make immediate action in block" + _block.getName());
                                 ret += makeImmediateAction(at, i);
                             }
                         }

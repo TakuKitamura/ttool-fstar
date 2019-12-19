@@ -61,7 +61,7 @@ import java.util.List;
 
 
 /**
- * Class TIFTranslator
+ * Class TMLTranslator
  * Linecommand application for translating TIF to other languages
  * Creation: 29/06/2007
  * @version 1.1 30/05/2014
@@ -172,22 +172,23 @@ public class TMLTranslator  {
 
     private static boolean loadMapping(String title, String path) {
         boolean ret;
-        //System.out.println("load");
+        System.out.println("Loading mapping");
         TMLMappingTextSpecification<Object> spec = new TMLMappingTextSpecification<>(title);
         ret = spec.makeTMLMapping(inputData, path);
-        System.out.println("load ended");
+        System.out.println("load ended:");
         List<TMLError> warnings;
 
         if (!ret) {
+            System.out.println("\n\n*** TML Modeling *** \n");
             System.out.println("Compilation:\n" + spec.printSummary());
         }
 
         if (ret) {
-            //System.out.println("Format OK");
+            System.out.println("Format OK");
             tmap = spec.getTMLMapping();
             tmlm = tmap.getTMLModeling();
 
-            //System.out.println("\n\n*** TML Modeling *** \n");
+
             //TMLTextSpecification textspec = new TMLTextSpecification("toto");
             //String s = textspec.toTextFormat(tmlm);
             //System.out.println(s);
@@ -408,11 +409,12 @@ public class TMLTranslator  {
 
     private static boolean saveData() {
         try {
+            System.out.println("Writing data in " + outputFile.getAbsolutePath() + " data=" + outputData);
             FileOutputStream fos = new FileOutputStream(outputFile);
             fos.write(outputData.getBytes());
             fos.close();
         } catch (Exception e) {
-            System.out.println("Error when writing output file");
+            System.out.println("Error when writing output file: " + e.getMessage());
             return false;
         }
         return true;
@@ -484,6 +486,10 @@ public class TMLTranslator  {
           s = s.trim();
           System.out.println("toto=" + s);*/
 
+        if (tmap != null) {
+            System.out.println("Mapping: " + tmap.toXML());
+        }
+
         switch(conversionType) {
             case 0:
                 if (tmap == null) {
@@ -515,11 +521,14 @@ public class TMLTranslator  {
 
         System.out.println("Conversion done");
 
-        if (!saveData()) {
-          return;
+        if (outputData != null) {
+            if (!saveData()) {
+                return;
+            }
+            System.out.println("Specification written in " + outputFile.getName() + ": " + outputData.length() + " bytes");
         }
 
-        System.out.println("Specification written in " + outputFile.getName() + ": " + outputData.length() + " bytes");
+
 
     }
 

@@ -130,9 +130,9 @@ public class FTDCountermeasure extends TGCScalableWithInternalComponent implemen
         }
 
 
-        if (currentFontSize == -1) {
-            currentFontSize = f.getSize();
-        }
+//        if (currentFontSize == -1) {
+//            currentFontSize = f.getSize();
+//        }
 
         if ((rescaled) && (!tdp.isScaled())) {
             rescaled = false;
@@ -172,11 +172,11 @@ public class FTDCountermeasure extends TGCScalableWithInternalComponent implemen
                 w = g.getFontMetrics().stringWidth(value);
                 int h = currentFontSize + (int) (textY * tdp.getZoom());
                 if ((w < (2 * textX + width)) && (h < height)) {
-                    g.drawString(value, x + (width - w) / 2, y + h);
+                    drawSingleString(g, value, x + (width - w) / 2, y + h);
                 } else {
                     w = g.getFontMetrics().stringWidth(ster);
                     if ((w < (2 * textX + width)) && (h < height)) {
-                        g.drawString(ster, x + (width - w) / 2, y + h);
+                        drawSingleString( g, ster, x + (width - w) / 2, y + h);
                     }
                 }
             } else {
@@ -193,9 +193,9 @@ public class FTDCountermeasure extends TGCScalableWithInternalComponent implemen
                 h = cumulated + currentFontSize + (int) (textY * tdp.getZoom());
                 if ((w < (2 * textX + width)) && (h < height)) {
                     //TraceManager.addDev("Drawing value=" + value);
-                    g.drawString(value, x + (width - w) / 2, y + h);
+                    drawSingleString(g, value, x + (width - w) / 2, y + h);
                 } else {
-                    g.drawString(value, x + (width - w) / 2, y + h);
+                    drawSingleString(g, value, x + (width - w) / 2, y + h);
                     //TraceManager.addDev("--------------------------------------------------- Cannot draw value=" + value);
                     //TraceManager.addDev("w=" + w + " val=" + (2*textX + width) + "h=" + h + " height=" + height + " zoom=" + tdp.getZoom() + " Font=" + f0);
                 }

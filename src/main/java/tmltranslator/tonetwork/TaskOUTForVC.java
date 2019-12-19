@@ -1,3 +1,4 @@
+
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
  * 
  * ludovic.apvrille AT enst.fr
@@ -55,6 +56,7 @@ public class TaskOUTForVC extends TMLTask {
 
     public TaskOUTForVC(String name, Object referenceToClass, Object referenceToActivityDiagram) {
         super(name, referenceToClass, referenceToActivityDiagram);
+        setDaemon(TMAP2Network.DAEMON);
     }
 
     // Output Channels are given in the order of VCs
@@ -69,12 +71,16 @@ public class TaskOUTForVC extends TMLTask {
         // Attributes
         TMLAttribute pktlen = new TMLAttribute("pktlen", "pktlen", new TMLType(TMLType.NATURAL), "0");
         this.addAttribute(pktlen);
-        TMLAttribute dst = new TMLAttribute("dst", "dst", new TMLType(TMLType.NATURAL), "0");
-        this.addAttribute(dst);
+        TMLAttribute dstX = new TMLAttribute("dstX", "dstX", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(dstX);
+        TMLAttribute dstY = new TMLAttribute("dstY", "dstY", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(dstY);
         TMLAttribute vc = new TMLAttribute("vc", "vc", new TMLType(TMLType.NATURAL), "0");
         this.addAttribute(vc);
         TMLAttribute eop = new TMLAttribute("eop", "eop", new TMLType(TMLType.NATURAL), "0");
         this.addAttribute(eop);
+        TMLAttribute chid = new TMLAttribute("chid", "chid", new TMLType(TMLType.NATURAL), "0");
+        this.addAttribute(chid);
         TMLAttribute j = new TMLAttribute("j", "j", new TMLType(TMLType.NATURAL), "0");
         this.addAttribute(j);
 
@@ -93,63 +99,74 @@ public class TaskOUTForVC extends TMLTask {
         TMLStartState start = new TMLStartState("mainStart", referenceObject);
         activity.setFirst(start);
 
+        // Loop forever
+        TMLForLoop mainLoop = new TMLForLoop("MainLoop", referenceObject);
+        mainLoop.setInfinite(true);
+        activity.addLinkElement(start,mainLoop);
+
         // Select Event
         TMLSelectEvt select = new TMLSelectEvt("selectEvent", referenceObject);
-        activity.addLinkElement(start, select);
+        activity.addLinkElement(mainLoop, select);
 
         // Branch for each input event
         for(int i=0; i<inPacketEvents.size(); i++) {
-            waitEvt = new TMLWaitEvent("PacketEvent", referenceObject);
-            waitEvt.setEvent(inPacketEvents.get(i));
-            waitEvt.addParam("pktlen");
-            waitEvt.addParam("dst");
-            waitEvt.addParam("vc");
-            waitEvt.addParam("eop");
-            activity.addLinkElement(select, waitEvt);
+            TMLWaitEvent waitPacket = new TMLWaitEvent("WaitForFirstFlit", referenceObject);
+            waitPacket.setEvent(inPacketEvents.get(i));
+            waitPacket.addParam("pktlen");
+            waitPacket.addParam("dstX");
+            waitPacket.addParam("dstY");
+            waitPacket.addParam("vc");
+            waitPacket.addParam("eop");
+            waitPacket.addParam("chid");
+            activity.addLinkElement(select, waitPacket);
 
             // loop on packet size
             TMLForLoop packetLoop = new TMLForLoop("packetLoop", referenceObject);
             packetLoop.setInit("j=0");
             packetLoop.setCondition("j<pktlen");
             packetLoop.setIncrement("j=j+1");
-            activity.addLinkElement(waitEvt, packetLoop);
+            activity.addLinkElement(waitPacket, packetLoop);
 
             // Inside packetloop
-            sendEvt = new TMLSendEvent("PacketInfo", referenceObject);
-            sendEvt.setEvent(outVCEvent);
-            sendEvt.addParam("pktlen");
-            sendEvt.addParam("dst");
-            sendEvt.addParam("vc");
-            sendEvt.addParam("eop");
-            activity.addLinkElement(packetLoop, sendEvt);
+            TMLSendEvent sendFlitEvt = new TMLSendEvent("PacketInfo", referenceObject);
+            sendFlitEvt.setEvent(outVCEvent);
+            sendFlitEvt.addParam("pktlen");
+            sendFlitEvt.addParam("dstX");
+            sendFlitEvt.addParam("dstY");
+            sendFlitEvt.addParam("vc");
+            sendFlitEvt.addParam("eop");
+            sendFlitEvt.addParam("chid");
+            activity.addLinkElement(packetLoop, sendFlitEvt);
 
             waitEvt = new TMLWaitEvent("ReturnFromVC", referenceObject);
             waitEvt.setEvent(vcSelect);
-            activity.addLinkElement(sendEvt, waitEvt);
+            activity.addLinkElement(sendFlitEvt, waitEvt);
 
             sendEvt = new TMLSendEvent("Feedback", referenceObject);
             sendEvt.setEvent(outFeedbackEvents.get(i));
             activity.addLinkElement(waitEvt, sendEvt);
 
-            TMLChoice choice = new TMLChoice("Choice on EOP", referenceObject);
+            TMLChoice choice = new TMLChoice("ChoiceOnEOP", referenceObject);
             activity.addLinkElement(sendEvt, choice);
 
             // Left branch of choice
-            waitEvt = new TMLWaitEvent("PacketEvent", referenceObject);
-            waitEvt.setEvent(inPacketEvents.get(i));
-            waitEvt.addParam("pktlen");
-            waitEvt.addParam("dst");
-            waitEvt.addParam("vc");
-            waitEvt.addParam("eop");
-            activity.addLinkElement(choice, waitEvt);
+            TMLWaitEvent waitNextFlit = new TMLWaitEvent("WaitForNextFlit", referenceObject);
+            waitNextFlit.setEvent(inPacketEvents.get(i));
+            waitNextFlit.addParam("pktlen");
+            waitNextFlit.addParam("dstX");
+            waitNextFlit.addParam("dstY");
+            waitNextFlit.addParam("vc");
+            waitNextFlit.addParam("eop");
+            waitNextFlit.addParam("chid");
+            activity.addLinkElement(choice, waitNextFlit);
             choice.addGuard("eop == 0");
 
-            stop = new TMLStopState("StopStateLeftChoice", referenceObject);
-            activity.addLinkElement(waitEvt, stop);
+            TMLStopState stopAfterFlit = new TMLStopState("StopStateLeftChoice", referenceObject);
+            activity.addLinkElement(waitNextFlit, stopAfterFlit);
 
             //Right branch of choice
-            stop = new TMLStopState("StopStateRightChoice", referenceObject);
-            activity.addLinkElement(choice, stop);
+            TMLStopState stopEOP = new TMLStopState("StopStateRightChoice", referenceObject);
+            activity.addLinkElement(choice, stopEOP);
             choice.addGuard("eop > 0");
 
             // Exit of the loop

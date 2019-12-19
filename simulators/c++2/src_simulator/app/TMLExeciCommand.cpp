@@ -76,13 +76,21 @@ TMLCommand* TMLExeciCommand::prepareNextTransaction(){
 
 std::string TMLExeciCommand::toString() const{
 	std::ostringstream outp;
-	outp << "Execi in " << TMLCommand::toString();
+	if (_execType == 0) {
+	  outp << "Execi in " << TMLCommand::toString();
+	} else {
+	  outp << "Execc in " << TMLCommand::toString();
+	}
 	return outp.str();
 }
 
 std::string TMLExeciCommand::toShortString() const{
 	std::ostringstream outp;
-	outp << _task->toString() << ": Execi " << _length;
+	if (_execType == 0) {
+	  outp << _task->toString() << ": Execi " << _length;
+	} else {
+	  outp << _task->toString() << ": Execc " << _length;
+	}
 	return outp.str();
 }
 

@@ -143,9 +143,14 @@ public class ADDClusterNode extends ADDNode implements WithAttributes {
 		drawSingleString(g, name, x + (width - w)/2, y + textY2);
 
 		// Icon
+
 		int borders = scale(4);
 		g.drawImage(scale(IconManager.imgic8006.getImage()), x + borders, y + borders, null);
 		g.drawImage(scale(IconManager.img9), x + width - scale(20), y + borders, null);
+
+//		g.drawImage(IconManager.imgic8006.getImage(), x + 4, y + 4, null);
+		//g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
+
 	}
 
     @Override

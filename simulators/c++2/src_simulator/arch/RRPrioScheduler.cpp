@@ -51,7 +51,7 @@ RRPrioScheduler::RRPrioScheduler(const std::string& iName, Priority iPrio, TMLTi
 TMLTime RRPrioScheduler::schedule(TMLTime iEndSchedule){
 	TaskList::iterator i;
 	//std::cout << _name << ": Schedule called \n";
-	TMLTransaction *anOldTransaction=_nextTransaction, *aTempTrans;
+	TMLTransaction *anOldTransaction=_nextTransaction, *aTempTrans, *isDelayTrans;
 	TMLTime aLowestRunnableTimeFuture=-1,aRunnableTime, aLowestRunnableTimePast=-1;
 	WorkloadSource *aSourcePast=0, *aSourceFuture=0;
 	//, *aScheduledSource=0;
@@ -61,7 +61,10 @@ TMLTime RRPrioScheduler::schedule(TMLTime iEndSchedule){
 		_lastSource->schedule(iEndSchedule);
 		if (_lastSource->getNextTransaction(iEndSchedule)!=0 && _lastSource->getNextTransaction(iEndSchedule)->getVirtualLength()!=0){
 			//if (anOldTransaction==0 || _lastSource->getNextTransaction(iEndSchedule)==anOldTransaction || _timeSlice >=_elapsedTime +  anOldTransaction->getBranchingPenalty() + anOldTransaction->getOperationLength() + _minSliceSize){
-			if (anOldTransaction==0 || _lastSource->getNextTransaction(iEndSchedule)==anOldTransaction || _timeSlice >=_elapsedTime +  anOldTransaction->getOperationLength() + _minSliceSize){
+			isDelayTrans = _lastSource->getNextTransaction(iEndSchedule);
+            if((!(isDelayTrans->getCommand()->getActiveDelay()) && isDelayTrans->getCommand()->isDelayTransaction())){
+                 aSameTaskFound=false;
+            }else if (anOldTransaction==0 || _lastSource->getNextTransaction(iEndSchedule)==anOldTransaction || _timeSlice >=_elapsedTime + anOldTransaction->getOperationLength() + _minSliceSize){
 				std::cout << "Select same task, remaining: " << _timeSlice - anOldTransaction->getOperationLength() << "\n";
 				aSourcePast=_lastSource;
 				aSameTaskFound=true;
@@ -148,7 +151,7 @@ void RRPrioScheduler::reset(){
 //}
 
 RRPrioScheduler::~RRPrioScheduler(){
-	std::cout << _name << ": Scheduler deleted\n";
+  //std::cout << _name << ": Scheduler deleted\n";
 }
 
 std::istream& RRPrioScheduler::readObject(std::istream &is){

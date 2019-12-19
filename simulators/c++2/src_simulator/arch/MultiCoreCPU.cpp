@@ -48,25 +48,39 @@
 //#include <TransactionListener.h>
 
 
-MultiCoreCPU::MultiCoreCPU(ID iID, std::string iName, WorkloadSource* iScheduler, WorkloadSource* iScheduler2, TMLTime iTimePerCycle, unsigned int iCyclesPerExeci, unsigned int iCyclesPerExecc, unsigned int iPipelineSize, unsigned int iTaskSwitchingCycles, unsigned int iBranchingMissrate, unsigned int iChangeIdleModeCycles, unsigned int iCyclesBeforeIdle, unsigned int ibyteDataSize): CPU(iID, iName, iScheduler), /*_lastTransaction(0),*/ _masterNextTransaction(0), _timePerCycle(iTimePerCycle)
+MultiCoreCPU::MultiCoreCPU(ID iID, 
+			   std::string iName, 
+			   WorkloadSource* iScheduler,  
+			   TMLTime iTimePerCycle, 
+			   unsigned int iCyclesPerExeci, 
+			   unsigned int iCyclesPerExecc, 
+			   unsigned int iPipelineSize, 
+			   unsigned int iTaskSwitchingCycles, 
+			   unsigned int iBranchingMissrate, 
+			   unsigned int iChangeIdleModeCycles, 
+			   unsigned int iCyclesBeforeIdle, 
+			   unsigned int ibyteDataSize,
+			   unsigned int iAmountOfCore): CPU(iID, iName, iScheduler, iAmountOfCore), /*_lastTransaction(0),*/ _masterNextTransaction(0), _timePerCycle(iTimePerCycle), 
+							coreNumber(0)
 #ifdef PENALTIES_ENABLED
-                                                                                                                                                                                                                                                                                                                                                                                                 , _pipelineSize(iPipelineSize), _taskSwitchingCycles(iTaskSwitchingCycles),_brachingMissrate(iBranchingMissrate)
-                                                                                                                                                                                                                                                                                                                                                                                                 , _changeIdleModeCycles(iChangeIdleModeCycles), _cyclesBeforeIdle(iCyclesBeforeIdle)
+                                                                                                                                                                                                                                                                 , _pipelineSize(iPipelineSize), _taskSwitchingCycles(iTaskSwitchingCycles),_brachingMissrate(iBranchingMissrate)
+                                                                                                                                                                                                                                                                 , _changeIdleModeCycles(iChangeIdleModeCycles), _cyclesBeforeIdle(iCyclesBeforeIdle)
 #endif
-                                                                                                                                                                                                                                                                                                                                                                                                 , _cyclesPerExeci(iCyclesPerExeci) /*, _busyCycles(0)*/
+                                                                                                                                                                                                                                                                 , _cyclesPerExeci(iCyclesPerExeci) /*, _busyCycles(0)*/
 #ifdef PENALTIES_ENABLED
-                                                                                                                                                                                                                                                                                                                                                                                                 , _timePerExeci(_cyclesPerExeci * _timePerCycle * (_pipelineSize *  _brachingMissrate + 100 - _brachingMissrate) /100.0)
-                                                                                                                                                                                                                                                                                                                                                                                                 ,_taskSwitchingTime(_taskSwitchingCycles*_timePerCycle)
-                                                                                                                                                                                                                                                                                                                                                                                                 , _timeBeforeIdle(_cyclesBeforeIdle*_timePerCycle)
-                                                                                                                                                                                                                                                                                                                                                                                                 , _changeIdleModeTime(_changeIdleModeCycles*_timePerCycle)
+                                                                                                                                                                                                                                                                 , _timePerExeci(_cyclesPerExeci * _timePerCycle * (_pipelineSize *  _brachingMissrate + 100 - _brachingMissrate) /100.0)
+                                                                                                                                                                                                                                                                 ,_taskSwitchingTime(_taskSwitchingCycles*_timePerCycle)
+                                                                                                                                                                                                                                                                 , _timeBeforeIdle(_cyclesBeforeIdle*_timePerCycle)
+                                                                                                                                                                                                                                                                 , _changeIdleModeTime(_changeIdleModeCycles*_timePerCycle)
 #else
-                                                                                                                                                                                                                                                                                                                                                                                                 , _timePerExeci(_cyclesPerExeci*_timePerCycle)
+                                                                                                                                                                                                                                                                 , _timePerExeci(_cyclesPerExeci*_timePerCycle)
 #endif
-                                                                                                                                                                                                                                                                                                                                                                                                   //, _pipelineSizeTimesExeci(_pipelineSize * _timePerExeci)
-                                                                                                                                                                                                                                                                                                                                                                                                   //,_missrateTimesPipelinesize(_brachingMissrate*_pipelineSize)
+                                                                                                                                                                                                                                                                //, _pipelineSizeTimesExeci(_pipelineSize * _timePerExeci)
+                                                                                                                                                                                                                                                                //,_missrateTimesPipelinesize(_brachingMissrate*_pipelineSize)
 {
   //std::cout << "Time per EXECIiiiiiiiiiiiiiiiiiiiiii: " << _timePerExeci << "\n";
   //_transactList.reserve(BLOCK_SIZE);
+  initCore();
 }
 
 MultiCoreCPU::~MultiCoreCPU(){
@@ -76,7 +90,40 @@ MultiCoreCPU::~MultiCoreCPU(){
   //delete _scheduler;
 }
 
+///test///
+void MultiCoreCPU::initCore(){
+  for (unsigned int i = 0; i < amountOfCore; i++)
+    multiCore[i] = 0;
+}
+
+/*unsigned int MultiCoreCPU::getCoreNumber(){
+  unsigned int i;
+  for( i = 0; i < amountOfCore; i++){
+    if(multiCore[i] == 0){
+      multiCore[i]=-1;
+      break;
+    }
+  }
+  return i;
+}*/
+
+TMLTime MultiCoreCPU::getMinEndSchedule(){
+  TMLTime minTime=multiCore[0];
+  for( TMLTime i = 0; i < multiCore.size(); i++){
+    // std::cout<<"core number is: "<<i<<" end schedule is "<<multiCore[i]<<std::endl;
+    if( minTime >= multiCore[i]){
+      minTime=multiCore[i];
+      coreNumber=i;
+      } 
+  }
+  // std::cout<<"in getMinEndSchedule core number is "<<coreNumber<<std::endl;
+  return minTime;
+}
+    
 TMLTransaction* MultiCoreCPU::getNextTransaction(){
+#ifdef DEBUG_CPU
+std::cout<<"getNextTransaction"<<_name<<std::endl;
+#endif
 #ifdef BUS_ENABLED
   if (_masterNextTransaction == 0 || _nextTransaction == 0){
     return _nextTransaction;
@@ -84,7 +131,7 @@ TMLTransaction* MultiCoreCPU::getNextTransaction(){
 #ifdef DEBUG_CPU
     std::cout << "CPU:getNT: " << _name << " has bus transaction on master " << _masterNextTransaction->toString() << std::endl;
 #endif
-    //std::cout << "CRASH Trans:" << _nextTransaction->toString() << std::endl << "Channel: " << _nextTransaction->getChannel() << "\n";
+    std::cout << "CRASH Trans:" << _nextTransaction->toString() << std::endl << "Channel: " << _nextTransaction->getChannel() << "\n";
     BusMaster* aTempMaster = getMasterForBus(_nextTransaction->getChannel()->getFirstMaster(_nextTransaction));
     //std::cout << "1  aTempMaster: " << aTempMaster << std::endl;
     bool aResult = aTempMaster->accessGranted();
@@ -105,10 +152,12 @@ TMLTransaction* MultiCoreCPU::getNextTransaction(){
 
 void MultiCoreCPU::calcStartTimeLength(TMLTime iTimeSlice){
 #ifdef DEBUG_CPU
+std::cout<<"calcStartTimeLength"<<_name<<std::endl;
   std::cout << "CPU:calcSTL: scheduling decision of CPU " << _name << ": " << _nextTransaction->toString() << std::endl;
 #endif
 #ifdef BUS_ENABLED
-  //std::cout << "get channel " << std::endl;
+std::cout << "CPU:calcSTL: scheduling decision of CPU " << _name << ": " << _nextTransaction->toString() << std::endl;
+  //std::cout << " " << std::endl;
   TMLChannel* aChannel=_nextTransaction->getCommand()->getChannel(0);
   //std::cout << "after get channel " << std::endl;
   if(aChannel == 0){
@@ -129,7 +178,7 @@ void MultiCoreCPU::calcStartTimeLength(TMLTime iTimeSlice){
   TMLTime aStartTime = max(_endSchedule,_nextTransaction->getRunnableTime());
   TMLTime aReminder = aStartTime % _timePerCycle;
   if (aReminder!=0) aStartTime+=_timePerCycle - aReminder;
-  std::cout << "CPU: set starttime in CPU=" << aStartTime << "\n";
+  //std::cout << _name << "CPU: set starttime in CPU=" << aStartTime << "\n";
 
   _nextTransaction->setStartTime(aStartTime);
 
@@ -203,7 +252,7 @@ TMLTime MultiCoreCPU::truncateNextTransAt(TMLTime iTime){
   if (_masterNextTransaction==0){
 #ifdef PENALTIES_ENABLED
 
-    std::cout << "CPU:nt.startTime: " << _nextTransaction->getStartTime() << std::endl;
+    //std::cout << "CPU:nt.startTime: " << _nextTransaction->getStartTime() << std::endl;
     if (iTime < _nextTransaction->getStartTime()) {
       return 0;
     }
@@ -222,7 +271,7 @@ TMLTime MultiCoreCPU::truncateNextTransAt(TMLTime iTime){
       _nextTransaction->setLength(_nextTransaction->getVirtualLength() *_timePerExeci);
     }
 #else
-    if (iTime <= _nextTransaction->getStartTime()) return 0;  //before: <=
+    if (iTime <= _nextTransaction->getStartTime()) return 0;  //before
     TMLTime aNewDuration = iTime - _nextTransaction->getStartTime();
     _nextTransaction->setVirtualLength(max((TMLTime)(aNewDuration /_timePerExeci), (TMLTime)1));
     _nextTransaction->setLength(_nextTransaction->getVirtualLength() *_timePerExeci);
@@ -236,6 +285,9 @@ TMLTime MultiCoreCPU::truncateNextTransAt(TMLTime iTime){
 }
 
 bool MultiCoreCPU::addTransaction(TMLTransaction* iTransToBeAdded){
+#ifdef DEBUG_CPU
+std::cout<<"addTransaction"<<_name<<std::endl;
+#endif
   bool aFinish;
   //TMLTransaction* aTransCopy=0;
   if (_masterNextTransaction==0){
@@ -285,10 +337,28 @@ bool MultiCoreCPU::addTransaction(TMLTransaction* iTransToBeAdded){
     std::cout << "CPU:addt: " << _name << " finalizing transaction next:" << _nextTransaction->toString() << " (enf of next) " << std::endl;
 #endif
     //_nextTransaction->getCommand()->execute();  //NEW!!!!
-    std::cout << "CPU:addt: to be started" << std::endl;
+    //    std::cout << "CPU:addt: to be started" << std::endl;
+    //std::cout << "CPU:calcSTL: addtransaction of CPU " << _name << ": " << _nextTransaction->toString() << std::endl;
     _endSchedule=_nextTransaction->getEndTime();
-    std::cout << "set end schedule CPU: " << _endSchedule << "\n";
-    _simulatedTime=max(_simulatedTime,_endSchedule);
+    ////test///
+   // unsigned int iCoreNumber=getCoreNumber();
+    static unsigned int time=0;
+    // std::cout<<"multicore number "<<coreNumber<<" end schedule "<<_endSchedule<<std::endl;
+    multiCore[coreNumber]=_endSchedule;
+  //  std::cout<<"cycle time is "<<_cycleTime<<std::endl;
+    if (time < amountOfCore -1){
+	  _endSchedule=0;
+	  _nextTransaction->setTransactCoreNumber(coreNumber);
+	  ++coreNumber;
+	 
+     }else {
+	  _nextTransaction->setTransactCoreNumber(coreNumber);
+	  _endSchedule=getMinEndSchedule();
+ 	 	
+    }
+    time++;
+    if(!(_nextTransaction->getCommand()->getTask()->getIsDaemon()==true && _nextTransaction->getCommand()->getTask()->getNextTransaction(0)==0))
+      _simulatedTime=max(_simulatedTime,_nextTransaction->getEndTime());
     _overallTransNo++; //NEW!!!!!!!!
     _overallTransSize+=_nextTransaction->getOperationLength();  //NEW!!!!!!!!
     //std::cout << "lets crash execute\n";
@@ -310,7 +380,7 @@ bool MultiCoreCPU::addTransaction(TMLTransaction* iTransToBeAdded){
 
 void MultiCoreCPU::schedule(){
   //std::cout <<"Hello\n";
-  //std::cout << "CPU:schedule BEGIN " << _name << "+++++++++++++++++++++++++++++++++\n";
+  std::cout << "CPU:schedule BEGIN " << _name << "+++++++++++++++++++++++++++++++++\n";
   TMLTime aTimeSlice = _scheduler->schedule(_endSchedule);
   //_schedulingNeeded=false;  05/05/11
   //std::cout << "1\n";
@@ -331,6 +401,8 @@ void MultiCoreCPU::schedule(){
   //std::cout << "5\n";
   if (_nextTransaction!=0 && aOldTransaction != _nextTransaction) calcStartTimeLength(aTimeSlice);
   //std::cout << "CPU:schedule END " << _name << "+++++++++++++++++++++++++++++++++\n";
+ 
+ std::cout << "CPU:schedule END " << _name << "+++++++++++++++++++++++++++++++++\n";
 }
 
 //std::string MultiCoreCPU::toString() const{
@@ -339,7 +411,7 @@ void MultiCoreCPU::schedule(){
 
 std::string MultiCoreCPU::toShortString() const{
   std::ostringstream outp;
-  outp << "cpu" << _ID;
+  outp << "cpu" << _ID ;
   return outp.str();
 }
 
@@ -358,8 +430,9 @@ void MultiCoreCPU::schedule2HTML(std::ofstream& myfile) const{
     aCurrTrans=*i;
     //if (aCurrTrans->getVirtualLength()==0) continue;
     aBlanks=aCurrTrans->getStartTime()-aCurrTime;
-    
-    if (aBlanks>0){
+    if ( aBlanks >= 0 && (!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction()) )
+        myfile << "<td colspan=\""<< aBlanks+1 <<"\" title=\"idle time\" class=\"not\"></td>\n";
+    else if (aBlanks>0){
       if (aBlanks==1)
         myfile << "<td title=\"idle time\" class=\"not\"></td>\n";
       else
@@ -372,18 +445,20 @@ void MultiCoreCPU::schedule2HTML(std::ofstream& myfile) const{
       if (aLength==1){
         //myfile << "<td title=\""<< aCurrTrans->toShortString() << "\" class=\"t15\"></td>\n";
         //myfile << "<td title=\" idle:" << aCurrTrans->getIdlePenalty() << " switch:" << aCurrTrans->getTaskSwitchingPenalty() << " bran:" << aCurrTrans->getBranchingPenalty() << "\" class=\"t15\"></td>\n";
-        myfile << "<td title=\" idle:" << aCurrTrans->getIdlePenalty() << " switch:" << aCurrTrans->getTaskSwitchingPenalty() << "\" class=\"t15\"></td>\n";
+        myfile << "<td title=\" idle:" << aCurrTrans->getIdlePenalty() << " switching penalty:" << aCurrTrans->getTaskSwitchingPenalty() << "\" class=\"t15\"></td>\n";
       }else{
         //myfile << "<td colspan=\"" << aLength << "\" title=\" idle:" << aCurrTrans->getIdlePenalty() << " switch:" << aCurrTrans->getTaskSwitchingPenalty() << " bran:" << aCurrTrans->getBranchingPenalty() << "\" class=\"t15\"></td>\n";
-        myfile << "<td colspan=\"" << aLength << "\" title=\" idle:" << aCurrTrans->getIdlePenalty() << " switch:" << aCurrTrans->getTaskSwitchingPenalty() << "\" class=\"t15\"></td>\n";
+        myfile << "<td colspan=\"" << aLength << "\" title=\" idle:" << aCurrTrans->getIdlePenalty() << " switching penalty:" << aCurrTrans->getTaskSwitchingPenalty() << "\" class=\"t15\"></td>\n";
       }
     }
     aLength=aCurrTrans->getOperationLength();
     aColor=aCurrTrans->getCommand()->getTask()->getInstanceNo() & 15;
-    if (aLength==1)
-      myfile << "<td title=\""<< aCurrTrans->toShortString() << "\" class=\"t"<< aColor <<"\"></td>\n";
-    else
-      myfile << "<td colspan=\"" << aLength << "\" title=\"" << aCurrTrans->toShortString() << "\" class=\"t"<< aColor <<"\"></td>\n";
+    if(!(!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction())){
+      if (aLength==1)
+        myfile << "<td title=\""<< aCurrTrans->toShortString() << "\" class=\"t"<< aColor <<"\"></td>\n";
+      else
+        myfile << "<td colspan=\"" << aLength << "\" title=\"" << aCurrTrans->toShortString() << "\" class=\"t"<< aColor <<"\"></td>\n";
+    }
 
 
     aCurrTime=aCurrTrans->getEndTime();
@@ -447,7 +522,7 @@ int MultiCoreCPU::allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const
   int total = 0;
   for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
     if (cpt >= begining) {
-      (*i)->toXML(glob, 0, _name);
+      (*i)->toXML(glob, 0, _name, getID());
       total ++;
     }
     cpt ++;
@@ -460,7 +535,7 @@ void MultiCoreCPU::latencies2XML(std::ostringstream& glob, unsigned int id1, uns
   for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
     if ((*i)->getCommand() !=NULL){
       if ((*i)->getCommand()->getID() == id1 || (*i)->getCommand()->getID() == id2){
-        (*i)->toXML(glob, 0, _name);
+        (*i)->toXML(glob, 0, _name, getID());
       }
     }
   }
@@ -469,72 +544,110 @@ void MultiCoreCPU::latencies2XML(std::ostringstream& glob, unsigned int id1, uns
 
 
 
-//TMLTime MultiCoreCPU::getNextSignalChange(bool iInit, std::string& oSigChange, bool& oNoMoreTrans){
+
 void MultiCoreCPU::getNextSignalChange(bool iInit, SignalChangeData* oSigData){
-  //new (oSigData) SignalChangeData(RUNNING, aCurrTrans->getStartTimeOperation(), this);
-  //std::ostringstream outp;
-  //oNoMoreTrans=false;
-  if (iInit){
-    _posTrasactListVCD=_transactList.begin();
-    _previousTransEndTime=0;
-    _vcdOutputState=END_IDLE_CPU;
-    if (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTime()!=0){
-      //outp << VCD_PREFIX << vcdValConvert(END_IDLE_CPU) << "cpu" << _ID;
-      //oSigChange=outp.str();
-      new (oSigData) SignalChangeData(END_IDLE_CPU, 0, this);
-      //return 0
-      return;
-    }
-  }
-  if (_posTrasactListVCD == _transactList.end()){
-    //outp << VCD_PREFIX << vcdValConvert(END_IDLE_CPU) << "cpu" << _ID;
-    //oSigChange=outp.str();
-    //oNoMoreTrans=true;
-    //return _previousTransEndTime;
-    new (oSigData) SignalChangeData(END_IDLE_CPU, _previousTransEndTime, this);
-  }else{
-    TMLTransaction* aCurrTrans=*_posTrasactListVCD;
-    switch (_vcdOutputState){
-    case END_TASK_CPU:
-      do{
-        _previousTransEndTime=(*_posTrasactListVCD)->getEndTime();
-        _posTrasactListVCD++;
-      }while (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTimeOperation()==_previousTransEndTime);
-      if (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTime()==_previousTransEndTime){
-        //outp << VCD_PREFIX << vcdValConvert(END_PENALTY_CPU) << "cpu" << _ID;
-        _vcdOutputState=END_PENALTY_CPU;
-        new (oSigData) SignalChangeData(END_PENALTY_CPU, _previousTransEndTime, this);
-      }else{
-        //outp << VCD_PREFIX << vcdValConvert(END_IDLE_CPU) << "cpu" << _ID;
-        _vcdOutputState=END_IDLE_CPU;
-        //if (_posTrasactListVCD == _transactList.end()) oNoMoreTrans=true;
-        new (oSigData) SignalChangeData(END_IDLE_CPU, _previousTransEndTime, this);
+  //static bool _end=false;
+
+  for( TransactionList::iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
+    
+ 
+    if( (*i)->getTransactCoreNumber() == oSigData->_coreNumberVcd){
+      
+  
+      
+      //std::cout<<(*_transactList.end())->toShortString()<<std::endl;
+      if (iInit){
+	_posTrasactListVCD= i;
+	_previousTransEndTime=0;
+	(*i)->setTransVcdOutPutState(END_IDLE_TRANS);
+	//std::cout<<"init"<<std::endl;
+	if (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTime()!=0){
+	  //outp << VCD_PREFIX << vcdValConvert(END_IDLE_CPU) << "cpu" << _ID;
+	  //oSigChange=outp.str();
+	  new (oSigData) SignalChangeData(END_IDLE_TRANS, 0, this);
+	  //return 0
+	  return;
+	}
       }
-      //oSigChange=outp.str();
-      //return _previousTransEndTime;
-      break;
-    case END_PENALTY_CPU:
-      //outp << VCD_PREFIX << vcdValConvert(END_TASK_CPU) << "cpu" << _ID;
-      //oSigChange=outp.str();
-      _vcdOutputState=END_TASK_CPU;
-      //return aCurrTrans->getStartTimeOperation();
-      new (oSigData) SignalChangeData(END_TASK_CPU, aCurrTrans->getStartTimeOperation(), this);
-      break;
-    case END_IDLE_CPU:
-      if (aCurrTrans->getPenalties()==0){
-        //outp << VCD_PREFIX << vcdValConvert(END_TASK_CPU) << "cpu" << _ID;
-        _vcdOutputState=END_TASK_CPU;
-        new (oSigData) SignalChangeData(END_TASK_CPU, aCurrTrans->getStartTime(), this);
+      
+     
+      if ((*i)->getEndState() == true){
+	//outp << VCD_PREFIX << vcdValConvert(END_IDLE_CPU) << "cpu" << _ID;
+	//oSigChange=outp.str();
+	//oNoMoreTrans=true;
+	//return _previousTransEndTime;
+        std::cout<<"end trans"<<(*i)->getEndTime()<<std::endl;
+	new (oSigData) SignalChangeData(END_IDLE_TRANS, (*i)->getEndTime(), this);
+        break;
       }else{
-        //outp << VCD_PREFIX << vcdValConvert(END_PENALTY_CPU) << "cpu" << _ID;
-        _vcdOutputState=END_PENALTY_CPU;
-        new (oSigData) SignalChangeData(END_PENALTY_CPU, aCurrTrans->getStartTime(), this);
+	_posTrasactListVCD = i;
+	TMLTransaction* aCurrTrans=*_posTrasactListVCD;
+       switch (aCurrTrans->getTransVcdOutPutState()){
+	case END_TASK_TRANS: 
+          
+	  //std::cout<<"END_TASK_CPU"<<std::endl;
+	  do{
+	    _previousTransEndTime=(*_posTrasactListVCD)->getEndTime();
+	    _posTrasactListVCD++;	  
+	    while(_posTrasactListVCD != _transactList.end()){
+		if((*_posTrasactListVCD)->getTransactCoreNumber() == oSigData->_coreNumberVcd)
+		  break;
+		else
+		  _posTrasactListVCD++;
+	      }
+	  }while (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTimeOperation()==_previousTransEndTime);
+	  //  std::cout<<"4444"<<std::endl;
+	  if (_posTrasactListVCD != _transactList.end() && (*_posTrasactListVCD)->getStartTime()==_previousTransEndTime){
+	    //outp << VCD_PREFIX << vcdValConvert(END_PENALTY_CPU) << "cpu" << _ID;
+	    (*_posTrasactListVCD)->setTransVcdOutPutState(END_PENALTY_TRANS);  
+	    new (oSigData) SignalChangeData(END_PENALTY_TRANS, _previousTransEndTime, this);
+	  }else{
+	    //outp << VCD_PREFIX << vcdValConvert(END_IDLE_CPU) << "cpu" << _ID;
+	    aCurrTrans->setTransVcdOutPutState(END_IDLE_TRANS);
+	    //if (_posTrasactListVCD == _transactList.end()) oNoMoreTrans=true;
+	    // if(oSigData->_time != _previousTransEndTime)  new (oSigData) SignalChangeData(END_PENALTY_TRANS, _previousTransEndTime, this);
+	    new (oSigData) SignalChangeData(END_IDLE_TRANS, _previousTransEndTime, this);
+            //_posTrasactListVCD = _transactList.end();
+            //std::cout<<(*_posTrasactListVCD)->toShortString()<<std::endl;   
+            if (_posTrasactListVCD == _transactList.end()) {aCurrTrans->setEndState(true);std::cout<<"hahaha"<<std::endl;}
+	  }
+          _transactList.erase(i);
+	  //oSigChange=outp.str();
+	  //return _previousTransEndTime;
+	  // this->_cycleTime++;
+	  break;
+	case END_PENALTY_TRANS:
+         
+	  // std::cout<<"END_PENALTY_CPU"<<std::endl;
+	  //outp << VCD_PREFIX << vcdValConvert(END_TASK_CPU) << "cpu" << _ID;
+	  //oSigChange=outp.str();
+	  aCurrTrans->setTransVcdOutPutState(END_TASK_TRANS);
+	  //return aCurrTrans->getStartTimeOperation();
+	  new (oSigData) SignalChangeData(END_TASK_TRANS, aCurrTrans->getStartTimeOperation(), this);
+	  break;
+	case END_IDLE_TRANS:
+	  // std::cout<<"END_IDLE_CPU"<<std::endl;
+	  if (aCurrTrans->getPenalties()==0){
+	    //outp << VCD_PREFIX << vcdValConvert(END_TASK_CPU) << "cpu" << _ID;
+	    aCurrTrans->setTransVcdOutPutState(END_TASK_TRANS);
+	    new (oSigData) SignalChangeData(END_TASK_TRANS, aCurrTrans->getStartTime(), this);
+	  }else{
+	    //outp << VCD_PREFIX << vcdValConvert(END_PENALTY_CPU) << "cpu" << _ID;
+	    aCurrTrans->setTransVcdOutPutState(END_PENALTY_TRANS);
+	    new (oSigData) SignalChangeData(END_PENALTY_TRANS, aCurrTrans->getStartTime(), this);
+	  }
+	  //oSigChange=outp.str();
+	  //return aCurrTrans->getStartTime();
+	  break;
+       }
       }
-      //oSigChange=outp.str();
-      //return aCurrTrans->getStartTime();
       break;
     }
+   
   }
+ 
+  //if (*_posTrasactListVCD != 0)
+   // std::cout<<"pos trans is !!!!!"<<(*_posTrasactListVCD)->toString()<<std::endl;
   //return 0;
 }
 

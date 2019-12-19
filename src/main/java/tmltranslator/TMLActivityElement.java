@@ -41,6 +41,7 @@
 
 package tmltranslator;
 
+import java.util.Objects;
 import java.util.Vector;
 
 
@@ -50,7 +51,7 @@ import java.util.Vector;
    * @version 1.0 23/11/2005
    * @author Ludovic APVRILLE
  */
-public abstract class TMLActivityElement extends TMLElement{
+public abstract class TMLActivityElement extends TMLElement {
     protected Vector<TMLActivityElement> nexts;
     public SecurityPattern securityPattern;
     private String value="";
@@ -79,6 +80,10 @@ public abstract class TMLActivityElement extends TMLElement{
         } else {
             return null;
         }
+    }
+
+    public boolean hasNext(TMLActivityElement _tmlae) {
+        return nexts.contains(_tmlae);
     }
 
     public void addNext(TMLActivityElement _tmlae) {
@@ -135,4 +140,13 @@ public abstract class TMLActivityElement extends TMLElement{
     }
     
     public abstract String customExtraToXML();
+
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof TMLActivityElement)) return false;
+        if(!super.equalSpec(o)) return false;
+        TMLActivityElement tmlActEtls = (TMLActivityElement) o;
+        TMLComparingMethod comp = new TMLComparingMethod();
+        return Objects.equals(value,tmlActEtls.getValue()) &&
+                comp.isTMLActivityEltListEquals(nexts,tmlActEtls.getNexts());
+    }
 }

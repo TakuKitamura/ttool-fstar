@@ -157,10 +157,16 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         drawSingleString(g,val, x + (width - w)/2, y + 2 * textY ); // Issue #31
 
         // Icon
+
         // Issue #31
         final int iconMargin = scale( 4 );
         g.drawImage( scale( IconManager.imgic1102.getImage() ), x + iconMargin/*4*/, y + iconMargin/*4*/, null);
         g.drawImage( scale( IconManager.img9 ), x + width - scale( 20 ), y + iconMargin/*4*/, null);
+
+        //g.drawImage(IconManager.imgic1102.getImage(), x + width - 20, y + 4, null);
+//        g.drawImage(IconManager.imgic1102.getImage(), x + 4, y + 4, null);
+        //g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
+
 
         // Link to mapped units
         if (c == ColorManager.POINTER_ON_ME_0) {

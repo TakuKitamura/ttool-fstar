@@ -97,6 +97,7 @@ import ui.avatarsmd.*;
 import ui.diplodocusmethodology.DiplodocusMethodologyDiagramPanel;
 import ui.ebrdd.EBRDDPanel;
 import ui.eln.ELNDiagramPanel;
+import ui.syscams.SysCAMSComponentTaskDiagramPanel;
 import ui.ftd.FaultTreeDiagramPanel;
 import ui.iod.InteractionOverviewDiagramPanel;
 import ui.ncdd.NCDiagramPanel;
@@ -530,6 +531,7 @@ public class GTURTLEModeling {
         return false;
     }
 
+
     public boolean generateTMLTxt(String _title) {
 
         //This branch is activated if doing the syntax check from the architecture panel.
@@ -596,6 +598,8 @@ public class GTURTLEModeling {
                 TMLTextSpecification<TGComponent> spec = new TMLTextSpecification<>(_title);
                 spec.toTextFormat(tmlm);        //TMLModeling
                 try {
+                    String XMLSpecTML = tmlm.toXML();
+                    FileUtils.saveFile(SpecConfigTTool.TMLCodeDirectory + "spec.xml", XMLSpecTML);
                     spec.saveFile(SpecConfigTTool.TMLCodeDirectory, "spec.tml");
                 } catch (Exception e) {
                     TraceManager.addError("File could not be saved: " + e.getMessage());
@@ -801,8 +805,8 @@ public class GTURTLEModeling {
         //Check if a path between two tasks uses firewallnode
         boolean secure = true;
         List<HwLink> links = map.getTMLArchitecture().getHwLinks();
-        HwExecutionNode node1 = (HwExecutionNode) map.getHwNodeOf(t1);
-        HwExecutionNode node2 = (HwExecutionNode) map.getHwNodeOf(t2);
+        HwExecutionNode node1 =  map.getHwNodeOf(t1);
+        HwExecutionNode node2 =  map.getHwNodeOf(t2);
         List<HwNode> found = new ArrayList<HwNode>();
         List<HwNode> done = new ArrayList<HwNode>();
         List<HwNode> path = new ArrayList<HwNode>();
@@ -868,7 +872,7 @@ public class GTURTLEModeling {
         List<HwNode> done = new ArrayList<HwNode>();
         //List<HwNode> path = new ArrayList<HwNode>();
 
-        HwExecutionNode node1 = (HwExecutionNode) map.getHwNodeOf(t1);
+        HwExecutionNode node1 =  map.getHwNodeOf(t1);
 
         //Map<HwNode, List<HwNode>> pathMap = new HashMap<HwNode, List<HwNode>>();
         for (HwLink link : links) {
@@ -1535,6 +1539,11 @@ public class GTURTLEModeling {
         return map;
     }
 
+    @SuppressWarnings("unchecked")
+    public void setTMLMapping(TMLMapping tmap) {
+        this.tmap = tmap;
+    }
+
 
     public HashMap<String, HashSet<String>> getCPUTaskMap() {
         HashMap<String, HashSet<String>> cpuTaskMap = new HashMap<String, HashSet<String>>();
@@ -1554,6 +1563,40 @@ public class GTURTLEModeling {
     public void addHSM(MainGUI gui, Map<String, List<String>> selectedCpuTasks) {
         HSMGeneration hsm = new HSMGeneration(gui, selectedCpuTasks, tmap);
         hsm.startThread();
+    }
+
+    @SuppressWarnings("unchecked")
+    public boolean generateGraphicalMapping(TMLMapping map) {
+        TURTLEPanel tmlap = tmap.getCorrespondanceList().getTG(tmap.getArch().getFirstCPU()).getTDiagramPanel().tp;
+        int arch = mgui.tabs.indexOf(tmlap);
+        mgui.cloneRenameTab(arch, "Z3");
+        TMLArchiPanel newArch = (TMLArchiPanel) mgui.tabs.get(mgui.tabs.size() - 1);
+        TMLArchiDiagramPanel panel = newArch.tmlap;
+
+        if (panel == null) {
+            return false;
+        }
+
+        panel.removeAllArtifacts();
+
+        List<HwExecutionNode> nodes = map.getNodes();
+        HwExecutionNode node;
+        List<TMLTask> tasks = map.getMappedTasks();
+        TMLTask task;
+        for(int i=0; i<nodes.size(); i++) {
+            node = nodes.get(i);
+            task = tasks.get(i);
+            if ((node != null) && (task != null)) {
+                if (!panel.addTaskToNode(node.getName(), task.getName())) {
+                    TraceManager.addDev("Could not add " + task.getName() + " to " + node.getName());
+                    return false;
+                } else {
+                    TraceManager.addDev("Task " + task.getName() + " was added to " + node.getName());
+                }
+            }
+        }
+
+        return true;
     }
 
 
@@ -1630,8 +1673,8 @@ public class GTURTLEModeling {
         //Check if a path between two tasks is secure
         boolean secure = true;
         List<HwLink> links = map.getTMLArchitecture().getHwLinks();
-        HwExecutionNode node1 = (HwExecutionNode) map.getHwNodeOf(t1);
-        HwExecutionNode node2 = (HwExecutionNode) map.getHwNodeOf(t2);
+        HwExecutionNode node1 = map.getHwNodeOf(t1);
+        HwExecutionNode node2 = map.getHwNodeOf(t2);
         List<HwNode> found = new ArrayList<HwNode>();
         List<HwNode> done = new ArrayList<HwNode>();
         List<HwNode> path = new ArrayList<HwNode>();
@@ -1710,7 +1753,7 @@ public class GTURTLEModeling {
                 for (TMLTask t : tmlm.securityTaskMap.get(sp)) {
                     ArrayList<HwMemory> mems = new ArrayList<HwMemory>();
                     boolean keyFound = false;
-                    HwExecutionNode node1 = (HwExecutionNode) tmap.getHwNodeOf(t);
+                    HwExecutionNode node1 = tmap.getHwNodeOf(t);
                     //Try to find memory using only private buses
                     List<HwNode> toVisit = new ArrayList<HwNode>();
                     //  List<HwNode> toMemory = new ArrayList<HwNode>();
@@ -1779,7 +1822,7 @@ public class GTURTLEModeling {
                 for (TMLTask t : tmlm.securityTaskMap.get(sp)) {
                     ArrayList<HwMemory> mems = new ArrayList<HwMemory>();
                     boolean keyFound = false;
-                    HwExecutionNode node1 = (HwExecutionNode) tmap.getHwNodeOf(t);
+                    HwExecutionNode node1 = tmap.getHwNodeOf(t);
                     //Try to find memory using only private buses
                     List<HwNode> toVisit = new ArrayList<HwNode>();
                     //  List<HwNode> toMemory = new ArrayList<HwNode>();
@@ -3559,7 +3602,7 @@ public class GTURTLEModeling {
     }
 
 
-    public String makeXMLFromSelectedComponentOfADiagram(TDiagramPanel tdp, int copyMaxId, int _decX, int _decY) {
+    public String makeXMLFromSelectedComponentOfADiagram(TDiagramPanel tdp, int copyMaxId, int _decX, int _decY, boolean cloneEvenIfNonNullFather) {
         StringBuffer sb = new StringBuffer();
         //TraceManager.addDev("Making copy");
 
@@ -3574,7 +3617,7 @@ public class GTURTLEModeling {
         StringBuffer s;
         String str;
 
-        s = tdp.saveSelectedInXML();
+        s = tdp.saveSelectedInXML(cloneEvenIfNonNullFather);
 
         final Vector<TCDTClass> classes = tdp.selectedTclasses();
 
@@ -3674,10 +3717,22 @@ public class GTURTLEModeling {
         return str;
     }
 
+
+    private String header() {
+        String head = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGMODELING version=\"" + DefaultText.getVersion() + "\"";
+        if (mgui.getCurrentJTabbedPane() != null) {
+            ModelParameters.setValueForID("LAST_SELECTED_SUB_TAB", "" + mgui.getCurrentJTabbedPane().getSelectedIndex());
+        }
+        head += ModelParameters.toXML();
+        head += ">\n\n";
+        return head;
+
+    }
+
     public String makeOneDiagramXMLFromGraphicalModel(TURTLEPanel tp, int indexOfDiagram) {
         StringBuffer sb = new StringBuffer();
         //sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGMODELING>\n\n");
-        sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGMODELING version=\"" + DefaultText.getVersion() + "\">\n\n");
+        sb.append(header());
 
         StringBuffer s;
         String str;
@@ -3704,7 +3759,7 @@ public class GTURTLEModeling {
     public String makeXMLFromTurtleModeling(int index, String extensionToName) {
         StringBuffer sb = new StringBuffer();
         //sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGMODELING>\n\n");
-        sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGMODELING version=\"" + DefaultText.getVersion() + "\">\n\n");
+        sb.append(header());
 
         StringBuffer s;
         String str;
@@ -5381,6 +5436,15 @@ public class GTURTLEModeling {
         } else {
             throw new MalformedModelingException();
         }
+
+
+        //Select first tab of current tab if it exists
+        if (mgui != null) {
+            if (mgui.getCurrentJTabbedPane() != null) {
+                if (mgui.getCurrentJTabbedPane().getTabCount() > 0)
+                    mgui.getCurrentJTabbedPane().setSelectedIndex(0);
+            }
+        }
     }
 
 
@@ -5398,7 +5462,7 @@ public class GTURTLEModeling {
             return null;
         }
 
-        sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<TURTLEGMODELING version=\"" + DefaultText.getVersion() + "\">\n\n");
+        sb.append(header());
 
         if (index2 > -1) {
             sb.append("<Modeling type=\"Analysis\" nameTab=\"Analysis\" >\n");
@@ -5445,6 +5509,9 @@ public class GTURTLEModeling {
 
         prepareErrors();
 
+        int selectedTab = -1;
+        int selectedSubTab = -1;
+
         try {
             // building nodes from xml String
             Document doc = db.parse(bais);
@@ -5469,22 +5536,38 @@ public class GTURTLEModeling {
                 return;
 
             }
+
+            // Loading header
+
+            try {
+                //TraceManager.addDev("Loading model parameters");
+                ModelParameters.loadValuesFromXML(doc.getElementsByTagName("TURTLEGMODELING").item(0));
+            } catch (Exception e) {
+                TraceManager.addDev("Exception when loading model parameters:" + e.getMessage());
+            }
+            selectedTab = ModelParameters.getIntegerValueFromID("LAST_SELECTED_MAIN_TAB");
+            selectedSubTab = ModelParameters.getIntegerValueFromID("LAST_SELECTED_SUB_TAB");
+
+            //TraceManager.addDev("End loading values");
+
             //designPanelNl = doc.getElementsByTagName("Design");
             //analysisNl = doc.getElementsByTagName("Analysis");
 
             pendingConnectors = new ArrayList<TGConnectorInfo>();
 
-            //TraceManager.addDev("nb de design=" + designPanelNl.getLength() + " nb d'analyse=" + analysisNl.getLength());
             boolean error = false;
             for (i = 0; i < panelNl.getLength(); i++) {
                 node = panelNl.item(i);
-                //TraceManager.addDev("Node = " + dnd);
+                //TraceManager.addDev("Node = " + node);
 
                 if (node.getNodeType() == Node.ELEMENT_NODE) {
                     // create design, and get an index for it
                     try {
+                        //TraceManager.addDev("Loading Node");
                         loadModeling(node);
+                        //TraceManager.addDev("Node loaded = ");
                     } catch (MalformedModelingException mme) {
+                        TraceManager.addError("Error when loading diagram");
                         Element elt = (Element) node;
                         String type = elt.getAttribute("type");
                         TraceManager.addError("Error when loading diagram: " + elt + " " + type, mme);
@@ -5492,7 +5575,9 @@ public class GTURTLEModeling {
                     }
                 }
             }
+
             if (error == true) {
+                //TraceManager.addDev("ERROR FOUND");
                 throw new MalformedModelingException();
             }
 
@@ -5509,7 +5594,14 @@ public class GTURTLEModeling {
         //TraceManager.addDev("making IDs");
         makeLastLoad();
         makeLovelyIds();
-        //TraceManager.addDev("IDs done");
+        TraceManager.addDev("IDs done");
+
+
+        // Selecting last tab
+        //TraceManager.addDev("Selecting tab:" + selectedTab);
+        mgui.selectTab(new Point(selectedTab, selectedSubTab));
+        //TraceManager.addDev("Tabs selected");
+
     }
 
     /*public void loadModeling(Node node) throws MalformedModelingException, SAXException {
@@ -6099,7 +6191,8 @@ public class GTURTLEModeling {
 
         nameTab = elt.getAttribute("nameTab");
 
-        indexDesign = mgui.createSysmlsecMethodology(nameTab);
+        //indexDesign = mgui.createSysmlsecMethodology(nameTab);
+		indexDesign = mgui.createSysCAMSComponentDesign(nameTab);
 
         diagramNl = node.getChildNodes();
 
@@ -6431,10 +6524,10 @@ public class GTURTLEModeling {
             ((AvatarCDPanel) tdp).setConnectorsToFront();
         }
 
-        /*if (tdp instanceof SysCAMSComponentTaskDiagramPanel) {
+        if (tdp instanceof SysCAMSComponentTaskDiagramPanel) {
             //TraceManager.addDev("Connectors...");
             ((SysCAMSComponentTaskDiagramPanel) tdp).setConnectorsToFront();
-        }*/
+        }
 
         if (tdp instanceof ELNDiagramPanel) {
             // TraceManager.addDev("Connectors...");
@@ -6778,6 +6871,7 @@ public class GTURTLEModeling {
 
         tmladp.removeAll();
 
+        //TraceManager.addDev("Loading diagram of " + name + " in " + tmladp.getName() +"\n");
         loadDiagram(elt, tmladp);
     }
 

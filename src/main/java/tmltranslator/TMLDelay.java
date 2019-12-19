@@ -42,6 +42,7 @@
 package tmltranslator;
 
 
+import java.util.Objects;
 
 /**
  * Class TMLDelay
@@ -90,6 +91,14 @@ public class TMLDelay extends TMLActivityElementWithIntervalAction {
 			return "*1000000";
 		}
 		return "";
+	}
+
+	public boolean equalSpec(Object o) {
+    	if (! (o instanceof TMLDelay)) return false;
+		if (!super.equalSpec(o)) return false;
+
+		TMLDelay tmlDelay = (TMLDelay) o;
+		return Objects.equals(timeUnit,tmlDelay.getUnit());
 	}
     
 }

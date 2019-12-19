@@ -41,9 +41,15 @@
 
 package ui.window;
 
+import help.HelpEntry;
+import help.HelpManager;
 import myutil.GraphicLib;
+import myutil.TraceManager;
 import tmltranslator.modelcompiler.ArchUnitMEC;
 import ui.ColorManager;
+import ui.MainGUI;
+import ui.TGComboBoxWithHelp;
+import ui.TGTextFieldWithHelp;
 import ui.util.IconManager;
 import ui.interactivesimulation.SimulationTransaction;
 import ui.tmldd.TMLArchiCPUNode;
@@ -51,7 +57,6 @@ import ui.tmldd.TMLArchiCPUNode;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.List;
@@ -66,6 +71,17 @@ import java.util.List;
 public class JDialogCPUNode extends JDialogBase implements ActionListener  {
     //private static String[] tracemodeTab = {"vcd trace", "VCI logger", "VCI stats"};
 //    private static String[] tracemodeTab = {"VCI logger"};
+
+
+    public static final String[] helpStrings = {"cpuname.html", "schedulingpolicy.html", "slicetime.html",
+            "numbercores.html", "datasize.html", "pipelinesize.html", "taskswitchingtime.html",
+            "misbrandingprediction.html", "cachemiss.html", "goidletime.html", "maxconsecutivecycles.html",
+            "execi.html", "execc.html", "clockdivider.html", "encryption.html", "cpuextension.html", "operation.html"};
+
+
+    protected MainGUI mgui;
+
+
     private boolean regularClose;
 
     private JPanel panel2, panel4, panel5;
@@ -77,14 +93,14 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
     protected JComboBox<String> tracemode;
  //   private static int selectedTracemode = 0;
     // Panel1
-    protected JTextField nodeName;
+    protected TGTextFieldWithHelp nodeName;
 
     // Panel2
-    protected JTextField sliceTime, nbOfCores, byteDataSize, pipelineSize, goIdleTime, maxConsecutiveIdleCycles,
+    protected TGTextFieldWithHelp sliceTime, nbOfCores, byteDataSize, pipelineSize, goIdleTime, maxConsecutiveIdleCycles,
             taskSwitchingTime, branchingPredictionPenalty, cacheMiss, clockRatio, execiTime, execcTime, monitored,
         operation;
 
-    protected JComboBox<String> schedulingPolicy, MECTypeCB, encryption;
+    protected TGComboBoxWithHelp<String> schedulingPolicy, MECTypeCB, encryption;
 
     // Tabbed pane for panel1 and panel2
     private JTabbedPane tabbedPane;
@@ -93,284 +109,27 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
     private java.util.List<SimulationTransaction> transactions;
 
     //issue 183
-    List<JTextArea> instructionHelpList;
-    List<JButton>   buttons;
-    int index;
+    private List<JButton>  buttons;
+    private List<HelpEntry> helpEntries;
+    private JDialogTGComponentHelp cpuHelp;
 
     /* Creates new form  */
-    public JDialogCPUNode(Frame _frame, String _title, TMLArchiCPUNode _node, ArchUnitMEC _MECType, java.util.List<SimulationTransaction> _transactions) {
+    public JDialogCPUNode(MainGUI _mgui, Frame _frame, String _title, TMLArchiCPUNode _node, ArchUnitMEC _MECType,
+                          java.util.List<SimulationTransaction> _transactions) {
         super(_frame, _title, true);
-      //  frame = _frame;
+
+        mgui = _mgui;
         node = _node;
         MECType = _MECType;
         transactions = _transactions;
+
         initComponents();
-   //     myInitComponents();
         pack();
-    }
-//
-//    private void myInitComponents() {
-//    }
-
-    //issue 183
-    private void setButton(JButton button) {
-        button.setOpaque(false);
-        button.setFocusPainted(false);
-        button.setContentAreaFilled(false);
-        button.setBorderPainted(false);
-    }
-
-    private void hardwareHelp(){
-
-        instructionHelpList = new ArrayList<>();
-        buttons = new ArrayList<>();
-        JTextArea jft1 = new JTextArea();
-        jft1.setText("CPU name");
-        instructionHelpList.add(jft1);
-
-        JTextArea jft2 = new JTextArea();
-        jft2.setText("Scheduling policy");
-        instructionHelpList.add(jft2);
-
-        JTextArea jft3 = new JTextArea("Slice time : The maximum time allocated by the OS " +
-                "scheduler to execute a task");
-        instructionHelpList.add(jft3);
-
-        JTextArea jft4 = new JTextArea("Nb of Cores :  The number of cores of the CPU");
-        instructionHelpList.add(jft4);
-
-        JTextArea jft5 = new JTextArea("Data size : The size of an EXECI/EXECC operation, in " +
-                "number of bytes");
-        instructionHelpList.add(jft5);
-
-        JTextArea jft6 = new JTextArea("Pipeline size : The number of stages of the pipeline");
-        instructionHelpList.add(jft6);
-
-        JTextArea jft7 = new JTextArea("Task switching : The time taken by the OS for a context switch");
-        instructionHelpList.add(jft7);
-
-        JTextArea jft8 = new JTextArea("Mis-branching prediction: The miss percentage of the CPU branch " +
-                "prediction scheme");
-        instructionHelpList.add(jft8);
-
-        JTextArea jft9 = new JTextArea("cahe-miss : The percentage of cache misses");
-        instructionHelpList.add(jft9);
-
-        JTextArea jft10 = new JTextArea("Go idle time (cycles) : The time taken by the OS and the CPU " +
-                "hardware to go idle");
-        instructionHelpList.add(jft10);
-
-        JTextArea jft11 = new JTextArea("Max consecutive cycles before idle (cycles) : Number of consecutive cycles of NOPs before the " +
-                "CPU goes idle");
-        instructionHelpList.add(jft11);
-
-        JTextArea jft12 = new JTextArea("EXECI execution : The number of clock cycles corresponding to an " +
-                "integer operation");
-        instructionHelpList.add(jft12);
-
-        JTextArea jft13 = new JTextArea("EXECC execution : The number of clock cycles corresponding to an " +
-                "operation on complex numbers");
-        instructionHelpList.add(jft13);
-
-        JTextArea jft14 = new JTextArea("Clock divider : This number defines the operating clock frequency of the CPU \n" +
-                "It is expressed via a number that is used to divide the global design\n" +
-                "frequency, whose default value is 200 MHz. Thus a clock divider equal to 4 means that the CPU\n" +
-                "operates at 200/4 = 50 MHz");
-        instructionHelpList.add(jft14);
-
-        for(int i = 0; i < instructionHelpList.size(); i++) {
-            Icon myIcon = IconManager.imgic32;
-            JButton but = new JButton(myIcon);
-            setButton(but);
-            buttons.add(but);
-        }
-
-        buttons.get(0).addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                JPopupMenu helpPopup = new JPopupMenu();
-                helpPopup.add(jft1);
-                if (!helpPopup.isVisible()) {
-                    helpPopup.show(buttons.get(0),20,20);
-                } else {
-                    helpPopup.setVisible(false);
-                }
-            }
-        });
-
-        buttons.get(1).addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                JPopupMenu helpPopup = new JPopupMenu();
-                helpPopup.add(jft2);
-                if (!helpPopup.isVisible()) {
-                    helpPopup.show(buttons.get(1),20,20);
-                } else {
-                    helpPopup.setVisible(false);
-                }
-            }
-        });
-
-        buttons.get(2).addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                JPopupMenu helpPopup = new JPopupMenu();
-                helpPopup.add(jft3);
-                if (!helpPopup.isVisible()) {
-                    helpPopup.show(buttons.get(2),20,20);
-                } else {
-                    helpPopup.setVisible(false);
-                }
-            }
-        });
-
-        buttons.get(3).addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                JPopupMenu helpPopup = new JPopupMenu();
-                helpPopup.add(jft4);
-                if (!helpPopup.isVisible()) {
-                    helpPopup.show(buttons.get(3),20,20);
-                } else {
-                    helpPopup.setVisible(false);
-                }
-            }
-        });
-
-        buttons.get(4).addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                JPopupMenu helpPopup = new JPopupMenu();
-                helpPopup.add(jft5);
-                if (!helpPopup.isVisible()) {
-                    helpPopup.show(buttons.get(4),20,20);
-                } else {
-                    helpPopup.setVisible(false);
-                }
-            }
-        });
-
-        buttons.get(5).addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                JPopupMenu helpPopup = new JPopupMenu();
-                helpPopup.add(jft6);
-                if (!helpPopup.isVisible()) {
-                    helpPopup.show(buttons.get(5),20,20);
-                } else {
-                    helpPopup.setVisible(false);
-                }
-            }
-        });
-
-        buttons.get(6).addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                JPopupMenu helpPopup = new JPopupMenu();
-                helpPopup.add(jft7);
-                if (!helpPopup.isVisible()) {
-                    helpPopup.show(buttons.get(6),20,20);
-                } else {
-                    helpPopup.setVisible(false);
-                }
-            }
-        });
-
-        buttons.get(7).addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                JPopupMenu helpPopup = new JPopupMenu();
-                helpPopup.add(jft8);
-                if (!helpPopup.isVisible()) {
-                    helpPopup.show(buttons.get(7),20,20);
-                } else {
-                    helpPopup.setVisible(false);
-                }
-            }
-        });
-
-        buttons.get(8).addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                JPopupMenu helpPopup = new JPopupMenu();
-                helpPopup.add(jft9);
-                if (!helpPopup.isVisible()) {
-                    helpPopup.show(buttons.get(8),20,20);
-                } else {
-                    helpPopup.setVisible(false);
-                }
-            }
-        });
-
-        buttons.get(9).addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                JPopupMenu helpPopup = new JPopupMenu();
-                helpPopup.add(jft10);
-                if (!helpPopup.isVisible()) {
-                    helpPopup.show(buttons.get(9),20,20);
-                } else {
-                    helpPopup.setVisible(false);
-                }
-            }
-        });
-
-        buttons.get(10).addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                JPopupMenu helpPopup = new JPopupMenu();
-                helpPopup.add(jft11);
-                if (!helpPopup.isVisible()) {
-                    helpPopup.show(buttons.get(10),20,20);
-                } else {
-                    helpPopup.setVisible(false);
-                }
-            }
-        });
-
-        buttons.get(11).addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                JPopupMenu helpPopup = new JPopupMenu();
-                helpPopup.add(jft12);
-                if (!helpPopup.isVisible()) {
-                    helpPopup.show(buttons.get(11),20,20);
-                } else {
-                    helpPopup.setVisible(false);
-                }
-            }
-        });
-
-        buttons.get(12).addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                JPopupMenu helpPopup = new JPopupMenu();
-                helpPopup.add(jft13);
-                if (!helpPopup.isVisible()) {
-                    helpPopup.show(buttons.get(12),20,20);
-                } else {
-                    helpPopup.setVisible(false);
-                }
-            }
-        });
-
-        buttons.get(13).addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                JPopupMenu helpPopup = new JPopupMenu();
-                helpPopup.add(jft14);
-                if (!helpPopup.isVisible()) {
-                    helpPopup.show(buttons.get(13),20,20);
-                } else {
-                    helpPopup.setVisible(false);
-                }
-            }
-        });
-
     }
 
 
     private void initComponents() {
+
         Container c = getContentPane();
         GridBagLayout gridbag0 = new GridBagLayout();
         GridBagLayout gridbag2 = new GridBagLayout();
@@ -379,7 +138,6 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         //GridBagConstraints c1 = new GridBagConstraints();
         GridBagConstraints c2 = new GridBagConstraints();
         GridBagConstraints c4 = new GridBagConstraints();
-        hardwareHelp();
 
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         c.setLayout(gridbag0);
@@ -404,16 +162,12 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         panel2.add(new JLabel("CPU name:"), c2);
         //-------
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        nodeName = new JTextField(node.getNodeName(), 30);
+        nodeName = new TGTextFieldWithHelp(node.getNodeName(), 30);
         nodeName.setEditable(true);
         nodeName.setFont(new Font("times", Font.PLAIN, 12));
         panel2.add(nodeName, c2);
+        nodeName.makeEndHelpButton(helpStrings[0], mgui, mgui.getHelpManager(), panel2, c2);
 
-        //issue 183
-        c2.weighty = 0.0;
-        c2.weightx = 0.0;
-        c2.gridwidth = GridBagConstraints.REMAINDER;
-        panel2.add(buttons.get(0),c2);
 
         c2.gridwidth = 1;
         c2.gridheight = 1;
@@ -423,17 +177,12 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         panel2.add(new JLabel("Scheduling policy:"), c2);
 
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        schedulingPolicy = new JComboBox<String>();
+        schedulingPolicy = new TGComboBoxWithHelp<String>();
         schedulingPolicy.addItem("Round Robin");
         schedulingPolicy.addItem("Round Robin - Priority Based");
         schedulingPolicy.setSelectedIndex(node.getSchedulingPolicy());
         panel2.add(schedulingPolicy, c2);
-
-        //issue 183
-        c2.weighty = 0.0;
-        c2.weightx = 0.0;
-        c2.gridwidth = GridBagConstraints.REMAINDER;
-        panel2.add(buttons.get(1),c2);
+        schedulingPolicy.makeEndHelpButton(helpStrings[1], mgui, mgui.getHelpManager(), panel2, c2);
 
         c2.gridwidth = 1;
         //issue 183
@@ -441,14 +190,9 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.weightx = 1.0;
         panel2.add(new JLabel("Slice time (in microseconds):"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        sliceTime = new JTextField(""+node.getSliceTime(), 15);
+        sliceTime = new TGTextFieldWithHelp(""+node.getSliceTime(), 15);
         panel2.add(sliceTime, c2);
-
-        //issue 183
-        c2.weighty = 0.0;
-        c2.weightx = 0.0;
-        c2.gridwidth = GridBagConstraints.REMAINDER;
-        panel2.add(buttons.get(2),c2);
+        sliceTime.makeEndHelpButton(helpStrings[2], mgui, mgui.getHelpManager(), panel2, c2);
 
         c2.gridwidth = 1;
         //issue 183
@@ -456,14 +200,9 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.weightx = 1.0;
         panel2.add(new JLabel("Nb of cores:"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        nbOfCores = new JTextField(""+node.getNbOfCores(), 15);
+        nbOfCores = new TGTextFieldWithHelp(""+node.getNbOfCores(), 15);
         panel2.add(nbOfCores, c2);
-
-        //issue 183
-        c2.weighty = 0.0;
-        c2.weightx = 0.0;
-        c2.gridwidth = GridBagConstraints.REMAINDER;
-        panel2.add(buttons.get(3),c2);
+        nbOfCores.makeEndHelpButton(helpStrings[3], mgui, mgui.getHelpManager(), panel2, c2);
 
         c2.gridwidth = 1;
         //issue 183
@@ -471,14 +210,10 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.weightx = 1.0;
         panel2.add(new JLabel("Data size (in byte):"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        byteDataSize = new JTextField(""+node.getByteDataSize(), 15);
+        byteDataSize = new TGTextFieldWithHelp(""+node.getByteDataSize(), 15);
         panel2.add(byteDataSize, c2);
+        byteDataSize.makeEndHelpButton(helpStrings[4], mgui, mgui.getHelpManager(), panel2, c2);
 
-        //issue 183
-        c2.weighty = 0.0;
-        c2.weightx = 0.0;
-        c2.gridwidth = GridBagConstraints.REMAINDER;
-        panel2.add(buttons.get(4),c2);
 
         c2.gridwidth = 1;
         //issue 183
@@ -486,14 +221,10 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.weightx = 1.0;
         panel2.add(new JLabel("Pipeline size (num. stages):"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        pipelineSize = new JTextField(""+node.getPipelineSize(), 15);
+        pipelineSize = new TGTextFieldWithHelp(""+node.getPipelineSize(), 15);
         panel2.add(pipelineSize, c2);
+        pipelineSize.makeEndHelpButton(helpStrings[5], mgui, mgui.getHelpManager(), panel2, c2);
 
-        //issue 183
-        c2.weighty = 0.0;
-        c2.weightx = 0.0;
-        c2.gridwidth = GridBagConstraints.REMAINDER;
-        panel2.add(buttons.get(5),c2);
 
         c2.gridwidth = 1;
         //issue 183
@@ -501,14 +232,10 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.weightx = 1.0;
         panel2.add(new JLabel("Task switching time (in cycle):"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        taskSwitchingTime = new JTextField(""+node.getTaskSwitchingTime(), 15);
+        taskSwitchingTime = new TGTextFieldWithHelp(""+node.getTaskSwitchingTime(), 15);
         panel2.add(taskSwitchingTime, c2);
+        pipelineSize.makeEndHelpButton(helpStrings[6], mgui, mgui.getHelpManager(), panel2, c2);
 
-        //issue 183
-        c2.weighty = 0.0;
-        c2.weightx = 0.0;
-        c2.gridwidth = GridBagConstraints.REMAINDER;
-        panel2.add(buttons.get(6),c2);
 
         c2.gridwidth = 1;
         //issue 183
@@ -516,14 +243,11 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.weightx = 1.0;
         panel2.add(new JLabel("Mis-Branching prediction (in %):"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        branchingPredictionPenalty = new JTextField(""+node.getBranchingPredictionPenalty(), 15);
+        branchingPredictionPenalty = new TGTextFieldWithHelp(""+node.getBranchingPredictionPenalty(), 15);
         panel2.add(branchingPredictionPenalty, c2);
+        branchingPredictionPenalty.makeEndHelpButton(helpStrings[7], mgui, mgui.getHelpManager(), panel2, c2);
 
-        //issue 183
-        c2.weighty = 0.0;
-        c2.weightx = 0.0;
-        c2.gridwidth = GridBagConstraints.REMAINDER;
-        panel2.add(buttons.get(7),c2);
+
 
         c2.gridwidth = 1;
         //issue 183
@@ -531,14 +255,10 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.weightx = 1.0;
         panel2.add(new JLabel("Cache-miss (in %):"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        cacheMiss = new JTextField(""+node.getCacheMiss(), 15);
+        cacheMiss = new TGTextFieldWithHelp(""+node.getCacheMiss(), 15);
         panel2.add(cacheMiss, c2);
+        cacheMiss.makeEndHelpButton(helpStrings[8], mgui, mgui.getHelpManager(), panel2, c2);
 
-        //issue 183
-        c2.weighty = 0.0;
-        c2.weightx = 0.0;
-        c2.gridwidth = GridBagConstraints.REMAINDER;
-        panel2.add(buttons.get(8),c2);
 
         c2.gridwidth = 1;
         //issue 183
@@ -546,14 +266,10 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.weightx = 1.0;
         panel2.add(new JLabel("Go idle time (in cycle):"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        goIdleTime = new JTextField(""+node.getGoIdleTime(), 15);
+        goIdleTime = new TGTextFieldWithHelp(""+node.getGoIdleTime(), 15);
         panel2.add(goIdleTime, c2);
+        goIdleTime.makeEndHelpButton(helpStrings[9], mgui, mgui.getHelpManager(), panel2, c2);
 
-        //issue 183
-        c2.weighty = 0.0;
-        c2.weightx = 0.0;
-        c2.gridwidth = GridBagConstraints.REMAINDER;
-        panel2.add(buttons.get(9),c2);
 
         c2.gridwidth = 1;
         //issue 183
@@ -561,14 +277,10 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.weightx = 1.0;
         panel2.add(new JLabel("Max consecutive cycles before idle (in cycle):"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        maxConsecutiveIdleCycles = new JTextField(""+node.getMaxConsecutiveIdleCycles(), 15);
+        maxConsecutiveIdleCycles = new TGTextFieldWithHelp(""+node.getMaxConsecutiveIdleCycles(), 15);
         panel2.add(maxConsecutiveIdleCycles, c2);
+        maxConsecutiveIdleCycles.makeEndHelpButton(helpStrings[10], mgui, mgui.getHelpManager(), panel2, c2);
 
-        //issue 183
-        c2.weighty = 0.0;
-        c2.weightx = 0.0;
-        c2.gridwidth = GridBagConstraints.REMAINDER;
-        panel2.add(buttons.get(10),c2);
 
         c2.gridwidth = 1;
         //issue 183
@@ -576,14 +288,10 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.weightx = 1.0;
         panel2.add(new JLabel("EXECI execution time (in cycle):"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        execiTime = new JTextField(""+node.getExeciTime(), 15);
+        execiTime = new TGTextFieldWithHelp(""+node.getExeciTime(), 15);
         panel2.add(execiTime, c2);
+        execiTime.makeEndHelpButton(helpStrings[11], mgui, mgui.getHelpManager(), panel2, c2);
 
-        //issue 183
-        c2.weighty = 0.0;
-        c2.weightx = 0.0;
-        c2.gridwidth = GridBagConstraints.REMAINDER;
-        panel2.add(buttons.get(11),c2);
 
         c2.gridwidth = 1;
         //issue 183
@@ -591,14 +299,11 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.weightx = 1.0;
         panel2.add(new JLabel("EXECC execution time (in cycle):"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        execcTime = new JTextField(""+node.getExeccTime(), 15);
+        execcTime = new TGTextFieldWithHelp(""+node.getExeccTime(), 15);
         panel2.add(execcTime, c2);
+        execcTime.makeEndHelpButton(helpStrings[12], mgui, mgui.getHelpManager(), panel2, c2);
 
-        //issue 183
-        c2.weighty = 0.0;
-        c2.weightx = 0.0;
-        c2.gridwidth = GridBagConstraints.REMAINDER;
-        panel2.add(buttons.get(12),c2);
+
 
         c2.gridwidth = 1;
         //issue 183
@@ -606,27 +311,10 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c2.weightx = 1.0;
         panel2.add(new JLabel("Clock divider:"), c2);
         //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        clockRatio = new JTextField(""+node.getClockRatio(), 15);
+        clockRatio = new TGTextFieldWithHelp(""+node.getClockRatio(), 15);
         panel2.add(clockRatio, c2);
+        execcTime.makeEndHelpButton(helpStrings[13], mgui, mgui.getHelpManager(), panel2, c2);
 
-        //issue 183
-        c2.weighty = 0.0;
-        c2.weightx = 0.0;
-        c2.gridwidth = GridBagConstraints.REMAINDER;
-        panel2.add(buttons.get(13),c2);
-
-        // monitored
-        /*c2.gridwidth = 1;
-        panel2.add(new JLabel("Monitored:"), c2);
-        //c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        //monitored = new JTextField(""+node.getMonitored(), 15);//DG 19.04.
-        tracemode = new JComboBox(tracemodeTab);
-        tracemode.setSelectedIndex(selectedTracemode);
-        tracemode.addActionListener(this);
-        panel2.add(tracemode, c2);
-
-        monitored = new JTextField("", 15);
-        panel2.add(monitored, c2);*/
 
 
         // Code generation
@@ -640,26 +328,35 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c4.weightx = 1.0;
         c4.fill = GridBagConstraints.HORIZONTAL;
         panel4.add(new JLabel("Encryption:"), c4);
-        c4.gridwidth = GridBagConstraints.REMAINDER;
-        encryption = new JComboBox<String>();
+        //c4.gridwidth = GridBagConstraints.REMAINDER;
+        encryption = new TGComboBoxWithHelp<String>();
         encryption.addItem("None");
         encryption.addItem("Software Encryption");
         encryption.addItem("Hardware Security Module");
         encryption.setSelectedIndex(node.getEncryption());
         panel4.add(encryption, c4);
+        encryption.makeEndHelpButton(helpStrings[14], mgui, mgui.getHelpManager(), panel4, c4);
 
+
+        c4.weighty = 1.0;
+        c4.weightx = 1.0;
+        
         // operation
         c4.gridwidth = 1;
         panel4.add(new JLabel("Operation:"), c4);
-        c4.gridwidth = GridBagConstraints.REMAINDER; //end row
-        operation = new JTextField(""+node.getOperation(), 15);
+        //c4.gridwidth = GridBagConstraints.REMAINDER; //end row
+        operation = new TGTextFieldWithHelp(""+node.getOperation(), 15);
         panel4.add(operation, c4);
+        operation.makeEndHelpButton(helpStrings[16], mgui, mgui.getHelpManager(), panel4, c4);
 
+
+        c4.weighty = 1.0;
+        c4.weightx = 1.0;
         // extension constructs
         c4.gridwidth = 1;
         panel4.add(new JLabel("CPU Extension Construct:"), c4);
-        c4.gridwidth = GridBagConstraints.REMAINDER; //end row
-        MECTypeCB = new JComboBox<String>( ArchUnitMEC.stringTypes );
+        //c4.gridwidth = GridBagConstraints.REMAINDER; //end row
+        MECTypeCB = new TGComboBoxWithHelp<String>( ArchUnitMEC.stringTypes );
         if( MECType == null )   {
             MECTypeCB.setSelectedIndex( 0 );
         }
@@ -668,20 +365,25 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         }
         MECTypeCB.addActionListener(this);
         panel4.add( MECTypeCB, c4);
+        MECTypeCB.makeEndHelpButton(helpStrings[15], mgui, mgui.getHelpManager(), panel4, c4);
 
+
+        TraceManager.addDev("Transactions size=" + transactions.size());
         if (transactions.size()!=0) {
-            panel5=new JPanel();
+            TraceManager.addDev("On going simulation");
+
+            panel5 = new JPanel();
             panel5.setPreferredSize(new Dimension(400,300));
-            MyFrame f =new MyFrame();
-            f.setPreferredSize(new Dimension(400,300));
-            panel5.add(f,c4);
+            MyFrame simulationFrame = new MyFrame();
+            TraceManager.addDev("Adding simulation frame");
+            simulationFrame.setPreferredSize(new Dimension(400,300));
+            panel5.add(simulationFrame,c4);
             tabbedPane.addTab("Simulation Transactions", panel5);
             //Draw from transactions
         }
         else {
             tabbedPane.addTab( "Main attributes", panel2 );
             tabbedPane.addTab( "Security & operation type", panel4 );
-
             tabbedPane.setSelectedIndex(0);
         }
         // main panel;
@@ -690,8 +392,8 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         c0.weightx = 1.0;
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
         c0.fill = GridBagConstraints.BOTH;
-        /*c.add(panel2, c0);
-          c.add(panel4, c0);*/
+       /* c.add(panel2, c0);
+        c.add(panel4, c0);*/
         c.add( tabbedPane, c0 );
 
         c0.gridwidth = 1;
@@ -702,15 +404,6 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
     }
 
     public void actionPerformed(ActionEvent evt)  {
-        /* if (evt.getSource() == typeBox) {
-           boolean b = ((Boolean)(initValues.elementAt(typeBox.getSelectedIndex()))).booleanValue();
-           initialValue.setEnabled(b);
-           return;
-           }*/
-
-//        if (evt.getSource() == tracemode) {
-//            selectedTracemode = tracemode.getSelectedIndex();
-//        }
 
         String command = evt.getActionCommand();
 
@@ -723,16 +416,26 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
     }
 
     public void closeDialog() {
+        //TraceManager.addDev("Save and close");
         regularClose = true;
         MECType = ArchUnitMEC.Types.get( MECTypeCB.getSelectedIndex() );
         dispose();
+        if ((cpuHelp != null) && cpuHelp.isVisible()) {
+            cpuHelp.setVisible(false);
+        }
     }
 
     public void cancelDialog() {
+
+        //TraceManager.addDev("Cancel dialog");
         dispose();
+        if ((cpuHelp != null) && cpuHelp.isVisible()) {
+            cpuHelp.setVisible(false);
+        }
     }
 
     public boolean isRegularClose() {
+        //TraceManager.addDev("regularclose=" + regularClose);
         return regularClose;
     }
 
@@ -824,6 +527,7 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
             return false;
         }
     }
+
     
     class MyFrame extends JPanel implements MouseMotionListener, MouseListener{
         Map<Range, String> toolMap = new HashMap<Range, String>();
@@ -926,6 +630,21 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
                 }
             }
             String commandName="";
+            TreeSet<Integer> tree = new TreeSet<>();
+            for(int j = 0; j < tranList.size(); j++) {
+                tree.add(Integer.valueOf(tranList.get(j).startTime));
+            }
+            Integer[] arr = new Integer[tree.size()];
+            tree.toArray(arr);
+            for (int t = 0; t < tranList.size(); t ++){
+                for (int k = 0; k < arr.length; k++){
+                    if(tranList.get(t).startTime.equals(String.valueOf(arr[k]))){
+                        tranList.get(t).index = k;
+                        break;
+                    }
+                }
+            }
+
             for (String s:tasks){
                 i++;
                 g.drawString(s.split("__")[1],0, i*50+50);
@@ -951,11 +670,18 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
                         g.setColor(ColorManager.TML_PORT_REQUEST);
                         commandName="REQ";
                     }
-                    else {
+                    else if (tran.command.contains("Delay")){
+                        g.setColor(ColorManager.TML_PORT_CHANNEL);
+                        commandName="DL";
+                    }
+                    else if (tran.command.contains("Execi")){
                         commandName="EX";
                         g.setColor(ColorManager.EXEC);
                     }
-                    int start = 30*tranList.indexOf(tran)+70;
+                    else {
+                        continue;
+                    }
+                    int start = 30*tran.index+70;
                     g.fillRect(start, i*50+40, 30, 20);
                     g.setColor(Color.black);
                     g.drawRect(start, i*50+40, 30, 20);

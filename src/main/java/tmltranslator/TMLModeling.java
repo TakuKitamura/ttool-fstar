@@ -55,6 +55,7 @@ import ui.TAttribute;
 import ui.tmlcompd.TMLCPrimitiveComponent;
 import ui.tmlcompd.TMLCPrimitivePort;
 import ui.TGComponent;
+import ui.tmlcompd.TMLPragma;
 
 import java.util.*;
 
@@ -65,16 +66,16 @@ import java.util.*;
  * @version 1.0 21/11/2005
  * @author Ludovic APVRILLE
  */
-public class TMLModeling<E> {
+public class  TMLModeling<E> {
     public final String SEP1 = "_S_";
 
     private List<TMLTask> tasks;
     private List<TMLChannel> channels;
     private List<TMLRequest> requests;
     private List<TMLEvent> events;
-    private List<String[]> pragmas;
+    private List<String> pragmas;
     
-    private TMLElement correspondance[];
+    private TMLElement correspondance[]; // Link to graphical components
 
     // Security
     public List<String> securityPatterns;
@@ -177,15 +178,12 @@ public class TMLModeling<E> {
     }
 
     private void init() {
-        /*tasks = new LinkedList();
-          channels = new LinkedList();
-          requests = new LinkedList();
-          events = new LinkedList();*/
+
         tasks = new ArrayList<TMLTask>();
         channels = new ArrayList<TMLChannel>();
         events = new ArrayList<TMLEvent>();
         requests = new ArrayList<TMLRequest>();
-        pragmas = new ArrayList<String[]>();
+        pragmas = new ArrayList<String>();
 	
 	securityPatterns = new ArrayList<String>();
 	secPatterns = new ArrayList<SecurityPattern>();
@@ -199,7 +197,8 @@ public class TMLModeling<E> {
     public void addTask(TMLTask task) {
         tasks.add(task);
     }
-    public void addPragma(String[] s){
+
+    public void addPragma(String s){
         pragmas.add(s);
     }
     public void addChannel(TMLChannel channel) {
@@ -697,6 +696,37 @@ public class TMLModeling<E> {
         return null;
     }
 
+
+    public List<TMLElement> getAllElementsWithName(String name) {
+        Vector<TMLElement> elts = new Vector<>();
+
+        for(TMLTask task: tasks) {
+            if (task.getName().compareTo(name) == 0) {
+                elts.add(task);
+            }
+        }
+
+        for(TMLChannel ch: channels) {
+            if (ch.getName().compareTo(name) == 0) {
+                elts.add(ch);
+            }
+        }
+
+        for(TMLEvent evt: events) {
+            if (evt.getName().compareTo(name) == 0) {
+                elts.add(evt);
+            }
+        }
+
+        for(TMLRequest req: requests) {
+            if (req.getName().compareTo(name) == 0) {
+                elts.add(req);
+            }
+        }
+
+        return elts;
+    }
+
     public List<TMLTask> getTasks() {
         return tasks;
     }
@@ -711,9 +741,10 @@ public class TMLModeling<E> {
 		return attackers;
 	}
 	
-    public List<String[]> getPragmas(){
+    public List<String> getPragmas(){
         return pragmas;
     }
+
     public Iterator<TMLTask> getListIteratorTasks() {
         return tasks.listIterator();
     }
@@ -753,7 +784,7 @@ public class TMLModeling<E> {
                 list.add(ch);
             }
             for (TMLTask task: ch.getOriginTasks()){
-            	if (task ==t){
+            	if (task == t){
             		list.add(ch);
             	}
             }
@@ -2107,7 +2138,7 @@ public class TMLModeling<E> {
                     del1 = (TMLDelay)elt1;
                     del0 = (TMLDelay)elt0;
 
-                    if (del1.getUnit().equals(del0.getUnit())) {
+                    if (del1.getUnit().equals(del0.getUnit()) && (del1.getActiveDelay() == del0.getActiveDelay())) {
                         // We delete the second i.e. elt1
                         activity.removeElement(elt1);
 
@@ -2248,12 +2279,13 @@ public class TMLModeling<E> {
     }
 
 
+
     public void printWCETOfTasks() {
         String result = "";
         for(TMLTask task: tasks) {
-            result += "\tTask " + task.getTaskName() + ":" + task.getWorstCaseIComplexity() + "\n";
+            result += "\tTask " + task.getTaskName() + ". IComplexity: " + task.getWorstCaseIComplexity() + "\n";
         }
-        TraceManager.addDev("Worst Case I Complexity:\n" + result);
+        //TraceManager.addDev("Worst Case I Complexity:\n" + result);
     }
 
 
@@ -2306,6 +2338,7 @@ public class TMLModeling<E> {
 		}
         // Create the new task and its activity diagram
         TMLTask forkTask = new TMLTask("FORKTASK" + SEP1 + _ch.getName(), _ch.getReferenceObject(), null);
+		forkTask.setDaemon(true);
         TMLActivity forkActivity = forkTask.getActivityDiagram();
         addTask(forkTask);
 
@@ -2514,6 +2547,7 @@ public class TMLModeling<E> {
 		}
         // Create the new task and its activity diagram
         TMLTask joinTask = new TMLTask("JOINTASK" + SEP1 + _ch.getName(), _ch.getReferenceObject(), null);
+		joinTask.setDaemon(true);
         TMLActivity joinActivity = joinTask.getActivityDiagram();
         addTask(joinTask);
 
@@ -2686,6 +2720,9 @@ public class TMLModeling<E> {
 	for (TMLTask t: tasks) {
 	    s += t.toXML();
 	}
+	for(String p: pragmas) {
+	    s += "<PRAGMA value=\"" + p + "\" />\n";
+    }
 	for (TMLChannel c: channels) {
 	    s += c.toXML();
 	}
@@ -2698,5 +2735,173 @@ public class TMLModeling<E> {
 	s += "</TMLMODELING>\n";
 	return s;
     }
-    
+
+    public boolean equalSpec(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TMLModeling<?> that = (TMLModeling<?>) o;
+
+        if(!isTaskListEquals(tasks, that.tasks))
+            return false;
+
+        if(!isRequestListEquals(requests, that.requests))
+            return false;
+
+        if(!isEventListEquals(events, that.events))
+            return false;
+
+        if(!isChannelListEquals(channels, that.channels))
+            return false;
+
+        if(!isSecurityPatternListEquals(secPatterns, that.secPatterns))
+            return false;
+
+        return (new HashSet<>(securityPatterns).equals(new HashSet<>(that.securityPatterns)));
+    }
+
+
+    public  boolean isTaskListEquals(List<TMLTask> list1, List<TMLTask> list2){
+        if (list1 == null && list2 == null) {
+            return true;
+        }
+        //Only one of them is null
+        else if(list1 == null || list2 == null) {
+            return false;
+        }
+        else if(list1.size() != list2.size()) {
+            return false;
+        }
+
+        //copying to avoid rearranging original lists
+        list1 = new ArrayList<>(list1);
+        list2 = new ArrayList<>(list2);
+
+        Collections.sort(list1, Comparator.comparing(TMLTask::getName));
+        Collections.sort(list2, Comparator.comparing(TMLTask::getName));
+
+        boolean test;
+
+        for (int i = 0; i < list1.size(); i++) {
+            test =  list1.get(i).equalSpec(list2.get(i));
+            if (!test) return false;
+        }
+
+        return true;
+    }
+
+    public  boolean isRequestListEquals(List<TMLRequest> list1, List<TMLRequest> list2){
+        if (list1 == null && list2 == null) {
+            return true;
+        }
+        //Only one of them is null
+        else if(list1 == null || list2 == null) {
+            return false;
+        }
+        else if(list1.size() != list2.size()) {
+            return false;
+        }
+
+        //copying to avoid rearranging original lists
+        list1 = new ArrayList<>(list1);
+        list2 = new ArrayList<>(list2);
+
+        Collections.sort(list1, Comparator.comparing(TMLRequest::getName));
+        Collections.sort(list2, Comparator.comparing(TMLRequest::getName));
+
+        boolean test;
+
+        for (int i = 0; i < list1.size(); i++) {
+            test =  list1.get(i).equalSpec(list2.get(i));
+            if (!test) return false;
+        }
+
+        return true;
+    }
+
+
+    public  boolean isChannelListEquals(List<TMLChannel> list1, List<TMLChannel> list2){
+        if (list1 == null && list2 == null) {
+            return true;
+        }
+        //Only one of them is null
+        else if(list1 == null || list2 == null) {
+            return false;
+        }
+        else if(list1.size() != list2.size()) {
+            return false;
+        }
+
+        //copying to avoid rearranging original lists
+        list1 = new ArrayList<>(list1);
+        list2 = new ArrayList<>(list2);
+
+        Collections.sort(list1, Comparator.comparing(TMLChannel::getName));
+        Collections.sort(list2, Comparator.comparing(TMLChannel::getName));
+
+        boolean test;
+
+        for (int i = 0; i < list1.size(); i++) {
+            test =  list1.get(i).equalSpec(list2.get(i));
+            if (!test) return false;
+        }
+
+        return true;
+    }
+
+    public  boolean isEventListEquals(List<TMLEvent> list1, List<TMLEvent> list2) {
+        if (list1 == null && list2 == null) {
+            return true;
+        }
+        //Only one of them is null
+        else if (list1 == null || list2 == null) {
+            return false;
+        } else if (list1.size() != list2.size()) {
+            return false;
+        }
+
+        //copying to avoid rearranging original lists
+        list1 = new ArrayList<>(list1);
+        list2 = new ArrayList<>(list2);
+
+        Collections.sort(list1, Comparator.comparing(TMLEvent::getName));
+        Collections.sort(list2, Comparator.comparing(TMLEvent::getName));
+
+        boolean test;
+
+        for (int i = 0; i < list1.size(); i++) {
+            test = list1.get(i).equalSpec(list2.get(i));
+            if (!test) return false;
+        }
+
+        return true;
+    }
+
+    public boolean isSecurityPatternListEquals(List<SecurityPattern> list1, List<SecurityPattern> list2) {
+        if (list1 == null && list2 == null) {
+            return true;
+        }
+        //Only one of them is null
+        else if (list1 == null || list2 == null) {
+            return false;
+        } else if (list1.size() != list2.size()) {
+            return false;
+        }
+
+        //copying to avoid rearranging original lists
+        list1 = new ArrayList<>(list1);
+        list2 = new ArrayList<>(list2);
+
+        Collections.sort(list1, Comparator.comparing(SecurityPattern::getName));
+        Collections.sort(list2, Comparator.comparing(SecurityPattern::getName));
+
+        boolean test;
+
+        for (int i = 0; i < list1.size(); i++) {
+            test = list1.get(i).equalSpec(list2.get(i));
+            if (!test) return false;
+        }
+
+        return true;
+    }
+
 }

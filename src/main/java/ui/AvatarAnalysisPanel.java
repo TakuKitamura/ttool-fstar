@@ -71,7 +71,8 @@ public class AvatarAnalysisPanel extends TURTLEPanel {
         super(_mgui);
 
     	// Issue #41 Ordering of tabbed panes 
-        tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
+        //tabbedPane = GraphicLib.createTabbedPane();//new JTabbedPane();
+        tabbedPane = GraphicLib.createDraggableEnhancedTabbedPane(this);
 
         cl = new ChangeListener() {
         	@Override

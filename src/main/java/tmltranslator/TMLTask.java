@@ -63,6 +63,7 @@ public class TMLTask extends TMLElement {
     private Set<TMLEvent> eventsList;
     private int operationType;
     private String operation = "";
+    private boolean isDaemon;
     private String operationMEC;
     private boolean isAttacker;
 
@@ -80,6 +81,12 @@ public class TMLTask extends TMLElement {
     public void setRequested(boolean _b) {
         isRequested = _b;
     }
+
+    public void setDaemon(boolean _b) {
+        isDaemon = _b;
+    }
+
+    public boolean isDaemon() {return isDaemon;}
 
     public void setPriority(int _priority) {
         priority = _priority;
@@ -113,6 +120,16 @@ public class TMLTask extends TMLElement {
         attributes.add(_tmla);
     }
 
+
+    public void addAttributeIfApplicable(TMLAttribute _tmla) {
+        for(TMLAttribute att: attributes) {
+            if (att.getName().compareTo(_tmla.getName()) == 0) {
+                return;
+            }
+        }
+        attributes.add(_tmla);
+    }
+
     public List<TMLAttribute> getAttributes() {
         return attributes;
     }
@@ -126,6 +143,17 @@ public class TMLTask extends TMLElement {
             }
         }
         return false;
+    }
+
+    public TMLActivityElement getElementByID(int commandID) {
+        TMLActivityElement tmlae;
+        for (int i = 0; i < activity.nElements(); i++) {
+            tmlae = activity.get(i);
+            if (tmlae.getID() == commandID) {
+                return tmlae;
+            }
+        }
+        return null;
     }
 
     public String[] makeCommandIDs() {
@@ -229,6 +257,9 @@ public class TMLTask extends TMLElement {
     }
 
     public String getTaskName() {
+        if (getName().indexOf("__") == -1) {
+            return getName();
+        }
         return getName().split("__")[1];
     }
 
@@ -236,6 +267,15 @@ public class TMLTask extends TMLElement {
     public TMLActivity getActivityDiagram() {
         return activity;
     }
+
+    public void addElement(TMLActivityElement prev, TMLActivityElement succ) {
+        if (activity == null) {
+            return;
+        }
+        activity.addElement(succ);
+        prev.addNext(succ);
+    }
+
 
     public void setExit(boolean b) {
         mustExit = b;
@@ -356,9 +396,9 @@ public class TMLTask extends TMLElement {
         writeTMLChannelsList.add(_ch);
     }
 
-    public List<TMLChannel> getTMLChannels() {
+    /*public List<TMLChannel> getTMLChannels() {
         return new ArrayList<TMLChannel>(channelsList);
-    }
+    }*/
 
     public List<TMLChannel> getReadTMLChannels() {
         return new ArrayList<TMLChannel>(readTMLChannelsList);
@@ -416,14 +456,80 @@ public class TMLTask extends TMLElement {
 
 
     // returns -1 if the WC cannot be computed
-    // The function follows one path randomly and concatenate ExecI operators
+    // Loops are executed only one time
     public int getWorstCaseIComplexity() {
         if (activity == null) {
             return -1;
         }
         //TraceManager.addDev("Handling task:" + getTaskName());
         return activity.getWorstCaseIComplexity();
-
     }
+
+    // returns -1 if the WC cannot be computed
+    //  Loops are executed only one time
+    public int getWorstCaseDataSending(TMLChannel c) {
+        if (activity == null) {
+            return -1;
+        }
+        //TraceManager.addDev("Handling task:" + getTaskName());
+        return activity.getWorstCaseDataSending(c) * c.getSize();
+    }
+
+    // returns -1 if the WC cannot be computed
+    //  Loops are executed only one time
+    public int getWorstCaseDataReceiving(TMLChannel c) {
+        if (activity == null) {
+            return -1;
+        }
+        //TraceManager.addDev("Handling task:" + getTaskName());
+        return activity.getWorstCaseDataReceiving(c) * c.getSize();
+    }
+
+
+    public Set<TMLChannel> getChannelSet() {
+        return channelsList;
+    }
+
+    public Set<TMLChannel> getReadTMLChannelSet() {
+        return readTMLChannelsList;
+    }
+
+    public Set<TMLChannel> getWriteTMLChannelSet() {
+        return writeTMLChannelsList;
+    }
+
+    public Set<TMLEvent> getEventSet() {
+        return eventsList;
+    }
+
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof TMLTask)) return false;
+        if (!super.equalSpec(o)) return false;
+        TMLTask tmlTask = (TMLTask) o;
+        TMLComparingMethod comp = new TMLComparingMethod();
+        if (request != null) {
+            if (!request.equalSpec(tmlTask.getRequest())) return false;
+        } else {
+            if (tmlTask.getRequest() != null) return false;
+        }
+
+        if(!(new HashSet<>(attributes).equals(new HashSet<>(tmlTask.attributes))))
+            return false;
+        return operationType == tmlTask.operationType &&
+                isDaemon == tmlTask.isDaemon &&
+                isRequested == tmlTask.isRequested() &&
+                isAttacker == tmlTask.isAttacker &&
+                priority == tmlTask.getPriority() &&
+                Objects.equals(operation, tmlTask.operation) &&
+                Objects.equals(operationMEC, tmlTask.operationMEC) &&
+                mustExit == tmlTask.exits() &&
+                activity.equalSpec(tmlTask.activity) &&
+                comp.isTMLChannelSetEquals(channelsList, tmlTask.getChannelSet()) &&
+                comp.isTMLChannelSetEquals(readTMLChannelsList, tmlTask.getReadTMLChannelSet()) &&
+                comp.isTMLChannelSetEquals(writeTMLChannelsList, tmlTask.getWriteTMLChannelSet()) &&
+                comp.isTMLEventSetEquals(eventsList, tmlTask.getEventSet());
+    }
+
+
 
 }

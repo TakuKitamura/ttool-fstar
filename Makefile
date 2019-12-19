@@ -55,7 +55,7 @@ make ultraclean         Clean the repository from binaries and compilation artif
 make ttooljavac		Build TTool only with javac
 make ttoolnotest	Build TTool with gradle, but do not execute test. Performs the install
 make allnotest		Builld all apps, but do not execute tests. Performs the install
-make ttoolhelp		Generate the help of TTool in HTML format
+make internalhelp		Generate the help of TTool in HTML format
 
 
 Other targets:
@@ -201,12 +201,12 @@ $(WEBCRAWLER_SERVER_BINARY): FORCE
 $(JTTOOL_BINARY): FORCE
 	@$(MAKE) -C $(JTTOOL_DIR) -e $@
 
-ttoolhelp: html
+internalhelp: html
 
 html: $(MD2HTML)
 
 %.html: %.md
-	pandoc $< -f markdown -t html -s -o  $@
+	pandoc $< -f markdown -t html -s -o  $@ --lua-filter=doc/ttoolfilter.lua --metadata pagetitle="TTool help"
 
 # ======================================== 
 # ==========    DOCUMENTATION   ========== 
@@ -415,6 +415,7 @@ $(BASERELEASE:.tgz=.tar): $(JTTOOL_BINARY) $(TTOOL_BINARY) $(LAUNCHER_BINARY) $(
 	@cp  $(TTOOL_SIMULATORS)/c++2/Makefile.defs $(TTOOL_TARGET)/simulators/c++2
 	@cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/*.cpp $(TTOOL_TARGET)/simulators/c++2/src_simulator
 	@cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/*.h $(TTOOL_TARGET)/simulators/c++2/src_simulator
+	@cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/*.js $(TTOOL_TARGET)/simulators/c++2/src_simulator
 	@cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/app/*.cpp $(TTOOL_TARGET)/simulators/c++2/src_simulator/app
 	@cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/app/*.h $(TTOOL_TARGET)/simulators/c++2/src_simulator/app
 	@cp  $(TTOOL_SIMULATORS)/c++2/src_simulator/arch/*.cpp $(TTOOL_TARGET)/simulators/c++2/src_simulator/arch

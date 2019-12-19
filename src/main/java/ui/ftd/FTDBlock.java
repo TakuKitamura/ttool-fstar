@@ -145,7 +145,12 @@ public class FTDBlock extends TGCScalableWithInternalComponent implements Swallo
         if ((w < (2*textX + width)) && (h < height)) {
             drawSingleString(g, value, x + (width - w)/2, y + h);
         }
+        
+        // Icon
+        g.drawImage(scale(IconManager.imgic1100.getImage()), x + scale(4), y + scale(4), null);
+        //g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
     }
+    
     //@Override
     public void internalDrawin(Graphics g) {
         String ster = "<<" + stereotype + ">>";

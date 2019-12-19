@@ -101,7 +101,7 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
         initScaling(200,30);
         
         properties = new LinkedList<String>();
-        oldScaleFactor = tdp.getZoom();
+//        oldScaleFactor = tdp.getZoom();
 
         nbConnectingPoint = 0;
         //addTGConnectingPointsComment();
@@ -162,7 +162,7 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
             makeValue();
         }
 
-        //  int h  = g.getFontMetrics().getHeight();
+//         int h  = g.getFontMetrics().getHeight();
         Color c = g.getColor();
 
         if (!(this.tdp.isScaled())) {
@@ -206,7 +206,7 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
         g.setColor(Color.black);
 
         int i = 1;
-        Font heading = new Font("heading", Font.BOLD, 14);
+//        Font heading = new Font("heading", Font.BOLD, 14);
         //g.setFont(heading);
         drawSingleString(g, "Safety Pragmas", x + textX, y + textY + currentFontSize);
         g.setFont(fold);
@@ -272,12 +272,14 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
     public boolean editOndoubleClick(JFrame frame) {
         String oldValue = value;
 
-        JDialogSafetyPragma jdn = new JDialogSafetyPragma(frame, "Setting the safety pragmas", value);
+        AvatarBDPanel abdp = (AvatarBDPanel) tdp;
+        Map<String, List<String>> blockAttributeMap = abdp.getBlockStrings(true, true, true);
+        JDialogSafetyPragma jdn = new JDialogSafetyPragma(frame, "Setting the safety pragmas", value, blockAttributeMap);
         //jdn.setLocation(200, 150);
         jdn.setSize(500, 500);
         GraphicLib.centerOnParent(jdn);
-        AvatarBDPanel abdp = (AvatarBDPanel) tdp;
-        jdn.blockAttributeMap = abdp.getBlockStrings(true, true, true);
+
+        //jdn.blockAttributeMap = abdp.getBlockStrings(true, true, true);
         jdn.setVisible(true); // blocked until dialog has been closed
 
         String s = jdn.getText();

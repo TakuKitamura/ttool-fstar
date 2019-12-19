@@ -69,6 +69,7 @@ public class TMLComponentTaskDiagramToolBar extends TToolBar {
 		
         mgui.actions[TGUIAction.TMLCTD_EDIT].setEnabled(b);
         mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
+		mgui.actions[TGUIAction.TML_PRAGMA].setEnabled(b);
 		mgui.actions[TGUIAction.TMLCTD_CCOMPONENT].setEnabled(b);
 		mgui.actions[TGUIAction.TMLCTD_CREMOTECOMPONENT].setEnabled(b);
 		mgui.actions[TGUIAction.TMLCTD_CPORT].setEnabled(b);
@@ -88,16 +89,7 @@ public class TMLComponentTaskDiagramToolBar extends TToolBar {
 		mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
 		mgui.updateZoomInfo();
 		
-		
-        /*mgui.actions[TGUIAction.TMLTD_TASK].setEnabled(b);
-        mgui.actions[TGUIAction.TMLTD_CHANNEL].setEnabled(b);
-        mgui.actions[TGUIAction.TMLTD_EVENT].setEnabled(b);
-        mgui.actions[TGUIAction.TMLTD_REQ].setEnabled(b);
-        mgui.actions[TGUIAction.TMLTD_ASSOC].setEnabled(b);
-        mgui.actions[TGUIAction.TMLTD_CONNECTOR].setEnabled(b);
-        mgui.actions[TGUIAction.ACT_TOGGLE_CHANNELS].setEnabled(b);
-        mgui.actions[TGUIAction.ACT_TOGGLE_EVENTS].setEnabled(b);
-        mgui.actions[TGUIAction.ACT_TOGGLE_REQUESTS].setEnabled(b);*/
+
     }
     
     @Override
@@ -112,6 +104,11 @@ public class TMLComponentTaskDiagramToolBar extends TToolBar {
         button = this.add(mgui.actions[TGUIAction.UML_NOTE]);
         button.addMouseListener(mgui.mouseHandler);
         
+        this.addSeparator();
+
+        button = this.add(mgui.actions[TGUIAction.TML_PRAGMA]);
+        button.addMouseListener(mgui.mouseHandler);
+
         this.addSeparator();
         
         button = this.add(mgui.actions[TGUIAction.TMLCTD_CCOMPONENT]);

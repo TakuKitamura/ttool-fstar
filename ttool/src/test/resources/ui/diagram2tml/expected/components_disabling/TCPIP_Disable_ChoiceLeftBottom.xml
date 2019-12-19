@@ -136,7 +136,7 @@
 <NEXTACTIVITYELEMENT id="46" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLChoice" value="" id="29" name="choice">
-<CUSTOM  guards="[ tcpctrl__a>0 ];[ tcpctrl__a==0 ];"  />
+<CUSTOM  guards="[ tcpctrl__a&gt;0 ];[ tcpctrl__a==0 ];"  />
 <NEXTACTIVITYELEMENT id="48" />
 <NEXTACTIVITYELEMENT id="45" />
 </ACTIVITYELEMENT>
@@ -160,7 +160,7 @@
 <CUSTOM  />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLReadChannel" value="" id="34" name="read channel">
-<CUSTOM  nbOfSamples="1"  channels="AppC__fromPtoT "  />
+<CUSTOM  nbOfSamples="1"  channels="AppC__fromPtoT "  type="1"  />
 <NEXTACTIVITYELEMENT id="24" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLForLoop" value="" id="35" name="loop">
@@ -180,27 +180,27 @@
 <NEXTACTIVITYELEMENT id="29" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLReadChannel" value="" id="39" name="read channel">
-<CUSTOM  nbOfSamples="1"  channels="AppC__temp "  />
+<CUSTOM  nbOfSamples="1"  channels="AppC__temp "  type="2"  />
 <NEXTACTIVITYELEMENT id="16" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLWaitEvent" value="" id="40" name="wait event">
-<CUSTOM  event="AppC__timeOut__AppC__timeOut" params=""  />
+<CUSTOM  event="AppC__timeOut__AppC__timeOut" params=""  blocking="false"  />
 <NEXTACTIVITYELEMENT id="39" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLWaitEvent" value="" id="41" name="wait event">
-<CUSTOM  event="AppC__receive__AppC__receive" params=""  />
+<CUSTOM  event="AppC__receive__AppC__receive" params=""  blocking="false"  />
 <NEXTACTIVITYELEMENT id="34" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLWaitEvent" value="" id="42" name="wait event">
-<CUSTOM  event="AppC__close__AppC__close" params=""  />
+<CUSTOM  event="AppC__close__AppC__close" params=""  blocking="false"  />
 <NEXTACTIVITYELEMENT id="30" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLWaitEvent" value="" id="43" name="wait event">
-<CUSTOM  event="AppC__send_TCP__AppC__send_TCP" params=""  />
+<CUSTOM  event="AppC__send_TCP__AppC__send_TCP" params=""  blocking="false"  />
 <NEXTACTIVITYELEMENT id="31" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLWaitEvent" value="" id="44" name="wait event">
-<CUSTOM  event="AppC__open__AppC__open" params=""  />
+<CUSTOM  event="AppC__open__AppC__open" params=""  blocking="false"  />
 <NEXTACTIVITYELEMENT id="28" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLSelectEvt" value="" id="45" name="select">
@@ -218,18 +218,18 @@
 <CUSTOM  />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLWaitEvent" value="" id="48" name="wait event">
-<CUSTOM  event="AppC__abort__AppC__abort" params=""  />
+<CUSTOM  event="AppC__abort__AppC__abort" params=""  blocking="false"  />
 <NEXTACTIVITYELEMENT id="49" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLStopState" value="" id="49" name="stop state">
 <CUSTOM  />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLReadChannel" value="" id="50" name="read channel">
-<CUSTOM  nbOfSamples="1"  channels="AppC__fromAtoT "  />
+<CUSTOM  nbOfSamples="1"  channels="AppC__fromAtoT "  type="1"  />
 <NEXTACTIVITYELEMENT id="26" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLWriteChannel" value="" id="51" name="write channel">
-<CUSTOM  nbOfSamples="1"  channels="AppC__fromTtoP "  />
+<CUSTOM  nbOfSamples="1"  channels="AppC__fromTtoP "  type="1"  />
 <NEXTACTIVITYELEMENT id="89" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLStopState" value="" id="52" name="stop state">
@@ -247,7 +247,7 @@
 <NEXTACTIVITYELEMENT id="76" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLWriteChannel" value="" id="56" name="write channel">
-<CUSTOM  nbOfSamples="1"  channels="AppC__fromTtoP "  />
+<CUSTOM  nbOfSamples="1"  channels="AppC__fromTtoP "  type="1"  />
 <NEXTACTIVITYELEMENT id="92" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLActionState" value="" id="57" name="action">
@@ -258,11 +258,11 @@
 <CUSTOM  />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLWriteChannel" value="" id="59" name="write channel">
-<CUSTOM  nbOfSamples="1"  channels="AppC__fromTtoP "  />
+<CUSTOM  nbOfSamples="1"  channels="AppC__fromTtoP "  type="1"  />
 <NEXTACTIVITYELEMENT id="91" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLWriteChannel" value="" id="60" name="write channel">
-<CUSTOM  nbOfSamples="1"  channels="AppC__fromTtoP "  />
+<CUSTOM  nbOfSamples="1"  channels="AppC__fromTtoP "  type="1"  />
 <NEXTACTIVITYELEMENT id="90" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLStopState" value="" id="61" name="stop state">
@@ -276,7 +276,7 @@
 <CUSTOM  />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLWriteChannel" value="" id="64" name="write channel">
-<CUSTOM  nbOfSamples="1"  channels="AppC__fromTtoP "  />
+<CUSTOM  nbOfSamples="1"  channels="AppC__fromTtoP "  type="1"  />
 <NEXTACTIVITYELEMENT id="94" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLActionState" value="" id="65" name="action">
@@ -291,7 +291,7 @@
 <CUSTOM  />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLWriteChannel" value="" id="68" name="write channel">
-<CUSTOM  nbOfSamples="1"  channels="AppC__fromTtoP "  />
+<CUSTOM  nbOfSamples="1"  channels="AppC__fromTtoP "  type="1"  />
 <NEXTACTIVITYELEMENT id="95" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLActionState" value="" id="69" name="action">
@@ -302,7 +302,7 @@
 <CUSTOM  />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLWriteChannel" value="" id="71" name="write channel">
-<CUSTOM  nbOfSamples="1"  channels="AppC__fromTtoP "  />
+<CUSTOM  nbOfSamples="1"  channels="AppC__fromTtoP "  type="1"  />
 <NEXTACTIVITYELEMENT id="96" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLActionState" value="" id="72" name="action">
@@ -313,7 +313,7 @@
 <CUSTOM  />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLWriteChannel" value="" id="74" name="write channel">
-<CUSTOM  nbOfSamples="1"  channels="AppC__fromTtoP "  />
+<CUSTOM  nbOfSamples="1"  channels="AppC__fromTtoP "  type="1"  />
 <NEXTACTIVITYELEMENT id="93" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLStopState" value="" id="75" name="stop state">
@@ -324,7 +324,7 @@
 <NEXTACTIVITYELEMENT id="77" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLWriteChannel" value="" id="77" name="write channel">
-<CUSTOM  nbOfSamples="1"  channels="AppC__temp "  />
+<CUSTOM  nbOfSamples="1"  channels="AppC__temp "  type="2"  />
 <NEXTACTIVITYELEMENT id="78" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLStopState" value="" id="78" name="stop state">
@@ -335,7 +335,7 @@
 <NEXTACTIVITYELEMENT id="80" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLWriteChannel" value="" id="80" name="write channel">
-<CUSTOM  nbOfSamples="1"  channels="AppC__temp "  />
+<CUSTOM  nbOfSamples="1"  channels="AppC__temp "  type="2"  />
 <NEXTACTIVITYELEMENT id="52" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLSendRequest" value="" id="81" name="send request">
@@ -343,7 +343,7 @@
 <NEXTACTIVITYELEMENT id="82" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLWriteChannel" value="" id="82" name="write channel">
-<CUSTOM  nbOfSamples="1"  channels="AppC__temp "  />
+<CUSTOM  nbOfSamples="1"  channels="AppC__temp "  type="2"  />
 <NEXTACTIVITYELEMENT id="58" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLSendRequest" value="" id="83" name="send request">
@@ -351,7 +351,7 @@
 <NEXTACTIVITYELEMENT id="84" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLWriteChannel" value="" id="84" name="write channel">
-<CUSTOM  nbOfSamples="1"  channels="AppC__temp "  />
+<CUSTOM  nbOfSamples="1"  channels="AppC__temp "  type="2"  />
 <NEXTACTIVITYELEMENT id="54" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLActionState" value="" id="85" name="action">
@@ -371,35 +371,35 @@
 <NEXTACTIVITYELEMENT id="60" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLSendEvent" value="" id="89" name="send event">
-<CUSTOM  event="AppC__send__AppC__send" params=""  />
+<CUSTOM  event="AppC__send__AppC__send" params=""  blocking="false"  />
 <NEXTACTIVITYELEMENT id="79" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLSendEvent" value="" id="90" name="send event">
-<CUSTOM  event="AppC__send__AppC__send" params=""  />
+<CUSTOM  event="AppC__send__AppC__send" params=""  blocking="false"  />
 <NEXTACTIVITYELEMENT id="57" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLSendEvent" value="" id="91" name="send event">
-<CUSTOM  event="AppC__send__AppC__send" params=""  />
+<CUSTOM  event="AppC__send__AppC__send" params=""  blocking="false"  />
 <NEXTACTIVITYELEMENT id="53" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLSendEvent" value="" id="92" name="send event">
-<CUSTOM  event="AppC__send__AppC__send" params=""  />
+<CUSTOM  event="AppC__send__AppC__send" params=""  blocking="false"  />
 <NEXTACTIVITYELEMENT id="55" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLSendEvent" value="" id="93" name="send event">
-<CUSTOM  event="AppC__send__AppC__send" params=""  />
+<CUSTOM  event="AppC__send__AppC__send" params=""  blocking="false"  />
 <NEXTACTIVITYELEMENT id="75" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLSendEvent" value="" id="94" name="send event">
-<CUSTOM  event="AppC__send__AppC__send" params=""  />
+<CUSTOM  event="AppC__send__AppC__send" params=""  blocking="false"  />
 <NEXTACTIVITYELEMENT id="65" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLSendEvent" value="" id="95" name="send event">
-<CUSTOM  event="AppC__send__AppC__send" params=""  />
+<CUSTOM  event="AppC__send__AppC__send" params=""  blocking="false"  />
 <NEXTACTIVITYELEMENT id="69" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLSendEvent" value="" id="96" name="send event">
-<CUSTOM  event="AppC__send__AppC__send" params=""  />
+<CUSTOM  event="AppC__send__AppC__send" params=""  blocking="false"  />
 <NEXTACTIVITYELEMENT id="72" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLStopState" value="" id="97" name="stop state">
@@ -409,7 +409,7 @@
 <CUSTOM  />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLWriteChannel" value="" id="99" name="write channel">
-<CUSTOM  nbOfSamples="1"  channels="AppC__fromTtoP "  />
+<CUSTOM  nbOfSamples="1"  channels="AppC__fromTtoP "  type="1"  />
 <NEXTACTIVITYELEMENT id="100" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLActionState" value="" id="100" name="action">
@@ -424,7 +424,7 @@
 <NEXTACTIVITYELEMENT id="101" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLSendEvent" value="" id="103" name="send event">
-<CUSTOM  event="AppC__send__AppC__send" params=""  />
+<CUSTOM  event="AppC__send__AppC__send" params=""  blocking="false"  />
 <NEXTACTIVITYELEMENT id="102" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLStopState" value="" id="104" name="stop state">
@@ -434,34 +434,34 @@
 <CUSTOM  />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLWriteChannel" value="" id="106" name="write channel">
-<CUSTOM  nbOfSamples="1"  channels="AppC__fromTtoA "  />
+<CUSTOM  nbOfSamples="1"  channels="AppC__fromTtoA "  type="1"  />
 <NEXTACTIVITYELEMENT id="138" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLWriteChannel" value="" id="107" name="write channel">
-<CUSTOM  nbOfSamples="1"  channels="AppC__fromTtoP "  />
+<CUSTOM  nbOfSamples="1"  channels="AppC__fromTtoP "  type="1"  />
 <NEXTACTIVITYELEMENT id="111" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLSendEvent" value="" id="108" name="send event">
-<CUSTOM  event="AppC__stop__AppC__stop" params=""  />
+<CUSTOM  event="AppC__stop__AppC__stop" params=""  blocking="false"  />
 <NEXTACTIVITYELEMENT id="139" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLWriteChannel" value="" id="109" name="write channel">
-<CUSTOM  nbOfSamples="1"  channels="AppC__fromTtoP "  />
+<CUSTOM  nbOfSamples="1"  channels="AppC__fromTtoP "  type="1"  />
 <NEXTACTIVITYELEMENT id="112" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLStopState" value="" id="110" name="stop state">
 <CUSTOM  />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLSendEvent" value="" id="111" name="send event">
-<CUSTOM  event="AppC__send__AppC__send" params=""  />
+<CUSTOM  event="AppC__send__AppC__send" params=""  blocking="false"  />
 <NEXTACTIVITYELEMENT id="105" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLSendEvent" value="" id="112" name="send event">
-<CUSTOM  event="AppC__send__AppC__send" params=""  />
+<CUSTOM  event="AppC__send__AppC__send" params=""  blocking="false"  />
 <NEXTACTIVITYELEMENT id="113" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLWriteChannel" value="" id="113" name="write channel">
-<CUSTOM  nbOfSamples="1"  channels="AppC__temp "  />
+<CUSTOM  nbOfSamples="1"  channels="AppC__temp "  type="2"  />
 <NEXTACTIVITYELEMENT id="110" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLStopState" value="" id="114" name="stop state">
@@ -500,7 +500,7 @@
 <NEXTACTIVITYELEMENT id="122" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLWriteChannel" value="" id="124" name="write channel">
-<CUSTOM  nbOfSamples="1"  channels="AppC__fromTtoP "  />
+<CUSTOM  nbOfSamples="1"  channels="AppC__fromTtoP "  type="1"  />
 <NEXTACTIVITYELEMENT id="129" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLStopState" value="" id="125" name="stop state">
@@ -511,7 +511,7 @@
 <NEXTACTIVITYELEMENT id="127" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLWriteChannel" value="" id="127" name="write channel">
-<CUSTOM  nbOfSamples="1"  channels="AppC__temp "  />
+<CUSTOM  nbOfSamples="1"  channels="AppC__temp "  type="2"  />
 <NEXTACTIVITYELEMENT id="130" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLActionState" value="" id="128" name="action">
@@ -519,7 +519,7 @@
 <NEXTACTIVITYELEMENT id="124" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLSendEvent" value="" id="129" name="send event">
-<CUSTOM  event="AppC__send__AppC__send" params=""  />
+<CUSTOM  event="AppC__send__AppC__send" params=""  blocking="false"  />
 <NEXTACTIVITYELEMENT id="126" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLActionState" value="" id="130" name="action">
@@ -527,7 +527,7 @@
 <NEXTACTIVITYELEMENT id="125" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLWriteChannel" value="" id="131" name="write channel">
-<CUSTOM  nbOfSamples="1"  channels="AppC__fromTtoP "  />
+<CUSTOM  nbOfSamples="1"  channels="AppC__fromTtoP "  type="1"  />
 <NEXTACTIVITYELEMENT id="134" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLActionState" value="" id="132" name="action">
@@ -538,7 +538,7 @@
 <CUSTOM  />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLSendEvent" value="" id="134" name="send event">
-<CUSTOM  event="AppC__send__AppC__send" params=""  />
+<CUSTOM  event="AppC__send__AppC__send" params=""  blocking="false"  />
 <NEXTACTIVITYELEMENT id="132" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLStopState" value="" id="135" name="stop state">
@@ -551,11 +551,11 @@
 <CUSTOM  />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLSendEvent" value="" id="138" name="send event">
-<CUSTOM  event="AppC__receive_Application__AppC__receive_Application" params=""  />
+<CUSTOM  event="AppC__receive_Application__AppC__receive_Application" params=""  blocking="false"  />
 <NEXTACTIVITYELEMENT id="6" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLReadChannel" value="" id="139" name="read channel">
-<CUSTOM  nbOfSamples="1"  channels="AppC__temp "  />
+<CUSTOM  nbOfSamples="1"  channels="AppC__temp "  type="2"  />
 <NEXTACTIVITYELEMENT id="5" />
 </ACTIVITYELEMENT>
 </ACTIVITY>

@@ -69,6 +69,12 @@ public:
 	SimComponents(int iHashValue);
 	///Destructor
 	virtual	~SimComponents();
+	///Add name of model
+	/**
+	\param msg is the name of model
+	*/
+	inline void addModelName(std::string msg) {_modelName=msg;}
+        inline std::string getModelName() {return _modelName;}
 	///Add a task
 	/**
 	\param iTask Pointer to task
@@ -94,6 +100,11 @@ public:
 	\param iCPU Pointer to CPU
 	*/
 	void addCPU(CPU* iCPU);
+	///Add a FPGA
+	/**
+	\param iFPGA Pointer to FPGA
+	*/
+	void addFPGA(FPGA* iFPGA);
 	///Add a bus
 	/**
 	\param iBus Pointer to bus
@@ -141,6 +152,12 @@ public:
 	\return Pointer to that CPU
 	*/
 	SchedulableDevice* getCPUByName(const std::string& iCPU) const;
+	///Searches for a FPGA based on its name
+	/**
+	\param iFPGA Name of the FPGA
+	\return Pointer to that FPGA
+	*/
+	SchedulableDevice* getFPGAByName(const std::string& iFPGA) const;
 	///Searches for a Task based on its name
 	/**
 	\param iTask Name of the Task
@@ -171,6 +188,12 @@ public:
 	\return Pointer to that CPU
 	*/
 	SchedulableDevice* getCPUByID(ID iID) const;
+	///Searches for a FPGA based on its name
+	/**
+	\param iID ID of the FPGA
+	\return Pointer to that FPGA
+	*/
+	SchedulableDevice* getFPGAByID(ID iID) const;
 	///Searches for a Task based on its name
 	/**
 	\param iID ID of the Task
@@ -200,6 +223,11 @@ public:
 	\return Const iterator for CPU list
 	*/	
 	inline const CPUList& getCPUList() const{return _cpuList;}
+	///Returns an iterator for the internal FPGA list
+	/**
+	\return Const iterator for FPGA list
+	*/	
+	inline const FPGAList& getFPGAList() const{return _fpgaList;}
 	///Returns an iterator for the internal bus list
 	/**
 	\return Const iterator for bus list
@@ -243,6 +271,7 @@ public:
 	\return Const iterator for task list
 	*/
 	inline const TaskList& getTaskList() const{return _taskList;}
+	inline const TaskList& getNonDaemonTaskList() const{return _nonDaemonTaskList;}
 #ifdef EBRDD_ENABLED
 	///Returns an iterator for the internal EBRDD list
 	/**
@@ -288,11 +317,14 @@ public:
 	virtual void generateTEPEs()=0;
 	void showTaskStates();
 	bool couldCPUBeIdle(CPU* iCPU);
+	bool couldFPGABeIdle(FPGA* iFPGA);
 protected:
 	///Pointer to simulator
 	Simulator* _simulator;
 	///List holding CPUs
 	CPUList _cpuList;
+	///List holding FPGAs
+	FPGAList _fpgaList;
 	///List holding schedulable communication devices
 	BusList _busList;
 	///List holding traceable devices
@@ -303,10 +335,14 @@ protected:
 	SlaveList _slList;
 	///List holding tasks
 	TaskList _taskList;
+	///List holding non daemon tasks
+        TaskList _nonDaemonTaskList;
 	///List holding channels
 	ChannelList _channelList;
 	///TEPE listener listener
 	TEPEListenerList _tepeListenerList;
+        ///name of model
+	std::string _modelName;
 #ifdef EBRDD_ENABLED
 	///List holding EBRDDs
 	EBRDDList _ebrddList;

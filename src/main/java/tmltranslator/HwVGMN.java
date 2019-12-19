@@ -63,4 +63,12 @@ public class HwVGMN extends HwCommunicationNode  {
 	return s;
     }
 
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof HwVGMN)) return false;
+        if (!super.equalSpec(o)) return false;
+
+        HwVGMN hwVGMN = (HwVGMN) o;
+        return byteDataSize == hwVGMN.byteDataSize;
+    }
+
 }

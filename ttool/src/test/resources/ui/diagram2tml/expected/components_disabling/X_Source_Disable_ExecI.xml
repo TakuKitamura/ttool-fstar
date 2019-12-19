@@ -7,7 +7,7 @@
 <CUSTOM  />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLWriteChannel" value="" id="2" name="write channel">
-<CUSTOM  nbOfSamples="size"  channels="Zigbee_TX__Source_ch_out__Zigbee_TX__symbol2ChipSeq_ch_in "  />
+<CUSTOM  nbOfSamples="size"  channels="Zigbee_TX__Source_ch_out__Zigbee_TX__symbol2ChipSeq_ch_in "  type="0"  />
 <NEXTACTIVITYELEMENT id="1" />
 </ACTIVITYELEMENT>
 <ACTIVITYELEMENT type="tmltranslator.TMLActionState" value="" id="3" name="action reading args">

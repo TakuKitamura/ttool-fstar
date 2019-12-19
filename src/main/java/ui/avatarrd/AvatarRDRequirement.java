@@ -560,6 +560,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
                         newSizeForSon(null);
                     }
                     setValue(s);
+                    return true;
                 }
 
                 if (!(tdp.actionOnDoubleClick(this))) {

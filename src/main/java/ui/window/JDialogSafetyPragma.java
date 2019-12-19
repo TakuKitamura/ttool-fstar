@@ -77,14 +77,15 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
     protected JMenuBar menuBar;
     protected JMenu help;
     protected JPopupMenu helpPopup;
-    public Map<String, List<String>> blockAttributeMap = new HashMap<String, List<String>>();
+    private Map<String, List<String>> blockAttributeMap;
 
     /*
      * Creates new form
      */
-    public JDialogSafetyPragma(Frame f, String title, String _text) {
+    public JDialogSafetyPragma(Frame f, String title, String _text, Map<String, List<String>> blockAttributeMap) {
         super(f, title, true);
         text = _text;
+        this.blockAttributeMap = blockAttributeMap;
 
         initComponents();
         pack();
@@ -365,6 +366,15 @@ public class JDialogSafetyPragma extends JDialogBase implements ActionListener {
                 help();
             }
         });
+
+        helpPopup.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "closeJlabel");
+        helpPopup.getActionMap().put("closeJlabel", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                helpPopup.setVisible(false);
+            }
+        });
+
         JPanel jp = new JPanel();
         jp.add(cancel);
         jp.add(close);

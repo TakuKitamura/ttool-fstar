@@ -52,6 +52,7 @@
 #include <SimComponents.h>
 #include <TMLStopCommand.h>
 #include <TMLRandomCommand.h>
+#include <TMLDelayCommand.h>
 
 std::list<TMLCommand*> TMLCommand::_instanceList;
 SimComponents* TMLCommand::_simComp=0;
@@ -111,7 +112,7 @@ TMLCommand* TMLCommand::prepare(bool iInit){
     _task->setCurrCommand(aNextCommand);
     if (aNextCommand==0){
       return 0;
-    }else{
+    } else {
       //std::cout << "Prepare command, prepare next command" << std::endl;
       return aNextCommand->prepare(false);
     }
@@ -138,6 +139,7 @@ TMLCommand* TMLCommand::prepare(bool iInit){
       if (_progress==0){
 #ifdef LISTENERS_ENABLED
         NOTIFY_CMD_ENTERED(this);
+	//std::cout<<"command is------"<<this->toString()<<std::endl;
 #else
 #ifdef EXPLO_ENABLED
         if (dynamic_cast<IndeterminismSource*>(this)!=0) NOTIFY_CMD_ENTERED(this);
@@ -169,76 +171,76 @@ TMLCommand* TMLCommand::prepare(bool iInit){
       #endif*/
     return result;
   }
-    return 0;
-  }
+  return 0;
+}
 
-    TMLCommand** TMLCommand::getNextCommands(unsigned int& oNbOfCmd) const{
-    //returned number is not correct for composite choice/choice commands and composite action/choice commands !!!!
-    oNbOfCmd=_nbOfNextCmds;
-    return _nextCommand;
-  }
+TMLCommand** TMLCommand::getNextCommands(unsigned int& oNbOfCmd) const{
+  //returned number is not correct for composite choice/choice commands and composite action/choice commands !!!!
+  oNbOfCmd=_nbOfNextCmds;
+  return _nextCommand;
+}
 
-    std::string TMLCommand::toString() const{
-    std::ostringstream outp;
-    outp << _task->toString() << " len:" << _length << " progress:" << _progress << " ID:" << _ID;
-    return outp.str();
-  }
+std::string TMLCommand::toString() const{
+  std::ostringstream outp;
+  outp << _task->toString() << " len:" << _length << " progress:" << _progress << " ID:" << _ID;
+  return outp.str();
+}
 
-    void TMLCommand::setBreakpoint(GeneralListener* iBreakp){
-    removeBreakpoint();
-    _breakpoint=iBreakp;
-    registerListener(iBreakp);
-  }
+void TMLCommand::setBreakpoint(GeneralListener* iBreakp){
+  removeBreakpoint();
+  _breakpoint=iBreakp;
+  registerListener(iBreakp);
+}
 
-    void TMLCommand::removeBreakpoint(){
-    if (_breakpoint!=0){
+void TMLCommand::removeBreakpoint(){
+  if (_breakpoint!=0){
     removeListener(_breakpoint);
     delete _breakpoint;
     _breakpoint=0;
   }
-  }
+}
 
-    std::ostream& TMLCommand::writeObject(std::ostream& s){
-    WRITE_STREAM(s,_progress);
+std::ostream& TMLCommand::writeObject(std::ostream& s){
+  WRITE_STREAM(s,_progress);
 #ifdef DEBUG_SERIALIZE
-    std::cout << "Write: TMLCommand " << _ID << " progress: " << _progress << std::endl;
+  std::cout << "Write: TMLCommand " << _ID << " progress: " << _progress << std::endl;
 #endif
-    /*#ifdef SAVE_BENCHMARK_VARS
-      WRITE_STREAM(s, _execTimes);
-      #endif*/
-    return s;
-  }
+  /*#ifdef SAVE_BENCHMARK_VARS
+    WRITE_STREAM(s, _execTimes);
+    #endif*/
+  return s;
+}
 
-    std::istream& TMLCommand::readObject(std::istream& s){
-    READ_STREAM(s,_progress);
+  std::istream& TMLCommand::readObject(std::istream& s){
+  READ_STREAM(s,_progress);
 #ifdef DEBUG_SERIALIZE
-    std::cout << "Read: TMLCommand " << _ID << " progress: " << _progress << std::endl;
+  std::cout << "Read: TMLCommand " << _ID << " progress: " << _progress << std::endl;
 #endif
-    /*#ifdef SAVE_BENCHMARK_VARS
-      READ_STREAM(s, _execTimes);
-      #endif*/
+  /*#ifdef SAVE_BENCHMARK_VARS
+    READ_STREAM(s, _execTimes);
+    #endif*/
 #ifdef STATE_HASH_ENABLED
-    if (_liveVarList!=0) _task->refreshStateHash(_liveVarList);
+  if (_liveVarList!=0) _task->refreshStateHash(_liveVarList);
 #endif
-    //std::cout << "End Read Object TMLCommand " << _ID << std::endl;
-    return s;
-  }
+  //std::cout << "End Read Object TMLCommand " << _ID << std::endl;
+  return s;
+}
 
-    void TMLCommand::reset(){
-    _progress=0;
-    //if (_currTransaction!=0) delete _currTransaction; NEW
-    _currTransaction=0;
-    _commandStartTime=-1;
-    //_execTimes=0;
-    //_stateHashes.clear();
-  }
+  void TMLCommand::reset(){
+  _progress=0;
+  //if (_currTransaction!=0) delete _currTransaction; NEW
+  _currTransaction=0;
+  _commandStartTime=-1;
+  //_execTimes=0;
+  //_stateHashes.clear();
+}
 
-    void TMLCommand::registerGlobalListener(GeneralListener* iListener){
-    std::cout << "Global cmd listener created \n";
-    for(std::list<TMLCommand*>::const_iterator i=_instanceList.begin(); i != _instanceList.end(); ++i){
-    (*i)->registerListener(iListener);
+  void TMLCommand::registerGlobalListener(GeneralListener* iListener){
+  //std::cout << "Global cmd listener created \n";
+  for(std::list<TMLCommand*>::const_iterator i=_instanceList.begin(); i != _instanceList.end(); ++i){
+  (*i)->registerListener(iListener);
   }
-  }
+}
 
     template<typename T>
       void TMLCommand::registerGlobalListenerForType(GeneralListener* iListener, TMLTask* aTask){

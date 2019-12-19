@@ -44,11 +44,13 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLCommand.h>
 #include <TMLRandomChoiceCommand.h>
 #include <TMLActionCommand.h>
+#include <TMLDelayCommand.h>
 #include <TMLNotifiedCommand.h>
 #include <TMLWaitCommand.h>
 #include <TMLTask.h>
 #include <dlfcn.h>
 #include <CPU.h>
+#include <FPGA.h>
 #define COND_SOURCE_FILE_NAME "newlib.c"
 #define COND_OBJ_FILE_NAME "newlib.o"
 
@@ -60,12 +62,16 @@ bool CondBreakpoint::_enabled=true;
 //************************************************************************
 RunXTransactions::RunXTransactions(SimComponents* iSimComp, unsigned int iTransToExecute):_simComp(iSimComp), _count(0), _transToExecute(iTransToExecute){
 	for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i)
-		(*i)->registerListener(this);	
+		(*i)->registerListener(this);
+	for(FPGAList::const_iterator j=_simComp->getFPGAList().begin(); j != _simComp->getFPGAList().end(); ++j)
+        (*j)->registerListener(this);
 }
 
 RunXTransactions::~RunXTransactions(){
 	for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i)
 		(*i)->removeListener(this);
+    for(FPGAList::const_iterator j=_simComp->getFPGAList().begin(); j != _simComp->getFPGAList().end(); ++j)
+        (*j)->removeListener(this);
 }
 
 void RunXTransactions::transExecuted(TMLTransaction* iTrans, ID iID){
@@ -205,6 +211,7 @@ RunTillNextRandomChoice::RunTillNextRandomChoice(SimComponents* iSimComp):_simCo
 }
 
 void RunTillNextRandomChoice::commandEntered(TMLCommand* iComm, ID iID){
+  //std::cout<<"run ill next random choice!!!stop change"<<std::endl;
 	IndeterminismSource* aChoice=dynamic_cast<IndeterminismSource*>(iComm);
 	if (_enabled && aChoice!=0 ){
 		_simComp->setStopFlag(true, MSG_RANDOMCHOICE);
@@ -247,12 +254,16 @@ void RunXCommands::setCmdsToExecute(unsigned int iCommandsToExecute){
 //************************************************************************
 RunXTimeUnits::RunXTimeUnits(SimComponents* iSimComp, TMLTime iEndTime):_simComp(iSimComp), _endTime(iEndTime){
 	for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i)
-		(*i)->registerListener(this);	
+		(*i)->registerListener(this);
+    for(FPGAList::const_iterator j=_simComp->getFPGAList().begin(); j != _simComp->getFPGAList().end(); ++j)
+		(*j)->registerListener(this);
 }
 
 RunXTimeUnits::~RunXTimeUnits(){
 	for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i)
 		(*i)->removeListener(this);
+    for(FPGAList::const_iterator j=_simComp->getFPGAList().begin(); j != _simComp->getFPGAList().end(); ++j)
+        (*j)->removeListener(this);
 }
 
 void RunXTimeUnits::transExecuted(TMLTransaction* iTrans, ID iID){

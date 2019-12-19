@@ -127,7 +127,7 @@ public class Print extends Command  {
                 return null;
             }
         };
-        subcommands.add(tabs);
+        addAndSortSubcommand(tabs);
 
     }
 

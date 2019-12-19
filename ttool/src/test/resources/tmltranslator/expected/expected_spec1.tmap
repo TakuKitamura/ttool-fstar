@@ -1,0 +1,22 @@
+TMLSPEC
+    #include "spec.tml"
+ENDTMLSPEC
+
+TMLARCHI
+    #include "spec.tarchi"
+ENDTMLARCHI
+
+TMLMAPPING
+    MAP CPU0 Application__PrimitiveComp1
+    SET Application__PrimitiveComp1 priority 0
+    MAP CPU0 Application__PrimitiveComp2
+    SET Application__PrimitiveComp2 priority 0
+    MAP CPU0 Application__PrimitiveComp3
+    SET Application__PrimitiveComp3 priority 0
+    MAP CPU0 Application__PrimitiveComp4
+    SET Application__PrimitiveComp4 priority 0
+    MAP CPU0 Application__PrimitiveComp5
+    SET Application__PrimitiveComp5 priority 0
+    MAP CPU0 Application__PrimitiveComp6
+    SET Application__PrimitiveComp6 priority 0
+ENDTMLMAPPING

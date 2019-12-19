@@ -91,17 +91,25 @@ public class Header {
 	
 	public static String getClusterHeader(SysCAMSTCluster cluster) {
 		 if (cluster != null) {
-			 LinkedList<SysCAMSTBlockTDF> blocks = cluster.getBlockTDF();
-			 
-			 headerCluster = "#include <systemc-ams>" + CR;
+		      headerCluster = "#include <systemc-ams>" + CR;
+		      LinkedList<SysCAMSTBlockTDF> blocks = cluster.getBlockTDF();			 			
 			 
 			 for (SysCAMSTBlockTDF b : blocks) {
-				 headerCluster = headerCluster + "#include \"" + b.getName() + ".h\"" + CR;
+			     headerCluster = headerCluster + "#include \"generated_H/" + b.getName() + ".h\"" + CR;//modification DG
 			 }
+
+			 //ajoute DG
+	 LinkedList<SysCAMSTBlockDE> blocksDE = cluster.getBlockDE();
+			 					 
+			 for (SysCAMSTBlockDE b : blocksDE) {
+			     headerCluster = headerCluster + "#include \"generated_H/" + b.getName() + ".h\"" + CR;//DG
+			 }
+			 
 			 headerCluster = headerCluster + CR;
 		 } else {
 			 headerCluster = "";
 		 }
+		
 		 return headerCluster;
-	} 
+	}
 }

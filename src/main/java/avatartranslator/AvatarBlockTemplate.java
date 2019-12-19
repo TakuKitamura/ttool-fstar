@@ -37,21 +37,21 @@
  */
 
 
-
-
-
 package avatartranslator;
 
 import myutil.TraceManager;
+
+import java.util.Vector;
 
 /**
  * Class AvatarBlockTemplate
  * Templates of AVATAR blocks (Timers, etc.)
  * Creation: 09/07/2010
- * @version 1.0 09/07/2010
+ *
  * @author Ludovic APVRILLE
+ * @version 2.0 14/11/2019
  */
-public class AvatarBlockTemplate  {
+public class AvatarBlockTemplate {
 
     public AvatarBlockTemplate() {
     }
@@ -69,7 +69,7 @@ public class AvatarBlockTemplate  {
         AvatarSignal set = new AvatarSignal("set", AvatarSignal.IN, _referenceBlock);
         AvatarSignal reset = new AvatarSignal("reset", AvatarSignal.IN, _referenceBlock);
         AvatarSignal expire = new AvatarSignal("expire", AvatarSignal.OUT, _referenceBlock);
-        
+
         AvatarAttribute val = new AvatarAttribute("value", AvatarType.INTEGER, ab, aa.getReferenceObject());
         set.addParameter(val);
         ab.addSignal(set);
@@ -132,7 +132,8 @@ public class AvatarBlockTemplate  {
 
     }
 
-    public static AvatarTransition makeAvatarEmptyTransitionBetween(AvatarBlock _block, AvatarStateMachine _asm, AvatarStateMachineElement _elt1, AvatarStateMachineElement _elt2, Object _reference) {
+    public static AvatarTransition makeAvatarEmptyTransitionBetween(AvatarBlock _block, AvatarStateMachine _asm,
+                                                                    AvatarStateMachineElement _elt1, AvatarStateMachineElement _elt2, Object _reference) {
         AvatarTransition at = new AvatarTransition(_block, "tr", _reference);
 
         _asm.addElement(at);
@@ -143,172 +144,400 @@ public class AvatarBlockTemplate  {
         return at;
     }
 
-    
+
     // WARNING: Does not handle the non blocking case
     public static AvatarBlock getFifoBlock(String _name, AvatarSpecification _avspec, AvatarRelation _ar, Object _referenceRelation, AvatarSignal _sig1, AvatarSignal _sig2, int _sizeOfFifo, int FIFO_ID) {
         AvatarBlock ab = new AvatarBlock(_name, _avspec, _referenceRelation);
 
-	// Create the read and write signals
-	AvatarSignal write = new AvatarSignal("write", AvatarSignal.IN, _referenceRelation);
-	AvatarSignal read = new AvatarSignal("read", AvatarSignal.OUT, _referenceRelation);
-        
-	ab.addSignal(write); // corresponds to sig1
-	ab.addSignal(read);  // corresponds to sig2
-	
+        // Create the read and write signals
+        AvatarSignal write = new AvatarSignal("write", AvatarSignal.IN, _referenceRelation);
+        AvatarSignal read = new AvatarSignal("read", AvatarSignal.OUT, _referenceRelation);
 
-	// Creating the attributes of the signals
-	// Same attributes for all signals
-	for(AvatarAttribute aa: _sig1.getListOfAttributes()) {
-	    write.addParameter(aa.advancedClone(null));
-	}
-	for(AvatarAttribute aa: _sig2.getListOfAttributes()) {
-	    read.addParameter(aa.advancedClone(null));
-	}
-	
+        ab.addSignal(write); // corresponds to sig1
+        ab.addSignal(read);  // corresponds to sig2
 
-	// Creating the attributes to support the FIFO
-	// For each parameter, we create an attribute that is similar to the one of e.g. sig1
-	// We duplicate this for the size of the fifo
-	for(AvatarAttribute aa: _sig1.getListOfAttributes()) {
-	    for(int i=0; i<_sizeOfFifo; i++) {
-		AvatarAttribute newA = aa.advancedClone(null);
-		newA.setName("arg__" + aa.getName() + "__" + i);
-		ab.addAttribute(newA);
-	    }
-	}
 
-	// If lossy, add corresponding lossy attributes
-	if (_ar.isLossy()) {
-	    for(AvatarAttribute aa: _sig1.getListOfAttributes()) {
-		AvatarAttribute newL = aa.advancedClone(null);
-		newL.setName("loss__" + aa.getName());
-		ab.addAttribute(newL);
-	    }
-	}
+        // Creating the attributes of the signals
+        // Same attributes for all signals
+        for (AvatarAttribute aa : _sig1.getListOfAttributes()) {
+            write.addParameter(aa.advancedClone(null));
+        }
+        for (AvatarAttribute aa : _sig2.getListOfAttributes()) {
+            read.addParameter(aa.advancedClone(null));
+        }
 
-	// If non blocking, then, we need extra attributes
-	if (!(_ar.isBlocking())) {
-	    for(AvatarAttribute aa: _sig1.getListOfAttributes()) {
-		AvatarAttribute newL = aa.advancedClone(null);
-		newL.setName("bucket__" + aa.getName());
-		ab.addAttribute(newL);
-	    }
-	}
 
-	// We create the attribute to manage the FIFO
-	AvatarAttribute size = new AvatarAttribute("size", AvatarType.INTEGER, ab, _referenceRelation);
-	size.setInitialValue("0");
-	ab.addAttribute(size);
+        // Creating the attributes to support the FIFO
+        // For each parameter, we create an attribute that is similar to the one of e.g. sig1
+        // We duplicate this for the size of the fifo
+        for (AvatarAttribute aa : _sig1.getListOfAttributes()) {
+            for (int i = 0; i < _sizeOfFifo; i++) {
+                AvatarAttribute newA = aa.advancedClone(null);
+                newA.setName("arg__" + aa.getName() + "__" + i);
+                ab.addAttribute(newA);
+            }
+        }
 
-	AvatarAttribute maxSize = new AvatarAttribute("maxSize", AvatarType.INTEGER, ab, _referenceRelation);
-	TraceManager.addDev("*********************************** Size of FIFO=" + _sizeOfFifo);
-	maxSize.setInitialValue("" + _sizeOfFifo);
-	ab.addAttribute(maxSize);
+        // If lossy, add corresponding lossy attributes
+        if (_ar.isLossy()) {
+            for (AvatarAttribute aa : _sig1.getListOfAttributes()) {
+                AvatarAttribute newL = aa.advancedClone(null);
+                newL.setName("loss__" + aa.getName());
+                ab.addAttribute(newL);
+            }
+        }
 
-	// Where we write: the head
-	AvatarAttribute head = new AvatarAttribute("head", AvatarType.INTEGER, ab, _referenceRelation);
-	head.setInitialValue("0");
-	ab.addAttribute(head);
+        // If non blocking, then, we need extra attributes
+        if (!(_ar.isBlocking())) {
+            for (AvatarAttribute aa : _sig1.getListOfAttributes()) {
+                AvatarAttribute newL = aa.advancedClone(null);
+                newL.setName("bucket__" + aa.getName());
+                ab.addAttribute(newL);
+            }
+        }
 
-	// Where we read: the tail
-	AvatarAttribute tail = new AvatarAttribute("tail", AvatarType.INTEGER, ab, _referenceRelation);
-	tail.setInitialValue("0");
-	ab.addAttribute(tail);
-	
+        // We create the attribute to manage the FIFO
+        AvatarAttribute size = new AvatarAttribute("size", AvatarType.INTEGER, ab, _referenceRelation);
+        size.setInitialValue("0");
+        ab.addAttribute(size);
 
-	// Creating the state machine
-	// Don't forget the isLossy
+        AvatarAttribute maxSize = new AvatarAttribute("maxSize", AvatarType.INTEGER, ab, _referenceRelation);
+        TraceManager.addDev("*********************************** Size of FIFO=" + _sizeOfFifo);
+        maxSize.setInitialValue("" + _sizeOfFifo);
+        ab.addAttribute(maxSize);
 
-	AvatarTransition at;
-	AvatarStateMachine asm = ab.getStateMachine();
+        // Where we write: the head
+        AvatarAttribute head = new AvatarAttribute("head", AvatarType.INTEGER, ab, _referenceRelation);
+        head.setInitialValue("0");
+        ab.addAttribute(head);
 
-	// Start state
+        // Where we read: the tail
+        AvatarAttribute tail = new AvatarAttribute("tail", AvatarType.INTEGER, ab, _referenceRelation);
+        tail.setInitialValue("0");
+        ab.addAttribute(tail);
+
+
+        // Creating the state machine
+        // Don't forget the isLossy
+
+        AvatarTransition at;
+        AvatarStateMachine asm = ab.getStateMachine();
+
+        // Start state
         AvatarStartState ass = new AvatarStartState("start", _referenceRelation);
-	asm.setStartState(ass);
+        asm.setStartState(ass);
         asm.addElement(ass);
 
-	// Main state: Wait4Request
-	AvatarState main = new AvatarState("Wait4Request", _referenceRelation);
+        // Main state: Wait4Request
+        AvatarState main = new AvatarState("Wait4Request", _referenceRelation);
         asm.addElement(main);
-	at = makeAvatarEmptyTransitionBetween(ab, asm, ass, main, _referenceRelation);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, ass, main, _referenceRelation);
 
 
-	// Can write only if fifo is not full only if transition
-	AvatarState testHead = new AvatarState("testHead", _referenceRelation);
+        // Can write only if fifo is not full only if transition
+        AvatarState testHead = new AvatarState("testHead", _referenceRelation);
         asm.addElement(testHead);
-	at = makeAvatarEmptyTransitionBetween(ab, asm, testHead, main, _referenceRelation);
-	at.setGuard("[head<maxSize]");
-	at = makeAvatarEmptyTransitionBetween(ab, asm, testHead, main, _referenceRelation);
-	at.setGuard("[head==maxSize]");
-	at.addAction("head=0");
-	
-	for(int i=0; i<_sizeOfFifo; i++) {
-	    AvatarActionOnSignal aaos_write = new AvatarActionOnSignal("write__" + i, write, _referenceRelation);
-	    for(AvatarAttribute aa: _sig1.getListOfAttributes()) {
-		aaos_write.addValue("arg__" + aa.getName() + "__" + i);
-	    }
-	    asm.addElement(aaos_write);
-	    at = makeAvatarEmptyTransitionBetween(ab, asm, main, aaos_write, _referenceRelation);
-	    at.setGuard("[(size < maxSize) && (head==" + i + ")]");
-	    at = makeAvatarEmptyTransitionBetween(ab, asm, aaos_write, testHead, _referenceRelation);
-	    at.addAction("head = head + 1");
-	    at.addAction("size = size + 1");
-			 
-	}
-	// if is lossy, can write, and does not store this nor increase the fifo size
-	if (_ar.isLossy()) {
-	    AvatarActionOnSignal aaos_write_loss = new AvatarActionOnSignal("writeloss__", write, _referenceRelation);
-	    for(AvatarAttribute aa: _sig1.getListOfAttributes()) {
-		aaos_write_loss.addValue("loss__" + aa.getName());
-	    }
-	    asm.addElement(aaos_write_loss);
-	    at = makeAvatarEmptyTransitionBetween(ab, asm, main, aaos_write_loss, _referenceRelation);
-	    at.setGuard("[(size < maxSize)]");
-	    at = makeAvatarEmptyTransitionBetween(ab, asm, aaos_write_loss, main, _referenceRelation);
-	}
+        at = makeAvatarEmptyTransitionBetween(ab, asm, testHead, main, _referenceRelation);
+        at.setGuard("[head<maxSize]");
+        at = makeAvatarEmptyTransitionBetween(ab, asm, testHead, main, _referenceRelation);
+        at.setGuard("[head==maxSize]");
+        at.addAction("head=0");
 
-	// If it is blocking, then, the new message is written but not added
-	if (!(_ar.isBlocking())) {
-	    AvatarActionOnSignal aaos_write_bucket = new AvatarActionOnSignal("writebucket__", write, _referenceRelation);
-	    for(AvatarAttribute aa: _sig1.getListOfAttributes()) {
-		aaos_write_bucket.addValue("bucket__" + aa.getName());
-	    }
-	    asm.addElement(aaos_write_bucket);
-	    at = makeAvatarEmptyTransitionBetween(ab, asm, main, aaos_write_bucket, _referenceRelation);
-	    at.setGuard("[(size == maxSize)]");
-	    at = makeAvatarEmptyTransitionBetween(ab, asm, aaos_write_bucket, main, _referenceRelation);
-	}
+        for (int i = 0; i < _sizeOfFifo; i++) {
+            AvatarActionOnSignal aaos_write = new AvatarActionOnSignal("write__" + i, write, _referenceRelation);
+            for (AvatarAttribute aa : _sig1.getListOfAttributes()) {
+                aaos_write.addValue("arg__" + aa.getName() + "__" + i);
+            }
+            asm.addElement(aaos_write);
+            at = makeAvatarEmptyTransitionBetween(ab, asm, main, aaos_write, _referenceRelation);
+            at.setGuard("[(size < maxSize) && (head==" + i + ")]");
+            at = makeAvatarEmptyTransitionBetween(ab, asm, aaos_write, testHead, _referenceRelation);
+            at.addAction("head = head + 1");
+            at.addAction("size = size + 1");
 
-	// Read
-	AvatarState testTail = new AvatarState("testTail", _referenceRelation);
+        }
+        // if is lossy, can write, and does not store this nor increase the fifo size
+        if (_ar.isLossy()) {
+            AvatarActionOnSignal aaos_write_loss = new AvatarActionOnSignal("writeloss__", write, _referenceRelation);
+            for (AvatarAttribute aa : _sig1.getListOfAttributes()) {
+                aaos_write_loss.addValue("loss__" + aa.getName());
+            }
+            asm.addElement(aaos_write_loss);
+            at = makeAvatarEmptyTransitionBetween(ab, asm, main, aaos_write_loss, _referenceRelation);
+            at.setGuard("[(size < maxSize)]");
+            at = makeAvatarEmptyTransitionBetween(ab, asm, aaos_write_loss, main, _referenceRelation);
+        }
+
+        // If it is blocking, then, the new message is written but not added
+        if (!(_ar.isBlocking())) {
+            AvatarActionOnSignal aaos_write_bucket = new AvatarActionOnSignal("writebucket__", write, _referenceRelation);
+            for (AvatarAttribute aa : _sig1.getListOfAttributes()) {
+                aaos_write_bucket.addValue("bucket__" + aa.getName());
+            }
+            asm.addElement(aaos_write_bucket);
+            at = makeAvatarEmptyTransitionBetween(ab, asm, main, aaos_write_bucket, _referenceRelation);
+            at.setGuard("[(size == maxSize)]");
+            at = makeAvatarEmptyTransitionBetween(ab, asm, aaos_write_bucket, main, _referenceRelation);
+        }
+
+        // Read
+        AvatarState testTail = new AvatarState("testTail", _referenceRelation);
         asm.addElement(testTail);
-	at = makeAvatarEmptyTransitionBetween(ab, asm, testTail, main, _referenceRelation);
-	at.setGuard("[tail<maxSize]");
-	at = makeAvatarEmptyTransitionBetween(ab, asm, testTail, main, _referenceRelation);
-	at.setGuard("[tail==maxSize]");
-	at.addAction("tail=0");
-	for(int i=0; i<_sizeOfFifo; i++) {
-	    AvatarActionOnSignal aaos_read = new AvatarActionOnSignal("read__" + i, read, _referenceRelation);
-	    for(AvatarAttribute aa: _sig1.getListOfAttributes()) {
-		aaos_read.addValue("arg__" + aa.getName() + "__" + i);
-	    }
-	    asm.addElement(aaos_read);
-	    at = makeAvatarEmptyTransitionBetween(ab, asm, main, aaos_read, _referenceRelation);
-	    at.setGuard("[(size > 0) && (tail==" + i + ")]");
-	    at = makeAvatarEmptyTransitionBetween(ab, asm, aaos_read, testTail, _referenceRelation);
-	    at.addAction("tail = tail + 1");
-	    at.addAction("size = size - 1");
-	}
-	
-	
+        at = makeAvatarEmptyTransitionBetween(ab, asm, testTail, main, _referenceRelation);
+        at.setGuard("[tail<maxSize]");
+        at = makeAvatarEmptyTransitionBetween(ab, asm, testTail, main, _referenceRelation);
+        at.setGuard("[tail==maxSize]");
+        at.addAction("tail=0");
+        for (int i = 0; i < _sizeOfFifo; i++) {
+            AvatarActionOnSignal aaos_read = new AvatarActionOnSignal("read__" + i, read, _referenceRelation);
+            for (AvatarAttribute aa : _sig1.getListOfAttributes()) {
+                aaos_read.addValue("arg__" + aa.getName() + "__" + i);
+            }
+            asm.addElement(aaos_read);
+            at = makeAvatarEmptyTransitionBetween(ab, asm, main, aaos_read, _referenceRelation);
+            at.setGuard("[(size > 0) && (tail==" + i + ")]");
+            at = makeAvatarEmptyTransitionBetween(ab, asm, aaos_read, testTail, _referenceRelation);
+            at.addAction("tail = tail + 1");
+            at.addAction("size = size - 1");
+        }
 
-	// Block is finished!
-	
-	return ab;
+
+        // Block is finished!
+
+        return ab;
     }
-	
 
-	
 
-    
+    public static AvatarBlock getSWGraphBlock(String _name, AvatarSpecification _avspec, Object _refB,
+                                              int duration, Vector<String> unblockedBy, Vector<String> unblockNext) {
+
+        AvatarBlock ab = new AvatarBlock(_name, _avspec, _refB);
+
+        // Create  signals
+        AvatarSignal selectP = new AvatarSignal("selectP", AvatarSignal.IN, _refB);
+        AvatarSignal stepP = new AvatarSignal("stepP", AvatarSignal.IN, _refB);
+        AvatarAttribute att1 = new AvatarAttribute("step", AvatarType.INTEGER, ab, _refB);
+        stepP.addParameter(att1);
+        AvatarSignal preemptP = new AvatarSignal("preemptP", AvatarSignal.IN, _refB);
+        AvatarSignal finishP = new AvatarSignal("finishP", AvatarSignal.OUT, _refB);
+
+        ab.addSignal(selectP);
+        ab.addSignal(stepP);
+        ab.addSignal(preemptP);
+        ab.addSignal(finishP);
+
+        // block / unblock signals
+
+        Vector<AvatarSignal> unblokedBySigs = new Vector<>();
+        for(String unblockName: unblockedBy) {
+            AvatarSignal sig = new AvatarSignal(unblockName, AvatarSignal.IN, _refB);
+            unblokedBySigs.add(sig);
+        }
+
+        Vector<AvatarSignal> unblokingBySigs = new Vector<>();
+        for(String unblockName: unblockNext) {
+            AvatarSignal sig = new AvatarSignal(unblockName, AvatarSignal.OUT, _refB);
+            unblokingBySigs.add(sig);
+        }
+
+
+        // Create attributes
+        AvatarAttribute durationAtt = new AvatarAttribute("duration", AvatarType.INTEGER, ab, _refB);
+        durationAtt.setInitialValue(""+duration);
+        ab.addAttribute(durationAtt);
+
+        AvatarAttribute stepAtt = new AvatarAttribute("step", AvatarType.INTEGER, ab, _refB);
+        ab.addAttribute(stepAtt);
+
+        // State machines
+        AvatarTransition at;
+        AvatarStateMachine asm = ab.getStateMachine();
+
+        // Start state
+        AvatarStartState ass = new AvatarStartState("start", _refB);
+        asm.setStartState(ass);
+        asm.addElement(ass);
+
+        // Wait for being unblocked
+        AvatarStateMachineElement previous = ass;
+        for(AvatarSignal as: unblokedBySigs) {
+            AvatarActionOnSignal aaosRead = new AvatarActionOnSignal("read__" + as.getSignalName(), as, _refB);
+            asm.addElement(aaosRead);
+            at = makeAvatarEmptyTransitionBetween(ab, asm, previous, aaosRead, _refB);
+            previous = aaosRead;
+        }
+
+        // Main step: waiting to be activated
+        AvatarState mainState = new AvatarState("Main", _refB);
+        asm.addElement(mainState);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, previous, mainState, _refB);
+
+        AvatarActionOnSignal selectRead = new AvatarActionOnSignal("read_" + selectP.getSignalName(), selectP, _refB);
+        asm.addElement(selectRead);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, mainState, selectRead, _refB);
+
+        // Activated
+        AvatarState activatedState = new AvatarState("activatedState", _refB);
+        asm.addElement(activatedState);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, selectRead, activatedState, _refB);
+
+        // Making a step
+        AvatarActionOnSignal stepRead = new AvatarActionOnSignal("read_" + stepP.getSignalName(), stepP, _refB);
+        asm.addElement(stepRead);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, activatedState, stepRead, _refB);
+        at.setGuard("duration>0");
+        at = makeAvatarEmptyTransitionBetween(ab, asm, stepRead, activatedState, _refB);
+        at.setDelays("2", "2");
+        at.addAction("durattion=duration-step");
+
+        // Preempted
+        AvatarActionOnSignal preemptRead = new AvatarActionOnSignal("read_" + preemptP.getSignalName(), preemptP, _refB);
+        asm.addElement(preemptRead);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, activatedState, preemptRead, _refB);
+        at.setGuard("duration>0");
+        at = makeAvatarEmptyTransitionBetween(ab, asm, preemptRead, mainState, _refB);
+
+        // Finished!
+        AvatarActionOnSignal finishRead = new AvatarActionOnSignal("write_" + finishP.getSignalName(), finishP, _refB);
+        asm.addElement(finishRead);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, activatedState, finishRead, _refB);
+        at.setGuard("duration==0");
+
+        // Unblocking next
+        AvatarState unblockingState = new AvatarState("unblockingState", _refB);
+        asm.addElement(unblockingState);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, finishRead, unblockingState, _refB);
+
+        // Adding all unblocking signals
+        for(AvatarSignal as: unblokingBySigs) {
+            AvatarActionOnSignal aaosWrite = new AvatarActionOnSignal("write__" + as.getSignalName(), as, _refB);
+            asm.addElement(aaosWrite);
+            at = makeAvatarEmptyTransitionBetween(ab, asm, unblockingState, aaosWrite, _refB);
+            at = makeAvatarEmptyTransitionBetween(ab, asm, aaosWrite, unblockingState, _refB);
+        }
+
+
+        return ab;
+    }
+
+    public static AvatarBlock getHWGraphBlock(String _name, AvatarSpecification _avspec, Object _refB,
+                                              int duration, Vector<String> unblockedBy, Vector<String> unblockNext) {
+
+        AvatarBlock ab = new AvatarBlock(_name, _avspec, _refB);
+
+        // Create  signals
+        AvatarSignal selectP = new AvatarSignal("selectP", AvatarSignal.IN, _refB);
+        AvatarSignal stepP = new AvatarSignal("stepP", AvatarSignal.IN, _refB);
+        AvatarAttribute att1 = new AvatarAttribute("step", AvatarType.INTEGER, ab, _refB);
+        stepP.addParameter(att1);
+        AvatarSignal deactivatedP = new AvatarSignal("deactivated", AvatarSignal.IN, _refB);
+        AvatarSignal reactivatedP = new AvatarSignal("reactivatedP", AvatarSignal.IN, _refB);
+        AvatarSignal finishP = new AvatarSignal("finishP", AvatarSignal.OUT, _refB);
+
+        ab.addSignal(selectP);
+        ab.addSignal(stepP);
+        ab.addSignal(deactivatedP);
+        ab.addSignal(reactivatedP);
+        ab.addSignal(finishP);
+
+        // block / unblock signals
+
+        Vector<AvatarSignal> unblokedBySigs = new Vector<>();
+        for(String unblockName: unblockedBy) {
+            AvatarSignal sig = new AvatarSignal(unblockName, AvatarSignal.IN, _refB);
+            unblokedBySigs.add(sig);
+        }
+
+        Vector<AvatarSignal> unblokingBySigs = new Vector<>();
+        for(String unblockName: unblockNext) {
+            AvatarSignal sig = new AvatarSignal(unblockName, AvatarSignal.OUT, _refB);
+            unblokingBySigs.add(sig);
+        }
+
+
+        // Create attributes
+        AvatarAttribute durationAtt = new AvatarAttribute("duration", AvatarType.INTEGER, ab, _refB);
+        durationAtt.setInitialValue(""+duration);
+        ab.addAttribute(durationAtt);
+
+        AvatarAttribute stepAtt = new AvatarAttribute("step", AvatarType.INTEGER, ab, _refB);
+        ab.addAttribute(stepAtt);
+
+        // State machines
+        AvatarTransition at;
+        AvatarStateMachine asm = ab.getStateMachine();
+
+        // Start state
+        AvatarStartState ass = new AvatarStartState("start", _refB);
+        asm.setStartState(ass);
+        asm.addElement(ass);
+
+        // Wait for being unblocked
+        AvatarStateMachineElement previous = ass;
+        for(AvatarSignal as: unblokedBySigs) {
+            AvatarActionOnSignal aaosRead = new AvatarActionOnSignal("read__" + as.getSignalName(), as, _refB);
+            asm.addElement(aaosRead);
+            at = makeAvatarEmptyTransitionBetween(ab, asm, previous, aaosRead, _refB);
+            previous = aaosRead;
+        }
+
+        // Main step: waiting to be activated
+        AvatarState mainState = new AvatarState("Main", _refB);
+        asm.addElement(mainState);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, previous, mainState, _refB);
+
+        AvatarActionOnSignal selectRead = new AvatarActionOnSignal("read_" + selectP.getSignalName(), selectP, _refB);
+        asm.addElement(selectRead);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, mainState, selectRead, _refB);
+
+
+        // Activation / deactivation
+        AvatarActionOnSignal deactivateRead = new AvatarActionOnSignal("read_" + deactivatedP.getSignalName(), deactivatedP, _refB);
+        asm.addElement(deactivateRead);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, mainState, deactivateRead, _refB);
+        AvatarActionOnSignal activateRead = new AvatarActionOnSignal("read_" + reactivatedP.getSignalName(), reactivatedP, _refB);
+        asm.addElement(activateRead);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, deactivateRead, activateRead, _refB);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, activateRead, mainState, _refB);
+
+
+        // Activated
+        AvatarState activatedState = new AvatarState("activatedState", _refB);
+        asm.addElement(activatedState);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, selectRead, activatedState, _refB);
+
+        // Making a step
+        AvatarActionOnSignal stepRead = new AvatarActionOnSignal("read_" + stepP.getSignalName(), stepP, _refB);
+        asm.addElement(stepRead);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, activatedState, stepRead, _refB);
+        at.setGuard("duration>0");
+        at = makeAvatarEmptyTransitionBetween(ab, asm, stepRead, activatedState, _refB);
+        at.setDelays("2", "2");
+        at.addAction("durattion=duration-step");
+
+        // Finished!
+        AvatarActionOnSignal finishRead = new AvatarActionOnSignal("write_" + finishP.getSignalName(), finishP, _refB);
+        asm.addElement(finishRead);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, activatedState, finishRead, _refB);
+        at.setGuard("duration==0");
+
+        // Unblocking next
+        AvatarState unblockingState = new AvatarState("unblockingState", _refB);
+        asm.addElement(unblockingState);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, finishRead, unblockingState, _refB);
+
+        // Adding all unblocking signals
+        for(AvatarSignal as: unblokingBySigs) {
+            AvatarActionOnSignal aaosWrite = new AvatarActionOnSignal("write__" + as.getSignalName(), as, _refB);
+            asm.addElement(aaosWrite);
+            at = makeAvatarEmptyTransitionBetween(ab, asm, unblockingState, aaosWrite, _refB);
+            at = makeAvatarEmptyTransitionBetween(ab, asm, aaosWrite, unblockingState, _refB);
+        }
+
+        return ab;
+    }
+
+    // Still to be added: main and clock blocks
+
+
 }

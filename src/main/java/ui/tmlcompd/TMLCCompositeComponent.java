@@ -106,7 +106,7 @@ public class TMLCCompositeComponent extends TGCScalableWithInternalComponent imp
         removable = true;
         userResizable = true;
         
-		value = "MyName";
+		value = "ComponentName";
 		name = "Composite component";
 		
         myImageIcon = IconManager.imgic1200;
@@ -321,6 +321,24 @@ public class TMLCCompositeComponent extends TGCScalableWithInternalComponent imp
 				}
 			}
         }
+
+		//issue 188 : attach primitive port into primitive component starting at the third level
+		if ((!swallowed) && (tgc instanceof TMLCPrimitivePort)) {
+			List<TMLCPrimitiveComponent> pcList = getAllPrimitiveComponents();
+			for(TMLCPrimitiveComponent tmlpc : pcList) {
+				if(((SwallowTGComponent)tmlpc).acceptSwallowedTGComponent(tgc)) {
+					if(tmlpc.isOnMe(x,y) != null) {
+						swallowed = true;
+						((SwallowTGComponent)tmlpc).addSwallowedTGComponent(tgc, x, y);
+						break;
+					}
+				}
+			}
+			if (swallowed) {
+				return true;
+			}
+		}
+		//------------
 		
 		if (swallowed) {
 			return true;

@@ -23,10 +23,6 @@
 <LOTOSPath data="../lotos" />
 <GGraphPath data="../graphs" />
 <TGraphPath data="../graphs" />
-<TToolUpdateURL data="" data1="http://labsoc.comelec.enst.fr/turtle/ttoolversion.html" />
-<TToolUpdateProxy data="false" />
-<TToolUpdateProxyPort data="8080" />
-<TToolUpdateProxyHost data="To Be Completed" />
 <JavaCodeDirectory data="../javacode" />
 <JavaCompilerPath data="/usr/bin/javac" />
 <TToolClassPath data="../javacode" />
@@ -35,7 +31,8 @@
 <SystemCCodeDirectory data="../simulators/c++2/" />
 <SystemCHost data="localhost"/>
 <SystemCCodeCompileCommand data="make -C ../simulators/c++2/" />
-<SystemCCodeExecuteCommand data="../simulators/c++2/run.x -ovcd ../simulators/c++2/vcddump.vcd" />
+<SystemCCodeExecuteCommand data="../simulators/c++2/run.x -ovcd vcddump.vcd" />
+<SystemCCodeExecuteCommand data="../simulators/c++2/run.x -cmd '1 6 500; 7 2 simu.txt'" />
 <SystemCCodeInteractiveExecuteCommand data="../simulators/c++2/run.x -server" />
 <TMLCodeDirectory data="../tmlcode/" />
 <CCodeDirectory data="../CCode" />
@@ -48,11 +45,11 @@
 <ProVerifVerifierPath data="../../proverif" />
 <ProVerifVerifierHost data="localhost" />
 <AVATARExecutableCodeDirectory data="../executablecode/" />
+<AVATARExecutableCodeHost data="localhost"/>
 <AVATARExecutableCodeCompileCommand data="make " />
 <AVATARExecutableCodeExecuteCommand data="run.x" />
 <AVATARMPSoCCodeDirectory data="../MPSoC/" />
 <AVATARMPSoCCompileCommand data="make -C ../MPSoC/ updateruntime updategeneratedcode compilesoclib" />
-<AVATARExecutableCodeHost data="localhost"/>
 <AVATARExecutableCodeCompileCommand data="make -C ../executablecode/" />
 <AVATARExecutableCodeExecuteCommand data="../executablecode/run.x" />
 <AVATARExecutableSoclibCodeCompileCommand data="make -C ../MPSoC/ updategeneratedcode compilesoclib" />
@@ -60,6 +57,9 @@
 <AVATARExecutableSoclibCodeTraceCommand data="make -C ../MPSoC/ runsoclib-trace" />
 <AVATARExecutableSoclibTraceFile data="../MPSoC/soclib/soclib/platform/topcells/caba-vgmn-mutekh_kernel_tutorial/trace" />
 <NCDirectory data="../nc/"/>
+<Z3LIBS data="/opt/z3/bin/libz3.so:/opt/z3/bin/libz3java.so"/>
+<PLUGIN_PATH data="../plugins" />
+<LastWindowAttributes x="10" y="10" width="1024" height="768" max="false" />
 
 <ExternalCommand1Host data="localhost"/>
 <ExternalCommand1 data="gtkwave ../simulators/c++2/vcddump.vcd"/>
@@ -67,5 +67,7 @@
 <ExternalCommand2 data="/packages/uppaal4.0.11/uppaal ../uppaal/spec.xml"/>
 
 <ProVerifHash data="1427594573"/>
+
+<LastOpenFile data="../modeling/AVATAR/MicroWaveOven_SafetySecurity_fullMethodo.xml" />
 
 </TURTLECONFIGURATION>

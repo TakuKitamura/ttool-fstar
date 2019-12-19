@@ -39,6 +39,7 @@
 
 package help;
 
+import myutil.Conversion;
 import myutil.GenericTree;
 import myutil.TraceManager;
 
@@ -48,6 +49,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.Vector;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 
@@ -60,14 +62,17 @@ import java.util.stream.Collectors;
  */
 public class HelpEntry implements GenericTree {
 
-    public HelpEntry linkToParent;
-    Vector<HelpEntry> entries;
+    protected static final int KEYWORD_SEARCH_IMPORTANCE = 5;
 
-    public String masterKeyword;
-    public String[] keywords;
+    protected HelpEntry linkToParent;
+    protected Vector<HelpEntry> entries;
 
-    public String pathToHTMLFile;
-    public String htmlContent;
+    protected String masterKeyword;
+    protected String[] keywords;
+
+    protected String pathToHTMLFile;
+    protected String htmlContent;
+    protected String htmlContentLowerCase;
 
 
     public HelpEntry() {
@@ -79,6 +84,10 @@ public class HelpEntry implements GenericTree {
             return "Help not loaded";
         }
         return masterKeyword;
+    }
+
+    public String getPathToHTMLFile() {
+        return pathToHTMLFile;
     }
 
     // Infos are: file of name, master key, list of keywords
@@ -93,15 +102,20 @@ public class HelpEntry implements GenericTree {
         }
 
         pathToHTMLFile = splitted[0] + ".html";
-        masterKeyword = splitted[1];
+
+        masterKeyword = splitted[1].replaceAll("_", " ");
+
         keywords = new String[splitted.length - 1];
         for (int i = 0; i < splitted.length - 1; i++) {
-            keywords[i] = splitted[i + 1];
+            keywords[i] = splitted[i + 1].replaceAll("_", " ");;
         }
 
         //TraceManager.addDev("Infos ok");
         return true;
     }
+
+
+
 
     public String getToolTip() {
         if (keywords == null) {
@@ -179,6 +193,10 @@ public class HelpEntry implements GenericTree {
         }
 
         return htmlContent;
+    }
+
+    public void setHTMLContent(String HTMLContent) {
+        htmlContentLowerCase = HTMLContent;
     }
 
 
@@ -276,6 +294,10 @@ public class HelpEntry implements GenericTree {
         }
     }
 
+    public boolean hasMasterKeyword(String word) {
+        return masterKeyword.compareTo(word) == 0;
+    }
+
     public int hasSimilarWords(String[] words) {
         int result = 0;
         for(String s:words) {
@@ -295,8 +317,83 @@ public class HelpEntry implements GenericTree {
         return false;
     }
 
+    public int hasInContent(String [] words) {
+        int score = 0;
+        for(String word: words) {
+            score += hasInContentAWord(word);
+        }
+        return score;
+    }
+
+    public int hasInContentAWord(String word) {
+        if (htmlContentLowerCase == null) {
+            if (htmlContent == null) {
+                htmlContent = getHTMLContent();
+            }
+            if (htmlContent == null) {
+                return 0;
+            }
+            htmlContentLowerCase = htmlContent.toLowerCase();
+        }
+        //TraceManager.addDev("Computing nb Ofs:" + word);
+        return Conversion.nbOf(htmlContentLowerCase, word);
+    }
+
+    public String getKeywords() {
+        String ret = "";
+        if (keywords != null) {
+            for (int i = 0; i < keywords.length; i++) {
+                ret += keywords[i] + " ";
+            }
+        }
+        return ret;
+    }
 
 
+    public String getKidsInHTML() {
+        String s = "";
+
+        if (entries != null) {
+            for (HelpEntry he : entries) {
+                s += "<li> ";
+                s += "<a href=\"file://" + he.getMasterKeyword() + ".html\"/>" + he.getMasterKeyword() + "</a>  " +
+                        he.getKeywords();
+                s += " </li>\n<br>\n";
+            }
+        }
+
+        return s;
+    }
+
+    public void searchInKeywords(String [] words, HelpEntry father, Vector<ScoredHelpEntry> scores) {
+        int score = hasSimilarWords(words);
+        if (score > 0) {
+            //father.addKid(this);
+            scores.add(new ScoredHelpEntry(KEYWORD_SEARCH_IMPORTANCE * score, this));
+            //TraceManager.addDev("Found in keyword:" + toString() + " score=" + score);
+        }
+
+        if (entries != null) {
+            for (HelpEntry he: entries) {
+                he.searchInKeywords(words, father, scores);
+            }
+        }
+    }
+
+    public void searchInContent(String [] words, HelpEntry father, Vector<ScoredHelpEntry> scores) {
+        int score = hasInContent(words);
+        if (score > 0) {
+            //father.addKid(this);
+            scores.add(new ScoredHelpEntry(KEYWORD_SEARCH_IMPORTANCE * score, this));
+            //TraceManager.addDev("Found in content:" + toString() + " score=" + score);
+        }
+
+        if (entries != null) {
+            for (HelpEntry he: entries) {
+                he.searchInContent(words, father, scores);
+            }
+        }
+    }
 
 
 

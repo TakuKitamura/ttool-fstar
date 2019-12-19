@@ -51,8 +51,9 @@ import java.awt.*;
  * Class UCDActor
  * Action state of a sequence diagram
  * Creation: 18/02/2005
- * @version 1.0 18/02/2005
+ *
  * @author Ludovic APVRILLE
+ * @version 1.0 18/02/2005
  */
 public class UCDActor extends TGCScalableWithoutInternalComponentOneLineText {
     /*protected int lineLength = 5;

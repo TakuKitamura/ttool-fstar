@@ -251,7 +251,7 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
                 GraphicLib.sortJTabbedPane(tp.tabbedPane, tp.panels, 1, tp.tabbedPane.getTabCount());
                 mgui.changeMade(null, -1);
             } else if (ac.equals("New Use Case Diagram")) {
-                mgui.createUniqueUseCaseDiagram(tp, "Use Case Diagram");
+                mgui.createUniqueUseCaseDiagram(tp, "UseCaseDiagram");
                 mgui.changeMade(null, -1);
             } else if (item == newsd) {
                 mgui.createUniqueSequenceDiagram(tp, "MyScenario");
@@ -263,37 +263,37 @@ public class TURTLEPanelPopupListener extends MouseAdapter /* popup menus onto t
                 mgui.createSequenceDiagramFromUCD(tp, "ScenarioFromUCD", (UseCaseDiagramPanel) (mgui.getCurrentTDiagramPanel()));
                 mgui.changeMade(null, -1);
             } else if (ac.equals("New Requirement Diagram")) {
-                mgui.createRequirementDiagram(tp, "Requirement Diagram");
+                mgui.createRequirementDiagram(tp, "RequirementDiagram");
                 mgui.changeMade(null, -1);
             } else if (ac.equals("New Attack Tree Diagram")) {
-                mgui.createAttackTreeDiagram(tp, "Attack Tree");
+                mgui.createAttackTreeDiagram(tp, "AttackTree");
                 mgui.changeMade(null, -1);
             } else if (e.getSource() == newftd) {
-                mgui.createFaultTreeDiagram(tp, "Fault Tree");
+                mgui.createFaultTreeDiagram(tp, "FaultTree");
                 mgui.changeMade(null, -1);
             } else if (ac.equals("New Event-Based Requirement Description Diagram")) {
                 mgui.createEBRDD(tp, "EBRDD");
                 mgui.changeMade(null, -1);
             } else if (ac.equals("New ProActive State Machine Diagram")) {
-                mgui.createProActiveSMD(tp, "ProActive SMD");
+                mgui.createProActiveSMD(tp, "ProActiveSMD");
                 mgui.changeMade(null, -1);
             } else if (e.getSource() == newavatarrd) {
-                mgui.createAvatarRD(tp, "AVATAR RD");
+                mgui.createAvatarRD(tp, "AVATARRD");
                 mgui.changeMade(null, -1);
             } else if (e.getSource() == newavatarpd) {
-                mgui.createAvatarPD(tp, "AVATAR PD");
+                mgui.createAvatarPD(tp, "AVATARPD");
                 mgui.changeMade(null, -1);
             } else if (e.getSource() == newavatarcd) {
-                mgui.createUniqueAvatarCD(tp, "Context Diagram");
+                mgui.createUniqueAvatarCD(tp, "ContextDiagram");
                 mgui.changeMade(null, -1);
             } else if (e.getSource() == newavatarad) {
-                mgui.createUniqueAvatarAD(tp, "Activity Diagram");
+                mgui.createUniqueAvatarAD(tp, "ActivityDiagram");
                 mgui.changeMade(null, -1);
             } else if (e.getSource() == newavatarmad) {
-                mgui.createAvatarMAD(tp, "Modeling Assumptions Diagram");
+                mgui.createAvatarMAD(tp, "ModelingAssumptionsDiagram");
                 mgui.changeMade(null, -1);
             } else if (e.getSource() == newsyscams) {
-                mgui.createSysCAMS(tp, "SystemC-AMS Component Diagram");
+                mgui.createSysCAMS(tp, "SystemC-AMS_ComponentDiagram");
                 mgui.changeMade(null, -1);
             } else if (e.getSource() == neweln) {
                 mgui.createELN(tp, "ELN Diagram");

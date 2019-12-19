@@ -53,6 +53,8 @@ import javax.swing.event.*;
  * Creation: 26/04/2018
  * @version 1.0 26/04/2018
  * @author Irina Kit Yan LEE
+ * @version 1.1 27/10/2019
+ * @author Daniela Genius
  */
 
 @SuppressWarnings("serial")
@@ -60,6 +62,8 @@ import javax.swing.event.*;
 public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener, ListSelectionListener {
 
 	private JTextField nameTextField;
+        private JTextField clockTextField;
+    
 //	private JTextField periodTextField;
 //	private String listPeriodString[];
 //	private JComboBox<String> periodComboBoxString;
@@ -75,12 +79,14 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener, Li
 	private DefaultListModel<String> structListModel;
 	private boolean structBool = false;
 	private JTextField nameTemplateTextField;
+    private JTextField valueTemplateTextField;
 	private String listTypeTemplateString[];
 	private JComboBox<String> typeTemplateComboBoxString;
 	private JTextField nameTypedefTextField;
 	private String listTypeTypedefString[];
 	private JComboBox<String> typeTypedefComboBoxString;
-	private JButton addModifyTypedefButton;
+
+    private JButton addModifyTypedefButton;
 	private ArrayList<String> listTmpTypedef;
 	private JList<String> typedefList;
 	private DefaultListModel<String> typedefListModel;
@@ -93,7 +99,11 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener, Li
 	private JButton nameFnButton;
 	private JTextArea codeTextArea;
 	private String finalString;
-
+    
+        private JRadioButton sensitiveRadioButton;  
+	private String listSensitiveString[];
+	private JComboBox<String> sensitiveComboBoxString;
+    
 	private SysCAMSBlockDE block;
 
 	public JDialogSysCAMSBlockDE(SysCAMSBlockDE block) {
@@ -232,41 +242,63 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener, Li
 		gridBag.setConstraints(nameTextField, constraints);
 		attributesBoxPanel.add(nameTextField);
 
-//		JLabel periodLabel = new JLabel("Period Tm : ");
-//		constraints = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-//				new Insets(5, 10, 15, 10), 0, 0);
-//		gridBag.setConstraints(periodLabel, constraints);
-//		attributesBoxPanel.add(periodLabel);
-//
-//		if (block.getPeriod() == -1) { 
-//			periodTextField = new JTextField(10);
-//		} else {
-//			periodTextField = new JTextField("" + block.getPeriod(), 10);
-//		}
-//		constraints = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-//				new Insets(5, 10, 15, 10), 0, 0);
-//		gridBag.setConstraints(periodTextField, constraints);
-//		attributesBoxPanel.add(periodTextField);
-//
-//		listPeriodString = new String[3];
-//		listPeriodString[0] = "us";
-//		listPeriodString[1] = "ms";
-//		listPeriodString[2] = "s";
-//		periodComboBoxString = new JComboBox<String>(listPeriodString);
-//		if (block.getTime().equals("") || block.getTime().equals("us")) {
-//			periodComboBoxString.setSelectedIndex(0);
-//		} else if (block.getTime().equals("ms")) {
-//			periodComboBoxString.setSelectedIndex(1);
-//		} else if (block.getTime().equals("s")) {
-//			periodComboBoxString.setSelectedIndex(2);
-//		}
-//		periodComboBoxString.setActionCommand("time");
-//		periodComboBoxString.addActionListener(this);
-//		constraints = new GridBagConstraints(2, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-//				new Insets(5, 10, 15, 10), 0, 0);
-//		gridBag.setConstraints(periodComboBoxString, constraints);
-//		attributesBoxPanel.add(periodComboBoxString);
+		JLabel labelClock = new JLabel("Clock : ");
+		constraints = new GridBagConstraints(0, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(15, 10, 5, 10), 0, 0);
+		gridBag.setConstraints(labelClock, constraints);
+		attributesBoxPanel.add(labelClock);
 
+		if (block.getValue().toString().equals("")) {
+			clockTextField = new JTextField(10);
+		} else {
+			clockTextField = new JTextField(block.getClockName().toString(), 10); 
+		}
+		constraints = new GridBagConstraints(1, 1, 2, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(15, 10, 5, 10), 0, 0);
+		gridBag.setConstraints(clockTextField, constraints);
+		attributesBoxPanel.add(clockTextField);
+
+
+JPanel sensitivePanel = new JPanel(new FlowLayout());
+
+		sensitiveRadioButton = new JRadioButton();
+		sensitiveRadioButton.setActionCommand("Sensitive");
+		sensitiveRadioButton.setSelected(block.getSensitive());
+		sensitiveRadioButton.addActionListener(this);
+		sensitivePanel.add(sensitiveRadioButton);
+
+		JLabel sensitiveLabel = new JLabel("Sensitive");
+		sensitivePanel.add(sensitiveLabel);
+
+		constraints = new GridBagConstraints(0, 4, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(15, 10, 5, 10), 0, 0);
+		gridBag.setConstraints(sensitivePanel, constraints);
+		attributesBoxPanel.add(sensitivePanel);
+
+		
+		//JLabel labelClock = new JLabel("Clock sensitivity : ");
+	
+	listSensitiveString = new String[3];
+		listSensitiveString[0] = "";
+        listSensitiveString[1] = "positive";
+		listSensitiveString[2] = "negative";
+		sensitiveComboBoxString = new JComboBox<String>(listSensitiveString);
+		if (block.getClockSensitivityMethod().equals("")) {
+			sensitiveComboBoxString.setSelectedIndex(0);
+        } else if (block.getClockSensitivityMethod().equals("positive")) {
+            sensitiveComboBoxString.setSelectedIndex(1);
+		} else if (block.getClockSensitivityMethod().equals("negative")) {
+			sensitiveComboBoxString.setSelectedIndex(2);
+		}
+		sensitiveComboBoxString.setActionCommand("Sensitive_method");
+		sensitiveComboBoxString.setEnabled(block.getSensitive());
+		sensitiveComboBoxString.addActionListener(this);
+		constraints = new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+				new Insets(15, 10, 5, 10), 0, 0);
+		gridBag.setConstraints(sensitiveComboBoxString, constraints);
+		//boxPanel.add(sensitiveComboBoxString);
+		attributesBoxPanel.add(sensitiveComboBoxString);
+		
 		attributesBox.add(attributesBoxPanel);
 		attributesMainPanel.add(attributesBox, BorderLayout.NORTH); 
 
@@ -394,15 +426,35 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener, Li
 					new Insets(5, 10, 5, 10), 0, 0);
 			templateGridBag.setConstraints(nameTemplateTextField, templateConstraint);
 			templatePanel.add(nameTemplateTextField);
+            
+            //CHANGES
+            JLabel egalTemplateLabel = new JLabel("=");
+            templateConstraint = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                    new Insets(5, 10, 5, 10), 0, 0);
+            templateGridBag.setConstraints(egalTemplateLabel, templateConstraint);
+            templatePanel.add(egalTemplateLabel);
+
+            JLabel valueTemplateLabel = new JLabel("value");
+            templateConstraint = new GridBagConstraints(2, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                    new Insets(5, 10, 5, 10), 0, 0);
+            templateGridBag.setConstraints(valueTemplateLabel, templateConstraint);
+            templatePanel.add(valueTemplateLabel);
+
+            valueTemplateTextField = new JTextField(block.getValueTemplate());
+            templateConstraint = new GridBagConstraints(2, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                    new Insets(5, 10, 5, 10), 0, 0);
+            templateGridBag.setConstraints(valueTemplateTextField, templateConstraint);
+            templatePanel.add(valueTemplateTextField);
+            //CHANGES
 
 			JLabel pointsTemplateLabel = new JLabel(":");
-			templateConstraint = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+			templateConstraint = new GridBagConstraints(3, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
 					new Insets(5, 10, 5, 10), 0, 0);
 			templateGridBag.setConstraints(pointsTemplateLabel, templateConstraint);
 			templatePanel.add(pointsTemplateLabel);
 
 			JLabel typeTemplateLabel = new JLabel("type");
-			templateConstraint = new GridBagConstraints(2, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+			templateConstraint = new GridBagConstraints(4, 0, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
 					new Insets(5, 10, 5, 10), 0, 0);
 			templateGridBag.setConstraints(typeTemplateLabel, templateConstraint);
 			templatePanel.add(typeTemplateLabel);
@@ -414,7 +466,7 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener, Li
 				typeTemplateComboBoxString.setSelectedIndex(0);
 			}
 			typeTemplateComboBoxString.addActionListener(this);
-			templateConstraint = new GridBagConstraints(2, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+			templateConstraint = new GridBagConstraints(4, 1, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
 					new Insets(5, 10, 5, 10), 0, 0);
 			templateGridBag.setConstraints(typeTemplateComboBoxString, templateConstraint);
 			templatePanel.add(typeTemplateComboBoxString);
@@ -668,6 +720,13 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener, Li
 	}
 
 	public void actionPerformed(ActionEvent e) {
+	    	if ("Sensitive".equals(e.getActionCommand())) {
+			if (sensitiveRadioButton.isSelected() == true) {
+				sensitiveComboBoxString.setEnabled(true);
+			} else {
+				sensitiveComboBoxString.setEnabled(false);
+			}
+		}
 		if ("Name_OK".equals(e.getActionCommand())) {
 			if (!nameFnTextField.getText().equals("")) {
 				codeTextArea.setText("void " + nameFnTextField.getText() + "() {\n\n}");
@@ -678,6 +737,13 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener, Li
 						JOptionPane.WARNING_MESSAGE);
 			}
 		}
+		
+		if (!(clockTextField.getText().isEmpty())) {
+		    block.setClockName(clockTextField.getText());
+		}else{
+		    block.setClockName("");
+		}
+		
 		if (block.getFather() != null) {
 			if ("OK".equals(e.getActionCommand())) {
 				nameTypedefTextField.setEditable(true);
@@ -981,36 +1047,19 @@ public class JDialogSysCAMSBlockDE extends JDialog implements ActionListener, Li
 		if ("Save_Close".equals(e.getActionCommand())) {
 			block.setValue(new String(nameTextField.getText()));
 
-//			if (!(periodTextField.getText().isEmpty())) {
-//				Boolean periodValueInteger = false;
-//				try {
-//					Integer.parseInt(periodTextField.getText());
-//				} catch (NumberFormatException e1) {
-//					JDialog msg = new JDialog(this);
-//					msg.setLocationRelativeTo(null);
-//					JOptionPane.showMessageDialog(msg, "Period Tm is not a Integer", "Warning !",
-//							JOptionPane.WARNING_MESSAGE);
-//					periodValueInteger = true;
-//				}
-//				if (periodValueInteger == false) {
-//					block.setPeriod(Integer.parseInt(periodTextField.getText()));
-//					block.setTime((String) periodComboBoxString.getSelectedItem());
-//				}
-//			} else {
-//				block.setPeriod(-1);
-//				block.setTime("");
-//			}
-
 			if (block.getFather() != null) {
 				block.setListStruct(structListModel);
 				block.setNameTemplate(nameTemplateTextField.getText());
 				block.setTypeTemplate((String) typeTemplateComboBoxString.getSelectedItem());
+                block.setValueTemplate(valueTemplateTextField.getText());
 				block.setListTypedef(typedefListModel);
-				
 				block.setNameFn(nameFnTextField.getText());
 				block.setCode(codeTextArea.getText());
 			}
 
+			block.setSensitive(sensitiveRadioButton.isSelected());
+			block.setClockSensitivityMethod((String) sensitiveComboBoxString.getSelectedItem());
+			
 			this.dispose();
 		}
 

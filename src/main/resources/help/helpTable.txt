@@ -1,9 +1,33 @@
-- general TTool general info tool
+- general TTool general info ttool tool
+-- syntaxchecking syntaxchecking syntax checking model verification
 - diplodocus diplodocus hardware software partitioning dse design space exploration
+-- application application functional view diplodocus
+--- channel channel functional view diplodocus
+----fork fork channel functional view diplodocus
+----join join channel functional view diplodocus
+--- activitydiagram activity_diagram activity diagram function view tasks
+----activedelay active_delay delay consumes cycles
 -- architecture architecture hardware os operating system
 --- cpu cpu processor cpu os
+----cpuname cpu_name cpu name
+----schedulingpolicy scheduling_policy scheduling policy cpu
+----slicetime slice_time slice time cpu
+----numbercores number_of_core number core cpu
+----datasize data_size data size cpu
+----pipelinesize pipeline_size pipeline size cpu
+----taskswitchingtime task_switching_time task switching time cpu
+----misbrandingprediction mis-branding_prediction mis branding prediction cpu
+----cachemiss cache_miss cache miss cpu
+----goidletime go_idle_time go idle time cpu
+----maxconsecutivecycles max_consecutive_cycles_before_idle max consecutive cycles before idle cpu
+----execi execi_execution_time execi execution time cpu
+----execc execc_execution_time execc execution time cpu
 ----clockdivider clock_divider clock divider cpu
--- mapping mapping tasks communication mapping 
+----encryption encryption encryption cpu
+----operation operation operation cpu
+----cpuextension cpu_extension_construct cpu extension construct
+
+-- mapping mapping tasks communication mapping
 ---taskmapping taskmapping tasks mapping
 ---communicationmapping communicationmapping communication mapping
 - avatar avatar software embedded systems safety security

@@ -56,6 +56,8 @@ import java.util.LinkedList;
  * Creation: 14/05/2018
  * @version 1.0 14/05/2018
  * @author Irina Kit Yan LEE
+ * @version 1.1 12/07/2018
+ * @author Irina Kit Yan LEE, Daniela GENIUS
 */
 
 public class TopCellGenerator {
@@ -63,6 +65,8 @@ public class TopCellGenerator {
 
 	private final static String GENERATED_PATH1 = "generated_CPP" + File.separator;
 	private final static String GENERATED_PATH2 = "generated_H" + File.separator;
+	private final static String CR = "\n";
+	private final static String CR2 = "\n\n";
 
 	public TopCellGenerator(SysCAMSSpecification sys) {
 		syscams = sys;
@@ -94,40 +98,48 @@ public class TopCellGenerator {
 		return (top);
 	}
 
-	public void saveFile(String path) {
+    public void saveFile(String path, Boolean standalone) {
 		SysCAMSTCluster cluster = TopCellGenerator.syscams.getCluster();
 		LinkedList<SysCAMSTConnector> connectors = TopCellGenerator.syscams.getAllConnectorCluster();
-
+		FileWriter fw; 
 		String top;
 
 		try {
 			// Save file .cpp
 			System.err.println(path + GENERATED_PATH1 + cluster.getClusterName() + ".cpp");
-			FileWriter fw = new FileWriter(path + GENERATED_PATH1 + "/" + cluster.getClusterName() + "_tb.cpp");
+			System.err.println(path + cluster.getClusterName() + ".cpp");			
+			    fw = new FileWriter(path + GENERATED_PATH1 + "/" + cluster.getClusterName() + "_tb.cpp");
+			    //}
+			fw = new FileWriter(path + "/" + cluster.getClusterName() + "_tb.cpp");
 			top = generateTopCell(cluster, connectors);
 			fw.write(top);
 			fw.close();
+		
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 		// Save files .h
-		saveFileBlock(path, cluster);
+		saveFileBlock(path, cluster, standalone);
 	}
 
-	public void saveFileBlock(String path, SysCAMSTCluster c) {
+    public void saveFileBlock(String path, SysCAMSTCluster c, Boolean standalone) {
 		String headerTDF, headerDE, codeTDF, codeDE;
 		LinkedList<SysCAMSTBlockTDF> tdf = c.getBlockTDF();
 		LinkedList<SysCAMSTBlockDE> de = c.getBlockDE();
-		
+		FileWriter fw; 
 		for (SysCAMSTBlockTDF t : tdf) {
 			try {
 				System.err.println(path + GENERATED_PATH2 + t.getName() + ".h");
-				FileWriter fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + ".h");
+				System.err.println(path + t.getName() + ".h"); 						
+			    fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + ".h");
+			
 				headerTDF = Header.getPrimitiveHeaderTDF(t);
 				fw.write(headerTDF);
 				codeTDF = PrimitiveCode.getPrimitiveCodeTDF(t);
+			
 				fw.write(codeTDF);
 				fw.close();
+			
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
@@ -135,12 +147,16 @@ public class TopCellGenerator {
 		for (SysCAMSTBlockDE t : de) {
 			try {
 				System.err.println(path + GENERATED_PATH2 + t.getName() + ".h");
-				FileWriter fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + ".h");
+				System.err.println(path + t.getName() + ".h");
+							
+				    fw = new FileWriter(path + GENERATED_PATH2 + "/" + t.getName() + ".h");
 				headerDE = Header.getPrimitiveHeaderDE(t);
 				fw.write(headerDE);
 				codeDE = PrimitiveCode.getPrimitiveCodeDE(t);
+			
 				fw.write(codeDE);
 				fw.close();
+			
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}

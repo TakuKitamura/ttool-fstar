@@ -263,6 +263,22 @@ public class HelpManager extends HelpEntry {
         return result;
     }
 
+    public HelpEntry getEntryWithMasterKeyword(String word) {
 
+        for(HelpEntry he: allEntries) {
+            boolean b = he.hasMasterKeyword(word);
+            if (b)
+                return he;
+        }
+        return null;
+    }
 
+    public HelpEntry getHelpEntryWithHTMLFile(String pathToHTMLFile) {
+        for(HelpEntry he: allEntries) {
+            if (he.pathToHTMLFile.compareTo(pathToHTMLFile) == 0) {
+                return he;
+            }
+        }
+        return null;
+    }
 }

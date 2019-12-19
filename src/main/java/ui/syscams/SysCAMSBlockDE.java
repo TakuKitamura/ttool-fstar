@@ -60,13 +60,17 @@ import java.util.LinkedList;
  */
 
 public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent {
-//	private int period;
-//	private String time;
+
 	private String nameFn;
 	private String code;
+        private String clock;
+        private String clockName;
+        private String clockSensitivityMethod;
+    	private boolean sensitive;
 	private DefaultListModel<String> listStruct;
 	private String nameTemplate;
 	private String typeTemplate;
+        private String valueTemplate;
 	private DefaultListModel<String> listTypedef;
 
 	private int maxFontSize = 14;
@@ -114,6 +118,7 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 		setListStruct(new DefaultListModel<String>());
 		setNameTemplate("");
 		setTypeTemplate("");
+        setValueTemplate("");
 		setListTypedef(new DefaultListModel<String>());
 
 		myImageIcon = IconManager.imgic1202;
@@ -301,10 +306,13 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 		sb.append("<Attribute name_function=\"" + getNameFn());
 //		sb.append(getPeriod());
 //		sb.append("\" time=\"" + getTime());
+		sb.append("\" clockName=\"" + getClockName());
+		sb.append("\" clockSensitivityMethod\"" + getClockSensitivityMethod());
 		sb.append("\" code=\"" + encode(getCode()));
 		sb.append("\" listStruct=\"" + splitParameters(getListStruct()));
 		sb.append("\" nameTemplate=\"" + getNameTemplate());
 		sb.append("\" typeTemplate=\"" + getTypeTemplate());
+		sb.append("\" valueTemplate=\"" + getValueTemplate());
 		sb.append("\" listTypedef=\"" + splitParameters(getListTypedef()));
 		sb.append("\" />\n");
 		sb.append("</extraparam>\n");
@@ -430,7 +438,7 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 			Node n1, n2;
 			Element elt;
 
-			String code, nameFn, listStruct, nameTemplate, typeTemplate, listTypedef;
+			String code, nameFn, listStruct, nameTemplate, typeTemplate, valueTemplate, listTypedef;
 
 			for(int i=0; i<nl.getLength(); i++) {
 				n1 = nl.item(i);
@@ -443,12 +451,16 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 							if (elt.getTagName().equals("Attribute")) {
 //								period = Integer.decode(elt.getAttribute("period")).intValue();
 //								time = elt.getAttribute("time");
+							    	clockName = elt.getAttribute("clockName");
+								clockSensitivityMethod = elt.getAttribute("clockSensitivityMethod");					
 								code = elt.getAttribute("code");
 								nameFn = elt.getAttribute("name_function");
 								listStruct = elt.getAttribute("listStruct");
 								nameTemplate = elt.getAttribute("nameTemplate");
 								typeTemplate = elt.getAttribute("typeTemplate");
+								valueTemplate = elt.getAttribute("valueTemplate");
 								listTypedef = elt.getAttribute("listTypedef");
+								setClockName(clockName);
 //								setPeriod(period);
 //								setTime(time);
 								setNameFn(nameFn);
@@ -464,6 +476,7 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 								setListStruct(lista);
 								setNameTemplate(nameTemplate);
 								setTypeTemplate(typeTemplate);
+								setValueTemplate(valueTemplate);
 								String[] splitb = listTypedef.split("\\|");
 								DefaultListModel<String> listb = new DefaultListModel<String>();
 								for (String s : splitb) {
@@ -519,22 +532,31 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 		return list;
 	}
 
-//	public int getPeriod() {
-//		return period;
-//	}
-//
-//	public void setPeriod(int _period) {
-//		period = _period;
-//	}
-//
-//	public String getTime() {
-//		return time;
-//	}
-//
-//	public void setTime(String _time) {
-//		time = _time;
-//	}
+	public void setClockName(String _clock) {
+		clock = _clock;
+	}
+	
+	public String getClockName() {
+		return clock;
+	}
 
+	public boolean getSensitive() {
+		return sensitive;
+	}
+    
+	public void setSensitive(boolean _sensitive) {
+		sensitive = _sensitive;
+	}
+    
+        public String getClockSensitivityMethod() {
+		return clockSensitivityMethod;
+	}
+
+    
+	public void setClockSensitivityMethod(String _clockSensitivityMethod) {
+		clockSensitivityMethod = _clockSensitivityMethod;
+	}	
+    
 	public void setNameFn(String nameFn) {
 		this.nameFn = nameFn;
 	}
@@ -573,6 +595,14 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 
 	public void setTypeTemplate(String _typeTemplate) {
 		typeTemplate = _typeTemplate;
+	}
+    
+    public String getValueTemplate() {
+        return valueTemplate;
+    }
+    
+    public void setValueTemplate(String _valueTemplate) {
+		valueTemplate = _valueTemplate;
 	}
 
 	public DefaultListModel<String> getListTypedef() {

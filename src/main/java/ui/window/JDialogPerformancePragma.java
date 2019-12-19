@@ -385,6 +385,15 @@ public class JDialogPerformancePragma extends JDialogBase implements ActionListe
                 help();
             }
         });
+
+        helpPopup.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "closeJlabel");
+        helpPopup.getActionMap().put("closeJlabel", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                helpPopup.setVisible(false);
+            }
+        });
+
         JPanel jp = new JPanel();
         jp.add(cancel);
         jp.add(close);

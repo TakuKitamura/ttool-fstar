@@ -75,11 +75,13 @@ public class JDialogTMLCompositePort extends JDialogBase implements ActionListen
     private int lossPercentage;
     private int maxNbOfLoss; //-1 means no max
 
+    private int vc;
+
     public boolean data;
     public boolean checkConf;
     public boolean checkAuth;
     // Panel1
-    private JTextField nameText, maxText, widthText, associatedEventJT;
+    private JTextField nameText, maxText, widthText, associatedEventJT, vcText;
     private JComboBox<String> typePort, typeList1, typeList2, typeList3, typeList4, typeList5;
     private JComboBox<String> origin, finite, blocking, dfType;
     private JComboBox<TGComponent> refReq;
@@ -102,7 +104,8 @@ public class JDialogTMLCompositePort extends JDialogBase implements ActionListen
                                    String title, Vector<String> _types,
                                    String _dataFlowType, String _associatedEvent, boolean _isPrex,
                                    boolean _isPostex, boolean _checkConf,
-                                   boolean _checkAuth, TGComponent _reference, Vector<TGComponent> _refs) {
+                                   boolean _checkAuth, TGComponent _reference, Vector<TGComponent> _refs,
+                                   int _vc) {
         super(f, title, true);
         frame = f;
 
@@ -134,6 +137,7 @@ public class JDialogTMLCompositePort extends JDialogBase implements ActionListen
         checkConf = _checkConf;
         checkAuth = _checkAuth;
         refs = _refs;
+        vc = _vc;
         reference = _reference;
         myInitComponents();
         initComponents();
@@ -216,6 +220,8 @@ public class JDialogTMLCompositePort extends JDialogBase implements ActionListen
         GridBagConstraints c3 = new GridBagConstraints();
         GridBagConstraints c4 = new GridBagConstraints();
         GridBagLayout gridbag4 = new GridBagLayout();
+        GridBagConstraints c5 = new GridBagConstraints();
+        GridBagLayout gridbag5 = new GridBagLayout();
 
         setFont(new Font("Helvetica", Font.PLAIN, 14));
         c.setLayout(gridbag0);
@@ -552,6 +558,29 @@ public class JDialogTMLCompositePort extends JDialogBase implements ActionListen
         maxNbOfLossText = new JTextField("" + maxNbOfLoss);
         panel3.add(maxNbOfLossText, c3);
 
+        JPanel panel5 = new JPanel();
+        panel5.setLayout(gridbag5);
+        panel5.setBorder(new javax.swing.border.TitledBorder("Network"));
+        panel5.setPreferredSize(new Dimension(300, 300));
+        c5.gridwidth = 1;
+        c5.gridheight = 1;
+        c5.weighty = 1.0;
+        c5.weightx = 1.0;
+        c5.gridwidth = GridBagConstraints.REMAINDER; //end row
+        c5.fill = GridBagConstraints.BOTH;
+        c5.gridheight = 5;
+        panel5.add(new JLabel(" "), c5);
+
+
+
+        c5.gridwidth = 1;
+        lossPercentageLabel = new JLabel("VC:");
+        panel5.add(lossPercentageLabel, c5);
+        c5.gridwidth = GridBagConstraints.REMAINDER; //end row
+        vcText = new JTextField("" + vc);
+        panel5.add(vcText, c5);
+
+
 
         // main panel;
         c0.gridwidth = 1;
@@ -565,6 +594,7 @@ public class JDialogTMLCompositePort extends JDialogBase implements ActionListen
         c.add(panel2, c0);
         c.add(panel4, c0);
         c.add(panel3, c0);
+        c.add(panel5, c0);
 
 
         c0.gridheight = 1;
@@ -714,6 +744,7 @@ public class JDialogTMLCompositePort extends JDialogBase implements ActionListen
         lossPercentageText.setEnabled(origin.getSelectedIndex() == 0);
         maxNbOfLossText.setEnabled(origin.getSelectedIndex() == 0);
         lossPercentageLabel.setEnabled(origin.getSelectedIndex() == 0);
+        vcText.setEnabled(origin.getSelectedIndex() == 0);
         maxNbOfLossLabel.setEnabled(origin.getSelectedIndex() == 0);
         if (confCheckBox.isSelected() || authCheckBox.isSelected()) {
             refReq.setEnabled(true);
@@ -806,6 +837,14 @@ public class JDialogTMLCompositePort extends JDialogBase implements ActionListen
             return Integer.decode(maxNbOfLossText.getText().trim());
         } catch (Exception e) {
             return -1;
+        }
+    }
+
+    public int getVC() {
+        try {
+            return Integer.decode(vcText.getText().trim());
+        } catch (Exception e) {
+            return 0;
         }
     }
 }

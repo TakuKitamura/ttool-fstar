@@ -38,6 +38,8 @@
 
 package avatartranslator;
 
+import myutil.TraceManager;
+
 import java.util.Map;
 
 /**
@@ -96,14 +98,58 @@ public class AvatarActionAssignment implements AvatarAction {
 
     @Override
     public void replaceAttributes( Map<AvatarAttribute, AvatarAttribute> attributesMapping) {
-        if (this.leftHand instanceof AvatarAttribute)
-            this.leftHand = attributesMapping.get (this.leftHand);
+        if (this.leftHand instanceof AvatarAttribute) {
+            AvatarAttribute at = attributesMapping.get(this.leftHand);
+            if (at == null) {
+                // Search by name
+                for(AvatarAttribute atbis: attributesMapping.keySet()) {
+                    if (atbis.getName().equals(this.leftHand.getName())) {
+                        at = attributesMapping.get(atbis);
+                        break;
+                    }
+                }
+
+
+            }
+
+            if (at == null) {
+                //TraceManager.addDev("No correspondance for " + this.term1.getName());
+            } else {
+                //TraceManager.addDev("Replaced with: " + at.getClass().getCanonicalName() +
+                //        " / " + at.getName());
+                this.leftHand = at;
+                //TraceManager.addDev("Next expr " + this.toString() + " name of var=" + this.term1.getName());
+            }
+        }
         else
             this.leftHand.replaceAttributes (attributesMapping);
 
-        if (this.rightHand instanceof AvatarAttribute)
-            this.rightHand = attributesMapping.get (this.rightHand);
-        else
-            this.rightHand.replaceAttributes (attributesMapping);
+        if (this.rightHand instanceof AvatarAttribute) {
+            AvatarAttribute at = attributesMapping.get(this.leftHand);
+            if (at == null) {
+                // Search by name
+                for(AvatarAttribute atbis: attributesMapping.keySet()) {
+                    if (atbis.getName().equals(this.rightHand.getName())) {
+                        at = attributesMapping.get(atbis);
+                        break;
+                    }
+                }
+
+
+            }
+
+            if (at == null) {
+                //TraceManager.addDev("No correspondance for " + this.term1.getName());
+            } else {
+                //TraceManager.addDev("Replaced with: " + at.getClass().getCanonicalName() +
+                //        " / " + at.getName());
+                this.rightHand = at;
+                //TraceManager.addDev("Next expr " + this.toString() + " name of var=" + this.term1.getName());
+            }
+        }
+        else {
+            TraceManager.addDev("Right:" + this.rightHand.getClass().getCanonicalName());
+            this.rightHand.replaceAttributes(attributesMapping);
+        }
     }
 }

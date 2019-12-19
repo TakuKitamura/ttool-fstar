@@ -61,7 +61,9 @@ public class TMLSendEvent extends TMLActivityElementEvent {
     }
 
     public String customExtraToXML() {
-	return " event=\"" + event.getName() +  "\" params=\"" + getAllParams() + "\" ";
+        String ret = " event=\"" + event.getName() +  "\" params=\"" + getAllParams() + "\" ";
+        ret += " blocking=\"" + event.isBlocking() + "\" ";
+        return ret;
     }
 
     

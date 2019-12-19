@@ -1,26 +1,26 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- * 
+ *
  * ludovic.apvrille AT enst.fr
- * 
+ *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- * 
+ *
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- * 
+ *
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- * 
+ *
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -31,7 +31,7 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- * 
+ *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
@@ -44,6 +44,8 @@ import common.SpecConfigTTool;
 import launcher.RTLLauncher;
 import myutil.PluginManager;
 import myutil.TraceManager;
+import tmltranslator.TMLMapping;
+import tmltranslator.TMLModeling;
 import ui.MainGUI;
 import ui.util.IconManager;
 import ui.window.JDialogSystemCGeneration;
@@ -61,7 +63,7 @@ import java.util.*;
  *
  * @author Ludovic APVRILLE
  */
-public class Action extends Command  {
+public class Action extends Command {
     // Action commands
     private final static String OPEN = "open";
     private final static String START = "start";
@@ -72,12 +74,13 @@ public class Action extends Command  {
     private final static String DIPLO_ONETRACE_SIMULATION = "diplodocus-onetrace-simulation";
     private final static String DIPLO_GENERATE_TML = "diplodocus-generate-tml";
     private final static String DIPLO_UPPAAL = "diplodocus-uppaal";
+    private final static String DIPLO_REMOVE_NOC = "diplodocus-remove-noc";
 
     private final static String NAVIGATE_PANEL_TO_LEFT = "navigate-panel-to-left";
+    private final static String NAVIGATE_PANEL_TO_RIGHT = "navigate-panel-to-right";
 
     private final static String NAVIGATE_LEFT_PANEL = "navigate-left-panel";
 
-    private final static String GENERIC = "generic";
 
     public Action() {
 
@@ -134,11 +137,19 @@ public class Action extends Command  {
     public void fillSubCommands() {
         // Start
         Command start = new Command() {
-            public String getCommand() { return START; }
-            public String getShortCommand() { return "s"; }
-            public String getDescription() { return "Starting the graphical interface of TTool"; }
+            public String getCommand() {
+                return START;
+            }
 
-            public  String executeCommand(String command, Interpreter interpreter) {
+            public String getShortCommand() {
+                return "s";
+            }
+
+            public String getDescription() {
+                return "Starting the graphical interface of TTool";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
                 if (interpreter.isTToolStarted()) {
                     return Interpreter.TTOOL_ALREADY_STARTED;
                 }
@@ -169,11 +180,19 @@ public class Action extends Command  {
 
         // Open
         Command open = new Command() {
-            public String getCommand() { return OPEN; }
-            public String getShortCommand() { return "o"; }
-            public String getDescription() { return "Opening a model in TTool"; }
+            public String getCommand() {
+                return OPEN;
+            }
 
-            public  String executeCommand(String command, Interpreter interpreter) {
+            public String getShortCommand() {
+                return "o";
+            }
+
+            public String getDescription() {
+                return "Opening a model in TTool";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
                 if (!interpreter.isTToolStarted()) {
                     return Interpreter.TTOOL_NOT_STARTED;
                 }
@@ -186,11 +205,19 @@ public class Action extends Command  {
 
         // Quit
         Command quit = new Command() {
-            public String getCommand() { return QUIT; }
-            public String getShortCommand() { return "q"; }
-            public String getDescription() { return "Closing the graphical interface of TTool"; }
+            public String getCommand() {
+                return QUIT;
+            }
 
-            public  String executeCommand(String command, Interpreter interpreter) {
+            public String getShortCommand() {
+                return "q";
+            }
+
+            public String getDescription() {
+                return "Closing the graphical interface of TTool";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
                 if (!interpreter.isTToolStarted()) {
                     return Interpreter.TTOOL_NOT_STARTED;
                 }
@@ -201,11 +228,19 @@ public class Action extends Command  {
 
         // Check syntax
         Command checkSyntax = new Command() {
-            public String getCommand() { return CHECKSYNTAX; }
-            public String getShortCommand() { return "cs"; }
-            public String getDescription() { return "Checking the syntax of an opened model"; }
+            public String getCommand() {
+                return CHECKSYNTAX;
+            }
 
-            public  String executeCommand(String command, Interpreter interpreter) {
+            public String getShortCommand() {
+                return "cs";
+            }
+
+            public String getDescription() {
+                return "Checking the syntax of an opened model";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
                 if (!interpreter.isTToolStarted()) {
                     return Interpreter.TTOOL_NOT_STARTED;
                 }
@@ -222,11 +257,19 @@ public class Action extends Command  {
 
         // Diplodocus interactive simulation
         Command diplodocusInteractiveSimulation = new Command() {
-            public String getCommand() { return DIPLO_INTERACTIVE_SIMULATION; }
-            public String getShortCommand() { return "dis"; }
-            public String getDescription() { return "Interactive simulation of a DIPLODOCUS model"; }
+            public String getCommand() {
+                return DIPLO_INTERACTIVE_SIMULATION;
+            }
 
-            public  String executeCommand(String command, Interpreter interpreter) {
+            public String getShortCommand() {
+                return "dis";
+            }
+
+            public String getDescription() {
+                return "Interactive simulation of a DIPLODOCUS model";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
                 if (!interpreter.isTToolStarted()) {
                     return Interpreter.TTOOL_NOT_STARTED;
                 }
@@ -247,11 +290,19 @@ public class Action extends Command  {
 
         // Diplodocus interactive simulation
         Command diplodocusFormalVerification = new Command() {
-            public String getCommand() { return DIPLO_FORMAL_VERIFICATION; }
-            public String getShortCommand() { return "dots"; }
-            public String getDescription() { return "Formal verification of a DIPLODOCUS mapping model"; }
+            public String getCommand() {
+                return DIPLO_FORMAL_VERIFICATION;
+            }
 
-            public  String executeCommand(String command, Interpreter interpreter) {
+            public String getShortCommand() {
+                return "dots";
+            }
+
+            public String getDescription() {
+                return "Formal verification of a DIPLODOCUS mapping model";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
                 if (!interpreter.isTToolStarted()) {
                     return Interpreter.TTOOL_NOT_STARTED;
                 }
@@ -272,25 +323,34 @@ public class Action extends Command  {
 
         // Diplodocus interactive simulation
         Command diplodocusOneTraceSimulation = new Command() {
-            public String getCommand() { return DIPLO_ONETRACE_SIMULATION; }
-            public String getShortCommand() { return "dots"; }
-            public String getDescription() { return "One-trace simulation of a DIPLODOCUS model"; }
+            public String getCommand() {
+                return DIPLO_ONETRACE_SIMULATION;
+            }
 
-            public  String executeCommand(String command, Interpreter interpreter) {
+            public String getShortCommand() {
+                return "dots";
+            }
+
+            public String getDescription() {
+                return "One-trace simulation of a DIPLODOCUS model";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
                 if (!interpreter.isTToolStarted()) {
                     return Interpreter.TTOOL_NOT_STARTED;
                 }
 
-                TURTLEPanel tp = interpreter.mgui.getCurrentTURTLEPanel();
+                TMLMapping map = interpreter.mgui.gtm.getTMLMapping();
+                TMLModeling tmlm;
 
-                if (!(tp instanceof TMLArchiPanel)) {
-                    return "Current diagram is invalid for one-trace simulation";
+                if (map == null) {
+                    tmlm = interpreter.mgui.gtm.getTMLModeling();
+                    if (tmlm == null) {
+                        return "No mapping for simulation";
+                    }
                 }
 
-
-                if (interpreter.mgui.checkModelingSyntax(interpreter.mgui.getCurrentTURTLEPanel(), true)) {
-                    interpreter.mgui.generateSystemC(JDialogSystemCGeneration.ONE_TRACE);
-                }
+                interpreter.mgui.generateSystemC(JDialogSystemCGeneration.ONE_TRACE);
 
                 return null;
             }
@@ -298,94 +358,140 @@ public class Action extends Command  {
 
         // Diplodocus generate TML
         Command diplodocusGenerateTML = new Command() {
-            public String getCommand() { return DIPLO_GENERATE_TML; }
-            public String getShortCommand() { return "dgtml"; }
-            public String getDescription() { return "Generate the TML code of a diplodocus model"; }
+            public String getCommand() {
+                return DIPLO_GENERATE_TML;
+            }
 
-            public  String executeCommand(String command, Interpreter interpreter) {
+            public String getShortCommand() {
+                return "dgtml";
+            }
+
+            public String getDescription() {
+                return "Generate the TML code of a diplodocus model";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
                 if (!interpreter.isTToolStarted()) {
                     return Interpreter.TTOOL_NOT_STARTED;
                 }
 
-                TURTLEPanel tp = interpreter.mgui.getCurrentTURTLEPanel();
+                TMLMapping map = interpreter.mgui.gtm.getTMLMapping();
+                TMLModeling tmlm;
 
-                if ((!(tp instanceof TMLArchiPanel)) &&  (!(tp instanceof TMLComponentDesignPanel))){
-                    return "Current diagram is invalid for generating TML";
-                }
-
-                if (interpreter.mgui.checkModelingSyntax(interpreter.mgui.getCurrentTURTLEPanel(), true)) {
-                    String tmp = interpreter.mgui.generateTMLTxt();
-                    if (tmp == null) {
-                        return "TML generation failed";
-                    } else {
-                        return "TML spec generated in: " + tmp;
+                if (map == null) {
+                    tmlm = interpreter.mgui.gtm.getTMLModeling();
+                    if (tmlm == null) {
+                        return "No model for simulation";
                     }
-
                 }
 
-                return null;
+                String tmp = interpreter.mgui.generateTMLTxt();
+                if (tmp == null) {
+                    return "TML generation failed";
+                } else {
+                    return "TML spec generated in: " + tmp;
+                }
+
+                //}
+
+                //return null;
             }
         };
 
         // Diplodocus uppaal
         Command diplodocusUPPAAL = new Command() {
-            public String getCommand() { return DIPLO_UPPAAL; }
-            public String getShortCommand() { return "du"; }
-            public String getDescription() { return "Use UPPAAL for formal verification of a DIPLO app"; }
+            public String getCommand() {
+                return DIPLO_UPPAAL;
+            }
 
-            public  String executeCommand(String command, Interpreter interpreter) {
+            public String getShortCommand() {
+                return "du";
+            }
+
+            public String getDescription() {
+                return "Use UPPAAL for formal verification of a DIPLO app";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
                 if (!interpreter.isTToolStarted()) {
                     return Interpreter.TTOOL_NOT_STARTED;
                 }
 
-                TURTLEPanel tp = interpreter.mgui.getCurrentTURTLEPanel();
+                TMLMapping map = interpreter.mgui.gtm.getTMLMapping();
+                TMLModeling tmlm;
 
-                if (tp == null) {
-                    return "No diagram to verify";
-                }
-
-                if (!(tp instanceof TMLComponentDesignPanel)) {
-                    return "Current diagram is invalid for UPPAAL verification";
-                }
-
-                if (interpreter.mgui.checkModelingSyntax(tp, true)) {
-                    String tmp = interpreter.mgui.generateTMLTxt();
-                    boolean result = interpreter.mgui.gtm.generateUPPAALFromTML(SpecConfigTTool.UPPAALCodeDirectory, false, 8, false);
-
-                    if (!result) {
-                        interpreter.print("UPPAAL verification failed");
-                    } else {
-                        interpreter.print("UPPAAL verification done");
+                if (map == null) {
+                    tmlm = interpreter.mgui.gtm.getTMLModeling();
+                    if (tmlm == null) {
+                        return "No model for simulation";
                     }
-
                 }
+
+                String tmp = interpreter.mgui.generateTMLTxt();
+                boolean result = interpreter.mgui.gtm.generateUPPAALFromTML(SpecConfigTTool.UPPAALCodeDirectory, false, 8, false);
+
+                if (!result) {
+                    interpreter.print("UPPAAL verification failed");
+                } else {
+                    interpreter.print("UPPAAL verification done");
+                }
+
+                //}
 
                 return null;
             }
         };
 
-        // Navigation
-        Command navigateLeftPanel = new Command() {
-            public String getCommand() { return NAVIGATE_LEFT_PANEL; }
-            public String getShortCommand() { return "nlf"; }
-            public String getDescription() { return "Select the edition panel on the left"; }
+        // Diplodocus generate TML
+        Command diplodocusRemoveNoC = new Command() {
+            public String getCommand() {
+                return DIPLO_REMOVE_NOC;
+            }
 
-            public  String executeCommand(String command, Interpreter interpreter) {
+            public String getShortCommand() {
+                return "drn";
+            }
+
+            public String getDescription() {
+                return "Remove the NoCs of a diplodocus mapping";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
                 if (!interpreter.isTToolStarted()) {
                     return Interpreter.TTOOL_NOT_STARTED;
                 }
 
-                interpreter.mgui.selectPanelOnTheLeft();
+                TMLMapping map = interpreter.mgui.gtm.getTMLMapping();
+                TMLModeling tmlm;
+
+                if (map == null) {
+                    tmlm = interpreter.mgui.gtm.getTMLModeling();
+                    if (tmlm == null) {
+                        return "No model for simulation";
+                    }
+                }
+
+                interpreter.mgui.removeNoC(true);
+
                 return null;
             }
         };
+
 
         Command movePanelToTheLeftPanel = new Command() {
-            public String getCommand() { return NAVIGATE_PANEL_TO_LEFT; }
-            public String getShortCommand() { return "nptf"; }
-            public String getDescription() { return "Select the edition panel on the left"; }
+            public String getCommand() {
+                return NAVIGATE_PANEL_TO_LEFT;
+            }
 
-            public  String executeCommand(String command, Interpreter interpreter) {
+            public String getShortCommand() {
+                return "nptf";
+            }
+
+            public String getDescription() {
+                return "Select the edition panel on the left";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
                 if (!interpreter.isTToolStarted()) {
                     return Interpreter.TTOOL_NOT_STARTED;
                 }
@@ -396,36 +502,49 @@ public class Action extends Command  {
             }
         };
 
-        Command generic = new Command() {
-            public String getCommand() { return GENERIC; }
-            public String getShortCommand() { return "g"; }
-            public String getDescription() { return "Apply a generic function of TTool"; }
+        Command movePanelToTheRightPanel = new Command() {
+            public String getCommand() {
+                return NAVIGATE_PANEL_TO_RIGHT;
+            }
 
-            public  String executeCommand(String command, Interpreter interpreter) {
+            public String getShortCommand() {
+                return "nptl";
+            }
+
+            public String getDescription() {
+                return "Select the edition panel on the right";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
                 if (!interpreter.isTToolStarted()) {
                     return Interpreter.TTOOL_NOT_STARTED;
                 }
 
-                ActionPerformer.actionPerformed(interpreter.mgui, null, command.trim(), null);
+                interpreter.mgui.requestMoveRightTab(interpreter.mgui.getCurrentJTabbedPane().getSelectedIndex());
 
                 return null;
             }
         };
 
 
-        subcommands.add(start);
-        subcommands.add(open);
-        subcommands.add(quit);
-        subcommands.add(checkSyntax);
-        subcommands.add(diplodocusInteractiveSimulation);
-        subcommands.add(diplodocusFormalVerification);
-        subcommands.add(diplodocusOneTraceSimulation);
-        subcommands.add(diplodocusGenerateTML);
-        subcommands.add(diplodocusUPPAAL);
 
-        subcommands.add(navigateLeftPanel);
+        Command generic = new Generic();
 
-        subcommands.add(generic);
+
+        addAndSortSubcommand(start);
+        addAndSortSubcommand(open);
+        addAndSortSubcommand(quit);
+        addAndSortSubcommand(checkSyntax);
+        addAndSortSubcommand(diplodocusInteractiveSimulation);
+        addAndSortSubcommand(diplodocusFormalVerification);
+        addAndSortSubcommand(diplodocusOneTraceSimulation);
+        addAndSortSubcommand(diplodocusGenerateTML);
+        addAndSortSubcommand(diplodocusUPPAAL);
+        addAndSortSubcommand(diplodocusRemoveNoC);
+        addAndSortSubcommand(movePanelToTheLeftPanel);
+        addAndSortSubcommand(movePanelToTheRightPanel);
+        addAndSortSubcommand(generic);
 
     }
+
 }

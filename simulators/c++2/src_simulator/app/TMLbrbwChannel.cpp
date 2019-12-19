@@ -69,12 +69,12 @@ void TMLbrbwChannel::write(){
     //aLostBytes /= 100;
     aLostBytes = min(aLostBytes/100, _maxNbOfLosses - _nbOfLosses);
     _content += _writeTrans->getVirtualLength() - aLostBytes;
-    std::cout << "Bytes to write: " << _writeTrans->getVirtualLength()-aLostBytes << "\n";
-    std::cout << "Bytes lost: " << aLostBytes << "\n";
+    // std::cout << "Bytes to write: " << _writeTrans->getVirtualLength()-aLostBytes << "\n";
+    //std::cout << "Bytes lost: " << aLostBytes << "\n";
     _nbOfLosses +=  aLostBytes;
   } else {
 #endif
-    std::cout << "write all  " << _writeTrans->getVirtualLength() << "\n";
+    //std::cout << "write all  " << _writeTrans->getVirtualLength() << "\n";
     _content+=_writeTrans->getVirtualLength();
 #ifdef LOSS_ENABLED
   }

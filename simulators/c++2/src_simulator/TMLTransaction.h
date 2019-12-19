@@ -48,6 +48,13 @@
 //class TMLCommand;
 class TMLChannel;
 
+enum vcdTransVisState
+    {
+	END_IDLE_TRANS,
+	END_PENALTY_TRANS,
+	END_TASK_TRANS
+};
+
 class TMLTransaction {
  public:
   ///Constructor
@@ -74,7 +81,7 @@ class TMLTransaction {
   /**
      \return Start time
   */
-  inline TMLTime getStartTime() const {return _startTime;}
+ inline TMLTime getStartTime() const {return _startTime;}
   ///Returns the start time of the operational part of the transaction
   /**
      \return Start time of the operational part
@@ -159,6 +166,7 @@ class TMLTransaction {
     return _startTime  + _length;
 #endif
   }
+
   ///Returns the idle panalty of the transaction
   /**
      \return Idle penalty
@@ -241,7 +249,19 @@ class TMLTransaction {
   inline void setStateID(ID iID) {_stateID=iID;}
   inline ID getStateID() {return _stateID;}
   inline void setTaskID(ID iID) {_taskID=iID;}
-  void toXML(std::ostringstream& glob, int deviceID, std::string deviceName) const;
+  inline unsigned int getTransactCoreNumber() {return _transactCoreNumber;}
+  inline void setTransactCoreNumber(unsigned int num) {_transactCoreNumber=num;}
+  inline void setTransVcdOutPutState(vcdTransVisState n) {_transVcdOutputState=n;}
+ // inline void setCurrDevice(SchedulableDevice* device) {_currDevice=device;}
+ // inline SchedulableDevice* getCurrDevice() {return _currDevice;}
+ // inline void setPreviousTransEndTime(unsigned int n) {_previousTransEndTime=n;}
+  //inline unsigned int getPreviousTransEndTime() {return _previousTransEndTime;}
+  inline vcdTransVisState getTransVcdOutPutState() {return _transVcdOutputState;}
+  inline void setEndState (bool f) { _endState=f;}
+  inline bool getEndState () {return _endState;}
+  void toXML(std::ostringstream& glob, int deviceID, std::string deviceName, ID uniqueID) const;
+  // Params of the transaction
+  std::string lastParams;
 
 
  protected:
@@ -255,6 +275,17 @@ class TMLTransaction {
   TMLLength _virtualLength;
   ///Pointer to the command the transaction belongs to
   TMLCommand* _command;
+  ///Core number of the transaction
+  unsigned int _transactCoreNumber;
+  ///State variable for the cpu VCD output
+  vcdTransVisState _transVcdOutputState;
+  //state of transaction for VCD output
+  bool _endState;
+
+  ///previous end time for the cpu VCD output
+ // unsigned int _previousTransEndTime;
+  //device executes the current device
+ // SchedulableDevice* currDevice;
 #ifdef PENALTIES_ENABLED
   ///Idle penalty
   TMLTime _idlePenalty;
@@ -271,6 +302,7 @@ class TMLTransaction {
   static MemPoolNoDel<TMLTransaction> memPool;
   ///Current Transaction ID
   static ID _ID;
+
 };
 
 #endif

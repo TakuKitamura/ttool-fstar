@@ -223,6 +223,10 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
 		if (tgc instanceof SysCAMSBlockDE) {
 			tgc.resizeWithFather();
 		}
+
+		if (tgc instanceof SysCAMSClock) {
+			tgc.resizeWithFather();
+		}	
         addInternalComponent(tgc, 0);
 		return true;
     }
@@ -259,6 +263,9 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
 			if (tgcomponent[i] instanceof SysCAMSBlockDE) {
 				tgcomponent[i].resizeWithFather();
 			}
+				if (tgcomponent[i] instanceof SysCAMSClock) {
+				tgcomponent[i].resizeWithFather();
+			}
         }
     }
 	
@@ -283,6 +290,19 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
 			}
 			if (tgcomponent[i] instanceof SysCAMSBlockDE) {
 				ll.add(((SysCAMSBlockDE)(tgcomponent[i])));
+			}
+		}
+		return ll;
+	}
+
+    	public java.util.List<SysCAMSClock> getAllClockComponents() {
+		ArrayList<SysCAMSClock> ll = new ArrayList<SysCAMSClock>();
+		for(int i=0; i<nbInternalTGComponent; i++) {
+			if (tgcomponent[i] instanceof SysCAMSCompositeComponent) {
+				ll.addAll(((SysCAMSCompositeComponent)tgcomponent[i]).getAllClockComponents());
+			}
+			if (tgcomponent[i] instanceof SysCAMSClock) {
+				ll.add(((SysCAMSClock)(tgcomponent[i])));
 			}
 		}
 		return ll;
@@ -406,6 +426,9 @@ public class SysCAMSCompositeComponent extends TGCScalableWithInternalComponent 
     	if (tgc instanceof SysCAMSBlockTDF) {
     		return true;
     	} else if (tgc instanceof SysCAMSBlockDE) {
+    		return true;
+    	}
+	 else if (tgc instanceof SysCAMSClock) {
     		return true;
     	}
     	return false;

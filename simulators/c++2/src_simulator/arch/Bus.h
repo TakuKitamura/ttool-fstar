@@ -116,7 +116,7 @@ public:
       	\param myfile Reference to the ofstream object representing the output file
     	*/
 	void schedule2TXT(std::ofstream& myfile) const;
-	
+	void schedule2XML(std::ostringstream& glob,std::ofstream& myfile) const;
 	void getNextSignalChange(bool iInit, SignalChangeData* oSigData);
 	virtual void streamBenchmarks(std::ostream& s) const;
 	virtual void reset();

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>TTool help</title>
+  <style>
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<h1 id="introduction">Introduction</h1>
+<p>AVATAR stands for Automated Verification of reAl Time softwARe. AVATAR targets the modeling and formal verification of the software of real-time embedded systems.</p>
+<h2 id="diagrams">Diagrams</h2>
+<p>The AVATAR profile reuses eight of the SysML diagrams (Package diagrams are not supported). AVATAR supports the following methodological phases:</p>
+<ul>
+<li><p><em>Requirement capture</em>. Requirements and properties are structured using AVATAR Requirement Diagrams. At this step, properties are just defined with a specific label.</p></li>
+<li><p><strong>Assumption modeling</strong>. Assumptions of system may be captured with an assumption modeling diagram, based on a SysML requirement diagram.</p></li>
+<li><p><strong>System analysis</strong>. A system may be analyzed using Use Case Diagrams, Activity Diagrams and Sequence Diagrams.</p></li>
+<li><p><strong>Software design</strong>. Software is designed in terms of communicating SysML blocks described in an AVATAR Block Diagram, and in terms of behaviors described with AVATAR State Machines.</p></li>
+<li><p><strong>Property modeling</strong>. The formal semantics of properties is defined within TEPE Parametric Diagrams (PDs). Since TEPE PDs involve elements defined in system design (e.g, a given integer attribute of a block), TEPE PDs may be defined only after a first system design has been performed.</p></li>
+<li><p>**Software deploiement* is performed with UML deploiement diagrams</p></li>
+</ul>
+<h2 id="verifications">Verifications</h2>
+<ul>
+<li><p>Formal verification can be performed from software design. Formal verification relies on internal tools (e.g. internal model-checker, reachability graph generator, graph minimization, test sequences generation) or UPPAAL.</p></li>
+<li><p>Simulation can be performed from deploiement diagram. It relies on the SoCLib environment.</p></li>
+<li><p>Executable code generation can be performed from software design diagrams. Code is generated in C/POSIX format.</p></li>
+</ul>
+</body>
+</html>

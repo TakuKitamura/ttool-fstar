@@ -57,6 +57,7 @@ public class OptimizationResult {
    public String result = "";
    public boolean mappingFound = false;
    public String error = null;
+   public TMLMapping resultingMapping;
 
     public OptimizationResult() {
     }

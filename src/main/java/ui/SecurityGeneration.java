@@ -83,7 +83,7 @@ public class SecurityGeneration implements Runnable {
 	List<String> hsmTasks = new ArrayList<String>();
 
 	Map<String, String> channelSecMap = new HashMap<String, String>();
-	TMLMapping<TGComponent> newMap;
+	TMLMapping<TGComponent> newMap;//TMLMapping<?> newMap; FIXME keep or not
 
 	public SecurityGeneration(MainGUI gui, String name, TMLMapping<TGComponent> map, TMLArchiPanel newarch, String encComp, String overhead, String decComp, boolean autoConf, boolean autoWeakAuth, boolean autoStrongAuth,	Map<String, List<String>> selectedCPUTasks){
 
@@ -198,9 +198,28 @@ public class SecurityGeneration implements Runnable {
 		}
 		return map;
 	}
+	
+	/**
+	 * Issue #204: Accounting for the change in naming tasks
+	 * @param task
+	 * @return
+	 */
+	private String getActivityDiagramName( final TMLTask task ) {
+		if ( task == null || task.getName() == null ) {
+			return null;
+		}
+		
+		final String[] splittedName = task.getName().split( "__");
+		
+		if ( splittedName.length > 0 ) {
+			return splittedName[ 1 ];
+		}
+		
+		return task.getName();
+ 	}
 
 	public boolean portInTask(TMLTask task, String portName){
-		TMLActivityDiagramPanel tad = tmlcdp.getTMLActivityDiagramPanel(task.getName());
+		TMLActivityDiagramPanel tad = tmlcdp.getTMLActivityDiagramPanel(task.getName());//( getActivityDiagramName( task ) );
 		for (TGComponent tg : tad.getComponentList()) {
 			if (tg instanceof TMLADWriteChannel) {
 				TMLADWriteChannel writeChannel = (TMLADWriteChannel) tg;
@@ -217,6 +236,7 @@ public class SecurityGeneration implements Runnable {
 		}
 		return false;
 	}
+
 	public void run(){
 		GTMLModeling gtm = new GTMLModeling(newarch, true);
 		map = gtm.translateToTMLMapping();
@@ -328,7 +348,7 @@ public class SecurityGeneration implements Runnable {
 		for (TMLTask task : map.getTMLModeling().getTasks()) {
 			//System.out.println("Task " + task.getName());
 			//Check if all channel operators are secured
-			TMLActivityDiagramPanel tad = tmlcdp.getTMLActivityDiagramPanel(task.getName());
+			TMLActivityDiagramPanel tad = tmlcdp.getTMLActivityDiagramPanel(task.getName()); //FIXME keep or not : getActivityDiagramName( task ) );
 			if (tad==null){
 				continue;
 
@@ -455,13 +475,13 @@ public class SecurityGeneration implements Runnable {
 								  System.out.println("Channel found "+ chantmp);
 								  }*/
 
-						}
-						if (hsmTasks.contains(chan.getOriginTask().getName().split("__")[1])){
-							channelSecMap.put(chanName, "hsmSec_"+secName);
-							if (!hsmSecOutChannels.get(chan.getOriginTask()).contains(chanName) && portInTask(chan.getOriginTask(),chanName)){
-								HSMChannel hsmchan = new HSMChannel(chanName,  chan.getOriginTask().getName().split("__")[1], HSMChannel.MAC);
-								hsmChannelMap.get(taskHSMMap.get(chan.getOriginTask().getName().split("__")[1])).add(hsmchan);
-								hsmSecOutChannels.get(chan.getOriginTask()).add(chanName);
+							}
+							if (hsmTasks.contains(chan.getOriginTask().getName().split("__")[1])){
+								channelSecMap.put(chanName, "hsmSec_"+secName);
+								if (!hsmSecOutChannels.get(chan.getOriginTask()).contains(chanName) && portInTask(chan.getOriginTask(),chanName)){
+									HSMChannel hsmchan = new HSMChannel(chanName,  chan.getOriginTask().getName().split("__")[1], HSMChannel.MAC);
+									hsmChannelMap.get(taskHSMMap.get(chan.getOriginTask().getName().split("__")[1])).add(hsmchan);
+									hsmSecOutChannels.get(chan.getOriginTask()).add(chanName);
 
 								if (autoStrongAuth) {
 									nonceOutChannels.get(chan.getOriginTask()).add(chanName);

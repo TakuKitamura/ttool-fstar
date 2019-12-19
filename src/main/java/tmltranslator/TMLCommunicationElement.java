@@ -43,6 +43,8 @@ package tmltranslator;
 
 import myutil.TraceManager;
 
+import java.util.Objects;
+
 /**
  * Class TMLCommunicationElement
  * Creation: 22/11/2005
@@ -85,5 +87,18 @@ public abstract class TMLCommunicationElement extends TMLElement {
         return maxNbOfLoss;
     }
 
+    public void configLossy(boolean _isLossy, int _percentage, int _maxNbOfLoss) {
+        isLossy = _isLossy;
+        lossPercentage = _percentage;
+        maxNbOfLoss = _maxNbOfLoss;
+    }
 
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof TMLCommunicationElement)) return false;
+        if (!super.equalSpec(o)) return false;
+        TMLCommunicationElement that = (TMLCommunicationElement) o;
+        return isLossy == that.isLossy &&
+                lossPercentage == that.lossPercentage &&
+                maxNbOfLoss == that.maxNbOfLoss;
+    }
 }

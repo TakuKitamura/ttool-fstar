@@ -49,6 +49,8 @@ import ui.TGComponent;
  * Creation: 14/05/2018
  * @version 1.0 14/05/2018
  * @author Irina Kit Yan LEE
+ * @version 1.1 10/06/2019
+ * @author Irina Kit Yan LEE, Daniela GENIUS
 */
 
 public class SysCAMSPortDE extends SysCAMSPrimitivePort {
@@ -56,6 +58,7 @@ public class SysCAMSPortDE extends SysCAMSPrimitivePort {
 //	private String time;
 //	private int rate;
 //	private int delay;
+        private int nbits;//DG
 	private String DEType;
 	private boolean sensitive;
 	private String sensitiveMethod;
@@ -110,7 +113,16 @@ public class SysCAMSPortDE extends SysCAMSPrimitivePort {
 	public boolean getSensitive() {
 		return sensitive;
 	}
+    
+	public int getNbits() {
+		return nbits;
+	}
 
+        public void setNbits(int _nbits) {
+		nbits = _nbits;
+	}
+
+    
 	public void setSensitive(boolean _sensitive) {
 		sensitive = _sensitive;
 	}

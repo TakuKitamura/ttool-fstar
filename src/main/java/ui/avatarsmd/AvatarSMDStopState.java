@@ -82,9 +82,9 @@ public class AvatarSMDStopState extends AvatarSMDBasicComponent implements Embed
     @Override
     public void internalDrawing(Graphics g) {
         ColorManager.setColor(g, state, 0);
-        g.fillOval(x + (width - internalCircleSize)/2, y + (height - internalCircleSize)/2, internalCircleSize, internalCircleSize);
+        g.fillOval(x + (width - scale(internalCircleSize))/2, y + (height - scale(internalCircleSize))/2, scale(internalCircleSize), scale(internalCircleSize));
         g.drawOval(x, y, width, height);
-        g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
+        g.drawLine(x+(width/2), y, x+(width/2), y - scale(lineLength));
     }
 
     @Override

@@ -66,33 +66,48 @@ public abstract class AvatarTerm extends AvatarElement {
         if (toParse == null || toParse.isEmpty ())
             return null;
 
+       // TraceManager.addDev("toParse:" + toParse);
+
         AvatarTerm result = AvatarTermFunction.createFromString (block, toParse);
-        if (result != null)
+        if (result != null) {
+            //TraceManager.addDev("Result1=" + result);
             return result;
+        }
+
 
         result = AvatarTuple.createFromString (block, toParse);
-        if (result != null)
+        if (result != null) {
+           //TraceManager.addDev("Parsed:" + toParse);
+            //TraceManager.addDev("Result2=" + result);
             return result;
+        }
 
         result = AvatarArithmeticOp.createFromString (block, toParse);
-        if (result != null)
+        if (result != null) {
+            //TraceManager.addDev("Result3=" + result);
             return result;
+        }
 
         toParse = toParse.trim ();
         result = block.getAvatarAttributeWithName (toParse);
-        if (result != null)
+        if (result != null) {
+            //TraceManager.addDev("Result4=" + result);
             return result;
+        }
         // TraceManager.addDev ("AvatarAttribute '" + toParse + "' couldn't be parsed");
 
         result = block.getAvatarSpecification ().getAvatarConstantWithName (toParse);
-        if (result != null)
+        if (result != null) {
+            //TraceManager.addDev("Result5=" + result);
             return result;
+        }
 
         try {
             // TODO: replace that by a true AvatarNumeric
             //int i = Integer.parseInt (toParse);
             result = new AvatarConstant (toParse, block);
             block.getAvatarSpecification ().addConstant ((AvatarConstant) result);
+            //TraceManager.addDev("Result6=" + result);
             return result;
         } catch (NumberFormatException e) { }
 
@@ -100,12 +115,14 @@ public abstract class AvatarTerm extends AvatarElement {
         if (AvatarTerm.isValidName (toParse)) {
             result = new AvatarConstant (toParse, block);
             block.getAvatarSpecification ().addConstant ((AvatarConstant) result);
+            //TraceManager.addDev("Result7=" + result);
             return result;
         }
         //TraceManager.addDev ("AvatarConstant '" + toParse + "' couldn't be parsed");
 
         //TraceManager.addDev ("AvatarTerm '" + toParse + "' couldn't be parsed");
         //if (allowRaw)
+        //TraceManager.addDev("Result7: return new term");
             return new AvatarTermRaw (toParse, block);
 	    //else
             //return null;
@@ -123,6 +140,10 @@ public abstract class AvatarTerm extends AvatarElement {
             // This should be an assignment
             AvatarTerm leftHand = AvatarTerm.createFromString (block, toParse.substring (0, indexEq));
             AvatarTerm rightHand = AvatarTerm.createFromString (block, toParse.substring (indexEq + 1));
+
+            //TraceManager.addDev("right hand of /" + toParse + "/ : >" + rightHand + "<");
+
+
             if (leftHand != null && rightHand != null && leftHand.isLeftHand ())
 
                 result = new AvatarActionAssignment ((AvatarLeftHand) leftHand, rightHand);
@@ -173,4 +194,5 @@ public abstract class AvatarTerm extends AvatarElement {
      *      The mapping used to replace the attributes of the term. All the attributes of the block should be present as keys.
      */
     public abstract void replaceAttributes( Map<AvatarAttribute, AvatarAttribute> attributesMapping);
+
 }

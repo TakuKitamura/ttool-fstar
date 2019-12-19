@@ -186,7 +186,7 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         if (pol.contains(x1, y1)) {
             return this;
         }
-
+ 
         return null;
     }
 
@@ -206,11 +206,12 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         int tmp;
         String tmpName;
 
-        JDialogCPUNode dialog = new JDialogCPUNode(frame, "Setting CPU attributes", this, MECType, transactions);
+        JDialogCPUNode dialog = new JDialogCPUNode(getTDiagramPanel().getMainGUI(), frame, "Setting CPU attributes", this, MECType, transactions);
         dialog.setSize(500, 450);
         GraphicLib.centerOnParent(dialog, 500, 450);
         // dialog.show(); // blocked until dialog has been closed
         dialog.setVisible(true);
+        
         MECType = dialog.getMECType();
 
         if (!dialog.isRegularClose()) {
@@ -259,11 +260,11 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
                 if (nbOfCores <= 0) {
                     nbOfCores = tmp;
                     error = true;
-                    errors += "Data size  ";
+                    errors += "Nb of cores   ";
                 }
             } catch (Exception e) {
                 error = true;
-                errors += "Data size  ";
+                errors += "nb of cores  ";
             }
         }
 
@@ -541,10 +542,15 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
                             }
 
                             if (elt.getTagName().equals("attributes")) {
+                                //TraceManager.addDev("LOADING attributes");
+
+
                                 try {
                                     // the "try" statement is for retro compatibility
                                     nbOfCores = Integer.decode(elt.getAttribute("nbOfCores")).intValue();
+                                    //TraceManager.addDev("Setting cores to:" + nbOfCores);
                                 } catch (Exception e) {
+                                    //TraceManager.addDev("Coud not load number of cores");
                                 }
                                 byteDataSize = Integer.decode(elt.getAttribute("byteDataSize")).intValue();
                                 schedulingPolicy = Integer.decode(elt.getAttribute("schedulingPolicy")).intValue();

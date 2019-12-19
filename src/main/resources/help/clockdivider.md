@@ -1,3 +1,9 @@
-The clock divider parameter specifies the relation between the main hardware clock (which is assumed to be unique) and the clock of the corresponding hardware node.
+## Clock divider
 
-Said differently, a clock divider of "x" means that the clock of this nodes runs at mainclock/x MHz.
+The clock divider specifies the operating clock frequency of the corresponding hardware node.
+
+It is expressed via a number that is used to divide the global design
+frequency, whose default value is 200 MHz. Thus a clock divider equal to 4 means that the CPU operates at 200/4 = 50 MHz
+
+
+

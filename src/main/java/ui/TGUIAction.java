@@ -1,3 +1,4 @@
+
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
  *
  * ludovic.apvrille AT enst.fr
@@ -90,7 +91,8 @@ public class TGUIAction extends AbstractAction {
     public static final int ACT_TURTLE_DOCUMENTATION = 118;
     public static final int ACT_DIPLODOCUS_DOCUMENTATION = 242;
     public static final int ACT_SYSMLSEC_DOCUMENTATION = 426;
-    public static final int ACT_ABOUT = 4;
+    public static final int ACT_ABOUT = 518;
+    public static final int ACT_INTEGRATED_HELP = 4;
     public static final int ACT_ENHANCE = 160;
     public static final int ACT_TTOOL_CONFIGURATION = 323;
 
@@ -218,6 +220,8 @@ public class TGUIAction extends AbstractAction {
     public static final int TMLAD_SEND_REQUEST = 143;
     public static final int TMLAD_SEND_EVENT = 144;
     public static final int TMLAD_WAIT_EVENT = 145;
+    public static final int TMLAD_WRITE_CAMS = 523;
+    public static final int TMLAD_READ_CAMS = 524;
     public static final int TMLAD_NOTIFIED_EVENT = 203;
     public static final int TMLAD_READ_CHANNEL = 146;
     public static final int TMLAD_FOR_LOOP = 147;
@@ -280,6 +284,7 @@ public class TGUIAction extends AbstractAction {
     public static final int CAMS_CLUSTER = 480;
     public static final int CAMS_GENCODE = 482;
     public static final int CAMS_BLOCK_GPIO2VCI = 497;
+     public static final int CAMS_CLOCK = 520;
     
     // ELN
     public static final int ELN_EDIT = 483;
@@ -595,6 +600,7 @@ public class TGUIAction extends AbstractAction {
     public static final int SAFETY_PRAGMA = 425;
     public static final int PERFORMANCE_PRAGMA = 438;
     public static final int AVATAR_FIREWALL = 437;
+    public static final int TML_PRAGMA = 521;
 
     public static final int ACT_CUT = 44;
     public static final int ACT_COPY = 45;
@@ -648,8 +654,12 @@ public class TGUIAction extends AbstractAction {
     public static final int ACT_AVATAR_FV_STATICANALYSIS = 365;
     public static final int ACT_AVATAR_EXECUTABLE_GENERATION = 340;
 
+    // DSE
     public static final int ACT_DSE = 434;
     public static final int ACT_DSE_Z3 = 516;
+
+    // NoC and routers
+    public static final int ACT_REMOVENOC = 517;
 
     // Ontologies
     public static final int ACT_GENERATE_ONTOLOGIES_CURRENT_DIAGRAM = 367;
@@ -667,8 +677,8 @@ public class TGUIAction extends AbstractAction {
 
     public static final int MOVE_ENABLED = 463;
     public static final int FIRST_DIAGRAM = 464;
-    
-    public static final int NB_ACTION = 517;
+    public static final int ACT_GEN_LATENCY_GRAPH = 519;
+    public static final int NB_ACTION = 525;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -909,6 +919,7 @@ public class TGUIAction extends AbstractAction {
         actions[ACT_GEN_DOC_REQ] = new TAction("gen-doc-req", "SysML requirements documentation", IconManager.imgic28, IconManager.imgic28, "SysML requirements documentation",  "SysML requirements documentation is displayed in an array, and may be further automatically generated in html format", 0);
 
         actions[ACT_ABOUT] = new TAction("about-command", "About", IconManager.imgic30, IconManager.imgic31, "About", "TTool information", 0);
+        actions[ACT_INTEGRATED_HELP] = new TAction("integrated-help", "Integrated help", IconManager.imgic30, IconManager.imgic31, "Integrated help", "TTool internal help", 0);
         actions[ACT_TURTLE_WEBSITE] = new TAction("turtle-website-command", "TTool's website", IconManager.imgic30, IconManager.imgic31, "TTool's website", "Various information (e.g., documentation) on TTool", 0);
         actions[ACT_TURTLE_DOCUMENTATION] = new TAction("turtle-docu-command", "AVATAR online help", IconManager.imgic30, IconManager.imgic31, "AVATAR online help", "AVATAR online help", 0);
         actions[ACT_DIPLODOCUS_DOCUMENTATION] = new TAction("diplo-docu-command", "DIPLODOCUS online help", IconManager.imgic30, IconManager.imgic31, "DIPLODOCUS online help", "DIPLODOCUS online help", 0);
@@ -985,6 +996,7 @@ public class TGUIAction extends AbstractAction {
         actions[UML_NOTE] = new TAction("edit-note", "Add a note to a diagram", IconManager.imgic320, IconManager.imgic321, "Add a comment", "Add a comment to the currently opened TTool diagram", 0);
         actions[PRAGMA] = new TAction("pragma", "Security pragmas", IconManager.imgic6000, IconManager.imgic6001, "Security pragmas", "Add security pragmas to the currently opened TTool diagram", 0);
         actions[SAFETY_PRAGMA] = new TAction("safety_pragma", "Add a safety (UPPAAL) property to a diagram", IconManager.imgic6002, IconManager.imgic6003, "Safety property (UPPAAL)", "Add a safety (UPPAAL) property to the currently opened TTool diagram", 0);
+        actions[TML_PRAGMA] = new TAction("tml_pragma", "Add a TML pragma", IconManager.imgic6006, IconManager.imgic6007,"TML pragma", "Add a TML pragma to the currently opened TTool diagram", 0);
         actions[PERFORMANCE_PRAGMA] = new TAction("performance_pragma", "Add a performance property to a diagram", IconManager.imgic6004, IconManager.imgic6005, "Performance property", "Add a performance property to the currently opened TTool diagram", 0);
         actions[AVATAR_FIREWALL] = new TAction("avatar_firewall", "Add an avatar firewall to a diagram", IconManager.imgic7001, IconManager.imgic7001, "Add an avatar firewall", "Add an avatar firewall to the currently opened TTool diagram", 0);
 
@@ -1095,8 +1107,11 @@ public class TGUIAction extends AbstractAction {
         actions[TMLAD_WRITE_CHANNEL] = new TAction("add-tmladd-write-channel", "Write in channel", IconManager.imgic900, IconManager.imgic900, "Write in channel", "Add a write to channel operator opened TML activity diagram", 0);
         actions[TMLAD_SEND_REQUEST] = new TAction("add-tmladd-send-request", "Send request", IconManager.imgic902, IconManager.imgic902, "Send request", "Add a send request operator to the currently opened TML activity diagram", 0);
         actions[TMLAD_SEND_EVENT] = new TAction("add-tmladd-send-event", "Send event", IconManager.imgic904, IconManager.imgic904, "Send event", "Add a send event operator to the currently opened TML activity diagram", 0);
-        actions[TMLAD_WAIT_EVENT] = new TAction("add-tmladd-wait-event", "Wait event", IconManager.imgic908, IconManager.imgic908, "Wait event", "Add a wait event operator to the currently opened TML activity diagram", 0);
+        actions[TMLAD_WAIT_EVENT] = new TAction("add-tmladd-wait-event", "Wait event", IconManager.imgic908, IconManager.imgic908, "Wait event", "Add a wait event operator to the currently opened TML activity diagram", 0);      
         actions[TMLAD_NOTIFIED_EVENT] = new TAction("add-tmladd-notified-event", "Notified event", IconManager.imgic918, IconManager.imgic918, "Notified event", "Add a notified event operator to the currently opened TML activity diagram", 0);
+	 actions[TMLAD_WRITE_CAMS] = new TAction("add-tmladd-write-cams", "Write to CAMS", IconManager.imgic904, IconManager.imgic905, "Write to CAMS", "Add a write CAMS operator to the currently opened TML activity diagram", 0);
+        actions[TMLAD_READ_CAMS] = new TAction("add-tmladd-read-cams", "Read CAMS", IconManager.imgic908, IconManager.imgic907, "Read CAMS", "Add a read CAMS operator to the currently opened TML activity diagram", 0);
+	
         actions[TMLAD_READ_CHANNEL] = new TAction("add-tmladd-read-channel", "Read in channel", IconManager.imgic906, IconManager.imgic906, "Read in channel", "Add a read to channel operator opened TML activity diagram", 0);
         actions[TMLAD_FOR_LOOP] = new TAction("add-tmlad-for-loop", "Loop (for)", IconManager.imgic912, IconManager.imgic912, "Loop (for)", "Add a for loop to the currently opened TML activity diagram", 0);
         actions[TMLAD_FOR_STATIC_LOOP] = new TAction("add-tmlad-for-static-loop", "Static loop (for)", IconManager.imgic912, IconManager.imgic912, "Static loop (for)", "Add a static for loop to the currently opened TML activity diagram", 0);
@@ -1138,13 +1153,15 @@ public class TGUIAction extends AbstractAction {
         actions[TMLARCHI_PORT_ARTIFACT] = new TAction("add-tmlarchi-port-artifact", "Map a port", IconManager.imgic702, IconManager.imgic702, "Map a port", "Map a port onto a node in the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_EVENT_ARTIFACT] = new TAction("add-tmlarchi-event-artifact", "Map an event / request", IconManager.imgic702, IconManager.imgic702, "Map an event/request", "Map an event or a request onto a node in the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_BRIDGENODE] = new TAction("add-tmlarchi-bridgenode", "Add a Bridge node", IconManager.imgic1104, IconManager.imgic1104, "Bridge node", "Add a bridge node to the currently opened DIPLODOCUS architecture diagram", 0);
-        actions[TMLARCHI_ROUTERNODE] = new TAction("add-tmlarchi-routernode", "Add a Router node", IconManager.imgic1104, IconManager.imgic1104, "Router node", "Add a router node to the currently opened DIPLODOCUS architecture diagram", 0);
+        actions[TMLARCHI_ROUTERNODE] = new TAction("add-tmlarchi-nocnode", "Add a NoC node", IconManager.imgic1104, IconManager.imgic1104, "NoC node", "Add a NoC node to the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_HWANODE] = new TAction("add-tmlarchi-hwanode", "Add a hardware accelerator node", IconManager.imgic1106, IconManager.imgic1106, "Hardware accelerator node", "Add a hardware accelerator node to the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_CAMSNODE] = new TAction("add-tmlarchi-camsnode", "Add a System C-AMS node", IconManager.imgic1106, IconManager.imgic1106, "System C-AMS node", "Add a System C-AMS node to the currently open DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_MEMORYNODE] = new TAction("add-tmlarchi-memorynode", "Add a memory node", IconManager.imgic1108, IconManager.imgic1108, "Memory node", "Add a memory node to the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_DMANODE] = new TAction("add-tmlarchi-dmanode", "Add a DMA node", IconManager.imgic1110, IconManager.imgic1110, "DMA node", "Add a DMA node to the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_KEY] = new TAction("add-tmlarchi-key", "Map a key", IconManager.imgic1118, IconManager.imgic1118, "Map a key", "Map a key onto a node in the currently opened DIPLODOCUS architecture diagram", 0);
         actions[TMLARCHI_FIREWALL] = new TAction("add-tmlarchi-firewall", "Add a Firewall", IconManager.imgic7001, IconManager.imgic7001, "Add a Firewall", "Add a Firewall in the currently opened DIPLODOCUS architecture diagram",0);
+
+        actions[ACT_REMOVENOC] = new TAction("remove-nocnode", "Remove NoC nodes", IconManager.imgic1104, IconManager.imgic1104, "Remove NoC node", "Replaces NoC nodes with similar tasks and nodes", 0);
 
         actions[TMLCP_EDIT] = new TAction("edit-tmlcp-diagram", "Edit communication pattern diagram", IconManager.imgic100, IconManager.imgic101, "Edit communication pattern diagram", "Make it possible to edit the currently opened communication pattern diagram", 0);
         actions[TMLCP_CONNECTOR] = new TAction("add-tmlcp-connector", "Add CP Connector", IconManager.imgic202, IconManager.imgic202, "Connector", "Add a Connector between two components of the currently opened communication pattern diagram", 0);
@@ -1178,7 +1195,7 @@ public class TGUIAction extends AbstractAction {
         actions[CAMS_CLUSTER] = new TAction("C-AMS-cluster", "Add a cluster", IconManager.imgic8003, IconManager.imgic8003, "Cluster", "Add a cluster to the currently opened SystemC-AMS Diagram", 0);
         actions[CAMS_GENCODE] = new TAction("C-AMS-gencode", "SystemC-AMS code generation",IconManager.imgic94, IconManager.imgic94, "Generate SystemC-AMS code", "SystemC-AMS diagram without check syntax", 0);
         actions[CAMS_BLOCK_GPIO2VCI] = new TAction("C-AMS-block-GPIO2VCI", "Add a block GPIO2VCI",IconManager.imgic8006, IconManager.imgic8006, "GPIO2VCI block", "Add a GPIO2VCI block to the currently opened SystemC-AMS Diagram", 0);
-
+	actions[CAMS_CLOCK] = new TAction("C-AMS-Clock", "Clock", IconManager.imgic8007, IconManager.imgic8007, "Clock", "Add a clock to the currently opened SystemC-AMS diagram", 0);
         // ELN
         actions[ELN_EDIT] = new TAction("add-action-eln", "Action state", IconManager.imgic100, IconManager.imgic101, "Action state", "Add an action state to the currently opened ELN diagram", 0);
         actions[ELN_CONNECTOR] = new TAction("eln-connector", "Add a connection", IconManager.imgic202, IconManager.imgic202, "Connector", "Connects two block of the currently opened ELN Diagram", 0);
@@ -1388,6 +1405,7 @@ public class TGUIAction extends AbstractAction {
 
         actions[MOVE_ENABLED] = new TAction("Move", "Move enabled", IconManager.imgic780, IconManager.imgic780, "Move enabled (shift + arrow)", "Move", 0);
         actions[FIRST_DIAGRAM] = new TAction("FirstDiagram", "First Diagram", IconManager.imgic142, IconManager.imgic142, "Switch the the first diagram", "Switch to the first diagram", 0);
+        actions[ACT_GEN_LATENCY_GRAPH] = new TAction("generate-latency-graph", "Analyze Latency Graph", IconManager.imgic1118, IconManager.imgic1118, "Analyze Latency Graph", "Analyze Latency Graph", '0');
     }
 
     public String getActionCommand()  {

@@ -38,7 +38,7 @@
 \sloppy 
 
 \begin{center}
-\Large Telecom ParisTech \\
+\Large Telecom Paris \\
 \Large COMELEC Department \\
 \vspace{20 pt}
 \underline{\Huge Development Infrastructure for TTool}
@@ -55,7 +55,7 @@
 \textbf{Name}   & Dominique BLOUIN & Ludovic APVRILLE &
 \multirow{2}{*}{Ludovic APVRILLE} \\
 \hhline{--~~}
-\textbf{Contact} & dominique.blouin@telecom-paristech.fr & \multirow{2}{*}{Arthur VUAGNIAUX} &  \\ 
+\textbf{Contact} & dominique.blouin@telecom-paris.fr & \multirow{2}{*}{Arthur VUAGNIAUX} &  \\ 
 \hhline{--~~}
 \textbf{Date} & \today & Matteo BERTOLINO &  \\ 
 \hline
@@ -146,9 +146,9 @@ as well as the testing, building and installation procedures.
 
 \subsection{Gitlab Server}
 
-TTool sources are hosted on the Gitlab server of \textbf{Telecom ParisTech} under the
+TTool sources are hosted on the Gitlab server of \textbf{Telecom Paris} under the
 group \textbf{\textit{mbe}\textit{-tools}} and project \textbf{\textit{TTool}}. The Gitlab project
-can be accessed via \url{https://gitlab.telecom-paristech.fr/users/sign_in}. 
+can be accessed via \url{https://gitlab.telecom-paris.fr/users/sign_in}. 
 Login must be performed using Shibboleth as shown in
 figure~\ref{fig:image1}, using the credentials from your institution if it is a
 member of the Federation Education Recherche (\url{https://services.renater.fr/federation/participants/idp}). Otherwise, please ask us for an account.
@@ -163,7 +163,7 @@ member of the Federation Education Recherche (\url{https://services.renater.fr/f
  
 \subsection{Basic Sources Management}
 
-The address to access the sources is \url{https://gitlab.telecom-paristech.fr/mbe-tools/TTool}.
+The address to access the sources is \url{https://gitlab.telecom-paris.fr/mbe-tools/TTool}.
 For the time being and until further notice, we will keep using a centralized development process, like it was the case for Subversion. In this process, each developer first obtains a clone of the master remote repository. For this, go to the directory where the sources are to be downloaded and issue the following command: \\
 
 
@@ -188,13 +188,13 @@ More information on the use of Git can be found here: \\
 
 By default, Git will ask credentials for each operation. In order to avoid this,
 it is possible to upload a public SSH key at: \\
-\url{https://gitlab.telecom-paristech.fr/profile/keys}.
+\url{https://gitlab.telecom-paris.fr/profile/keys}.
 
 \subsection{Bug Tracking}
 
 The Gitlab server provides an issues tracking system to record bugs, evolutions
 or support demands from users and developers. Issues can be seen at: \\
-\url{https://gitlab.telecom-paristech.fr/mbe-tools/TTool/issues} \\
+\url{https://gitlab.telecom-paris.fr/mbe-tools/TTool/issues} \\
 
 It is suggested to create an issue for every modification that is made to the
 code, providing with the issue detailed information on the problem including
@@ -689,7 +689,7 @@ public class Foo {
 
 Do ensure your file is correctly indented before committing/pushing it.
 Preferably, configure your code editor so that these guidelines are
-automatically enforced.
+automatically enforced. Also, for guidelines not given here, please apply the ones given in \href{https://google.github.io/styleguide/javaguide.html}{Java coding styles}.
 
 
 \subsubsection{How to output debug information}
@@ -889,8 +889,8 @@ public class TToolUtilTestsRunner  {
     public static void main(String[] args) {
         Result result = JUnitCore.runClasses(TestRshClient.class);
 
-        for ( final Failure failure : result.getFailures() ) { 
-            System.err.println( "Test failed : " + failure.toString() );
+        for ( final Failure failure: result.getFailures() ) { 
+            System.err.println( "Test failed: " + failure.toString() );
         }
  		
         if ( result.wasSuccessful() ) {
@@ -1240,7 +1240,7 @@ The current version of IzPack used by TTool is 5.1.3.
 
 \subsection{Sources}
 
-The sources of the installer are located in the TTool-Private Gitlab project at \url{https://gitlab.telecom-paristech.fr/mbe-tools/TTool-Private/tree/master/installer}. 
+The sources of the installer are located in the TTool-Private Gitlab project at \url{https://gitlab.telecom-paris.fr/mbe-tools/TTool-Private/tree/master/installer}. 
 
 \subsection{Configuration File}
 

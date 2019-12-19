@@ -68,4 +68,22 @@ public class TMLError {
     public TMLError(int _type) {
         type = _type;
     }
+
+    public String toString() {
+        String ret = "";
+        ret += message + ".";
+        if (task != null) {
+            ret += " Task: " + task.getName();
+        }
+        if (element != null) {
+            ret += " Activity element: " + element.getName();
+        }
+        if (referenceObject != null) {
+            ret += " Reference: " + referenceObject.toString();
+        }
+
+        return ret;
+    }
+
+
 }

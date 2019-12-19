@@ -59,7 +59,7 @@ public	class JPanelBreakPoints extends JPanel implements ActionListener, ListSel
 	
 	
 	private JFrameInteractiveSimulation jfis;
-	private java.util.List<Point> points;
+	private java.util.List<Point> points; // task & command
 	private Vector<String> breakpoints;
 	
 	

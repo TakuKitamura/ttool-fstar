@@ -1,0 +1,330 @@
+// TML Application - FORMAT 0.1
+// Application: /Users/localapvrille/TToolgit/TTool/modeling/DIPLODOCUS/SmartCardProtocol.xml
+// Generated: Fri Jul 19 10:32:01 CEST 2019
+
+// Channels
+CHANNEL AppC__fromAtoT BRNBW 4 OUT AppC__Application IN AppC__TCPIP
+CHANNEL AppC__fromDtoSC BRNBW 40 OUT AppC__InterfaceDevice IN AppC__SmartCard
+CHANNEL AppC__fromPtoT BRNBW 4 OUT AppC__SmartCard IN AppC__TCPIP
+CHANNEL AppC__fromSCtoD BRNBW 40 OUT AppC__SmartCard IN AppC__InterfaceDevice
+CHANNEL AppC__fromTtoA BRNBW 4 OUT AppC__TCPIP IN AppC__Application
+CHANNEL AppC__fromTtoP BRNBW 4 OUT AppC__TCPIP IN AppC__SmartCard
+CHANNEL AppC__temp NBRNBW 4 OUT AppC__TCPIP IN AppC__TCPIP
+
+// Events
+EVENT AppC__abort__AppC__abort() NINB 1 AppC__Application AppC__TCPIP
+EVENT AppC__answerToReset__AppC__answerToReset() NINB 1 AppC__SmartCard AppC__InterfaceDevice
+EVENT AppC__close__AppC__close() NINB 1 AppC__Application AppC__TCPIP
+EVENT AppC__connectionOpened__AppC__connectionOpened() NIB 8 AppC__Application AppC__SmartCard
+EVENT AppC__data_Ready_SC__AppC__data_Ready_SC() INF AppC__SmartCard AppC__InterfaceDevice
+EVENT AppC__data_Ready__AppC__data_Ready(int, bool) INF AppC__InterfaceDevice AppC__SmartCard
+EVENT AppC__end__AppC__end() NINB 1 AppC__InterfaceDevice AppC__SmartCard
+EVENT AppC__open__AppC__open() NINB 1 AppC__Application AppC__TCPIP
+EVENT AppC__opened__AppC__opened() INF AppC__TCPIP AppC__Application
+EVENT AppC__pTSConfirm__AppC__pTSConfirm() NINB 1 AppC__SmartCard AppC__InterfaceDevice
+EVENT AppC__pTS__AppC__pTS() NINB 1 AppC__InterfaceDevice AppC__SmartCard
+EVENT AppC__receive_Application__AppC__receive_Application() INF AppC__TCPIP AppC__Application
+EVENT AppC__receive__AppC__receive() INF AppC__SmartCard AppC__TCPIP
+EVENT AppC__reset__AppC__reset() NINB 1 AppC__InterfaceDevice AppC__SmartCard
+EVENT AppC__send_TCP__AppC__send_TCP() INF AppC__Application AppC__TCPIP
+EVENT AppC__send__AppC__send() INF AppC__TCPIP AppC__SmartCard
+EVENT AppC__stop__AppC__stop() NINB 1 AppC__TCPIP AppC__Timer
+EVENT AppC__timeOut__AppC__timeOut() NINB 1 AppC__Timer AppC__TCPIP
+
+// Requests
+REQUEST AppC__activation() AppC__InterfaceDevice AppC__SmartCard
+REQUEST AppC__req_Timer() AppC__TCPIP AppC__Timer
+REQUEST AppC__start_Application() AppC__SmartCard AppC__Application
+REQUEST AppC__start_TCP_IP() AppC__Application AppC__SmartCard AppC__TCPIP
+
+TASK AppC__Application
+    TASKOP
+    //Local variables
+    
+    //Behavior
+    NOTIFY AppC__open__AppC__open
+    WAIT AppC__opened__AppC__opened
+    NOTIFY AppC__connectionOpened__AppC__connectionOpened
+    EXECI 10
+    WRITE AppC__fromAtoT 1
+    NOTIFY AppC__send_TCP__AppC__send_TCP
+    RAND
+        CASERAND 50
+            NOTIFY AppC__close__AppC__close
+        ENDCASERAND
+        CASERAND 50
+            NOTIFY AppC__abort__AppC__abort
+        ENDCASERAND
+    ENDRAND
+ENDTASK
+
+TASK AppC__InterfaceDevice
+    TASKOP
+    //Local variables
+    int resetType = 0
+    int x = 0
+    int i = 0
+    int nbOfComputedPackets = 1
+    bool b
+    
+    //Behavior
+    NOTIFYREQUEST AppC__activation
+    NOTIFY AppC__reset__AppC__reset
+    WAIT AppC__answerToReset__AppC__answerToReset
+    NOTIFY AppC__pTS__AppC__pTS
+    WAIT AppC__pTSConfirm__AppC__pTSConfirm
+    FOR(i=0; i<nbOfComputedPackets; i = i +1)
+        RAND
+            CASERAND 50
+                WRITE AppC__fromDtoSC 1
+                NOTIFY AppC__data_Ready__AppC__data_Ready x b
+            ENDCASERAND
+            CASERAND 50
+                NOTIFIED AppC__data_Ready_SC__AppC__data_Ready_SC x
+                IF (x==0)
+                ORIF (x>0)
+                    WAIT AppC__data_Ready_SC__AppC__data_Ready_SC
+                    READ AppC__fromSCtoD 1
+                ENDIF
+            ENDCASERAND
+        ENDRAND
+    ENDFOR
+    NOTIFY AppC__end__AppC__end
+ENDTASK
+
+TASK AppC__SmartCard
+    TASKOP
+    //Local variables
+    int resetType = 0
+    int a = 0
+    bool b
+    int i = 0
+    int j = 0
+    int x = 0
+    int tcpctrl__a
+    int tcpctrl__state
+    int t
+    
+    //Behavior
+    WAIT AppC__reset__AppC__reset
+    NOTIFY AppC__answerToReset__AppC__answerToReset
+    WAIT AppC__pTS__AppC__pTS
+    NOTIFY AppC__pTSConfirm__AppC__pTSConfirm
+    NOTIFYREQUEST AppC__start_TCP_IP
+    NOTIFYREQUEST AppC__start_Application
+    WAIT AppC__connectionOpened__AppC__connectionOpened
+    FOR(j=0; x==0; j = j)
+        SELECTEVT
+            CASE AppC__send__AppC__send
+                READ AppC__fromTtoP 1
+                NOTIFY AppC__data_Ready_SC__AppC__data_Ready_SC
+                WRITE AppC__fromSCtoD 1
+            ENDCASE
+            CASE AppC__data_Ready__AppC__data_Ready t b
+                READ AppC__fromDtoSC 1
+                NOTIFY AppC__receive__AppC__receive
+                WRITE AppC__fromPtoT 1
+            ENDCASE
+            CASE AppC__end__AppC__end
+            ENDCASE
+        ENDSELECTEVT
+    ENDFOR
+ENDTASK
+
+TASK AppC__TCPIP
+    TASKOP
+    //Local variables
+    int wind = 64
+    int seqNum = 0
+    int i
+    int j
+    int a = 0
+    int b = 0
+    int tcpctrl__a
+    int tcpctrl__state
+    
+    //Behavior
+    FOR(i=0; (tcpctrl__a==0); i = i)
+        NOTIFIED AppC__abort__AppC__abort tcpctrl__a
+        IF (tcpctrl__a>0)
+            WAIT AppC__abort__AppC__abort
+        ORIF (tcpctrl__a==0)
+            SELECTEVT
+                CASE AppC__timeOut__AppC__timeOut
+                    READ AppC__temp 1
+                    EXECI b
+                    WRITE AppC__fromTtoP 1
+                    NOTIFY AppC__send__AppC__send
+                ENDCASE
+                CASE AppC__receive__AppC__receive
+                    READ AppC__fromPtoT 1
+                    EXECI b b
+                    RAND
+                        CASERAND 33
+                            RAND
+                                CASERAND 33
+                                    NOTIFY AppC__stop__AppC__stop
+                                    READ AppC__temp 1
+                                    RAND
+                                        CASERAND 50
+                                            EXECI b
+                                            WRITE AppC__fromTtoP 1
+                                            NOTIFY AppC__send__AppC__send
+                                            WRITE AppC__temp 1
+                                        ENDCASERAND
+                                        CASERAND 50
+                                            IF (tcpctrl__state==2)
+                                                tcpctrl__state=4
+                                            ORIF (tcpctrl__state==4)
+                                            ELSE
+                                                IF (tcpctrl__state==5)
+                                                    tcpctrl__state=6
+                                                ORIF (tcpctrl__state==7)
+                                                    tcpctrl__state=8
+                                                    tcpctrl__state=0
+                                                ELSE
+                                                    IF (tcpctrl__state==10)
+                                                        tcpctrl__state=0
+                                                    ELSE
+                                                    ENDIF
+                                                ENDIF
+                                            ENDIF
+                                        ENDCASERAND
+                                    ENDRAND
+                                ENDCASERAND
+                                CASERAND 33
+                                    IF (tcpctrl__state==4)
+                                        EXECI b
+                                        WRITE AppC__fromTtoA 1
+                                        NOTIFY AppC__receive_Application__AppC__receive_Application
+                                        EXECI b
+                                        WRITE AppC__fromTtoP 1
+                                        NOTIFY AppC__send__AppC__send
+                                    ELSE
+                                    ENDIF
+                                ENDCASERAND
+                                CASERAND 33
+                                    IF (tcpctrl__state==1)
+                                        EXECI b
+                                        seqNum=seqNum+wind
+                                        WRITE AppC__fromTtoP 1
+                                        NOTIFY AppC__send__AppC__send
+                                        NOTIFYREQUEST AppC__req_Timer
+                                        WRITE AppC__temp 1
+                                        tcpctrl__state=2
+                                    ORIF (tcpctrl__state==3)
+                                        EXECI b
+                                        WRITE AppC__fromTtoP 1
+                                        NOTIFY AppC__send__AppC__send
+                                        tcpctrl__state=2
+                                    ELSE
+                                    ENDIF
+                                ENDCASERAND
+                            ENDRAND
+                        ENDCASERAND
+                        CASERAND 33
+                            IF (tcpctrl__state==0)
+                                tcpctrl__state=1
+                            ORIF (tcpctrl__state==0)
+                                EXECI b
+                                WRITE AppC__fromTtoP 1
+                                NOTIFY AppC__send__AppC__send
+                                tcpctrl__state=3
+                            ELSE
+                            ENDIF
+                        ENDCASERAND
+                        CASERAND 33
+                            IF (tcpctrl__state==5)
+                                EXECI b
+                                WRITE AppC__fromTtoP 1
+                                NOTIFY AppC__send__AppC__send
+                                tcpctrl__state=7
+                            ORIF (tcpctrl__state==4)
+                                EXECI b
+                                WRITE AppC__fromTtoP 1
+                                NOTIFY AppC__send__AppC__send
+                                tcpctrl__state=9
+                            ELSE
+                                IF (tcpctrl__state==6)
+                                    EXECI b
+                                    WRITE AppC__fromTtoP 1
+                                    tcpctrl__state=8
+                                    NOTIFY AppC__send__AppC__send
+                                    tcpctrl__state=0
+                                ELSE
+                                ENDIF
+                            ENDIF
+                        ENDCASERAND
+                    ENDRAND
+                ENDCASE
+                CASE AppC__close__AppC__close
+                    IF ((tcpctrl__state==2)or(tcpctrl__state==4))
+                        EXECI b
+                        seqNum=seqNum+wind
+                        WRITE AppC__fromTtoP 1
+                        NOTIFY AppC__send__AppC__send
+                        tcpctrl__state=5
+                        NOTIFYREQUEST AppC__req_Timer
+                        WRITE AppC__temp 1
+                    ORIF (tcpctrl__state==9)
+                        EXECI b
+                        seqNum=seqNum+wind
+                        WRITE AppC__fromTtoP 1
+                        NOTIFY AppC__send__AppC__send
+                        tcpctrl__state=10
+                        NOTIFYREQUEST AppC__req_Timer
+                        WRITE AppC__temp 1
+                    ELSE
+                        IF (tcpctrl__state==1)
+                            tcpctrl__state=0
+                        ELSE
+                        ENDIF
+                    ENDIF
+                ENDCASE
+                CASE AppC__send_TCP__AppC__send_TCP
+                    IF (tcpctrl__state==4)
+                        READ AppC__fromAtoT 1
+                        EXECI b
+                        seqNum=seqNum+wind
+                        WRITE AppC__fromTtoP 1
+                        NOTIFY AppC__send__AppC__send
+                        NOTIFYREQUEST AppC__req_Timer
+                        WRITE AppC__temp 1
+                    ORIF (tcpctrl__state==1)
+                        EXECI b
+                        seqNum=seqNum+wind
+                        WRITE AppC__fromTtoP 1
+                        NOTIFY AppC__send__AppC__send
+                        tcpctrl__state=3
+                        NOTIFYREQUEST AppC__req_Timer
+                        WRITE AppC__temp 1
+                    ELSE
+                    ENDIF
+                ENDCASE
+                CASE AppC__open__AppC__open
+                    NOTIFY AppC__opened__AppC__opened
+                    IF (tcpctrl__state==0)
+                        tcpctrl__state=1
+                    ELSE
+                    ENDIF
+                ENDCASE
+            ENDSELECTEVT
+        ENDIF
+    ENDFOR
+    tcpctrl__state=0
+ENDTASK
+
+TASK AppC__Timer
+    TASKOP
+    //Local variables
+    int x = 0
+    
+    //Behavior
+    NOTIFIED AppC__stop__AppC__stop x
+    IF (x==0)
+        NOTIFY AppC__timeOut__AppC__timeOut
+    ORIF (x>0)
+        WAIT AppC__stop__AppC__stop
+    ENDIF
+ENDTASK
+

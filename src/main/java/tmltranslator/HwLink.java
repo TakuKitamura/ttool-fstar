@@ -39,6 +39,8 @@
 
 package tmltranslator;
 
+import java.util.Objects;
+
 /**
  * Class HwLink
  * Creation: 05/09/2007
@@ -84,6 +86,11 @@ public class HwLink implements Comparable<HwLink> {
         return s;
     }
 
+    public void setNodes(HwBus bus, HwNode node) {
+        this.bus = bus;
+        this.hwnode = node;
+    }
+
     public boolean areConnected(HwNode node1, HwNode node2) {
         if (connectedBusHwNode(node1, node2)) {
             return true;
@@ -98,6 +105,16 @@ public class HwLink implements Comparable<HwLink> {
         }
 
         return (nodeBus == bus) || (nodeBus == vgmn) || (nodeBus == crossbar);
+    }
+
+    public boolean equalSpec(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HwLink hwLink = (HwLink) o;
+        return priority == hwLink.priority &&
+                bus.getName().equals(hwLink.bus.getName()) &&
+                hwnode.getName().equals(hwLink.hwnode.getName()) &&
+                Objects.equals(getName(),hwLink.getName());
     }
 
 }

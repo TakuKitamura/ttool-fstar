@@ -47,7 +47,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLEventChannel.h>
 
 ///This class models a send event operation within a TML task.
-class TMLSendCommand:public TMLCommand{
+class TMLSendCommand:public TMLCommand {
 public:
 	///Constructor
     	/**
@@ -86,6 +86,8 @@ protected:
 	////Bitmap of live variables
 	//const char* _liveVarList;
 	TMLCommand* prepareNextTransaction();
+
+	
 };
 
 #endif

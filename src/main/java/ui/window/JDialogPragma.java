@@ -38,6 +38,7 @@
 
 package ui.window;
 
+import myutil.TraceManager;
 import ui.util.IconManager;
 
 import javax.swing.*;
@@ -308,6 +309,7 @@ public class JDialogPragma extends JDialogBase implements ActionListener {
         //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	
         helpPopup = new JPopupMenu();
         JTextArea jft = new JTextArea("Pragma Guidelines: \n #Authenticity: Compare if two Attributes are equal at given states \n #Confidentiality: Query whether the attacker knows the value of this attribute. \n #PublicConstant: Declare string as public constant \n #PrivateConstant: Declare string as private constant \n #InitialSessionKnowledge: Knowledge at the start of each session\n #InitialSystemKnowledge: Knowledge at the start of the system \n #PrivatePublicKeys: Set two attribute of a block as Private and Public Key respectively \n #Public: Declare variable public \n #SecrecyAssumption: Assume attribute confidential, but query to verify \n #Secret: See #Confidentiality");
+        jft.setEditable(false);
         helpPopup.add(jft);
         textarea = new JTextArea();
 
@@ -387,6 +389,15 @@ public class JDialogPragma extends JDialogBase implements ActionListener {
                 help();
             }
         });
+
+        helpPopup.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"), "closeJTextArea");
+        helpPopup.getActionMap().put("closeJTextArea", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                helpPopup.setVisible(false);
+            }
+        });
+
         JPanel jp = new JPanel();
         jp.add(cancel);
         jp.add(close);

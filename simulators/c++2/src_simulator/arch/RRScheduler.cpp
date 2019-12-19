@@ -41,6 +41,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <TMLTransaction.h>
 #include <TMLCommand.h>
 #include <TMLTask.h>
+#include <CPU.h>
 
 RRScheduler::RRScheduler(const std::string& iName, Priority iPrio, TMLTime iTimeSlice ,TMLTime iMinSliceSize): WorkloadSource(iPrio), _name(iName), _nextTransaction(0), _timeSlice(iTimeSlice), _minSliceSize(iMinSliceSize), _elapsedTime(0), _lastSource(0){
 }
@@ -51,7 +52,7 @@ RRScheduler::RRScheduler(const std::string& iName, Priority iPrio, TMLTime iTime
 TMLTime RRScheduler::schedule(TMLTime iEndSchedule){
 	TaskList::iterator i;
 	//std::cout << _name << ": Schedule called \n";
-	TMLTransaction *anOldTransaction=_nextTransaction, *aTempTrans;
+	TMLTransaction *anOldTransaction=_nextTransaction, *aTempTrans, *isDelayTrans;
 	TMLTime aLowestRunnableTimeFuture=-1,aRunnableTime, aLowestRunnableTimePast=-1;
 	WorkloadSource *aSourcePast=0, *aSourceFuture=0;
 	//, *aScheduledSource=0;
@@ -60,8 +61,10 @@ TMLTime RRScheduler::schedule(TMLTime iEndSchedule){
 		//aScheduledSource=_lastSource;
 		_lastSource->schedule(iEndSchedule);
 		if (_lastSource->getNextTransaction(iEndSchedule)!=0 && _lastSource->getNextTransaction(iEndSchedule)->getVirtualLength()!=0){
-			//if (anOldTransaction==0 || _lastSource->getNextTransaction(iEndSchedule)==anOldTransaction || _timeSlice >=_elapsedTime +  anOldTransaction->getBranchingPenalty() + anOldTransaction->getOperationLength() + _minSliceSize){
-			if (anOldTransaction==0 || _lastSource->getNextTransaction(iEndSchedule)==anOldTransaction || _timeSlice >=_elapsedTime +  anOldTransaction->getOperationLength() + _minSliceSize){
+		    isDelayTrans = _lastSource->getNextTransaction(iEndSchedule);
+		    if((!(isDelayTrans->getCommand()->getActiveDelay()) && isDelayTrans->getCommand()->isDelayTransaction())){
+		         aSameTaskFound=false;
+		    }else if (anOldTransaction==0 || _lastSource->getNextTransaction(iEndSchedule)==anOldTransaction || _timeSlice >=_elapsedTime +  anOldTransaction->getOperationLength() + _minSliceSize){
 				//std::cout << "Select same task, remaining: " << _timeSlice - anOldTransaction->getOperationLength() << "\n";
 				aSourcePast=_lastSource;
 				aSameTaskFound=true;
@@ -71,6 +74,7 @@ TMLTime RRScheduler::schedule(TMLTime iEndSchedule){
 	if (!aSameTaskFound){
 		//std::cout << _name << ": Second if\n";
 		for(WorkloadList::iterator i=_workloadList.begin(); i != _workloadList.end(); ++i){
+
 			//std::cout << "Loop\n";
 			//if (*i!=aScheduledSource)
 			 (*i)->schedule(iEndSchedule);
@@ -142,7 +146,7 @@ void RRScheduler::reset(){
 //}
 
 RRScheduler::~RRScheduler(){
-	std::cout << _name << ": Scheduler deleted\n";
+  //std::cout << _name << ": Scheduler deleted\n";
 }
 
 std::istream& RRScheduler::readObject(std::istream &is){

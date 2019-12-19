@@ -51,7 +51,8 @@ SchedulableDevice::SchedulableDevice(	ID iID,
 						_deleteScheduler(true),
 						_busyCycles(0),
 						_static_consumPerCycle (15),
-						_dynamic_consumPerCycle (35) {
+						_dynamic_consumPerCycle (35),
+						_cycleTime(0) {
 	_transactList.reserve( BLOCK_SIZE_TRANS );
 }
 
@@ -92,24 +93,36 @@ TMLTransaction* SchedulableDevice::getTransactions1By1(bool iInit){
 
 // Issue #4: Some browsers (like Firefox) do not support column spans of more than 1000 columns
 void SchedulableDevice::writeHTMLColumn(	std::ofstream& myfile,
-											const unsigned int colSpan,
-											const std::string cellClass ) {
+						const unsigned int colSpan,
+						const std::string cellClass ) {
 	writeHTMLColumn( myfile, colSpan, cellClass, "" );
 }
 
+
 void SchedulableDevice::writeHTMLColumn(	std::ofstream& myfile,
-											const unsigned int colSpan,
-											const std::string cellClass,
-											const std::string title ) {
+						const unsigned int colSpan,
+						const std::string cellClass,
+						const std::string title) {
 	writeHTMLColumn( myfile, colSpan, cellClass, title, "", true );
 }
 
+
 void SchedulableDevice::writeHTMLColumn(	std::ofstream& myfile,
-											const unsigned int colSpan,
-											const std::string cellClass,
-											const std::string title,
-											const std::string content,
-											const bool endline ) {
+						const unsigned int colSpan,
+						const std::string cellClass,
+						const std::string title,
+						const std::string content) {
+	writeHTMLColumn( myfile, colSpan, cellClass, title, content, true );
+}
+
+
+
+void SchedulableDevice::writeHTMLColumn(	std::ofstream& myfile,
+						const unsigned int colSpan,
+						const std::string cellClass,
+						const std::string title,
+						const std::string content,
+						const bool endline ) {
 	std::string begLine( START_TD );
 
 	if ( !title.empty() ) {
@@ -120,7 +133,7 @@ void SchedulableDevice::writeHTMLColumn(	std::ofstream& myfile,
 
 	begLine.append( " class=\"" );
 
-	if ( colSpan == 1 ) {
+	if ( colSpan == 1) {
 		begLine.append( cellClass );
 		begLine.append( "\"" );
 		myfile << begLine << ">" << END_TD;
@@ -167,6 +180,7 @@ void SchedulableDevice::writeHTMLColumn(	std::ofstream& myfile,
 	}
 }
 
+
 std::string SchedulableDevice::determineHTMLCellClass( 	std::map<TMLTask*, std::string> &taskColors,
 														TMLTask* task,
 														unsigned int &nextColor ) {
@@ -183,7 +197,192 @@ std::string SchedulableDevice::determineHTMLCellClass( 	std::map<TMLTask*, std::
 	return taskColors[ task ];
 }
 
-void SchedulableDevice::schedule2HTML(std::ofstream& myfile) const {
+
+double SchedulableDevice::averageLoad() const{
+  double _averageLoad=0;
+  TMLTime _maxEndTime=0;
+  for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
+      TMLTime _endTime= (*i)->getEndTime();
+      _maxEndTime=max(_maxEndTime,_endTime);
+  }
+  std::cout<<"max end time is "<<_maxEndTime<<std::endl;
+  for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
+     _averageLoad += (*i)->getEndTime() - (*i)->getStartTime();  
+  
+  }
+  if(_maxEndTime == 0)
+    return 0;
+  else {
+    _averageLoad = (double)_averageLoad/_maxEndTime;
+    return _averageLoad;
+  }
+  
+}
+
+void SchedulableDevice::drawPieChart(std::ofstream& myfile) const { 
+  TMLTime _maxEndTime=0;
+
+  for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
+    TMLTime _endTime= (*i)->getEndTime();
+    _maxEndTime=max(_maxEndTime,_endTime);
+  }
+   
+  std::map <TMLTask*, double > transPercentage;
+  for( TransactionList::const_iterator i = _transactList.begin(); i!= _transactList.end(); ++i){     
+    transPercentage[(*i)-> getCommand()->getTask()]+=(double)((*i)->getEndTime()-(*i)->getStartTime())/_maxEndTime;           
+  }
+    
+  std::map <TMLTask*, double>::iterator iter = transPercentage.begin();
+  myfile << "   var ctx" << _ID << "= $(\"#pie-chartcanvas-" << _ID << "\");\n";
+    
+  double idle=1;
+  myfile << "   var data" << _ID << " = new Array (";
+  while( iter != transPercentage.end()){
+    myfile << "\"" << iter->second << "\",";
+    idle-=iter->second;
+    ++iter;
+  }
+  myfile << "\"" << idle << "\");\n";
+    
+  myfile << "    var efficiency" << _ID << " = [];" << std::endl;
+  myfile << "    var coloR" << _ID << " = [];" << std::endl;
+  myfile << "    var dynamicColors" << _ID << SCHED_HTML_JS_FUNCTION;
+    
+  myfile << "    for (var i in data" << _ID << "){\n";
+  myfile << "             efficiency" << _ID << ".push(data" << _ID << "[i]);\n";
+  myfile << "             coloR" << _ID << ".push(dynamicColors" << _ID << "());\n";
+  myfile << "}" << std::endl;
+    
+  myfile << "   var data" << _ID << " = { \n";
+  myfile << "           labels : [";
+  iter = transPercentage.begin();
+  while( iter != transPercentage.end()){
+    myfile << " \"" << iter->first->toString() << "\",";
+    idle-=iter->second;
+    ++iter;
+  }        
+  myfile << "\"idle time\"],\n";
+  myfile << "          datasets : [\n \
+                                     {\n \
+                                           data : efficiency" << _ID << ",\n";
+  myfile << "                            backgroundColor : coloR" << _ID << std::endl;
+  myfile << SCHED_HTML_JS_CONTENT1;
+  myfile << "  var options" << _ID << SCHED_HTML_JS_CONTENT3;
+  myfile << _name << ": Average load is " <<  std::setprecision(2) << averageLoad() << SCHED_HTML_JS_CONTENT2 << std::endl; 
+ 
+}
+  
+
+
+void SchedulableDevice::showPieChart(std::ofstream& myfile) const{
+  //myfile << SCHED_HTML_JS_BUTTON1 << _ID  << SCHED_HTML_JS_BUTTON2 << std::endl;
+  myfile << SCHED_HTML_JS_DIV_BEGIN2 << std::endl;
+  myfile << SCHED_HTML_JS_BEGIN_CANVAS << _ID << SCHED_HTML_JS_END_CANVAS <<std::endl;
+  myfile << SCHED_HTML_JS_DIV_END << std::endl;
+}
+
+void SchedulableDevice::buttonPieChart(std::ofstream& myfile) const{
+  // myfile << "$(\"#" << _ID << "\").click(function() {\n";
+    myfile << "    var chart" << _ID << " = new Chart( "<<
+      "ctx" << _ID << ", {\n \
+              type : \"pie\",\n";
+    myfile << "               data : data" << _ID << ",\n";
+    myfile << "               options : options" << _ID << std::endl << "                   });" << std::endl;
+    // myfile << "   chart" << _ID << SCHED_HTML_JS_HIDE;
+    myfile << "   if(!" << SHOW_PIE_CHART << "){\n \t"
+        << "      document.getElementById(\"pie-chartcanvas-" << _ID << "\"" << ").style.display = \"none\";\n \t"
+        << "   }\n \t"
+        << "   else {\n \t"
+        << "      document.getElementById(\"pie-chartcanvas-"<< _ID << "\"" << ").style.display = \"block\"; \n \t"
+        << "   }\n \t";
+    myfile << "   chart" << _ID << ".update();" << std::endl;
+}
+
+
+void SchedulableDevice::HW2HTML(std::ofstream& myfile) const {    
+  //	myfile << "<h2><span>Scheduling for device: "<< _name << "</span></h2>" << std::endl;
+  myfile << SCHED_HTML_BOARD;
+  myfile << _name  << END_TD << "</tr>" << std::endl;
+  myfile << SCHED_HTML_JS_TABLE_END << std::endl;
+  myfile << SCHED_HTML_BOARD2 << std::endl;
+  if ( _transactList.size() == 0 ) {
+    myfile << "<h4>Device never activated</h4>" << std::endl;
+    myfile << SCHED_HTML_JS_TABLE_END << std::endl << SCHED_HTML_JS_CLEAR << std::endl;
+  }
+  else {
+    //myfile << "<table>" << std::endl << "<tr>";
+    myfile << "<tr>";
+    std::map<TMLTask*, std::string> taskCellClasses;
+    unsigned int nextCellClassIndex = 0;
+    TMLTime aCurrTime = 0;
+
+    for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
+      std::cout<<"get transaction core number is: "<<(*i)->getTransactCoreNumber()<<std::endl;
+      std::cout<<"time : "<<_cycleTime<<std::endl;
+      std::cout << "CPU:calcSTL: html of CPU " << _name << ": " << (*i)->toString() << std::endl;
+      //if( (*i)->getTransactCoreNumber() == this->_cycleTime ){
+      TMLTransaction* aCurrTrans = *i;
+      unsigned int aBlanks = aCurrTrans->getStartTime() - aCurrTime;
+
+      if ( aBlanks >= 0 && (!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction()) )
+          writeHTMLColumn( myfile, aBlanks+1, "not", "idle time" );
+      else if ( aBlanks > 0 )
+          writeHTMLColumn( myfile, aBlanks, "not", "idle time" );
+
+      unsigned int aLength = aCurrTrans->getPenalties();
+
+      if ( aLength != 0 ) {
+	std::ostringstream title;
+	title << "idle:" << aCurrTrans->getIdlePenalty() << " switching penalty:" << aCurrTrans->getTaskSwitchingPenalty();
+	writeHTMLColumn( myfile, aLength, "not", title.str() );
+      }
+
+      aLength = aCurrTrans->getOperationLength();
+
+      // Issue #4
+      TMLTask* task = aCurrTrans->getCommand()->getTask();
+      const std::string cellClass = determineHTMLCellClass( taskCellClasses, task, nextCellClassIndex );
+      std::string aCurrTransName=aCurrTrans->toShortString();
+      unsigned int indexTrans=aCurrTransName.find_first_of(":");
+      std::string aCurrContent=aCurrTransName.substr(indexTrans+1,2);
+     
+      writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString(), aCurrContent);
+
+      aCurrTime = aCurrTrans->getEndTime();
+      // }
+    }
+		
+
+    myfile << "</tr>" << std::endl << "<tr>";
+
+    for ( unsigned int aLength = 0; aLength < aCurrTime; aLength++ ) {
+      myfile << "<th></th>";
+    }
+
+    myfile << "</tr>" << std::endl << "<tr>";
+
+    for ( unsigned int aLength = 0; aLength <= aCurrTime; aLength += 5 ) {
+      std::ostringstream spanVal;
+      spanVal << aLength;
+      writeHTMLColumn( myfile, 5, "sc", "", spanVal.str(), false );
+      //myfile << "<td colspan=\"5\" class=\"sc\">" << aLength << "</td>";
+    }
+
+    myfile << "</tr>" << std::endl << "</table>" << std::endl << SCHED_HTML_JS_DIV_END << std::endl;
+    myfile << SCHED_HTML_JS_CLEAR << std::endl;
+  }
+}
+
+  
+void SchedulableDevice::schedule2XML(std::ostringstream& glob,std::ofstream& myfile) const{
+  for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
+      (*i)->toXML(glob, 0, _name, _ID);
+     // myfile << glob.str() << std::endl;
+
+  }
+}
+
+void SchedulableDevice::schedule2HTML(std::ofstream& myfile) const {    
 	myfile << "<h2><span>Scheduling for device: "<< _name << "</span></h2>" << std::endl;
 
 	if ( _transactList.size() == 0 ) {
@@ -197,18 +396,23 @@ void SchedulableDevice::schedule2HTML(std::ofstream& myfile) const {
 		TMLTime aCurrTime = 0;
 
 		for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
+		  std::cout<<"get transaction core number is: "<<(*i)->getTransactCoreNumber()<<std::endl;
+		  std::cout<<"time : "<<_cycleTime<<std::endl;
+		  std::cout << "CPU:calcSTL: html of CPU " << _name << ": " << (*i)->toString() << std::endl;
+		  //if( (*i)->getTransactCoreNumber() == this->_cycleTime ){
 			TMLTransaction* aCurrTrans = *i;
 			unsigned int aBlanks = aCurrTrans->getStartTime() - aCurrTime;
 
-			if ( aBlanks > 0 ) {
-				writeHTMLColumn( myfile, aBlanks, "not", "idle time" );
-			}
+            if ( aBlanks >= 0 && (!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction()) )
+                writeHTMLColumn( myfile, aBlanks+1, "not", "idle time" );
+            else if ( aBlanks > 0 )
+                writeHTMLColumn( myfile, aBlanks, "not", "idle time" );
 
 			unsigned int aLength = aCurrTrans->getPenalties();
 
 			if ( aLength != 0 ) {
 				std::ostringstream title;
-				title << "idle:" << aCurrTrans->getIdlePenalty() << " switch:" << aCurrTrans->getTaskSwitchingPenalty();
+				title << "idle:" << aCurrTrans->getIdlePenalty() << " switching penalty:" << aCurrTrans->getTaskSwitchingPenalty();
 				writeHTMLColumn( myfile, aLength, "not", title.str() );
 			}
 
@@ -217,11 +421,14 @@ void SchedulableDevice::schedule2HTML(std::ofstream& myfile) const {
 			// Issue #4
 			TMLTask* task = aCurrTrans->getCommand()->getTask();
 			const std::string cellClass = determineHTMLCellClass( taskCellClasses, task, nextCellClassIndex );
-
-			writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString() );
+            if(!(!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction())){
+              writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString() );
+            }
 
 			aCurrTime = aCurrTrans->getEndTime();
+		 // }
 		}
+		
 
 		myfile << "</tr>" << std::endl << "<tr>";
 
@@ -239,7 +446,6 @@ void SchedulableDevice::schedule2HTML(std::ofstream& myfile) const {
 		}
 
 		myfile << "</tr>" << std::endl << "</table>" << std::endl << "<table>" << std::endl << "<tr>";
-
 		for( std::map<TMLTask*, std::string>::iterator taskColIt = taskCellClasses.begin(); taskColIt != taskCellClasses.end(); ++taskColIt ) {
 			TMLTask* task = (*taskColIt).first;
 			// Unset the default td max-width of 5px. For some reason setting the max-with on a specific t style does not work
@@ -279,4 +485,5 @@ void SchedulableDevice::schedule2HTML(std::ofstream& myfile) const {
 		myfile << "</table>" << std::endl;
 	}
 }
+
 

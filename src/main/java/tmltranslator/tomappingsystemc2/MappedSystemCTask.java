@@ -1,26 +1,27 @@
+
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- * 
+ *
  * ludovic.apvrille AT enst.fr
- * 
+ *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- * 
+ *
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- * 
+ *
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- * 
+ *
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -31,7 +32,7 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- * 
+ *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
@@ -45,6 +46,7 @@ import myutil.FileUtils;
 import myutil.TraceManager;
 import tmltranslator.*;
 
+import java.io.File;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -71,6 +73,7 @@ public class MappedSystemCTask {
     // private boolean optimize;
     private StaticAnalysis _analysis;
     private LiveVariableNode _startAnaNode = null;
+    private boolean mappedOnCPU;
 
     private final static String DOTH = ".h";
     private final static String DOTCPP = ".cpp";
@@ -83,7 +86,8 @@ public class MappedSystemCTask {
 //    private final static String EF = "}";
 
 
-    public MappedSystemCTask(TMLTask _task, List<TMLChannel> _channels, List<TMLEvent> _events, List<TMLRequest> _requests, TMLMapping<?> _tmlmapping, Set<Integer> _depChannels) {
+    public MappedSystemCTask(TMLTask _task, List<TMLChannel> _channels, List<TMLEvent> _events, List<TMLRequest> _requests, TMLMapping<?>
+            _tmlmapping, Set<Integer> _depChannels, boolean mappedOnCPU) {
         task = _task;
         channels = _channels;
         events = _events;
@@ -99,6 +103,7 @@ public class MappedSystemCTask {
         functionSig = "";
         commentText = "";
         commentNum = 0;
+        this.mappedOnCPU = mappedOnCPU;
         // optimize=false;
 
         _analysis = new StaticAnalysis(_task, _channels, _events, _requests, _depChannels);
@@ -106,8 +111,81 @@ public class MappedSystemCTask {
     }
 
     public void saveInFiles(String path) throws FileException {
-        FileUtils.saveFile(path + reference + DOTH, getHCode());
-        FileUtils.saveFile(path + reference + DOTCPP, getCPPCode());
+        saveInFilesWithFileSize(path);
+
+    }
+
+    public void saveInFilesWithFileSize(String path) throws FileException {
+        boolean generateH = true;
+        boolean generateCPP = true;
+
+        try {
+            long sizeh = new File(path + reference + DOTH).length();
+            long sizecpp = new File(path + reference + DOTCPP).length();
+
+            //TraceManager.addDev("Computing length of " + path + reference + DOTH + ": " + sizeh);
+            //TraceManager.addDev("Computing length of " + path + reference + DOTCPP + ": " + sizeh);
+
+
+            if (sizeh == getHCode().length()) {
+                generateH = false;
+            }
+
+            if (sizecpp == getCPPCode().length()) {
+                generateCPP = false;
+            }
+
+
+        } catch (Exception e) {}
+
+        if (generateH) {
+            FileUtils.saveFile(path + reference + DOTH, getHCode());
+        }
+
+        if (generateCPP) {
+            FileUtils.saveFile(path + reference + DOTCPP, getCPPCode());
+        }
+    }
+
+    public void saveInFilesWithSha1(String path) throws FileException {
+        String sha1cpp, sha1h;
+        boolean generateH = true;
+        boolean generateCPP = true;
+
+        //TraceManager.addDev("Computing sha1 of " + path + reference + DOTH);
+        sha1h = FileUtils.SHA1(new File(path + reference + DOTH));
+        //TraceManager.addDev("Computing sha1 of " + path + reference + DOTCPP);
+        //TraceManager.addDev("Computing sha1 of " + path + reference + DOTCPP);
+        sha1cpp = FileUtils.SHA1(new File(path + reference + DOTCPP));
+
+        //if (sha1h != null) {
+        //    TraceManager.addDev("Sha1 of " + path + reference + DOTH + ": " + sha1h);
+        //}
+        //if (sha1cpp != null) {
+        //    TraceManager.addDev("Sha1 of " + path + reference + DOTCPP + ": " + sha1cpp);
+        //}
+
+        if (sha1h != null) {
+            String tmp = Conversion.toSHA1(getHCode());
+            if (tmp.equals(sha1h)) {
+                generateH = false;
+            }
+        }
+
+        if (sha1cpp != null) {
+            String tmp = Conversion.toSHA1(getCPPCode());
+            if (tmp.equals(sha1cpp)) {
+                generateCPP = false;
+            }
+        }
+
+        if (generateH) {
+            FileUtils.saveFile(path + reference + DOTH, getHCode());
+        }
+
+        if (generateCPP) {
+            FileUtils.saveFile(path + reference + DOTCPP, getCPPCode());
+        }
     }
 
     public TMLTask getTMLTask() {
@@ -152,6 +230,7 @@ public class MappedSystemCTask {
         code += "#include <TMLActionCommand.h>\n#include <TMLChoiceCommand.h>\n#include <TMLRandomChoiceCommand.h>\n#include <TMLExeciCommand.h>\n";
         code += "#include <TMLSelectCommand.h>\n#include <TMLReadCommand.h>\n#include <TMLNotifiedCommand.h>\n#include <TMLExeciRangeCommand.h>\n";
         code += "#include <TMLRequestCommand.h>\n#include <TMLSendCommand.h>\n#include <TMLWaitCommand.h>\n";
+        code += "#include <TMLDelayCommand.h>\n";
         code += "#include <TMLWriteCommand.h>\n#include <TMLStopCommand.h>\n#include <TMLWriteMultCommand.h>\n#include <TMLRandomCommand.h>\n\n";
         code += "extern \"C\" bool condFunc(TMLTask* _ioTask_);\n";
         return code;
@@ -169,7 +248,7 @@ public class MappedSystemCTask {
         makeHeaderClassH();
         makeEndClassH();
 
-        cppcode += reference + "::" + makeConstructorSignature() + ":TMLTask(iID, iPriority,iName,iCPUs,iNumOfCPUs)" + CR + makeAttributesCode();
+        cppcode += reference + "::" + makeConstructorSignature() + ":TMLTask(iID, iPriority,iName,iCPUs,iNumOfCPUs, isDaemon)" + CR + makeAttributesCode();
         cppcode += initCommand + CR + "{" + CR;
         if (commentNum != 0) cppcode += "_comment = new std::string[" + commentNum + "]" + SCCR + commentText + CR;
         cppcode += "//generate task variable look-up table" + CR;
@@ -231,8 +310,21 @@ public class MappedSystemCTask {
 //    }
 
     private String makeConstructorSignature() {
-        String constSig = reference + "(ID iID, Priority iPriority, std::string iName, CPU** iCPUs, unsigned int iNumOfCPUs" + CR;
+
+
+        String constSig;
+
+        if (mappedOnCPU) {
+            constSig = reference + "(ID iID, Priority iPriority, std::string iName, CPU** iCPUs, unsigned int iNumOfCPUs, bool isDaemon" + CR;
+        } else {
+            constSig = reference + "(ID iID, Priority iPriority, std::string iName, FPGA** iCPUs, unsigned int iNumOfCPUs, bool isDaemon" + CR;
+        }
+
+        TraceManager.addDev("\n***** Task name:" + task.getName());
+
+
         for (TMLChannel ch : channels) {
+            TraceManager.addDev("Adding ch " + ch.getExtendedName());
             constSig += ", TMLChannel* " + ch.getExtendedName() + CR;
         }
         for (TMLEvent evt : events) {
@@ -433,11 +525,30 @@ public class MappedSystemCTask {
             //functionSig+="void " + cmdName + "_func(ParamType & oMin, ParamType& oMax)" + SCCR;
 
         } else if (currElem instanceof TMLActionState || currElem instanceof TMLDelay) {
-            String action, comment;
+            String action, comment, delayLen;
             if (currElem instanceof TMLActionState) {
                 //if (debug) TraceManager.addDev("Checking Action\n");
                 action = formatAction(((TMLActionState) currElem).getAction());
                 comment = action;
+                String elemName = currElem.getName(), idString;
+                if (elemName.charAt(0) == '#') {
+                    int pos = elemName.indexOf('\\');
+                    idString = elemName.substring(1, pos);
+                    //TraceManager.addDev(elemName + "***" + pos + "***" + idString + "***"+ elemName.length());
+                    cmdName = "_" + elemName.substring(pos + 1) + idString;
+                } else {
+                    cmdName = "_action" + currElem.getID();
+                    idString = String.valueOf(currElem.getID());
+                }
+                hcode += "TMLActionCommand " + cmdName + SCCR;
+                initCommand += "," + cmdName + "(" + idString + ",this,(ActionFuncPointer)&" + reference + "::" + cmdName + "_func, " + getFormattedLiveVarStr(currElem) + ")" + CR;
+                nextCommand = cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0), false, retElement, null) + "));\n";
+                functions += "void " + reference + "::" + cmdName + "_func(){\n#ifdef ADD_COMMENTS\naddComment(new Comment(_endLastTransaction,0," + commentNum + "));\n#endif\n" + modifyString(addSemicolonIfNecessary(action)) + CR;
+                //functions+="return 0"+ SCCR;
+                functions += "}" + CR2;
+                commentText += "_comment[" + commentNum + "]=std::string(\"Action " + comment + "\");\n";
+                commentNum++;
+                functionSig += "void " + cmdName + "_func()" + SCCR;
             } else {
                 //if (debug) TraceManager.addDev("Checking Delay\n");
                 int masterClockFreq = tmlmapping.getTMLArchitecture().getMasterClockFrequency();
@@ -446,32 +557,46 @@ public class MappedSystemCTask {
                 comment = action;
                 action += "\nif (tmpDelayxy==0) tmpDelayxy=1;\n";
                 if (delay.getMinDelay().equals(delay.getMaxDelay())) {
-                    action += "_endLastTransaction+=tmpDelayxy";
+                    if (!delay.getActiveDelay()){
+                        action += "_endLastTransaction+=tmpDelayxy"; // Take all delay totally idle for x units of time
+                    } else {
+                        action += "_endLastTransaction+=0"; //consumes cycles
+                    }
+
+                    delayLen = delay.getMaxDelay() + "*" + masterClockFreq + delay.getMasterClockFactor();
                 } else {
                     action += "TMLTime tmpDelayxx = " + delay.getMinDelay() + "*" + masterClockFreq + delay.getMasterClockFactor() + ";\nif (tmpDelayxx==0) tmpDelayxx=1;\n";
-                    action += "_endLastTransaction+=myrand(tmpDelayxx,tmpDelayxy)";
+                    if (!delay.getActiveDelay()){
+                        action += "_endLastTransaction+= myrand(tmpDelayxx,tmpDelayxy)"; // Take all delay totally idle for x units of time
+                    } else {
+                        action += "_endLastTransaction+=0"; //consumes cycles
+                    }
+                    java.util.Random r = new  java.util.Random();
+                    delayLen = String.valueOf(r.nextInt(Integer.valueOf(delay.getMaxDelay())-Integer.valueOf(delay.getMinDelay())) + Integer.valueOf(delay.getMinDelay())) + "*" + masterClockFreq + delay.getMasterClockFactor();
                 }
+                String elemName = currElem.getName(), idString;
+                if (elemName.charAt(0) == '#') {
+                    int pos = elemName.indexOf('\\');
+                    idString = elemName.substring(1, pos);
+                    //TraceManager.addDev(elemName + "***" + pos + "***" + idString + "***"+ elemName.length());
+                    cmdName = "_" + elemName.substring(pos + 1) + idString;
+                } else {
+                    cmdName = "_delay" + currElem.getID();
+                    idString = String.valueOf(currElem.getID());
+                }
+                hcode += "TMLDelayCommand " + cmdName + SCCR;
+                initCommand += "," + cmdName + "(" + idString + ",this,"+ delayLen +",(ActionFuncPointer)&" + reference + "::" + cmdName + "_func, " + getFormattedLiveVarStr(currElem) + ", " + delay.getActiveDelay() + ")" + CR;
+                nextCommand = cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0), false, retElement, null) + "));\n";
+                functions += "void " + reference + "::" + cmdName + "_func(){\n#ifdef ADD_COMMENTS\naddComment(new Comment(_endLastTransaction,0," + commentNum + "));\n#endif\n" + modifyString(addSemicolonIfNecessary(action)) + CR;
+                //functions+="return 0"+ SCCR;
+//                functions += "std::ostringstream ss" + SCCR + "\n";
+//                functions += "if(" + cmdName + ".getCurrTransaction() != NULL) " + cmdName + ".getCurrTransaction()->lastParams = ss.str()" +
+//                        SCCR + "\n";
+                functions += "}" + CR2;
+                commentText += "_comment[" + commentNum + "]=std::string(\"Delay " + comment + "\");\n";
+                commentNum++;
+                functionSig += "void " + cmdName + "_func()" + SCCR;
             }
-            //cmdName= "_action" + currElem.getID();
-            String elemName = currElem.getName(), idString;
-            if (elemName.charAt(0) == '#') {
-                int pos = elemName.indexOf('\\');
-                idString = elemName.substring(1, pos);
-                //TraceManager.addDev(elemName + "***" + pos + "***" + idString + "***"+ elemName.length());
-                cmdName = "_" + elemName.substring(pos + 1) + idString;
-            } else {
-                cmdName = "_action" + currElem.getID();
-                idString = String.valueOf(currElem.getID());
-            }
-            hcode += "TMLActionCommand " + cmdName + SCCR;
-            initCommand += "," + cmdName + "(" + idString + ",this,(ActionFuncPointer)&" + reference + "::" + cmdName + "_func, " + getFormattedLiveVarStr(currElem) + ")" + CR;
-            nextCommand = cmdName + ".setNextCommand(array(1,(TMLCommand*)" + makeCommands(currElem.getNextElement(0), false, retElement, null) + "));\n";
-            functions += "void " + reference + "::" + cmdName + "_func(){\n#ifdef ADD_COMMENTS\naddComment(new Comment(_endLastTransaction,0," + commentNum + "));\n#endif\n" + modifyString(addSemicolonIfNecessary(action)) + CR;
-            //functions+="return 0"+ SCCR;
-            functions += "}" + CR2;
-            commentText += "_comment[" + commentNum + "]=std::string(\"Action " + comment + "\");\n";
-            commentNum++;
-            functionSig += "void " + cmdName + "_func()" + SCCR;
 
         } else if (currElem instanceof TMLExecI) {
             //if (debug) TraceManager.addDev("Checking Execi\n");
@@ -775,18 +900,33 @@ public class MappedSystemCTask {
                     if (evt.getNbOfParams() == 0) {
                         paramList += ",(ParamFuncPointer)0";
                     } else {
-
                         //functionSig+="Parameter<ParamType>* " + cmdName + "_func_" + i + "(Parameter<ParamType>* ioParam)" + SCCR;
                         //functions+="Parameter<ParamType>* " + reference + "::" + cmdName +  "_func_" + i + "(Parameter<ParamType>* ioParam){" + CR;
                         functionSig += "Parameter* " + cmdName + "_func_" + i + "(Parameter* ioParam)" + SCCR;
                         functions += "Parameter* " + reference + "::" + cmdName + "_func_" + i + "(Parameter* ioParam){" + CR;
 
                         paramList += ",(ParamFuncPointer)&" + reference + "::" + cmdName + "_func_" + i + CR;
+                        functions += "std::ostringstream ss" + SCCR + "\n";
                         functions += "ioParam->getP(&" + ((TMLSelectEvt) currElem).getParam(i, 0);
-                        for (int j = 1; j < evt.getNbOfParams(); j++) {
-                            functions += ", &" + ((TMLSelectEvt) currElem).getParam(i, j);
+                            for (int j = 1; j < evt.getNbOfParams(); j++) {
+                                functions += ", &" + ((TMLSelectEvt) currElem).getParam(i, j);
+                            }
+                        functions += ");\n";
+                        functions += "ss << \"(\"";
+                        for (int p = 0; p < evt.getNbOfParams(); p++) {
+                            functions += " << " + ((TMLSelectEvt) currElem).getParam(i, p) + " << " + "\"(" + ((TMLSelectEvt) currElem).getParam
+                                    (i, p) + ")\"";
+                            if (p < evt.getNbOfParams() - 1) {
+                                functions += " << \",\"";
+                            }
                         }
-                        functions += ");\nreturn 0;\n}\n\n";
+                        functions += " << \")\"" + SCCR;
+                        //functions += "if(" + cmdName + ".myTransaction != NULL) " +  cmdName + ".myTransaction->lastParams  = ss.str()" + SCCR +
+                        // "\n";
+                        functions += "if(" + cmdName + ".getCurrTransaction() != NULL) " + cmdName + ".getCurrTransaction()->lastParams = ss.str" +
+                                "()" +
+                                SCCR + "\n";
+                        functions += "return 0" + SCCR + "\n\n}";
                     }
                     nextCommand += ",(TMLCommand*)" + makeCommands(currElem.getNextElement(i), true, retElement, null);
                 }
@@ -905,14 +1045,46 @@ public class MappedSystemCTask {
             //functions+="Parameter<ParamType>* " + reference + "::" + cmdName +  "_func(Parameter<ParamType>* ioParam){" + CR;
             functionSig += "Parameter* " + cmdName + "_func(Parameter* ioParam)" + SCCR;
             functions += "Parameter* " + reference + "::" + cmdName + "_func(Parameter* ioParam){" + CR;
-            if (wait)
-                functions += "ioParam->getP(" + concatParams + ")" + SCCR + "return 0" + SCCR;
-            else
+            if (wait) {
+                functions += "std::ostringstream ss" + SCCR + "\n";
+                functions += "ioParam->getP(" + concatParams + ")" + SCCR;
+                functions += "ss << \"(\"";
+                for (int p = 0; p < nbOfParams; p++) {
+                    functions += " << " + paramArray[p] + " << " + "\"(" + paramArray[p] + ")\"";
+                    if (p < nbOfParams - 1) {
+                        functions += " << \",\"";
+                    }
+                }
+                functions += " << \")\"" + SCCR;
+                functions += "if(" + cmdName + ".getCurrTransaction() != NULL) " + cmdName + ".getCurrTransaction()->lastParams = ss.str()" +
+                        SCCR + "\n";
+                functions += "return 0" + SCCR;
+
+            } else {
                 //functions += "return new Parameter<ParamType>(" + nbOfParams + "," + concatParams + ")" + SCCR;
+                functions += "std::ostringstream ss" + SCCR + "\n";
+                functions += "ss << \"(\"";
+                for (int p = 0; p < nbOfParams; p++) {
+                    functions += " << " + paramArray[p];
+                    if (!(paramArray[p].matches("^[-+]?\\d+(\\.\\d+)?$"))) {
+                        if ((paramArray[p].compareTo("true") != 0) && (paramArray[p].compareTo("false") != 0)) {
+                            functions += " << \"(" + paramArray[p] + ")\"";
+                        }
+                    }
+                    if (p < nbOfParams - 1) {
+                        functions += " << \",\"";
+                    }
+                }
+                functions += " << \")\"" + SCCR;
+                //functions += "if(" + cmdName + ".myTransaction != NULL) " + cmdName + ".myTransaction->lastParams  = ss.str()" + SCCR + "\n";
+                functions += "if(" + cmdName + ".getCurrTransaction() != NULL) " + cmdName + ".getCurrTransaction()->lastParams = ss.str()" +
+                        SCCR + "\n";
                 functions += "return new SizedParameter<ParamType," + nbOfParams + ">(" + concatParams + ")" + SCCR;
+            }
             functions += "}\n\n";
             //}
         }
+
     }
 
     private void makeEndClassH() {

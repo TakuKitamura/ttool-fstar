@@ -1,3 +1,5 @@
+
+
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
  * 
  * ludovic.apvrille AT enst.fr
@@ -101,6 +103,7 @@ public class ConfigurationTTool {
     public static String CCodeDirectory = "";
     public static String SystemCCodeCompileCommand = "";
     public static String SystemCCodeExecuteCommand = "";
+    public static String SystemCCodeExecuteXCycle = "";
     public static String SystemCCodeInteractiveExecuteCommand = "";
     public static String SystemCHost = "";
     public static String VCDPath = "";
@@ -158,7 +161,7 @@ public class ConfigurationTTool {
     //public static String[] PLUGIN_GRAPHICAL_COMPONENT = new String[0];
 
     // URL for models
-    public static String URL_MODEL = "http://ttool.telecom-paristech.fr/networkmodels/models.txt";
+    public static String URL_MODEL = "http://ttool.telecom-paris.fr/networkmodels/models.txt";
 
     // Others
     public static String RGStyleSheet = "";
@@ -473,6 +476,7 @@ public class ConfigurationTTool {
             sb.append("SystemCHost: " + SystemCHost + "\n");
             sb.append("SystemCCodeCompileCommand: " + SystemCCodeCompileCommand + "\n");
             sb.append("SystemCCodeExecuteCommand: " + SystemCCodeExecuteCommand + "\n");
+            sb.append("SystemCCodeExecuteXCycle: " + SystemCCodeExecuteXCycle + "\n");
             sb.append("SystemCCodeInteractiveExecuteCommand: " + SystemCCodeInteractiveExecuteCommand + "\n");
             sb.append("GTKWavePath: " + GTKWavePath + "\n");
             // TML
@@ -728,6 +732,9 @@ public class ConfigurationTTool {
                 nl = doc.getElementsByTagName("SystemCCodeExecuteCommand");
                 if (nl.getLength() > 0)
                     SystemCCodeExecuteCommand(nl);
+                nl = doc.getElementsByTagName("SystemCCodeExecuteXCycle");
+                if (nl.getLength() > 0)
+                    SystemCCodeExecuteXCycle(nl);
                 nl = doc.getElementsByTagName("SystemCCodeInteractiveExecuteCommand");
                 if (nl.getLength() > 0)
                     SystemCCodeInteractiveExecuteCommand(nl);
@@ -1226,6 +1233,15 @@ public class ConfigurationTTool {
         }
     }
 
+    private static void SystemCCodeExecuteXCycle(NodeList nl) throws MalformedConfigurationException {
+        try {
+            Element elt = (Element) (nl.item(0));
+            SystemCCodeExecuteXCycle = elt.getAttribute("data");
+        } catch (Exception e) {
+            throw new MalformedConfigurationException(e.getMessage());
+        }
+    }
+
     private static void SystemCCodeInteractiveExecuteCommand(NodeList nl) throws MalformedConfigurationException {
         try {
             Element elt = (Element) (nl.item(0));
@@ -1713,11 +1729,13 @@ public class ConfigurationTTool {
                     }
                     TraceManager.addDev("Loading Z3 lib: " + tmp);
                     System.load(tmp);
+                    TraceManager.addDev("Loaded Z3 lib: " + tmp);
                 }
+
             }
 
         } catch (UnsatisfiedLinkError e) {
-            return ("Z3 libs + " + ConfigurationTTool.Z3LIBS + " could not be loaded\n");
+            return ("Z3 libs " + ConfigurationTTool.Z3LIBS + " could not be loaded\n");
         }
 
         return null;

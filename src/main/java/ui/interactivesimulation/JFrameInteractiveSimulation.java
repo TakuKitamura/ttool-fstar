@@ -40,7 +40,6 @@ package ui.interactivesimulation;
 
 import common.ConfigurationTTool;
 import common.SpecConfigTTool;
-import ddtranslatorSoclib.toTopCell.Simulation;
 import launcher.LauncherException;
 import launcher.RshClient;
 import myutil.*;
@@ -623,6 +622,12 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         // First empty line
         c01.gridwidth = GridBagConstraints.REMAINDER; //end row
         jp02.add(new JLabel(" "), c01);
+        JLabel warning = new JLabel("Beware: Formal Verification ignores Penalties");
+        Font newLabelFont=new Font(warning.getFont().getName(),Font.ITALIC,warning.getFont().getSize());
+        //Set JLabel font using new created font
+        warning.setFont(newLabelFont);
+        jp02.add(warning, c01);
+        jp02.add(new JLabel(" "), c01);
 
         // Line minimum command: labels
         c01.gridwidth = 1;
@@ -653,11 +658,12 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 
         // One empty line
         c01.gridwidth = GridBagConstraints.REMAINDER; //end row
-        jp02.add(new JLabel(" "), c01);
+        jp02.add(new JLabel(""), c01);
 
         // Line minimum command: labels
         c01.gridwidth = 1;
         jp02.add(new JLabel("minimum BRANCH coverage"), c01);
+
         labelMinimalBranchCoverage = new JLabel("100%");
         c01.fill = GridBagConstraints.CENTER;
         jp02.add(labelMinimalBranchCoverage, c01);
@@ -763,28 +769,35 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         jp01.add(new JLabel(" "), c01);
         latex = new JCheckBox("Generate info in Latex format");
         jp01.add(latex, c01);
+
         debug = new JCheckBox("Print messages received from server");
         jp01.add(debug, c01);
+
         animate = new JCheckBox("Animate UML diagrams");
         jp01.add(animate, c01);
+
         diploids = new JCheckBox("Show DIPLO IDs on UML diagrams");
         jp01.add(diploids, c01);
         diploids.addItemListener(this);
         diploids.setSelected(false);
+
         animateWithInfo = new JCheckBox("Show transaction progression on UML diagrams");
         jp01.add(animateWithInfo, c01);
         animateWithInfo.addItemListener(this);
-        animateWithInfo.setSelected(true);
+        animateWithInfo.setSelected(ModelParameters.getBooleanValueFromID("ANIMATE_WITH_INFO_DIPLO_SIM"));
+
         openDiagram = new JCheckBox("Automatically open active task diagram");
         jp01.add(openDiagram, c01);
-        openDiagram.setSelected(true);
+        openDiagram.setSelected(ModelParameters.getBooleanValueFromID("OPEN_DIAG_DIPLO_SIM"));
+        openDiagram.addItemListener(this);
+
         update = new JCheckBox("Automatically update information (task, CPU, etc.)");
         jp01.add(update, c01);
         update.addItemListener(this);
-        update.setSelected(true);
+        update.setSelected(ModelParameters.getBooleanValueFromID("UPDATE_INFORMATION_DIPLO_SIM"));
 
         animate.addItemListener(this);
-        animate.setSelected(true);
+        animate.setSelected(ModelParameters.getBooleanValueFromID("ANIMATE_INTERACTIVE_SIMULATION"));
 
 
         TableSorter sorterPI;
@@ -1774,6 +1787,12 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 					simtraces.add(trace);
 				}
 			}
+            else if (command.contains("Delay")){
+                String trace="time="+tran.endTime+ " block=" + tran.taskName + " type=state_entering state=delay" + tran.length;
+                if (!simtraces.contains(trace)){
+                    simtraces.add(trace);
+                }
+            }
 			else {
 				//TraceManager.addDev("UNHANDLED COMMAND " + tran.command + " " + tran.deviceName + " " + tran.nodeType);
 			}
@@ -1789,12 +1808,23 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		catch (Exception e){
 			
 		}
-		String nodename = tran.deviceName;
+
+		/*String nodename = tran.deviceName;
+		TraceManager.addDev("Transaction=" + tran);
 		for(HwNode node: tmap.getTMLArchitecture().getHwNodes()) {
+		    TraceManager.addDev("Adding transaction for " + nodename + " vs " + node.getName());
 			if ((node.getName()+"_0").equals(nodename)){
 				mgui.addTransaction(node.getID(), tran);
 			}
-		}
+		}*/
+        //TraceManager.addDev("Transaction=" + tran);
+        for(HwNode node: tmap.getTMLArchitecture().getHwNodes()) {
+            //TraceManager.addDev("Adding transaction for " + tran.uniqueID + " vs " + node.getID());
+            if (node.getID() == tran.uniqueID){
+                mgui.addTransaction(node.getID(), tran);
+                break;
+            }
+        }
 	}
     
     public void calculateCorrespondingTimes(){
@@ -2132,9 +2162,15 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                         }
 
                         if (elt.getTagName().compareTo(SIMULATION_TRANS) == 0) {
-							//System.out.println("EL " + elt.getAttribute("messageid"));
+							//TraceManager.addDev("New simulation transaction:" + elt);
                             SimulationTransaction st = new SimulationTransaction();
                             st.nodeType = elt.getAttribute("deviceid");
+
+                            try {
+                                st.uniqueID = new Integer(elt.getAttribute("uniqueid"));
+                            } catch (Exception e) {
+
+                            }
 
                             st.deviceName = elt.getAttribute("devicename");
                             String commandT = elt.getAttribute("command");
@@ -2170,7 +2206,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                             st.virtualLength = elt.getAttribute("virtuallength");
                             st.channelName = elt.getAttribute("ch");
 
-                            //  st.id = id;
+                            //st.id = id;
                             if (trans == null) {
                                 trans = new Vector<SimulationTransaction>();
                             }
@@ -2286,7 +2322,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 
         if ((msg != null) && (error != null)) {
             if (error.trim().equals("0")) {
-                printFromServer(msg + ": command successful");
+                //printFromServer(msg + ": command successful");
                 
                 if (msg.indexOf("reset") != -1) {
                     time.setText("0");
@@ -2514,6 +2550,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         actions[InteractiveSimulationActions.ACT_SAVE_VCD].setEnabled(b);
         actions[InteractiveSimulationActions.ACT_SAVE_HTML].setEnabled(b);
         actions[InteractiveSimulationActions.ACT_SAVE_TXT].setEnabled(b);
+        actions[InteractiveSimulationActions.ACT_SAVE_XML].setEnabled(b);
         actions[InteractiveSimulationActions.ACT_PRINT_BENCHMARK].setEnabled(b);
         actions[InteractiveSimulationActions.ACT_SAVE_BENCHMARK].setEnabled(b);
         actions[InteractiveSimulationActions.ACT_SAVE_STATE].setEnabled(b);
@@ -2595,7 +2632,9 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
     private void saveTraceText() {
     	sendSaveTraceCommand( manageFileExtension( saveFileName.getText(), ".txt" ), "2" );
     }
-    
+    private void saveTraceXml() {
+    	sendSaveTraceCommand( manageFileExtension( saveFileName.getText(), ".xml" ), "3" );
+    }
     private String manageFileExtension( String filename,
     									final String extension ) {
     	filename = filename.trim();
@@ -2642,8 +2681,11 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                 type = SimulationTrace.VCD_DIPLO;
             } else if (format.compareTo("1") == 0) {
 	            type = SimulationTrace.HTML_DIPLO;
-            } else {
+            } else  if (format.compareTo("2") == 0){
 	            type = SimulationTrace.TXT_DIPLO;
+            } else
+            {
+            	 type = SimulationTrace.XML_DIPLO;
             }
 	        SimulationTrace st = new SimulationTrace(original, type, filename);
             mgui.addSimulationTrace(st);
@@ -2968,7 +3010,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             _state = tasktm.getState(valueTable.get(new Integer(id)));
         }
 
-        TraceManager.addDev("state:" + _state);
+        //TraceManager.addDev("state:" + _state);
 
         if ((i != null) && (c != null)) {
             try {
@@ -3279,14 +3321,20 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 
     public void itemStateChanged(ItemEvent e) {
         if (e.getSource() == animate) {
+            ModelParameters.setValueForID("ANIMATE_INTERACTIVE_SIMULATION", "" + animate.isSelected());
             mgui.setDiploAnimate(animate.isSelected());
             diploids.setEnabled(animate.isSelected());
             animateWithInfo.setEnabled(animate.isSelected());
             openDiagram.setEnabled(animate.isSelected());
         } else if (e.getSource() == diploids) {
             mgui.setDiploIDs(diploids.isSelected());
-        }else if (e.getSource() == animateWithInfo) {
+        } else if (e.getSource() == animateWithInfo) {
             mgui.setTransationProgression(animateWithInfo.isSelected());
+            ModelParameters.setValueForID("ANIMATE_WITH_INFO_DIPLO_SIM", "" + animateWithInfo.isSelected());
+        } else if (e.getSource() == update) {
+            ModelParameters.setValueForID("UPDATE_INFORMATION_DIPLO_SIM", "" + update.isSelected());
+        } else if (e.getSource() == debug) {
+            ModelParameters.setValueForID("OPEN_DIAG_DIPLO_SIM", "" + debug.isSelected());
         }
     }
 
@@ -3347,6 +3395,8 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             saveTraceHTML();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_SAVE_TXT].getActionCommand()))  {
             saveTraceText();
+        } else if (command.equals(actions[InteractiveSimulationActions.ACT_SAVE_XML].getActionCommand())) {
+        	saveTraceXml();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_SAVE_STATE].getActionCommand()))  {
             sendSaveStateCommand();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_RESTORE_STATE].getActionCommand()))  {
@@ -3491,6 +3541,21 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         return -1;
     }
 
+    public boolean breakpointAfterSelectEvent(int _commandID) {
+        if (tmap != null) {
+            TMLTask task = tmap.getTMLTaskByCommandID(_commandID);
+            if (task != null) {
+                TMLActivityElement tmlae = task.getElementByID(_commandID);
+                if (tmlae instanceof TMLWaitEvent) {
+                    if (task.getActivityDiagram().getPrevious(tmlae) instanceof TMLSelectEvt) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     public void addBreakPoint(int _commandID) {
         //TraceManager.addDev("Add breakpoint: " + _commandID);
         // Check whether that breakpoint is already listed or not
@@ -3499,6 +3564,15 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                 return;
             }
         }
+
+        if (breakpointAfterSelectEvent(_commandID)) {
+            jta.append("Breakpoint on sendEvent " + _commandID + " cannot be taken into account because it is placed after a selectEvent. \n " +
+                    "Instead, you can put this breakpoing on the selectEvent operator");
+            return;
+        }
+        // Check if valid breakpoint: cannot be put on receive events after selectevt
+
+
 
         if (tmap != null) {
             TMLTask task = tmap.getTMLTaskByCommandID(_commandID);
@@ -3526,7 +3600,12 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 
     public void sendBreakPointList() {
         for(Point p: points) {
-            sendCommand("add-breakpoint " + p.x + " " + p.y + "\n");
+            if (breakpointAfterSelectEvent(p.y)) {
+                jta.append("Breakpoint on sendEvent " + p.y + " cannot be taken into account because it is placed after a selectEvent. \n " +
+                        "Instead, you can put this breakpoing on the selectEvent operator");
+            } else {
+                sendCommand("add-breakpoint " + p.x + " " + p.y + "\n");
+            }
         }
         sendCommand("active-breakpoints 1");
     }

@@ -85,6 +85,7 @@ public class TMLADDelay extends TADComponentWithSubcomponents /* Issue #69 TGCWi
         tgc.setMinDelay("10");
 		tgc.setMaxDelay("nope");
 		tgc.setHasMaxValue(false);
+		tgc.setActiveDelay(false);
 		tgc.setUnit("ms");
         tgc.setName("value of the delay");
 		tgc.makeValue();
@@ -143,7 +144,8 @@ public class TMLADDelay extends TADComponentWithSubcomponents /* Issue #69 TGCWi
 	public String getUnit() {
 		return ((TGCTimeDelay)tgcomponent[0]).getUnit();
 	}
-    
+
+	public boolean getActiveDelayEnable(){return  ((TGCTimeDelay)tgcomponent[0]).getActiveDelay(); }
     @Override
     public int getType() {
         return TGComponentManager.TMLAD_DELAY;

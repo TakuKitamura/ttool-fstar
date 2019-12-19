@@ -58,6 +58,7 @@ import java.util.Vector;
    * @version 1.0 23/11/2007
    * @author Ludovic APVRILLE
  */
+
 public class TMLArchiHWANode extends TMLArchiNode implements SwallowTGComponent, WithAttributes, TMLArchiElementInterface {
 
 	// Issue #31
@@ -68,6 +69,7 @@ public class TMLArchiHWANode extends TMLArchiNode implements SwallowTGComponent,
 //    private int textY2 = 30;
 //    private int derivationx = 2;
 //    private int derivationy = 3;
+
     private String stereotype = "HWA";
 
     private int byteDataSize = HwCPU.DEFAULT_BYTE_DATA_SIZE;
@@ -160,10 +162,15 @@ public class TMLArchiHWANode extends TMLArchiNode implements SwallowTGComponent,
         drawSingleString(g,name, x + (width - w)/2, y + marginY2 );
 
         // Icon
+
         // Issue #31
 		final int iconMargin = scale( 4 );
         g.drawImage( scale( IconManager.imgic1106.getImage() ), x + iconMargin /*4*/, y + iconMargin/*4*/, null);
         g.drawImage( scale( IconManager.img9 ), x + width - scale( 20 ), y + iconMargin/*4*/, null);
+
+//        g.drawImage(IconManager.imgic1106.getImage(), x + 4, y + 4, null);
+        //g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
+
     }
 
     @Override

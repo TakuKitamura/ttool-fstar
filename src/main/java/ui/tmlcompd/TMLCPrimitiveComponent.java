@@ -39,6 +39,8 @@
 package ui.tmlcompd;
 
 import myutil.GraphicLib;
+import myutil.TraceManager;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -72,6 +74,8 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
     private Color myColor;
 
     private boolean isAttacker = false;
+    private boolean isDaemon = false;
+    
     // Icon
     private int iconSize = 15;
     private boolean iconIsDrawn = false;
@@ -373,19 +377,24 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         return isAttacker;
     }
 
+
+    public boolean isDaemon() {
+        return isDaemon;
+    }
+    
     @Override
     public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
         // On the icon?
         if (iconIsDrawn) {
-            if (GraphicLib.isInRectangle(_x, _y, x + width - iconSize - textX, y + textX, iconSize, iconSize)) {
+            if (GraphicLib.isInRectangle(_x, _y, x + width - iconSize - textX, y + textX, scale(iconSize), scale(iconSize))) {
                 tdp.getMouseManager().setSelection(-1, -1);
                 tdp.selectTab(getValue());
                 return true;
             }
         }
 
-        // On the name ?
-        if ((displayText) && (_y <= (y + currentFontSize + textX))) {
+        // On the name ? 
+        /*if ((displayText) && (_y <= (y + currentFontSize + textX))) {
             //TraceManager.addDev("Edit on double click x=" + _x + " y=" + _y);
             oldValue = value;
             String s = (String) JOptionPane.showInputDialog(frame, "Name:", "Setting component name",
@@ -423,10 +432,15 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 
             }
             return false;
-        }
+        }*/
 
         // And so -> attributes!
-        JDialogAttribute jda = new JDialogAttribute(myAttributes, null, frame, "Setting attributes of " + value, "Attribute", operation);
+        String oldName = getValue();
+        oldValue = getValue();
+
+
+		JDialogAttribute jda = new JDialogAttribute(myAttributes, null, frame,
+                "Setting attributes of " + value, "Attribute", operation, isDaemon, getValue());
         setJDialogOptions(jda);
         // jda.setSize(650, 375);
         GraphicLib.centerOnParent(jda, 750, 375);
@@ -436,8 +450,61 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         //return false;
         //}
         operation = jda.getOperation();
-        rescaled = true;
-        return true;
+        isDaemon = jda.isDaemon();
+
+        TraceManager.addDev("PC1");
+
+        String s = jda.getName();
+        if (oldName.compareTo(s) == 0) {
+            rescaled = false;
+            return true;
+        }
+
+        if ((s != null) && (s.length() > 0)) {
+            // Check whether this name is already in use, or not
+
+            //TraceManager.addDev("PC2");
+
+            if (!TAttribute.isAValidId(s, false, true, false)) {
+                JOptionPane.showMessageDialog(frame,
+                        "Could not change the name of the component: the new name is not a valid name",
+                        "Error",
+                        JOptionPane.INFORMATION_MESSAGE);
+                return false;
+            }
+
+            //TraceManager.addDev("PC3");
+
+            if (oldValue.compareTo(s) != 0) {
+                if (((TMLComponentTaskDiagramPanel) (tdp)).namePrimitiveComponentInUse(oldValue, s)) {
+                    JOptionPane.showMessageDialog(frame,
+                            "Error: the name is already in use",
+                            "Name modification",
+                            JOptionPane.ERROR_MESSAGE);
+                    return false;
+                }
+            }
+
+            TraceManager.addDev("PC4");
+
+
+            //TraceManager.addDev("Set value with change");
+            setComponentName(s);
+            //TraceManager.addDev("PC4.1 oldvalue=" + oldName + " s=" + s);
+            setValueWithChange(s);
+            //TraceManager.addDev("PC4.2");
+            isAttacker = s.contains("Attacker");
+            rescaled = true;
+            //TraceManager.addDev("return true");
+
+            //TraceManager.addDev("PC5");
+
+            return true;
+
+        }
+        return false;
+
+
 
     }
 
@@ -588,6 +655,8 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<Data isAttacker=\"");
         sb.append(isAttacker() ? "Yes" : "No");
+        sb.append("\" daemon=\"");
+        sb.append(isDaemon);
         sb.append("\" Operation=\"");
         sb.append(operation);
         sb.append("\" />\n");
@@ -637,11 +706,20 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
                             elt = (Element) n2;
                             if (elt.getTagName().equals("Data")) {
                                 isAttacker = elt.getAttribute("isAttacker").equals("Yes");
+
                                 String tmpO = elt.getAttribute("Operation");
                                 if (tmpO == null) {
                                     operation = "";
                                 }  else {
                                     operation = tmpO;
+                                }
+
+
+                                tmpO = elt.getAttribute("daemon");
+                                if (tmpO == null) {
+                                    isDaemon = false;
+                                }  else {
+                                    isDaemon = tmpO.equals("true");
                                 }
                             }
                             if (elt.getTagName().equals("Attribute")) {

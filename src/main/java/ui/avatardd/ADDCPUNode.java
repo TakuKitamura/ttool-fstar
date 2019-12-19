@@ -155,7 +155,7 @@ public class ADDCPUNode extends ADDNode implements SwallowTGComponent, WithAttri
 
         // Icon
         g.drawImage(IconManager.imgic1100.getImage(), x + 4, y + 4, null);
-        g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
+        //g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
     }
 
     public TGComponent isOnOnlyMe(int x1, int y1) {

@@ -220,6 +220,30 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         if (h + graph.getFontMetrics().getDescent() + textY >= this.height)
             return;
         Font f = graph.getFont();
+
+        // limits
+//        this.limitName = -1;
+//        this.limitAttr = -1;
+//        this.limitMethod = -1;
+//        this.limitSignal = y + height;
+//
+//        // h retains the coordinate along X where an element was last drawn
+//        int h = 0;
+//
+//        int textY1 = (int) (this.textY1 * this.tdp.getZoom());
+//        int textX = (int) (this.textX * this.tdp.getZoom());
+//
+//        // Draw icon
+//        this.iconIsDrawn = this.width > IconManager.iconSize + 2 * textX && height > IconManager.iconSize + 2 * textX;
+//        if (this.iconIsDrawn) {
+//            graph.drawImage(IconManager.img5100, this.x + this.width - IconManager.iconSize - textX, this.y + textX, null);
+//        }
+//
+//
+//        Font font = graph.getFont();
+
+
+
         String ster = BLOCK_TYPE_STR.get(typeStereotype);
         int w = graph.getFontMetrics().stringWidth(ster);
          h = graph.getFontMetrics().getAscent() + graph.getFontMetrics().getLeading() + textY;
@@ -297,7 +321,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
             w = graph.getFontMetrics().stringWidth(methodString);
             if (w + 2 * textX < this.width)
-                graph.drawString(methodString, this.x + textX, this.y + h);
+                drawSingleString(graph, methodString, this.x + textX, this.y + h);
             else {
                 // If we can't, try to draw with "..." instead
                 int stringLength;
@@ -305,7 +329,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                     String abbrev = methodString.substring(0, stringLength) + "...";
                     w = graph.getFontMetrics().stringWidth(abbrev);
                     if (w + 2 * textX < this.width) {
-                        graph.drawString(abbrev, this.x + textX, this.y + h);
+                        drawSingleString(graph, abbrev, this.x + textX, this.y + h);
                         break;
                     }
                 }

@@ -43,6 +43,8 @@ package tmltranslator;
 
 import tmltranslator.modelcompiler.ArchUnitMEC;
 
+import java.util.Objects;
+
 
 /**
  * Class HwNode
@@ -76,5 +78,20 @@ public abstract class HwNode extends DIPLOElement  {
     }
 
     public abstract String toXML();
+
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof HwNode))
+            return false;
+        HwNode hwNode = (HwNode) o;
+        if (mec != null && (!mec.equalSpec(hwNode.getArchUnitMEC())))
+            return false;
+        return maximumNbOfMappedElement == hwNode.maximumNbOfMappedElement &&
+                clockRatio == hwNode.clockRatio &&
+                name.equals(hwNode.getName());
+    }
+
+    public void setName(String _name) {
+        name = _name;
+    }
 
 }

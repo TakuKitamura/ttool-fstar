@@ -51,11 +51,12 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
-   * Class TMLArchiArtifact
-   * Artifact of a deployment diagram
-   * Creation: 02/05/2005
-   * @version 1.0 02/05/2005
-   * @author Ludovic APVRILLE
+ * Class TMLArchiArtifact
+ * Artifact of a deployment diagram
+ * Creation: 02/05/2005
+ *
+ * @author Ludovic APVRILLE
+ * @version 1.0 02/05/2005
  */
 public class TMLArchiArtifact extends TGCWithoutInternalComponent implements SwallowedTGComponent, WithAttributes, TMLArchiTaskInterface {
 
@@ -77,7 +78,7 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
     protected String referenceTaskName = "referenceToTask";
     protected String taskName = "name";
     protected int priority = 0; // Between 0 and 10
-    protected String operation = "";
+    //protected String operation = "";
     protected String operationMEC = "VOID";
 
     private ArchUnitMEC fatherArchUnitMECType = new CpuMEC();
@@ -102,7 +103,7 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
         moveable = true;
         editable = true;
         removable = true;
-        userResizable=true;
+        userResizable = true;
         value = "TMLDesign::task    ";
         taskName = "name";
         referenceTaskName = "TMLTask";
@@ -154,7 +155,7 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
         } else {
             g.setColor(ColorManager.CPU_BOX_2);
         }
-        g.fillRect(x+1, y+1, width-1, height-1);
+        g.fillRect(x + 1, y + 1, width - 1, height - 1);
         g.setColor(c);
 
         // Issue #31
@@ -190,7 +191,7 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
 
     @Override
     public void resizeWithFather() {
-        if ((father != null) && ((father instanceof TMLArchiCPUNode) || (father instanceof TMLArchiHWANode))) {
+        if ((father != null) && ((father instanceof TMLArchiCPUNode) || (father instanceof TMLArchiHWANode) || (father instanceof TMLArchiFPGANode))) {
             //
             setCdRectangle(0, father.getWidth() - getWidth(), 0, father.getHeight() - getHeight());
             //setCd(Math.min(x, father.getWidth() - getWidth()), Math.min(y, father.getHeight() - getHeight()));
@@ -202,8 +203,8 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
     public boolean editOndoubleClick(JFrame frame) {
         String tmp;
         boolean error = false;
-        if (father!=null){
-            fatherArchUnitMECType = ((TMLArchiNode)father).getMECType();
+        if (father != null) {
+            fatherArchUnitMECType = ((TMLArchiNode) father).getMECType();
         }
         JDialogTMLTaskArtifact dialog = new JDialogTMLTaskArtifact(frame, "Setting artifact attributes", this, operationMEC, fatherArchUnitMECType);
     //    dialog.setSize(400, 350);
@@ -238,9 +239,9 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
 
         if (error) {
             JOptionPane.showMessageDialog(frame,
-                                          "Name is non-valid",
-                                          "Error",
-                                          JOptionPane.INFORMATION_MESSAGE);
+                    "Name is non-valid",
+                    "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
         }
 
         makeFullValue();
@@ -248,7 +249,7 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
         return !error;
     }
 
-    private void makeFullValue() {
+    public void makeFullValue() {
         value = referenceTaskName + "::" + taskName;
     }
 
@@ -292,12 +293,12 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
             String svalue = null, sname = null, sreferenceTask = null;
             String prio;
 
-            for(int i=0; i<nl.getLength(); i++) {
+            for (int i = 0; i < nl.getLength(); i++) {
                 n1 = nl.item(i);
                 //
                 if (n1.getNodeType() == Node.ELEMENT_NODE) {
                     nli = n1.getChildNodes();
-                    for(int j=0; j<nli.getLength(); j++) {
+                    for (int j = 0; j < nli.getLength(); j++) {
                         n2 = nli.item(j);
                         //
                         if (n2.getNodeType() == Node.ELEMENT_NODE) {
@@ -311,12 +312,18 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
                                     priority = Integer.decode(prio).intValue();
                                 }
                                 operationMEC = elt.getAttribute("operationMEC");
-                                if( (elt.getAttribute("fatherComponentMECType") != null) &&  (elt.getAttribute("fatherComponentMECType").length() > 0) )        {
-                                    if( elt.getAttribute("fatherComponentMECType").length() > 1 )       {
+                                //TraceManager.addDev("operationMEC:" + operationMEC);
+                                String tmp = elt.getAttribute("operation");
+                                //TraceManager.addDev("operation:" + tmp);
+                                if ((tmp != null) && (tmp.length() > 0)) {
+                                    operationMEC = tmp;
+                                }
+
+                                if ((elt.getAttribute("fatherComponentMECType") != null) && (elt.getAttribute("fatherComponentMECType").length() > 0)) {
+                                    if (elt.getAttribute("fatherComponentMECType").length() > 1) {
                                         fatherArchUnitMECType = ArchUnitMEC.Types.get(0);
-                                    }
-                                    else        {
-                                        fatherArchUnitMECType = ArchUnitMEC.Types.get( Integer.valueOf( elt.getAttribute("fatherComponentMECType") ) );
+                                    } else {
+                                        fatherArchUnitMECType = ArchUnitMEC.Types.get(Integer.valueOf(elt.getAttribute("fatherComponentMECType")));
                                     }
                                 }
                             }
@@ -374,28 +381,27 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
     }
 
     public int getOperationType()       {
-
         if( fatherArchUnitMECType instanceof FepMEC )   {
-            if( operation.equals( "CWM" ) )     {
+            if( operationMEC.equals( "CWM" ) )     {
                 return FepOperationMEC.CWM_MEC;
             }
-            else if( operation.equals( "CWL" ) )        {
+            else if( operationMEC.equals( "CWL" ) )        {
                 //TraceManager.addDev( "Operation: " + operation + " returns " + FepOperationMEC.CwlMEC );
                 return FepOperationMEC.CWL_MEC;
             }
-            else if( operation.equals( "CWA" ) )        {
+            else if( operationMEC.equals( "CWA" ) )        {
                 //TraceManager.addDev( "Operation: " + operation + " returns " + FepOperationMEC.CwaMEC );
                 return FepOperationMEC.CWA_MEC;
             }
-            else if( operation.equals( "CWP" ) )        {
+            else if( operationMEC.equals( "CWP" ) )        {
                 //TraceManager.addDev( "Operation: " + operation + " returns " + FepOperationMEC.CwpMEC );
                 return FepOperationMEC.CWP_MEC;
             }
-            else if( operation.equals( "FFT" ) )        {
+            else if( operationMEC.equals( "FFT" ) )        {
                 //TraceManager.addDev( "Operation: " + operation + " returns " + FepOperationMEC.FftMEC );
                 return FepOperationMEC.FFT_MEC;
             }
-            else if( operation.equals( "SUM" ) )        {
+            else if( operationMEC.equals( "SUM" ) )        {
                 //TraceManager.addDev( "Operation: " + operation + " returns " + FepOperationMEC.SumMEC );
                 return FepOperationMEC.SUM_MEC;
             }

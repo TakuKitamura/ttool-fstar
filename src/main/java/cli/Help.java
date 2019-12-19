@@ -96,17 +96,19 @@ public class Help extends Command  {
                 s += c.getShortCommand() + "\t" + c.getCommand() + "\t" + c.getDescription() + "\n";
             }
             interpreter.print(s);
+            TraceManager.addDev("Info on command");
             return null;
         }
 
 
-        Command c = interpreter.getCommandByName(command);
+        Command c = interpreter.getSubCommandByName(command);
 
         if (c == null) {
             return Interpreter.BAD_COMMAND_NAME;
         }
 
         interpreter.print(c.getHelp(1));
+
 
         return null;
 
@@ -115,4 +117,6 @@ public class Help extends Command  {
     public void fillSubCommands() {
 
     }
+
+
 }

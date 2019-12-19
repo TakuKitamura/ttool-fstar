@@ -54,6 +54,7 @@ Ludovic Apvrille, Renaud Pacalet
 
 class TMLCommand;
 class CPU;
+class FPGA;
 class Comment;
 
 enum vcdTaskVisState
@@ -73,7 +74,8 @@ public:
 	\param iCPU Pointer to the CPUs the task is mapped onto
 	\param iNoOfCPUs Number of CPUs
     	*/
-	TMLTask(ID iID, Priority iPriority, std::string iName, CPU** iCPU, unsigned int iNoOfCPUs);
+	TMLTask(ID iID, Priority iPriority, std::string iName, CPU** iCPU, unsigned int iNoOfCPUs, bool isDaemon);
+	TMLTask(ID iID, Priority iPriority, std::string iName, FPGA** iFPGA, unsigned int iNoOfFPGAs, bool isDaemon);
 	///Destructor
 	virtual ~TMLTask();
 	///Returns the priority of the task
@@ -101,6 +103,11 @@ public:
       	\return Pointer to the CPU
     	*/
 	inline CPU* getCPU() const {return _currentCPU;}
+	///Return a pointer to the FPGA on which the task in running
+	/**
+      	\return Pointer to the FPGA
+    	*/
+	inline FPGA* getFPGA() const {return _currentFPGA;}
 	///Returns a string representation of the task
 	/**
 	\return Detailed string representation
@@ -224,6 +231,11 @@ public:
 	void refreshStateHash(const char* iLiveVarList);
 	void schedule2TXT(std::ostream& myfile) const;
 	int hasRunnableTrans(CPU* iCPU);
+	int hasRunnableTrans(FPGA* iFPGA);
+	void setNextCellIndex(unsigned int n) {_nextCellIndex=n;}
+	unsigned int getNextCellIndex() const {return _nextCellIndex;}
+	void schedule2HTML(std::ofstream& myfile) const;
+	bool getIsDaemon() {return _isDaemon;};
 protected:
 	///ID of the task
 	ID _ID;
@@ -241,6 +253,15 @@ protected:
 	CPU** _cpus;
 	///Number of cores assigned to the task
 	unsigned int _noOfCPUs;
+	///Pointer to the FPGA which currently executes the task, can be zero in case the Task is mapped onto a multicore FPGA
+	FPGA* _currentFPGA;
+	///Array containing all the cores the task is mapped onto
+	FPGA** _fpgas;
+	///Number of cores assigned to the task
+	unsigned int _noOfFPGAs;
+	bool _isDaemon;
+	unsigned int _nextCellIndex;
+
 #ifdef ADD_COMMENTS
 	///Comment list
 	CommentList _commentList;
@@ -259,6 +280,10 @@ protected:
 	unsigned long _CPUContentionDelay;
 	///Number of transactions which have been executed on a CPU
 	unsigned long _noCPUTransactions;
+	///Sum of contention delay of FPGA transactions
+	unsigned long _FPGAContentionDelay;
+	///Number of transactions which have been executed on a FPGA
+	unsigned long _noFPGATransactions;
 	///Look up table for task variables (by name)
 	VariableLookUpTableName _varLookUpName;
 	///Look up table for task variables (by ID)
@@ -280,6 +305,33 @@ protected:
 	HashAlgo _stateHash;
 	const char* _liveVarList;
 	bool _hashInvalidated;
+	static void writeHTMLColumn(	std::ofstream& myfile,
+									const unsigned int colSpan,
+									const std::string cellClass );
+
+	
+	static void writeHTMLColumn(	std::ofstream& myfile,
+									const unsigned int colSpan,
+									const std::string cellClass,
+									const std::string title );
+		
+	static void writeHTMLColumn(	std::ofstream& myfile,
+									const unsigned int colSpan,
+									const std::string cellClass,
+									const std::string title, 
+									const std::string content);
+	
+
+
+	static void writeHTMLColumn(	std::ofstream& myfile,
+									const unsigned int colSpan,
+									const std::string cellClass,
+									const std::string title,
+									const std::string content,
+									const bool endline );
+	static std::string determineHTMLCellClass( 	std::map<TMLTask*, std::string> &taskColors,
+												TMLTask* task,
+												unsigned int &nextColor );
 };
 
 #endif

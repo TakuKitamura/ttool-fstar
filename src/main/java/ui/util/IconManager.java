@@ -69,8 +69,9 @@ public class IconManager {
 
     public static ImageIcon imgic40, imgic41, imgic42, imgic43, imgic44, imgic45, imgic46, imgic47, imgic48, imgic49;
     public static ImageIcon imgic50, imgic51, imgic52, imgic53, imgic54, imgic55, imgic56, imgic57, imgic58, imgic59;
+    public static ImageIcon imgic52r, imgic53r; // reverse icons
     public static ImageIcon imgic60, imgic61, imgic62, imgic63, imgic64, imgic65, imgic66, imgic68;
-    public static ImageIcon imgic70, imgic71, imgic72, imgic73, imgic75, imgic76, imgic77, imgic78, imgic79, imgic780;
+    public static ImageIcon imgic70, imgic71, imgic72, imgic73, imgic75, imgic76, imgic77, imgic78, imgic78Big, imgic79, imgic780;
     public static ImageIcon imgic80, imgic82, imgic84, imgic86, imgic88, imgic89, imgic89_z3;
     public static ImageIcon imgic90, imgic92, imgic94, imgic96, imgic98, imgic99;
 
@@ -107,7 +108,7 @@ public class IconManager {
     public static ImageIcon imgic700, imgic702;
 
     public static ImageIcon imgic800, imgic802, imgic804, imgic806, imgic808, imgic810, imgic812;
-    public static ImageIcon imgic900, imgic902, imgic904, imgic906, imgic908, imgic910, imgic912, imgic914, imgic916, imgic918;
+    public static ImageIcon imgic900, imgic902, imgic904, imgic905, imgic906,  imgic907, imgic908, imgic910, imgic912, imgic914, imgic916, imgic918;
     public static ImageIcon imgic920, imgic922, imgic924, imgic926, imgic928, imgic930;
     public static ImageIcon imgic940, imgic941;
     // Requirement diagrams
@@ -125,7 +126,7 @@ public class IconManager {
     public static Image img1410, img1412, img1414;
 
     // TMLDD
-    public static ImageIcon imgic1100, imgic1102, imgic1104, imgic1106, imgic1108;
+    public static ImageIcon imgic1100, imgic1102, imgic1104, imgic1106,  imgic1107, imgic1108;
     public static ImageIcon imgic1110, imgic1112, imgic1114, imgic1116, imgic1118;
     public static ImageIcon imgic1120;
 
@@ -135,7 +136,7 @@ public class IconManager {
     public static ImageIcon imgic1300, imgic1302, imgic1304, imgic1306, imgic1308;
     public static ImageIcon imgic1310, imgic1312, imgic1314, imgic1316, imgic1318;
     public static ImageIcon imgic1320, imgic1322, imgic1324, imgic1326, imgic1328;
-    public static ImageIcon imgic1330;
+    public static ImageIcon imgic1330, imgic1332;
 
 
     // SMD diagram
@@ -160,11 +161,12 @@ public class IconManager {
     public static ImageIcon imgic5070, imgic5072, imgic5074;
 
     public static ImageIcon imgic5100, imgic5102, imgic5104, imgic5106, imgic5108;
-    public static ImageIcon imgic5110, imgic5112, imgic5113, imgic5114;
+    public static ImageIcon imgic5110, imgic5112, imgic5113, imgic5114, imgic5116;
     public static ImageIcon imgic5200;
 
     //pragmas
     public static ImageIcon imgic6000, imgic6001, imgic6002, imgic6003, imgic6004, imgic6005;
+    public static ImageIcon imgic6006, imgic6007;
 
     //Security
     public static ImageIcon imgic7000, imgic7001;
@@ -183,7 +185,7 @@ public class IconManager {
     public static ImageIcon imgic2111; //New icon created by Solange
     
     // SystemC-AMS
-    public static ImageIcon imgic8000, imgic8001, imgic8002, imgic8003, imgic8004, imgic8005, imgic8006;
+    public static ImageIcon imgic8000, imgic8001, imgic8002, imgic8003, imgic8004, imgic8005, imgic8006, imgic8007;
 
     // ELN
     public static ImageIcon imgic8010, imgic8011, imgic8012, imgic8013, imgic8014, imgic8015, imgic8016, imgic8017, imgic8018, imgic8019, 
@@ -261,6 +263,8 @@ public class IconManager {
     private static String icon51 = "toolbarButtonGraphics/media/FastForward24.gif";
     private static String icon52 = "toolbarButtonGraphics/media/Play16.gif";
     private static String icon53 = "toolbarButtonGraphics/media/Play24.gif";
+    private static String icon52r = "toolbarButtonGraphics/media/Play16Reverse.gif";
+    private static String icon53r = "toolbarButtonGraphics/media/Play24Reverse.gif";
     private static String icon54 = "toolbarButtonGraphics/media/Stop16.gif";
     private static String icon55 = "toolbarButtonGraphics/media/Stop24.gif";
     private static String icon56 = "toolbarButtonGraphics/general/Find16.gif";
@@ -286,6 +290,7 @@ public class IconManager {
     private static String icon76 = "toolbarButtonGraphics/general/Preferences16.gif";
     private static String icon77 = "toolbarButtonGraphics/general/Preferences24.gif";
     private static String icon78 = "toolbarButtonGraphics/navigation/Up16.gif";
+    private static String icon78Big = "toolbarButtonGraphics/navigation/Up24.gif";
     private static String icon79 = "toolbarButtonGraphics/navigation/Down16.gif";
     private static String icon780 = "toolbarButtonGraphics/navigation/navig.gif";
 
@@ -463,7 +468,9 @@ public class IconManager {
     private static String icon900 = "tmladwrch.gif";
     private static String icon902 = "tmladsendreq.gif";
     private static String icon904 = "tmladsendevt.gif";
+    private static String icon905 = "tmladwritecams.gif";
     private static String icon906 = "tmladrdch.gif";
+    private static String icon907 = "tmladreadcams.gif";
     private static String icon908 = "tmladwaitevt.gif";
     private static String icon910 = "tmladexeci.gif";
     private static String icon912 = "tmladforloop.gif";
@@ -526,6 +533,7 @@ public class IconManager {
     private static String icon1102 = "tmlbusnode.gif";
     private static String icon1104 = "tmlbridgenode.gif";
     private static String icon1106 = "tmlhwanode.gif";
+    private static String icon1107 = "tmlcamsnode.gif";
     private static String icon1108 = "tmlmemorynode.gif";
     private static String icon1110 = "tmldmanode.gif";
     private static String icon1118 = "tmlkey.gif";
@@ -561,6 +569,7 @@ public class IconManager {
     private static String icon1326 = "runexplo.gif";
     private static String icon1328 = "savesvg24.gif";
     private static String icon1330 = "stepforwardx24.gif";
+    private static String icon1332 = "savexml24.gif";
 
     // SMD diagrams
     private static String icon2000 = "prosmdsendmsg.gif";
@@ -640,6 +649,7 @@ public class IconManager {
     private static String icon5112 = "invariantbig.gif";
     private static String icon5113 = "toolbarButtonGraphics/general/Search16_E.gif";
     private static String icon5114 = "toolbarButtonGraphics/general/Search16_I.gif";
+    private static String icon5116 = "daemon16.png";
 
     // Avatar DD
     private static String icon5200 = "search-ideogram-25px.png";
@@ -651,6 +661,8 @@ public class IconManager {
     private static String icon6003 = "toolbarButtonGraphics/general/safepragma24.gif";
     private static String icon6004 = "toolbarButtonGraphics/general/performancepragma16.gif";
     private static String icon6005 = "toolbarButtonGraphics/general/performancepragma24.gif";
+    private static String icon6006 = "toolbarButtonGraphics/general/tmlpragma16.gif";
+    private static String icon6007 = "toolbarButtonGraphics/general/tmlpragma24.gif";
 
     //Security stuff
     private static String icon7000 = "tmlcrypto.gif";
@@ -675,7 +687,7 @@ public class IconManager {
     private static String icon8004 = "camstdfblock.gif";
     private static String icon8005 = "camsdeblock.gif";
     private static String icon8006 = "camsgpio2vciblock.gif";
-    
+    private static String icon8007 = "clocksignal.gif";
     // ELN
     private static String icon8010 = "elnresistor.gif";
     private static String icon8011 = "elncapacitor.gif";
@@ -806,6 +818,8 @@ public class IconManager {
         imgic51 = getIcon(icon51);
         imgic52 = getIcon(icon52);
         imgic53 = getIcon(icon53);
+        imgic52r = getIcon(icon52r);
+        imgic53r = getIcon(icon53r);
         imgic54 = getIcon(icon54);
         imgic55 = getIcon(icon55);
         imgic56 = getIcon(icon56);
@@ -830,6 +844,7 @@ public class IconManager {
         imgic76 = getIcon(icon76);
         imgic77 = getIcon(icon77);
         imgic78 = getIcon(icon78);
+        imgic78Big = getIcon(icon78Big);
         imgic79 = getIcon(icon79);
         imgic780 = getIcon(icon780);
 
@@ -967,7 +982,9 @@ public class IconManager {
         imgic900 = getIcon(icon900);
         imgic902 = getIcon(icon902);
         imgic904 = getIcon(icon904);
+	imgic905 = getIcon(icon905);
         imgic906 = getIcon(icon906);
+	imgic907 = getIcon(icon907);
         imgic908 = getIcon(icon908);
         imgic910 = getIcon(icon910);
         imgic912 = getIcon(icon912);
@@ -1080,6 +1097,7 @@ public class IconManager {
         imgic1326 = getIcon(icon1326);
         imgic1328 = getIcon(icon1328);
         imgic1330 = getIcon(icon1330);
+        imgic1332 = getIcon(icon1332);
 
         imgic2000 = getIcon(icon2000);
         imgic2002 = getIcon(icon2002);
@@ -1164,6 +1182,7 @@ public class IconManager {
         imgic5112 = getIcon(icon5112);
         imgic5113 = getIcon(icon5113);
         imgic5114 = getIcon(icon5114);
+        imgic5116 = getIcon(icon5116);
 
         imgic5200 = getIcon(icon5200);
         if (imgic5200 != null) {
@@ -1176,6 +1195,8 @@ public class IconManager {
         imgic6003 = getIcon(icon6003);
         imgic6004 = getIcon(icon6004);
         imgic6005 = getIcon(icon6005);
+        imgic6006 = getIcon(icon6006);
+        imgic6007 = getIcon(icon6007);
 
 
         imgic7000 = getIcon(icon7000);
@@ -1196,6 +1217,7 @@ public class IconManager {
         imgic8004 = getIcon(icon8004);
         imgic8005 = getIcon(icon8005);
         imgic8006 = getIcon(icon8006);
+	imgic8007 = getIcon(icon8007);
 
         imgic8010 = getIcon(icon8010);
         imgic8011 = getIcon(icon8011);

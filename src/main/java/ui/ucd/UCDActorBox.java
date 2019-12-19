@@ -66,10 +66,10 @@ public class UCDActorBox extends TGCScalableWithoutInternalComponentOneLineText 
     public UCDActorBox(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-	width = (int)(40 * tdp.getZoom());
-        height = (int)(50 * tdp.getZoom());
-	minWidth = (int)(40 * tdp.getZoom());
-	oldScaleFactor = tdp.getZoom();
+        width = (int) (40 * tdp.getZoom());
+        height = (int) (50 * tdp.getZoom());
+        minWidth = (int) (40 * tdp.getZoom());
+        oldScaleFactor = tdp.getZoom();
 
         nbConnectingPoint = 24;
         connectingPoint = new TGConnectingPoint[nbConnectingPoint];
@@ -90,7 +90,7 @@ public class UCDActorBox extends TGCScalableWithoutInternalComponentOneLineText 
         editable = true;
         removable = true;
 
-	super.oldScaleFactor = tdp.getZoom();
+        super.oldScaleFactor = tdp.getZoom();
 
         value = "Actor";
         name = "actor";

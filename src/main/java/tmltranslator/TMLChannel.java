@@ -44,6 +44,7 @@ import ui.tmlcompd.TMLCPrimitivePort;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Class TMLChannel
@@ -57,14 +58,14 @@ public class TMLChannel extends TMLCommunicationElement {
     public static final int BRBW = 0;
     public static final int BRNBW = 1;
     public static final int NBRNBW = 2;
-    public int confStatus;
+
     public boolean checkConf;
     public boolean checkAuth;
-    private int size;
+    private int size; // width of the channel i.e. nb of bytes of each sample
     private int type;
-    private int max;
+    private int max; // Maximum number of samples
     public TMLCPrimitivePort port;
-    public TMLCPrimitivePort port2;
+    //public TMLCPrimitivePort port2;
     public ArrayList<TMLCPrimitivePort> ports;
 
     // Used on for 1 -> 1 channel
@@ -74,6 +75,7 @@ public class TMLChannel extends TMLCommunicationElement {
     // Used for 1 -> many channel, or for many -> 1 channel
     protected ArrayList<TMLTask> originTasks, destinationTasks;
     protected ArrayList<TMLPort> originPorts, destinationPorts;
+
     protected int nbOfSamples = 1; // Represent how many samples are read (join) or written (fork) at once
 
 
@@ -82,6 +84,8 @@ public class TMLChannel extends TMLCommunicationElement {
     private String CR = "\n";
     private String SP = " ";
     private int priority;
+
+    private int vc = 0;
     
     public ArrayList<TMLTask> originalOriginTasks = new ArrayList<TMLTask>(); 
     public ArrayList<TMLTask> originalDestinationTasks = new ArrayList<TMLTask>(); 
@@ -186,6 +190,14 @@ public class TMLChannel extends TMLCommunicationElement {
     }
 
     public int getNumberOfSamples() { return nbOfSamples;}
+
+    public void setVC(int vc) {
+        TraceManager.addDev("Setting VC to " + vc + " for channel " + getName());
+        this.vc = vc;
+    }
+
+    public int getVC() { return vc;}
+
 
     public TMLTask getDestinationTask(int index) {
         return destinationTasks.get(index);
@@ -365,6 +377,14 @@ public class TMLChannel extends TMLCommunicationElement {
         destinationTask = _destination;
     }
 
+    public void setOriginTask(TMLTask t) {
+        originTask = t;
+    }
+
+    public void setDestinationTask(TMLTask t) {
+        destinationTask = t;
+    }
+
     public void setPorts(TMLPort _origin, TMLPort _destination) {
         originPort = _origin;
         destinationPort = _destination;
@@ -499,9 +519,13 @@ public class TMLChannel extends TMLCommunicationElement {
         String s = TAB + "CHANNEL" + SP + name + CR;
         if (isBasicChannel()) {
             s += TAB2 + "Origin task: " + originTask.getName() + CR;
-            s += TAB2 + "Origin port: " + originPort.getName() + CR;
+            if (originPort != null) {
+                s += TAB2 + "Destination port: " + originPort.getName() + CR;
+            }
             s += TAB2 + "Destination task: " + destinationTask.getName() + CR;
-            s += TAB2 + "Destination port: " + destinationPort.getName() + CR;
+            if (destinationPort != null) {
+                s += TAB2 + "Destination port: " + destinationPort.getName() + CR;
+            }
         }
         if (isAForkChannel()) {
             s += TAB2 + "Origin task: " + originTasks.get(0).getName() + CR;
@@ -523,15 +547,21 @@ public class TMLChannel extends TMLCommunicationElement {
     }
 
     public String toXML() {
-        TraceManager.addDev("Channel:" + this.toString());
+        //TraceManager.addDev("Channel:" + this.toString());
         String s = "<TMLCHANNEL ";
         s += "name=\"" + name + "\" ";
         if (isBasicChannel()) {
             s += "origintask=\"" + originTask.getName() + "\" ";
-            s += "originport=\"" + originPort.getName() + "\" ";
+            if (originPort != null) {
+                s += "originport=\"" + originPort.getName() + "\" ";
+            }
             s += "destinationtask=\"" + destinationTask.getName() + "\" ";
-            s += "destinationport=\"" + destinationPort.getName() + "\" ";
-            s += "dataFlowType=\"" + originPort.getDataFlowType() + "\" ";
+            if (destinationPort != null) {
+                s += "destinationport=\"" + destinationPort.getName() + "\" ";
+            }
+            if (originPort != null) {
+                s += "dataFlowType=\"" + originPort.getDataFlowType() + "\" ";
+            }
         }
         if (isAForkChannel()) {
             s += "origintask=\"" + originTasks.get(0).getName() + "\" ";
@@ -583,7 +613,47 @@ public class TMLChannel extends TMLCommunicationElement {
         }
         s += "size=\"" + size + "\" ";
         s += "max=\"" + max + "\" ";
+        s += "vc=\"" + vc + "\" ";
         s += " />\n";
         return s;
     }
+
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof TMLChannel)) return false;
+        if (!super.equalSpec(o)) return false;
+        TMLChannel channel = (TMLChannel) o;
+        TMLComparingMethod comp = new TMLComparingMethod();
+
+        if (originPort != null) {
+            if (!originPort.equalSpec(channel.getOriginPort()))
+                return false;
+        }
+
+        if (destinationPort != null) {
+            if (!destinationPort.equalSpec(channel.getDestinationPort())) return false;
+        }
+
+        if (originTask != null) {
+            if (!originTask.equalSpec(channel.getOriginTask()))
+                return false;
+        }
+
+        if (destinationTask != null) {
+            if (!destinationTask.equalSpec(channel.getDestinationTask())) return false;
+        }
+
+        return checkConf == channel.checkConf &&
+                checkAuth == channel.checkAuth &&
+                size == channel.size &&
+                type == channel.type &&
+                max == channel.max &&
+                vc == channel.vc &&
+                nbOfSamples == channel.getNumberOfSamples() &&
+                priority == channel.priority &&
+                comp.isTasksListEquals(originTasks, channel.getOriginTasks()) &&
+                comp.isTasksListEquals(destinationTasks, channel.getDestinationTasks()) &&
+                comp.isPortListEquals(originPorts, channel.getOriginPorts()) &&
+                comp.isPortListEquals(destinationPorts, channel.getDestinationPorts());
+    }
+
 }

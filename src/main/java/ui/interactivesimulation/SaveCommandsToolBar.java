@@ -64,6 +64,7 @@ public class SaveCommandsToolBar extends InteractiveSimulationBar {
 		jfis.actions[InteractiveSimulationActions.ACT_SAVE_VCD].setEnabled(b);
 		jfis.actions[InteractiveSimulationActions.ACT_SAVE_HTML].setEnabled(b);
 		jfis.actions[InteractiveSimulationActions.ACT_SAVE_TXT].setEnabled(b);
+		jfis.actions[InteractiveSimulationActions.ACT_SAVE_XML].setEnabled(b);
     }
     
     protected void setButtons() {
@@ -80,6 +81,11 @@ public class SaveCommandsToolBar extends InteractiveSimulationBar {
 		this.addSeparator();
 		
 		button = this.add(jfis.actions[InteractiveSimulationActions.ACT_SAVE_TXT]);
+        button.addMouseListener(jfis.mouseHandler);
+
+        this.addSeparator();
+		
+		button = this.add(jfis.actions[InteractiveSimulationActions.ACT_SAVE_XML]);
         button.addMouseListener(jfis.mouseHandler);
         
        

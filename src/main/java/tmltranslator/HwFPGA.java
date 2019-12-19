@@ -67,6 +67,8 @@ public class HwFPGA extends HwExecutionNode {
     public int capacity = HwFPGA.DEFAULT_CAPACITY;
     public int mappingPenalty = HwFPGA.DEFAULT_MAPPING_PENALTY;
     public int reconfigurationTime = HwFPGA.DEFAULT_RECONFIGURATION_TIME;
+    public String scheduling = "";
+
 
     public HwFPGA(String _name) {
         super(_name);
@@ -76,13 +78,30 @@ public class HwFPGA extends HwExecutionNode {
     public String getType() {
         return "FPGA";
     }
+
+    public void setScheduling(String scheduling) { this.scheduling = scheduling;}
+
+    public String getScheduling() {return scheduling;}
     
-    @Override
+	@Override
     public String toXML() {
-        String s = "<FPGA name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize + "\" execiTime=\"" + execiTime + "\" execcTime=\"" + execcTime + "\" pipelineSize=\"";
-        s +=  "\" capacity=\"" + capacity + "\" mappingPenalty=\"" + mappingPenalty + "\" reconfigurationTime=\"" + reconfigurationTime + "\" />\n";
+        String s = "<FPGA name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize +
+                "\" execiTime=\"" + execiTime + "\" execcTime=\"" + execcTime + "\" pipelineSize=\"";
+        s +=  "\" capacity=\"" + capacity + "\" scheduling=\"" + scheduling + "\" mappingPenalty=\"" +
+                mappingPenalty + "\" reconfigurationTime=\"" + reconfigurationTime + "\" />\n";
         return s;
     }
 
-
+	 public boolean equalSpec(Object o) {
+	        if (!(o instanceof HwFPGA)) return false;
+	        if(!super.equalSpec(o)) return false;
+	        HwFPGA hwFPGA = (HwFPGA) o;
+	        return byteDataSize == hwFPGA.byteDataSize &&
+	                goIdleTime == hwFPGA.goIdleTime &&
+	                maxConsecutiveIdleCycles == hwFPGA.maxConsecutiveIdleCycles &&
+	                capacity == hwFPGA.capacity &&
+	                mappingPenalty == hwFPGA.mappingPenalty &&
+	                reconfigurationTime == hwFPGA.reconfigurationTime &&
+	                scheduling.equals(hwFPGA.scheduling);
+	    }
 }

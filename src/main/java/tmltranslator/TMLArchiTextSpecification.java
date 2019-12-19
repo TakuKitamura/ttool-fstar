@@ -70,15 +70,18 @@ public class TMLArchiTextSpecification {
     private ArrayList<TMLTXTError> errors;
     private ArrayList<TMLTXTError> warnings;
 
-    private String keywords[] = {"NODE", "CPU", "FPGA", "SET", "BUS", "LINK", "BRIDGE", "ROUTER", "MEMORY", "MASTERCLOCKFREQUENCY", "DMA"};
-    private String nodetypes[] = {"CPU", "FPGA", "BUS", "LINK", "BRIDGE", "ROUTER", "MEMORY", "HWA", "DMA"};
-    private String cpuparameters[] = {"nbOfCores", "byteDataSize", "pipelineSize", "goIdleTime", "maxConsecutiveIdleCycles", "taskSwitchingTime", "branchingPredictionPenalty", "cacheMiss", "schedulingPolicy", "sliceTime", "execiTime", "execcTime"};
-    private String fpgaparameters[] = {"capacity", "byteDataSize", "mappingPenalty", "goIdleTime", "maxConsecutiveIdleCycles", "reconfigurationTime", "execiTime", "execcTime"};
+    private String keywords[] = {"NODE", "CPU", "FPGA", "SET", "BUS", "LINK", "BRIDGE", "NOC", "MEMORY", "MASTERCLOCKFREQUENCY", "DMA"};
+    private String nodetypes[] = {"CPU", "FPGA", "BUS", "LINK", "BRIDGE", "NOC", "MEMORY", "HWA", "DMA"};
+    private String cpuparameters[] = {"nbOfCores", "byteDataSize", "pipelineSize", "goIdleTime", "maxConsecutiveIdleCycles", "taskSwitchingTime",
+            "branchingPredictionPenalty", "cacheMiss", "schedulingPolicy", "sliceTime", "execiTime", "execcTime", "operation", "clockDivider"};
+    private String fpgaparameters[] = {"capacity", "byteDataSize", "mappingPenalty", "goIdleTime",
+            "maxConsecutiveIdleCycles", "reconfigurationTime", "execiTime", "execcTime", "scheduling", "clockDivider"};
     private String linkparameters[] = {"bus", "node", "priority"};
-    private String hwaparameters[] = {"byteDataSize", "execiTime"};
-    private String busparameters[] = {"byteDataSize", "pipelineSize", "arbitration"};
-    private String bridgeparameters[] = {"bufferByteSize"};
-    private String memoryparameters[] = {"byteDataSize"};
+    private String hwaparameters[] = {"byteDataSize", "execiTime", "execcTime", "clockDivider"};
+    private String busparameters[] = {"byteDataSize", "pipelineSize", "arbitration", "clockDivider"};
+    private String bridgeparameters[] = {"bufferByteSize", "clockDivider"};
+    private String memoryparameters[] = {"byteDataSize", "clockDivider"};
+    private String nocparameters[] = {"bufferbytesize", "nocSize", "clockdivider"};
     //  private String dmaparameters[] = {"byteDataSize", "nbOfChannels"};
 
 
@@ -147,7 +150,7 @@ public class TMLArchiTextSpecification {
         HwA hwa;
         HwBus bus;
         HwBridge bridge;
-        HwRouter router;
+        HwNoC noc;
         HwMemory memory;
         HwDMA dma;
 
@@ -171,7 +174,9 @@ public class TMLArchiTextSpecification {
                 code += set + "sliceTime " + cpu.sliceTime + CR;
                 code += set + "execiTime " + cpu.execiTime + CR;
                 code += set + "execcTime " + cpu.execcTime + CR;
-                code += set + "operation " + cpu.getOperation() + CR;
+                if (cpu.getOperation().length() > 0) {
+                    code += set + "operation " + cpu.getOperation() + CR;
+                }
             }
 
             // FPGA
@@ -188,7 +193,12 @@ public class TMLArchiTextSpecification {
                 code += set + "reconfigurationTime " + fpga.reconfigurationTime + CR;
                 code += set + "execiTime " + fpga.execiTime + CR;
                 code += set + "execcTime " + fpga.execcTime + CR;
-                code += set + "operation " + fpga.getOperation() + CR;
+                if (fpga.getOperation().length() > 0) {
+                    code += set + "operation " + fpga.getOperation() + CR;
+                }
+                if (fpga.getScheduling().length() > 0) {
+                    code += set + "scheduling " + fpga.getScheduling() + CR;
+                }
 
             }
 
@@ -201,7 +211,9 @@ public class TMLArchiTextSpecification {
                 code += set + "byteDataSize " + hwa.byteDataSize + CR;
                 code += set + "execiTime " + hwa.execiTime + CR;
                 code += set + "execcTime " + hwa.execcTime + CR;
-                code += set + "operation " + hwa.getOperation() + CR;
+                if (hwa.getOperation().length() > 0) {
+                    code += set + "operation " + hwa.getOperation() + CR;
+                }
             }
 
             // BUS
@@ -225,14 +237,14 @@ public class TMLArchiTextSpecification {
                 code += set + "bufferByteSize " + bridge.bufferByteSize + CR;
             }
 
-            // Router
-            if (node instanceof HwRouter) {
-                router = (HwRouter) node;
+            // NoC
+            if (node instanceof HwNoC) {
+                noc = (HwNoC) node;
                 name = prepareString(node.getName());
                 set = "SET " + name + " ";
-                code += "NODE ROUTER " + name + CR;
-                code += set + "bufferByteSize " + router.bufferByteSize + CR;
-                code += set + "NoCSize " + router.size + CR;
+                code += "NODE NOC " + name + CR;
+                code += set + "bufferByteSize " + noc.bufferByteSize + CR;
+                code += set + "NoCSize " + noc.size + CR;
             }
 
             // Memory
@@ -253,6 +265,8 @@ public class TMLArchiTextSpecification {
                 code += set + "byteDataSize " + dma.byteDataSize + CR;
                 code += set + "nbOfChannels " + dma.nbOfChannels + CR;
             }
+
+            code += "SET " + prepareString(node.getName()) + " " + "clockDivider " + node.clockRatio + "\n";
 
             code += CR;
 
@@ -340,8 +354,8 @@ public class TMLArchiTextSpecification {
 
     public void browseCode() {
         // Browse lines of code one after the other
-        // Build accordinlgy the TMLModeling and updates errors and warnings
-        // In case of fatal error, immedialty quit code bowsing
+        // Build accordingly the TMLModeling and updates errors and warnings
+        // In case of fatal error, immediately quit code browsing
 
         StringReader sr = new StringReader(spec);
         BufferedReader br = new BufferedReader(sr);
@@ -443,9 +457,12 @@ public class TMLArchiTextSpecification {
                 return -1;
             }
 
+            //TraceManager.addDev("NEW NODE =" + _split[1]);
+
             if (_split[1].equals("CPU")) {
                 HwCPU cpu = new HwCPU(_split[2]);
                 tmla.addHwNode(cpu);
+                //TraceManager.addDev("Adding CPU:" + cpu.getName());
             } else if (_split[1].equals("FPGA")) {
                 HwFPGA fpga = new HwFPGA(_split[2]);
                 tmla.addHwNode(fpga);
@@ -461,9 +478,9 @@ public class TMLArchiTextSpecification {
             } else if (_split[1].equals("BRIDGE")) {
                 HwBridge bridge = new HwBridge(_split[2]);
                 tmla.addHwNode(bridge);
-            } else if (_split[1].equals("ROUTER")) {
-                HwRouter router = new HwRouter(_split[2]);
-                tmla.addHwNode(router);
+            } else if (_split[1].equals("NOC")) {
+                HwNoC noc = new HwNoC(_split[2]);
+                tmla.addHwNode(noc);
             } else if (_split[1].equals("HWA")) {
                 HwA hwa = new HwA(_split[2]);
                 tmla.addHwNode(hwa);
@@ -477,7 +494,7 @@ public class TMLArchiTextSpecification {
         // SET
         if (isInstruction("SET", _split[0])) {
 
-            if (_split.length != 4) {
+            if (_split.length < 4) {
                 error = "A set instruction must be used with 3 parameters, and not " + (_split.length - 1);
                 addError(0, _lineNb, 0, error);
                 return -1;
@@ -487,8 +504,14 @@ public class TMLArchiTextSpecification {
                 return -1;
             }
 
-            HwNode node = tmla.getHwNodeByName(_split[1]);
+
             HwLink link;
+            HwNode node = tmla.getHwNodeByName(_split[1]);
+            if (node != null) {
+                //TraceManager.addDev("Handling node=" + node.getName());
+            } else {
+                //TraceManager.addDev("Null node=" + _split[1]);
+            }
 
             if (node == null) {
                 link = tmla.getHwLinkByName(_split[1]);
@@ -498,6 +521,7 @@ public class TMLArchiTextSpecification {
                     return -1;
                 } else {
                     // Link node
+
                     if (link instanceof HwLink) {
                         if (!checkParameter("SET", _split, 2, 8, _lineNb)) {
                             return -1;
@@ -538,13 +562,21 @@ public class TMLArchiTextSpecification {
                 if (node instanceof HwCPU) {
                     HwCPU cpu = (HwCPU) node;
 
+                    //TraceManager.addDev("Seeting 1" + _split[2] + " in " + cpu.getName());
+
+
                     if (!checkParameter("SET", _split, 2, 3, _lineNb)) {
                         return -1;
                     }
 
-                    if (!checkParameter("SET", _split, 3, 1, _lineNb)) {
-                        return -1;
+                    if (_split[2].toUpperCase().compareTo("OPERATION") != 0) {
+                        if (!checkParameter("SET", _split, 3, 1, _lineNb)) {
+                            return -1;
+                        }
                     }
+
+                    //TraceManager.addDev("Setting 2" + _split[2] + " in " + cpu.getName());
+
 
                     if (_split[2].toUpperCase().equals("NBOFCORES")) {
                         cpu.nbOfCores = Integer.decode(_split[3]).intValue();
@@ -594,12 +626,16 @@ public class TMLArchiTextSpecification {
                         cpu.execcTime = Integer.decode(_split[3]).intValue();
                     }
 
+                    if (_split[2].toUpperCase().equals("CLOCKDIVIDER")) {
+                        cpu.clockRatio = Integer.decode(_split[3]).intValue();
+                    }
+
                     if (_split[2].toUpperCase().equals("OPERATION")) {
                         String tmpOp = "";
                         for (int i=3; i<_split.length; i++) {
                             tmpOp += _split[i] + " ";
                         }
-
+                        //TraceManager.addDev("Setting op in " + cpu.getName() + " to " + tmpOp);
                         cpu.setOperation(tmpOp.trim());
                     }
                 }
@@ -607,7 +643,7 @@ public class TMLArchiTextSpecification {
                 if (node instanceof HwFPGA) {
                     HwFPGA fpga = (HwFPGA) node;
 
-                    if (!checkParameter("SET", _split, 2, 3, _lineNb)) {
+                    if (!checkParameter("SET", _split, 2, 13, _lineNb)) {
                         return -1;
                     }
 
@@ -648,6 +684,10 @@ public class TMLArchiTextSpecification {
                         fpga.execcTime = Integer.decode(_split[3]).intValue();
                     }
 
+                    if (_split[2].toUpperCase().equals("CLOCKDIVIDER")) {
+                        fpga.clockRatio = Integer.decode(_split[3]).intValue();
+                    }
+
                     if (_split[2].toUpperCase().equals("OPERATION")) {
                         String tmpOp = "";
                         for (int i=3; i<_split.length; i++) {
@@ -657,10 +697,21 @@ public class TMLArchiTextSpecification {
                         fpga.setOperation(tmpOp.trim());
 
                     }
+
+                    if (_split[2].toUpperCase().equals("SCHEDULING")) {
+                        String tmpOp = "";
+                        for (int i=3; i<_split.length; i++) {
+                            tmpOp += _split[i] + " ";
+                        }
+
+                        fpga.setScheduling(tmpOp.trim());
+                    }
                 }
 
                 if (node instanceof HwA) {
                     HwA hwa = (HwA) node;
+
+                    TraceManager.addDev("HWA = " + _split[2]);
 
                     if (!checkParameter("SET", _split, 2, 10, _lineNb)) {
                         return -1;
@@ -676,6 +727,16 @@ public class TMLArchiTextSpecification {
 
                     if (_split[2].toUpperCase().equals("EXECITIME")) {
                         hwa.execiTime = Integer.decode(_split[3]).intValue();
+                    }
+
+                    TraceManager.addDev("Testing HWA = " + _split[2]);
+
+                    if (_split[2].toUpperCase().equals("EXECCTIME")) {
+                        hwa.execcTime = Integer.decode(_split[3]).intValue();
+                    }
+
+                    if (_split[2].toUpperCase().equals("CLOCKDIVIDER")) {
+                        hwa.clockRatio = Integer.decode(_split[3]).intValue();
                     }
 
                     if (_split[2].toUpperCase().equals("OPERATION")) {
@@ -710,6 +771,10 @@ public class TMLArchiTextSpecification {
                     if (_split[2].toUpperCase().equals("ARBITRATION")) {
                         bus.arbitration = Integer.decode(_split[3]).intValue();
                     }
+
+                    if (_split[2].toUpperCase().equals("CLOCKDIVIDER")) {
+                        bus.clockRatio = Integer.decode(_split[3]).intValue();
+                    }
                 }
 
                 if (node instanceof HwBridge) {
@@ -726,12 +791,16 @@ public class TMLArchiTextSpecification {
                     if (_split[2].toUpperCase().equals("BUFFERBYTESIZE")) {
                         bridge.bufferByteSize = Integer.decode(_split[3]).intValue();
                     }
+
+                    if (_split[2].toUpperCase().equals("CLOCKDIVIDER")) {
+                        bridge.clockRatio = Integer.decode(_split[3]).intValue();
+                    }
                 }
 
-                if (node instanceof HwRouter) {
-                    HwRouter router = (HwRouter) node;
+                if (node instanceof HwNoC) {
+                    HwNoC noc = (HwNoC) node;
 
-                    if (!checkParameter("SET", _split, 2, 11, _lineNb)) {
+                    if (!checkParameter("SET", _split, 2, 14, _lineNb)) {
                         return -1;
                     }
 
@@ -740,12 +809,17 @@ public class TMLArchiTextSpecification {
                     }
 
                     if (_split[2].toUpperCase().equals("BUFFERBYTESIZE")) {
-                        router.bufferByteSize = Integer.decode(_split[3]).intValue();
+                        noc.bufferByteSize = Integer.decode(_split[3]).intValue();
                     }
 
                     if (_split[2].toUpperCase().equals("NOCSIZE")) {
-                        router.size = Integer.decode(_split[3]).intValue();
+                        noc.size = Integer.decode(_split[3]).intValue();
                     }
+
+                    if (_split[2].toUpperCase().equals("CLOCKDIVIDER")) {
+                        noc.clockRatio = Integer.decode(_split[3]).intValue();
+                    }
+
                 }
 
                 if (node instanceof HwMemory) {
@@ -761,6 +835,10 @@ public class TMLArchiTextSpecification {
 
                     if (_split[2].toUpperCase().equals("BYTEDATASIZE")) {
                         memory.byteDataSize = Integer.decode(_split[3]).intValue();
+                    }
+
+                    if (_split[2].toUpperCase().equals("CLOCKDIVIDER")) {
+                        memory.clockRatio = Integer.decode(_split[3]).intValue();
                     }
                 }
 
@@ -782,6 +860,11 @@ public class TMLArchiTextSpecification {
                     if (_split[2].toUpperCase().equals("NBOFCHANNELS")) {
                         dma.nbOfChannels = Integer.decode(_split[3]).intValue();
                     }
+
+                    if (_split[2].toUpperCase().equals("CLOCKDIVIDER")) {
+                        dma.clockRatio = Integer.decode(_split[3]).intValue();
+                    }
+
                 }
             }
 
@@ -811,6 +894,7 @@ public class TMLArchiTextSpecification {
     // Type 10: HWA parameter
     // Type 11: BRIDGE parameter
     // Type 12: MEMORY parameter
+    // Type 13: FPGA parameter
 
     public boolean checkParameter(String _inst, String[] _split, int _parameter, int _type, int _lineNb) {
         boolean err = false;
@@ -895,6 +979,17 @@ public class TMLArchiTextSpecification {
                         err = true;
                     }
                     break;
+                case 13:
+                    if (!isIncluded(_split[_parameter], fpgaparameters)) {
+                        err = true;
+                    }
+                    break;
+                case 14:
+                    if (!isIncluded(_split[_parameter], nocparameters)) {
+                        err = true;
+                    }
+                    break;
+
             }
         } else {
             err = true;

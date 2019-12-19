@@ -48,6 +48,7 @@ Ludovic Apvrille, Renaud Pacalet
 #include <string.h>
 #include <iostream>
 #include <sstream>
+#include <iomanip>
 #include <fstream>
 #include <map>
 #include <set>
@@ -70,7 +71,6 @@ Ludovic Apvrille, Renaud Pacalet
 #include <sys/time.h>
 #include <sys/resource.h>
 #include <unistd.h>
-
 #include "penalties.h"
 
 #define WRITE_STREAM(s,v) s.write((char*) &v,sizeof(v)); 
@@ -85,7 +85,10 @@ using std::max;
 #undef DEBUG_CPU
 #undef DEBUG_BUS
 #undef DEBUG_SERIALIZE
+#undef DEBUG_HTML
 
+#undef DEBUG_FPGA
+#undef DEBUG_SIMULATE
 //enables mapping of DIPLODOCUS channels onto buses
 #define BUS_ENABLED
 //cost of a send/wait command
@@ -220,6 +223,8 @@ using std::max;
 #define TAG_UTILc "</util>"
 #define TAG_CPUo "<cpu"
 #define TAG_CPUc "</cpu>"
+#define TAG_FPGAo "<fpga"
+#define TAG_FPGAc "</fpga>"
 #define TAG_PROGRESSo "<progr>"
 #define TAG_PROGRESSc "</progr>"
 #define TAG_CURRTASKo "<currtask>"
@@ -232,6 +237,8 @@ using std::max;
 #define EXT_TXT ".txt"
 #define EXT_HTML ".html"
 #define EXT_CSS ".css"
+#define EXT_JS ".js"
+#define EXT_XML ".xml"
 
 // Issue #4 HTML Trace Constants
 #define MAX_COL_SPAN 1000
@@ -253,7 +260,66 @@ using std::max;
 #define SCHED_HTML_END_STYLE "</style>\n"
 #define SCHED_HTML_CSS_BEG_LINK "<link rel=\"stylesheet\" type=\"text/css\" href=\""
 #define SCHED_HTML_CSS_END_LINK "\" />\n"
+#define SCHED_HTML_TITLE_HW "<h1> Summary HW </h1>"
+#define SCHED_HTML_TITLE_TASK "<h1> Summary tasks </h1>"
+#define SCHED_HTML_TITLE_DEVICE "<h1> Device scheduling </h1>"
+#define SCHED_HTML_BOARD "<table width=\"170px\" style=\"float: left\">\n \<tr><td style=\"max-width: unset;\">"
+#define SCHED_HTML_BOARD2 "<table style=\"float: left\">"
+
+#define SCHED_HTML_JS_LINK1 "<script src=\"https://code.jquery.com/jquery-3.4.1.min.js\">"
+#define SCHED_HTML_JS_LINK2 "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js\">"
+#define SCHED_HTML_BEGIN_JS "<script>\n"
+#define SCHED_HTML_END_JS "</script>\n"
+#define SCHED_HTML_JS_TABLE_BEGIN "<table>"
+#define SCHED_HTML_JS_TABLE_END "</table>"
+#define SCHED_HTML_JS_BEGIN_CANVAS "     <canvas id=\"pie-chartcanvas-"
+#define SCHED_HTML_JS_END_CANVAS "\" width=\"256\" height=\"256\"></canvas>"
+#define SCHED_HTML_JS_WINDOW "window.onload = function () {\n"
+#define SCHED_HTML_DIV "<div>\n"
+#define SCHED_HTML_JS_DIV_BEGIN "<div class=\"wrapper\">"
+#define SCHED_HTML_JS_DIV_BEGIN2 "<div class=\"pie-chart-container\">"
+#define SCHED_HTML_JS_DIV_BEGIN3 "<div style=\"float: left\">"
+#define SCHED_HTML_JS_BUTTON "<button id=\"button\"> Show/Hide Pie Chart </button>"
+#define SCHED_HTML_JS_DIV_END "</div>"
+#define SCHED_HTML_JS_CLEAR "<div class = \"clear\"></div>"
 #define NB_HTML_COLORS 15
+#define SHOW_PIE_CHART  "ShowPie"
+
+#define SCHED_HTML_JS_FUNCTION "= function() {\n \
+		var r = Math.floor(Math.random() * 255);\n \
+		var g = Math.floor(Math.random() * 255);\n \
+		var b = Math.floor(Math.random() * 255);\n \
+		return \"rgb(\" + r + \",\" + g + \",\" + b + \")\";\n \
+	};\n"
+
+
+#define SCHED_HTML_JS_CONTENT1 "  }]\n \
+};\n"
+
+#define SCHED_HTML_JS_CONTENT3 " = {\n \
+			title : {\n \
+			display : true,\n \
+			position : \"top\",\n \
+			text : \""
+
+#define SCHED_HTML_JS_CONTENT2 "\", \n \
+			fontSize : 14,\n \
+			fontColor : \"#111\"\n \
+		},\n \
+		legend : {\n \
+			display : true,\n \
+			position : \"bottom\"\n \
+		}\n \
+	};\n"
+
+#define SCHED_HTML_PIE_END "}\n \
+		]\n\
+	};\n"		
+	
+#define SCHED_HTML_JS_HIDE " .data.datasets.forEach(function(ds){\n \
+        ds.hidden=!ds.hidden;\n \
+	});\n"
+
 #define SCHED_HTML_CSS_CONTENT "table{\n \
 	border-collapse: collapse;\n \
 	empty-cells: show;\n \
@@ -496,12 +562,30 @@ h2 span {\n \
 .t14last {\n \
 	background-color: LightGoldenRodYellow;\n \
 	border-style: solid solid solid none;\n \
+}\n \
+.wrapper {\n \
+	width: 256px;\n \
+	height: 256px;\n \
+}\n \
+.pie-chart-container {\n \
+	width : 256px;\n \
+	height : 256px;\n \
+	float : left;\n \
+	margin-left : 2em;\n \
+}\n \
+.clear {\n \
+	clear:both\n \
 }"
+
+#define SCHED_HTML_SCRIPT_CONTENT
+
+
 
 class TMLTask;
 class TMLTransaction;
 class TMLCommand;
 class CPU;
+class FPGA;
 class SchedulableCommDevice;
 class SchedulableDevice;
 class Parameter;
@@ -518,6 +602,7 @@ class EBRDD;
 class EBRDDCommand;
 class SignalConstraint;
 
+
 ///Datatype used for time measurements
 typedef unsigned long long TMLTime;
 ///Datatype used to indicate the virtual length of commands (execution units, data units)
@@ -532,6 +617,8 @@ typedef std::list<TMLTask*> TaskList;
 typedef std::vector<TMLTransaction*> TransactionList;
 ///Datatype holding pointer to CPUs, used by SimComponents and simulation kernel
 typedef std::list<CPU*> CPUList;
+///Datatype holding pointer to FPGAs, used by SimComponents and simulation kernel
+typedef std::list<FPGA*> FPGAList;
 ///Datatype holding pointer to CPUs and Bridges, used by simulation kernel for scheduling
 typedef std::list<SchedulableDevice*> SchedulingList;
 ///Datatype holding references to buses, used by SimComponents and simulation kernel
@@ -689,7 +776,7 @@ public:
 	SignalChangeData(unsigned int iSigChange, TMLTime iTime, TraceableDevice* iDevice):_sigChange(iSigChange),_time(iTime),_device(iDevice){
 		//std::cout << _sigChange << " " << _time << " " << _device << " " << " constructor***\n";
 	}
-	SignalChangeData():_sigChange(0),_time(0),_device(0){
+	SignalChangeData():_sigChange(0),_time(0),_device(0),_coreNumberVcd(0),_taskFPGA(0){
 	}
 	///String representation of the signal change in VCD format
 	//std::string _sigChange;
@@ -698,6 +785,9 @@ public:
 	TMLTime _time;
 	///Pointer to the device the signal belongs to
 	TraceableDevice* _device;
+        ///for cpu,the correspond core number
+        unsigned int _coreNumberVcd;
+	TMLTask* _taskFPGA;
 };
 
 ///Function object for the comparison of the runnable time of two transaction
@@ -761,6 +851,7 @@ void replaceAll(std::string& ioHTML, std::string iSearch, std::string iReplace);
 bool ends_with(std::string const& str, std::string const& suffix);
 
 inline std::string vcdValConvert(unsigned int iVal) {if(iVal==1 || iVal==2) return "1"; else return "0";}
+inline std::string vcdTaskValConvert(unsigned int iVal) {if(iVal==2) return "10"; else if(iVal==1) return "01"; else return "00";}
 std::string vcdTimeConvert(TMLTime iVal);
 int getexename(char* buf, size_t size);
 unsigned int getEnabledBranchNo(int iNo, int iMask);

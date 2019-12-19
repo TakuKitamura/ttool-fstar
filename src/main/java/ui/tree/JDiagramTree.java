@@ -43,6 +43,7 @@ package ui.tree;
 
 import common.*;
 import help.HelpEntry;
+import help.HelpManager;
 import translator.CheckingError;
 import tmltranslator.TMLCheckingError;
 import ui.*;
@@ -94,6 +95,7 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
     protected JMenuItem jmiShowInFinder;
     protected JMenuItem jmiShowST;
     protected JMenuItem jmiShowInFinderST;
+    protected JMenuItem jmiCompareST;
     protected JPopupMenu popupTree;
     protected JPopupMenu popupTreeST;
     protected RG selectedRG;
@@ -255,6 +257,14 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
                 }
 
                 popupTreeST.add(jmiShowInFinderST);
+                
+                if (selectedST.getType() == SimulationTrace.XML_DIPLO) {
+                	jmiCompareST = new JMenuItem("Compare");
+                	jmiCompareST.addActionListener(this);
+                    popupTreeST.add(jmiCompareST);
+                }
+
+
 
             //}
             popupTreeST.show(tree, x, y);
@@ -375,7 +385,10 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
             return;
         }
 
+
+
         Object nodeInfo = tp.getLastPathComponent();
+        //TraceManager.addDev("NodeInfo:" + nodeInfo);
         Object o;
 
         if (nodeInfo instanceof TDiagramPanel) {
@@ -436,6 +449,8 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
 
         } else if (nodeInfo instanceof HelpEntry) {
             mgui.openHelpFrame((HelpEntry)nodeInfo);
+        } else if (nodeInfo instanceof HelpTree) {
+            mgui.openHelpFrame(((HelpTree)nodeInfo).getHelpManager());
         }
     }
 
@@ -497,6 +512,10 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
             } else if (ae.getSource() == jmiShowInFinderST) {
                mgui.showInFinder(selectedST, true);
             }
+            else if (ae.getSource() == jmiCompareST) {
+                mgui.compareSimulationTraces(selectedST, true);
+               
+             }
         }
 
         if (selectedGT != null) {

@@ -43,9 +43,8 @@ package tmltranslator;
 
 import ui.tmlcompd.TMLCPrimitivePort;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
+
 import myutil.*;
 
 /**
@@ -106,6 +105,16 @@ public class TMLEvent extends TMLCommunicationElement {
     public void setBlocking(boolean _isBlocking) {
         isBlocking = _isBlocking;
     }
+
+    public void setOriginTask(TMLTask t) {
+        origin = t;
+    }
+
+    public void setDestinationTask(TMLTask t) {
+        destination = t;
+    }
+
+
 
     public void setTasks(TMLTask _origin, TMLTask _destination) {
         origin = _origin;
@@ -327,6 +336,43 @@ public class TMLEvent extends TMLCommunicationElement {
 	}
         s += "</TMLEVENT>\n";
 	return s;
+    }
+
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof TMLEvent)) return false;
+        if (!super.equalSpec(o)) return false;
+        TMLEvent event = (TMLEvent) o;
+
+        TMLComparingMethod comp = new TMLComparingMethod();
+
+        if (originPort != null) {
+            if (!originPort.equalSpec(event.getOriginPort()))
+                return false;
+        }
+
+        if (destinationPort != null) {
+            if (!destinationPort.equalSpec(event.getDestinationPort())) return false;
+        }
+
+        if (origin != null) {
+            if (!origin.equalSpec(event.getOriginTask()))
+                return false;
+        }
+
+        if (destination != null) {
+            if (!destination.equalSpec(event.getDestinationTask())) return false;
+        }
+        if(!(new HashSet<>(params).equals(new HashSet<>(event.params))))
+            return false;
+        return maxEvt == event.maxEvt &&
+                isBlocking == event.isBlocking &&
+                checkAuth == event.checkAuth &&
+                checkConf == event.checkConf &&
+                canBeNotified == event.canBeNotified() &&
+                comp.isTasksListEquals(originTasks, event.getOriginTasks()) &&
+                comp.isTasksListEquals(destinationTasks, event.getDestinationTasks()) &&
+                comp.isPortListEquals(originPorts, event.getOriginPorts()) &&
+                comp.isPortListEquals(destinationPorts, event.getDestinationPorts());
     }
 
 }

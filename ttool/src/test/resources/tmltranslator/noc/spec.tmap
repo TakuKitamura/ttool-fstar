@@ -1,0 +1,22 @@
+TMLSPEC
+    #include "spec.tml"
+ENDTMLSPEC
+
+TMLARCHI
+    #include "spec.tarchi"
+ENDTMLARCHI
+
+TMLMAPPING
+    MAP CPU01 noc_2x2_3flows__FunctionReceive0_2
+    SET noc_2x2_3flows__FunctionReceive0_2 priority 0
+    MAP CPU00 noc_2x2_3flows__FunctionSend0_0
+    SET noc_2x2_3flows__FunctionSend0_0 priority 0
+    MAP CPU11 noc_2x2_3flows__FunctionReceive0_1
+    SET noc_2x2_3flows__FunctionReceive0_1 priority 0
+    MAP CPU11 noc_2x2_3flows__FunctionReceive0_0
+    SET noc_2x2_3flows__FunctionReceive0_0 priority 0
+    MAP CPU10 noc_2x2_3flows__FunctionSend0_2
+    SET noc_2x2_3flows__FunctionSend0_2 priority 0
+    MAP CPU10 noc_2x2_3flows__FunctionSend0_1
+    SET noc_2x2_3flows__FunctionSend0_1 priority 0
+ENDTMLMAPPING

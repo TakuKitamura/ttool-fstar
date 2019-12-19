@@ -124,7 +124,9 @@ public class JDialogTMLTaskArtifact extends JDialogBase implements ActionListene
     	c1.fill = GridBagConstraints.HORIZONTAL;
     	panel2.add(new JLabel("Task:"), c1);
     	//c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-    	Vector<String> list = artifact.getTDiagramPanel().getMGUI().getAllNonMappedTMLTaskNames((TMLArchiDiagramPanel)(artifact.getTDiagramPanel()), artifact.getReferenceTaskName(), artifact.getTaskName());
+    	Vector<String> list = artifact.getTDiagramPanel().getMGUI().
+				getAllNonMappedTMLTaskNames((TMLArchiDiagramPanel)(
+						artifact.getTDiagramPanel()), artifact.getReferenceTaskName(), artifact.getTaskName());
     	int index = 0;
     	if (list.size() == 0) {
     		list.add("No more task to map");
@@ -163,7 +165,7 @@ public class JDialogTMLTaskArtifact extends JDialogBase implements ActionListene
     	c3.gridwidth = GridBagConstraints.REMAINDER; //end row
     	Vector<String> operationsListS = new Vector<>();
     	int indexOp = 0;
-    	TraceManager.addDev( "Inside JDialogTMLTaskArtifact: " + MECType );
+    	//TraceManager.addDev( "Inside JDialogTMLTaskArtifact: " + MECType );
     	if( MECType instanceof FepMEC )	{
     		operationsListS = FepMEC.OPERATIONS_LIST;
     		indexOp = operationsListS.indexOf( operation );
@@ -182,7 +184,13 @@ public class JDialogTMLTaskArtifact extends JDialogBase implements ActionListene
     	}
     	else if( MECType instanceof CpuMEC )	{
     		String tmp = (String)(referenceTaskName.getSelectedItem());
-    		operationsListS.add( tmp.split("::")[1] );
+    		String tmpS [] = tmp.split("::");
+    		//TraceManager.addDev("TMP=" + tmp);
+    		if (tmpS.length > 1) {
+                operationsListS.add(tmpS[1]);
+            } else {
+                operationsListS.add(tmpS[0]);
+            }
     		indexOp = operationsListS.indexOf( operation );
     	}
     	else	{

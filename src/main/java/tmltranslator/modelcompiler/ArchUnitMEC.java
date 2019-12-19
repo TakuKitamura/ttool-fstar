@@ -40,6 +40,7 @@
 package tmltranslator.modelcompiler;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Vector;
 
 /**
@@ -96,6 +97,15 @@ public abstract class ArchUnitMEC       {
 
     public String typeToString() {
 	return stringTypesArr[index];
+    }
+
+    public boolean equalSpec(Object o) {
+        if (!(o instanceof ArchUnitMEC)) return false;
+        ArchUnitMEC that = (ArchUnitMEC) o;
+        return index == that.getIndex() &&
+                Objects.equals(initCtxRoutine, that.getCtxInitCode()) &&
+                Objects.equals(ctxCleanupRoutine, that.getCtxCleanupCode()) &&
+                Objects.equals(localMemoryPointer, getLocalMemoryPointer());
     }
 
 }       //End of class

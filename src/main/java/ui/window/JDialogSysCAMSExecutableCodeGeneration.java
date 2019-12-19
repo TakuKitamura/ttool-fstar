@@ -72,6 +72,8 @@ import java.util.Arrays;
  * @author Irina Kit Yan LEE, 
  * @version 1.1 06/08/2018
  * @author Rodrigo CORTES PORTO
+ * @version 1.2 22/10/2019
+ * @author Rodrigo CORTES PORTO, Daniela GENIUS
  */
 
 @SuppressWarnings("serial")
@@ -84,17 +86,6 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
     private String textSysC1 = "Base directory of code generation:";
     private String textSysC7 = "Base directory of topcell generation:";
     private String textSysC8 = "Base directory of Makefile:";
-//    private String textSysC2 = "Compile SystemC-AMS executable with"; // compile
-//    private String textSysC4 = "Run code in soclib / mutekh:";
-//    private String textSysC5 = "Show AVATAR trace from file w/o hardware:";
-//    private String textSysC6 = "Show cycle accurate trace from MPSoC file:";
-
-//    private static String[] codes = {"AVATAR SOCLIB"};
-
-//    private static int selectedRun = 1;
-//    private static int selectedCompile = 0;
-//    private static int selectedViewTrace = 0;
-//    private static boolean static_putUserCode = true;
 
     protected static String pathCode;
     protected static String pathSoclibTraceFile;
@@ -109,7 +100,8 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
     private static
 
     int mode;
-
+    Boolean standalone; //are there any GPIO blocks?
+    
     //components
     protected JTextArea jta;
     protected JButton start;
@@ -508,7 +500,8 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
 //        String cmd;
 //        String list;//, data;
         hasError = false;
-
+	Boolean has_GPIO = false;
+	
         try {
             if (jp1.getSelectedIndex() == 0) {
                 Vector<SysCAMSComponentTaskDiagramPanel> syscamsDiagramPanels = mgui.getListSysCAMSPanel();
@@ -520,13 +513,9 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
                     } else {
                         jta.append("\nPerforming Validation for \""+(syscalsspec.getCluster()).getClusterName()+"\".\n");
                         LinkedList<SysCAMSTConnector> connectors = syscalsspec.getAllConnectorsCluster4Matrix();
-                        System.out.printf("Connectors4matrix for 1 cluster = %d.\n", connectors.size());
                         LinkedList<SysCAMSTBlockTDF> tdfBlocks = syscalsspec.getAllBlockTDF();
-                        System.out.printf("Blocks for 1 cluster = %d.\n", tdfBlocks.size());
                         LinkedList<SysCAMSTConnector> connectorsTdfDe = syscalsspec.getAllConnectorsTdfDe();
-                        System.out.printf("ConnectorsTdfDe for 1 cluster = %d.\n", connectorsTdfDe.size());
-                        LinkedList<SysCAMSTConnector> allConnectors = syscalsspec.getAllConnectorsCluster4Soclib();
-                        System.out.printf("All Connectors for 1 cluster = %d.\n", allConnectors.size());
+                        LinkedList<SysCAMSTConnector> allConnectors = syscalsspec.getAllConnectors();
                         LinkedList<SysCAMSTBlockDE> deBlocks = syscalsspec.getAllBlockDE();
                         LinkedList<SysCAMSTBlockGPIO2VCI> gpioBlocks = syscalsspec.getAllBlockGPIO2VCI();
                         //Validate that all ports are connected
@@ -539,8 +528,14 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
                                 nbPorts += deBlock.getPortDE().size();
                             } 
                             for(SysCAMSTBlockGPIO2VCI gpioBlock : gpioBlocks) {
+				has_GPIO=true;
                                 nbPorts += gpioBlock.getPortDE().size();
                             }
+			    if(has_GPIO==true)
+				standalone=false;
+			    else
+				standalone=true;
+			    
                             if(nbPorts != (allConnectors.size()*2)) {
                                 jta.append("Error: There are unconnected ports.\n");
                                 throw new InterruptedException();
@@ -577,53 +572,140 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
                         //Validate Block parameters (rate, Tp, Tm, Delay) and propagate timesteps to all blocks
                         //try {
                             propagateTimestep(connectorsTdfDe, tdfBlocks);
-                        
-                            //TODO-DELETE THIS, after debugging:
-                            for(SysCAMSTBlockTDF tdfBlock : tdfBlocks) {
-                                System.out.println("params of Block: " +tdfBlock.getName());
-                                System.out.println("Tm: " + tdfBlock.getPeriod());
-                                for(SysCAMSTPortTDF portTdf : tdfBlock.getPortTDF()) {
-                                    System.out.println("Port: " + portTdf.getName());
-                                    System.out.println("Tp: " + portTdf.getPeriod());
-                                    System.out.println("Rate: " + portTdf.getRate());
-                                    System.out.println("Delay: " + portTdf.getDelay());
+                            if(tdfBlocks.size() == 1) {
+                                if(connectors.size() > 0) { //Case when self-loops exist.
+                                    for(int i = 0; i < connectors.size(); i++) {
+                                        if( (((SysCAMSTPortTDF) connectors.get(i).get_p1().getComponent()).getDelay() + ((SysCAMSTPortTDF) connectors.get(i).get_p2().getComponent()).getDelay()) < ((SysCAMSTPortTDF) connectors.get(i).get_p1().getComponent()).getRate() ) {
+                                            jta.append("Static schedule can not be computed due to missing delays in loops.\n");
+                                            jta.append("The following delays are suggested:\n");
+                                            jta.append("In Port: \"" + ((SysCAMSTPortTDF) connectors.get(i).get_p1().getComponent()).getName() + "\". Insert delay of " + ((SysCAMSTPortTDF) connectors.get(i).get_p1().getComponent()).getRate() + "\n");
+                                        }
+                                        
+                                    }
+                                    if(allConnectors.size() > 0) { //Case when connections to DE exist.
+                                        boolean recompute = false;
+                                        boolean suggest_delays = false;
+                                        double[] time_prev = {0.0, 0.0}; //array to store "in" ([0]) and "out" ([1]) previous times
+                                        do{
+                                            try {
+                                                for(SysCAMSTBlockTDF tdfBlock : tdfBlocks){
+                                                    tdfBlock.syncTDFBlockDEBlock(time_prev);
+                                                }
+                                                recompute = false;
+                                                
+                                            } catch (SysCAMSValidateException se) {
+                                                recompute = true;
+                                                suggest_delays = true;
+                                                //System.out.println("Causality exception: " + se.getMessage());
+                                            }
+                                        } while (recompute);
+                                        if(suggest_delays){
+                                            jta.append("The following delays are suggested to solve synchronization issues between DE and TDF modules:\n");
+                                            for(SysCAMSTBlockTDF tdfBlock : tdfBlocks){
+                                                for(SysCAMSTPortConverter portConverter : tdfBlock.getPortConverter()) {
+                                                    if(portConverter.getRecompute()){
+                                                        jta.append("In Block: \"" + tdfBlock.getName() + "\". Port: \"" + portConverter.getName() + "\". Insert delay of " + portConverter.getDelay() + "\n");
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                } else if(allConnectors.size() > 0) { //Case when connections to DE exist - no self-loops
+                                    boolean recompute = false;
+                                    boolean suggest_delays = false;
+                                    double[] time_prev = {0.0, 0.0}; //array to store "in" ([0]) and "out" ([1]) previous times
+                                    do{
+                                        try {
+                                            for(SysCAMSTBlockTDF tdfBlock : tdfBlocks){
+                                                tdfBlock.syncTDFBlockDEBlock(time_prev);
+                                            }
+                                            recompute = false;
+                                            
+                                        } catch (SysCAMSValidateException se) {
+                                            recompute = true;
+                                            suggest_delays = true;
+                                            //System.out.println("Causality exception: " + se.getMessage());
+                                        }
+                                    } while (recompute);
+                                    if(suggest_delays){
+                                        jta.append("The following delays are suggested to solve synchronization issues between DE and TDF modules:\n");
+                                        for(SysCAMSTBlockTDF tdfBlock : tdfBlocks){
+                                            for(SysCAMSTPortConverter portConverter : tdfBlock.getPortConverter()) {
+                                                if(portConverter.getRecompute()){
+                                                    jta.append("In Block: \"" + tdfBlock.getName() + "\". Port: \"" + portConverter.getName() + "\". Insert delay of " + portConverter.getDelay() + "\n");
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
-                                
-                                for(SysCAMSTPortConverter portConverter : tdfBlock.getPortConverter()) {
-                                    System.out.println("Port: " + portConverter.getName());
-                                    System.out.println("Tp: " + portConverter.getPeriod());
-                                    System.out.println("Rate: " + portConverter.getRate());
-                                    System.out.println("Delay: " + portConverter.getDelay());
-                                }
-                            }
-                            
-                            //TODO: verify trivial case when only 1 block and no connectors. 
-                            if(connectors.size() > 0) {
-                                boolean recompute = false;
+                            } else if(connectors.size() > 0) { //Case for more than 1 TDF block.
+                                boolean[] recompute = {false, false};   //[0]-for sync issues [1]-for loop delays
                                 boolean suggest_delays = false;
+                                boolean suggest_delays_loops = false;
+                                SysCAMSTPortTDF tdfPort1;
+                                SysCAMSTPortTDF tdfPort2;
                                 RealVector buffer = new ArrayRealVector(connectors.size());
                                 RealVectorFormat printFormat = new RealVectorFormat();
                                 RealMatrix topologyMatrix = buildTopologyMatrix(connectors, tdfBlocks, buffer);
-                                System.out.println("Buffer after topMatrix is: " + printFormat.format(buffer) );
-                                //try {
                                 RealVector execRate = solveTopologyMatrix(topologyMatrix, tdfBlocks);
-                                //TODO: to recompute missing delays in loops: modify buffer with the suggested delay, and loop.
                                 do {
                                     recompute = computeSchedule(execRate, topologyMatrix, buffer, tdfBlocks, connectors);
-                                    if(recompute)
+                                    if(recompute[0])
                                         suggest_delays = true;
-                                } while (recompute);
-                                if(suggest_delays){
+                                    if(recompute[1]) {
+                                        RealVector bufferLoopDelays = new ArrayRealVector(connectors.size());
+                                        bufferLoopDelays = rebuildBuffer(connectors, tdfBlocks, bufferLoopDelays);
+                                        buffer = bufferLoopDelays.copy();
+                                        suggest_delays_loops = true;
+                                    }
+                                } while (recompute[0] || recompute[1]);
+                                
+                                if(suggest_delays_loops) {
+                                    jta.append("Static schedule can not be computed due to missing delays in loops.\n");
+                                    jta.append("The following delays are suggested:\n");
+                                    for(SysCAMSTBlockTDF tdfBlock : tdfBlocks){
+                                        for(SysCAMSTPortTDF tdfPort : tdfBlock.getPortTDF()) {
+                                            if(tdfPort.getRecompute()){
+                                                jta.append("In Block: \"" + tdfBlock.getName() + "\". Port: \"" + tdfPort.getName() + "\". Insert delay of " + tdfPort.getDelay() + "\n");
+                                            }
+                                        }
+                                        for(int j = 0; j < connectors.size(); j++) {
+                                            tdfPort1 = ((SysCAMSTPortTDF) connectors.get(j).get_p1().getComponent());
+                                            tdfPort2 = ((SysCAMSTPortTDF) connectors.get(j).get_p2().getComponent());
+                                            if( tdfPort1.getBlockTDF().getName().equals(tdfBlock.getName()) && tdfPort2.getBlockTDF().getName().equals(tdfBlock.getName()) ) {
+                                                if( (tdfPort1.getDelay() + tdfPort2.getDelay()) < tdfPort1.getRate() ) {
+                                                    jta.append("In Block: \"" + tdfBlock.getName() + "\". Port: \"" + tdfPort1.getName() + "\". Insert delay of " + tdfPort1.getRate() + "\n");
+                                                }
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    for(SysCAMSTBlockTDF tdfBlock : tdfBlocks){
+                                        for(int j = 0; j < connectors.size(); j++) {
+                                            tdfPort1 = ((SysCAMSTPortTDF) connectors.get(j).get_p1().getComponent());
+                                            tdfPort2 = ((SysCAMSTPortTDF) connectors.get(j).get_p2().getComponent());
+                                            if( tdfPort1.getBlockTDF().getName().equals(tdfBlock.getName()) && tdfPort2.getBlockTDF().getName().equals(tdfBlock.getName()) ) {
+                                                if( (tdfPort1.getDelay() + tdfPort2.getDelay()) < tdfPort1.getRate() ) {
+                                                    jta.append("Static schedule can not be computed due to missing delays in loops.\n");
+                                                    jta.append("The following delays are suggested:\n");
+                                                    jta.append("In Block: \"" + tdfBlock.getName() + "\". Port: \"" + tdfPort1.getName() + "\". Insert delay of " + tdfPort1.getRate() + "\n");
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                
+                                if(suggest_delays) {
                                     jta.append("The following delays are suggested to solve synchronization issues between DE and TDF modules:\n");
                                     for(SysCAMSTBlockTDF tdfBlock : tdfBlocks){
                                         for(SysCAMSTPortConverter portConverter : tdfBlock.getPortConverter()) {
-                                            if(portConverter.getRecompute()){
+                                            if(portConverter.getRecompute()) {
                                                 jta.append("In Block: \"" + tdfBlock.getName() + "\". Port: \"" + portConverter.getName() + "\". Insert delay of " + portConverter.getDelay() + "\n");
                                             }
                                         }
                                     }
                                 }
-                            }
+                            } 
                             jta.append("Validation for \""+(syscalsspec.getCluster()).getClusterName()+"\" completed.\n");
                         } catch (InterruptedException ie) {
                             System.err.println("Interrupted");
@@ -631,7 +713,6 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
                             mode = STOPPED;
                             setButtons();
                             hasError = true;
-                            //return;
                         } catch (Exception e) {
                             e.printStackTrace();
                             mode = STOPPED;
@@ -663,10 +744,11 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
                 	if (syscalsspec == null) {
                 		jta.append("Error: No SYSCAMS specification\n");
                 	} else {
-                		System.err.println("**SYSCAMS TOPCELL found");
-
-                		TopCellGenerator topCellGenerator = new TopCellGenerator(syscalsspec);
-                        TopCellGeneratorCluster topCellGeneratorCluster = new TopCellGeneratorCluster(syscalsspec);
+			    //System.err.println("**SYSCAMS TOPCELL found");
+				//if(standalone){
+				TopCellGenerator topCellGenerator = new TopCellGenerator(syscalsspec);//}
+			//else{
+			TopCellGeneratorCluster topCellGeneratorCluster = new TopCellGeneratorCluster(syscalsspec);//}
                 		testGo();
                 		jta.append("Generation of TopCell \"" + syscalsspec.getCluster().getClusterName() + "\" executable code: done\n");
 
@@ -675,10 +757,13 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
                 			System.err.println("Saving SysCAMS code in files\n");
                 			pathCode = code2.getText();
 
-                			System.err.println("SYSCAMS TOPCELL : " + syscalsspec.getCluster().getClusterName() + "saved in " + code2.getText());
-                			topCellGenerator.saveFile(pathCode);
-                            topCellGeneratorCluster.saveFile(pathCode);
-
+                			System.err.println("SYSCAMS TOPCELL : " + syscalsspec.getCluster().getClusterName() + " saved in " + code2.getText());
+					//DG 16.09.2019 separate standalone from with-Soclib versions
+					if(standalone){
+                			topCellGenerator.saveFile(pathCode, standalone);
+					}else{
+					topCellGeneratorCluster.saveFile(pathCode, standalone);
+					}
                 			jta.append("Code saved\n");
                 		} catch (Exception e) {
                 			jta.append("Could not generate files\n");
@@ -909,7 +994,7 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
                 }
             }
         }
-        jta.append("Error: At least one Module or Port Timestep should be entered in at least one TDF block of this cluster.\n");
+        jta.append("Error: At least one Module Timestep or Port Timestep should be entered in at least one TDF block of this cluster.\n");
         throw new InterruptedException(); 
     }
     
@@ -941,7 +1026,7 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
             if(tp > 0) {
                 //validate timestep consistency (rate*tp == tm)
                 if(rate*tp != tm){
-                    jta.append("Error: In block \""+tdfBlock.getName()+ "\" Timestep Tm is inconsistent with timestep Tp of port \"" + tdfPort.getName()+"\".\n");
+                    jta.append("Error while propagating Timesteps: In block \""+tdfBlock.getName()+ "\" Timestep Tm is inconsistent with Rate or timestep Tp of port \"" + tdfPort.getName()+"\".\n");
                     return false;
                 }
             } else {
@@ -962,8 +1047,8 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
                         } else {
                             //validate timestep consitency between 2 ports.
                             if(p2_tdfPort.getPeriod() != tp) {
-                                jta.append("Error: In block \""+tdfBlock.getName()+"\" Timestep Tp of port \"" +tdfPort.getName()
-                               + "\" is inconsistent with timestep Tp of port \"" + p2_tdfPort.getName()+"\" from block \""+p2_tdfPort.getBlockTDF().getName()+"\".\n");
+                                jta.append("Error while propagating Timesteps: In block \""+tdfBlock.getName()+"\" Rate or Timestep Tp of port \"" +tdfPort.getName()
+                               + "\" is inconsistent with Rate or timestep Tp of port \"" + p2_tdfPort.getName()+"\" from block \""+p2_tdfPort.getBlockTDF().getName()+"\".\n");
                                 return false;
                             }
                             //if connected block was not visited yet, then propagate timestep
@@ -982,8 +1067,8 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
                         } else {
                             //validate timestep consitency between 2 ports.
                             if(p1_tdfPort.getPeriod() != tp) {
-                               jta.append("Error: In block \""+tdfBlock.getName()+"\" Timestep Tp of port \"" +tdfPort.getName()
-                               + "\" is inconsistent with timestep Tp of port \"" + p1_tdfPort.getName()+"\" from block \""+p1_tdfPort.getBlockTDF().getName()+"\".\n");
+                               jta.append("Error while propagating Timesteps: In block \""+tdfBlock.getName()+"\" Rate or Timestep Tp of port \"" +tdfPort.getName()
+                               + "\" is inconsistent with Rate or timestep Tp of port \"" + p1_tdfPort.getName()+"\" from block \""+p1_tdfPort.getBlockTDF().getName()+"\".\n");
                                return false;
                             }
                             //if connected block was not visited yet, then propagate timestep
@@ -1004,7 +1089,7 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
            if(tp > 0) {
                //validate timestep consistency (rate*tp == tm)
                if(rate*tp != tm){
-                   jta.append("Error: In block \""+tdfBlock.getName()+ "\" Timestep Tm is inconsistent with timestep Tp of port \"" + converterPort.getName()+"\".\n");
+                   jta.append("Error while propagating Timesteps: In block \""+tdfBlock.getName()+ "\" Timestep Tm is inconsistent with Rate or timestep Tp of port \"" + converterPort.getName()+"\".\n");
                    return false;
                }
            } else {
@@ -1029,7 +1114,7 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
         int rate = tdfPort.getRate();
         if(tm > 0) {
             if(rate*tp != tm) {
-                jta.append("Error: In block \""+tdfBlock.getName()+ "\" Timestep Tm is inconsistent with timestep Tp of port \"" + tdfPort.getName()+"\".\n");
+                jta.append("Error while propagating Timesteps: In block \""+tdfBlock.getName()+ "\" Timestep Tm is inconsistent with Rate or timestep Tp of port \"" + tdfPort.getName()+"\".\n");
                 return false;
             } 
         } else {
@@ -1046,7 +1131,7 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
         int rate = converterPort.getRate();
         if(tm > 0) {
             if(rate*tp != tm) {
-                jta.append("Error: In block \""+tdfBlock.getName()+ "\" Timestep Tm is inconsistent with timestep Tp of port \"" + converterPort.getName()+"\".\n");
+                jta.append("Error while propagating Timesteps: In block \""+tdfBlock.getName()+ "\" Timestep Tm is inconsistent with Rate or timestep Tp of port \"" + converterPort.getName()+"\".\n");
                 return false;
             } 
         } else {
@@ -1061,14 +1146,21 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
         double [][] tArray = new double[connectors.size()][blocks.size()];
         for(int i = 0; i < connectors.size(); i++) {
             for(int j = 0; j < blocks.size(); j++) {
-                if( ((SysCAMSTPortTDF) connectors.get(i).get_p1().getComponent()).getBlockTDF().getName().equals(blocks.get(j).getName()) ) {
-                    System.out.println("Inserting in : "+ i + " " + j + " From port: "+ ((SysCAMSTPortTDF) connectors.get(i).get_p1().getComponent()).getName() +" Rate: " + ((SysCAMSTPortTDF) connectors.get(i).get_p1().getComponent()).getRate() );
+                if( ((SysCAMSTPortTDF) connectors.get(i).get_p1().getComponent()).getBlockTDF().getName().equals(blocks.get(j).getName()) &&
+                ((SysCAMSTPortTDF) connectors.get(i).get_p2().getComponent()).getBlockTDF().getName().equals(blocks.get(j).getName()) ) {
+                    tArray[i][j] = ((SysCAMSTPortTDF) connectors.get(i).get_p1().getComponent()).getRate() - ((SysCAMSTPortTDF) connectors.get(i).get_p2().getComponent()).getRate() ;
+                    if(((SysCAMSTPortTDF) connectors.get(i).get_p1().getComponent()).getDelay() > 0) {
+                        buffer.addToEntry(i, ((SysCAMSTPortTDF) connectors.get(i).get_p1().getComponent()).getDelay() ); 
+                    }
+                    if(((SysCAMSTPortTDF) connectors.get(i).get_p2().getComponent()).getDelay() > 0) {
+                        buffer.addToEntry(i, ((SysCAMSTPortTDF) connectors.get(i).get_p2().getComponent()).getDelay() );
+                    }
+                } else if( ((SysCAMSTPortTDF) connectors.get(i).get_p1().getComponent()).getBlockTDF().getName().equals(blocks.get(j).getName()) ) {
                     tArray[i][j] = ((SysCAMSTPortTDF) connectors.get(i).get_p1().getComponent()).getRate();
                     if(((SysCAMSTPortTDF) connectors.get(i).get_p1().getComponent()).getDelay() > 0) {
                         buffer.addToEntry(i, ((SysCAMSTPortTDF) connectors.get(i).get_p1().getComponent()).getDelay() ); 
                     }
                 } else if( ((SysCAMSTPortTDF) connectors.get(i).get_p2().getComponent()).getBlockTDF().getName().equals(blocks.get(j).getName()) ) {
-                    System.out.println("Inserting in : "+ i + " " + j + " From port: "+ ((SysCAMSTPortTDF) connectors.get(i).get_p2().getComponent()).getName() +" Rate: " + -((SysCAMSTPortTDF) connectors.get(i).get_p2().getComponent()).getRate() );
                     tArray[i][j] = -((SysCAMSTPortTDF) connectors.get(i).get_p2().getComponent()).getRate();
                     if(((SysCAMSTPortTDF) connectors.get(i).get_p2().getComponent()).getDelay() > 0) {
                         buffer.addToEntry(i, ((SysCAMSTPortTDF) connectors.get(i).get_p2().getComponent()).getDelay() );
@@ -1076,13 +1168,26 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
                 }
             }
         }
-        
-        //double[][] tArray = { { 2, -1, 0 }, { 0, 2, -4 }, { -1, 0, 1 } };
-        //double[][] tArray = { { 2, 3, 5 }, { -4, 2, 3} };
-        //double[][] tArray = { { 3, -2, 0, 0 }, { 0, 4, 0, -3 }, { 0, 1, -3, 0 }, { -1, 0, 2, 0 }, { -2, 0, 0, 1 } };
-        //double[][] tArray = { { 3, -2 } };
         RealMatrix tMatrix = new Array2DRowRealMatrix(tArray);
         return tMatrix;
+    }
+    
+    public RealVector rebuildBuffer(LinkedList<SysCAMSTConnector> connectors, LinkedList<SysCAMSTBlockTDF> blocks, RealVector buffer) {
+        for(int i = 0; i < connectors.size(); i++) {
+            for(int j = 0; j < blocks.size(); j++) {
+                if( ((SysCAMSTPortTDF) connectors.get(i).get_p1().getComponent()).getBlockTDF().getName().equals(blocks.get(j).getName()) ) {
+                    if(((SysCAMSTPortTDF) connectors.get(i).get_p1().getComponent()).getDelay() > 0) {
+                        buffer.addToEntry(i, ((SysCAMSTPortTDF) connectors.get(i).get_p1().getComponent()).getDelay() ); 
+                    }
+                } else if( ((SysCAMSTPortTDF) connectors.get(i).get_p2().getComponent()).getBlockTDF().getName().equals(blocks.get(j).getName()) ) {
+                    if(((SysCAMSTPortTDF) connectors.get(i).get_p2().getComponent()).getDelay() > 0) {
+                        buffer.addToEntry(i, ((SysCAMSTPortTDF) connectors.get(i).get_p2().getComponent()).getDelay() );
+                    }
+                }
+            }
+        }
+        
+        return buffer;
     }
 
     public RealVector solveTopologyMatrix(RealMatrix matrixA, LinkedList<SysCAMSTBlockTDF> blocks) throws InterruptedException {
@@ -1094,55 +1199,44 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
         int rank = qr.getRank(dropThreshold);
         if(rank != blocks.size()-1){
             jta.append("Error: Port sample rates are inconsistent. Topology matrix can not be solved.\n");
-            System.err.println("Port sample rates are inconsistent. Topology matrix can not be solved. Rank: " +rank+" != #blocks-1");
             throw new InterruptedException(); 
         }
-        System.out.println("Checking kernel columns ...");
         RealMatrix zMatrix = matrixA.multiply(qMatrix);
-        for (int c = rank; c < matrixA.getColumnDimension(); c++) {
-            System.out.printf("The product of A with column %d of Q has sup "
-                            + "norm %f.\n",
-                            c, zMatrix.getColumnMatrix(c).getNorm());
-            //TODO: verify if norm is not zero, throw error that kernel could not be found.              
-        }
-        
         RealMatrix kernelMatrix = qMatrix.getSubMatrix( 0, qMatrix.getRowDimension()-1, rank, qMatrix.getColumnDimension()-1 );
         double[] resultArray = new double[kernelMatrix.getRowDimension()];
         double result_tmp = 0.0;
         int v_lcm = 1;
         BigFraction[] resultFractionArray = new BigFraction[kernelMatrix.getRowDimension()];
         for (int i = 0; i < kernelMatrix.getRowDimension(); i++) {
-            System.out.printf("The kernelMatrix is %f .\n", kernelMatrix.getEntry(i, 0) );
             resultArray[i] = kernelMatrix.getEntry(i, 0) / kernelMatrix.getEntry(kernelMatrix.getRowDimension()-1, 0);
             result_tmp = kernelMatrix.getEntry(i, 0) / kernelMatrix.getEntry(kernelMatrix.getRowDimension()-1, 0);
             resultFractionArray[i] = new BigFraction(result_tmp, 2147483647);
-            System.out.println("The resultArray is: "+ resultArray[i] + ", result_tmp: " + result_tmp);
-            System.out.println("The resultFractionArray is: "+ resultFractionArray[i].toString() + " with num: " + resultFractionArray[i].getNumeratorAsInt() + " and denom: "+ resultFractionArray[i].getDenominatorAsInt()
-            + " and given as a double: " + resultFractionArray[i].doubleValue());
             v_lcm = ArithmeticUtils.lcm(resultFractionArray[i].getDenominatorAsInt() , v_lcm);
-            System.out.println("The lcm is: "+ v_lcm );
         }
         int[] tmpResult = new int[kernelMatrix.getRowDimension()];
         double[] finalResult = new double[kernelMatrix.getRowDimension()];
         for (int i = 0; i < kernelMatrix.getRowDimension(); i++) {
             tmpResult[i] = (resultFractionArray[i].multiply(v_lcm)).intValue();
             finalResult[i] = (double)tmpResult[i];
-            System.out.println("The finalResult is: "+ finalResult[i] + " - " + blocks.get(i).getName() );
         }
             RealVector xVector = new ArrayRealVector(finalResult);
             return xVector;
     }
     
-    public boolean computeSchedule(RealVector q, RealMatrix gamma, RealVector buffer, LinkedList<SysCAMSTBlockTDF> tdfBlocks, LinkedList<SysCAMSTConnector> connectors) throws InterruptedException {
+    public boolean[] computeSchedule(RealVector q, RealMatrix gamma, RealVector buffer, LinkedList<SysCAMSTBlockTDF> tdfBlocks, LinkedList<SysCAMSTConnector> connectors) throws InterruptedException {
         RealVector q1 = new ArrayRealVector(q.getDimension());
         RealVector nu = new ArrayRealVector(q.getDimension());
         RealVector tmpBuffer = new ArrayRealVector(gamma.getRowDimension());;
         RealVectorFormat printFormat = new RealVectorFormat();
+        String last_schedule = "Current scheduled modules list is: ";
         boolean deadlock = false;
-        boolean recompute = false;
+        boolean[] recompute = {false, false};   //[0]-for sync issues [1]-for loop delays
         SysCAMSTBlockTDF tdfBlock;
-        LinkedList<SysCAMSTPortConverter> portConvertersTmp;
+        SysCAMSTPortTDF tdfPort;
+        SysCAMSTPortTDF tdfPort1;
+        SysCAMSTPortTDF tdfPort2;
         double[] time_prev = {0.0, 0.0}; //array to store "in" ([0]) and "out" ([1]) previous times
+        
         //Reset the number of times all blocks have been executed
         for(int i = 0; i < tdfBlocks.size(); i++) {
             tdfBlocks.get(i).setN(0);
@@ -1155,18 +1249,14 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
                     tdfBlock = tdfBlocks.get(i);
                     //check if block is runnable: If it has not run q times 
                     //and it won't cause a buffer size to go negative.
-                    System.out.println("q1 is: " + printFormat.format(q1) );
-                    System.out.println("q is: " + printFormat.format(q) );
                     if(q1.getEntry(i) != q.getEntry(i)) {
                         nu.setEntry(i, 1);
                         tmpBuffer = buffer.add(gamma.operate(nu));
-                        System.out.println("tmpBuffer is: " + printFormat.format(tmpBuffer) );
                         if(tmpBuffer.getMinValue() >= 0) {
                             deadlock = false;
                             q1 = q1.add(nu);
                             buffer = tmpBuffer.copy();
-                            System.out.println("Schedule " + tdfBlock.getName() );
-                            System.out.println("Buffer is: " + printFormat.format(buffer) );
+                            last_schedule += tdfBlock.getName() + " - ";
                             //Validate sync bewtween TDF/DE 
                             tdfBlock.syncTDFBlockDEBlock(time_prev);
                         }
@@ -1175,23 +1265,24 @@ public class JDialogSysCAMSExecutableCodeGeneration extends javax.swing.JFrame i
                 }
             }
         } catch (SysCAMSValidateException se) {
-            recompute = true;
-            System.out.println("Causality exception: " + se.getMessage());
+            recompute[0] = true;
+            //System.out.println("Causality exception: " + se.getMessage());
         }
         if (deadlock){
-            System.out.println("Static schedule can not be computed due to missing delays in loops" );
-            jta.append("Error: Static schedule can not be computed due to missing delays in loops\n" );
+            //System.out.println(last_schedule);
             int minIndex = tmpBuffer.getMinIndex();
-            //TODO: for the suggested delay, I need to first detect loops within the graph(DFS?), then recompute recursively with the suggested delay until it can be solved.
-            /*jta.append("Following delay is suggested:\n" );
-            int currentDelay = ((SysCAMSTPortTDF) connectors.get(minIndex).get_p2().getComponent()).getDelay();
-            jta.append(currentDelay-(int)tmpBuffer.getMinValue() +" in port \""
-            +((SysCAMSTPortTDF) connectors.get(minIndex).get_p2().getComponent()).getName()
-            +"\" from block \""+ ((SysCAMSTPortTDF) connectors.get(minIndex).get_p2().getComponent()).getBlockTDF().getName()+"\"\n");
-            */
-            throw new InterruptedException(); 
-        } else {
-            System.out.println("Schedule complete-STOP" );
+            int currentDelay = 0;
+            int suggestedDelay;
+            for(int i = 0; i < tmpBuffer.getDimension(); i++) {
+                if (tmpBuffer.getEntry(i) < 0) {
+                    tdfPort = (SysCAMSTPortTDF) connectors.get(i).get_p2().getComponent();
+                    currentDelay = tdfPort.getDelay();
+                    suggestedDelay = tdfPort.getDelay() - (int)tmpBuffer.getEntry(i);
+                    tdfPort.setDelay(suggestedDelay);
+                    tdfPort.setRecompute(true);
+                }
+            }
+            recompute[1] = true;
         }
         return recompute;
     }
