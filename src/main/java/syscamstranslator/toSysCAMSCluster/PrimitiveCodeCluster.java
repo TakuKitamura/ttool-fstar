@@ -476,9 +476,9 @@ public class PrimitiveCodeCluster {
 				corpsPrimitiveDE = corpsPrimitiveDE + "\t};" + CR2;
 			}
 
-			//DG 17.10.
-			if(de.getClockName()!="")
-			corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_in <bool>"  + de.getClockName() + ";" + CR;			
+			//	DG 17.10.
+				if(de.getClockName()!="")
+				corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_in <bool>"  + de.getClockName() + ";" + CR;			
 	       
 	if (!deports.isEmpty()) {
 			   
@@ -526,7 +526,7 @@ if (t.getOrigin() == 0) {
 			if (!deports.isEmpty() || !de.getListStruct().isEmpty()) {
 				corpsPrimitiveDE = corpsPrimitiveDE + "\t: ";
 				if (!deports.isEmpty()) {
-					for (int i = 0; i < deports.size(); i++) {
+				    for (int i = 0; i < deports.size(); i++) {
 						if (deports.size() >= 1) {
 							if (cpt == 0) {
 								corpsPrimitiveDE = corpsPrimitiveDE + deports.get(i).getName() + "(\"" + deports.get(i).getName() + "\")" + CR;
@@ -542,7 +542,8 @@ if (t.getOrigin() == 0) {
 				}
 				String identifier;
 				if (!de.getListStruct().isEmpty()) {
-					for (int i = 0; i < de.getListStruct().size(); i++) {
+				    
+				    for (int i = 0; i < de.getListStruct().getSize(); i++) {
 						String select = de.getListStruct().get(i);
 						String[] splita = select.split(" = ");
 						identifier = splita[0];
@@ -560,10 +561,10 @@ if (t.getOrigin() == 0) {
 					}
 				}
 			}
-
-			//for (SysCAMSTClock t : clock) {
-			   corpsPrimitiveDE = corpsPrimitiveDE + "\t, "+de.getClockName()+"(\""+de.getClockName()+"\")"+CR;
-			   //	}
+		
+			if(de.getClockName()!="")
+			  corpsPrimitiveDE = corpsPrimitiveDE + "\t, "+de.getClockName()+"(\""+de.getClockName()+"\")"+CR;
+		
 			
 			boolean sensitive = false, method = false;
 			if (!de.getCode().equals("")) {

@@ -149,14 +149,17 @@ public class ClusterCode {
                                     + "sig_" + nb_con + ";" + CR;
                             names.add("sig_" + nb_con);
                         } else {
-			    if(((SysCAMSTPortConverter) connectors.get(i).get_p1().getComponent()).getNbits()==0){
+			    // System.out.println("***@@@"+ connectors.get(i).get_p1().getComponent().getName());
+			    //System.out.println("***@@@"+ connectors.get(i).get_p1().getComponent().getDEType());
+			    if(((SysCAMSTPortDE) connectors.get(i).get_p1().getComponent()).getNbits()==0){//DG 20.12. Converter ->DE
+				
                             corpsCluster = corpsCluster + "\tsc_core::sc_signal<" + ((SysCAMSTPortConverter) connectors.get(i).get_p2().getComponent()).getConvType() + "> " 
                                     + connectors.get(i).getName() + ";" + CR;
                             names.add(connectors.get(i).getName());
 			}
 			else{
-
-                            corpsCluster = corpsCluster + "\tsc_core::sc_signal<" + ((SysCAMSTPortConverter) connectors.get(i).get_p2().getComponent()).getConvType() + "<"+ ((SysCAMSTPortConverter) connectors.get(i).get_p1().getComponent()).getNbits()+"> " + "> " 
+//DG 20.12. Converter ->DE
+                            corpsCluster = corpsCluster + "\tsc_core::sc_signal<" + ((SysCAMSTPortConverter) connectors.get(i).get_p2().getComponent()).getConvType() + "<"+ ((SysCAMSTPortDE) connectors.get(i).get_p1().getComponent()).getNbits()+"> " + "> " 
                                     + connectors.get(i).getName() + ";" + CR;
                             names.add(connectors.get(i).getName());
 			    
@@ -214,7 +217,7 @@ public class ClusterCode {
 
 	    	    for (SysCAMSTClock t : clock) {
 		corpsCluster += "sc_clock "+t.getName()+";"+CR;
-		}
+		    }
 	    
 		    
             corpsCluster = corpsCluster + "public:" + CR;
