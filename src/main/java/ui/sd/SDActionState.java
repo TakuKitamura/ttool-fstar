@@ -56,8 +56,8 @@ import java.awt.*;
  */
 public class SDActionState extends TGCOneLineText implements SwallowedTGComponent {
     protected int lineLength = 5;
-    protected int textX =  5;
-    protected int textY =  15;
+//    protected int textX =  5;
+//    protected int textY =  15;
     protected int arc = 5;
     protected int w; //w1;
     
@@ -67,6 +67,9 @@ public class SDActionState extends TGCOneLineText implements SwallowedTGComponen
         width = 30;
         height = 20;
         minWidth = 30;
+        textX = 5;
+        textY = 15;
+        initScaling(30,20);
         
         nbConnectingPoint = 0;
         addTGConnectingPointsCommentMiddle();
@@ -89,7 +92,7 @@ public class SDActionState extends TGCOneLineText implements SwallowedTGComponen
         }
         g.drawRoundRect(x - width/2, y, width, height, arc, arc);
         
-        drawSingleString(g, value, x - w / 2 , y + textY);
+        drawSingleString(g, value, x - width/2 + textX , y + textY);
     }
     
     public TGComponent isOnMe(int _x, int _y) {

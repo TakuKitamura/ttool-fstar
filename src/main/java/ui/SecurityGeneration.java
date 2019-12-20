@@ -83,7 +83,7 @@ public class SecurityGeneration implements Runnable {
 	List<String> hsmTasks = new ArrayList<String>();
 
 	Map<String, String> channelSecMap = new HashMap<String, String>();
-	TMLMapping<TGComponent> newMap;//TMLMapping<?> newMap; FIXME keep or not
+	TMLMapping<TGComponent> newMap;
 
 	public SecurityGeneration(MainGUI gui, String name, TMLMapping<TGComponent> map, TMLArchiPanel newarch, String encComp, String overhead, String decComp, boolean autoConf, boolean autoWeakAuth, boolean autoStrongAuth,	Map<String, List<String>> selectedCPUTasks){
 
@@ -219,7 +219,7 @@ public class SecurityGeneration implements Runnable {
  	}
 
 	public boolean portInTask(TMLTask task, String portName){
-		TMLActivityDiagramPanel tad = tmlcdp.getTMLActivityDiagramPanel(task.getName());//( getActivityDiagramName( task ) );
+		TMLActivityDiagramPanel tad = tmlcdp.getTMLActivityDiagramPanel(task.getName());// FIXME ( getActivityDiagramName( task ) );
 		for (TGComponent tg : tad.getComponentList()) {
 			if (tg instanceof TMLADWriteChannel) {
 				TMLADWriteChannel writeChannel = (TMLADWriteChannel) tg;
@@ -348,7 +348,7 @@ public class SecurityGeneration implements Runnable {
 		for (TMLTask task : map.getTMLModeling().getTasks()) {
 			//System.out.println("Task " + task.getName());
 			//Check if all channel operators are secured
-			TMLActivityDiagramPanel tad = tmlcdp.getTMLActivityDiagramPanel(task.getName()); //FIXME keep or not : getActivityDiagramName( task ) );
+			TMLActivityDiagramPanel tad = tmlcdp.getTMLActivityDiagramPanel(task.getName()); //FIXME getActivityDiagramName( task ) )
 			if (tad==null){
 				continue;
 
@@ -475,13 +475,13 @@ public class SecurityGeneration implements Runnable {
 								  System.out.println("Channel found "+ chantmp);
 								  }*/
 
-							}
-							if (hsmTasks.contains(chan.getOriginTask().getName().split("__")[1])){
-								channelSecMap.put(chanName, "hsmSec_"+secName);
-								if (!hsmSecOutChannels.get(chan.getOriginTask()).contains(chanName) && portInTask(chan.getOriginTask(),chanName)){
-									HSMChannel hsmchan = new HSMChannel(chanName,  chan.getOriginTask().getName().split("__")[1], HSMChannel.MAC);
-									hsmChannelMap.get(taskHSMMap.get(chan.getOriginTask().getName().split("__")[1])).add(hsmchan);
-									hsmSecOutChannels.get(chan.getOriginTask()).add(chanName);
+						}
+						if (hsmTasks.contains(chan.getOriginTask().getName().split("__")[1])){
+							channelSecMap.put(chanName, "hsmSec_"+secName);
+							if (!hsmSecOutChannels.get(chan.getOriginTask()).contains(chanName) && portInTask(chan.getOriginTask(),chanName)){
+								HSMChannel hsmchan = new HSMChannel(chanName,  chan.getOriginTask().getName().split("__")[1], HSMChannel.MAC);
+								hsmChannelMap.get(taskHSMMap.get(chan.getOriginTask().getName().split("__")[1])).add(hsmchan);
+								hsmSecOutChannels.get(chan.getOriginTask()).add(chanName);
 
 								if (autoStrongAuth) {
 									nonceOutChannels.get(chan.getOriginTask()).add(chanName);
@@ -684,7 +684,7 @@ public class SecurityGeneration implements Runnable {
 							break;
 						}
 					}
-				}
+				} 
 			}
 		}
 		if (comps.size() == 0) {
@@ -725,7 +725,8 @@ public class SecurityGeneration implements Runnable {
 					destPort.typep = 2;
 					originPort.setParam(0, new TType(1));
 					destPort.setParam(0, new TType(1));
-				}
+				}				
+
 				destPort.isOrigin = !hsmChan.isOrigin;
 
 				tcdp.addComponent(destPort, comp.getX(), comp.getY(), true, true);
