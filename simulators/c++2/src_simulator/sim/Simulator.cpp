@@ -1550,6 +1550,54 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
       std::cout << "End Run until FPGA x executes." << std::endl;
       break;
     }
+    case 16:{ //Write x samples/events to channel y
+      std::cout << "\nAdd virtual signals." << std::endl;
+      aInpStream >> aStrParam;
+      std::string channelName =_simComp->getChannelList(aStrParam);
+      TMLChannel* aChannel = _simComp->getChannelByName(channelName);
+      //aGlobMsg << TAG_MSGo << MSG_CMDNIMPL << TAG_MSGc << std::endl;
+      //anErrorCode=1;
+      if (aChannel==0){
+        aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
+        anErrorCode=2;
+      } else {
+        aInpStream >> aParam1;
+        TMLEventChannel* anEventChannel = dynamic_cast<TMLEventChannel*>(aChannel);
+        if (anEventChannel==0){
+          aChannel->insertSamples(aParam1, 0);
+        } else {
+          //Parameter<ParamType> anInsertParam((dynamic_cast<TMLEventChannel*>(aChannel))->getParamNo());
+          std::string str, tempParameter="";
+          aInpStream >> str;
+          while (1) {
+              std::size_t const n = str.find_first_of("0123456789");
+              if(n != std::string::npos){
+                  std::size_t const m = str.find_first_not_of("0123456789", n);
+                  tempParameter += str.substr(n, m != std::string::npos ? m-n : m) + " ";
+                  if(m != std::string::npos)
+                    str = str.substr(m, str.length());
+                  else {
+                    std::cout << "End of parameter." << std::endl;
+                    break;
+                  }
+
+              }
+              else {
+                  std::cout << "There is no more number in the parameter." << std::endl;
+                  break;
+              }
+
+          }
+          std::istringstream ss(tempParameter);
+          Parameter* anInsertParam = anEventChannel->buildParameter();
+          ss >> anInsertParam;
+          aChannel->insertSamples(aParam1, anInsertParam);
+        }
+        aGlobMsg << TAG_MSGo << "Write data/event to channel." << TAG_MSGc << std::endl;
+      }
+      std::cout << "End virtual signals." << std::endl;
+      break;
+    }
     default:
       aGlobMsg << TAG_MSGo << MSG_CMDNFOUND<< TAG_MSGc << std::endl;
       anErrorCode=3;
