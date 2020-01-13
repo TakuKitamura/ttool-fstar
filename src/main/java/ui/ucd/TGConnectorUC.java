@@ -65,7 +65,7 @@ public  abstract class TGConnectorUC extends TGConnector {
         value = _value;
     }
     
-    
+    @Override
     protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
         //g.drawLine(x1, y1, x2, y2);
         GraphicLib.dashedArrowWithLine(g, 1, 1, 0, x1, y1, x2, y2, false);
@@ -73,13 +73,15 @@ public  abstract class TGConnectorUC extends TGConnector {
         // Indicate semantics 
         w  = g.getFontMetrics().stringWidth(value);
         h = g.getFontMetrics().getHeight();
-        g.drawString(value, (p1.getX() + p2.getX() - w) / 2, (p1.getY() + p2.getY())/2);
+        drawSingleString(g, value, (p1.getX() + p2.getX() - w) / 2, (p1.getY() + p2.getY())/2);
     }
     
+    @Override
     protected void drawMiddleSegment(Graphics g, int x1, int y1, int x2, int y2) {
         GraphicLib.dashedLine(g, x1, y1, x2, y2);
     }
     
+    @Override
     public TGComponent extraIsOnOnlyMe(int x1, int y1) {
         if (GraphicLib.isInRectangle(x1, y1, (p1.getX() + p2.getX() - w) / 2, (p1.getY() + p2.getY())/2 - h, w, h)) {
             return this;

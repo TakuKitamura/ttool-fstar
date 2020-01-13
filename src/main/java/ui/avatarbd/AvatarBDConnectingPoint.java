@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatarbd;
 
 import ui.CDElement;
@@ -58,11 +55,11 @@ public class AvatarBDConnectingPoint extends  TGConnectingPointWidthHeight {
         super(_container, _x, _y, _in, _out, _w, _h);
     }
     
+    @Override
     public boolean isCompatibleWith(int type) {
         if (type == TGComponentManager.AVATARBD_COMPOSITION_CONNECTOR) {
             return true;
         }
         return type == TGComponentManager.AVATARBD_PORT_CONNECTOR;
     }
-    
 }

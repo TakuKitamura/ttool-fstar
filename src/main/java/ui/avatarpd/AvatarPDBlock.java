@@ -42,11 +42,13 @@
 package ui.avatarpd;
 
 import myutil.GraphicLib;
+
 import ui.*;
 import ui.util.IconManager;
 
 import javax.swing.*;
 import java.awt.*;
+//import java.awt.image.ImageObserver;import myutil.TraceManager;
 import java.util.LinkedList;
 import java.util.Vector;
 
@@ -59,22 +61,22 @@ import java.util.Vector;
 * @author Ludovic APVRILLE
  */
 public class AvatarPDBlock extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent {
-    private int textY1 = 3;
+    //private int textY1 = 3;
     private String stereotype = "block";
 	
-	private int maxFontSize = 12;
-	private int minFontSize = 4;
+	//private int maxFontSize = 12;
+	//private int minFontSize = 4;
 	private int currentFontSize = -1;
-	private boolean displayText = true;
-	private int textX = 7;
+	//private boolean displayText = true;
+	//private int textX = 7;
 	
-	private int limitName = -1;
-	private int limitAttr = -1;
-	private int limitMethod = -1;
+//	private int limitName = -1;
+//	private int limitAttr = -1;
+//	private int limitMethod = -1;
 	
 	// Icon
 	private int iconSize = 15;
-	private boolean iconIsDrawn = false;
+//	private boolean iconIsDrawn = false;
 	
 	
 	public String oldValue;
@@ -82,10 +84,16 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
     public AvatarPDBlock(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-        width = 250;
-        height = 200;
+        // Issue #31
+        textY = 3;
+        textX = 7;
         minWidth = 5;
         minHeight = 2;
+        initScaling(250, 200);
+
+        //        width = 250;
+        //        height = 200;
+
         
         nbConnectingPoint = 16;
         connectingPoint = new TGConnectingPoint[16];
@@ -122,273 +130,338 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
 		setValue(name);
 		oldValue = value;
 		
-		currentFontSize = maxFontSize;
+		//currentFontSize = maxFontSize;
 		oldScaleFactor = tdp.getZoom();
         
         myImageIcon = IconManager.imgic700;
 		
 		actionOnAdd();
     }
+    /**
+     * will get the position which represent the center of the box
+     * we are drawing. It will use the stringWidth so that the center is 
+     * calculated in function of the string we want to draw.
+     * this function is used in internalDrawing
+     * @param g
+     * @param str
+     * @return
+     */
+
     
-    public void internalDrawing(Graphics g) {
-		String ster = "<<" + stereotype + ">>";
-		Font f = g.getFont();
-		Font fold = f;
-		
-		//
-		
-		if ((rescaled) && (!tdp.isScaled())) {
-			
-			if (currentFontSize == -1) {
-				currentFontSize = f.getSize();
-			}
-			rescaled = false;
-			// Must set the font size ..
-			// Find the biggest font not greater than max_font size
-			// By Increment of 1
-			// Or decrement of 1
-			// If font is less than 4, no text is displayed
-			
-			int maxCurrentFontSize = Math.max(0, Math.min(height, maxFontSize));
-			int w0, w1, w2;
-			f = f.deriveFont((float)maxCurrentFontSize);
-			g.setFont(f);
-			//
-			while(maxCurrentFontSize > (minFontSize-1)) {
-				w0 = g.getFontMetrics().stringWidth(value);
-				w1 = g.getFontMetrics().stringWidth(ster);
-				w2 = Math.min(w0, w1);
-				if (w2 < (width - (2*textX))) {
-					break;
-				}
-				maxCurrentFontSize --;
-				f = f.deriveFont((float)maxCurrentFontSize);
-				g.setFont(f);
-			}
-			currentFontSize = maxCurrentFontSize;
-			
-			if(currentFontSize <minFontSize) {
-				displayText = false;
-			} else {
-				displayText = true;
-				f = f.deriveFont((float)currentFontSize);
-				g.setFont(f);
-			}
-			
-		}
-		
-		//
-		
-		Color c = g.getColor();
-		
+    @Override
+    public void internalDrawing(Graphics g)
+    {
+    	//Rectangle and filling
+    	currentFontSize = g.getFont().getSize();
 		g.draw3DRect(x, y, width, height, true);
-		
-		//g.setColor(ColorManager.AVATAR_BLOCK);
-		Color avat = ColorManager.AVATAR_BLOCK;
-		int h;
-		h = 2* (currentFontSize + (int)(textY1 * tdp.getZoom())) + 2;
-		g.setColor(new Color(avat.getRed(), avat.getGreen(), avat.getBlue() + (getMyDepth() * 10)));
-		g.fill3DRect(x+1, y+1, width-1, Math.min(h, height)-1, true);
-		g.setColor(c);
-        
-        // Strings
-		int w;
-		h = 0;
-		if (displayText) {
-			f = f.deriveFont((float)currentFontSize);
-			Font f0 = g.getFont();
-			g.setFont(f.deriveFont(Font.BOLD));
-			
-			w = g.getFontMetrics().stringWidth(ster);
-			h =  currentFontSize + (int)(textY1 * tdp.getZoom());
-			if ((w < (2*textX + width)) && (h < height)) {
-				g.drawString(ster, x + (width - w)/2, y +h);
-			}
-			g.setFont(f0);
-			w  = g.getFontMetrics().stringWidth(value);
-			h = 2* (currentFontSize + (int)(textY1 * tdp.getZoom()));
-			if ((w < (2*textX + width)) && (h < height)) {
-				g.drawString(value, x + (width - w)/2, y + h);
-			}
-			limitName = y + h;
-		} else {
-			limitName = -1;
-		}
-		
-		g.setFont(fold);
-		
-		h = h +2;
-		if (h < height) {
-			//g.drawLine(x, y+h, x+width, y+h);
-			g.setColor(new Color(avat.getRed(), avat.getGreen(), avat.getBlue() + (getMyDepth() * 10)));
-			g.fill3DRect(x+1, y+h, width-1, height-1-h, true);
-			g.setColor(c);
+		int compartmentHeight = (currentFontSize + (2 * textY)) * 2;
+		if (compartmentHeight < height) {
+			Color savecurrColor = g.getColor();
+			Color avatarColor = ColorManager.AVATAR_BLOCK;
+			g.setColor(new Color(avatarColor.getRed(), avatarColor.getGreen(), avatarColor.getBlue() + (getMyDepth() * 10)));
+			g.fill3DRect(x + 1, y + compartmentHeight, width - 1, height - compartmentHeight, true);
+			g.fill3DRect(x + 1, y + 1, width - 1, compartmentHeight - 1, true);
+			g.setColor(savecurrColor);
 		}
 		
 		// Icon
-		if ((width>30) && (height > (iconSize + 2*textX))) {
-			iconIsDrawn = true;
-			g.drawImage(IconManager.img5100, x + width - iconSize - textX, y + textX, null);
-		} else {
-			iconIsDrawn = false;
-		}
-		
-		/*int cpt = h;
-		// Attributes
-		if (((AvatarBDPanel)tdp).areAttributesVisible()) {
-		limitAttr = -1;
-		int index = 0;
-		String attr;
-		
-		TAttribute a;
-		
-		int si = Math.min(12, (int)((float)currentFontSize - 2));
-		
-		f = g.getFont();
-		f = f.deriveFont((float)si);
-		g.setFont(f);
-		int step = si + 2;
-		
-		while(index < myAttributes.size()) {
-		cpt += step ;
-		if (cpt >= (height - textX)) {
-		break;
-		}
-		a = (TAttribute)(myAttributes.get(index));
-		attr = a.toString();
-		w = g.getFontMetrics().stringWidth(attr);
-		if ((w + (2 * textX) + 1) < width) {
-		g.drawString(attr, x + textX, y + cpt);
-		limitAttr = y + cpt;
-		} else {
-		attr = "...";
-		w = g.getFontMetrics().stringWidth(attr);
-		if ((w + textX + 2) < width) {
-		g.drawString(attr, x + textX + 1, y + cpt);
-		limitAttr = y + cpt;
-		} else {
-		// skip attribute
-		cpt -= step;
-		}
-		}
-		index ++;
-		}
-		} else {
-		limitAttr = -1;
-		}
-		
-		// Methods
-		if (((AvatarBDPanel)tdp).areAttributesVisible()) {
-		limitMethod = -1;
-		if (myMethods.size() > 0) {
-		if (cpt < height) {
-		cpt += textY1;
-		g.drawLine(x, y+cpt, x+width, y+cpt);
-		cpt += textY1;
-		}
-		}
-		
-		int index = 0;
-		String method;
-		AvatarMethod am;
-		
-		int si = Math.min(12, (int)((float)currentFontSize - 2));
-		
-		f = g.getFont();
-		f = f.deriveFont((float)si);
-		g.setFont(f);
-		int step = si + 2;
-		
-		while(index < myMethods.size()) {
-		cpt += step ;
-		if (cpt >= (height - textX)) {
-		break;
-		}
-		am = (AvatarMethod)(myMethods.get(index));
-		method = "- " + am.toString();
-		w = g.getFontMetrics().stringWidth(method);
-		if ((w + (2 * textX) + 1) < width) {
-		g.drawString(method, x + textX, y + cpt);
-		limitMethod = y + cpt;
-		} else {
-		method = "...";
-		w = g.getFontMetrics().stringWidth(method);
-		if ((w + textX + 2) < width) {
-		g.drawString(method, x + textX + 1, y + cpt);
-		limitMethod = y + cpt;
-		} else {
-		// skip attribute
-		cpt -= step;
-		}
-		}
-		index ++;
-		}
-		} else {
-		limitMethod = -1;
-		}
-		
-		// Signals
-		if (((AvatarBDPanel)tdp).areAttributesVisible()) {
-		
-		if (mySignals.size() > 0) {
-		if (cpt < height) {
-		cpt += textY1;
-		g.drawLine(x, y+cpt, x+width, y+cpt);
-		cpt += textY1;
-		}
-		}
-		
-		int index = 0;
-		String signal;
-		AvatarSignal as;
-		
-		int si = Math.min(12, (int)((float)currentFontSize - 2));
-		
-		f = g.getFont();
-		f = f.deriveFont((float)si);
-		g.setFont(f);
-		int step = si + 2;
-		
-		while(index < mySignals.size()) {
-		cpt += step ;
-		if (cpt >= (height - textX)) {
-		break;
-		}
-		as = (AvatarSignal)(mySignals.get(index));
-		signal = as.toString();
-		w = g.getFontMetrics().stringWidth(signal);
-		if ((w + (2 * textX) + 1) < width) {
-		g.drawString(signal, x + textX, y + cpt);
-		} else {
-		signal = "...";
-		w = g.getFontMetrics().stringWidth(signal);
-		if ((w + textX + 2) < width) {
-		g.drawString(signal, x + textX + 1, y + cpt);
-		} else {
-		// skip attribute
-		cpt -= step;
-		}
-		}
-		index ++;
-		}
-		}*/
-		
-		g.setFont(fold);
-		
-        /*int w  = g.getFontMetrics().stringWidth(ster);
+		//int border = scale(5);
+		//g.drawImage(scale(IconManager.img5100), x + width - scale(iconSize) - border, y + border, Color.yellow, null);
+		drawIcon(g, IconManager.img5100, iconSize);	
+		//String Title + Stereotype
+		//Issue #31: isTextReadable and canTextgointheBox function are used to make sure the display is going to be correct
 		Font f = g.getFont();
+		int fontSize = f.getSize();
+//		if (isTextReadable(g) && canTextGoInTheBox(g, fontSize, value, iconSize))
+//		{
+//			g.setFont(f.deriveFont(Font.BOLD));
+//			g.drawString(value, getCenterOfBox(g, value), y + currentFontSize);
+//		}
 		g.setFont(f.deriveFont(Font.BOLD));
-        g.drawString(ster, x + (width - w)/2, y + textY1);
-		g.setFont(f);
-        w  = g.getFontMetrics().stringWidth(value);
-        g.drawString(value, x + (width - w)/2, y + textY2);*/
-		
-		// Icon
-		//g.drawImage(IconManager.imgic1100.getImage(), x + 4, y + 4, null);
-		//g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
+		drawSingleString(g, value, getCenterOfBox(g, value), y + currentFontSize);
+		String ster ="<<stereotype>>";
+		if (isTextReadable(g) && canTextGoInTheBox(g, fontSize, ster, 0))
+		{
+			g.setFont(f.deriveFont(Font.PLAIN));
+			//g.drawString(ster, getCenterOfBox(g, ster), y + currentFontSize * 2 + textY);
+			drawSingleString(g, ster, getCenterOfBox(g, ster), y + currentFontSize * 2 + textY);
+		}
     }
-	
     
+//    
+//    @Override
+//    public void internalDrawing(Graphics g) {
+//    	//TraceManager.addDev("Hello this is AvatarPDBlock ---- ");
+//		String ster = "<<" + stereotype + ">>";
+//		Font f = g.getFont();
+//		Font fold = f;
+//		int currentFontSize = f.getSize();
+//		if ( (!tdp.isScaled())) 
+//		{
+//			//if (currentFontSize == -1)
+//			//	currentFontSize = f.getSize();
+//			
+//			//rescaled = false;
+//			// Must set the font size ..
+//			// Find the biggest font not greater than max_font size
+//			// By Increment of 1
+//			// Or decrement of 1
+//			// If font is less than 4, no text is displayed
+//			
+//			int maxTextSize = Math.max(0, Math.min(height, maxFontSize));
+//			int w0, w1, w2;
+//			//f = f.deriveFont((float)maxCurrentFontSize);
+//			//g.setFont(f);
+//			
+//			while(maxTextSize > (minFontSize-1)) {
+//				w0 = g.getFontMetrics().stringWidth(value);
+//				w1 = g.getFontMetrics().stringWidth(ster);
+//				w2 = Math.min(w0, w1);
+//				if (w2 < (width - (2*textX))) {
+//					break;
+//				}
+//				maxTextSize--;
+//				f = f.deriveFont((float)maxTextSize);
+//				g.setFont(f);
+//			}
+//			currentFontSize = maxTextSize;
+//			f = f.deriveFont((float)maxTextSize);
+//			g.setFont(f);
+//			
+//			if (currentFontSize <minFontSize) {
+//				displayText = false;
+//			} else {
+//				displayText = true;
+//				f = f.deriveFont((float)currentFontSize);
+//				g.setFont(f);
+//			}
+//			
+//		}
+//		
+//		//
+//		
+//		Color c = g.getColor();
+//		//contour rectangle
+//		g.draw3DRect(x, y, width, height, true);
+//		
+//		//g.setColor(ColorManager.AVATAR_BLOCK);
+//		Color avat = ColorManager.AVATAR_BLOCK;
+//		int compartmentHeight = 2 *( currentFontSize + textY )+ scale(2);
+//		//compartmentHeight = 2* (currentFontSize + (int)(textY * tdp.getZoom())) + 2;
+//		
+//		g.setColor(new Color(avat.getRed(), avat.getGreen(), avat.getBlue() + (getMyDepth() * 10)));
+//		g.fill3DRect(x+1, y+1,
+//				width-1, Math.min(compartmentHeight, height)-1, true);
+//		g.setColor(c);
+//        
+//        // Strings
+//		int w;
+//		compartmentHeight = displayText ? 0: compartmentHeight;
+//		if (displayText) {
+//			f = f.deriveFont((float)(currentFontSize));
+//			Font f0 = g.getFont();
+//			g.setFont(f.deriveFont(Font.BOLD));
+//			
+//			//this part is the top text between << >> in an avatar PD diagrams
+//			w = g.getFontMetrics().stringWidth(ster);
+//			compartmentHeight =  currentFontSize + textY;
+//			//compartmentHeight =  currentFontSize + (int)(textY * tdp.getZoom()); //zoom i suppose
+//			
+//			if ((w < (2*textX + width)) && (compartmentHeight < height)) 
+//				g.drawString(ster, x + (width - w)/2, y +compartmentHeight);
+//			
+//			// this part is the line just under the << >> 
+//			//FIXME:this text zooms glitch, 
+//			//when clicking on zoom the diagrams indeed zooms 
+//			//but the text only take its zoomed form after the user click on the screen
+//			g.setFont(f0);
+//			w  = g.getFontMetrics().stringWidth(value);
+//			// already done upper
+//			//compartmentHeight = 2 * (currentFontSize + (int)(textY * tdp.getZoom()));
+//			if ((w < (2*textX + width)) && (compartmentHeight < height)) {
+//				int middle = x + (width - w)/2;
+//				g.drawString(value, middle, y + compartmentHeight);
+//			}
+//			//limitName = y + compartmentHeight;
+//		} else
+//			//limitName = -1;
+//		
+//		
+//		//g.setFont(fold);
+//		
+//		compartmentHeight = compartmentHeight + scale(4);
+//		if (compartmentHeight < height) {
+//			//g.drawLine(x, y+h, x+width, y+h);
+//			g.setColor(new Color(avat.getRed(), avat.getGreen(), avat.getBlue() + (getMyDepth() * 10)));
+//			g.fill3DRect(x+1, y+compartmentHeight-2, width-1, height-1-compartmentHeight, true);
+//			g.setColor(c);
+//		}
+//		
+//		// Icon
+//		if ((width > scale(30)) && (height > (scale(iconSize) + 2*textX))) {
+//			//iconIsDrawn = true;
+//			g.drawImage( scale(IconManager.img5100), x + width - scale( iconSize + 3 ), y + scale( 3 ), Color.yellow, null);
+//			//g.drawImage(IconManager.img5100, x + width - iconSize - textX, y + textX, null);
+//		} else {
+//			//iconIsDrawn = false;
+//		}
+//		
+//		/*int cpt = h;
+//		// Attributes
+//		if (((AvatarBDPanel)tdp).areAttributesVisible()) {
+//		limitAttr = -1;
+//		int index = 0;
+//		String attr;
+//		
+//		TAttribute a;
+//		
+//		int si = Math.min(12, (int)((float)currentFontSize - 2));
+//		
+//		f = g.getFont();
+//		f = f.deriveFont((float)si);
+//		g.setFont(f);
+//		int step = si + 2;
+//		
+//		while(index < myAttributes.size()) {
+//		cpt += step ;
+//		if (cpt >= (height - textX)) {
+//		break;
+//		}
+//		a = (TAttribute)(myAttributes.get(index));
+//		attr = a.toString();
+//		w = g.getFontMetrics().stringWidth(attr);
+//		if ((w + (2 * textX) + 1) < width) {
+//		g.drawString(attr, x + textX, y + cpt);
+//		limitAttr = y + cpt;
+//		} else {
+//		attr = "...";
+//		w = g.getFontMetrics().stringWidth(attr);
+//		if ((w + textX + 2) < width) {
+//		g.drawString(attr, x + textX + 1, y + cpt);
+//		limitAttr = y + cpt;
+//		} else {
+//		// skip attribute
+//		cpt -= step;
+//		}
+//		}
+//		index ++;
+//		}
+//		} else {
+//		limitAttr = -1;
+//		}
+//		
+//		// Methods
+//		if (((AvatarBDPanel)tdp).areAttributesVisible()) {
+//		limitMethod = -1;
+//		if (myMethods.size() > 0) {
+//		if (cpt < height) {
+//		cpt += textY1;
+//		g.drawLine(x, y+cpt, x+width, y+cpt);
+//		cpt += textY1;
+//		}
+//		}
+//		
+//		int index = 0;
+//		String method;
+//		AvatarMethod am;
+//		
+//		int si = Math.min(12, (int)((float)currentFontSize - 2));
+//		
+//		f = g.getFont();
+//		f = f.deriveFont((float)si);
+//		g.setFont(f);
+//		int step = si + 2;
+//		
+//		while(index < myMethods.size()) {
+//		cpt += step ;
+//		if (cpt >= (height - textX)) {
+//		break;
+//		}
+//		am = (AvatarMethod)(myMethods.get(index));
+//		method = "- " + am.toString();
+//		w = g.getFontMetrics().stringWidth(method);
+//		if ((w + (2 * textX) + 1) < width) {
+//		g.drawString(method, x + textX, y + cpt);
+//		limitMethod = y + cpt;
+//		} else {
+//		method = "...";
+//		w = g.getFontMetrics().stringWidth(method);
+//		if ((w + textX + 2) < width) {
+//		g.drawString(method, x + textX + 1, y + cpt);
+//		limitMethod = y + cpt;
+//		} else {
+//		// skip attribute
+//		cpt -= step;
+//		}
+//		}
+//		index ++;
+//		}
+//		} else {
+//		limitMethod = -1;
+//		}
+//		
+//		// Signals
+//		if (((AvatarBDPanel)tdp).areAttributesVisible()) {
+//		
+//		if (mySignals.size() > 0) {
+//		if (cpt < height) {
+//		cpt += textY1;
+//		g.drawLine(x, y+cpt, x+width, y+cpt);
+//		cpt += textY1;
+//		}
+//		}
+//		
+//		int index = 0;
+//		String signal;
+//		AvatarSignal as;
+//		
+//		int si = Math.min(12, (int)((float)currentFontSize - 2));
+//		
+//		f = g.getFont();
+//		f = f.deriveFont((float)si);
+//		g.setFont(f);
+//		int step = si + 2;
+//		
+//		while(index < mySignals.size()) {
+//		cpt += step ;
+//		if (cpt >= (height - textX)) {
+//		break;
+//		}
+//		as = (AvatarSignal)(mySignals.get(index));
+//		signal = as.toString();
+//		w = g.getFontMetrics().stringWidth(signal);
+//		if ((w + (2 * textX) + 1) < width) {
+//		g.drawString(signal, x + textX, y + cpt);
+//		} else {
+//		signal = "...";
+//		w = g.getFontMetrics().stringWidth(signal);
+//		if ((w + textX + 2) < width) {
+//		g.drawString(signal, x + textX + 1, y + cpt);
+//		} else {
+//		// skip attribute
+//		cpt -= step;
+//		}
+//		}
+//		index ++;
+//		}
+//		}*/
+//		
+//		g.setFont(fold);
+//		
+//        /*int w  = g.getFontMetrics().stringWidth(ster);
+//		Font f = g.getFont();
+//		g.setFont(f.deriveFont(Font.BOLD));
+//        g.drawString(ster, x + (width - w)/2, y + textY1);
+//		g.setFont(f);
+//        w  = g.getFontMetrics().stringWidth(value);
+//        g.drawString(value, x + (width - w)/2, y + textY2);*/
+//		
+//		// Icon
+//		//g.drawImage(IconManager.imgic1100.getImage(), x + 4, y + 4, null);
+//		//g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
+//    }
+	
+    @Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
         
         if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
@@ -406,6 +479,7 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
         return name;
     }
     
+    @Override
 	public boolean editOndoubleClick(JFrame frame) {
 		
 		oldValue = value;
@@ -448,9 +522,9 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
 			}
 		}
 		return false;
-		
     }
-	
+    
+    @Override
 	public boolean acceptSwallowedTGComponent(TGComponent tgc) {
 		if (tgc instanceof AvatarPDBlock) {
 			return true;
@@ -464,11 +538,12 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
 
     }
     
-    
+    @Override
     public int getType() {
         return TGComponentManager.APD_BLOCK;
     }
     
+    @Override
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
 		boolean swallowed = false;
 		
@@ -531,6 +606,7 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
 		return true;
     }
     
+    @Override
     public void removeSwallowedTGComponent(TGComponent tgc) {
 		removeMyInternalComponent(tgc, false);
 	}
@@ -577,7 +653,7 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
     }
     
 	
-    
+	@Override
     public void hasBeenResized() {
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof AvatarPDBlock) {
@@ -596,7 +672,7 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
 		}
         
     }
-	
+	@Override
 	public void resizeWithFather() {
         if ((father != null) && (father instanceof AvatarPDBlock)) {
 			// Too large to fit in the father? -> resize it!
@@ -663,7 +739,7 @@ public class AvatarPDBlock extends TGCScalableWithInternalComponent implements S
 	}
 	
 	
-    
+	@Override
    	public int getDefaultConnector() {
         return TGComponentManager.APD_COMPOSITION_CONNECTOR;
 	}

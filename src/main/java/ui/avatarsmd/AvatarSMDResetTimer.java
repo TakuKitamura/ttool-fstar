@@ -70,8 +70,8 @@ import ui.window.JDialogAvatarTimer;
  */
 public class AvatarSMDResetTimer extends AvatarSMDBasicCanBeDisabledComponent /* Issue #69 AvatarSMDBasicComponent*/ implements BasicErrorHighlight, PartOfInvariant {
     protected int lineLength = 5;
-    protected int textX =  5;
-    protected int textY =  15;
+//    protected int textX =  5;
+//    protected int textY =  15;
     protected int arc = 5;
     protected int linebreak = 10;
 	
@@ -84,9 +84,13 @@ public class AvatarSMDResetTimer extends AvatarSMDBasicCanBeDisabledComponent /*
     public AvatarSMDResetTimer(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
+        //Issue #31
         width = 30;
         height = 20;
         minWidth = 30;
+        textX =  5;
+        textY = 15;
+        initScaling(30,20);
         
         nbConnectingPoint = 2;
         connectingPoint = new TGConnectingPoint[2];
@@ -185,7 +189,8 @@ public class AvatarSMDResetTimer extends AvatarSMDBasicCanBeDisabledComponent /*
 		g.drawLine(x+width+hourglassSpace, y+height, x+width+hourglassSpace + hourglassWidth, y);
 		
         //g.drawString("sig()", x+(width-w) / 2, y);
-        g.drawString(value, x + (width - w) / 2 , y + textY);
+//        g.drawString(value, x + (width - w) / 2 , y + textY);
+		drawSingleString(g, value, x + (width - w) / 2 , y + textY);
     }
     
     @Override

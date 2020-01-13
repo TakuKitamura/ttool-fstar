@@ -57,20 +57,16 @@ import ui.util.IconManager;
  */
 public class TMLCPJoin extends TGCWithoutInternalComponent{
 
-	private int lineLength = 0;
+	// Issue #31
+//	private int lineLength = 0;
 	private static int instanceCounter = 0;
 	private int counter = 0;
 	//private int textX, textY;
 
 	public TMLCPJoin(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-			
-		width = 150;
-		height = 5;
-		
-		//textX = width - 10;
-		//textY = height - 8;
 
+		// Issue #31
 		nbConnectingPoint = 6;
 		connectingPoint = new TGConnectingPoint[6];
 		connectingPoint[0] = new TGConnectingPointTMLCP(this, 0, -lineLength, true, false, 0.167, 0.0);
@@ -79,6 +75,10 @@ public class TMLCPJoin extends TGCWithoutInternalComponent{
 		connectingPoint[3] = new TGConnectingPointTMLCP(this, 0, -lineLength, true, false, 0.667, 0.0);
 		connectingPoint[4] = new TGConnectingPointTMLCP(this, 0, -lineLength, true, false, 0.833, 0.0);
 		connectingPoint[5] = new TGConnectingPointTMLCP(this, 0, lineLength, false, true, 0.5, 1.0);
+			
+		initScaling( 150, 5 );
+//		width = 150;
+//		height = 5;
 
 		addTGConnectingPointsComment();
 
@@ -96,7 +96,7 @@ public class TMLCPJoin extends TGCWithoutInternalComponent{
 	}
 
 	@Override
-	public void internalDrawing(Graphics g) {
+	protected void internalDrawing(Graphics g) {
 		g.drawRect(x, y, width, height);
 		g.fillRect(x, y, width, height);
 	}

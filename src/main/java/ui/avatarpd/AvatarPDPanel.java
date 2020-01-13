@@ -71,41 +71,52 @@ public class AvatarPDPanel extends TDiagramPanel implements TDPWithAttributes{
         addMouseMotionListener(tdmm);*/
     }
     
+    @Override
     public boolean actionOnDoubleClick(TGComponent tgc) {
         return true;
     }
     
+    @Override
     public boolean actionOnAdd(TGComponent tgc) {
         return false;
-    }
+    }   
+    
+    @Override
     public boolean actionOnValueChanged(TGComponent tgc) {
         return false;
     }
     
+    @Override
     public  boolean actionOnRemove(TGComponent tgc) {
         return false;
     }
     
+    @Override
     public String getXMLHead() {
         return "<AvatarPDPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
     }
     
+    @Override
     public String getXMLTail() {
         return "</AvatarPDPanel>";
     }
     
+    @Override
     public String getXMLSelectedHead() {
         return "<AvatarPDPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
     }
     
+    @Override
     public String getXMLSelectedTail() {
         return "</AvatarPDPanelCopy>";
     }
     
+    @Override
     public String getXMLCloneHead() {
         return "<AvatarPDPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
     }
     
+    @Override
     public String getXMLCloneTail() {
         return "</AvatarPDPanelCopy>";
     }
@@ -119,7 +130,8 @@ public class AvatarPDPanel extends TDiagramPanel implements TDPWithAttributes{
     }
     
     
-	
+    
+    @Override
 	public boolean hasAutoConnect() {
 		return false;
 	}

@@ -62,14 +62,15 @@ public  class TGConnectorSpecialization extends TGConnector {
         
          myImageIcon = IconManager.imgic610;
     }
-    
-    
+
+    @Override
     protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
         //g.drawLine(x1, y1, x2, y2);
         GraphicLib.arrowWithLine(g, 1, 0, 0, x1, y1, x2, y2, false);
     }
     
-       public int getType() {
+    @Override
+    public int getType() {
         return TGComponentManager.CONNECTOR_SPECIA_UCD;
     }
     

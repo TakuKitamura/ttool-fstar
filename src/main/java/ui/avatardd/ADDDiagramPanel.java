@@ -37,16 +37,19 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package ui.avatardd;
 
+import java.util.Iterator;
+import java.util.Vector;
+
+import org.w3c.dom.Element;
 
 import myutil.TraceManager;
-import org.w3c.dom.Element;
-import ui.*;
-
-import java.util.ListIterator;
-import java.util.Vector;
+import ui.MainGUI;
+import ui.TDPWithAttributes;
+import ui.TDiagramPanel;
+import ui.TGComponent;
+import ui.TToolBar;
 
 /**
  * Class ADDDiagramPanel
@@ -66,6 +69,7 @@ public class ADDDiagramPanel extends TDiagramPanel implements TDPWithAttributes 
           addMouseMotionListener(tdmm);*/
     }
 
+    @Override
     public boolean actionOnDoubleClick(TGComponent tgc) {
         //
         /*if (tgc instanceof TCDTClass) {
@@ -86,6 +90,7 @@ public class ADDDiagramPanel extends TDiagramPanel implements TDPWithAttributes 
         return false;
     }
 
+    @Override
     public boolean actionOnAdd(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {
           TCDTClass tgcc = (TCDTClass)(tgc);
@@ -96,6 +101,7 @@ public class ADDDiagramPanel extends TDiagramPanel implements TDPWithAttributes 
         return false;
     }
 
+    @Override
     public boolean actionOnRemove(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {
           TCDTClass tgcc = (TCDTClass)(tgc);
@@ -106,7 +112,8 @@ public class ADDDiagramPanel extends TDiagramPanel implements TDPWithAttributes 
         return false;
     }
 
-    public boolean actionOnValueChanged(TGComponent tgc) {
+   @Override
+   public boolean actionOnValueChanged(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {
           return actionOnDoubleClick(tgc);
           }*/
@@ -121,26 +128,32 @@ public class ADDDiagramPanel extends TDiagramPanel implements TDPWithAttributes 
         masterClockFrequency = _masterClockFrequency;
     }
 
+    @Override
     public String getXMLHead() {
         return "<ADDDiagramPanel name=\"" + name + "\"" + sizeParam() + displayParam() + displayClock() + " >";
     }
 
+    @Override
     public String getXMLTail() {
         return "</ADDDiagramPanel>";
     }
 
+    @Override
     public String getXMLSelectedHead() {
         return "<ADDDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
     }
 
+    @Override
     public String getXMLSelectedTail() {
         return "</ADDDiagramPanelCopy>";
     }
 
+    @Override
     public String getXMLCloneHead() {
         return "<ADDDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
     }
 
+    @Override
     public String getXMLCloneTail() {
         return "</ADDDiagramPanelCopy>";
     }
@@ -184,18 +197,17 @@ public class ADDDiagramPanel extends TDiagramPanel implements TDPWithAttributes 
         }
     }
 
-
     public boolean isMapped(String _ref, String _name) {
-        ListIterator iterator = componentList.listIterator();
+        Iterator<TGComponent> iterator = componentList.listIterator();
         TGComponent tgc;
-        ADDCPUNode node;
-        Vector v;
+      //  ADDCPUNode node;
+        Vector<ADDBlockArtifact> v;
         ADDBlockArtifact artifact;
         int i;
         String name = _ref + "::" + _name;
 
         while (iterator.hasNext()) {
-            tgc = (TGComponent) (iterator.next());
+            tgc = iterator.next();
             if (tgc instanceof ADDCPUNode) {
                 v = ((ADDCPUNode) (tgc)).getArtifactList();
                 for (i = 0; i < v.size(); i++) {
@@ -211,16 +223,16 @@ public class ADDDiagramPanel extends TDiagramPanel implements TDPWithAttributes 
     }
 
     public boolean isChannelMapped(String _ref, String _name) {
-        ListIterator iterator = componentList.listIterator();
+        Iterator<TGComponent> iterator = componentList.listIterator();
         TGComponent tgc;
-        ADDMemoryNode node;
-        Vector v;
+        //ADDMemoryNode node;
+        Vector<ADDChannelArtifact> v;
         ADDChannelArtifact artifact;
         int i;
         String name = _ref + "::" + _name;
 
         while (iterator.hasNext()) {
-            tgc = (TGComponent) (iterator.next());
+            tgc = iterator.next();
             if (tgc instanceof ADDRAMNode) {
                 v = ((ADDRAMNode) (tgc)).getArtifactList();
                 for (i = 0; i < v.size(); i++) {

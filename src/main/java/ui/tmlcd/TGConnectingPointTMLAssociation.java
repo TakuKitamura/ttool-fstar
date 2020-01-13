@@ -36,12 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmlcd;
-
-//import java.awt.*;
 
 import ui.CDElement;
 import ui.TGComponentManager;
@@ -54,14 +49,14 @@ import ui.TGConnectingPointTwoFathers;
  * @version 1.0 28/10/2005
  * @author Ludovic APVRILLE
  */
-public class TGConnectingPointTMLAssociation extends  TGConnectingPointTwoFathers{
+public class TGConnectingPointTMLAssociation extends TGConnectingPointTwoFathers {
     
     public TGConnectingPointTMLAssociation(CDElement _container1, CDElement _container2, int _x, int _y, boolean _in, boolean _out) {
         super(_container1, _container2, _x, _y, _in, _out);
     }
     
+    @Override
     public boolean isCompatibleWith(int type) {
         return type == TGComponentManager.CONNECTOR_TML_COMPOSITION_OPERATOR;
     }
-    
 }

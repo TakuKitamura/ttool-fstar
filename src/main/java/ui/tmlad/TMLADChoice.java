@@ -55,6 +55,8 @@ import ui.ad.TADChoice;
  * @author Ludovic APVRILLE
  */
 public class TMLADChoice extends TADChoice /* Issue #69 TGCWithInternalComponent*/ implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
+
+	// Issue #31
 //    private int lineLength = 10;
 //    private int lineOutLength = 25;
 //    private int textX1, textY1, textX2, textY2, textX3, textY3;
@@ -117,9 +119,9 @@ public class TMLADChoice extends TADChoice /* Issue #69 TGCWithInternalComponent
     	nbConnectingPoint = 4;
     	connectingPoint = new TGConnectingPoint[nbConnectingPoint];
     	connectingPoint[ 0 ] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-    	connectingPoint[ 1 ] = new TGConnectingPointTMLAD(this, -lineOutLength, 0, false, true, 0.0, 0.5);
-    	connectingPoint[ 2 ] = new TGConnectingPointTMLAD(this, lineOutLength, 0, false, true, 1.0, 0.5);
-    	connectingPoint[ 3 ] = new TGConnectingPointTMLAD(this, 0, lineOutLength,  false, true, 0.5, 1.0);
+    	connectingPoint[ 1 ] = new TGConnectingPointTMLAD(this, -OUT_LINE_LENGTH, 0, false, true, 0.0, 0.5);
+    	connectingPoint[ 2 ] = new TGConnectingPointTMLAD(this, OUT_LINE_LENGTH, 0, false, true, 1.0, 0.5);
+    	connectingPoint[ 3 ] = new TGConnectingPointTMLAD(this, 0, OUT_LINE_LENGTH,  false, true, 0.5, 1.0);
     }
     
 //    public void internalDrawing(Graphics g) {

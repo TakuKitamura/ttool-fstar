@@ -1774,7 +1774,7 @@ public class GTURTLEModeling {
                                 if (link.hwnode instanceof HwMemory) {
                                     mems.add((HwMemory) link.hwnode);
                                     TMLArchiMemoryNode memNode = (TMLArchiMemoryNode) listE.getTG(link.hwnode);
-                                    ArrayList<TMLArchiKey> keys = memNode.getKeyList();
+                                    List<TMLArchiKey> keys = memNode.getKeyList();
                                     String patternString = "";
                                     for (TMLArchiKey key : keys) {
                                         if (key.getValue().equals(sp.name)) {
@@ -1842,7 +1842,7 @@ public class GTURTLEModeling {
                                 if (link.hwnode instanceof HwMemory) {
                                     mems.add((HwMemory) link.hwnode);
                                     TMLArchiMemoryNode memNode = (TMLArchiMemoryNode) listE.getTG(link.hwnode);
-                                    ArrayList<TMLArchiKey> keys = memNode.getKeyList();
+                                    List<TMLArchiKey> keys = memNode.getKeyList();
                                     String patternString = "";
                                     for (TMLArchiKey key : keys) {
                                         if (key.getValue().equals(sp.name)) {
@@ -7497,7 +7497,7 @@ public class GTURTLEModeling {
                             t = "" + type;
                         }
                         TraceManager.addDev("A badly formed component could not be created in the diagram:" + " diagram: " + tdp + " component:" + n);
-
+                        mme.printStackTrace();
                         UICheckingError ce = new UICheckingError(CheckingError.BEHAVIOR_ERROR, "A component could not be correctly loaded - type=" + t);
                         ce.setTDiagramPanel(tdp);
                         checkingErrors.add(ce);
@@ -7880,7 +7880,7 @@ public class GTURTLEModeling {
 
         } catch (Exception e) {
             TraceManager.addError("Exception XML Component " + e.getMessage() + "trace=" + e.getStackTrace());
-            throw new MalformedModelingException();
+            throw new MalformedModelingException( e );
         }
         return tgc;
     }

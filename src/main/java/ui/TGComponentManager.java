@@ -2126,7 +2126,7 @@ public class TGComponentManager {
             return TMLAD_EXECI;
         } else if (tgc instanceof TMLADExecIInterval) {
             return TMLAD_EXECI_INTERVAL;
-        } else if (tgc instanceof TMLADExecC) {
+        } else if (tgc instanceof TADExec) {
             return TMLAD_EXECC;
         } else if (tgc instanceof TMLADExecCInterval) {
             return TMLAD_EXECC_INTERVAL;

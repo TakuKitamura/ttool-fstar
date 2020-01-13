@@ -905,6 +905,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
 //        return ret;
 //    }
 
+    @Override
     public String getAttributes() {
         String attr = "";
         if ( !guard.isNull())

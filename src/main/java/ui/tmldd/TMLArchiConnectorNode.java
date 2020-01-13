@@ -78,6 +78,7 @@ public  class TMLArchiConnectorNode extends TGConnector implements WithAttribute
         editable = true;
     }
     
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
         JDialogTMLConnectorNode dialog = new JDialogTMLConnectorNode(frame, "Setting connector attributes", this);
 		//dialog.setSize(350, 300);
@@ -92,7 +93,7 @@ public  class TMLArchiConnectorNode extends TGConnector implements WithAttribute
 			
 		return true;
     }
-    
+    @Override
     protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
 	  if (hasASpy) {
 	      g.drawImage(IconManager.img5200, (x1 + x2)/2, (y1 + y2)/2, null);
@@ -106,8 +107,10 @@ public  class TMLArchiConnectorNode extends TGConnector implements WithAttribute
     }
     
     public boolean hasASpy() {
-	return hasASpy;
+    	return hasASpy;
     }
+    
+    @Override
     public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
         componentMenu.addSeparator();
         JMenuItem generate = null;
@@ -122,10 +125,13 @@ public  class TMLArchiConnectorNode extends TGConnector implements WithAttribute
         generate.addActionListener(menuAL);
         componentMenu.add(generate);
     }
+    
+    @Override
     public int getType() {
         return TGComponentManager.CONNECTOR_NODE_TMLARCHI;
     }
 	
+    @Override
 	protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<info priority=\"");
@@ -182,6 +188,7 @@ public  class TMLArchiConnectorNode extends TGConnector implements WithAttribute
         }
     }
 	
+    @Override
     public boolean eventOnPopup(ActionEvent e) {
         String s = e.getActionCommand();
         TraceManager.addDev("action: " + s);
@@ -198,6 +205,7 @@ public  class TMLArchiConnectorNode extends TGConnector implements WithAttribute
             
         return true;
     }
+    
     
     public TMLArchiCPUNode getOriginNode() {
         TGComponent tgc = tdp.getComponentToWhichBelongs(getTGConnectingPointP1());
@@ -220,7 +228,7 @@ public  class TMLArchiConnectorNode extends TGConnector implements WithAttribute
 	public int getPriority() {
 		return priority;
 	}
-    
+    @Override
 	public String getAttributes() {
 		return "Priority = " + priority;
 	}

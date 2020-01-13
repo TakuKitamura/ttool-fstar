@@ -90,7 +90,8 @@ public  class AvatarMADMeetConnector extends AvatarMADConnector /* Issue #69 TGC
 //        }
 //        return null;
 //    }
-
+    
+    @Override
     public int getType() {
         return TGComponentManager.AVATARMAD_MEET_CONNECTOR;
     }

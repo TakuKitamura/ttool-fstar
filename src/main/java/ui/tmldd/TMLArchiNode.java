@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmldd;
 
 import tmltranslator.HwNode;
@@ -49,6 +46,7 @@ import ui.TDiagramPanel;
 import ui.TGCWithInternalComponent;
 import ui.TGComponent;
 
+import java.util.List;
 import java.util.ArrayList;
 
 /**
@@ -59,7 +57,12 @@ import java.util.ArrayList;
    * @author Ludovic APVRILLE
  */
 public abstract class TMLArchiNode extends TGCWithInternalComponent implements SwallowTGComponent {
-    protected int clockRatio = HwNode.DEFAULT_CLOCK_RATIO;
+    
+	protected int clockRatio = HwNode.DEFAULT_CLOCK_RATIO;
+
+    // Issue #31
+	protected static final int DERIVATION_X = 2;
+	protected static final int DERIVATION_Y = 3;
 
     //the return type of method getComponentType
     public final static int STORAGE = 0;
@@ -70,8 +73,12 @@ public abstract class TMLArchiNode extends TGCWithInternalComponent implements S
 
     public TMLArchiNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+
+        // Issue #31
+        textY = 15;
     }
 
+    @Override
     public boolean isHidden() {
         //TraceManager.addDev("Am I hidden?" + getValue());
         if (tdp != null) {
@@ -83,8 +90,8 @@ public abstract class TMLArchiNode extends TGCWithInternalComponent implements S
         return true;
     }
 
-    public ArrayList<TMLArchiArtifact> getAllTMLArchiArtifacts() {
-        ArrayList<TMLArchiArtifact> artifacts = new ArrayList<TMLArchiArtifact>();
+    public List<TMLArchiArtifact> getAllTMLArchiArtifacts() {
+        List<TMLArchiArtifact> artifacts = new ArrayList<TMLArchiArtifact>();
 
         for(int i=0; i<nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof TMLArchiArtifact) {
@@ -104,5 +111,4 @@ public abstract class TMLArchiNode extends TGCWithInternalComponent implements S
     public ArchUnitMEC getMECType()     {
         return MECType;
     }
-
 }

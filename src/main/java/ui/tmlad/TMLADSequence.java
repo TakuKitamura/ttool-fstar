@@ -54,6 +54,8 @@ import ui.ad.TADSequence;
  * @author Ludovic APVRILLE
  */
 public class TMLADSequence extends TADSequence /* Issue #69 TGCWithInternalComponent*/ implements EmbeddedComment, AllowedBreakpoint {
+
+	// Issue #31
    // private int lineLength = 0;
     //private int textX, textY;
 

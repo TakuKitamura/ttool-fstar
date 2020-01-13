@@ -76,13 +76,15 @@ import ui.window.JDialogMultiString;
  * @version 1.0 21/11/2005
  */
 public class TMLADSendEvent extends TADComponentWithoutSubcomponents implements CheckableAccessibility, CheckableLatency, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
-    protected int lineLength = 5;
-    protected int textX = 5;
-    protected int textY = 15;
-    protected int arc = 5;
-    protected int linebreak = 10;
 
-    protected String eventName = "evt";
+	// Issue #31
+//    protected int lineLength = 5;
+//    protected int textX = 5;
+//    protected int textY = 15;
+//    protected int arc = 5;
+//    protected int linebreak = 10;
+
+    private String eventName = "evt";
     int nParam = 5;
     protected String[] params = new String[nParam];
 
@@ -97,14 +99,15 @@ public class TMLADSendEvent extends TADComponentWithoutSubcomponents implements 
     public TMLADSendEvent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        width = 30;
-        height = 20;
-        minWidth = 30;
-
+    	// Issue #31
         nbConnectingPoint = 2;
         connectingPoint = new TGConnectingPoint[2];
         connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
         connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.5, 1.0);
+//        width = 30;
+//        height = 20;
+        initScaling( 30, 20 );
+        minWidth = scale( 30 );
 
         for (int i = 0; i < nParam; i++) {
             params[i] = "";
@@ -117,19 +120,20 @@ public class TMLADSendEvent extends TADComponentWithoutSubcomponents implements 
 
         name = "send event";
         makeValue();
-
         myImageIcon = IconManager.imgic904;
     }
 
     @Override
-    public void internalDrawing(Graphics g) {
-        int w = g.getFontMetrics().stringWidth(value);
-        int w1 = Math.max(minWidth, w + 2 * textX);
-        if ((w1 != width) & (!tdp.isScaled())) {
-            setCd(x + width / 2 - w1 / 2, y);
-            width = w1;            //updateConnectingPoints();
-        }
-
+    protected void internalDrawing(Graphics g) {
+    	
+    	// Issue #31
+        final int w = checkWidth( g );//g.getFontMetrics().stringWidth(value);
+//        
+//        int w1 = Math.max(minWidth, w + 2 * textX);
+//        if ( w1 > width & !tdp.isScaled() ) {
+//            setCd(x - (w1 - width) / 2 , y);
+//            width = w1;            //updateConnectingPoints();
+//        }
 
         // Issue #69
         if ( isEnabled() && stateOfError > 0) {
@@ -150,7 +154,6 @@ public class TMLADSendEvent extends TADComponentWithoutSubcomponents implements 
 
         //g.drawRoundRect(x, y, width, height, arc, arc);
         Color c = g.getColor();
-        //
 
         g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
         g.drawLine(x + (width / 2), y + height, x + (width / 2), y + lineLength + height);
@@ -183,8 +186,8 @@ public class TMLADSendEvent extends TADComponentWithoutSubcomponents implements 
         g.drawLine(x + width - linebreak, y + height, x + width, y + height / 2);
 
 
-        g.drawString("evt", x + (width - w) / 2, y);
-        g.drawString(value, x + (width - w) / 2, y + textY);
+        drawSingleString(g,"evt", x + (width - w) / 2, y);
+        drawSingleString(g,value, x + (width - w) / 2, y + textY);
 
         drawReachabilityInformation(g);
     }
@@ -214,7 +217,7 @@ public class TMLADSendEvent extends TADComponentWithoutSubcomponents implements 
         }
     }
 
-   // @Override
+    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -241,8 +244,8 @@ public class TMLADSendEvent extends TADComponentWithoutSubcomponents implements 
 
             }
         }
-        value += ")";
 
+        value += ")";
     }
 
     public String getEventName() {
@@ -253,7 +256,6 @@ public class TMLADSendEvent extends TADComponentWithoutSubcomponents implements 
         eventName = _name;
         makeValue();
     }
-
 
     public String getParamValue(int i) {
         return params[i];

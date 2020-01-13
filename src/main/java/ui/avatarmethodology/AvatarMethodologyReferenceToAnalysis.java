@@ -70,11 +70,11 @@ public class AvatarMethodologyReferenceToAnalysis extends AvatarMethodologyDiagr
         addTGConnectingPointsCommentTop();    
         
     }
-	
+	@Override
     public  int getType() {
         return TGComponentManager.AVATARMETHODOLOGY_REF_ANALYSIS;
     }
-    
+	@Override
     public boolean isAValidPanelType(TURTLEPanel panel) {
     	if (panel instanceof AvatarAnalysisPanel) {
     		return true;
@@ -82,11 +82,11 @@ public class AvatarMethodologyReferenceToAnalysis extends AvatarMethodologyDiagr
         return panel instanceof AttackTreePanel;
 
     }
-    
+	@Override
     public void makeValidationInfos(AvatarMethodologyDiagramName dn) {
     	dn.setValidationsNumber(0);
     }
-    
+    @Override
     public boolean makeCall(String diagramName, int index) {
     	return true;
     }

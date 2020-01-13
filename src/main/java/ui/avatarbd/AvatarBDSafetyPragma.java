@@ -66,8 +66,8 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
 
     protected String[] values;
     protected List<String> properties;
-    protected int textX = 25;
-    protected int textY = 5;
+//    protected int textX = 25;
+//    protected int textY = 5;
     protected int marginY = 20;
     protected int marginX = 20;
     protected int limit = 15;
@@ -91,12 +91,17 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
 
     public AvatarBDSafetyPragma(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
+        
         width = 200;
+        textY = 5;
+        textX = 25;
         height = 30;
         minWidth = 80;
         minHeight = 10;
+        initScaling(200,30);
+        
         properties = new LinkedList<String>();
-        oldScaleFactor = tdp.getZoom();
+//        oldScaleFactor = tdp.getZoom();
 
         nbConnectingPoint = 0;
         //addTGConnectingPointsComment();
@@ -157,7 +162,7 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
             makeValue();
         }
 
-        //  int h  = g.getFontMetrics().getHeight();
+//         int h  = g.getFontMetrics().getHeight();
         Color c = g.getColor();
 
         if (!(this.tdp.isScaled())) {
@@ -201,12 +206,12 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
         g.setColor(Color.black);
 
         int i = 1;
-        Font heading = new Font("heading", Font.BOLD, 14);
-        g.setFont(heading);
-        g.drawString("Safety Pragmas", x + textX, y + textY + currentFontSize);
+//        Font heading = new Font("heading", Font.BOLD, 14);
+        //g.setFont(heading);
+        drawSingleString(g, "Safety Pragmas", x + textX, y + textY + currentFontSize);
         g.setFont(fold);
         for (String s : properties) {
-            g.drawString(s, x + textX, y + textY + (i + 1) * currentFontSize);
+            drawSingleString(g, s, x + textX, y + textY + (i + 1) * currentFontSize);
             if (syntaxErrors.contains(s)) {
                 Color ctmp = g.getColor();
                 g.setColor(Color.red);
@@ -220,7 +225,7 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
 
 /*        for (int i = 0; i<values.length; i++) {
             //TraceManager.addDev("x+texX=" + (x + textX) + " y+textY=" + y + textY + i* h + ": " + values[i]);
-            g.drawString(values[i], x + textX, y + textY + (i+1)* currentFontSize);
+            drawSingleString(g, values[i], x + textX, y + textY + (i+1)* currentFontSize);
         }
 */
         g.setColor(c);
@@ -346,7 +351,7 @@ public class AvatarBDSafetyPragma extends TGCScalableWithoutInternalComponent {
             } else if (status == PROVED_ERROR) {
                 Font f = g.getFont();
                 g.setFont(new Font("TimesRoman", Font.BOLD, 14));
-                g.drawString("?", _x - 15, _y);
+                drawSingleString(g, "?", _x - 15, _y);
                 g.setFont(f);
             } else {
                 g.setColor(Color.red);

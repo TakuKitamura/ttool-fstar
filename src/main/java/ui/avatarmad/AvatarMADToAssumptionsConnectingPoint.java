@@ -36,12 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatarmad;
-
-//import java.awt.*;
 
 import ui.CDElement;
 import ui.TGComponentManager;
@@ -68,10 +63,8 @@ public class AvatarMADToAssumptionsConnectingPoint extends  TGConnectingPointWid
 		orientation = _orientation;
     }
     
+    @Override
     public boolean isCompatibleWith(int type) {
         return type == TGComponentManager.AVATARMAD_IMPACT_CONNECTOR;
-
     }
-	
-
 }

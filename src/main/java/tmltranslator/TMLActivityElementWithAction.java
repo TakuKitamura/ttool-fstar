@@ -63,11 +63,13 @@ public class TMLActivityElementWithAction extends TMLActivityElement {
     public String getAction() {
         return action;
     }
-
+    
+    @Override
     public String toString() {
         return "Action: " + getAction();
     }
-
+    
+    @Override
     public String customExtraToXML() {
 	    String s = " action=\"" + getAction() + "\"";
 	    return s;

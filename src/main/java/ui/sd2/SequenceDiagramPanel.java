@@ -65,6 +65,7 @@ public class SequenceDiagramPanel extends TDiagramPanel {
           addMouseMotionListener(tdmm);*/
     }
 
+    @Override
     public boolean actionOnDoubleClick(TGComponent tgc) {
         //
         /*if (tgc instanceof TCDTClass) {
@@ -85,6 +86,7 @@ public class SequenceDiagramPanel extends TDiagramPanel {
         return false;
     }
 
+    @Override
     public boolean actionOnAdd(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {
           TCDTClass tgcc = (TCDTClass)(tgc);
@@ -97,6 +99,7 @@ public class SequenceDiagramPanel extends TDiagramPanel {
         return false;
     }
 
+    @Override
     public boolean actionOnRemove(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {
           TCDTClass tgcc = (TCDTClass)(tgc);
@@ -108,6 +111,7 @@ public class SequenceDiagramPanel extends TDiagramPanel {
         return false;
     }
 
+    @Override
     public boolean actionOnValueChanged(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {
           return actionOnDoubleClick(tgc);
@@ -116,26 +120,32 @@ public class SequenceDiagramPanel extends TDiagramPanel {
         return false;
     }
 
+    @Override
     public String getXMLHead() {
         return "<SequenceDiagramPanelZV name=\"" + name + "\"" + sizeParam() + " >";
     }
 
+    @Override
     public String getXMLTail() {
         return "</SequenceDiagramPanelZV>";
     }
 
+    @Override
     public String getXMLSelectedHead() {
         return "<SequenceDiagramPanelZVCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
     }
 
+    @Override
     public String getXMLSelectedTail() {
         return "</SequenceDiagramPanelZVCopy>";
     }
 
+    @Override
     public String getXMLCloneHead() {
         return "<SequenceDiagramPanelZVCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
     }
 
+    @Override
     public String getXMLCloneTail() {
         return "</SequenceDiagramPanelZVCopy>";
     }
@@ -219,6 +229,7 @@ public class SequenceDiagramPanel extends TDiagramPanel {
         return null;
     }
 
+    @Override
     public TGComponent getSecondTGComponent(TGConnector tgco) {
         TGComponent tmp;
         TGComponent tmp1;

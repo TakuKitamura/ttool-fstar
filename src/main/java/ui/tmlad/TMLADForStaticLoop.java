@@ -58,6 +58,8 @@ public class TMLADForStaticLoop extends TADForLoop /* Issue #69 TGCWithoutIntern
 //    private final static String IN_LOOP = "inside loop";
 //    private final static String EXIT_LOOP = "exit loop";
 //
+
+	// Issue #31
 //    protected int lineLength = 5;
 //    protected int textX =  5;
 //    protected int textY =  15;
@@ -72,12 +74,12 @@ public class TMLADForStaticLoop extends TADForLoop /* Issue #69 TGCWithoutIntern
 //        width = 30;
 //        height = 20;
 //        minWidth = 30;
-
-        nbConnectingPoint = 3;
-        connectingPoint = new TGConnectingPoint[3];
-        connectingPoint[ INDEX_ENTER_LOOP ] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-        connectingPoint[ INDEX_INSIDE_LOOP ] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 1.0, 0.45); // loop
-        connectingPoint[ INDEX_EXIT_LOOP ] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.5, 1.0); // after lopp
+//
+//        nbConnectingPoint = 3;
+//        connectingPoint = new TGConnectingPoint[3];
+//        connectingPoint[ INDEX_ENTER_LOOP ] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
+//        connectingPoint[ INDEX_INSIDE_LOOP ] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 1.0, 0.45); // loop
+//        connectingPoint[ INDEX_EXIT_LOOP ] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.5, 1.0); // after lopp
 
 //        moveable = true;
 //        editable = true;
@@ -89,23 +91,33 @@ public class TMLADForStaticLoop extends TADForLoop /* Issue #69 TGCWithoutIntern
 //        myImageIcon = IconManager.imgic912;
     }
 
+    @Override
+    protected void createConnectingPoints() {
+        nbConnectingPoint = 3;
+        connectingPoint = new TGConnectingPoint[3];
+        connectingPoint[ INDEX_ENTER_LOOP ] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
+        connectingPoint[ INDEX_INSIDE_LOOP ] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 1.0, 0.45); // loop
+        connectingPoint[ INDEX_EXIT_LOOP ] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.5, 1.0); // after lopp
+    }
+
     private void makeValueLoop() {
         valueLoop = "Loop " + value + " times";
     }
 
     @Override
-    public void internalDrawing(Graphics g) {
+    protected void internalDrawing(Graphics g) {
         if (valueLoop.length() == 0) {
             makeValueLoop();
         }
-
-        int w  = g.getFontMetrics().stringWidth(valueLoop);
-        int w1 = Math.max(minWidth, w + 2 * textX);
-        if ((w1 != width) & (!tdp.isScaled())) {
-            setCd(x + width/2 - w1/2, y);
-            width = w1;
-            //updateConnectingPoints();
-        }
+    	
+    	// Issue #31
+        final int w = checkWidth( g, valueLoop );//g.getFontMetrics().stringWidth(valueLoop);
+//        int w1 = Math.max(minWidth, w + 2 * textX);
+//        if ((w1 != width) & (!tdp.isScaled())) {
+//            setCd(x + width/2 - w1/2, y);
+//            width = w1;
+//            //updateConnectingPoints();
+//        }
 
         if (stateOfError > 0)  {
             Color c = g.getColor();
@@ -125,12 +137,11 @@ public class TMLADForStaticLoop extends TADForLoop /* Issue #69 TGCWithoutIntern
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
         //g.drawLine(x+width, y+height/2, x+width +lineLength, y+height/2);
 
-        g.drawString(valueLoop, x + (width - w) / 2 , y + textY);
+        drawSingleString(g,valueLoop, x + (width - w) / 2 , y + textY);
 
-	//info on loops
-	g.drawString(IN_LOOP, x+width+2, y+height/2);
-	g.drawString(EXIT_LOOP, x+width/2+2, y+height+10);
-	
+        //info on loops
+		drawSingleString(g,IN_LOOP, x+width+2, y+height/2);
+		drawSingleString(g,EXIT_LOOP, x+width/2+2, y+height+ scale( 10 ) );
     }
 
     @Override

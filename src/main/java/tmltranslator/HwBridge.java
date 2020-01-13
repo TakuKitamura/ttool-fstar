@@ -42,10 +42,10 @@
 package tmltranslator;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.HashSet; 
 import java.util.Objects;
-
 
 /**
  * Class HwBridge
@@ -58,14 +58,15 @@ public class HwBridge extends HwCommunicationNode  {
     public static final int DEFAULT_BUFFER_BYTE_DATA_SIZE = 4;
     
     public boolean isFirewall;
-    public ArrayList<String> firewallRules = new ArrayList<String>();
+    public List<String> firewallRules = new ArrayList<String>();
     public int latency = 0;
     public int bufferByteSize = DEFAULT_BUFFER_BYTE_DATA_SIZE; // In bytes. Should more than 0
     
     public HwBridge(String _name) {
         super(_name);
     }
-
+    
+    @Override
     public String toXML() {
 	String s = "<BRIDGE name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  bufferByteSize=\"" + bufferByteSize + "\" />\n";
 	return s;

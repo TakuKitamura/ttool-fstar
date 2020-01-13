@@ -37,15 +37,13 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package tmltranslator.tmlcp;
 
 import tmltranslator.TMLAttribute;
 import tmltranslator.TMLElement;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
 * Class TMLSDMessage
@@ -56,7 +54,7 @@ import java.util.ArrayList;
 public class TMLSDMessage extends TMLElement  {
 
 	//mind the difference between TMLAttribute and TMLAttribute!
-	private ArrayList<TMLAttribute> attributeList;	
+	private List<TMLAttribute> attributeList;	
 	private String senderName = "";
 	private String receiverName = "";
 	private int yCoord;
@@ -78,7 +76,7 @@ public class TMLSDMessage extends TMLElement  {
 	}*/
 
 	public TMLSDMessage( String _name, String _senderName, String _receiverName, int _yCoord,
-												Object _referenceObject, ArrayList<String> _params )	{
+												Object _referenceObject, List<String> _params )	{
 		super( _name, _referenceObject );
 		this.yCoord = _yCoord;
 		this.senderName = _senderName;
@@ -90,7 +88,7 @@ public class TMLSDMessage extends TMLElement  {
 	}
 	
 	// Constructor used for the TMLCPparser where in the TMLCP code there is no notion of yCoord and of referenceObject
-	public TMLSDMessage( String _name, String _senderName, String _receiverName, ArrayList<String> _params )	{
+	public TMLSDMessage( String _name, String _senderName, String _receiverName, List<String> _params )	{
 		super( _name, null );
 		this.yCoord = -1;
 		this.senderName = _senderName;
@@ -114,7 +112,7 @@ public class TMLSDMessage extends TMLElement  {
 			attributeList.add( _attribute );
 	}
 
-	public ArrayList<TMLAttribute> getAttributes()	{
+	public List<TMLAttribute> getAttributes()	{
 		return attributeList;
 	}
 

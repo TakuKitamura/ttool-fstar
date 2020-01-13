@@ -58,22 +58,27 @@ import java.awt.geom.Line2D;
  * @author Ludovic APVRILLE, Andrea ENRICI
  */
 public class TMLCPRefAD extends TADOneLineText /* Issue #69 TGCOneLineText*/ {
-    protected int lineLength = 5;
-    protected int textX =  5;
-    protected int textY =  15;
-    protected int arc = 5;
+	
+	// Issue #31
+//    protected int lineLength = 5;
+//    protected int textX =  5;
+//    protected int textY =  15;
+//    protected int arc = 5;
 
     public TMLCPRefAD(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        width = 30;
-        height = 35;
-        minWidth = 70;
-
+        // Issue #31
         nbConnectingPoint = 2;
         connectingPoint = new TGConnectingPoint[2];
         connectingPoint[0] = new TGConnectingPointTMLCP(this, 0, -lineLength, true, false, 0.5, 0.0);
         connectingPoint[1] = new TGConnectingPointTMLCP(this, 0, lineLength, false, true, 0.5, 1.0);
+
+        initScaling( 30, 35 );
+//        width = 30;
+//        height = 35;
+        minWidth = scale( 70 );
+        textX = scale( 5 );
 
         addTGConnectingPointsComment();
 
@@ -88,15 +93,16 @@ public class TMLCPRefAD extends TADOneLineText /* Issue #69 TGCOneLineText*/ {
     }
 
     @Override
-    public void internalDrawing(Graphics g) {
-        //int w2 = g.getFontMetrics().stringWidth("ref");
-        int w  = g.getFontMetrics().stringWidth(value) /*+ w2*/;
-        int w1 = Math.max(minWidth, w + 2 * textX);
-        if ((w1 != width) & (!tdp.isScaled())) {
-            setCd(x + width/2 - w1/2, y);
-            width = w1;
-            //updateConnectingPoints();
-        }
+    protected void internalDrawing(Graphics g) {
+    	
+    	// Issue #31
+        final int w = checkWidth( g );//g.getFontMetrics().stringWidth(value);
+//        int w1 = Math.max(minWidth, w + 2 * textX);
+//        if ((w1 != width) & (!tdp.isScaled())) {
+//            setCd(x + width/2 - w1/2, y);
+//            width = w1;
+//            //updateConnectingPoints();
+//        }
 
         Color c = g.getColor();
         g.setColor(ColorManager.IOD_REFERENCE);
@@ -105,17 +111,22 @@ public class TMLCPRefAD extends TADOneLineText /* Issue #69 TGCOneLineText*/ {
 
         g.drawRect(x, y, width, height);
 
-
         g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
 
-        g.drawString(name, x + (width - w) / 2, y + textY + 15);
-        g.drawString("ad", x+3, y+12);
-        g.drawLine(x, y+15, x+15, y+15);
-        g.drawLine(x+25, y, x+25, y+8);
-        g.drawLine(x+15, y+15, x+25, y+8);
-
-
+        final int offset = scale( 15 );
+        drawSingleString(g,name, x + (width - w) / 2, y + textY + offset /* 15 Issue #31 */ );
+        
+        // Issue #31
+        final int adOffsetX = scale( 3 );
+        final int adOffsetY = scale( 12 );
+        drawSingleString(g,"ad", x + adOffsetX /*3*/, y + adOffsetY );
+        g.drawLine(x, y + offset /*15*/, x + offset /* 15 */, y+ offset /*15 Issue #31 */);
+       
+        final int adBoxOffsetX = scale( 25 );
+        final int adBoxOffsetY = scale( 8 );
+        g.drawLine(x + adBoxOffsetX /*25*/, y, x + adBoxOffsetX /*25*/, y + adBoxOffsetY /*8*/);
+        g.drawLine(x+ offset /*15*/, y+ offset /*15*/, x + adBoxOffsetX /*25*/, y + adBoxOffsetY /*8*/ );
     }
 
     @Override
@@ -134,7 +145,6 @@ public class TMLCPRefAD extends TADOneLineText /* Issue #69 TGCOneLineText*/ {
     public String getAction() {
         return value;
     }
-
 
     @Override
     public int getType() {

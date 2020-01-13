@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.prosmd;
 
 import ui.CDElement;
@@ -58,15 +55,8 @@ public class TGConnectingPointProSMD extends  TGConnectingPointWidthHeight{
         super(_container, _x, _y, _in, _out, _w, _h);
     }
     
+    @Override
     public boolean isCompatibleWith(int type) {
         return type == TGComponentManager.CONNECTOR_PROSMD;
     }
-    
 }
-
-
-
-
-
-
-

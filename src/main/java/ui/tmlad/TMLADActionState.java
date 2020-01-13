@@ -64,6 +64,8 @@ import ui.ad.TADActionState;
  * @author Ludovic APVRILLE
  */
 public class TMLADActionState extends TADActionState/* Issue #69 TGCOneLineText */implements PreJavaCode, PostJavaCode, CheckableAccessibility, CheckableLatency, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
+
+	// Issue #31
 //    protected int lineLength = 5;
 //    protected int textX =  5;
 //    protected int textY =  15;
@@ -102,23 +104,25 @@ public class TMLADActionState extends TADActionState/* Issue #69 TGCOneLineText 
     }
 
     @Override
-    public void internalDrawing(Graphics g) {
-        int w  = g.getFontMetrics().stringWidth(value);
-        int w1 = Math.max(minWidth, w + 2 * textX);
-        if ((w1 != width) & (!tdp.isScaled())) {
-            setCd(x + width/2 - w1/2, y);
-            width = w1;
-            //updateConnectingPoints();
-        }
+    protected void internalDrawing(Graphics g) {
+    	
+    	// Issue #31
+        final int w = checkWidth( g );//g.getFontMetrics().stringWidth(value);
+//        int w1 = Math.max(minWidth, w + 2 * textX);
+//        if ((w1 != width) /*& (!tdp.isScaled())*/) {
+//            setCd(x + width/2 - w1/2, y);
+//            width = w1;
+//            //updateConnectingPoints();
+//        }
 		
 		if (stateAction > 0)  {
 			Color c = g.getColor();
 			switch(stateAction) {
-			case ErrorHighlight.OK:
-				g.setColor(ColorManager.ATTRIBUTE_BOX_ACTION);
-				break;
-			default:
-				g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
+				case ErrorHighlight.OK:
+					g.setColor(ColorManager.ATTRIBUTE_BOX_ACTION);
+					break;
+				default:
+					g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
 			}
 			g.fillRoundRect(x, y, width, height, arc, arc);
 			g.setColor(c);
@@ -128,7 +132,7 @@ public class TMLADActionState extends TADActionState/* Issue #69 TGCOneLineText 
         g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
         
-        g.drawString(value, x + (width - w) / 2 , y + textY);
+        drawSingleString(g,value, x + (width - w) / 2 , y + textY);
     }
     
 //    public TGComponent isOnMe(int _x, int _y) {

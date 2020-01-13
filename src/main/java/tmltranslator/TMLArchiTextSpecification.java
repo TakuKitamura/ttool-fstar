@@ -122,7 +122,8 @@ public class TMLArchiTextSpecification {
         return warnings;
     }
 
-
+    
+    @Override
     public String toString() {
         return spec;
     }

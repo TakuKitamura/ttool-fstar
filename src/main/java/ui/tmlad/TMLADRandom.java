@@ -59,10 +59,12 @@ import java.awt.geom.Line2D;
  * @author Ludovic APVRILLE
  */
 public class TMLADRandom extends TADComponentWithoutSubcomponents/* Issue #69 TGCWithoutInternalComponent */implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
-    protected int lineLength = 5;
-    protected int textX =  5;
-    protected int textY =  15;
-    protected int arc = 5;
+
+	// Issue #31
+//    protected int lineLength = 5;
+//    protected int textX =  5;
+//    protected int textY =  15;
+//    protected int arc = 5;
 	protected String valueRandom = "";
 	protected String variable;
 	protected String minValue;
@@ -74,14 +76,15 @@ public class TMLADRandom extends TADComponentWithoutSubcomponents/* Issue #69 TG
     public TMLADRandom(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-        width = 30;
-        height = 20;
-        minWidth = 30;
-        
+        // Issue #31
         nbConnectingPoint = 2;
         connectingPoint = new TGConnectingPoint[2];
         connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
         connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.5, 1.0); // after lopp
+//        width = 30;
+//        height = 20;
+        initScaling( 30, 20 );
+        minWidth = scale( 30 );
         
         moveable = true;
         editable = true;
@@ -100,18 +103,19 @@ public class TMLADRandom extends TADComponentWithoutSubcomponents/* Issue #69 TG
 	}
     
 	@Override
-    public void internalDrawing(Graphics g) {
+    protected void internalDrawing(Graphics g) {
 		if (valueRandom.length() == 0) {
 			makeValue();
 		}
-		
-        int w  = g.getFontMetrics().stringWidth(valueRandom);
-        int w1 = Math.max(minWidth, w + 2 * textX);
-        if ((w1 != width) & (!tdp.isScaled())) {
-            setCd(x + width/2 - w1/2, y);
-            width = w1;
-            //updateConnectingPoints();
-        }
+    	
+    	// Issue #31
+        final int w = checkWidth( g, valueRandom );//g.getFontMetrics().stringWidth(value);
+//        int w1 = Math.max(minWidth, w + 2 * textX);
+//        if ((w1 != width) & (!tdp.isScaled())) {
+//            setCd(x + width/2 - w1/2, y);
+//            width = w1;
+//            //updateConnectingPoints();
+//        }
 		
 		if (stateOfError > 0)  {
 			Color c = g.getColor();
@@ -131,7 +135,7 @@ public class TMLADRandom extends TADComponentWithoutSubcomponents/* Issue #69 TG
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
         //g.drawLine(x+width, y+height/2, x+width +lineLength, y+height/2);
         
-        g.drawString(valueRandom, x + (width - w) / 2 , y + textY);
+        drawSingleString(g,valueRandom, x + (width - w) / 2 , y + textY);
     }
 	
 	@Override

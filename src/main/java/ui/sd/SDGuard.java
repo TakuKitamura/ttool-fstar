@@ -96,7 +96,7 @@ public class SDGuard extends TGCOneLineText implements SwallowedTGComponent {
 		g.drawLine(x+width/2, y, x+width/2-lineLength, y);
 		g.drawLine(x+width/2, y+height, x+width/2-lineLength, y+height);
         
-        g.drawString(value, x - w / 2 , y + textY);
+        drawSingleString(g, value, x - w / 2 , y + textY);
     }
     
     public TGComponent isOnMe(int _x, int _y) {

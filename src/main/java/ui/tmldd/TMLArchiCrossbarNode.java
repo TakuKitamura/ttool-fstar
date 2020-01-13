@@ -61,10 +61,12 @@ import java.awt.*;
    * @author Ludovic APVRILLE, adapted for crossbar by Daniela Genius 10/08/2016
  */
 public class TMLArchiCrossbarNode extends TMLArchiCommunicationNode implements SwallowTGComponent, WithAttributes {
-    private int textY1 = 15;
-    private int textY2 = 30;
-    private int derivationx = 2;
-    private int derivationy = 3;
+
+	// Issue #31
+//    private int textY1 = 15;
+//    private int textY2 = 30;
+//    private int derivationx = 2;
+//    private int derivationy = 3;
     private String stereotype = "Crossbar";
 
     private int byteDataSize = HwBus.DEFAULT_BYTE_DATA_SIZE;
@@ -75,10 +77,13 @@ public class TMLArchiCrossbarNode extends TMLArchiCommunicationNode implements S
     public TMLArchiCrossbarNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        width = 250;
-        height = 50;
+    	// Issue #31
+//        width = 250;
+//        height = 50;
+        textY = 15;
         minWidth = 100;
         minHeight = 50;
+        initScaling( 250, 50 );
 
         nbConnectingPoint = 16;
         connectingPoint = new TGConnectingPoint[16];
@@ -116,19 +121,23 @@ public class TMLArchiCrossbarNode extends TMLArchiCommunicationNode implements S
         myImageIcon = IconManager.imgic700;
     }
 
-    public void internalDrawing(Graphics g) {
+    @Override
+    protected void internalDrawing(Graphics g) {
         Color c = g.getColor();
         g.draw3DRect(x, y, width, height, true);
 
+        // Issue #31
+        final int derivationX = scale( DERIVATION_X );
+        final int derivationY = scale( DERIVATION_Y );
 
         // Top lines
-        g.drawLine(x, y, x + derivationx, y - derivationy);
-        g.drawLine(x + width, y, x + width + derivationx, y - derivationy);
-        g.drawLine(x + derivationx, y - derivationy, x + width + derivationx, y - derivationy);
+        g.drawLine(x, y, x + derivationX, y - derivationY);
+        g.drawLine(x + width, y, x + width + derivationX, y - derivationY);
+        g.drawLine(x + derivationX, y - derivationY, x + width + derivationX, y - derivationY);
 
         // Right lines
-        g.drawLine(x + width, y + height, x + width + derivationx, y - derivationy + height);
-        g.drawLine(x + derivationx + width, y - derivationy, x + width + derivationx, y - derivationy + height);
+        g.drawLine(x + width, y + height, x + width + derivationX, y - derivationY + height);
+        g.drawLine(x + derivationX + width, y - derivationY, x + width + derivationX, y - derivationY + height);
 
         // Filling color
         g.setColor(ColorManager.BUS_BOX);
@@ -140,41 +149,28 @@ public class TMLArchiCrossbarNode extends TMLArchiCommunicationNode implements S
         int w  = g.getFontMetrics().stringWidth(ster);
         Font f = g.getFont();
         g.setFont(f.deriveFont(Font.BOLD));
-        g.drawString(ster, x + (width - w)/2, y + textY1);
+        drawSingleString(g,ster, x + (width - w)/2, y + textY );// Issue #31
         g.setFont(f);
         w  = g.getFontMetrics().stringWidth(name);
-        g.drawString(name, x + (width - w)/2, y + textY2);
+        drawSingleString(g,name, x + (width - w)/2, y + 2 * textY );// Issue #31
 
         // Icon
-        //g.drawImage(IconManager.imgic1102.getImage(), x + width - 20, y + 4, null);
-        g.drawImage(IconManager.imgic1102.getImage(), x + 4, y + 4, null);
-        g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
+        // Issue #31
+        final int iconMargin = scale( 4 );
+        g.drawImage( scale( IconManager.imgic1102.getImage() ), x + iconMargin/*4*/, y + iconMargin/*4*/, null);
+        g.drawImage( scale( IconManager.img9 ), x + width - scale( 20 ), y + iconMargin/*4*/, null);
 
         c = g.getColor();
-
-        //Draw bus privacy
-	/* if (privacy== HwBus.BUS_PUBLIC){
-
-        }
-        else {
-            int[] xps = new int[]{x+4, x+7, x+10, x+13, x+16, x+19, x+22, x+22, x+13, x+4};
-            int[] yps = new int[]{y+18, y+22, y+22, y+18, y+22, y+22,y+18, y+35, y+43, y+35};
-            g.setColor(Color.green);
-            g.fillPolygon(xps, yps,10);
-
-            // g.drawOval(x+6, y+19, 12, 18);
-
-            //    g.fillRect(x+4, y+25, 18, 14);
-            g.setColor(c);
-            g.drawPolygon(xps, yps,10);
-            //  g.drawRect(x+4, y+25, 18, 14);
-	    }*/
     }
 
+    @Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
-
         Polygon pol = new Polygon();
         pol.addPoint(x, y);
+
+        // Issue #31
+        final int derivationx = scale( DERIVATION_X );
+        final int derivationy = scale( DERIVATION_Y );
         pol.addPoint(x + derivationx, y - derivationy);
         pol.addPoint(x + derivationx + width, y - derivationy);
         pol.addPoint(x + derivationx + width, y + height - derivationy);
@@ -196,6 +192,7 @@ public class TMLArchiCrossbarNode extends TMLArchiCommunicationNode implements S
         return name;
     }
 
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
         boolean error = false;
         String errors = "";
@@ -313,11 +310,12 @@ public class TMLArchiCrossbarNode extends TMLArchiCommunicationNode implements S
         return true;
     }
 
-
+    @Override
     public int getType() {
         return TGComponentManager.TMLARCHI_CROSSBARNODE;
     }
 
+    @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<info stereotype=\"" + stereotype + "\" nodeName=\"" + name);
@@ -335,36 +333,36 @@ public class TMLArchiCrossbarNode extends TMLArchiCommunicationNode implements S
 
     @Override
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
-        //
-        try {
-            NodeList nli;
-            Node n1, n2;
-            Element elt;
-         //   int t1id;
-            String sstereotype = null, snodeName = null;
-            for(int i=0; i<nl.getLength(); i++) {
-                n1 = nl.item(i);
-                //
-                if (n1.getNodeType() == Node.ELEMENT_NODE) {
-                    nli = n1.getChildNodes();
-                    for(int j=0; j<nli.getLength(); j++) {
-                        n2 = nli.item(j);
-                        //
-                        if (n2.getNodeType() == Node.ELEMENT_NODE) {
-                            elt = (Element) n2;
-                            if (elt.getTagName().equals("info")) {
-                                sstereotype = elt.getAttribute("stereotype");
-                                snodeName = elt.getAttribute("nodeName");
-                            }
-                            if (sstereotype != null) {
-                                stereotype = sstereotype;
-                            }
-                            if (snodeName != null){
-                                name = snodeName;
-                            }
-                            if (elt.getTagName().equals("attributes")) {
-                                byteDataSize = Integer.decode(elt.getAttribute("byteDataSize")).intValue();
-				/*              arbitrationPolicy =Integer.decode(elt.getAttribute("arbitrationPolicy")).intValue();                                                                    pipelineSize = Integer.decode(elt.getAttribute("pipelineSize")).intValue();
+    	//
+    	try {
+    		NodeList nli;
+    		Node n1, n2;
+    		Element elt;
+    		//   int t1id;
+    		String sstereotype = null, snodeName = null;
+    		for(int i=0; i<nl.getLength(); i++) {
+    			n1 = nl.item(i);
+    			//
+    			if (n1.getNodeType() == Node.ELEMENT_NODE) {
+    				nli = n1.getChildNodes();
+    				for(int j=0; j<nli.getLength(); j++) {
+    					n2 = nli.item(j);
+    					//
+    					if (n2.getNodeType() == Node.ELEMENT_NODE) {
+    						elt = (Element) n2;
+    						if (elt.getTagName().equals("info")) {
+    							sstereotype = elt.getAttribute("stereotype");
+    							snodeName = elt.getAttribute("nodeName");
+    						}
+    						if (sstereotype != null) {
+    							stereotype = sstereotype;
+    						}
+    						if (snodeName != null){
+    							name = snodeName;
+    						}
+    						if (elt.getTagName().equals("attributes")) {
+    							byteDataSize = Integer.decode(elt.getAttribute("byteDataSize")).intValue();
+    							/*              arbitrationPolicy =Integer.decode(elt.getAttribute("arbitrationPolicy")).intValue();                                                                    pipelineSize = Integer.decode(elt.getAttribute("pipelineSize")).intValue();
                                 if ((elt.getAttribute("clockRatio") != null) &&  (elt.getAttribute("clockRatio").length() > 0)){
                                     clockRatio = Integer.decode(elt.getAttribute("clockRatio")).intValue();
                                 }
@@ -373,18 +371,16 @@ public class TMLArchiCrossbarNode extends TMLArchiCommunicationNode implements S
                                 }
                                 if ((elt.getAttribute("privacy") != null) &&  (elt.getAttribute("privacy").length() > 0)){
 				privacy = Integer.decode(elt.getAttribute("privacy")).intValue();*/
-                                }
-                            }
-                        }
-                    }
-                }
-	}
-
-     catch (Exception e) {
-            throw new MalformedModelingException();
-        }
+    						}
+    					}
+    				}
+    			}
+    		}
+    	}
+    	catch (Exception e) {
+    		throw new MalformedModelingException( e );
+    	}
     }
-
 
     public int getByteDataSize(){
         return byteDataSize;
@@ -405,6 +401,7 @@ public class TMLArchiCrossbarNode extends TMLArchiCommunicationNode implements S
         return privacy;
 	}*/
 
+    @Override
     public String getAttributes() {
         String attr = "";
         attr += "Data size (in byte) = " + byteDataSize + "\n";
@@ -419,8 +416,8 @@ public class TMLArchiCrossbarNode extends TMLArchiCommunicationNode implements S
         return attr;
     }
 
-    public int getComponentType()       {
+    @Override
+    public int getComponentType() {
         return TRANSFER;
     }
-
 }

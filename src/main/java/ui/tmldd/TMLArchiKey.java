@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmldd;
 
 import myutil.GraphicLib;
@@ -60,16 +57,20 @@ import java.awt.*;
    * @author Letitia LI, Ludovic APVRILLE
  */
 public class TMLArchiKey extends TGCWithoutInternalComponent implements SwallowedTGComponent, WithAttributes, TMLArchiSecurityInterface {
-    protected int lineLength = 5;
-    protected int textX =  5;
-    protected int textY =  15;
-    protected int textY2 =  35;
-    protected int space = 5;
-    protected int fileX = 20;
-    protected int fileY = 25;
-    protected int cran = 5;
 
-    protected String oldValue = "";
+	// Issue #31
+//    protected int lineLength = 5;
+//    protected int textX =  5;
+//    protected int textY =  15;
+//    protected int textY2 =  35;
+//    protected int space = 5;
+//    protected int fileX = 20;
+//    protected int fileY = 25;
+//    protected int cran = 5;
+	private static final int KEY_OFFSET_Y = 5;
+	private static final int KEY_OFFSET_X = 20;
+
+    //protected String oldValue = "";
     protected String referenceKey = "TMLKey";
     protected String typeName = "key";
     protected int priority = 5; // Between 0 and 10
@@ -77,10 +78,15 @@ public class TMLArchiKey extends TGCWithoutInternalComponent implements Swallowe
     public TMLArchiKey(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        width = 75;
-        height = 40;
+        // Issue #31
+//        width = 75;
+//        height = 40;
         minWidth = 75;
-        minHeight = fileY + 5;
+        minHeight = 30;//fileY + 5;
+        textX = 5;
+        textY = 15;
+        
+        initScaling( 75, 40 );
 
         nbConnectingPoint = 0;
         addTGConnectingPointsComment();
@@ -100,7 +106,7 @@ public class TMLArchiKey extends TGCWithoutInternalComponent implements Swallowe
         myImageIcon = IconManager.imgic1118;
     }
 
-
+    @Override
     public boolean isHidden() {
         //TraceManager.addDev("Archi task artifact: Am I hidden?" + getValue());
         boolean ret = false;
@@ -113,6 +119,7 @@ public class TMLArchiKey extends TGCWithoutInternalComponent implements Swallowe
         //TraceManager.addDev("Hidden? -> " + ret);
         return ret;
     }
+
     public int getPriority() {
         return priority;
     }
@@ -121,12 +128,14 @@ public class TMLArchiKey extends TGCWithoutInternalComponent implements Swallowe
         priority = _priority;
     }
 
+    @Override
+    protected void internalDrawing(Graphics g) {
 
-    public void internalDrawing(Graphics g) {
-
-        if (oldValue.compareTo(value) != 0) {
-            setValue(value, g);
-        }
+    	// Issue #31
+//    	if (oldValue.compareTo(value) != 0) {
+//            setValue(value, g);
+//        }
+    	checkWidth( g );
 
         g.drawRect(x, y, width, height);
         Color c = g.getColor();
@@ -134,10 +143,21 @@ public class TMLArchiKey extends TGCWithoutInternalComponent implements Swallowe
         g.fillRect(x+1, y+1, width-1, height-1);
         g.setColor(c);
 
-		g.fillOval(x+width-fileX, y+space, height/3, height/3);
-		g.fillRect(x+width-space-fileX/2,y+space, 3, height*3/4-space);
-		g.fillRect(x+width-space-fileX/2, y+height*3/4, 8,3);
-		g.fillRect(x+width-space-fileX/2, y+height*2/3, 8,3);
+        // Issue #31
+        final int keyOffsetX = scale( KEY_OFFSET_X );
+        final int keyOffsetY = scale( KEY_OFFSET_Y );
+        final int shaftWidth = scale( 3 );
+        
+        // Key head
+		g.fillOval(x+width-keyOffsetX, y+keyOffsetY, height/3, height/3);
+		
+		// Key shaft
+		g.fillRect(x+width-keyOffsetY-keyOffsetX/2,y+keyOffsetY, shaftWidth/*3*/, height*3/4-keyOffsetY);
+		
+		// key teeth
+		final int teethLength = scale( 8 );
+		g.fillRect(x+width-keyOffsetY-keyOffsetX/2, y+height*3/4, teethLength/*8*/, shaftWidth/*3*/);
+		g.fillRect(x+width-keyOffsetY-keyOffsetX/2, y+height*2/3, teethLength/*8*/, shaftWidth/*3*/);
 /*
         //g.drawRoundRect(x, y, width, height, arc, arc);
         g.drawLine(x+width-space-fileX, y + space, x+width-space-fileX, y+space+fileY);
@@ -148,43 +168,43 @@ public class TMLArchiKey extends TGCWithoutInternalComponent implements Swallowe
         g.drawLine(x+width-space-cran, y+space, x+width-space-cran, y+space+cran);
         g.drawLine(x+width-space-cran, y+space+cran, x + width-space, y+space+cran);
 */
-        g.drawImage(IconManager.img9, x+width-space-fileX + 3, y + space + 7, null);
+        // Issue #31
+        g.drawImage( scale( IconManager.img9 ), x+width-keyOffsetY-keyOffsetX + shaftWidth/*3*/, y + keyOffsetY + scale( 7 ), null );
 
-        g.drawString(value, x + textX , y + textY);
+        drawSingleString(g,value, x + textX , y + textY);
 
         Font f = g.getFont();
         g.setFont(f.deriveFont(Font.ITALIC));
-        g.drawString(typeName, x + textX , y + textY + 20);
+        // Issue #31
+        drawSingleString(g,typeName, x + textX , y + textY + scale( 20 ) );
         g.setFont(f);
-
     }
 
-    public void setValue(String val, Graphics g) {
-        oldValue = value;
-        int w  = fileX + g.getFontMetrics().stringWidth(value) + textX;
-        int w1 = Math.max(minWidth, w);
+    // Issue #31
+    //private void setValue(String val/*, Graphics g*/) {
+//    	oldValue = value;
+//    	int w  = fileX + g.getFontMetrics().stringWidth(value) + textX;
+//    	int w1 = Math.max(minWidth, w);
+//
+//    	//TraceManager.addDev("      Width=" + width + " w1=" + w1 + " value=" + value);
+//    	if (w1 != width) {
+//    		width = w1;
+//    		resizeWithFather();
+//    	}
+    	//TraceManager.addDev("      Width=" + width + " w1=" + w1 + " value=" + value);
+//    }
 
-        //TraceManager.addDev("      Width=" + width + " w1=" + w1 + " value=" + value);
-        if (w1 != width) {
-            width = w1;
-            resizeWithFather();
-        }
-        //TraceManager.addDev("      Width=" + width + " w1=" + w1 + " value=" + value);
-    }
-
+    @Override
     public void resizeWithFather() {
         if ((father != null) && (father instanceof TMLArchiMemoryNode)) {
-            //
             setCdRectangle(0, Math.max(0,father.getWidth() - getWidth()), 0, Math.max(father.getHeight() - getHeight(),0));
-            //setCd(Math.min(x, father.getWidth() - getWidth()), Math.min(y, father.getHeight() - getHeight()));
             setMoveCd(x, y);
         }
     }
 
-
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
         JDialogArchiKey dialog = new JDialogArchiKey(frame, "Setting channel artifact attributes", this);
-       // dialog.setSize(700, 600);
         GraphicLib.centerOnParent(dialog, 700, 600);
         dialog.setVisible( true ); // blocked until dialog has been closed
         String tmp;
@@ -200,7 +220,6 @@ public class TMLArchiKey extends TGCWithoutInternalComponent implements Swallowe
         if (dialog.getReferenceCommunicationName().length() != 0) {
             tmp = dialog.getReferenceCommunicationName();
             referenceKey = tmp;
-
         }
 
         if (dialog.getCommunicationName().length() != 0) {
@@ -216,8 +235,6 @@ public class TMLArchiKey extends TGCWithoutInternalComponent implements Swallowe
         if (dialog.getTypeName().length() != 0) {
             typeName = dialog.getTypeName();
         }
-
-
 
         if (error) {
             JOptionPane.showMessageDialog(frame,
@@ -235,6 +252,7 @@ public class TMLArchiKey extends TGCWithoutInternalComponent implements Swallowe
         value = referenceKey;
     }
 
+    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -242,10 +260,12 @@ public class TMLArchiKey extends TGCWithoutInternalComponent implements Swallowe
         return null;
     }
 
+    @Override
     public int getType() {
         return TGComponentManager.TMLARCHI_KEY;
     }
 
+    @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<info value=\"" + value + "\" referenceKeyName=\"");
@@ -305,7 +325,7 @@ public class TMLArchiKey extends TGCWithoutInternalComponent implements Swallowe
 
         } catch (Exception e) {
             
-            throw new MalformedModelingException();
+            throw new MalformedModelingException( e );
         }
         makeFullValue();
     }
@@ -317,7 +337,6 @@ public class TMLArchiKey extends TGCWithoutInternalComponent implements Swallowe
     public String getReferencKey() {
         return referenceKey;
     }
-
 
     public void setReferenceKey(String s){
         referenceKey=s;
@@ -332,8 +351,8 @@ public class TMLArchiKey extends TGCWithoutInternalComponent implements Swallowe
         return typeName;
     }
 
+    @Override
     public String getAttributes() {
         return "Priority = " + priority;
     }
-
 }

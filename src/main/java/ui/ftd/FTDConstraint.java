@@ -62,7 +62,7 @@ import java.awt.*;
  * @version 1.0 14/12/2017
  */
 public class FTDConstraint extends TGCScalableWithInternalComponent implements SwallowedTGComponent, ConstraintListInterface {
-    private int textY1 = 5;
+//	private int textY1 = 5;
     //private int textY2 = 30;
 
     public static final String[] STEREOTYPES = {"<<OR>>", "<<XOR>>", "<<AND>>", "<<NOT>>", "<<SEQUENCE>>", "<<AFTER>>",
@@ -88,10 +88,12 @@ public class FTDConstraint extends TGCScalableWithInternalComponent implements S
     public FTDConstraint(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        width = (int) (150 * tdp.getZoom());
-        height = (int) (50 * tdp.getZoom());
+        width = 150; //(int) (150 * tdp.getZoom());
+        height = 50; //(int) (50 * tdp.getZoom());
         minWidth = 100;
-
+        textY = 5;
+        initScaling(150,50);
+        
         nbConnectingPoint = 12;
         connectingPoint = new TGConnectingPoint[12];
 
@@ -123,24 +125,25 @@ public class FTDConstraint extends TGCScalableWithInternalComponent implements S
         myImageIcon = IconManager.imgic1078;
     }
 
+    @Override
     public void internalDrawing(Graphics g) {
 
         Font f = g.getFont();
         //     Font fold = f;
 
-        if (currentFontSize == -1) {
-            currentFontSize = f.getSize();
-        }
+//        if (currentFontSize == -1) {
+//            currentFontSize = f.getSize();
+//        }
 
-        if ((rescaled) && (!tdp.isScaled())) {
-
-            rescaled = false;
-
-            float scale = (float) (f.getSize() * tdp.getZoom());
-            scale = Math.min(maxFontSize, scale);
-            currentFontSize = (int) scale;
-            displayText = !(scale < minFontSize);
-        }
+//        if ((rescaled) && (!tdp.isScaled())) {
+//
+//            rescaled = false;
+//
+//            float scale = (float) (f.getSize() * tdp.getZoom());
+//            scale = Math.min(maxFontSize, scale);
+//            currentFontSize = (int) scale;
+//            displayText = !(scale < minFontSize);
+//        }
 
         Color c = g.getColor();
         //g.draw3DRect(x, y, width, height, true);
@@ -153,9 +156,9 @@ public class FTDConstraint extends TGCScalableWithInternalComponent implements S
         //g.fill3DRect(x+1, y+1, width-1, height-1, true);
 
         g.setColor(c);
-
-        if (height > (IconManager.iconSize * 2 + 10)) {
-            g.drawImage(ICONS[index], this.x + this.width - IconManager.iconSize * 2 - 6, this.y + 10, null);
+        int border_space_icon = scale(5);
+        if (height >= (scale(IconManager.iconSize * 2 + border_space_icon))) {
+            g.drawImage(scale(ICONS[index]), this.x + this.width - scale(IconManager.iconSize *2 + border_space_icon ), this.y + border_space_icon, null);
         }
 
         Font f0 = g.getFont();
@@ -163,16 +166,16 @@ public class FTDConstraint extends TGCScalableWithInternalComponent implements S
             f = f.deriveFont(currentFontSize);
             g.setFont(f.deriveFont(Font.BOLD));
             int w = g.getFontMetrics().stringWidth(value);
-            g.drawString(value, x + (width - w) / 2, y + currentFontSize + (int) (textY1 * tdp.getZoom()));
+            drawSingleString(g,value, x + (width - w) / 2, y + currentFontSize + textY);
 
 
             g.setFont(f0.deriveFont(f0.getSize() - 2).deriveFont(Font.ITALIC));
             w = g.getFontMetrics().stringWidth(equation);
             if (w >= width) {
                 w = g.getFontMetrics().stringWidth("...");
-                g.drawString("...", x + (width - w) / 2, y + (2 * currentFontSize) + (int) (textY1 * tdp.getZoom()));
+                drawSingleString(g,"...", x + (width - w) / 2, y + (2 * currentFontSize) +  textY);
             } else {
-                g.drawString(equation, x + (width - w) / 2, y + (2 * currentFontSize) + (int) (textY1 * tdp.getZoom()));
+                drawSingleString(g,equation, x + (width - w) / 2, y + (2 * currentFontSize) + textY);
             }
             g.setFont(f0);
         }
@@ -195,6 +198,7 @@ public class FTDConstraint extends TGCScalableWithInternalComponent implements S
        }*/
 
 
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
 //        String tmp;
 //        boolean error = false;
@@ -224,6 +228,7 @@ public class FTDConstraint extends TGCScalableWithInternalComponent implements S
         return true;
     }
 
+    @Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
 
         if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
@@ -232,14 +237,17 @@ public class FTDConstraint extends TGCScalableWithInternalComponent implements S
         return null;
     }
 
+    @Override
     public int getType() {
         return TGComponentManager.FTD_CONSTRAINT;
     }
 
+    @Override
     public String[] getConstraintList() {
         return STEREOTYPES;
     }
 
+    @Override
     public String getCurrentConstraint() {
         return value;
     }
@@ -280,6 +288,7 @@ public class FTDConstraint extends TGCScalableWithInternalComponent implements S
         return (value.compareTo(STEREOTYPES[7]) == 0);
     }
 
+    @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<info equation=\"" + GTURTLEModeling.transformString(getEquation()));
@@ -334,6 +343,7 @@ public class FTDConstraint extends TGCScalableWithInternalComponent implements S
         }
     }
 
+    @Override
     public void resizeWithFather() {
         if ((father != null) && (father instanceof FTDBlock)) {
             //

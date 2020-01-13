@@ -37,9 +37,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmldd;
 
 import myutil.GraphicLib;
@@ -61,14 +58,20 @@ import java.awt.*;
  * @author Andrea ENRICI
  */
 public class TMLArchiEventArtifact extends TGCWithoutInternalComponent implements SwallowedTGComponent, WithAttributes {
-    protected int lineLength = 5;
-    protected int textX =  5;
-    protected int textY =  15;
-    protected int textY2 =  35;
-    protected int space = 5;
-    protected int fileX = 20;
-    protected int fileY = 25;
-    protected int cran = 5;
+
+	// Issue #31
+	private static final int SPACE = 5;
+	private static final int CRAN = 5;
+	private static final int FILE_X = 20;
+	private static final int FILE_Y = 25;
+//    protected int lineLength = 5;
+//    protected int textX =  5;
+//    protected int textY =  15;
+//    protected int textY2 =  35;
+//    protected int space = 5;
+//    protected int fileX = 20;
+//    protected int fileY = 25;
+//    protected int cran = 5;
 
     protected String oldValue = "";
     protected String referenceEventName = "TMLEvent";
@@ -78,13 +81,16 @@ public class TMLArchiEventArtifact extends TGCWithoutInternalComponent implement
 
     public TMLArchiEventArtifact(
                                  int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)     {
-
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        width = 75;
-        height = 40;
+        // Issue #31
+//        width = 75;
+//        height = 40;
+        textX = 5;
+        textY = 15;
         minWidth = 75;
-
+        initScaling( 75, 40 );
+        
         nbConnectingPoint = 0;
         addTGConnectingPointsComment();
 
@@ -111,39 +117,45 @@ public class TMLArchiEventArtifact extends TGCWithoutInternalComponent implement
         priority = _priority;
     }
 
-
-    public void internalDrawing(Graphics g) {
-
+    @Override
+    protected void internalDrawing(Graphics g) {
         if (oldValue.compareTo(value) != 0) {
             setValue(value, g);
         }
 
         g.drawRect(x, y, width, height);
 
-        //g.drawRoundRect(x, y, width, height, arc, arc);
-        g.drawLine(x+width-space-fileX, y + space, x+width-space-fileX, y+space+fileY);
-        g.drawLine(x+width-space-fileX, y + space, x+width-space-cran, y+space);
-        g.drawLine(x+width-space-cran, y+space, x+width-space, y+space + cran);
-        g.drawLine(x+width-space, y+space + cran, x+width-space, y+space+fileY);
-        g.drawLine(x+width-space, y+space+fileY, x+width-space-fileX, y+space+fileY);
-        g.drawLine(x+width-space-cran, y+space, x+width-space-cran, y+space+cran);
-        g.drawLine(x+width-space-cran, y+space+cran, x + width-space, y+space+cran);
+        // Issue #31
+        final int space = scale( SPACE );
+        final int marginFileX = scale( SPACE + FILE_X );
+        final int marginFileY = scale( SPACE + FILE_Y );
+        final int marginCran = scale( SPACE + CRAN );
 
-        g.drawImage(IconManager.img9, x+width-space-fileX + 3, y + space + 7, null);
+        g.drawLine(x+width- marginFileX/*space-fileX*/, y + space, x+width - marginFileX/*space-fileX*/, y+ marginFileY/*space+fileY*/);
+        g.drawLine(x+width- marginFileX/*space-fileX*/, y + space, x+width- marginCran/*space-cran*/, y+space);
+        g.drawLine(x+width- marginCran/*space-cran*/, y+space, x+width-space, y+ marginCran/*space + cran*/);
+        g.drawLine(x+ width-space, y+ marginCran/*space + cran*/, x+width-space, y+ marginFileY/*space+fileY*/);
+        g.drawLine(x+width-space, y+ marginFileY/*space+fileY*/, x+width- marginFileX/*space-fileX*/, y+ marginFileY/*space+fileY*/);
+        g.drawLine(x+width- marginCran/*space-cran*/, y+space, x+width- marginCran/*space-cran*/, y+ marginCran/*space+cran*/);
+        g.drawLine(x+width- marginCran/*space-cran*/, y+ marginCran/*space+cran*/, x + width-space, y+ marginCran/*space+cran*/);
 
-        g.drawString(value, x + textX , y + textY);
+        g.drawImage( scale( IconManager.img9 ), x+width- scale( SPACE + FILE_X - 3 )/*space-fileX*/ + 3, y + scale( SPACE + 7 )/*space + 7*/, null);// Issue #31
+
+        drawSingleString(g,value, x + textX , y + textY);
 
         Font f = g.getFont();
         g.setFont(f.deriveFont(Font.ITALIC));
-        g.drawString(typeName, x + textX , y + textY + 20);
+        drawSingleString(g,typeName, x + textX , y + textY + scale( 20 ) );// Issue #31
         g.setFont(f);
-
     }
 
     public void setValue(String val, Graphics g) {
         oldValue = value;
         int w  = g.getFontMetrics().stringWidth(value);
-        int w1 = Math.max(minWidth, w + 2 * textX + fileX + space);
+        
+        // Issue #31
+        final int marginFileX = scale( SPACE + FILE_X );
+        int w1 = Math.max(minWidth, w + 2 * textX + marginFileX/*fileX + space*/);
 
         //
         if (w1 != width) {
@@ -153,6 +165,7 @@ public class TMLArchiEventArtifact extends TGCWithoutInternalComponent implement
         //
     }
 
+    @Override
     public void resizeWithFather() {
         if ((father != null) && (father instanceof TMLArchiCommunicationNode)) {
             //
@@ -162,9 +175,8 @@ public class TMLArchiEventArtifact extends TGCWithoutInternalComponent implement
         }
     }
 
-
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
-
         String tmp;
         boolean error = false;
 
@@ -214,6 +226,7 @@ public class TMLArchiEventArtifact extends TGCWithoutInternalComponent implement
         value = referenceEventName + "::" + eventName;
     }
 
+    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -221,12 +234,13 @@ public class TMLArchiEventArtifact extends TGCWithoutInternalComponent implement
         return null;
     }
 
+    @Override
     public int getType() {
         return TGComponentManager.TMLARCHI_EVENT_ARTIFACT;
     }
 
+    @Override
     protected String translateExtraParam() {
-
         StringBuffer sb = new StringBuffer( "<extraparam>\n" );
         sb.append( "<info value=\"" + value + "\" eventName=\"" + eventName + "\" referenceEventName=\"" );
         sb.append( referenceEventName );
@@ -311,7 +325,6 @@ public class TMLArchiEventArtifact extends TGCWithoutInternalComponent implement
         return eventName;
     }
 
-
     public String getFullValue() {
         String tmp = getValue();
         tmp += " (" + getTypeName() + ")";
@@ -322,8 +335,8 @@ public class TMLArchiEventArtifact extends TGCWithoutInternalComponent implement
         return typeName;
     }
 
+    @Override
     public String getAttributes() {
         return "Priority = " + priority;
     }
-
 }       //End of class

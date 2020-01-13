@@ -36,12 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.sysmlsecmethodology;
-
-//import java.awt.*;
 
 import ui.CDElement;
 import ui.TGComponentManager;
@@ -54,19 +49,15 @@ import ui.TGConnectingPointWidthHeight;
  * @version 1.0 26/01/2016
  * @author Ludovic APVRILLE
  */
-public class SysmlsecMethodologyConnectingPoint extends  TGConnectingPointWidthHeight {
+public class SysmlsecMethodologyConnectingPoint extends TGConnectingPointWidthHeight {
 
     public SysmlsecMethodologyConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h, int _orientation) {
         super(_container, _x, _y, _in, _out, _w, _h);
         orientation = _orientation;
     }
 
+    @Override
     public boolean isCompatibleWith(int type) {
-
         return type == TGComponentManager.SYSMLSEC_METHODOLOGY_CONNECTOR;
-
-
     }
-
-
 }

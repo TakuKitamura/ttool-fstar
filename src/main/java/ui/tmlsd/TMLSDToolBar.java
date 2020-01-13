@@ -37,20 +37,13 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmlsd;
 
-import myutil.TraceManager;
+import javax.swing.JButton;
+
 import ui.MainGUI;
 import ui.TGUIAction;
 import ui.TToolBar;
-
-import javax.swing.*;
-
-//import java.awt.*;
-//import java.awt.event.*;
 
 /**
  * Class TMLSDToolBar
@@ -67,6 +60,7 @@ public class TMLSDToolBar extends TToolBar {
         super(_mgui);
     }
 
+    @Override
     protected void setActive(boolean b) {
         mgui.actions[TGUIAction.TMLSD_EDIT].setEnabled(b);
         mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
@@ -78,12 +72,17 @@ public class TMLSDToolBar extends TToolBar {
         mgui.actions[TGUIAction.TMLSD_ACTION_STATE].setEnabled(b);
         mgui.actions[TGUIAction.SD_ALIGN_INSTANCES].setEnabled(b);
 
-        mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
-        mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
-        mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
+		// Issue #31
+		mgui.actions[ TGUIAction.ACT_ZOOM_MORE ].setEnabled( b );
+		mgui.actions[ TGUIAction.ACT_ZOOM_LESS ].setEnabled( b );
+		mgui.actions[ TGUIAction.ACT_SHOW_ZOOM ].setEnabled( b );
+//        mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
+//        mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
+//        mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
         mgui.updateZoomInfo();
     }
 
+    @Override
     protected void setButtons() {
         JButton button;
 
@@ -123,7 +122,5 @@ public class TMLSDToolBar extends TToolBar {
 
         button = this.add(mgui.actions[TGUIAction.SD_ALIGN_INSTANCES]);
         button.addMouseListener(mgui.mouseHandler);
-
     }
-
 } // Class

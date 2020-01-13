@@ -64,11 +64,12 @@ public class TMLCChannelOutPort extends TMLCPrimitivePort {
         //myImageIcon = IconManager.imgic700;
     }
 	
-
+    @Override
 	public void drawParticularity(Graphics g) {
 		
 	}
-	
+    
+    @Override
     public int getType() {
         return TGComponentManager.TMLCTD_COPORT;
     }

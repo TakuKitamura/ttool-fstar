@@ -45,6 +45,7 @@ package ui;
  * @version 1.0 10/03/2008
  * @author Ludovic APVRILLE
  */
-public interface ScalableTGComponent  {
-    void rescale(double scaleFactor);
+public interface ScalableTGComponent {
+    
+	void rescale(double scaleFactor);
 }

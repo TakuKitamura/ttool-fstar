@@ -61,7 +61,7 @@ public  class AvatarCDAssociationConnector extends TGConnectorWithCommentConnect
         super(_x, _y,  _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
     }
     
-    
+    @Override
     protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
         g.drawLine(x1, y1, x2, y2);
         //GraphicLib.dashedArrowWithLine(g, 1, 1, 0, x1, y1, x2, y2, false);
@@ -69,20 +69,22 @@ public  class AvatarCDAssociationConnector extends TGConnectorWithCommentConnect
         // Indicate semantics 
         //w  = g.getFontMetrics().stringWidth(value);
         //h = g.getFontMetrics().getHeight();
-        //g.drawString(value, (p1.getX() + p2.getX() - w) / 2, (p1.getY() + p2.getY())/2);
+        //drawSingleString(g, value, (p1.getX() + p2.getX() - w) / 2, (p1.getY() + p2.getY())/2);
     }
     
     /*protected void drawMiddleSegment(Graphics g, int x1, int y1, int x2, int y2) {
         GraphicLib.dashedLine(g, x1, y1, x2, y2);
     }*/
     
+    @Override
     public TGComponent extraIsOnOnlyMe(int x1, int y1) {
         if (GraphicLib.isInRectangle(x1, y1, (p1.getX() + p2.getX() - w) / 2, (p1.getY() + p2.getY())/2 - h, w, h)) {
             return this;
         }
         return null;
     }
-	
+    
+    @Override
 	 public int getType() {
         return TGComponentManager.ACD_ASSOCIATION_CONNECTOR;
     }

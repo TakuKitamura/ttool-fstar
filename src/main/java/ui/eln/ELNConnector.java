@@ -42,8 +42,17 @@ import ui.*;
 import ui.eln.sca_eln_sca_tdf.*;
 import ui.util.IconManager;
 import ui.window.JDialogELNConnector;
-import java.awt.*;
-import java.util.*;
+
+import java.awt.BasicStroke;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Stroke;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
+
 import javax.swing.JFrame;
 import myutil.GraphicLib;
 
@@ -55,8 +64,8 @@ import myutil.GraphicLib;
  * @author Irina Kit Yan LEE
  */
 
-public class ELNConnector extends TGConnector implements ScalableTGComponent {
-	protected double oldScaleFactor;
+public class ELNConnector extends TGConnector /* Issue #31 implements ScalableTGComponent*/ {
+	//protected double oldScaleFactor;
 
 	public ELNConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
 		super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
@@ -64,7 +73,7 @@ public class ELNConnector extends TGConnector implements ScalableTGComponent {
 		myImageIcon = IconManager.imgic202;
 		value = "";
 		editable = false;
-		oldScaleFactor = tdp.getZoom();
+		//oldScaleFactor = tdp.getZoom();
 		
 		p1 = _p1;
 		p2 = _p2;
@@ -78,12 +87,14 @@ public class ELNConnector extends TGConnector implements ScalableTGComponent {
 		return p2;
 	}
 
+	@Override
 	public boolean editOndoubleClick(JFrame frame) {
 		JDialogELNConnector jde = new JDialogELNConnector(this);
 		jde.setVisible(true);
 		return true;
 	}
 
+	@Override
 	protected void drawLastSegment(Graphics gr, int x1, int y1, int x2, int y2) {
 		Graphics2D g = (Graphics2D) gr;
 		
@@ -262,30 +273,31 @@ public class ELNConnector extends TGConnector implements ScalableTGComponent {
 		}
 		return "";
 	}
-	
-	public void rescale(double scaleFactor) {
-		int xx, yy;
+//	Issue #31: Now moved in upper class
+//	public void rescale(double scaleFactor) {
+//		int xx, yy;
+//
+//		for (int i = 0; i < nbInternalTGComponent; i++) {
+//			xx = tgcomponent[i].getX();
+//			yy = tgcomponent[i].getY();
+//			tgcomponent[i].dx = (tgcomponent[i].dx + xx) / oldScaleFactor * scaleFactor;
+//			tgcomponent[i].dy = (tgcomponent[i].dy + yy) / oldScaleFactor * scaleFactor;
+//			xx = (int) (tgcomponent[i].dx);
+//			tgcomponent[i].dx = tgcomponent[i].dx - xx;
+//			yy = (int) (tgcomponent[i].dy);
+//			tgcomponent[i].dy = tgcomponent[i].dy - yy;
+//			tgcomponent[i].setCd(xx, yy);
+//		}
+//		oldScaleFactor = scaleFactor;
+//	}
 
-		for (int i = 0; i < nbInternalTGComponent; i++) {
-			xx = tgcomponent[i].getX();
-			yy = tgcomponent[i].getY();
-			tgcomponent[i].dx = (tgcomponent[i].dx + xx) / oldScaleFactor * scaleFactor;
-			tgcomponent[i].dy = (tgcomponent[i].dy + yy) / oldScaleFactor * scaleFactor;
-			xx = (int) (tgcomponent[i].dx);
-			tgcomponent[i].dx = tgcomponent[i].dx - xx;
-			yy = (int) (tgcomponent[i].dy);
-			tgcomponent[i].dy = tgcomponent[i].dy - yy;
-			tgcomponent[i].setCd(xx, yy);
-		}
-		oldScaleFactor = scaleFactor;
-	}
-
+	@Override
 	public int getType() {
 		return TGComponentManager.ELN_CONNECTOR;
 	}
 
-	public java.util.List<ELNMidPortTerminal> getAllMidPortTerminal() {
-		java.util.List<ELNMidPortTerminal> list = new ArrayList<ELNMidPortTerminal>();
+	public List<ELNMidPortTerminal> getAllMidPortTerminal() {
+		List<ELNMidPortTerminal> list = new ArrayList<ELNMidPortTerminal>();
 		for (int i = 0; i < nbInternalTGComponent; i++) {
 			if (tgcomponent[i] instanceof ELNMidPortTerminal) {
 				list.add((ELNMidPortTerminal) (tgcomponent[i]));

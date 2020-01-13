@@ -59,11 +59,15 @@ import java.awt.geom.Line2D;
  * @author Ludovic APVRILLE
  */
 public class TMLADNotifiedEvent extends TADComponentWithoutSubcomponents/* Issue #69TGCWithoutInternalComponent */ implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
-    protected int lineLength = 5;
-    protected int textX =  5;
-    protected int textY =  15;
-    protected int linebreak = 10;
-    protected int textX1 = 2;
+
+	// Issue #31
+//    protected int lineLength = 5;
+//    protected int textX =  5;
+//    protected int textY =  15;
+    //protected int linebreak = 10;
+//    private int textX1;
+//    private double dtextX1;
+    
     
     protected String eventName = "evt";
     protected String result = "x";
@@ -73,14 +77,15 @@ public class TMLADNotifiedEvent extends TADComponentWithoutSubcomponents/* Issue
     public TMLADNotifiedEvent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-        width = 30;
-        height = 20;
-        minWidth = 30;
-        
+        // Issue #31
         nbConnectingPoint = 2;
         connectingPoint = new TGConnectingPoint[2];
         connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
         connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.5, 1.0);
+//        width = 30;
+//        height = 20;
+        initScaling( 30, 20 );
+        minWidth = 30;
 
         moveable = true;
         editable = true;
@@ -93,15 +98,16 @@ public class TMLADNotifiedEvent extends TADComponentWithoutSubcomponents/* Issue
     }
     
     @Override
-    public void internalDrawing(Graphics g) {
-        int w  = g.getFontMetrics().stringWidth(value);
-        int w1 = Math.max(minWidth, w + 3 * textX);
-        if ((w1 != width) && (!tdp.isScaled())) {
-            setCd(x + width/2 - w1/2, y);
-            width = w1;
-            //updateConnectingPoints();
-        }
-		
+    protected void internalDrawing(Graphics g) {
+  
+    	// Issue #31
+        final int w = checkWidth( g ); // g.getFontMetrics().stringWidth(value);
+//        int w1 = Math.max(minWidth, w + 3 * textX);
+//        if ((w1 != width) && (!tdp.isScaled())) {
+//            setCd(x + width/2 - w1/2, y);
+//            width = w1;
+//            //updateConnectingPoints();
+//        }
 		
 		if (stateOfError > 0)  {
 			Color c = g.getColor();
@@ -142,8 +148,8 @@ public class TMLADNotifiedEvent extends TADComponentWithoutSubcomponents/* Issue
         g.drawLine(x, y, x+linebreak, y+height/2);
         g.drawLine(x, y+height, x+linebreak, y+height/2);
         
-        g.drawString("evt", x+(width-w) / 2, y);
-        g.drawString(value, x + linebreak + textX1, y + textY);
+        drawSingleString(g,"evt", x+(width-w) / 2, y);
+        drawSingleString(g,value, x + linebreak + scale( 2 ), y + textY);
     }
     
     @Override
@@ -263,6 +269,7 @@ public class TMLADNotifiedEvent extends TADComponentWithoutSubcomponents/* Issue
     	return TGComponentManager.CONNECTOR_TMLAD;
     }
 	
+    @Override
 	public void setStateAction(int _stateAction) {
 		stateOfError = _stateAction;
 	}

@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmlcd;
 
 import ui.MainGUI;
@@ -59,7 +56,6 @@ public class TMLTaskDiagramToolBar extends TToolBar {
     
     public TMLTaskDiagramToolBar(MainGUI _mgui) {
         super(_mgui);
-        
     }
     
     protected void setActive(boolean b) {
@@ -76,9 +72,16 @@ public class TMLTaskDiagramToolBar extends TToolBar {
         mgui.actions[TGUIAction.ACT_TOGGLE_REQUESTS].setEnabled(b);
 		mgui.actions[TGUIAction.ACT_TOGGLE_DIPLO_ID].setEnabled(b);
 		
-		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
-		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
-		mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
+//		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
+//		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
+		// Issue #31
+		mgui.actions[ TGUIAction.ACT_ZOOM_MORE ].setEnabled( b );
+		mgui.actions[ TGUIAction.ACT_ZOOM_LESS ].setEnabled( b );
+		mgui.actions[ TGUIAction.ACT_SHOW_ZOOM ].setEnabled( b );
+
+//		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(false);
+//		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(false);
+//		mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(false);
 		
 		mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
 		mgui.actions[TGUIAction.ACT_ONECLICK_LOTOS_RG].setEnabled(b);
@@ -123,27 +126,20 @@ public class TMLTaskDiagramToolBar extends TToolBar {
         button = this.add(mgui.actions[TGUIAction.TMLTD_REQ]);
         button.addMouseListener(mgui.mouseHandler);
         
-         this.addSeparator();
+        this.addSeparator();
          
-         button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_CHANNELS]);
-         button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_CHANNELS]);
+        button.addMouseListener(mgui.mouseHandler);
          
-         button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_EVENTS]);
-         button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_EVENTS]);
+        button.addMouseListener(mgui.mouseHandler);
          
-          button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_REQUESTS]);
-         button.addMouseListener(mgui.mouseHandler);
+        button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_REQUESTS]);
+        button.addMouseListener(mgui.mouseHandler);
 		 
-		 this.addSeparator();
+		this.addSeparator();
 		
 		button = this.add(mgui.actions[TGUIAction.ACT_TOGGLE_DIPLO_ID]);
         button.addMouseListener(mgui.mouseHandler);
-        
     }
-    
 } // Class
-
-
-
-
-

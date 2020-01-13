@@ -77,11 +77,11 @@ import ui.window.JDialogAvatarSignal;
  */
 public class AvatarSMDReceiveSignal extends AvatarSMDBasicCanBeDisabledComponent /* Issue #69 AvatarSMDBasicComponent*/ implements CheckableAccessibility, LinkedReference, CheckableLatency, BasicErrorHighlight, PartOfInvariant {
     protected int lineLength = 5;
-    protected int textX =  5;
-    protected int textY =  15;
+//    protected int textX =  5;
+//    protected int textY =  15;
     protected int arc = 5;
     protected int linebreak = 10;
-	protected int textX1 = 2;
+//	protected int textX1 = 2;
    
 	private Map<String, String> latencyVals;
 
@@ -98,6 +98,9 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicCanBeDisabledComponent
         width = 30;
         height = 20;
         minWidth = 30;
+        textX =  5;
+        textY =  15;
+        initScaling(30, 20);
         
         nbConnectingPoint = 2;
         connectingPoint = new TGConnectingPoint[2];
@@ -125,7 +128,7 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicCanBeDisabledComponent
     
 	@Override
 	public void internalDrawing(Graphics g) {
-        int w  = g.getFontMetrics().stringWidth(value + textX1);
+        int w  = g.getFontMetrics().stringWidth(value + textX);
         int w1 = Math.max(minWidth, w + 2 * textX);
         if ((w1 != width) & (!tdp.isScaled())) {
             setCd(x + width/2 - w1/2, y);
@@ -194,8 +197,10 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicCanBeDisabledComponent
     	}
 		   
         //g.drawString("sig()", x+(width-w) / 2, y);
-        g.drawString(value, x + linebreak + textX1, y + textY);
-		//
+        
+//    	g.drawString(value, x + linebreak + textX, y + textY);
+		drawSingleString(g, value, x + linebreak + textX, y + textY);
+    	//
 		if (getCheckLatency()){
 			ConcurrentHashMap<String, String> latency =tdp.getMGUI().getLatencyVals(getAVATARID());
 			if (latency!=null){
@@ -207,7 +212,9 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicCanBeDisabledComponent
 		if (reference!=null){
 			if (reference instanceof AvatarRDRequirement){
 				AvatarRDRequirement refReq = (AvatarRDRequirement) reference;
-				g.drawString("ref: "+ refReq.getValue(), x, y+height1+textY);
+				//Issue #31
+//				g.drawString("ref: "+ refReq.getValue(), x, y+height1+textY);
+				drawSingleString(g,"ref: "+ refReq.getValue(), x, y+height1+textY);
 			}
 		}
     }
@@ -216,7 +223,9 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicCanBeDisabledComponent
 		int index=1;
 		for (String s:latencyVals.keySet()){
 			int w  = g.getFontMetrics().stringWidth(s);
-			g.drawString(s, x-latencyX-w+1, y-latencyY*index-2);
+//			g.drawString(s, x-latencyX-w+1, y-latencyY*index-2);
+			drawSingleString(g, s, x-latencyX-w+1, y-latencyY*index-2);
+			
 			g.drawRect(x-latencyX-w, y-latencyY*index-textHeight, w+4, textHeight); 
 			g.drawLine(x,y,x-latencyX, y-latencyY*index);
 			Color c = g.getColor();
@@ -311,7 +320,8 @@ public class AvatarSMDReceiveSignal extends AvatarSMDBasicCanBeDisabledComponent
 				}
 			}
 			
-			g.drawString(latencyVals.get(s), x-latencyX/2, y-latencyY*index/2);
+//			g.drawString(latencyVals.get(s), x-latencyX/2, y-latencyY*index/2);
+			drawSingleString(g, latencyVals.get(s), x-latencyX/2, y-latencyY*index/2);
 			g.setColor(c);
 			index++;
 		}

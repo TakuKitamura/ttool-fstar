@@ -54,27 +54,33 @@ import java.awt.geom.Line2D;
 * @author Ludovic APVRILLE
  */
 public class TMLADDelayInterval extends TADComponentWithSubcomponents /* Issue #69 TGCWithInternalComponent*/ implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
-    private int lineLength = 5;
-	private int textX, textY;
+
+	// Issue #31
+//    private int lineLength = 5;
+	//private int textX, textY;
 //    private int ilength = 10;
 //    private int lineLength1 = 2;
-	private int incrementY = 3;
-    private int segment = 4;
+//	private int incrementY = 3;
+//    private int segment = 4;
+	private static final int INCREMENT_Y = 3;
+	private static final int NB_SEGMENTS = 4;
 	
 	protected int stateOfError = 0; // Not yet checked
     
     public TMLADDelayInterval(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        width = 10;
-        height = 30;
-        textX = width + 5;
-        textY = height/2 + 5;
-        
+       
+        // Issue #31
         nbConnectingPoint = 2;
         connectingPoint = new TGConnectingPoint[2];
         connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
         connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, + lineLength, false, true, 0.5, 1.0);
+//        width = 10;
+//        height = 30;
+        initScaling( 10, 30 );
+
+        textX = width + scale( 5 );
+        textY = height/2 + scale( 5 );
         
         nbInternalTGComponent = 1;
         tgcomponent = new TGComponent[nbInternalTGComponent];
@@ -98,7 +104,7 @@ public class TMLADDelayInterval extends TADComponentWithSubcomponents /* Issue #
     }
     
     @Override
-    public void internalDrawing(Graphics g) {
+    protected void internalDrawing(Graphics g) {
 		if (stateOfError > 0)  {
 			Color c = g.getColor();
 			switch(stateOfError) {
@@ -116,15 +122,17 @@ public class TMLADDelayInterval extends TADComponentWithSubcomponents /* Issue #
         g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
         
-        int y1 = y + 4;
-        int x1 = x + 2;
-        int width1 = width - 4;
+        int y1 = y + scale( 4 );
+        int x1 = x + scale( 2 );
+        int width1 = width - scale( 4 );
         
-        for (int i=0; i<segment; i++) {
-            g.drawLine(x1, y1, x1+width1, y1+incrementY);
-            y1 += incrementY;
-            g.drawLine(x1+width1, y1, x1, y1+incrementY);
-            y1 += incrementY;
+        final int scaledIncrementY = scale( INCREMENT_Y );
+        
+        for (int i = 0; i < NB_SEGMENTS; i++ ) {
+            g.drawLine( x1, y1, x1 + width1, y1 + scaledIncrementY );
+            y1 += scaledIncrementY;
+            g.drawLine( x1 + width1, y1, x1, y1 + scaledIncrementY );
+            y1 += scaledIncrementY;
         }
     }
     

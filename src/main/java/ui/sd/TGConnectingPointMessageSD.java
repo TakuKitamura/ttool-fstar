@@ -36,12 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.sd;
-
-//import java.awt.*;
 
 import ui.CDElement;
 import ui.TGComponentManager;
@@ -54,12 +49,13 @@ import ui.TGConnectingPoint;
  * @version 1.0 06/10/2004
  * @author Ludovic APVRILLE
  */
-public class TGConnectingPointMessageSD extends  TGConnectingPoint{
+public class TGConnectingPointMessageSD extends TGConnectingPoint {
     
     public TGConnectingPointMessageSD(CDElement _container, int _x, int _y, boolean _in, boolean _out) {
         super(_container, _x, _y, _in, _out);
     }
     
+    @Override
     public boolean isCompatibleWith(int type) {
         //
         if ((type == TGComponentManager.CONNECTOR_MESSAGE_ASYNC_SD)  || (type == TGComponentManager.CONNECTOR_MESSAGE_SYNC_SD)) {
@@ -69,5 +65,4 @@ public class TGConnectingPointMessageSD extends  TGConnectingPoint{
         //
         return false;
     }
-    
 }

@@ -79,14 +79,15 @@ public class AvatarSMDStopState extends AvatarSMDBasicComponent implements Embed
         myImageIcon = IconManager.imgic210;
     }
     
+    @Override
     public void internalDrawing(Graphics g) {
         ColorManager.setColor(g, state, 0);
-        g.fillOval(x + (width - internalCircleSize)/2, y + (height - internalCircleSize)/2, internalCircleSize, internalCircleSize);
+        g.fillOval(x + (width - scale(internalCircleSize))/2, y + (height - scale(internalCircleSize))/2, scale(internalCircleSize), scale(internalCircleSize));
         g.drawOval(x, y, width, height);
-        g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
+        g.drawLine(x+(width/2), y, x+(width/2), y - scale(lineLength));
     }
-    
-    
+
+    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -94,6 +95,7 @@ public class AvatarSMDStopState extends AvatarSMDBasicComponent implements Embed
         return null;
     }
     
+    @Override
     public int getType() {
         return TGComponentManager.AVATARSMD_STOP_STATE;
     }

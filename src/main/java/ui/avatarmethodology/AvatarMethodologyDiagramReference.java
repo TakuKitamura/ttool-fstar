@@ -63,22 +63,22 @@ import java.util.Vector;
    * @author Ludovic APVRILLE
  */
 public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithInternalComponent implements SwallowTGComponent  {
-    public String oldValue;
-    protected int textX = 5;
-    protected int textY = 22;
-    protected int lineHeight = 30;
-    protected double dlineHeight = 0.0;
-    //protected int reqType = 0;
+    public String oldValue; 
+    //protected int textX = 5; 
+//    protected int textY = 22; 
+//    protected int lineHeight = 30;
+//    protected double dlineHeight = 0.0;
+//    protected int reqType = 0;
     // 0: normal, 1: formal, 2: security
     //protected int startFontSize = 10;
-    protected Graphics graphics;
-    protected int iconSize = 30;
-
+    //protected Graphics graphics;
+    //protected int iconSize = 30;
+    private static final int ICON_SIZE = 30;
     protected Font myFont, myFontB;
     protected int maxFontSize = 30;
     protected int minFontSize = 4;
-    protected int currentFontSize = -1;
-    protected boolean displayText = true;
+    //protected int currentFontSize = -1;
+    //protected boolean displayText = true;
 
     protected int typeOfReference;
 
@@ -102,15 +102,24 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
 
     public AvatarMethodologyDiagramReference(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-
-        initScaling(200, 120);
-        oldScaleFactor = tdp.getZoom();
-        dlineHeight = lineHeight * oldScaleFactor;
-        lineHeight = (int)dlineHeight;
-        dlineHeight = dlineHeight - lineHeight;
-
+        
+        // Issue #31
+        lineLength = 30;
+        textX = 5;
+        textY = 22;
+    
         minWidth = 10;
-        minHeight = lineHeight;
+        minHeight = lineLength;
+        
+        initScaling(200, 120);
+        // Issue #31
+//        oldScaleFactor = tdp.getZoom();
+//        dlineHeight = lineHeight * oldScaleFactor;
+//        lineHeight = (int)dlineHeight;
+//        dlineHeight = dlineHeight - lineHeight;
+//
+//        minWidth = 10;
+//        minHeight = lineLength;
 
         addTGConnectingPointsCommentTop();
 
@@ -127,9 +136,7 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
         removable = false;
         userResizable = true;
         multieditable = true;
-
-
-
+        
         oldValue = value;
 
         myImageIcon = IconManager.imgic5006;
@@ -138,33 +145,37 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
         actionOnAdd();
     }
 
-
+    /**
+     * From abstract class ui.TGComponent: declaration of abstract method
+	 * InternalDrawing
+	 * @param g
+	 * */
+    @Override
     public void internalDrawing(Graphics g) {
         Font f = g.getFont();
         //  Font fold = f;
         //    int w, c;
-        int size;
+        //int size;
 
         value = TYPE_STR[typeOfReference];
 
-        if (!tdp.isScaled()) {
-            graphics = g;
-        }
-
-        if (((rescaled) && (!tdp.isScaled())) || myFont == null) {
-            currentFontSize = tdp.getFontSize();
-            //
-            myFont = f.deriveFont((float)currentFontSize);
-            myFontB = myFont.deriveFont(Font.BOLD);
-
-            if (rescaled) {
-                rescaled = false;
-            }
-        }
-
-        displayText = currentFontSize >= minFontSize;
-
-        //   int h  = g.getFontMetrics().getHeight();
+//        if (!tdp.isScaled()) {
+//            graphics = g;
+//        }
+        // Issue #31 The font is already managed when drawing the panel
+//        if (((rescaled) && (!tdp.isScaled())) || myFont == null) {
+//            currentFontSize = tdp.getFontSize();
+//            //
+//            myFont = f.deriveFont((float)currentFontSize);
+//            myFontB = myFont.deriveFont(Font.BOLD);
+//
+//            if (rescaled) {
+//                rescaled = false;
+//            }
+//        }
+        final int fontSize = g.getFont().getSize();
+        displayText = fontSize >= minFontSize;
+        //issue #31 displayText = currentFontSize >= minFontSize;
 
         g.setColor(ColorManager.AVATAR_REQUIREMENT_TOP);
         g.fillRect(x, y, width, height);
@@ -177,109 +188,33 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
         //g.setColor(ColorManager.AVATAR_REQUIREMENT_TOP);
         //g.fillRect(x+1, y+1+lineHeight, width-1, height-1-lineHeight);
         ColorManager.setColor(g, getState(), 0);
-        if ((lineHeight > 23) && (width > 23)){
-            g.drawImage(IconManager.img5100, x + width - iconSize + 1, y + 3, Color.yellow, null);
-        }
-
+        //if (!isTextReadable(g))
+    	//	return;
+        if (!isTextReadable(g) || !canTextGoInTheBox(g, fontSize, value, ICON_SIZE))
+    		return;
+        //if ((lineLength > 23) && (width > 23)){
+            //g.drawImage(IconManager.img5100, x + width - iconSize + 1, y + 3, Color.yellow, null);
+        g.drawImage( scale( IconManager.img5100 ), x + width - scale(ICON_SIZE + 1 ), y + scale( 3 ), Color.yellow, null);
+        //}
+    	
         if (displayText) {
-            size = currentFontSize - 2;
-            g.setFont(myFontB);
+            //size = currentFontSize - 2;
+            //g.setFont(myFontB);
 
-            drawLimitedString(g, value, x, y + size + 3, width, 1);
+            drawLimitedString(g, value, x, y + fontSize + 3, width, 1);
             g.setFont(f);
         }
-
-        /*if (displayText) {
-          size = currentFontSize - 2;
-          g.setFont(myFont.deriveFont((float)(myFont.getSize() - 2)));
-
-          drawLimitedString(g, REQ_TYPE_STR[reqType], x, y + size, width, 1);
-
-          size += currentFontSize;
-          g.setFont(myFontB);
-          w = g.getFontMetrics().stringWidth(value);
-          drawLimitedString(g, value, x, y + size, width, 1);
-
-          }
-
-          if (verified) {
-          if (satisfied) {
-          Color tmp = g.getColor();
-          GraphicLib.setMediumStroke(g);
-          g.setColor(Color.green);
-          g.drawLine(x+width-2, y-6+lineHeight, x+width-6, y-2+lineHeight);
-          g.drawLine(x+width-6, y-3+lineHeight, x+width-8, y-6+lineHeight);
-          g.setColor(tmp);
-          GraphicLib.setNormalStroke(g);
-          } else {
-          //g.drawString("acc", x + width - 10, y+height-10);
-          Color tmp = g.getColor();
-          GraphicLib.setMediumStroke(g);
-          g.setColor(Color.red);
-          g.drawLine(x+width-2, y-2+lineHeight, x+width-8, y-8+lineHeight);
-          g.drawLine(x+width-8, y-2+lineHeight, x+width-2, y-8+lineHeight);
-          g.setColor(tmp);
-          GraphicLib.setNormalStroke(g);
-          }
-          }
-
-          g.setFont(myFont);
-          String texti = "Text";
-          String s ;
-          int i;
-          size = lineHeight + currentFontSize;
-
-          //ID
-          if (size < (height - 2)) {
-          drawLimitedString(g, "ID=" + id, x + textX, y + size, width, 0);
-          }
-          size += currentFontSize;
-
-          //text
-          for(i=0; i<texts.length; i++) {
-          if (size < (height - 2)) {
-          s = texts[i];
-          if (i == 0) {
-          s = texti + "=\"" + s;
-          }
-          if (i == (texts.length - 1)) {
-          s = s + "\"";
-          }
-          drawLimitedString(g, s, x + textX, y + size, width, 0);
-          }
-          size += currentFontSize;
-
-          }
-          // Type and risk
-          if (size < (height - 2)) {
-          drawLimitedString(g, "Kind=\"" + kind + "\"", x + textX, y + size, width, 0);
-          size += currentFontSize;
-          if (size < (height - 2)) {
-          drawLimitedString(g, "Risk=\"" + criticality + "\"", x + textX, y + size, width, 0);
-          size += currentFontSize;
-          if (size < (height - 2)) {
-
-          drawLimitedString(g, "Reference elements=\"" + referenceElements + "\"", x + textX, y + size, width, 0);
-
-          size += currentFontSize;
-          if (size < (height - 2)) {
-
-          if (reqType == SECURITY_REQ) {
-          drawLimitedString(g, "Targeted attacks=\"" + attackTreeNode + "\"", x + textX, y + size, width, 0);
-          }
-
-          if (reqType == SAFETY_REQ) {
-          drawLimitedString(g, "Violated action=\"" + violatedAction + "\"", x + textX, y + size, width, 0);
-          }
-          }
-          }
-          }
-          }
-
-
-          g.setFont(f);*/
     }
-
+    
+	/**
+	 * editOndoubleClick: permits edition of the element on double click
+	 * by simply calling adddiagramReference
+	 * @param frame
+	 * @param _x
+	 * @param _y
+	 * @return boolean true
+	 * */
+    @Override
     public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
         addDiagramReference(frame);
         return true;
@@ -338,28 +273,45 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
           return editAttributes();*/
 
     }
-
-
-    public void rescale(double scaleFactor){
-        dlineHeight = (lineHeight + dlineHeight) / oldScaleFactor * scaleFactor;
-        lineHeight = (int)(dlineHeight);
-        dlineHeight = dlineHeight - lineHeight;
-
-        minHeight = lineHeight;
-
-        super.rescale(scaleFactor);
-    }
-
-
+    /**
+     * Rescale: rescale the element with the help of a scaleFactor
+     * From abstract class TGScalableComponent
+     * @param scaleFactor
+     * 
+     * */
+    // Issue #31 
+//    @Override
+//    public void rescale(double scaleFactor){
+//        dlineHeight = (lineLength + dlineHeight) / oldScaleFactor * scaleFactor;
+//        lineLength = (int)(dlineHeight);
+//        dlineHeight = dlineHeight - lineLength;
+//
+//        minHeight = lineLength;
+//
+//        super.rescale(scaleFactor);
+//    }
+   
+	/**
+	 * isOnOnlyMe, Coming from Abstract Method From TGCWithInternalComponent (Abstract Class) 
+	 * @param x1
+	 * @param y1
+	 * @return TGComponent or null
+	 * */
+    @Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
-        if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
+        if (GraphicLib.isInRectangle(x1, y1, x, y, width, height))
             return this;
-        }
         return null;
     }
 
-
-
+	/**
+	 * addActionToPopupMenu
+	 * @param componentMenu
+	 * @param menuAL
+	 * @param x
+	 * @param y
+	 * */
+    @Override
     public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
 
         componentMenu.addSeparator();
@@ -370,6 +322,12 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
         componentMenu.add(diagramReference);
     }
 
+	/**
+	 * eventOnPopup
+	 * @param e
+	 * @return boolean true
+	 * */
+    @Override
     public boolean eventOnPopup(ActionEvent e) {
         //   String s = e.getActionCommand();
 
@@ -382,6 +340,10 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
         return true;
     }
 
+	/**
+	 * addDiagramReference: permits to pop a new window???
+	 * @param frame
+	 * */
     public void addDiagramReference(JFrame frame) {
         JDialogManageListOfString jdmlos;
         Vector<String> ignored; // Must be built from non selected TMLTaskDiagramPanel or TMLCompPanel
@@ -457,16 +419,23 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
 
     public abstract void makeValidationInfos(AvatarMethodologyDiagramName dn);
 
+    /**
+     * hasAvatarMethodologyDiagramName
+     * @param s
+     * @return boolean denoting if the string s is in the tgcomponent list
+     * */
     public boolean hasAvatarMethodologyDiagramName(String s) {
-        for(int i=0; i<nbInternalTGComponent; i++) {
-            if (tgcomponent[i].getValue().compareTo(s) == 0) {
+        for (int i = 0; i < nbInternalTGComponent; i++)
+            if (tgcomponent[i].getValue().compareTo(s) == 0)
                 return true;
-            }
-        }
         return false;
     }
 
-
+    /**
+     * fillIgnoredSelectedFromInternalComponents
+     * @param ignored
+     * @param selected
+     * */
     public void fillIgnoredSelectedFromInternalComponents(Vector<String> ignored, Vector<String>selected) {
         // Get from mgui the list of all diagrams with type depends from the subclass
         // If diagrams have the same name -> we do not see the difference
@@ -513,11 +482,25 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
     }
 
     public abstract boolean isAValidPanelType(TURTLEPanel panel);
-
+    
+    /**
+     * Permits to know if tgc is an instance of AvatarMethodologyDiagramName
+     * @param tgc
+     * @return boolean
+     * */
+    @Override
     public boolean acceptSwallowedTGComponent(TGComponent tgc) {
         return tgc instanceof AvatarMethodologyDiagramName;
     }
 
+    /**
+     * addSwallowedTGComponent
+     * @param tgc
+     * @param x
+     * @param y
+     * @return boolean
+     * */
+    @Override
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
         tgc.setFather(this);
         addInternalComponent(tgc, 0);
@@ -525,12 +508,22 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
         return true;
     }
 
+    /**
+     * removeSwallowedTGComponent
+     * @param tgc
+     * */
+    @Override
     public void removeSwallowedTGComponent(TGComponent tgc) {
         removeInternalComponent(tgc);
     }
 
     public abstract boolean makeCall(String diagramName, int index);
 
+    /**
+     * openDiagram
+     * @param tabName
+     * @return boolean
+     * */
     protected boolean openDiagram(String tabName) {
         if (!tdp.getMGUI().selectMainTab(tabName)) {
             TraceManager.addDev("Diagram removed?");
@@ -539,11 +532,14 @@ public abstract class AvatarMethodologyDiagramReference extends TGCScalableWithI
         return true;
     }
 
+    /**
+     * giveInformation
+     * @param info
+     * 
+     * */
     protected void giveInformation(String info) {
         tdp.getMGUI().setStatusBarText(info);
     }
-
-
 
     /*public String getDiagramReferences() {
       return referenceElements;

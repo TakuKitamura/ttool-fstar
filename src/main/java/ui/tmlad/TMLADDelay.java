@@ -54,8 +54,10 @@ import java.awt.geom.Line2D;
  * @author Ludovic APVRILLE
  */
 public class TMLADDelay extends TADComponentWithSubcomponents /* Issue #69 TGCWithInternalComponent*/ implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
-    private int lineLength = 5;
-    private int textX, textY;
+
+	// Issue #31
+//    private int lineLength = 5;
+    //private int textX, textY;
 //    private int ilength = 10;
 //    private int lineLength1 = 2;
 	
@@ -63,16 +65,18 @@ public class TMLADDelay extends TADComponentWithSubcomponents /* Issue #69 TGCWi
     
     public TMLADDelay(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        width = 10;
-        height = 30;
-        textX = width + 5;
-        textY = height/2 + 5;
-        
+
+        // Issue #31
         nbConnectingPoint = 2;
         connectingPoint = new TGConnectingPoint[2];
         connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
         connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, + lineLength, false, true, 0.5, 1.0);
+//        width = 10;
+//        height = 30;
+        initScaling( 10, 30 );
+
+        textX = width + scale( 5 );
+        textY = height/2 + scale( 5 );
         
         nbInternalTGComponent = 1;
         tgcomponent = new TGComponent[nbInternalTGComponent];
@@ -97,7 +101,7 @@ public class TMLADDelay extends TADComponentWithSubcomponents /* Issue #69 TGCWi
     }
     
     @Override
-    public void internalDrawing(Graphics g) {
+    protected void internalDrawing(Graphics g) {
 		if (stateOfError > 0)  {
 			Color c = g.getColor();
 			switch(stateOfError) {

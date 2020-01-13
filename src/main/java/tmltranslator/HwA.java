@@ -67,11 +67,13 @@ public class HwA extends HwExecutionNode  {
     public HwA(String _name) {
         super(_name);
     }
-
+    
+    @Override
     public String getType() {
         return "HWA";
     }
-
+    
+    @Override
     public String toXML() {
 	String s = "<HWA name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize + "\" execiTime=\"" + execiTime + "\" execcTime=\"" + execcTime + "\" />\n";
 	return s;

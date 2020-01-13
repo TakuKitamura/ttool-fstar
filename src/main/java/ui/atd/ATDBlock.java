@@ -58,7 +58,7 @@ import java.util.Vector;
    * @author Ludovic APVRILLE
  */
 public class ATDBlock extends TGCScalableWithInternalComponent implements SwallowTGComponent {
-    private int textY1 = 3;
+//    private int textY1 = 3;
     private String stereotype = "block";
 
     private int maxFontSize = 12;
@@ -75,6 +75,9 @@ public class ATDBlock extends TGCScalableWithInternalComponent implements Swallo
         height = 200;
         minWidth = 5;
         minHeight = 2;
+        //Issue #31
+        textY = 3;
+        initScaling(250, 200);
 
         nbConnectingPoint = 16;
         connectingPoint = new TGConnectingPoint[16];
@@ -121,7 +124,7 @@ public class ATDBlock extends TGCScalableWithInternalComponent implements Swallo
         Font fold = f;
 
         //
-
+        currentFontSize = f.getSize();
         if ((rescaled) && (!tdp.isScaled())) {
 
             if (currentFontSize == -1) {
@@ -139,18 +142,18 @@ public class ATDBlock extends TGCScalableWithInternalComponent implements Swallo
             f = f.deriveFont((float)maxCurrentFontSize);
             g.setFont(f);
             //
-            while(maxCurrentFontSize > (minFontSize-1)) {
-                w0 = g.getFontMetrics().stringWidth(value);
-                w1 = g.getFontMetrics().stringWidth(ster);
-                w2 = Math.min(w0, w1);
-                if (w2 < (width - (2*textX))) {
-                    break;
-                }
-                maxCurrentFontSize --;
-                f = f.deriveFont((float)maxCurrentFontSize);
-                g.setFont(f);
-            }
-            currentFontSize = maxCurrentFontSize;
+//            while(maxCurrentFontSize > (minFontSize-1)) {
+//                w0 = g.getFontMetrics().stringWidth(value);
+//                w1 = g.getFontMetrics().stringWidth(ster);
+//                w2 = Math.min(w0, w1);
+//                if (w2 < (width - (2*textX))) {
+//                    break;
+//                }
+//                maxCurrentFontSize --;
+//                f = f.deriveFont((float)maxCurrentFontSize);
+//                g.setFont(f);
+//            }
+//            currentFontSize = maxCurrentFontSize;
 
             if(currentFontSize <minFontSize) {
                 displayText = false;
@@ -163,7 +166,7 @@ public class ATDBlock extends TGCScalableWithInternalComponent implements Swallo
         }
 
         //
-
+        currentFontSize = f.getSize();
         Color c = g.getColor();
         g.draw3DRect(x, y, width, height, true);
 
@@ -179,15 +182,15 @@ public class ATDBlock extends TGCScalableWithInternalComponent implements Swallo
             g.setFont(f.deriveFont(Font.BOLD));
 
             w = g.getFontMetrics().stringWidth(ster);
-            int h =  currentFontSize + (int)(textY1 * tdp.getZoom());
+            int h =  currentFontSize + textY;
             if ((w < (2*textX + width)) && (h < height)) {
-                g.drawString(ster, x + (width - w)/2, y +h);
+                drawSingleString(g,ster, x + (width - w)/2, y +h);
             }
             g.setFont(f0);
             w  = g.getFontMetrics().stringWidth(value);
-            h = 2* (currentFontSize + (int)(textY1 * tdp.getZoom()));
+            h = 2* (currentFontSize + textY);
             if ((w < (2*textX + width)) && (h < height)) {
-                g.drawString(value, x + (width - w)/2, y + h);
+                drawSingleString(g,value, x + (width - w)/2, y + h);
             }
         }
 

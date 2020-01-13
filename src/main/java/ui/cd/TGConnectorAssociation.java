@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
- 
 package ui.cd;
 
 import ui.*;
@@ -46,9 +43,6 @@ import ui.util.IconManager;
 
 import java.awt.*;
 import java.util.Vector;
-
-//import java.awt.geom.*;
-//import myutil.*;
 
 /**
  * Class TGConnectorAssociation

@@ -85,9 +85,9 @@ public class TMLActivityDiagramPanel extends TDiagramPanel {
     public  boolean actionOnRemove(TGComponent tgc) {
         return false;
     }
-    
+
     public String getXMLHead() {
-        return "<TMLActivityDiagramPanel name=\"" + name + "\"" + sizeParam() + " >";
+        return "<TMLActivityDiagramPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
     }
     
     public String getXMLTail() {

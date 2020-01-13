@@ -62,7 +62,7 @@ public class AvatarBDToolBar extends TToolBar {
     public AvatarBDToolBar(MainGUI _mgui) {
         super(_mgui);
     }
-
+    @Override
     protected void setActive(boolean b) {
         mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
         mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
@@ -97,7 +97,8 @@ public class AvatarBDToolBar extends TToolBar {
         mgui.actions[TGUIAction.ACT_MODEL_CHECKING].setEnabled(b);
 
     }
-
+    
+    @Override
     protected void setButtons() {
         JButton button;
 

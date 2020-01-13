@@ -25,10 +25,12 @@ public abstract class TADForLoop extends TADComponentWithoutSubcomponents implem
 	protected static final int INDEX_INSIDE_LOOP = 1;
 	protected static final int INDEX_EXIT_LOOP = 2;
 
-	protected int lineLength = 5;
-    protected int textX =  5;
-    protected int textY =  15;
-    protected int arc = 5;
+	//protected int lineLength = 5;
+	
+	// Issue #31
+//    protected int textX =  5;
+//    protected int textY =  15;
+//    protected int arc = 5;
 
     protected int stateOfError = 0;
 
@@ -43,9 +45,13 @@ public abstract class TADForLoop extends TADComponentWithoutSubcomponents implem
 						TDiagramPanel _tdp ) {
 		super( _x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp );
 
-		width = 30;
-        height = 20;
-        minWidth = 30;
+        // Issue #31
+		createConnectingPoints();
+//		width = 30;
+//        height = 20;
+		initScaling( 30, 20 );
+        minWidth = scale( 30 );
+        textX =  scale( 5 );
 
         moveable = true;
         editable = true;
@@ -53,6 +59,8 @@ public abstract class TADForLoop extends TADComponentWithoutSubcomponents implem
         
         myImageIcon = IconManager.imgic912;
 	}
+
+    protected abstract void createConnectingPoints();
 
     @Override
     public TGComponent isOnMe(int _x, int _y) {

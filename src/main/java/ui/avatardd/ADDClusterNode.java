@@ -59,7 +59,7 @@ import java.awt.*;
  */
 
 public class ADDClusterNode extends ADDNode implements WithAttributes {
-	private int textY1 = 15;
+//	private int textY1 = 15;
 	private int textY2 = 30;
 	private int derivationx = 2;
 	private int derivationy = 3;
@@ -72,11 +72,13 @@ public class ADDClusterNode extends ADDNode implements WithAttributes {
 	public ADDClusterNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
+		textY = 15;
 		width = 250;
 		height = 200;
 		minWidth = 150;
 		minHeight = 100;
-
+		initScaling(250, 200);
+		
 		nbConnectingPoint = 16;
 		connectingPoint = new TGConnectingPoint[16];
 
@@ -135,16 +137,23 @@ public class ADDClusterNode extends ADDNode implements WithAttributes {
 		int w  = g.getFontMetrics().stringWidth(ster);
 		Font f = g.getFont();
 		g.setFont(f.deriveFont(Font.BOLD));
-		g.drawString(ster, x + (width - w)/2, y + textY1);
+		drawSingleString(g, ster, x + (width - w)/2, y + textY);
 		g.setFont(f);
 		w  = g.getFontMetrics().stringWidth(name);
-		g.drawString(name, x + (width - w)/2, y + textY2);
+		drawSingleString(g, name, x + (width - w)/2, y + textY2);
 
 		// Icon
-		g.drawImage(IconManager.imgic8006.getImage(), x + 4, y + 4, null);
+
+		int borders = scale(4);
+		g.drawImage(scale(IconManager.imgic8006.getImage()), x + borders, y + borders, null);
+		g.drawImage(scale(IconManager.img9), x + width - scale(20), y + borders, null);
+
+//		g.drawImage(IconManager.imgic8006.getImage(), x + 4, y + 4, null);
 		//g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
+
 	}
 
+    @Override
 	public TGComponent isOnOnlyMe(int x1, int y1) {
 		Polygon pol = new Polygon();
 		pol.addPoint(x, y);
@@ -171,6 +180,7 @@ public class ADDClusterNode extends ADDNode implements WithAttributes {
 		return index;
 	}
 
+    @Override
 	public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
 		int i;
 		MainGUI mgui = getTDiagramPanel().getMainGUI();
@@ -215,10 +225,12 @@ public class ADDClusterNode extends ADDNode implements WithAttributes {
 		return false;
 	}
 
+    @Override
 	public int getType() {
 		return TGComponentManager.ADD_CLUSTERNODE;
 	}
 
+    @Override
 	protected String translateExtraParam() {
 		StringBuffer sb = new StringBuffer("<extraparam>\n");
 		sb.append("<info stereotype=\"" + stereotype + "\" nodeName=\"" + name);
@@ -229,6 +241,7 @@ public class ADDClusterNode extends ADDNode implements WithAttributes {
 		return new String(sb);
 	}
 
+    @Override
 	public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
 		try {
 			NodeList nli;
@@ -266,10 +279,12 @@ public class ADDClusterNode extends ADDNode implements WithAttributes {
 		}
 	}
 
+    @Override
 	public int getDefaultConnector() {
 		return TGComponentManager.ADD_CONNECTOR;
 	}
 
+    @Override
 	public String getAttributes() {
 		String attr = "";
 		attr += "index = " + index + "\n";

@@ -59,7 +59,7 @@ import ui.util.IconManager;
  */
 public class TMLCPFork extends TADComponentWithoutSubcomponents /* Issue #69 TGCWithoutInternalComponent*/ {
 	
-	private int lineLength = 0;
+	//private int lineLength = 0;
 	private static int instanceCounter = 0;
 	private int counter = 0;
 	//private int textX, textY;
@@ -67,12 +67,7 @@ public class TMLCPFork extends TADComponentWithoutSubcomponents /* Issue #69 TGC
 	public TMLCPFork(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 			
-		width = 150;
-		height = 5;
-		
-		//textX = width - 10;
-		//textY = height - 8;
-
+		// Issue #31
 		nbConnectingPoint = 6;
 		connectingPoint = new TGConnectingPoint[6];
 		connectingPoint[0] = new TGConnectingPointTMLCP(this, 0, lineLength, false, true, 0.167, 1.0);
@@ -81,6 +76,13 @@ public class TMLCPFork extends TADComponentWithoutSubcomponents /* Issue #69 TGC
 		connectingPoint[3] = new TGConnectingPointTMLCP(this, 0, lineLength, false, true, 0.667, 1.0);
 		connectingPoint[4] = new TGConnectingPointTMLCP(this, 0, lineLength, false, true, 0.833, 1.0);
 		connectingPoint[5] = new TGConnectingPointTMLCP(this, 0, -lineLength, true, false, 0.5, 0.0);
+		
+		initScaling( 150, 5 );
+//		width = 150;
+//		height = 5;
+		
+		//textX = width - 10;
+		//textY = height - 8;
                 
         addTGConnectingPointsComment();
 
@@ -98,7 +100,7 @@ public class TMLCPFork extends TADComponentWithoutSubcomponents /* Issue #69 TGC
 	}
 
 	@Override
-	public void internalDrawing(Graphics g) {
+	protected void internalDrawing(Graphics g) {
 		g.drawRect(x, y, width, height);
 		g.fillRect(x, y, width, height);
 	}

@@ -100,7 +100,7 @@ public class TMLChannelProperties extends TGCWithoutInternalComponent {
             ColorManager.setColor(g, getState(), 0);
             //
             h = g.getFontMetrics().getHeight();
-            g.drawString(value, x, y + h);
+            drawSingleString(g,value, x, y + h);
             
             if (!tdp.isScaled()) {
                 width = g.getFontMetrics().stringWidth(value);

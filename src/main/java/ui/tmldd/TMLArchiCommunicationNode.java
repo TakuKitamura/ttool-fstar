@@ -37,9 +37,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmldd;
 
 import ui.SwallowTGComponent;
@@ -64,29 +61,30 @@ public abstract class TMLArchiCommunicationNode extends TMLArchiNode implements 
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
     }
 
-
+    @Override
     public boolean acceptSwallowedTGComponent(TGComponent tgc) {
         return ( (tgc instanceof TMLArchiCommunicationArtifact) || (tgc instanceof TMLArchiEventArtifact) );
     }
 
+    @Override
     public boolean addSwallowedTGComponent( TGComponent tgc, int x, int y )     {
-
         if( tgc instanceof TMLArchiCommunicationArtifact )      {
             // Make it an internal component
             // It's one of my son
             //Set its coordinates
             tgc.setFather(this);
             tgc.setDrawingZone(true);
-	    tgc.resizeWithFather();
+            tgc.resizeWithFather();
  
             //add it
             addInternalComponent( tgc, 0 );
             return true;
         }
         else    {
-	    TraceManager.addDev("Testing swallow " + tgc);
-            if( tgc instanceof TMLArchiEventArtifact )  {
-		TraceManager.addDev("Testing swallow archievent ok " + tgc);
+        	TraceManager.addDev("Testing swallow " + tgc);
+            
+        	if( tgc instanceof TMLArchiEventArtifact )  {
+        		TraceManager.addDev("Testing swallow archievent ok " + tgc);
                 tgc.setFather( this );
                 tgc.setDrawingZone( true );
                 tgc.resizeWithFather();
@@ -97,45 +95,49 @@ public abstract class TMLArchiCommunicationNode extends TMLArchiNode implements 
         }
     }
 
+    @Override
     public void removeSwallowedTGComponent(TGComponent tgc) {
         removeInternalComponent(tgc);
     }
 
-
     public List<TMLArchiCommunicationArtifact> getChannelArtifactList() {
-
         List<TMLArchiCommunicationArtifact> v = new ArrayList<TMLArchiCommunicationArtifact>();
+
         for( int i = 0; i < nbInternalTGComponent; i++ ) {
             if( tgcomponent[i] instanceof TMLArchiCommunicationArtifact )       {
                 v.add( (TMLArchiCommunicationArtifact)( tgcomponent[i]) );
             }
         }
+        
         return v;
     }
 
-    public ArrayList<TMLArchiKey> getKeyList(){
-        ArrayList<TMLArchiKey> v = new ArrayList<TMLArchiKey>();
+    public List<TMLArchiKey> getKeyList(){
+        List<TMLArchiKey> v = new ArrayList<TMLArchiKey>();
+        
         for( int i = 0; i < nbInternalTGComponent; i++ ) {
             if( tgcomponent[i] instanceof TMLArchiKey )       {
                 v.add( (TMLArchiKey)( tgcomponent[i]) );
             }
         }
+        
         return v;
     }
 
     public List<TMLArchiEventArtifact> getEventArtifactList() {
-
         List<TMLArchiEventArtifact> v = new ArrayList<TMLArchiEventArtifact>();
+
         for( int i = 0; i < nbInternalTGComponent; i++ )        {
             if( tgcomponent[i] instanceof TMLArchiEventArtifact )       {
                 v.add( (TMLArchiEventArtifact)(tgcomponent[i]) );
             }
         }
+        
         return v;
     }
 
+    @Override
     public void hasBeenResized() {
-
         for( int i = 0; i < nbInternalTGComponent; i++ )        {
             if( tgcomponent[i] instanceof TMLArchiCommunicationArtifact ) {
                 tgcomponent[i].resizeWithFather();
@@ -148,11 +150,13 @@ public abstract class TMLArchiCommunicationNode extends TMLArchiNode implements 
         }
     }
 
+    @Override
     public int getDefaultConnector() {
         return TGComponentManager.CONNECTOR_NODE_TMLARCHI;
     }
 
-    public int getComponentType()       {
+    @Override
+    public int getComponentType() {
         return OTHER;
     }
 }

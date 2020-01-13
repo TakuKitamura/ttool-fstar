@@ -38,13 +38,15 @@
 
 package ui.tmlad;
 
-import myutil.GraphicLib;
-import ui.*;
-import ui.ad.TADComponentWithSubcomponents;
-import ui.util.IconManager;
+import java.awt.Graphics;
 
-import java.awt.*;
-import java.awt.geom.Line2D;
+import ui.CDElement;
+import ui.TDiagramPanel;
+import ui.TGCTimeInterval;
+import ui.TGComponent;
+import ui.TGComponentManager;
+import ui.ad.TADExec;
+import ui.ad.TGConnectingPointAD;
 
 /**
  * Class TMLADExecIInterval
@@ -53,93 +55,106 @@ import java.awt.geom.Line2D;
  * @version 1.0 02/12/2005
  * @author Ludovic APVRILLE
  */
-public class TMLADExecIInterval extends TADComponentWithSubcomponents /* Issue #69 TGCWithInternalComponent */ implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
-    private int lineLength = 5;
-    private int textX, textY;
-    private int ilength = 10;
-    private int lineLength1 = 2;
-	
-	protected int stateOfError = 0; // Not yet checked
+public class TMLADExecIInterval extends TADExec /* Issue #31 TADComponentWithSubcomponents *//* Issue #69 TGCWithInternalComponent  implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight*/ {
+
+	// Issue #31
+//    private int lineLength = 5;
+ //   private int textX, textY;
+//    private int ilength = 10;
+//    private int lineLength1 = 2;
+//	
+//	protected int stateOfError = 0; // Not yet checked
     
     public TMLADExecIInterval(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
-        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
-        width = 10;
-        height = 30;
-        textX = width + 5;
-        textY = height/2 + 5;
-        
-        nbConnectingPoint = 2;
-        connectingPoint = new TGConnectingPoint[2];
-        connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-        connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, + lineLength, false, true, 0.5, 1.0);
-        
-        nbInternalTGComponent = 1;
-        tgcomponent = new TGComponent[nbInternalTGComponent];
-        
-        TGCTimeInterval tgc = new TGCTimeInterval(x+textX, y+textY, -75, 30, textY - 10, textY + 10, true, this, _tdp);
-        tgc.setValue("");
-        tgc.setName("value of the time interval");
-        tgcomponent[0] = tgc;
-        
-        moveable = true;
-        editable = false;
-        removable = true;
+        super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp, "", "value of the time interval" );
+
+        // Issue #31
+//        width = 10;
+//        height = 30;
+//        initSize( 10, 30 );
+//        textX = width + scale( 5 );
+//        textY = height/2 + scale( 5 );
+//        
+//        nbConnectingPoint = 2;
+//        connectingPoint = new TGConnectingPoint[2];
+//        connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
+//        connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, + lineLength, false, true, 0.5, 1.0);
+//        
+//        nbInternalTGComponent = 1;
+//        tgcomponent = new TGComponent[nbInternalTGComponent];
+//        
+//        TGCTimeInterval tgc = new TGCTimeInterval(x+textX, y+textY, -75, 30, textY - 10, textY + 10, true, this, _tdp);
+//        tgc.setValue("");
+//        tgc.setName("value of the time interval");
+//        tgcomponent[0] = tgc;
+//        
+//        moveable = true;
+//        editable = false;
+//        removable = true;
         
         name = "execIInterval";
         
-        myImageIcon = IconManager.imgic214;
+//        myImageIcon = IconManager.imgic214;
+    }
+
+    @Override
+    protected TGCTimeInterval createInternalComponent() {
+    	return new TGCTimeInterval(x+textX, y+textY, -75, 30, textY - 10, textY + 10, true, this, tdp);
     }
     
-    @Override
-    public void internalDrawing(Graphics g) {
-		if (stateOfError > 0)  {
-			Color c = g.getColor();
-			switch(stateOfError) {
-			case ErrorHighlight.OK:
-				g.setColor(ColorManager.EXEC);
-				break;
-			default:
-				g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
-			}
-			g.fillRect(x, y, width, height);
-			g.setColor(c);
-		}
-        g.drawRect(x, y, width, height);
-        g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
-        g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
-        g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/2,  x + (width/2) + lineLength1, y+(height-ilength)/2);
-        g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/2 + ilength,  x + (width/2) + lineLength1, y+(height-ilength)/2 + ilength);
-        g.drawLine(x + (width/2), y+(height-ilength)/2, x + (width/2), y+(height+ilength)/2);
+    protected TGCTimeInterval getTimeInterval() {
+    	return (TGCTimeInterval) tgcomponent[0];
     }
+//    
+//    @Override
+//    public void internalDrawing(Graphics g) {
+//		if (stateOfError > 0)  {
+//			Color c = g.getColor();
+//			switch(stateOfError) {
+//			case ErrorHighlight.OK:
+//				g.setColor(ColorManager.EXEC);
+//				break;
+//			default:
+//				g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
+//			}
+//			g.fillRect(x, y, width, height);
+//			g.setColor(c);
+//		}
+//        g.drawRect(x, y, width, height);
+//        g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
+//        g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
+//        g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/2,  x + (width/2) + lineLength1, y+(height-ilength)/2);
+//        g.drawLine(x + (width/2) - lineLength1, y+(height-ilength)/2 + ilength,  x + (width/2) + lineLength1, y+(height-ilength)/2 + ilength);
+//        g.drawLine(x + (width/2), y+(height-ilength)/2, x + (width/2), y+(height+ilength)/2);
+//    }
     
-    @Override
-    public TGComponent isOnOnlyMe(int x1, int y1) {
-        if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
-            return this;
-        }
-        
-        if ((int)(Line2D.ptSegDistSq(x +width/2, y- lineLength,  x+width/2, y + lineLength + height, x1, y1)) < distanceSelected) {
-			return this;	
-		}
-        
-        return null;
-    }
+//    @Override
+//    public TGComponent isOnOnlyMe(int x1, int y1) {
+//        if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
+//            return this;
+//        }
+//        
+//        if ((int)(Line2D.ptSegDistSq(x +width/2, y- lineLength,  x+width/2, y + lineLength + height, x1, y1)) < distanceSelected) {
+//			return this;	
+//		}
+//        
+//        return null;
+//    }
     
     public String getMinDelayValue() {
-        return ((TGCTimeInterval)(tgcomponent[0])).getMinDelay();
+        return getTimeInterval().getMinDelay();
     }
     
     public String getMaxDelayValue() {
-        return ((TGCTimeInterval)(tgcomponent[0])).getMaxDelay();
+        return getTimeInterval().getMaxDelay();
     }
     
     public void setMinValue(String val) {
-        ((TGCTimeInterval)(tgcomponent[0])).setMinDelay(val);
+    	getTimeInterval().setMinDelay(val);
     }
     
     public void setMaxValue(String val) {
-        ((TGCTimeInterval)(tgcomponent[0])).setMaxDelay(val);
+    	getTimeInterval().setMaxDelay(val);
     }
     
     @Override
@@ -151,9 +166,22 @@ public class TMLADExecIInterval extends TADComponentWithSubcomponents /* Issue #
     public int getDefaultConnector() {
     	return TGComponentManager.CONNECTOR_TMLAD;
     }
-	
-    @Override
-	public void setStateAction(int _stateAction) {
-		stateOfError = _stateAction;
+//	
+//    @Override
+//	public void setStateAction(int _stateAction) {
+//		stateOfError = _stateAction;
+//	}
+
+	@Override
+	protected TGConnectingPointAD createConnectingPoint(CDElement _container, int _x, int _y, boolean _in, boolean _out,
+			double _w, double _h) {
+		return new TGConnectingPointTMLAD( _container, _x, _y, _in, _out, _w, _h );
+	}
+
+	@Override
+	protected void drawInternalSymbol(Graphics g, int symbolWidth, int symbolHeight) {
+		g.drawLine(x + (width/2) - symbolWidth, y+(height-symbolHeight)/2,  x + (width/2) + symbolWidth, y+(height-symbolHeight)/2);
+		g.drawLine(x + (width/2) - symbolWidth, y+(height-symbolHeight)/2 + symbolHeight,  x + (width/2) + symbolWidth, y+(height-symbolHeight)/2 + symbolHeight);
+		g.drawLine(x + (width/2), y+(height-symbolHeight)/2, x + (width/2), y+(height+symbolHeight)/2);
 	}
 }

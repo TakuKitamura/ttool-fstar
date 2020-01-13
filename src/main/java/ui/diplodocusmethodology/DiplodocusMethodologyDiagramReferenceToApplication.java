@@ -72,16 +72,16 @@ public class DiplodocusMethodologyDiagramReferenceToApplication extends Diplodoc
 
     }
 
-
+    @Override
     public  int getType() {
         return TGComponentManager.DIPLODODUSMETHODOLOGY_REF_APPLICATION;
     }
-
+    @Override
     public boolean isAValidPanelType(TURTLEPanel panel) {
         return (panel instanceof TMLDesignPanel) || (panel instanceof TMLComponentDesignPanel);
 
     }
-
+    @Override
     public void makeValidationInfos(DiplodocusMethodologyDiagramName dn) {
         dn.setValidationsNumber(5);
         dn.setValidationsInfo(0, DiplodocusMethodologyDiagramName.SIM_ANIM_APP_DIPLO);
@@ -91,7 +91,8 @@ public class DiplodocusMethodologyDiagramReferenceToApplication extends Diplodoc
 	dn.setValidationsInfo(3, DiplodocusMethodologyDiagramName.PROVERIF_DIPLO);
         dn.setValidationsInfo(4, DiplodocusMethodologyDiagramName.TML_APP_DIPLO);
     }
-
+    
+    @Override
     public boolean makeCall(String diagramName, int index) {
         String tmp;
 
@@ -175,9 +176,4 @@ public class DiplodocusMethodologyDiagramReferenceToApplication extends Diplodoc
         return true;
 
     }
-
-
-
-
-
 }

@@ -92,7 +92,7 @@ public class SDTimerCancellation extends TGCWithoutInternalComponent implements 
             heightValue = g.getFontMetrics().getHeight();
         }
         
-        g.drawString(value, x+width, y+height/2+3);
+        drawSingleString(g, value, x+width, y+height/2+3);
         
         g.drawLine(x, y, x+width, y+height);
         //g.drawLine(x, y, x+width, y);

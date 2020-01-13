@@ -4,7 +4,7 @@ import ui.TDiagramPanel;
 import ui.TGCOneLineText;
 import ui.TGComponent;
 
-public abstract class TADOneLineText extends TGCOneLineText {
+public abstract class TADOneLineText extends TGCOneLineText /* Issue #31 implements ScalableTGComponent*/ {
 
 	public TADOneLineText(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father,
 			TDiagramPanel _tdp) {

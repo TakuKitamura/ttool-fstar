@@ -39,7 +39,6 @@
 package ui.directedgraph;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -52,13 +51,10 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.Thread.State;
 import java.util.List;
 import java.util.Vector;
@@ -73,7 +69,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
@@ -84,26 +79,20 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
+//import javax.swing.table.DefaultTableModel;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.jgrapht.Graph;
-import org.jgrapht.ext.JGraphXAdapter;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.io.EdgeProvider;
 import org.jgrapht.io.ExportException;
 import org.jgrapht.io.GraphMLImporter;
 import org.jgrapht.io.ImportException;
-import org.jgrapht.io.SimpleGraphMLImporter;
 import org.jgrapht.io.VertexProvider;
 import org.xml.sax.SAXException;
-
-import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
-import com.mxgraph.swing.mxGraphComponent;
 
 import common.ConfigurationTTool;
 import common.SpecConfigTTool;
@@ -111,13 +100,8 @@ import myutil.GraphicLib;
 import myutil.ScrolledJTextArea;
 import tmltranslator.TMLMapping;
 import ui.ColorManager;
-import ui.MainGUI;
-import ui.SimulationTrace;
 import ui.TGComponent;
 import ui.TMLComponentDesignPanel;
-import ui.interactivesimulation.InteractiveSimulationActions;
-import ui.interactivesimulation.JFrameCompareSimulationTraces;
-import ui.interactivesimulation.SaveCommandsToolBar;
 import ui.interactivesimulation.SimulationTransaction;
 import ui.interactivesimulation.SimulationTransactionParser;
 
@@ -132,11 +116,11 @@ import ui.interactivesimulation.SimulationTransactionParser;
 
 public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListener, Runnable, MouseListener, ItemListener, ChangeListener {
 
-    private JButton saveGraph, viewGraph;
+//    private JButton saveGraph, viewGraph;
     protected JTextArea jta;
     protected JScrollPane jsp;
-    private JTabbedPane commandTab, resultTab, resultTabDetailed;
-    private JPanel loadxml, commands, jp01, jp02, activities, graphAnalysisResult, jp03, jp04, jp05, graphAnalysisResultDetailed;
+    private JTabbedPane commandTab, resultTab;/*, resultTabDetailed;*/
+    private JPanel loadxml, commands, jp01, jp02, /*activities,*/ graphAnalysisResult, jp03, jp04, jp05; //,graphAnalysisResultDetailed;
     protected JButton buttonClose, buttonShowDGraph, buttonSaveDGraph, buttonBrowse, buttonDetailedAnalysis;
 
     protected JTextField saveDirName;
@@ -145,7 +129,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
     private JComboBox<String> tasksDropDownCombo1 = new JComboBox<String>();
     private JComboBox<String> tasksDropDownCombo2 = new JComboBox<String>();
 
-    private JComboBox<Object> tracesCombo1, tracesCombo2;
+//    private JComboBox<Object> tracesCombo1, tracesCombo2;
 
     protected SaveGraphToolBar sgtb;
 
@@ -154,7 +138,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
 
     private String[] columnNames = new String[5];
     private String[] columnMinMaxNames = new String[5];
-    private String[] columnByTaskNames = new String[4];
+//    private String[] columnByTaskNames = new String[4];
     private Object[][] dataDetailedByTask;
     private Object[][] dataDetailedMinMax;
 
@@ -165,13 +149,13 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
 
     private DirectedGraphTranslator dgraph;
 
-    private JScrollPane scrollPane11, scrollPane12, scrollPane13;
+    private JScrollPane scrollPane11, scrollPane12;//, scrollPane13;
 
-    private GridBagLayout gridbag01;
-    private GridBagConstraints c01;
+//    private GridBagLayout gridbag01;
+//    private GridBagConstraints c01;
     private Thread t;
 
-    @SuppressWarnings("deprecation")
+//    @SuppressWarnings("deprecation")
     public JFrameLatencyDetailedAnalysis(TMLMapping<TGComponent> tmap, List<TMLComponentDesignPanel> cpanels) {
         super("Latency Detailed Analysis");
         initActions();
@@ -215,9 +199,9 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
 
         // mainpanel.add(jp, BorderLayout.NORTH);
 
-        GridBagLayout gridbag02 = new GridBagLayout();
+//        GridBagLayout gridbag02 = new GridBagLayout();
 
-        GridBagLayout gridbag03 = new GridBagLayout();
+//        GridBagLayout gridbag03 = new GridBagLayout();
 
         commands = new JPanel(new BorderLayout());
         commands.setBorder(new javax.swing.border.TitledBorder("load/Save"));
@@ -233,7 +217,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
 
         framePanel.add(commands, mainConstraint);
 
-        GridBagLayout gridbag05 = new GridBagLayout();
+//        GridBagLayout gridbag05 = new GridBagLayout();
 
         graphAnalysisResult = new JPanel(new BorderLayout());
         graphAnalysisResult.setBorder(new javax.swing.border.TitledBorder("Latency Detailed Analysis "));
@@ -718,7 +702,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
 
         tableData = dgraph.latencyDetailedAnalysis(task1, task2, transFile1);
 
-        DefaultTableModel model = new DefaultTableModel();
+//        DefaultTableModel model = new DefaultTableModel();
 
         table11.removeAll();
 
@@ -732,7 +716,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
                     int row = table11.getSelectedRow();
                     Thread t = new Thread() {
                         public void run() {
-                            JFrameLatencyDetailedPopup rowPopup = new JFrameLatencyDetailedPopup(dgraph, row, true);
+                           /* JFrameLatencyDetailedPopup rowPopup =*/ new JFrameLatencyDetailedPopup(dgraph, row, true);
                         }
                     };
 
@@ -747,7 +731,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
 
         tableData2 = dgraph.latencyMinMaxAnalysis(task1, task2, transFile1);
 
-        DefaultTableModel model2 = new DefaultTableModel();
+//        DefaultTableModel model2 = new DefaultTableModel();
 
         table12.removeAll();
 
@@ -760,7 +744,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
                     int row = table12.getSelectedRow();
                     Thread t = new Thread() {
                         public void run() {
-                            JFrameLatencyDetailedPopup rowPopup = new JFrameLatencyDetailedPopup(dgraph, row, false);
+                            /*JFrameLatencyDetailedPopup rowPopup = */new JFrameLatencyDetailedPopup(dgraph, row, false);
                         }
                     };
 

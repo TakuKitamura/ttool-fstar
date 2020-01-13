@@ -45,102 +45,105 @@ package ui;
    * @version 1.0 14/04/2014
    * @author Ludovic APVRILLE
  */
-public abstract class TGCScalableWithoutInternalComponent extends TGCWithoutInternalComponent implements ScalableTGComponent {
+public abstract class TGCScalableWithoutInternalComponent extends TGCWithoutInternalComponent /*implements ScalableTGComponent*/ {
     
-	protected boolean rescaled = false;
-    
-	protected double oldScaleFactor;
+//	protected boolean rescaled = false;
+//    
+//	protected double oldScaleFactor;
 
     public TGCScalableWithoutInternalComponent(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-    }
-
-    @Override
-    public void rescale (double scaleFactor){
-        rescaled = true;
-
-        final double factor = scaleFactor / oldScaleFactor;
-
-        dwidth = (width + dwidth) * factor;// oldScaleFactor * scaleFactor;
-        dheight = (height + dheight) * factor;// oldScaleFactor * scaleFactor;
-        dx = (dx + x) * factor;// oldScaleFactor * scaleFactor;
-        dy = (dy + y) * factor;// oldScaleFactor * scaleFactor;
-        dMinWidth = (minWidth + dMinWidth) * factor;// oldScaleFactor * scaleFactor;
-        dMinHeight = (minHeight + dMinHeight) * factor;// oldScaleFactor * scaleFactor;
-        dMaxWidth = (maxWidth + dMaxWidth) * factor;// oldScaleFactor * scaleFactor;
-        dMaxHeight = (maxHeight + dMaxHeight) * factor;// oldScaleFactor * scaleFactor;
-
-        width = (int)(dwidth);
-        dwidth = dwidth - width;
-        height = (int)(dheight);
-        dheight = dheight - height;
-        minWidth = (int)(dMinWidth);
-        minHeight = (int)(dMinHeight);
-        maxWidth = (int)(dMaxWidth);
-        maxHeight = (int)(dMaxHeight);
-
-	//TraceManager.addDev("tgc= " + this + " minHeight=" + minHeight);
-	//TraceManager.addDev("tgc= " + this + " maxHeight=" + maxHeight);
-	
-        dMinWidth = dMinWidth - minWidth;
-        dMinHeight = dMinHeight - minHeight;
-        dMaxWidth = dMaxWidth - maxWidth;
-        dMaxHeight = dMaxHeight - maxHeight;
-        x = (int)(dx);
-        dx = dx - x;
-        y = (int)(dy);
-        dy = dy - y;
         
-        // Issue #81: We also need to update max coordinate values
-        maxX *= factor;
-        maxY *= factor;
-
-        oldScaleFactor = scaleFactor;
-
-        if (father != null) {
-            // Must rescale my zone...
-            resizeWithFather();
-        } else {
-            minX = (int)(tdp.getMinX()/tdp.getZoom());
-            maxX = (int)(tdp.getMaxX()/tdp.getZoom());
-            minY = (int)(tdp.getMinY()/tdp.getZoom());
-            maxY = (int)(tdp.getMaxY()/tdp.getZoom());
-
-        }
-	
-        setMoveCd(x, y, true);
+//        // Isssue #31
+//        oldScaleFactor = 1.0;
     }
 
-    protected void initScaling(int w, int h) {
-        oldScaleFactor = tdp.getZoom();
-
-        dx = 0;
-        dy = 0;
-
-        dwidth = w * oldScaleFactor;
-        width = (int)dwidth;
-        dwidth = dwidth - width;
-
-        dheight = h * oldScaleFactor;
-        height = (int)(dheight);
-        dheight = dheight - height;
-
-        dMaxWidth = defMaxWidth * oldScaleFactor;
-        dMaxHeight = defMaxHeight * oldScaleFactor;
-
-        maxWidth = defMaxWidth;
-        maxHeight = defMaxHeight;
-
-        dMaxWidth = dMaxWidth - maxWidth;
-        dMaxHeight = dMaxHeight - maxHeight;
-
-        if (father == null) {
-            minX = (int)(tdp.getMinX()/tdp.getZoom());
-            maxX = (int)(tdp.getMaxX()/tdp.getZoom());
-            minY = (int)(tdp.getMinY()/tdp.getZoom());
-            maxY = (int)(tdp.getMaxY()/tdp.getZoom());
-        }
-
-        rescaled = true;
-    }
+//    @Override
+//    public void rescale (double scaleFactor){
+//        rescaled = true;
+//
+//        final double factor = scaleFactor / oldScaleFactor;
+//
+//        dwidth = (width + dwidth) * factor;// oldScaleFactor * scaleFactor;
+//        dheight = (height + dheight) * factor;// oldScaleFactor * scaleFactor;
+//        dx = (dx + x) * factor;// oldScaleFactor * scaleFactor;
+//        dy = (dy + y) * factor;// oldScaleFactor * scaleFactor;
+//        dMinWidth = (minWidth + dMinWidth) * factor;// oldScaleFactor * scaleFactor;
+//        dMinHeight = (minHeight + dMinHeight) * factor;// oldScaleFactor * scaleFactor;
+//        dMaxWidth = (maxWidth + dMaxWidth) * factor;// oldScaleFactor * scaleFactor;
+//        dMaxHeight = (maxHeight + dMaxHeight) * factor;// oldScaleFactor * scaleFactor;
+//
+//        width = (int)(dwidth);
+//        dwidth = dwidth - width;
+//        height = (int)(dheight);
+//        dheight = dheight - height;
+//        minWidth = (int)(dMinWidth);
+//        minHeight = (int)(dMinHeight);
+//        maxWidth = (int)(dMaxWidth);
+//        maxHeight = (int)(dMaxHeight);
+//
+//	//TraceManager.addDev("tgc= " + this + " minHeight=" + minHeight);
+//	//TraceManager.addDev("tgc= " + this + " maxHeight=" + maxHeight);
+//	
+//        dMinWidth = dMinWidth - minWidth;
+//        dMinHeight = dMinHeight - minHeight;
+//        dMaxWidth = dMaxWidth - maxWidth;
+//        dMaxHeight = dMaxHeight - maxHeight;
+//        x = (int)(dx);
+//        dx = dx - x;
+//        y = (int)(dy);
+//        dy = dy - y;
+//        
+//        // Issue #81: We also need to update max coordinate values
+//        maxX *= factor;
+//        maxY *= factor;
+//
+//        oldScaleFactor = scaleFactor;
+//
+//        if (father != null) {
+//            // Must rescale my zone...
+//            resizeWithFather();
+//        } else {
+//            minX = (int)(tdp.getMinX()/tdp.getZoom());
+//            maxX = (int)(tdp.getMaxX()/tdp.getZoom());
+//            minY = (int)(tdp.getMinY()/tdp.getZoom());
+//            maxY = (int)(tdp.getMaxY()/tdp.getZoom());
+//
+//        }
+//	
+//        setMoveCd(x, y, true);
+//    }
+//
+//    protected void initScaling(int w, int h) {
+//        oldScaleFactor = tdp.getZoom();
+//
+//        dx = 0;
+//        dy = 0;
+//
+//        dwidth = w * oldScaleFactor;
+//        width = (int)dwidth;
+//        dwidth = dwidth - width;
+//
+//        dheight = h * oldScaleFactor;
+//        height = (int)(dheight);
+//        dheight = dheight - height;
+//
+//        dMaxWidth = defMaxWidth * oldScaleFactor;
+//        dMaxHeight = defMaxHeight * oldScaleFactor;
+//
+//        maxWidth = defMaxWidth;
+//        maxHeight = defMaxHeight;
+//
+//        dMaxWidth = dMaxWidth - maxWidth;
+//        dMaxHeight = dMaxHeight - maxHeight;
+//
+//        if (father == null) {
+//            minX = (int)(tdp.getMinX()/tdp.getZoom());
+//            maxX = (int)(tdp.getMaxX()/tdp.getZoom());
+//            minY = (int)(tdp.getMinY()/tdp.getZoom());
+//            maxY = (int)(tdp.getMaxY()/tdp.getZoom());
+//        }
+//
+//        rescaled = true;
+//    }
 }

@@ -102,6 +102,7 @@ public class TMLCCompositePort extends TMLCChannelFacility implements SwallowedT
         myImageIcon = IconManager.imgic1204;
     }
     
+    @Override
     public void internalDrawing(Graphics g) {
 		if ((x != oldx) | (oldy != y)) {
 			// Component has moved!

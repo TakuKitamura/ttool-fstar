@@ -1,3 +1,4 @@
+
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
  * 
  * ludovic.apvrille AT enst.fr
@@ -65,12 +66,13 @@ public class AvatarCDActorBox extends TGCScalableOneLineText {
 
     public AvatarCDActorBox(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-
-        width = (int)(40 * tdp.getZoom());
-        height = (int)(50 * tdp.getZoom());
-        minWidth = (int)(40 * tdp.getZoom());
+        //issue #31
+        width = 40;
+        height = 50;
+        minWidth = 40; //(int)(40 * tdp.getZoom());
         oldScaleFactor = tdp.getZoom();
-
+        initScaling(40,50);
+        
         nbConnectingPoint = 24;
         connectingPoint = new TGConnectingPoint[nbConnectingPoint];
         int i;
@@ -96,6 +98,7 @@ public class AvatarCDActorBox extends TGCScalableOneLineText {
         myImageIcon = IconManager.imgic600;
     }
 
+    @Override
     public void internalDrawing(Graphics g) {
         w  = g.getFontMetrics().stringWidth(value);
         int w1  = g.getFontMetrics().stringWidth(STEREOTYPE);
@@ -103,11 +106,12 @@ public class AvatarCDActorBox extends TGCScalableOneLineText {
             width = Math.max(Math.max(w, w1) + space, minWidth);
         }
         h = g.getFontMetrics().getHeight();
-        g.drawString(STEREOTYPE, x + ((width - w1) / 2), y + h + space/2);
-        g.drawString(value, x + ((width - w) / 2) , y + height - h);
+        drawSingleString(g, STEREOTYPE, x + ((width - w1) / 2), y + h + space/2);
+        drawSingleString(g, value, x + ((width - w) / 2) , y + height - h);
         g.drawRect(x, y, width, height);
     }
 
+    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -118,11 +122,13 @@ public class AvatarCDActorBox extends TGCScalableOneLineText {
         return null;
     }
 
+    @Override
     public int getMyCurrentMinX() {
         return Math.min(x + width / 2 - w / 2, x);
 
     }
 
+    @Override
     public int getMyCurrentMaxX() {
         return Math.max(x + width / 2 + w / 2, x + width);
     }
@@ -132,6 +138,7 @@ public class AvatarCDActorBox extends TGCScalableOneLineText {
     }
 
 
+    @Override
     public int getType() {
         return TGComponentManager.ACD_ACTOR_BOX;
     }

@@ -68,13 +68,13 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
     //private static String GLOBAL_CODE_INFO = "(global code)";
     private static String ENTRY_CODE_INFO = "(entry code)";
 
-    private int textY1 = 3;
+//    private int textY1 = 3;
 
-    private int maxFontSize = 12;
-    private int minFontSize = 4;
-    private int currentFontSize = -1;
-    private boolean displayText = true;
-    private int textX = 7;
+//    private int maxFontSize = 12;
+//    private int minFontSize = 4;
+//    private int currentFontSize = -1;
+//    private boolean displayText = true;
+//    private int textX = 7;
 
     //protected String [] globalCode;
     protected String [] entryCode;
@@ -93,11 +93,13 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
 
     public AvatarSMDState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-
+        textX = 7;
+        textY = 3;
         width = 100;
         height = 50;
         minWidth = 40;
         minHeight = 30;
+        initScaling(100, 50);
 
         nbConnectingPoint = 32;
         connectingPoint = new TGConnectingPoint[32];
@@ -160,8 +162,8 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
         //name = "State";
         oldValue = value;
 
-        currentFontSize = maxFontSize;
-        oldScaleFactor = tdp.getZoom();
+//        currentFontSize = maxFontSize;
+//        oldScaleFactor = tdp.getZoom();
 
         myImageIcon = IconManager.imgic700;
 
@@ -191,126 +193,159 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
         mutexStates = null;
     }
 
-    @Override
-    public void internalDrawing(Graphics g) {
-        Font f = g.getFont();
-        Font fold = f;
-
-        f = f.deriveFont(minFontSize);
-        //
-
-        if ((rescaled) && (!tdp.isScaled())) {
-
-            if (currentFontSize == -1) {
-                currentFontSize = f.getSize();
-            }
-            rescaled = false;
-            // Must set the font size ..
-            // Find the biggest font not greater than max_font size
-            // By Increment of 1
-            // Or decrement of 1
-            // If font is less than 4, no text is displayed
-
-            int maxCurrentFontSize = Math.max(0, Math.min(height, maxFontSize));
-            int w0;//, w1, w2;
-            f = f.deriveFont((float)maxCurrentFontSize);
-            g.setFont(f);
-            //
-            while(maxCurrentFontSize > (minFontSize-1)) {
-                w0 = g.getFontMetrics().stringWidth(value);
-                if (w0 < (width - (2*textX))) {
-                    break;
-                }
-                maxCurrentFontSize --;
-                f = f.deriveFont((float)maxCurrentFontSize);
-                g.setFont(f);
-            }
-            currentFontSize = maxCurrentFontSize;
-
-            if(currentFontSize <minFontSize) {
-                displayText = false;
-            } else {
-                displayText = true;
-                f = f.deriveFont((float)currentFontSize);
-                g.setFont(f);
-            }
-
-        }
-
-        Color c = g.getColor();
-        //g.setColor(ColorManager.AVATAR_STATE);
-        
+//    @Override
+    public void internalDrawing(Graphics g)
+    {
+    	Font f = g.getFont();
+    	//Rectangle
+    	Color c = g.getColor();
         // Issue #69
-    	if ( isEnabled() ) {
-            Color avat = ColorManager.AVATAR_STATE;
-    		g.setColor(new Color(avat.getRed(), avat.getGreen(), Math.min(255, avat.getBlue() + (getMyDepth() * 10))));
-    	}
-    	else {
-	    	g.setColor( ColorManager.DISABLED_FILLING );
-    	}
+     	if (isEnabled()) {
+             Color avat = ColorManager.AVATAR_STATE;
+     		 g.setColor(new Color(avat.getRed(), avat.getGreen(), Math.min(255, avat.getBlue() + (getMyDepth() * 10))));
+     	}
+     	else {
+ 	    	g.setColor( ColorManager.DISABLED_FILLING );
+     	}
 
         g.fillRoundRect(x, y, width, height, 5, 5);
         g.setColor(c);
         g.drawRoundRect(x, y, width, height, 5, 5);
+        g.drawLine(x, y+ f.getSize() + 2, x+width, y+ f.getSize() + 2);
 
-        // Strings
-        int w;
-        int h = 0;
-        if (displayText) {
-            f = f.deriveFont((float)currentFontSize);
-            Font f0 = g.getFont();
-            g.setFont(f.deriveFont(Font.BOLD));
-
-            w = g.getFontMetrics().stringWidth(value);
-            h =  currentFontSize + (int)(textY1 * tdp.getZoom());
-            if ((w < (2*textX + width)) && (h < height)) {
-                g.drawString(value, x + (width - w)/2, y +h);
-            }
-
-
-            g.setColor(ColorManager.AVATAR_CODE);
-            int step = h + h;
-            /*if (hasGlobalCode()) {
-              w = g.getFontMetrics().stringWidth(GLOBAL_CODE_INFO);
-              if ((w < (2*textX + width)) && (step + 1 < height)) {
-              g.drawString(GLOBAL_CODE_INFO, x + (width - w)/2, y +step);
-              }
-              step = step + h;
-              }*/
-            if (hasEntryCode()) {
-                w = g.getFontMetrics().stringWidth(ENTRY_CODE_INFO);
-                if ((w < (2*textX + width)) && (step + 1 < height)) {
-                    g.drawString(ENTRY_CODE_INFO, x + (width - w)/2, y +step);
-                }
-                step = step + h;
-            }
-            g.setColor(c);
-
-
-            g.setFont(f0);
-        }
-
-        g.setFont(fold);
-
-        h = h +2;
-        if (h < height) {
-            g.drawLine(x, y+h, x+width, y+h);
-        }
-
-        // Icon
-
-        g.setFont(fold);
-
-        /*if ((mutexStates != null) && (state == TGState.POINTER_ON_ME)){
-          String s = "Mutually exclusive states:\n";
-          for(AvatarSMDState st: mutexStates) {
-          s += st.getTDiagramPanel().getName() + "/" + st.getStateName() + "\n";
-          }
-          drawAttributes(g, s);
-          }*/
-
-        drawSecurityInformation(g);
+    	//Strings
+    	g.setFont(f.deriveFont(Font.BOLD));
+    	drawSingleString(g, value, getCenter(g, value), y + f.getSize());
+    	
+    	g.setFont(f.deriveFont(Font.PLAIN));
+    	g.setColor(ColorManager.AVATAR_CODE);
+    	drawSingleString(g, ENTRY_CODE_INFO, getCenter(g, ENTRY_CODE_INFO), y + f.getSize() * 2 + scale(3));
+    	g.setColor(c);
+    	
+    	//Security information
+    	drawSecurityInformation(g);
     }
+    
+//    //@Override
+//    public void internalDrawin(Graphics g) {
+//        Font f = g.getFont();
+//        Font fold = f;
+//
+//        f = f.deriveFont(minFontSize);
+//        //
+//
+//        if ((rescaled) && (!tdp.isScaled())) {
+//
+//            if (currentFontSize == -1) {
+//                currentFontSize = f.getSize();
+//            }
+//            rescaled = false;
+//            // Must set the font size ..
+//            // Find the biggest font not greater than max_font size
+//            // By Increment of 1
+//            // Or decrement of 1
+//            // If font is less than 4, no text is displayed
+//
+//            int maxCurrentFontSize = Math.max(0, Math.min(height, maxFontSize));
+//            int w0;//, w1, w2;
+//            f = f.deriveFont((float)maxCurrentFontSize);
+//            g.setFont(f);
+//            //
+//            while(maxCurrentFontSize > (minFontSize-1)) {
+//                w0 = g.getFontMetrics().stringWidth(value);
+//                if (w0 < (width - (2*textX))) {
+//                    break;
+//                }
+//                maxCurrentFontSize --;
+//                f = f.deriveFont((float)maxCurrentFontSize);
+//                g.setFont(f);
+//            }
+//            currentFontSize = maxCurrentFontSize;
+//
+//            if(currentFontSize <minFontSize) {
+//                displayText = false;
+//            } else {
+//                displayText = true;
+//                f = f.deriveFont((float)currentFontSize);
+//                g.setFont(f);
+//            }
+//
+//        }
+//
+//        Color c = g.getColor();
+//        //g.setColor(ColorManager.AVATAR_STATE);
+//        
+//        // Issue #69
+//    	if ( isEnabled() ) {
+//            Color avat = ColorManager.AVATAR_STATE;
+//    		g.setColor(new Color(avat.getRed(), avat.getGreen(), Math.min(255, avat.getBlue() + (getMyDepth() * 10))));
+//    	}
+//    	else {
+//	    	g.setColor( ColorManager.DISABLED_FILLING );
+//    	}
+//
+//        g.fillRoundRect(x, y, width, height, 5, 5);
+//        g.setColor(c);
+//        g.drawRoundRect(x, y, width, height, 5, 5);
+//
+//        // Strings
+//        int w;
+//        int h = 0;
+//        if (displayText) {
+//            f = f.deriveFont((float)currentFontSize);
+//            Font f0 = g.getFont();
+//            g.setFont(f.deriveFont(Font.BOLD));
+//
+//            w = g.getFontMetrics().stringWidth(value);
+//            h =  currentFontSize + (int)(textY1 * tdp.getZoom());
+//            if ((w < (2*textX + width)) && (h < height)) {
+//                g.drawString(value, x + (width - w)/2, y +h);
+//            }
+//
+//
+//            g.setColor(ColorManager.AVATAR_CODE);
+//            int step = h + h;
+//            /*if (hasGlobalCode()) {
+//              w = g.getFontMetrics().stringWidth(GLOBAL_CODE_INFO);
+//              if ((w < (2*textX + width)) && (step + 1 < height)) {
+//              g.drawString(GLOBAL_CODE_INFO, x + (width - w)/2, y +step);
+//              }
+//              step = step + h;
+//              }*/
+//            if (hasEntryCode()) {
+//                w = g.getFontMetrics().stringWidth(ENTRY_CODE_INFO);
+//                if ((w < (2*textX + width)) && (step + 1 < height)) {
+//                    g.drawString(ENTRY_CODE_INFO, x + (width - w)/2, y +step);
+//                }
+//                step = step + h;
+//            }
+//            g.setColor(c);
+//
+//
+//            g.setFont(f0);
+//        }
+//
+//        g.setFont(fold);
+//
+//        h = h +2;
+//        if (h < height) {
+//            g.drawLine(x, y+h, x+width, y+h);
+//        }
+//
+//        // Icon
+//
+//        g.setFont(fold);
+//
+//        /*if ((mutexStates != null) && (state == TGState.POINTER_ON_ME)){
+//          String s = "Mutually exclusive states:\n";
+//          for(AvatarSMDState st: mutexStates) {
+//          s += st.getTDiagramPanel().getName() + "/" + st.getStateName() + "\n";
+//          }
+//          drawAttributes(g, s);
+//          }*/
+//
+//        drawSecurityInformation(g);
+//    }
 
     private void drawSecurityInformation(Graphics g) {
         if (securityInformation > 0) {
@@ -611,6 +646,7 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
         return (nbInternalTGComponent > 0);
     }
 
+    @Override
     public String getAttributes() {
         if (mutexStates == null) {
             return null;

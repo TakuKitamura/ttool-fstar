@@ -73,6 +73,7 @@ public class TMLEventOperator extends TMLCompositionOperator {
         myImageIcon = IconManager.imgic800;
     }
     
+    @Override
     public void internalDrawing(Graphics g) {
         if (((TMLTaskDiagramPanel)(tdp)).areEventsVisible()) {
             g.drawRect(x, y, width, height);
@@ -81,7 +82,7 @@ public class TMLEventOperator extends TMLCompositionOperator {
             //g.drawImage(IconManager.img8, x + width - 20, y + 3, ColorManager.COMPOSITION_OPERATOR, null);
             ColorManager.setColor(g, getState(), 0);
             g.setFont((g.getFont()).deriveFont(Font.BOLD));
-            g.drawString(value, x + textX, y + textY);
+            drawSingleString(g,value, x + textX, y + textY);
             g.setFont((g.getFont()).deriveFont(Font.PLAIN));
         }
     }
@@ -122,6 +123,7 @@ public class TMLEventOperator extends TMLCompositionOperator {
 		return ColorManager.TML_PORT_EVENT;
 	}
     
+	@Override
     public int getType() {
         return TGComponentManager.TMLTD_EVENT_OPERATOR;
     }

@@ -1,4 +1,4 @@
-/* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
+ /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
  *
  * ludovic.apvrille AT enst.fr
  *
@@ -35,9 +35,6 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-
-
-
 
 package ui.tmlcompd;
 
@@ -130,7 +127,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
     protected int lossPercentage;
     protected int maxNbOfLoss; //-1 means no max
 
-    // Security Verification
+    //Security Verification
     public int checkConfStatus;
 
     public int checkSecConfStatus;
@@ -212,6 +209,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         return myColor;
     }
 
+    @Override
     public void internalDrawing(Graphics g) {
         if ((x != oldx) | (oldy != y)) {
             // Component has moved!
@@ -353,22 +351,23 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         TGComponent tgc = getFather();
         int ft = 10;
         if ((tgc != null) && (tgc instanceof TMLCPrimitiveComponent)) {
-            ft = ((TMLCPrimitiveComponent)tgc).getCurrentFontSize();
+            ft = g.getFont().getSize();// Issue #31 ((TMLCPrimitiveComponent)tgc).getCurrentFontSize();
             //
         }
         //
         int w;
         Font f = g.getFont();
         Font fold = f;
-
-        int si = Math.min(8, (int)((float)ft - 2));
-        f = f.deriveFont((float)si);
-        g.setFont(f);
-        w = g.getFontMetrics().stringWidth(commName);
-        if (w < ((int)(width * 1.5))) {
-            g.drawString(commName, x, y-1);
-        }
-
+        // Issue #31: The commName was not zooming 
+        //int si = Math.min(8, (int)((float)ft - 2));
+        //f = f.deriveFont((float)si);
+        //g.setFont(f);
+        //w = g.getFontMetrics().stringWidth(commName);
+        //if (w < ((int)(width * 1.5))) {
+        //    drawSingleString(g,commName, x, y-1);
+        //}
+        //drawSingleString(g,commName, x, y -1);
+        drawSingleString(g, commName, x, y -1);
         if (checkConf && isOrigin){
             drawConfVerification(g);
         }
@@ -385,7 +384,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 
     public void drawAuthVerification(Graphics g){
         
-        g.drawString(secName, x-xc*2/3, y+yc*2/3);
+        drawSingleString(g,secName, x-xc*2/3, y+yc*2/3);
         Color c = g.getColor();
         Color c1;
         Color c2;
@@ -423,8 +422,8 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         g.setColor(c);
         g.drawPolygon(xps, yps,3);
         g.drawPolygon(xpw, ypw, 3);
-        g.drawString("S", x-authxoffset+1, y+yc+authyoffset);
-        g.drawString("W", x-authxoffset+authlockwidth/2, y+yc+authovalheight);
+        drawSingleString(g,"S", x-authxoffset+1, y+yc+authyoffset);
+        drawSingleString(g,"W", x-authxoffset+authlockwidth/2, y+yc+authovalheight);
         if (checkStrongAuthStatus ==3){
             g.drawLine(x-authxoffset, y+authyoffset*3/2, x-authxoffset/2, y+authyoffset+yc);
             g.drawLine(x-authxoffset, y+authyoffset+yc, x-authxoffset/2, y+authyoffset*3/2);
@@ -454,7 +453,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         default:
             return;
         }
-        g.drawString(mappingName, x-conflockwidth*2, y-conflockheight);
+        drawSingleString(g,mappingName, x-conflockwidth*2, y-conflockheight);
         g.drawOval(x-confovalwidth*2, y, confovalwidth, confovalheight);
         g.setColor(c1);
         g.fillRect(x-conflockwidth*3/2, y+conflockheight/2, conflockwidth, conflockheight);
@@ -480,7 +479,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
             default:
                 return;
             }
-            g.drawString(secName, x-conflockwidth*2, y+conflockheight*3);
+            drawSingleString(g,secName, x-conflockwidth*2, y+conflockheight*3);
             g.drawOval(x-confovalwidth*2, y+confyoffset, confovalwidth, confovalheight);
             g.setColor(c1);
             g.fillRect(x-conflockwidth*3/2, y+conflockheight/2+confyoffset, conflockwidth, conflockheight);
@@ -538,7 +537,8 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
             ((TMLCPortConnectingPoint)(connectingPoint[i])).setH(h0);
         }
     }
-
+    
+    @Override
     public TGComponent isOnOnlyMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -554,11 +554,13 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
 
 
     //public abstract int getType();
-
+    
+    @Override
     public void wasSwallowed() {
         myColor = null;
     }
-
+    
+    @Override
     public void wasUnswallowed() {
         myColor = null;
         setFather(null);
@@ -566,7 +568,8 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         setCdRectangle(tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY());
 
     }
-
+    
+    @Override
     public void resizeWithFather() {
         //
         if ((father != null) && (father instanceof TMLCPrimitiveComponent)) {
@@ -579,7 +582,8 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
             oldy = -1;
         }
     }
-
+    
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
         //
         //String oldValue = valueOCL;
@@ -603,12 +607,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
             }
         }
 
-        JDialogTMLCompositePort jda = new JDialogTMLCompositePort(commName, typep, list[0], list[1], list[2], list[3],
-                list[4], isOrigin, isFinite, isBlocking,
-                ""+maxSamples, ""+widthSamples, isLossy, lossPercentage, maxNbOfLoss,
-                frame, "Port properties",
-                otherTypes, dataFlowType, associatedEvent, isPrex, isPostex, checkConf, checkAuth, reference, refs,
-                vc);
+        JDialogTMLCompositePort jda = new JDialogTMLCompositePort(commName, typep, list[0], list[1], list[2], list[3], list[4], isOrigin, isFinite, isBlocking, ""+maxSamples, ""+widthSamples, isLossy, lossPercentage, maxNbOfLoss, frame, "Port properties", otherTypes, dataFlowType, associatedEvent, isPrex, isPostex, checkConf, checkAuth, reference, refs, vc);
         // jda.setSize(350, 700);
         GraphicLib.centerOnParent(jda, 350, 700 );
         // jda.show(); // blocked until dialog has been closed
@@ -754,7 +753,8 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
         }
 
     }
-
+    
+    @Override
     protected String translateExtraParam() {
         TType a;
         //String val = "";
@@ -911,7 +911,7 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
                                     vc = Integer.decode(elt.getAttribute("vc"));
                                 } catch (Exception e) {
                                     vc = 0;
-                                }
+                               }
 
                             }
 
@@ -980,16 +980,16 @@ public abstract class TMLCPrimitivePort extends TGCScalableWithInternalComponent
     public void setParam(int index, TType t){
         list[index] = t;
     }
-
+    
+    @Override
     public int getDefaultConnector() {
         return TGComponentManager.CONNECTOR_PORT_TMLC;
     }
-
     public int getVC() {
         return vc;
     }
-
-
+    
+    @Override
     public String getAttributes() {
         String attr = "";
         if (isOrigin()) {

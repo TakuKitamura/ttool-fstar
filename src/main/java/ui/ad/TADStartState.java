@@ -54,18 +54,16 @@ import java.awt.geom.Line2D;
  */
 public class TADStartState extends TADComponentWithoutSubcomponents/* Issue #69 TGCWithoutInternalComponent*/ {
 	
-	protected int lineLength = 5;
+	//protected int lineLength = 5;
 
 	public TADStartState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
 		super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 		
-		width = 15;
-		height = 15;
-
+		// Issue #3&
 		createConnectingPoints();
-//		nbConnectingPoint = 1;
-//		connectingPoint = new TGConnectingPoint[1];
-//		connectingPoint[0] = new TGConnectingPointAD(this, 0, lineLength, false, true, 0.5, 1.0);
+//		width = 15;
+//		height = 15;
+		initScaling( 15, 15 );
 
 		nbInternalTGComponent = 0;
 
@@ -85,9 +83,11 @@ public class TADStartState extends TADComponentWithoutSubcomponents/* Issue #69 
     }
 
     @Override
-	public void internalDrawing(Graphics g) {
-		g.fillOval(x, y, width, height);
-		g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
+	protected void internalDrawing(Graphics g) {
+    	final int radius = width / 2;
+
+    	g.fillOval(x, y, radius * 2, radius * 2 );//width, height);
+		g.drawLine(x+(width/2), y+height, x+(width/2), (int) (y + lineLength /** oldScaleFactor*/ + height));
 	}
 
     @Override

@@ -36,23 +36,30 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.window;
 
-import ui.util.IconManager;
-import myutil.TraceManager;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
-import java.util.Vector;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Vector;
 
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import myutil.TraceManager;
 
 /**
  * Class JDialogCryptographicConfiguration
@@ -71,7 +78,7 @@ public class JDialogCryptographicConfiguration extends JDialogBase implements Ac
 
 	private JPanel panel1;
 
-	private List<securityAlgorithm> secAlgs;
+	private List<SecurityAlgorithm> secAlgs;
 	private Vector<String> algNames;
 	// Panel1
 	private JTextField [] texts;
@@ -96,16 +103,15 @@ public class JDialogCryptographicConfiguration extends JDialogBase implements Ac
 		nonces=_nonces;
 		keys=_keys;
 		texts = new JTextField[nbString];
-		secAlgs= new ArrayList<securityAlgorithm>();
+		secAlgs= new ArrayList<SecurityAlgorithm>();
 		algNames=new Vector<String>();
 		initComponents();
-		myInitComponents();
+		//myInitComponents();
 		pack();
 	}
 
-
-	private void myInitComponents() {
-	}
+//	private void myInitComponents() {
+//	}
 
 	private void initComponents() {
 		//These values are normalized to AES 128 bit as 100
@@ -114,28 +120,25 @@ public class JDialogCryptographicConfiguration extends JDialogBase implements Ac
 		//http://www.cs.wustl.edu/~jain/cse567-06/ftp/encryption_perf/index.html
 		//https://automationrhapsody.com/md5-sha-1-sha-256-sha-512-speed-performance/
 		//Add list of sample security algorithms
-		secAlgs.add(new securityAlgorithm("AES", "0","100","100","128","Symmetric Encryption"));  
-		secAlgs.add(new securityAlgorithm("Triple-DES", "0","200","200","128","Symmetric Encryption"));
+		secAlgs.add(new SecurityAlgorithm("AES", "0","100","100","128","Symmetric Encryption"));  
+		secAlgs.add(new SecurityAlgorithm("Triple-DES", "0","200","200","128","Symmetric Encryption"));
 		
-		secAlgs.add(new securityAlgorithm("RSA", "0","250","150","128","Asymmetric Encryption"));    
-		secAlgs.add(new securityAlgorithm("ECC", "0","315","310","128","Asymmetric Encryption"));    
+		secAlgs.add(new SecurityAlgorithm("RSA", "0","250","150","128","Asymmetric Encryption"));    
+		secAlgs.add(new SecurityAlgorithm("ECC", "0","315","310","128","Asymmetric Encryption"));    
 		
-		secAlgs.add(new securityAlgorithm("SHA-256", "0","370","370","128","Hash"));    
-		secAlgs.add(new securityAlgorithm("Whirlpool", "0","550","550","128","Hash"));  
+		secAlgs.add(new SecurityAlgorithm("SHA-256", "0","370","370","128","Hash"));    
+		secAlgs.add(new SecurityAlgorithm("Whirlpool", "0","550","550","128","Hash"));  
 		
-		secAlgs.add(new securityAlgorithm("Poly-1305", "0","400","400","128","MAC"));    
-		secAlgs.add(new securityAlgorithm("HMAC", "0","800","800","128","MAC")); 
+		secAlgs.add(new SecurityAlgorithm("Poly-1305", "0","400","400","128","MAC"));    
+		secAlgs.add(new SecurityAlgorithm("HMAC", "0","800","800","128","MAC")); 
 		
-		for (securityAlgorithm secAlg: secAlgs){
+		for (SecurityAlgorithm secAlg: secAlgs){
 			algNames.add(secAlg.name);
 		}
 		inserts = new JButton[nbString];
 		helps = new HashMap<>();
 
 		c = getContentPane();
-		//GridBagLayout gridbag0 = new GridBagLayout();
-
-
 
 		setFont(new Font("Helvetica", Font.PLAIN, 14));
 		c.setLayout(new BorderLayout());
@@ -146,7 +149,7 @@ public class JDialogCryptographicConfiguration extends JDialogBase implements Ac
 			panel1= new EncryptPanel(this);
 		}
 		else {
-			panel1=new funcPanel(this);
+			panel1=new FuncPanel(this);
 		}
 		/*c0.gridwidth = 1;
 		c0.gridheight = 10;
@@ -167,8 +170,9 @@ public class JDialogCryptographicConfiguration extends JDialogBase implements Ac
         c.add(panelButton, BorderLayout.SOUTH);
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent evt)  {
-		String command = evt.getActionCommand();
+		//String command = evt.getActionCommand();
 
 		// Compare the action command to the known actions.
 		 if (evt.getSource() == closeButton)  {
@@ -181,7 +185,7 @@ public class JDialogCryptographicConfiguration extends JDialogBase implements Ac
 			if (evt.getSource() == inserts[0]) {
 				texts[1].setText(helps.get(1).getSelectedItem().toString());
 				boolean repanel = false;
-				if (helps.get(1).getSelectedIndex()==5 && !(panel1 instanceof advPanel)){
+				if (helps.get(1).getSelectedIndex()==5 && !(panel1 instanceof AdvPanel)){
 					values[1]=helps.get(1).getSelectedItem().toString();
 					values[0]=texts[0].getText();
 					values[3]=texts[3].getText();
@@ -191,9 +195,9 @@ public class JDialogCryptographicConfiguration extends JDialogBase implements Ac
 					values[9]=texts[9].getText();
 					repanel=true;
 					c.removeAll();
-					panel1= new advPanel(this);
+					panel1= new AdvPanel(this);
 				}
-				else if ((helps.get(1).getSelectedIndex() >2) && !(panel1 instanceof funcPanel)){
+				else if ((helps.get(1).getSelectedIndex() >2) && !(panel1 instanceof FuncPanel)){
 					values[1]=helps.get(1).getSelectedItem().toString();
 					values[0]=texts[0].getText();
 					values[3]=texts[3].getText();
@@ -203,7 +207,7 @@ public class JDialogCryptographicConfiguration extends JDialogBase implements Ac
 					values[9]=texts[9].getText();
 					repanel=true;
 					c.removeAll();
-					panel1= new funcPanel(this);
+					panel1= new FuncPanel(this);
 				}
 				else if ((helps.get(1).getSelectedIndex() <3) && !(panel1 instanceof EncryptPanel)){
 					values[1]=helps.get(1).getSelectedItem().toString();
@@ -261,7 +265,7 @@ public class JDialogCryptographicConfiguration extends JDialogBase implements Ac
 			if (evt.getSource() == inserts[9]) {
 				if (helps.get(9).getSelectedItem()!=null){
 					texts[9].setText(helps.get(9).getSelectedItem().toString());
-					for (securityAlgorithm secAlg: secAlgs){
+					for (SecurityAlgorithm secAlg: secAlgs){
 						if (secAlg.name.equals(texts[9].getText())){
 							//Set algorithm times + overhead
 							texts[1].setText(secAlg.type);
@@ -397,14 +401,10 @@ public class JDialogCryptographicConfiguration extends JDialogBase implements Ac
 			texts[9]=new JTextField(values[9],15);
 			c1.gridwidth = GridBagConstraints.REMAINDER; //end row
 			add(texts[9],c1);
-
 		}
-
-
-
 	}
 
-	public class funcPanel extends JPanel {
+	public class FuncPanel extends JPanel {
         private void addEmptyLine(GridBagConstraints gc) {
             gc.weighty = 1.0;
             gc.weightx = 1.0;
@@ -414,7 +414,7 @@ public class JDialogCryptographicConfiguration extends JDialogBase implements Ac
             add(new JLabel(" "), gc);
         }
 
-		funcPanel(JDialogCryptographicConfiguration j){
+		FuncPanel(JDialogCryptographicConfiguration j){
 			GridBagConstraints c1 = new GridBagConstraints();
 			GridBagLayout gridbag1 = new GridBagLayout();
 
@@ -494,8 +494,7 @@ public class JDialogCryptographicConfiguration extends JDialogBase implements Ac
 		}
 	}
 
-
-	public class advPanel extends JPanel {
+	public class AdvPanel extends JPanel {
         private void addEmptyLine(GridBagConstraints gc) {
             gc.weighty = 1.0;
             gc.weightx = 1.0;
@@ -505,7 +504,7 @@ public class JDialogCryptographicConfiguration extends JDialogBase implements Ac
             add(new JLabel(" "), gc);
         }
 
-		advPanel(JDialogCryptographicConfiguration j){
+		AdvPanel(JDialogCryptographicConfiguration j){
 			GridBagConstraints c1 = new GridBagConstraints();
 			GridBagLayout gridbag1 = new GridBagLayout();
 
@@ -604,14 +603,14 @@ public class JDialogCryptographicConfiguration extends JDialogBase implements Ac
 		dispose();
 	}
 
-	public class securityAlgorithm {
+	public class SecurityAlgorithm {
 		String name;
 		String overhead;
 		String encryptCC;
 		String decryptCC;
 		String keysize;
 		String type;
-		public securityAlgorithm(String name, String overhead, String encryptCC, String decryptCC, String keysize, String type){
+		public SecurityAlgorithm(String name, String overhead, String encryptCC, String decryptCC, String keysize, String type){
 			this.name=name;
 			this.overhead=overhead;
 			this.encryptCC = encryptCC;

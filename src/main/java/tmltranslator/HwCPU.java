@@ -37,6 +37,8 @@
  */
 
 
+
+
 package tmltranslator;
 
 import tmltranslator.modelcompiler.ArchUnitMEC;
@@ -56,9 +58,9 @@ public class HwCPU extends HwExecutionNode {
 
     public static final int BASIC_ROUND_ROBIN = 0;
     public static final int ROUND_ROBIN_PRIORITY_BASED = 1;
-    public static final int ENCRYPTION_NONE = 0;
-    public static final int ENCRYPTION_SW = 1;
-    public static final int ENCRYPTION_HW = 2;
+    public static final int ENCRYPTION_NONE= 0;
+    public static final int ENCRYPTION_SW= 1;
+    public static final int ENCRYPTION_HW= 2;
     public static final int DEFAULT_NB_OF_CORES = 1;
     public static final int DEFAULT_BYTE_DATA_SIZE = 4;
     public static final int DEFAULT_PIPELINE_SIZE = 5;
@@ -71,7 +73,7 @@ public class HwCPU extends HwExecutionNode {
     public static final int DEFAULT_SLICE_TIME = 10000; // in microseconds
     public static final ArchUnitMEC DEFAULT_MODEL_EXTENSION_CONSTRUCT = new CpuMEC();
 
-    public int encryption = 0;
+    public int encryption  = 0;
     public int nbOfCores = DEFAULT_NB_OF_CORES; // Should be equal or greater than 1
     public int byteDataSize = DEFAULT_BYTE_DATA_SIZE; // Should be greater than 0
     public int pipelineSize = DEFAULT_PIPELINE_SIZE; // Should be greater than 0
@@ -88,14 +90,15 @@ public class HwCPU extends HwExecutionNode {
         super(_name);
         maximumNbOfTasks = 100;
     }
-
+    
+    @Override
     public String getType() {
-        switch (schedulingPolicy) {
-            case ROUND_ROBIN_PRIORITY_BASED:
-                return "CPURRPB";
-            case BASIC_ROUND_ROBIN:
-            default:
-                return "CPURR";
+        switch(schedulingPolicy) {
+        case ROUND_ROBIN_PRIORITY_BASED:
+            return "CPURRPB";
+        case BASIC_ROUND_ROBIN:
+        default:
+            return "CPURR";
         }
     }
 

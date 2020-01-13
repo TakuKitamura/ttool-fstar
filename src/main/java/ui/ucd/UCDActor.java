@@ -37,6 +37,8 @@
  */
 
 
+
+
 package ui.ucd;
 
 import myutil.GraphicLib;
@@ -64,54 +66,54 @@ public class UCDActor extends TGCScalableWithoutInternalComponentOneLineText {
     private int maxFontSize = 12;
     private int minFontSize = 4;
     private int currentFontSize = -1;*/
-
-    public UCDActor(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
+    
+    public UCDActor(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-
-        width = (int) (30 * tdp.getZoom());
-        height = (int) (70 * tdp.getZoom());
+	
+        width = (int)(30 * tdp.getZoom());
+        height = (int)(70 * tdp.getZoom());
         oldScaleFactor = tdp.getZoom();
         //minWidth = 30;
-
+        
         nbConnectingPoint = 24;
         connectingPoint = new TGConnectingPoint[nbConnectingPoint];
         int i;
-        for (int j = 0; j < 24; j = j + 12) {
-            for (i = 0; i < 5; i++) {
-                connectingPoint[i + j] = new TGConnectingPointActorUCD(this, 0, 0, true, true, 0.0, ((double) (i)) / 4);
+        for(int j=0; j<24; j = j + 12) {
+            for(i=0; i<5; i++) {
+                connectingPoint[i + j] = new TGConnectingPointActorUCD(this, 0, 0, true, true, 0.0, ((double)(i))/4);
             }
-            connectingPoint[5 + j] = new TGConnectingPointActorUCD(this, 0, 0, true, true, 0.5, 0.0);
-            connectingPoint[6 + j] = new TGConnectingPointActorUCD(this, 0, 0, true, true, 0.5, 1.0);
-            for (i = 0; i < 5; i++) {
-                connectingPoint[i + 7 + j] = new TGConnectingPointActorUCD(this, 0, 0, true, true, 1.0, ((double) i) / 4);
+            connectingPoint[5+j] = new TGConnectingPointActorUCD(this, 0, 0, true, true, 0.5, 0.0);
+            connectingPoint[6+j] = new TGConnectingPointActorUCD(this, 0, 0, true, true, 0.5, 1.0);
+            for(i=0; i<5; i++) {
+                connectingPoint[i+7+j] = new TGConnectingPointActorUCD(this, 0, 0, true, true, 1.0, ((double)i)/4);
             }
         }
         addTGConnectingPointsComment();
-
+        
         moveable = true;
         editable = true;
         removable = true;
 
         super.oldScaleFactor = tdp.getZoom();
         //currentFontSize = (int) (maxFontSize*oldScaleFactor);
-
+        
         value = "Actor";
         name = "actor";
-
+        
         myImageIcon = IconManager.imgic600;
     }
 
     @Override
-    public void internalDrawing(Graphics graph) {
-        Font font = graph.getFont();
-        this.internalDrawingAux(graph);
-        graph.setFont(font);
+    public void internalDrawing (Graphics graph) {
+        Font font = graph.getFont ();
+        this.internalDrawingAux (graph);
+        graph.setFont (font);
     }
-
+    
     public void internalDrawingAux(Graphics graph) {
-        //Font font = graph.getFont ();
-        //  String ster;
-
+	//Font font = graph.getFont ();
+      //  String ster;
+	
 	/*if (this.rescaled && !this.tdp.isScaled ()) {
             this.rescaled = false;
             // Must set the font size...
@@ -139,49 +141,53 @@ public class UCDActor extends TGCScalableWithoutInternalComponentOneLineText {
             }
 	    }*/
 
-
-        w = graph.getFontMetrics().stringWidth(value);
+	
+        w  = graph.getFontMetrics().stringWidth(value);
         h = graph.getFontMetrics().getHeight();
         height = height - h;
         //g.drawRoundRect(x - width/2, y, width, height, arc, arc);
-        graph.drawOval(x + width / 4, y, width / 2, width / 2);
+        graph.drawOval(x + width/4, y, width/2, width/2);
         //Body
-        graph.drawLine(x + width / 2, y + width / 2, x + width / 2, y + height - width / 2);
+        graph.drawLine(x+width/2, y+width/2, x+width/2, y+height-width/2);
         //Arms
-        graph.drawLine(x, y + width / 2 + 8, x + width, y + width / 2 + 8);
+        graph.drawLine(x, y+width/2 + 8, x+width, y+width/2 + 8);
         //Left leg
-        graph.drawLine(x + width / 2, y + height - width / 2, x, y + height);
+        graph.drawLine(x+width/2, y+height-width/2, x, y+height);
         //right leg
-        graph.drawLine(x + width / 2, y + height - width / 2, x + width, y + height);
+        graph.drawLine(x+width/2, y+height-width/2, x+width, y+height);
         //name of actor
-        graph.drawString(value, x + width / 2 - w / 2, y + height + h);
+        drawSingleString(graph, value, x + width / 2 - w / 2 , y + height + h);
         height = height + h;
     }
-
+    
+    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
         }
-        if (GraphicLib.isInRectangle(_x, _y, x + width / 2 - w / 2, y + height - h, w, h)) {
+        if (GraphicLib.isInRectangle(_x, _y, x + width / 2 - w / 2, y +height - h, w, h)) {
             return this;
         }
         return null;
     }
-
+    
+    @Override
     public int getMyCurrentMinX() {
         return Math.min(x + width / 2 - w / 2, x);
 
     }
-
+    
+    @Override
     public int getMyCurrentMaxX() {
         return Math.max(x + width / 2 + w / 2, x + width);
     }
-
+  
     public String getActorName() {
         return value;
     }
-
-
+    
+    
+    @Override
     public int getType() {
         return TGComponentManager.UCD_ACTOR;
     }

@@ -58,8 +58,8 @@ import java.awt.*;
  */
 public class ADDBlockArtifact extends TGCWithoutInternalComponent implements SwallowedTGComponent {
     protected int lineLength = 5;
-    protected int textX =  5;
-    protected int textY =  15;
+//    protected int textX =  5;
+//    protected int textY =  15;
     protected int textY2 =  35;
     protected int space = 5;
     protected int fileX = 20;
@@ -73,9 +73,12 @@ public class ADDBlockArtifact extends TGCWithoutInternalComponent implements Swa
     public ADDBlockArtifact(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
+        textY =  15;
+        textX =  5;
         width = 75;
         height = 40;
         minWidth = 75;
+        initScaling(75,40);
         
         nbConnectingPoint = 0;
         addTGConnectingPointsComment();
@@ -114,9 +117,12 @@ public class ADDBlockArtifact extends TGCWithoutInternalComponent implements Swa
         g.drawLine(x+width-space-cran, y+space, x+width-space-cran, y+space+cran);
         g.drawLine(x+width-space-cran, y+space+cran, x + width-space, y+space+cran);
 		
+
+		g.drawImage(scale(IconManager.img9), x+scale(width-space-fileX + 3), y + scale(space + 7), null);
+
 		//g.drawImage(IconManager.img9, x+width-space-fileX + 3, y + space + 7, null);
         
-        g.drawString(value, x + textX , y + textY);
+        drawSingleString(g, value, x + textX , y + textY);
         
     }
     

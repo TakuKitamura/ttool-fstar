@@ -72,9 +72,4 @@ public abstract class AbstractCDElement implements CDElement {
 	public void acceptBackward( final ICDElementVisitor visitor ) {
 		visitor.visit( this );
     }
-//    
-//    @Override
-//    public boolean isFullDisabler() {
-//    	return false;
-//    }
 }

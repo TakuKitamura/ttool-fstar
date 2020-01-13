@@ -39,26 +39,26 @@
 
 package ui.avatarrd;
 
-
-import myutil.Conversion;
+//import java.awt.event.ActionEvent;
+//import java.awt.event.ActionListener;
+//import java.util.Arrays;
+//import java.util.LinkedList;
+//import ui.window.JDialogIDAndStereotype;
+//import ui.window.JDialogRequirement;
+//import myutil.TraceManager;
+//import org.w3c.dom.Element;
+//import org.w3c.dom.Node;
+//import org.w3c.dom.NodeList;
+//import myutil.Conversion;
 import myutil.GraphicLib;
-import myutil.TraceManager;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import ui.*;
 import ui.util.IconManager;
 import ui.window.JDialogChoiceSelection;
-import ui.window.JDialogIDAndStereotype;
-import ui.window.JDialogRequirement;
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
+
 
 /**
  * Class AvatarRDRequirementReference
@@ -73,8 +73,8 @@ public class AvatarRDRequirementReference extends TGCScalableWithInternalCompone
     public static String  DEFAULT_REF = "UnsetReference";
 
     public String oldValue;
-    protected int textX = 5;
-    protected int textY = 22;
+    //protected int textX = 5;
+//    protected int textY = 22;
     protected int lineHeight = 30;
     private double dlineHeight = 0.0;
     //protected int reqType = 0;
@@ -98,15 +98,19 @@ public class AvatarRDRequirementReference extends TGCScalableWithInternalCompone
 
     public AvatarRDRequirementReference(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-
+        
+        //Issue #31
+        minWidth = 1;
+        minHeight = lineHeight;
+        textX = 5;
+        textY = 22;
         initScaling(200, 120);
+        
+        
         oldScaleFactor = tdp.getZoom();
         dlineHeight = lineHeight * oldScaleFactor;
         lineHeight = (int) dlineHeight;
         dlineHeight = dlineHeight - lineHeight;
-
-        minWidth = 1;
-        minHeight = lineHeight;
 
         nbConnectingPoint = 40;
         connectingPoint = new TGConnectingPoint[nbConnectingPoint];

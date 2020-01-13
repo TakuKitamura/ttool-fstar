@@ -36,19 +36,18 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui;
 
-import myutil.GraphicLib;
-import myutil.TraceManager;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import ui.util.IconManager;
 
-import java.awt.*;
+import myutil.GraphicLib;
+import ui.util.IconManager;
 
 /**
    * Class TGCPanelInfo
@@ -69,8 +68,11 @@ public class TGCPanelInfo extends TGCScalableWithoutInternalComponent {
     public final static int LOWER_MIDDLE = 8;
     public final static int LOWER_RIGHT = 9;
     
-    protected int marginY = 5;
-    protected int marginX = 5;
+    // Issue #31
+    private static final int MARGIN_X = 5;
+    private static final int MARGIN_Y = 5;
+//    protected int marginY = 5;
+//    protected int marginX = 5;
     
     protected Graphics myg;
 
@@ -96,7 +98,8 @@ public class TGCPanelInfo extends TGCScalableWithoutInternalComponent {
         minWidth = 20;
         minHeight = 20;
 
-        oldScaleFactor = tdp.getZoom();
+        // Issue #31
+        //oldScaleFactor = tdp.getZoom();
 
         nbConnectingPoint = 0;
         //addTGConnectingPointsComment();
@@ -130,7 +133,7 @@ public class TGCPanelInfo extends TGCScalableWithoutInternalComponent {
     }
 
     @Override
-    public void internalDrawing(Graphics g) {
+    protected void internalDrawing(Graphics g) {
         Font f = g.getFont();
         //Font fold = f;
 
@@ -161,6 +164,10 @@ public class TGCPanelInfo extends TGCScalableWithoutInternalComponent {
 		g.setFont(f.deriveFont(Font.BOLD));
 		//int h = g.getFontMetrics().getHeight();
 		int w = g.getFontMetrics().stringWidth(value);
+		
+		// Issue #31
+		final int marginX = scale( MARGIN_X );
+		final int marginY = scale( MARGIN_Y );
 		
 		switch(stringPos) {
 		case UPPER_LEFT:
@@ -203,15 +210,15 @@ public class TGCPanelInfo extends TGCScalableWithoutInternalComponent {
         return null;
     }
 
-    @Override
-    public void rescale(double scaleFactor){
+//    @Override
+//    public void rescale(double scaleFactor){
         /*dlineHeight = (lineHeight + dlineHeight) / oldScaleFactor * scaleFactor;
           lineHeight = (int)(dlineHeight);
           dlineHeight = dlineHeight - lineHeight;
           minHeight = lineHeight;*/
 
-        super.rescale(scaleFactor);
-    }
+//        super.rescale(scaleFactor);
+//    }
 
     @Override
     public int getType() {

@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmlsd;
 
 import myutil.GraphicLib;
@@ -55,18 +52,22 @@ import java.awt.*;
  * @author Ludovic APVRILLE
  */
 public class TMLSDActionState extends TGCOneLineText implements SwallowedTGComponent {
-    protected int lineLength = 5;
-    protected int textX =  5;
-    protected int textY =  15;
-    protected int arc = 5;
-    protected int w; //w1;
+
+	// Issue #31
+	//    protected int lineLength = 5;
+//    protected int textX =  5;
+//    protected int textY =  15;
+//    protected int arc = 5;
+    //protected int w; //w1;
     
     public TMLSDActionState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-        width = 30;
-        height = 20;
-        minWidth = 30;
+        // Issue #31
+        initScaling( 30, 20 );
+//        width = 30;
+//        height = 20;
+        minWidth = scale( 30 );
         
         nbConnectingPoint = 0;
         addTGConnectingPointsCommentMiddle();
@@ -81,17 +82,21 @@ public class TMLSDActionState extends TGCOneLineText implements SwallowedTGCompo
         myImageIcon = IconManager.imgic512;
     }
     
-    public void internalDrawing(Graphics g) {
-        w  = g.getFontMetrics().stringWidth(value);
-        int w1 = Math.max(minWidth, w + 2 * textX);
-        if ((w1 != width) && (!tdp.isScaled())) {
-            width = w1;
-        }
+    @Override
+    protected void internalDrawing(Graphics g) {
+
+    	// Issue #31
+        final int w = checkWidth( g );//g.getFontMetrics().stringWidth(value);
+//        int w1 = Math.max(minWidth, w + 2 * textX);
+//        if ((w1 != width) && (!tdp.isScaled())) {
+//            width = w1;
+//        }
         g.drawRoundRect(x - width/2, y, width, height, arc, arc);
         
-        g.drawString(value, x - w / 2 , y + textY);
+        drawSingleString(g,value, x - w / 2 , y + textY);
     }
     
+    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x - width/2, y, width, height)) {
             return this;
@@ -99,7 +104,6 @@ public class TMLSDActionState extends TGCOneLineText implements SwallowedTGCompo
         return null;
     }
     
- 
     public String getAction() {
         return value;
     }
@@ -129,8 +133,8 @@ public class TMLSDActionState extends TGCOneLineText implements SwallowedTGCompo
         return ret;
     }
     
+    @Override
     public int getType() {
         return TGComponentManager.TMLSD_ACTION_STATE;
     }
-  
 }
