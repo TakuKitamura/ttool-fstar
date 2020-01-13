@@ -138,7 +138,7 @@ public class TMLADDecrypt extends TADComponentWithoutSubcomponents/* Issue #69 T
         g.drawLine(x + (width / 2), y + height + scaledMargin, x + (width / 2), y + lineLength + height + scaledMargin);
 
         // D
-        final int xPosOffset = (int) (width / 3 );
+        final int xPosOffset = width / 3 ;
         final int scaledSymbolMarginY = scale( DEC_SYMBOL_MARGIN_Y );
         g.drawLine(x + xPosOffset, y + scaledSymbolMarginY, x + xPosOffset, y + height - scaledSymbolMarginY );
         g.drawArc(x - scaledMargin, y + scaledMargin, width, height - 2 * scaledMargin, 270, 180);

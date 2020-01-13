@@ -262,7 +262,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         if (h + textY >= this.height)
             return;
         h += graph.getFontMetrics().getDescent() + textY;
-        if (canTextGoInTheBox(graph, h, "line", 0));
+        //if (canTextGoInTheBox(graph, h, "line", 0));
         graph.drawLine(this.x, this.y + h, this.x + this.width, this.y + h);
         h += textY;
         
@@ -300,6 +300,8 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         this.limitAttr = this.y + h;
         if (h + textY >= this.height)
             return;
+
+        h += graph.getFontMetrics().getDescent();
 
         graph.drawLine(this.x, this.y + h, this.x + this.width, this.y + h);
         h += textY;

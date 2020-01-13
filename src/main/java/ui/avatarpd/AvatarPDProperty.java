@@ -138,12 +138,13 @@ public class AvatarPDProperty extends TGCScalableWithInternalComponent implement
     	// Liveness
         
 		String state;
-		switch(kind)
-		{
+		switch(kind) {
 			case 0:
 				state="liveness";
+				break;
 			case 1:
 				state="reachability";
+				break;
 			default:
 				state="safety";
 		}

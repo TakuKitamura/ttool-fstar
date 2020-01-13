@@ -466,7 +466,7 @@ public class TMLTaskDiagramPanel extends TDiagramPanel {
 		String name;
         
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             if (tgc instanceof TMLTaskOperator) {
 				name = ((TMLTaskOperator)tgc).getTaskName();
 				if (ref && name.equals(_name)) {
@@ -488,7 +488,7 @@ public class TMLTaskDiagramPanel extends TDiagramPanel {
 		//List<String> list = new ArrayList<String>();
         
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             if (tgc instanceof TMLTaskOperator) {
 				if (((TMLTaskOperator)tgc).getTaskName().equals(_name)) {
 					return ((TMLTaskOperator)tgc);

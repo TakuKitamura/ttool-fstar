@@ -87,7 +87,7 @@ public class TADStartState extends TADComponentWithoutSubcomponents/* Issue #69 
     	final int radius = width / 2;
 
     	g.fillOval(x, y, radius * 2, radius * 2 );//width, height);
-		g.drawLine(x+(width/2), y+height, x+(width/2), (int) (y + lineLength /** oldScaleFactor*/ + height));
+		g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength /** oldScaleFactor*/ + height);
 	}
 
     @Override

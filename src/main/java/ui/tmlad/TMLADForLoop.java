@@ -158,7 +158,7 @@ public class TMLADForLoop extends TADForLoop /* Issue #69 TGCWithoutInternalComp
 		//int wTmp =  g.getFontMetrics().stringWidth(EXIT_LOOP);
 		
 		// Issue #31
-		drawSingleString(g,EXIT_LOOP, (int) (x+width/2+ 2 * oldScaleFactor), (int) (y+height+ scale( 10 ) ) );
+		drawSingleString(g,EXIT_LOOP, (int) (x+width/2+ 2 * oldScaleFactor), y+height+ scale( 10 ));
     }
 
     @Override
