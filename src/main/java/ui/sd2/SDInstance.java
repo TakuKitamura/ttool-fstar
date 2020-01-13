@@ -340,19 +340,19 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
         }
 
         if (tgc instanceof SDTimerSetting) {
-            realX = getX()+(width/2) + ((SDTimerSetting)tgc).getLineLength() - tgc.getWidth()/2;
+            realX = getX()+(width/2) ;
             //tgc.setCdRectangle((width/2) + ((SDTimerSetting)tgc).getLineLength() - tgc.getWidth()/2, (width/2) + ((SDTimerSetting)tgc).getLineLength() - tgc.getWidth()/2, spacePt - tgc.getHeight()/2, height-spacePt-tgc.getHeight() / 2);
             tgc.setCd(realX, realY);
         }
 
         if (tgc instanceof SDTimerExpiration) {
-            realX = getX()+(width/2) + ((SDTimerExpiration)tgc).getLineLength() - tgc.getWidth()/2;
+            realX = getX() + (width/2) ;
             //tgc.setCdRectangle((width/2) + ((SDTimerExpiration)tgc).getLineLength() - tgc.getWidth()/2, (width/2) + ((SDTimerExpiration)tgc).getLineLength() - tgc.getWidth()/2, spacePt - tgc.getHeight()/2, height-spacePt-tgc.getHeight() / 2);
             tgc.setCd(realX, realY);
         }
 
         if (tgc instanceof SDTimerCancellation) {
-            realX = getX()+(width/2) + ((SDTimerCancellation)tgc).getLineLength() - tgc.getWidth()/2;
+            realX = getX()+(width/2) ;
             //tgc.setCdRectangle((width/2) + ((SDTimerCancellation)tgc).getLineLength() - tgc.getWidth()/2, (width/2) + ((SDTimerCancellation)tgc).getLineLength() - tgc.getWidth()/2, spacePt - tgc.getHeight()/2, height-spacePt-tgc.getHeight() / 2);
             tgc.setCd(realX, realY);
         }
@@ -539,15 +539,15 @@ public class SDInstance extends TGCScalableWithInternalComponent implements Swal
         }
 
         if (tgc instanceof SDTimerSetting) {
-            tgc.setCdRectangle((width/2) + ((SDTimerSetting)tgc).getLineLength() - tgc.getWidth()/2, (width/2) + ((SDTimerSetting)tgc).getLineLength() - tgc.getWidth()/2, spacePt() - tgc.getHeight()/2, height- spacePt() -tgc.getHeight() / 2);
+            tgc.setCdRectangle((width/2), (width/2), spacePt() - tgc.getHeight()/2, height- spacePt() -tgc.getHeight() / 2);
         }
 
         if (tgc instanceof SDTimerExpiration) {
-            tgc.setCdRectangle((width/2) + ((SDTimerExpiration)tgc).getLineLength() - tgc.getWidth()/2, (width/2) + ((SDTimerExpiration)tgc).getLineLength() - tgc.getWidth()/2, spacePt() - tgc.getHeight()/2, height- spacePt() -tgc.getHeight() / 2);
+            tgc.setCdRectangle((width/2) , (width/2), spacePt() - tgc.getHeight()/2, height- spacePt() -tgc.getHeight() / 2);
         }
 
         if (tgc instanceof SDTimerCancellation) {
-            tgc.setCdRectangle((width/2) + ((SDTimerCancellation)tgc).getLineLength() - tgc.getWidth()/2, (width/2) + ((SDTimerCancellation)tgc).getLineLength() - tgc.getWidth()/2, spacePt() - tgc.getHeight()/2, height- spacePt() -tgc.getHeight() / 2);
+            tgc.setCdRectangle((width/2), (width/2) , spacePt() - tgc.getHeight()/2, height- spacePt() -tgc.getHeight() / 2);
         }
     }
 

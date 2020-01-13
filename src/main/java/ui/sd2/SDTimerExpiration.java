@@ -61,12 +61,11 @@ import java.awt.*;
 public class SDTimerExpiration extends TGCScalableWithoutInternalComponent implements SwallowedTGComponent {
     private String timer = "myTimer";
     private int widthValue, heightValue;
-    private int lineWidth = 20;
     
     public SDTimerExpiration(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-	width = (int)(15 * tdp.getZoom());
+	    width = (int)(30 * tdp.getZoom());
         height = (int)(25 * tdp.getZoom());
         oldScaleFactor = tdp.getZoom();
 
@@ -87,6 +86,7 @@ public class SDTimerExpiration extends TGCScalableWithoutInternalComponent imple
     }
     
     public void internalDrawing(Graphics g) {
+
         if (!tdp.isScaled()) {
             widthValue  = g.getFontMetrics().stringWidth(value);
             heightValue = g.getFontMetrics().getHeight();
@@ -94,20 +94,17 @@ public class SDTimerExpiration extends TGCScalableWithoutInternalComponent imple
         
         g.drawString(value, x+width, y+height/2+3);
         
-        g.drawLine(x, y, x+width, y+height);
-        g.drawLine(x, y, x+width, y);
-        g.drawLine(x, y+height, x+width, y+height);
-        g.drawLine(x+width, y, x, y+height);
+        g.drawLine(x+width/2, y, x+width, y+height);
+        g.drawLine(x+width/2, y, x+width, y);
+        g.drawLine(x+width/2, y+height, x+width, y+height);
+        g.drawLine(x+width, y, x+width/2, y+height);
         
-        GraphicLib.arrowWithLine(g, 2, 0, 10, x+width/2-lineWidth, y+height/2, x+width/2, y+height/2, true);
+        GraphicLib.arrowWithLine(g, 2, 0, 10, x, y+height/2, x+width/2, y+height/2, true);
     }
-    
-    public int getLineLength() {
-        return lineWidth;
-    }
+
     
     public TGComponent isOnMe(int _x, int _y) {
-        if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
+        if (GraphicLib.isInRectangle(_x, _y, x+width/2, y, width/2, height)) {
             return this;
         }
         
@@ -117,7 +114,7 @@ public class SDTimerExpiration extends TGCScalableWithoutInternalComponent imple
         }
         
         /* line */
-        if (GraphicLib.isInRectangle(_x, _y, x+width/2-lineWidth, y+height/2-2, lineWidth, 4)) {
+        if (GraphicLib.isInRectangle(_x, _y, x, y+height/2-2, width/2, 4)) {
             return this;
         }
         return null;
