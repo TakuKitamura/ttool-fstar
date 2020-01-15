@@ -87,14 +87,16 @@ public class UCDBorder extends TGCScalableWithoutInternalComponentOneLineText {
         myImageIcon = IconManager.imgic612;
     }
     
+    @Override
     public void internalDrawing(Graphics g) {
         w  = g.getFontMetrics().stringWidth(value);
         h = g.getFontMetrics().getHeight();
         
         g.drawRect(x, y, width, height);
-        g.drawString(value, x + width - w - textSpace, y + h);
+        drawSingleString(g, value, x + width - w - textSpace, y + h);
     }
     
+    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -107,6 +109,7 @@ public class UCDBorder extends TGCScalableWithoutInternalComponentOneLineText {
     }
     
     
+    @Override
     public int getType() {
         return TGComponentManager.UCD_BORDER;
     }

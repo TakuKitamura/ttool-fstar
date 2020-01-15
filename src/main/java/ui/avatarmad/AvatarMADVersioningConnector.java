@@ -76,7 +76,7 @@ public  class AvatarMADVersioningConnector extends TGConnectorWithCommentConnect
 		myImageIcon = IconManager.imgic1008;
     }
     
-    
+    @Override
     protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
 		 
         //g.drawLine(x1, y1, x2, y2);
@@ -100,6 +100,7 @@ public  class AvatarMADVersioningConnector extends TGConnectorWithCommentConnect
  		g.setFont(old);
     }
     
+    @Override
     public TGComponent extraIsOnOnlyMe(int x1, int y1) {
         if (GraphicLib.isInRectangle(x1, y1, (p1.getX() + p2.getX() - w) / 2, (p1.getY() + p2.getY())/2 - h, w, h)) {
             return this;
@@ -111,6 +112,7 @@ public  class AvatarMADVersioningConnector extends TGConnectorWithCommentConnect
         return null;
     }
     
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
     	JDialogVersioningConnector jdvc = new JDialogVersioningConnector(frame, oldVersion, newVersion);
      //   jdvc.setSize(400, 300);
@@ -137,6 +139,7 @@ public  class AvatarMADVersioningConnector extends TGConnectorWithCommentConnect
     	return true;
     }
     
+    @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<oldVersion data=\"");
@@ -212,9 +215,7 @@ public  class AvatarMADVersioningConnector extends TGConnectorWithCommentConnect
 		
     }
     
-    
-    
-    
+    @Override
     public int getType() {
         return TGComponentManager.AVATARMAD_VERSIONING_CONNECTOR;
     }

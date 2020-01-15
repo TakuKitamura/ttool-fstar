@@ -37,16 +37,19 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package ui.avatardd;
 
+import java.util.Iterator;
+import java.util.Vector;
+
+import org.w3c.dom.Element;
 
 import myutil.TraceManager;
-import org.w3c.dom.Element;
-import ui.*;
-
-import java.util.ListIterator;
-import java.util.Vector;
+import ui.MainGUI;
+import ui.TDPWithAttributes;
+import ui.TDiagramPanel;
+import ui.TGComponent;
+import ui.TToolBar;
 
 /**
  * Class ADDDiagramPanel
@@ -66,6 +69,7 @@ public class ADDDiagramPanel extends TDiagramPanel implements TDPWithAttributes 
           addMouseMotionListener(tdmm);*/
     }
 
+    @Override
     public boolean actionOnDoubleClick(TGComponent tgc) {
         //
         /*if (tgc instanceof TCDTClass) {
@@ -86,6 +90,7 @@ public class ADDDiagramPanel extends TDiagramPanel implements TDPWithAttributes 
         return false;
     }
 
+    @Override
     public boolean actionOnAdd(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {
           TCDTClass tgcc = (TCDTClass)(tgc);
@@ -96,6 +101,7 @@ public class ADDDiagramPanel extends TDiagramPanel implements TDPWithAttributes 
         return false;
     }
 
+    @Override
     public boolean actionOnRemove(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {
           TCDTClass tgcc = (TCDTClass)(tgc);
@@ -106,7 +112,8 @@ public class ADDDiagramPanel extends TDiagramPanel implements TDPWithAttributes 
         return false;
     }
 
-    public boolean actionOnValueChanged(TGComponent tgc) {
+   @Override
+   public boolean actionOnValueChanged(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {
           return actionOnDoubleClick(tgc);
           }*/
@@ -121,26 +128,32 @@ public class ADDDiagramPanel extends TDiagramPanel implements TDPWithAttributes 
         masterClockFrequency = _masterClockFrequency;
     }
 
+    @Override
     public String getXMLHead() {
         return "<ADDDiagramPanel name=\"" + name + "\"" + sizeParam() + displayParam() + displayClock() + " >";
     }
 
+    @Override
     public String getXMLTail() {
         return "</ADDDiagramPanel>";
     }
 
+    @Override
     public String getXMLSelectedHead() {
         return "<ADDDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
     }
 
+    @Override
     public String getXMLSelectedTail() {
         return "</ADDDiagramPanelCopy>";
     }
 
+    @Override
     public String getXMLCloneHead() {
         return "<ADDDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
     }
 
+    @Override
     public String getXMLCloneTail() {
         return "</ADDDiagramPanelCopy>";
     }
@@ -184,22 +197,21 @@ public class ADDDiagramPanel extends TDiagramPanel implements TDPWithAttributes 
         }
     }
 
-
     public boolean isMapped(String _ref, String _name) {
-        ListIterator iterator = componentList.listIterator();
+        Iterator<TGComponent> iterator = componentList.listIterator();
         TGComponent tgc;
-        ADDCPUNode node;
-        Vector v;
+      //  ADDCPUNode node;
+        Vector<ADDBlockArtifact> v;
         ADDBlockArtifact artifact;
         int i;
         String name = _ref + "::" + _name;
 
         while (iterator.hasNext()) {
-            tgc = (TGComponent) (iterator.next());
+            tgc = iterator.next();
             if (tgc instanceof ADDCPUNode) {
                 v = ((ADDCPUNode) (tgc)).getArtifactList();
                 for (i = 0; i < v.size(); i++) {
-                    artifact = (ADDBlockArtifact) (v.get(i));
+                    artifact = v.get(i);
                     if (artifact.getValue().equals(name)) {
                         return true;
                     }
@@ -211,20 +223,20 @@ public class ADDDiagramPanel extends TDiagramPanel implements TDPWithAttributes 
     }
 
     public boolean isChannelMapped(String _ref, String _name) {
-        ListIterator iterator = componentList.listIterator();
+        Iterator<TGComponent> iterator = componentList.listIterator();
         TGComponent tgc;
-        ADDMemoryNode node;
-        Vector v;
+        //ADDMemoryNode node;
+        Vector<ADDChannelArtifact> v;
         ADDChannelArtifact artifact;
         int i;
         String name = _ref + "::" + _name;
 
         while (iterator.hasNext()) {
-            tgc = (TGComponent) (iterator.next());
+            tgc = iterator.next();
             if (tgc instanceof ADDRAMNode) {
                 v = ((ADDRAMNode) (tgc)).getArtifactList();
                 for (i = 0; i < v.size(); i++) {
-                    artifact = (ADDChannelArtifact) (v.get(i));
+                    artifact = v.get(i);
                     TraceManager.addDev("Comparing " + artifact.getLongChannelName() + " with " + name);
                     if (artifact.getLongChannelName().equals(name)) {
                         return true;
@@ -236,120 +248,5 @@ public class ADDDiagramPanel extends TDiagramPanel implements TDPWithAttributes 
         return false;
     }
 
-    /*public void renameMapping(String oldName, String newName) {
-      ListIterator iterator = getListOfNodes().listIterator();
-      TMLArchiNode node;
-      Vector v;
-      TMLArchiArtifact artifact;
-      ArrayList<TMLArchiCommunicationArtifact> ChannelList;
-      ArrayList<TMLArchiEventArtifact> EventList;
-      int i;
-
-      while(iterator.hasNext()) {
-      node = (TMLArchiNode)(iterator.next());
-
-      // Task mapping
-
-      if ((node instanceof TMLArchiCPUNode) || (node instanceof TMLArchiHWANode)) {
-      if (node instanceof TMLArchiCPUNode) {
-      v =  ((TMLArchiCPUNode)(node)).getArtifactList();
-      //
-      } else {
-      v =  ((TMLArchiHWANode)(node)).getArtifactList();
-      //
-      }
-
-      for(i=0; i<v.size(); i++) {
-      artifact = (TMLArchiArtifact)(v.get(i));
-      if (artifact.getReferenceTaskName().compareTo(oldName) == 0) {
-      artifact.setReferenceTaskName(newName);
-      }
-      }
-      }
-
-      // Channel, request mapping
-      if( node instanceof TMLArchiCommunicationNode ) {
-      ChannelList = ( (TMLArchiCommunicationNode)node ).getChannelArtifactList();
-      for( TMLArchiCommunicationArtifact arti: ChannelList )    {
-      if( arti.getReferenceCommunicationName().compareTo( oldName ) == 0) {
-      arti.setReferenceCommunicationName( newName );
-      }
-      }
-      //Event mapping
-      EventList = ((TMLArchiCommunicationNode)node).getEventArtifactList();
-      for(TMLArchiEventArtifact arti: EventList) {
-      if( arti.getReferenceEventName().compareTo( oldName ) == 0 ) {
-      arti.setReferenceEventName( newName );
-      }
-      }
-      }
-      }
-      }
-
-      public void setPriority( String _name, int _priority ) {
-
-      ListIterator iterator = getListOfNodes().listIterator();
-      TMLArchiNode node;
-      Vector v;
-      TMLArchiArtifact artifact;
-      ArrayList<TMLArchiCommunicationArtifact> ChannelList;
-      ArrayList<TMLArchiEventArtifact> EventList;
-      int i;
-
-      while(iterator.hasNext()) {
-      node = (TMLArchiNode)(iterator.next());
-
-
-      // Channel, request mapping
-      if( node instanceof TMLArchiCommunicationNode ) {
-      ChannelList = ( (TMLArchiCommunicationNode)node ).getChannelArtifactList();
-      for( TMLArchiCommunicationArtifact arti: ChannelList ) {
-      if( arti.getFullValue().compareTo( _name ) == 0) {
-      arti.setPriority(_priority);
-      }
-      }
-      //Event mapping
-      EventList = ( (TMLArchiCommunicationNode)node ).getEventArtifactList();
-      for( TMLArchiEventArtifact arti: EventList ) {
-      if( arti.getFullValue().compareTo( _name ) == 0) {
-      arti.setPriority( _priority );
-      }
-      }
-      }
-      }
-      }
-
-      public int getMaxPriority( String _name ) {
-
-      ListIterator iterator = getListOfNodes().listIterator();
-      TMLArchiNode node;
-      Vector v;
-      TMLArchiArtifact artifact;
-      ArrayList<TMLArchiCommunicationArtifact> ChannelList;
-      ArrayList<TMLArchiEventArtifact> EventList;
-      int i;
-      int prio = 0;
-
-      while(iterator.hasNext()) {
-      node = (TMLArchiNode)(iterator.next());
-      //Channel, request mapping
-      if( node instanceof TMLArchiCommunicationNode ) {
-      ChannelList = ( (TMLArchiCommunicationNode)node ).getChannelArtifactList();
-      for( TMLArchiCommunicationArtifact arti: ChannelList ) {
-      if( arti.getFullValue().compareTo( _name ) == 0) {
-      prio = Math.max(prio, arti.getPriority());
-      }
-      }
-      //Event mapping
-      EventList = ((TMLArchiCommunicationNode)node).getEventArtifactList();
-      for( TMLArchiEventArtifact arti: EventList) {
-      if( arti.getFullValue().compareTo( _name ) == 0) {
-      prio = Math.max( prio, arti.getPriority() );
-      }
-      }
-      }
-      }
-      return prio;
-      }*/
 
 }//End of class

@@ -61,6 +61,7 @@ public class AvatarSMDStartState extends AvatarSMDBasicComponent implements Embe
         
         width = 15;
         height = 15;
+        initScaling(15, 15);
         
         nbConnectingPoint = 1;
         connectingPoint = new TGConnectingPoint[1];
@@ -80,7 +81,7 @@ public class AvatarSMDStartState extends AvatarSMDBasicComponent implements Embe
     @Override
     public void internalDrawing(Graphics g) {
         g.fillOval(x, y, width, height);
-        g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
+        g.drawLine(x+(width/2), y+height, x+(width/2), y + scale(lineLength) + height);
     }
     
     @Override

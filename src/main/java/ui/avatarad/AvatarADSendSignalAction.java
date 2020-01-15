@@ -55,8 +55,8 @@ import java.awt.geom.Line2D;
  */
 public class AvatarADSendSignalAction extends AvatarADBasicCanBeDisabledComponent/* Issue #69 AvatarADBasicComponent*/ implements EmbeddedComment, BasicErrorHighlight {
     protected int lineLength = 5;
-    protected int textX =  5;
-    protected int textY =  15;
+//    protected int textX =  5;
+//    protected int textY =  15;
     protected int arc = 5;
     protected int linebreak = 10;
 
@@ -64,7 +64,8 @@ public class AvatarADSendSignalAction extends AvatarADBasicCanBeDisabledComponen
 
     public AvatarADSendSignalAction(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-
+        textX =  5;
+        textY =  15;
         initScaling(30, 20);
         minWidth = (int)(30* tdp.getZoom());
         oldScaleFactor = tdp.getZoom();
@@ -139,8 +140,8 @@ public class AvatarADSendSignalAction extends AvatarADBasicCanBeDisabledComponen
         g.drawLine(x+width-linebreak, y, x+width, y+height/2);
         g.drawLine(x+width-linebreak, y+height, x+width, y+height/2);
 
-        //g.drawString("sig", x+(width-w) / 2, y);
-        g.drawString(value, x + (width - w) / 2 , y + (int)((textY*tdp.getZoom())));
+        //drawSingleString(g, "sig", x+(width-w) / 2, y);
+        drawSingleString(g, value, x + (width - w) / 2 , y + textY);
     }
 
     @Override

@@ -110,7 +110,7 @@ public class SDInstance extends TGCWithInternalComponent implements SwallowTGCom
             wText  = g.getFontMetrics().stringWidth(name);
             hText = g.getFontMetrics().getHeight();
         }
-        g.drawString( name, x - (wText / 2) + width/2, y - 3 );
+        drawSingleString(g,  name, x - (wText / 2) + width/2, y - 3 );
         g.drawLine(x - (wText / 2) + width/2, y-2, x + (wText / 2) + width/2, y-2);
         g.drawLine(x+(width/2), y, x+(width/2), y +height);
 

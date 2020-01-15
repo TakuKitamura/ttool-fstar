@@ -56,25 +56,29 @@ import java.awt.*;
  * @author Ludovic APVRILLE
  */
 public class AvatarPDAlias extends TGCScalableWithInternalComponent implements ConstraintListInterface {
-    private int textY1 = 5;
+//    private int textY1 = 5;
     //private int textY2 = 30;
 	
 	public static final String[] STEREOTYPES = {"<<alias>>"}; 
 	
     protected String oldValue = "";
 	
-	private int maxFontSize = 12;
-	private int minFontSize = 4;
-	private int currentFontSize = -1;
-	private boolean displayText = true;
-	private int textX = 1;
+//	private int maxFontSize = 12;
+//	private int minFontSize = 4;
+//	private int currentFontSize = -1;
+//	private boolean displayText = true;
+//	private int textX = 1;
     
     public AvatarPDAlias(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-        width = (int)(100* tdp.getZoom());
-        height = (int)(40 * tdp.getZoom());
+        //Issue #31
+        width = 100;
+        height = 40;
         minWidth = 100;
+        textY = 5;
+        textX = 1;
+        initScaling(100, 40);
         
         nbConnectingPoint = 16;
         connectingPoint = new TGConnectingPoint[16];
@@ -104,111 +108,126 @@ public class AvatarPDAlias extends TGCScalableWithInternalComponent implements C
         
         value = "sig_al";
 		
-		currentFontSize = maxFontSize;
-		oldScaleFactor = tdp.getZoom();
+//		currentFontSize = maxFontSize;
+//		oldScaleFactor = tdp.getZoom();
         
         myImageIcon = IconManager.imgic1078;
     }
     
-    public void internalDrawing(Graphics g) {
-		String ster;
-		ster = STEREOTYPES[0];
-		Font f = g.getFont();
-		Font fold = f;
-		
-		if (value != oldValue) {
-			setValue(value, g);
-		}
-		
-		if ((rescaled) && (!tdp.isScaled())) {
-			
-			if (currentFontSize == -1) {
-				currentFontSize = f.getSize();
-			}
-			rescaled = false;
-			// Must set the font size ..
-			// Find the biggest font not greater than max_font size
-			// By Increment of 1
-			// Or decrement of 1
-			// If font is less than 4, no text is displayed
-			
-			int maxCurrentFontSize = Math.max(0, Math.min(height, maxFontSize));
-			int w0, w1, w2;
-			f = f.deriveFont((float)maxCurrentFontSize);
-			g.setFont(f);
-			//
-			while(maxCurrentFontSize > (minFontSize-1)) {
-				w0 = g.getFontMetrics().stringWidth(value);
-				w1 = g.getFontMetrics().stringWidth(ster);
-				w2 = Math.min(w0, w1);
-				if (w2 < (width - (2*textX))) {
-					break;
-				}
-				maxCurrentFontSize --;
-				f = f.deriveFont((float)maxCurrentFontSize);
-				g.setFont(f);
-			}
-			currentFontSize = maxCurrentFontSize;
-			
-			if(currentFontSize <minFontSize) {
-				displayText = false;
-			} else {
-				displayText = true;
-				f = f.deriveFont((float)currentFontSize);
-				g.setFont(f);
-			}
-			
-		}
-		
-        Color c = g.getColor();
+    @Override
+    public void internalDrawing(Graphics g)
+    {
+    	//rectangle
+    	Color c = g.getColor();
 		g.draw3DRect(x, y, width, height, true);
-		
-	
 		g.setColor(ColorManager.AVATARPD_ALIAS);
-		
 		g.fill3DRect(x+1, y+1, width-1, height-1, true);
 		g.setColor(c);
-        
-        // Strings
-		int w;
-		if (displayText) {
-			f = f.deriveFont((float)currentFontSize);
-			Font f0 = g.getFont();
-			
-			boolean cannotWriteAttack = (height < (2 * currentFontSize + (int)(textY1 * tdp.getZoom())));
-			
-			if (cannotWriteAttack) {
-				w  = g.getFontMetrics().stringWidth(value);
-				int h =  currentFontSize + (int)(textY1 * tdp.getZoom());
-				if ((w < (2*textX + width)) && (h < height)) {
-					g.drawString(value, x + (width - w)/2, y + h);
-				} else {
-					w  = g.getFontMetrics().stringWidth(ster);
-					if ((w < (2*textX + width)) && (h < height)) {
-						g.drawString(ster, x + (width - w)/2, y + h);
-					}
-				}
-			} else {
-				g.setFont(f.deriveFont(Font.BOLD));
-				int h =  currentFontSize + (int)(textY1 * tdp.getZoom());
-				int cumulated = 0;
-				w = g.getFontMetrics().stringWidth(ster);
-				if ((w < (2*textX + width)) && (h < height)) {
-					g.drawString(ster, x + (width - w)/2, y + h);
-					cumulated = h;
-				}
-				g.setFont(f0);
-				w  = g.getFontMetrics().stringWidth(value);
-				h = cumulated + currentFontSize + (int)(textY1 * tdp.getZoom());
-				if ((w < (2*textX + width)) && (h < height)) {
-					g.drawString(value, x + (width - w)/2, y + h);
-				}
-			}
-		}
-		
-		g.setFont(fold);
-        
+    	
+    	//Strings
+    	String ster = STEREOTYPES[0];
+    	drawDoubleString(g, ster, value);
     }
+    
+//    public void internalDrawing(Graphics g) {
+//		String ster;
+//		ster = STEREOTYPES[0];
+//		Font f = g.getFont();
+//		Font fold = f;
+//		
+//		if (value != oldValue) {
+//			setValue(value, g);
+//		}
+//		
+//		if ((rescaled) && (!tdp.isScaled())) {
+//			
+//			if (currentFontSize == -1) {
+//				currentFontSize = f.getSize();
+//			}
+//			rescaled = false;
+//			// Must set the font size ..
+//			// Find the biggest font not greater than max_font size
+//			// By Increment of 1
+//			// Or decrement of 1
+//			// If font is less than 4, no text is displayed
+//			
+//			int maxCurrentFontSize = Math.max(0, Math.min(height, maxFontSize));
+//			int w0, w1, w2;
+//			f = f.deriveFont((float)maxCurrentFontSize);
+//			g.setFont(f);
+//			//
+//			while(maxCurrentFontSize > (minFontSize-1)) {
+//				w0 = g.getFontMetrics().stringWidth(value);
+//				w1 = g.getFontMetrics().stringWidth(ster);
+//				w2 = Math.min(w0, w1);
+//				if (w2 < (width - (2*textX))) {
+//					break;
+//				}
+//				maxCurrentFontSize --;
+//				f = f.deriveFont((float)maxCurrentFontSize);
+//				g.setFont(f);
+//			}
+//			currentFontSize = maxCurrentFontSize;
+//			
+//			if(currentFontSize <minFontSize) {
+//				displayText = false;
+//			} else {
+//				displayText = true;
+//				f = f.deriveFont((float)currentFontSize);
+//				g.setFont(f);
+//			}
+//			
+//		}
+//		
+//        Color c = g.getColor();
+//		g.draw3DRect(x, y, width, height, true);
+//		
+//	
+//		g.setColor(ColorManager.AVATARPD_ALIAS);
+//		
+//		g.fill3DRect(x+1, y+1, width-1, height-1, true);
+//		g.setColor(c);
+//        
+//        // Strings
+//		int w;
+//		if (displayText) {
+//			f = f.deriveFont((float)currentFontSize);
+//			Font f0 = g.getFont();
+//			
+//			boolean cannotWriteAttack = (height < (2 * currentFontSize + (int)(textY * tdp.getZoom())));
+//			
+//			if (cannotWriteAttack) {
+//				w  = g.getFontMetrics().stringWidth(value);
+//				int h =  currentFontSize + (int)(textY * tdp.getZoom());
+//				if ((w < (2*textX + width)) && (h < height)) {
+//					g.drawString(value, x + (width - w)/2, y + h);
+//				} else {
+//					w  = g.getFontMetrics().stringWidth(ster);
+//					if ((w < (2*textX + width)) && (h < height)) {
+//						g.drawString(ster, x + (width - w)/2, y + h);
+//					}
+//				}
+//			} else {
+//				g.setFont(f.deriveFont(Font.BOLD));
+//				int h =  currentFontSize + (int)(textY * tdp.getZoom());
+//				int cumulated = 0;
+//				w = g.getFontMetrics().stringWidth(ster);
+//				if ((w < (2*textX + width)) && (h < height)) {
+//					g.drawString(ster, x + (width - w)/2, y + h);
+//					cumulated = h;
+//				}
+//				g.setFont(f0);
+//				w  = g.getFontMetrics().stringWidth(value);
+//				h = cumulated + currentFontSize + (int)(textY * tdp.getZoom());
+//				if ((w < (2*textX + width)) && (h < height)) {
+//					g.drawString(value, x + (width - w)/2, y + h);
+//				}
+//			}
+//		}
+//		
+//		g.setFont(fold);
+//        
+//    }
     
    public void setValue(String val, Graphics g) {
         oldValue = value;
@@ -224,10 +243,10 @@ public class AvatarPDAlias extends TGCScalableWithInternalComponent implements C
     }
 
     
-    
+    @Override
      public boolean editOndoubleClick(JFrame frame) {
-		String tmp;
-		boolean error = false;
+//		String tmp;
+//		boolean error = false;
 		
 		//String text = getName() + ": ";
 		String s = (String)JOptionPane.showInputDialog(frame, "Alias=",
@@ -251,6 +270,7 @@ public class AvatarPDAlias extends TGCScalableWithInternalComponent implements C
 		return false;
     }
     
+    @Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
         
         if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
@@ -259,17 +279,18 @@ public class AvatarPDAlias extends TGCScalableWithInternalComponent implements C
         return null;
     }
     
+    @Override
     public int getType() {
         return TGComponentManager.APD_ALIAS;
     }
 	
+    @Override
 	public String[] getConstraintList() {
 		return STEREOTYPES;
 	}
 	
+    @Override
 	public String getCurrentConstraint() {
 		return value;
 	}
-  
-    
 }

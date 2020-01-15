@@ -36,14 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui;
-
-//import java.awt.*;
-
-//import myutil.*;
 
 /**
  * Class TGConnectingPointComment
@@ -58,14 +51,8 @@ public class TGConnectingPointComment extends  TGConnectingPointWidthHeight {
         super(_container, _x, _y, _in, _out, _w, _h);
     }
     
+    @Override
     public boolean isCompatibleWith(int type) {
         return type == TGComponentManager.CONNECTOR_COMMENT;
     }
 }
-
-
-
-
-
-
-

@@ -59,19 +59,17 @@ public class TMLSDStorageInstance extends TMLSDInstance implements SwallowTGComp
 																	TGComponent _father, TDiagramPanel _tdp )  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-        width = 10;
-        height = 500;
-        //textX = 0;
-        //textY = 2;
-        minWidth = 10;
-        maxWidth = 10;
-        minHeight = 250;
-        maxHeight = 1500;
+        initScaling( 10, 500 );
+//        width = 10;
+//        height = 500;
+        minWidth = scale( 10 );
+        maxWidth = scale( 10 );
+        minHeight = scale( 250 );
+        maxHeight = scale( 1500 );
         
-        
-        makeTGConnectingPoints();
-        //addTGConnectingPointsComment();
-        
+        // Issue #31 Already called in superclass
+      //  makeTGConnectingPoints();
+
         nbInternalTGComponent = 0;
         
         moveable = true;
@@ -103,22 +101,15 @@ public class TMLSDStorageInstance extends TMLSDInstance implements SwallowTGComp
 	}
 	
 	protected void setJDialogOptions( JDialogTMLCPStorageInstance jda ) {
-		
 		jda.addAccess(TAttribute.getStringAccess(TAttribute.PUBLIC));
 		jda.addAccess(TAttribute.getStringAccess(TAttribute.PRIVATE));
 		jda.addType(TAttribute.getStringType(TAttribute.NATURAL), true);
 		jda.addType(TAttribute.getStringType(TAttribute.BOOLEAN), true);
 		jda.addType(TAttribute.getStringType(TAttribute.ADDRESS), true);
 		
-/*		Vector<String> records = ( (TMLComponentTaskDiagramPanel )(tdp)).getAllRecords(this);
-		for( String s: records ) {
-			jda.addType(s, false);
-		}*/
-		
 		jda.enableInitialValue(true);
 		jda.enableRTLOTOSKeyword(true);
 		jda.enableJavaKeyword(false);
-		//jda.enableTMLKeyword(false);
 	}
 
 	@Override

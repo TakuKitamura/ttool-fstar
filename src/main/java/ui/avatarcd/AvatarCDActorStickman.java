@@ -64,9 +64,9 @@ public class AvatarCDActorStickman extends TGCScalableOneLineText {
     public AvatarCDActorStickman(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-	width = (int)(30 * tdp.getZoom());
-        height = (int)(70 * tdp.getZoom());
-	oldScaleFactor = tdp.getZoom();
+        width = 30;// (int)(30 * tdp.getZoom());
+        height = 70; //(int)(70 * tdp.getZoom());
+        oldScaleFactor = tdp.getZoom();
 	
                
         nbConnectingPoint = 24;
@@ -109,7 +109,7 @@ public class AvatarCDActorStickman extends TGCScalableOneLineText {
         //right leg
         g.drawLine(x+width/2, y+height-width/2, x+width, y+height);
         //name of actor
-        g.drawString(value, x + width / 2 - w / 2 , y + height + h);
+        drawSingleString(g, value, x + width / 2 - w / 2 , y + height + h);
         height = height + h;
     }
     

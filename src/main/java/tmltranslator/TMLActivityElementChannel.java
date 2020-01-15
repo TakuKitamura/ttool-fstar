@@ -108,7 +108,8 @@ public class TMLActivityElementChannel extends TMLActivityElement {
             channels.add(newChan);
         }
     }
-
+    
+    @Override
     public String customExtraToXML() {
         String s = " nbOfSamples=\"" + nbOfSamples + "\" ";
         String chan = "";

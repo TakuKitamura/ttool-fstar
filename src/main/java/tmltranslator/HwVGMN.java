@@ -56,7 +56,8 @@ public class HwVGMN extends HwCommunicationNode  {
     public HwVGMN(String _name) {
         super(_name);
     }
-
+    
+    @Override
     public String toXML() {
 	String s = "<VGMN name=\"" + name + "\" clockRatio=\"" + clockRatio + "\"  byteDataSize=\"" + byteDataSize + "\" />\n";
 	return s;

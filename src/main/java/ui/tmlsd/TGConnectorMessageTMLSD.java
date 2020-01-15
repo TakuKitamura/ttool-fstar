@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmlsd;
 
 import myutil.GraphicLib;
@@ -50,8 +47,10 @@ import ui.util.IconManager;
 import ui.window.JDialogMultiStringCP;
 
 import javax.swing.*;
-import java.awt.*;
+
+import java.awt.Point;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -192,9 +191,9 @@ public abstract class TGConnectorMessageTMLSD extends TGConnector {
 		value += ")";
 	}
 
-	public ArrayList<String> getParams()	{
+	public List<String> getParams()	{
 
-		ArrayList<String> toBeReturned = new ArrayList<String>();
+		List<String> toBeReturned = new ArrayList<String>();
 		for( int i = 0; i < nParam; i++ )	{
 			if( ( params[i] != "" ) && ( params[i] != "null") )	{
 				toBeReturned.add( params[i] );

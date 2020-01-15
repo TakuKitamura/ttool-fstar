@@ -36,12 +36,9 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
 package ui.tmldd;
 
-
 import myutil.GraphicLib;
-import myutil.TraceManager;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -63,12 +60,13 @@ import java.util.Vector;
  * @author Ludovic APVRILLE
  * @version 1.1 21/05/2008
  */
-public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent, WithAttributes,
-        TMLArchiElementInterface, TMLArchiElementWithArtifactList {
-    private int textY1 = 15;
-    private int textY2 = 30;
-    private int derivationx = 2;
-    private int derivationy = 3;
+public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent, WithAttributes, TMLArchiElementInterface {
+
+	// Issue #31
+//	private int textY1 = 15;
+//    private int textY2 = 30;
+//    private int derivationx = 2;
+//    private int derivationy = 3;
     private String stereotype = "CPU";
 
     private int nbOfCores = HwCPU.DEFAULT_NB_OF_CORES;
@@ -89,10 +87,13 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
     public TMLArchiCPUNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        width = 250;
-        height = 200;
+        // Issue #31
+//        width = 250;
+//        height = 200;
+        textY = 15;
         minWidth = 150;
         minHeight = 100;
+        initScaling( 250, 200 );
 
         nbConnectingPoint = 16;
         connectingPoint = new TGConnectingPoint[16];
@@ -130,19 +131,23 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         myImageIcon = IconManager.imgic700;
     }
 
-    public void internalDrawing(Graphics g) {
+    @Override
+    protected void internalDrawing(Graphics g) {
         Color c = g.getColor();
         g.draw3DRect(x, y, width, height, true);
 
+        // Issue #31
+        final int derivationX = scale( DERIVATION_X );
+        final int derivationY = scale( DERIVATION_Y );
 
         // Top lines
-        g.drawLine(x, y, x + derivationx, y - derivationy);
-        g.drawLine(x + width, y, x + width + derivationx, y - derivationy);
-        g.drawLine(x + derivationx, y - derivationy, x + width + derivationx, y - derivationy);
+        g.drawLine(x, y, x + derivationX, y - derivationY);
+        g.drawLine(x + width, y, x + width + derivationX, y - derivationY);
+        g.drawLine(x + derivationX, y - derivationY, x + width + derivationX, y - derivationY);
 
         // Right lines
-        g.drawLine(x + width, y + height, x + width + derivationx, y - derivationy + height);
-        g.drawLine(x + derivationx + width, y - derivationy, x + width + derivationx, y - derivationy + height);
+        g.drawLine(x + width, y + height, x + width + derivationX, y - derivationY + height);
+        g.drawLine(x + derivationX + width, y - derivationY, x + width + derivationX, y - derivationY + height);
 
         // Filling color
         g.setColor(ColorManager.CPU_BOX_1);
@@ -154,29 +159,34 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         int w = g.getFontMetrics().stringWidth(ster);
         Font f = g.getFont();
         g.setFont(f.deriveFont(Font.BOLD));
-        g.drawString(ster, x + (width - w) / 2, y + textY1);
+        drawSingleString(g,ster, x + (width - w) / 2, y + textY);// Issue #31
         g.setFont(f);
         w = g.getFontMetrics().stringWidth(name);
-        g.drawString(name, x + (width - w) / 2, y + textY2);
+        drawSingleString(g,name, x + (width - w) / 2, y + 2 * textY );// Issue #31
 
         // Icon
-        g.drawImage(IconManager.imgic1100.getImage(), x + 4, y + 4, null);
-        //g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
+        // Issue #31
+        final int imgOffset = scale( 4 );
+        g.drawImage( scale( IconManager.imgic1100.getImage() ), x + imgOffset/*4*/, y + imgOffset/*4*/, null);
     }
 
+    @Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
-
         Polygon pol = new Polygon();
         pol.addPoint(x, y);
-        pol.addPoint(x + derivationx, y - derivationy);
-        pol.addPoint(x + derivationx + width, y - derivationy);
-        pol.addPoint(x + derivationx + width, y + height - derivationy);
+
+        // Issue #31
+        final int derivationX = scale( DERIVATION_X );
+        final int derivationY = scale( DERIVATION_Y );
+        pol.addPoint(x + derivationX, y - derivationY);
+        pol.addPoint(x + derivationX + width, y - derivationY);
+        pol.addPoint(x + derivationX + width, y + height - derivationY);
         pol.addPoint(x + width, y + height);
         pol.addPoint(x, y + height);
         if (pol.contains(x1, y1)) {
             return this;
         }
-
+ 
         return null;
     }
 
@@ -189,6 +199,7 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         return name;
     }
 
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
         boolean error = false;
         String errors = "";
@@ -198,17 +209,14 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         JDialogCPUNode dialog = new JDialogCPUNode(getTDiagramPanel().getMainGUI(), frame, "Setting CPU attributes", this, MECType, transactions);
         dialog.setSize(500, 450);
         GraphicLib.centerOnParent(dialog, 500, 450);
-        dialog.setVisible(true); // blocked until dialog has been closed
-
+        // dialog.show(); // blocked until dialog has been closed
+        dialog.setVisible(true);
+        
         MECType = dialog.getMECType();
-
-        //TraceManager.addDev("CPU core 1");
 
         if (!dialog.isRegularClose()) {
             return false;
         }
-
-        //TraceManager.addDev("CPU core 2");
 
         if (dialog.getNodeName().length() != 0) {
             tmpName = dialog.getNodeName();
@@ -220,7 +228,6 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
                 name = tmpName;
             }
         }
-       // TraceManager.addDev("CPU core 3");
 
         schedulingPolicy = dialog.getSchedulingPolicy();
         if (schedulingPolicy == HwCPU.BASIC_ROUND_ROBIN) {
@@ -246,13 +253,10 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
             }
         }
 
-        //TraceManager.addDev("CPU core 4");
-
         if (dialog.getNbOfCores().length() != 0) {
             try {
                 tmp = nbOfCores;
                 nbOfCores = Integer.decode(dialog.getNbOfCores()).intValue();
-                //TraceManager.addDev("Nb of cores=" + nbOfCores);
                 if (nbOfCores <= 0) {
                     nbOfCores = tmp;
                     error = true;
@@ -427,17 +431,17 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         return true;
     }
 
-
-
+    @Override
     public int getType() {
         return TGComponentManager.TMLARCHI_CPUNODE;
     }
 
+    @Override
     public boolean acceptSwallowedTGComponent(TGComponent tgc) {
         return tgc instanceof TMLArchiArtifact;
-
     }
 
+    @Override
     public boolean addSwallowedTGComponent(TGComponent tgc, int x, int y) {
 
         //Set its coordinates
@@ -450,9 +454,9 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         }
 
         return false;
-
     }
 
+    @Override
     public void removeSwallowedTGComponent(TGComponent tgc) {
         removeInternalComponent(tgc);
     }
@@ -468,6 +472,7 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         return v;
     }
 
+    @Override
     public void hasBeenResized() {
         for (int i = 0; i < nbInternalTGComponent; i++) {
             if (tgcomponent[i] instanceof TMLArchiArtifact) {
@@ -477,6 +482,7 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
 
     }
 
+    @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<info stereotype=\"" + stereotype + "\" nodeName=\"" + name);
@@ -505,8 +511,6 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
         //
         try {
-
-            //TraceManager.addDev("Extra param of CPU node " + this.getValue());
 
             NodeList nli;
             Node n1, n2;
@@ -600,6 +604,7 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         }
     }
 
+    @Override
     public int getDefaultConnector() {
         return TGComponentManager.CONNECTOR_NODE_TMLARCHI;
     }
@@ -660,7 +665,7 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
         return operation;
     }
 
-
+    @Override
     public String getAttributes() {
         String attr = "";
         attr += "Nb of cores = " + nbOfCores + "\n";
@@ -685,8 +690,8 @@ public class TMLArchiCPUNode extends TMLArchiNode implements SwallowTGComponent,
 
     }
 
+    @Override
     public int getComponentType() {
         return CONTROLLER;
     }
-
 }

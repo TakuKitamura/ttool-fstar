@@ -36,11 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatarpd;
-
 
 import ui.CDElement;
 import ui.TGComponentManager;
@@ -59,8 +55,8 @@ public class AvatarPDConnectingPoint extends  TGConnectingPointWidthHeight {
         super(_container, _x, _y, _in, _out, _w, _h);
     }
     
+    @Override
     public boolean isCompatibleWith(int type) {
         return type == TGComponentManager.APD_COMPOSITION_CONNECTOR;
     }
-    
 }

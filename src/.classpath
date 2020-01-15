@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="main/java"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="/libs/commons-codec-1.10.jar"/>
 	<classpathentry kind="lib" path="/libs/commons-io-2.4.jar"/>
 	<classpathentry kind="lib" path="/libs/derby.jar"/>
@@ -20,5 +24,9 @@
 	<classpathentry kind="lib" path="/libs/jautomata-core.jar"/>
 	<classpathentry kind="lib" path="/libs/jna-3.3.0.jar"/>
 	<classpathentry kind="lib" path="/libs/com.microsoft.z3.jar"/>
+	<classpathentry kind="lib" path="/libs/jgrapht-core-1.3.0.jar"/>
+	<classpathentry kind="lib" path="/libs/jgrapht-ext-1.3.0.jar"/>
+	<classpathentry kind="lib" path="/libs/jgrapht-io-1.3.0.jar"/>
+	<classpathentry kind="lib" path="/libs/jgraphx-3.4.1.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

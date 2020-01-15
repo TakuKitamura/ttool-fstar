@@ -49,7 +49,7 @@ import ui.TGConnectingPointWidthHeight;
  * @version 1.0 12/12/2003
  * @author Ludovic APVRILLE
  */
-public class TGConnectingPointAD extends TGConnectingPointWidthHeight{
+public class TGConnectingPointAD extends TGConnectingPointWidthHeight {
 
 	public TGConnectingPointAD(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h) {
 		super(_container, _x, _y, _in, _out, _w, _h);

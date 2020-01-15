@@ -36,12 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.sd2;
-
-//import java.awt.*;
 
 import ui.CDElement;
 import ui.TGComponentManager;
@@ -60,6 +55,7 @@ public class TGConnectingPointMessageSD extends  TGConnectingPointWidthHeight {
         super(_container, _x, _y, _in, _out, _w, _h);
     }
 
+    @Override
     public boolean isCompatibleWith(int type) {
         //TraceManager.addDev("is compatible with " + type);
         if ((type == TGComponentManager.CONNECTOR_MESSAGE_ASYNC_SDZV)  || (type == TGComponentManager.CONNECTOR_MESSAGE_SYNC_SDZV)) {
@@ -70,5 +66,4 @@ public class TGConnectingPointMessageSD extends  TGConnectingPointWidthHeight {
         //
         return false;
     }
-
 }

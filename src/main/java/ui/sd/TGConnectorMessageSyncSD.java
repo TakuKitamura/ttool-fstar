@@ -79,7 +79,7 @@ public  class TGConnectorMessageSyncSD extends TGConnectorMessageSD {
         }
 
         //g.drawString(value, (p1.getX() + p2.getX()) / 2, ((p1.getY() + p2.getY()) / 2) - 5);
-        g.drawString(value, ((p1.getX() + p2.getX()) / 2)-widthValue/2, ((p1.getY() + p2.getY()) / 2) - 5);
+        drawSingleString(g, value, ((p1.getX() + p2.getX()) / 2)-widthValue/2, ((p1.getY() + p2.getY()) / 2) - 5);
     }
 
     public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {

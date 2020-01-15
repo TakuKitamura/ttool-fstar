@@ -69,20 +69,20 @@ public class AvatarMethodologyReferenceToAssumptions extends AvatarMethodologyDi
         addTGConnectingPointsCommentTop();    
         
     }
-	
+    @Override
     public  int getType() {
         return TGComponentManager.AVATARMETHODOLOGY_REF_ASSUMPTIONS;
     }
-    
+    @Override
     public boolean isAValidPanelType(TURTLEPanel panel) {
         return panel instanceof AvatarMADsPanel;
 
     }
-    
+    @Override
     public void makeValidationInfos(AvatarMethodologyDiagramName dn) {
     	dn.setValidationsNumber(0);
     }
-    
+    @Override
     public boolean makeCall(String diagramName, int index) {
     	return true;
     }

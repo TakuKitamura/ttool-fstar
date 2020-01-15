@@ -490,6 +490,18 @@ public class CommandParser {
         sc = new SimulationCommand("write-in-channel", "wic", "6", params, paramNames, "Writes y samples / events to channel / event x");
         commandList.add(sc);
 
+        // add signals
+        params = new int[3];
+        paramNames = new String[3];
+        params[0] = 2;
+        paramNames[0] = "Channel name";
+        params[1] = 2;
+        paramNames[1] = "Nb of samples";
+        params[2] = 2;
+        paramNames[2] = "value of samples";
+        sc = new SimulationCommand("add-virtual-signals", "avs", "1 16", params, paramNames, "Send virtual events to channel");
+        commandList.add(sc);
+
 
 
 

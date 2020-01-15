@@ -71,8 +71,8 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
     protected List<String> models;
     protected List<String> properties;
     public List<String> syntaxErrors;
-    protected int textX = 25;
-    protected int textY = 5;
+//    protected int textX = 25;
+//    protected int textY = 5;
     protected int marginY = 20;
     protected int marginX = 20;
     protected int limit = 15;
@@ -102,11 +102,15 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
 
     public AvatarBDPragma(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-
+        
+        textX = 25;
+        textY = 5;
         width = 200;
         height = 30;
         minWidth = 80;
         minHeight = 10;
+        initScaling(200, 30);
+        
         models = new LinkedList<String>();
         properties = new LinkedList<String>();
         authStrongMap = new HashMap<String, Integer>();
@@ -166,16 +170,16 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
           graphics = g;
           }*/
 
-        if (((rescaled) && (!tdp.isScaled())) || myFont == null) {
-            currentFontSize = tdp.getFontSize() + 1;
-            //
-            //            myFont = f.deriveFont((float)currentFontSize);
-            //myFontB = myFont.deriveFont(Font.BOLD);
-
-            if (rescaled) {
-                rescaled = false;
-            }
-        }
+//        if (((rescaled) && (!tdp.isScaled())) || myFont == null) {
+//            currentFontSize = tdp.getFontSize() + 1;
+//            //
+//            //            myFont = f.deriveFont((float)currentFontSize);
+//            //myFontB = myFont.deriveFont(Font.BOLD);
+//
+//            if (rescaled) {
+//                rescaled = false;
+//            }
+//        }
 
         if (values == null) {
             makeValue();
@@ -203,18 +207,18 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
                 desiredWidth = Math.max(desiredWidth, this.tdp.stringWidth(g, values[i]) + marginX + textX);
 
             //	currentFontSize= 5;
-            int desiredHeight = ((models.size() + properties.size() + 4) * currentFontSize) + textY + 1;
+//            int desiredHeight = ((models.size() + properties.size() + 4) * currentFontSize) + textY + 1;
 
             //TraceManager.addDev("resize: " + desiredWidth + "," + desiredHeight);
 
-            if ((desiredWidth != width) || (desiredHeight != height)) {
-                resize(desiredWidth, desiredHeight);
-            }
+//            if ((desiredWidth != width) || (desiredHeight != height)) {
+//                resize(desiredWidth, desiredHeight);
+//            }
         }
 
         g.drawLine(x, y, x + width, y);
         g.drawLine(x, y, x, y + height);
-        g.drawLine(x, y + height, x + width - limit, y + height);
+        g.drawLine(x, y + height, x + width - limit, y + height); //down
         g.drawLine(x + width, y, x + width, y + height - limit);
 
         g.setColor(ColorManager.PRAGMA_BG);
@@ -238,11 +242,11 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
         int i = 1;
         Font heading = new Font("heading", Font.BOLD, this.tdp.getFontSize() * 7 / 6);
         g.setFont(heading);
-        g.drawString("Security features", x + textX, y + textY + currentFontSize);
+        drawSingleString(g, "Security features", x + textX, y + textY + currentFontSize);
         g.setFont(fold);
         for (String s : models) {
             pragmaLocMap.put(s, y + textY + (i + 1) * currentFontSize);
-            g.drawString(s, x + textX, y + textY + (i + 1) * currentFontSize);
+            drawSingleString(g, s, x + textX, y + textY + (i + 1) * currentFontSize);
             if (syntaxErrors.contains(s)) {
                 Color ctmp = g.getColor();
                 g.setColor(Color.red);
@@ -254,11 +258,13 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
         }
         // FIXME: why the empty string ? 
         //I forget...
-        g.drawString(" ", x + textX, y + textY + (i + 1) * currentFontSize);
+        //FIXME: issue #31 without the f.getSize it would glitch
+        currentFontSize = f.getSize();
+        drawSingleString(g, " ", x + textX, y + textY + (i + 1) * currentFontSize);
         i++;
         g.drawLine(x, y + textY / 2 + i * currentFontSize, x + width, y + textY / 2 + i * currentFontSize);
         g.setFont(heading);
-        g.drawString("Security Property", x + textX, y + textY + (i + 1) * currentFontSize);
+        drawSingleString(g, "Security Property", x + textX, y + textY + (i + 1) * currentFontSize);
         g.setFont(fold);
         i++;
 //		
@@ -268,7 +274,7 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
                 drawConfidentialityVerification(s, g, x + lockX, y + lockY + (i + 1) * currentFontSize);
                 g.setFont(fold);
             }
-            g.drawString(s, x + textX, y + textY + (i + 1) * currentFontSize);
+            drawSingleString(g, s, x + textX, y + textY + (i + 1) * currentFontSize);
             pragmaLocMap.put(s, y + textY + i * currentFontSize);
             if (syntaxErrors.contains(s)) {
                 Color ctmp = g.getColor();
@@ -282,7 +288,7 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
 
 /*        for (int i = 0; i<values.length; i++) {
             //TraceManager.addDev("x+texX=" + (x + textX) + " y+textY=" + y + textY + i* h + ": " + values[i]);
-            g.drawString(values[i], x + textX, y + textY + (i+1)* currentFontSize);
+            drawSingleString(g, values[i], x + textX, y + textY + (i+1)* currentFontSize);
         }
 */
         g.setColor(c);
@@ -383,10 +389,10 @@ public class AvatarBDPragma extends TGCScalableWithoutInternalComponent {
 //        g.drawRect(_x+4, _y-7, 18, 14);
         g.drawPolygon(xps, yps, 3);
         g.drawPolygon(xpw, ypw, 3);
-        g.drawString("S", _x + 6, _y + 2);
-        g.drawString("W", _x + 13, _y - 2);
+        drawSingleString(g, "S", _x + 6, _y + 2);
+        drawSingleString(g, "W", _x + 13, _y - 2);
 //	if (c1==Color.gray){
-//	    g.drawString("?", _x+4, _y+2);
+//	    drawSingleString(g, "?", _x+4, _y+2);
 //	}
     }
 

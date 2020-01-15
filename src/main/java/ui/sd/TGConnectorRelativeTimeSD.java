@@ -87,7 +87,7 @@ public  class TGConnectorRelativeTimeSD extends TGConnector {
             heightValue = g.getFontMetrics().getHeight();
         }
         
-        g.drawString(value, ((p1.getX() + p2.getX()) / 2) - widthValue - 2, ((p1.getY() + p2.getY()) / 2));
+        drawSingleString(g, value, ((p1.getX() + p2.getX()) / 2) - widthValue - 2, ((p1.getY() + p2.getY()) / 2));
     }
     
     public TGComponent extraIsOnOnlyMe(int x1, int y1) {

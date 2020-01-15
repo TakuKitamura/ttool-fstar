@@ -80,6 +80,7 @@ public abstract class TMLCompositionOperator extends TGCWithInternalComponent {
         actionOnAdd();
     }
     
+    @Override
     public void internalDrawing(Graphics g) {
         g.drawRect(x, y, width, height);
         //g.setColor(ColorManager.COMPOSITION_OPERATOR);
@@ -90,10 +91,10 @@ public abstract class TMLCompositionOperator extends TGCWithInternalComponent {
         g.setFont((g.getFont()).deriveFont(Font.BOLD));
         g.drawString(value, x + textX, y + textY);
         g.setFont((g.getFont()).deriveFont(Font.PLAIN));
-		
     }
     
-    public TGComponent isOnOnlyMe(int x1, int y1) {
+    @Override
+   public TGComponent isOnOnlyMe(int x1, int y1) {
         if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
             return this;
         }
@@ -101,13 +102,6 @@ public abstract class TMLCompositionOperator extends TGCWithInternalComponent {
     }
     
     public abstract boolean isToggledVisible();
-	public abstract Color getMyColor();
-    
+	
+    public abstract Color getMyColor();
 }
-
-
-
-
-
-
-

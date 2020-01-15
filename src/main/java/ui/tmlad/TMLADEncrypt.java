@@ -61,12 +61,21 @@ import java.awt.geom.Line2D;
  * @version 1.0 21/11/2005
  */
 public class TMLADEncrypt extends TADComponentWithoutSubcomponents/* Issue #69 TGCWithoutInternalComponent*/ implements EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
-    private int lineLength = 5;
+
+	// Issue #31
+//    private int lineLength = 5;
     //  private int textX, textY;
-    private int ex = 5;
-    private int textHeight = 8;
-    private int ilength = 12;
-    private int lineLength1 = 3;
+//    private int ex = 5;
+//    private int textHeight = 8;
+//    
+//    private double dlength = 12;
+//    private double dlineLength1 = 3;
+	
+	private static final int MARGIN = 5;
+	private static final int ENC_SYMBOL_HEIGHT = 12;
+	private static final int ENC_SYMBOL_MARGIN = 3;
+	private static final int SEC_ICON_HIGHT = 8;
+    
     public String type = "";
     public String message_overhead = "";
     public String size = "";
@@ -82,16 +91,16 @@ public class TMLADEncrypt extends TADComponentWithoutSubcomponents/* Issue #69 T
     public TMLADEncrypt(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        width = 15;
-        height = 35;
-        //    textX = width + 5;
-//        textY = height/2 + 5;
-
+        // Issue #31
         nbConnectingPoint = 2;
         connectingPoint = new TGConnectingPoint[2];
         connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
-        connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, +lineLength + ex, false, true, 0.5, 1.0);
-
+        connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, +lineLength + MARGIN, false, true, 0.5, 1.0);
+//        width = 15;
+//        height = 35;
+        //    textX = width + 5;
+//        textY = height/2 + 5;
+        initScaling( 15, 35 );
 
         moveable = true;
         editable = true;
@@ -103,7 +112,9 @@ public class TMLADEncrypt extends TADComponentWithoutSubcomponents/* Issue #69 T
     }
 
     @Override
-    public void internalDrawing(Graphics g) {
+    protected void internalDrawing(Graphics g) {
+        final int scaledMargin = scale( MARGIN );
+
         if (stateOfError > 0) {
             Color c = g.getColor();
             switch (stateOfError) {
@@ -115,77 +126,89 @@ public class TMLADEncrypt extends TADComponentWithoutSubcomponents/* Issue #69 T
             }
             g.fillRect(x, y, width, height);
             int[] xP = new int[]{x, x + width, x + width / 2};
-            int[] yP = new int[]{y + height, y + height, y + height + ex};
+            int[] yP = new int[]{ y + height, y + height, y + height + scaledMargin };
             g.fillPolygon(xP, yP, 3);
             g.setColor(c);
         }
+
         g.drawLine(x, y, x + width, y);
         g.drawLine(x, y, x, y + height);
         g.drawLine(x + width, y, x + width, y + height);
-        g.drawLine(x, y + height, x + width / 2, y + height + ex);
-        g.drawLine(x + width / 2, y + height + ex, x + width, y + height);
+        
+        g.drawLine(x, y + height, x + width / 2, y + height + scaledMargin );
+        g.drawLine(x + width / 2, y + height + scaledMargin, x + width, y + height);
         g.drawLine(x + (width / 2), y, x + (width / 2), y - lineLength);
-        g.drawLine(x + (width / 2), y + height + ex, x + (width / 2), y + lineLength + height + ex);
+        g.drawLine(x + (width / 2), y + height + scaledMargin, x + (width / 2), y + lineLength + height + scaledMargin);
 
+        // Issue #31
+        final int scaledSymbolHeight = scale( ENC_SYMBOL_HEIGHT );
+        final int scaledSymbolMargin = scale( ENC_SYMBOL_MARGIN );
+        
         if (type.equals("Symmetric Encryption")) {
             //S
-            g.drawLine(x + ex, y + (height - ilength) / 4, x + width - ex, y + (height - ilength) / 4);
-            g.drawLine(x + ex, y + (height - ilength) / 4 + ilength, x + width - ex, y + (height - ilength) / 4 + ilength);
-            g.drawLine(x + ex, y + (height - ilength) / 4 + ilength / 2, x + width - ex, y + (height - ilength) / 4 + ilength / 2);
-            g.drawLine(x + ex, y + (height - ilength) / 4, x + ex, y + (height - ilength) / 4 + ilength / 2);
-            g.drawLine(x + width - ex, y + (height - ilength) / 4 + ilength / 2, x + width - ex, y + (height - ilength) / 4 + ilength);
+            g.drawLine(x + scaledMargin, y + (height - scaledSymbolHeight) / 4, x + width - scaledMargin, y + (height - scaledSymbolHeight) / 4);
+            g.drawLine(x + scaledMargin, y + (height - scaledSymbolHeight) / 4 + scaledSymbolHeight, x + width - scaledMargin, y + (height - scaledSymbolHeight) / 4 + scaledSymbolHeight);
+            g.drawLine(x + scaledMargin, y + (height - scaledSymbolHeight) / 4 + scaledSymbolHeight / 2, x + width - scaledMargin, y + (height - scaledSymbolHeight) / 4 + scaledSymbolHeight / 2);
+            g.drawLine(x + scaledMargin, y + (height - scaledSymbolHeight) / 4, x + scaledMargin, y + (height - scaledSymbolHeight) / 4 + scaledSymbolHeight / 2);
+            g.drawLine(x + width - scaledMargin, y + (height - scaledSymbolHeight) / 4 + scaledSymbolHeight / 2, x + width - scaledMargin, y + (height - scaledSymbolHeight) / 4 + scaledSymbolHeight);
             //E
-            g.drawLine(x + ex, y + (height - ilength) / 4 + height / 2 - ex / 2, x + width - ex, y + (height - ilength) / 4 + height / 2 - ex / 2);
-            g.drawLine(x + ex, y + (height - ilength) / 4 + ilength + height / 2 - ex / 2, x + width - ex, y + (height - ilength) / 4 + ilength + height / 2 - ex / 2);
-            g.drawLine(x + ex, y + (height - ilength) / 4 + ilength / 2 + height / 2 - ex / 2, x + width - ex, y + (height - ilength) / 4 + ilength / 2 + height / 2 - ex / 2);
-            g.drawLine(x + ex, y + (height - ilength) / 4 + height / 2 - ex / 2, x + ex, y + (height - ilength) / 4 + ilength + height / 2 - ex / 2);
+            g.drawLine(x + scaledMargin, y + (height - scaledSymbolHeight) / 4 + height / 2 - scaledMargin / 2, x + width - scaledMargin, y + (height - scaledSymbolHeight) / 4 + height / 2 - scaledMargin / 2);
+            g.drawLine(x + scaledMargin, y + (height - scaledSymbolHeight) / 4 + scaledSymbolHeight + height / 2 - scaledMargin / 2, x + width - scaledMargin, y + (height - scaledSymbolHeight) / 4 + scaledSymbolHeight + height / 2 - scaledMargin / 2);
+            g.drawLine(x + scaledMargin, y + (height - scaledSymbolHeight) / 4 + scaledSymbolHeight / 2 + height / 2 - scaledMargin / 2, x + width - scaledMargin, y + (height - scaledSymbolHeight) / 4 + scaledSymbolHeight / 2 + height / 2 - scaledMargin / 2);
+            g.drawLine(x + scaledMargin, y + (height - scaledSymbolHeight) / 4 + height / 2 - scaledMargin / 2, x + scaledMargin, y + (height - scaledSymbolHeight) / 4 + scaledSymbolHeight + height / 2 - scaledMargin / 2);
         } else if (type.equals("Asymmetric Encryption")) {
             //A
-            g.drawLine(x + (width / 2), y + (height - ilength) / 4, x + ex, y + (height - ilength) / 4 + ilength);
-            g.drawLine(x + (width / 2), y + (height - ilength) / 4, x + (width) - ex, y + (height - ilength) / 4 + ilength);
-            g.drawLine(x + 3 * ex / 2, y + (height - ilength) / 4 + ilength / 2 + ex / 2, x + width - 3 * ex / 2, y + (height - ilength) / 4 + ilength / 2 + ex / 2);
+            g.drawLine(x + (width / 2), y + (height - scaledSymbolHeight) / 4, x + scaledMargin, y + (height - scaledSymbolHeight) / 4 + scaledSymbolHeight);
+            g.drawLine(x + (width / 2), y + (height - scaledSymbolHeight) / 4, x + (width) - scaledMargin, y + (height - scaledSymbolHeight) / 4 + scaledSymbolHeight);
+            g.drawLine(x + 3 * scaledMargin / 2, y + (height - scaledSymbolHeight) / 4 + scaledSymbolHeight / 2 + scaledMargin / 2, x + width - 3 * scaledMargin / 2, y + (height - scaledSymbolHeight) / 4 + scaledSymbolHeight / 2 + scaledMargin / 2);
             //E
-            g.drawLine(x + ex, y + (height - ilength) / 4 + height / 2 - ex / 2, x + width - ex, y + (height - ilength) / 4 + height / 2 - ex / 2);
-            g.drawLine(x + ex, y + (height - ilength) / 4 + ilength + height / 2 - ex / 2, x + width - ex, y + (height - ilength) / 4 + ilength + height / 2 - ex / 2);
-            g.drawLine(x + ex, y + (height - ilength) / 4 + ilength / 2 + height / 2 - ex / 2, x + width - ex, y + (height - ilength) / 4 + ilength / 2 + height / 2 - ex / 2);
-            g.drawLine(x + ex, y + (height - ilength) / 4 + height / 2 - ex / 2, x + ex, y + (height - ilength) / 4 + ilength + height / 2 - ex / 2);
+            g.drawLine(x + scaledMargin, y + (height - scaledSymbolHeight) / 4 + height / 2 - scaledMargin / 2, x + width - scaledMargin, y + (height - scaledSymbolHeight) / 4 + height / 2 - scaledMargin / 2);
+            g.drawLine(x + scaledMargin, y + (height - scaledSymbolHeight) / 4 + scaledSymbolHeight + height / 2 - scaledMargin / 2, x + width - scaledMargin, y + (height - scaledSymbolHeight) / 4 + scaledSymbolHeight + height / 2 - scaledMargin / 2);
+            g.drawLine(x + scaledMargin, y + (height - scaledSymbolHeight) / 4 + scaledSymbolHeight / 2 + height / 2 - scaledMargin / 2, x + width - scaledMargin, y + (height - scaledSymbolHeight) / 4 + scaledSymbolHeight / 2 + height / 2 - scaledMargin / 2);
+            g.drawLine(x + scaledMargin, y + (height - scaledSymbolHeight) / 4 + height / 2 - scaledMargin / 2, x + scaledMargin, y + (height - scaledSymbolHeight) / 4 + scaledSymbolHeight + height / 2 - scaledMargin / 2);
         } else if (type.equals("Nonce")) {
             //N
-            g.drawLine(x + (width / 2) - lineLength1, y + (height - ilength) / 2, x + (width / 2) - lineLength1, y + (height - ilength) / 2 + ilength);
-            g.drawLine(x + (width / 2) + lineLength1, y + (height - ilength) / 2, x + (width / 2) + lineLength1, y + (height - ilength) / 2 + ilength);
-            g.drawLine(x + (width / 2) - lineLength1, y + (height - ilength) / 2, x + (width / 2) + lineLength1, y + (height - ilength) / 2 + ilength);
+            g.drawLine(x + (width / 2) - scaledSymbolMargin, y + (height - scaledSymbolHeight) / 2, x + (width / 2) - scaledSymbolMargin, y + (height - scaledSymbolHeight) / 2 + scaledSymbolHeight);
+            g.drawLine(x + (width / 2) + scaledSymbolMargin, y + (height - scaledSymbolHeight) / 2, x + (width / 2) + scaledSymbolMargin, y + (height - scaledSymbolHeight) / 2 + scaledSymbolHeight);
+            g.drawLine(x + (width / 2) - scaledSymbolMargin, y + (height - scaledSymbolHeight) / 2, x + (width / 2) + scaledSymbolMargin, y + (height - scaledSymbolHeight) / 2 + scaledSymbolHeight);
         } else if (type.equals("MAC")) {
             //M
-            g.drawLine(x + ex / 2 + 1, y + (height - ilength) / 2, x + ex / 2 + 1, y + (height - ilength) / 2 + ilength);
-            g.drawLine(x + width - ex / 2 - 1, y + (height - ilength) / 2, x + width - ex / 2 - 1, y + (height - ilength) / 2 + ilength);
-            g.drawLine(x + ex / 2 + 1, y + (height - ilength) / 2, x + width / 2, y + (height - ilength) / 2 + ilength);
-            g.drawLine(x + width - ex / 2 - 1, y + (height - ilength) / 2, x + width / 2, y + (height - ilength) / 2 + ilength);
+            g.drawLine(x + scaledMargin / 2 + 1, y + (height - scaledSymbolHeight) / 2, x + scaledMargin / 2 + 1, y + (height - scaledSymbolHeight) / 2 + scaledSymbolHeight);
+            g.drawLine(x + width - scaledMargin / 2 - 1, y + (height - scaledSymbolHeight) / 2, x + width - scaledMargin / 2 - 1, y + (height - scaledSymbolHeight) / 2 + scaledSymbolHeight);
+            g.drawLine(x + scaledMargin / 2 + 1, y + (height - scaledSymbolHeight) / 2, x + width / 2, y + (height - scaledSymbolHeight) / 2 + scaledSymbolHeight);
+            g.drawLine(x + width - scaledMargin / 2 - 1, y + (height - scaledSymbolHeight) / 2, x + width / 2, y + (height - scaledSymbolHeight) / 2 + scaledSymbolHeight);
         } else if (type.equals("Hash")) {
-            g.drawLine(x + (width / 2) - lineLength1, y + (height - ilength) / 2, x + (width / 2) - lineLength1, y + (height - ilength) / 2 + ilength);
-            g.drawLine(x + (width / 2) + lineLength1, y + (height - ilength) / 2, x + (width / 2) + lineLength1, y + (height - ilength) / 2 + ilength);
-            g.drawLine(x + (width / 2) - lineLength1, y + (height - ilength) / 2 + ilength / 2, x + (width / 2) + lineLength1, y + (height - ilength) / 2 + ilength / 2);
+        	//H
+            g.drawLine(x + (width / 2) - scaledSymbolMargin, y + (height - scaledSymbolHeight) / 2, x + (width / 2) - scaledSymbolMargin, y + (height - scaledSymbolHeight) / 2 + scaledSymbolHeight);
+            g.drawLine(x + (width / 2) + scaledSymbolMargin, y + (height - scaledSymbolHeight) / 2, x + (width / 2) + scaledSymbolMargin, y + (height - scaledSymbolHeight) / 2 + scaledSymbolHeight);
+            g.drawLine(x + (width / 2) - scaledSymbolMargin, y + (height - scaledSymbolHeight) / 2 + scaledSymbolHeight / 2, x + (width / 2) + scaledSymbolMargin, y + (height - scaledSymbolHeight) / 2 + scaledSymbolHeight / 2);
         } else if (type.equals("Advanced")) {
             //A
-            g.drawLine(x + (width / 2), y + (height - ilength) / 2, x + ex, y + (height - ilength) / 2 + ilength);
-            g.drawLine(x + (width / 2), y + (height - ilength) / 2, x + (width) - ex, y + (height - ilength) / 2 + ilength);
-            g.drawLine(x + 3 * ex / 2, y + (height - ilength) / 2 + ilength / 2 + ex / 2, x + width - 3 * ex / 2, y + (height - ilength) / 2 + ilength / 2 + ex / 2);
+            g.drawLine(x + (width / 2), y + (height - scaledSymbolHeight) / 2, x + scaledMargin, y + (height - scaledSymbolHeight) / 2 + scaledSymbolHeight);
+            g.drawLine(x + (width / 2), y + (height - scaledSymbolHeight) / 2, x + (width) - scaledMargin, y + (height - scaledSymbolHeight) / 2 + scaledSymbolHeight);
+            g.drawLine(x + 3 * scaledMargin / 2, y + (height - scaledSymbolHeight) / 2 + scaledSymbolHeight / 2 + scaledMargin / 2, x + width - 3 * scaledMargin / 2, y + (height - scaledSymbolHeight) / 2 + scaledSymbolHeight / 2 + scaledMargin / 2);
         }
+        
         //Draw security pattern
-        g.drawString("sec:" + securityContext, x + 3 * width / 2, y + height / 2);
+        drawSingleString(g,"sec:" + securityContext, x + 3 * width / 2, y + height / 2);
+        
+        final int scaledSecIconHeight = scale( SEC_ICON_HIGHT );
+        
         //Draw nonce if it exists
         if (!nonce.isEmpty()) {
-            g.drawString("nonce:" + nonce, x + 3 * width / 2, y + height / 2 + textHeight);
+            drawSingleString(g,"nonce:" + nonce, x + 3 * width / 2, y + height / 2 + scaledSecIconHeight );
         }
+        
         //Draw key if it exists
         if (!key.isEmpty()) {
-            g.drawString("key:" + key, x + 3 * width / 2, y + height / 2 + 2 * textHeight);
+            drawSingleString(g,"key:" + key, x + 3 * width / 2, y + height / 2 + 2 * scaledSecIconHeight );
         }
-        g.drawImage(IconManager.imgic7000.getImage(), x - 22, y + height / 2, null);
+        
+        g.drawImage( scale( IconManager.imgic7000.getImage() ), x - scale( 22 ), y + height / 2, null );
     }
 
     @Override
     public boolean editOndoubleClick(JFrame frame) {
-        //JDialogTwoString jdts = new JDialogTwoString(frame, "Setting channel's properties", "Channel name", channelName, "Nb of samples", nbOfSamples);]
         String[] values = new String[]{securityContext, type, message_overhead, encTime, size, nonce, formula, decTime, key, algorithm};
         String[] nonces = tdp.getMGUI().getAllNonce();
         String[] keys = tdp.getMGUI().getAllKeys().toArray(new String[0]);

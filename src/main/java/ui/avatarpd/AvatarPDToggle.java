@@ -105,6 +105,7 @@ public abstract class  AvatarPDToggle extends TGCScalableWithInternalComponent {
         //
     }
     
+	@Override
     public void resizeWithFather() {
         if ((father != null) && (father instanceof AvatarPDBlock)) {
             //
@@ -140,7 +141,8 @@ public abstract class  AvatarPDToggle extends TGCScalableWithInternalComponent {
 	public void setToggle(String _toggle) {
 		toggle = _toggle;
 	}
-	
+    
+	@Override
 	protected String translateExtraParam() {
 		
         StringBuffer sb = new StringBuffer("<extraparam>\n");

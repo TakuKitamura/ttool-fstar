@@ -90,6 +90,7 @@ public  class ADDConnector extends TGConnector  {
     	return p2;
 	}
 
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
         /*JDialogTMLConnectorNode dialog = new JDialogTMLConnectorNode(frame, "Setting connector attributes", this);
 		dialog.setSize(350, 300);
@@ -104,7 +105,8 @@ public  class ADDConnector extends TGConnector  {
 			
 		return true;
     }
-    
+
+    @Override
     protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
     	  g.drawLine(x1, y1, x2, y2);
 
@@ -122,12 +124,14 @@ public  class ADDConnector extends TGConnector  {
     public boolean hasASpy() {
 	return hasASpy;
     }
-    
+
+    @Override
     public int getType() {
         return TGComponentManager.ADD_CONNECTOR;
     }
 
-    
+
+    @Override
     public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
         componentMenu.addSeparator();
         JMenuItem generate = null;
@@ -143,6 +147,7 @@ public  class ADDConnector extends TGConnector  {
         componentMenu.add(generate);
     }
 
+    @Override
     public boolean eventOnPopup(ActionEvent e) {
         String s = e.getActionCommand();
 	TraceManager.addDev("action: " + s);
@@ -157,7 +162,8 @@ public  class ADDConnector extends TGConnector  {
             
         return true;
     }
-    
+
+    @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<spy value=\"" + hasASpy + "\" />\n");

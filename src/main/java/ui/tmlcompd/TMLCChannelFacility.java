@@ -74,6 +74,7 @@ public abstract class TMLCChannelFacility extends TGCScalableWithInternalCompone
         userResizable = false;
     }
 
+    @Override
     public TGComponent isOnOnlyMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -157,7 +158,8 @@ public abstract class TMLCChannelFacility extends TGCScalableWithInternalCompone
         conflictMessage = _msg;
         calculatePortColor();
     }
-
+    
+    @Override
     public int getDefaultConnector() {
         return TGComponentManager.CONNECTOR_PORT_TMLC;
     }

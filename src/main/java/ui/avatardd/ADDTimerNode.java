@@ -137,10 +137,10 @@ public class ADDTimerNode extends ADDCommunicationNode implements WithAttributes
         int w  = g.getFontMetrics().stringWidth(ster);
         Font f = g.getFont();
         g.setFont(f.deriveFont(Font.BOLD));
-        g.drawString(ster, x + (width - w)/2, y + textY1);
+        drawSingleString(g, ster, x + (width - w)/2, y + textY1);
         w  = g.getFontMetrics().stringWidth(name);
         g.setFont(f);
-        g.drawString(name, x + (width - w)/2, y + textY2);
+        drawSingleString(g, name, x + (width - w)/2, y + textY2);
 
         // Icon
         //g.drawImage(IconManager.imgic1108.getImage(), x + width - 20, y + 4, null);

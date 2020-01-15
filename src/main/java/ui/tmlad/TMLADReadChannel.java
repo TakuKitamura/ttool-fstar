@@ -81,12 +81,14 @@ import ui.window.TabInfo;
  */
 public class TMLADReadChannel extends TADComponentWithoutSubcomponents/* Issue #69 TGCWithoutInternalComponent*/ implements CheckableAccessibility, LinkedReference, CheckableLatency, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
     private Map<String, String> latencyVals;
-    protected int lineLength = 5;
-    protected int textX = 5;
+
+	// Issue #31
+//    protected int lineLength = 5;
+//    protected int textX = 5;
     protected int textX0 = 2;
-    protected int textY0 = 0;
+    //protected int textY0 = 0;
     protected int textY1 = 15;
-    protected int linebreak = 10;
+  //  protected int linebreak = 10;
 
     protected int decSec = 4;
 
@@ -113,14 +115,16 @@ public class TMLADReadChannel extends TADComponentWithoutSubcomponents/* Issue #
     public TMLADReadChannel(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        width = 30;
-        height = 20;
-        minWidth = 30;
-
+        // Issue #31
         nbConnectingPoint = 2;
         connectingPoint = new TGConnectingPoint[2];
         connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
         connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.5, 1.0);
+//        width = 30;
+//        height = 20;
+        initScaling( 30, 20 );
+        minWidth = scale( 30 );
+        textY = 0;
 
         moveable = true;
         editable = true;
@@ -143,14 +147,16 @@ public class TMLADReadChannel extends TADComponentWithoutSubcomponents/* Issue #
     }
 
     @Override
-    public void internalDrawing(Graphics g) {
-        int w = g.getFontMetrics().stringWidth(value);
-        int w1 = Math.max(minWidth, w + 2 * textX);
-        if ((w1 != width) & (!tdp.isScaled())) {
-            setCd(x + width / 2 - w1 / 2, y);
-            width = w1;
-            //updateConnectingPoints();
-        }
+    protected void internalDrawing(Graphics g) {
+    	
+    	// Issue #31
+        final int w = checkWidth( g );//g.getFontMetrics().stringWidth(value);
+//        int w1 = Math.max(minWidth, w + 2 * textX);
+//        if ((w1 != width) & (!tdp.isScaled())) {
+//            setCd(x + width / 2 - w1 / 2, y);
+//            width = w1;
+//            //updateConnectingPoints();
+//        }
 
         if (stateOfError > 0) {
             Color c = g.getColor();
@@ -191,18 +197,18 @@ public class TMLADReadChannel extends TADComponentWithoutSubcomponents/* Issue #
         g.drawLine(x, y, x + linebreak, y + height / 2);
         g.drawLine(x, y + height, x + linebreak, y + height / 2);
         if (isAttacker) {
-            g.drawString("attack", x + (width - w) / 2, y + textY0);
+            drawSingleString(g,"attack", x + (width - w) / 2, y + textY); // Issue #31
         } else {
-            g.drawString("chl", x + (width - w) / 2, y + textY0);
+            drawSingleString(g,"chl", x + (width - w) / 2, y + textY); // Issue #31
         }
-        g.drawString(value, x + linebreak + textX0, y + textY1);
+        drawSingleString(g,value, x + linebreak + scale( textX0 ), y + scale( textY1 ) ); // Issue #31
 
         if (!securityContext.equals("")) {
         	c = g.getColor();
 	        if (!isEncForm){
 	        	g.setColor(Color.RED);
 	        }
-            g.drawString("sec:" + securityContext, x + 3 * width / 4, y + height + textY1 - decSec);
+            drawSingleString(g,"sec:" + securityContext, x + 3 * width / 4, y + height + textY1 - decSec);
             g.setColor(c);
         }
         drawReachabilityInformation(g);
@@ -220,10 +226,16 @@ public class TMLADReadChannel extends TADComponentWithoutSubcomponents/* Issue #
         int index = 1;
         for (String s : latencyVals.keySet()) {
             int w = g.getFontMetrics().stringWidth(s);
-            g.drawString(s, x - latencyX - w + 1, y - latencyY * index - 2);
+            
+            // Issue #31
+            latencyX = scale( latencyX );
+            latencyY = scale( latencyY );
+            textHeight = scale( textHeight );
+            
+            drawSingleString(g,s, x - latencyX - w + 1, y - latencyY * index - 2); 
             g.drawRect(x - latencyX - w, y - latencyY * index - textHeight, w + 4, textHeight);
             g.drawLine(x, y, x - latencyX, y - latencyY * index);
-            g.drawString(latencyVals.get(s), x - latencyX / 2, y - latencyY * index / 2);
+            drawSingleString(g,latencyVals.get(s), x - latencyX / 2, y - latencyY * index / 2);
             index++;
         }
     }
@@ -243,15 +255,15 @@ public class TMLADReadChannel extends TADComponentWithoutSubcomponents/* Issue #
                     return;
             }
 
-            GraphicLib.arrowWithLine(g, 1, 0, 10, x - 30, y - 3, x - 15, y - 3, true);
-            g.drawOval(x - 11, y - 10, 7, 9);
+            GraphicLib.arrowWithLine(g, 1, 0, 10, x - scale( 30 ), y - scale( 3 ), x - scale( 15 ), y - scale( 3 ), true); // Issue #31
+            g.drawOval(x - scale( 11 ), y - scale( 10 ), scale( 7 ), scale( 9 )); // Issue #31
             g.setColor(c1);
-            g.fillRect(x - 12, y - 7, 9, 7);
+            g.fillRect(x - scale( 12 ), y - scale( 7 ), scale( 9 ), scale( 7 )); // Issue #31
             g.setColor(c);
-            g.drawRect(x - 12, y - 7, 9, 7);
+            g.drawRect(x - scale( 12 ), y - scale( 7 ), scale( 9 ), scale( 7 )); // Issue #31
             if (reachabilityInformation == NOT_REACHABLE) {
-                g.drawLine(x - 14, y - 9, x - 1, y + 3);
-                g.drawLine(x - 14, y + 3, x - 1, y - 9);
+                g.drawLine(x - scale( 14 ), y - scale( 9 ), x - scale( 1 ), y + scale( 3 )); // Issue #31
+                g.drawLine(x - scale( 14 ), y + scale( 3 ), x - scale( 1 ), y - scale( 9 )); // Issue #31
             }
         }
     }

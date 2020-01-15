@@ -221,7 +221,7 @@ public abstract class SysmlsecMethodologyDiagramReference extends TGCScalableWit
           g.setColor(tmp);
           GraphicLib.setNormalStroke(g);
           } else {
-          //g.drawString("acc", x + width - 10, y+height-10);
+          //drawSingleString(g, "acc", x + width - 10, y+height-10);
           Color tmp = g.getColor();
           GraphicLib.setMediumStroke(g);
           g.setColor(Color.red);

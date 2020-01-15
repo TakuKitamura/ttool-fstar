@@ -61,7 +61,7 @@ import java.awt.*;
 public class FTDFault extends TGCScalableWithInternalComponent implements SwallowedTGComponent, WithAttributes, CheckableAccessibility/*, Issue #69 CanBeDisabled*/ {
     public static double DEFAULT_PROBABILITY = 0.5;
 
-    private int textY1 = 3;
+//    private int textY1 = 3;
     //   private int textY2 = 3;
 
     // private static int arc = 7;
@@ -84,9 +84,11 @@ public class FTDFault extends TGCScalableWithInternalComponent implements Swallo
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
         width = 125;
-        height = (int)(40 * tdp.getZoom());
+        height = 40; //(int)(40 * tdp.getZoom());
         minWidth = 100;
-
+        textY = 3; //issue 31
+        initScaling(125, 40);
+        
         nbConnectingPoint = 24;
         connectingPoint = new TGConnectingPoint[24];
 
@@ -146,9 +148,9 @@ public class FTDFault extends TGCScalableWithInternalComponent implements Swallo
         }
 
 
-        if (currentFontSize == -1) {
-            currentFontSize = f.getSize();
-        }
+//        if (currentFontSize == -1) {
+//            currentFontSize = f.getSize();
+//        }
 
         if ((rescaled) && (!tdp.isScaled())) {
             rescaled = false;
@@ -195,11 +197,11 @@ public class FTDFault extends TGCScalableWithInternalComponent implements Swallo
             g.setFont(f);
             //Font f0 = g.getFont();
 
-            boolean cannotWriteFault = (height < (2 * currentFontSize + (int)(textY1 * tdp.getZoom())));
+            boolean cannotWriteFault = (height < (2 * currentFontSize + (int)(textY * tdp.getZoom())));
             //TraceManager.addDev("Zoom=" + tdp.getZoom() + " Cannot write attack=" + cannotWriteAttack + "Font=" + f0);
             if (cannotWriteFault) {
                 w  = g.getFontMetrics().stringWidth(value);
-                int h =  currentFontSize + (int)(textY1 * tdp.getZoom());
+                int h =  currentFontSize + (int)(textY * tdp.getZoom());
                 if ((w < (2*textX + width)) && (h < height)) {
                     g.drawString(value, x + (width - w)/2, y + h);
                 } else {
@@ -210,7 +212,7 @@ public class FTDFault extends TGCScalableWithInternalComponent implements Swallo
                 }
             } else {
                 g.setFont(f.deriveFont(Font.BOLD));
-                int h =  currentFontSize + (int)(textY1 * tdp.getZoom());
+                int h =  currentFontSize + (int)(textY * tdp.getZoom());
                 int cumulated = 0;
                 w = g.getFontMetrics().stringWidth(ster);
                 if ((w < (2*textX + width)) && (h < height)) {
@@ -219,7 +221,7 @@ public class FTDFault extends TGCScalableWithInternalComponent implements Swallo
                 }
                 g.setFont(f);
                 w  = g.getFontMetrics().stringWidth(value);
-                h = cumulated + currentFontSize + (int)(textY1 * tdp.getZoom());
+                h = cumulated + currentFontSize + (int)(textY * tdp.getZoom());
                 if ((w < (2*textX + width)) && (h < height)) {
                     //TraceManager.addDev("Drawing value=" + value);
                     g.drawString(value, x + (width - w)/2, y + h);

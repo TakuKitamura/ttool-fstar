@@ -59,9 +59,6 @@ public class SysCAMSComponentTaskDiagramToolBar extends TToolBar {
 	}
 
 	protected void setActive(boolean b) {
-		mgui.actions[TGUIAction.ACT_ZOOM_MORE].setEnabled(b);
-		mgui.actions[TGUIAction.ACT_ZOOM_LESS].setEnabled(b);
-
 		mgui.actions[TGUIAction.CAMS_EDIT].setEnabled(b);
 		mgui.actions[TGUIAction.UML_NOTE].setEnabled(b);
 		mgui.actions[TGUIAction.CAMS_BLOCK_TDF].setEnabled(b);
@@ -79,7 +76,10 @@ public class SysCAMSComponentTaskDiagramToolBar extends TToolBar {
 		mgui.actions[TGUIAction.ACT_ONECLICK_LOTOS_RG].setEnabled(b);
 		mgui.actions[TGUIAction.ACT_SIMU_SYSTEMC].setEnabled(b);
 
-		mgui.actions[TGUIAction.ACT_SHOW_ZOOM].setEnabled(b);
+		// Issue #31
+		mgui.actions[ TGUIAction.ACT_ZOOM_MORE ].setEnabled( b );
+		mgui.actions[ TGUIAction.ACT_ZOOM_LESS ].setEnabled( b );
+		mgui.actions[ TGUIAction.ACT_SHOW_ZOOM ].setEnabled( b );
 		mgui.updateZoomInfo();
 	}
 

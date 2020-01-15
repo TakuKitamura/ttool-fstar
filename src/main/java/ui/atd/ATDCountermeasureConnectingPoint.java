@@ -36,11 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.atd;
-
 
 import ui.CDElement;
 import ui.TGComponentManager;
@@ -59,8 +55,8 @@ public class ATDCountermeasureConnectingPoint extends  TGConnectingPointWidthHei
         super(_container, _x, _y, _in, _out, _w, _h);
     }
     
+    @Override
     public boolean isCompatibleWith(int type) {
         return type == TGComponentManager.ATD_COUNTERMEASURE_CONNECTOR;
     }
-    
 }

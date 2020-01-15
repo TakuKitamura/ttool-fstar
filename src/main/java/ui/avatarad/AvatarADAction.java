@@ -55,8 +55,8 @@ import java.awt.geom.Line2D;
  */
 public class AvatarADAction extends AvatarADBasicCanBeDisabledComponent/* Issue #69 AvatarADBasicComponent*/ implements EmbeddedComment, BasicErrorHighlight {
     protected int lineLength = 5;
-    protected int textX =  5;
-    protected int textY =  15;
+//    protected int textX =  5;
+//    protected int textY =  15;
     protected int arc = 5;
 
     protected int stateOfError = 0; // Not yet checked
@@ -66,7 +66,10 @@ public class AvatarADAction extends AvatarADBasicCanBeDisabledComponent/* Issue 
     public AvatarADAction(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
+        textX =  5;
+        textY =  15;
         initScaling(30, 20);
+        
         minWidth = (int)(30* tdp.getZoom());
         oldScaleFactor = tdp.getZoom();
 
@@ -84,7 +87,7 @@ public class AvatarADAction extends AvatarADBasicCanBeDisabledComponent/* Issue 
 
         myImageIcon = IconManager.imgic204;
     }
-
+    
     @Override
     public void internalDrawing(Graphics g) {
         int w  = g.getFontMetrics().stringWidth(value);
@@ -112,7 +115,7 @@ public class AvatarADAction extends AvatarADBasicCanBeDisabledComponent/* Issue 
         g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
         g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
 
-        g.drawString(value, x + (width - w) / 2 , y + (int)((textY*tdp.getZoom())));
+        drawSingleString(g, value, x + (width - w) / 2 , y + textY);
 
     }
 

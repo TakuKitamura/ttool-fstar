@@ -57,12 +57,6 @@ public class TGConnectingPointTMLCP extends  TGConnectingPointWidthHeight{
     
     @Override
     public boolean isCompatibleWith(int type) {
-        //
-        if (type == TGComponentManager.CONNECTOR_TMLCP) {
-            //
-            return true;
-        }
-        //
-        return false;
+        return type == TGComponentManager.CONNECTOR_TMLCP;
     }
 }

@@ -53,7 +53,9 @@ import ui.ad.TADStartState;
  * @author Ludovic APVRILLE
  */
 public class TMLADStartState extends TADStartState /* Issue #69 TGCWithoutInternalComponent*/ implements EmbeddedComment{
-    private int lineLength = 5;
+
+	// Issue #31
+    //private int lineLength = 5;
     
     public TMLADStartState(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);

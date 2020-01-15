@@ -73,7 +73,8 @@ public class TMLActivityElementWithIntervalAction extends TMLActivityElement {
     public String getMaxDelay() {
         return maxDelay;
     }
-
+    
+    @Override
     public String customExtraToXML() {
 	return " min=\"" + minDelay +  "\" max=\"" + maxDelay + "\" " + "isActiveDelay=\"" + isActiveDelay + "\" ";
     }

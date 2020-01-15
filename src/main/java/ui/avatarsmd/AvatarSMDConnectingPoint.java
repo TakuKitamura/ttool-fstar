@@ -36,12 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
- 
 package ui.avatarsmd;
-
-//import java.awt.*;
 
 import ui.CDElement;
 import ui.TGComponentManager;
@@ -60,15 +55,8 @@ public class AvatarSMDConnectingPoint extends  TGConnectingPointWidthHeight{
 		super(_container, _x, _y, _in, _out, _w, _h);
 	}
 
+	@Override
 	public boolean isCompatibleWith(int type) {
         return type == TGComponentManager.AVATARSMD_CONNECTOR;
     }
-       
 }
-
-
-
-
-    
-
-

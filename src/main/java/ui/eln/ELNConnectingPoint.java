@@ -60,10 +60,12 @@ public class ELNConnectingPoint extends TGConnectingPointWidthHeight {
 		name = _name;
 	}
 
+	@Override
 	public boolean isCompatibleWith(int type) {
 		return type == TGComponentManager.ELN_CONNECTOR;
 	}
 	
+	@Override
 	public String getName() {
 		return name;
 	}

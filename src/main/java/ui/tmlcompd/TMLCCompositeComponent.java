@@ -62,10 +62,10 @@ import java.util.ListIterator;
  * @author Ludovic APVRILLE
  */
 public class TMLCCompositeComponent extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent, HiddenInternalComponents {
-	private int maxFontSize = 20;
-	private int minFontSize = 4;
+//	private int maxFontSize = 20;
+//	private int minFontSize = 4;
 	private int currentFontSize = -1;
-	private boolean displayText = true;
+//	private boolean displayText = true;
 //	private int spacePt = 3;
 	private Color myColor;
 	private int iconSize = 17;
@@ -113,93 +113,124 @@ public class TMLCCompositeComponent extends TGCScalableWithInternalComponent imp
     }
     
     @Override
-    public void internalDrawing(Graphics g) {
-		int w;
-		int c;
-		Font f = g.getFont();
-		Font fold = f;
-		//FontMetrics fm = g.getFontMetrics();
-		
-		if (myColor == null) {
+    public void internalDrawing(Graphics g)
+    {
+    	//Color choosing
+    	if (myColor == null) {
 			if (ColorManager.TML_COMPOSITE_COMPONENT == Color.white) {
 				myColor = Color.white;
 			} else {
-			myColor = new Color(251, 252, 200- (getMyDepth() * 10), 200);
+				myColor = new Color(251, 252, 200- (getMyDepth() * 10), 200);
 			}
 		}
-		
-		if ((rescaled) && (!tdp.isScaled())) {
-			
-			if (currentFontSize == -1) {
-				currentFontSize = f.getSize();
-			}
-			rescaled = false;
-			// Must set the font size ..
-			// Find the biggest font not greater than max_font size
-			// By Increment of 1
-			// Or decrement of 1
-			// If font is less than 4, no text is displayed
-			
-			int maxCurrentFontSize = Math.max(0, Math.min(height-(2*textX), maxFontSize));
-			
-			//f = f.deriveFont((float)maxCurrentFontSize);
-			//g.setFont(f);
-			while(maxCurrentFontSize > (minFontSize-1)) {
-				f = f.deriveFont((float)maxCurrentFontSize);
-				g.setFont(f);
-				w = g.getFontMetrics().stringWidth(value);
-				//w = fm.stringWidth(value);
-				c = width - iconSize - (2 * textX);
-				//
-				if (w < c) {
-					break;
-				}
-				maxCurrentFontSize --;
-				
-			}
-			currentFontSize = maxCurrentFontSize;
-
-            displayText = currentFontSize >= minFontSize;
-		}
-		
-		// Zoom is assumed to be computed
-		Color col = g.getColor();
+    	
+    	//Rectangle & filling
+    	Color col = g.getColor();
 		g.drawRect(x, y, width, height);
 		if ((width > 2) && (height > 2)) {
 			g.setColor(myColor);
 			g.fillRect(x+1, y+1, width-1, height-1);
 			g.setColor(col);
 		}
-		
-        // Font size 
-		if (displayText) {
-			f = f.deriveFont((float)currentFontSize);
-			g.setFont(f);
-			w = g.getFontMetrics().stringWidth(value);
-			//
-			if (!(w < (width - 2 * (iconSize + textX)))) {
-				g.drawString(value, x + textX + 1, y + currentFontSize + textX);
-			} else {
-				g.drawString(value, x + (width - w)/2, y + currentFontSize + textX);
-			}
-		}
-		
-		g.setFont(fold);
-		
-		// Icon
-		if ((width>30) && (height > (iconSize + 2*textX))) {
-			g.drawImage(IconManager.imgic1200.getImage(), x + width - iconSize - textX, y + textX, null);
-		}
+    	
+    	//Strings
+    	Font f = g.getFont();
+    	currentFontSize = f.getSize();
+    	if (canTextGoInTheBox(g, currentFontSize, value, iconSize + textX))
+    		drawSingleString(g, value, getCenter(g, value), y + currentFontSize + textX);
+    	
+    	//Icon
+    	drawImageWithCheck(g, IconManager.imgic1200.getImage(), x + width - scale(iconSize) - textX, y + textX);
     }
+    
+   // @Override
+//    public void internalDrawin(Graphics g) {
+//		int w;
+//		int c;
+//		Font f = g.getFont();
+//		Font fold = f;
+//		//FontMetrics fm = g.getFontMetrics();
+//		
+//		if (myColor == null) {
+//			if (ColorManager.TML_COMPOSITE_COMPONENT == Color.white) {
+//				myColor = Color.white;
+//			} else {
+//				myColor = new Color(251, 252, 200- (getMyDepth() * 10), 200);
+//			}
+//		}
+//		
+//		if ((rescaled) && (!tdp.isScaled())) {
+//			
+//			if (currentFontSize == -1) {
+//				currentFontSize = f.getSize();
+//			}
+//			rescaled = false;
+//			// Must set the font size ..
+//			// Find the biggest font not greater than max_font size
+//			// By Increment of 1
+//			// Or decrement of 1
+//			// If font is less than 4, no text is displayed
+//			
+//			int maxCurrentFontSize = Math.max(0, Math.min(height-(2*textX), maxFontSize));
+//			
+//			//f = f.deriveFont((float)maxCurrentFontSize);
+//			//g.setFont(f);
+//			while(maxCurrentFontSize > (minFontSize-1)) {
+//				f = f.deriveFont((float)maxCurrentFontSize);
+//				g.setFont(f);
+//				w = g.getFontMetrics().stringWidth(value);
+//				//w = fm.stringWidth(value);
+//				c = width - iconSize - (2 * textX);
+//				//
+//				if (w < c) {
+//					break;
+//				}
+//				maxCurrentFontSize --;
+//				
+//			}
+//			currentFontSize = maxCurrentFontSize;
+//
+//            displayText = currentFontSize >= minFontSize;
+//		}
+//		
+//		// Zoom is assumed to be computed
+//		Color col = g.getColor();
+//		g.drawRect(x, y, width, height);
+//		if ((width > 2) && (height > 2)) {
+//			g.setColor(myColor);
+//			g.fillRect(x+1, y+1, width-1, height-1);
+//			g.setColor(col);
+//		}
+//		
+//        // Font size 
+//		if (displayText) {
+//			f = f.deriveFont((float)currentFontSize);
+//			g.setFont(f);
+//			w = g.getFontMetrics().stringWidth(value);
+//			
+//			if (!(w < (width - 2 * (iconSize + textX)))) {
+//				drawSingleString(g, value, x + textX + 1, y + currentFontSize + textX);
+//			} else {
+//				drawSingleString(g, value, x + (width - w)/2, y + currentFontSize + textX);
+//			}
+//		}
+//		
+//		g.setFont(fold);
+//		
+//		// Icon
+//		if ((width>30) && (height > (iconSize + 2*textX))) {
+//			g.drawImage(IconManager.imgic1200.getImage(), x + width - iconSize - textX, y + textX, null);
+//		}
+//    }
 	
-    @Override
-	public void rescale(double scaleFactor){
-		dtextX = (textX + dtextX) / oldScaleFactor * scaleFactor;
-		textX = (int)(dtextX);
-		dtextX = dtextX - textX; 
-		
-		super.rescale(scaleFactor);
-	}
+//    @Override
+//	public void rescale(double scaleFactor){
+//		dtextX = (textX + dtextX) / oldScaleFactor * scaleFactor;
+//		textX = (int)(dtextX);
+//		dtextX = dtextX - textX; 
+//		
+//		super.rescale(scaleFactor);
+//	}
     
     @Override
     public TGComponent isOnOnlyMe(int _x, int _y) {

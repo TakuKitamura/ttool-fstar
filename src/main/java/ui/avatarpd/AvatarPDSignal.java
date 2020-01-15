@@ -56,26 +56,26 @@ import java.awt.*;
  * @author Ludovic APVRILLE
  */
 public class AvatarPDSignal extends TGCScalableWithInternalComponent implements SwallowedTGComponent  {
-    private int textY1 = 3;
-    private int textY2 = 3;
+    //private int textY1 = 3;
+    //private int textY2 = 3;
 	//private int textX = 10;
 	
     protected String oldValue = "";
     protected String description = "";
 	private String stereotype = "signal";
-	private boolean isRootAttack = false;
+	//private boolean isRootAttack = false;
 	 
 	private int maxFontSize = 12;
-	private int minFontSize = 4;
+	//private int minFontSize = 4;
 	private int currentFontSize = -1;
-	private boolean displayText = true;
+	//private boolean displayText = true;
 	private int textX = 2;
     
     public AvatarPDSignal(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-        width = (int)(125* tdp.getZoom());
-        height = (int)(40 * tdp.getZoom());
+        width = 125;//(int)(125* tdp.getZoom());
+        height = 40;//(int)(40 * tdp.getZoom());
         minWidth = 100;
         
         nbConnectingPoint = 12;
@@ -107,7 +107,36 @@ public class AvatarPDSignal extends TGCScalableWithInternalComponent implements 
         
         myImageIcon = IconManager.imgic702;
     }
+    // Issue #31
+    @Override
+    public void internalDrawing(Graphics g)
+    {
+    	//Rectangle + Filling
+    	Color c = g.getColor();
+		g.draw3DRect(x, y, width, height, true);
+		g.setColor(ColorManager.AVATARPD_SIGNAL);
+		g.fill3DRect(x+1, y+1, width-1, height-1, true);
+		g.setColor(c);
+    	
+		//Strings: Title and stereotype
+		currentFontSize = g.getFont().getSize();
+		String ster = "<<" + stereotype + ">>";
+		if (isTextReadable(g))
+		{
+			g.setFont(g.getFont().deriveFont(Font.BOLD));
+			g.drawString(ster,  getCenterOfBox(g, ster), y + currentFontSize);
+		}
+		
+		if (isTextReadable(g))
+		{
+			g.setFont(g.getFont().deriveFont(Font.PLAIN));
+			g.drawString(value, getCenterOfBox(g, value), y + (currentFontSize * 2) + textX);
+		}
+    }
     
+    
+/*
+ * 	@Override
     public void internalDrawing(Graphics g) {
 		String ster;
 		ster = "<<" + stereotype + ">>";
@@ -206,7 +235,7 @@ public class AvatarPDSignal extends TGCScalableWithInternalComponent implements 
 		
 		g.setFont(fold);
         
-    }
+    }*/
     
    public void setValue(String val, Graphics g) {
         oldValue = value;
@@ -232,8 +261,8 @@ public class AvatarPDSignal extends TGCScalableWithInternalComponent implements 
     
     
      public boolean editOndoubleClick(JFrame frame) {
-		String tmp;
-		boolean error = false;
+//		String tmp;
+//		boolean error = false;
 		
 		//String text = getName() + ": ";
 		String s = (String)JOptionPane.showInputDialog(frame, "Signal name",

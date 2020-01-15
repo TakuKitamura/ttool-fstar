@@ -109,8 +109,8 @@ public class TMLSDPanel extends TDiagramPanel {
         return false;
     }
     
-    public String getXMLHead() {
-        return "<TMLSDPanel name=\"" + name + "\"" + sizeParam() + " >";
+    public String getXMLHead() {							// Issue #31
+        return "<TMLSDPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
     }
     
     public String getXMLTail() {

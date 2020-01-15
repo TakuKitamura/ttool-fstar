@@ -593,7 +593,7 @@ public class TMLComponentTaskDiagramPanel extends TDiagramPanel implements TDPWi
     public String getXMLCloneTail() {
         return "</TMLComponentTaskDiagramPanelCopy>";
     }
-
+    @Override
     public boolean areAttributesVisible() {
         return attributesVisible;
     }

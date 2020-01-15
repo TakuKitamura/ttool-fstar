@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmlcd;
 
 import myutil.GraphicLib;
@@ -86,16 +83,18 @@ public class TMLOperationBox extends TGCWithoutInternalComponent {
         myImageIcon = IconManager.imgic122;
     }
     
-    public void internalDrawing(Graphics g) {
+    @Override
+    protected void internalDrawing(Graphics g) {
         g.drawRect(x, y, width, height);
         g.setColor(ColorManager.OPERATION_BOX);
         g.fillRect(x+1, y+1, width-1, height-1);
         ColorManager.setColor(g, getState(), 0);
         if (value.length() > 0) {
-            g.drawString(value, x + textX, y + textY);
+            drawSingleString(g,value, x + textX, y + textY);
         }
     }
     
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
         oldValue = value;
         String text = getName() + ": ";
@@ -112,7 +111,7 @@ public class TMLOperationBox extends TGCWithoutInternalComponent {
         return false;
     }
     
-    
+    @Override
     public TGComponent isOnMe(int x1, int y1) {
         if (GraphicLib.isInRectangle(x1, y1, x, y, width, height)) {
             return this;
@@ -120,15 +119,8 @@ public class TMLOperationBox extends TGCWithoutInternalComponent {
         return null;
     }
     
+    @Override
     public int getDefaultConnector() {
       return TGComponentManager.CONNECTOR_TML_ASSOCIATION_NAV;
     }
-    
 }
-
-
-
-
-
-
-

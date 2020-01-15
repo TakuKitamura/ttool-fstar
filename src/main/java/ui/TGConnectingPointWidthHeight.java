@@ -45,7 +45,7 @@ package ui;
  * @version 1.0 09/12/2003
  * @author Ludovic APVRILLE
  */
-public class TGConnectingPointWidthHeight extends TGConnectingPoint{
+public class TGConnectingPointWidthHeight extends TGConnectingPoint {
 
 	protected double w;
     
@@ -56,15 +56,16 @@ public class TGConnectingPointWidthHeight extends TGConnectingPoint{
         w = _w;
         h = _h;
     }
-
+    /* From Interface ui.CDElement*/
     @Override
     public int getX() {
-        return x + container.getX() + (int)(container.getWidth() * w);
+        return scaledX() + container.getX() + (int)(container.getWidth() * w );
     }
-
+    
+    /* From Interface ui.CDElement*/
     @Override
     public int getY() {
-        return y + container.getY() + (int)(container.getHeight() * h);
+        return scaledY() + container.getY() + (int)(container.getHeight() * h);
     }
 
     public void setW(double _w) {

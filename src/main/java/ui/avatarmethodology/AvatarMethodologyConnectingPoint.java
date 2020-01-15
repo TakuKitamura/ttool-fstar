@@ -36,12 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatarmethodology;
-
-//import java.awt.*;
 
 import ui.CDElement;
 import ui.TGComponentManager;
@@ -60,13 +55,14 @@ public class AvatarMethodologyConnectingPoint extends  TGConnectingPointWidthHei
         super(_container, _x, _y, _in, _out, _w, _h);
 		orientation = _orientation;
     }
-    
+    /**
+     * From ui.TGConnectingPoint.isCompatibleWith
+     * isCompatibleWith checks if the element to be connected are compatible ?
+     * @param type
+     * @return boolean indicating if the type is compatible
+     * */
+    @Override
     public boolean isCompatibleWith(int type) {
-
         return type == TGComponentManager.AVATARMETHODOLOGY_CONNECTOR;
-
-
     }
-	
-
 }

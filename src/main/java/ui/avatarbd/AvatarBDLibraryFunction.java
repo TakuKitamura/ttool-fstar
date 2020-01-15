@@ -178,6 +178,7 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
         this.height = 100;
         this.minWidth = 5;
         this.minHeight = 2;
+        initScaling(160, 100);
 
         this.nbConnectingPoint = 0;
         this.connectingPoint = new TGConnectingPoint[0];
@@ -336,7 +337,7 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
         // Draw icon
         this.iconIsDrawn = this.width > IconManager.iconSize + 2 * paddingHorizontal && height > IconManager.iconSize + 2 * paddingHorizontal;
         if (this.iconIsDrawn)
-            graph.drawImage(IconManager.img5100, this.x + this.width - IconManager.iconSize - paddingHorizontal, this.y + paddingHorizontal, null);
+            graph.drawImage(scale(IconManager.img5100), this.x + this.width - scale(IconManager.iconSize) - paddingHorizontal, this.y + paddingHorizontal, null);
 
 
         Font font = graph.getFont();
@@ -396,7 +397,7 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
         // Write stereotype if small enough
         int w = graph.getFontMetrics().stringWidth(ster);
         if (w + 2 * paddingHorizontal < this.width)
-            graph.drawString(ster, this.x + (this.width - w) / 2, this.y + h);
+            drawSingleString(graph, ster, this.x + (this.width - w) / 2, this.y + h);
         else {
             // try to draw with "..." instead
             if (!this.isCrypto)
@@ -408,7 +409,7 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
                 String abbrev = "<<" + ster.substring(0, stringLength) + "...>>";
                 w = graph.getFontMetrics().stringWidth(abbrev);
                 if (w + 2 * paddingHorizontal < this.width) {
-                    graph.drawString(abbrev, this.x + (this.width - w) / 2, this.y + h);
+                    drawSingleString(graph, abbrev, this.x + (this.width - w) / 2, this.y + h);
                     break;
                 }
             }
@@ -422,14 +423,14 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
 
         w = graph.getFontMetrics().stringWidth(this.value);
         if (w + 2 * paddingHorizontal < this.width)
-            graph.drawString(this.value, this.x + (this.width - w) / 2, this.y + h);
+            drawSingleString(graph, this.value, this.x + (this.width - w) / 2, this.y + h);
         else {
             // try to draw with "..." instead
             for (int stringLength = this.value.length() - 1; stringLength >= 0; stringLength--) {
                 String abbrev = this.value.substring(0, stringLength) + "...";
                 w = graph.getFontMetrics().stringWidth(abbrev);
                 if (w + 2 * paddingHorizontal < this.width) {
-                    graph.drawString(abbrev, this.x + (this.width - w) / 2, this.y + h);
+                    drawSingleString(graph, abbrev, this.x + (this.width - w) / 2, this.y + h);
                     break;
                 }
             }
@@ -471,7 +472,7 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
             // Try to draw it
             w = graph.getFontMetrics().stringWidth(attrString);
             if (w + 2 * paddingHorizontal < this.width)
-                graph.drawString(attrString, this.x + paddingHorizontal, this.y + h);
+                drawSingleString(graph, attrString, this.x + paddingHorizontal, this.y + h);
             else {
                 // If we can't, try to draw with "..." instead
                 int stringLength;
@@ -479,7 +480,7 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
                     String abbrev = attrString.substring(0, stringLength) + "...";
                     w = graph.getFontMetrics().stringWidth(abbrev);
                     if (w + 2 * paddingHorizontal < this.width) {
-                        graph.drawString(abbrev, this.x + paddingHorizontal, this.y + h);
+                        drawSingleString(graph, abbrev, this.x + paddingHorizontal, this.y + h);
                         break;
                     }
                 }
@@ -512,7 +513,7 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
             String signalString = "~ " + signal.toString();
             w = graph.getFontMetrics().stringWidth(signalString);
             if (w + 2 * paddingHorizontal < this.width)
-                graph.drawString(signalString, this.x + paddingHorizontal, this.y + h);
+                drawSingleString(graph, signalString, this.x + paddingHorizontal, this.y + h);
             else {
                 // If we can't, try to draw with "..." instead
                 int stringLength;
@@ -520,7 +521,7 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
                     String abbrev = signalString.substring(0, stringLength) + "...";
                     w = graph.getFontMetrics().stringWidth(abbrev);
                     if (w + 2 * paddingHorizontal < this.width) {
-                        graph.drawString(abbrev, this.x + paddingHorizontal, this.y + h);
+                        drawSingleString(graph, abbrev, this.x + paddingHorizontal, this.y + h);
                         break;
                     }
                 }
@@ -553,7 +554,7 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
 
             w = graph.getFontMetrics().stringWidth(attrString);
             if (w + 2 * paddingHorizontal < this.width)
-                graph.drawString(attrString, this.x + paddingHorizontal, this.y + h);
+                drawSingleString(graph, attrString, this.x + paddingHorizontal, this.y + h);
             else {
                 // If we can't, try to draw with "..." instead
                 int stringLength;
@@ -561,7 +562,7 @@ public class AvatarBDLibraryFunction extends TGCScalableWithoutInternalComponent
                     String abbrev = attrString.substring(0, stringLength) + "...";
                     w = graph.getFontMetrics().stringWidth(abbrev);
                     if (w + 2 * paddingHorizontal < this.width) {
-                        graph.drawString(abbrev, this.x + paddingHorizontal, this.y + h);
+                        drawSingleString(graph, abbrev, this.x + paddingHorizontal, this.y + h);
                         break;
                     }
                 }

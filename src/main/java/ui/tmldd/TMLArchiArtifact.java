@@ -58,16 +58,21 @@ import java.awt.*;
  * @author Ludovic APVRILLE
  * @version 1.0 02/05/2005
  */
-public class TMLArchiArtifact extends TGCWithoutInternalComponent implements SwallowedTGComponent, WithAttributes,
-        TMLArchiTaskInterface {
-    protected int lineLength = 5;
-    protected int textX = 5;
-    protected int textY = 15;
-    protected int textY2 = 35;
-    protected int space = 5;
-    protected int fileX = 20;
-    protected int fileY = 25;
-    protected int cran = 5;
+public class TMLArchiArtifact extends TGCWithoutInternalComponent implements SwallowedTGComponent, WithAttributes, TMLArchiTaskInterface {
+
+	// Issue #31
+	private static final int SPACE = 5;
+	private static final int CRAN = 5;
+	private static final int FILE_X = 20;
+	private static final int FILE_Y = 25;
+//    protected int lineLength = 5;
+//    protected int textX =  5;
+//    protected int textY =  15;
+//    protected int textY2 =  35;
+//    protected int space = 5;
+//    protected int fileX = 20;
+//    protected int fileY = 25;
+//    protected int cran = 5;
 
     protected String oldValue = "";
     protected String referenceTaskName = "referenceToTask";
@@ -78,16 +83,19 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
 
     private ArchUnitMEC fatherArchUnitMECType = new CpuMEC();
 
-    public String status = "";
-    public String lastTransaction = "";
-
-    public TMLArchiArtifact(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos,
-                            TGComponent _father, TDiagramPanel _tdp) {
+    public String status="";
+    public String lastTransaction="";
+    
+    public TMLArchiArtifact(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        width = 100;
-        height = 40;
+        // Issue #31
+		textX = 5;
+        textY = 15;
+//        width = 100;
+//        height = 40;
         minWidth = 100;
+        initScaling( 100, 40 );
 
         nbConnectingPoint = 0;
         addTGConnectingPointsComment();
@@ -96,7 +104,7 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
         editable = true;
         removable = true;
         userResizable = true;
-        value = "TMLDesign::task";
+        value = "TMLDesign::task    ";
         taskName = "name";
         referenceTaskName = "TMLTask";
 
@@ -105,29 +113,34 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
         myImageIcon = IconManager.imgic702;
     }
 
+    @Override
     public boolean isHidden() {
-        //TraceManager.addDev("Archi task artifact: Am I hidden?" + getValue());
-        boolean ret = false;
-        if (tdp != null) {
-            if (tdp instanceof TMLArchiDiagramPanel) {
-                ret = !(((TMLArchiDiagramPanel) (tdp)).inCurrentView(this));
-
-            }
-        }
-        //TraceManager.addDev("Hidden? -> " + ret);
-        return ret;
+		//TraceManager.addDev("Archi task artifact: Am I hidden?" + getValue());
+		boolean ret = false;
+		if (tdp != null) {
+		    if (tdp instanceof TMLArchiDiagramPanel) {
+			ret = !(((TMLArchiDiagramPanel)(tdp)).inCurrentView(this));
+			
+		    }
+		}
+		//TraceManager.addDev("Hidden? -> " + ret);
+		return ret;
     }
 
     public int getPriority() {
         return priority;
     }
 
+    /*public String getOperation() {
+      return operation;
+      }*/
 
-    public void internalDrawing(Graphics g) {
-
+    @Override
+    protected void internalDrawing(Graphics g) {
         if (oldValue.compareTo(value) != 0) {
             setValue(value, g);
         }
+
         g.drawRect(x, y, width, height);
         Color c = g.getColor();
 
@@ -145,23 +158,28 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
         g.fillRect(x + 1, y + 1, width - 1, height - 1);
         g.setColor(c);
 
-        //g.drawRoundRect(x, y, width, height, arc, arc);
-        g.drawLine(x + width - space - fileX, y + space, x + width - space - fileX, y + space + fileY);
-        g.drawLine(x + width - space - fileX, y + space, x + width - space - cran, y + space);
-        g.drawLine(x + width - space - cran, y + space, x + width - space, y + space + cran);
-        g.drawLine(x + width - space, y + space + cran, x + width - space, y + space + fileY);
-        g.drawLine(x + width - space, y + space + fileY, x + width - space - fileX, y + space + fileY);
-        g.drawLine(x + width - space - cran, y + space, x + width - space - cran, y + space + cran);
-        g.drawLine(x + width - space - cran, y + space + cran, x + width - space, y + space + cran);
-        g.drawString(value, x + textX, y + textY);
-        //g.drawImage(IconManager.img9, x+width-space-fileX + 3, y + space + 7, null);
-
+        // Issue #31
+        final int space = scale( SPACE );
+        final int marginFileX = scale( SPACE + FILE_X );
+        final int marginFileY = scale( SPACE + FILE_Y );
+        final int marginCran = scale( SPACE + CRAN );
+        
+        g.drawLine(x+width- marginFileX /*space-fileX*/, y + space, x+width- marginFileX /*space-fileX*/, y+ marginFileY/*space+fileY*/);
+        g.drawLine(x+width- marginFileX/*space-fileX*/, y + space, x+width-marginCran/*space-cran*/, y+space);
+        g.drawLine(x+width-marginCran/*space-cran*/, y+space, x+width-space, y+ marginCran/*space + cran*/);
+        g.drawLine(x+width-space, y+ marginCran/*space + cran*/, x+width-space, y+ marginFileY/*space+fileY*/);
+        g.drawLine(x+width-space, y+ marginFileY/*space+fileY*/, x+width-marginFileX/*space-fileX*/, y+ marginFileY/*space+fileY*/);
+        g.drawLine(x+width- marginCran /*space-cran*/, y+space, x+width- marginCran/*space-cran*/, y+ marginCran/*space+cran*/);
+        g.drawLine(x+width- marginCran/*space-cran*/, y+ marginCran/*space+cran*/, x + width-space, y+marginCran /*space+cran*/);
+        drawSingleString(g,value, x + textX , y + textY);
     }
 
     public void setValue(String val, Graphics g) {
         oldValue = value;
-        int w = g.getFontMetrics().stringWidth(value);
-        int w1 = Math.max(minWidth, w + 2 * textX + fileX + space);
+        int w  = g.getFontMetrics().stringWidth(value);
+        
+        final int marginFileX = scale( SPACE + FILE_X );
+        int w1 = Math.max(minWidth, w + 2 * textX + marginFileX/*fileX + space*/);
 
         //
         if (w1 != width) {
@@ -171,6 +189,7 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
         //
     }
 
+    @Override
     public void resizeWithFather() {
         if ((father != null) && ((father instanceof TMLArchiCPUNode) || (father instanceof TMLArchiHWANode) || (father instanceof TMLArchiFPGANode))) {
             //
@@ -180,7 +199,7 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
         }
     }
 
-
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
         String tmp;
         boolean error = false;
@@ -188,9 +207,9 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
             fatherArchUnitMECType = ((TMLArchiNode) father).getMECType();
         }
         JDialogTMLTaskArtifact dialog = new JDialogTMLTaskArtifact(frame, "Setting artifact attributes", this, operationMEC, fatherArchUnitMECType);
-        //    dialog.setSize(400, 350);
+    //    dialog.setSize(400, 350);
         GraphicLib.centerOnParent(dialog, 400, 350);
-        dialog.setVisible(true); // blocked until dialog has been closed
+        dialog.setVisible( true ); // blocked until dialog has been closed
         operationMEC = dialog.getOperation();
 
         if (!dialog.isRegularClose()) {
@@ -228,13 +247,13 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
         makeFullValue();
 
         return !error;
-
     }
 
     public void makeFullValue() {
         value = referenceTaskName + "::" + taskName;
     }
 
+    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -242,33 +261,35 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
         return null;
     }
 
+    @Override
     public int getType() {
         return TGComponentManager.TMLARCHI_ARTIFACT;
     }
 
+    @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
-        sb.append("<info value=\"" + value + "\" taskName=\"" + taskName + "\" referenceTaskName=\"");
-        sb.append(referenceTaskName);
-        sb.append("\" priority=\"");
-        sb.append(priority);
-        sb.append("\" operationMEC=\"");
-        sb.append(operationMEC);
-        sb.append("\" fatherComponentMECType=\"" + fatherArchUnitMECType.getIndex());
-        sb.append("\" />\n");
-        sb.append("</extraparam>\n");
+        sb.append( "<info value=\"" + value + "\" taskName=\"" + taskName + "\" referenceTaskName=\"" );
+        sb.append( referenceTaskName );
+        sb.append( "\" priority=\"" );
+        sb.append( priority );
+        sb.append( "\" operationMEC=\"" );
+        sb.append( operationMEC );
+        sb.append( "\" fatherComponentMECType=\"" + fatherArchUnitMECType.getIndex() );
+        sb.append( "\" />\n" );
+        sb.append( "</extraparam>\n" );
         return new String(sb);
     }
 
     @Override
-    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException {
+    public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
         //
         try {
 
             NodeList nli;
             Node n1, n2;
             Element elt;
-            //   int t1id;
+         //   int t1id;
             String svalue = null, sname = null, sreferenceTask = null;
             String prio;
 
@@ -309,7 +330,7 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
                             if (svalue != null) {
                                 value = svalue;
                             }
-                            if (sname != null) {
+                            if (sname != null){
                                 taskName = sname;
                             }
                             if (sreferenceTask != null) {
@@ -321,7 +342,7 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
             }
 
         } catch (Exception e) {
-            throw new MalformedModelingException();
+            throw new MalformedModelingException( e );
         }
         makeFullValue();
     }
@@ -338,17 +359,15 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
         referenceTaskName = _referenceTaskName;
         makeFullValue();
     }
-
-    public void setFullName(String _taskName, String _referenceTaskName) {
-        taskName = _taskName;
-        referenceTaskName = _referenceTaskName;
+    public void setFullName(String _taskName, String _referenceTaskName){
+        taskName= _taskName;
+        referenceTaskName=_referenceTaskName;
         makeFullValue();
     }
-
     public String getTaskName() {
         return taskName;
     }
-
+    
     public void setTaskName(String s) {
         taskName = s;
     }
@@ -361,55 +380,52 @@ public class TMLArchiArtifact extends TGCWithoutInternalComponent implements Swa
         return operationMEC;
     }
 
-
-    public int getOperationType() {
-
-        //TraceManager.addDev("GET OP TYPE for" + this.getTaskName());
-
-        if (fatherArchUnitMECType instanceof FepMEC) {
-            //TraceManager.addDev("\tFEP" + " opMEC=" + operationMEC);
-            if (operationMEC.equals("CWM")) {
+    public int getOperationType()       {
+        if( fatherArchUnitMECType instanceof FepMEC )   {
+            if( operationMEC.equals( "CWM" ) )     {
                 return FepOperationMEC.CWM_MEC;
-            } else if (operationMEC.equals("CWL")) {
-                //TraceManager.addDev( "Operation: " + operationMEC + " returns " + FepOperationMEC.CwlMEC );
+            }
+            else if( operationMEC.equals( "CWL" ) )        {
+                //TraceManager.addDev( "Operation: " + operation + " returns " + FepOperationMEC.CwlMEC );
                 return FepOperationMEC.CWL_MEC;
-            } else if (operationMEC.equals("CWA")) {
+            }
+            else if( operationMEC.equals( "CWA" ) )        {
                 //TraceManager.addDev( "Operation: " + operation + " returns " + FepOperationMEC.CwaMEC );
                 return FepOperationMEC.CWA_MEC;
-            } else if (operationMEC.equals("CWP")) {
+            }
+            else if( operationMEC.equals( "CWP" ) )        {
                 //TraceManager.addDev( "Operation: " + operation + " returns " + FepOperationMEC.CwpMEC );
                 return FepOperationMEC.CWP_MEC;
-            } else if (operationMEC.equals("FFT")) {
+            }
+            else if( operationMEC.equals( "FFT" ) )        {
                 //TraceManager.addDev( "Operation: " + operation + " returns " + FepOperationMEC.FftMEC );
                 return FepOperationMEC.FFT_MEC;
-            } else if (operationMEC.equals("SUM")) {
+            }
+            else if( operationMEC.equals( "SUM" ) )        {
                 //TraceManager.addDev( "Operation: " + operation + " returns " + FepOperationMEC.SumMEC );
                 return FepOperationMEC.SUM_MEC;
             }
-        } else if (fatherArchUnitMECType instanceof MapperMEC) {
-            //TraceManager.addDev("\tMapper");
+        }
+        else if( fatherArchUnitMECType instanceof MapperMEC )   {
             //TraceManager.addDev( "Operation: " + operation + " returns " + OperationMEC.MappOperationMEC );
             return OperationMEC.MAPP_OPERATION_MEC;
-        } else if (fatherArchUnitMECType instanceof InterleaverMEC) {
-            //TraceManager.addDev("\tInterleaver");
+        }
+        else if( fatherArchUnitMECType instanceof InterleaverMEC        )       {
             //TraceManager.addDev( "Operation: " + operation + " returns " + OperationMEC.IntlOperationMEC );
             return OperationMEC.INTL_OPERATION_MEC;
-        } else if (fatherArchUnitMECType instanceof AdaifMEC) {
-            //TraceManager.addDev("\tAdaif");
+        }
+        else if( fatherArchUnitMECType instanceof AdaifMEC )    {
             //TraceManager.addDev( "Operation: " + operation + " returns " + OperationMEC.AdaifOperationMEC );
             return OperationMEC.ADAIF_OPERATION_MEC;
-        } else if (fatherArchUnitMECType instanceof CpuMEC) {
-            //TraceManager.addDev("\tCpu MEC");
-            ////TraceManager.addDev( "Operation: " + operation + " returns " + OperationMEC.CpuOperationMEC );
+        }
+        else if( fatherArchUnitMECType instanceof CpuMEC )      {
+            //TraceManager.addDev( "Operation: " + operation + " returns " + OperationMEC.CpuOperationMEC );
             return OperationMEC.CPU_OPERATION_MEC;
         }
-        //TraceManager.addDev("\tUnknown MEC");
         return -1;
     }
 
     public ArchUnitMEC getArchUnitMEC() {
         return fatherArchUnitMECType;
     }
-
-
 }

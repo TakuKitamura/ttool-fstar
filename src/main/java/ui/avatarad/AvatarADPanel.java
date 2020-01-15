@@ -149,7 +149,7 @@ public class AvatarADPanel extends TDiagramPanel implements TDPWithAttributes{
         AvatarADPartition ontheLeft = null;//, sdi;
         int x = getMaxX(),xtmp;
         int y;
-        int i;
+//        int i;
         TGComponent tgc;
         Iterator<TGComponent> iterator = componentList.listIterator();
         

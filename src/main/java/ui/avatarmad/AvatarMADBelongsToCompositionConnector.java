@@ -36,11 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatarmad;
-
 
 import ui.*;
 import ui.util.IconManager;
@@ -55,14 +51,14 @@ import java.util.Vector;
    * @version 1.0 16/10/2015
    * @author Ludovic APVRILLE
  */
-public  class AvatarMADBelongsToCompositionConnector extends TGConnectorWithCommentConnectionPoints implements ScalableTGComponent{
+public  class AvatarMADBelongsToCompositionConnector extends TGConnectorWithCommentConnectionPoints /* Issue #31 implements ScalableTGComponent*/ {
     protected int d = 12;
     protected int D = 18;
     //protected int widthValue, heightValue, maxWidthValue, h;
     protected Polygon p;
     protected int xp1, xp2, yp1, yp2;
-    protected double oldScaleFactor;
-    protected boolean rescaled;
+//    protected double oldScaleFactor;
+//    protected boolean rescaled;
 
 
     public AvatarMADBelongsToCompositionConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
@@ -72,10 +68,11 @@ public  class AvatarMADBelongsToCompositionConnector extends TGConnectorWithComm
 
         value = "{info}";
         editable = true;
-        oldScaleFactor = tdp.getZoom();
-        rescaled = true;
+//        oldScaleFactor = tdp.getZoom();
+//        rescaled = true;
     }
-
+    
+    @Override
     protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2) {
         if ((p == null) || (rescaled) || (xp1 != x1) || (xp2 != x2) || (yp1 != y1) || (yp2 != y2)){
             p = new Polygon();
@@ -83,7 +80,7 @@ public  class AvatarMADBelongsToCompositionConnector extends TGConnectorWithComm
             xp2 = x2;
             yp1 = y1;
             yp2 = y2;
-            Double alpha;
+           // Double alpha;
 
             int dd = (int)(d*tdp.getZoom());
             int DD = (int)(D*tdp.getZoom());
@@ -166,6 +163,7 @@ public  class AvatarMADBelongsToCompositionConnector extends TGConnectorWithComm
         rescaled = false;
     }
 
+    @Override
     public TGComponent extraIsOnOnlyMe(int x1, int y1) {
         if (p != null) {
             if (p.contains(x1, y1)) {
@@ -176,35 +174,33 @@ public  class AvatarMADBelongsToCompositionConnector extends TGConnectorWithComm
         return null;
     }
 
-    public void rescale(double scaleFactor){
-        //
-        int xx, yy;
+    //Issue #31 Now managed in upper class
+//    public void rescale(double scaleFactor){
+//        //
+//        int xx, yy;
+//
+//        for(int i=0; i<nbInternalTGComponent; i++) {
+//            xx = tgcomponent[i].getX();
+//            yy = tgcomponent[i].getY();
+//            //
+//            tgcomponent[i].dx = (tgcomponent[i].dx + xx) / oldScaleFactor * scaleFactor;
+//            tgcomponent[i].dy = (tgcomponent[i].dy + yy) / oldScaleFactor * scaleFactor;
+//            xx = (int)(tgcomponent[i].dx);
+//            tgcomponent[i].dx = tgcomponent[i].dx - xx;
+//            yy = (int)(tgcomponent[i].dy);
+//            tgcomponent[i].dy = tgcomponent[i].dy - yy;
+//
+//            tgcomponent[i].setCd(xx, yy);
+//
+//            //
+//        }
+//
+//        oldScaleFactor = scaleFactor;
+//        rescaled = true;
+//    }
 
-        for(int i=0; i<nbInternalTGComponent; i++) {
-            xx = tgcomponent[i].getX();
-            yy = tgcomponent[i].getY();
-            //
-            tgcomponent[i].dx = (tgcomponent[i].dx + xx) / oldScaleFactor * scaleFactor;
-            tgcomponent[i].dy = (tgcomponent[i].dy + yy) / oldScaleFactor * scaleFactor;
-            xx = (int)(tgcomponent[i].dx);
-            tgcomponent[i].dx = tgcomponent[i].dx - xx;
-            yy = (int)(tgcomponent[i].dy);
-            tgcomponent[i].dy = tgcomponent[i].dy - yy;
-
-            tgcomponent[i].setCd(xx, yy);
-
-            //
-        }
-
-        oldScaleFactor = scaleFactor;
-        rescaled = true;
-    }
-
-
+    @Override
     public int getType() {
         return TGComponentManager.AVATARMAD_BELONGSTOCOMPOSITION_CONNECTOR;
     }
-
-
-
 }

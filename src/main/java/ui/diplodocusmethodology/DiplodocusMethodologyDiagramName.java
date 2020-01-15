@@ -65,7 +65,6 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
     public final static int X_MARGIN = 5;
     public final static int Y_MARGIN = 3;
 
-
     protected final static int SIM_TRACE_APP_DIPLO = 0;
     protected final static int SIM_ANIM_APP_DIPLO = 7;
     protected final static int UPP_APP_DIPLO = 1;
@@ -107,6 +106,10 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
     public DiplodocusMethodologyDiagramName(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y,  _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
+        minWidth = 10;
+        minHeight = lineLength;
+        initScaling(10, 10);
+        
         nbConnectingPoint = 0;
         minWidth = 10;
         nbInternalTGComponent = 0;
@@ -117,14 +120,90 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
 
         name = "value ";
 
-
-
-        initScaling(10, 10);
-
-
         myImageIcon = IconManager.imgic302;
     }
+    
+    //Issue #31: Factorisation with isTextReadable included into a new function: drawSingleString
+    @Override
+    public void internalDrawing(Graphics g)
+    {
+//    	if (!isTextReadable(g))
+//    		return;
+    	// Strings
+    	String textDiagramRef = value;
+    	Font f = g.getFont();
+    	//g.drawString(textDiagramRef, x, y);
+    	drawSingleString(g, textDiagramRef, x, y);
+    	//validation and their strings
+    	GestionOfValidations(g, f);
+    }
+    
+    private void setFontStyleWhenPointerIsOnMe(Graphics g, int fontStyle, boolean pointerOnMe, Font font, int index) {
+    	if (pointerOnMe && indexOnMe == index)
+        	g.setFont(font.deriveFont(fontStyle));
+    }
+    
+    private void GestionOfValidations(Graphics g, Font f) {
+        if (validations == null) {
+            if (getFather() instanceof DiplodocusMethodologyDiagramReference) {
+                ((DiplodocusMethodologyDiagramReference)(getFather())).makeValidationInfos(this);
+            }
+        }
+        
+        if ((validations != null) && (valMinX == null)) {
+            valMinX = new int[validations.length];
+            valMaxX = new int[validations.length];
+        }
+        int widthText = g.getFontMetrics().stringWidth(value);
+        int widthFather = getFather().getWidth();
+        int curWidth = Math.max(width, myWidth);
+        int currentMaxWidthX = widthFather + x - 2 * (X_MARGIN);
+        int saveCurrentMaxX = currentMaxWidthX;
+        boolean oneWritten = false;
+        int saveWidth = 0;
+        g.setFont(f.deriveFont(Font.ITALIC));
+        boolean pointerIsOnMe = tdp.componentPointed() == this ? true : false;
+        
+        if ((validations != null) & (validations.length >0)) {
+            for (int i = validations.length-1; i >= 0; i--) {
+                saveWidth = g.getFontMetrics().stringWidth(SHORT_ACTION_NAMES[validations[i]]);
 
+                if ((currentMaxWidthX - saveWidth) > (x + widthText)) {
+//                    if ((onMe && indexOnMe == i)) {
+//                        g.setFont(f.deriveFont(Font.BOLD));
+//                    } Issue #31
+                	setFontStyleWhenPointerIsOnMe(g, Font.BOLD, pointerIsOnMe, f, i);
+                    //g.drawString(SHORT_ACTION_NAMES[validations[i]], currentMaxWidthX - saveWidth, y);
+                	drawSingleString(g, SHORT_ACTION_NAMES[validations[i]], currentMaxWidthX - saveWidth, y);
+                    
+                	g.setFont(f.deriveFont(Font.ITALIC));
+                    valMinX[i] = currentMaxWidthX - saveWidth;
+                    valMaxX[i] = currentMaxWidthX;
+                    oneWritten = true;
+                    currentMaxWidthX = currentMaxWidthX - saveWidth - 5;
+                } else 
+                    break;
+            }
+        }
+
+        g.setFont(f);
+
+        if (oneWritten) {
+            makeScale(g, saveCurrentMaxX - x);
+        } else {
+            makeScale(g, widthText);
+        }
+        // Issue #31: Same as in Avatar Diagram Name: rectangle size error on zoom
+//        if (onMe)
+//            g.drawRect(x-2, y-12, myWidth+4, 15);
+        if (pointerIsOnMe)
+        	g.drawRect(x - 2, y - scale(15), curWidth +  4, scale(15));
+    
+	}
+
+
+	/*
+    @Override
     public void internalDrawing(Graphics g) {
         boolean onMe = false;
 
@@ -132,13 +211,13 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
             onMe = true;
         }
 
-	if (getFather() == null) {
-	    return;
-	}
-	
-	if ((y+Y_MARGIN) > (getFather().getY()+getFather().getHeight())) {
-	    return;
-	}
+		if (getFather() == null) {
+		    return;
+		}
+		
+		if ((y+Y_MARGIN) > (getFather().getY()+getFather().getHeight())) {
+		    return;
+		}
 	
 
         //TraceManager.addDev("Internal drawing ...");
@@ -175,17 +254,17 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
             valMaxX = new int[validations.length];
         }
 
-        /*if (validations == null) {
-          TraceManager.addDev("null validation");
-          } else {
-          TraceManager.addDev("Validation size=" + validations.length);
-          }*/
+//        if (validations == null) {
+//          TraceManager.addDev("null validation");
+//          } else {
+//          TraceManager.addDev("Validation size=" + validations.length);
+//          }
 
         currentMaxX = wf + x - 2*(X_MARGIN);
         saveCurrentMaxX = currentMaxX;
 
         if (wf < w+(2*X_MARGIN)) {
-            makeScale(g, w+(2*X_MARGIN));
+            makeScale(g, w + (2 * X_MARGIN));
             return;
         }
 
@@ -224,14 +303,12 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
         } else {
             makeScale(g, w);
         }
-
+        // Issue #31: Same as in Avatar Diagram Name: rectangle size error on zoom
+//        if (onMe)
+//            g.drawRect(x-2, y-12, myWidth+4, 15);
         if (onMe)
-            g.drawRect(x-2, y-12, myWidth+4, 15);
-
-        return;
-
-
-    }
+        	g.drawRect(x - 2, y - scale(15), myWidth +  4, scale(15));
+    }*/
 
     private void makeScale(Graphics g, int _size) {
         if (!tdp.isScaled()) {
@@ -240,7 +317,7 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
         }
     }
 
-
+    @Override
     public TGComponent isOnMe(int _x, int _y) {
         int oldIndex = indexOnMe;
         if (GraphicLib.isInRectangle(_x, _y, x, y - height, Math.max(myWidth, minWidth), myHeight)) {
@@ -270,7 +347,8 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
         }
         return null;
     }
-
+    
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
 
         if (indexOnMe == -1) {
@@ -292,11 +370,12 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
         return true;
     }
 
-
+    @Override
     public  int getType() {
         return TGComponentManager.DIPLODODUSMETHODOLOGY_DIAGRAM_NAME;
     }
-
+    
+    @Override
     public int getDefaultConnector() {
         return TGComponentManager.DIPLODOCUSMETHODOLOGY_CONNECTOR;
     }
@@ -308,7 +387,8 @@ public class DiplodocusMethodologyDiagramName extends TGCScalableWithoutInternal
     public void setValidationsInfo(int _index, int _val) {
         validations[_index] = _val;
     }
-
+    
+    @Override
     public void rescale(double scaleFactor){
 
         if ((valMinX != null) && (valMinX.length > 0)) {

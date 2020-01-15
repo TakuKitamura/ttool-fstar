@@ -36,16 +36,13 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmlcd;
-
 
 import org.w3c.dom.Element;
 import ui.*;
 import ui.tmldd.TMLArchiDiagramPanel;
 
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -65,6 +62,7 @@ public class TMLTaskDiagramPanel extends TDiagramPanel {
         addMouseMotionListener(tdmm);*/
     }
     
+    @Override
     public boolean actionOnDoubleClick(TGComponent tgc) {
         //
         if (tgc instanceof TMLTaskOperator) {
@@ -79,6 +77,7 @@ public class TMLTaskDiagramPanel extends TDiagramPanel {
         return false;
     }
     
+    @Override
     public boolean actionOnAdd(TGComponent tgc) {
         //
         if (tgc instanceof TMLTaskOperator) {
@@ -96,6 +95,7 @@ public class TMLTaskDiagramPanel extends TDiagramPanel {
         return false;
     }
     
+    @Override
     public boolean actionOnRemove(TGComponent tgc) {
         if (tgc instanceof TMLTaskOperator) {
             TMLTaskOperator tgcc = (TMLTaskOperator)(tgc);
@@ -106,6 +106,7 @@ public class TMLTaskDiagramPanel extends TDiagramPanel {
         return false;
     }
     
+    @Override
     public boolean actionOnValueChanged(TGComponent tgc) {
         if (tgc instanceof TMLTaskOperator) {
             return actionOnDoubleClick(tgc);
@@ -113,36 +114,40 @@ public class TMLTaskDiagramPanel extends TDiagramPanel {
         return false;
     }
     
+    @Override
     public String getXMLHead() {
         return "<TMLTaskDiagramPanel name=\"" + name + "\"" + sizeParam() + displayParam() +" >";
     }
     
+    @Override
     public String getXMLTail() {
         return "</TMLTaskDiagramPanel>";
     }
     
+    @Override
     public String getXMLSelectedHead() {
         return "<TMLTaskDiagramPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
     }
     
+    @Override
     public String getXMLSelectedTail() {
         return "</TMLTaskDiagramPanelCopy>";
     }
     
+    @Override
     public String getXMLCloneHead() {
         return "<TMLTaskDiagramPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
     }
     
+    @Override
     public String getXMLCloneTail() {
         return "</TMLTaskDiagramPanelCopy>";
     }
     
-
-    
+    @Override
     public boolean areAttributesVisible() {
         return attributesVisible;
     }
-    
     
     public boolean areChannelVisible() {
         return synchroVisible;
@@ -151,7 +156,6 @@ public class TMLTaskDiagramPanel extends TDiagramPanel {
     public void setAttributesVisible(boolean b) {
         attributesVisible = b;
     }
-    
     
     public void setChannelVisible(boolean b) {
         channelVisible = b;
@@ -366,13 +370,13 @@ public class TMLTaskDiagramPanel extends TDiagramPanel {
         }
     }
 	
-	public ArrayList<String> getAllTMLTaskNames(String _topname) {
+	public List<String> getAllTMLTaskNames(String _topname) {
 		TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
-		ArrayList<String> list = new ArrayList<String>();
+        Iterator<TGComponent> iterator = componentList.listIterator();
+		List<String> list = new ArrayList<String>();
         
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             if (tgc instanceof TMLTaskOperator) {
 				list.add(_topname + "::" + ((TMLTaskOperator)tgc).getTaskName());
             }
@@ -381,15 +385,15 @@ public class TMLTaskDiagramPanel extends TDiagramPanel {
 		return list;
 	}
 
-	public ArrayList<String> getAllTMLCommunicationNames(String _topname) {
+	public List<String> getAllTMLCommunicationNames(String _topname) {
 		TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
-		ArrayList<String> list = new ArrayList<String>();
+        Iterator<TGComponent> iterator = componentList.listIterator();
+		List<String> list = new ArrayList<String>();
 		String name = "";
 		String type = "";
         
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             if (tgc instanceof TMLCompositionOperator) {
 				if (tgc instanceof TMLEventOperator) {
 					name = ((TMLEventOperator)tgc).getEventName();
@@ -411,19 +415,19 @@ public class TMLTaskDiagramPanel extends TDiagramPanel {
 		return list;
 	}
 
-    public ArrayList<String> getAllTMLChannelNames( String _topname )   {
+    public List<String> getAllTMLChannelNames( String _topname )   {
 		TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
-		ArrayList<String> list = new ArrayList<String>();
+        Iterator<TGComponent> iterator = componentList.listIterator();
+		List<String> list = new ArrayList<String>();
 		String name = "";
-		String type = "";
+		//String type = "";
         
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             if (tgc instanceof TMLCompositionOperator) {
 				if (tgc instanceof TMLChannelOperator) {
 					name = ((TMLChannelOperator)tgc).getChannelName();
-					type = "Channel";
+			//		type = "Channel";
 				}
 				list.add(_topname + "::" + name );
             }
@@ -432,34 +436,37 @@ public class TMLTaskDiagramPanel extends TDiagramPanel {
 		return list;
     }
 
-	public ArrayList<String> getAllTMLEventNames( String _topname ) {
+	public List<String> getAllTMLEventNames( String _topname ) {
 		TGComponent tgc;
-   	Iterator iterator = componentList.listIterator();
-		ArrayList<String> list = new ArrayList<String>();
+		Iterator<TGComponent> iterator = componentList.listIterator();
+		List<String> list = new ArrayList<String>();
 		String name = "";
 		String type = "";
         
         while( iterator.hasNext() ) {
-					tgc = (TGComponent)( iterator.next() );
-          if (tgc instanceof TMLCompositionOperator) {
-						if (tgc instanceof TMLEventOperator) {
-							name = ((TMLEventOperator)tgc).getEventName();
-							type = "Event";
-						}
-						list.add( _topname + "::" + name + " (" + type + ")" );
-          }
+        	tgc = iterator.next();
+          
+        	if (tgc instanceof TMLCompositionOperator) {
+        		if (tgc instanceof TMLEventOperator) {
+					name = ((TMLEventOperator)tgc).getEventName();
+					type = "Event";
+				}
+				
+        		list.add( _topname + "::" + name + " (" + type + ")" );
+        	}
         }
-		return list;
+		
+        return list;
 	}
 	
-	public ArrayList<String> getAllNonMappedTMLTaskNames(String _topName, TMLArchiDiagramPanel _tadp, boolean ref, String _name) {
+	public List<String> getAllNonMappedTMLTaskNames(String _topName, TMLArchiDiagramPanel _tadp, boolean ref, String _name) {
 		TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
-		ArrayList<String> list = new ArrayList<String>();
+        Iterator<TGComponent> iterator = componentList.listIterator();
+		List<String> list = new ArrayList<String>();
 		String name;
         
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             if (tgc instanceof TMLTaskOperator) {
 				name = ((TMLTaskOperator)tgc).getTaskName();
 				if (ref && name.equals(_name)) {
@@ -477,11 +484,11 @@ public class TMLTaskDiagramPanel extends TDiagramPanel {
 	
 	public TMLTaskOperator getTaskByName(String _name) {
 		TGComponent tgc;
-        Iterator iterator = componentList.listIterator();
-		ArrayList<String> list = new ArrayList<String>();
+        Iterator<TGComponent> iterator = componentList.listIterator();
+		//List<String> list = new ArrayList<String>();
         
         while(iterator.hasNext()) {
-            tgc = (TGComponent)(iterator.next());
+            tgc = iterator.next();
             if (tgc instanceof TMLTaskOperator) {
 				if (((TMLTaskOperator)tgc).getTaskName().equals(_name)) {
 					return ((TMLTaskOperator)tgc);
@@ -491,5 +498,4 @@ public class TMLTaskDiagramPanel extends TDiagramPanel {
 		
 		return null;
 	}
-    
 }

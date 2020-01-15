@@ -164,10 +164,10 @@ public class TMLAttributeBox extends TGCWithoutInternalComponent {
             TAttribute a;
             for(int i=0; i<myAttributes.size(); i++) {
                 a = myAttributes.get (i);
-                g.drawString(a.toString(), x + textX, y + textY + i* h);
+                drawSingleString(g,a.toString(), x + textX, y + textY + i* h);
             }
         } else if (myAttributes.size() >0) {
-            g.drawString("...", x + textX, y + textY);
+            drawSingleString(g,"...", x + textX, y + textY);
         }
     }
     

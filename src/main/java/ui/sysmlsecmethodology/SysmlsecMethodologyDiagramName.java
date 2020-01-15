@@ -175,7 +175,7 @@ public class SysmlsecMethodologyDiagramName extends TGCScalableWithoutInternalCo
         }
         widthAppli = g.getFontMetrics().stringWidth(val);
         curWidth = Math.max(widthAppli, curWidth);
-        g.drawString(val, x, y);
+        drawSingleString(g, val, x, y);
         g.setFont(f);
 
         if (validations == null) {
@@ -223,7 +223,7 @@ public class SysmlsecMethodologyDiagramName extends TGCScalableWithoutInternalCo
                     if ((onMe && indexOnMe == i)) {
                         g.setFont(f.deriveFont(Font.BOLD));
                     }
-                    g.drawString(SHORT_ACTION_NAMES[validations[i]], currentMaxX - w1, y);
+                    drawSingleString(g, SHORT_ACTION_NAMES[validations[i]], currentMaxX - w1, y);
                     g.setFont(f.deriveFont(Font.ITALIC));
                     valMinX[i] = currentMaxX-w1;
                     valMaxX[i] = currentMaxX;

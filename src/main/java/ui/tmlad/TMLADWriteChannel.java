@@ -81,12 +81,14 @@ import ui.window.TabInfo;
  * @version 1.0 17/11/2005
  */
 public class TMLADWriteChannel extends TADComponentWithoutSubcomponents/* Issue #69 TGCWithoutInternalComponent*/ implements CheckableAccessibility, LinkedReference, CheckableLatency, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
-    protected int lineLength = 5;
-    protected int textX = 5;
-    protected int textY = 15;
-    protected int arc = 5;
-    protected int linebreak = 10;
-    protected int decSec = 4;
+
+	// Issue #31
+//    protected int lineLength = 5;
+//    protected int textX = 5;
+//    protected int textY = 15;
+//    protected int arc = 5;
+//    protected int linebreak = 10;
+    //protected int decSec = 4;
 
     private Map<String, String> latencyVals;
 
@@ -113,15 +115,15 @@ public class TMLADWriteChannel extends TADComponentWithoutSubcomponents/* Issue 
     public TMLADWriteChannel(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        width = 30;
-        height = 20;
-        minWidth = 30;
-
-
+    	// Issue #31
         nbConnectingPoint = 2;
         connectingPoint = new TGConnectingPoint[2];
         connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
         connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.5, 1.0);
+//        width = 30;
+//        height = 20;
+        initScaling( 30, 20 );
+        minWidth = scale( 30 );
 
         moveable = true;
         editable = true;
@@ -139,14 +141,16 @@ public class TMLADWriteChannel extends TADComponentWithoutSubcomponents/* Issue 
     }
 
     @Override
-    public void internalDrawing(Graphics g) {
-        int w = g.getFontMetrics().stringWidth(value);
-        int w1 = Math.max(minWidth, w + 2 * textX);
-        if ((w1 != width) & (!tdp.isScaled())) {
-            setCd(x + width / 2 - w1 / 2, y);
-            width = w1;
-            //updateConnectingPoints();
-        }
+    protected void internalDrawing(Graphics g) {
+    	
+    	// Issue #31
+        final int w = checkWidth( g );//g.getFontMetrics().stringWidth(value);
+//        int w1 = Math.max(minWidth, w + 2 * textX);
+//        if ((w1 != width) & (!tdp.isScaled())) {
+//            setCd(x + width / 2 - w1 / 2, y);
+//            width = w1;
+//            //updateConnectingPoints();
+//        }
         //g.drawRoundRect(x, y, width, height, arc, arc);
 
         if (stateOfError > 0) {
@@ -187,17 +191,17 @@ public class TMLADWriteChannel extends TADComponentWithoutSubcomponents/* Issue 
         g.drawLine(x + width - linebreak, y, x + width, y + height / 2);
         g.drawLine(x + width - linebreak, y + height, x + width, y + height / 2);
         if (isAttacker) {
-            g.drawString("attack", x + (width - w) / 2, y);
+            drawSingleString(g,"attack", x + (width - w) / 2, y);
         } else {
-            g.drawString("chl", x + (width - w) / 2, y);
+            drawSingleString(g,"chl", x + (width - w) / 2, y);
         }
-        g.drawString(value, x + (width - w) / 2, y + textY);
+        drawSingleString(g,value, x + (width - w) / 2, y + textY);
         if (!securityContext.equals("")) {
 	        c = g.getColor();
 	        if (!isEncForm){
 	        	g.setColor(Color.RED);
 	        }
-            g.drawString("sec:" + securityContext, x + 3 * width / 4, y + height + textY - decSec);
+            drawSingleString(g,"sec:" + securityContext, x + 3 * width / 4, y + height + textY - scale( 4 ) );
             g.setColor(c);
         }
 
@@ -209,6 +213,7 @@ public class TMLADWriteChannel extends TADComponentWithoutSubcomponents/* Issue 
                 drawLatencyInformation(g);
             }
         }
+        
         drawReachabilityInformation(g);
     }
 
@@ -216,21 +221,20 @@ public class TMLADWriteChannel extends TADComponentWithoutSubcomponents/* Issue 
         int index = 1;
         for (String s : latencyVals.keySet()) {
             int w = g.getFontMetrics().stringWidth(s);
-            g.drawString(s, x - latencyX - w + 1, y - latencyY * index - 2);
+            drawSingleString(g,s, x - latencyX - w + 1, y - latencyY * index - 2);
             g.drawRect(x - latencyX - w, y - latencyY * index - textHeight, w + 4, textHeight);
             g.drawLine(x, y, x - latencyX, y - latencyY * index);
-            g.drawString(latencyVals.get(s), x - latencyX / 2, y - latencyY * index / 2);
+            drawSingleString(g,latencyVals.get(s), x - latencyX / 2, y - latencyY * index / 2);
             index++;
         }
     }
 
-    public void addLatency(String name, String num) {
-        latencyVals.put(name, num);
-    }
+//    public void addLatency(String name, String num) {
+//        latencyVals.put(name, num);
+//    }
 
     private void drawReachabilityInformation(Graphics g) {
         if (reachabilityInformation > 0) {
-
             Color c = g.getColor();
             Color c1;
             switch (reachabilityInformation) {

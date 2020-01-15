@@ -43,7 +43,7 @@ public class GraphLatencyAnalysis extends AbstractUITest {
 
         mainGUI.openProjectFromFile(new File(getBaseResourcesDir() + modelPath));
         // mainGUI.openProjectFromFile(new File( modelPath));
-        
+
 
         final TMLArchiPanel panel = findArchiPanel(mappingDiagName);
 

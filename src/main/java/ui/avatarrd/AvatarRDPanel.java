@@ -63,11 +63,13 @@ public class AvatarRDPanel extends TDiagramPanel implements TDPWithAttributes {
         addMouseListener(tdmm);
         addMouseMotionListener(tdmm);*/
     }
-
+    
+    @Override
     public boolean actionOnDoubleClick(TGComponent tgc) {
         return true;
     }
-
+    
+    @Override
     public boolean actionOnAdd(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {
             TCDTClass tgcc = (TCDTClass)(tgc);
@@ -76,7 +78,8 @@ public class AvatarRDPanel extends TDiagramPanel implements TDPWithAttributes {
         }*/
         return false;
     }
-
+    
+    @Override
     public boolean actionOnRemove(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {
             TCDTClass tgcc = (TCDTClass)(tgc);
@@ -86,34 +89,41 @@ public class AvatarRDPanel extends TDiagramPanel implements TDPWithAttributes {
         }*/
         return false;
     }
-
+    
+    @Override
     public boolean actionOnValueChanged(TGComponent tgc) {
         /*if (tgc instanceof TCDTClass) {
             return actionOnDoubleClick(tgc);
         }*/
         return false;
     }
-
+    
+    @Override
     public String getXMLHead() {
         return "<AvatarRDPanel name=\"" + name + "\"" + sizeParam() + zoomParam() + " >";
     }
-
+    
+    @Override
     public String getXMLTail() {
         return "</AvatarRDPanel>";
     }
-
+    
+    @Override
     public String getXMLSelectedHead() {
         return "<AvatarRDPanelCopy name=\"" + name + "\" xSel=\"" + xSel + "\" ySel=\"" + ySel + "\" widthSel=\"" + widthSel + "\" heightSel=\"" + heightSel + "\" >";
     }
-
+    
+    @Override
     public String getXMLSelectedTail() {
         return "</AvatarRDPanelCopy>";
     }
-
+    
+    @Override
     public String getXMLCloneHead() {
         return "<AvatarRDPanelCopy name=\"" + name + "\" xSel=\"" + 0 + "\" ySel=\"" + 0 + "\" widthSel=\"" + 0 + "\" heightSel=\"" + 0 + "\" >";
     }
-
+    
+    @Override
     public String getXMLCloneTail() {
         return "</AvatarRDPanelCopy>";
     }
@@ -178,7 +188,8 @@ public class AvatarRDPanel extends TDiagramPanel implements TDPWithAttributes {
         
         return false;
     }*/
-
+    
+    @Override
     public void enhance() {
         autoAdjust();
     }

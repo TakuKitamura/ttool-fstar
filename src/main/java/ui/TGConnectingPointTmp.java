@@ -35,13 +35,8 @@
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-
-
-
  
 package ui;
-
-//import java.awt.*;
 
 /**
  * Class TGConnectingPointTmp
@@ -50,7 +45,7 @@ package ui;
  * @version 1.0 16/12/2003
  * @author Ludovic APVRILLE
  */
-public class TGConnectingPointTmp extends  TGConnectingPoint{
+public class TGConnectingPointTmp extends TGConnectingPoint {
 	private int id;
 	
 	public TGConnectingPointTmp(CDElement _container, int _x, int _y, int _id) {
@@ -58,19 +53,13 @@ public class TGConnectingPointTmp extends  TGConnectingPoint{
 		id = _id;
 	}
 
+	@Override
 	public boolean isCompatibleWith(int type) {
 		return false;
 	}
 	
+	@Override
 	public int getId() {
 		return id;
 	}
-       
 }
-
-
-
-
-    
-
-

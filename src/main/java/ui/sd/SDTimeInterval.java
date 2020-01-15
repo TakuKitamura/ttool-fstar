@@ -92,7 +92,7 @@ public class SDTimeInterval extends TGCTimeInterval implements SwallowedTGCompon
         //g.drawLine(x+(width/2), y+height, x+(width/2), y + lineLength + height);
          //w  = g.getFontMetrics().stringWidth(value);
         
-        g.drawString(value, x + textX, y + textY);
+        drawSingleString(g, value, x + textX, y + textY);
         
         if (!tdp.isScaled()) {
             wtext = g.getFontMetrics().stringWidth(value);

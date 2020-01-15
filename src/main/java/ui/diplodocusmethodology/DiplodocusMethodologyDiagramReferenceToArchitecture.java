@@ -70,25 +70,26 @@ public class DiplodocusMethodologyDiagramReferenceToArchitecture extends Diplodo
 
     }
 
-
+    @Override
     public  int getType() {
         return TGComponentManager.DIPLODODUSMETHODOLOGY_REF_ARCHITECTURE;
     }
 
 
+    @Override
     public boolean isAValidPanelType(TURTLEPanel panel) {
         return panel instanceof TMLArchiPanel;
 
     }
 
+    @Override
     public void makeValidationInfos(DiplodocusMethodologyDiagramName dn) {
         dn.setValidationsNumber(0);
     }
 
+    @Override
     public boolean makeCall(String diagramName, int index) {
         return true;
     }
-
-
 
 }

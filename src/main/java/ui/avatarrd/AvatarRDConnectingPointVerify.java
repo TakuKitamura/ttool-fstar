@@ -36,12 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.avatarrd;
-
-//import java.awt.*;
 
 import ui.CDElement;
 import ui.TGComponentManager;
@@ -54,7 +49,7 @@ import ui.TGConnectingPointWidthHeight;
  * @version 1.0 20/04/2010
  * @author Ludovic APVRILLE
  */
-public class AvatarRDConnectingPointVerify extends  TGConnectingPointWidthHeight {
+public class AvatarRDConnectingPointVerify extends TGConnectingPointWidthHeight {
     
     public AvatarRDConnectingPointVerify(CDElement _container, int _x, int _y, boolean _in, boolean _out, double _w, double _h, int _orientation) {
         super(_container, _x, _y, _in, _out, _w, _h);
@@ -65,6 +60,7 @@ public class AvatarRDConnectingPointVerify extends  TGConnectingPointWidthHeight
         super(_container, _x, _y, _in, _out, _w, _h);
     }
     
+	@Override
     public boolean isCompatibleWith(int type) {
         //
         if (type == TGComponentManager.AVATARRD_VERIFY_CONNECTOR) {

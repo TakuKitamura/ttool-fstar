@@ -63,11 +63,13 @@ import java.util.List;
    * @author Ludovic APVRILLE
  */
 public class TMLADSendRequest extends TADComponentWithoutSubcomponents/* Issue #69TGCWithoutInternalComponent*/ implements CheckableAccessibility, CheckableLatency, EmbeddedComment, AllowedBreakpoint, BasicErrorHighlight {
-    protected int lineLength = 5;
-    protected int textX =  5;
-    protected int textY =  15;
-    protected int arc = 5;
-    protected int linebreak = 10;
+
+	// Issue #31
+//    protected int lineLength = 5;
+//    protected int textX =  5;
+//    protected int textY =  15;
+//    protected int arc = 5;
+//    protected int linebreak = 10;
 
     protected String requestName = "req";
     int nParam = 5;
@@ -84,14 +86,18 @@ public class TMLADSendRequest extends TADComponentWithoutSubcomponents/* Issue #
     public TMLADSendRequest(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        width = 30;
-        height = 20;
-        minWidth = 30;
-
+    	// Issue #31
         nbConnectingPoint = 2;
         connectingPoint = new TGConnectingPoint[2];
         connectingPoint[0] = new TGConnectingPointTMLAD(this, 0, -lineLength, true, false, 0.5, 0.0);
         connectingPoint[1] = new TGConnectingPointTMLAD(this, 0, lineLength, false, true, 0.5, 1.0);
+//        width = 30;
+//        height = 20;
+        initScaling( 30, 20 );
+        minWidth = scale( 30 );
+        
+        // Issue #31
+        //textX = 5;
 
         for(int i=0; i<nParam; i++) {
             params[i] = "";
@@ -109,17 +115,20 @@ public class TMLADSendRequest extends TADComponentWithoutSubcomponents/* Issue #
     }
 
     @Override
-    public void internalDrawing(Graphics g) {
-        int w  = g.getFontMetrics().stringWidth(value);
-        int w1 = Math.max(minWidth, w + 2 * textX);
-        if ((w1 != width) & (!tdp.isScaled())) {
-            setCd(x + width/2 - w1/2, y);
-            width = w1;
-            //updateConnectingPoints();
-        }
+    protected void internalDrawing(Graphics g) {
+       	
+    	// Issue #31
+        final int w = checkWidth( g );//g.getFontMetrics().stringWidth(value);
+//        int w1 = Math.max(minWidth, w + 2 * textX);
+//        if ( w1 > width & !tdp.isScaled() ) {
+//            setCd(x - (w1 - width) / 2 , y);
+//            width = w1;
+//            //updateConnectingPoints();
+//        }
         //g.drawRoundRect(x, y, width, height, arc, arc);
 
-        if (stateOfError > 0)  {
+        // Issue #69
+        if ( isEnabled() && stateOfError > 0 ) {
             Color c = g.getColor();
             switch(stateOfError) {
             case ErrorHighlight.OK:
@@ -140,7 +149,12 @@ public class TMLADSendRequest extends TADComponentWithoutSubcomponents/* Issue #
         int height1 = height;
         int width1 = width;
         Color c = g.getColor();
-        g.setColor(ColorManager.TML_PORT_REQUEST);
+        
+        // Issue #69
+        if ( isEnabled() ) {
+        	g.setColor(ColorManager.TML_PORT_REQUEST);
+        }
+        
         g.drawLine(x1, y1, x1+width1-linebreak, y1);
         g.drawLine(x1, y1+height1, x1+width1-linebreak, y1+height1);
         g.drawLine(x1, y1, x1, y1+height1);
@@ -156,8 +170,8 @@ public class TMLADSendRequest extends TADComponentWithoutSubcomponents/* Issue #
         g.drawLine(x+width-linebreak, y, x+width, y+height/2);
         g.drawLine(x+width-linebreak, y+height, x+width, y+height/2);
 
-        g.drawString("req", x+(width-w) / 2, y);
-        g.drawString(value, x + (width - w) / 2 , y + textY);
+        drawSingleString(g,"req", x+(width-w) / 2, y);
+        drawSingleString(g,value, x + (width - w) / 2 , y + textY);
 
         drawReachabilityInformation(g);
     }
@@ -213,8 +227,8 @@ public class TMLADSendRequest extends TADComponentWithoutSubcomponents/* Issue #
 
             }
         }
-        value += ")";
 
+        value += ")";
     }
 
     public String getRequestName() {

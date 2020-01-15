@@ -69,14 +69,28 @@ public  class AvatarMethodologyConnector extends TGConnectorWithCommentConnectio
 		removable = false;
     }
     
-    
+    /**
+     * drawLastSegment: calling arrowWithLine
+     * Is Linking 2 diagram references ? (x1,y1) and (x2, y2)
+     * @param g		grahics
+     * @param x1	int
+     * @param y1	int
+     * @param x2	int
+     * @param y2	int
+     * */
+    @Override
     protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
 		 
         //g.drawLine(x1, y1, x2, y2);
         GraphicLib.arrowWithLine(g, 1, 1, 0, x1, y1, x2, y2, false);
         
     }
-    
+    /**
+     * extraIsOnOnlyMe
+     * @param x1 int
+     * @param y1 int
+     **/
+    @Override
     public TGComponent extraIsOnOnlyMe(int x1, int y1) {
         if (GraphicLib.isInRectangle(x1, y1, (p1.getX() + p2.getX() - w) / 2, (p1.getY() + p2.getY())/2 - h, w, h)) {
             return this;
@@ -84,6 +98,11 @@ public  class AvatarMethodologyConnector extends TGConnectorWithCommentConnectio
         return null;
     }
     
+    /**
+     * get the type of the current avatar methodology connector ?
+     * @return int denoting of the type avatar methodology connector
+     */
+    @Override
     public int getType() {
         return TGComponentManager.AVATARMETHODOLOGY_CONNECTOR;
     }

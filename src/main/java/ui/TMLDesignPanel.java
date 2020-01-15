@@ -37,9 +37,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui;
 
 import myutil.GraphicLib;
@@ -57,6 +54,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Iterator;
 import java.util.Vector;
 
@@ -150,37 +148,39 @@ public class TMLDesignPanel extends TURTLEPanel {
         mgui.changeMade(tmltdp, TDiagramPanel.NEW_COMPONENT);
 
         //jsp.setVisible(true);
-
     }
 
+    @Override
     public String saveHeaderInXml(String extensionToName) {
-	if (extensionToName == null) {
-	    return "<Modeling type=\"TML Design\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
-	}
-	return "<Modeling type=\"TML Design\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
+		if (extensionToName == null) {
+		    return "<Modeling type=\"TML Design\" nameTab=\"" + mgui.getTabName(this) + "\" >\n";
+		}
+		return "<Modeling type=\"TML Design\" nameTab=\"" + mgui.getTabName(this) + extensionToName + "\" >\n";
     }
 
+    @Override
     public String saveTailInXml() {
         return "</Modeling>\n\n\n";
     }
 
+    @Override
     public String toString() {
         return mgui.getTitleAt(this) + " (TML Functional View)";
     }
 
-    public ArrayList<String> getAllTMLTaskNames(String _name) {
+    public List<String> getAllTMLTaskNames(String _name) {
         return tmltdp.getAllTMLTaskNames(_name);
     }
 
-    public ArrayList<String> getAllTMLCommunicationNames(String _name) {
+    public List<String> getAllTMLCommunicationNames(String _name) {
         return tmltdp.getAllTMLCommunicationNames(_name);
     }
 
-    public ArrayList<String> getAllTMLEventNames( String _name ) {
+    public List<String> getAllTMLEventNames( String _name ) {
         return tmltdp.getAllTMLEventNames( _name );
     }
 
-    public java.util.List<String> getAllNonMappedTMLTaskNames(String _name, TMLArchiDiagramPanel _tadp, boolean ref, String name) {
+    public List<String> getAllNonMappedTMLTaskNames(String _name, TMLArchiDiagramPanel _tadp, boolean ref, String name) {
         return tmltdp.getAllNonMappedTMLTaskNames(_name, _tadp, ref, name);
     }
 

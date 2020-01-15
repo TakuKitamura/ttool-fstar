@@ -84,25 +84,26 @@ public  class TGConnectorTMLAssociationNav extends TGConnector {
         myImageIcon = IconManager.imgic106;
     }
     
+    @Override
     public void internalDrawing(Graphics g) {
         TMLTaskDiagramPanel tmltdp = (TMLTaskDiagramPanel)tdp;
         if (!tmltdp.areAllVisible()) {
             if (!tmltdp.connectedToVisible(this))
                 return;
         }
-        super.internalDrawing(g);
+//        super.internalDrawing(g);
         super.internalDrawing(g);
     }
     
+    @Override
     protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
         GraphicLib.arrowWithLine(g, 1, 1, arrowLength, x1, y1, x2, y2, false);
     }
     
+    @Override
     public int getType() {
         return TGComponentManager.CONNECTOR_TML_ASSOCIATION_NAV;
     }
-    
- 
     
     public void setP1(TGConnectingPoint p) {
         p1 = p;
@@ -118,10 +119,7 @@ public  class TGConnectorTMLAssociationNav extends TGConnector {
         }
     }
    
-    
     public void pointHasBeenRemoved(TGCPointOfConnector tgc) {
-        
-        
         int i, index = 0;
         TGConnectingPointTwoFathers cp1, cp2;
         
@@ -202,6 +200,7 @@ public  class TGConnectorTMLAssociationNav extends TGConnector {
         return null;
     }
     
+    @Override
     public void addActionToPopupMenu(JPopupMenu componentMenu, ActionListener menuAL, int x, int y) {
         componentMenu.addSeparator();
         JMenuItem reverse = new JMenuItem("Reverse");
@@ -209,14 +208,14 @@ public  class TGConnectorTMLAssociationNav extends TGConnector {
         componentMenu.add(reverse);
     }
     
+    @Override
     public boolean eventOnPopup(ActionEvent e) {
         reverse();
         return true;
     }
     
+    @Override
     public int getDefaultConnector() {
-      return TGComponentManager.CONNECTOR_TML_COMPOSITION_OPERATOR;
+    	return TGComponentManager.CONNECTOR_TML_COMPOSITION_OPERATOR;
     }
-    
-
 }

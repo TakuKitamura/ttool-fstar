@@ -183,7 +183,7 @@ public class TMLTaskOperator extends TGCWithInternalComponent implements TMLTask
         return w;
     }*/
     
-    
+    @Override
     public void internalDrawing(Graphics g) {
         if (!tdp.isScaled()) {
             graphics = g;
@@ -199,17 +199,18 @@ public class TMLTaskOperator extends TGCWithInternalComponent implements TMLTask
 		//
         ColorManager.setColor(g, getState(), 0);
         g.setFont(f.deriveFont(Font.BOLD));
-        g.drawString(value, x + textX, y + textY);
+        drawSingleString(g,value, x + textX, y + textY);
         g.setFont(f);
         
         if (exit) {
             g.setFont(f.deriveFont((float)exitFontSize));
             int w  =  g.getFontMetrics().stringWidth(EXIT_STRING);
-            g.drawString(EXIT_STRING, x + width - w - 5, y + textY + exitFontSize);
+            drawSingleString(g,EXIT_STRING, x + width - w - 5, y + textY + exitFontSize);
             g.setFont(f);
         }
     }
     
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
         oldValue = value;
         

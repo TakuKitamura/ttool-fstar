@@ -56,14 +56,22 @@ import java.awt.*;
    * @author Ludovic APVRILLE
  */
 public class ADDArtifact extends TGCWithoutInternalComponent implements SwallowedTGComponent, WithAttributes {
-    protected int lineLength = 5;
-    protected int textX =  5;
-    protected int textY =  15;
-    protected int textY2 =  35;
-    protected int space = 5;
-    protected int fileX = 20;
-    protected int fileY = 25;
-    protected int cran = 5;
+//    protected int lineLength = 5;
+//    protected int textX =  5;
+//    protected int textY =  15;
+
+	// Issue #31
+	private static final int SPACE = 5;
+	private static final int CRAN = 5;
+	private static final int FILE_X = 20;
+	private static final int FILE_Y = 25;
+    
+
+//    protected int textY2 =  35;
+//    protected int space = 5;
+//    protected int fileX = 20;
+//    protected int fileY = 25;
+//    protected int cran = 5;
 
     protected String oldValue = "";
     protected String referenceTaskName = "referenceToBlock";
@@ -71,10 +79,13 @@ public class ADDArtifact extends TGCWithoutInternalComponent implements Swallowe
 
     public ADDArtifact(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-
+        //Issue #31
+        textY =  15;
+        textX =  5;
         width = 75;
         height = 40;
         minWidth = 75;
+        initScaling(75,40);
 
         nbConnectingPoint = 0;
         addTGConnectingPointsComment();
@@ -104,25 +115,32 @@ public class ADDArtifact extends TGCWithoutInternalComponent implements Swallowe
         g.fillRect(x+1, y+1, width-1, height-1);
         g.setColor(c);
 
+        // Issue #31
+        final int space = scale( SPACE );
+        final int marginFileX = scale( SPACE + FILE_X );
+        final int marginFileY = scale( SPACE + FILE_Y );
+        final int marginCran = scale( SPACE + CRAN );
+        
         //g.drawRoundRect(x, y, width, height, arc, arc);
-        g.drawLine(x+width-space-fileX, y + space, x+width-space-fileX, y+space+fileY);
-        g.drawLine(x+width-space-fileX, y + space, x+width-space-cran, y+space);
-        g.drawLine(x+width-space-cran, y+space, x+width-space, y+space + cran);
-        g.drawLine(x+width-space, y+space + cran, x+width-space, y+space+fileY);
-        g.drawLine(x+width-space, y+space+fileY, x+width-space-fileX, y+space+fileY);
-        g.drawLine(x+width-space-cran, y+space, x+width-space-cran, y+space+cran);
-        g.drawLine(x+width-space-cran, y+space+cran, x + width-space, y+space+cran);
+        g.drawLine(x+width-marginFileX, y + space, x+width-marginFileX, y+marginFileY);
+        g.drawLine(x+width-marginFileX, y + space, x+width-marginCran, y+space);
+        g.drawLine(x+width-marginCran, y+space, x+width-space, y+marginCran);
+        g.drawLine(x+width-space, y+marginCran, x+width-space, y+marginFileY);
+        g.drawLine(x+width-space, y+marginFileY, x+width-marginFileX, y+marginFileY);
+        g.drawLine(x+width-marginCran, y+space, x+width-marginCran, y+marginCran);
+        g.drawLine(x+width-marginCran, y+marginCran, x + width-space, y+marginCran);
 
-        g.drawImage(IconManager.img9, x+width-space-fileX + 3, y + space + 7, null);
+        g.drawImage(scale(IconManager.img9), x + scale(width-marginFileX + 3), y + scale(space + 7), null);
 
-        g.drawString(value, x + textX , y + textY);
+        drawSingleString(g, value, x + textX , y + textY);
 
     }
 
     public void setValue(String val, Graphics g) {
+    	final int marginFileX = scale( SPACE + FILE_X );
         oldValue = value;
         int w  = g.getFontMetrics().stringWidth(value);
-        int w1 = Math.max(minWidth, w + 2 * textX + fileX + space);
+        int w1 = Math.max(minWidth, w + 2 * textX + marginFileX);
 
         //
         if (w1 != width) {
@@ -284,7 +302,8 @@ public class ADDArtifact extends TGCWithoutInternalComponent implements Swallowe
     public String getTaskName() {
         return taskName;
     }
-
+    
+    @Override
     public String getAttributes() {
         return "";
     }

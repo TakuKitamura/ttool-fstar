@@ -57,25 +57,29 @@ import java.awt.*;
  * @author Ludovic APVRILLE
  */
 public class AvatarPDPropertyRelation extends TGCScalableWithInternalComponent implements ConstraintListInterface {
-    private int textY1 = 5;
+    //private int textY1 = 5;
     //private int textY2 = 30;
 	
 	public static final String[] STEREOTYPES = {"OR", "AND", "=>", "<=>"}; 
 	
     protected String oldValue = "";
 	
-	private int maxFontSize = 12;
-	private int minFontSize = 4;
+//	private int maxFontSize = 12;
+//	private int minFontSize = 4;
 	private int currentFontSize = -1;
-	private boolean displayText = true;
-	private int textX = 1;
+//	private boolean displayText = true;
+//	private int textX = 1;
     
     public AvatarPDPropertyRelation(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
         
-        width = (int)(80* tdp.getZoom());
-        height = (int)(40 * tdp.getZoom());
+        width = 80;
+        height = 40;
         minWidth = 75;
+        textY = 5;
+        textX = 1;
+        //Issue #31
+        initScaling(80,40);
         
         nbConnectingPoint = 12;
         connectingPoint = new TGConnectingPoint[12];
@@ -114,75 +118,86 @@ public class AvatarPDPropertyRelation extends TGCScalableWithInternalComponent i
         
         value = "OR";
 		
-		currentFontSize = maxFontSize;
-		oldScaleFactor = tdp.getZoom();
+//		currentFontSize = maxFontSize;
+//		oldScaleFactor = tdp.getZoom();
         
         myImageIcon = IconManager.imgic1078;
     }
-    
-    public void internalDrawing(Graphics g) {
-        
-		Font f = g.getFont();
-	//	Font fold = f;
-		
-		if ((rescaled) && (!tdp.isScaled())) {
-			
-			if (currentFontSize == -1) {
-				currentFontSize = f.getSize();
-			}
-			rescaled = false;
-			// Must set the font size ..
-			// Find the biggest font not greater than max_font size
-			// By Increment of 1
-			// Or decrement of 1
-			// If font is less than 4, no text is displayed
-			
-			int maxCurrentFontSize = Math.max(0, Math.min(height, maxFontSize));
-			int w0;
-			f = f.deriveFont((float)maxCurrentFontSize);
-			g.setFont(f);
-			//
-			while(maxCurrentFontSize > (minFontSize-1)) {
-				w0 = g.getFontMetrics().stringWidth(value);
-				if (w0 < (width - (2*textX))) {
-					break;
-				}
-				maxCurrentFontSize --;
-				f = f.deriveFont((float)maxCurrentFontSize);
-				g.setFont(f);
-			}
-			currentFontSize = maxCurrentFontSize;
-			
-			if(currentFontSize <minFontSize) {
-				displayText = false;
-			} else {
-				displayText = true;
-				f = f.deriveFont((float)currentFontSize);
-				g.setFont(f);
-			}
-			
-		}
-		
-        /*Color c = g.getColor();
-		g.draw3DRect(x, y, width, height, true);
-		
-		g.setColor(ColorManager.AVATARPD_PROPERTY_RELATION);
-		g.fill3DRect(x+1, y+1, width-1, height-1, true);
-		g.setColor(c);*/
-		
-		GraphicLib.draw3DRoundRectangle(g, x, y, width, height, AvatarPDPanel.ARC, ColorManager.AVATARPD_PROPERTY_RELATION, g.getColor());
-		
-        
-		Font f0 = g.getFont();
-		if (displayText) {
-			f = f.deriveFont((float)currentFontSize);
-			g.setFont(f.deriveFont(Font.BOLD));
-			int w  = g.getFontMetrics().stringWidth(value);
-			g.drawString(value, x + (width - w)/2, y + currentFontSize + (int)(textY1*tdp.getZoom()));
-			g.setFont(f0);
-		}
-        
+    @Override
+    public void internalDrawing(Graphics g)
+    {
+    	//Rectangle
+    	GraphicLib.draw3DRoundRectangle(g, x, y, width, height, AvatarPDPanel.ARC, ColorManager.AVATARPD_PROPERTY_RELATION, g.getColor());
+    	
+    	//String
+    	if (!isTextReadable(g))
+    		return;
+    	currentFontSize = g.getFont().getSize();
+    	g.drawString(value, getCenter(g, value), y + currentFontSize);
     }
+//    public void internalDrawing(Graphics g) {
+//        
+//		Font f = g.getFont();
+//	//	Font fold = f;
+//		
+//		if ((rescaled) && (!tdp.isScaled())) {
+//			
+//			if (currentFontSize == -1) {
+//				currentFontSize = f.getSize();
+//			}
+//			rescaled = false;
+//			// Must set the font size ..
+//			// Find the biggest font not greater than max_font size
+//			// By Increment of 1
+//			// Or decrement of 1
+//			// If font is less than 4, no text is displayed
+//			
+//			int maxCurrentFontSize = Math.max(0, Math.min(height, maxFontSize));
+//			int w0;
+//			f = f.deriveFont((float)maxCurrentFontSize);
+//			g.setFont(f);
+//			//
+//			while(maxCurrentFontSize > (minFontSize-1)) {
+//				w0 = g.getFontMetrics().stringWidth(value);
+//				if (w0 < (width - (2*textX))) {
+//					break;
+//				}
+//				maxCurrentFontSize --;
+//				f = f.deriveFont((float)maxCurrentFontSize);
+//				g.setFont(f);
+//			}
+//			currentFontSize = maxCurrentFontSize;
+//			
+//			if(currentFontSize <minFontSize) {
+//				displayText = false;
+//			} else {
+//				displayText = true;
+//				f = f.deriveFont((float)currentFontSize);
+//				g.setFont(f);
+//			}
+//			
+//		}
+//		
+//        /*Color c = g.getColor();
+//		g.draw3DRect(x, y, width, height, true);
+//		
+//		g.setColor(ColorManager.AVATARPD_PROPERTY_RELATION);
+//		g.fill3DRect(x+1, y+1, width-1, height-1, true);
+//		g.setColor(c);*/
+//		
+//		GraphicLib.draw3DRoundRectangle(g, x, y, width, height, AvatarPDPanel.ARC, ColorManager.AVATARPD_PROPERTY_RELATION, g.getColor());
+//		
+//        
+//		Font f0 = g.getFont();
+//		if (displayText) {
+//			f = f.deriveFont((float)currentFontSize);
+//			g.setFont(f.deriveFont(Font.BOLD));
+//			int w  = g.getFontMetrics().stringWidth(value);
+//			g.drawString(value, x + (width - w)/2, y + currentFontSize + (int)(textY*tdp.getZoom()));
+//			g.setFont(f0);
+//		}
+//        
+//    }
     
    /* public void setValue(String val, Graphics g) {
         oldValue = value;

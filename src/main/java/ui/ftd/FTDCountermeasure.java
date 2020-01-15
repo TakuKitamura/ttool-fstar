@@ -60,7 +60,7 @@ import java.awt.*;
  * @version 1.0 14/12/2017
  */
 public class FTDCountermeasure extends TGCScalableWithInternalComponent implements SwallowedTGComponent, WithAttributes {
-    private int textY1 = 3;
+//    private int textY1 = 3;
     //   private int textY2 = 3;
 
     // private static int arc = 7;
@@ -77,7 +77,7 @@ public class FTDCountermeasure extends TGCScalableWithInternalComponent implemen
     private static int minFontSize = 4;
     private int currentFontSize = -1;
     private boolean displayText = true;
-    private int textX = 10;
+//    private int textX = 10;
 
     public FTDCountermeasure(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
@@ -85,6 +85,9 @@ public class FTDCountermeasure extends TGCScalableWithInternalComponent implemen
         width = 125;
         height = (int) (40 * tdp.getZoom());
         minWidth = 100;
+        textY = 3;
+        textX = 10;
+        initScaling(125,40);
 
         nbConnectingPoint = 12;
         connectingPoint = new TGConnectingPoint[12];
@@ -116,6 +119,7 @@ public class FTDCountermeasure extends TGCScalableWithInternalComponent implemen
         myImageIcon = IconManager.imgic702;
     }
 
+    @Override
     public void internalDrawing(Graphics g) {
         String ster = "<<" + stereotype + ">>";
         Font f = g.getFont();
@@ -126,9 +130,9 @@ public class FTDCountermeasure extends TGCScalableWithInternalComponent implemen
         }
 
 
-        if (currentFontSize == -1) {
-            currentFontSize = f.getSize();
-        }
+//        if (currentFontSize == -1) {
+//            currentFontSize = f.getSize();
+//        }
 
         if ((rescaled) && (!tdp.isScaled())) {
             rescaled = false;
@@ -162,22 +166,22 @@ public class FTDCountermeasure extends TGCScalableWithInternalComponent implemen
             g.setFont(f);
             //Font f0 = g.getFont();
 
-            boolean cannotWriteAttack = (height < (2 * currentFontSize + (int) (textY1 * tdp.getZoom())));
+            boolean cannotWriteAttack = (height < (2 * currentFontSize + (int) (textY * tdp.getZoom())));
             //TraceManager.addDev("Zoom=" + tdp.getZoom() + " Cannot write attack=" + cannotWriteAttack + "Font=" + f0);
             if (cannotWriteAttack) {
                 w = g.getFontMetrics().stringWidth(value);
-                int h = currentFontSize + (int) (textY1 * tdp.getZoom());
+                int h = currentFontSize + (int) (textY * tdp.getZoom());
                 if ((w < (2 * textX + width)) && (h < height)) {
-                    g.drawString(value, x + (width - w) / 2, y + h);
+                    drawSingleString(g, value, x + (width - w) / 2, y + h);
                 } else {
                     w = g.getFontMetrics().stringWidth(ster);
                     if ((w < (2 * textX + width)) && (h < height)) {
-                        g.drawString(ster, x + (width - w) / 2, y + h);
+                        drawSingleString( g, ster, x + (width - w) / 2, y + h);
                     }
                 }
             } else {
                 g.setFont(f.deriveFont(Font.BOLD));
-                int h = currentFontSize + (int) (textY1 * tdp.getZoom());
+                int h = currentFontSize + (int) (textY * tdp.getZoom());
                 int cumulated = 0;
                 w = g.getFontMetrics().stringWidth(ster);
                 if ((w < (2 * textX + width)) && (h < height)) {
@@ -186,12 +190,12 @@ public class FTDCountermeasure extends TGCScalableWithInternalComponent implemen
                 }
                 g.setFont(f);
                 w = g.getFontMetrics().stringWidth(value);
-                h = cumulated + currentFontSize + (int) (textY1 * tdp.getZoom());
+                h = cumulated + currentFontSize + (int) (textY * tdp.getZoom());
                 if ((w < (2 * textX + width)) && (h < height)) {
                     //TraceManager.addDev("Drawing value=" + value);
-                    g.drawString(value, x + (width - w) / 2, y + h);
+                    drawSingleString(g, value, x + (width - w) / 2, y + h);
                 } else {
-                    g.drawString(value, x + (width - w) / 2, y + h);
+                    drawSingleString(g, value, x + (width - w) / 2, y + h);
                     //TraceManager.addDev("--------------------------------------------------- Cannot draw value=" + value);
                     //TraceManager.addDev("w=" + w + " val=" + (2*textX + width) + "h=" + h + " height=" + height + " zoom=" + tdp.getZoom() + " Font=" + f0);
                 }
@@ -248,6 +252,7 @@ public class FTDCountermeasure extends TGCScalableWithInternalComponent implemen
         //
     }
 
+    @Override
     public void resizeWithFather() {
         if ((father != null) && (father instanceof FTDBlock)) {
             //
@@ -258,6 +263,7 @@ public class FTDCountermeasure extends TGCScalableWithInternalComponent implemen
     }
 
 
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
         String tmp;
         boolean error = false;
@@ -300,6 +306,7 @@ public class FTDCountermeasure extends TGCScalableWithInternalComponent implemen
         return !error;
     }
 
+    @Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
         Polygon p = getMyPolygon();
         if (p.contains(x1, y1)) {
@@ -308,6 +315,7 @@ public class FTDCountermeasure extends TGCScalableWithInternalComponent implemen
         return null;
     }
 
+    @Override
     public int getType() {
         return TGComponentManager.FTD_COUNTERMEASURE;
     }
@@ -324,6 +332,7 @@ public class FTDCountermeasure extends TGCScalableWithInternalComponent implemen
         return value;
     }
 
+    @Override
     public String getAttributes() {
         String s = "Description = " + description + "\n";
         s += "Id=" + getId();
@@ -375,12 +384,14 @@ public class FTDCountermeasure extends TGCScalableWithInternalComponent implemen
         makeValue();
     }
 
+    @Override
     public void wasUnswallowed() {
         setFather(null);
         TDiagramPanel tdp = getTDiagramPanel();
         setCdRectangle(tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY());
     }
 
+    @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
 

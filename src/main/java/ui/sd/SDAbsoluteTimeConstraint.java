@@ -90,7 +90,7 @@ public class SDAbsoluteTimeConstraint extends TGCWithoutInternalComponent implem
             widthValue  = g.getFontMetrics().stringWidth(value);
             heightValue = g.getFontMetrics().getHeight();
         }
-        g.drawString(value, x-widthValue-2, y);
+        drawSingleString(g, value, x-widthValue-2, y);
         g.drawLine(x, y, x+width, y);
     }
     

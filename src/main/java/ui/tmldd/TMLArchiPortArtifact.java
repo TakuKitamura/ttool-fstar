@@ -81,14 +81,20 @@ import ui.window.JDialogPortArtifact;
    * @author Ludovic APVRILLE
  */
 public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements SwallowedTGComponent, WithAttributes, TMLArchiPortInterface {
-    protected int lineLength = 5;
-    protected int textX =  5;
-    protected int textY =  15;
-    protected int textY2 =  35;
-    protected int space = 5;
-    protected int fileX = 20;
-    protected int fileY = 25;
-    protected int cran = 5;
+
+	// Issue #31
+//    protected int lineLength = 5;
+//    protected int textX =  5;
+//    protected int textY =  15;
+//    protected int textY2 =  35;
+//    protected int space = 5;
+//    protected int fileX = 20;
+//    protected int fileY = 25;
+//    protected int cran = 5;
+	private static final int SPACE = 5;
+	private static final int CRAN = 5;
+	private static final int FILE_X = 20;
+	private static final int FILE_Y = 25;
     protected String mappedMemory = "VOID";
     protected String oldValue = "";
     protected String referenceCommunicationName = "TMLCommunication";
@@ -103,9 +109,13 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
     public TMLArchiPortArtifact(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        width = 75;
-        height = 40;
+        // Issue #31
+//        width = 75;
+//        height = 40;
         minWidth = 75;
+        textX =  5;
+        textY =  15;
+        initScaling( 75, 40 );
 
         nbConnectingPoint = 0;
         addTGConnectingPointsComment();
@@ -120,22 +130,20 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
 
         makeFullValue();
 
-        //setPriority(((TMLArchiDiagramPanel)tdp).getPriority(getFullValue(), priority);
-
         myImageIcon = IconManager.imgic702;
     }
 
+    @Override
     public boolean isHidden() {
-	//TraceManager.addDev("Archi task artifact: Am I hidden?" + getValue());
-	boolean ret = false;
-	if (tdp != null) {
-	    if (tdp instanceof TMLArchiDiagramPanel) {
-		ret = !(((TMLArchiDiagramPanel)(tdp)).inCurrentView(this));
-		
-	    }
-	}
-	//TraceManager.addDev("Hidden? -> " + ret);
-	return ret;
+		//TraceManager.addDev("Archi task artifact: Am I hidden?" + getValue());
+		boolean ret = false;
+		if (tdp != null) {
+		    if (tdp instanceof TMLArchiDiagramPanel) {
+		    	ret = !(((TMLArchiDiagramPanel)(tdp)).inCurrentView(this));
+		    }
+		}
+		//TraceManager.addDev("Hidden? -> " + ret);
+		return ret;
     }
 
     public int getPriority() {
@@ -146,16 +154,20 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         priority = _priority;
     }
 
-
-    public void internalDrawing(Graphics g) {
-
-        if (oldValue.compareTo(value) != 0) {
-            setValue(value, g);
-        }
+    @Override
+    protected void internalDrawing(Graphics g) {
+    	// Issue #31 
+//        if (oldValue.compareTo(value) != 0) {
+//            setValue(value, g);
+//        }
+    	checkWidth( g );
 
         g.drawRect(x, y, width, height);
 
-        //g.drawRoundRect(x, y, width, height, arc, arc);
+        final int space = scale( SPACE );
+        final int fileX = scale( FILE_X );
+        final int fileY = scale( FILE_Y );
+        final int cran = scale( CRAN );
         g.drawLine(x+width-space-fileX, y + space, x+width-space-fileX, y+space+fileY);
         g.drawLine(x+width-space-fileX, y + space, x+width-space-cran, y+space);
         g.drawLine(x+width-space-cran, y+space, x+width-space, y+space + cran);
@@ -164,13 +176,17 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         g.drawLine(x+width-space-cran, y+space, x+width-space-cran, y+space+cran);
         g.drawLine(x+width-space-cran, y+space+cran, x + width-space, y+space+cran);
 
+
+        g.drawImage( scale( IconManager.img9 ), x+width - scale( space + fileX - 3 ), y + scale( SPACE + 7 ), null);
+
         //g.drawImage(IconManager.img9, x+width-space-fileX + 3, y + space + 7, null);
 
-        g.drawString(value, x + textX , y + textY);
+
+        drawSingleString(g,value, x + textX , y + textY);
 
         Font f = g.getFont();
         g.setFont(f.deriveFont(Font.ITALIC));
-        g.drawString(typeName, x + textX , y + textY + 20);
+        drawSingleString(g,typeName, x + textX , y + textY + 20);
         g.setFont(f);
 
         // Link to selected memory
@@ -193,23 +209,22 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
                 }
             }
         }
-
-
     }
+//
+//    public void setValue(String val, Graphics g) {
+//        oldValue = value;
+//        int w  = g.getFontMetrics().stringWidth(value);
+//        int w1 = Math.max(minWidth, w + 2 * textX + fileX + space);
+//
+//        //
+//        if (w1 != width) {
+//            width = w1;
+//            resizeWithFather();
+//        }
+//        //
+//    }
 
-    public void setValue(String val, Graphics g) {
-        oldValue = value;
-        int w  = g.getFontMetrics().stringWidth(value);
-        int w1 = Math.max(minWidth, w + 2 * textX + fileX + space);
-
-        //
-        if (w1 != width) {
-            width = w1;
-            resizeWithFather();
-        }
-        //
-    }
-
+    @Override
     public void resizeWithFather() {
         if ((father != null) && (father instanceof TMLArchiCommunicationNode)) {
             //
@@ -219,13 +234,13 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         }
     }
 
-
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
         String tmp;
         boolean error = false;
 
         // Get the list of all other TMLArchiPortArtifact.java and retrieve the mapped ports
-	Vector<String> portsList = this.getTDiagramPanel().getMGUI().getAllTMLInputPorts();
+        Vector<String> portsList = this.getTDiagramPanel().getMGUI().getAllTMLInputPorts();
 
         //TraceManager.addDev( "bufferParameters before opening the window: " + bufferParameters.toString() );
         JDialogPortArtifact dialog = new JDialogPortArtifact( frame, "Setting port artifact attributes", this, mappedMemory, portsList, value );
@@ -287,13 +302,13 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         makeFullValue();
 
         return !error;
-
     }
 
     private void makeFullValue() {
         value = referenceCommunicationName + "::" + portName;
     }
 
+    @Override
     public TGComponent isOnMe(int _x, int _y) {
         if (GraphicLib.isInRectangle(_x, _y, x, y, width, height)) {
             return this;
@@ -301,10 +316,12 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         return null;
     }
 
+    @Override
     public int getType() {
         return TGComponentManager.TMLARCHI_PORT_ARTIFACT;
     }
 
+    @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<info value=\"" + value + "\" portName=\"" + portName + "\" referenceCommunicationName=\"");
@@ -342,7 +359,6 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
         //
         try {
-
             NodeList nli;
             Node n1, n2;
             Element elt;
@@ -424,8 +440,7 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
             }
 
         } catch (Exception e) {
-            
-            throw new MalformedModelingException();
+            throw new MalformedModelingException( e );
         }
         makeFullValue();
     }
@@ -447,7 +462,6 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         return portName;
     }
 
-
     public String getFullValue() {
         String tmp = getValue();
         tmp += " (" + getTypeName() + ")";
@@ -458,6 +472,7 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         return typeName;
     }
 
+    @Override
     public String getAttributes() {
         return "Priority = " + priority;
     }
@@ -466,15 +481,15 @@ public class TMLArchiPortArtifact extends TGCWithoutInternalComponent implements
         return mappedMemory;
     }
 
-    public String getEndAddress()       {
+    public String getEndAddress() {
         return endAddress;
     }
 
-    public String getStartAddress()     {
+    public String getStartAddress() {
         return startAddress;
     }
 
-    public List<String> getBufferParameters()      {
+    public List<String> getBufferParameters() {
         return bufferParameters;
     }
 }

@@ -36,9 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.tmldd;
 
 import myutil.GraphicLib;
@@ -46,7 +43,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import tmltranslator.HwBridge;
-import tmltranslator.HwExecutionNode;
 import tmltranslator.HwNoC;
 import ui.*;
 import ui.util.IconManager;
@@ -64,11 +60,13 @@ import java.util.HashMap;
    * @author Ludovic APVRILLE
  */
 public class TMLArchiRouterNode extends TMLArchiCommunicationNode implements SwallowTGComponent, WithAttributes, TMLArchiElementInterface {
-    private int textY1 = 15;
-    private int textY2 = 30;
-    private int derivationx = 2;
-    private int derivationy = 3;
-    private String stereotype = "NoC";
+
+	// Issue #31
+//    private int textY1 = 15;
+//    private int textY2 = 30;
+//    private int derivationx = 2;
+//    private int derivationy = 3;
+    private String stereotype = "ROUTER";
     private int size = 2; // 2x2 NoC by default
 
     private int bufferByteDataSize = HwBridge.DEFAULT_BUFFER_BYTE_DATA_SIZE;
@@ -77,10 +75,13 @@ public class TMLArchiRouterNode extends TMLArchiCommunicationNode implements Swa
     public TMLArchiRouterNode(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
-        width = 250;
-        height = 100;
+    	// Issue #31
+//        width = 250;
+//        height = 100;
         minWidth = 100;
         minHeight = 35;
+        textY = 15;
+        initScaling( 250, 100 );
 
         nbConnectingPoint = 16;
         connectingPoint = new TGConnectingPoint[16];
@@ -118,20 +119,24 @@ public class TMLArchiRouterNode extends TMLArchiCommunicationNode implements Swa
         myImageIcon = IconManager.imgic700;
     }
 
-
-    public void internalDrawing(Graphics g) {
+    @Override
+    protected void internalDrawing(Graphics g) {
 	
         Color c = g.getColor();
         g.draw3DRect(x, y, width, height, true);
 
         // Top lines
-        g.drawLine(x, y, x + derivationx, y - derivationy);
-        g.drawLine(x + width, y, x + width + derivationx, y - derivationy);
-        g.drawLine(x + derivationx, y - derivationy, x + width + derivationx, y - derivationy);
+
+        // Issue #31
+        final int derivationX = scale( DERIVATION_X );
+        final int derivationY = scale( DERIVATION_Y );
+        g.drawLine(x, y, x + derivationX, y - derivationY);
+        g.drawLine(x + width, y, x + width + derivationX, y - derivationY);
+        g.drawLine(x + derivationX, y - derivationY, x + width + derivationX, y - derivationY);
 
         // Right lines
-        g.drawLine(x + width, y + height, x + width + derivationx, y - derivationy + height);
-        g.drawLine(x + derivationx + width, y - derivationy, x + width + derivationx, y - derivationy + height);
+        g.drawLine(x + width, y + height, x + width + derivationX, y - derivationY + height);
+        g.drawLine(x + derivationX + width, y - derivationY, x + width + derivationX, y - derivationY + height);
 
         // Filling color
         g.setColor(ColorManager.BRIDGE_BOX);
@@ -141,23 +146,27 @@ public class TMLArchiRouterNode extends TMLArchiCommunicationNode implements Swa
         // Strings
         String ster = "<<" + stereotype + ">>";
         int w  = g.getFontMetrics().stringWidth(ster);
-        g.drawString(ster, x + (width - w)/2, y + textY1);
+        drawSingleString(g,ster, x + (width - w)/2, y + textY ); // Issue #31
         w  = g.getFontMetrics().stringWidth(name);
-        g.drawString(name, x + (width - w)/2, y + textY2);
+        drawSingleString(g,name, x + (width - w)/2, y + 2 * textY ); // Issue #31
 
         // Icon
-        //g.drawImage(IconManager.imgic1104.getImage(), x + width - 20, y + 4, null);
-        g.drawImage(IconManager.imgic1104.getImage(), x + 4, y + 4, null);
-        //g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
+        // Issue #31
+        final int margin = scale( 4 );
+        g.drawImage( scale( IconManager.imgic1104.getImage() ), x + margin, y + margin, null);
     }
 
+    @Override
     public TGComponent isOnOnlyMe(int x1, int y1) {
-
         Polygon pol = new Polygon();
         pol.addPoint(x, y);
-        pol.addPoint(x + derivationx, y - derivationy);
-        pol.addPoint(x + derivationx + width, y - derivationy);
-        pol.addPoint(x + derivationx + width, y + height - derivationy);
+
+        // Issue #31
+        final int derivationX = scale( DERIVATION_X );
+        final int derivationY = scale( DERIVATION_Y );
+        pol.addPoint(x + derivationX, y - derivationY);
+        pol.addPoint(x + derivationX + width, y - derivationY);
+        pol.addPoint(x + derivationX + width, y + height - derivationY);
         pol.addPoint(x + width, y + height);
         pol.addPoint(x, y + height);
         if (pol.contains(x1, y1)) {
@@ -176,15 +185,16 @@ public class TMLArchiRouterNode extends TMLArchiCommunicationNode implements Swa
         return name;
     }
 
+    @Override
     public boolean editOndoubleClick(JFrame frame) {
         boolean error = false;
         String errors = "";
         int tmp;
         String tmpName;
 
-        JDialogRouterNode dialog = new JDialogRouterNode(frame, "Setting NoC attributes", this);
+        JDialogRouterNode dialog = new JDialogRouterNode(frame, "Setting router attributes", this);
      //   dialog.setSize(350, 350);
-        GraphicLib.centerOnParent(dialog, 650, 350);
+        GraphicLib.centerOnParent(dialog, 350, 350);
         dialog.setVisible( true ); // blocked until dialog has been closed
 
         if (!dialog.isRegularClose()) {
@@ -270,11 +280,12 @@ public class TMLArchiRouterNode extends TMLArchiCommunicationNode implements Swa
         return true;
     }
 
-
+    @Override
     public int getType() {
         return TGComponentManager.TMLARCHI_ROUTERNODE;
     }
 
+    @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
         sb.append("<info stereotype=\"" + stereotype + "\" nodeName=\"" + name);
@@ -292,7 +303,6 @@ public class TMLArchiRouterNode extends TMLArchiCommunicationNode implements Swa
     public void loadExtraParam(NodeList nl, int decX, int decY, int decId) throws MalformedModelingException{
         //
         try {
-
             NodeList nli;
             Node n1, n2;
             Element elt;
@@ -339,10 +349,9 @@ public class TMLArchiRouterNode extends TMLArchiCommunicationNode implements Swa
             }
 
         } catch (Exception e) {
-            throw new MalformedModelingException();
+            throw new MalformedModelingException(e);
         }
     }
-
 
     public int getBufferByteDataSize(){
         return bufferByteDataSize;
@@ -352,6 +361,7 @@ public class TMLArchiRouterNode extends TMLArchiCommunicationNode implements Swa
         return size;
     }
 
+    @Override
     public String getAttributes() {
         String attr = "";
         attr += "Buffer size (in byte) = " + bufferByteDataSize + "\n";
@@ -360,13 +370,13 @@ public class TMLArchiRouterNode extends TMLArchiCommunicationNode implements Swa
         return attr;
     }
 
-    public int getComponentType()       {
+    @Override
+    public int getComponentType() {
         return TRANSFER;
     }
-
+    
     public String getPlacement() {
-        return placement;
+    	return placement;     
     }
-
-
+    
 }

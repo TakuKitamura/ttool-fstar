@@ -79,7 +79,7 @@ public  class AvatarRDVerifyConnector extends TGConnectorWithCommentConnectionPo
 		
         w  = g.getFontMetrics().stringWidth(value);
         h = g.getFontMetrics().getHeight();
-        g.drawString(value, (x1 + x2 - w) / 2, (y1 + y2)/2);
+        drawSingleString(g, value, (x1 + x2 - w) / 2, (y1 + y2)/2);
 		g.setFont(old);
     }
     

@@ -36,12 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
 package ui.diplodocusmethodology;
-
-//import java.awt.*;
 
 import ui.CDElement;
 import ui.TGComponentManager;
@@ -61,12 +56,8 @@ public class DiplodocusMethodologyConnectingPoint extends  TGConnectingPointWidt
 		orientation = _orientation;
     }
     
+    @Override
     public boolean isCompatibleWith(int type) {
-
         return type == TGComponentManager.DIPLODOCUSMETHODOLOGY_CONNECTOR;
-
-
     }
-	
-
 }

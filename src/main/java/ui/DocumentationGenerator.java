@@ -36,10 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package ui;
 
 import myutil.Conversion;
@@ -57,7 +53,6 @@ import ui.util.DefaultText;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-import common.ConfigurationTTool;
 import common.SpecConfigTTool;
 
 import java.awt.image.BufferedImage;
@@ -470,15 +465,16 @@ public class DocumentationGenerator implements SteppedAlgorithm, StoppableGUIEle
         tmpdoc += DefaultText.getVersion();
         tmpdoc += " generation date: " + formattedDate;
         tmpdoc += "----\n";
-	tmpdoc += "% To be compiled as follows: make all. Relies on https://github.com/pacalet/mli.git\n";
-	tmpdoc += "\\documentclass[11pt,a4paper]{article}\n\n\\usepackage{graphicx}\n\n\\begin{document}\n";
-	tmpdoc += "\\extrafloats{750}\n";
-	tmpdoc += "\\title{" + Conversion.replaceAllString(projectName, "_", "\\_") + "}\n";
-	tmpdoc += "\\date{\\today}\n";
-	tmpdoc += "\\maketitle\n\n";
-	tmpdoc += "\\input{"+texIncludeFileNameSvg+"}\n";
-	tmpdoc += "\\end{document}\n\n";
-        return tmpdoc;
+		tmpdoc += "% To be compiled as follows: make all. Relies on https://github.com/pacalet/mli.git\n";
+		tmpdoc += "\\documentclass[11pt,a4paper]{article}\n\n\\usepackage{graphicx}\n\n\\begin{document}\n";
+		tmpdoc += "\\extrafloats{750}\n";
+		tmpdoc += "\\title{" + Conversion.replaceAllString(projectName, "_", "\\_") + "}\n";
+		tmpdoc += "\\date{\\today}\n";
+		tmpdoc += "\\maketitle\n\n";
+		tmpdoc += "\\input{"+texIncludeFileNameSvg+"}\n";
+		tmpdoc += "\\end{document}\n\n";
+
+		return tmpdoc;
     }
 
     public  String getIncludeLatexDocumentationHeaderSvg(String _projectName) {
@@ -494,5 +490,4 @@ public class DocumentationGenerator implements SteppedAlgorithm, StoppableGUIEle
         tmpdoc += "----\n\n";
         return tmpdoc;
     }
-
 }

@@ -74,16 +74,16 @@ public class DiplodocusMethodologyDiagramReferenceToMapping extends DiplodocusMe
 
     }
 
-
+    @Override
     public  int getType() {
         return TGComponentManager.DIPLODODUSMETHODOLOGY_REF_MAPPING;
     }
-
+    @Override
     public boolean isAValidPanelType(TURTLEPanel panel) {
         return panel instanceof TMLArchiPanel;
 
     }
-
+    @Override
     public void makeValidationInfos(DiplodocusMethodologyDiagramName dn) {
         dn.setValidationsNumber(4);
         dn.setValidationsInfo(0, DiplodocusMethodologyDiagramName.SIM_ANIM_MAPPING_DIPLO);
@@ -91,7 +91,7 @@ public class DiplodocusMethodologyDiagramReferenceToMapping extends DiplodocusMe
         dn.setValidationsInfo(2, DiplodocusMethodologyDiagramName.FV_MAPPING_DIPLO);
         dn.setValidationsInfo(3, DiplodocusMethodologyDiagramName.TML_MAPPING_DIPLO);
     }
-
+    @Override
     public boolean makeCall(String diagramName, int index) {
         String tmp;
 

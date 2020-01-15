@@ -57,8 +57,8 @@ import myutil.GraphicLib;
  * @author Irina Kit Yan LEE
  */
 
-public class SysCAMSPortConnector extends TGConnector implements ScalableTGComponent, SpecificActionAfterAdd, SpecificActionAfterMove {
-	protected double oldScaleFactor;
+public class SysCAMSPortConnector extends TGConnector implements /* Issue #31 ScalableTGComponent,*/ SpecificActionAfterAdd, SpecificActionAfterMove {
+	//protected double oldScaleFactor;
 
 	public SysCAMSPortConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
 		super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
@@ -66,7 +66,7 @@ public class SysCAMSPortConnector extends TGConnector implements ScalableTGCompo
 		myImageIcon = IconManager.imgic202;
 		value = "";
 		editable = true;
-		oldScaleFactor = tdp.getZoom();
+		//oldScaleFactor = tdp.getZoom();
 		
 		p1 = _p1;
 		p2 = _p2;
@@ -80,12 +80,14 @@ public class SysCAMSPortConnector extends TGConnector implements ScalableTGCompo
 		return p2;
 	}
 
+	@Override
 	public boolean editOndoubleClick(JFrame frame) {
 		JDialogSysCAMSConnector jde = new JDialogSysCAMSConnector(this);
 		jde.setVisible(true);
 		return true;
 	}
 	
+	@Override
 	protected void drawLastSegment(Graphics gr, int x1, int y1, int x2, int y2) {
 		Graphics2D g = (Graphics2D) gr;
 		
@@ -153,24 +155,25 @@ public class SysCAMSPortConnector extends TGConnector implements ScalableTGCompo
 		} catch (Exception e) {
 		}
 	}
+// Issue #31: Moved to upper class
+//	public void rescale(double scaleFactor) {
+//		int xx, yy;
+//
+//		for (int i = 0; i < nbInternalTGComponent; i++) {
+//			xx = tgcomponent[i].getX();
+//			yy = tgcomponent[i].getY();
+//			tgcomponent[i].dx = (tgcomponent[i].dx + xx) / oldScaleFactor * scaleFactor;
+//			tgcomponent[i].dy = (tgcomponent[i].dy + yy) / oldScaleFactor * scaleFactor;
+//			xx = (int) (tgcomponent[i].dx);
+//			tgcomponent[i].dx = tgcomponent[i].dx - xx;
+//			yy = (int) (tgcomponent[i].dy);
+//			tgcomponent[i].dy = tgcomponent[i].dy - yy;
+//			tgcomponent[i].setCd(xx, yy);
+//		}
+//		oldScaleFactor = scaleFactor;
+//	}
 
-	public void rescale(double scaleFactor) {
-		int xx, yy;
-
-		for (int i = 0; i < nbInternalTGComponent; i++) {
-			xx = tgcomponent[i].getX();
-			yy = tgcomponent[i].getY();
-			tgcomponent[i].dx = (tgcomponent[i].dx + xx) / oldScaleFactor * scaleFactor;
-			tgcomponent[i].dy = (tgcomponent[i].dy + yy) / oldScaleFactor * scaleFactor;
-			xx = (int) (tgcomponent[i].dx);
-			tgcomponent[i].dx = tgcomponent[i].dx - xx;
-			yy = (int) (tgcomponent[i].dy);
-			tgcomponent[i].dy = tgcomponent[i].dy - yy;
-			tgcomponent[i].setCd(xx, yy);
-		}
-		oldScaleFactor = scaleFactor;
-	}
-
+	@Override
 	public int getType() {
 		return TGComponentManager.CAMS_CONNECTOR;
 	}

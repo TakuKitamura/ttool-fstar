@@ -150,12 +150,15 @@ public class AvatarSMDLibraryFunctionCall extends AvatarSMDBasicCanBeDisabledCom
                 String abbrev = this.value.substring (0, stringLength) + "...";
                 int w = this.tdp.stringWidth (graph, abbrev);
                 if (w + 2*AvatarSMDLibraryFunctionCall.paddingHorizontal < this.width-2*linebreak) {
-                    graph.drawString (abbrev, this.x + (this.width - w)/2, this.y + (this.height+h)/2);
-                    break;
+//                    graph.drawString (abbrev, this.x + (this.width - w)/2, this.y + (this.height+h)/2);
+                    drawSingleString(graph, abbrev, this.x + (this.width - w)/2, this.y + (this.height+h)/2);
+                	break;
                 }
             }
         } else
-            graph.drawString (this.value, this.x + (this.width - stringWidth) / 2 , this.y + (this.height+h)/2);
+        	drawSingleString(graph, this.value, this.x + (this.width - stringWidth) / 2 , this.y + (this.height+h)/2);
+//            graph.drawString (this.value, this.x + (this.width - stringWidth) / 2 , this.y + (this.height+h)/2);
+        	
     }
 
     @Override
