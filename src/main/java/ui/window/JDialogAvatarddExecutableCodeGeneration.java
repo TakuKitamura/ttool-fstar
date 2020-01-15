@@ -52,6 +52,7 @@ import ui.util.IconManager;
 import ui.MainGUI;
 import ui.avatardd.ADDDiagramPanel;
 import ui.interactivesimulation.JFrameSimulationSDPanel;
+import ui.syscams.SysCAMSComponentTaskDiagramPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -60,6 +61,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.Vector;
 
 /**
  * Class JDialogAvatarddExecutableCodeGeneration
@@ -531,9 +533,16 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
 
                 ADDDiagramPanel deploymentDiagramPanel = mgui.getFirstAvatarDeploymentPanelFound();
                 AvatarDeploymentPanelTranslator avdeploymenttranslator = new AvatarDeploymentPanelTranslator(deploymentDiagramPanel);
+		
                 AvatarddSpecification avddspec = avdeploymenttranslator.getAvatarddSpecification();
                 AvatarSpecification avspec = mgui.gtm.getAvatarSpecification();
 
+
+		Vector<SysCAMSComponentTaskDiagramPanel> listsyscamspanel = mgui.getListSysCAMSPanel();
+		
+		//SysCAMSPanelTranslator syscamspaneltranslator = new SysCAMSPanelTranslator(syscamspanel);
+		//	SysCAMSSpecification syscamsspec =  syscamspaneltranslator.getSysCAMSSpecification();
+		
                 // Generating code
                 if (avddspec == null) {
                     jta.append("Error: No AVATAR Deployemnt specification\n");
@@ -550,8 +559,11 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
                         pathCode = code2.getText();
 
                         TraceManager.addDev("AVATAR TOPCELL saved in " + code2.getText());
-                        topCellGenerator.saveFile(pathCode);
-
+			//if (!listsyscamspanel.isEmpty())
+			if (listsyscamspanel==null)topCellGenerator.saveFile(pathCode);
+                        //topCellGenerator.saveFile(pathCode,listsyscamspanel); // DG 13.12.2019
+			else //topCellGenerator.saveFile(pathCode);
+topCellGenerator.saveFile(pathCode,listsyscamspanel); // DG 13.12.2019
                         jta.append("Code saved\n");
                     } catch (Exception e) {
                         jta.append("Could not generate files\n");
@@ -623,13 +635,13 @@ public class JDialogAvatarddExecutableCodeGeneration extends javax.swing.JFrame 
                     try {
                         jta.append("Saving code in files\n");
                         pathCode = code2.getText();
-                        topCellGenerator.saveFile(pathCode);
+                        topCellGenerator.saveFile(pathCode,listsyscamspanel);
 
                         jta.append("Code saved\n");
                     } catch (Exception e) {
                         jta.append("Could not generate files\n");
                     }
-
+		    
                     testGo();
                     jta.append("Generation of C-SOCLIB executable code: done\n");
                     //t2j.printJavaClasses();

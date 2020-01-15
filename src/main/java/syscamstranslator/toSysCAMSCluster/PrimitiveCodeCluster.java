@@ -127,11 +127,9 @@ public class PrimitiveCodeCluster {
 					if ((i > 0)) {
 						corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t, " + identifier + "(" + value + ")" + CR;
 					} 
-					// if (i == tdf.getListStruct().getSize()-1) {
-					// corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t{}" + CR;
-					//  }//deleted DG
+				
 				}
-				corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t{}" + CR;//moved DG
+				corpsPrimitiveTDF = corpsPrimitiveTDF + "\t\t{}" + CR;
 				corpsPrimitiveTDF = corpsPrimitiveTDF + "\t};" + CR2;
 			}
 
@@ -330,6 +328,11 @@ public class PrimitiveCodeCluster {
 				}
 			}
 
+			if(tdf.getDynamic().equals(true)){
+			    corpsPrimitiveTDF = corpsPrimitiveTDF+"\t allow_dynamic_tdf();"+CR;
+			    cpt2++;
+			}
+
 			if (cpt2 > 0) {
 				corpsPrimitiveTDF = corpsPrimitiveTDF + "\t}" + CR2;
 			}
@@ -406,6 +409,7 @@ public class PrimitiveCodeCluster {
 		
 		if (de != null) {
 			LinkedList<SysCAMSTPortDE> deports = de.getPortDE();
+		
 			int cpt = 0;
 			int cpt2 = 0;
 
@@ -472,25 +476,12 @@ public class PrimitiveCodeCluster {
 				corpsPrimitiveDE = corpsPrimitiveDE + "\t};" + CR2;
 			}
 
-			//DG 17.10.
-			if(de.getClockName()!="")
-			corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_in <bool>"  + de.getClockName() + ";" + CR;
-
-			
-			/*	if (!deports.isEmpty()) {
-				for (SysCAMSTPortDE t : deports) {
-					if (t.getOrigin() == 0) {
-						corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_in< " + t.getDEType() + " > " + t.getName() + ";" + CR;
-					} else if (t.getOrigin() == 1) {
-						corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_out< " + t.getDEType() + " > " + t.getName() + ";" + CR;
-					}
-				}
-			}*/
-
-
-
+			//	DG 17.10.
+				if(de.getClockName()!="")
+				corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_in <bool>"  + de.getClockName() + ";" + CR;			
+	       
 	if (!deports.isEmpty()) {
-			    //System.out.println("@@@@@@@@@DE ports non empty");
+			   
 				for (SysCAMSTPortDE t : deports) {
 
 
@@ -499,25 +490,21 @@ public class PrimitiveCodeCluster {
 					    	corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_in <" + t.getDEType() + " >"  + t.getName() + ";" + CR;
 	
 					    
-						//	System.out.println("@@@@@@@@@2DE "+t.getDEType()+t.getNbits());		
+						
 					} else if (t.getOrigin() == 1) {
 					      corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_out <" + t.getDEType() + " > "+ t.getName() + ";" + CR;
 		 
-					      // System.out.println("@@@@@@@@@3DE "+t.getDEType()+t.getNbits());					
+							
 					}
 				}
 				   else {
 
 if (t.getOrigin() == 0) {
     	corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_in <" + t.getDEType() + "<"+t.getNbits()+"> > " + t.getName() + ";" + CR;
-    	//corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_in <sc_uint <"+t.getNbits()+"> > " + t.getName() + ";" + CR;
-					 
-	//	System.out.println("@@@@@@@@@4DE "+t.getDEType()+t.getNbits());		
+    
 					} else if (t.getOrigin() == 1) {
       corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_out <" + t.getDEType() + "<"+t.getNbits() +"> > "+ t.getName() + ";" + CR;
-      //corpsPrimitiveDE = corpsPrimitiveDE + "\tsc_core::sc_out <sc_uint <"+t.getNbits() +"> > "+ t.getName() + ";" + CR;
-		 
-      // System.out.println("@@@@@@@@@5DE "+t.getDEType()+t.getNbits());					
+   		
 					}
 
 				       
@@ -539,7 +526,7 @@ if (t.getOrigin() == 0) {
 			if (!deports.isEmpty() || !de.getListStruct().isEmpty()) {
 				corpsPrimitiveDE = corpsPrimitiveDE + "\t: ";
 				if (!deports.isEmpty()) {
-					for (int i = 0; i < deports.size(); i++) {
+				    for (int i = 0; i < deports.size(); i++) {
 						if (deports.size() >= 1) {
 							if (cpt == 0) {
 								corpsPrimitiveDE = corpsPrimitiveDE + deports.get(i).getName() + "(\"" + deports.get(i).getName() + "\")" + CR;
@@ -555,7 +542,8 @@ if (t.getOrigin() == 0) {
 				}
 				String identifier;
 				if (!de.getListStruct().isEmpty()) {
-					for (int i = 0; i < de.getListStruct().size(); i++) {
+				    
+				    for (int i = 0; i < de.getListStruct().getSize(); i++) {
 						String select = de.getListStruct().get(i);
 						String[] splita = select.split(" = ");
 						identifier = splita[0];
@@ -573,11 +561,15 @@ if (t.getOrigin() == 0) {
 					}
 				}
 			}
-
+		
+			if(de.getClockName()!="")
+			  corpsPrimitiveDE = corpsPrimitiveDE + "\t, "+de.getClockName()+"(\""+de.getClockName()+"\")"+CR;
+		
+			
 			boolean sensitive = false, method = false;
 			if (!de.getCode().equals("")) {
-			    corpsPrimitiveDE = corpsPrimitiveDE + "\t{" + CR ;
-			    //	corpsPrimitiveDE = corpsPrimitiveDE + "\t{" + CR + "\t\tSC_METHOD(" + de.getNameFn() + ");" + CR;
+			    //  corpsPrimitiveDE = corpsPrimitiveDE + "\t{" + CR ;
+			    	corpsPrimitiveDE = corpsPrimitiveDE + "\t{" + CR + "\t\tSC_METHOD(" + de.getNameFn() + ");" + CR;
 				method = true;
 			} 
 

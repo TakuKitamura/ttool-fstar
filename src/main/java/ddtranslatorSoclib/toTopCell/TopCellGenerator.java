@@ -52,11 +52,17 @@ import avatartranslator.AvatarSpecification;
 import ddtranslatorSoclib.*;
 import ddtranslatorSoclib.toSoclib.*;
 
+import ui.syscams.SysCAMSComponentTaskDiagramPanel;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Vector;
 import myutil.TraceManager;
+
+import java.util.LinkedList;
+
+import syscamstranslator.*;
 
 public class TopCellGenerator
 {
@@ -108,12 +114,12 @@ public class TopCellGenerator
 				
 		AvatarComponent comp1 = my_p1.getComponent();
 		AvatarComponent comp2 = my_p2.getComponent(); 
-		//	if (comp2==comp){
+	
 			if (comp1==comp){
-		//comp2 is a crossbar
+		
 		  AvatarCrossbar comp3=  (AvatarCrossbar)comp2;
 		     cluster_index=comp3.getClusterIndex();
-		     //System.out.println("$$$ Cluster Index "+cluster_index);
+		    
 		     	return cluster_index;
 		}	
 	}
@@ -130,8 +136,7 @@ public class TopCellGenerator
 	    AvatarComponent comp1 = my_p1.getComponent();
 	    AvatarComponent comp2 = my_p2.getComponent(); 
 	    if (comp1 instanceof AvatarCPU){ 
-		AvatarCPU comp1cpu = (AvatarCPU)comp1;
-		//	if(comp1cpu.getCrossbarIndex(comp2)==cluster_no)
+		AvatarCPU comp1cpu = (AvatarCPU)comp1;	
 		if(getCrossbarIndex(comp2)==cluster_no)
 		    cpus++;			
 	    }		    			    
@@ -150,8 +155,7 @@ public class TopCellGenerator
 	    AvatarComponent comp1 = my_p1.getComponent();
 	    AvatarComponent comp2 = my_p2.getComponent(); 
 	    if (comp1 instanceof AvatarRAM){ 
-		AvatarRAM comp1ram = (AvatarRAM)comp1;
-		//if(comp1ram.getCrossbarIndex(comp2)==cluster_no)
+		AvatarRAM comp1ram = (AvatarRAM)comp1;	
 		if(getCrossbarIndex(comp2)==cluster_no)
 		    rams++;			
 	    }		    		
@@ -161,7 +165,7 @@ public class TopCellGenerator
 	return rams; 
     }
 
-    	public static int ttys_in_cluster(AvatarddSpecification dd,int cluster_no){
+    	public static int ttys_in_cluster(AvatarddSpecification dd, int cluster_no){
 	avatardd = dd;
 	int ttys=0;
 	for  (AvatarConnector connector : avatardd.getConnectors()){		
@@ -172,7 +176,6 @@ public class TopCellGenerator
 	    AvatarComponent comp2 = my_p2.getComponent(); 
 	    if (comp1 instanceof AvatarTTY){ 
 		AvatarTTY comp1ram = (AvatarTTY)comp1;
-		//if(comp1ram.getCrossbarIndex(comp2)==cluster_no)
 		if(getCrossbarIndex(comp2)==cluster_no)
 		    ttys++;			
 	    }		    		
@@ -183,7 +186,7 @@ public class TopCellGenerator
     }
     	
     
-    public String generateTopCell() {
+    public String generateTopCell(Vector<SysCAMSComponentTaskDiagramPanel> listsyscamspanel) {
 	String icn;
 	
 	/* first test validity of the hardware platform*/
@@ -218,8 +221,7 @@ public class TopCellGenerator
 	    // of memory accesses other than channel    
 	    
 	    for  (AvatarConnector connector : avatardd.getConnectors()){
-		//  AvatarConnectingPoint my_p1= (AvatarConnectingPoint)connector.get_p1(); 
-		//AvatarConnectingPoint my_p2= (AvatarConnectingPoint)connector.get_p2(); 
+	
 		AvatarConnectingPoint my_p1= connector.get_p1(); 
 		AvatarConnectingPoint my_p2= connector.get_p2(); 
 		
@@ -240,27 +242,10 @@ public class TopCellGenerator
 			AvatarCPU comp1cpu = (AvatarCPU)comp1;
 			
 			
-		    }
-		    
-		    /*	if (comp2 instanceof AvatarRAM){ 
-			AvatarRAM comp2ram = (AvatarRAM)comp1;
-			
-			comp2ram.setMonitored(comp2ram.getMonitored());
-			}
-			
-			if (comp2 instanceof AvatarCPU){ 
-			AvatarCPU comp2cpu = (AvatarCPU)comp2;
-			
-			comp2cpu.setMonitored(comp2cpu.getMonitored());
-			}*/
+		    }		    		 
 		}
 	    }
 	    
-	    /* Central interconnect or local crossbars */
-	    
-	    /* if(TopCellGenerator.avatardd.getNbCrossbar()>0){
-		
-	       }*/
 	    makeVCIparameters();
 	    makeConfig();
 	    String top = Header.getHeader() + 
@@ -272,14 +257,7 @@ public class TopCellGenerator
 		Declaration.getDeclarations(avatardd,avspec) + 
 		Signal.getSignal(avatardd) +
 		NetList.getNetlist(avatardd,icn,tracing) +
-		Simulation.getSimulation();
-	    /*System.out.println(Header.getHeader());
-	    System.out.println(Code.getCode());
-	    System.out.println(MappingTable.getMappingTable(avatardd));
-	    System.out.println(Loader.getLoader(avspec));
-	    System.out.println(Declaration.getDeclarations(avatardd,avspec));
-	    System.out.println(Signal.getSignal(avatardd));
-	    System.out.println(NetList.getNetlist(avatardd,icn,tracing));*/	       
+		Simulation.getSimulation(listsyscamspanel);
 	    return (top);
     }	
     
@@ -300,11 +278,29 @@ public class TopCellGenerator
 		return mappingLines;
 	}
 
-    public void saveFile(String path) {
+
+      public void saveFile(String path) {
+	  //System.out.println("save file 1 **********");
 		try {
           System.err.println(path + GENERATED_PATH + "top.cc");
 			FileWriter fw = new FileWriter(path + GENERATED_PATH + "/top.cc");
-			top = generateTopCell();
+			top = generateTopCell(null);
+			fw.write(top);
+			fw.close();
+		} catch (IOException ex) {
+		}
+		saveFileDeploy(path);
+		saveFilePlatform(path);
+		saveFileProcinfo(path);
+		saveFileNBproc(path);
+	}
+
+    public void saveFile(String path, Vector<SysCAMSComponentTaskDiagramPanel> listsyscamspanel) {
+	//System.out.println("save file 2 **********");
+		try {
+          System.err.println(path + GENERATED_PATH + "top.cc");
+			FileWriter fw = new FileWriter(path + GENERATED_PATH + "/top.cc");
+			top = generateTopCell(listsyscamspanel);
 			fw.write(top);
 			fw.close();
 		} catch (IOException ex) {

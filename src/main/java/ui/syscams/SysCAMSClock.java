@@ -124,7 +124,7 @@ public class SysCAMSClock extends TGCScalableWithInternalComponent implements Sw
 	
 		setListTypedef(new DefaultListModel<String>());
 
-		myImageIcon = IconManager.imgic1202;
+		myImageIcon = IconManager.imgic8008;
 
 		actionOnAdd();
 	}

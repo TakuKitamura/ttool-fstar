@@ -55,6 +55,7 @@ import javax.swing.DefaultListModel;
 public class SysCAMSTBlockTDF extends SysCAMSTComponent {
 	private String name;
 	private double period;
+    	private Boolean dynamic;
 	private String time;
 	private String processCode;
     private String constructorCode;
@@ -73,9 +74,10 @@ public class SysCAMSTBlockTDF extends SysCAMSTComponent {
     private int n;
     private boolean isTimestepPropagated;
 	
-	public SysCAMSTBlockTDF(String _name, double _period, String _time, String _processCode, String _constructorCode, DefaultListModel<String> _listStruct, String _nameTemplate, String _typeTemplate, String _valueTemplate, DefaultListModel<String> _listTypedef, SysCAMSTCluster _cluster) {
+    public SysCAMSTBlockTDF(String _name, double _period, Boolean _dynamic, String _time, String _processCode, String _constructorCode, DefaultListModel<String> _listStruct, String _nameTemplate, String _typeTemplate, String _valueTemplate, DefaultListModel<String> _listTypedef, SysCAMSTCluster _cluster) {
 		name = _name;
 		period = _period;
+		dynamic = _dynamic;
 		time = _time;
 		processCode = _processCode;
         constructorCode = _constructorCode;
@@ -102,6 +104,14 @@ public class SysCAMSTBlockTDF extends SysCAMSTComponent {
     
     public void setPeriod(double _period) {
 		period = _period;
+	}
+
+    	public Boolean getDynamic() {
+		return dynamic;
+	}
+    
+    public void setDynamic(double _dynamic) {
+		dynamic = _dynamic;
 	}
 	
 	public String getTime() {

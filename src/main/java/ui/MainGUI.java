@@ -8580,7 +8580,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         } else {
             JDialog msg = new JDialog();
             msg.setLocationRelativeTo(null);
-            JOptionPane.showMessageDialog(msg, "There is no SystemC-AMS panel. Please add one.", "Warning !", JOptionPane.WARNING_MESSAGE);
+            //JOptionPane.showMessageDialog(msg, "There is no SystemC-AMS panel. Please add one.", "Warning !", JOptionPane.WARNING_MESSAGE);//DG 19.12. obsolete
             return null;
         }
     }
