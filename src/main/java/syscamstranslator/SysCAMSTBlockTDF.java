@@ -110,7 +110,7 @@ public class SysCAMSTBlockTDF extends SysCAMSTComponent {
 		return dynamic;
 	}
     
-    public void setDynamic(double _dynamic) {
+    public void setDynamic(Boolean _dynamic) {
 		dynamic = _dynamic;
 	}
 	
