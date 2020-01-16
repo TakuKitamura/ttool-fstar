@@ -75,6 +75,7 @@ public class ClusterCode {
 	    LinkedList<SysCAMSTBlockDE> de = cluster.getBlockDE();
 	    LinkedList<SysCAMSTClock> clock = cluster.getClock();
 
+	   
 	  
 	    //corpsCluster = "template <typename vci_param>" + CR +
 		//     "class " +cluster.getClusterName()+ " : public sc_core::sc_module { "+ CR;          
