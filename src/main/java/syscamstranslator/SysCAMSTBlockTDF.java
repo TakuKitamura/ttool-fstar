@@ -103,17 +103,16 @@ public class SysCAMSTBlockTDF extends SysCAMSTComponent {
     public void setPeriod(double _period) {
 		period = _period;
 	}
-<<<<<<< src/main/java/syscamstranslator/SysCAMSTBlockTDF.java
 
-    	public Boolean getDynamic() {
+
+    /*    	public Boolean getDynamic() {
 		return dynamic;
 	}
     
     public void setDynamic(Boolean _dynamic) {
 		dynamic = _dynamic;
-	}
-=======
->>>>>>> src/main/java/syscamstranslator/SysCAMSTBlockTDF.java
+		}*/
+
 	
 	public String getTime() {
 		return time;
