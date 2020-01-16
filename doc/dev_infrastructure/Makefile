@@ -1,7 +1,7 @@
 # Tools
 LATEXFLAGS	?= -interaction=nonstopmode -file-line-error
 PDFLATEX	= pdflatex $(LATEXFLAGS)
-BIBTEX		= bibtex
+BIBTEX		= 
 FIG2DEV		= fig2dev
 RUBBER		?= $(shell which rubber 2> /dev/null)
 RUBBERFLAGS	= --pdf --short --warn refs --warn misc
