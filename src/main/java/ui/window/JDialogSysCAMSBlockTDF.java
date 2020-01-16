@@ -90,14 +90,10 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 
 	private JTextArea processCodeTextArea;
 	private String finalString;
-        private JTextArea constructorCodeTextArea;
+    private JTextArea constructorCodeTextArea;
 
 	private SysCAMSBlockTDF block;
-        private JRadioButton dynamicRadioButton;
-    //private String listDynamicString[];
-    //private JComboBox<String> dynamicComboBoxString;
-    
-    
+
 	public JDialogSysCAMSBlockTDF(SysCAMSBlockTDF block) {
 		this.setTitle("Setting TDF Block Attributes");
 		this.setLocationRelativeTo(null);
@@ -269,50 +265,9 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 		gridBag.setConstraints(periodComboBoxString, constraints);
 		attributesBoxPanel.add(periodComboBoxString);
 
-
-		JPanel dynamicPanel = new JPanel(new FlowLayout());
-
-		dynamicRadioButton = new JRadioButton();
-		dynamicRadioButton.setActionCommand("Dynamic");
-		dynamicRadioButton.setSelected(block.getDynamic());
-		dynamicRadioButton.addActionListener(this);
-		dynamicPanel.add(dynamicRadioButton);
-		JLabel dynamicLabel = new JLabel("Dynamic");
-		dynamicPanel.add(dynamicLabel);
-		constraints = new GridBagConstraints(0, 4, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-			       new Insets(15, 10, 5, 10), 0, 0);
-		gridBag.setConstraints(dynamicPanel, constraints);
-		attributesBoxPanel.add(dynamicPanel);
-
-
-		/*	listDynamicString = new String[3];
-		listDynamicString[0] = "";
-        listDynamicString[1] = "";
-		listDynamicString[2] = "accepts attribute changes";
-		dynamicComboBoxString = new JComboBox<String>(listDynamicString);
-		if (block.getClockSensitivityMethod().equals("")) {
-			dynamicComboBoxString.setSelectedIndex(0);
-        } else if (block.getClockSensitivityMethod().equals("changes attributes")) {
-            dynamicComboBoxString.setSelectedIndex(1);
-		} else if (block.getClockSensitivityMethod().equals("accepts attribute changes")) {
-			dynamicComboBoxString.setSelectedIndex(2);
-		}
-		dynamicComboBoxString.setActionCommand("Dynamic_method");
-		dynamicComboBoxString.setEnabled(block.getDynamic());
-		dynamicComboBoxString.addActionListener(this);
-		constraints = new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(15, 10, 5, 10), 0, 0);
-		gridBag.setConstraints(dynamicComboBoxString, constraints);
-		//boxPanel.add(dynamicComboBoxString);
-		attributesBoxPanel.add(dynamicComboBoxString);*/
-
-
-		
-		
 		attributesBox.add(attributesBoxPanel); 
 		attributesMainPanel.add(attributesBox, BorderLayout.NORTH); 
 
-		
 		// --- Parameters ---//
 		parametersMainPanel.setLayout(new BorderLayout());
 
@@ -733,15 +688,6 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 	}
 
 	public void actionPerformed(ActionEvent e) {
-	    /*if ("Dynamic".equals(e.getActionCommand())) {
-			if (dynamicRadioButton.isSelected() == true) {
-				dynamicComboBoxString.setEnabled(true);
-			} else {
-				dynamicComboBoxString.setEnabled(false);
-			}
-			}*/
-
-	    
 		if ("OK".equals(e.getActionCommand())) {
 			nameTypedefTextField.setEditable(true);
 			typeTypedefComboBoxString.setEnabled(true);
@@ -1043,9 +989,6 @@ public class JDialogSysCAMSBlockTDF extends JDialog implements ActionListener, L
 		if ("Save_Close".equals(e.getActionCommand())) {
 			block.setValue(new String(nameTextField.getText()));
 
-			block.setDynamic(dynamicRadioButton.isSelected());
-			//block.setDynamicMethod((String) dynamicComboBoxString.getSelectedItem());
-			
 			if (!(periodTextField.getText().isEmpty())) {
 				Boolean periodValueInteger = false;
 				try {

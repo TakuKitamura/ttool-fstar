@@ -60,14 +60,13 @@ import java.util.LinkedList;
 
 public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent {
 	private double period;
-    	private Boolean dynamic;
 	private String time;
 	private String processCode;
-        private String constructorCode;
+    private String constructorCode;
 	private DefaultListModel<String> listStruct;
 	private String nameTemplate;
 	private String typeTemplate;
-        private String valueTemplate;
+    private String valueTemplate;
 	private DefaultListModel<String> listTypedef;
 
 	private int maxFontSize = 14;
@@ -108,15 +107,15 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 		value = tdp.findSysCAMSPrimitiveComponentName("blockTDF");
 		oldValue = value;
 		name = "Primitive component - Block TDF";
-		setDynamic(false);
+
 		setPeriod(-1);
 		setTime("");
 		setProcessCode("void processing() {\n\n}");
-		setConstructorCode("");
+        setConstructorCode("");
 		setListStruct(new DefaultListModel<String>());
 		setNameTemplate("");
 		setTypeTemplate("");
-		setValueTemplate("");
+        setValueTemplate("");
 		setListTypedef(new DefaultListModel<String>());
 
 		myImageIcon = IconManager.imgic1202;
@@ -319,7 +318,6 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 	protected String translateExtraParam() {
 		StringBuffer sb = new StringBuffer("<extraparam>\n");
 		sb.append("<Attribute period=\"" + getPeriod());
-		sb.append("\" dynamic=\"" + getDynamic());
 		sb.append("\" time=\"" + getTime());
 		sb.append("\" processCode=\"" + encode(getProcessCode()));
                 sb.append("\" constructorCode=\"" + encode(getConstructorCode()));
@@ -454,7 +452,7 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 			NodeList nli;
 			Node n1, n2;
 			Element elt;
-			Boolean dynamic;
+
 			double period;
 			String time, processCode, constructorCode, listStruct, nameTemplate, typeTemplate, valueTemplate, listTypedef;
 
@@ -468,7 +466,6 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 							elt = (Element) n2;
 							if (elt.getTagName().equals("Attribute")) {
 								period = Double.valueOf(elt.getAttribute("period")).doubleValue();
-								dynamic = Boolean.valueOf(elt.getAttribute("dynamic")).booleanValue();
 								time = elt.getAttribute("time");
 								processCode = elt.getAttribute("processCode");
                                 constructorCode = elt.getAttribute("constructorCode");
@@ -478,7 +475,6 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
                                 valueTemplate = elt.getAttribute("valueTemplate");
 								listTypedef = elt.getAttribute("listTypedef");
 								setPeriod(period);
-								setDynamic(dynamic);
 								setTime(time);
 								processCode = decode(processCode).toString();
 								setProcessCode(processCode);
@@ -589,14 +585,6 @@ public class SysCAMSBlockTDF extends TGCScalableWithInternalComponent implements
 
 	public void setPeriod(double _period) {
 		period = _period;
-	}
-
-    	public Boolean getDynamic() {
-		return dynamic;
-	}
-
-	public void setDynamic(Boolean _dynamic) {
-		dynamic =  _dynamic;
 	}
 
 	public String getTime() {
