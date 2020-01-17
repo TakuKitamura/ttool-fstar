@@ -45,35 +45,20 @@ import myutil.TraceManager;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import proverifspec.ProVerifResultTrace;
+import proverifspec.ProVerifResultTraceStep;
 import ui.*;
 import ui.avatarsmd.AvatarSMDPanel;
+import ui.interactivesimulation.JFrameSimulationSDPanel;
 import ui.util.IconManager;
 import ui.window.JDialogAvatarBlock;
 import ui.window.JDialogIDAndStereotype;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-
-
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.awt.*;
+import java.io.*;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-import proverifspec.ProVerifResultTrace;
-import proverifspec.ProVerifResultTraceStep;
-import ui.interactivesimulation.JFrameSimulationSDPanel;
 
 /**
  * Class AvatarBDBlock
@@ -89,7 +74,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
 //    private int textY1 = 3;
 //    private int textX = 7;
-    
+
     private static String stereotype = "block";
 //    private static String stereotypeCrypto = "cryptoblock";
 
@@ -98,7 +83,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
     private int typeStereotype = 0; // <<block>> by default
 
     private int maxFontSize = 12;
-//    private int minFontSize = 4;
+    //    private int minFontSize = 4;
     private int currentFontSize = -1;
 
     private int limitName = -1;
@@ -108,10 +93,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
     // Icon
     private int iconSize = 15;
-    private boolean iconIsDrawn = false;
-
-
-
+    
 
     // TAttribute, AvatarMethod, AvatarSignal
     protected List<TAttribute> myAttributes;
@@ -119,9 +101,9 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
     protected List<AvatarSignal> mySignals;
     protected String[] globalCode;
 
-	protected Map<TAttribute, ProVerifResultTrace> attrTraceMap = new HashMap<TAttribute, ProVerifResultTrace>();
-	protected Map<TAttribute, Integer> attrLocMap = new HashMap<TAttribute, Integer>();
-	
+    protected Map<TAttribute, ProVerifResultTrace> attrTraceMap = new HashMap<TAttribute, ProVerifResultTrace>();
+    protected Map<TAttribute, Integer> attrLocMap = new HashMap<TAttribute, Integer>();
+
     public String oldValue;
 
     public AvatarBDBlock(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
@@ -133,8 +115,8 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         minHeight = 2;
         textY = 3;
         textX = 7;
-        initScaling(250,200);
-        
+        initScaling(250, 200);
+
 
         nbConnectingPoint = 16;
         connectingPoint = new TGConnectingPoint[16];
@@ -189,10 +171,10 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         this.internalDrawingAux(graph);
         graph.setFont(font);
     }
-    
-    public void addProVerifTrace(TAttribute attr, ProVerifResultTrace trace){
-    	attrTraceMap.put(attr,trace);
-    }	
+
+    public void addProVerifTrace(TAttribute attr, ProVerifResultTrace trace) {
+        attrTraceMap.put(attr, trace);
+    }
 
     public void setSignalsAsNonAttached() {
         for (AvatarSignal mySig : mySignals) mySig.attachedToARelation = false;
@@ -201,19 +183,20 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
     public void addSignal(AvatarSignal sig) {
         this.mySignals.add(sig);
     }
+
     /**
      * Issue #31: text disappearance
+     *
      * @param graph
      */
-    private void internalDrawingAux(Graphics graph)
-    {
-    	//Rectangle
-    	Color c = graph.getColor();
+    private void internalDrawingAux(Graphics graph) {
+        //Rectangle
+        Color c = graph.getColor();
         graph.drawRect(this.x, this.y, this.width, this.height);
         graph.setColor(BLOCK_TYPE_COLOR.get(typeStereotype));
         graph.fillRect(this.x + 1, this.y + 1, this.width - 1, this.height - 1);
         graph.setColor(c);
-        
+
         //string
         int h = graph.getFontMetrics().getAscent() + graph.getFontMetrics().getLeading() + textY;
 
@@ -243,19 +226,18 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 //        Font font = graph.getFont();
 
 
-
         String ster = BLOCK_TYPE_STR.get(typeStereotype);
         int w = graph.getFontMetrics().stringWidth(ster);
-         h = graph.getFontMetrics().getAscent() + graph.getFontMetrics().getLeading() + textY;
+        h = graph.getFontMetrics().getAscent() + graph.getFontMetrics().getLeading() + textY;
         graph.setFont(f.deriveFont(Font.BOLD));
         if (w + 2 * textX < this.width)
-        	drawSingleString(graph, ster, getCenter(graph, ster), this.y + h);
+            drawSingleString(graph, ster, getCenter(graph, ster), this.y + h);
         h += graph.getFontMetrics().getHeight() + textY;
         w = graph.getFontMetrics().stringWidth(value);
         graph.setFont(f.deriveFont(Font.PLAIN));
         if (w + 2 * textX < this.width)
-        	drawSingleString(graph, this.value, getCenter(graph, value), this.y + h);
-        
+            drawSingleString(graph, this.value, getCenter(graph, value), this.y + h);
+
         //draw separator
         this.limitName = this.y + h;
 
@@ -265,7 +247,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         //if (canTextGoInTheBox(graph, h, "line", 0));
         graph.drawLine(this.x, this.y + h, this.x + this.width, this.y + h);
         h += textY;
-        
+
         //Attributes
         if (!this.tdp.areAttributesVisible())
             return;
@@ -284,18 +266,18 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
             // Get the string for this parameter
             String attrString = attr.toAvatarString();
             w = graph.getFontMetrics().stringWidth(attrString);
-            attrLocMap.put(attr,this.y+h);
+            attrLocMap.put(attr, this.y + h);
             if (w + 2 * textX < this.width) {
                 //graph.drawString(attrString, this.x + textX, this.y + h);
-            	drawSingleString(graph, attrString, this.x + textX, this.y + h);
+                drawSingleString(graph, attrString, this.x + textX, this.y + h);
                 this.drawConfidentialityVerification(attr.getConfidentialityVerification(), graph, this.x, this.y + h);
             }
         }
-        
+
         //ICON
         drawImageWithCheck(graph, IconManager.img5100, this.x + this.width - scale(IconManager.iconSize) - textX, this.y + textX);
-    
-        
+
+
         // Remember the end of attributes
         this.limitAttr = this.y + h;
         if (h + textY >= this.height)
@@ -309,7 +291,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         // Methods
         limitMethod = limitAttr;
         limitSignal = limitAttr;
-        
+
         for (AvatarMethod method : this.myMethods) {
             h += step;
             if (h >= this.height - textX) {
@@ -369,7 +351,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
             w = graph.getFontMetrics().stringWidth(signalString);
             if (w + 2 * textX < this.width) {
 //                graph.drawString(signalString, this.x + textX, this.y + h);
-            	drawSingleString(graph, signalString, this.x + textX, this.y + h);
+                drawSingleString(graph, signalString, this.x + textX, this.y + h);
                 drawInfoAttachement(signal, graph, x, y + h);
 
             } else {
@@ -380,7 +362,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                     w = graph.getFontMetrics().stringWidth(abbrev);
                     if (w + 2 * textX < this.width) {
                         //graph.drawString(abbrev, this.x + textX, this.y + h);
-                    	drawSingleString(graph, abbrev, this.x + textX, this.y + h);
+                        drawSingleString(graph, abbrev, this.x + textX, this.y + h);
                         drawInfoAttachement(signal, graph, x, y + h);
                         break;
                     }
@@ -409,14 +391,14 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
             w = graph.getFontMetrics().stringWidth(GLOBAL_CODE_INFO);
             if (w + 2 * textX < this.width)
-            	drawSingleString(graph, GLOBAL_CODE_INFO, this.x + (this.width - w) / 2, this.y + h);
+                drawSingleString(graph, GLOBAL_CODE_INFO, this.x + (this.width - w) / 2, this.y + h);
 //                graph.drawString(GLOBAL_CODE_INFO, this.x + (this.width - w) / 2, this.y + h);
         } else {
             limitSignal = height;
-        }   
-            
+        }
+
     }
-    
+
 //    private void internalDrawingAu(Graphics graph) {
 //
 //        //TraceManager.addDev("Block drawing aux = " + this);
@@ -753,45 +735,45 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         g.setColor(c);
     }
 
-	public void showTrace(int y){
+    public void showTrace(int y) {
 
-		if (y< limitAttr){
-			for (TAttribute attr: attrLocMap.keySet()){
-    		if (attrLocMap.get(attr) < y && y < attrLocMap.get(attr) +currentFontSize && attrTraceMap.get(attr)!=null){
-    			PipedOutputStream pos = new PipedOutputStream();
-       			try {
-        			PipedInputStream pis = new PipedInputStream(pos, 4096);
-            		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(pos));
+        if (y < limitAttr) {
+            for (TAttribute attr : attrLocMap.keySet()) {
+                if (attrLocMap.get(attr) < y && y < attrLocMap.get(attr) + currentFontSize && attrTraceMap.get(attr) != null) {
+                    PipedOutputStream pos = new PipedOutputStream();
+                    try {
+                        PipedInputStream pis = new PipedInputStream(pos, 4096);
+                        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(pos));
 
-		            JFrameSimulationSDPanel jfssdp = new JFrameSimulationSDPanel(null, tdp.getMGUI(), "Confidentiality " + attr.toString());
-		            jfssdp.setIconImage(IconManager.img8);
-    		        GraphicLib.centerOnParent(jfssdp, 600, 600);
-   			        jfssdp.setFileReference(new BufferedReader(new InputStreamReader(pis)));
-            		jfssdp.setVisible(true);
+                        JFrameSimulationSDPanel jfssdp = new JFrameSimulationSDPanel(null, tdp.getMGUI(), "Confidentiality " + attr.toString());
+                        jfssdp.setIconImage(IconManager.img8);
+                        GraphicLib.centerOnParent(jfssdp, 600, 600);
+                        jfssdp.setFileReference(new BufferedReader(new InputStreamReader(pis)));
+                        jfssdp.setVisible(true);
                         //jfssdp.setModalExclusionType(ModalExclusionType
-                          //      .APPLICATION_EXCLUDE);
-            		jfssdp.toFront();
+                        //      .APPLICATION_EXCLUDE);
+                        jfssdp.toFront();
 
                         // TraceManager.addDev("\n--- Trace ---");
-            		int i = 0;
-            		for (ProVerifResultTraceStep step : attrTraceMap.get(attr).getTrace()) {
-		            	step.describeAsTMLSDTransaction(bw, i);
-    	        	    i++;
-           			}
-            		bw.close();
-        		} catch (IOException e) {
-        			TraceManager.addDev("Error when writing trace step SD transaction");
-        		} finally {
-        			try {
-        				pos.close();
-        	    	} catch (IOException ignored) {
-        			}
-        		}
+                        int i = 0;
+                        for (ProVerifResultTraceStep step : attrTraceMap.get(attr).getTrace()) {
+                            step.describeAsTMLSDTransaction(bw, i);
+                            i++;
+                        }
+                        bw.close();
+                    } catch (IOException e) {
+                        TraceManager.addDev("Error when writing trace step SD transaction");
+                    } finally {
+                        try {
+                            pos.close();
+                        } catch (IOException ignored) {
+                        }
+                    }
 
-    		}
-    	}
-		}
-	}
+                }
+            }
+        }
+    }
 
     private void drawConfidentialityVerification(int confidentialityVerification, Graphics g, int _x, int _y) {
         Color c = g.getColor();
@@ -853,17 +835,17 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
     @Override
     public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
         int textX = (int) (this.textX * this.tdp.getZoom());
-        if (iconIsDrawn) {
-            if (GraphicLib.isInRectangle(_x, _y, x + width - iconSize - textX, y + textX, iconSize, iconSize)) {
-                tdp.getMouseManager().setSelection(-1, -1);
-                tdp.selectTab(getValue());
-                return true;
-            }
+
+        if (GraphicLib.isInRectangle(_x, _y, x + width - iconSize - textX, y + textX, iconSize, iconSize)) {
+            tdp.getMouseManager().setSelection(-1, -1);
+            tdp.selectTab(getValue());
+            return true;
         }
+
         // On the name ?
         if ((limitName == -1 && _y <= y + 2 * currentFontSize) || _y < limitName) {
             JDialogIDAndStereotype dialog = new JDialogIDAndStereotype(frame, "Setting Block ID", BLOCK_TYPE_STR.toArray(new String[0]), getValue
-                    (), typeStereotype,  BLOCK_TYPE_COLOR.toArray(new Color[0]), ColorManager.AVATAR_BLOCK);
+                    (), typeStereotype, BLOCK_TYPE_COLOR.toArray(new Color[0]), ColorManager.AVATAR_BLOCK);
             //dialog.setSize(400, 300);
             GraphicLib.centerOnParent(dialog, 400, 300);
             // dialog.show(); // blocked until dialog has been closed
@@ -876,7 +858,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
             String s = dialog.getName();
 
-            if ((s != null) && (s.length() > 0)){
+            if ((s != null) && (s.length() > 0)) {
                 //boolean b;
                 if (!s.equals(oldValue)) {
                     if (!TAttribute.isAValidId(s, false, false, false)) {
@@ -908,9 +890,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                     }
 
 
-
                 }
-
 
 
                 // Setting stereotype
@@ -931,7 +911,6 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                 addStereotype(s, rgb);
 
                 //TraceManager.addDev("My stereotype=" + BLOCK_TYPE_STR.get(typeStereotype) + " color=" + BLOCK_TYPE_COLOR.get(typeStereotype).getRGB());
-
 
 
                 if (isCryptoBlock()) {
@@ -1367,7 +1346,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         //TraceManager.addDev("Adding stereotype for " + s + " with color " + rgb);
         int index = -1;
         String sLower = s.toLowerCase();
-        for (int i=0; i<BLOCK_TYPE_STR.size(); i++) {
+        for (int i = 0; i < BLOCK_TYPE_STR.size(); i++) {
             if (BLOCK_TYPE_STR.get(i).toLowerCase().compareTo(sLower) == 0) {
                 index = i;
                 break;
@@ -1389,7 +1368,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
             //TraceManager.addDev("No stereotype found: adding" + s + " with color " + rgb);
             BLOCK_TYPE_STR.add(s);
             BLOCK_TYPE_COLOR.add(new Color(rgb));
-            typeStereotype = BLOCK_TYPE_STR.size()-1;
+            typeStereotype = BLOCK_TYPE_STR.size() - 1;
             //TraceManager.addDev("Stereotype =" + BLOCK_TYPE_STR.get(typeStereotype) + " typestereotype=" + typeStereotype);
             return true;
         }
@@ -1756,14 +1735,14 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
     public String getAttributes() {
         String attr = "";
-        for (TAttribute a: myAttributes) {
-            attr +=  a.toAvatarString() + "\n";
+        for (TAttribute a : myAttributes) {
+            attr += a.toAvatarString() + "\n";
         }
-        for (AvatarMethod m: myMethods) {
-            attr +=  m.toString() + "\n";
+        for (AvatarMethod m : myMethods) {
+            attr += m.toString() + "\n";
         }
-        for (AvatarSignal s: mySignals) {
-            attr +=  s.toString() + "\n";
+        for (AvatarSignal s : mySignals) {
+            attr += s.toString() + "\n";
         }
         return attr;
     }
