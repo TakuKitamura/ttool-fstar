@@ -93,7 +93,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
     // Icon
     private int iconSize = 15;
-    
+
 
     // TAttribute, AvatarMethod, AvatarSignal
     protected List<TAttribute> myAttributes;
