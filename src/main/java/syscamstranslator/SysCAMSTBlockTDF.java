@@ -103,6 +103,16 @@ public class SysCAMSTBlockTDF extends SysCAMSTComponent {
     public void setPeriod(double _period) {
 		period = _period;
 	}
+
+
+    /*    	public Boolean getDynamic() {
+		return dynamic;
+	}
+    
+    public void setDynamic(Boolean _dynamic) {
+		dynamic = _dynamic;
+		}*/
+
 	
 	public String getTime() {
 		return time;
