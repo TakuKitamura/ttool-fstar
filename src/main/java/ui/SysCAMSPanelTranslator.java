@@ -201,7 +201,6 @@ public class SysCAMSPanelTranslator {
 
 					String blockTDFName = blockTDF.getValue();
 					double periodBlock = blockTDF.getPeriod();
-					Boolean dynamicBlock = blockTDF.getDynamic();
 					String timeBlock = blockTDF.getTime();
                     if (timeBlock.equals("s")) {
                         timeBlock = timeBlock + "ec";
@@ -216,7 +215,7 @@ public class SysCAMSPanelTranslator {
                     String valueTemplate = blockTDF.getValueTemplate();
 					DefaultListModel<String> listTypedef = blockTDF.getListTypedef();
 
-					SysCAMSTBlockTDF syscamsBlockTDF = new SysCAMSTBlockTDF(blockTDFName, periodBlock, dynamicBlock,  timeBlock, processCode, constructorCode, listStruct, nameTemplate, typeTemplate, valueTemplate, listTypedef, syscamsCluster);				
+					SysCAMSTBlockTDF syscamsBlockTDF = new SysCAMSTBlockTDF(blockTDFName, periodBlock, timeBlock, processCode, constructorCode, listStruct, nameTemplate, typeTemplate, valueTemplate, listTypedef, syscamsCluster);				
 
 					List<SysCAMSPortTDF> portsTDF = blockTDF.getAllInternalPortsTDF();
 					for (int j = 0; j < portsTDF.size(); j++) {

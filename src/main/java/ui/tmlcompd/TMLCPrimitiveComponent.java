@@ -78,7 +78,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
     
     // Icon
     private int iconSize = 15;
-    private boolean iconIsDrawn = false;
+    //private boolean iconIsDrawn = false;
 
     // Attributes
     //   private boolean attributesAreDrawn = false;
@@ -182,6 +182,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
     	
     	// Scaled ICON drawing
     	g.drawImage(scale(IconManager.imgic1200.getImage()), x + width - iconSize - textX, y + textX, null);
+
         if (isAttacker)
             g.drawImage(scale(IconManager.imgic7008.getImage()), x + width - 2 * iconSize - textX, y + 2 * textX, null);
         
@@ -385,13 +386,17 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
     @Override
     public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
         // On the icon?
-        if (iconIsDrawn) {
-            if (GraphicLib.isInRectangle(_x, _y, x + width - iconSize - textX, y + textX, scale(iconSize), scale(iconSize))) {
+        //TraceManager.addDev("icon is drawn? " + iconIsDrawn);
+        //if (iconIsDrawn) {
+            TraceManager.addDev("Icon drawn iconSize=" + iconSize + "scaleIcon=" + scale(iconSize));
+
+            if (GraphicLib.isInRectangle(_x, _y, x + width - iconSize - textX, y + textX, scale(iconSize),
+                    scale(iconSize))) {
                 tdp.getMouseManager().setSelection(-1, -1);
                 tdp.selectTab(getValue());
                 return true;
             }
-        }
+        //}
 
         // On the name ? 
         /*if ((displayText) && (_y <= (y + currentFontSize + textX))) {
