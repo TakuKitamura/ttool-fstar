@@ -68,8 +68,7 @@ public class ClusterCode {
 	int nb_block = 1;
 
 	LinkedList<String> names = new LinkedList<String>();
-	LinkedList<String> clocknames = new LinkedList<String>();
-	
+
 	if (cluster != null) {
 	    LinkedList<SysCAMSTBlockTDF> tdf = cluster.getBlockTDF();
 	    LinkedList<SysCAMSTBlockDE> de = cluster.getBlockDE();
@@ -182,9 +181,7 @@ public class ClusterCode {
 		     if(t.getUnitStartTime().equals("\u03BCs"))unitStartTimeString="SC_US";
 		     if(t.getUnit().equals("ns"))unitString="SC_NS";
 		     if(t.getUnitStartTime().equals("ns"))unitStartTimeString="SC_NS";		   		    
-		    corpsCluster = corpsCluster + "\t  sc_clock " + t.getName() + " (\"" + t.getName() + "\"," + t.getFrequency()+","+ unitString+","+ t.getDutyCycle()+","+ t.getStartTime()+","+unitStartTimeString+","+ t.getPosFirst()+");" + CR;
-		    clocknames.add(t.getName());
-		}
+		    corpsCluster = corpsCluster + "\t  sc_clock " + t.getName() + " (\"" + t.getName() + "\"," + t.getFrequency()+","+ unitString+","+ t.getDutyCycle()+","+ t.getStartTime()+","+unitStartTimeString+","+ t.getPosFirst()+");" + CR;    		}
 					      		
 		nb_block=0;
 				corpsCluster = corpsCluster + CR + "\t// Instantiate cluster's modules." + CR;	
@@ -319,11 +316,6 @@ public class ClusterCode {
 		corpsCluster = corpsCluster + "\t// Configure signal tracing." + CR 
 		    + "\tsca_trace_file* tfp = sca_create_tabular_trace_file(\"" + cluster.getClusterName() + "_tb\");" + CR;
 
-	for (int i = 0; i <clock.size(); i++) {
-		    corpsCluster = corpsCluster + "\tsca_trace(tfp, "+ clocknames.get(i) + ", \"" + clocknames.get(i) + "\");" + CR;
-		}
-
-		
 		for (int i = 0; i < connectors.size(); i++) {
 		    corpsCluster = corpsCluster + "\tsca_trace(tfp, "+ names.get(i) + ", \"" + names.get(i) + "\");" + CR;
 		}

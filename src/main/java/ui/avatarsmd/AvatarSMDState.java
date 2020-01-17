@@ -216,11 +216,14 @@ public class AvatarSMDState extends TGCScalableWithInternalComponent implements 
     	//Strings
     	g.setFont(f.deriveFont(Font.BOLD));
     	drawSingleString(g, value, getCenter(g, value), y + f.getSize());
-    	
+
+
     	g.setFont(f.deriveFont(Font.PLAIN));
-    	g.setColor(ColorManager.AVATAR_CODE);
-    	drawSingleString(g, ENTRY_CODE_INFO, getCenter(g, ENTRY_CODE_INFO), y + f.getSize() * 2 + scale(3));
-    	g.setColor(c);
+    	if (hasEntryCode()) {
+            g.setColor(ColorManager.AVATAR_CODE);
+            drawSingleString(g, ENTRY_CODE_INFO, getCenter(g, ENTRY_CODE_INFO), y + f.getSize() * 2 + scale(3));
+            g.setColor(c);
+        }
     	
     	//Security information
     	drawSecurityInformation(g);
