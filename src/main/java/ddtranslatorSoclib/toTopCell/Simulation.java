@@ -47,8 +47,21 @@
 package ddtranslatorSoclib.toTopCell;
 import ddtranslatorSoclib.AvatarCoproMWMR;//DG 30.04.2018
 
+import java.util.LinkedList;
+
+import syscamstranslator.*;
+import ui.MainGUI;
+import ui.SysCAMSPanelTranslator;
+import ui.syscams.SysCAMSComponentTaskDiagramPanel;
+import java.util.LinkedList;
+import java.util.Vector;
+import java.util.Arrays;
+
+
 public class Simulation {
-	
+
+    protected MainGUI mgui;//DG 28.11.2019
+    
     private  static String simulation;
 	
     private final static String CR = "\n";
@@ -57,9 +70,12 @@ public class Simulation {
     public Simulation(){
     }
 
-    public static String getSimulation(){
- int network_io=0;
- simulation=CR;
+    public static String getSimulation(Vector<SysCAMSComponentTaskDiagramPanel> listsyscamspanel){
+	int network_io=0;
+	simulation=CR;
+
+	/* Clocks are to be declared in the sc_main in the topcell */
+	
  for (AvatarCoproMWMR copro : TopCellGenerator.avatardd.getAllCoproMWMR()){
 		//a coprocessor with its FIFO interface built from HWA 
 		/*	netlist = netlist +"hwa"+i+".p_clk(signal_clk);" + CR;
@@ -67,7 +83,7 @@ public class Simulation {
                 netlist = netlist +"hwa"+i+".p_from_ctrl["+i+"](signal_fifo_"+i+"_from_ctrl);" + CR;
 		netlist = netlist +"hwa"+i+".p_to_ctrl["+i+"](signal_fifo_"+i+"_to_ctrl);" + CR2;*/
 
-
+    
 		//IE and OE are special cases as they have VCI an fifo initiator interface!!!
 		// In that case, another main (for Network_IO) is substituted
   
@@ -83,6 +99,40 @@ public class Simulation {
 		     "----------------------------simulation-------------------------" + CR +
 		     "***************************************************************************/"+CR2 ;
 		 simulation =simulation+"int sc_main (int argc, char *argv[])" + CR + "{" + CR;
+
+
+		 /*loop over all panels and all clocks */
+
+		 // Vector<SysCAMSComponentTaskDiagramPanel> syscamsDiagramPanels = mgui.getListSysCAMSPanel();
+
+  
+		 
+		 if(listsyscamspanel!=null){
+		 
+		 for (SysCAMSComponentTaskDiagramPanel syscamsDiagramPanel : listsyscamspanel) {
+		     SysCAMSPanelTranslator syscamspaneltranslator = new SysCAMSPanelTranslator(syscamsDiagramPanel);
+		     SysCAMSSpecification syscalsspec = syscamspaneltranslator.getSysCAMSSpecification();
+		     LinkedList<SysCAMSTClock> clocks = syscalsspec.getAllClock();
+		         		
+		     for (SysCAMSTClock t : clocks) {
+		    
+			 String unitString="SC_SEC";
+			 String unitStartTimeString="SC_SEC";
+		   
+			 if(t.getUnit().equals("s"))unitString="SC_SEC";
+			 if(t.getUnitStartTime().equals("s"))unitStartTimeString="SC_SEC";
+			 if(t.getUnit().equals("ms"))unitString="SC_MS";
+			 if(t.getUnitStartTime().equals("ms"))unitStartTimeString="SC_MS";
+			 if(t.getUnit().equals("\u03BCs"))unitString="SC_US";
+			 if(t.getUnitStartTime().equals("\u03BCs"))unitStartTimeString="SC_US";
+			 if(t.getUnit().equals("ns"))unitString="SC_NS";
+			 if(t.getUnitStartTime().equals("ns"))unitStartTimeString="SC_NS";		   		    
+			 simulation =simulation+ "\t  sc_clock " + t.getName() + " (\"" + t.getName() + "\"," + t.getFrequency()+","+ unitString+","+ t.getDutyCycle()+","+ t.getStartTime()+","+unitStartTimeString+","+ t.getPosFirst()+");" + CR;	
+		     }
+		 }
+		 }
+
+		 
 		 simulation = simulation +"       try {" + CR +"         return _main(argc, argv);" + CR + "    }" + CR2;
 		 simulation =simulation +"       catch (std::exception &e) {" + CR + "            std::cout << e.what() << std::endl;" + CR + "            throw;"+ CR+"    }"; 
 		simulation =simulation+" catch (...) {" + CR;

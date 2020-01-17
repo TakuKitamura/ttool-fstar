@@ -242,6 +242,7 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 		listArrayTypeString.add("bool");
 		listArrayTypeString.add("double");
 		listArrayTypeString.add("sc_int<N>");
+		listArrayTypeString.add("sc_uint<N>");
 		if (port.getFather() != null) {
 			if (port.getFather() instanceof SysCAMSBlockTDF) {
 				if (!((SysCAMSBlockTDF) port.getFather()).getListTypedef().isEmpty()) {
@@ -270,6 +271,9 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 			}
 			if (port.getConvType().equals("sc_dt::sc_int")) {
 				typeComboBoxString.setSelectedIndex(3);
+			}
+				if (port.getConvType().equals("sc_dt::sc_uint")) {
+				typeComboBoxString.setSelectedIndex(4);
 			}
 		}
 		typeComboBoxString.addActionListener(this);
@@ -414,7 +418,16 @@ public class JDialogSysCAMSPortConverter extends JDialog implements ActionListen
 				     port.setNbits(Integer.parseInt(nbitsTextField.getText()));
 			
 					
-				}		
+				}
+			
+	if(typeComboBoxString.getSelectedItem()=="sc_uint<N>"){
+			    //port.setConvType("sc_dt::sc_int<"+nbitsTextField.getText()+"> ");
+				     port.setConvType("sc_dt::sc_uint");
+				     port.setNbits(Integer.parseInt(nbitsTextField.getText()));
+			
+					
+				}
+			
 				else{
 			port.setConvType((String) typeComboBoxString.getSelectedItem());
 			port.setNbits(Integer.parseInt(nbitsTextField.getText()));
