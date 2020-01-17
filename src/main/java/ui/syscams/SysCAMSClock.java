@@ -184,6 +184,7 @@ public class SysCAMSClock extends TGCScalableWithInternalComponent implements Sw
 		}
 
 		g.setFont(fold);
+	
 	}
 
 	public void rescale(double scaleFactor){

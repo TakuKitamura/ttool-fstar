@@ -125,8 +125,8 @@ public class SysCAMSPanelTranslator {
 				String clockSensitivityMethod = blockDE.getClockSensitivityMethod();
 //				int periodBlock = blockDE.getPeriod();
 //				String time = blockDE.getTime();
-//				String nameFn = blockDE.getNameFn();
-//				String code = blockDE.getCode();
+				//String nameFn = blockDE.getNameFn();
+				//String code = blockDE.getCode();
 //				DefaultListModel<String> listStruct = blockDE.getListStruct();
 //				String nameTemplate = blockDE.getNameTemplate();
 //				String typeTemplate = blockDE.getTypeTemplate();
@@ -274,6 +274,7 @@ public class SysCAMSPanelTranslator {
 					String blockDEName = blockDE.getValue();					String clockName = blockDE.getClockName();
 					String clockSensitivityMethod = blockDE.getClockSensitivityMethod();
 					String nameFn = blockDE.getNameFn();
+					//System.out.println("Name function : "+ nameFn);
 					String code = blockDE.getCode();
 					DefaultListModel<String> listStruct = blockDE.getListStruct();
 					String nameTemplate = blockDE.getNameTemplate();
