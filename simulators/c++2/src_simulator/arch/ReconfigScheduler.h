@@ -66,6 +66,10 @@ public:
 	inline TMLTransaction* getNextTransaction(TMLTime iEndSchedule) const {return _nextTransaction;}
 	inline std::string toString() const {return _name;}
 	void reset();
+	static bool sortByPriority(const WorkloadSource* first, const WorkloadSource* second)
+        {
+            return first->getPriority() < second->getPriority();
+        }
 	//void transWasScheduled(SchedulableDevice* iDevice);
 protected:
 	///Name of the scheduler

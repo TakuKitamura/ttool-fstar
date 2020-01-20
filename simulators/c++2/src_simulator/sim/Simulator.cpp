@@ -1169,7 +1169,7 @@ ServerIF* Simulator::run(int iLen, char ** iArgs){
     std::vector<std::string> parameters = readFromFile(aArgString);
     std::string aNewCmd;
     int previousTransTime = 0;
-    if((parameters.size() != (lineNumber*4)) != 0){
+    if((parameters.size() != (lineNumber*4))){
         std::cout << "Error: Wrong format, each line should contains 4 parameters.\n";
     } else {
         if(lineNumber != 0){

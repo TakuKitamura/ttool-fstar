@@ -57,6 +57,13 @@ public class DiplodocusDelayTest extends AbstractUITest {
     final int [] NB_Of_SIGNAL_TRANSTIONS = {13};
     final int [] MIN_SIGNAL_CYCLES = {35};
     final int [] MAX_SIGNAL_CYCLES = {35};
+
+    // test for reconfiguration of FPGA
+    final String [] MODELS_FPGA_RECONFIG = {"fpga_reconfig1", "fpga_reconfig2", "fpga_reconfig3", "fpga_reconfig4", "fpga_reconfig5"};
+    final int [] NB_Of_FPGA_STATES = {20, 20, 20, 20, 20};
+    final int [] NB_Of_FPGA_TRANSTIONS = {19, 19, 19, 19, 19};
+    final int [] MIN_FPGA_CYCLES = {143, 102, 107, 87, 102};
+    final int [] MAX_FPGA_CYCLES = {143, 102, 107, 87, 102};
     private String SIM_DIR;
 
 
@@ -933,6 +940,161 @@ public class DiplodocusDelayTest extends AbstractUITest {
             int maxValue = graph.getMaxValue("allCPUsFPGAsTerminated");
             System.out.println("executing: maxvalue of " + s + " " + maxValue);
             assertTrue(MAX_SIGNAL_CYCLES[i] == maxValue);
+        }
+    }
+
+    @Test
+    public void testReconfigFPGA() throws Exception {
+        for (int i = 0; i < MODELS_FPGA_RECONFIG.length; i++) {
+            String s = MODELS_FPGA_RECONFIG[i];
+            SIM_DIR = DIR_GEN + s + "/";
+            System.out.println("executing: checking syntax " + s);
+            // select architecture tab
+            mainGUI.openProjectFromFile(new File(RESOURCES_DIR + s + ".xml"));
+            for(TURTLEPanel _tab : mainGUI.getTabs()) {
+                if(_tab instanceof TMLArchiPanel) {
+                    for (TDiagramPanel tdp : _tab.getPanels()) {
+                        if (tdp instanceof TMLArchiDiagramPanel) {
+                            mainGUI.selectTab(tdp);
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+            mainGUI.checkModelingSyntax(true);
+            TMLMapping tmap = mainGUI.gtm.getTMLMapping();
+            TMLSyntaxChecking syntax = new TMLSyntaxChecking(tmap);
+            syntax.checkSyntax();
+            assertTrue(syntax.hasErrors() == 0);
+            // Generate SystemC code
+            System.out.println("executing: sim code gen for " + s);
+            final IDiploSimulatorCodeGenerator tml2systc;
+            List<EBRDD> al = new ArrayList<EBRDD>();
+            List<TEPE> alTepe = new ArrayList<TEPE>();
+            tml2systc = DiploSimulatorFactory.INSTANCE.createCodeGenerator(tmap, al, alTepe);
+            tml2systc.setModelName(s);
+            String error = tml2systc.generateSystemC(false, true);
+            assertTrue(error == null);
+
+            File directory = new File(SIM_DIR);
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+
+            // Putting sim files
+            System.out.println("SIM executing: sim lib code copying for " + s);
+            ConfigurationTTool.SystemCCodeDirectory = getBaseResourcesDir() + "../../../../simulators/c++2/";
+            boolean simFiles = SpecConfigTTool.checkAndCreateSystemCDir(SIM_DIR);
+
+            System.out.println("SIM executing: sim lib code copying done with result " + simFiles);
+            assertTrue(simFiles);
+
+            System.out.println("SIM Saving file in: " + SIM_DIR);
+            tml2systc.saveFile(SIM_DIR, "appmodel");
+
+            // Compile it
+            System.out.println("executing: compile");
+            Process proc;
+            BufferedReader proc_in;
+            String str;
+            boolean mustRecompileAll;
+            Penalties penalty = new Penalties(SIM_DIR  + "src_simulator");
+            int changed = penalty.handlePenalties(false);
+
+            if (changed == 1) {
+                mustRecompileAll = true;
+            } else {
+                mustRecompileAll = false;
+            }
+
+            if (mustRecompileAll) {
+                System.out.println("executing: " + "make -C " + SIM_DIR + " clean");
+                try {
+                    proc = Runtime.getRuntime().exec("make -C " + SIM_DIR + " clean");
+                    proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+                    while ((str = proc_in.readLine()) != null) {
+                        // TraceManager.addDev( "Sending " + str + " from " + port + " to client..." );
+                        System.out.println("executing: " + str);
+                    }
+                } catch (Exception e) {
+                    // probably make is not installed
+                    System.out.println("FAILED: executing: " + "make -C " + SIM_DIR + " clean");
+                    return;
+                }
+            }
+
+            System.out.println("executing: " + "make -C " + SIM_DIR);
+            try {
+
+                proc = Runtime.getRuntime().exec("make -C " + SIM_DIR + "");
+                proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+
+                monitorError(proc);
+
+                while ((str = proc_in.readLine()) != null) {
+                    // TraceManager.addDev( "Sending " + str + " from " + port + " to client..." );
+                    System.out.println("executing: " + str);
+                }
+            } catch (Exception e) {
+                // Probably make is not installed
+                System.out.println("FAILED: executing: " + "make -C " + SIM_DIR);
+                return;
+            }
+            System.out.println("SUCCESS: executing: " + "make -C " + SIM_DIR);
+
+            // Run the simulator
+            String graphPath = SIM_DIR + "testgraph_" + s;
+            try {
+
+                String[] params = new String[3];
+
+                params[0] = "./" + SIM_DIR + "run.x";
+                params[1] = "-cmd";
+                params[2] = "1 0; 1 7 100 100 " + graphPath;
+                proc = Runtime.getRuntime().exec(params);
+                //proc = Runtime.getRuntime().exec("./" + SIM_DIR + "run.x -explo -gname testgraph_" + s);
+                proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+
+                monitorError(proc);
+
+                while ((str = proc_in.readLine()) != null) {
+                    // TraceManager.addDev( "Sending " + str + " from " + port + " to client..." );
+                    System.out.println("executing: " + str);
+                }
+            } catch (Exception e) {
+                // Probably make is not installed
+                System.out.println("FAILED: executing simulation");
+                return;
+            }
+
+            // Compare results with expected ones
+            // Must load the graph
+            File graphFile = new File(graphPath + ".aut");
+            String graphData = "";
+            try {
+                graphData = FileUtils.loadFileData(graphFile);
+            } catch (Exception e) {
+                assertTrue(false);
+            }
+
+            AUTGraph graph = new AUTGraph();
+            graph.buildGraph(graphData);
+
+            // States and transitions
+            System.out.println("executing: nb states of " + s + " " + graph.getNbOfStates());
+            assertTrue(NB_Of_FPGA_STATES[i] == graph.getNbOfStates());
+            System.out.println("executing: nb transitions of " + s + " " + graph.getNbOfTransitions());
+            assertTrue(NB_Of_FPGA_TRANSTIONS[i] == graph.getNbOfTransitions());
+
+            // Min and max cycles
+            int minValue = graph.getMinValue("allCPUsFPGAsTerminated");
+            System.out.println("executing: minvalue of " + s + " " + minValue);
+            assertTrue(MIN_FPGA_CYCLES[i] == minValue);
+
+            int maxValue = graph.getMaxValue("allCPUsFPGAsTerminated");
+            System.out.println("executing: maxvalue of " + s + " " + maxValue);
+            assertTrue(MAX_FPGA_CYCLES[i] == maxValue);
         }
     }
 }

@@ -242,7 +242,8 @@ std::cout<<"fpga addTransaction"<<std::endl;
     if(_endSchedule == 0 && (!(_nextTransaction->getCommand()->getTask()->getIsDaemon()==true && _nextTransaction->getCommand()->getTask()->getNextTransaction(0)==0))) 
       _maxEndTime=max(_maxEndTime,_nextTransaction->getEndTime());
     if(_reconfigNumber>0)
-      _endSchedule=_maxEndTime+_reconfigNumber*_reconfigTime;
+      _nextTransaction->setStartTime(_maxEndTime+_reconfigNumber*_reconfigTime);
+//      _endSchedule=_maxEndTime+_reconfigNumber*_reconfigTime;
     else{
       _endSchedule=0;
       
