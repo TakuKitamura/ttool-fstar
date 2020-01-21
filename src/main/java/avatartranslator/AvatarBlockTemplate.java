@@ -42,6 +42,7 @@ package avatartranslator;
 import myutil.TraceManager;
 
 import java.util.Vector;
+import java.util.jar.Attributes;
 
 /**
  * Class AvatarBlockTemplate
@@ -513,7 +514,7 @@ public class AvatarBlockTemplate {
         at.setGuard("duration>0");
         at = makeAvatarEmptyTransitionBetween(ab, asm, stepRead, activatedState, _refB);
         at.setDelays("2", "2");
-        at.addAction("durattion=duration-step");
+        at.addAction("duration=duration-step");
 
         // Finished!
         AvatarActionOnSignal finishRead = new AvatarActionOnSignal("write_" + finishP.getSignalName(), finishP, _refB);
@@ -537,7 +538,189 @@ public class AvatarBlockTemplate {
         return ab;
     }
 
-    // Still to be added: main and clock blocks
 
+
+    public static AvatarBlock getClockGraphBlock(String _name, AvatarSpecification _avspec, Object _refB,
+                                              int stepV, String tickS, String allFinishedS) {
+
+        AvatarBlock ab = new AvatarBlock(_name, _avspec, _refB);
+
+        // Create  signals
+        AvatarSignal tick = new AvatarSignal(tickS, AvatarSignal.OUT, _refB);
+        AvatarSignal allFinished = new AvatarSignal(allFinishedS, AvatarSignal.OUT, _refB);
+
+        ab.addSignal(tick);
+        ab.addSignal(allFinished);
+
+
+
+        // Create attributes
+        AvatarAttribute h = new AvatarAttribute("duration", AvatarType.INTEGER, ab, _refB);
+        h.setInitialValue("" + 0);
+        ab.addAttribute(h);
+
+        AvatarAttribute step = new AvatarAttribute("step", AvatarType.INTEGER, ab, _refB);
+        step.setInitialValue("" + stepV);
+        ab.addAttribute(step);
+
+        // State machines
+        AvatarTransition at;
+        AvatarStateMachine asm = ab.getStateMachine();
+
+        // Start state
+        AvatarStartState ass = new AvatarStartState("start", _refB);
+        asm.setStartState(ass);
+        asm.addElement(ass);
+
+        // Main state
+        AvatarState mainState = new AvatarState("mainState", _refB);
+        asm.addElement(mainState);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, ass, mainState, _refB);
+
+
+        // Tick
+        AvatarActionOnSignal aaosWrite = new AvatarActionOnSignal("sendTickIn_" + tick.getSignalName(), tick, _refB);
+        asm.addElement(aaosWrite);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, mainState, aaosWrite, _refB);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, aaosWrite, mainState, _refB);
+        at.addAction("h=h+step");
+
+        // finished
+        aaosWrite = new AvatarActionOnSignal("sendAllFinished_" + allFinished.getSignalName(), allFinished, _refB);
+        asm.addElement(aaosWrite);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, mainState, aaosWrite, _refB);
+
+        AvatarStopState stop = new AvatarStopState("stop", _refB);
+        asm.addElement(stop);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, aaosWrite, stop, _refB);
+
+
+        return ab;
+    }
+
+
+    // Still to be added: main blocks
+    public static AvatarBlock getClockGraphBlock(String _name, AvatarSpecification _avspec, Object _refB,
+                                                 Vector<String> swTasks, Vector<String> hwTasks, Vector<String> hwSizes,
+                                                 String tickS, String allFinishedS, int nbCoresV, int durationDRV,
+                                                 int HWSize) {
+
+        AvatarBlock ab = new AvatarBlock(_name, _avspec, _refB);
+
+        AvatarSignal as;
+
+        AvatarSignal tick = new AvatarSignal(tickS, AvatarSignal.IN, _refB);
+        AvatarSignal allFinished = new AvatarSignal(allFinishedS, AvatarSignal.IN, _refB);
+
+        ab.addSignal(tick);
+        ab.addSignal(allFinished);
+
+        // Create  signals for SW Tasks
+        for(String taskName: swTasks) {
+            as = new AvatarSignal("finished_" + taskName, AvatarSignal.IN, _refB);
+            ab.addSignal(as);
+            as = new AvatarSignal("select_" + taskName, AvatarSignal.OUT, _refB);
+            ab.addSignal(as);
+            as = new AvatarSignal("preempt_" + taskName, AvatarSignal.OUT, _refB);
+            ab.addSignal(as);
+            as = new AvatarSignal("step_" + taskName, AvatarSignal.OUT, _refB);
+            ab.addSignal(as);
+        }
+
+        // Create  signals for hW Tasks
+        for(String taskName: hwTasks) {
+            as = new AvatarSignal("finished_" + taskName, AvatarSignal.IN, _refB);
+            ab.addSignal(as);
+            as = new AvatarSignal("select_" + taskName, AvatarSignal.OUT, _refB);
+            ab.addSignal(as);
+            as = new AvatarSignal("step_" + taskName, AvatarSignal.OUT, _refB);
+            ab.addSignal(as);
+            as = new AvatarSignal("deactivate_" + taskName, AvatarSignal.OUT, _refB);
+            ab.addSignal(as);
+            as = new AvatarSignal("reactivate_" + taskName, AvatarSignal.OUT, _refB);
+            ab.addSignal(as);
+
+        }
+
+
+        // Attributes
+        AvatarAttribute nbHWTasks = new AvatarAttribute("nbHWTasks", AvatarType.INTEGER, ab, _refB);
+        nbHWTasks.setInitialValue("" + hwTasks.size());
+        ab.addAttribute(nbHWTasks);
+
+        AvatarAttribute durationDR = new AvatarAttribute("durationDR", AvatarType.INTEGER, ab, _refB);
+        durationDR.setInitialValue("" + durationDRV);
+        ab.addAttribute(durationDR);
+
+        AvatarAttribute step = new AvatarAttribute("step", AvatarType.INTEGER, ab, _refB);
+        ab.addAttribute(step);
+
+        AvatarAttribute nbHW = new AvatarAttribute("nbHW", AvatarType.INTEGER, ab, _refB);
+        nbHW.setInitialValue("" + HWSize);
+        ab.addAttribute(nbHW);
+
+        AvatarAttribute remainHW = new AvatarAttribute("remainHW", AvatarType.INTEGER, ab, _refB);
+        remainHW.setInitialValue("" + HWSize);
+        ab.addAttribute(remainHW);
+
+        AvatarAttribute nbCores = new AvatarAttribute("nbCores", AvatarType.INTEGER, ab, _refB);
+        nbCores.setInitialValue("" + nbCoresV);
+        ab.addAttribute(nbCores);
+
+        AvatarAttribute allocCore = new AvatarAttribute("allocCore", AvatarType.INTEGER, ab, _refB);
+        allocCore.setInitialValue("0");
+        ab.addAttribute(allocCore);
+
+        int cpt = 0;
+        for(String size: hwSizes) {
+            AvatarAttribute sizeTask = new AvatarAttribute("size_" + hwTasks.get(cpt),
+                    AvatarType.INTEGER, ab, _refB);
+            sizeTask.setInitialValue(""+size);
+            ab.addAttribute(sizeTask);
+            cpt ++;
+        }
+
+        AvatarAttribute rescheduleSW = new AvatarAttribute("rescheduleSW", AvatarType.BOOLEAN, ab, _refB);
+        rescheduleSW.setInitialValue("false");
+        ab.addAttribute(rescheduleSW);
+
+        AvatarAttribute runningHW = new AvatarAttribute("runningHW", AvatarType.INTEGER, ab, _refB);
+        ab.addAttribute(runningHW);
+
+        AvatarAttribute currentDR = new AvatarAttribute("currentDR", AvatarType.INTEGER, ab, _refB);
+        currentDR.setInitialValue("0");
+        ab.addAttribute(currentDR);
+
+        AvatarAttribute finalClockValue = new AvatarAttribute("finalClockValue", AvatarType.INTEGER, ab, _refB);
+        ab.addAttribute(finalClockValue);
+
+
+        // State machines
+        AvatarTransition at;
+        AvatarStateMachine asm = ab.getStateMachine();
+
+        // Start state
+        AvatarStartState ass = new AvatarStartState("start", _refB);
+        asm.setStartState(ass);
+        asm.addElement(ass);
+
+        // finishSW state
+        AvatarState finishSW = new AvatarState("finishSW", _refB);
+        asm.addElement(finishSW);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, ass, finishSW, _refB);
+
+        for(String task: swTasks) {
+            as = ab.getAvatarSignalWithName("finished_" + task);
+            AvatarActionOnSignal finishedSWRead = new AvatarActionOnSignal("read_" + as.getSignalName(), as, _refB);
+            asm.addElement(finishedSWRead);
+            at = makeAvatarEmptyTransitionBetween(ab, asm, finishSW, finishedSWRead, _refB);
+            at = makeAvatarEmptyTransitionBetween(ab, asm, finishedSWRead, finishSW, _refB);
+            at.addAction("allocCore = allocCore-1");
+        }
+
+
+
+        return ab;
+    }
 
 }
