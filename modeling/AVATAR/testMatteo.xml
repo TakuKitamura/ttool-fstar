@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<TURTLEGMODELING version="1.0beta" ANIMATE_INTERACTIVE_SIMULATION="true" ACTIVATE_PENALTIES="true" UPDATE_INFORMATION_DIPLO_SIM="true" ANIMATE_WITH_INFO_DIPLO_SIM="true" OPEN_DIAG_DIPLO_SIM="false" LAST_SELECTED_MAIN_TAB="1" LAST_SELECTED_SUB_TAB="0">
+<TURTLEGMODELING version="1.0beta" ANIMATE_INTERACTIVE_SIMULATION="true" ACTIVATE_PENALTIES="true" UPDATE_INFORMATION_DIPLO_SIM="true" ANIMATE_WITH_INFO_DIPLO_SIM="true" OPEN_DIAG_DIPLO_SIM="false" LAST_SELECTED_MAIN_TAB="1" LAST_SELECTED_SUB_TAB="1">
 
 <Modeling type="AVATAR Design" nameTab="Design1" tabs="Block Diagram$Main$P0$P2$P3$P1$DR" >
 <AVATARBlockDiagramPanel name="Block Diagram" minX="10" maxX="2500" minY="10" maxY="1500" zoom="1.0" >
@@ -2849,7 +2849,7 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
 <P1  x="1312" y="436" id="1270" />
-<P2  x="1342" y="359" id="1141" />
+<P2  x="1336" y="359" id="1141" />
 <AutomaticDrawing  data="false" />
 </CONNECTOR>
 <CONNECTOR type="5002" id="1118" >
@@ -2857,7 +2857,7 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="" />
 <TGConnectingPoint num="0" id="1117" />
-<P1  x="633" y="807" id="1186" />
+<P1  x="661" y="697" id="1186" />
 <P2  x="732" y="633" id="1283" />
 <AutomaticDrawing  data="true" />
 <extraparam>
@@ -2879,7 +2879,7 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="" />
 <TGConnectingPoint num="0" id="1119" />
-<P1  x="686" y="900" id="1181" />
+<P1  x="736" y="1034" id="1181" />
 <P2  x="1124" y="636" id="1266" />
 <AutomaticDrawing  data="true" />
 <extraparam>
@@ -2944,7 +2944,7 @@
 <infoparam name="connector" value="" />
 <TGConnectingPoint num="0" id="1127" />
 <P1  x="186" y="630" id="1233" />
-<P2  x="477" y="900" id="1180" />
+<P2  x="437" y="1034" id="1180" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <iso value="in selectP()" />
@@ -2979,7 +2979,7 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="" />
 <TGConnectingPoint num="0" id="1131" />
-<P1  x="581" y="807" id="1178" />
+<P1  x="586" y="697" id="1178" />
 <P2  x="582" y="352" id="1208" />
 <AutomaticDrawing  data="true" />
 <extraparam>
@@ -2999,8 +2999,8 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="" />
 <TGConnectingPoint num="0" id="1133" />
-<P1  x="581" y="994" id="1183" />
-<P2  x="582" y="1047" id="1153" />
+<P1  x="736" y="1202" id="1190" />
+<P2  x="1220" y="1018" id="1153" />
 <AutomaticDrawing  data="true" />
 <extraparam>
 <iso value="in tick(int step)" />
@@ -3012,7 +3012,7 @@
 </CONNECTOR>
 <COMPONENT type="301" id="1151" >
 <cdparam x="1255" y="320" />
-<sizeparam width="175" height="39" minWidth="20" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="162" height="39" minWidth="20" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="UML Note" value="The model assumes that
@@ -3043,7 +3043,7 @@ there is a unique sink
 </COMPONENT>
 
 <COMPONENT type="5000" id="1176" >
-<cdparam x="466" y="1047" />
+<cdparam x="1104" y="1018" />
 <sizeparam width="233" height="186" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -3083,8 +3083,8 @@ there is a unique sink
 </COMPONENT>
 
 <COMPONENT type="5000" id="1201" >
-<cdparam x="477" y="807" />
-<sizeparam width="209" height="187" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="437" y="697" />
+<sizeparam width="299" height="674" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="Block0" value="Main" />
@@ -5285,8 +5285,8 @@ there is a unique sink
 </COMPONENT>
 
 <COMPONENT type="5103" id="1786" >
-<cdparam x="1609" y="1892" />
-<sizeparam width="99" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1614" y="1892" />
+<sizeparam width="89" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="3500" />
@@ -5304,8 +5304,8 @@ there is a unique sink
 </COMPONENT>
 
 <COMPONENT type="5103" id="1797" >
-<cdparam x="1478" y="1891" />
-<sizeparam width="99" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1483" y="1891" />
+<sizeparam width="89" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="3500" />
@@ -5323,8 +5323,8 @@ there is a unique sink
 </COMPONENT>
 
 <COMPONENT type="5103" id="1808" >
-<cdparam x="1347" y="1891" />
-<sizeparam width="99" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="1352" y="1891" />
+<sizeparam width="89" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="3500" />
@@ -5342,8 +5342,8 @@ there is a unique sink
 </COMPONENT>
 
 <COMPONENT type="5103" id="1819" >
-<cdparam x="698" y="2008" />
-<sizeparam width="102" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="703" y="2008" />
+<sizeparam width="92" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="3500" />
@@ -5361,8 +5361,8 @@ there is a unique sink
 </COMPONENT>
 
 <COMPONENT type="5103" id="1830" >
-<cdparam x="586" y="1998" />
-<sizeparam width="102" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="591" y="1998" />
+<sizeparam width="92" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="3500" />
@@ -5380,8 +5380,8 @@ there is a unique sink
 </COMPONENT>
 
 <COMPONENT type="5103" id="1841" >
-<cdparam x="472" y="1996" />
-<sizeparam width="102" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="477" y="1996" />
+<sizeparam width="92" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="3500" />
@@ -5408,8 +5408,8 @@ there is a unique sink
 </COMPONENT>
 
 <COMPONENT type="5104" id="1854" >
-<cdparam x="511" y="656" />
-<sizeparam width="188" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="519" y="656" />
+<sizeparam width="173" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="3500" />
@@ -5427,8 +5427,8 @@ there is a unique sink
 </COMPONENT>
 
 <COMPONENT type="5103" id="1865" >
-<cdparam x="537" y="2519" />
-<sizeparam width="92" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="542" y="2519" />
+<sizeparam width="83" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="3500" />
@@ -5446,8 +5446,8 @@ there is a unique sink
 </COMPONENT>
 
 <COMPONENT type="5103" id="1876" >
-<cdparam x="416" y="2510" />
-<sizeparam width="92" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="421" y="2510" />
+<sizeparam width="83" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="3500" />
@@ -5465,8 +5465,8 @@ there is a unique sink
 </COMPONENT>
 
 <COMPONENT type="5103" id="1887" >
-<cdparam x="262" y="2506" />
-<sizeparam width="92" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="267" y="2506" />
+<sizeparam width="83" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="3500" />
@@ -5484,8 +5484,8 @@ there is a unique sink
 </COMPONENT>
 
 <COMPONENT type="5103" id="1898" >
-<cdparam x="123" y="2507" />
-<sizeparam width="92" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="128" y="2507" />
+<sizeparam width="83" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="3500" />
@@ -5503,8 +5503,8 @@ there is a unique sink
 </COMPONENT>
 
 <COMPONENT type="5104" id="1909" >
-<cdparam x="697" y="2333" />
-<sizeparam width="78" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="701" y="2333" />
+<sizeparam width="71" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="3500" />
@@ -5573,8 +5573,8 @@ there is a unique sink
 </COMPONENT>
 
 <COMPONENT type="5103" id="1961" >
-<cdparam x="933" y="1692" />
-<sizeparam width="74" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="937" y="1692" />
+<sizeparam width="66" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="3500" />
@@ -5592,8 +5592,8 @@ there is a unique sink
 </COMPONENT>
 
 <COMPONENT type="5103" id="1972" >
-<cdparam x="732" y="1698" />
-<sizeparam width="74" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="736" y="1698" />
+<sizeparam width="66" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="3500" />
@@ -5611,8 +5611,8 @@ there is a unique sink
 </COMPONENT>
 
 <COMPONENT type="5103" id="1983" >
-<cdparam x="511" y="1685" />
-<sizeparam width="74" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="515" y="1685" />
+<sizeparam width="66" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="3500" />
@@ -5631,7 +5631,7 @@ there is a unique sink
 
 <COMPONENT type="301" id="2000" >
 <cdparam x="156" y="1667" />
-<sizeparam width="109" height="15" minWidth="20" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="105" height="15" minWidth="20" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="3500" />
 <infoparam name="UML Note" value="CanTrigger DR
@@ -5709,8 +5709,8 @@ there is a unique sink
 </COMPONENT>
 
 <COMPONENT type="5103" id="2052" >
-<cdparam x="237" y="1358" />
-<sizeparam width="74" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="241" y="1358" />
+<sizeparam width="66" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="3500" />
@@ -5728,8 +5728,8 @@ there is a unique sink
 </COMPONENT>
 
 <COMPONENT type="5103" id="2063" >
-<cdparam x="239" y="1084" />
-<sizeparam width="89" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="242" y="1084" />
+<sizeparam width="83" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="3500" />
@@ -5798,8 +5798,8 @@ there is a unique sink
 </COMPONENT>
 
 <COMPONENT type="5104" id="2115" >
-<cdparam x="400" y="637" />
-<sizeparam width="93" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="403" y="637" />
+<sizeparam width="86" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="3500" />
@@ -5817,8 +5817,8 @@ there is a unique sink
 </COMPONENT>
 
 <COMPONENT type="5104" id="2126" >
-<cdparam x="248" y="628" />
-<sizeparam width="93" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="251" y="628" />
+<sizeparam width="86" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="3500" />
@@ -5887,8 +5887,8 @@ there is a unique sink
 </COMPONENT>
 
 <COMPONENT type="5104" id="2178" >
-<cdparam x="238" y="310" />
-<sizeparam width="93" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="241" y="310" />
+<sizeparam width="86" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="3500" />
@@ -6017,8 +6017,8 @@ there is a unique sink
 </COMPONENT>
 
 <COMPONENT type="5104" id="2273" >
-<cdparam x="523" y="602" />
-<sizeparam width="93" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="526" y="602" />
+<sizeparam width="86" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="3500" />
@@ -9310,8 +9310,8 @@ there is a unique sink
 </SUBCOMPONENT>
 
 <COMPONENT type="5104" id="3796" >
-<cdparam x="242" y="56" />
-<sizeparam width="124" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="247" y="56" />
+<sizeparam width="115" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -9329,8 +9329,8 @@ there is a unique sink
 </COMPONENT>
 
 <COMPONENT type="5103" id="3807" >
-<cdparam x="638" y="594" />
-<sizeparam width="85" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="641" y="594" />
+<sizeparam width="78" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -9400,8 +9400,8 @@ there is a unique sink
 </COMPONENT>
 
 <COMPONENT type="5104" id="3859" >
-<cdparam x="208" y="385" />
-<sizeparam width="92" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="213" y="385" />
+<sizeparam width="83" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -9521,8 +9521,8 @@ there is a unique sink
 </COMPONENT>
 
 <COMPONENT type="5103" id="3952" >
-<cdparam x="637" y="423" />
-<sizeparam width="61" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="640" y="423" />
+<sizeparam width="55" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -9540,8 +9540,8 @@ there is a unique sink
 </COMPONENT>
 
 <COMPONENT type="5104" id="3963" >
-<cdparam x="348" y="175" />
-<sizeparam width="74" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="352" y="175" />
+<sizeparam width="66" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -9568,8 +9568,8 @@ there is a unique sink
 </COMPONENT>
 
 <COMPONENT type="5104" id="3976" >
-<cdparam x="499" y="184" />
-<sizeparam width="99" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="504" y="184" />
+<sizeparam width="89" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -9587,8 +9587,8 @@ there is a unique sink
 </COMPONENT>
 
 <COMPONENT type="5104" id="3987" >
-<cdparam x="497" y="137" />
-<sizeparam width="102" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="502" y="137" />
+<sizeparam width="92" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />

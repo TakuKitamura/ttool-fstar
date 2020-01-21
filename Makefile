@@ -557,7 +557,8 @@ clean:
 	@$(MAKE) -C $(TTOOL_DOC_SOCLIB_INSTALLATIONGUIDE_DIR) clean
 	@rm -rf $(TTOOL_TARGET_RELEASE)
 	@rm -f $(TTOOL_STD_RELEASE)/*.tar
-	@rm -rf $(TTOOL_BUILD)	
+	@rm -rf $(TTOOL_BUILD)
+	@rm -rf $(TTOOL_DIR)/build/
 
 ultraclean: clean
 	@rm -rf $(TTOOL_DOC_HTML)

@@ -718,6 +718,52 @@ public class AvatarBlockTemplate {
             at.addAction("allocCore = allocCore-1");
         }
 
+        // finishHW state
+        AvatarState finishHW = new AvatarState("finishHW", _refB);
+        asm.addElement(finishHW);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, ass, finishHW, _refB);
+        at.setDelays("1", "1");
+        at.addAction("rescheduleSW=false");
+
+        cpt = 0;
+        for(String task: hwTasks) {
+            as = ab.getAvatarSignalWithName("finished_" + task);
+            AvatarActionOnSignal finishedHWRead = new AvatarActionOnSignal("read_" + as.getSignalName(), as, _refB);
+            asm.addElement(finishedHWRead);
+            at = makeAvatarEmptyTransitionBetween(ab, asm, finishHW, finishedHWRead, _refB);
+            if (cpt < hwTasks.size() - 1) {
+                at = makeAvatarEmptyTransitionBetween(ab, asm, finishedHWRead, finishHW, _refB);
+                at.addAction("rescheduleSW = true");
+                at.addAction("runningHW = runningHW - 1");
+                at.addAction("nbHWTasks = nbHWTask - 1");
+
+            } else {
+                as = allFinished;
+                AvatarActionOnSignal allFinishedRead = new AvatarActionOnSignal("read_" + as.getSignalName(), as, _refB);
+                asm.addElement(allFinishedRead);
+
+                at = makeAvatarEmptyTransitionBetween(ab, asm, finishedHWRead, allFinishedRead, _refB);
+                at.addAction("rescheduleSW = true");
+                at.addAction("runningHW = runningHW - 1");
+                at.addAction("nbHWTasks = nbHWTask - 1");
+
+                AvatarStopState stop = new AvatarStopState("stopAllFinished", _refB);
+                asm.addElement(stop);
+                at = makeAvatarEmptyTransitionBetween(ab, asm, allFinishedRead, stop, _refB);
+            }
+
+
+
+
+
+        }
+
+
+
+
+
+
+
 
 
         return ab;
