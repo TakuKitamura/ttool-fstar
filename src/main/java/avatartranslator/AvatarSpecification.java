@@ -250,6 +250,25 @@ public class AvatarSpecification extends AvatarElement {
 		return sb.toString();
     }
 
+
+    public String toShortString() {
+        //TraceManager.addDev("To Short String");
+        //Thread.currentThread().dumpStack();
+        StringBuffer sb = new StringBuffer("Blocks:\n");
+        for(AvatarBlock block: blocks) {
+            sb.append("*** " + block.toShortString()+"\n");
+        }
+        sb.append("\nRelations:\n");
+        for(AvatarRelation relation: relations) {
+            sb.append("Relation:" + relation.toString() + "\n");
+        }
+        /*for (AvatarConstant constant: constants){
+            sb.append("Constant:" + constant.toString() + "\n");
+        }*/
+
+        return sb.toString();
+    }
+
     public AvatarBlock getBlockWithName(String _name) {
         for(AvatarBlock block: blocks) {
             if (block.getName().compareTo(_name)== 0) {

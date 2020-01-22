@@ -205,7 +205,11 @@ public class AvatarRelation extends AvatarElement {
             if (i>0) {
                 sb.append(" ; ");
             }
-            sb.append(block1.getName() + "." + signals1.get(i).getName() + "=" + block2.getName() + "." + signals2.get(i).getName());
+            if ((signals1.get(i) == null) || (signals2.get(i) == null)) {
+                sb.append(block1.getName() + "." + "NULL" + "=" + block2.getName() + "." + "NULL");
+            } else {
+                sb.append(block1.getName() + "." + signals1.get(i).getName() + "=" + block2.getName() + "." + signals2.get(i).getName());
+            }
         }
         return sb.toString();
     }
