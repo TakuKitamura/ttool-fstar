@@ -321,7 +321,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         prepareTransitionsOfState(initialState);
         blockValues = initialState.getBlockValues();
 
-        //TraceManager.addDev("initialState=" + initialState.toString() + "\n nbOfTransitions" + initialState.transitions.size());
+        TraceManager.addDev("initialState=" + initialState.toString() + "\n nbOfTransitions" + initialState.transitions.size());
         initialState.computeHash(blockValues);
         addState(initialState);
         //states.put(initialState.hashValue, initialState);

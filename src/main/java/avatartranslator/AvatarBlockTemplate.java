@@ -333,12 +333,14 @@ public class AvatarBlockTemplate {
         for(String unblockName: unblockedBy) {
             AvatarSignal sig = new AvatarSignal(unblockName, AvatarSignal.IN, _refB);
             unblokedBySigs.add(sig);
+            ab.addSignal(sig);
         }
 
         Vector<AvatarSignal> unblokingBySigs = new Vector<>();
         for(String unblockName: unblockNext) {
             AvatarSignal sig = new AvatarSignal(unblockName, AvatarSignal.OUT, _refB);
             unblokingBySigs.add(sig);
+            ab.addSignal(sig);
         }
 
 
@@ -384,6 +386,7 @@ public class AvatarBlockTemplate {
 
         // Making a step
         AvatarActionOnSignal stepRead = new AvatarActionOnSignal("read_" + stepP.getSignalName(), stepP, _refB);
+        stepRead.addValue("step");
         asm.addElement(stepRead);
         at = makeAvatarEmptyTransitionBetween(ab, asm, activatedState, stepRead, _refB);
         at.setGuard("duration>0");
@@ -447,12 +450,14 @@ public class AvatarBlockTemplate {
         for(String unblockName: unblockedBy) {
             AvatarSignal sig = new AvatarSignal(unblockName, AvatarSignal.IN, _refB);
             unblokedBySigs.add(sig);
+            ab.addSignal(sig);
         }
 
         Vector<AvatarSignal> unblokingBySigs = new Vector<>();
         for(String unblockName: unblockNext) {
             AvatarSignal sig = new AvatarSignal(unblockName, AvatarSignal.OUT, _refB);
             unblokingBySigs.add(sig);
+            ab.addSignal(sig);
         }
 
 
@@ -548,7 +553,11 @@ public class AvatarBlockTemplate {
 
         // Create  signals
         AvatarSignal tick = new AvatarSignal(tickS, AvatarSignal.OUT, _refB);
+        AvatarAttribute att = new AvatarAttribute("step", AvatarType.INTEGER, ab, _refB);
+        tick.addParameter(att);
         AvatarSignal allFinished = new AvatarSignal(allFinishedS, AvatarSignal.OUT, _refB);
+        AvatarAttribute attH = new AvatarAttribute("h", AvatarType.INTEGER, ab, _refB);
+        allFinished.addParameter(attH);
 
         ab.addSignal(tick);
         ab.addSignal(allFinished);
@@ -613,7 +622,11 @@ public class AvatarBlockTemplate {
         AvatarSignal as;
 
         AvatarSignal tick = new AvatarSignal(tickS, AvatarSignal.IN, _refB);
+        AvatarAttribute attT = new AvatarAttribute("step", AvatarType.INTEGER, ab, _refB);
+        tick.addParameter(attT);
         AvatarSignal allFinished = new AvatarSignal(allFinishedS, AvatarSignal.IN, _refB);
+        AvatarAttribute att = new AvatarAttribute("h", AvatarType.INTEGER, ab, _refB);
+        allFinished.addParameter(att);
 
         ab.addSignal(tick);
         ab.addSignal(allFinished);
@@ -627,6 +640,8 @@ public class AvatarBlockTemplate {
             as = new AvatarSignal("preempt_" + taskName, AvatarSignal.OUT, _refB);
             ab.addSignal(as);
             as = new AvatarSignal("step_" + taskName, AvatarSignal.OUT, _refB);
+            AvatarAttribute att1 = new AvatarAttribute("step", AvatarType.INTEGER, ab, _refB);
+            as.addParameter(att1);
             ab.addSignal(as);
         }
 
@@ -637,6 +652,8 @@ public class AvatarBlockTemplate {
             as = new AvatarSignal("select_" + taskName, AvatarSignal.OUT, _refB);
             ab.addSignal(as);
             as = new AvatarSignal("step_" + taskName, AvatarSignal.OUT, _refB);
+            AvatarAttribute att1 = new AvatarAttribute("step", AvatarType.INTEGER, ab, _refB);
+            as.addParameter(att1);
             ab.addSignal(as);
             as = new AvatarSignal("deactivate_" + taskName, AvatarSignal.OUT, _refB);
             ab.addSignal(as);
@@ -658,9 +675,14 @@ public class AvatarBlockTemplate {
         AvatarAttribute step = new AvatarAttribute("step", AvatarType.INTEGER, ab, _refB);
         ab.addAttribute(step);
 
-        AvatarAttribute nbHW = new AvatarAttribute("allocHW", AvatarType.INTEGER, ab, _refB);
+        AvatarAttribute nbHW = new AvatarAttribute("nbHW", AvatarType.INTEGER, ab, _refB);
         nbHW.setInitialValue("" + HWSize);
         ab.addAttribute(nbHW);
+
+        AvatarAttribute allocHW = new AvatarAttribute("allocHW", AvatarType.INTEGER, ab, _refB);
+        allocHW.setInitialValue("0");
+        ab.addAttribute(allocHW);
+
 
         AvatarAttribute remainHW = new AvatarAttribute("remainHW", AvatarType.INTEGER, ab, _refB);
         remainHW.setInitialValue("" + HWSize);
@@ -714,7 +736,7 @@ public class AvatarBlockTemplate {
 
         for(String task: swTasks) {
             as = ab.getAvatarSignalWithName("finished_" + task);
-            AvatarActionOnSignal finishedSWRead = new AvatarActionOnSignal("read_" + as.getSignalName(), as, _refB);
+            AvatarActionOnSignal finishedSWRead = new AvatarActionOnSignal("read_" + as.getSignalName() + "_" + task, as, _refB);
             asm.addElement(finishedSWRead);
             at = makeAvatarEmptyTransitionBetween(ab, asm, finishSW, finishedSWRead, _refB);
             at = makeAvatarEmptyTransitionBetween(ab, asm, finishedSWRead, finishSW, _refB);
@@ -724,7 +746,7 @@ public class AvatarBlockTemplate {
         // finishHW state
         AvatarState finishHW = new AvatarState("finishHW", _refB);
         asm.addElement(finishHW);
-        at = makeAvatarEmptyTransitionBetween(ab, asm, ass, finishHW, _refB);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, finishSW, finishHW, _refB);
         at.setDelays("1", "1");
         at.addAction("rescheduleSW=false");
 
@@ -738,7 +760,7 @@ public class AvatarBlockTemplate {
                 at = makeAvatarEmptyTransitionBetween(ab, asm, finishedHWRead, finishHW, _refB);
                 at.addAction("rescheduleSW = true");
                 at.addAction("runningHW = runningHW - 1");
-                at.addAction("nbHWTasks = nbHWTask - 1");
+                at.addAction("nbHWTasks = nbHWTasks - 1");
 
             } else {
                 as = allFinished;
@@ -749,7 +771,7 @@ public class AvatarBlockTemplate {
                 at = makeAvatarEmptyTransitionBetween(ab, asm, finishedHWRead, allFinishedRead, _refB);
                 at.addAction("rescheduleSW = true");
                 at.addAction("runningHW = runningHW - 1");
-                at.addAction("nbHWTasks = nbHWTask - 1");
+                at.addAction("nbHWTasks = nbHWTasks - 1");
 
                 AvatarStopState stop = new AvatarStopState("stopAllFinished", _refB);
                 asm.addElement(stop);
@@ -864,15 +886,26 @@ public class AvatarBlockTemplate {
         // makeStep state
         AvatarState makeStep = new AvatarState("makeStep", _refB);
         asm.addElement(makeStep);
+
+        at = makeAvatarEmptyTransitionBetween(ab, asm, selectSW, makeStep, _refB);
+        at.setGuard("currentDR > 0");
+        at.setDelays("2", "2");
+
         at = makeAvatarEmptyTransitionBetween(ab, asm, selectSW, makeStep, _refB);
         at.setGuard("nbHWTasks == 0");
         at.setDelays("1", "1");
 
-        at = makeAvatarEmptyTransitionBetween(ab, asm, blockNonSelected, makeStep, _refB);
-        at.setDelays("1", "1");
 
         at = makeAvatarEmptyTransitionBetween(ab, asm, blockNonSelected, makeStep, _refB);
         at.setDelays("1", "1");
+
+        at = makeAvatarEmptyTransitionBetween(ab, asm, selectHW, makeStep, _refB);
+        at.setDelays("1", "1");
+
+        at = makeAvatarEmptyTransitionBetween(ab, asm, unblockAllHWP, makeStep, _refB);
+        at.setDelays("1", "1");
+
+
 
         // makeSteps state
         AvatarState makeSteps = new AvatarState("makeSteps", _refB);

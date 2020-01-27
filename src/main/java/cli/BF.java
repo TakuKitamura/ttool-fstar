@@ -40,6 +40,7 @@
 package cli;
 
 //import com.sun.deploy.trace.Trace;
+import avatartranslator.modelchecker.AvatarModelChecker;
 import common.ConfigurationTTool;
 import launcher.RTLLauncher;
 import myutil.Conversion;
@@ -312,9 +313,18 @@ public class BF extends Command  {
                     ar.addSignals(as1, as2);
                 }
 
-
                 TraceManager.addDev("Done making relations 2.1 for " + bft.name);
+
                 // Relation between this block and its next
+
+                for(BFTask next: bft.getNext()) {
+                    ar = new AvatarRelation("r" + bft.name + "Main", b, next.block, this);
+                     as1 = b.getAvatarSignalWithName("unblock" + next.name);
+                     as2 = next.block.getAvatarSignalWithName("unblockFrom" + bft.name);
+                    ar.addSignals(as1, as2);
+                    avspec.addRelation(ar);
+                }
+
 
             }
 
@@ -325,7 +335,21 @@ public class BF extends Command  {
             TraceManager.addDev("\n\n**************** AVSPEC:\n" + avspec.toShortString() + "\n*********\n\n");
 
 
-            // Compte RG
+            // Draw design if TTool is started
+            if (interpreter.mgui != null) {
+                interpreter.mgui.drawAvatarSpecification(avspec);
+            }
+
+            TraceManager.addDev("Model checking: generating RG");
+
+
+            // Generate RG
+            /*AvatarModelChecker amc = new AvatarModelChecker(avspec);
+            amc.setComputeRG(true);
+            amc.startModelChecking();
+            System.out.println("\n\nModel checking done\n");
+            System.out.println("Nb of states:" + amc.getNbOfStates() + "\n");
+            System.out.println("Nb of links:" + amc.getNbOfLinks() + "\n");*/
 
             // Deduce best scheduling
 

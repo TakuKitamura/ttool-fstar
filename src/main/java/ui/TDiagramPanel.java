@@ -1018,6 +1018,18 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             } else {
                 if (addToList) {
                     componentList.add(0, tgc);
+                    // Enlarge panel accordingly
+                    while (maxX < (tgc.getX() + tgc.getWidth())) {
+                        maxX += increment;
+                        mgui.changeMade(this, DIAGRAM_RESIZED);
+                        updateSize();
+                    }
+                    while (maxY < (tgc.getY() + tgc.getHeight())) {
+                        maxY += increment;
+                        mgui.changeMade(this, DIAGRAM_RESIZED);
+                        updateSize();
+                    }
+
                 }
             }
         }

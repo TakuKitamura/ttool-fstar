@@ -9307,7 +9307,13 @@ public class GTURTLEModeling {
             } else {
                 action = t.getActions().get(0).toString().replaceAll(" ", "");
             }
+            // Delays
+            SMDCon.setTransitionTime(t.getMinDelay(), t.getMaxDelay(), t.getMinCompute(), t.getMaxCompute());
+
+            // Guard
             SMDCon.setTransitionInfo(t.getGuard().toString(), action);
+
+            // Action
             for (int i = 1; i < t.getActions().size(); i++) {
                 SMDCon.setTransitionInfo("", t.getActions().get(i).toString().replaceAll(" ", ""));
             }

@@ -1842,9 +1842,13 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     }
 
     public void drawAvatarSpecification(AvatarSpecification av) {
+        TraceManager.addDev("Draw Spec 1");
         int index = createAvatarDesign("GeneratedDesign");
+        TraceManager.addDev("Draw Spec 2");
         AvatarDesignPanel adp = (AvatarDesignPanel) (tabs.elementAt(index));
+        TraceManager.addDev("Draw Spec 3");
         gtm.drawPanel(av, adp);
+        TraceManager.addDev("Draw Spec 4");
     }
 
     // Creates the status bar.

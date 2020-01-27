@@ -98,6 +98,11 @@ public class BFTask  {
         previous.add(t);
     }
 
+
+    public Vector<BFTask> getNext() {
+        return next;
+    }
+
     public String toString() {
         StringBuffer sb = new StringBuffer(name + ": ");
         if (isHW()) {
@@ -126,18 +131,18 @@ public class BFTask  {
         Vector<String> unblockedBy = new Vector<>();
         for(BFTask t: previous) {
             String s = "unblockFrom" + t.name;
+            unblockedBy.add(s);
         }
         Vector<String> unblock = new Vector<>();
         for(BFTask t: next) {
             String s = "unblock" + t.name;
+            unblock.add(s);
         }
         if(isHW()) {
             block = AvatarBlockTemplate.getHWGraphBlock(name, avspec, this, timing, unblockedBy, unblock);
         } else {
             block = AvatarBlockTemplate.getSWGraphBlock(name, avspec, this, timing, unblockedBy, unblock);
         }
-
-        avspec.addBlock(block);
     }
 
 
