@@ -615,7 +615,7 @@ public class AvatarBlockTemplate {
     public static AvatarBlock getMainGraphBlock(String _name, AvatarSpecification _avspec, Object _refB,
                                                  Vector<String> swTasks, Vector<String> hwTasks, Vector<String> hwSizes,
                                                  String tickS, String allFinishedS, int nbCoresV, int durationDRV,
-                                                 int HWSize) {
+                                                 int HWSize, int minSize) {
 
         AvatarBlock ab = new AvatarBlock(_name, _avspec, _refB);
 
@@ -695,6 +695,15 @@ public class AvatarBlockTemplate {
         AvatarAttribute allocCore = new AvatarAttribute("allocCore", AvatarType.INTEGER, ab, _refB);
         allocCore.setInitialValue("0");
         ab.addAttribute(allocCore);
+
+        AvatarAttribute minSizeAttr = new AvatarAttribute("minHW", AvatarType.INTEGER, ab, _refB);
+        minSizeAttr.setInitialValue(""+minSize);
+        ab.addAttribute(minSizeAttr);
+
+        AvatarAttribute delayDR = new AvatarAttribute("delayDR", AvatarType.BOOLEAN, ab, _refB);
+        delayDR.setInitialValue("false");
+        ab.addAttribute(delayDR);
+
 
         int cpt = 0;
         for(String size: hwSizes) {
@@ -842,8 +851,15 @@ public class AvatarBlockTemplate {
             at.addAction("runningHW = runningHW + 1");
             at.addAction("allocHW = allocHW + " + hwSizes.get(cpt));
             at.addAction("remainHW = remainHW - " + hwSizes.get(cpt));
+            at.addAction("delayDR = false");
             cpt ++;
         }
+
+        // Delaying DR
+        at = makeAvatarEmptyTransitionBetween(ab, asm, selectHW, selectHW, _refB);
+        at.setGuard("(runningHW == 0) && ((allocHW > 0) && ((remainHW >= minHW)&&(delayDR == false)))");
+        at.addAction("delayDR = true");
+
 
         // blockNonSelected state
         AvatarState blockNonSelected = new AvatarState("blockNonSelected", _refB);
@@ -863,7 +879,8 @@ public class AvatarBlockTemplate {
         AvatarState startDR = new AvatarState("startDR", _refB);
         asm.addElement(startDR);
         at = makeAvatarEmptyTransitionBetween(ab, asm, selectHW, startDR, _refB);
-        at.setGuard("(runningHW == 0) && (allocHW > 0)");
+        //at.setGuard("(runningHW == 0) && (allocHW > 0)");
+        at.setGuard("(runningHW == 0) && ((allocHW > 0) && (delayDR == false))");
 
 
         // unblockAllHWP state
@@ -873,6 +890,7 @@ public class AvatarBlockTemplate {
         at.addAction("currentDR = durationDR");
         at.addAction("allocHW = 0");
         at.addAction("remainHW = nbHW");
+        at.addAction("delayDR = true");
 
 
         for(String task: hwTasks) {
@@ -933,6 +951,13 @@ public class AvatarBlockTemplate {
             at = makeAvatarEmptyTransitionBetween(ab, asm, makeSteps, stepHWWrite, _refB);
             at = makeAvatarEmptyTransitionBetween(ab, asm, stepHWWrite, makeSteps, _refB);
         }
+
+
+        // nothing is running? Stop now!
+        AvatarStopState assDeadlock = new AvatarStopState("deadlockstate", _refB);
+        asm.addElement(assDeadlock);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, makeSteps, assDeadlock, _refB);
+        at.setGuard("(runningHW == 0) && ((allocCore == 0) && (currentDR == 0))");
 
         // waitForSteps state
         AvatarState waitForSteps = new AvatarState("waitForSteps", _refB);

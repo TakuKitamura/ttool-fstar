@@ -51,9 +51,11 @@ import ui.util.IconManager;
 import ui.window.JDialogSystemCGeneration;
 import ui.*;
 
+import java.awt.*;
 import java.io.File;
 import java.util.BitSet;
 import java.util.*;
+import java.util.List;
 
 
 /**
@@ -66,6 +68,7 @@ import java.util.*;
 public class Action extends Command {
     // Action commands
     private final static String OPEN = "open";
+    private final static String RESIZE = "resize";
     private final static String START = "start";
     private final static String QUIT = "quit";
     private final static String CHECKSYNTAX = "check-syntax";
@@ -173,6 +176,41 @@ public class Action extends Command {
                 interpreter.mgui.start(interpreter.showWindow());
 
                 interpreter.setTToolStarted(true);
+
+                return null;
+            }
+        };
+
+        // Open
+        Command resize = new Command() {
+            public String getCommand() {
+                return RESIZE;
+            }
+
+            public String getShortCommand() {
+                return "r";
+            }
+
+            public String getDescription() {
+                return "Resize TTool main window";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+                
+
+                String[] commands = command.split(" ");
+                if (commands.length < 2) {
+                    return Interpreter.BAD;
+                }
+
+                int w = Integer.decode(commands[0]);
+                int h = Integer.decode(commands[1]);
+
+                interpreter.mgui.getFrame().setMinimumSize(new Dimension(200, 200));
+                interpreter.mgui.getFrame().setSize(new Dimension(w, h));
 
                 return null;
             }
@@ -533,6 +571,7 @@ public class Action extends Command {
 
         addAndSortSubcommand(start);
         addAndSortSubcommand(open);
+        addAndSortSubcommand(resize);
         addAndSortSubcommand(quit);
         addAndSortSubcommand(checkSyntax);
         addAndSortSubcommand(diplodocusInteractiveSimulation);

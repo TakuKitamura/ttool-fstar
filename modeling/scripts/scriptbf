@@ -5,5 +5,7 @@ action start
 wait 2
 action open $model
 wait 5
+action resize 600 500
+wait 5
 bf ../modeling/scripts/g0.txt 100 3 1
-wait 400
+wait 40000

@@ -39,14 +39,14 @@
 
 package cli;
 
-//import com.sun.deploy.trace.Trace;
 import avatartranslator.modelchecker.AvatarModelChecker;
 import common.ConfigurationTTool;
+import graph.AUTGraph;
+import graph.AUTState;
+import graph.AUTTransition;
+import graph.RG;
 import launcher.RTLLauncher;
-import myutil.Conversion;
-import myutil.IntExpressionEvaluator;
-import myutil.PluginManager;
-import myutil.TraceManager;
+import myutil.*;
 import ui.MainGUI;
 import ui.util.IconManager;
 import avatartranslator.*;
@@ -66,6 +66,8 @@ import java.util.*;
  * @author Ludovic APVRILLE
  */
 public class BF extends Command  {
+
+    public static final String[] KEYWORDS = {"tick", "select_", "finished", "startDR", "stopDR"};
 
 
     public BF() {
@@ -230,6 +232,18 @@ public class BF extends Command  {
                 TraceManager.addDev(ta.toString());
             }
 
+
+            // Get the min size of HW clbs
+            int min = 999999999;
+            for (BFTask ta: tasks) {
+                if (ta.isHW()) {
+                    min = Math.min(min, ta.clb);
+                }
+            }
+            TraceManager.addDev("Min CLB:" + min);
+
+
+
             // Generate AvatarSpec
             AvatarSpecification avspec = new AvatarSpecification(fileName, this);
 
@@ -261,7 +275,7 @@ public class BF extends Command  {
 
             AvatarBlock mainBlock = AvatarBlockTemplate.getMainGraphBlock("Main", avspec, this,
                     swTasks, hwTasks, hwSizes, "tick",
-                    "allFinished", nbOfCores, dynamicReconfigurationTime, nbOfCLBs);
+                    "allFinished", nbOfCores, dynamicReconfigurationTime, nbOfCLBs, min);
             avspec.addBlock(mainBlock);
 
             // Relations
@@ -344,14 +358,99 @@ public class BF extends Command  {
 
 
             // Generate RG
-            /*AvatarModelChecker amc = new AvatarModelChecker(avspec);
+            AvatarModelChecker amc = new AvatarModelChecker(avspec);
             amc.setComputeRG(true);
             amc.startModelChecking();
             System.out.println("\n\nModel checking done\n");
             System.out.println("Nb of states:" + amc.getNbOfStates() + "\n");
-            System.out.println("Nb of links:" + amc.getNbOfLinks() + "\n");*/
+            System.out.println("Nb of links:" + amc.getNbOfLinks() + "\n");
+
+            System.out.println("Full graph: " + amc.toString());
 
             // Deduce best scheduling
+            String graphAUT = amc.toAUT();
+            String autfile = "RG";
+            RG rg = new RG(autfile);
+            rg.fileName = autfile;
+            rg.data = graphAUT;
+            rg.nbOfStates = amc.getNbOfStates();
+            rg.nbOfTransitions = amc.getNbOfLinks();
+
+            rg.graph = new AUTGraph();
+            rg.graph.buildGraph(graphAUT);
+            rg.graph.computeStates();
+            ArrayList<AUTState> states = rg.graph.getStates();
+
+            int []deadlockStates = rg.graph.getVectorPotentialDeadlocks();
+
+            int minValue = 999999999;
+            int minStateIndex = -1;
+
+            for(int i=0; i<deadlockStates.length; i++) {
+                AUTState state = states.get(deadlockStates[i]);
+                for(AUTTransition tr: state.inTransitions) {
+                    System.out.println("Working on transition:" + tr.transition);
+                    if (tr.transition.contains("allFinished")){
+                        int index0 = tr.transition.indexOf("(");
+                        int index1 = tr.transition.indexOf(")");
+                        if ((index0 > -1) && (index1 > -1) && (index1 > index0+1)) {
+                            String value = tr.transition.substring(index0+1, index1);
+                            System.out.println("Value: " + value);
+                            int val = Integer.decode(value);
+                            if (val < minValue) {
+                                minValue = val;
+                                minStateIndex = deadlockStates[i];
+                            }
+                        }
+                    }
+                }
+            }
+
+            System.out.println("Min:" + minValue);
+            if (minStateIndex > -1) {
+                System.out.println("Minimum value: " + minValue);
+                System.out.println("Trace:\n ");
+                DijkstraState[] dss;
+                int from = 0;
+                int to = minStateIndex;
+                dss = GraphAlgorithms.ShortestPathFrom(rg.graph, from);
+                int size = dss[to].path.length;
+
+                if (size == 0) {
+                    System.out.println("No path from " + from + " to " + to);
+                    return null;
+                }
+
+                String path = "";
+                int currentTime = 0;
+                for (int j = 0; j < dss[to].path.length; j++) {
+                    //path = path + "[" + dss[to].path[j] + "]";
+                    if (j < size - 1) {
+                       String action = rg.graph.getActionTransition(dss[to].path[j], dss[to].path[j + 1]);
+                       boolean selected = false;
+                       for(int i=0; i<KEYWORDS.length; i++) {
+                           if (action.contains(KEYWORDS[i])) {
+                               if (i ==0) {
+                                   currentTime ++;
+                                   selected = false;
+                                   break;
+                               }
+                               selected = true;
+                               break;
+                           }
+                       }
+                       if (selected) {
+                            path = path + "[" + currentTime + "]\t" + action + "\n";
+                        }
+                    }
+                }
+                System.out.println(path);
+
+            } else {
+                System.out.println("No scheduling found");
+            }
+
+
 
 
 

@@ -240,6 +240,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
         //draw separator
         this.limitName = this.y + h;
+        //TraceManager.addDev("limitName=" + limitName);
 
         if (h + textY >= this.height)
             return;
@@ -843,8 +844,10 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         }
 
         // On the name ?
-        if ((limitName == -1 && _y <= y + 2 * currentFontSize) || _y < limitName) {
-            JDialogIDAndStereotype dialog = new JDialogIDAndStereotype(frame, "Setting Block ID", BLOCK_TYPE_STR.toArray(new String[0]), getValue
+        //TraceManager.addDev("_y=" + _y + " limitName=" + limitName);
+        if ((limitName == -1) || _y < limitName) {
+            JDialogIDAndStereotype dialog = new JDialogIDAndStereotype(frame, "Setting Block ID",
+                    BLOCK_TYPE_STR.toArray(new String[0]), getValue
                     (), typeStereotype, BLOCK_TYPE_COLOR.toArray(new Color[0]), ColorManager.AVATAR_BLOCK);
             //dialog.setSize(400, 300);
             GraphicLib.centerOnParent(dialog, 400, 300);
