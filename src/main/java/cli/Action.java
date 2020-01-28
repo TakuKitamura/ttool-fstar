@@ -199,7 +199,7 @@ public class Action extends Command {
                 if (!interpreter.isTToolStarted()) {
                     return Interpreter.TTOOL_NOT_STARTED;
                 }
-                
+
 
                 String[] commands = command.split(" ");
                 if (commands.length < 2) {

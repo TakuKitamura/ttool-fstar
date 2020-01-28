@@ -611,7 +611,48 @@ public class AvatarBlockTemplate {
     }
 
 
-    // Still to be added: main blocks
+    public static AvatarBlock getDRManagerBlock(String _name, AvatarSpecification _avspec, Object _refB) {
+        AvatarBlock ab = new AvatarBlock(_name, _avspec, _refB);
+
+        AvatarSignal as;
+
+        AvatarSignal startDR = new AvatarSignal("startDR", AvatarSignal.IN, _refB);
+        AvatarSignal stopDR = new AvatarSignal("stopDR", AvatarSignal.IN, _refB);
+
+        ab.addSignal(startDR);
+        ab.addSignal(stopDR);
+
+
+        AvatarTransition at;
+        AvatarStateMachine asm = ab.getStateMachine();
+
+        // Start state
+        AvatarStartState ass = new AvatarStartState("start", _refB);
+        asm.setStartState(ass);
+        asm.addElement(ass);
+
+        // MainState state
+        AvatarState mainState = new AvatarState("mainState", _refB);
+        asm.addElement(mainState);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, ass, mainState, _refB);
+
+        // Receive startDR
+        AvatarActionOnSignal aaosRead = new AvatarActionOnSignal("startDR", startDR, _refB);
+        asm.addElement(aaosRead);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, mainState, aaosRead, _refB);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, aaosRead, mainState, _refB);
+
+        // Receive stopDR
+        aaosRead = new AvatarActionOnSignal("stopDR", stopDR, _refB);
+        asm.addElement(aaosRead);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, mainState, aaosRead, _refB);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, aaosRead, mainState, _refB);
+
+        return ab;
+    }
+
+
+    // main block
     public static AvatarBlock getMainGraphBlock(String _name, AvatarSpecification _avspec, Object _refB,
                                                  Vector<String> swTasks, Vector<String> hwTasks, Vector<String> hwSizes,
                                                  String tickS, String allFinishedS, int nbCoresV, int durationDRV,
@@ -620,6 +661,7 @@ public class AvatarBlockTemplate {
         AvatarBlock ab = new AvatarBlock(_name, _avspec, _refB);
 
         AvatarSignal as;
+
 
         AvatarSignal tick = new AvatarSignal(tickS, AvatarSignal.IN, _refB);
         AvatarAttribute attT = new AvatarAttribute("step", AvatarType.INTEGER, ab, _refB);
@@ -630,6 +672,13 @@ public class AvatarBlockTemplate {
 
         ab.addSignal(tick);
         ab.addSignal(allFinished);
+
+        // Signals for DR
+        AvatarSignal startDRSig = new AvatarSignal("startDR", AvatarSignal.OUT, _refB);
+        AvatarSignal stopDRSig = new AvatarSignal("stopDR", AvatarSignal.OUT, _refB);
+
+        ab.addSignal(startDRSig);
+        ab.addSignal(stopDRSig);
 
         // Create  signals for SW Tasks
         for(String taskName: swTasks) {
@@ -845,7 +894,7 @@ public class AvatarBlockTemplate {
             AvatarActionOnSignal selectHWWrite = new AvatarActionOnSignal("write_" + as.getSignalName(), as, _refB);
             asm.addElement(selectHWWrite);
             at = makeAvatarEmptyTransitionBetween(ab, asm, selectHW, selectHWWrite, _refB);
-            at.setGuard("remainHW > " + hwSizes.get(cpt));
+            at.setGuard("remainHW >= " + hwSizes.get(cpt));
 
             at = makeAvatarEmptyTransitionBetween(ab, asm, selectHWWrite, selectHW, _refB);
             at.addAction("runningHW = runningHW + 1");
@@ -881,16 +930,18 @@ public class AvatarBlockTemplate {
         at = makeAvatarEmptyTransitionBetween(ab, asm, selectHW, startDR, _refB);
         //at.setGuard("(runningHW == 0) && (allocHW > 0)");
         at.setGuard("(runningHW == 0) && ((allocHW > 0) && (delayDR == false))");
-
-
-        // unblockAllHWP state
-        AvatarState unblockAllHWP = new AvatarState("unblockAllHWP", _refB);
-        asm.addElement(unblockAllHWP);
-        at = makeAvatarEmptyTransitionBetween(ab, asm, startDR, unblockAllHWP, _refB);
+        AvatarActionOnSignal startDRWrite = new AvatarActionOnSignal("startDRWrite", startDRSig, _refB);
+        asm.addElement(startDRWrite);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, startDR, startDRWrite, _refB);
         at.addAction("currentDR = durationDR");
         at.addAction("allocHW = 0");
         at.addAction("remainHW = nbHW");
         at.addAction("delayDR = true");
+
+        // unblockAllHWP state
+        AvatarState unblockAllHWP = new AvatarState("unblockAllHWP", _refB);
+        asm.addElement(unblockAllHWP);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, startDRWrite, unblockAllHWP, _refB);
 
 
         for(String task: hwTasks) {
@@ -967,10 +1018,24 @@ public class AvatarBlockTemplate {
         at.setDelays("1", "1");
         at.setGuard("currentDR == 0");
 
-        at = makeAvatarEmptyTransitionBetween(ab, asm, makeSteps, waitForSteps, _refB);
+        AvatarState DRAnalysisSState = new AvatarState("DRAnalysisSState", _refB);
+        asm.addElement(DRAnalysisSState);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, makeSteps, DRAnalysisSState, _refB);
         at.setDelays("1", "1");
         at.setGuard("currentDR > 0");
         at.addAction("currentDR = currentDR - step");
+
+        at = makeAvatarEmptyTransitionBetween(ab, asm, DRAnalysisSState, waitForSteps, _refB);
+        at.setGuard("currentDR > 0");
+
+        AvatarActionOnSignal drStopWrite = new AvatarActionOnSignal("drStopWrite", stopDRSig, _refB);
+        asm.addElement(drStopWrite);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, DRAnalysisSState, drStopWrite, _refB);
+        at.setGuard("currentDR == 0");
+        at = makeAvatarEmptyTransitionBetween(ab, asm, drStopWrite, waitForSteps, _refB);
+
+
+
 
         at = makeAvatarEmptyTransitionBetween(ab, asm, waitForSteps, finishSW, _refB);
         at.setDelays("2", "2");

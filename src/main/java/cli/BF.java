@@ -224,13 +224,13 @@ public class BF extends Command  {
 
             }
 
-            TraceManager.addDev("File read");
+            //TraceManager.addDev("File read");
 
             // Print all tasks
-            TraceManager.addDev("Tasks:");
+            /*TraceManager.addDev("Tasks:");
             for (BFTask ta: tasks) {
                 TraceManager.addDev(ta.toString());
-            }
+            }*/
 
 
             // Get the min size of HW clbs
@@ -278,12 +278,24 @@ public class BF extends Command  {
                     "allFinished", nbOfCores, dynamicReconfigurationTime, nbOfCLBs, min);
             avspec.addBlock(mainBlock);
 
+            // DRManager
+            AvatarBlock  drManager = AvatarBlockTemplate.getDRManagerBlock("DRManager", avspec, this);
+            avspec.addBlock(drManager);
+
+
             // Relations
             TraceManager.addDev("Making relations 1");
             AvatarRelation ar = new AvatarRelation("rMainClock", clockBlock, mainBlock, this);
             ar.addSignals(clockBlock.getAvatarSignalWithName("tick"), mainBlock.getAvatarSignalWithName("tick"));
             ar.addSignals(clockBlock.getAvatarSignalWithName("allFinished"), mainBlock.getAvatarSignalWithName("allFinished"));
             avspec.addRelation(ar);
+
+            //Relations for DRManager
+            ar = new AvatarRelation("rMainClock", drManager, mainBlock, this);
+            ar.addSignals(drManager.getAvatarSignalWithName("startDR"), mainBlock.getAvatarSignalWithName("startDR"));
+            ar.addSignals(drManager.getAvatarSignalWithName("stopDR"), mainBlock.getAvatarSignalWithName("stopDR"));
+            avspec.addRelation(ar);
+
 
             TraceManager.addDev("Making relations 2");
 
@@ -346,7 +358,7 @@ public class BF extends Command  {
 
 
             // Printing avspec
-            TraceManager.addDev("\n\n**************** AVSPEC:\n" + avspec.toShortString() + "\n*********\n\n");
+            //TraceManager.addDev("\n\n**************** AVSPEC:\n" + avspec.toShortString() + "\n*********\n\n");
 
 
             // Draw design if TTool is started
@@ -354,18 +366,18 @@ public class BF extends Command  {
                 interpreter.mgui.drawAvatarSpecification(avspec);
             }
 
-            TraceManager.addDev("Model checking: generating RG");
+            //TraceManager.addDev("Model checking: generating RG");
 
 
             // Generate RG
             AvatarModelChecker amc = new AvatarModelChecker(avspec);
             amc.setComputeRG(true);
             amc.startModelChecking();
-            System.out.println("\n\nModel checking done\n");
-            System.out.println("Nb of states:" + amc.getNbOfStates() + "\n");
-            System.out.println("Nb of links:" + amc.getNbOfLinks() + "\n");
+            //System.out.println("\n\nModel checking done\n");
+            //System.out.println("Nb of states:" + amc.getNbOfStates() + "\n");
+            //System.out.println("Nb of links:" + amc.getNbOfLinks() + "\n");
 
-            System.out.println("Full graph: " + amc.toString());
+            //System.out.println("Full graph: " + amc.toString());
 
             // Deduce best scheduling
             String graphAUT = amc.toAUT();
@@ -389,13 +401,13 @@ public class BF extends Command  {
             for(int i=0; i<deadlockStates.length; i++) {
                 AUTState state = states.get(deadlockStates[i]);
                 for(AUTTransition tr: state.inTransitions) {
-                    System.out.println("Working on transition:" + tr.transition);
+                    //System.out.println("Working on transition:" + tr.transition);
                     if (tr.transition.contains("allFinished")){
                         int index0 = tr.transition.indexOf("(");
                         int index1 = tr.transition.indexOf(")");
                         if ((index0 > -1) && (index1 > -1) && (index1 > index0+1)) {
                             String value = tr.transition.substring(index0+1, index1);
-                            System.out.println("Value: " + value);
+                            //System.out.println("Value: " + value);
                             int val = Integer.decode(value);
                             if (val < minValue) {
                                 minValue = val;
@@ -406,10 +418,10 @@ public class BF extends Command  {
                 }
             }
 
-            System.out.println("Min:" + minValue);
+            //System.out.println("Min:" + minValue);
             if (minStateIndex > -1) {
-                System.out.println("Minimum value: " + minValue);
-                System.out.println("Trace:\n ");
+                //System.out.println("Minimum value: " + minValue);
+                //System.out.println("Trace:\n ");
                 DijkstraState[] dss;
                 int from = 0;
                 int to = minStateIndex;
@@ -417,7 +429,7 @@ public class BF extends Command  {
                 int size = dss[to].path.length;
 
                 if (size == 0) {
-                    System.out.println("No path from " + from + " to " + to);
+                    //System.out.println("No path from " + from + " to " + to);
                     return null;
                 }
 
