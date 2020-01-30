@@ -253,13 +253,6 @@ public class BF extends Command  {
                 avspec.addBlock(bft.block);
             }
 
-            // Clock
-            TraceManager.addDev("Making clock block");
-            AvatarBlock clockBlock = AvatarBlockTemplate.getClockGraphBlock("Clock", avspec, this, 1, "tick",
-                    "allFinished");
-            avspec.addBlock(clockBlock);
-
-            // Main block
             TraceManager.addDev("Making main block");
             Vector<String> swTasks = new Vector<>();
             Vector<String> hwTasks = new Vector<>();
@@ -272,6 +265,20 @@ public class BF extends Command  {
                     swTasks.add(bft.name);
                 }
             }
+
+            // Clock
+            Vector<String> allTasks = new Vector<>();
+            allTasks.addAll(swTasks);
+            allTasks.addAll(hwTasks);
+            allTasks.add("dr_");
+            TraceManager.addDev("Making clock block");
+            AvatarBlock clockBlock = AvatarBlockTemplate.getClockGraphBlock("Clock", avspec, this,
+                    9999, "tick",
+                    "allFinished", allTasks);
+            avspec.addBlock(clockBlock);
+
+            // Main block
+
 
             AvatarBlock mainBlock = AvatarBlockTemplate.getMainGraphBlock("Main", avspec, this,
                     swTasks, hwTasks, hwSizes, "tick",
@@ -287,8 +294,19 @@ public class BF extends Command  {
             TraceManager.addDev("Making relations 1");
             AvatarRelation ar = new AvatarRelation("rMainClock", clockBlock, mainBlock, this);
             ar.addSignals(clockBlock.getAvatarSignalWithName("tick"), mainBlock.getAvatarSignalWithName("tick"));
-            ar.addSignals(clockBlock.getAvatarSignalWithName("allFinished"), mainBlock.getAvatarSignalWithName("allFinished"));
+            ar.addSignals(clockBlock.getAvatarSignalWithName("allFinished"),
+                    mainBlock.getAvatarSignalWithName("allFinished"));
+            // All selectClock
+            for(String taskName: allTasks) {
+                ar.addSignals(clockBlock.getAvatarSignalWithName("selectClock_" + taskName),
+                        mainBlock.getAvatarSignalWithName("selectClock_" + taskName));
+            }
+
             avspec.addRelation(ar);
+
+
+
+
 
             //Relations for DRManager
             ar = new AvatarRelation("rMainClock", drManager, mainBlock, this);
@@ -371,6 +389,8 @@ public class BF extends Command  {
 
             // Generate RG
             AvatarModelChecker amc = new AvatarModelChecker(avspec);
+            amc.setIgnoreEmptyTransitions(true);
+            amc.setIgnoreConcurrenceBetweenInternalActions(true);
             amc.setComputeRG(true);
             amc.startModelChecking();
             //System.out.println("\n\nModel checking done\n");
@@ -443,7 +463,11 @@ public class BF extends Command  {
                        for(int i=0; i<KEYWORDS.length; i++) {
                            if (action.contains(KEYWORDS[i])) {
                                if (i ==0) {
-                                   currentTime ++;
+                                   int indexTick = action.indexOf("?tick(");
+                                   int indexPar = action.indexOf(")");
+                                   String val = action.substring(indexTick+6, indexPar);
+
+                                   currentTime += Integer.decode(val);
                                    selected = false;
                                    break;
                                }

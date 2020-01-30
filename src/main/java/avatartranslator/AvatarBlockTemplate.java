@@ -315,9 +315,11 @@ public class AvatarBlockTemplate {
         AvatarBlock ab = new AvatarBlock(_name, _avspec, _refB);
 
         // Create  signals
-        AvatarSignal selectP = new AvatarSignal("selectP", AvatarSignal.IN, _refB);
-        AvatarSignal stepP = new AvatarSignal("stepP", AvatarSignal.IN, _refB);
+        AvatarSignal selectP = new AvatarSignal("selectP", AvatarSignal.OUT, _refB);
         AvatarAttribute att1 = new AvatarAttribute("step", AvatarType.INTEGER, ab, _refB);
+        selectP.addParameter(att1);
+        AvatarSignal stepP = new AvatarSignal("stepP", AvatarSignal.IN, _refB);
+        att1 = new AvatarAttribute("step", AvatarType.INTEGER, ab, _refB);
         stepP.addParameter(att1);
         AvatarSignal preemptP = new AvatarSignal("preemptP", AvatarSignal.IN, _refB);
         AvatarSignal finishP = new AvatarSignal("finishP", AvatarSignal.OUT, _refB);
@@ -375,14 +377,15 @@ public class AvatarBlockTemplate {
         asm.addElement(mainState);
         at = makeAvatarEmptyTransitionBetween(ab, asm, previous, mainState, _refB);
 
-        AvatarActionOnSignal selectRead = new AvatarActionOnSignal("read_" + selectP.getSignalName(), selectP, _refB);
-        asm.addElement(selectRead);
-        at = makeAvatarEmptyTransitionBetween(ab, asm, mainState, selectRead, _refB);
+        AvatarActionOnSignal selectWrite = new AvatarActionOnSignal("write_" + selectP.getSignalName(), selectP, _refB);
+        asm.addElement(selectWrite);
+        selectWrite.addValue("duration");
+        at = makeAvatarEmptyTransitionBetween(ab, asm, mainState, selectWrite, _refB);
 
         // Activated
         AvatarState activatedState = new AvatarState("activatedState", _refB);
         asm.addElement(activatedState);
-        at = makeAvatarEmptyTransitionBetween(ab, asm, selectRead, activatedState, _refB);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, selectWrite, activatedState, _refB);
 
         // Making a step
         AvatarActionOnSignal stepRead = new AvatarActionOnSignal("read_" + stepP.getSignalName(), stepP, _refB);
@@ -430,9 +433,11 @@ public class AvatarBlockTemplate {
         AvatarBlock ab = new AvatarBlock(_name, _avspec, _refB);
 
         // Create  signals
-        AvatarSignal selectP = new AvatarSignal("selectP", AvatarSignal.IN, _refB);
-        AvatarSignal stepP = new AvatarSignal("stepP", AvatarSignal.IN, _refB);
+        AvatarSignal selectP = new AvatarSignal("selectP", AvatarSignal.OUT, _refB);
         AvatarAttribute att1 = new AvatarAttribute("step", AvatarType.INTEGER, ab, _refB);
+        selectP.addParameter(att1);
+        AvatarSignal stepP = new AvatarSignal("stepP", AvatarSignal.IN, _refB);
+        att1 = new AvatarAttribute("step", AvatarType.INTEGER, ab, _refB);
         stepP.addParameter(att1);
         AvatarSignal deactivatedP = new AvatarSignal("deactivatedP", AvatarSignal.IN, _refB);
         AvatarSignal reactivatedP = new AvatarSignal("reactivatedP", AvatarSignal.IN, _refB);
@@ -492,9 +497,10 @@ public class AvatarBlockTemplate {
         asm.addElement(mainState);
         at = makeAvatarEmptyTransitionBetween(ab, asm, previous, mainState, _refB);
 
-        AvatarActionOnSignal selectRead = new AvatarActionOnSignal("read_" + selectP.getSignalName(), selectP, _refB);
-        asm.addElement(selectRead);
-        at = makeAvatarEmptyTransitionBetween(ab, asm, mainState, selectRead, _refB);
+        AvatarActionOnSignal selectWrite = new AvatarActionOnSignal("write_" + selectP.getSignalName(), selectP, _refB);
+        selectWrite.addValue("duration");
+        asm.addElement(selectWrite);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, mainState, selectWrite, _refB);
 
 
         // Activation / deactivation
@@ -510,7 +516,7 @@ public class AvatarBlockTemplate {
         // Activated
         AvatarState activatedState = new AvatarState("activatedState", _refB);
         asm.addElement(activatedState);
-        at = makeAvatarEmptyTransitionBetween(ab, asm, selectRead, activatedState, _refB);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, selectWrite, activatedState, _refB);
 
         // Making a step
         AvatarActionOnSignal stepRead = new AvatarActionOnSignal("read_" + stepP.getSignalName(), stepP, _refB);
@@ -547,7 +553,8 @@ public class AvatarBlockTemplate {
 
 
     public static AvatarBlock getClockGraphBlock(String _name, AvatarSpecification _avspec, Object _refB,
-                                              int stepV, String tickS, String allFinishedS) {
+                                              int stepV, String tickS, String allFinishedS,
+                                                 Vector<String> allTasks) {
 
         AvatarBlock ab = new AvatarBlock(_name, _avspec, _refB);
 
@@ -562,6 +569,18 @@ public class AvatarBlockTemplate {
         ab.addSignal(tick);
         ab.addSignal(allFinished);
 
+        AvatarSignal as;
+
+
+
+        // Create  signals for Tasks
+        for(String taskName: allTasks) {
+            as = new AvatarSignal("selectClock_" + taskName, AvatarSignal.IN, _refB);
+            AvatarAttribute att1 = new AvatarAttribute("step", AvatarType.INTEGER, ab, _refB);
+            as.addParameter(att1);
+            ab.addSignal(as);
+
+        }
 
 
         // Create attributes
@@ -572,6 +591,17 @@ public class AvatarBlockTemplate {
         AvatarAttribute step = new AvatarAttribute("step", AvatarType.INTEGER, ab, _refB);
         step.setInitialValue("" + stepV);
         ab.addAttribute(step);
+
+
+        Vector<AvatarAttribute> allMins = new Vector<>();
+
+        // Create attributes for tasks
+        for(String taskName: allTasks) {
+            AvatarAttribute att1 = new AvatarAttribute("step_" + taskName, AvatarType.INTEGER, ab, _refB);
+            att1.setInitialValue("" + stepV);
+            ab.addAttribute(att1);
+            allMins.add(att1);
+        }
 
         // State machines
         AvatarTransition at;
@@ -588,13 +618,48 @@ public class AvatarBlockTemplate {
         at = makeAvatarEmptyTransitionBetween(ab, asm, ass, mainState, _refB);
 
 
+        // Min Computation state
+        AvatarState minState = new AvatarState("minState", _refB);
+        asm.addElement(minState);
+        for(AvatarAttribute aa0: allMins) {
+            at = makeAvatarEmptyTransitionBetween(ab, asm, minState, mainState, _refB);
+            String guard = "";
+            for(AvatarAttribute aa1: allMins) {
+                if (aa1 != aa0) {
+                    if (guard.length() == 0)
+                        guard = "(" + aa1.getName() + ">=" + aa0.getName() + ")";
+                    else
+                        guard = "((" + aa1.getName() + ">=" + aa0.getName() + ") && " + guard + ")";
+                }
+            }
+            at.setGuard(guard);
+            at.addAction("step = " + aa0.getName());
+        }
+
+
+        // SelectClock
+        for(String task: allTasks) {
+            as = ab.getAvatarSignalWithName("selectClock_" + task);
+            AvatarActionOnSignal newStepRead = new AvatarActionOnSignal("selectClock_" + as.getSignalName(), as, _refB);
+            newStepRead.addValue("step_" + task);
+            asm.addElement(newStepRead);
+            at = makeAvatarEmptyTransitionBetween(ab, asm, mainState, newStepRead, _refB);
+            at = makeAvatarEmptyTransitionBetween(ab, asm, newStepRead, minState, _refB);
+        }
+
+
+
+
         // Tick
         AvatarActionOnSignal aaosWrite = new AvatarActionOnSignal("sendTickIn_" + tick.getSignalName(), tick, _refB);
         asm.addElement(aaosWrite);
         aaosWrite.addValue("step");
         at = makeAvatarEmptyTransitionBetween(ab, asm, mainState, aaosWrite, _refB);
-        at = makeAvatarEmptyTransitionBetween(ab, asm, aaosWrite, mainState, _refB);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, aaosWrite, minState, _refB);
         at.addAction("h = h + step");
+        for(String task: allTasks) {
+            at.addAction("step_" + task + " = step_" + task + " - step");
+        }
 
         // finished
         aaosWrite = new AvatarActionOnSignal("sendAllFinished_" + allFinished.getSignalName(), allFinished, _refB);
@@ -684,12 +749,18 @@ public class AvatarBlockTemplate {
         for(String taskName: swTasks) {
             as = new AvatarSignal("finished_" + taskName, AvatarSignal.IN, _refB);
             ab.addSignal(as);
-            as = new AvatarSignal("select_" + taskName, AvatarSignal.OUT, _refB);
+            as = new AvatarSignal("select_" + taskName, AvatarSignal.IN, _refB);
+            AvatarAttribute att1 = new AvatarAttribute("step", AvatarType.INTEGER, ab, _refB);
+            as.addParameter(att1);
+            ab.addSignal(as);
+            as = new AvatarSignal("selectClock_" + taskName, AvatarSignal.OUT, _refB);
+             att1 = new AvatarAttribute("step", AvatarType.INTEGER, ab, _refB);
+            as.addParameter(att1);
             ab.addSignal(as);
             as = new AvatarSignal("preempt_" + taskName, AvatarSignal.OUT, _refB);
             ab.addSignal(as);
             as = new AvatarSignal("step_" + taskName, AvatarSignal.OUT, _refB);
-            AvatarAttribute att1 = new AvatarAttribute("step", AvatarType.INTEGER, ab, _refB);
+             att1 = new AvatarAttribute("step", AvatarType.INTEGER, ab, _refB);
             as.addParameter(att1);
             ab.addSignal(as);
         }
@@ -698,18 +769,30 @@ public class AvatarBlockTemplate {
         for(String taskName: hwTasks) {
             as = new AvatarSignal("finished_" + taskName, AvatarSignal.IN, _refB);
             ab.addSignal(as);
-            as = new AvatarSignal("select_" + taskName, AvatarSignal.OUT, _refB);
+            as = new AvatarSignal("select_" + taskName, AvatarSignal.IN, _refB);
+            AvatarAttribute att1 = new AvatarAttribute("step", AvatarType.INTEGER, ab, _refB);
+            as.addParameter(att1);
+            ab.addSignal(as);
+            as = new AvatarSignal("selectClock_" + taskName, AvatarSignal.OUT, _refB);
+            att1 = new AvatarAttribute("step", AvatarType.INTEGER, ab, _refB);
+            as.addParameter(att1);
             ab.addSignal(as);
             as = new AvatarSignal("step_" + taskName, AvatarSignal.OUT, _refB);
-            AvatarAttribute att1 = new AvatarAttribute("step", AvatarType.INTEGER, ab, _refB);
+            att1 = new AvatarAttribute("step", AvatarType.INTEGER, ab, _refB);
             as.addParameter(att1);
             ab.addSignal(as);
             as = new AvatarSignal("deactivate_" + taskName, AvatarSignal.OUT, _refB);
             ab.addSignal(as);
             as = new AvatarSignal("reactivate_" + taskName, AvatarSignal.OUT, _refB);
             ab.addSignal(as);
-
         }
+
+        AvatarSignal selectDR = new AvatarSignal("selectClock_dr_", AvatarSignal.OUT, _refB);
+        AvatarAttribute attDR = new AvatarAttribute("step", AvatarType.INTEGER, ab, _refB);
+        selectDR.addParameter(attDR);
+        ab.addSignal(selectDR);
+
+
 
 
         // Attributes
@@ -723,6 +806,10 @@ public class AvatarBlockTemplate {
 
         AvatarAttribute step = new AvatarAttribute("step", AvatarType.INTEGER, ab, _refB);
         ab.addAttribute(step);
+
+        AvatarAttribute maxStep = new AvatarAttribute("maxStep", AvatarType.INTEGER, ab, _refB);
+        maxStep.setInitialValue("9999");
+        ab.addAttribute(maxStep);
 
         AvatarAttribute nbHW = new AvatarAttribute("nbHW", AvatarType.INTEGER, ab, _refB);
         nbHW.setInitialValue("" + HWSize);
@@ -796,8 +883,13 @@ public class AvatarBlockTemplate {
             as = ab.getAvatarSignalWithName("finished_" + task);
             AvatarActionOnSignal finishedSWRead = new AvatarActionOnSignal("read_" + as.getSignalName() + "_" + task, as, _refB);
             asm.addElement(finishedSWRead);
+            as = ab.getAvatarSignalWithName("selectClock_" + task);
+            AvatarActionOnSignal selectSWWrite = new AvatarActionOnSignal("writeclock_" + as.getSignalName(), as, _refB);
+            selectSWWrite.addValue("maxStep");
+            asm.addElement(selectSWWrite);
             at = makeAvatarEmptyTransitionBetween(ab, asm, finishSW, finishedSWRead, _refB);
-            at = makeAvatarEmptyTransitionBetween(ab, asm, finishedSWRead, finishSW, _refB);
+            at = makeAvatarEmptyTransitionBetween(ab, asm, finishedSWRead, selectSWWrite, _refB);
+            at = makeAvatarEmptyTransitionBetween(ab, asm, selectSWWrite, finishSW, _refB);
             at.addAction("allocCore = allocCore-1");
         }
 
@@ -813,9 +905,14 @@ public class AvatarBlockTemplate {
             as = ab.getAvatarSignalWithName("finished_" + task);
             AvatarActionOnSignal finishedHWRead = new AvatarActionOnSignal("read_" + as.getSignalName(), as, _refB);
             asm.addElement(finishedHWRead);
+            as = ab.getAvatarSignalWithName("selectClock_" + task);
+            AvatarActionOnSignal selectHWWrite = new AvatarActionOnSignal("writeclock_" + as.getSignalName(), as, _refB);
+            selectHWWrite.addValue("maxStep");
+            asm.addElement(selectHWWrite);
             at = makeAvatarEmptyTransitionBetween(ab, asm, finishHW, finishedHWRead, _refB);
+            at = makeAvatarEmptyTransitionBetween(ab, asm, finishedHWRead, selectHWWrite, _refB);
             if (cpt < hwTasks.size() - 1) {
-                at = makeAvatarEmptyTransitionBetween(ab, asm, finishedHWRead, finishHW, _refB);
+                at = makeAvatarEmptyTransitionBetween(ab, asm, selectHWWrite, finishHW, _refB);
                 at.addAction("rescheduleSW = true");
                 at.addAction("runningHW = runningHW - 1");
                 at.addAction("nbHWTasks = nbHWTasks - 1");
@@ -826,7 +923,7 @@ public class AvatarBlockTemplate {
                 allFinishedRead.addValue("finalClockValue");
                 asm.addElement(allFinishedRead);
 
-                at = makeAvatarEmptyTransitionBetween(ab, asm, finishedHWRead, allFinishedRead, _refB);
+                at = makeAvatarEmptyTransitionBetween(ab, asm, selectHWWrite, allFinishedRead, _refB);
                 at.addAction("rescheduleSW = true");
                 at.addAction("runningHW = runningHW - 1");
                 at.addAction("nbHWTasks = nbHWTasks - 1");
@@ -873,12 +970,18 @@ public class AvatarBlockTemplate {
 
         for(String task: swTasks) {
             as = ab.getAvatarSignalWithName("select_" + task);
-            AvatarActionOnSignal selectSWWrite = new AvatarActionOnSignal("write_" + as.getSignalName(), as, _refB);
+            AvatarActionOnSignal selectSWRead = new AvatarActionOnSignal("read_" + as.getSignalName(), as, _refB);
+            selectSWRead.addValue("step");
+            asm.addElement(selectSWRead);
+            as = ab.getAvatarSignalWithName("selectClock_" + task);
+            AvatarActionOnSignal selectSWWrite = new AvatarActionOnSignal("writeclock_" + as.getSignalName(), as, _refB);
+            selectSWWrite.addValue("step");
             asm.addElement(selectSWWrite);
-            at = makeAvatarEmptyTransitionBetween(ab, asm, selectSW, selectSWWrite, _refB);
+            at = makeAvatarEmptyTransitionBetween(ab, asm, selectSW, selectSWRead, _refB);
             at.setGuard("allocCore < nbCores");
-            at = makeAvatarEmptyTransitionBetween(ab, asm, selectSWWrite, selectSW, _refB);
+            at = makeAvatarEmptyTransitionBetween(ab, asm, selectSWRead, selectSWWrite, _refB);
             at.addAction("allocCore = allocCore + 1");
+            at = makeAvatarEmptyTransitionBetween(ab, asm, selectSWWrite, selectSW, _refB);
         }
 
         // selectHW state
@@ -891,10 +994,18 @@ public class AvatarBlockTemplate {
         cpt = 0;
         for(String task: hwTasks) {
             as = ab.getAvatarSignalWithName("select_" + task);
-            AvatarActionOnSignal selectHWWrite = new AvatarActionOnSignal("write_" + as.getSignalName(), as, _refB);
+            AvatarActionOnSignal selectHWRead = new AvatarActionOnSignal("read_" + as.getSignalName(), as, _refB);
+            selectHWRead.addValue("step");
+            asm.addElement(selectHWRead);
+            as = ab.getAvatarSignalWithName("selectClock_" + task);
+            AvatarActionOnSignal selectHWWrite = new AvatarActionOnSignal("writeClock_" + as.getSignalName(), as, _refB);
+            selectHWWrite.addValue("step");
             asm.addElement(selectHWWrite);
-            at = makeAvatarEmptyTransitionBetween(ab, asm, selectHW, selectHWWrite, _refB);
+
+            at = makeAvatarEmptyTransitionBetween(ab, asm, selectHW, selectHWRead, _refB);
             at.setGuard("remainHW >= " + hwSizes.get(cpt));
+
+            at = makeAvatarEmptyTransitionBetween(ab, asm, selectHWRead, selectHWWrite, _refB);
 
             at = makeAvatarEmptyTransitionBetween(ab, asm, selectHWWrite, selectHW, _refB);
             at.addAction("runningHW = runningHW + 1");
@@ -932,7 +1043,11 @@ public class AvatarBlockTemplate {
         at.setGuard("(runningHW == 0) && ((allocHW > 0) && (delayDR == false))");
         AvatarActionOnSignal startDRWrite = new AvatarActionOnSignal("startDRWrite", startDRSig, _refB);
         asm.addElement(startDRWrite);
+        AvatarActionOnSignal startDRWriteClock = new AvatarActionOnSignal("startDRWrite", selectDR, _refB);
+        startDRWriteClock.addValue("durationDR");
+        asm.addElement(startDRWriteClock);
         at = makeAvatarEmptyTransitionBetween(ab, asm, startDR, startDRWrite, _refB);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, startDRWrite, startDRWriteClock, _refB);
         at.addAction("currentDR = durationDR");
         at.addAction("allocHW = 0");
         at.addAction("remainHW = nbHW");
@@ -941,7 +1056,7 @@ public class AvatarBlockTemplate {
         // unblockAllHWP state
         AvatarState unblockAllHWP = new AvatarState("unblockAllHWP", _refB);
         asm.addElement(unblockAllHWP);
-        at = makeAvatarEmptyTransitionBetween(ab, asm, startDRWrite, unblockAllHWP, _refB);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, startDRWriteClock, unblockAllHWP, _refB);
 
 
         for(String task: hwTasks) {
@@ -1030,9 +1145,13 @@ public class AvatarBlockTemplate {
 
         AvatarActionOnSignal drStopWrite = new AvatarActionOnSignal("drStopWrite", stopDRSig, _refB);
         asm.addElement(drStopWrite);
+        AvatarActionOnSignal stopDRWriteClock = new AvatarActionOnSignal("stopDRWriteClock", selectDR, _refB);
+        stopDRWriteClock.addValue("maxStep");
+        asm.addElement(stopDRWriteClock);
         at = makeAvatarEmptyTransitionBetween(ab, asm, DRAnalysisSState, drStopWrite, _refB);
         at.setGuard("currentDR == 0");
-        at = makeAvatarEmptyTransitionBetween(ab, asm, drStopWrite, waitForSteps, _refB);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, drStopWrite, stopDRWriteClock, _refB);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, stopDRWriteClock, waitForSteps, _refB);
 
 
 
