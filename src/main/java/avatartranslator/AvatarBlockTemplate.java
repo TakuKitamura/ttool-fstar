@@ -354,6 +354,12 @@ public class AvatarBlockTemplate {
         AvatarAttribute stepAtt = new AvatarAttribute("step", AvatarType.INTEGER, ab, _refB);
         ab.addAttribute(stepAtt);
 
+        if (unblokedBySigs.size() > 1) {
+            AvatarAttribute nbOfUnblocks = new AvatarAttribute("nbOfUnblocks", AvatarType.INTEGER, ab, _refB);
+            nbOfUnblocks.setInitialValue("0");
+            ab.addAttribute(nbOfUnblocks);
+        }
+
         // State machines
         AvatarTransition at;
         AvatarStateMachine asm = ab.getStateMachine();
@@ -363,19 +369,37 @@ public class AvatarBlockTemplate {
         asm.setStartState(ass);
         asm.addElement(ass);
 
-        // Wait for being unblocked
-        AvatarStateMachineElement previous = ass;
-        for(AvatarSignal as: unblokedBySigs) {
-            AvatarActionOnSignal aaosRead = new AvatarActionOnSignal("read__" + as.getSignalName(), as, _refB);
-            asm.addElement(aaosRead);
-            at = makeAvatarEmptyTransitionBetween(ab, asm, previous, aaosRead, _refB);
-            previous = aaosRead;
-        }
-
-        // Main step: waiting to be activated
+        // Main state
         AvatarState mainState = new AvatarState("Main", _refB);
         asm.addElement(mainState);
-        at = makeAvatarEmptyTransitionBetween(ab, asm, previous, mainState, _refB);
+
+        if (unblokedBySigs.size() > 1) {
+
+            AvatarState waitForUnblock = new AvatarState("start", _refB);
+            asm.addElement(waitForUnblock);
+            at = makeAvatarEmptyTransitionBetween(ab, asm, ass, waitForUnblock, _refB);
+
+            // Wait for being unblocked
+            for (AvatarSignal as : unblokedBySigs) {
+                AvatarActionOnSignal aaosRead = new AvatarActionOnSignal("read__" + as.getSignalName(), as, _refB);
+                asm.addElement(aaosRead);
+                at = makeAvatarEmptyTransitionBetween(ab, asm, waitForUnblock, aaosRead, _refB);
+                at = makeAvatarEmptyTransitionBetween(ab, asm, aaosRead, waitForUnblock, _refB);
+                at.addAction("nbOfUnblocks = nbOfUnblocks + 1");
+            }
+
+            // Main step: waiting to be activated
+            at = makeAvatarEmptyTransitionBetween(ab, asm, waitForUnblock, mainState, _refB);
+            at.setGuard("nbOfUnblocks == " + unblokedBySigs.size());
+        } else if (unblokedBySigs.size() == 1){
+            AvatarSignal as = unblokedBySigs.get(0);
+            AvatarActionOnSignal aaosRead = new AvatarActionOnSignal("read__" + as.getSignalName(), as, _refB);
+            asm.addElement(aaosRead);
+            at = makeAvatarEmptyTransitionBetween(ab, asm, ass, aaosRead, _refB);
+            at = makeAvatarEmptyTransitionBetween(ab, asm, aaosRead, mainState, _refB);
+        } else {
+            at = makeAvatarEmptyTransitionBetween(ab, asm, ass, mainState, _refB);
+        }
 
         AvatarActionOnSignal selectWrite = new AvatarActionOnSignal("write_" + selectP.getSignalName(), selectP, _refB);
         asm.addElement(selectWrite);
@@ -405,24 +429,31 @@ public class AvatarBlockTemplate {
         at = makeAvatarEmptyTransitionBetween(ab, asm, preemptRead, mainState, _refB);
 
         // Finished!
-        AvatarActionOnSignal finishRead = new AvatarActionOnSignal("write_" + finishP.getSignalName(), finishP, _refB);
-        asm.addElement(finishRead);
-        at = makeAvatarEmptyTransitionBetween(ab, asm, activatedState, finishRead, _refB);
-        at.setGuard("duration==0");
 
         // Unblocking next
         AvatarState unblockingState = new AvatarState("unblockingState", _refB);
         asm.addElement(unblockingState);
-        at = makeAvatarEmptyTransitionBetween(ab, asm, finishRead, unblockingState, _refB);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, mainState, unblockingState, _refB);
+        at.setGuard("duration==0");
 
+        AvatarStateMachineElement previous = unblockingState;
         // Adding all unblocking signals
         for(AvatarSignal as: unblokingBySigs) {
             AvatarActionOnSignal aaosWrite = new AvatarActionOnSignal("write__" + as.getSignalName(), as, _refB);
             asm.addElement(aaosWrite);
-            at = makeAvatarEmptyTransitionBetween(ab, asm, unblockingState, aaosWrite, _refB);
-            at = makeAvatarEmptyTransitionBetween(ab, asm, aaosWrite, unblockingState, _refB);
+            at = makeAvatarEmptyTransitionBetween(ab, asm, previous, aaosWrite, _refB);
+            previous = aaosWrite;
         }
 
+
+        AvatarActionOnSignal finishRead = new AvatarActionOnSignal("write_" + finishP.getSignalName(), finishP, _refB);
+        asm.addElement(finishRead);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, previous, finishRead, _refB);
+
+        AvatarStopState stopState = new AvatarStopState("stopState", _refB);
+        asm.addElement(stopState);
+
+        at = makeAvatarEmptyTransitionBetween(ab, asm, finishRead, stopState, _refB);
 
         return ab;
     }
@@ -474,6 +505,13 @@ public class AvatarBlockTemplate {
         AvatarAttribute stepAtt = new AvatarAttribute("step", AvatarType.INTEGER, ab, _refB);
         ab.addAttribute(stepAtt);
 
+
+        if (unblokedBySigs.size() > 1) {
+            AvatarAttribute nbOfUnblocks = new AvatarAttribute("nbOfUnblocks", AvatarType.INTEGER, ab, _refB);
+            nbOfUnblocks.setInitialValue("0");
+            ab.addAttribute(nbOfUnblocks);
+        }
+
         // State machines
         AvatarTransition at;
         AvatarStateMachine asm = ab.getStateMachine();
@@ -483,8 +521,41 @@ public class AvatarBlockTemplate {
         asm.setStartState(ass);
         asm.addElement(ass);
 
+        // Main state
+        AvatarState mainState = new AvatarState("Main", _refB);
+        asm.addElement(mainState);
+
+        if (unblokedBySigs.size() > 1) {
+
+            AvatarState waitForUnblock = new AvatarState("start", _refB);
+            asm.addElement(waitForUnblock);
+            at = makeAvatarEmptyTransitionBetween(ab, asm, ass, waitForUnblock, _refB);
+
+            // Wait for being unblocked
+            for (AvatarSignal as : unblokedBySigs) {
+                AvatarActionOnSignal aaosRead = new AvatarActionOnSignal("read__" + as.getSignalName(), as, _refB);
+                asm.addElement(aaosRead);
+                at = makeAvatarEmptyTransitionBetween(ab, asm, waitForUnblock, aaosRead, _refB);
+                at = makeAvatarEmptyTransitionBetween(ab, asm, aaosRead, waitForUnblock, _refB);
+                at.addAction("nbOfUnblocks = nbOfUnblocks + 1");
+            }
+
+            // Main step: waiting to be activated
+            at = makeAvatarEmptyTransitionBetween(ab, asm, waitForUnblock, mainState, _refB);
+            at.setGuard("nbOfUnblocks == " + unblokedBySigs.size());
+        } else if (unblokedBySigs.size() == 1){
+            AvatarSignal as = unblokedBySigs.get(0);
+            AvatarActionOnSignal aaosRead = new AvatarActionOnSignal("read__" + as.getSignalName(), as, _refB);
+            asm.addElement(aaosRead);
+            at = makeAvatarEmptyTransitionBetween(ab, asm, ass, aaosRead, _refB);
+            at = makeAvatarEmptyTransitionBetween(ab, asm, aaosRead, mainState, _refB);
+        } else {
+            at = makeAvatarEmptyTransitionBetween(ab, asm, ass, mainState, _refB);
+        }
+
+
         // Wait for being unblocked
-        AvatarStateMachineElement previous = ass;
+        /*AvatarStateMachineElement previous = ass;
         for(AvatarSignal as: unblokedBySigs) {
             AvatarActionOnSignal aaosRead = new AvatarActionOnSignal("read__" + as.getSignalName(), as, _refB);
             asm.addElement(aaosRead);
@@ -495,7 +566,7 @@ public class AvatarBlockTemplate {
         // Main step: waiting to be activated
         AvatarState mainState = new AvatarState("Main", _refB);
         asm.addElement(mainState);
-        at = makeAvatarEmptyTransitionBetween(ab, asm, previous, mainState, _refB);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, previous, mainState, _refB);*/
 
         AvatarActionOnSignal selectWrite = new AvatarActionOnSignal("write_" + selectP.getSignalName(), selectP, _refB);
         selectWrite.addValue("duration");
@@ -529,23 +600,32 @@ public class AvatarBlockTemplate {
         at.addAction("duration=duration-step");
 
         // Finished!
-        AvatarActionOnSignal finishRead = new AvatarActionOnSignal("write_" + finishP.getSignalName(), finishP, _refB);
-        asm.addElement(finishRead);
-        at = makeAvatarEmptyTransitionBetween(ab, asm, activatedState, finishRead, _refB);
-        at.setGuard("duration==0");
+
 
         // Unblocking next
         AvatarState unblockingState = new AvatarState("unblockingState", _refB);
         asm.addElement(unblockingState);
-        at = makeAvatarEmptyTransitionBetween(ab, asm, finishRead, unblockingState, _refB);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, activatedState, unblockingState, _refB);
+        at.setGuard("duration==0");
 
+        AvatarStateMachineElement previous = unblockingState;
         // Adding all unblocking signals
         for(AvatarSignal as: unblokingBySigs) {
             AvatarActionOnSignal aaosWrite = new AvatarActionOnSignal("write__" + as.getSignalName(), as, _refB);
             asm.addElement(aaosWrite);
-            at = makeAvatarEmptyTransitionBetween(ab, asm, unblockingState, aaosWrite, _refB);
-            at = makeAvatarEmptyTransitionBetween(ab, asm, aaosWrite, unblockingState, _refB);
+            at = makeAvatarEmptyTransitionBetween(ab, asm, previous, aaosWrite, _refB);
+            previous = aaosWrite;
         }
+
+
+        AvatarActionOnSignal finishRead = new AvatarActionOnSignal("write_" + finishP.getSignalName(), finishP, _refB);
+        asm.addElement(finishRead);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, previous, finishRead, _refB);
+
+        AvatarStopState stopState = new AvatarStopState("stopState", _refB);
+        asm.addElement(stopState);
+
+        at = makeAvatarEmptyTransitionBetween(ab, asm, finishRead, stopState, _refB);
 
         return ab;
     }
@@ -579,7 +659,10 @@ public class AvatarBlockTemplate {
             AvatarAttribute att1 = new AvatarAttribute("step", AvatarType.INTEGER, ab, _refB);
             as.addParameter(att1);
             ab.addSignal(as);
-
+            as = new AvatarSignal("setClock_" + taskName, AvatarSignal.IN, _refB);
+            att1 = new AvatarAttribute("step", AvatarType.INTEGER, ab, _refB);
+            as.addParameter(att1);
+            ab.addSignal(as);
         }
 
 
@@ -647,6 +730,17 @@ public class AvatarBlockTemplate {
             at = makeAvatarEmptyTransitionBetween(ab, asm, newStepRead, minState, _refB);
         }
 
+        // SetClock
+        //TraceManager.addDev("Set clock actions");
+        for(String task: allTasks) {
+            as = ab.getAvatarSignalWithName("setClock_" + task);
+            AvatarActionOnSignal newStepRead = new AvatarActionOnSignal("setClock_" + as.getSignalName(), as, _refB);
+            newStepRead.addValue("step_" + task);
+            asm.addElement(newStepRead);
+            at = makeAvatarEmptyTransitionBetween(ab, asm, mainState, newStepRead, _refB);
+            at = makeAvatarEmptyTransitionBetween(ab, asm, newStepRead, mainState, _refB);
+        }
+        TraceManager.addDev("Done");
 
 
 
@@ -757,6 +851,10 @@ public class AvatarBlockTemplate {
              att1 = new AvatarAttribute("step", AvatarType.INTEGER, ab, _refB);
             as.addParameter(att1);
             ab.addSignal(as);
+            as = new AvatarSignal("setClock_" + taskName, AvatarSignal.OUT, _refB);
+            att1 = new AvatarAttribute("step", AvatarType.INTEGER, ab, _refB);
+            as.addParameter(att1);
+            ab.addSignal(as);
             as = new AvatarSignal("preempt_" + taskName, AvatarSignal.OUT, _refB);
             ab.addSignal(as);
             as = new AvatarSignal("step_" + taskName, AvatarSignal.OUT, _refB);
@@ -777,6 +875,10 @@ public class AvatarBlockTemplate {
             att1 = new AvatarAttribute("step", AvatarType.INTEGER, ab, _refB);
             as.addParameter(att1);
             ab.addSignal(as);
+            as = new AvatarSignal("setClock_" + taskName, AvatarSignal.OUT, _refB);
+            att1 = new AvatarAttribute("step", AvatarType.INTEGER, ab, _refB);
+            as.addParameter(att1);
+            ab.addSignal(as);
             as = new AvatarSignal("step_" + taskName, AvatarSignal.OUT, _refB);
             att1 = new AvatarAttribute("step", AvatarType.INTEGER, ab, _refB);
             as.addParameter(att1);
@@ -792,8 +894,12 @@ public class AvatarBlockTemplate {
         selectDR.addParameter(attDR);
         ab.addSignal(selectDR);
 
+        AvatarSignal setDR = new AvatarSignal("setClock_dr_", AvatarSignal.OUT, _refB);
+         attDR = new AvatarAttribute("step", AvatarType.INTEGER, ab, _refB);
+        setDR.addParameter(attDR);
+        ab.addSignal(setDR);
 
-
+        TraceManager.addDev("Main block: 1" );
 
         // Attributes
         AvatarAttribute nbHWTasks = new AvatarAttribute("nbHWTasks", AvatarType.INTEGER, ab, _refB);
@@ -864,7 +970,7 @@ public class AvatarBlockTemplate {
         AvatarAttribute finalClockValue = new AvatarAttribute("finalClockValue", AvatarType.INTEGER, ab, _refB);
         ab.addAttribute(finalClockValue);
 
-
+        //TraceManager.addDev("Main block: 1" );
         // State machines
         AvatarTransition at;
         AvatarStateMachine asm = ab.getStateMachine();
@@ -889,7 +995,9 @@ public class AvatarBlockTemplate {
             asm.addElement(selectSWWrite);
             at = makeAvatarEmptyTransitionBetween(ab, asm, finishSW, finishedSWRead, _refB);
             at = makeAvatarEmptyTransitionBetween(ab, asm, finishedSWRead, selectSWWrite, _refB);
+            at.setDelays("1", "1");
             at = makeAvatarEmptyTransitionBetween(ab, asm, selectSWWrite, finishSW, _refB);
+            at.setDelays("1", "1");
             at.addAction("allocCore = allocCore-1");
         }
 
@@ -911,11 +1019,14 @@ public class AvatarBlockTemplate {
             asm.addElement(selectHWWrite);
             at = makeAvatarEmptyTransitionBetween(ab, asm, finishHW, finishedHWRead, _refB);
             at = makeAvatarEmptyTransitionBetween(ab, asm, finishedHWRead, selectHWWrite, _refB);
+            at.setDelays("1", "1");
+
             if (cpt < hwTasks.size() - 1) {
                 at = makeAvatarEmptyTransitionBetween(ab, asm, selectHWWrite, finishHW, _refB);
                 at.addAction("rescheduleSW = true");
                 at.addAction("runningHW = runningHW - 1");
                 at.addAction("nbHWTasks = nbHWTasks - 1");
+                at.setDelays("1", "1");
 
             } else {
                 as = allFinished;
@@ -982,8 +1093,11 @@ public class AvatarBlockTemplate {
             at = makeAvatarEmptyTransitionBetween(ab, asm, selectSWRead, selectSWWrite, _refB);
             at.addAction("allocCore = allocCore + 1");
             at = makeAvatarEmptyTransitionBetween(ab, asm, selectSWWrite, selectSW, _refB);
+            at.setDelays("1", "1");
         }
 
+
+        //TraceManager.addDev("Main block: 1" );
         // selectHW state
         AvatarState selectHW = new AvatarState("selectHW", _refB);
         asm.addElement(selectHW);
@@ -991,6 +1105,7 @@ public class AvatarBlockTemplate {
         at.setDelays("2", "2");
         at.setGuard("currentDR == 0");
 
+        //TraceManager.addDev("Main block: 1.1" );
         cpt = 0;
         for(String task: hwTasks) {
             as = ab.getAvatarSignalWithName("select_" + task);
@@ -1001,17 +1116,21 @@ public class AvatarBlockTemplate {
             AvatarActionOnSignal selectHWWrite = new AvatarActionOnSignal("writeClock_" + as.getSignalName(), as, _refB);
             selectHWWrite.addValue("step");
             asm.addElement(selectHWWrite);
+            //TraceManager.addDev("Main block: 1.2" );
 
             at = makeAvatarEmptyTransitionBetween(ab, asm, selectHW, selectHWRead, _refB);
             at.setGuard("remainHW >= " + hwSizes.get(cpt));
 
             at = makeAvatarEmptyTransitionBetween(ab, asm, selectHWRead, selectHWWrite, _refB);
+            at.setDelays("1", "1");
 
             at = makeAvatarEmptyTransitionBetween(ab, asm, selectHWWrite, selectHW, _refB);
             at.addAction("runningHW = runningHW + 1");
             at.addAction("allocHW = allocHW + " + hwSizes.get(cpt));
             at.addAction("remainHW = remainHW - " + hwSizes.get(cpt));
             at.addAction("delayDR = false");
+            at.setDelays("1", "1");
+            TraceManager.addDev("Main block: 1.3" );
             cpt ++;
         }
 
@@ -1034,6 +1153,7 @@ public class AvatarBlockTemplate {
             at = makeAvatarEmptyTransitionBetween(ab, asm, blockNonSelected, deactivateHWWrite, _refB);
             at = makeAvatarEmptyTransitionBetween(ab, asm, deactivateHWWrite, blockNonSelected, _refB);
         }
+        TraceManager.addDev("Main block: 1.5" );
 
         // startDR state
         AvatarState startDR = new AvatarState("startDR", _refB);
@@ -1067,6 +1187,7 @@ public class AvatarBlockTemplate {
             at = makeAvatarEmptyTransitionBetween(ab, asm, reactivateHWWrite, unblockAllHWP, _refB);
         }
 
+        //TraceManager.addDev("Main block: 2" );
         // makeStep state
         AvatarState makeStep = new AvatarState("makeStep", _refB);
         asm.addElement(makeStep);
@@ -1090,15 +1211,26 @@ public class AvatarBlockTemplate {
         at.setDelays("1", "1");
 
 
-
+        //TraceManager.addDev("Main block: 3" );
         // makeSteps state
         AvatarState makeSteps = new AvatarState("makeSteps", _refB);
         asm.addElement(makeSteps);
+        AvatarState verifyStep = new AvatarState("verifyStep", _refB);
+        asm.addElement(verifyStep);
         AvatarActionOnSignal tickRead = new AvatarActionOnSignal(tick.getSignalName(), tick, _refB);
         tickRead.addValue("step");
         asm.addElement(tickRead);
         at = makeAvatarEmptyTransitionBetween(ab, asm, makeStep, tickRead, _refB);
-        at = makeAvatarEmptyTransitionBetween(ab, asm, tickRead, makeSteps, _refB);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, tickRead, verifyStep, _refB);
+        at.setDelays("1", "1");
+
+        at = makeAvatarEmptyTransitionBetween(ab, asm, verifyStep, makeSteps, _refB);
+        at.setGuard("else");
+
+        AvatarStopState stopState = new AvatarStopState("stopState", _refB);
+        asm.addElement(stopState);
+        at = makeAvatarEmptyTransitionBetween(ab, asm, verifyStep, stopState, _refB);
+        at.setGuard("(step == 0) || (step>5000)");
 
         for(String task: swTasks) {
             as = ab.getAvatarSignalWithName("step_" + task);
@@ -1117,7 +1249,7 @@ public class AvatarBlockTemplate {
             at = makeAvatarEmptyTransitionBetween(ab, asm, makeSteps, stepHWWrite, _refB);
             at = makeAvatarEmptyTransitionBetween(ab, asm, stepHWWrite, makeSteps, _refB);
         }
-
+        //TraceManager.addDev("Main block: 3" );
 
         // nothing is running? Stop now!
         AvatarStopState assDeadlock = new AvatarStopState("deadlockstate", _refB);
@@ -1143,15 +1275,17 @@ public class AvatarBlockTemplate {
         at = makeAvatarEmptyTransitionBetween(ab, asm, DRAnalysisSState, waitForSteps, _refB);
         at.setGuard("currentDR > 0");
 
+
         AvatarActionOnSignal drStopWrite = new AvatarActionOnSignal("drStopWrite", stopDRSig, _refB);
         asm.addElement(drStopWrite);
-        AvatarActionOnSignal stopDRWriteClock = new AvatarActionOnSignal("stopDRWriteClock", selectDR, _refB);
+        AvatarActionOnSignal stopDRWriteClock = new AvatarActionOnSignal("stopDRWriteClock", setDR, _refB);
         stopDRWriteClock.addValue("maxStep");
         asm.addElement(stopDRWriteClock);
         at = makeAvatarEmptyTransitionBetween(ab, asm, DRAnalysisSState, drStopWrite, _refB);
         at.setGuard("currentDR == 0");
         at = makeAvatarEmptyTransitionBetween(ab, asm, drStopWrite, stopDRWriteClock, _refB);
         at = makeAvatarEmptyTransitionBetween(ab, asm, stopDRWriteClock, waitForSteps, _refB);
+        at.setDelays("1", "1");
 
 
 

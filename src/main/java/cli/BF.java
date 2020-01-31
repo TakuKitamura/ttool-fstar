@@ -279,13 +279,15 @@ public class BF extends Command  {
 
             // Main block
 
-
+            TraceManager.addDev("Making main block");
             AvatarBlock mainBlock = AvatarBlockTemplate.getMainGraphBlock("Main", avspec, this,
                     swTasks, hwTasks, hwSizes, "tick",
                     "allFinished", nbOfCores, dynamicReconfigurationTime, nbOfCLBs, min);
             avspec.addBlock(mainBlock);
 
+
             // DRManager
+            TraceManager.addDev("Making DRManager block");
             AvatarBlock  drManager = AvatarBlockTemplate.getDRManagerBlock("DRManager", avspec, this);
             avspec.addBlock(drManager);
 
@@ -296,10 +298,15 @@ public class BF extends Command  {
             ar.addSignals(clockBlock.getAvatarSignalWithName("tick"), mainBlock.getAvatarSignalWithName("tick"));
             ar.addSignals(clockBlock.getAvatarSignalWithName("allFinished"),
                     mainBlock.getAvatarSignalWithName("allFinished"));
-            // All selectClock
+            // All selectClock and setClock
             for(String taskName: allTasks) {
                 ar.addSignals(clockBlock.getAvatarSignalWithName("selectClock_" + taskName),
                         mainBlock.getAvatarSignalWithName("selectClock_" + taskName));
+            }
+            TraceManager.addDev("Making relations between setClocks");
+            for(String taskName: allTasks) {
+                ar.addSignals(clockBlock.getAvatarSignalWithName("setClock_" + taskName),
+                        mainBlock.getAvatarSignalWithName("setClock_" + taskName));
             }
 
             avspec.addRelation(ar);
