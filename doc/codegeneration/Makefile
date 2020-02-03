@@ -3,7 +3,7 @@ SHELL=/bin/bash
 # Top LaTeX document (without .tex extension)
 TOP		= codegeneration_documentation.tex
 # Bibliography (if any)
-BIBLIO		= code_generation_documentation.bib
+BIBLIO		= 
 
 # Figures directory
 FIGDIR		= figures
