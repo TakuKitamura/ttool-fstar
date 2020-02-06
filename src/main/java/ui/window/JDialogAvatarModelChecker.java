@@ -90,6 +90,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     protected static boolean graphSelectedDot = false;
     protected static boolean ignoreEmptyTransitionsSelected = true;
     protected static boolean ignoreConcurrenceBetweenInternalActionsSelected = true;
+    protected static boolean ignoreInternalStatesSelected = true;
     protected static boolean generateDesignSelected = false;
     protected static int reachabilitySelected = REACHABILITY_NONE;
     protected static int livenessSelected = LIVENESS_NONE;
@@ -135,7 +136,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     protected ButtonGroup liveness;
     protected boolean showLiveness;
 
-    protected JCheckBox saveGraphAUT, saveGraphDot, ignoreEmptyTransitions, ignoreConcurrenceBetweenInternalActions, generateDesign;
+    protected JCheckBox saveGraphAUT, saveGraphDot, ignoreEmptyTransitions, ignoreInternalStates,
+            ignoreConcurrenceBetweenInternalActions, generateDesign;
     protected JTextField graphPath, graphPathDot;
     protected JTabbedPane jp1;
     protected JScrollPane jsp;
@@ -222,6 +224,10 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         ignoreConcurrenceBetweenInternalActions = new JCheckBox("Ignore concurrency between internal actions", ignoreConcurrenceBetweenInternalActionsSelected);
         ignoreConcurrenceBetweenInternalActions.addActionListener(this);
         jp01.add(ignoreConcurrenceBetweenInternalActions, c01);
+        ignoreInternalStates = new JCheckBox("Ignore states between internal actions",
+                ignoreInternalStatesSelected);
+        ignoreInternalStates.addActionListener(this);
+        jp01.add(ignoreInternalStates, c01);
 
 
         // Reachability
@@ -430,6 +436,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             setButtons();
         } else if (evt.getSource() == ignoreConcurrenceBetweenInternalActions) {
             setButtons();
+        } else if (evt.getSource() == ignoreInternalStates) {
+            setButtons();
         } else {
             setButtons();
         }
@@ -532,6 +540,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             // Setting options
             amc.setIgnoreEmptyTransitions(ignoreEmptyTransitionsSelected);
             amc.setIgnoreConcurrenceBetweenInternalActions(ignoreConcurrenceBetweenInternalActionsSelected);
+            amc.setIgnoreInternalStates(ignoreInternalStatesSelected);
 
             // Reachability
             int res;
@@ -703,6 +712,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         }
         ignoreEmptyTransitionsSelected = ignoreEmptyTransitions.isSelected();
         ignoreConcurrenceBetweenInternalActionsSelected = ignoreConcurrenceBetweenInternalActions.isSelected();
+        ignoreInternalStatesSelected = ignoreInternalStates.isSelected();
 
         if (noReachability.isSelected()) {
             reachabilitySelected = REACHABILITY_NONE;
@@ -810,7 +820,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                 //if (diff == 0) {
 
 
-                nbOfStatesPerSecond.setText("" + 1000 * diff / duration);
+                nbOfStatesPerSecond.setText("" + (int)(1000.0 * diff / duration));
 
                 updateInfo();
                 //}

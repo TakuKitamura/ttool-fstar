@@ -80,6 +80,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     // Options
     private boolean ignoreEmptyTransitions;
     private boolean ignoreConcurrenceBetweenInternalActions;
+    private boolean ignoreInternalStates;
 
     // RG
     private boolean computeRG;
@@ -110,6 +111,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         }
         ignoreEmptyTransitions = true;
         ignoreConcurrenceBetweenInternalActions = true;
+        ignoreInternalStates = true;
         studyReachability = false;
         computeRG = false;
         freeIntermediateStateCoding = true;
@@ -167,6 +169,11 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
     public void setIgnoreConcurrenceBetweenInternalActions(boolean _b) {
         ignoreConcurrenceBetweenInternalActions = _b;
+    }
+
+    public void setIgnoreInternalStates(boolean _b) {
+        TraceManager.addDev("ignore niternal state?" + ignoreInternalStates);
+        ignoreInternalStates = _b;
     }
 
     public void setLivenessofState(AvatarStateElement _ase, AvatarBlock _ab) {
@@ -282,8 +289,11 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         prepareStates();
         prepareTransitions();
 
-        TraceManager.addDev("Starting the model checking");
-        startModelChecking(DEFAULT_NB_OF_THREADS);
+
+        nbOfThreads = Runtime.getRuntime().availableProcessors();
+        TraceManager.addDev("Starting the model checking with " + nbOfThreads + " threads");
+        TraceManager.addDev("ignore internl state:" + ignoreInternalStates);
+        startModelChecking(nbOfThreads);
         TraceManager.addDev("Model checking done");
     }
 
@@ -539,7 +549,11 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                     // Must look for possible transitions from the same state
                     if (!(tr.fromStateWithMoreThanOneTransition)) {
                         st = tr;
-                        break;
+                        if (ignoreInternalStates) { // New behavior
+                            computeAllInternalStatesFrom(_ss, st);
+                            return;
+                        }
+                        break; //old behaviour
                     }
 
                     // Must look for similar transitions in the the same block
@@ -658,6 +672,124 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             nbOfLinks++;
             _ss.addNext(link);
         }
+
+        if (freeIntermediateStateCoding) {
+            _ss.freeUselessAllocations();
+        } else {
+            _ss.finished();
+        }
+
+        mustStop();
+    }
+
+
+    private void computeAllInternalStatesFrom(SpecificationState _ss, SpecificationTransition st) {
+        SpecificationState newState = _ss.advancedClone();
+        SpecificationState previousState = _ss;
+
+        int cpt = 0;
+
+        while (st != null) {
+            //TraceManager.addDev("cpt=" + cpt + " Working on transition:" + st);
+            cpt ++;
+            newState.increaseClockOfBlocksExcept(st);
+            executeTransition(previousState, newState, st);
+            if (ignoreEmptyTransitions) {
+                handleNonEmptyUniqueTransition(newState);
+            }
+
+
+            newState.computeHash(blockValues);
+
+            SpecificationState similar = findSimilarState(newState);
+            if (similar != null) {
+                SpecificationLink link = new SpecificationLink();
+                link.originState = _ss;
+                String action = st.infoForGraph;
+                action += " [" + st.clockMin + "..." + st.clockMax + "]";
+                link.action = action;
+                link.destinationState = similar;
+                nbOfLinks++;
+                _ss.addNext(link);
+                break;
+            }
+
+
+            // Compute next transition
+            //prepareTransitionsOfState(previousState);
+            prepareTransitionsOfState(newState);
+            ArrayList<SpecificationTransition> transitions = newState.transitions;
+            if (transitions == null) {
+                TraceManager.addDev("null transitions");
+                nbOfDeadlocks++;
+                mustStop();
+                return;
+            }
+            ArrayList<SpecificationTransition> newTransitions = new ArrayList<SpecificationTransition>();
+            for (SpecificationTransition tr : transitions) {
+                if (tr.getType() == AvatarTransition.TYPE_SEND_SYNC) {
+                    for (SpecificationTransition tro : transitions) {
+                        if (tro.getType() == AvatarTransition.TYPE_RECV_SYNC) {
+                            SpecificationTransition newT = computeSynchronousTransition(tr, tro);
+                            if (newT != null) newTransitions.add(newT);
+                        }
+                    }
+                } else if (AvatarTransition.isActionType(tr.getType())) {
+                    newTransitions.add(tr);
+                } else if (tr.getType() == AvatarTransition.TYPE_EMPTY) {
+                    newTransitions.add(tr);
+                }
+            }
+            transitions = newTransitions;
+
+            // Selecting only the transactions within the smallest clock interval
+            int clockMin = Integer.MAX_VALUE, clockMax = Integer.MAX_VALUE;
+            for (SpecificationTransition tr : transitions) {
+                clockMin = Math.min(clockMin, tr.clockMin);
+                clockMax = Math.min(clockMax, tr.clockMax);
+            }
+            newTransitions = new ArrayList<SpecificationTransition>();
+            for (SpecificationTransition tr : transitions) {
+                if (tr.clockMin <= clockMax) {
+                    tr.clockMax = clockMax;
+                    newTransitions.add(tr);
+                }
+            }
+            transitions = newTransitions;
+            st = null;
+            if (ignoreConcurrenceBetweenInternalActions) {
+
+                // See whether there is at least one transition with an immediate internal action with no alternative in the same block
+                for (SpecificationTransition tr : transitions) {
+                    //TraceManager.addDev("tr=" + tr + " type=" + tr.getType());
+                    if ((AvatarTransition.isActionType(tr.getType()) && (tr.clockMin == tr.clockMax) && (tr.clockMin == 0))
+                            || tr.getType() == AvatarTransition.TYPE_EMPTY) {
+                        // Must look for possible transitions from the same state
+                        if (!(tr.fromStateWithMoreThanOneTransition)) {
+                            st = tr;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (st == null) {
+                //Creating new link
+                SpecificationLink link = new SpecificationLink();
+                link.originState = _ss;
+                String action = "internal";
+                action += " [" +  "0...0" +  "]";
+                link.action = action;
+                link.destinationState = newState;
+                addStateIfNotExisting(newState);
+                pendingStates.add(newState);
+                nbOfLinks++;
+                _ss.addNext(link);
+                break;
+            }
+            previousState = newState;
+            newState = previousState.advancedClone();
+        }
+
         if (freeIntermediateStateCoding) {
             _ss.freeUselessAllocations();
         } else {
@@ -1305,6 +1437,11 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         if (similar == null) {
             addState(newState);
         }
+        return similar;
+    }
+
+    private synchronized SpecificationState findSimilarState(SpecificationState newState) {
+        SpecificationState similar = states.get(newState.getHash(blockValues));
         return similar;
     }
 
