@@ -49,10 +49,14 @@ import java.util.*;
  * @version 1.1 19/05/2008
  */
 public class TMLArchitecture {
+
+    public static final int MASTER_CLOCK_FREQUENCY = 200;
+
     private List<HwNode> hwnodes;
     private List<HwLink> hwlinks; // Between buses and other component
 
-    private int masterClockFrequency = 200; // in MHz
+
+    private int masterClockFrequency = MASTER_CLOCK_FREQUENCY; // in MHz
 
     private int hashCode;
     private boolean hashCodeComputed = false;

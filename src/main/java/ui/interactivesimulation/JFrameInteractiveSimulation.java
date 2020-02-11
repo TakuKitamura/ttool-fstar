@@ -70,6 +70,8 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
@@ -160,6 +162,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		
     // Status elements
 	private JLabel status, time, info;
+	private int frequency;
 
     // Task elements
 	private TaskVariableTableModel tvtm;
@@ -265,7 +268,16 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 
         mode = NOT_STARTED;
 
+
+
+
         tmap = _tmap;
+        if (tmap != null) {
+            frequency = tmap.getTMLArchitecture().getMasterClockFrequency();
+        } else {
+            frequency = TMLArchitecture.MASTER_CLOCK_FREQUENCY;
+        }
+
         if (tmap != null) {
             tmap.makeMinimumMapping();
             hashCode = tmap.getHashCode();
@@ -1968,7 +1980,12 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                             gotTimeAnswerFromServer = true;
                             node0 = nl.item(0);
                             //
-                            time.setText(node0.getTextContent());
+                            if (node0.getTextContent() != null) {
+                                String val = node0.getTextContent();
+                                TraceManager.addDev("Sim time=" + val);
+                                val = formatString(val);
+                                time.setText(val);
+                            }
                         }
 
                         nl = elt.getElementsByTagName("simtimemin");
@@ -3446,6 +3463,19 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_SHOW_TRACE].getActionCommand())) {
 			writeSimTrace();
 		}
+    }
+
+    private String formatString(String input) {
+        StringBuffer sb = new StringBuffer(input);
+        int ptr = 3;
+        int inc = 4;
+
+        while(sb.length() > ptr) {
+            sb.insert(sb.length()-ptr, " ");
+            ptr = ptr + inc;
+        }
+
+        return sb.toString();
     }
 
     public void error(String error) {
