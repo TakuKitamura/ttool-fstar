@@ -1983,7 +1983,11 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                             if (node0.getTextContent() != null) {
                                 String val = node0.getTextContent();
                                 TraceManager.addDev("Sim time=" + val);
+                                int valueCycle = Integer.decode(val);
+                                long timeP = (long)((long)(valueCycle) * 1000 / frequency);
                                 val = formatString(val);
+                                String timePS = formatString(""+timeP);
+                                val = val + " cycles / " + timePS  + " ns";
                                 time.setText(val);
                             }
                         }
