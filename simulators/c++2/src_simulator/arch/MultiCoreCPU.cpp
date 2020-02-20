@@ -426,22 +426,59 @@ void MultiCoreCPU::schedule2HTML(std::ofstream& myfile) const{
   //if (_transactList.empty()) return;
   //std::cout << "0. size: " << _transactList.size() << '\n';
   myfile << "<h2><span>Scheduling for device: "<< _name <<"</span></h2>\n<table>\n<tr>";
+  unsigned int tempReduce = 0;
+  std::vector<unsigned int> listScale;
+  std::vector<unsigned int> listScaleTime;
+  listScale.push_back(0);
+  listScaleTime.push_back(0);
   for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
     aCurrTrans=*i;
     //if (aCurrTrans->getVirtualLength()==0) continue;
     aBlanks=aCurrTrans->getStartTime()-aCurrTime;
-    if ( aBlanks >= 0 && (!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction()) )
-        myfile << "<td colspan=\""<< aBlanks+1 <<"\" title=\"idle time\" class=\"not\"></td>\n";
-    else if (aBlanks>0){
-      if (aBlanks==1)
-        myfile << "<td title=\"idle time\" class=\"not\"></td>\n";
-      else
-        myfile << "<td colspan=\""<< aBlanks <<"\" title=\"idle time\" class=\"not\"></td>\n";
+    bool isBlankTooBig = false;
+    std::ostringstream tempString;
+    int tempBlanks;
+    if(aBlanks >= 250) {
+        int newBlanks = 20;
+        tempBlanks = aBlanks;
+        tempReduce += aBlanks - newBlanks;
+        aBlanks = newBlanks;
+        isBlankTooBig = true;
     }
-    
+    if ( aBlanks >= 0 && (!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction()) ){
+
+        listScale.push_back(aBlanks+1);
+        tempString << tempBlanks+1;
+	    if(aCurrTrans->getStartTime()+1 > listScaleTime.back()){
+            listScaleTime.push_back(aCurrTrans->getStartTime()+1);
+        }
+        if (isBlankTooBig){
+            myfile << "<td colspan=\""<< aBlanks+1 <<"\" title=\"idle time\" class=\"not\">" << "<- idle " + tempString.str() + " ->" << "</td>\n";
+        } else {
+            myfile << "<td colspan=\""<< aBlanks+1 <<"\" title=\"idle time\" class=\"not\"></td>\n";
+        }
+    }
+    else if (aBlanks>0){
+      listScale.push_back(aBlanks);
+      tempString << tempBlanks;
+	  if(aCurrTrans->getStartTime() > listScaleTime.back()){
+          listScaleTime.push_back(aCurrTrans->getStartTime());
+      }
+      if (isBlankTooBig){
+          myfile << "<td colspan=\""<< aBlanks <<"\" title=\"idle time\" class=\"not\">" << "<- idle " + tempString.str() + " ->" << "</td>\n";
+      } else {
+          if (aBlanks==1)
+            myfile << "<td title=\"idle time\" class=\"not\"></td>\n";
+          else
+            myfile << "<td colspan=\""<< aBlanks <<"\" title=\"idle time\" class=\"not\"></td>\n";
+      }
+    }
+
     aLength=aCurrTrans->getPenalties();
-    
+
     if (aLength!=0){
+      listScale.push_back(aLength);
+      listScaleTime.push_back(listScaleTime.back()+aLength);
       if (aLength==1){
         //myfile << "<td title=\""<< aCurrTrans->toShortString() << "\" class=\"t15\"></td>\n";
         //myfile << "<td title=\" idle:" << aCurrTrans->getIdlePenalty() << " switch:" << aCurrTrans->getTaskSwitchingPenalty() << " bran:" << aCurrTrans->getBranchingPenalty() << "\" class=\"t15\"></td>\n";
@@ -458,6 +495,14 @@ void MultiCoreCPU::schedule2HTML(std::ofstream& myfile) const{
         myfile << "<td title=\""<< aCurrTrans->toShortString() << "\" class=\"t"<< aColor <<"\"></td>\n";
       else
         myfile << "<td colspan=\"" << aLength << "\" title=\"" << aCurrTrans->toShortString() << "\" class=\"t"<< aColor <<"\"></td>\n";
+
+      listScale.push_back(aLength);
+      if(aCurrTrans->getStartTime() > listScaleTime.back()){
+         listScaleTime.push_back(aCurrTrans->getStartTime());
+      }
+      if(aCurrTrans->getEndTime() > listScaleTime.back()){
+        listScaleTime.push_back(aCurrTrans->getEndTime());
+      }
     }
 
 
@@ -466,9 +511,22 @@ void MultiCoreCPU::schedule2HTML(std::ofstream& myfile) const{
   }
   //std::cout << "acurrTime: " << aCurrTime << std::endl;
   myfile << "</tr>\n<tr>";
-  for(aLength=0;aLength<aCurrTime;aLength++) myfile << "<th></th>";
+  for(aLength=0;aLength<aCurrTime - tempReduce;aLength++) myfile << "<th></th>";
   myfile << "</tr>\n<tr>";
-  for(aLength=0;aLength<aCurrTime;aLength+=5) myfile << "<td colspan=\"5\" class=\"sc\">" << aLength << "</td>";
+  for ( unsigned int aLength = 0; aLength < listScale.size(); aLength += 1 ) {
+    std::ostringstream spanVal;
+    if(aLength < listScaleTime.size())
+      spanVal << listScaleTime[aLength];
+    else
+      spanVal << "";
+    if(aLength+1 >= listScale.size()){
+      myfile << "<td colspan=\"5\" class=\"sc\">" << spanVal.str() << "</td>";
+    }else {
+      myfile << "<td colspan=\"" << listScale[aLength+1] << "\" class=\"sc\">" << spanVal.str() << "</td>";
+    }
+    //myfile << "<td colspan=\"5\" class=\"sc\">" << aLength << "</td>";
+  }
+//  for(aLength=0;aLength<aCurrTime;aLength+=5) myfile << "<td colspan=\"5\" class=\"sc\">" << aLength << "</td>";
   myfile << "</tr>\n</table>\n<table>\n<tr>";
   for(TaskList::const_iterator j=_taskList.begin(); j != _taskList.end(); ++j){
     if ((*j) != NULL) {
