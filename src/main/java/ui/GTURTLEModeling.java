@@ -7790,6 +7790,8 @@ public class GTURTLEModeling {
             tgc.setInternalLoaded(false);
             tgc.setMinSize(myMinWidth, myMinHeight);
             tgc.setMinDesiredSize(myMinDesiredWidth, myMinDesiredHeight);
+
+            // To handle old models
             if (!(tgc instanceof TGCPointOfConnector)) {
                 tgc.resize(myWidth, myHeight);
                 tgc.hasBeenResized();
