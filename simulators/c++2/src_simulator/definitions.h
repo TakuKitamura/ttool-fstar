@@ -338,6 +338,7 @@ th{\n \
 .sc{\n \
 	border-style: none;\n \
 	padding: 0px;\n \
+	font-size: small;\n \
 }\n \
 h2 {\n \
 	border-bottom: 1px solid #666;\n \
