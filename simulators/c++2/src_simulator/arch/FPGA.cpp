@@ -425,6 +425,15 @@ int FPGA::allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const {
   return total;
 }
 
+int FPGA::allTrans2XMLByTask(std::ostringstream& glob, std::string taskName) const {
+  int total = 0;
+  for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
+      (*i)->toXMLByTask(glob, 0, _name, _ID, taskName);
+      total ++;
+  }
+  return total;
+}
+
 
 void FPGA::latencies2XML(std::ostringstream& glob, unsigned int id1, unsigned int id2) {
   for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
