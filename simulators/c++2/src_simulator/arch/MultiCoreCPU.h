@@ -116,7 +116,6 @@ public:
       	\param glob refers to the output stream
     	*/
 	int allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const;
-    int allTrans2XMLByTask(std::ostringstream& glob, std::string taskName) const;
 
 	void latencies2XML(std::ostringstream& glob, unsigned int id1, unsigned int id2);
 	virtual void streamBenchmarks(std::ostream& s) const;
