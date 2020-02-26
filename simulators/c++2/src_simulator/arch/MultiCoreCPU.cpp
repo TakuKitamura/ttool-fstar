@@ -431,6 +431,7 @@ void MultiCoreCPU::schedule2HTML(std::ofstream& myfile) const{
   std::vector<unsigned int> listScaleTime;
   listScale.push_back(0);
   listScaleTime.push_back(0);
+  TMLTransaction* checkLastTime = _transactList.back();
   for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
     aCurrTrans=*i;
     //if (aCurrTrans->getVirtualLength()==0) continue;
@@ -438,8 +439,8 @@ void MultiCoreCPU::schedule2HTML(std::ofstream& myfile) const{
     bool isBlankTooBig = false;
     std::ostringstream tempString;
     int tempBlanks;
-    if(aBlanks >= 250) {
-        int newBlanks = 20;
+    if((checkLastTime)->getEndTime() >= 250 && aBlanks > 10) {
+        int newBlanks = 10;
         tempBlanks = aBlanks;
         tempReduce += aBlanks - newBlanks;
         aBlanks = newBlanks;
@@ -477,8 +478,12 @@ void MultiCoreCPU::schedule2HTML(std::ofstream& myfile) const{
     aLength=aCurrTrans->getPenalties();
 
     if (aLength!=0){
-      listScale.push_back(aLength);
       listScaleTime.push_back(listScaleTime.back()+aLength);
+      if(checkLastTime->getEndTime() >= 250 && aLength >10){
+          tempReduce += aLength - 10;
+          aLength = 10;
+      }
+      listScale.push_back(aLength);
       if (aLength==1){
         //myfile << "<td title=\""<< aCurrTrans->toShortString() << "\" class=\"t15\"></td>\n";
         //myfile << "<td title=\" idle:" << aCurrTrans->getIdlePenalty() << " switch:" << aCurrTrans->getTaskSwitchingPenalty() << " bran:" << aCurrTrans->getBranchingPenalty() << "\" class=\"t15\"></td>\n";
@@ -491,6 +496,10 @@ void MultiCoreCPU::schedule2HTML(std::ofstream& myfile) const{
     aLength=aCurrTrans->getOperationLength();
     aColor=aCurrTrans->getCommand()->getTask()->getInstanceNo() & 15;
     if(!(!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction())){
+      if(checkLastTime->getEndTime() >= 250 && aLength >10){
+        tempReduce += aLength - 10;
+        aLength = 10;
+      }
       if (aLength==1)
         myfile << "<td title=\""<< aCurrTrans->toShortString() << "\" class=\"t"<< aColor <<"\"></td>\n";
       else

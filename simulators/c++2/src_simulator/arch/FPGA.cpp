@@ -604,8 +604,8 @@ void FPGA::HW2HTML(std::ofstream& myfile)  {
 	bool isBlankTooBig = false;
 	std::ostringstream tempString;
 	int tempBlanks;
-	if(aBlanks >= 250) {
-	    int newBlanks = 20;
+	if(_htmlCurrTask->getEndLastTransaction() >= 250 && aBlanks >10) {
+	    int newBlanks = 10;
 	    tempBlanks = aBlanks;
 	    tempReduce += aBlanks - newBlanks;
 	    aBlanks = newBlanks;
@@ -646,6 +646,10 @@ void FPGA::HW2HTML(std::ofstream& myfile)  {
 	unsigned int indexTrans=aCurrTransName.find_first_of(":");
 	std::string aCurrContent=aCurrTransName.substr(indexTrans+1,2);
 	if(!(!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction())){
+      if(_htmlCurrTask->getEndLastTransaction() >= 250 && aLength >10){
+          tempReduce += aLength - 10;
+          aLength = 10;
+      }
       writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString(), aCurrContent );
       listScale.push_back(aLength);
       if(aCurrTrans->getStartTime() > listScaleTime.back()){
@@ -721,8 +725,8 @@ void FPGA::schedule2HTML(std::ofstream& myfile)  {
     bool isBlankTooBig = false;
     std::ostringstream tempString;
     int tempBlanks;
-    if(aBlanks >= 250) {
-        int newBlanks = 20;
+    if(_htmlCurrTask->getEndLastTransaction() >= 250 && aBlanks >10) {
+        int newBlanks = 10;
         tempBlanks = aBlanks;
         tempReduce += aBlanks - newBlanks;
         aBlanks = newBlanks;
@@ -762,6 +766,10 @@ void FPGA::schedule2HTML(std::ofstream& myfile)  {
 	//	std::cout<<"what is this task?"<<task->toString()<<std::endl;
 	const std::string cellClass = determineHTMLCellClass(  nextCellClassIndex );
     if(!(!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction())){
+      if(_htmlCurrTask->getEndLastTransaction() >= 250 && aLength >10){
+          tempReduce += aLength - 10;
+          aLength = 10;
+      }
       writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString() );
       listScale.push_back(aLength);
       if(aCurrTrans->getStartTime() > listScaleTime.back()){

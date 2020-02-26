@@ -190,6 +190,14 @@ void CPU::HW2HTML(std::ofstream& myfile) const {
     std::vector<unsigned int> listScaleTime;
     listScale.push_back(0);
     listScaleTime.push_back(0);
+    unsigned int endTimeOfCore = 0;
+    for( unsigned int j = _transactList.size()-1; j >= 0; j-- ) {
+        if(  _transactList[j]->getTransactCoreNumber() == this->_cycleTime ){
+            endTimeOfCore = _transactList[j]->getEndTime();
+            break;
+        }
+    }
+
     for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
       std::cout<<"get transaction core number is: "<<(*i)->getTransactCoreNumber()<<std::endl;
       std::cout<<"time : "<<_cycleTime<<std::endl;
@@ -200,8 +208,8 @@ void CPU::HW2HTML(std::ofstream& myfile) const {
 	bool isBlankTooBig = false;
 	std::ostringstream tempString;
 	int tempBlanks;
-	if(aBlanks >= 250) {
-	    int newBlanks = 20;
+	if(endTimeOfCore >= 250 && aBlanks > 10) {
+	    int newBlanks = 10;
 	    tempBlanks = aBlanks;
 	    tempReduce += aBlanks - newBlanks;
 	    aBlanks = newBlanks;
@@ -235,8 +243,12 @@ void CPU::HW2HTML(std::ofstream& myfile) const {
 	unsigned int aLength = aCurrTrans->getPenalties();
 
 	if ( aLength != 0 ) {
-	  listScale.push_back(aLength);
 	  listScaleTime.push_back(listScaleTime.back()+aLength);
+      if (endTimeOfCore >= 250 && aLength > 10){
+          tempReduce += aLength - 10;
+          aLength = 10;
+      }
+      listScale.push_back(aLength);
 	  std::ostringstream title;
 	  title << "idle:" << aCurrTrans->getIdlePenalty() << " switching penalty:" << aCurrTrans->getTaskSwitchingPenalty();
 	  writeHTMLColumn( myfile, aLength, "not", title.str() );
@@ -251,6 +263,10 @@ void CPU::HW2HTML(std::ofstream& myfile) const {
 	unsigned int indexTrans=aCurrTransName.find_first_of(":");
 	std::string aCurrContent=aCurrTransName.substr(indexTrans+1,2);
 	if(!(!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction())){
+      if (endTimeOfCore >= 250 && aLength > 10){
+        tempReduce += aLength - 10;
+        aLength = 10;
+      }
       writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString(), aCurrContent );
       listScale.push_back(aLength);
       if(aCurrTrans->getStartTime() > listScaleTime.back()){
@@ -311,6 +327,13 @@ void CPU::schedule2HTML(std::ofstream& myfile) const {
     std::vector<unsigned int> listScaleTime;
     listScale.push_back(0);
     listScaleTime.push_back(0);
+    unsigned int endTimeOfCore = 0;
+    for( unsigned int j = _transactList.size()-1; j >= 0; j-- ) {
+            if(  _transactList[j]->getTransactCoreNumber() == this->_cycleTime ){
+                endTimeOfCore = _transactList[j]->getEndTime();
+                break;
+            }
+    }
     for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
       std::cout<<"get transaction core number is: "<<(*i)->getTransactCoreNumber()<<std::endl;
       std::cout<<"time : "<<_cycleTime<<std::endl;
@@ -321,8 +344,8 @@ void CPU::schedule2HTML(std::ofstream& myfile) const {
     bool isBlankTooBig = false;
     std::ostringstream tempString;
     int tempBlanks;
-    if(aBlanks >= 250) {
-        int newBlanks = 20;
+    if(endTimeOfCore >= 250 && aBlanks > 10) {
+        int newBlanks = 10;
         tempBlanks = aBlanks;
         tempReduce += aBlanks - newBlanks;
         aBlanks = newBlanks;
@@ -357,8 +380,12 @@ void CPU::schedule2HTML(std::ofstream& myfile) const {
 
 	if ( aLength != 0 ) {
 	  std::ostringstream title;
-      listScale.push_back(aLength);
       listScaleTime.push_back(listScaleTime.back()+aLength);
+      if (endTimeOfCore >= 250 && aLength > 10){
+          tempReduce += aLength - 10;
+          aLength = 10;
+      }
+      listScale.push_back(aLength);
 	  title << "idle:" << aCurrTrans->getIdlePenalty() << " switching penalty:" << aCurrTrans->getTaskSwitchingPenalty();
 	  writeHTMLColumn( myfile, aLength, "not", title.str() );
 	}
@@ -369,6 +396,10 @@ void CPU::schedule2HTML(std::ofstream& myfile) const {
 	TMLTask* task = aCurrTrans->getCommand()->getTask();
 	const std::string cellClass = determineHTMLCellClass( taskCellClasses, task, nextCellClassIndex );
     if(!(!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction())){
+      if (endTimeOfCore >= 250 && aLength > 10){
+        tempReduce += aLength - 10;
+        aLength = 10;
+      }
       writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString() );
       listScale.push_back(aLength);
       if(aCurrTrans->getStartTime() > listScaleTime.back()){
