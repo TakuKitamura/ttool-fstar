@@ -393,7 +393,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         mainpanel.add(split, BorderLayout.CENTER);
 
         // Commands
-        commands = new JPanel();
+        commands = new JPanel(new BorderLayout());
         //commands.setFloatable(true);
         //commands.setMinimumSize(new Dimension(300, 250));
         commands.setBorder(new javax.swing.border.TitledBorder("Commands"));
@@ -522,7 +522,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         listTextCommands.addMouseListener(this);
         jp01.add(listTextCommands, c01);
 
-        commands.add(commandTab);
+        commands.add(commandTab, BorderLayout.NORTH);
 
         // Set variables
         jpsv = new JPanelSetVariables(this, valueTable);
@@ -742,7 +742,9 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 
         // Simulation time
         jp02 = new JPanel();
-        infos.add(jp02, BorderLayout.SOUTH);
+        //infos.add(jp02, BorderLayout.SOUTH);
+        commands.add(jp02, BorderLayout.SOUTH);
+        //mainTop.add(jp02, c02);
         jp02.add(new JLabel("Status:"));
         status = new JLabel("Unknown");
         status.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);

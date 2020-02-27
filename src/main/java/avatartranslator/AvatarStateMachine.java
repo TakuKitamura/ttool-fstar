@@ -1694,4 +1694,16 @@ public class AvatarStateMachine extends AvatarElement {
         
         return null;
     }
+
+
+    public void removeAllDelays() {
+        for ( final AvatarStateMachineElement element : elements ) {
+            if (element instanceof AvatarTransition) {
+                final AvatarTransition transition = (AvatarTransition) element;
+                if (transition.hasDelay()) {
+                    transition.setDelays("0", "0");
+                }
+            }
+        }
+    }
 }
