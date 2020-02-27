@@ -431,6 +431,7 @@ void MultiCoreCPU::schedule2HTML(std::ofstream& myfile) const{
   std::vector<unsigned int> listScaleTime;
   listScale.push_back(0);
   listScaleTime.push_back(0);
+  bool changeCssClass = false;
   TMLTransaction* checkLastTime = _transactList.back();
   for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
     aCurrTrans=*i;
@@ -445,6 +446,7 @@ void MultiCoreCPU::schedule2HTML(std::ofstream& myfile) const{
         tempReduce += aBlanks - newBlanks;
         aBlanks = newBlanks;
         isBlankTooBig = true;
+        changeCssClass = true;
     }
     if ( aBlanks >= 0 && (!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction()) ){
 
@@ -529,10 +531,17 @@ void MultiCoreCPU::schedule2HTML(std::ofstream& myfile) const{
     else
       spanVal << "";
     if(aLength+1 >= listScale.size()){
-      myfile << "<td colspan=\"5\" class=\"sc\">" << spanVal.str() << "</td>";
+
+      if(changeCssClass){
+          myfile << "<td colspan=\"5\" class=\"sc1\">" << spanVal.str() << "</td>";
+      } else
+          myfile << "<td colspan=\"5\" class=\"sc\">" << spanVal.str() << "</td>";
     }else {
-      myfile << "<td colspan=\"" << listScale[aLength+1] << "\" class=\"sc\">" << spanVal.str() << "</td>";
-    }
+      if(changeCssClass){
+          myfile << "<td colspan=\"" << listScale[aLength+1] << "\" class=\"sc1\">" << spanVal.str() << "</td>";
+      } else
+          myfile << "<td colspan=\"" << listScale[aLength+1] << "\" class=\"sc\">" << spanVal.str() << "</td>";
+      }
     //myfile << "<td colspan=\"5\" class=\"sc\">" << aLength << "</td>";
   }
 //  for(aLength=0;aLength<aCurrTime;aLength+=5) myfile << "<td colspan=\"5\" class=\"sc\">" << aLength << "</td>";

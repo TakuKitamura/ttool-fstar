@@ -320,6 +320,7 @@ void SchedulableDevice::HW2HTML(std::ofstream& myfile) const {
     std::vector<unsigned int> listScaleTime;
     listScale.push_back(0);
     listScaleTime.push_back(0);
+    bool changeCssClass = false;
     TMLTransaction* checkLastTime = _transactList.back();
     for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
       std::cout<<"get transaction core number is: "<<(*i)->getTransactCoreNumber()<<std::endl;
@@ -337,6 +338,7 @@ void SchedulableDevice::HW2HTML(std::ofstream& myfile) const {
 	    tempReduce += aBlanks - newBlanks;
 	    aBlanks = newBlanks;
 	    isBlankTooBig = true;
+        changeCssClass = true;
 	}
 	if ( aBlanks >= 0 && (!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction()) ){
 	    listScale.push_back(aBlanks+1);
@@ -419,10 +421,17 @@ void SchedulableDevice::HW2HTML(std::ofstream& myfile) const {
       else
         spanVal << "";
       if(aLength+1 >= listScale.size()){
-        writeHTMLColumn( myfile, 5, "sc", "", spanVal.str(), false );
+
+        if(changeCssClass){
+            writeHTMLColumn( myfile, 5, "sc1",  spanVal.str(), spanVal.str(), false );
+        } else
+            writeHTMLColumn( myfile, 5, "sc", spanVal.str(), spanVal.str(), false );
       }else {
-        writeHTMLColumn( myfile, listScale[aLength+1], "sc", "", spanVal.str(), false );
-      }
+        if(changeCssClass){
+            writeHTMLColumn( myfile, listScale[aLength+1], "sc1", spanVal.str(), spanVal.str(), false );
+        } else
+            writeHTMLColumn( myfile, listScale[aLength+1], "sc", spanVal.str(), spanVal.str(), false );
+        }
       //myfile << "<td colspan=\"5\" class=\"sc\">" << aLength << "</td>";
     }
 
@@ -457,6 +466,7 @@ void SchedulableDevice::schedule2HTML(std::ofstream& myfile) const {
         std::vector<unsigned int> listScaleTime;
         listScale.push_back(0);
         listScaleTime.push_back(0);
+        bool changeCssClass = false;
         TMLTransaction* checkLastTime = _transactList.back();
 		for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
 		  std::cout<<"get transaction core number is: "<<(*i)->getTransactCoreNumber()<<std::endl;
@@ -474,6 +484,7 @@ void SchedulableDevice::schedule2HTML(std::ofstream& myfile) const {
                 tempReduce += aBlanks - newBlanks;
                 aBlanks = newBlanks;
                 isBlankTooBig = true;
+                changeCssClass = true;
             }
             if ( aBlanks >= 0 && (!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction()) ){
                 listScale.push_back(aBlanks+1);
@@ -554,10 +565,17 @@ void SchedulableDevice::schedule2HTML(std::ofstream& myfile) const {
           else
             spanVal << "";
           if(aLength+1 >= listScale.size()){
-            writeHTMLColumn( myfile, 5, "sc", "", spanVal.str(), false );
+
+            if(changeCssClass){
+                writeHTMLColumn( myfile, 5, "sc1",  spanVal.str(), spanVal.str(), false );
+            } else
+                writeHTMLColumn( myfile, 5, "sc", spanVal.str(), spanVal.str(), false );
           }else {
-            writeHTMLColumn( myfile, listScale[aLength+1], "sc", "", spanVal.str(), false );
-          }
+            if(changeCssClass){
+                writeHTMLColumn( myfile, listScale[aLength+1], "sc1", spanVal.str(), spanVal.str(), false );
+            } else
+                writeHTMLColumn( myfile, listScale[aLength+1], "sc", spanVal.str(), spanVal.str(), false );
+            }
 			//myfile << "<td colspan=\"5\" class=\"sc\">" << aLength << "</td>";
 		}
 
