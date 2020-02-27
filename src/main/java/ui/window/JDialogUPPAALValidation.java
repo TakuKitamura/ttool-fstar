@@ -573,7 +573,7 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
             rshc.stopCommand();
         } catch (LauncherException le) {
         }
-        rshc = null;
+
         mode = NOT_STARTED;
         setButtons();
     }
@@ -808,10 +808,10 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
             }
 
             //Removing files
-            rshc.deleteFile(fn + ".xml");
-            rshc.deleteFile(fn + ".q");
-            rshc.deleteFile(fn + ".res");
-            rshc.deleteFile(fn + ".xtr");
+            deleteFile(fn + ".xml");
+            deleteFile(fn + ".q");
+            deleteFile(fn + ".res");
+            deleteFile(fn + ".xtr");
 
             rshc.freeId(id);
             jta.append("\nAll Done\n");
@@ -828,6 +828,20 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
             } catch (LauncherException le1) {
             }
             return;
+
+        } catch (NullPointerException npe) {
+            TraceManager.addError(npe);
+            mode = NOT_STARTED;
+            setButtons();
+            try {
+                if (rshctmp != null) {
+                    rshctmp.freeId(id);
+                }
+            } catch (LauncherException le1) {
+
+                return;
+            }
+
         } catch (Exception e) {
             TraceManager.addError(e);
             mode = NOT_STARTED;
@@ -837,8 +851,9 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
                     rshctmp.freeId(id);
                 }
             } catch (LauncherException le1) {
+
+                return;
             }
-            return;
         }
 
         mode = NOT_STARTED;
@@ -936,6 +951,8 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
         if (showDetails.isSelected()) {
             jta.append("-> " + query + "\n");
         }
+
+
         rshc.sendFileData(fn + ".q", query);
 
         cmd1 = cmdVerifyta + " -u ";
@@ -1144,4 +1161,34 @@ public class JDialogUPPAALValidation extends javax.swing.JDialog implements Acti
                 break;
         }
     }
+
+
+    public synchronized void nullRSHC() {
+        rshc = null;
+    }
+
+    public synchronized void deleteFile(String name) throws LauncherException {
+        if (rshc == null) {
+            throw new LauncherException("Stopped by used");
+        }
+
+        rshc.deleteFile(name);
+    }
+
+    public synchronized void sendFileData(String filename, String query) throws LauncherException {
+        if (rshc == null) {
+            throw new LauncherException("Stopped by used");
+        }
+
+        rshc.sendFileData(filename, query);
+    }
+
+    public synchronized void freeId(int id) throws LauncherException {
+        if (rshc == null) {
+            throw new LauncherException("Stopped by used");
+        }
+        rshc.freeId(id);
+    }
+
+
 }

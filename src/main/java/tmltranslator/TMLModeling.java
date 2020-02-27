@@ -2363,6 +2363,10 @@ public class  TMLModeling<E> {
             _ch.getDestinationTasks().get(i).replaceReadChannelWith(_ch, chans[i]);
         }
 
+        // Reworking _ch type: it cannot be non blocking on reading
+        if (_ch.getType() == TMLChannel.NBRNBW) {
+            _ch.setType(TMLChannel.BRNBW);
+        }
 
         // Transform the original channel into a basic channel
         _ch.setTasks(_ch.getOriginTasks().get(0), forkTask);
@@ -2570,6 +2574,10 @@ public class  TMLModeling<E> {
         // Modify the channel of write operators to the new channels!
         for(i=0; i<nb; i++) {
             _ch.getOriginTasks().get(i).replaceWriteChannelWith(_ch, chans[i]);
+        }
+
+        if (_ch.getType() == TMLChannel.NBRNBW) {
+            _ch.setType(TMLChannel.BRNBW);
         }
 
 
