@@ -2576,6 +2576,10 @@ public class  TMLModeling<E> {
             _ch.getOriginTasks().get(i).replaceWriteChannelWith(_ch, chans[i]);
         }
 
+        if (_ch.getType() == TMLChannel.NBRNBW) {
+            _ch.setType(TMLChannel.BRNBW);
+        }
+
 
         // Transform the original channel into a basic channel
         _ch.setTasks(joinTask, _ch.getDestinationTasks().get(0));
