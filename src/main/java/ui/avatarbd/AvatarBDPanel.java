@@ -61,6 +61,7 @@ public class AvatarBDPanel extends TDiagramPanel {
 	private List<AvatarBDStateMachineOwner> validated, ignored;
     private String val = null, ign = null;
     private boolean optimized = true;
+    private boolean considerTimingOperators = true;
 
     private static final String DEFAULT_MAIN = "void __user_init() {\n}\n\n";
 
@@ -262,6 +263,12 @@ public class AvatarBDPanel extends TDiagramPanel {
             s += "<Optimized value=\"false\" />\n";
         }
 
+        if (considerTimingOperators) {
+            s += "<considerTimingOperators value=\"true\" />\n";
+        } else {
+            s += "<considerTimingOperators value=\"false\" />\n";
+        }
+
         if (validated == null) {
             s += "<Validated value=\"\" />\n";
         } else {
@@ -323,6 +330,26 @@ public class AvatarBDPanel extends TDiagramPanel {
                     //TraceManager.addDev("Found value=" + s);
                     if (s != null) {
                         optimized = s.compareTo("true") == 0;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // Model was saved in an older version of TTool
+            TraceManager.addDev("Exception when loading parameter of block diagram:" + e.getMessage());
+
+        }
+
+
+        // consider timing ops
+        nl = elt.getElementsByTagName("considerTimingOperators");
+        try {
+            if (nl.getLength()>0) {
+                n = nl.item(0);
+                if (n.getNodeType() == Node.ELEMENT_NODE) {
+                    s = ((Element)n).getAttribute("value");
+                    //TraceManager.addDev("Found value=" + s);
+                    if (s != null) {
+                        considerTimingOperators = s.compareTo("true") == 0;
                     }
                 }
             }
@@ -656,6 +683,10 @@ public class AvatarBDPanel extends TDiagramPanel {
         return optimized;
     }
 
+    public boolean getConsiderTimingOperators() {
+        return considerTimingOperators;
+    }
+
     public void setValidated( List<AvatarBDStateMachineOwner> _validated) {
         validated = _validated;
     }
@@ -666,6 +697,10 @@ public class AvatarBDPanel extends TDiagramPanel {
 
     public void setOptimized(boolean _optimized) {
         optimized = _optimized;
+    }
+
+    public void setConsiderTimingOperators(boolean _considerTimingOperators) {
+        considerTimingOperators = _considerTimingOperators;
     }
 
     public void makeValidated() {

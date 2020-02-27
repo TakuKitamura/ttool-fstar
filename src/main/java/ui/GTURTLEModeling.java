@@ -3225,7 +3225,8 @@ public class GTURTLEModeling {
     }
 
     // BUILDING An AVATAR Design AND CHECKING IT
-    public boolean checkAvatarDesign(List<AvatarBDStateMachineOwner> blocks, AvatarDesignPanel adp, boolean _optimize) {
+    public boolean checkAvatarDesign(List<AvatarBDStateMachineOwner> blocks, AvatarDesignPanel adp, boolean _optimize, boolean
+            considerTimingOperators) {
         // Builds a TURTLE modeling from diagrams
         //warnings = new Vector();
         //checkingErrors = null;
@@ -3240,6 +3241,11 @@ public class GTURTLEModeling {
         avatarspec = adpt.generateAvatarSpecification(blocks);
         avatarspec.setInformationSource(adp);
         optimizeAvatar = _optimize;
+
+        if (!considerTimingOperators) {
+            avatarspec.removeAllDelays();
+        }
+
         //TraceManager.addDev("AvatarSpec:" + avatarspec.toString() + "\n\n");
         tmState = 3;
 

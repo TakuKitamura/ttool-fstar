@@ -3782,7 +3782,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             List<AvatarBDStateMachineOwner> blocksToValidate = new LinkedList<AvatarBDStateMachineOwner>();
             JDialogSelectAvatarBlock jdmc = new JDialogSelectAvatarBlock(frame, blocksToValidate,
                     adp.getAvatarBDPanel().getFullStateMachineOwnerList(), "Choosing blocks to validate", adp.getValidated(), adp.getIgnored(),
-                    adp.getOptimized());
+                    adp.getOptimized(), adp.getConsiderTimingOperators());
             if (!automatic) {
                 GraphicLib.centerOnParent(jdmc);
                 jdmc.setVisible(true); // blocked until dialog has been closed
@@ -3799,14 +3799,16 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             adp.setValidated(jdmc.getValidated());
             adp.setIgnored(jdmc.getIgnored());
             adp.setOptimized(jdmc.getOptimized());
+            adp.setConsiderTimingOperators(jdmc.getConsiderTimingOperators());
 
             boolean optimize = jdmc.getOptimized();
+            boolean considerTimingOperators = jdmc.getConsiderTimingOperators();
             if (blocksToValidate.size() > 0) {
                 /*
                  * adp.validated = JDialogModelChecking.validated; adp.ignored =
                  * JDialogModelChecking.ignored;
                  */
-                b = gtm.checkAvatarDesign(blocksToValidate, adp, optimize);
+                b = gtm.checkAvatarDesign(blocksToValidate, adp, optimize, considerTimingOperators);
                 expandToWarnings();
                 expandToErrors();
                 if (b) {
@@ -3841,7 +3843,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             List<AvatarBDStateMachineOwner> blocksToValidate = new LinkedList<AvatarBDStateMachineOwner>();
             JDialogSelectAvatarBlock jdmc = new JDialogSelectAvatarBlock(frame, blocksToValidate,
                     adp.getAvatarBDPanel().getFullStateMachineOwnerList(), "Choosing blocks to validate", adp.getValidated(), adp.getIgnored(),
-                    adp.getOptimized());
+                    adp.getOptimized(), adp.getConsiderTimingOperators());
             if (!automatic) {
                 GraphicLib.centerOnParent(jdmc);
                 jdmc.setVisible(true); // blocked until dialog has been closed
@@ -3858,14 +3860,18 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
             adp.setValidated(jdmc.getValidated());
             adp.setIgnored(jdmc.getIgnored());
             adp.setOptimized(jdmc.getOptimized());
+            adp.setConsiderTimingOperators(jdmc.getConsiderTimingOperators());
 
             boolean optimize = jdmc.getOptimized();
+            boolean considerTimingOperators = jdmc.getConsiderTimingOperators();
+
+
             if (blocksToValidate.size() > 0) {
                 /*
                  * adp.validated = JDialogModelChecking.validated; adp.ignored =
                  * JDialogModelChecking.ignored;
                  */
-                b = gtm.checkAvatarDesign(blocksToValidate, adp, optimize);
+                b = gtm.checkAvatarDesign(blocksToValidate, adp, optimize, considerTimingOperators);
                 expandToWarnings();
                 expandToErrors();
                 if (b) {
