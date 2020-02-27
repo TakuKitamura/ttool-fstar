@@ -339,6 +339,16 @@ th{\n \
 	border-style: none;\n \
 	padding: 0px;\n \
 	font-size: small;\n \
+    transform: rotate(45deg);\n \
+    transform-origin: left top;\n \
+}\n \
+.sc1{\n \
+	border-style: none;\n \
+	padding: 0px;\n \
+	font-size: small;\n \
+	color: red;\n \
+    transform: rotate(45deg);\n \
+    transform-origin: left top;\n \
 }\n \
 h2 {\n \
 	border-bottom: 1px solid #666;\n \
