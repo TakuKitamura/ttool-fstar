@@ -99,7 +99,7 @@ public class JPanelTaskTransactions extends JPanel {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
-                    System.out.println("levan" + tasks.getSelectedItem().toString());
+                    System.out.println(tasks.getSelectedItem().toString());
                     if (ttm != null) {
                         ttm.setData(_trans,tasks.getSelectedItem().toString());
                     }
