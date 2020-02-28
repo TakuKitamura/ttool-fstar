@@ -978,12 +978,16 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
     }*/
 
     // Adding component
-    public TGComponent addComponent(int x, int y, boolean swallow) {
+    public final TGComponent addComponent(int x, int y, boolean swallow) {
         //TraceManager.addDev("Add component");
         TGComponent tgc = addComponent(x, y, mgui.getIdButtonSelected(), swallow);
         if (tgc instanceof ComponentPluginInterface) {
             ((ComponentPluginInterface) tgc).setPlugin(mgui.getPluginSelected());
         }
+        //TraceManager.addDev("Add component");
+        //Adapt the panel size accordingly
+        adaptPanelToNewComponent(tgc);
+
         return tgc;
     }
 
@@ -1019,16 +1023,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                 if (addToList) {
                     componentList.add(0, tgc);
                     // Enlarge panel accordingly
-                    while (maxX < (tgc.getX() + tgc.getWidth())) {
-                        maxX += increment;
-                        mgui.changeMade(this, DIAGRAM_RESIZED);
-                        updateSize();
-                    }
-                    while (maxY < (tgc.getY() + tgc.getHeight())) {
-                        maxY += increment;
-                        mgui.changeMade(this, DIAGRAM_RESIZED);
-                        updateSize();
-                    }
+                    adaptPanelToNewComponent(tgc);
 
                 }
             }
@@ -1039,6 +1034,21 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
 
         return ret;
+    }
+
+
+    private void adaptPanelToNewComponent(TGComponent tgc) {
+        while (maxX < (tgc.getX() + tgc.getWidth())) {
+            maxX += increment;
+            mgui.changeMade(this, DIAGRAM_RESIZED);
+            updateSize();
+        }
+        while (maxY < (tgc.getY() + tgc.getHeight())) {
+            maxY += increment;
+            mgui.changeMade(this, DIAGRAM_RESIZED);
+            updateSize();
+        }
+
     }
 
     public SwallowTGComponent findSwallowTGComponent(int x, int y) {
