@@ -141,6 +141,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
     // Commands
     private JPanel /*main,*/ mainTop, commands/*, save, state*/, infos/*, outputs*/, cpuPanel, variablePanel;
     protected JPanelTransactions transactionPanel;
+    protected JPanelTaskTransactions taskTransactionPanel;
     private JCheckBox latex, debug, animate, diploids, update, openDiagram, animateWithInfo;
     private JTabbedPane commandTab, infoTab;
     protected JTextField paramMainCommand;
@@ -894,7 +895,13 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
           transactionPanel.add(jspTransactionInfo, BorderLayout.NORTH);
           updateTransactionInformationButton = new JButton(actions[InteractiveSimulationActions.ACT_UPDATE_TRANSACTIONS]);
           transactionPanel.add(updateTransactionInformationButton, BorderLayout.SOUTH);*/
+        if (tmap == null) {
+            taskTransactionPanel = new JPanelTaskTransactions(null, this,NB_OF_TRANSACTIONS);
+        } else {
+            taskTransactionPanel = new JPanelTaskTransactions(tmap.getTMLModeling(),this,NB_OF_TRANSACTIONS);
+        }
 
+        infoTab.addTab("Task Transactions", null, taskTransactionPanel, "Transactions of given Task");
         // CPUs
         cpuPanel = new JPanel();
         cpuPanel.setLayout(new BorderLayout());
@@ -2333,6 +2340,9 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                 if (transactionPanel != null) {
                     transactionPanel.setData(trans);
                 }
+                if (taskTransactionPanel != null) {
+                    taskTransactionPanel.setData(trans);
+                }
                 if (latencyPanel !=null){
                     processLatency();
                 }
@@ -2866,6 +2876,9 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         int nb = NB_OF_TRANSACTIONS;
         if (transactionPanel != null) {
             nb = transactionPanel.getNbOfTransactions();
+        }
+        if (taskTransactionPanel != null) {
+            nb = taskTransactionPanel.getNbOfTransactions();
         }
         sendCommand("lt " + nb);
     }

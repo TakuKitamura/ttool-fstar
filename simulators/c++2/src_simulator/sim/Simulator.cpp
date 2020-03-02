@@ -404,6 +404,27 @@ int Simulator::allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const{
     total += (*j)->allTrans2XML(glob, maxNbOfTrans);
   }
 
+ for(FPGAList::const_iterator k=_simComp->getFPGAList().begin(); k != _simComp->getFPGAList().end(); ++k){
+    total += (*k)->allTrans2XML(glob, maxNbOfTrans);
+  }
+  return total;
+}
+
+int Simulator::allTrans2XMLByTask(std::ostringstream& glob, std::string taskName) const{
+  int total = 0;
+  //glob << TAG_TRANSo << "Transaction" << TAG_TRANSc << std::endl;
+  for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
+    total += (*i)->allTrans2XMLByTask(glob, taskName);
+  }
+
+  for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
+    total += (*j)->allTrans2XMLByTask(glob, taskName);
+  }
+
+  for(FPGAList::const_iterator k=_simComp->getFPGAList().begin(); k != _simComp->getFPGAList().end(); ++k){
+    total += (*k)->allTrans2XMLByTask(glob, taskName);
+  }
+
   return total;
 }
 
@@ -2011,6 +2032,13 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
     std::cout <<"Calculate latencies between " << aParam1 << " and " << aParam2 << std::endl;
     addLatencyIds(aParam1, aParam2);
     std::cout << "latencies " << &anEntityMsg << std::endl;
+  case 25: //Get list of all transactions belogn to a task
+    aInpStream >> aStrParam;
+    std::cout << "Get list of all transactions belong to " << aStrParam << std::endl;
+    returnedNbOfTransactions = allTrans2XMLByTask(anEntityMsg, aStrParam);
+    anEntityMsg << TAG_TRANSACTION_NBo << "nb=\"" << returnedNbOfTransactions << "\"" << TAG_TRANSACTION_NBc <<  std::endl;
+    std::cout << "End list of all transactions belong to a task." << std::endl;
+    break;
   default:
     anEntityMsg << TAG_MSGo << MSG_CMDNFOUND<< TAG_MSGc << std::endl;
     anErrorCode=3;
