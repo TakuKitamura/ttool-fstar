@@ -6,6 +6,8 @@ import ui.TGComponent;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.Vector;
@@ -83,8 +85,9 @@ public class JPanelTaskTransactions extends JPanel {
         nbOfTransactions = new JTextField(Integer.toString(defaultNbOfTransactions), defaultNbOfTransactions);
         add(nbOfTransactions, c2);
 
-        add(new JLabel(" "), c2);
+        add(new JLabel("# Task Name: "), c2);
         tasks = new JComboBox<>();
+        tasks.addItem("-----");
         if(tmlm != null){
             for (int k = 0; k < tmlm.getTasks().size(); k++){
                 tasks.addItem(tmlm.getTasks().get(k).getName());
@@ -93,12 +96,17 @@ public class JPanelTaskTransactions extends JPanel {
 
         tasks.setSelectedIndex(0);
         add(tasks, c2);
-//        updateTransactionInformationButton = new JButton(jfis.actions[InteractiveSimulationActions.ACT_UPDATE_TRANSACTIONS]);
-//        add(updateTransactionInformationButton, c2);
-        tasks.addItemListener(new ItemListener() {
+        updateTransactionInformationButton = new JButton(jfis.actions[InteractiveSimulationActions.ACT_UPDATE_TRANSACTIONS]);
+        add(updateTransactionInformationButton, c2);
+        tasks.addActionListener(new ActionListener() {
             @Override
-            public void itemStateChanged(ItemEvent e) {
-                if (e.getStateChange() == ItemEvent.SELECTED) {
+            public void actionPerformed(ActionEvent actionEvent) {
+                if (_trans == null){
+                    System.out.println("TRANSACTION LIST IS NULL \nYOU NEED TO UPDATE TRANSACTIONS FIRST");
+                    final JPopupMenu menu = new JPopupMenu("Alert");
+                    menu.add("TRANSACTION LIST IS NULL. \nYOU NEED TO UPDATE TRANSACTIONS FIRST.");
+                    menu.show(updateTransactionInformationButton, updateTransactionInformationButton.getWidth()/2, updateTransactionInformationButton.getHeight()/2);
+                }else {
                     System.out.println(tasks.getSelectedItem().toString());
                     if (ttm != null) {
                         ttm.setData(_trans,tasks.getSelectedItem().toString());
