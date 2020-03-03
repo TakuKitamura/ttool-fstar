@@ -80,6 +80,8 @@ public class JDialogAttribute extends JDialogBase implements ActionListener, Lis
     protected boolean isDaemon;
     protected JCheckBox daemonBox;
 
+
+
     // Operation type
     protected String operation;
     protected JPanel panelOperation;
