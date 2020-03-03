@@ -80,6 +80,15 @@ public class JDialogAttribute extends JDialogBase implements ActionListener, Lis
     protected boolean isDaemon;
     protected JCheckBox daemonBox;
 
+    // Periodic task?
+    protected boolean isPeriodic;
+    protected JCheckBox periodicBox;
+    protected JTextField periodText;
+    protected JLabel periodLabel;
+    protected JComboBox<String> units;
+    protected String periodValue = "";
+    protected String unit = "ns"; // can be "ns" or "us" or "ms" or "s";
+
 
 
     // Operation type
@@ -308,12 +317,33 @@ public class JDialogAttribute extends JDialogBase implements ActionListener, Lis
             cOp = new GridBagConstraints();
             panelOperation = new JPanel();
             panelOperation.setLayout(gbOp);
-            panelOperation.setBorder(new javax.swing.border.TitledBorder("System termination"));
+            panelOperation.setBorder(new javax.swing.border.TitledBorder("Options"));
             cOp.weightx = 1.0;
             cOp.gridwidth = GridBagConstraints.REMAINDER; //end row
             daemonBox = new JCheckBox("Daemon task?");
             daemonBox.setSelected(isDaemon);
             panelOperation.add(daemonBox, cOp);
+            cOp.gridwidth = GridBagConstraints.REMAINDER; //end row
+            periodicBox = new JCheckBox("Periodic task?");
+            periodicBox.addActionListener(this);
+            periodicBox.setSelected(isPeriodic);
+            panelOperation.add(periodicBox, cOp);
+            cOp.gridwidth = 1;
+            periodLabel = new JLabel("period: ");
+            panelOperation.add(periodLabel, cOp);
+            //cOp.gridwidth = GridBagConstraints.REMAINDER; //end row
+            periodText = new JTextField(periodValue, 15);
+            panelOperation.add(periodText, cOp);
+            cOp.gridwidth = GridBagConstraints.REMAINDER; //end row
+            units = new JComboBox<>();
+            units.addItem("ns");
+            units.addItem("us");
+            units.addItem("ms");
+            units.addItem("s");
+            units.setSelectedItem(units);
+            panelOperation.add(units, cOp);
+            periodicBox.setSelected(isPeriodic);
+            handlePeriodicElements();
 
             c0.weighty = 1.0;
             c0.weightx = 1.0;
@@ -348,6 +378,10 @@ public class JDialogAttribute extends JDialogBase implements ActionListener, Lis
             boolean b = initValues.get (typeBox.getSelectedIndex()).booleanValue();
             initialValue.setEnabled(b);
             return;
+        }
+
+        if (evt.getSource() == periodicBox) {
+            handlePeriodicElements();
         }
         
         
@@ -399,7 +433,12 @@ public class JDialogAttribute extends JDialogBase implements ActionListener, Lis
         checkTMLKeyword = !b;
     }
     
-    
+    public void handlePeriodicElements() {
+        boolean isSelected = periodicBox.isSelected();
+        periodLabel.setEnabled(isSelected);
+        periodText.setEnabled(isSelected);
+        units.setEnabled(isSelected);
+    }
     
     public void addAttribute() {
         Object o1 = accessBox.getSelectedItem();
@@ -566,6 +605,10 @@ public class JDialogAttribute extends JDialogBase implements ActionListener, Lis
 
     public boolean isDaemon() {
         return daemonBox.isSelected();
+    }
+
+    public boolean isPeriodic() {
+        return periodicBox.isSelected();
     }
 
     public String getOperation() {
