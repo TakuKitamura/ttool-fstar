@@ -133,6 +133,7 @@ public:
 	///inline unsigned int getTransNumber() { return _transNumber;}
         inline unsigned int getID () { return _ID;}
 	void HW2HTML(std::ofstream& myfile) ;
+    void removeTrans(int numberOfTrans);
 	void schedule2HTML(std::ofstream& myfile) ;
 	inline const TaskList& getTaskList() const{return _taskList;}
 	inline void setHtmlCurrTask(TMLTask *t) { _htmlCurrTask=t;}

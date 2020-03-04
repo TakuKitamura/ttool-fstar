@@ -107,6 +107,7 @@ public:
     	*/
 	int allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const;
     int allTrans2XMLByTask(std::ostringstream& glob, std::string taskName) const;
+    void removeTrans(int numberOfTrans);
 	void latencies2XML(std::ostringstream& glob, unsigned int id1, unsigned int id2);
 	/**
       	\param myfile Reference to the ofstream object representing the output file

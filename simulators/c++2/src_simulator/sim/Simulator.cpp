@@ -428,6 +428,30 @@ int Simulator::allTrans2XMLByTask(std::ostringstream& glob, std::string taskName
   return total;
 }
 
+void Simulator::removeOldTransaction(int numberOfTrans){
+    for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
+        for(TaskList::const_iterator j = (*i)->getTaskList().begin(); j != (*i)->getTaskList().end(); ++j){
+            (*j)->removeTrans(numberOfTrans);
+        }
+    }
+    for(FPGAList::const_iterator i=_simComp->getFPGAList().begin(); i != _simComp->getFPGAList().end(); ++i){
+        for(TaskList::const_iterator j = (*i)->getTaskList().begin(); j != (*i)->getTaskList().end(); ++j){
+            (*j)->removeTrans(numberOfTrans);
+        }
+    }
+    for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
+      (*i)->removeTrans(numberOfTrans);
+    }
+
+    for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
+      (*j)->removeTrans(numberOfTrans);
+    }
+
+    for(FPGAList::const_iterator k=_simComp->getFPGAList().begin(); k != _simComp->getFPGAList().end(); ++k){
+        (*k)->removeTrans(numberOfTrans);
+    }
+}
+
 void Simulator::latencies2XML(std::ostringstream& glob, int id1, int id2) {
   for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
     (*i)->latencies2XML(glob, id1, id2);
@@ -2038,6 +2062,12 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
     returnedNbOfTransactions = allTrans2XMLByTask(anEntityMsg, aStrParam);
     anEntityMsg << TAG_TRANSACTION_NBo << "nb=\"" << returnedNbOfTransactions << "\"" << TAG_TRANSACTION_NBc <<  std::endl;
     std::cout << "End list of all transactions belong to a task." << std::endl;
+    break;
+  case 26: //Emptying simulation transactions during simulation
+    aInpStream >> aParam2;
+    std::cout << "Remove list of " << aParam2 << " transactions per CPU or Bus." << std::endl;
+    removeOldTransaction(aParam2);
+    std::cout << "End remove list of transactions." << std::endl;
     break;
   default:
     anEntityMsg << TAG_MSGo << MSG_CMDNFOUND<< TAG_MSGc << std::endl;
