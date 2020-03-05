@@ -273,9 +273,9 @@ public:
 	*/
 	int allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const;
 
-    int allTrans2XMLByTask(std::ostringstream& glob, std::string taskName) const;
+	int allTrans2XMLByTask(std::ostringstream& glob, std::string taskName) const;
 
-    void removeOldTransaction(int numberOfTrans);
+	void removeOldTransaction(int numberOfTrans);
 
 	void latencies2XML(std::ostringstream& glob, int id1, int id2);
 	
