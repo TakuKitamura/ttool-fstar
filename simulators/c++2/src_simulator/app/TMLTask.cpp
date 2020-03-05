@@ -527,8 +527,8 @@ std::string TMLTask::determineHTMLCellClass( 	std::map<TMLTask*, std::string> &t
 	return taskColors[ task ];
 }
 
-void TMLTask::removeTrans(int numberOfTrans){
-    if (numberOfTrans == 1){
+void TMLTask::removeTrans(int numberOfTrans) {
+    if (numberOfTrans == 1) {
         _transactList.clear();
     }
 }

@@ -428,26 +428,26 @@ int Simulator::allTrans2XMLByTask(std::ostringstream& glob, std::string taskName
   return total;
 }
 
-void Simulator::removeOldTransaction(int numberOfTrans){
-    for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
-        for(TaskList::const_iterator j = (*i)->getTaskList().begin(); j != (*i)->getTaskList().end(); ++j){
+void Simulator::removeOldTransaction(int numberOfTrans) {
+    for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i) {
+        for(TaskList::const_iterator j = (*i)->getTaskList().begin(); j != (*i)->getTaskList().end(); ++j) {
             (*j)->removeTrans(numberOfTrans);
         }
     }
-    for(FPGAList::const_iterator i=_simComp->getFPGAList().begin(); i != _simComp->getFPGAList().end(); ++i){
-        for(TaskList::const_iterator j = (*i)->getTaskList().begin(); j != (*i)->getTaskList().end(); ++j){
+    for(FPGAList::const_iterator i=_simComp->getFPGAList().begin(); i != _simComp->getFPGAList().end(); ++i) {
+        for(TaskList::const_iterator j = (*i)->getTaskList().begin(); j != (*i)->getTaskList().end(); ++j) {
             (*j)->removeTrans(numberOfTrans);
         }
     }
-    for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i){
+    for(CPUList::const_iterator i=_simComp->getCPUList().begin(); i != _simComp->getCPUList().end(); ++i) {
       (*i)->removeTrans(numberOfTrans);
     }
 
-    for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
+    for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j) {
       (*j)->removeTrans(numberOfTrans);
     }
 
-    for(FPGAList::const_iterator k=_simComp->getFPGAList().begin(); k != _simComp->getFPGAList().end(); ++k){
+    for(FPGAList::const_iterator k=_simComp->getFPGAList().begin(); k != _simComp->getFPGAList().end(); ++k) {
         (*k)->removeTrans(numberOfTrans);
     }
 }

@@ -159,9 +159,7 @@ public class RemoveAllTransactionsTests extends AbstractUITest {
                 // save trace file and check the transactions displayed on the trace.
                 params[2] = "26 1;1 6 100; 26 1;22 100; 1 6 100; 7 2 " + graphPath +"_save.txt";
                 proc = Runtime.getRuntime().exec(params);
-                //proc = Runtime.getRuntime().exec("./" + SIM_DIR + "run.x -explo -gname testgraph_" + s);
                 proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-
                 monitorError(proc);
                 PrintStream out = new PrintStream(new FileOutputStream(graphPath + ".txt"));
                 while ((str = proc_in.readLine()) != null) {
@@ -194,43 +192,28 @@ public class RemoveAllTransactionsTests extends AbstractUITest {
 
             int lineNum = 1;
 
-            while (line1 != null || line2 != null)
-            {
-                if(line1 == null || line2 == null)
-                {
+            while (line1 != null || line2 != null) {
+                if(line1 == null || line2 == null) {
                     areEqual = false;
-
+                    break;
+                } else if(!line1.equalsIgnoreCase(line2)) {
+                    areEqual = false;
                     break;
                 }
-                else if(! line1.equalsIgnoreCase(line2))
-                {
-                    areEqual = false;
-
-                    break;
-                }
-
                 line1 = reader1.readLine();
-
                 line2 = reader2.readLine();
-
                 lineNum++;
             }
 
-            if(areEqual)
-            {
+            if(areEqual) {
                 System.out.println("Two files have same content.");
                 assertTrue(areEqual);
-            }
-            else
-            {
-                System.out.println("Two files have different content. They differ at line "+lineNum);
-
-                System.out.println("File1 has "+line1+" and File2 has "+line2+" at line "+lineNum);
+            } else {
+                System.out.println("Two files have different content. They differ at line " + lineNum);
+                System.out.println("File1 has " + line1 + " and File2 has " + line2 + " at line " + lineNum);
                 assertTrue(areEqual);
             }
-
             reader1.close();
-
             reader2.close();
         }
     }

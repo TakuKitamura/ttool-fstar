@@ -434,8 +434,8 @@ int FPGA::allTrans2XMLByTask(std::ostringstream& glob, std::string taskName) con
   return total;
 }
 
-void FPGA::removeTrans(int numberOfTrans){
-    if (numberOfTrans == 1){
+void FPGA::removeTrans(int numberOfTrans) {
+    if (numberOfTrans == 1) {
         _transactList.clear();
     }
 }

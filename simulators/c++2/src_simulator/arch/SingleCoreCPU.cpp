@@ -480,8 +480,8 @@ int SingleCoreCPU::allTrans2XMLByTask(std::ostringstream& glob, std::string task
   return total;
 }
 
-void SingleCoreCPU::removeTrans(int numberOfTrans){
-    if (numberOfTrans == 1){
+void SingleCoreCPU::removeTrans(int numberOfTrans) {
+    if (numberOfTrans == 1) {
         _transactList.clear();
     }
 }

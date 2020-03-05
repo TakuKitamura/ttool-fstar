@@ -256,8 +256,8 @@ int Bus::allTrans2XMLByTask(std::ostringstream& glob, std::string taskName) cons
   return total;
 }
 
-void Bus::removeTrans(int numberOfTrans){
-    if (numberOfTrans == 1){
+void Bus::removeTrans(int numberOfTrans) {
+    if (numberOfTrans == 1) {
         _transactList.clear();
     }
 }
