@@ -27,7 +27,7 @@ import static org.junit.Assert.assertTrue;
 
 public class RemoveAllTransactionsTests extends AbstractUITest {
     final String DIR_GEN = "test_diplo_simulator/";
-    final String [] MODELS_PARSE_HTML = {"parseFPGA_HTML", "parseCPU1_HTML","parseCPU2_HTML"};
+    final String [] MODELS_PARSE_HTML = {"parseFPGA_HTML"};
     final String [] PARSE_FPGA_REMOVEALL = {"<- idle 355 ->", "<- idle 355 ->", "<- idle 355 ->"};
     private String SIM_DIR;
     @BeforeClass
@@ -46,7 +46,7 @@ public class RemoveAllTransactionsTests extends AbstractUITest {
     }
     @Test
     public void testRemoveAllTransactions() throws Exception {
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < MODELS_PARSE_HTML.length; i++) {
             String s = MODELS_PARSE_HTML[i];
             SIM_DIR = DIR_GEN + s + "_rmat/";
             System.out.println("executing: checking syntax " + s);
