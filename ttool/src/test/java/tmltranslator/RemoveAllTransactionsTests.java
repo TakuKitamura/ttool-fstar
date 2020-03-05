@@ -28,7 +28,7 @@ import static org.junit.Assert.assertTrue;
 public class RemoveAllTransactionsTests extends AbstractUITest {
     final String DIR_GEN = "test_diplo_simulator/";
     final String [] MODELS_PARSE_HTML = {"parseFPGA_HTML"};
-    final String [] PARSE_FPGA_REMOVEALL = {"<- idle 355 ->", "<- idle 355 ->", "<- idle 355 ->"};
+    final static String EXPECTED_FILE_REMOVE_ALL_TRANS = getBaseResourcesDir() + "tmltranslator/expected/expected_remove_all_trans.txt";
     private String SIM_DIR;
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
@@ -157,7 +157,7 @@ public class RemoveAllTransactionsTests extends AbstractUITest {
                 //list 100 recent transactions on TransacList to check it is empty or not
                 //run again next 100 time units
                 // save trace file and check the transactions displayed on the trace.
-                params[2] = "26 1;1 6 100; 26 1;22 100; 1 6 100; 7 1 " + graphPath +".html";
+                params[2] = "26 1;1 6 100; 26 1;22 100; 1 6 100; 7 2 " + graphPath +"_save.txt";
                 proc = Runtime.getRuntime().exec(params);
                 //proc = Runtime.getRuntime().exec("./" + SIM_DIR + "run.x -explo -gname testgraph_" + s);
                 proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
@@ -180,19 +180,58 @@ public class RemoveAllTransactionsTests extends AbstractUITest {
             // Compare results with expected ones
             // Must load the graph
             File file = new File(graphPath + ".txt");
-            assertTrue(file.length() == 0);
-            Document htmlFile = null;
-            try {
-                htmlFile = Jsoup.parse(new File(graphPath + ".html"), "ISO-8859-1");
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } // right
-            Elements div = htmlFile.select("td.not");
-            for (int j = 0; j < 3; j++) {
-                System.out.println("executing " + s + ": " + div.get(j).text());
-                assertTrue(PARSE_FPGA_REMOVEALL[j].equals(div.get(j).text()));
+            assertTrue(file.length() == 0);// check transacList empty or not
+
+            BufferedReader reader1 = new BufferedReader(new FileReader(graphPath + "_save.txt"));
+
+            BufferedReader reader2 = new BufferedReader(new FileReader(EXPECTED_FILE_REMOVE_ALL_TRANS));
+
+            String line1 = reader1.readLine();
+
+            String line2 = reader2.readLine();
+
+            boolean areEqual = true;
+
+            int lineNum = 1;
+
+            while (line1 != null || line2 != null)
+            {
+                if(line1 == null || line2 == null)
+                {
+                    areEqual = false;
+
+                    break;
+                }
+                else if(! line1.equalsIgnoreCase(line2))
+                {
+                    areEqual = false;
+
+                    break;
+                }
+
+                line1 = reader1.readLine();
+
+                line2 = reader2.readLine();
+
+                lineNum++;
             }
+
+            if(areEqual)
+            {
+                System.out.println("Two files have same content.");
+                assertTrue(areEqual);
+            }
+            else
+            {
+                System.out.println("Two files have different content. They differ at line "+lineNum);
+
+                System.out.println("File1 has "+line1+" and File2 has "+line2+" at line "+lineNum);
+                assertTrue(areEqual);
+            }
+
+            reader1.close();
+
+            reader2.close();
         }
     }
 }
