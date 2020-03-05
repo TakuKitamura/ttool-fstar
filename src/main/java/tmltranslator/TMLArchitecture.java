@@ -557,5 +557,20 @@ public class TMLArchitecture {
 
         return bridgeList;
     }
+    
+    public List<HwA> getHwA() {
+        List<HwA> hardwareAccList = new ArrayList<HwA>();
+
+        for (HwNode node : hwnodes) {
+            if (node instanceof HwA) {
+                HwA hardwareAcc = (HwA) node;
+                hardwareAccList.add(hardwareAcc);
+
+            }
+        }
+
+        return hardwareAccList;
+    }
+
 
 }

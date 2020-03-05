@@ -177,7 +177,7 @@
 <transinfo  uniqueid="2" deviceid="0" devicename="Bus0_0" command="Application2__task4: Write 4,Application2__comm_1__Application2__comm_0" starttime="2524" endtime="2525" length="1" virtuallength="4" id="40" runnableTime="2524" ch="Application2__comm_1__Application2__comm_0" />
 <transinfo  uniqueid="2" deviceid="0" devicename="Bus0_0" command="Application2__task4: Write 4,Application2__comm_1__Application2__comm_0" starttime="2818" endtime="2819" length="1" virtuallength="4" id="40" runnableTime="2818" ch="Application2__comm_1__Application2__comm_0" />
 <transinfo  uniqueid="2" deviceid="0" devicename="Bus0_0" command="Application2__task4: Write 4,Application2__comm_1__Application2__comm_0" starttime="2929" endtime="2930" length="1" virtuallength="4" id="40" runnableTime="2929" ch="Application2__comm_1__Application2__comm_0" />
-
+<model>/ui/graphLatencyAnalysis/input/GraphTestModel.xml / DIPLODOCUS architecture and mapping Diagram</model>
 </global>
 </siminfo>
 

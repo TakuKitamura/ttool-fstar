@@ -44,13 +44,8 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
@@ -60,8 +55,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -69,40 +62,23 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultDirectedGraph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.io.Attribute;
-import org.jgrapht.io.EdgeProvider;
-import org.jgrapht.io.GmlImporter;
-import org.jgrapht.io.GraphImporter;
-import org.jgrapht.io.GraphMLImporter;
-import org.jgrapht.io.ImportException;
-import org.jgrapht.io.VertexProvider;
 import org.xml.sax.SAXException;
 
 import common.ConfigurationTTool;
-import myutil.TraceManager;
 import ui.MainGUI;
 import ui.SimulationTrace;
 
-/**
- * Class JFrameCompareSimulationTraces : open the compare popup with all the
- * related functionality (browse for second file, difference in simulation
- * traces and latency calculation button )
- * 
- * Creation: 19/07/2019
- * 
- * @author Maysam ZOOR
- */
+public class JFrameCompareSimulationTraces extends JFrame implements ActionListener {
 
-public class JFrameCompareSimulationTraces extends JFrame implements ActionListener, WindowListener {
-
-    private JButton browse, parse, difference, latencyDetails, graph;
+    private JButton browse, parse, difference, latencyDetails, latencyAnalysis;
     private JFileChooser fc, fc2;
     private File file;
-    private SimulationTrace selectedST;
+    private SimulationTrace selectedST, secondSelectedST;
     private static Vector<SimulationTransaction> transFile1;
+    Vector<String> dropDown1, dropDown2 = new Vector<String>();
+    private JFrame  JFrameTest;
+
+    MainGUI _mgui;
 
     public Vector<SimulationTransaction> getTransFile1() {
         return transFile1;
@@ -124,23 +100,30 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
     private SimulationTransaction st = new SimulationTransaction();
     private JTextField file2 = new JTextField();
     private boolean panelAdded = false;
+    private boolean latencyPanelAdded = false;
     private static JPanelCompareXmlGraph newContentPane;
-    private JComboBox<Object> devicesDropDownCombo1 = new JComboBox<Object>();
-    private JComboBox<Object> devicesDropDownCombo2 = new JComboBox<Object>();
-    private JComboBox<Object> tracesCombo1, tracesCombo2;
 
-    public JFrameCompareSimulationTraces(MainGUI _mgui, String _title, SimulationTrace sST, boolean visible) {
+    JPanel latencyPanel = new JPanel(new GridBagLayout());;
+    private JComboBox<String> devicesDropDownCombo1 = new JComboBox<String>();
+    private JComboBox<String> devicesDropDownCombo2 = new JComboBox<String>();
+    private JComboBox<String> tracesCombo1, tracesCombo2;
+
+    private Thread t, t1;
+
+    public JFrameCompareSimulationTraces(MainGUI mgui, String _title, SimulationTrace sST, boolean visible) {
 
         super(_title);
+        
+       
 
         this.selectedST = sST;
         GridLayout myLayout = new GridLayout(3, 1);
-
+        _mgui = mgui;
         // this.setBackground(Color.RED);
         this.setLayout(myLayout);
 
-        addWindowListener(this);
-        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        //addWindowListener(this);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         if (ConfigurationTTool.SystemCCodeDirectory.length() > 0) {
             fc = new JFileChooser(ConfigurationTTool.SystemCCodeDirectory);
@@ -198,25 +181,6 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
         c.weighty = 1;
         buttonPanel.add(file2, c);
 
-        JLabel lab3 = new JLabel("Secound Graph ", JLabel.LEFT);
-
-        c.fill = GridBagConstraints.NORTHWEST;
-        c.gridx = 0;
-        c.gridy = 2;
-        c.weightx = 1;
-        c.weighty = 1;
-        c.anchor = GridBagConstraints.WEST;
-        buttonPanel.add(lab3, c);
-
-        graph = new JButton("Graph");
-        graph.addActionListener(this);
-        c.fill = GridBagConstraints.NORTHWEST;
-        c.gridx = 0;
-        c.gridy = 3;
-        c.weightx = 1;
-        c.weighty = 1;
-        buttonPanel.add(graph, c);
-
         browse = new JButton("Browse");
         browse.addActionListener(this);
         c.fill = GridBagConstraints.NORTHWEST;
@@ -235,6 +199,15 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
         c.weighty = 1;
         buttonPanel.add(parse, c);
 
+        /*latencyAnalysis = new JButton("latencyAnalysis");
+        latencyAnalysis.addActionListener(this);
+        c.fill = GridBagConstraints.NORTHWEST;
+        c.gridx = 1;
+        c.gridy = 4;
+        c.weightx = 5;
+        c.weighty = 1;
+        buttonPanel.add(latencyAnalysis, c);*/
+
         difference = new JButton("difference");
         difference.addActionListener(this);
         c.fill = GridBagConstraints.NORTHWEST;
@@ -248,6 +221,7 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
 
         this.pack();
         this.setVisible(visible);
+        JFrameTest= this;
 
     }
 
@@ -300,68 +274,142 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
 
             final DefaultComboBoxModel<Object> model = new DefaultComboBoxModel<Object>(transacationsDropDown1);
 
-            tracesCombo1.setModel(model);
+            // tracesCombo1.setModel(model);
 
         } else if (e.getSource() == devicesDropDownCombo2) {
             Vector<Object> transacationsDropDown2 = newContentPane.loadTransacationsDropDown(devicesDropDownCombo2.getSelectedItem());
 
             final DefaultComboBoxModel<Object> model = new DefaultComboBoxModel<Object>(transacationsDropDown2);
 
-            tracesCombo2.setModel(model);
+            // tracesCombo2.setModel(model);
 
-        } else if (e.getSource() == graph) {
+        } /*else if (e.getSource() == latencyAnalysis) {
 
-            if (ConfigurationTTool.SystemCCodeDirectory.length() > 0) {
-                fc2 = new JFileChooser(ConfigurationTTool.SystemCCodeDirectory);
-            } else {
-                fc2 = new JFileChooser();
-            }
-
-            FileNameExtensionFilter filter = new FileNameExtensionFilter("graphml files", "graphml");
-            fc2.setFileFilter(filter);
-
-            int returnVal = fc2.showOpenDialog(JFrameCompareSimulationTraces.this);
-
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
-                file = fc2.getSelectedFile();
-                // file2.setText(file.getPath());
-
-            }
-
-            FileReader ps = null;
-            try {
-                ps = new FileReader(file);
-            } catch (FileNotFoundException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            }
-
-            VertexProvider<String> vertexProvider = (id, attributes) -> {
-                String cv = new String(id);
-                cv.replaceAll("\\s+", "");
-                cv.replaceAll("(", "");
-                cv.replaceAll(")", "");
-                return cv;
-
+            t = new Thread() {
+                public void run() {
+                    try {
+                        _mgui.latencyDetailedAnalysisForXML(selectedST, true, false,1);
+                    } catch (XPathExpressionException | ParserConfigurationException | SAXException | IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
             };
 
-            EdgeProvider<String, DefaultEdge> edgeProvider = (from, to, label, attributes) -> new DefaultEdge();
-
-            GraphMLImporter<String, DefaultEdge> importer = new GraphMLImporter<String, DefaultEdge>(vertexProvider, edgeProvider);
+            t.start();
 
             try {
-                Graph<String, DefaultEdge> importedGraph = new DefaultDirectedGraph<>(DefaultEdge.class);
-                ;
-                importer.importGraph(importedGraph, ps);
-                System.out.print(importedGraph.vertexSet().size());
-            } catch (ImportException e1) {
+                t.join();
+            } catch (InterruptedException e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
 
-        }
+            if (t.getState() == Thread.State.TERMINATED) {
+                dropDown1 = _mgui.getLatencyDetailedAnalysis().getCheckedTransactions();
+            }
+
+            secondSelectedST = new SimulationTrace("file2", SimulationTrace.XML_DIPLO, file2.getText());
+
+            System.out.println("load drop down1: " + _mgui.getLatencyDetailedAnalysis().getCheckedTransactions().size());
+
+            t1 = new Thread() {
+                public void run() {
+                    try {
+                        _mgui.latencyDetailedAnalysisForXML(secondSelectedST, true,false,2);
+                    } catch (XPathExpressionException | ParserConfigurationException | SAXException | IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+            };
+
+            t1.start();
+
+            try {
+                t1.join();
+            } catch (InterruptedException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+
+            if (t1.getState() == Thread.State.TERMINATED) {
+
+                dropDown2 = _mgui.getLatencyDetailedAnalysis().getCheckedTransactions();
+            }
+            System.out.println("load drop down2: " + _mgui.getLatencyDetailedAnalysis().getCheckedTransactions().size());
+
+            if (!latencyPanelAdded) {
+                DrawLatencyPanel();
+
+                latencyPanelAdded = true;
+                latencyPanel.revalidate();
+                latencyPanel.repaint();
+                latencyPanel.setVisible(true);
+                this.add(latencyPanel);
+                this.pack();
+
+            } else {
+                this.revalidate();
+                latencyPanel.revalidate();
+                latencyPanel.repaint();
+
+            }
+
+            this.revalidate();
+            this.repaint();
+            this.pack();
+            this.revalidate();
+            this.repaint();
+
+            this.setVisible(true);
+        }*/
 
     }
+
+    /*
+     * else if (e.getSource() == graph) {
+     * 
+     * if (ConfigurationTTool.SystemCCodeDirectory.length() > 0) { fc2 = new
+     * JFileChooser(ConfigurationTTool.SystemCCodeDirectory); } else { fc2 = new
+     * JFileChooser(); }
+     * 
+     * FileNameExtensionFilter filter = new FileNameExtensionFilter("graphml files",
+     * "graphml"); fc2.setFileFilter(filter);
+     * 
+     * int returnVal = fc2.showOpenDialog(JFrameCompareSimulationTraces.this);
+     * 
+     * if (returnVal == JFileChooser.APPROVE_OPTION) { file = fc2.getSelectedFile();
+     * // file2.setText(file.getPath());
+     * 
+     * }
+     * 
+     * FileReader ps = null; try { ps = new FileReader(file); } catch
+     * (FileNotFoundException e1) { // TODO Auto-generated catch block
+     * e1.printStackTrace(); }
+     * 
+     * VertexProvider<String> vertexProvider = (id, attributes) -> { String cv = new
+     * String(id); cv.replaceAll("\\s+", ""); cv.replaceAll("(", "");
+     * cv.replaceAll(")", ""); return cv;
+     * 
+     * };
+     * 
+     * EdgeProvider<String, DefaultEdge> edgeProvider = (from, to, label,
+     * attributes) -> new DefaultEdge();
+     * 
+     * GraphMLImporter<String, DefaultEdge> importer = new GraphMLImporter<String,
+     * DefaultEdge>(vertexProvider, edgeProvider);
+     * 
+     * try { Graph<String, DefaultEdge> importedGraph = new
+     * DefaultDirectedGraph<>(DefaultEdge.class); ;
+     * importer.importGraph(importedGraph, ps);
+     * System.out.print(importedGraph.vertexSet().size()); } catch (ImportException
+     * e1) { // TODO Auto-generated catch block e1.printStackTrace(); }
+     * 
+     * }
+     */
+
+    // }
 
     public int parseXML(String file1Path, String file2Path) throws SAXException, IOException, ParserConfigurationException {
 
@@ -402,8 +450,6 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
 
             this.add(newContentPane);
 
-            DrawLatencyPanel();
-
             panelAdded = true;
         }
 
@@ -413,19 +459,16 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
 
     private void DrawLatencyPanel() {
 
-        JPanel latencyPanel = new JPanel(new GridBagLayout()); // use FlowLayout
+        latencyPanel = new JPanel(new GridBagLayout()); // use FlowLayout
         GridBagConstraints c = new GridBagConstraints();
         latencyPanel.setBorder(new javax.swing.border.TitledBorder("Latency for Simulation Traces File"));
         c.fill = GridBagConstraints.NORTHWEST;
 
         new JTextField();
 
-        Vector<Object> devicesDropDown1 = newContentPane.loadDevicesDropDown();
+        devicesDropDownCombo1 = new JComboBox<String>(dropDown1);
 
-        devicesDropDownCombo1 = new JComboBox<Object>(devicesDropDown1);
-
-        Vector<Object> transacationsDropDown1 = newContentPane.loadTransacationsDropDown(devicesDropDownCombo1.getSelectedItem());
-        tracesCombo1 = new JComboBox<Object>(transacationsDropDown1);
+        tracesCombo1 = new JComboBox<String>(dropDown1);
 
         c.fill = GridBagConstraints.NORTHWEST;
         c.gridx = 0;
@@ -441,16 +484,12 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
         c.weightx = 1;
         c.weighty = 1;
         latencyPanel.add(tracesCombo1, c);
-        this.add(latencyPanel);
 
         devicesDropDownCombo1.addActionListener(this);
 
-        Vector<Object> devicesDropDown2 = newContentPane.loadDevicesDropDown();
+        devicesDropDownCombo2 = new JComboBox<String>(dropDown2);
 
-        devicesDropDownCombo2 = new JComboBox<Object>(devicesDropDown2);
-
-        Vector<Object> transacationsDropDown2 = newContentPane.loadTransacationsDropDown(devicesDropDownCombo2.getSelectedItem());
-        tracesCombo2 = new JComboBox<Object>(transacationsDropDown2);
+        tracesCombo2 = new JComboBox<String>(dropDown2);
 
         c.fill = GridBagConstraints.NORTHWEST;
         c.gridx = 1;
@@ -463,7 +502,6 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
         c.gridy = 1;
 
         latencyPanel.add(tracesCombo2, c);
-        this.add(latencyPanel);
 
         devicesDropDownCombo2.addActionListener(this);
 
@@ -475,44 +513,11 @@ public class JFrameCompareSimulationTraces extends JFrame implements ActionListe
         c.weightx = 1;
         c.weighty = 1;
         latencyPanel.add(latencyDetails, c);
-    }
-
-    @Override
-    public void windowOpened(WindowEvent e) {
+        latencyPanel.setVisible(true);
 
     }
 
-    @Override
-    public void windowClosing(WindowEvent e) {
-        TraceManager.addDev("Windows closed!");
-        close();
 
-    }
-
-    @Override
-    public void windowClosed(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowIconified(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowDeiconified(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowActivated(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowDeactivated(WindowEvent e) {
-
-    }
 
     public void close() {
 

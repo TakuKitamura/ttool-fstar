@@ -9,7 +9,7 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="Connector between ports" />
 <P1  x="255" y="334" id="44" />
-<P2  x="494" y="331" id="55" />
+<P2  x="498" y="331" id="55" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
 <CONNECTOR type="126" id="2" >
@@ -235,7 +235,7 @@
 </SUBCOMPONENT>
 
 <COMPONENT type="1202" id="65" >
-<cdparam x="444" y="344" />
+<cdparam x="448" y="344" />
 <sizeparam width="200" height="150" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -254,7 +254,7 @@
 </COMPONENT>
 <SUBCOMPONENT type="1203" id="56" >
 <father id="65" num="0" />
-<cdparam x="481" y="331" />
+<cdparam x="485" y="331" />
 <sizeparam width="26" height="26" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="-13" maxX="187" minY="-13" maxY="137" />
@@ -273,10 +273,10 @@
 
 </TMLComponentTaskDiagramPanel>
 
-<TMLActivityDiagramPanel name="task4" minX="10" maxX="2500" minY="10" maxY="1500" >
+<TMLActivityDiagramPanel name="task4" minX="10" maxX="2500" minY="10" maxY="1500" zoom="1.0" >
 <COMPONENT type="1008" id="68" >
-<cdparam x="559" y="179" />
-<sizeparam width="85" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="549" y="179" />
+<sizeparam width="105" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -289,8 +289,8 @@
 </COMPONENT>
 
 <COMPONENT type="1006" id="71" >
-<cdparam x="721" y="566" />
-<sizeparam width="79" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="711" y="566" />
+<sizeparam width="99" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -328,8 +328,8 @@
 </COMPONENT>
 
 <COMPONENT type="1008" id="80" >
-<cdparam x="749" y="388" />
-<sizeparam width="52" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="739" y="388" />
+<sizeparam width="72" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -381,7 +381,7 @@
 <cdparam x="407" y="65" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
-<P1  x="407" y="65" id="83" />
+<P1  x="407" y="70" id="83" />
 <P2  x="473" y="98" id="75" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -412,7 +412,7 @@
 
 </TMLActivityDiagramPanel>
 
-<TMLActivityDiagramPanel name="task22" minX="10" maxX="2500" minY="10" maxY="1500" >
+<TMLActivityDiagramPanel name="task22" minX="10" maxX="2500" minY="10" maxY="1500" zoom="1.0" >
 <COMPONENT type="1036" id="93" >
 <cdparam x="453" y="363" />
 <sizeparam width="15" height="35" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
@@ -428,14 +428,15 @@
 </COMPONENT>
 
 <COMPONENT type="1009" id="96" >
-<cdparam x="427" y="301" />
-<sizeparam width="83" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="417" y="301" />
+<sizeparam width="103" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
 <infoparam name="read channel" value="comm_0(1) " />
 <TGConnectingPoint num="0" id="94" />
 <TGConnectingPoint num="1" id="95" />
+<latencyCheck />
 <extraparam>
 <Data channelName="comm_0" nbOfSamples="1" secPattern="test" isAttacker="No" isEncForm="Yes" />
 </extraparam>
@@ -472,8 +473,8 @@
 </COMPONENT>
 
 <COMPONENT type="1010" id="107" >
-<cdparam x="411" y="228" />
-<sizeparam width="65" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="401" y="228" />
+<sizeparam width="85" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -500,7 +501,7 @@
 <cdparam x="407" y="65" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
-<P1  x="407" y="65" id="108" />
+<P1  x="407" y="70" id="108" />
 <P2  x="402" y="123" id="99" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -547,7 +548,7 @@
 
 </TMLActivityDiagramPanel>
 
-<TMLActivityDiagramPanel name="Function0" minX="10" maxX="2500" minY="10" maxY="1500" >
+<TMLActivityDiagramPanel name="Function0" minX="10" maxX="2500" minY="10" maxY="1500" zoom="1.0" >
 <COMPONENT type="1013" id="119" >
 <cdparam x="402" y="348" />
 <sizeparam width="10" height="30" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
@@ -586,8 +587,8 @@
 </COMPONENT>
 
 <COMPONENT type="1008" id="126" >
-<cdparam x="381" y="221" />
-<sizeparam width="69" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="371" y="221" />
+<sizeparam width="89" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -640,7 +641,7 @@
 <cdparam x="407" y="65" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
-<P1  x="407" y="65" id="131" />
+<P1  x="407" y="70" id="131" />
 <P2  x="398" y="153" id="127" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -663,7 +664,7 @@
 
 </TMLActivityDiagramPanel>
 
-<TMLActivityDiagramPanel name="Function1" minX="10" maxX="2500" minY="10" maxY="1500" >
+<TMLActivityDiagramPanel name="Function1" minX="10" maxX="2500" minY="10" maxY="1500" zoom="1.0" >
 <COMPONENT type="1001" id="139" >
 <cdparam x="399" y="181" />
 <sizeparam width="20" height="20" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
@@ -683,8 +684,8 @@
 </COMPONENT>
 
 <COMPONENT type="1010" id="144" >
-<cdparam x="488" y="190" />
-<sizeparam width="89" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="478" y="190" />
+<sizeparam width="109" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -721,7 +722,7 @@
 <cdparam x="407" y="65" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
-<P1  x="407" y="65" id="149" />
+<P1  x="407" y="70" id="149" />
 <P2  x="423" y="113" id="145" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -752,7 +753,7 @@
 
 </TMLActivityDiagramPanel>
 
-<TMLActivityDiagramPanel name="Function2" minX="10" maxX="2500" minY="10" maxY="1500" >
+<TMLActivityDiagramPanel name="Function2" minX="10" maxX="2500" minY="10" maxY="1500" zoom="1.0" >
 <COMPONENT type="1001" id="156" >
 <cdparam x="343" y="215" />
 <sizeparam width="20" height="20" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
@@ -772,8 +773,8 @@
 </COMPONENT>
 
 <COMPONENT type="1010" id="161" >
-<cdparam x="473" y="331" />
-<sizeparam width="73" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="463" y="331" />
+<sizeparam width="93" height="20" minWidth="30" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="10" maxX="2500" minY="10" maxY="1500" />
@@ -818,7 +819,7 @@
 <cdparam x="407" y="65" />
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
-<P1  x="407" y="65" id="166" />
+<P1  x="407" y="70" id="166" />
 <P2  x="398" y="153" id="162" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR>
@@ -847,7 +848,7 @@
 
 
 <Modeling type="TML Architecture" nameTab="Architecture2" >
-<TMLArchiDiagramPanel name="DIPLODOCUS architecture and mapping Diagram" minX="10" maxX="2500" minY="10" maxY="1500" attributes="0" masterClockFrequency="200" >
+<TMLArchiDiagramPanel name="DIPLODOCUS architecture and mapping Diagram" minX="10" maxX="2500" minY="10" maxY="1500" attributes="0" masterClockFrequency="200" zoom="1.0" >
 <COMPONENT type="1105" id="196" >
 <cdparam x="608" y="382" />
 <sizeparam width="200" height="200" minWidth="100" minHeight="35" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />

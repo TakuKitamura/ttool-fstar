@@ -379,7 +379,7 @@ void Simulator::schedule2XML(std::ostringstream& glob,std::string& iTraceFileNam
     for(BusList::const_iterator j=_simComp->getBusList().begin(); j != _simComp->getBusList().end(); ++j){
       (*j)->schedule2XML(glob,myfile);
     }
-
+    glob << TAG_MODELo<< _simComp->getModelName() << TAG_MODELc; //name of model
     glob << std::endl << TAG_GLOBALc << std::endl << TAG_STARTc << std::endl;
 
     myfile << glob.str() << std::endl;

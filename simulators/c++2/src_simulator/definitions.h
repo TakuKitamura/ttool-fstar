@@ -231,6 +231,9 @@ using std::max;
 #define TAG_CURRTASKc "</currtask>"
 #define TAG_ENERGYo "<energy>"
 #define TAG_ENERGYc "</energy>"
+#define TAG_MODELo "<model>"
+#define TAG_MODELc "</model>"
+
 
 #define EXT_SEP "."
 #define EXT_VCD ".vcd"

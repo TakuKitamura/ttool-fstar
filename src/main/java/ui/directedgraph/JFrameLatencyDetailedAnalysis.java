@@ -98,8 +98,10 @@ import common.ConfigurationTTool;
 import common.SpecConfigTTool;
 import myutil.GraphicLib;
 import myutil.ScrolledJTextArea;
+import myutil.TraceManager;
 import tmltranslator.TMLMapping;
 import ui.ColorManager;
+import ui.SimulationTrace;
 import ui.TGComponent;
 import ui.TMLComponentDesignPanel;
 import ui.interactivesimulation.SimulationTransaction;
@@ -119,10 +121,11 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
 //    private JButton saveGraph, viewGraph;
     protected JTextArea jta;
     protected JScrollPane jsp;
-    private JTabbedPane commandTab, resultTab;/*, resultTabDetailed;*/
-    private JPanel loadxml, commands, jp01, jp02, /*activities,*/ graphAnalysisResult, jp03, jp04, jp05; //,graphAnalysisResultDetailed;
+    private JTabbedPane commandTab, resultTab;/* , resultTabDetailed; */
+    private JPanel loadxml, commands, jp01, jp02, /* activities, */ graphAnalysisResult, jp03, jp04, jp05; // ,graphAnalysisResultDetailed;
     protected JButton buttonClose, buttonShowDGraph, buttonSaveDGraph, buttonBrowse, buttonDetailedAnalysis;
 
+    public Vector<String> checkedTransactions = new Vector<String>();
     protected JTextField saveDirName;
     protected JTextField saveFileName;
 
@@ -149,16 +152,19 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
 
     private DirectedGraphTranslator dgraph;
 
-    private JScrollPane scrollPane11, scrollPane12;//, scrollPane13;
+    private JScrollPane scrollPane11, scrollPane12;// , scrollPane13;
 
 //    private GridBagLayout gridbag01;
 //    private GridBagConstraints c01;
     private Thread t;
 
 //    @SuppressWarnings("deprecation")
-    public JFrameLatencyDetailedAnalysis(TMLMapping<TGComponent> tmap, List<TMLComponentDesignPanel> cpanels) {
+    public JFrameLatencyDetailedAnalysis(TMLMapping<TGComponent> tmap, List<TMLComponentDesignPanel> cpanels, SimulationTrace selectedST) {
         super("Latency Detailed Analysis");
         initActions();
+        fillCheckedTrans(tmap);
+
+        file = new File(selectedST.getFullPath());
 
         GridBagLayout gridbagmain = new GridBagLayout();
 
@@ -192,7 +198,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
         jp.add(buttonDetailedAnalysis);
         jp.add(buttonClose);
 
-        buttonDetailedAnalysis.setEnabled(false);
+        buttonDetailedAnalysis.setEnabled(true);
         buttonShowDGraph.setEnabled(false);
 
         framePanel.add(jp, mainConstraint);
@@ -278,6 +284,9 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
 
         file1 = new JTextField(40);
         file1.setMinimumSize(new Dimension(300, 30));
+        file1.setText(selectedST.getFullPath());
+        file1.setEditable(false);
+
 
         c01.gridheight = 1;
         c01.weighty = 1.0;
@@ -294,7 +303,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
         c01.gridwidth = 1;
         c01.gridx = 1;
         c01.gridy = 1;
-        tasksDropDownCombo1.addActionListener(this);
+        tasksDropDownCombo1 = new JComboBox<String>(checkedTransactions);
         loadxml.add(tasksDropDownCombo1, c01);
 
         c01.gridheight = 1;
@@ -304,19 +313,19 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
         c01.gridx = 2;
         c01.gridy = 1;
 
-        tasksDropDownCombo2.addActionListener(this);
+        tasksDropDownCombo2 = new JComboBox<String>(checkedTransactions);
 
         loadxml.add(tasksDropDownCombo2, c01);
 
-        buttonBrowse = new JButton(actions[LatencyDetailedAnalysisActions.ACT_LOAD_SIMULATION_TRACES]);
+        //buttonBrowse = new JButton(actions[LatencyDetailedAnalysisActions.ACT_LOAD_SIMULATION_TRACES]);
 
-        c01.gridheight = 1;
-        c01.weighty = 1.0;
-        c01.weightx = 1.0;
-        c01.gridwidth = 1;
-        c01.gridx = 2;
-        c01.gridy = 0;
-        loadxml.add(buttonBrowse, c01);
+       // c01.gridheight = 1;
+        //c01.weighty = 1.0;
+       // c01.weightx = 1.0;
+        //c01.gridwidth = 1;
+        //c01.gridx = 2;
+       // c01.gridy = 0;
+       // loadxml.add(buttonBrowse, c01);
 
         GridBagLayout gridbag04 = new GridBagLayout();
         GridBagConstraints c04 = new GridBagConstraints();
@@ -574,7 +583,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
             jta.setText("");
             dispose();
             setVisible(false);
-        } else if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_LOAD_SIMULATION_TRACES].getActionCommand())) {
+        } /*else if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_LOAD_SIMULATION_TRACES].getActionCommand())) {
 
             if (ConfigurationTTool.SystemCCodeDirectory.length() > 0) {
                 fc = new JFileChooser(ConfigurationTTool.SystemCCodeDirectory);
@@ -594,8 +603,8 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
 
                 transFile1 = parseFile(file);
 
-                models[0] = new DefaultComboBoxModel(loadDropDowns());
-                models[1] = new DefaultComboBoxModel(loadDropDowns());
+              //  models[0] = new DefaultComboBoxModel(loadDropDowns());
+               // models[1] = new DefaultComboBoxModel(loadDropDowns());
 
                 tasksDropDownCombo1.setModel(models[0]);
                 tasksDropDownCombo2.setModel(models[1]);
@@ -605,11 +614,12 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
                 this.pack();
                 this.setVisible(true);
             }
-        } else if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_DETAILED_ANALYSIS].getActionCommand())) {
+        }*/ else if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_DETAILED_ANALYSIS].getActionCommand())) {
             jta.append("the Latency Between: \n " + tasksDropDownCombo1.getSelectedItem() + " and \n" + tasksDropDownCombo2.getSelectedItem()
                     + " is studied \n");
             Thread t = new Thread() {
                 public void run() {
+                    transFile1 = parseFile(file);
                     latencyDetailedAnalysis();
                 }
             };
@@ -662,7 +672,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
                 Graph<String, DefaultEdge> importedGraph = new DefaultDirectedGraph<>(DefaultEdge.class);
                 ;
                 importer.importGraph(importedGraph, ps);
-              
+
             } catch (ImportException e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
@@ -716,7 +726,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
                     int row = table11.getSelectedRow();
                     Thread t = new Thread() {
                         public void run() {
-                           /* JFrameLatencyDetailedPopup rowPopup =*/ new JFrameLatencyDetailedPopup(dgraph, row, true);
+                            /* JFrameLatencyDetailedPopup rowPopup = */ new JFrameLatencyDetailedPopup(dgraph, row, true);
                         }
                     };
 
@@ -744,7 +754,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
                     int row = table12.getSelectedRow();
                     Thread t = new Thread() {
                         public void run() {
-                            /*JFrameLatencyDetailedPopup rowPopup = */new JFrameLatencyDetailedPopup(dgraph, row, false);
+                            /* JFrameLatencyDetailedPopup rowPopup = */new JFrameLatencyDetailedPopup(dgraph, row, false);
                         }
                     };
 
@@ -780,12 +790,12 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
 
     }
 
-    public Vector<String> loadDropDowns() {
+  /*  public Vector<String> loadDropDowns() {
         Vector<String> allLatencyTasks = dgraph.getLatencyVertices();
 
         return allLatencyTasks;
 
-    }
+    }*/
 
     public void error(String error) {
         jta.append("error: " + error + "\n");
@@ -793,7 +803,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
 
     private void showgraphFrame() {
         try {
-            dgraph.showGraph();
+            dgraph.showGraph(dgraph);
 
             jta.append("Refer to the generatd dialog to view the graph.\n");
 
@@ -803,6 +813,23 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
         }
 
     }
+    
+    public void fillCheckedTrans(TMLMapping<TGComponent> tmap) {
+        if (tmap == null) {
+            return;
+        }
+        for (TGComponent tgc : tmap.getTMLModeling().getCheckedComps().keySet()) {
+            String compName = tmap.getTMLModeling().getCheckedComps().get(tgc);
+            TraceManager.addDev(compName + "__" + tgc.getDIPLOID());
+            checkedTransactions.add(compName + "__" + tgc.getDIPLOID());
+        }
+
+    }
+
+    public Vector<String> getCheckedTransactions() {
+        return checkedTransactions;
+    }
+
 
     @Override
     public void stateChanged(ChangeEvent e) {

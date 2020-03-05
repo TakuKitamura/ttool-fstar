@@ -38,8 +38,39 @@
 
 package ui.directedgraph;
 
-import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
-import com.mxgraph.swing.mxGraphComponent;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.FilterWriter;
+import java.io.IOException;
+import java.io.Writer;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Vector;
+
+import javax.imageio.ImageIO;
+import javax.swing.DefaultListModel;
+import javax.swing.JApplet;
+import javax.swing.JFrame;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
+
+import org.apache.commons.math3.geometry.spherical.twod.Vertex;
+import org.apache.derby.tools.sysinfo;
+import org.graphstream.graph.Edge;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.AllDirectedPaths;
@@ -47,25 +78,71 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.ext.JGraphXAdapter;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.io.*;
-import tmltranslator.*;
+import org.jgrapht.io.ComponentNameProvider;
+import org.jgrapht.io.EdgeProvider;
+import org.jgrapht.io.ExportException;
+import org.jgrapht.io.GraphImporter;
+import org.jgrapht.io.GraphMLExporter;
+import org.jgrapht.io.GraphMLImporter;
+import org.jgrapht.io.ImportException;
+import org.jgrapht.io.VertexProvider;
+
+import com.mxgraph.layout.mxCircleLayout;
+import com.mxgraph.layout.mxIGraphLayout;
+import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
+import com.mxgraph.swing.mxGraphComponent;
+import com.mxgraph.util.mxCellRenderer;
+import com.sun.prism.paint.Color;
+
+import tmltranslator.HwA;
+import tmltranslator.HwCommunicationNode;
+import tmltranslator.HwLink;
+import tmltranslator.HwNode;
+import tmltranslator.TMLActivity;
+import tmltranslator.TMLActivityElement;
+import tmltranslator.TMLChannel;
+import tmltranslator.TMLElement;
+import tmltranslator.TMLError;
+import tmltranslator.TMLMapping;
+import tmltranslator.TMLReadChannel;
+import tmltranslator.TMLRequest;
+import tmltranslator.TMLSendEvent;
+import tmltranslator.TMLTask;
+import tmltranslator.TMLWaitEvent;
+import tmltranslator.TMLWriteChannel;
 import tmltranslator.tomappingsystemc2.DiploSimulatorCodeGenerator;
 import ui.TGComponent;
 import ui.TGConnectingPoint;
 import ui.TGConnector;
 import ui.TMLComponentDesignPanel;
 import ui.interactivesimulation.SimulationTransaction;
-import ui.tmlad.*;
+import ui.tmlad.TMLADActionState;
+import ui.tmlad.TMLADChoice;
+import ui.tmlad.TMLADDecrypt;
+import ui.tmlad.TMLADDelay;
+import ui.tmlad.TMLADDelayInterval;
+import ui.tmlad.TMLADEncrypt;
+import ui.tmlad.TMLADExecC;
+import ui.tmlad.TMLADExecCInterval;
+import ui.tmlad.TMLADExecI;
+import ui.tmlad.TMLADExecIInterval;
+import ui.tmlad.TMLADForEverLoop;
+import ui.tmlad.TMLADForLoop;
+import ui.tmlad.TMLADForStaticLoop;
+import ui.tmlad.TMLADNotifiedEvent;
+import ui.tmlad.TMLADRandom;
+import ui.tmlad.TMLADReadChannel;
+import ui.tmlad.TMLADReadRequestArg;
+import ui.tmlad.TMLADSelectEvt;
+import ui.tmlad.TMLADSendEvent;
+import ui.tmlad.TMLADSendRequest;
+import ui.tmlad.TMLADSequence;
+import ui.tmlad.TMLADStartState;
+import ui.tmlad.TMLADStopState;
+import ui.tmlad.TMLADUnorderedSequence;
+import ui.tmlad.TMLADWaitEvent;
+import ui.tmlad.TMLADWriteChannel;
 import ui.tmlcompd.TMLCPrimitivePort;
-
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.*;
-import java.util.*;
-import java.util.List;
-import java.util.Map.Entry;
 
 /**
  * Class DirectedGraphTranslator: this class generate the directed graph
@@ -88,41 +165,60 @@ public class DirectedGraphTranslator extends JApplet {
 
     // List<HwNode> path;
 
-    TMLActivityElement currentElement;
-    TMLActivityElement backwardElement;
-    ArrayList<String> SummaryCommMapping;
+    private TMLActivityElement currentElement;
+    private TMLActivityElement backwardElement;
+    private ArrayList<String> SummaryCommMapping;
 
     private Graph<String, DefaultEdge> g;
+
+    public Graph<String, DefaultEdge> getG() {
+        return g;
+    }
+
+    public void setG(Graph<String, DefaultEdge> g) {
+        this.g = g;
+    }
+
     private static final Dimension DEFAULT_SIZE = new Dimension(530, 320);
-    List<TMLComponentDesignPanel> cpanels;
-    List<HwLink> links;
-    TMLMapping<TGComponent> tmap;
-    HashMap<String, String> addedEdges = new HashMap<String, String>();
-    HashMap<String, HashSet<String>> sendEventWaitEventEdges = new HashMap<String, HashSet<String>>();
-    HashMap<String, HashSet<String>> readWriteChannelEdges = new HashMap<String, HashSet<String>>();
-    HashMap<String, HashSet<String>> sequenceEdges = new HashMap<String, HashSet<String>>();
-    HashMap<String, ArrayList<String>> orderedSequenceList = new HashMap<String, ArrayList<String>>();
-    HashMap<String, HashSet<String>> unOrderedSequenceEdges = new HashMap<String, HashSet<String>>();
-    HashMap<String, ArrayList<String>> unOrderedSequenceList = new HashMap<String, ArrayList<String>>();
-    List<String> forEverLoopList = new ArrayList<String>();
-    HashMap<String, List<TMLTask>> requests = new HashMap<String, List<TMLTask>>();
+    private final List<TMLComponentDesignPanel> cpanels;
+    private final List<HwLink> links;
+    private final TMLMapping<TGComponent> tmap;
+    private final HashMap<String, String> addedEdges = new HashMap<String, String>();
+    private final HashMap<String, HashSet<String>> sendEventWaitEventEdges = new HashMap<String, HashSet<String>>();
+    private final HashMap<String, HashSet<String>> readWriteChannelEdges = new HashMap<String, HashSet<String>>();
+    private final HashMap<String, HashSet<String>> sequenceEdges = new HashMap<String, HashSet<String>>();
+    private final HashMap<String, ArrayList<String>> orderedSequenceList = new HashMap<String, ArrayList<String>>();
+    private final HashMap<String, HashSet<String>> unOrderedSequenceEdges = new HashMap<String, HashSet<String>>();
+    private final HashMap<String, ArrayList<String>> unOrderedSequenceList = new HashMap<String, ArrayList<String>>();
+    private final List<String> forEverLoopList = new ArrayList<String>();
+    private final HashMap<String, List<TMLTask>> requests = new HashMap<String, List<TMLTask>>();
 
-    HashMap<String, HashSet<String>> requestEdges = new HashMap<String, HashSet<String>>();
+    private final HashMap<String, HashSet<String>> requestEdges = new HashMap<String, HashSet<String>>();
 
-    HashMap<String, List<String>> requestsOriginDestination = new HashMap<String, List<String>>();
-    HashMap<String, List<String>> requestsPorts = new HashMap<String, List<String>>();
+    private final HashMap<String, List<String>> requestsOriginDestination = new HashMap<String, List<String>>();
+    private final HashMap<String, List<String>> requestsPorts = new HashMap<String, List<String>>();
 
-    HashMap<String, List<String>> requestsDestination = new HashMap<String, List<String>>();
-    Vector<String> allLatencyTasks = new Vector<String>();
+    private final HashMap<String, List<String>> requestsDestination = new HashMap<String, List<String>>();
+    private final Vector<String> allLatencyTasks = new Vector<String>();
 
-    static JScrollPane scrollPane = new JScrollPane();
+    private static JScrollPane scrollPane = new JScrollPane();
 
     // List<String,String> = new ArrayList<String,String>();
 
-    HashMap<String, String> nameIDTaskList = new HashMap<String, String>();
+    private final HashMap<String, String> nameIDTaskList = new HashMap<String, String>();
+
+    private final HashMap<String, ArrayList<String>> channelPaths = new HashMap<String, ArrayList<String>>();
 
     public HashMap<String, String> getNameIDTaskList() {
         return nameIDTaskList;
+    }
+
+    public JScrollPane getScrollPane() {
+        return scrollPane;
+    }
+
+    public static void setScrollPane(JScrollPane scrollPane) {
+        DirectedGraphTranslator.scrollPane = scrollPane;
     }
 
     private Object[][] dataByTask = null;
@@ -136,7 +232,7 @@ public class DirectedGraphTranslator extends JApplet {
 
     HashMap<Integer, List<String>> detailsOfMinMaxRow = new HashMap<Integer, List<String>>();
     HashMap<Integer, List<SimulationTransaction>> dataBydelayedTasksOfMinMAx = new HashMap<Integer, List<SimulationTransaction>>();
-    JFrame frame;
+    private final JFrame frame = new JFrame("The Sys-ML Model As Directed Graph");
 
     List<Integer> times1 = new ArrayList<Integer>();
     List<Integer> times2 = new ArrayList<Integer>();
@@ -146,6 +242,7 @@ public class DirectedGraphTranslator extends JApplet {
     String idTask2;
     String task2DeviceName = "";
     String task1DeviceName = "";
+    ArrayList<String> devicesToBeConsidered = new ArrayList<String>();
 
     Vector<SimulationTransaction> relatedsimTraces = new Vector<SimulationTransaction>();
     Vector<SimulationTransaction> delayDueTosimTraces = new Vector<SimulationTransaction>();
@@ -164,25 +261,25 @@ public class DirectedGraphTranslator extends JApplet {
 
         DrawDirectedGraph();
 
-        JGraphXAdapter<String, DefaultEdge> graphAdapter = new JGraphXAdapter<String, DefaultEdge>(g);
-
-        mxHierarchicalLayout layout = new mxHierarchicalLayout(graphAdapter);
-
-        layout.setInterHierarchySpacing(100);
-        layout.setInterRankCellSpacing(100);
-        layout.setIntraCellSpacing(100);
-
-        layout.execute(graphAdapter.getDefaultParent());
-
-        scrollPane.setViewportView(new mxGraphComponent(graphAdapter));
-
-        scrollPane.setVisible(true);
-
-        scrollPane.revalidate();
-        scrollPane.repaint();
-        frame = new JFrame("The Sys-ML Model As Directed Graph");
-        frame.add(scrollPane);
-        frame.pack();
+        /*
+         * JGraphXAdapter<String, DefaultEdge> graphAdapter = new JGraphXAdapter<String,
+         * DefaultEdge>(g);
+         * 
+         * mxHierarchicalLayout layout = new mxHierarchicalLayout(graphAdapter);
+         * 
+         * layout.setInterHierarchySpacing(100); layout.setInterRankCellSpacing(100);
+         * layout.setIntraCellSpacing(100);
+         * 
+         * layout.execute(graphAdapter.getDefaultParent());
+         * 
+         * scrollPane.setViewportView(new mxGraphComponent(graphAdapter));
+         * 
+         * scrollPane.setVisible(true);
+         * 
+         * scrollPane.revalidate(); scrollPane.repaint(); frame = new
+         * JFrame("The Sys-ML Model As Directed Graph"); frame.add(scrollPane);
+         * frame.pack();
+         */
         // frame.setVisible(false);
 
     }
@@ -196,6 +293,8 @@ public class DirectedGraphTranslator extends JApplet {
         HashMap<String, HashSet<TMLElement>> memorychannel = new HashMap<String, HashSet<TMLElement>>();
 
         HashMap<String, HashSet<TMLElement>> bridgechannel = new HashMap<String, HashSet<TMLElement>>();
+
+        HashMap<String, HashSet<TMLTask>> cpuTask = new HashMap<String, HashSet<TMLTask>>();
 
         g = new DefaultDirectedGraph<>(DefaultEdge.class);
 
@@ -218,6 +317,22 @@ public class DirectedGraphTranslator extends JApplet {
                 bridgechannel.put(node.getName(), tmap.getLisMappedChannels(node));
 
             }
+
+        }
+
+        for (HwA node : tmap.getArch().getHwA()) {
+
+            if (tmap.getLisMappedTasks(node).size() > 0) {
+                cpuTask.put(node.getName(), tmap.getLisMappedTasks(node));
+
+            }
+
+            cpuTasks = getCPUTaskMap(cpuTask);
+
+            // if (tmap.getLisMappedChannels(node).size() > 0) {
+            // bridgechannel.put(node.getName(), tmap.getLisMappedChannels(node));
+
+            // }
 
         }
 
@@ -288,6 +403,17 @@ public class DirectedGraphTranslator extends JApplet {
 
             if (!pathNodes.isEmpty()) {
                 for (HwCommunicationNode node : pathNodes) {
+
+                    if (channelPaths.containsKey(ch.getName())) {
+                        if (!channelPaths.get(ch.getName()).contains(node.getName())) {
+                            channelPaths.get(ch.getName()).add(node.getName());
+                        }
+                    } else {
+                        ArrayList<String> pathNodeNames = new ArrayList<String>();
+                        pathNodeNames.add(node.getName());
+                        channelPaths.put(ch.getName(), pathNodeNames);
+                    }
+
                     if (!g.containsEdge(node.getName(), ch.getName())) {
                         g.addEdge(node.getName(), ch.getName());
                     }
@@ -300,7 +426,15 @@ public class DirectedGraphTranslator extends JApplet {
 
         SummaryCommMapping = tmap.getSummaryCommMapping();
 
-        cpuTasks = getCPUTaskMap();
+        for (HwNode node : tmap.getArch().getCPUs()) {
+            if (tmap.getLisMappedTasks(node).size() > 0) {
+                cpuTask.put(node.getName(), tmap.getLisMappedTasks(node));
+
+            }
+
+            cpuTasks = getCPUTaskMap(cpuTask);
+
+        }
 
         for (HwLink link : links) {
 
@@ -376,21 +510,11 @@ public class DirectedGraphTranslator extends JApplet {
 
     // draw the vertices and edges for the tasks mapped to the CPUs
 
-    public HashMap<String, HashSet<String>> getCPUTaskMap() {
+    public HashMap<String, HashSet<String>> getCPUTaskMap(HashMap<String, HashSet<TMLTask>> cpuTask) {
+
         HashMap<String, HashSet<String>> cpuTaskMap = new HashMap<String, HashSet<String>>();
-
-        HashMap<String, HashSet<TMLTask>> cpuTask = new HashMap<String, HashSet<TMLTask>>();
-
         if (tmap == null) {
             return cpuTaskMap;
-        }
-
-        for (HwNode node : tmap.getArch().getCPUs()) {
-            if (tmap.getLisMappedTasks(node).size() > 0) {
-                cpuTask.put(node.getName(), tmap.getLisMappedTasks(node));
-
-            }
-
         }
 
         for (Entry<String, HashSet<TMLTask>> entry : cpuTask.entrySet()) {
@@ -1589,10 +1713,34 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     // open graph in a frame
-    public void showGraph() {
+    public void showGraph(DirectedGraphTranslator dgraph) {
 
-        frame.setLocationByPlatform(true);
-        frame.setVisible(true);
+        JGraphXAdapter<String, DefaultEdge> graphAdapter = new JGraphXAdapter<String, DefaultEdge>(dgraph.getG());
+
+        mxHierarchicalLayout layout = new mxHierarchicalLayout(graphAdapter);
+
+        layout.setInterHierarchySpacing(100);
+        layout.setInterRankCellSpacing(100);
+        layout.setIntraCellSpacing(100);
+
+        layout.execute(graphAdapter.getDefaultParent());
+
+        dgraph.getScrollPane().setViewportView(new mxGraphComponent(graphAdapter));
+
+        dgraph.getScrollPane().setVisible(true);
+
+        dgraph.getScrollPane().revalidate();
+        dgraph.getScrollPane().repaint();
+
+        dgraph.getFrame().add(dgraph.getScrollPane());
+
+        dgraph.getFrame().pack();
+        dgraph.getFrame().setLocationByPlatform(true);
+        dgraph.getFrame().setVisible(true);
+    }
+
+    public JFrame getFrame() {
+        return frame;
     }
 
     // save graph in .graphml format
@@ -1695,7 +1843,7 @@ public class DirectedGraphTranslator extends JApplet {
 
     // fill the main table of the latency frame by checking all the delay times
     // between the selected tasks
-    public Object[][] latencyDetailedAnalysis(String task12, String task22, Vector<SimulationTransaction> transFile1) {
+    public Object[][] latencyDetailedAnalysis(String task12ID, String task22ID, Vector<SimulationTransaction> transFile1) {
 
         transFile = transFile1;
 
@@ -1704,17 +1852,20 @@ public class DirectedGraphTranslator extends JApplet {
 
         String message = "";
 
-        String[] task1 = task12.split("__");
+        String[] task1 = task12ID.split("__");
 
         int task1index = task1.length;
 
         idTask1 = task1[task1index - 1];
 
-        String[] task2 = task22.split("__");
+        String[] task2 = task22ID.split("__");
 
         int task2index = task2.length;
 
         idTask2 = task2[task2index - 1];
+
+        String task12 = nameIDTaskList.get(idTask1);
+        String task22 = nameIDTaskList.get(idTask2);
 
         Vector<SimulationTransaction> Task1Traces = new Vector<SimulationTransaction>();
         Vector<SimulationTransaction> Task2Traces = new Vector<SimulationTransaction>();
@@ -1730,6 +1881,44 @@ public class DirectedGraphTranslator extends JApplet {
 
         // message = "there exists " +path.size()+" between: " + task12 + " and " +
         // task22;
+
+        if (path2 != null && path2.getLength() > 0) {
+
+            for (Entry<String, ArrayList<String>> entry : channelPaths.entrySet()) {
+
+                String ChannelName = entry.getKey();
+                ArrayList<String> busChList = entry.getValue();
+
+                GraphPath<String, DefaultEdge> pathTochannel = DijkstraShortestPath.findPathBetween(g, task12, ChannelName);
+                GraphPath<String, DefaultEdge> pathFromChannel = DijkstraShortestPath.findPathBetween(g, ChannelName, task22);
+
+                if (pathTochannel != null && pathTochannel.getLength() > 0 && pathFromChannel != null && pathFromChannel.getLength() > 0) {
+
+                    devicesToBeConsidered.addAll(busChList);
+
+                }
+
+            }
+
+        } else {
+
+            for (Entry<String, ArrayList<String>> entry : channelPaths.entrySet()) {
+
+                String ChannelName = entry.getKey();
+                ArrayList<String> busChList = entry.getValue();
+
+                GraphPath<String, DefaultEdge> pathTochannel = DijkstraShortestPath.findPathBetween(g, task12, ChannelName);
+                GraphPath<String, DefaultEdge> pathFromChannel = DijkstraShortestPath.findPathBetween(g, ChannelName, task22);
+
+                if ((pathTochannel != null && pathTochannel.getLength() > 0) || (pathFromChannel != null && pathFromChannel.getLength() > 0)) {
+
+                    devicesToBeConsidered.addAll(busChList);
+
+                }
+
+            }
+
+        }
 
         for (SimulationTransaction st : transFile1) {
 
@@ -1767,10 +1956,38 @@ public class DirectedGraphTranslator extends JApplet {
             relatedsimTraces = new Vector<SimulationTransaction>();
             delayDueTosimTraces = new Vector<SimulationTransaction>();
 
+            runnableTimePerDevice = new HashMap<String, ArrayList<ArrayList<Integer>>>();
+
             for (SimulationTransaction st : transFile1) {
                 Boolean onPath = false;
 
-                if (Integer.valueOf(st.startTime) >= times1.get(i) && Integer.valueOf(st.endTime) <= times2.get(i)) {
+               // if (Integer.valueOf(st.startTime) >= times1.get(i) && Integer.valueOf(st.startTime) < times2.get(i)) {
+
+                    
+                    
+                    
+                    if (!(Integer.valueOf(st.startTime) < times1.get(i) && Integer.valueOf(st.endTime) < times1.get(i))
+                            && !(Integer.valueOf(st.startTime) > times2.get(i) && Integer.valueOf(st.endTime) > times2.get(i))) {
+
+                    
+                  //  if (Integer.valueOf(st.startTime) >= minTime && Integer.valueOf(st.startTime) < maxTime) {
+
+                        if (Integer.valueOf(st.endTime) > times2.get(i)) {
+                            st.endTime = times2.get(i).toString();
+                            st.length = Integer.valueOf(Integer.valueOf(times2.get(i)) - Integer.valueOf(st.startTime)).toString();
+                        }
+                        
+                        
+                        if (Integer.valueOf(st.startTime) < times1.get(i)) {
+                            st.startTime = Integer.valueOf(times1.get(i)).toString();
+                            st.length = Integer.valueOf(Integer.valueOf(st.endTime)-Integer.valueOf(times1.get(i))).toString();
+                        }
+                        
+                        if (Integer.valueOf(st.startTime) < times1.get(i) && Integer.valueOf(st.endTime) > times2.get(i)) {
+                            st.startTime = Integer.valueOf(times1.get(i)).toString();
+                            st.endTime = times2.get(i).toString();
+                            st.length = Integer.valueOf(Integer.valueOf(times2.get(i))-Integer.valueOf(times1.get(i))).toString();
+                        }
 
                     String taskname = "";
 
@@ -1793,8 +2010,11 @@ public class DirectedGraphTranslator extends JApplet {
                         }
 
                     }
+                    String[] name = st.deviceName.split("_");
+                    String deviceName = name[0];
                     // there is a path between task 1 and task 2
                     if (path2 != null && path2.getLength() > 0) {
+
                         if (!taskname.equals(null) && !taskname.equals("")) {
 
                             GraphPath<String, DefaultEdge> pathToOrigin = DijkstraShortestPath.findPathBetween(g, task12, taskname);
@@ -1828,8 +2048,8 @@ public class DirectedGraphTranslator extends JApplet {
                                 }
                             }
 
-                            else if (((st.deviceName.equals(task2DeviceName)) || st.deviceName.equals(task1DeviceName)) && !st.id.equals(idTask1)
-                                    && !st.id.equals(idTask2)) {
+                            else if (((st.deviceName.equals(task2DeviceName)) || st.deviceName.equals(task1DeviceName)
+                                    || devicesToBeConsidered.contains(deviceName)) && !st.id.equals(idTask1) && !st.id.equals(idTask2)) {
                                 delayDueTosimTraces.add(st);
 
                             }
@@ -1847,8 +2067,8 @@ public class DirectedGraphTranslator extends JApplet {
                                     || pathExistsTestwithTask2 != null && pathExistsTestwithTask2.getLength() > 0) {
                                 relatedsimTraces.add(st);
 
-                            } else if (((st.deviceName.equals(task2DeviceName)) || st.deviceName.equals(task1DeviceName)) && !st.id.equals(idTask1)
-                                    && !st.id.equals(idTask2)) {
+                            } else if (((st.deviceName.equals(task2DeviceName)) || st.deviceName.equals(task1DeviceName)
+                                    || devicesToBeConsidered.contains(deviceName)) && !st.id.equals(idTask1) && !st.id.equals(idTask2)) {
                                 delayDueTosimTraces.add(st);
 
                             }
@@ -1934,9 +2154,6 @@ public class DirectedGraphTranslator extends JApplet {
     // get the details of the delay for a selected min or max delay row
     public void getRowDetailsMinMax(int row) {
 
-        relatedsimTraces = new Vector<SimulationTransaction>();
-        delayDueTosimTraces = new Vector<SimulationTransaction>();
-
         String task12 = (String) dataByTaskMinMax[row][0];
         int minTime = (int) dataByTaskMinMax[row][1];
         String task22 = (String) dataByTaskMinMax[row][2];
@@ -1946,6 +2163,7 @@ public class DirectedGraphTranslator extends JApplet {
         HashMap<String, ArrayList<SimulationTransaction>> relatedTasks = new HashMap<String, ArrayList<SimulationTransaction>>();
         relatedsimTraces = new Vector<SimulationTransaction>();
         delayDueTosimTraces = new Vector<SimulationTransaction>();
+        runnableTimePerDevice = new HashMap<String, ArrayList<ArrayList<Integer>>>();
 
         // AllDirectedPaths<String, DefaultEdge> allPaths = new AllDirectedPaths<String,
         // DefaultEdge>(g);
@@ -1957,10 +2175,71 @@ public class DirectedGraphTranslator extends JApplet {
 
         GraphPath<String, DefaultEdge> path2 = DijkstraShortestPath.findPathBetween(g, task12, task22);
 
+        if (path2 != null && path2.getLength() > 0) {
+
+            for (Entry<String, ArrayList<String>> entry : channelPaths.entrySet()) {
+
+                String ChannelName = entry.getKey();
+                ArrayList<String> busChList = entry.getValue();
+
+                GraphPath<String, DefaultEdge> pathTochannel = DijkstraShortestPath.findPathBetween(g, task12, ChannelName);
+                GraphPath<String, DefaultEdge> pathFromChannel = DijkstraShortestPath.findPathBetween(g, ChannelName, task22);
+
+                if (pathTochannel != null && pathTochannel.getLength() > 0 && pathFromChannel != null && pathFromChannel.getLength() > 0) {
+
+                    devicesToBeConsidered.addAll(busChList);
+
+                }
+
+            }
+
+        } else {
+
+            for (Entry<String, ArrayList<String>> entry : channelPaths.entrySet()) {
+
+                String ChannelName = entry.getKey();
+                ArrayList<String> busChList = entry.getValue();
+
+                GraphPath<String, DefaultEdge> pathTochannel = DijkstraShortestPath.findPathBetween(g, task12, ChannelName);
+                GraphPath<String, DefaultEdge> pathFromChannel = DijkstraShortestPath.findPathBetween(g, ChannelName, task22);
+
+                if ((pathTochannel != null && pathTochannel.getLength() > 0) || (pathFromChannel != null && pathFromChannel.getLength() > 0)) {
+
+                    devicesToBeConsidered.addAll(busChList);
+
+                }
+
+            }
+
+        }
+
         for (SimulationTransaction st : transFile) {
             Boolean onPath = false;
 
-            if (Integer.valueOf(st.startTime) >= minTime && Integer.valueOf(st.endTime) <= maxTime) {
+            if (!(Integer.valueOf(st.startTime) < minTime && Integer.valueOf(st.endTime) < minTime)
+                    && !(Integer.valueOf(st.startTime) > maxTime && Integer.valueOf(st.endTime) > maxTime)) {
+
+            
+          //  if (Integer.valueOf(st.startTime) >= minTime && Integer.valueOf(st.startTime) < maxTime) {
+
+                if (Integer.valueOf(st.endTime) > maxTime) {
+                    st.endTime = Integer.valueOf(maxTime).toString();
+                    st.length = Integer.valueOf(Integer.valueOf(maxTime) - Integer.valueOf(st.startTime)).toString();
+                }
+                
+                if (Integer.valueOf(st.startTime) < minTime) {
+                    st.startTime = Integer.valueOf(minTime).toString();
+                    st.length = Integer.valueOf(Integer.valueOf(st.endTime)-Integer.valueOf(minTime)).toString();
+                }
+                
+                if (Integer.valueOf(st.startTime) < minTime && Integer.valueOf(st.endTime) > maxTime) {
+                    st.startTime = Integer.valueOf(minTime).toString();
+                    st.endTime = Integer.valueOf(maxTime).toString();
+                    st.length = Integer.valueOf(Integer.valueOf(maxTime) - Integer.valueOf(minTime)).toString();
+                }
+                
+                
+                
 
                 String taskname = "";
 
@@ -1981,6 +2260,10 @@ public class DirectedGraphTranslator extends JApplet {
 
                     }
                 }
+
+                String[] name = st.deviceName.split("_");
+                String deviceName = name[0];
+
                 // there is a path between task 1 and task 2
                 if (path2 != null && path2.getLength() > 0) {
                     if (!taskname.equals(null) && !taskname.equals("")) {
@@ -1994,15 +2277,39 @@ public class DirectedGraphTranslator extends JApplet {
 
                             relatedsimTraces.add(st);
 
+                            ArrayList<Integer> timeValues = new ArrayList<Integer>();
+                            timeValues.add(0, Integer.valueOf(st.runnableTime));
+                            timeValues.add(1, Integer.valueOf(st.startTime));
+
+                            if (!(st.runnableTime).equals(st.startTime)) {
+
+                                if (runnableTimePerDevice.containsKey(st.deviceName)) {
+
+                                    if (!runnableTimePerDevice.get(st.deviceName).contains(timeValues)) {
+                                        runnableTimePerDevice.get(st.deviceName).add(timeValues);
+                                    }
+                                } else {
+
+                                    ArrayList<ArrayList<Integer>> timeValuesList = new ArrayList<ArrayList<Integer>>();
+                                    timeValuesList.add(timeValues);
+
+                                    runnableTimePerDevice.put(st.deviceName, timeValuesList);
+
+                                }
+
+                            }
+
                         }
 
-                        else if (((st.deviceName.equals(task2DeviceName)) || st.deviceName.equals(task1DeviceName)) && !st.id.equals(idTask1)
-                                && !st.id.equals(idTask2)) {
+                        else if (((st.deviceName.equals(task2DeviceName)) || st.deviceName.equals(task1DeviceName)
+                                || devicesToBeConsidered.contains(deviceName)) && !st.id.equals(idTask1) && !st.id.equals(idTask2)) {
                             delayDueTosimTraces.add(st);
 
                         }
 
                     }
+
+                    timeDelayedPerRow.put(row, runnableTimePerDevice);
 
                 } else {
                     if (!taskname.equals(null) && !taskname.equals("")) {
@@ -2015,8 +2322,8 @@ public class DirectedGraphTranslator extends JApplet {
                                 || pathExistsTestwithTask2 != null && pathExistsTestwithTask2.getLength() > 0) {
                             relatedsimTraces.add(st);
 
-                        } else if (((st.deviceName.equals(task2DeviceName)) || st.deviceName.equals(task1DeviceName)) && !st.id.equals(idTask1)
-                                && !st.id.equals(idTask2)) {
+                        } else if (((st.deviceName.equals(task2DeviceName)) || st.deviceName.equals(task1DeviceName)
+                                || devicesToBeConsidered.contains(deviceName)) && !st.id.equals(idTask1) && !st.id.equals(idTask2)) {
                             delayDueTosimTraces.add(st);
 
                         }
@@ -2080,9 +2387,24 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     // fill the Min max delay table on main latency analysis frame
-    public Object[][] latencyMinMaxAnalysis(String task12, String task22, Vector<SimulationTransaction> transFile1) {
+    public Object[][] latencyMinMaxAnalysis(String task12ID, String task22ID, Vector<SimulationTransaction> transFile1) {
         List<Integer> times1MinMAx = new ArrayList<Integer>();
         List<Integer> times2MinMAx = new ArrayList<Integer>();
+
+        String[] task1 = task12ID.split("__");
+
+        int task1index = task1.length;
+
+        idTask1 = task1[task1index - 1];
+
+        String[] task2 = task22ID.split("__");
+
+        int task2index = task2.length;
+
+        idTask2 = task2[task2index - 1];
+
+        String task12 = nameIDTaskList.get(idTask1);
+        String task22 = nameIDTaskList.get(idTask2);
 
         times1MinMAx = times1;
         times2MinMAx = times2;
@@ -2175,6 +2497,7 @@ public class DirectedGraphTranslator extends JApplet {
             dataByTaskRowDetails[i][2] = st.deviceName;
             dataByTaskRowDetails[i][3] = Integer.valueOf(st.startTime);
             dataByTaskRowDetails[i][4] = Integer.valueOf(st.endTime);
+
             i++;
         }
 

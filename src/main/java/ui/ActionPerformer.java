@@ -311,8 +311,6 @@ public class ActionPerformer {
             mgui.enhanceDiagram();
         } else if (command.equals(mgui.actions[TGUIAction.ACT_NC].getActionCommand())) {
             mgui.NC();
-        } else if (command.equals(mgui.actions[TGUIAction.ACT_GEN_LATENCY_GRAPH].getActionCommand())) {
-            mgui.latencyDetailedAnalysis();
         } else if (command.equals(mgui.actions[TGUIAction.EXTERNAL_ACTION_1].getActionCommand())) {
             mgui.executeUserCommand(ConfigurationTTool.ExternalCommand1Host, SpecConfigTTool.ExternalCommand1);
         } else if (command.equals(mgui.actions[TGUIAction.EXTERNAL_ACTION_2].getActionCommand())) {

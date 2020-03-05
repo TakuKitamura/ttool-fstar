@@ -58,10 +58,16 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
+
+import org.xml.sax.SAXException;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -96,6 +102,8 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
     protected JMenuItem jmiShowST;
     protected JMenuItem jmiShowInFinderST;
     protected JMenuItem jmiCompareST;
+    protected JMenuItem jmiLatencyAnalysisST;
+    protected JMenuItem jmiCompareLatencyAnalysisST;
     protected JPopupMenu popupTree;
     protected JPopupMenu popupTreeST;
     protected RG selectedRG;
@@ -259,9 +267,19 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
                 popupTreeST.add(jmiShowInFinderST);
                 
                 if (selectedST.getType() == SimulationTrace.XML_DIPLO) {
-                	jmiCompareST = new JMenuItem("Compare");
-                	jmiCompareST.addActionListener(this);
+                    
+                    jmiCompareST = new JMenuItem("Compare Simulatin Traces");
+                    jmiCompareST.addActionListener(this);
                     popupTreeST.add(jmiCompareST);
+                    
+                    jmiLatencyAnalysisST  = new JMenuItem("Latency Analysis");
+                    jmiLatencyAnalysisST.addActionListener(this);
+                    popupTreeST.add(jmiLatencyAnalysisST);
+                    
+                    jmiCompareLatencyAnalysisST  = new JMenuItem("Compare Latency Analysis");
+                    jmiCompareLatencyAnalysisST.addActionListener(this);
+                    popupTreeST.add(jmiCompareLatencyAnalysisST);
+
                 }
 
 
@@ -516,7 +534,31 @@ public class JDiagramTree extends javax.swing.JTree implements ActionListener, M
                 mgui.compareSimulationTraces(selectedST, true);
                
              }
-        }
+            else if (ae.getSource() == jmiLatencyAnalysisST) {
+                try {
+                    mgui.latencyDetailedAnalysisForXML(selectedST, true , false,1);
+                } catch (XPathExpressionException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (ParserConfigurationException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (SAXException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+               
+             } else if (ae.getSource() == jmiCompareLatencyAnalysisST) {
+                
+                     mgui.compareLatencyForXML(selectedST, false);
+                 
+                
+              }
+         }
+
 
         if (selectedGT != null) {
             if (ae.getSource() == jmiAddFromFile) {
