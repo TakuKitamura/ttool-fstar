@@ -15,7 +15,7 @@ import java.util.Vector;
 public class JPanelTaskTransactions extends JPanel {
     private JFrameInteractiveSimulation jfis;
     private TaskTransactionTableModel ttm;
-    private JButton updateTransactionInformationButton;
+    private JButton updateTransactionInformationButton, clearAllOldTransactions;
     private JScrollPane jspTransactionInfo;
     private JComboBox<String> tasks;
     private Vector<SimulationTransaction> _trans;
@@ -85,7 +85,7 @@ public class JPanelTaskTransactions extends JPanel {
         nbOfTransactions = new JTextField(Integer.toString(defaultNbOfTransactions), defaultNbOfTransactions);
         add(nbOfTransactions, c2);
 
-        add(new JLabel("# Task Name: "), c2);
+        add(new JLabel("Task Name: "), c2);
         tasks = new JComboBox<>();
         tasks.addItem("-----");
         if(tmlm != null){
@@ -98,6 +98,15 @@ public class JPanelTaskTransactions extends JPanel {
         add(tasks, c2);
         updateTransactionInformationButton = new JButton(jfis.actions[InteractiveSimulationActions.ACT_UPDATE_TRANSACTIONS]);
         add(updateTransactionInformationButton, c2);
+        clearAllOldTransactions = new JButton();
+        clearAllOldTransactions.setText("Clear all old transactions");
+        clearAllOldTransactions.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                jfis.sendCommand("rmat 1");
+            }
+        });
+        add(clearAllOldTransactions, c2);
         tasks.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {

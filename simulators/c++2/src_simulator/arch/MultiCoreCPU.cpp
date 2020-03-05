@@ -615,6 +615,12 @@ int MultiCoreCPU::allTrans2XMLByTask(std::ostringstream& glob, std::string taskN
   return total;
 }
 
+void MultiCoreCPU::removeTrans(int numberOfTrans) {
+    if (numberOfTrans == 1) {
+        _transactList.clear();
+    }
+}
+
 
 void MultiCoreCPU::latencies2XML(std::ostringstream& glob, unsigned int id1, unsigned int id2) {
 
