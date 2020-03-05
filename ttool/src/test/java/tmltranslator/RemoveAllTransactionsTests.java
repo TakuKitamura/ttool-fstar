@@ -193,10 +193,10 @@ public class RemoveAllTransactionsTests extends AbstractUITest {
             int lineNum = 1;
 
             while (line1 != null || line2 != null) {
-                if(line1 == null || line2 == null) {
+                if (line1 == null || line2 == null) {
                     areEqual = false;
                     break;
-                } else if(!line1.equalsIgnoreCase(line2)) {
+                } else if (!line1.equalsIgnoreCase(line2)) {
                     areEqual = false;
                     break;
                 }
@@ -205,7 +205,7 @@ public class RemoveAllTransactionsTests extends AbstractUITest {
                 lineNum++;
             }
 
-            if(areEqual) {
+            if (areEqual) {
                 System.out.println("Two files have same content.");
                 assertTrue(areEqual);
             } else {
