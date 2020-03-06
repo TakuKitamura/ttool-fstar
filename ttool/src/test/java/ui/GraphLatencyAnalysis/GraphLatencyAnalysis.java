@@ -12,10 +12,10 @@ import org.junit.Test;
 import ui.AbstractUITest;
 import ui.SimulationTrace;
 import ui.TMLArchiPanel;
-import ui.directedgraph.DirectedGraphTranslator;
-import ui.directedgraph.JFrameLatencyDetailedAnalysis;
-import ui.directedgraph.JFrameLatencyDetailedPopup;
 import ui.interactivesimulation.SimulationTransaction;
+import ui.simulationtraceanalysis.DirectedGraphTranslator;
+import ui.simulationtraceanalysis.JFrameLatencyDetailedAnalysis;
+import ui.simulationtraceanalysis.JFrameLatencyDetailedPopup;
 
 public class GraphLatencyAnalysis extends AbstractUITest {
 

@@ -18,9 +18,9 @@ import ui.AbstractUITest;
 import ui.MainGUI;
 import ui.SimulationTrace;
 import ui.TMLArchiPanel;
-import ui.directedgraph.DirectedGraphTranslator;
-import ui.directedgraph.JFrameCompareLatencyDetail;
 import ui.interactivesimulation.SimulationTransaction;
+import ui.simulationtraceanalysis.DirectedGraphTranslator;
+import ui.simulationtraceanalysis.JFrameCompareLatencyDetail;
 
 public class CompareLatencyInSimulationTraces extends AbstractUITest {
 

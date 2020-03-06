@@ -36,7 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-package ui.directedgraph;
+package ui.simulationtraceanalysis;
 
 import ui.util.IconManager;
 import ui.TAction;

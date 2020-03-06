@@ -36,12 +36,11 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-package ui.directedgraph;
+package ui.simulationtraceanalysis;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -84,16 +83,18 @@ import ui.interactivesimulation.SimulationTransaction;
  *
  * @author Maysam Zoor
  */
-public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableModelListener {
+public class JFrameLatencyDetailedPopup extends JFrame implements TableModelListener {
 
     private String[] columnByTaskNames = new String[5];
     private String[] columnByHWNames = new String[5];
-    JScrollPane scrollPane11, scrollPane12, scrollPane13, scrollPane14,scrollPane15,scrollPane16;
+    JScrollPane scrollPane12, scrollPane13, scrollPane14;
     public static JTable taskNames, hardwareNames;
-    private Object[][] dataDetailedByTask, dataDetailedByTask2;
+    private Object[][] dataDetailedByTask;
     private String[] columnNames;
-    
-    private JPanel jp02;
+    List<String> onPathBehavior = new ArrayList<String>();
+    List<String> offPathBehavior = new ArrayList<String>();
+    List<String> offPathBehaviorCausingDelay = new ArrayList<String>();
+
     public Object[][] getDataDetailedByTask() {
         return dataDetailedByTask;
     }
@@ -102,35 +103,16 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
         return dataHWDelayByTask;
     }
 
-    private Object[][] dataHWDelayByTask, dataHWDelayByTask2;
+    private Object[][] dataHWDelayByTask;
 
-    public JFrameLatencyComparedDetailedPopup(DirectedGraphTranslator dgraph1, DirectedGraphTranslator dgraph2, int row, int row2,
-            boolean firstTable) {
+    public JFrameLatencyDetailedPopup(DirectedGraphTranslator dgraph, int row, boolean firstTable) {
 
         super("Detailed Latency By Row");
-        
 
-        GridBagLayout gridbagmain = new GridBagLayout();
+        GridLayout myLayout = new GridLayout(3, 1);
 
-        GridBagConstraints mainConstraint = new GridBagConstraints();
+        this.setLayout(myLayout);
 
-        Container framePanel = getContentPane();
-        framePanel.setLayout(gridbagmain);
-
-        
-        GridBagLayout gridbag02 = new GridBagLayout();
-        GridBagConstraints c02 = new GridBagConstraints();
-        // Save
-        jp02 = new JPanel(gridbag02);
-        
-        
-        mainConstraint.gridx = 0;
-        mainConstraint.gridy = 0;          
-        mainConstraint.fill = GridBagConstraints.HORIZONTAL;
-        //framePanel.setBackground(Color.red);
-        framePanel.add(jp02, mainConstraint);
-        
-        
         columnByTaskNames[0] = "Transaction List";
         columnByTaskNames[1] = "Transaction Diagram Name ";
         columnByTaskNames[2] = "Hardware ";
@@ -140,16 +122,12 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
         JPanel jp04 = new JPanel(new BorderLayout());
         if (firstTable) {
 
-            dataDetailedByTask = dgraph1.getTaskByRowDetails(row);
-
-            dataDetailedByTask2 = dgraph2.getTaskByRowDetails(row2);
+            dataDetailedByTask = dgraph.getTaskByRowDetails(row);
 
         } else {
-            dgraph1.getRowDetailsMinMax(row);
-            dataDetailedByTask = dgraph1.getTasksByRowMinMax(row);
+            dgraph.getRowDetailsMinMax(row);
 
-            dgraph2.getRowDetailsMinMax(row2);
-            dataDetailedByTask2 = dgraph2.getTasksByRowMinMax(row2);
+            dataDetailedByTask = dgraph.getTasksByRowMinMax(row);
 
         }
         DefaultTableModel model = new DefaultTableModel(dataDetailedByTask, columnByTaskNames) {
@@ -176,68 +154,11 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
 
         JTable taskNames = new JTable(model);
         taskNames.setAutoCreateRowSorter(true);
-        scrollPane11 = new JScrollPane(taskNames, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-
-        scrollPane11.setVisible(true);
-        
-        
-        c02.gridheight = 1;
-        c02.weighty = 1.0;
-        c02.weightx = 1.0;
-        c02.gridwidth = 1;
-        c02.gridx = 0;
-        c02.gridy = 0;
-        c02.fill = GridBagConstraints.BOTH;
-        
-       
-        //c02.fill = GridBagConstraints.BOTH;
-
-
-        framePanel.add(scrollPane11,c02);
-
-        DefaultTableModel model12 = new DefaultTableModel(dataDetailedByTask2, columnByTaskNames) {
-            @Override
-            public Class getColumnClass(int column) {
-                switch (column) {
-                case 0:
-                    return String.class;
-                case 1:
-                    return String.class;
-                case 2:
-                    return String.class;
-                case 3:
-                    return Integer.class;
-                case 4:
-                    return Integer.class;
-                default:
-                    return Integer.class;
-                }
-            }
-        };
-
-        // taskNames = new JTable(dataDetailedByTask, columnByTaskNames);
-
-        JTable taskNames12 = new JTable(model12);
-        taskNames12.setAutoCreateRowSorter(true);
-        scrollPane12 = new JScrollPane(taskNames12, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        scrollPane12 = new JScrollPane(taskNames, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
         scrollPane12.setVisible(true);
 
-        c02.gridheight = 1;
-        c02.weighty = 1.0;
-        c02.weightx = 1.0;
-        c02.gridwidth = 1;
-        c02.gridx = 1;
-        c02.gridy = 0;
-        c02.fill = GridBagConstraints.BOTH;
-        
-        
-       
-       // c02.fill = GridBagConstraints.BOTH;
-
-
-        framePanel.add(scrollPane12,c02);
-       
+        this.add(scrollPane12);
 
         columnByHWNames[0] = "Task on Same device";
         columnByHWNames[1] = "Transaction Diagram Name ";
@@ -247,12 +168,10 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
 
         if (firstTable) {
 
-            dataHWDelayByTask = dgraph1.getTaskHWByRowDetails(row);
-            dataHWDelayByTask2 = dgraph2.getTaskHWByRowDetails(row2);
+            dataHWDelayByTask = dgraph.getTaskHWByRowDetails(row);
 
         } else {
-            dataHWDelayByTask = dgraph1.getTaskHWByRowDetailsMinMax(row);
-            dataHWDelayByTask2 = dgraph2.getTaskHWByRowDetailsMinMax(row2);
+            dataHWDelayByTask = dgraph.getTaskHWByRowDetailsMinMax(row);
         }
 
         DefaultTableModel model2 = new DefaultTableModel(dataHWDelayByTask, columnByHWNames) {
@@ -281,110 +200,7 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
         scrollPane13 = new JScrollPane(hardwareNames, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
         scrollPane13.setVisible(true);
-       
-        c02.gridheight = 1;
-        c02.weighty = 1.0;
-        c02.weightx = 1.0;
-        c02.gridwidth = 1;
-        c02.gridx = 0;
-        c02.gridy = 1;
-        c02.fill = GridBagConstraints.BOTH;
-        //c02.fill = GridBagConstraints.BOTH;
-
-
-        framePanel.add(scrollPane13,c02);
-
-        DefaultTableModel model3 = new DefaultTableModel(dataHWDelayByTask2, columnByHWNames) {
-            @Override
-            public Class getColumnClass(int column) {
-                switch (column) {
-                case 0:
-                    return String.class;
-                case 1:
-                    return String.class;
-                case 2:
-                    return String.class;
-                case 3:
-                    return Integer.class;
-                case 4:
-                    return Integer.class;
-                default:
-                    return Integer.class;
-                }
-            }
-        };
-
-        JTable hardwareNames2 = new JTable(model3);
-        hardwareNames2.setAutoCreateRowSorter(true);
-
-        scrollPane14 = new JScrollPane(hardwareNames2, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-
-        scrollPane14.setVisible(true);
-       
-        
-        c02.gridheight = 1;
-        c02.weighty = 1.0;
-        c02.weightx = 1.0;
-        c02.gridwidth = 1;
-        c02.gridx = 1;
-        c02.gridy = 1;
-        c02.fill = GridBagConstraints.BOTH;
-       // c02.fill = GridBagConstraints.BOTH;
-
-
-        framePanel.add(scrollPane14,c02);
-
-
-        scrollPane15 = new JScrollPane(LatencyTable(dgraph1, row, firstTable), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-                JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-
-        scrollPane15.setVisible(true);
-        
-        c02.gridheight = 1;
-        c02.weighty = 1.0;
-        c02.weightx = 1.0;
-        c02.gridwidth = 2;
-        c02.gridx = 0;
-        c02.gridy = 3;
-        c02.fill = GridBagConstraints.BOTH;     
-       
-
-
-        framePanel.add(scrollPane15,c02);
-        
-        
-        scrollPane16 = new JScrollPane(LatencyTable(dgraph2, row2, firstTable), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-                JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-
-        scrollPane16.setVisible(true);
-        c02.gridheight = 1;
-        c02.weighty = 1.0;
-        c02.weightx = 1.0;
-        c02.gridwidth = 2;
-        c02.gridx = 0;
-        c02.gridy = 4;
-        c02.fill = GridBagConstraints.BOTH;     
-       
-
-
-        framePanel.add(scrollPane16,c02);
-
-        this.pack();
-        this.setVisible(true);
-        // TODO Auto-generated constructor stub
-    }
-
-    @Override
-    public void tableChanged(TableModelEvent e) {
-        // TODO Auto-generated method stub
-
-    }
-
-    public JTable LatencyTable(DirectedGraphTranslator dgraph, int row, boolean firstTable) {
-        
-        List<String> onPathBehavior = new ArrayList<String>();
-        List<String> offPathBehavior = new ArrayList<String>();
-        List<String> offPathBehaviorCausingDelay = new ArrayList<String>();
+        this.add(scrollPane13);
 
         int maxTime = -1;
 
@@ -478,10 +294,10 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
                                         ArrayList<ArrayList<Integer>> timeList = entry.getValue();
 
                                         for (int j = 0; j < timeList.size(); j++) {
-
+                                            
                                             if (Integer.valueOf(st.startTime) >= timeList.get(j).get(0)
                                                     && Integer.valueOf(st.startTime) <= timeList.get(j).get(1)) {
-
+                                               
                                                 causeDelay = true;
 
                                             }
@@ -573,8 +389,9 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
                 }
 
             }
-            HashMap<String, ArrayList<ArrayList<Integer>>> delayTime = dgraph.getRowDelayDetailsByHW(row);
             
+            HashMap<String, ArrayList<ArrayList<Integer>>> delayTime = dgraph.getRowDelayDetailsByHW(row);
+
             for (SimulationTransaction st : dgraph.getTaskMinMaxHWByRowDetails(row)) {
 
                 for (String dName : deviceNames1) {
@@ -586,7 +403,7 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
                             int columnnmber = Integer.parseInt(st.endTime) - minTime - i;
                             dataDetailedByTask[deviceNames1.indexOf(dName)][columnnmber] = dgraph.getNameIDTaskList().get(st.id);
                             ;
-                            
+
                             boolean causeDelay = false;
 
                             if (delayTime.containsKey(st.deviceName)) {
@@ -672,7 +489,20 @@ public class JFrameLatencyComparedDetailedPopup extends JFrame implements TableM
             tableColumn.setPreferredWidth(preferredWidth);
         }
 
-        return table;
+        scrollPane14 = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+
+        scrollPane14.setVisible(true);
+        this.add(scrollPane14);
+
+        this.pack();
+        this.setVisible(true);
+        // TODO Auto-generated constructor stub
+    }
+
+    @Override
+    public void tableChanged(TableModelEvent e) {
+        // TODO Auto-generated method stub
 
     }
+
 }

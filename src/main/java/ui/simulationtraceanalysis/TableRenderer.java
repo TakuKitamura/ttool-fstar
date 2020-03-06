@@ -1,4 +1,4 @@
-package ui.directedgraph;
+package ui.simulationtraceanalysis;
 
 import java.awt.Color;
 import java.awt.Component;
