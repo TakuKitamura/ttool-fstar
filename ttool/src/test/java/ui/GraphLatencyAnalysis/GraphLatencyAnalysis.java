@@ -21,11 +21,7 @@ public class GraphLatencyAnalysis extends AbstractUITest {
 
     private static final String simulationTracePath = "/ui/graphLatencyAnalysis/input/graphTestSimulationTrace.xml";
     private static final String modelPath = "/ui/graphLatencyAnalysis/input/GraphTestModel.xml";
-   // private static final String simulationTracePath =
-   //  "/home/maysam/eclipse/TTool/ttool/src/test/resources/ui/graphLatencyAnalysis/input/graphTestSimulationTrace.xml";
-   //  private static final String modelPath =
-   // "/home/maysam/eclipse/TTool/ttool/src/test/resources/ui/graphLatencyAnalysis/input/GraphTestModel.xml";
-
+  
     private static final String mappingDiagName = "Architecture2";
     private Vector<SimulationTransaction> transFile1;
     private Vector<String> dropDown;
