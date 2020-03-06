@@ -346,6 +346,7 @@ public class ActionPerformer {
 
             // AVATAR BD
         } else if (command.equals(mgui.actions[TGUIAction.ABD_BLOCK].getActionCommand())) {
+	 } else if (command.equals(mgui.actions[TGUIAction.AMS_INTERFACE].getActionCommand())) {    
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARBD_BLOCK);
         } else if (command.equals(mgui.actions[TGUIAction.ABD_CRYPTOBLOCK].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARBD_CRYPTOBLOCK);

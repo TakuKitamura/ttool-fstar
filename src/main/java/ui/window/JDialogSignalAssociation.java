@@ -82,10 +82,11 @@ public class JDialogSignalAssociation extends JDialogBase implements ActionListe
     private List<AvatarSignal> available1, available2;
     private AvatarBDPortConnector connector;
 
-    private JRadioButton synchronous, asynchronous;
+    private JRadioButton synchronous, asynchronous, AMS;
+    
     private JLabel labelFIFO;
     private JTextField sizeOfFIFO;
-    private JCheckBox blocking, isPrivate, isBroadcast, isLossy;
+    private JCheckBox blocking, isPrivate, isBroadcast, isLossy, isAMS;
     private JPanel panel1, panel2, panel3, panel4;
 
     private boolean cancelled = true;
@@ -274,6 +275,10 @@ public class JDialogSignalAssociation extends JDialogBase implements ActionListe
         isLossy.setToolTipText("A lossy channel randomly losses messages");
         isLossy.setSelected(connector.isLossy());
         panel3.add(isLossy, c3);
+	isAMS = new JCheckBox("AMS channel");
+        isAMS.setToolTipText("An AMS channel communicates with an analog module");
+        isAMS.setSelected(connector.isAMS());
+        panel3.add(isAMS, c3);
 
         c3.gridwidth = 3;
         labelFIFO = new JLabel("Size of FIFO:");
@@ -508,6 +513,10 @@ public class JDialogSignalAssociation extends JDialogBase implements ActionListe
         return asynchronous.isSelected();
     }
 
+    public boolean isAMS() {
+        return AMS.isSelected();
+    }
+    
     public String getSizeOfFIFO() {
         return sizeOfFIFO.getText();
     }

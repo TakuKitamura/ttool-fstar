@@ -82,11 +82,13 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
     protected List<String> outSignalsAtOrigin;
 
     protected boolean asynchronous;
+    protected boolean AMS;
     protected int sizeOfFIFO;
     protected boolean blockingFIFO;
     protected boolean isPrivate = true; // isprivate = cannot be listened by an attacker
     protected boolean isBroadcast = false;
     protected boolean isLossy = false;
+    protected boolean isAMS = false;
 
     public AvatarBDPortConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
         super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
@@ -126,6 +128,9 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
         int cz = (int) (tdp.getZoom() * c);
         if (isAsynchronous()) {
             g.setColor(Color.WHITE);
+        }
+	 if (isAMS()) {
+            g.setColor(Color.GRAY);
         }
         g.fillRect(x2 - (cz / 2), y2 - (cz / 2), cz, cz);
         g.fillRect(p1.getX() - (cz / 2), p1.getY() - (cz / 2), cz, cz);
@@ -305,6 +310,18 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
         return (AvatarBDBlock) (tdp.getComponentToWhichBelongs(p2));
     }
 
+
+     public AvatarBDInterface getAvatarBDInterface1() {
+        return (AvatarBDInterface) (tdp.getComponentToWhichBelongs(p1));
+    }
+
+
+    public AvatarBDInterface getAvatarBDInterface2() {
+        return (AvatarBDInterface) (tdp.getComponentToWhichBelongs(p2));
+    }
+
+
+    
     @Override
     public boolean editOndoubleClick(JFrame frame) {
         // Gets the two concerned blocks
@@ -357,6 +374,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
         isPrivate = jdas.isPrivate();
         isBroadcast = jdas.isBroadcast();
         isLossy = jdas.isLossy();
+	isAMS = jdas.isAMS();
 
         try {
             sizeOfFIFO = Integer.decode(jdas.getSizeOfFIFO()).intValue();
@@ -402,6 +420,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
         sb.append("\" private=\"" + isPrivate);
         sb.append("\" broadcast=\"" + isBroadcast);
         sb.append("\" lossy=\"" + isLossy);
+	sb.append("\" ams=\"" + isAMS);
         sb.append("\" />\n");
 
         sb.append("</extraparam>\n");
@@ -414,7 +433,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
             NodeList nli;
             Node n1, n2;
             Element elt;
-            String val, val1, val2, val3, val4, val5;
+            String val, val1, val2, val3, val4, val5, val6;
             sizeOfFIFO = 4;
             blockingFIFO = false;
             asynchronous = false;
@@ -467,6 +486,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
                                 val3 = elt.getAttribute("private");
                                 val4 = elt.getAttribute("broadcast");
                                 val5 = elt.getAttribute("lossy");
+				val6 = elt.getAttribute("ams");
 
                                 if ((val != null) && (!(val.equals("null")))) {
                                     asynchronous = val.trim().toLowerCase().compareTo("true") == 0;
@@ -506,6 +526,12 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
 
                                 } else {
                                     isLossy = false;
+                                }
+				if ((val6 != null) && (!(val6.equals("null")))) {
+                                    isAMS = val6.trim().toLowerCase().compareTo("true") == 0;
+
+                                } else {
+                                    isAMS = false;
                                 }
                             }
                         }
@@ -714,8 +740,16 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
         return asynchronous;
     }
 
+    public boolean isAMS() {
+        return AMS;
+    }
+   
     public void setAsynchronous(boolean asy) {
         asynchronous = asy;
+    }
+
+    public void setAMS(boolean ams) {
+        AMS = ams;
     }
 
     public int getSizeOfFIFO() {

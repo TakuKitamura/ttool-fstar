@@ -133,8 +133,15 @@ public class AvatarADToolBar extends TToolBar {
         button.addMouseListener(mgui.mouseHandler);
 
         this.addSeparator();
+	
+	button = this.add(mgui.actions[TGUIAction.AAD_SEND_SIGNALAMS_ACTION]);
+        button.addMouseListener(mgui.mouseHandler);
 
+        button = this.add(mgui.actions[TGUIAction.AAD_ACCEPT_EVENTAMS_ACTION]);
+        button.addMouseListener(mgui.mouseHandler);
 
+	this.addSeparator();
+	
         button = this.add(mgui.actions[TGUIAction.AAD_ACTION]);
         button.addMouseListener(mgui.mouseHandler);
 

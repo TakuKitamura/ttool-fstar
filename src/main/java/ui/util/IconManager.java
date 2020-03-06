@@ -105,7 +105,7 @@ public class IconManager {
 
     public static ImageIcon imgic600, imgic602, imgic604, imgic606, imgic608, imgic610, imgic612, imgic614;
 
-    public static ImageIcon imgic700, imgic702;
+    public static ImageIcon imgic700, imgic701, imgic702;
 
     public static ImageIcon imgic800, imgic802, imgic804, imgic806, imgic808, imgic810, imgic812;
     public static ImageIcon imgic900, imgic902, imgic904, imgic905, imgic906,  imgic907, imgic908, imgic910, imgic912, imgic914, imgic916, imgic918;
@@ -141,7 +141,7 @@ public class IconManager {
 
     // SMD diagram
     public static ImageIcon imgic2000, imgic2002, imgic2004, imgic2006, imgic2008, imgic2010, imgic2012, imgic2014,
-    imgic2016, imgic2018;
+	imgic2016, imgic2018, imgic2015, imgic2017;
 
     // CSD diagram
     public static ImageIcon imgic2100, imgic2104, imgic2106, imgic2108, imgic2110;
@@ -151,7 +151,7 @@ public class IconManager {
     public static ImageIcon imgic3000;
 
     // AVATAR
-    public static ImageIcon imgic5000, imgic5002, imgic5004, imgic5006, imgic5008;
+    public static ImageIcon imgic5000, imgic5001, imgic5002, imgic5004, imgic5006, imgic5008;
     public static ImageIcon imgic5010, imgic5012, imgic5014, imgic5016, imgic5018;
     public static ImageIcon imgic5020, imgic5022, imgic5024, imgic5026, imgic5028;
     public static ImageIcon imgic5030, imgic5032, imgic5034, imgic5036, imgic5038;
@@ -453,6 +453,7 @@ public class IconManager {
 
     // Deployment diagrams
     private static String icon700 = "ddnode.gif";
+    private static String icon701 = "ddnode.gif";
     private static String icon702 = "ddartifact.gif";
 
 
@@ -581,6 +582,8 @@ public class IconManager {
     private static String icon2012 = "prosmdstate.gif";
     private static String icon2014 = "sendsignal.gif";
     private static String icon2016 = "receivesignal.gif";
+    private static String icon2015 = "sendsignalams.gif";
+    private static String icon2017 = "receivesignalams.gif";
     private static String icon2018 = "functioncall.gif";
 
     //CSD diagrams
@@ -599,6 +602,7 @@ public class IconManager {
     public static final int iconSize = 15;
 
     private static String icon5000 = "avatarblock.gif";
+    private static String icon5001 = "avatarinterface.gif";
     private static String icon5002 = "avatarbdcomp.gif";
     private static String icon5004 = "avatarbdlink.gif";
     private static String icon5006 = "avatarrdreq.gif";
@@ -970,6 +974,7 @@ public class IconManager {
         imgic614 = getIcon(icon614);
 
         imgic700 = getIcon(icon700);
+	imgic701 = getIcon(icon701);
         imgic702 = getIcon(icon702);
 
         imgic800 = getIcon(icon800);
@@ -1110,7 +1115,9 @@ public class IconManager {
         imgic2014 = getIcon(icon2014);
         imgic2016 = getIcon(icon2016);
         imgic2018 = getIcon(icon2018);
-
+	imgic2015 = getIcon(icon2015);
+        imgic2017 = getIcon(icon2017);
+	
         imgic2100 = getIcon(icon2100);
         //Delegate Ports removed, by Solange
         //imgic2102 = getIcon(icon2102);
@@ -1126,6 +1133,7 @@ public class IconManager {
         // AVATAR
         //imgic3000 = getIcon(icon3000);
         imgic5000 = getIcon(icon5000);
+	imgic5001 = getIcon(icon5001);
         imgic5002 = getIcon(icon5002);
         imgic5004 = getIcon(icon5004);
         imgic5006 = getIcon(icon5006);

@@ -178,6 +178,16 @@ public class AvatarBDPanel extends TDiagramPanel {
         return false;
     }
     
+    /*    @Override
+    public boolean actionOnValueChanged(TGComponent tgc) {
+        if (tgc instanceof AvatarAMSInterface) {
+            //updateAllSignalsOnConnectors();
+            return actionOnDoubleClick(tgc);
+        }
+        return false;
+	}*/
+
+    
     @Override
     public boolean areAttributesVisible() {
         return attributesVisible;
@@ -452,7 +462,87 @@ public class AvatarBDPanel extends TDiagramPanel {
 
         return v;
     }
+    //ajoute DG 27.02.: Interfcae signals treated as block signals to avoid too many case distinctions - is this possible ?
 
+  public List<AvatarSignal> getListOfAvailableSignals(AvatarBDInterface _block) {
+        List<AvatarSignal> v = new LinkedList<AvatarSignal> ();
+
+        List<AvatarSignal> listOfBlock = _block.getSignalList();
+        if (listOfBlock.size() == 0)
+            return v;
+
+        v.addAll(listOfBlock);
+
+        for (TGComponent tgc: this.componentList)
+            if (tgc instanceof AvatarBDPortConnector) {
+                AvatarBDPortConnector port = (AvatarBDPortConnector) tgc;
+                if (port.getAvatarBDInterface1() == _block) {
+                    List<String> ll = port.getListOfSignalsOrigin();
+                    removeSignals(v, ll);
+                }
+                if (port.getAvatarBDInterface2() == _block) {
+                    List<String> ll = port.getListOfSignalsDestination();
+                    removeSignals(v, ll);
+                }
+            }
+
+        return v;
+    }
+
+    public List<AvatarSignal> getListOfAvailableOutSignals (AvatarBDInterface _block) {
+        List<AvatarSignal> v = new LinkedList<AvatarSignal> ();
+
+        List<AvatarSignal> listOfBlock = _block.getOutSignalList();
+        if (listOfBlock.size() == 0)
+            return v;
+
+        v.addAll(listOfBlock);
+
+        for (TGComponent tgc: this.componentList)
+            if (tgc instanceof AvatarBDPortConnector) {
+                AvatarBDPortConnector port = (AvatarBDPortConnector)tgc;
+                if (port.getAvatarBDInterface1() ==  _block) {
+                    List<String> ll = port.getListOfSignalsOrigin();
+                    removeSignals(v, ll);
+                }
+                if (port.getAvatarBDInterface2() == _block) {
+                    List<String> ll = port.getListOfSignalsDestination();
+                    removeSignals(v, ll);
+                }
+            }
+
+        return v;
+    }
+
+    public List<AvatarSignal> getListOfAvailableInSignals(AvatarBDInterface _block) {
+        List<AvatarSignal> v = new LinkedList<AvatarSignal> ();
+
+        List<AvatarSignal> listOfBlock = _block.getInSignalList();
+        if (listOfBlock.size() == 0)
+            return v;
+
+        v.addAll(listOfBlock);
+
+        for (TGComponent tgc: this.componentList)
+            if (tgc instanceof AvatarBDPortConnector) {
+                AvatarBDPortConnector port = (AvatarBDPortConnector)tgc;
+                if (port.getAvatarBDInterface1() ==  _block) {
+                    List<String> ll = port.getListOfSignalsOrigin();
+                    removeSignals(v, ll);
+                }
+                if (port.getAvatarBDInterface2() ==  _block) {
+                    List<String> ll = port.getListOfSignalsDestination();
+                    removeSignals(v, ll);
+                }
+            }
+
+        return v;
+    }
+
+
+    
+    //fin ajoute DG
+    
     // Remove AvatarSignals of v which name is provided in list
     private static void removeSignals(List<AvatarSignal> v, List<String> list) {
         for(String s: list) {
