@@ -28,8 +28,7 @@ public class CompareLatencyInSimulationTraces extends AbstractUITest {
     private static final String simulationTracePathFile1 = "/ui/graphLatencyAnalysis/input/graphTestSimulationTrace.xml";
     private static final String simulationTracePathFile2 = "/ui/graphLatencyAnalysis/input/testFunc.xml";
     private static final String modelPath = "/ui/graphLatencyAnalysis/input/GraphTestModel.xml";
-  
-   
+
     private static final String mappingDiagName = "Architecture2";
 
     private Vector<String> checkedTransactionsFile1 = new Vector<String>();
@@ -62,13 +61,11 @@ public class CompareLatencyInSimulationTraces extends AbstractUITest {
 
         mainGUI.openProjectFromFile(new File(getBaseResourcesDir() + modelPath));
 
-      
-
         final TMLArchiPanel panel = findArchiPanel(mappingDiagName);
 
         simT1 = new SimulationTrace("graphTestSimulationTrace", 6, (getBaseResourcesDir() + simulationTracePathFile1));
-        
-        mainGUI.setLatencyDetailedAnalysisMain( new latencyDetailedAnalysisMain());
+
+        mainGUI.setLatencyDetailedAnalysisMain(new latencyDetailedAnalysisMain());
         mainGUI.getLatencyDetailedAnalysisMain().setCheckedTransactionsFile(new Vector<String>());
 
         mainGUI.latencyDetailedAnalysisForXML(simT1, false, true, 1);
@@ -81,12 +78,12 @@ public class CompareLatencyInSimulationTraces extends AbstractUITest {
 
         if (mainGUI.getLatencyDetailedAnalysisMain().getDgraph().getGraphsize() > 0) {
             dgraph1 = mainGUI.getLatencyDetailedAnalysisMain().getDgraph();
-            
+
             mainGUI.getLatencyDetailedAnalysisMain().setDgraph(null);
-           
+
             mainGUI.getLatencyDetailedAnalysisMain().setCheckedTransactionsFile(new Vector<String>());
             simT2 = new SimulationTrace("graphTestSimulationTrace", 6, (getBaseResourcesDir() + simulationTracePathFile2));
-            
+
             mainGUI.latencyDetailedAnalysisForXML(simT2, false, true, 1);
 
             while (mainGUI.getLatencyDetailedAnalysisMain().getDgraph().getGraphsize() == 0) {
@@ -95,18 +92,16 @@ public class CompareLatencyInSimulationTraces extends AbstractUITest {
 
             if (mainGUI.getLatencyDetailedAnalysisMain().getDgraph().getGraphsize() > 0) {
                 dgraph2 = mainGUI.getLatencyDetailedAnalysisMain().getDgraph();
-                
-                
+
                 checkedTransactionsFile2 = mainGUI.getLatencyDetailedAnalysisMain().getCheckedTransactionsFile();
                 cld = new JFrameCompareLatencyDetail(dgraph1, dgraph2, checkedTransactionsFile1, checkedTransactionsFile2, simT1, simT2, false);
-                
+
                 if (cld == null) {
                     System.out.println("NULL Panel");
                 } else {
                     cld.setVisible(false);
                 }
 
-               
             }
 
         }
@@ -115,7 +110,7 @@ public class CompareLatencyInSimulationTraces extends AbstractUITest {
 
     @Test
     public void parseFile() {
-      
+
         int graphsize = dgraph1.getGraphsize();
 
         assertTrue(1 > 0);
@@ -145,8 +140,8 @@ public class CompareLatencyInSimulationTraces extends AbstractUITest {
         transFile1 = cld.parseFile(file1);
         transFile2 = cld.parseFile(file2);
 
-        cld.latencyDetailedAnalysis(task1, task2, task3, task4, transFile1, transFile2,false);
-       
+        cld.latencyDetailedAnalysis(task1, task2, task3, task4, transFile1, transFile2, false);
+
         cld.setVisible(false);
 
         assertTrue(cld.getTableData().length > 0);
