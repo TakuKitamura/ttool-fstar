@@ -21,7 +21,7 @@ public class GraphLatencyAnalysis extends AbstractUITest {
 
     private static final String simulationTracePath = "/ui/graphLatencyAnalysis/input/graphTestSimulationTrace.xml";
     private static final String modelPath = "/ui/graphLatencyAnalysis/input/GraphTestModel.xml";
-  
+
     private static final String mappingDiagName = "Architecture2";
     private Vector<SimulationTransaction> transFile1;
     private Vector<String> dropDown;
@@ -41,7 +41,6 @@ public class GraphLatencyAnalysis extends AbstractUITest {
         mainGUI.openProjectFromFile(new File(getBaseResourcesDir() + modelPath));
         // mainGUI.openProjectFromFile(new File( modelPath));
 
-
         final TMLArchiPanel panel = findArchiPanel(mappingDiagName);
 
         if (panel == null) {
@@ -52,17 +51,16 @@ public class GraphLatencyAnalysis extends AbstractUITest {
 
         mainGUI.checkModelingSyntax(panel, true);
         SimulationTrace file2 = new SimulationTrace("graphTestSimulationTrace", 6, simulationTracePath);
-        
+
         mainGUI.latencyDetailedAnalysis(file2, panel, false, false, mainGUI);
 
         latencyDetailedAnalysis = mainGUI.getLatencyDetailedAnalysisMain().getLatencyDetailedAnalysis();
         if (latencyDetailedAnalysis != null) {
             latencyDetailedAnalysis.setVisible(false);
-            if (latencyDetailedAnalysis.graphStatus() == Thread.State.TERMINATED )
-            {
+            if (latencyDetailedAnalysis.graphStatus() == Thread.State.TERMINATED) {
                 dgt = latencyDetailedAnalysis.getDgraph();
             }
-            while (latencyDetailedAnalysis.graphStatus() != Thread.State.TERMINATED ) {
+            while (latencyDetailedAnalysis.graphStatus() != Thread.State.TERMINATED) {
                 dgt = latencyDetailedAnalysis.getDgraph();
             }
         }
@@ -82,10 +80,11 @@ public class GraphLatencyAnalysis extends AbstractUITest {
 
         assertTrue(dropDown.size() == 3);
 
-        transFile1 = mainGUI.getLatencyDetailedAnalysisMain().getLatencyDetailedAnalysis().parseFile(new File(getBaseResourcesDir() + simulationTracePath));
+        transFile1 = mainGUI.getLatencyDetailedAnalysisMain().getLatencyDetailedAnalysis()
+                .parseFile(new File(getBaseResourcesDir() + simulationTracePath));
 
         // transFile1 = mainGUI.getLatencyDetailedAnalysis() .parseFile(new File(
-         //simulationTracePath));
+        // simulationTracePath));
 
         assertTrue(transFile1.size() == 175);
 
