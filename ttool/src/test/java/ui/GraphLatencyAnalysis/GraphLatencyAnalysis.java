@@ -55,7 +55,7 @@ public class GraphLatencyAnalysis extends AbstractUITest {
         
         mainGUI.latencyDetailedAnalysis(file2, panel, false, false, mainGUI);
 
-        latencyDetailedAnalysis = mainGUI.getLatencyDetailedAnalysis();
+        latencyDetailedAnalysis = mainGUI.getLatencyDetailedAnalysisMain().getLatencyDetailedAnalysis();
         if (latencyDetailedAnalysis != null) {
             latencyDetailedAnalysis.setVisible(false);
             if (latencyDetailedAnalysis.graphStatus() == Thread.State.TERMINATED )
@@ -82,7 +82,7 @@ public class GraphLatencyAnalysis extends AbstractUITest {
 
         assertTrue(dropDown.size() == 3);
 
-        transFile1 = mainGUI.getLatencyDetailedAnalysis().parseFile(new File(getBaseResourcesDir() + simulationTracePath));
+        transFile1 = mainGUI.getLatencyDetailedAnalysisMain().getLatencyDetailedAnalysis().parseFile(new File(getBaseResourcesDir() + simulationTracePath));
 
         // transFile1 = mainGUI.getLatencyDetailedAnalysis() .parseFile(new File(
          //simulationTracePath));

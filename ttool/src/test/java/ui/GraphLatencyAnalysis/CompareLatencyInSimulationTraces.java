@@ -21,6 +21,7 @@ import ui.TMLArchiPanel;
 import ui.interactivesimulation.SimulationTransaction;
 import ui.simulationtraceanalysis.DirectedGraphTranslator;
 import ui.simulationtraceanalysis.JFrameCompareLatencyDetail;
+import ui.simulationtraceanalysis.latencyDetailedAnalysisMain;
 
 public class CompareLatencyInSimulationTraces extends AbstractUITest {
 
@@ -28,6 +29,7 @@ public class CompareLatencyInSimulationTraces extends AbstractUITest {
     private static final String simulationTracePathFile2 = "/ui/graphLatencyAnalysis/input/testFunc.xml";
     private static final String modelPath = "/ui/graphLatencyAnalysis/input/GraphTestModel.xml";
   
+   
     private static final String mappingDiagName = "Architecture2";
 
     private Vector<String> checkedTransactionsFile1 = new Vector<String>();
@@ -60,41 +62,42 @@ public class CompareLatencyInSimulationTraces extends AbstractUITest {
 
         mainGUI.openProjectFromFile(new File(getBaseResourcesDir() + modelPath));
 
-        // openModel(modelPath);
-
-        // mainGUI.openProjectFromFile(new File( modelPath));
+      
 
         final TMLArchiPanel panel = findArchiPanel(mappingDiagName);
 
         simT1 = new SimulationTrace("graphTestSimulationTrace", 6, (getBaseResourcesDir() + simulationTracePathFile1));
-        mainGUI.setCheckedTransactionsFile(new Vector<String>());
+        
+        mainGUI.setLatencyDetailedAnalysisMain( new latencyDetailedAnalysisMain());
+        mainGUI.getLatencyDetailedAnalysisMain().setCheckedTransactionsFile(new Vector<String>());
 
         mainGUI.latencyDetailedAnalysisForXML(simT1, false, true, 1);
 
-        checkedTransactionsFile1 = mainGUI.getCheckedTransactionsFile();
+        checkedTransactionsFile1 = mainGUI.getLatencyDetailedAnalysisMain().getCheckedTransactionsFile();
 
-        while (mainGUI.getDgraph().getGraphsize() == 0) {
+        while (mainGUI.getLatencyDetailedAnalysisMain().getDgraph().getGraphsize() == 0) {
 
         }
 
-        if (mainGUI.getDgraph().getGraphsize() > 0) {
-            dgraph1 = mainGUI.getDgraph();
+        if (mainGUI.getLatencyDetailedAnalysisMain().getDgraph().getGraphsize() > 0) {
+            dgraph1 = mainGUI.getLatencyDetailedAnalysisMain().getDgraph();
             
-            mainGUI.setDgraph(null);
-            mainGUI.setCheckedTransactionsFile(new Vector<String>());
+            mainGUI.getLatencyDetailedAnalysisMain().setDgraph(null);
+           
+            mainGUI.getLatencyDetailedAnalysisMain().setCheckedTransactionsFile(new Vector<String>());
             simT2 = new SimulationTrace("graphTestSimulationTrace", 6, (getBaseResourcesDir() + simulationTracePathFile2));
-
+            
             mainGUI.latencyDetailedAnalysisForXML(simT2, false, true, 1);
 
-            while (mainGUI.getDgraph().getGraphsize() == 0) {
+            while (mainGUI.getLatencyDetailedAnalysisMain().getDgraph().getGraphsize() == 0) {
 
             }
 
-            if (mainGUI.getDgraph().getGraphsize() > 0) {
-                dgraph2 = mainGUI.getDgraph();
+            if (mainGUI.getLatencyDetailedAnalysisMain().getDgraph().getGraphsize() > 0) {
+                dgraph2 = mainGUI.getLatencyDetailedAnalysisMain().getDgraph();
                 
                 
-                checkedTransactionsFile2 = mainGUI.getCheckedTransactionsFile();
+                checkedTransactionsFile2 = mainGUI.getLatencyDetailedAnalysisMain().getCheckedTransactionsFile();
                 cld = new JFrameCompareLatencyDetail(dgraph1, dgraph2, checkedTransactionsFile1, checkedTransactionsFile2, simT1, simT2, false);
                 
                 if (cld == null) {
