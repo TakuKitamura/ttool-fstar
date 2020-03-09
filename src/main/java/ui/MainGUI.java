@@ -352,12 +352,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     // Thread for autosave
     private PeriodicBehaviorThread pbt;
 
-    private TMLArchiPanel tmlap; // USed to retrieve the currently opened architecture panel
-
-    public TMLArchiPanel getTmlap() {
-        return tmlap;
-    }
-
+   
   
     // Plugin management
     // public static PluginManager pluginManager;
@@ -4077,7 +4072,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                 }
             }
         } else if (tp instanceof TMLArchiPanel) {
-            tmlap = (TMLArchiPanel) tp;
+            TMLArchiPanel  tmlap = (TMLArchiPanel) tp;
             JDialogSelectTMLNodes.validated = tmlap.validated;
             JDialogSelectTMLNodes.ignored = tmlap.ignored;
             Vector<TGComponent> tmlNodesToValidate = new Vector<TGComponent>();
@@ -9559,10 +9554,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
     }
 
-    // Get the currently opened architecture panel
-    public TMLArchiPanel getCurrentArchiPanel() {
-        return tmlap;
-    }
+   
 
     // DraggableTabbedPaneCallbackInterface
     public void hasBeenDragged(int initialPosition, int destinationPosition) {
