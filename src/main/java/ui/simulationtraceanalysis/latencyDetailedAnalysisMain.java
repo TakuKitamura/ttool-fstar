@@ -56,7 +56,7 @@ public class latencyDetailedAnalysisMain {
         List<TMLComponentDesignPanel> cpanels;
         TMLComponentDesignPanel compdp;
         TURTLEPanel tp = selectedTab;
-        TMLArchiPanel  tmlap = (TMLArchiPanel) tp;
+       
         // tmlap = (TMLArchiPanel) tp;
 
         if (mainGUI_compare.gtm == null) {
@@ -64,6 +64,8 @@ public class latencyDetailedAnalysisMain {
         } else {
 
             if (mainGUI_compare.gtm.getTMLMapping() != null) {
+                
+                TMLArchiPanel  tmlap = (TMLArchiPanel) tp;
                 TMLMapping<TGComponent> map = mainGUI_compare.gtm.getTMLMapping();
                 for (TGComponent component : tmlap.tmlap.getComponentList()) {
                     tmlNodesToValidate.add(component);
