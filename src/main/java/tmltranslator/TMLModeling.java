@@ -2120,6 +2120,9 @@ public class  TMLModeling<E> {
         }
     }
 
+
+
+
     /**
      *  Concatenate Delay operations
      * @param activity : TML actvity {@link TMLActivity}
@@ -2155,6 +2158,79 @@ public class  TMLModeling<E> {
             }
         }
     }
+
+    /**
+     *  Replaces periodic task by two tasks and an event
+     */
+    public Vector<TMLTask> removePeriodicTasks() {
+        Vector<TMLTask> addedTasks = new Vector<>();
+
+        
+        for(TMLTask t: tasks) {
+            if (t.isPeriodic()) {
+
+                // Create a new Task
+                TMLTask startingTask = new TMLTask("StarterOf" + t.getTaskName(), t.getReferenceObject(),
+                        t.getActivityDiagram().getReferenceObject());
+                addedTasks.add(startingTask);
+                // Create an event between the 2
+                TMLEvent evt = new TMLEvent("PERIODIC_EVT_" + t.getNameExtension(), t.getReferenceObject(),
+                        1, false);
+                events.add(evt);
+                evt.setOriginTask(startingTask);
+                evt.setDestinationTask(t);
+                t.addTMLEvent(evt);
+                startingTask.addTMLEvent(evt);
+
+                // Modify the activity diagram of t
+                TMLActivity activity = t.getActivityDiagram();
+                TMLForLoop mainLoop = new TMLForLoop("LoopForPeriod", activity.getFirst().getReferenceObject());
+                activity.addElement(mainLoop);
+                TMLActivityElement ae = activity.getFirst().getNextElement(0);
+                TMLWaitEvent tmlwe = new TMLWaitEvent("periodEvent", activity.getFirst().getReferenceObject());
+                tmlwe.setEvent(evt);
+                activity.addElement(tmlwe);
+                activity.getFirst().removeNext(0);
+                activity.getFirst().addNext(mainLoop);
+                mainLoop.addNext(tmlwe);
+                tmlwe.addNext(ae);
+
+
+                // Generate the activity diagram of startingTask
+                activity = startingTask.getActivityDiagram();
+                TMLStartState start = new TMLStartState("startState", startingTask.getReferenceObject());
+                activity.setFirst(start);
+
+                mainLoop = new TMLForLoop("LoopForPeriod", startingTask.getReferenceObject());
+                activity.addElement(mainLoop);
+                start.addNext(mainLoop);
+
+                TMLSendEvent tmlse = new TMLSendEvent("periodEvent", startingTask.getReferenceObject());
+                tmlse.setEvent(evt);
+                activity.addElement(tmlse);
+                mainLoop.addNext(tmlse);
+
+                TMLDelay delay = new TMLDelay("periodDelay", startingTask.getReferenceObject());
+                delay.setUnit(t.getPeriodUnit());
+                delay.setValue(t.getPeriodValue());
+                activity.addElement(delay);
+                tmlse.addNext(delay);
+
+                TMLStopState stopState = new TMLStopState("periodiStop", startingTask.getReferenceObject());
+                activity.addElement(stopState);
+                delay.addNext(stopState);
+
+
+                t.setPeriodic(false, "", "ns");
+
+            }
+        }
+
+
+        return addedTasks;
+    }
+
+
 
     public void removeAllRandomSequences() {
         for (TMLTask task: tasks) {

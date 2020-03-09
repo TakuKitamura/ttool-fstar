@@ -111,7 +111,8 @@ public class JDialogAttribute extends JDialogBase implements ActionListener, Lis
     
     /* Creates new form  */
     public JDialogAttribute(java.util.List<TAttribute> _attributes, java.util.List<TAttribute>_forbidden, Frame f,
-                            String title, String attrib, String _operation, boolean _isDaemon, String name) {
+                            String title, String attrib, String _operation, boolean _isDaemon,
+                            boolean _isPeriodic, String _periodValue, String _unit, String name) {
         super(f, title, true);
         frame = f;
         attributesPar = _attributes;
@@ -121,6 +122,10 @@ public class JDialogAttribute extends JDialogBase implements ActionListener, Lis
         this.operation = _operation;
         this.isDaemon = _isDaemon;
         this.name = name;
+
+        this.isPeriodic = _isPeriodic;
+        this.periodValue = _periodValue;
+        this.unit = _unit;
         
         attributes = new LinkedList<TAttribute> ();
         
@@ -340,7 +345,7 @@ public class JDialogAttribute extends JDialogBase implements ActionListener, Lis
             units.addItem("us");
             units.addItem("ms");
             units.addItem("s");
-            units.setSelectedItem(units);
+            units.setSelectedItem(unit);
             panelOperation.add(units, cOp);
             periodicBox.setSelected(isPeriodic);
             handlePeriodicElements();
@@ -609,6 +614,12 @@ public class JDialogAttribute extends JDialogBase implements ActionListener, Lis
 
     public boolean isPeriodic() {
         return periodicBox.isSelected();
+    }
+
+    public String getPeriodValue() {return periodText.getText().trim();}
+
+    public String getUnit() {
+        return units.getItemAt(units.getSelectedIndex());
     }
 
     public String getOperation() {
