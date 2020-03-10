@@ -283,6 +283,7 @@ public class ColorManager {
     public static void noColor() {
         UML_NOTE_BG = Color.white;
         AVATAR_BLOCK = Color.white;
+	AVATAR_INTERFACE = Color.white;
         AVATAR_DATATYPE = Color.white;
         AVATAR_STATE = Color.white;
         AVATAR_REQUIREMENT_TOP = Color.white;

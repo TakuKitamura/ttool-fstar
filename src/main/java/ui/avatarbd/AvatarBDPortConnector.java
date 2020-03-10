@@ -128,7 +128,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
         //g.drawLine(x1, y1, x2, y2);
         Color col = g.getColor();
         int cz = (int) (tdp.getZoom() * c);
-        if (isAsynchronous()) {
+        if (isAsynchronous()&&!(isAMS())) {
             g.setColor(Color.WHITE);
         }
 	 if (isAMS()) {
@@ -490,7 +490,8 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
                                 val5 = elt.getAttribute("lossy");
 				val6 = elt.getAttribute("ams");
 
-                                if ((val != null) && (!(val.equals("null")))) {
+				//     if ((val != null) && (!(val.equals("null")))) {
+				if ((val != null) && (!(val6.equals("null"))) && (!(val.equals("null")))){			
                                     asynchronous = val.trim().toLowerCase().compareTo("true") == 0;
 
                                 }
@@ -531,6 +532,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
                                 }
 				if ((val6 != null) && (!(val6.equals("null")))) {
                                     isAMS = val6.trim().toLowerCase().compareTo("true") == 0;
+				    System.out.println("@@@ AMS reconnu @@@");
 
                                 } else {
                                     isAMS = false;
