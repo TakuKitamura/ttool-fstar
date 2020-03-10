@@ -376,6 +376,11 @@ public class ActionPerformer {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARSMD_SEND_SIGNAL);
         } else if (command.equals(mgui.actions[TGUIAction.ASMD_RECEIVE_SIGNAL].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARSMD_RECEIVE_SIGNAL);
+	} else if (command.equals(mgui.actions[TGUIAction.ASMD_SEND_AMSSIGNAL].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARSMD_SEND_AMSSIGNAL);
+        } else if (command.equals(mgui.actions[TGUIAction.ASMD_RECEIVE_AMSSIGNAL].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARSMD_RECEIVE_AMSSIGNAL);
+	    
         } else if (command.equals(mgui.actions[TGUIAction.ASMD_LIBRARY_FUNCTION_CALL].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARSMD_LIBRARY_FUNCTION_CALL);
 // Issue #69       } else if (command.equals(mgui.actions[TGUIAction.ASMD_PARALLEL].getActionCommand())) {
@@ -511,6 +516,10 @@ public class ActionPerformer {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AAD_SEND_SIGNAL_ACTION);
         } else if (command.equals(mgui.actions[TGUIAction.AAD_ACCEPT_EVENT_ACTION].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AAD_ACCEPT_EVENT_ACTION);
+	 } else if (command.equals(mgui.actions[TGUIAction.AAD_SEND_AMS_ACTION].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AAD_SEND_AMS_ACTION);
+        } else if (command.equals(mgui.actions[TGUIAction.AAD_ACCEPT_AMS_ACTION].getActionCommand())) {
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AAD_ACCEPT_AMS_ACTION);    
         } else if (command.equals(mgui.actions[TGUIAction.AAD_PARTITION].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AAD_PARTITION);
         } else if (command.equals(mgui.actions[TGUIAction.AAD_ALIGN_PARTITION].getActionCommand())) {

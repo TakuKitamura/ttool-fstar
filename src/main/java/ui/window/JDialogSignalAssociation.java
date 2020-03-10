@@ -266,19 +266,29 @@ public class JDialogSignalAssociation extends JDialogBase implements ActionListe
         asynchronous.setToolTipText("FIFO-based communication");
         asynchronous.addActionListener(this);
         panel3.add(asynchronous, c3);
+
+	AMS = new JRadioButton("AMS");
+        AMS.setToolTipText("Communication with analog component");
+        AMS.addActionListener(this);
+        panel3.add(AMS, c3);
+	
         ButtonGroup bt = new ButtonGroup();
+	
         bt.add(synchronous);
         bt.add(asynchronous);
+	bt.add(AMS);
+	
         asynchronous.setSelected(connector.isAsynchronous());
         synchronous.setSelected(!connector.isAsynchronous());
+	AMS.setSelected(!connector.isAsynchronous());
+	AMS.setSelected(!connector.isSynchronous());
+	
         isLossy = new JCheckBox("Lossy channel");
         isLossy.setToolTipText("A lossy channel randomly losses messages");
         isLossy.setSelected(connector.isLossy());
         panel3.add(isLossy, c3);
-	isAMS = new JCheckBox("AMS channel");
-        isAMS.setToolTipText("An AMS channel communicates with an analog module");
-        isAMS.setSelected(connector.isAMS());
-        panel3.add(isAMS, c3);
+	
+
 
         c3.gridwidth = 3;
         labelFIFO = new JLabel("Size of FIFO:");

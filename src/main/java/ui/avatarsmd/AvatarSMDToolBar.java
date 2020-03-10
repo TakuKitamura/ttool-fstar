@@ -68,9 +68,12 @@ public class AvatarSMDToolBar extends TToolBar {
         mgui.actions[TGUIAction.ASMD_STOP].setEnabled(b);
 		mgui.actions[TGUIAction.ASMD_SEND_SIGNAL].setEnabled(b);
         mgui.actions[TGUIAction.ASMD_RECEIVE_SIGNAL].setEnabled(b);
+		mgui.actions[TGUIAction.ASMD_SEND_AMSSIGNAL].setEnabled(b);
+        mgui.actions[TGUIAction.ASMD_RECEIVE_AMSSIGNAL].setEnabled(b);
         mgui.actions[TGUIAction.ASMD_LIBRARY_FUNCTION_CALL].setEnabled(b);
 		//mgui.actions[TGUIAction.ASMD_PARALLEL].setEnabled(b);
 		mgui.actions[TGUIAction.ASMD_STATE].setEnabled(b);
+		mgui.actions[TGUIAction.ASMD_GPIO].setEnabled(b);
 		mgui.actions[TGUIAction.ASMD_CHOICE].setEnabled(b);
 		mgui.actions[TGUIAction.ASMD_RANDOM].setEnabled(b);
 		
@@ -127,6 +130,11 @@ public class AvatarSMDToolBar extends TToolBar {
 		
 		button = this.add(mgui.actions[TGUIAction.ASMD_STATE]);
         button.addMouseListener(mgui.mouseHandler);
+	
+	this.addSeparator();
+		
+		button = this.add(mgui.actions[TGUIAction.ASMD_GPIO]);
+        button.addMouseListener(mgui.mouseHandler);
 		
 		this.addSeparator();
 		
@@ -149,6 +157,14 @@ public class AvatarSMDToolBar extends TToolBar {
         button.addMouseListener(mgui.mouseHandler);
         
         button = this.add(mgui.actions[TGUIAction.ASMD_RECEIVE_SIGNAL]);
+        button.addMouseListener(mgui.mouseHandler);
+
+		this.addSeparator();
+        
+        button = this.add(mgui.actions[TGUIAction.ASMD_SEND_AMSSIGNAL]);
+        button.addMouseListener(mgui.mouseHandler);
+        
+        button = this.add(mgui.actions[TGUIAction.ASMD_RECEIVE_AMSSIGNAL]);
         button.addMouseListener(mgui.mouseHandler);
 		
 		this.addSeparator();

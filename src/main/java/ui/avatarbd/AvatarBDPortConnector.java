@@ -82,7 +82,9 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
     protected List<String> outSignalsAtOrigin;
 
     protected boolean asynchronous;
+    protected boolean synchronous;
     protected boolean AMS;
+    
     protected int sizeOfFIFO;
     protected boolean blockingFIFO;
     protected boolean isPrivate = true; // isprivate = cannot be listened by an attacker
@@ -740,12 +742,20 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
         return asynchronous;
     }
 
+     public boolean isSynchronous() {
+        return synchronous;
+    }
+
     public boolean isAMS() {
         return AMS;
     }
    
     public void setAsynchronous(boolean asy) {
         asynchronous = asy;
+    }
+
+     public void setSynchronous(boolean sy) {
+        synchronous = sy;
     }
 
     public void setAMS(boolean ams) {

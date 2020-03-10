@@ -52,6 +52,7 @@ import ui.avatarcd.AvatarCDBlock;
 import ui.avatarmad.AvatarMADAssumption;
 import ui.avatarrd.AvatarRDRequirement;
 import ui.avatarsmd.AvatarSMDState;
+import ui.avatarsmd.AvatarSMDGPIO;
 import ui.cd.*;
 import ui.ftd.FTDFault;
 import ui.eln.*;
@@ -2788,6 +2789,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
 		 || (o instanceof AvatarBDInterface && this.checkAvatarBDInterface((AvatarBDInterface) o, name))
                     || (o instanceof AvatarCDBlock && this.checkAvatarCDBlock((AvatarCDBlock) o, name))
                     || (o instanceof AvatarSMDState && this.checkAvatarSMDState((AvatarSMDState) o, name))
+		    || (o instanceof AvatarSMDGPIO && this.checkAvatarSMDGPIOState((AvatarSMDGPIO) o, name))
                     || (o instanceof AvatarADActivity && this.checkAvatarADActivity((AvatarADActivity) o, name))
                     || (o instanceof AvatarMADAssumption && this.checkAvatarMADAssumption((AvatarMADAssumption) o, name))
                     || (o instanceof AvatarRDRequirement && this.checkAvatarRDRequirement((AvatarRDRequirement) o, name))
@@ -2956,6 +2958,10 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         }
 
         public boolean checkAvatarSMDState(AvatarSMDState o, String name) {
+            return false;
+        }	
+
+	 public boolean checkAvatarSMDGPIOState(AvatarSMDGPIO o, String name) {
             return false;
         }
 
@@ -3322,6 +3328,18 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         });
     }
 
+ public String findAvatarSMDGPIOName(String name) {
+        return this.findGoodName(name, new NameChecker() {
+            public boolean checkAvatarSMDGPIOState(AvatarSMDGPIO o, String name) {
+                if (o.getValue().equals(name))
+                    return true;
+                //return o.hasInternalStateWithName(name);
+		return false;
+            }
+        });
+    }
+
+    
     public String findAvatarADActivityName(String name) {
         return this.findGoodName(name, new NameChecker() {
             public boolean checkAvatarADActivity(AvatarADActivity o, String name) {
