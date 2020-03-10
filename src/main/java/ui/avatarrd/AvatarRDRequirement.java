@@ -103,7 +103,7 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
     public final static int LOW = 2;
 
     protected String text;
-    protected String[] texts;
+    protected String[] texts = {""};
     protected String kind = "";
     protected String criticality = "";
     protected int reqType = 0; // Type of stereotype

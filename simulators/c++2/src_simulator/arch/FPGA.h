@@ -108,6 +108,7 @@ public:
       	\param glob refers to the output stream
     	*/
 	int allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const;
+    int allTrans2XMLByTask(std::ostringstream& glob, std::string taskName) const;
 	void latencies2XML(std::ostringstream& glob, unsigned int id1, unsigned int id2);
 	//virtual TMLTime truncateNextTransAt(TMLTime iTime)=0;
 	///Adds a new bus master to the internal list
@@ -132,6 +133,7 @@ public:
 	///inline unsigned int getTransNumber() { return _transNumber;}
         inline unsigned int getID () { return _ID;}
 	void HW2HTML(std::ofstream& myfile) ;
+	void removeTrans(int numberOfTrans);
 	void schedule2HTML(std::ofstream& myfile) ;
 	inline const TaskList& getTaskList() const{return _taskList;}
 	inline void setHtmlCurrTask(TMLTask *t) { _htmlCurrTask=t;}

@@ -138,16 +138,18 @@ public class TGCTimeDelay extends TGCWithoutInternalComponent{
 		String oldUnit = getUnit();
         String[] array = new String[3];
 		String ind;
+		String sec = "max";
 		if (hasMaxDelay) {
 			ind = "min";
 		} else {
-			ind = "value";
+			ind = "delay value";
+			sec = "";
 		}
         array[0] = getMinDelay(); array[1] = getMaxDelay(); array[2] = getUnit();
         
         JDialogTimeIntervalUnit jdti = new JDialogTimeIntervalUnit(getTDiagramPanel().getMainGUI(), frame, array, hasMaxDelay, isActiveDelay,
                 "Setting time parameters", ind,
-                "max");
+                sec);
         //jdti.setSize(350, 250);
         GraphicLib.centerOnParent(jdti, 350, 250);
         jdti.setVisible( true ); // blocked until dialog has been closed

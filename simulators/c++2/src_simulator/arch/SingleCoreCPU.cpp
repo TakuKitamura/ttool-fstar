@@ -471,6 +471,21 @@ int SingleCoreCPU::allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) cons
   return total;
 }
 
+int SingleCoreCPU::allTrans2XMLByTask(std::ostringstream& glob, std::string taskName) const {
+  int total = 0;
+  for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
+      (*i)->toXMLByTask(glob, 0, _name, _ID, taskName);
+      total ++;
+  }
+  return total;
+}
+
+void SingleCoreCPU::removeTrans(int numberOfTrans) {
+    if (numberOfTrans == 1) {
+        _transactList.clear();
+    }
+}
+
 void SingleCoreCPU::latencies2XML(std::ostringstream& glob, unsigned int id1, unsigned int id2) {
   for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
     if ((*i)->getCommand() !=NULL){

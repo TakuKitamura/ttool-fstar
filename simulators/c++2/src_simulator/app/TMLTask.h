@@ -148,6 +148,7 @@ public:
       	\param iTrans Pointer to the transaction
     	*/ 
 	void addTransaction(TMLTransaction* iTrans);
+	void removeTrans(int numberOfTrans);
 	virtual std::ostream& writeObject(std::ostream& s);
 	virtual std::istream& readObject(std::istream& s);
 	virtual void streamBenchmarks(std::ostream& s) const;

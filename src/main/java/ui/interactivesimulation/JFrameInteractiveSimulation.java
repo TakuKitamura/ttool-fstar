@@ -141,6 +141,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
     // Commands
     private JPanel /*main,*/ mainTop, commands/*, save, state*/, infos/*, outputs*/, cpuPanel, variablePanel;
     protected JPanelTransactions transactionPanel;
+    protected JPanelTaskTransactions taskTransactionPanel;
     private JCheckBox latex, debug, animate, diploids, update, openDiagram, animateWithInfo;
     private JTabbedPane commandTab, infoTab;
     protected JTextField paramMainCommand;
@@ -393,7 +394,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         mainpanel.add(split, BorderLayout.CENTER);
 
         // Commands
-        commands = new JPanel();
+        commands = new JPanel(new BorderLayout());
         //commands.setFloatable(true);
         //commands.setMinimumSize(new Dimension(300, 250));
         commands.setBorder(new javax.swing.border.TitledBorder("Commands"));
@@ -522,7 +523,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         listTextCommands.addMouseListener(this);
         jp01.add(listTextCommands, c01);
 
-        commands.add(commandTab);
+        commands.add(commandTab, BorderLayout.NORTH);
 
         // Set variables
         jpsv = new JPanelSetVariables(this, valueTable);
@@ -742,7 +743,9 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 
         // Simulation time
         jp02 = new JPanel();
-        infos.add(jp02, BorderLayout.SOUTH);
+        //infos.add(jp02, BorderLayout.SOUTH);
+        commands.add(jp02, BorderLayout.SOUTH);
+        //mainTop.add(jp02, c02);
         jp02.add(new JLabel("Status:"));
         status = new JLabel("Unknown");
         status.setForeground(ColorManager.InteractiveSimulationText_UNKNOWN);
@@ -892,7 +895,13 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
           transactionPanel.add(jspTransactionInfo, BorderLayout.NORTH);
           updateTransactionInformationButton = new JButton(actions[InteractiveSimulationActions.ACT_UPDATE_TRANSACTIONS]);
           transactionPanel.add(updateTransactionInformationButton, BorderLayout.SOUTH);*/
+        if (tmap == null) {
+            taskTransactionPanel = new JPanelTaskTransactions(null, this,NB_OF_TRANSACTIONS);
+        } else {
+            taskTransactionPanel = new JPanelTaskTransactions(tmap.getTMLModeling(),this,NB_OF_TRANSACTIONS);
+        }
 
+        infoTab.addTab("Task Transactions", null, taskTransactionPanel, "Transactions of given Task");
         // CPUs
         cpuPanel = new JPanel();
         cpuPanel.setLayout(new BorderLayout());
@@ -1984,7 +1993,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                                 String val = node0.getTextContent();
                                 TraceManager.addDev("Sim time=" + val);
                                 int valueCycle = Integer.decode(val);
-                                long timeP = (long)((long)(valueCycle) * 1000 / frequency);
+                                long timeP = ((long)(valueCycle) * 1000 / frequency);
                                 val = formatString(val);
                                 String timePS = formatString(""+timeP);
                                 val = val + " cycles / " + timePS  + " ns";
@@ -2330,6 +2339,9 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                 //TraceManager.addDev("Transinfo -> " + trans.size());
                 if (transactionPanel != null) {
                     transactionPanel.setData(trans);
+                }
+                if (taskTransactionPanel != null) {
+                    taskTransactionPanel.setData(trans);
                 }
                 if (latencyPanel !=null){
                     processLatency();
@@ -2864,6 +2876,9 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         int nb = NB_OF_TRANSACTIONS;
         if (transactionPanel != null) {
             nb = transactionPanel.getNbOfTransactions();
+        }
+        if (taskTransactionPanel != null) {
+            nb = taskTransactionPanel.getNbOfTransactions();
         }
         sendCommand("lt " + nb);
     }

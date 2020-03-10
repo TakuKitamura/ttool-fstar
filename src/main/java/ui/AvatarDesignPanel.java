@@ -115,6 +115,12 @@ public class AvatarDesignPanel extends TURTLEPanel {
         }
     }
 
+    public void setConsiderTimingOperators(boolean _considerTimingOperators) {
+        if (abdp != null) {
+            abdp.setConsiderTimingOperators(_considerTimingOperators);
+        }
+    }
+
     public List<AvatarBDStateMachineOwner> getValidated() {
         if (abdp != null) {
             return abdp.getValidated();
@@ -132,6 +138,13 @@ public class AvatarDesignPanel extends TURTLEPanel {
     public boolean getOptimized() {
         if (abdp != null) {
             return abdp.getOptimized();
+        }
+        return true;
+    }
+
+    public boolean getConsiderTimingOperators() {
+        if (abdp != null) {
+            return abdp.getConsiderTimingOperators();
         }
         return true;
     }

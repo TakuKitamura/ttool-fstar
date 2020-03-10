@@ -341,6 +341,12 @@ public class AvatarSpecification extends AvatarElement {
         }
     }
 
+    public void removeAllDelays() {
+        for(AvatarBlock block: blocks) {
+            block.getStateMachine().removeAllDelays();
+        }
+    }
+
     public void removeTimers() {
         //renameTimers();
 

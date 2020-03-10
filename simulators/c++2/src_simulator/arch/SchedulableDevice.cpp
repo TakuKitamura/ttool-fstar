@@ -315,7 +315,13 @@ void SchedulableDevice::HW2HTML(std::ofstream& myfile) const {
     std::map<TMLTask*, std::string> taskCellClasses;
     unsigned int nextCellClassIndex = 0;
     TMLTime aCurrTime = 0;
-
+    unsigned int tempReduce = 0;
+    std::vector<unsigned int> listScale;
+    std::vector<unsigned int> listScaleTime;
+    listScale.push_back(0);
+    listScaleTime.push_back(0);
+    bool changeCssClass = false;
+    TMLTransaction* checkLastTime = _transactList.back();
     for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
       std::cout<<"get transaction core number is: "<<(*i)->getTransactCoreNumber()<<std::endl;
       std::cout<<"time : "<<_cycleTime<<std::endl;
@@ -323,16 +329,52 @@ void SchedulableDevice::HW2HTML(std::ofstream& myfile) const {
       //if( (*i)->getTransactCoreNumber() == this->_cycleTime ){
       TMLTransaction* aCurrTrans = *i;
       unsigned int aBlanks = aCurrTrans->getStartTime() - aCurrTime;
-
-      if ( aBlanks >= 0 && (!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction()) )
-          writeHTMLColumn( myfile, aBlanks+1, "not", "idle time" );
-      else if ( aBlanks > 0 )
-          writeHTMLColumn( myfile, aBlanks, "not", "idle time" );
+	bool isBlankTooBig = false;
+	std::ostringstream tempString;
+	int tempBlanks;
+	if((checkLastTime)->getEndTime() >= 250 && aBlanks > 10) {
+	    int newBlanks = 10;
+	    tempBlanks = aBlanks;
+	    tempReduce += aBlanks - newBlanks;
+	    aBlanks = newBlanks;
+	    isBlankTooBig = true;
+        changeCssClass = true;
+	}
+	if ( aBlanks >= 0 && (!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction()) ){
+	    listScale.push_back(aBlanks+1);
+	    tempString << tempBlanks+1;
+	    if(aCurrTrans->getStartTime()+1 > listScaleTime.back()){
+            listScaleTime.push_back(aCurrTrans->getStartTime()+1);
+        }
+	    if (isBlankTooBig){
+	        writeHTMLColumn( myfile, aBlanks+1, "not", "idle time", "<- idle " + tempString.str() + " ->", false );
+	    } else {
+	        writeHTMLColumn( myfile, aBlanks+1, "not", "idle time" );
+	    }
+	}
+	else if ( aBlanks > 0 ){
+	    listScale.push_back(aBlanks);
+	    tempString << tempBlanks;
+	    if(aCurrTrans->getStartTime() > listScaleTime.back()){
+            listScaleTime.push_back(aCurrTrans->getStartTime());
+        }
+	    if (isBlankTooBig){
+            writeHTMLColumn( myfile, aBlanks, "not", "idle time", "<- idle " + tempString.str() + " ->", false );
+        } else {
+            writeHTMLColumn( myfile, aBlanks, "not", "idle time" );
+        }
+	}
 
       unsigned int aLength = aCurrTrans->getPenalties();
 
       if ( aLength != 0 ) {
 	std::ostringstream title;
+    listScaleTime.push_back(listScaleTime.back()+aLength);
+    if(checkLastTime->getEndTime() >= 250 && aLength >10){
+        tempReduce += aLength - 10;
+        aLength = 10;
+    }
+    listScale.push_back(aLength);
 	title << "idle:" << aCurrTrans->getIdlePenalty() << " switching penalty:" << aCurrTrans->getTaskSwitchingPenalty();
 	writeHTMLColumn( myfile, aLength, "not", title.str() );
       }
@@ -345,9 +387,20 @@ void SchedulableDevice::HW2HTML(std::ofstream& myfile) const {
       std::string aCurrTransName=aCurrTrans->toShortString();
       unsigned int indexTrans=aCurrTransName.find_first_of(":");
       std::string aCurrContent=aCurrTransName.substr(indexTrans+1,2);
-     
-      writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString(), aCurrContent);
-
+      if(!(!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction())){
+          if(checkLastTime->getEndTime() >= 250 && aLength >10){
+              tempReduce += aLength - 10;
+              aLength = 10;
+          }
+          writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString(), aCurrContent);
+          listScale.push_back(aLength);
+          if(aCurrTrans->getStartTime() > listScaleTime.back()){
+             listScaleTime.push_back(aCurrTrans->getStartTime());
+          }
+          if(aCurrTrans->getEndTime() > listScaleTime.back()){
+             listScaleTime.push_back(aCurrTrans->getEndTime());
+          }
+      }
       aCurrTime = aCurrTrans->getEndTime();
       // }
     }
@@ -355,16 +408,30 @@ void SchedulableDevice::HW2HTML(std::ofstream& myfile) const {
 
     myfile << "</tr>" << std::endl << "<tr>";
 
-    for ( unsigned int aLength = 0; aLength < aCurrTime; aLength++ ) {
+    for ( unsigned int aLength = 0; aLength < aCurrTime - tempReduce; aLength++ ) {
       myfile << "<th></th>";
     }
 
     myfile << "</tr>" << std::endl << "<tr>";
 
-    for ( unsigned int aLength = 0; aLength <= aCurrTime; aLength += 5 ) {
+    for ( unsigned int aLength = 0; aLength < listScale.size(); aLength += 1 ) {
       std::ostringstream spanVal;
-      spanVal << aLength;
-      writeHTMLColumn( myfile, 5, "sc", "", spanVal.str(), false );
+      if(aLength < listScaleTime.size())
+        spanVal << listScaleTime[aLength];
+      else
+        spanVal << "";
+      if(aLength+1 >= listScale.size()){
+
+        if(changeCssClass){
+            writeHTMLColumn( myfile, 5, "sc1",  spanVal.str(), spanVal.str(), false );
+        } else
+            writeHTMLColumn( myfile, 5, "sc", spanVal.str(), spanVal.str(), false );
+      }else {
+        if(changeCssClass){
+            writeHTMLColumn( myfile, listScale[aLength+1], "sc1", spanVal.str(), spanVal.str(), false );
+        } else
+            writeHTMLColumn( myfile, listScale[aLength+1], "sc", spanVal.str(), spanVal.str(), false );
+        }
       //myfile << "<td colspan=\"5\" class=\"sc\">" << aLength << "</td>";
     }
 
@@ -394,7 +461,13 @@ void SchedulableDevice::schedule2HTML(std::ofstream& myfile) const {
 		std::map<TMLTask*, std::string> taskCellClasses;
 		unsigned int nextCellClassIndex = 0;
 		TMLTime aCurrTime = 0;
-
+        unsigned int tempReduce = 0;
+        std::vector<unsigned int> listScale;
+        std::vector<unsigned int> listScaleTime;
+        listScale.push_back(0);
+        listScaleTime.push_back(0);
+        bool changeCssClass = false;
+        TMLTransaction* checkLastTime = _transactList.back();
 		for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
 		  std::cout<<"get transaction core number is: "<<(*i)->getTransactCoreNumber()<<std::endl;
 		  std::cout<<"time : "<<_cycleTime<<std::endl;
@@ -402,16 +475,52 @@ void SchedulableDevice::schedule2HTML(std::ofstream& myfile) const {
 		  //if( (*i)->getTransactCoreNumber() == this->_cycleTime ){
 			TMLTransaction* aCurrTrans = *i;
 			unsigned int aBlanks = aCurrTrans->getStartTime() - aCurrTime;
-
-            if ( aBlanks >= 0 && (!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction()) )
-                writeHTMLColumn( myfile, aBlanks+1, "not", "idle time" );
-            else if ( aBlanks > 0 )
-                writeHTMLColumn( myfile, aBlanks, "not", "idle time" );
+            bool isBlankTooBig = false;
+            std::ostringstream tempString;
+            int tempBlanks;
+            if(checkLastTime->getEndTime() >= 250 && aBlanks > 10) {
+                int newBlanks = 10;
+                tempBlanks = aBlanks;
+                tempReduce += aBlanks - newBlanks;
+                aBlanks = newBlanks;
+                isBlankTooBig = true;
+                changeCssClass = true;
+            }
+            if ( aBlanks >= 0 && (!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction()) ){
+                listScale.push_back(aBlanks+1);
+                tempString << tempBlanks+1;
+     	        if(aCurrTrans->getStartTime()+1 > listScaleTime.back()){
+                    listScaleTime.push_back(aCurrTrans->getStartTime()+1);
+                }
+                if (isBlankTooBig){
+                    writeHTMLColumn( myfile, aBlanks+1, "not", "idle time", "<- idle " + tempString.str() + " ->", false );
+                } else {
+                    writeHTMLColumn( myfile, aBlanks+1, "not", "idle time" );
+                }
+            }
+            else if ( aBlanks > 0 ){
+                listScale.push_back(aBlanks);
+                tempString << tempBlanks;
+                if(aCurrTrans->getStartTime() > listScaleTime.back()){
+                    listScaleTime.push_back(aCurrTrans->getStartTime());
+                }
+                if (isBlankTooBig){
+                    writeHTMLColumn( myfile, aBlanks, "not", "idle time", "<- idle " + tempString.str() + " ->", false );
+                } else {
+                    writeHTMLColumn( myfile, aBlanks, "not", "idle time" );
+                }
+            }
 
 			unsigned int aLength = aCurrTrans->getPenalties();
 
 			if ( aLength != 0 ) {
 				std::ostringstream title;
+                listScaleTime.push_back(listScaleTime.back()+aLength);
+                if (checkLastTime->getEndTime() >= 250 && aLength > 10){
+                    tempReduce += aLength - 10;
+                    aLength = 10;
+                }
+                listScale.push_back(aLength);
 				title << "idle:" << aCurrTrans->getIdlePenalty() << " switching penalty:" << aCurrTrans->getTaskSwitchingPenalty();
 				writeHTMLColumn( myfile, aLength, "not", title.str() );
 			}
@@ -422,7 +531,18 @@ void SchedulableDevice::schedule2HTML(std::ofstream& myfile) const {
 			TMLTask* task = aCurrTrans->getCommand()->getTask();
 			const std::string cellClass = determineHTMLCellClass( taskCellClasses, task, nextCellClassIndex );
             if(!(!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction())){
+              if(checkLastTime->getEndTime() >= 250 && aLength >10){
+                  tempReduce += aLength - 10;
+                  aLength = 10;
+              }
               writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString() );
+              listScale.push_back(aLength);
+              if(aCurrTrans->getStartTime() > listScaleTime.back()){
+                 listScaleTime.push_back(aCurrTrans->getStartTime());
+              }
+              if(aCurrTrans->getEndTime() > listScaleTime.back()){
+                listScaleTime.push_back(aCurrTrans->getEndTime());
+              }
             }
 
 			aCurrTime = aCurrTrans->getEndTime();
@@ -432,16 +552,30 @@ void SchedulableDevice::schedule2HTML(std::ofstream& myfile) const {
 
 		myfile << "</tr>" << std::endl << "<tr>";
 
-		for ( unsigned int aLength = 0; aLength < aCurrTime; aLength++ ) {
+		for ( unsigned int aLength = 0; aLength < aCurrTime - tempReduce; aLength++ ) {
 			myfile << "<th></th>";
 		}
 
 		myfile << "</tr>" << std::endl << "<tr>";
 
-		for ( unsigned int aLength = 0; aLength <= aCurrTime; aLength += 5 ) {
-			std::ostringstream spanVal;
-			spanVal << aLength;
-			writeHTMLColumn( myfile, 5, "sc", "", spanVal.str(), false );
+        for ( unsigned int aLength = 0; aLength < listScale.size(); aLength += 1 ) {
+          std::ostringstream spanVal;
+          if(aLength < listScaleTime.size())
+            spanVal << listScaleTime[aLength];
+          else
+            spanVal << "";
+          if(aLength+1 >= listScale.size()){
+
+            if(changeCssClass){
+                writeHTMLColumn( myfile, 5, "sc1",  spanVal.str(), spanVal.str(), false );
+            } else
+                writeHTMLColumn( myfile, 5, "sc", spanVal.str(), spanVal.str(), false );
+          }else {
+            if(changeCssClass){
+                writeHTMLColumn( myfile, listScale[aLength+1], "sc1", spanVal.str(), spanVal.str(), false );
+            } else
+                writeHTMLColumn( myfile, listScale[aLength+1], "sc", spanVal.str(), spanVal.str(), false );
+            }
 			//myfile << "<td colspan=\"5\" class=\"sc\">" << aLength << "</td>";
 		}
 

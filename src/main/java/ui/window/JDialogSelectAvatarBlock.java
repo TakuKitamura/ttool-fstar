@@ -71,6 +71,7 @@ public class JDialogSelectAvatarBlock extends JDialogBase implements ActionListe
     
 	public List<AvatarBDStateMachineOwner> validated, ignored;
     private boolean optimized = true;
+    private boolean considerTimingOperators = false;
 
     private List<AvatarBDStateMachineOwner> val, ign, back;
 
@@ -81,18 +82,21 @@ public class JDialogSelectAvatarBlock extends JDialogBase implements ActionListe
     private JButton addOneIgnored;
     private JButton allIgnored;
     protected JCheckBox optimize;
+    protected JCheckBox considerTimingOperatorsBox;
 
     private boolean hasBeenCancelled = true;
 
     /*
      * Creates new form
      */
-    public JDialogSelectAvatarBlock(Frame f, List<AvatarBDStateMachineOwner> _back, List<AvatarBDStateMachineOwner> componentList, String title, List<AvatarBDStateMachineOwner> _validated, List<AvatarBDStateMachineOwner> _ignored, boolean _optimized) {
+    public JDialogSelectAvatarBlock(Frame f, List<AvatarBDStateMachineOwner> _back, List<AvatarBDStateMachineOwner> componentList, String title, List<AvatarBDStateMachineOwner> _validated, List<AvatarBDStateMachineOwner> _ignored,
+                                    boolean _optimized, boolean _considerTimingOperators) {
         super(f, title, true);
 
         back = _back;
         validated = _validated;
         ignored = _ignored;
+        considerTimingOperators = _considerTimingOperators;
         optimized = _optimized;
 
         if ((validated == null) || (ignored == null)) {
@@ -219,6 +223,9 @@ public class JDialogSelectAvatarBlock extends JDialogBase implements ActionListe
         optimize = new JCheckBox("Optimize specification");
         optimize.setSelected(optimized);
         c.add(optimize, c2);
+        considerTimingOperatorsBox = new JCheckBox("Take into account time operators");
+        considerTimingOperatorsBox.setSelected(considerTimingOperators);
+        c.add(considerTimingOperatorsBox, c2);
         c2.fill = GridBagConstraints.HORIZONTAL;
         c2.gridwidth = 1; //end row
         initMainButtons(c2, c, this, false, "Check syntax", "Cancel");
@@ -344,6 +351,7 @@ public class JDialogSelectAvatarBlock extends JDialogBase implements ActionListe
         validated = val;
         ignored = ign;
         optimized = optimize.isSelected();
+        considerTimingOperators = considerTimingOperatorsBox.isSelected();
 
         hasBeenCancelled = false;
         dispose();
@@ -392,6 +400,10 @@ public class JDialogSelectAvatarBlock extends JDialogBase implements ActionListe
 
     public boolean getOptimized() {
         return optimized;
+    }
+
+    public boolean getConsiderTimingOperators() {
+        return considerTimingOperators;
     }
 
     public boolean hasBeenCancelled() {

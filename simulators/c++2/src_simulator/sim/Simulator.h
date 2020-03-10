@@ -272,7 +272,11 @@ public:
 	\param glob Stream on which the XML answer shall be send to
 	*/
 	int allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const;
-	
+
+	int allTrans2XMLByTask(std::ostringstream& glob, std::string taskName) const;
+
+	void removeOldTransaction(int numberOfTrans);
+
 	void latencies2XML(std::ostringstream& glob, int id1, int id2);
 	
 	///Is true if the simulator is busy

@@ -320,6 +320,22 @@ public class CommandParser {
         sc = new SimulationCommand("list-transactions", "lt", "22", params, paramNames, "Get the most recent transactions");
         commandList.add(sc);
 
+        // Get transactions
+        params = new int[1];
+        paramNames = new String[1];
+        params[0] = 2;
+        paramNames[0] = "Task Name";
+        sc = new SimulationCommand("list-all-transactions-of-a-task", "lat", "25", params, paramNames, "Get all transactions of Task");
+        commandList.add(sc);
+
+        // Remove all the transactions in the past
+        params = new int[1];
+        paramNames = new String[1];
+        params[0] = 1;
+        paramNames[0] = "<YES>: 1, <NO>: 0";
+        sc = new SimulationCommand("remove-all-trans", "rmat", "26", params, paramNames, "Remove all the transactions in the past");
+        commandList.add(sc);
+
         // rm-breakpoint
         params = new int[2];
         paramNames = new String[2];

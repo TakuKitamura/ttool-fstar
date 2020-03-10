@@ -425,6 +425,20 @@ int FPGA::allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const {
   return total;
 }
 
+int FPGA::allTrans2XMLByTask(std::ostringstream& glob, std::string taskName) const {
+  int total = 0;
+  for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
+      (*i)->toXMLByTask(glob, 0, _name, _ID, taskName);
+      total ++;
+  }
+  return total;
+}
+
+void FPGA::removeTrans(int numberOfTrans) {
+    if (numberOfTrans == 1) {
+        _transactList.clear();
+    }
+}
 
 void FPGA::latencies2XML(std::ostringstream& glob, unsigned int id1, unsigned int id2) {
   for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){
@@ -582,6 +596,12 @@ void FPGA::HW2HTML(std::ofstream& myfile)  {
      myfile << "<table>" << std::endl << "<tr>";
     TMLTime aCurrTime = 0;
     unsigned int taskOccurTime = 0;
+    unsigned int tempReduce = 0;
+    std::vector<unsigned int> listScale;
+    std::vector<unsigned int> listScaleTime;
+    listScale.push_back(0);
+    listScaleTime.push_back(0);
+    bool changeCssClass = false;
     for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
 #ifdef DEBUG_FPGA
       std::cout <<  (*i)-> getCommand()->getTask()->toString() <<std::endl;
@@ -596,11 +616,41 @@ void FPGA::HW2HTML(std::ofstream& myfile)  {
 #endif
 	TMLTransaction* aCurrTrans = *i;
 	unsigned int aBlanks = aCurrTrans->getStartTime() - aCurrTime;
-	//std::cout<<"blank is "<<aBlanks<<std::endl;
-	if ( aBlanks >= 0 && (!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction()) )
-	    writeHTMLColumn( myfile, aBlanks+1, "not", "idle time" );
-	else if ( aBlanks > 0 )
-	    writeHTMLColumn( myfile, aBlanks, "not", "idle time" );
+	bool isBlankTooBig = false;
+	std::ostringstream tempString;
+	int tempBlanks;
+	if(_htmlCurrTask->getEndLastTransaction() >= 250 && aBlanks >10) {
+	    int newBlanks = 10;
+	    tempBlanks = aBlanks;
+	    tempReduce += aBlanks - newBlanks;
+	    aBlanks = newBlanks;
+	    isBlankTooBig = true;
+	    changeCssClass = true;
+	}
+	if ( aBlanks >= 0 && (!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction()) ){
+	    listScale.push_back(aBlanks+1);
+	    tempString << tempBlanks+1;
+	    if(aCurrTrans->getStartTime()+1 > listScaleTime.back()){
+            listScaleTime.push_back(aCurrTrans->getStartTime()+1);
+        }
+	    if (isBlankTooBig){
+	        writeHTMLColumn( myfile, aBlanks+1, "not", "idle time", "<- idle " + tempString.str() + " ->", false );
+	    } else {
+	        writeHTMLColumn( myfile, aBlanks+1, "not", "idle time" );
+	    }
+	}
+	else if ( aBlanks > 0 ){
+	    listScale.push_back(aBlanks);
+	    tempString << tempBlanks;
+	    if(aCurrTrans->getStartTime() > listScaleTime.back()){
+            listScaleTime.push_back(aCurrTrans->getStartTime());
+        }
+	    if (isBlankTooBig){
+            writeHTMLColumn( myfile, aBlanks, "not", "idle time", "<- idle " + tempString.str() + " ->", false );
+        } else {
+            writeHTMLColumn( myfile, aBlanks, "not", "idle time" );
+        }
+	}
 
 	unsigned int aLength = aCurrTrans->getOperationLength();
 
@@ -612,27 +662,50 @@ void FPGA::HW2HTML(std::ofstream& myfile)  {
 	unsigned int indexTrans=aCurrTransName.find_first_of(":");
 	std::string aCurrContent=aCurrTransName.substr(indexTrans+1,2);
 	if(!(!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction())){
+      if(_htmlCurrTask->getEndLastTransaction() >= 250 && aLength >10){
+          tempReduce += aLength - 10;
+          aLength = 10;
+      }
       writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString(), aCurrContent );
+      listScale.push_back(aLength);
+      if(aCurrTrans->getStartTime() > listScaleTime.back()){
+         listScaleTime.push_back(aCurrTrans->getStartTime());
+      }
+      if(aCurrTrans->getEndTime() > listScaleTime.back()){
+         listScaleTime.push_back(aCurrTrans->getEndTime());
+      }
     }
 	if(aCurrTrans->getCommand()->getTask()->getIsDaemon() == true && aCurrTrans->getEndTime() > _simulatedTime)
 	  aCurrTime = _simulatedTime;
 	else
 	  aCurrTime = aCurrTrans->getEndTime();
       }
-    }	
+    }
 
     myfile << "</tr>" << std::endl << "<tr>";
-
-    for ( unsigned int aLength = 0; aLength < aCurrTime; aLength++ ) {
+    for ( unsigned int aLength = 0; aLength < aCurrTime - tempReduce; aLength++ ) {
       myfile << "<th></th>";
     }
 
     myfile << "</tr>" << std::endl << "<tr>";
-
-    for ( unsigned int aLength = 0; aLength <= aCurrTime; aLength += 5 ) {
+    for ( unsigned int aLength = 0; aLength < listScale.size(); aLength += 1 ) {
       std::ostringstream spanVal;
-      spanVal << aLength;
-      writeHTMLColumn( myfile, 5, "sc", "", spanVal.str(), false );
+      if(aLength < listScaleTime.size())
+        spanVal << listScaleTime[aLength];
+      else
+        spanVal << "";
+      if(aLength+1 >= listScale.size()){
+
+        if(changeCssClass){
+             writeHTMLColumn( myfile, 5, "sc1",  spanVal.str(), spanVal.str(), false );
+        } else
+             writeHTMLColumn( myfile, 5, "sc", spanVal.str(), spanVal.str(), false );
+      }else {
+        if(changeCssClass){
+            writeHTMLColumn( myfile, listScale[aLength+1], "sc1", spanVal.str(), spanVal.str(), false );
+        } else
+             writeHTMLColumn( myfile, listScale[aLength+1], "sc", spanVal.str(), spanVal.str(), false );
+      }
       //myfile << "<td colspan=\"5\" class=\"sc\">" << aLength << "</td>";
     }
    }
@@ -652,6 +725,12 @@ void FPGA::schedule2HTML(std::ofstream& myfile)  {
 
     TMLTime aCurrTime = 0;
     unsigned int taskOccurTime = 0;
+    unsigned int tempReduce = 0;
+    std::vector<unsigned int> listScale;
+    std::vector<unsigned int> listScaleTime;
+    listScale.push_back(0);
+    listScaleTime.push_back(0);
+    bool changeCssClass = false;
     for( TransactionList::const_iterator i = _transactList.begin(); i != _transactList.end(); ++i ) {
       //#ifdef DEBUG_FPGA
       std::cout <<  (*i)-> getCommand()->getTask()->toString() <<std::endl;
@@ -667,10 +746,42 @@ void FPGA::schedule2HTML(std::ofstream& myfile)  {
 	TMLTransaction* aCurrTrans = *i;
 	unsigned int aBlanks = aCurrTrans->getStartTime() - aCurrTime;
 	//std::cout<<"blank is "<<aBlanks<<std::endl;
-	if ( aBlanks >= 0 && (!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction()) )
-	    writeHTMLColumn( myfile, aBlanks+1, "not", "idle time" );
-	else if ( aBlanks > 0 )
-	    writeHTMLColumn( myfile, aBlanks, "not", "idle time" );
+    bool isBlankTooBig = false;
+    std::ostringstream tempString;
+    int tempBlanks;
+    if(_htmlCurrTask->getEndLastTransaction() >= 250 && aBlanks >10) {
+        int newBlanks = 10;
+        tempBlanks = aBlanks;
+        tempReduce += aBlanks - newBlanks;
+        aBlanks = newBlanks;
+        isBlankTooBig = true;
+        changeCssClass = true;
+    }
+
+	if ( aBlanks >= 0 && (!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction()) ){
+	    listScale.push_back(aBlanks+1);
+	    tempString << tempBlanks+1;
+	    if(aCurrTrans->getStartTime()+1 > listScaleTime.back()){
+            listScaleTime.push_back(aCurrTrans->getStartTime()+1);
+        }
+	    if (isBlankTooBig){
+	        writeHTMLColumn( myfile, aBlanks+1, "not", "idle time", "<- idle " + tempString.str() + " ->", false );
+	    } else {
+	        writeHTMLColumn( myfile, aBlanks+1, "not", "idle time" );
+	    }
+	}
+	else if ( aBlanks > 0 ){
+	    listScale.push_back(aBlanks);
+	    tempString << tempBlanks;
+	    if(aCurrTrans->getStartTime() > listScaleTime.back()){
+            listScaleTime.push_back(aCurrTrans->getStartTime());
+        }
+	    if (isBlankTooBig){
+            writeHTMLColumn( myfile, aBlanks, "not", "idle time", "<- idle " + tempString.str() + " ->", false );
+        } else {
+            writeHTMLColumn( myfile, aBlanks, "not", "idle time" );
+        }
+	}
 
 	unsigned int aLength = aCurrTrans->getOperationLength();
 
@@ -680,7 +791,18 @@ void FPGA::schedule2HTML(std::ofstream& myfile)  {
 	//	std::cout<<"what is this task?"<<task->toString()<<std::endl;
 	const std::string cellClass = determineHTMLCellClass(  nextCellClassIndex );
     if(!(!(aCurrTrans->getCommand()->getActiveDelay()) && aCurrTrans->getCommand()->isDelayTransaction())){
+      if(_htmlCurrTask->getEndLastTransaction() >= 250 && aLength >10){
+          tempReduce += aLength - 10;
+          aLength = 10;
+      }
       writeHTMLColumn( myfile, aLength, cellClass, aCurrTrans->toShortString() );
+      listScale.push_back(aLength);
+      if(aCurrTrans->getStartTime() > listScaleTime.back()){
+         listScaleTime.push_back(aCurrTrans->getStartTime());
+      }
+      if(aCurrTrans->getEndTime() > listScaleTime.back()){
+        listScaleTime.push_back(aCurrTrans->getEndTime());
+      }
     }
 
 	if(aCurrTrans->getCommand()->getTask()->getIsDaemon() == true && aCurrTrans->getEndTime() > _simulatedTime)
@@ -693,16 +815,29 @@ void FPGA::schedule2HTML(std::ofstream& myfile)  {
 
     myfile << "</tr>" << std::endl << "<tr>";
 
-    for ( unsigned int aLength = 0; aLength < aCurrTime; aLength++ ) {
+    for ( unsigned int aLength = 0; aLength < aCurrTime - tempReduce; aLength++ ) {
       myfile << "<th></th>";
     }
 
     myfile << "</tr>" << std::endl << "<tr>";
-
-    for ( unsigned int aLength = 0; aLength <= aCurrTime; aLength += 5 ) {
+    for ( unsigned int aLength = 0; aLength < listScale.size(); aLength += 1 ) {
       std::ostringstream spanVal;
-      spanVal << aLength;
-      writeHTMLColumn( myfile, 5, "sc", "", spanVal.str(), false );
+      if(aLength < listScaleTime.size())
+        spanVal << listScaleTime[aLength];
+      else
+        spanVal << "";
+      if(aLength+1 >= listScale.size()){
+
+        if(changeCssClass){
+            writeHTMLColumn( myfile, 5, "sc1",  spanVal.str(), spanVal.str(), false );
+        } else
+         writeHTMLColumn( myfile, 5, "sc", spanVal.str(), spanVal.str(), false );
+      }else {
+        if(changeCssClass){
+            writeHTMLColumn( myfile, listScale[aLength+1], "sc1", spanVal.str(), spanVal.str(), false );
+        } else
+           writeHTMLColumn( myfile, listScale[aLength+1], "sc", spanVal.str(), spanVal.str(), false );
+        }
       //myfile << "<td colspan=\"5\" class=\"sc\">" << aLength << "</td>";
     }
 

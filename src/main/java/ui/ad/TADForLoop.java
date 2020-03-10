@@ -141,6 +141,9 @@ public abstract class TADForLoop extends TADComponentWithoutSubcomponents implem
 	}
 
 	public TGConnectingPoint getExitLoopConnectingPoint() {
-		return connectingPoint[ INDEX_EXIT_LOOP ];
+    	if (INDEX_EXIT_LOOP < connectingPoint.length ) {
+			return connectingPoint[INDEX_EXIT_LOOP];
+		}
+		return null;
 	}
 }

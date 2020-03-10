@@ -67,6 +67,11 @@ public class TMLTask extends TMLElement {
     private String operationMEC;
     private boolean isAttacker;
 
+
+    private boolean isPeriodic = false;
+    private String periodValue = "";
+    private String periodUnit = "ns";
+
     public TMLTask(String name, Object referenceToClass, Object referenceToActivityDiagram) {
         super(name, referenceToClass);
         //TraceManager.addDev("Creating new TMLTask:" + name);
@@ -87,6 +92,23 @@ public class TMLTask extends TMLElement {
     }
 
     public boolean isDaemon() {return isDaemon;}
+
+    public void setPeriodic(boolean _b, String _periodValue, String _unit) {
+        isPeriodic = _b;
+        periodValue = periodValue;
+        periodUnit = _unit;
+    }
+
+    public String getPeriodUnit() {
+        return periodUnit;
+    }
+
+    public String getPeriodValue() {
+        return periodValue;
+    }
+
+
+    public boolean isPeriodic() {return isPeriodic;}
 
     public void setPriority(int _priority) {
         priority = _priority;

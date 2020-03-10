@@ -124,9 +124,12 @@ public class JDialogTimeIntervalUnit extends JDialogBase implements ActionListen
         panel1 = new JPanel();
         panel1.setLayout(gridbag1);
         if ((id1 != null) && (id2 != null)) {
-            panel1.setBorder(new javax.swing.border.TitledBorder("setting " + id1 + " and " + id2));
+            if (id2.length() > 0)
+                panel1.setBorder(new javax.swing.border.TitledBorder("Setting " + id1 + " and " + id2));
+            else
+                panel1.setBorder(new javax.swing.border.TitledBorder("Setting " + id1));
         } else {            
-            panel1.setBorder(new javax.swing.border.TitledBorder("setting min and max delays"));
+            panel1.setBorder(new javax.swing.border.TitledBorder("Setting min and max delays"));
         }
         panel1.setPreferredSize(new Dimension(300, 150));
 
@@ -193,6 +196,7 @@ public class JDialogTimeIntervalUnit extends JDialogBase implements ActionListen
         c0.gridheight = 10;
         c0.weighty = 1.0;
         c0.weightx = 1.0;
+        c0.fill = GridBagConstraints.BOTH;
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
         
         c.add(panel1, c0);
