@@ -419,9 +419,9 @@ public class AvatarSMDGPIO extends TGCScalableWithInternalComponent implements A
           null,
           getValue());*/
 
-        //JDialogAvatarGPIOState jdas = new JDialogAvatarGPIOState(frame, "Setting state parameters", value, entryCode);
+        JDialogAvatarGPIOState jdas = new JDialogAvatarGPIOState(frame, "Setting state parameters", value, entryCode);
 		
-		JDialogAvatarGPIOState jdas = new JDialogAvatarGPIOState(frame,  "Setting state parameters", null, refs); //DG 9.3. ToDo reference c'est quoi??
+	//	JDialogAvatarGPIOState jdas = new JDialogAvatarGPIOState(frame,  "Setting state parameters", null, refs); //DG 9.3. ToDo reference c'est quoi??
 								 
        // jdas.setSize(600, 550);
         GraphicLib.centerOnParent(jdas, 600, 550 );
@@ -432,7 +432,7 @@ public class AvatarSMDGPIO extends TGCScalableWithInternalComponent implements A
             return false;
         }
 
-        String s = jdas.getGPIOName();
+        String s = jdas.getGPIOStateName();
 
         if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
             //boolean b;

@@ -36,225 +36,223 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-    //vrac
-/*for(AvatarAmsCluster amsCluster : TopCellGenerator.avatardd.getAllAmsCluster ()) {
-            if(amsCluster.getNo_amsCluster() == 0) {
-	    code += "if(strcmp(name, \""+amsCluster.getAmsClusterName()+"\") == 0) {\n";*/
-		//end vrac
+
 
 
 package ui.window;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Font;
-import java.awt.Frame;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import myutil.Conversion;
+import myutil.GraphicLib;
+import ui.util.IconManager;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Vector;
-
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-
-import myutil.TraceManager;
-import ui.AvatarSignal;
-import ui.TGComponent;
-
-import ddtranslatorSoclib.AvatarAmsCluster;
 
 /**
  * Class JDialogAvatarGPIOState
- * Dialog for managing several string components
- * Creation: 12/04/2010
- * @version 1.0 12/04/2010
+ * Dialog for managing AVATAR states information
+ * Creation: 08/03/2013
+ * @version 1.0 08/03/2013
  * @author Ludovic APVRILLE
  */
 public class JDialogAvatarGPIOState extends JDialogBase implements ActionListener  {
-
-    //private List<AvatarGPIO> gpios, realGpios;
-    private List<AvatarAmsCluster> gpios, realGpios;
-    private List<String> showGPIO;
-    private String currentGPIO;
-    private boolean isOut;
+    
 	
-	private TGComponent reference;
-    private Vector<TGComponent> refs;
-
+	//protected String [] globalCode;
+	protected String [] entryCode;
+    
     private boolean cancelled = true;
-
-	private JComboBox<TGComponent> refChecks;
-
+    
+    
     private JPanel panel1;
-
+	private JPanel panel2;
+    
     // Panel1
-    private JComboBox<String> listGPIO;
-    private JButton selectGPIO;
-    private JTextField GPIO;
-
+    private String stateName;
+	private JTextField stateNameText;
+	
+	// Panel of code and files
+	protected JTextArea jtaEntryCode; 
+	//jtaGlobalCode;
+    
+    
     /* Creates new form  */
-    public JDialogAvatarGPIOState(Frame _f, String _title, String _currentGPIO, List<AvatarAmsCluster> _GPIOs, boolean _isOut, TGComponent _reference, Vector<TGComponent> _refs) {
+    // arrayDelay: [0] -> minDelay ; [1] -> maxDelay
+    public JDialogAvatarGPIOState(Frame _f, String _title, String _name, String[] _entryCode) {
+        
         super(_f, _title, true);
-
-        GPIOs = _GPIOs;
-        currentGPIO = _currentGPIO;
-        isOut = _isOut;
-		reference=_reference;
-		refs=_refs;
-
-        makeGPIOs();
-
+       
+        stateName = _name;
+		
+	
+		
+		//globalCode = _globalCode;
+		entryCode = _entryCode;
+		
+		
         initComponents();
-//        myInitComponents();
-
+        myInitComponents();
         pack();
     }
-
-    private void makeGPIOs() {
-        showGPIOs = new LinkedList<String> ();
-        realGPIOs = new LinkedList<AvatarGPIO> ();
-
-
-	for(AvatarAmsCluster amsCluster : TopCellGenerator.avatardd.getAllAmsCluster ()) {
-            if(amsCluster.getNo_amsCluster() == 0) {
-	        showGPIOs.add(amsCluster.getAmsClusterName());
-		realGPIOs.add(amsCluster);
-		//DG toDo distinguish GPIO's in and out signals
 	
-		/*    for (AvatarGPIO as: GPIOs)
-            if (((as.getInOut() == AvatarGPIO.OUT) && (isOut)) ||  ((as.getInOut() == AvatarGPIO.IN) && (!isOut))){
-                showGPIOs.add(as.toString());
-                realGPIOs.add(as);
-		}*/
-		
-	    }
-	}
+    
+    
+    private void myInitComponents() {
     }
-
-//    private void myInitComponents() {
-//    }
-
+    
     private void initComponents() {
+		int i;
+		
         Container c = getContentPane();
-        //GridBagLayout gridbag0 = new GridBagLayout();
+        GridBagLayout gridbag0 = new GridBagLayout();
         GridBagLayout gridbag1 = new GridBagLayout();
-        //GridBagConstraints c0 = new GridBagConstraints();
+		GridBagLayout gridbag2 = new GridBagLayout();
+        GridBagConstraints c0 = new GridBagConstraints();
         GridBagConstraints c1 = new GridBagConstraints();
-
+		GridBagConstraints c2 = new GridBagConstraints();
+        
         setFont(new Font("Helvetica", Font.PLAIN, 14));
-        c.setLayout(new BorderLayout());
-
+        c.setLayout(gridbag0);
+        
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
+        
         panel1 = new JPanel();
         panel1.setLayout(gridbag1);
-
-        panel1.setBorder(new javax.swing.border.TitledBorder("GPIOs"));
-
-        //panel1.setPreferredSize(new Dimension(500, 250));
-
-        // first line panel1
+           
+        
+        panel1.setBorder(new javax.swing.border.TitledBorder("GPIOState parameters"));
+    
+        JPanel panel11 = new JPanel(new BorderLayout());
+        // Name of state
         c1.weighty = 1.0;
         c1.weightx = 1.0;
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        c1.fill = GridBagConstraints.BOTH;
+        c1.gridwidth = 1;
+		c1.gridheight = 1;
+        c1.fill = GridBagConstraints.HORIZONTAL;
         c1.gridheight = 1;
-        c1.anchor = GridBagConstraints.CENTER;
-        panel1.add(new JLabel(" "), c1);
-
-        // Combo box
-        c1.fill = GridBagConstraints.HORIZONTAL;
-        listGPIOs = new JComboBox<String> (showGPIOs.toArray (new String[showGPIOs.size()]));
-        panel1.add(listGPIOs, c1);
-
-
-        // GPIO
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        selectGPIO = new JButton("Select GPIO by name");
-        panel1.add(selectGPIO, c1);
-        selectGPIO.setEnabled(showGPIOs.size() > 0);
-        selectGPIO.addActionListener(this);
-
-        // Text
-        c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-        GPIO = new JTextField(currentGPIO, 30);
-        panel1.add(GPIO, c1);
-        //panel1.setEditable(true);
-
-		//Reference to DIPLODOCUS GPIO or Requirement
-		c1.gridwidth = 1;
-        c1.fill = GridBagConstraints.HORIZONTAL;
-        c1.anchor = GridBagConstraints.CENTER;
-		panel1.add(new JLabel("Reference Requirement"),c1);
+		panel1.add(new JLabel("ID of state = "), c1);
 		c1.gridwidth = GridBagConstraints.REMAINDER; //end row
-		refChecks = new JComboBox<TGComponent>(refs);
-		refChecks.insertItemAt(null, 0);
-		TraceManager.addDev("Reference=" + reference);
-		if (reference != null){
-			refChecks.setSelectedItem(reference);
-		} else {
-		    refChecks.setSelectedIndex(0);
-        }
-		panel1.add(refChecks,c1);
-
-        c.add(panel1, BorderLayout.CENTER);
-
-        JPanel buttons = initBasicButtons(this);
-        c.add(buttons, BorderLayout.SOUTH);
+		stateNameText = new JTextField(stateName);
+        panel1.add(stateNameText, c1);
+        panel11.add(panel1, BorderLayout.CENTER);
+        
+        
+       
+		panel2 = new JPanel();
+        panel2.setLayout(gridbag2);
+           
+        panel2.setBorder(new javax.swing.border.TitledBorder("Entry code"));
+		// guard
+        c2.weighty = 1.0;
+        c2.weightx = 1.0;
+        c2.gridwidth = 1;
+		c2.gridheight = 1;
+        c2.fill = GridBagConstraints.BOTH;
+		c2.gridwidth = GridBagConstraints.REMAINDER;
+        c2.gridheight = 1;
+       
+		/*panel2.add(new JLabel("Global code:"), c2);
+		jtaGlobalCode = new JTextArea();
+        jtaGlobalCode.setEditable(true);
+        jtaGlobalCode.setMargin(new Insets(10, 10, 10, 10));
+        jtaGlobalCode.setTabSize(3);
+		String files = "";
+		if (globalCode != null) {
+			for(i=0; i<globalCode.length; i++) {
+				files += globalCode[i] + "\n";
+			}
+		}
+        jtaGlobalCode.append(files);
+        jtaGlobalCode.setFont(new Font("times", Font.PLAIN, 12));
+        JScrollPane jsp = new JScrollPane(jtaGlobalCode, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        jsp.setPreferredSize(new Dimension(300, 200));
+        panel2.add(jsp, c2);*/
+        
+		//panel2.add(new JLabel("Entry code"), c2);
+		jtaEntryCode = new JTextArea();
+        jtaEntryCode.setEditable(true);
+        jtaEntryCode.setMargin(new Insets(10, 10, 10, 10));
+        jtaEntryCode.setTabSize(3);
+		String code = "";
+		if (entryCode != null) {
+			for(i=0; i<entryCode.length; i++) {
+				code += entryCode[i] + "\n";
+			}
+		}
+        jtaEntryCode.append(code);
+        jtaEntryCode.setFont(new Font("times", Font.PLAIN, 12));
+        JScrollPane jsp = new JScrollPane(jtaEntryCode, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+         jsp.setPreferredSize(new Dimension(300, 200));
+        //jsp.setPreferredSize(new Dimension(300, 300));
+        panel2.add(jsp, c2);
+    
+        
+		 // main panel;
+        c0.gridwidth = 1;
+        c0.gridheight = 10;
+        c0.weighty = 1.0;
+        c0.weightx = 1.0;
+        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
+        
+        // Issue #41 Ordering of tabbed panes 
+		JTabbedPane jtp = GraphicLib.createTabbedPane();//new JTabbedPane();
+		jtp.setPreferredSize( new Dimension( 400, 450 ) );
+		jtp.add("General", panel11);
+		jtp.add("Prototyping", panel2);
+        c0.fill = GridBagConstraints.BOTH;
+        c.add(jtp, c0);
+        
+        c0.gridwidth = 1;
+        c0.gridheight = 1;
+        c0.fill = GridBagConstraints.HORIZONTAL;
+        
+        initButtons(c0, c, this);
     }
-
-    @Override
+    
     public void	actionPerformed(ActionEvent evt)  {
         //String command = evt.getActionCommand();
-
+        
         // Compare the action command to the known actions.
         if (evt.getSource() == closeButton)  {
             closeDialog();
         } else if (evt.getSource() == cancelButton)  {
             cancelDialog();
-        } else if (evt.getSource() == selectGPIO)  {
-            selectGPIO();
-        }
+        } 
     }
-
-    public void selectGPIO() {
-        int index = listGPIOs.getSelectedIndex();
-        GPIO.setText(realGPIOs.get(index).getUseDescription());
-    }
-
+	
+    
     public void closeDialog() {
-        cancelled = false;
+		
+		//globalCode =  Conversion.wrapText(jtaGlobalCode.getText());
+		entryCode =  Conversion.wrapText(jtaEntryCode.getText());
+		cancelled = false;
         dispose();
     }
-
-    /*  public String getGPIO() {
-        return GPIO.getText();
-	}*/
-
-    public String getGPIOName() {
-        return GPIO.getText();
+    
+    /*public String getActions() {
+        return signal.getText();
+    }*/
+    
+    public String getGPIOStateName() {
+        return stateNameText.getText();
+    }
+	
+	public boolean hasBeenCancelled() {
+		return cancelled;
 	}
     
-	public TGComponent getReference(){
-		return (TGComponent) refChecks.getSelectedItem();
-	}
-
-    public boolean hasValidString() {
-        return GPIO.getText().length() > 0;
-    }
-
-    public boolean hasBeenCancelled() {
-        return cancelled;
-    }
-
     public void cancelDialog() {
         dispose();
     }
+	
+	/*public String[] getGlobalCode() {
+		return globalCode;
+	}*/
+	
+	public String[] getEntryCode() {
+		return entryCode;
+	}
+	
 }
