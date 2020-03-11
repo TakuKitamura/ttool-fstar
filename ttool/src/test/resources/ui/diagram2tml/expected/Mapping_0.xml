@@ -1,6 +1,6 @@
 <TMLMAPPING>
 <TMLMODELING>
-<TASK name="Zigbee_TX__X_Sink" priority="0" >
+<TASK name="Zigbee_TX__X_Sink" priority="0"  isDaemon="false"  isPeriodic="false"  periodValue=""  periodUnit="" >
 <ATTRIBUTE type="1" name="size" initialValue=""/>
 <ATTRIBUTE type="1" name="arg1__req" initialValue="0"/>
 <ACTIVITY first="0">
@@ -25,7 +25,7 @@
 </ACTIVITYELEMENT>
 </ACTIVITY>
 </TASK>
-<TASK name="Zigbee_TX__F_CWP_I" priority="0" >
+<TASK name="Zigbee_TX__F_CWP_I" priority="0"  isDaemon="false"  isPeriodic="false"  periodValue=""  periodUnit="" >
 <ATTRIBUTE type="1" name="size" initialValue=""/>
 <ACTIVITY first="0">
 <ACTIVITYELEMENT type="tmltranslator.TMLStartState" value="" id="0" name="start">
@@ -49,7 +49,7 @@
 </ACTIVITYELEMENT>
 </ACTIVITY>
 </TASK>
-<TASK name="Zigbee_TX__F_CWP_Q" priority="0" >
+<TASK name="Zigbee_TX__F_CWP_Q" priority="0"  isDaemon="false"  isPeriodic="false"  periodValue=""  periodUnit="" >
 <ATTRIBUTE type="1" name="size" initialValue=""/>
 <ACTIVITY first="0">
 <ACTIVITYELEMENT type="tmltranslator.TMLStartState" value="" id="0" name="start">
@@ -73,7 +73,7 @@
 </ACTIVITYELEMENT>
 </ACTIVITY>
 </TASK>
-<TASK name="Zigbee_TX__F_CWL" priority="0" >
+<TASK name="Zigbee_TX__F_CWL" priority="0"  isDaemon="false"  isPeriodic="false"  periodValue=""  periodUnit="" >
 <ATTRIBUTE type="1" name="size" initialValue=""/>
 <ACTIVITY first="0">
 <ACTIVITYELEMENT type="tmltranslator.TMLStartState" value="" id="0" name="start">
@@ -101,7 +101,7 @@
 </ACTIVITYELEMENT>
 </ACTIVITY>
 </TASK>
-<TASK name="Zigbee_TX__F_Sink" priority="0" >
+<TASK name="Zigbee_TX__F_Sink" priority="0"  isDaemon="false"  isPeriodic="false"  periodValue=""  periodUnit="" >
 <ATTRIBUTE type="1" name="size" initialValue=""/>
 <ATTRIBUTE type="1" name="size_1" initialValue=""/>
 <ACTIVITY first="0">
@@ -126,7 +126,7 @@
 </ACTIVITYELEMENT>
 </ACTIVITY>
 </TASK>
-<TASK name="Zigbee_TX__X_Chip2Octet" priority="0" >
+<TASK name="Zigbee_TX__X_Chip2Octet" priority="0"  isDaemon="false"  isPeriodic="false"  periodValue=""  periodUnit="" >
 <ATTRIBUTE type="1" name="size" initialValue=""/>
 <ATTRIBUTE type="1" name="arg1__req" initialValue="0"/>
 <ACTIVITY first="0">
@@ -155,7 +155,7 @@
 </ACTIVITYELEMENT>
 </ACTIVITY>
 </TASK>
-<TASK name="Zigbee_TX__F_Symbol2ChipSeq" priority="0" >
+<TASK name="Zigbee_TX__F_Symbol2ChipSeq" priority="0"  isDaemon="false"  isPeriodic="false"  periodValue=""  periodUnit="" >
 <ATTRIBUTE type="1" name="size" initialValue=""/>
 <ACTIVITY first="0">
 <ACTIVITYELEMENT type="tmltranslator.TMLStartState" value="" id="0" name="start">
@@ -179,7 +179,7 @@
 </ACTIVITYELEMENT>
 </ACTIVITY>
 </TASK>
-<TASK name="Zigbee_TX__X_Source" priority="0" >
+<TASK name="Zigbee_TX__X_Source" priority="0"  isDaemon="false"  isPeriodic="false"  periodValue=""  periodUnit="" >
 <ATTRIBUTE type="1" name="size" initialValue=""/>
 <ATTRIBUTE type="1" name="arg1__req" initialValue="0"/>
 <ACTIVITY first="0">
@@ -204,7 +204,7 @@
 </ACTIVITYELEMENT>
 </ACTIVITY>
 </TASK>
-<TASK name="Zigbee_TX__F_Source" priority="0" >
+<TASK name="Zigbee_TX__F_Source" priority="0"  isDaemon="false"  isPeriodic="false"  periodValue=""  periodUnit="" >
 <ATTRIBUTE type="1" name="size" initialValue="127"/>
 <ACTIVITY first="0">
 <ACTIVITYELEMENT type="tmltranslator.TMLStartState" value="" id="0" name="start">
@@ -228,7 +228,7 @@
 </ACTIVITYELEMENT>
 </ACTIVITY>
 </TASK>
-<TASK name="Zigbee_TX__F_Chip2Octet" priority="0" >
+<TASK name="Zigbee_TX__F_Chip2Octet" priority="0"  isDaemon="false"  isPeriodic="false"  periodValue=""  periodUnit="" >
 <ATTRIBUTE type="1" name="size" initialValue=""/>
 <ACTIVITY first="0">
 <ACTIVITYELEMENT type="tmltranslator.TMLStartState" value="" id="0" name="start">
@@ -252,7 +252,7 @@
 </ACTIVITYELEMENT>
 </ACTIVITY>
 </TASK>
-<TASK name="Zigbee_TX__X_CWL" priority="0" >
+<TASK name="Zigbee_TX__X_CWL" priority="0"  isDaemon="false"  isPeriodic="false"  periodValue=""  periodUnit="" >
 <ATTRIBUTE type="1" name="size" initialValue=""/>
 <ATTRIBUTE type="1" name="arg1__req" initialValue="0"/>
 <ACTIVITY first="0">
@@ -281,7 +281,7 @@
 </ACTIVITYELEMENT>
 </ACTIVITY>
 </TASK>
-<TASK name="Zigbee_TX__X_CWP_Q" priority="0" >
+<TASK name="Zigbee_TX__X_CWP_Q" priority="0"  isDaemon="false"  isPeriodic="false"  periodValue=""  periodUnit="" >
 <ATTRIBUTE type="1" name="size" initialValue=""/>
 <ATTRIBUTE type="1" name="arg1__req" initialValue="0"/>
 <ACTIVITY first="0">
@@ -310,7 +310,7 @@
 </ACTIVITYELEMENT>
 </ACTIVITY>
 </TASK>
-<TASK name="Zigbee_TX__X_CWP_I" priority="0" >
+<TASK name="Zigbee_TX__X_CWP_I" priority="0"  isDaemon="false"  isPeriodic="false"  periodValue=""  periodUnit="" >
 <ATTRIBUTE type="1" name="size" initialValue=""/>
 <ATTRIBUTE type="1" name="arg1__req" initialValue="0"/>
 <ACTIVITY first="0">
@@ -339,7 +339,7 @@
 </ACTIVITYELEMENT>
 </ACTIVITY>
 </TASK>
-<TASK name="Zigbee_TX__X_Symbol2ChipSeq" priority="0" >
+<TASK name="Zigbee_TX__X_Symbol2ChipSeq" priority="0"  isDaemon="false"  isPeriodic="false"  periodValue=""  periodUnit="" >
 <ATTRIBUTE type="1" name="size" initialValue=""/>
 <ATTRIBUTE type="1" name="arg1__req" initialValue="0"/>
 <ACTIVITY first="0">
@@ -368,7 +368,7 @@
 </ACTIVITYELEMENT>
 </ACTIVITY>
 </TASK>
-<TASK name="FORKTASK_S_Zigbee_TX__cwl_ch_out__cwpQ_ch_in__cwpI_ch_in" priority="0" >
+<TASK name="FORKTASK_S_Zigbee_TX__cwl_ch_out__cwpQ_ch_in__cwpI_ch_in" priority="0"  isDaemon="true"  isPeriodic="false"  periodValue=""  periodUnit="ns" >
 <ATTRIBUTE type="1" name="i" initialValue="0"/>
 <ACTIVITY first="0">
 <ACTIVITYELEMENT type="tmltranslator.TMLStartState" value="" id="0" name="startOfFork">
@@ -400,7 +400,7 @@
 </ACTIVITYELEMENT>
 </ACTIVITY>
 </TASK>
-<TASK name="JOINTASK_S_Zigbee_TX__cwpQ_ch_out__sink_ch_in__cwpI_ch_out" priority="0" >
+<TASK name="JOINTASK_S_Zigbee_TX__cwpQ_ch_out__sink_ch_in__cwpI_ch_out" priority="0"  isDaemon="true"  isPeriodic="false"  periodValue=""  periodUnit="ns" >
 <ATTRIBUTE type="1" name="i" initialValue="0"/>
 <ACTIVITY first="0">
 <ACTIVITYELEMENT type="tmltranslator.TMLStartState" value="" id="0" name="startOfJoin">

@@ -469,10 +469,10 @@ public class TMLTask extends TMLElement {
     public String toXML() {
         String s = new String("<TASK name=\"" + name);
         s += "\" priority=\"" + priority + "\" ";
-        s += "\" isDaemon=\"" + isDaemon() + "\" ";
-        s += "\" isPeriodic=\"" + isPeriodic() + "\" ";
-        s += "\" periodValue=\"" + getPeriodValue() + "\" ";
-        s += "\" periodUnit=\"" + getPeriodUnit() + "\" ";
+        s += " isDaemon=\"" + isDaemon() + "\" ";
+        s += " isPeriodic=\"" + isPeriodic() + "\" ";
+        s += " periodValue=\"" + getPeriodValue() + "\" ";
+        s += " periodUnit=\"" + getPeriodUnit() + "\" ";
         s += ">\n";
         for (TMLAttribute attr : attributes) {
             s += attr.toXML();
