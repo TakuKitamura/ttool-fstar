@@ -95,7 +95,7 @@ public class TMLTask extends TMLElement {
 
     public void setPeriodic(boolean _b, String _periodValue, String _unit) {
         isPeriodic = _b;
-        periodValue = periodValue;
+        periodValue = _periodValue;
         periodUnit = _unit;
     }
 

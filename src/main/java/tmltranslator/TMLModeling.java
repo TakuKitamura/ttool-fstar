@@ -2165,7 +2165,7 @@ public class  TMLModeling<E> {
     public Vector<TMLTask> removePeriodicTasks() {
         Vector<TMLTask> addedTasks = new Vector<>();
 
-        
+
         for(TMLTask t: tasks) {
             if (t.isPeriodic()) {
 
@@ -2216,7 +2216,7 @@ public class  TMLModeling<E> {
                 activity.addElement(delay);
                 tmlse.addNext(delay);
 
-                TMLStopState stopState = new TMLStopState("periodiStop", startingTask.getReferenceObject());
+                TMLStopState stopState = new TMLStopState("periodStop", startingTask.getReferenceObject());
                 activity.addElement(stopState);
                 delay.addNext(stopState);
 

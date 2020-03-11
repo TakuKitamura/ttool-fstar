@@ -385,6 +385,18 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
     public boolean isDaemon() {
         return isDaemon;
     }
+
+    public boolean isPeriodic() {
+        return isPeriodic;
+    }
+
+    public String getPeriodValue() {
+        return periodValue;
+    }
+
+    public String getPeriodUnit() {
+        return unit;
+    }
     
     @Override
     public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
@@ -452,7 +464,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
                 unit, getValue());
         setJDialogOptions(jda);
         // jda.setSize(650, 375);
-        GraphicLib.centerOnParent(jda, 750, 375);
+        GraphicLib.centerOnParent(jda, 750, 575);
         jda.setVisible(true); // blocked until dialog has been closed
         //makeValue();
         //if (oldValue.equals(value)) {
@@ -464,7 +476,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         periodValue = jda.getPeriodValue();
         unit = jda.getUnit();
 
-        if (!periodValue.matches("-?\\d+")) {
+        if ((isPeriodic) && (!periodValue.matches("-?\\d+"))) {
             TraceManager.addDev("Invalid period: " + periodValue);
             JOptionPane.showMessageDialog(frame,
                     "Invalid period: " + periodValue,
