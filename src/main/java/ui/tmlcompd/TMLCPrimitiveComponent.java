@@ -188,7 +188,12 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 
         if (isAttacker)
             g.drawImage(scale(IconManager.imgic7008.getImage()), x + width - 2 * iconSize - textX, y + 2 * textX, null);
-        
+
+        if (isDaemon) {
+            g.drawImage(scale(IconManager.imgic5116.getImage()), x + textX, y + textX, null);
+        }
+
+
         // Attributes printing
         if (tdp.areAttributesVisible())
         {
