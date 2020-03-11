@@ -2162,8 +2162,9 @@ public class  TMLModeling<E> {
     /**
      *  Replaces periodic task by two tasks and an event
      */
-    public Vector<TMLTask> removePeriodicTasks() {
+    public TMLTask[] removePeriodicTasks() {
         Vector<TMLTask> addedTasks = new Vector<>();
+        Vector<TMLTask> allTasks = new Vector<>();
 
 
         for(TMLTask t: tasks) {
@@ -2172,7 +2173,12 @@ public class  TMLModeling<E> {
                 // Create a new Task
                 TMLTask startingTask = new TMLTask("StarterOf" + t.getTaskName(), t.getReferenceObject(),
                         t.getActivityDiagram().getReferenceObject());
+                if (t.isDaemon()) {
+                    startingTask.setDaemon(true);
+                }
+                allTasks.add(startingTask);
                 addedTasks.add(startingTask);
+                addedTasks.add(t);
                 // Create an event between the 2
                 TMLEvent evt = new TMLEvent("PERIODIC_EVT_" + t.getNameExtension(), t.getReferenceObject(),
                         1, false);
@@ -2212,7 +2218,9 @@ public class  TMLModeling<E> {
 
                 TMLDelay delay = new TMLDelay("periodDelay", startingTask.getReferenceObject());
                 delay.setUnit(t.getPeriodUnit());
-                delay.setValue(t.getPeriodValue());
+                TraceManager.addDev("Setting delay for Periodic tasks:" + t.getPeriodValue());
+                delay.setMinDelay(t.getPeriodValue());
+                delay.setMaxDelay(t.getPeriodValue());
                 activity.addElement(delay);
                 tmlse.addNext(delay);
 
@@ -2227,7 +2235,18 @@ public class  TMLModeling<E> {
         }
 
 
-        return addedTasks;
+        for(TMLTask t: allTasks) {
+            tasks.add(t);
+        }
+        
+        TMLTask[] returnedTasks = new TMLTask[addedTasks.size()];
+
+        int cpt;
+        for(cpt=0; cpt<addedTasks.size(); cpt++) {
+            returnedTasks[cpt] = addedTasks.get(cpt);
+        }
+
+        return returnedTasks;
     }
 
 

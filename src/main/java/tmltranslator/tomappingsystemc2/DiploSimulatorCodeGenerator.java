@@ -89,6 +89,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
 
         tmlmodeling = _tmlm;
         tmlmodeling.removeForksAndJoins();
+        tmlmodeling.removePeriodicTasks();
         // tmlmapping = tmlmodeling.getDefaultMapping();
         // tepeTranslator = new SystemCTEPE(new ArrayList<TEPE>(), this);
     }
@@ -119,6 +120,7 @@ public class DiploSimulatorCodeGenerator implements IDiploSimulatorCodeGenerator
 
         tmlmapping.handleCPs();
         tmlmapping.removeForksAndJoins();
+        tmlmapping.removePeriodicTasks();
         tmlmapping.makeMinimumMapping();
         tepeTranslator = new SystemCTEPE(_tepes, this);
         namesGen = NamesGenerationHelper.INSTANCE;
