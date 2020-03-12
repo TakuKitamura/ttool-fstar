@@ -53,6 +53,8 @@ import remotesimulation.RemoteConnection;
 import remotesimulation.RemoteConnectionException;
 import tmltranslator.*;
 import ui.*;
+import ui.tmldd.TMLArchiCPUNode;
+import ui.tmldd.TMLArchiDiagramPanel;
 import ui.window.JDialogSelectTasks;
 import ui.util.IconManager;
 
@@ -2346,6 +2348,31 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                 if (latencyPanel !=null){
                     processLatency();
                 }
+                for(TURTLEPanel _tab : mgui.getTabs()) {
+                    if(_tab instanceof TMLArchiPanel) {
+                        for (TDiagramPanel tdp : _tab.getPanels()) {
+                            if (tdp instanceof TMLArchiDiagramPanel) {
+                                mgui.selectTab(tdp);
+                                for (TGComponent tg : tdp.getComponentList()) {
+                                    if (tg instanceof TMLArchiCPUNode) {
+                                        Vector <SimulationTransaction> _trans = new Vector<SimulationTransaction>();
+                                        TMLArchiCPUNode tmpcpu = (TMLArchiCPUNode) tg;
+                                        for (int i = 0; i < trans.size(); i++) {
+                                            String temp = trans.get(i).deviceName;
+                                            temp = temp.substring(0, temp.indexOf("_"));
+                                            if (tg.getName().equals(temp)) {
+                                                _trans.add(trans.elementAt(i));
+                                            }
+                                        }
+                                        tmpcpu.transferList(_trans);
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
                 //ttm.setData(trans);
             }
         } catch (Exception e) {
@@ -2559,6 +2586,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         actions[InteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(b);
         actions[InteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(b);
         actions[InteractiveSimulationActions.ACT_RUN_EXPLORATION].setEnabled(b);
+        actions[InteractiveSimulationActions.ACT_REMOVE_ALL_TRANS].setEnabled(b);
 
         if (jpsv != null) {
             jpsv.setVariableButton(b);
@@ -3451,6 +3479,35 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             transTimes=new HashMap<String, List<String>>();
             processLatency();
             askForUpdate();
+        } else if (command.equals(actions[InteractiveSimulationActions.ACT_REMOVE_ALL_TRANS].getActionCommand())) {
+            sendCommand("rmat 1");
+            updateTransactions();
+
+            if(taskTransactionPanel != null) {
+                taskTransactionPanel.resetTable();
+            }
+            if(taskTransactionPanel != null) {
+                transactionPanel.resetTable();
+            }
+
+            for(TURTLEPanel _tab : mgui.getTabs()) {
+                if(_tab instanceof TMLArchiPanel) {
+                    for (TDiagramPanel tdp : _tab.getPanels()) {
+                        if (tdp instanceof TMLArchiDiagramPanel) {
+                            mgui.selectTab(tdp);
+                            for (TGComponent tg : tdp.getComponentList()) {
+                                if (tg instanceof TMLArchiCPUNode) {
+                                    TMLArchiCPUNode tmpcpu = (TMLArchiCPUNode) tg;
+                                    tmpcpu.resetTransactionsList();
+                                }
+                            }
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_STOP_SIMU].getActionCommand())) {
             sendCommand("stop");
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_UPDATE_VARIABLES].getActionCommand())) {

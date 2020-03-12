@@ -74,6 +74,7 @@ public class MainCommandsToolBar extends InteractiveSimulationBar {
 		jfis.actions[InteractiveSimulationActions.ACT_RUN_UNTIL_CHANNEL_ACCESS].setEnabled(b);
         jfis.actions[InteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(b);
 		jfis.actions[InteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(b);
+		jfis.actions[InteractiveSimulationActions.ACT_REMOVE_ALL_TRANS].setEnabled(b);
     }
     
     protected void setButtons() {
@@ -81,7 +82,10 @@ public class MainCommandsToolBar extends InteractiveSimulationBar {
         
         button = this.add(jfis.actions[InteractiveSimulationActions.ACT_RESET_SIMU]);
         button.addMouseListener(jfis.mouseHandler);
-        
+
+		button = this.add(jfis.actions[InteractiveSimulationActions.ACT_REMOVE_ALL_TRANS]);
+		button.addMouseListener(jfis.mouseHandler);
+
 		this.addSeparator();
 		
 		button = this.add(jfis.actions[InteractiveSimulationActions.ACT_STOP_SIMU]);
