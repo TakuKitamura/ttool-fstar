@@ -2,9 +2,8 @@ package tmltranslator;
 
 import common.ConfigurationTTool;
 import common.SpecConfigTTool;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
+import graph.AUTGraph;
+import myutil.FileUtils;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -29,6 +28,8 @@ public class RemoveAllTransactionsTests extends AbstractUITest {
     final String DIR_GEN = "test_diplo_simulator/";
     final String [] MODELS_PARSE_HTML = {"parseFPGA_HTML"};
     final static String EXPECTED_FILE_REMOVE_ALL_TRANS = getBaseResourcesDir() + "tmltranslator/expected/expected_remove_all_trans.txt";
+    final int [] FULL_DATA_TRANSACTION = {21, 20, 1179, 1179};
+    final int [] REMOVE_DATA_TRANSACTION = {8, 7, 1179, 1179};
     private String SIM_DIR;
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
@@ -157,7 +158,7 @@ public class RemoveAllTransactionsTests extends AbstractUITest {
                 //list 100 recent transactions on TransacList to check it is empty or not
                 //run again next 100 time units
                 // save trace file and check the transactions displayed on the trace.
-                params[2] = "26 1;1 6 100; 26 1;22 100; 1 6 100; 7 2 " + graphPath +"_save.txt";
+                params[2] = "26 1;1 6 100; 26 1;22 100; 1 6 100; 7 2 " + graphPath + "_save.txt" + "; 1 0; 1 7 100 100 " + graphPath + "_save";
                 proc = Runtime.getRuntime().exec(params);
                 proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
                 monitorError(proc);
@@ -169,6 +170,23 @@ public class RemoveAllTransactionsTests extends AbstractUITest {
                         out.append(str + "\n");
                     }
                 }
+
+                params = new String[3];
+
+                params[0] = "./" + SIM_DIR + "run.x";
+                params[1] = "-cmd";
+                params[2] = "1 0; 1 7 100 100 " + graphPath + "_full";
+                proc = Runtime.getRuntime().exec(params);
+                //proc = Runtime.getRuntime().exec("./" + SIM_DIR + "run.x -explo -gname testgraph_" + s);
+                proc_in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+
+                monitorError(proc);
+
+                while ((str = proc_in.readLine()) != null) {
+                    // TraceManager.addDev( "Sending " + str + " from " + port + " to client..." );
+                    System.out.println("executing: " + str);
+                }
+
             } catch (Exception e) {
                 // Probably make is not installed
                 System.out.println("FAILED: executing simulation");
@@ -215,6 +233,59 @@ public class RemoveAllTransactionsTests extends AbstractUITest {
             }
             reader1.close();
             reader2.close();
+
+            //compare number of states
+            //Non remove trans check
+            File graphFile = new File(graphPath + "_full.aut");
+            String graphData = "";
+            try {
+                graphData = FileUtils.loadFileData(graphFile);
+            } catch (Exception e) {
+                assertTrue(false);
+            }
+
+            AUTGraph graph = new AUTGraph();
+            graph.buildGraph(graphData);
+            // States and transitions
+            System.out.println("executing: nb states of " + s + " " + graph.getNbOfStates());
+            assertTrue(FULL_DATA_TRANSACTION[0] == graph.getNbOfStates());
+            System.out.println("executing: nb transitions of " + s + " " + graph.getNbOfTransitions());
+            assertTrue(FULL_DATA_TRANSACTION[1] == graph.getNbOfTransitions());
+
+            // Min and max cycles
+            int minValue = graph.getMinValue("allCPUsFPGAsTerminated");
+            System.out.println("executing: minvalue of " + s + " " + minValue);
+            assertTrue(FULL_DATA_TRANSACTION[2] == minValue);
+
+            int maxValue = graph.getMaxValue("allCPUsFPGAsTerminated");
+            System.out.println("executing: maxvalue of " + s + " " + maxValue);
+            assertTrue(FULL_DATA_TRANSACTION[3] == maxValue);
+
+            //Remove trans check
+            graphFile = new File(graphPath + "_save.aut");
+            graphData = "";
+            try {
+                graphData = FileUtils.loadFileData(graphFile);
+            } catch (Exception e) {
+                assertTrue(false);
+            }
+
+            graph = new AUTGraph();
+            graph.buildGraph(graphData);
+            // States and transitions
+            System.out.println("executing: nb states of remove transactions " + s + " " + graph.getNbOfStates());
+            assertTrue(REMOVE_DATA_TRANSACTION[0] == graph.getNbOfStates());
+            System.out.println("executing: nb transitions of remove transactions " + s + " " + graph.getNbOfTransitions());
+            assertTrue(REMOVE_DATA_TRANSACTION[1] == graph.getNbOfTransitions());
+
+            // Min and max cycles
+            minValue = graph.getMinValue("allCPUsFPGAsTerminated");
+            System.out.println("executing: minvalue of remove transactions " + s + " " + minValue);
+            assertTrue(REMOVE_DATA_TRANSACTION[2] == minValue);
+
+            maxValue = graph.getMaxValue("allCPUsFPGAsTerminated");
+            System.out.println("executing: maxvalue of remove transactions " + s + " " + maxValue);
+            assertTrue(REMOVE_DATA_TRANSACTION[3] == maxValue);
         }
     }
 }

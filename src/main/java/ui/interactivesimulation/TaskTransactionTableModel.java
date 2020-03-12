@@ -80,16 +80,19 @@ public class TaskTransactionTableModel extends AbstractTableModel  {
     }
 
     public synchronized void setData(Vector<SimulationTransaction> _trans, String taskName) {
-        data = new SimulationTransaction[_trans.size()];
-        int t = 0;
-        for(int i=0; i<_trans.size(); i++) {
-            if (_trans.get(i).taskName.equals(taskName)){
-                data[t] = _trans.get(i);
-                t++;
-            }
+        if(_trans != null) {
+            data = new SimulationTransaction[_trans.size()];
+            int t = 0;
+            for(int i=0; i<_trans.size(); i++) {
+                if (_trans.get(i).taskName.equals(taskName)){
+                    data[t] = _trans.get(i);
+                    t++;
+                }
 
+            }
+            fireTableStructureChanged();
         }
-        fireTableStructureChanged();
+
     }
 
 }

@@ -159,7 +159,7 @@ public class InteractiveSimulationActions extends AbstractAction {
         actions[ACT_RUN_TO_TIME] = new TAction("run-to-time", "Run to time x", IconManager.imgic1304, IconManager.imgic1304, "Run to time x", "Run simulation until time x is reached. Works only if the simulator is \"ready\"", 'R');
         actions[ACT_RUN_X_TRANSACTIONS] = new TAction("run-x-transactions", "Run x transactions", IconManager.imgic1306, IconManager.imgic1306, "Run x transactions", "Run simulation for x transactions. Works only if the simulator is \"ready\"", 'R');
         actions[ACT_RUN_X_COMMANDS] = new TAction("run-x-commands", "Run x commands", IconManager.imgic1308, IconManager.imgic1308, "Run x commands", "Run simulation for x commands. Works only if the simulator is \"ready\"", 'R');
-        actions[ACT_REMOVE_ALL_TRANS] = new TAction("remove-all-trans","Remove all transactions",IconManager.imgic337, IconManager.imgic337,"Remove all transactions", "Remove all the transactions stored before", 'R');
+        actions[ACT_REMOVE_ALL_TRANS] = new TAction("remove-all-trans","Remove all transactions",IconManager.imgic337, IconManager.imgic337,"Remove all transactions", "Remove all the transactions stored in transaction list", 'R');
 
         actions[ACT_RUN_EXPLORATION] = new TAction("run-exploration", "Run exploration", IconManager.imgic1326, IconManager.imgic1326, "Run exploration", "Explore branches of the simulation", 'R');
         actions[ACT_RUN_TO_NEXT_BUS_TRANSFER] = new TAction("run-until-bus-transfer", "Run until bus transfer", IconManager.imgic1316, IconManager.imgic1316, "Run until transfer on bus", "Run until a transfer on the indicated bus is performed. Works only if the simulator is \"ready\"", 'R');

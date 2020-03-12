@@ -103,7 +103,8 @@ public class AvatarInteractiveSimulationActions extends AbstractAction {
     public static final int ACT_UP_ASYNC_MSG = 33;
     public static final int ACT_DOWN_ASYNC_MSG = 34;
     public static final int ACT_ADD_LATENCY = 35;
-    public static final int NB_ACTION = 36;
+    public static final int ACT_REMOVE_ALL_TRANS = 36;
+    public static final int NB_ACTION = 37;
 
 
     private static final TAction[] actions = new TAction[NB_ACTION];
@@ -149,6 +150,7 @@ public class AvatarInteractiveSimulationActions extends AbstractAction {
         actions[ACT_RUN_TO_TIME] = new TAction("run-to-time", "Run to time x", IconManager.imgic1304, IconManager.imgic1304, "Run to time x", "Run simulation until time x is reached. Works only if the simulator is \"ready\"", 'R');
         actions[ACT_RUN_X_TRANSACTIONS] = new TAction("run-x-transactions", "Run x transactions", IconManager.imgic1306, IconManager.imgic1306, "Run x transactions", "Run simulation for x transactions. Works only if the simulator is \"ready\"", 'R');
         actions[ACT_RUN_X_COMMANDS] = new TAction("run-x-commands", "x Step-by-Step", IconManager.imgic1330, IconManager.imgic1330, "x Step-by-Step", "Run simulation for x commands. Works only if the simulator is \"ready\"", 'R');
+        actions[ACT_REMOVE_ALL_TRANS] = new TAction("remove-all-trans","Remove all transactions",IconManager.imgic337, IconManager.imgic337,"Remove all transactions", "Remove all the transactions stored in transaction list", 'R');
 
         actions[ACT_BACK_ONE] = new TAction("back-one", "Back one transaction", IconManager.imgic47, IconManager.imgic47, "Back one transaction", "Go one transaction backward", 'B');
 

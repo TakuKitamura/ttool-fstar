@@ -2359,8 +2359,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                                         TMLArchiCPUNode tmpcpu = (TMLArchiCPUNode) tg;
                                         for (int i = 0; i < trans.size(); i++) {
                                             String temp = trans.get(i).deviceName;
-                                            temp = temp.substring(0, temp.indexOf("_"));
-                                            if (tg.getName().equals(temp)) {
+                                            if (temp.contains(tg.getName())) {
                                                 _trans.add(trans.elementAt(i));
                                             }
                                         }
@@ -3481,7 +3480,6 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             askForUpdate();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_REMOVE_ALL_TRANS].getActionCommand())) {
             sendCommand("rmat 1");
-            updateTransactions();
 
             if(taskTransactionPanel != null) {
                 taskTransactionPanel.resetTable();
@@ -3507,7 +3505,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                     break;
                 }
             }
-
+            updateTransactions();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_STOP_SIMU].getActionCommand())) {
             sendCommand("stop");
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_UPDATE_VARIABLES].getActionCommand())) {

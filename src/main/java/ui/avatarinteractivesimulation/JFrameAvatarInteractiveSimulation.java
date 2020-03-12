@@ -1247,6 +1247,7 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
                 actions[AvatarInteractiveSimulationActions.ACT_BACK_ONE].setEnabled(true);
                 actions[AvatarInteractiveSimulationActions.ACT_RUN_X_COMMANDS].setEnabled(true);
                 actions[AvatarInteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(true);
+                actions[AvatarInteractiveSimulationActions.ACT_REMOVE_ALL_TRANS].setEnabled(true);
                 actions[AvatarInteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(false);
 
                 b = true;
@@ -1257,6 +1258,7 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
                 actions[AvatarInteractiveSimulationActions.ACT_BACK_ONE].setEnabled(false);
                 actions[AvatarInteractiveSimulationActions.ACT_RUN_X_COMMANDS].setEnabled(false);
                 actions[AvatarInteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(false);
+                actions[AvatarInteractiveSimulationActions.ACT_REMOVE_ALL_TRANS].setEnabled(false);
                 actions[AvatarInteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(true);
                 b = false;
                 break;
@@ -1265,6 +1267,7 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
                 actions[AvatarInteractiveSimulationActions.ACT_BACK_ONE].setEnabled(true);
                 actions[AvatarInteractiveSimulationActions.ACT_RUN_X_COMMANDS].setEnabled(false);
                 actions[AvatarInteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(true);
+                actions[AvatarInteractiveSimulationActions.ACT_REMOVE_ALL_TRANS].setEnabled(true);
                 actions[AvatarInteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(false);
                 b = true;
                 break;
@@ -1275,6 +1278,7 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
                 actions[AvatarInteractiveSimulationActions.ACT_BACK_ONE].setEnabled(false);
                 actions[AvatarInteractiveSimulationActions.ACT_RUN_X_COMMANDS].setEnabled(false);
                 actions[AvatarInteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(true);
+                actions[AvatarInteractiveSimulationActions.ACT_REMOVE_ALL_TRANS].setEnabled(true);
                 actions[AvatarInteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(false);
                 b = true;
                 break;
@@ -2103,6 +2107,10 @@ public class JFrameAvatarInteractiveSimulation extends JFrame implements AvatarS
         } else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_RESET_SIMU].getActionCommand())) {
             resetSimulation();
 
+        } else if  (command.equals(actions[AvatarInteractiveSimulationActions.ACT_REMOVE_ALL_TRANS].getActionCommand())) {
+            if (ass != null) {
+                ass.removeAllTransactions();
+            }
         } else if (command.equals(actions[AvatarInteractiveSimulationActions.ACT_STOP_AND_CLOSE_ALL].getActionCommand())) {
             close();
             return;
