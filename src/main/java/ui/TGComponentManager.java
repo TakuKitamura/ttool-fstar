@@ -437,8 +437,8 @@ public class TGComponentManager {
     public static final int AVATARSMD_CONNECTOR = 5102;
     public static final int AVATARSMD_SEND_SIGNAL = 5103;
     public static final int AVATARSMD_RECEIVE_SIGNAL = 5104;
-    public static final int AVATARSMD_SEND_AMSSIGNAL = 5113;
-    public static final int AVATARSMD_RECEIVE_AMSSIGNAL = 5114;
+    public static final int AVATARSMD_SEND_AMS_SIGNAL = 5113;
+    public static final int AVATARSMD_RECEIVE_AMS_SIGNAL = 5114;
     // Issue #69
     //public static final int AVATARSMD_PARALLEL = 5105;
     
@@ -606,7 +606,7 @@ public class TGComponentManager {
             case AVATARSMD_SEND_SIGNAL:
                 tgc = new AvatarSMDSendSignal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
-	    case AVATARSMD_SEND_AMSSIGNAL:
+	    case AVATARSMD_SEND_AMS_SIGNAL:
                 tgc = new AvatarSMDSendAMSSignal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;	
             case AVATARSMD_LIBRARY_FUNCTION_CALL:
@@ -615,7 +615,7 @@ public class TGComponentManager {
             case AVATARSMD_RECEIVE_SIGNAL:
                 tgc = new AvatarSMDReceiveSignal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
-		case AVATARSMD_RECEIVE_AMSSIGNAL:
+		case AVATARSMD_RECEIVE_AMS_SIGNAL:
                 tgc = new AvatarSMDReceiveAMSSignal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
 //              case AVATARSMD_PARALLEL: Issue #69

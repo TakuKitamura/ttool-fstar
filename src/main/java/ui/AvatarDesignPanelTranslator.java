@@ -89,14 +89,14 @@ public class AvatarDesignPanelTranslator {
 
     public AvatarSpecification generateAvatarSpecification(List<AvatarBDStateMachineOwner> _blocks) {
         List<AvatarBDBlock> blocks = new LinkedList<AvatarBDBlock>();
-	List<AvatarBDInterface> interfaces = new LinkedList<AvatarBDInterface>();
+	//	List<AvatarBDInterface> interfaces = new LinkedList<AvatarBDInterface>();
         List<AvatarBDLibraryFunction> libraryFunctions = new LinkedList<AvatarBDLibraryFunction>();
 
         for (AvatarBDStateMachineOwner owner : _blocks)
             if (owner instanceof AvatarBDBlock)
                 blocks.add((AvatarBDBlock) owner);
-	    else if (owner instanceof AvatarBDInterface)
-                interfaces.add((AvatarBDInterface) owner);
+	//  else if (owner instanceof AvatarBDInterface)
+        //        interfaces.add((AvatarBDInterface) owner);
             else
                 libraryFunctions.add((AvatarBDLibraryFunction) owner);
 
@@ -112,9 +112,9 @@ public class AvatarDesignPanelTranslator {
         nameTypeMap = new HashMap<String, String>();
         createLibraryFunctions(as, libraryFunctions);
         createBlocks(as, blocks);
-	createInterfaces(as, interfaces);
+	//createInterfaces(as, interfaces);
         createRelationsBetweenBlocks(as, blocks);
-	createRelationsBetweenBlocksAndInterfaces(as, blocks, interfaces);
+	//createRelationsBetweenBlocksAndInterfaces(as, blocks, interfaces);
         makeBlockStateMachines(as);
         createPragmas(as, blocks);
 
@@ -880,7 +880,7 @@ public class AvatarDesignPanelTranslator {
 
     //ajoute DG 28.02.
 
- private void createInterfaces(AvatarSpecification _as, List<AvatarBDInterface> _interfaces) {
+    /* private void createInterfaces(AvatarSpecification _as, List<AvatarBDInterface> _interfaces) {
      for (AvatarBDInterface interf : _interfaces) {
      //for (AvatarBDInterface interf : _as.getListOfInterfaces()) {
             AvatarAMSInterface ai = new AvatarAMSInterface(interf.getInterfaceName(), _as, interf);
@@ -960,7 +960,7 @@ public class AvatarDesignPanelTranslator {
                 }
             }
         }
-    }
+	}*/
     
     //fin ajoute DG
     
@@ -2199,7 +2199,7 @@ public class AvatarDesignPanelTranslator {
 
     // ajoute DG
 
-    private void createRelationsBetweenBlocksAndInterfaces(AvatarSpecification _as, List<AvatarBDBlock> _blocks, List<AvatarBDInterface> _interfaces) {
+    /*  private void createRelationsBetweenBlocksAndInterfaces(AvatarSpecification _as, List<AvatarBDBlock> _blocks, List<AvatarBDInterface> _interfaces) {
         adp.getAvatarBDPanel().updateAllSignalsOnConnectors();
         Iterator<TGComponent> iterator = adp.getAvatarBDPanel().getComponentList().listIterator();
 
@@ -2277,7 +2277,7 @@ public class AvatarDesignPanelTranslator {
         }
     }
 
-
+    */
     //fin ajoute DG
 	
     private void createRelationsBetweenBlocks(AvatarSpecification _as, List<AvatarBDBlock> _blocks) {

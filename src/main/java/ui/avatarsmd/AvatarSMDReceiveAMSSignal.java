@@ -137,10 +137,10 @@ public class AvatarSMDReceiveAMSSignal extends AvatarSMDBasicCanBeDisabledCompon
         }
 		
 		if (stateOfError > 0)  {
-			Color c = g.getColor();
+		    	Color c = g.getColor();		    
 			switch(stateOfError) {
 			case ErrorHighlight.OK:
-				g.setColor(ColorManager.AVATAR_RECEIVE_SIGNAL);
+				g.setColor(ColorManager.AVATAR_RECEIVE_AMS_SIGNAL);
 				break;
 			default:
 				g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
@@ -154,6 +154,8 @@ public class AvatarSMDReceiveAMSSignal extends AvatarSMDBasicCanBeDisabledCompon
 		
         //g.drawRoundRect(x, y, width, height, arc, arc);
 		Color c = g.getColor();
+
+		//Color c = g.setColor(ColorManager.AVATAR_RECEIVE_AMS_SIGNAL);
 		//
 		
         g.drawLine(x+(width/2), y, x+(width/2), y - lineLength);
@@ -167,7 +169,7 @@ public class AvatarSMDReceiveAMSSignal extends AvatarSMDBasicCanBeDisabledCompon
 		int y1 = y + 1;
 		int height1 = height;
 		int width1 = width;
-		g.setColor(ColorManager.AVATAR_RECEIVE_SIGNAL);
+		g.setColor(ColorManager.AVATAR_RECEIVE_AMS_SIGNAL);
 		g.drawLine(x1, y1, x1+width1, y1);
         g.drawLine(x1+width1, y1, x1+width1, y1+height1);
         g.drawLine(x1, y1+height1, x1+width1, y1+height1);
@@ -446,7 +448,7 @@ public class AvatarSMDReceiveAMSSignal extends AvatarSMDBasicCanBeDisabledCompon
     
 	@Override
     public int getType() {
-        return TGComponentManager.AVATARSMD_RECEIVE_SIGNAL;
+        return TGComponentManager.AVATARSMD_RECEIVE_AMS_SIGNAL;
     }
     
 	@Override

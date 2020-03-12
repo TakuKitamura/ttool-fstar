@@ -90,8 +90,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
     protected boolean isPrivate = true; // isprivate = cannot be listened by an attacker
     protected boolean isBroadcast = false;
     protected boolean isLossy = false;
-    protected boolean isAMS = false;
-
+   
     public AvatarBDPortConnector(int _x, int _y, int _minX, int _minY, int _maxX, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp, TGConnectingPoint _p1, TGConnectingPoint _p2, Vector<Point> _listPoint) {
         super(_x, _y, _minX, _minY, _maxX, _maxY, _pos, _father, _tdp, _p1, _p2, _listPoint);
         
@@ -128,15 +127,19 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
         //g.drawLine(x1, y1, x2, y2);
         Color col = g.getColor();
         int cz = (int) (tdp.getZoom() * c);
+		
+	if (isAMS()) {
+	    g.setColor(Color.GRAY);
+        }
+	
         if (isAsynchronous()&&!(isAMS())) {
             g.setColor(Color.WHITE);
         }
-	 if (isAMS()) {
-            g.setColor(Color.GRAY);
-        }
+
         g.fillRect(x2 - (cz / 2), y2 - (cz / 2), cz, cz);
         g.fillRect(p1.getX() - (cz / 2), p1.getY() - (cz / 2), cz, cz);
         g.setColor(col);
+
         if (isAsynchronous()) {
             g.drawRect(x2 - (cz / 2), y2 - (cz / 2), cz, cz);
             g.drawRect(p1.getX() - (cz / 2), p1.getY() - (cz / 2), cz, cz);
@@ -376,7 +379,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
         isPrivate = jdas.isPrivate();
         isBroadcast = jdas.isBroadcast();
         isLossy = jdas.isLossy();
-	isAMS = jdas.isAMS();
+	AMS = jdas.isAMS();
 
         try {
             sizeOfFIFO = Integer.decode(jdas.getSizeOfFIFO()).intValue();
@@ -422,7 +425,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
         sb.append("\" private=\"" + isPrivate);
         sb.append("\" broadcast=\"" + isBroadcast);
         sb.append("\" lossy=\"" + isLossy);
-	sb.append("\" ams=\"" + isAMS);
+	sb.append("\" ams=\"" + AMS);
         sb.append("\" />\n");
 
         sb.append("</extraparam>\n");
@@ -491,7 +494,7 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
 				val6 = elt.getAttribute("ams");
 
 				//     if ((val != null) && (!(val.equals("null")))) {
-				if ((val != null) && (!(val6.equals("null"))) && (!(val.equals("null")))){			
+				if ((val != null) && (!(val.equals("null")))){			
                                     asynchronous = val.trim().toLowerCase().compareTo("true") == 0;
 
                                 }
@@ -531,11 +534,10 @@ public class AvatarBDPortConnector extends TGConnectorWithCommentConnectionPoint
                                     isLossy = false;
                                 }
 				if ((val6 != null) && (!(val6.equals("null")))) {
-                                    isAMS = val6.trim().toLowerCase().compareTo("true") == 0;
-				    System.out.println("@@@ AMS reconnu @@@");
+                                    AMS = val6.trim().toLowerCase().compareTo("true") == 0;				   				  
 
                                 } else {
-                                    isAMS = false;
+                                    AMS = false;
                                 }
                             }
                         }

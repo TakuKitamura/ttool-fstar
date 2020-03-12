@@ -54,6 +54,7 @@ import avatartranslator.AvatarSignal;
 import avatartranslator.AvatarSpecification;
 import avatartranslator.AvatarStartState;
 import avatartranslator.AvatarState;
+import avatartranslator.AvatarAMSInterface;
 import avatartranslator.AvatarStateMachine;
 import avatartranslator.AvatarStateMachineElement;
 import avatartranslator.AvatarStopState;
@@ -183,7 +184,9 @@ public class TasksAndMainGenerator {
 
         makeSynchronousChannels();
 
-        makeAsynchronousChannels();  
+        makeAsynchronousChannels();
+
+	makeAMSChannelDataDeclaration();  
 
         makeThreadsInMain(debug);
     }
@@ -358,7 +361,26 @@ public class TasksAndMainGenerator {
     		}
     	}
     }
+
+ public void makeAMSChannelDataDeclaration() {
+     //DG Channel Name equals data name (signal name in SystemC AMS sense) in this case
+    	if (avspec.AMSExist()){
+
+	    for(AvatarRelation ar: avspec.getRelations()) {
  
+		if (ar.isAMS()) {
+		    for(int i=0; i<ar.nbOfSignals() ; i++) {
+
+			ar.setId(i);
+		    //mainFile.appendToHCode("extern AMS __" + getChannelName(ar, i) + ";" + CR);
+		    //DG still to distinguis between int and float; here, channel declaration is data declaration
+			mainFile.appendToHCode("int AMSchannel" + getChannelName(ar, i) + ";" + CR);
+		    }
+		}
+	    }
+	}
+ }
+    
     //DG 19.09. need this for main program generation
     /* public int makeCoprocReferenceFromTask(AvatarBlock block){
     	List<AvatarTask> tasks = avddspec.getAllMappedTask();
@@ -400,6 +422,20 @@ public class TasksAndMainGenerator {
     		//DG 19.09. found coproc do not make task
 
     	}
+	/*for(AvatarAMSInterface interf: avspec.getListOfInterfaces()) {
+    		if (findCPUidFromTask(interf)!=-1) 
+    			makeTask(interf,findCPUidFromTask(interf));
+    		else {
+    			//AvatarBlock father = block.getFather();
+    			//if(father!=null){ //DG bug: donne null pointer
+    			//makeTask(block,FindCPUidFromTask(father));
+    			makeTaskAMS(interf,0);
+
+
+    		}
+    		//DG 19.09. found coproc do not make task
+
+    	}*/
     }
 
     public void makeTask(AvatarBlock block , int cpuId) {
@@ -422,6 +458,22 @@ public class TasksAndMainGenerator {
     	taskFiles.add(taskFile);
     }
 
+    /*public void makeTaskAMS(AvatarAMSInterface interf , int cpuId) {
+    	TaskFileSoclib taskFile = new TaskFileSoclib(block.getName(),cpuId);
+
+    	
+    	defineAllSignalAMS(interf,taskFile);
+
+	//	defineAllStates(interf, taskFile);
+
+    	//defineAllMethods(interf, taskFile);
+
+    	//makeMainFunctionAMS(interf, taskFile);
+
+		taskFiles.add(taskFile);
+		}*/
+
+    
     // ---------------------------------------------------------
 
     public void defineAllStates(AvatarBlock _block, TaskFileSoclib _taskFile) {
@@ -433,7 +485,7 @@ public class TasksAndMainGenerator {
             if (asme instanceof AvatarState) {
                 _taskFile.addToMainCode("#define STATE__" + asme.getName() + " " + id + CR);
                 id ++;
-            }
+            }	  
         }
         _taskFile.addToMainCode("#define STATE__STOP__STATE " + id + CR);
         _taskFile.addToMainCode(CR);
@@ -447,7 +499,7 @@ public class TasksAndMainGenerator {
         }
         _taskFile.addToMainCode(CR);
     }
-    
+       
     public void defineAllMethods(AvatarBlock _block, TaskFileSoclib _taskFile) {
         Vector<String> allNames = new Vector<String>();
         for (AvatarMethod am: _block.getMethods()) {
@@ -610,7 +662,7 @@ public class TasksAndMainGenerator {
     }
 
 
-    public static String[] enleveDoublons(String[] table) {
+    public static String[] eliminateDoubles(String[] table) {
 
         String[] copy = new String[table.length];
         System.arraycopy(table, 0, copy, 0, table.length);
@@ -659,7 +711,7 @@ public class TasksAndMainGenerator {
         }
 
 
-        String [] canalNonDouble= enleveDoublons(canal);
+        String [] canalNonDouble= eliminateDoubles(canal);
 
         //************************************************************************RG
 
@@ -977,13 +1029,25 @@ public class TasksAndMainGenerator {
 
 		    } else {
 
+	//ajoute DG
+			if (ar.isAMS()) {
+			    AvatarBlock ifc= ar.getBlock2();
+			    
+			    String cluster_name=ifc.getName();
+			    
+			    for(i=0; i<_aaos.getNbOfValues(); i++)
+				ret += "write_gpio2vci("+getChannelName(ar,as)+i+",\""+cluster_name+"\");" + CR;
+			} else {
+
+			
 			ret += "debug2Msg(__myname, \"-> (=====) test "+getChannelName(ar, as) + "\");" + CR;
 
 			ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID()+ ", SEND_SYNC_REQUEST, " + delay + ", " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
 			ret += "__req" + _index + ".syncChannel = &__" + getChannelName(ar, as) + ";" + CR;
 
+			}
 		    }
-                }
+		}
 		// Receiving
 	    }
 	    else {
@@ -1001,10 +1065,22 @@ public class TasksAndMainGenerator {
 			ret += "__req" + _index + ".syncChannel = &__" + getChannelName(ar, as) + ";" + CR;
                     } else {
 
+			//ajoute DG: AMS interface can only be block2: ToDo
+			if (ar.isAMS()) {
+			    //DG ToDo identify cluster name, loop over all parameters
+			    AvatarBlock ifc= ar.getBlock2();
+			    
+			    String cluster_name=ifc.getName();// connected to -> Interface block on other end -> getName
+			    //unimportant if in or out signal??
+			    for(i=0; i<_aaos.getNbOfValues(); i++)
+			    ret += getChannelName(ar,as)+i+" = read_gpio2vci(\""+cluster_name+"\");" + CR;
+			} else {
+			
 			ret += "debug2Msg(__myname, \"-> (=====) test "+getChannelName(ar, as)+ "\");" + CR;//DG 18.05.
 			ret += "makeNewRequest(&__req" + _index + ", " + _aaos.getID() + ", RECEIVE_SYNC_REQUEST, " + delay + ", " + _aaos.getNbOfValues() + ", __params" + _index + ");" + CR;
 			ret += "__req" + _index + ".syncChannel = &__" + getChannelName(ar, as) + ";" + CR;
-                    }
+			}
+		    }
 		}
 	    }
 	}

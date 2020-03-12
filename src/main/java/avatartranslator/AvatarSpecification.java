@@ -196,6 +196,16 @@ public class AvatarSpecification extends AvatarElement {
       
     	return false;
     }
+
+    public boolean AMSExist(){
+    	List<AvatarRelation> ams = getRelations();
+      
+    	for ( AvatarRelation ar : ams )
+    		if (ar.isAMS())
+    			return true;
+      
+    	return false;
+    }
     
     // end DG
     public void addBlock(AvatarBlock _block) {

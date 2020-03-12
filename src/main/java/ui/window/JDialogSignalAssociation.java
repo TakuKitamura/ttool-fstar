@@ -278,10 +278,9 @@ public class JDialogSignalAssociation extends JDialogBase implements ActionListe
         bt.add(asynchronous);
 	bt.add(AMS);
 	
-        asynchronous.setSelected(connector.isAsynchronous());
-        synchronous.setSelected(!connector.isAsynchronous());
-	AMS.setSelected(!connector.isAsynchronous());
-	AMS.setSelected(!connector.isSynchronous());
+        asynchronous.setSelected(connector.isAsynchronous()&&!(connector.isAMS()));
+        synchronous.setSelected(!(connector.isAsynchronous())&&!(connector.isAMS()));
+		AMS.setSelected((!connector.isAsynchronous())&&!(connector.isSynchronous()));
 	
         isLossy = new JCheckBox("Lossy channel");
         isLossy.setToolTipText("A lossy channel randomly losses messages");
@@ -383,6 +382,9 @@ public class JDialogSignalAssociation extends JDialogBase implements ActionListe
         } else if (evt.getSource() == synchronous) {
             updateSynchronousElements();
         } else if (evt.getSource() == asynchronous) {
+            updateSynchronousElements();
+        }
+	else if (evt.getSource() == AMS) {
             updateSynchronousElements();
         }
     }

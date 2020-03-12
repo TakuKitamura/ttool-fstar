@@ -113,6 +113,7 @@ public class AvatarSMDSendAMSSignal extends AvatarSMDBasicCanBeDisabledComponent
 
         name = "Send AMS signal";
         value = "sig()";
+	
         //makeValue();
 
         myImageIcon = IconManager.imgic904;
@@ -134,12 +135,13 @@ public class AvatarSMDSendAMSSignal extends AvatarSMDBasicCanBeDisabledComponent
 
         if (stateOfError > 0)  {
             Color c = g.getColor();
+	    //Color c =  g.setColor(ColorManager.AVATAR_SEND_AMS_SIGNAL);
             switch(stateOfError) {
             case ErrorHighlight.OK:
-                g.setColor(ColorManager.AVATAR_SEND_SIGNAL);
+                g.setColor(ColorManager.AVATAR_SEND_AMS_SIGNAL);
                 break;
             default:
-                g.setColor(ColorManager.UNKNOWN_BOX_ACTION);
+                g.setColor(ColorManager.UNKNOWN_BOX_ACTION);		
             }
             // Making the polygon
             int [] px1 = {x, x+width-linebreak, x+width, x+width-linebreak, x};
@@ -163,7 +165,7 @@ public class AvatarSMDSendAMSSignal extends AvatarSMDBasicCanBeDisabledComponent
         int y1 = y + 1;
         int height1 = height;
         int width1 = width;
-        g.setColor(ColorManager.AVATAR_SEND_SIGNAL);
+        g.setColor(ColorManager.AVATAR_SEND_AMS_SIGNAL);
         g.drawLine(x1, y1, x1+width1-linebreak, y1);
         g.drawLine(x1, y1+height1, x1+width1-linebreak, y1+height1);
         g.drawLine(x1, y1, x1, y1+height1);
@@ -502,7 +504,7 @@ public class AvatarSMDSendAMSSignal extends AvatarSMDBasicCanBeDisabledComponent
 
 	@Override
     public int getType() {
-        return TGComponentManager.AVATARSMD_SEND_SIGNAL;
+        return TGComponentManager.AVATARSMD_SEND_AMS_SIGNAL;
     }
 
 	@Override
