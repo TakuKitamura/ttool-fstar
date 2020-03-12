@@ -95,7 +95,7 @@ public class TMLTask extends TMLElement {
 
     public void setPeriodic(boolean _b, String _periodValue, String _unit) {
         isPeriodic = _b;
-        periodValue = periodValue;
+        periodValue = _periodValue;
         periodUnit = _unit;
     }
 
@@ -467,7 +467,13 @@ public class TMLTask extends TMLElement {
     }
 
     public String toXML() {
-        String s = new String("<TASK name=\"" + name + "\" priority=\"" + priority + "\" >\n");
+        String s = new String("<TASK name=\"" + name);
+        s += "\" priority=\"" + priority + "\" ";
+        s += " isDaemon=\"" + isDaemon() + "\" ";
+        s += " isPeriodic=\"" + isPeriodic() + "\" ";
+        s += " periodValue=\"" + getPeriodValue() + "\" ";
+        s += " periodUnit=\"" + getPeriodUnit() + "\" ";
+        s += ">\n";
         for (TMLAttribute attr : attributes) {
             s += attr.toXML();
         }
@@ -539,6 +545,9 @@ public class TMLTask extends TMLElement {
             return false;
         return operationType == tmlTask.operationType &&
                 isDaemon == tmlTask.isDaemon &&
+                isPeriodic == tmlTask.isPeriodic &&
+                periodValue.compareTo(tmlTask.getPeriodValue()) == 0 &&
+                periodUnit.compareTo(tmlTask.getPeriodUnit()) == 0 &&
                 isRequested == tmlTask.isRequested() &&
                 isAttacker == tmlTask.isAttacker &&
                 priority == tmlTask.getPriority() &&

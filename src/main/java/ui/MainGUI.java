@@ -341,7 +341,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     // Thread for autosave
     private PeriodicBehaviorThread pbt;
 
-    private TMLArchiPanel tmlap; // USed to retrieve the currently opened architecture panel
+    private TMLArchiPanel tmlap; // Used to retrieve the currently opened architecture panel
 
     // Plugin management
     // public static PluginManager pluginManager;

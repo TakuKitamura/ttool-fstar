@@ -348,6 +348,12 @@ public class TMLTextSpecification<E> {
         String sb = "";
         for (TMLTask task : tmlm.getTasks()) {
             sb += "TASK" + SP + task.getName() + CR;
+            if (task.isDaemon()) {
+                sb += "DAEMON" + CR;
+            }
+            if (task.isPeriodic()) {
+                sb += "PERIODIC " + task.getPeriodValue() + SP + task.getPeriodUnit() + CR;
+            }
             sb += "TASKOP" + SP + task.getOperation() + CR;
             sb += makeActivity(task);
             sb += "ENDTASK" + CR2;
@@ -1347,10 +1353,77 @@ public class TMLTextSpecification<E> {
             String tmpOp = "";
 
             for (int j = 1; j < _split.length; j++) {
-                tmpOp += _split[j];
+                tmpOp += _split[j] +  " ";
 
             }
             task.addOperation(tmpOp);
+        }
+
+        // DAEMON
+        if ((isInstruction("DAEMON", _split[0]))) {
+
+            if (!inTask) {
+                error = "A daemon task cannot be declared outside the body of another task";
+                addError(0, _lineNb, 0, error);
+                return -1;
+            }
+
+            if (!inTaskDec) {
+                error = "A daemon operation cannot be declared outside the declarative part of another task";
+                addError(0, _lineNb, 0, error);
+                return -1;
+            }
+
+            inDec = false;
+            inTask = true;
+            inTaskDec = true;
+
+            task.setDaemon(true);
+        }
+
+        // PERIODIC
+        if ((isInstruction("PERIODIC", _split[0]))) {
+           // periodic task?
+
+            if (!inTask) {
+                error = "A periodic task cannot be declared outside the body of another task";
+                addError(0, _lineNb, 0, error);
+                return -1;
+            }
+
+            if (!inTaskDec) {
+                error = "A periodic operation cannot be declared outside the declarative part of another task";
+                addError(0, _lineNb, 0, error);
+                return -1;
+            }
+
+            if (_split.length < 3) {
+                error = "A periodic task must be declared with a value and a unit";
+                addError(0, _lineNb, 0, error);
+                return -1;
+            }
+
+            String periodValue = _split[1];
+            String unit = _split[2];
+
+            if (!periodValue.matches("-?\\d+")) {
+                error = "A periodic task must be declared with a numerical period value (and not " + periodValue + ")";
+                addError(0, _lineNb, 0, error);
+                return -1;
+            }
+
+            if (!unit.matches("(?i)ns|us|ms|s")) {
+                error = "A periodic task must be declared with a unit equal to ns or us or ms or s";
+                addError(0, _lineNb, 0, error);
+                return -1;
+            }
+
+
+            inDec = false;
+            inTask = true;
+            inTaskDec = true;
+
+            task.setPeriodic(true, periodValue, unit);
         }
 
 
