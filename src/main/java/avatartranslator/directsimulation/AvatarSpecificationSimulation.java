@@ -146,6 +146,10 @@ public class AvatarSpecificationSimulation {
         return allTransactions;
     }
 
+    public void removeAllTransactions() {
+        allTransactions.removeAll(allTransactions);
+    }
+
     public long getClockValue() {
         return clockValue;
     }

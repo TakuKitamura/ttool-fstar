@@ -143,6 +143,12 @@ public  class JPanelTransactions extends JPanel  {
 	return ttm;
     }
 
+    public void resetTable() {
+        if (ttm != null) {
+            ttm.setData(null);
+        }
+    }
+
     public int getNbOfTransactions() {
 	
 	try {

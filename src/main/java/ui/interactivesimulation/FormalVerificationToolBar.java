@@ -66,12 +66,16 @@ public class FormalVerificationToolBar extends InteractiveSimulationBar {
         jfis.actions[InteractiveSimulationActions.ACT_RUN_EXPLORATION].setEnabled(b);
         jfis.actions[InteractiveSimulationActions.ACT_ANALYSIS_RG].setEnabled(b);
         jfis.actions[InteractiveSimulationActions.ACT_VIEW_RG].setEnabled(b);
+        jfis.actions[InteractiveSimulationActions.ACT_REMOVE_ALL_TRANS].setEnabled(b);
     }
 
     protected void setButtons() {
         JButton button;
 
         button = this.add(jfis.actions[InteractiveSimulationActions.ACT_RESET_SIMU]);
+        button.addMouseListener(jfis.mouseHandler);
+
+        button = this.add(jfis.actions[InteractiveSimulationActions.ACT_REMOVE_ALL_TRANS]);
         button.addMouseListener(jfis.mouseHandler);
 
         this.addSeparator();
