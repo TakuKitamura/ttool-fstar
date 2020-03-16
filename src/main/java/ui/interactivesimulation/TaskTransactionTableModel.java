@@ -8,6 +8,7 @@ public class TaskTransactionTableModel extends AbstractTableModel  {
     private JFrameInteractiveSimulation jfis;
     private int nbOfRows;
     private SimulationTransaction data[];
+    private int transSize = 0;
 
 
     //private String [] names;
@@ -22,7 +23,7 @@ public class TaskTransactionTableModel extends AbstractTableModel  {
         if (data == null) {
             return 0;
         }
-        return data.length;
+        return transSize;
     }
 
     public int getColumnCount() {
@@ -90,6 +91,7 @@ public class TaskTransactionTableModel extends AbstractTableModel  {
                 }
 
             }
+            transSize = t;
             fireTableStructureChanged();
         }
 
