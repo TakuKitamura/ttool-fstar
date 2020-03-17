@@ -47,22 +47,23 @@ import java.util.List;
 import java.util.Map;
 
 /**
-   * Class AvatarRelation
+   * Class AvatarInterfaceRelation
    * synchronizatio in Avatar ...
    * Creation: 20/05/2010
    * @version 1.0 20/05/2010
    * @author Ludovic APVRILLE
  */
-public class AvatarRelation extends AvatarElement {
+public class AvatarInterfaceRelation extends AvatarElement {
 
 
-    public AvatarBlock block1, block2;
+    public AvatarBlock block1;
+    public AvatarAMSInterface block2;
     private List<AvatarSignal> signals1, signals2;
     private boolean blocking, asynchronous, ams, isPrivate, isBroadcast, isLossy;
     private int sizeOfFIFO; // -1 means infinite
     public int id;//DG
 
-    public AvatarRelation(String _name, AvatarBlock _block1, AvatarBlock _block2, Object _referenceObject) {
+    public AvatarInterfaceRelation(String _name, AvatarBlock _block1, AvatarAMSInterface _block2, Object _referenceObject) {
         super(_name, _referenceObject);
         signals1 = new LinkedList<AvatarSignal>();
         signals2 = new LinkedList<AvatarSignal>();
@@ -71,8 +72,8 @@ public class AvatarRelation extends AvatarElement {
         blocking = false;
         sizeOfFIFO = 1024;
         asynchronous = false;
-	ams = false;
         isBroadcast = false;
+	ams = false;
 	id = 0;//DG
     }
   
@@ -96,7 +97,7 @@ public class AvatarRelation extends AvatarElement {
     public void setAMS(boolean _b) {
         ams = _b;
     }
-
+    
     public void setBlocking(boolean _b) {
         blocking = _b;
     }
@@ -121,10 +122,10 @@ public class AvatarRelation extends AvatarElement {
         return asynchronous;
     }
 
-    public boolean isAMS() {
+     public boolean isAMS() {
         return ams;
     }
-    
+
     public boolean isPrivate() {
         return isPrivate;
     }
@@ -168,7 +169,7 @@ public class AvatarRelation extends AvatarElement {
         return this.block1;
     }
 
-    public AvatarBlock getBlock2() {
+    public AvatarAMSInterface getBlock2() {
         return this.block2;
     }
 
@@ -181,10 +182,10 @@ public class AvatarRelation extends AvatarElement {
         return getSignal2(_index);
     }
 
-    public AvatarBlock getInBlock(int _index) {
+    public AvatarAMSInterface getInBlock(int _index) {
         AvatarSignal sig1 = signals1.get(_index);
         if (sig1.isIn()) {
-            return block1;
+            //return block1;
         }
 
         return block2;
@@ -199,10 +200,10 @@ public class AvatarRelation extends AvatarElement {
         return getSignal2(_index);
     }
 
-    public AvatarBlock getOutBlock(int _index) {
+    public AvatarAMSInterface getOutBlock(int _index) {
         AvatarSignal sig1 = signals1.get(_index);
         if (sig1.isOut()) {
-            return block1;
+            //return block1;
         }
 
         return block2;
@@ -272,14 +273,14 @@ public class AvatarRelation extends AvatarElement {
       signals2 = signals2_tmp;
       }*/
 
-    public AvatarRelation advancedClone( Map<AvatarBlock, AvatarBlock> correspondenceBlocks) {
+    /*   public AvatarInterfaceRelation advancedClone( Map<AvatarBlock, AvatarBlock> correspondenceBlocks) {
 		AvatarBlock b1, b2;
 		b1 = correspondenceBlocks.get(block1);
 		b2 = correspondenceBlocks.get(block2);
 		if ((b1 == null) || (b2 == null)) {
 		    return null;
 		}
-		AvatarRelation ar = new AvatarRelation(getName(), b1, b2, getReferenceObject());
+		AvatarInterfaceRelation ar = new AvatarInterfaceRelation(getName(), b1, b2, getReferenceObject());
 		ar.setAsynchronous(isAsynchronous());
 		ar.setBlocking(isBlocking());
 		ar.setPrivate(isPrivate());
@@ -303,5 +304,5 @@ public class AvatarRelation extends AvatarElement {
 		cloneLinkToReferenceObjects(ar);	
 	
 		return ar;
-    }
+    }*/
 }

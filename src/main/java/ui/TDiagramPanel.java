@@ -44,6 +44,7 @@ import ui.atd.ATDAttack;
 import ui.atd.ATDBlock;
 import ui.avatarad.AvatarADActivity;
 import ui.avatarbd.AvatarBDBlock;
+import ui.avatarbd.AvatarBDInterface;
 import ui.avatarbd.AvatarBDPragma;
 import ui.avatarbd.AvatarBDDataType;
 import ui.avatarbd.AvatarBDLibraryFunction;
@@ -2794,8 +2795,9 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
                     || (o instanceof ATDAttack && this.checkATDAttack((ATDAttack) o, name))
                     || (o instanceof FTDFault && this.checkFTDFault((FTDFault) o, name))
                     || (o instanceof AvatarBDBlock && this.checkAvatarBDBlock((AvatarBDBlock) o, name))
+		 || (o instanceof AvatarBDInterface && this.checkAvatarBDInterface((AvatarBDInterface) o, name))
                     || (o instanceof AvatarCDBlock && this.checkAvatarCDBlock((AvatarCDBlock) o, name))
-                    || (o instanceof AvatarSMDState && this.checkAvatarSMDState((AvatarSMDState) o, name))
+                    || (o instanceof AvatarSMDState && this.checkAvatarSMDState((AvatarSMDState) o, name))		   
                     || (o instanceof AvatarADActivity && this.checkAvatarADActivity((AvatarADActivity) o, name))
                     || (o instanceof AvatarMADAssumption && this.checkAvatarMADAssumption((AvatarMADAssumption) o, name))
                     || (o instanceof AvatarRDRequirement && this.checkAvatarRDRequirement((AvatarRDRequirement) o, name))
@@ -2955,13 +2957,17 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             return false;
         }
 
+	 public boolean checkAvatarBDInterface(AvatarBDInterface o, String name) {
+            return false;
+        }
+
         public boolean checkAvatarCDBlock(AvatarCDBlock o, String name) {
             return false;
         }
 
         public boolean checkAvatarSMDState(AvatarSMDState o, String name) {
             return false;
-        }
+        }	
 
         public boolean checkAvatarADActivity(AvatarADActivity o, String name) {
             return false;
@@ -3256,6 +3262,28 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
         });
     }
 
+    //ajoute DG
+    
+    public String findAvatarBDInterfaceName(String name) {
+        return this.findGoodName(name, new NameChecker() {
+            public boolean checkAvatarBDInterface(AvatarBDInterface o, String name) {
+                if (o.getValue().equals(name))
+                    return true;
+                return o.hasInternalInterfaceWithName(name);
+            }
+
+            public boolean checkAvatarBDLibraryFunction(AvatarBDLibraryFunction o, String name) {
+                return o.getFunctionName().equals(name);
+            }
+
+            public boolean checkAvatarBDDataType(AvatarBDDataType o, String name) {
+                return o.getDataTypeName().equals(name);
+            }
+        });
+    }
+
+    // fin ajoute
+    
     public String findAvatarBDBlockName(String name) {
         return this.findGoodName(name, new NameChecker() {
             public boolean checkAvatarBDBlock(AvatarBDBlock o, String name) {
@@ -3303,7 +3331,7 @@ public abstract class TDiagramPanel extends JPanel implements GenericTree {
             }
         });
     }
-
+    
     public String findAvatarADActivityName(String name) {
         return this.findGoodName(name, new NameChecker() {
             public boolean checkAvatarADActivity(AvatarADActivity o, String name) {

@@ -51,7 +51,8 @@ import ui.*;
 import ui.avatarsmd.AvatarSMDPanel;
 import ui.interactivesimulation.JFrameSimulationSDPanel;
 import ui.util.IconManager;
-import ui.window.JDialogAvatarBlock;
+//import ui.window.JDialogAvatarBlock;
+import ui.window.JDialogAvatarInterface;
 import ui.window.JDialogIDAndStereotype;
 
 import javax.swing.*;
@@ -61,14 +62,14 @@ import java.util.*;
 import java.util.List;
 
 /**
- * Class AvatarBDBlock
+ * Class AvatarBDInterface
  * Node. To be used in AVATAR Block Diagrams
  * Creation: 06/04/2010
  *
  * @author Ludovic APVRILLE
  * @version 1.1 06/04/2010
  */
-public class AvatarBDBlock extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent, GenericTree, AvatarBDStateMachineOwner, WithAttributes {
+public class AvatarBDInterface extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent, GenericTree, AvatarBDStateMachineOwner, WithAttributes {
 
     private static String GLOBAL_CODE_INFO = "(block code)";
 
@@ -78,8 +79,9 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
     private static String stereotype = "block";
 //    private static String stereotypeCrypto = "cryptoblock";
 
-    protected static List<String> BLOCK_TYPE_STR = new ArrayList<String>(Arrays.asList("block", "cryptoblock","AMSinterface"));
-    protected static List<Color> BLOCK_TYPE_COLOR = new ArrayList<Color>(Arrays.asList(ColorManager.AVATAR_BLOCK, ColorManager.AVATAR_BLOCK, ColorManager.AVATAR_INTERFACE));
+    protected static List<String> BLOCK_TYPE_STR = new ArrayList<String>(Arrays.asList("block", "cryptoblock"));
+    //protected static List<Color> BLOCK_TYPE_COLOR = new ArrayList<Color>(Arrays.asList(ColorManager.AVATAR_BLOCK, ColorManager.AVATAR_BLOCK));
+    protected static List<Color> BLOCK_TYPE_COLOR = new ArrayList<Color>(Arrays.asList(ColorManager.AVATAR_INTERFACE, ColorManager.AVATAR_INTERFACE));
     private int typeStereotype = 0; // <<block>> by default
 
     private int maxFontSize = 12;
@@ -106,7 +108,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
     public String oldValue;
 
-    public AvatarBDBlock(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
+    public AvatarBDInterface(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
 
         width = 250;
@@ -149,14 +151,15 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         removable = true;
         userResizable = true;
 
-        name = tdp.findAvatarBDBlockName("Block");
+        name = tdp.findAvatarBDInterfaceName("Interface");
         setValue(name);
         oldValue = value;
 
         oldScaleFactor = tdp.getZoom();
         currentFontSize = (int) (maxFontSize * oldScaleFactor);
 
-        myImageIcon = IconManager.imgic700;
+        //myImageIcon = IconManager.imgic700;
+	myImageIcon = IconManager.imgic700;
 
         this.myAttributes = new LinkedList<TAttribute>();
         this.myMethods = new LinkedList<AvatarMethod>();
@@ -402,7 +405,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
 //    private void internalDrawingAu(Graphics graph) {
 //
-//        //TraceManager.addDev("Block drawing aux = " + this);
+//        //TraceManager.addDev("Interface drawing aux = " + this);
 //
 //        // Draw outer rectangle (for border)
 //        Color c = graph.getColor();
@@ -825,8 +828,8 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
     public String getFullyQualifiedName() {
         String result = "";
-        if (this.father != null && (this.father instanceof AvatarBDBlock)) {
-            result = ((AvatarBDBlock) this.father).getFullyQualifiedName() + ".";
+        if (this.father != null && (this.father instanceof AvatarBDInterface)) {
+            result = ((AvatarBDInterface) this.father).getFullyQualifiedName() + ".";
         }
         result += this.value;
 
@@ -846,9 +849,9 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         // On the name ?
         //TraceManager.addDev("_y=" + _y + " limitName=" + limitName);
         if ((limitName == -1) || _y < limitName) {
-            JDialogIDAndStereotype dialog = new JDialogIDAndStereotype(frame, "Setting Block ID",
+            JDialogIDAndStereotype dialog = new JDialogIDAndStereotype(frame, "Setting Interface ID",
                     BLOCK_TYPE_STR.toArray(new String[0]), getValue
-                    (), typeStereotype, BLOCK_TYPE_COLOR.toArray(new Color[0]), ColorManager.AVATAR_BLOCK);
+                    (), typeStereotype, BLOCK_TYPE_COLOR.toArray(new Color[0]), ColorManager.AVATAR_INTERFACE);
             //dialog.setSize(400, 300);
             GraphicLib.centerOnParent(dialog, 400, 300);
             // dialog.show(); // blocked until dialog has been closed
@@ -866,26 +869,26 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                 if (!s.equals(oldValue)) {
                     if (!TAttribute.isAValidId(s, false, false, false)) {
                         JOptionPane.showMessageDialog(frame,
-                                "Could not change the name of the Block: the new name is not a valid name",
+                                "Could not change the name of the Interface: the new name is not a valid name",
                                 "Error",
                                 JOptionPane.INFORMATION_MESSAGE);
                         return false;
                     }
 
-                    if (!tdp.isAvatarBlockNameUnique(s)) {
+		    /*    if (!tdp.isAvatarInterfaceNameUnique(s)) {
                         JOptionPane.showMessageDialog(frame,
-                                "Could not change the name of the Block: the new name is already in use",
+                                "Could not change the name of the Interface: the new name is already in use",
                                 "Error",
                                 JOptionPane.INFORMATION_MESSAGE);
                         return false;
-                    }
+			}*/
 
                     setValue(s);
                     recalculateSize();
 
                     if (!(tdp.actionOnDoubleClick(this))) {
                         JOptionPane.showMessageDialog(frame,
-                                "Could not change the name of the Block: this name is already in use",
+                                "Could not change the name of the Interface: this name is already in use",
                                 "Error",
                                 JOptionPane.INFORMATION_MESSAGE);
                         setValue(oldValue);
@@ -989,7 +992,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         if (ttdp instanceof AvatarBDPanel) {
             mainCode = ((AvatarBDPanel) (ttdp)).getMainCode();
         }
-        JDialogAvatarBlock jdab = new JDialogAvatarBlock(this.myAttributes, this.myMethods, this.mySignals, null, frame, "Setting attributes of " + value, "Attribute", tab, globalCode, true, mainCode);
+        JDialogAvatarInterface jdab = new JDialogAvatarInterface(this.myAttributes, this.myMethods, this.mySignals, null, frame, "Setting attributes of " + value, "Attribute", tab, globalCode, true, mainCode);
         setJDialogOptions(jdab);
 //        jdab.setSize(650, 575);
         GraphicLib.centerOnParent(jdab, 780, 700);
@@ -1012,7 +1015,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         return true;
     }
 
-    protected void setJDialogOptions(JDialogAvatarBlock _jdab) {
+    protected void setJDialogOptions(JDialogAvatarInterface _jdab) {
         //jda.addAccess(TAttribute.getStringAccess(TAttribute.PUBLIC));
         _jdab.addAccess(TAttribute.getStringAccess(TAttribute.PRIVATE));
         //_jdab.addType(TAttribute.getStringType(TAttribute.NATURAL), true);
@@ -1037,7 +1040,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
     @Override
     public boolean acceptSwallowedTGComponent(TGComponent tgc) {
-        return tgc instanceof AvatarBDBlock || tgc instanceof AvatarBDLibraryFunction;
+        return tgc instanceof AvatarBDInterface || tgc instanceof AvatarBDLibraryFunction;
 
     }
 
@@ -1072,7 +1075,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         tgc.setDrawingZone(true);
 
         //Set its coordinates
-        if (tgc instanceof AvatarBDBlock) {
+        if (tgc instanceof AvatarBDInterface) {
             //tgc.setCdRectangle((width/2) - tgc.getWidth(), (width/2), spacePt, height-spacePt);
             //
             tgc.resizeWithFather();
@@ -1119,7 +1122,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                 }
                 return true;
             } else {
-                if (((AvatarBDBlock) tgcomponent[i]).removeMyInternalComponent(tgc, false)) {
+                if (((AvatarBDInterface) tgcomponent[i]).removeMyInternalComponent(tgc, false)) {
                     return true;
                 }
             }
@@ -1198,7 +1201,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
             //
             //
 
-            //TraceManager.addDev("LEP Begin Block  = " + this + " trace=");
+            //TraceManager.addDev("LEP Begin Interface  = " + this + " trace=");
             //Thread.currentThread().dumpStack();
 
             for (int i = 0; i < nl.getLength(); i++) {
@@ -1377,10 +1380,12 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         }
     }
 
-    public String getBlockName() {
+    public String getInterfaceName() {
         return value;
     }
-
+    
+ 
+    
     public boolean hasGlobalCode() {
         if (globalCode == null) {
             return false;
@@ -1417,7 +1422,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
     @Override
     public void hasBeenResized() {
         for (int i = 0; i < nbInternalTGComponent; i++) {
-            if (tgcomponent[i] instanceof AvatarBDBlock) {
+            if (tgcomponent[i] instanceof AvatarBDInterface) {
                 tgcomponent[i].resizeWithFather();
             } else if (tgcomponent[i] instanceof AvatarBDLibraryFunction) {
                 tgcomponent[i].resizeWithFather();
@@ -1432,7 +1437,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
     @Override
     public void resizeWithFather() {
-        if ((father != null) && (father instanceof AvatarBDBlock)) {
+        if ((father != null) && (father instanceof AvatarBDInterface)) {
             // Too large to fit in the father? -> resize it!
             resizeToFatherSize();
 
@@ -1441,22 +1446,22 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         }
     }
 
-    public List<AvatarBDBlock> getBlockList() {
-        List<AvatarBDBlock> list = new LinkedList<AvatarBDBlock>();
+    public List<AvatarBDInterface> getInterfaceList() {
+        List<AvatarBDInterface> list = new LinkedList<AvatarBDInterface>();
         for (int i = 0; i < nbInternalTGComponent; i++) {
-            if (tgcomponent[i] instanceof AvatarBDBlock) {
-                list.add((AvatarBDBlock) (tgcomponent[i]));
+            if (tgcomponent[i] instanceof AvatarBDInterface) {
+                list.add((AvatarBDInterface) (tgcomponent[i]));
             }
         }
         return list;
     }
 
-    public List<AvatarBDBlock> getFullBlockList() {
-        List<AvatarBDBlock> list = new LinkedList<AvatarBDBlock>();
+    public List<AvatarBDInterface> getFullInterfaceList() {
+        List<AvatarBDInterface> list = new LinkedList<AvatarBDInterface>();
         for (int i = 0; i < nbInternalTGComponent; i++) {
-            if (tgcomponent[i] instanceof AvatarBDBlock) {
-                list.add((AvatarBDBlock) (tgcomponent[i]));
-                list.addAll(((AvatarBDBlock) tgcomponent[i]).getFullBlockList());
+            if (tgcomponent[i] instanceof AvatarBDInterface) {
+                list.add((AvatarBDInterface) (tgcomponent[i]));
+                list.addAll(((AvatarBDInterface) tgcomponent[i]).getFullInterfaceList());
             }
         }
         return list;
@@ -1467,26 +1472,26 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
         for (int i = 0; i < nbInternalTGComponent; i++) {
             if (this.tgcomponent[i] instanceof AvatarBDLibraryFunction)
                 list.add((AvatarBDLibraryFunction) this.tgcomponent[i]);
-            else if (this.tgcomponent[i] instanceof AvatarBDBlock)
-                list.addAll(((AvatarBDBlock) this.tgcomponent[i]).getFullLibraryFunctionList());
+            else if (this.tgcomponent[i] instanceof AvatarBDInterface)
+                list.addAll(((AvatarBDInterface) this.tgcomponent[i]).getFullLibraryFunctionList());
         }
 
         return list;
     }
 
-    public boolean hasInternalBlockWithName(String name) {
-        List<AvatarBDBlock> list = getFullBlockList();
-        for (AvatarBDBlock b : list) {
+    public boolean hasInternalInterfaceWithName(String name) {
+        List<AvatarBDInterface> list = getFullInterfaceList();
+        for (AvatarBDInterface b : list) {
             if (b.getValue().compareTo(name) == 0) {
                 return true;
             }
         }
-        List<AvatarBDLibraryFunction> llist = getFullLibraryFunctionList();
+	/* List<AvatarBDLibraryFunction> llist = getFullLibraryFunctionList();
         for (AvatarBDLibraryFunction b : llist) {
             if (b.getFunctionName().compareTo(name) == 0) {
                 return true;
             }
-        }
+	    }*/
 
         return false;
     }
@@ -1542,7 +1547,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
         List<AvatarMethod> v = new LinkedList<AvatarMethod>();
         v.addAll(this.myMethods);
-        v.addAll(((AvatarBDBlock) getFather()).getAllMethodList());
+        v.addAll(((AvatarBDInterface) getFather()).getAllMethodList());
         return v;
     }
 
@@ -1553,7 +1558,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
 
         List<AvatarSignal> v = new LinkedList<AvatarSignal>();
         v.addAll(this.mySignals);
-        v.addAll(((AvatarBDBlock) getFather()).getAllSignalList());
+        v.addAll(((AvatarBDInterface) getFather()).getAllSignalList());
         return v;
     }
 
@@ -1614,7 +1619,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
     }
 
     public AvatarSMDPanel getAvatarSMDPanel() {
-        return ((AvatarDesignPanel) (tdp.tp)).getAvatarSMDPanel(getBlockName());
+        return ((AvatarDesignPanel) (tdp.tp)).getAvatarSMDPanel(getInterfaceName());
     }
 
     public boolean isCryptoBlock() {
@@ -1694,7 +1699,7 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
     }
 
     public int getIndexOfChild(Object child) {
-        if (child instanceof AvatarBDBlock) {
+        if (child instanceof AvatarBDInterface) {
             for (int i = 0; i < nbInternalTGComponent; i++) {
                 if (tgcomponent[i] == child) {
                     return i;
@@ -1728,12 +1733,12 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
     }
 
     public String getOwnerName() {
-        return this.getBlockName();
+        return this.getInterfaceName();
     }
 
     @Override
     public String toString() {
-        return "Block: " + getValue();
+        return "Interface: " + getValue();
     }
 
     public String getAttributes() {

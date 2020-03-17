@@ -6,7 +6,7 @@
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
- * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
+ * obtained from external tools, e.g. TL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
  * 
  * This software is governed by the CeCILL  license under French law and
@@ -81,6 +81,8 @@ public class AvatarADToolBar extends TToolBar {
         mgui.actions[TGUIAction.AAD_STOP_FLOW].setEnabled(b);
         mgui.actions[TGUIAction.AAD_SEND_SIGNAL_ACTION].setEnabled(b);
         mgui.actions[TGUIAction.AAD_ACCEPT_EVENT_ACTION].setEnabled(b);
+	mgui.actions[TGUIAction.AAD_SEND_AMS_ACTION].setEnabled(b);
+        mgui.actions[TGUIAction.AAD_ACCEPT_AMS_ACTION].setEnabled(b);
         mgui.actions[TGUIAction.AAD_PARTITION].setEnabled(b);
         mgui.actions[TGUIAction.AAD_ASSOCIATION_CONNECTOR].setEnabled(b);
         mgui.actions[TGUIAction.AAD_ALIGN_PARTITION].setEnabled(b);
@@ -131,10 +133,17 @@ public class AvatarADToolBar extends TToolBar {
 
         button = this.add(mgui.actions[TGUIAction.AAD_ACCEPT_EVENT_ACTION]);
         button.addMouseListener(mgui.mouseHandler);
+	
+	this.addSeparator();
 
-        this.addSeparator();
+	 button = this.add(mgui.actions[TGUIAction.AAD_SEND_AMS_ACTION]);
+        button.addMouseListener(mgui.mouseHandler);
 
-
+        button = this.add(mgui.actions[TGUIAction.AAD_ACCEPT_AMS_ACTION]);
+        button.addMouseListener(mgui.mouseHandler);
+	
+	this.addSeparator();
+	
         button = this.add(mgui.actions[TGUIAction.AAD_ACTION]);
         button.addMouseListener(mgui.mouseHandler);
 
