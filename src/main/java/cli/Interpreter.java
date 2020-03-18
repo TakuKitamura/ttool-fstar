@@ -74,6 +74,7 @@ public class Interpreter implements Runnable, TerminalProviderInterface {
     public final static String ROBOT_EXCEPTION = "Robot could not be started";
     public final static String BAD_FILE_NAME = "Unvalid file identifier";
     public final static String BAD_FILE = "Badly formatted file";
+    public final static String AVATAR_NO_SPEC = "No Avatar specification";
 
 
     private String script;

@@ -59,6 +59,7 @@ public class AvatarSpecification extends AvatarElement {
     
     private List<AvatarBlock> blocks;
     private List<AvatarRelation> relations;
+
     private List<AvatarInterfaceRelation> irelations;
     private List<AvatarAMSInterface> interfaces;
 

@@ -39,9 +39,14 @@
 
 package cli;
 
+import avatartranslator.AvatarSpecification;
+import avatartranslator.modelchecker.AvatarModelChecker;
 import common.ConfigurationTTool;
 import common.SpecConfigTTool;
+import graph.RG;
 import launcher.RTLLauncher;
+import myutil.Conversion;
+import myutil.FileUtils;
 import myutil.PluginManager;
 import myutil.TraceManager;
 import tmltranslator.TMLMapping;
@@ -53,6 +58,8 @@ import ui.*;
 
 import java.awt.*;
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.BitSet;
 import java.util.*;
 import java.util.List;
@@ -83,6 +90,8 @@ public class Action extends Command {
     private final static String NAVIGATE_PANEL_TO_RIGHT = "navigate-panel-to-right";
 
     private final static String NAVIGATE_LEFT_PANEL = "navigate-left-panel";
+
+    private final static String AVATAR_RG_GENERATION = "avatar-rg";
 
 
     public Action() {
@@ -564,6 +573,95 @@ public class Action extends Command {
             }
         };
 
+        Command generateRGFromAvatar = new Command() {
+            public String getCommand() {
+                return AVATAR_RG_GENERATION;
+            }
+
+            public String getShortCommand() {
+                return "arg";
+            }
+
+            public String getDescription() {
+                return "Generate a Reachability graph from an AVATAR model";
+            }
+
+            public String getUsage() { return "arg <Ref to graph file>"; }
+
+            public String getExample() {
+                return "arg /tmp/mylovelyrg?.aut (\"?\" is replaced with current date and time)";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                String[] commands = command.split(" ");
+                if (commands.length < 1) {
+                    return Interpreter.BAD;
+                }
+
+                String graphPath = commands[0];
+
+                AvatarSpecification avspec = interpreter.mgui.gtm.getAvatarSpecification();
+                if(avspec == null) {
+                    return Interpreter.AVATAR_NO_SPEC;
+                }
+
+                AvatarModelChecker amc = new AvatarModelChecker(avspec);
+                amc.setIgnoreEmptyTransitions(true);
+                amc.setIgnoreConcurrenceBetweenInternalActions(true);
+                amc.setIgnoreInternalStates(true);
+                amc.setComputeRG(true);
+                TraceManager.addDev("Starting model checking");
+                amc.startModelChecking();
+                System.out.println("Model checking done states:" + amc.getNbOfStates() +
+                        " links:" + amc.getNbOfLinks() + "\n");
+
+                // Saving graph
+                String graphAUT = amc.toAUT();
+                String autfile;
+
+                if (graphPath.length() == 0) {
+                    graphPath =  System.getProperty("user.dir") + "/" + "rg$.aut";
+                }
+
+                System.out.println("graphpath=" + graphPath);
+
+                if (graphPath.indexOf("?") != -1) {
+                    System.out.println("question mark found");
+                    DateFormat dateFormat = new SimpleDateFormat("_yyyyMMdd_HHmmss");
+                    Date date = new Date();
+                    String dateAndTime = dateFormat.format(date);
+                    autfile = Conversion.replaceAllChar(graphPath, '?', dateAndTime);
+                    System.out.println("graphpath=" + graphPath);
+                } else {
+                    autfile = graphPath;
+                }
+
+                System.out.println("autfile=" + autfile);
+
+                try {
+                    RG rg = new RG(autfile);
+                    rg.data = graphAUT;
+                    rg.fileName = autfile;
+                    rg.nbOfStates = amc.getNbOfStates();
+                    rg.nbOfTransitions = amc.getNbOfLinks();
+                    System.out.println("Saving graph in " + autfile + "\n");
+                    File f = new File(autfile);
+                    rg.name = f.getName();
+                    interpreter.mgui.addRG(rg);
+                    FileUtils.saveFile(autfile, graphAUT);
+                    System.out.println("Graph saved in " + autfile + "\n");
+                } catch (Exception e) {
+                    System.out.println("Graph could not be saved in " + autfile + "\n");
+                }
+
+                return null;
+            }
+        };
+
 
 
         Command generic = new Generic();
@@ -574,6 +672,7 @@ public class Action extends Command {
         addAndSortSubcommand(resize);
         addAndSortSubcommand(quit);
         addAndSortSubcommand(checkSyntax);
+        addAndSortSubcommand(generateRGFromAvatar);
         addAndSortSubcommand(diplodocusInteractiveSimulation);
         addAndSortSubcommand(diplodocusFormalVerification);
         addAndSortSubcommand(diplodocusOneTraceSimulation);
