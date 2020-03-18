@@ -158,7 +158,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
 //    private GridBagConstraints c01;
     private Thread t;
 
-//    @SuppressWarnings("deprecation")
+    // @SuppressWarnings("deprecation")
     public JFrameLatencyDetailedAnalysis(TMLMapping<TGComponent> tmap, List<TMLComponentDesignPanel> cpanels, SimulationTrace selectedST) {
         super("Latency Detailed Analysis");
         initActions();
@@ -287,7 +287,6 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
         file1.setText(selectedST.getFullPath());
         file1.setEditable(false);
 
-
         c01.gridheight = 1;
         c01.weighty = 1.0;
         c01.weightx = 1.0;
@@ -317,15 +316,16 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
 
         loadxml.add(tasksDropDownCombo2, c01);
 
-        //buttonBrowse = new JButton(actions[LatencyDetailedAnalysisActions.ACT_LOAD_SIMULATION_TRACES]);
+        // buttonBrowse = new
+        // JButton(actions[LatencyDetailedAnalysisActions.ACT_LOAD_SIMULATION_TRACES]);
 
-       // c01.gridheight = 1;
-        //c01.weighty = 1.0;
-       // c01.weightx = 1.0;
-        //c01.gridwidth = 1;
-        //c01.gridx = 2;
-       // c01.gridy = 0;
-       // loadxml.add(buttonBrowse, c01);
+        // c01.gridheight = 1;
+        // c01.weighty = 1.0;
+        // c01.weightx = 1.0;
+        // c01.gridwidth = 1;
+        // c01.gridx = 2;
+        // c01.gridy = 0;
+        // loadxml.add(buttonBrowse, c01);
 
         GridBagLayout gridbag04 = new GridBagLayout();
         GridBagConstraints c04 = new GridBagConstraints();
@@ -583,38 +583,34 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
             jta.setText("");
             dispose();
             setVisible(false);
-        } /*else if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_LOAD_SIMULATION_TRACES].getActionCommand())) {
-
-            if (ConfigurationTTool.SystemCCodeDirectory.length() > 0) {
-                fc = new JFileChooser(ConfigurationTTool.SystemCCodeDirectory);
-            } else {
-                fc = new JFileChooser();
-            }
-
-            FileNameExtensionFilter filter = new FileNameExtensionFilter("XML files", "xml");
-            fc.setFileFilter(filter);
-            int returnVal = fc.showOpenDialog(this);
-
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
-
-                ComboBoxModel[] models = new ComboBoxModel[2];
-                file = fc.getSelectedFile();
-                file1.setText(file.getPath());
-
-                transFile1 = parseFile(file);
-
-              //  models[0] = new DefaultComboBoxModel(loadDropDowns());
-               // models[1] = new DefaultComboBoxModel(loadDropDowns());
-
-                tasksDropDownCombo1.setModel(models[0]);
-                tasksDropDownCombo2.setModel(models[1]);
-                buttonDetailedAnalysis.setEnabled(true);
-
-                jta.append("The imported file contains: " + transFile1.size() + " Traces \n");
-                this.pack();
-                this.setVisible(true);
-            }
-        }*/ else if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_DETAILED_ANALYSIS].getActionCommand())) {
+        } /*
+           * else if (command.equals(actions[LatencyDetailedAnalysisActions.
+           * ACT_LOAD_SIMULATION_TRACES].getActionCommand())) {
+           * 
+           * if (ConfigurationTTool.SystemCCodeDirectory.length() > 0) { fc = new
+           * JFileChooser(ConfigurationTTool.SystemCCodeDirectory); } else { fc = new
+           * JFileChooser(); }
+           * 
+           * FileNameExtensionFilter filter = new FileNameExtensionFilter("XML files",
+           * "xml"); fc.setFileFilter(filter); int returnVal = fc.showOpenDialog(this);
+           * 
+           * if (returnVal == JFileChooser.APPROVE_OPTION) {
+           * 
+           * ComboBoxModel[] models = new ComboBoxModel[2]; file = fc.getSelectedFile();
+           * file1.setText(file.getPath());
+           * 
+           * transFile1 = parseFile(file);
+           * 
+           * // models[0] = new DefaultComboBoxModel(loadDropDowns()); // models[1] = new
+           * DefaultComboBoxModel(loadDropDowns());
+           * 
+           * tasksDropDownCombo1.setModel(models[0]);
+           * tasksDropDownCombo2.setModel(models[1]);
+           * buttonDetailedAnalysis.setEnabled(true);
+           * 
+           * jta.append("The imported file contains: " + transFile1.size() +
+           * " Traces \n"); this.pack(); this.setVisible(true); } }
+           */ else if (command.equals(actions[LatencyDetailedAnalysisActions.ACT_DETAILED_ANALYSIS].getActionCommand())) {
             jta.append("the Latency Between: \n " + tasksDropDownCombo1.getSelectedItem() + " and \n" + tasksDropDownCombo2.getSelectedItem()
                     + " is studied \n");
             Thread t = new Thread() {
@@ -790,12 +786,14 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
 
     }
 
-  /*  public Vector<String> loadDropDowns() {
-        Vector<String> allLatencyTasks = dgraph.getLatencyVertices();
-
-        return allLatencyTasks;
-
-    }*/
+    /*
+     * public Vector<String> loadDropDowns() { Vector<String> allLatencyTasks =
+     * dgraph.getLatencyVertices();
+     * 
+     * return allLatencyTasks;
+     * 
+     * }
+     */
 
     public void error(String error) {
         jta.append("error: " + error + "\n");
@@ -813,7 +811,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
         }
 
     }
-    
+
     public void fillCheckedTrans(TMLMapping<TGComponent> tmap) {
         if (tmap == null) {
             return;
@@ -829,7 +827,6 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
     public Vector<String> getCheckedTransactions() {
         return checkedTransactions;
     }
-
 
     @Override
     public void stateChanged(ChangeEvent e) {
@@ -877,6 +874,10 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
     public void run() {
         // TODO Auto-generated method stub
 
+    }
+
+    public Thread getT() {
+        return t;
     }
 
 }

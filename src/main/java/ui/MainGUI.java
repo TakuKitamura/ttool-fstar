@@ -9579,34 +9579,17 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
     public void compareLatencyForXML(SimulationTrace selectedST, boolean b) {
         
-        latencyDetailedAnalysisMain = new latencyDetailedAnalysisMain();
-        latencyDetailedAnalysisMain.compareLatencyForXML(this,selectedST,b);
+        latencyDetailedAnalysisMain = new latencyDetailedAnalysisMain(1,this,selectedST,b,false,0);        
       
     }
 
     public void latencyDetailedAnalysisForXML(SimulationTrace selectedST, boolean b, boolean compare, int j) throws XPathExpressionException, ParserConfigurationException, SAXException, IOException  {
         
-        latencyDetailedAnalysisMain = new latencyDetailedAnalysisMain();
-        latencyDetailedAnalysisMain.latencyDetailedAnalysisForXML(this,selectedST,b ,compare,j);
+        latencyDetailedAnalysisMain = new latencyDetailedAnalysisMain(2,this,selectedST,b ,compare,j);
         
         
     }
-    
-    public void latencyDetailedAnalysis(SimulationTrace selectedST, TURTLEPanel selectedTab, boolean b, boolean compare, MainGUI mainGUI_compare) {
-        latencyDetailedAnalysisMain = new latencyDetailedAnalysisMain();
-        latencyDetailedAnalysisMain.latencyDetailedAnalysis(selectedST,selectedTab ,b,compare,mainGUI_compare);
-    }
 
-    public latencyDetailedAnalysisMain getLatencyDetailedAnalysisMain() {
-        return latencyDetailedAnalysisMain;
-    }
-
-    public void setLatencyDetailedAnalysisMain(latencyDetailedAnalysisMain latencyDetailedAnalysisMain) {
-        this.latencyDetailedAnalysisMain = latencyDetailedAnalysisMain;
-    }
-
-
-
-
+  
 
 } // Class MainGUI

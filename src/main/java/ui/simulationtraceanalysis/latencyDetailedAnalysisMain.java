@@ -38,15 +38,54 @@ import ui.window.JDialogToChosePanel;
 
 public class latencyDetailedAnalysisMain {
 
-    private DirectedGraphTranslator dgraph;
+    public DirectedGraphTranslator dgraph;
     private Vector<String> checkedTransactionsFile1 = new Vector<String>();
-    private Vector<String> checkedTransactionsFile2 = new Vector<String>();
-    private Vector<String> checkedTransactionsFile = new Vector<String>();
-    public MainGUI mainGUI_compare2,mainGUI_compare;
-    
+    public Vector<String> checkedTransactionsFile2 = new Vector<String>();
+    public Vector<String> checkedTransactionsFile = new Vector<String>();
+    public MainGUI mainGUI_compare2, mainGUI_compare;
+
     private JFrameLatencyDetailedAnalysis latencyDetailedAnalysis;
 
-    public latencyDetailedAnalysisMain() {
+    private Thread t, t1;
+
+    public latencyDetailedAnalysisMain(int callerId, MainGUI mainGUI, SimulationTrace selectedST, boolean b, boolean compare, int j) {
+
+        if (callerId == 2) {
+
+            t = new Thread() {
+                public void run() {
+                    try {
+                        latencyDetailedAnalysisForXML(mainGUI, selectedST, b, compare, j);
+                    } catch (XPathExpressionException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    } catch (ParserConfigurationException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    } catch (SAXException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+            };
+
+            t.start();
+
+        } else if (callerId == 1) {
+
+            t1 = new Thread() {
+                public void run() {
+
+                    compareLatencyForXML(mainGUI, selectedST, b);
+
+                }
+            };
+
+            t1.start();
+        }
 
     }
 
@@ -56,7 +95,7 @@ public class latencyDetailedAnalysisMain {
         List<TMLComponentDesignPanel> cpanels;
         TMLComponentDesignPanel compdp;
         TURTLEPanel tp = selectedTab;
-       
+
         // tmlap = (TMLArchiPanel) tp;
 
         if (mainGUI_compare.gtm == null) {
@@ -64,8 +103,8 @@ public class latencyDetailedAnalysisMain {
         } else {
 
             if (mainGUI_compare.gtm.getTMLMapping() != null) {
-                
-                TMLArchiPanel  tmlap = (TMLArchiPanel) tp;
+
+                TMLArchiPanel tmlap = (TMLArchiPanel) tp;
                 TMLMapping<TGComponent> map = mainGUI_compare.gtm.getTMLMapping();
                 for (TGComponent component : tmlap.tmlap.getComponentList()) {
                     tmlNodesToValidate.add(component);
@@ -153,17 +192,16 @@ public class latencyDetailedAnalysisMain {
 
     }
 
-    public void compareLatencyForXML( MainGUI mainGUI,SimulationTrace selectedST, boolean b) {
-
-     
+    public void compareLatencyForXML(MainGUI mainGUI, SimulationTrace selectedST, boolean b) {
 
         final DirectedGraphTranslator dgraph1, dgraph2;
         try {
 
             checkedTransactionsFile = new Vector<String>();
-            latencyDetailedAnalysisForXML(mainGUI,selectedST, false, true, 1);
+            latencyDetailedAnalysisForXML(mainGUI, selectedST, false, true, 1);
 
             checkedTransactionsFile1 = checkedTransactionsFile;
+
         } catch (XPathExpressionException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
@@ -188,56 +226,52 @@ public class latencyDetailedAnalysisMain {
 
             JFileChooser fc;
 
-            if (ConfigurationTTool.SystemCCodeDirectory.length() > 0) {
-                fc = new JFileChooser(ConfigurationTTool.SystemCCodeDirectory);
-            } else {
-                fc = new JFileChooser();
-            }
+            JFrameCompareLatencyDetail cld = new JFrameCompareLatencyDetail(this, mainGUI, dgraph1, checkedTransactionsFile1, selectedST, true);
 
-            FileNameExtensionFilter filter = new FileNameExtensionFilter("XML files", "xml");
-            fc.setFileFilter(filter);
-
-            int returnVal = fc.showOpenDialog(mainGUI.frame);
-
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
-                File filefc = fc.getSelectedFile();
-                // file2.setText(file.getPath());
-
-                // Object obj = filefc;
-
-                checkedTransactionsFile = new Vector<String>();
-                SimulationTrace file2 = new SimulationTrace(filefc.getName(), 6, filefc.getAbsolutePath());
-
-                if (file2 instanceof SimulationTrace) {
-
-                    try {
-                        latencyDetailedAnalysisForXML(mainGUI,file2, false, true, 2);
-                    } catch (XPathExpressionException | ParserConfigurationException | SAXException | IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-
-                    while (dgraph.getGraphsize() == 0) {
-
-                    }
-
-                    if (dgraph.getGraphsize() > 0) {
-                        dgraph2 = dgraph;
-                        checkedTransactionsFile2 = checkedTransactionsFile;
-                        JFrameCompareLatencyDetail cld = new JFrameCompareLatencyDetail(dgraph1, dgraph2, checkedTransactionsFile1,
-                                checkedTransactionsFile2, selectedST, file2, true);
-
-                        mainGUI_compare2.closeTurtleModeling();
-
-                    }
-                }
-
-            }
+            /*
+             * if (ConfigurationTTool.SystemCCodeDirectory.length() > 0) { fc = new
+             * JFileChooser(ConfigurationTTool.SystemCCodeDirectory); } else { fc = new
+             * JFileChooser(); }
+             * 
+             * FileNameExtensionFilter filter = new FileNameExtensionFilter("XML files",
+             * "xml"); fc.setFileFilter(filter);
+             * 
+             * int returnVal = fc.showOpenDialog(mainGUI.frame);
+             * 
+             * if (returnVal == JFileChooser.APPROVE_OPTION) { File filefc =
+             * fc.getSelectedFile(); // file2.setText(file.getPath());
+             * 
+             * // Object obj = filefc;
+             * 
+             * checkedTransactionsFile = new Vector<String>(); SimulationTrace file2 = new
+             * SimulationTrace(filefc.getName(), 6, filefc.getAbsolutePath());
+             * 
+             * if (file2 instanceof SimulationTrace) {
+             * 
+             * try { latencyDetailedAnalysisForXML(mainGUI, file2, false, true, 2); } catch
+             * (XPathExpressionException | ParserConfigurationException | SAXException |
+             * IOException e) { // TODO Auto-generated catch block e.printStackTrace(); }
+             * 
+             * while (dgraph.getGraphsize() == 0) {
+             * 
+             * }
+             * 
+             * if (dgraph.getGraphsize() > 0) { dgraph2 = dgraph; checkedTransactionsFile2 =
+             * checkedTransactionsFile; JFrameCompareLatencyDetail cld = new
+             * JFrameCompareLatencyDetail(dgraph1, dgraph2, checkedTransactionsFile1,
+             * checkedTransactionsFile2, selectedST, file2, true);
+             * 
+             * mainGUI_compare2.closeTurtleModeling();
+             * 
+             * } }
+             * 
+             * }
+             */
 
         }
     }
 
-    public void latencyDetailedAnalysisForXML(MainGUI mainGUI,SimulationTrace selectedST, boolean b, boolean compare, int j)
+    public void latencyDetailedAnalysisForXML(MainGUI mainGUI, SimulationTrace selectedST, boolean b, boolean compare, int j)
             throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
         String xml = ""; // Populated XML String....
 
@@ -444,12 +478,11 @@ public class latencyDetailedAnalysisMain {
     public void setCheckedTransactionsFile(Vector<String> checkedTransactionsFile) {
         this.checkedTransactionsFile = checkedTransactionsFile;
     }
-    
+
     public JFrameLatencyDetailedAnalysis getLatencyDetailedAnalysis() {
         return latencyDetailedAnalysis;
     }
 
-    
     protected static String getBaseResourcesDir() {
         final String systemPropResDir = System.getProperty("resources_dir");
 
@@ -458,6 +491,14 @@ public class latencyDetailedAnalysisMain {
         }
 
         return systemPropResDir;
+    }
+
+    public Thread getT() {
+        return t;
+    }
+
+    public Thread getT1() {
+        return t1;
     }
 
 }

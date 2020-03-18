@@ -13,9 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
-import myutil.PluginManager;
 import ui.AbstractUITest;
-import ui.MainGUI;
 import ui.SimulationTrace;
 import ui.TMLArchiPanel;
 import ui.interactivesimulation.SimulationTransaction;
@@ -41,6 +39,7 @@ public class CompareLatencyInSimulationTraces extends AbstractUITest {
     DirectedGraphTranslator dgraph1, dgraph2;
     private static String task1, task2, task3, task4;
     JFrameCompareLatencyDetail cld;
+    private latencyDetailedAnalysisMain latencyDetailedAnalysisMain;
 
     Vector<SimulationTransaction> transFile1, transFile2;
     SimulationTrace simT1, simT2;
@@ -65,36 +64,38 @@ public class CompareLatencyInSimulationTraces extends AbstractUITest {
 
         simT1 = new SimulationTrace("graphTestSimulationTrace", 6, (getBaseResourcesDir() + simulationTracePathFile1));
 
-        mainGUI.setLatencyDetailedAnalysisMain(new latencyDetailedAnalysisMain());
-        mainGUI.getLatencyDetailedAnalysisMain().setCheckedTransactionsFile(new Vector<String>());
+        latencyDetailedAnalysisMain = new latencyDetailedAnalysisMain(3, mainGUI, simT1, false, false, 3);
+        latencyDetailedAnalysisMain.setCheckedTransactionsFile(new Vector<String>());
 
-        mainGUI.latencyDetailedAnalysisForXML(simT1, false, true, 1);
+        Thread t = new Thread() {
+            public void run() {
 
-        checkedTransactionsFile1 = mainGUI.getLatencyDetailedAnalysisMain().getCheckedTransactionsFile();
+                try {
+                    latencyDetailedAnalysisMain.latencyDetailedAnalysisForXML(mainGUI, simT1, false, true, 1);
+                } catch (XPathExpressionException | ParserConfigurationException | SAXException | IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
 
-        while (mainGUI.getLatencyDetailedAnalysisMain().getDgraph().getGraphsize() == 0) {
+            }
+        };
+        t.start();
+
+        while (t.getState() != Thread.State.TERMINATED) {
 
         }
+        if (t.getState() == Thread.State.TERMINATED) {
 
-        if (mainGUI.getLatencyDetailedAnalysisMain().getDgraph().getGraphsize() > 0) {
-            dgraph1 = mainGUI.getLatencyDetailedAnalysisMain().getDgraph();
-
-            mainGUI.getLatencyDetailedAnalysisMain().setDgraph(null);
-
-            mainGUI.getLatencyDetailedAnalysisMain().setCheckedTransactionsFile(new Vector<String>());
-            simT2 = new SimulationTrace("graphTestSimulationTrace", 6, (getBaseResourcesDir() + simulationTracePathFile2));
-
-            mainGUI.latencyDetailedAnalysisForXML(simT2, false, true, 1);
-
-            while (mainGUI.getLatencyDetailedAnalysisMain().getDgraph().getGraphsize() == 0) {
+            while (latencyDetailedAnalysisMain.getDgraph().getGraphsize() == 0) {
 
             }
 
-            if (mainGUI.getLatencyDetailedAnalysisMain().getDgraph().getGraphsize() > 0) {
-                dgraph2 = mainGUI.getLatencyDetailedAnalysisMain().getDgraph();
+            if (latencyDetailedAnalysisMain.getDgraph().getGraphsize() > 0) {
+                dgraph1 = latencyDetailedAnalysisMain.getDgraph();
+                checkedTransactionsFile1 = latencyDetailedAnalysisMain.getCheckedTransactionsFile();
+                latencyDetailedAnalysisMain.setDgraph(null);
 
-                checkedTransactionsFile2 = mainGUI.getLatencyDetailedAnalysisMain().getCheckedTransactionsFile();
-                cld = new JFrameCompareLatencyDetail(dgraph1, dgraph2, checkedTransactionsFile1, checkedTransactionsFile2, simT1, simT2, false);
+                cld = new JFrameCompareLatencyDetail(latencyDetailedAnalysisMain, mainGUI, dgraph1, checkedTransactionsFile1, simT1, false);
 
                 if (cld == null) {
                     System.out.println("NULL Panel");
@@ -102,10 +103,44 @@ public class CompareLatencyInSimulationTraces extends AbstractUITest {
                     cld.setVisible(false);
                 }
 
+                latencyDetailedAnalysisMain.setCheckedTransactionsFile(new Vector<String>());
+                simT2 = new SimulationTrace("graphTestSimulationTrace", 6, (getBaseResourcesDir() + simulationTracePathFile2));
+
+                Thread t1 = new Thread() {
+                    public void run() {
+
+                        try {
+
+                            latencyDetailedAnalysisMain.latencyDetailedAnalysisForXML(mainGUI, simT2, false, true, 1);
+                        } catch (XPathExpressionException | ParserConfigurationException | SAXException | IOException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+
+                    }
+                };
+                t1.start();
+
+                while (t1.getState() != Thread.State.TERMINATED) {
+
+                }
+                if (t1.getState() == Thread.State.TERMINATED) {
+
+                    while (latencyDetailedAnalysisMain.getDgraph().getGraphsize() == 0) {
+
+                    }
+
+                    if (latencyDetailedAnalysisMain.getDgraph().getGraphsize() > 0) {
+                        dgraph2 = latencyDetailedAnalysisMain.getDgraph();
+
+                        checkedTransactionsFile2 = latencyDetailedAnalysisMain.getCheckedTransactionsFile();
+
+                    }
+
+                }
             }
 
         }
-
     }
 
     @Test
@@ -139,6 +174,8 @@ public class CompareLatencyInSimulationTraces extends AbstractUITest {
 
         transFile1 = cld.parseFile(file1);
         transFile2 = cld.parseFile(file2);
+
+        cld.setDgraph2(dgraph2);
 
         cld.latencyDetailedAnalysis(task1, task2, task3, task4, transFile1, transFile2, false);
 
