@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<TURTLEGMODELING version="1.0beta" ANIMATE_INTERACTIVE_SIMULATION="false" ACTIVATE_PENALTIES="true" UPDATE_INFORMATION_DIPLO_SIM="false" ANIMATE_WITH_INFO_DIPLO_SIM="true" OPEN_DIAG_DIPLO_SIM="false" LAST_SELECTED_MAIN_TAB="0" LAST_SELECTED_SUB_TAB="0">
+<TURTLEGMODELING version="1.0beta" ANIMATE_INTERACTIVE_SIMULATION="false" ACTIVATE_PENALTIES="true" UPDATE_INFORMATION_DIPLO_SIM="false" ANIMATE_WITH_INFO_DIPLO_SIM="true" OPEN_DIAG_DIPLO_SIM="false" LAST_SELECTED_MAIN_TAB="1" LAST_SELECTED_SUB_TAB="0">
 
 <Modeling type="Avatar Requirement" nameTab="AVATAR Requirements" >
 <AvatarRDPanel name="AVATAR RD" minX="10" maxX="1900" minY="10" maxY="1400" zoom="1.0" >
@@ -8,7 +8,7 @@
 <cdparam x="727" y="252" />
 <sizeparam width="150" height="30" minWidth="10" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="107" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1400" />
 <infoparam name="AvatarElementReference" value="CoffeeMachine" />
 <TGConnectingPoint num="0" id="1" />
 <TGConnectingPoint num="1" id="2" />
@@ -31,7 +31,7 @@
 <cdparam x="724" y="202" />
 <sizeparam width="150" height="30" minWidth="10" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="57" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1400" />
 <infoparam name="AvatarElementReference" value="Wallet" />
 <TGConnectingPoint num="0" id="17" />
 <TGConnectingPoint num="1" id="18" />
@@ -54,7 +54,7 @@
 <cdparam x="660" y="10" />
 <sizeparam width="278" height="120" minWidth="1" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="59" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1400" />
 <infoparam name="Requirement" value="req00" />
 <TGConnectingPoint num="0" id="33" />
 <TGConnectingPoint num="1" id="34" />
@@ -118,7 +118,7 @@
 <cdparam x="46" y="491" />
 <sizeparam width="301" height="120" minWidth="1" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="113" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1400" />
 <infoparam name="Requirement" value="Req_Availability" />
 <TGConnectingPoint num="0" id="77" />
 <TGConnectingPoint num="1" id="78" />
@@ -182,7 +182,7 @@
 <cdparam x="10" y="182" />
 <sizeparam width="150" height="120" minWidth="1" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="136" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1400" />
 <infoparam name="Requirement" value="Req_CoffeeMachine" />
 <TGConnectingPoint num="0" id="121" />
 <TGConnectingPoint num="1" id="122" />
@@ -245,7 +245,7 @@
 <cdparam x="682" y="367" />
 <sizeparam width="171" height="30" minWidth="10" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="158" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1400" />
 <infoparam name="AvatarProperty" value="BeverageDeliverProperty" />
 <TGConnectingPoint num="0" id="165" />
 <TGConnectingPoint num="1" id="166" />
@@ -268,7 +268,7 @@
 <cdparam x="728" y="304" />
 <sizeparam width="150" height="30" minWidth="10" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="128" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1400" />
 <infoparam name="AvatarProperty" value="WalletCoinProperty" />
 <TGConnectingPoint num="0" id="181" />
 <TGConnectingPoint num="1" id="182" />
@@ -291,7 +291,7 @@
 <cdparam x="233" y="147" />
 <sizeparam width="271" height="104" minWidth="1" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="48" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1400" />
 <infoparam name="Requirement" value="req1" />
 <TGConnectingPoint num="0" id="197" />
 <TGConnectingPoint num="1" id="198" />
@@ -355,7 +355,7 @@
 <cdparam x="632" y="151" />
 <sizeparam width="150" height="30" minWidth="10" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="117" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1400" />
 <infoparam name="AvatarProperty" value="OneCoinProperty" />
 <TGConnectingPoint num="0" id="241" />
 <TGConnectingPoint num="1" id="242" />
@@ -378,7 +378,7 @@
 <cdparam x="192" y="15" />
 <sizeparam width="304" height="110" minWidth="1" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="51" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1400" />
 <infoparam name="Requirement" value="req0" />
 <TGConnectingPoint num="0" id="257" />
 <TGConnectingPoint num="1" id="258" />
@@ -442,7 +442,7 @@
 <cdparam x="208" y="294" />
 <sizeparam width="357" height="174" minWidth="1" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="48" minDesiredHeight="0" />
 <hidden value="false" />
-<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="900" />
+<cdrectangleparam minX="10" maxX="1900" minY="10" maxY="1400" />
 <infoparam name="Requirement" value="req2" />
 <TGConnectingPoint num="0" id="301" />
 <TGConnectingPoint num="1" id="302" />
@@ -1293,7 +1293,7 @@
 <extraparam>
 <isd value="in pushCoffeeButton()" />
 <oso value="out push()" />
-<FIFOType asynchronous="false" size="1024" blocking="false" private="true" broadcast="false" lossy="false" />
+<FIFOType asynchronous="false" size="1024" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5002" id="697" >
@@ -1309,7 +1309,7 @@
 <osd value="out ejectCoin(int nbOfCoins)" />
 <isd value="in getCoin(int nbOfCoins)" />
 <oso value="out putCoin(int nbOfCoins)" />
-<FIFOType asynchronous="false" size="1024" blocking="false" private="true" broadcast="false" lossy="false" />
+<FIFOType asynchronous="false" size="1024" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5002" id="699" >
@@ -1323,7 +1323,7 @@
 <extraparam>
 <isd value="in pushTeaButton()" />
 <oso value="out push()" />
-<FIFOType asynchronous="false" size="1024" blocking="false" private="true" broadcast="false" lossy="false" />
+<FIFOType asynchronous="false" size="1024" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR>
 <COMPONENT type="5000" id="724" >
