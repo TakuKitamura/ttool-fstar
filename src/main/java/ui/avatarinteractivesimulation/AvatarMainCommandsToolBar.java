@@ -75,6 +75,7 @@ public class AvatarMainCommandsToolBar extends AvatarInteractiveSimulationBar {
         jfais.actions[AvatarInteractiveSimulationActions.ACT_STOP_SIMU].setEnabled(b);
         jfais.actions[AvatarInteractiveSimulationActions.ACT_RESET_SIMU].setEnabled(b);
         jfais.actions[AvatarInteractiveSimulationActions.ACT_RUN_X_COMMANDS].setEnabled(b);
+        jfais.actions[AvatarInteractiveSimulationActions.ACT_REMOVE_ALL_TRANS].setEnabled(b);
 
 
 
@@ -84,6 +85,9 @@ public class AvatarMainCommandsToolBar extends AvatarInteractiveSimulationBar {
         JButton button;
 
         button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_RESET_SIMU]);
+        button.addMouseListener(jfais.mouseHandler);
+
+        button = this.add(jfais.actions[AvatarInteractiveSimulationActions.ACT_REMOVE_ALL_TRANS]);
         button.addMouseListener(jfais.mouseHandler);
 
         this.addSeparator();

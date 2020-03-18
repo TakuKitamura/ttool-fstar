@@ -551,6 +551,8 @@ public class GTMLModeling {
                 tmlt.addOperation(tmlcpc.getOperation());
                 tmlt.setDaemon(tmlcpc.isDaemon());
                 tmlt.setAttacker(tmlcpc.isAttacker());
+                tmlt.setPeriodic(tmlcpc.isPeriodic(), tmlcpc.getPeriodValue(), tmlcpc.getPeriodUnit());
+
                 //TraceManager.addDev("Task added:" + tmlt.getName() + " with tadp=" + tmladp + " major=" + tmladp.getMGUI().getMajorTitle(tmladp));
                 listE.addCor(tmlt, tgc);
                 tmlm.addTask(tmlt);

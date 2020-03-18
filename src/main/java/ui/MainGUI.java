@@ -350,9 +350,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     private Invariant currentInvariant;
 
     // Thread for autosave
-    private PeriodicBehaviorThread pbt;
-
-   
+    private PeriodicBehaviorThread pbt;   
   
     // Plugin management
     // public static PluginManager pluginManager;

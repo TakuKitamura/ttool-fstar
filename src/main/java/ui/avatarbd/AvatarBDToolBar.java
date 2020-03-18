@@ -79,6 +79,7 @@ public class AvatarBDToolBar extends TToolBar {
         mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
 
         mgui.actions[TGUIAction.ABD_BLOCK].setEnabled(b);
+	mgui.actions[TGUIAction.AMS_INTERFACE].setEnabled(b);
         mgui.actions[TGUIAction.ABD_CRYPTOBLOCK].setEnabled(b);
         mgui.actions[TGUIAction.ABD_DATATYPE].setEnabled(b);
         mgui.actions[TGUIAction.ABD_COMPOSITION_CONNECTOR].setEnabled(b);
@@ -130,6 +131,12 @@ public class AvatarBDToolBar extends TToolBar {
         button = this.add(mgui.actions[TGUIAction.ABD_BLOCK]);
         button.addMouseListener(mgui.mouseHandler);
 
+
+	this.addSeparator();
+
+        button = this.add(mgui.actions[TGUIAction.AMS_INTERFACE]);
+        button.addMouseListener(mgui.mouseHandler);
+	
         this.addSeparator();
 
         button = this.add(mgui.actions[TGUIAction.ABD_CRYPTOBLOCK]);

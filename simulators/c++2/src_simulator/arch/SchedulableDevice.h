@@ -98,6 +98,7 @@ public:
 	virtual int allTrans2XML(std::ostringstream& glob, int maxNbOfTrans) const =0;
     virtual int allTrans2XMLByTask(std::ostringstream& glob, std::string taskName) const =0;
 	virtual void latencies2XML(std::ostringstream& glob, unsigned int id1, unsigned int id2)=0;
+	virtual void removeTrans(int numberOfTrans)=0;
 	virtual std::string toString() const =0;
 	virtual std::istream& readObject(std::istream &is);
 	virtual std::ostream& writeObject(std::ostream &os);

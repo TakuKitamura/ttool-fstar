@@ -60,6 +60,9 @@ public class AvatarSpecification extends AvatarElement {
     private List<AvatarBlock> blocks;
     private List<AvatarRelation> relations;
 
+    private List<AvatarInterfaceRelation> irelations;
+    private List<AvatarAMSInterface> interfaces;
+
     /**
      * The list of all library functions that can be called.
      */
@@ -82,6 +85,7 @@ public class AvatarSpecification extends AvatarElement {
     public AvatarSpecification(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
         blocks = new LinkedList<AvatarBlock>();
+	interfaces = new LinkedList<AvatarAMSInterface>();
         relations = new LinkedList<AvatarRelation>();
         //broadcast = new AvatarBroadcast("Broadcast", _referenceObject);
         pragmas = new LinkedList<AvatarPragma>();
@@ -141,6 +145,10 @@ public class AvatarSpecification extends AvatarElement {
         return blocks;
     }
 
+     public List<AvatarAMSInterface> getListOfInterfaces() {
+        return interfaces;
+    }
+
     public List<AvatarRelation> getRelations() {
         return relations;
     }
@@ -189,14 +197,32 @@ public class AvatarSpecification extends AvatarElement {
       
     	return false;
     }
+
+    public boolean AMSExist(){
+    	List<AvatarRelation> ams = getRelations();
+      
+    	for ( AvatarRelation ar : ams )
+    		if (ar.isAMS())
+    			return true;
+      
+    	return false;
+    }
     
     // end DG
     public void addBlock(AvatarBlock _block) {
         blocks.add(_block);
     }
 
+    public void addInterface(AvatarAMSInterface _interface) {
+        interfaces.add(_interface);
+    }
+    
     public void addRelation(AvatarRelation _relation) {
         relations.add(_relation);
+    }
+
+     public void addInterfaceRelation(AvatarInterfaceRelation _irelation) {
+        irelations.add(_irelation);
     }
 
     /*public void addBroadcastSignal(AvatarSignal _as) {
@@ -273,6 +299,16 @@ public class AvatarSpecification extends AvatarElement {
         for(AvatarBlock block: blocks) {
             if (block.getName().compareTo(_name)== 0) {
                 return block;
+            }
+        }
+
+        return null;
+    }
+
+    public AvatarAMSInterface getAMSInterfaceWithName(String _name) {
+        for(AvatarAMSInterface interf: interfaces) {
+            if (interf.getName().compareTo(_name)== 0) {
+                return interf;
             }
         }
 

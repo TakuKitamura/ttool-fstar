@@ -58,7 +58,7 @@ public class AvatarRelation extends AvatarElement {
 
     public AvatarBlock block1, block2;
     private List<AvatarSignal> signals1, signals2;
-    private boolean blocking, asynchronous, isPrivate, isBroadcast, isLossy;
+    private boolean blocking, asynchronous, ams, isPrivate, isBroadcast, isLossy;
     private int sizeOfFIFO; // -1 means infinite
     public int id;//DG
 
@@ -71,6 +71,7 @@ public class AvatarRelation extends AvatarElement {
         blocking = false;
         sizeOfFIFO = 1024;
         asynchronous = false;
+	ams = false;
         isBroadcast = false;
 	id = 0;//DG
     }
@@ -90,6 +91,10 @@ public class AvatarRelation extends AvatarElement {
 
     public void setAsynchronous(boolean _b) {
         asynchronous = _b;
+    }
+
+    public void setAMS(boolean _b) {
+        ams = _b;
     }
 
     public void setBlocking(boolean _b) {
@@ -116,6 +121,10 @@ public class AvatarRelation extends AvatarElement {
         return asynchronous;
     }
 
+    public boolean isAMS() {
+        return ams;
+    }
+    
     public boolean isPrivate() {
         return isPrivate;
     }

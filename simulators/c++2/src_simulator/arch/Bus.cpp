@@ -256,6 +256,12 @@ int Bus::allTrans2XMLByTask(std::ostringstream& glob, std::string taskName) cons
   return total;
 }
 
+void Bus::removeTrans(int numberOfTrans) {
+    if (numberOfTrans == 1) {
+        _transactList.clear();
+    }
+}
+
 void Bus::latencies2XML(std::ostringstream& glob, unsigned int id1, unsigned int id2) {
 
   for(TransactionList::const_iterator i=_transactList.begin(); i != _transactList.end(); ++i){

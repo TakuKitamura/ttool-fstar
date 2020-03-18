@@ -817,6 +817,22 @@ public class TMLMapping<E> {
         return tmla.getArchitectureComplexity();
     }
 
+    public void removePeriodicTasks() {
+        TMLTask[] addedTasks = tmlm.removePeriodicTasks();
+        // First tasks is the new task, the second one is the original periodic task
+
+        for(int i=0; i<addedTasks.length; i = i + 2) {
+            // mapping tasks to the same execution node as the controlled tasks
+            TMLTask originTask = addedTasks[i+1];
+            ArrayList<HwExecutionNode> nodes = getAllHwExecutionNodesOfTask(originTask);
+            for(HwExecutionNode node: nodes) {
+                onnodes.add(node);
+                mappedtasks.add(addedTasks[i]);
+            }
+        }
+    }
+
+
     public void removeForksAndJoins() {
         TraceManager.addDev("\n\nRemove fork and join in MAPPING. Current nb of tasks:" + tmlm.getTasks().size());
         if (tmlm != null) {

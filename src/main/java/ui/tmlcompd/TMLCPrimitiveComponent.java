@@ -75,6 +75,9 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 
     private boolean isAttacker = false;
     private boolean isDaemon = false;
+    private boolean isPeriodic = false;
+    private String periodValue = "";
+    private String unit = "ms";
     
     // Icon
     private int iconSize = 15;
@@ -185,7 +188,12 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 
         if (isAttacker)
             g.drawImage(scale(IconManager.imgic7008.getImage()), x + width - 2 * iconSize - textX, y + 2 * textX, null);
-        
+
+        if (isDaemon) {
+            g.drawImage(scale(IconManager.imgic5116.getImage()), x + textX, y + textX, null);
+        }
+
+
         // Attributes printing
         if (tdp.areAttributesVisible())
         {
@@ -382,6 +390,18 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
     public boolean isDaemon() {
         return isDaemon;
     }
+
+    public boolean isPeriodic() {
+        return isPeriodic;
+    }
+
+    public String getPeriodValue() {
+        return periodValue;
+    }
+
+    public String getPeriodUnit() {
+        return unit;
+    }
     
     @Override
     public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
@@ -445,10 +465,11 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 
 
 		JDialogAttribute jda = new JDialogAttribute(myAttributes, null, frame,
-                "Setting attributes of " + value, "Attribute", operation, isDaemon, getValue());
+                "Setting attributes of " + value, "Attribute", operation, isDaemon, isPeriodic, periodValue,
+                unit, getValue());
         setJDialogOptions(jda);
         // jda.setSize(650, 375);
-        GraphicLib.centerOnParent(jda, 750, 375);
+        GraphicLib.centerOnParent(jda, 750, 575);
         jda.setVisible(true); // blocked until dialog has been closed
         //makeValue();
         //if (oldValue.equals(value)) {
@@ -456,6 +477,22 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         //}
         operation = jda.getOperation();
         isDaemon = jda.isDaemon();
+        isPeriodic = jda.isPeriodic();
+        periodValue = jda.getPeriodValue();
+        unit = jda.getUnit();
+
+        if ((isPeriodic) && (!periodValue.matches("-?\\d+"))) {
+            TraceManager.addDev("Invalid period: " + periodValue);
+            JOptionPane.showMessageDialog(frame,
+                    "Invalid period: " + periodValue,
+                    "Error",
+                    JOptionPane.INFORMATION_MESSAGE);
+            periodValue = "";
+            isPeriodic = false;
+        }
+
+
+        unit = jda.getUnit();
 
         TraceManager.addDev("PC1");
 
@@ -662,6 +699,12 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         sb.append(isAttacker() ? "Yes" : "No");
         sb.append("\" daemon=\"");
         sb.append(isDaemon);
+        sb.append("\" periodic=\"");
+        sb.append(isPeriodic);
+        sb.append("\" periodValue=\"");
+        sb.append(periodValue);
+        sb.append("\" unit=\"");
+        sb.append(unit);
         sb.append("\" Operation=\"");
         sb.append(operation);
         sb.append("\" />\n");
@@ -725,6 +768,27 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
                                     isDaemon = false;
                                 }  else {
                                     isDaemon = tmpO.equals("true");
+                                }
+
+                                tmpO = elt.getAttribute("periodic");
+                                if (tmpO == null) {
+                                    isPeriodic = false;
+                                }  else {
+                                    isPeriodic = tmpO.equals("true");
+                                }
+
+                                tmpO = elt.getAttribute("periodValue");
+                                if (tmpO == null) {
+                                    periodValue = "";
+                                }  else {
+                                    periodValue = tmpO;
+                                }
+
+                                tmpO = elt.getAttribute("unit");
+                                if (tmpO == null) {
+                                    unit = "ms";
+                                }  else {
+                                    unit = tmpO;
                                 }
                             }
                             if (elt.getTagName().equals("Attribute")) {

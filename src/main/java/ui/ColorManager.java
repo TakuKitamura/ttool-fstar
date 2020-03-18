@@ -173,11 +173,14 @@ public class ColorManager {
     //public static final Color AVATAR_BLOCK = new Color(158, 218, 227);
     //public static final Color AVATAR_BLOCK = new Color(149, 193, 210);
     public static  Color AVATAR_BLOCK = new Color(193, 218, 241);
+    public static  Color AVATAR_INTERFACE = new Color(0, 220, 162);
     public static  Color AVATAR_LIBRARYFUNCTION = new Color(237, 208, 14);
     //public static final Color AVATAR_DATATYPE = new Color(109, 193, 210);
     public static  Color AVATAR_DATATYPE = new Color(156, 220, 162);
     public static  Color AVATAR_SEND_SIGNAL = new Color(128, 180, 205);
+    public static  Color AVATAR_SEND_AMS_SIGNAL = new Color(153, 153, 255);
     public static  Color AVATAR_RECEIVE_SIGNAL = new Color(128, 180, 205);
+    public static  Color AVATAR_RECEIVE_AMS_SIGNAL = new Color(153, 153, 255);
     public static  Color AVATAR_LIBRARY_FUNCTION_CALL = new Color(128, 180, 205);
     //public static final Color AVATAR_GUARD = new Color(128, 180, 205);
     public static  Color AVATAR_GUARD = new Color(0, 89, 26);
@@ -282,6 +285,7 @@ public class ColorManager {
     public static void noColor() {
         UML_NOTE_BG = Color.white;
         AVATAR_BLOCK = Color.white;
+	AVATAR_INTERFACE = Color.white;
         AVATAR_DATATYPE = Color.white;
         AVATAR_STATE = Color.white;
         AVATAR_REQUIREMENT_TOP = Color.white;

@@ -417,6 +417,7 @@ public class TGUIAction extends AbstractAction {
     // AVATAR Block Diagram
     public static final int ABD_BLOCK = 289;
     public static final int ABD_CRYPTOBLOCK = 332;
+    public static final int AMS_INTERFACE = 527;
     public static final int ABD_DATATYPE = 324;
     public static final int ABD_COMPOSITION_CONNECTOR = 290;
     public static final int ABD_PORT_CONNECTOR = 295;
@@ -430,9 +431,12 @@ public class TGUIAction extends AbstractAction {
     public static final int ASMD_STOP = 294;
     public static final int ASMD_SEND_SIGNAL = 296;
     public static final int ASMD_RECEIVE_SIGNAL = 297;
+    public static final int ASMD_SEND_AMSSIGNAL = 525;
+    public static final int ASMD_RECEIVE_AMSSIGNAL = 526;
     public static final int ASMD_LIBRARY_FUNCTION_CALL = 432;
     //public static final int ASMD_PARALLEL = 298; Issue #69
     public static final int ASMD_STATE = 299;
+    public static final int ASMD_GPIO = 298;
     public static final int ASMD_CHOICE = 325;
     public static final int ASMD_RANDOM = 326;
     public static final int ASMD_SET_TIMER = 327;
@@ -526,6 +530,8 @@ public class TGUIAction extends AbstractAction {
     public static final int AAD_ACTIVITY = 357;
     public static final int AAD_ACTION = 358;
     public static final int AAD_STOP_FLOW = 359;
+    public static final int AAD_ACCEPT_AMS_ACTION = 360;
+    public static final int AAD_SEND_AMS_ACTION = 361;
     public static final int AAD_ACCEPT_EVENT_ACTION = 360;
     public static final int AAD_SEND_SIGNAL_ACTION = 361;
     public static final int AAD_PARTITION = 362;
@@ -677,7 +683,7 @@ public class TGUIAction extends AbstractAction {
 
     public static final int MOVE_ENABLED = 463;
     public static final int FIRST_DIAGRAM = 464;   
-    public static final int NB_ACTION = 525;
+    public static final int NB_ACTION = 528;
 
     private static final TAction [] actions = new TAction[NB_ACTION];
 
@@ -1307,6 +1313,7 @@ public class TGUIAction extends AbstractAction {
         // AVATAR Block Diagrams
         actions[ABD_BLOCK] = new TAction("abd-block", "Add a block", IconManager.imgic5000, IconManager.imgic5000, "Block", "Add a SysML Block to the currently opened AVATAR Block Diagram", 0);
         actions[ABD_CRYPTOBLOCK] = new TAction("abd-cryptoblock", "Add a crypto block", IconManager.imgic5000, IconManager.imgic5000, "Crypto block", "Add a SysML Crypto Block to the currently opened AVATAR Block Diagram", 0);
+	    actions[AMS_INTERFACE] = new TAction("interface", "Add an AMS interface", IconManager.imgic5000, IconManager.imgic5000, "interface", "Add an AMS interface to the currently opened AVATAR Block Diagram", 0);
         actions[ABD_DATATYPE] = new TAction("abd-datatype", "Add a data type", IconManager.imgic5034, IconManager.imgic5034, "Data type", "Add a SysML Block representing a Data Type to the currently opened AVATAR Block Diagram", 0);
         actions[ABD_COMPOSITION_CONNECTOR] = new TAction("abd-composition-connector", "Add a composition connector between blocks", IconManager.imgic5002, IconManager.imgic5002, "Composition connector", "Add a composition between blocks of the currently opened AVATAR Block Diagram", 0);
         actions[ABD_PORT_CONNECTOR] = new TAction("abd-port-connector", "Add a composition connector between blocks", IconManager.imgic5004, IconManager.imgic5004, "Port connector", "Add a port link between blocks of the currently opened AVATAR Block Diagram", 0);
@@ -1320,10 +1327,13 @@ public class TGUIAction extends AbstractAction {
         actions[ASMD_STOP] = new TAction("add-asmd-stop", "Add Stop", IconManager.imgic210, IconManager.imgic210, "Stop", "Add a termination state to the currently opened AVATAR state machine diagram", 0);
         actions[ASMD_SEND_SIGNAL] = new TAction("add-asmd-sendsignal", "Send signal", IconManager.imgic2014, IconManager.imgic2014, "Send signal", "Add a send signal operator to the currently opened AVATAR state machine diagram", 0);
         actions[ASMD_RECEIVE_SIGNAL] = new TAction("add-asmd-receivesignal", "Receive signal", IconManager.imgic2016, IconManager.imgic2016, "Receive signal", "Add a receive signal operator to the currently opened AVATAR state machine diagram", 0);
+	 actions[ASMD_SEND_AMSSIGNAL] = new TAction("add-ams-sendsignal", "Send signal", IconManager.imgic2015, IconManager.imgic2015, "Send signal", "Add an AMS send signal operator to the currently opened AVATAR state machine diagram", 0);
+        actions[ASMD_RECEIVE_AMSSIGNAL] = new TAction("add-asmd-receivesignal", "Receive signal", IconManager.imgic2017, IconManager.imgic2017, "Receive signal", "Add an AMS receive signal operator to the currently opened AVATAR state machine diagram", 0);
         // TODO: change icon
         actions[ASMD_LIBRARY_FUNCTION_CALL] = new TAction("add-asmd-libraryfunctioncall", "Library function call", IconManager.imgic2018, IconManager.imgic2018, "Library function call", "Add a library function call to the currently opened AVATAR state machine diagram", 0);
         //actions[ASMD_PARALLEL] = new TAction("add-asmd-parallel", "Parallel", IconManager.imgic206, IconManager.imgic206, "Parallel", "Add a parallel operator to the currently opened AVATAR state machine diagram", 0);
         actions[ASMD_STATE] = new TAction("add-asmd-state", "State", IconManager.imgic5036, IconManager.imgic5036, "State", "Add a new state to the currently opened AVATAR state machine diagram", 0);
+	 actions[ASMD_GPIO] = new TAction("add-asmd-state", "GPIO State", IconManager.imgic5036, IconManager.imgic5036, "State", "Add a new GPIO state to the currently opened AVATAR state machine diagram", 0);
         actions[ASMD_CHOICE] = new TAction("add-asmd-choice", "Add Choice", IconManager.imgic208, IconManager.imgic208, "Choice", "Add a choice - non-deterministic or guarded - to the currently opened AVATAR state machine diagram", 0);
         actions[ASMD_RANDOM] = new TAction("add-asmd-random", "Add random", IconManager.imgic924, IconManager.imgic924, "Select random", "Add a random operator to the currently opened AVATAR State Machine diagram", 0);
         actions[ASMD_SET_TIMER] = new TAction("add-asmd-setrimer", "Set timer", IconManager.imgic5038, IconManager.imgic5038, "Set timer", "Add a set timer operator to the currently opened AVATAR State Machine diagram", 0);
@@ -1394,6 +1404,10 @@ public class TGUIAction extends AbstractAction {
         actions[AAD_STOP_FLOW] = new TAction("add-aad-stop-flow", "Stop flow", IconManager.imgic5046, IconManager.imgic5046, "Stop flow", "Add a stop flow state to the currently opened avatar activity diagram", 0);
         actions[AAD_SEND_SIGNAL_ACTION] = new TAction("add-add-send-signal-action", "Send signal", IconManager.imgic5050, IconManager.imgic5050, "Send signal", "Add a send signal operator to the currently opened avatar activity diagram", 0);
         actions[AAD_ACCEPT_EVENT_ACTION] = new TAction("add-add-accept-event-action", "Accept event", IconManager.imgic5056, IconManager.imgic5056, "Accept event", "Add an accept event operator to the currently opened avatar activity diagram", 0);
+
+ actions[AAD_SEND_AMS_ACTION] = new TAction("add-add-send-ams-action", "Send AMS signal", IconManager.imgic5050, IconManager.imgic5050, "Send AMS signal", "Add a send AMS signal operator to the currently opened avatar activity diagram", 0);
+        actions[AAD_ACCEPT_AMS_ACTION] = new TAction("add-add-accept-ams-action", "Accept AMS signal", IconManager.imgic5056, IconManager.imgic5056, "Accept AMS", "Add an accept AMS operator to the currently opened avatar activity diagram", 0);
+	
         actions[AAD_PARTITION] = new TAction("add-add-partition", "Partition", IconManager.imgic5052, IconManager.imgic5052, "Partition", "Add a partition to the currently opened avatar activity diagram", 0);
         actions[AAD_ALIGN_PARTITION] = new TAction("add-aad-align_partitions", "Align partitions", IconManager.imgic5054, IconManager.imgic5054, "Align partitions", "Align partitions of the currently opened avatar activity diagram", 0);
 

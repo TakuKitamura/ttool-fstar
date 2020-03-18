@@ -67,6 +67,11 @@ public class TMLTask extends TMLElement {
     private String operationMEC;
     private boolean isAttacker;
 
+
+    private boolean isPeriodic = false;
+    private String periodValue = "";
+    private String periodUnit = "ns";
+
     public TMLTask(String name, Object referenceToClass, Object referenceToActivityDiagram) {
         super(name, referenceToClass);
         //TraceManager.addDev("Creating new TMLTask:" + name);
@@ -87,6 +92,23 @@ public class TMLTask extends TMLElement {
     }
 
     public boolean isDaemon() {return isDaemon;}
+
+    public void setPeriodic(boolean _b, String _periodValue, String _unit) {
+        isPeriodic = _b;
+        periodValue = _periodValue;
+        periodUnit = _unit;
+    }
+
+    public String getPeriodUnit() {
+        return periodUnit;
+    }
+
+    public String getPeriodValue() {
+        return periodValue;
+    }
+
+
+    public boolean isPeriodic() {return isPeriodic;}
 
     public void setPriority(int _priority) {
         priority = _priority;
@@ -445,7 +467,13 @@ public class TMLTask extends TMLElement {
     }
 
     public String toXML() {
-        String s = new String("<TASK name=\"" + name + "\" priority=\"" + priority + "\" >\n");
+        String s = new String("<TASK name=\"" + name);
+        s += "\" priority=\"" + priority + "\" ";
+        s += " isDaemon=\"" + isDaemon() + "\" ";
+        s += " isPeriodic=\"" + isPeriodic() + "\" ";
+        s += " periodValue=\"" + getPeriodValue() + "\" ";
+        s += " periodUnit=\"" + getPeriodUnit() + "\" ";
+        s += ">\n";
         for (TMLAttribute attr : attributes) {
             s += attr.toXML();
         }
@@ -517,6 +545,9 @@ public class TMLTask extends TMLElement {
             return false;
         return operationType == tmlTask.operationType &&
                 isDaemon == tmlTask.isDaemon &&
+                isPeriodic == tmlTask.isPeriodic &&
+                periodValue.compareTo(tmlTask.getPeriodValue()) == 0 &&
+                periodUnit.compareTo(tmlTask.getPeriodUnit()) == 0 &&
                 isRequested == tmlTask.isRequested() &&
                 isAttacker == tmlTask.isAttacker &&
                 priority == tmlTask.getPriority() &&

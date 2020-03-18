@@ -43,6 +43,7 @@
 package ui;
 
 import avatartranslator.AvatarBlock;
+import avatartranslator.AvatarAMSInterface;
 import avatartranslator.AvatarLibraryFunction;
 import req.ebrdd.EBRDDComponent;
 import req.ebrdd.EBRDDGeneralComponent;
@@ -211,6 +212,18 @@ public class CorrespondanceTGElement implements CorrespondanceElement<TGComponen
              Object o = data.elementAt(index);
              if (o instanceof AvatarBlock) {
                 return (AvatarBlock)o;
+             }
+            return null;
+        }
+        return null;
+    }
+
+    	public AvatarAMSInterface getAvatarAMSInterface(TGComponent _tgc) {
+        int index = tg.indexOf(_tgc);
+         if ((index != -1) && (tg.size() > index)) {
+             Object o = data.elementAt(index);
+             if (o instanceof AvatarAMSInterface) {
+                return (AvatarAMSInterface)o;
              }
             return null;
         }

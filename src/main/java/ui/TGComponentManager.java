@@ -437,7 +437,8 @@ public class TGComponentManager {
     public static final int AVATARSMD_CONNECTOR = 5102;
     public static final int AVATARSMD_SEND_SIGNAL = 5103;
     public static final int AVATARSMD_RECEIVE_SIGNAL = 5104;
-    
+    public static final int AVATARSMD_SEND_AMS_SIGNAL = 5113;
+    public static final int AVATARSMD_RECEIVE_AMS_SIGNAL = 5114;
     // Issue #69
     //public static final int AVATARSMD_PARALLEL = 5105;
     
@@ -525,6 +526,8 @@ public class TGComponentManager {
     public static final int AAD_STOP_FLOW = 5508;
     public static final int AAD_SEND_SIGNAL_ACTION = 5509;
     public static final int AAD_ACCEPT_EVENT_ACTION = 5510;
+     public static final int AAD_SEND_AMS_ACTION = 5512;
+    public static final int AAD_ACCEPT_AMS_ACTION = 5513;
     public static final int AAD_PARTITION = 5511;
 
 
@@ -603,11 +606,17 @@ public class TGComponentManager {
             case AVATARSMD_SEND_SIGNAL:
                 tgc = new AvatarSMDSendSignal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
+	    case AVATARSMD_SEND_AMS_SIGNAL:
+                tgc = new AvatarSMDSendAMSSignal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;	
             case AVATARSMD_LIBRARY_FUNCTION_CALL:
                 tgc = new AvatarSMDLibraryFunctionCall(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
             case AVATARSMD_RECEIVE_SIGNAL:
                 tgc = new AvatarSMDReceiveSignal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+		case AVATARSMD_RECEIVE_AMS_SIGNAL:
+                tgc = new AvatarSMDReceiveAMSSignal(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
 //              case AVATARSMD_PARALLEL: Issue #69
 //              tgc = new AvatarSMDParallel(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -728,6 +737,13 @@ public class TGComponentManager {
             case AAD_ACCEPT_EVENT_ACTION:
                 tgc = new AvatarADAcceptEventAction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
+	    case AAD_SEND_AMS_ACTION:
+                tgc = new AvatarADSendAMSAction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AAD_ACCEPT_AMS_ACTION:
+                tgc = new AvatarADAcceptAMSAction(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+		
             case AAD_PARTITION:
                 tgc = new AvatarADPartition(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
@@ -1785,6 +1801,10 @@ public class TGComponentManager {
             return AAD_SEND_SIGNAL_ACTION;
         } else if (tgc instanceof AvatarADAcceptEventAction) {
             return AAD_ACCEPT_EVENT_ACTION;
+	} else if (tgc instanceof AvatarADSendAMSAction) {
+            return AAD_SEND_AMS_ACTION;
+        } else if (tgc instanceof AvatarADAcceptAMSAction) {
+            return AAD_ACCEPT_AMS_ACTION;  
         } else if (tgc instanceof AvatarADPartition) {
             return AAD_PARTITION;
         } else if (tgc instanceof AvatarADAssociationConnector) {

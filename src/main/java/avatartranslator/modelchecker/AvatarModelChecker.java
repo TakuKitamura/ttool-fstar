@@ -292,7 +292,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
         nbOfThreads = Runtime.getRuntime().availableProcessors();
         TraceManager.addDev("Starting the model checking with " + nbOfThreads + " threads");
-        TraceManager.addDev("ignore internl state:" + ignoreInternalStates);
+        TraceManager.addDev("Ignore internal state:" + ignoreInternalStates);
         startModelChecking(nbOfThreads);
         TraceManager.addDev("Model checking done");
     }

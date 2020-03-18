@@ -82,10 +82,11 @@ public class JDialogSignalAssociation extends JDialogBase implements ActionListe
     private List<AvatarSignal> available1, available2;
     private AvatarBDPortConnector connector;
 
-    private JRadioButton synchronous, asynchronous;
+    private JRadioButton synchronous, asynchronous, AMS;
+    
     private JLabel labelFIFO;
     private JTextField sizeOfFIFO;
-    private JCheckBox blocking, isPrivate, isBroadcast, isLossy;
+    private JCheckBox blocking, isPrivate, isBroadcast, isLossy, isAMS;
     private JPanel panel1, panel2, panel3, panel4;
 
     private boolean cancelled = true;
@@ -265,15 +266,28 @@ public class JDialogSignalAssociation extends JDialogBase implements ActionListe
         asynchronous.setToolTipText("FIFO-based communication");
         asynchronous.addActionListener(this);
         panel3.add(asynchronous, c3);
+
+	AMS = new JRadioButton("AMS");
+        AMS.setToolTipText("Communication with analog component");
+        AMS.addActionListener(this);
+        panel3.add(AMS, c3);
+	
         ButtonGroup bt = new ButtonGroup();
+	
         bt.add(synchronous);
         bt.add(asynchronous);
-        asynchronous.setSelected(connector.isAsynchronous());
-        synchronous.setSelected(!connector.isAsynchronous());
+	bt.add(AMS);
+	
+        asynchronous.setSelected(connector.isAsynchronous()&&!(connector.isAMS()));
+        synchronous.setSelected(!(connector.isAsynchronous())&&!(connector.isAMS()));
+		AMS.setSelected((!connector.isAsynchronous())&&!(connector.isSynchronous()));
+	
         isLossy = new JCheckBox("Lossy channel");
         isLossy.setToolTipText("A lossy channel randomly losses messages");
         isLossy.setSelected(connector.isLossy());
         panel3.add(isLossy, c3);
+	
+
 
         c3.gridwidth = 3;
         labelFIFO = new JLabel("Size of FIFO:");
@@ -368,6 +382,9 @@ public class JDialogSignalAssociation extends JDialogBase implements ActionListe
         } else if (evt.getSource() == synchronous) {
             updateSynchronousElements();
         } else if (evt.getSource() == asynchronous) {
+            updateSynchronousElements();
+        }
+	else if (evt.getSource() == AMS) {
             updateSynchronousElements();
         }
     }
@@ -508,6 +525,10 @@ public class JDialogSignalAssociation extends JDialogBase implements ActionListe
         return asynchronous.isSelected();
     }
 
+    public boolean isAMS() {
+        return AMS.isSelected();
+    }
+    
     public String getSizeOfFIFO() {
         return sizeOfFIFO.getText();
     }

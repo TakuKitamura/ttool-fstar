@@ -78,8 +78,8 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
     private static String stereotype = "block";
 //    private static String stereotypeCrypto = "cryptoblock";
 
-    protected static List<String> BLOCK_TYPE_STR = new ArrayList<String>(Arrays.asList("block", "cryptoblock"));
-    protected static List<Color> BLOCK_TYPE_COLOR = new ArrayList<Color>(Arrays.asList(ColorManager.AVATAR_BLOCK, ColorManager.AVATAR_BLOCK));
+    protected static List<String> BLOCK_TYPE_STR = new ArrayList<String>(Arrays.asList("block", "cryptoblock","AMSinterface"));
+    protected static List<Color> BLOCK_TYPE_COLOR = new ArrayList<Color>(Arrays.asList(ColorManager.AVATAR_BLOCK, ColorManager.AVATAR_BLOCK, ColorManager.AVATAR_INTERFACE));
     private int typeStereotype = 0; // <<block>> by default
 
     private int maxFontSize = 12;

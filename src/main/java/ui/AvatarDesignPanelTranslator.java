@@ -89,11 +89,14 @@ public class AvatarDesignPanelTranslator {
 
     public AvatarSpecification generateAvatarSpecification(List<AvatarBDStateMachineOwner> _blocks) {
         List<AvatarBDBlock> blocks = new LinkedList<AvatarBDBlock>();
+	//	List<AvatarBDInterface> interfaces = new LinkedList<AvatarBDInterface>();
         List<AvatarBDLibraryFunction> libraryFunctions = new LinkedList<AvatarBDLibraryFunction>();
 
         for (AvatarBDStateMachineOwner owner : _blocks)
             if (owner instanceof AvatarBDBlock)
                 blocks.add((AvatarBDBlock) owner);
+	//  else if (owner instanceof AvatarBDInterface)
+        //        interfaces.add((AvatarBDInterface) owner);
             else
                 libraryFunctions.add((AvatarBDLibraryFunction) owner);
 
@@ -109,7 +112,9 @@ public class AvatarDesignPanelTranslator {
         nameTypeMap = new HashMap<String, String>();
         createLibraryFunctions(as, libraryFunctions);
         createBlocks(as, blocks);
+	//createInterfaces(as, interfaces);
         createRelationsBetweenBlocks(as, blocks);
+	//createRelationsBetweenBlocksAndInterfaces(as, blocks, interfaces);
         makeBlockStateMachines(as);
         createPragmas(as, blocks);
 
@@ -670,6 +675,10 @@ public class AvatarDesignPanelTranslator {
         _ab.addAttribute(this.createRegularAttribute(_ab, _a, _preName));
     }
 
+    private void addRegularAttributeInterface(AvatarAMSInterface _ai, TAttribute _a, String _preName) {
+        _ai.addAttribute(this.createRegularAttribute(_ai, _a, _preName));
+    }
+    
     private void createLibraryFunctions(AvatarSpecification _as, List<AvatarBDLibraryFunction> _libraryFunctions) {
         for (AvatarBDLibraryFunction libraryFunction : _libraryFunctions) {
             AvatarLibraryFunction alf = new AvatarLibraryFunction(libraryFunction.getFunctionName(), _as, libraryFunction);
@@ -869,6 +878,92 @@ public class AvatarDesignPanelTranslator {
         }
     }
 
+    //ajoute DG 28.02.
+
+    /* private void createInterfaces(AvatarSpecification _as, List<AvatarBDInterface> _interfaces) {
+     for (AvatarBDInterface interf : _interfaces) {
+     //for (AvatarBDInterface interf : _as.getListOfInterfaces()) {
+            AvatarAMSInterface ai = new AvatarAMSInterface(interf.getInterfaceName(), _as, interf);
+            _as.addInterface(ai);
+            listE.addCor(ai, interf);
+            interf.setAVATARID(ai.getID());
+
+            // Create attributes
+            for (TAttribute a : interf.getAttributeList()) {
+                if (a.getType() == TAttribute.INTEGER) {
+                    addRegularAttributeInterface(ai, a, "");
+                } else if (a.getType() == TAttribute.NATURAL) {
+                    addRegularAttributeInterface(ai, a, "");
+                } else if (a.getType() == TAttribute.BOOLEAN) {
+                    addRegularAttributeInterface(ai, a, "");
+                } else if (a.getType() == TAttribute.TIMER) {
+                    addRegularAttributeInterface(ai, a, "");
+                } else {
+                    // other
+                    // TraceManager.addDev(" -> Other type found: " + a.getTypeOther());
+                    List<TAttribute> types = adp.getAvatarBDPanel().getAttributesOfDataType(a.getTypeOther());
+                    if (types == null) {
+                        UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Unknown data type:  " + a.getTypeOther() + " used in " + ai.getName());
+                        ce.setTDiagramPanel(adp.getAvatarBDPanel());
+                        addCheckingError(ce);
+                        return;
+                    } else {
+                        if (types.size() == 0) {
+                            UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Data type definition must contain at least one attribute:  " + ai.getName());
+                            ce.setTDiagramPanel(adp.getAvatarBDPanel());
+                            addCheckingError(ce);
+                        } else {
+                            nameTypeMap.put(interf.getInterfaceName() + "." + a.getId(), a.getTypeOther());
+                            typeAttributesMap.put(a.getTypeOther(), types);
+                            for (TAttribute type : types)
+                                addRegularAttributeInterface(ai, type, a.getId() + "__");
+                        }
+                    }
+
+                }
+            }
+
+            // Create methods
+            for (ui.AvatarMethod uiam : interf.getMethodList()) {
+                avatartranslator.AvatarMethod atam = new avatartranslator.AvatarMethod(uiam.getId(), uiam);
+                atam.setImplementationProvided(uiam.isImplementationProvided());
+                ai.addMethod(atam);
+                makeParameters(ai, atam, uiam);
+                makeReturnParameters(ai, interf, atam, uiam);
+            }
+
+            // Create signals
+            for (ui.AvatarSignal uias : interf.getSignalList()) {
+                avatartranslator.AvatarSignal atas;
+                if (uias.getInOut() == AvatarSignal.IN) {
+                    atas = new avatartranslator.AvatarSignal(uias.getId(), avatartranslator.AvatarSignal.IN, uias);
+                } else {
+                    atas = new avatartranslator.AvatarSignal(uias.getId(), avatartranslator.AvatarSignal.OUT, uias);
+                }
+                ai.addSignal(atas);
+                makeParameters(ai, atas, uias);
+            }
+
+            // Put global code
+            ai.addGlobalCode(interf.getGlobalCode());
+
+        }
+
+        // Make interface hierarchy
+        for (AvatarAMSInterface interf : _as.getListOfInterfaces()) {
+            TGComponent tgc1 = listE.getTG(interf);
+            if ((tgc1 != null) && (tgc1.getFather() != null)) {
+                TGComponent tgc2 = tgc1.getFather();
+                AvatarAMSInterface ai = listE.getAvatarAMSInterface(tgc2);
+                if (ai != null) {
+                    interf.setFather(ai);
+                }
+            }
+        }
+	}*/
+    
+    //fin ajoute DG
+    
     private void makeBlockStateMachines(AvatarSpecification _as) {
         // Make state machine of blocks
         for (AvatarBlock block : _as.getListOfBlocks())
@@ -2102,6 +2197,89 @@ public class AvatarDesignPanelTranslator {
         return null;
     }
 
+    // ajoute DG
+
+    /*  private void createRelationsBetweenBlocksAndInterfaces(AvatarSpecification _as, List<AvatarBDBlock> _blocks, List<AvatarBDInterface> _interfaces) {
+        adp.getAvatarBDPanel().updateAllSignalsOnConnectors();
+        Iterator<TGComponent> iterator = adp.getAvatarBDPanel().getComponentList().listIterator();
+
+        TGComponent tgc;
+        AvatarBDPortConnector port;
+        AvatarBDBlock block;	
+	AvatarBDInterface interf;
+        List<String> l1, l2;
+        int i;
+        String name1, name2;
+        AvatarInterfaceRelation r;      
+	AvatarBlock b;
+	AvatarAMSInterface interf2;
+        avatartranslator.AvatarSignal atas1, atas2;
+
+        while (iterator.hasNext()) {
+            tgc = iterator.next();
+
+            if (tgc instanceof AvatarBDPortConnector) {
+                port = (AvatarBDPortConnector) tgc;
+		
+                block = port.getAvatarBDBlock1();
+                interf = port.getAvatarBDInterface2();
+	       
+                //TraceManager.addDev("Searching block #1 with name " + block1.getBlockName() + " and block #2 with name " + block2.getBlockName());
+                b = _as.getBlockWithName(block.getBlockName());
+                interf2 = _as.getAMSInterfaceWithName(interf.getInterfaceName());
+
+                if ((b != null) && (interf2 != null)) {
+                    //TraceManager.addDev("B1 and B2 are not null");
+                    r = new AvatarInterfaceRelation("relation", b, interf2, tgc);
+                    // Signals of l1
+                    l1 = port.getListOfSignalsOrigin();
+                    l2 = port.getListOfSignalsDestination();
+
+                    for (i = 0; i < l1.size(); i++) {
+                        name1 = AvatarSignal.getSignalNameFromFullSignalString(l1.get(i));
+                        name2 = AvatarSignal.getSignalNameFromFullSignalString(l2.get(i));
+                        //TraceManager.addDev("Searching signal with name " + name1 +  " in block " + b1.getName());
+                        atas1 = b.getAvatarSignalWithName(name1);
+                        atas2 = interf2.getAvatarSignalWithName(name2);
+
+                        if ((atas1 != null) && (atas2 != null)) {
+                            if (atas1.isCompatibleWith(atas2)) {
+                                //TraceManager.addDev("Signals " + atas1 + " and " + atas2 + " are compatible");
+                                r.addSignals(atas1, atas2);
+                            } else {
+                                //TraceManager.addDev("Signals " + atas1 + " and " + atas2 + " are NOT compatible");
+                                UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Wrong signal association betwen " + atas1 + " and " + atas2);
+                                // TODO: adapt
+                                // ce.setAvatarBlock(_ab);
+                                ce.setTDiagramPanel(tgc.getTDiagramPanel());
+                                ce.setTGComponent(tgc);
+                                addCheckingError(ce);
+                            }
+                        } else {
+                            TraceManager.addDev("Null signals in AVATAR relation: " + name1 + " " + name2);
+                        }
+                    }
+
+                    // Attribute of the relation
+                    r.setBlocking(port.isBlocking());
+                    r.setAsynchronous(port.isAsynchronous());
+		    r.setAMS(port.isAMS());
+                    r.setSizeOfFIFO(port.getSizeOfFIFO());
+                    r.setPrivate(port.isPrivate());
+                    r.setBroadcast(port.isBroadcast());
+                    r.setLossy(port.isLossy());
+
+                    _as.addInterfaceRelation(r);
+                } else {
+                    TraceManager.addDev("Null block b=" + b + " interface =" + interf2);
+                }
+            }
+        }
+    }
+
+    */
+    //fin ajoute DG
+	
     private void createRelationsBetweenBlocks(AvatarSpecification _as, List<AvatarBDBlock> _blocks) {
         adp.getAvatarBDPanel().updateAllSignalsOnConnectors();
         Iterator<TGComponent> iterator = adp.getAvatarBDPanel().getComponentList().listIterator();

@@ -527,6 +527,12 @@ std::string TMLTask::determineHTMLCellClass( 	std::map<TMLTask*, std::string> &t
 	return taskColors[ task ];
 }
 
+void TMLTask::removeTrans(int numberOfTrans) {
+    if (numberOfTrans == 1) {
+        _transactList.clear();
+    }
+}
+
 void TMLTask::schedule2HTML(std::ofstream& myfile) const {    
   //	myfile << "<h2><span>Scheduling for device: "<< _name << "</span></h2>" << std::endl;
   myfile << SCHED_HTML_DIV << SCHED_HTML_BOARD;

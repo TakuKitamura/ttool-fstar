@@ -126,11 +126,13 @@ public class TransactionTableModel extends AbstractTableModel {
     }
 
     public synchronized void setData(Vector<SimulationTransaction> _trans) {
-	data = new SimulationTransaction[_trans.size()];
-	for(int i=0; i<_trans.size(); i++) {
-	    data[i] = _trans.get(i);
-	}
-	fireTableStructureChanged();
+        if(_trans != null){
+            data = new SimulationTransaction[_trans.size()];
+            for(int i=0; i<_trans.size(); i++) {
+                data[i] = _trans.get(i);
+            }
+            fireTableStructureChanged();
+        }
     }
 
 }
