@@ -554,10 +554,12 @@ public class AvatarRDRequirement extends TGCScalableWithInternalComponent implem
                     }
 
 
-                    int size = graphics.getFontMetrics().stringWidth(s) + iconSize + 5;
-                    minDesiredWidth = Math.max(size, minWidth);
-                    if (minDesiredWidth != width) {
-                        newSizeForSon(null);
+                    if (graphics != null) {
+                        int size = graphics.getFontMetrics().stringWidth(s) + iconSize + 5;
+                        minDesiredWidth = Math.max(size, minWidth);
+                        if (minDesiredWidth != width) {
+                            newSizeForSon(null);
+                        }
                     }
                     setValue(s);
                     return true;
