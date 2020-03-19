@@ -3425,6 +3425,23 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             startSimulation();
             //TraceManager.addDev("Start simulation!");
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_STOP_AND_CLOSE_ALL].getActionCommand()))  {
+            for(TURTLEPanel _tab : mgui.getTabs()) {
+                if(_tab instanceof TMLArchiPanel) {
+                    for (TDiagramPanel tdp : _tab.getPanels()) {
+                        if (tdp instanceof TMLArchiDiagramPanel) {
+                            mgui.selectTab(tdp);
+                            for (TGComponent tg : tdp.getComponentList()) {
+                                if (tg instanceof TMLArchiCPUNode) {
+                                    TMLArchiCPUNode tmpcpu = (TMLArchiCPUNode) tg;
+                                    tmpcpu.resetTransactionsList();
+                                }
+                            }
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
             killSimulator();
             close();
             return;
