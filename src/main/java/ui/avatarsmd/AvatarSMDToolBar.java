@@ -68,8 +68,12 @@ public class AvatarSMDToolBar extends TToolBar {
         mgui.actions[TGUIAction.ASMD_STOP].setEnabled(b);
 		mgui.actions[TGUIAction.ASMD_SEND_SIGNAL].setEnabled(b);
         mgui.actions[TGUIAction.ASMD_RECEIVE_SIGNAL].setEnabled(b);
-		mgui.actions[TGUIAction.ASMD_SEND_AMSSIGNAL].setEnabled(b);
-        mgui.actions[TGUIAction.ASMD_RECEIVE_AMSSIGNAL].setEnabled(b);
+
+        if (mgui.isExperimentalOn()) {
+            mgui.actions[TGUIAction.ASMD_SEND_AMSSIGNAL].setEnabled(b);
+            mgui.actions[TGUIAction.ASMD_RECEIVE_AMSSIGNAL].setEnabled(b);
+        }
+
         mgui.actions[TGUIAction.ASMD_LIBRARY_FUNCTION_CALL].setEnabled(b);
 		//mgui.actions[TGUIAction.ASMD_PARALLEL].setEnabled(b);
 		mgui.actions[TGUIAction.ASMD_STATE].setEnabled(b);

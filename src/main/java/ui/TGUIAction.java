@@ -1327,14 +1327,19 @@ public class TGUIAction extends AbstractAction {
         actions[ASMD_START] = new TAction("add-asmd-start", "Add Start state", IconManager.imgic222, IconManager.imgic222, "Start", "Add a start state to the currently opened AVATAR state machine diagram", 0);
         actions[ASMD_STOP] = new TAction("add-asmd-stop", "Add Stop", IconManager.imgic210, IconManager.imgic210, "Stop", "Add a termination state to the currently opened AVATAR state machine diagram", 0);
         actions[ASMD_SEND_SIGNAL] = new TAction("add-asmd-sendsignal", "Send signal", IconManager.imgic2014, IconManager.imgic2014, "Send signal", "Add a send signal operator to the currently opened AVATAR state machine diagram", 0);
-        actions[ASMD_RECEIVE_SIGNAL] = new TAction("add-asmd-receivesignal", "Receive signal", IconManager.imgic2016, IconManager.imgic2016, "Receive signal", "Add a receive signal operator to the currently opened AVATAR state machine diagram", 0);
-	 actions[ASMD_SEND_AMSSIGNAL] = new TAction("add-ams-sendsignal", "Send signal", IconManager.imgic2015, IconManager.imgic2015, "Send signal", "Add an AMS send signal operator to the currently opened AVATAR state machine diagram", 0);
-        actions[ASMD_RECEIVE_AMSSIGNAL] = new TAction("add-asmd-receivesignal", "Receive signal", IconManager.imgic2017, IconManager.imgic2017, "Receive signal", "Add an AMS receive signal operator to the currently opened AVATAR state machine diagram", 0);
+        actions[ASMD_RECEIVE_SIGNAL] = new TAction("add-asmd-receivesignal", "Receive signal", IconManager.imgic2016, IconManager.imgic2016,
+                "Receive signal", "Add a receive signal operator to the currently opened AVATAR state machine diagram", 0);
+
+        actions[ASMD_SEND_AMSSIGNAL] = new TAction("add-ams-sendsignal", "Send AMS signal", IconManager.imgic2015, IconManager.imgic2015, "Send AMS signal",
+                "Add an AMS send signal operator to the currently opened AVATAR state machine diagram", 0);
+        actions[ASMD_RECEIVE_AMSSIGNAL] = new TAction("add-asmd-receivesignal", "Receive AMS signal", IconManager.imgic2017, IconManager.imgic2017,
+                "Receive AMS signal", "Add an AMS receive signal operator to the currently opened AVATAR state machine diagram", 0);
+
         // TODO: change icon
         actions[ASMD_LIBRARY_FUNCTION_CALL] = new TAction("add-asmd-libraryfunctioncall", "Library function call", IconManager.imgic2018, IconManager.imgic2018, "Library function call", "Add a library function call to the currently opened AVATAR state machine diagram", 0);
         //actions[ASMD_PARALLEL] = new TAction("add-asmd-parallel", "Parallel", IconManager.imgic206, IconManager.imgic206, "Parallel", "Add a parallel operator to the currently opened AVATAR state machine diagram", 0);
         actions[ASMD_STATE] = new TAction("add-asmd-state", "State", IconManager.imgic5036, IconManager.imgic5036, "State", "Add a new state to the currently opened AVATAR state machine diagram", 0);
-	 actions[ASMD_GPIO] = new TAction("add-asmd-state", "GPIO State", IconManager.imgic5036, IconManager.imgic5036, "State", "Add a new GPIO state to the currently opened AVATAR state machine diagram", 0);
+	    actions[ASMD_GPIO] = new TAction("add-asmd-state", "GPIO State", IconManager.imgic5036, IconManager.imgic5036, "State", "Add a new GPIO state to the currently opened AVATAR state machine diagram", 0);
         actions[ASMD_CHOICE] = new TAction("add-asmd-choice", "Add Choice", IconManager.imgic208, IconManager.imgic208, "Choice", "Add a choice - non-deterministic or guarded - to the currently opened AVATAR state machine diagram", 0);
         actions[ASMD_RANDOM] = new TAction("add-asmd-random", "Add random", IconManager.imgic924, IconManager.imgic924, "Select random", "Add a random operator to the currently opened AVATAR State Machine diagram", 0);
         actions[ASMD_SET_TIMER] = new TAction("add-asmd-setrimer", "Set timer", IconManager.imgic5038, IconManager.imgic5038, "Set timer", "Add a set timer operator to the currently opened AVATAR State Machine diagram", 0);

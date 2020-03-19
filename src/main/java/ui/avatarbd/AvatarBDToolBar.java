@@ -79,7 +79,9 @@ public class AvatarBDToolBar extends TToolBar {
         mgui.actions[TGUIAction.CONNECTOR_COMMENT].setEnabled(b);
 
         mgui.actions[TGUIAction.ABD_BLOCK].setEnabled(b);
-	mgui.actions[TGUIAction.AMS_INTERFACE].setEnabled(b);
+        if (mgui.isExperimentalOn()) {
+            mgui.actions[TGUIAction.AMS_INTERFACE].setEnabled(b);
+        }
         mgui.actions[TGUIAction.ABD_CRYPTOBLOCK].setEnabled(b);
         mgui.actions[TGUIAction.ABD_DATATYPE].setEnabled(b);
         mgui.actions[TGUIAction.ABD_COMPOSITION_CONNECTOR].setEnabled(b);
