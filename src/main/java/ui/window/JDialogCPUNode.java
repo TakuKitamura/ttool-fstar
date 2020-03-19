@@ -368,8 +368,8 @@ public class JDialogCPUNode extends JDialogBase implements ActionListener  {
         MECTypeCB.makeEndHelpButton(helpStrings[15], mgui, mgui.getHelpManager(), panel4, c4);
 
 
-        TraceManager.addDev("Transactions size=" + transactions.size());
-        if (transactions.size()!=0) {
+        if (transactions != null && transactions.size()!=0) {
+            TraceManager.addDev("Transactions size=" + transactions.size());
             TraceManager.addDev("On going simulation");
 
             panel5 = new JPanel();

@@ -1351,13 +1351,25 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
 
     switch (aParam1){
       //_end =oLastTrans->printEnd();
-    case 0:     //Run to next breakpoint
-      std::cout << "Run to next breakpoint." << std::endl;
-      aGlobMsg << TAG_MSGo << "Run to next breakpoint" << TAG_MSGc << std::endl;
-      _simTerm=runToNextBreakpoint(oLastTrans);
-      std::cout << "End Run to next breakpoint." << std::endl;
-      _end =oLastTrans->printEnd();
-      break;
+    case 0: {    //Run to next breakpoint
+          std::cout << "Run to next breakpoint." << std::endl;
+          aGlobMsg << TAG_MSGo << "Run to next breakpoint" << TAG_MSGc << std::endl;
+          _simTerm=runToNextBreakpoint(oLastTrans);
+          int tempDaemon = 0;
+          if (!_simComp->getNonDaemonTaskList().empty()) {
+             for (TaskList::const_iterator i=_simComp->getNonDaemonTaskList().begin(); i != _simComp->getNonDaemonTaskList().end(); ++i) {
+                if((*i)->getState()==3){
+                    tempDaemon ++;
+                }
+             }
+          }
+          if (tempDaemon < _simComp->getNonDaemonTaskList().size()) {
+             _simTerm = false;
+          }
+          std::cout << "End Run to next breakpoint." << std::endl;
+          _end =oLastTrans->printEnd();
+          break;
+      }
     case 1:     //Run up to trans x
       std::cout << "Run to transaction x." << std::endl;
       aGlobMsg << TAG_MSGo << MSG_CMDNIMPL << TAG_MSGc << std::endl;
