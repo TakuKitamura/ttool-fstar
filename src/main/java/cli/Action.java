@@ -616,7 +616,7 @@ public class Action extends Command {
                 amc.setComputeRG(true);
                 TraceManager.addDev("Starting model checking");
                 amc.startModelChecking();
-                System.out.println("Model checking done states:" + amc.getNbOfStates() +
+                System.out.println("Model checking done\nGraph: states:" + amc.getNbOfStates() +
                         " links:" + amc.getNbOfLinks() + "\n");
 
                 // Saving graph
@@ -627,18 +627,19 @@ public class Action extends Command {
                     graphPath =  System.getProperty("user.dir") + "/" + "rg$.aut";
                 }
 
-                System.out.println("graphpath=" + graphPath);
+
 
                 if (graphPath.indexOf("?") != -1) {
-                    System.out.println("question mark found");
+                    //System.out.println("Question mark found");
                     DateFormat dateFormat = new SimpleDateFormat("_yyyyMMdd_HHmmss");
                     Date date = new Date();
                     String dateAndTime = dateFormat.format(date);
                     autfile = Conversion.replaceAllChar(graphPath, '?', dateAndTime);
-                    System.out.println("graphpath=" + graphPath);
+                    //System.out.println("graphpath=" + graphPath);
                 } else {
                     autfile = graphPath;
                 }
+                System.out.println("graphpath=" + graphPath);
 
                 System.out.println("autfile=" + autfile);
 

@@ -60,6 +60,7 @@ import java.util.*;
  */
 public class Print extends Command  {
     private final static String TABS = "tabs";
+    private final static String DIR = "dir";
 
     public Print() {
 
@@ -127,7 +128,21 @@ public class Print extends Command  {
                 return null;
             }
         };
+        Command dir = new Command() {
+            public String getCommand() { return DIR; }
+            public String getShortCommand() { return "d"; }
+            public String getDescription() { return "Printing the default directory"; }
+
+            public  String executeCommand(String command, Interpreter interpreter) {
+
+
+                System.out.println("Defautl directory: " +  System.getProperty("user.dir"));
+
+                return null;
+            }
+        };
         addAndSortSubcommand(tabs);
+        addAndSortSubcommand(dir);
 
     }
 
