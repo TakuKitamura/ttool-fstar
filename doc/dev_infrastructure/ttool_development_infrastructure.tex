@@ -913,8 +913,12 @@ or
 \begin{verbatim}
 gradle :ttool:test
 \end{verbatim}
+for a specific sub-project.\\
 
-for a specific sub-project.
+It, is also possible to run a given test, e.g.:
+\begin{verbatim}
+gradle :ttool:test -i --test cli.CLIAvatarModelCheckerTest
+\end{verbatim}
 
 A report is then generated under
 \texttt{<project>/build/reports/tests/test/index.html}.
