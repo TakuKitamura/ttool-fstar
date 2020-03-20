@@ -76,13 +76,9 @@ public class AvatarBDInterface extends TGCScalableWithInternalComponent implemen
 //    private int textY1 = 3;
 //    private int textX = 7;
 
-    private static String stereotype = "block";
-//    private static String stereotypeCrypto = "cryptoblock";
+    private static String stereotype = "amsinterface";
+    private static Color stereotypeColor = ColorManager.AVATAR_INTERFACE;
 
-    protected static List<String> BLOCK_TYPE_STR = new ArrayList<String>(Arrays.asList("block", "cryptoblock"));
-    //protected static List<Color> BLOCK_TYPE_COLOR = new ArrayList<Color>(Arrays.asList(ColorManager.AVATAR_BLOCK, ColorManager.AVATAR_BLOCK));
-    protected static List<Color> BLOCK_TYPE_COLOR = new ArrayList<Color>(Arrays.asList(ColorManager.AVATAR_INTERFACE, ColorManager.AVATAR_INTERFACE));
-    private int typeStereotype = 0; // <<block>> by default
 
     private int maxFontSize = 12;
     //    private int minFontSize = 4;
@@ -196,7 +192,7 @@ public class AvatarBDInterface extends TGCScalableWithInternalComponent implemen
         //Rectangle
         Color c = graph.getColor();
         graph.drawRect(this.x, this.y, this.width, this.height);
-        graph.setColor(BLOCK_TYPE_COLOR.get(typeStereotype));
+        graph.setColor(stereotypeColor);
         graph.fillRect(this.x + 1, this.y + 1, this.width - 1, this.height - 1);
         graph.setColor(c);
 
@@ -229,7 +225,7 @@ public class AvatarBDInterface extends TGCScalableWithInternalComponent implemen
 //        Font font = graph.getFont();
 
 
-        String ster = BLOCK_TYPE_STR.get(typeStereotype);
+        String ster = stereotype;
         int w = graph.getFontMetrics().stringWidth(ster);
         h = graph.getFontMetrics().getAscent() + graph.getFontMetrics().getLeading() + textY;
         graph.setFont(f.deriveFont(Font.BOLD));
@@ -849,20 +845,10 @@ public class AvatarBDInterface extends TGCScalableWithInternalComponent implemen
         // On the name ?
         //TraceManager.addDev("_y=" + _y + " limitName=" + limitName);
         if ((limitName == -1) || _y < limitName) {
-            JDialogIDAndStereotype dialog = new JDialogIDAndStereotype(frame, "Setting Interface ID",
-                    BLOCK_TYPE_STR.toArray(new String[0]), getValue
-                    (), typeStereotype, BLOCK_TYPE_COLOR.toArray(new Color[0]), ColorManager.AVATAR_INTERFACE);
-            //dialog.setSize(400, 300);
-            GraphicLib.centerOnParent(dialog, 400, 300);
-            // dialog.show(); // blocked until dialog has been closed
-            oldValue = value;
-            dialog.setVisible(true);
-
-            if (dialog.hasBeenCancelled()) {
-                return false;
-            }
-
-            String s = dialog.getName();
+            String s = (String) JOptionPane.showInputDialog(frame, "Library Function Name",
+                    "setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
+                    null,
+                    this.getValue());
 
             if ((s != null) && (s.length() > 0)) {
                 //boolean b;
@@ -899,33 +885,6 @@ public class AvatarBDInterface extends TGCScalableWithInternalComponent implemen
                 }
 
 
-                // Setting stereotype
-                s = dialog.getStereotype().trim();
-
-                if (!TAttribute.isAValidId(s, false, false, false)) {
-                    JOptionPane.showMessageDialog(frame,
-                            "Could not use the new stereotype: the new stereotype name is not valid",
-                            "Error",
-                            JOptionPane.INFORMATION_MESSAGE);
-                    return false;
-                }
-
-                int rgb = dialog.getColor();
-
-                //TraceManager.addDev("RGBColor:" + rgb + " vs default color:" + ColorManager.AVATAR_BLOCK.getRGB());
-
-                addStereotype(s, rgb);
-
-                //TraceManager.addDev("My stereotype=" + BLOCK_TYPE_STR.get(typeStereotype) + " color=" + BLOCK_TYPE_COLOR.get(typeStereotype).getRGB());
-
-
-                if (isCryptoBlock()) {
-                    addCryptoElements();
-                } else {
-                    int tmpSter = typeStereotype;
-                    removeCryptoElements();
-                    typeStereotype = tmpSter;
-                }
 
 
                 return true;
@@ -1035,7 +994,7 @@ public class AvatarBDInterface extends TGCScalableWithInternalComponent implemen
 
     @Override
     public int getType() {
-        return TGComponentManager.AVATARBD_BLOCK;
+        return TGComponentManager.AVATARBD_AMS_INTERFACE;
     }
 
     @Override
@@ -1133,12 +1092,7 @@ public class AvatarBDInterface extends TGCScalableWithInternalComponent implemen
     @Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
-        sb.append("<blockType data=\"");
-        sb.append(BLOCK_TYPE_STR.get(typeStereotype));
-        sb.append("\" color=\"");
-        sb.append(BLOCK_TYPE_COLOR.get(typeStereotype).getRGB());
-        sb.append("\" />\n");
-        sb.append("<CryptoBlock value=\"" + isCryptoBlock() + "\" />\n");
+
         for (TAttribute a : this.myAttributes) {
             sb.append("<Attribute access=\"");
             sb.append(a.getAccess());
@@ -1245,30 +1199,7 @@ public class AvatarBDInterface extends TGCScalableWithInternalComponent implemen
                                     this.myAttributes.add(ta);
                                 }
                             }
-                            if (elt.getTagName().equals("blockType")) {
-                                //
-                                s = elt.getAttribute("data");
-                                String tmp3 = elt.getAttribute("color");
-                                //TraceManager.addDev("stereotype=" + s + " color=" + tmp3);
-                                int rgb = ColorManager.AVATAR_REQUIREMENT_TOP.getRGB();
-                                try {
-                                    rgb = Integer.decode(tmp3).intValue();
-                                } catch (Exception e) {
-                                }
-                                if (s.equals("null")) {
-                                    typeStereotype = 0;
-                                } else {
-                                    try {
-                                        typeStereotype = Integer.decode(s).intValue(); // default stereo: old way
-                                    } catch (Exception e) {
-                                        addStereotype(s, rgb);
-                                    }
-                                }
-                                if (typeStereotype > (BLOCK_TYPE_STR.size() - 1)) {
-                                    typeStereotype = 0;
-                                }
 
-                            }
                             if (elt.getTagName().equals("Method")) {
                                 //
                                 method = elt.getAttribute("value");
@@ -1285,7 +1216,7 @@ public class AvatarBDInterface extends TGCScalableWithInternalComponent implemen
 
                                 //TraceManager.addDev("Method = " + method + ". Starting with aencrypt?");
                                 if (method.startsWith("bool verifyMAC(")) {
-                                    typeStereotype = 1;
+
 
                                     //TraceManager.addDev("Add crypto methods");
                                     //addCryptoElements();
@@ -1335,9 +1266,6 @@ public class AvatarBDInterface extends TGCScalableWithInternalComponent implemen
         }
 
 
-        if (isCryptoBlock()) {
-            addCryptoElements();
-        }
 
         if (tmpGlobalCode.trim().length() == 0) {
             globalCode = null;
@@ -1348,37 +1276,7 @@ public class AvatarBDInterface extends TGCScalableWithInternalComponent implemen
         //TraceManager.addDev("LEP End Block  = " + this);
     }
 
-    public boolean addStereotype(String s, int rgb) {
-        //TraceManager.addDev("Adding stereotype for " + s + " with color " + rgb);
-        int index = -1;
-        String sLower = s.toLowerCase();
-        for (int i = 0; i < BLOCK_TYPE_STR.size(); i++) {
-            if (BLOCK_TYPE_STR.get(i).toLowerCase().compareTo(sLower) == 0) {
-                index = i;
-                break;
-            }
-        }
 
-        // Found stereotype
-        if (index != -1) {
-            //TraceManager.addDev("Found stereotype");
-            typeStereotype = index;
-            if (index > 0) {
-                //TraceManager.addDev("Setting new color");
-                BLOCK_TYPE_COLOR.set(index, new Color(rgb));
-            }
-            return false;
-
-            // Must add a new stereotype
-        } else {
-            //TraceManager.addDev("No stereotype found: adding" + s + " with color " + rgb);
-            BLOCK_TYPE_STR.add(s);
-            BLOCK_TYPE_COLOR.add(new Color(rgb));
-            typeStereotype = BLOCK_TYPE_STR.size() - 1;
-            //TraceManager.addDev("Stereotype =" + BLOCK_TYPE_STR.get(typeStereotype) + " typestereotype=" + typeStereotype);
-            return true;
-        }
-    }
 
     public String getInterfaceName() {
         return value;
@@ -1622,23 +1520,7 @@ public class AvatarBDInterface extends TGCScalableWithInternalComponent implemen
         return ((AvatarDesignPanel) (tdp.tp)).getAvatarSMDPanel(getInterfaceName());
     }
 
-    public boolean isCryptoBlock() {
-        return typeStereotype == 1;
-    }
 
-    public void removeCryptoElements() {
-        typeStereotype = 0;
-
-        for (String method : AvatarMethod.cryptoMethods)
-            this.removeMethodIfApplicable(method);
-    }
-
-    public void addCryptoElements() {
-        typeStereotype = 1;
-
-        for (String method : AvatarMethod.cryptoMethods)
-            this.addMethodIfApplicable(method);
-    }
 
     private void removeMethodIfApplicable(String methodString) {
         Iterator<AvatarMethod> iterator = this.myMethods.iterator();

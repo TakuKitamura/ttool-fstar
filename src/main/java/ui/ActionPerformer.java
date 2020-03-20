@@ -348,7 +348,7 @@ public class ActionPerformer {
         } else if (command.equals(mgui.actions[TGUIAction.ABD_BLOCK].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARBD_BLOCK);
 	    } else if (command.equals(mgui.actions[TGUIAction.AMS_INTERFACE].getActionCommand())) {
-            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARBD_BLOCK);
+            mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARBD_AMS_INTERFACE);
         } else if (command.equals(mgui.actions[TGUIAction.ABD_CRYPTOBLOCK].getActionCommand())) {
             mgui.actionOnButton(TGComponentManager.COMPONENT, TGComponentManager.AVATARBD_CRYPTOBLOCK);
         } else if (command.equals(mgui.actions[TGUIAction.ABD_DATATYPE].getActionCommand())) {

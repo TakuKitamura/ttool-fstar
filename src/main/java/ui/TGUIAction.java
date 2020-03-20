@@ -1115,7 +1115,7 @@ public class TGUIAction extends AbstractAction {
         actions[TMLAD_SEND_EVENT] = new TAction("add-tmladd-send-event", "Send event", IconManager.imgic904, IconManager.imgic904, "Send event", "Add a send event operator to the currently opened TML activity diagram", 0);
         actions[TMLAD_WAIT_EVENT] = new TAction("add-tmladd-wait-event", "Wait event", IconManager.imgic908, IconManager.imgic908, "Wait event", "Add a wait event operator to the currently opened TML activity diagram", 0);      
         actions[TMLAD_NOTIFIED_EVENT] = new TAction("add-tmladd-notified-event", "Notified event", IconManager.imgic918, IconManager.imgic918, "Notified event", "Add a notified event operator to the currently opened TML activity diagram", 0);
-	 actions[TMLAD_WRITE_CAMS] = new TAction("add-tmladd-write-cams", "Write to CAMS", IconManager.imgic904, IconManager.imgic905, "Write to CAMS", "Add a write CAMS operator to the currently opened TML activity diagram", 0);
+	    actions[TMLAD_WRITE_CAMS] = new TAction("add-tmladd-write-cams", "Write to CAMS", IconManager.imgic904, IconManager.imgic905, "Write to CAMS", "Add a write CAMS operator to the currently opened TML activity diagram", 0);
         actions[TMLAD_READ_CAMS] = new TAction("add-tmladd-read-cams", "Read CAMS", IconManager.imgic908, IconManager.imgic907, "Read CAMS", "Add a read CAMS operator to the currently opened TML activity diagram", 0);
 	
         actions[TMLAD_READ_CHANNEL] = new TAction("add-tmladd-read-channel", "Read in channel", IconManager.imgic906, IconManager.imgic906, "Read in channel", "Add a read to channel operator opened TML activity diagram", 0);
@@ -1201,7 +1201,7 @@ public class TGUIAction extends AbstractAction {
         actions[CAMS_CLUSTER] = new TAction("C-AMS-cluster", "Add a cluster", IconManager.imgic8003, IconManager.imgic8003, "Cluster", "Add a cluster to the currently opened SystemC-AMS Diagram", 0);
         actions[CAMS_GENCODE] = new TAction("C-AMS-gencode", "SystemC-AMS code generation",IconManager.imgic94, IconManager.imgic94, "Generate SystemC-AMS code", "SystemC-AMS diagram without check syntax", 0);
         actions[CAMS_BLOCK_GPIO2VCI] = new TAction("C-AMS-block-GPIO2VCI", "Add a block GPIO2VCI",IconManager.imgic8006, IconManager.imgic8006, "GPIO2VCI block", "Add a GPIO2VCI block to the currently opened SystemC-AMS Diagram", 0);
-	actions[CAMS_CLOCK] = new TAction("C-AMS-Clock", "Clock", IconManager.imgic8007, IconManager.imgic8007, "Clock", "Add a clock to the currently opened SystemC-AMS diagram", 0);
+	    actions[CAMS_CLOCK] = new TAction("C-AMS-Clock", "Clock", IconManager.imgic8007, IconManager.imgic8007, "Clock", "Add a clock to the currently opened SystemC-AMS diagram", 0);
         // ELN
         actions[ELN_EDIT] = new TAction("add-action-eln", "Action state", IconManager.imgic100, IconManager.imgic101, "Action state", "Add an action state to the currently opened ELN diagram", 0);
         actions[ELN_CONNECTOR] = new TAction("eln-connector", "Add a connection", IconManager.imgic202, IconManager.imgic202, "Connector", "Connects two block of the currently opened ELN Diagram", 0);
@@ -1314,7 +1314,8 @@ public class TGUIAction extends AbstractAction {
         // AVATAR Block Diagrams
         actions[ABD_BLOCK] = new TAction("abd-block", "Add a block", IconManager.imgic5000, IconManager.imgic5000, "Block", "Add a SysML Block to the currently opened AVATAR Block Diagram", 0);
         actions[ABD_CRYPTOBLOCK] = new TAction("abd-cryptoblock", "Add a crypto block", IconManager.imgic5000, IconManager.imgic5000, "Crypto block", "Add a SysML Crypto Block to the currently opened AVATAR Block Diagram", 0);
-	    actions[AMS_INTERFACE] = new TAction("interface", "Add an AMS interface", IconManager.imgic5000, IconManager.imgic5000, "interface", "Add an AMS interface to the currently opened AVATAR Block Diagram", 0);
+	    actions[AMS_INTERFACE] = new TAction("interface", "Add an AMS interface", IconManager.imgic5076, IconManager.imgic5076, "interface",
+                "Add an AMS interface to the currently opened AVATAR Block Diagram", 0);
         actions[ABD_DATATYPE] = new TAction("abd-datatype", "Add a data type", IconManager.imgic5034, IconManager.imgic5034, "Data type", "Add a SysML Block representing a Data Type to the currently opened AVATAR Block Diagram", 0);
         actions[ABD_COMPOSITION_CONNECTOR] = new TAction("abd-composition-connector", "Add a composition connector between blocks", IconManager.imgic5002, IconManager.imgic5002, "Composition connector", "Add a composition between blocks of the currently opened AVATAR Block Diagram", 0);
         actions[ABD_PORT_CONNECTOR] = new TAction("abd-port-connector", "Add a composition connector between blocks", IconManager.imgic5004, IconManager.imgic5004, "Port connector", "Add a port link between blocks of the currently opened AVATAR Block Diagram", 0);

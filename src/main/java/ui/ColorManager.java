@@ -173,7 +173,7 @@ public class ColorManager {
     //public static final Color AVATAR_BLOCK = new Color(158, 218, 227);
     //public static final Color AVATAR_BLOCK = new Color(149, 193, 210);
     public static  Color AVATAR_BLOCK = new Color(193, 218, 241);
-    public static  Color AVATAR_INTERFACE = new Color(0, 220, 162);
+    public static  Color AVATAR_INTERFACE = new Color(215, 217, 219);
     public static  Color AVATAR_LIBRARYFUNCTION = new Color(237, 208, 14);
     //public static final Color AVATAR_DATATYPE = new Color(109, 193, 210);
     public static  Color AVATAR_DATATYPE = new Color(156, 220, 162);
@@ -285,7 +285,7 @@ public class ColorManager {
     public static void noColor() {
         UML_NOTE_BG = Color.white;
         AVATAR_BLOCK = Color.white;
-	AVATAR_INTERFACE = Color.white;
+	    AVATAR_INTERFACE = Color.white;
         AVATAR_DATATYPE = Color.white;
         AVATAR_STATE = Color.white;
         AVATAR_REQUIREMENT_TOP = Color.white;
@@ -313,7 +313,7 @@ public class ColorManager {
         MEMORY_BOX = Color.white;
         DMA_BOX = Color.white;
         HWA_BOX = Color.white;
-	CAMS_BOX = Color.white;
+	    CAMS_BOX = Color.white;
         ATD_BLOCK = Color.white;
         ATD_ATTACK = Color.white;
         ATD_ROOT_ATTACK = Color.white;

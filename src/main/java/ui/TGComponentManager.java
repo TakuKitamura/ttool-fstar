@@ -430,6 +430,7 @@ public class TGComponentManager {
     public static final int AVATARBD_CRYPTOBLOCK = 5004;
     public static final int AVATARBD_LIBRARYFUNCTION = 5005;
     public static final int AVATARBD_CRYPTOLIBRARYFUNCTION = 5006;
+    public static final int AVATARBD_AMS_INTERFACE = 5008;
 
     // AVATAR SMD -> starts at 5100
     public static final int AVATARSMD_START_STATE = 5100;
@@ -582,6 +583,9 @@ public class TGComponentManager {
             // AVATAR
             case AVATARBD_BLOCK:
                 tgc = new AvatarBDBlock(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
+                break;
+            case AVATARBD_AMS_INTERFACE:
+                tgc = new AvatarBDInterface(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
                 break;
             case AVATARBD_CRYPTOBLOCK:
                 tgc = new AvatarBDBlock(x, y, tdp.getMinX(), tdp.getMaxX(), tdp.getMinY(), tdp.getMaxY(), false, null, tdp);
@@ -1577,6 +1581,8 @@ public class TGComponentManager {
             // AVATAR BD
         } else if (tgc instanceof AvatarBDBlock) {
             return AVATARBD_BLOCK;
+        } else if (tgc instanceof AvatarBDInterface) {
+            return AVATARBD_AMS_INTERFACE;
         } else if (tgc instanceof AvatarBDDataType) {
             return AVATARBD_DATATYPE;
         } else if (tgc instanceof AvatarBDCompositionConnector) {

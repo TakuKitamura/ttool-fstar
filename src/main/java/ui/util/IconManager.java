@@ -158,7 +158,7 @@ public class IconManager {
     public static ImageIcon imgic5040, imgic5042, imgic5044, imgic5046, imgic5048;
     public static ImageIcon imgic5050, imgic5052, imgic5054, imgic5056, imgic5058;
     public static ImageIcon imgic5060, imgic5062, imgic5064, imgic5066, imgic5068;
-    public static ImageIcon imgic5070, imgic5072, imgic5074;
+    public static ImageIcon imgic5070, imgic5072, imgic5074, imgic5076;
 
     public static ImageIcon imgic5100, imgic5102, imgic5104, imgic5106, imgic5108;
     public static ImageIcon imgic5110, imgic5112, imgic5113, imgic5114, imgic5116;
@@ -640,6 +640,7 @@ public class IconManager {
     private static String icon5070 = "avatarlibfunction.gif";
     private static String icon5072 = "scissors.png";
     private static String icon5074 = "avatarrdreqref.gif";
+    private static String icon5076 = "avataramsinterface.gif";
 
     private static String icon5100 = "avatarhead16.gif";
     private static String icon5102 = "avatarhead32.gif";
@@ -1115,7 +1116,7 @@ public class IconManager {
         imgic2014 = getIcon(icon2014);
         imgic2016 = getIcon(icon2016);
         imgic2018 = getIcon(icon2018);
-	imgic2015 = getIcon(icon2015);
+	    imgic2015 = getIcon(icon2015);
         imgic2017 = getIcon(icon2017);
 	
         imgic2100 = getIcon(icon2100);
@@ -1133,7 +1134,7 @@ public class IconManager {
         // AVATAR
         //imgic3000 = getIcon(icon3000);
         imgic5000 = getIcon(icon5000);
-	imgic5001 = getIcon(icon5001);
+	    imgic5001 = getIcon(icon5001);
         imgic5002 = getIcon(icon5002);
         imgic5004 = getIcon(icon5004);
         imgic5006 = getIcon(icon5006);
@@ -1174,6 +1175,7 @@ public class IconManager {
             img5072 = imgic5072.getImage();
         }
         imgic5074 = getIcon(icon5074);
+        imgic5076 = getIcon(icon5076);
 
         imgic5100 = getIcon(icon5100);
         imgic5102 = getIcon(icon5102);
