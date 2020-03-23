@@ -66,7 +66,9 @@ import javax.swing.DefaultListModel;
 import javax.swing.JApplet;
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 
 import org.apache.commons.math3.geometry.spherical.twod.Vertex;
 import org.apache.derby.tools.sysinfo;
@@ -157,11 +159,13 @@ public class DirectedGraphTranslator extends JApplet {
     // private TMLArchiPanel tmlap; // USed to retrieve the currently opened
     // architecture panel
     // private TMLMapping<TGComponent> tmap;
-    private TMLComponentDesignPanel tmlcdp;
+    // private TMLComponentDesignPanel tmlcdp;
 
     private TMLTask task, task1, task2;
 
     protected TMLActivity activity;
+    int nodeNbProgressBar = 0;
+    int nodeNb = 0;
 
     // List<HwNode> path;
 
@@ -180,7 +184,8 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     private static final Dimension DEFAULT_SIZE = new Dimension(530, 320);
-    private final List<TMLComponentDesignPanel> cpanels;
+    private List<TMLComponentDesignPanel> cpanels;
+
     private final List<HwLink> links;
     private final TMLMapping<TGComponent> tmap;
     private final HashMap<String, String> addedEdges = new HashMap<String, String>();
@@ -247,18 +252,37 @@ public class DirectedGraphTranslator extends JApplet {
     Vector<SimulationTransaction> relatedsimTraces = new Vector<SimulationTransaction>();
     Vector<SimulationTransaction> delayDueTosimTraces = new Vector<SimulationTransaction>();
 
+    JFrameLatencyDetailedAnalysis frameLatencyDetailedAnalysis;
+    JFrameCompareLatencyDetail frameCompareLatencyDetail;
+    int callingFrame;
+    int nbOfNodes = 0;
+
     HashMap<String, ArrayList<ArrayList<Integer>>> runnableTimePerDevice = new HashMap<String, ArrayList<ArrayList<Integer>>>();
 
     @SuppressWarnings("deprecation")
-    public DirectedGraphTranslator(TMLMapping<TGComponent> tmap1, List<TMLComponentDesignPanel> cpanels1) {
+    public DirectedGraphTranslator(JFrameLatencyDetailedAnalysis jFrameLatencyDetailedAnalysis, JFrameCompareLatencyDetail jframeCompareLatencyDetail,
+            TMLMapping<TGComponent> tmap1, List<TMLComponentDesignPanel> cpanels1, int i) {
 
         tmap = tmap1;
-        cpanels = cpanels1;
+        setCpanels(cpanels1);
 
         links = tmap.getTMLArchitecture().getHwLinks();
 
-        tmlcdp = cpanels.get(0);
+        // tmlcdp = getCpanels().get(0);
 
+        callingFrame = i;
+
+        if (callingFrame == 0)
+
+        {
+            frameLatencyDetailedAnalysis = jFrameLatencyDetailedAnalysis;
+        } else if (callingFrame == 1) {
+            frameCompareLatencyDetail = jframeCompareLatencyDetail;
+            // frameCompareLatencyDetail.pack();
+            // frameCompareLatencyDetail.revalidate();
+            // frameCompareLatencyDetail.repaint();
+
+        }
         DrawDirectedGraph();
 
         /*
@@ -287,6 +311,118 @@ public class DirectedGraphTranslator extends JApplet {
     // The main function to add the vertices and edges according to the model
 
     private void DrawDirectedGraph() {
+        nodeNbProgressBar = 0;
+
+        nodeNbProgressBar = tmap.getArch().getBUSs().size() + tmap.getArch().getHwBridge().size() + tmap.getArch().getHwA().size()
+                + tmap.getArch().getMemories().size() + tmap.getArch().getCPUs().size();
+
+        for (HwA node : tmap.getArch().getHwA()) {
+
+            if (tmap.getLisMappedTasks(node).size() > 0) {
+
+                nodeNbProgressBar = tmap.getLisMappedTasks(node).size() + nodeNbProgressBar;
+
+                for (TMLTask task : tmap.getLisMappedTasks(node)) {
+
+                    nodeNbProgressBar = task.getActivityDiagram().nElements() + nodeNbProgressBar;
+
+                }
+
+            }
+
+        }
+
+        for (HwNode node : tmap.getArch().getCPUs()) {
+
+            if (tmap.getLisMappedTasks(node).size() > 0) {
+
+                nodeNbProgressBar = tmap.getLisMappedTasks(node).size() + nodeNbProgressBar;
+
+                for (TMLTask task : tmap.getLisMappedTasks(node)) {
+
+                    nodeNbProgressBar = task.getActivityDiagram().nElements() + nodeNbProgressBar;
+
+                }
+
+            }
+        }
+
+        HashSet<String> mappedcomm = new HashSet<String>();
+
+        for (HwNode node : tmap.getArch().getBUSs()) {
+
+            if (tmap.getLisMappedChannels(node).size() > 0) {
+                for (TMLElement entry : tmap.getLisMappedChannels(node)) {
+
+                    if (!mappedcomm.contains(entry.getName())) {
+                        mappedcomm.add(entry.getName());
+                        nodeNbProgressBar++;
+
+                    }
+
+                }
+            }
+
+        }
+
+        for (HwNode node : tmap.getArch().getHwBridge()) {
+
+            if (tmap.getLisMappedChannels(node).size() > 0) {
+
+                for (TMLElement entry : tmap.getLisMappedChannels(node)) {
+                    if (!mappedcomm.contains(entry.getName())) {
+                        mappedcomm.add(entry.getName());
+                        nodeNbProgressBar++;
+
+                    }
+
+                }
+            }
+
+        }
+
+        for (HwNode node : tmap.getArch().getMemories()) {
+
+            if (tmap.getLisMappedChannels(node).size() > 0) {
+                for (TMLElement entry : tmap.getLisMappedChannels(node)) {
+                    if (!mappedcomm.contains(entry.getName())) {
+                        mappedcomm.add(entry.getName());
+                        nodeNbProgressBar++;
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        for (TMLChannel ch : tmap.getTMLModeling().getChannels()) {
+
+            if (!mappedcomm.contains(ch.getName())) {
+                mappedcomm.add(ch.getName());
+
+                nodeNbProgressBar++;
+
+            }
+
+        }
+
+        if (callingFrame == 0)
+
+        {
+            frameLatencyDetailedAnalysis.pbar.setMaximum(nodeNbProgressBar);
+            frameLatencyDetailedAnalysis.pbar.setMinimum(0);
+
+        }
+        if (callingFrame == 1)
+
+        {
+            frameCompareLatencyDetail.pbar.setMaximum(nodeNbProgressBar);
+            frameCompareLatencyDetail.pbar.setMinimum(0);
+        }
+
+        nbOfNodes = 0;
 
         HashMap<String, HashSet<String>> cpuTasks;
         HashMap<String, HashSet<TMLElement>> buschannel = new HashMap<String, HashSet<TMLElement>>();
@@ -300,7 +436,12 @@ public class DirectedGraphTranslator extends JApplet {
 
         for (HwNode node : tmap.getArch().getBUSs()) {
 
-            g.addVertex(node.getName());
+            if (!g.containsVertex(node.getName())) {
+                g.addVertex(node.getName());
+
+                updatemainBar("getBUSs");
+
+            }
 
             if (tmap.getLisMappedChannels(node).size() > 0) {
                 buschannel.put(node.getName(), tmap.getLisMappedChannels(node));
@@ -311,7 +452,12 @@ public class DirectedGraphTranslator extends JApplet {
 
         for (HwNode node : tmap.getArch().getHwBridge()) {
 
-            g.addVertex(node.getName());
+            if (!g.containsVertex(node.getName())) {
+                g.addVertex(node.getName());
+
+                updatemainBar("getHwBridge");
+
+            }
 
             if (tmap.getLisMappedChannels(node).size() > 0) {
                 bridgechannel.put(node.getName(), tmap.getLisMappedChannels(node));
@@ -322,7 +468,10 @@ public class DirectedGraphTranslator extends JApplet {
 
         for (HwA node : tmap.getArch().getHwA()) {
 
+            cpuTask = new HashMap<String, HashSet<TMLTask>>();
+
             if (tmap.getLisMappedTasks(node).size() > 0) {
+
                 cpuTask.put(node.getName(), tmap.getLisMappedTasks(node));
 
             }
@@ -338,7 +487,12 @@ public class DirectedGraphTranslator extends JApplet {
 
         for (HwNode node : tmap.getArch().getMemories()) {
 
-            g.addVertex(node.getName());
+            if (!g.containsVertex(node.getName())) {
+                g.addVertex(node.getName());
+
+                updatemainBar("getMemories");
+
+            }
 
             if (tmap.getLisMappedChannels(node).size() > 0) {
                 memorychannel.put(node.getName(), tmap.getLisMappedChannels(node));
@@ -354,7 +508,14 @@ public class DirectedGraphTranslator extends JApplet {
             for (TMLElement busCh : busChList) {
 
                 String ChannelName = busCh.getName();
-                g.addVertex(ChannelName);
+
+                if (!g.containsVertex(ChannelName)) {
+                    g.addVertex(ChannelName);
+
+                    updatemainBar("ChannelName");
+
+                }
+
                 g.addEdge(busName, ChannelName);
 
                 TMLChannel tmlch = (TMLChannel) busCh;
@@ -373,7 +534,13 @@ public class DirectedGraphTranslator extends JApplet {
             for (TMLElement busCh : busChList) {
 
                 String ChannelName = busCh.getName();
-                g.addVertex(ChannelName);
+                if (!g.containsVertex(ChannelName)) {
+                    g.addVertex(ChannelName);
+
+                    updatemainBar("ChannelName");
+
+                }
+
                 g.addEdge(busName, ChannelName);
             }
 
@@ -386,7 +553,13 @@ public class DirectedGraphTranslator extends JApplet {
             for (TMLElement busCh : busChList) {
 
                 String ChannelName = busCh.getName();
-                g.addVertex(ChannelName);
+                if (!g.containsVertex(ChannelName)) {
+                    g.addVertex(ChannelName);
+
+                    updatemainBar("ChannelName");
+
+                }
+
                 g.addEdge(busName, ChannelName);
             }
 
@@ -399,6 +572,7 @@ public class DirectedGraphTranslator extends JApplet {
 
             if (!g.vertexSet().contains(ch.getName())) {
                 g.addVertex(ch.getName());
+                updatemainBar(ch.getName());
             }
 
             if (!pathNodes.isEmpty()) {
@@ -427,7 +601,9 @@ public class DirectedGraphTranslator extends JApplet {
         SummaryCommMapping = tmap.getSummaryCommMapping();
 
         for (HwNode node : tmap.getArch().getCPUs()) {
+            cpuTask = new HashMap<String, HashSet<TMLTask>>();
             if (tmap.getLisMappedTasks(node).size() > 0) {
+
                 cpuTask.put(node.getName(), tmap.getLisMappedTasks(node));
 
             }
@@ -509,6 +685,22 @@ public class DirectedGraphTranslator extends JApplet {
     }
 
     // draw the vertices and edges for the tasks mapped to the CPUs
+
+    private void updatemainBar(String string) {
+
+        nbOfNodes++;
+
+        if (callingFrame == 0)
+
+        {
+            frameLatencyDetailedAnalysis.updateBar(nbOfNodes);
+        } else if (callingFrame == 1) {
+
+            frameCompareLatencyDetail.updateBar(nbOfNodes);
+
+        }
+
+    }
 
     public HashMap<String, HashSet<String>> getCPUTaskMap(HashMap<String, HashSet<TMLTask>> cpuTask) {
 
@@ -600,14 +792,14 @@ public class DirectedGraphTranslator extends JApplet {
 
             for (TMLTask task : value) {
 
-                for (TMLComponentDesignPanel dpPanel : cpanels) {
-                    String[] taskpanel = task.getName().split("__");
-
-                    if (dpPanel.getNameOfTab().equals(taskpanel[0])) {
-                        tmlcdp = dpPanel;
-                    }
-
-                }
+                /*
+                 * for (TMLComponentDesignPanel dpPanel : getCpanels()) { String[] taskpanel =
+                 * task.getName().split("__");
+                 * 
+                 * if (dpPanel.getNameOfTab().equals(taskpanel[0])) { tmlcdp = dpPanel; }
+                 * 
+                 * }
+                 */
                 // get the names and params of send events per task and their corresponding wait
                 // events
                 for (TMLSendEvent sendEvent : task.getSendEvents()) {
@@ -697,8 +889,15 @@ public class DirectedGraphTranslator extends JApplet {
                 }
 
                 // add the name of the task as a vertex
-                g.addVertex(key);
-                g.addVertex(task.getName());
+
+                if (!g.vertexSet().contains(key)) {
+                    g.addVertex(key);
+                    updatemainBar(key);
+                }
+                if (!g.vertexSet().contains(task.getName())) {
+                    g.addVertex(task.getName());
+                    updatemainBar(task.getName());
+                }
 
                 g.addEdge(key, task.getName());
 
@@ -747,6 +946,8 @@ public class DirectedGraphTranslator extends JApplet {
 
                     }
 
+                    updatemainBar(eventName);
+
                     if (currentElement.getNexts().size() > 1) {
                         for (TMLActivityElement ae : currentElement.getNexts()) {
                             multiNexts.add(ae);
@@ -767,6 +968,7 @@ public class DirectedGraphTranslator extends JApplet {
                                 + activity.getPrevious(currentElement).getID();
 
                         g.addVertex(taskEndName);
+
                         // allTasks.add(taskEndName);
 
                         if (!(activity.getPrevious(currentElement).getReferenceObject() instanceof TMLADSequence)) {
@@ -1961,33 +2163,30 @@ public class DirectedGraphTranslator extends JApplet {
             for (SimulationTransaction st : transFile1) {
                 Boolean onPath = false;
 
-               // if (Integer.valueOf(st.startTime) >= times1.get(i) && Integer.valueOf(st.startTime) < times2.get(i)) {
+                // if (Integer.valueOf(st.startTime) >= times1.get(i) &&
+                // Integer.valueOf(st.startTime) < times2.get(i)) {
 
-                    
-                    
-                    
-                    if (!(Integer.valueOf(st.startTime) < times1.get(i) && Integer.valueOf(st.endTime) < times1.get(i))
-                            && !(Integer.valueOf(st.startTime) > times2.get(i) && Integer.valueOf(st.endTime) > times2.get(i))) {
+                if (!(Integer.valueOf(st.startTime) < times1.get(i) && Integer.valueOf(st.endTime) < times1.get(i))
+                        && !(Integer.valueOf(st.startTime) > times2.get(i) && Integer.valueOf(st.endTime) > times2.get(i))) {
 
-                    
-                  //  if (Integer.valueOf(st.startTime) >= minTime && Integer.valueOf(st.startTime) < maxTime) {
+                    // if (Integer.valueOf(st.startTime) >= minTime && Integer.valueOf(st.startTime)
+                    // < maxTime) {
 
-                        if (Integer.valueOf(st.endTime) > times2.get(i)) {
-                            st.endTime = times2.get(i).toString();
-                            st.length = Integer.valueOf(Integer.valueOf(times2.get(i)) - Integer.valueOf(st.startTime)).toString();
-                        }
-                        
-                        
-                        if (Integer.valueOf(st.startTime) < times1.get(i)) {
-                            st.startTime = Integer.valueOf(times1.get(i)).toString();
-                            st.length = Integer.valueOf(Integer.valueOf(st.endTime)-Integer.valueOf(times1.get(i))).toString();
-                        }
-                        
-                        if (Integer.valueOf(st.startTime) < times1.get(i) && Integer.valueOf(st.endTime) > times2.get(i)) {
-                            st.startTime = Integer.valueOf(times1.get(i)).toString();
-                            st.endTime = times2.get(i).toString();
-                            st.length = Integer.valueOf(Integer.valueOf(times2.get(i))-Integer.valueOf(times1.get(i))).toString();
-                        }
+                    if (Integer.valueOf(st.endTime) > times2.get(i)) {
+                        st.endTime = times2.get(i).toString();
+                        st.length = Integer.valueOf(Integer.valueOf(times2.get(i)) - Integer.valueOf(st.startTime)).toString();
+                    }
+
+                    if (Integer.valueOf(st.startTime) < times1.get(i)) {
+                        st.startTime = Integer.valueOf(times1.get(i)).toString();
+                        st.length = Integer.valueOf(Integer.valueOf(st.endTime) - Integer.valueOf(times1.get(i))).toString();
+                    }
+
+                    if (Integer.valueOf(st.startTime) < times1.get(i) && Integer.valueOf(st.endTime) > times2.get(i)) {
+                        st.startTime = Integer.valueOf(times1.get(i)).toString();
+                        st.endTime = times2.get(i).toString();
+                        st.length = Integer.valueOf(Integer.valueOf(times2.get(i)) - Integer.valueOf(times1.get(i))).toString();
+                    }
 
                     String taskname = "";
 
@@ -2219,27 +2418,24 @@ public class DirectedGraphTranslator extends JApplet {
             if (!(Integer.valueOf(st.startTime) < minTime && Integer.valueOf(st.endTime) < minTime)
                     && !(Integer.valueOf(st.startTime) > maxTime && Integer.valueOf(st.endTime) > maxTime)) {
 
-            
-          //  if (Integer.valueOf(st.startTime) >= minTime && Integer.valueOf(st.startTime) < maxTime) {
+                // if (Integer.valueOf(st.startTime) >= minTime && Integer.valueOf(st.startTime)
+                // < maxTime) {
 
                 if (Integer.valueOf(st.endTime) > maxTime) {
                     st.endTime = Integer.valueOf(maxTime).toString();
                     st.length = Integer.valueOf(Integer.valueOf(maxTime) - Integer.valueOf(st.startTime)).toString();
                 }
-                
+
                 if (Integer.valueOf(st.startTime) < minTime) {
                     st.startTime = Integer.valueOf(minTime).toString();
-                    st.length = Integer.valueOf(Integer.valueOf(st.endTime)-Integer.valueOf(minTime)).toString();
+                    st.length = Integer.valueOf(Integer.valueOf(st.endTime) - Integer.valueOf(minTime)).toString();
                 }
-                
+
                 if (Integer.valueOf(st.startTime) < minTime && Integer.valueOf(st.endTime) > maxTime) {
                     st.startTime = Integer.valueOf(minTime).toString();
                     st.endTime = Integer.valueOf(maxTime).toString();
                     st.length = Integer.valueOf(Integer.valueOf(maxTime) - Integer.valueOf(minTime)).toString();
                 }
-                
-                
-                
 
                 String taskname = "";
 
@@ -2525,6 +2721,14 @@ public class DirectedGraphTranslator extends JApplet {
 
         importer.importGraph(importedGraph, ps);
 
+    }
+
+    public List<TMLComponentDesignPanel> getCpanels() {
+        return cpanels;
+    }
+
+    public void setCpanels(List<TMLComponentDesignPanel> cpanels) {
+        this.cpanels = cpanels;
     }
 
 }

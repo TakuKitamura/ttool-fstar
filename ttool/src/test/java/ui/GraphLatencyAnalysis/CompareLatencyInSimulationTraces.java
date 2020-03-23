@@ -19,6 +19,7 @@ import ui.TMLArchiPanel;
 import ui.interactivesimulation.SimulationTransaction;
 import ui.simulationtraceanalysis.DirectedGraphTranslator;
 import ui.simulationtraceanalysis.JFrameCompareLatencyDetail;
+import ui.simulationtraceanalysis.JFrameLatencyDetailedAnalysis;
 import ui.simulationtraceanalysis.latencyDetailedAnalysisMain;
 
 public class CompareLatencyInSimulationTraces extends AbstractUITest {
@@ -40,6 +41,7 @@ public class CompareLatencyInSimulationTraces extends AbstractUITest {
     private static String task1, task2, task3, task4;
     JFrameCompareLatencyDetail cld;
     private latencyDetailedAnalysisMain latencyDetailedAnalysisMain;
+    private JFrameLatencyDetailedAnalysis jFrameLatencyDetailedAnalysis;
 
     Vector<SimulationTransaction> transFile1, transFile2;
     SimulationTrace simT1, simT2;
@@ -72,6 +74,16 @@ public class CompareLatencyInSimulationTraces extends AbstractUITest {
 
                 try {
                     latencyDetailedAnalysisMain.latencyDetailedAnalysisForXML(mainGUI, simT1, false, true, 1);
+
+                    cld = new JFrameCompareLatencyDetail(latencyDetailedAnalysisMain, mainGUI, checkedTransactionsFile1,
+                            latencyDetailedAnalysisMain.map1, latencyDetailedAnalysisMain.cpanels1, simT1, false);
+
+                    if (cld == null) {
+                        System.out.println("NULL Panel");
+                    } else {
+                        cld.setVisible(false);
+                    }
+
                 } catch (XPathExpressionException | ParserConfigurationException | SAXException | IOException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -86,60 +98,68 @@ public class CompareLatencyInSimulationTraces extends AbstractUITest {
         }
         if (t.getState() == Thread.State.TERMINATED) {
 
-            while (latencyDetailedAnalysisMain.getDgraph().getGraphsize() == 0) {
+            while (cld.t.getState() != Thread.State.TERMINATED) {
 
             }
+            if (cld.t.getState() == Thread.State.TERMINATED) {
 
-            if (latencyDetailedAnalysisMain.getDgraph().getGraphsize() > 0) {
-                dgraph1 = latencyDetailedAnalysisMain.getDgraph();
-                checkedTransactionsFile1 = latencyDetailedAnalysisMain.getCheckedTransactionsFile();
-                latencyDetailedAnalysisMain.setDgraph(null);
+                while (cld.dgraph.getGraphsize() == 0) {
 
-                cld = new JFrameCompareLatencyDetail(latencyDetailedAnalysisMain, mainGUI, dgraph1, checkedTransactionsFile1, simT1, false);
-
-                if (cld == null) {
-                    System.out.println("NULL Panel");
-                } else {
-                    cld.setVisible(false);
                 }
 
-                latencyDetailedAnalysisMain.setCheckedTransactionsFile(new Vector<String>());
-                simT2 = new SimulationTrace("graphTestSimulationTrace", 6, (getBaseResourcesDir() + simulationTracePathFile2));
+                if (cld.dgraph.getGraphsize() > 0) {
+                    dgraph1 = cld.dgraph;
+                    checkedTransactionsFile1 = latencyDetailedAnalysisMain.getCheckedTransactionsFile();
+                    cld.dgraph = null;
 
-                Thread t1 = new Thread() {
-                    public void run() {
+                    latencyDetailedAnalysisMain.setCheckedTransactionsFile(new Vector<String>());
+                    simT2 = new SimulationTrace("graphTestSimulationTrace", 6, (getBaseResourcesDir() + simulationTracePathFile2));
 
-                        try {
+                    Thread t1 = new Thread() {
+                        public void run() {
 
-                            latencyDetailedAnalysisMain.latencyDetailedAnalysisForXML(mainGUI, simT2, false, true, 1);
-                        } catch (XPathExpressionException | ParserConfigurationException | SAXException | IOException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
+                            try {
+
+                                latencyDetailedAnalysisMain.latencyDetailedAnalysisForXML(mainGUI, simT2, false, true, 1);
+
+                            } catch (XPathExpressionException | ParserConfigurationException | SAXException | IOException e) {
+                                // TODO Auto-generated catch block
+                                e.printStackTrace();
+                            }
+
+                        }
+                    };
+                    t1.start();
+
+                    while (t1.getState() != Thread.State.TERMINATED) {
+
+                    }
+                    if (t1.getState() == Thread.State.TERMINATED) {
+
+                        t1 = new Thread() {
+                            public void run() {
+                                dgraph2 = new DirectedGraphTranslator(jFrameLatencyDetailedAnalysis, cld, latencyDetailedAnalysisMain.map1,
+                                        latencyDetailedAnalysisMain.getCpanels1(), 3);
+
+                            }
+
+                        };
+
+                        t1.start();
+
+                        while (t1.getState() != Thread.State.TERMINATED) {
+
+                        }
+
+                        if (t1.getState() == Thread.State.TERMINATED) {
+
+                            checkedTransactionsFile2 = latencyDetailedAnalysisMain.getCheckedTransactionsFile();
+
                         }
 
                     }
-                };
-                t1.start();
-
-                while (t1.getState() != Thread.State.TERMINATED) {
-
-                }
-                if (t1.getState() == Thread.State.TERMINATED) {
-
-                    while (latencyDetailedAnalysisMain.getDgraph().getGraphsize() == 0) {
-
-                    }
-
-                    if (latencyDetailedAnalysisMain.getDgraph().getGraphsize() > 0) {
-                        dgraph2 = latencyDetailedAnalysisMain.getDgraph();
-
-                        checkedTransactionsFile2 = latencyDetailedAnalysisMain.getCheckedTransactionsFile();
-
-                    }
-
                 }
             }
-
         }
     }
 

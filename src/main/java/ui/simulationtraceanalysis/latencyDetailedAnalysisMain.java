@@ -38,15 +38,18 @@ import ui.window.JDialogToChosePanel;
 
 public class latencyDetailedAnalysisMain {
 
-    public DirectedGraphTranslator dgraph;
+    // public DirectedGraphTranslator dgraph;
     private Vector<String> checkedTransactionsFile1 = new Vector<String>();
     public Vector<String> checkedTransactionsFile2 = new Vector<String>();
     public Vector<String> checkedTransactionsFile = new Vector<String>();
     public MainGUI mainGUI_compare2, mainGUI_compare;
 
     private JFrameLatencyDetailedAnalysis latencyDetailedAnalysis;
+    JFrameCompareLatencyDetail cld;
 
     private Thread t, t1;
+    public TMLMapping<TGComponent> map1;
+    public List<TMLComponentDesignPanel> cpanels1;
 
     public latencyDetailedAnalysisMain(int callerId, MainGUI mainGUI, SimulationTrace selectedST, boolean b, boolean compare, int j) {
 
@@ -106,6 +109,7 @@ public class latencyDetailedAnalysisMain {
 
                 TMLArchiPanel tmlap = (TMLArchiPanel) tp;
                 TMLMapping<TGComponent> map = mainGUI_compare.gtm.getTMLMapping();
+
                 for (TGComponent component : tmlap.tmlap.getComponentList()) {
                     tmlNodesToValidate.add(component);
                 }
@@ -140,7 +144,11 @@ public class latencyDetailedAnalysisMain {
                     }
                 }
                 if (compare) {
-                    dgraph = new DirectedGraphTranslator(map, cpanels);
+
+                    map1 = map;
+                    setCpanels1(cpanels);
+                    // dgraph = new DirectedGraphTranslator(latencyDetailedAnalysis,cld,map,
+                    // cpanels,1);
 
                     for (TGComponent tgc1 : map.getTMLModeling().getCheckedComps().keySet()) {
                         String compName = map.getTMLModeling().getCheckedComps().get(tgc1);
@@ -165,7 +173,11 @@ public class latencyDetailedAnalysisMain {
                     cpanels = new ArrayList<TMLComponentDesignPanel>();
                     cpanels.add(tmlcdp);
                     if (compare) {
-                        dgraph = new DirectedGraphTranslator(map, cpanels);
+                        // dgraph = new DirectedGraphTranslator(latencyDetailedAnalysis,cld,map,
+                        // cpanels,1);
+
+                        map1 = map;
+                        setCpanels1(cpanels);
 
                         for (TGComponent tgc : map.getTMLModeling().getCheckedComps().keySet()) {
                             String compName = map.getTMLModeling().getCheckedComps().get(tgc);
@@ -216,59 +228,48 @@ public class latencyDetailedAnalysisMain {
             e1.printStackTrace();
         }
 
-        while (dgraph.getGraphsize() == 0) {
+        cld = new JFrameCompareLatencyDetail(this, mainGUI, checkedTransactionsFile1, map1, cpanels1, selectedST, true);
 
-        }
+        /*
+         * if (ConfigurationTTool.SystemCCodeDirectory.length() > 0) { fc = new
+         * JFileChooser(ConfigurationTTool.SystemCCodeDirectory); } else { fc = new
+         * JFileChooser(); }
+         * 
+         * FileNameExtensionFilter filter = new FileNameExtensionFilter("XML files",
+         * "xml"); fc.setFileFilter(filter);
+         * 
+         * int returnVal = fc.showOpenDialog(mainGUI.frame);
+         * 
+         * if (returnVal == JFileChooser.APPROVE_OPTION) { File filefc =
+         * fc.getSelectedFile(); // file2.setText(file.getPath());
+         * 
+         * // Object obj = filefc;
+         * 
+         * checkedTransactionsFile = new Vector<String>(); SimulationTrace file2 = new
+         * SimulationTrace(filefc.getName(), 6, filefc.getAbsolutePath());
+         * 
+         * if (file2 instanceof SimulationTrace) {
+         * 
+         * try { latencyDetailedAnalysisForXML(mainGUI, file2, false, true, 2); } catch
+         * (XPathExpressionException | ParserConfigurationException | SAXException |
+         * IOException e) { // TODO Auto-generated catch block e.printStackTrace(); }
+         * 
+         * while (dgraph.getGraphsize() == 0) {
+         * 
+         * }
+         * 
+         * if (dgraph.getGraphsize() > 0) { dgraph2 = dgraph; checkedTransactionsFile2 =
+         * checkedTransactionsFile; JFrameCompareLatencyDetail cld = new
+         * JFrameCompareLatencyDetail(dgraph1, dgraph2, checkedTransactionsFile1,
+         * checkedTransactionsFile2, selectedST, file2, true);
+         * 
+         * mainGUI_compare2.closeTurtleModeling();
+         * 
+         * } }
+         * 
+         * }
+         */
 
-        if (dgraph.getGraphsize() > 0) {
-            dgraph1 = dgraph;
-            dgraph = null;
-
-            JFileChooser fc;
-
-            JFrameCompareLatencyDetail cld = new JFrameCompareLatencyDetail(this, mainGUI, dgraph1, checkedTransactionsFile1, selectedST, true);
-
-            /*
-             * if (ConfigurationTTool.SystemCCodeDirectory.length() > 0) { fc = new
-             * JFileChooser(ConfigurationTTool.SystemCCodeDirectory); } else { fc = new
-             * JFileChooser(); }
-             * 
-             * FileNameExtensionFilter filter = new FileNameExtensionFilter("XML files",
-             * "xml"); fc.setFileFilter(filter);
-             * 
-             * int returnVal = fc.showOpenDialog(mainGUI.frame);
-             * 
-             * if (returnVal == JFileChooser.APPROVE_OPTION) { File filefc =
-             * fc.getSelectedFile(); // file2.setText(file.getPath());
-             * 
-             * // Object obj = filefc;
-             * 
-             * checkedTransactionsFile = new Vector<String>(); SimulationTrace file2 = new
-             * SimulationTrace(filefc.getName(), 6, filefc.getAbsolutePath());
-             * 
-             * if (file2 instanceof SimulationTrace) {
-             * 
-             * try { latencyDetailedAnalysisForXML(mainGUI, file2, false, true, 2); } catch
-             * (XPathExpressionException | ParserConfigurationException | SAXException |
-             * IOException e) { // TODO Auto-generated catch block e.printStackTrace(); }
-             * 
-             * while (dgraph.getGraphsize() == 0) {
-             * 
-             * }
-             * 
-             * if (dgraph.getGraphsize() > 0) { dgraph2 = dgraph; checkedTransactionsFile2 =
-             * checkedTransactionsFile; JFrameCompareLatencyDetail cld = new
-             * JFrameCompareLatencyDetail(dgraph1, dgraph2, checkedTransactionsFile1,
-             * checkedTransactionsFile2, selectedST, file2, true);
-             * 
-             * mainGUI_compare2.closeTurtleModeling();
-             * 
-             * } }
-             * 
-             * }
-             */
-
-        }
     }
 
     public void latencyDetailedAnalysisForXML(MainGUI mainGUI, SimulationTrace selectedST, boolean b, boolean compare, int j)
@@ -463,14 +464,6 @@ public class latencyDetailedAnalysisMain {
 
     }
 
-    public DirectedGraphTranslator getDgraph() {
-        return dgraph;
-    }
-
-    public void setDgraph(DirectedGraphTranslator dgraph) {
-        this.dgraph = dgraph;
-    }
-
     public Vector<String> getCheckedTransactionsFile() {
         return checkedTransactionsFile;
     }
@@ -499,6 +492,14 @@ public class latencyDetailedAnalysisMain {
 
     public Thread getT1() {
         return t1;
+    }
+
+    public List<TMLComponentDesignPanel> getCpanels1() {
+        return cpanels1;
+    }
+
+    public void setCpanels1(List<TMLComponentDesignPanel> cpanels1) {
+        this.cpanels1 = cpanels1;
     }
 
 }

@@ -39,6 +39,7 @@
 package ui.simulationtraceanalysis;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -68,6 +69,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
@@ -122,7 +124,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
     protected JTextArea jta;
     protected JScrollPane jsp;
     private JTabbedPane commandTab, resultTab;/* , resultTabDetailed; */
-    private JPanel loadxml, commands, jp01, jp02, /* activities, */ graphAnalysisResult, jp03, jp04, jp05; // ,graphAnalysisResultDetailed;
+    private JPanel loadxml, commands, jp01, jp02, /* activities, */ graphAnalysisResult, jp03, jp04, jp05, progressBarpanel; // ,graphAnalysisResultDetailed;
     protected JButton buttonClose, buttonShowDGraph, buttonSaveDGraph, buttonBrowse, buttonDetailedAnalysis;
 
     public Vector<String> checkedTransactions = new Vector<String>();
@@ -159,6 +161,10 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
     private Thread t;
 
     // @SuppressWarnings("deprecation")
+
+    JProgressBar pbar;
+    JFrameCompareLatencyDetail jframeCompareLatencyDetail;
+
     public JFrameLatencyDetailedAnalysis(TMLMapping<TGComponent> tmap, List<TMLComponentDesignPanel> cpanels, SimulationTrace selectedST) {
         super("Latency Detailed Analysis");
         initActions();
@@ -203,6 +209,41 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
 
         framePanel.add(jp, mainConstraint);
 
+        GridBagLayout gridbag01 = new GridBagLayout();
+        GridBagConstraints c01 = new GridBagConstraints();
+        progressBarpanel = new JPanel(gridbag01);
+
+        c01.gridheight = 1;
+        c01.weighty = 1.0;
+        c01.weightx = 1.0;
+        c01.gridwidth = 1;
+        c01.gridx = 0;
+        c01.gridy = 0;
+        // c01.fill = GridBagConstraints.BOTH;
+
+        JLabel pBarLabel = new JLabel("Progress of Graph Generation", JLabel.LEFT);
+        progressBarpanel.add(pBarLabel, c01);
+
+        c01.gridheight = 1;
+        c01.weighty = 1.0;
+        c01.weightx = 1.0;
+        c01.gridwidth = 1;
+        c01.gridx = 1;
+        c01.gridy = 0;
+
+        pbar = new JProgressBar();
+        pbar.setForeground(Color.GREEN);
+
+        progressBarpanel.add(pbar, c01);
+
+        mainConstraint.gridheight = 1;
+        mainConstraint.gridx = 0;
+        mainConstraint.gridy = 3;
+        mainConstraint.ipady = 40;
+        mainConstraint.fill = GridBagConstraints.HORIZONTAL;
+
+        framePanel.add(progressBarpanel, mainConstraint);
+
         // mainpanel.add(jp, BorderLayout.NORTH);
 
 //        GridBagLayout gridbag02 = new GridBagLayout();
@@ -242,21 +283,24 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
         framePanel.add(graphAnalysisResult, mainConstraint);
         // mainTop.add(commands, c02);
 
+        // mainConstraint.gridwidth = GridBagConstraints.REMAINDER; // end row
+        // mainConstraint.fill = GridBagConstraints.BOTH;
+
         jp05 = new JPanel(new BorderLayout());
         // mainpanel.add(split, BorderLayout.SOUTH);
         mainConstraint.weighty = 00;
         mainConstraint.ipady = 100;
 
         mainConstraint.gridx = 0;
-        mainConstraint.gridy = 3;
+        mainConstraint.gridy = 4;
 
         mainConstraint.fill = GridBagConstraints.HORIZONTAL;
 
         framePanel.add(jp05, mainConstraint);
         commandTab = GraphicLib.createTabbedPaneRegular();// new JTabbedPane();
 
-        GridBagLayout gridbag01 = new GridBagLayout();
-        GridBagConstraints c01 = new GridBagConstraints();
+        gridbag01 = new GridBagLayout();
+        c01 = new GridBagConstraints();
         loadxml = new JPanel(gridbag01);
         commandTab.addTab("load XML", null, loadxml, "load XML");
 
@@ -461,11 +505,16 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
         t = new Thread() {
             public void run() {
                 generateDirectedGraph(tmap, cpanels);
+
             }
         };
 
         t.start();
 
+    }
+
+    public void updateBar(int newValue) {
+        pbar.setValue(newValue);
     }
 
     public DirectedGraphTranslator getDgraph() {
@@ -479,7 +528,7 @@ public class JFrameLatencyDetailedAnalysis extends JFrame implements ActionListe
     private void generateDirectedGraph(TMLMapping<TGComponent> tmap, List<TMLComponentDesignPanel> cpanels) {
 
         try {
-            dgraph = new DirectedGraphTranslator(tmap, cpanels);
+            dgraph = new DirectedGraphTranslator(this, jframeCompareLatencyDetail, tmap, cpanels, 0);
             jta.append("A Directed Graph with " + dgraph.getGraphsize() + " vertices" + dgraph.getGraphEdgeSet() + "Edges was generated.\n");
             // buttonSaveDGraph.setEnabled(true);
             buttonShowDGraph.setEnabled(true);
