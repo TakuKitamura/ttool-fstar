@@ -698,6 +698,13 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             nbOfLinks++;
             _ss.addNext(link);
         }
+        
+        if (stateLimitReached) {
+        	if (_ss.isDeadlock()) {
+        		// have to register current state as deadlock of the graph
+        		nbOfDeadlocks++;
+        	}
+        }
 
         if (freeIntermediateStateCoding) {
             _ss.freeUselessAllocations();
@@ -826,6 +833,13 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             }
             previousState = newState;
             newState = previousState.advancedClone();
+        }
+        
+        if (stateLimitReached) {
+        	if (_ss.isDeadlock()) {
+        		// have to register current state as deadlock of the graph
+        		nbOfDeadlocks++;
+        	}
         }
 
         if (freeIntermediateStateCoding) {
