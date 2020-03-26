@@ -94,6 +94,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     protected static boolean generateDesignSelected = false;
     protected static int reachabilitySelected = REACHABILITY_NONE;
     protected static int livenessSelected = LIVENESS_NONE;
+    protected static boolean limitStatesSelected = false;
+    protected static String stateLimitValue;
 
     protected MainGUI mgui;
 
@@ -135,6 +137,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     protected JRadioButton noLiveness, livenessCheckable, livenessAllStates;
     protected ButtonGroup liveness;
     protected boolean showLiveness;
+    protected JCheckBox stateLimit;
+    protected JTextField stateLimitField;
 
     protected JCheckBox saveGraphAUT, saveGraphDot, ignoreEmptyTransitions, ignoreInternalStates,
             ignoreConcurrenceBetweenInternalActions, generateDesign;
@@ -280,6 +284,13 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         noLiveness.setSelected(livenessSelected == LIVENESS_NONE);
         livenessCheckable.setSelected(livenessSelected == LIVENESS_SELECTED);
         livenessAllStates.setSelected(livenessSelected == LIVENESS_ALL);
+
+        //Limitations
+        stateLimit = new JCheckBox("Limit number of states in GF", limitStatesSelected);
+        stateLimit.addActionListener(this);
+        jp01.add(stateLimit, c01);
+        stateLimitField = new JTextField(stateLimitValue);
+        jp01.add(stateLimitField, c01);
 
 
         // RG
@@ -574,6 +585,22 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                 amc.setComputeRG(true);
                 jta.append("Computation of Reachability Graph activated\n");
             }
+            
+            
+            if (stateLimit.isSelected()) {
+            	amc.setStateLimit(true);
+				try{
+					int stateLimitInt = Integer.parseInt(stateLimitField.getText());
+					if (stateLimitInt < 0) {
+						jta.append("State Limit field is not valid, insert a positive number\n");
+						go = false;
+					}
+					amc.setStateLimitValue(stateLimitInt);
+				} catch (NumberFormatException e) {
+					jta.append("State Limit field is not valid\n");
+					go = false;
+				}
+            }
 
             // Starting model checking
             testGo();
@@ -721,6 +748,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         } else {
             reachabilitySelected = REACHABILITY_ALL;
         }
+        
+        stateLimitField.setEnabled(stateLimit.isSelected());
 
         switch (mode) {
             case NOT_STARTED:

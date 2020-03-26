@@ -97,6 +97,11 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     private boolean livenessDone;
     private boolean studyLiveness;
     private SpecificationLiveness livenessInfo;
+    
+    //RG limits
+    private boolean stateLimitRG;
+    private boolean stateLimitReached;
+    private int stateLimit;
 
 
     public AvatarModelChecker(AvatarSpecification _spec) {
@@ -114,6 +119,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         ignoreInternalStates = true;
         studyReachability = false;
         computeRG = false;
+        stateLimitRG = false; //No state limit in RG computation
+        stateLimit = Integer.MAX_VALUE;
         freeIntermediateStateCoding = true;
     }
 
@@ -234,6 +241,14 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     public void setComputeRG(boolean _rg) {
         computeRG = _rg;
     }
+    
+    public void setStateLimit(boolean _stateLimitRG) {
+    	stateLimitRG = _stateLimitRG; //_stateLimitRG;
+    }
+    
+    public void setStateLimitValue(int _stateLimit) {
+    	stateLimit = _stateLimit;
+    }
 
     /*private synchronized boolean startMC() {
 	
@@ -255,6 +270,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         livenessDone = false;
         studyReachability = false;
         computeRG = false;
+        stateLimitRG = false;
 
 
         startModelChecking();
@@ -269,6 +285,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         }
 
         stoppedBeforeEnd = false;
+        stateLimitReached = false;
         stateID = 0;
         nbOfDeadlocks = 0;
 
@@ -641,6 +658,15 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 //newState.id = getStateID();
                 //TraceManager.addDev("Putting new state with id = " +  newState.id + " stateID = " + stateID + " states size = " + states.size() + " states by id size = " + statesByID.size());
                 //statesByID.put(newState.id, newState);
+            	
+            	if (stateLimitRG && stateID >= stateLimit) {
+            		if (stateLimitReached) {
+            			continue;
+            		}
+            		stateLimitReached = true;
+            	}
+
+            	
                 if ((studyLiveness == false) || (studyLiveness && !(tr.livenessFound))) {
                     pendingStates.add(newState);
                 }
@@ -780,7 +806,14 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 action += " [" +  "0...0" +  "]";
                 link.action = action;
                 link.destinationState = newState;
-                addStateIfNotExisting(newState);
+                similar = addStateIfNotExisting(newState);
+                if (similar == null && stateLimitRG && (stateID >= stateLimit)) {
+            		// Reached limit in number of states
+                	if (stateLimitReached) {
+                		break;
+                	}
+                	stateLimitReached = true;
+            	}
                 pendingStates.add(newState);
                 nbOfLinks++;
                 _ss.addNext(link);
@@ -1435,7 +1468,11 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     private synchronized SpecificationState addStateIfNotExisting(SpecificationState newState) {
         SpecificationState similar = states.get(newState.getHash(blockValues));
         if (similar == null) {
-            addState(newState);
+        	if (!(stateLimitRG && stateID >= stateLimit)) {
+        		addState(newState);
+        	} else {
+        		return null;
+    	    }
         }
         return similar;
     }
