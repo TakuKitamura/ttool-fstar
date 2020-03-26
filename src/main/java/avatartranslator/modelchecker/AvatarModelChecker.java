@@ -805,7 +805,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 String action = "internal";
                 action += " [" +  "0...0" +  "]";
                 link.action = action;
-                link.destinationState = newState;
                 similar = addStateIfNotExisting(newState);
                 if (similar == null && stateLimitRG && (stateID >= stateLimit)) {
             		// Reached limit in number of states
@@ -814,7 +813,13 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 	}
                 	stateLimitReached = true;
             	}
-                pendingStates.add(newState);
+                if (similar != null) {
+                	// check if it has been created by another thread in the meanwhile
+                	link.destinationState = similar;
+                } else {
+                	link.destinationState = newState;
+                	pendingStates.add(newState);
+                }
                 nbOfLinks++;
                 _ss.addNext(link);
                 break;
