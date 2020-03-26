@@ -649,7 +649,21 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             link.action = action;
             newState.computeHash(blockValues);
             //SpecificationState similar = states.get(newState.getHash(blockValues));
-            SpecificationState similar = addStateIfNotExisting(newState);
+            
+            //SpecificationState similar = addStateIfNotExisting(newState);
+            SpecificationState similar;
+            synchronized (this) {
+                similar = states.get(newState.getHash(blockValues));
+                if (similar == null) {
+                    if (!(stateLimitRG && stateID >= stateLimit)) {
+                        addState(newState);
+                    } else {
+                        stateLimitReached = true;
+                        continue;
+                    }
+                }
+            }
+            
             if (similar == null) {
                 //  Unknown state
 
@@ -658,14 +672,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 //newState.id = getStateID();
                 //TraceManager.addDev("Putting new state with id = " +  newState.id + " stateID = " + stateID + " states size = " + states.size() + " states by id size = " + statesByID.size());
                 //statesByID.put(newState.id, newState);
-            	
-            	if (stateLimitRG && stateID >= stateLimit) {
-            		if (stateLimitReached) {
-            			continue;
-            		}
-            		stateLimitReached = true;
-            	}
-
             	
                 if ((studyLiveness == false) || (studyLiveness && !(tr.livenessFound))) {
                     pendingStates.add(newState);
@@ -812,14 +818,17 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 String action = "internal";
                 action += " [" +  "0...0" +  "]";
                 link.action = action;
-                similar = addStateIfNotExisting(newState);
-                if (similar == null && stateLimitRG && (stateID >= stateLimit)) {
-            		// Reached limit in number of states
-                	if (stateLimitReached) {
-                		break;
-                	}
-                	stateLimitReached = true;
-            	}
+                synchronized (this) {
+                    similar = states.get(newState.getHash(blockValues));
+                    if (similar == null) {
+                        if (!(stateLimitRG && stateID >= stateLimit)) {
+                            addState(newState);
+                        } else {
+                            stateLimitReached = true; //can be removed
+                            break;
+                        }
+                    }
+                }
                 if (similar != null) {
                 	// check if it has been created by another thread in the meanwhile
                 	link.destinationState = similar;

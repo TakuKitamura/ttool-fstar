@@ -591,7 +591,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             	amc.setStateLimit(true);
 				try{
 					int stateLimitInt = Integer.parseInt(stateLimitField.getText());
-					if (stateLimitInt < 0) {
+					if (stateLimitInt <= 0) {
 						jta.append("State Limit field is not valid, insert a positive number\n");
 						go = false;
 					}
