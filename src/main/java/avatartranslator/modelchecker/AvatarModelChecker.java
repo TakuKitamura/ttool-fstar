@@ -100,9 +100,12 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     
     //RG limits
     private boolean stateLimitRG;
-    private boolean stateLimitReached;
-    private int stateLimit;
-
+    private boolean timeLimitRG;
+    private boolean timeLimitReached;
+    private boolean limitReached;
+    private long stateLimit;
+    private long timeLimit;
+    
 
     public AvatarModelChecker(AvatarSpecification _spec) {
         if (_spec != null) {
@@ -120,7 +123,9 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         studyReachability = false;
         computeRG = false;
         stateLimitRG = false; //No state limit in RG computation
+        timeLimitRG = false;
         stateLimit = Integer.MAX_VALUE;
+        timeLimit = 500;
         freeIntermediateStateCoding = true;
     }
 
@@ -246,8 +251,16 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     	stateLimitRG = _stateLimitRG; //_stateLimitRG;
     }
     
-    public void setStateLimitValue(int _stateLimit) {
+    public void setStateLimitValue(long _stateLimit) {
     	stateLimit = _stateLimit;
+    }
+    
+    public void setTimeLimit(boolean _timeLimitRG) {
+        timeLimitRG = _timeLimitRG; //_stateLimitRG;
+    }
+    
+    public void setTimeLimitValue(long _timeLimit) {
+        timeLimit = _timeLimit;
     }
 
     /*private synchronized boolean startMC() {
@@ -271,6 +284,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         studyReachability = false;
         computeRG = false;
         stateLimitRG = false;
+        timeLimitRG = false;
 
 
         startModelChecking();
@@ -285,7 +299,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         }
 
         stoppedBeforeEnd = false;
-        stateLimitReached = false;
+        limitReached = false;
+        timeLimitReached = false;
         stateID = 0;
         nbOfDeadlocks = 0;
 
@@ -355,7 +370,11 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         //statesByID.put(initialState.id, initialState);
         pendingStates.add(initialState);
 
-        computeAllStates();
+        if (timeLimitRG) {
+            computeAllStatesTime();
+        } else {
+            computeAllStates();
+        }
 
         // All done
     }
@@ -383,6 +402,47 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 TraceManager.addDev("Join on avatar model checker thread failed for thread #" + i);
             }
         }
+
+        TraceManager.addDev("Threads terminated");
+
+        // Set to non reachable not computed elements
+        if ((studyReachability) && (!stoppedBeforeEnd)) {
+            for (SpecificationReachability re : reachabilities) {
+                if (re.result == SpecificationReachabilityType.NOTCOMPUTED) {
+                    re.result = SpecificationReachabilityType.NONREACHABLE;
+                }
+            }
+        }
+
+    }
+    
+    private void computeAllStatesTime() {
+        int i;
+        Thread[] ts = new Thread[nbOfThreads];
+        TimerTask stopExecTask = new TimerTask() {
+            public void run() {
+                timeLimitReached = true;
+            }
+        };
+        Timer timer = new Timer("Timer");
+
+        for (i = 0; i < nbOfThreads - 1; i++) {
+            ts[i] = new Thread(this);
+            ts[i].start();
+        }
+        
+        timer.schedule(stopExecTask, timeLimit);        
+
+        //TraceManager.addDev("Waiting for threads termination (nb of threads:" + nbOfThreads + ")");
+        for (i = 0; i < nbOfThreads; i++) {
+            try {
+                ts[i].join();
+            } catch (Exception e) {
+                TraceManager.addDev("Join on avatar model checker thread failed for thread #" + i);
+            }
+        }
+        
+        timer.cancel();
 
         TraceManager.addDev("Threads terminated");
 
@@ -655,10 +715,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             synchronized (this) {
                 similar = states.get(newState.getHash(blockValues));
                 if (similar == null) {
-                    if (!(stateLimitRG && stateID >= stateLimit)) {
+                    if (!((stateLimitRG && stateID >= stateLimit) || timeLimitReached)) {
                         addState(newState);
                     } else {
-                        stateLimitReached = true;
+                        limitReached = true;
                         continue;
                     }
                 }
@@ -705,7 +765,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             _ss.addNext(link);
         }
         
-        if (stateLimitReached) {
+        if (limitReached) {
         	if (_ss.isDeadlock()) {
         		// have to register current state as deadlock of the graph
         		nbOfDeadlocks++;
@@ -821,10 +881,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 synchronized (this) {
                     similar = states.get(newState.getHash(blockValues));
                     if (similar == null) {
-                        if (!(stateLimitRG && stateID >= stateLimit)) {
+                        if (!(stateLimitRG && stateID >= stateLimit) || timeLimitReached) {
                             addState(newState);
                         } else {
-                            stateLimitReached = true; //can be removed
+                            limitReached = true; //can be removed
                             break;
                         }
                     }
@@ -844,7 +904,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             newState = previousState.advancedClone();
         }
         
-        if (stateLimitReached) {
+        if (limitReached) {
         	if (_ss.isDeadlock()) {
         		// have to register current state as deadlock of the graph
         		nbOfDeadlocks++;

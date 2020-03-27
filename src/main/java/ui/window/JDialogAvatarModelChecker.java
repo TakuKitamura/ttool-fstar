@@ -96,6 +96,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     protected static int livenessSelected = LIVENESS_NONE;
     protected static boolean limitStatesSelected = false;
     protected static String stateLimitValue;
+    protected static boolean limitTimeSelected = false;
+    protected static String timeLimitValue;
 
     protected MainGUI mgui;
 
@@ -139,6 +141,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     protected boolean showLiveness;
     protected JCheckBox stateLimit;
     protected JTextField stateLimitField;
+    protected JCheckBox timeLimit;
+    protected JTextField timeLimitField;
 
     protected JCheckBox saveGraphAUT, saveGraphDot, ignoreEmptyTransitions, ignoreInternalStates,
             ignoreConcurrenceBetweenInternalActions, generateDesign;
@@ -291,6 +295,11 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         jp01.add(stateLimit, c01);
         stateLimitField = new JTextField(stateLimitValue);
         jp01.add(stateLimitField, c01);
+        timeLimit = new JCheckBox("Limit time for GF generation (ms)", limitStatesSelected);
+        timeLimit.addActionListener(this);
+        jp01.add(timeLimit, c01);
+        timeLimitField = new JTextField(timeLimitValue);
+        jp01.add(timeLimitField, c01);
 
 
         // RG
@@ -586,20 +595,34 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                 jta.append("Computation of Reachability Graph activated\n");
             }
             
-            
+            // Limitations
             if (stateLimit.isSelected()) {
             	amc.setStateLimit(true);
 				try{
-					int stateLimitInt = Integer.parseInt(stateLimitField.getText());
-					if (stateLimitInt <= 0) {
+					Long stateLimitLong = Long.parseLong(stateLimitField.getText());
+					if (stateLimitLong <= 0) {
 						jta.append("State Limit field is not valid, insert a positive number\n");
 						go = false;
 					}
-					amc.setStateLimitValue(stateLimitInt);
+					amc.setStateLimitValue(stateLimitLong.longValue());
 				} catch (NumberFormatException e) {
 					jta.append("State Limit field is not valid\n");
 					go = false;
 				}
+            }
+            if (timeLimit.isSelected()) {
+                amc.setTimeLimit(true);
+                try{
+                    Long timeLimitLong = Long.parseLong(timeLimitField.getText());
+                    if (timeLimitLong <= 0) {
+                        jta.append("State Limit field is not valid, insert a positive number\n");
+                        go = false;
+                    }
+                    amc.setTimeLimitValue(timeLimitLong.longValue());
+                } catch (NumberFormatException e) {
+                    jta.append("Time Limit field is not valid\n");
+                    go = false;
+                }
             }
 
             // Starting model checking
@@ -750,6 +773,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         }
         
         stateLimitField.setEnabled(stateLimit.isSelected());
+        limitStatesSelected = stateLimit.isSelected();
+        timeLimitField.setEnabled(timeLimit.isSelected());
+        limitTimeSelected = timeLimit.isSelected();
 
         switch (mode) {
             case NOT_STARTED:
