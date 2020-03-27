@@ -446,6 +446,15 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
         TraceManager.addDev("Threads terminated");
 
+        if (timeLimitReached) {
+            // Deadlock value is not reliable due to a immediate stop
+            nbOfDeadlocks = 0;
+            for (SpecificationState state : statesByID.values()) {
+                if (state.isDeadlock()) {
+                    nbOfDeadlocks++;
+                }
+            }
+        }
         // Set to non reachable not computed elements
         if ((studyReachability) && (!stoppedBeforeEnd)) {
             for (SpecificationReachability re : reachabilities) {
@@ -467,6 +476,11 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             // Pickup a state
             if ((stoppedBeforeEnd) || (stoppedConditionReached)) {
                 //TraceManager.addDev("In Avatar modelchecher thread: stopped before end or terminated");
+                return;
+            }
+            
+            if (timeLimitReached) {
+                pendingStates.clear();
                 return;
             }
 
