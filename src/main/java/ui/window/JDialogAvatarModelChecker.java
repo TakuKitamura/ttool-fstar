@@ -177,7 +177,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             graphDirDot = _graphDir + File.separator + "rgavatar$.dot";
         }
 
-        showLiveness = _showLiveness;
+        //showLiveness = _showLiveness;
+        showLiveness = true;
 
         initComponents();
         myInitComponents();
@@ -295,7 +296,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         jp01.add(stateLimit, c01);
         stateLimitField = new JTextField(stateLimitValue);
         jp01.add(stateLimitField, c01);
-        timeLimit = new JCheckBox("Limit time for GF generation (ms)", limitStatesSelected);
+        timeLimit = new JCheckBox("Limit time for GF generation (ms)", limitTimeSelected);
         timeLimit.addActionListener(this);
         jp01.add(timeLimit, c01);
         timeLimitField = new JTextField(timeLimitValue);
