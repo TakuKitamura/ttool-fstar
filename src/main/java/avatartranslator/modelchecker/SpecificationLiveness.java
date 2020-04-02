@@ -60,7 +60,7 @@ public class SpecificationLiveness  {
     public SpecificationLiveness(Object _ref1, Object _ref2) {
 	ref1 = _ref1;
 	ref2 = _ref2;
-	result = false;
+	result = true;
 	state = null;
     }
 
@@ -82,9 +82,9 @@ public class SpecificationLiveness  {
 
 	
 	if (result) {
-	    return name + " -> liveness is satisfied"; 
+	    return name + " -> liveness is satisfied\n"; 
 	}
-	return name + " -> liveness is NOT satisfied";
+	return name + " -> liveness is NOT satisfied\n";
 	
     }
 

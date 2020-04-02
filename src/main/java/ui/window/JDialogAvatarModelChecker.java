@@ -42,6 +42,7 @@ package ui.window;
 import avatartranslator.AvatarSpecification;
 import avatartranslator.AvatarStateMachineElement;
 import avatartranslator.modelchecker.AvatarModelChecker;
+import avatartranslator.modelchecker.SpecificationLiveness;
 import avatartranslator.modelchecker.SpecificationReachability;
 import avatartranslator.modelchecker.SpecificationReachabilityType;
 import myutil.*;
@@ -179,7 +180,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
 
         //showLiveness = _showLiveness;
         showLiveness = true;
-
+        
         initComponents();
         myInitComponents();
         pack();
@@ -596,6 +597,12 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                 jta.append("Computation of Reachability Graph activated\n");
             }
             
+            if (livenessSelected == LIVENESS_SELECTED) {
+                mgui.resetLiveness();
+                res = amc.setLivenessofState();
+                jta.append("Liveness of " + res + " selected elements activated\n");
+            }
+            
             // Limitations
             if (stateLimit.isSelected()) {
             	amc.setStateLimit(true);
@@ -629,7 +636,12 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             // Starting model checking
             testGo();
 
-            amc.startModelChecking();
+            if (livenessSelected == LIVENESS_NONE) {
+                amc.startModelChecking();
+            } else {
+                amc.startModelCheckingLiveness();
+            }
+            
             TraceManager.addDev("Model checking done");
             //TraceManager.addDev("RG:" + amc.statesToString() + "\n\n");
 
@@ -660,6 +672,11 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                         handleReachability(sr.ref2, sr.result);
                     }
                 }
+            }
+            
+            if (livenessSelected != LIVENESS_NONE) {
+                jta.append("\nLiveness Analysis:\n");
+                jta.append(amc.getLivenessResult().toString());
             }
 
             //TraceManager.addDev(amc.toString());
@@ -771,6 +788,14 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             reachabilitySelected = REACHABILITY_SELECTED;
         } else {
             reachabilitySelected = REACHABILITY_ALL;
+        }
+        
+        if (noLiveness.isSelected()) {
+            livenessSelected = LIVENESS_NONE;
+        } else if (livenessCheckable.isSelected()) {
+            livenessSelected = LIVENESS_SELECTED;
+        } else {
+            livenessSelected = LIVENESS_ALL;
         }
         
         stateLimitField.setEnabled(stateLimit.isSelected());

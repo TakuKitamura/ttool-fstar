@@ -64,7 +64,6 @@ public class SpecificationTransition  {
     public AvatarTransition[] transitions;
 
     public String infoForGraph;
-    public boolean livenessFound;
 
 
     public SpecificationTransition() {

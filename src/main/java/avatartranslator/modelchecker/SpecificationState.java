@@ -64,11 +64,13 @@ public class SpecificationState implements Comparable<SpecificationState>  {
     public boolean hashComputed;
     public long id;
     public LinkedList<SpecificationLink> nexts; // The RG is there
+    public boolean liveness; //trace the liveness check at this state
 
     public ArrayList<SpecificationTransition> transitions;
 
     public SpecificationState() {
         hashComputed = false;
+        liveness = false;
     }
 
     // blocks must not be null
