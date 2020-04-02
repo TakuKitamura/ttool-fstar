@@ -47,8 +47,6 @@ import myutil.TraceManager;
 
 import java.util.*;
 
-import org.apache.commons.io.filefilter.FalseFileFilter;
-
 
 /**
  * Class AvatarModelChecker
@@ -197,10 +195,11 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         for (AvatarBlock block : spec.getListOfBlocks()) {
             for (AvatarStateMachineElement elt : block.getStateMachine().getListOfElements()) {
                 //TraceManager.addDev("null elt in state machine of block=" + block.getName());
-                if (elt.canBeVerified() && elt.isChecked()) {
+                //if (elt.canBeVerified() && elt.isChecked()) {
+                if (elt.isChecked()) {
                     livenessInfo = new SpecificationLiveness(elt, block);
                     states++;
-                    break;
+                    //break;
                 }
             }
         }
@@ -1265,8 +1264,13 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         return getNextState(e, _newState, maxNbOfIterations);
     }
     
-    private AvatarStateElement getNextStateNoCheck(AvatarStateMachineElement e, int maxNbOfIterations) {
+    private AvatarStateMachineElement getNextStateLivenessCheck(AvatarStateMachineElement e, int maxNbOfIterations) {
+        //Returns an element if there is a liveness checked element else it returns a state
         e = e.getNext(0);
+        if (e == livenessInfo.ref1) {
+            //liveness element found
+            return e;
+        }
         if (e instanceof AvatarStateElement) {
             return (AvatarStateElement) e;
         }
@@ -1274,7 +1278,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         if (maxNbOfIterations == 0) {
             return null;
         }
-        return getNextStateNoCheck(e, maxNbOfIterations);
+        return getNextStateLivenessCheck(e, maxNbOfIterations);
     }
 
     // Execute the actions of a transition, and correspondingly impact the variables of the
@@ -1468,7 +1472,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     }
     
     private boolean checkFalseLivenessFromCurrentState(SpecificationState _ss, ArrayList<SpecificationTransition> transitions) {
-        AvatarStateElement ase;
+        AvatarStateMachineElement asme;
         boolean livenessState = false;
         int livenessAlternatives = 0;
         
@@ -1476,10 +1480,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             for (int i = 0; i < tr.transitions.length; i++) {
                 if (tr.transitions[i].getBlock() == livenessInfo.ref2) {
                     //transition on same state machine to check
-                    ase = getNextStateNoCheck(tr.transitions[i], 10);
-                    if (ase != null) {
+                    asme = getNextStateLivenessCheck(tr.transitions[i], 10);
+                    if (asme != null) {
                         livenessAlternatives++;
-                        if (livenessInfo.ref1 == ase) {
+                        if (livenessInfo.ref1 == asme) {
                             TraceManager.addDev("Liveness found on a path");
                             livenessState = true;
                         }
@@ -1497,14 +1501,14 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     }
     
     private boolean setLivenessofState(SpecificationState newState, SpecificationTransition tr, boolean livenessStateCuncurrent, boolean precLiveness) {
-        AvatarStateElement ase;
+        AvatarStateMachineElement asme;
         boolean found = false;
         
         // Find if newState carries the transition to a liveness check state
         for (int i = 0; i < tr.transitions.length; i++) {
-            ase = getNextStateNoCheck(tr.transitions[i], 10);
-            if (ase != null) {
-                if (livenessInfo.ref1 == ase) {
+            asme = getNextStateLivenessCheck(tr.transitions[i], 10);
+            if (asme != null) {
+                if (livenessInfo.ref1 == asme) {
                     newState.liveness = livenessStateCuncurrent;
                     found = true;
                 }

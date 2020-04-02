@@ -601,6 +601,12 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                 mgui.resetLiveness();
                 res = amc.setLivenessofState();
                 jta.append("Liveness of " + res + " selected elements activated\n");
+                
+                SpecificationLiveness sl = amc.getLivenessResult();
+                handleLiveness(sl.ref1, false);
+//                if (sl.ref2 != sl.ref1) {
+//                    handleLiveness(sl.ref2, sl.result);
+//                }
             }
             
             // Limitations
@@ -677,6 +683,12 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             if (livenessSelected != LIVENESS_NONE) {
                 jta.append("\nLiveness Analysis:\n");
                 jta.append(amc.getLivenessResult().toString());
+                
+                SpecificationLiveness sl = amc.getLivenessResult();
+                handleLiveness(sl.ref1, sl.result);
+//                if (sl.ref2 != sl.ref1) {
+//                    handleLiveness(sl.ref2, sl.result);
+//                }
             }
 
             //TraceManager.addDev(amc.toString());
@@ -759,6 +771,23 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                         tgc.setReachability(TGComponent.ACCESSIBILITY_KO);
                         tgc.setLiveness(TGComponent.ACCESSIBILITY_KO);
                         break;
+                }
+                tgc.getTDiagramPanel().repaint();
+            }
+        }
+    }
+    
+    protected void handleLiveness(Object _o, boolean _res) {
+        if (_o instanceof AvatarStateMachineElement) {
+            Object o = ((AvatarStateMachineElement) _o).getReferenceObject();
+            if (o instanceof TGComponent) {
+                TGComponent tgc = (TGComponent) (o);
+                //TraceManager.addDev("Reachability of tgc=" + tgc + " value=" + tgc.getValue() + " class=" + tgc.getClass());
+                if (_res) {
+                    tgc.setReachability(TGComponent.ACCESSIBILITY_OK);
+                    tgc.setLiveness(TGComponent.ACCESSIBILITY_OK);
+                } else {
+                    tgc.setLiveness(TGComponent.ACCESSIBILITY_KO);
                 }
                 tgc.getTDiagramPanel().repaint();
             }
