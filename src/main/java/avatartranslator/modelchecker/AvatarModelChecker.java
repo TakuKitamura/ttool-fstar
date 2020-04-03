@@ -97,7 +97,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     // Liveness
     private boolean livenessDone;
     private boolean studyLiveness;
-    //private ArrayList<SpecificationLiveness> livenesses;
+    private ArrayList<SpecificationLiveness> livenesses;
     private SpecificationLiveness livenessInfo;
     
     //RG limits
@@ -190,27 +190,38 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         ignoreInternalStates = _b;
     }
 
-    public int setLivenessofState() {
-        int states = 0;
+    public int setLivenessOfSelected() {
+        livenesses = new ArrayList<SpecificationLiveness>();
         for (AvatarBlock block : spec.getListOfBlocks()) {
             for (AvatarStateMachineElement elt : block.getStateMachine().getListOfElements()) {
                 //TraceManager.addDev("null elt in state machine of block=" + block.getName());
                 //if (elt.canBeVerified() && elt.isChecked()) {
                 if (elt.isChecked()) {
-                    livenessInfo = new SpecificationLiveness(elt, block);
-                    states++;
-                    //break;
+                    SpecificationLiveness sl = new SpecificationLiveness(elt, block);
+                    livenesses.add(sl);
                 }
             }
         }
-        if (states > 0) {
-            studyLiveness = true;
-        }
-        return states;
+        studyLiveness = true;
+        return livenesses.size();
     }
     
-    public SpecificationLiveness getLivenessResult() {
-        return livenessInfo;
+    public int setLivenessOfAllStates() {        
+        livenesses = new ArrayList<SpecificationLiveness>();
+        for (AvatarBlock block : spec.getListOfBlocks()) {
+            for (AvatarStateMachineElement elt : block.getStateMachine().getListOfElements()) {
+                if (((elt instanceof AvatarStateElement) && (elt.canBeVerified())) || (elt.isCheckable())) {
+                    SpecificationLiveness sl = new SpecificationLiveness(elt, block);
+                    livenesses.add(sl);
+                }
+            }
+        }
+        studyLiveness = true;
+        return livenesses.size();
+    }
+    
+    public ArrayList<SpecificationLiveness> getLivenesses() {
+        return livenesses;
     }
 
     public int setReachabilityOfSelected() {
@@ -288,26 +299,41 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
       }*/
 
     public boolean startModelCheckingLiveness() {
-        // No other study are authorized at the same time
-        //
-
+        boolean studyreach;
+        
         if (spec == null) {
             return false;
         }
 
-        if (livenessInfo == null) {
+        if (livenesses == null) {
             return false;
         }
-
-        studyLiveness = true;
-        livenessDone = false;
-        studyReachability = false;
-        computeRG = false;
+        
         stateLimitRG = false;
         timeLimitRG = false;
+        studyreach = studyReachability;
+        
+        //then compute livenesses
+        studyLiveness = true;
+        studyReachability = false;
+        computeRG = false;
+        livenessDone = false;
 
+        for (SpecificationLiveness sl : livenesses) {
+            livenessInfo = sl;
+            startModelChecking();
+            livenessDone = false;
+            stoppedConditionReached = false;
+        }
+        
+        if (studyreach) {
+            //do a run to compute reachabilities
+            studyLiveness = false;
+            studyReachability = true;
+            computeRG = true;
+            startModelChecking();
+        }
 
-        startModelChecking();
         return true;
     }
 
@@ -343,7 +369,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
 
         nbOfThreads = Runtime.getRuntime().availableProcessors();
-        nbOfThreads = 1;
         TraceManager.addDev("Starting the model checking with " + nbOfThreads + " threads");
         TraceManager.addDev("Ignore internal state:" + ignoreInternalStates);
         startModelChecking(nbOfThreads);
@@ -1645,6 +1670,25 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         int cpt = 0;
         for (SpecificationReachability re : reachabilities) {
             ret += (cpt + 1) + ". " + re.toString() + "\n";
+            cpt++;
+        }
+        return ret;
+    }
+    
+    public String livenessToString() {
+        if (!studyLiveness) {
+            return "Liveness not activated";
+        }
+
+
+        String ret = "";
+        if (stoppedBeforeEnd) {
+            ret += "Beware: Full study of reachability might not have been fully completed\n";
+        }
+
+        int cpt = 0;
+        for (SpecificationLiveness sl : livenesses) {
+            ret += (cpt + 1) + ". " + sl.toString() + "\n";
             cpt++;
         }
         return ret;

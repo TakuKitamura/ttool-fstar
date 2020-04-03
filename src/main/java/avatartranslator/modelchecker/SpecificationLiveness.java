@@ -82,9 +82,9 @@ public class SpecificationLiveness  {
 
 	
 	if (result) {
-	    return name + " -> liveness is satisfied\n"; 
+	    return name + " -> liveness is satisfied"; 
 	}
-	return name + " -> liveness is NOT satisfied\n";
+	return name + " -> liveness is NOT satisfied";
 	
     }
 

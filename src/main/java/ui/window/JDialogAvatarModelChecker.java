@@ -599,14 +599,22 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             
             if (livenessSelected == LIVENESS_SELECTED) {
                 mgui.resetLiveness();
-                res = amc.setLivenessofState();
+                res = amc.setLivenessOfSelected();
+                jta.append("Liveness of " + res + " states activated\n");
+                
+                for (SpecificationLiveness sl : amc.getLivenesses()) {
+                    handleLiveness(sl.ref1, false);
+                }
+            }
+            
+            if (livenessSelected == LIVENESS_ALL) {
+                mgui.resetLiveness();
+                res = amc.setLivenessOfAllStates();
                 jta.append("Liveness of " + res + " selected elements activated\n");
                 
-                SpecificationLiveness sl = amc.getLivenessResult();
-                handleLiveness(sl.ref1, false);
-//                if (sl.ref2 != sl.ref1) {
-//                    handleLiveness(sl.ref2, sl.result);
-//                }
+                for (SpecificationLiveness sl : amc.getLivenesses()) {
+                    handleLiveness(sl.ref1, false);
+                }
             }
             
             // Limitations
@@ -682,13 +690,11 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             
             if (livenessSelected != LIVENESS_NONE) {
                 jta.append("\nLiveness Analysis:\n");
-                jta.append(amc.getLivenessResult().toString());
+                jta.append(amc.livenessToString());
                 
-                SpecificationLiveness sl = amc.getLivenessResult();
-                handleLiveness(sl.ref1, sl.result);
-//                if (sl.ref2 != sl.ref1) {
-//                    handleLiveness(sl.ref2, sl.result);
-//                }
+                for (SpecificationLiveness sl : amc.getLivenesses()) {
+                    handleLiveness(sl.ref1, sl.result);
+                }
             }
 
             //TraceManager.addDev(amc.toString());
