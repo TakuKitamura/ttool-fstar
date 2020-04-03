@@ -156,6 +156,14 @@ public class SpecificationState implements Comparable<SpecificationState>  {
         }
         return cpt;
     }
+    
+    public int getNextsSize() {
+        if (nexts == null) {
+            return 0;
+        } else {
+            return nexts.size();
+        }
+    }
 
     public void addNext(SpecificationLink sl) {
 	if (nexts == null) {

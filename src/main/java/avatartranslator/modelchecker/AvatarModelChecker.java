@@ -343,6 +343,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
 
         nbOfThreads = Runtime.getRuntime().availableProcessors();
+        nbOfThreads = 1;
         TraceManager.addDev("Starting the model checking with " + nbOfThreads + " threads");
         TraceManager.addDev("Ignore internal state:" + ignoreInternalStates);
         startModelChecking(nbOfThreads);
@@ -716,15 +717,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         //   Otherwise create the new state and its link, and add it to the pending list of states
         int cptt = 0;
         
-        boolean livenessStateFound = false;
-        boolean livenessStateCuncurrent = false;
-        
-        if (studyLiveness) {
-            //check for a transition with a false liveness state
-            // true only if there is an unique transition to a state with liveness check
-            livenessStateCuncurrent = checkFalseLivenessFromCurrentState(_ss, transitions);
-        }
-        
         for (SpecificationTransition tr : transitions) {
             //TraceManager.addDev("Handling transitions #" + cptt + " type =" + tr.getType());
             cptt++;
@@ -743,7 +735,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             
             if (studyLiveness) {
                 //set liveness value for state
-                livenessStateFound = setLivenessofState(newState, tr, livenessStateCuncurrent, _ss.liveness);
+                setLivenessofState(newState, tr, _ss.liveness);
             }
 
             // Remove empty transitions if applicable
@@ -782,13 +774,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 //newState.id = getStateID();
                 //TraceManager.addDev("Putting new state with id = " +  newState.id + " stateID = " + stateID + " states size = " + states.size() + " states by id size = " + statesByID.size());
                 //statesByID.put(newState.id, newState);
-            	
-                if (studyLiveness && livenessStateFound && livenessStateCuncurrent == false) {
-                    livenessDone = true;
-                    livenessInfo.result = false;
-                } else {
-                    pendingStates.add(newState);
-                }
+                
+                pendingStates.add(newState);
 
                 link.destinationState = newState;
                 //newState.id = getStateID();
@@ -802,8 +789,12 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
                 // If liveness, must verify that from similar it is possible to go to the considered
                 // state or not.
-                if (studyLiveness && similar.liveness == false) {
-                    if (!newState.liveness) {
+                if (studyLiveness && newState.liveness == false) {
+                    if (similar.liveness) {
+                        //found a branch with false liveness
+                        livenessDone = true;
+                        livenessInfo.result = false;
+                    } else if (stateIsReachableFromState(similar, _ss)) {
                         //found a loop with false liveness
                         livenessDone = true;
                         livenessInfo.result = false;
@@ -836,7 +827,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     private void computeAllInternalStatesFrom(SpecificationState _ss, SpecificationTransition st) {
         SpecificationState newState = _ss.advancedClone();
         SpecificationState previousState = _ss;
-        boolean livenessStateFound = false;
 
         int cpt = 0;
 
@@ -848,7 +838,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             
             if (studyLiveness) {
                 //set liveness value for state
-                livenessStateFound = setLivenessofState(newState, st, true, previousState.liveness);
+                setLivenessofState(newState, st, previousState.liveness);
             }
             
             if (ignoreEmptyTransitions) {
@@ -868,6 +858,17 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 link.destinationState = similar;
                 nbOfLinks++;
                 _ss.addNext(link);
+                if (studyLiveness && newState.liveness == false) {
+                    if (similar.liveness) {
+                        //found a branch with false liveness
+                        livenessDone = true;
+                        livenessInfo.result = false;
+                    } else if (stateIsReachableFromState(similar, _ss)) {
+                        //found a loop with false liveness
+                        livenessDone = true;
+                        livenessInfo.result = false;
+                    }
+                }
                 break;
             }
 
@@ -950,10 +951,17 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 if (similar != null) {
                 	// check if it has been created by another thread in the meanwhile
                 	link.destinationState = similar;
-                	if (studyLiveness && similar.liveness == false && !livenessStateFound) {
-                        livenessDone = true;
-                        livenessInfo.result = false;
-                	}
+                	if (studyLiveness && newState.liveness == false) {
+                        if (similar.liveness) {
+                            //found a branch with false liveness
+                            livenessDone = true;
+                            livenessInfo.result = false;
+                        } else if (stateIsReachableFromState(similar, _ss)) {
+                            //found a loop with false liveness
+                            livenessDone = true;
+                            livenessInfo.result = false;
+                        }
+                    }
                 } else {
                     link.destinationState = newState;
                 	pendingStates.add(newState);
@@ -1471,36 +1479,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
     }
     
-    private boolean checkFalseLivenessFromCurrentState(SpecificationState _ss, ArrayList<SpecificationTransition> transitions) {
-        AvatarStateMachineElement asme;
-        boolean livenessState = false;
-        int livenessAlternatives = 0;
-        
-        for (SpecificationTransition tr : transitions) {
-            for (int i = 0; i < tr.transitions.length; i++) {
-                if (tr.transitions[i].getBlock() == livenessInfo.ref2) {
-                    //transition on same state machine to check
-                    asme = getNextStateLivenessCheck(tr.transitions[i], 10);
-                    if (asme != null) {
-                        livenessAlternatives++;
-                        if (livenessInfo.ref1 == asme) {
-                            TraceManager.addDev("Liveness found on a path");
-                            livenessState = true;
-                        }
-                    }
-                }
-            }
-        }
-        if (livenessAlternatives == 1 && livenessState == true) {
-            //liveness in state is found
-            return true;
-        } else {
-            //liveness state is not found or liveness is not true
-            return false;
-        }
-    }
-    
-    private boolean setLivenessofState(SpecificationState newState, SpecificationTransition tr, boolean livenessStateCuncurrent, boolean precLiveness) {
+    private boolean setLivenessofState(SpecificationState newState, SpecificationTransition tr, boolean precLiveness) {
         AvatarStateMachineElement asme;
         boolean found = false;
         
@@ -1509,7 +1488,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             asme = getNextStateLivenessCheck(tr.transitions[i], 10);
             if (asme != null) {
                 if (livenessInfo.ref1 == asme) {
-                    newState.liveness = livenessStateCuncurrent;
+                    newState.liveness = true;
                     found = true;
                 }
             }
@@ -1707,5 +1686,27 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         return states;
     }
 
-
+    private boolean stateIsReachableFromState(SpecificationState start, SpecificationState arrival) {
+        Set<Long> visited= new HashSet<Long>();    
+        return stateIsReachableFromStateRec(start, arrival, visited);
+    }
+    
+    private boolean stateIsReachableFromStateRec(SpecificationState start, SpecificationState arrival, Set<Long> visited) {
+        if (start == arrival) {
+            return true;
+        } else if (start.getNextsSize() == 0){
+            return false;
+        } else if (visited.contains(start.id)) {
+            return false;
+        }
+        
+        visited.add(start.id);
+        for (SpecificationLink i : start.nexts) {
+            if (stateIsReachableFromStateRec(i.destinationState, arrival, visited)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
 }
