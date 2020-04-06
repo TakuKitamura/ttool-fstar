@@ -1663,17 +1663,17 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         }
 
 
-        String ret = "";
+        StringBuilder ret = new StringBuilder();
         if (stoppedBeforeEnd) {
-            ret += "Beware: Full study of reachability might not have been fully completed\n";
+            ret.append("Beware: Full study of reachability might not have been fully completed\n");
         }
 
         int cpt = 0;
         for (SpecificationReachability re : reachabilities) {
-            ret += (cpt + 1) + ". " + re.toString() + "\n";
+            ret.append((cpt + 1) + ". " + re.toString() + "\n");
             cpt++;
         }
-        return ret;
+        return ret.toString();
     }
     
     public String livenessToString() {
@@ -1682,17 +1682,17 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         }
 
 
-        String ret = "";
+        StringBuilder ret = new StringBuilder();
         if (stoppedBeforeEnd) {
-            ret += "Beware: Full study of reachability might not have been fully completed\n";
+            ret.append("Beware: Full study of reachability might not have been fully completed\n");
         }
 
         int cpt = 0;
         for (SpecificationLiveness sl : livenesses) {
-            ret += (cpt + 1) + ". " + sl.toString() + "\n";
+            ret.append((cpt + 1) + ". " + sl.toString() + "\n");
             cpt++;
         }
-        return ret;
+        return ret.toString();
     }
 
     // Do not free the RG
