@@ -333,6 +333,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             computeRG = true;
             startModelChecking();
         }
+        studyLiveness = true;
 
         return true;
     }
@@ -415,6 +416,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         //states.put(initialState.hashValue, initialState);
         //statesByID.put(initialState.id, initialState);
         pendingStates.add(initialState);
+        nbOfCurrentComputations = 0;
 
         if (timeLimitRG) {
             computeAllStatesTime();
@@ -527,7 +529,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             
             if (timeLimitReached || livenessDone) {
                 emptyPendingStates();
-                notifyAll();
                 return;
             }
 
