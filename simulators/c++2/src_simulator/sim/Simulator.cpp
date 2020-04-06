@@ -1310,6 +1310,21 @@ ServerIF* Simulator::run(int iLen, char ** iArgs){
   return 0;
 }
 
+bool Simulator::getDaemonTaskStatus(SimComponents* __simComp) {
+    int tempDaemon = 0;
+    if (!__simComp->getNonDaemonTaskList().empty()) {
+       for (TaskList::const_iterator i=__simComp->getNonDaemonTaskList().begin(); i != __simComp->getNonDaemonTaskList().end(); ++i) {
+          if((*i)->getState()==3){
+             tempDaemon ++;
+          }
+       }
+    }
+    if (tempDaemon < __simComp->getNonDaemonTaskList().size()) {
+       return false;
+    }
+    return true;
+}
+
 void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
   std::cout<<"decodeCommand"<<std::endl;
   //std::cout << "Not crashed. I: " << iCmd << std::endl;
@@ -1355,15 +1370,7 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
           std::cout << "Run to next breakpoint." << std::endl;
           aGlobMsg << TAG_MSGo << "Run to next breakpoint" << TAG_MSGc << std::endl;
           _simTerm=runToNextBreakpoint(oLastTrans);
-          int tempDaemon = 0;
-          if (!_simComp->getNonDaemonTaskList().empty()) {
-             for (TaskList::const_iterator i=_simComp->getNonDaemonTaskList().begin(); i != _simComp->getNonDaemonTaskList().end(); ++i) {
-                if((*i)->getState()==3){
-                    tempDaemon ++;
-                }
-             }
-          }
-          if (tempDaemon < _simComp->getNonDaemonTaskList().size()) {
+          if (!getDaemonTaskStatus(_simComp)) {
              _simTerm = false;
           }
           std::cout << "End Run to next breakpoint." << std::endl;
@@ -1382,6 +1389,9 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
       //_currCmdListener=new RunXTransactions(_simComp,aParam2);
       aGlobMsg << TAG_MSGo << "Created listener run " << aParam2 << " transactions" << TAG_MSGc << std::endl;
       _simTerm = runXTransactions(aParam2, oLastTrans);
+      if (!getDaemonTaskStatus(_simComp)) {
+         _simTerm = false;
+      }
       std::cout << "Run x transactions." << std::endl;
       break;
     case 3:     //Run up to command x
@@ -1396,6 +1406,9 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
       //_currCmdListener=new RunXCommands(_simComp,aParam2);
       aGlobMsg << TAG_MSGo << "Created listener run " << aParam2 << " commands" << TAG_MSGc << std::endl;
       _simTerm = runXCommands(aParam2, oLastTrans);
+      if (!getDaemonTaskStatus(_simComp)) {
+         _simTerm = false;
+      }
       std::cout << "End Run x commands." << std::endl;
       break;
     case 5: //Run up to time x
@@ -1404,6 +1417,9 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
       //_currCmdListener=new RunXTimeUnits(_simComp,aParam2);
       aGlobMsg << TAG_MSGo << "Created listener run to time " << aParam2 << TAG_MSGc << std::endl;
       _simTerm = runTillTimeX(aParam2, oLastTrans);
+      if (!getDaemonTaskStatus(_simComp)) {
+         _simTerm = false;
+      }
       std::cout << "End Run to time x." << std::endl;
       break;
     case 6:     //Run for x time units
@@ -1412,6 +1428,9 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
       //_currCmdListener=new RunXTimeUnits(_simComp,aParam2+SchedulableDevice::getSimulatedTime());
       aGlobMsg << TAG_MSGo  << "Created listener run " << aParam2 << " time units" << TAG_MSGc << std::endl;
       _simTerm = runXTimeUnits(aParam2, oLastTrans);
+      if (!getDaemonTaskStatus(_simComp)) {
+         _simTerm = false;
+      }
       std::cout << "End Run for x time units." << std::endl;
       break;
     case 7: {//Explore Tree
@@ -1496,6 +1515,9 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
         //_currCmdListener=new RunTillTransOnDevice(_simComp, aSubject);
         aGlobMsg << TAG_MSGo << "Created listener on Bus " << aStrParam << TAG_MSGc << std::endl;
         _simTerm=runToBusTrans(aBus, oLastTrans);
+        if (!getDaemonTaskStatus(_simComp)) {
+           _simTerm = false;
+        }
       }else{
         aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
         anErrorCode=2;
@@ -1512,6 +1534,9 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
         //_currCmdListener=new RunTillTransOnDevice(_simComp, aSubject);
         aGlobMsg << TAG_MSGo << "Created listener on CPU " << aStrParam << TAG_MSGc << std::endl;
         _simTerm=runToCPUTrans(aCPU, oLastTrans);
+        if (!getDaemonTaskStatus(_simComp)) {
+           _simTerm = false;
+        }
       }else{
         aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
         anErrorCode=2;
@@ -1527,6 +1552,9 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
       if (aTask!=0){
         aGlobMsg << TAG_MSGo << "Created listener on Task " << aStrParam << TAG_MSGc << std::endl;
         _simTerm=runToTaskTrans(aTask, oLastTrans);
+        if (!getDaemonTaskStatus(_simComp)) {
+           _simTerm = false;
+        }
         //_currCmdListener=new RunTillTransOnDevice(_simComp, aSubject);
 
       }else{
@@ -1545,6 +1573,9 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
         //_currCmdListener=new RunTillTransOnDevice(_simComp, aSubject);
         aGlobMsg << TAG_MSGo << "Created listener on Slave " << aStrParam << TAG_MSGc << std::endl;
         _simTerm=runToSlaveTrans(aSlave, oLastTrans);
+        if (!getDaemonTaskStatus(_simComp)) {
+           _simTerm = false;
+        }
       }else{
         aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
         anErrorCode=2;
@@ -1561,6 +1592,9 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
         //_currCmdListener=new RunTillTransOnDevice(_simComp, aSubject);
         aGlobMsg << TAG_MSGo << "Created listener on Channel " << aStrParam << TAG_MSGc << std::endl;
         _simTerm=runToChannelTrans(aChannel, oLastTrans);
+        if (!getDaemonTaskStatus(_simComp)) {
+           _simTerm = false;
+        }
       }else{
         aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
         anErrorCode=2;
@@ -1571,6 +1605,9 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
     case 13:{//Run to next random choice command
       std::cout << "Run to next random command." << std::endl;
       _simTerm=runToNextRandomCommand(oLastTrans);
+      if (!getDaemonTaskStatus(_simComp)) {
+         _simTerm = false;
+      }
       std::cout << "End Run to next random choice command." << std::endl;
       break;
     }
@@ -1605,6 +1642,9 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
         //_currCmdListener=new RunTillTransOnDevice(_simComp, aSubject);
         aGlobMsg << TAG_MSGo << "Created listener on FPGA " << aStrParam << TAG_MSGc << std::endl;
         _simTerm=runToCPUTrans(aFPGA, oLastTrans);
+        if (!getDaemonTaskStatus(_simComp)) {
+           _simTerm = false;
+        }
       }else{
         aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
         anErrorCode=2;
