@@ -99,6 +99,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     private boolean studyLiveness;
     private ArrayList<SpecificationLiveness> livenesses;
     private SpecificationLiveness livenessInfo;
+    private long parallelLivenessPaths;
     
     //RG limits
     private boolean stateLimitRG;
@@ -348,6 +349,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         stoppedBeforeEnd = false;
         limitReached = false;
         timeLimitReached = false;
+        parallelLivenessPaths = 1; //keeps track of paths with no liveness of state
         stateID = 0;
         nbOfDeadlocks = 0;
 
@@ -406,6 +408,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         //initialState.id = 0//getStateID();
         if (ignoreEmptyTransitions) {
             handleNonEmptyUniqueTransition(initialState);
+        }
+        if (studyLiveness && initialState.liveness == true) {
+            //liveness on initial states
+            return;
         }
         prepareTransitionsOfState(initialState);
         blockValues = initialState.getBlockValues();
@@ -546,7 +552,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 // Handle one given state
                 computeAllStatesFrom(s);
                 // Release the computation
-                releasePickupState();
+                releasePickupState(s);
             }
         }
     }
@@ -567,6 +573,11 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 size = pendingStates.size();
             }
         }
+        
+        if (parallelLivenessPaths == 0) {
+            // stop as soon as liveness is verified for all the pending states
+            return null;
+        }
 
         SpecificationState s = pendingStates.get(0);
         pendingStates.remove(0);
@@ -574,7 +585,11 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         return s;
     }
 
-    private synchronized void releasePickupState() {
+    private synchronized void releasePickupState(SpecificationState s) {
+         //new paths without liveness
+        if (studyLiveness && s.liveness == false) {
+            parallelLivenessPaths += s.nextNoLiveness - 1;
+        }
         nbOfCurrentComputations--;
         notifyAll();
     }
@@ -741,11 +756,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         //   compute new state, and compare with existing ones
         //   If not a new state, create the link rom the previous state to the new one
         //   Otherwise create the new state and its link, and add it to the pending list of states
-        int cptt = 0;
+        int nextNoLiveness = 0;
         
         for (SpecificationTransition tr : transitions) {
             //TraceManager.addDev("Handling transitions #" + cptt + " type =" + tr.getType());
-            cptt++;
 
             // Make tr
             // to do so, must create a new state
@@ -769,6 +783,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 handleNonEmptyUniqueTransition(newState);
             }
             prepareTransitionsOfState(newState);
+            
 
             // Compute the hash of the new state, and create the link to the right next state
             SpecificationLink link = new SpecificationLink();
@@ -804,6 +819,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 pendingStates.add(newState);
 
                 link.destinationState = newState;
+                
+                if (!newState.liveness) {
+                    nextNoLiveness++;
+                }
                 //newState.id = getStateID();
                 //TraceManager.addDev("Creating new state for newState=" + newState);
 
@@ -839,6 +858,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         		nbOfDeadlocks++;
         	}
         }
+        
+        _ss.nextNoLiveness = nextNoLiveness;
 
         if (freeIntermediateStateCoding) {
             _ss.freeUselessAllocations();
@@ -854,17 +875,19 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         SpecificationState newState = _ss.advancedClone();
         SpecificationState previousState = _ss;
 
-        int cpt = 0;
+        int nextNoLiveness = 0;
 
         while (st != null) {
             //TraceManager.addDev("cpt=" + cpt + " Working on transition:" + st);
-            cpt ++;
+            nextNoLiveness = 1;
             newState.increaseClockOfBlocksExcept(st);
             executeTransition(previousState, newState, st);
             
             if (studyLiveness) {
                 //set liveness value for state
-                setLivenessofState(newState, st, previousState.liveness);
+                if (setLivenessofState(newState, st, previousState.liveness)) {
+                    nextNoLiveness = 0;
+                }
             }
             
             if (ignoreEmptyTransitions) {
@@ -1006,6 +1029,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         		nbOfDeadlocks++;
         	}
         }
+        
+        _ss.nextNoLiveness = nextNoLiveness;
 
         if (freeIntermediateStateCoding) {
             _ss.freeUselessAllocations();
@@ -1522,7 +1547,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         if (!found) {
             newState.liveness = precLiveness;
         }
-        return found;
+        return found || precLiveness;
     }
 
 
