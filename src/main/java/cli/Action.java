@@ -586,13 +586,22 @@ public class Action extends Command {
                 return "Generate a Reachability graph from an AVATAR model";
             }
 
-            public String getUsage() { return "arg <Ref to graph file>"; }
+            public String getUsage() { return "[OPTION]... [FILE]\n"
+                    + "-r, -rs\treachability of selected states\n"
+                    + "-ra\treachability of all states\n"
+                    + "-l, ls\tliveness of all states\n"
+                    + "-la\tliveness of all states\n"
+                    + "-s NUM\t maximum states created\n"
+                    + "-t NUM\t maximum time (ms)\n";
+            }
 
             public String getExample() {
                 return "arg /tmp/mylovelyrg?.aut (\"?\" is replaced with current date and time)";
             }
 
             public String executeCommand(String command, Interpreter interpreter) {
+                //format: flags(-rl -la -t 100) graph_path
+                
                 if (!interpreter.isTToolStarted()) {
                     return Interpreter.TTOOL_NOT_STARTED;
                 }
@@ -602,7 +611,7 @@ public class Action extends Command {
                     return Interpreter.BAD;
                 }
 
-                String graphPath = commands[0];
+                String graphPath = commands[commands.length - 1];
 
                 AvatarSpecification avspec = interpreter.mgui.gtm.getAvatarSpecification();
                 if(avspec == null) {
@@ -614,10 +623,74 @@ public class Action extends Command {
                 amc.setIgnoreConcurrenceBetweenInternalActions(true);
                 amc.setIgnoreInternalStates(true);
                 amc.setComputeRG(true);
+                boolean reachabilityAnalysis = false;
+                boolean livenessAnalysis = false;
+                for (int i = 0; i < commands.length - 1; i++) {
+                    //specification
+                    switch (commands[i]) {
+                        case "-r":
+                        case "-rs":
+                            //reachability of selected states
+                            amc.setReachabilityOfSelected();
+                            reachabilityAnalysis = true;
+                            break;
+                        case "-ra":
+                            //reachability of all states
+                            amc.setReachabilityOfAllStates();
+                            reachabilityAnalysis = true;
+                            break;
+                        case "-l":
+                        case "-ls":
+                            //liveness of selected states
+                            amc.setLivenessOfSelected();
+                            livenessAnalysis = true;
+                            break;
+                        case "-la":
+                            //liveness of all states
+                            amc.setLivenessOfAllStates();
+                            livenessAnalysis = true;
+                            break;
+                        case "-s":
+                            //state limit followed by a number
+                            long states;
+                            try {
+                                states = Long.parseLong(commands[++i]);
+                            } catch (NumberFormatException e){
+                                return Interpreter.BAD;
+                            }
+                            amc.setStateLimitValue(states);
+                            amc.setStateLimit(true);
+                            break;
+                        case "-t":
+                            //time limit followed by a number
+                            long time;
+                            try {
+                                time = Long.parseLong(commands[++i]);
+                            } catch (NumberFormatException e){
+                                return Interpreter.BAD;
+                            }
+                            amc.setTimeLimitValue(time);
+                            amc.setTimeLimit(true);
+                            break;
+                        default:
+                            return Interpreter.BAD;
+                    }
+                }
                 TraceManager.addDev("Starting model checking");
-                amc.startModelChecking();
+                if (livenessAnalysis) {
+                    amc.startModelCheckingLiveness();
+                } else {
+                    amc.startModelChecking();
+                }
+                
                 System.out.println("Model checking done\nGraph: states:" + amc.getNbOfStates() +
                         " links:" + amc.getNbOfLinks() + "\n");
+                if (reachabilityAnalysis) {
+                    System.out.println("\nReachability Analysis:" + amc.reachabilityToString());
+                }
+                if (livenessAnalysis) {
+                    System.out.println("\nLiveness Analysis:" + amc.livenessToString());
+                }
 
                 // Saving graph
                 String graphAUT = amc.toAUT();
