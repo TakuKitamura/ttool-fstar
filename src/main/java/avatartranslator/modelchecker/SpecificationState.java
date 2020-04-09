@@ -58,7 +58,6 @@ import java.util.LinkedList;
    * @author Ludovic APVRILLE
  */
 public class SpecificationState implements Comparable<SpecificationState>  {
-
     public SpecificationBlock [] blocks;
     public int hashValue;
     public boolean hashComputed;
@@ -67,11 +66,13 @@ public class SpecificationState implements Comparable<SpecificationState>  {
     public boolean liveness; //trace the liveness check at this state
     public int nextNoLiveness; //trace next states without liveness
     public ArrayList<SpecificationTransition> transitions;
+    public long distance; //max #steps to be reached from S0
 
     public SpecificationState() {
         hashComputed = false;
         liveness = false;
         nextNoLiveness = 0;
+        distance = 0;
     }
 
     // blocks must not be null

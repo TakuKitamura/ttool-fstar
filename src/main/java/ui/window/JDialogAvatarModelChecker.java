@@ -840,7 +840,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
 
         switch (mode) {
             case NOT_STARTED:
-                if ((reachabilitySelected == REACHABILITY_SELECTED) || (reachabilitySelected == REACHABILITY_ALL) || graphSelected || graphSelectedDot) {
+                if ((reachabilitySelected == REACHABILITY_SELECTED) || (reachabilitySelected == REACHABILITY_ALL) || (livenessSelected == LIVENESS_SELECTED) || (livenessSelected == LIVENESS_ALL)|| graphSelected || graphSelectedDot) {
                     start.setEnabled(true);
                 } else {
                     start.setEnabled(false);

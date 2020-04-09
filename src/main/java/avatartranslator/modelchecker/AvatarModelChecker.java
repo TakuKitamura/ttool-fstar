@@ -372,6 +372,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
 
         nbOfThreads = Runtime.getRuntime().availableProcessors();
+        nbOfThreads = 1;
         TraceManager.addDev("Starting the model checking with " + nbOfThreads + " threads");
         TraceManager.addDev("Ignore internal state:" + ignoreInternalStates);
         startModelChecking(nbOfThreads);
@@ -415,6 +416,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         }
         prepareTransitionsOfState(initialState);
         blockValues = initialState.getBlockValues();
+        initialState.distance = 0;
 
         TraceManager.addDev("initialState=" + initialState.toString() + "\n nbOfTransitions" + initialState.transitions.size());
         initialState.computeHash(blockValues);
@@ -823,6 +825,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 if (!newState.liveness) {
                     nextNoLiveness++;
                 }
+                newState.distance = _ss.distance + 1;
                 //newState.id = getStateID();
                 //TraceManager.addDev("Creating new state for newState=" + newState);
 
@@ -1014,6 +1017,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 } else {
                     link.destinationState = newState;
                 	pendingStates.add(newState);
+                	newState.distance = _ss.distance + 1;
                 }
                 nbOfLinks++;
                 _ss.addNext(link);
@@ -1757,7 +1761,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     }
 
     private boolean stateIsReachableFromState(SpecificationState start, SpecificationState arrival) {
-        Set<Long> visited= new HashSet<Long>();    
+        Set<Long> visited= new HashSet<Long>();
+        if (start.distance > arrival.distance) {
+            return false;
+        }
         return stateIsReachableFromStateRec(start, arrival, visited);
     }
     
