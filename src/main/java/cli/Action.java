@@ -686,10 +686,10 @@ public class Action extends Command {
                 System.out.println("Model checking done\nGraph: states:" + amc.getNbOfStates() +
                         " links:" + amc.getNbOfLinks() + "\n");
                 if (reachabilityAnalysis) {
-                    System.out.println("\nReachability Analysis:" + amc.reachabilityToString());
+                    interpreter.print("Reachability Analysis:\n" + amc.reachabilityToStringGeneric());
                 }
                 if (livenessAnalysis) {
-                    System.out.println("\nLiveness Analysis:" + amc.livenessToString());
+                    interpreter.print("Liveness Analysis:\n" + amc.livenessToString());
                 }
 
                 // Saving graph

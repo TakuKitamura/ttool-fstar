@@ -1696,6 +1696,25 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         return ret.toString();
     }
     
+    public String reachabilityToStringGeneric() {
+        if (!studyReachability) {
+            return "Reachability not activated";
+        }
+
+
+        StringBuilder ret = new StringBuilder();
+        if (stoppedBeforeEnd) {
+            ret.append("Beware: Full study of reachability might not have been fully completed\n");
+        }
+
+        int cpt = 0;
+        for (SpecificationReachability re : reachabilities) {
+            ret.append((cpt + 1) + ". " + re.toStringGeneric() + "\n");
+            cpt++;
+        }
+        return ret.toString();
+    }
+    
     public String livenessToString() {
         if (!studyLiveness) {
             return "Liveness not activated";

@@ -92,5 +92,34 @@ public class SpecificationReachability  {
 	return name + " -> NOT reachable";
 	
     }
+    
+    public String toStringGeneric() {
+        String name;
+        if (ref1 instanceof AvatarStateMachineElement) {
+            name = "Element " + ((AvatarStateMachineElement)ref1).getExtendedName();
+        } else {
+            name = ref1.toString();
+        }
+
+        if (ref2 != null) {
+            if (ref2 instanceof AvatarBlock) {
+            name += " of block " + ((AvatarBlock)ref2).getName();
+            } else {
+            name += ref2.toString();
+            }
+        }
+
+        
+        if (result == SpecificationReachabilityType.NOTCOMPUTED) {
+            return name + " -> not computed"; 
+        }
+        
+        if (result == SpecificationReachabilityType.REACHABLE) {
+            return name + " -> reachable";
+        }
+
+        return name + " -> NOT reachable";
+        
+    }
 
 }
