@@ -46,6 +46,7 @@ import myutil.IntExpressionEvaluator;
 import myutil.TraceManager;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 /**
@@ -99,7 +100,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     private boolean studyLiveness;
     private ArrayList<SpecificationLiveness> livenesses;
     private SpecificationLiveness livenessInfo;
-    private long parallelLivenessPaths;
     
     //RG limits
     private boolean stateLimitRG;
@@ -349,7 +349,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         stoppedBeforeEnd = false;
         limitReached = false;
         timeLimitReached = false;
-        parallelLivenessPaths = 1; //keeps track of paths with no liveness of state
         stateID = 0;
         nbOfDeadlocks = 0;
 
@@ -372,7 +371,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
 
         nbOfThreads = Runtime.getRuntime().availableProcessors();
-        nbOfThreads = 1;
         TraceManager.addDev("Starting the model checking with " + nbOfThreads + " threads");
         TraceManager.addDev("Ignore internal state:" + ignoreInternalStates);
         startModelChecking(nbOfThreads);
@@ -575,11 +573,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 size = pendingStates.size();
             }
         }
-        
-        if (parallelLivenessPaths == 0) {
-            // stop as soon as liveness is verified for all the pending states
-            return null;
-        }
 
         SpecificationState s = pendingStates.get(0);
         pendingStates.remove(0);
@@ -588,10 +581,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     }
 
     private synchronized void releasePickupState(SpecificationState s) {
-         //new paths without liveness
-        if (studyLiveness && s.liveness == false) {
-            parallelLivenessPaths += s.nextNoLiveness - 1;
-        }
         nbOfCurrentComputations--;
         notifyAll();
     }
@@ -758,8 +747,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         //   compute new state, and compare with existing ones
         //   If not a new state, create the link rom the previous state to the new one
         //   Otherwise create the new state and its link, and add it to the pending list of states
-        int nextNoLiveness = 0;
-        
+        int i = 0;
         for (SpecificationTransition tr : transitions) {
             //TraceManager.addDev("Handling transitions #" + cptt + " type =" + tr.getType());
 
@@ -817,14 +805,21 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 //newState.id = getStateID();
                 //TraceManager.addDev("Putting new state with id = " +  newState.id + " stateID = " + stateID + " states size = " + states.size() + " states by id size = " + statesByID.size());
                 //statesByID.put(newState.id, newState);
-                
-                pendingStates.add(newState);
 
                 link.destinationState = newState;
                 
-                if (!newState.liveness) {
-                    nextNoLiveness++;
+                if (!studyLiveness) {
+                    pendingStates.add(newState);
+                } else if (!newState.liveness) {
+                    if (i == 0) {
+                        //Priority for parallel DFS on the first transition
+                        pendingStates.add(0, newState);
+                    } else {
+                        //Not priority for parallel BFS on the other transitions
+                        pendingStates.add(newState);
+                    }
                 }
+                
                 newState.distance = _ss.distance + 1;
                 //newState.id = getStateID();
                 //TraceManager.addDev("Creating new state for newState=" + newState);
@@ -853,6 +848,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             //links.add(link);
             nbOfLinks++;
             _ss.addNext(link);
+            i++;
         }
         
         if (limitReached) {
@@ -861,8 +857,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         		nbOfDeadlocks++;
         	}
         }
-        
-        _ss.nextNoLiveness = nextNoLiveness;
 
         if (freeIntermediateStateCoding) {
             _ss.freeUselessAllocations();
@@ -878,19 +872,14 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         SpecificationState newState = _ss.advancedClone();
         SpecificationState previousState = _ss;
 
-        int nextNoLiveness = 0;
-
         while (st != null) {
             //TraceManager.addDev("cpt=" + cpt + " Working on transition:" + st);
-            nextNoLiveness = 1;
             newState.increaseClockOfBlocksExcept(st);
             executeTransition(previousState, newState, st);
             
             if (studyLiveness) {
                 //set liveness value for state
-                if (setLivenessofState(newState, st, previousState.liveness)) {
-                    nextNoLiveness = 0;
-                }
+                setLivenessofState(newState, st, previousState.liveness);
             }
             
             if (ignoreEmptyTransitions) {
@@ -1016,7 +1005,11 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                     }
                 } else {
                     link.destinationState = newState;
-                	pendingStates.add(newState);
+                    if (!studyLiveness) {
+                        pendingStates.add(newState);
+                    } else if (!newState.liveness) {
+                        pendingStates.add(0, newState);
+                    }
                 	newState.distance = _ss.distance + 1;
                 }
                 nbOfLinks++;
@@ -1034,8 +1027,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         	}
         }
         
-        _ss.nextNoLiveness = nextNoLiveness;
-
         if (freeIntermediateStateCoding) {
             _ss.freeUselessAllocations();
         } else {
