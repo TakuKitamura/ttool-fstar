@@ -63,13 +63,13 @@ public class SpecificationState implements Comparable<SpecificationState>  {
     public boolean hashComputed;
     public long id;
     public LinkedList<SpecificationLink> nexts; // The RG is there
-    public boolean liveness; //trace the liveness check at this state
+    public boolean property; //trace the property check at this state
     public ArrayList<SpecificationTransition> transitions;
     public long distance; //max #steps to be reached from S0
 
     public SpecificationState() {
         hashComputed = false;
-        liveness = false;
+        property = false;
         distance = 0;
     }
 

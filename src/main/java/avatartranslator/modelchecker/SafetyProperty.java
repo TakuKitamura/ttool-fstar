@@ -70,19 +70,19 @@ public class SafetyProperty  {
     public static final int BLOCK_STATE = 0;
     public static final int BOOL_EXPR = 1;
     
+    public int safetyType;
+    public AvatarBlock block;
+    public int blockIndex;
     
     private String rawProperty;
 
-    private int safetyType;
     private int propertyType;
     private String p;
     public boolean result;
 
     private boolean isBlockStateProperty;
-    private AvatarBlock block;
     private AvatarAttribute attribute;
 
-    private int blockIndex;
     private int stateIndex;
 
     private int errorOnProperty;
@@ -132,6 +132,7 @@ public class SafetyProperty  {
     	fieldString = pFields[0].split("\\.")[1];
     	
     	block = _spec.getBlockWithName(blockString);
+    	blockIndex = _spec.getBlockIndex(block);
     	
     	if (block == null) {
     	    errorOnProperty = BAD_PROPERTY_STRUCTURE;
