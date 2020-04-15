@@ -95,6 +95,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     protected static boolean generateDesignSelected = false;
     protected static int reachabilitySelected = REACHABILITY_NONE;
     protected static int livenessSelected = LIVENESS_NONE;
+    protected static boolean safetySelected = false;
+    protected static boolean checkNoDeadSelected = false;
     protected static boolean limitStatesSelected = false;
     protected static String stateLimitValue;
     protected static boolean limitTimeSelected = false;
@@ -144,6 +146,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     protected JTextField stateLimitField;
     protected JCheckBox timeLimit;
     protected JTextField timeLimitField;
+    protected JCheckBox noDeadlocks;
+    protected JCheckBox safety;
 
     protected JCheckBox saveGraphAUT, saveGraphDot, ignoreEmptyTransitions, ignoreInternalStates,
             ignoreConcurrenceBetweenInternalActions, generateDesign;
@@ -238,6 +242,10 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                 ignoreInternalStatesSelected);
         ignoreInternalStates.addActionListener(this);
         jp01.add(ignoreInternalStates, c01);
+        
+        noDeadlocks = new JCheckBox("No deadlocks?", checkNoDeadSelected);
+        noDeadlocks.addActionListener(this);
+        jp01.add(noDeadlocks, c01);
 
 
         // Reachability
@@ -290,6 +298,12 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         noLiveness.setSelected(livenessSelected == LIVENESS_NONE);
         livenessCheckable.setSelected(livenessSelected == LIVENESS_SELECTED);
         livenessAllStates.setSelected(livenessSelected == LIVENESS_ALL);
+        
+        
+        //Safety pragmas
+        safety = new JCheckBox("Safety Pragmas", safetySelected);
+        safety.addActionListener(this);
+        jp01.add(safety, c01);
 
         //Limitations
         stateLimit = new JCheckBox("Limit number of states in GF", limitStatesSelected);
@@ -563,6 +577,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             amc.setIgnoreEmptyTransitions(ignoreEmptyTransitionsSelected);
             amc.setIgnoreConcurrenceBetweenInternalActions(ignoreConcurrenceBetweenInternalActionsSelected);
             amc.setIgnoreInternalStates(ignoreInternalStatesSelected);
+            amc.setCheckNoDeadlocks(checkNoDeadSelected);
 
             // Reachability
             int res;
@@ -617,6 +632,10 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                 }
             }
             
+            if (safetySelected) {
+                res = amc.setSafetyAnalysis();
+            }
+            
             // Limitations
             if (stateLimit.isSelected()) {
             	amc.setStateLimit(true);
@@ -650,10 +669,10 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             // Starting model checking
             testGo();
 
-            if (livenessSelected == LIVENESS_NONE) {
+            if (livenessSelected == LIVENESS_NONE && safetySelected == false) {
                 amc.startModelChecking();
             } else {
-                amc.startModelCheckingLiveness();
+                amc.startModelCheckingProperties();
             }
             
             TraceManager.addDev("Model checking done");
@@ -673,6 +692,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             jta.append("\n\nModel checking done\n");
             jta.append("Nb of states:" + amc.getNbOfStates() + "\n");
             jta.append("Nb of links:" + amc.getNbOfLinks() + "\n");
+            if (checkNoDeadSelected) {
+                jta.append("\nNo deadlocks?\n" + "-> " + amc.deadlockToString() + "\n");
+            }
 
             if ((reachabilitySelected == REACHABILITY_SELECTED) || (reachabilitySelected == REACHABILITY_ALL)) {
                 jta.append("\nReachabilities found:\n");
@@ -695,6 +717,11 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                 for (SpecificationLiveness sl : amc.getLivenesses()) {
                     handleLiveness(sl.ref1, sl.result);
                 }
+            }
+            
+            if (safetySelected) {
+                jta.append("\nSafety Analysis:\n");
+                jta.append(amc.safetyToString());
             }
 
             //TraceManager.addDev(amc.toString());
@@ -816,6 +843,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         ignoreEmptyTransitionsSelected = ignoreEmptyTransitions.isSelected();
         ignoreConcurrenceBetweenInternalActionsSelected = ignoreConcurrenceBetweenInternalActions.isSelected();
         ignoreInternalStatesSelected = ignoreInternalStates.isSelected();
+        checkNoDeadSelected = noDeadlocks.isSelected();
 
         if (noReachability.isSelected()) {
             reachabilitySelected = REACHABILITY_NONE;
@@ -833,6 +861,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             livenessSelected = LIVENESS_ALL;
         }
         
+        safetySelected = safety.isSelected();
         stateLimitField.setEnabled(stateLimit.isSelected());
         limitStatesSelected = stateLimit.isSelected();
         timeLimitField.setEnabled(timeLimit.isSelected());

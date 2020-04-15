@@ -54,7 +54,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * Avatar Model Checker
  * Creation: 31/05/2016
  *
- * @author Ludovic APVRILLE
+ * @author Ludovic APVRILLE, Alessandro TEMPIA CALVINO
  * @version 1.0 31/05/2016
  */
 public class AvatarModelChecker implements Runnable, myutil.Graph {
@@ -93,6 +93,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     private int nbOfRemainingReachabilities;
 
     // Dealocks
+    private boolean checkNoDeadlocks;
+    private boolean deadlockStop;
     private int nbOfDeadlocks;
 
     // Liveness
@@ -100,6 +102,11 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     private boolean studyLiveness;
     private ArrayList<SpecificationLiveness> livenesses;
     private SpecificationLiveness livenessInfo;
+    
+    // Safety
+    private boolean studySafety;
+    private ArrayList<SafetyProperty> safeties;
+    private SafetyProperty safety;
     
     //RG limits
     private boolean stateLimitRG;
@@ -123,6 +130,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         ignoreEmptyTransitions = true;
         ignoreConcurrenceBetweenInternalActions = true;
         ignoreInternalStates = true;
+        checkNoDeadlocks = false;
+        deadlockStop = false;
         studyReachability = false;
         computeRG = false;
         stateLimitRG = false; //No state limit in RG computation
@@ -189,6 +198,11 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     public void setIgnoreInternalStates(boolean _b) {
         TraceManager.addDev("ignore niternal state?" + ignoreInternalStates);
         ignoreInternalStates = _b;
+    }
+    
+    public void setCheckNoDeadlocks(boolean _checkNoDeadlocks) {
+        checkNoDeadlocks = _checkNoDeadlocks;
+        deadlockStop = false;
     }
 
     public int setLivenessOfSelected() {
@@ -274,6 +288,18 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     public int getNbOfDeadlocks() {
         return nbOfDeadlocks;
     }
+    
+    public int setSafetyAnalysis() {
+        safeties = new ArrayList<SafetyProperty>();
+        for (String property : spec.getSafetyPragmas()) {
+            SafetyProperty sp = new SafetyProperty(property, spec);
+            if (!sp.hasError()) {
+                safeties.add(sp);
+            }
+        }
+        studySafety = safeties.size() > 0;
+        return safeties.size();
+    }
 
     public void setComputeRG(boolean _rg) {
         computeRG = _rg;
@@ -299,14 +325,15 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 	
       }*/
 
-    public boolean startModelCheckingLiveness() {
+    public boolean startModelCheckingProperties() {
         boolean studyreach;
+        int deadlocks = 0;
         
         if (spec == null) {
             return false;
         }
 
-        if (livenesses == null) {
+        if ((studyLiveness && livenesses == null) || (studySafety && safeties == null)) {
             return false;
         }
         
@@ -315,16 +342,18 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         studyreach = studyReachability;
         
         //then compute livenesses
-        studyLiveness = true;
         studyReachability = false;
         computeRG = false;
         livenessDone = false;
 
-        for (SpecificationLiveness sl : livenesses) {
-            livenessInfo = sl;
-            startModelChecking();
-            livenessDone = false;
-            stoppedConditionReached = false;
+        if (studyLiveness) {
+            for (SpecificationLiveness sl : livenesses) {
+                livenessInfo = sl;
+                startModelChecking();
+                livenessDone = false;
+                stoppedConditionReached = false;
+                deadlocks += nbOfDeadlocks;
+            }
         }
         
         if (studyreach) {
@@ -333,8 +362,22 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             studyReachability = true;
             computeRG = true;
             startModelChecking();
+            deadlocks += nbOfDeadlocks;
+        }
+        
+        if (checkNoDeadlocks) {
+            if (deadlocks == 0) {
+                studyLiveness = false;
+                studyReachability = false;
+                computeRG = false;
+                deadlockStop = true;
+                startModelChecking();
+            } else {
+                nbOfDeadlocks = 1;
+            }
         }
         studyLiveness = true;
+        studyReachability = studyreach;
 
         return true;
     }
@@ -738,6 +781,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             //    nbOfDeadlocks++;
             }
             nbOfDeadlocks++;
+            livenessDone = deadlockStop; //use this flag to stop the execution
             //TraceManager.addDev("Deadlock found");
         }
 
@@ -921,6 +965,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             if (transitions == null) {
                 TraceManager.addDev("null transitions");
                 nbOfDeadlocks++;
+                livenessDone = deadlockStop; //use this flag to stop the execution
                 mustStop();
                 return;
             }
@@ -1698,7 +1743,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     
     public String reachabilityToStringGeneric() {
         if (!studyReachability) {
-            return "Reachability not activated";
+            return "Reachability not activated\n";
         }
 
 
@@ -1717,19 +1762,51 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     
     public String livenessToString() {
         if (!studyLiveness) {
-            return "Liveness not activated";
+            return "Liveness not activated\n";
         }
 
 
         StringBuilder ret = new StringBuilder();
         if (stoppedBeforeEnd) {
-            ret.append("Beware: Full study of reachability might not have been fully completed\n");
+            ret.append("Beware: Full study of liveness might not have been fully completed\n");
         }
 
         int cpt = 0;
         for (SpecificationLiveness sl : livenesses) {
             ret.append((cpt + 1) + ". " + sl.toString() + "\n");
             cpt++;
+        }
+        return ret.toString();
+    }
+    
+    public String deadlockToString() {
+        if (!checkNoDeadlocks) {
+            return "Deadlock check not activeted\n";
+        }
+        
+        String ret;
+        if (nbOfDeadlocks > 0) {
+            ret = "property is not satisfied\n";
+        } else {
+            ret = "property is satisfied\n";
+        }
+        
+        return ret;
+    }
+    
+    public String safetyToString() {
+        if (!studySafety) {
+            return "Safety check is not activated\n";
+        }
+
+
+        StringBuilder ret = new StringBuilder();
+        if (stoppedBeforeEnd) {
+            ret.append("Beware: Full study of safety might not have been fully completed\n");
+        }
+
+        for (SafetyProperty sp : safeties) {
+            ret.append(sp.toString() + "\n");
         }
         return ret.toString();
     }

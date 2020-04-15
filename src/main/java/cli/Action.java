@@ -678,7 +678,7 @@ public class Action extends Command {
                 }
                 TraceManager.addDev("Starting model checking");
                 if (livenessAnalysis) {
-                    amc.startModelCheckingLiveness();
+                    amc.startModelCheckingProperties();
                 } else {
                     amc.startModelChecking();
                 }

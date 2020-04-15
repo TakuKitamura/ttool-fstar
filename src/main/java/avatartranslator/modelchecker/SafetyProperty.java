@@ -42,12 +42,14 @@
 
 package avatartranslator.modelchecker;
 
+import java.time.Clock;
+
 import avatartranslator.*;
 
 
 /**
    * Class SafetyProperty
-   * Coding of a ssafety property
+   * Coding of a safety property
    * Creation: 22/11/2017
    * @version 1.0 22/11/2017
    * @author Ludovic APVRILLE
@@ -74,8 +76,12 @@ public class SafetyProperty  {
     private int safetyType;
     private int propertyType;
     private String p;
+    public boolean result;
 
     private boolean isBlockStateProperty;
+    private AvatarBlock block;
+    private AvatarAttribute attribute;
+
     private int blockIndex;
     private int stateIndex;
 
@@ -83,55 +89,85 @@ public class SafetyProperty  {
 
 
     public SafetyProperty(String property, AvatarSpecification _spec) {
-	rawProperty = property.trim();
-	analyzeProperty(_spec);
+        rawProperty = property.trim();
+        analyzeProperty(_spec);
+        result = false;
     }
 
     public boolean analyzeProperty(AvatarSpecification _spec) {
-	String tmpP = rawProperty;
-	
-	errorOnProperty = NO_ERROR;
-
-	if (tmpP.startsWith("A[]")) {
-	    safetyType = ALLTRACES_ALLSTATES;
-	} else if (tmpP.startsWith("A<>")) {
-	    safetyType = ALLTRACES_ONESTATE;
-	} else if (tmpP.startsWith("E[]")) {
-	    safetyType = ONETRACE_ALLSTATES;
-	} else if (tmpP.startsWith("E<>")) {
-	    safetyType = ONETRACE_ONESTATE;
-	} else {
-	    errorOnProperty = BAD_SAFETY_TYPE;
-	    return false;
-	}
-
-	p = tmpP.substring(3, tmpP.length()).trim();
-
-	if (p.length() == 0) {
-	    errorOnProperty = BAD_PROPERTY_STRUCTURE;
-	    return false;
-	}
-
-	return (errorOnProperty == NO_ERROR);
+    	String tmpP = rawProperty;
+    	String[] pFields;
+    	String blockString, fieldString;
+    	
+    	errorOnProperty = NO_ERROR;
+    
+    	if (tmpP.startsWith("A[]")) {
+    	    safetyType = ALLTRACES_ALLSTATES;
+    	} else if (tmpP.startsWith("A<>")) {
+    	    safetyType = ALLTRACES_ONESTATE;
+    	} else if (tmpP.startsWith("E[]")) {
+    	    safetyType = ONETRACE_ALLSTATES;
+    	} else if (tmpP.startsWith("E<>")) {
+    	    safetyType = ONETRACE_ONESTATE;
+    	} else {
+    	    errorOnProperty = BAD_SAFETY_TYPE;
+    	    return false;
+    	}
+    
+    	p = tmpP.substring(3, tmpP.length()).trim();
+    
+    	if (p.length() == 0) {
+    	    errorOnProperty = BAD_PROPERTY_STRUCTURE;
+    	    return false;
+    	}
+    	
+    	pFields = p.split(" "); //[0] item, [1] operator, [3] value
+    	
+    	if (pFields.length != 3 || pFields[0].split("\\.").length != 2) {
+    	    errorOnProperty = BAD_PROPERTY_STRUCTURE;
+            return false;
+    	}
+    	
+    	blockString = pFields[0].split("\\.")[0];
+    	fieldString = pFields[0].split("\\.")[1];
+    	
+    	block = _spec.getBlockWithName(blockString);
+    	
+    	if (block == null) {
+    	    errorOnProperty = BAD_PROPERTY_STRUCTURE;
+            return false;
+    	}
+    	
+    	attribute = block.getAvatarAttributeWithName(fieldString);
+    	
+    	if (attribute == null) {
+            errorOnProperty = BAD_PROPERTY_STRUCTURE;
+            return false;
+        }
+    	
+    	return (errorOnProperty == NO_ERROR);
     }
 
     
     public boolean hasError() {
-	return errorOnProperty != NO_ERROR;
+        return errorOnProperty != NO_ERROR;
     }
 
     public void setErrorOnP() {
-	errorOnProperty = BAD_PROPERTY_STRUCTURE;
+        errorOnProperty = BAD_PROPERTY_STRUCTURE;
     }
 
     public String getP() {
-	return p;
+        return p;
     }
     
 
     public String toString() {
-	return "prop: " + rawProperty;
+        if (result) {
+            return rawProperty + " -> property is satisfied";
+        } else {
+            return rawProperty + " -> property is NOT satisfied";
+        }
     }
 
-    
 }
