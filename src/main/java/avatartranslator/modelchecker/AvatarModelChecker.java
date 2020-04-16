@@ -71,6 +71,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     private Map<Integer, SpecificationState> states;
     private Map<Long, SpecificationState> statesByID;
     private List<SpecificationState> pendingStates;
+    private List<SpecificationState> allPendingStates;
     //private List<SpecificationLink> links;
     private int nbOfLinks;
     private long stateID = 0;
@@ -423,7 +424,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         spec.makeFullStates();
 
         if (ignoreEmptyTransitions) {
-            spec.removeEmptyTransitions((nbOfRemainingReachabilities == 0) || studyLiveness);
+            spec.removeEmptyTransitions((nbOfRemainingReachabilities == 0) || studyLiveness || studySafety);
         }
 
         //TraceManager.addDev("Preparing Avatar specification :" + spec.toString());
@@ -450,6 +451,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         states = Collections.synchronizedMap(new HashMap<Integer, SpecificationState>());
         statesByID = Collections.synchronizedMap(new HashMap<Long, SpecificationState>());
         pendingStates = Collections.synchronizedList(new LinkedList<SpecificationState>());
+        allPendingStates = Collections.synchronizedList(new LinkedList<SpecificationState>());
         //links = Collections.synchronizedList(new ArrayList<SpecificationLink>());
         nbOfLinks = 0;
 
@@ -478,6 +480,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         if (studySafety) {
             initialState.property = evaluateSafetyProperty(initialState, false);
             actionOnProperty(initialState, 0, null, null);
+        } else {
+            pendingStates.add(initialState);
         }
         
         prepareTransitionsOfState(initialState);
@@ -489,7 +493,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         addState(initialState);
         //states.put(initialState.hashValue, initialState);
         //statesByID.put(initialState.id, initialState);
-        pendingStates.add(initialState);
         nbOfCurrentComputations = 0;
 
         if (timeLimitRG) {
@@ -618,6 +621,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 go = false;
             } else {
                 // Handle one given state
+                allPendingStates.add(s);
                 computeAllStatesFrom(s);
                 // Release the computation
                 releasePickupState(s);
@@ -643,7 +647,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         }
 
         SpecificationState s = pendingStates.get(0);
-        pendingStates.remove(0);
+        pendingStates.remove(s); //remove(0) has a race condition I insert elements also in 0
         nbOfCurrentComputations++;
         return s;
     }
@@ -764,6 +768,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                         st = tr;
                         if (ignoreInternalStates) { // New behavior
                             computeAllInternalStatesFrom(_ss, st);
+                            _ss.elaborated = true;
                             return;
                         }
                         break; //old behaviour
@@ -811,6 +816,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         //   compute new state, and compare with existing ones
         //   If not a new state, create the link rom the previous state to the new one
         //   Otherwise create the new state and its link, and add it to the pending list of states
+
         int i = 0;
         for (SpecificationTransition tr : transitions) {
             //TraceManager.addDev("Handling transitions #" + cptt + " type =" + tr.getType());
@@ -871,7 +877,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 //states.put(newState.getHash(blockValues), newState);
                 //addState(newState);
                 //newState.id = getStateID();
-                //TraceManager.addDev("Putting new state with id = " +  newState.id + " stateID = " + stateID + " states size = " + states.size() + " states by id size = " + statesByID.size());
+                //TraceManager.addDev("P//hereutting new state with id = " +  newState.id + " stateID = " + stateID + " states size = " + states.size() + " states by id size = " + statesByID.size());
                 //statesByID.put(newState.id, newState);
 
                 link.destinationState = newState;
@@ -882,6 +888,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 } else {
                     actionOnProperty(newState, i, similar, _ss);
                 }
+                i++;
                 //newState.id = getStateID();
                 //TraceManager.addDev("Creating new state for newState=" + newState);
 
@@ -899,8 +906,9 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             //links.add(link);
             nbOfLinks++;
             _ss.addNext(link);
-            i++;
         }
+        
+        _ss.elaborated = true;
         
         if (limitReached) {
         	if (_ss.isDeadlock()) {
@@ -1609,7 +1617,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                     //found a branch with false liveness
                     propertyDone = true;
                     livenessInfo.result = false;
-                } else if (stateIsReachableFromState(similar, _ss)) {
+                } else if (stateIsReachableFromState(similar, _ss)) { //TODO: concurrent operation when going through the next list
                     //found a loop with false liveness
                     propertyDone = true;
                     livenessInfo.result = false;
@@ -1951,7 +1959,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     private boolean stateIsReachableFromStateRec(SpecificationState start, SpecificationState arrival, Set<Long> visited) {
         if (start == arrival) {
             return true;
-        } else if (start.getNextsSize() == 0){
+        } else if (start.getNextsSize() == 0 || start.elaborated == false){
             return false;
         } else if (visited.contains(start.id)) {
             return false;

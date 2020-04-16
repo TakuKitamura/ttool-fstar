@@ -64,12 +64,14 @@ public class SpecificationState implements Comparable<SpecificationState>  {
     public long id;
     public LinkedList<SpecificationLink> nexts; // The RG is there
     public boolean property; //trace the property check at this state
+    public boolean elaborated; //true only if the elaboration has been completed
     public ArrayList<SpecificationTransition> transitions;
     public long distance; //max #steps to be reached from S0
 
     public SpecificationState() {
         hashComputed = false;
         property = false;
+        elaborated = false;
         distance = 0;
     }
 
