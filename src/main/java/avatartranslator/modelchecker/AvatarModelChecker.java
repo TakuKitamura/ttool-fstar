@@ -300,6 +300,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         studySafety = safeties.size() > 0;
         return safeties.size();
     }
+    
+    public ArrayList<SafetyProperty> getSafeties() {
+        return safeties;
+    }
 
     public void setComputeRG(boolean _rg) {
         computeRG = _rg;
@@ -326,8 +330,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
       }*/
 
     public boolean startModelCheckingProperties() {
-        boolean studyreach;
-        int deadlocks = 0;
+        boolean studyS, studyL, studyR;
+        long deadlocks = 0;
         
         if (spec == null) {
             return false;
@@ -339,14 +343,19 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         
         stateLimitRG = false;
         timeLimitRG = false;
-        studyreach = studyReachability;
+        studyR = studyReachability;
+        studyL = studyLiveness;
+        studyS = studySafety;
         
         //then compute livenesses
-        studyReachability = false;
         computeRG = false;
         propertyDone = false;
+        studySafety = false;
+        studyLiveness = false;
+        studyReachability = false;
 
-        if (studyLiveness) {
+        if (studyL) {
+            studyLiveness = true;
             for (SpecificationLiveness sl : livenesses) {
                 livenessInfo = sl;
                 startModelChecking();
@@ -354,30 +363,40 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 stoppedConditionReached = false;
                 deadlocks += nbOfDeadlocks;
             }
+            studyLiveness = false;
         }
         
-        if (studyreach) {
-            //do a run to compute reachabilities
-            studyLiveness = false;
+        if (studyS) {
+            studySafety = true;
+            for (SafetyProperty sp : safeties) {
+                safety = sp;
+                startModelChecking();
+                propertyDone = false;
+                stoppedConditionReached = false;
+                deadlocks += nbOfDeadlocks;
+            }
+            studySafety = false;
+        }
+        
+        if (studyR) {
             studyReachability = true;
-            computeRG = true;
+            //computeRG = true;
             startModelChecking();
             deadlocks += nbOfDeadlocks;
+            studyReachability = false;
         }
         
         if (checkNoDeadlocks) {
             if (deadlocks == 0) {
-                studyLiveness = false;
-                studyReachability = false;
-                computeRG = false;
                 deadlockStop = true;
                 startModelChecking();
             } else {
                 nbOfDeadlocks = 1;
             }
         }
-        studyLiveness = true;
-        studyReachability = studyreach;
+        studyLiveness = studyL;
+        studySafety = studyS;
+        studyReachability = studyR;
 
         return true;
     }
@@ -451,10 +470,17 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         if (ignoreEmptyTransitions) {
             handleNonEmptyUniqueTransition(initialState);
         }
+        
         if (studyLiveness && initialState.property == true) {
             //property on initial states
             return;
         }
+        
+        if (studySafety) {
+            initialState.property = evaluateSafetyProperty(initialState, false);
+            actionOnProperty(initialState, 0, null, null);
+        }
+        
         prepareTransitionsOfState(initialState);
         blockValues = initialState.getBlockValues();
         initialState.distance = 0;
@@ -774,12 +800,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
         //TraceManager.addDev("Possible transitions 4:" + transitions.size());
         if (transitions.size() == 0) {
-            if (studyLiveness && _ss.property == false) {
-                livenessInfo.result = false;
-                propertyDone = true;
-            //} else {
-            //    nbOfDeadlocks++;
-            }
+            checkPropertyOnDeadlock(_ss);
             nbOfDeadlocks++;
             propertyDone = deadlockStop; //use this flag to stop the execution
             //TraceManager.addDev("Deadlock found");
@@ -860,7 +881,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 if (!studyLiveness && !studySafety) {
                     pendingStates.add(newState);
                 } else {
-                    actionOnProperty(newState, i, null, _ss);
+                    actionOnProperty(newState, i, similar, _ss);
                 }
                 //newState.id = getStateID();
                 //TraceManager.addDev("Creating new state for newState=" + newState);
@@ -913,6 +934,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 setLivenessofState(newState, st, previousState.property);
             }
             
+            if (studySafety) {
+                newState.property = evaluateSafetyProperty(newState, previousState.property);
+            }
+            
             if (ignoreEmptyTransitions) {
                 handleNonEmptyUniqueTransition(newState);
             }
@@ -930,17 +955,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 link.destinationState = similar;
                 nbOfLinks++;
                 _ss.addNext(link);
-                if (studyLiveness && newState.property == false) {
-                    if (similar.property) {
-                        //found a branch with false liveness
-                        propertyDone = true;
-                        livenessInfo.result = false;
-                    } else if (stateIsReachableFromState(similar, _ss)) {
-                        //found a loop with false liveness
-                        propertyDone = true;
-                        livenessInfo.result = false;
-                    }
-                }
+                actionOnProperty(newState, 0, similar, _ss);
                 break;
             }
 
@@ -1024,24 +1039,14 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 if (similar != null) {
                 	// check if it has been created by another thread in the meanwhile
                 	link.destinationState = similar;
-                	if (studyLiveness && newState.property == false) {
-                        if (similar.property) {
-                            //found a branch with false liveness
-                            propertyDone = true;
-                            livenessInfo.result = false;
-                        } else if (stateIsReachableFromState(similar, _ss)) {
-                            //found a loop with false liveness
-                            propertyDone = true;
-                            livenessInfo.result = false;
-                        }
-                    }
+                	actionOnProperty(newState, 0, similar, _ss);
                 } else {
                     link.destinationState = newState;
                     newState.distance = _ss.distance + 1;
-                    if (!studyLiveness) {
+                    if (!studyLiveness && !studySafety) {
                         pendingStates.add(newState);
-                    } else if (!newState.property) {
-                        pendingStates.add(0, newState);
+                    } else {
+                        actionOnProperty(newState, 0, similar, _ss);
                     }
                 }
                 nbOfLinks++;
@@ -1587,10 +1592,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             result = !result;
         }
 
-        return result |! precProperty;
+        return result || precProperty;
     }
     
-    private boolean actionOnProperty(SpecificationState newState, int i, SpecificationState similar, SpecificationState _ss) {
+    private void actionOnProperty(SpecificationState newState, int i, SpecificationState similar, SpecificationState _ss) {
         if (studyLiveness) {
             if (similar == null && !newState.property) { 
                 if (i == 0) {
@@ -1600,24 +1605,83 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                     //Not priority for parallel BFS on the other transitions
                     pendingStates.add(newState);
                 }
-            } else if (similar != null) {
-                if (newState.property == false) {
-                    if (similar.property) {
-                        //found a branch with false liveness
-                        propertyDone = true;
-                        livenessInfo.result = false;
-                    } else if (stateIsReachableFromState(similar, _ss)) {
-                        //found a loop with false liveness
-                        propertyDone = true;
-                        livenessInfo.result = false;
-                    }
+            } else if (similar != null && newState.property == false) {
+                if (similar.property) {
+                    //found a branch with false liveness
+                    propertyDone = true;
+                    livenessInfo.result = false;
+                } else if (stateIsReachableFromState(similar, _ss)) {
+                    //found a loop with false liveness
+                    propertyDone = true;
+                    livenessInfo.result = false;
                 }
             }
         } else if (studySafety) {
-            
+            if (safety.safetyType == SafetyProperty.ALLTRACES_ALLSTATES) {
+                if (newState.property) {
+                    propertyDone = true;
+                    safety.result = false;
+                } else if (similar == null){
+                    pendingStates.add(newState);
+                }
+            } else if (safety.safetyType == SafetyProperty.ONETRACE_ALLSTATES) {
+                if (similar == null && !newState.property) {
+                    if (i == 0) {
+                        //Priority for parallel DFS on the first transition
+                        pendingStates.add(0, newState);
+                    } else {
+                        //Not priority for parallel BFS on the other transitions
+                        pendingStates.add(newState);
+                    }
+                } else if (similar != null && !newState.property) {
+                    if (!similar.property && stateIsReachableFromState(similar, _ss)) {
+                        //found a loop with true property
+                        propertyDone = true;
+                        safety.result = true;
+                    }
+                }
+            } else if (safety.safetyType == SafetyProperty.ALLTRACES_ONESTATE) {
+                if (similar == null && !newState.property) { 
+                    if (i == 0) {
+                        //Priority for parallel DFS on the first transition
+                        pendingStates.add(0, newState);
+                    } else {
+                        //Not priority for parallel BFS on the other transitions
+                        pendingStates.add(newState);
+                    }
+                } else if (similar != null && newState.property == false) {
+                    if (!similar.property && stateIsReachableFromState(similar, _ss)) {
+                        //found a loop with false property
+                        propertyDone = true;
+                        safety.result = false;
+                    }
+                }
+            } else if (safety.safetyType == SafetyProperty.ONETRACE_ONESTATE) {
+                if (newState.property) {
+                    propertyDone = true;
+                    safety.result = true;
+                } else if (similar == null) {
+                    pendingStates.add(newState);
+                }
+            }
         }
-        
-        return true;
+    }
+    
+    private void checkPropertyOnDeadlock(SpecificationState ss) {
+        if (studyLiveness) {
+            if (ss.property == false) {
+                livenessInfo.result = false;
+                propertyDone = true;
+            }
+        } else if (studySafety) {
+            if (safety.safetyType == SafetyProperty.ALLTRACES_ONESTATE && ss.property == false) {
+                safety.result = false;
+                propertyDone = true;
+            } else if (safety.safetyType == SafetyProperty.ONETRACE_ALLSTATES && ss.property == false) {
+                safety.result = true;
+                propertyDone = true;
+            }
+        }
     }
 
 

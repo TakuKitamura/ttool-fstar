@@ -91,7 +91,6 @@ public class SafetyProperty  {
     public SafetyProperty(String property, AvatarSpecification _spec) {
         rawProperty = property.trim();
         analyzeProperty(_spec);
-        result = false;
     }
 
     public boolean analyzeProperty(AvatarSpecification _spec) {
@@ -103,14 +102,19 @@ public class SafetyProperty  {
     
     	if (tmpP.startsWith("A[]")) {
     	    safetyType = ALLTRACES_ALLSTATES;
+    	    result = true;
     	} else if (tmpP.startsWith("A<>")) {
     	    safetyType = ALLTRACES_ONESTATE;
+    	    result = true;
     	} else if (tmpP.startsWith("E[]")) {
     	    safetyType = ONETRACE_ALLSTATES;
+    	    result = false;
     	} else if (tmpP.startsWith("E<>")) {
     	    safetyType = ONETRACE_ONESTATE;
+    	    result = false;
     	} else {
     	    errorOnProperty = BAD_SAFETY_TYPE;
+    	    result = false;
     	    return false;
     	}
     
@@ -146,6 +150,8 @@ public class SafetyProperty  {
             return false;
         }
     	
+    	p = fieldString + " " + pFields[1] + " " + pFields[2];
+    	
     	return (errorOnProperty == NO_ERROR);
     }
 
@@ -160,6 +166,10 @@ public class SafetyProperty  {
 
     public String getP() {
         return p;
+    }
+    
+    public String getRawProperty() {
+        return rawProperty;
     }
     
 

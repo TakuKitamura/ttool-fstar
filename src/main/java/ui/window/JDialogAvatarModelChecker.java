@@ -42,6 +42,7 @@ package ui.window;
 import avatartranslator.AvatarSpecification;
 import avatartranslator.AvatarStateMachineElement;
 import avatartranslator.modelchecker.AvatarModelChecker;
+import avatartranslator.modelchecker.SafetyProperty;
 import avatartranslator.modelchecker.SpecificationLiveness;
 import avatartranslator.modelchecker.SpecificationReachability;
 import avatartranslator.modelchecker.SpecificationReachabilityType;
@@ -49,6 +50,7 @@ import myutil.*;
 import ui.util.IconManager;
 import ui.MainGUI;
 import ui.TGComponent;
+import ui.TURTLEPanel;
 import graph.RG;
 import graph.AUTGraph;
 
@@ -59,7 +61,10 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
@@ -164,7 +169,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     //  private boolean hasError = false;
     private java.util.Timer timer;
     //protected boolean startProcess = false;
-
+    protected Map<String, Integer> verifMap;
 
     /*
      * Creates new form
@@ -188,6 +193,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         initComponents();
         myInitComponents();
         pack();
+        
+        verifMap = new HashMap<String, Integer>();
 
 	/*if ((mgui != null) && (spec != null)) {
         mgui.drawAvatarSpecification(spec);
@@ -722,6 +729,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             if (safetySelected) {
                 jta.append("\nSafety Analysis:\n");
                 jta.append(amc.safetyToString());
+                handleSafety(amc.getSafeties());
             }
 
             //TraceManager.addDev(amc.toString());
@@ -826,6 +834,19 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             }
         }
     }
+    
+    protected void handleSafety(ArrayList<SafetyProperty> safeties) {
+        int status;
+        for (SafetyProperty sp : safeties) {
+            if (sp.result) {
+                status = 1;
+            } else {
+                status = 0;
+            }
+            verifMap.put(sp.getRawProperty(), status);
+        }
+        mgui.modelBacktracingUPPAAL(verifMap);
+    }
 
     protected void checkMode() {
         mode = NOT_STARTED;
@@ -869,7 +890,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
 
         switch (mode) {
             case NOT_STARTED:
-                if ((reachabilitySelected == REACHABILITY_SELECTED) || (reachabilitySelected == REACHABILITY_ALL) || (livenessSelected == LIVENESS_SELECTED) || (livenessSelected == LIVENESS_ALL)|| graphSelected || graphSelectedDot) {
+                if ((reachabilitySelected == REACHABILITY_SELECTED) || (reachabilitySelected == REACHABILITY_ALL) || (livenessSelected == LIVENESS_SELECTED) || (livenessSelected == LIVENESS_ALL) || safetySelected|| graphSelected || graphSelectedDot) {
                     start.setEnabled(true);
                 } else {
                     start.setEnabled(false);
