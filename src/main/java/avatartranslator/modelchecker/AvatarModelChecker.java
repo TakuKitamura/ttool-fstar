@@ -71,7 +71,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     private Map<Integer, SpecificationState> states;
     private Map<Long, SpecificationState> statesByID;
     private List<SpecificationState> pendingStates;
-    private List<SpecificationState> allPendingStates;
     //private List<SpecificationLink> links;
     private int nbOfLinks;
     private long stateID = 0;
@@ -451,7 +450,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         states = Collections.synchronizedMap(new HashMap<Integer, SpecificationState>());
         statesByID = Collections.synchronizedMap(new HashMap<Long, SpecificationState>());
         pendingStates = Collections.synchronizedList(new LinkedList<SpecificationState>());
-        allPendingStates = Collections.synchronizedList(new LinkedList<SpecificationState>());
         //links = Collections.synchronizedList(new ArrayList<SpecificationLink>());
         nbOfLinks = 0;
 
@@ -621,7 +619,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 go = false;
             } else {
                 // Handle one given state
-                allPendingStates.add(s);
                 computeAllStatesFrom(s);
                 // Release the computation
                 releasePickupState(s);
@@ -1617,7 +1614,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                     //found a branch with false liveness
                     propertyDone = true;
                     livenessInfo.result = false;
-                } else if (stateIsReachableFromState(similar, _ss)) { //TODO: concurrent operation when going through the next list
+                } else if (stateIsReachableFromState(similar, _ss)) {
                     //found a loop with false liveness
                     propertyDone = true;
                     livenessInfo.result = false;
