@@ -42,8 +42,6 @@
 
 package avatartranslator.modelchecker;
 
-import java.time.Clock;
-
 import avatartranslator.*;
 
 
@@ -55,6 +53,12 @@ import avatartranslator.*;
    * @author Ludovic APVRILLE
  */
 public class SafetyProperty  {
+
+    private String rawProperty;
+    private String p;
+    private AvatarAttribute attribute;
+    private int errorOnProperty;
+    
     // Error on property
     public static final int NO_ERROR = 0;
     public static final int BAD_SAFETY_TYPE = 1;
@@ -65,6 +69,7 @@ public class SafetyProperty  {
     public static final int ALLTRACES_ONESTATE = 1; // A<>
     public static final int ONETRACE_ALLSTATES = 2; // E[]
     public static final int ONETRACE_ONESTATE = 3;  // E<>
+    
 
     // Type of property
     public static final int BLOCK_STATE = 0;
@@ -73,21 +78,9 @@ public class SafetyProperty  {
     public int safetyType;
     public AvatarBlock block;
     public int blockIndex;
-    
-    private String rawProperty;
-
-    private int propertyType;
-    private String p;
     public boolean result;
-
-    private boolean isBlockStateProperty;
-    private AvatarAttribute attribute;
-
-    private int stateIndex;
-
-    private int errorOnProperty;
-
-
+    
+    
     public SafetyProperty(String property, AvatarSpecification _spec) {
         rawProperty = property.trim();
         analyzeProperty(_spec);

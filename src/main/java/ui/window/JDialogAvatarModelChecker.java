@@ -50,7 +50,6 @@ import myutil.*;
 import ui.util.IconManager;
 import ui.MainGUI;
 import ui.TGComponent;
-import ui.TURTLEPanel;
 import graph.RG;
 import graph.AUTGraph;
 
