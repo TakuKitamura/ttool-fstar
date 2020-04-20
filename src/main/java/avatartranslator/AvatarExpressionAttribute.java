@@ -82,6 +82,31 @@ public class AvatarExpressionAttribute {
         error = !initAttributes(spec);
     }
     
+    public AvatarExpressionAttribute(AvatarBlock block, String s) {
+        this.s = s;
+        isNegated = false;
+        isNot = false;
+        
+        if (s.startsWith("not(")) {
+            //not(variable)
+            isNot = true;
+            this.s = s.substring(3).trim();
+            while (this.s.startsWith("(") && this.s.endsWith(")")){
+                this.s = this.s.substring(1, this.s.length() - 1);
+            }
+        }
+        if (s.startsWith("-")) {
+            //not(variable)
+            isNegated = true;
+            this.s = s.substring(1).trim();
+            while (this.s.startsWith("(") && this.s.endsWith(")")){
+                this.s = this.s.substring(1, this.s.length() - 1);
+            }
+        }
+        
+        error = !initAttributes(block);
+    }
+    
     
     private boolean initAttributes(AvatarSpecification spec) {
         //Extract Block and Attribute
@@ -118,6 +143,25 @@ public class AvatarExpressionAttribute {
         return true;
     }
     
+    private boolean initAttributes(AvatarBlock block) {
+        //Extract Attribute
+        if (block == null) {
+            return false;
+        }
+        
+        this.block = block;
+        this.blockIndex = -1; //not initialized
+        
+        attributeIndex = block.getIndexOfAvatarAttributeWithName(s);
+        
+        if (attributeIndex == -1) {
+            return false;
+        }
+        
+        accessIndex = attributeIndex + SpecificationBlock.ATTR_INDEX;
+        return true;
+    }
+    
     public boolean hasError() {
         return error == true;
     }
@@ -134,7 +178,29 @@ public class AvatarExpressionAttribute {
         return value;
     }
     
-    public String toString() {
-        return this.s;
+    public int getValue(SpecificationBlock sb) {
+        int value = sb.values[accessIndex];
+        
+        if (isNot) {
+            value = (value == 0) ? 1 : 0;
+        } else if (isNegated) {
+            value = -value;
+        }
+        
+        return value;
     }
+    
+    public String toString() {
+        String res = "";
+        if (isNot) {
+            res = "not(" + this.s + ")";
+        } else if (isNegated) {
+            res += "-" + this.s;
+        } else {
+            res = s;
+        }
+         
+        return res;
+    }
+    
 }

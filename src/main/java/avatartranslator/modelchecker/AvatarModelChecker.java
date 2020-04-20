@@ -159,6 +159,20 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     public AvatarSpecification getReworkedAvatarSpecification() {
         return spec;
     }
+    
+    private void initExpressionSolvers() {
+        for (AvatarBlock block : spec.getListOfBlocks()) {
+            AvatarStateMachine asm = block.getStateMachine();
+
+            for (AvatarStateMachineElement elt : asm.getListOfElements()) {
+                if (elt instanceof AvatarTransition) {
+                    if (((AvatarTransition) elt).isGuarded()) {
+                        ((AvatarTransition) elt).buildGuardSolver();
+                    }
+                }
+            }
+        }
+    }
 
     public int getNbOfStates() {
         if (states == null) {
@@ -425,6 +439,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         if (ignoreEmptyTransitions) {
             spec.removeEmptyTransitions((nbOfRemainingReachabilities == 0) || studyLiveness || studySafety);
         }
+        
+        initExpressionSolvers();
 
         //TraceManager.addDev("Preparing Avatar specification :" + spec.toString());
         prepareStates();
@@ -1083,10 +1099,11 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         }
 
         // Must evaluate the guard
-        String guard = _at.getGuard().toString();
-        String s = Conversion.replaceAllString(guard, "[", "").trim();
-        s = Conversion.replaceAllString(s, "]", "").trim();
-        return evaluateBoolExpression(s, _block, _sb);
+        //String guard = _at.getGuard().toString();
+        //String s = Conversion.replaceAllString(guard, "[", "").trim();
+        //s = Conversion.replaceAllString(s, "]", "").trim();
+        return (_at.getGuardSolver().getResult(_sb) == 0) ?  false : true;
+        //return evaluateBoolExpression(s, _block, _sb);
     }
 
     private void handleAvatarTransition(AvatarTransition _at, AvatarBlock _block, SpecificationBlock _sb, int _indexOfBlock, ArrayList<SpecificationTransition> _transitionsToAdd, boolean _fromStateWithMoreThanOneTransition) {
