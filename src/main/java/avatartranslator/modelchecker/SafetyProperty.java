@@ -36,10 +36,6 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-
-
-
-
 package avatartranslator.modelchecker;
 
 import avatartranslator.*;
@@ -58,6 +54,7 @@ public class SafetyProperty  {
     private String p;
     private AvatarAttribute attribute;
     private int errorOnProperty;
+    private AvatarExpressionSolver safetySolver;
     
     // Error on property
     public static final int NO_ERROR = 0;
@@ -113,6 +110,15 @@ public class SafetyProperty  {
     
     	p = tmpP.substring(3, tmpP.length()).trim();
     
+    	safetySolver = new AvatarExpressionSolver(p);
+    	boolean exprRet = safetySolver.buildExpression(_spec);
+    	
+    	if (exprRet == false) {
+    	    errorOnProperty = BAD_PROPERTY_STRUCTURE;
+            return false;
+    	}
+    	
+    	/*
     	if (p.length() == 0) {
     	    errorOnProperty = BAD_PROPERTY_STRUCTURE;
     	    return false;
@@ -144,6 +150,7 @@ public class SafetyProperty  {
         }
     	
     	p = fieldString + " " + pFields[1] + " " + pFields[2];
+    	*/
     	
     	return (errorOnProperty == NO_ERROR);
     }
@@ -165,6 +172,9 @@ public class SafetyProperty  {
         return rawProperty;
     }
     
+    public boolean getResult(SpecificationState _ss) {
+        return safetySolver.getResult(_ss) != 0;
+    }
 
     public String toString() {
         if (result) {

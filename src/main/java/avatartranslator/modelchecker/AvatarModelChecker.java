@@ -1588,7 +1588,11 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
     
     private boolean evaluateSafetyProperty(SpecificationState newState, boolean precProperty) {
-        boolean result = evaluateBoolExpression(safety.getP(), safety.block, newState.blocks[safety.blockIndex]);
+        boolean result = safety.getResult(newState);
+        
+        //if (result != evaluateBoolExpression(safety.getP(), safety.block, newState.blocks[safety.blockIndex])) {
+            //System.out.println("Different");
+        //}
         
         // the value to be associated to the state property depends on the type of property to be checked
         // A[] -> !result; A<> -> result; E[] -> !result; E<> -> result
