@@ -190,6 +190,30 @@ public class AvatarExpressionAttribute {
         return value;
     }
     
+    public void setValue(SpecificationState ss, int value) {
+        int v = value;
+        
+        if (isNot) {
+            v = (value == 0) ? 1 : 0;
+        } else if (isNegated) {
+            v = -value;
+        }
+        
+        ss.blocks[blockIndex].values[accessIndex] = v;
+    }
+    
+    public void setValue(SpecificationBlock sb, int value) {
+        int v = value;
+        
+        if (isNot) {
+            v = (value == 0) ? 1 : 0;
+        } else if (isNegated) {
+            v = -value;
+        }
+        
+        sb.values[accessIndex] = v;
+    }
+    
     public String toString() {
         String res = "";
         if (isNot) {

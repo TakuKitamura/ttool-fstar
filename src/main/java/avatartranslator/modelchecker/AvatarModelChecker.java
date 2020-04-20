@@ -159,20 +159,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     public AvatarSpecification getReworkedAvatarSpecification() {
         return spec;
     }
-    
-    private void initExpressionSolvers() {
-        for (AvatarBlock block : spec.getListOfBlocks()) {
-            AvatarStateMachine asm = block.getStateMachine();
-
-            for (AvatarStateMachineElement elt : asm.getListOfElements()) {
-                if (elt instanceof AvatarTransition) {
-                    if (((AvatarTransition) elt).isGuarded()) {
-                        ((AvatarTransition) elt).buildGuardSolver();
-                    }
-                }
-            }
-        }
-    }
 
     public int getNbOfStates() {
         if (states == null) {
@@ -448,6 +434,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
 
         nbOfThreads = Runtime.getRuntime().availableProcessors();
+        nbOfThreads = 1;
         TraceManager.addDev("Starting the model checking with " + nbOfThreads + " threads");
         TraceManager.addDev("Ignore internal state:" + ignoreInternalStates);
         startModelChecking(nbOfThreads);
@@ -679,6 +666,28 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             pendingStates.clear();
         }
         nbOfCurrentComputations = 0;
+    }
+    
+    private void initExpressionSolvers() {
+        AvatarTransition at;
+        
+        for (AvatarBlock block : spec.getListOfBlocks()) {
+            AvatarStateMachine asm = block.getStateMachine();
+
+            for (AvatarStateMachineElement elt : asm.getListOfElements()) {
+                if (elt instanceof AvatarTransition) {
+                    at = (AvatarTransition) elt;
+                    if (at.isGuarded()) {
+                        at.buildGuardSolver();
+                    }
+                    for (AvatarAction aa : at.getActions()) {
+                        if (aa instanceof AvatarActionAssignment) {
+                            ((AvatarActionAssignment) aa).buildActionSolver(block);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void prepareTransitionsOfState(SpecificationState _ss) {
@@ -1419,23 +1428,25 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 if (retAction == null) {
                     retAction = nameOfVar + "=" + act;
                 }
+                
+                ((AvatarActionAssignment) aAction).executeActionSolver(_newState.blocks[_st.blocksInt[0]]);
 
-                int indexVar = block.getIndexOfAvatarAttributeWithName(nameOfVar);
-                AvatarType type = block.getAttribute(indexVar).getType();
-                if (indexVar != -1) {
-                    if (type == AvatarType.INTEGER) {
-                        //TraceManager.addDev("Evaluating int expr=" + act);
-                        int result = evaluateIntExpression(act, _st.blocks[0], _newState.blocks[_st.blocksInt[0]]);
-                        _newState.blocks[_st.blocksInt[0]].values[SpecificationBlock.ATTR_INDEX + indexVar] = result;
-                    } else if (type == AvatarType.BOOLEAN) {
-                        boolean bool = evaluateBoolExpression(act, _st.blocks[0], _newState.blocks[_st.blocksInt[0]]);
-                        if (bool) {
-                            _newState.blocks[_st.blocksInt[0]].values[SpecificationBlock.ATTR_INDEX + indexVar] = 1;
-                        } else {
-                            _newState.blocks[_st.blocksInt[0]].values[SpecificationBlock.ATTR_INDEX + indexVar] = 0;
-                        }
-                    }
-                }
+//                int indexVar = block.getIndexOfAvatarAttributeWithName(nameOfVar);
+//                AvatarType type = block.getAttribute(indexVar).getType();
+//                if (indexVar != -1) {
+//                    if (type == AvatarType.INTEGER) {
+//                        //TraceManager.addDev("Evaluating int expr=" + act);
+//                        int result = evaluateIntExpression(act, _st.blocks[0], _newState.blocks[_st.blocksInt[0]]);
+//                        _newState.blocks[_st.blocksInt[0]].values[SpecificationBlock.ATTR_INDEX + indexVar] = result;
+//                    } else if (type == AvatarType.BOOLEAN) {
+//                        boolean bool = evaluateBoolExpression(act, _st.blocks[0], _newState.blocks[_st.blocksInt[0]]);
+//                        if (bool) {
+//                            _newState.blocks[_st.blocksInt[0]].values[SpecificationBlock.ATTR_INDEX + indexVar] = 1;
+//                        } else {
+//                            _newState.blocks[_st.blocksInt[0]].values[SpecificationBlock.ATTR_INDEX + indexVar] = 0;
+//                        }
+//                    }
+//                }
             }
         }
 
