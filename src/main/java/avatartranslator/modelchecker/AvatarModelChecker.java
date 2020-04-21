@@ -434,7 +434,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
 
         nbOfThreads = Runtime.getRuntime().availableProcessors();
-        nbOfThreads = 1;
         TraceManager.addDev("Starting the model checking with " + nbOfThreads + " threads");
         TraceManager.addDev("Ignore internal state:" + ignoreInternalStates);
         startModelChecking(nbOfThreads);
@@ -685,6 +684,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                             ((AvatarActionAssignment) aa).buildActionSolver(block);
                         }
                     }
+                }else if (elt instanceof AvatarActionOnSignal) {
+                    ((AvatarActionOnSignal) elt).buildActionSolver(block);
                 }
             }
         }
@@ -1407,7 +1408,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     private String executeActionTransition(SpecificationState _previousState, SpecificationState _newState, SpecificationTransition _st) {
         // We use the attributes value as in the _newState
         // Get the attributes value list
-        AvatarBlock block = _st.blocks[0];
+//        AvatarBlock block = _st.blocks[0];
 
         String retAction = null;
 
@@ -1458,15 +1459,15 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     }
 
     private String executeSyncTransition(SpecificationState _previousState, SpecificationState _newState, SpecificationTransition _st) {
-        AvatarBlock block0 = _st.blocks[0];
-        AvatarBlock block1 = _st.blocks[1];
+//        AvatarBlock block0 = _st.blocks[0];
+//        AvatarBlock block1 = _st.blocks[1];
         AvatarActionOnSignal aaoss, aaosr;
-        AvatarAttribute avat;
-        String value;
+//        AvatarAttribute avat;
+//        String value;
         int result;
-        boolean resultB;
-        int indexVar;
-        String nameOfVar;
+//        boolean resultB;
+//        int indexVar;
+//        String nameOfVar;
         String ret = "";
 
 
@@ -1478,29 +1479,38 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         }
 
         // copy the value of attributes from one block to the other one
+//        for (int i = 0; i < aaoss.getNbOfValues(); i++) {           
+//            value = aaoss.getValue(i);
+//            try {
+//                avat = aaoss.getSignal().getListOfAttributes().get(i);
+//                if (avat.getType() == AvatarType.INTEGER) {
+//                    //TraceManager.addDev("Evaluating expression, value=" + value);
+//                    //TraceManager.addDev("Evaluating int expr=" + value);
+//                    result = evaluateIntExpression(value, block0, _newState.blocks[_st.blocksInt[0]]);
+//                } else if (avat.getType() == AvatarType.BOOLEAN) {
+//                    resultB = evaluateBoolExpression(value, block0, _newState.blocks[_st.blocksInt[0]]);
+//                    result = resultB ? 1 : 0;
+//                } else {
+//                    result = 0;
+//                }
+//
+//                // Putting the result to the destination var
+//                nameOfVar = aaosr.getValue(i);
+//                indexVar = block1.getIndexOfAvatarAttributeWithName(nameOfVar);
+//                _newState.blocks[_st.blocksInt[1]].values[SpecificationBlock.ATTR_INDEX + indexVar] = result;
+//                ret += "" + result;
+//            } catch (Exception e) {
+//                TraceManager.addDev("EXCEPTION on adding value " + aaoss);
+//            }
+//        }
         for (int i = 0; i < aaoss.getNbOfValues(); i++) {
-            value = aaoss.getValue(i);
-            try {
-                avat = aaoss.getSignal().getListOfAttributes().get(i);
-                if (avat.getType() == AvatarType.INTEGER) {
-                    //TraceManager.addDev("Evaluating expression, value=" + value);
-                    //TraceManager.addDev("Evaluating int expr=" + value);
-                    result = evaluateIntExpression(value, block0, _newState.blocks[_st.blocksInt[0]]);
-                } else if (avat.getType() == AvatarType.BOOLEAN) {
-                    resultB = evaluateBoolExpression(value, block0, _newState.blocks[_st.blocksInt[0]]);
-                    result = resultB ? 1 : 0;
-                } else {
-                    result = 0;
-                }
-
-                // Putting the result to the destination var
-                nameOfVar = aaosr.getValue(i);
-                indexVar = block1.getIndexOfAvatarAttributeWithName(nameOfVar);
-                _newState.blocks[_st.blocksInt[1]].values[SpecificationBlock.ATTR_INDEX + indexVar] = result;
+//            try {
+                result = aaoss.getExpressionAttribute(i).getValue(_newState.blocks[_st.blocksInt[0]]);
+                aaosr.getExpressionAttribute(i).setValue(_newState.blocks[_st.blocksInt[1]], result);
                 ret += "" + result;
-            } catch (Exception e) {
-                TraceManager.addDev("EXCEPTION on adding value " + aaoss);
-            }
+//            } catch (Exception e) {
+//                TraceManager.addDev("EXCEPTION on adding value " + aaoss);
+//            }
         }
 
 
@@ -1538,6 +1548,16 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 _ss.property = true;
             }
         }
+        
+//        if (studySafety) {
+//            if (safety.propertyType == SafetyProperty.BLOCK_STATE && safety.state == _ase) {
+//                if (safety.safetyType == SafetyProperty.ALLTRACES_ALLSTATES || safety.safetyType == SafetyProperty.ONETRACE_ALLSTATES) {
+//                    _ss.property = false;
+//                } else {
+//                    _ss.property = true;
+//                }
+//            }
+//        }
 
         if (_ase.getNexts().size() != 1) {
             return _ase;

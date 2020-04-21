@@ -55,13 +55,11 @@ import avatartranslator.AvatarStateMachineElement;
 public class SpecificationLiveness  {
     public Object ref1, ref2; // ref1 must be provided, ref2 might be null
     public boolean result; 
-    public SpecificationState state;
     
     public SpecificationLiveness(Object _ref1, Object _ref2) {
 	ref1 = _ref1;
 	ref2 = _ref2;
 	result = true;
-	state = null;
     }
 
     public String toString() {

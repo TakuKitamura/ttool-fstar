@@ -52,7 +52,6 @@ public class SafetyProperty  {
 
     private String rawProperty;
     private String p;
-    private AvatarAttribute attribute;
     private int errorOnProperty;
     private AvatarExpressionSolver safetySolver;
     
@@ -73,8 +72,9 @@ public class SafetyProperty  {
     public static final int BOOL_EXPR = 1;
     
     public int safetyType;
+    public int propertyType;
     public AvatarBlock block;
-    public int blockIndex;
+    public AvatarStateElement state;
     public boolean result;
     
     
@@ -109,48 +109,32 @@ public class SafetyProperty  {
     	}
     
     	p = tmpP.substring(3, tmpP.length()).trim();
-    
-    	safetySolver = new AvatarExpressionSolver(p);
-    	boolean exprRet = safetySolver.buildExpression(_spec);
     	
-    	if (exprRet == false) {
-    	    errorOnProperty = BAD_PROPERTY_STRUCTURE;
-            return false;
+    	if (!p.matches("^.*[\\+\\-<>=&\\*/].*$")) {
+    	    propertyType = BLOCK_STATE;
+    	    pFields = p.split("\\.");
+    	    blockString = pFields[0];
+            fieldString = pFields[1];
+            block = _spec.getBlockWithName(blockString);
+            if (block == null) {
+                errorOnProperty = BAD_PROPERTY_STRUCTURE;
+                return false;
+            }
+            state = block.getStateMachine().getStateWithName(fieldString);
+            if (state == null) {
+                errorOnProperty = BAD_PROPERTY_STRUCTURE;
+                return false;
+            } 
+    	} else {
+    	    propertyType = BOOL_EXPR;
+        	safetySolver = new AvatarExpressionSolver(p);
+        	boolean exprRet = safetySolver.buildExpression(_spec);
+    	
+        	if (exprRet == false) {
+        	    errorOnProperty = BAD_PROPERTY_STRUCTURE;
+                return false;
+    	    }
     	}
-    	
-    	/*
-    	if (p.length() == 0) {
-    	    errorOnProperty = BAD_PROPERTY_STRUCTURE;
-    	    return false;
-    	}
-    	
-    	pFields = p.split(" "); //[0] item, [1] operator, [3] value
-    	
-    	if (pFields.length != 3 || pFields[0].split("\\.").length != 2) {
-    	    errorOnProperty = BAD_PROPERTY_STRUCTURE;
-            return false;
-    	}
-    	
-    	blockString = pFields[0].split("\\.")[0];
-    	fieldString = pFields[0].split("\\.")[1];
-    	
-    	block = _spec.getBlockWithName(blockString);
-    	blockIndex = _spec.getBlockIndex(block);
-    	
-    	if (block == null) {
-    	    errorOnProperty = BAD_PROPERTY_STRUCTURE;
-            return false;
-    	}
-    	
-    	attribute = block.getAvatarAttributeWithName(fieldString);
-    	
-    	if (attribute == null) {
-            errorOnProperty = BAD_PROPERTY_STRUCTURE;
-            return false;
-        }
-    	
-    	p = fieldString + " " + pFields[1] + " " + pFields[2];
-    	*/
     	
     	return (errorOnProperty == NO_ERROR);
     }
@@ -176,6 +160,14 @@ public class SafetyProperty  {
         return safetySolver.getResult(_ss) != 0;
     }
 
+    public void setBlock(AvatarBlock block) {
+        this.block = block;
+    }
+    
+    public void setState(AvatarStateElement ase) {
+        this.state = ase;
+    }
+    
     public String toString() {
         if (result) {
             return rawProperty + " -> property is satisfied";
