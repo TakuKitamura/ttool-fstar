@@ -247,6 +247,84 @@ public class AvatarExpressionSolver {
         return returnVal;
     }
     
+    public boolean buildExpression() {
+        boolean returnVal;
+        
+        removeUselessBrackets();
+
+        if (!expression.matches("^.+[\\+\\-<>=&\\*/].*$")) {
+            // leaf
+            isLeaf = true;
+            if (expression.equals("true")) {
+                intValue = 1;
+                isImmediateValue = IMMEDIATE_INT;
+                returnVal = true;
+            } else if (expression.equals("false")) {
+                intValue = 0;
+                isImmediateValue = IMMEDIATE_INT;
+                returnVal = true;
+            } else if (expression.matches("-?\\d+")) {
+                intValue = Integer.parseInt(expression);
+                isImmediateValue = IMMEDIATE_INT;
+                returnVal = true;
+            } else {
+                returnVal = false;
+            }
+            //System.out.println("Variable " + expression + "\n");
+            return returnVal;
+        }
+        
+        isLeaf = false;
+        
+        if (expression.startsWith("not(")) {
+            //not bracket must be closed in the last char
+            int closingIndex = getClosingBracket(4);
+            
+            if (closingIndex == -1) {
+                return false;
+            }
+            if (closingIndex == expression.length() - 1) {
+              //not(expression)
+                isNot = true;
+                expression = expression.substring(4, expression.length() - 1).trim();
+            }
+        }
+        
+        if (expression.startsWith("-(")) {
+            //not bracket must be closed in the last char
+            int closingIndex = getClosingBracket(4);
+            
+            if (closingIndex == -1) {
+                return false;
+            }
+            if (closingIndex == expression.length() - 1) {
+              //not(expression)
+                isNot = true;
+                expression = expression.substring(2, expression.length() - 1).trim();
+            }
+        }
+        
+        int index = getOperatorIndex();
+        
+        if (index == -1) {
+            return false;
+        }
+        
+        operator = expression.charAt(index);
+        
+        //split and recur
+        String leftExpression = expression.substring(0, index).strip();
+        String rightExpression = expression.substring(index + 1, expression.length()).strip();
+        
+        left = new AvatarExpressionSolver(leftExpression);
+        right = new AvatarExpressionSolver(rightExpression);
+        //System.out.println("Expression " + expression + " ; " + leftExpression + " ; " + rightExpression + "\n");  
+        returnVal = left.buildExpression();
+        returnVal &= right.buildExpression();
+        
+        return returnVal;
+    }
+    
     private void replaceOperators() {
         expression = expression.replaceAll("\\|\\|", "\\|").trim();
         expression = expression.replaceAll("&&", "&").trim();

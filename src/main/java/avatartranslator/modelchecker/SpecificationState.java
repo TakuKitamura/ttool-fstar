@@ -199,8 +199,8 @@ public class SpecificationState implements Comparable<SpecificationState>  {
     }
 
     public void freeUselessAllocations() {
-	blocks = null;
-	transitions = null;
+        blocks = null;
+        transitions = null;
     }
 
     public int compareTo( SpecificationState _s ) {

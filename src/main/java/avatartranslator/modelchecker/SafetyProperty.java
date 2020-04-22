@@ -74,13 +74,22 @@ public class SafetyProperty  {
     public int safetyType;
     public int propertyType;
     public AvatarBlock block;
-    public AvatarStateElement state;
+    public AvatarStateMachineElement state;
     public boolean result;
     
     
     public SafetyProperty(String property, AvatarSpecification _spec) {
         rawProperty = property.trim();
         analyzeProperty(_spec);
+    }
+    
+    public SafetyProperty(AvatarBlock block, AvatarStateMachineElement state) {
+        //create liveness safety
+        this.block = block;
+        this.state = state;
+        propertyType = BLOCK_STATE;
+        safetyType = ALLTRACES_ONESTATE;
+        result = true;
     }
 
     public boolean analyzeProperty(AvatarSpecification _spec) {
@@ -156,7 +165,7 @@ public class SafetyProperty  {
         return rawProperty;
     }
     
-    public boolean getResult(SpecificationState _ss) {
+    public boolean getSolverResult(SpecificationState _ss) {
         return safetySolver.getResult(_ss) != 0;
     }
 
@@ -173,6 +182,15 @@ public class SafetyProperty  {
             return rawProperty + " -> property is satisfied";
         } else {
             return rawProperty + " -> property is NOT satisfied";
+        }
+    }
+    
+    public String toLivenessString() {
+        String name = "Element " + state.getExtendedName() + " of block " + block.getName();
+        if (result) {
+            return name + " -> liveness is satisfied"; 
+        } else {
+            return name + " -> liveness is NOT satisfied";
         }
     }
 

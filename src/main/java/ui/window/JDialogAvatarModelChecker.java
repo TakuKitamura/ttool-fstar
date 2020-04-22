@@ -623,8 +623,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                 res = amc.setLivenessOfSelected();
                 jta.append("Liveness of " + res + " states activated\n");
                 
-                for (SpecificationLiveness sl : amc.getLivenesses()) {
-                    handleLiveness(sl.ref1, false);
+                for (SafetyProperty sp : amc.getLivenesses()) {
+                    handleLiveness(sp.state, false);
                 }
             }
             
@@ -633,8 +633,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                 res = amc.setLivenessOfAllStates();
                 jta.append("Liveness of " + res + " selected elements activated\n");
                 
-                for (SpecificationLiveness sl : amc.getLivenesses()) {
-                    handleLiveness(sl.ref1, false);
+                for (SafetyProperty sp : amc.getLivenesses()) {
+                    handleLiveness(sp.state, false);
                 }
             }
             
@@ -720,8 +720,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                 jta.append("\nLiveness Analysis:\n");
                 jta.append(amc.livenessToString());
                 
-                for (SpecificationLiveness sl : amc.getLivenesses()) {
-                    handleLiveness(sl.ref1, sl.result);
+                for (SafetyProperty sp : amc.getLivenesses()) {
+                    handleLiveness(sp.state, sp.result);
                 }
             }
             
