@@ -54,6 +54,7 @@ public class SafetyProperty  {
     private String p;
     private int errorOnProperty;
     private AvatarExpressionSolver safetySolver;
+    private AvatarExpressionSolver safetySolverLead;
     
     // Error on property
     public static final int NO_ERROR = 0;
@@ -61,10 +62,11 @@ public class SafetyProperty  {
     public static final int BAD_PROPERTY_STRUCTURE = 1;
 
     // Type of safety
-    public static final int ALLTRACES_ALLSTATES = 0;// A[]
-    public static final int ALLTRACES_ONESTATE = 1; // A<>
-    public static final int ONETRACE_ALLSTATES = 2; // E[]
-    public static final int ONETRACE_ONESTATE = 3;  // E<>
+    public static final int ALLTRACES_ALLSTATES = 0;// A[] p
+    public static final int ALLTRACES_ONESTATE = 1; // A<> p
+    public static final int ONETRACE_ALLSTATES = 2; // E[] p
+    public static final int ONETRACE_ONESTATE = 3;  // E<> p
+    public static final int LEADS_TO = 4;           // p --> q
     
 
     // Type of property
@@ -73,8 +75,11 @@ public class SafetyProperty  {
     
     public int safetyType;
     public int propertyType;
+    public int leadType;
     public AvatarBlock block;
+    public AvatarBlock blockLead;
     public AvatarStateMachineElement state;
+    public AvatarStateMachineElement stateLead;
     public boolean result;
     
     
@@ -87,6 +92,9 @@ public class SafetyProperty  {
         //create liveness safety
         this.block = block;
         this.state = state;
+        AvatarExpressionAttribute attribute = new AvatarExpressionAttribute(block, state);
+        safetySolver = new AvatarExpressionSolver();
+        safetySolver.builExpression(attribute);
         propertyType = BLOCK_STATE;
         safetyType = ALLTRACES_ONESTATE;
         result = true;
@@ -94,8 +102,6 @@ public class SafetyProperty  {
 
     public boolean analyzeProperty(AvatarSpecification _spec) {
     	String tmpP = rawProperty;
-    	String[] pFields;
-    	String blockString, fieldString;
     	
     	errorOnProperty = NO_ERROR;
     
@@ -111,39 +117,23 @@ public class SafetyProperty  {
     	} else if (tmpP.startsWith("E<>")) {
     	    safetyType = ONETRACE_ONESTATE;
     	    result = false;
+    	} else if (tmpP.contains("-->")){
+    	    safetyType = LEADS_TO;
+    	    result = true;
     	} else {
     	    errorOnProperty = BAD_SAFETY_TYPE;
-    	    result = false;
-    	    return false;
+            result = false;
+            return false;
     	}
-    
-    	p = tmpP.substring(3, tmpP.length()).trim();
     	
-    	if (!p.matches("^.*[\\+\\-<>=&\\*/].*$")) {
-    	    propertyType = BLOCK_STATE;
-    	    pFields = p.split("\\.");
-    	    blockString = pFields[0];
-            fieldString = pFields[1];
-            block = _spec.getBlockWithName(blockString);
-            if (block == null) {
-                errorOnProperty = BAD_PROPERTY_STRUCTURE;
-                return false;
-            }
-            state = block.getStateMachine().getStateWithName(fieldString);
-            if (state == null) {
-                errorOnProperty = BAD_PROPERTY_STRUCTURE;
-                return false;
-            } 
+    	if (safetyType != LEADS_TO) {
+    	    p = tmpP.substring(3, tmpP.length()).trim();
+    	    initSafetyTrace(_spec);
     	} else {
-    	    propertyType = BOOL_EXPR;
-        	safetySolver = new AvatarExpressionSolver(p);
-        	boolean exprRet = safetySolver.buildExpression(_spec);
-    	
-        	if (exprRet == false) {
-        	    errorOnProperty = BAD_PROPERTY_STRUCTURE;
-                return false;
-    	    }
+    	    p = tmpP;
+    	    initSafetyLeads(_spec);
     	}
+    	
     	
     	return (errorOnProperty == NO_ERROR);
     }
@@ -153,29 +143,46 @@ public class SafetyProperty  {
         return errorOnProperty != NO_ERROR;
     }
 
+    
     public void setErrorOnP() {
         errorOnProperty = BAD_PROPERTY_STRUCTURE;
     }
 
+    
     public String getP() {
         return p;
     }
+    
     
     public String getRawProperty() {
         return rawProperty;
     }
     
+    
     public boolean getSolverResult(SpecificationState _ss) {
         return safetySolver.getResult(_ss) != 0;
     }
+    
+    
+    public boolean getSolverResult(SpecificationState _ss, AvatarStateMachineElement _asme) {
+        return safetySolver.getResult(_ss, _asme) != 0;
+    }
+    
+    
+    public boolean getSolverLeadResult(SpecificationState _ss, AvatarStateMachineElement _asme) {
+        return safetySolverLead.getResult(_ss, _asme) != 0;
+    }
 
+    
     public void setBlock(AvatarBlock block) {
         this.block = block;
     }
     
+    
     public void setState(AvatarStateElement ase) {
         this.state = ase;
     }
+    
     
     public String toString() {
         if (result) {
@@ -185,6 +192,7 @@ public class SafetyProperty  {
         }
     }
     
+    
     public String toLivenessString() {
         String name = "Element " + state.getExtendedName() + " of block " + block.getName();
         if (result) {
@@ -192,6 +200,70 @@ public class SafetyProperty  {
         } else {
             return name + " -> liveness is NOT satisfied";
         }
+    }
+    
+    
+    private boolean initSafetyTrace(AvatarSpecification _spec) {      
+        safetySolver = new AvatarExpressionSolver(p);
+        boolean exprRet = safetySolver.buildExpression(_spec);
+        
+        if (exprRet == false) {
+            errorOnProperty = BAD_PROPERTY_STRUCTURE;
+        }
+        
+        if (safetySolver.hasState()) {
+            propertyType = BLOCK_STATE;
+        } else {
+            propertyType = BOOL_EXPR;
+        }
+        
+        return exprRet;
+    }
+    
+    
+    private boolean initSafetyLeads(AvatarSpecification _spec) {
+        String[] pFields;
+        String pp, pq;
+        boolean exprRet;
+        
+        pFields = p.split("-->");
+        if (pFields.length != 2) {
+            errorOnProperty = BAD_PROPERTY_STRUCTURE;
+            return false;
+        }
+
+        pp = pFields[0].trim();
+        pq = pFields[1].trim();
+        
+        safetySolver = new AvatarExpressionSolver(pp);
+        exprRet = safetySolver.buildExpression(_spec);
+    
+        if (exprRet == false) {
+            errorOnProperty = BAD_PROPERTY_STRUCTURE;
+            return false;
+        }
+        
+        safetySolverLead = new AvatarExpressionSolver(pq);
+        exprRet = safetySolverLead.buildExpression(_spec);
+
+        if (exprRet == false) {
+            errorOnProperty = BAD_PROPERTY_STRUCTURE;
+            return false;
+        }
+        
+        if (safetySolver.hasState()) {
+            propertyType = BLOCK_STATE;
+        } else {
+            propertyType = BOOL_EXPR;
+        }
+        
+        if (safetySolverLead.hasState()) {
+            leadType = BLOCK_STATE;
+        } else {
+            leadType = BOOL_EXPR;
+        }
+        
+        return true;
     }
 
 }

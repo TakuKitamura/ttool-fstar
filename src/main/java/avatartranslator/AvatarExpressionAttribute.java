@@ -52,11 +52,12 @@ import avatartranslator.modelchecker.SpecificationState;
 public class AvatarExpressionAttribute {
     private AvatarBlock block;
     private int blockIndex;
-    private int attributeIndex;
     private int accessIndex;
+    private AvatarStateMachineElement state;
     private String s;
     private boolean isNegated;
     private boolean isNot;
+    private boolean isState;
     private boolean error;
     
     
@@ -64,6 +65,7 @@ public class AvatarExpressionAttribute {
         this.s = s;
         isNegated = false;
         isNot = false;
+        isState = false;
         
         if (s.startsWith("not(")) {
             //not(variable)
@@ -86,6 +88,7 @@ public class AvatarExpressionAttribute {
         this.s = s;
         isNegated = false;
         isNot = false;
+        isState = false;
         
         if (s.startsWith("not(")) {
             //not(variable)
@@ -107,6 +110,15 @@ public class AvatarExpressionAttribute {
         error = !initAttributes(block);
     }
     
+    public AvatarExpressionAttribute(AvatarBlock block, AvatarStateMachineElement asme) {
+        this.s = asme.name;
+        isNegated = false;
+        isNot = false;
+        isState = true;
+        state = asme;
+        error = false;
+    }
+
     
     private boolean initAttributes(AvatarSpecification spec) {
         //Extract Block and Attribute
@@ -134,10 +146,15 @@ public class AvatarExpressionAttribute {
         
         blockIndex = spec.getBlockIndex(block);
         
-        attributeIndex = block.getIndexOfAvatarAttributeWithName(fieldString);
+        int attributeIndex = block.getIndexOfAvatarAttributeWithName(fieldString);
         
         if (attributeIndex == -1) {
-            return false;
+            // state?
+            state = block.getStateMachine().getStateWithName(fieldString);
+            if (state == null) {
+                return false;
+            }
+            isState = true;
         }
         accessIndex = attributeIndex + SpecificationBlock.ATTR_INDEX;
         return true;
@@ -152,10 +169,15 @@ public class AvatarExpressionAttribute {
         this.block = block;
         this.blockIndex = -1; //not initialized
         
-        attributeIndex = block.getIndexOfAvatarAttributeWithName(s);
+        int attributeIndex = block.getIndexOfAvatarAttributeWithName(s);
         
         if (attributeIndex == -1) {
-            return false;
+            // state?
+            state = block.getStateMachine().getStateWithName(s);
+            if (state == null) {
+                return false;
+            }
+            isState = true;
         }
         
         accessIndex = attributeIndex + SpecificationBlock.ATTR_INDEX;
@@ -167,7 +189,31 @@ public class AvatarExpressionAttribute {
     }
  
     public int getValue(SpecificationState ss) {
-        int value = ss.blocks[blockIndex].values[accessIndex];
+        int value;
+        
+        if (isState) {
+            return 0;
+        }
+        
+        value = ss.blocks[blockIndex].values[accessIndex];
+        
+        if (isNot) {
+            value = (value == 0) ? 1 : 0;
+        } else if (isNegated) {
+            value = -value;
+        }
+        
+        return value;
+    }
+    
+    public int getValue(SpecificationState ss, AvatarStateMachineElement asme) {
+        int value;
+        
+        if (isState) {
+            return (state == asme) ? 1 : 0;
+        }
+        
+        value = ss.blocks[blockIndex].values[accessIndex];
         
         if (isNot) {
             value = (value == 0) ? 1 : 0;
@@ -179,7 +225,13 @@ public class AvatarExpressionAttribute {
     }
     
     public int getValue(SpecificationBlock sb) {
-        int value = sb.values[accessIndex];
+        int value;
+        
+        if (isState) {
+            return 0;
+        }
+        
+        value = sb.values[accessIndex];
         
         if (isNot) {
             value = (value == 0) ? 1 : 0;
@@ -191,7 +243,13 @@ public class AvatarExpressionAttribute {
     }
     
     public void setValue(SpecificationState ss, int value) {
-        int v = value;
+        int v;
+        
+        if (isState) {
+            return;
+        }
+        
+        v = value;
         
         if (isNot) {
             v = (value == 0) ? 1 : 0;
@@ -203,7 +261,13 @@ public class AvatarExpressionAttribute {
     }
     
     public void setValue(SpecificationBlock sb, int value) {
-        int v = value;
+        int v;
+        
+        if (isState) {
+            return;
+        }
+        
+        v = value;
         
         if (isNot) {
             v = (value == 0) ? 1 : 0;
@@ -212,6 +276,10 @@ public class AvatarExpressionAttribute {
         }
         
         sb.values[accessIndex] = v;
+    }
+    
+    public boolean isState() {
+        return isState;
     }
     
     public String toString() {

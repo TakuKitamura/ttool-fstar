@@ -84,6 +84,7 @@ public class AvatarExpressionSolver {
         isNegated = false;
     }
     
+    
     public void setExpression(String expression) {
         this.expression = expression;
         replaceOperators();
@@ -94,7 +95,7 @@ public class AvatarExpressionSolver {
         
         removeUselessBrackets();
         
-        if (!expression.matches("^.+[\\+\\-<>=&\\*/].*$")) {
+        if (!expression.matches("^.+[\\+\\-<>=&\\|\\*/].*$")) {
             // leaf
             isLeaf = true;
             if (expression.equals("true")) {
@@ -247,6 +248,14 @@ public class AvatarExpressionSolver {
         return returnVal;
     }
     
+    public boolean builExpression(AvatarExpressionAttribute attribute) {
+        this.expression = attribute.toString();
+        isLeaf = true;
+        isImmediateValue = IMMEDIATE_NO;
+        leaf = attribute;
+        return true;
+    }
+    
     public boolean buildExpression() {
         boolean returnVal;
         
@@ -341,122 +350,104 @@ public class AvatarExpressionSolver {
     private int getOperatorIndex() {
         int index;
         // find the last executed operator
-//        if (expression.matches("^.+[=\\$:;<>].*$")) {
-//            // boolean operator found
-//            if (expression.indexOf('=') != -1) {
-//                return expression.indexOf('=');
-//            } else if (expression.indexOf('$') != -1) {
-//                return expression.indexOf('$');
-//            } else if (expression.indexOf('<') != -1) {
-//                return expression.indexOf('<');
-//            } else if (expression.indexOf('>') != -1) {
-//                return expression.indexOf('>');
-//            } else if (expression.indexOf(':') != -1) {
-//                return expression.indexOf(':');
-//            } else {
-//                return expression.indexOf(';');
-//            }
-//        } else {
-            // search for middle operator
-            int i, level, priority;
-            boolean subVar = true; //when a subtraction is only one one variable
-            char a;
-            level = 0;
-            priority = 0;
-            for (i = 0, index = -1; i < expression.length(); i++) {
-                a = expression.charAt(i);
-                switch (a) {
-                case '=':
-                    if (level == 0) {
-                        index = i;
-                        priority = 2;
-                    }
-                    subVar = true;
-                    break;
-                case '$':
-                    if (level == 0) {
-                        index = i;
-                        priority = 2;
-                    }
-                    subVar = true;
-                    break;
-                case '<':
-                    if (level == 0) {
-                        index = i;
-                        priority = 2;
-                    }
-                    subVar = true;
-                    break;
-                case '>':
-                    if (level == 0) {
-                        index = i;
-                        priority = 2;
-                    }
-                    subVar = true;
-                    break;
-                case ':':
-                    if (level == 0) {
-                        index = i;
-                        priority = 2;
-                    }
-                    subVar = true;
-                    break;
-                case ';':
-                    if (level == 0) {
-                        index = i;
-                        priority = 2;
-                    }
-                    subVar = true;
-                    break;
-                case '-':
-                    if (level == 0 && !subVar && priority < 2) {
-                        index = i;
-                        priority = 1;
-                    }
-                    break;
-                case '+':
-                    if (level == 0 && !subVar && priority < 2) {
-                        index = i;
-                        priority = 1;
-                    }
-                    break;
-                case '|':
-                    if (level == 0 && priority < 2) {
-                        index = i;
-                        priority = 1;
-                    }
-                    break;
-                case '/':
-                    if (level == 0  && priority == 0) {
-                        index = i;
-                    }
-                    break;
-                case '*':
-                    if (level == 0  && priority == 0) {
-                        index = i;
-                    }
-                    break;
-                case '&':
-                    if (level == 0  && priority == 0) {
-                        index = i;
-                    }
-                    break;
-                case '(':
-                    level++;
-                    subVar = true;
-                    break;
-                case ')':
-                    level--;
-                    subVar = false;
-                    break;
-                case ' ':
-                    break;
-                default:
-                    subVar = false;
-                    break;
+        int i, level, priority;
+        boolean subVar = true; //when a subtraction is only one one variable
+        char a;
+        level = 0;
+        priority = 0;
+        for (i = 0, index = -1; i < expression.length(); i++) {
+            a = expression.charAt(i);
+            switch (a) {
+            case '=':
+                if (level == 0) {
+                    index = i;
+                    priority = 2;
                 }
+                subVar = true;
+                break;
+            case '$':
+                if (level == 0) {
+                    index = i;
+                    priority = 2;
+                }
+                subVar = true;
+                break;
+            case '<':
+                if (level == 0) {
+                    index = i;
+                    priority = 2;
+                }
+                subVar = true;
+                break;
+            case '>':
+                if (level == 0) {
+                    index = i;
+                    priority = 2;
+                }
+                subVar = true;
+                break;
+            case ':':
+                if (level == 0) {
+                    index = i;
+                    priority = 2;
+                }
+                subVar = true;
+                break;
+            case ';':
+                if (level == 0) {
+                    index = i;
+                    priority = 2;
+                }
+                subVar = true;
+                break;
+            case '-':
+                if (level == 0 && !subVar && priority < 2) {
+                    index = i;
+                    priority = 1;
+                }
+                break;
+            case '+':
+                if (level == 0 && !subVar && priority < 2) {
+                    index = i;
+                    priority = 1;
+                }
+                break;
+            case '|':
+                if (level == 0 && priority < 2) {
+                    index = i;
+                    priority = 1;
+                }
+                break;
+            case '/':
+                if (level == 0  && priority == 0) {
+                    index = i;
+                }
+                break;
+            case '*':
+                if (level == 0  && priority == 0) {
+                    index = i;
+                }
+                break;
+            case '&':
+                if (level == 0  && priority == 0) {
+                    index = i;
+                }
+                break;
+            case '(':
+                level++;
+                subVar = true;
+                break;
+            case ')':
+                level--;
+                subVar = false;
+                break;
+            case ' ':
+                break;
+            default:
+                subVar = false;
+                break;
             }
-//        }
+        }
         return index;
     }
     
@@ -482,6 +473,26 @@ public class AvatarExpressionSolver {
             }
         } else {
             res = getChildrenResult(left.getResult(ss), right.getResult(ss));
+        }
+        
+        if (isNot) {
+            res = (res == 0) ? 1 : 0;
+        } else if (isNegated) {
+            res = -res;
+        }
+        return res;
+    }
+    
+    public int getResult(SpecificationState ss, AvatarStateMachineElement asme) {
+        int res;
+        if (isLeaf) {
+            if (isImmediateValue == IMMEDIATE_INT) {
+                res = intValue;
+            } else {
+                res = leaf.getValue(ss, asme);
+            }
+        } else {
+            res = getChildrenResult(left.getResult(ss, asme), right.getResult(ss, asme));
         }
         
         if (isNot) {
@@ -595,6 +606,21 @@ public class AvatarExpressionSolver {
                 break;
             }
             return "(" + leftString + " " + opString + " " + rightString + ")";
+        }
+    }
+    
+    public boolean hasState() {
+        boolean hasState;
+        if (isLeaf) {
+            if (isImmediateValue == IMMEDIATE_NO) {
+                return leaf.isState();
+            } else {
+                return false;
+            }
+        } else {
+            hasState = left.hasState();
+            hasState |= right.hasState();
+            return hasState;
         }
     }
     
