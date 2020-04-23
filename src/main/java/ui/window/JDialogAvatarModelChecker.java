@@ -784,6 +784,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         } catch (InterruptedException ie) {
             jta.append("Interrupted\n");
         }
+        
+        amc = null;
 
         jta.append("\n\nReady to process next command\n");
 

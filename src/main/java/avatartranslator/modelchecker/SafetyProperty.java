@@ -137,6 +137,13 @@ public class SafetyProperty  {
     	
     	return (errorOnProperty == NO_ERROR);
     }
+    
+    public void initLead() {
+        safetySolver = safetySolverLead;
+        safetyType = ALLTRACES_ONESTATE;
+        propertyType = leadType;
+        result = true;
+    }
 
     
     public boolean hasError() {

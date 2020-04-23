@@ -71,6 +71,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     private Map<Integer, SpecificationState> states;
     private Map<Long, SpecificationState> statesByID;
     private List<SpecificationState> pendingStates;
+    private List<SpecificationState> safetyLeadStates;
     //private List<SpecificationLink> links;
     private int nbOfLinks;
     private long stateID = 0;
@@ -337,6 +338,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             return false;
         }
         
+        initModelChecking();
+        
         stateLimitRG = false;
         timeLimitRG = false;
         studyR = studyReachability;
@@ -354,9 +357,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             studySafety = true;
             for (SafetyProperty sp : livenesses) {
                 safety = sp;
-                startModelChecking();
-                propertyDone = false;
-                stoppedConditionReached = false;
+                startModelChecking(nbOfThreads);
+                resetModelChecking();
                 deadlocks += nbOfDeadlocks;
             }
             studySafety = false;
@@ -366,9 +368,25 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             studySafety = true;
             for (SafetyProperty sp : safeties) {
                 safety = sp;
-                startModelChecking();
-                propertyDone = false;
-                stoppedConditionReached = false;
+                if (safety.safetyType == SafetyProperty.LEADS_TO) {
+                    // prepare to save second pass states
+                    safetyLeadStates = Collections.synchronizedList(new LinkedList<SpecificationState>());
+                }
+                startModelChecking(nbOfThreads);
+                if (safety.safetyType == SafetyProperty.LEADS_TO) {
+                    // second pass
+                    safety.initLead();
+                    for (SpecificationState state : safetyLeadStates) {
+                        deadlocks += nbOfDeadlocks;
+                        resetModelChecking();
+                        startModelChecking(state, nbOfThreads);
+                        if (safety.result == false) {
+                            break;
+                        }
+                    }
+                    safetyLeadStates = null;
+                }
+                resetModelChecking();
                 deadlocks += nbOfDeadlocks;
             }
             studySafety = false;
@@ -377,23 +395,24 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         if (studyR) {
             studyReachability = true;
             //computeRG = true;
-            startModelChecking();
+            startModelChecking(nbOfThreads);
             deadlocks += nbOfDeadlocks;
-            studyReachability = false;
+            resetModelChecking();
         }
         
         if (checkNoDeadlocks) {
             if (deadlocks == 0) {
                 deadlockStop = true;
-                startModelChecking();
+                startModelChecking(nbOfThreads);
             } else {
                 nbOfDeadlocks = 1;
             }
         }
+        
         studyLiveness = studyL;
         studySafety = studyS;
         studyReachability = studyR;
-
+        TraceManager.addDev("Model checking done");
         return true;
     }
 
@@ -403,36 +422,9 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         if (spec == null) {
             return;
         }
-
-        stoppedBeforeEnd = false;
-        limitReached = false;
-        timeLimitReached = false;
-        stateID = 0;
-        nbOfDeadlocks = 0;
-
-
-        // Remove timers, composite states, randoms
-        TraceManager.addDev("Reworking Avatar specification");
-        spec.removeElseGuards();
-        spec.removeTimers();
-        spec.removeRandoms();
-        spec.removeFIFOs(4);
-        spec.makeFullStates();
-
-        if (ignoreEmptyTransitions) {
-            spec.removeEmptyTransitions((nbOfRemainingReachabilities == 0) || studySafety);
-        }
         
-        initExpressionSolvers();
-
-        //TraceManager.addDev("Preparing Avatar specification :" + spec.toString());
-        prepareStates();
-        prepareTransitions();
-
-
-        nbOfThreads = Runtime.getRuntime().availableProcessors();
-        TraceManager.addDev("Starting the model checking with " + nbOfThreads + " threads");
-        TraceManager.addDev("Ignore internal state:" + ignoreInternalStates);
+        initModelChecking();
+        
         startModelChecking(nbOfThreads);
         TraceManager.addDev("Model checking done");
     }
@@ -481,6 +473,14 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             handleNonEmptyUniqueTransition(initialState);
         }
         
+        prepareTransitionsOfState(initialState);
+        blockValues = initialState.getBlockValues();
+        initialState.distance = 0;
+
+        TraceManager.addDev("initialState=" + initialState.toString() + "\n nbOfTransitions" + initialState.transitions.size());
+        initialState.computeHash(blockValues);
+        addState(initialState);
+        
         if (studySafety) {
             if (safety.propertyType == SafetyProperty.BOOL_EXPR) {
                 initialState.property = evaluateSafetyOfProperty(initialState, null, false);
@@ -489,14 +489,49 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         } else {
             pendingStates.add(initialState);
         }
+        //states.put(initialState.hashValue, initialState);
+        //statesByID.put(initialState.id, initialState);
+        nbOfCurrentComputations = 0;
+
+        if (timeLimitRG) {
+            computeAllStatesTime();
+        } else {
+            computeAllStates();
+        }
+
+        // All done
+    }
+    
+    public void startModelChecking(SpecificationState initialState, int _nbOfThreads) {
+        nbOfThreads = _nbOfThreads;
+        stateID = 0;
+        nbOfDeadlocks = 0;
         
-        prepareTransitionsOfState(initialState);
+        // Init data stuctures
+        states = Collections.synchronizedMap(new HashMap<Integer, SpecificationState>());
+        statesByID = Collections.synchronizedMap(new HashMap<Long, SpecificationState>());
+        pendingStates = Collections.synchronizedList(new LinkedList<SpecificationState>());
+        //links = Collections.synchronizedList(new ArrayList<SpecificationLink>());
+        nbOfLinks = 0;
+
+        // Check stop conditions
+        if (mustStop()) {
+            return;
+        }
+
+        // initialState's transitions and blocks must be already initialized
         blockValues = initialState.getBlockValues();
         initialState.distance = 0;
+        
+        // properties are not tested on the initial node. The property is reset
+        initialState.property = false;
 
         TraceManager.addDev("initialState=" + initialState.toString() + "\n nbOfTransitions" + initialState.transitions.size());
         initialState.computeHash(blockValues);
         addState(initialState);
+        
+        pendingStates.add(initialState);
+           
         //states.put(initialState.hashValue, initialState);
         //statesByID.put(initialState.id, initialState);
         nbOfCurrentComputations = 0;
@@ -510,12 +545,57 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         // All done
     }
 
+    
     public void stopModelChecking() {
         emptyPendingStates();
         stoppedBeforeEnd = true;
+        safety.result = false;
         TraceManager.addDev("Model checking stopped");
     }
+    
+    
+    private void initModelChecking() {
+        stoppedBeforeEnd = false;
+        limitReached = false;
+        timeLimitReached = false;
+        stateID = 0;
+        nbOfDeadlocks = 0;
 
+        // Remove timers, composite states, randoms
+        TraceManager.addDev("Reworking Avatar specification");
+        spec.removeElseGuards();
+        spec.removeTimers();
+        spec.removeRandoms();
+        spec.removeFIFOs(4);
+        spec.makeFullStates();
+
+        if (ignoreEmptyTransitions) {
+            spec.removeEmptyTransitions((nbOfRemainingReachabilities == 0) || studyLiveness ||studySafety);
+        }
+        
+        initExpressionSolvers();
+
+        //TraceManager.addDev("Preparing Avatar specification :" + spec.toString());
+        prepareStates();
+        prepareTransitions();
+
+
+        nbOfThreads = Runtime.getRuntime().availableProcessors();
+        TraceManager.addDev("Starting the model checking with " + nbOfThreads + " threads");
+        TraceManager.addDev("Ignore internal state:" + ignoreInternalStates);
+    }
+    
+    
+    private void resetModelChecking() {
+        propertyDone = false;
+        stoppedConditionReached = false;
+        limitReached = false;
+        timeLimitReached = false;
+        stateID = 0;
+        nbOfDeadlocks = 0;    
+    }
+
+    
     private void computeAllStates() {
         int i;
         Thread[] ts = new Thread[nbOfThreads];
@@ -1577,29 +1657,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
 
     }
-    
-    
-    private boolean evaluateSafetyOfState(SpecificationState newState, SpecificationTransition tr, boolean precLiveness) {
-        AvatarStateMachineElement asme;
-        boolean result = false;
-        
-        // Find if newState carries the transition to a safety check stateElement
-        for (int i = 0; i < tr.transitions.length; i++) {
-            //asme = getNextStateLivenessCheck(tr.transitions[i], 10);
-            asme = tr.transitions[i].getNext(0);
-//            if (asme == safety.state) {
-//                result = true;
-//                break;
-//            }
-            result |= safety.getSolverResult(newState, asme);
-        }
-        
-        if (safety.safetyType == SafetyProperty.ALLTRACES_ALLSTATES || safety.safetyType == SafetyProperty.ONETRACE_ALLSTATES) {
-            result = !result;
-        }
-        
-        return result || precLiveness;
-    }
 
     
     private boolean evaluateSafetyOfProperty(SpecificationState newState, SpecificationTransition tr, boolean precProperty) {
@@ -1634,15 +1691,19 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                     pendingStates.add(newState);
                 }
             } else if (safety.safetyType == SafetyProperty.ONETRACE_ALLSTATES) {
-                if (similar == null && !newState.property) {
-                    if (i == 0) {
-                        //Priority for parallel DFS on the first transition
-                        pendingStates.add(0, newState);
+                if (similar == null) {
+                    if (!newState.property) {
+                        if (i == 0) {
+                            //Priority for parallel DFS on the first transition
+                            pendingStates.add(0, newState);
+                        } else {
+                            //Not priority for parallel BFS on the other transitions
+                            pendingStates.add(newState);
+                        }
                     } else {
-                        //Not priority for parallel BFS on the other transitions
-                        pendingStates.add(newState);
+                        newState.freeUselessAllocations();
                     }
-                } else if (similar != null && !newState.property) {
+                } else if (!newState.property) {
                     if (!similar.property && stateIsReachableFromState(similar, _ss)) {
                         //found a loop with true property
                         propertyDone = true;
@@ -1650,15 +1711,19 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                     }
                 }
             } else if (safety.safetyType == SafetyProperty.ALLTRACES_ONESTATE) {
-                if (similar == null && !newState.property) { 
-                    if (i == 0) {
-                        //Priority for parallel DFS on the first transition
-                        pendingStates.add(0, newState);
+                if (similar == null) {
+                    if (!newState.property) { 
+                        if (i == 0) {
+                            //Priority for parallel DFS on the first transition
+                            pendingStates.add(0, newState);
+                        } else {
+                            //Not priority for parallel BFS on the other transitions
+                            pendingStates.add(newState);
+                        }
                     } else {
-                        //Not priority for parallel BFS on the other transitions
-                        pendingStates.add(newState);
+                        newState.freeUselessAllocations();
                     }
-                } else if (similar != null && newState.property == false) {
+                } else if (newState.property == false) {
                     if (!similar.property && stateIsReachableFromState(similar, _ss)) {
                         //found a loop with false property
                         propertyDone = true;
@@ -1670,6 +1735,16 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                     propertyDone = true;
                     safety.result = true;
                 } else if (similar == null) {
+                    pendingStates.add(newState);
+                }
+            } else if (safety.safetyType == SafetyProperty.LEADS_TO) {
+                if (similar == null) {
+                    if (newState.property) {
+                        SpecificationState state = newState.advancedClone();
+                        state.transitions = newState.transitions;
+                        safetyLeadStates.add(state);
+                        newState.property = false;
+                    }
                     pendingStates.add(newState);
                 }
             }

@@ -553,6 +553,7 @@ public class AvatarExpressionSolver {
             break;
         case '|':
             result = ((leftV + rightV) > 0) ? 1 : 0;
+            break;
         case '/':
             result = leftV / rightV;
             break;
