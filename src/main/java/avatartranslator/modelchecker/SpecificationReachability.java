@@ -54,13 +54,13 @@ import avatartranslator.AvatarStateMachineElement;
  */
 public class SpecificationReachability  {
     public Object ref1, ref2; // ref1 must be provided, ref2 might be null
-    public SpecificationReachabilityType result;
+    public SpecificationPropertyPhase result;
     public SpecificationState state;
     
     public SpecificationReachability(Object _ref1, Object _ref2) {
 	ref1 = _ref1;
 	ref2 = _ref2;
-	result = SpecificationReachabilityType.NOTCOMPUTED;
+	result = SpecificationPropertyPhase.NOTCOMPUTED;
 	state = null;
     }
 
@@ -81,11 +81,11 @@ public class SpecificationReachability  {
 	}
 
 	
-	if (result == SpecificationReachabilityType.NOTCOMPUTED) {
+	if (result == SpecificationPropertyPhase.NOTCOMPUTED) {
 	    return name + " -> not computed"; 
 	}
 	
-	if (result == SpecificationReachabilityType.REACHABLE) {
+	if (result == SpecificationPropertyPhase.SATISFIED) {
 	    return name + " -> reachable in RG state " + state.id; 
 	}
 
@@ -110,11 +110,11 @@ public class SpecificationReachability  {
         }
 
         
-        if (result == SpecificationReachabilityType.NOTCOMPUTED) {
+        if (result == SpecificationPropertyPhase.NOTCOMPUTED) {
             return name + " -> not computed"; 
         }
         
-        if (result == SpecificationReachabilityType.REACHABLE) {
+        if (result == SpecificationPropertyPhase.SATISFIED) {
             return name + " -> reachable";
         }
 

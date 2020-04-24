@@ -360,6 +360,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 safety = sp;
                 startModelChecking(nbOfThreads);
                 resetModelChecking();
+                safety.setComputed();
                 deadlocks += nbOfDeadlocks;
             }
             studySafety = false;
@@ -387,6 +388,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                     }
                     safetyLeadStates = null;
                 }
+                safety.setComputed();
                 resetModelChecking();
                 deadlocks += nbOfDeadlocks;
             }
@@ -542,9 +544,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     public void stopModelChecking() {
         emptyPendingStates();
         stoppedBeforeEnd = true;
-        if (studySafety) {
-            safety.result = false;
-        }
         TraceManager.addDev("Model checking stopped");
     }
     
@@ -615,8 +614,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         // Set to non reachable not computed elements
         if ((studyReachability) && (!stoppedBeforeEnd)) {
             for (SpecificationReachability re : reachabilities) {
-                if (re.result == SpecificationReachabilityType.NOTCOMPUTED) {
-                    re.result = SpecificationReachabilityType.NONREACHABLE;
+                if (re.result == SpecificationPropertyPhase.NOTCOMPUTED) {
+                    re.result = SpecificationPropertyPhase.NONSATISFIED;
                 }
             }
         }
@@ -665,8 +664,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         // Set to non reachable not computed elements
         if ((studyReachability) && (!stoppedBeforeEnd)) {
             for (SpecificationReachability re : reachabilities) {
-                if (re.result == SpecificationReachabilityType.NOTCOMPUTED) {
-                    re.result = SpecificationReachabilityType.NONREACHABLE;
+                if (re.result == SpecificationPropertyPhase.NOTCOMPUTED) {
+                    re.result = SpecificationPropertyPhase.NONSATISFIED;
                 }
             }
         }
@@ -1780,9 +1779,9 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
     public void checkElementReachability(AvatarStateMachineElement elt, SpecificationState _ss) {
         for (SpecificationReachability re : reachabilities) {
-            if (re.result == SpecificationReachabilityType.NOTCOMPUTED) {
+            if (re.result == SpecificationPropertyPhase.NOTCOMPUTED) {
                 if (re.ref1 == elt) {
-                    re.result = SpecificationReachabilityType.REACHABLE;
+                    re.result = SpecificationPropertyPhase.SATISFIED;
                     re.state = _ss;
                     nbOfRemainingReachabilities--;
                     //TraceManager.addDev("Remaining reachabilities:" + nbOfRemainingReachabilities);

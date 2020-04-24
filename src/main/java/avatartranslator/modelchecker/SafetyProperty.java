@@ -55,6 +55,7 @@ public class SafetyProperty  {
     private int errorOnProperty;
     private AvatarExpressionSolver safetySolver;
     private AvatarExpressionSolver safetySolverLead;
+    private SpecificationPropertyPhase phase;
     
     // Error on property
     public static final int NO_ERROR = 0;
@@ -86,6 +87,7 @@ public class SafetyProperty  {
     public SafetyProperty(String property, AvatarSpecification _spec) {
         rawProperty = property.trim();
         analyzeProperty(_spec);
+        phase = SpecificationPropertyPhase.NOTCOMPUTED;
     }
     
     public SafetyProperty(AvatarBlock block, AvatarStateMachineElement state, int _safetyType) {
@@ -98,6 +100,7 @@ public class SafetyProperty  {
         propertyType = BLOCK_STATE;
         safetyType = _safetyType;
         result = true;
+        phase = SpecificationPropertyPhase.NOTCOMPUTED;
     }
 
     public boolean analyzeProperty(AvatarSpecification _spec) {
@@ -179,6 +182,10 @@ public class SafetyProperty  {
     public boolean getSolverLeadResult(SpecificationState _ss, AvatarStateMachineElement _asme) {
         return safetySolverLead.getResult(_ss, _asme) != 0;
     }
+    
+    public SpecificationPropertyPhase getPhase() {
+        return phase;
+    }
 
     
     public void setBlock(AvatarBlock block) {
@@ -190,23 +197,46 @@ public class SafetyProperty  {
         this.state = ase;
     }
     
+    public void setComputed() {
+        if (result) {
+            phase = SpecificationPropertyPhase.SATISFIED;
+        } else {
+            phase = SpecificationPropertyPhase.NONSATISFIED;
+        }
+    }
+    
     
     public String toString() {
-        if (result) {
-            return rawProperty + " -> property is satisfied";
-        } else {
-            return rawProperty + " -> property is NOT satisfied";
+        String ret = "";
+        switch(phase) {
+        case NOTCOMPUTED:
+            ret = rawProperty + " -> property not computed";
+            break;
+        case SATISFIED:
+            ret = rawProperty + " -> property is satisfied";
+            break;
+        case NONSATISFIED:
+            ret = rawProperty + " -> property is NOT satisfied"; 
+            break;
         }
+        return ret;
     }
     
     
     public String toLivenessString() {
         String name = "Element " + state.getExtendedName() + " of block " + block.getName();
-        if (result) {
-            return name + " -> liveness is satisfied"; 
-        } else {
-            return name + " -> liveness is NOT satisfied";
+        switch(phase) {
+        case NOTCOMPUTED:
+            name += rawProperty + " -> liveness not computed";
+            break;
+        case SATISFIED:
+            name += rawProperty + " -> liveness is satisfied";
+            break;
+        case NONSATISFIED:
+            name += rawProperty + " -> liveness is NOT satisfied"; 
+            break;
         }
+        return name;
     }
     
     

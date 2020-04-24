@@ -45,7 +45,7 @@ import avatartranslator.modelchecker.AvatarModelChecker;
 import avatartranslator.modelchecker.SafetyProperty;
 import avatartranslator.modelchecker.SpecificationLiveness;
 import avatartranslator.modelchecker.SpecificationReachability;
-import avatartranslator.modelchecker.SpecificationReachabilityType;
+import avatartranslator.modelchecker.SpecificationPropertyPhase;
 import myutil.*;
 import ui.util.IconManager;
 import ui.MainGUI;
@@ -621,7 +621,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                 jta.append("Liveness of " + res + " states activated\n");
                 
                 for (SafetyProperty sp : amc.getLivenesses()) {
-                    handleLiveness(sp.state, false);
+                    handleLiveness(sp.state, sp.getPhase());
                 }
             }
             
@@ -631,12 +631,15 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                 jta.append("Liveness of " + res + " selected elements activated\n");
                 
                 for (SafetyProperty sp : amc.getLivenesses()) {
-                    handleLiveness(sp.state, false);
+                    handleLiveness(sp.state, sp.getPhase());
                 }
             }
             
             if (safetySelected) {
                 res = amc.setSafetyAnalysis();
+                jta.append("Analysis of " + res + " safety pragmas activated\n");
+                
+                handleSafety(amc.getSafeties());
             }
             
             // Limitations
@@ -718,7 +721,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                 jta.append(amc.livenessToString());
                 
                 for (SafetyProperty sp : amc.getLivenesses()) {
-                    handleLiveness(sp.state, sp.result);
+                    handleLiveness(sp.state, sp.getPhase());
                 }
             }
             
@@ -792,7 +795,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         //
     }
 
-    protected void handleReachability(Object _o, SpecificationReachabilityType _res) {
+    protected void handleReachability(Object _o, SpecificationPropertyPhase _res) {
         if (_o instanceof AvatarStateMachineElement) {
             Object o = ((AvatarStateMachineElement) _o).getReferenceObject();
             if (o instanceof TGComponent) {
@@ -801,12 +804,11 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                 switch (_res) {
                     case NOTCOMPUTED:
                         tgc.setReachability(TGComponent.ACCESSIBILITY_UNKNOWN);
-                        tgc.setLiveness(TGComponent.ACCESSIBILITY_UNKNOWN);
                         break;
-                    case REACHABLE:
+                    case SATISFIED:
                         tgc.setReachability(TGComponent.ACCESSIBILITY_OK);
                         break;
-                    case NONREACHABLE:
+                    case NONSATISFIED:
                         tgc.setReachability(TGComponent.ACCESSIBILITY_KO);
                         tgc.setLiveness(TGComponent.ACCESSIBILITY_KO);
                         break;
@@ -816,17 +818,22 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         }
     }
     
-    protected void handleLiveness(Object _o, boolean _res) {
+    protected void handleLiveness(Object _o, SpecificationPropertyPhase _res) {
         if (_o instanceof AvatarStateMachineElement) {
             Object o = ((AvatarStateMachineElement) _o).getReferenceObject();
             if (o instanceof TGComponent) {
                 TGComponent tgc = (TGComponent) (o);
                 //TraceManager.addDev("Reachability of tgc=" + tgc + " value=" + tgc.getValue() + " class=" + tgc.getClass());
-                if (_res) {
-                    tgc.setReachability(TGComponent.ACCESSIBILITY_OK);
-                    tgc.setLiveness(TGComponent.ACCESSIBILITY_OK);
-                } else {
-                    tgc.setLiveness(TGComponent.ACCESSIBILITY_KO);
+                switch (_res) {
+                    case NOTCOMPUTED:
+                        tgc.setLiveness(TGComponent.ACCESSIBILITY_UNKNOWN);
+                    case SATISFIED:
+                        tgc.setReachability(TGComponent.ACCESSIBILITY_OK);
+                        tgc.setLiveness(TGComponent.ACCESSIBILITY_OK);
+                        break;
+                    case NONSATISFIED:
+                        tgc.setLiveness(TGComponent.ACCESSIBILITY_KO);
+                        break;
                 }
                 tgc.getTDiagramPanel().repaint();
             }
@@ -836,7 +843,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     protected void handleSafety(ArrayList<SafetyProperty> safeties) {
         int status;
         for (SafetyProperty sp : safeties) {
-            if (sp.result) {
+            if (sp.getPhase() == SpecificationPropertyPhase.SATISFIED) {
                 status = 1;
             } else {
                 status = 0;
