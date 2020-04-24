@@ -88,7 +88,7 @@ public class SafetyProperty  {
         analyzeProperty(_spec);
     }
     
-    public SafetyProperty(AvatarBlock block, AvatarStateMachineElement state) {
+    public SafetyProperty(AvatarBlock block, AvatarStateMachineElement state, int _safetyType) {
         //create liveness safety
         this.block = block;
         this.state = state;
@@ -96,7 +96,7 @@ public class SafetyProperty  {
         safetySolver = new AvatarExpressionSolver();
         safetySolver.builExpression(attribute);
         propertyType = BLOCK_STATE;
-        safetyType = ALLTRACES_ONESTATE;
+        safetyType = _safetyType;
         result = true;
     }
 

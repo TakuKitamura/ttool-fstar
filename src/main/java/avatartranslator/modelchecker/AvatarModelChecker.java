@@ -209,7 +209,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 //TraceManager.addDev("null elt in state machine of block=" + block.getName());
                 //if (elt.canBeVerified() && elt.isChecked()) {
                 if (elt.isChecked()) {
-                    SafetyProperty sp = new SafetyProperty(block, elt);
+                    SafetyProperty sp = new SafetyProperty(block, elt, SafetyProperty.ALLTRACES_ONESTATE);
                     livenesses.add(sp);
                 }
             }
@@ -223,7 +223,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         for (AvatarBlock block : spec.getListOfBlocks()) {
             for (AvatarStateMachineElement elt : block.getStateMachine().getListOfElements()) {
                 if (((elt instanceof AvatarStateElement) && (elt.canBeVerified())) || (elt.isCheckable())) {
-                    SafetyProperty sp = new SafetyProperty(block, elt);
+                    SafetyProperty sp = new SafetyProperty(block, elt, SafetyProperty.ALLTRACES_ONESTATE);
                     livenesses.add(sp);
                 }
             }
@@ -549,7 +549,9 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     public void stopModelChecking() {
         emptyPendingStates();
         stoppedBeforeEnd = true;
-        safety.result = false;
+        if (studySafety) {
+            safety.result = false;
+        }
         TraceManager.addDev("Model checking stopped");
     }
     
@@ -770,7 +772,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                             ((AvatarActionAssignment) aa).buildActionSolver(block);
                         }
                     }
-                }else if (elt instanceof AvatarActionOnSignal) {
+                } else if (elt instanceof AvatarActionOnSignal) {
                     ((AvatarActionOnSignal) elt).buildActionSolver(block);
                 }
             }
@@ -1423,7 +1425,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             ase = getNextState(_st.transitions[i], _newState, 10);
             if (ase != null) {
                 checkElement(ase, _newState);
-                int index = _st.blocks[i].getStateMachine().getIndexOfState(ase);
+                //int index = _st.blocks[i].getStateMachine().getIndexOfState(ase);
+                int index = _st.transitions[i].getBlock().getStateMachine().getIndexOfState(ase);
                 if (index > -1) {
                     _newState.blocks[_st.blocksInt[i]].values[SpecificationBlock.STATE_INDEX] = index;
                 }
@@ -1507,7 +1510,9 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             retAction = "";
         }
 
-        return "i(" + _st.blocks[0].getName() + "/" + retAction + ")";
+        //return "i(" + _st.blocks[0].getName() + "/" + retAction + ")";
+        return "i(" + _st.transitions[0].getBlock().getName() + "/" + retAction + ")";
+
     }
 
     private String executeSyncTransition(SpecificationState _previousState, SpecificationState _newState, SpecificationTransition _st) {
