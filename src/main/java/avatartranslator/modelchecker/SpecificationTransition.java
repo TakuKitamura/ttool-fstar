@@ -54,25 +54,17 @@ import avatartranslator.AvatarTransition;
  */
 public class SpecificationTransition  {
     public int clockMin, clockMax;
-
     public boolean fromStateWithMoreThanOneTransition;
-    
-    public int[] blocksInt;
-
     public AvatarTransition[] transitions;
-
     public String infoForGraph;
 
 
     public SpecificationTransition() {
     }
 
-    public void init(int _nbOfElements, AvatarTransition _at, AvatarBlock _ab, SpecificationBlock _sb, int _blockIndex) {
+    public void init(int _nbOfElements, AvatarTransition _at, int _blockIndex) {
         transitions = new AvatarTransition[_nbOfElements];
         transitions[0] = _at;        
-
-        blocksInt = new int[_nbOfElements];
-        blocksInt[0] = _blockIndex;
     }
 
     public int getType() {
@@ -89,13 +81,8 @@ public class SpecificationTransition  {
         transitions[0] = _tr1.transitions[0];
         transitions[1] = _tr2.transitions[0];
 
-        blocksInt = new int[nbOfElements];
-        blocksInt[0] = _tr1.blocksInt[0];
-        blocksInt[1] = _tr2.blocksInt[0];
-
         clockMin = Math.max(_tr1.clockMin, _tr2.clockMin);
         clockMax = Math.max(_tr1.clockMax, _tr2.clockMax);
-
     }
 
     public boolean hasBlockOf(SpecificationTransition _tr) {
@@ -120,27 +107,21 @@ public class SpecificationTransition  {
 
     
     public boolean hasBlockIndex(int _index) {
-        if (blocksInt == null) {
+        if (transitions == null) {
             return false;
         }
-
-        for(int i=0; i<blocksInt.length; i++) {
-            if (blocksInt[i] == _index) {
+        
+        for(int i = 0; i<transitions.length; i++) {
+            if (((AvatarBlock) transitions[i].getBlock()).getBlockIndex() == _index) {
                 return true;
             }
         }
-
         return false;
     }
 
     public String toString() {
         String ret = "Trans: ";
 
-//        if (blocks != null) {
-//            for (int i=0; i<blocks.length; i++) {
-//                ret += "/ Block" + i  + ": " + blocks[i].getName();
-//            }
-//        }
         if (transitions != null) {
             for (int i = 0; i < transitions.length; i++) {
                 ret += "/ Block" + i  + ": " + transitions[i].getBlock().getName() + "/" + transitions[i];

@@ -342,6 +342,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         
         stateLimitRG = false;
         timeLimitRG = false;
+        ignoreEmptyTransitions = true;
         studyR = studyReachability;
         studyL = studyLiveness;
         studyS = studySafety;
@@ -468,16 +469,15 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 }
         }
         
-        //initialState.id = 0//getStateID();
         if (ignoreEmptyTransitions) {
             handleNonEmptyUniqueTransition(initialState);
         }
-        
-        prepareTransitionsOfState(initialState);
+//        
+//        prepareTransitionsOfState(initialState);
         blockValues = initialState.getBlockValues();
         initialState.distance = 0;
 
-        TraceManager.addDev("initialState=" + initialState.toString() + "\n nbOfTransitions" + initialState.transitions.size());
+        //TraceManager.addDev("initialState=" + initialState.toString() + "\n nbOfTransitions" + initialState.transitions.size());
         initialState.computeHash(blockValues);
         addState(initialState);
         
@@ -522,11 +522,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         // initialState's transitions and blocks must be already initialized
         blockValues = initialState.getBlockValues();
         initialState.distance = 0;
-        
-        // properties are not tested on the initial node. The property is reset
-        initialState.property = false;
 
-        TraceManager.addDev("initialState=" + initialState.toString() + "\n nbOfTransitions" + initialState.transitions.size());
+        //TraceManager.addDev("initialState=" + initialState.toString() + "\n nbOfTransitions" + initialState.transitions.size());
         initialState.computeHash(blockValues);
         addState(initialState);
         
@@ -536,11 +533,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         //statesByID.put(initialState.id, initialState);
         nbOfCurrentComputations = 0;
 
-        if (timeLimitRG) {
-            computeAllStatesTime();
-        } else {
-            computeAllStates();
-        }
+        computeAllStates();
 
         // All done
     }
@@ -580,6 +573,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         //TraceManager.addDev("Preparing Avatar specification :" + spec.toString());
         prepareStates();
         prepareTransitions();
+        prepareBlocks();
 
 
         nbOfThreads = Runtime.getRuntime().availableProcessors();
@@ -813,6 +807,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             mustStop();
             return;
         }
+        
+        prepareTransitionsOfState(_ss);
 
         ArrayList<SpecificationTransition> transitions = _ss.transitions;
         if (transitions == null) {
@@ -948,11 +944,11 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 newState.property = evaluateSafetyOfProperty(newState, tr, _ss.property);
             }
 
-            // Remove empty transitions if applicable
+//            // Remove empty transitions if applicable
             if (ignoreEmptyTransitions) {
                 handleNonEmptyUniqueTransition(newState);
             }
-            prepareTransitionsOfState(newState);
+//            prepareTransitionsOfState(newState);
             
 
             // Compute the hash of the new state, and create the link to the right next state
@@ -1208,7 +1204,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         SpecificationTransition st = new SpecificationTransition();
         st.fromStateWithMoreThanOneTransition = _fromStateWithMoreThanOneTransition;
         _transitionsToAdd.add(st);
-        st.init(1, _at, _block, _sb, _indexOfBlock);
+        st.init(1, _at, _indexOfBlock);
 
         // Must compute the clockmin and clockmax values
         String minDelay = _at.getMinDelay().trim();
@@ -1290,6 +1286,13 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                     }
                 }
             }
+        }
+    }
+    
+    private void prepareBlocks() {
+        int i = 0;
+        for (AvatarBlock ab : spec.getListOfBlocks()) {
+            ab.setBlockIndex(i++);
         }
     }
 
@@ -1428,7 +1431,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 //int index = _st.blocks[i].getStateMachine().getIndexOfState(ase);
                 int index = _st.transitions[i].getBlock().getStateMachine().getIndexOfState(ase);
                 if (index > -1) {
-                    _newState.blocks[_st.blocksInt[i]].values[SpecificationBlock.STATE_INDEX] = index;
+                    _newState.blocks[((AvatarBlock) _st.transitions[i].getBlock()).getBlockIndex()].values[SpecificationBlock.STATE_INDEX] = index;
                 }
             }
         }
@@ -1485,7 +1488,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                     retAction = nameOfVar + "=" + act;
                 }
                 
-                ((AvatarActionAssignment) aAction).executeActionSolver(_newState.blocks[_st.blocksInt[0]]);
+                ((AvatarActionAssignment) aAction).executeActionSolver(_newState.blocks[((AvatarBlock) _st.transitions[0].getBlock()).getBlockIndex()]);
 
 //                int indexVar = block.getIndexOfAvatarAttributeWithName(nameOfVar);
 //                AvatarType type = block.getAttribute(indexVar).getType();
@@ -1562,8 +1565,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 //        }
         for (int i = 0; i < aaoss.getNbOfValues(); i++) {
 //            try {
-                result = aaoss.getExpressionAttribute(i).getValue(_newState.blocks[_st.blocksInt[0]]);
-                aaosr.getExpressionAttribute(i).setValue(_newState.blocks[_st.blocksInt[1]], result);
+                result = aaoss.getExpressionAttribute(i).getValue(_newState.blocks[((AvatarBlock) _st.transitions[0].getBlock()).getBlockIndex()]);
+                aaosr.getExpressionAttribute(i).setValue(_newState.blocks[((AvatarBlock) _st.transitions[1].getBlock()).getBlockIndex()], result);
                 ret += "" + result;
 //            } catch (Exception e) {
 //                TraceManager.addDev("EXCEPTION on adding value " + aaoss);
@@ -1746,7 +1749,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 if (similar == null) {
                     if (newState.property) {
                         SpecificationState state = newState.advancedClone();
-                        state.transitions = newState.transitions;
                         safetyLeadStates.add(state);
                         newState.property = false;
                     }

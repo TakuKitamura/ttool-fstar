@@ -560,9 +560,6 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             reinitValues();
             jta.append("Starting the model checker\n");
 
-
-
-
             amc = new AvatarModelChecker(spec);
 
             if (generateDesignSelected) {
@@ -891,7 +888,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
 
         switch (mode) {
             case NOT_STARTED:
-                if ((reachabilitySelected == REACHABILITY_SELECTED) || (reachabilitySelected == REACHABILITY_ALL) || (livenessSelected == LIVENESS_SELECTED) || (livenessSelected == LIVENESS_ALL) || safetySelected|| graphSelected || graphSelectedDot) {
+                if ((reachabilitySelected == REACHABILITY_SELECTED) || (reachabilitySelected == REACHABILITY_ALL) || (livenessSelected == LIVENESS_SELECTED) || (livenessSelected == LIVENESS_ALL) || safetySelected || checkNoDeadSelected || graphSelected || graphSelectedDot) {
                     start.setEnabled(true);
                 } else {
                     start.setEnabled(false);
