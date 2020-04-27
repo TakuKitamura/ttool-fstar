@@ -126,7 +126,7 @@ public class CLIAvatarModelCheckerTest extends AbstractTest implements Interpret
 	
 	@Test
     public void testStateLimitCoffeeMachine() {
-        String filePath = getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelchecker_sl";
+        String filePath = getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelchecker_n";
         String script;
         
         outputResult = new StringBuilder();
@@ -194,6 +194,32 @@ public class CLIAvatarModelCheckerTest extends AbstractTest implements Interpret
         System.out.println("states=" + graph.getNbOfStates() + " transitions=" + graph.getNbOfTransitions());
         assertTrue(graph.getNbOfStates() == 14);
         assertTrue(graph.getNbOfTransitions() == 16);
+        assertEquals(expectedOutput, outputResult.toString());
+    }
+	
+	@Test
+    public void testReachabilityLivenessSafetyAirbusDoor_V2() {
+        String filePath = getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelchecker_s";
+        String script;
+        
+        outputResult = new StringBuilder();
+
+        File f = new File(filePath);
+        assertTrue(myutil.FileUtils.checkFileForOpen(f));
+
+        script = myutil.FileUtils.loadFileData(f);
+
+        assertTrue(script.length() > 0);
+
+        boolean show = false;
+        Interpreter interpret = new Interpreter(script, (InterpreterOutputInterface)this, show);
+        interpret.interpret();
+        
+        filePath = getBaseResourcesDir() + PATH_TO_TEST_FILE + "modelchecker_s_expected";
+        f = new File(filePath);
+        assertTrue(myutil.FileUtils.checkFileForOpen(f));
+        String expectedOutput = myutil.FileUtils.loadFileData(f);
+
         assertEquals(expectedOutput, outputResult.toString());
     }
 

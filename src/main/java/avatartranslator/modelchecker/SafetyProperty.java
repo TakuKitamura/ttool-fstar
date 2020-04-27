@@ -227,13 +227,13 @@ public class SafetyProperty  {
         String name = "Element " + state.getExtendedName() + " of block " + block.getName();
         switch(phase) {
         case NOTCOMPUTED:
-            name += rawProperty + " -> liveness not computed";
+            name += " -> liveness not computed";
             break;
         case SATISFIED:
-            name += rawProperty + " -> liveness is satisfied";
+            name += " -> liveness is satisfied";
             break;
         case NONSATISFIED:
-            name += rawProperty + " -> liveness is NOT satisfied"; 
+            name += " -> liveness is NOT satisfied"; 
             break;
         }
         return name;

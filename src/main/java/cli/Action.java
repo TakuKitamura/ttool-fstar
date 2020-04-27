@@ -591,7 +591,9 @@ public class Action extends Command {
                     + "-ra\treachability of all states\n"
                     + "-l, ls\tliveness of all states\n"
                     + "-la\tliveness of all states\n"
-                    + "-s NUM\t maximum states created\n"
+                    + "-s safety pragmas verification\n"
+                    + "-d no deadlocks verification\n"
+                    + "-n NUM\t maximum states created\n"
                     + "-t NUM\t maximum time (ms)\n";
             }
 
@@ -625,6 +627,8 @@ public class Action extends Command {
                 amc.setComputeRG(true);
                 boolean reachabilityAnalysis = false;
                 boolean livenessAnalysis = false;
+                boolean safetyAnalysis = false;
+                boolean noDeadlocks = false;
                 for (int i = 0; i < commands.length - 1; i++) {
                     //specification
                     switch (commands[i]) {
@@ -651,6 +655,16 @@ public class Action extends Command {
                             livenessAnalysis = true;
                             break;
                         case "-s":
+                            //safety
+                            amc.setSafetyAnalysis();
+                            safetyAnalysis = true;
+                            break;
+                        case "-d":
+                            //safety
+                            amc.setCheckNoDeadlocks(true);
+                            noDeadlocks = true;
+                            break;
+                        case "-n":
                             //state limit followed by a number
                             long states;
                             try {
@@ -677,7 +691,7 @@ public class Action extends Command {
                     }
                 }
                 TraceManager.addDev("Starting model checking");
-                if (livenessAnalysis) {
+                if (livenessAnalysis || safetyAnalysis) {
                     amc.startModelCheckingProperties();
                 } else {
                     amc.startModelChecking();
@@ -685,11 +699,17 @@ public class Action extends Command {
                 
                 System.out.println("Model checking done\nGraph: states:" + amc.getNbOfStates() +
                         " links:" + amc.getNbOfLinks() + "\n");
+                if (noDeadlocks) {
+                    interpreter.print("No Deadlocks:\n" + amc.deadlockToString());
+                }
                 if (reachabilityAnalysis) {
                     interpreter.print("Reachability Analysis:\n" + amc.reachabilityToStringGeneric());
                 }
                 if (livenessAnalysis) {
                     interpreter.print("Liveness Analysis:\n" + amc.livenessToString());
+                }
+                if (safetyAnalysis) {
+                    interpreter.print("Safety Analysis:\n" + amc.safetyToString());
                 }
 
                 // Saving graph

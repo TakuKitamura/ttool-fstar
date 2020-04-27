@@ -7,5 +7,5 @@ wait 2
 action open $model
 wait 4
 action check-syntax
-action avatar-rg -ra -la -d rgmodelchecker.aut
+action avatar-rg -n 12 rgmodelchecker.aut
 action quit
