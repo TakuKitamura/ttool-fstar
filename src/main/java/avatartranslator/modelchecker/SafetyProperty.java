@@ -51,11 +51,11 @@ import avatartranslator.*;
 public class SafetyProperty  {
 
     private String rawProperty;
-    private String p;
     private int errorOnProperty;
     private AvatarExpressionSolver safetySolver;
     private AvatarExpressionSolver safetySolverLead;
     private SpecificationPropertyPhase phase;
+    private AvatarStateMachineElement state;
     
     // Error on property
     public static final int NO_ERROR = 0;
@@ -68,7 +68,6 @@ public class SafetyProperty  {
     public static final int ONETRACE_ALLSTATES = 2; // E[] p
     public static final int ONETRACE_ONESTATE = 3;  // E<> p
     public static final int LEADS_TO = 4;           // p --> q
-    
 
     // Type of property
     public static final int BLOCK_STATE = 0;
@@ -77,10 +76,6 @@ public class SafetyProperty  {
     public int safetyType;
     public int propertyType;
     public int leadType;
-    public AvatarBlock block;
-    public AvatarBlock blockLead;
-    public AvatarStateMachineElement state;
-    public AvatarStateMachineElement stateLead;
     public boolean result;
     
     
@@ -92,8 +87,6 @@ public class SafetyProperty  {
     
     public SafetyProperty(AvatarBlock block, AvatarStateMachineElement state, int _safetyType) {
         //create liveness safety
-        this.block = block;
-        this.state = state;
         AvatarExpressionAttribute attribute = new AvatarExpressionAttribute(block, state);
         safetySolver = new AvatarExpressionSolver();
         safetySolver.builExpression(attribute);
@@ -101,10 +94,13 @@ public class SafetyProperty  {
         safetyType = _safetyType;
         result = true;
         phase = SpecificationPropertyPhase.NOTCOMPUTED;
+        rawProperty = "Element " + state.getExtendedName() + " of block " + block.getName();
+        this.state = state;
     }
 
     public boolean analyzeProperty(AvatarSpecification _spec) {
     	String tmpP = rawProperty;
+    	String p;
     	
     	errorOnProperty = NO_ERROR;
     
@@ -131,10 +127,10 @@ public class SafetyProperty  {
     	
     	if (safetyType != LEADS_TO) {
     	    p = tmpP.substring(3, tmpP.length()).trim();
-    	    initSafetyTrace(_spec);
+    	    initSafetyTrace(_spec, p);
     	} else {
     	    p = tmpP;
-    	    initSafetyLeads(_spec);
+    	    initSafetyLeads(_spec, p);
     	}
     	
     	
@@ -157,11 +153,6 @@ public class SafetyProperty  {
     public void setErrorOnP() {
         errorOnProperty = BAD_PROPERTY_STRUCTURE;
     }
-
-    
-    public String getP() {
-        return p;
-    }
     
     
     public String getRawProperty() {
@@ -183,19 +174,11 @@ public class SafetyProperty  {
         return safetySolverLead.getResult(_ss, _asme) != 0;
     }
     
+    
     public SpecificationPropertyPhase getPhase() {
         return phase;
     }
-
     
-    public void setBlock(AvatarBlock block) {
-        this.block = block;
-    }
-    
-    
-    public void setState(AvatarStateElement ase) {
-        this.state = ase;
-    }
     
     public void setComputed() {
         if (result) {
@@ -205,18 +188,22 @@ public class SafetyProperty  {
         }
     }
     
+    public AvatarStateMachineElement getState() {
+        return state;
+    }
+    
     
     public String toString() {
-        String ret = "";
+        String ret = rawProperty;
         switch(phase) {
         case NOTCOMPUTED:
-            ret = rawProperty + " -> property not computed";
+            ret += " -> property not computed";
             break;
         case SATISFIED:
-            ret = rawProperty + " -> property is satisfied";
+            ret += " -> property is satisfied";
             break;
         case NONSATISFIED:
-            ret = rawProperty + " -> property is NOT satisfied"; 
+            ret += " -> property is NOT satisfied"; 
             break;
         }
         return ret;
@@ -224,7 +211,7 @@ public class SafetyProperty  {
     
     
     public String toLivenessString() {
-        String name = "Element " + state.getExtendedName() + " of block " + block.getName();
+        String name = rawProperty;
         switch(phase) {
         case NOTCOMPUTED:
             name += " -> liveness not computed";
@@ -240,7 +227,7 @@ public class SafetyProperty  {
     }
     
     
-    private boolean initSafetyTrace(AvatarSpecification _spec) {      
+    private boolean initSafetyTrace(AvatarSpecification _spec, String p) {      
         safetySolver = new AvatarExpressionSolver(p);
         boolean exprRet = safetySolver.buildExpression(_spec);
         
@@ -258,7 +245,7 @@ public class SafetyProperty  {
     }
     
     
-    private boolean initSafetyLeads(AvatarSpecification _spec) {
+    private boolean initSafetyLeads(AvatarSpecification _spec, String p) {
         String[] pFields;
         String pp, pq;
         boolean exprRet;

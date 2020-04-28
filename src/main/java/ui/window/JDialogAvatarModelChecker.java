@@ -621,7 +621,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                 jta.append("Liveness of " + res + " states activated\n");
                 
                 for (SafetyProperty sp : amc.getLivenesses()) {
-                    handleLiveness(sp.state, sp.getPhase());
+                    handleLiveness(sp.getState(), sp.getPhase());
                 }
             }
             
@@ -631,7 +631,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                 jta.append("Liveness of " + res + " selected elements activated\n");
                 
                 for (SafetyProperty sp : amc.getLivenesses()) {
-                    handleLiveness(sp.state, sp.getPhase());
+                    handleLiveness(sp.getState(), sp.getPhase());
                 }
             }
             
@@ -721,7 +721,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                 jta.append(amc.livenessToString());
                 
                 for (SafetyProperty sp : amc.getLivenesses()) {
-                    handleLiveness(sp.state, sp.getPhase());
+                    handleLiveness(sp.getState(), sp.getPhase());
                 }
             }
             
