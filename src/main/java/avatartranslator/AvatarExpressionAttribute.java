@@ -55,65 +55,26 @@ public class AvatarExpressionAttribute {
     private int accessIndex;
     private AvatarStateMachineElement state;
     private String s;
-    private boolean isNegated;
-    private boolean isNot;
     private boolean isState;
     private boolean error;
     
     
     public AvatarExpressionAttribute(AvatarSpecification spec, String s) {
         this.s = s;
-        isNegated = false;
-        isNot = false;
         isState = false;
-        
-        if (s.startsWith("not(")) {
-            //not(variable)
-            isNot = true;
-            this.s = s.substring(3).trim();
-            while (this.s.startsWith("(") && this.s.endsWith(")")){
-                this.s = this.s.substring(1, this.s.length() - 1);
-            }
-        }
-        if (s.startsWith("-")) {
-            //not(variable)
-            isNegated = true;
-            this.s = s.substring(1).trim();
-        }
         
         error = !initAttributes(spec);
     }
     
     public AvatarExpressionAttribute(AvatarBlock block, String s) {
         this.s = s;
-        isNegated = false;
-        isNot = false;
         isState = false;
-        
-        if (s.startsWith("not(")) {
-            //not(variable)
-            isNot = true;
-            this.s = s.substring(3).trim();
-            while (this.s.startsWith("(") && this.s.endsWith(")")){
-                this.s = this.s.substring(1, this.s.length() - 1);
-            }
-        }
-        if (s.startsWith("-")) {
-            //not(variable)
-            isNegated = true;
-            this.s = s.substring(1).trim();
-            while (this.s.startsWith("(") && this.s.endsWith(")")){
-                this.s = this.s.substring(1, this.s.length() - 1);
-            }
-        }
         
         error = !initAttributes(block);
     }
     
     public AvatarExpressionAttribute(AvatarBlock block, AvatarStateMachineElement asme) {
         this.s = asme.name;
-        isNegated = false;
-        isNot = false;
         isState = true;
         state = asme;
         error = false;
@@ -197,12 +158,6 @@ public class AvatarExpressionAttribute {
         
         value = ss.blocks[blockIndex].values[accessIndex];
         
-        if (isNot) {
-            value = (value == 0) ? 1 : 0;
-        } else if (isNegated) {
-            value = -value;
-        }
-        
         return value;
     }
     
@@ -214,12 +169,6 @@ public class AvatarExpressionAttribute {
         }
         
         value = ss.blocks[blockIndex].values[accessIndex];
-        
-        if (isNot) {
-            value = (value == 0) ? 1 : 0;
-        } else if (isNegated) {
-            value = -value;
-        }
         
         return value;
     }
@@ -233,12 +182,6 @@ public class AvatarExpressionAttribute {
         
         value = sb.values[accessIndex];
         
-        if (isNot) {
-            value = (value == 0) ? 1 : 0;
-        } else if (isNegated) {
-            value = -value;
-        }
-        
         return value;
     }
     
@@ -250,12 +193,6 @@ public class AvatarExpressionAttribute {
         }
         
         v = value;
-        
-        if (isNot) {
-            v = (value == 0) ? 1 : 0;
-        } else if (isNegated) {
-            v = -value;
-        }
         
         ss.blocks[blockIndex].values[accessIndex] = v;
     }
@@ -269,12 +206,6 @@ public class AvatarExpressionAttribute {
         
         v = value;
         
-        if (isNot) {
-            v = (value == 0) ? 1 : 0;
-        } else if (isNegated) {
-            v = -value;
-        }
-        
         sb.values[accessIndex] = v;
     }
     
@@ -283,16 +214,7 @@ public class AvatarExpressionAttribute {
     }
     
     public String toString() {
-        String res = "";
-        if (isNot) {
-            res = "not(" + this.s + ")";
-        } else if (isNegated) {
-            res += "-" + this.s;
-        } else {
-            res = s;
-        }
-         
-        return res;
+        return s;
     }
     
 }

@@ -95,9 +95,12 @@ public class AvatarExpressionSolver {
         
         removeUselessBrackets();
         
-        if (!expression.matches("^.+[\\+\\-<>=&\\|\\*/].*$")) {
+        if (!expression.matches("^.+[\\+\\-<>=:;\\$&\\|\\*/].*$")) {
             // leaf
             isLeaf = true;
+            checkNot();
+            checkNegated();
+            checkNegatedNoBrackets();
             if (expression.equals("true")) {
                 intValue = 1;
                 isImmediateValue = IMMEDIATE_INT;
@@ -120,32 +123,11 @@ public class AvatarExpressionSolver {
         
         isLeaf = false;
         
-        if (expression.startsWith("not(")) {
-            //not bracket must be closed in the last char
-            int closingIndex = getClosingBracket(4);
-            
-            if (closingIndex == -1) {
-                return false;
-            }
-            if (closingIndex == expression.length() - 1) {
-              //not(expression)
-                isNot = true;
-                expression = expression.substring(4, expression.length() - 1).trim();
-            }
-        }
+        returnVal = checkNot();
+        returnVal &= checkNegated();
         
-        if (expression.startsWith("-(")) {
-            //not bracket must be closed in the last char
-            int closingIndex = getClosingBracket(4);
-            
-            if (closingIndex == -1) {
-                return false;
-            }
-            if (closingIndex == expression.length() - 1) {
-              //not(expression)
-                isNot = true;
-                expression = expression.substring(2, expression.length() - 1).trim();
-            }
+        if (!returnVal) {
+            return false;
         }
         
         int index = getOperatorIndex();
@@ -174,9 +156,12 @@ public class AvatarExpressionSolver {
         
         removeUselessBrackets();
 
-        if (!expression.matches("^.+[\\+\\-<>=&\\*/].*$")) {
+        if (!expression.matches("^.+[\\+\\-<>=:;\\$&\\|\\*/].*$")) {
             // leaf
             isLeaf = true;
+            checkNot();
+            checkNegated();
+            checkNegatedNoBrackets();
             if (expression.equals("true")) {
                 intValue = 1;
                 isImmediateValue = IMMEDIATE_INT;
@@ -199,32 +184,11 @@ public class AvatarExpressionSolver {
         
         isLeaf = false;
         
-        if (expression.startsWith("not(")) {
-            //not bracket must be closed in the last char
-            int closingIndex = getClosingBracket(4);
-            
-            if (closingIndex == -1) {
-                return false;
-            }
-            if (closingIndex == expression.length() - 1) {
-              //not(expression)
-                isNot = true;
-                expression = expression.substring(4, expression.length() - 1).trim();
-            }
-        }
+        returnVal = checkNot();
+        returnVal &= checkNegated();
         
-        if (expression.startsWith("-(")) {
-            //not bracket must be closed in the last char
-            int closingIndex = getClosingBracket(4);
-            
-            if (closingIndex == -1) {
-                return false;
-            }
-            if (closingIndex == expression.length() - 1) {
-              //not(expression)
-                isNot = true;
-                expression = expression.substring(2, expression.length() - 1).trim();
-            }
+        if (!returnVal) {
+            return false;
         }
         
         int index = getOperatorIndex();
@@ -261,9 +225,12 @@ public class AvatarExpressionSolver {
         
         removeUselessBrackets();
 
-        if (!expression.matches("^.+[\\+\\-<>=&\\*/].*$")) {
+        if (!expression.matches("^.+[\\+\\-<>=:;\\$&\\|\\*/].*$")) {
             // leaf
             isLeaf = true;
+            checkNot();
+            checkNegated();
+            checkNegatedNoBrackets();
             if (expression.equals("true")) {
                 intValue = 1;
                 isImmediateValue = IMMEDIATE_INT;
@@ -285,32 +252,11 @@ public class AvatarExpressionSolver {
         
         isLeaf = false;
         
-        if (expression.startsWith("not(")) {
-            //not bracket must be closed in the last char
-            int closingIndex = getClosingBracket(4);
-            
-            if (closingIndex == -1) {
-                return false;
-            }
-            if (closingIndex == expression.length() - 1) {
-              //not(expression)
-                isNot = true;
-                expression = expression.substring(4, expression.length() - 1).trim();
-            }
-        }
+        returnVal = checkNot();
+        returnVal &= checkNegated();
         
-        if (expression.startsWith("-(")) {
-            //not bracket must be closed in the last char
-            int closingIndex = getClosingBracket(4);
-            
-            if (closingIndex == -1) {
-                return false;
-            }
-            if (closingIndex == expression.length() - 1) {
-              //not(expression)
-                isNot = true;
-                expression = expression.substring(2, expression.length() - 1).trim();
-            }
+        if (!returnVal) {
+            return false;
         }
         
         int index = getOperatorIndex();
@@ -345,6 +291,48 @@ public class AvatarExpressionSolver {
         expression = expression.replaceAll("\\band\\b", "&").trim();
         //expression.replaceAll("\\btrue\\b", "t").trim();
         //expression.replaceAll("\\bfalse\\b", "f").trim(); 
+    }
+    
+    private boolean checkNot() {
+        if (expression.startsWith("not(")) {
+            //not bracket must be closed in the last char
+            int closingIndex = getClosingBracket(4);
+            
+            if (closingIndex == -1) {
+                return false;
+            }
+            if (closingIndex == expression.length() - 1) {
+              //not(expression)
+                isNot = true;
+                expression = expression.substring(4, expression.length() - 1).trim();
+            }
+        }
+        return true;
+    }
+    
+    private boolean checkNegated() {
+        if (expression.startsWith("-(")) {
+            //not bracket must be closed in the last char
+            int closingIndex = getClosingBracket(2);
+            
+            if (closingIndex == -1) {
+                return false;
+            }
+            if (closingIndex == expression.length() - 1) {
+              //-(expression)
+                isNegated = true;
+                expression = expression.substring(2, expression.length() - 1).trim();
+            }
+        }
+        return true;
+    }
+    
+    private boolean checkNegatedNoBrackets() {
+        if (expression.startsWith("-")) {     
+            isNegated = true;
+            expression = expression.substring(1, expression.length()).trim();
+        }
+        return true;
     }
     
     private int getOperatorIndex() {
@@ -452,15 +440,23 @@ public class AvatarExpressionSolver {
     }
     
     public int getResult() {
+        int res;
         if (isLeaf) {
-            if (isImmediateValue == IMMEDIATE_NO) {
-                return 0;
+            if (isImmediateValue == IMMEDIATE_INT) {
+                res = intValue;
             } else {
-                return intValue;
+                return 0;
             }
+        } else {
+            res = getChildrenResult(left.getResult(), right.getResult());
         }
         
-        return getChildrenResult(left.getResult(), right.getResult());
+        if (isNot) {
+            res = (res == 0) ? 1 : 0;
+        } else if (isNegated) {
+            res = -res;
+        }       
+        return res;
     }
     
     public int getResult(SpecificationState ss) {
@@ -552,7 +548,7 @@ public class AvatarExpressionSolver {
             result = leftV + rightV;
             break;
         case '|':
-            result = ((leftV + rightV) > 0) ? 1 : 0;
+            result = (leftV == 0 && rightV == 0) ? 0 : 1;
             break;
         case '/':
             result = leftV / rightV;
@@ -561,7 +557,7 @@ public class AvatarExpressionSolver {
             result = leftV * rightV;
             break;
         case '&':
-            result = ((leftV + rightV - 2) == 0) ? 1 : 0;
+            result = (leftV == 0 || rightV == 0) ? 0 : 1;
             break;
         default:
             //System.out.println("Error in EquationSolver::getResult");
@@ -573,12 +569,19 @@ public class AvatarExpressionSolver {
     }
     
     public String toString() {
+        String retS;
         if (isLeaf) {
             if (isImmediateValue == IMMEDIATE_NO) {
-                return leaf.toString();
+                retS = leaf.toString();
             } else {
-                return String.valueOf(intValue);
-            }  
+                retS = String.valueOf(intValue);
+            }
+            if (isNegated) {
+                retS = "-(" + retS + ")";
+            }
+            if (isNot) {
+                retS = "not(" + retS + ")";
+            }
         } else {
             String leftString = left.toString();
             String rightString = right.toString();
@@ -606,8 +609,15 @@ public class AvatarExpressionSolver {
                 opString = "" + operator;
                 break;
             }
-            return "(" + leftString + " " + opString + " " + rightString + ")";
+            retS = "(" + leftString + " " + opString + " " + rightString + ")";
+            if (isNegated) {
+                retS = "-" + retS;
+            }
+            if (isNot) {
+                retS = "not" + retS;
+            }
         }
+        return retS;
     }
     
     public boolean hasState() {
