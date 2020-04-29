@@ -47,20 +47,18 @@
 package avatartranslator;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import avatartranslator.*;
 import avatartranslator.modelchecker.SpecificationBlock;
+import avatartranslator.modelchecker.SpecificationState;
 
 public class AvatarExpressionTest {
     
-    private AvatarGuard res;
-    private AvatarBlock block;
-    private SpecificationBlock specBlock;
+    private AvatarSpecification as;
+    private AvatarBlock block1, block2;
     
     public AvatarExpressionTest() {
         
@@ -68,25 +66,33 @@ public class AvatarExpressionTest {
     
     @Before
     public void test () {
-        AvatarSpecification as = new AvatarSpecification("avatarspecification", null);
+        as = new AvatarSpecification("avatarspecification", null);
 
-        block = new AvatarBlock("myblock", as, null);
-        as.addBlock(block);
-        AvatarAttribute x = new AvatarAttribute("x", AvatarType.INTEGER, block, null);
-        block.addAttribute(x);
-        AvatarAttribute y = new AvatarAttribute("y", AvatarType.INTEGER, block, null);
-        block.addAttribute(y);
-        AvatarAttribute z = new AvatarAttribute("z", AvatarType.INTEGER, block, null);
-        block.addAttribute(z);
-        AvatarAttribute w = new AvatarAttribute("w", AvatarType.BOOLEAN, block, null);
-        block.addAttribute(w);
+        block1 = new AvatarBlock("block1", as, null);
+        as.addBlock(block1);
+        AvatarAttribute x1 = new AvatarAttribute("x", AvatarType.INTEGER, block1, null);
+        block1.addAttribute(x1);
+        AvatarAttribute y1 = new AvatarAttribute("y", AvatarType.INTEGER, block1, null);
+        block1.addAttribute(y1);
+        AvatarAttribute z1 = new AvatarAttribute("z", AvatarType.INTEGER, block1, null);
+        block1.addAttribute(z1);
         
-        x.setInitialValue("10");
-        y.setInitialValue("5");
-        z.setInitialValue("2");
+        x1.setInitialValue("10");
+        y1.setInitialValue("5");
+        z1.setInitialValue("2");
         
-        specBlock = new SpecificationBlock();
-        specBlock.init(block, false);
+        block2 = new AvatarBlock("block2", as, null);
+        as.addBlock(block2);
+        AvatarAttribute x2 = new AvatarAttribute("x", AvatarType.INTEGER, block2, null);
+        block2.addAttribute(x2);
+        AvatarAttribute y2 = new AvatarAttribute("y", AvatarType.INTEGER, block2, null);
+        block2.addAttribute(y2);
+        AvatarAttribute z2 = new AvatarAttribute("z", AvatarType.INTEGER, block2, null);
+        block2.addAttribute(z2);
+        
+        x2.setInitialValue("9");
+        y2.setInitialValue("7");
+        z2.setInitialValue("3");
     }
     
     @Test
@@ -112,15 +118,34 @@ public class AvatarExpressionTest {
     
     @Test
     public void testBlock() {
+        SpecificationBlock specBlock = new SpecificationBlock();
+        specBlock.init(block1, false);
+        
         AvatarExpressionSolver e1 = new AvatarExpressionSolver("x + y");
-        e1.buildExpression(block);
+        e1.buildExpression(block1);
         AvatarExpressionSolver e2 = new AvatarExpressionSolver("-x / y - 15 * z + 1 == -31");
-        e2.buildExpression(block);
-        AvatarExpressionSolver e3 = new AvatarExpressionSolver("not(-x / z - (x + y) * 2 + 1 == -(60 - 26))");
-        e3.buildExpression(block);
+        e2.buildExpression(block1);
+        AvatarExpressionSolver e3 = new AvatarExpressionSolver("not(-x / z - (x + y) * 2 + 1 >= -(60 - 26))");
+        e3.buildExpression(block1);
         assertTrue(e1.getResult(specBlock) == 15);
         assertTrue(e2.getResult(specBlock) == 1);
         assertTrue(e3.getResult(specBlock) == 0);
+    }
+    
+    @Test
+    public void testSpec() {
+        SpecificationState ss = new SpecificationState();
+        ss.setInit(as, false);
+        
+        AvatarExpressionSolver e1 = new AvatarExpressionSolver("block1.x + block2.y");
+        e1.buildExpression(as);
+        AvatarExpressionSolver e2 = new AvatarExpressionSolver("-block1.x / block1.y - 15 * block2.z + 1 == -46");
+        e2.buildExpression(as);
+        AvatarExpressionSolver e3 = new AvatarExpressionSolver("not(-block2.x / block2.z - not(block1.x + block2.y) * -2 + -(1) <= -(-4 + 7))");
+        e3.buildExpression(as);
+        assertTrue(e1.getResult(ss) == 17);
+        assertTrue(e2.getResult(ss) == 1);
+        assertTrue(e3.getResult(ss) == 0);
     }
 
 }
