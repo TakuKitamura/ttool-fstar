@@ -72,6 +72,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     private Map<Long, SpecificationState> statesByID;
     private List<SpecificationState> pendingStates;
     private List<SpecificationState> safetyLeadStates;
+    private Map<AvatarTransition, Set<AvatarTransition>> signalRelation;
     //private List<SpecificationLink> links;
     private int nbOfLinks;
     private long stateID = 0;
@@ -1244,7 +1245,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         // Compute the id of each transition
         // Assumes the allStates list has been computed in AvatarStateMachine
         // Assumes that it is only after states that transitions have non empty
-
+        signalRelation = new HashMap<AvatarTransition, Set<AvatarTransition>>();
 
         for (AvatarBlock block : spec.getListOfBlocks()) {
             AvatarStateMachine asm = block.getStateMachine();
@@ -1263,6 +1264,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                                             at.type = AvatarTransition.TYPE_RECV_SYNC;
                                         } else {
                                             at.type = AvatarTransition.TYPE_SEND_SYNC;
+                                            synchronizeSignalRelation(at, sig);
                                         }
                                     }
                                 } else {
@@ -1293,6 +1295,31 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         for (AvatarBlock ab : spec.getListOfBlocks()) {
             ab.setBlockIndex(i++);
         }
+    }
+    
+    private void synchronizeSignalRelation(AvatarTransition sender, AvatarSignal sig) {
+        HashSet<AvatarTransition> set = new HashSet<>();
+
+        for (AvatarBlock block : spec.getListOfBlocks()) {
+            AvatarStateMachine asm = block.getStateMachine();
+            if (asm != null) {
+                for (int i = 0; i < asm.allStates.length; i++) {
+                    for (int j = 0; j < asm.allStates[i].nbOfNexts(); j++) {
+                        AvatarStateMachineElement e = asm.allStates[i].getNext(j);
+                        if (e instanceof AvatarTransition) {
+                            AvatarStateMachineElement n = e.getNext(0);
+                            if (n != null && n instanceof AvatarActionOnSignal) {
+                                AvatarSignal asr = ((AvatarActionOnSignal) n).getSignal();
+                                if (asr.isIn() && spec.areSynchronized(sig, asr)) {
+                                    set.add((AvatarTransition) e);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        signalRelation.put(sender, set);
     }
 
     public boolean oldEvaluateBoolExpression(String _expr, AvatarBlock _block, SpecificationBlock _sb) {
@@ -1395,20 +1422,26 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     }
 
     private SpecificationTransition computeSynchronousTransition(SpecificationTransition sender, SpecificationTransition receiver) {
-        AvatarTransition trs = sender.transitions[0];
-        AvatarTransition trr = receiver.transitions[0];
-
-        AvatarStateMachineElement asmes, asmer;
-        asmes = trs.getNext(0);
-        asmer = trr.getNext(0);
-        if ((asmes == null) || (asmer == null)) return null;
-        if (!(asmes instanceof AvatarActionOnSignal)) return null;
-        if (!(asmer instanceof AvatarActionOnSignal)) return null;
-
-        AvatarSignal ass = ((AvatarActionOnSignal) asmes).getSignal();
-        AvatarSignal asr = ((AvatarActionOnSignal) asmer).getSignal();
-
-        if (spec.areSynchronized(ass, asr)) {
+//        AvatarTransition trs = sender.transitions[0];
+//        AvatarTransition trr = receiver.transitions[0];
+//
+//        AvatarStateMachineElement asmes, asmer;
+//        asmes = trs.getNext(0);
+//        asmer = trr.getNext(0);
+//        if ((asmes == null) || (asmer == null)) return null;
+//        if (!(asmes instanceof AvatarActionOnSignal)) return null;
+//        if (!(asmer instanceof AvatarActionOnSignal)) return null;
+//
+//        AvatarSignal ass = ((AvatarActionOnSignal) asmes).getSignal();
+//        AvatarSignal asr = ((AvatarActionOnSignal) asmer).getSignal();
+//
+//        if (spec.areSynchronized(ass, asr)) {
+//            SpecificationTransition st = new SpecificationTransition();
+//            st.makeFromTwoSynchronous(sender, receiver);
+//            return st;
+//        }
+        
+        if (signalRelation.get(sender.transitions[0]).contains(receiver.transitions[0])) {
             SpecificationTransition st = new SpecificationTransition();
             st.makeFromTwoSynchronous(sender, receiver);
             return st;
