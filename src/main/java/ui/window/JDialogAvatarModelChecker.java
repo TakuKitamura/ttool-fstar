@@ -43,7 +43,6 @@ import avatartranslator.AvatarSpecification;
 import avatartranslator.AvatarStateMachineElement;
 import avatartranslator.modelchecker.AvatarModelChecker;
 import avatartranslator.modelchecker.SafetyProperty;
-import avatartranslator.modelchecker.SpecificationLiveness;
 import avatartranslator.modelchecker.SpecificationReachability;
 import avatartranslator.modelchecker.SpecificationPropertyPhase;
 import myutil.*;
@@ -185,6 +184,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         if (graphDirDot == null) {
             graphDirDot = _graphDir + File.separator + "rgavatar$.dot";
         }
+        
+        stateLimitValue = "100";
+        timeLimitValue =  "5000";
 
         //showLiveness = _showLiveness;
         showLiveness = true;
@@ -219,11 +221,24 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         // Issue #41 Ordering of tabbed panes 
         jp1 = GraphicLib.createTabbedPane();//new JTabbedPane();
 
+        JPanel jpopt = new JPanel();
+        GridBagLayout gridbagopt = new GridBagLayout();
+        GridBagConstraints copt = new GridBagConstraints();
+        jpopt.setLayout(gridbagopt);
+        jpopt.setBorder(new javax.swing.border.TitledBorder("Options"));
+
+        copt.gridwidth = 1;
+        copt.gridheight = 1;
+        copt.weighty = 1.0;
+        copt.weightx = 1.0;
+        copt.fill = GridBagConstraints.HORIZONTAL;
+        copt.gridwidth = GridBagConstraints.REMAINDER; //end row
+        
         JPanel jp01 = new JPanel();
         GridBagLayout gridbag01 = new GridBagLayout();
         GridBagConstraints c01 = new GridBagConstraints();
         jp01.setLayout(gridbag01);
-        jp01.setBorder(new javax.swing.border.TitledBorder("Options"));
+        jp01.setBorder(new javax.swing.border.TitledBorder("Graph generation options"));
 
         c01.gridwidth = 1;
         c01.gridheight = 1;
@@ -249,55 +264,95 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         ignoreInternalStates.addActionListener(this);
         jp01.add(ignoreInternalStates, c01);
         
+
+        //Limitations
+        c01.gridwidth = 1;
+        stateLimit = new JCheckBox("Limit number of states in RG:", limitStatesSelected);
+        stateLimit.addActionListener(this);
+        jp01.add(stateLimit, c01);
+        c01.gridwidth = GridBagConstraints.REMAINDER;
+        stateLimitField = new JTextField(stateLimitValue);
+        jp01.add(stateLimitField, c01);
+        c01.gridwidth = 1;
+        timeLimit = new JCheckBox("Time constraint for RG generation (ms):", limitTimeSelected);
+        timeLimit.addActionListener(this);
+        jp01.add(timeLimit, c01);
+        c01.gridwidth = GridBagConstraints.REMAINDER;
+        timeLimitField = new JTextField(timeLimitValue);
+        jp01.add(timeLimitField, c01);
+
+
+
+        JPanel jpbasic = new JPanel();
+        GridBagLayout gridbagbasic = new GridBagLayout();
+        GridBagConstraints cbasic = new GridBagConstraints();
+        jpbasic.setLayout(gridbagbasic);
+        jpbasic.setBorder(new javax.swing.border.TitledBorder("Properties verification"));
+
+        cbasic.gridwidth = 1;
+        cbasic.gridheight = 1;
+        cbasic.weighty = 1.0;
+        cbasic.weightx = 1.0;
+        cbasic.fill = GridBagConstraints.HORIZONTAL;
+        cbasic.gridwidth = GridBagConstraints.REMAINDER; //end row
+        
+        
+        // Deadlocks
         noDeadlocks = new JCheckBox("No deadlocks?", checkNoDeadSelected);
         noDeadlocks.addActionListener(this);
-        jp01.add(noDeadlocks, c01);
+        jpbasic.add(noDeadlocks, cbasic);
 
-
+        
         // Reachability
+        cbasic.gridwidth = 1;
+        jpbasic.add(new JLabel("Reachability:"), cbasic);
         reachabilities = new ButtonGroup();
 
-        noReachability = new JRadioButton("No reachability");
+        noReachability = new JRadioButton("None");
         noReachability.addActionListener(this);
-        jp01.add(noReachability, c01);
+        jpbasic.add(noReachability, cbasic);
         reachabilities.add(noReachability);
 
-        reachabilityCheckable = new JRadioButton("Reachability of selected states");
+        reachabilityCheckable = new JRadioButton("Selected states");
         reachabilityCheckable.addActionListener(this);
-        jp01.add(reachabilityCheckable, c01);
+        jpbasic.add(reachabilityCheckable, cbasic);
         reachabilities.add(reachabilityCheckable);
 
-        reachabilityAllStates = new JRadioButton("Reachability of all states");
+        cbasic.gridwidth = GridBagConstraints.REMAINDER;
+        reachabilityAllStates = new JRadioButton("All states");
         reachabilityAllStates.addActionListener(this);
-        jp01.add(reachabilityAllStates, c01);
+        jpbasic.add(reachabilityAllStates, cbasic);
         reachabilities.add(reachabilityAllStates);
-
+        
         noReachability.setSelected(reachabilitySelected == REACHABILITY_NONE);
         reachabilityCheckable.setSelected(reachabilitySelected == REACHABILITY_SELECTED);
         reachabilityAllStates.setSelected(reachabilitySelected == REACHABILITY_ALL);
-
-
+        
+        
         // Liveness
+        cbasic.gridwidth = 1;
+        jpbasic.add(new JLabel("Liveness:"), cbasic);
         liveness = new ButtonGroup();
 
-        noLiveness = new JRadioButton("No liveness");
+        noLiveness = new JRadioButton("None");
         noLiveness.addActionListener(this);
         if (showLiveness) {
-            jp01.add(noLiveness, c01);
+            jpbasic.add(noLiveness, cbasic);
         }
         liveness.add(noLiveness);
 
-        livenessCheckable = new JRadioButton("Liveness of selected states");
+        livenessCheckable = new JRadioButton("Selected states");
         livenessCheckable.addActionListener(this);
         if (showLiveness) {
-            jp01.add(livenessCheckable, c01);
+            jpbasic.add(livenessCheckable, cbasic);
         }
         liveness.add(livenessCheckable);
 
-        livenessAllStates = new JRadioButton("Liveness of all states");
+        cbasic.gridwidth = GridBagConstraints.REMAINDER;
+        livenessAllStates = new JRadioButton("All states");
         livenessAllStates.addActionListener(this);
         if (showLiveness) {
-            jp01.add(livenessAllStates, c01);
+            jpbasic.add(livenessAllStates, cbasic);
         }
         liveness.add(livenessAllStates);
 
@@ -309,35 +364,30 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         //Safety pragmas
         safety = new JCheckBox("Safety Pragmas", safetySelected);
         safety.addActionListener(this);
-        jp01.add(safety, c01);
-
-        //Limitations
-        stateLimit = new JCheckBox("Limit number of states in GF", limitStatesSelected);
-        stateLimit.addActionListener(this);
-        jp01.add(stateLimit, c01);
-        stateLimitField = new JTextField(stateLimitValue);
-        jp01.add(stateLimitField, c01);
-        timeLimit = new JCheckBox("Limit time for GF generation (ms)", limitTimeSelected);
-        timeLimit.addActionListener(this);
-        jp01.add(timeLimit, c01);
-        timeLimitField = new JTextField(timeLimitValue);
-        jp01.add(timeLimitField, c01);
-
-
+        jpbasic.add(safety, cbasic);
+        
+        if (spec.getSafetyPragmas() == null || spec.getSafetyPragmas().isEmpty()) {
+            safety.setEnabled(false);
+        }
+        
+        jpopt.add(jp01, c01);
+        jpopt.add(jpbasic, cbasic);
+        
         // RG
         saveGraphAUT = new JCheckBox("Reachability Graph Generation", graphSelected);
         saveGraphAUT.addActionListener(this);
         //saveGraphAUT.addSelectionListener(this);
-        jp01.add(saveGraphAUT, c01);
+        jpopt.add(saveGraphAUT, copt);
         graphPath = new JTextField(graphDir);
-        jp01.add(graphPath, c01);
+        jpopt.add(graphPath, copt);
         saveGraphDot = new JCheckBox("Save RG in dotty:", graphSelectedDot);
         saveGraphDot.addActionListener(this);
         //saveGraphDot.setEnebaled(false);
-        jp01.add(saveGraphDot, c01);
+        jpopt.add(saveGraphDot, copt);
         graphPathDot = new JTextField(graphDirDot);
-        jp01.add(graphPathDot, c01);
-        c.add(jp01, BorderLayout.NORTH);
+        jpopt.add(graphPathDot, copt);
+        
+        c.add(jpopt, BorderLayout.NORTH);
 
 
         jta = new ScrolledJTextArea();
