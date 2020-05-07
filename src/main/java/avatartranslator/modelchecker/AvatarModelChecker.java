@@ -223,7 +223,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         livenesses = new ArrayList<SafetyProperty>();
         for (AvatarBlock block : spec.getListOfBlocks()) {
             for (AvatarStateMachineElement elt : block.getStateMachine().getListOfElements()) {
-                if (((elt instanceof AvatarStateElement) && (elt.canBeVerified())) || (elt.isCheckable())) {
+                if (elt.isCheckable()) {
                     SafetyProperty sp = new SafetyProperty(block, elt, SafetyProperty.ALLTRACES_ONESTATE);
                     livenesses.add(sp);
                 }
@@ -242,7 +242,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         for (AvatarBlock block : spec.getListOfBlocks()) {
             for (AvatarStateMachineElement elt : block.getStateMachine().getListOfElements()) {
                 //TraceManager.addDev("null elt in state machine of block=" + block.getName());
-                if (elt.canBeVerified() && elt.isChecked()) {
+                if (elt.isChecked()) {
                     SpecificationReachability reach = new SpecificationReachability(elt, block);
                     reachabilities.add(reach);
                 }
@@ -257,7 +257,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         reachabilities = new ArrayList<SpecificationReachability>();
         for (AvatarBlock block : spec.getListOfBlocks()) {
             for (AvatarStateMachineElement elt : block.getStateMachine().getListOfElements()) {
-                if (((elt instanceof AvatarStateElement) && (elt.canBeVerified())) || (elt.isCheckable())) {
+                if (elt.isCheckable()) {
                     SpecificationReachability reach = new SpecificationReachability(elt, block);
                     reachabilities.add(reach);
                 }
@@ -335,7 +335,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             return false;
         }
 
-        if ((studyLiveness && livenesses == null) || (studySafety && safeties == null)) {
+        if ((studyLiveness && livenesses == null) || (studySafety && safeties == null) || (studyReachability && reachabilities == null)) {
             return false;
         }
         
@@ -402,6 +402,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             startModelChecking(nbOfThreads);
             deadlocks += nbOfDeadlocks;
             resetModelChecking();
+            studyReachability = false;
         }
         
         if (checkNoDeadlocks) {
@@ -1998,7 +1999,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         
         String ret;
         if (nbOfDeadlocks > 0) {
-            ret = "property is not satisfied\n";
+            ret = "property is NOT satisfied\n";
         } else {
             ret = "property is satisfied\n";
         }

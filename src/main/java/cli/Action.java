@@ -41,6 +41,7 @@ package cli;
 
 import avatartranslator.AvatarSpecification;
 import avatartranslator.modelchecker.AvatarModelChecker;
+import avatartranslator.modelcheckercompare.CompareToUppaal;
 import common.ConfigurationTTool;
 import common.SpecConfigTTool;
 import graph.RG;
@@ -55,12 +56,10 @@ import ui.MainGUI;
 import ui.util.IconManager;
 import ui.window.JDialogSystemCGeneration;
 import ui.*;
-
 import java.awt.*;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.BitSet;
 import java.util.*;
 import java.util.List;
 
@@ -92,6 +91,7 @@ public class Action extends Command {
     private final static String NAVIGATE_LEFT_PANEL = "navigate-left-panel";
 
     private final static String AVATAR_RG_GENERATION = "avatar-rg";
+    private final static String AVATAR_UPPAAL_COMPARE = "comp-uppaal";
 
 
     public Action() {
@@ -755,6 +755,54 @@ public class Action extends Command {
                 return null;
             }
         };
+        
+        Command compareUppaal = new Command() {
+            public String getCommand() {
+                return AVATAR_UPPAAL_COMPARE;
+            }
+
+            public String getShortCommand() {
+                return "cup";
+            }
+
+            public String getDescription() {
+                return "Compare the internal verification tool with uppaal";
+            }
+
+            public String getUsage() {
+                return "c-uppaal [UPPAAL PATH]";
+            }
+
+            public String getExample() {
+                return "comp-uppaal /packages/uppaal/";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+                
+                String[] commands = command.split(" ");
+                if (commands.length != 1) {
+                    return Interpreter.BAD;
+                }
+                
+                String uppaalPath = commands[0];
+                
+                //set configuration paths
+                ConfigurationTTool.UPPAALVerifierHost = "localhost";
+                ConfigurationTTool.UPPAALVerifierPath = uppaalPath + "/bin-Linux/verifyta";
+                ConfigurationTTool.UPPAALCodeDirectory = "../../uppaal/";
+                SpecConfigTTool.UPPAALCodeDirectory = ConfigurationTTool.UPPAALCodeDirectory;
+                
+                interpreter.mgui.gtm.generateUPPAALFromAVATAR(SpecConfigTTool.UPPAALCodeDirectory);
+                
+                boolean res = CompareToUppaal.compareToUppaal(interpreter.mgui, 2, 2, false, true);
+                
+                interpreter.print("comp-uppaal result: " + res);
+                return null;
+            }
+        };
 
 
 
@@ -775,6 +823,7 @@ public class Action extends Command {
         addAndSortSubcommand(diplodocusRemoveNoC);
         addAndSortSubcommand(movePanelToTheLeftPanel);
         addAndSortSubcommand(movePanelToTheRightPanel);
+        addAndSortSubcommand(compareUppaal);
         addAndSortSubcommand(generic);
 
     }

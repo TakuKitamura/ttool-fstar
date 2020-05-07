@@ -1,5 +1,5 @@
 No Deadlocks:
-property is not satisfied
+property is NOT satisfied
 Reachability Analysis:
 1. Element start of block Wallet -> reachable
 2. Element main of block Wallet -> reachable

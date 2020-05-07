@@ -725,7 +725,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             // Starting model checking
             testGo();
 
-            if (livenessSelected == LIVENESS_NONE && safetySelected == false) {
+            if (livenessSelected == LIVENESS_NONE && safetySelected == false && checkNoDeadSelected == false) {
                 amc.startModelChecking();
             } else {
                 amc.startModelCheckingProperties();
