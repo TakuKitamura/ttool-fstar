@@ -368,6 +368,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         
         if (spec.getSafetyPragmas() == null || spec.getSafetyPragmas().isEmpty()) {
             safety.setEnabled(false);
+            safety.setSelected(false);
         }
         
         jpopt.add(jp01, c01);

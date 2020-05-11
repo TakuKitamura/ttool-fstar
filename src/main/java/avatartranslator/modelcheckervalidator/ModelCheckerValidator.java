@@ -36,12 +36,14 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-package avatartranslator.modelcheckercompare;
+package avatartranslator.modelcheckervalidator;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
+
 import launcher.LauncherException;
 import launcher.RshClient;
 import rationals.properties.isEmpty;
@@ -50,23 +52,27 @@ import ui.MainGUI;
 import ui.TGComponent;
 import ui.TGComponentAndUPPAALQuery;
 import ui.TURTLEPanel;
+import uppaaldesc.UPPAALSpec;
+import uppaaldesc.UPPAALTemplate;
+import avatartranslator.AvatarBlock;
 import avatartranslator.AvatarSpecification;
 import avatartranslator.AvatarStateMachineElement;
 import avatartranslator.modelchecker.AvatarModelChecker;
 import avatartranslator.modelchecker.SafetyProperty;
 import avatartranslator.modelchecker.SpecificationPropertyPhase;
 import avatartranslator.modelchecker.SpecificationReachability;
+import avatartranslator.touppaal.AVATAR2UPPAAL;
 
 
 /**
- * Class CompareToUppaal
- * Compare To Uppaal
+ * Class ModelCheckerValidator
+ * Model-checker validator
  * Creation: 05/05/2020
  *
  * @author Alessandro TEMPIA CALVINO
  * @version 1.0 05/05/2020
  */
-public class CompareToUppaal {
+public class ModelCheckerValidator {
     public final static int STUDY_SELECTED = 1;
     public final static int STUDY_ALL = 2;
     
@@ -105,7 +111,7 @@ public class CompareToUppaal {
      * Starts the internal Avatar model-checker and UPPAAL. It verifies that the results are the same.
      * Returns true if the results are equal or UPPAAL is not installed. Returns false if the results are different.
      */
-    public static boolean compareToUppaal(MainGUI mgui, int rStudy, int lStudy, boolean sStudy, boolean dStudy) {
+    public static boolean validate(MainGUI mgui, int rStudy, int lStudy, boolean sStudy, boolean dStudy) {
         GTURTLEModeling gtm = mgui.gtm;
         TURTLEPanel tp = mgui.getCurrentTURTLEPanel();
         
@@ -161,6 +167,7 @@ public class CompareToUppaal {
         
         //run UPPAAL
         StringBuilder diff = new StringBuilder();
+        boolean equal = true;
         try {
             id = rshc.getId();
             fn = fileName.substring(0, fileName.length() - 4) + "_" + id;
@@ -174,6 +181,7 @@ public class CompareToUppaal {
                 uResult = workQuery(gtm, rshc, "A[] not deadlock", fn);
                 if (!((uResult == 0 && amc.getNbOfDeadlocks() > 0) || (uResult == 1 && amc.getNbOfDeadlocks() == 0))) {
                     diff.append("No Deadlock: amc = " + (amc.getNbOfDeadlocks() == 0) + "; uppaal = " + (uResult == 1) + "\n");
+                    equal = false;
                 }
             }
             
@@ -199,14 +207,15 @@ public class CompareToUppaal {
                                         if (!(uResult == 1 && sr.result == SpecificationPropertyPhase.SATISFIED ||
                                                 uResult == 0 && sr.result == SpecificationPropertyPhase.NONSATISFIED)) {
                                             diff.append("Reachability " + ((AvatarStateMachineElement)sr.ref1).getExtendedName() + ": amc = " + (sr.result == SpecificationPropertyPhase.SATISFIED) + "; uppaal = " + (uResult == 1) + "\n");
-                                            break;
+                                            equal = false;
                                         }
+                                        break;
                                     }
                                 }
                             }
                         }
                         if (!match) {
-                            //diff.append("Reachability query " + s + " not matched\n");
+                            diff.append("Reachability query " + s + " not matched\n");
                         }
                     }
                 }
@@ -233,36 +242,49 @@ public class CompareToUppaal {
                                     if (!(uResult == 1 && sp.getPhase() == SpecificationPropertyPhase.SATISFIED ||
                                             uResult == 0 && sp.getPhase() == SpecificationPropertyPhase.NONSATISFIED)) {
                                         diff.append("Liveness " + sp.getState().getExtendedName() + ": amc = " + (sp.getPhase() == SpecificationPropertyPhase.SATISFIED) + "; uppaal = " + (uResult == 1) + "\n");
-                                        break;
+                                        equal = false;
                                     }
+                                    break;
                                 }
                             }
                         }
                         if (!match) {
-                            //diff.append("Liveness query " + s + " not matched\n");
+                            diff.append("Liveness query " + s + " not matched\n");
                         }
                     }
                 }
-                
-                rshc.deleteFile(fn + ".xml");
-                rshc.deleteFile(fn + ".q");
-                rshc.deleteFile(fn + ".res");
-                rshc.deleteFile(fn + ".xtr");
-
-                rshc.freeId(id);
             }
+            
+            if (sStudy) {
+                ArrayList<SafetyProperty> safeties = amc.getSafeties();
+                for (SafetyProperty sp : safeties) {
+                    query = translateCustomQuery(gtm, spec, sp.getRawProperty());
+                    uResult = workQuery(gtm, rshc, query, fn);
+                    if (!(uResult == 1 && sp.getPhase() == SpecificationPropertyPhase.SATISFIED ||
+                            uResult == 0 && sp.getPhase() == SpecificationPropertyPhase.NONSATISFIED)) {
+                        diff.append("Safety " + sp.getRawProperty() + ": amc = " + (sp.getPhase() == SpecificationPropertyPhase.SATISFIED) + "; uppaal = " + (uResult == 1) + "\n");
+                        equal = false;
+                    }
+                }
+                
+            }
+            
+            rshc.deleteFile(fn + ".xml");
+            rshc.deleteFile(fn + ".q");
+            rshc.deleteFile(fn + ".res");
+            rshc.deleteFile(fn + ".xtr");
+
+            rshc.freeId(id);
         } catch (Exception e) {
             System.out.println("Shit: " + e + "\n");
             return false;
         }
         
-        if (diff.length() == 0) {
-            return true;
-        } else {
-            //report diff
+        if (diff.length() != 0) {
             System.out.println("Avatar-UPPAAL Compare diff:\n" + diff);
-            return false;
         }
+        
+        return equal;
     }
     
     
@@ -338,6 +360,51 @@ public class CompareToUppaal {
         }
         return false;
     }
-    
+
+
+    private static String translateCustomQuery(GTURTLEModeling gtm, AvatarSpecification avspec, String query) {
+        UPPAALSpec spec = gtm.getLastUPPAALSpecification();
+        AVATAR2UPPAAL avatar2uppaal = gtm.getAvatar2Uppaal();
+        Map<String, String> hash = avatar2uppaal.getHash();
+        String finQuery = query + " ";
+
+        for (String str : hash.keySet()) {
+            finQuery = finQuery.replaceAll(str + "\\s", hash.get(str));
+            finQuery = finQuery.replaceAll(str + "\\)", hash.get(str) + "\\)");
+            finQuery = finQuery.replaceAll(str + "\\-", hash.get(str) + "\\-");
+        }
+        
+        if (avspec == null) {
+            return "";
+        }
+
+        java.util.List<AvatarBlock> blocks = avspec.getListOfBlocks();
+        java.util.List<String> matches = new java.util.ArrayList<String>();
+        for (AvatarBlock block : blocks) {
+            UPPAALTemplate temp = spec.getTemplateByName(block.getName());
+            if (temp != null) {
+                if (finQuery.contains(block.getName() + ".")) {
+                    matches.add(block.getName());
+                }
+            }
+        }
+
+
+        for (String match : matches) {
+            boolean ignore = false;
+            for (String posStrings : matches) {
+                if (!posStrings.equals(match) && posStrings.contains(match)) {
+                    ignore = true;
+                }
+            }
+            if (!ignore) {
+                UPPAALTemplate temp = spec.getTemplateByName(match);
+                int index = avatar2uppaal.getIndexOfTranslatedTemplate(temp);
+                finQuery = finQuery.replaceAll(match, match + "__" + index);
+            }
+        }
+
+        return finQuery;
+    }
 
 }

@@ -41,7 +41,7 @@ package cli;
 
 import avatartranslator.AvatarSpecification;
 import avatartranslator.modelchecker.AvatarModelChecker;
-import avatartranslator.modelcheckercompare.CompareToUppaal;
+import avatartranslator.modelcheckervalidator.ModelCheckerValidator;
 import common.ConfigurationTTool;
 import common.SpecConfigTTool;
 import graph.RG;
@@ -91,7 +91,7 @@ public class Action extends Command {
     private final static String NAVIGATE_LEFT_PANEL = "navigate-left-panel";
 
     private final static String AVATAR_RG_GENERATION = "avatar-rg";
-    private final static String AVATAR_UPPAAL_COMPARE = "comp-uppaal";
+    private final static String AVATAR_UPPAAL_VALIDATE = "avatar-rg-validate";
 
 
     public Action() {
@@ -591,10 +591,10 @@ public class Action extends Command {
                     + "-ra\treachability of all states\n"
                     + "-l, ls\tliveness of all states\n"
                     + "-la\tliveness of all states\n"
-                    + "-s safety pragmas verification\n"
-                    + "-d no deadlocks verification\n"
-                    + "-n NUM\t maximum states created\n"
-                    + "-t NUM\t maximum time (ms)\n";
+                    + "-s\tsafety pragmas verification\n"
+                    + "-d\tno deadlocks verification\n"
+                    + "-n NUM\tmaximum states created\n"
+                    + "-t NUM\tmaximum time (ms)\n";
             }
 
             public String getExample() {
@@ -758,23 +758,29 @@ public class Action extends Command {
         
         Command compareUppaal = new Command() {
             public String getCommand() {
-                return AVATAR_UPPAAL_COMPARE;
+                return AVATAR_UPPAAL_VALIDATE;
             }
 
             public String getShortCommand() {
-                return "cup";
+                return "avg-val";
             }
 
             public String getDescription() {
-                return "Compare the internal verification tool with uppaal";
+                return "Validate the internal verification tool with uppaal";
             }
 
             public String getUsage() {
-                return "c-uppaal [UPPAAL PATH]";
+                return "avatar-rg-validate [OPTION]... [UPPAAL PATH]\n" + 
+                        "-r, -rs\treachability of selected states\n" + 
+                        "-ra\treachability of all states\n" + 
+                        "-l, ls\tliveness of all states\n" + 
+                        "-la\tliveness of all states\n" + 
+                        "-s\tsafety pragmas verification\n" + 
+                        "-d\tno deadlocks verification\n";
             }
 
             public String getExample() {
-                return "comp-uppaal /packages/uppaal/";
+                return "avatar-rg-validate -ra -la -s -d /packages/uppaal/";
             }
 
             public String executeCommand(String command, Interpreter interpreter) {
@@ -783,23 +789,62 @@ public class Action extends Command {
                 }
                 
                 String[] commands = command.split(" ");
-                if (commands.length != 1) {
+                if (commands.length < 1) {
                     return Interpreter.BAD;
                 }
                 
-                String uppaalPath = commands[0];
+                //get args
+                String uppaalPath = commands[commands.length - 1];
+
+                int rStudy = 0;
+                int lStudy = 0;
+                boolean sStudy = false;
+                boolean dStudy = false;
+                for (int i = 0; i < commands.length - 1; i++) {
+                    //specification
+                    switch (commands[i]) {
+                        case "-r":
+                        case "-rs":
+                            //reachability of selected states
+                            rStudy = ModelCheckerValidator.STUDY_SELECTED;
+                            break;
+                        case "-ra":
+                            //reachability of all states
+                            rStudy = ModelCheckerValidator.STUDY_ALL;
+                            break;
+                        case "-l":
+                        case "-ls":
+                            //liveness of selected states
+                            lStudy = ModelCheckerValidator.STUDY_SELECTED;
+                            break;
+                        case "-la":
+                            //liveness of all states
+                            lStudy = ModelCheckerValidator.STUDY_ALL;
+                            break;
+                        case "-s":
+                            //safety
+                            sStudy = true;
+                            break;
+                        case "-d":
+                            //safety
+                            dStudy = true;
+                            break;
+                        default:
+                            return Interpreter.BAD;
+                    }
+                }
                 
                 //set configuration paths
                 ConfigurationTTool.UPPAALVerifierHost = "localhost";
                 ConfigurationTTool.UPPAALVerifierPath = uppaalPath + "/bin-Linux/verifyta";
                 ConfigurationTTool.UPPAALCodeDirectory = "../../uppaal/";
                 SpecConfigTTool.UPPAALCodeDirectory = ConfigurationTTool.UPPAALCodeDirectory;
-                
+
                 interpreter.mgui.gtm.generateUPPAALFromAVATAR(SpecConfigTTool.UPPAALCodeDirectory);
                 
-                boolean res = CompareToUppaal.compareToUppaal(interpreter.mgui, 2, 2, false, true);
+                boolean res = ModelCheckerValidator.validate(interpreter.mgui, rStudy, lStudy, sStudy, dStudy);
                 
-                interpreter.print("comp-uppaal result: " + res);
+                interpreter.print("avatar-rg-validate result: " + res);
                 return null;
             }
         };

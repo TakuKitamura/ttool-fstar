@@ -47,25 +47,13 @@ package cli;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
 import java.io.File;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import cli.Interpreter;
 import common.ConfigurationTTool;
 import common.SpecConfigTTool;
 import graph.AUTGraph;
-import org.junit.Before;
 import org.junit.Test;
-
-import avatartranslator.modelcheckercompare.CompareToUppaal;
 import test.AbstractTest;
-import ui.TAttribute;
-import ui.avatarbd.AvatarBDPanel;
-import ui.avatarbd.AvatarBDPragma;
+
 
 public class CLIAvatarModelCheckerTest extends AbstractTest implements InterpreterOutputInterface {
 
@@ -228,8 +216,37 @@ public class CLIAvatarModelCheckerTest extends AbstractTest implements Interpret
     }
 	
 	@Test
-	public void testCompareUppaal() {
-        String filePath = getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelchecker_u";
+	public void testValidateCoffeeMachine() {
+        String filePath = getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelchecker_val1";
+        String script;
+        
+        outputResult = new StringBuilder();
+
+        File f = new File(filePath);
+        assertTrue(myutil.FileUtils.checkFileForOpen(f));
+
+        script = myutil.FileUtils.loadFileData(f);
+
+        assertTrue(script.length() > 0);
+        
+        //Load configuration for UPPAAL paths
+        String config = "../../bin/config.xml";
+        try {
+            ConfigurationTTool.loadConfiguration(config, true);
+            SpecConfigTTool.setBasicConfigFile(config);
+        } catch (Exception e) {
+            System.out.println("Error loading configuration from file: " + config);
+        }
+        
+        Interpreter interpret = new Interpreter(script, (InterpreterOutputInterface)this, false);       
+        interpret.interpret();
+        
+        assertTrue(outputResult.toString().contains("true"));
+    }
+	
+	@Test
+    public void testValidateAirbusDoor_V2 () {
+        String filePath = getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelchecker_val2";
         String script;
         
         outputResult = new StringBuilder();

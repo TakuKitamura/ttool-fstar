@@ -1,53 +1,33 @@
 No Deadlocks:
 property is satisfied
 Reachability Analysis:
-1. Element start of block DoorAndLockButton -> reachable
-2. Element CLOSED_AND_LOCKED of block DoorAndLockButton -> reachable
-3. Element action_on_signal__clone:unlock of block DoorAndLockButton -> reachable
-4. Element CLOSED_AND_UNLOCKED of block DoorAndLockButton -> reachable
-5. Element action_on_signal__clone:lock of block DoorAndLockButton -> reachable
-6. Element action_on_signal__clone:open of block DoorAndLockButton -> reachable
-7. Element OPENED of block DoorAndLockButton -> reachable
-8. Element action_on_signal__clone:leaveCockpit of block DoorAndLockButton -> reachable
-9. Element action_on_signal__clone:close of block DoorAndLockButton -> reachable
-10. Element action_on_signal__clone:enterCockpit of block DoorAndLockButton -> reachable
-11. Element LOCKED_EMPTY_COCKPIT of block DoorAndLockButton -> NOT reachable
-12. Element action_on_signal__clone:emergencyCall of block DoorAndLockButton -> reachable
-13. Element IN_EMERGENCY_CALL of block DoorAndLockButton -> reachable
-14. Element action_on_signal__clone:lock of block DoorAndLockButton -> reachable
-15. Element start of block OnboardPersons -> reachable
-16. Element start of block Captain -> reachable
-17. Element stop of block Captain -> NOT reachable
-18. Element start of block Crew -> reachable
-19. Element stop of block Crew -> NOT reachable
-20. Element start of block Passenger -> reachable
-21. Element stop of block Passenger -> NOT reachable
-22. Element start of block FirstOfficer -> reachable
-23. Element stop of block FirstOfficer -> NOT reachable
+1. Element CLOSED_AND_LOCKED of block DoorAndLockButton -> reachable
+2. Element action_on_signal__clone:unlock of block DoorAndLockButton -> reachable
+3. Element CLOSED_AND_UNLOCKED of block DoorAndLockButton -> reachable
+4. Element action_on_signal__clone:lock of block DoorAndLockButton -> reachable
+5. Element action_on_signal__clone:open of block DoorAndLockButton -> reachable
+6. Element OPENED of block DoorAndLockButton -> reachable
+7. Element action_on_signal__clone:leaveCockpit of block DoorAndLockButton -> reachable
+8. Element action_on_signal__clone:close of block DoorAndLockButton -> reachable
+9. Element action_on_signal__clone:enterCockpit of block DoorAndLockButton -> reachable
+10. Element LOCKED_EMPTY_COCKPIT of block DoorAndLockButton -> NOT reachable
+11. Element action_on_signal__clone:emergencyCall of block DoorAndLockButton -> reachable
+12. Element IN_EMERGENCY_CALL of block DoorAndLockButton -> reachable
+13. Element action_on_signal__clone:lock of block DoorAndLockButton -> reachable
 Liveness Analysis:
-1. Element start of block DoorAndLockButton -> liveness is satisfied
-2. Element CLOSED_AND_LOCKED of block DoorAndLockButton -> liveness is satisfied
-3. Element action_on_signal__clone:unlock of block DoorAndLockButton -> liveness is NOT satisfied
-4. Element CLOSED_AND_UNLOCKED of block DoorAndLockButton -> liveness is NOT satisfied
-5. Element action_on_signal__clone:lock of block DoorAndLockButton -> liveness is NOT satisfied
-6. Element action_on_signal__clone:open of block DoorAndLockButton -> liveness is NOT satisfied
-7. Element OPENED of block DoorAndLockButton -> liveness is NOT satisfied
-8. Element action_on_signal__clone:leaveCockpit of block DoorAndLockButton -> liveness is NOT satisfied
-9. Element action_on_signal__clone:close of block DoorAndLockButton -> liveness is NOT satisfied
-10. Element action_on_signal__clone:enterCockpit of block DoorAndLockButton -> liveness is NOT satisfied
-11. Element LOCKED_EMPTY_COCKPIT of block DoorAndLockButton -> liveness is NOT satisfied
-12. Element action_on_signal__clone:emergencyCall of block DoorAndLockButton -> liveness is NOT satisfied
-13. Element IN_EMERGENCY_CALL of block DoorAndLockButton -> liveness is NOT satisfied
-14. Element action_on_signal__clone:lock of block DoorAndLockButton -> liveness is NOT satisfied
-15. Element start of block OnboardPersons -> liveness is satisfied
-16. Element start of block Captain -> liveness is satisfied
-17. Element stop of block Captain -> liveness is NOT satisfied
-18. Element start of block Crew -> liveness is satisfied
-19. Element stop of block Crew -> liveness is NOT satisfied
-20. Element start of block Passenger -> liveness is satisfied
-21. Element stop of block Passenger -> liveness is NOT satisfied
-22. Element start of block FirstOfficer -> liveness is satisfied
-23. Element stop of block FirstOfficer -> liveness is NOT satisfied
+1. Element CLOSED_AND_LOCKED of block DoorAndLockButton -> liveness is satisfied
+2. Element action_on_signal__clone:unlock of block DoorAndLockButton -> liveness is NOT satisfied
+3. Element CLOSED_AND_UNLOCKED of block DoorAndLockButton -> liveness is NOT satisfied
+4. Element action_on_signal__clone:lock of block DoorAndLockButton -> liveness is NOT satisfied
+5. Element action_on_signal__clone:open of block DoorAndLockButton -> liveness is NOT satisfied
+6. Element OPENED of block DoorAndLockButton -> liveness is NOT satisfied
+7. Element action_on_signal__clone:leaveCockpit of block DoorAndLockButton -> liveness is NOT satisfied
+8. Element action_on_signal__clone:close of block DoorAndLockButton -> liveness is NOT satisfied
+9. Element action_on_signal__clone:enterCockpit of block DoorAndLockButton -> liveness is NOT satisfied
+10. Element LOCKED_EMPTY_COCKPIT of block DoorAndLockButton -> liveness is NOT satisfied
+11. Element action_on_signal__clone:emergencyCall of block DoorAndLockButton -> liveness is NOT satisfied
+12. Element IN_EMERGENCY_CALL of block DoorAndLockButton -> liveness is NOT satisfied
+13. Element action_on_signal__clone:lock of block DoorAndLockButton -> liveness is NOT satisfied
 Safety Analysis:
 E<> Passenger.isInCockpit ==true&&DoorAndLockButton.inside==1 -> property is satisfied
 E<> DoorAndLockButton.LOCKED_EMPTY_COCKPIT -> property is NOT satisfied
