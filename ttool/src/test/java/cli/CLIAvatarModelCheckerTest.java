@@ -272,5 +272,34 @@ public class CLIAvatarModelCheckerTest extends AbstractTest implements Interpret
         
         assertTrue(outputResult.toString().contains("true"));
     }
+	
+	@Test
+    public void testValidatePressureController_V2 () {
+        String filePath = getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelchecker_val3";
+        String script;
+        
+        outputResult = new StringBuilder();
+
+        File f = new File(filePath);
+        assertTrue(myutil.FileUtils.checkFileForOpen(f));
+
+        script = myutil.FileUtils.loadFileData(f);
+
+        assertTrue(script.length() > 0);
+        
+        //Load configuration for UPPAAL paths
+        String config = "../../bin/config.xml";
+        try {
+            ConfigurationTTool.loadConfiguration(config, true);
+            SpecConfigTTool.setBasicConfigFile(config);
+        } catch (Exception e) {
+            System.out.println("Error loading configuration from file: " + config);
+        }
+        
+        Interpreter interpret = new Interpreter(script, (InterpreterOutputInterface)this, false);       
+        interpret.interpret();
+        
+        assertTrue(outputResult.toString().contains("true"));
+    }
 
 }

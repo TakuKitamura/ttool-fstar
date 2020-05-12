@@ -1,5 +1,5 @@
 print dir
-set model resources/test/cli/input/CoffeeMachine_Avatar.xml
+set model resources/test/cli/models/CoffeeMachine_Avatar.xml
 #print The model to be opened is: $model
 action start
 wait 2

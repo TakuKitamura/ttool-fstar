@@ -46,7 +46,6 @@ import java.util.Map;
 
 import launcher.LauncherException;
 import launcher.RshClient;
-import rationals.properties.isEmpty;
 import ui.GTURTLEModeling;
 import ui.MainGUI;
 import ui.TGComponent;
@@ -174,7 +173,7 @@ public class ModelCheckerValidator {
             rshc.sendFileData(fn + ".xml", gtm.getLastUPPAALSpecification().getStringSpec());
 
             int uResult, index;
-            String name, query;
+            String query;
             
             if (dStudy) {
                 System.out.println("Deadlock Study");
@@ -193,7 +192,6 @@ public class ModelCheckerValidator {
                     String s = cq.uppaalQuery;
                     index = s.indexOf('$');
                     if ((index != -1)) {
-                        name = s.substring(index + 1, s.length());
                         query = s.substring(0, index);
                         uResult = workQuery(gtm, rshc, "E<> " + query, fn);
                         match = false;
@@ -229,7 +227,6 @@ public class ModelCheckerValidator {
                     String s = cq.uppaalQuery;
                     index = s.indexOf('$');
                     if ((index != -1)) {
-                        name = s.substring(index + 1, s.length());
                         query = s.substring(0, index);
                         uResult = workQuery(gtm, rshc, "A<> " + query, fn);
                         match = false;
