@@ -58,17 +58,21 @@ import java.util.LinkedList;
    * @author Ludovic APVRILLE
  */
 public class SpecificationState implements Comparable<SpecificationState>  {
-
     public SpecificationBlock [] blocks;
     public int hashValue;
     public boolean hashComputed;
     public long id;
     public LinkedList<SpecificationLink> nexts; // The RG is there
-
+    public boolean property; //trace the property check at this state
+    public boolean elaborated; //true only if the elaboration has been completed
     public ArrayList<SpecificationTransition> transitions;
+    public long distance; //max #steps to be reached from S0
 
     public SpecificationState() {
         hashComputed = false;
+        property = false;
+        elaborated = false;
+        distance = 0;
     }
 
     // blocks must not be null
@@ -154,6 +158,14 @@ public class SpecificationState implements Comparable<SpecificationState>  {
         }
         return cpt;
     }
+    
+    public int getNextsSize() {
+        if (nexts == null) {
+            return 0;
+        } else {
+            return nexts.size();
+        }
+    }
 
     public void addNext(SpecificationLink sl) {
 	if (nexts == null) {
@@ -187,8 +199,8 @@ public class SpecificationState implements Comparable<SpecificationState>  {
     }
 
     public void freeUselessAllocations() {
-	blocks = null;
-	transitions = null;
+        blocks = null;
+        transitions = null;
     }
 
     public int compareTo( SpecificationState _s ) {
