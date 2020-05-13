@@ -139,8 +139,8 @@ public class AvatarExpressionSolver {
         operator = expression.charAt(index);
         
         //split and recur
-        String leftExpression = expression.substring(0, index).trim();
-        String rightExpression = expression.substring(index + 1, expression.length()).trim();
+        String leftExpression = expression.substring(0, index).strip();
+        String rightExpression = expression.substring(index + 1, expression.length()).strip();
         
         left = new AvatarExpressionSolver(leftExpression);
         right = new AvatarExpressionSolver(rightExpression);
@@ -200,8 +200,8 @@ public class AvatarExpressionSolver {
         operator = expression.charAt(index);
         
         //split and recur
-        String leftExpression = expression.substring(0, index).trim();
-        String rightExpression = expression.substring(index + 1, expression.length()).trim();
+        String leftExpression = expression.substring(0, index).strip();
+        String rightExpression = expression.substring(index + 1, expression.length()).strip();
         
         left = new AvatarExpressionSolver(leftExpression);
         right = new AvatarExpressionSolver(rightExpression);
@@ -268,8 +268,8 @@ public class AvatarExpressionSolver {
         operator = expression.charAt(index);
         
         //split and recur
-        String leftExpression = expression.substring(0, index).trim();
-        String rightExpression = expression.substring(index + 1, expression.length()).trim();
+        String leftExpression = expression.substring(0, index).strip();
+        String rightExpression = expression.substring(index + 1, expression.length()).strip();
         
         left = new AvatarExpressionSolver(leftExpression);
         right = new AvatarExpressionSolver(rightExpression);
