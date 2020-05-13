@@ -42,6 +42,8 @@ import myutil.TraceManager;
 
 import java.util.Map;
 
+import avatartranslator.modelchecker.SpecificationBlock;
+
 /**
    * Class AvatarActionAssignment
    * Creation: 16/09/2015
@@ -51,10 +53,14 @@ import java.util.Map;
 public class AvatarActionAssignment implements AvatarAction {
     AvatarLeftHand leftHand;
     AvatarTerm rightHand;
+    AvatarExpressionSolver actionSolver;
+    private AvatarExpressionAttribute leftAttribute;
 
     public AvatarActionAssignment (AvatarLeftHand _leftHand, AvatarTerm _rightHand) {
         this.leftHand = _leftHand;
         this.rightHand = _rightHand;
+        this.actionSolver = null;
+        this.leftAttribute = null;
     }
 
     public boolean isAVariableSetting () {
@@ -72,6 +78,10 @@ public class AvatarActionAssignment implements AvatarAction {
     public AvatarTerm getRightHand () {
         return this.rightHand;
     }
+    
+    public AvatarExpressionSolver getActionSolver() {
+        return actionSolver;
+    }
 
     public boolean isABasicVariableSetting () {
         return  (this.leftHand instanceof AvatarAttribute || this.leftHand instanceof AvatarTuple) &&
@@ -84,6 +94,19 @@ public class AvatarActionAssignment implements AvatarAction {
 
     public String toString () {
         return this.leftHand.getName() + " = " + this.rightHand.getName();
+    }
+    
+    public boolean buildActionSolver(AvatarBlock block) {
+        boolean res;
+        actionSolver = new AvatarExpressionSolver(rightHand.getName());
+        res = actionSolver.buildExpression((AvatarBlock) block);
+        leftAttribute = new AvatarExpressionAttribute(block, leftHand.getName());
+        res &= !leftAttribute.hasError();
+        return res;
+    }
+    
+    public void executeActionSolver(SpecificationBlock sb) {
+        leftAttribute.setValue(sb, actionSolver.getResult(sb));
     }
 
     @Override

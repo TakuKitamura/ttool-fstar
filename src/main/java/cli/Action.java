@@ -41,6 +41,7 @@ package cli;
 
 import avatartranslator.AvatarSpecification;
 import avatartranslator.modelchecker.AvatarModelChecker;
+import avatartranslator.modelcheckervalidator.ModelCheckerValidator;
 import common.ConfigurationTTool;
 import common.SpecConfigTTool;
 import graph.RG;
@@ -55,12 +56,10 @@ import ui.MainGUI;
 import ui.util.IconManager;
 import ui.window.JDialogSystemCGeneration;
 import ui.*;
-
 import java.awt.*;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.BitSet;
 import java.util.*;
 import java.util.List;
 
@@ -92,6 +91,7 @@ public class Action extends Command {
     private final static String NAVIGATE_LEFT_PANEL = "navigate-left-panel";
 
     private final static String AVATAR_RG_GENERATION = "avatar-rg";
+    private final static String AVATAR_UPPAAL_VALIDATE = "avatar-rg-validate";
 
 
     public Action() {
@@ -586,13 +586,24 @@ public class Action extends Command {
                 return "Generate a Reachability graph from an AVATAR model";
             }
 
-            public String getUsage() { return "arg <Ref to graph file>"; }
+            public String getUsage() { return "[OPTION]... [FILE]\n"
+                    + "-r, -rs\treachability of selected states\n"
+                    + "-ra\treachability of all states\n"
+                    + "-l, ls\tliveness of all states\n"
+                    + "-la\tliveness of all states\n"
+                    + "-s\tsafety pragmas verification\n"
+                    + "-d\tno deadlocks verification\n"
+                    + "-n NUM\tmaximum states created\n"
+                    + "-t NUM\tmaximum time (ms)\n";
+            }
 
             public String getExample() {
                 return "arg /tmp/mylovelyrg?.aut (\"?\" is replaced with current date and time)";
             }
 
             public String executeCommand(String command, Interpreter interpreter) {
+                //format: flags(-rl -la -t 100) graph_path
+                
                 if (!interpreter.isTToolStarted()) {
                     return Interpreter.TTOOL_NOT_STARTED;
                 }
@@ -602,7 +613,7 @@ public class Action extends Command {
                     return Interpreter.BAD;
                 }
 
-                String graphPath = commands[0];
+                String graphPath = commands[commands.length - 1];
 
                 AvatarSpecification avspec = interpreter.mgui.gtm.getAvatarSpecification();
                 if(avspec == null) {
@@ -614,10 +625,92 @@ public class Action extends Command {
                 amc.setIgnoreConcurrenceBetweenInternalActions(true);
                 amc.setIgnoreInternalStates(true);
                 amc.setComputeRG(true);
+                boolean reachabilityAnalysis = false;
+                boolean livenessAnalysis = false;
+                boolean safetyAnalysis = false;
+                boolean noDeadlocks = false;
+                for (int i = 0; i < commands.length - 1; i++) {
+                    //specification
+                    switch (commands[i]) {
+                        case "-r":
+                        case "-rs":
+                            //reachability of selected states
+                            amc.setReachabilityOfSelected();
+                            reachabilityAnalysis = true;
+                            break;
+                        case "-ra":
+                            //reachability of all states
+                            amc.setReachabilityOfAllStates();
+                            reachabilityAnalysis = true;
+                            break;
+                        case "-l":
+                        case "-ls":
+                            //liveness of selected states
+                            amc.setLivenessOfSelected();
+                            livenessAnalysis = true;
+                            break;
+                        case "-la":
+                            //liveness of all states
+                            amc.setLivenessOfAllStates();
+                            livenessAnalysis = true;
+                            break;
+                        case "-s":
+                            //safety
+                            amc.setSafetyAnalysis();
+                            safetyAnalysis = true;
+                            break;
+                        case "-d":
+                            //safety
+                            amc.setCheckNoDeadlocks(true);
+                            noDeadlocks = true;
+                            break;
+                        case "-n":
+                            //state limit followed by a number
+                            long states;
+                            try {
+                                states = Long.parseLong(commands[++i]);
+                            } catch (NumberFormatException e){
+                                return Interpreter.BAD;
+                            }
+                            amc.setStateLimitValue(states);
+                            amc.setStateLimit(true);
+                            break;
+                        case "-t":
+                            //time limit followed by a number
+                            long time;
+                            try {
+                                time = Long.parseLong(commands[++i]);
+                            } catch (NumberFormatException e){
+                                return Interpreter.BAD;
+                            }
+                            amc.setTimeLimitValue(time);
+                            amc.setTimeLimit(true);
+                            break;
+                        default:
+                            return Interpreter.BAD;
+                    }
+                }
                 TraceManager.addDev("Starting model checking");
-                amc.startModelChecking();
+                if (livenessAnalysis || safetyAnalysis) {
+                    amc.startModelCheckingProperties();
+                } else {
+                    amc.startModelChecking();
+                }
+                
                 System.out.println("Model checking done\nGraph: states:" + amc.getNbOfStates() +
                         " links:" + amc.getNbOfLinks() + "\n");
+                if (noDeadlocks) {
+                    interpreter.print("No Deadlocks:\n" + amc.deadlockToString());
+                }
+                if (reachabilityAnalysis) {
+                    interpreter.print("Reachability Analysis:\n" + amc.reachabilityToStringGeneric());
+                }
+                if (livenessAnalysis) {
+                    interpreter.print("Liveness Analysis:\n" + amc.livenessToString());
+                }
+                if (safetyAnalysis) {
+                    interpreter.print("Safety Analysis:\n" + amc.safetyToString());
+                }
 
                 // Saving graph
                 String graphAUT = amc.toAUT();
@@ -662,6 +755,99 @@ public class Action extends Command {
                 return null;
             }
         };
+        
+        Command compareUppaal = new Command() {
+            public String getCommand() {
+                return AVATAR_UPPAAL_VALIDATE;
+            }
+
+            public String getShortCommand() {
+                return "avg-val";
+            }
+
+            public String getDescription() {
+                return "Validate the internal verification tool with uppaal";
+            }
+
+            public String getUsage() {
+                return "avatar-rg-validate [OPTION]... [UPPAAL PATH]\n" + 
+                        "-r, -rs\treachability of selected states\n" + 
+                        "-ra\treachability of all states\n" + 
+                        "-l, ls\tliveness of all states\n" + 
+                        "-la\tliveness of all states\n" + 
+                        "-s\tsafety pragmas verification\n" + 
+                        "-d\tno deadlocks verification\n";
+            }
+
+            public String getExample() {
+                return "avatar-rg-validate -ra -la -s -d /packages/uppaal/";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+                
+                String[] commands = command.split(" ");
+                if (commands.length < 1) {
+                    return Interpreter.BAD;
+                }
+                
+                //get args
+                String uppaalPath = commands[commands.length - 1];
+
+                int rStudy = 0;
+                int lStudy = 0;
+                boolean sStudy = false;
+                boolean dStudy = false;
+                for (int i = 0; i < commands.length - 1; i++) {
+                    //specification
+                    switch (commands[i]) {
+                        case "-r":
+                        case "-rs":
+                            //reachability of selected states
+                            rStudy = ModelCheckerValidator.STUDY_SELECTED;
+                            break;
+                        case "-ra":
+                            //reachability of all states
+                            rStudy = ModelCheckerValidator.STUDY_ALL;
+                            break;
+                        case "-l":
+                        case "-ls":
+                            //liveness of selected states
+                            lStudy = ModelCheckerValidator.STUDY_SELECTED;
+                            break;
+                        case "-la":
+                            //liveness of all states
+                            lStudy = ModelCheckerValidator.STUDY_ALL;
+                            break;
+                        case "-s":
+                            //safety
+                            sStudy = true;
+                            break;
+                        case "-d":
+                            //safety
+                            dStudy = true;
+                            break;
+                        default:
+                            return Interpreter.BAD;
+                    }
+                }
+                
+                //set configuration paths
+                ConfigurationTTool.UPPAALVerifierHost = "localhost";
+                ConfigurationTTool.UPPAALVerifierPath = uppaalPath + "/bin-Linux/verifyta";
+                ConfigurationTTool.UPPAALCodeDirectory = "../../uppaal/";
+                SpecConfigTTool.UPPAALCodeDirectory = ConfigurationTTool.UPPAALCodeDirectory;
+
+                interpreter.mgui.gtm.generateUPPAALFromAVATAR(SpecConfigTTool.UPPAALCodeDirectory);
+                
+                boolean res = ModelCheckerValidator.validate(interpreter.mgui, rStudy, lStudy, sStudy, dStudy);
+                
+                interpreter.print("avatar-rg-validate result: " + res);
+                return null;
+            }
+        };
 
 
 
@@ -682,6 +868,7 @@ public class Action extends Command {
         addAndSortSubcommand(diplodocusRemoveNoC);
         addAndSortSubcommand(movePanelToTheLeftPanel);
         addAndSortSubcommand(movePanelToTheRightPanel);
+        addAndSortSubcommand(compareUppaal);
         addAndSortSubcommand(generic);
 
     }
