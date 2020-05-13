@@ -47,30 +47,22 @@ package cli;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
 import java.io.File;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import cli.Interpreter;
-
+import common.ConfigurationTTool;
+import common.SpecConfigTTool;
 import graph.AUTGraph;
-import org.junit.Before;
 import org.junit.Test;
-
 import test.AbstractTest;
-import ui.TAttribute;
-import ui.avatarbd.AvatarBDPanel;
-import ui.avatarbd.AvatarBDPragma;
+
 
 public class CLIAvatarModelCheckerTest extends AbstractTest implements InterpreterOutputInterface {
 
-    final static String PATH_TO_TEST_FILE = "/cli/input/";
+    final static String PATH_TO_TEST_FILE = "cli/input/";
+    final static String PATH_TO_EXPECTED_FILE = "cli/expected/";
+    private StringBuilder outputResult;
 	
 	public CLIAvatarModelCheckerTest() {
-       //
+	    //
     }
 	
 
@@ -85,7 +77,229 @@ public class CLIAvatarModelCheckerTest extends AbstractTest implements Interpret
 
     public void print(String s) {
 	    System.out.println("info from interpreter:" + s);
+	    outputResult.append(s);
     }
 	
- 
+	@Test
+	public void testCoffeeMachine() {
+	    String filePath = getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelchecker";
+	    String script;
+	    
+	    outputResult = new StringBuilder();
+
+	    File f = new File(filePath);
+	    assertTrue(myutil.FileUtils.checkFileForOpen(f));
+
+	    script = myutil.FileUtils.loadFileData(f);
+
+	    assertTrue(script.length() > 0);
+
+	    boolean show = false;
+        Interpreter interpret = new Interpreter(script, (InterpreterOutputInterface)this, show);
+        interpret.interpret();
+
+        // Must now load the graph
+        filePath = "rgmodelchecker.aut";
+        f = new File(filePath);
+        assertTrue(myutil.FileUtils.checkFileForOpen(f));
+        String data = myutil.FileUtils.loadFileData(f);
+
+        assertTrue(data.length() > 0);
+        AUTGraph graph = new AUTGraph();
+        graph.buildGraph(data);
+        graph.computeStates();
+
+        System.out.println("states=" + graph.getNbOfStates() + " transitions=" + graph.getNbOfTransitions());
+        assertTrue(graph.getNbOfStates() == 14);
+        assertTrue(graph.getNbOfTransitions() == 16);
+
+
+	}
+	
+	@Test
+    public void testStateLimitCoffeeMachine() {
+        String filePath = getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelchecker_n";
+        String script;
+        
+        outputResult = new StringBuilder();
+
+        File f = new File(filePath);
+        assertTrue(myutil.FileUtils.checkFileForOpen(f));
+
+        script = myutil.FileUtils.loadFileData(f);
+
+        assertTrue(script.length() > 0);
+
+        boolean show = false;
+        Interpreter interpret = new Interpreter(script, (InterpreterOutputInterface)this, show);
+        interpret.interpret();
+
+        // Must now load the graph
+        filePath = "rgmodelchecker.aut";
+        f = new File(filePath);
+        assertTrue(myutil.FileUtils.checkFileForOpen(f));
+        String data = myutil.FileUtils.loadFileData(f);
+
+        assertTrue(data.length() > 0);
+        AUTGraph graph = new AUTGraph();
+        graph.buildGraph(data);
+        graph.computeStates();
+
+        System.out.println("states=" + graph.getNbOfStates() + " transitions=" + graph.getNbOfTransitions());
+        assertTrue(graph.getNbOfStates() == 12);
+    }
+	
+	@Test
+    public void testReachabilityLivenessCoffeeMachine() {
+        String filePath = getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelchecker_rl";
+        String script;
+        
+        outputResult = new StringBuilder();
+
+        File f = new File(filePath);
+        assertTrue(myutil.FileUtils.checkFileForOpen(f));
+
+        script = myutil.FileUtils.loadFileData(f);
+
+        assertTrue(script.length() > 0);
+
+        boolean show = false;
+        Interpreter interpret = new Interpreter(script, (InterpreterOutputInterface)this, show);
+        interpret.interpret();
+
+        // Must now load the graph
+        filePath = "rgmodelchecker.aut";
+        f = new File(filePath);
+        assertTrue(myutil.FileUtils.checkFileForOpen(f));
+        String data = myutil.FileUtils.loadFileData(f);
+
+        assertTrue(data.length() > 0);
+        AUTGraph graph = new AUTGraph();
+        graph.buildGraph(data);
+        graph.computeStates();
+        
+        filePath = getBaseResourcesDir() + PATH_TO_EXPECTED_FILE + "modelchecker_rl_expected";
+        f = new File(filePath);
+        assertTrue(myutil.FileUtils.checkFileForOpen(f));
+        String expectedOutput = myutil.FileUtils.loadFileData(f);
+
+        System.out.println("states=" + graph.getNbOfStates() + " transitions=" + graph.getNbOfTransitions());
+        assertTrue(graph.getNbOfStates() == 14);
+        assertTrue(graph.getNbOfTransitions() == 16);
+        assertEquals(expectedOutput, outputResult.toString());
+    }
+	
+	@Test
+    public void testReachabilityLivenessSafetyAirbusDoor_V2() {
+        String filePath = getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelchecker_s";
+        String script;
+        
+        outputResult = new StringBuilder();
+
+        File f = new File(filePath);
+        assertTrue(myutil.FileUtils.checkFileForOpen(f));
+
+        script = myutil.FileUtils.loadFileData(f);
+
+        assertTrue(script.length() > 0);
+
+        boolean show = false;
+        Interpreter interpret = new Interpreter(script, (InterpreterOutputInterface)this, show);
+        interpret.interpret();
+        
+        filePath = getBaseResourcesDir() + PATH_TO_EXPECTED_FILE + "modelchecker_s_expected";
+        f = new File(filePath);
+        assertTrue(myutil.FileUtils.checkFileForOpen(f));
+        String expectedOutput = myutil.FileUtils.loadFileData(f);
+
+        assertEquals(expectedOutput, outputResult.toString());
+    }
+	
+	@Test
+	public void testValidateCoffeeMachine() {
+        String filePath = getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelchecker_val1";
+        String script;
+        
+        outputResult = new StringBuilder();
+
+        File f = new File(filePath);
+        assertTrue(myutil.FileUtils.checkFileForOpen(f));
+
+        script = myutil.FileUtils.loadFileData(f);
+
+        assertTrue(script.length() > 0);
+        
+        //Load configuration for UPPAAL paths
+        String config = "../../bin/config.xml";
+        try {
+            ConfigurationTTool.loadConfiguration(config, true);
+            SpecConfigTTool.setBasicConfigFile(config);
+        } catch (Exception e) {
+            System.out.println("Error loading configuration from file: " + config);
+        }
+        
+        Interpreter interpret = new Interpreter(script, (InterpreterOutputInterface)this, false);       
+        interpret.interpret();
+        
+        assertTrue(outputResult.toString().contains("true"));
+    }
+	
+	@Test
+    public void testValidateAirbusDoor_V2 () {
+        String filePath = getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelchecker_val2";
+        String script;
+        
+        outputResult = new StringBuilder();
+
+        File f = new File(filePath);
+        assertTrue(myutil.FileUtils.checkFileForOpen(f));
+
+        script = myutil.FileUtils.loadFileData(f);
+
+        assertTrue(script.length() > 0);
+        
+        //Load configuration for UPPAAL paths
+        String config = "../../bin/config.xml";
+        try {
+            ConfigurationTTool.loadConfiguration(config, true);
+            SpecConfigTTool.setBasicConfigFile(config);
+        } catch (Exception e) {
+            System.out.println("Error loading configuration from file: " + config);
+        }
+        
+        Interpreter interpret = new Interpreter(script, (InterpreterOutputInterface)this, false);       
+        interpret.interpret();
+        
+        assertTrue(outputResult.toString().contains("true"));
+    }
+	
+	@Test
+    public void testValidatePressureController_V2 () {
+        String filePath = getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelchecker_val3";
+        String script;
+        
+        outputResult = new StringBuilder();
+
+        File f = new File(filePath);
+        assertTrue(myutil.FileUtils.checkFileForOpen(f));
+
+        script = myutil.FileUtils.loadFileData(f);
+
+        assertTrue(script.length() > 0);
+        
+        //Load configuration for UPPAAL paths
+        String config = "../../bin/config.xml";
+        try {
+            ConfigurationTTool.loadConfiguration(config, true);
+            SpecConfigTTool.setBasicConfigFile(config);
+        } catch (Exception e) {
+            System.out.println("Error loading configuration from file: " + config);
+        }
+        
+        Interpreter interpret = new Interpreter(script, (InterpreterOutputInterface)this, false);       
+        interpret.interpret();
+        
+        assertTrue(outputResult.toString().contains("true"));
+    }
+
 }

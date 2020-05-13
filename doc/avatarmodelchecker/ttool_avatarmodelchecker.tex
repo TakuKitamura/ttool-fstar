@@ -1,0 +1,277 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{latexsym}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{txfonts}
+\usepackage{wasysym}
+\usepackage{adjustbox}
+\usepackage{ragged2e}
+\usepackage{tabularx}
+\usepackage{hhline}
+\usepackage{float}
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage{fancyhdr}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[a4paper,bindingoffset=0.2in,headsep=0.5cm,left=1in,right=1in,bottom=3cm,top=2cm,headheight=2cm]{geometry}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{pblue}{rgb}{0.13,0.13,1}
+\definecolor{pgreen}{rgb}{0,0.5,0}
+\definecolor{pred}{rgb}{0.9,0,0}
+\definecolor{pgrey}{rgb}{0.46,0.45,0.48}
+
+\everymath{\displaystyle}
+\pagestyle{fancy}
+\fancyhf{}
+\rfoot{Page \thepage}
+
+\lstset{language=C,basicstyle=\footnotesize,keywordstyle=\color{red}\bfseries,  commentstyle=\color{blue}\textit,stringstyle=\color{green}\ttfamily, showspaces=false,showstringspaces=false}
+
+
+\begin{document}
+\sloppy 
+
+\begin{center}
+\Large Telecom Paris \\
+\Large COMELEC Department \\
+\vspace{20 pt}
+\underline{\Huge AVATAR Model-Checker}
+\end{center}
+
+\begin{table}[H]
+\large
+\centering
+\begin{adjustbox}{width=\textwidth}
+\begin{tabular}{ |p{1.6cm}|p{6.0cm}|p{4.4cm}|p{4.2cm}| }
+\hhline{----}
+ & \textbf{Document Manager} & \textbf{Contributors}  & \textbf{Checked by}  \\ 
+\hhline{----}
+\textbf{Name}   & Dominique BLOUIN & Ludovic APVRILLE &
+\multirow{2}{*}{%Ludovic APVRILLE
+} \\
+\hhline{--~~}
+\textbf{Contact} & dominique.blouin@telecom-paris.fr & Alessandro TEMPIA CALVINO & \\ 
+\hhline{--~~}
+\textbf{Date} & \today &  &  \\ 
+\hline
+\end{tabular}
+\end{adjustbox}
+\end{table}
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.4\textwidth]{images/image1.png}
+\end{figure}
+
+\newpage
+\tableofcontents
+
+% \newpage
+% \listoffigures
+
+\newpage
+\section{Preface}
+
+\subsection{Table of Versions}
+
+\begin{table}[H]
+\large
+\centering
+\begin{adjustbox}{width=\textwidth}
+\begin{tabular}{ |p{1.5cm}|p{2.5cm}|p{9.0cm}|p{3.0cm}| }
+\hhline{----}
+\textbf{Version} & \textbf{Date} & \textbf{Description  $  \&  $  Rationale of
+Modifications} & \textbf{Sections Modified} \\
+\hhline{----}
+1.0 & 23/03/2020 & First draft &  \\ 
+\hline
+\end{tabular}
+\end{adjustbox}
+\end{table}
+
+\subsection{Table of References and Applicable Documents}
+
+\begin{table}[H]
+\large
+\centering
+\begin{adjustbox}{width=\textwidth}
+\begin{tabular}{ |p{2.66in}|p{2.66in}|p{0.95in}|p{0.43in}| }
+\hhline{----}
+\textbf{Reference} & \textbf{Title  $  \&  $  Edition} & \textbf{Author or
+Editor} & \textbf{Year}
+\\
+\hhline{----}
+ &  &  &  \\ 
+\hline
+\end{tabular}
+\end{adjustbox}
+\end{table}
+
+\subsection{Acronyms and glossary}
+
+\begin{table}[H]
+\large
+\centering
+\begin{adjustbox}{width=\textwidth}
+\begin{tabular}{ |p{1.24in}|p{5.45in}| }
+\hhline{--}
+\textbf{Term} & \textbf{Description} \\ 
+\hhline{--}
+ &  \\ 
+\hline
+\end{tabular}
+\end{adjustbox}
+\end{table}
+
+\subsection{Executive Summary}
+
+This document describes how the AVATAR model checker works. It explains the data structure used to represent the models and the algorithm for the reachability graph generation.
+
+\newpage 
+
+\section{AVATAR Model-Checker}
+\label{sec:am}
+
+
+
+
+\subsection{Introduction}
+The model-checker is used to generate a reachability graph starting from an AVATAR model. It can be also used to check the reachability and liveness on a list of selected states. The model checker is contained inside the package \texttt{avatartranslator.modelchecker}.
+
+
+
+
+\subsection{Reachability Graph}
+The model-checker's constructor takes an Avatar specification as input. The main method used for the graph generation is \texttt{startModelChecking()}. This method is responsible for preparing the data structure for the main algorithm to be executed. In particular, it runs the following operations:
+
+\begin{itemize}
+\item Remove else guards, timers, composite states, randoms from the state machine of blocks in the Avatar specification
+\item Prepare the states
+\item Prepare the transitions
+\item Run \texttt{startModelChecking(nbThreads)}
+\end{itemize}
+The states are prepared inside the method \texttt{prepareStates()}. For each block inside the avatar specification, the method extracts all the states definitions (instances of \texttt{AvatarStateElement}) from the list of state machine elements \texttt{elements} saving them in the array allStates.
+\\
+Transition, instead, are prepared inside the method \texttt{prepareTransitions()}. This method is responsible for storing the type of transaction based on the type of the following state they address. The method is executed over all the blocks of the specification. The transitions are differentiated into the following categories:
+\begin{itemize}
+\item TYPE\_RECV\_SYNC
+\item TYPE\_SEND\_SYNC
+\item TYPE\_ACTION\_AND\_METHOD
+\item TYPE\_ACTIONONLY
+\item TYPE\_METHODONLY
+\item TYPE\_EMPTY
+\end{itemize}
+Then the number of available processors is stored and passed to the next method \texttt{startModelChecking(nbThreads)}.
+
+
+
+
+\subsection{Algorithm's preparation}
+\label{sec:am_prep}
+The reachability graph generation start in the method \texttt{startModelChecking(nbThreads)}. In the first part, the graph data structures are initialized:
+\begin{itemize}
+\item \texttt{states}: map used to store the states of the reachability graph (\texttt{SpecificationState}), mapped by the hash of the state
+\item \texttt{statesByID}: map used to store the states of the reachability graph (\texttt{SpecificationState}), mapped by the ID (incremented every time a state is created)
+\item \texttt{pendingStates}: list of graph states that can be executed during the current iteration of the algorithm
+\end{itemize}
+The initial state of the reachability graph is created. A specificationState must save all the current configuration of the blocks and state machines. This is reached wrapping the Avatar blocks into specification blocks. Specification blocks add an integer array saving:
+\begin{itemize}
+\item \textbf{State}: it points the current state of the state machine of the wrapped block in \texttt{allStates}
+\item \textbf{Clock\_min}: minimum value of the current clock used as a lower bound to extract the executable transitions (time domain)
+\item \textbf{Clock\_max}: maximum value of the current clock used as a higher bound to extract the executable transitions (time domain)
+\item \textbf{Attributes}: block variables' value
+\end{itemize}
+The initial state is initialized storing the specification blocks for each Avatar Block. Specification blocks are initialized with the start state, clock at 0 and with initial variables' value.
+\\\\
+The method \texttt{handleNonEmptyUniqueTransition()} is used to increase the current state of specification block until not empty unique transitions are found. For instance, if from the initial state of the state machine there is only one empty (true guard, no time, no signal, no action) transition to another state, it can be directly executed since it doesn't have any dependency. Executing first these transitions helps to decrease the number of states created in the reachability graph.
+\\\\
+Then a hash for the state is created. All the specification block states' values (state, clock, values) are stored together in an array called \texttt{hash}. For this array, a hash number is calculated. The initial state is then inserted inside the maps \texttt{states}, \texttt{statesByID} and inside the \texttt{pendingStates} list.
+\\\\
+Then the method \texttt{computeAllStates()} is called to run the main algorithm on multiple threads.
+
+\subsection{The Main Algorithm}
+The main loop of the algorithm is run in parallel by multiple threads in the method \texttt{run()}. The main loop is responsible for:
+\begin{itemize}
+\item Pick-up a state from the pending state queue
+\item Preapare the transitions from the picked state
+\item Execute the valid available transitions
+\item Gather the next possible states
+\item Create a link in the reachability graph between current and new states
+\item Inser the new states in the pending list
+\end{itemize}
+A state is picked up with the method \texttt{pickupState()}. The thread waits for an available state to be processed in the pendent queue.
+\\\\
+The main method for the application of the algorithm is \texttt{computeAllStatesFrom(SpecificationState)}. \\\
+First it prepares the transitions from the current state with the method \texttt{prepareTransitionsOfState(specificationState)}. For a specification state, it creates an array \texttt{transitions} containing all the possible transitions that could be executed from the current specification state, i.e. from the states pointed by the specification blocks for each state machine, wrapped in specification transitions. \\
+The method \texttt{handleAvatarTransition} checks if a transition can be executed at the current state. First, it checks if the guard condition is satisfied. Then it wraps the transition under analysis inside a specification transition. A specification transition saves the following information:
+\begin{itemize}
+\item If the start state of the transition (state machine) has multiple transitions
+\item the transition which is represented
+\item The clock min and max values
+\end{itemize}
+The minimum and maximum clock of the transaction are calculated. A transition can happen during a time contained inside an interval. Inside these clock variables we want to store the difference from the current time interval for a transition to occur:
+\begin{itemize}
+\item The minimum clock value would be given by the situation when the past transition occurs as late as possible and the current under analysis happens as soon as possible (assuming that this transition starts after the past one)
+\item The maximum clock value would be given by the situation when the past transition occurs as soon as possible and the current under analysis happens as late as possible (assuming that this transition starts after the past one)
+\item When the assumption (the transition starts after the past one) is not valid, the reasoning is exactly the opposite
+\end{itemize}
+This interval is important as only transitions within the smallest interval can be executed (exhaustive explanation further on in the documentation).
+\\\\
+Then, the main methgod selects the executable transitions of the specification state base on the following criteria:
+\begin{itemize}
+\item A synchronous transition (Send, Receive) is executable if both the sender and the receiver transitions, which belong to the same signal, are available in \texttt{transitions}.
+\item Only the first available transitions can be executed. The minimum clock depends on the transition with the minimum clock min. The maximum clock, instead, by the first transition with the minimum max clock. For instance, let's imagine that we are at clock (0, 0) and we have three transitions (0, 3), (1, 2), (4, 5). In this case, the min clock will be 0 and max clock 2. The two possible transitions that can be executed are (0, 3) and (1, 2)
+\item Each transition is limited by the general max clock
+\end{itemize}
+The \texttt{ignoreConcurrenceBetweenInternalActions} flag controls the possibility of executing as soon as possible empty transitions with no alternatives and no time constraints. For all the transitions that follow these rules, the method \texttt{computeAllInternalStatesFrom} is called.
+\\\\
+First of all, a new state \texttt{newState} is created from a copy of the current one. Then it is updated with new values depending on the transition. The first operation is to update the clock time for each specification block. The time is kept relative to the past transition. So, after a transition is executed, the specification block where the transition occurred will have min and max time at zero. For instance, let's execute a transition A. After transition A, a transition B can happen with a delay between 20 and 30 units. No matter the value of the clock before transition A, the clock is set at 0 to wait for an interval of time between 20 and 30. For specification blocks not in the transitions, instead, the current clock has to be increased and then upper bounded to the max clock of the transition. For instance, let's take a transition A on SP1 with time (10, 20), a transition B on SP2 with time (20, 30), and a global clock at 0. After transition A is executed. The clock in SP2 is increased becoming (10, 20) so that the time is considered advancing during transition A.
+\\\\
+The transition is executed in the method \texttt{executeTransition}. The next state pointed by the transition is retrieved, the state index of the specification block is updated, and the action or the synchronized signal is executed.
+\\\\
+The hash of the newly created state is then used to check if an already existing state with the same configuration already exists. In this case, only a link would be added and the new state copy will be deleted.
+\\\\
+For nonempty transitions, in general, the execution procedure is the same as the algorithm's preparation explained in subsection \ref{sec:am_prep} which is executed for all the pendent transitions. Continuing the main loop of the algorithm, the reachability graph will be generated.
+
+
+\section{Reachability of States}
+The reachability condition of states is checked while creating the reachability graph. The array \texttt{reachabilities} contains the states elements to be checked. Every time a transition is executed, from state $s_t$ to state $s_{t+1}$, $s_{t+1}$ is checked for reachability. When all the states elements in \texttt{reachabilities} have been reached or the reachability graph is completed, the reachability study finishes.
+
+\section{Safety and Liveness}
+In the model also safety and liveness conditions could be proved. In particular, imagining a structure in time of the model, as a tree, the following CTL and LTL formulas are supported:
+\begin{itemize}
+	\item \textbf{A[] p}: property p is always true for each path (other common notation \textbf{AG p})
+	\item \textbf{A<> p}: property p will eventually be true for each path (other common notation \textbf{AF p})
+	\item \textbf{E[] p}: exists a path in which property p is always true (other common notation \textbf{EG p})
+	\item \textbf{E<> p}:  exists a path in which property p will eventually be true (other common notation \textbf{EF p})
+	\item \textbf{p --> q}: whenever p is true, then q will be true at some subsequent moment (other common notation \textbf{G(p $\Rightarrow$ Fq}))
+\end{itemize}
+with \textit{p} and \textit{q} properties. Properties are written as expressions on variables or states of the model.\\
+Examples:
+\begin{itemize}
+	\item \textit{E<> Passenger.isInCockpit ==true \&\& DoorAndLockButton.inside==1}: exists a path in which Passenger.isInCockpit is true and DoorAndLockButton.inside is equal to 1
+	\item \textit{A[] MainController.currentPressure < 25}: MainController.currentPressure is always less than 25
+	\item \textit{DoorAndLockButton.IN\_EMERGENCY\_CALL --> DoorAndLockButton.CLOSED\_AND\_LOCKED || DoorAndLockButton.CLOSED\_AND\_UNLOCKED}: whenever DoorAndLockButton.IN\_EMERGENCY\_CALL state is encounted, then or DoorAndLockButton.CLOSED\_AND\_LOCKED or DoorAndLockButton.CLOSED\_AND\_UNLOCKED will be encounted at some subsequent moment
+\end{itemize}
+Liveness properties of model states are solved with a \textbf{A<> p} property type.
+\\\\
+Safety and liveness properties are represented by the \texttt{SafetyProperty} class. The properties are built in the AvatarExpressionSolver class. It creates a syntax tree where each leaf is a AvatarExpressionAttribute or an immediate value and each node is an operator. An AvatarExpressionAttribute can represent a state or a variable of the model. It contains pointers so that, given a state of the model checker, it extracts the associated value in \textit{O(1)}. It can represent integers and boolean values encoded as integers. So, results of properties can be extracted just by visiting the AvatarExpressionSolver tree. AvatarExpressionSolver is also used for guards and actions. The methods \texttt{getSolverResult(SpecificationState)} and \texttt{getSolverResult(SpecificationState, AvatarStateMachineElement)} can be use to obtain the expression's result.
+\\\\
+Safety properties are solved by finding loops or terminal conditions (deadlocks) in the model. For each property type we will explain how the modelchecker behaves.
+\begin{itemize}
+	\item \textbf{A[] p}: if during the reachability graph creation, a new state has p false, the property is false.
+	\item \textbf{A<> p}: if the property is true for a state, stop the search on that path. If a false loop or a false deadlock is found , the property is false. If no false loops or false deadlocks are found, the property is true.
+	\item \textbf{E[] p}:  if the property is false for a state, stop the search on that path. If a true loop or a true deadlock is found , the property is true. If no true loops or false deadlocks are found, the property is false.
+	\item \textbf{E<> p}:  if during the reachability graph creation, a new state has p true, the property is true.
+	\item \textbf{p --> q}: every time \texttt{p} is true save the SpecificationState in the safetyLeadStates array. Then, for each node in safetyLeadStates start a liveness check \texttt{A<>p} from that node. If the liveness is true for all the nodes in safetyLeadStates or safetyLeadStates is empty, the property is true, else it is false.
+\end{itemize}
+The exploration space of states explodes easily in many models. That's why proving properties is hard. The basic idea of liveness is to find a counter example to prove it wrong. So, we want to detect a cycle (or a path that ends to a deadlock) for which the state we want to check is not live. If the states' space explodes, an exploration in breadth will not be effective as the number of nodes increases too much before proving or disproving any property, the space will be too big to be explored.\\
+Moreover, loops are found analyzing a path in depth. So, the check is executed in a depth first search-like manner, instead of a breadth first search implemented for other types of studies, like reachability. It will allow us to search through a path for a property to be true or false having a result within a manageable states' space most of the times. As soon as a property is (un)satisfied the search can continue through another path or stop. In the implementation, each thread follows a path to disprove the liveness. As soon as the property is unsatisfied, the check can stop. As soon as the property is satisfied, the search in that path can stop, and another one is fetched.\\
+
+\end{document}

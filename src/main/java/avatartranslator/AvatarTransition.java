@@ -44,6 +44,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+
 /**
  * Class AvatarTransition
  * Creation: 20/05/2010
@@ -73,6 +74,8 @@ public class AvatarTransition extends AvatarStateMachineElement {
     private String minDelay = "", maxDelay = "";
     private String minCompute = "", maxCompute = "";
     private AvatarStateMachineOwner block;
+    
+    private AvatarExpressionSolver guardSolver;
 
     private List<AvatarAction> actions; // actions on variable, or method call
 
@@ -81,10 +84,22 @@ public class AvatarTransition extends AvatarStateMachineElement {
         actions = new LinkedList<AvatarAction>();
         this.guard = new AvatarGuardEmpty();
         this.block = _block;
+        guardSolver = null;
     }
 
     public AvatarGuard getGuard() {
         return guard;
+    }
+    
+    public boolean buildGuardSolver() {
+        String expr = guard.toString().replaceAll("\\[", "").trim();
+        expr = expr.replaceAll("\\]", "");
+        guardSolver = new AvatarExpressionSolver(expr);
+        return guardSolver.buildExpression((AvatarBlock) block);
+    }
+    
+    public AvatarExpressionSolver getGuardSolver() {
+        return guardSolver;
     }
 
     public void setGuard(AvatarGuard _guard) {

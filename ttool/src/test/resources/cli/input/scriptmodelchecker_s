@@ -1,5 +1,5 @@
 print dir
-set model resources/test/cli/models/CoffeeMachine_Avatar.xml
+set model resources/test/cli/models/AirbusDoor_V2.xml
 #print The model to be opened is: $model
 action start
 wait 2
@@ -7,5 +7,5 @@ wait 2
 action open $model
 wait 4
 action check-syntax
-action avatar-rg rgmodelchecker.aut
+action avatar-rg -d -ra -la -s rgmodelchecker.aut
 action quit

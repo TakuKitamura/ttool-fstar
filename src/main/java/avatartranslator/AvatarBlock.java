@@ -57,6 +57,7 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
     private List<AvatarSignal> signals;
     private AvatarStateMachine asm;
     private AvatarSpecification avspec;
+    private int blockIndex; //Index of block in the Avatar Specification
 
     private String globalCode;
 
@@ -252,6 +253,14 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
 
     public AvatarAttribute getAttribute(int _index) {
         return attributes.get(_index);
+    }
+    
+    public int getBlockIndex() {
+        return blockIndex;
+    }
+    
+    public void setBlockIndex(int _blockIndex) {
+        blockIndex = _blockIndex;
     }
 
     public boolean setAttributeValue(int _index, String _value) {
