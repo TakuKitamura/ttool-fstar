@@ -878,6 +878,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                 switch (_res) {
                     case NOTCOMPUTED:
                         tgc.setLiveness(TGComponent.ACCESSIBILITY_UNKNOWN);
+                        break;
                     case SATISFIED:
                         tgc.setReachability(TGComponent.ACCESSIBILITY_OK);
                         tgc.setLiveness(TGComponent.ACCESSIBILITY_OK);
