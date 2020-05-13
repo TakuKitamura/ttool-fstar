@@ -99,7 +99,7 @@ public class AvatarActionAssignment implements AvatarAction {
     public boolean buildActionSolver(AvatarBlock block) {
         boolean res;
         actionSolver = new AvatarExpressionSolver(rightHand.getName());
-        res = actionSolver.buildExpression((AvatarBlock) block);
+        res = actionSolver.buildExpression(block);
         leftAttribute = new AvatarExpressionAttribute(block, leftHand.getName());
         res &= !leftAttribute.hasError();
         return res;

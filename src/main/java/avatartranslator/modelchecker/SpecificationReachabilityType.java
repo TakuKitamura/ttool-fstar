@@ -37,47 +37,18 @@
  */
 
 
-package ui.util;
 
+
+
+package avatartranslator.modelchecker;
 
 /**
- * Class DefaultText
- * Text of some windows
- * Creation: 01/12/2003
- *
- * @author Ludovic APVRILLE
- * @version 1.2 21/06/2018
+   * Class SpecificationReachabilityType
+   * Reachability types
+   * Creation: 07/06/2016
+   * @version 1.0 07/06/2016
+   * @author Ludovic APVRILLE
  */
-public class DefaultText {
-
-    public static String BUILD = "13396";
-    public static String DATE = "2020/05/13 03:11:56 CET";
-
-    public static StringBuffer sbAbout = makeAbout();
-
-    public static String getAboutText() {
-        return new String(sbAbout);
-    }
-
-    public static String getVersion() {
-        return "1.0beta"; /* Set new release Nov. 16th, 2017 */
-    }
-
-    public static String getFullVersion() {
-        return getVersion() + " -- build: " + DefaultText.BUILD + " date: " + DefaultText.DATE;
-    }
-
-    private static StringBuffer makeAbout() {
-        StringBuffer sb = new StringBuffer();
-        sb.append("TTool version " + getFullVersion() + "\n");
-        sb.append("Copyright IMT - Telecom Paris / Ludovic Apvrille \n");
-        sb.append("\nContact: ludovic.apvrille@telecom-paris.fr\n");
-        sb.append("\nProgrammers\n\tTelecom ParisTech: Ludovic Apvrille, Dominique Blouin, Fabien Tessier, \n\tDaniel Knorreck, Florian Lugou, Letitia Li\n");
-        sb.append("\n\tNokia: Andrea Enrici\n");
-        sb.append("\n\tLIP6: Daniela Genius\n");
-        sb.append("\nFor more information:\n");
-        sb.append("http://ttool.telecom-paristech.fr/\n\n");
-        return sb;
-    }
-
+public enum SpecificationReachabilityType  {
+    NOTCOMPUTED, REACHABLE, NONREACHABLE
 }
