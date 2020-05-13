@@ -197,8 +197,9 @@ public class AvatarMADAssumption extends TGCScalableWithInternalComponent implem
      * @param g
      */
     @Override
-    public void internalDrawing(Graphics g)
-    {
+    public void internalDrawing(Graphics g) {
+        graphics = g;
+
     	// Rectangle
     	Font font = g.getFont();
     	g.drawRect(x, y, width, height);
