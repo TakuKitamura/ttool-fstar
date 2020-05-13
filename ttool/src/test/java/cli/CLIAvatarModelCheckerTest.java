@@ -86,39 +86,6 @@ public class CLIAvatarModelCheckerTest extends AbstractTest implements Interpret
 	    System.out.println("info from interpreter:" + s);
     }
 	
-	@Test
-	public void testCoffeeMachine() {
-	    String filePath = getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelchecker";
-	    String script;
 
-	    File f = new File(filePath);
-	    assertTrue(myutil.FileUtils.checkFileForOpen(f));
-
-	    script = myutil.FileUtils.loadFileData(f);
-
-	    assertTrue(script.length() > 0);
-
-	    boolean show = false;
-        Interpreter interpret = new Interpreter(script, (InterpreterOutputInterface)this, show);
-        interpret.interpret();
-
-        // Must now load the graph
-        filePath = "rgmodelchecker.aut";
-        f = new File(filePath);
-        assertTrue(myutil.FileUtils.checkFileForOpen(f));
-        String data = myutil.FileUtils.loadFileData(f);
-
-        assertTrue(data.length() > 0);
-        AUTGraph graph = new AUTGraph();
-        graph.buildGraph(data);
-        graph.computeStates();
-
-        System.out.println("states=" + graph.getNbOfStates() + " transitions=" + graph.getNbOfTransitions());
-        assertTrue(graph.getNbOfStates() == 14);
-        assertTrue(graph.getNbOfTransitions() == 16);
-
-
-	}
-	
 
 }
