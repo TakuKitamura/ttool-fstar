@@ -70,6 +70,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     private Map<Integer, SpecificationState> states;
     private Map<Long, SpecificationState> statesByID;
     private List<SpecificationState> pendingStates;
+
     //private List<SpecificationLink> links;
     private int nbOfLinks;
     private long stateID = 0;
@@ -913,6 +914,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             }
         }
     }
+
 
     public boolean oldEvaluateBoolExpression(String _expr, AvatarBlock _block, SpecificationBlock _sb) {
         String act = _expr;
