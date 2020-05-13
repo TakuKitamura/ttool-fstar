@@ -43,12 +43,12 @@
 package avatartranslator.modelchecker;
 
 /**
-   * Class SpecificationPropertyPhase
+   * Class SpecificationReachabilityType
    * Reachability types
    * Creation: 07/06/2016
    * @version 1.0 07/06/2016
    * @author Ludovic APVRILLE
  */
-public enum SpecificationPropertyPhase  {
-    NOTCOMPUTED, SATISFIED, NONSATISFIED
+public enum SpecificationReachabilityType  {
+    NOTCOMPUTED, REACHABLE, NONREACHABLE
 }

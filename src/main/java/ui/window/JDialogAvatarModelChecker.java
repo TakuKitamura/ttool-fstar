@@ -42,9 +42,8 @@ package ui.window;
 import avatartranslator.AvatarSpecification;
 import avatartranslator.AvatarStateMachineElement;
 import avatartranslator.modelchecker.AvatarModelChecker;
-import avatartranslator.modelchecker.SafetyProperty;
 import avatartranslator.modelchecker.SpecificationReachability;
-import avatartranslator.modelchecker.SpecificationPropertyPhase;
+import avatartranslator.modelchecker.SpecificationReachabilityType;
 import myutil.*;
 import ui.util.IconManager;
 import ui.MainGUI;
@@ -59,10 +58,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
@@ -98,12 +94,6 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     protected static boolean generateDesignSelected = false;
     protected static int reachabilitySelected = REACHABILITY_NONE;
     protected static int livenessSelected = LIVENESS_NONE;
-    protected static boolean safetySelected = false;
-    protected static boolean checkNoDeadSelected = false;
-    protected static boolean limitStatesSelected = false;
-    protected static String stateLimitValue;
-    protected static boolean limitTimeSelected = false;
-    protected static String timeLimitValue;
 
     protected MainGUI mgui;
 
@@ -145,12 +135,6 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     protected JRadioButton noLiveness, livenessCheckable, livenessAllStates;
     protected ButtonGroup liveness;
     protected boolean showLiveness;
-    protected JCheckBox stateLimit;
-    protected JTextField stateLimitField;
-    protected JCheckBox timeLimit;
-    protected JTextField timeLimitField;
-    protected JCheckBox noDeadlocks;
-    protected JCheckBox safety;
 
     protected JCheckBox saveGraphAUT, saveGraphDot, ignoreEmptyTransitions, ignoreInternalStates,
             ignoreConcurrenceBetweenInternalActions, generateDesign;
@@ -167,7 +151,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     //  private boolean hasError = false;
     private java.util.Timer timer;
     //protected boolean startProcess = false;
-    protected Map<String, Integer> verifMap;
+
 
     /*
      * Creates new form
@@ -184,18 +168,12 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         if (graphDirDot == null) {
             graphDirDot = _graphDir + File.separator + "rgavatar$.dot";
         }
-        
-        stateLimitValue = "100";
-        timeLimitValue =  "5000";
 
-        //showLiveness = _showLiveness;
-        showLiveness = true;
-        
+        showLiveness = _showLiveness;
+
         initComponents();
         myInitComponents();
         pack();
-        
-        verifMap = new HashMap<String, Integer>();
 
 	/*if ((mgui != null) && (spec != null)) {
         mgui.drawAvatarSpecification(spec);
@@ -221,24 +199,11 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         // Issue #41 Ordering of tabbed panes 
         jp1 = GraphicLib.createTabbedPane();//new JTabbedPane();
 
-        JPanel jpopt = new JPanel();
-        GridBagLayout gridbagopt = new GridBagLayout();
-        GridBagConstraints copt = new GridBagConstraints();
-        jpopt.setLayout(gridbagopt);
-        jpopt.setBorder(new javax.swing.border.TitledBorder("Options"));
-
-        copt.gridwidth = 1;
-        copt.gridheight = 1;
-        copt.weighty = 1.0;
-        copt.weightx = 1.0;
-        copt.fill = GridBagConstraints.HORIZONTAL;
-        copt.gridwidth = GridBagConstraints.REMAINDER; //end row
-        
         JPanel jp01 = new JPanel();
         GridBagLayout gridbag01 = new GridBagLayout();
         GridBagConstraints c01 = new GridBagConstraints();
         jp01.setLayout(gridbag01);
-        jp01.setBorder(new javax.swing.border.TitledBorder("Graph generation options"));
+        jp01.setBorder(new javax.swing.border.TitledBorder("Options"));
 
         c01.gridwidth = 1;
         c01.gridheight = 1;
@@ -263,132 +228,74 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                 ignoreInternalStatesSelected);
         ignoreInternalStates.addActionListener(this);
         jp01.add(ignoreInternalStates, c01);
-        
-
-        //Limitations
-        c01.gridwidth = 1;
-        stateLimit = new JCheckBox("Limit number of states in RG:", limitStatesSelected);
-        stateLimit.addActionListener(this);
-        jp01.add(stateLimit, c01);
-        c01.gridwidth = GridBagConstraints.REMAINDER;
-        stateLimitField = new JTextField(stateLimitValue);
-        jp01.add(stateLimitField, c01);
-        c01.gridwidth = 1;
-        timeLimit = new JCheckBox("Time constraint for RG generation (ms):", limitTimeSelected);
-        timeLimit.addActionListener(this);
-        jp01.add(timeLimit, c01);
-        c01.gridwidth = GridBagConstraints.REMAINDER;
-        timeLimitField = new JTextField(timeLimitValue);
-        jp01.add(timeLimitField, c01);
 
 
-
-        JPanel jpbasic = new JPanel();
-        GridBagLayout gridbagbasic = new GridBagLayout();
-        GridBagConstraints cbasic = new GridBagConstraints();
-        jpbasic.setLayout(gridbagbasic);
-        jpbasic.setBorder(new javax.swing.border.TitledBorder("Properties verification"));
-
-        cbasic.gridwidth = 1;
-        cbasic.gridheight = 1;
-        cbasic.weighty = 1.0;
-        cbasic.weightx = 1.0;
-        cbasic.fill = GridBagConstraints.HORIZONTAL;
-        cbasic.gridwidth = GridBagConstraints.REMAINDER; //end row
-        
-        
-        // Deadlocks
-        noDeadlocks = new JCheckBox("No deadlocks?", checkNoDeadSelected);
-        noDeadlocks.addActionListener(this);
-        jpbasic.add(noDeadlocks, cbasic);
-
-        
         // Reachability
-        cbasic.gridwidth = 1;
-        jpbasic.add(new JLabel("Reachability:"), cbasic);
         reachabilities = new ButtonGroup();
 
-        noReachability = new JRadioButton("None");
+        noReachability = new JRadioButton("No reachability");
         noReachability.addActionListener(this);
-        jpbasic.add(noReachability, cbasic);
+        jp01.add(noReachability, c01);
         reachabilities.add(noReachability);
 
-        reachabilityCheckable = new JRadioButton("Selected states");
+        reachabilityCheckable = new JRadioButton("Reachability of selected states");
         reachabilityCheckable.addActionListener(this);
-        jpbasic.add(reachabilityCheckable, cbasic);
+        jp01.add(reachabilityCheckable, c01);
         reachabilities.add(reachabilityCheckable);
 
-        cbasic.gridwidth = GridBagConstraints.REMAINDER;
-        reachabilityAllStates = new JRadioButton("All states");
+        reachabilityAllStates = new JRadioButton("Reachability of all states");
         reachabilityAllStates.addActionListener(this);
-        jpbasic.add(reachabilityAllStates, cbasic);
+        jp01.add(reachabilityAllStates, c01);
         reachabilities.add(reachabilityAllStates);
-        
+
         noReachability.setSelected(reachabilitySelected == REACHABILITY_NONE);
         reachabilityCheckable.setSelected(reachabilitySelected == REACHABILITY_SELECTED);
         reachabilityAllStates.setSelected(reachabilitySelected == REACHABILITY_ALL);
-        
-        
+
+
         // Liveness
-        cbasic.gridwidth = 1;
-        jpbasic.add(new JLabel("Liveness:"), cbasic);
         liveness = new ButtonGroup();
 
-        noLiveness = new JRadioButton("None");
+        noLiveness = new JRadioButton("No liveness");
         noLiveness.addActionListener(this);
         if (showLiveness) {
-            jpbasic.add(noLiveness, cbasic);
+            jp01.add(noLiveness, c01);
         }
         liveness.add(noLiveness);
 
-        livenessCheckable = new JRadioButton("Selected states");
+        livenessCheckable = new JRadioButton("Liveness of selected states");
         livenessCheckable.addActionListener(this);
         if (showLiveness) {
-            jpbasic.add(livenessCheckable, cbasic);
+            jp01.add(livenessCheckable, c01);
         }
         liveness.add(livenessCheckable);
 
-        cbasic.gridwidth = GridBagConstraints.REMAINDER;
-        livenessAllStates = new JRadioButton("All states");
+        livenessAllStates = new JRadioButton("Liveness of all states");
         livenessAllStates.addActionListener(this);
         if (showLiveness) {
-            jpbasic.add(livenessAllStates, cbasic);
+            jp01.add(livenessAllStates, c01);
         }
         liveness.add(livenessAllStates);
 
         noLiveness.setSelected(livenessSelected == LIVENESS_NONE);
         livenessCheckable.setSelected(livenessSelected == LIVENESS_SELECTED);
         livenessAllStates.setSelected(livenessSelected == LIVENESS_ALL);
-        
-        
-        //Safety pragmas
-        safety = new JCheckBox("Safety Pragmas", safetySelected);
-        safety.addActionListener(this);
-        jpbasic.add(safety, cbasic);
-        
-        if (spec.getSafetyPragmas() == null || spec.getSafetyPragmas().isEmpty()) {
-            safety.setEnabled(false);
-            safety.setSelected(false);
-        }
-        
-        jpopt.add(jp01, c01);
-        jpopt.add(jpbasic, cbasic);
-        
+
+
         // RG
         saveGraphAUT = new JCheckBox("Reachability Graph Generation", graphSelected);
         saveGraphAUT.addActionListener(this);
         //saveGraphAUT.addSelectionListener(this);
-        jpopt.add(saveGraphAUT, copt);
+        jp01.add(saveGraphAUT, c01);
         graphPath = new JTextField(graphDir);
-        jpopt.add(graphPath, copt);
+        jp01.add(graphPath, c01);
         saveGraphDot = new JCheckBox("Save RG in dotty:", graphSelectedDot);
         saveGraphDot.addActionListener(this);
         //saveGraphDot.setEnebaled(false);
-        jpopt.add(saveGraphDot, copt);
+        jp01.add(saveGraphDot, c01);
         graphPathDot = new JTextField(graphDirDot);
-        jpopt.add(graphPathDot, copt);
-        
-        c.add(jpopt, BorderLayout.NORTH);
+        jp01.add(graphPathDot, c01);
+        c.add(jp01, BorderLayout.NORTH);
 
 
         jta = new ScrolledJTextArea();
@@ -611,6 +518,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             reinitValues();
             jta.append("Starting the model checker\n");
 
+
+
+
             amc = new AvatarModelChecker(spec);
 
             if (generateDesignSelected) {
@@ -631,7 +541,6 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             amc.setIgnoreEmptyTransitions(ignoreEmptyTransitionsSelected);
             amc.setIgnoreConcurrenceBetweenInternalActions(ignoreConcurrenceBetweenInternalActionsSelected);
             amc.setIgnoreInternalStates(ignoreInternalStatesSelected);
-            amc.setCheckNoDeadlocks(checkNoDeadSelected);
 
             // Reachability
             int res;
@@ -665,73 +574,11 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                 amc.setComputeRG(true);
                 jta.append("Computation of Reachability Graph activated\n");
             }
-            
-            if (livenessSelected == LIVENESS_SELECTED) {
-                mgui.resetLiveness();
-                res = amc.setLivenessOfSelected();
-                jta.append("Liveness of " + res + " states activated\n");
-                
-                for (SafetyProperty sp : amc.getLivenesses()) {
-                    handleLiveness(sp.getState(), sp.getPhase());
-                }
-            }
-            
-            if (livenessSelected == LIVENESS_ALL) {
-                mgui.resetLiveness();
-                res = amc.setLivenessOfAllStates();
-                jta.append("Liveness of " + res + " selected elements activated\n");
-                
-                for (SafetyProperty sp : amc.getLivenesses()) {
-                    handleLiveness(sp.getState(), sp.getPhase());
-                }
-            }
-            
-            if (safetySelected) {
-                res = amc.setSafetyAnalysis();
-                jta.append("Analysis of " + res + " safety pragmas activated\n");
-                
-                handleSafety(amc.getSafeties());
-            }
-            
-            // Limitations
-            if (stateLimit.isSelected()) {
-            	amc.setStateLimit(true);
-				try{
-					Long stateLimitLong = Long.parseLong(stateLimitField.getText());
-					if (stateLimitLong <= 0) {
-						jta.append("State Limit field is not valid, insert a positive number\n");
-						go = false;
-					}
-					amc.setStateLimitValue(stateLimitLong.longValue());
-				} catch (NumberFormatException e) {
-					jta.append("State Limit field is not valid\n");
-					go = false;
-				}
-            }
-            if (timeLimit.isSelected()) {
-                amc.setTimeLimit(true);
-                try{
-                    Long timeLimitLong = Long.parseLong(timeLimitField.getText());
-                    if (timeLimitLong <= 0) {
-                        jta.append("State Limit field is not valid, insert a positive number\n");
-                        go = false;
-                    }
-                    amc.setTimeLimitValue(timeLimitLong.longValue());
-                } catch (NumberFormatException e) {
-                    jta.append("Time Limit field is not valid\n");
-                    go = false;
-                }
-            }
 
             // Starting model checking
             testGo();
 
-            if (livenessSelected == LIVENESS_NONE && safetySelected == false && checkNoDeadSelected == false) {
-                amc.startModelChecking();
-            } else {
-                amc.startModelCheckingProperties();
-            }
-            
+            amc.startModelChecking();
             TraceManager.addDev("Model checking done");
             //TraceManager.addDev("RG:" + amc.statesToString() + "\n\n");
 
@@ -749,9 +596,6 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             jta.append("\n\nModel checking done\n");
             jta.append("Nb of states:" + amc.getNbOfStates() + "\n");
             jta.append("Nb of links:" + amc.getNbOfLinks() + "\n");
-            if (checkNoDeadSelected) {
-                jta.append("\nNo deadlocks?\n" + "-> " + amc.deadlockToString() + "\n");
-            }
 
             if ((reachabilitySelected == REACHABILITY_SELECTED) || (reachabilitySelected == REACHABILITY_ALL)) {
                 jta.append("\nReachabilities found:\n");
@@ -765,21 +609,6 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                         handleReachability(sr.ref2, sr.result);
                     }
                 }
-            }
-            
-            if (livenessSelected != LIVENESS_NONE) {
-                jta.append("\nLiveness Analysis:\n");
-                jta.append(amc.livenessToString());
-                
-                for (SafetyProperty sp : amc.getLivenesses()) {
-                    handleLiveness(sp.getState(), sp.getPhase());
-                }
-            }
-            
-            if (safetySelected) {
-                jta.append("\nSafety Analysis:\n");
-                jta.append(amc.safetyToString());
-                handleSafety(amc.getSafeties());
             }
 
             //TraceManager.addDev(amc.toString());
@@ -835,8 +664,6 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         } catch (InterruptedException ie) {
             jta.append("Interrupted\n");
         }
-        
-        amc = null;
 
         jta.append("\n\nReady to process next command\n");
 
@@ -846,7 +673,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         //
     }
 
-    protected void handleReachability(Object _o, SpecificationPropertyPhase _res) {
+    protected void handleReachability(Object _o, SpecificationReachabilityType _res) {
         if (_o instanceof AvatarStateMachineElement) {
             Object o = ((AvatarStateMachineElement) _o).getReferenceObject();
             if (o instanceof TGComponent) {
@@ -855,11 +682,12 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                 switch (_res) {
                     case NOTCOMPUTED:
                         tgc.setReachability(TGComponent.ACCESSIBILITY_UNKNOWN);
+                        tgc.setLiveness(TGComponent.ACCESSIBILITY_UNKNOWN);
                         break;
-                    case SATISFIED:
+                    case REACHABLE:
                         tgc.setReachability(TGComponent.ACCESSIBILITY_OK);
                         break;
-                    case NONSATISFIED:
+                    case NONREACHABLE:
                         tgc.setReachability(TGComponent.ACCESSIBILITY_KO);
                         tgc.setLiveness(TGComponent.ACCESSIBILITY_KO);
                         break;
@@ -867,41 +695,6 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                 tgc.getTDiagramPanel().repaint();
             }
         }
-    }
-    
-    protected void handleLiveness(Object _o, SpecificationPropertyPhase _res) {
-        if (_o instanceof AvatarStateMachineElement) {
-            Object o = ((AvatarStateMachineElement) _o).getReferenceObject();
-            if (o instanceof TGComponent) {
-                TGComponent tgc = (TGComponent) (o);
-                //TraceManager.addDev("Reachability of tgc=" + tgc + " value=" + tgc.getValue() + " class=" + tgc.getClass());
-                switch (_res) {
-                    case NOTCOMPUTED:
-                        tgc.setLiveness(TGComponent.ACCESSIBILITY_UNKNOWN);
-                    case SATISFIED:
-                        tgc.setReachability(TGComponent.ACCESSIBILITY_OK);
-                        tgc.setLiveness(TGComponent.ACCESSIBILITY_OK);
-                        break;
-                    case NONSATISFIED:
-                        tgc.setLiveness(TGComponent.ACCESSIBILITY_KO);
-                        break;
-                }
-                tgc.getTDiagramPanel().repaint();
-            }
-        }
-    }
-    
-    protected void handleSafety(ArrayList<SafetyProperty> safeties) {
-        int status;
-        for (SafetyProperty sp : safeties) {
-            if (sp.getPhase() == SpecificationPropertyPhase.SATISFIED) {
-                status = 1;
-            } else {
-                status = 0;
-            }
-            verifMap.put(sp.getRawProperty(), status);
-        }
-        mgui.modelBacktracingUPPAAL(verifMap);
     }
 
     protected void checkMode() {
@@ -920,7 +713,6 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         ignoreEmptyTransitionsSelected = ignoreEmptyTransitions.isSelected();
         ignoreConcurrenceBetweenInternalActionsSelected = ignoreConcurrenceBetweenInternalActions.isSelected();
         ignoreInternalStatesSelected = ignoreInternalStates.isSelected();
-        checkNoDeadSelected = noDeadlocks.isSelected();
 
         if (noReachability.isSelected()) {
             reachabilitySelected = REACHABILITY_NONE;
@@ -929,24 +721,10 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         } else {
             reachabilitySelected = REACHABILITY_ALL;
         }
-        
-        if (noLiveness.isSelected()) {
-            livenessSelected = LIVENESS_NONE;
-        } else if (livenessCheckable.isSelected()) {
-            livenessSelected = LIVENESS_SELECTED;
-        } else {
-            livenessSelected = LIVENESS_ALL;
-        }
-        
-        safetySelected = safety.isSelected();
-        stateLimitField.setEnabled(stateLimit.isSelected());
-        limitStatesSelected = stateLimit.isSelected();
-        timeLimitField.setEnabled(timeLimit.isSelected());
-        limitTimeSelected = timeLimit.isSelected();
 
         switch (mode) {
             case NOT_STARTED:
-                if ((reachabilitySelected == REACHABILITY_SELECTED) || (reachabilitySelected == REACHABILITY_ALL) || (livenessSelected == LIVENESS_SELECTED) || (livenessSelected == LIVENESS_ALL) || safetySelected || checkNoDeadSelected || graphSelected || graphSelectedDot) {
+                if ((reachabilitySelected == REACHABILITY_SELECTED) || (reachabilitySelected == REACHABILITY_ALL) || graphSelected || graphSelectedDot) {
                     start.setEnabled(true);
                 } else {
                     start.setEnabled(false);
