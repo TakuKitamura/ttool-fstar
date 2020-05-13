@@ -281,7 +281,6 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         livenessCheckable.setSelected(livenessSelected == LIVENESS_SELECTED);
         livenessAllStates.setSelected(livenessSelected == LIVENESS_ALL);
 
-
         // RG
         saveGraphAUT = new JCheckBox("Reachability Graph Generation", graphSelected);
         saveGraphAUT.addActionListener(this);

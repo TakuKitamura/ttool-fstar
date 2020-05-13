@@ -92,6 +92,10 @@ public class Action extends Command {
     private final static String NAVIGATE_LEFT_PANEL = "navigate-left-panel";
 
     private final static String AVATAR_RG_GENERATION = "avatar-rg";
+<<<<<<< HEAD
+=======
+    private final static String AVATAR_UPPAAL_COMPARE = "comp-uppaal";
+>>>>>>> parent of 4edaea660... Finished the implementation of the model checker validator and of the associated tests
 
 
     public Action() {
@@ -586,7 +590,20 @@ public class Action extends Command {
                 return "Generate a Reachability graph from an AVATAR model";
             }
 
+<<<<<<< HEAD
             public String getUsage() { return "arg <Ref to graph file>"; }
+=======
+            public String getUsage() { return "[OPTION]... [FILE]\n"
+                    + "-r, -rs\treachability of selected states\n"
+                    + "-ra\treachability of all states\n"
+                    + "-l, ls\tliveness of all states\n"
+                    + "-la\tliveness of all states\n"
+                    + "-s safety pragmas verification\n"
+                    + "-d no deadlocks verification\n"
+                    + "-n NUM\t maximum states created\n"
+                    + "-t NUM\t maximum time (ms)\n";
+            }
+>>>>>>> parent of 4edaea660... Finished the implementation of the model checker validator and of the associated tests
 
             public String getExample() {
                 return "arg /tmp/mylovelyrg?.aut (\"?\" is replaced with current date and time)";
@@ -662,6 +679,57 @@ public class Action extends Command {
                 return null;
             }
         };
+<<<<<<< HEAD
+=======
+        
+        Command compareUppaal = new Command() {
+            public String getCommand() {
+                return AVATAR_UPPAAL_COMPARE;
+            }
+
+            public String getShortCommand() {
+                return "cup";
+            }
+
+            public String getDescription() {
+                return "Compare the internal verification tool with uppaal";
+            }
+
+            public String getUsage() {
+                return "c-uppaal [UPPAAL PATH]";
+            }
+
+            public String getExample() {
+                return "comp-uppaal /packages/uppaal/";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+                
+                String[] commands = command.split(" ");
+                if (commands.length != 1) {
+                    return Interpreter.BAD;
+                }
+                
+                String uppaalPath = commands[0];
+                
+                //set configuration paths
+                ConfigurationTTool.UPPAALVerifierHost = "localhost";
+                ConfigurationTTool.UPPAALVerifierPath = uppaalPath + "/bin-Linux/verifyta";
+                ConfigurationTTool.UPPAALCodeDirectory = "../../uppaal/";
+                SpecConfigTTool.UPPAALCodeDirectory = ConfigurationTTool.UPPAALCodeDirectory;
+                
+                interpreter.mgui.gtm.generateUPPAALFromAVATAR(SpecConfigTTool.UPPAALCodeDirectory);
+                
+                boolean res = CompareToUppaal.compareToUppaal(interpreter.mgui, 2, 2, false, true);
+                
+                interpreter.print("comp-uppaal result: " + res);
+                return null;
+            }
+        };
+>>>>>>> parent of 4edaea660... Finished the implementation of the model checker validator and of the associated tests
 
 
 

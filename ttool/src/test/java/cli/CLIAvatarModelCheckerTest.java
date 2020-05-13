@@ -55,6 +55,7 @@ import java.util.List;
 import java.util.Map;
 
 import cli.Interpreter;
+
 import graph.AUTGraph;
 import org.junit.Before;
 import org.junit.Test;
@@ -87,5 +88,5 @@ public class CLIAvatarModelCheckerTest extends AbstractTest implements Interpret
     }
 	
 
-
+ 
 }
