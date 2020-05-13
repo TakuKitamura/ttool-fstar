@@ -304,18 +304,6 @@ public class AvatarSpecification extends AvatarElement {
 
         return null;
     }
-    
-    public int getBlockIndex(AvatarBlock _block) {
-        int cpt = 0;
-        for(AvatarBlock block: blocks) {
-            if (block == _block) {
-                return cpt;
-            }
-            cpt++;
-        }
-        
-        return -1;
-    }
 
     public AvatarAMSInterface getAMSInterfaceWithName(String _name) {
         for(AvatarAMSInterface interf: interfaces) {

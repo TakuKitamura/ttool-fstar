@@ -54,13 +54,13 @@ import avatartranslator.AvatarStateMachineElement;
  */
 public class SpecificationReachability  {
     public Object ref1, ref2; // ref1 must be provided, ref2 might be null
-    public SpecificationPropertyPhase result;
+    public SpecificationReachabilityType result;
     public SpecificationState state;
     
     public SpecificationReachability(Object _ref1, Object _ref2) {
 	ref1 = _ref1;
 	ref2 = _ref2;
-	result = SpecificationPropertyPhase.NOTCOMPUTED;
+	result = SpecificationReachabilityType.NOTCOMPUTED;
 	state = null;
     }
 
@@ -81,45 +81,16 @@ public class SpecificationReachability  {
 	}
 
 	
-	if (result == SpecificationPropertyPhase.NOTCOMPUTED) {
+	if (result == SpecificationReachabilityType.NOTCOMPUTED) {
 	    return name + " -> not computed"; 
 	}
 	
-	if (result == SpecificationPropertyPhase.SATISFIED) {
+	if (result == SpecificationReachabilityType.REACHABLE) {
 	    return name + " -> reachable in RG state " + state.id; 
 	}
 
 	return name + " -> NOT reachable";
 	
-    }
-    
-    public String toStringGeneric() {
-        String name;
-        if (ref1 instanceof AvatarStateMachineElement) {
-            name = "Element " + ((AvatarStateMachineElement)ref1).getExtendedName();
-        } else {
-            name = ref1.toString();
-        }
-
-        if (ref2 != null) {
-            if (ref2 instanceof AvatarBlock) {
-            name += " of block " + ((AvatarBlock)ref2).getName();
-            } else {
-            name += ref2.toString();
-            }
-        }
-
-        
-        if (result == SpecificationPropertyPhase.NOTCOMPUTED) {
-            return name + " -> not computed"; 
-        }
-        
-        if (result == SpecificationPropertyPhase.SATISFIED) {
-            return name + " -> reachable";
-        }
-
-        return name + " -> NOT reachable";
-        
     }
 
 }

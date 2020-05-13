@@ -41,7 +41,6 @@ package avatartranslator;
 
 import myutil.TraceManager;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -56,7 +55,6 @@ public class AvatarActionOnSignal extends AvatarStateMachineElement {
     private AvatarSignal signal;
     private List<String> values;
 	private boolean checkLatency;
-	private List<AvatarExpressionAttribute> actionAttr;
 
 
 	public AvatarActionOnSignal(String _name, AvatarSignal _signal, Object _referenceObject ) {
@@ -71,7 +69,6 @@ public class AvatarActionOnSignal extends AvatarStateMachineElement {
 		
 		signal = _signal;
 		values = new LinkedList<String>();
-		actionAttr = null;
 	}
 
     public AvatarSignal getSignal() {
@@ -108,23 +105,6 @@ public class AvatarActionOnSignal extends AvatarStateMachineElement {
 
     public boolean isReceiving() {
         return signal.isIn();
-    }
-    
-    public boolean buildActionSolver(AvatarBlock block) {
-        AvatarExpressionAttribute aea;
-        boolean res = true;
-        int i = 0;
-        actionAttr = new ArrayList<AvatarExpressionAttribute>();
-        for (String val : values) {
-            aea = new AvatarExpressionAttribute(block, val);
-            actionAttr.add(aea);
-            res &= aea.hasError();
-        }
-        return res;
-    }
-    
-    public AvatarExpressionAttribute getExpressionAttribute(int index) {
-        return actionAttr.get(index);
     }
 
     public AvatarActionOnSignal basicCloneMe(AvatarStateMachineOwner _block) {
