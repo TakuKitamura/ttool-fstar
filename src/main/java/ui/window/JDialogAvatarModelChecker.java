@@ -230,6 +230,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         jp01.add(ignoreInternalStates, c01);
 
 
+
         // Reachability
         reachabilities = new ButtonGroup();
 
