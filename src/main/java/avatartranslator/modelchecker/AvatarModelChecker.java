@@ -179,6 +179,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     public void setLivenessofState(AvatarStateElement _ase, AvatarBlock _ab) {
         livenessInfo = new SpecificationLiveness(_ase, _ab);
         studyLiveness = true;
+
     }
 
     public int setReachabilityOfSelected() {
@@ -247,6 +248,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             return false;
         }
 
+
         if (livenessInfo == null) {
             return false;
         }
@@ -257,7 +259,9 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         computeRG = false;
 
 
+
         startModelChecking();
+      
         return true;
     }
 
@@ -1414,6 +1418,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             ret += (cpt + 1) + ". " + re.toString() + "\n";
             cpt++;
         }
+      
         return ret;
     }
 

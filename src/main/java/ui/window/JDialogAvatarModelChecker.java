@@ -578,6 +578,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             testGo();
 
             amc.startModelChecking();
+
             TraceManager.addDev("Model checking done");
             //TraceManager.addDev("RG:" + amc.statesToString() + "\n\n");
 

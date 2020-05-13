@@ -87,6 +87,5 @@ public class CLIAvatarModelCheckerTest extends AbstractTest implements Interpret
 	    System.out.println("info from interpreter:" + s);
     }
 	
-
  
 }
