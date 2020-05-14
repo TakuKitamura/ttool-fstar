@@ -113,7 +113,6 @@ public class AvatarActionOnSignal extends AvatarStateMachineElement {
     public boolean buildActionSolver(AvatarBlock block) {
         AvatarExpressionAttribute aea;
         boolean res = true;
-        int i = 0;
         actionAttr = new ArrayList<AvatarExpressionAttribute>();
         for (String val : values) {
             aea = new AvatarExpressionAttribute(block, val);

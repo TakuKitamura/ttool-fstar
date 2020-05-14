@@ -283,12 +283,16 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         return reachabilities.size() - nbOfRemainingReachabilities;
     }
 
+
     public int getNbOfDeadlocks() {
         return nbOfDeadlocks;
     }
-    
+
+
     public int setSafetyAnalysis() {
-        safeties = new ArrayList<SafetyProperty>();
+        if (safeties == null) {
+            safeties = new ArrayList<SafetyProperty>();
+        }
         for (String property : spec.getSafetyPragmas()) {
             SafetyProperty sp = new SafetyProperty(property, spec);
             if (!sp.hasError()) {
@@ -297,6 +301,20 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         }
         studySafety = safeties.size() > 0;
         return safeties.size();
+    }
+
+
+    public boolean addSafety(String pragma) {
+        if (safeties == null) {
+            safeties = new ArrayList<SafetyProperty>();
+        }
+        SafetyProperty sp = new SafetyProperty(pragma, spec);
+        if (!sp.hasError()) {
+            safeties.add(sp);
+            studySafety = true;
+            return true;
+        }
+        return false;
     }
     
     public ArrayList<SafetyProperty> getSafeties() {
