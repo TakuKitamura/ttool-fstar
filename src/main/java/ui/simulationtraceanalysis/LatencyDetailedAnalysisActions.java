@@ -36,7 +36,7 @@
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
-package ui.directedgraph;
+package ui.simulationtraceanalysis;
 
 import ui.util.IconManager;
 import ui.TAction;
@@ -64,8 +64,12 @@ public class LatencyDetailedAnalysisActions extends AbstractAction {
     public static final int ACT_LOAD_SIMULATION_TRACES = 4;
     public static final int ACT_DETAILED_ANALYSIS = 5;
     public static final int ACT_Import_ANALYSIS = 6;
+    
+    public static final int ACT_SHOW_GRAPH_FILE_1 = 7;
+    public static final int ACT_SHOW_GRAPH_FILE_2 = 8;
+    public static final int ACT_COMPARE_IN_DETAILS = 9;
 
-    public static final int NB_ACTION = 7;
+    public static final int NB_ACTION = 10;
 
     private static final TAction[] actions = new TAction[NB_ACTION];
 
@@ -117,6 +121,16 @@ public class LatencyDetailedAnalysisActions extends AbstractAction {
                 "show detailed analysis tables", "show detailed analysis tables", 'T');
         actions[ACT_Import_ANALYSIS] = new TAction("import-trace", "Save Directed Graph", IconManager.imgic341, IconManager.imgic341,
                 "import Directed Graph", "Import Directed Graph", 'S');
+        
+        actions[ACT_SHOW_GRAPH_FILE_1] = new TAction("show_graph_file_1", "Show Directed Graph 1", IconManager.imgic341, IconManager.imgic341,
+                "Show Directed Graph", "Show Directed Graph", 'S');
+        
+        actions[ACT_SHOW_GRAPH_FILE_2] = new TAction("show_graph_file_2", "Show Directed Graph 2", IconManager.imgic341, IconManager.imgic341,
+                "Show Directed Graph", "Show Directed Graph", 'S');
+        
+        actions[ACT_COMPARE_IN_DETAILS] = new TAction("compare_in_details", "Compare In Detials", IconManager.imgic53, IconManager.imgic53,
+                "Compare In Detials", "Compare In Detials", 'S');
+
 
     }
 

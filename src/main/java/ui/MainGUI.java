@@ -68,7 +68,6 @@ import ui.avatarrd.AvatarRDPanel;
 import ui.avatarsmd.AvatarSMDPanel;
 import ui.cd.TClassDiagramPanel;
 import ui.diplodocusmethodology.DiplodocusMethodologyDiagramPanel;
-import ui.directedgraph.JFrameLatencyDetailedAnalysis;
 import ui.ebrdd.EBRDDPanel;
 import ui.eln.ELNDiagramPanel;
 import ui.file.*;
@@ -82,6 +81,7 @@ import ui.osad.TURTLEOSActivityDiagramPanel;
 import ui.prosmd.ProactiveSMDPanel;
 import ui.req.Requirement;
 import ui.req.RequirementDiagramPanel;
+import ui.simulationtraceanalysis.latencyDetailedAnalysisMain;
 import ui.syscams.SysCAMSComponentTaskDiagramPanel;
 import ui.syscams.SysCAMSCompositeComponent;
 import ui.tmlad.TMLActivityDiagramPanel;
@@ -106,12 +106,19 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
+
+import org.xml.sax.SAXException;
+
+
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
 import java.util.List;
@@ -197,7 +204,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     public final static byte NOT_OPENED = 0;
     public final static byte OPENED = 1;
     public final static byte MODEL_OK = 2;
-    public final static byte MODEL_CHANGED = 3;
+    public final static byte MODEL_CHANGED = 3; 
     public final static byte MODEL_SAVED = 4;
     public final static byte RTLOTOS_OK = 5;
     public final static byte BACKWARD = 6;
@@ -329,7 +336,11 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     private JFrameInteractiveSimulation jfis;
     private JFrameAvatarInteractiveSimulation jfais;
     private JFrameCompareSimulationTraces cSimTrace;
-    private JFrameLatencyDetailedAnalysis latencyDetailedAnalysis;
+    
+    
+    private latencyDetailedAnalysisMain latencyDetailedAnalysisMain;
+    
+
 
     // Help
     private HelpManager helpManager;
@@ -339,10 +350,8 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     private Invariant currentInvariant;
 
     // Thread for autosave
-    private PeriodicBehaviorThread pbt;
-
-    private TMLArchiPanel tmlap; // Used to retrieve the currently opened architecture panel
-
+    private PeriodicBehaviorThread pbt;   
+  
     // Plugin management
     // public static PluginManager pluginManager;
 
@@ -4061,7 +4070,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                 }
             }
         } else if (tp instanceof TMLArchiPanel) {
-            tmlap = (TMLArchiPanel) tp;
+            TMLArchiPanel  tmlap = (TMLArchiPanel) tp;
             JDialogSelectTMLNodes.validated = tmlap.validated;
             JDialogSelectTMLNodes.ignored = tmlap.ignored;
             Vector<TGComponent> tmlNodesToValidate = new Vector<TGComponent>();
@@ -9543,10 +9552,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
     }
 
-    // Get the currently opened architecture panel
-    public TMLArchiPanel getCurrentArchiPanel() {
-        return tmlap;
-    }
+   
 
     // DraggableTabbedPaneCallbackInterface
     public void hasBeenDragged(int initialPosition, int destinationPosition) {
@@ -9569,85 +9575,19 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         cSimTrace.setVisible(true);
     }
 
-    public void latencyDetailedAnalysis() {
-
-        Vector<TGComponent> tmlNodesToValidate = new Vector<TGComponent>();
-        List<TMLComponentDesignPanel> cpanels;
-        TMLComponentDesignPanel compdp;
-        TURTLEPanel tp = getCurrentTURTLEPanel();
-
-        // tmlap = (TMLArchiPanel) tp;
-
-        if (gtm == null) {
-
-        } else {
-
-            if (gtm.getTMLMapping() != null) {
-                TMLMapping<TGComponent> map = gtm.getTMLMapping();
-                for (TGComponent component : tmlap.tmlap.getComponentList()) {
-                    tmlNodesToValidate.add(component);
-                }
-                TGComponent tgc;
-                List<TMLArchiArtifact> artifacts;
-                String namePanel;
-                TURTLEPanel tup;
-                Iterator<? extends TGComponent> iterator = tmlNodesToValidate.listIterator();
-                cpanels = new ArrayList<TMLComponentDesignPanel>();
-
-                while (iterator.hasNext()) {
-                    tgc = iterator.next();
-
-                    if (tgc instanceof TMLArchiNode) {
-                        artifacts = ((TMLArchiNode) (tgc)).getAllTMLArchiArtifacts();
-                        for (TMLArchiArtifact artifact : artifacts) {
-                            namePanel = artifact.getReferenceTaskName();
-                            try {
-                                tup = getTURTLEPanel(namePanel);
-
-                                if (tup instanceof TMLComponentDesignPanel) {
-                                    compdp = (TMLComponentDesignPanel) (tup);
-                                    if (!cpanels.contains(compdp)) {
-                                        cpanels.add(compdp);
-                                    }
-                                }
-                            } catch (Exception e) {
-                                // Just in case the mentionned panel is not a TML design Panel
-                            }
-
-                        }
-                    }
-                }
-
-                latencyDetailedAnalysis = new JFrameLatencyDetailedAnalysis(map, cpanels);
-                latencyDetailedAnalysis.setIconImage(IconManager.img9);
-                GraphicLib.centerOnParent(latencyDetailedAnalysis, 900, 600);
-                latencyDetailedAnalysis.setVisible(true);
-
-            } else {
-
-                if (gtm.getArtificialTMLMapping() != null) {
-
-                    TMLMapping<TGComponent> map = gtm.getArtificialTMLMapping();
-                    TMLComponentDesignPanel tmlcdp = (TMLComponentDesignPanel) tp;
-                    cpanels = new ArrayList<TMLComponentDesignPanel>();
-                    cpanels.add(tmlcdp);
-                    latencyDetailedAnalysis = new JFrameLatencyDetailedAnalysis(map, cpanels);
-                    latencyDetailedAnalysis.setIconImage(IconManager.img9);
-                    GraphicLib.centerOnParent(latencyDetailedAnalysis, 900, 600);
-                    latencyDetailedAnalysis.setVisible(true);
-
-                } else {
-
-                }
-            }
-        }
-
-        // dp.getPanels();
-
+    public void compareLatencyForXML(SimulationTrace selectedST, boolean b) {
+        
+        latencyDetailedAnalysisMain = new latencyDetailedAnalysisMain(1,this,selectedST,b,false,0);        
+      
     }
 
-    public JFrameLatencyDetailedAnalysis getLatencyDetailedAnalysis() {
-        return latencyDetailedAnalysis;
+    public void latencyDetailedAnalysisForXML(SimulationTrace selectedST, boolean b, boolean compare, int j) throws XPathExpressionException, ParserConfigurationException, SAXException, IOException  {
+        
+        latencyDetailedAnalysisMain = new latencyDetailedAnalysisMain(2,this,selectedST,b ,compare,j);
+        
+        
     }
+
+  
 
 } // Class MainGUI

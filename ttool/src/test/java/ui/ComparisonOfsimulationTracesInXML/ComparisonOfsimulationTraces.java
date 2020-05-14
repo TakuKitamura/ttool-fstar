@@ -35,11 +35,7 @@ public class ComparisonOfsimulationTraces extends AbstractUITest {
 
         STfilePath1 = getBaseResourcesDir() + path1;
         STfilePath2 = getBaseResourcesDir() + path2;
-
-        // STfilePath1 =
-        // "/home/maysam/eclipse/TTool/ttool/src/test/resources/ui/xmlCompare/input/simple.xml";
-        // STfilePath2 =
-        // "/home/maysam/eclipse/TTool/ttool/src/test/resources/ui/xmlCompare/input/simplifiedWithSecurity.xml";
+       
         selectedST1 = new SimulationTrace("simple.xml", 6, STfilePath1);
         selectedST2 = new SimulationTrace("simplifiedWithSecurity.xml", 6, STfilePath2);
 
