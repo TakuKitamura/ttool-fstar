@@ -80,7 +80,7 @@ public class SafetyProperty  {
     
     
     public SafetyProperty(String property, AvatarSpecification _spec) {
-        rawProperty = property.trim();
+        rawProperty = property;
         analyzeProperty(_spec);
         phase = SpecificationPropertyPhase.NOTCOMPUTED;
     }
@@ -99,7 +99,7 @@ public class SafetyProperty  {
     }
 
     public boolean analyzeProperty(AvatarSpecification _spec) {
-    	String tmpP = rawProperty;
+    	String tmpP = rawProperty.trim();
     	String p;
     	
     	errorOnProperty = NO_ERROR;
