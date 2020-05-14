@@ -101,7 +101,7 @@ public class AvatarExpressionAttribute {
         
         block = spec.getBlockWithName(blockString);
         
-        if (blockIndex == -1) {
+        if (block == null) {
             return false;
         }
         

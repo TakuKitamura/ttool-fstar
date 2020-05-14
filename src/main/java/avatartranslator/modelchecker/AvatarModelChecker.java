@@ -194,7 +194,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     }
 
     public void setIgnoreInternalStates(boolean _b) {
-        TraceManager.addDev("ignore niternal state?" + ignoreInternalStates);
+        TraceManager.addDev("ignore internal state?" + ignoreInternalStates);
         ignoreInternalStates = _b;
     }
     
@@ -346,7 +346,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
       }*/
 
     public boolean startModelCheckingProperties() {
-        boolean studyS, studyL, studyR;
+        boolean studyS, studyL, studyR, genRG;
         long deadlocks = 0;
         
         if (spec == null) {
@@ -365,6 +365,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         studyR = studyReachability;
         studyL = studyLiveness;
         studyS = studySafety;
+        genRG = computeRG;
         
         //then compute livenesses
         computeRG = false;
@@ -414,16 +415,24 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             studySafety = false;
         }
         
-        if (studyR) {
-            studyReachability = true;
-            //computeRG = true;
+        if (studyR || genRG) {
+            if (genRG) {
+                deadlocks = 0;
+            }
+            studyReachability = studyR;
+            computeRG = genRG;
             startModelChecking(nbOfThreads);
             deadlocks += nbOfDeadlocks;
             resetModelChecking();
             studyReachability = false;
+            computeRG = false;
         }
         
-        if (checkNoDeadlocks) {
+        if (genRG) {
+            nbOfDeadlocks = (int) deadlocks;
+        } else if (checkNoDeadlocks) {
+            //If a complete study with reachability graph generation has been executed,
+            //there is no need to study deadlocks again
             if (deadlocks == 0) {
                 deadlockStop = true;
                 startModelChecking(nbOfThreads);
@@ -432,9 +441,11 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             }
         }
         
+        computeRG = genRG;
         studyLiveness = studyL;
         studySafety = studyS;
         studyReachability = studyR;
+        
         TraceManager.addDev("Model checking done");
         return true;
     }

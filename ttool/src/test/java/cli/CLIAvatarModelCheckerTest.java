@@ -207,10 +207,27 @@ public class CLIAvatarModelCheckerTest extends AbstractTest implements Interpret
         Interpreter interpret = new Interpreter(script, (InterpreterOutputInterface)this, show);
         interpret.interpret();
         
+     // Must now load the graph
+        filePath = "rgmodelchecker.aut";
+        f = new File(filePath);
+        assertTrue(myutil.FileUtils.checkFileForOpen(f));
+        String data = myutil.FileUtils.loadFileData(f);
+        
+        assertTrue(data.length() > 0);
+        AUTGraph graph = new AUTGraph();
+        graph.buildGraph(data);
+        graph.computeStates();
+        
         filePath = getBaseResourcesDir() + PATH_TO_EXPECTED_FILE + "modelchecker_s_expected";
         f = new File(filePath);
         assertTrue(myutil.FileUtils.checkFileForOpen(f));
         String expectedOutput = myutil.FileUtils.loadFileData(f);
+
+        System.out.println("states=" + graph.getNbOfStates() + " transitions=" + graph.getNbOfTransitions());
+        assertTrue(graph.getNbOfStates() == 251);
+        assertTrue(graph.getNbOfTransitions() > 750);
+        assertTrue(graph.getNbOfTransitions() < 770);
+
 
         assertEquals(expectedOutput, outputResult.toString());
     }
@@ -229,15 +246,6 @@ public class CLIAvatarModelCheckerTest extends AbstractTest implements Interpret
 
         assertTrue(script.length() > 0);
         
-        //Load configuration for UPPAAL paths
-        String config = "../../bin/config.xml";
-        try {
-            ConfigurationTTool.loadConfiguration(config, true);
-            SpecConfigTTool.setBasicConfigFile(config);
-        } catch (Exception e) {
-            System.out.println("Error loading configuration from file: " + config);
-        }
-        
         Interpreter interpret = new Interpreter(script, (InterpreterOutputInterface)this, false);       
         interpret.interpret();
         
@@ -245,7 +253,7 @@ public class CLIAvatarModelCheckerTest extends AbstractTest implements Interpret
     }
 	
 	@Test
-    public void testValidateAirbusDoor_V2 () {
+    public void testValidateAirbusDoor_V2() {
         String filePath = getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelchecker_val2";
         String script;
         
@@ -258,15 +266,6 @@ public class CLIAvatarModelCheckerTest extends AbstractTest implements Interpret
 
         assertTrue(script.length() > 0);
         
-        //Load configuration for UPPAAL paths
-        String config = "../../bin/config.xml";
-        try {
-            ConfigurationTTool.loadConfiguration(config, true);
-            SpecConfigTTool.setBasicConfigFile(config);
-        } catch (Exception e) {
-            System.out.println("Error loading configuration from file: " + config);
-        }
-        
         Interpreter interpret = new Interpreter(script, (InterpreterOutputInterface)this, false);       
         interpret.interpret();
         
@@ -274,7 +273,7 @@ public class CLIAvatarModelCheckerTest extends AbstractTest implements Interpret
     }
 	
 	@Test
-    public void testValidatePressureController_V2 () {
+    public void testValidatePressureController_V2() {
         String filePath = getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelchecker_val3";
         String script;
         
@@ -287,19 +286,35 @@ public class CLIAvatarModelCheckerTest extends AbstractTest implements Interpret
 
         assertTrue(script.length() > 0);
         
-        //Load configuration for UPPAAL paths
-        String config = "../../bin/config.xml";
-        try {
-            ConfigurationTTool.loadConfiguration(config, true);
-            SpecConfigTTool.setBasicConfigFile(config);
-        } catch (Exception e) {
-            System.out.println("Error loading configuration from file: " + config);
-        }
-        
         Interpreter interpret = new Interpreter(script, (InterpreterOutputInterface)this, false);       
         interpret.interpret();
         
         assertTrue(outputResult.toString().contains("true"));
+    }
+	
+	@Test
+    public void testCliCustomQuery () {
+        String filePath = getBaseResourcesDir() + PATH_TO_TEST_FILE + "scriptmodelchecker_q";
+        String script;
+        
+        outputResult = new StringBuilder();
+
+        File f = new File(filePath);
+        assertTrue(myutil.FileUtils.checkFileForOpen(f));
+
+        script = myutil.FileUtils.loadFileData(f);
+
+        assertTrue(script.length() > 0);
+        
+        Interpreter interpret = new Interpreter(script, (InterpreterOutputInterface)this, false);       
+        interpret.interpret();
+        
+        filePath = getBaseResourcesDir() + PATH_TO_EXPECTED_FILE + "modelchecker_q_expected";
+        f = new File(filePath);
+        assertTrue(myutil.FileUtils.checkFileForOpen(f));
+        String expectedOutput = myutil.FileUtils.loadFileData(f);
+
+        assertEquals(expectedOutput, outputResult.toString()+"\n");
     }
 
 }
