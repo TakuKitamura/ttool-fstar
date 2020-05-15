@@ -62,6 +62,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -151,6 +152,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     protected JTextField timeLimitField;
     protected JCheckBox noDeadlocks;
     protected JCheckBox safety;
+    protected JButton checkUncheckAllPragmas;
+    protected java.util.List<JCheckBox> customChecks;
 
     protected JCheckBox saveGraphAUT, saveGraphDot, ignoreEmptyTransitions, ignoreInternalStates,
             ignoreConcurrenceBetweenInternalActions, generateDesign;
@@ -190,6 +193,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
 
         //showLiveness = _showLiveness;
         showLiveness = true;
+        customChecks = new LinkedList<JCheckBox>();
         
         initComponents();
         myInitComponents();
@@ -287,7 +291,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         GridBagLayout gridbagbasic = new GridBagLayout();
         GridBagConstraints cbasic = new GridBagConstraints();
         jpbasic.setLayout(gridbagbasic);
-        jpbasic.setBorder(new javax.swing.border.TitledBorder("Properties verification"));
+        jpbasic.setBorder(new javax.swing.border.TitledBorder("Basic properties"));
 
         cbasic.gridwidth = 1;
         cbasic.gridheight = 1;
@@ -361,18 +365,88 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         livenessAllStates.setSelected(livenessSelected == LIVENESS_ALL);
         
         
+        JPanel jpadvanced = new JPanel();
+        GridBagLayout gridbagadvanced = new GridBagLayout();
+        GridBagConstraints cadvanced = new GridBagConstraints();
+        jpadvanced.setLayout(gridbagadvanced);
+        jpadvanced.setBorder(new javax.swing.border.TitledBorder("Advanced properties"));
+        
+        cadvanced.anchor = GridBagConstraints.WEST;
+        cadvanced.gridwidth = 1;
+        cadvanced.gridheight = 1;
+        cadvanced.weighty = 1.0;
+        cadvanced.weightx = 1.0;
+        cadvanced.fill = GridBagConstraints.HORIZONTAL; 
+        cadvanced.gridwidth = GridBagConstraints.REMAINDER; //end row
+
+        GridBagConstraints cadvanced2 = new GridBagConstraints();
+        cadvanced2.anchor = GridBagConstraints.EAST;
+        cadvanced2.gridwidth = 1;
+        cadvanced2.gridheight = 1;
+        cadvanced2.weighty = 1.0;
+        cadvanced2.weightx = 1.0;
+        cadvanced2.fill = GridBagConstraints.NONE; 
+        cadvanced2.gridwidth = GridBagConstraints.REMAINDER; //end row
+
+        
         //Safety pragmas
-        safety = new JCheckBox("Safety Pragmas", safetySelected);
+        cadvanced.gridwidth = 1;
+        safety = new JCheckBox("Safety pragmas", safetySelected);
         safety.addActionListener(this);
-        jpbasic.add(safety, cbasic);
+        jpadvanced.add(safety, cadvanced);
+        
+        cadvanced.gridwidth = GridBagConstraints.REMAINDER;
+        checkUncheckAllPragmas = new JButton("Check / uncheck all");
+        checkUncheckAllPragmas.addActionListener(this);
         
         if (spec.getSafetyPragmas() == null || spec.getSafetyPragmas().isEmpty()) {
             safety.setEnabled(false);
             safety.setSelected(false);
+            //checkUncheckAllPragmas.setEnabled(false);
+        } else {
+            cadvanced.anchor = GridBagConstraints.EAST;
+            cadvanced.fill = GridBagConstraints.NONE; 
+            cadvanced.gridwidth = GridBagConstraints.REMAINDER; //end row
+            jpadvanced.add(checkUncheckAllPragmas, cadvanced);
+            cadvanced.gridwidth = GridBagConstraints.REMAINDER;
+
+            JPanel jpadvancedQ = new JPanel();
+            GridBagConstraints cadvancedQ = new GridBagConstraints();
+            GridBagLayout gridbagadvancedQ = new GridBagLayout();
+            cadvancedQ.anchor = GridBagConstraints.WEST;
+            cadvancedQ.gridheight = 1;
+            cadvancedQ.weighty = 1.0;
+            cadvancedQ.weightx = 1.0;
+            jpadvancedQ.setLayout(gridbagadvancedQ);
+            cadvancedQ.fill = GridBagConstraints.BOTH;
+
+
+            for (String s : spec.getSafetyPragmas()) {
+                cadvancedQ.gridwidth = GridBagConstraints.RELATIVE;
+                JLabel space = new JLabel("   ");
+                cadvancedQ.weightx = 0.0;
+                jpadvancedQ.add(space, cadvancedQ);
+                cadvancedQ.gridwidth = GridBagConstraints.REMAINDER; //end row
+                JCheckBox cqb = new JCheckBox(s);
+                cqb.addActionListener(this);
+                cadvancedQ.weightx = 1.0;
+                cqb.setSelected(true);
+                jpadvancedQ.add(cqb, cadvancedQ);
+                customChecks.add(cqb);
+            }
+            JScrollPane jsp = new JScrollPane(jpadvancedQ, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+            jsp.setPreferredSize(new Dimension(500, 150));
+            cadvanced.gridheight = 10;
+            cadvanced.anchor = GridBagConstraints.WEST;
+            cadvanced.fill = GridBagConstraints.HORIZONTAL; 
+            cadvanced.gridwidth = GridBagConstraints.REMAINDER; //end row
+            jpadvanced.add(jsp, cadvanced);
         }
         
         jpopt.add(jp01, c01);
         jpopt.add(jpbasic, cbasic);
+        jpopt.add(jpadvanced, cadvanced);
+        
         
         // RG
         saveGraphAUT = new JCheckBox("Reachability Graph Generation", graphSelected);
@@ -508,6 +582,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
 
     }
 
+
     public void actionPerformed(ActionEvent evt) {
         String command = evt.getActionCommand();
 
@@ -517,6 +592,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             stopProcess();
         } else if (command.equals("Close")) {
             closeDialog();
+        } else if (evt.getSource() == checkUncheckAllPragmas) {
+            checkUncheckAllPragmas();
         } else if (evt.getSource() == show) {
             showGraph();
         } else if (evt.getSource() == display) {
@@ -687,7 +764,15 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             }
             
             if (safetySelected) {
-                res = amc.setSafetyAnalysis();
+                //res = amc.setSafetyAnalysis();
+                res = 0;
+                for(JCheckBox cc: customChecks) {
+                    if (cc.isSelected()) {
+                        if (amc.addSafety(cc.getText())) {
+                            res++;
+                        }
+                    }
+                }
                 jta.append("Analysis of " + res + " safety pragmas activated\n");
                 
                 handleSafety(amc.getSafeties());
@@ -810,9 +895,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                     rg.name = f.getName();
                     mgui.addRG(rg);
                     FileUtils.saveFile(autfile, graphAUT);
-                    jta.append("Graph saved in " + autfile + "\n");
+                    jta.append("\nGraph saved in " + autfile + "\n");
                 } catch (Exception e) {
-                    jta.append("Graph could not be saved in " + autfile + "\n");
+                    jta.append("\nGraph could not be saved in " + autfile + "\n");
                 }
             }
             if (saveGraphDot.isSelected()) {
@@ -826,9 +911,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                     String graph = amc.toDOT();
                     //TraceManager.addDev("graph AUT=\n" + graph);
                     FileUtils.saveFile(dotfile, graph);
-                    jta.append("Graph saved in " + dotfile + "\n");
+                    jta.append("\nGraph saved in " + dotfile + "\n");
                 } catch (Exception e) {
-                    jta.append("Graph could not be saved in " + dotfile + "\n");
+                    jta.append("\nGraph could not be saved in " + dotfile + "\n");
                 }
             }
 
@@ -894,6 +979,11 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     
     protected void handleSafety(ArrayList<SafetyProperty> safeties) {
         int status;
+        
+        if (safeties == null) {
+            return;
+        }
+
         for (SafetyProperty sp : safeties) {
             if (sp.getPhase() == SpecificationPropertyPhase.SATISFIED) {
                 status = 1;
@@ -940,6 +1030,13 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         }
         
         safetySelected = safety.isSelected();
+        
+        if (!customChecks.isEmpty()) {
+            for(JCheckBox cb: customChecks) {
+                cb.setEnabled(safetySelected);
+            }
+        }
+        
         stateLimitField.setEnabled(stateLimit.isSelected());
         limitStatesSelected = stateLimit.isSelected();
         timeLimitField.setEnabled(timeLimit.isSelected());
@@ -947,10 +1044,21 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
 
         switch (mode) {
             case NOT_STARTED:
-                if ((reachabilitySelected == REACHABILITY_SELECTED) || (reachabilitySelected == REACHABILITY_ALL) || (livenessSelected == LIVENESS_SELECTED) || (livenessSelected == LIVENESS_ALL) || safetySelected || checkNoDeadSelected || graphSelected || graphSelectedDot) {
+                if ((reachabilitySelected == REACHABILITY_SELECTED) || (reachabilitySelected == REACHABILITY_ALL) || (livenessSelected == LIVENESS_SELECTED) || (livenessSelected == LIVENESS_ALL) || checkNoDeadSelected || graphSelected || graphSelectedDot) {
                     start.setEnabled(true);
                 } else {
-                    start.setEnabled(false);
+                    if (safetySelected) {
+                        boolean sel = false;
+                        for(JCheckBox cb: customChecks) {
+                            if (cb.isSelected()) {
+                                sel = true;
+                                break;
+                            }
+                        }
+                        start.setEnabled(sel);
+                    } else {
+                        start.setEnabled(false);
+                    }
                 }
                 stop.setEnabled(false);
                 close.setEnabled(true);
@@ -1049,6 +1157,21 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                 //}
             }
         } catch (Exception e) {
+        }
+    }
+    
+
+    private void checkUncheckAllPragmas() {
+        if (customChecks != null) {
+            int nb = 0;
+            for(JCheckBox cb: customChecks) {
+                nb = cb.isSelected() ? nb + 1 : nb ;
+            }
+            boolean check = (nb * 2) < customChecks.size();
+            for(JCheckBox cb: customChecks) {
+                cb.setSelected(check);
+            }
+            setButtons();
         }
     }
 
