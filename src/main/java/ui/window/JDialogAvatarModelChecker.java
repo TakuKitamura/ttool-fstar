@@ -378,16 +378,6 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         cadvanced.weightx = 1.0;
         cadvanced.fill = GridBagConstraints.HORIZONTAL; 
         cadvanced.gridwidth = GridBagConstraints.REMAINDER; //end row
-
-        GridBagConstraints cadvanced2 = new GridBagConstraints();
-        cadvanced2.anchor = GridBagConstraints.EAST;
-        cadvanced2.gridwidth = 1;
-        cadvanced2.gridheight = 1;
-        cadvanced2.weighty = 1.0;
-        cadvanced2.weightx = 1.0;
-        cadvanced2.fill = GridBagConstraints.NONE; 
-        cadvanced2.gridwidth = GridBagConstraints.REMAINDER; //end row
-
         
         //Safety pragmas
         cadvanced.gridwidth = 1;
