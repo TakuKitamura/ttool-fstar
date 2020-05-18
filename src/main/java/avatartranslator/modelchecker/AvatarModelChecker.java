@@ -106,6 +106,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     private ArrayList<SafetyProperty> safeties;
     private SafetyProperty safety;
     
+    // Re-Initialization
+    private boolean studyReinit;
+    private SpecificationReinit initState;
+    
     //RG limits
     private boolean stateLimitRG;
     private boolean timeLimitRG;
@@ -320,6 +324,19 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     public ArrayList<SafetyProperty> getSafeties() {
         return safeties;
     }
+    
+
+    public void setReinitAnalyzis(boolean studyReinit) {
+        this.studyReinit = studyReinit;
+    }
+    
+    
+    public boolean getReinitResult() {
+        if (initState != null) {
+            return initState.getResult();
+        }
+        return false;
+    }
 
     public void setComputeRG(boolean _rg) {
         computeRG = _rg;
@@ -493,7 +510,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             checkElement(asme, initialState);
             if (studySafety && safety.propertyType == SafetyProperty.BLOCK_STATE) {
                 initialState.property |= safety.getSolverResult(initialState, asme);
-                break;
             }
         }
         if (studySafety && safety.propertyType == SafetyProperty.BLOCK_STATE) {
@@ -551,6 +567,22 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         if (mustStop()) {
             return;
         }
+        
+        int cpt = 0;
+        for (AvatarBlock block : spec.getListOfBlocks()) {
+            AvatarStateMachine asm = block.getStateMachine();
+            SpecificationBlock sb = initialState.blocks[cpt];
+            AvatarStateMachineElement asme = asm.allStates[sb.values[SpecificationBlock.STATE_INDEX]];
+            if (studySafety && safety.propertyType == SafetyProperty.BLOCK_STATE) {
+                initialState.property |= safety.getSolverResult(initialState, asme);
+            }
+            cpt++;
+        }
+        if (studySafety && safety.propertyType == SafetyProperty.BLOCK_STATE) {
+                if (safety.safetyType == SafetyProperty.ALLTRACES_ALLSTATES || safety.safetyType == SafetyProperty.ONETRACE_ALLSTATES) {
+                    initialState.property = !initialState.property;
+                }
+        }
 
         // initialState's transitions and blocks must be already initialized
         blockValues = initialState.getBlockValues();
@@ -560,7 +592,15 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         initialState.computeHash(blockValues);
         addState(initialState);
         
-        pendingStates.add(initialState);
+        if (studySafety) {
+            if (safety.propertyType == SafetyProperty.BOOL_EXPR) {
+                initialState.property = evaluateSafetyOfProperty(initialState, null, false);
+            }
+            actionOnProperty(initialState, 0, null, null);
+        } else {
+            pendingStates.add(initialState);
+        }
+        //pendingStates.add(initialState);
            
         //states.put(initialState.hashValue, initialState);
         //statesByID.put(initialState.id, initialState);
