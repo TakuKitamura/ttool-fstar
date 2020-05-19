@@ -135,6 +135,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         checkNoDeadlocks = false;
         deadlockStop = false;
         studyReachability = false;
+        studyReinit = false;
         computeRG = false;
         stateLimitRG = false; //No state limit in RG computation
         timeLimitRG = false;
@@ -326,13 +327,13 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     }
     
 
-    public void setReinitAnalyzis(boolean studyReinit) {
+    public void setReinitAnalysis(boolean studyReinit) {
         this.studyReinit = studyReinit;
     }
     
     
     public boolean getReinitResult() {
-        if (initState != null) {
+        if (studyReinit && initState != null) {
             return initState.getResult();
         }
         return false;
@@ -363,7 +364,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
       }*/
 
     public boolean startModelCheckingProperties() {
-        boolean studyS, studyL, studyR, genRG;
+        boolean studyS, studyL, studyR, studyRI, genRG;
         long deadlocks = 0;
         
         if (spec == null) {
@@ -382,6 +383,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         studyR = studyReachability;
         studyL = studyLiveness;
         studyS = studySafety;
+        studyRI = studyReinit;
         genRG = computeRG;
         
         //then compute livenesses
@@ -390,15 +392,16 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         studySafety = false;
         studyLiveness = false;
         studyReachability = false;
+        studyReinit = false;
 
         if (studyL) {
             studySafety = true;
             for (SafetyProperty sp : livenesses) {
                 safety = sp;
                 startModelChecking(nbOfThreads);
+                deadlocks += nbOfDeadlocks;
                 resetModelChecking();
                 safety.setComputed();
-                deadlocks += nbOfDeadlocks;
             }
             studySafety = false;
         }
@@ -426,10 +429,18 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                     safetyLeadStates = null;
                 }
                 safety.setComputed();
-                resetModelChecking();
                 deadlocks += nbOfDeadlocks;
+                resetModelChecking();
             }
             studySafety = false;
+        }
+        
+        if (studyRI) {
+            studyReinit = true;
+            startModelChecking(nbOfThreads);
+            deadlocks += nbOfDeadlocks;
+            resetModelChecking();
+            studyReinit = false;
         }
         
         if (studyR || genRG) {
@@ -462,6 +473,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         studyLiveness = studyL;
         studySafety = studyS;
         studyReachability = studyR;
+        studyReinit = studyRI;
         
         TraceManager.addDev("Model checking done");
         return true;
@@ -538,6 +550,11 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         } else {
             pendingStates.add(initialState);
         }
+        
+        if (studyReinit) {
+            initState = new SpecificationReinit(initialState);
+        }
+
         //states.put(initialState.hashValue, initialState);
         //statesByID.put(initialState.id, initialState);
         nbOfCurrentComputations = 0;
@@ -1858,17 +1875,28 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 }
             }
         }
+
+        if (studyReinit && similar != null) {
+            if (similar != initState.initState && stateIsReachableFromState(similar, _ss)) {
+                propertyDone = true;
+                initState.setResult(false);
+            }
+        }
     }
     
     private void checkPropertyOnDeadlock(SpecificationState ss) {
         if (studySafety) {
             if (safety.safetyType == SafetyProperty.ALLTRACES_ONESTATE && ss.property == false) {
+                propertyDone = true;
                 safety.result = false;
-                propertyDone = true;
             } else if (safety.safetyType == SafetyProperty.ONETRACE_ALLSTATES && ss.property == false) {
-                safety.result = true;
                 propertyDone = true;
+                safety.result = true;
             }
+        }
+        if (studyReinit) {
+            propertyDone = true;
+            initState.setResult(false);
         }
     }
 
@@ -2092,6 +2120,23 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         }
         return ret.toString();
     }
+    
+    
+    public String reinitToString() {
+        if (!studyReinit || initState == null) {
+            return "Reinitialization check not activeted\n";
+        }
+        
+        String ret;
+        if (initState.getResult()) {
+            ret = "property is satisfied\n";
+        } else {
+            ret = "property is NOT satisfied\n";
+        }
+        
+        return ret;
+    }
+    
 
     // Do not free the RG
     public void freeUselessAllocations() {
