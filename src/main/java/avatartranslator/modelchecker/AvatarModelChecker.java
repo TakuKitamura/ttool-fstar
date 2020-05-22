@@ -44,6 +44,7 @@ import myutil.BoolExpressionEvaluator;
 import myutil.Conversion;
 import myutil.IntExpressionEvaluator;
 import myutil.TraceManager;
+import rationals.properties.isEmpty;
 
 import java.util.*;
 
@@ -379,7 +380,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         
         stateLimitRG = false;
         timeLimitRG = false;
-        ignoreEmptyTransitions = true;
+        //ignoreEmptyTransitions = true;
         studyR = studyReachability;
         studyL = studyLiveness;
         studyS = studySafety;
@@ -1792,8 +1793,16 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         
         if (safety.propertyType == SafetyProperty.BLOCK_STATE) {
             for (int i = 0; i < tr.transitions.length; i++) {
+                int k = 10;
                 asme = tr.transitions[i].getNext(0);
-                result |= safety.getSolverResult(newState, asme);
+                while (k > 0) {
+                    result |= safety.getSolverResult(newState, asme);
+                    if (asme instanceof AvatarStateElement || result == true) {
+                        break;
+                    }
+                    asme = asme.getNext(0);
+                    k--;
+                }
             }
         } else {
             result = safety.getSolverResult(newState);
