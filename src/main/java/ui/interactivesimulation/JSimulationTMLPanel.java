@@ -69,8 +69,8 @@ import java.util.LinkedHashMap;
  */
 public class JSimulationTMLPanel extends JPanel implements MouseMotionListener, Runnable  {
 
-    private static int MAX_X = 800;
-    private static int MAX_Y = 200;
+    private static int MAX_X = 1600;
+    private static int MAX_Y = 400;
     private static long stamp = 0;
 
     private int maxX = MAX_X;
@@ -78,9 +78,9 @@ public class JSimulationTMLPanel extends JPanel implements MouseMotionListener, 
     private final static int limit = 10;
 
     // Drawing parameters
-    private final static int minSpaceBetweenLifeLines = 5;
-    private final static int verticalSpaceUnderBlocks = 15;
-    private int spaceBetweenLifeLines = 150;
+    private final static int minSpaceBetweenLifeLines = 50;
+    private final static int verticalSpaceUnderBlocks = 150;
+    private int spaceBetweenLifeLines = 300;
     private boolean spaceBetweenLifeLinesComputed = false;
     private int spaceAtEnd = 50;
     private int spaceAtTop = 50;
@@ -105,6 +105,8 @@ public class JSimulationTMLPanel extends JPanel implements MouseMotionListener, 
     private Vector<Point> points;
     private Vector<GenericTransaction> transactionsOfPoints;
     private Hashtable<String, Point> asyncMsgs;
+    private Hashtable<String, Long> asyncStartTime;
+    private boolean checkMessID;
 
     // List of entities ... List is discovered progressively
     // Or the list is described in the trace (header information)
@@ -135,7 +137,8 @@ public class JSimulationTMLPanel extends JPanel implements MouseMotionListener, 
         points = new Vector<>();
 
         asyncMsgs = new Hashtable<>();
-
+        asyncStartTime = new Hashtable<>();
+        checkMessID = true;
         mode = NO_MODE;
 
         setBackground(Color.WHITE);
@@ -326,6 +329,22 @@ public class JSimulationTMLPanel extends JPanel implements MouseMotionListener, 
             clockValueMouse = clockValue;
             g.drawString("@" + clockValue/clockDiviser, 10, currentY+g.getFontMetrics().getHeight()/2);
         }
+        if(checkMessID) {
+            for (int i = Math.max(transactions.size() - drawnTransactions, 0); i < transactions.size(); i++) {
+                gt = transactions.get(i);
+                if (gt.type == GenericTransaction.SEND_ASYNCHRO) {
+                    asyncStartTime.put(gt.messageID, gt.startingTime);
+                }
+            }
+            for (int i = Math.max(transactions.size() - drawnTransactions, 0); i < transactions.size(); i++) {
+                gt = transactions.get(i);
+                if (gt.type == GenericTransaction.RECEIVE_ASYNCHRO) {
+                    if (asyncStartTime.get(gt.messageID) == null || gt.startingTime < asyncStartTime.get(gt.messageID))
+                        gt.messageID = String.valueOf(new Integer(gt.messageID) - 1);
+                }
+            }
+        }
+        checkMessID = false;
 
         for(int i=Math.max(transactions.size()-drawnTransactions, 0); i<transactions.size(); i++) {
             gt = transactions.get(i);
