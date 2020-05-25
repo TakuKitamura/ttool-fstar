@@ -1138,7 +1138,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             newState.computeHash(blockValues);
 
             SpecificationState similar = findSimilarState(newState);
-            if (similar != null) {
+            if (similar != null || studySafety && safety.safetyType == SafetyProperty.LEADS_TO && newState.property) {
                 SpecificationLink link = new SpecificationLink();
                 link.originState = _ss;
                 String action = st.infoForGraph;
@@ -1729,6 +1729,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 result = !result;
             }
             _ss.property |= result;
+            
+            if (safety.safetyType == SafetyProperty.LEADS_TO && result) {
+                return _ase;
+            }
         }
 
         if (_ase.getNexts().size() != 1) {
