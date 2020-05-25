@@ -366,6 +366,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
     public boolean startModelCheckingProperties() {
         boolean studyS, studyL, studyR, studyRI, genRG;
+        boolean emptyTr;
         long deadlocks = 0;
         
         if (spec == null) {
@@ -380,7 +381,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         
         stateLimitRG = false;
         timeLimitRG = false;
-        //ignoreEmptyTransitions = true;
+        emptyTr = ignoreEmptyTransitions;
         studyR = studyReachability;
         studyL = studyLiveness;
         studyS = studySafety;
@@ -414,11 +415,13 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 if (safety.safetyType == SafetyProperty.LEADS_TO) {
                     // prepare to save second pass states
                     safetyLeadStates = Collections.synchronizedList(new LinkedList<SpecificationState>());
+                    ignoreEmptyTransitions = false;
                 }
                 startModelChecking(nbOfThreads);
                 if (safety.safetyType == SafetyProperty.LEADS_TO) {
                     // second pass
                     safety.initLead();
+                    ignoreEmptyTransitions = emptyTr;
                     for (SpecificationState state : safetyLeadStates) {
                         deadlocks += nbOfDeadlocks;
                         resetModelChecking();
@@ -601,6 +604,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                     initialState.property = !initialState.property;
                 }
         }
+        
+        if (ignoreEmptyTransitions) {
+            handleNonEmptyUniqueTransition(initialState);
+        }
 
         // initialState's transitions and blocks must be already initialized
         blockValues = initialState.getBlockValues();
@@ -653,7 +660,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         spec.makeFullStates();
 
         if (ignoreEmptyTransitions) {
-            spec.removeEmptyTransitions((nbOfRemainingReachabilities == 0) || studyLiveness ||studySafety);
+            spec.removeEmptyTransitions(!(studyReachability || studyLiveness || studySafety));
         }
         
         initExpressionSolvers();
