@@ -590,15 +590,9 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         }
         
         int cpt = 0;
-        for (AvatarBlock block : spec.getListOfBlocks()) {
-            AvatarStateMachine asm = block.getStateMachine();
-            SpecificationBlock sb = initialState.blocks[cpt];
-            AvatarStateMachineElement asme = asm.allStates[sb.values[SpecificationBlock.STATE_INDEX]];
-            if (studySafety && safety.propertyType == SafetyProperty.BLOCK_STATE) {
-                initialState.property |= safety.getSolverResult(initialState, asme);
-            }
-            cpt++;
-        }
+        
+        initialState.property |= safety.getSolverResult(initialState);
+
         if (studySafety && safety.propertyType == SafetyProperty.BLOCK_STATE) {
                 if (safety.safetyType == SafetyProperty.ALLTRACES_ALLSTATES || safety.safetyType == SafetyProperty.ONETRACE_ALLSTATES) {
                     initialState.property = !initialState.property;
@@ -662,11 +656,12 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         if (ignoreEmptyTransitions) {
             spec.removeEmptyTransitions(!(studyReachability || studyLiveness || studySafety));
         }
-        
-        initExpressionSolvers();
 
         //TraceManager.addDev("Preparing Avatar specification :" + spec.toString());
         prepareStates();
+
+        initExpressionSolvers();
+
         prepareTransitions();
         prepareBlocks();
 
@@ -864,6 +859,13 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 } else if (elt instanceof AvatarActionOnSignal) {
                     ((AvatarActionOnSignal) elt).buildActionSolver(block);
                 }
+            }
+        }
+        
+        //To have all the leadsTo functionalities allStates in stateMachines must be filled with states
+        if (studySafety && safeties != null) {
+            for (SafetyProperty sp : safeties) {
+               sp.linkSolverStates();
             }
         }
     }
@@ -1800,19 +1802,23 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     
     private boolean evaluateSafetyOfProperty(SpecificationState newState, SpecificationTransition tr, boolean precProperty) {
         AvatarStateMachineElement asme;
-        boolean result = false;
+        boolean result;
         
         if (safety.propertyType == SafetyProperty.BLOCK_STATE) {
-            for (int i = 0; i < tr.transitions.length; i++) {
-                int k = 10;
-                asme = tr.transitions[i].getNext(0);
-                while (k > 0) {
-                    result |= safety.getSolverResult(newState, asme);
-                    if (asme instanceof AvatarStateElement || result == true) {
-                        break;
+            result = safety.getSolverResult(newState);
+            
+            if (!result) {
+                for (int i = 0; i < tr.transitions.length; i++) {
+                    int k = 10;
+                    asme = tr.transitions[i].getNext(0);
+                    while (k > 0) {
+                        result |= safety.getSolverResult(newState, asme);
+                        if (asme instanceof AvatarStateElement || result == true) {
+                            break;
+                        }
+                        asme = asme.getNext(0);
+                        k--;
                     }
-                    asme = asme.getNext(0);
-                    k--;
                 }
             }
         } else {
