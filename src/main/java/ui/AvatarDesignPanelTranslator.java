@@ -1710,6 +1710,20 @@ public class AvatarDesignPanelTranslator {
 
         if (afterMinDelayStr != null && afterMaxDelayStr != null) {
             transition.setDelays(afterMinDelayStr, afterMaxDelayStr);
+
+            // Must handle distribution law and extra attributes
+            int law = connector.getEffectiveDelayDistributionLaw();
+            String extraArg = connector.getExtraDelay1();
+
+            error = AvatarSyntaxChecker.isAValidIntExpr(spec, block, extraArg);
+
+            if (error < 0) {
+                makeError(error, connector.tdp, block, connector, "invalid extra attribute 1", extraArg);
+            } else {
+                //TraceManager.addDev("Adding min and max delay AND Distribution law: " + law + " attr=" + extraArg);
+                transition.setDistributionLaw(law, extraArg);
+            }
+
         }
     }
 

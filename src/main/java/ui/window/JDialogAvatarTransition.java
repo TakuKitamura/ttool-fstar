@@ -73,6 +73,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.BadLocationException;
 
+import avatartranslator.AvatarTransition;
 import myutil.GraphicLib;
 import ui.AvatarMethod;
 import ui.Expression;
@@ -89,7 +90,8 @@ public class JDialogAvatarTransition extends JDialogBase implements ActionListen
 
     private Vector<Vector<Expression>> actionRows;
     //private Vector<String> actions;
-    private String guard, afterMin, afterMax, /*computeMin, computeMax,*/ probability;
+    private String guard, afterMin, afterMax, extraDelay1, /*computeMin, computeMax,*/ probability;
+    private int distributionLaw;
     private List<TAttribute> myAttributes;
     private List<AvatarMethod> myMethods;
     private Vector<String> allElements, insertElements;
@@ -104,7 +106,8 @@ public class JDialogAvatarTransition extends JDialogBase implements ActionListen
 //    private JPanel panel2;
 
     // Panel1
-    private JTextField guardT, afterMinT, afterMaxT, /*computeMinT, computeMaxT,*/ probabilityT;
+    private JTextField guardT, afterMinT, afterMaxT, extraDelay1T, /*computeMinT, computeMaxT,*/ probabilityT;
+    private JComboBox<String> distributionLawB;
     
     private JTable actionsTable;
 //    private JTextArea actionsT;
@@ -129,6 +132,8 @@ public class JDialogAvatarTransition extends JDialogBase implements ActionListen
     								String _guard,
     								String _afterMin,
     								String _afterMax,
+								  int _distributionLaw,
+								  String _extraDelay1,
 								  /* String _computeMin, String _computeMax,*/ 
     								Vector<Expression> _actions,
     								List<TAttribute> _myAttributes, 
@@ -142,6 +147,8 @@ public class JDialogAvatarTransition extends JDialogBase implements ActionListen
         guard = _guard;
         afterMin = _afterMin;
         afterMax = _afterMax;
+        extraDelay1 = _extraDelay1;
+        distributionLaw = _distributionLaw;
 //        computeMin = _computeMin;
 //        computeMax = _computeMax;
 
@@ -275,6 +282,22 @@ public class JDialogAvatarTransition extends JDialogBase implements ActionListen
 //    	panel1.add(afterMaxT, c1);
 //    	c1.gridwidth = GridBagConstraints.REMAINDER; //end row
 //    	panel1.add(new JLabel(")"), c1);
+
+        // Distribution law
+        constraintsFields.gridwidth = 1;
+        pnlTransitionInfo.add(new JLabel("Time distribution law:", SwingConstants.RIGHT ), constraintsLabels );
+        distributionLawB = new JComboBox<>(AvatarTransition.DISTRIBUTION_LAWS);
+        distributionLawB.setSelectedIndex(distributionLaw);
+        distributionLawB.addActionListener(this);
+
+        pnlTransitionInfo.add(distributionLawB, constraintsFields );
+        pnlTransitionInfo.add(new JLabel("Attr 1:", SwingConstants.RIGHT ), constraintsLabels );
+        extraDelay1T = new JTextField(extraDelay1, 10);
+        constraintsFields.gridwidth = GridBagConstraints.REMAINDER;;
+        constraintsFields.insets.right = 0;
+        pnlTransitionInfo.add(extraDelay1T, constraintsFields );
+        checkAttributesDistributionLawB();
+
 
     	// Compute
     	/*c1.gridwidth = 1;
@@ -607,8 +630,8 @@ public class JDialogAvatarTransition extends JDialogBase implements ActionListen
             closeDialog();
         } else if (evt.getSource() == cancelButton)  {
             cancelDialog();
-//        } else if (evt.getSource() == insertElement)  {
-//            insertElements();
+        } else if (evt.getSource() == distributionLawB)  {
+            checkAttributesDistributionLawB();
         }
     }
     
@@ -734,6 +757,10 @@ public class JDialogAvatarTransition extends JDialogBase implements ActionListen
         return afterMaxT.getText();
     }
 
+    public String getExtraDelay1() { return extraDelay1T.getText();}
+
+    public int getDistributionLaw() { return distributionLawB.getSelectedIndex();}
+
 //    public String getComputeMin() {
 //        if (computeMinT == null) {
 //        	return "";
@@ -778,4 +805,12 @@ public class JDialogAvatarTransition extends JDialogBase implements ActionListen
 //    public String[] getCodeToInclude() {
 //        return codeToInclude;
 //    }
+
+
+    private void checkAttributesDistributionLawB() {
+        distributionLaw = distributionLawB.getSelectedIndex();
+        int nbOfExtras = AvatarTransition.NB_OF_EXTRA_ATTRIBULTES[distributionLaw];
+        extraDelay1T.setEnabled(nbOfExtras>0);
+    }
+
 }

@@ -1,26 +1,26 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- * 
+ *
  * ludovic.apvrille AT enst.fr
- * 
+ *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- * 
+ *
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- * 
+ *
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- * 
+ *
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -31,18 +31,17 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- * 
+ *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
 
-
-
-
 package avatartranslator.directsimulation;
 
 import avatartranslator.AvatarStateMachineElement;
+import avatartranslator.AvatarTransition;
+import myutil.MyMath;
 import myutil.TraceManager;
 
 import java.awt.*;
@@ -50,13 +49,14 @@ import java.util.Vector;
 
 
 /**
-   * Class AvatarSimulationPendingTransaction
-   * Avatar: notion of pending transaction in simulation
-   * Creation: 11/01/2011
-   * @version 1.0 11/01/2011
-   * @author Ludovic APVRILLE
+ * Class AvatarSimulationPendingTransaction
+ * Avatar: notion of pending transaction in simulation
+ * Creation: 11/01/2011
+ *
+ * @author Ludovic APVRILLE
+ * @version 1.0 11/01/2011
  */
-public class AvatarSimulationPendingTransaction  {
+public class AvatarSimulationPendingTransaction {
 
     public AvatarSimulationBlock asb;
     public AvatarStateMachineElement previouslyExecutedElement;
@@ -74,6 +74,9 @@ public class AvatarSimulationPendingTransaction  {
     public int myMinDelay;
     public int myMaxDelay;
     public boolean hasDelay;
+    public int delayDistributionLaw;
+    public double extraParam1;
+
     // For time already elapsed for that transition
     public boolean hasElapsedTime;
     public int elapsedTime;
@@ -104,7 +107,6 @@ public class AvatarSimulationPendingTransaction  {
     public double probability = 0.5;
 
 
-
     public AvatarSimulationPendingTransaction() {
         hasClock = false;
         hasElapsedTime = false;
@@ -126,6 +128,8 @@ public class AvatarSimulationPendingTransaction  {
         aspt.myMinDelay = this.myMinDelay;
         aspt.myMaxDelay = this.myMaxDelay;
         aspt.hasDelay = this.hasDelay;
+        aspt.delayDistributionLaw = this.delayDistributionLaw;
+        aspt.extraParam1 = this.extraParam1;
         aspt.hasElapsedTime = this.hasElapsedTime;
         aspt.elapsedTime = this.elapsedTime;
         aspt.myMinDuration = this.myMinDuration;
@@ -143,7 +147,7 @@ public class AvatarSimulationPendingTransaction  {
         AvatarSimulationPendingTransaction aspt = cloneMe();
         if (linkedTransactions != null) {
             aspt.linkedTransactions = new Vector<AvatarSimulationPendingTransaction>();
-            for(AvatarSimulationPendingTransaction aspt0: linkedTransactions) {
+            for (AvatarSimulationPendingTransaction aspt0 : linkedTransactions) {
                 aspt.linkedTransactions.add(aspt0);
             }
         }
@@ -168,11 +172,10 @@ public class AvatarSimulationPendingTransaction  {
     }
 
 
-
     public String toString() {
         String res = "in Block " + asb.getName() + ": ";
         if (linkedTransactions != null) {
-            res  = res + "broadcast ";
+            res = res + "broadcast ";
         }
         if (linkedTransaction == null) {
             if (elementToExecute == null) {
@@ -182,9 +185,9 @@ public class AvatarSimulationPendingTransaction  {
             res = res + elementToExecute.getNiceName() + "/ID=" + elementToExecute.getID();
             if (hasClock) {
                 if (myMinDuration == maxDuration) {
-                    res += " [Delay: " +myMinDuration + "]";
+                    res += " [Delay: " + myMinDuration + "]";
                 } else {
-                    res += " [Delay: between " +myMinDuration + " and " + maxDuration + "]";
+                    res += " [Delay: between " + myMinDuration + " and " + maxDuration + "]";
                 }
             }
 
@@ -196,9 +199,9 @@ public class AvatarSimulationPendingTransaction  {
         if (linkedTransactions != null) {
             res += " --to--> [";
             int cpt = 0;
-            for(AvatarSimulationPendingTransaction aspt: linkedTransactions) {
+            for (AvatarSimulationPendingTransaction aspt : linkedTransactions) {
                 if (cpt == 0) {
-                    cpt ++;
+                    cpt++;
                 } else {
                     res += " ";
                 }
@@ -217,7 +220,7 @@ public class AvatarSimulationPendingTransaction  {
             return null;
         }
 
-        for(AvatarSimulationPendingTransaction aspt: linkedTransactions) {
+        for (AvatarSimulationPendingTransaction aspt : linkedTransactions) {
             if (blocks.contains(aspt.asb)) {
                 return new Point(blocks.indexOf(aspt.asb), blocks.size());
             }
@@ -228,31 +231,44 @@ public class AvatarSimulationPendingTransaction  {
     }
 
     public boolean hasBlock(AvatarSimulationBlock _b) {
-	//TraceManager.addDev("HasBlock? _b=" + _b + " tr=" + this);
+        //TraceManager.addDev("HasBlock? _b=" + _b + " tr=" + this);
         if (asb == _b) {
-	    //TraceManager.addDev("True");
+            //TraceManager.addDev("True");
             return true;
         }
 
-	if (linkedTransaction != null) {
-	    if (linkedTransaction.asb == _b) {
-		//TraceManager.addDev("True");
-		return true;
-	    }
-	}
-	
+        if (linkedTransaction != null) {
+            if (linkedTransaction.asb == _b) {
+                //TraceManager.addDev("True");
+                return true;
+            }
+        }
+
         if (linkedTransactions != null) {
-            for(AvatarSimulationPendingTransaction aspt: linkedTransactions) {
+            for (AvatarSimulationPendingTransaction aspt : linkedTransactions) {
                 if (aspt.asb == _b) {
-		    //TraceManager.addDev("True");
+                    //TraceManager.addDev("True");
                     return true;
                 }
             }
         }
 
-	//TraceManager.addDev("False");
+        //TraceManager.addDev("False");
         return false;
 
+    }
+
+    public void makeRandomDelay() {
+        switch (delayDistributionLaw) {
+            case AvatarTransition.DELAY_UNIFORM_LAW:
+                TraceManager.addDev("\n\n\n******* UNIFORM LAW ********");
+                selectedDuration = myMinDuration + (int) (Math.floor(Math.random() * (maxDuration - myMinDuration)));
+                return;
+            case AvatarTransition.DELAY_TRIANGULAR_LAW:
+                TraceManager.addDev("\n\n\n******* TRIANGULAR LAW ********");
+                selectedDuration = (int) (MyMath.triangularDistribution((double) (myMinDuration), (double) (maxDuration), extraParam1));
+                return;
+        }
     }
 
 

@@ -229,6 +229,8 @@ public class AvatarSimulationBlock {
                         aspt.myMinDelay = evaluateIntExpression(trans.getMinDelay(), lastTransaction.attributeValues);
                         aspt.myMaxDelay = evaluateIntExpression(trans.getMaxDelay(), lastTransaction.attributeValues);
                         aspt.hasDelay = true;
+                        aspt.extraParam1 = evaluateIntExpression(trans.getDelayExtra1(), lastTransaction.attributeValues);
+                        aspt.delayDistributionLaw = trans.getDelayDistributionLaw();
                         if (lastTransaction != null) {
                             if (lastTransaction.clockValueWhenFinished < _clockValue) {
                                 aspt.hasElapsedTime = true;
@@ -243,6 +245,8 @@ public class AvatarSimulationBlock {
                         aspt.myMinDelay = evaluateIntExpression(trans.getMinDelay(), lastTransaction.attributeValues);
                         aspt.myMaxDelay = evaluateIntExpression(trans.getMaxDelay(), lastTransaction.attributeValues);
                         aspt.hasDelay = true;
+                        aspt.extraParam1 = evaluateIntExpression(trans.getDelayExtra1(), lastTransaction.attributeValues);
+                        aspt.delayDistributionLaw = trans.getDelayDistributionLaw();
 
                         //TraceManager.addDev(">>>>>   Signal with delay before");
 
@@ -259,11 +263,13 @@ public class AvatarSimulationBlock {
                 if (aspt.hasElapsedTime) {
                     aspt.myMinDelay = aspt.myMinDelay - aspt.elapsedTime;
                     aspt.myMaxDelay = aspt.myMaxDelay - aspt.elapsedTime;
+                    aspt.extraParam1 = aspt.extraParam1 - aspt.elapsedTime;
                 }
 
                 if (aspt.hasDelay) {
                     aspt.myMinDelay = Math.max(0, aspt.myMinDelay);
                     aspt.myMaxDelay = Math.max(0, aspt.myMaxDelay);
+                    aspt.extraParam1 = Math.max(0, aspt.extraParam1);
                 }
 
 
