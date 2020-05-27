@@ -72,7 +72,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     private Map<Integer, SpecificationState> states;
     private Map<Long, SpecificationState> statesByID;
     private List<SpecificationState> pendingStates;
-    private List<SpecificationState> safetyLeadStates;
+    private Map<Integer, SpecificationState> safetyLeadStates;
     private Map<AvatarTransition, Set<AvatarTransition>> signalRelation;
     //private List<SpecificationLink> links;
     private int nbOfLinks;
@@ -414,7 +414,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 safety = sp;
                 if (safety.safetyType == SafetyProperty.LEADS_TO) {
                     // prepare to save second pass states
-                    safetyLeadStates = Collections.synchronizedList(new LinkedList<SpecificationState>());
+                    safetyLeadStates = Collections.synchronizedMap(new HashMap<Integer, SpecificationState>());
                     ignoreEmptyTransitions = false;
                 }
                 startModelChecking(nbOfThreads);
@@ -422,7 +422,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                     // second pass
                     safety.initLead();
                     ignoreEmptyTransitions = emptyTr;
-                    for (SpecificationState state : safetyLeadStates) {
+                    for (SpecificationState state : safetyLeadStates.values()) {
                         deadlocks += nbOfDeadlocks;
                         resetModelChecking();
                         startModelChecking(state, nbOfThreads);
@@ -430,6 +430,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                             break;
                         }
                     }
+                    System.out.println("Dimensions of lead states to elaborate: " + safetyLeadStates.size());
                     safetyLeadStates = null;
                 }
                 safety.setComputed();
@@ -591,7 +592,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         
         int cpt = 0;
         
-        initialState.property |= safety.getSolverResult(initialState);
+        initialState.property = safety.getSolverResult(initialState);
 
         if (studySafety && safety.propertyType == SafetyProperty.BLOCK_STATE) {
                 if (safety.safetyType == SafetyProperty.ALLTRACES_ALLSTATES || safety.safetyType == SafetyProperty.ONETRACE_ALLSTATES) {
@@ -1147,7 +1148,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             newState.computeHash(blockValues);
 
             SpecificationState similar = findSimilarState(newState);
-            if (similar != null || studySafety && safety.safetyType == SafetyProperty.LEADS_TO && newState.property) {
+            if (similar != null) {
                 SpecificationLink link = new SpecificationLink();
                 link.originState = _ss;
                 String action = st.infoForGraph;
@@ -1157,6 +1158,25 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 nbOfLinks++;
                 _ss.addNext(link);
                 actionOnProperty(newState, 0, similar, _ss);
+                break;
+            } else if (studySafety && safety.safetyType == SafetyProperty.LEADS_TO && newState.property) {
+                newState = reduceCombinatorialExplosion(newState);
+                
+                similar = findSimilarState(newState);
+                SpecificationLink link = new SpecificationLink();
+                link.originState = _ss;
+                String action = st.infoForGraph;
+                action += " [" + st.clockMin + "..." + st.clockMax + "]";
+                link.action = action;
+                if (similar != null) {
+                    link.destinationState = similar;
+                } else {
+                    link.destinationState = newState;
+                    addState(newState);
+                    actionOnProperty(newState, 0, similar, _ss);
+                }
+                nbOfLinks++;
+                _ss.addNext(link);
                 break;
             }
 
@@ -1272,6 +1292,77 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         }
 
         mustStop();
+    }
+    
+    
+    private SpecificationState reduceCombinatorialExplosion(SpecificationState ss) {
+        // ss with true property. Find and execute transitions that maintain the property
+        // true
+        SpecificationState prevState = ss;
+        boolean found;
+        
+        do {
+            prepareTransitionsOfState(prevState);
+            ArrayList<SpecificationTransition> transitions = prevState.transitions;
+            if (transitions == null) {
+                return prevState;
+            }
+            ArrayList<SpecificationTransition> newTransitions = new ArrayList<SpecificationTransition>();
+            for (SpecificationTransition tr : transitions) {
+                if (tr.getType() == AvatarTransition.TYPE_SEND_SYNC) {
+                    for (SpecificationTransition tro : transitions) {
+                        if (tro.getType() == AvatarTransition.TYPE_RECV_SYNC) {
+                            SpecificationTransition newT = computeSynchronousTransition(tr, tro);
+                            if (newT != null) newTransitions.add(newT);
+                        }
+                    }
+                } else if (AvatarTransition.isActionType(tr.getType())) {
+                    newTransitions.add(tr);
+                } else if (tr.getType() == AvatarTransition.TYPE_EMPTY) {
+                    newTransitions.add(tr);
+                }
+            }
+            transitions = newTransitions;
+    
+            // Selecting only the transactions within the smallest clock interval
+            int clockMin = Integer.MAX_VALUE, clockMax = Integer.MAX_VALUE;
+            for (SpecificationTransition tr : transitions) {
+                clockMin = Math.min(clockMin, tr.clockMin);
+                clockMax = Math.min(clockMax, tr.clockMax);
+            }
+            newTransitions = new ArrayList<SpecificationTransition>();
+            for (SpecificationTransition tr : transitions) {
+                if (tr.clockMin <= clockMax) {
+                    tr.clockMax = clockMax;
+                    newTransitions.add(tr);
+                }
+            }
+            transitions = newTransitions;
+            found = false;
+            for (SpecificationTransition tr : transitions) {
+                if ((AvatarTransition.isActionType(tr.getType()) && (tr.clockMin == tr.clockMax) && (tr.clockMin == 0))
+                        || tr.getType() == AvatarTransition.TYPE_EMPTY) {
+                    if (!(tr.fromStateWithMoreThanOneTransition)) {
+                        // try this transition
+                        SpecificationState newState = prevState.advancedClone();
+                        executeTransition(prevState, newState, tr);
+                        newState.property = evaluateSafetyOfProperty(newState, tr, false);
+                        if (newState.property) {
+                            newState.computeHash(blockValues);
+                            SpecificationState similar = findSimilarState(newState);
+                            if (similar != null) {
+                                return newState;
+                            }
+                            found = true;
+                            prevState = newState;
+                            break;
+                        }
+                    }
+                }
+            }
+        } while (found);
+        
+        return prevState;
     }
 
     private boolean guardResult(AvatarTransition _at, AvatarBlock _block, SpecificationBlock _sb) {
@@ -1894,7 +1985,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 if (similar == null) {
                     if (newState.property) {
                         SpecificationState state = newState.advancedClone();
-                        safetyLeadStates.add(state);
+                        if (!ignoreConcurrenceBetweenInternalActions) {
+                            state = reduceCombinatorialExplosion(state);
+                        }
+                        safetyLeadStates.put(state.getHash(state.getBlockValues()), state);
                         newState.property = false;
                     }
                     pendingStates.add(newState);
