@@ -56,7 +56,6 @@ public class SpecificationTransition  {
     public int clockMin, clockMax;
     public boolean fromStateWithMoreThanOneTransition;
     public AvatarTransition[] transitions;
-    public String infoForGraph;
 
 
     public SpecificationTransition() {

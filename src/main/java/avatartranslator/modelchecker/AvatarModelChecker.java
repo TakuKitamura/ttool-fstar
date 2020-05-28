@@ -993,18 +993,16 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
             // Impact the variable of the state, either by executing actions, or by
             // doing the synchronization
-            executeTransition(_ss, newState, tr);
-            String action = tr.infoForGraph;
+            String action = executeTransition(_ss, newState, tr);
             
             if (studySafety) {
                 newState.property = evaluateSafetyOfProperty(newState, tr, _ss.property);
             }
 
-//            // Remove empty transitions if applicable
+            // Remove empty transitions if applicable
             if (ignoreEmptyTransitions) {
                 handleNonEmptyUniqueTransition(newState);
             }
-//            prepareTransitionsOfState(newState);
             
 
             // Compute the hash of the new state, and create the link to the right next state
@@ -1092,7 +1090,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         while (st != null) {
             //TraceManager.addDev("cpt=" + cpt + " Working on transition:" + st);
             newState.increaseClockOfBlocksExcept(st);
-            executeTransition(previousState, newState, st);
+            String action = executeTransition(previousState, newState, st);
             
             if (studySafety) {
                 newState.property = evaluateSafetyOfProperty(newState, st, previousState.property);
@@ -1109,7 +1107,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             if (similar != null) {
                 SpecificationLink link = new SpecificationLink();
                 link.originState = _ss;
-                String action = st.infoForGraph;
                 action += " [" + st.clockMin + "..." + st.clockMax + "]";
                 link.action = action;
                 link.destinationState = similar;
@@ -1123,7 +1120,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 similar = findSimilarState(newState);
                 SpecificationLink link = new SpecificationLink();
                 link.originState = _ss;
-                String action = st.infoForGraph;
                 action += " [" + st.clockMin + "..." + st.clockMax + "]";
                 link.action = action;
                 if (similar != null) {
@@ -1173,7 +1169,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 //Creating new link
                 SpecificationLink link = new SpecificationLink();
                 link.originState = _ss;
-                String action = "internal";
                 action += " [" +  "0...0" +  "]";
                 link.action = action;
                 synchronized (this) {
@@ -1583,7 +1578,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     }
 
 
-    private void executeTransition(SpecificationState _previousState, SpecificationState _newState, SpecificationTransition _st) {
+    private String executeTransition(SpecificationState _previousState, SpecificationState _newState, SpecificationTransition _st) {
         int type = _st.transitions[0].type;
         AvatarStateElement ase;
 
@@ -1602,14 +1597,12 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
 
         if ((AvatarTransition.isActionType(type)) || (type == AvatarTransition.TYPE_EMPTY)) {
-            _st.infoForGraph = executeActionTransition(_previousState, _newState, _st);
-            return;
+            return executeActionTransition(_previousState, _newState, _st);
         } else if (type == AvatarTransition.TYPE_SEND_SYNC) {
-            _st.infoForGraph = executeSyncTransition(_previousState, _newState, _st);
-            return;
+            return executeSyncTransition(_previousState, _newState, _st);
         }
 
-        _st.infoForGraph = "not implemented";
+        return "not implemented";
     }
 
     private AvatarStateElement getNextState(AvatarStateMachineElement e, SpecificationState _newState, int maxNbOfIterations) {
@@ -1731,7 +1724,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 //            try {
                 result = aaoss.getExpressionAttribute(i).getValue(_newState.blocks[((AvatarBlock) _st.transitions[0].getBlock()).getBlockIndex()]);
                 aaosr.getExpressionAttribute(i).setValue(_newState.blocks[((AvatarBlock) _st.transitions[1].getBlock()).getBlockIndex()], result);
-                ret += "" + result;
+                ret += result;
 //            } catch (Exception e) {
 //                TraceManager.addDev("EXCEPTION on adding value " + aaoss);
 //            }
