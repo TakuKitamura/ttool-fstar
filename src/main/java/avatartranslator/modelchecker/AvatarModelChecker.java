@@ -804,7 +804,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     private synchronized SpecificationState pickupState() {
         int size = pendingStates.size();
         while (size == 0) {
-            if (nbOfCurrentComputations == 0) {
+            if (nbOfCurrentComputations <= 0) {
                 return null;
             } else {
                 try {
@@ -908,8 +908,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         
         prepareTransitionsOfState(_ss);
 
-        ArrayList<SpecificationTransition> transitions = _ss.transitions;
-        if (transitions == null) {
+        
+        if (_ss.transitions == null) {
             TraceManager.addDev("null transitions");
             nbOfDeadlocks++;
             mustStop();
@@ -917,50 +917,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         }
 
         //TraceManager.addDev("Possible transitions 1:" + transitions.size());
-
-        // All locally executable transitions are now gathered.
-        // We simply need to select the ones that are executable
-        // Two constraints: synchronous transactions must have a counter part
-        // then, we select only the transitions which clock intervals are within the lowest clock interval
-
-        // Reworking sync/non sync. We create one new transition for all possible synchros, and we remove the ones
-        // with only one synchro
-        ArrayList<SpecificationTransition> newTransitions = new ArrayList<SpecificationTransition>();
-        for (SpecificationTransition tr : transitions) {
-            if (tr.getType() == AvatarTransition.TYPE_SEND_SYNC) {
-                for (SpecificationTransition tro : transitions) {
-                    if (tro.getType() == AvatarTransition.TYPE_RECV_SYNC) {
-                        SpecificationTransition newT = computeSynchronousTransition(tr, tro);
-                        if (newT != null) newTransitions.add(newT);
-                    }
-                }
-            } else if (AvatarTransition.isActionType(tr.getType())) {
-                newTransitions.add(tr);
-            } else if (tr.getType() == AvatarTransition.TYPE_EMPTY) {
-                newTransitions.add(tr);
-            }
-        }
-        transitions = newTransitions;
-        //TraceManager.addDev("Possible transitions 2:" + transitions.size());
-
-
-        // Selecting only the transactions within the smallest clock interval
-        int clockMin = Integer.MAX_VALUE, clockMax = Integer.MAX_VALUE;
-        for (SpecificationTransition tr : transitions) {
-            clockMin = Math.min(clockMin, tr.clockMin);
-            clockMax = Math.min(clockMax, tr.clockMax);
-        }
-
-        //TraceManager.addDev("Selected clock interval:" + clockMin + "," + clockMax);
-
-        newTransitions = new ArrayList<SpecificationTransition>();
-        for (SpecificationTransition tr : transitions) {
-            if (tr.clockMin <= clockMax) {
-                tr.clockMax = clockMax;
-                newTransitions.add(tr);
-            }
-        }
-        transitions = newTransitions;
+        ArrayList<SpecificationTransition> transitions = computeValidTransitions(_ss.transitions);
+        
         //TraceManager.addDev("Possible transitions 3:" + transitions.size());
 
         if (ignoreConcurrenceBetweenInternalActions) {
@@ -1052,7 +1010,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             // Compute the hash of the new state, and create the link to the right next state
             SpecificationLink link = new SpecificationLink();
             link.originState = _ss;
-            action += " [" + tr.clockMin + "..." + clockMax + "]";
+            action += " [" + tr.clockMin + "..." + tr.clockMax + "]";
             link.action = action;
             newState.computeHash(blockValues);
             //SpecificationState similar = states.get(newState.getHash(blockValues));
@@ -1160,7 +1118,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 actionOnProperty(newState, 0, similar, _ss);
                 break;
             } else if (studySafety && safety.safetyType == SafetyProperty.LEADS_TO && newState.property) {
-                newState = reduceCombinatorialExplosion(newState);
+                newState = reduceCombinatorialExplosionProperty(newState);
                 
                 similar = findSimilarState(newState);
                 SpecificationLink link = new SpecificationLink();
@@ -1184,45 +1142,17 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             // Compute next transition
             //prepareTransitionsOfState(previousState);
             prepareTransitionsOfState(newState);
-            ArrayList<SpecificationTransition> transitions = newState.transitions;
-            if (transitions == null) {
+            
+            if (newState.transitions == null) {
                 TraceManager.addDev("null transitions");
                 nbOfDeadlocks++;
                 propertyDone = deadlockStop; //use this flag to stop the execution
                 mustStop();
                 return;
             }
-            ArrayList<SpecificationTransition> newTransitions = new ArrayList<SpecificationTransition>();
-            for (SpecificationTransition tr : transitions) {
-                if (tr.getType() == AvatarTransition.TYPE_SEND_SYNC) {
-                    for (SpecificationTransition tro : transitions) {
-                        if (tro.getType() == AvatarTransition.TYPE_RECV_SYNC) {
-                            SpecificationTransition newT = computeSynchronousTransition(tr, tro);
-                            if (newT != null) newTransitions.add(newT);
-                        }
-                    }
-                } else if (AvatarTransition.isActionType(tr.getType())) {
-                    newTransitions.add(tr);
-                } else if (tr.getType() == AvatarTransition.TYPE_EMPTY) {
-                    newTransitions.add(tr);
-                }
-            }
-            transitions = newTransitions;
-
-            // Selecting only the transactions within the smallest clock interval
-            int clockMin = Integer.MAX_VALUE, clockMax = Integer.MAX_VALUE;
-            for (SpecificationTransition tr : transitions) {
-                clockMin = Math.min(clockMin, tr.clockMin);
-                clockMax = Math.min(clockMax, tr.clockMax);
-            }
-            newTransitions = new ArrayList<SpecificationTransition>();
-            for (SpecificationTransition tr : transitions) {
-                if (tr.clockMin <= clockMax) {
-                    tr.clockMax = clockMax;
-                    newTransitions.add(tr);
-                }
-            }
-            transitions = newTransitions;
+            
+            ArrayList<SpecificationTransition> transitions = computeValidTransitions(newState.transitions);
+            
             st = null;
             if (ignoreConcurrenceBetweenInternalActions) {
 
@@ -1295,7 +1225,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     }
     
     
-    private SpecificationState reduceCombinatorialExplosion(SpecificationState ss) {
+    private SpecificationState reduceCombinatorialExplosionProperty(SpecificationState ss) {
         // ss with true property. Find and execute transitions that maintain the property
         // true
         SpecificationState prevState = ss;
@@ -1303,41 +1233,13 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         
         do {
             prepareTransitionsOfState(prevState);
-            ArrayList<SpecificationTransition> transitions = prevState.transitions;
-            if (transitions == null) {
+            
+            if (prevState.transitions == null) {
                 return prevState;
             }
-            ArrayList<SpecificationTransition> newTransitions = new ArrayList<SpecificationTransition>();
-            for (SpecificationTransition tr : transitions) {
-                if (tr.getType() == AvatarTransition.TYPE_SEND_SYNC) {
-                    for (SpecificationTransition tro : transitions) {
-                        if (tro.getType() == AvatarTransition.TYPE_RECV_SYNC) {
-                            SpecificationTransition newT = computeSynchronousTransition(tr, tro);
-                            if (newT != null) newTransitions.add(newT);
-                        }
-                    }
-                } else if (AvatarTransition.isActionType(tr.getType())) {
-                    newTransitions.add(tr);
-                } else if (tr.getType() == AvatarTransition.TYPE_EMPTY) {
-                    newTransitions.add(tr);
-                }
-            }
-            transitions = newTransitions;
-    
-            // Selecting only the transactions within the smallest clock interval
-            int clockMin = Integer.MAX_VALUE, clockMax = Integer.MAX_VALUE;
-            for (SpecificationTransition tr : transitions) {
-                clockMin = Math.min(clockMin, tr.clockMin);
-                clockMax = Math.min(clockMax, tr.clockMax);
-            }
-            newTransitions = new ArrayList<SpecificationTransition>();
-            for (SpecificationTransition tr : transitions) {
-                if (tr.clockMin <= clockMax) {
-                    tr.clockMax = clockMax;
-                    newTransitions.add(tr);
-                }
-            }
-            transitions = newTransitions;
+            
+            ArrayList<SpecificationTransition> transitions = computeValidTransitions(prevState.transitions);
+            
             found = false;
             for (SpecificationTransition tr : transitions) {
                 if ((AvatarTransition.isActionType(tr.getType()) && (tr.clockMin == tr.clockMax) && (tr.clockMin == 0))
@@ -1363,6 +1265,48 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         } while (found);
         
         return prevState;
+    }
+    
+    private ArrayList<SpecificationTransition> computeValidTransitions(ArrayList<SpecificationTransition> transitions) {
+        ArrayList<SpecificationTransition> newTransitions = new ArrayList<SpecificationTransition>();
+        ArrayList<SpecificationTransition> validTransitions = new ArrayList<SpecificationTransition>();
+
+        // All locally executable transitions are now gathered.
+        // We simply need to select the ones that are executable
+        // Two constraints: synchronous transactions must have a counter part
+        // then, we select only the transitions which clock intervals are within the lowest clock interval
+
+        // Reworking sync/non sync. We create one new transition for all possible synchros, and we remove the ones
+        // with only one synchro
+        for (SpecificationTransition tr : transitions) {
+            if (tr.getType() == AvatarTransition.TYPE_SEND_SYNC) {
+                for (SpecificationTransition tro : transitions) {
+                    if (tro.getType() == AvatarTransition.TYPE_RECV_SYNC) {
+                        SpecificationTransition newT = computeSynchronousTransition(tr, tro);
+                        if (newT != null) newTransitions.add(newT);
+                    }
+                }
+            } else if (AvatarTransition.isActionType(tr.getType())) {
+                newTransitions.add(tr);
+            } else if (tr.getType() == AvatarTransition.TYPE_EMPTY) {
+                newTransitions.add(tr);
+            }
+        }
+
+        // Selecting only the transactions within the smallest clock interval
+        int clockMin = Integer.MAX_VALUE, clockMax = Integer.MAX_VALUE;
+        for (SpecificationTransition tr : newTransitions) {
+            clockMin = Math.min(clockMin, tr.clockMin);
+            clockMax = Math.min(clockMax, tr.clockMax);
+        }
+        
+        for (SpecificationTransition tr : newTransitions) {
+            if (tr.clockMin <= clockMax) {
+                tr.clockMax = clockMax;
+                validTransitions.add(tr);
+            }
+        }
+        return validTransitions;
     }
 
     private boolean guardResult(AvatarTransition _at, AvatarBlock _block, SpecificationBlock _sb) {
@@ -1986,7 +1930,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                     if (newState.property) {
                         SpecificationState state = newState.advancedClone();
                         if (!ignoreConcurrenceBetweenInternalActions) {
-                            state = reduceCombinatorialExplosion(state);
+                            state = reduceCombinatorialExplosionProperty(state);
                         }
                         safetyLeadStates.put(state.getHash(state.getBlockValues()), state);
                         newState.property = false;

@@ -596,7 +596,8 @@ public class Action extends Command {
                     + "-q \"QUERY\"\tquery a safety pragma\n"
                     + "-d\tno deadlocks verification\n"
                     + "-n NUM\tmaximum states created (Only for a non verification study)\n"
-                    + "-t NUM\tmaximum time (ms) (Only for a non verification study)\n";
+                    + "-t NUM\tmaximum time (ms) (Only for a non verification study)\n"
+                    + "-c\tconsider full concurrency between actions";
             }
 
             public String getExample() {
@@ -724,6 +725,9 @@ public class Action extends Command {
                             amc.setTimeLimitValue(time);
                             amc.setTimeLimit(true);
                             break;
+                        case "-c":
+                            //concurrency
+                            amc.setIgnoreConcurrenceBetweenInternalActions(false);
                         default:
                             return Interpreter.BAD;
                     }
