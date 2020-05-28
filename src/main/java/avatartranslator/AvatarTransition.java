@@ -56,10 +56,12 @@ public class AvatarTransition extends AvatarStateMachineElement {
     // Delay distribution laws
     public final static int DELAY_UNIFORM_LAW = 0;
     public final static int DELAY_TRIANGULAR_LAW = 1;
-    public final static String[] DISTRIBUTION_LAWS = {"Uniform", "Triangular"};
-    public final static String[] DISTRIBUTION_LAWS_SHORT = {"", " ^"};
+    public final static int DELAY_GAUSSIAN_LAW = 2;
+    public final static String[] DISTRIBUTION_LAWS = {"Uniform", "Triangular", "Gaussian"};
+    public final static String[] DISTRIBUTION_LAWS_SHORT = {"", " ^", "ĝ"};
 
-    public final static int[] NB_OF_EXTRA_ATTRIBULTES = {0, 1};
+    public final static int[] NB_OF_EXTRA_ATTRIBULTES = {0, 1, 1};
+    public final static String[] LABELS_OF_EXTRA_ATTRIBULTES = {"", "triangle top", "standard deviation"};
 
     // Type management: to be used by code generators
     public static final int UNDEFINED = -1;

@@ -261,12 +261,16 @@ public class AvatarSimulationPendingTransaction {
     public void makeRandomDelay() {
         switch (delayDistributionLaw) {
             case AvatarTransition.DELAY_UNIFORM_LAW:
-                TraceManager.addDev("\n\n\n******* UNIFORM LAW ********");
+                //TraceManager.addDev("\n\n\n******* UNIFORM LAW ********");
                 selectedDuration = myMinDuration + (int) (Math.floor(Math.random() * (maxDuration - myMinDuration)));
                 return;
             case AvatarTransition.DELAY_TRIANGULAR_LAW:
-                TraceManager.addDev("\n\n\n******* TRIANGULAR LAW ********");
+                //TraceManager.addDev("\n\n\n******* TRIANGULAR LAW ********");
                 selectedDuration = (int) (MyMath.triangularDistribution((double) (myMinDuration), (double) (maxDuration), extraParam1));
+                return;
+            case AvatarTransition.DELAY_GAUSSIAN_LAW:
+                //TraceManager.addDev("\n\n\n******* GAUSSIAN LAW ********");
+                selectedDuration = (int)(Math.floor(MyMath.gaussianDistribution((double) (myMinDuration), (double) (maxDuration), extraParam1)));
                 return;
         }
     }

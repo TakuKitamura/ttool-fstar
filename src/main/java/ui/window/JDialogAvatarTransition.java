@@ -107,6 +107,7 @@ public class JDialogAvatarTransition extends JDialogBase implements ActionListen
 
     // Panel1
     private JTextField guardT, afterMinT, afterMaxT, extraDelay1T, /*computeMinT, computeMaxT,*/ probabilityT;
+    private JLabel extraDelay1L;
     private JComboBox<String> distributionLawB;
     
     private JTable actionsTable;
@@ -291,7 +292,8 @@ public class JDialogAvatarTransition extends JDialogBase implements ActionListen
         distributionLawB.addActionListener(this);
 
         pnlTransitionInfo.add(distributionLawB, constraintsFields );
-        pnlTransitionInfo.add(new JLabel("Attr 1:", SwingConstants.RIGHT ), constraintsLabels );
+        extraDelay1L = new JLabel("Attr 1:", SwingConstants.RIGHT);
+        pnlTransitionInfo.add(extraDelay1L, constraintsLabels );
         extraDelay1T = new JTextField(extraDelay1, 10);
         constraintsFields.gridwidth = GridBagConstraints.REMAINDER;;
         constraintsFields.insets.right = 0;
@@ -811,6 +813,7 @@ public class JDialogAvatarTransition extends JDialogBase implements ActionListen
         distributionLaw = distributionLawB.getSelectedIndex();
         int nbOfExtras = AvatarTransition.NB_OF_EXTRA_ATTRIBULTES[distributionLaw];
         extraDelay1T.setEnabled(nbOfExtras>0);
+        extraDelay1L.setText(AvatarTransition.LABELS_OF_EXTRA_ATTRIBULTES[distributionLaw] + ":");
     }
 
 }
