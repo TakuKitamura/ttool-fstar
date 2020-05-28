@@ -42,8 +42,6 @@ import myutil.TraceManager;
 
 import java.util.*;
 
-import org.apache.commons.math3.analysis.function.Add;
-
 /**
  * Class AvatarStateMachine
  * State machine, with composite states
@@ -229,7 +227,6 @@ public class AvatarStateMachine extends AvatarElement {
     }
     
     private void addStateAfterActionOnSignal(AvatarBlock _block) {
-        AvatarStateMachineElement next;
         List<AvatarStateMachineElement> toAdd = new ArrayList<AvatarStateMachineElement>();
         int id = 0;
         

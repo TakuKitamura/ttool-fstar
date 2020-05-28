@@ -44,7 +44,6 @@ import myutil.BoolExpressionEvaluator;
 import myutil.Conversion;
 import myutil.IntExpressionEvaluator;
 import myutil.TraceManager;
-import rationals.properties.isEmpty;
 
 import java.util.*;
 
@@ -589,9 +588,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         if (mustStop()) {
             return;
         }
-        
-        int cpt = 0;
-        
+                
         initialState.property = safety.getSolverResult(initialState);
 
         if (studySafety && safety.propertyType == SafetyProperty.BLOCK_STATE) {
