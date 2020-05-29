@@ -40,10 +40,7 @@
 package avatartranslator.directsimulation;
 
 import avatartranslator.*;
-import myutil.BoolExpressionEvaluator;
-import myutil.Conversion;
-import myutil.IntExpressionEvaluator;
-import myutil.TraceManager;
+import myutil.*;
 
 import java.util.Vector;
 
@@ -398,12 +395,15 @@ public class AvatarSimulationBlock {
                     int valMin = evaluateIntExpression(random.getMinValue(), attributeValues);
                     int valMax = evaluateIntExpression(random.getMaxValue(), attributeValues);
 
+                    double extra1 = Double.parseDouble(random.getExtraAttribute1());
+
                     if ((forcedRandom > -1) && (forcedRandom >= valMin) && (forcedRandom <= valMax)) {
                         // Use provided value as random value
                         valMin = forcedRandom;
                     } else {
-                        // randomnly select a value
-                        valMin = (int) (Math.floor((Math.random()) * (valMax - valMin + 1))) + valMin;
+                        // randomly select a value according to distribution law
+
+                        valMin = makeRandom(valMin, valMax, random.getFunctionId(), extra1);
                     }
                     attributeValues.remove(index);
                     attributeValues.add(index, "" + valMin);
@@ -720,5 +720,21 @@ public class AvatarSimulationBlock {
 
         //TraceManager.addDev("Result of " + _expr + " = " + result);
         return result;
+    }
+
+    public int makeRandom(int minV, int maxV, int functionID, double extra1) {
+        switch (functionID) {
+            case AvatarRandom.RANDOM_UNIFORM_LAW:
+                //TraceManager.addDev("\n\n\n******* UNIFORM LAW ********");
+                return (int) (Math.floor((Math.random()) * (maxV - minV + 1))) + minV;
+            case AvatarRandom.RANDOM_TRIANGULAR_LAW:
+                //TraceManager.addDev("\n\n\n******* TRIANGULAR LAW ********");
+                return (int) (MyMath.triangularDistribution((double) (minV), (double) (maxV), extra1));
+            case AvatarTransition.DELAY_GAUSSIAN_LAW:
+                //TraceManager.addDev("\n\n\n******* GAUSSIAN LAW ********");
+                return (int)(Math.floor(MyMath.gaussianDistribution((double) (minV), (double) (maxV), extra1)));
+
+        }
+        return minV;
     }
 }

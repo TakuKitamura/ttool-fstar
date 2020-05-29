@@ -38,6 +38,7 @@
 
 package ui.avatarsmd;
 
+import avatartranslator.AvatarRandom;
 import myutil.GraphicLib;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -66,6 +67,7 @@ public class AvatarSMDRandom extends  AvatarSMDBasicCanBeDisabledComponent /* Is
     protected String variable;
     protected String minValue;
     protected String maxValue;
+    protected String extraAtrribute1;
     protected int functionId;
 
     protected int stateOfError = 0; // Not yet checked
@@ -98,7 +100,8 @@ public class AvatarSMDRandom extends  AvatarSMDBasicCanBeDisabledComponent /* Is
     }
 
     private void makeValue() {
-        valueRandom = variable + " = RANDOM" + functionId + "[" + minValue + ", " + maxValue + "]";
+        valueRandom = variable + " = RANDOM" + functionId + "[" + minValue + ", " + maxValue + "] "
+                + AvatarRandom.DISTRIBUTION_LAWS_SHORT[functionId].trim();
     }
 
 	public void setVariable(String v){
@@ -157,7 +160,8 @@ public class AvatarSMDRandom extends  AvatarSMDBasicCanBeDisabledComponent /* Is
         //int tmp;
         String tmpName;
 
-        JDialogTMLADRandom dialog = new JDialogTMLADRandom(frame, "Setting RANDOM attributes", getVariable(), getMinValue(), getMaxValue(), getFunctionId());
+        JDialogTMLADRandom dialog = new JDialogTMLADRandom(frame, "Setting RANDOM attributes",
+                getVariable(), getMinValue(), getMaxValue(), getFunctionId(), getExtraAttribute1());
         //dialog.setSize(500, 450);
         GraphicLib.centerOnParent(dialog, 500, 450);
         dialog.setVisible( true ); // blocked until dialog has been closed
@@ -192,6 +196,8 @@ public class AvatarSMDRandom extends  AvatarSMDBasicCanBeDisabledComponent /* Is
         }
 
         functionId = dialog.getFunctionId();
+
+        extraAtrribute1 = dialog.getExtraAttribute1();
 
         if (error) {
             JOptionPane.showMessageDialog(frame,
@@ -239,6 +245,10 @@ public class AvatarSMDRandom extends  AvatarSMDBasicCanBeDisabledComponent /* Is
         return functionId;
     }
 
+    public String getExtraAttribute1() {
+        return extraAtrribute1;
+    }
+
 	@Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
@@ -250,6 +260,8 @@ public class AvatarSMDRandom extends  AvatarSMDBasicCanBeDisabledComponent /* Is
         sb.append(getMaxValue());
         sb.append("\" functionId=\"");
         sb.append(getFunctionId());
+        sb.append("\" extraAttribute1=\"");
+        sb.append(getExtraAttribute1());
         sb.append("\" />\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -278,6 +290,10 @@ public class AvatarSMDRandom extends  AvatarSMDBasicCanBeDisabledComponent /* Is
                                 variable = elt.getAttribute("variable");
                                 minValue = elt.getAttribute("minValue");
                                 maxValue = elt.getAttribute("maxValue");
+                                extraAtrribute1 = elt.getAttribute("extraAttribute1");
+                                if (extraAtrribute1 == null) {
+                                    extraAtrribute1 = "";
+                                }
                                 s = elt.getAttribute("functionId");
                                 if (s != null) {
                                     try {

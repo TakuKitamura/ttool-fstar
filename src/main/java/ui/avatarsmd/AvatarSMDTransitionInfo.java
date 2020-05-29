@@ -68,7 +68,6 @@ import ui.TGState;
 import ui.WithAttributes;
 import ui.util.IconManager;
 import ui.window.JDialogAvatarTransition;
-import myutil.TraceManager;
 
 /**
  * Class AvatarSMDTransitionInfo
@@ -532,7 +531,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
         delayDistributionLaw.setText( "" + jdat.getDistributionLaw() );
 
 
-        if (AvatarTransition.NB_OF_EXTRA_ATTRIBULTES[jdat.getDistributionLaw()] > 0 ) {
+        if (AvatarTransition.NB_OF_EXTRA_ATTRIBUTES[jdat.getDistributionLaw()] > 0 ) {
             if (extraDelay1.getText().length() == 0) {
                 extraDelay1.setText(afterDelay.getMinExpression().getText());
             }

@@ -60,8 +60,8 @@ public class AvatarTransition extends AvatarStateMachineElement {
     public final static String[] DISTRIBUTION_LAWS = {"Uniform", "Triangular", "Gaussian"};
     public final static String[] DISTRIBUTION_LAWS_SHORT = {"", " ^", "ĝ"};
 
-    public final static int[] NB_OF_EXTRA_ATTRIBULTES = {0, 1, 1};
-    public final static String[] LABELS_OF_EXTRA_ATTRIBULTES = {"", "triangle top", "standard deviation"};
+    public final static int[] NB_OF_EXTRA_ATTRIBUTES = {0, 1, 1};
+    public final static String[] LABELS_OF_EXTRA_ATTRIBUTES = {"", "triangle top", "standard deviation"};
 
     // Type management: to be used by code generators
     public static final int UNDEFINED = -1;

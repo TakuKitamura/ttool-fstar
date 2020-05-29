@@ -51,7 +51,18 @@ public class AvatarRandom extends AvatarStateMachineElement {
     protected String variable;
     protected String minValue;
     protected String maxValue;
+
+
+    public final static int RANDOM_UNIFORM_LAW = 0;
+    public final static int RANDOM_TRIANGULAR_LAW = 1;
+    public final static int RANDOM_GAUSSIAN_LAW = 2;
+    public final static String[] DISTRIBUTION_LAWS = {"Uniform", "Triangular", "Gaussian"};
+    public final static String[] DISTRIBUTION_LAWS_SHORT = {"", " ^", "ĝ"};
+
+    public final static int[] NB_OF_EXTRA_ATTRIBUTES = {0, 1, 1};
+    public final static String[] LABELS_OF_EXTRA_ATTRIBUTES = {"", "triangle top", "standard deviation"};
     protected int functionId;
+    protected String extraAttribute1;
 
     public AvatarRandom(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
@@ -73,6 +84,10 @@ public class AvatarRandom extends AvatarStateMachineElement {
         return functionId;
     }
 
+    public String getExtraAttribute1() {
+        return extraAttribute1;
+    }
+
     public void setVariable(String _variable) {
         variable = _variable;
     }
@@ -84,6 +99,10 @@ public class AvatarRandom extends AvatarStateMachineElement {
 
     public void setFunctionId(int _functionId) {
         functionId = _functionId;
+    }
+
+    public void setExtraAttribute1(String _extraAttribute1) {
+        extraAttribute1 = _extraAttribute1;
     }
 
     public String getNiceName() {
@@ -100,6 +119,7 @@ public class AvatarRandom extends AvatarStateMachineElement {
 	 ar.setVariable(variable);
 	 ar.setValues(minValue, maxValue);
 	 ar.setFunctionId(functionId);
+	 ar.setExtraAttribute1(extraAttribute1);
 
         return ar;
     }

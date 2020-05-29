@@ -561,19 +561,31 @@ public class JDialogAvatarTransition extends JDialogBase implements ActionListen
     	jtp.add( "General", pnlTransitionInfo );
     	//jtp.add("Prototyping", panel2);
     	//c.add(jtp, c0);
-    	c.add(jtp, BorderLayout.CENTER);
+
+
+        GridBagLayout gridbag0 = new GridBagLayout();
+        GridBagConstraints c0 = new GridBagConstraints();
+        c.setLayout(gridbag0);
+        c0.gridwidth = 1;
+        c0.gridheight = 10;
+        c0.weighty = 1.0;
+        c0.weightx = 1.0;
+        c0.gridwidth = GridBagConstraints.REMAINDER; //end row
+        c0.fill = GridBagConstraints.BOTH;
+        c.add(jtp, c0);
+    	//c.add(jtp, BorderLayout.CENTER);
 
     	JPanel buttons = new JPanel();
     	buttons.setLayout( new GridBagLayout() );
 
-    	final GridBagConstraints c0 = new GridBagConstraints();
-    	c0.gridwidth = 1;
-    	c0.gridheight = 1;
-    	c0.fill = GridBagConstraints.HORIZONTAL;
+    	final GridBagConstraints g00 = new GridBagConstraints();
+    	g00.gridwidth = 1;
+    	g00.gridheight = 1;
+    	g00.fill = GridBagConstraints.HORIZONTAL;
     	
-    	initButtons(c0, buttons, this);
+    	initButtons(g00, buttons, this);
 
-    	c.add(buttons, BorderLayout.SOUTH);
+    	c.add(buttons, c0);
     }
 	
 	private void downAction() {
@@ -811,9 +823,9 @@ public class JDialogAvatarTransition extends JDialogBase implements ActionListen
 
     private void checkAttributesDistributionLawB() {
         distributionLaw = distributionLawB.getSelectedIndex();
-        int nbOfExtras = AvatarTransition.NB_OF_EXTRA_ATTRIBULTES[distributionLaw];
+        int nbOfExtras = AvatarTransition.NB_OF_EXTRA_ATTRIBUTES[distributionLaw];
         extraDelay1T.setEnabled(nbOfExtras>0);
-        extraDelay1L.setText(AvatarTransition.LABELS_OF_EXTRA_ATTRIBULTES[distributionLaw] + ":");
+        extraDelay1L.setText(AvatarTransition.LABELS_OF_EXTRA_ATTRIBUTES[distributionLaw] + ":");
     }
 
 }
