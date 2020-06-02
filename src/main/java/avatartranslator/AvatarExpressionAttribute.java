@@ -78,6 +78,8 @@ public class AvatarExpressionAttribute {
         isState = true;
         state = asme;
         error = false;
+        accessIndex = -1;
+        block = null;
     }
 
     
@@ -101,7 +103,7 @@ public class AvatarExpressionAttribute {
         
         block = spec.getBlockWithName(blockString);
         
-        if (blockIndex == -1) {
+        if (block == null) {
             return false;
         }
         
@@ -116,8 +118,10 @@ public class AvatarExpressionAttribute {
                 return false;
             }
             isState = true;
+            accessIndex = block.getStateMachine().getIndexOfState((AvatarStateElement) state);
+        } else {
+            accessIndex = attributeIndex + SpecificationBlock.ATTR_INDEX;
         }
-        accessIndex = attributeIndex + SpecificationBlock.ATTR_INDEX;
         return true;
     }
     
@@ -139,9 +143,10 @@ public class AvatarExpressionAttribute {
                 return false;
             }
             isState = true;
+            accessIndex = block.getStateMachine().getIndexOfState((AvatarStateElement) state);
+        } else {
+            accessIndex = attributeIndex + SpecificationBlock.ATTR_INDEX;
         }
-        
-        accessIndex = attributeIndex + SpecificationBlock.ATTR_INDEX;
         return true;
     }
     
@@ -153,7 +158,14 @@ public class AvatarExpressionAttribute {
         int value;
         
         if (isState) {
-            return 0;
+            if (ss.blocks == null || accessIndex == -1) {
+                return 0;
+            }
+            if (ss.blocks[blockIndex].values[SpecificationBlock.STATE_INDEX] == accessIndex) {
+                return 1;
+            } else {
+                return 0;
+            }
         }
         
         value = ss.blocks[blockIndex].values[accessIndex];
@@ -177,7 +189,14 @@ public class AvatarExpressionAttribute {
         int value;
         
         if (isState) {
-            return 0;
+            if (sb == null || accessIndex == -1) {
+                return 0;
+            }     
+            if (sb.values[SpecificationBlock.STATE_INDEX] == accessIndex) {
+                return 1;
+            } else {
+                return 0;
+            }
         }
         
         value = sb.values[accessIndex];
@@ -207,6 +226,17 @@ public class AvatarExpressionAttribute {
         v = value;
         
         sb.values[accessIndex] = v;
+    }
+    
+    //Link state to access index in the state machine
+    public void linkState() {
+        if (isState) {
+            if (block != null) {
+                accessIndex = block.getStateMachine().getIndexOfState((AvatarStateElement) state);
+            } else {
+                accessIndex = -1;
+            }
+        }
     }
     
     public boolean isState() {

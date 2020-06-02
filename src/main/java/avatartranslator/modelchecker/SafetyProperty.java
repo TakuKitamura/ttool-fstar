@@ -193,6 +193,17 @@ public class SafetyProperty  {
     }
     
     
+    public void linkSolverStates() {
+        //linking to states so that normal bool elaborations are possible
+        if (safetySolver != null) {
+            safetySolver.linkStates();
+        }
+        if (safetySolverLead != null) {
+            safetySolverLead.linkStates();
+        }
+    }
+    
+    
     public String toString() {
         String ret = rawProperty;
         switch(phase) {

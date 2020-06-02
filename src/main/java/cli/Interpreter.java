@@ -251,7 +251,7 @@ public class Interpreter implements Runnable, TerminalProviderInterface {
                 input = "";
             } else {
                 varName = input.substring(0, indexSpace);
-                input = input.substring(indexSpace + 1, input.length());
+                input = input.substring(indexSpace, input.length());
             }
 
             // Identifying variable

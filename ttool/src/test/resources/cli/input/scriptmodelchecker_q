@@ -1,5 +1,6 @@
 print dir
 set model resources/test/cli/models/AirbusDoor_V2.xml
+set query "DoorAndLockButton.inside == 0 --> DoorAndLockButton.inside>0, E<> Passenger.isInCockpit ==true&&DoorAndLockButton.inside==1"
 #print The model to be opened is: $model
 action start
 wait 2
@@ -7,5 +8,5 @@ wait 2
 action open $model
 wait 4
 action check-syntax
-action avatar-rg -d -ra -la -s -g rgmodelchecker.aut
+action avatar-rg -q $query
 action quit
