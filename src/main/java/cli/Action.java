@@ -728,6 +728,7 @@ public class Action extends Command {
                         case "-c":
                             //concurrency
                             amc.setIgnoreConcurrenceBetweenInternalActions(false);
+                            break;
                         default:
                             return Interpreter.BAD;
                     }
