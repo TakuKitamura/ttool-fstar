@@ -395,7 +395,12 @@ public class AvatarSimulationBlock {
                     int valMin = evaluateIntExpression(random.getMinValue(), attributeValues);
                     int valMax = evaluateIntExpression(random.getMaxValue(), attributeValues);
 
-                    double extra1 = Double.parseDouble(random.getExtraAttribute1());
+                    double extra1;
+                    try {
+                        extra1 = Double.parseDouble(random.getExtraAttribute1());
+                    } catch (Exception e) {
+                        extra1 = 0.0;
+                    }
 
                     if ((forcedRandom > -1) && (forcedRandom >= valMin) && (forcedRandom <= valMax)) {
                         // Use provided value as random value
