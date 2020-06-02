@@ -198,7 +198,15 @@ public class AvatarSMDRandom extends  AvatarSMDBasicCanBeDisabledComponent /* Is
 
         functionId = dialog.getFunctionId();
 
+        String formerExtra = extraAttribute1;
         extraAttribute1 = dialog.getExtraAttribute1();
+        double extra1;
+        try {
+            extra1 = Double.parseDouble(extraAttribute1);
+        } catch (Exception e) {
+            extraAttribute1 = formerExtra;
+        }
+
 
         if (error) {
             JOptionPane.showMessageDialog(frame,

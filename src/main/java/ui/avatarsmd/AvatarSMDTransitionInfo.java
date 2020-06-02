@@ -527,7 +527,14 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
         //TraceManager.addDev("Max delay:" + jdat.getAfterMax().trim());
         afterDelay.getMinExpression().setText( jdat.getAfterMin().trim() );
         afterDelay.getMaxExpression().setText( jdat.getAfterMax().trim() );
-        extraDelay1.setText( jdat.getExtraDelay1().trim());
+        String retExtra = jdat.getExtraDelay1().trim();
+        try {
+            double extra1 = Double.parseDouble(retExtra);
+            extraDelay1.setText(retExtra );
+        } catch (Exception e) {
+        }
+
+
         delayDistributionLaw.setText( "" + jdat.getDistributionLaw() );
 
 
