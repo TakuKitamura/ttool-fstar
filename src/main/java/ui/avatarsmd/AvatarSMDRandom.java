@@ -67,7 +67,7 @@ public class AvatarSMDRandom extends  AvatarSMDBasicCanBeDisabledComponent /* Is
     protected String variable;
     protected String minValue;
     protected String maxValue;
-    protected String extraAtrribute1;
+    protected String extraAttribute1;
     protected int functionId;
 
     protected int stateOfError = 0; // Not yet checked
@@ -95,6 +95,7 @@ public class AvatarSMDRandom extends  AvatarSMDBasicCanBeDisabledComponent /* Is
         minValue = "0";
         maxValue = "10";
         functionId = 0;
+        extraAttribute1 = "";
 
         myImageIcon = IconManager.imgic912;
     }
@@ -197,7 +198,7 @@ public class AvatarSMDRandom extends  AvatarSMDBasicCanBeDisabledComponent /* Is
 
         functionId = dialog.getFunctionId();
 
-        extraAtrribute1 = dialog.getExtraAttribute1();
+        extraAttribute1 = dialog.getExtraAttribute1();
 
         if (error) {
             JOptionPane.showMessageDialog(frame,
@@ -246,7 +247,7 @@ public class AvatarSMDRandom extends  AvatarSMDBasicCanBeDisabledComponent /* Is
     }
 
     public String getExtraAttribute1() {
-        return extraAtrribute1;
+        return extraAttribute1;
     }
 
 	@Override
@@ -290,15 +291,16 @@ public class AvatarSMDRandom extends  AvatarSMDBasicCanBeDisabledComponent /* Is
                                 variable = elt.getAttribute("variable");
                                 minValue = elt.getAttribute("minValue");
                                 maxValue = elt.getAttribute("maxValue");
-                                extraAtrribute1 = elt.getAttribute("extraAttribute1");
-                                if (extraAtrribute1 == null) {
-                                    extraAtrribute1 = "";
+                                extraAttribute1 = elt.getAttribute("extraAttribute1");
+                                if (extraAttribute1 == null) {
+                                    extraAttribute1 = "";
                                 }
                                 s = elt.getAttribute("functionId");
                                 if (s != null) {
                                     try {
                                         functionId = new Integer(s).intValue();
                                     } catch (Exception e){
+                                        functionId = AvatarRandom.RANDOM_UNIFORM_LAW;
                                     }
                                 }
                                 //
