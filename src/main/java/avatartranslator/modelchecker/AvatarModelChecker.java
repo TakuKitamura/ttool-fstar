@@ -110,6 +110,9 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     private boolean studyReinit;
     private SpecificationReinit initState;
     
+    //Debug counterexample
+    //private boolean counterexample;
+    
     //RG limits
     private boolean stateLimitRG;
     private boolean timeLimitRG;
@@ -365,7 +368,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
     public boolean startModelCheckingProperties() {
         boolean studyS, studyL, studyR, studyRI, genRG;
-        boolean emptyTr;
+        boolean emptyTr, ignoreConcurrence;
         long deadlocks = 0;
         
         if (spec == null) {
@@ -381,6 +384,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         stateLimitRG = false;
         timeLimitRG = false;
         emptyTr = ignoreEmptyTransitions;
+        ignoreConcurrence = ignoreConcurrenceBetweenInternalActions;
         studyR = studyReachability;
         studyL = studyLiveness;
         studyS = studySafety;
@@ -397,6 +401,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
         if (studyL) {
             studySafety = true;
+            ignoreConcurrenceBetweenInternalActions = true;
+            ignoreEmptyTransitions = true;
             for (SafetyProperty sp : livenesses) {
                 safety = sp;
                 startModelChecking(nbOfThreads);
@@ -405,22 +411,27 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 safety.setComputed();
             }
             studySafety = false;
+            ignoreConcurrenceBetweenInternalActions = ignoreConcurrence;
+            ignoreEmptyTransitions = emptyTr;
         }
         
         if (studyS) {
             studySafety = true;
             for (SafetyProperty sp : safeties) {
                 safety = sp;
+                ignoreConcurrenceBetweenInternalActions = true;
                 if (safety.safetyType == SafetyProperty.LEADS_TO) {
                     // prepare to save second pass states
                     safetyLeadStates = Collections.synchronizedMap(new HashMap<Integer, SpecificationState>());
                     ignoreEmptyTransitions = false;
+                    ignoreConcurrenceBetweenInternalActions = ignoreConcurrence;
                 }
                 startModelChecking(nbOfThreads);
                 if (safety.safetyType == SafetyProperty.LEADS_TO) {
                     // second pass
                     safety.initLead();
                     ignoreEmptyTransitions = emptyTr;
+                    ignoreConcurrenceBetweenInternalActions = true;
                     for (SpecificationState state : safetyLeadStates.values()) {
                         deadlocks += nbOfDeadlocks;
                         resetModelChecking();
@@ -434,6 +445,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 }
                 safety.setComputed();
                 deadlocks += nbOfDeadlocks;
+                ignoreConcurrenceBetweenInternalActions = ignoreConcurrence;
                 resetModelChecking();
             }
             studySafety = false;
@@ -467,7 +479,9 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             //there is no need to study deadlocks again
             if (deadlocks == 0) {
                 deadlockStop = true;
+                ignoreConcurrenceBetweenInternalActions = true;
                 startModelChecking(nbOfThreads);
+                ignoreConcurrenceBetweenInternalActions = ignoreConcurrence;
             } else {
                 nbOfDeadlocks = 1;
             }
