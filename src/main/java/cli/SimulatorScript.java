@@ -40,11 +40,15 @@
 package cli;
 
 import common.ConfigurationTTool;
+import launcher.LauncherException;
 import launcher.RTLLauncher;
+import launcher.RshClient;
 import myutil.Conversion;
 import myutil.IntExpressionEvaluator;
 import myutil.PluginManager;
 import myutil.TraceManager;
+import remotesimulation.RemoteConnection;
+import remotesimulation.RemoteConnectionException;
 import ui.MainGUI;
 import ui.util.IconManager;
 import avatartranslator.*;
@@ -64,6 +68,7 @@ import java.util.*;
 public class SimulatorScript extends Command  {
 
 
+
     public SimulatorScript() {
 
     }
@@ -80,7 +85,7 @@ public class SimulatorScript extends Command  {
         return "sc";
     }
 
-    public String getUsage() { return "simulatorscript <simulatorexecutable> <inputFile> <outputFile>"; }
+    public String getUsage() { return "simulatorscript <path_to_simulator_executable> <inputFile> <outputFile>"; }
 
     public String getDescription() { return "Starting a simulation script test. Reserved for Development purpose"; }
 
@@ -91,8 +96,11 @@ public class SimulatorScript extends Command  {
 
     public  String executeCommand(String command, Interpreter interpreter) {
         try {
-           executeSimulatorScript();
-           return null;
+            String[] commands = command.split(" ");
+            if (commands.length < 3) {
+                return Interpreter.BAD;
+            }
+           return executeSimulatorScript(commands[0], commands[1], commands[2], interpreter);
         } catch (Exception e) {
             TraceManager.addDev("Exception: " + e.getMessage());
             return "Test failed";
@@ -105,13 +113,42 @@ public class SimulatorScript extends Command  {
 
     }
 
-    private void executeSimulatorScript() {
-        // starts simulation
+    private String executeSimulatorScript(String simuPath, String file1, String file2, Interpreter interpreter) throws java.io.IOException, java
+            .lang.InterruptedException {
+        // Checking arguments
+        // Test all files
+        File simuFile = new File(simuPath);
+        if (!simuFile.exists()) {
+            return interpreter.BAD_FILE_NAME + ": " + simuPath;
+        }
 
-        // connects to the simulator
+        File inputFile = new File(file1);
+        if (!simuFile.exists()) {
+            return interpreter.BAD_FILE_NAME + ": " + file1;
+        }
+
+        // If the output file does not exist, its is not important: we create it!
+        File outputFile = new File(file2);
+
+
+        // Starts simulation
+        Process simuProcess = Runtime.getRuntime().exec(simuPath + " -server");
+
+        // Wait for one second
+        Thread.sleep(1000);
+
+
+        // Connects to the simulator
+        RemoteConnection rc = new RemoteConnection("localhost");
+        try {
+            rc.connect();
+        } catch (RemoteConnectionException rce) {
+            return "Could not connect";
+        }
 
 
         // Opens the two files
+
 
         // Loop: as soon as there is a new input, read it, see if value change -> compute
         // simulation time. Append this simulation time to the output file
@@ -121,9 +158,11 @@ public class SimulatorScript extends Command  {
         // Then execute until event2. Note the new time time2. Compute (time2-time1)
         // append time2-time1 to the output file
 
-
+        return null;
 
     }
+
+
 
 
 }
