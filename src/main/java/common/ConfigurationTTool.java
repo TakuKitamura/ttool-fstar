@@ -1736,6 +1736,8 @@ public class ConfigurationTTool {
 
         } catch (UnsatisfiedLinkError e) {
             return ("Z3 libs " + ConfigurationTTool.Z3LIBS + " could not be loaded\n");
+        } catch (IllegalArgumentException iae) {
+            return ("Z3 libs " + ConfigurationTTool.Z3LIBS + " could not be used\n");
         }
 
         return null;

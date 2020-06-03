@@ -53,7 +53,9 @@ import ui.MainGUI;
 import ui.util.IconManager;
 import avatartranslator.*;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.BitSet;
 import java.util.*;
 
@@ -66,7 +68,8 @@ import java.util.*;
  * @author Ludovic APVRILLE
  */
 public class SimulatorScript extends Command  {
-
+    private static String[] channels = {"wsend_train_position1_Frame_R", "wframeBuffer", "rframeBuffer", "wcomputationResult",
+            "rcontrolData"};
 
 
     public SimulatorScript() {
@@ -148,20 +151,85 @@ public class SimulatorScript extends Command  {
 
 
         // Opens the two files
+        boolean running = true;
+        BufferedInputStream reader = new BufferedInputStream(new FileInputStream( inputFile ) );
+        String readString = "";
+        String line = "";
+        boolean first = true;
+        double lastValue = 0;
 
+        try {
+            while (running) {
+                if (reader.available() > 0) {
+                    char c = (char) reader.read();
 
-        // Loop: as soon as there is a new input, read it, see if value change -> compute
-        // simulation time. Append this simulation time to the output file
-        // To compute the simulation time: simulate until read time. Erase all past transactions
-        // Then wait for event1.
-        // and note the time of event1.
-        // Then execute until event2. Note the new time time2. Compute (time2-time1)
-        // append time2-time1 to the output file
+                    // regular character?
+                    if (String.valueOf(c).matches(".")) {
+                        readString += c;
+                    } else {
+                        // End of line
+                        // Must handle the line
+                        line = readString.trim();
+                        TraceManager.addDev("Line read:" + line);
+                        readString = "";
+                        String lines[] = line.split(" ");
+                        if (lines.length > 1) {
+                            double value1 = Double.parseDouble(lines[1]);
+                            if (first) {
+                                first = false;
+                                lastValue = value1;
+                            } else {
+                                if (value1 != lastValue) {
+                                    lastValue = value1;
+                                    double time1 = Double.parseDouble(lines[0]);
+                                    // Run simulation until time1
+                                    runSimulationTo(rc, time1);
+                                    // Remove all transactions
+                                    removeAllTransactions(rc);
+                                    // Wait for  to occur
+
+                                    // Get time of event1
+
+                                    // Wait for event2 to occur
+                                    // Get time of event2.
+                                    // Append to file2 time2-time1
+                                }
+                            }
+                        }
+
+                    }
+                }
+
+                // Nothing new in the file
+                else {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException ex) {
+                        running = false;
+                    }
+                }
+            }
+        } catch (RemoteConnectionException rce) {
+            return "Connection failure";
+        }
+
 
         return null;
 
     }
 
+    private void runSimulationTo(RemoteConnection rc, double time1) throws RemoteConnectionException {
+        // Must convert in clock cycles
+        // We assume 200 MHz
+        // We assume time is in ms
+        long nbOfCycles = (long)(200000 * time1);
+        rc.send("1 5 " + nbOfCycles);
+
+    }
+
+    private void removeAllTransactions(RemoteConnection rc) throws RemoteConnectionException {
+        rc.send("26");
+    }
 
 
 
