@@ -197,6 +197,20 @@ public:
 	\return Return value of simulate() function
 	*/
 	bool runToChannelTrans(TMLChannel* iChannel, TMLTransaction*& oLastTrans);
+	///Runs the simulation until a write transaction on iChannel is executed
+	/**
+	\param iChannel Pointer to the Channel
+	\param oLastTrans Returns the last transaction executed during a simulation
+	\return Return value of simulate() function
+	*/
+	bool runToChannelWriteTrans(TMLChannel* iChannel, TMLTransaction*& oLastTrans);
+	///Runs the simulation until a read transaction on iChannel is executed
+	/**
+	\param iChannel Pointer to the Channel
+	\param oLastTrans Returns the last transaction executed during a simulation
+	\return Return value of simulate() function
+	*/
+	bool runToChannelReadTrans(TMLChannel* iChannel, TMLTransaction*& oLastTrans);
 	///Runs the simulation until a random choice command is encountered
 	/**
 	\param oLastTrans Returns the last transaction executed during a simulation

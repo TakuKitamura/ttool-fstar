@@ -412,6 +412,22 @@ public class CommandParser {
         sc = new SimulationCommand("run-until-channel-access", "ruca", "1 12", params, paramNames, "Run simulation until a operation is performed on the channel which ID is provided as parameter");
         commandList.add(sc);
 
+        // run-until-write-on-channel-access
+        params = new int[1];
+        paramNames = new String[1];
+        params[0] = 2;
+        paramNames[0] = "Channel name";
+        sc = new SimulationCommand("run-until-write-on-channel-access", "ruwca", "1 17", params, paramNames, "Run simulation until a write operation is performed on the channel which channel name is provided as parameter");
+        commandList.add(sc);
+
+        // run-until-read-on-channel-access
+        params = new int[1];
+        paramNames = new String[1];
+        params[0] = 2;
+        paramNames[0] = "Channel name";
+        sc = new SimulationCommand("run-until-read-on-channel-access", "rurca", "1 18", params, paramNames, "Run simulation until a read operation is performed on the channel which chanel name is provided as parameter");
+        commandList.add(sc);
+
         // run-until-cpu-executes
         params = new int[1];
         paramNames = new String[1];

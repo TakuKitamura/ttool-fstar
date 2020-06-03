@@ -310,6 +310,46 @@ protected:
 };
 
 //************************************************************************
+///Listener which stops the simulation as soon write data is conveyed on a given channel
+class RunTillWriteTransOnChannel: public GeneralListener{
+public:
+	///Constructor
+	/**
+	\param iSimComp Pointer to a SimComponents object
+	\param iSubject Channel to listen on
+	*/
+	RunTillWriteTransOnChannel(SimComponents* iSimComp, ListenerSubject<GeneralListener>* iSubject);
+	///Destructor
+	virtual ~RunTillWriteTransOnChannel();
+	void transExecuted(TMLTransaction* iTrans, ID iID);
+protected:
+	///Pointer to a SimComponents object
+	SimComponents* _simComp;
+	///Channel to listen on
+	ListenerSubject <GeneralListener> * _subject;
+};
+
+//************************************************************************
+///Listener which stops the simulation as soon read data is conveyed on a given channel
+class RunTillReadTransOnChannel: public GeneralListener{
+public:
+	///Constructor
+	/**
+	\param iSimComp Pointer to a SimComponents object
+	\param iSubject Channel to listen on
+	*/
+	RunTillReadTransOnChannel(SimComponents* iSimComp, ListenerSubject<GeneralListener>* iSubject);
+	///Destructor
+	virtual ~RunTillReadTransOnChannel();
+	void transExecuted(TMLTransaction* iTrans, ID iID);
+protected:
+	///Pointer to a SimComponents object
+	SimComponents* _simComp;
+	///Channel to listen on
+	ListenerSubject <GeneralListener> * _subject;
+};
+
+//************************************************************************
 ///Listener for generating signals to be evaluated by TEPE constraints
 class TEPESigListener: public GeneralListener{
 public:

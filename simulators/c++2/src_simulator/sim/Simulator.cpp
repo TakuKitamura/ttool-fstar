@@ -1660,6 +1660,40 @@ void Simulator::decodeCommand(std::string iCmd, std::ostream& iXmlOutStream){
       std::cout << "End virtual signals." << std::endl;
       break;
     }
+    case 17:{//Run until write operation on channel x is performed
+      std::cout << "Run until write operation on channel x is performed." << std::endl;
+      aInpStream >> aStrParam;
+      //ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (_simComp->getChannelByName(aStrParam));
+      std::string channelName =_simComp->getChannelList(aStrParam);
+      TMLChannel* aChannel = _simComp->getChannelByName(channelName);
+      if (aChannel!=0){
+        //_currCmdListener=new RunTillTransOnDevice(_simComp, aSubject);
+        aGlobMsg << TAG_MSGo << "Created listener on Channel " << aStrParam << TAG_MSGc << std::endl;
+        _simTerm=runToChannelWriteTrans(aChannel, oLastTrans);
+      }else{
+        aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
+        anErrorCode=2;
+      }
+      std::cout << "End Run until write operation on channel x is performed." << std::endl;
+      break;
+    }
+    case 18:{//Run until read operation on channel x is performed
+      std::cout << "Run until read operation on channel x is performed." << std::endl;
+      aInpStream >> aStrParam;
+      //ListenerSubject<TransactionListener>* aSubject= static_cast<ListenerSubject<TransactionListener>* > (_simComp->getChannelByName(aStrParam));
+      std::string channelName =_simComp->getChannelList(aStrParam);
+      TMLChannel* aChannel = _simComp->getChannelByName(channelName);
+      if (aChannel!=0){
+        //_currCmdListener=new RunTillTransOnDevice(_simComp, aSubject);
+        aGlobMsg << TAG_MSGo << "Created listener on Channel " << aStrParam << TAG_MSGc << std::endl;
+        _simTerm=runToChannelReadTrans(aChannel, oLastTrans);
+      }else{
+        aGlobMsg << TAG_MSGo << MSG_CMPNFOUND << TAG_MSGc << std::endl;
+        anErrorCode=2;
+      }
+      std::cout << "End Run until read operation on channel x is performed." << std::endl;
+      break;
+    }
     default:
       aGlobMsg << TAG_MSGo << MSG_CMDNFOUND<< TAG_MSGc << std::endl;
       anErrorCode=3;
@@ -2189,6 +2223,20 @@ bool Simulator::runToChannelTrans(TMLChannel* iChannel, TMLTransaction*& oLastTr
   //ListenerSubject<ChannelListener>* aSubject= static_cast<ListenerSubject<ChannelListener>* > (iChannel);
   ListenerSubject<GeneralListener>* aSubject= static_cast<ListenerSubject<GeneralListener>* > (iChannel);
   RunTillTransOnChannel aListener(_simComp, aSubject);
+  return simulate(oLastTrans);
+}
+
+bool Simulator::runToChannelWriteTrans(TMLChannel* iChannel, TMLTransaction*& oLastTrans){
+  //ListenerSubject<ChannelListener>* aSubject= static_cast<ListenerSubject<ChannelListener>* > (iChannel);
+  ListenerSubject<GeneralListener>* aSubject= static_cast<ListenerSubject<GeneralListener>* > (iChannel);
+  RunTillWriteTransOnChannel aListener(_simComp, aSubject);
+  return simulate(oLastTrans);
+}
+
+bool Simulator::runToChannelReadTrans(TMLChannel* iChannel, TMLTransaction*& oLastTrans){
+  //ListenerSubject<ChannelListener>* aSubject= static_cast<ListenerSubject<ChannelListener>* > (iChannel);
+  ListenerSubject<GeneralListener>* aSubject= static_cast<ListenerSubject<GeneralListener>* > (iChannel);
+  RunTillReadTransOnChannel aListener(_simComp, aSubject);
   return simulate(oLastTrans);
 }
 
