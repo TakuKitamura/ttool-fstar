@@ -65,20 +65,20 @@ public class JDialogTMLADRandom extends JDialogBase implements ActionListener  {
     
     private JPanel panel2;
     private Frame frame;
-	private String variable, minValue, maxValue, extraAttribute1;
+	private String variable, minValue, maxValue, extraAttribute1, extraAttribute2;
 
 	private int functionId;
     
 	
 	// Panel2
-    private JTextField jvariable, jminValue, jmaxValue, jextraAttribute1;
-    private JLabel jextraAttribute1L;
+    private JTextField jvariable, jminValue, jmaxValue, jextraAttribute1, jextraAttribute2;
+    private JLabel jextraAttribute1L, jextraAttribute2L;
 	private JComboBox<String> randomFunction;
     
     /* Creates new form  */
     public JDialogTMLADRandom(Frame _frame, String _title, String _variable,
                               String _minValue, String _maxValue, int _functionId,
-                              String _extraAttribute1) {
+                              String _extraAttribute1, String _extraAttribute2) {
         super(_frame, _title, true);
         frame = _frame;
         variable = _variable;
@@ -86,6 +86,7 @@ public class JDialogTMLADRandom extends JDialogBase implements ActionListener  {
 		maxValue = _maxValue;
 		functionId = _functionId;
 		extraAttribute1 = _extraAttribute1;
+        extraAttribute2 = _extraAttribute2;
         
         initComponents();
         myInitComponents();
@@ -168,6 +169,17 @@ public class JDialogTMLADRandom extends JDialogBase implements ActionListener  {
             panel2.add(jextraAttribute1, c2);
         }
 
+        if (extraAttribute2 != null) {
+            c2.gridwidth = 1;
+            jextraAttribute2L = new JLabel("");
+            panel2.add(jextraAttribute2L, c2);
+            c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+            jextraAttribute2 = new JTextField(extraAttribute2, 30);
+            jextraAttribute2.setEditable(true);
+            jextraAttribute2.setFont(new Font("times", Font.PLAIN, 12));
+            panel2.add(jextraAttribute2, c2);
+        }
+
         checkAttributesDistributionLawB();
         
         // main panel;
@@ -236,15 +248,28 @@ public class JDialogTMLADRandom extends JDialogBase implements ActionListener  {
 
     public String getExtraAttribute1() {return jextraAttribute1.getText();}
 
+    public String getExtraAttribute2() {return jextraAttribute2.getText();}
+
     private void checkAttributesDistributionLawB() {
         if (extraAttribute1 != null) {
             functionId = randomFunction.getSelectedIndex();
             int nbOfExtras = AvatarRandom.NB_OF_EXTRA_ATTRIBUTES[functionId];
             jextraAttribute1.setEnabled(nbOfExtras > 0);
-            if (AvatarRandom.LABELS_OF_EXTRA_ATTRIBUTES[functionId].length() > 0)
-                jextraAttribute1L.setText(AvatarRandom.LABELS_OF_EXTRA_ATTRIBUTES[functionId] + ":");
+            if (AvatarRandom.LABELS_OF_EXTRA_ATTRIBUTES_1[functionId].length() > 0)
+                jextraAttribute1L.setText(AvatarRandom.LABELS_OF_EXTRA_ATTRIBUTES_1[functionId] + ":");
             else {
                 jextraAttribute1L.setText("");
+            }
+        }
+
+        if (extraAttribute2 != null) {
+            functionId = randomFunction.getSelectedIndex();
+            int nbOfExtras = AvatarRandom.NB_OF_EXTRA_ATTRIBUTES[functionId];
+            jextraAttribute2.setEnabled(nbOfExtras > 1);
+            if (AvatarRandom.LABELS_OF_EXTRA_ATTRIBUTES_2[functionId].length() > 0)
+                jextraAttribute2L.setText(AvatarRandom.LABELS_OF_EXTRA_ATTRIBUTES_2[functionId] + ":");
+            else {
+                jextraAttribute2L.setText("");
             }
         }
     }

@@ -146,7 +146,7 @@ public class TMLADRandom extends TADComponentWithoutSubcomponents/* Issue #69 TG
 		String tmpName;
         
 		JDialogTMLADRandom dialog = new JDialogTMLADRandom(frame, "Setting RANDOM attributes",
-				getVariable(), getMinValue(), getMaxValue(), getFunctionId(), null);
+				getVariable(), getMinValue(), getMaxValue(), getFunctionId(), null, null);
 		//dialog.setSize(500, 450);
         GraphicLib.centerOnParent(dialog, 500, 450);
         dialog.setVisible( true ); // blocked until dialog has been closed

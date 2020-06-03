@@ -42,6 +42,7 @@
 package myutil;
 
 import java.util.Random;
+import org.apache.commons.math3.distribution.LogNormalDistribution;
 
 /**
  * Class MyMath
@@ -128,6 +129,20 @@ public class MyMath {
         //System.out.println("2. n=" + n);
         return n;
     }
+
+
+    public static double logNormalDistribution(double a, double b, double sigma, double mean) {
+	    //TraceManager.addDev("LOG  NORMAL. SIGMA=" + sigma + " MEAN=" + mean);
+	    LogNormalDistribution lnd = new LogNormalDistribution(sigma, mean);
+	    double val = lnd.sample();
+	    val += a;
+	    if (val > b) {
+	        return logNormalDistribution(a, b, sigma, mean);
+        }
+        return val;
+    }
+
+
 
   
 }

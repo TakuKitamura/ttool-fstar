@@ -56,13 +56,16 @@ public class AvatarRandom extends AvatarStateMachineElement {
     public final static int RANDOM_UNIFORM_LAW = 0;
     public final static int RANDOM_TRIANGULAR_LAW = 1;
     public final static int RANDOM_GAUSSIAN_LAW = 2;
-    public final static String[] DISTRIBUTION_LAWS = {"Uniform", "Triangular", "Gaussian"};
-    public final static String[] DISTRIBUTION_LAWS_SHORT = {"", " ^", "ĝ"};
+    public final static int RANDOM_LOG_NORMAL_LAW = 3;
+    public final static String[] DISTRIBUTION_LAWS = {"Uniform", "Triangular", "Gaussian", "Log normal"};
+    public final static String[] DISTRIBUTION_LAWS_SHORT = {"", " ^", "ĝ", "ln"};
 
-    public final static int[] NB_OF_EXTRA_ATTRIBUTES = {0, 1, 1};
-    public final static String[] LABELS_OF_EXTRA_ATTRIBUTES = {"", "triangle top", "standard deviation"};
+    public final static int[] NB_OF_EXTRA_ATTRIBUTES = {0, 1, 1, 2};
+    public final static String[] LABELS_OF_EXTRA_ATTRIBUTES_1 = {"", "triangle top", "standard deviation", "standard deviation"};
+    public final static String[] LABELS_OF_EXTRA_ATTRIBUTES_2 = {"", "", "", "mean"};
     protected int functionId;
     protected String extraAttribute1;
+    protected String extraAttribute2;
 
     public AvatarRandom(String _name, Object _referenceObject) {
         super(_name, _referenceObject);
@@ -88,6 +91,10 @@ public class AvatarRandom extends AvatarStateMachineElement {
         return extraAttribute1;
     }
 
+    public String getExtraAttribute2() {
+        return extraAttribute2;
+    }
+
     public void setVariable(String _variable) {
         variable = _variable;
     }
@@ -103,6 +110,9 @@ public class AvatarRandom extends AvatarStateMachineElement {
 
     public void setExtraAttribute1(String _extraAttribute1) {
         extraAttribute1 = _extraAttribute1;
+    }
+    public void setExtraAttribute2(String _extraAttribute2) {
+        extraAttribute2 = _extraAttribute2;
     }
 
     public String getNiceName() {
@@ -120,7 +130,8 @@ public class AvatarRandom extends AvatarStateMachineElement {
 	 ar.setValues(minValue, maxValue);
 	 ar.setFunctionId(functionId);
 	 ar.setExtraAttribute1(extraAttribute1);
+	 ar.setExtraAttribute2(extraAttribute2);
 
-        return ar;
+	 return ar;
     }
 }

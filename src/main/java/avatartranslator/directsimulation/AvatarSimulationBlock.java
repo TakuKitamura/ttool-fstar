@@ -402,13 +402,23 @@ public class AvatarSimulationBlock {
                         extra1 = 0.0;
                     }
 
+                    double extra2;
+                    //TraceManager.addDev("Extra2=" + random.getExtraAttribute2());
+                    try {
+                        extra2 = Double.parseDouble(random.getExtraAttribute2());
+                    } catch (Exception e) {
+                        //TraceManager.addDev("Extra2 exception");
+                        extra2 = 0.0;
+                    }
+                    //TraceManager.addDev("Extra2=" + extra2);
+
                     if ((forcedRandom > -1) && (forcedRandom >= valMin) && (forcedRandom <= valMax)) {
                         // Use provided value as random value
                         valMin = forcedRandom;
                     } else {
                         // randomly select a value according to distribution law
 
-                        valMin = makeRandom(valMin, valMax, random.getFunctionId(), extra1);
+                        valMin = makeRandom(valMin, valMax, random.getFunctionId(), extra1, extra2);
                     }
                     attributeValues.remove(index);
                     attributeValues.add(index, "" + valMin);
@@ -727,7 +737,7 @@ public class AvatarSimulationBlock {
         return result;
     }
 
-    public int makeRandom(int minV, int maxV, int functionID, double extra1) {
+    public int makeRandom(int minV, int maxV, int functionID, double extra1, double extra2) {
         switch (functionID) {
             case AvatarRandom.RANDOM_UNIFORM_LAW:
                 //TraceManager.addDev("\n\n\n******* UNIFORM LAW ********");
@@ -735,10 +745,16 @@ public class AvatarSimulationBlock {
             case AvatarRandom.RANDOM_TRIANGULAR_LAW:
                 //TraceManager.addDev("\n\n\n******* TRIANGULAR LAW ********");
                 return (int) (MyMath.triangularDistribution((double) (minV), (double) (maxV), extra1));
-            case AvatarTransition.DELAY_GAUSSIAN_LAW:
+            case AvatarRandom.RANDOM_GAUSSIAN_LAW:
                 //TraceManager.addDev("\n\n\n******* GAUSSIAN LAW ********");
                 return (int)(Math.floor(MyMath.gaussianDistribution((double) (minV), (double) (maxV), extra1)));
-
+            case AvatarRandom.RANDOM_LOG_NORMAL_LAW:
+                try {
+                    return (int) (Math.floor(MyMath.logNormalDistribution((double) (minV), (double) (maxV), extra1, extra2)));
+                } catch (Exception e) {
+                    TraceManager.addDev("Exception on log normal: " + e.getMessage());
+                    return minV;
+                }
         }
         return minV;
     }

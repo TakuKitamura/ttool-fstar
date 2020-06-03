@@ -68,6 +68,7 @@ public class AvatarSMDRandom extends  AvatarSMDBasicCanBeDisabledComponent /* Is
     protected String minValue;
     protected String maxValue;
     protected String extraAttribute1;
+    protected String extraAttribute2;
     protected int functionId;
 
     protected int stateOfError = 0; // Not yet checked
@@ -96,6 +97,7 @@ public class AvatarSMDRandom extends  AvatarSMDBasicCanBeDisabledComponent /* Is
         maxValue = "10";
         functionId = 0;
         extraAttribute1 = "";
+        extraAttribute2 = "";
 
         myImageIcon = IconManager.imgic912;
     }
@@ -162,7 +164,7 @@ public class AvatarSMDRandom extends  AvatarSMDBasicCanBeDisabledComponent /* Is
         String tmpName;
 
         JDialogTMLADRandom dialog = new JDialogTMLADRandom(frame, "Setting RANDOM attributes",
-                getVariable(), getMinValue(), getMaxValue(), getFunctionId(), getExtraAttribute1());
+                getVariable(), getMinValue(), getMaxValue(), getFunctionId(), getExtraAttribute1(), getExtraAttribute2());
         //dialog.setSize(500, 450);
         GraphicLib.centerOnParent(dialog, 500, 450);
         dialog.setVisible( true ); // blocked until dialog has been closed
@@ -205,6 +207,15 @@ public class AvatarSMDRandom extends  AvatarSMDBasicCanBeDisabledComponent /* Is
             extra1 = Double.parseDouble(extraAttribute1);
         } catch (Exception e) {
             extraAttribute1 = formerExtra;
+        }
+
+        formerExtra = extraAttribute2;
+        extraAttribute2 = dialog.getExtraAttribute2();
+        double extra2;
+        try {
+            extra2 = Double.parseDouble(extraAttribute2);
+        } catch (Exception e) {
+            extraAttribute2 = formerExtra;
         }
 
 
@@ -258,6 +269,10 @@ public class AvatarSMDRandom extends  AvatarSMDBasicCanBeDisabledComponent /* Is
         return extraAttribute1;
     }
 
+    public String getExtraAttribute2() {
+        return extraAttribute2;
+    }
+
 	@Override
     protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
@@ -271,6 +286,8 @@ public class AvatarSMDRandom extends  AvatarSMDBasicCanBeDisabledComponent /* Is
         sb.append(getFunctionId());
         sb.append("\" extraAttribute1=\"");
         sb.append(getExtraAttribute1());
+        sb.append("\" extraAttribute2=\"");
+        sb.append(getExtraAttribute2());
         sb.append("\" />\n");
         sb.append("</extraparam>\n");
         return new String(sb);
@@ -302,6 +319,10 @@ public class AvatarSMDRandom extends  AvatarSMDBasicCanBeDisabledComponent /* Is
                                 extraAttribute1 = elt.getAttribute("extraAttribute1");
                                 if (extraAttribute1 == null) {
                                     extraAttribute1 = "";
+                                }
+                                extraAttribute2 = elt.getAttribute("extraAttribute2");
+                                if (extraAttribute2 == null) {
+                                    extraAttribute2 = "";
                                 }
                                 s = elt.getAttribute("functionId");
                                 if (s != null) {

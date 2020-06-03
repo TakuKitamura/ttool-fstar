@@ -624,6 +624,7 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
         asme.setValues (replaceAttributesInExpr(_asme.getMinValue (), _arg), replaceAttributesInExpr(_asme.getMaxValue (), _arg));
         asme.setFunctionId (_asme.getFunctionId ());
         asme.setExtraAttribute1(_asme.getExtraAttribute1());
+        asme.setExtraAttribute2(_asme.getExtraAttribute2());
         asme.setVariable (arg.placeholdersMapping.get (this.getAvatarAttributeWithName (_asme.getVariable ())).getName ());
 
         this.translateNext (asme, _asme, arg);

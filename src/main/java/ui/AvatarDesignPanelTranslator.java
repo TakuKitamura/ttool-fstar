@@ -1558,6 +1558,8 @@ public class AvatarDesignPanelTranslator {
             arandom.setValues(tmp1, tmp2);
             arandom.setFunctionId(asmdrand.getFunctionId());
             arandom.setExtraAttribute1(asmdrand.getExtraAttribute1());
+            arandom.setExtraAttribute2(asmdrand.getExtraAttribute2());
+
 
             tmp1 = modifyString(asmdrand.getVariable());
             AvatarAttribute aa = _ab.getAvatarAttributeWithName(tmp1);
