@@ -90,8 +90,8 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 
     protected static final int NB_OF_TRANSACTIONS = 1000;
 
-    protected static final String SIMULATION_HEADER = "siminfo";
-    protected static final String SIMULATION_GLOBAL = "global";
+    public static final String SIMULATION_HEADER = "siminfo";
+    public static final String SIMULATION_GLOBAL = "global";
     protected static final String SIMULATION_TASK = "task";
     protected static final String SIMULATION_CPU = "cpu";
     protected static final String SIMULATION_BUS = "bus";

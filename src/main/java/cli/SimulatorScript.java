@@ -47,15 +47,25 @@ import myutil.Conversion;
 import myutil.IntExpressionEvaluator;
 import myutil.PluginManager;
 import myutil.TraceManager;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 import remotesimulation.RemoteConnection;
 import remotesimulation.RemoteConnectionException;
-import ui.MainGUI;
+import ui.*;
+import ui.interactivesimulation.JFrameInteractiveSimulation;
+import ui.interactivesimulation.SimulationTransaction;
+import ui.tmldd.TMLArchiCPUNode;
+import ui.tmldd.TMLArchiDiagramPanel;
 import ui.util.IconManager;
 import avatartranslator.*;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.*;
 import java.util.BitSet;
 import java.util.*;
 
@@ -67,10 +77,15 @@ import java.util.*;
  *
  * @author Ludovic APVRILLE
  */
-public class SimulatorScript extends Command  {
-    private static String[] channels = {"wsend_train_position1_Frame_R", "wframeBuffer", "rframeBuffer", "wcomputationResult",
-            "rcontrolData"};
+public class SimulatorScript extends Command  implements Runnable  {
+    private static String[] channels = {"wDesignHMAC__send_train_position1_Frame_R__DesignHMAC__framePL1", "wDesignHMAC__framebuffer",
+            "rDesignHMAC__framebuffer", "wDesignHMAC__computationResult__DesignHMAC__controlData",
+            "rDesignHMAC__computationResult__DesignHMAC__controlData"};
 
+
+    private long [] times;
+    private int currentIndex;
+    private RemoteConnection rc;
 
     public SimulatorScript() {
 
@@ -142,7 +157,7 @@ public class SimulatorScript extends Command  {
 
 
         // Connects to the simulator
-        RemoteConnection rc = new RemoteConnection("localhost");
+        rc = new RemoteConnection("localhost");
         try {
             rc.connect();
         } catch (RemoteConnectionException rce) {
@@ -186,9 +201,16 @@ public class SimulatorScript extends Command  {
                                     runSimulationTo(rc, time1);
                                     // Remove all transactions
                                     removeAllTransactions(rc);
-                                    // Wait for  to occur
-
+                                    currentIndex = 0;
+                                    times = new long[channels.length];
                                     // Get time of event1
+                                    for(int i=0; i<channels.length; i++) {
+                                        // Wait for channel operation
+                                        runUntilChannel(rc, channels[0]);
+                                        // Get current Time
+                                        sendGetSimulationTime(rc);
+                                        waitForNextIndex();
+                                    }
 
                                     // Wait for event2 to occur
                                     // Get time of event2.
@@ -218,6 +240,11 @@ public class SimulatorScript extends Command  {
 
     }
 
+
+    public void sendGetSimulationTime(RemoteConnection rc) throws RemoteConnectionException {
+        rc.send("13");
+    }
+
     private void runSimulationTo(RemoteConnection rc, double time1) throws RemoteConnectionException {
         // Must convert in clock cycles
         // We assume 200 MHz
@@ -230,6 +257,185 @@ public class SimulatorScript extends Command  {
     private void removeAllTransactions(RemoteConnection rc) throws RemoteConnectionException {
         rc.send("26");
     }
+
+    private void runUntilChannel(RemoteConnection rc, String channelName) throws RemoteConnectionException {
+
+    }
+
+    private synchronized void waitForNextIndex() {
+        int oldValue = currentIndex;
+        while( oldValue == currentIndex) {
+            try {
+                wait();
+            } catch (InterruptedException ie) {
+
+            }
+        }
+    }
+
+
+
+    // Listening thread
+    public void run() {
+        try {
+            while (true) {
+                String s = rc.readOneLine();
+                analyzeServerAnswer(s);
+            }
+        } catch (Exception e) {
+
+        }
+    }
+
+
+    protected void analyzeServerAnswer(String s) {
+        //
+        String ssxml = "";
+        int index0 = s.indexOf("<?xml");
+
+        if (index0 != -1) {
+            //
+            ssxml = s.substring(index0, s.length()) + "\n";
+        } else {
+            //
+            ssxml = ssxml + s + "\n";
+        }
+
+        index0 = ssxml.indexOf("</siminfo>");
+
+        if (index0 != -1) {
+            //
+            ssxml = ssxml.substring(0, index0+10);
+            loadXMLInfoFromServer(ssxml);
+            ssxml = "";
+        }
+    }
+
+
+    protected boolean loadXMLInfoFromServer(String xmldata) {
+        //jta.append("XML from server:" + xmldata + "\n\n");
+
+        DocumentBuilderFactory dbf;
+        DocumentBuilder db;
+
+        try {
+            dbf = DocumentBuilderFactory.newInstance();
+            db = dbf.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            dbf = null;
+            db = null;
+        }
+
+        if ((dbf == null) || (db == null)) {
+            return false;
+        }
+
+        ByteArrayInputStream bais = new ByteArrayInputStream(decodeString(xmldata).getBytes());
+        int i;
+
+        try {
+            // building nodes from xml String
+            Document doc = db.parse(bais);
+            NodeList nl;
+            Node node;
+
+            nl = doc.getElementsByTagName(JFrameInteractiveSimulation.SIMULATION_HEADER);
+
+            if (nl == null) {
+                return false;
+            }
+
+            for(i=0; i<nl.getLength(); i++) {
+                node = nl.item(i);
+                //
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    // create design, and get an index for it
+                    return loadConfiguration(node);
+                }
+            }
+        } catch (IOException e) {
+            TraceManager.addError("Error when parsing server info:" + e.getMessage());
+            return false;
+        } catch (SAXException saxe) {
+            TraceManager.addError("Error when parsing server info:" + saxe.getMessage());
+            TraceManager.addError("xml:" + xmldata);
+            return false;
+        }
+
+        return true;
+    }
+
+    public static String decodeString(String s)  {
+        if (s == null)
+            return s;
+        byte b[] = null;
+        try {
+            b = s.getBytes("ISO-8859-1");
+            return new String(b);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+
+    protected boolean loadConfiguration(Node node1) {
+        NodeList diagramNl = node1.getChildNodes();
+        if (diagramNl == null) {
+            return false;
+        }
+        Element elt;
+        Node node, node0;
+        NodeList nl;
+
+
+        try {
+            for (int j = 0; j < diagramNl.getLength(); j++) {
+                node = diagramNl.item(j);
+
+                if (node == null) {
+                    TraceManager.addDev("null node");
+                    return false;
+                }
+
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    elt = (Element) node;
+
+                    // Status
+                    if (elt.getTagName().compareTo(JFrameInteractiveSimulation.SIMULATION_GLOBAL) == 0) {
+
+                        nl = elt.getElementsByTagName("simtime");
+                        if ((nl != null) && (nl.getLength() > 0)) {
+                            node0 = nl.item(0);
+                            if (node0.getTextContent() != null) {
+                                String val = node0.getTextContent();
+                                //Write value to table
+                                writeTimeValue(val);
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private synchronized void writeTimeValue(String val) {
+        if (times == null) {
+            return;
+        }
+        try {
+            long valL = Long.decode(val);
+            times[currentIndex] = valL;
+            currentIndex ++;
+            notify();
+        } catch (Exception e) {
+
+        }
+    }
+
 
 
 
