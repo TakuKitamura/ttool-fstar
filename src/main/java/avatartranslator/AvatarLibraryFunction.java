@@ -623,6 +623,7 @@ public class AvatarLibraryFunction extends AvatarElement implements AvatarTransl
         AvatarRandom asme = new AvatarRandom (this.name + "_" + arg.counter + "__" + _asme.getName (), arg.referenceObject);
         asme.setValues (replaceAttributesInExpr(_asme.getMinValue (), _arg), replaceAttributesInExpr(_asme.getMaxValue (), _arg));
         asme.setFunctionId (_asme.getFunctionId ());
+        asme.setExtraAttribute1(_asme.getExtraAttribute1());
         asme.setVariable (arg.placeholdersMapping.get (this.getAvatarAttributeWithName (_asme.getVariable ())).getName ());
 
         this.translateNext (asme, _asme, arg);

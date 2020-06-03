@@ -59,7 +59,7 @@ import java.util.Vector;
 public class Interpreter implements Runnable, TerminalProviderInterface {
 
     public final static Command[] commands = {new Action(), new Help(), new History(), new Print(), new Quit(),
-            new TestSpecific(), new TML(), new Set(), new Wait(), new Robot(), new BF()};
+            new TestSpecific(), new TML(), new Set(), new Wait(), new Robot(), new BF(), new SimulatorScript()};
 
     // Errors
     public final static String UNKNOWN = "Unknown command";
@@ -251,7 +251,7 @@ public class Interpreter implements Runnable, TerminalProviderInterface {
                 input = "";
             } else {
                 varName = input.substring(0, indexSpace);
-                input = input.substring(indexSpace + 1, input.length());
+                input = input.substring(indexSpace, input.length());
             }
 
             // Identifying variable

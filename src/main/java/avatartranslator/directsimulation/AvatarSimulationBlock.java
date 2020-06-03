@@ -40,10 +40,7 @@
 package avatartranslator.directsimulation;
 
 import avatartranslator.*;
-import myutil.BoolExpressionEvaluator;
-import myutil.Conversion;
-import myutil.IntExpressionEvaluator;
-import myutil.TraceManager;
+import myutil.*;
 
 import java.util.Vector;
 
@@ -229,6 +226,8 @@ public class AvatarSimulationBlock {
                         aspt.myMinDelay = evaluateIntExpression(trans.getMinDelay(), lastTransaction.attributeValues);
                         aspt.myMaxDelay = evaluateIntExpression(trans.getMaxDelay(), lastTransaction.attributeValues);
                         aspt.hasDelay = true;
+                        aspt.extraParam1 = evaluateIntExpression(trans.getDelayExtra1(), lastTransaction.attributeValues);
+                        aspt.delayDistributionLaw = trans.getDelayDistributionLaw();
                         if (lastTransaction != null) {
                             if (lastTransaction.clockValueWhenFinished < _clockValue) {
                                 aspt.hasElapsedTime = true;
@@ -243,6 +242,8 @@ public class AvatarSimulationBlock {
                         aspt.myMinDelay = evaluateIntExpression(trans.getMinDelay(), lastTransaction.attributeValues);
                         aspt.myMaxDelay = evaluateIntExpression(trans.getMaxDelay(), lastTransaction.attributeValues);
                         aspt.hasDelay = true;
+                        aspt.extraParam1 = evaluateIntExpression(trans.getDelayExtra1(), lastTransaction.attributeValues);
+                        aspt.delayDistributionLaw = trans.getDelayDistributionLaw();
 
                         //TraceManager.addDev(">>>>>   Signal with delay before");
 
@@ -259,11 +260,13 @@ public class AvatarSimulationBlock {
                 if (aspt.hasElapsedTime) {
                     aspt.myMinDelay = aspt.myMinDelay - aspt.elapsedTime;
                     aspt.myMaxDelay = aspt.myMaxDelay - aspt.elapsedTime;
+                    aspt.extraParam1 = aspt.extraParam1 - aspt.elapsedTime;
                 }
 
                 if (aspt.hasDelay) {
                     aspt.myMinDelay = Math.max(0, aspt.myMinDelay);
                     aspt.myMaxDelay = Math.max(0, aspt.myMaxDelay);
+                    aspt.extraParam1 = Math.max(0, aspt.extraParam1);
                 }
 
 
@@ -392,12 +395,20 @@ public class AvatarSimulationBlock {
                     int valMin = evaluateIntExpression(random.getMinValue(), attributeValues);
                     int valMax = evaluateIntExpression(random.getMaxValue(), attributeValues);
 
+                    double extra1;
+                    try {
+                        extra1 = Double.parseDouble(random.getExtraAttribute1());
+                    } catch (Exception e) {
+                        extra1 = 0.0;
+                    }
+
                     if ((forcedRandom > -1) && (forcedRandom >= valMin) && (forcedRandom <= valMax)) {
                         // Use provided value as random value
                         valMin = forcedRandom;
                     } else {
-                        // randomnly select a value
-                        valMin = (int) (Math.floor((Math.random()) * (valMax - valMin + 1))) + valMin;
+                        // randomly select a value according to distribution law
+
+                        valMin = makeRandom(valMin, valMax, random.getFunctionId(), extra1);
                     }
                     attributeValues.remove(index);
                     attributeValues.add(index, "" + valMin);
@@ -714,5 +725,21 @@ public class AvatarSimulationBlock {
 
         //TraceManager.addDev("Result of " + _expr + " = " + result);
         return result;
+    }
+
+    public int makeRandom(int minV, int maxV, int functionID, double extra1) {
+        switch (functionID) {
+            case AvatarRandom.RANDOM_UNIFORM_LAW:
+                //TraceManager.addDev("\n\n\n******* UNIFORM LAW ********");
+                return (int) (Math.floor((Math.random()) * (maxV - minV + 1))) + minV;
+            case AvatarRandom.RANDOM_TRIANGULAR_LAW:
+                //TraceManager.addDev("\n\n\n******* TRIANGULAR LAW ********");
+                return (int) (MyMath.triangularDistribution((double) (minV), (double) (maxV), extra1));
+            case AvatarTransition.DELAY_GAUSSIAN_LAW:
+                //TraceManager.addDev("\n\n\n******* GAUSSIAN LAW ********");
+                return (int)(Math.floor(MyMath.gaussianDistribution((double) (minV), (double) (maxV), extra1)));
+
+        }
+        return minV;
     }
 }

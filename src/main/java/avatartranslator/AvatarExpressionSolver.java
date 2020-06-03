@@ -635,6 +635,17 @@ public class AvatarExpressionSolver {
         }
     }
     
+    public void linkStates() {
+        if (isLeaf) {
+            if (isImmediateValue == IMMEDIATE_NO) {
+                leaf.linkState();
+            }
+        } else {
+            left.linkStates();
+            right.linkStates();
+        }
+    }
+    
     private void removeUselessBrackets() {
         while (expression.startsWith("(") && expression.endsWith(")")) {
             if (getClosingBracket(1) == expression.length() - 1) {

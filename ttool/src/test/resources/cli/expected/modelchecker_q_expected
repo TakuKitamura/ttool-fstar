@@ -1,0 +1,4 @@
+Safety Analysis:
+DoorAndLockButton.inside == 0 --> DoorAndLockButton.inside>0 -> property is NOT satisfied
+E<> Passenger.isInCockpit ==true&&DoorAndLockButton.inside==1 -> property is satisfied
+All done. See you soon.

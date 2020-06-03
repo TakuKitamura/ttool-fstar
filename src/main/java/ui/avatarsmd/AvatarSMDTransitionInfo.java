@@ -46,6 +46,7 @@ import java.util.Vector;
 
 import javax.swing.JFrame;
 
+import avatartranslator.AvatarTransition;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -67,7 +68,6 @@ import ui.TGState;
 import ui.WithAttributes;
 import ui.util.IconManager;
 import ui.window.JDialogAvatarTransition;
-import myutil.TraceManager;
 
 /**
  * Class AvatarSMDTransitionInfo
@@ -81,6 +81,8 @@ import myutil.TraceManager;
 public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent implements WithAttributes {
 
 	private static final String NULL_EXPR = "";
+
+    private static final String ZERO_EXPR = "0";
 
 	private static final String NULL_GUARD_EXPR = "[ ]";
 
@@ -97,8 +99,11 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
 	private final Expression guard;
     
     private final RangeExpression afterDelay;
-
     private final RangeExpression computeDelay;
+    private final Expression extraDelay1;
+    private final Expression delayDistributionLaw;
+
+
 //    protected String guard;
 //    protected String afterMin;
 //    protected String afterMax;
@@ -130,6 +135,8 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
 
         guard = new Expression( NULL_GUARD_EXPR, NULL_GUARD_EXPR, null );
         afterDelay = new RangeExpression( NULL_EXPR, NULL_EXPR, NULL_EXPR, "after (%s, %s)", null , "after(%s)");
+        extraDelay1 = new Expression( NULL_EXPR, NULL_EXPR, "extraDelay1=%s" );
+        delayDistributionLaw = new Expression( ZERO_EXPR, ZERO_EXPR, "delayDistributionLaw=%s" );
         computeDelay = new RangeExpression( NULL_EXPR, NULL_EXPR, NULL_EXPR, "computeFor (%s, %s)", null, "computeFor (%s)");
         probability = new Expression( NULL_EXPR, NULL_EXPR, "weight=%s" );
 
@@ -226,8 +233,15 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
         if ( !afterDelay.isNull() ) {
             atLeastOneThing = true;
 
-            final String formattedExpr = afterDelay.toString();
-        	final int textWidth = g.getFontMetrics().stringWidth( formattedExpr );
+            String formattedExpr = afterDelay.toString();
+            final int formattedLaw = Integer.decode(delayDistributionLaw.getText());
+            String law = "";
+            if ((formattedLaw>=0) && (formattedLaw < AvatarTransition.DISTRIBUTION_LAWS_SHORT.length))
+                law = AvatarTransition.DISTRIBUTION_LAWS_SHORT[formattedLaw];
+            formattedExpr = formattedExpr + " " + law;
+            formattedExpr = formattedExpr.trim();
+
+            final int textWidth = g.getFontMetrics().stringWidth( formattedExpr);
             
             if (tdp.isDrawingMain()) {
                 width = Math.max( textWidth, width );
@@ -485,6 +499,8 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
 																	getGuard(),
 																	getAfterMinDelay(),
 																	getAfterMaxDelay(),
+                                                                    getDelayDistributionLaw(),
+                                                                    getExtraDelay1(),
 //																	getComputeMinDelay(),
 //																	getComputeMaxDelay(),
 																	listOfActions,
@@ -511,6 +527,23 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
         //TraceManager.addDev("Max delay:" + jdat.getAfterMax().trim());
         afterDelay.getMinExpression().setText( jdat.getAfterMin().trim() );
         afterDelay.getMaxExpression().setText( jdat.getAfterMax().trim() );
+        String retExtra = jdat.getExtraDelay1().trim();
+        try {
+            double extra1 = Double.parseDouble(retExtra);
+            extraDelay1.setText(retExtra );
+        } catch (Exception e) {
+        }
+
+
+        delayDistributionLaw.setText( "" + jdat.getDistributionLaw() );
+
+
+        if (AvatarTransition.NB_OF_EXTRA_ATTRIBUTES[jdat.getDistributionLaw()] > 0 ) {
+            if (extraDelay1.getText().length() == 0) {
+                extraDelay1.setText(afterDelay.getMinExpression().getText());
+            }
+        }
+
 //        computeDelay.getMinExpression().setText( jdat.getComputeMin().trim() );
 //        computeDelay.getMaxExpression().setText( jdat.getComputeMax().trim() );
         listOfActions.clear();
@@ -544,6 +577,8 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
         sb.append( toXML( "guard", guard ) );
         sb.append( toXML( "afterMin", afterDelay.getMinExpression() ) );
         sb.append( toXML( "afterMax", afterDelay.getMaxExpression() ) );
+        sb.append( toXML( "extraDelay1", extraDelay1 ) );
+        sb.append( toXML( "delayDistributionLaw", delayDistributionLaw ) );
         sb.append( toXML( "computeMin", computeDelay.getMinExpression() ) );
         sb.append( toXML( "computeMax", computeDelay.getMaxExpression() ) );
         sb.append( toXML( "probability", probability ) );
@@ -669,6 +704,41 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
 //                                    afterMax = s;
                                 }
                             }
+
+                            if (elt.getTagName().equals("extraDelay1")) {
+                                s = elt.getAttribute("value");
+                                if (s != null) {
+                                    extraDelay1.setText( s );
+
+                                    // Issue #69 loading enabling parameters
+                                    s = elt.getAttribute("enabled");
+
+                                    s = elt.getAttribute("enabled");
+
+                                    if ( s != null && !s.isEmpty() ) {
+                                        extraDelay1.setEnabled(Boolean.parseBoolean(s));
+                                    }
+//
+                                }
+                            }
+
+                            if (elt.getTagName().equals("delayDistributionLaw")) {
+                                s = elt.getAttribute("value");
+                                if (s != null) {
+                                    delayDistributionLaw.setText( s );
+
+                                    // Issue #69 loading enabling parameters
+                                    s = elt.getAttribute("enabled");
+
+
+                                    if ( s != null && !s.isEmpty() ) {
+                                        delayDistributionLaw.setEnabled(Boolean.parseBoolean(s));
+                                    }
+
+//
+                                }
+                            }
+
                             if (elt.getTagName().equals("computeMin")) {
                                 s = elt.getAttribute("value");
                                 if (s != null) {
@@ -796,6 +866,15 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
         return afterDelay.getMaxExpression().getText();
         //return afterMax;
     }
+
+    public int getDelayDistributionLaw() {
+        return Integer.decode(delayDistributionLaw.getText());
+    }
+
+    public String getExtraDelay1() {
+        return extraDelay1.getText();
+    }
+
 
     /**
      * Issue #69

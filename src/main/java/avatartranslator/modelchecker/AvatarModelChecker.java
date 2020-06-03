@@ -71,7 +71,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     private Map<Integer, SpecificationState> states;
     private Map<Long, SpecificationState> statesByID;
     private List<SpecificationState> pendingStates;
-    private List<SpecificationState> safetyLeadStates;
+    private Map<Integer, SpecificationState> safetyLeadStates;
     private Map<AvatarTransition, Set<AvatarTransition>> signalRelation;
     //private List<SpecificationLink> links;
     private int nbOfLinks;
@@ -106,6 +106,13 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     private ArrayList<SafetyProperty> safeties;
     private SafetyProperty safety;
     
+    // Re-Initialization
+    private boolean studyReinit;
+    private SpecificationReinit initState;
+    
+    //Debug counterexample
+    //private boolean counterexample;
+    
     //RG limits
     private boolean stateLimitRG;
     private boolean timeLimitRG;
@@ -131,6 +138,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         checkNoDeadlocks = false;
         deadlockStop = false;
         studyReachability = false;
+        studyReinit = false;
         computeRG = false;
         stateLimitRG = false; //No state limit in RG computation
         timeLimitRG = false;
@@ -194,7 +202,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     }
 
     public void setIgnoreInternalStates(boolean _b) {
-        TraceManager.addDev("ignore niternal state?" + ignoreInternalStates);
+        TraceManager.addDev("ignore internal state?" + ignoreInternalStates);
         ignoreInternalStates = _b;
     }
     
@@ -320,6 +328,19 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     public ArrayList<SafetyProperty> getSafeties() {
         return safeties;
     }
+    
+
+    public void setReinitAnalysis(boolean studyReinit) {
+        this.studyReinit = studyReinit;
+    }
+    
+    
+    public boolean getReinitResult() {
+        if (studyReinit && initState != null) {
+            return initState.getResult();
+        }
+        return false;
+    }
 
     public void setComputeRG(boolean _rg) {
         computeRG = _rg;
@@ -346,7 +367,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
       }*/
 
     public boolean startModelCheckingProperties() {
-        boolean studyS, studyL, studyR;
+        boolean studyS, studyL, studyR, studyRI, genRG;
+        boolean emptyTr, ignoreConcurrence;
         long deadlocks = 0;
         
         if (spec == null) {
@@ -361,10 +383,13 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         
         stateLimitRG = false;
         timeLimitRG = false;
-        ignoreEmptyTransitions = true;
+        emptyTr = ignoreEmptyTransitions;
+        ignoreConcurrence = ignoreConcurrenceBetweenInternalActions;
         studyR = studyReachability;
         studyL = studyLiveness;
         studyS = studySafety;
+        studyRI = studyReinit;
+        genRG = computeRG;
         
         //then compute livenesses
         computeRG = false;
@@ -372,32 +397,42 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         studySafety = false;
         studyLiveness = false;
         studyReachability = false;
+        studyReinit = false;
 
         if (studyL) {
             studySafety = true;
+            ignoreConcurrenceBetweenInternalActions = true;
+            ignoreEmptyTransitions = true;
             for (SafetyProperty sp : livenesses) {
                 safety = sp;
                 startModelChecking(nbOfThreads);
+                deadlocks += nbOfDeadlocks;
                 resetModelChecking();
                 safety.setComputed();
-                deadlocks += nbOfDeadlocks;
             }
             studySafety = false;
+            ignoreConcurrenceBetweenInternalActions = ignoreConcurrence;
+            ignoreEmptyTransitions = emptyTr;
         }
         
         if (studyS) {
             studySafety = true;
             for (SafetyProperty sp : safeties) {
                 safety = sp;
+                ignoreConcurrenceBetweenInternalActions = true;
                 if (safety.safetyType == SafetyProperty.LEADS_TO) {
                     // prepare to save second pass states
-                    safetyLeadStates = Collections.synchronizedList(new LinkedList<SpecificationState>());
+                    safetyLeadStates = Collections.synchronizedMap(new HashMap<Integer, SpecificationState>());
+                    ignoreEmptyTransitions = false;
+                    ignoreConcurrenceBetweenInternalActions = ignoreConcurrence;
                 }
                 startModelChecking(nbOfThreads);
                 if (safety.safetyType == SafetyProperty.LEADS_TO) {
                     // second pass
                     safety.initLead();
-                    for (SpecificationState state : safetyLeadStates) {
+                    ignoreEmptyTransitions = emptyTr;
+                    ignoreConcurrenceBetweenInternalActions = true;
+                    for (SpecificationState state : safetyLeadStates.values()) {
                         deadlocks += nbOfDeadlocks;
                         resetModelChecking();
                         startModelChecking(state, nbOfThreads);
@@ -405,36 +440,59 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                             break;
                         }
                     }
+                    System.out.println("Dimensions of lead states to elaborate: " + safetyLeadStates.size());
                     safetyLeadStates = null;
                 }
                 safety.setComputed();
-                resetModelChecking();
                 deadlocks += nbOfDeadlocks;
+                ignoreConcurrenceBetweenInternalActions = ignoreConcurrence;
+                resetModelChecking();
             }
             studySafety = false;
         }
         
-        if (studyR) {
-            studyReachability = true;
-            //computeRG = true;
+        if (studyRI) {
+            studyReinit = true;
+            startModelChecking(nbOfThreads);
+            deadlocks += nbOfDeadlocks;
+            resetModelChecking();
+            studyReinit = false;
+        }
+        
+        if (studyR || genRG) {
+            if (genRG) {
+                deadlocks = 0;
+            }
+            studyReachability = studyR;
+            computeRG = genRG;
             startModelChecking(nbOfThreads);
             deadlocks += nbOfDeadlocks;
             resetModelChecking();
             studyReachability = false;
+            computeRG = false;
         }
         
-        if (checkNoDeadlocks) {
+        if (genRG) {
+            nbOfDeadlocks = (int) deadlocks;
+        } else if (checkNoDeadlocks) {
+            //If a complete study with reachability graph generation has been executed,
+            //there is no need to study deadlocks again
             if (deadlocks == 0) {
                 deadlockStop = true;
+                ignoreConcurrenceBetweenInternalActions = true;
                 startModelChecking(nbOfThreads);
+                ignoreConcurrenceBetweenInternalActions = ignoreConcurrence;
             } else {
                 nbOfDeadlocks = 1;
             }
         }
         
+        computeRG = genRG;
         studyLiveness = studyL;
         studySafety = studyS;
         studyReachability = studyR;
+        studyReinit = studyRI;
+        
         TraceManager.addDev("Model checking done");
         return true;
     }
@@ -482,7 +540,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             checkElement(asme, initialState);
             if (studySafety && safety.propertyType == SafetyProperty.BLOCK_STATE) {
                 initialState.property |= safety.getSolverResult(initialState, asme);
-                break;
             }
         }
         if (studySafety && safety.propertyType == SafetyProperty.BLOCK_STATE) {
@@ -511,6 +568,11 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         } else {
             pendingStates.add(initialState);
         }
+        
+        if (studyReinit) {
+            initState = new SpecificationReinit(initialState);
+        }
+
         //states.put(initialState.hashValue, initialState);
         //statesByID.put(initialState.id, initialState);
         nbOfCurrentComputations = 0;
@@ -540,6 +602,18 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         if (mustStop()) {
             return;
         }
+                
+        initialState.property = safety.getSolverResult(initialState);
+
+        if (studySafety && safety.propertyType == SafetyProperty.BLOCK_STATE) {
+                if (safety.safetyType == SafetyProperty.ALLTRACES_ALLSTATES || safety.safetyType == SafetyProperty.ONETRACE_ALLSTATES) {
+                    initialState.property = !initialState.property;
+                }
+        }
+        
+        if (ignoreEmptyTransitions) {
+            handleNonEmptyUniqueTransition(initialState);
+        }
 
         // initialState's transitions and blocks must be already initialized
         blockValues = initialState.getBlockValues();
@@ -549,7 +623,15 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         initialState.computeHash(blockValues);
         addState(initialState);
         
-        pendingStates.add(initialState);
+        if (studySafety) {
+            if (safety.propertyType == SafetyProperty.BOOL_EXPR) {
+                initialState.property = evaluateSafetyOfProperty(initialState, null, false);
+            }
+            actionOnProperty(initialState, 0, null, null);
+        } else {
+            pendingStates.add(initialState);
+        }
+        //pendingStates.add(initialState);
            
         //states.put(initialState.hashValue, initialState);
         //statesByID.put(initialState.id, initialState);
@@ -584,13 +666,14 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         spec.makeFullStates();
 
         if (ignoreEmptyTransitions) {
-            spec.removeEmptyTransitions((nbOfRemainingReachabilities == 0) || studyLiveness ||studySafety);
+            spec.removeEmptyTransitions(!(studyReachability || studyLiveness || studySafety));
         }
-        
-        initExpressionSolvers();
 
         //TraceManager.addDev("Preparing Avatar specification :" + spec.toString());
         prepareStates();
+
+        initExpressionSolvers();
+
         prepareTransitions();
         prepareBlocks();
 
@@ -732,7 +815,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     private synchronized SpecificationState pickupState() {
         int size = pendingStates.size();
         while (size == 0) {
-            if (nbOfCurrentComputations == 0) {
+            if (nbOfCurrentComputations <= 0) {
                 return null;
             } else {
                 try {
@@ -790,6 +873,13 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 }
             }
         }
+        
+        //To have all the leadsTo functionalities allStates in stateMachines must be filled with states
+        if (studySafety && safeties != null) {
+            for (SafetyProperty sp : safeties) {
+               sp.linkSolverStates();
+            }
+        }
     }
 
     private void prepareTransitionsOfState(SpecificationState _ss) {
@@ -829,8 +919,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         
         prepareTransitionsOfState(_ss);
 
-        ArrayList<SpecificationTransition> transitions = _ss.transitions;
-        if (transitions == null) {
+        
+        if (_ss.transitions == null) {
             TraceManager.addDev("null transitions");
             nbOfDeadlocks++;
             mustStop();
@@ -838,50 +928,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         }
 
         //TraceManager.addDev("Possible transitions 1:" + transitions.size());
-
-        // All locally executable transitions are now gathered.
-        // We simply need to select the ones that are executable
-        // Two constraints: synchronous transactions must have a counter part
-        // then, we select only the transitions which clock intervals are within the lowest clock interval
-
-        // Reworking sync/non sync. We create one new transition for all possible synchros, and we remove the ones
-        // with only one synchro
-        ArrayList<SpecificationTransition> newTransitions = new ArrayList<SpecificationTransition>();
-        for (SpecificationTransition tr : transitions) {
-            if (tr.getType() == AvatarTransition.TYPE_SEND_SYNC) {
-                for (SpecificationTransition tro : transitions) {
-                    if (tro.getType() == AvatarTransition.TYPE_RECV_SYNC) {
-                        SpecificationTransition newT = computeSynchronousTransition(tr, tro);
-                        if (newT != null) newTransitions.add(newT);
-                    }
-                }
-            } else if (AvatarTransition.isActionType(tr.getType())) {
-                newTransitions.add(tr);
-            } else if (tr.getType() == AvatarTransition.TYPE_EMPTY) {
-                newTransitions.add(tr);
-            }
-        }
-        transitions = newTransitions;
-        //TraceManager.addDev("Possible transitions 2:" + transitions.size());
-
-
-        // Selecting only the transactions within the smallest clock interval
-        int clockMin = Integer.MAX_VALUE, clockMax = Integer.MAX_VALUE;
-        for (SpecificationTransition tr : transitions) {
-            clockMin = Math.min(clockMin, tr.clockMin);
-            clockMax = Math.min(clockMax, tr.clockMax);
-        }
-
-        //TraceManager.addDev("Selected clock interval:" + clockMin + "," + clockMax);
-
-        newTransitions = new ArrayList<SpecificationTransition>();
-        for (SpecificationTransition tr : transitions) {
-            if (tr.clockMin <= clockMax) {
-                tr.clockMax = clockMax;
-                newTransitions.add(tr);
-            }
-        }
-        transitions = newTransitions;
+        ArrayList<SpecificationTransition> transitions = computeValidTransitions(_ss.transitions);
+        
         //TraceManager.addDev("Possible transitions 3:" + transitions.size());
 
         if (ignoreConcurrenceBetweenInternalActions) {
@@ -956,24 +1004,22 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
             // Impact the variable of the state, either by executing actions, or by
             // doing the synchronization
-            executeTransition(_ss, newState, tr);
-            String action = tr.infoForGraph;
+            String action = executeTransition(_ss, newState, tr);
             
             if (studySafety) {
                 newState.property = evaluateSafetyOfProperty(newState, tr, _ss.property);
             }
 
-//            // Remove empty transitions if applicable
+            // Remove empty transitions if applicable
             if (ignoreEmptyTransitions) {
                 handleNonEmptyUniqueTransition(newState);
             }
-//            prepareTransitionsOfState(newState);
             
 
             // Compute the hash of the new state, and create the link to the right next state
             SpecificationLink link = new SpecificationLink();
             link.originState = _ss;
-            action += " [" + tr.clockMin + "..." + clockMax + "]";
+            action += " [" + tr.clockMin + "..." + tr.clockMax + "]";
             link.action = action;
             newState.computeHash(blockValues);
             //SpecificationState similar = states.get(newState.getHash(blockValues));
@@ -1055,7 +1101,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         while (st != null) {
             //TraceManager.addDev("cpt=" + cpt + " Working on transition:" + st);
             newState.increaseClockOfBlocksExcept(st);
-            executeTransition(previousState, newState, st);
+            String action = executeTransition(previousState, newState, st);
             
             if (studySafety) {
                 newState.property = evaluateSafetyOfProperty(newState, st, previousState.property);
@@ -1072,7 +1118,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             if (similar != null) {
                 SpecificationLink link = new SpecificationLink();
                 link.originState = _ss;
-                String action = st.infoForGraph;
                 action += " [" + st.clockMin + "..." + st.clockMax + "]";
                 link.action = action;
                 link.destinationState = similar;
@@ -1080,51 +1125,41 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 _ss.addNext(link);
                 actionOnProperty(newState, 0, similar, _ss);
                 break;
+            } else if (studySafety && safety.safetyType == SafetyProperty.LEADS_TO && newState.property) {
+                newState = reduceCombinatorialExplosionProperty(newState);
+                
+                similar = findSimilarState(newState);
+                SpecificationLink link = new SpecificationLink();
+                link.originState = _ss;
+                action += " [" + st.clockMin + "..." + st.clockMax + "]";
+                link.action = action;
+                if (similar != null) {
+                    link.destinationState = similar;
+                } else {
+                    link.destinationState = newState;
+                    addState(newState);
+                    actionOnProperty(newState, 0, similar, _ss);
+                }
+                nbOfLinks++;
+                _ss.addNext(link);
+                break;
             }
 
 
             // Compute next transition
             //prepareTransitionsOfState(previousState);
             prepareTransitionsOfState(newState);
-            ArrayList<SpecificationTransition> transitions = newState.transitions;
-            if (transitions == null) {
+            
+            if (newState.transitions == null) {
                 TraceManager.addDev("null transitions");
                 nbOfDeadlocks++;
                 propertyDone = deadlockStop; //use this flag to stop the execution
                 mustStop();
                 return;
             }
-            ArrayList<SpecificationTransition> newTransitions = new ArrayList<SpecificationTransition>();
-            for (SpecificationTransition tr : transitions) {
-                if (tr.getType() == AvatarTransition.TYPE_SEND_SYNC) {
-                    for (SpecificationTransition tro : transitions) {
-                        if (tro.getType() == AvatarTransition.TYPE_RECV_SYNC) {
-                            SpecificationTransition newT = computeSynchronousTransition(tr, tro);
-                            if (newT != null) newTransitions.add(newT);
-                        }
-                    }
-                } else if (AvatarTransition.isActionType(tr.getType())) {
-                    newTransitions.add(tr);
-                } else if (tr.getType() == AvatarTransition.TYPE_EMPTY) {
-                    newTransitions.add(tr);
-                }
-            }
-            transitions = newTransitions;
-
-            // Selecting only the transactions within the smallest clock interval
-            int clockMin = Integer.MAX_VALUE, clockMax = Integer.MAX_VALUE;
-            for (SpecificationTransition tr : transitions) {
-                clockMin = Math.min(clockMin, tr.clockMin);
-                clockMax = Math.min(clockMax, tr.clockMax);
-            }
-            newTransitions = new ArrayList<SpecificationTransition>();
-            for (SpecificationTransition tr : transitions) {
-                if (tr.clockMin <= clockMax) {
-                    tr.clockMax = clockMax;
-                    newTransitions.add(tr);
-                }
-            }
-            transitions = newTransitions;
+            
+            ArrayList<SpecificationTransition> transitions = computeValidTransitions(newState.transitions);
+            
             st = null;
             if (ignoreConcurrenceBetweenInternalActions) {
 
@@ -1145,7 +1180,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 //Creating new link
                 SpecificationLink link = new SpecificationLink();
                 link.originState = _ss;
-                String action = "internal";
                 action += " [" +  "0...0" +  "]";
                 link.action = action;
                 synchronized (this) {
@@ -1194,6 +1228,91 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         }
 
         mustStop();
+    }
+    
+    
+    private SpecificationState reduceCombinatorialExplosionProperty(SpecificationState ss) {
+        // ss with true property. Find and execute transitions that maintain the property
+        // true
+        SpecificationState prevState = ss;
+        boolean found;
+        
+        do {
+            prepareTransitionsOfState(prevState);
+            
+            if (prevState.transitions == null) {
+                return prevState;
+            }
+            
+            ArrayList<SpecificationTransition> transitions = computeValidTransitions(prevState.transitions);
+            
+            found = false;
+            for (SpecificationTransition tr : transitions) {
+                if ((AvatarTransition.isActionType(tr.getType()) && (tr.clockMin == tr.clockMax) && (tr.clockMin == 0))
+                        || tr.getType() == AvatarTransition.TYPE_EMPTY) {
+                    if (!(tr.fromStateWithMoreThanOneTransition)) {
+                        // try this transition
+                        SpecificationState newState = prevState.advancedClone();
+                        executeTransition(prevState, newState, tr);
+                        newState.property = evaluateSafetyOfProperty(newState, tr, false);
+                        if (newState.property) {
+                            newState.computeHash(blockValues);
+                            SpecificationState similar = findSimilarState(newState);
+                            if (similar != null) {
+                                return newState;
+                            }
+                            found = true;
+                            prevState = newState;
+                            break;
+                        }
+                    }
+                }
+            }
+        } while (found);
+        
+        return prevState;
+    }
+    
+    private ArrayList<SpecificationTransition> computeValidTransitions(ArrayList<SpecificationTransition> transitions) {
+        ArrayList<SpecificationTransition> newTransitions = new ArrayList<SpecificationTransition>();
+        ArrayList<SpecificationTransition> validTransitions = new ArrayList<SpecificationTransition>();
+
+        // All locally executable transitions are now gathered.
+        // We simply need to select the ones that are executable
+        // Two constraints: synchronous transactions must have a counter part
+        // then, we select only the transitions which clock intervals are within the lowest clock interval
+
+        // Reworking sync/non sync. We create one new transition for all possible synchros, and we remove the ones
+        // with only one synchro
+        for (SpecificationTransition tr : transitions) {
+            if (tr.getType() == AvatarTransition.TYPE_SEND_SYNC) {
+                for (SpecificationTransition tro : transitions) {
+                    if (tro.getType() == AvatarTransition.TYPE_RECV_SYNC) {
+                        SpecificationTransition newT = computeSynchronousTransition(tr, tro);
+                        if (newT != null) newTransitions.add(newT);
+                    }
+                }
+            } else if (AvatarTransition.isActionType(tr.getType())) {
+                newTransitions.add(tr);
+            } else if (tr.getType() == AvatarTransition.TYPE_EMPTY) {
+                newTransitions.add(tr);
+            }
+        }
+
+        // Selecting only the transactions within the smallest clock interval
+        int clockMin = Integer.MAX_VALUE, clockMax = Integer.MAX_VALUE;
+        for (SpecificationTransition tr : newTransitions) {
+            clockMin = Math.min(clockMin, tr.clockMin);
+            clockMax = Math.min(clockMax, tr.clockMax);
+        }
+        
+        for (SpecificationTransition tr : newTransitions) {
+            if (tr.clockMin <= clockMax) {
+                tr.clockMax = clockMax;
+                validTransitions.add(tr);
+            }
+        }
+        return validTransitions;
     }
 
     private boolean guardResult(AvatarTransition _at, AvatarBlock _block, SpecificationBlock _sb) {
@@ -1470,7 +1589,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     }
 
 
-    private void executeTransition(SpecificationState _previousState, SpecificationState _newState, SpecificationTransition _st) {
+    private String executeTransition(SpecificationState _previousState, SpecificationState _newState, SpecificationTransition _st) {
         int type = _st.transitions[0].type;
         AvatarStateElement ase;
 
@@ -1489,14 +1608,12 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
 
         if ((AvatarTransition.isActionType(type)) || (type == AvatarTransition.TYPE_EMPTY)) {
-            _st.infoForGraph = executeActionTransition(_previousState, _newState, _st);
-            return;
+            return executeActionTransition(_previousState, _newState, _st);
         } else if (type == AvatarTransition.TYPE_SEND_SYNC) {
-            _st.infoForGraph = executeSyncTransition(_previousState, _newState, _st);
-            return;
+            return executeSyncTransition(_previousState, _newState, _st);
         }
 
-        _st.infoForGraph = "not implemented";
+        return "not implemented";
     }
 
     private AvatarStateElement getNextState(AvatarStateMachineElement e, SpecificationState _newState, int maxNbOfIterations) {
@@ -1618,7 +1735,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 //            try {
                 result = aaoss.getExpressionAttribute(i).getValue(_newState.blocks[((AvatarBlock) _st.transitions[0].getBlock()).getBlockIndex()]);
                 aaosr.getExpressionAttribute(i).setValue(_newState.blocks[((AvatarBlock) _st.transitions[1].getBlock()).getBlockIndex()], result);
-                ret += "" + result;
+                ret += result;
 //            } catch (Exception e) {
 //                TraceManager.addDev("EXCEPTION on adding value " + aaoss);
 //            }
@@ -1660,6 +1777,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 result = !result;
             }
             _ss.property |= result;
+            
+            if (safety.safetyType == SafetyProperty.LEADS_TO && result) {
+                return _ase;
+            }
         }
 
         if (_ase.getNexts().size() != 1) {
@@ -1720,12 +1841,24 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     
     private boolean evaluateSafetyOfProperty(SpecificationState newState, SpecificationTransition tr, boolean precProperty) {
         AvatarStateMachineElement asme;
-        boolean result = false;
+        boolean result;
         
         if (safety.propertyType == SafetyProperty.BLOCK_STATE) {
-            for (int i = 0; i < tr.transitions.length; i++) {
-                asme = tr.transitions[i].getNext(0);
-                result |= safety.getSolverResult(newState, asme);
+            result = safety.getSolverResult(newState);
+            
+            if (!result) {
+                for (int i = 0; i < tr.transitions.length; i++) {
+                    int k = 10;
+                    asme = tr.transitions[i].getNext(0);
+                    while (k > 0) {
+                        result |= safety.getSolverResult(newState, asme);
+                        if (asme instanceof AvatarStateElement || result == true) {
+                            break;
+                        }
+                        asme = asme.getNext(0);
+                        k--;
+                    }
+                }
             }
         } else {
             result = safety.getSolverResult(newState);
@@ -1800,11 +1933,21 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 if (similar == null) {
                     if (newState.property) {
                         SpecificationState state = newState.advancedClone();
-                        safetyLeadStates.add(state);
+                        if (!ignoreConcurrenceBetweenInternalActions) {
+                            state = reduceCombinatorialExplosionProperty(state);
+                        }
+                        safetyLeadStates.put(state.getHash(state.getBlockValues()), state);
                         newState.property = false;
                     }
                     pendingStates.add(newState);
                 }
+            }
+        }
+
+        if (studyReinit && similar != null) {
+            if (similar != initState.initState && stateIsReachableFromState(similar, _ss)) {
+                propertyDone = true;
+                initState.setResult(false);
             }
         }
     }
@@ -1812,12 +1955,16 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     private void checkPropertyOnDeadlock(SpecificationState ss) {
         if (studySafety) {
             if (safety.safetyType == SafetyProperty.ALLTRACES_ONESTATE && ss.property == false) {
+                propertyDone = true;
                 safety.result = false;
-                propertyDone = true;
             } else if (safety.safetyType == SafetyProperty.ONETRACE_ALLSTATES && ss.property == false) {
-                safety.result = true;
                 propertyDone = true;
+                safety.result = true;
             }
+        }
+        if (studyReinit) {
+            propertyDone = true;
+            initState.setResult(false);
         }
     }
 
@@ -2041,6 +2188,23 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         }
         return ret.toString();
     }
+    
+    
+    public String reinitToString() {
+        if (!studyReinit || initState == null) {
+            return "Reinitialization check not activeted\n";
+        }
+        
+        String ret;
+        if (initState.getResult()) {
+            ret = "property is satisfied\n";
+        } else {
+            ret = "property is NOT satisfied\n";
+        }
+        
+        return ret;
+    }
+    
 
     // Do not free the RG
     public void freeUselessAllocations() {

@@ -53,6 +53,15 @@ import java.util.List;
  * @version 1.0 20/05/2010
  */
 public class AvatarTransition extends AvatarStateMachineElement {
+    // Delay distribution laws
+    public final static int DELAY_UNIFORM_LAW = 0;
+    public final static int DELAY_TRIANGULAR_LAW = 1;
+    public final static int DELAY_GAUSSIAN_LAW = 2;
+    public final static String[] DISTRIBUTION_LAWS = {"Uniform", "Triangular", "Gaussian"};
+    public final static String[] DISTRIBUTION_LAWS_SHORT = {"", " ^", "ĝ"};
+
+    public final static int[] NB_OF_EXTRA_ATTRIBUTES = {0, 1, 1};
+    public final static String[] LABELS_OF_EXTRA_ATTRIBUTES = {"", "triangle top", "standard deviation"};
 
     // Type management: to be used by code generators
     public static final int UNDEFINED = -1;
@@ -72,8 +81,14 @@ public class AvatarTransition extends AvatarStateMachineElement {
     private double probability = DEFAULT_PROBABILITY;
     private AvatarGuard guard;
     private String minDelay = "", maxDelay = "";
+    private String delayExtra1 = ""; // Used for some of the distribution law
+    private int delayDistributionLaw = 0;
+
     private String minCompute = "", maxCompute = "";
     private AvatarStateMachineOwner block;
+
+
+
     
     private AvatarExpressionSolver guardSolver;
 
@@ -239,6 +254,11 @@ public class AvatarTransition extends AvatarStateMachineElement {
         maxDelay = _maxDelay;
     }
 
+    public void setDistributionLaw(int _law, String _delayExtra1 ) {
+        delayDistributionLaw = _law;
+        delayExtra1 = _delayExtra1;
+    }
+
     public void setComputes(String _minCompute, String _maxCompute) {
         minCompute = _minCompute;
         maxCompute = _maxCompute;
@@ -248,11 +268,21 @@ public class AvatarTransition extends AvatarStateMachineElement {
         return minDelay;
     }
 
+
+
     public String getMaxDelay() {
         if (maxDelay.trim().length() == 0) {
             return getMinDelay();
         }
         return maxDelay;
+    }
+
+    public int getDelayDistributionLaw() {
+        return delayDistributionLaw;
+    }
+
+    public String getDelayExtra1() {
+        return delayExtra1;
     }
 
     public String getMinCompute() {

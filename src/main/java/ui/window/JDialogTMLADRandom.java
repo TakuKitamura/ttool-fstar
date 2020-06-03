@@ -41,7 +41,7 @@
 
 package ui.window;
 
-import ui.util.IconManager;
+import avatartranslator.AvatarRandom;
 
 import javax.swing.*;
 import java.awt.*;
@@ -65,22 +65,27 @@ public class JDialogTMLADRandom extends JDialogBase implements ActionListener  {
     
     private JPanel panel2;
     private Frame frame;
-	private String variable, minValue, maxValue;
+	private String variable, minValue, maxValue, extraAttribute1;
+
 	private int functionId;
     
 	
 	// Panel2
-    private JTextField jvariable, jminValue, jmaxValue;
+    private JTextField jvariable, jminValue, jmaxValue, jextraAttribute1;
+    private JLabel jextraAttribute1L;
 	private JComboBox<String> randomFunction;
     
     /* Creates new form  */
-    public JDialogTMLADRandom(Frame _frame, String _title, String _variable, String _minValue, String _maxValue, int _functionId) {
+    public JDialogTMLADRandom(Frame _frame, String _title, String _variable,
+                              String _minValue, String _maxValue, int _functionId,
+                              String _extraAttribute1) {
         super(_frame, _title, true);
         frame = _frame;
         variable = _variable;
 		minValue = _minValue;
 		maxValue = _maxValue;
 		functionId = _functionId;
+		extraAttribute1 = _extraAttribute1;
         
         initComponents();
         myInitComponents();
@@ -139,18 +144,38 @@ public class JDialogTMLADRandom extends JDialogBase implements ActionListener  {
 		panel2.add(jmaxValue, c2);
         
 		c2.gridwidth = 1;
-        panel2.add(new JLabel("Probability function:"), c2);
+        panel2.add(new JLabel("Distribution law:"), c2);
         c2.gridwidth = GridBagConstraints.REMAINDER; //end row
-        randomFunction = new JComboBox<>();
-        randomFunction.addItem("Uniform");
+        if (extraAttribute1 != null) {
+            randomFunction = new JComboBox<>(AvatarRandom.DISTRIBUTION_LAWS);
+        } else {
+            randomFunction = new JComboBox<String>();
+            randomFunction.addItem("Uniform");
+        }
+
 		randomFunction.setSelectedIndex(functionId);
+        randomFunction.addActionListener(this);
         panel2.add(randomFunction, c2);
+
+        if (extraAttribute1 != null) {
+            c2.gridwidth = 1;
+            jextraAttribute1L = new JLabel("");
+            panel2.add(jextraAttribute1L, c2);
+            c2.gridwidth = GridBagConstraints.REMAINDER; //end row
+            jextraAttribute1 = new JTextField(extraAttribute1, 30);
+            jextraAttribute1.setEditable(true);
+            jextraAttribute1.setFont(new Font("times", Font.PLAIN, 12));
+            panel2.add(jextraAttribute1, c2);
+        }
+
+        checkAttributesDistributionLawB();
         
         // main panel;
         c0.gridheight = 10;
         c0.weighty = 1.0;
         c0.weightx = 1.0;
         c0.gridwidth = GridBagConstraints.REMAINDER; //end row
+        c0.fill = GridBagConstraints.BOTH;
         c.add(panel2, c0);
         
         c0.gridwidth = 1;
@@ -175,6 +200,8 @@ public class JDialogTMLADRandom extends JDialogBase implements ActionListener  {
             closeDialog();
         } else if (command.equals("Cancel")) {
             cancelDialog();
+        } else if (evt.getSource() == randomFunction) {
+            checkAttributesDistributionLawB();
         }
     }
     
@@ -205,6 +232,21 @@ public class JDialogTMLADRandom extends JDialogBase implements ActionListener  {
     
     public int getFunctionId() {
         return randomFunction.getSelectedIndex();
+    }
+
+    public String getExtraAttribute1() {return jextraAttribute1.getText();}
+
+    private void checkAttributesDistributionLawB() {
+        if (extraAttribute1 != null) {
+            functionId = randomFunction.getSelectedIndex();
+            int nbOfExtras = AvatarRandom.NB_OF_EXTRA_ATTRIBUTES[functionId];
+            jextraAttribute1.setEnabled(nbOfExtras > 0);
+            if (AvatarRandom.LABELS_OF_EXTRA_ATTRIBUTES[functionId].length() > 0)
+                jextraAttribute1L.setText(AvatarRandom.LABELS_OF_EXTRA_ATTRIBUTES[functionId] + ":");
+            else {
+                jextraAttribute1L.setText("");
+            }
+        }
     }
     
     

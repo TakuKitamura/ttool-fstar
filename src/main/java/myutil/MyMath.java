@@ -41,6 +41,8 @@
 
 package myutil;
 
+import java.util.Random;
+
 /**
  * Class MyMath
  * Creation: 08/02/2012
@@ -90,7 +92,42 @@ public class MyMath {
 
 	}
 
-	
-  
+	// Triangular distribution
+    // a,b: interval min and max
+    // c: std deviation
+	public static double triangularDistribution(double a, double b, double c) {
+		double F = (c - a) / (b - a);
+		double rand = Math.random();
+		if (rand < F) {
+			return a + Math.sqrt(rand * (b - a) * (c - a));
+		} else {
+			return b - Math.sqrt((1 - rand) * (b - a) * (b - c));
+		}
+	}
+
+    // Gaussian distribution
+    // a: min of interval
+    // b : max of interval
+    // c: standard deviation
+    public static double gaussianDistribution(double a, double b, double c) {
+        Random r = new Random();
+        double n = r.nextGaussian();
+        //System.out.println("1. n=" + n);
+        n = n * c;
+        //System.out.println("1.1 n=" + n);
+        n = n + (b+a)/2;
+        //System.out.println("1.2 n=" + n);
+        if (n < a) {
+            return gaussianDistribution(a, b, c);
+        }
+        //System.out.println("1.3 n=" + n);
+        if (n>b) {
+            return gaussianDistribution(a, b, c);
+        }
+        //n = Math.max(a, n);
+        //System.out.println("2. n=" + n);
+        return n;
+    }
+
   
 }

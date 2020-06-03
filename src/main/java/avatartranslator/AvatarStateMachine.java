@@ -197,10 +197,12 @@ public class AvatarStateMachine extends AvatarElement {
     // Add missing implicit states.
     public void makeFullStates(AvatarBlock _block) {
         addStatesToEmptyNonTerminalEmptyNext(_block);
+        addStateAfterActionOnSignal(_block);
         addStatesToTransitionsBetweenTwoNonStates(_block);
         addStatesToActionTransitions(_block);
         addStatesToNonEmptyTransitionsBetweenNonStateToState(_block);
     }
+    
 
     private void addStatesToEmptyNonTerminalEmptyNext(AvatarBlock _b) {
         List<AvatarStateMachineElement> toConsider = new ArrayList<AvatarStateMachineElement>();
@@ -222,6 +224,36 @@ public class AvatarStateMachine extends AvatarElement {
             tr.addNext(stopMe);
         }
 
+    }
+    
+    private void addStateAfterActionOnSignal(AvatarBlock _block) {
+        List<AvatarStateMachineElement> toAdd = new ArrayList<AvatarStateMachineElement>();
+        int id = 0;
+        
+        for (AvatarStateMachineElement elt : elements) {
+            if (elt instanceof AvatarActionOnSignal) {                
+                if (elt.getNext(0) instanceof AvatarTransition) {
+                    AvatarTransition tr = (AvatarTransition) elt.getNext(0);
+                    // We create an intermediate state
+                    AvatarState state = new AvatarState("IntermediateState4__" + id, elt.getReferenceObject());
+                    toAdd.add(state);
+                    AvatarTransition at1 = new AvatarTransition(_block, "TransitionForIntermediateState4__" + id, elt.getReferenceObject());
+                    toAdd.add(at1);
+
+                    elt.removeAllNexts();
+                    elt.addNext(at1);
+                    at1.addNext(state);
+                    state.addNext(tr);
+
+                    id++;
+                }
+
+            }
+        }
+        
+        for (AvatarStateMachineElement add : toAdd) {
+            elements.add(add);
+        }
     }
 
 

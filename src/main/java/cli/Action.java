@@ -587,14 +587,17 @@ public class Action extends Command {
             }
 
             public String getUsage() { return "[OPTION]... [FILE]\n"
+                    + "-g FILE\tcompute and save in FILE the reachability graph"
                     + "-r, -rs\treachability of selected states\n"
                     + "-ra\treachability of all states\n"
                     + "-l, ls\tliveness of all states\n"
                     + "-la\tliveness of all states\n"
                     + "-s\tsafety pragmas verification\n"
+                    + "-q \"QUERY\"\tquery a safety pragma\n"
                     + "-d\tno deadlocks verification\n"
-                    + "-n NUM\tmaximum states created\n"
-                    + "-t NUM\tmaximum time (ms)\n";
+                    + "-n NUM\tmaximum states created (Only for a non verification study)\n"
+                    + "-t NUM\tmaximum time (ms) (Only for a non verification study)\n"
+                    + "-c\tconsider full concurrency between actions";
             }
 
             public String getExample() {
@@ -602,7 +605,7 @@ public class Action extends Command {
             }
 
             public String executeCommand(String command, Interpreter interpreter) {
-                //format: flags(-rl -la -t 100) graph_path
+                //format: -rl -la -t 100 -g graph_path
                 
                 if (!interpreter.isTToolStarted()) {
                     return Interpreter.TTOOL_NOT_STARTED;
@@ -613,7 +616,8 @@ public class Action extends Command {
                     return Interpreter.BAD;
                 }
 
-                String graphPath = commands[commands.length - 1];
+                //String graphPath = commands[commands.length - 1];
+                String graphPath = "";
 
                 AvatarSpecification avspec = interpreter.mgui.gtm.getAvatarSpecification();
                 if(avspec == null) {
@@ -624,14 +628,24 @@ public class Action extends Command {
                 amc.setIgnoreEmptyTransitions(true);
                 amc.setIgnoreConcurrenceBetweenInternalActions(true);
                 amc.setIgnoreInternalStates(true);
-                amc.setComputeRG(true);
+                amc.setComputeRG(false);
+                boolean rgGraph = false;
                 boolean reachabilityAnalysis = false;
                 boolean livenessAnalysis = false;
                 boolean safetyAnalysis = false;
                 boolean noDeadlocks = false;
-                for (int i = 0; i < commands.length - 1; i++) {
+                for (int i = 0; i < commands.length; i++) {
                     //specification
                     switch (commands[i]) {
+                        case "-g":
+                            if (i != commands.length - 1) {
+                                graphPath = commands[++i];
+                                amc.setComputeRG(true);
+                                rgGraph = true;
+                            } else {
+                                return Interpreter.BAD;
+                            }
+                            break;
                         case "-r":
                         case "-rs":
                             //reachability of selected states
@@ -659,6 +673,31 @@ public class Action extends Command {
                             amc.setSafetyAnalysis();
                             safetyAnalysis = true;
                             break;
+                        case "-q":
+                            //query
+                            StringBuilder query;
+                            if (!commands[++i].startsWith("\"")) {
+                                return Interpreter.BAD;
+                            }
+                            query = new StringBuilder(commands[i].substring(1));
+                            while (!commands[++i].endsWith("\"") && i < commands.length) {
+                                query.append(" ");
+                                query.append(commands[i]);
+                            }
+                            query.append(" ");
+                            query.append(commands[i].substring(0, commands[i].length() - 1));
+                            //Supports multiple queries separated by a comma
+                            String[] queries = query.toString().split("\\s*,\\s*");
+                            for (String q : queries) {
+                                if (q != "") {
+                                    if (amc.addSafety(q) == false) {
+                                        System.out.println("Query " + q + " is badly written");
+                                        return Interpreter.BAD;
+                                    }
+                                }
+                            }
+                            safetyAnalysis = true;
+                            break;
                         case "-d":
                             //safety
                             amc.setCheckNoDeadlocks(true);
@@ -669,7 +708,7 @@ public class Action extends Command {
                             long states;
                             try {
                                 states = Long.parseLong(commands[++i]);
-                            } catch (NumberFormatException e){
+                            } catch (Exception e){
                                 return Interpreter.BAD;
                             }
                             amc.setStateLimitValue(states);
@@ -680,18 +719,22 @@ public class Action extends Command {
                             long time;
                             try {
                                 time = Long.parseLong(commands[++i]);
-                            } catch (NumberFormatException e){
+                            } catch (Exception e){
                                 return Interpreter.BAD;
                             }
                             amc.setTimeLimitValue(time);
                             amc.setTimeLimit(true);
+                            break;
+                        case "-c":
+                            //concurrency
+                            amc.setIgnoreConcurrenceBetweenInternalActions(false);
                             break;
                         default:
                             return Interpreter.BAD;
                     }
                 }
                 TraceManager.addDev("Starting model checking");
-                if (livenessAnalysis || safetyAnalysis) {
+                if (livenessAnalysis || safetyAnalysis || noDeadlocks) {
                     amc.startModelCheckingProperties();
                 } else {
                     amc.startModelChecking();
@@ -713,43 +756,45 @@ public class Action extends Command {
                 }
 
                 // Saving graph
-                String graphAUT = amc.toAUT();
-                String autfile;
-
-                if (graphPath.length() == 0) {
-                    graphPath =  System.getProperty("user.dir") + "/" + "rg$.aut";
-                }
-
-
-
-                if (graphPath.indexOf("?") != -1) {
-                    //System.out.println("Question mark found");
-                    DateFormat dateFormat = new SimpleDateFormat("_yyyyMMdd_HHmmss");
-                    Date date = new Date();
-                    String dateAndTime = dateFormat.format(date);
-                    autfile = Conversion.replaceAllChar(graphPath, '?', dateAndTime);
-                    //System.out.println("graphpath=" + graphPath);
-                } else {
-                    autfile = graphPath;
-                }
-                System.out.println("graphpath=" + graphPath);
-
-                System.out.println("autfile=" + autfile);
-
-                try {
-                    RG rg = new RG(autfile);
-                    rg.data = graphAUT;
-                    rg.fileName = autfile;
-                    rg.nbOfStates = amc.getNbOfStates();
-                    rg.nbOfTransitions = amc.getNbOfLinks();
-                    System.out.println("Saving graph in " + autfile + "\n");
-                    File f = new File(autfile);
-                    rg.name = f.getName();
-                    interpreter.mgui.addRG(rg);
-                    FileUtils.saveFile(autfile, graphAUT);
-                    System.out.println("Graph saved in " + autfile + "\n");
-                } catch (Exception e) {
-                    System.out.println("Graph could not be saved in " + autfile + "\n");
+                if (rgGraph) {
+                    String graphAUT = amc.toAUT();
+                    String autfile;
+    
+                    if (graphPath.length() == 0) {
+                        graphPath =  System.getProperty("user.dir") + "/" + "rg$.aut";
+                    }
+    
+    
+    
+                    if (graphPath.indexOf("?") != -1) {
+                        //System.out.println("Question mark found");
+                        DateFormat dateFormat = new SimpleDateFormat("_yyyyMMdd_HHmmss");
+                        Date date = new Date();
+                        String dateAndTime = dateFormat.format(date);
+                        autfile = Conversion.replaceAllChar(graphPath, '?', dateAndTime);
+                        //System.out.println("graphpath=" + graphPath);
+                    } else {
+                        autfile = graphPath;
+                    }
+                    System.out.println("graphpath=" + graphPath);
+    
+                    System.out.println("autfile=" + autfile);
+    
+                    try {
+                        RG rg = new RG(autfile);
+                        rg.data = graphAUT;
+                        rg.fileName = autfile;
+                        rg.nbOfStates = amc.getNbOfStates();
+                        rg.nbOfTransitions = amc.getNbOfLinks();
+                        System.out.println("Saving graph in " + autfile + "\n");
+                        File f = new File(autfile);
+                        rg.name = f.getName();
+                        interpreter.mgui.addRG(rg);
+                        FileUtils.saveFile(autfile, graphAUT);
+                        System.out.println("Graph saved in " + autfile + "\n");
+                    } catch (Exception e) {
+                        System.out.println("Graph could not be saved in " + autfile + "\n");
+                    }
                 }
 
                 return null;

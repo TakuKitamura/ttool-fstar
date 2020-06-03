@@ -1071,7 +1071,9 @@ public class AvatarSpecificationSimulation {
             // Must select a value for the duration!
             if (_aspt.linkedTransaction != null) {
                 if (_aspt.durationOnCurrent) {
-                    _aspt.selectedDuration = _aspt.myMinDuration + (int) (Math.floor(Math.random() * (_aspt.maxDuration - _aspt.myMinDuration)));
+
+                    //_aspt.selectedDuration = _aspt.myMinDuration + (int) (Math.floor(Math.random() * (_aspt.maxDuration - _aspt.myMinDuration)));
+                    _aspt.makeRandomDelay();
                     //TraceManager.addDev("Selected duration:" + _aspt.selectedDuration + " myMinDuration=" + _aspt.myMinDuration + " maxDuration=" + _aspt.maxDuration);
                     if (_aspt.durationOnOther) {
                         _aspt.linkedTransaction.durationSelected = true;
@@ -1081,7 +1083,8 @@ public class AvatarSpecificationSimulation {
                     }
                 }
             } else {
-                _aspt.selectedDuration = _aspt.myMinDuration + (int) (Math.floor(Math.random() * (_aspt.maxDuration - _aspt.myMinDuration)));
+                _aspt.makeRandomDelay();
+                //_aspt.selectedDuration = _aspt.myMinDuration + (int) (Math.floor(Math.random() * (_aspt.maxDuration - _aspt.myMinDuration)));
                 //TraceManager.addDev("Selected duration:" + _aspt.selectedDuration + " myMinDuration=" + _aspt.myMinDuration + " maxDuration=" + _aspt.maxDuration);
             }
         }
