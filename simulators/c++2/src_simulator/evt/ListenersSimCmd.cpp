@@ -323,6 +323,44 @@ void RunTillTransOnChannel::transExecuted(TMLTransaction* iTrans, ID iID){
 }
 
 //************************************************************************
+RunTillWriteTransOnChannel::RunTillWriteTransOnChannel(SimComponents* iSimComp, ListenerSubject<GeneralListener>* iSubject):_simComp(iSimComp), _subject
+(iSubject) {
+	_subject->registerListener(this);
+}
+
+RunTillWriteTransOnChannel::~RunTillWriteTransOnChannel(){
+	_subject->removeListener(this);
+}
+
+void RunTillWriteTransOnChannel::transExecuted(TMLTransaction* iTrans, ID iID){
+    std::string temp = iTrans->toShortString();
+    std::string::size_type position = temp.find("Write");
+    if(position!=std::string::npos) {
+        _simComp->setStopFlag(true, MSG_TRANSONCHANNEL);
+    }
+	//return true;
+}
+
+//************************************************************************
+RunTillReadTransOnChannel::RunTillReadTransOnChannel(SimComponents* iSimComp, ListenerSubject<GeneralListener>* iSubject):_simComp(iSimComp), _subject
+(iSubject) {
+	_subject->registerListener(this);
+}
+
+RunTillReadTransOnChannel::~RunTillReadTransOnChannel(){
+	_subject->removeListener(this);
+}
+
+void RunTillReadTransOnChannel::transExecuted(TMLTransaction* iTrans, ID iID){
+    std::string temp = iTrans->toShortString();
+    std::string::size_type position = temp.find("Read");
+    if(position!=std::string::npos) {
+        _simComp->setStopFlag(true, MSG_TRANSONCHANNEL);
+    }
+	//return true;
+}
+
+//************************************************************************
 //{SIM_START, SIM_END, TIME_ADV, TASK_START, TASK_END, CMD_RUNNABLE, CMD_START, CMD_END, TRANS_EXEC} EventType;
 TEPESigListener::TEPESigListener(ID* iSubjectIDs, unsigned int iNbOfSubjectIDs, unsigned int iEvtBitmap, unsigned int iTransTypeBitmap, unsigned int inbOfSignals, SignalConstraint** iNotifConstr, NtfSigFuncPointer* iNotifFunc, SimComponents* iSimComp, ListenerSubject<GeneralListener>* iSimulator): _subjectIDs(iSubjectIDs), _nbOfSubjectIDs(iNbOfSubjectIDs), _evtBitmap(iEvtBitmap), _transTypeBitmap(iTransTypeBitmap), _nbOfSignals(inbOfSignals), _notifConstr(iNotifConstr), _notifFunc(iNotifFunc), _sigNotified(false), _simComp(iSimComp), _simulator(iSimulator){
 	for (unsigned int i=0; i< _nbOfSubjectIDs; i++){

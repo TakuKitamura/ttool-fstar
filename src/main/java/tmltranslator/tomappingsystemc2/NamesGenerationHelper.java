@@ -85,6 +85,8 @@ public class NamesGenerationHelper {
             "RunXTimeUnits",
             "RunTillTransOnDevice",
             "RunTillTransOnTask",
+            "RunTillWriteTransOnChannel",
+            "RunTillReadTransOnChannel",
             "RunTillTransOnChannel",
             "TEPESigListener",
             "TEPEFloatingSigListener",
