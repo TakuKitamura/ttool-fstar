@@ -755,6 +755,20 @@ public class AvatarSimulationBlock {
                     TraceManager.addDev("Exception on log normal: " + e.getMessage());
                     return minV;
                 }
+            case AvatarRandom.RANDOM_EXPONENTIAL_LAW:
+                try {
+                    return (int) (Math.floor(MyMath.exponentialDistribution( (double) (minV), (double) (maxV), extra1) ));
+                } catch (Exception e) {
+                    TraceManager.addDev("Exception on exponential distribution: " + e.getMessage());
+                    return minV;
+                }
+            case AvatarRandom.RANDOM_WEIBULL_LAW:
+                try {
+                    return (int) (Math.floor(MyMath.weibullDistribution( (double) (minV), (double) (maxV), extra1, extra2) ));
+                } catch (Exception e) {
+                    TraceManager.addDev("Exception on weibull distribution: " + e.getMessage());
+                    return minV;
+                }
         }
         return minV;
     }

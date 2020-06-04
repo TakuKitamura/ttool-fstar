@@ -42,7 +42,7 @@
 package myutil;
 
 import java.util.Random;
-import org.apache.commons.math3.distribution.LogNormalDistribution;
+import org.apache.commons.math3.distribution.*;
 
 /**
  * Class MyMath
@@ -141,6 +141,27 @@ public class MyMath {
         }
         return val;
     }
+
+    public static double exponentialDistribution(double a, double b, double mean) {
+        ExponentialDistribution ed = new ExponentialDistribution(mean);
+        double val = ed.sample();
+        val += a;
+        if (val > b) {
+            return exponentialDistribution(a, b, mean);
+        }
+        return val;
+    }
+
+    public static double weibullDistribution(double a, double b, double shape, double scale) {
+        WeibullDistribution wd = new WeibullDistribution(shape, scale);
+        double val = wd.sample();
+        val += a;
+        if (val > b) {
+            return weibullDistribution(a, b, shape, scale);
+        }
+        return val;
+    }
+
 
 
 
