@@ -101,6 +101,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
     private final RangeExpression afterDelay;
     private final RangeExpression computeDelay;
     private final Expression extraDelay1;
+    private final Expression extraDelay2;
     private final Expression delayDistributionLaw;
 
 
@@ -136,6 +137,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
         guard = new Expression( NULL_GUARD_EXPR, NULL_GUARD_EXPR, null );
         afterDelay = new RangeExpression( NULL_EXPR, NULL_EXPR, NULL_EXPR, "after (%s, %s)", null , "after(%s)");
         extraDelay1 = new Expression( NULL_EXPR, NULL_EXPR, "extraDelay1=%s" );
+        extraDelay2 = new Expression( NULL_EXPR, NULL_EXPR, "extraDelay2=%s" );
         delayDistributionLaw = new Expression( ZERO_EXPR, ZERO_EXPR, "delayDistributionLaw=%s" );
         computeDelay = new RangeExpression( NULL_EXPR, NULL_EXPR, NULL_EXPR, "computeFor (%s, %s)", null, "computeFor (%s)");
         probability = new Expression( NULL_EXPR, NULL_EXPR, "weight=%s" );
@@ -501,6 +503,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
 																	getAfterMaxDelay(),
                                                                     getDelayDistributionLaw(),
                                                                     getExtraDelay1(),
+                                                                    getExtraDelay2(),
 //																	getComputeMinDelay(),
 //																	getComputeMaxDelay(),
 																	listOfActions,
@@ -533,16 +536,24 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
             extraDelay1.setText(retExtra );
         } catch (Exception e) {
         }
+        retExtra = jdat.getExtraDelay2().trim();
+        try {
+            double extra2 = Double.parseDouble(retExtra);
+            extraDelay2.setText(retExtra );
+        } catch (Exception e) {
+        }
 
 
         delayDistributionLaw.setText( "" + jdat.getDistributionLaw() );
 
-
-        if (AvatarTransition.NB_OF_EXTRA_ATTRIBUTES[jdat.getDistributionLaw()] > 0 ) {
+        /*if (AvatarTransition.NB_OF_EXTRA_ATTRIBUTES[jdat.getDistributionLaw()] > 0 ) {
             if (extraDelay1.getText().length() == 0) {
                 extraDelay1.setText(afterDelay.getMinExpression().getText());
             }
-        }
+            if (extraDelay2.getText().length() == 0) {
+                extraDelay2.setText(afterDelay.getMinExpression().getText());
+            }
+        }*/
 
 //        computeDelay.getMinExpression().setText( jdat.getComputeMin().trim() );
 //        computeDelay.getMaxExpression().setText( jdat.getComputeMax().trim() );
@@ -578,6 +589,7 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
         sb.append( toXML( "afterMin", afterDelay.getMinExpression() ) );
         sb.append( toXML( "afterMax", afterDelay.getMaxExpression() ) );
         sb.append( toXML( "extraDelay1", extraDelay1 ) );
+        sb.append( toXML( "extraDelay2", extraDelay2 ) );
         sb.append( toXML( "delayDistributionLaw", delayDistributionLaw ) );
         sb.append( toXML( "computeMin", computeDelay.getMinExpression() ) );
         sb.append( toXML( "computeMax", computeDelay.getMaxExpression() ) );
@@ -713,10 +725,23 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
                                     // Issue #69 loading enabling parameters
                                     s = elt.getAttribute("enabled");
 
+                                    if ( s != null && !s.isEmpty() ) {
+                                        extraDelay1.setEnabled(Boolean.parseBoolean(s));
+                                    }
+//
+                                }
+                            }
+
+                            if (elt.getTagName().equals("extraDelay2")) {
+                                s = elt.getAttribute("value");
+                                if (s != null) {
+                                    extraDelay2.setText( s );
+
+                                    // Issue #69 loading enabling parameters
                                     s = elt.getAttribute("enabled");
 
                                     if ( s != null && !s.isEmpty() ) {
-                                        extraDelay1.setEnabled(Boolean.parseBoolean(s));
+                                        extraDelay2.setEnabled(Boolean.parseBoolean(s));
                                     }
 //
                                 }
@@ -873,6 +898,10 @@ public class AvatarSMDTransitionInfo extends TGCWithoutInternalComponent impleme
 
     public String getExtraDelay1() {
         return extraDelay1.getText();
+    }
+
+    public String getExtraDelay2() {
+        return extraDelay2.getText();
     }
 
 

@@ -57,11 +57,16 @@ public class AvatarTransition extends AvatarStateMachineElement {
     public final static int DELAY_UNIFORM_LAW = 0;
     public final static int DELAY_TRIANGULAR_LAW = 1;
     public final static int DELAY_GAUSSIAN_LAW = 2;
-    public final static String[] DISTRIBUTION_LAWS = {"Uniform", "Triangular", "Gaussian"};
-    public final static String[] DISTRIBUTION_LAWS_SHORT = {"", " ^", "ĝ"};
+    public final static int RANDOM_LOG_NORMAL_LAW = 3;
+    public final static int RANDOM_EXPONENTIAL_LAW = 4;
+    public final static int RANDOM_WEIBULL_LAW = 5;
+    public final static String[] DISTRIBUTION_LAWS = {"Uniform", "Triangular", "Gaussian", "Log normal", "Exponential", "Weibull"};
+    public final static String[] DISTRIBUTION_LAWS_SHORT = {"", " ^", "ĝ", "ln", "e^", "w"};
 
-    public final static int[] NB_OF_EXTRA_ATTRIBUTES = {0, 1, 1};
-    public final static String[] LABELS_OF_EXTRA_ATTRIBUTES = {"", "triangle top", "standard deviation"};
+    public final static int[] NB_OF_EXTRA_ATTRIBUTES = {0, 1, 1, 2, 1, 2};
+    public final static String[] LABELS_OF_EXTRA_ATTRIBUTES_1 = {"", "triangle top", "standard deviation", "standard deviation", "mean", "shape"};
+    public final static String[] LABELS_OF_EXTRA_ATTRIBUTES_2 = {"", "", "", "mean", "", "scale"};
+
 
     // Type management: to be used by code generators
     public static final int UNDEFINED = -1;
@@ -82,6 +87,7 @@ public class AvatarTransition extends AvatarStateMachineElement {
     private AvatarGuard guard;
     private String minDelay = "", maxDelay = "";
     private String delayExtra1 = ""; // Used for some of the distribution law
+    private String delayExtra2 = ""; // Used for some of the distribution law
     private int delayDistributionLaw = 0;
 
     private String minCompute = "", maxCompute = "";
@@ -254,9 +260,10 @@ public class AvatarTransition extends AvatarStateMachineElement {
         maxDelay = _maxDelay;
     }
 
-    public void setDistributionLaw(int _law, String _delayExtra1 ) {
+    public void setDistributionLaw(int _law, String _delayExtra1, String _delayExtra2 ) {
         delayDistributionLaw = _law;
         delayExtra1 = _delayExtra1;
+        delayExtra2 = _delayExtra2;
     }
 
     public void setComputes(String _minCompute, String _maxCompute) {
@@ -283,6 +290,10 @@ public class AvatarTransition extends AvatarStateMachineElement {
 
     public String getDelayExtra1() {
         return delayExtra1;
+    }
+
+    public String getDelayExtra2() {
+        return delayExtra2;
     }
 
     public String getMinCompute() {

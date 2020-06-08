@@ -227,6 +227,7 @@ public class AvatarSimulationBlock {
                         aspt.myMaxDelay = evaluateIntExpression(trans.getMaxDelay(), lastTransaction.attributeValues);
                         aspt.hasDelay = true;
                         aspt.extraParam1 = evaluateIntExpression(trans.getDelayExtra1(), lastTransaction.attributeValues);
+                        aspt.extraParam2 = evaluateIntExpression(trans.getDelayExtra2(), lastTransaction.attributeValues);
                         aspt.delayDistributionLaw = trans.getDelayDistributionLaw();
                         if (lastTransaction != null) {
                             if (lastTransaction.clockValueWhenFinished < _clockValue) {
@@ -242,7 +243,8 @@ public class AvatarSimulationBlock {
                         aspt.myMinDelay = evaluateIntExpression(trans.getMinDelay(), lastTransaction.attributeValues);
                         aspt.myMaxDelay = evaluateIntExpression(trans.getMaxDelay(), lastTransaction.attributeValues);
                         aspt.hasDelay = true;
-                        aspt.extraParam1 = evaluateIntExpression(trans.getDelayExtra1(), lastTransaction.attributeValues);
+                        aspt.extraParam1 = evaluateDoubleExpression(trans.getDelayExtra1(), lastTransaction.attributeValues);
+                        aspt.extraParam2 = evaluateDoubleExpression(trans.getDelayExtra2(), lastTransaction.attributeValues);
                         aspt.delayDistributionLaw = trans.getDelayDistributionLaw();
 
                         //TraceManager.addDev(">>>>>   Signal with delay before");
@@ -692,6 +694,15 @@ public class AvatarSimulationBlock {
 
     public String getAttributeName(int _index) {
         return block.getAttribute(_index).getName();
+    }
+
+    public double evaluateDoubleExpression(String _expr,  Vector<String> _attributeValues) {
+        try {
+            double ret = Double.parseDouble(_expr);
+            return ret;
+        } catch (Exception e) {
+            return 0.0;
+        }
     }
 
     public int evaluateIntExpression(String _expr, Vector<String> _attributeValues) {

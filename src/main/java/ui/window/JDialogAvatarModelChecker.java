@@ -435,7 +435,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                 customChecks.add(cqb);
             }
             JScrollPane jsp = new JScrollPane(jpadvancedQ, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-            jsp.setPreferredSize(new Dimension(500, 150));
+            jsp.setPreferredSize(new Dimension(500, 120));
             cadvanced.gridheight = 10;
             cadvanced.anchor = GridBagConstraints.WEST;
             cadvanced.fill = GridBagConstraints.HORIZONTAL; 

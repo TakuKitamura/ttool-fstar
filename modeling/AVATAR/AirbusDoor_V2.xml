@@ -876,6 +876,7 @@
 <MainCode value="void __user_init() {"/>
 <MainCode value="}"/>
 <Optimized value="true" />
+<considerTimingOperators value="true" />
 <Validated value="" />
 <Ignored value="" />
 
@@ -892,7 +893,7 @@
 <isd value="in stopBuzzer()" />
 <oso value="out startBuzzer3sec()" />
 <oso value="out endBuzzer3sec()" />
-<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" />
+<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5002" id="573" >
@@ -908,7 +909,7 @@
 <isd value="in emergencyCode()" />
 <oso value="out call()" />
 <oso value="out emergencyCall()" />
-<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" />
+<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5002" id="575" >
@@ -926,7 +927,7 @@
 <osd value="out redLight()" />
 <osd value="out greenLight()" />
 <osd value="out noLight()" />
-<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" />
+<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5002" id="577" >
@@ -944,7 +945,7 @@
 <oso value="out openFromCockpit()" />
 <oso value="out openFromCabin()" />
 <oso value="out close(int nbOfPersonsInside, int nbOfPersonsOutside, int nbOfPilotOutside, int nbOfCrewOutside)" />
-<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" />
+<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5002" id="579" >
@@ -964,7 +965,7 @@
 <oso value="out lock()" />
 <oso value="out unlock()" />
 <oso value="out norm()" />
-<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" />
+<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5002" id="581" >
@@ -988,7 +989,7 @@
 <osd value="out cabinCrewEnteringCockpit()" />
 <osd value="out passengerLeavingCockpit()" />
 <osd value="out passengerEnteringCockpit()" />
-<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" />
+<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5002" id="583" >
@@ -1000,7 +1001,7 @@
 <P2  x="1237" y="935" id="708" />
 <AutomaticDrawing  data="true" />
 <extraparam>
-<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" />
+<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5002" id="585" >
@@ -1020,7 +1021,7 @@
 <osd value="out open()" />
 <osd value="out stopFault()" />
 <osd value="out stopOpen()" />
-<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" />
+<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5002" id="587" >
@@ -1034,7 +1035,7 @@
 <extraparam>
 <isd value="in readNbOfPilots(int nb)" />
 <oso value="out obs_nbOfPilotsIncockpit(int nbOfPilotsInCockpit)" />
-<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" />
+<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5002" id="589" >
@@ -1048,7 +1049,7 @@
 <extraparam>
 <isd value="in readNbOfPassengersInCockpit(int passengersInCokpit)" />
 <oso value="out obs_nbOfPassengersIncockpit(int nbOfPassengersInCockpit)" />
-<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" />
+<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5002" id="591" >
@@ -1064,7 +1065,7 @@
 <iso value="in AtLeastTwoPersonsInTheCockpitViolated(int nbOfPersonsInCockpit)" />
 <osd value="out obs_AtLeastOntPilotInTheCockpit(int nbOfPilots)" />
 <osd value="out obs_AtLeastTwoPersonsInTheCockpit(int nbOfPersonsInCockpit)" />
-<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" />
+<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5002" id="593" >
@@ -1078,7 +1079,7 @@
 <extraparam>
 <iso value="in getNbOfPilotsInCabin(int nbOfPilotsInCabin)" />
 <osd value="out obs_nbOfPilotsInCabin(int nbOfPilotsInCabin)" />
-<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" />
+<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR>
 <CONNECTOR type="5002" id="595" >
@@ -1094,7 +1095,7 @@
 <isd value="in stopAlarm()" />
 <oso value="out startAlarm()" />
 <oso value="out stopAlarm()" />
-<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" />
+<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR>
 <COMPONENT type="5000" id="620" >
@@ -1718,6 +1719,8 @@
 <guard value="[ else ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -1748,6 +1751,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -1778,6 +1783,8 @@
 <guard value="[ pilotsInCabin == value]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -1809,6 +1816,8 @@
 <guard value="[ else ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -1871,6 +1880,8 @@
 <guard value="[ pilotsInCabin == 0]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -1901,6 +1912,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -1931,6 +1944,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -1961,6 +1976,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -1991,6 +2008,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -2021,6 +2040,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -2547,6 +2568,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -2577,6 +2600,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -2607,6 +2632,8 @@
 <guard value="[ else ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -2637,6 +2664,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -2667,6 +2696,8 @@
 <guard value="[ else ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -2697,6 +2728,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -2727,6 +2760,8 @@
 <guard value="[ nb &lt; 2]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -2758,6 +2793,8 @@
 <guard value="[ nb &lt; 1]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -2789,6 +2826,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -2819,6 +2858,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -2849,6 +2890,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -3430,6 +3473,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -3460,6 +3505,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -3490,6 +3537,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -3550,6 +3599,8 @@
 <guard value="[ passengersInCockpit &gt; 0]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -3580,6 +3631,8 @@
 <guard value="[ else ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -3892,6 +3945,8 @@
 <guard value="[ else ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -3952,6 +4007,8 @@
 <guard value="[ pilotsInCockpit &gt; 0]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -3982,6 +4039,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -4012,6 +4071,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -4042,6 +4103,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -4354,6 +4417,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -4385,6 +4450,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -4415,6 +4482,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -4446,6 +4515,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -4476,6 +4547,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -4507,6 +4580,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -4537,6 +4612,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -4568,6 +4645,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -4579,8 +4658,8 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
 <TGConnectingPoint num="0" id="2555" />
-<P1  x="787" y="437" id="2960" />
-<P2  x="658" y="595" id="2858" />
+<P1  x="787" y="437" id="2666" />
+<P2  x="658" y="595" id="2714" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="2554" >
 <father id="2556" num="0" />
@@ -4598,6 +4677,8 @@
 <guard value="[ (fault == true)&amp;&amp; (open == true)]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -4609,8 +4690,8 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
 <TGConnectingPoint num="0" id="2562" />
-<P1  x="837" y="437" id="2962" />
-<P2  x="892" y="587" id="2801" />
+<P1  x="837" y="437" id="2668" />
+<P2  x="892" y="587" id="2803" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="2561" >
 <father id="2563" num="0" />
@@ -4628,6 +4709,8 @@
 <guard value="[(fault == false)&amp;&amp; (open == true)]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -4639,8 +4722,8 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
 <TGConnectingPoint num="0" id="2569" />
-<P1  x="875" y="424" id="2945" />
-<P2  x="988" y="469" id="2712" />
+<P1  x="875" y="424" id="2651" />
+<P2  x="988" y="469" id="2860" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="2568" >
 <father id="2570" num="0" />
@@ -4658,6 +4741,8 @@
 <guard value="[ (fault == true)&amp;&amp; (open == false)]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -4669,8 +4754,8 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
 <TGConnectingPoint num="0" id="2576" />
-<P1  x="775" y="412" id="2935" />
-<P2  x="618" y="455" id="2639" />
+<P1  x="775" y="412" id="2641" />
+<P2  x="618" y="455" id="2933" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="2575" >
 <father id="2577" num="0" />
@@ -4688,6 +4773,8 @@
 <guard value="[ (fault == false)&amp;&amp; (open == false)]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -4699,8 +4786,8 @@
 <sizeparam width="0" height="0" minWidth="0" minHeight="0" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <infoparam name="connector" value="null" />
 <TGConnectingPoint num="0" id="2583" />
-<P1  x="836" y="345" id="2930" />
-<P2  x="825" y="387" id="2933" />
+<P1  x="836" y="345" id="2711" />
+<P2  x="825" y="387" id="2639" />
 <AutomaticDrawing  data="true" />
 </CONNECTOR><SUBCOMPONENT type="-1" id="2582" >
 <father id="2584" num="0" />
@@ -4718,6 +4805,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -4748,6 +4837,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -4923,12 +5014,12 @@
 </COMPONENT>
 <SUBCOMPONENT type="5106" id="2710" >
 <father id="3077" num="0" />
-<cdparam x="568" y="455" />
+<cdparam x="775" y="387" />
 <sizeparam width="100" height="50" minWidth="40" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="0" maxX="541" minY="0" maxY="391" />
-<infoparam name="state0" value="IDLE" />
+<infoparam name="state0" value="Test" />
 <TGConnectingPoint num="0" id="2638" />
 <TGConnectingPoint num="1" id="2639" />
 <TGConnectingPoint num="2" id="2640" />
@@ -5004,272 +5095,272 @@
 <extraparam>
 </extraparam>
 </SUBCOMPONENT>
-<SUBCOMPONENT type="5106" id="2783" >
+<SUBCOMPONENT type="5100" id="2712" >
 <father id="3077" num="1" />
-<cdparam x="938" y="469" />
-<sizeparam width="100" height="50" minWidth="40" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<cdparam x="829" y="325" />
+<sizeparam width="15" height="15" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
-<enabled value="true" />
-<cdrectangleparam minX="0" maxX="541" minY="0" maxY="391" />
-<infoparam name="state0" value="FAULT" />
+<cdrectangleparam minX="0" maxX="626" minY="0" maxY="426" />
+<infoparam name="start state" value="null" />
 <TGConnectingPoint num="0" id="2711" />
-<TGConnectingPoint num="1" id="2712" />
-<TGConnectingPoint num="2" id="2713" />
-<TGConnectingPoint num="3" id="2714" />
-<TGConnectingPoint num="4" id="2715" />
-<TGConnectingPoint num="5" id="2716" />
-<TGConnectingPoint num="6" id="2717" />
-<TGConnectingPoint num="7" id="2718" />
-<TGConnectingPoint num="8" id="2719" />
-<TGConnectingPoint num="9" id="2720" />
-<TGConnectingPoint num="10" id="2721" />
-<TGConnectingPoint num="11" id="2722" />
-<TGConnectingPoint num="12" id="2723" />
-<TGConnectingPoint num="13" id="2724" />
-<TGConnectingPoint num="14" id="2725" />
-<TGConnectingPoint num="15" id="2726" />
-<TGConnectingPoint num="16" id="2727" />
-<TGConnectingPoint num="17" id="2728" />
-<TGConnectingPoint num="18" id="2729" />
-<TGConnectingPoint num="19" id="2730" />
-<TGConnectingPoint num="20" id="2731" />
-<TGConnectingPoint num="21" id="2732" />
-<TGConnectingPoint num="22" id="2733" />
-<TGConnectingPoint num="23" id="2734" />
-<TGConnectingPoint num="24" id="2735" />
-<TGConnectingPoint num="25" id="2736" />
-<TGConnectingPoint num="26" id="2737" />
-<TGConnectingPoint num="27" id="2738" />
-<TGConnectingPoint num="28" id="2739" />
-<TGConnectingPoint num="29" id="2740" />
-<TGConnectingPoint num="30" id="2741" />
-<TGConnectingPoint num="31" id="2742" />
-<TGConnectingPoint num="32" id="2743" />
-<TGConnectingPoint num="33" id="2744" />
-<TGConnectingPoint num="34" id="2745" />
-<TGConnectingPoint num="35" id="2746" />
-<TGConnectingPoint num="36" id="2747" />
-<TGConnectingPoint num="37" id="2748" />
-<TGConnectingPoint num="38" id="2749" />
-<TGConnectingPoint num="39" id="2750" />
-<TGConnectingPoint num="40" id="2751" />
-<TGConnectingPoint num="41" id="2752" />
-<TGConnectingPoint num="42" id="2753" />
-<TGConnectingPoint num="43" id="2754" />
-<TGConnectingPoint num="44" id="2755" />
-<TGConnectingPoint num="45" id="2756" />
-<TGConnectingPoint num="46" id="2757" />
-<TGConnectingPoint num="47" id="2758" />
-<TGConnectingPoint num="48" id="2759" />
-<TGConnectingPoint num="49" id="2760" />
-<TGConnectingPoint num="50" id="2761" />
-<TGConnectingPoint num="51" id="2762" />
-<TGConnectingPoint num="52" id="2763" />
-<TGConnectingPoint num="53" id="2764" />
-<TGConnectingPoint num="54" id="2765" />
-<TGConnectingPoint num="55" id="2766" />
-<TGConnectingPoint num="56" id="2767" />
-<TGConnectingPoint num="57" id="2768" />
-<TGConnectingPoint num="58" id="2769" />
-<TGConnectingPoint num="59" id="2770" />
-<TGConnectingPoint num="60" id="2771" />
-<TGConnectingPoint num="61" id="2772" />
-<TGConnectingPoint num="62" id="2773" />
-<TGConnectingPoint num="63" id="2774" />
-<TGConnectingPoint num="64" id="2775" />
-<TGConnectingPoint num="65" id="2776" />
-<TGConnectingPoint num="66" id="2777" />
-<TGConnectingPoint num="67" id="2778" />
-<TGConnectingPoint num="68" id="2779" />
-<TGConnectingPoint num="69" id="2780" />
-<TGConnectingPoint num="70" id="2781" />
-<TGConnectingPoint num="71" id="2782" />
-<extraparam>
-</extraparam>
 </SUBCOMPONENT>
-<SUBCOMPONENT type="5106" id="2856" >
+<SUBCOMPONENT type="5106" id="2785" >
 <father id="3077" num="2" />
-<cdparam x="855" y="587" />
-<sizeparam width="100" height="50" minWidth="40" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<enabled value="true" />
-<cdrectangleparam minX="0" maxX="541" minY="0" maxY="391" />
-<infoparam name="state0" value="OPEN" />
-<TGConnectingPoint num="0" id="2784" />
-<TGConnectingPoint num="1" id="2785" />
-<TGConnectingPoint num="2" id="2786" />
-<TGConnectingPoint num="3" id="2787" />
-<TGConnectingPoint num="4" id="2788" />
-<TGConnectingPoint num="5" id="2789" />
-<TGConnectingPoint num="6" id="2790" />
-<TGConnectingPoint num="7" id="2791" />
-<TGConnectingPoint num="8" id="2792" />
-<TGConnectingPoint num="9" id="2793" />
-<TGConnectingPoint num="10" id="2794" />
-<TGConnectingPoint num="11" id="2795" />
-<TGConnectingPoint num="12" id="2796" />
-<TGConnectingPoint num="13" id="2797" />
-<TGConnectingPoint num="14" id="2798" />
-<TGConnectingPoint num="15" id="2799" />
-<TGConnectingPoint num="16" id="2800" />
-<TGConnectingPoint num="17" id="2801" />
-<TGConnectingPoint num="18" id="2802" />
-<TGConnectingPoint num="19" id="2803" />
-<TGConnectingPoint num="20" id="2804" />
-<TGConnectingPoint num="21" id="2805" />
-<TGConnectingPoint num="22" id="2806" />
-<TGConnectingPoint num="23" id="2807" />
-<TGConnectingPoint num="24" id="2808" />
-<TGConnectingPoint num="25" id="2809" />
-<TGConnectingPoint num="26" id="2810" />
-<TGConnectingPoint num="27" id="2811" />
-<TGConnectingPoint num="28" id="2812" />
-<TGConnectingPoint num="29" id="2813" />
-<TGConnectingPoint num="30" id="2814" />
-<TGConnectingPoint num="31" id="2815" />
-<TGConnectingPoint num="32" id="2816" />
-<TGConnectingPoint num="33" id="2817" />
-<TGConnectingPoint num="34" id="2818" />
-<TGConnectingPoint num="35" id="2819" />
-<TGConnectingPoint num="36" id="2820" />
-<TGConnectingPoint num="37" id="2821" />
-<TGConnectingPoint num="38" id="2822" />
-<TGConnectingPoint num="39" id="2823" />
-<TGConnectingPoint num="40" id="2824" />
-<TGConnectingPoint num="41" id="2825" />
-<TGConnectingPoint num="42" id="2826" />
-<TGConnectingPoint num="43" id="2827" />
-<TGConnectingPoint num="44" id="2828" />
-<TGConnectingPoint num="45" id="2829" />
-<TGConnectingPoint num="46" id="2830" />
-<TGConnectingPoint num="47" id="2831" />
-<TGConnectingPoint num="48" id="2832" />
-<TGConnectingPoint num="49" id="2833" />
-<TGConnectingPoint num="50" id="2834" />
-<TGConnectingPoint num="51" id="2835" />
-<TGConnectingPoint num="52" id="2836" />
-<TGConnectingPoint num="53" id="2837" />
-<TGConnectingPoint num="54" id="2838" />
-<TGConnectingPoint num="55" id="2839" />
-<TGConnectingPoint num="56" id="2840" />
-<TGConnectingPoint num="57" id="2841" />
-<TGConnectingPoint num="58" id="2842" />
-<TGConnectingPoint num="59" id="2843" />
-<TGConnectingPoint num="60" id="2844" />
-<TGConnectingPoint num="61" id="2845" />
-<TGConnectingPoint num="62" id="2846" />
-<TGConnectingPoint num="63" id="2847" />
-<TGConnectingPoint num="64" id="2848" />
-<TGConnectingPoint num="65" id="2849" />
-<TGConnectingPoint num="66" id="2850" />
-<TGConnectingPoint num="67" id="2851" />
-<TGConnectingPoint num="68" id="2852" />
-<TGConnectingPoint num="69" id="2853" />
-<TGConnectingPoint num="70" id="2854" />
-<TGConnectingPoint num="71" id="2855" />
-<extraparam>
-</extraparam>
-</SUBCOMPONENT>
-<SUBCOMPONENT type="5106" id="2929" >
-<father id="3077" num="3" />
 <cdparam x="559" y="595" />
 <sizeparam width="198" height="50" minWidth="40" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="0" maxX="443" minY="0" maxY="391" />
 <infoparam name="state0" value="FAULT_AND_OPEN" />
-<TGConnectingPoint num="0" id="2857" />
-<TGConnectingPoint num="1" id="2858" />
-<TGConnectingPoint num="2" id="2859" />
-<TGConnectingPoint num="3" id="2860" />
-<TGConnectingPoint num="4" id="2861" />
-<TGConnectingPoint num="5" id="2862" />
-<TGConnectingPoint num="6" id="2863" />
-<TGConnectingPoint num="7" id="2864" />
-<TGConnectingPoint num="8" id="2865" />
-<TGConnectingPoint num="9" id="2866" />
-<TGConnectingPoint num="10" id="2867" />
-<TGConnectingPoint num="11" id="2868" />
-<TGConnectingPoint num="12" id="2869" />
-<TGConnectingPoint num="13" id="2870" />
-<TGConnectingPoint num="14" id="2871" />
-<TGConnectingPoint num="15" id="2872" />
-<TGConnectingPoint num="16" id="2873" />
-<TGConnectingPoint num="17" id="2874" />
-<TGConnectingPoint num="18" id="2875" />
-<TGConnectingPoint num="19" id="2876" />
-<TGConnectingPoint num="20" id="2877" />
-<TGConnectingPoint num="21" id="2878" />
-<TGConnectingPoint num="22" id="2879" />
-<TGConnectingPoint num="23" id="2880" />
-<TGConnectingPoint num="24" id="2881" />
-<TGConnectingPoint num="25" id="2882" />
-<TGConnectingPoint num="26" id="2883" />
-<TGConnectingPoint num="27" id="2884" />
-<TGConnectingPoint num="28" id="2885" />
-<TGConnectingPoint num="29" id="2886" />
-<TGConnectingPoint num="30" id="2887" />
-<TGConnectingPoint num="31" id="2888" />
-<TGConnectingPoint num="32" id="2889" />
-<TGConnectingPoint num="33" id="2890" />
-<TGConnectingPoint num="34" id="2891" />
-<TGConnectingPoint num="35" id="2892" />
-<TGConnectingPoint num="36" id="2893" />
-<TGConnectingPoint num="37" id="2894" />
-<TGConnectingPoint num="38" id="2895" />
-<TGConnectingPoint num="39" id="2896" />
-<TGConnectingPoint num="40" id="2897" />
-<TGConnectingPoint num="41" id="2898" />
-<TGConnectingPoint num="42" id="2899" />
-<TGConnectingPoint num="43" id="2900" />
-<TGConnectingPoint num="44" id="2901" />
-<TGConnectingPoint num="45" id="2902" />
-<TGConnectingPoint num="46" id="2903" />
-<TGConnectingPoint num="47" id="2904" />
-<TGConnectingPoint num="48" id="2905" />
-<TGConnectingPoint num="49" id="2906" />
-<TGConnectingPoint num="50" id="2907" />
-<TGConnectingPoint num="51" id="2908" />
-<TGConnectingPoint num="52" id="2909" />
-<TGConnectingPoint num="53" id="2910" />
-<TGConnectingPoint num="54" id="2911" />
-<TGConnectingPoint num="55" id="2912" />
-<TGConnectingPoint num="56" id="2913" />
-<TGConnectingPoint num="57" id="2914" />
-<TGConnectingPoint num="58" id="2915" />
-<TGConnectingPoint num="59" id="2916" />
-<TGConnectingPoint num="60" id="2917" />
-<TGConnectingPoint num="61" id="2918" />
-<TGConnectingPoint num="62" id="2919" />
-<TGConnectingPoint num="63" id="2920" />
-<TGConnectingPoint num="64" id="2921" />
-<TGConnectingPoint num="65" id="2922" />
-<TGConnectingPoint num="66" id="2923" />
-<TGConnectingPoint num="67" id="2924" />
-<TGConnectingPoint num="68" id="2925" />
-<TGConnectingPoint num="69" id="2926" />
-<TGConnectingPoint num="70" id="2927" />
-<TGConnectingPoint num="71" id="2928" />
+<TGConnectingPoint num="0" id="2713" />
+<TGConnectingPoint num="1" id="2714" />
+<TGConnectingPoint num="2" id="2715" />
+<TGConnectingPoint num="3" id="2716" />
+<TGConnectingPoint num="4" id="2717" />
+<TGConnectingPoint num="5" id="2718" />
+<TGConnectingPoint num="6" id="2719" />
+<TGConnectingPoint num="7" id="2720" />
+<TGConnectingPoint num="8" id="2721" />
+<TGConnectingPoint num="9" id="2722" />
+<TGConnectingPoint num="10" id="2723" />
+<TGConnectingPoint num="11" id="2724" />
+<TGConnectingPoint num="12" id="2725" />
+<TGConnectingPoint num="13" id="2726" />
+<TGConnectingPoint num="14" id="2727" />
+<TGConnectingPoint num="15" id="2728" />
+<TGConnectingPoint num="16" id="2729" />
+<TGConnectingPoint num="17" id="2730" />
+<TGConnectingPoint num="18" id="2731" />
+<TGConnectingPoint num="19" id="2732" />
+<TGConnectingPoint num="20" id="2733" />
+<TGConnectingPoint num="21" id="2734" />
+<TGConnectingPoint num="22" id="2735" />
+<TGConnectingPoint num="23" id="2736" />
+<TGConnectingPoint num="24" id="2737" />
+<TGConnectingPoint num="25" id="2738" />
+<TGConnectingPoint num="26" id="2739" />
+<TGConnectingPoint num="27" id="2740" />
+<TGConnectingPoint num="28" id="2741" />
+<TGConnectingPoint num="29" id="2742" />
+<TGConnectingPoint num="30" id="2743" />
+<TGConnectingPoint num="31" id="2744" />
+<TGConnectingPoint num="32" id="2745" />
+<TGConnectingPoint num="33" id="2746" />
+<TGConnectingPoint num="34" id="2747" />
+<TGConnectingPoint num="35" id="2748" />
+<TGConnectingPoint num="36" id="2749" />
+<TGConnectingPoint num="37" id="2750" />
+<TGConnectingPoint num="38" id="2751" />
+<TGConnectingPoint num="39" id="2752" />
+<TGConnectingPoint num="40" id="2753" />
+<TGConnectingPoint num="41" id="2754" />
+<TGConnectingPoint num="42" id="2755" />
+<TGConnectingPoint num="43" id="2756" />
+<TGConnectingPoint num="44" id="2757" />
+<TGConnectingPoint num="45" id="2758" />
+<TGConnectingPoint num="46" id="2759" />
+<TGConnectingPoint num="47" id="2760" />
+<TGConnectingPoint num="48" id="2761" />
+<TGConnectingPoint num="49" id="2762" />
+<TGConnectingPoint num="50" id="2763" />
+<TGConnectingPoint num="51" id="2764" />
+<TGConnectingPoint num="52" id="2765" />
+<TGConnectingPoint num="53" id="2766" />
+<TGConnectingPoint num="54" id="2767" />
+<TGConnectingPoint num="55" id="2768" />
+<TGConnectingPoint num="56" id="2769" />
+<TGConnectingPoint num="57" id="2770" />
+<TGConnectingPoint num="58" id="2771" />
+<TGConnectingPoint num="59" id="2772" />
+<TGConnectingPoint num="60" id="2773" />
+<TGConnectingPoint num="61" id="2774" />
+<TGConnectingPoint num="62" id="2775" />
+<TGConnectingPoint num="63" id="2776" />
+<TGConnectingPoint num="64" id="2777" />
+<TGConnectingPoint num="65" id="2778" />
+<TGConnectingPoint num="66" id="2779" />
+<TGConnectingPoint num="67" id="2780" />
+<TGConnectingPoint num="68" id="2781" />
+<TGConnectingPoint num="69" id="2782" />
+<TGConnectingPoint num="70" id="2783" />
+<TGConnectingPoint num="71" id="2784" />
 <extraparam>
 </extraparam>
 </SUBCOMPONENT>
-<SUBCOMPONENT type="5100" id="2931" >
-<father id="3077" num="4" />
-<cdparam x="829" y="325" />
-<sizeparam width="15" height="15" minWidth="1" minHeight="1" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
-<hidden value="false" />
-<cdrectangleparam minX="0" maxX="626" minY="0" maxY="426" />
-<infoparam name="start state" value="null" />
-<TGConnectingPoint num="0" id="2930" />
-</SUBCOMPONENT>
-<SUBCOMPONENT type="5106" id="3004" >
-<father id="3077" num="5" />
-<cdparam x="775" y="387" />
+<SUBCOMPONENT type="5106" id="2858" >
+<father id="3077" num="3" />
+<cdparam x="855" y="587" />
 <sizeparam width="100" height="50" minWidth="40" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <enabled value="true" />
 <cdrectangleparam minX="0" maxX="541" minY="0" maxY="391" />
-<infoparam name="state0" value="Test" />
+<infoparam name="state0" value="OPEN" />
+<TGConnectingPoint num="0" id="2786" />
+<TGConnectingPoint num="1" id="2787" />
+<TGConnectingPoint num="2" id="2788" />
+<TGConnectingPoint num="3" id="2789" />
+<TGConnectingPoint num="4" id="2790" />
+<TGConnectingPoint num="5" id="2791" />
+<TGConnectingPoint num="6" id="2792" />
+<TGConnectingPoint num="7" id="2793" />
+<TGConnectingPoint num="8" id="2794" />
+<TGConnectingPoint num="9" id="2795" />
+<TGConnectingPoint num="10" id="2796" />
+<TGConnectingPoint num="11" id="2797" />
+<TGConnectingPoint num="12" id="2798" />
+<TGConnectingPoint num="13" id="2799" />
+<TGConnectingPoint num="14" id="2800" />
+<TGConnectingPoint num="15" id="2801" />
+<TGConnectingPoint num="16" id="2802" />
+<TGConnectingPoint num="17" id="2803" />
+<TGConnectingPoint num="18" id="2804" />
+<TGConnectingPoint num="19" id="2805" />
+<TGConnectingPoint num="20" id="2806" />
+<TGConnectingPoint num="21" id="2807" />
+<TGConnectingPoint num="22" id="2808" />
+<TGConnectingPoint num="23" id="2809" />
+<TGConnectingPoint num="24" id="2810" />
+<TGConnectingPoint num="25" id="2811" />
+<TGConnectingPoint num="26" id="2812" />
+<TGConnectingPoint num="27" id="2813" />
+<TGConnectingPoint num="28" id="2814" />
+<TGConnectingPoint num="29" id="2815" />
+<TGConnectingPoint num="30" id="2816" />
+<TGConnectingPoint num="31" id="2817" />
+<TGConnectingPoint num="32" id="2818" />
+<TGConnectingPoint num="33" id="2819" />
+<TGConnectingPoint num="34" id="2820" />
+<TGConnectingPoint num="35" id="2821" />
+<TGConnectingPoint num="36" id="2822" />
+<TGConnectingPoint num="37" id="2823" />
+<TGConnectingPoint num="38" id="2824" />
+<TGConnectingPoint num="39" id="2825" />
+<TGConnectingPoint num="40" id="2826" />
+<TGConnectingPoint num="41" id="2827" />
+<TGConnectingPoint num="42" id="2828" />
+<TGConnectingPoint num="43" id="2829" />
+<TGConnectingPoint num="44" id="2830" />
+<TGConnectingPoint num="45" id="2831" />
+<TGConnectingPoint num="46" id="2832" />
+<TGConnectingPoint num="47" id="2833" />
+<TGConnectingPoint num="48" id="2834" />
+<TGConnectingPoint num="49" id="2835" />
+<TGConnectingPoint num="50" id="2836" />
+<TGConnectingPoint num="51" id="2837" />
+<TGConnectingPoint num="52" id="2838" />
+<TGConnectingPoint num="53" id="2839" />
+<TGConnectingPoint num="54" id="2840" />
+<TGConnectingPoint num="55" id="2841" />
+<TGConnectingPoint num="56" id="2842" />
+<TGConnectingPoint num="57" id="2843" />
+<TGConnectingPoint num="58" id="2844" />
+<TGConnectingPoint num="59" id="2845" />
+<TGConnectingPoint num="60" id="2846" />
+<TGConnectingPoint num="61" id="2847" />
+<TGConnectingPoint num="62" id="2848" />
+<TGConnectingPoint num="63" id="2849" />
+<TGConnectingPoint num="64" id="2850" />
+<TGConnectingPoint num="65" id="2851" />
+<TGConnectingPoint num="66" id="2852" />
+<TGConnectingPoint num="67" id="2853" />
+<TGConnectingPoint num="68" id="2854" />
+<TGConnectingPoint num="69" id="2855" />
+<TGConnectingPoint num="70" id="2856" />
+<TGConnectingPoint num="71" id="2857" />
+<extraparam>
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="5106" id="2931" >
+<father id="3077" num="4" />
+<cdparam x="938" y="469" />
+<sizeparam width="100" height="50" minWidth="40" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<enabled value="true" />
+<cdrectangleparam minX="0" maxX="541" minY="0" maxY="391" />
+<infoparam name="state0" value="FAULT" />
+<TGConnectingPoint num="0" id="2859" />
+<TGConnectingPoint num="1" id="2860" />
+<TGConnectingPoint num="2" id="2861" />
+<TGConnectingPoint num="3" id="2862" />
+<TGConnectingPoint num="4" id="2863" />
+<TGConnectingPoint num="5" id="2864" />
+<TGConnectingPoint num="6" id="2865" />
+<TGConnectingPoint num="7" id="2866" />
+<TGConnectingPoint num="8" id="2867" />
+<TGConnectingPoint num="9" id="2868" />
+<TGConnectingPoint num="10" id="2869" />
+<TGConnectingPoint num="11" id="2870" />
+<TGConnectingPoint num="12" id="2871" />
+<TGConnectingPoint num="13" id="2872" />
+<TGConnectingPoint num="14" id="2873" />
+<TGConnectingPoint num="15" id="2874" />
+<TGConnectingPoint num="16" id="2875" />
+<TGConnectingPoint num="17" id="2876" />
+<TGConnectingPoint num="18" id="2877" />
+<TGConnectingPoint num="19" id="2878" />
+<TGConnectingPoint num="20" id="2879" />
+<TGConnectingPoint num="21" id="2880" />
+<TGConnectingPoint num="22" id="2881" />
+<TGConnectingPoint num="23" id="2882" />
+<TGConnectingPoint num="24" id="2883" />
+<TGConnectingPoint num="25" id="2884" />
+<TGConnectingPoint num="26" id="2885" />
+<TGConnectingPoint num="27" id="2886" />
+<TGConnectingPoint num="28" id="2887" />
+<TGConnectingPoint num="29" id="2888" />
+<TGConnectingPoint num="30" id="2889" />
+<TGConnectingPoint num="31" id="2890" />
+<TGConnectingPoint num="32" id="2891" />
+<TGConnectingPoint num="33" id="2892" />
+<TGConnectingPoint num="34" id="2893" />
+<TGConnectingPoint num="35" id="2894" />
+<TGConnectingPoint num="36" id="2895" />
+<TGConnectingPoint num="37" id="2896" />
+<TGConnectingPoint num="38" id="2897" />
+<TGConnectingPoint num="39" id="2898" />
+<TGConnectingPoint num="40" id="2899" />
+<TGConnectingPoint num="41" id="2900" />
+<TGConnectingPoint num="42" id="2901" />
+<TGConnectingPoint num="43" id="2902" />
+<TGConnectingPoint num="44" id="2903" />
+<TGConnectingPoint num="45" id="2904" />
+<TGConnectingPoint num="46" id="2905" />
+<TGConnectingPoint num="47" id="2906" />
+<TGConnectingPoint num="48" id="2907" />
+<TGConnectingPoint num="49" id="2908" />
+<TGConnectingPoint num="50" id="2909" />
+<TGConnectingPoint num="51" id="2910" />
+<TGConnectingPoint num="52" id="2911" />
+<TGConnectingPoint num="53" id="2912" />
+<TGConnectingPoint num="54" id="2913" />
+<TGConnectingPoint num="55" id="2914" />
+<TGConnectingPoint num="56" id="2915" />
+<TGConnectingPoint num="57" id="2916" />
+<TGConnectingPoint num="58" id="2917" />
+<TGConnectingPoint num="59" id="2918" />
+<TGConnectingPoint num="60" id="2919" />
+<TGConnectingPoint num="61" id="2920" />
+<TGConnectingPoint num="62" id="2921" />
+<TGConnectingPoint num="63" id="2922" />
+<TGConnectingPoint num="64" id="2923" />
+<TGConnectingPoint num="65" id="2924" />
+<TGConnectingPoint num="66" id="2925" />
+<TGConnectingPoint num="67" id="2926" />
+<TGConnectingPoint num="68" id="2927" />
+<TGConnectingPoint num="69" id="2928" />
+<TGConnectingPoint num="70" id="2929" />
+<TGConnectingPoint num="71" id="2930" />
+<extraparam>
+</extraparam>
+</SUBCOMPONENT>
+<SUBCOMPONENT type="5106" id="3004" >
+<father id="3077" num="5" />
+<cdparam x="568" y="455" />
+<sizeparam width="100" height="50" minWidth="40" minHeight="30" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<hidden value="false" />
+<enabled value="true" />
+<cdrectangleparam minX="0" maxX="541" minY="0" maxY="391" />
+<infoparam name="state0" value="IDLE" />
 <TGConnectingPoint num="0" id="2932" />
 <TGConnectingPoint num="1" id="2933" />
 <TGConnectingPoint num="2" id="2934" />
@@ -5404,6 +5495,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -5434,6 +5527,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -5494,6 +5589,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -5524,6 +5621,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -5554,6 +5653,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -5738,6 +5839,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -5768,6 +5871,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -5808,6 +5913,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -5838,6 +5945,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -5868,6 +5977,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -5908,6 +6019,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -5938,6 +6051,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -5968,6 +6083,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -5998,6 +6115,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -6028,6 +6147,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -6058,6 +6179,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -6088,6 +6211,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -6118,6 +6243,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -6148,6 +6275,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -6178,6 +6307,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -6208,6 +6339,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -6238,6 +6371,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -6268,6 +6403,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -6298,6 +6435,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -6761,6 +6900,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -6791,6 +6932,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -6821,6 +6964,8 @@
 <guard value="[ (emergency == true) &amp;&amp; (unlocked == false)]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -6851,6 +6996,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -6882,6 +7029,8 @@
 <guard value="[ (pilotOutside &gt; 0) || (crewOutside &gt; 0)]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -6912,6 +7061,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -6943,6 +7094,8 @@
 <guard value="[ peopleInside &gt; 0]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -6973,6 +7126,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -7004,6 +7159,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -7034,6 +7191,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -7064,6 +7223,8 @@
 <guard value="[ peopleInside &gt; 0]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -7094,6 +7255,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -7124,6 +7287,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -7155,6 +7320,8 @@
 <guard value="[ (peopleOutside &gt; 0) &amp;&amp; (unlocked == true)]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -7185,6 +7352,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -7216,6 +7385,8 @@
 <guard value="[ peopleInside &gt; 0]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -7246,6 +7417,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -7277,6 +7450,8 @@
 <guard value="[ peopleInside &gt; 0]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -7317,6 +7492,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -7348,6 +7525,8 @@
 <guard value="[ buzzerOn == true]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -7378,6 +7557,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -7409,6 +7590,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -7440,6 +7623,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -7470,6 +7655,8 @@
 <guard value="[ peopleOutside &gt; 0]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -7500,6 +7687,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -7530,6 +7719,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -7560,6 +7751,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -7591,6 +7784,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -7621,6 +7816,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -7651,6 +7848,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -7681,6 +7880,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -7711,6 +7912,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -7742,6 +7945,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -7773,6 +7978,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -7803,6 +8010,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -8875,6 +9084,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -8907,6 +9118,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -8939,6 +9152,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -8969,6 +9184,8 @@
 <guard value="[ pilotsInCabin &gt; 0]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -8999,6 +9216,8 @@
 <guard value="[ pilotsInCockpit &gt; 0]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -9029,6 +9248,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -9061,6 +9282,8 @@
 <guard value="[ cabinCrewInCabin &gt; 0]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -9091,6 +9314,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -9123,6 +9348,8 @@
 <guard value="[ cabinCrewInCockpit &gt; 0]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -9153,6 +9380,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -9185,6 +9414,8 @@
 <guard value="[ PassengersInCabin &gt; 0]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -9215,6 +9446,8 @@
 <guard value="[ passengersInCockpit &gt; 0]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -9245,6 +9478,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -9277,6 +9512,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -9308,6 +9545,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -9338,6 +9577,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -9368,6 +9609,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -9398,6 +9641,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -9428,6 +9673,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -9929,6 +10176,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -9959,6 +10208,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -9990,6 +10241,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -10020,6 +10273,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -10051,6 +10306,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -10081,6 +10338,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -10112,6 +10371,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -10142,6 +10403,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -10173,6 +10436,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -10203,6 +10468,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -10234,6 +10501,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -10264,6 +10533,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -10295,6 +10566,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -10325,6 +10598,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -10385,6 +10660,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -10415,6 +10692,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -10445,6 +10724,8 @@
 <guard value="[ peopleInside &gt; 0]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -10475,6 +10756,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -10505,6 +10788,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -10978,6 +11263,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -11008,6 +11295,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -11058,6 +11347,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -11088,6 +11379,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -11118,6 +11411,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -11158,6 +11453,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -11188,6 +11485,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -11218,6 +11517,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -11268,6 +11569,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -11298,6 +11601,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -11328,6 +11633,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -11358,6 +11665,8 @@
 <guard value="[  ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -11388,6 +11697,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -11418,6 +11729,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -11448,6 +11761,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -11903,6 +12218,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -11963,6 +12280,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -12023,6 +12342,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -12053,6 +12374,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -12083,6 +12406,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -12113,6 +12438,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -12143,6 +12470,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -12173,6 +12502,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -12203,6 +12534,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -12518,6 +12851,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -12578,6 +12913,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -12638,6 +12975,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -12668,6 +13007,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -12698,6 +13039,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -12728,6 +13071,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -12758,6 +13103,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -12788,6 +13135,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -12818,6 +13167,8 @@
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -13088,7 +13439,8 @@
 <MainCode value="void __user_init() {"/>
 <MainCode value="}"/>
 <Optimized value="true" />
-<Validated value="" />
+<considerTimingOperators value="true" />
+<Validated value="Person;DoorAndLockButton;OnboardPersons;Captain;Crew;Passenger;FirstOfficer;" />
 <Ignored value="" />
 
 <CONNECTOR type="5002" id="6598" >
@@ -13114,12 +13466,12 @@
 <osd value="out enterCockpit()" />
 <osd value="out leaveCockit()" />
 <osd value="out sendEmergency()" />
-<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" />
+<FIFOType asynchronous="false" size="1" blocking="false" private="true" broadcast="false" lossy="false" ams="false" />
 </extraparam>
 </CONNECTOR>
 <COMPONENT type="303" id="6615" >
 <cdparam x="302" y="473" />
-<sizeparam width="882" height="123" minWidth="80" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="845" height="123" minWidth="80" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="3000" minY="10" maxY="1500" />
 <infoparam name="UPPAAL Pragma" value="E&lt;&gt; Passenger.isInCockpit ==true&amp;&amp;DoorAndLockButton.inside==1
@@ -13159,7 +13511,7 @@ DoorAndLockButton.IN_EMERGENCY_CALL --&gt; DoorAndLockButton.CLOSED_AND_LOCKED |
 
 <COMPONENT type="301" id="6632" >
 <cdparam x="17" y="474" />
-<sizeparam width="255" height="87" minWidth="20" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
+<sizeparam width="237" height="87" minWidth="20" minHeight="10" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="10" maxX="3000" minY="10" maxY="1500" />
 <infoparam name="UML Note" value="To add a person, clone e.g. &quot;Captain&quot;
@@ -13315,11 +13667,11 @@ in DoorAndLockButton
 </COMPONENT>
 <SUBCOMPONENT type="5000" id="6691" >
 <father id="6791" num="0" />
-<cdparam x="64" y="322" />
+<cdparam x="65" y="217" />
 <sizeparam width="225" height="98" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="525" minY="0" maxY="321" />
-<infoparam name="Block0" value="FirstOfficer" />
+<infoparam name="Block0" value="Captain" />
 <TGConnectingPoint num="0" id="6667" />
 <TGConnectingPoint num="1" id="6668" />
 <TGConnectingPoint num="2" id="6669" />
@@ -13353,11 +13705,11 @@ in DoorAndLockButton
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="6716" >
 <father id="6791" num="1" />
-<cdparam x="534" y="247" />
+<cdparam x="299" y="249" />
 <sizeparam width="225" height="134" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="525" minY="0" maxY="285" />
-<infoparam name="Block0" value="Passenger" />
+<infoparam name="Block0" value="Crew" />
 <TGConnectingPoint num="0" id="6692" />
 <TGConnectingPoint num="1" id="6693" />
 <TGConnectingPoint num="2" id="6694" />
@@ -13386,16 +13738,16 @@ in DoorAndLockButton
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
 <Attribute access="0" id="isInCockpit" value="false" type="4" typeOther="" />
-<Attribute access="0" id="knowsEmergencyCode" value="false" type="4" typeOther="" />
+<Attribute access="0" id="knowsEmergencyCode" value="true" type="4" typeOther="" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="6741" >
 <father id="6791" num="2" />
-<cdparam x="299" y="249" />
+<cdparam x="534" y="247" />
 <sizeparam width="225" height="134" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="525" minY="0" maxY="285" />
-<infoparam name="Block0" value="Crew" />
+<infoparam name="Block0" value="Passenger" />
 <TGConnectingPoint num="0" id="6717" />
 <TGConnectingPoint num="1" id="6718" />
 <TGConnectingPoint num="2" id="6719" />
@@ -13424,16 +13776,16 @@ in DoorAndLockButton
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
 <Attribute access="0" id="isInCockpit" value="false" type="4" typeOther="" />
-<Attribute access="0" id="knowsEmergencyCode" value="true" type="4" typeOther="" />
+<Attribute access="0" id="knowsEmergencyCode" value="false" type="4" typeOther="" />
 </extraparam>
 </SUBCOMPONENT>
 <SUBCOMPONENT type="5000" id="6766" >
 <father id="6791" num="3" />
-<cdparam x="65" y="217" />
+<cdparam x="64" y="322" />
 <sizeparam width="225" height="98" minWidth="5" minHeight="2" maxWidth="2000" maxHeight="2000" minDesiredWidth="0" minDesiredHeight="0" />
 <hidden value="false" />
 <cdrectangleparam minX="0" maxX="525" minY="0" maxY="321" />
-<infoparam name="Block0" value="Captain" />
+<infoparam name="Block0" value="FirstOfficer" />
 <TGConnectingPoint num="0" id="6742" />
 <TGConnectingPoint num="1" id="6743" />
 <TGConnectingPoint num="2" id="6744" />
@@ -13507,6 +13859,8 @@ in DoorAndLockButton
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -13578,6 +13932,8 @@ in DoorAndLockButton
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -13648,6 +14004,8 @@ in DoorAndLockButton
 <guard value="[ ]" enabled="true"/>
 <afterMin value="1" enabled="true"/>
 <afterMax value="1" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -13678,6 +14036,8 @@ in DoorAndLockButton
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -13710,6 +14070,8 @@ in DoorAndLockButton
 <guard value="[ outside &gt; 0]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -13780,6 +14142,8 @@ in DoorAndLockButton
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -13850,6 +14214,8 @@ in DoorAndLockButton
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -13880,6 +14246,8 @@ in DoorAndLockButton
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -13910,6 +14278,8 @@ in DoorAndLockButton
 <guard value="[ inside &gt; 0]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -13940,6 +14310,8 @@ in DoorAndLockButton
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -13970,6 +14342,8 @@ in DoorAndLockButton
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -14000,6 +14374,8 @@ in DoorAndLockButton
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -14030,6 +14406,8 @@ in DoorAndLockButton
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -14060,6 +14438,8 @@ in DoorAndLockButton
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -14090,6 +14470,8 @@ in DoorAndLockButton
 <guard value="[ inside &gt; 0]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -14120,6 +14502,8 @@ in DoorAndLockButton
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -14152,6 +14536,8 @@ in DoorAndLockButton
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -14182,6 +14568,8 @@ in DoorAndLockButton
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -14212,6 +14600,8 @@ in DoorAndLockButton
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -14933,6 +15323,8 @@ in DoorAndLockButton
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -14963,6 +15355,8 @@ in DoorAndLockButton
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -15046,6 +15440,8 @@ in DoorAndLockButton
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -15076,6 +15472,8 @@ in DoorAndLockButton
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -15106,6 +15504,8 @@ in DoorAndLockButton
 <guard value="[ isInCockpit]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -15136,6 +15536,8 @@ in DoorAndLockButton
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -15166,6 +15568,8 @@ in DoorAndLockButton
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -15196,6 +15600,8 @@ in DoorAndLockButton
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -15226,6 +15632,8 @@ in DoorAndLockButton
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -15256,6 +15664,8 @@ in DoorAndLockButton
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -15287,6 +15697,8 @@ in DoorAndLockButton
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -15318,6 +15730,8 @@ in DoorAndLockButton
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -15348,6 +15762,8 @@ in DoorAndLockButton
 <guard value="[ isInCockpit]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -15378,6 +15794,8 @@ in DoorAndLockButton
 <guard value="[ not(isInCockpit)]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -15408,6 +15826,8 @@ in DoorAndLockButton
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -15438,6 +15858,8 @@ in DoorAndLockButton
 <guard value="[ isInCockpit ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -15468,6 +15890,8 @@ in DoorAndLockButton
 <guard value="[ (isInCockpit == false) and (knowsEmergencyCode == true)]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -15810,6 +16234,8 @@ in DoorAndLockButton
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -15840,6 +16266,8 @@ in DoorAndLockButton
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -15923,6 +16351,8 @@ in DoorAndLockButton
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -15953,6 +16383,8 @@ in DoorAndLockButton
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -16036,6 +16468,8 @@ in DoorAndLockButton
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
@@ -16066,6 +16500,8 @@ in DoorAndLockButton
 <guard value="[ ]" enabled="true"/>
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
+<extraDelay1 value="" enabled="true"/>
+<delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
 <probability value="" enabled="true"/>
