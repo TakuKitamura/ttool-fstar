@@ -435,12 +435,16 @@ public class AvatarStateMachine extends AvatarElement {
                 AvatarTransition at2 = new AvatarTransition(_block, "Transition2ForRandom__" + elt.getName() + "__" + id, elt.getReferenceObject());
                 at2.setGuard("[" + random.getVariable() + " < " + random.getMaxValue() + "]");
                 at2.addAction(random.getVariable() + "=" + random.getVariable() + " + 1");
+                AvatarTransition at3 = new AvatarTransition(_block, "Transition3ForRandom__ " + elt.getName() + "__" + id, elt.getReferenceObject());
+                AvatarState afterRandom = new AvatarState("StateAfterRandom__" + elt.getName() + "__" + id, elt.getReferenceObject());
 
                 // Adding elements
                 toAdd.add(at1);
                 toAdd.add(randomState);
                 toAdd.add(beforeRandom);
                 toAdd.add(at2);
+                toAdd.add(at3);
+                toAdd.add(afterRandom);
 
                 // Linking elements
                 if (previous != null) {
@@ -450,8 +454,10 @@ public class AvatarStateMachine extends AvatarElement {
                 beforeRandom.addNext(at1);
                 at1.addNext(randomState);
                 randomState.addNext(at2);
-                randomState.addNext(next);
+                randomState.addNext(at3);
                 at2.addNext(randomState);
+                at3.addNext(afterRandom);
+                afterRandom.addNext(next);
 
                 id++;
 

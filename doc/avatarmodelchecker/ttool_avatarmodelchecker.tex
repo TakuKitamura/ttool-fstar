@@ -135,11 +135,142 @@ This document describes how the AVATAR model checker of TTool works. This docume
 
 \newpage 
 
+\section{A First Example}
+This very first example explains how to verify reachability, liveness and safety properties using the AVATAR model-checker on a design model.
+
+\subsection{Getting the example}
+Be sure to get the latest version of TTool including the remote loading of models (June 2020 and after). Do: File, Open from TTool repository, and select "PressureController.xml". Then, open the design panel to view the AVATAR design model.
+
+\subsection{Understanding the model}
+The Pressure Controller is build upon a set of blocks representing the system itself, and two blocks representing the environment (the pressure sensor, and the alarm actuator), see Figure \ref{fig:pressurecontroller}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=1\textwidth]{images/PressureController.png}
+\caption{Pressure Controller System: Avatar Design}
+\label{fig:pressurecontroller}
+\end{figure}
+
+\subsubsection{PressureSensor}
+The pressure sensor (see Figure \ref{fig:pressuresensor}) monitors the pressure with a period of 20 units of time. In the first branch, "IsInCode" method that is \textbf{not} executed when the model is considered for functional simulation or formal verification. Indeed, in our case, the "branch" boolean is set to false by default, so the random command is executed (and not the readingPressure() method). The random value, between 18 and 21, is sent every period of time to the main controller.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.6\textwidth]{images/pressuresensor.jpg}
+\caption{Pressure Sensor}
+\label{fig:pressuresensor}
+\end{figure}
+
+\subsubsection{MainController}
+The main controller (see Figure \ref{fig:maincontroller}) receives the pressure value from the pressure sensor. If the value is greater equal than a threshold, set at 20, a high pressure signal is sent to the alarm manager.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.7\textwidth]{images/maincontroller.jpg}
+\caption{Main Controller}
+\label{fig:maincontroller}
+\end{figure}
+
+\subsubsection{AlarmManager}
+The alarm manager (see Figure \ref{fig:alarmmanager}) activates an alarm when the controller senses a high pressure. The alarm is deactivated after "alarmDuration", controlled by a timer, if no other high pressure signals are sensed.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.7\textwidth]{images/alarmmanager.jpg}
+\caption{AlarmManager}
+\label{fig:alarmmanager}
+\end{figure}
+
+\subsubsection{AlarmActuator}
+The alarm actuator may receive on and off signals activating and deactivating the alarm.
+
+
+\subsection{Reachability and liveness}
+For specific states, we can activate the reachability and liveness check going to the correspondant state machine, right clicking on a state or a signal and selecting "Check for Reachability / Liveness". For instance, let's do that on the \textit{AlarmIsOn} state in the AlarmManager state machine. After the operation, the letters R and L in grey will appear next to the state  (see Figure \ref{fig:rl_grey}) to confirm that the state is selected for the reachability and liveness check. After that, we may proceed with the verification.
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.5\textwidth]{images/rl_grey.jpg}
+\caption{State selected for reachability and liveness check}
+\label{fig:rl_grey}
+\end{figure}
+\\To open the model-checker window, we must first compile the model. To do that, let's click on the "syntax analysis" icon and then on "check syntax" to compile the model.  Then,, we click on the "safety veification (internal tool)" icon representing a screwdriver and a wrench with the text "RC". The following window should open (see Figure \ref{fig:mcwindow}).
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\textwidth]{images/modelcheckerwindow.jpg}
+\caption{Model-checker window}
+\label{fig:mcwindow}
+\end{figure}
+\\To execute the reachability and liveness check on the selected state, let's select "Selected states" in both Reachability and Liveness lines. Then, we can press the start button. The text area will contain the verification report indicating if the properties are satisfied or not. Moreover, if we go back to the AlarmManager state machine, the RL text next to the state is colored with green for \textit{satisfied} and in red for \textit{not satisfied} (see Figure \ref{fig:rl_exe}).
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.5\textwidth]{images/rl_exe.jpg}
+\caption{Reachability and Liveness result}
+\label{fig:rl_exe}
+\end{figure}
+\\In this case, the reachability is satisfied as it is possible that the pressure sensor detects a temperature higher than the controller threshold. The liveness, instead, is not satisfied as it is possible that a temperature higher than the threshold is never detected.
+\\\\
+If we want to simply verify the reachability and liveness property automatically for all the states, we can select "All states" in the model-checking window.
+
+\subsection{Safety properties}
+We can find, write and modify safety properties in the block diagram tab inside the pink block. The pink block can be created by clicking on the "Safety property button" as shown in figure \ref{fig:safety}.
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.6\textwidth]{images/safety.png}
+\caption{Safety properties creation}
+\label{fig:safety}
+\end{figure}
+\\If we do a double click on the pink box, we see the safety and liveness pragmas written as a CTL formula using UPPAAL syntax. If we press the question mark in the window, a short illustrated guide on how the queries work appears.
+\\\\
+To start the CTL query verification, let's compile again and let's open the model-checker wiindow. As shown in figure \ref{fig:mcwindow}, we want to select the checkbox "Safety pragmas" and then we select the queries that we want to verify. In this case, let's execute them all. Let's press the start butto to begin the verification. The query results is shown both in the report field in the window and in the pink box in the block diagram tab (see Picture \ref{fig:sresult}).
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.7\textwidth]{images/safety_result.png}
+\caption{Safety Result}
+\label{fig:sresult}
+\end{figure}
+
+\newpage
+\section{Verification Guide}
+In this section we will explain all the features and all the options that are present in the AVATAR model-checker. As window reference, please refer to figure \ref{fig:mcwindow}.
+\\\\The model-checker allows to generate a reachability graph and to prove properties. Starting from the top, the first section contains graph generations options. In particular:
+\begin{itemize}
+	\item \textbf{Do not display empty transitions as internal states}: in the reachability graph generation, states are created also for empty transitions (no action, no time, no choice). This option does not affect the verification.
+	\item \textbf{Ignore concurrency between internal actions}: this option allow to ignore a full concurrency study. It is very useful to limit the state explosion of the model due to all the concurrencies among states. It is so suggested to keep it selected to have a faster verification. This option, however, it is considered only in the \textit{leadsto} study, as it is the only study that might be affected by this option, and in the reachability graph generation. \textbf{Important}: basic concurrency it is evaluated also with this optimization selected. Basic concurrency means that the concurrency is evaluated until states with multiple transitions, if statement, and signals communitation (things that are evaluated in not selected mode) are encounted. In normal usage, you should not need to deselect this option.
+	\item \textbf{Ignore states between internal actions}: This option allows to ignore intermediate states between actions that can be directly executed. this optimization helps decreasing the number of states in the reachability graph generation. If  \textit{Ignore concurrency between internal actions} is not selected, this option is not used. We suggest to keep this option selected for verification as it would not affect the result.
+	 \item \textbf{Limit the number of states in RG}: it limits the reachability graph generation to a fixed number of states. It is particularly useful for big models. This option is automatically ignored when a verification study is selected.
+	 \item \textbf{Time constraint for RG generation}: it allows to stop the reachability graph generation after a fixed number of milliseconds. It is particularly useful for big models. This option is automatically ignored when a verification study is selected.
+\end{itemize}
+The next section contains options for basic properties verification:
+\begin{itemize}
+	\item \textbf{No deadlocks}: it checks that the model is deadlock free
+	\item \textbf{Reinitialization}: it checks that, for all the paths, the model will eventually restart to the initial state
+	\item \textbf{Reachability}: it checks states reachability
+	\item \textbf{Liveness}: it checks for states liveness
+\end{itemize}
+The next section allows advanced options to be selected. It allows to execute safety and liveness pragmas written as a CTL formula. Each of them can be selected or not for the verification.
+\\\\
+Then, if \textbf{Reachability Graph Generation} options is used to generate and save the reachability graph. Moreover, it can can be saved also in "dotty" format.
+
+\subsection{CTL query syntax}
+The query syntax for CTL formulas, for expressions \texttt{p} and \texttt{q}, is the following:
+\begin{itemize}
+	\item \textbf{A[] p}: property p is always true for each path (other common notation \textbf{AG p})
+	\item \textbf{A<> p}: property p will eventually be true for each path (other common notation \textbf{AF p})
+	\item \textbf{E[] p}: there exists at least one path in which property p is always true (other common notation \textbf{EG p})
+	\item \textbf{E<> p}:  there exists a path in which property p will eventually be true (other common notation \textbf{EF p})
+	\item \textbf{p --> q}: whenever p is true, then q will eventually be true at some subsequent moment (other common notation \textbf{G(p $\Rightarrow$ Fq)})
+\end{itemize}
+Expression \texttt{p} and \texttt{q} may be on states or attributes. The format used to reference a variable or a state of a block is \textit{BlockName.AttributeName} or \textit{BlockName.StateName}. Conditions on variables can be combined using classic C code like boolean operators (||, \&\&, and, or). Variables can be negated or inverted (not(variable)). Examples:
+\begin{itemize}
+	\item \textit{E<> Passenger.isInCockpit ==true \&\& DoorAndLockButton.inside==1}: there exists a path in which there is at least one state in which Passenger.isInCockpit is true and DoorAndLockButton.inside is equal to 1
+	\item \textit{A[] MainController.currentPressure < 25}: MainController.currentPressure is always less than 25
+	\item \textit{DoorAndLockButton.IN\_EMERGENCY\_CALL --> DoorAndLockButton.CLOSED\_AND\_LOCKED || DoorAndLockButton.CLOSED\_AND\_UNLOCKED}: whenever DoorAndLockButton.IN\_EMERGENCY\_CALL state is encounted, then or DoorAndLockButton.CLOSED\_AND\_LOCKED or DoorAndLockButton.CLOSED\_AND\_UNLOCKED will be encounted at some subsequent moment.
+\end{itemize}
+
+
+\newpage
 \section{AVATAR Model-Checker}
 \label{sec:am}
-
-
-
 
 \subsection{Introduction}
 The model-checker is used to generate a reachability graph starting from an AVATAR model. It can be also used to check the reachability and liveness on a list of selected states. The model checker is contained inside the package \texttt{avatartranslator.modelchecker}.
@@ -254,14 +385,6 @@ In the model also safety and liveness conditions could be proved. In particular,
 	\item \textbf{p --> q}: whenever p is true, then q will be true at some subsequent moment (other common notation \textbf{G(p $\Rightarrow$ Fq}))
 \end{itemize}
 with \textit{p} and \textit{q} properties. \textbf{Properties are written as expressions on variables or states of the AVATAR model}.
-
-\subsection{Examples}
-\begin{itemize}
-	\item \textit{E<> Passenger.isInCockpit ==true \&\& DoorAndLockButton.inside==1}: there exists a path in which there is at least one state in which Passenger.isInCockpit is true and DoorAndLockButton.inside is equal to 1
-	\item \textit{A[] MainController.currentPressure < 25}: MainController.currentPressure is always less than 25
-	\item \textit{DoorAndLockButton.IN\_EMERGENCY\_CALL --> DoorAndLockButton.CLOSED\_AND\_LOCKED || DoorAndLockButton.CLOSED\_AND\_UNLOCKED}: whenever DoorAndLockButton.IN\_EMERGENCY\_CALL state is encounted, then or DoorAndLockButton.CLOSED\_AND\_LOCKED or DoorAndLockButton.CLOSED\_AND\_UNLOCKED will be encounted at some subsequent moment.
-\end{itemize}
-Liveness properties directly specified in model states are solved with a \textbf{A<> p} property type.\\
 
 \subsection{Handling of safety and liveness properties by the AVATAR model checker}
 Safety and liveness properties are represented by the \texttt{SafetyProperty} class. The properties are built in the AvatarExpressionSolver class. It creates a syntax tree where each leaf is a AvatarExpressionAttribute or an immediate value and each node is an operator. An AvatarExpressionAttribute can represent a state or a variable of the model. It contains pointers so that, given a state of the model checker, it extracts the associated value in \textit{O(1)}. It can represent integers and boolean values encoded as integers. So, results of properties can be extracted just by visiting the AvatarExpressionSolver tree. AvatarExpressionSolver is also used for guards and actions. The methods \texttt{getSolverResult(SpecificationState)} and \texttt{getSolverResult(SpecificationState, AvatarStateMachineElement)} can be use to obtain the expressions result.\\
