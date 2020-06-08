@@ -23,6 +23,7 @@ dependencies {
     compile name: 'jaxen-1.1.6'
     compile name: 'opencloud'
     compileOnly name: 'jna-3.3.0'
+    compile name: 'commons-math3-3.6.1'
 }
 
 jar {
