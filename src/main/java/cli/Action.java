@@ -73,7 +73,11 @@ import java.util.List;
  */
 public class Action extends Command {
     // Action commands
+    private final static String NEW = "new";
     private final static String OPEN = "open";
+    private final static String SAVE = "save";
+    private final static String SET_FILE = "set-file";
+    private final static String GET_FILE = "get-file";
     private final static String RESIZE = "resize";
     private final static String START = "start";
     private final static String QUIT = "quit";
@@ -190,7 +194,7 @@ public class Action extends Command {
             }
         };
 
-        // Open
+        // Resize
         Command resize = new Command() {
             public String getCommand() {
                 return RESIZE;
@@ -245,6 +249,116 @@ public class Action extends Command {
                 }
 
                 interpreter.mgui.openProjectFromFile(new File(command));
+
+                return null;
+            }
+        };
+
+        // New
+        Command newT = new Command() {
+            public String getCommand() {
+                return NEW;
+            }
+
+            public String getShortCommand() {
+                return "n";
+            }
+
+            public String getDescription() {
+                return "Creating a new model in TTool";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                interpreter.mgui.newProject();
+
+                return null;
+            }
+        };
+
+        // Set-File
+        Command setFile = new Command() {
+            public String getCommand() {
+                return SET_FILE;
+            }
+
+            public String getShortCommand() {
+                return "sf";
+            }
+
+            public String getDescription() {
+                return "Setting the save file of TTool";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                String[] commands = command.split(" ");
+                if (commands.length < 1) {
+                    return Interpreter.BAD;
+                }
+
+                String fileName = commands[commands.length-1];
+
+                interpreter.mgui.setFileName(fileName);
+
+                return null;
+            }
+        };
+
+        Command getFile = new Command() {
+            public String getCommand() {
+                return GET_FILE;
+            }
+
+            public String getShortCommand() {
+                return "gf";
+            }
+
+            public String getDescription() {
+                return "Get the name of the  model under edition TTool";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+
+
+                String fileName = interpreter.mgui.getFileName();
+
+                System.out.println(fileName);
+
+                return null;
+            }
+        };
+
+        // Save
+        Command save = new Command() {
+            public String getCommand() {
+                return SAVE;
+            }
+
+            public String getShortCommand() {
+                return "sm";
+            }
+
+            public String getDescription() {
+                return "Saving a model in TTool";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                interpreter.mgui.saveProject();
 
                 return null;
             }
@@ -900,7 +1014,11 @@ public class Action extends Command {
 
 
         addAndSortSubcommand(start);
+        addAndSortSubcommand(newT);
         addAndSortSubcommand(open);
+        addAndSortSubcommand(setFile);
+        addAndSortSubcommand(getFile);
+        addAndSortSubcommand(save);
         addAndSortSubcommand(resize);
         addAndSortSubcommand(quit);
         addAndSortSubcommand(checkSyntax);

@@ -67,7 +67,7 @@ public class TToolCLI implements InterpreterOutputInterface {
 
     public static void printUsage() {
         System.out.println("ttool-cli: usage");
-        System.out.println("ttool-cli <script file> OR ttool-cli -help");
+        System.out.println("ttool-cli <script file> OR ttool-cli -help OR ttool-cli -interact");
         System.out.println("options: -debug -show");
 
     }

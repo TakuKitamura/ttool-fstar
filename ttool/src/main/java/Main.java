@@ -106,7 +106,7 @@ public class Main implements ActionListener, InterpreterOutputInterface{
 
         JStartingWindow splashFrame = null;
         //System.out.println("hello");
-        URL imageURL = Main.class.getResource("ui/util/starting_logo.gif");
+        URL imageURL = Main.class.getResource("ui/util/starting_logo.png");
         Image img;
         //System.out.println("helli");
         if (imageURL != null) {

@@ -3189,7 +3189,17 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return b;
     }
 
-    protected boolean saveProject() {
+    public String setFileName(String fileName) {
+        File f = new File(fileName);
+        file = FileUtils.addFileExtensionIfMissing(f, TFileFilter.getExtension());
+        return file.getName();
+    }
+
+    public String getFileName() {
+        return file.getAbsolutePath();
+    }
+
+    public boolean saveProject() {
         if (file == null) {
             if (dir != null)
                 createFileDialog();
