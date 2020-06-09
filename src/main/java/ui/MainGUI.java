@@ -8210,6 +8210,10 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         mainTabbedPane.setTitleAt(tabs.size() - 1, mainTabbedPane.getTitleAt(index) + "_" + s);
     }
 
+    public void removeCurrentTab() {
+        requestRemoveTab(mainTabbedPane.getSelectedIndex());
+    }
+
     public void requestRemoveTab(int index) {
         if (index >= tabs.size()) {
             return;
@@ -9436,7 +9440,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                 JMenuItem item = (JMenuItem) e.getSource();
                 String ac = item.getActionCommand();
                 if (ac.equals("Rename")) {
-                    mgui.requestRenameTab(mainTabbedPane.getSelectedIndex());
+                    mgui.removeCurrentTab();
                 } else if (ac.equals("Remove")) {
                     mgui.requestRemoveTab(mainTabbedPane.getSelectedIndex());
                 } else if (ac.equals("Move to the left")) {

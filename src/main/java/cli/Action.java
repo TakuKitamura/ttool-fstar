@@ -81,6 +81,11 @@ public class Action extends Command {
     private final static String RESIZE = "resize";
     private final static String START = "start";
     private final static String QUIT = "quit";
+
+    private final static String NEW_DESIGN = "new-design";
+    private final static String REMOVE_CURRENT_TAB = "remove-current-tab";
+
+
     private final static String CHECKSYNTAX = "check-syntax";
     private final static String DIPLO_INTERACTIVE_SIMULATION = "diplodocus-interactive-simulation";
     private final static String DIPLO_FORMAL_VERIFICATION = "diplodocus-formal-verification";
@@ -321,7 +326,8 @@ public class Action extends Command {
             }
 
             public String getDescription() {
-                return "Get the name of the  model under edition TTool";
+                return "Get the name of the  model under edition TTool. If a variable is provided as argument, the " +
+                        "result is saved into this variable";
             }
 
             public String executeCommand(String command, Interpreter interpreter) {
@@ -329,9 +335,14 @@ public class Action extends Command {
                     return Interpreter.TTOOL_NOT_STARTED;
                 }
 
+                String[] commands = command.split(" ");
 
 
                 String fileName = interpreter.mgui.getFileName();
+
+                if (commands.length > 0) {
+                    interpreter.addVariable(commands[0], fileName);
+                }
 
                 System.out.println(fileName);
 
@@ -383,6 +394,56 @@ public class Action extends Command {
                     return Interpreter.TTOOL_NOT_STARTED;
                 }
                 interpreter.mgui.quitApplication(false, false);
+                return null;
+            }
+        };
+
+        // New (avatar) design
+        Command newDesign = new Command() {
+            public String getCommand() {
+                return NEW_DESIGN;
+            }
+
+            public String getShortCommand() {
+                return "nd";
+            }
+
+            public String getDescription() {
+                return "Create a new design view";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                interpreter.mgui.newDesign();
+
+                return null;
+            }
+        };
+
+        // Remove current tab
+        Command removeCurrentTab = new Command() {
+            public String getCommand() {
+                return REMOVE_CURRENT_TAB;
+            }
+
+            public String getShortCommand() {
+                return "rct";
+            }
+
+            public String getDescription() {
+                return "Remove the current tab";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                interpreter.mgui.removeCurrentTab();
+
                 return null;
             }
         };
@@ -1021,6 +1082,10 @@ public class Action extends Command {
         addAndSortSubcommand(save);
         addAndSortSubcommand(resize);
         addAndSortSubcommand(quit);
+
+        addAndSortSubcommand(newDesign);
+        addAndSortSubcommand(removeCurrentTab);
+
         addAndSortSubcommand(checkSyntax);
         addAndSortSubcommand(generateRGFromAvatar);
         addAndSortSubcommand(diplodocusInteractiveSimulation);

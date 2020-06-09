@@ -3,7 +3,8 @@ wait 2
 action new
 wait 2
 action set-file resources/test/cli/output/mynewmodel
-action get-file
+action get-file myfile
+print v myfile
 action save
 wait 1
 action quit
