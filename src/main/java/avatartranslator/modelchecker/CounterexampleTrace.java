@@ -88,7 +88,7 @@ public class CounterexampleTrace {
             s.append(id);
             int j = 0;
             for (AvatarBlock block : blocks) {
-                s.append("\t" + block.getName() + "." + block.getStateMachine().allStates[cs.blocksStates[j]].getName());
+                s.append("\t" + block.getName() + "." + block.getStateMachine().allStates[cs.blocksStates[j++]].getName());
             }
             s.append("\n");
             id++;
