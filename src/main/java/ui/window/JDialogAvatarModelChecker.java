@@ -49,6 +49,7 @@ import myutil.*;
 import ui.util.IconManager;
 import ui.MainGUI;
 import ui.TGComponent;
+import ui.avatarbd.AvatarBDSafetyPragma;
 import graph.RG;
 import graph.AUTGraph;
 
@@ -992,9 +993,11 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
 
         for (SafetyProperty sp : safeties) {
             if (sp.getPhase() == SpecificationPropertyPhase.SATISFIED) {
-                status = 1;
+                status = AvatarBDSafetyPragma.PROVED_TRUE;
+            } else if (sp.getPhase() == SpecificationPropertyPhase.NONSATISFIED) {
+                status = AvatarBDSafetyPragma.PROVED_FALSE;
             } else {
-                status = 0;
+                status = AvatarBDSafetyPragma.PROVED_ERROR;
             }
             verifMap.put(sp.getRawProperty(), status);
         }
