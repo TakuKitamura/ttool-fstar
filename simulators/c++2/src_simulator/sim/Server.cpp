@@ -89,7 +89,7 @@ int Server::run(){
 
 	if (p == NULL){
 		std::cerr << "server: failed to bind\n";
-		return 1;
+		exit(0);
 	}
 	
 	freeaddrinfo(aServerInfo);

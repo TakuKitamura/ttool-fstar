@@ -90,7 +90,7 @@ public class JDialogAvatarTransition extends JDialogBase implements ActionListen
 
     private Vector<Vector<Expression>> actionRows;
     //private Vector<String> actions;
-    private String guard, afterMin, afterMax, extraDelay1, /*computeMin, computeMax,*/ probability;
+    private String guard, afterMin, afterMax, extraDelay1, extraDelay2, /*computeMin, computeMax,*/ probability;
     private int distributionLaw;
     private List<TAttribute> myAttributes;
     private List<AvatarMethod> myMethods;
@@ -106,8 +106,9 @@ public class JDialogAvatarTransition extends JDialogBase implements ActionListen
 //    private JPanel panel2;
 
     // Panel1
-    private JTextField guardT, afterMinT, afterMaxT, extraDelay1T, /*computeMinT, computeMaxT,*/ probabilityT;
+    private JTextField guardT, afterMinT, afterMaxT, extraDelay1T, extraDelay2T,/*computeMinT, computeMaxT,*/ probabilityT;
     private JLabel extraDelay1L;
+	private JLabel extraDelay2L;
     private JComboBox<String> distributionLawB;
     
     private JTable actionsTable;
@@ -135,6 +136,7 @@ public class JDialogAvatarTransition extends JDialogBase implements ActionListen
     								String _afterMax,
 								  int _distributionLaw,
 								  String _extraDelay1,
+									   String _extraDelay2,
 								  /* String _computeMin, String _computeMax,*/ 
     								Vector<Expression> _actions,
     								List<TAttribute> _myAttributes, 
@@ -149,6 +151,7 @@ public class JDialogAvatarTransition extends JDialogBase implements ActionListen
         afterMin = _afterMin;
         afterMax = _afterMax;
         extraDelay1 = _extraDelay1;
+		extraDelay2 = _extraDelay2;
         distributionLaw = _distributionLaw;
 //        computeMin = _computeMin;
 //        computeMax = _computeMax;
@@ -290,14 +293,24 @@ public class JDialogAvatarTransition extends JDialogBase implements ActionListen
         distributionLawB = new JComboBox<>(AvatarTransition.DISTRIBUTION_LAWS);
         distributionLawB.setSelectedIndex(distributionLaw);
         distributionLawB.addActionListener(this);
-
+        constraintsFields.gridwidth = GridBagConstraints.REMAINDER;
         pnlTransitionInfo.add(distributionLawB, constraintsFields );
+
+
         extraDelay1L = new JLabel("Attr 1:", SwingConstants.RIGHT);
         pnlTransitionInfo.add(extraDelay1L, constraintsLabels );
         extraDelay1T = new JTextField(extraDelay1, 10);
-        constraintsFields.gridwidth = GridBagConstraints.REMAINDER;;
+        constraintsFields.gridwidth = GridBagConstraints.REMAINDER;
         constraintsFields.insets.right = 0;
         pnlTransitionInfo.add(extraDelay1T, constraintsFields );
+
+        extraDelay2L = new JLabel("Attr 2:", SwingConstants.RIGHT);
+        pnlTransitionInfo.add(extraDelay2L, constraintsLabels );
+        extraDelay2T = new JTextField(extraDelay2, 10);
+        constraintsFields.gridwidth = GridBagConstraints.REMAINDER;;
+        constraintsFields.insets.right = 0;
+        pnlTransitionInfo.add(extraDelay2T, constraintsFields );
+
         checkAttributesDistributionLawB();
 
 
@@ -773,6 +786,8 @@ public class JDialogAvatarTransition extends JDialogBase implements ActionListen
 
     public String getExtraDelay1() { return extraDelay1T.getText();}
 
+    public String getExtraDelay2() { return extraDelay2T.getText();}
+
     public int getDistributionLaw() { return distributionLawB.getSelectedIndex();}
 
 //    public String getComputeMin() {
@@ -825,7 +840,18 @@ public class JDialogAvatarTransition extends JDialogBase implements ActionListen
         distributionLaw = distributionLawB.getSelectedIndex();
         int nbOfExtras = AvatarTransition.NB_OF_EXTRA_ATTRIBUTES[distributionLaw];
         extraDelay1T.setEnabled(nbOfExtras>0);
-        extraDelay1L.setText(AvatarTransition.LABELS_OF_EXTRA_ATTRIBUTES[distributionLaw] + ":");
+        if (extraDelay1T.isEnabled()) {
+            extraDelay1L.setText(AvatarTransition.LABELS_OF_EXTRA_ATTRIBUTES_1[distributionLaw] + ":");
+        } else {
+            extraDelay1L.setText("");
+        }
+        extraDelay2T.setEnabled(nbOfExtras>1);
+        if (extraDelay2T.isEnabled()) {
+            extraDelay2L.setText(AvatarTransition.LABELS_OF_EXTRA_ATTRIBUTES_2[distributionLaw] + ":");
+        } else {
+            extraDelay2L.setText("");
+        }
+
     }
 
 }

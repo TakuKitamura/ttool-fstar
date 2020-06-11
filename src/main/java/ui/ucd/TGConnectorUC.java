@@ -68,7 +68,7 @@ public  abstract class TGConnectorUC extends TGConnector {
     @Override
     protected void drawLastSegment(Graphics g, int x1, int y1, int x2, int y2){
         //g.drawLine(x1, y1, x2, y2);
-        GraphicLib.dashedArrowWithLine(g, 1, 1, 0, x1, y1, x2, y2, false);
+        GraphicLib.dashedArrowWithLine(g, 1, 1, 12, x1, y1, x2, y2, false);
         
         // Indicate semantics 
         w  = g.getFontMetrics().stringWidth(value);

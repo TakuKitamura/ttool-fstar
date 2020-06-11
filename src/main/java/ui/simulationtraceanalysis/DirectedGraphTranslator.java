@@ -1,26 +1,26 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- * 
+ *
  * ludovic.apvrille AT enst.fr
- * 
+ *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- * 
+ *
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- * 
+ *
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- * 
+ *
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -31,48 +31,15 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- * 
+ *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
 
 package ui.simulationtraceanalysis;
 
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.FilterWriter;
-import java.io.IOException;
-import java.io.Writer;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Vector;
-
-import javax.imageio.ImageIO;
-import javax.swing.DefaultListModel;
-import javax.swing.JApplet;
-import javax.swing.JFrame;
-import javax.swing.JList;
-import javax.swing.JProgressBar;
-import javax.swing.JScrollPane;
-import javax.swing.SwingUtilities;
-
-import org.apache.commons.math3.geometry.spherical.twod.Vertex;
-import org.apache.derby.tools.sysinfo;
-import org.graphstream.graph.Edge;
+import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
+import com.mxgraph.swing.mxGraphComponent;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.AllDirectedPaths;
@@ -80,76 +47,30 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.ext.JGraphXAdapter;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.io.ComponentNameProvider;
-import org.jgrapht.io.EdgeProvider;
-import org.jgrapht.io.ExportException;
-import org.jgrapht.io.GraphImporter;
-import org.jgrapht.io.GraphMLExporter;
-import org.jgrapht.io.GraphMLImporter;
-import org.jgrapht.io.ImportException;
-import org.jgrapht.io.VertexProvider;
-
-import com.mxgraph.layout.mxCircleLayout;
-import com.mxgraph.layout.mxIGraphLayout;
-import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
-import com.mxgraph.swing.mxGraphComponent;
-import com.mxgraph.util.mxCellRenderer;
-import com.sun.prism.paint.Color;
-
-import tmltranslator.HwA;
-import tmltranslator.HwCommunicationNode;
-import tmltranslator.HwLink;
-import tmltranslator.HwNode;
-import tmltranslator.TMLActivity;
-import tmltranslator.TMLActivityElement;
-import tmltranslator.TMLChannel;
-import tmltranslator.TMLElement;
-import tmltranslator.TMLError;
-import tmltranslator.TMLMapping;
-import tmltranslator.TMLReadChannel;
-import tmltranslator.TMLRequest;
-import tmltranslator.TMLSendEvent;
-import tmltranslator.TMLTask;
-import tmltranslator.TMLWaitEvent;
-import tmltranslator.TMLWriteChannel;
+import org.jgrapht.io.*;
+import tmltranslator.*;
 import tmltranslator.tomappingsystemc2.DiploSimulatorCodeGenerator;
 import ui.TGComponent;
 import ui.TGConnectingPoint;
 import ui.TGConnector;
 import ui.TMLComponentDesignPanel;
 import ui.interactivesimulation.SimulationTransaction;
-import ui.tmlad.TMLADActionState;
-import ui.tmlad.TMLADChoice;
-import ui.tmlad.TMLADDecrypt;
-import ui.tmlad.TMLADDelay;
-import ui.tmlad.TMLADDelayInterval;
-import ui.tmlad.TMLADEncrypt;
-import ui.tmlad.TMLADExecC;
-import ui.tmlad.TMLADExecCInterval;
-import ui.tmlad.TMLADExecI;
-import ui.tmlad.TMLADExecIInterval;
-import ui.tmlad.TMLADForEverLoop;
-import ui.tmlad.TMLADForLoop;
-import ui.tmlad.TMLADForStaticLoop;
-import ui.tmlad.TMLADNotifiedEvent;
-import ui.tmlad.TMLADRandom;
-import ui.tmlad.TMLADReadChannel;
-import ui.tmlad.TMLADReadRequestArg;
-import ui.tmlad.TMLADSelectEvt;
-import ui.tmlad.TMLADSendEvent;
-import ui.tmlad.TMLADSendRequest;
-import ui.tmlad.TMLADSequence;
-import ui.tmlad.TMLADStartState;
-import ui.tmlad.TMLADStopState;
-import ui.tmlad.TMLADUnorderedSequence;
-import ui.tmlad.TMLADWaitEvent;
-import ui.tmlad.TMLADWriteChannel;
+import ui.tmlad.*;
 import ui.tmlcompd.TMLCPrimitivePort;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.util.*;
+import java.util.List;
+import java.util.Map.Entry;
 
 /**
  * Class DirectedGraphTranslator: this class generate the directed graph
  * equivalent for the sysml model
- * 
+ * <p>
  * 23/09/2019
  *
  * @author Maysam Zoor
@@ -261,7 +182,7 @@ public class DirectedGraphTranslator extends JApplet {
 
     @SuppressWarnings("deprecation")
     public DirectedGraphTranslator(JFrameLatencyDetailedAnalysis jFrameLatencyDetailedAnalysis, JFrameCompareLatencyDetail jframeCompareLatencyDetail,
-            TMLMapping<TGComponent> tmap1, List<TMLComponentDesignPanel> cpanels1, int i) {
+                                   TMLMapping<TGComponent> tmap1, List<TMLComponentDesignPanel> cpanels1, int i) {
 
         tmap = tmap1;
         setCpanels(cpanels1);
@@ -288,18 +209,18 @@ public class DirectedGraphTranslator extends JApplet {
         /*
          * JGraphXAdapter<String, DefaultEdge> graphAdapter = new JGraphXAdapter<String,
          * DefaultEdge>(g);
-         * 
+         *
          * mxHierarchicalLayout layout = new mxHierarchicalLayout(graphAdapter);
-         * 
+         *
          * layout.setInterHierarchySpacing(100); layout.setInterRankCellSpacing(100);
          * layout.setIntraCellSpacing(100);
-         * 
+         *
          * layout.execute(graphAdapter.getDefaultParent());
-         * 
+         *
          * scrollPane.setViewportView(new mxGraphComponent(graphAdapter));
-         * 
+         *
          * scrollPane.setVisible(true);
-         * 
+         *
          * scrollPane.revalidate(); scrollPane.repaint(); frame = new
          * JFrame("The Sys-ML Model As Directed Graph"); frame.add(scrollPane);
          * frame.pack();
@@ -795,9 +716,9 @@ public class DirectedGraphTranslator extends JApplet {
                 /*
                  * for (TMLComponentDesignPanel dpPanel : getCpanels()) { String[] taskpanel =
                  * task.getName().split("__");
-                 * 
+                 *
                  * if (dpPanel.getNameOfTab().equals(taskpanel[0])) { tmlcdp = dpPanel; }
-                 * 
+                 *
                  * }
                  */
                 // get the names and params of send events per task and their corresponding wait
@@ -975,7 +896,7 @@ public class DirectedGraphTranslator extends JApplet {
                             g.addEdge(preEventName, taskEndName);
                         }
 
-                        @SuppressWarnings({ "unchecked", "rawtypes" })
+                        @SuppressWarnings({"unchecked", "rawtypes"})
                         AllDirectedPaths<String, DefaultEdge> allPaths = new AllDirectedPaths<String, DefaultEdge>(g);
                         if (orderedSequenceList.size() > 0) {
 
@@ -1081,7 +1002,7 @@ public class DirectedGraphTranslator extends JApplet {
                                                                                 if (!adjacentsequenceListEntryValue.getKey()
                                                                                         .equals(sequenceListEntry.getKey())
                                                                                         && !adjacentsequenceListEntryValue.getKey()
-                                                                                                .equals(othersequenceListEntryValue.getKey())) {
+                                                                                        .equals(othersequenceListEntryValue.getKey())) {
 
                                                                                     if (path.get(i).getVertexList()
                                                                                             .contains(adjacentsequenceListEntryValue)) {
@@ -1682,9 +1603,7 @@ public class DirectedGraphTranslator extends JApplet {
 
                                 }
 
-                            }
-
-                            else {
+                            } else {
                                 HashSet<String> writeChVertex = new HashSet<String>();
                                 writeChVertex.add(chwriteName);
 
@@ -1737,7 +1656,7 @@ public class DirectedGraphTranslator extends JApplet {
 
                                 /*
                                  * if (g.containsVertex(chwriteName))
-                                 * 
+                                 *
                                  * { g.addEdge(chwriteName, eventName); }
                                  */
 
@@ -1948,7 +1867,7 @@ public class DirectedGraphTranslator extends JApplet {
     // save graph in .graphml format
     public void exportGraph(String filename) throws ExportException, IOException {
 
-        @SuppressWarnings({ "rawtypes", "unchecked" })
+        @SuppressWarnings({"rawtypes", "unchecked"})
         GraphMLExporter<String, DefaultEdge> gmlExporter = new GraphMLExporter();
 
         ComponentNameProvider<String> vertexIDProvider = new ComponentNameProvider<String>() {
@@ -2245,9 +2164,7 @@ public class DirectedGraphTranslator extends JApplet {
                                     }
 
                                 }
-                            }
-
-                            else if (((st.deviceName.equals(task2DeviceName)) || st.deviceName.equals(task1DeviceName)
+                            } else if (((st.deviceName.equals(task2DeviceName)) || st.deviceName.equals(task1DeviceName)
                                     || devicesToBeConsidered.contains(deviceName)) && !st.id.equals(idTask1) && !st.id.equals(idTask2)) {
                                 delayDueTosimTraces.add(st);
 
@@ -2495,9 +2412,7 @@ public class DirectedGraphTranslator extends JApplet {
 
                             }
 
-                        }
-
-                        else if (((st.deviceName.equals(task2DeviceName)) || st.deviceName.equals(task1DeviceName)
+                        } else if (((st.deviceName.equals(task2DeviceName)) || st.deviceName.equals(task1DeviceName)
                                 || devicesToBeConsidered.contains(deviceName)) && !st.id.equals(idTask1) && !st.id.equals(idTask2)) {
                             delayDueTosimTraces.add(st);
 

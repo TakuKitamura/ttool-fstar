@@ -3189,7 +3189,17 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return b;
     }
 
-    protected boolean saveProject() {
+    public String setFileName(String fileName) {
+        File f = new File(fileName);
+        file = FileUtils.addFileExtensionIfMissing(f, TFileFilter.getExtension());
+        return file.getName();
+    }
+
+    public String getFileName() {
+        return file.getAbsolutePath();
+    }
+
+    public boolean saveProject() {
         if (file == null) {
             if (dir != null)
                 createFileDialog();
@@ -5045,7 +5055,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         JDialogAvatarModelChecker jmc = new JDialogAvatarModelChecker(frame, this, "Avatar: Model Checking", gtm.getAvatarSpecification(),
                 SpecConfigTTool.TGraphPath, experimentalOn);
         // jmc.setSize(550, 600);
-        GraphicLib.centerOnParent(jmc, 650, 600);
+        GraphicLib.centerOnParent(jmc, 650, 850);
         jmc.setVisible(true);
     }
 
@@ -8200,6 +8210,10 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         mainTabbedPane.setTitleAt(tabs.size() - 1, mainTabbedPane.getTitleAt(index) + "_" + s);
     }
 
+    public void removeCurrentTab() {
+        requestRemoveTab(mainTabbedPane.getSelectedIndex());
+    }
+
     public void requestRemoveTab(int index) {
         if (index >= tabs.size()) {
             return;
@@ -9426,7 +9440,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                 JMenuItem item = (JMenuItem) e.getSource();
                 String ac = item.getActionCommand();
                 if (ac.equals("Rename")) {
-                    mgui.requestRenameTab(mainTabbedPane.getSelectedIndex());
+                    mgui.removeCurrentTab();
                 } else if (ac.equals("Remove")) {
                     mgui.requestRemoveTab(mainTabbedPane.getSelectedIndex());
                 } else if (ac.equals("Move to the left")) {

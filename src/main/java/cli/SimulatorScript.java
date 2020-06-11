@@ -66,6 +66,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
+import java.rmi.Remote;
 import java.util.BitSet;
 import java.util.*;
 
@@ -85,7 +86,9 @@ public class SimulatorScript extends Command  implements Runnable  {
 
     private long [] times;
     private int currentIndex;
+    private long latestTime = -1;
     private RemoteConnection rc;
+    private boolean isReady = false;
 
     public SimulatorScript() {
 
@@ -150,7 +153,7 @@ public class SimulatorScript extends Command  implements Runnable  {
 
 
         // Starts simulation
-        Process simuProcess = Runtime.getRuntime().exec(simuPath + " -server");
+        //Process simuProcess = Runtime.getRuntime().exec(simuPath + " -server");
 
         // Wait for one second
         Thread.sleep(1000);
@@ -160,18 +163,27 @@ public class SimulatorScript extends Command  implements Runnable  {
         rc = new RemoteConnection("localhost");
         try {
             rc.connect();
+            isReady = true;
         } catch (RemoteConnectionException rce) {
             return "Could not connect";
         }
 
+        Thread t = new Thread(this);
+        t.start();
 
-        // Opens the two files
+
+        // Opens the input file
         boolean running = true;
         BufferedInputStream reader = new BufferedInputStream(new FileInputStream( inputFile ) );
+
+
+
         String readString = "";
         String line = "";
         boolean first = true;
         double lastValue = 0;
+
+
 
         try {
             while (running) {
@@ -185,20 +197,32 @@ public class SimulatorScript extends Command  implements Runnable  {
                         // End of line
                         // Must handle the line
                         line = readString.trim();
-                        TraceManager.addDev("Line read:" + line);
+                        //TraceManager.addDev("Line read:" + line);
                         readString = "";
-                        String lines[] = line.split(" ");
+                        //line = Conversion.replaceAllString(line, "\t", " ");
+                        //line = Conversion.replaceAllString(line, "  ", " ");
+                        //TraceManager.addDev("Line read:" + line);
+                        String lines[] = line.split("\\s+");
+                        /*for(String s: lines) {
+                            TraceManager.addDev("\t>" + s + "<");
+                        }*/
                         if (lines.length > 1) {
+                            //TraceManager.addDev("Lines length: " + lines.length);
                             double value1 = Double.parseDouble(lines[1]);
                             if (first) {
+                                //TraceManager.addDev("First value");
                                 first = false;
                                 lastValue = value1;
                             } else {
                                 if (value1 != lastValue) {
+
                                     lastValue = value1;
                                     double time1 = Double.parseDouble(lines[0]);
+                                    TraceManager.addDev("Sender. Time: " + time1 + " New value: " + value1);
                                     // Run simulation until time1
-                                    runSimulationTo(rc, time1);
+                                    //runSimulationTo(rc, time1);
+                                    //Thread.sleep(50);
+                                    //waitForNextTime(rc);
                                     // Remove all transactions
                                     removeAllTransactions(rc);
                                     currentIndex = 0;
@@ -206,15 +230,34 @@ public class SimulatorScript extends Command  implements Runnable  {
                                     // Get time of event1
                                     for(int i=0; i<channels.length; i++) {
                                         // Wait for channel operation
-                                        runUntilChannel(rc, channels[0]);
-                                        // Get current Time
-                                        sendGetSimulationTime(rc);
-                                        waitForNextIndex();
-                                    }
+                                        TraceManager.addDev("Sender. i. " + i + " - Running until channel: " + channels[i]);
+                                        runUntilChannel(rc, channels[i]);
+                                        Thread.sleep(5);
+                                        TraceManager.addDev("Sender. Waiting for current time");
 
-                                    // Wait for event2 to occur
-                                    // Get time of event2.
-                                    // Append to file2 time2-time1
+                                        // Get current Time
+                                        //sendGetSimulationTime(rc);
+                                        //Thread.sleep(50);
+                                        times[currentIndex++] = waitForNextTime(rc);
+                                        TraceManager.addDev("Sender. Simulation time is: " + times[i]);
+                                    }
+                                    // Compute final time
+                                    long finalTime = times[times.length-1] - times[0];
+                                    TraceManager.addDev("Sender. Final time: " + finalTime + " clock cycles");
+
+                                    // Compute this time in milliseconds
+                                    double physicalTimeMillis = finalTime / 200000; // We assume 200MHz
+                                    System.out.println("***********************************\n" +
+                                            "Final time: " + physicalTimeMillis + " ms\n" +
+                                            "***********************************");
+
+                                    // Append result to output file
+                                    FileWriter fw = new FileWriter(outputFile, true);
+                                    BufferedWriter bw = new BufferedWriter(fw);
+                                    PrintWriter out = new PrintWriter(bw);
+                                    out.println(""+physicalTimeMillis);
+                                    out.flush();
+
                                 }
                             }
                         }
@@ -249,28 +292,56 @@ public class SimulatorScript extends Command  implements Runnable  {
         // Must convert in clock cycles
         // We assume 200 MHz
         // We assume time is in ms
-        long nbOfCycles = (long)(200000 * time1);
-        rc.send("1 5 " + nbOfCycles);
+        long nbOfCycles = (long)(200 * time1);
+        toServer("1 5 " + nbOfCycles, rc);
 
     }
 
     private void removeAllTransactions(RemoteConnection rc) throws RemoteConnectionException {
-        rc.send("26");
+        toServer("26", rc);
     }
 
     private void runUntilChannel(RemoteConnection rc, String channelName) throws RemoteConnectionException {
+        String realChannelName = channelName.substring(1, channelName.length());
+        int cmdVal = 17;
+        if (channelName.startsWith("r")) {
+            cmdVal = 18;
+        }
+
+        String cmd = "1 " + cmdVal + " " + realChannelName;
+        toServer(cmd, rc);
 
     }
 
-    private synchronized void waitForNextIndex() {
-        int oldValue = currentIndex;
-        while( oldValue == currentIndex) {
+    private synchronized void toServer(String s, RemoteConnection rc) throws RemoteConnectionException  {
+        while(!isReady) {
+            TraceManager.addDev("Server not ready");
             try {
-                wait();
+                sendGetSimulationTime(rc);
+                wait(250);
             } catch (InterruptedException ie) {
 
             }
         }
+        TraceManager.addDev("Sender. Cmd to server: " + s);
+        rc.send(s);
+    }
+
+    private synchronized long waitForNextTime(RemoteConnection rc) throws RemoteConnectionException {
+        int oldValue = currentIndex;
+        latestTime = -1;
+        while( latestTime == -1) {
+            TraceManager.addDev("Sender. Sending time request.");
+            sendGetSimulationTime(rc);
+            try {
+                wait(250);
+            } catch (InterruptedException ie) {
+                TraceManager.addDev("Sender. Interrupted");
+            }
+        }
+        long ret = latestTime;
+        latestTime = -1;
+        return ret;
     }
 
 
@@ -279,7 +350,9 @@ public class SimulatorScript extends Command  implements Runnable  {
     public void run() {
         try {
             while (true) {
+                //TraceManager.addDev("\tReceiver. Waiting from server input.");
                 String s = rc.readOneLine();
+                //TraceManager.addDev("\tReceiver. Received from server:" + s);
                 analyzeServerAnswer(s);
             }
         } catch (Exception e) {
@@ -288,152 +361,35 @@ public class SimulatorScript extends Command  implements Runnable  {
     }
 
 
-    protected void analyzeServerAnswer(String s) {
-        //
-        String ssxml = "";
-        int index0 = s.indexOf("<?xml");
-
-        if (index0 != -1) {
-            //
-            ssxml = s.substring(index0, s.length()) + "\n";
-        } else {
-            //
-            ssxml = ssxml + s + "\n";
-        }
-
-        index0 = ssxml.indexOf("</siminfo>");
-
-        if (index0 != -1) {
-            //
-            ssxml = ssxml.substring(0, index0+10);
-            loadXMLInfoFromServer(ssxml);
-            ssxml = "";
-        }
-    }
-
-
-    protected boolean loadXMLInfoFromServer(String xmldata) {
-        //jta.append("XML from server:" + xmldata + "\n\n");
-
-        DocumentBuilderFactory dbf;
-        DocumentBuilder db;
-
-        try {
-            dbf = DocumentBuilderFactory.newInstance();
-            db = dbf.newDocumentBuilder();
-        } catch (ParserConfigurationException e) {
-            dbf = null;
-            db = null;
-        }
-
-        if ((dbf == null) || (db == null)) {
-            return false;
-        }
-
-        ByteArrayInputStream bais = new ByteArrayInputStream(decodeString(xmldata).getBytes());
-        int i;
-
-        try {
-            // building nodes from xml String
-            Document doc = db.parse(bais);
-            NodeList nl;
-            Node node;
-
-            nl = doc.getElementsByTagName(JFrameInteractiveSimulation.SIMULATION_HEADER);
-
-            if (nl == null) {
-                return false;
+    protected synchronized void  analyzeServerAnswer(String s) {
+        if (s.startsWith("<status>")) {
+            if (s.contains("ready")) {
+                isReady = true;
+            } else {
+                isReady = false;
             }
-
-            for(i=0; i<nl.getLength(); i++) {
-                node = nl.item(i);
-                //
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
-                    // create design, and get an index for it
-                    return loadConfiguration(node);
-                }
-            }
-        } catch (IOException e) {
-            TraceManager.addError("Error when parsing server info:" + e.getMessage());
-            return false;
-        } catch (SAXException saxe) {
-            TraceManager.addError("Error when parsing server info:" + saxe.getMessage());
-            TraceManager.addError("xml:" + xmldata);
-            return false;
-        }
-
-        return true;
-    }
-
-    public static String decodeString(String s)  {
-        if (s == null)
-            return s;
-        byte b[] = null;
-        try {
-            b = s.getBytes("ISO-8859-1");
-            return new String(b);
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-
-    protected boolean loadConfiguration(Node node1) {
-        NodeList diagramNl = node1.getChildNodes();
-        if (diagramNl == null) {
-            return false;
-        }
-        Element elt;
-        Node node, node0;
-        NodeList nl;
-
-
-        try {
-            for (int j = 0; j < diagramNl.getLength(); j++) {
-                node = diagramNl.item(j);
-
-                if (node == null) {
-                    TraceManager.addDev("null node");
-                    return false;
-                }
-
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
-                    elt = (Element) node;
-
-                    // Status
-                    if (elt.getTagName().compareTo(JFrameInteractiveSimulation.SIMULATION_GLOBAL) == 0) {
-
-                        nl = elt.getElementsByTagName("simtime");
-                        if ((nl != null) && (nl.getLength() > 0)) {
-                            node0 = nl.item(0);
-                            if (node0.getTextContent() != null) {
-                                String val = node0.getTextContent();
-                                //Write value to table
-                                writeTimeValue(val);
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            return false;
-        }
-
-        return true;
-    }
-
-    private synchronized void writeTimeValue(String val) {
-        if (times == null) {
+            notifyAll();
+            TraceManager.addDev("\tReceiver. Status: " + s);
             return;
         }
-        try {
-            long valL = Long.decode(val);
-            times[currentIndex] = valL;
-            currentIndex ++;
-            notify();
-        } catch (Exception e) {
 
+
+        int index0 = s.indexOf("<simtime>");
+        int index1 = s.indexOf("</simtime>");
+        if ((index0 > -1) && (index1 > -1)) {
+            String val = s.substring(index0+9, index1).trim();
+            //TraceManager.addDev("Reading simulation time:" + val);
+            writeTimeValue(val);
         }
+    }
+
+
+    private synchronized void writeTimeValue(String val) {
+
+        long valL = Long.decode(val);
+        TraceManager.addDev("\tReceiver. Received simulation time:" + valL);
+        latestTime = valL;
+        notifyAll();
     }
 
 

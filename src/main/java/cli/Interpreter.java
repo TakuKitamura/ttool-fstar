@@ -236,6 +236,14 @@ public class Interpreter implements Runnable, TerminalProviderInterface {
         variables.put(name, value);
     }
 
+    public String getVariableValue(String name) {
+        String v = variables.get(name);
+        if (v == null) {
+            return "";
+        }
+        return v;
+    }
+
     private String removeVariablesIn(String input) {
         String ret = "";
         String initialLine = input;

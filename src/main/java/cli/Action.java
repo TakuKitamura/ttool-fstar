@@ -73,10 +73,19 @@ import java.util.List;
  */
 public class Action extends Command {
     // Action commands
+    private final static String NEW = "new";
     private final static String OPEN = "open";
+    private final static String SAVE = "save";
+    private final static String SET_FILE = "set-file";
+    private final static String GET_FILE = "get-file";
     private final static String RESIZE = "resize";
     private final static String START = "start";
     private final static String QUIT = "quit";
+
+    private final static String NEW_DESIGN = "new-design";
+    private final static String REMOVE_CURRENT_TAB = "remove-current-tab";
+
+
     private final static String CHECKSYNTAX = "check-syntax";
     private final static String DIPLO_INTERACTIVE_SIMULATION = "diplodocus-interactive-simulation";
     private final static String DIPLO_FORMAL_VERIFICATION = "diplodocus-formal-verification";
@@ -190,7 +199,7 @@ public class Action extends Command {
             }
         };
 
-        // Open
+        // Resize
         Command resize = new Command() {
             public String getCommand() {
                 return RESIZE;
@@ -250,6 +259,122 @@ public class Action extends Command {
             }
         };
 
+        // New
+        Command newT = new Command() {
+            public String getCommand() {
+                return NEW;
+            }
+
+            public String getShortCommand() {
+                return "n";
+            }
+
+            public String getDescription() {
+                return "Creating a new model in TTool";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                interpreter.mgui.newProject();
+
+                return null;
+            }
+        };
+
+        // Set-File
+        Command setFile = new Command() {
+            public String getCommand() {
+                return SET_FILE;
+            }
+
+            public String getShortCommand() {
+                return "sf";
+            }
+
+            public String getDescription() {
+                return "Setting the save file of TTool";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                String[] commands = command.split(" ");
+                if (commands.length < 1) {
+                    return Interpreter.BAD;
+                }
+
+                String fileName = commands[commands.length-1];
+
+                interpreter.mgui.setFileName(fileName);
+
+                return null;
+            }
+        };
+
+        Command getFile = new Command() {
+            public String getCommand() {
+                return GET_FILE;
+            }
+
+            public String getShortCommand() {
+                return "gf";
+            }
+
+            public String getDescription() {
+                return "Get the name of the  model under edition TTool. If a variable is provided as argument, the " +
+                        "result is saved into this variable";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                String[] commands = command.split(" ");
+
+
+                String fileName = interpreter.mgui.getFileName();
+
+                if (commands.length > 0) {
+                    interpreter.addVariable(commands[0], fileName);
+                }
+
+                System.out.println(fileName);
+
+                return null;
+            }
+        };
+
+        // Save
+        Command save = new Command() {
+            public String getCommand() {
+                return SAVE;
+            }
+
+            public String getShortCommand() {
+                return "sm";
+            }
+
+            public String getDescription() {
+                return "Saving a model in TTool";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                interpreter.mgui.saveProject();
+
+                return null;
+            }
+        };
+
         // Quit
         Command quit = new Command() {
             public String getCommand() {
@@ -269,6 +394,56 @@ public class Action extends Command {
                     return Interpreter.TTOOL_NOT_STARTED;
                 }
                 interpreter.mgui.quitApplication(false, false);
+                return null;
+            }
+        };
+
+        // New (avatar) design
+        Command newDesign = new Command() {
+            public String getCommand() {
+                return NEW_DESIGN;
+            }
+
+            public String getShortCommand() {
+                return "nd";
+            }
+
+            public String getDescription() {
+                return "Create a new design view";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                interpreter.mgui.newDesign();
+
+                return null;
+            }
+        };
+
+        // Remove current tab
+        Command removeCurrentTab = new Command() {
+            public String getCommand() {
+                return REMOVE_CURRENT_TAB;
+            }
+
+            public String getShortCommand() {
+                return "rct";
+            }
+
+            public String getDescription() {
+                return "Remove the current tab";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                interpreter.mgui.removeCurrentTab();
+
                 return null;
             }
         };
@@ -900,9 +1075,17 @@ public class Action extends Command {
 
 
         addAndSortSubcommand(start);
+        addAndSortSubcommand(newT);
         addAndSortSubcommand(open);
+        addAndSortSubcommand(setFile);
+        addAndSortSubcommand(getFile);
+        addAndSortSubcommand(save);
         addAndSortSubcommand(resize);
         addAndSortSubcommand(quit);
+
+        addAndSortSubcommand(newDesign);
+        addAndSortSubcommand(removeCurrentTab);
+
         addAndSortSubcommand(checkSyntax);
         addAndSortSubcommand(generateRGFromAvatar);
         addAndSortSubcommand(diplodocusInteractiveSimulation);

@@ -200,7 +200,7 @@ public class UCDUseCase extends TGCScalableWithoutInternalComponent {
     @Override
 	protected String translateExtraParam() {
         StringBuffer sb = new StringBuffer("<extraparam>\n");
-        sb.append("<info extension=\"" + extension + "\" ");
+        sb.append("<info extension=\"" + GTURTLEModeling.transformString(extension) + "\" ");
         sb.append("/>\n");
         sb.append("</extraparam>\n");
         return new String(sb);

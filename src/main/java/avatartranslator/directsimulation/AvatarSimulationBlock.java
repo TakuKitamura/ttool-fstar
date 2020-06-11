@@ -227,6 +227,7 @@ public class AvatarSimulationBlock {
                         aspt.myMaxDelay = evaluateIntExpression(trans.getMaxDelay(), lastTransaction.attributeValues);
                         aspt.hasDelay = true;
                         aspt.extraParam1 = evaluateIntExpression(trans.getDelayExtra1(), lastTransaction.attributeValues);
+                        aspt.extraParam2 = evaluateIntExpression(trans.getDelayExtra2(), lastTransaction.attributeValues);
                         aspt.delayDistributionLaw = trans.getDelayDistributionLaw();
                         if (lastTransaction != null) {
                             if (lastTransaction.clockValueWhenFinished < _clockValue) {
@@ -242,7 +243,8 @@ public class AvatarSimulationBlock {
                         aspt.myMinDelay = evaluateIntExpression(trans.getMinDelay(), lastTransaction.attributeValues);
                         aspt.myMaxDelay = evaluateIntExpression(trans.getMaxDelay(), lastTransaction.attributeValues);
                         aspt.hasDelay = true;
-                        aspt.extraParam1 = evaluateIntExpression(trans.getDelayExtra1(), lastTransaction.attributeValues);
+                        aspt.extraParam1 = evaluateDoubleExpression(trans.getDelayExtra1(), lastTransaction.attributeValues);
+                        aspt.extraParam2 = evaluateDoubleExpression(trans.getDelayExtra2(), lastTransaction.attributeValues);
                         aspt.delayDistributionLaw = trans.getDelayDistributionLaw();
 
                         //TraceManager.addDev(">>>>>   Signal with delay before");
@@ -694,6 +696,15 @@ public class AvatarSimulationBlock {
         return block.getAttribute(_index).getName();
     }
 
+    public double evaluateDoubleExpression(String _expr,  Vector<String> _attributeValues) {
+        try {
+            double ret = Double.parseDouble(_expr);
+            return ret;
+        } catch (Exception e) {
+            return 0.0;
+        }
+    }
+
     public int evaluateIntExpression(String _expr, Vector<String> _attributeValues) {
         String act = _expr;
         int cpt = 0;
@@ -753,6 +764,20 @@ public class AvatarSimulationBlock {
                     return (int) (Math.floor(MyMath.logNormalDistribution((double) (minV), (double) (maxV), extra1, extra2)));
                 } catch (Exception e) {
                     TraceManager.addDev("Exception on log normal: " + e.getMessage());
+                    return minV;
+                }
+            case AvatarRandom.RANDOM_EXPONENTIAL_LAW:
+                try {
+                    return (int) (Math.floor(MyMath.exponentialDistribution( (double) (minV), (double) (maxV), extra1) ));
+                } catch (Exception e) {
+                    TraceManager.addDev("Exception on exponential distribution: " + e.getMessage());
+                    return minV;
+                }
+            case AvatarRandom.RANDOM_WEIBULL_LAW:
+                try {
+                    return (int) (Math.floor(MyMath.weibullDistribution( (double) (minV), (double) (maxV), extra1, extra2) ));
+                } catch (Exception e) {
+                    TraceManager.addDev("Exception on weibull distribution: " + e.getMessage());
                     return minV;
                 }
         }

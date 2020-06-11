@@ -145,12 +145,12 @@ public final class GraphicLib {
         g2.drawLine(x1, y1, x2, y2);
         g2.setStroke(normalStroke);
 
-        // extremite 1
+        // end 1
         if ((type == 0) || (type == 2)) {
             drawArrow(g, x1, y1, x2, y2, head, length, full);
         }
 
-        // extremite 2
+        // end 2
         if ((type == 0) || (type == 1)) {
             drawArrow(g, x2, y2, x1, y1, head, length, full);
         }

@@ -57,12 +57,14 @@ public class AvatarRandom extends AvatarStateMachineElement {
     public final static int RANDOM_TRIANGULAR_LAW = 1;
     public final static int RANDOM_GAUSSIAN_LAW = 2;
     public final static int RANDOM_LOG_NORMAL_LAW = 3;
-    public final static String[] DISTRIBUTION_LAWS = {"Uniform", "Triangular", "Gaussian", "Log normal"};
-    public final static String[] DISTRIBUTION_LAWS_SHORT = {"", " ^", "ĝ", "ln"};
+    public final static int RANDOM_EXPONENTIAL_LAW = 4;
+    public final static int RANDOM_WEIBULL_LAW = 5;
+    public final static String[] DISTRIBUTION_LAWS = {"Uniform", "Triangular", "Gaussian", "Log normal", "Exponential", "Weibull"};
+    public final static String[] DISTRIBUTION_LAWS_SHORT = {"", " ^", "ĝ", "ln", "e^", "w"};
 
-    public final static int[] NB_OF_EXTRA_ATTRIBUTES = {0, 1, 1, 2};
-    public final static String[] LABELS_OF_EXTRA_ATTRIBUTES_1 = {"", "triangle top", "standard deviation", "standard deviation"};
-    public final static String[] LABELS_OF_EXTRA_ATTRIBUTES_2 = {"", "", "", "mean"};
+    public final static int[] NB_OF_EXTRA_ATTRIBUTES = {0, 1, 1, 2, 1, 2};
+    public final static String[] LABELS_OF_EXTRA_ATTRIBUTES_1 = {"", "triangle top", "standard deviation", "standard deviation", "mean", "shape"};
+    public final static String[] LABELS_OF_EXTRA_ATTRIBUTES_2 = {"", "", "", "mean", "", "scale"};
     protected int functionId;
     protected String extraAttribute1;
     protected String extraAttribute2;
