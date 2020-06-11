@@ -63,10 +63,12 @@ public class CustomizerGraphicalComponent {
     }
 
     public static ImageIcon getImageIcon() {
-	URL url = CustomizerGraphicalComponent.class.getResource("myicon.gif");
+	    URL url = CustomizerGraphicalComponent.class.getResource("myicon.gif");
+
+	    System.out.println("URL=" + url);
 
         if (url != null)  {
-	    myIcon = new ImageIcon(url);
+	        myIcon = new ImageIcon(url);
             return myIcon;
         } 
 	

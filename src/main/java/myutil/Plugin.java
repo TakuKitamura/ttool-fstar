@@ -40,7 +40,6 @@
 package myutil;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -107,7 +106,7 @@ public class Plugin {
 
     public ImageIcon getDiplodocusCodeGeneratorLogo() {
         String mName = "getLogoImage";
-        TraceManager.addDev("Getting image with method=" + mName);
+        //TraceManager.addDev("Getting image with method=" + mName);
         ImageIcon img = executeRetImageIconMethod(classDiplodocusCodeGenerator, mName);
         return img;
     }
@@ -128,10 +127,15 @@ public class Plugin {
 
     public boolean hasGraphicalComponent(String _diagID) {
         //TraceManager.addDev("Test GC with diag=" + _diagID);
+        //TraceManager.addDev("Executing hasGraphicalComponent in plugin "  + getName());
         String ret = executeRetStringMethod(removeJar(name), "hasGraphicalComponent");
+        //TraceManager.addDev("Executed hasGraphicalComponent in plugin "  + getName() + " ret=" +ret);
+
         if (ret != null) {
             classGraphicalComponent = getClass(ret);
+            //TraceManager.addDev("Executing getPanelClassName in plugin "  + getName());
             String diagOk = executeRetStringMethod(classGraphicalComponent, "getPanelClassName");
+            //TraceManager.addDev("Executed getPanelClassName in plugin "  + getName());
             if (diagOk != null) {
                 if (diagOk.compareTo(_diagID) == 0) {
                     //TraceManager.addDev("Found graphical component in plugin:" + name);
@@ -184,9 +188,9 @@ public class Plugin {
             }
 
         } catch (Exception e) {
-            TraceManager.addDev("getClass()\n");
-            e.printStackTrace(System.out);
-            //TraceManager.addDev("Exception when using plugin " + name + " with className=" + _className);
+            //TraceManager.addDev("getClass()\n");
+            //e.printStackTrace(System.out);
+            TraceManager.addDev("Exception when using plugin " + name + " with className=" + _className);
             return null;
         }
 
@@ -218,7 +222,7 @@ public class Plugin {
 
             return c.getMethod(_methodName);
         } catch (Exception e) {
-            //e.printStackTrace( System.out );
+            e.printStackTrace( System.out );
             TraceManager.addDev("Exception when using plugin " + name + " with className=" + _className + " and method " + _methodName);
             return null;
         }
@@ -227,7 +231,9 @@ public class Plugin {
 
     public String executeRetStringMethod(String _className, String _methodName) {
         // We have a valid plugin. We now need to get the Method
+        //TraceManager.addDev("-------- Getting " + _methodName + " of class " + _className);
         Method m = getMethod(_className, _methodName);
+        //TraceManager.addDev("-------- Got " + _methodName + " of class " + _className);
         if (m == null) {
             //TraceManager.addDev("Null method with class as a string class=" + _className + " _method=" + _methodName);
             return null;
@@ -301,7 +307,7 @@ public class Plugin {
 
             return (ImageIcon) (m.invoke(null));
         } catch (Exception e) {
-            TraceManager.addDev("Exception occured when executing method " + _methodName);
+            TraceManager.addDev("Exception occurred when executing method " + _methodName + " in plugin " + this.getName());
             return null;
         }
     }

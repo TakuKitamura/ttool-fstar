@@ -93,6 +93,7 @@ Modifications} & \textbf{Sections Modified} \\
 1.2 & 11/02/2017 & Added more info on tests & Tests \\ 
 1.3 & 02/10/2018 & Update and added GUI development & All\\
 1.4 & 22/11/2018 & Added more info on automated tests and on the installer & Automated tests / Installer \\
+1.4 & 11/06/2020 & Plugin: configuration, programming & Plugin \\
 \hline
 \end{tabular}
 \end{adjustbox}
@@ -1442,7 +1443,28 @@ if (_split[1].equals("CPU")) {
 \end{lstlisting}
 and do the same for the FPGA component.
 
-\item Finally, in the same method, have a look to the case \texttt{if (node instanceof HwCPU)} and do the same for FPGA. To make the comparison easier, capitalize the name of the FPGA's parameters. 
+\item Finally, in the same method, have a look to the case \texttt{if (node instanceof HwCPU)} and do the same for FPGA. To make the comparison easier, capitalize the name of the FPGA parameters. 
 \end{itemize}   
+
+\newpage
+\section{Plugin}
+
+A plugin makes it possible to add external features to TTool. 
+
+\subsection{Installing a plugin}
+A plugin is provided as a \textit{jar} file, for instance \textit{MyLovelyPlugin.jar}. For TTool to find and use this plugin, a configuration line must be added to the configuration file of TTool (e.g. \textit{config.xml}). For instance:
+
+\begin{lstlisting}
+<PLUGIN file="MyLovelyPlugin.jar" package = "mainstream"/>
+\end{lstlisting}
+means that the main class of the plugin, called "MyLovelyPlugin" shall be searched for in the "mainstream" package of the jar file. If the main class of the plugin is not in a package, then package must be left empty  \texttt{package=""}.
+
+
+TTool searches for plugin in its default bin directory, or, if configured, in the \texttt{PLUGIN\_PATH}. Thus, the configuration file (e.g. \textit{config.xml}) can declare:
+\begin{lstlisting}
+<PLUGIN_PATH data="../plugins" />
+\end{lstlisting}
+
+\subsection{Programming a new plugin}
 
 \end{document}
