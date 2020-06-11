@@ -114,6 +114,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     private boolean counterexample;
     private CounterexampleTrace counterTrace;
     public Map<Integer, CounterexampleTraceState> traceStates;
+    private StringBuilder counterTraceReport;
     
     //RG limits
     private boolean stateLimitRG;
@@ -344,6 +345,20 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         }
         return false;
     }
+    
+    public void setCounterExampleTrace(boolean counterexample) {
+        this.counterexample = counterexample;
+        if (counterexample) {
+            counterTraceReport = new StringBuilder();
+        }
+    }
+    
+    public String getCounterTrace() {
+        if (counterTraceReport == null) {
+            return "";
+        }
+        return counterTraceReport.toString();
+    }
 
     public void setComputeRG(boolean _rg) {
         computeRG = _rg;
@@ -383,9 +398,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         }
         
         initModelChecking();
-        
-        counterexample = true; //TODO: delete
-        
+                
         stateLimitRG = false;
         timeLimitRG = false;
         emptyTr = ignoreEmptyTransitions;
@@ -411,9 +424,9 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             ignoreEmptyTransitions = true;
             for (SafetyProperty sp : livenesses) {
                 safety = sp;
-                initCounterexample();
+//                initCounterexample();
                 startModelChecking(nbOfThreads);
-                generateCounterexample();
+//                generateCounterexample();
                 deadlocks += nbOfDeadlocks;
                 resetModelChecking();
                 if (!stoppedBeforeEnd) {
@@ -447,8 +460,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                     for (SpecificationState state : safetyLeadStates.values()) {
                         deadlocks += nbOfDeadlocks;
                         resetModelChecking();
+                        initCounterexample();
                         startModelChecking(state, nbOfThreads);
                         if (safety.result == false) {
+                            generateCounterexample();
                             break;
                         }
                     }
@@ -898,15 +913,20 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
 
     private void initCounterexample() {
-        counterTrace = new CounterexampleTrace(spec);
-        traceStates =  Collections.synchronizedMap(new HashMap<Integer, CounterexampleTraceState>());
+        if (counterexample) {
+            counterTrace = new CounterexampleTrace(spec);
+            traceStates =  Collections.synchronizedMap(new HashMap<Integer, CounterexampleTraceState>());
+        }
     }
     
     
     private void generateCounterexample() {
         if (counterexample && counterTrace.hasCounterexample()) {
             counterTrace.buildTrace();
-            System.out.println(counterTrace.generateSimpleTrace());
+            if (studySafety) {
+                counterTraceReport.append("Trace for " + safety.getRawProperty() + "\n");
+                counterTraceReport.append(counterTrace.generateSimpleTrace(states) + "\n");
+            }
         }
     }
 

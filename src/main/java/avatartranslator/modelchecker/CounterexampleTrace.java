@@ -2,6 +2,7 @@ package avatartranslator.modelchecker;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import avatartranslator.AvatarBlock;
 import avatartranslator.AvatarSpecification;
@@ -69,6 +70,7 @@ public class CounterexampleTrace {
         return s.toString();
     }
     
+    
     public String generateSimpleTrace() {
         if (trace == null) {
             return "";
@@ -91,6 +93,44 @@ public class CounterexampleTrace {
                 s.append("\t" + block.getName() + "." + block.getStateMachine().allStates[cs.blocksStates[j++]].getName());
             }
             s.append("\n");
+            id++;
+        }
+        return s.toString();
+    }
+    
+    
+    public String generateSimpleTrace(Map<Integer, SpecificationState> states) {
+        if (trace == null) {
+            return "";
+        }
+        
+        StringBuilder s = new StringBuilder();
+        List<AvatarBlock> blocks = spec.getListOfBlocks();
+        
+        for (AvatarBlock block : blocks) {
+            if (block.getStateMachine().allStates == null) {
+                return "";
+            }
+        }
+
+        int id = 0;
+        SpecificationState state = null;
+        for (CounterexampleTraceState cs : trace) {
+            if (state != null) {
+                for (SpecificationLink sl : state.nexts) {
+                    if (sl.destinationState.hashValue == cs.hash) {
+                        s.append("Transition " + sl.action + "\n");
+                        break;
+                    }
+                }
+            }
+            s.append("State " + id + ":\t");
+            int j = 0;
+            for (AvatarBlock block : blocks) {
+                s.append("\t" + block.getName() + "." + block.getStateMachine().allStates[cs.blocksStates[j++]].getName());
+            }
+            s.append("\n");
+            state = states.get(cs.hash);       
             id++;
         }
         return s.toString();
