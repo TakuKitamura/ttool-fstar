@@ -76,10 +76,16 @@ public class AvatarExpressionTest {
         block1.addAttribute(y1);
         AvatarAttribute z1 = new AvatarAttribute("z", AvatarType.INTEGER, block1, null);
         block1.addAttribute(z1);
+        AvatarAttribute a1 = new AvatarAttribute("key1", AvatarType.BOOLEAN, block1, null);
+        block1.addAttribute(a1);
+        AvatarAttribute b1 = new AvatarAttribute("key2", AvatarType.BOOLEAN, block1, null);
+        block1.addAttribute(b1);
         
         x1.setInitialValue("10");
         y1.setInitialValue("5");
         z1.setInitialValue("2");
+        a1.setInitialValue("true");
+        b1.setInitialValue("false");
         
         block2 = new AvatarBlock("block2", as, null);
         as.addBlock(block2);
@@ -127,9 +133,30 @@ public class AvatarExpressionTest {
         e2.buildExpression(block1);
         AvatarExpressionSolver e3 = new AvatarExpressionSolver("not(-x / z - (x + y) * 2 + 1 >= -(60 - 26))");
         e3.buildExpression(block1);
+        AvatarExpressionSolver e4 = new AvatarExpressionSolver("(key1==true) and (key2==false)");
+        e4.buildExpression(block1);
+        AvatarExpressionSolver e5 = new AvatarExpressionSolver("(key1) and (key2)");
+        e5.buildExpression(block1);
+        AvatarExpressionSolver e6 = new AvatarExpressionSolver("(key1==key1) or (key2==key1)");
+        e6.buildExpression(block1);
+        AvatarExpressionSolver e7 = new AvatarExpressionSolver("((key1==key1) and not(key2==key1)) and (x - y == z + 3)");
+        e7.buildExpression(block1);
+        AvatarExpressionSolver e8 = new AvatarExpressionSolver("x + x*(y+z)/(x + z - x)");
+        e8.buildExpression(block1);
+        AvatarExpressionSolver e9 = new AvatarExpressionSolver("x + x*(y+z)*(x - z)");
+        e9.buildExpression(block1);
+        AvatarExpressionSolver e10 = new AvatarExpressionSolver("x*((x + y)*z + (x+z)/z)/x");
+        e10.buildExpression(block1);
         assertTrue(e1.getResult(specBlock) == 15);
         assertTrue(e2.getResult(specBlock) == 1);
         assertTrue(e3.getResult(specBlock) == 0);
+        assertTrue(e4.getResult(specBlock) == 1);
+        assertTrue(e5.getResult(specBlock) == 0);
+        assertTrue(e6.getResult(specBlock) == 1);
+        assertTrue(e7.getResult(specBlock) == 1);
+        assertTrue(e8.getResult(specBlock) == 45);
+        assertTrue(e9.getResult(specBlock) == 570);
+        assertTrue(e10.getResult(specBlock) == 36);
     }
     
     @Test
