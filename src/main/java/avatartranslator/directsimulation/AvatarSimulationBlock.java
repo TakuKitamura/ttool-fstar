@@ -40,6 +40,7 @@
 package avatartranslator.directsimulation;
 
 import avatartranslator.*;
+import avatartranslator.modelchecker.SpecificationBlock;
 import myutil.*;
 
 import java.util.Vector;
@@ -223,11 +224,11 @@ public class AvatarSimulationBlock {
                     AvatarTransition trans = (AvatarTransition) (aspt.elementToExecute);
                     aspt.probability = trans.getProbability();
                     if (trans.hasDelay()) {
-                        aspt.myMinDelay = evaluateIntExpression(trans.getMinDelay(), lastTransaction.attributeValues);
-                        aspt.myMaxDelay = evaluateIntExpression(trans.getMaxDelay(), lastTransaction.attributeValues);
+                        aspt.myMinDelay = newEvaluateIntExpression(trans.getMinDelay(), lastTransaction.attributeValues);
+                        aspt.myMaxDelay = newEvaluateIntExpression(trans.getMaxDelay(), lastTransaction.attributeValues);
                         aspt.hasDelay = true;
-                        aspt.extraParam1 = evaluateIntExpression(trans.getDelayExtra1(), lastTransaction.attributeValues);
-                        aspt.extraParam2 = evaluateIntExpression(trans.getDelayExtra2(), lastTransaction.attributeValues);
+                        aspt.extraParam1 = newEvaluateIntExpression(trans.getDelayExtra1(), lastTransaction.attributeValues);
+                        aspt.extraParam2 = newEvaluateIntExpression(trans.getDelayExtra2(), lastTransaction.attributeValues);
                         aspt.delayDistributionLaw = trans.getDelayDistributionLaw();
                         if (lastTransaction != null) {
                             if (lastTransaction.clockValueWhenFinished < _clockValue) {
@@ -240,8 +241,8 @@ public class AvatarSimulationBlock {
                 } else if (aspt.involvedElement instanceof AvatarTransition) {
                     AvatarTransition trans = (AvatarTransition) (aspt.involvedElement);
                     if (trans.hasDelay()) {
-                        aspt.myMinDelay = evaluateIntExpression(trans.getMinDelay(), lastTransaction.attributeValues);
-                        aspt.myMaxDelay = evaluateIntExpression(trans.getMaxDelay(), lastTransaction.attributeValues);
+                        aspt.myMinDelay = newEvaluateIntExpression(trans.getMinDelay(), lastTransaction.attributeValues);
+                        aspt.myMaxDelay = newEvaluateIntExpression(trans.getMaxDelay(), lastTransaction.attributeValues);
                         aspt.hasDelay = true;
                         aspt.extraParam1 = evaluateDoubleExpression(trans.getDelayExtra1(), lastTransaction.attributeValues);
                         aspt.extraParam2 = evaluateDoubleExpression(trans.getDelayExtra2(), lastTransaction.attributeValues);
@@ -394,8 +395,8 @@ public class AvatarSimulationBlock {
                 AvatarRandom random = (AvatarRandom) (_elt);
                 index = block.getIndexOfAvatarAttributeWithName(random.getVariable());
                 if (index > -1) {
-                    int valMin = evaluateIntExpression(random.getMinValue(), attributeValues);
-                    int valMax = evaluateIntExpression(random.getMaxValue(), attributeValues);
+                    int valMin = newEvaluateIntExpression(random.getMinValue(), attributeValues);
+                    int valMax = newEvaluateIntExpression(random.getMaxValue(), attributeValues);
 
                     double extra1;
                     try {
@@ -450,7 +451,7 @@ public class AvatarSimulationBlock {
                                     result = "";
                                     if (avat.getType() == AvatarType.INTEGER) {
                                         //TraceManager.addDev("Evaluating expression, value=" + value);
-                                        result += evaluateIntExpression(value, lastTransaction.attributeValues);
+                                        result += newEvaluateIntExpression(value, lastTransaction.attributeValues);
                                     } else if (avat.getType() == AvatarType.BOOLEAN) {
                                         result += evaluateBoolExpression(value, lastTransaction.attributeValues);
                                     }
@@ -514,7 +515,7 @@ public class AvatarSimulationBlock {
                                 avat = aaos.getSignal().getListOfAttributes().get(i);
                                 result = "";
                                 if (avat.getType() == AvatarType.INTEGER) {
-                                    result += evaluateIntExpression(value, lastTransaction.attributeValues);
+                                    result += newEvaluateIntExpression(value, lastTransaction.attributeValues);
                                 } else if (avat.getType() == AvatarType.BOOLEAN) {
                                     result += evaluateBoolExpression(value, lastTransaction.attributeValues);
                                 }
@@ -650,7 +651,7 @@ public class AvatarSimulationBlock {
             // int or bool???
             AvatarType type = block.getAttribute(indexVar).getType();
             if (type == AvatarType.INTEGER) {
-                int result = evaluateIntExpression(act, _attributeValues);
+                int result = newEvaluateIntExpression(act, _attributeValues);
                 _actions.add(nameOfVar + " = " + result);
                 _attributeValues.remove(indexVar);
                 _attributeValues.add(indexVar, "" + result);
@@ -703,6 +704,14 @@ public class AvatarSimulationBlock {
         } catch (Exception e) {
             return 0.0;
         }
+    }
+
+    public int newEvaluateIntExpression(String _expr, Vector<String> _attributeValues) {
+        AvatarExpressionSolver e1 = new AvatarExpressionSolver(_expr);
+        SpecificationBlock sb = new SpecificationBlock(_attributeValues);
+        e1.buildExpression(block);
+        return e1.getResult(sb);
+
     }
 
     public int evaluateIntExpression(String _expr, Vector<String> _attributeValues) {

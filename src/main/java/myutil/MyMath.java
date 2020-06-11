@@ -41,7 +41,12 @@
 
 package myutil;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.commons.math3.distribution.*;
 
 /**
@@ -160,6 +165,46 @@ public class MyMath {
             return weibullDistribution(a, b, shape, scale);
         }
         return val;
+    }
+
+    /**
+     * Extract the positive or negative int values from a String
+     *"-" is considered only as an unary operator
+     *
+     *
+     * @param s Input String
+     */
+    public static List<Integer> extractIntegerValues(String s) {
+		ArrayList<Integer> retList = new ArrayList<>();
+
+		Pattern p = Pattern.compile("-?\\d+");
+		Matcher m = p.matcher(s);
+		while (m.find()) {
+			try {
+				retList.add(Integer.decode(m.group()));
+			} catch (Exception e) {
+
+			}
+		}
+		return retList;
+	}
+
+    /**
+     * @param s Input String
+     * @param maxV Maximum of the interval. Expected to be higher than minV
+     * @return whether the provided String contains
+     * positive or negative int values outside
+     * of the input interval
+     */
+	public static boolean hasIntegerValueOverMax(String s, int maxV) {
+        List<Integer> listOfInt = extractIntegerValues(s);
+        for(Integer i: listOfInt) {
+            int v = Math.abs(i.intValue());
+            if (v > maxV) {
+                return true;
+            }
+        }
+        return false;
     }
 
 

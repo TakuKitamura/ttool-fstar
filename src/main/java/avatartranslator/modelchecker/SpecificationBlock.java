@@ -40,6 +40,7 @@ package avatartranslator.modelchecker;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Vector;
 
 import avatartranslator.AvatarAttribute;
 import avatartranslator.AvatarBlock;
@@ -67,6 +68,16 @@ public class SpecificationBlock  {
     
 
     public SpecificationBlock() {
+    }
+
+    public SpecificationBlock(Vector<String> _valuesOfVariables) {
+        values = new int[_valuesOfVariables.size()+3];
+        for(int i=0; i<_valuesOfVariables.size(); i++) {
+            try {
+                values[i + 3] = Integer.decode(_valuesOfVariables.get(i));
+            } catch (Exception e) {
+            }
+        }
     }
 
     public int getHash() {

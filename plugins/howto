@@ -6,7 +6,7 @@ $make
 Then, edit the configuration file of TTool (default: TTool/bin/config.xml) and add:
 <PLUGIN_PATH data="../plugins" />
 <PLUGIN file="CustomizerAvatarJavaCodeGeneration.jar" package = "."/>
-PLUGIN file="CustomizerGraphicalComponent.jar" package="."/>
+<PLUGIN file="CustomizerGraphicalComponent.jar" package="."/>
 
 Then, start TTool, and generate Java code from an avatar design model.
 

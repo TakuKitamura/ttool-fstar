@@ -38,6 +38,7 @@
 
 package avatartranslator;
 
+import myutil.MyMath;
 import myutil.TraceManager;
 
 import java.util.*;
@@ -1735,4 +1736,88 @@ public class AvatarStateMachine extends AvatarElement {
             }
         }
     }
+
+    /**
+     * Looks for all numerical values over
+     * the provided max
+     *
+     * @param maxV Maximum value.
+     */
+    public ArrayList<AvatarElement> elementsWithNumericalValueOver(int maxV) {
+        String val;
+
+        ArrayList<AvatarElement> invalids = new ArrayList<AvatarElement>();
+
+        for(AvatarStateMachineElement asme: elements) {
+
+            // Action on signals
+            if (asme instanceof AvatarActionOnSignal) {
+                AvatarActionOnSignal aaos = (AvatarActionOnSignal)asme;
+                for(int i=0; i<aaos.getNbOfValues(); i++) {
+                    val = aaos.getValue(i);
+                    if (MyMath.hasIntegerValueOverMax(val, maxV)) {
+                        invalids.add(this);
+                        break;
+                    }
+                }
+
+            }
+
+            if (asme instanceof AvatarRandom) {
+                AvatarRandom arand = (AvatarRandom)asme;
+                val = arand.getMinValue();
+                if (MyMath.hasIntegerValueOverMax(val, maxV)) {
+                    invalids.add(this);
+                } else {
+                    val = arand.getMaxValue();
+                    if (MyMath.hasIntegerValueOverMax(val, maxV)) {
+                        invalids.add(this);
+                    }
+                }
+            }
+
+            if (asme instanceof AvatarSetTimer) {
+                AvatarSetTimer atop = (AvatarSetTimer)asme;
+                val = atop.getTimerValue();
+                if (MyMath.hasIntegerValueOverMax(val, maxV)) {
+                    invalids.add(this);
+                }
+            }
+
+            if (asme instanceof AvatarTransition) {
+                AvatarTransition at = (AvatarTransition)asme;
+
+                // Guard
+                val = at.getGuard().toString();
+                if (MyMath.hasIntegerValueOverMax(val, maxV)) {
+                    invalids.add(this);
+                }
+
+                // Delays
+                val = at.getMinDelay();
+                if (MyMath.hasIntegerValueOverMax(val, maxV)) {
+                    invalids.add(this);
+                }
+                val = at.getMaxDelay();
+                if (MyMath.hasIntegerValueOverMax(val, maxV)) {
+                    invalids.add(this);
+                }
+
+                // Actions
+                for(AvatarAction aa: at.getActions()) {
+                    val = aa.toString();
+                    if (MyMath.hasIntegerValueOverMax(val, maxV)) {
+                        invalids.add(this);
+                    }
+                }
+
+            }
+
+
+
+        }
+
+        return invalids;
+    }
+
 }

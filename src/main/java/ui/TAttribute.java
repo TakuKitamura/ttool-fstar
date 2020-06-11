@@ -277,7 +277,8 @@ public class TAttribute {
                 }
                 return val > 0;
             case INTEGER:
-                return value.matches("\\d*");
+                //return value.matches("-?\\d+");
+                return value.matches("\\d+");
             case TIMER:
                 return ((value == null) || (value.equals("")));
             default:
