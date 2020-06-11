@@ -65,7 +65,7 @@
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=0.4\textwidth]{images/image1.png}
+\includegraphics[width=0.3\textwidth]{images/tp}
 \end{figure}
 
 \newpage
@@ -1466,5 +1466,121 @@ TTool searches for plugin in its default bin directory, or, if configured, in th
 \end{lstlisting}
 
 \subsection{Programming a new plugin}
+
+
+
+\subsubsection{Starting from examples}
+Examples of plugins are provided in the public git of TTool in "plugins" subdirectory. Two plugins are provided. To complie them, just go to their related directory and run:
+\begin{verbatim}
+$ make
+\end{verbatim}
+This should generate a \textit{.jar} than can be used by TTool as a plugin
+
+
+\subsubsection{General idea}
+The main class of a plugin should declare the following methods:
+\begin{lstlisting}
+public static String getLongText() {
+	return "Example of plugin component, and how to insert it in a toolbar";
+}
+
+public static String getShortText() {
+	return "Example of plugin component";
+}
+    
+public static String getVeryShortText() {
+	return "Plugin component";
+}
+\end{lstlisting}
+Then, depending on the goal of the plugin, it should declare other functions that are explained in the next subsection
+
+\subsubsection{Adding a new graphical component with a plugin}
+
+The following methods have to be declared and implemented for a graphical component to work within a plugin.
+\begin{itemize}
+\item \textit{public static String hasGraphicalComponent}() returns a String giving the name of the  class of the plugin that implements the new graphical component
+\item \textit{public static String getPanelClassName()} returns the name of the Panel to which the graphical component is meant to be added
+\item \textit{public static ImageIcon getImageIcon()} returns the icon that is added to the Panel toolbar
+\item \textit{public static int getWidth()} and \textit{public static int getHeitght()} return the default width and height of the component, respectively.
+\item \textit{public boolean isMoveable()} specifies whether this component can be moved by a user
+\item \textit{public boolean isRemovable()} specifies it the component can be removed from the diagram once added
+\item \textit{public boolean isUserResizable()} specifies if the component can be resized by a user
+\item \textit{public boolean isEditable()} specifies if a user can double click on the component to open a dialog window and thus edit its values.
+\item \textit{public String getCustomValue(String value, String diagramName)} is expected to return an extra information on the component, e.g. a help.
+\item \textit{public int getWidth(Graphics g, String value)} shall return a number of pixel taken by this component to draw a String. This number depends e.g. of the Font used by the component.
+\item \textit{public int getHeight(Graphics g, String value)} is similar to the previous function but for the height.
+\item \textit{public  internalDrawing(Graphics g, int x, int y, int width, int height, String value, String diagramName)} is expected to draw on Graphics $g$ the component.
+\item \textit{public  boolean isOnMe(int x, int y, int width, int height, int xP, int yP)} shall return if the mouse pointer, which coordinates are given in "xP" and "yP", is over the component, or not.
+\item \textit{public  String editOnDoubleClick(JFrame frame, String value)} makes it possible to modify the component (by e.g. opening a dialog window) whenever there is a double click on the component. This function blocks the main UI interface until it returns.
+\end{itemize}
+
+\subsubsection{Customizing the C-code generator of AVATAR Design (a.k.a. software design)}
+It is possible to customize the C-code generator of AVATAR Design by defining rules. The following static functions are expected to be implemented by the plugin:
+\begin{itemize}
+\item \textit{public  static String hasAvatarCodeGenerator()} returns the class of the plugin customizing the code generator
+\item \textit{public static String hasAvatarCodeGenerator()} returns a customization of the main declaration
+\end{itemize}
+
+\subsubsection{Customizing the C-code generator of DIPLODOCUS Mapping}
+It is possible to use a totally different C-code generator for DIPLODOCUS mappings using the following  methods.
+\begin{itemize}
+\item \textit{public static String hasDiplodocusCodeGenerator()} returns theclass of the Plugin handling the interface with TTool. This class must implement the following methods:
+\item \textit{public static String getIdentifier()} returns a description of the code generator. For instance "This smart code generator provides an optimized memory handling".
+\item \textit{public static ImageIcon getLogoImage()} returns a logo, e.g. a logo of your company.
+\item \textit{public void setCodeDirectory( String codeGenPath )} makes it possible to provide the configured top directory where the user wishes to save the code
+\item \textit{public boolean generateCode( String model, String compilationOptions ) } is the main function to handle code generation. The DIPLODOCUS model is provided as an XML specification, and compilation options are listed in a String as a set of options (e.g "-lpthread") 
+\end{itemize}
+
+\subsubsection{Developing other plugins}
+Plugins targeting other aspects of TTool can be developed, but the code of TTool has to be patched, usually quite slightly.
+
+For instance, the class JDialogCCodeGeneration shows how patch TTool to use a plugin in the code. Usually, two main aspects have to be programmed:
+\begin{itemize}
+\item Detecting that a plugin can be used.\\
+For instance, to detect that there is a custom plugin for DIPLODOCUS code generation:
+\begin{lstlisting}
+Plugin foundPlugin = null;
+LinkedList<Plugin> listP = PluginManager.pluginManager.
+                                 getPluginDiplodocusCodeGenerator();
+for (Plugin p : listP) {
+      String desc = p.getDiplodocusCodeGeneratorIdentifier();
+      if (desc != null) {
+                    if (index == cpt) {
+                        // A plugin has been found
+                        foundPlugin = p;
+                        break;
+                    }
+        }
+}
+\end{lstlisting}
+
+\item Calling the functions of the plugin in order to use it. For instance:
+\begin{lstlisting}
+// Current model is converted to XML format
+String XML = tmap.toXML();
+
+// An instance of the class implementing the code generation 
+// in the plugin is created
+Object instance = foundPlugin.
+                   getClassDiplodocusCodeGenerator().newInstance();
+
+if (instance == null) {
+      jta.append("Invalid plugin: could not create an instance\n");
+} else {
+      // Try to set the current project directory
+       Plugin.executeOneStringMethod(instance, code1.getText(), 
+                  "setCodeDirectory");
+
+       // Then start the code genrator of the plugin
+        boolean ret = Plugin.executeBoolStringMethod(instance, XML, 
+                                "generateCode", codeOpt.getText());
+}
+\end{lstlisting}
+\end{itemize}
+
+
+
+\subsection{Using plugins from the command line interface}
+Under development.
 
 \end{document}
