@@ -239,6 +239,18 @@ public class AvatarExpressionAttribute {
         }
     }
     
+    
+    public int getAttributeType() {
+        if (isState) {
+            return AvatarExpressionSolver.IMMEDIATE_BOOL;
+        } else if (block.getAttribute(accessIndex - SpecificationBlock.ATTR_INDEX).getType() == AvatarType.BOOLEAN) {
+            return AvatarExpressionSolver.IMMEDIATE_BOOL;
+        } else {
+            return AvatarExpressionSolver.IMMEDIATE_INT;
+        }
+    }
+    
+    
     public boolean isState() {
         return isState;
     }

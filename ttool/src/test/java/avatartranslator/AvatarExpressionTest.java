@@ -104,22 +104,21 @@ public class AvatarExpressionTest {
     @Test
     public void testImmediate() {
         AvatarExpressionSolver e1 = new AvatarExpressionSolver("10 + 15 >= 20");
-        e1.buildExpression();
+        assertTrue(e1.buildExpression());
         AvatarExpressionSolver e2 = new AvatarExpressionSolver("-10 / 2 - 15 * 2 + 1 == -30 -4");
-        e2.buildExpression();
+        assertTrue(e2.buildExpression());
         AvatarExpressionSolver e3 = new AvatarExpressionSolver("not(-10 / 2 - 15 * 2 + 1 == -(60 - 26))");
-        e3.buildExpression();
+        assertTrue(e3.buildExpression());
         AvatarExpressionSolver e4 = new AvatarExpressionSolver("1 && 0 >= 1 || 0");
-        e4.buildExpression();
+        assertFalse(e4.buildExpression());
         AvatarExpressionSolver e5 = new AvatarExpressionSolver("true and not(false) == not(false or false)");
-        e5.buildExpression();
+        assertTrue(e5.buildExpression());
         AvatarExpressionSolver e6 = new AvatarExpressionSolver("10 -Cabin.match");
+        assertFalse(e6.buildExpression());
         assertTrue(e1.getResult() == 1);
         assertTrue(e2.getResult() == 1);
         assertTrue(e3.getResult() == 0);
-        assertTrue(e4.getResult() == 0);
         assertTrue(e5.getResult() == 1);
-        assertTrue(e6.buildExpression() == false);
     }
     
     @Test
@@ -128,25 +127,25 @@ public class AvatarExpressionTest {
         specBlock.init(block1, false);
         
         AvatarExpressionSolver e1 = new AvatarExpressionSolver("x + y");
-        e1.buildExpression(block1);
+        assertTrue(e1.buildExpression(block1));
         AvatarExpressionSolver e2 = new AvatarExpressionSolver("-x / y - 15 * z + 1 == -31");
-        e2.buildExpression(block1);
+        assertTrue(e2.buildExpression(block1));
         AvatarExpressionSolver e3 = new AvatarExpressionSolver("not(-x / z - (x + y) * 2 + 1 >= -(60 - 26))");
-        e3.buildExpression(block1);
+        assertTrue(e3.buildExpression(block1));
         AvatarExpressionSolver e4 = new AvatarExpressionSolver("(key1==true) and (key2==false)");
-        e4.buildExpression(block1);
+        assertTrue(e4.buildExpression(block1));
         AvatarExpressionSolver e5 = new AvatarExpressionSolver("(key1) and (key2)");
-        e5.buildExpression(block1);
+        assertTrue(e5.buildExpression(block1));
         AvatarExpressionSolver e6 = new AvatarExpressionSolver("(key1==key1) or (key2==key1)");
-        e6.buildExpression(block1);
+        assertTrue(e6.buildExpression(block1));
         AvatarExpressionSolver e7 = new AvatarExpressionSolver("((key1==key1) and not(key2==key1)) and (x - y == z + 3)");
-        e7.buildExpression(block1);
+        assertTrue(e7.buildExpression(block1));
         AvatarExpressionSolver e8 = new AvatarExpressionSolver("x + x*(y+z)/(x + z - x)");
-        e8.buildExpression(block1);
+        assertTrue(e8.buildExpression(block1));
         AvatarExpressionSolver e9 = new AvatarExpressionSolver("x + x*(y+z)*(x - z)");
-        e9.buildExpression(block1);
+        assertTrue(e9.buildExpression(block1));
         AvatarExpressionSolver e10 = new AvatarExpressionSolver("x*((x + y)*z + (x+z)/z)/x");
-        e10.buildExpression(block1);
+        assertTrue(e10.buildExpression(block1));
         assertTrue(e1.getResult(specBlock) == 15);
         assertTrue(e2.getResult(specBlock) == 1);
         assertTrue(e3.getResult(specBlock) == 0);
@@ -165,11 +164,11 @@ public class AvatarExpressionTest {
         ss.setInit(as, false);
         
         AvatarExpressionSolver e1 = new AvatarExpressionSolver("block1.x + block2.y");
-        e1.buildExpression(as);
+        assertTrue(e1.buildExpression(as));
         AvatarExpressionSolver e2 = new AvatarExpressionSolver("-block1.x / block1.y - 15 * block2.z + 1 == -46");
-        e2.buildExpression(as);
+        assertTrue(e2.buildExpression(as));
         AvatarExpressionSolver e3 = new AvatarExpressionSolver("not(-block2.x / block2.z - not(block1.x + block2.y) * -2 + -(1) <= -(-4 + 7))");
-        e3.buildExpression(as);
+        assertFalse(e3.buildExpression(as));
         assertTrue(e1.getResult(ss) == 17);
         assertTrue(e2.getResult(ss) == 1);
         assertTrue(e3.getResult(ss) == 0);
