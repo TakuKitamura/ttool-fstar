@@ -198,6 +198,7 @@ public class IconManager {
     
     private static String icon8 = "turtle_16.gif";
     private static String icon9 = "diplodocus2_16.gif";
+    
     //Added by Solange
     private static String icon0 = "hideifce.gif";
     //Added by Solange, the component icon

@@ -74,6 +74,7 @@ public class PluginAction extends Command {
     private final static String INFO_PLUGIN = "info";
     private final static String INFO_COMMAND_PLUGIN = "info-command";
     private final static String LOAD_PLUGIN = "load";
+    private final static String EXECUTE_COMMAND_IN_PLUGIN = "exec";
 
 
 
@@ -228,6 +229,47 @@ public class PluginAction extends Command {
             }
         };
 
+        // execute command
+        Command executeCommand = new Command() {
+            public String getCommand() {
+                return EXECUTE_COMMAND_IN_PLUGIN;
+            }
+
+            public String getShortCommand() {
+                return "e";
+            }
+
+            public String getDescription() {
+                return "Execute a command. exec <pluginname> <command> [variable for return value (if applicable)] [arg1] [arg2] ...";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (PluginManager.pluginManager == null) {
+                    return "No plugins";
+                }
+
+                String[] commands = command.split(" ");
+                if (commands.length < 2) {
+                    return Interpreter.BAD;
+                }
+
+                Plugin p = PluginManager.pluginManager.getPlugin(commands[0]);
+                if (p == null) {
+                    return "No such plugin";
+                }
+
+                String s = p.getHelpOnCommandLineInterfaceFunction(commands[1]);
+
+                if ((s == null) || (s.length() == 0))  {
+                    return "No such function";
+                }
+
+                System.out.println(s);
+
+                return null;
+            }
+        };
+
         // load
         Command load = new Command() {
             public String getCommand() {
@@ -270,6 +312,7 @@ public class PluginAction extends Command {
 
         addAndSortSubcommand(list);
         addAndSortSubcommand(info);
+        addAndSortSubcommand(executeCommand);
         addAndSortSubcommand(infoCommand);
         addAndSortSubcommand(load);
 
