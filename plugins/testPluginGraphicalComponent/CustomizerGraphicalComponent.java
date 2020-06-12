@@ -52,11 +52,11 @@ public class CustomizerGraphicalComponent {
     private final static String[] CLI_COMMANDS =  {"getPanelClassName",
             "getWidthS",
             "getHeightS",
-            "setDefaultWidth"};
+            "setDefaultWidthS"};
     private final static String[] CLI_PROTOTYPES =  {"getPanelClassName: returns a String",
             "getWidthS: returns a String",
             "getHeightS: returns a String",
-            "setDefaultWidth <int defaultWidth>: returns void"};
+            "setDefaultWidthS <String defaultWidth>: returns void"};
 
     private final static String[] CLI_HELP_COMMANDS = {
             "returns the associated panel name of the component",
@@ -153,6 +153,14 @@ public class CustomizerGraphicalComponent {
 
     public static void setDefaultWidth(int defaultWith) {
         DEFAULT_WIDTH = defaultWith;
+    }
+
+    public static void setDefaultWidthS(String defaultWith) {
+        try {
+            DEFAULT_WIDTH = Integer.decode(defaultWith);;
+        } catch (Exception e) {
+
+        }
     }
 
 

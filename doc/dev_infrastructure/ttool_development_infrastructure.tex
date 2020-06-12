@@ -1612,13 +1612,13 @@ Path:	../plugins
 Has graphical component?	false
 Has Avatar code generator?	true
 Has Diplodocus code generator?	false
-Custom commands: getPanelClassName getWidth getHeight setDefaultWidth 
+Custom commands: getPanelClassName getWidth getHeight setDefaultWidthS 
 \end{verbatim}
-\end{itemize}
+
 \item \textit{plugin info-command <plugin name> <command name>}: provides information on a given command provided by a plugin
 \begin{verbatim}
-$ plugin info-command CustomizerGraphicalComponent.jar setDefaultWidth
-static void setDefaultWidth(int defaultWidth): makes it possible to set the default width
+$ plugin info-command CustomizerGraphicalComponent.jar setDefaultWidthS
+static void setDefaultWidthS(String defaultWidth): makes it possible to set the default width
 \end{verbatim}
 \end{itemize}
 
@@ -1632,13 +1632,44 @@ A plugin that may be used by the command line interface must define the followin
 
 
 \subsubsection{Custom commands}
-A plugin can define a list of custom commands. These commands can take only \textit{String} as parameter and can return either nothing or a String. They have to be implemented with a method having the same name as the command. The method must also be \textbf{static}.
+A plugin can define a list of custom commands. These commands can take only \textit{String} as parameter (maximum 4 String) and can return either nothing or a String. They have to be implemented with a method having the same name as the command. The method must also be \textbf{static}.
 
 For instance:
 \begin{verbatim}
 public static String getWidthS() {
         return "100";
 }
+
+public static void setDefaultWidthS(String defaultWith) {
+        try {
+            DEFAULT_WIDTH = Integer.decode(defaultWith);;
+        } catch (Exception e) {
+
+        }
+ }
+
+\end{verbatim}
+
+The "exec" sub command of the "plugin" command can be used to execute custom functions. "exec" takes the following arguments:
+\begin{itemize}
+\item plugin name
+\item method name
+\item if the called method returns a String, the returned String can be stored in a variable specified as "-ret <name of variable>"
+\item Then the input arguments of the method follow. 
+\end{itemize}
+
+For instance, to execute the method "getWidthS" of plugin "CustomizerGraphicalComponent.jar" and store the result in variable "s", do as follows:
+\begin{verbatim}
+1> plugin exec CustomizerGraphicalComponent.jar getWidthS -ret x
+Command executed
+2> print var x
+Variable x = 100
+Command executed
+\end{verbatim}
+
+The following example shows how to provide an argument to a custom command.
+\begin{verbatim}
+1> plugin exec CustomizerGraphicalComponent.jar setDefaultWidth 200
 \end{verbatim}
 
 

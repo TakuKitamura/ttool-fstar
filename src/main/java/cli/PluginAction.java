@@ -230,6 +230,8 @@ public class PluginAction extends Command {
         };
 
         // execute command
+
+
         Command executeCommand = new Command() {
             public String getCommand() {
                 return EXECUTE_COMMAND_IN_PLUGIN;
@@ -240,7 +242,8 @@ public class PluginAction extends Command {
             }
 
             public String getDescription() {
-                return "Execute a command. exec <pluginname> <command> [variable for return value (if applicable)] [arg1] [arg2] ...";
+                return "Execute a command. exec <pluginname> <command> [-ret variable for return value (if applicable)] " +
+                        "[arg1]  [arg2] ...";
             }
 
             public String executeCommand(String command, Interpreter interpreter) {
@@ -258,13 +261,41 @@ public class PluginAction extends Command {
                     return "No such plugin";
                 }
 
-                String s = p.getHelpOnCommandLineInterfaceFunction(commands[1]);
-
-                if ((s == null) || (s.length() == 0))  {
-                    return "No such function";
+                String methodName = commands[1];
+                if ((methodName == null) || (methodName.length() == 0))  {
+                    return "No such command";
                 }
 
-                System.out.println(s);
+                // Look for a return variable
+                String retVar = null;
+                int indexArg = 2;
+                if (commands.length > 3) {
+                    if (commands[2].compareTo("-ret") == 0) {
+                        retVar = commands[3];
+                        indexArg = 4;
+                        TraceManager.addDev("Using variable for return:" + retVar);
+                    }
+                }
+
+
+
+                String[] tab = new String[commands.length-indexArg];
+                for(int i=0; i<tab.length; i++) {
+                    tab[i] = commands[i+indexArg];
+                }
+
+                TraceManager.addDev("Using " + tab.length + " arguments");
+
+                // Start the command
+                String ret = p.callCommandLineCommand(methodName, tab);
+
+                TraceManager.addDev("Ret= " +ret);
+
+                // Store new variable
+                if ((ret != null) && (retVar != null)) {
+                    interpreter.addVariable(retVar, ret);
+                }
+
 
                 return null;
             }

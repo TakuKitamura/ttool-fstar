@@ -361,6 +361,48 @@ public class Plugin {
         }
     }
 
+    public String callCommandLineCommand(String _methodName, String[] args) {
+        if (classCommandLineInterface == null) {
+            hasCommandLineInterface();
+            if (classCommandLineInterface == null) {
+                TraceManager.addDev("No class for command line");
+                return null;
+            }
+        }
+
+        return callCommandLineCommand(classCommandLineInterface, _methodName, args);
+    }
+
+    public String callCommandLineCommand(Class<?> c, String _methodName, String[] args) {
+        Class[] cArg = new Class[args.length];
+        for (int i=0; i<args.length; i++) {
+            cArg[i] = String.class;
+        }
+
+        try {
+            Method m = c.getMethod(_methodName, cArg);
+            switch(args.length) {
+                case 0:
+                    return (String) (m.invoke(null));
+                case 1:
+                    return (String) (m.invoke(null, args[0]));
+                case 2:
+                    return (String) (m.invoke(null, args[0], args[1]));
+                case 3:
+                    return (String) (m.invoke(null, args[0], args[1], args[2]));
+                case 4:
+                    return (String) (m.invoke(null, args[0], args[1], args[2], args[3]));
+
+            }
+
+
+        } catch (Exception e) {
+            TraceManager.addDev("Exception occurred when executing method " + _methodName + " in plugin " + this.getName());
+            return null;
+        }
+        return null;
+    }
+
 
     public ImageIcon executeRetImageIconMethod(Class<?> c, String _methodName) {
         // We have a valid plugin. We now need to get the Method
