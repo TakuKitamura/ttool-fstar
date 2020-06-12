@@ -557,6 +557,26 @@ public class AvatarExpressionSolver {
         return res;
     }
     
+    public int getResult(int[] attributesValues) {
+        int res;
+        if (isLeaf) {
+            if (isImmediateValue != IMMEDIATE_NO) {
+                res = intValue;
+            } else {
+                res = leaf.getValue(attributesValues);
+            }
+        } else {
+            res = getChildrenResult(left.getResult(attributesValues), right.getResult(attributesValues));
+        }
+        
+        if (isNot) {
+            res = (res == 0) ? 1 : 0;
+        } else if (isNegated) {
+            res = -res;
+        }
+        return res;
+    }
+    
     private int getChildrenResult(int leftV, int rightV) {
         int result;
         

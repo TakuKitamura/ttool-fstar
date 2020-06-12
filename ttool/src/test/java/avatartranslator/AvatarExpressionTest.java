@@ -135,6 +135,7 @@ public class AvatarExpressionTest {
     public void testBlock() {
         SpecificationBlock specBlock = new SpecificationBlock();
         specBlock.init(block1, false);
+        int[] attributes = {2, 3, 7, 0, 1};
         
         AvatarExpressionSolver e1 = new AvatarExpressionSolver("x + y");
         assertTrue(e1.buildExpression(block1));
@@ -156,6 +157,12 @@ public class AvatarExpressionTest {
         assertTrue(e9.buildExpression(block1));
         AvatarExpressionSolver e10 = new AvatarExpressionSolver("x*((x + y)*z + (x+z)/z)/x");
         assertTrue(e10.buildExpression(block1));
+        AvatarExpressionSolver e11 = new AvatarExpressionSolver("x + y");
+        assertTrue(e11.buildExpression(block1));
+        AvatarExpressionSolver e12 = new AvatarExpressionSolver("x*((x + y)*z + (x+z)/z)/x");
+        assertTrue(e12.buildExpression(block1));
+        AvatarExpressionSolver e13 = new AvatarExpressionSolver("(key1==false) and (key2==true)");
+        assertTrue(e13.buildExpression(block1));
         assertTrue(e1.getResult(specBlock) == 15);
         assertTrue(e2.getResult(specBlock) == 1);
         assertTrue(e3.getResult(specBlock) == 0);
@@ -166,6 +173,9 @@ public class AvatarExpressionTest {
         assertTrue(e8.getResult(specBlock) == 45);
         assertTrue(e9.getResult(specBlock) == 570);
         assertTrue(e10.getResult(specBlock) == 36);
+        assertTrue(e11.getResult(attributes) == 5);
+        assertTrue(e12.getResult(attributes) == 36);
+        assertTrue(e13.getResult(attributes) == 1);
     }
     
     @Test
