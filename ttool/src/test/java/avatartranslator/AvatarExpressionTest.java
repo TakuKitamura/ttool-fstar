@@ -119,13 +119,16 @@ public class AvatarExpressionTest {
         assertFalse(e7.buildExpression());
         AvatarExpressionSolver e8 = new AvatarExpressionSolver("-(false)");
         assertFalse(e8.buildExpression());
-        AvatarExpressionSolver e9 = new AvatarExpressionSolver("-10 < 5 || 20/4 == 5");
+        AvatarExpressionSolver e9 = new AvatarExpressionSolver("-10 < 5 && 20/4 == 5");
         assertTrue(e9.buildExpression());
+        AvatarExpressionSolver e10 = new AvatarExpressionSolver("true && 0 >= 1 || false");
+        assertTrue(e10.buildExpression());
         assertTrue(e1.getResult() == 1);
         assertTrue(e2.getResult() == 1);
         assertTrue(e3.getResult() == 0);
         assertTrue(e5.getResult() == 1);
         assertTrue(e9.getResult() == 1);
+        assertTrue(e10.getResult() == 0);
     }
     
     @Test
