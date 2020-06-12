@@ -1581,6 +1581,65 @@ if (instance == null) {
 
 
 \subsection{Using plugins from the command line interface}
-Under development.
+\subsubsection{Main commands}
+\begin{itemize}
+\item \textit{plugin load <path> <plugin name> [optional: plugin package]}: loads a plugin
+\begin{verbatim}
+$ cd TTool/bin
+$ java -jar ttool-cli.jar -interact
+0> plugin list
+plugin list
+No plugins
+1> plugin load ../plugins CustomizerGraphicalComponent.jar
+plugin load ../plugins CustomizerGraphicalComponent.jar
+2> plugin list
+plugin list
+CustomizerGraphicalComponent.jar
+\end{verbatim}
+\item \textit{plugin info <plugin name>}: provides information on a given plugin
+\begin{verbatim}
+\item \textit{plugin list}: list all the loaded plugins
+\begin{verbatim}
+$ plugin list
+CustomizerAvatarJavaCodeGeneration.jar
+CustomizerGraphicalComponent.jar
+\end{verbatim}
+\item \textit{plugin info <plugin name>}: provides information on a given plugin
+\begin{verbatim}
+$ plugin info CustomizerGraphicalComponent.jar
+Package:	
+Path:	../plugins
+Has graphical component?	false
+Has Avatar code generator?	true
+Has Diplodocus code generator?	false
+Custom commands: getPanelClassName getWidth getHeight setDefaultWidth 
+\end{verbatim}
+\end{itemize}
+\item \textit{plugin info-command <plugin name> <command name>}: provides information on a given command provided by a plugin
+\begin{verbatim}
+$ plugin info-command CustomizerGraphicalComponent.jar setDefaultWidth
+static void setDefaultWidth(int defaultWidth): makes it possible to set the default width
+\end{verbatim}
+\end{itemize}
+
+\subsubsection{Mandatory functions}
+A plugin that may be used by the command line interface must define the following methods:
+\begin{itemize}
+\item  \textit{public static String hasCommandLineInterface()}: returns the class of the plugin implementing custom commands
+\item  \textit{public static String getCommandsOfCommandLineInterface()}: returns all the  names of custom commands (for instance: "getValue")
+\item \textit{public static String getHelpOnCommandLineInterfaceFunction(String command)}: returns some help about the function given as parameter.
+\end{itemize}
+
+
+\subsubsection{Custom commands}
+A plugin can define a list of custom commands. These commands can take only \textit{String} as parameter and can return either nothing or a String. They have to be implemented with a method having the same name as the command. The method must also be \textbf{static}.
+
+For instance:
+\begin{verbatim}
+public static String getWidthS() {
+        return "100";
+}
+\end{verbatim}
+
 
 \end{document}

@@ -62,6 +62,7 @@ public class Plugin {
     private Class classAvatarCodeGenerator;
     private Class classDiplodocusCodeGenerator;
     private Class classGraphicalComponent;
+    private Class classCommandLineInterface;
 
 
     public Plugin(String _path, String _name, String _packageName) {
@@ -75,16 +76,26 @@ public class Plugin {
         return name;
     }
 
+    public String getPackageName() {
+        return packageName;
+    }
+
     public String getPath() {
         return path;
     }
 
     public boolean hasAvatarCodeGenerator() {
-        String ret = executeRetStringMethod(removeJar(name), "hasAvatarCodeGenerator");
-        if (ret != null) {
-            classAvatarCodeGenerator = getClass(ret);
-            return true;
+        String ret = null;
+        try {
+            ret = executeRetStringMethod(removeJar(name), "hasAvatarCodeGenerator");
+            if (ret != null) {
+                classAvatarCodeGenerator = getClass(ret);
+                return true;
+            }
+        } catch(Exception e) {
+            return false;
         }
+
 
         return false;
     }
@@ -102,6 +113,41 @@ public class Plugin {
     public String getDiplodocusCodeGeneratorIdentifier() {
         String desc = executeRetStringMethod(classDiplodocusCodeGenerator, "getIdentifier");
         return desc;
+    }
+
+    public boolean hasCommandLineInterface() {
+        String ret = executeRetStringMethod(removeJar(name), "hasCommandLineInterface");
+        if (ret != null) {
+            classCommandLineInterface = getClass(ret);
+            return true;
+        }
+
+        return false;
+    }
+
+    public String getCommandLineInterfaceFunctions() {
+        String ret = executeRetStringMethod(removeJar(name), "getCommandsOfCommandLineInterface");
+        if (ret != null) {
+            return ret;
+        }
+
+        return "";
+    }
+
+    public String getHelpOnCommandLineInterfaceFunction(String command) {
+        if (classCommandLineInterface == null) {
+            hasCommandLineInterface();
+        }
+        if (classCommandLineInterface == null) {
+            return "";
+        }
+
+        String ret = executeStaticRetStringOneStringMethod(classCommandLineInterface,"getHelpOnCommandLineInterfaceFunction", command);
+        if (ret != null) {
+            return ret;
+        }
+
+        return "";
     }
 
     public ImageIcon getDiplodocusCodeGeneratorLogo() {
@@ -222,7 +268,7 @@ public class Plugin {
 
             return c.getMethod(_methodName);
         } catch (Exception e) {
-            e.printStackTrace( System.out );
+            //e.printStackTrace( System.out );
             TraceManager.addDev("Exception when using plugin " + name + " with className=" + _className + " and method " + _methodName);
             return null;
         }
@@ -231,11 +277,11 @@ public class Plugin {
 
     public String executeRetStringMethod(String _className, String _methodName) {
         // We have a valid plugin. We now need to get the Method
-        //TraceManager.addDev("-------- Getting " + _methodName + " of class " + _className);
+        TraceManager.addDev("-------- Getting " + _methodName + " of class " + _className);
         Method m = getMethod(_className, _methodName);
-        //TraceManager.addDev("-------- Got " + _methodName + " of class " + _className);
+        TraceManager.addDev("-------- Got " + _methodName + " of class " + _className);
         if (m == null) {
-            //TraceManager.addDev("Null method with class as a string class=" + _className + " _method=" + _methodName);
+            TraceManager.addDev("Null method with class as a string class=" + _className + " _method=" + _methodName);
             return null;
         }
 
@@ -294,6 +340,25 @@ public class Plugin {
         //TraceManager.addDev("Looking for method=" + _methodName + " in instance " + instance);
         Method method = instance.getClass().getMethod(_methodName, cArg);
         method.invoke(instance, value);
+    }
+
+    public static String executeStaticRetStringOneStringMethod(Class<?> c, String _methodName, String value)  {
+        try {
+            Class[] cArg = new Class[1];
+            cArg[0] = String.class;
+            //TraceManager.addDev("Getting <" + _methodName + "> in class <" + c.getName() + ">");
+            Method m = c.getMethod(_methodName, cArg);
+
+            if (m == null) {
+                TraceManager.addDev("Null method in executeRetStringMethod with Class parameter");
+                return null;
+            }
+            return (String) (m.invoke(null, value));
+        } catch (Exception e) {
+            TraceManager.addDev("Exception occurred when executing method " + _methodName + " Exception: " + e.getMessage());
+            e.printStackTrace( System.out );
+            return null;
+        }
     }
 
 

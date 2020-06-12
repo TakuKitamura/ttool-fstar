@@ -56,12 +56,11 @@ public class PluginManager {
     public static String PLUGIN_PATH = "";
 
     public ArrayList<Plugin> plugins;
-    public ArrayList<Plugin> pluginPackages;
 
     public PluginManager() {
         plugins = new ArrayList<Plugin>();
-        pluginPackages = new ArrayList<Plugin>();
     }
+
 
     public void preparePlugins(String path, String[] plugins, String[] packages) {
         PLUGIN_PATH = path;
