@@ -115,10 +115,17 @@ public class AvatarExpressionTest {
         assertTrue(e5.buildExpression());
         AvatarExpressionSolver e6 = new AvatarExpressionSolver("10 -Cabin.match");
         assertFalse(e6.buildExpression());
+        AvatarExpressionSolver e7 = new AvatarExpressionSolver("not(10)");
+        assertFalse(e7.buildExpression());
+        AvatarExpressionSolver e8 = new AvatarExpressionSolver("-(false)");
+        assertFalse(e8.buildExpression());
+        AvatarExpressionSolver e9 = new AvatarExpressionSolver("-10 < 5 || 20/4 == 5");
+        assertTrue(e9.buildExpression());
         assertTrue(e1.getResult() == 1);
         assertTrue(e2.getResult() == 1);
         assertTrue(e3.getResult() == 0);
         assertTrue(e5.getResult() == 1);
+        assertTrue(e9.getResult() == 1);
     }
     
     @Test

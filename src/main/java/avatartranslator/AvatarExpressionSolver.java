@@ -813,10 +813,6 @@ public class AvatarExpressionSolver {
         }
         
         switch (operator) {
-        case '<':
-        case '>':
-        case ':':
-        case ';':
         case '-':
         case '+':
         case '/':
@@ -827,6 +823,10 @@ public class AvatarExpressionSolver {
         case '&':
         case '=':
         case '$':
+        case '<':
+        case '>':
+        case ':':
+        case ';':
             optype = IMMEDIATE_BOOL;
             break;
         default:
