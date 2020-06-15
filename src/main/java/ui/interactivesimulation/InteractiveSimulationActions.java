@@ -112,7 +112,8 @@ public class InteractiveSimulationActions extends AbstractAction {
 
     public static final int ACT_SAVE_SD_PNG = 39;
     public static final int ACT_REMOVE_ALL_TRANS = 41;
-    public static final int NB_ACTION = 42;
+    public static final int ACT_SHOW_TRACE_HTML = 42;
+    public static final int NB_ACTION = 43;
 
 
     private  static final TAction [] actions = new TAction[NB_ACTION];
@@ -199,6 +200,7 @@ public class InteractiveSimulationActions extends AbstractAction {
         actions[ACT_UPDATE_LATENCY] = new TAction("update-latency", "Update latencies", IconManager.imgic75, IconManager.imgic75, "Update latencies", "Update latencies", '0');
         actions[ACT_ADD_LATENCY] = new TAction("add-latency", "Measure Latency", null, null, "Measure Latency", "Measure Latency", '0');
 		actions[ACT_SHOW_TRACE] = new TAction("show-trace", "Show Simulation Traces", IconManager.imgic7007, IconManager.imgic7007, "Show Simulation Traces", "Show Simulation Traces", '0');
+        actions[ACT_SHOW_TRACE_HTML] = new TAction("show-trace-html", "Show Simulation Traces in html", IconManager.imgic7007, IconManager.imgic7007, "Show Simulation Traces in html", "Show Simulation Traces in html format", '0');
 
         actions[ACT_QUIT_SD_WINDOW] = new TAction("close-sdpanel", "Close Window", IconManager.imgic27, IconManager.imgic27, "Close window", "Close this window", 'Q');
         actions[ACT_SAVE_SD_SVG] = new TAction("svg-sdpanel", "Save in SVG Format", IconManager.imgic1310, IconManager.imgic1310, "Save in SVG Format", "Save as SVG file", 'S');

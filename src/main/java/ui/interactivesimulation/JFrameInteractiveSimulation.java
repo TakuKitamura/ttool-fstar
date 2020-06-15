@@ -114,7 +114,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
     private String hostSystemC;
     private String pathExecute;
 
-    protected JButton buttonClose, buttonStart, buttonStopAndClose, buttonShowTrace;
+    protected JButton buttonClose, buttonStart, buttonStopAndClose, buttonShowTrace, buttonShowTraceHtml;
     protected JTextArea jta;
     protected JScrollPane jsp;
 
@@ -257,6 +257,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	private PipedOutputStream pos;
 	private PipedInputStream pis;
 	private JFrameTMLSimulationPanel tmlSimPanel;
+    private JFrameTMLSimulationPanelHtml tmlSimPanelHtml;
 	private BufferedWriter bw;
 	private int simIndex=0;
     
@@ -332,6 +333,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         buttonClose = new JButton(actions[InteractiveSimulationActions.ACT_STOP_ALL]);
         buttonStopAndClose = new JButton(actions[InteractiveSimulationActions.ACT_STOP_AND_CLOSE_ALL]);
         buttonShowTrace = new JButton(actions[InteractiveSimulationActions.ACT_SHOW_TRACE]);
+        buttonShowTraceHtml = new JButton(actions[InteractiveSimulationActions.ACT_SHOW_TRACE_HTML]);
         //buttonStopAndClose = new JButton(buttonStopAndCloseS, IconManager.imgic27);
 
 
@@ -351,12 +353,15 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 
         JPanel jp = new JPanel();
         //jp.setBackground(ColorManager.InteractiveSimulationBackground);
-        //jp.setPreferredSize(new Dimension(800, 75));
+        jp.setPreferredSize(new Dimension(800, 80));
         jp.add(buttonStart);
         jp.add(buttonStopAndClose);
         jp.add(buttonClose);
         jp.add(buttonShowTrace);
+        jp.add(buttonShowTraceHtml);
         mainpanel.add(jp, BorderLayout.NORTH);
+//        mainpanel.setSize(mainpanel.getPreferredSize());
+//        validate();
 
 
         GridBagLayout gridbag02 = new GridBagLayout();
@@ -1493,7 +1498,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 					return i.compareTo(j);
     			}
 			});
-			//
+			//r
 			//
 			if (simtraces.size()>2000){
 				//Only write last 2000 simulations
@@ -1522,6 +1527,21 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 			
 		}
 	}
+
+	public void writeSimTraceHtml() {
+        tmlSimPanelHtml = new JFrameTMLSimulationPanelHtml(new Frame(), mgui, trans, "Show Trace in HTML");
+        //Make a popup to select which tasks
+        Vector<String> tmlComponentsToValidate = new Vector<String>();
+        List<String> tasks = new ArrayList<String>();
+        for (TMLTask task: tmap.getTMLModeling().getTasks()){
+            tasks.add(task.getName());
+        }
+        JDialogSelectTasks jdstmlc = new JDialogSelectTasks(f, tmlComponentsToValidate, tasks, "Select tasks to show in trace");
+
+        GraphicLib.centerOnParent(jdstmlc);
+        jdstmlc.setVisible(true);
+        tmlSimPanelHtml.setVisible(true);
+    }
 	
 	public void writeArchitectureSimTrace(){
 	}
@@ -3553,7 +3573,9 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             resetSimTrace();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_SHOW_TRACE].getActionCommand())) {
 			writeSimTrace();
-		}
+		} else if (command.equals(actions[InteractiveSimulationActions.ACT_SHOW_TRACE_HTML].getActionCommand())) {
+            writeSimTraceHtml();
+        }
     }
 
     private String formatString(String input) {
