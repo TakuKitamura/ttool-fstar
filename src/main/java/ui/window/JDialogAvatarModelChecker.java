@@ -49,6 +49,7 @@ import myutil.*;
 import ui.util.IconManager;
 import ui.MainGUI;
 import ui.TGComponent;
+import ui.avatarbd.AvatarBDSafetyPragma;
 import graph.RG;
 import graph.AUTGraph;
 
@@ -103,6 +104,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     protected static boolean checkNoDeadSelected = false;
     protected static boolean checkReinitSelected = false;
     protected static boolean limitStatesSelected = false;
+    protected static boolean generateCountertraceSelected = false;
+    protected static String countertracePath;
     protected static String stateLimitValue;
     protected static boolean limitTimeSelected = false;
     protected static String timeLimitValue;
@@ -154,6 +157,8 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     protected JCheckBox noDeadlocks;
     protected JCheckBox reinit;
     protected JCheckBox safety;
+    protected JCheckBox countertrace;
+    protected JTextField countertraceField;
     protected JButton checkUncheckAllPragmas;
     protected java.util.List<JCheckBox> customChecks;
 
@@ -190,6 +195,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             graphDirDot = _graphDir + File.separator + "rgavatar$.dot";
         }
         
+        countertracePath = "trace$.txt";
         stateLimitValue = "100";
         timeLimitValue =  "5000";
 
@@ -442,7 +448,18 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             cadvanced.gridwidth = GridBagConstraints.REMAINDER; //end row
             jpadvanced.add(jsp, cadvanced);
         }
+        cadvanced.gridwidth = GridBagConstraints.REMAINDER;
         
+        //Countertrace
+        cadvanced.gridwidth = 1;
+        countertrace = new JCheckBox("Generate counterexample traces", generateCountertraceSelected);
+        countertrace.addActionListener(this);
+        jpadvanced.add(countertrace, cadvanced);
+        cadvanced.gridwidth = GridBagConstraints.REMAINDER;
+        countertraceField = new JTextField(countertracePath);
+        jpadvanced.add(countertraceField, cadvanced);
+
+
         jpopt.add(jp01, c01);
         jpopt.add(jpbasic, cbasic);
         jpopt.add(jpadvanced, cadvanced);
@@ -710,6 +727,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             amc.setIgnoreInternalStates(ignoreInternalStatesSelected);
             amc.setCheckNoDeadlocks(checkNoDeadSelected);
             amc.setReinitAnalysis(checkReinitSelected);
+            amc.setCounterExampleTrace(generateCountertraceSelected);
 
             // Reachability
             int res;
@@ -878,6 +896,23 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             DateFormat dateFormat = new SimpleDateFormat("_yyyyMMdd_HHmmss");
             Date date = new Date();
             String dateAndTime = dateFormat.format(date);
+            
+            if (generateCountertraceSelected) {
+                String trace = amc.getCounterTrace();
+                
+                String autfile;
+                if (countertraceField.getText().indexOf("$") != -1) {
+                    autfile = Conversion.replaceAllChar(countertraceField.getText(), '$', dateAndTime);
+                } else {
+                    autfile = countertraceField.getText();
+                }
+                try {
+                    FileUtils.saveFile(autfile, trace);
+                    jta.append("\nCounterexample trace saved in " + autfile + "\n");
+                } catch (Exception e) {
+                    jta.append("\nCounterexample trace could not be saved in " + autfile + "\n");
+                }
+            }
 
             if (saveGraphAUT.isSelected()) {
                 graphAUT = amc.toAUT();
@@ -992,9 +1027,11 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
 
         for (SafetyProperty sp : safeties) {
             if (sp.getPhase() == SpecificationPropertyPhase.SATISFIED) {
-                status = 1;
+                status = AvatarBDSafetyPragma.PROVED_TRUE;
+            } else if (sp.getPhase() == SpecificationPropertyPhase.NONSATISFIED) {
+                status = AvatarBDSafetyPragma.PROVED_FALSE;
             } else {
-                status = 0;
+                status = AvatarBDSafetyPragma.PROVED_ERROR;
             }
             verifMap.put(sp.getRawProperty(), status);
         }
@@ -1043,6 +1080,10 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                 cb.setEnabled(safetySelected);
             }
         }
+        
+        countertrace.setEnabled(safety.isSelected());
+        countertraceField.setEnabled(countertrace.isSelected());
+        generateCountertraceSelected = countertrace.isSelected();
         
         stateLimitField.setEnabled(stateLimit.isSelected());
         limitStatesSelected = stateLimit.isSelected();
