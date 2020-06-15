@@ -38,6 +38,8 @@
 
 package avatartranslator;
 
+import java.util.List;
+
 import avatartranslator.modelchecker.SpecificationBlock;
 import avatartranslator.modelchecker.SpecificationState;
 
@@ -204,6 +206,19 @@ public class AvatarExpressionAttribute {
         return value;
     }
     
+    public int getValue(int[] attributesValues) {
+        int value;
+        
+        if (isState) {
+                return 0;
+        }
+        
+        //Cancel offset based on Specification Blocks
+        value = attributesValues[accessIndex - SpecificationBlock.ATTR_INDEX];
+        
+        return value;
+    }
+    
     public void setValue(SpecificationState ss, int value) {
         int v;
         
@@ -238,6 +253,18 @@ public class AvatarExpressionAttribute {
             }
         }
     }
+    
+    
+    public int getAttributeType() {
+        if (isState) {
+            return AvatarExpressionSolver.IMMEDIATE_BOOL;
+        } else if (block.getAttribute(accessIndex - SpecificationBlock.ATTR_INDEX).getType() == AvatarType.BOOLEAN) {
+            return AvatarExpressionSolver.IMMEDIATE_BOOL;
+        } else {
+            return AvatarExpressionSolver.IMMEDIATE_INT;
+        }
+    }
+    
     
     public boolean isState() {
         return isState;

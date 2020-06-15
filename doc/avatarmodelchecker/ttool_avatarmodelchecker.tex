@@ -20,6 +20,7 @@
 \usepackage{hyperref}
 \usepackage{listings}
 \usepackage{color}
+\usepackage[labelfont=sf,hypcap=false,format=hang,width=0.8\columnwidth]{caption}
 
 \definecolor{pblue}{rgb}{0.13,0.13,1}
 \definecolor{pgreen}{rgb}{0,0.5,0}
@@ -131,18 +132,18 @@ Editor} & \textbf{Year}
 
 \subsection{Executive Summary}
 
-This document describes how the AVATAR model checker of TTool works. This document explains the data structure used to represent the models, the algorithm for  reachability graph generation, and the properties that can be verified. 
+This document describes how the AVATAR model checker of TTool works. This document is divided mainly into two parts. The first one is the user guide on how to use the model-checker. The second one explains the data structure used to represent the models, the algorithm for reachability graph generation, and the properties that can be verified.
 
-\newpage 
+\newpage
 
 \section{A First Example}
-This very first example explains how to verify reachability, liveness and safety properties using the AVATAR model-checker on a design model.
+This very first example explains how to verify reachability, liveness, and safety properties using the AVATAR model-checker on a design model.
 
 \subsection{Getting the example}
 Be sure to get the latest version of TTool including the remote loading of models (June 2020 and after). Do: File, Open from TTool repository, and select "PressureController.xml". Then, open the design panel to view the AVATAR design model.
 
 \subsection{Understanding the model}
-The Pressure Controller is build upon a set of blocks representing the system itself, and two blocks representing the environment (the pressure sensor, and the alarm actuator), see Figure \ref{fig:pressurecontroller}.
+The Pressure Controller is built upon a set of blocks representing the system itself, and two blocks representing the environment (the pressure sensor, and the alarm actuator), see Figure \ref{fig:pressurecontroller}.
 
 \begin{figure}[h]
 \centering
@@ -152,7 +153,7 @@ The Pressure Controller is build upon a set of blocks representing the system it
 \end{figure}
 
 \subsubsection{PressureSensor}
-The pressure sensor (see Figure \ref{fig:pressuresensor}) monitors the pressure with a period of 20 units of time. In the first branch, "IsInCode" method that is \textbf{not} executed when the model is considered for functional simulation or formal verification. Indeed, in our case, the "branch" boolean is set to false by default, so the random command is executed (and not the readingPressure() method). The random value, between 18 and 21, is sent every period of time to the main controller.
+The pressure sensor (see Figure \ref{fig:pressuresensor}) monitors the pressure with a period of 20 units of time. In the first branch, "IsInCode" method is \textbf{not} executed when the model is considered for functional simulation or formal verification. Indeed, in our case, the "branch" boolean is set to false by default, so the random command is executed (and not the readingPressure() method). The random value, between 18 and 21, is sent every period of time to the main controller.
 
 \begin{figure}[h!]
 \centering
@@ -172,7 +173,7 @@ The main controller (see Figure \ref{fig:maincontroller}) receives the pressure 
 \end{figure}
 
 \subsubsection{AlarmManager}
-The alarm manager (see Figure \ref{fig:alarmmanager}) activates an alarm when the controller senses a high pressure. The alarm is deactivated after "alarmDuration", controlled by a timer, if no other high pressure signals are sensed.
+The alarm manager (see Figure \ref{fig:alarmmanager}) activates an alarm when the controller senses a high pressure. The alarm is deactivated after "alarmDuration", controlled by a timer, if no other high pressure signals are sensed in the meanwhile.
 
 \begin{figure}[h!]
 \centering
@@ -186,28 +187,28 @@ The alarm actuator may receive on and off signals activating and deactivating th
 
 
 \subsection{Reachability and liveness}
-For specific states, we can activate the reachability and liveness check going to the correspondant state machine, right clicking on a state or a signal and selecting "Check for Reachability / Liveness". For instance, let's do that on the \textit{AlarmIsOn} state in the AlarmManager state machine. After the operation, the letters R and L in grey will appear next to the state  (see Figure \ref{fig:rl_grey}) to confirm that the state is selected for the reachability and liveness check. After that, we may proceed with the verification.
+To activate the reachability and liveness check for specific states, we need to go to the correspondant block state machine, right click on a state or a signal and select "Check for Reachability / Liveness". For instance, let's do that on the \textit{AlarmIsOn} state in the AlarmManager state machine. After this operation, the letters R and L in grey will appear next to the state (see Figure \ref{fig:rl_grey}) to confirm that the state is selected for the reachability and liveness check. After that, we may proceed with the verification.
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.5\textwidth]{images/rl_grey.jpg}
 \caption{State selected for reachability and liveness check}
 \label{fig:rl_grey}
 \end{figure}
-\\To open the model-checker window, we must first compile the model. To do that, let's click on the "syntax analysis" icon and then on "check syntax" to compile the model.  Then,, we click on the "safety veification (internal tool)" icon representing a screwdriver and a wrench with the text "RC". The following window should open (see Figure \ref{fig:mcwindow}).
+\\To open the model-checker window, we must first compile the model. To do that, let's click on the "syntax analysis" icon and then on "check syntax". Then, we click on the "safety verification (internal tool)" icon representing a screwdriver and a wrench crossed with the text "RC". The following window should open (see Figure \ref{fig:mcwindow}).
 \begin{figure}[h!]
 \centering
 \includegraphics[width=\textwidth]{images/modelcheckerwindow.jpg}
 \caption{Model-checker window}
 \label{fig:mcwindow}
 \end{figure}
-\\To execute the reachability and liveness check on the selected state, let's select "Selected states" in both Reachability and Liveness lines. Then, we can press the start button. The text area will contain the verification report indicating if the properties are satisfied or not. Moreover, if we go back to the AlarmManager state machine, the RL text next to the state is colored with green for \textit{satisfied} and in red for \textit{not satisfied} (see Figure \ref{fig:rl_exe}).
+\\To execute the reachability and liveness check on the selected state, let's select "Selected states" in both Reachability and Liveness lines. Then, we can press the start button. The text area will contain the verification report indicating if the properties are satisfied or not. Moreover, if we go back to the AlarmManager state machine, the RL text next to the state is now colored with green for \textit{satisfied} and in red for \textit{not satisfied} (see Figure \ref{fig:rl_exe}).
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.5\textwidth]{images/rl_exe.jpg}
 \caption{Reachability and Liveness result}
 \label{fig:rl_exe}
 \end{figure}
-\\In this case, the reachability is satisfied as it is possible that the pressure sensor detects a temperature higher than the controller threshold. The liveness, instead, is not satisfied as it is possible that a temperature higher than the threshold is never detected.
+\\In this case, the reachability is satisfied as the pressure sensor may detect a temperature higher than the controller threshold. The liveness, instead, is not satisfied as a temperature higher than the threshold may be never detected.
 \\\\
 If we want to simply verify the reachability and liveness property automatically for all the states, we can select "All states" in the model-checking window.
 
@@ -221,7 +222,7 @@ We can find, write and modify safety properties in the block diagram tab inside 
 \end{figure}
 \\If we do a double click on the pink box, we see the safety and liveness pragmas written as a CTL formula using UPPAAL syntax. If we press the question mark in the window, a short illustrated guide on how the queries work appears.
 \\\\
-To start the CTL query verification, let's compile again and let's open the model-checker wiindow. As shown in figure \ref{fig:mcwindow}, we want to select the checkbox "Safety pragmas" and then we select the queries that we want to verify. In this case, let's execute them all. Let's press the start butto to begin the verification. The query results is shown both in the report field in the window and in the pink box in the block diagram tab (see Picture \ref{fig:sresult}).
+To start the CTL query verification, let's compile again and let's open the model-checker window. As shown in figure \ref{fig:mcwindow}, we want to select the checkbox "Safety pragmas" and then we select the queries that we want to verify. In this case, let's execute all of them. Let's press the start button to begin the verification. The query results are shown both in the report field and inside the pink box in the block diagram tab (see Picture \ref{fig:sresult}).
 \begin{figure}[h!]
 \centering
 \includegraphics[width=0.7\textwidth]{images/safety_result.png}
@@ -230,13 +231,13 @@ To start the CTL query verification, let's compile again and let's open the mode
 \end{figure}
 
 \newpage
-\section{Verification Guide}
-In this section we will explain all the features and all the options that are present in the AVATAR model-checker. As window reference, please refer to figure \ref{fig:mcwindow}.
+\section{Verification Guide} \label{sec:vg}
+In this section we will explain all the features and options that are present in the AVATAR model-checker. For a reference to the model-checking window, please refer to figure \ref{fig:mcwindow}.
 \\\\The model-checker allows to generate a reachability graph and to prove properties. Starting from the top, the first section contains graph generations options. In particular:
 \begin{itemize}
-	\item \textbf{Do not display empty transitions as internal states}: in the reachability graph generation, states are created also for empty transitions (no action, no time, no choice). This option does not affect the verification.
-	\item \textbf{Ignore concurrency between internal actions}: this option allow to ignore a full concurrency study. It is very useful to limit the state explosion of the model due to all the concurrencies among states. It is so suggested to keep it selected to have a faster verification. This option, however, it is considered only in the \textit{leadsto} study, as it is the only study that might be affected by this option, and in the reachability graph generation. \textbf{Important}: basic concurrency it is evaluated also with this optimization selected. Basic concurrency means that the concurrency is evaluated until states with multiple transitions, if statement, and signals communitation (things that are evaluated in not selected mode) are encounted. In normal usage, you should not need to deselect this option.
-	\item \textbf{Ignore states between internal actions}: This option allows to ignore intermediate states between actions that can be directly executed. this optimization helps decreasing the number of states in the reachability graph generation. If  \textit{Ignore concurrency between internal actions} is not selected, this option is not used. We suggest to keep this option selected for verification as it would not affect the result.
+	\item \textbf{Do not display empty transitions as internal states}: in the reachability graph generation, states are not created for empty transitions (no action, no time, no choice). In practice, empty transition states are collapsed together. This option does not affect the verification. Option on by default.
+	\item \textbf{Ignore concurrency between internal actions}: this option allows to ignore a full concurrency study. It is very useful to limit the state explosion of the model due to all the concurrencies among its states. It is so suggested to keep it selected to have a faster verification. This option, however, affects only in the \textit{leadsto} study, and the reachability graph generation. \textbf{Important}: basic concurrency it is evaluated also with this optimization selected. Basic concurrency means that concurrency is normally evaluated until states with multiple transitions, or if statement, or signals communication are encounted. In normal usage, you should not need to deselect this option (example in the next section \ref{sec:cb}). Option on by default.
+	\item \textbf{Ignore states between internal actions}: This option allows to ignore intermediate states between actions that can be directly executed. this optimization helps decreasing the number of states in the reachability graph generation. If  \textit{Ignore concurrency between internal actions} is not selected, this option automatically deactivated. We suggest to keep this option selected for verification as it would not affect the result. Option on by default.
 	 \item \textbf{Limit the number of states in RG}: it limits the reachability graph generation to a fixed number of states. It is particularly useful for big models. This option is automatically ignored when a verification study is selected.
 	 \item \textbf{Time constraint for RG generation}: it allows to stop the reachability graph generation after a fixed number of milliseconds. It is particularly useful for big models. This option is automatically ignored when a verification study is selected.
 \end{itemize}
@@ -244,12 +245,12 @@ The next section contains options for basic properties verification:
 \begin{itemize}
 	\item \textbf{No deadlocks}: it checks that the model is deadlock free
 	\item \textbf{Reinitialization}: it checks that, for all the paths, the model will eventually restart to the initial state
-	\item \textbf{Reachability}: it checks states reachability
+	\item \textbf{Reachability}: it checks for states reachability
 	\item \textbf{Liveness}: it checks for states liveness
 \end{itemize}
-The next section allows advanced options to be selected. It allows to execute safety and liveness pragmas written as a CTL formula. Each of them can be selected or not for the verification.
+The next section allows to execute safety and liveness pragmas written as a CTL formula. Each of them can be selected or not for the verification.
 \\\\
-Then, if \textbf{Reachability Graph Generation} options is used to generate and save the reachability graph. Moreover, it can can be saved also in "dotty" format.
+Then, \textbf{Reachability Graph Generation} options is used to generate and save the reachability graph. Moreover, it can can be saved also in "dotty" format.
 
 \subsection{CTL query syntax}
 The query syntax for CTL formulas, for expressions \texttt{p} and \texttt{q}, is the following:
@@ -260,13 +261,43 @@ The query syntax for CTL formulas, for expressions \texttt{p} and \texttt{q}, is
 	\item \textbf{E<> p}:  there exists a path in which property p will eventually be true (other common notation \textbf{EF p})
 	\item \textbf{p --> q}: whenever p is true, then q will eventually be true at some subsequent moment (other common notation \textbf{G(p $\Rightarrow$ Fq)})
 \end{itemize}
-Expression \texttt{p} and \texttt{q} may be on states or attributes. The format used to reference a variable or a state of a block is \textit{BlockName.AttributeName} or \textit{BlockName.StateName}. Conditions on variables can be combined using classic C code like boolean operators (||, \&\&, and, or). Variables can be negated or inverted (not(variable)). Examples:
+Expression \texttt{p} and \texttt{q} may be on states or variables. The format used to reference a variable or a state of a block is \textit{BlockName.AttributeName} or \textit{BlockName.StateName}. Conditions on variables can be combined using classic C code like boolean operators (||, \&\&, and, or). Variables can be negated or inverted (not(variable)). Examples:
 \begin{itemize}
 	\item \textit{E<> Passenger.isInCockpit ==true \&\& DoorAndLockButton.inside==1}: there exists a path in which there is at least one state in which Passenger.isInCockpit is true and DoorAndLockButton.inside is equal to 1
 	\item \textit{A[] MainController.currentPressure < 25}: MainController.currentPressure is always less than 25
 	\item \textit{DoorAndLockButton.IN\_EMERGENCY\_CALL --> DoorAndLockButton.CLOSED\_AND\_LOCKED || DoorAndLockButton.CLOSED\_AND\_UNLOCKED}: whenever DoorAndLockButton.IN\_EMERGENCY\_CALL state is encounted, then or DoorAndLockButton.CLOSED\_AND\_LOCKED or DoorAndLockButton.CLOSED\_AND\_UNLOCKED will be encounted at some subsequent moment.
 \end{itemize}
 
+\subsection{Concurrency behavior} \label{sec:cb}
+In section \ref{sec:vg}, we discussed about the option \textit{Ignore concurrency between internal actions} and how it could effect the model-checker behavior. In this section, we will show with a guided example the differences between having this option on or off.
+\\\\
+In this simplified example (see Figure \ref{fig:cb}), we have two blocks: a sensor and a main block that receive the informations.
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.8\textwidth]{images/conc_blocks.png}
+\caption{Example on concurrency}
+\label{fig:cb}
+\end{figure}
+Let's consider the two blocks connected through a synchronous channel. Also with asynchronous there would not be any difference in this analysis. The two states machine are shown in figure \ref{fig:csm}.
+\begin{table}[h!]
+	\begin{center}
+	\begin{tabular}{ c c }
+	\includegraphics[scale=0.6]{images/conc_sensor.png}
+	&
+	\includegraphics[scale=0.6]{images/conc_main.png}
+	\\
+	(a)
+	&
+	(b)
+	\end{tabular}
+	\end{center}
+	\captionof{figure}{Sensor (a) and Main (b) state machines}
+	\label{fig:csm}
+\end{table}\\\\
+First, we want to prove that after Sensor.Sent, Main will eventually reach the Receive state (\textit{Sensor.Sent --> Main.Receive}). After the data is sent by the sensor and received by the main block, the is a concurrency between executing first the Sent state or the Received state. In this case, both with the option \textit{Ignore concurrency between internal actions} selected or not, the pragma result will be always false. In fact, the Received state may be reached before Sent.\\
+Different is the case for the following pragma: \textit{Sensor.Sent --> Main.Restart}. In this case, after the Received state, there are two possible choices: Elaborate and Ignore. If the option \textit{Ignore concurrency between internal actions} is selected, the single transitions have priority over the choices. This will lead to Sent being reached before Elaborate or Ignore. The pragma will be true. If the option is not selected instead, a full concurrency study is executed and the pragma will result correctly false. Note that a full concurrency study will considerably slow down the verification performance.
+\\\\
+The best way to avoid concurrency problems and to keep this option always selected is to ask concurrency aware queries. If we want to check if something happens after sending the data, the best choice would be to query \textit{Sensor.Wait --> Main.Restart}. This query does not depend by concurrency since it happens before a "synchronization" point.
 
 \newpage
 \section{AVATAR Model-Checker}
