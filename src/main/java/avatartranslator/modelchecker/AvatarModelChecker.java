@@ -1145,9 +1145,9 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         }
 
         if (freeIntermediateStateCoding) {
-//            _ss.freeUselessAllocations();
+            _ss.freeUselessAllocations();
         } else {
-//            _ss.finished();
+            _ss.finished();
         }
 
         mustStop();
@@ -1318,9 +1318,9 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         }
         
         if (freeIntermediateStateCoding) {
-//            _ss.freeUselessAllocations();
+            _ss.freeUselessAllocations();
         } else {
-//            _ss.finished();
+            _ss.finished();
         }
 
         mustStop();
