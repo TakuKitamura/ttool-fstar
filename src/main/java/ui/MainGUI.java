@@ -8224,6 +8224,19 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         changeMade(null, -1);
     }
 
+
+    public boolean selectPanelByName(String name) {
+        for (int i = 0; i < mainTabbedPane.getTabCount(); i++) {
+            if (mainTabbedPane.getTitleAt(i).equals(name)) {
+                mainTabbedPane.setSelectedIndex(i);
+                return true;
+            }
+
+        }
+        return false;
+    }
+
+
     public void requestMoveRightTab(int index) {
         // TraceManager.addDev("Move right");
         if (index > tabs.size() - 2) {

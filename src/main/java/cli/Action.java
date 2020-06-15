@@ -97,6 +97,8 @@ public class Action extends Command {
     private final static String NAVIGATE_PANEL_TO_LEFT = "navigate-panel-to-left";
     private final static String NAVIGATE_PANEL_TO_RIGHT = "navigate-panel-to-right";
 
+    private final static String SELECT_PANEL = "select-panel";
+
     private final static String NAVIGATE_LEFT_PANEL = "navigate-left-panel";
 
     private final static String AVATAR_RG_GENERATION = "avatar-rg";
@@ -699,6 +701,35 @@ public class Action extends Command {
             }
         };
 
+        Command selectPanel = new Command() {
+            public String getCommand() {
+                return SELECT_PANEL;
+            }
+
+            public String getShortCommand() {
+                return "sp";
+            }
+
+            public String getDescription() {
+                return "Select the edition panel with a name";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                String[] commands = command.split(" ");
+                if (commands.length < 1) {
+                    return Interpreter.BAD;
+                }
+
+                interpreter.mgui.selectPanelByName(commands[0]);
+
+                return null;
+            }
+        };
+
 
         Command movePanelToTheLeftPanel = new Command() {
             public String getCommand() {
@@ -741,6 +772,8 @@ public class Action extends Command {
                 if (!interpreter.isTToolStarted()) {
                     return Interpreter.TTOOL_NOT_STARTED;
                 }
+
+
 
                 interpreter.mgui.requestMoveRightTab(interpreter.mgui.getCurrentJTabbedPane().getSelectedIndex());
 
@@ -1096,6 +1129,7 @@ public class Action extends Command {
         addAndSortSubcommand(diplodocusRemoveNoC);
         addAndSortSubcommand(movePanelToTheLeftPanel);
         addAndSortSubcommand(movePanelToTheRightPanel);
+        addAndSortSubcommand(selectPanel);
         addAndSortSubcommand(compareUppaal);
         addAndSortSubcommand(generic);
 
