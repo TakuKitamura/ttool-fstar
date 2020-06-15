@@ -82,27 +82,302 @@ public class JFrameTMLSimulationPanelHtml extends JFrame implements ActionListen
 
         // Simulation panel
         sdpanel = new JEditorPane();
-        sdpanel.setEditable(false);
-//        String temp = "<!DOCTYPE html>\n" + "<html>\n" + "<body>";
-//        sdpanel.setContentType("text/html");
-//
-//        for (int i = 0; i < trans.size(); i ++){
-//            temp += "<h1> --Device name" + trans.get(i).deviceName + "--Task name " + trans.get(i).taskName + "--Command " + trans.get(i).command +
+        sdpanel.setEditable(true);
+        sdpanel.setContentType("text/html");
+        String temp = "<!DOCTYPE html>\n" + "<html>\n";
+        temp += "<head>\n" +
+                "<style>";
+        temp += "table{\n" +
+                " \tborder-collapse: collapse;\n" +
+                " \tempty-cells: show;\n" +
+                " \tmargin: 0.4cm;\n" +
+                " }\n" +
+                " td{\n" +
+                " \tpadding: 10px 5px;\n" +
+                " \tborder: 1px solid black;\n" +
+                " \tmax-width: 5px;\n" +
+                " }\n" +
+                " th{\n" +
+                " \tpadding: 5px;\n" +
+                " \tborder-left: 1px dotted black;\n" +
+                " \tborder-right: 1px dotted black;\n" +
+                " }\n" +
+                " .sc{\n" +
+                " \tborder-style: none;\n" +
+                " \tpadding: 0px;\n" +
+                " \tfont-size: small;\n" +
+                "     transform: rotate(45deg);\n" +
+                "     transform-origin: left top;\n" +
+                " }\n" +
+                " .sc1{\n" +
+                " \tborder-style: none;\n" +
+                " \tpadding: 0px;\n" +
+                " \tfont-size: small;\n" +
+                " \tcolor: red;\n" +
+                "     transform: rotate(45deg);\n" +
+                "     transform-origin: left top;\n" +
+                " }\n" +
+                " h2 {\n" +
+                " \tborder-bottom: 1px solid #666;\n" +
+                " }\n" +
+                " h2 span {\n" +
+                " \tposition: relative;\n" +
+                " \tleft: -0.3em;\n" +
+                " \tbottom: -0.6em;\n" +
+                " \tpadding: 1px 0.5em;\n" +
+                " \tborder-style: solid;\n" +
+                " \tborder-width: 1px 1px 1px 0.8em;\n" +
+                " \tborder-color: #666 #666 #666 #008;\n" +
+                " \tbackground-color: #ddd;\n" +
+                " }\n" +
+                " .space{border-style: none;}\n" +
+                " .not{background-color: white;}\n" +
+                " .notfirst {\n" +
+                " \tbackground-color: white;\n" +
+                " \tborder-style: solid none solid solid;\n" +
+                " }\n" +
+                " .notmid {\n" +
+                " \tbackground-color: white;\n" +
+                " \tborder-style: solid none solid none;\n" +
+                " }\n" +
+                " .notlast {\n" +
+                " \tbackground-color: white;\n" +
+                " \tborder-style: solid solid solid none;\n" +
+                " }\n" +
+                " .t0{background-color: yellow;}\n" +
+                " .t0first {\n" +
+                " \tbackground-color: yellow;\n" +
+                " \tborder-style: solid none solid solid;\n" +
+                " }\n" +
+                " .t0mid {\n" +
+                " \tbackground-color: yellow;\n" +
+                " \tborder-style: solid none solid none;\n" +
+                " }\n" +
+                " .t0last {\n" +
+                " \tbackground-color: yellow;\n" +
+                " \tborder-style: solid solid solid none;\n" +
+                " }\n" +
+                " .t1{background-color: purple;}\n" +
+                " .t1first {\n" +
+                " \tbackground-color: purple;\n" +
+                " \tborder-style: solid none solid solid;\n" +
+                " }\n" +
+                " .t1mid {\n" +
+                " \tbackground-color: purple;\n" +
+                " \tborder-style: solid none solid none;\n" +
+                " }\n" +
+                " .t1last {\n" +
+                " \tbackground-color: purple;\n" +
+                " \tborder-style: solid solid solid none;\n" +
+                " }\n" +
+                " .t2{background-color: red;}\n" +
+                " .t2first {\n" +
+                " \tbackground-color: red;\n" +
+                " \tborder-style: solid none solid solid;\n" +
+                " }\n" +
+                " .t2mid {\n" +
+                " \tbackground-color: red;\n" +
+                " \tborder-style: solid none solid none;\n" +
+                " }\n" +
+                " .t2last {\n" +
+                " \tbackground-color: red;\n" +
+                " \tborder-style: solid solid solid none;\n" +
+                " }\n" +
+                " .t3{background-color: silver;}\n" +
+                " .t3first {\n" +
+                " \tbackground-color: silver;\n" +
+                " \tborder-style: solid none solid solid;\n" +
+                " }\n" +
+                " .t3mid {\n" +
+                " \tbackground-color: silver;\n" +
+                " \tborder-style: solid none solid none;\n" +
+                " }\n" +
+                " .t3last {\n" +
+                " \tbackground-color: silver;\n" +
+                " \tborder-style: solid solid solid none;\n" +
+                " }\n" +
+                " .t4{background-color: teal;}\n" +
+                " .t4first {\n" +
+                " \tbackground-color: teal;\n" +
+                " \tborder-style: solid none solid solid;\n" +
+                " }\n" +
+                " .t4mid {\n" +
+                " \tbackground-color: teal;\n" +
+                " \tborder-style: solid none solid none;\n" +
+                " }\n" +
+                " .t4last {\n" +
+                " \tbackground-color: teal;\n" +
+                " \tborder-style: solid solid solid none;\n" +
+                " }\n" +
+                " .t5{background-color: aqua;}\n" +
+                " .t5first {\n" +
+                " \tbackground-color: aqua;\n" +
+                " \tborder-style: solid none solid solid;\n" +
+                " }\n" +
+                " .t5mid {\n" +
+                " \tbackground-color: aqua;\n" +
+                " \tborder-style: solid none solid none;\n" +
+                " }\n" +
+                " .t5last {\n" +
+                " \tbackground-color: aqua;\n" +
+                " \tborder-style: solid solid solid none;\n" +
+                " }\n" +
+                " .t6{background-color: olive;}\n" +
+                " .t6first {\n" +
+                " \tbackground-color: olive;\n" +
+                " \tborder-style: solid none solid solid;\n" +
+                " }\n" +
+                " .t6mid {\n" +
+                " \tbackground-color: olive;\n" +
+                " \tborder-style: solid none solid none;\n" +
+                " }\n" +
+                " .t6last {\n" +
+                " \tbackground-color: olive;\n" +
+                " \tborder-style: solid solid solid none;\n" +
+                " }\n" +
+                " .t7{background-color: navy;}\n" +
+                " .t7first {\n" +
+                " \tbackground-color: navy;\n" +
+                " \tborder-style: solid none solid solid;\n" +
+                " }\n" +
+                " .t7mid {\n" +
+                " \tbackground-color: navy;\n" +
+                " \tborder-style: solid none solid none;\n" +
+                " }\n" +
+                " .t7last {\n" +
+                " \tbackground-color: navy;\n" +
+                " \tborder-style: solid solid solid none;\n" +
+                " }\n" +
+                " .t8{background-color: maroon;}\n" +
+                " .t8first {\n" +
+                " \tbackground-color: maroon;\n" +
+                " \tborder-style: solid none solid solid;\n" +
+                " }\n" +
+                " .t8mid {\n" +
+                " \tbackground-color: maroon;\n" +
+                " \tborder-style: solid none solid none;\n" +
+                " }\n" +
+                " .t8last {\n" +
+                " \tbackground-color: maroon;\n" +
+                " \tborder-style: solid solid solid none;\n" +
+                " }\n" +
+                " .t9{background-color: lime;}\n" +
+                " .t9first {\n" +
+                " \tbackground-color: lime;\n" +
+                " \tborder-style: solid none solid solid;\n" +
+                " }\n" +
+                " .t9mid {\n" +
+                " \tbackground-color: lime;\n" +
+                " \tborder-style: solid none solid none;\n" +
+                " }\n" +
+                " .t9last {\n" +
+                " \tbackground-color: lime;\n" +
+                " \tborder-style: solid solid solid none;\n" +
+                " }\n" +
+                " .t10{background-color: green;}\n" +
+                " .t10first {\n" +
+                " \tbackground-color: green;\n" +
+                " \tborder-style: solid none solid solid;\n" +
+                " }\n" +
+                " .t10mid {\n" +
+                " \tbackground-color: green;\n" +
+                " \tborder-style: solid none solid none;\n" +
+                " }\n" +
+                " .t10last {\n" +
+                " \tbackground-color: green;\n" +
+                " \tborder-style: solid solid solid none;\n" +
+                " }\n" +
+                " .t11{background-color: gray;}\n" +
+                " .t11first {\n" +
+                " \tbackground-color: gray;\n" +
+                " \tborder-style: solid none solid solid;\n" +
+                " }\n" +
+                " .t11mid {\n" +
+                " \tbackground-color: gray;\n" +
+                " \tborder-style: solid none solid none;\n" +
+                " }\n" +
+                " .t11last {\n" +
+                " \tbackground-color: gray;\n" +
+                " \tborder-style: solid solid solid none;\n" +
+                " }\n" +
+                " .t12{background-color: fuchsia;}\n" +
+                " .t12first {\n" +
+                " \tbackground-color: fuchsia;\n" +
+                " \tborder-style: solid none solid solid;\n" +
+                " }\n" +
+                " .t12mid {\n" +
+                " \tbackground-color: fuchsia;\n" +
+                " \tborder-style: solid none solid none;\n" +
+                " }\n" +
+                " .t12last {\n" +
+                " \tbackground-color: fuchsia;\n" +
+                " \tborder-style: solid solid solid none;\n" +
+                " }\n" +
+                " .t13{background-color: blue;}\n" +
+                " .t13first {\n" +
+                " \tbackground-color: blue;\n" +
+                " \tborder-style: solid none solid solid;\n" +
+                " }\n" +
+                " .t13mid {\n" +
+                " \tbackground-color: blue;\n" +
+                " \tborder-style: solid none solid none;\n" +
+                " }\n" +
+                " .t13last {\n" +
+                " \tbackground-color: blue;\n" +
+                " \tborder-style: solid solid solid none;\n" +
+                " }\n" +
+                " .t14{\n" +
+                " \tbackground-color: LightGoldenRodYellow;\n" +
+                "}\n" +
+                " .t14first {\n" +
+                " \tbackground-color: LightGoldenRodYellow;\n" +
+                " \tborder-style: solid none solid solid;\n" +
+                " }\n" +
+                " .t14mid {\n" +
+                " \tbackground-color: LightGoldenRodYellow;\n" +
+                " \tborder-style: solid none solid none;\n" +
+                " }\n" +
+                " .t14last {\n" +
+                " \tbackground-color: LightGoldenRodYellow;\n" +
+                " \tborder-style: solid solid solid none;\n" +
+                " }\n" +
+                " .wrapper {\n" +
+                " \twidth: 256px;\n" +
+                " \theight: 256px;\n" +
+                " }\n" +
+                " .pie-chart-container {\n" +
+                " \twidth : 256px;\n" +
+                " \theight : 256px;\n" +
+                " \tfloat : left;\n" +
+                " \tmargin-left : 2em;\n" +
+                " }\n" +
+                " .clear {\n" +
+                " \tclear:both\n" +
+                " }";
+        temp += "</style>\n" +
+                "</head>\n <body>";
+        temp += "<table style=\"float: left\">\n<tr>";
+
+        for (int i = 0; i < 11; i ++){
+//            temp += "<h1> --Device name " + trans.get(i).toString() + "--Task name " + trans.get(i).startTime + "--Command " + trans.get(i).endTime +
 //                    "--end </h1>\n";
-//
-//        }
-//        temp += "</body>\n" + "</html>";
-//        sdpanel.setText(temp);
+
+            temp += "<td title=\"" + trans.get(i).command +"\" style = \"background-color: red;\" colspan=\"" + String.valueOf(Integer.valueOf(trans.get(i).endTime) - Integer.valueOf(trans.get(i).startTime)) + "\"></td>\n";
+
+        }
+        temp += "</tr>\n<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>\n</body>\n" + "</html>";
+        System.out.println(temp);
+        sdpanel.setText(temp);
 
         JScrollPane jsp	= new JScrollPane(sdpanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         jsp.setWheelScrollingEnabled(true);
         jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
-        try {
-            File file = new File("/home/levan/Desktop/TTool/simulators/c++2/test.html");
-            sdpanel.setPage(file.toURI().toURL());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            File file = new File("/home/levan/Desktop/TTool/simulators/c++2/test.html");
+//            sdpanel.setPage(file.toURI().toURL());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         framePanel.add(jsp, BorderLayout.CENTER);
 
         // statusBar
