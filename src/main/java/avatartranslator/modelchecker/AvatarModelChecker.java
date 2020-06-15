@@ -428,6 +428,17 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 startModelChecking(nbOfThreads);
 //                generateCounterexample();
                 deadlocks += nbOfDeadlocks;
+//                for (SpecificationState ss : statesByID.values()) {
+//                    System.out.print("State " + ss.id);
+//                    int i = 0;
+//                    for (AvatarBlock block : spec.getListOfBlocks()) {
+//                        if (ss.blocks != null) {
+//                        System.out.print("\t" + block.getName() + "." + block.getStateMachine().allStates[ss.blocks[i].values[0]].getName());
+//                        }
+//                        i++;
+//                    }
+//                    System.out.println("\t" + ss.property);
+//                }
                 resetModelChecking();
                 if (!stoppedBeforeEnd) {
                     safety.setComputed();
@@ -1134,9 +1145,9 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         }
 
         if (freeIntermediateStateCoding) {
-            _ss.freeUselessAllocations();
+//            _ss.freeUselessAllocations();
         } else {
-            _ss.finished();
+//            _ss.finished();
         }
 
         mustStop();
@@ -1146,6 +1157,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     private void computeAllInternalStatesFrom(SpecificationState _ss, SpecificationTransition st) {
         SpecificationState newState = _ss.advancedClone();
         SpecificationState previousState = _ss;
+        
+        ArrayList<Integer> stackStates = new ArrayList<>(); //keeps track of the block hashes
 
         while (st != null) {
             //TraceManager.addDev("cpt=" + cpt + " Working on transition:" + st);
@@ -1160,7 +1173,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 handleNonEmptyUniqueTransition(newState);
             }
 
-
             newState.computeHash(blockValues);
 
             SpecificationState similar = findSimilarState(newState);
@@ -1174,6 +1186,40 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 _ss.addNext(link);
                 actionOnProperty(newState, 0, similar, _ss);
                 break;
+            } else if (stackStates.contains(newState.hashValue)) {
+                //already elaborated, add that state
+                SpecificationLink link = new SpecificationLink();
+                link.originState = _ss;
+                action += " [" +  "0...0" +  "]";
+                link.action = action;
+                link.destinationState = newState;
+                synchronized (this) {
+                    similar = states.get(newState.getHash(blockValues));
+                    if (similar == null) {
+                        if (!(stateLimitRG && stateID >= stateLimit)/* || timeLimitReached*/) {
+                            addState(newState);
+                        } else {
+                            limitReached = true; //can be removed
+                            break;
+                        }
+                    }
+                }
+                if (similar != null) {
+                    // check if it has been created by another thread in the meanwhile
+                    link.destinationState = similar;
+                    actionOnProperty(newState, 0, similar, _ss);
+                } else {
+                    link.destinationState = newState;
+                    newState.distance = _ss.distance + 1;
+                    if (!studySafety) {
+                        pendingStates.add(newState);
+                    } else {
+                        actionOnProperty(newState, 0, similar, _ss);
+                    }
+                }
+                nbOfLinks++;
+                _ss.addNext(link);
+                break;   
             } else if (studySafety && safety.safetyType == SafetyProperty.LEADS_TO && newState.property) {
                 newState = reduceCombinatorialExplosionProperty(newState);
                 
@@ -1193,7 +1239,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 _ss.addNext(link);
                 break;
             }
-
+            
+            stackStates.add(newState.hashValue);
 
             // Compute next transition
             //prepareTransitionsOfState(previousState);
@@ -1271,9 +1318,9 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         }
         
         if (freeIntermediateStateCoding) {
-            _ss.freeUselessAllocations();
+//            _ss.freeUselessAllocations();
         } else {
-            _ss.finished();
+//            _ss.finished();
         }
 
         mustStop();
@@ -1286,6 +1333,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         SpecificationState prevState = ss;
         boolean found;
         
+        ArrayList<Integer> stackStates = new ArrayList<>(); //keeps track of the block hashes
+        
         do {
             prepareTransitionsOfState(prevState);
             
@@ -1294,6 +1343,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             }
             
             ArrayList<SpecificationTransition> transitions = computeValidTransitions(prevState.transitions);
+            stackStates.add(prevState.hashValue);
             
             found = false;
             for (SpecificationTransition tr : transitions) {
@@ -1307,7 +1357,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                         if (newState.property) {
                             newState.computeHash(blockValues);
                             SpecificationState similar = findSimilarState(newState);
-                            if (similar != null) {
+                            if (similar != null || stackStates.contains(newState.hashValue)) {
                                 return newState;
                             }
                             found = true;

@@ -38,8 +38,6 @@
 
 package avatartranslator;
 
-import java.util.List;
-
 import avatartranslator.modelchecker.SpecificationBlock;
 import avatartranslator.modelchecker.SpecificationState;
 
