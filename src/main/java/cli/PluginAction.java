@@ -75,6 +75,7 @@ public class PluginAction extends Command {
     private final static String INFO_COMMAND_PLUGIN = "info-command";
     private final static String LOAD_PLUGIN = "load";
     private final static String EXECUTE_COMMAND_IN_PLUGIN = "exec";
+    private final static String EXECUTE_RAW_COMMAND_IN_PLUGIN = "exec-raw";
 
 
 
@@ -230,8 +231,6 @@ public class PluginAction extends Command {
         };
 
         // execute command
-
-
         Command executeCommand = new Command() {
             public String getCommand() {
                 return EXECUTE_COMMAND_IN_PLUGIN;
@@ -301,6 +300,79 @@ public class PluginAction extends Command {
             }
         };
 
+        // execute raw command
+        Command executeRawCommand = new Command() {
+            public String getCommand() {
+                return EXECUTE_COMMAND_IN_PLUGIN;
+            }
+
+            public String getShortCommand() {
+                return "er";
+            }
+
+            public String getDescription() {
+                return "Execute a command. execraw <pluginname> <command>  [-ret variable for return value (if applicable)] [arguments in one " +
+                        "string] ";
+
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (PluginManager.pluginManager == null) {
+                    return "No plugins";
+                }
+
+                String[] commands = command.split(" ");
+                if (commands.length < 2) {
+                    return Interpreter.BAD;
+                }
+
+                Plugin p = PluginManager.pluginManager.getPlugin(commands[0]);
+                if (p == null) {
+                    return "No such plugin";
+                }
+                commands[0] = "";
+
+                String methodName = commands[1];
+                if ((methodName == null) || (methodName.length() == 0))  {
+                    return "No such command";
+                }
+                commands[1] = "";
+
+                // Look for a return variable
+                String retVar = null;
+                int indexArg = 2;
+                if (commands.length > 3) {
+                    if (commands[2].compareTo("-ret") == 0) {
+                        retVar = commands[3];
+                        TraceManager.addDev("Using variable for return:" + retVar);
+                        commands[2] = "";
+                        commands[3] = "";
+                    }
+                }
+
+                StringBuilder builder = new StringBuilder();
+                for(String s : commands) {
+                    builder.append(s);
+                }
+                String str = builder.toString().trim();
+                String []sA = new String[1];
+
+
+                // Start the command
+                String ret = p.callCommandLineCommand(methodName, sA);
+
+                TraceManager.addDev("Ret= " +ret);
+
+                // Store new variable
+                if ((ret != null) && (retVar != null)) {
+                    interpreter.addVariable(retVar, ret);
+                }
+
+
+                return null;
+            }
+        };
+
         // load
         Command load = new Command() {
             public String getCommand() {
@@ -344,6 +416,7 @@ public class PluginAction extends Command {
         addAndSortSubcommand(list);
         addAndSortSubcommand(info);
         addAndSortSubcommand(executeCommand);
+        addAndSortSubcommand(executeRawCommand);
         addAndSortSubcommand(infoCommand);
         addAndSortSubcommand(load);
 
