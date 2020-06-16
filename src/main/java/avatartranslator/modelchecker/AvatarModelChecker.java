@@ -424,21 +424,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             ignoreEmptyTransitions = true;
             for (SafetyProperty sp : livenesses) {
                 safety = sp;
-//                initCounterexample();
                 startModelChecking(nbOfThreads);
-//                generateCounterexample();
                 deadlocks += nbOfDeadlocks;
-//                for (SpecificationState ss : statesByID.values()) {
-//                    System.out.print("State " + ss.id);
-//                    int i = 0;
-//                    for (AvatarBlock block : spec.getListOfBlocks()) {
-//                        if (ss.blocks != null) {
-//                        System.out.print("\t" + block.getName() + "." + block.getStateMachine().allStates[ss.blocks[i].values[0]].getName());
-//                        }
-//                        i++;
-//                    }
-//                    System.out.println("\t" + ss.property);
-//                }
                 resetModelChecking();
                 if (!stoppedBeforeEnd) {
                     safety.setComputed();
@@ -891,30 +878,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         nbOfCurrentComputations = 0;
     }
     
-    private void initExpressionSolvers() {
-        AvatarTransition at;
+    private void initExpressionSolvers() {        
+        spec.generateAllExpressionSolvers();
         
-        for (AvatarBlock block : spec.getListOfBlocks()) {
-            AvatarStateMachine asm = block.getStateMachine();
-
-            for (AvatarStateMachineElement elt : asm.getListOfElements()) {
-                if (elt instanceof AvatarTransition) {
-                    at = (AvatarTransition) elt;
-                    if (at.isGuarded()) {
-                        at.buildGuardSolver();
-                    }
-                    for (AvatarAction aa : at.getActions()) {
-                        if (aa instanceof AvatarActionAssignment) {
-                            ((AvatarActionAssignment) aa).buildActionSolver(block);
-                        }
-                    }
-                } else if (elt instanceof AvatarActionOnSignal) {
-                    ((AvatarActionOnSignal) elt).buildActionSolver(block);
-                }
-            }
-        }
-        
-        //To have all the leadsTo functionalities allStates in stateMachines must be filled with states
+        //To have all the safety functionalities allStates in stateMachines must be filled with states
         if (studySafety && safeties != null) {
             for (SafetyProperty sp : safeties) {
                sp.linkSolverStates();
