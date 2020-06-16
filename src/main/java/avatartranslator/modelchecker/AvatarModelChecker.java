@@ -594,7 +594,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 //        
 //        prepareTransitionsOfState(initialState);
         blockValues = initialState.getBlockValues();
-        initialState.distance = 0;
+//        initialState.distance = 0;
 
         //TraceManager.addDev("initialState=" + initialState.toString() + "\n nbOfTransitions" + initialState.transitions.size());
         initialState.computeHash(blockValues);
@@ -657,7 +657,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
         // initialState's transitions and blocks must be already initialized
         blockValues = initialState.getBlockValues();
-        initialState.distance = 0;
+//        initialState.distance = 0;
 
         //TraceManager.addDev("initialState=" + initialState.toString() + "\n nbOfTransitions" + initialState.transitions.size());
         initialState.computeHash(blockValues);
@@ -1108,7 +1108,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 //statesByID.put(newState.id, newState);
 
                 link.destinationState = newState;
-                newState.distance = _ss.distance + 1;
+//                newState.distance = _ss.distance + 1;
                 
                 if (!studySafety) {
                     pendingStates.add(newState);
@@ -1210,7 +1210,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                     actionOnProperty(newState, 0, similar, _ss);
                 } else {
                     link.destinationState = newState;
-                    newState.distance = _ss.distance + 1;
+//                    newState.distance = _ss.distance + 1;
                     if (!studySafety) {
                         pendingStates.add(newState);
                     } else {
@@ -1295,7 +1295,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 	actionOnProperty(newState, 0, similar, _ss);
                 } else {
                     link.destinationState = newState;
-                    newState.distance = _ss.distance + 1;
+//                    newState.distance = _ss.distance + 1;
                     if (!studySafety) {
                         pendingStates.add(newState);
                     } else {
@@ -2388,9 +2388,9 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
     private boolean stateIsReachableFromState(SpecificationState start, SpecificationState arrival) {
         Set<Long> visited= new HashSet<Long>();
-        if (start.distance > arrival.distance) {
-            return false;
-        }
+//        if (start.distance > arrival.distance) {
+//            return false;
+//        }
         return stateIsReachableFromStateRec(start, arrival, visited);
     }
     
