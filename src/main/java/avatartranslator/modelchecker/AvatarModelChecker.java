@@ -112,6 +112,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     
     //Debug counterexample
     private boolean counterexample;
+    private boolean counterTraceAUT;
     private CounterexampleTrace counterTrace;
     public Map<Integer, CounterexampleTraceState> traceStates;
     private StringBuilder counterTraceReport;
@@ -346,10 +347,11 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         return false;
     }
     
-    public void setCounterExampleTrace(boolean counterexample) {
+    public void setCounterExampleTrace(boolean counterexample, boolean counterTraceAUT) {
         this.counterexample = counterexample;
         if (counterexample) {
             counterTraceReport = new StringBuilder();
+            this.counterTraceAUT = counterTraceAUT;
         }
     }
     
@@ -358,6 +360,13 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             return "";
         }
         return counterTraceReport.toString();
+    }
+    
+    public List<String> getAUTTraces() {
+        if (counterTrace == null) {
+            return null;
+        }
+        return counterTrace.getAUTTrace();
     }
 
     public void setComputeRG(boolean _rg) {
@@ -398,6 +407,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         }
         
         initModelChecking();
+        
+        initCounterexample();
                 
         stateLimitRG = false;
         timeLimitRG = false;
@@ -450,7 +461,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                     ignoreEmptyTransitions = false;
                     ignoreConcurrenceBetweenInternalActions = ignoreConcurrence;
                 }
-                initCounterexample();
+                resetCounterexample();
                 startModelChecking(nbOfThreads);
                 generateCounterexample();
                 if (safety.safetyType == SafetyProperty.LEADS_TO) {
@@ -461,7 +472,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                     for (SpecificationState state : safetyLeadStates.values()) {
                         deadlocks += nbOfDeadlocks;
                         resetModelChecking();
-                        initCounterexample();
+                        resetCounterexample();
                         startModelChecking(state, nbOfThreads);
                         if (safety.result == false) {
                             generateCounterexample();
@@ -497,7 +508,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 deadlockStop = true;
                 counterexample = genTrace;
                 ignoreConcurrenceBetweenInternalActions = true;
-                initCounterexample();
+                resetCounterexample();
                 startModelChecking(nbOfThreads);
                 generateCounterexample();
                 deadlocks = nbOfDeadlocks;
@@ -918,6 +929,13 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         }
     }
     
+    private void resetCounterexample() {
+        if (counterexample) {
+            counterTrace.reset();
+            traceStates =  Collections.synchronizedMap(new HashMap<Integer, CounterexampleTraceState>());
+        }
+    }
+    
     
     private void generateCounterexample() {
         if (counterexample && counterTrace.hasCounterexample()) {
@@ -928,6 +946,9 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             } else if (deadlockStop) {
                 counterTraceReport.append("Trace for NO Deadlocks\n");
                 counterTraceReport.append(counterTrace.generateSimpleTrace(states) + "\n\n");
+            }
+            if (counterTraceAUT) {
+                counterTrace.generateTraceAUT(states);
             }
         }
     }

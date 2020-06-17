@@ -1,5 +1,6 @@
 package avatartranslator.modelchecker;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -12,12 +13,14 @@ public class CounterexampleTrace {
     private LinkedList<CounterexampleTraceState> trace;
     private CounterexampleTraceState counterexampleState;
     private AvatarSpecification spec;
+    private List<String> autTraces;
 
     
     public CounterexampleTrace(AvatarSpecification spec) {
         this.trace = null;
         this.counterexampleState = null;
         this.spec = spec;
+        this.autTraces = null;
     }
     
     
@@ -28,6 +31,24 @@ public class CounterexampleTrace {
     
     public boolean hasCounterexample() {
         return counterexampleState != null;
+    }
+    
+    
+    public void reset() {
+        this.trace = null;
+        this.counterexampleState = null;
+    }
+    
+    
+    public List<String> getAUTTrace() {
+        return autTraces;
+    }
+    
+    
+    public void resetAUTTrace() {
+        if (autTraces != null) {
+            autTraces.clear();
+        }
     }
     
     
@@ -134,6 +155,53 @@ public class CounterexampleTrace {
             id++;
         }
         return s.toString();
+    }
+    
+    public void generateTraceAUT(Map<Integer, SpecificationState> states) {
+        if (trace == null) {
+            return;
+        }
+        
+        if (autTraces == null) {
+            autTraces = new ArrayList<String>();
+        }
+        
+        List<AvatarBlock> blocks = spec.getListOfBlocks();
+        
+        for (AvatarBlock block : blocks) {
+            if (block.getStateMachine().allStates == null) {
+                return;
+            }
+        }
+
+        SpecificationState state = null;
+        
+        StringBuilder s = new StringBuilder();
+
+        int nstates = 0;
+        int counterex = counterexampleState.hash;
+
+        for (CounterexampleTraceState cs : trace) {
+            if (state != null) {
+                for (SpecificationLink sl : state.nexts) {
+                    if (sl.destinationState.hashValue == cs.hash) {
+                        s.append("(" + sl.originState.id + ",\"" + sl.action + "\"," + sl.destinationState.id + ")\n");
+                        break;
+                    }
+                }
+            }
+            state = states.get(cs.hash);
+            if (cs.hash == counterex) {
+                nstates++;
+            }
+        }
+               
+        nstates = trace.size() - nstates + 1;
+        
+        s.insert(0 ,"des(0," + (trace.size() - 1) + "," + nstates + ")\n");
+        
+        
+        autTraces.add(s.toString());
     }
 
 }

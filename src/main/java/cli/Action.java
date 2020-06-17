@@ -910,7 +910,7 @@ public class Action extends Command {
                         case "-v":
                             if (i != commands.length - 1) {
                                 counterPath = commands[++i];
-                                amc.setCounterExampleTrace(true);
+                                amc.setCounterExampleTrace(true, false);
                                 counterTraces = true;
                             } else {
                                 return Interpreter.BAD;

@@ -63,6 +63,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.TimerTask;
@@ -727,7 +728,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             amc.setIgnoreInternalStates(ignoreInternalStatesSelected);
             amc.setCheckNoDeadlocks(checkNoDeadSelected);
             amc.setReinitAnalysis(checkReinitSelected);
-            amc.setCounterExampleTrace(generateCountertraceSelected);
+            amc.setCounterExampleTrace(generateCountertraceSelected, false);
 
             // Reachability
             int res;
@@ -911,6 +912,14 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
                     jta.append("\nCounterexample trace saved in " + autfile + "\n");
                 } catch (Exception e) {
                     jta.append("\nCounterexample trace could not be saved in " + autfile + "\n");
+                }
+                
+                List<String> autTraces = amc.getAUTTraces();
+                if (autTraces != null) {
+                    for (String tr : autTraces) {
+                        System.out.println(tr + "\n");
+                        mgui.showAUTFromString("Last RG", tr);
+                    }
                 }
             }
 
