@@ -91,6 +91,7 @@ public class Action extends Command {
     private final static String DIPLO_FORMAL_VERIFICATION = "diplodocus-formal-verification";
     private final static String DIPLO_ONETRACE_SIMULATION = "diplodocus-onetrace-simulation";
     private final static String DIPLO_GENERATE_TML = "diplodocus-generate-tml";
+    private final static String DIPLO_GENERATE_XML = "diplodocus-generate-xml";
     private final static String DIPLO_UPPAAL = "diplodocus-uppaal";
     private final static String DIPLO_REMOVE_NOC = "diplodocus-remove-noc";
 
@@ -605,7 +606,7 @@ public class Action extends Command {
                 if (map == null) {
                     tmlm = interpreter.mgui.gtm.getTMLModeling();
                     if (tmlm == null) {
-                        return "No model for simulation";
+                        return "No model for generation";
                     }
                 }
 
@@ -614,6 +615,53 @@ public class Action extends Command {
                     return "TML generation failed";
                 } else {
                     return "TML spec generated in: " + tmp;
+                }
+
+                //}
+
+                //return null;
+            }
+        };
+
+        // Diplodocus generate XML
+        Command diplodocusGenerateXML = new Command() {
+            public String getCommand() {
+                return DIPLO_GENERATE_XML;
+            }
+
+            public String getShortCommand() {
+                return "dgxml";
+            }
+
+            public String getDescription() {
+                return "Generate the XML of a diplodocus model.\n<variable name>: variable in which the " +
+                        "XML specification is saved";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                String[] commands = command.split(" ");
+                if (commands.length < 1) {
+                    return Interpreter.BAD;
+                }
+
+                String varName = commands[0];
+
+                TMLMapping map = interpreter.mgui.gtm.getTMLMapping();
+
+                if (map == null) {
+                    return "No model for generation";
+                }
+
+                String tmp = map.toXML();
+                if (tmp == null) {
+                    return "XML generation failed";
+                } else {
+                    interpreter.addVariable(varName, tmp);
+                    return null;
                 }
 
                 //}
@@ -666,7 +714,7 @@ public class Action extends Command {
             }
         };
 
-        // Diplodocus generate TML
+        // Diplodocus remove NoC
         Command diplodocusRemoveNoC = new Command() {
             public String getCommand() {
                 return DIPLO_REMOVE_NOC;
@@ -1125,6 +1173,7 @@ public class Action extends Command {
         addAndSortSubcommand(diplodocusFormalVerification);
         addAndSortSubcommand(diplodocusOneTraceSimulation);
         addAndSortSubcommand(diplodocusGenerateTML);
+        addAndSortSubcommand(diplodocusGenerateXML);
         addAndSortSubcommand(diplodocusUPPAAL);
         addAndSortSubcommand(diplodocusRemoveNoC);
         addAndSortSubcommand(movePanelToTheLeftPanel);

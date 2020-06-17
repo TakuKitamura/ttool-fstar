@@ -303,7 +303,7 @@ public class PluginAction extends Command {
         // execute raw command
         Command executeRawCommand = new Command() {
             public String getCommand() {
-                return EXECUTE_COMMAND_IN_PLUGIN;
+                return EXECUTE_RAW_COMMAND_IN_PLUGIN;
             }
 
             public String getShortCommand() {
@@ -311,8 +311,10 @@ public class PluginAction extends Command {
             }
 
             public String getDescription() {
-                return "Execute a command. execraw <pluginname> <command>  [-ret variable for return value (if applicable)] [arguments in one " +
-                        "string] ";
+                return "Execute a command. execraw <pluginname> <command>  [-ret variable for return value (if applicable)]\n\t <all arguments in " +
+                        "one" +
+                        " " +
+                        "string> ";
 
             }
 

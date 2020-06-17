@@ -1650,7 +1650,7 @@ public static void setDefaultWidthS(String defaultWith) {
 
 \end{verbatim}
 
-The "exec" sub command of the "plugin" command can be used to execute custom functions. "exec" takes the following arguments:
+The \textbf{exec} sub command of the "plugin" command can be used to execute custom functions. "exec" takes the following arguments:
 \begin{itemize}
 \item plugin name
 \item method name
@@ -1672,5 +1672,9 @@ The following example shows how to provide an argument to a custom command.
 1> plugin exec CustomizerGraphicalComponent.jar setDefaultWidth 200
 \end{verbatim}
 
-
+The \textbf{exec-raw} command works similarly apart from the fact that all arguments are given as input to the plugin as one string. For instance, a commane line like:
+\begin{verbatim}
+1> plugin exec CustomizerGraphicalComponent.jar setDefaultWidthS 100 200 300
+\end{verbatim}
+Will result in calling setDefaultWidthS with the String "100 200 300" and not with 3 String arguments ("100", "200", "300") just like for the \textbf{exec} command.  
 \end{document}

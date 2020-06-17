@@ -156,6 +156,7 @@ public class CustomizerGraphicalComponent {
     }
 
     public static void setDefaultWidthS(String defaultWith) {
+        System.out.println("default width=" + defaultWidth);
         try {
             DEFAULT_WIDTH = Integer.decode(defaultWith);;
         } catch (Exception e) {
