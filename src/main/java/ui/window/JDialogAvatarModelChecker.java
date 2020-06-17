@@ -1081,7 +1081,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             }
         }
         
-        countertrace.setEnabled(safety.isSelected());
+        countertrace.setEnabled(safety.isSelected() || noDeadlocks.isSelected());
         countertraceField.setEnabled(countertrace.isSelected());
         generateCountertraceSelected = countertrace.isSelected();
         
