@@ -83,7 +83,7 @@ public class Action extends Command {
     private final static String QUIT = "quit";
 
     private final static String NEW_DESIGN = "new-design";
-    private final static String REMOVE_CURRENT_TAB = "remove-current-tab";
+    private final static String REMOVE_CURRENT_TAB = "remove-cufrrent-tab";
 
 
     private final static String CHECKSYNTAX = "check-syntax";
