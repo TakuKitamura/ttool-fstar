@@ -38,15 +38,17 @@
 
 package ui.atd;
 
+import myutil.TraceManager;
 import ui.CDElement;
 import ui.TGComponentManager;
+import ui.TGConnectingPoint;
 import ui.TGConnectingPointWidthHeight;
 
 /**
  * Class ATDCountermeasureConnectingPoint
  * Definition of connecting points on which countermeasures connectors can be connected
  * Creation: 06/06/2017
- * @version 1.0 06/06/2017
+ * @version 1.1 18/06/2020
  * @author Ludovic APVRILLE
  */
 public class ATDCountermeasureConnectingPoint extends  TGConnectingPointWidthHeight {
@@ -58,5 +60,25 @@ public class ATDCountermeasureConnectingPoint extends  TGConnectingPointWidthHei
     @Override
     public boolean isCompatibleWith(int type) {
         return type == TGComponentManager.ATD_COUNTERMEASURE_CONNECTOR;
+    }
+
+    public boolean isCompatibleWith(int type, TGConnectingPoint outPoint) {
+        TraceManager.addDev("Is compatible with type=" + type);
+        if (outPoint == null) {
+            TraceManager.addDev("Null outpoint");
+        }
+
+        if (outPoint != null) {
+            TraceManager.addDev("Instances out: " + outPoint.getFather() + " new: " + getFather());
+            if ((outPoint.getFather() instanceof ATDCountermeasure) && (getFather() instanceof ATDCountermeasure)) {
+                return false;
+            }
+
+            if ((outPoint.getFather() instanceof ATDAttack) && (getFather() instanceof ATDAttack)) {
+                return false;
+            }
+
+        }
+        return isCompatibleWith(type);
     }
 }
