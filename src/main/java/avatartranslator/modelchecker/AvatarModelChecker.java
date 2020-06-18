@@ -362,7 +362,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         return counterTraceReport.toString();
     }
     
-    public List<String> getAUTTraces() {
+    public List<CounterexampleQueryReport> getAUTTraces() {
         if (counterTrace == null) {
             return null;
         }
@@ -951,7 +951,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 if (studySafety) {
                     counterTrace.generateTraceAUT(safety.getRawProperty(), states);
                 } else if (deadlockStop) {
-                    counterTrace.generateTraceAUT("No Deadlocks", states);
+                    counterTrace.generateTraceAUT("No Deadlocks?", states);
                 }
             }
         }

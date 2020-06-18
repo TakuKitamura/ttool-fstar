@@ -8,13 +8,13 @@ import java.util.Map;
 
 import avatartranslator.AvatarBlock;
 import avatartranslator.AvatarSpecification;
-import avatartranslator.AvatarStateMachine;
+
 
 public class CounterexampleTrace {
     private LinkedList<CounterexampleTraceState> trace;
     private CounterexampleTraceState counterexampleState;
     private AvatarSpecification spec;
-    private List<String> autTraces;
+    private List<CounterexampleQueryReport> autTraces;
 
     
     public CounterexampleTrace(AvatarSpecification spec) {
@@ -41,7 +41,7 @@ public class CounterexampleTrace {
     }
     
     
-    public List<String> getAUTTrace() {
+    public List<CounterexampleQueryReport> getAUTTrace() {
         return autTraces;
     }
     
@@ -158,13 +158,13 @@ public class CounterexampleTrace {
         return s.toString();
     }
     
-    public void generateTraceAUT(String name, Map<Integer, SpecificationState> states) {
+    public void generateTraceAUT(String query, Map<Integer, SpecificationState> states) {
         if (trace == null) {
             return;
         }
         
         if (autTraces == null) {
-            autTraces = new ArrayList<String>();
+            autTraces = new ArrayList<CounterexampleQueryReport>();
         }
         
         List<AvatarBlock> blocks = spec.getListOfBlocks();
@@ -200,8 +200,8 @@ public class CounterexampleTrace {
         
         s.insert(0 ,"des(0," + (trace.size() - 1) + "," + statesID.size() + ")\n");
         
-        
-        autTraces.add(s.toString());
+        CounterexampleQueryReport cr = new CounterexampleQueryReport(null, query, s.toString());
+        autTraces.add(cr);
     }
 
 }
