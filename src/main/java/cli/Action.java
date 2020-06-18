@@ -853,7 +853,8 @@ public class Action extends Command {
                     + "-d\tno deadlocks verification\n"
                     + "-n NUM\tmaximum states created (Only for a non verification study)\n"
                     + "-t NUM\tmaximum time (ms) (Only for a non verification study)\n"
-                    + "-c\tconsider full concurrency between actions";
+                    + "-c\tconsider full concurrency between actions\n"
+                    + "-v FILE\tsave counterexample traces for pragmas in FILE";
             }
 
             public String getExample() {
@@ -874,6 +875,7 @@ public class Action extends Command {
 
                 //String graphPath = commands[commands.length - 1];
                 String graphPath = "";
+                String counterPath = "";
 
                 AvatarSpecification avspec = interpreter.mgui.gtm.getAvatarSpecification();
                 if(avspec == null) {
@@ -886,6 +888,7 @@ public class Action extends Command {
                 amc.setIgnoreInternalStates(true);
                 amc.setComputeRG(false);
                 boolean rgGraph = false;
+                boolean counterTraces = false;
                 boolean reachabilityAnalysis = false;
                 boolean livenessAnalysis = false;
                 boolean safetyAnalysis = false;
@@ -985,6 +988,15 @@ public class Action extends Command {
                             //concurrency
                             amc.setIgnoreConcurrenceBetweenInternalActions(false);
                             break;
+                        case "-v":
+                            if (i != commands.length - 1) {
+                                counterPath = commands[++i];
+                                amc.setCounterExampleTrace(true, false);
+                                counterTraces = true;
+                            } else {
+                                return Interpreter.BAD;
+                            }
+                            break;
                         default:
                             return Interpreter.BAD;
                     }
@@ -1010,6 +1022,28 @@ public class Action extends Command {
                 if (safetyAnalysis) {
                     interpreter.print("Safety Analysis:\n" + amc.safetyToString());
                 }
+                
+                
+                DateFormat dateFormat = new SimpleDateFormat("_yyyyMMdd_HHmmss");
+                Date date = new Date();
+                String dateAndTime = dateFormat.format(date);
+                
+                if (counterTraces) {
+                    String trace = amc.getCounterTrace();
+                    
+                    String autfile;
+                    if (counterPath.indexOf("$") != -1) {
+                        autfile = Conversion.replaceAllChar(counterPath, '$', dateAndTime);
+                    } else {
+                        autfile = counterPath;
+                    }
+                    try {
+                        FileUtils.saveFile(autfile, trace);
+                        System.out.println("\nCounterexample trace saved in " + autfile + "\n");
+                    } catch (Exception e) {
+                        System.out.println("\nCounterexample trace could not be saved in " + autfile + "\n");
+                    }
+                }
 
                 // Saving graph
                 if (rgGraph) {
@@ -1024,9 +1058,6 @@ public class Action extends Command {
     
                     if (graphPath.indexOf("?") != -1) {
                         //System.out.println("Question mark found");
-                        DateFormat dateFormat = new SimpleDateFormat("_yyyyMMdd_HHmmss");
-                        Date date = new Date();
-                        String dateAndTime = dateFormat.format(date);
                         autfile = Conversion.replaceAllChar(graphPath, '?', dateAndTime);
                         //System.out.println("graphpath=" + graphPath);
                     } else {

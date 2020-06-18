@@ -343,6 +343,17 @@ public class AvatarExpressionSolver {
                 isNot = true;
                 expression = expression.substring(4, expression.length() - 1).trim();
             }
+        } else if (expression.startsWith("!(")) {
+            int closingIndex = getClosingBracket(2);
+            
+            if (closingIndex == -1) {
+                return false;
+            }
+            if (closingIndex == expression.length() - 1) {
+                //not(expression)
+                isNot = true;
+                expression = expression.substring(2, expression.length() - 1).trim();
+            }
         }
         return true;
     }
@@ -709,7 +720,7 @@ public class AvatarExpressionSolver {
             right.linkStates();
         }
     }
-    
+
     private boolean checkIntegrity() {
         int optype, optypel, optyper;
         boolean returnVal;

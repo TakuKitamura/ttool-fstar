@@ -66,13 +66,13 @@ public class SpecificationState implements Comparable<SpecificationState>  {
     public boolean property; //trace the property check at this state
     public boolean elaborated; //true only if the elaboration has been completed
     public ArrayList<SpecificationTransition> transitions;
-    public long distance; //max #steps to be reached from S0
+//    public long distance; //max #steps to be reached from S0
 
     public SpecificationState() {
         hashComputed = false;
         property = false;
         elaborated = false;
-        distance = 0;
+//        distance = 0;
     }
 
     // blocks must not be null

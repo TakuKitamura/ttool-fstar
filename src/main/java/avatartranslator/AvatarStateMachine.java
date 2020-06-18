@@ -427,29 +427,65 @@ public class AvatarStateMachine extends AvatarElement {
                 previous = getPreviousElementOf(elt);
                 next = elt.getNext(0);
                 toRemove.add(elt);
+//
+//                // Creating elements
+//                AvatarState beforeRandom = new AvatarState("StateBeforeRandom__" + elt.getName() + "__" + id, elt.getReferenceObject());
+//                AvatarState randomState = new AvatarState("StateForRandom__" + elt.getName() + "__" + id, elt.getReferenceObject());
+//                
+//                for (int i = Integer.parseInt(random.getMinValue()); i <= Integer.parseInt(random.getMaxValue()); i++) {
+//                    AvatarTransition at1 = new AvatarTransition(_block, "TransitionForRandom__" + random.getVariable() + "=" + i + "__" + elt.getName() + "__" + id, elt.getReferenceObject());
+//                    at1.addAction(random.getVariable() + "=" + i);
+//                    toAdd.add(at1);
+//                    beforeRandom.addNext(at1);
+//                    at1.addNext(randomState);
+//                }
+//                
+//                // Adding elements
+//                toAdd.add(beforeRandom);
+//                toAdd.add(randomState);
+//
+//                // Linking elements
+//                if (previous != null) {
+//                    previous.removeAllNexts();
+//                    previous.addNext(beforeRandom);
+//                }
+//                randomState.addNext(next);
+//
+//                id++;
+//
+//            }
 
                 // Creating elements
-                AvatarState beforeRandom = new AvatarState("StateBeforeRandom__" + elt.getName() + "__" + id, elt.getReferenceObject());
+                AvatarTransition at1 = new AvatarTransition(_block, "Transition1ForRandom__ " + elt.getName() + "__" + id, elt.getReferenceObject());
+                at1.addAction(random.getVariable() + "=" + random.getMinValue());
                 AvatarState randomState = new AvatarState("StateForRandom__" + elt.getName() + "__" + id, elt.getReferenceObject());
-                
-                for (int i = Integer.parseInt(random.getMinValue()); i <= Integer.parseInt(random.getMaxValue()); i++) {
-                    AvatarTransition at1 = new AvatarTransition(_block, "TransitionForRandom__" + random.getVariable() + "=" + i + "__" + elt.getName() + "__" + id, elt.getReferenceObject());
-                    at1.addAction(random.getVariable() + "=" + i);
-                    toAdd.add(at1);
-                    beforeRandom.addNext(at1);
-                    at1.addNext(randomState);
-                }
-                
+                AvatarState beforeRandom = new AvatarState("StateBeforeRandom__" + elt.getName() + "__" + id, elt.getReferenceObject());
+                AvatarTransition at2 = new AvatarTransition(_block, "Transition2ForRandom__" + elt.getName() + "__" + id, elt.getReferenceObject());
+                at2.setGuard("[" + random.getVariable() + " < " + random.getMaxValue() + "]");
+                at2.addAction(random.getVariable() + "=" + random.getVariable() + " + 1");
+                AvatarTransition at3 = new AvatarTransition(_block, "Transition3ForRandom__ " + elt.getName() + "__" + id, elt.getReferenceObject());
+                AvatarState afterRandom = new AvatarState("StateAfterRandom__" + elt.getName() + "__" + id, elt.getReferenceObject());
+
                 // Adding elements
-                toAdd.add(beforeRandom);
+                toAdd.add(at1);
                 toAdd.add(randomState);
+                toAdd.add(beforeRandom);
+                toAdd.add(at2);
+                toAdd.add(at3);
+                toAdd.add(afterRandom);
 
                 // Linking elements
                 if (previous != null) {
                     previous.removeAllNexts();
                     previous.addNext(beforeRandom);
                 }
-                randomState.addNext(next);
+                beforeRandom.addNext(at1);
+                at1.addNext(randomState);
+                randomState.addNext(at2);
+                randomState.addNext(at3);
+                at2.addNext(randomState);
+                at3.addNext(afterRandom);
+                afterRandom.addNext(next);
 
                 id++;
 

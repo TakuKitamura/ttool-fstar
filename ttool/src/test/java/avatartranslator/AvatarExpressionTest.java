@@ -111,7 +111,7 @@ public class AvatarExpressionTest {
         assertTrue(e3.buildExpression());
         AvatarExpressionSolver e4 = new AvatarExpressionSolver("1 && 0 >= 1 || 0");
         assertFalse(e4.buildExpression());
-        AvatarExpressionSolver e5 = new AvatarExpressionSolver("true and not(false) == not(false or false)");
+        AvatarExpressionSolver e5 = new AvatarExpressionSolver("true and not(false) == !(false or false)");
         assertTrue(e5.buildExpression());
         AvatarExpressionSolver e6 = new AvatarExpressionSolver("10 -Cabin.match");
         assertFalse(e6.buildExpression());
