@@ -1,6 +1,7 @@
 package avatartranslator.modelchecker;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -157,7 +158,7 @@ public class CounterexampleTrace {
         return s.toString();
     }
     
-    public void generateTraceAUT(Map<Integer, SpecificationState> states) {
+    public void generateTraceAUT(String name, Map<Integer, SpecificationState> states) {
         if (trace == null) {
             return;
         }
@@ -167,6 +168,7 @@ public class CounterexampleTrace {
         }
         
         List<AvatarBlock> blocks = spec.getListOfBlocks();
+        Map<Long, Integer> statesID = new HashMap<>();
         
         for (AvatarBlock block : blocks) {
             if (block.getStateMachine().allStates == null) {
@@ -178,27 +180,25 @@ public class CounterexampleTrace {
         
         StringBuilder s = new StringBuilder();
 
-        int nstates = 0;
-        int counterex = counterexampleState.hash;
+        int id = 0;
 
         for (CounterexampleTraceState cs : trace) {
+            if (!statesID.containsKey(states.get(cs.hash).id)) {
+                statesID.put(states.get(cs.hash).id, id++);
+            }
             if (state != null) {
                 for (SpecificationLink sl : state.nexts) {
                     if (sl.destinationState.hashValue == cs.hash) {
-                        s.append("(" + sl.originState.id + ",\"" + sl.action + "\"," + sl.destinationState.id + ")\n");
+                        s.append("(" + statesID.get(sl.originState.id) + ",\"" + sl.action + "\"," + statesID.get(sl.destinationState.id) + ")\n");
                         break;
                     }
                 }
             }
             state = states.get(cs.hash);
-            if (cs.hash == counterex) {
-                nstates++;
-            }
         }
-               
-        nstates = trace.size() - nstates + 1;
+              
         
-        s.insert(0 ,"des(0," + (trace.size() - 1) + "," + nstates + ")\n");
+        s.insert(0 ,"des(0," + (trace.size() - 1) + "," + statesID.size() + ")\n");
         
         
         autTraces.add(s.toString());

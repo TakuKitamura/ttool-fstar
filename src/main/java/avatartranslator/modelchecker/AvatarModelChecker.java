@@ -948,7 +948,11 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 counterTraceReport.append(counterTrace.generateSimpleTrace(states) + "\n\n");
             }
             if (counterTraceAUT) {
-                counterTrace.generateTraceAUT(states);
+                if (studySafety) {
+                    counterTrace.generateTraceAUT(safety.getRawProperty(), states);
+                } else if (deadlockStop) {
+                    counterTrace.generateTraceAUT("No Deadlocks", states);
+                }
             }
         }
     }
