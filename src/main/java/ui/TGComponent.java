@@ -2012,18 +2012,18 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
       return null;
       }*/
 
-    public TGConnectingPoint getFreeTGConnectingPointAtAndCompatible(int x, int y, int type) {
+    /*public TGConnectingPoint getFreeTGConnectingPointAtAndCompatible(int x, int y, int type) {
         return getTopFather().getFromTopFreeTGConnectingPointAtAndCompatible(x, y, type);
-    }
+    }*/
 
     public TGConnectingPoint getFreeTGConnectingPointAtAndCompatible(int x, int y, int type, TGConnectingPoint outPoint) {
         return getTopFather().getFromTopFreeTGConnectingPointAtAndCompatible(x, y, type, outPoint);
     }
 
-    public TGConnectingPoint getFromTopFreeTGConnectingPointAtAndCompatible(int x, int y, int type) {
+    /*public TGConnectingPoint getFromTopFreeTGConnectingPointAtAndCompatible(int x, int y, int type) {
         //TraceManager.addDev("With null out");
         return getFromTopFreeTGConnectingPointAtAndCompatible(x, y, type, null);
-    }
+    }*/
 
     public TGConnectingPoint getFromTopFreeTGConnectingPointAtAndCompatible(int x, int y, int type, TGConnectingPoint outPoint) {
         //TraceManager.addDev("Getting TGConnecting point outPoint=");

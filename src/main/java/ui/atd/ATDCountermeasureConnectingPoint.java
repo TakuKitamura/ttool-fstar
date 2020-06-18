@@ -63,13 +63,10 @@ public class ATDCountermeasureConnectingPoint extends  TGConnectingPointWidthHei
     }
 
     public boolean isCompatibleWith(int type, TGConnectingPoint outPoint) {
-        TraceManager.addDev("Is compatible with type=" + type);
-        if (outPoint == null) {
-            TraceManager.addDev("Null outpoint");
-        }
+
 
         if (outPoint != null) {
-            TraceManager.addDev("Instances out: " + outPoint.getFather() + " new: " + getFather());
+            //TraceManager.addDev("Instances out: " + outPoint.getFather() + " new: " + getFather());
             if ((outPoint.getFather() instanceof ATDCountermeasure) && (getFather() instanceof ATDCountermeasure)) {
                 return false;
             }

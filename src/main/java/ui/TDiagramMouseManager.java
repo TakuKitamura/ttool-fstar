@@ -161,7 +161,7 @@ public class TDiagramMouseManager extends MouseAdapter {//implements MouseListen
                     TGConnectingPoint p1;
                     //TraceManager.addDev("Working on TGC=" + tgc);
                     if (tgc.getDefaultConnector() != -1) {
-                        p1 = tgc.getFreeTGConnectingPointAtAndCompatible(e.getX(), e.getY(), tgc.getDefaultConnector());
+                        p1 = tgc.getFreeTGConnectingPointAtAndCompatible(e.getX(), e.getY(), tgc.getDefaultConnector(), null);
                         if ((p1 != null) && (p1.isOut())) {
                             // add connector
                             actionMade = true;
