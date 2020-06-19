@@ -120,6 +120,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -1851,8 +1853,12 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     }
 
     public void drawAvatarSpecification(AvatarSpecification av) {
+        DateFormat dateFormat = new SimpleDateFormat("_yyyyMMdd_HHmmss");
+        Date date = new Date();
+        String dateAndTime = dateFormat.format(date);
+        String tabName = "GeneratedDesign_" + dateAndTime;
         TraceManager.addDev("Draw Spec 1");
-        int index = createAvatarDesign("GeneratedDesign");
+        int index = createAvatarDesign(tabName);
         TraceManager.addDev("Draw Spec 2");
         AvatarDesignPanel adp = (AvatarDesignPanel) (tabs.elementAt(index));
         TraceManager.addDev("Draw Spec 3");
@@ -5045,9 +5051,14 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         }
     }
 
+
     public void avatarModelChecker() {
         TraceManager.addDev("Execute avatar model checker");
-        gtm.generateAvatarFromTML(true, false);
+        TURTLEPanel tdp = getCurrentTURTLEPanel();
+        if (tdp instanceof TMLComponentDesignPanel) {
+            gtm.generateFullAvatarFromTML();
+        }
+
         if (gtm.getAvatarSpecification() == null) {
             TraceManager.addDev("Null avatar spec");
             return;

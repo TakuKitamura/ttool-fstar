@@ -66,6 +66,7 @@ import tmltranslator.*;
 import tmltranslator.modelcompiler.TMLModelCompiler;
 import tmltranslator.toautomata.TML2AUT;
 import tmltranslator.toautomata.TML2AUTviaLOTOS;
+import tmltranslator.toavatar.FullTML2Avatar;
 import tmltranslator.toavatarsec.TML2Avatar;
 import tmltranslator.tosystemc.TML2SystemC;
 import tmltranslator.touppaal.RelationTMLUPPAAL;
@@ -1892,6 +1893,21 @@ public class GTURTLEModeling {
         TraceManager.addDev("Mapping finished");
     }
 
+    public void generateFullAvatarFromTML() {
+        if (tmlm != null && tmap == null) {
+            tmap = tmlm.getDefaultMapping();
+        }
+
+
+        FullTML2Avatar t2a = new FullTML2Avatar(tmap);
+        TraceManager.addDev("Avatar spec generation");
+        avatarspec = t2a.generateAvatarSpec("1");
+
+        if (mgui.isExperimentalOn()) {
+            mgui.drawAvatarSpecification(avatarspec);
+        }
+    }
+
     public void generateAvatarFromTML(boolean mc, boolean security) {
         TraceManager.addDev("Generating Avatar from TML");
         if (tmlm != null && tmap == null) {
@@ -1904,6 +1920,9 @@ public class GTURTLEModeling {
             TraceManager.addDev("Avatar spec generation");
             avatarspec = t2a.generateAvatarSpec("1");
             TraceManager.addDev("Avatar spec generation: done");
+            if (mgui.isExperimentalOn()) {
+                mgui.drawAvatarSpecification(avatarspec);
+            }
         }
     }
 
@@ -1926,7 +1945,8 @@ public class GTURTLEModeling {
             avatarspec = t2a.generateAvatarSpec(loopLimit);
 
             if (mgui.isExperimentalOn()) {
-                DateFormat dateFormat = new SimpleDateFormat("_yyyyMMdd_HHmmss");
+                mgui.drawAvatarSpecification(avatarspec);
+                /*DateFormat dateFormat = new SimpleDateFormat("_yyyyMMdd_HHmmss");
                 Date date = new Date();
                 String dateAndTime = dateFormat.format(date);
                 String tabName = "GeneratedDesign_" + dateAndTime;
@@ -1937,7 +1957,7 @@ public class GTURTLEModeling {
                     if (adp != null) {
                         drawPanel(avatarspec, adp);
                     }
-                }
+                }*/
             }
 
         } else if (avatarspec == null) {
