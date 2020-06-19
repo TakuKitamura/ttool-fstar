@@ -54,6 +54,8 @@ import java.util.ArrayList;
    * @author Ludovic APVRILLE
  */
 public class AvatarSpecification extends AvatarElement {
+
+    public final static int UPPAAL_MAX_INT = 32767;
     
 	public static String[] ops = {">", "<", "+", "-", "*", "/", "[", "]", "(", ")", ":", "=", "==", ",", "!", "?", "{", "}", "|", "&"};
     

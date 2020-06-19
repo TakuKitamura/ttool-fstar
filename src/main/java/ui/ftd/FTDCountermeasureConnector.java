@@ -87,27 +87,5 @@ public  class FTDCountermeasureConnector extends TGConnectorWithCommentConnectio
     public int getType() {
         return TGComponentManager.FTD_COUNTERMEASURE_CONNECTOR;
     }
-// Issue #31: Moved to upper class
-//    public void rescale(double scaleFactor){
-//        //
-//        int xx, yy;
-//
-//        for(int i=0; i<nbInternalTGComponent; i++) {
-//            xx = tgcomponent[i].getX();
-//            yy = tgcomponent[i].getY();
-//            //
-//            tgcomponent[i].dx = (tgcomponent[i].dx + xx) / oldScaleFactor * scaleFactor;
-//            tgcomponent[i].dy = (tgcomponent[i].dy + yy) / oldScaleFactor * scaleFactor;
-//            xx = (int)(tgcomponent[i].dx);
-//            tgcomponent[i].dx = tgcomponent[i].dx - xx;
-//            yy = (int)(tgcomponent[i].dy);
-//            tgcomponent[i].dy = tgcomponent[i].dy - yy;
-//
-//            tgcomponent[i].setCd(xx, yy);
-//
-//            //
-//        }
-//
-//        oldScaleFactor = scaleFactor;
-//    }
+
 }

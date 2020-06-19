@@ -1279,7 +1279,7 @@
 <MainCode value="}"/>
 <Optimized value="true" />
 <considerTimingOperators value="true" />
-<Validated value="" />
+<Validated value="Wallet;CoffeeMachine;TeaButton;CoffeeButton;" />
 <Ignored value="" />
 
 <CONNECTOR type="5002" id="695" >
@@ -1401,7 +1401,7 @@ E[] Wallet.nbOfCoins&gt;=1
 <extraparam>
 <blockType data="block" color="-4072719" />
 <CryptoBlock value="false" />
-<Attribute access="0" id="nbOfCoins" value="2" type="8" typeOther="" />
+<Attribute access="0" id="nbOfCoins" value="3" type="8" typeOther="" />
 <Attribute access="0" id="x" value="1" type="8" typeOther="" />
 <Attribute access="0" id="minUserDelay" value="50" type="8" typeOther="" />
 <Attribute access="0" id="maxUserDelay" value="70" type="8" typeOther="" />
@@ -1564,6 +1564,7 @@ E[] Wallet.nbOfCoins&gt;=1
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
 <extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
 <delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
@@ -1596,6 +1597,7 @@ E[] Wallet.nbOfCoins&gt;=1
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
 <extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
 <delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
@@ -1628,6 +1630,7 @@ E[] Wallet.nbOfCoins&gt;=1
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
 <extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
 <delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
@@ -1660,6 +1663,7 @@ E[] Wallet.nbOfCoins&gt;=1
 <afterMin value="mechanicalDelay" enabled="true"/>
 <afterMax value="" enabled="true"/>
 <extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
 <delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
@@ -1982,6 +1986,7 @@ E[] Wallet.nbOfCoins&gt;=1
 <afterMin value="mechanicalDelay" enabled="true"/>
 <afterMax value="" enabled="true"/>
 <extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
 <delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
@@ -2014,6 +2019,7 @@ E[] Wallet.nbOfCoins&gt;=1
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
 <extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
 <delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
@@ -2046,6 +2052,7 @@ E[] Wallet.nbOfCoins&gt;=1
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
 <extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
 <delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
@@ -2284,6 +2291,7 @@ E[] Wallet.nbOfCoins&gt;=1
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
 <extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
 <delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
@@ -2316,6 +2324,7 @@ E[] Wallet.nbOfCoins&gt;=1
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
 <extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
 <delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
@@ -2349,6 +2358,7 @@ E[] Wallet.nbOfCoins&gt;=1
 <afterMin value="coinDelay" enabled="true"/>
 <afterMax value="" enabled="true"/>
 <extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
 <delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
@@ -2381,6 +2391,7 @@ E[] Wallet.nbOfCoins&gt;=1
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
 <extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
 <delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="teaMinDelay" enabled="true"/>
 <computeMax value="teaMaxDelay" enabled="true"/>
@@ -2415,6 +2426,7 @@ E[] Wallet.nbOfCoins&gt;=1
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
 <extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
 <delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
@@ -2447,6 +2459,7 @@ E[] Wallet.nbOfCoins&gt;=1
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
 <extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
 <delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="coffeeMinDelay" enabled="true"/>
 <computeMax value="coffeeMaxDelay" enabled="true"/>
@@ -2481,6 +2494,7 @@ E[] Wallet.nbOfCoins&gt;=1
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
 <extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
 <delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
@@ -2513,6 +2527,7 @@ E[] Wallet.nbOfCoins&gt;=1
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
 <extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
 <delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
@@ -2545,6 +2560,7 @@ E[] Wallet.nbOfCoins&gt;=1
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
 <extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
 <delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
@@ -2578,6 +2594,7 @@ E[] Wallet.nbOfCoins&gt;=1
 <afterMin value="coinDelay" enabled="true"/>
 <afterMax value="" enabled="true"/>
 <extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
 <delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
@@ -2610,6 +2627,7 @@ E[] Wallet.nbOfCoins&gt;=1
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
 <extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
 <delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
@@ -2643,6 +2661,7 @@ E[] Wallet.nbOfCoins&gt;=1
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
 <extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
 <delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
@@ -2675,6 +2694,7 @@ E[] Wallet.nbOfCoins&gt;=1
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
 <extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
 <delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
@@ -2708,6 +2728,7 @@ E[] Wallet.nbOfCoins&gt;=1
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
 <extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
 <delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
@@ -2740,6 +2761,7 @@ E[] Wallet.nbOfCoins&gt;=1
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
 <extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
 <delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
@@ -3523,6 +3545,7 @@ E[] Wallet.nbOfCoins&gt;=1
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
 <extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
 <delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
@@ -3557,6 +3580,7 @@ E[] Wallet.nbOfCoins&gt;=1
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
 <extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
 <delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
@@ -3589,6 +3613,7 @@ E[] Wallet.nbOfCoins&gt;=1
 <afterMin value="minUserDelay" enabled="true"/>
 <afterMax value="maxUserDelay" enabled="true"/>
 <extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
 <delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
@@ -3623,6 +3648,7 @@ E[] Wallet.nbOfCoins&gt;=1
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
 <extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
 <delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>
@@ -3655,6 +3681,7 @@ E[] Wallet.nbOfCoins&gt;=1
 <afterMin value="" enabled="true"/>
 <afterMax value="" enabled="true"/>
 <extraDelay1 value="" enabled="true"/>
+<extraDelay2 value="" enabled="true"/>
 <delayDistributionLaw value="0" enabled="true"/>
 <computeMin value="" enabled="true"/>
 <computeMax value="" enabled="true"/>

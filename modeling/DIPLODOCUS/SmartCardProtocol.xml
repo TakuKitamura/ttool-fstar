@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<TURTLEGMODELING version="1.0beta" ANIMATE_INTERACTIVE_SIMULATION="true" ACTIVATE_PENALTIES="false" UPDATE_INFORMATION_DIPLO_SIM="false" ANIMATE_WITH_INFO_DIPLO_SIM="true" OPEN_DIAG_DIPLO_SIM="false" LAST_SELECTED_MAIN_TAB="1" LAST_SELECTED_SUB_TAB="0">
+<TURTLEGMODELING version="1.0beta" ANIMATE_INTERACTIVE_SIMULATION="true" ACTIVATE_PENALTIES="false" UPDATE_INFORMATION_DIPLO_SIM="false" ANIMATE_WITH_INFO_DIPLO_SIM="true" OPEN_DIAG_DIPLO_SIM="false" LAST_SELECTED_MAIN_TAB="3" LAST_SELECTED_SUB_TAB="0">
 
 <Modeling type="TML Component Design" nameTab="AppC" tabs="TML Component Task Diagram$Application$TCPIP$Timer$InterfaceDevice$SmartCard" >
 <TMLComponentTaskDiagramPanel name="TML Component Task Diagram" minX="0" maxX="2724" minY="0" maxY="916" channels="true" events="true" requests="true" zoom="1.0000000000000018" >

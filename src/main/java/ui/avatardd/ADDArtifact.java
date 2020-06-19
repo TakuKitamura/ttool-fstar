@@ -130,7 +130,7 @@ public class ADDArtifact extends TGCWithoutInternalComponent implements Swallowe
         g.drawLine(x+width-marginCran, y+space, x+width-marginCran, y+marginCran);
         g.drawLine(x+width-marginCran, y+marginCran, x + width-space, y+marginCran);
 
-        g.drawImage(scale(IconManager.img9), x + scale(width-marginFileX + 3), y + scale(space + 7), null);
+        //g.drawImage(scale(IconManager.img9), x + scale(width-marginFileX + 3), y + scale(space + 7), null);
 
         drawSingleString(g, value, x + textX , y + textY);
 

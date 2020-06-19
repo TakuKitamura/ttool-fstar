@@ -307,7 +307,7 @@ public class SysCAMSBlockDE extends TGCScalableWithInternalComponent implements 
 //		sb.append(getPeriod());
 //		sb.append("\" time=\"" + getTime());
 		sb.append("\" clockName=\"" + getClockName());
-		sb.append("\" clockSensitivityMethod\"" + getClockSensitivityMethod());
+		sb.append("\" clockSensitivityMethod=\"" + getClockSensitivityMethod());
 		sb.append("\" code=\"" + encode(getCode()));
 		sb.append("\" listStruct=\"" + splitParameters(getListStruct()));
 		sb.append("\" nameTemplate=\"" + getNameTemplate());

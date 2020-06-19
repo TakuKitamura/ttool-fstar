@@ -38,16 +38,36 @@
  * /**
  * Class CustomizerAvatarJavaCodeGeneration
  * Creation: 27/06/2017
- * @version 1.0 27/06/2017
+ * @version 1.1 12/06/2020
  * @author Ludovic APVRILLE
  * @see
  */
+
 
 import java.awt.*;
 import java.net.URL;
 import javax.swing.*;
      
 public class CustomizerGraphicalComponent {
+    private final static String[] CLI_COMMANDS =  {"getPanelClassName",
+            "getWidthS",
+            "getHeightS",
+            "setDefaultWidthS"};
+    private final static String[] CLI_PROTOTYPES =  {"getPanelClassName: returns a String",
+            "getWidthS: returns a String",
+            "getHeightS: returns a String",
+            "setDefaultWidthS <String defaultWidth>: returns void"};
+
+    private final static String[] CLI_HELP_COMMANDS = {
+            "returns the associated panel name of the component",
+            "returns the default width",
+            "returns the default height",
+            "makes it possible to set the default width"
+    };
+
+    private static int DEFAULT_WIDTH = 100;
+
+
     public static ImageIcon myIcon;
     
     public CustomizerGraphicalComponent() {
@@ -58,15 +78,43 @@ public class CustomizerGraphicalComponent {
 	return "CustomizerGraphicalComponent";
     }
 
+    public static String hasCommandLineInterface() {
+        return "CustomizerGraphicalComponent";
+    }
+
+    public static String getCommandsOfCommandLineInterface() {
+        StringBuffer sb = new StringBuffer("");
+        for(String s: CLI_COMMANDS) {
+            sb.append(s + " " );
+        }
+        return sb.toString();
+    }
+
+    public static String getHelpOnCommandLineInterfaceFunction(String command) {
+        int cpt = 0;
+
+        command = command.toLowerCase();
+        for(String s: CLI_COMMANDS) {
+            if (s.toLowerCase().compareTo(command) == 0) {
+                return CLI_PROTOTYPES[cpt] + ": " + CLI_HELP_COMMANDS[cpt];
+            }
+            cpt ++;
+        }
+        return null;
+
+    }
+
     public static String getPanelClassName() {
 	return "TMLArchiDiagramPanel";
     }
 
     public static ImageIcon getImageIcon() {
-	URL url = CustomizerGraphicalComponent.class.getResource("myicon.gif");
+	    URL url = CustomizerGraphicalComponent.class.getResource("myicon.gif");
+
+	    System.out.println("URL=" + url);
 
         if (url != null)  {
-	    myIcon = new ImageIcon(url);
+	        myIcon = new ImageIcon(url);
             return myIcon;
         } 
 	
@@ -86,12 +134,34 @@ public class CustomizerGraphicalComponent {
 	return "Plugin component";
     }
 
+
+    public static String getWidthS() {
+        return "100";
+    }
+
+    public static String getHeightS() {
+        return "50";
+    }
+
     public static int getWidth() {
 	return 100;
     }
     
     public static int getHeight() {
 	return 50;
+    }
+
+    public static void setDefaultWidth(int defaultWith) {
+        DEFAULT_WIDTH = defaultWith;
+    }
+
+    public static void setDefaultWidthS(String defaultWith) {
+        System.out.println("default width=" + defaultWidth);
+        try {
+            DEFAULT_WIDTH = Integer.decode(defaultWith);;
+        } catch (Exception e) {
+
+        }
     }
 
 
@@ -117,8 +187,8 @@ public class CustomizerGraphicalComponent {
 
     
     public int getWidth(Graphics g, String _value) {
-	int w = g.getFontMetrics ().stringWidth (_value);
-	return w + 20;	
+	    int w = g.getFontMetrics ().stringWidth (_value);
+	    return w + 20;
     }
 
     public int getHeight(Graphics g, String _value) {
@@ -126,23 +196,23 @@ public class CustomizerGraphicalComponent {
     }
     
     public void internalDrawing(Graphics g, int _x, int _y, int _width, int _height, String _value, String _diagramName) {
-	g.drawRect(_x, _y, _width, _height);
-	g.drawString(_value, _x+5, _y+20);
+	    g.drawRect(_x, _y, _width, _height);
+	    g.drawString(_value, _x+5, _y+20);
     }
 
     public boolean isOnMe(int _x, int _y, int _width, int _height, int _xP, int _yP) {
-	if ((_xP>_x) && (_xP<_x+_width) && (_yP>_y) && (_yP<_y+_height)) {
-	    return true;
-	}
+	    if ((_xP>_x) && (_xP<_x+_width) && (_yP>_y) && (_yP<_y+_height)) {
+	        return true;
+	    }
 	return false;
     }
 
     public String editOnDoubleClick(JFrame _frame, String _value) {
-	String s = (String)JOptionPane.showInputDialog(_frame, "My plugin component name",
+	    String s = (String)JOptionPane.showInputDialog(_frame, "My plugin component name",
 						       "setting value", JOptionPane.PLAIN_MESSAGE, myIcon,
                                                            null,
                                                            _value);
-	return s;
+	    return s;
     }
     
     public static void main(String[] args) {

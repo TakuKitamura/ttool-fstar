@@ -40,7 +40,6 @@
 package myutil;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -63,6 +62,7 @@ public class Plugin {
     private Class classAvatarCodeGenerator;
     private Class classDiplodocusCodeGenerator;
     private Class classGraphicalComponent;
+    private Class classCommandLineInterface;
 
 
     public Plugin(String _path, String _name, String _packageName) {
@@ -76,16 +76,26 @@ public class Plugin {
         return name;
     }
 
+    public String getPackageName() {
+        return packageName;
+    }
+
     public String getPath() {
         return path;
     }
 
     public boolean hasAvatarCodeGenerator() {
-        String ret = executeRetStringMethod(removeJar(name), "hasAvatarCodeGenerator");
-        if (ret != null) {
-            classAvatarCodeGenerator = getClass(ret);
-            return true;
+        String ret = null;
+        try {
+            ret = executeRetStringMethod(removeJar(name), "hasAvatarCodeGenerator");
+            if (ret != null) {
+                classAvatarCodeGenerator = getClass(ret);
+                return true;
+            }
+        } catch(Exception e) {
+            return false;
         }
+
 
         return false;
     }
@@ -105,9 +115,44 @@ public class Plugin {
         return desc;
     }
 
+    public boolean hasCommandLineInterface() {
+        String ret = executeRetStringMethod(removeJar(name), "hasCommandLineInterface");
+        if (ret != null) {
+            classCommandLineInterface = getClass(ret);
+            return true;
+        }
+
+        return false;
+    }
+
+    public String getCommandLineInterfaceFunctions() {
+        String ret = executeRetStringMethod(removeJar(name), "getCommandsOfCommandLineInterface");
+        if (ret != null) {
+            return ret;
+        }
+
+        return "";
+    }
+
+    public String getHelpOnCommandLineInterfaceFunction(String command) {
+        if (classCommandLineInterface == null) {
+            hasCommandLineInterface();
+        }
+        if (classCommandLineInterface == null) {
+            return "";
+        }
+
+        String ret = executeStaticRetStringOneStringMethod(classCommandLineInterface,"getHelpOnCommandLineInterfaceFunction", command);
+        if (ret != null) {
+            return ret;
+        }
+
+        return "";
+    }
+
     public ImageIcon getDiplodocusCodeGeneratorLogo() {
         String mName = "getLogoImage";
-        TraceManager.addDev("Getting image with method=" + mName);
+        //TraceManager.addDev("Getting image with method=" + mName);
         ImageIcon img = executeRetImageIconMethod(classDiplodocusCodeGenerator, mName);
         return img;
     }
@@ -128,10 +173,15 @@ public class Plugin {
 
     public boolean hasGraphicalComponent(String _diagID) {
         //TraceManager.addDev("Test GC with diag=" + _diagID);
+        //TraceManager.addDev("Executing hasGraphicalComponent in plugin "  + getName());
         String ret = executeRetStringMethod(removeJar(name), "hasGraphicalComponent");
+        //TraceManager.addDev("Executed hasGraphicalComponent in plugin "  + getName() + " ret=" +ret);
+
         if (ret != null) {
             classGraphicalComponent = getClass(ret);
+            //TraceManager.addDev("Executing getPanelClassName in plugin "  + getName());
             String diagOk = executeRetStringMethod(classGraphicalComponent, "getPanelClassName");
+            //TraceManager.addDev("Executed getPanelClassName in plugin "  + getName());
             if (diagOk != null) {
                 if (diagOk.compareTo(_diagID) == 0) {
                     //TraceManager.addDev("Found graphical component in plugin:" + name);
@@ -184,9 +234,9 @@ public class Plugin {
             }
 
         } catch (Exception e) {
-            TraceManager.addDev("getClass()\n");
-            e.printStackTrace(System.out);
-            //TraceManager.addDev("Exception when using plugin " + name + " with className=" + _className);
+            //TraceManager.addDev("getClass()\n");
+            //e.printStackTrace(System.out);
+            TraceManager.addDev("Exception when using plugin " + name + " with className=" + _className);
             return null;
         }
 
@@ -227,9 +277,11 @@ public class Plugin {
 
     public String executeRetStringMethod(String _className, String _methodName) {
         // We have a valid plugin. We now need to get the Method
+        TraceManager.addDev("-------- Getting " + _methodName + " of class " + _className);
         Method m = getMethod(_className, _methodName);
+        TraceManager.addDev("-------- Got " + _methodName + " of class " + _className);
         if (m == null) {
-            //TraceManager.addDev("Null method with class as a string class=" + _className + " _method=" + _methodName);
+            TraceManager.addDev("Null method with class as a string class=" + _className + " _method=" + _methodName);
             return null;
         }
 
@@ -290,6 +342,67 @@ public class Plugin {
         method.invoke(instance, value);
     }
 
+    public static String executeStaticRetStringOneStringMethod(Class<?> c, String _methodName, String value)  {
+        try {
+            Class[] cArg = new Class[1];
+            cArg[0] = String.class;
+            //TraceManager.addDev("Getting <" + _methodName + "> in class <" + c.getName() + ">");
+            Method m = c.getMethod(_methodName, cArg);
+
+            if (m == null) {
+                TraceManager.addDev("Null method in executeRetStringMethod with Class parameter");
+                return null;
+            }
+            return (String) (m.invoke(null, value));
+        } catch (Exception e) {
+            TraceManager.addDev("Exception occurred when executing method " + _methodName + " Exception: " + e.getMessage());
+            e.printStackTrace( System.out );
+            return null;
+        }
+    }
+
+    public String callCommandLineCommand(String _methodName, String[] args) {
+        if (classCommandLineInterface == null) {
+            hasCommandLineInterface();
+            if (classCommandLineInterface == null) {
+                TraceManager.addDev("No class for command line");
+                return null;
+            }
+        }
+
+        return callCommandLineCommand(classCommandLineInterface, _methodName, args);
+    }
+
+    public String callCommandLineCommand(Class<?> c, String _methodName, String[] args) {
+        Class[] cArg = new Class[args.length];
+        for (int i=0; i<args.length; i++) {
+            cArg[i] = String.class;
+        }
+
+        try {
+            Method m = c.getMethod(_methodName, cArg);
+            switch(args.length) {
+                case 0:
+                    return (String) (m.invoke(null));
+                case 1:
+                    return (String) (m.invoke(null, args[0]));
+                case 2:
+                    return (String) (m.invoke(null, args[0], args[1]));
+                case 3:
+                    return (String) (m.invoke(null, args[0], args[1], args[2]));
+                case 4:
+                    return (String) (m.invoke(null, args[0], args[1], args[2], args[3]));
+
+            }
+
+
+        } catch (Exception e) {
+            TraceManager.addDev("Exception occurred when executing method " + _methodName + " in plugin " + this.getName());
+            return null;
+        }
+        return null;
+    }
+
 
     public ImageIcon executeRetImageIconMethod(Class<?> c, String _methodName) {
         // We have a valid plugin. We now need to get the Method
@@ -301,7 +414,7 @@ public class Plugin {
 
             return (ImageIcon) (m.invoke(null));
         } catch (Exception e) {
-            TraceManager.addDev("Exception occured when executing method " + _methodName);
+            TraceManager.addDev("Exception occurred when executing method " + _methodName + " in plugin " + this.getName());
             return null;
         }
     }

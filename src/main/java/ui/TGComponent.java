@@ -2012,20 +2012,21 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
       return null;
       }*/
 
-    public TGConnectingPoint getFreeTGConnectingPointAtAndCompatible(int x, int y, int type) {
+    /*public TGConnectingPoint getFreeTGConnectingPointAtAndCompatible(int x, int y, int type) {
         return getTopFather().getFromTopFreeTGConnectingPointAtAndCompatible(x, y, type);
-    }
+    }*/
 
     public TGConnectingPoint getFreeTGConnectingPointAtAndCompatible(int x, int y, int type, TGConnectingPoint outPoint) {
         return getTopFather().getFromTopFreeTGConnectingPointAtAndCompatible(x, y, type, outPoint);
     }
 
-    public TGConnectingPoint getFromTopFreeTGConnectingPointAtAndCompatible(int x, int y, int type) {
+    /*public TGConnectingPoint getFromTopFreeTGConnectingPointAtAndCompatible(int x, int y, int type) {
+        //TraceManager.addDev("With null out");
         return getFromTopFreeTGConnectingPointAtAndCompatible(x, y, type, null);
-    }
+    }*/
 
     public TGConnectingPoint getFromTopFreeTGConnectingPointAtAndCompatible(int x, int y, int type, TGConnectingPoint outPoint) {
-        //TraceManager.addDev("Getting TGConnecting point");
+        //TraceManager.addDev("Getting TGConnecting point outPoint=");
 
         for (int i = 0; i < nbConnectingPoint; i++) {
             if ((Math.abs(connectingPoint[i].getX() - x) < 4) && (Math.abs(connectingPoint[i].getY() - y) < 4) &&
@@ -2037,7 +2038,7 @@ public abstract class TGComponent  extends AbstractCDElement implements /*CDElem
         // look in subcomponents
         TGConnectingPoint p;
         for (int i = 0; i < nbInternalTGComponent; i++) {
-            p = tgcomponent[i].getFromTopFreeTGConnectingPointAtAndCompatible(x, y, type);
+            p = tgcomponent[i].getFromTopFreeTGConnectingPointAtAndCompatible(x, y, type, outPoint);
             if (p != null) {
                 return p;
             }

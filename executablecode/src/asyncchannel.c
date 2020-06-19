@@ -49,6 +49,22 @@ message* getAndRemoveOldestMessageFromAsyncChannel(asyncchannel *channel) {
   return msg;
 }
 
+message* getAndRemoveMostRecentMessageFromAsyncChannel(asyncchannel *channel) {
+  message *msg;
+  message *previous;
+
+  if (channel->currentNbOfMessages == 0) {
+    return NULL;
+  }
+
+  msg = channel->pendingMessages;
+  channel->pendingMessages = msg->next;
+  channel->currentNbOfMessages = channel->currentNbOfMessages -1;
+
+  return msg;
+}
+
+
 void addMessageToAsyncChannel(asyncchannel *channel, message *msg) {
   msg->next = channel->pendingMessages;
   channel->pendingMessages = msg;

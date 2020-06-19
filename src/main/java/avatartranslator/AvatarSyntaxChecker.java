@@ -39,6 +39,7 @@
 package avatartranslator;
 
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.List;
 
 import compiler.tmlparser.ParseException;
@@ -95,7 +96,14 @@ public class AvatarSyntaxChecker  {
         //return parse(_as, _ab, "guard", _guard);
     }
 
+    /*
+     * @return 0 if ok, -1 if failure
+     */
     public static int isAValidIntExpr(AvatarSpecification _as, AvatarStateMachineOwner _ab, String _expr) {
+
+        /*AvatarExpressionSolver e1 = new AvatarExpressionSolver("x + y");
+        e1.buildExpression(_ab);*/
+
         if (_expr.trim().length() == 0) {
             return 0;
         }
@@ -117,8 +125,7 @@ public class AvatarSyntaxChecker  {
         }
 
         return 0;
-        // OLD return parse(_as, _ab, "actionnat", _expr);*/
-
+        // OLD return parse(_as, _ab, "actionnat", _expr);
 
     }
 
@@ -277,4 +284,23 @@ public class AvatarSyntaxChecker  {
         return 0;
 
     }
+
+
+    // Searches for numerical values over max
+    // @return list of AvatarElement not respecting this interval
+    public static ArrayList<AvatarElement> useOfInvalidUPPAALNumericalValues(AvatarSpecification _as, int maxV) {
+        ArrayList<AvatarElement> invalids = new ArrayList<AvatarElement>();
+
+        for(AvatarBlock ab: _as.getListOfBlocks()) {
+            // Check for attribute initial value
+            invalids.addAll(ab.getAttributesOverMax(maxV));
+
+            // Check operators of State machine
+            invalids.addAll(ab.getStateMachine().elementsWithNumericalValueOver(maxV));
+        }
+
+
+        return invalids;
+    }
+
 }

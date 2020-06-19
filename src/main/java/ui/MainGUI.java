@@ -8224,6 +8224,19 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         changeMade(null, -1);
     }
 
+
+    public boolean selectPanelByName(String name) {
+        for (int i = 0; i < mainTabbedPane.getTabCount(); i++) {
+            if (mainTabbedPane.getTitleAt(i).equals(name)) {
+                mainTabbedPane.setSelectedIndex(i);
+                return true;
+            }
+
+        }
+        return false;
+    }
+
+
     public void requestMoveRightTab(int index) {
         // TraceManager.addDev("Move right");
         if (index > tabs.size() - 2) {
@@ -9440,9 +9453,9 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                 JMenuItem item = (JMenuItem) e.getSource();
                 String ac = item.getActionCommand();
                 if (ac.equals("Rename")) {
-                    mgui.removeCurrentTab();
+                    mgui.requestRenameTab(mainTabbedPane.getSelectedIndex());
                 } else if (ac.equals("Remove")) {
-                    mgui.requestRemoveTab(mainTabbedPane.getSelectedIndex());
+                    mgui.removeCurrentTab();
                 } else if (ac.equals("Move to the left")) {
                     mgui.requestMoveLeftTab(mainTabbedPane.getSelectedIndex());
                 } else if (ac.equals("Move to the right")) {

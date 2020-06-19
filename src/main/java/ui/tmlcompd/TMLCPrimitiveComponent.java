@@ -1,26 +1,26 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- * 
+ *
  * ludovic.apvrille AT enst.fr
- * 
+ *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- * 
+ *
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- * 
+ *
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- * 
+ *
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -31,7 +31,7 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- * 
+ *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
@@ -40,7 +40,6 @@ package ui.tmlcompd;
 
 import myutil.GraphicLib;
 import myutil.TraceManager;
-
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -65,10 +64,10 @@ import java.util.Vector;
  */
 public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent implements SwallowTGComponent, SwallowedTGComponent, WithAttributes {
     // #FIXME Debugging
-	//private int maxFontSize = 14;
+    //private int maxFontSize = 14;
     //private int minFontSize = 4;
     private int currentFontSize = -1;
-	
+
     //private boolean displayText = true;
     //    private int spacePt = 3;
     private Color myColor;
@@ -78,7 +77,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
     private boolean isPeriodic = false;
     private String periodValue = "";
     private String unit = "ms";
-    
+
     // Icon
     private int iconSize = 15;
     //private boolean iconIsDrawn = false;
@@ -88,7 +87,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
     //public HashMap<String, Integer> attrMap = new HashMap<String, Integer>();
     //public String mappingName;
     protected List<TAttribute> myAttributes;
-    
+
     // Issue #31
 //    private int textX = 15; // border for ports
 //    private double dtextX = 0.0;
@@ -105,7 +104,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         //minHeight = 1;
         minWidth = 150;
         minHeight = 100;
-        
+
         initScaling(200, 150);
 
         // Issue #31
@@ -136,12 +135,11 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 
         actionOnAdd();
     }
-    
-    private Color choosingColor()
-    {
-        if (ColorManager.TML_COMPOSITE_COMPONENT == Color.white) 
+
+    private Color choosingColor() {
+        if (ColorManager.TML_COMPOSITE_COMPONENT == Color.white)
             return Color.white;
-        else 
+        else
             return new Color(201, 243, 188 - (getMyDepth() * 10), 200);
     }
 
@@ -153,38 +151,38 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 //    			&& (txtWidth + spaceTakenByIcon < width) // enough space in width
 //    			;
 //    }
-    /** 
-     * Function which is drawing the box, the text and icon 
+
+    /**
+     * Function which is drawing the box, the text and icon
      * Issue #31: Fixed zoom on texts and icon + made sure that if the text can't go into the box is does not get drawn
+     *
      * @param g
      */
     @Override
-    public void internalDrawing(Graphics g)
-    {
-    	//rectangle + Filling color
-    	Color c = g.getColor();
-    	myColor = choosingColor();
-    	g.drawRect(x, y, width, height);
-    	g.setColor(myColor);
-    	g.fill3DRect(x, y, width, height, true);
-    	g.setColor(c);
-    	
-    	//String
-    	int stringWidth = g.getFontMetrics().stringWidth(value);
-    	int centerOfBox = (width - stringWidth) / 2;
-    	Font f = g.getFont();
-    	currentFontSize = f.getSize();
-    	if (canTextGoInTheBox(g, currentFontSize, value, iconSize))
-    	{
-	    	//put title in bold before drawing then set back to normal after
-	    	g.setFont(f.deriveFont(Font.BOLD));
+    public void internalDrawing(Graphics g) {
+        //rectangle + Filling color
+        Color c = g.getColor();
+        myColor = choosingColor();
+        g.drawRect(x, y, width, height);
+        g.setColor(myColor);
+        g.fill3DRect(x, y, width, height, true);
+        g.setColor(c);
+
+        //String
+        int stringWidth = g.getFontMetrics().stringWidth(value);
+        int centerOfBox = (width - stringWidth) / 2;
+        Font f = g.getFont();
+        currentFontSize = f.getSize();
+        if (canTextGoInTheBox(g, currentFontSize, value, iconSize)) {
+            //put title in bold before drawing then set back to normal after
+            g.setFont(f.deriveFont(Font.BOLD));
 //	    	drawSingleString(g,value, x + centerOfBox, y + currentFontSize + textY);
-	    	drawSingleString(g, value, x + centerOfBox, y + currentFontSize + textY);
-	    	g.setFont(f);
-    	}
-    	
-    	// Scaled ICON drawing
-    	g.drawImage(scale(IconManager.imgic1200.getImage()), x + width - iconSize - textX, y + textX, null);
+            drawSingleString(g, value, x + centerOfBox, y + currentFontSize + textY);
+            g.setFont(f);
+        }
+
+        // Scaled ICON drawing
+        g.drawImage(scale(IconManager.imgic1200.getImage()), x + width - iconSize - textX, y + textX, null);
 
         if (isAttacker)
             g.drawImage(scale(IconManager.imgic7008.getImage()), x + width - 2 * iconSize - textX, y + 2 * textX, null);
@@ -195,25 +193,21 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 
 
         // Attributes printing
-        if (tdp.areAttributesVisible())
-        {
-        	//spaces permits the attributes to not override each other
-        	int spaces = currentFontSize + textY * 2; 
-        	TAttribute attribute;
-        	String attributeStr;
-        	for (int i = 0; i < myAttributes.size(); i++)
-        	{
-        		attribute = myAttributes.get(i);
-        		spaces += currentFontSize;
-        		attributeStr = attribute.toString();
-        		if (canTextGoInTheBox(g, spaces, attributeStr, iconSize))
-        		{
-	                drawSingleString(g,attributeStr, x + textX, y + spaces);
-	                drawVerification(g, x + textX, y + spaces, attribute.getConfidentialityVerification());
-        		}
-        		else // if we could not display some attributes it will show a ...
-        			drawSingleString(g,"...", x + textX, y + height - 15);
-        	}
+        if (tdp.areAttributesVisible()) {
+            //spaces permits the attributes to not override each other
+            int spaces = currentFontSize + textY * 2;
+            TAttribute attribute;
+            String attributeStr;
+            for (int i = 0; i < myAttributes.size(); i++) {
+                attribute = myAttributes.get(i);
+                spaces += currentFontSize;
+                attributeStr = attribute.toString();
+                if (canTextGoInTheBox(g, spaces, attributeStr, iconSize)) {
+                    drawSingleString(g, attributeStr, x + textX, y + spaces);
+                    drawVerification(g, x + textX, y + spaces, attribute.getConfidentialityVerification());
+                } else // if we could not display some attributes it will show a ...
+                    drawSingleString(g, "...", x + textX, y + height - 15);
+            }
         }
     }
 /*
@@ -402,20 +396,20 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
     public String getPeriodUnit() {
         return unit;
     }
-    
+
     @Override
     public boolean editOndoubleClick(JFrame frame, int _x, int _y) {
         // On the icon?
         //TraceManager.addDev("icon is drawn? " + iconIsDrawn);
         //if (iconIsDrawn) {
-            TraceManager.addDev("Icon drawn iconSize=" + iconSize + "scaleIcon=" + scale(iconSize));
+        TraceManager.addDev("Icon drawn iconSize=" + iconSize + "scaleIcon=" + scale(iconSize));
 
-            if (GraphicLib.isInRectangle(_x, _y, x + width - iconSize - textX, y + textX, scale(iconSize),
-                    scale(iconSize))) {
-                tdp.getMouseManager().setSelection(-1, -1);
-                tdp.selectTab(getValue());
-                return true;
-            }
+        if (GraphicLib.isInRectangle(_x, _y, x + width - iconSize - textX, y + textX, scale(iconSize),
+                scale(iconSize))) {
+            tdp.getMouseManager().setSelection(-1, -1);
+            tdp.selectTab(getValue());
+            return true;
+        }
         //}
 
         // On the name ? 
@@ -464,7 +458,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
         oldValue = getValue();
 
 
-		JDialogAttribute jda = new JDialogAttribute(myAttributes, null, frame,
+        JDialogAttribute jda = new JDialogAttribute(myAttributes, null, frame,
                 "Setting attributes of " + value, "Attribute", operation, isDaemon, isPeriodic, periodValue,
                 unit, getValue());
         setJDialogOptions(jda);
@@ -545,7 +539,6 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 
         }
         return false;
-
 
 
     }
@@ -645,7 +638,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
 
     @Override
     public void resizeWithFather() {
-        if (/*(father != null) && (*/father instanceof TMLCCompositeComponent ) {
+        if (/*(father != null) && (*/father instanceof TMLCCompositeComponent) {
             // Too large to fit in the father? -> resize it!
             resizeToFatherSize();
 
@@ -758,7 +751,7 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
                                 String tmpO = elt.getAttribute("Operation");
                                 if (tmpO == null) {
                                     operation = "";
-                                }  else {
+                                } else {
                                     operation = tmpO;
                                 }
 
@@ -766,28 +759,28 @@ public class TMLCPrimitiveComponent extends TGCScalableWithInternalComponent imp
                                 tmpO = elt.getAttribute("daemon");
                                 if (tmpO == null) {
                                     isDaemon = false;
-                                }  else {
+                                } else {
                                     isDaemon = tmpO.equals("true");
                                 }
 
                                 tmpO = elt.getAttribute("periodic");
                                 if (tmpO == null) {
                                     isPeriodic = false;
-                                }  else {
+                                } else {
                                     isPeriodic = tmpO.equals("true");
                                 }
 
                                 tmpO = elt.getAttribute("periodValue");
                                 if (tmpO == null) {
                                     periodValue = "";
-                                }  else {
+                                } else {
                                     periodValue = tmpO;
                                 }
 
                                 tmpO = elt.getAttribute("unit");
                                 if (tmpO == null) {
                                     unit = "ms";
-                                }  else {
+                                } else {
                                     unit = tmpO;
                                 }
                             }

@@ -195,7 +195,7 @@ public class TMLTaskOperator extends TGCWithInternalComponent implements TMLTask
         g.drawRect(x, y, width, height);
         g.setColor(Color.yellow);
         g.fillRect(x+1, y+1, width-1, height-1);
-        g.drawImage(IconManager.img9, x + width - 20, y + 6, Color.yellow, null);
+        //g.drawImage(IconManager.img9, x + width - 20, y + 6, Color.yellow, null);
 		//
         ColorManager.setColor(g, getState(), 0);
         g.setFont(f.deriveFont(Font.BOLD));

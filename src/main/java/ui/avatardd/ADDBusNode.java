@@ -150,8 +150,8 @@ public class ADDBusNode extends ADDCommunicationNode implements WithAttributes {
         //g.drawImage(IconManager.imgic1102.getImage(), x + width - 20, y + 4, null);
         int borders = scale(4);
         g.drawImage(scale(IconManager.imgic1102.getImage()), x + borders, y + borders, null);
-        g.drawImage(scale(IconManager.img9), x + width - scale(20), y + borders, null);
-        g.drawImage(IconManager.imgic1102.getImage(), x + 4, y + 4, null);
+        //g.drawImage(scale(IconManager.img9), x + width - scale(20), y + borders, null);
+        //g.drawImage(IconManager.imgic1102.getImage(), x + 4, y + 4, null);
         //g.drawImage(IconManager.img9, x + width - 20, y + 4, null);
 
     }

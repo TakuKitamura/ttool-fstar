@@ -158,7 +158,6 @@ public class TMLArchiVGMNNode extends TMLArchiCommunicationNode implements Swall
         //g.drawImage(IconManager.imgic1102.getImage(), x + width - 20, y + 4, null);
         final int imageMargin = scale( 4 );
         g.drawImage( scale( IconManager.imgic1102.getImage() ), x + imageMargin, y + imageMargin, null);
-        g.drawImage( scale( IconManager.img9 ), x + width - scale( 20 ), y + imageMargin, null);
 
         c = g.getColor();
 

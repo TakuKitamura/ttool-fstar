@@ -107,7 +107,10 @@ void executeSendAsyncTransaction(request *req) {
   // Full FIFO?
   if (req->asyncChannel->currentNbOfMessages == req->asyncChannel->maxNbOfMessages) {
     // Must remove the oldest  message
-    getAndRemoveOldestMessageFromAsyncChannel(req->asyncChannel);
+    // getAndRemoveMostRecentMessageFromAsyncChannel(req->asyncChannel);
+    //Does not add the message
+    traceAsynchronousSendRequest(req);
+    return;
   }
 
   addMessageToAsyncChannel(req->asyncChannel, req->msg);

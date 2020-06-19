@@ -120,6 +120,22 @@ public class AvatarDesignPanelTranslator {
 
         //TraceManager.addDev("Removing else guards");
         as.removeElseGuards();
+
+
+        // Checking integer values
+        ArrayList<AvatarElement> listOfBadInt = AvatarSyntaxChecker.useOfInvalidUPPAALNumericalValues(as, AvatarSpecification.UPPAAL_MAX_INT);
+        // Adding warnings for each element
+        for(AvatarElement ae: listOfBadInt) {
+            UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Integer expression outside UPPAAL range: " +
+                    ae.toString() +
+            "-> UPPAAL verification may fail");
+            ce.setTDiagramPanel(adp.getAvatarBDPanel());
+            if (ae.getReferenceObject() instanceof  TGComponent) {
+                ce.setTGComponent((TGComponent)ae.getReferenceObject());
+            }
+            addWarning(ce);
+        }
+
         //TraceManager.addDev("Removing else guards ... done");
         //System.out.println(as.toString());
         adp.abdp.repaint();
