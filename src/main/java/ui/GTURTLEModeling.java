@@ -66,7 +66,7 @@ import tmltranslator.*;
 import tmltranslator.modelcompiler.TMLModelCompiler;
 import tmltranslator.toautomata.TML2AUT;
 import tmltranslator.toautomata.TML2AUTviaLOTOS;
-import tmltranslator.toavatar.TML2Avatar;
+import tmltranslator.toavatarsec.TML2Avatar;
 import tmltranslator.tosystemc.TML2SystemC;
 import tmltranslator.touppaal.RelationTMLUPPAAL;
 import tmltranslator.touppaal.TML2UPPAAL;
@@ -134,6 +134,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
 import java.io.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 
@@ -1912,7 +1914,9 @@ public class GTURTLEModeling {
         } else if (tmap != null) {
             t2a = new TML2Avatar(tmap, false, true);
             avatarspec = t2a.generateAvatarSpec(loopLimit);
-            //	drawPanel(avatarspec, mgui.getFirstAvatarDesignPanelFound());
+            if (mgui.isExperimentalOn()) {
+                drawPanel(avatarspec, mgui.getFirstAvatarDesignPanelFound());
+            }
 
         } else if (tmlm != null) {
             //Generate default mapping
@@ -1920,6 +1924,22 @@ public class GTURTLEModeling {
 
             t2a = new TML2Avatar(tmap, false, true);
             avatarspec = t2a.generateAvatarSpec(loopLimit);
+
+            if (mgui.isExperimentalOn()) {
+                DateFormat dateFormat = new SimpleDateFormat("_yyyyMMdd_HHmmss");
+                Date date = new Date();
+                String dateAndTime = dateFormat.format(date);
+                String tabName = "GeneratedDesign_" + dateAndTime;
+                mgui.addAvatarDesignPanel(tabName, -1);
+                TURTLEPanel tp = mgui.getTURTLEPanel(tabName);
+                if (tp instanceof AvatarDesignPanel) {
+                    AvatarDesignPanel adp = (AvatarDesignPanel)tp;
+                    if (adp != null) {
+                        drawPanel(avatarspec, adp);
+                    }
+                }
+            }
+
         } else if (avatarspec == null) {
             return false;
         }

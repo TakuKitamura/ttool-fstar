@@ -1010,7 +1010,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return index;
     }
 
-    private int addAvatarDesignPanel(String name, int index) {
+    public int addAvatarDesignPanel(String name, int index) {
         if (index == -1) {
             index = tabs.size();
         }
@@ -4864,7 +4864,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
     public void avatarProVerifVerification() {
         boolean limit = true;
-        TraceManager.addDev("Avatar proverif fv");
+        TraceManager.addDev("AVATAR PROVERIF FV");
         TURTLEPanel tp = this.getCurrentTURTLEPanel();
         AvatarDesignPanel adp = null;
         if (tp instanceof AvatarDesignPanel) {

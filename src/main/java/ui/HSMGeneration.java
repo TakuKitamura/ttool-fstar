@@ -15,7 +15,7 @@ import myutil.IntExpressionEvaluator;
 import myutil.TraceManager;
 
 import tmltranslator.*;
-import tmltranslator.toavatar.TML2Avatar;
+import tmltranslator.toavatarsec.TML2Avatar;
 
 import avatartranslator.*;
 import avatartranslator.toproverif.AVATAR2ProVerif;

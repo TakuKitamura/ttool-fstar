@@ -26,7 +26,7 @@ import tmltranslator.TMLMapping;
 import tmltranslator.TMLModeling;
 import tmltranslator.TMLPort;
 import tmltranslator.TMLTask;
-import tmltranslator.toavatar.TML2Avatar;
+import tmltranslator.toavatarsec.TML2Avatar;
 import ui.tmlad.TGConnectorTMLAD;
 import ui.tmlad.TMLADChoice;
 import ui.tmlad.TMLADDecrypt;
