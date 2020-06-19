@@ -459,7 +459,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         countertrace = new JCheckBox("Generate counterexample traces", generateCountertraceSelected);
         countertrace.addActionListener(this);
         jpadvanced.add(countertrace, cadvanced);
-        countertraceAUT = new JCheckBox("Counterexample AUT graphs", generateCountertraceAUTSelected);
+        countertraceAUT = new JCheckBox("Generate counterexample AUT graphs", generateCountertraceAUTSelected);
         countertraceAUT.addActionListener(this);
         jpadvanced.add(countertraceAUT, cadvanced);
         cadvanced.gridwidth = GridBagConstraints.REMAINDER;
