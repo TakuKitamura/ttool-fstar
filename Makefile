@@ -71,7 +71,7 @@ Please report bugs or suggestions of improvements to:
 endef
 export HELP_message
 
-.PHONY: ttool clean launcher graphminimize graphshow tiftranslator tmltranslator rundse remotesimulator webcrawler documentation help ultraclean publish_jar preinstall test git
+.PHONY: ttool clean launcher graphminimize graphshow ttool-cli tiftranslator tmltranslator rundse remotesimulator webcrawler documentation help ultraclean publish_jar preinstall test git
 
 help:
 	@echo "$$HELP_message"

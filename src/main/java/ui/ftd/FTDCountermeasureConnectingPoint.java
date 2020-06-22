@@ -40,6 +40,7 @@ package ui.ftd;
 
 import ui.CDElement;
 import ui.TGComponentManager;
+import ui.TGConnectingPoint;
 import ui.TGConnectingPointWidthHeight;
 
 /**
@@ -58,5 +59,19 @@ public class FTDCountermeasureConnectingPoint extends  TGConnectingPointWidthHei
     @Override
     public boolean isCompatibleWith(int type) {
         return type == TGComponentManager.FTD_COUNTERMEASURE_CONNECTOR;
+    }
+
+    public boolean isCompatibleWith(int type, TGConnectingPoint outPoint) {
+        if (outPoint != null) {
+            if ((outPoint.getFather() instanceof FTDCountermeasure) && (getFather() instanceof FTDCountermeasure)) {
+                return false;
+            }
+
+            if ((outPoint.getFather() instanceof FTDFault) && (getFather() instanceof FTDFault)) {
+                return false;
+            }
+
+        }
+        return isCompatibleWith(type);
     }
 }

@@ -54,6 +54,8 @@ import java.util.ArrayList;
    * @author Ludovic APVRILLE
  */
 public class AvatarSpecification extends AvatarElement {
+
+    public final static int UPPAAL_MAX_INT = 32767;
     
 	public static String[] ops = {">", "<", "+", "-", "*", "/", "[", "]", "(", ")", ":", "=", "==", ",", "!", "?", "{", "}", "|", "&"};
     
@@ -343,6 +345,46 @@ public class AvatarSpecification extends AvatarElement {
 
     public static String putRealAttributeValueInString(String _source, AvatarAttribute _at) {
         return Conversion.putVariableValueInString(ops, _source, _at.getName(), _at.getInitialValue());
+    }
+    
+    
+    /* Generates the Expression Solvers, returns the AvatarStateMachineElement
+     * containing the errors */
+    public List<AvatarStateMachineElement> generateAllExpressionSolvers() {
+        List<AvatarStateMachineElement> errors = new ArrayList<>();
+        AvatarTransition at;
+        boolean returnVal;
+        
+        for (AvatarBlock block : getListOfBlocks()) {
+            AvatarStateMachine asm = block.getStateMachine();
+
+            for (AvatarStateMachineElement elt : asm.getListOfElements()) {
+                if (elt instanceof AvatarTransition) {
+                    at = (AvatarTransition) elt;
+                    if (at.isGuarded()) {
+                        returnVal = at.buildGuardSolver();
+                        if (returnVal == false) {
+                            errors.add(at);
+                        }
+                    }
+                    for (AvatarAction aa : at.getActions()) {
+                        if (aa instanceof AvatarActionAssignment) {
+                            returnVal = ((AvatarActionAssignment) aa).buildActionSolver(block);
+                            if (returnVal == false) {
+                                errors.add(elt);
+                            }
+                        }
+                    }
+                } else if (elt instanceof AvatarActionOnSignal) {
+                    returnVal = ((AvatarActionOnSignal) elt).buildActionSolver(block);
+                    if (returnVal == false) {
+                        errors.add(elt);
+                    }
+                }
+            }
+        }
+        
+        return errors;
     }
 
     public void removeCompositeStates() {

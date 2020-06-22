@@ -1,0 +1,19 @@
+action start
+wait 2
+action new
+wait 2
+action set-file resources/test/cli/output/myemptymodel
+action get-file myfile
+print v myfile
+action save
+wait 1
+#We create a tab
+action new-design
+wait 1
+#We remove the tab
+action remove-current-tab
+wait 1
+#We save again the model
+action save
+wait 1
+action quit

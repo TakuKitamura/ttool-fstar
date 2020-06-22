@@ -65,7 +65,7 @@
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=0.4\textwidth]{images/image1.png}
+\includegraphics[width=0.3\textwidth]{images/tp}
 \end{figure}
 
 \newpage
@@ -93,6 +93,7 @@ Modifications} & \textbf{Sections Modified} \\
 1.2 & 11/02/2017 & Added more info on tests & Tests \\ 
 1.3 & 02/10/2018 & Update and added GUI development & All\\
 1.4 & 22/11/2018 & Added more info on automated tests and on the installer & Automated tests / Installer \\
+1.4 & 11/06/2020 & Plugin: configuration, programming & Plugin \\
 \hline
 \end{tabular}
 \end{adjustbox}
@@ -1442,7 +1443,238 @@ if (_split[1].equals("CPU")) {
 \end{lstlisting}
 and do the same for the FPGA component.
 
-\item Finally, in the same method, have a look to the case \texttt{if (node instanceof HwCPU)} and do the same for FPGA. To make the comparison easier, capitalize the name of the FPGA's parameters. 
+\item Finally, in the same method, have a look to the case \texttt{if (node instanceof HwCPU)} and do the same for FPGA. To make the comparison easier, capitalize the name of the FPGA parameters. 
 \end{itemize}   
 
+\newpage
+\section{Plugin}
+
+A plugin makes it possible to add external features to TTool. 
+
+\subsection{Installing a plugin}
+A plugin is provided as a \textit{jar} file, for instance \textit{MyLovelyPlugin.jar}. For TTool to find and use this plugin, a configuration line must be added to the configuration file of TTool (e.g. \textit{config.xml}). For instance:
+
+\begin{lstlisting}
+<PLUGIN file="MyLovelyPlugin.jar" package = "mainstream"/>
+\end{lstlisting}
+means that the main class of the plugin, called "MyLovelyPlugin" shall be searched for in the "mainstream" package of the jar file. If the main class of the plugin is not in a package, then package must be left empty  \texttt{package=""}.
+
+
+TTool searches for plugin in its default bin directory, or, if configured, in the \texttt{PLUGIN\_PATH}. Thus, the configuration file (e.g. \textit{config.xml}) can declare:
+\begin{lstlisting}
+<PLUGIN_PATH data="../plugins" />
+\end{lstlisting}
+
+\subsection{Programming a new plugin}
+
+
+
+\subsubsection{Starting from examples}
+Examples of plugins are provided in the public git of TTool in "plugins" subdirectory. Two plugins are provided. To complie them, just go to their related directory and run:
+\begin{verbatim}
+$ make
+\end{verbatim}
+This should generate a \textit{.jar} than can be used by TTool as a plugin
+
+
+\subsubsection{General idea}
+The main class of a plugin should declare the following methods:
+\begin{lstlisting}
+public static String getLongText() {
+	return "Example of plugin component, and how to insert it in a toolbar";
+}
+
+public static String getShortText() {
+	return "Example of plugin component";
+}
+    
+public static String getVeryShortText() {
+	return "Plugin component";
+}
+\end{lstlisting}
+Then, depending on the goal of the plugin, it should declare other functions that are explained in the next subsection
+
+\subsubsection{Adding a new graphical component with a plugin}
+
+The following methods have to be declared and implemented for a graphical component to work within a plugin.
+\begin{itemize}
+\item \textit{public static String hasGraphicalComponent}() returns a String giving the name of the  class of the plugin that implements the new graphical component
+\item \textit{public static String getPanelClassName()} returns the name of the Panel to which the graphical component is meant to be added
+\item \textit{public static ImageIcon getImageIcon()} returns the icon that is added to the Panel toolbar
+\item \textit{public static int getWidth()} and \textit{public static int getHeitght()} return the default width and height of the component, respectively.
+\item \textit{public boolean isMoveable()} specifies whether this component can be moved by a user
+\item \textit{public boolean isRemovable()} specifies it the component can be removed from the diagram once added
+\item \textit{public boolean isUserResizable()} specifies if the component can be resized by a user
+\item \textit{public boolean isEditable()} specifies if a user can double click on the component to open a dialog window and thus edit its values.
+\item \textit{public String getCustomValue(String value, String diagramName)} is expected to return an extra information on the component, e.g. a help.
+\item \textit{public int getWidth(Graphics g, String value)} shall return a number of pixel taken by this component to draw a String. This number depends e.g. of the Font used by the component.
+\item \textit{public int getHeight(Graphics g, String value)} is similar to the previous function but for the height.
+\item \textit{public  internalDrawing(Graphics g, int x, int y, int width, int height, String value, String diagramName)} is expected to draw on Graphics $g$ the component.
+\item \textit{public  boolean isOnMe(int x, int y, int width, int height, int xP, int yP)} shall return if the mouse pointer, which coordinates are given in "xP" and "yP", is over the component, or not.
+\item \textit{public  String editOnDoubleClick(JFrame frame, String value)} makes it possible to modify the component (by e.g. opening a dialog window) whenever there is a double click on the component. This function blocks the main UI interface until it returns.
+\end{itemize}
+
+\subsubsection{Customizing the C-code generator of AVATAR Design (a.k.a. software design)}
+It is possible to customize the C-code generator of AVATAR Design by defining rules. The following static functions are expected to be implemented by the plugin:
+\begin{itemize}
+\item \textit{public  static String hasAvatarCodeGenerator()} returns the class of the plugin customizing the code generator
+\item \textit{public static String hasAvatarCodeGenerator()} returns a customization of the main declaration
+\end{itemize}
+
+\subsubsection{Customizing the C-code generator of DIPLODOCUS Mapping}
+It is possible to use a totally different C-code generator for DIPLODOCUS mappings using the following  methods.
+\begin{itemize}
+\item \textit{public static String hasDiplodocusCodeGenerator()} returns theclass of the Plugin handling the interface with TTool. This class must implement the following methods:
+\item \textit{public static String getIdentifier()} returns a description of the code generator. For instance "This smart code generator provides an optimized memory handling".
+\item \textit{public static ImageIcon getLogoImage()} returns a logo, e.g. a logo of your company.
+\item \textit{public void setCodeDirectory( String codeGenPath )} makes it possible to provide the configured top directory where the user wishes to save the code
+\item \textit{public boolean generateCode( String model, String compilationOptions ) } is the main function to handle code generation. The DIPLODOCUS model is provided as an XML specification, and compilation options are listed in a String as a set of options (e.g "-lpthread") 
+\end{itemize}
+
+\subsubsection{Developing other plugins}
+Plugins targeting other aspects of TTool can be developed, but the code of TTool has to be patched, usually quite slightly.
+
+For instance, the class JDialogCCodeGeneration shows how patch TTool to use a plugin in the code. Usually, two main aspects have to be programmed:
+\begin{itemize}
+\item Detecting that a plugin can be used.\\
+For instance, to detect that there is a custom plugin for DIPLODOCUS code generation:
+\begin{lstlisting}
+Plugin foundPlugin = null;
+LinkedList<Plugin> listP = PluginManager.pluginManager.
+                                 getPluginDiplodocusCodeGenerator();
+for (Plugin p : listP) {
+      String desc = p.getDiplodocusCodeGeneratorIdentifier();
+      if (desc != null) {
+                    if (index == cpt) {
+                        // A plugin has been found
+                        foundPlugin = p;
+                        break;
+                    }
+        }
+}
+\end{lstlisting}
+
+\item Calling the functions of the plugin in order to use it. For instance:
+\begin{lstlisting}
+// Current model is converted to XML format
+String XML = tmap.toXML();
+
+// An instance of the class implementing the code generation 
+// in the plugin is created
+Object instance = foundPlugin.
+                   getClassDiplodocusCodeGenerator().newInstance();
+
+if (instance == null) {
+      jta.append("Invalid plugin: could not create an instance\n");
+} else {
+      // Try to set the current project directory
+       Plugin.executeOneStringMethod(instance, code1.getText(), 
+                  "setCodeDirectory");
+
+       // Then start the code genrator of the plugin
+        boolean ret = Plugin.executeBoolStringMethod(instance, XML, 
+                                "generateCode", codeOpt.getText());
+}
+\end{lstlisting}
+\end{itemize}
+
+
+
+\subsection{Using plugins from the command line interface}
+\subsubsection{Main commands}
+\begin{itemize}
+\item \textit{plugin load <path> <plugin name> [optional: plugin package]}: loads a plugin
+\begin{verbatim}
+$ cd TTool/bin
+$ java -jar ttool-cli.jar -interact
+0> plugin list
+plugin list
+No plugins
+1> plugin load ../plugins CustomizerGraphicalComponent.jar
+plugin load ../plugins CustomizerGraphicalComponent.jar
+2> plugin list
+plugin list
+CustomizerGraphicalComponent.jar
+\end{verbatim}
+\item \textit{plugin info <plugin name>}: provides information on a given plugin
+\begin{verbatim}
+\item \textit{plugin list}: list all the loaded plugins
+\begin{verbatim}
+$ plugin list
+CustomizerAvatarJavaCodeGeneration.jar
+CustomizerGraphicalComponent.jar
+\end{verbatim}
+\item \textit{plugin info <plugin name>}: provides information on a given plugin
+\begin{verbatim}
+$ plugin info CustomizerGraphicalComponent.jar
+Package:	
+Path:	../plugins
+Has graphical component?	false
+Has Avatar code generator?	true
+Has Diplodocus code generator?	false
+Custom commands: getPanelClassName getWidth getHeight setDefaultWidthS 
+\end{verbatim}
+
+\item \textit{plugin info-command <plugin name> <command name>}: provides information on a given command provided by a plugin
+\begin{verbatim}
+$ plugin info-command CustomizerGraphicalComponent.jar setDefaultWidthS
+static void setDefaultWidthS(String defaultWidth): makes it possible to set the default width
+\end{verbatim}
+\end{itemize}
+
+\subsubsection{Mandatory functions}
+A plugin that may be used by the command line interface must define the following methods:
+\begin{itemize}
+\item  \textit{public static String hasCommandLineInterface()}: returns the class of the plugin implementing custom commands
+\item  \textit{public static String getCommandsOfCommandLineInterface()}: returns all the  names of custom commands (for instance: "getValue")
+\item \textit{public static String getHelpOnCommandLineInterfaceFunction(String command)}: returns some help about the function given as parameter.
+\end{itemize}
+
+
+\subsubsection{Custom commands}
+A plugin can define a list of custom commands. These commands can take only \textit{String} as parameter (maximum 4 String) and can return either nothing or a String. They have to be implemented with a method having the same name as the command. The method must also be \textbf{static}.
+
+For instance:
+\begin{verbatim}
+public static String getWidthS() {
+        return "100";
+}
+
+public static void setDefaultWidthS(String defaultWith) {
+        try {
+            DEFAULT_WIDTH = Integer.decode(defaultWith);;
+        } catch (Exception e) {
+
+        }
+ }
+
+\end{verbatim}
+
+The \textbf{exec} sub command of the "plugin" command can be used to execute custom functions. "exec" takes the following arguments:
+\begin{itemize}
+\item plugin name
+\item method name
+\item if the called method returns a String, the returned String can be stored in a variable specified as "-ret <name of variable>"
+\item Then the input arguments of the method follow. 
+\end{itemize}
+
+For instance, to execute the method "getWidthS" of plugin "CustomizerGraphicalComponent.jar" and store the result in variable "s", do as follows:
+\begin{verbatim}
+1> plugin exec CustomizerGraphicalComponent.jar getWidthS -ret x
+Command executed
+2> print var x
+Variable x = 100
+Command executed
+\end{verbatim}
+
+The following example shows how to provide an argument to a custom command.
+\begin{verbatim}
+1> plugin exec CustomizerGraphicalComponent.jar setDefaultWidth 200
+\end{verbatim}
+
+The \textbf{exec-raw} command works similarly apart from the fact that all arguments are given as input to the plugin as one string. For instance, a commane line like:
+\begin{verbatim}
+1> plugin exec CustomizerGraphicalComponent.jar setDefaultWidthS 100 200 300
+\end{verbatim}
+Will result in calling setDefaultWidthS with the String "100 200 300" and not with 3 String arguments ("100", "200", "300") just like for the \textbf{exec} command.  
 \end{document}

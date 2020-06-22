@@ -37,24 +37,26 @@
  */
 
 
-
-
 package ui;
 
-import javax.swing.*;
-import java.util.*;
-import java.awt.event.*;
+import myutil.Plugin;
+import myutil.PluginManager;
+import myutil.TraceManager;
 
-import myutil.*;
-import common.*;
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 
 /**
  * Class TToolBar
  * Abstract toolbar to be used by TURTLE diagrams
  * Creation: 21/12/2003
- * @version 1.0 21/12/2003
+ *
  * @author Ludovic APVRILLE
+ * @version 1.0 21/12/2003
  * @see TGComponent
  */
 public abstract class TToolBar extends JToolBar implements ActionListener {
@@ -71,7 +73,7 @@ public abstract class TToolBar extends JToolBar implements ActionListener {
         super();
         mgui = _mgui;
         setOrientation(SwingConstants.HORIZONTAL);
-        setFloatable(true) ;
+        setFloatable(true);
         setButtons();
     }
 
@@ -84,30 +86,45 @@ public abstract class TToolBar extends JToolBar implements ActionListener {
         pluginActions = new ArrayList<TGUIAction>();
         plugins = new ArrayList<Plugin>();
         this.addSeparator();
-	LinkedList<Plugin> list = PluginManager.pluginManager.getPluginGraphicalComponent(diag);
-	TraceManager.addDev("List of " + list.size() + " graphical components");
-	for(Plugin p: list) {
-	    //Plugin p = PluginManager.pluginManager.getPluginOrCreate(ConfigurationTTool.PLUGIN_GRAPHICAL_COMPONENT[i]);
-	    String shortText = p.executeRetStringMethod(p.getClassGraphicalComponent(), "getShortText");
-	    String longText = p.executeRetStringMethod(p.getClassGraphicalComponent(), "getLongText");
-	    String veryShortText = p.executeRetStringMethod(p.getClassGraphicalComponent(), "getVeryShortText");
-	    ImageIcon img = p.executeRetImageIconMethod(p.getClassGraphicalComponent(), "getImageIcon");
-	    if ((img != null)  && (shortText != null)) {
-		TraceManager.addDev("Plugin: " + p.getName() + " short name:" + shortText);
-		TAction t = new TAction("command-" + p.getName(), shortText, img, img, veryShortText, longText, 0);
-		TGUIAction tguia = new TGUIAction(t);
-		pluginActions.add(tguia);
-		plugins.add(p);
-		JButton button = add(tguia);
-		button.addMouseListener(mgui.mouseHandler);
-		tguia.addActionListener(this);
-		//button.addActionListener(this);
+        LinkedList<Plugin> list = PluginManager.pluginManager.getPluginGraphicalComponent(diag);
+        //TraceManager.addDev("List of " + list.size() + " graphical components");
+        for (Plugin p : list) {
+            //Plugin p = PluginManager.pluginManager.getPluginOrCreate(ConfigurationTTool.PLUGIN_GRAPHICAL_COMPONENT[i]);
+            //TraceManager.addDev("Testing plugin p=" + p.getName());
+            String shortText = p.executeRetStringMethod(p.getClassGraphicalComponent(), "getShortText");
+            String longText = p.executeRetStringMethod(p.getClassGraphicalComponent(), "getLongText");
+            String veryShortText = p.executeRetStringMethod(p.getClassGraphicalComponent(), "getVeryShortText");
+            //TraceManager.addDev("Got info on text. Will try icon");
+            ImageIcon img = p.executeRetImageIconMethod(p.getClassGraphicalComponent(), "getImageIcon");
+            //TraceManager.addDev("Icon got");
+            if (img == null) {
+                TraceManager.addDev("null icon");
+            } else {
+                TraceManager.addDev("Ok icon");
+            }
+
+            if (shortText == null) {
+                TraceManager.addDev("null short text");
+            } else {
+                TraceManager.addDev("Ok short text");
+            }
+
+            if ((img != null) && (shortText != null)) {
+                TraceManager.addDev("Plugin: " + p.getName() + " short name:" + shortText);
+                TAction t = new TAction("command-" + p.getName(), shortText, img, img, veryShortText, longText, 0);
+                TGUIAction tguia = new TGUIAction(t);
+                pluginActions.add(tguia);
+                plugins.add(p);
+                JButton button = add(tguia);
+                button.addMouseListener(mgui.mouseHandler);
+                tguia.addActionListener(this);
+                //button.addActionListener(this);
 		
 		/*JButton toto = new JButton("Test");
 		  toto.addActionListener(this);
 		  add(toto);*/
-		//TraceManager.addDev("Action listener...");
-	    }
+                //TraceManager.addDev("Action listener...");
+            }
         }
     }
 
@@ -120,14 +137,14 @@ public abstract class TToolBar extends JToolBar implements ActionListener {
         TGUIAction act = null;
         String command = evt.getActionCommand();
         //TraceManager.addDev("command=" + command);
-        for(TGUIAction t: pluginActions) {
+        for (TGUIAction t : pluginActions) {
             //TraceManager.addDev(" command of action:" + t.getActionCommand());
             if (t.getActionCommand().compareTo(command) == 0) {
                 p = plugins.get(index);
                 act = t;
                 break;
             }
-            index ++;
+            index++;
         }
 
         if ((act != null) && (p != null)) {

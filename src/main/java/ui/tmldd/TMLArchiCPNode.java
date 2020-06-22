@@ -161,7 +161,7 @@ public class TMLArchiCPNode extends TMLArchiCommunicationNode implements Swallow
         // Issue #31
         final int iconMargin = scale( 4 );
         g.drawImage( scale( IconManager.imgic1102.getImage() ), x + iconMargin/*4*/, y + iconMargin/*4*/, null);
-        g.drawImage( scale( IconManager.img9 ), x + width - scale( 20 ), y + iconMargin/*4*/, null);
+        //g.drawImage( scale( IconManager.img9 ), x + width - scale( 20 ), y + iconMargin/*4*/, null);
 
         //g.drawImage(IconManager.imgic1102.getImage(), x + width - 20, y + 4, null);
 //        g.drawImage(IconManager.imgic1102.getImage(), x + 4, y + 4, null);

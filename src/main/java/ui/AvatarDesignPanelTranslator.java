@@ -120,6 +120,22 @@ public class AvatarDesignPanelTranslator {
 
         //TraceManager.addDev("Removing else guards");
         as.removeElseGuards();
+
+
+        // Checking integer values
+        ArrayList<AvatarElement> listOfBadInt = AvatarSyntaxChecker.useOfInvalidUPPAALNumericalValues(as, AvatarSpecification.UPPAAL_MAX_INT);
+        // Adding warnings for each element
+        for(AvatarElement ae: listOfBadInt) {
+            UICheckingError ce = new UICheckingError(CheckingError.STRUCTURE_ERROR, "Integer expression outside UPPAAL range: " +
+                    ae.toString() +
+            "-> UPPAAL verification may fail");
+            ce.setTDiagramPanel(adp.getAvatarBDPanel());
+            if (ae.getReferenceObject() instanceof  TGComponent) {
+                ce.setTGComponent((TGComponent)ae.getReferenceObject());
+            }
+            addWarning(ce);
+        }
+
         //TraceManager.addDev("Removing else guards ... done");
         //System.out.println(as.toString());
         adp.abdp.repaint();
@@ -1716,15 +1732,22 @@ public class AvatarDesignPanelTranslator {
 
             // Must handle distribution law and extra attributes
             int law = connector.getEffectiveDelayDistributionLaw();
-            String extraArg = connector.getExtraDelay1();
+            String extraArg1 = connector.getExtraDelay1();
 
-            error = AvatarSyntaxChecker.isAValidIntExpr(spec, block, extraArg);
+
+            error = AvatarSyntaxChecker.isAValidIntExpr(spec, block, extraArg1);
 
             if (error < 0) {
-                makeError(error, connector.tdp, block, connector, "invalid extra attribute 1", extraArg);
+                makeError(error, connector.tdp, block, connector, "invalid extra attribute 1", extraArg1);
             } else {
-                //TraceManager.addDev("Adding min and max delay AND Distribution law: " + law + " attr=" + extraArg);
-                transition.setDistributionLaw(law, extraArg);
+                String extraArg2 = connector.getExtraDelay2();
+                error = AvatarSyntaxChecker.isAValidIntExpr(spec, block, extraArg2);
+                if (error < 0) {
+                    makeError(error, connector.tdp, block, connector, "invalid extra attribute 2", extraArg2);
+                } else {
+                    //TraceManager.addDev("Adding min and max delay AND Distribution law: " + law + " attr=" + extraArg);
+                    transition.setDistributionLaw(law, extraArg1, extraArg2);
+                }
             }
 
         }

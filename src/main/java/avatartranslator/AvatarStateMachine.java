@@ -38,6 +38,7 @@
 
 package avatartranslator;
 
+import myutil.MyMath;
 import myutil.TraceManager;
 
 import java.util.*;
@@ -426,6 +427,33 @@ public class AvatarStateMachine extends AvatarElement {
                 previous = getPreviousElementOf(elt);
                 next = elt.getNext(0);
                 toRemove.add(elt);
+//
+//                // Creating elements
+//                AvatarState beforeRandom = new AvatarState("StateBeforeRandom__" + elt.getName() + "__" + id, elt.getReferenceObject());
+//                AvatarState randomState = new AvatarState("StateForRandom__" + elt.getName() + "__" + id, elt.getReferenceObject());
+//                
+//                for (int i = Integer.parseInt(random.getMinValue()); i <= Integer.parseInt(random.getMaxValue()); i++) {
+//                    AvatarTransition at1 = new AvatarTransition(_block, "TransitionForRandom__" + random.getVariable() + "=" + i + "__" + elt.getName() + "__" + id, elt.getReferenceObject());
+//                    at1.addAction(random.getVariable() + "=" + i);
+//                    toAdd.add(at1);
+//                    beforeRandom.addNext(at1);
+//                    at1.addNext(randomState);
+//                }
+//                
+//                // Adding elements
+//                toAdd.add(beforeRandom);
+//                toAdd.add(randomState);
+//
+//                // Linking elements
+//                if (previous != null) {
+//                    previous.removeAllNexts();
+//                    previous.addNext(beforeRandom);
+//                }
+//                randomState.addNext(next);
+//
+//                id++;
+//
+//            }
 
                 // Creating elements
                 AvatarTransition at1 = new AvatarTransition(_block, "Transition1ForRandom__ " + elt.getName() + "__" + id, elt.getReferenceObject());
@@ -435,12 +463,16 @@ public class AvatarStateMachine extends AvatarElement {
                 AvatarTransition at2 = new AvatarTransition(_block, "Transition2ForRandom__" + elt.getName() + "__" + id, elt.getReferenceObject());
                 at2.setGuard("[" + random.getVariable() + " < " + random.getMaxValue() + "]");
                 at2.addAction(random.getVariable() + "=" + random.getVariable() + " + 1");
+                AvatarTransition at3 = new AvatarTransition(_block, "Transition3ForRandom__ " + elt.getName() + "__" + id, elt.getReferenceObject());
+                AvatarState afterRandom = new AvatarState("StateAfterRandom__" + elt.getName() + "__" + id, elt.getReferenceObject());
 
                 // Adding elements
                 toAdd.add(at1);
                 toAdd.add(randomState);
                 toAdd.add(beforeRandom);
                 toAdd.add(at2);
+                toAdd.add(at3);
+                toAdd.add(afterRandom);
 
                 // Linking elements
                 if (previous != null) {
@@ -450,8 +482,10 @@ public class AvatarStateMachine extends AvatarElement {
                 beforeRandom.addNext(at1);
                 at1.addNext(randomState);
                 randomState.addNext(at2);
-                randomState.addNext(next);
+                randomState.addNext(at3);
                 at2.addNext(randomState);
+                at3.addNext(afterRandom);
+                afterRandom.addNext(next);
 
                 id++;
 
@@ -1738,4 +1772,88 @@ public class AvatarStateMachine extends AvatarElement {
             }
         }
     }
+
+    /**
+     * Looks for all numerical values over
+     * the provided max
+     *
+     * @param maxV Maximum value.
+     */
+    public ArrayList<AvatarElement> elementsWithNumericalValueOver(int maxV) {
+        String val;
+
+        ArrayList<AvatarElement> invalids = new ArrayList<AvatarElement>();
+
+        for(AvatarStateMachineElement asme: elements) {
+
+            // Action on signals
+            if (asme instanceof AvatarActionOnSignal) {
+                AvatarActionOnSignal aaos = (AvatarActionOnSignal)asme;
+                for(int i=0; i<aaos.getNbOfValues(); i++) {
+                    val = aaos.getValue(i);
+                    if (MyMath.hasIntegerValueOverMax(val, maxV)) {
+                        invalids.add(this);
+                        break;
+                    }
+                }
+
+            }
+
+            if (asme instanceof AvatarRandom) {
+                AvatarRandom arand = (AvatarRandom)asme;
+                val = arand.getMinValue();
+                if (MyMath.hasIntegerValueOverMax(val, maxV)) {
+                    invalids.add(this);
+                } else {
+                    val = arand.getMaxValue();
+                    if (MyMath.hasIntegerValueOverMax(val, maxV)) {
+                        invalids.add(this);
+                    }
+                }
+            }
+
+            if (asme instanceof AvatarSetTimer) {
+                AvatarSetTimer atop = (AvatarSetTimer)asme;
+                val = atop.getTimerValue();
+                if (MyMath.hasIntegerValueOverMax(val, maxV)) {
+                    invalids.add(this);
+                }
+            }
+
+            if (asme instanceof AvatarTransition) {
+                AvatarTransition at = (AvatarTransition)asme;
+
+                // Guard
+                val = at.getGuard().toString();
+                if (MyMath.hasIntegerValueOverMax(val, maxV)) {
+                    invalids.add(this);
+                }
+
+                // Delays
+                val = at.getMinDelay();
+                if (MyMath.hasIntegerValueOverMax(val, maxV)) {
+                    invalids.add(this);
+                }
+                val = at.getMaxDelay();
+                if (MyMath.hasIntegerValueOverMax(val, maxV)) {
+                    invalids.add(this);
+                }
+
+                // Actions
+                for(AvatarAction aa: at.getActions()) {
+                    val = aa.toString();
+                    if (MyMath.hasIntegerValueOverMax(val, maxV)) {
+                        invalids.add(this);
+                    }
+                }
+
+            }
+
+
+
+        }
+
+        return invalids;
+    }
+
 }

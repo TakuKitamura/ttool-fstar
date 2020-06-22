@@ -120,6 +120,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -1010,7 +1012,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return index;
     }
 
-    private int addAvatarDesignPanel(String name, int index) {
+    public int addAvatarDesignPanel(String name, int index) {
         if (index == -1) {
             index = tabs.size();
         }
@@ -1851,8 +1853,12 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
     }
 
     public void drawAvatarSpecification(AvatarSpecification av) {
+        DateFormat dateFormat = new SimpleDateFormat("_yyyyMMdd_HHmmss");
+        Date date = new Date();
+        String dateAndTime = dateFormat.format(date);
+        String tabName = "GeneratedDesign_" + dateAndTime;
         TraceManager.addDev("Draw Spec 1");
-        int index = createAvatarDesign("GeneratedDesign");
+        int index = createAvatarDesign(tabName);
         TraceManager.addDev("Draw Spec 2");
         AvatarDesignPanel adp = (AvatarDesignPanel) (tabs.elementAt(index));
         TraceManager.addDev("Draw Spec 3");
@@ -3189,7 +3195,17 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         return b;
     }
 
-    protected boolean saveProject() {
+    public String setFileName(String fileName) {
+        File f = new File(fileName);
+        file = FileUtils.addFileExtensionIfMissing(f, TFileFilter.getExtension());
+        return file.getName();
+    }
+
+    public String getFileName() {
+        return file.getAbsolutePath();
+    }
+
+    public boolean saveProject() {
         if (file == null) {
             if (dir != null)
                 createFileDialog();
@@ -4854,7 +4870,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
 
     public void avatarProVerifVerification() {
         boolean limit = true;
-        TraceManager.addDev("Avatar proverif fv");
+        TraceManager.addDev("AVATAR PROVERIF FV");
         TURTLEPanel tp = this.getCurrentTURTLEPanel();
         AvatarDesignPanel adp = null;
         if (tp instanceof AvatarDesignPanel) {
@@ -5035,9 +5051,14 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         }
     }
 
+
     public void avatarModelChecker() {
         TraceManager.addDev("Execute avatar model checker");
-        gtm.generateAvatarFromTML(true, false);
+        TURTLEPanel tdp = getCurrentTURTLEPanel();
+        if (tdp instanceof TMLComponentDesignPanel) {
+            gtm.generateFullAvatarFromTML();
+        }
+
         if (gtm.getAvatarSpecification() == null) {
             TraceManager.addDev("Null avatar spec");
             return;
@@ -5045,7 +5066,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         JDialogAvatarModelChecker jmc = new JDialogAvatarModelChecker(frame, this, "Avatar: Model Checking", gtm.getAvatarSpecification(),
                 SpecConfigTTool.TGraphPath, experimentalOn);
         // jmc.setSize(550, 600);
-        GraphicLib.centerOnParent(jmc, 650, 600);
+        GraphicLib.centerOnParent(jmc, 650, 850);
         jmc.setVisible(true);
     }
 
@@ -8200,6 +8221,10 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         mainTabbedPane.setTitleAt(tabs.size() - 1, mainTabbedPane.getTitleAt(index) + "_" + s);
     }
 
+    public void removeCurrentTab() {
+        requestRemoveTab(mainTabbedPane.getSelectedIndex());
+    }
+
     public void requestRemoveTab(int index) {
         if (index >= tabs.size()) {
             return;
@@ -8209,6 +8234,19 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
         mainTabbedPane.remove(index);
         changeMade(null, -1);
     }
+
+
+    public boolean selectPanelByName(String name) {
+        for (int i = 0; i < mainTabbedPane.getTabCount(); i++) {
+            if (mainTabbedPane.getTitleAt(i).equals(name)) {
+                mainTabbedPane.setSelectedIndex(i);
+                return true;
+            }
+
+        }
+        return false;
+    }
+
 
     public void requestMoveRightTab(int index) {
         // TraceManager.addDev("Move right");
@@ -9428,7 +9466,7 @@ public class MainGUI implements ActionListener, WindowListener, KeyListener, Per
                 if (ac.equals("Rename")) {
                     mgui.requestRenameTab(mainTabbedPane.getSelectedIndex());
                 } else if (ac.equals("Remove")) {
-                    mgui.requestRemoveTab(mainTabbedPane.getSelectedIndex());
+                    mgui.removeCurrentTab();
                 } else if (ac.equals("Move to the left")) {
                     mgui.requestMoveLeftTab(mainTabbedPane.getSelectedIndex());
                 } else if (ac.equals("Move to the right")) {

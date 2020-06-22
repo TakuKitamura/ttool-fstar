@@ -214,6 +214,7 @@ public class AvatarSMDConnector extends TGConnectorWithCommentConnectionPoints i
         return getAvatarSMDTransitionInfo().getDelayDistributionLaw();
     }
     public String getExtraDelay1() { return getAvatarSMDTransitionInfo().getExtraDelay1(); }
+    public String getExtraDelay2() { return getAvatarSMDTransitionInfo().getExtraDelay2(); }
 
     public String getComputeMinDelay() {
         return getAvatarSMDTransitionInfo().getComputeMinDelay();

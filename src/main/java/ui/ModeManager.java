@@ -146,15 +146,20 @@ public class ModeManager {
             actions[TGUIAction.ACT_REMOVENOC].setEnabled(true);
             if (mgui.getCurrentTURTLEPanel() instanceof TMLComponentDesignPanel) {
                 actions[TGUIAction.ACT_GEN_UPPAAL].setEnabled(true);
+                if (mgui.isExperimentalOn()) {
+                    actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER].setEnabled(true);
+                }
             } else {
                 actions[TGUIAction.ACT_GEN_UPPAAL].setEnabled(false);
+                actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER].setEnabled(false);
             }
             actions[TGUIAction.ACT_GEN_JAVA].setEnabled(true);
             actions[TGUIAction.ACT_SIMU_JAVA].setEnabled(true);
             actions[TGUIAction.ACT_GEN_RTLOTOS].setEnabled(true);
             actions[TGUIAction.ACT_PROJECTION].setEnabled(false);
             actions[TGUIAction.ACT_AVATAR_FV_PROVERIF].setEnabled(true);
-            actions[TGUIAction.ACT_AVATAR_MODEL_CHECKER].setEnabled(false);
+
+
             break;
 
         case MainGUI.MODEL_UPPAAL_OK:
@@ -179,7 +184,8 @@ public class ModeManager {
             actions[TGUIAction.ACT_GEN_CCODE].setEnabled(true);
             actions[TGUIAction.ACT_GEN_AUT].setEnabled(true);
             actions[TGUIAction.ACT_GEN_AUTS].setEnabled(true);
-            actions[TGUIAction.ACT_GEN_UPPAAL].setEnabled(true);            
+            actions[TGUIAction.ACT_GEN_UPPAAL].setEnabled(true);
+
             break;
         case MainGUI.AVATAR_SYNTAXCHECKING_OK:
             actions[TGUIAction.ACT_AVATAR_SIM].setEnabled(true);

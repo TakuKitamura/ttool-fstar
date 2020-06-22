@@ -169,7 +169,7 @@ public class TMLArchiKey extends TGCWithoutInternalComponent implements Swallowe
         g.drawLine(x+width-space-cran, y+space+cran, x + width-space, y+space+cran);
 */
         // Issue #31
-        g.drawImage( scale( IconManager.img9 ), x+width-keyOffsetY-keyOffsetX + shaftWidth/*3*/, y + keyOffsetY + scale( 7 ), null );
+        //g.drawImage( scale( IconManager.img9 ), x+width-keyOffsetY-keyOffsetX + shaftWidth/*3*/, y + keyOffsetY + scale( 7 ), null );
 
         drawSingleString(g,value, x + textX , y + textY);
 

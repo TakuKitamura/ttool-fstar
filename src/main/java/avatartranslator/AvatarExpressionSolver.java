@@ -50,8 +50,10 @@ import avatartranslator.modelchecker.SpecificationState;
  * @version 1.0 17/04/2020
  */
 public class AvatarExpressionSolver {
-    private static final int IMMEDIATE_NO = 0;
-    private static final int IMMEDIATE_INT = 1;
+    protected static final int IMMEDIATE_NO = 0;
+    protected static final int IMMEDIATE_INT = 1;
+    protected static final int IMMEDIATE_BOOL = 2;
+
     
     private AvatarExpressionSolver left, right;
     private char operator;
@@ -59,7 +61,7 @@ public class AvatarExpressionSolver {
     private boolean isLeaf; //variable
     private boolean isNot;
     private boolean isNegated;
-    private int isImmediateValue; //0: No; 1: Boolean; 2: Int
+    private int isImmediateValue; //0: No; 1: Int; 2: Boolean;
     private int intValue;
     private AvatarExpressionAttribute leaf;
     
@@ -93,6 +95,48 @@ public class AvatarExpressionSolver {
     public boolean buildExpression(AvatarSpecification spec) {
         boolean returnVal;
         
+        returnVal = buildExpressionRec(spec); 
+        if (returnVal == false) {
+            return false;
+        }
+        
+        return checkIntegrity();
+    }
+    
+    public boolean buildExpression(AvatarBlock block) {
+        boolean returnVal;
+        
+        returnVal = buildExpressionRec(block); 
+        if (returnVal == false) {
+            return false;
+        }
+        
+        return checkIntegrity();
+    }
+    
+    public boolean buildExpression() {
+        boolean returnVal;
+        
+        returnVal = buildExpressionRec(); 
+        if (returnVal == false) {
+            return false;
+        }
+        
+        return checkIntegrity();
+    }
+    
+    public boolean builExpression(AvatarExpressionAttribute attribute) {
+        this.expression = attribute.toString();
+        isLeaf = true;
+        isImmediateValue = IMMEDIATE_NO;
+        leaf = attribute;
+        return true;
+    }
+    
+    
+    public boolean buildExpressionRec(AvatarSpecification spec) {
+        boolean returnVal;
+        
         removeUselessBrackets();
         
         if (!expression.matches("^.+[\\+\\-<>=:;\\$&\\|\\*/].*$")) {
@@ -103,11 +147,11 @@ public class AvatarExpressionSolver {
             checkNegatedNoBrackets();
             if (expression.equals("true")) {
                 intValue = 1;
-                isImmediateValue = IMMEDIATE_INT;
+                isImmediateValue = IMMEDIATE_BOOL;
                 returnVal = true;
             } else if (expression.equals("false")) {
                 intValue = 0;
-                isImmediateValue = IMMEDIATE_INT;
+                isImmediateValue = IMMEDIATE_BOOL;
                 returnVal = true;
             } else if (expression.matches("-?\\d+")) {
                 intValue = Integer.parseInt(expression);
@@ -145,13 +189,13 @@ public class AvatarExpressionSolver {
         left = new AvatarExpressionSolver(leftExpression);
         right = new AvatarExpressionSolver(rightExpression);
         //System.out.println("Expression " + expression + " ; " + leftExpression + " ; " + rightExpression + "\n");  
-        returnVal = left.buildExpression(spec);
-        returnVal &= right.buildExpression(spec);   
+        returnVal = left.buildExpressionRec(spec);
+        returnVal &= right.buildExpressionRec(spec);   
         
         return returnVal;
     }
     
-    public boolean buildExpression(AvatarBlock block) {
+    public boolean buildExpressionRec(AvatarBlock block) {
         boolean returnVal;
         
         removeUselessBrackets();
@@ -164,11 +208,11 @@ public class AvatarExpressionSolver {
             checkNegatedNoBrackets();
             if (expression.equals("true")) {
                 intValue = 1;
-                isImmediateValue = IMMEDIATE_INT;
+                isImmediateValue = IMMEDIATE_BOOL;
                 returnVal = true;
             } else if (expression.equals("false")) {
                 intValue = 0;
-                isImmediateValue = IMMEDIATE_INT;
+                isImmediateValue = IMMEDIATE_BOOL;
                 returnVal = true;
             } else if (expression.matches("-?\\d+")) {
                 intValue = Integer.parseInt(expression);
@@ -206,21 +250,14 @@ public class AvatarExpressionSolver {
         left = new AvatarExpressionSolver(leftExpression);
         right = new AvatarExpressionSolver(rightExpression);
         //System.out.println("Expression " + expression + " ; " + leftExpression + " ; " + rightExpression + "\n");  
-        returnVal = left.buildExpression(block);
-        returnVal &= right.buildExpression(block);
+        returnVal = left.buildExpressionRec(block);
+        returnVal &= right.buildExpressionRec(block);
         
         return returnVal;
     }
     
-    public boolean builExpression(AvatarExpressionAttribute attribute) {
-        this.expression = attribute.toString();
-        isLeaf = true;
-        isImmediateValue = IMMEDIATE_NO;
-        leaf = attribute;
-        return true;
-    }
     
-    public boolean buildExpression() {
+    public boolean buildExpressionRec() {
         boolean returnVal;
         
         removeUselessBrackets();
@@ -233,11 +270,11 @@ public class AvatarExpressionSolver {
             checkNegatedNoBrackets();
             if (expression.equals("true")) {
                 intValue = 1;
-                isImmediateValue = IMMEDIATE_INT;
+                isImmediateValue = IMMEDIATE_BOOL;
                 returnVal = true;
             } else if (expression.equals("false")) {
                 intValue = 0;
-                isImmediateValue = IMMEDIATE_INT;
+                isImmediateValue = IMMEDIATE_BOOL;
                 returnVal = true;
             } else if (expression.matches("-?\\d+")) {
                 intValue = Integer.parseInt(expression);
@@ -274,8 +311,8 @@ public class AvatarExpressionSolver {
         left = new AvatarExpressionSolver(leftExpression);
         right = new AvatarExpressionSolver(rightExpression);
         //System.out.println("Expression " + expression + " ; " + leftExpression + " ; " + rightExpression + "\n");  
-        returnVal = left.buildExpression();
-        returnVal &= right.buildExpression();
+        returnVal = left.buildExpressionRec();
+        returnVal &= right.buildExpressionRec();
         
         return returnVal;
     }
@@ -305,6 +342,17 @@ public class AvatarExpressionSolver {
               //not(expression)
                 isNot = true;
                 expression = expression.substring(4, expression.length() - 1).trim();
+            }
+        } else if (expression.startsWith("!(")) {
+            int closingIndex = getClosingBracket(2);
+            
+            if (closingIndex == -1) {
+                return false;
+            }
+            if (closingIndex == expression.length() - 1) {
+                //not(expression)
+                isNot = true;
+                expression = expression.substring(2, expression.length() - 1).trim();
             }
         }
         return true;
@@ -346,43 +394,55 @@ public class AvatarExpressionSolver {
         for (i = 0, index = -1; i < expression.length(); i++) {
             a = expression.charAt(i);
             switch (a) {
-            case '=':
+            case '|':
                 if (level == 0) {
                     index = i;
-                    priority = 2;
+                    priority = 5;
+                }
+                break;
+            case '&':
+                if (level == 0 && priority < 5) {
+                    index = i;
+                    priority = 4;
+                }
+                break;
+            case '=':
+                if (level == 0 && priority < 4) {
+                    index = i;
+                    priority = 3;
                 }
                 subVar = true;
                 break;
             case '$':
-                if (level == 0) {
+                if (level == 0 && priority < 4) {
                     index = i;
-                    priority = 2;
+                    priority = 3;
                 }
                 subVar = true;
                 break;
             case '<':
-                if (level == 0) {
+                if (level == 0 && priority < 3) {
                     index = i;
                     priority = 2;
                 }
                 subVar = true;
                 break;
             case '>':
-                if (level == 0) {
+                if (level == 0 && priority < 3) {
                     index = i;
                     priority = 2;
                 }
                 subVar = true;
                 break;
             case ':':
-                if (level == 0) {
+                if (level == 0 && priority < 3) {
                     index = i;
                     priority = 2;
                 }
                 subVar = true;
                 break;
             case ';':
-                if (level == 0) {
+                if (level == 0 && priority < 3) {
                     index = i;
                     priority = 2;
                 }
@@ -400,23 +460,12 @@ public class AvatarExpressionSolver {
                     priority = 1;
                 }
                 break;
-            case '|':
-                if (level == 0 && priority < 2) {
-                    index = i;
-                    priority = 1;
-                }
-                break;
             case '/':
                 if (level == 0  && priority == 0) {
                     index = i;
                 }
                 break;
             case '*':
-                if (level == 0  && priority == 0) {
-                    index = i;
-                }
-                break;
-            case '&':
                 if (level == 0  && priority == 0) {
                     index = i;
                 }
@@ -442,7 +491,7 @@ public class AvatarExpressionSolver {
     public int getResult() {
         int res;
         if (isLeaf) {
-            if (isImmediateValue == IMMEDIATE_INT) {
+            if (isImmediateValue != IMMEDIATE_NO) {
                 res = intValue;
             } else {
                 return 0;
@@ -462,7 +511,7 @@ public class AvatarExpressionSolver {
     public int getResult(SpecificationState ss) {
         int res;
         if (isLeaf) {
-            if (isImmediateValue == IMMEDIATE_INT) {
+            if (isImmediateValue != IMMEDIATE_NO) {
                 res = intValue;
             } else {
                 res = leaf.getValue(ss);
@@ -482,7 +531,7 @@ public class AvatarExpressionSolver {
     public int getResult(SpecificationState ss, AvatarStateMachineElement asme) {
         int res;
         if (isLeaf) {
-            if (isImmediateValue == IMMEDIATE_INT) {
+            if (isImmediateValue != IMMEDIATE_NO) {
                 res = intValue;
             } else {
                 res = leaf.getValue(ss, asme);
@@ -502,13 +551,33 @@ public class AvatarExpressionSolver {
     public int getResult(SpecificationBlock sb) {
         int res;
         if (isLeaf) {
-            if (isImmediateValue == IMMEDIATE_INT) {
+            if (isImmediateValue != IMMEDIATE_NO) {
                 res = intValue;
             } else {
                 res = leaf.getValue(sb);
             }
         } else {
             res = getChildrenResult(left.getResult(sb), right.getResult(sb));
+        }
+        
+        if (isNot) {
+            res = (res == 0) ? 1 : 0;
+        } else if (isNegated) {
+            res = -res;
+        }
+        return res;
+    }
+    
+    public int getResult(int[] attributesValues) {
+        int res;
+        if (isLeaf) {
+            if (isImmediateValue != IMMEDIATE_NO) {
+                res = intValue;
+            } else {
+                res = leaf.getValue(attributesValues);
+            }
+        } else {
+            res = getChildrenResult(left.getResult(attributesValues), right.getResult(attributesValues));
         }
         
         if (isNot) {
@@ -573,8 +642,14 @@ public class AvatarExpressionSolver {
         if (isLeaf) {
             if (isImmediateValue == IMMEDIATE_NO) {
                 retS = leaf.toString();
-            } else {
+            } else if (isImmediateValue == IMMEDIATE_INT){
                 retS = String.valueOf(intValue);
+            } else {
+                if (intValue == 0) {
+                    retS = "false";
+                } else {
+                    retS = "true";
+                }
             }
             if (isNegated) {
                 retS = "-(" + retS + ")";
@@ -645,6 +720,51 @@ public class AvatarExpressionSolver {
             right.linkStates();
         }
     }
+
+    private boolean checkIntegrity() {
+        int optype, optypel, optyper;
+        boolean returnVal;
+        
+        if (isLeaf) {
+            if (isNot) {
+                return getReturnType() == IMMEDIATE_BOOL;
+            } else if (isNegated) {
+                return getReturnType() == IMMEDIATE_INT;
+            } else {
+                return true;
+            }
+        }
+        
+        optype = getType();
+        optypel = left.getReturnType();
+        optyper = right.getReturnType();
+                
+        switch(optype) {
+        case IMMEDIATE_NO:
+            returnVal = false; //Error
+            break;
+        case IMMEDIATE_INT:
+            returnVal = (optypel == IMMEDIATE_INT && optyper == IMMEDIATE_INT) ? true : false;
+            break;
+        case IMMEDIATE_BOOL:
+            returnVal = (optypel == IMMEDIATE_BOOL && optyper == IMMEDIATE_BOOL) ? true : false;
+            break;
+        case 3:
+            returnVal = (optypel == optyper) ? true : false;
+            break;
+        default:
+            returnVal = false;
+        }
+        
+        if (returnVal == false) {
+            return false;
+        }
+        
+        returnVal = left.checkIntegrity();
+        returnVal &= right.checkIntegrity();
+
+        return returnVal;
+    }
     
     private void removeUselessBrackets() {
         while (expression.startsWith("(") && expression.endsWith(")")) {
@@ -672,6 +792,80 @@ public class AvatarExpressionSolver {
             }
         }
         return -1;
+    }
+    
+    private int getType() {
+        int optype;
+        
+        if (isLeaf) {
+            if (isImmediateValue == IMMEDIATE_NO) {
+                return leaf.getAttributeType();
+            } else {
+                return isImmediateValue;
+            }      
+        }
+        
+        switch (operator) {
+        case '=':
+        case '$':
+            optype = 3; //BOTH sides must have the same type
+            break;
+        case '<':
+        case '>':
+        case ':':
+        case ';':
+        case '-':
+        case '+':
+        case '/':
+        case '*':
+            optype = IMMEDIATE_INT;
+            break;
+        case '|':
+        case '&':
+            optype = IMMEDIATE_BOOL;
+            break;
+        default:
+            optype = IMMEDIATE_NO; //ERROR
+            break;
+        }
+        
+        return optype;
+    }
+    
+    private int getReturnType() {
+        int optype;
+        
+        if (isLeaf) {
+            if (isImmediateValue == IMMEDIATE_NO) {
+                return leaf.getAttributeType();
+            } else {
+                return isImmediateValue;
+            }      
+        }
+        
+        switch (operator) {
+        case '-':
+        case '+':
+        case '/':
+        case '*':
+            optype = IMMEDIATE_INT;
+            break;
+        case '|':
+        case '&':
+        case '=':
+        case '$':
+        case '<':
+        case '>':
+        case ':':
+        case ';':
+            optype = IMMEDIATE_BOOL;
+            break;
+        default:
+            optype = IMMEDIATE_NO; //ERROR
+            break;
+        }
+        
+        return optype;
     }
 
 }

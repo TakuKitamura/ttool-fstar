@@ -111,7 +111,11 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     private SpecificationReinit initState;
     
     //Debug counterexample
-    //private boolean counterexample;
+    private boolean counterexample;
+    private boolean counterTraceAUT;
+    private CounterexampleTrace counterTrace;
+    public Map<Integer, CounterexampleTraceState> traceStates;
+    private StringBuilder counterTraceReport;
     
     //RG limits
     private boolean stateLimitRG;
@@ -144,6 +148,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         timeLimitRG = false;
         stateLimit = Integer.MAX_VALUE;
         timeLimit = 500;
+        counterexample = false;
         freeIntermediateStateCoding = true;
     }
 
@@ -341,6 +346,28 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         }
         return false;
     }
+    
+    public void setCounterExampleTrace(boolean counterexample, boolean counterTraceAUT) {
+        this.counterexample = counterexample;
+        if (counterexample) {
+            counterTraceReport = new StringBuilder();
+            this.counterTraceAUT = counterTraceAUT;
+        }
+    }
+    
+    public String getCounterTrace() {
+        if (counterTraceReport == null) {
+            return "";
+        }
+        return counterTraceReport.toString();
+    }
+    
+    public List<String> getAUTTraces() {
+        if (counterTrace == null) {
+            return null;
+        }
+        return counterTrace.getAUTTrace();
+    }
 
     public void setComputeRG(boolean _rg) {
         computeRG = _rg;
@@ -367,7 +394,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
       }*/
 
     public boolean startModelCheckingProperties() {
-        boolean studyS, studyL, studyR, studyRI, genRG;
+        boolean studyS, studyL, studyR, studyRI, genRG, genTrace;
         boolean emptyTr, ignoreConcurrence;
         long deadlocks = 0;
         
@@ -381,6 +408,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         
         initModelChecking();
         
+        initCounterexample();
+                
         stateLimitRG = false;
         timeLimitRG = false;
         emptyTr = ignoreEmptyTransitions;
@@ -390,6 +419,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         studyS = studySafety;
         studyRI = studyReinit;
         genRG = computeRG;
+        genTrace = counterexample;
         
         //then compute livenesses
         computeRG = false;
@@ -398,6 +428,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         studyLiveness = false;
         studyReachability = false;
         studyReinit = false;
+        counterexample = false;
+                
 
         if (studyL) {
             studySafety = true;
@@ -408,7 +440,9 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 startModelChecking(nbOfThreads);
                 deadlocks += nbOfDeadlocks;
                 resetModelChecking();
-                safety.setComputed();
+                if (!stoppedBeforeEnd) {
+                    safety.setComputed();
+                }
             }
             studySafety = false;
             ignoreConcurrenceBetweenInternalActions = ignoreConcurrence;
@@ -417,6 +451,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         
         if (studyS) {
             studySafety = true;
+            counterexample = genTrace;
             for (SafetyProperty sp : safeties) {
                 safety = sp;
                 ignoreConcurrenceBetweenInternalActions = true;
@@ -426,7 +461,9 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                     ignoreEmptyTransitions = false;
                     ignoreConcurrenceBetweenInternalActions = ignoreConcurrence;
                 }
+                resetCounterexample();
                 startModelChecking(nbOfThreads);
+                generateCounterexample();
                 if (safety.safetyType == SafetyProperty.LEADS_TO) {
                     // second pass
                     safety.initLead();
@@ -435,20 +472,25 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                     for (SpecificationState state : safetyLeadStates.values()) {
                         deadlocks += nbOfDeadlocks;
                         resetModelChecking();
+                        resetCounterexample();
                         startModelChecking(state, nbOfThreads);
                         if (safety.result == false) {
+                            generateCounterexample();
                             break;
                         }
                     }
                     System.out.println("Dimensions of lead states to elaborate: " + safetyLeadStates.size());
                     safetyLeadStates = null;
                 }
-                safety.setComputed();
+                if (!stoppedBeforeEnd) {
+                    safety.setComputed();
+                }
                 deadlocks += nbOfDeadlocks;
                 ignoreConcurrenceBetweenInternalActions = ignoreConcurrence;
                 resetModelChecking();
             }
             studySafety = false;
+            counterexample = false;
         }
         
         if (studyRI) {
@@ -457,6 +499,24 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             deadlocks += nbOfDeadlocks;
             resetModelChecking();
             studyReinit = false;
+        }
+        
+        if (checkNoDeadlocks) {
+            //If a complete study with reachability graph generation has been executed,
+            //there is no need to study deadlocks again
+            if (deadlocks == 0 || genTrace) {
+                deadlockStop = true;
+                counterexample = genTrace;
+                ignoreConcurrenceBetweenInternalActions = true;
+                resetCounterexample();
+                startModelChecking(nbOfThreads);
+                generateCounterexample();
+                deadlocks = nbOfDeadlocks;
+                resetModelChecking();
+                ignoreConcurrenceBetweenInternalActions = ignoreConcurrence;
+                counterexample = false;
+                deadlockStop = false;
+            }
         }
         
         if (studyR || genRG) {
@@ -474,17 +534,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         
         if (genRG) {
             nbOfDeadlocks = (int) deadlocks;
-        } else if (checkNoDeadlocks) {
-            //If a complete study with reachability graph generation has been executed,
-            //there is no need to study deadlocks again
-            if (deadlocks == 0) {
-                deadlockStop = true;
-                ignoreConcurrenceBetweenInternalActions = true;
-                startModelChecking(nbOfThreads);
-                ignoreConcurrenceBetweenInternalActions = ignoreConcurrence;
-            } else {
-                nbOfDeadlocks = 1;
-            }
+        } else if (checkNoDeadlocks && deadlocks > 0) {
+            nbOfDeadlocks = 1;
         }
         
         computeRG = genRG;
@@ -492,7 +543,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         studySafety = studyS;
         studyReachability = studyR;
         studyReinit = studyRI;
-        
+                
         TraceManager.addDev("Model checking done");
         return true;
     }
@@ -554,7 +605,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 //        
 //        prepareTransitionsOfState(initialState);
         blockValues = initialState.getBlockValues();
-        initialState.distance = 0;
+//        initialState.distance = 0;
 
         //TraceManager.addDev("initialState=" + initialState.toString() + "\n nbOfTransitions" + initialState.transitions.size());
         initialState.computeHash(blockValues);
@@ -567,6 +618,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             actionOnProperty(initialState, 0, null, null);
         } else {
             pendingStates.add(initialState);
+            if (counterexample && deadlockStop) {
+                //Register counterexample trace
+                actionOnProperty(initialState, 0, null, null);
+            }
         }
         
         if (studyReinit) {
@@ -617,7 +672,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
         // initialState's transitions and blocks must be already initialized
         blockValues = initialState.getBlockValues();
-        initialState.distance = 0;
+//        initialState.distance = 0;
 
         //TraceManager.addDev("initialState=" + initialState.toString() + "\n nbOfTransitions" + initialState.transitions.size());
         initialState.computeHash(blockValues);
@@ -630,6 +685,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             actionOnProperty(initialState, 0, null, null);
         } else {
             pendingStates.add(initialState);
+            if (counterexample && deadlockStop) {
+                //Register counterexample trace
+                actionOnProperty(initialState, 0, null, null);
+            }
         }
         //pendingStates.add(initialState);
            
@@ -851,36 +910,53 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         nbOfCurrentComputations = 0;
     }
     
-    private void initExpressionSolvers() {
-        AvatarTransition at;
+    private void initExpressionSolvers() {        
+        spec.generateAllExpressionSolvers();
         
-        for (AvatarBlock block : spec.getListOfBlocks()) {
-            AvatarStateMachine asm = block.getStateMachine();
-
-            for (AvatarStateMachineElement elt : asm.getListOfElements()) {
-                if (elt instanceof AvatarTransition) {
-                    at = (AvatarTransition) elt;
-                    if (at.isGuarded()) {
-                        at.buildGuardSolver();
-                    }
-                    for (AvatarAction aa : at.getActions()) {
-                        if (aa instanceof AvatarActionAssignment) {
-                            ((AvatarActionAssignment) aa).buildActionSolver(block);
-                        }
-                    }
-                } else if (elt instanceof AvatarActionOnSignal) {
-                    ((AvatarActionOnSignal) elt).buildActionSolver(block);
-                }
-            }
-        }
-        
-        //To have all the leadsTo functionalities allStates in stateMachines must be filled with states
+        //To have all the safety functionalities allStates in stateMachines must be filled with states
         if (studySafety && safeties != null) {
             for (SafetyProperty sp : safeties) {
                sp.linkSolverStates();
             }
         }
     }
+
+
+    private void initCounterexample() {
+        if (counterexample) {
+            counterTrace = new CounterexampleTrace(spec);
+            traceStates =  Collections.synchronizedMap(new HashMap<Integer, CounterexampleTraceState>());
+        }
+    }
+    
+    private void resetCounterexample() {
+        if (counterexample) {
+            counterTrace.reset();
+            traceStates =  Collections.synchronizedMap(new HashMap<Integer, CounterexampleTraceState>());
+        }
+    }
+    
+    
+    private void generateCounterexample() {
+        if (counterexample && counterTrace.hasCounterexample()) {
+            counterTrace.buildTrace();
+            if (studySafety) {
+                counterTraceReport.append("Trace for " + safety.getRawProperty() + "\n");
+                counterTraceReport.append(counterTrace.generateSimpleTrace(states) + "\n\n");
+            } else if (deadlockStop) {
+                counterTraceReport.append("Trace for NO Deadlocks\n");
+                counterTraceReport.append(counterTrace.generateSimpleTrace(states) + "\n\n");
+            }
+            if (counterTraceAUT) {
+                if (studySafety) {
+                    counterTrace.generateTraceAUT(safety.getRawProperty(), states);
+                } else if (deadlockStop) {
+                    counterTrace.generateTraceAUT("No Deadlocks", states);
+                }
+            }
+        }
+    }
+
 
     private void prepareTransitionsOfState(SpecificationState _ss) {
 
@@ -923,6 +999,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         if (_ss.transitions == null) {
             TraceManager.addDev("null transitions");
             nbOfDeadlocks++;
+            checkPropertyOnDeadlock(_ss);
             mustStop();
             return;
         }
@@ -980,7 +1057,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         if (transitions.size() == 0) {
             checkPropertyOnDeadlock(_ss);
             nbOfDeadlocks++;
-            propertyDone = deadlockStop; //use this flag to stop the execution
             //TraceManager.addDev("Deadlock found");
         }
 
@@ -1048,12 +1124,16 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 //statesByID.put(newState.id, newState);
 
                 link.destinationState = newState;
-                newState.distance = _ss.distance + 1;
+//                newState.distance = _ss.distance + 1;
                 
-                if (!studySafety) {
-                    pendingStates.add(newState);
-                } else {
+                if (studySafety) {
                     actionOnProperty(newState, i, similar, _ss);
+                } else {
+                    pendingStates.add(newState);
+                    if (counterexample && deadlockStop) {
+                        //Register counterexample trace
+                        actionOnProperty(newState, i, similar, _ss);
+                    }
                 }
                 i++;
                 //newState.id = getStateID();
@@ -1097,6 +1177,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     private void computeAllInternalStatesFrom(SpecificationState _ss, SpecificationTransition st) {
         SpecificationState newState = _ss.advancedClone();
         SpecificationState previousState = _ss;
+        
+        ArrayList<Integer> stackStates = new ArrayList<>(); //keeps track of the block hashes
 
         while (st != null) {
             //TraceManager.addDev("cpt=" + cpt + " Working on transition:" + st);
@@ -1111,7 +1193,6 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 handleNonEmptyUniqueTransition(newState);
             }
 
-
             newState.computeHash(blockValues);
 
             SpecificationState similar = findSimilarState(newState);
@@ -1125,6 +1206,44 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 _ss.addNext(link);
                 actionOnProperty(newState, 0, similar, _ss);
                 break;
+            } else if (stackStates.contains(newState.hashValue)) {
+                //already elaborated, add that state
+                SpecificationLink link = new SpecificationLink();
+                link.originState = _ss;
+                action += " [" +  "0...0" +  "]";
+                link.action = action;
+                link.destinationState = newState;
+                synchronized (this) {
+                    similar = states.get(newState.getHash(blockValues));
+                    if (similar == null) {
+                        if (!(stateLimitRG && stateID >= stateLimit)/* || timeLimitReached*/) {
+                            addState(newState);
+                        } else {
+                            limitReached = true; //can be removed
+                            break;
+                        }
+                    }
+                }
+                if (similar != null) {
+                    // check if it has been created by another thread in the meanwhile
+                    link.destinationState = similar;
+                    actionOnProperty(newState, 0, similar, _ss);
+                } else {
+                    link.destinationState = newState;
+//                    newState.distance = _ss.distance + 1;
+                    if (studySafety) {
+                        actionOnProperty(newState, 0, similar, _ss);
+                    } else {
+                        pendingStates.add(newState);
+                        if (counterexample && deadlockStop) {
+                            //Register counterexample trace
+                            actionOnProperty(newState, 0, similar, _ss);
+                        }
+                    }
+                }
+                nbOfLinks++;
+                _ss.addNext(link);
+                break;   
             } else if (studySafety && safety.safetyType == SafetyProperty.LEADS_TO && newState.property) {
                 newState = reduceCombinatorialExplosionProperty(newState);
                 
@@ -1144,7 +1263,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 _ss.addNext(link);
                 break;
             }
-
+            
+            stackStates.add(newState.hashValue);
 
             // Compute next transition
             //prepareTransitionsOfState(previousState);
@@ -1153,7 +1273,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             if (newState.transitions == null) {
                 TraceManager.addDev("null transitions");
                 nbOfDeadlocks++;
-                propertyDone = deadlockStop; //use this flag to stop the execution
+                checkPropertyOnDeadlock(_ss);
                 mustStop();
                 return;
             }
@@ -1199,11 +1319,15 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 	actionOnProperty(newState, 0, similar, _ss);
                 } else {
                     link.destinationState = newState;
-                    newState.distance = _ss.distance + 1;
-                    if (!studySafety) {
-                        pendingStates.add(newState);
-                    } else {
+//                    newState.distance = _ss.distance + 1;
+                    if (studySafety) {
                         actionOnProperty(newState, 0, similar, _ss);
+                    } else {
+                        pendingStates.add(newState);
+                        if (counterexample && deadlockStop) {
+                            //Register counterexample trace
+                            actionOnProperty(newState, 0, similar, _ss);
+                        }
                     }
                 }
                 nbOfLinks++;
@@ -1237,6 +1361,8 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         SpecificationState prevState = ss;
         boolean found;
         
+        ArrayList<Integer> stackStates = new ArrayList<>(); //keeps track of the block hashes
+        
         do {
             prepareTransitionsOfState(prevState);
             
@@ -1245,6 +1371,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             }
             
             ArrayList<SpecificationTransition> transitions = computeValidTransitions(prevState.transitions);
+            stackStates.add(prevState.hashValue);
             
             found = false;
             for (SpecificationTransition tr : transitions) {
@@ -1258,7 +1385,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                         if (newState.property) {
                             newState.computeHash(blockValues);
                             SpecificationState similar = findSimilarState(newState);
-                            if (similar != null) {
+                            if (similar != null || stackStates.contains(newState.hashValue)) {
                                 return newState;
                             }
                             found = true;
@@ -1874,11 +2001,14 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     }
     
     private void actionOnProperty(SpecificationState newState, int i, SpecificationState similar, SpecificationState _ss) {
+        boolean cexample = false;
+        
         if (studySafety) {
             if (safety.safetyType == SafetyProperty.ALLTRACES_ALLSTATES) {
                 if (newState.property) {
                     propertyDone = true;
                     safety.result = false;
+                    cexample = true;
                 } else if (similar == null){
                     pendingStates.add(newState);
                 }
@@ -1896,10 +2026,11 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                         newState.freeUselessAllocations();
                     }
                 } else if (!newState.property) {
-                    if (!similar.property && stateIsReachableFromState(similar, _ss)) {
+                    if (!similar.property && stateIsReachableFromState(similar, _ss) || similar.property) {
                         //found a loop with true property
                         propertyDone = true;
                         safety.result = true;
+                        cexample = true;
                     }
                 }
             } else if (safety.safetyType == SafetyProperty.ALLTRACES_ONESTATE) {
@@ -1916,16 +2047,18 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                         newState.freeUselessAllocations();
                     }
                 } else if (newState.property == false) {
-                    if (!similar.property && stateIsReachableFromState(similar, _ss)) {
+                    if (!similar.property && stateIsReachableFromState(similar, _ss) || similar.property) {
                         //found a loop with false property
                         propertyDone = true;
                         safety.result = false;
+                        cexample = true;
                     }
                 }
             } else if (safety.safetyType == SafetyProperty.ONETRACE_ONESTATE) {
                 if (newState.property) {
                     propertyDone = true;
                     safety.result = true;
+                    cexample = true;
                 } else if (similar == null) {
                     pendingStates.add(newState);
                 }
@@ -1942,29 +2075,59 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                     pendingStates.add(newState);
                 }
             }
-        }
-
-        if (studyReinit && similar != null) {
+        } else if (studyReinit && similar != null) {
             if (similar != initState.initState && stateIsReachableFromState(similar, _ss)) {
                 propertyDone = true;
                 initState.setResult(false);
+                cexample = true;
+            }
+        }
+        
+        if (counterexample) {
+            if (cexample == true) {
+                CounterexampleTraceState cs = new CounterexampleTraceState();
+                if (_ss != null) {
+                    cs.initState(newState, traceStates.get(_ss.hashValue));
+                } else {
+                    cs.initState(newState, null);
+                }
+                counterTrace.setCounterexample(cs);
+            } else if (similar == null) {
+                CounterexampleTraceState cs = new CounterexampleTraceState();
+                if (_ss != null) {
+                    cs.initState(newState, traceStates.get(_ss.hashValue));
+                } else {
+                    cs.initState(newState, null);
+                }
+                traceStates.put(cs.hash, cs);
             }
         }
     }
     
     private void checkPropertyOnDeadlock(SpecificationState ss) {
+        boolean cexample = false;
+        
         if (studySafety) {
             if (safety.safetyType == SafetyProperty.ALLTRACES_ONESTATE && ss.property == false) {
                 propertyDone = true;
                 safety.result = false;
+                cexample = true;
             } else if (safety.safetyType == SafetyProperty.ONETRACE_ALLSTATES && ss.property == false) {
                 propertyDone = true;
                 safety.result = true;
+                cexample = true;
             }
-        }
-        if (studyReinit) {
+        } else if (studyReinit) {
             propertyDone = true;
             initState.setResult(false);
+            cexample = true;
+        } else if (deadlockStop) {
+            propertyDone = true;
+            cexample = true;
+        }
+        
+        if (counterexample && cexample == true) {
+            counterTrace.setCounterexample(traceStates.get(ss.hashValue));
         }
     }
 
@@ -2162,14 +2325,19 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             return "Deadlock check not activeted\n";
         }
         
-        String ret;
-        if (nbOfDeadlocks > 0) {
-            ret = "property is NOT satisfied\n";
-        } else {
-            ret = "property is satisfied\n";
+        StringBuilder ret = new StringBuilder();
+        
+        if (stoppedBeforeEnd) {
+            ret.append("Beware: Full deadlock study might not have been fully completed\n");
         }
         
-        return ret;
+        if (nbOfDeadlocks > 0) {
+            ret.append("property is NOT satisfied\n");
+        } else {
+            ret.append("property is satisfied\n");
+        }
+        
+        return ret.toString();
     }
     
     public String safetyToString() {
@@ -2195,14 +2363,18 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             return "Reinitialization check not activeted\n";
         }
         
-        String ret;
+        StringBuilder ret = new StringBuilder();
+        
+        if (stoppedBeforeEnd) {
+            ret.append("Beware: Full study of liveness might not have been fully completed\n");
+        }
         if (initState.getResult()) {
-            ret = "property is satisfied\n";
+            ret.append("property is satisfied\n");
         } else {
-            ret = "property is NOT satisfied\n";
+            ret.append("property is NOT satisfied\n");
         }
         
-        return ret;
+        return ret.toString();
     }
     
 
@@ -2244,9 +2416,9 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
 
     private boolean stateIsReachableFromState(SpecificationState start, SpecificationState arrival) {
         Set<Long> visited= new HashSet<Long>();
-        if (start.distance > arrival.distance) {
-            return false;
-        }
+//        if (start.distance > arrival.distance) {
+//            return false;
+//        }
         return stateIsReachableFromStateRec(start, arrival, visited);
     }
     

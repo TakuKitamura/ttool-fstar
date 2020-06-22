@@ -61,6 +61,7 @@ import java.util.*;
 public class Print extends Command  {
     private final static String TABS = "tabs";
     private final static String DIR = "dir";
+    private final static String VAR = "var";
 
     public Print() {
 
@@ -136,13 +137,30 @@ public class Print extends Command  {
             public  String executeCommand(String command, Interpreter interpreter) {
 
 
-                System.out.println("Defautl directory: " +  System.getProperty("user.dir"));
+                System.out.println("Default directory: " +  System.getProperty("user.dir"));
+
+                return null;
+            }
+        };
+        Command var = new Command() {
+            public String getCommand() { return VAR; }
+            public String getShortCommand() { return "v"; }
+            public String getDescription() { return "Printing the value of the variable provided as input"; }
+
+            public  String executeCommand(String command, Interpreter interpreter) {
+                String[] commands = command.split(" ");
+                if (commands.length < 1) {
+                    return Interpreter.BAD;
+                }
+
+                System.out.println("Variable " +  commands[0] + " = " + interpreter.getVariableValue(commands[0]));
 
                 return null;
             }
         };
         addAndSortSubcommand(tabs);
         addAndSortSubcommand(dir);
+        addAndSortSubcommand(var);
 
     }
 

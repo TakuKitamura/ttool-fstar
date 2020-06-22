@@ -1,26 +1,26 @@
 /* Copyright or (C) or Copr. GET / ENST, Telecom-Paris, Ludovic Apvrille
- * 
+ *
  * ludovic.apvrille AT enst.fr
- * 
+ *
  * This software is a computer program whose purpose is to allow the
  * edition of TURTLE analysis, design and deployment diagrams, to
  * allow the generation of RT-LOTOS or Java code from this diagram,
  * and at last to allow the analysis of formal validation traces
  * obtained from external tools, e.g. RTL from LAAS-CNRS and CADP
  * from INRIA Rhone-Alpes.
- * 
+ *
  * This software is governed by the CeCILL  license under French law and
  * abiding by the rules of distribution of free software.  You can  use,
  * modify and/ or redistribute the software under the terms of the CeCILL
  * license as circulated by CEA, CNRS and INRIA at the following URL
  * "http://www.cecill.info".
- * 
+ *
  * As a counterpart to the access to the source code and  rights to copy,
  * modify and redistribute granted by the license, users are provided only
  * with a limited warranty  and the software's author,  the holder of the
  * economic rights,  and the successive licensors  have only  limited
  * liability.
- * 
+ *
  * In this respect, the user's attention is drawn to the risks associated
  * with loading,  using,  modifying and/or developing or reproducing the
  * software by the user in light of its specific status of free software,
@@ -31,43 +31,43 @@
  * requirements in conditions enabling the security of their systems and/or
  * data to be ensured and,  more generally, to use and operate it in the
  * same conditions as regards security.
- * 
+ *
  * The fact that you are presently reading this means that you have had
  * knowledge of the CeCILL license and that you accept its terms.
  */
-
-
 
 
 package ui.avatarrd;
 
 
 import myutil.GraphicLib;
-//import myutil.TraceManager;
 import ui.*;
 import ui.util.IconManager;
 
 import javax.swing.*;
 import java.awt.*;
 
+//import myutil.TraceManager;
+
 /**
  * Class AvatarRDProperty
  * Avatar property: to be used in avatar requirement diagrams
  * Creation: 20/04/2010
- * @version 1.0 20/04/2010
+ *
  * @author Ludovic APVRILLE
+ * @version 1.0 20/04/2010
  */
 public class AvatarRDProperty extends TGCScalableWithInternalComponent implements TGAutoAdjust {
     public String oldValue;
-//    protected int textX = 5;
+    //    protected int textX = 5;
 //    protected int textY = 22;
     protected int lineHeight = 30;
     private double dlineHeight = 0.0;
     //protected int startFontSize = 10;
     protected Graphics graphics;
-    
 
-//    private Font myFont, myFontB;
+
+    //    private Font myFont, myFontB;
     //private int maxFontSize = 30;
 //    private int minFontSize = 4;
     private int currentFontSize = -1;
@@ -81,16 +81,16 @@ public class AvatarRDProperty extends TGCScalableWithInternalComponent implement
     private int iconSize = 18;
     //private boolean iconIsDrawn = false;
 
-    public AvatarRDProperty(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp)  {
+    public AvatarRDProperty(int _x, int _y, int _minX, int _maxX, int _minY, int _maxY, boolean _pos, TGComponent _father, TDiagramPanel _tdp) {
         super(_x, _y, _minX, _maxX, _minY, _maxY, _pos, _father, _tdp);
-        
+
         textX = 5;
         textY = 22;
         initScaling(150, lineHeight);
-        
+
         oldScaleFactor = tdp.getZoom();
         dlineHeight = lineHeight * oldScaleFactor;
-        lineHeight = (int)dlineHeight;
+        lineHeight = (int) dlineHeight;
         dlineHeight = dlineHeight - lineHeight;
 
         minWidth = 10;
@@ -140,39 +140,39 @@ public class AvatarRDProperty extends TGCScalableWithInternalComponent implement
 
         actionOnAdd();
     }
-    
+
     //Issue #31
     @Override
-    public void internalDrawing(Graphics g)
-    {
-    	//Rectangle
-    	g.drawRect(x, y, width, height);
-    	g.drawLine(x, y + lineHeight, x + width, y + lineHeight);
-    	 
-    	//Filling
-    	g.setColor(ColorManager.AVATAR_REQUIREMENT_TOP);
-      g.fillRect(x+1, y+1, width-1, lineHeight-1);
-      g.setColor(ColorManager.AVATAR_REQUIREMENT_ATTRIBUTES);
-      g.fillRect(x+1, y+1+lineHeight, width-1, height-1-lineHeight);
-      ColorManager.setColor(g, getState(), 0);
-      
-      //Readability Check
-      if (!isTextReadable(g))
-    	  return;
-      //Icon
-      g.drawImage(scale(IconManager.img5100), x + width - scale(iconSize + 2), y + scale(3), Color.yellow, null);
-      
-      //Strings
-      Font font = g.getFont();
-      currentFontSize = font.getSize();
-      g.setFont(font.deriveFont(Font.BOLD));
-      drawLimitedString(g, PROPERTY, x, y + currentFontSize , width, 1);
-      g.setFont(font.deriveFont(Font.PLAIN));
-      drawLimitedString(g, value, x, y + currentFontSize * 2, width, 1);
+    public void internalDrawing(Graphics g) {
+        graphics = g;
+        //Rectangle
+        g.drawRect(x, y, width, height);
+        g.drawLine(x, y + lineHeight, x + width, y + lineHeight);
+
+        //Filling
+        g.setColor(ColorManager.AVATAR_REQUIREMENT_TOP);
+        g.fillRect(x + 1, y + 1, width - 1, lineHeight - 1);
+        g.setColor(ColorManager.AVATAR_REQUIREMENT_ATTRIBUTES);
+        g.fillRect(x + 1, y + 1 + lineHeight, width - 1, height - 1 - lineHeight);
+        ColorManager.setColor(g, getState(), 0);
+
+        //Readability Check
+        if (!isTextReadable(g))
+            return;
+        //Icon
+        g.drawImage(scale(IconManager.img5100), x + width - scale(iconSize + 2), y + scale(3), Color.yellow, null);
+
+        //Strings
+        Font font = g.getFont();
+        currentFontSize = font.getSize();
+        g.setFont(font.deriveFont(Font.BOLD));
+        drawLimitedString(g, PROPERTY, x, y + currentFontSize, width, 1);
+        g.setFont(font.deriveFont(Font.PLAIN));
+        drawLimitedString(g, value, x, y + currentFontSize * 2, width, 1);
     }
-    
-    
-//    public void internalDrawing(Graphics g) {
+
+
+    //    public void internalDrawing(Graphics g) {
 //        Font f = g.getFont();
 //        
 //        //Font fold = f; FIXME: unused 
@@ -241,31 +241,34 @@ public class AvatarRDProperty extends TGCScalableWithInternalComponent implement
             if (hasFather()) {
                 texti = getTopLevelName() + " / " + diagramText;
             }
-            String s = (String)JOptionPane.showInputDialog(frame, texti,
-                                                           "setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
-                                                           null,
-                                                           getValue());
+            String s = (String) JOptionPane.showInputDialog(frame, texti,
+                    "setting value", JOptionPane.PLAIN_MESSAGE, IconManager.imgic101,
+                    null,
+                    getValue());
 
             if ((s != null) && (s.length() > 0) && (!s.equals(oldValue))) {
                 //boolean b;
                 if (!TAttribute.isAValidId(s, false, false, false)) {
                     JOptionPane.showMessageDialog(frame,
-                                                  "Could not change the name of the Property: the new name is not a valid name",
-                                                  "Error",
-                                                  JOptionPane.INFORMATION_MESSAGE);
+                            "Could not change the name of the Property: the new name is not a valid name",
+                            "Error",
+                            JOptionPane.INFORMATION_MESSAGE);
                     return false;
                 }
 
                 if (!tdp.isRequirementNameUnique(s)) {
                     JOptionPane.showMessageDialog(frame,
-                                                  "Could not change the name of the Property: the new name is already in use",
-                                                  "Error",
-                                                  JOptionPane.INFORMATION_MESSAGE);
+                            "Could not change the name of the Property: the new name is already in use",
+                            "Error",
+                            JOptionPane.INFORMATION_MESSAGE);
                     return false;
                 }
 
 
-                int size = graphics.getFontMetrics().stringWidth(s) + iconSize + 5;
+                int size = minWidth;
+                if (graphics != null) {
+                    size = graphics.getFontMetrics().stringWidth(s) + iconSize + 5;
+                }
                 minDesiredWidth = Math.max(size, minWidth);
                 if (minDesiredWidth != width) {
                     newSizeForSon(null);
@@ -276,9 +279,9 @@ public class AvatarRDProperty extends TGCScalableWithInternalComponent implement
                     return true;
                 } else {
                     JOptionPane.showMessageDialog(frame,
-                                                  "Could not change the name of the Property: this name is already in use",
-                                                  "Error",
-                                                  JOptionPane.INFORMATION_MESSAGE);
+                            "Could not change the name of the Property: this name is already in use",
+                            "Error",
+                            JOptionPane.INFORMATION_MESSAGE);
                     setValue(oldValue);
                 }
             }
@@ -306,9 +309,9 @@ public class AvatarRDProperty extends TGCScalableWithInternalComponent implement
       return true;
       }*/
     @Override
-    public void rescale(double scaleFactor){
+    public void rescale(double scaleFactor) {
         dlineHeight = (lineHeight + dlineHeight) / oldScaleFactor * scaleFactor;
-        lineHeight = (int)(dlineHeight);
+        lineHeight = (int) (dlineHeight);
         dlineHeight = dlineHeight - lineHeight;
         minHeight = lineHeight;
 
@@ -328,7 +331,7 @@ public class AvatarRDProperty extends TGCScalableWithInternalComponent implement
     }
 
     @Override
-    public  int getType() {
+    public int getType() {
         return TGComponentManager.AVATARRD_PROPERTY;
     }
 
@@ -357,9 +360,10 @@ public class AvatarRDProperty extends TGCScalableWithInternalComponent implement
        }*/
     @Override
     public String toString() {
-        String ret =  getValue() + PROPERTY;
+        String ret = getValue() + PROPERTY;
         return ret;
     }
+
     @Override
     public void autoAdjust(int mode) {
         //
@@ -369,9 +373,9 @@ public class AvatarRDProperty extends TGCScalableWithInternalComponent implement
         }
 
         Font f = graphics.getFont();
-        Font f0 = f.deriveFont((float)currentFontSize);
+        Font f0 = f.deriveFont((float) currentFontSize);
         Font f1 = f0.deriveFont(Font.BOLD);
-        Font f2 = f.deriveFont((float)(currentFontSize - 2));
+        Font f2 = f.deriveFont((float) (currentFontSize - 2));
 
         // Must find for both modes which width is desirable
         String s0, s1;

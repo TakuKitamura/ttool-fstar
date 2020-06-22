@@ -73,20 +73,32 @@ import java.util.List;
  */
 public class Action extends Command {
     // Action commands
+    private final static String NEW = "new";
     private final static String OPEN = "open";
+    private final static String SAVE = "save";
+    private final static String SET_FILE = "set-file";
+    private final static String GET_FILE = "get-file";
     private final static String RESIZE = "resize";
     private final static String START = "start";
     private final static String QUIT = "quit";
+
+    private final static String NEW_DESIGN = "new-design";
+    private final static String REMOVE_CURRENT_TAB = "remove-cufrrent-tab";
+
+
     private final static String CHECKSYNTAX = "check-syntax";
     private final static String DIPLO_INTERACTIVE_SIMULATION = "diplodocus-interactive-simulation";
     private final static String DIPLO_FORMAL_VERIFICATION = "diplodocus-formal-verification";
     private final static String DIPLO_ONETRACE_SIMULATION = "diplodocus-onetrace-simulation";
     private final static String DIPLO_GENERATE_TML = "diplodocus-generate-tml";
+    private final static String DIPLO_GENERATE_XML = "diplodocus-generate-xml";
     private final static String DIPLO_UPPAAL = "diplodocus-uppaal";
     private final static String DIPLO_REMOVE_NOC = "diplodocus-remove-noc";
 
     private final static String NAVIGATE_PANEL_TO_LEFT = "navigate-panel-to-left";
     private final static String NAVIGATE_PANEL_TO_RIGHT = "navigate-panel-to-right";
+
+    private final static String SELECT_PANEL = "select-panel";
 
     private final static String NAVIGATE_LEFT_PANEL = "navigate-left-panel";
 
@@ -190,7 +202,7 @@ public class Action extends Command {
             }
         };
 
-        // Open
+        // Resize
         Command resize = new Command() {
             public String getCommand() {
                 return RESIZE;
@@ -250,6 +262,122 @@ public class Action extends Command {
             }
         };
 
+        // New
+        Command newT = new Command() {
+            public String getCommand() {
+                return NEW;
+            }
+
+            public String getShortCommand() {
+                return "n";
+            }
+
+            public String getDescription() {
+                return "Creating a new model in TTool";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                interpreter.mgui.newProject();
+
+                return null;
+            }
+        };
+
+        // Set-File
+        Command setFile = new Command() {
+            public String getCommand() {
+                return SET_FILE;
+            }
+
+            public String getShortCommand() {
+                return "sf";
+            }
+
+            public String getDescription() {
+                return "Setting the save file of TTool";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                String[] commands = command.split(" ");
+                if (commands.length < 1) {
+                    return Interpreter.BAD;
+                }
+
+                String fileName = commands[commands.length-1];
+
+                interpreter.mgui.setFileName(fileName);
+
+                return null;
+            }
+        };
+
+        Command getFile = new Command() {
+            public String getCommand() {
+                return GET_FILE;
+            }
+
+            public String getShortCommand() {
+                return "gf";
+            }
+
+            public String getDescription() {
+                return "Get the name of the  model under edition TTool. If a variable is provided as argument, the " +
+                        "result is saved into this variable";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                String[] commands = command.split(" ");
+
+
+                String fileName = interpreter.mgui.getFileName();
+
+                if (commands.length > 0) {
+                    interpreter.addVariable(commands[0], fileName);
+                }
+
+                System.out.println(fileName);
+
+                return null;
+            }
+        };
+
+        // Save
+        Command save = new Command() {
+            public String getCommand() {
+                return SAVE;
+            }
+
+            public String getShortCommand() {
+                return "sm";
+            }
+
+            public String getDescription() {
+                return "Saving a model in TTool";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                interpreter.mgui.saveProject();
+
+                return null;
+            }
+        };
+
         // Quit
         Command quit = new Command() {
             public String getCommand() {
@@ -269,6 +397,56 @@ public class Action extends Command {
                     return Interpreter.TTOOL_NOT_STARTED;
                 }
                 interpreter.mgui.quitApplication(false, false);
+                return null;
+            }
+        };
+
+        // New (avatar) design
+        Command newDesign = new Command() {
+            public String getCommand() {
+                return NEW_DESIGN;
+            }
+
+            public String getShortCommand() {
+                return "nd";
+            }
+
+            public String getDescription() {
+                return "Create a new design view";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                interpreter.mgui.newDesign();
+
+                return null;
+            }
+        };
+
+        // Remove current tab
+        Command removeCurrentTab = new Command() {
+            public String getCommand() {
+                return REMOVE_CURRENT_TAB;
+            }
+
+            public String getShortCommand() {
+                return "rct";
+            }
+
+            public String getDescription() {
+                return "Remove the current tab";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                interpreter.mgui.removeCurrentTab();
+
                 return null;
             }
         };
@@ -428,7 +606,7 @@ public class Action extends Command {
                 if (map == null) {
                     tmlm = interpreter.mgui.gtm.getTMLModeling();
                     if (tmlm == null) {
-                        return "No model for simulation";
+                        return "No model for generation";
                     }
                 }
 
@@ -437,6 +615,53 @@ public class Action extends Command {
                     return "TML generation failed";
                 } else {
                     return "TML spec generated in: " + tmp;
+                }
+
+                //}
+
+                //return null;
+            }
+        };
+
+        // Diplodocus generate XML
+        Command diplodocusGenerateXML = new Command() {
+            public String getCommand() {
+                return DIPLO_GENERATE_XML;
+            }
+
+            public String getShortCommand() {
+                return "dgxml";
+            }
+
+            public String getDescription() {
+                return "Generate the XML of a diplodocus model.\n<variable name>: variable in which the " +
+                        "XML specification is saved";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                String[] commands = command.split(" ");
+                if (commands.length < 1) {
+                    return Interpreter.BAD;
+                }
+
+                String varName = commands[0];
+
+                TMLMapping map = interpreter.mgui.gtm.getTMLMapping();
+
+                if (map == null) {
+                    return "No model for generation";
+                }
+
+                String tmp = map.toXML();
+                if (tmp == null) {
+                    return "XML generation failed";
+                } else {
+                    interpreter.addVariable(varName, tmp);
+                    return null;
                 }
 
                 //}
@@ -489,7 +714,7 @@ public class Action extends Command {
             }
         };
 
-        // Diplodocus generate TML
+        // Diplodocus remove NoC
         Command diplodocusRemoveNoC = new Command() {
             public String getCommand() {
                 return DIPLO_REMOVE_NOC;
@@ -519,6 +744,35 @@ public class Action extends Command {
                 }
 
                 interpreter.mgui.removeNoC(true);
+
+                return null;
+            }
+        };
+
+        Command selectPanel = new Command() {
+            public String getCommand() {
+                return SELECT_PANEL;
+            }
+
+            public String getShortCommand() {
+                return "sp";
+            }
+
+            public String getDescription() {
+                return "Select the edition panel with a name";
+            }
+
+            public String executeCommand(String command, Interpreter interpreter) {
+                if (!interpreter.isTToolStarted()) {
+                    return Interpreter.TTOOL_NOT_STARTED;
+                }
+
+                String[] commands = command.split(" ");
+                if (commands.length < 1) {
+                    return Interpreter.BAD;
+                }
+
+                interpreter.mgui.selectPanelByName(commands[0]);
 
                 return null;
             }
@@ -567,6 +821,8 @@ public class Action extends Command {
                     return Interpreter.TTOOL_NOT_STARTED;
                 }
 
+
+
                 interpreter.mgui.requestMoveRightTab(interpreter.mgui.getCurrentJTabbedPane().getSelectedIndex());
 
                 return null;
@@ -597,7 +853,8 @@ public class Action extends Command {
                     + "-d\tno deadlocks verification\n"
                     + "-n NUM\tmaximum states created (Only for a non verification study)\n"
                     + "-t NUM\tmaximum time (ms) (Only for a non verification study)\n"
-                    + "-c\tconsider full concurrency between actions";
+                    + "-c\tconsider full concurrency between actions\n"
+                    + "-v FILE\tsave counterexample traces for pragmas in FILE";
             }
 
             public String getExample() {
@@ -618,6 +875,7 @@ public class Action extends Command {
 
                 //String graphPath = commands[commands.length - 1];
                 String graphPath = "";
+                String counterPath = "";
 
                 AvatarSpecification avspec = interpreter.mgui.gtm.getAvatarSpecification();
                 if(avspec == null) {
@@ -630,6 +888,7 @@ public class Action extends Command {
                 amc.setIgnoreInternalStates(true);
                 amc.setComputeRG(false);
                 boolean rgGraph = false;
+                boolean counterTraces = false;
                 boolean reachabilityAnalysis = false;
                 boolean livenessAnalysis = false;
                 boolean safetyAnalysis = false;
@@ -729,6 +988,15 @@ public class Action extends Command {
                             //concurrency
                             amc.setIgnoreConcurrenceBetweenInternalActions(false);
                             break;
+                        case "-v":
+                            if (i != commands.length - 1) {
+                                counterPath = commands[++i];
+                                amc.setCounterExampleTrace(true, false);
+                                counterTraces = true;
+                            } else {
+                                return Interpreter.BAD;
+                            }
+                            break;
                         default:
                             return Interpreter.BAD;
                     }
@@ -754,6 +1022,28 @@ public class Action extends Command {
                 if (safetyAnalysis) {
                     interpreter.print("Safety Analysis:\n" + amc.safetyToString());
                 }
+                
+                
+                DateFormat dateFormat = new SimpleDateFormat("_yyyyMMdd_HHmmss");
+                Date date = new Date();
+                String dateAndTime = dateFormat.format(date);
+                
+                if (counterTraces) {
+                    String trace = amc.getCounterTrace();
+                    
+                    String autfile;
+                    if (counterPath.indexOf("$") != -1) {
+                        autfile = Conversion.replaceAllChar(counterPath, '$', dateAndTime);
+                    } else {
+                        autfile = counterPath;
+                    }
+                    try {
+                        FileUtils.saveFile(autfile, trace);
+                        System.out.println("\nCounterexample trace saved in " + autfile + "\n");
+                    } catch (Exception e) {
+                        System.out.println("\nCounterexample trace could not be saved in " + autfile + "\n");
+                    }
+                }
 
                 // Saving graph
                 if (rgGraph) {
@@ -768,9 +1058,6 @@ public class Action extends Command {
     
                     if (graphPath.indexOf("?") != -1) {
                         //System.out.println("Question mark found");
-                        DateFormat dateFormat = new SimpleDateFormat("_yyyyMMdd_HHmmss");
-                        Date date = new Date();
-                        String dateAndTime = dateFormat.format(date);
                         autfile = Conversion.replaceAllChar(graphPath, '?', dateAndTime);
                         //System.out.println("graphpath=" + graphPath);
                     } else {
@@ -900,19 +1187,29 @@ public class Action extends Command {
 
 
         addAndSortSubcommand(start);
+        addAndSortSubcommand(newT);
         addAndSortSubcommand(open);
+        addAndSortSubcommand(setFile);
+        addAndSortSubcommand(getFile);
+        addAndSortSubcommand(save);
         addAndSortSubcommand(resize);
         addAndSortSubcommand(quit);
+
+        addAndSortSubcommand(newDesign);
+        addAndSortSubcommand(removeCurrentTab);
+
         addAndSortSubcommand(checkSyntax);
         addAndSortSubcommand(generateRGFromAvatar);
         addAndSortSubcommand(diplodocusInteractiveSimulation);
         addAndSortSubcommand(diplodocusFormalVerification);
         addAndSortSubcommand(diplodocusOneTraceSimulation);
         addAndSortSubcommand(diplodocusGenerateTML);
+        addAndSortSubcommand(diplodocusGenerateXML);
         addAndSortSubcommand(diplodocusUPPAAL);
         addAndSortSubcommand(diplodocusRemoveNoC);
         addAndSortSubcommand(movePanelToTheLeftPanel);
         addAndSortSubcommand(movePanelToTheRightPanel);
+        addAndSortSubcommand(selectPanel);
         addAndSortSubcommand(compareUppaal);
         addAndSortSubcommand(generic);
 

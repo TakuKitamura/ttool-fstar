@@ -58,7 +58,7 @@ import java.util.Vector;
  */
 public class Interpreter implements Runnable, TerminalProviderInterface {
 
-    public final static Command[] commands = {new Action(), new Help(), new History(), new Print(), new Quit(),
+    public final static Command[] commands = {new Action(), new Help(), new History(), new Print(), new PluginAction(), new Quit(),
             new TestSpecific(), new TML(), new Set(), new Wait(), new Robot(), new BF(), new SimulatorScript()};
 
     // Errors
@@ -234,6 +234,14 @@ public class Interpreter implements Runnable, TerminalProviderInterface {
 
     public void addVariable(String name, String value) {
         variables.put(name, value);
+    }
+
+    public String getVariableValue(String name) {
+        String v = variables.get(name);
+        if (v == null) {
+            return "";
+        }
+        return v;
     }
 
     private String removeVariablesIn(String input) {

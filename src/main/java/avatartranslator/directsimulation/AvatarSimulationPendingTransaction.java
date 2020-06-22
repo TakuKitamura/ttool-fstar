@@ -39,6 +39,7 @@
 
 package avatartranslator.directsimulation;
 
+import avatartranslator.AvatarRandom;
 import avatartranslator.AvatarStateMachineElement;
 import avatartranslator.AvatarTransition;
 import myutil.MyMath;
@@ -76,6 +77,7 @@ public class AvatarSimulationPendingTransaction {
     public boolean hasDelay;
     public int delayDistributionLaw;
     public double extraParam1;
+    public double extraParam2;
 
     // For time already elapsed for that transition
     public boolean hasElapsedTime;
@@ -272,6 +274,34 @@ public class AvatarSimulationPendingTransaction {
                 //TraceManager.addDev("\n\n\n******* GAUSSIAN LAW ********");
                 selectedDuration = (int)(Math.floor(MyMath.gaussianDistribution((double) (myMinDuration), (double) (maxDuration), extraParam1)));
                 return;
+            case AvatarTransition.RANDOM_LOG_NORMAL_LAW:
+                try {
+                    selectedDuration =  (int) (Math.floor(MyMath.logNormalDistribution((double) (myMinDuration), (double) (maxDuration),
+                            extraParam1,
+                            extraParam2)));
+                } catch (Exception e) {
+                    TraceManager.addDev("Exception on log normal: " + e.getMessage());
+                    selectedDuration = myMinDuration;
+                }
+                return;
+            case AvatarTransition.RANDOM_EXPONENTIAL_LAW:
+                try {
+                    selectedDuration =  (int) (Math.floor(MyMath.exponentialDistribution( (double) (myMinDuration), (double) (maxDuration), extraParam1) ));
+                } catch (Exception e) {
+                    TraceManager.addDev("Exception on exponential distribution: " + e.getMessage());
+                    selectedDuration = myMinDuration;
+                }
+                return;
+            case AvatarTransition.RANDOM_WEIBULL_LAW:
+                try {
+                    selectedDuration = (int) (Math.floor(MyMath.weibullDistribution( (double) (myMinDuration), (double) (maxDuration), extraParam1,
+                            extraParam2) ));
+                } catch (Exception e) {
+                    TraceManager.addDev("Exception on weibull distribution: " + e.getMessage());
+                    selectedDuration = myMinDuration;
+                }
+                return;
+
         }
     }
 

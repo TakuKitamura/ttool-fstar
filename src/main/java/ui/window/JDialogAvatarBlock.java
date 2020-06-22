@@ -41,6 +41,7 @@ package ui.window;
 
 import myutil.Conversion;
 import myutil.GraphicLib;
+import myutil.TraceManager;
 import ui.AvatarMethod;
 import ui.AvatarSignal;
 import ui.TAttribute;
@@ -750,6 +751,8 @@ public class JDialogAvatarBlock extends JDialogBase implements ActionListener, L
             if ((TAttribute.isAValidId(s, checkKeyword, checkUPPAALKeyword, checkJavaKeyword)) && (TAttribute.notIn(s, forbidden))) {
                 int i = TAttribute.getAccess(o1.toString());
                 int j = TAttribute.getAvatarType(o2.toString());
+
+                TraceManager.addDev("Type=" + o2.toString());
 
                 if ((j == TAttribute.ARRAY_NAT) && (value.length() < 1)) {
                     value = "2";
