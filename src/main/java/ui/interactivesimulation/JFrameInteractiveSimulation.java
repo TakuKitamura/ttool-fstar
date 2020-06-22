@@ -72,6 +72,8 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
@@ -358,8 +360,6 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         jp.add(buttonShowTrace);
         jp.add(buttonShowTraceTimeline);
         mainpanel.add(jp, BorderLayout.NORTH);
-//        mainpanel.setSize(mainpanel.getPreferredSize());
-//        validate();
 
 
         GridBagLayout gridbag02 = new GridBagLayout();
@@ -1496,7 +1496,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 					return i.compareTo(j);
     			}
 			});
-			//r
+			//
 			//
 			if (simtraces.size()>2000){
 				//Only write last 2000 simulations
