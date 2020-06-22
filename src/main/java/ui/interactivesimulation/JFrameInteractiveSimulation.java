@@ -72,8 +72,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
@@ -114,7 +112,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
     private String hostSystemC;
     private String pathExecute;
 
-    protected JButton buttonClose, buttonStart, buttonStopAndClose, buttonShowTrace, buttonShowTraceHtml;
+    protected JButton buttonClose, buttonStart, buttonStopAndClose, buttonShowTrace, buttonShowTraceTimeline;
     protected JTextArea jta;
     protected JScrollPane jsp;
 
@@ -257,7 +255,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	private PipedOutputStream pos;
 	private PipedInputStream pis;
 	private JFrameTMLSimulationPanel tmlSimPanel;
-    private JFrameTMLSimulationPanelHtml tmlSimPanelHtml;
+    private JFrameTMLSimulationPanelTimeline tmlSimPanelTimeline;
 	private BufferedWriter bw;
 	private int simIndex=0;
     
@@ -333,7 +331,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         buttonClose = new JButton(actions[InteractiveSimulationActions.ACT_STOP_ALL]);
         buttonStopAndClose = new JButton(actions[InteractiveSimulationActions.ACT_STOP_AND_CLOSE_ALL]);
         buttonShowTrace = new JButton(actions[InteractiveSimulationActions.ACT_SHOW_TRACE]);
-        buttonShowTraceHtml = new JButton(actions[InteractiveSimulationActions.ACT_SHOW_TRACE_HTML]);
+        buttonShowTraceTimeline = new JButton(actions[InteractiveSimulationActions.ACT_SHOW_TRACE_TIMELINE]);
         //buttonStopAndClose = new JButton(buttonStopAndCloseS, IconManager.imgic27);
 
 
@@ -358,7 +356,7 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
         jp.add(buttonStopAndClose);
         jp.add(buttonClose);
         jp.add(buttonShowTrace);
-        jp.add(buttonShowTraceHtml);
+        jp.add(buttonShowTraceTimeline);
         mainpanel.add(jp, BorderLayout.NORTH);
 //        mainpanel.setSize(mainpanel.getPreferredSize());
 //        validate();
@@ -1528,19 +1526,35 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 		}
 	}
 
-	public void writeSimTraceHtml() {
-        tmlSimPanelHtml = new JFrameTMLSimulationPanelHtml(new Frame(), mgui, trans, "Show Trace in HTML");
-        //Make a popup to select which tasks
-        Vector<String> tmlComponentsToValidate = new Vector<String>();
-        List<String> tasks = new ArrayList<String>();
-        for (TMLTask task: tmap.getTMLModeling().getTasks()){
-            tasks.add(task.getName());
-        }
-        JDialogSelectTasks jdstmlc = new JDialogSelectTasks(f, tmlComponentsToValidate, tasks, "Select tasks to show in trace");
+	public void writeSimTraceTimeline() {
+	    if(trans != null && !trans.isEmpty()) {
+	        try {
+                //Make a popup to select which tasks
+                Vector<String> tmlComponentsToValidate = new Vector<String>();
+                List<String> tasks = new ArrayList<String>();
+                for (TMLTask task : tmap.getTMLModeling().getTasks()) {
+                    tasks.add(task.getName());
+                }
+                JDialogSelectTasks jdstmlc = new JDialogSelectTasks(f, tmlComponentsToValidate, tasks, "Select tasks to show in trace");
 
-        GraphicLib.centerOnParent(jdstmlc);
-        jdstmlc.setVisible(true);
-        tmlSimPanelHtml.setVisible(true);
+                GraphicLib.centerOnParent(jdstmlc);
+                jdstmlc.setVisible(true);
+                Vector<SimulationTransaction> _transCopy = new Vector<SimulationTransaction>();
+                for (int i = 0; i < trans.size(); i++) {
+                    for (String taskname : tmlComponentsToValidate) {
+                        if (taskname.equals(trans.get(i).taskName)) {
+                            _transCopy.add(trans.get(i));
+                        }
+                    }
+                }
+                if(!_transCopy.isEmpty()) {
+                    tmlSimPanelTimeline = new JFrameTMLSimulationPanelTimeline(new Frame(), mgui, _transCopy, "Show Trace - Timeline");
+                    tmlSimPanelTimeline.setVisible(true);
+                }
+            } catch (Exception e) {
+	            System.out.println("Error: " + e.toString());
+            }
+        }
     }
 	
 	public void writeArchitectureSimTrace(){
@@ -2225,6 +2239,8 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
                             }
 
                             st.deviceName = elt.getAttribute("devicename");
+                            st.coreNumber = elt.getAttribute("corenumber");
+
                             String commandT = elt.getAttribute("command");
                             if (commandT != null) {
                                 int index = commandT.indexOf(": ");
@@ -3573,8 +3589,8 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
             resetSimTrace();
         } else if (command.equals(actions[InteractiveSimulationActions.ACT_SHOW_TRACE].getActionCommand())) {
 			writeSimTrace();
-		} else if (command.equals(actions[InteractiveSimulationActions.ACT_SHOW_TRACE_HTML].getActionCommand())) {
-            writeSimTraceHtml();
+		} else if (command.equals(actions[InteractiveSimulationActions.ACT_SHOW_TRACE_TIMELINE].getActionCommand())) {
+            writeSimTraceTimeline();
         }
     }
 

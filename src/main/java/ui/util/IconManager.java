@@ -173,7 +173,7 @@ public class IconManager {
     //Safety
     public static ImageIcon imgic7002, imgic7003, imgic7004, imgic7005, imgic7006;
     //Show traces
-    public static ImageIcon imgic7007;
+    public static ImageIcon imgic7007, imgic8030;
     //Attacker Scenarios
     public static ImageIcon imgic7008;
     //UPPAAL Help popup
@@ -715,6 +715,7 @@ public class IconManager {
     private static String icon8027 = "elndeisource.gif";
     private static String icon8028 = "elndevsink.gif";
     private static String icon8029 = "elndevsource.gif";
+    private static String icon8030 = "toolbarButtonGraphics/general/timeline.png";
     
     public IconManager() {
 
@@ -1250,6 +1251,7 @@ public class IconManager {
         imgic8027 = getIcon(icon8027);
         imgic8028 = getIcon(icon8028);
         imgic8029 = getIcon(icon8029);
+        imgic8030 = getIcon(icon8030);
     }
 
 } // Class
