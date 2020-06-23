@@ -31,6 +31,7 @@ dependencies {
     compile name: 'batik-codec'
     compile name: 'batik-constants'
     compile name: 'batik-xml'
+    compile name: 'batik-extensions'
     compile name: 'batik-ext'
     compile name: 'batik-util' 
     compile name: 'batik-svggen'
