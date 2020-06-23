@@ -64,7 +64,7 @@ import java.util.*;
  *
  * @author Letitia LI, Ludovic APVRILLE
  */
-public class TML2AvatarDP {
+public class FullTML2AvatarDP {
 
     //protected CorrespondanceTGElement listB; // list for particular element -> first element of group of blocks
     protected TMLMapping tmlmap;
@@ -80,13 +80,13 @@ public class TML2AvatarDP {
     boolean security;
     AvatarSpecification avspec;
 
-    public TML2AvatarDP(TMLMapping tmlmapping, boolean modelcheck, boolean sec) {
+    public FullTML2AvatarDP(TMLMapping tmlmapping, boolean modelcheck, boolean sec) {
         tmlmap = tmlmapping;
         mc = modelcheck;
         security = sec;
     }
 
-    public TML2AvatarDP(AvatarSpecification av) {
+    public FullTML2AvatarDP(AvatarSpecification av) {
         avspec = av;
     }
 
@@ -224,7 +224,7 @@ public class TML2AvatarDP {
     }
 
     public void translate() {
-        TML2Avatar tml2av = new TML2Avatar(tmlmap, mc, security);
+        FullTML2Avatar tml2av = new FullTML2Avatar(tmlmap);
         avspec = tml2av.generateAvatarSpec("1");
         drawPanel();
         //Create AvatarDesignDiagram

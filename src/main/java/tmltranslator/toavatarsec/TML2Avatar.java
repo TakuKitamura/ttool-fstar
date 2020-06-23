@@ -35,7 +35,7 @@
 */
 
 
-package tmltranslator.toavatar;
+package tmltranslator.toavatarsec;
 
 import avatartranslator.*;
 import myutil.TraceManager;
