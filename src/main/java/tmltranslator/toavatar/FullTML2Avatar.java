@@ -1305,7 +1305,7 @@ public class FullTML2Avatar {
                 elementList.add(initState);
                 //Build transition to choice
                 tran = new AvatarTransition(block, "loop_init__" + ae.getName(), ae.getReferenceObject());
-                tran.addAction(AvatarTerm.createActionFromString(block, "loop_index=0"));
+                tran.addAction("loop_index=0");
                 elementList.add(tran);
                 initState.addNext(tran);
                 //Choice state
@@ -1316,7 +1316,7 @@ public class FullTML2Avatar {
                 tran = new AvatarTransition(block, "loop_increment__" + ae.getName(), ae.getReferenceObject());
                 //Set default loop limit guard
                 tran.setGuard(AvatarGuard.createFromString(block, "loop_index != " + loopLimit));
-                tran.addAction(AvatarTerm.createActionFromString(block, "loop_index = loop_index + 1"));
+                //tran.addAction(AvatarTerm.createActionFromString(block, "loop_index = loop_index + 1"));
                 tran.addNext(elements.get(0));
                 as.addNext(tran);
                 elementList.add(tran);
@@ -1621,8 +1621,8 @@ public class FullTML2Avatar {
 				     tmp = new AvatarAttribute("aliceandbob_encrypted", AvatarType.INTEGER, block, null);
 				     block.addAttribute(tmp);*/
 
-            //AvatarAttribute loop_index = new AvatarAttribute("loop_index", AvatarType.INTEGER, block, null);
-            //block.addAttribute(loop_index);
+            AvatarAttribute loop_index = new AvatarAttribute("loop_index", AvatarType.INTEGER, block, null);
+            block.addAttribute(loop_index);
 
             for (TMLAttribute attr : task.getAttributes()) {
                 AvatarType type;
