@@ -65,7 +65,7 @@ import tmltranslator.TMLMapping;
 import tmltranslator.TMLModeling;
 import tmltranslator.TMLStartState;
 import tmltranslator.TMLTask;
-import tmltranslator.toavatar.TML2Avatar;
+import tmltranslator.toavatarsec.TML2Avatar;
 import ui.MainGUI;
 import ui.TGComponent;
 import ui.TMLComponentDesignPanel;
