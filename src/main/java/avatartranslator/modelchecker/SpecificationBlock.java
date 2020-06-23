@@ -62,10 +62,7 @@ public class SpecificationBlock  {
     public static final int ATTR_INDEX = 3;
     
     public int [] values; // state in block, clockmin, clockmax, variables
-    public int maxClock;
-    
-    public AvatarBlock block;
-    
+    public int maxClock;    
 
     public SpecificationBlock() {
     }
