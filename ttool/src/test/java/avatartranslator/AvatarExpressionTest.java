@@ -134,7 +134,7 @@ public class AvatarExpressionTest {
     @Test
     public void testBlock() {
         SpecificationBlock specBlock = new SpecificationBlock();
-        specBlock.init(block1, false);
+        specBlock.init(block1, false, false);
         int[] attributes = {2, 3, 7, 0, 1};
         
         AvatarExpressionSolver e1 = new AvatarExpressionSolver("x + y");
@@ -180,6 +180,7 @@ public class AvatarExpressionTest {
     
     @Test
     public void testSpec() {
+        as.sortAttributes();
         SpecificationState ss = new SpecificationState();
         ss.setInit(as, false);
         

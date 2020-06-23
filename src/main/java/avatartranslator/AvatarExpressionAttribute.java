@@ -53,6 +53,7 @@ public class AvatarExpressionAttribute {
     private AvatarBlock block;
     private int blockIndex;
     private int accessIndex;
+    private int accessOffset;
     private AvatarStateMachineElement state;
     private String s;
     private boolean isState;
@@ -79,6 +80,7 @@ public class AvatarExpressionAttribute {
         state = asme;
         error = false;
         accessIndex = -1;
+        accessOffset = -1;
         block = null;
     }
 
@@ -111,6 +113,8 @@ public class AvatarExpressionAttribute {
         
         int attributeIndex = block.getIndexOfAvatarAttributeWithName(fieldString);
         
+        accessOffset = -1;
+        
         if (attributeIndex == -1) {
             // state?
             state = block.getStateMachine().getStateWithName(fieldString);
@@ -120,7 +124,13 @@ public class AvatarExpressionAttribute {
             isState = true;
             accessIndex = block.getStateMachine().getIndexOfState((AvatarStateElement) state);
         } else {
-            accessIndex = attributeIndex + SpecificationBlock.ATTR_INDEX;
+            int offset = block.getBooleanOffset();
+            if (offset == -1 || attributeIndex < offset) {
+                accessIndex = attributeIndex + SpecificationBlock.ATTR_INDEX;
+            } else {
+                accessIndex = SpecificationBlock.ATTR_INDEX + offset + ((attributeIndex - offset) / 32);
+                accessOffset = (attributeIndex - offset) % 32;
+            }
         }
         return true;
     }
@@ -136,6 +146,8 @@ public class AvatarExpressionAttribute {
         
         int attributeIndex = block.getIndexOfAvatarAttributeWithName(s);
         
+        accessOffset = -1;
+        
         if (attributeIndex == -1) {
             // state?
             state = block.getStateMachine().getStateWithName(s);
@@ -145,7 +157,13 @@ public class AvatarExpressionAttribute {
             isState = true;
             accessIndex = block.getStateMachine().getIndexOfState((AvatarStateElement) state);
         } else {
-            accessIndex = attributeIndex + SpecificationBlock.ATTR_INDEX;
+            int offset = block.getBooleanOffset();
+            if (offset == -1 || attributeIndex < offset) {
+                accessIndex = attributeIndex + SpecificationBlock.ATTR_INDEX;
+            } else {
+                accessIndex = SpecificationBlock.ATTR_INDEX + offset + ((attributeIndex - offset) / 32);
+                accessOffset = (attributeIndex - offset) % 32;
+            }
         }
         return true;
     }
@@ -168,7 +186,11 @@ public class AvatarExpressionAttribute {
             }
         }
         
-        value = ss.blocks[blockIndex].values[accessIndex];
+        if (accessOffset == -1) {
+            value = ss.blocks[blockIndex].values[accessIndex];
+        } else {
+            value = (ss.blocks[blockIndex].values[accessIndex] >> accessOffset) & 1;
+        }
         
         return value;
     }
@@ -180,7 +202,11 @@ public class AvatarExpressionAttribute {
             return (state == asme) ? 1 : 0;
         }
         
-        value = ss.blocks[blockIndex].values[accessIndex];
+        if (accessOffset == -1) {
+            value = ss.blocks[blockIndex].values[accessIndex];
+        } else {
+            value = (ss.blocks[blockIndex].values[accessIndex] >> accessOffset) & 1;
+        }
         
         return value;
     }
@@ -199,7 +225,11 @@ public class AvatarExpressionAttribute {
             }
         }
         
-        value = sb.values[accessIndex];
+        if (accessOffset == -1) {
+            value = sb.values[accessIndex];
+        } else {
+            value = (sb.values[accessIndex] >> accessOffset) & 1;
+        }
         
         return value;
     }
@@ -208,37 +238,41 @@ public class AvatarExpressionAttribute {
         int value;
         
         if (isState) {
-                return 0;
+            return 0;
         }
         
         //Cancel offset based on Specification Blocks
-        value = attributesValues[accessIndex - SpecificationBlock.ATTR_INDEX];
+        if (accessOffset == -1) {
+            value = attributesValues[accessIndex - SpecificationBlock.ATTR_INDEX];
+        } else {
+            value = (attributesValues[accessIndex - SpecificationBlock.ATTR_INDEX] >> accessOffset) & 1;
+        }
         
         return value;
     }
     
-    public void setValue(SpecificationState ss, int value) {
-        int v;
-        
+    public void setValue(SpecificationState ss, int value) {        
         if (isState) {
             return;
         }
         
-        v = value;
-        
-        ss.blocks[blockIndex].values[accessIndex] = v;
+        if (accessOffset == -1) {
+            ss.blocks[blockIndex].values[accessIndex] = value;
+        } else {
+            ss.blocks[blockIndex].values[accessIndex] ^= ((-(value & 1))^ ss.blocks[blockIndex].values[accessIndex]) & (1 << accessOffset);
+        }
     }
     
-    public void setValue(SpecificationBlock sb, int value) {
-        int v;
-        
+    public void setValue(SpecificationBlock sb, int value) {      
         if (isState) {
             return;
         }
-        
-        v = value;
-        
-        sb.values[accessIndex] = v;
+                
+        if (accessOffset == -1) {
+            sb.values[accessIndex] = value;
+        } else {
+            sb.values[accessIndex] ^= ((-(value & 1))^ sb.values[accessIndex]) & (1 << accessOffset);
+        }
     }
     
     //Link state to access index in the state machine
@@ -256,10 +290,14 @@ public class AvatarExpressionAttribute {
     public int getAttributeType() {
         if (isState) {
             return AvatarExpressionSolver.IMMEDIATE_BOOL;
-        } else if (block.getAttribute(accessIndex - SpecificationBlock.ATTR_INDEX).getType() == AvatarType.BOOLEAN) {
-            return AvatarExpressionSolver.IMMEDIATE_BOOL;
+        } else if (accessOffset == -1) {
+            if (block.getAttribute(accessIndex - SpecificationBlock.ATTR_INDEX).getType() == AvatarType.BOOLEAN) {
+                return AvatarExpressionSolver.IMMEDIATE_BOOL;
+            } else {
+                return AvatarExpressionSolver.IMMEDIATE_INT;
+            }
         } else {
-            return AvatarExpressionSolver.IMMEDIATE_INT;
+            return AvatarExpressionSolver.IMMEDIATE_BOOL;
         }
     }
     

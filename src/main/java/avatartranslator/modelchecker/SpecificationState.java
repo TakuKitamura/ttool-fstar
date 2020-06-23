@@ -105,7 +105,7 @@ public class SpecificationState implements Comparable<SpecificationState>  {
 
         for(AvatarBlock block: _spec.getListOfBlocks()) {
             blocks[cpt] = new SpecificationBlock();
-            blocks[cpt].init(block, _ignoreEmptyTransitions);
+            blocks[cpt].init(block, _ignoreEmptyTransitions, true);
             cpt ++;
         }
 
@@ -141,8 +141,8 @@ public class SpecificationState implements Comparable<SpecificationState>  {
             if (!(_st.hasBlockIndex(i))) {
                 sb.values[SpecificationBlock.CLOCKMIN_INDEX] += _st.clockMin;
                 sb.values[SpecificationBlock.CLOCKMAX_INDEX] += _st.clockMax;
-		sb.values[SpecificationBlock.CLOCKMIN_INDEX] = Math.min(sb.values[SpecificationBlock.CLOCKMIN_INDEX], sb.maxClock);
-		sb.values[SpecificationBlock.CLOCKMAX_INDEX] = Math.min(sb.values[SpecificationBlock.CLOCKMAX_INDEX], sb.maxClock);
+        		sb.values[SpecificationBlock.CLOCKMIN_INDEX] = Math.min(sb.values[SpecificationBlock.CLOCKMIN_INDEX], sb.maxClock);
+        		sb.values[SpecificationBlock.CLOCKMAX_INDEX] = Math.min(sb.values[SpecificationBlock.CLOCKMAX_INDEX], sb.maxClock);
             } else {
                 sb.values[SpecificationBlock.CLOCKMIN_INDEX] = 0;
                 sb.values[SpecificationBlock.CLOCKMAX_INDEX] = 0;

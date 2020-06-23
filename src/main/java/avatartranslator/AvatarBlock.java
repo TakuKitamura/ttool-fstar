@@ -61,6 +61,8 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
     private int blockIndex; //Index of block in the Avatar Specification
 
     private String globalCode;
+    
+    private int booleanOffset;
 
 
     public AvatarBlock(String _name, AvatarSpecification _avspec, Object _referenceObject) {
@@ -71,6 +73,7 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
         methods = new LinkedList<AvatarMethod>();
         signals = new LinkedList<AvatarSignal>();
         asm = new AvatarStateMachine(this, "statemachineofblock__" + _name, _referenceObject);
+        booleanOffset = -1;
     }
 
 
@@ -696,6 +699,32 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
             }
         }
         return outside;
+    }
+    
+    
+    //move boolean attributes to last positions in list attributes
+    public void sortAttributes() {
+        List<AvatarAttribute> newAttributes = new LinkedList<AvatarAttribute>();
+        
+        for (AvatarAttribute attribute : attributes) {
+            if (attribute.getType() != AvatarType.BOOLEAN) {
+                newAttributes.add(attribute);
+            }
+        }
+        
+        booleanOffset = newAttributes.size();
+        
+        for (AvatarAttribute attribute : attributes) {
+            if (attribute.getType() == AvatarType.BOOLEAN) {
+                newAttributes.add(attribute);
+            }
+        }
+        
+        attributes = newAttributes;
+    }
+    
+    public int getBooleanOffset() {
+        return booleanOffset;
     }
 
 

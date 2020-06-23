@@ -426,6 +426,12 @@ public class AvatarSpecification extends AvatarElement {
             addBlock(addedBlocks.get(i));
         }
     }
+    
+    public void sortAttributes() {
+        for(AvatarBlock block: blocks) {
+            block.sortAttributes();
+        }
+    }
 //
 //    private void renameTimers() {
 //        // Check whether timers have the same name in different blocks
