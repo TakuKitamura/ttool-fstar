@@ -94,7 +94,6 @@ export GLOBAL_CFLAGS		= -encoding "UTF8" -Xlint:unchecked -Xlint:deprecation -Xl
 
 export TTOOL_DIR		= $(TTOOL_PATH)/ttool
 export TTOOL_BINARY 		= $(TTOOL_BUILD)/ttool.jar
-export TTOOL_BINARY_NOTEST 		= $(TTOOL_BUILD)/ttool.jar
 
 export LAUNCHER_DIR		= $(TTOOL_PATH)/launcher
 export LAUNCHER_BINARY 		= $(TTOOL_BUILD)/launcher.jar
@@ -128,7 +127,6 @@ export WEBCRAWLER_SERVER_BINARY	= $(TTOOL_BUILD)/webcrawler-server.jar
 
 export JTTOOL_DIR		= $(TTOOL_PATH)/jttool
 export JTTOOL_BINARY		= $(TTOOL_BUILD)/jttool.jar
-export JTTOOL_BINARY_NOTEST		= $(TTOOL_BUILD)/jttool.jar
 
 export TTOOL_HELP_DIR	= $(TTOOL_PATH)/src/main/resources/help
 MD_FILES=$(wildcard src/main/resources/help/*.md)	
@@ -146,7 +144,6 @@ ttool: $(TTOOL_BINARY)
 ttoolnotest: 
 
 $(TTOOL_BINARY): FORCE
-	echo TTool_Binary
 	@($(GRADLE) :ttool:build $(GRADLE_OPTIONS)) || ($(ERROR_MSG) $(GRADLE_VERSION) $(GRADLE_VERSION_NEEDED)&& $(MAKE) -C $(TTOOL_DIR) -e $@)
 
 
