@@ -135,7 +135,7 @@ MD2HTML=$(MD_FILES:.md=.html)
 all: ttool launcher ttool-cli graphminimize graphshow tiftranslator tmltranslator rundse remotesimulator webcrawler install
 
 allnotest: GRADLE_OPTIONS += $(GRADLE_NO_TEST)
-allnotest: jttool ttool launcher ttool-cli graphminimize graphshow tiftranslator tmltranslator rundse remotesimulator webcrawler install
+allnotest: ttool launcher ttool-cli graphminimize graphshow tiftranslator tmltranslator rundse remotesimulator webcrawler install
 
 ttoolnotest: GRADLE_OPTIONS += $(GRADLE_NO_TEST)
 ttoolnotest: ttool install
@@ -199,8 +199,8 @@ $(WEBCRAWLER_CLIENT_BINARY): FORCE
 $(WEBCRAWLER_SERVER_BINARY): FORCE
 	@($(GRADLE) :webcrawler-server:build) || ($(ERROR_MSG) && $(MAKE) -C $(WEBCRAWLER_SERVER_DIR) -e $@)
 
-$(JTTOOL_BINARY): FORCE
-	@$(MAKE) -C $(JTTOOL_DIR) -e $@
+#$(JTTOOL_BINARY): FORCE
+#	@$(MAKE) -C $(JTTOOL_DIR) -e $@
 
 
 internalhelp: html
