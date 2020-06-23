@@ -94,6 +94,7 @@ export GLOBAL_CFLAGS		= -encoding "UTF8" -Xlint:unchecked -Xlint:deprecation -Xl
 
 export TTOOL_DIR		= $(TTOOL_PATH)/ttool
 export TTOOL_BINARY 		= $(TTOOL_BUILD)/ttool.jar
+export TTOOL_BINARY_NOTEST 		= $(TTOOL_BUILD)/ttool.jar
 
 export LAUNCHER_DIR		= $(TTOOL_PATH)/launcher
 export LAUNCHER_BINARY 		= $(TTOOL_BUILD)/launcher.jar
@@ -127,6 +128,7 @@ export WEBCRAWLER_SERVER_BINARY	= $(TTOOL_BUILD)/webcrawler-server.jar
 
 export JTTOOL_DIR		= $(TTOOL_PATH)/jttool
 export JTTOOL_BINARY		= $(TTOOL_BUILD)/jttool.jar
+export JTTOOL_BINARY_NOTEST		= $(TTOOL_BUILD)/jttool.jar
 
 export TTOOL_HELP_DIR	= $(TTOOL_PATH)/src/main/resources/help
 MD_FILES=$(wildcard src/main/resources/help/*.md)	
@@ -144,7 +146,9 @@ ttool: $(TTOOL_BINARY)
 ttoolnotest: 
 
 $(TTOOL_BINARY): FORCE
+	echo TTool_Binary
 	@($(GRADLE) :ttool:build $(GRADLE_OPTIONS)) || ($(ERROR_MSG) $(GRADLE_VERSION) $(GRADLE_VERSION_NEEDED)&& $(MAKE) -C $(TTOOL_DIR) -e $@)
+
 
 ttooljavac: 
 	$(MAKE) -C $(TTOOL_DIR)
@@ -200,6 +204,7 @@ $(WEBCRAWLER_SERVER_BINARY): FORCE
 
 $(JTTOOL_BINARY): FORCE
 	@$(MAKE) -C $(JTTOOL_DIR) -e $@
+
 
 internalhelp: html
 
@@ -390,7 +395,8 @@ $(TTOOL_PREINSTALL_LINUX:.tgz=.tar): $(BASERELEASE:.tgz=.tar)
 	@cp $(TTOOL_PATH)/build/*.jar $(TTOOL_TARGET_LINUX)/TTool/bin/
 	@$(TAR) uf $@ -C $(TTOOL_TARGET_LINUX) proverif uppaal TTool/bin/config_linux.xml ttool.exe
 
-$(BASERELEASE:.tgz=.tar): $(JTTOOL_BINARY) $(TTOOL_BINARY) $(LAUNCHER_BINARY) $(TIFTRANSLATOR_BINARY) $(TMLTRANSLATOR_BINARY) $(RUNDSE_BINARY) FORCE
+#$(BASERELEASE:.tgz=.tar): $(JTTOOL_BINARY) $(TTOOL_BINARY) $(LAUNCHER_BINARY $(TIFTRANSLATOR_BINARYT) $(TMLTRANSLATOR_BINARY) $(RUNDSE_BINARY) FORCE
+$(BASERELEASE:.tgz=.tar): allnotest
 	@echo "$(PREFIX) Preparing base release"
 	@rm -rf $(TTOOL_TARGET_RELEASE)
 	@mkdir -p $(TTOOL_TARGET)
@@ -485,8 +491,8 @@ $(BASERELEASE:.tgz=.tar): $(JTTOOL_BINARY) $(TTOOL_BINARY) $(LAUNCHER_BINARY) $(
 	@cp $(TTOOL_DOC_SYSMLSEC_DIR)/build/sysmlsec_documentation.pdf  $(TTOOL_TARGET)/doc/sysmlsec_documentation.pdf
 	@cp $(TTOOL_DOC_SYSMLSEC_DIR)/build/sysmlsec_documentation.pdf  $(TTOOL_PRIVATE)/website/ttool/docs/
 	@$(MAKE) -C $(TTOOL_DOC_AVATARCODEGENERATION_DIR) codegeneration_documentation
-	@cp $(TTOOL_DOC_AVATARCODEGENERATION_DIR)/codegeneration_documentation.pdf  $(TTOOL_TARGET)/doc/avatarcodegeneration_documentation.pdf
-	@cp $(TTOOL_DOC_AVATARCODEGENERATION_DIR)/codegeneration_documentation.pdf  $(TTOOL_PRIVATE)/website/ttool/docs/
+	@cp $(TTOOL_DOC_AVATARCODEGENERATION_DIR)/build/codegeneration_documentation.pdf  $(TTOOL_TARGET)/doc/avatarcodegeneration_documentation.pdf
+	@cp $(TTOOL_DOC_AVATARCODEGENERATION_DIR)/build/codegeneration_documentation.pdf  $(TTOOL_PRIVATE)/website/ttool/docs/
 	@$(MAKE) -C $(TTOOL_DOC_SOCLIB_USERGUIDE_DIR) user_guide
 	@cp $(TTOOL_DOC_SOCLIB_USERGUIDE_DIR)/build/user_guide.pdf  $(TTOOL_TARGET)/doc/prototyping_with_soclib_user_guide.pdf
 	@$(MAKE) -C $(TTOOL_DOC_SOCLIB_INSTALLATIONGUIDE_DIR) installation_guide
