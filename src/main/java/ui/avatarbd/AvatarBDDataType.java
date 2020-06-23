@@ -513,6 +513,11 @@ public class AvatarBDDataType extends TGCScalableWithInternalComponent implement
                                 id = elt.getAttribute("id");
                                 valueAtt = elt.getAttribute("value");
 
+
+                                if (valueAtt == null) {
+                                    valueAtt = "";
+                                }
+
                                 if (valueAtt.equals("null")) {
                                     valueAtt = "";
                                 }

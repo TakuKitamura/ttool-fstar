@@ -1226,6 +1226,10 @@ public class AvatarBDBlock extends TGCScalableWithInternalComponent implements S
                                 id = elt.getAttribute("id");
                                 valueAtt = elt.getAttribute("value");
 
+                                if (valueAtt == null) {
+                                    valueAtt = "";
+                                }
+
                                 if (valueAtt.equals("null")) {
                                     valueAtt = "";
                                 }
