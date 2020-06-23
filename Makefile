@@ -135,7 +135,7 @@ MD2HTML=$(MD_FILES:.md=.html)
 all: ttool launcher ttool-cli graphminimize graphshow tiftranslator tmltranslator rundse remotesimulator webcrawler install
 
 allnotest: GRADLE_OPTIONS += $(GRADLE_NO_TEST)
-allnotest: ttool launcher ttool-cli graphminimize graphshow tiftranslator tmltranslator rundse remotesimulator webcrawler install
+allnotest: jttool ttool launcher ttool-cli graphminimize graphshow tiftranslator tmltranslator rundse remotesimulator webcrawler install
 
 ttoolnotest: GRADLE_OPTIONS += $(GRADLE_NO_TEST)
 ttoolnotest: ttool install
