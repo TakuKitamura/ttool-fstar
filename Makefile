@@ -135,7 +135,7 @@ MD2HTML=$(MD_FILES:.md=.html)
 all: ttool launcher ttool-cli graphminimize graphshow tiftranslator tmltranslator rundse remotesimulator webcrawler install
 
 allnotest: GRADLE_OPTIONS += $(GRADLE_NO_TEST)
-allnotest: $(JTTOOL_BINARY) ttool launcher ttool-cli graphminimize graphshow tiftranslator tmltranslator rundse remotesimulator webcrawler install
+allnotest: jttool ttool launcher ttool-cli graphminimize graphshow tiftranslator tmltranslator rundse remotesimulator webcrawler install
 
 ttoolnotest: GRADLE_OPTIONS += $(GRADLE_NO_TEST)
 ttoolnotest: ttool install
@@ -326,9 +326,9 @@ $(STDRELEASE:.tgz=.tar): $(BASERELEASE:.tgz=.tar)
 	@cp $(TTOOL_FIGURES)/Makefile $(TTOOL_TARGET)/figures
 	@cp $(TTOOL_FIGURES)/mli.mk $(TTOOL_TARGET)/figures
 # JTTool
-	@mkdir -p $(TTOOL_TARGET)/java
-	@cp $(JTTOOL_BINARY) $(TTOOL_TARGET)/java
-	@cp $(TTOOL_DOC)/README_java $(TTOOL_TARGET)/java
+#	@mkdir -p $(TTOOL_TARGET)/java
+#	@cp $(JTTOOL_BINARY) $(TTOOL_TARGET)/java
+#	@cp $(TTOOL_DOC)/README_java $(TTOOL_TARGET)/java
 # Basic bin
 	@cp $(TTOOL_EXE) $(TTOOL_TARGET)/
 	@cp $(TTOOL_CONFIG_SRC) $(TTOOL_TARGET)/bin
