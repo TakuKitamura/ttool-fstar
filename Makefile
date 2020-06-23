@@ -333,7 +333,7 @@ $(STDRELEASE:.tgz=.tar): $(BASERELEASE:.tgz=.tar)
 	@cp $(TTOOL_EXE) $(TTOOL_TARGET)/
 	@cp $(TTOOL_CONFIG_SRC) $(TTOOL_TARGET)/bin
 	@cp $(TTOOL_LOTOS_H) $(TTOOL_TARGET)/bin
-	@$(TAR) uf $@ -C $(TTOOL_TARGET_RELEASE) TTool/lotos TTool/nc TTool/bin TTool/java TTool/figures TTool/doc/prototyping_with_soclib_installation_guide.pdf TTool/doc/prototyping_with_soclib_user_guide.pdf  $(patsubst $(TTOOL_DOC)/%,TTool/%,$(TTOOL_EXE))
+	@$(TAR) uf $@ -C $(TTOOL_TARGET_RELEASE) TTool/lotos TTool/nc TTool/bin TTool/figures TTool/doc/prototyping_with_soclib_installation_guide.pdf TTool/doc/prototyping_with_soclib_user_guide.pdf  $(patsubst $(TTOOL_DOC)/%,TTool/%,$(TTOOL_EXE))
 
 $(ADVANCED_RELEASE:.tgz=.tar): $(STDRELEASE:.tgz=.tar) documentation
 	@echo "$(PREFIX) Generating advanced release"
