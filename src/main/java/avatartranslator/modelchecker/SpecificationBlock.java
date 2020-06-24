@@ -86,10 +86,15 @@ public class SpecificationBlock  {
     	//TraceManager.addDev("Nb of attributes:" + attrs.size());
     	//TraceManager.addDev("in block=" + _block.toString());
     	int booleanIndex = _block.getBooleanOffset();
+    	int optRatio = _block.getAttributeOptRatio();
     	if (!compress || booleanIndex == -1) {
     	    values = new int[HEADER_VALUES+attrs.size()];
     	} else {
-    	    values = new int[HEADER_VALUES+booleanIndex+((attrs.size()-booleanIndex+31)/32)];
+    	    if (optRatio > 1) {
+    	        values = new int[HEADER_VALUES+(booleanIndex+optRatio-1)/optRatio+((attrs.size()-booleanIndex+31)/32)];
+    	    } else {
+                values = new int[HEADER_VALUES+booleanIndex+((attrs.size()-booleanIndex+31)/32)];
+    	    }
     	}
 
     	// Initial state
@@ -112,18 +117,25 @@ public class SpecificationBlock  {
         	}
     	} else {
     	    int i = 0;
-    	    for(AvatarAttribute attr: attrs) {
-    	        if (i < booleanIndex) {
-    	            values[cpt++] = attr.getInitialValueInInt();
-    	        } else if (((i - booleanIndex) % 32) == 0) {
-    	            values[cpt] = attr.getInitialValueInInt();
-    	        } else {
-    	            values[cpt] |= attr.getInitialValueInInt() << ((i - booleanIndex) % 32);
-    	            if (((i - booleanIndex) % 32) == 31) {
-    	                cpt++;
-    	            }
-    	        }
-    	        i++;
+            for(AvatarAttribute attr: attrs) {
+                if (i < booleanIndex) {
+                    if (i % optRatio == 0) {
+                        values[cpt] = attr.getInitialValueInInt();
+                    } else {
+                        values[cpt] |= attr.getInitialValueInInt() << ((i % optRatio) * (32 / optRatio));
+                    }
+                    if (i % optRatio + 1 == optRatio) {
+                        cpt++;
+                    }
+                } else if (((i - booleanIndex) % 32) == 0) {
+                    values[cpt] = attr.getInitialValueInInt();
+                } else {
+                    values[cpt] |= attr.getInitialValueInInt() << ((i - booleanIndex) % 32);
+                    if (((i - booleanIndex) % 32) == 31) {
+                        cpt++;
+                    }
+                }
+                i++;
             }
     	}
     }

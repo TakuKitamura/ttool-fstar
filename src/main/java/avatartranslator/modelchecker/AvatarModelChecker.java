@@ -84,6 +84,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
     private boolean ignoreEmptyTransitions;
     private boolean ignoreConcurrenceBetweenInternalActions;
     private boolean ignoreInternalStates;
+    private boolean verboseInfo;
 
     // RG
     private boolean computeRG;
@@ -150,6 +151,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         timeLimit = 500;
         counterexample = false;
         freeIntermediateStateCoding = true;
+        verboseInfo = true;
     }
 
     public AvatarSpecification getInitialSpec() {
@@ -420,6 +422,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         studyRI = studyReinit;
         genRG = computeRG;
         genTrace = counterexample;
+        verboseInfo = false;
         
         //then compute livenesses
         computeRG = false;
@@ -522,6 +525,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         if (studyR || genRG) {
             if (genRG) {
                 deadlocks = 0;
+                verboseInfo = true;
             }
             studyReachability = studyR;
             computeRG = genRG;
@@ -934,6 +938,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         if (counterexample) {
             counterTrace.reset();
             traceStates =  Collections.synchronizedMap(new HashMap<Integer, CounterexampleTraceState>());
+            verboseInfo = true;
         }
     }
     
@@ -956,6 +961,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 }
             }
         }
+        verboseInfo = false;
     }
 
 
@@ -1096,8 +1102,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             // Compute the hash of the new state, and create the link to the right next state
             SpecificationLink link = new SpecificationLink();
             link.originState = _ss;
-            action += " [" + tr.clockMin + "..." + tr.clockMax + "]";
-            link.action = action;
+            if (verboseInfo) { 
+                action += " [" + tr.clockMin + "..." + tr.clockMax + "]";
+                link.action = action;
+            }
             newState.computeHash(blockValues);
             //SpecificationState similar = states.get(newState.getHash(blockValues));
             
@@ -1200,8 +1208,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
             if (similar != null) {
                 SpecificationLink link = new SpecificationLink();
                 link.originState = _ss;
-                action += " [" + st.clockMin + "..." + st.clockMax + "]";
-                link.action = action;
+                if (verboseInfo) {
+                    action += " [" + st.clockMin + "..." + st.clockMax + "]";
+                    link.action = action;
+                }
                 link.destinationState = similar;
                 nbOfLinks++;
                 _ss.addNext(link);
@@ -1211,8 +1221,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 //already elaborated, add that state
                 SpecificationLink link = new SpecificationLink();
                 link.originState = _ss;
-                action += " [" +  "0...0" +  "]";
-                link.action = action;
+                if (verboseInfo) {
+                    action += " [" +  "0...0" +  "]";
+                    link.action = action;
+                }
                 link.destinationState = newState;
                 synchronized (this) {
                     similar = states.get(newState.getHash(blockValues));
@@ -1251,8 +1263,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 similar = findSimilarState(newState);
                 SpecificationLink link = new SpecificationLink();
                 link.originState = _ss;
-                action += " [" + st.clockMin + "..." + st.clockMax + "]";
-                link.action = action;
+                if (verboseInfo) {
+                    action += " [" + st.clockMin + "..." + st.clockMax + "]";
+                    link.action = action;
+                }
                 if (similar != null) {
                     link.destinationState = similar;
                 } else {
@@ -1301,8 +1315,10 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
                 //Creating new link
                 SpecificationLink link = new SpecificationLink();
                 link.originState = _ss;
-                action += " [" +  "0...0" +  "]";
-                link.action = action;
+                if (verboseInfo) {
+                    action += " [" +  "0...0" +  "]";
+                    link.action = action;
+                }
                 synchronized (this) {
                     similar = states.get(newState.getHash(blockValues));
                     if (similar == null) {

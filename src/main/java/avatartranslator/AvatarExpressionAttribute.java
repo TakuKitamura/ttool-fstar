@@ -53,11 +53,12 @@ public class AvatarExpressionAttribute {
     private AvatarBlock block;
     private int blockIndex;
     private int accessIndex;
-    private int accessOffset;
     private AvatarStateMachineElement state;
     private String s;
     private boolean isState;
     private boolean error;
+    private int shift;
+    private int mask;
     
     
     public AvatarExpressionAttribute(AvatarSpecification spec, String s) {
@@ -80,7 +81,8 @@ public class AvatarExpressionAttribute {
         state = asme;
         error = false;
         accessIndex = -1;
-        accessOffset = -1;
+        shift = 0;
+        mask = 0xFFFFFFFF;
         block = null;
     }
 
@@ -113,7 +115,8 @@ public class AvatarExpressionAttribute {
         
         int attributeIndex = block.getIndexOfAvatarAttributeWithName(fieldString);
         
-        accessOffset = -1;
+        shift = 0;
+        mask = 0xFFFFFFFF;
         
         if (attributeIndex == -1) {
             // state?
@@ -125,11 +128,19 @@ public class AvatarExpressionAttribute {
             accessIndex = block.getStateMachine().getIndexOfState((AvatarStateElement) state);
         } else {
             int offset = block.getBooleanOffset();
+            int optRatio = block.getAttributeOptRatio();
             if (offset == -1 || attributeIndex < offset) {
-                accessIndex = attributeIndex + SpecificationBlock.ATTR_INDEX;
+                accessIndex = attributeIndex / optRatio + SpecificationBlock.ATTR_INDEX;
+                shift = (attributeIndex % optRatio) * (32 / optRatio);
+                if (optRatio == 2) {
+                    mask = 0xFFFF;
+                } else if (optRatio == 4) {
+                    mask = 0xFF;
+                }
             } else {
                 accessIndex = SpecificationBlock.ATTR_INDEX + offset + ((attributeIndex - offset) / 32);
-                accessOffset = (attributeIndex - offset) % 32;
+                shift = (attributeIndex - offset) % 32;
+                mask = 1;
             }
         }
         return true;
@@ -146,7 +157,8 @@ public class AvatarExpressionAttribute {
         
         int attributeIndex = block.getIndexOfAvatarAttributeWithName(s);
         
-        accessOffset = -1;
+        shift = 0;
+        mask = 0xFFFFFFFF;
         
         if (attributeIndex == -1) {
             // state?
@@ -158,11 +170,19 @@ public class AvatarExpressionAttribute {
             accessIndex = block.getStateMachine().getIndexOfState((AvatarStateElement) state);
         } else {
             int offset = block.getBooleanOffset();
+            int optRatio = block.getAttributeOptRatio();
             if (offset == -1 || attributeIndex < offset) {
-                accessIndex = attributeIndex + SpecificationBlock.ATTR_INDEX;
+                accessIndex = attributeIndex / optRatio + SpecificationBlock.ATTR_INDEX;
+                shift = (attributeIndex % optRatio) * (32 / optRatio);
+                if (optRatio == 2) {
+                    mask = 0xFFFF;
+                } else if (optRatio == 4) {
+                    mask = 0xFF;
+                }
             } else {
                 accessIndex = SpecificationBlock.ATTR_INDEX + offset + ((attributeIndex - offset) / 32);
-                accessOffset = (attributeIndex - offset) % 32;
+                shift = (attributeIndex - offset) % 32;
+                mask = 1;
             }
         }
         return true;
@@ -186,11 +206,7 @@ public class AvatarExpressionAttribute {
             }
         }
         
-        if (accessOffset == -1) {
-            value = ss.blocks[blockIndex].values[accessIndex];
-        } else {
-            value = (ss.blocks[blockIndex].values[accessIndex] >> accessOffset) & 1;
-        }
+        value = (ss.blocks[blockIndex].values[accessIndex] >> shift) & mask;
         
         return value;
     }
@@ -202,11 +218,7 @@ public class AvatarExpressionAttribute {
             return (state == asme) ? 1 : 0;
         }
         
-        if (accessOffset == -1) {
-            value = ss.blocks[blockIndex].values[accessIndex];
-        } else {
-            value = (ss.blocks[blockIndex].values[accessIndex] >> accessOffset) & 1;
-        }
+        value = (ss.blocks[blockIndex].values[accessIndex] >> shift) & mask;
         
         return value;
     }
@@ -225,11 +237,7 @@ public class AvatarExpressionAttribute {
             }
         }
         
-        if (accessOffset == -1) {
-            value = sb.values[accessIndex];
-        } else {
-            value = (sb.values[accessIndex] >> accessOffset) & 1;
-        }
+        value = (sb.values[accessIndex] >> shift) & mask;
         
         return value;
     }
@@ -242,11 +250,7 @@ public class AvatarExpressionAttribute {
         }
         
         //Cancel offset based on Specification Blocks
-        if (accessOffset == -1) {
-            value = attributesValues[accessIndex - SpecificationBlock.ATTR_INDEX];
-        } else {
-            value = (attributesValues[accessIndex - SpecificationBlock.ATTR_INDEX] >> accessOffset) & 1;
-        }
+        value = (attributesValues[accessIndex - SpecificationBlock.ATTR_INDEX] >> shift) & mask;
         
         return value;
     }
@@ -256,11 +260,7 @@ public class AvatarExpressionAttribute {
             return;
         }
         
-        if (accessOffset == -1) {
-            ss.blocks[blockIndex].values[accessIndex] = value;
-        } else {
-            ss.blocks[blockIndex].values[accessIndex] ^= ((-(value & 1))^ ss.blocks[blockIndex].values[accessIndex]) & (1 << accessOffset);
-        }
+        ss.blocks[blockIndex].values[accessIndex] = (ss.blocks[blockIndex].values[accessIndex] & (~(mask << shift))) | ((value & mask) << shift);
     }
     
     public void setValue(SpecificationBlock sb, int value) {      
@@ -268,11 +268,12 @@ public class AvatarExpressionAttribute {
             return;
         }
                 
-        if (accessOffset == -1) {
-            sb.values[accessIndex] = value;
-        } else {
-            sb.values[accessIndex] ^= ((-(value & 1))^ sb.values[accessIndex]) & (1 << accessOffset);
-        }
+//        if (shift == -1) {
+//            sb.values[accessIndex] = value;
+//        } else {
+//            sb.values[accessIndex] ^= ((-(value & 1))^ sb.values[accessIndex]) & (1 << shift);
+//        }
+        sb.values[accessIndex] = (sb.values[accessIndex] & (~(mask << shift))) | ((value & mask) << shift);
     }
     
     //Link state to access index in the state machine
@@ -290,8 +291,12 @@ public class AvatarExpressionAttribute {
     public int getAttributeType() {
         if (isState) {
             return AvatarExpressionSolver.IMMEDIATE_BOOL;
-        } else if (accessOffset == -1) {
-            if (block.getAttribute(accessIndex - SpecificationBlock.ATTR_INDEX).getType() == AvatarType.BOOLEAN) {
+        }
+        int offset = block.getBooleanOffset();
+        int ratio = block.getAttributeOptRatio();
+        int attributeIndex = (accessIndex - SpecificationBlock.ATTR_INDEX) * ratio + shift * ratio / 32;
+        if (offset == -1 || (attributeIndex < offset)) {
+            if (block.getAttribute((accessIndex - SpecificationBlock.ATTR_INDEX)).getType() == AvatarType.BOOLEAN) {
                 return AvatarExpressionSolver.IMMEDIATE_BOOL;
             } else {
                 return AvatarExpressionSolver.IMMEDIATE_INT;

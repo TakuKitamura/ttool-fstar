@@ -63,6 +63,7 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
     private String globalCode;
     
     private int booleanOffset;
+    private int attributeOptRatio;
 
 
     public AvatarBlock(String _name, AvatarSpecification _avspec, Object _referenceObject) {
@@ -74,6 +75,7 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
         signals = new LinkedList<AvatarSignal>();
         asm = new AvatarStateMachine(this, "statemachineofblock__" + _name, _referenceObject);
         booleanOffset = -1;
+        attributeOptRatio = 1;
     }
 
 
@@ -725,6 +727,19 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
     
     public int getBooleanOffset() {
         return booleanOffset;
+    }
+    
+    
+    public int getAttributeOptRatio() {
+        return attributeOptRatio;
+    }
+    
+    public void setAttributeOptRatio(int attributeOptRatio) {
+        if (attributeOptRatio == 2 || attributeOptRatio == 4) {
+            this.attributeOptRatio = attributeOptRatio;
+        } else {
+            this.attributeOptRatio = 1;
+        }
     }
 
 
