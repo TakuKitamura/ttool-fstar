@@ -432,6 +432,12 @@ public class AvatarSpecification extends AvatarElement {
             block.sortAttributes();
         }
     }
+    
+    public void setAttributeOptRatio(int attributeOptRatio) {
+        for(AvatarBlock block: blocks) {
+            block.setAttributeOptRatio(attributeOptRatio);
+        }
+    }
 //
 //    private void renameTimers() {
 //        // Check whether timers have the same name in different blocks

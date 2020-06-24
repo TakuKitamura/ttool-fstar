@@ -138,7 +138,7 @@ public class AvatarExpressionAttribute {
                     mask = 0xFF;
                 }
             } else {
-                accessIndex = SpecificationBlock.ATTR_INDEX + offset + ((attributeIndex - offset) / 32);
+                accessIndex = SpecificationBlock.ATTR_INDEX + (offset + optRatio - 1) / optRatio + ((attributeIndex - offset) / 32);
                 shift = (attributeIndex - offset) % 32;
                 mask = 1;
             }
@@ -180,7 +180,7 @@ public class AvatarExpressionAttribute {
                     mask = 0xFF;
                 }
             } else {
-                accessIndex = SpecificationBlock.ATTR_INDEX + offset + ((attributeIndex - offset) / 32);
+                accessIndex = SpecificationBlock.ATTR_INDEX + (offset + optRatio - 1) / optRatio + ((attributeIndex - offset) / 32);
                 shift = (attributeIndex - offset) % 32;
                 mask = 1;
             }

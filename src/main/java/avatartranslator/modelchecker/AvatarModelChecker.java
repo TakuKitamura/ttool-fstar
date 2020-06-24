@@ -736,6 +736,7 @@ public class AvatarModelChecker implements Runnable, myutil.Graph {
         prepareStates();
         
         spec.sortAttributes();
+        spec.setAttributeOptRatio(2);
         initExpressionSolvers();
 
         prepareTransitions();

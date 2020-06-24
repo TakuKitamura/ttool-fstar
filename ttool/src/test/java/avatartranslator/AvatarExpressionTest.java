@@ -181,6 +181,7 @@ public class AvatarExpressionTest {
     @Test
     public void testSpec() {
         as.sortAttributes();
+        as.setAttributeOptRatio(2);
         SpecificationState ss = new SpecificationState();
         ss.setInit(as, false);
         
