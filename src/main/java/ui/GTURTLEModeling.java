@@ -1903,9 +1903,9 @@ public class GTURTLEModeling {
         TraceManager.addDev("Avatar spec generation");
         avatarspec = t2a.generateAvatarSpec("1");
 
-        if (mgui.isExperimentalOn()) {
+        /*if (mgui.isExperimentalOn()) {
             mgui.drawAvatarSpecification(avatarspec);
-        }
+        }*/
     }
 
     public void generateAvatarFromTML(boolean mc, boolean security) {
