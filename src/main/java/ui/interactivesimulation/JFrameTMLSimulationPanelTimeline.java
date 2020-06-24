@@ -17,7 +17,7 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
     public InteractiveSimulationActions[] actions;
     private Vector<SimulationTransaction> trans;
 
-    private static final int BIG_IDLE = 250;
+    private static final int BIG_IDLE = 50;
     private static String htmlContent;
     private int count = 0;
     protected JComboBox<String> units;
@@ -31,7 +31,7 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
         super(_title);
         mgui = _mgui;
         initActions();
-        trans = _trans;
+        trans = new Vector<SimulationTransaction>(_trans);
         makeComponents();
     }
 
@@ -217,20 +217,26 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
                     if (Integer.valueOf(map.get(i).get(j).endTime) > Integer.valueOf(listScaleTime.lastElement())) {
                         listScaleTime.add(map.get(i).get(j).endTime);
                     }
-                } else if ((j != 0 && (Integer.valueOf(map.get(i).get(j).startTime) != Integer.valueOf(map.get(i).get(j - 1).endTime)))) {
+                } else if ((j != 0 && (Integer.valueOf(map.get(i).get(j).startTime) > Integer.valueOf(map.get(i).get(j - 1).endTime)))) {
                     int sub = Integer.valueOf(map.get(i).get(j).startTime) - Integer.valueOf(map.get(i).get(j - 1).endTime);
                     if (sub > BIG_IDLE) {
                         htmlContent += "<td title=\"idle time" + "\" class = \"not\" colspan=\"10\"> <-IDLE " + String.valueOf(sub) + "-> </td>\n";
                         listScale.add("10");
-                    } else {
+                    } else if (sub > 0) {
                         htmlContent += "<td title=\"idle time" + "\" class = \"not\" colspan=\"" + String.valueOf(sub) + "\"></td>\n";
                         listScale.add(String.valueOf(sub));
                     }
 
                 }
+                int sub1 = Integer.valueOf(map.get(i).get(j).endTime) - Integer.valueOf(map.get(i).get(j).startTime);
+                if (sub1 > BIG_IDLE) {
+                    htmlContent += "<td title=\"" + map.get(i).get(j).command + "\" class = \"" + (map.get(i).get(j).command.contains("Idle") ? "not" : taskColors.get(map.get(i).get(j).taskName)) + "\" colspan=\"10\">" + map.get(i).get(j).command.substring(0, 1) + "</td>\n";
+                    listScale.add("10");
+                } else if (sub1 > 0) {
+                    htmlContent += "<td title=\"" + map.get(i).get(j).command + "\" class = \"" + (map.get(i).get(j).command.contains("Idle") ? "not" : taskColors.get(map.get(i).get(j).taskName)) + "\" colspan=\"" + String.valueOf(sub1) + "\">" + map.get(i).get(j).command.substring(0, 1) + "</td>\n";
+                    listScale.add(String.valueOf(sub1));
+                }
 
-                htmlContent += "<td title=\"" + map.get(i).get(j).command + "\" class = \"" + (map.get(i).get(j).command.contains("Idle") ? "not" : taskColors.get(map.get(i).get(j).taskName)) + "\" colspan=\"" + String.valueOf(Integer.valueOf(map.get(i).get(j).endTime) - Integer.valueOf(map.get(i).get(j).startTime)) + "\">" + map.get(i).get(j).command.substring(0, 1) + "</td>\n";
-                listScale.add(String.valueOf(Integer.valueOf(map.get(i).get(j).endTime) - Integer.valueOf(map.get(i).get(j).startTime)));
                 if (Integer.valueOf(map.get(i).get(j).startTime) > Integer.valueOf(listScaleTime.lastElement())) {
                     listScaleTime.add(map.get(i).get(j).startTime);
                 }
@@ -271,7 +277,7 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
         }
 
         htmlContent += "</tr>\n</table>\n</body>\n" + "</html>";
-        System.out.println(htmlContent);
+//        System.out.println(htmlContent);
         sdpanel.setText(htmlContent);
 
         JScrollPane jsp = new JScrollPane(sdpanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);

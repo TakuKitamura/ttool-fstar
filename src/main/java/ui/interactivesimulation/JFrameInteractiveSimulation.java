@@ -1527,34 +1527,52 @@ public class JFrameInteractiveSimulation extends JFrame implements ActionListene
 	}
 
 	public void writeSimTraceTimeline() {
-	    if(trans != null && !trans.isEmpty()) {
-	        try {
-                //Make a popup to select which tasks
-                Vector<String> tmlComponentsToValidate = new Vector<String>();
-                List<String> tasks = new ArrayList<String>();
-                for (TMLTask task : tmap.getTMLModeling().getTasks()) {
-                    tasks.add(task.getName());
-                }
-                JDialogSelectTasks jdstmlc = new JDialogSelectTasks(f, tmlComponentsToValidate, tasks, "Select tasks to show in trace");
+        Thread thread=new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                        updateTransactions();
+                        System.out.println("update trans");
+                        Thread.sleep(1000);
 
-                GraphicLib.centerOnParent(jdstmlc);
-                jdstmlc.setVisible(true);
-                Vector<SimulationTransaction> _transCopy = new Vector<SimulationTransaction>();
-                for (int i = 0; i < trans.size(); i++) {
-                    for (String taskname : tmlComponentsToValidate) {
-                        if (taskname.equals(trans.get(i).taskName)) {
-                            _transCopy.add(trans.get(i));
+                        if(trans != null && !trans.isEmpty()) {
+                            try {
+                                //Make a popup to select which tasks
+                                Vector<String> tmlComponentsToValidate = new Vector<String>();
+                                List<String> tasks = new ArrayList<String>();
+                                for (TMLTask task : tmap.getTMLModeling().getTasks()) {
+                                    tasks.add(task.getName());
+                                }
+                                JDialogSelectTasks jdstmlc = new JDialogSelectTasks(f, tmlComponentsToValidate, tasks, "Select tasks to show in trace");
+
+                                GraphicLib.centerOnParent(jdstmlc);
+                                jdstmlc.setVisible(true);
+                                Vector<SimulationTransaction> _transCopy = new Vector<SimulationTransaction>();
+                                for (int i = 0; i < trans.size(); i++) {
+                                    for (String taskname : tmlComponentsToValidate) {
+                                        if (taskname.equals(trans.get(i).taskName)) {
+                                            int checkPenalty = Integer.valueOf(trans.get(i).endTime) - Integer.valueOf(trans.get(i).startTime) - Integer.valueOf(trans.get(i).length);
+                                            if (checkPenalty > 0) trans.get(i).startTime = String.valueOf(Integer.valueOf(trans.get(i).endTime) - Integer.valueOf(trans.get(i).length));
+                                            _transCopy.add(trans.get(i));
+                                        }
+                                    }
+                                }
+                                if(!_transCopy.isEmpty()) {
+                                    tmlSimPanelTimeline = new JFrameTMLSimulationPanelTimeline(new Frame(), mgui, _transCopy, "Show Trace - Timeline");
+                                    tmlSimPanelTimeline.setVisible(true);
+                                }
+                            } catch (Exception e) {
+                                System.out.println("Error: " + e.toString());
+                            }
+                        } else {
+                            System.out.println("Trans is null, Transaction list need to be update (button \"Update transactions\" under Transactions tab).");
                         }
-                    }
-                }
-                if(!_transCopy.isEmpty()) {
-                    tmlSimPanelTimeline = new JFrameTMLSimulationPanelTimeline(new Frame(), mgui, _transCopy, "Show Trace - Timeline");
-                    tmlSimPanelTimeline.setVisible(true);
-                }
-            } catch (Exception e) {
-	            System.out.println("Error: " + e.toString());
+
+                }catch (Exception ex){
+                    ex.printStackTrace();}
             }
-        }
+        });
+        thread.start();
     }
 	
 	public void writeArchitectureSimTrace(){
