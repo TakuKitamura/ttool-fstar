@@ -15,11 +15,10 @@ import java.util.*;
 public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionListener {
 
     public InteractiveSimulationActions[] actions;
-    private Vector<SimulationTransaction> trans;
+    private Vector<SimulationTransaction> transTransfer;
 
     private static final int BIG_IDLE = 50;
-    private static String htmlContent;
-    private int count = 0;
+    private static String htmlPaneContent;
     protected JComboBox<String> units;
 
     private JTextPane sdpanel;
@@ -31,7 +30,15 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
         super(_title);
         mgui = _mgui;
         initActions();
-        trans = new Vector<SimulationTransaction>(_trans);
+        if (_trans.size() > 2000) {
+            int numTraces = _trans.size();
+            transTransfer = new Vector<SimulationTransaction>();
+            for (int i = 0; i < 2000; i++) {
+                transTransfer.add(_trans.get(numTraces - 2000 + i));
+            }
+        } else {
+            transTransfer = new Vector<SimulationTransaction>(_trans);
+        }
         makeComponents();
     }
 
@@ -54,7 +61,29 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
         JButton buttonHtml = new JButton(actions[InteractiveSimulationActions.ACT_SAVE_TIMELINE_HTML]);
         topPanel.add(buttonHtml);
 
-        // classify trans base on CPU and Core
+        framePanel.add(topPanel, BorderLayout.NORTH);
+
+        // Simulation panel
+        sdpanel = new JTextPane();
+        sdpanel.setEditable(false);
+        sdpanel.setContentType("text/html");
+        htmlPaneContent = generateHtmlContent(transTransfer);
+        sdpanel.setText(htmlPaneContent);
+
+        JScrollPane jsp = new JScrollPane(sdpanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        jsp.setWheelScrollingEnabled(true);
+        jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
+        framePanel.add(jsp, BorderLayout.CENTER);
+
+        // statusBar
+        status = createStatusBar();
+        framePanel.add(status, BorderLayout.SOUTH);
+
+        pack();
+
+    }
+    private String generateHtmlContent( Vector<SimulationTransaction> trans) {
+        String htmlContent = "";
         Map<String, Vector<SimulationTransaction>> map = new HashMap<String, Vector<SimulationTransaction>>();
         Map<String, String> taskColors = new HashMap<String, String>();
         int taskIndex = 0;
@@ -78,13 +107,7 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
         for (String i : map.keySet()) {
             if (Integer.valueOf(map.get(i).lastElement().endTime) > endTime) endTime = Integer.valueOf(map.get(i).lastElement().endTime);
         }
-
-        framePanel.add(topPanel, BorderLayout.NORTH);
-
-        // Simulation panel
-        sdpanel = new JTextPane();
-        sdpanel.setEditable(false);
-        sdpanel.setContentType("text/html");
+        if (endTime > 2000) endTime = 2000;
         htmlContent = "<!DOCTYPE html>\n" + "<html>\n";
         htmlContent += "<head>\n" +
                 "<style>\n";
@@ -193,8 +216,11 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
                 "\"><b>Time</b></td>\n</tr>\n" +
                 "<tr><th></th><th class=\"notfirst\"></th></tr>\n" +
                 "<div class = \"clear\"></div>";
+        int count = 0;
         for (String i : map.keySet()) {
+            System.out.println("Wrting content for " + i);
             count ++;
+            int rowLength = 0;
             Vector<String> listScale = new Vector<String>();
             Vector<String> listScaleTime = new Vector<String>();
             listScale.add("0");
@@ -206,9 +232,11 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
                     if(Integer.valueOf(map.get(i).get(j).startTime) > BIG_IDLE) {
                         htmlContent += "<td title=\"idle time" + "\" class = \"not\" colspan=\"10\"> <-IDLE " + map.get(i).get(j).startTime + "-> </td>\n";
                         listScale.add("10");
+                        rowLength += 10;
                     } else {
                         htmlContent += "<td title=\"idle time" + "\" class = \"not\" colspan=\"" + map.get(i).get(j).startTime + "\"></td>\n";
                         listScale.add(map.get(i).get(j).startTime);
+                        rowLength += Integer.valueOf(map.get(i).get(j).startTime);
                     }
 
                     if (Integer.valueOf(map.get(i).get(j).startTime) > Integer.valueOf(listScaleTime.lastElement())) {
@@ -222,9 +250,11 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
                     if (sub > BIG_IDLE) {
                         htmlContent += "<td title=\"idle time" + "\" class = \"not\" colspan=\"10\"> <-IDLE " + String.valueOf(sub) + "-> </td>\n";
                         listScale.add("10");
+                        rowLength += 10;
                     } else if (sub > 0) {
                         htmlContent += "<td title=\"idle time" + "\" class = \"not\" colspan=\"" + String.valueOf(sub) + "\"></td>\n";
                         listScale.add(String.valueOf(sub));
+                        rowLength += sub;
                     }
 
                 }
@@ -232,9 +262,11 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
                 if (sub1 > BIG_IDLE) {
                     htmlContent += "<td title=\"" + map.get(i).get(j).command + "\" class = \"" + (map.get(i).get(j).command.contains("Idle") ? "not" : taskColors.get(map.get(i).get(j).taskName)) + "\" colspan=\"10\">" + map.get(i).get(j).command.substring(0, 1) + "</td>\n";
                     listScale.add("10");
+                    rowLength += 10;
                 } else if (sub1 > 0) {
                     htmlContent += "<td title=\"" + map.get(i).get(j).command + "\" class = \"" + (map.get(i).get(j).command.contains("Idle") ? "not" : taskColors.get(map.get(i).get(j).taskName)) + "\" colspan=\"" + String.valueOf(sub1) + "\">" + map.get(i).get(j).command.substring(0, 1) + "</td>\n";
                     listScale.add(String.valueOf(sub1));
+                    rowLength += sub1;
                 }
 
                 if (Integer.valueOf(map.get(i).get(j).startTime) > Integer.valueOf(listScaleTime.lastElement())) {
@@ -245,7 +277,7 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
                 }
             }
             htmlContent += "</tr>\n<tr>";
-            for (int k = 0; k < Integer.valueOf(map.get(i).lastElement().endTime) + 2; k++) {
+            for (int k = 0; k < rowLength + 3; k++) {
                 if( k == 1) {
                     htmlContent += "<th class=\"notfirst\">";
                 } else {
@@ -278,19 +310,7 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
 
         htmlContent += "</tr>\n</table>\n</body>\n" + "</html>";
 //        System.out.println(htmlContent);
-        sdpanel.setText(htmlContent);
-
-        JScrollPane jsp = new JScrollPane(sdpanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        jsp.setWheelScrollingEnabled(true);
-        jsp.getVerticalScrollBar().setUnitIncrement(MainGUI.INCREMENT);
-        framePanel.add(jsp, BorderLayout.CENTER);
-
-        // statusBar
-        status = createStatusBar();
-        framePanel.add(status, BorderLayout.SOUTH);
-
-        pack();
-
+        return htmlContent;
     }
 
     private void initActions() {
@@ -332,7 +352,7 @@ public class JFrameTMLSimulationPanelTimeline extends JFrame implements ActionLi
         }
         try {
             FileOutputStream fos = new FileOutputStream(file);
-            fos.write(htmlContent.getBytes());
+            fos.write(htmlPaneContent.getBytes());
             fos.close();
             JOptionPane.showMessageDialog(getContentPane(), "The capture was correctly performed and saved in " + file.getAbsolutePath(), "Screen capture ok", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {

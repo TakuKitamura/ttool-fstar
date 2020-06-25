@@ -716,7 +716,7 @@ public class IconManager {
     private static String icon8027 = "elndeisource.gif";
     private static String icon8028 = "elndevsink.gif";
     private static String icon8029 = "elndevsource.gif";
-    private static String icon8030 = "toolbarButtonGraphics/general/timeline.png";
+    private static String icon8030 = "timeline.png";
     
     public IconManager() {
 
