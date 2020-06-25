@@ -83,7 +83,7 @@ public class TMLActivityDiagramToolBar extends TToolBar {
         mgui.actions[TGUIAction.TMLAD_SEND_REQUEST].setEnabled(b);
         mgui.actions[TGUIAction.TMLAD_SEND_EVENT].setEnabled(b);
         mgui.actions[TGUIAction.TMLAD_WAIT_EVENT].setEnabled(b);
-	 mgui.actions[TGUIAction.TMLAD_WRITE_CAMS].setEnabled(b);
+	    mgui.actions[TGUIAction.TMLAD_WRITE_CAMS].setEnabled(b);
         mgui.actions[TGUIAction.TMLAD_READ_CAMS].setEnabled(b);
         mgui.actions[TGUIAction.TMLAD_NOTIFIED_EVENT].setEnabled(b);
 		mgui.actions[TGUIAction.TMLAD_READ_REQUEST_ARG].setEnabled(b);
@@ -140,8 +140,6 @@ public class TMLActivityDiagramToolBar extends TToolBar {
         button = this.add(mgui.actions[TGUIAction.TMLAD_WRITE_CHANNEL]);
         button.addMouseListener(mgui.mouseHandler);
 
-	button = this.add(mgui.actions[TGUIAction.TMLAD_WRITE_CAMS]);
-        button.addMouseListener(mgui.mouseHandler);
 
         button = this.add(mgui.actions[TGUIAction.TMLAD_SEND_EVENT]);
         button.addMouseListener(mgui.mouseHandler);
@@ -155,8 +153,7 @@ public class TMLActivityDiagramToolBar extends TToolBar {
         button.addMouseListener(mgui.mouseHandler);
 
 
-	button = this.add(mgui.actions[TGUIAction.TMLAD_READ_CAMS]);
-        button.addMouseListener(mgui.mouseHandler);
+
         
 	
         button = this.add(mgui.actions[TGUIAction.TMLAD_WAIT_EVENT]);
@@ -168,6 +165,14 @@ public class TMLActivityDiagramToolBar extends TToolBar {
 		button = this.add(mgui.actions[TGUIAction.TMLAD_READ_REQUEST_ARG]);
         button.addMouseListener(mgui.mouseHandler);
         
+        this.addSeparator();
+
+        button = this.add(mgui.actions[TGUIAction.TMLAD_WRITE_CAMS]);
+        button.addMouseListener(mgui.mouseHandler);
+
+        button = this.add(mgui.actions[TGUIAction.TMLAD_READ_CAMS]);
+        button.addMouseListener(mgui.mouseHandler);
+
         this.addSeparator();
         
         button = this.add(mgui.actions[TGUIAction.TMLAD_ACTION_STATE]);
