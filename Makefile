@@ -146,6 +146,7 @@ ttoolnotest:
 $(TTOOL_BINARY): FORCE
 	@($(GRADLE) :ttool:build $(GRADLE_OPTIONS)) || ($(ERROR_MSG) $(GRADLE_VERSION) $(GRADLE_VERSION_NEEDED)&& $(MAKE) -C $(TTOOL_DIR) -e $@)
 
+
 ttooljavac: 
 	$(MAKE) -C $(TTOOL_DIR)
 	$(MAKE) -C $(TTOOLCLI_DIR)
@@ -198,8 +199,9 @@ $(WEBCRAWLER_CLIENT_BINARY): FORCE
 $(WEBCRAWLER_SERVER_BINARY): FORCE
 	@($(GRADLE) :webcrawler-server:build) || ($(ERROR_MSG) && $(MAKE) -C $(WEBCRAWLER_SERVER_DIR) -e $@)
 
-$(JTTOOL_BINARY): FORCE
-	@$(MAKE) -C $(JTTOOL_DIR) -e $@
+#$(JTTOOL_BINARY): FORCE
+#	@$(MAKE) -C $(JTTOOL_DIR) -e $@
+
 
 internalhelp: html
 
@@ -324,14 +326,14 @@ $(STDRELEASE:.tgz=.tar): $(BASERELEASE:.tgz=.tar)
 	@cp $(TTOOL_FIGURES)/Makefile $(TTOOL_TARGET)/figures
 	@cp $(TTOOL_FIGURES)/mli.mk $(TTOOL_TARGET)/figures
 # JTTool
-	@mkdir -p $(TTOOL_TARGET)/java
-	@cp $(JTTOOL_BINARY) $(TTOOL_TARGET)/java
-	@cp $(TTOOL_DOC)/README_java $(TTOOL_TARGET)/java
+#	@mkdir -p $(TTOOL_TARGET)/java
+#	@cp $(JTTOOL_BINARY) $(TTOOL_TARGET)/java
+#	@cp $(TTOOL_DOC)/README_java $(TTOOL_TARGET)/java
 # Basic bin
 	@cp $(TTOOL_EXE) $(TTOOL_TARGET)/
 	@cp $(TTOOL_CONFIG_SRC) $(TTOOL_TARGET)/bin
 	@cp $(TTOOL_LOTOS_H) $(TTOOL_TARGET)/bin
-	@$(TAR) uf $@ -C $(TTOOL_TARGET_RELEASE) TTool/lotos TTool/nc TTool/bin TTool/java TTool/figures TTool/doc/prototyping_with_soclib_installation_guide.pdf TTool/doc/prototyping_with_soclib_user_guide.pdf  $(patsubst $(TTOOL_DOC)/%,TTool/%,$(TTOOL_EXE))
+	@$(TAR) uf $@ -C $(TTOOL_TARGET_RELEASE) TTool/lotos TTool/nc TTool/bin TTool/figures TTool/doc/prototyping_with_soclib_installation_guide.pdf TTool/doc/prototyping_with_soclib_user_guide.pdf  $(patsubst $(TTOOL_DOC)/%,TTool/%,$(TTOOL_EXE))
 
 $(ADVANCED_RELEASE:.tgz=.tar): $(STDRELEASE:.tgz=.tar) documentation
 	@echo "$(PREFIX) Generating advanced release"
@@ -390,7 +392,8 @@ $(TTOOL_PREINSTALL_LINUX:.tgz=.tar): $(BASERELEASE:.tgz=.tar)
 	@cp $(TTOOL_PATH)/build/*.jar $(TTOOL_TARGET_LINUX)/TTool/bin/
 	@$(TAR) uf $@ -C $(TTOOL_TARGET_LINUX) proverif uppaal TTool/bin/config_linux.xml ttool.exe
 
-$(BASERELEASE:.tgz=.tar): $(JTTOOL_BINARY) $(TTOOL_BINARY) $(LAUNCHER_BINARY) $(TIFTRANSLATOR_BINARY) $(TMLTRANSLATOR_BINARY) $(RUNDSE_BINARY) FORCE
+#$(BASERELEASE:.tgz=.tar): $(JTTOOL_BINARY) $(TTOOL_BINARY) $(LAUNCHER_BINARY $(TIFTRANSLATOR_BINARYT) $(TMLTRANSLATOR_BINARY) $(RUNDSE_BINARY) FORCE
+$(BASERELEASE:.tgz=.tar): allnotest
 	@echo "$(PREFIX) Preparing base release"
 	@rm -rf $(TTOOL_TARGET_RELEASE)
 	@mkdir -p $(TTOOL_TARGET)
@@ -485,8 +488,8 @@ $(BASERELEASE:.tgz=.tar): $(JTTOOL_BINARY) $(TTOOL_BINARY) $(LAUNCHER_BINARY) $(
 	@cp $(TTOOL_DOC_SYSMLSEC_DIR)/build/sysmlsec_documentation.pdf  $(TTOOL_TARGET)/doc/sysmlsec_documentation.pdf
 	@cp $(TTOOL_DOC_SYSMLSEC_DIR)/build/sysmlsec_documentation.pdf  $(TTOOL_PRIVATE)/website/ttool/docs/
 	@$(MAKE) -C $(TTOOL_DOC_AVATARCODEGENERATION_DIR) codegeneration_documentation
-	@cp $(TTOOL_DOC_AVATARCODEGENERATION_DIR)/codegeneration_documentation.pdf  $(TTOOL_TARGET)/doc/avatarcodegeneration_documentation.pdf
-	@cp $(TTOOL_DOC_AVATARCODEGENERATION_DIR)/codegeneration_documentation.pdf  $(TTOOL_PRIVATE)/website/ttool/docs/
+	@cp $(TTOOL_DOC_AVATARCODEGENERATION_DIR)/build/codegeneration_documentation.pdf  $(TTOOL_TARGET)/doc/avatarcodegeneration_documentation.pdf
+	@cp $(TTOOL_DOC_AVATARCODEGENERATION_DIR)/build/codegeneration_documentation.pdf  $(TTOOL_PRIVATE)/website/ttool/docs/
 	@$(MAKE) -C $(TTOOL_DOC_SOCLIB_USERGUIDE_DIR) user_guide
 	@cp $(TTOOL_DOC_SOCLIB_USERGUIDE_DIR)/build/user_guide.pdf  $(TTOOL_TARGET)/doc/prototyping_with_soclib_user_guide.pdf
 	@$(MAKE) -C $(TTOOL_DOC_SOCLIB_INSTALLATIONGUIDE_DIR) installation_guide

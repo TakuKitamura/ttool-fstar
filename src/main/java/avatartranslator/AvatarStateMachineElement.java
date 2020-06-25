@@ -39,6 +39,7 @@
 
 package avatartranslator;
 
+import myutil.TraceManager;
 import ui.TGComponent;
 
 import java.util.HashMap;
@@ -290,7 +291,8 @@ public abstract class AvatarStateMachineElement extends AvatarElement {
 
     public abstract AvatarStateMachineElement basicCloneMe(AvatarStateMachineOwner _block);
 
-    public void fillAdvancedValues(AvatarStateMachineElement asme, HashMap<AvatarStateMachineElement, AvatarStateMachineElement> correspondenceMap) {
+    public void fillAdvancedValues(AvatarStateMachineElement asme, HashMap<AvatarStateMachineElement, AvatarStateMachineElement> correspondenceMap,
+     AvatarStateMachine mch                              ) {
         // Fill all reference elements
         cloneLinkToReferenceObjects(asme);
 
@@ -310,6 +312,14 @@ public abstract class AvatarStateMachineElement extends AvatarElement {
             AvatarStateMachineElement newNext = correspondenceMap.get(next);
             if (newNext != null) {
                 asme.addNext(newNext);
+            } else {
+                TraceManager.addDev("Null next for " + next.toString());
+                if (mch != null) {
+                    TraceManager.addDev("State machine contains next? " + mch.elements.contains(next));
+
+
+
+                }
             }
         }
     }

@@ -1727,6 +1727,15 @@ public class AvatarStateMachine extends AvatarElement {
             AvatarStateMachineElement ae;
             ae = elt.basicCloneMe(_newBlock);
 
+            /*if (ae instanceof AvatarState) {
+                TraceManager.addDev("New state: ");
+            }
+            TraceManager.addDev("elt: " +  ae.toString());*/
+
+            if (ae == null) {
+                TraceManager.addDev("Null AE");
+            }
+
             _newAsm.addElement(ae);
 
             if (ae instanceof AvatarStartState) {
@@ -1739,7 +1748,9 @@ public class AvatarStateMachine extends AvatarElement {
         for (AvatarStateMachineElement elt : elements) {
             AvatarStateMachineElement ae = correspondenceMap.get(elt);
             if (ae != null) {
-                elt.fillAdvancedValues(ae, correspondenceMap);
+                elt.fillAdvancedValues(ae, correspondenceMap, this);
+            } else {
+                TraceManager.addDev("Null correspondance ae");
             }
         }
     }

@@ -511,19 +511,33 @@ public class AvatarBDDataType extends TGCScalableWithInternalComponent implement
                                     typeOther = "";
                                 }
                                 id = elt.getAttribute("id");
-                                valueAtt = elt.getAttribute("value");
+
+                                try {
+                                    valueAtt = elt.getAttribute("value");
+                                } catch (Exception e) {
+                                    valueAtt = "";
+                                }
+
+
+                                if (valueAtt == null) {
+                                    valueAtt = "";
+                                }
 
                                 if (valueAtt.equals("null")) {
                                     valueAtt = "";
                                 }
-                                if ((TAttribute.isAValidId(id, false, false, false)) && (TAttribute.isAValidInitialValue(type, valueAtt))) {
-                                    //
-                                    if (type == TAttribute.NATURAL) {
-                                        type = TAttribute.INTEGER;
+
+
+
+                                if ((TAttribute.isAValidId(id, false, false, false))) {
+                                    if ((valueAtt.length() == 0 ) || ((TAttribute.isAValidInitialValue(type, valueAtt)))) {
+                                        if (type == TAttribute.NATURAL) {
+                                            type = TAttribute.INTEGER;
+                                        }
+                                        TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
+                                        ta.isAvatar = true;
+                                        myAttributes.add(ta);
                                     }
-                                    TAttribute ta = new TAttribute(access, id, valueAtt, type, typeOther);
-                                    ta.isAvatar = true;
-                                    myAttributes.add(ta);
                                 }
                             }
                         }

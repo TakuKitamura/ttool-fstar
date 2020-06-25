@@ -1905,6 +1905,8 @@ public class GTURTLEModeling {
 
         if (mgui.isExperimentalOn()) {
             mgui.drawAvatarSpecification(avatarspec);
+            AvatarSpecification av2 = avatarspec.advancedClone();
+            mgui.drawAvatarSpecification(av2);
         }
     }
 
@@ -8694,6 +8696,10 @@ public class GTURTLEModeling {
             mgui.resetAllDIPLOIDs();
             listE.useDIPLOIDs();
             mgui.setMode(MainGUI.GEN_DESIGN_OK);
+
+
+
+
             return true;
         }
     }
@@ -9173,8 +9179,8 @@ public class GTURTLEModeling {
                 originDestMap.put(bl1.split("__")[bl1.split("__").length - 1], hs);
             }
         }
-        //Add Relations
 
+        //Add Relations
         for (String bl1 : originDestMap.keySet()) {
             for (String bl2 : originDestMap.get(bl1)) {
                 Vector<Point> points = new Vector<Point>();
@@ -9210,6 +9216,7 @@ public class GTURTLEModeling {
                         conn.setSizeOfFIFO(ar.getSizeOfFIFO());
                         //
                         for (int i = 0; i < ar.nbOfSignals(); i++) {
+                            //TraceManager.addDev("Adding signal relations to connector");
                             //
                             conn.addSignal(ar.getSignal1(i).toString(), ar.getSignal1(i).getInOut() == 0, ar.block1.getName().contains(bl1));
                             conn.addSignal(ar.getSignal2(i).toString(), ar.getSignal2(i).getInOut() == 0, !ar.block1.getName().contains(bl1));
@@ -9234,6 +9241,8 @@ public class GTURTLEModeling {
             }
         }
         ypos += 100;
+
+
         //Add Pragmas
         AvatarBDPragma pragma = new AvatarBDPragma(xpos, ypos, xpos, xpos * 2, ypos, ypos * 2, false, null, abd);
         //  String[] arr = new String[avspec.getPragmas().size()];
