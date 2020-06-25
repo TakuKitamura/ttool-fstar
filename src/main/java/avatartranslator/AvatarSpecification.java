@@ -367,6 +367,12 @@ public class AvatarSpecification extends AvatarElement {
                             errors.add(at);
                         }
                     }
+                    if (at.hasDelay()) {
+                        returnVal = at.buildDelaySolver();
+                        if (returnVal == false) {
+                            errors.add(at);
+                        }
+                    }
                     for (AvatarAction aa : at.getActions()) {
                         if (aa instanceof AvatarActionAssignment) {
                             returnVal = ((AvatarActionAssignment) aa).buildActionSolver(block);

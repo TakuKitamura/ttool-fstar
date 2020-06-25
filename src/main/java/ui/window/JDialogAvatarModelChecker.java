@@ -729,6 +729,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             timer.scheduleAtFixedRate(mcm, 0, 500);
 
             // Setting options
+            amc.setCompressionFactor(1);
             amc.setIgnoreEmptyTransitions(ignoreEmptyTransitionsSelected);
             amc.setIgnoreConcurrenceBetweenInternalActions(ignoreConcurrenceBetweenInternalActionsSelected);
             amc.setIgnoreInternalStates(ignoreInternalStatesSelected);

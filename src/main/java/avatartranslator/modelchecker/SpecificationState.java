@@ -65,9 +65,8 @@ public class SpecificationState implements Comparable<SpecificationState>  {
     public LinkedList<SpecificationLink> nexts; // The RG is there
     public boolean property; //trace the property check at this state
     public boolean elaborated; //true only if the elaboration has been completed
-    public ArrayList<SpecificationTransition> transitions;
-//    public long distance; //max #steps to be reached from S0
 
+    
     public SpecificationState() {
         hashComputed = false;
         property = false;
@@ -193,14 +192,8 @@ public class SpecificationState implements Comparable<SpecificationState>  {
 	return 0;
     }
 
-    public void finished() {
-        //blocks = null;
-        transitions = null;
-    }
-
     public void freeUselessAllocations() {
         blocks = null;
-        transitions = null;
     }
 
     public int compareTo( SpecificationState _s ) {

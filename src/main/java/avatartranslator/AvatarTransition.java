@@ -93,10 +93,9 @@ public class AvatarTransition extends AvatarStateMachineElement {
     private String minCompute = "", maxCompute = "";
     private AvatarStateMachineOwner block;
 
-
-
-    
     private AvatarExpressionSolver guardSolver;
+    private AvatarExpressionSolver minDelaySolver;
+    private AvatarExpressionSolver maxDelaySolver;
 
     private List<AvatarAction> actions; // actions on variable, or method call
 
@@ -106,6 +105,8 @@ public class AvatarTransition extends AvatarStateMachineElement {
         this.guard = new AvatarGuardEmpty();
         this.block = _block;
         guardSolver = null;
+        minDelaySolver = null;
+        maxDelaySolver = null;
     }
 
     public AvatarGuard getGuard() {
@@ -113,14 +114,41 @@ public class AvatarTransition extends AvatarStateMachineElement {
     }
     
     public boolean buildGuardSolver() {
-        String expr = guard.toString().replaceAll("\\[", "").trim();
-        expr = expr.replaceAll("\\]", "");
-        guardSolver = new AvatarExpressionSolver(expr);
-        return guardSolver.buildExpression((AvatarBlock) block);
+        if (isGuarded()) {
+            String expr = guard.toString().replaceAll("\\[", "").trim();
+            expr = expr.replaceAll("\\]", "");
+            guardSolver = new AvatarExpressionSolver(expr);
+            return guardSolver.buildExpression((AvatarBlock) block);
+        }
+        return true;
+    }
+    
+    public boolean buildDelaySolver() {
+        boolean result;
+        if (hasDelay()) {
+            minDelaySolver = new AvatarExpressionSolver(minDelay);
+            result = minDelaySolver.buildExpression((AvatarBlock) block);
+            if (maxDelay.trim().length() != 0) {
+                maxDelaySolver = new AvatarExpressionSolver(maxDelay);
+                result &= maxDelaySolver.buildExpression((AvatarBlock) block);
+            } else {
+                maxDelaySolver = minDelaySolver;
+            }
+            return result;
+        }
+        return true;
     }
     
     public AvatarExpressionSolver getGuardSolver() {
         return guardSolver;
+    }
+    
+    public AvatarExpressionSolver getMinDelaySolver() {
+        return minDelaySolver;
+    }
+    
+    public AvatarExpressionSolver getMaxDelaySolver() {
+        return maxDelaySolver;
     }
 
     public void setGuard(AvatarGuard _guard) {
