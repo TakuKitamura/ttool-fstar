@@ -194,6 +194,20 @@ public class AvatarExpressionTest {
         assertTrue(e1.getResult(ss) == 17);
         assertTrue(e2.getResult(ss) == 1);
         assertTrue(e3.getResult(ss) == 0);
+        
+        as.setAttributeOptRatio(4);
+        ss = new SpecificationState();
+        ss.setInit(as, false);
+        
+        e1 = new AvatarExpressionSolver("block1.x + block2.y");
+        assertTrue(e1.buildExpression(as));
+        e2 = new AvatarExpressionSolver("-block1.x / block1.y - 15 * block2.z + 1 == -46");
+        assertTrue(e2.buildExpression(as));
+        e3 = new AvatarExpressionSolver("not(-block2.x / block2.z - not(block1.x + block2.y) * -2 + -(1) <= -(-4 + 7))");
+        assertFalse(e3.buildExpression(as));
+        assertTrue(e1.getResult(ss) == 17);
+        assertTrue(e2.getResult(ss) == 1);
+        assertTrue(e3.getResult(ss) == 0);
     }
 
 }
