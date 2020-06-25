@@ -124,7 +124,7 @@ public class SpecificationBlock  {
                     } else {
                         values[cpt] |= attr.getInitialValueInInt() << ((i % optRatio) * (32 / optRatio));
                     }
-                    if (i % optRatio + 1 == optRatio) {
+                    if (i % optRatio + 1 == optRatio || i + 1 == booleanIndex) {
                         cpt++;
                     }
                 } else if (((i - booleanIndex) % 32) == 0) {
