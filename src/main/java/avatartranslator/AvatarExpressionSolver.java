@@ -160,6 +160,12 @@ public class AvatarExpressionSolver {
             } else {
                 leaf = new AvatarExpressionAttribute(spec, expression);
                 returnVal = !leaf.hasError();
+                if (leaf.isConstant()) {
+                    AvatarAttribute attr = leaf.getConstAttribute();
+                    intValue = attr.getInitialValueInInt();
+                    isImmediateValue = attr.isBool() ? IMMEDIATE_BOOL : IMMEDIATE_INT;
+                    leaf = null;
+                }
             }
             //System.out.println("Variable " + expression + "\n");
             return returnVal;
@@ -221,6 +227,12 @@ public class AvatarExpressionSolver {
             } else {
                 leaf = new AvatarExpressionAttribute(block, expression);
                 returnVal = !leaf.hasError();
+                if (leaf.isConstant()) {
+                    AvatarAttribute attr = leaf.getConstAttribute();
+                    intValue = attr.getInitialValueInInt();
+                    isImmediateValue = attr.isBool() ? IMMEDIATE_BOOL : IMMEDIATE_INT;
+                    leaf = null;
+                }
             }
             //System.out.println("Variable " + expression + "\n");
             return returnVal;

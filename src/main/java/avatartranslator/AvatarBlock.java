@@ -42,7 +42,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-
 /**
  * Class AvatarBlock
  * Creation: 20/05/2010
@@ -64,6 +63,7 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
     
     private int booleanOffset;
     private int attributeOptRatio;
+    private List<AvatarAttribute> constants;
 
 
     public AvatarBlock(String _name, AvatarSpecification _avspec, Object _referenceObject) {
@@ -287,6 +287,28 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
             cpt++;
         }
         return -1;
+    }
+    
+    public int getIndexOfConstantWithName(String _name) {
+        int cpt = 0;
+        
+        if (constants == null) {
+            return -1;
+        }
+        for (AvatarAttribute attribute : constants) {
+            if (attribute.getName().compareTo(_name) == 0) {
+                return cpt;
+            }
+            cpt++;
+        }
+        return -1;
+    }
+    
+    public AvatarAttribute getConstantWithIndex(int index) {
+        if (constants == null) {
+            return null;
+        }
+        return constants.get(index);
     }
 
     /**
@@ -740,6 +762,49 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
         } else {
             this.attributeOptRatio = 1;
         }
+    }
+    
+    
+    public void removeConstantAttributes() {
+        AvatarTransition at;
+        List<AvatarAttribute> newAttributes = new LinkedList<AvatarAttribute>();
+        constants = new LinkedList<AvatarAttribute>();
+
+        for (AvatarAttribute attr : attributes) {
+            boolean toKeep = false;
+            for (AvatarStateMachineElement elt : asm.getListOfElements()) {
+                if (elt instanceof AvatarTransition) {
+                    at = (AvatarTransition) elt;
+                    for (AvatarAction aa : at.getActions()) {
+                        if (aa instanceof AvatarActionAssignment) {
+                           if (((AvatarActionAssignment) aa).leftHand.getName().compareTo(attr.name) == 0) {
+                               //assigned
+                               toKeep = true;
+                           }
+                        }
+                    }
+                } else if (elt instanceof AvatarActionOnSignal) {
+                    AvatarSignal sig = ((AvatarActionOnSignal) elt).getSignal();
+                    if (sig != null && sig.isIn()) {
+                        for (String val : ((AvatarActionOnSignal) elt).getValues()) {
+                            if (val.compareTo(attr.name) == 0) {
+                                //assigned
+                                toKeep = true;
+                            }
+                        }
+                    }
+                }
+                if (toKeep) {
+                    break;
+                }
+            }
+            if (!toKeep) {
+                constants.add(attr);
+            } else {
+                newAttributes.add(attr);
+            }
+        }
+        attributes = newAttributes;
     }
 
 

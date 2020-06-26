@@ -433,6 +433,12 @@ public class AvatarSpecification extends AvatarElement {
         }
     }
     
+    public void removeConstants() {
+        for(AvatarBlock block : blocks) {
+            block.removeConstantAttributes();
+        }
+    }
+    
     public void sortAttributes() {
         for(AvatarBlock block: blocks) {
             block.sortAttributes();
