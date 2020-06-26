@@ -119,6 +119,18 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
         signals.add(_signal);
     }
 
+    public AvatarSignal addSignalIfApplicable(String name, int type, Object refObject) {
+        AvatarSignal sig = getSignalByName(name);
+        if (sig != null) {
+            return sig;
+        }
+        sig = new AvatarSignal(name, type, refObject);
+        addSignal(sig);
+        return sig;
+
+    }
+
+
     public List<AvatarAttribute> getAttributes() {
         return attributes;
     }

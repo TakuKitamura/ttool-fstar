@@ -1906,7 +1906,7 @@ public class GTURTLEModeling {
         if (mgui.isExperimentalOn()) {
 
             TraceManager.addDev("Avatar spec:" + avatarspec.toString());
-            mgui.drawAvatarSpecification(avatarspec);
+            //mgui.drawAvatarSpecification(avatarspec);
             //TraceManager.addDev("Avatar spec:" + avatarspec.toString());
             //AvatarSpecification av2 = avatarspec.advancedClone();
             //mgui.drawAvatarSpecification(av2);
@@ -9222,9 +9222,9 @@ public class GTURTLEModeling {
                         for (int i = 0; i < ar.nbOfSignals(); i++) {
                             //TraceManager.addDev("Adding signal relations to connector");
                             //
-                            //TraceManager.addDev("Adding signal 1: " + ar.getSignal1(i).toString() + " of block " + ar.block1.getName());
+                            TraceManager.addDev("Adding signal 1: " + ar.getSignal1(i).toString() + " of block " + ar.block1.getName());
                             conn.addSignal(ar.getSignal1(i).toString(), ar.getSignal1(i).getInOut() == 0, ar.block1.getName().contains(bl1));
-                            //TraceManager.addDev("Adding signal 2:" + ar.getSignal2(i).toString() + " of block " + ar.block2.getName());
+                            TraceManager.addDev("Adding signal 2:" + ar.getSignal2(i).toString() + " of block " + ar.block2.getName());
                             conn.addSignal(ar.getSignal2(i).toString(), ar.getSignal2(i).getInOut() == 0, !ar.block2.getName().contains(bl2));
                             //
                         }
