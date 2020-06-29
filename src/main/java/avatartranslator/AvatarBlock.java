@@ -797,6 +797,10 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
                             }
                         }
                     }
+                } else if (elt instanceof AvatarRandom) {
+                    if (((AvatarRandom) elt).getVariable().compareTo(attr.name) == 0) {
+                        toKeep = true;
+                    }
                 }
                 if (toKeep) {
                     break;
