@@ -195,6 +195,8 @@ public class AvatarExpressionTest {
         assertTrue(e2.getResult(ss) == 1);
         assertTrue(e3.getResult(ss) == 0);
         
+        as.removeConstants();
+        as.sortAttributes();
         as.setAttributeOptRatio(4);
         ss = new SpecificationState();
         ss.setInit(as, false);
@@ -208,6 +210,8 @@ public class AvatarExpressionTest {
         assertTrue(e1.getResult(ss) == 17);
         assertTrue(e2.getResult(ss) == 1);
         assertTrue(e3.getResult(ss) == 0);
+        
+      
     }
 
 }
