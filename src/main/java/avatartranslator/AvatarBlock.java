@@ -772,6 +772,10 @@ public class AvatarBlock extends AvatarElement implements AvatarStateMachineOwne
 
         for (AvatarAttribute attr : attributes) {
             boolean toKeep = false;
+            
+            if (attr.isTimer()) {
+                toKeep = true;
+            }
             for (AvatarStateMachineElement elt : asm.getListOfElements()) {
                 if (elt instanceof AvatarTransition) {
                     at = (AvatarTransition) elt;
