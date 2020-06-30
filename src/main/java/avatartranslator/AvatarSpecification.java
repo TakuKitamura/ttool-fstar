@@ -355,6 +355,8 @@ public class AvatarSpecification extends AvatarElement {
         AvatarTransition at;
         boolean returnVal;
         
+        AvatarExpressionSolver.emptyAttributesMap();
+        
         for (AvatarBlock block : getListOfBlocks()) {
             AvatarStateMachine asm = block.getStateMachine();
 

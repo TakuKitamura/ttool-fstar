@@ -338,4 +338,71 @@ public class AvatarExpressionAttribute {
         return s;
     }
     
+    public static AvatarElement getElement(String s, AvatarSpecification spec) {
+        //Extract Block and Attribute
+        String[] splitS;
+        String blockString;
+        String fieldString;
+        AvatarBlock block;
+        int blockIndex;
+        
+        if (spec == null) {
+            return null;
+        }
+        
+        if (s.matches(".+\\..+")) {
+            splitS = s.split("\\.");
+            blockString = splitS[0];
+            fieldString = splitS[1];
+        } else {
+            return null;
+        }
+        
+        block = spec.getBlockWithName(blockString);
+        
+        if (block == null) {
+            return null;
+        }
+        
+        blockIndex = spec.getBlockIndex(block);
+        
+        int attributeIndex = block.getIndexOfAvatarAttributeWithName(fieldString);
+        
+        if (attributeIndex == -1) {
+            attributeIndex = block.getIndexOfConstantWithName(fieldString);
+            if (attributeIndex == -1) {
+                // state?
+                return block.getStateMachine().getStateWithName(fieldString);
+            } else {
+                //not created for constants
+                return null;
+            }
+        } else {
+            return block.getAvatarAttributeWithName(fieldString);
+        }
+    }
+    
+    public static AvatarElement getElement(String s, AvatarBlock block) {
+        //Extract Attribute        
+        if (block == null) {
+            return null;
+        }
+        
+        
+        int attributeIndex = block.getIndexOfAvatarAttributeWithName(s);
+        
+        if (attributeIndex == -1) {
+            attributeIndex = block.getIndexOfConstantWithName(s);
+            if (attributeIndex == -1) {
+                // state?
+                return block.getStateMachine().getStateWithName(s);
+            } else {
+                //not created for constants
+                return null;
+            }
+        } else {
+            return block.getAvatarAttributeWithName(s);
+        }
+    }
+    
 }

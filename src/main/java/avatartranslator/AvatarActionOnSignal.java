@@ -112,12 +112,22 @@ public class AvatarActionOnSignal extends AvatarStateMachineElement {
     
     public boolean buildActionSolver(AvatarBlock block) {
         AvatarExpressionAttribute aea;
+        AvatarElement attr;
         boolean res = true;
+        
         actionAttr = new ArrayList<AvatarExpressionAttribute>();
         for (String val : values) {
-            aea = new AvatarExpressionAttribute(block, val);
-            actionAttr.add(aea);
-            res &= aea.hasError();
+            attr = AvatarExpressionAttribute.getElement(val, block);
+            if (attr != null && AvatarExpressionSolver.containsElementAttribute(attr)) {
+                actionAttr.add(AvatarExpressionSolver.getElementAttribute(attr));
+            } else {
+                aea = new AvatarExpressionAttribute(block, val);
+                res &= !aea.hasError();
+                if (res) {
+                    AvatarExpressionSolver.addElementAttribute(attr, aea);
+                    actionAttr.add(aea);
+                }
+            }
         }
         return res;
     }
