@@ -38,6 +38,8 @@
 
 package avatartranslator;
 
+import java.util.HashMap;
+import java.util.Map;
 import avatartranslator.modelchecker.SpecificationBlock;
 import avatartranslator.modelchecker.SpecificationState;
 
@@ -64,6 +66,8 @@ public class AvatarExpressionSolver {
     private int isImmediateValue; //0: No; 1: Int; 2: Boolean;
     private int intValue;
     private AvatarExpressionAttribute leaf;
+    
+    private static Map<AvatarElement, AvatarExpressionAttribute> attributesMap;
     
     
     public AvatarExpressionSolver() {
@@ -95,6 +99,9 @@ public class AvatarExpressionSolver {
     public boolean buildExpression(AvatarSpecification spec) {
         boolean returnVal;
         
+        if (attributesMap == null) {
+            attributesMap = new HashMap<AvatarElement, AvatarExpressionAttribute>();
+        }
         returnVal = buildExpressionRec(spec); 
         if (returnVal == false) {
             return false;
@@ -106,6 +113,9 @@ public class AvatarExpressionSolver {
     public boolean buildExpression(AvatarBlock block) {
         boolean returnVal;
         
+        if (attributesMap == null) {
+            attributesMap = new HashMap<AvatarElement, AvatarExpressionAttribute>();
+        }
         returnVal = buildExpressionRec(block); 
         if (returnVal == false) {
             return false;
@@ -158,8 +168,22 @@ public class AvatarExpressionSolver {
                 isImmediateValue = IMMEDIATE_INT;
                 returnVal = true;
             } else {
-                leaf = new AvatarExpressionAttribute(spec, expression);
-                returnVal = !leaf.hasError();
+                AvatarElement ae = AvatarExpressionAttribute.getElement(expression, spec);
+                if (ae != null && attributesMap.containsKey(ae)) {
+                    leaf = attributesMap.get(ae);
+                    returnVal = true;
+                } else {
+                    leaf = new AvatarExpressionAttribute(spec, expression);
+                    returnVal = !leaf.hasError();
+                    if (leaf.isConstant()) {
+                        AvatarAttribute attr = leaf.getConstAttribute();
+                        intValue = attr.getInitialValueInInt();
+                        isImmediateValue = attr.isBool() ? IMMEDIATE_BOOL : IMMEDIATE_INT;
+                        leaf = null;
+                    } else if (returnVal == true) {
+                        attributesMap.put(ae, leaf);
+                    }
+                }
             }
             //System.out.println("Variable " + expression + "\n");
             return returnVal;
@@ -219,8 +243,22 @@ public class AvatarExpressionSolver {
                 isImmediateValue = IMMEDIATE_INT;
                 returnVal = true;
             } else {
-                leaf = new AvatarExpressionAttribute(block, expression);
-                returnVal = !leaf.hasError();
+                AvatarElement ae = AvatarExpressionAttribute.getElement(expression, block);
+                if (ae != null && attributesMap.containsKey(ae)) {
+                    leaf = attributesMap.get(ae);
+                    returnVal = true;
+                } else {
+                    leaf = new AvatarExpressionAttribute(block, expression);
+                    returnVal = !leaf.hasError();
+                    if (leaf.isConstant()) {
+                        AvatarAttribute attr = leaf.getConstAttribute();
+                        intValue = attr.getInitialValueInInt();
+                        isImmediateValue = attr.isBool() ? IMMEDIATE_BOOL : IMMEDIATE_INT;
+                        leaf = null;
+                    } else if (returnVal == true) {
+                        attributesMap.put(ae, leaf);
+                    }
+                }
             }
             //System.out.println("Variable " + expression + "\n");
             return returnVal;
@@ -720,6 +758,38 @@ public class AvatarExpressionSolver {
             right.linkStates();
         }
     }
+    
+    
+    public static boolean containsElementAttribute(AvatarElement ae) {
+        if (attributesMap != null) {
+            return attributesMap.containsKey(ae);
+        } else {
+            return false;
+        }
+    }
+
+
+    public static AvatarExpressionAttribute getElementAttribute(AvatarElement ae) {
+        if (attributesMap != null) {
+            return attributesMap.get(ae);
+        } else {
+            return null;
+        }
+    }
+    
+
+    public static void addElementAttribute(AvatarElement ae, AvatarExpressionAttribute aexa) {
+        if (attributesMap == null) {
+            attributesMap = new HashMap<AvatarElement, AvatarExpressionAttribute>();
+        }
+        attributesMap.put(ae, aexa);
+    }
+    
+
+    public static void emptyAttributesMap() {
+        attributesMap = new HashMap<AvatarElement, AvatarExpressionAttribute>();
+    }
+
 
     private boolean checkIntegrity() {
         int optype, optypel, optyper;

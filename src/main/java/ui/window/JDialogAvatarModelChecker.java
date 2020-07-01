@@ -42,6 +42,7 @@ package ui.window;
 import avatartranslator.AvatarSpecification;
 import avatartranslator.AvatarStateMachineElement;
 import avatartranslator.modelchecker.AvatarModelChecker;
+import avatartranslator.modelchecker.CounterexampleQueryReport;
 import avatartranslator.modelchecker.SafetyProperty;
 import avatartranslator.modelchecker.SpecificationReachability;
 import avatartranslator.modelchecker.SpecificationPropertyPhase;
@@ -106,6 +107,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     protected static boolean checkReinitSelected = false;
     protected static boolean limitStatesSelected = false;
     protected static boolean generateCountertraceSelected = false;
+    protected static boolean generateCountertraceAUTSelected = false;
     protected static String countertracePath;
     protected static String stateLimitValue;
     protected static boolean limitTimeSelected = false;
@@ -159,6 +161,7 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
     protected JCheckBox reinit;
     protected JCheckBox safety;
     protected JCheckBox countertrace;
+    protected JCheckBox countertraceAUT;
     protected JTextField countertraceField;
     protected JButton checkUncheckAllPragmas;
     protected java.util.List<JCheckBox> customChecks;
@@ -456,6 +459,9 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         countertrace = new JCheckBox("Generate counterexample traces", generateCountertraceSelected);
         countertrace.addActionListener(this);
         jpadvanced.add(countertrace, cadvanced);
+        countertraceAUT = new JCheckBox("Generate counterexample AUT graphs", generateCountertraceAUTSelected);
+        countertraceAUT.addActionListener(this);
+        jpadvanced.add(countertraceAUT, cadvanced);
         cadvanced.gridwidth = GridBagConstraints.REMAINDER;
         countertraceField = new JTextField(countertracePath);
         jpadvanced.add(countertraceField, cadvanced);
@@ -723,12 +729,13 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             timer.scheduleAtFixedRate(mcm, 0, 500);
 
             // Setting options
+            amc.setCompressionFactor(2);
             amc.setIgnoreEmptyTransitions(ignoreEmptyTransitionsSelected);
             amc.setIgnoreConcurrenceBetweenInternalActions(ignoreConcurrenceBetweenInternalActionsSelected);
             amc.setIgnoreInternalStates(ignoreInternalStatesSelected);
             amc.setCheckNoDeadlocks(checkNoDeadSelected);
             amc.setReinitAnalysis(checkReinitSelected);
-            amc.setCounterExampleTrace(generateCountertraceSelected, false);
+            amc.setCounterExampleTrace(generateCountertraceSelected, generateCountertraceAUTSelected);
 
             // Reachability
             int res;
@@ -901,24 +908,39 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
             if (generateCountertraceSelected) {
                 String trace = amc.getCounterTrace();
                 
-                String autfile;
+                String file;
                 if (countertraceField.getText().indexOf("$") != -1) {
-                    autfile = Conversion.replaceAllChar(countertraceField.getText(), '$', dateAndTime);
+                    file = Conversion.replaceAllChar(countertraceField.getText(), '$', dateAndTime);
                 } else {
-                    autfile = countertraceField.getText();
+                    file = countertraceField.getText();
                 }
                 try {
-                    FileUtils.saveFile(autfile, trace);
-                    jta.append("\nCounterexample trace saved in " + autfile + "\n");
+                    File f = new File(file);
+                    FileUtils.saveFile(file, trace);
+                    jta.append("\nCounterexample trace saved in " + file + "\n");
                 } catch (Exception e) {
-                    jta.append("\nCounterexample trace could not be saved in " + autfile + "\n");
+                    jta.append("\nCounterexample trace could not be saved in " + file + "\n");
                 }
                 
-                List<String> autTraces = amc.getAUTTraces();
+                List<CounterexampleQueryReport> autTraces = amc.getAUTTraces();
                 if (autTraces != null) {
-                    for (String tr : autTraces) {
-                        System.out.println(tr + "\n");
-                        mgui.showAUTFromString("Last RG", tr);
+                    int i = 0;
+                    String autfile = FileUtils.removeFileExtension(file);
+                    for (CounterexampleQueryReport tr : autTraces) {
+                        String filename = autfile + "_" + i + ".aut";
+                        try {
+                            RG rg = new RG(file);
+                            rg.data = tr.getReport();
+                            rg.fileName = filename;
+                            rg.name = tr.getQuery();
+                            mgui.addRG(rg);
+                            File f = new File(filename);
+                            FileUtils.saveFile(filename, tr.getReport());
+                            jta.append("Counterexample graph trace " + tr.getQuery() + " saved in " + filename + "\n");
+                        } catch (Exception e) {
+                            jta.append("Counterexample graph trace "+ tr.getQuery() + " could not be saved in " + filename + "\n");
+                        }
+                        i++;
                     }
                 }
             }
@@ -1091,8 +1113,11 @@ public class JDialogAvatarModelChecker extends javax.swing.JFrame implements Act
         }
         
         countertrace.setEnabled(safety.isSelected() || noDeadlocks.isSelected());
+        countertraceAUT.setEnabled(countertrace.isSelected());
         countertraceField.setEnabled(countertrace.isSelected());
         generateCountertraceSelected = countertrace.isSelected();
+        generateCountertraceAUTSelected = countertraceAUT.isSelected();
+
         
         stateLimitField.setEnabled(stateLimit.isSelected());
         limitStatesSelected = stateLimit.isSelected();

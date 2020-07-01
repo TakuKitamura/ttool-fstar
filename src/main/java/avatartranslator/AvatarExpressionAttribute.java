@@ -56,41 +56,45 @@ public class AvatarExpressionAttribute {
     private AvatarStateMachineElement state;
     private String s;
     private boolean isState;
-    private boolean error;
+    private int error;  //0: no error; -1: building error; -2: is constant
+    private int shift;
+    private int mask;
     
     
     public AvatarExpressionAttribute(AvatarSpecification spec, String s) {
         this.s = s;
         isState = false;
         
-        error = !initAttributes(spec);
+        error = initAttributes(spec);
     }
     
     public AvatarExpressionAttribute(AvatarBlock block, String s) {
         this.s = s;
         isState = false;
         
-        error = !initAttributes(block);
+        error = initAttributes(block);
     }
     
     public AvatarExpressionAttribute(AvatarBlock block, AvatarStateMachineElement asme) {
         this.s = asme.name;
         isState = true;
         state = asme;
-        error = false;
+        error = 0;
         accessIndex = -1;
+        shift = 0;
+        mask = 0xFFFFFFFF;
         block = null;
     }
 
     
-    private boolean initAttributes(AvatarSpecification spec) {
+    private int initAttributes(AvatarSpecification spec) {
         //Extract Block and Attribute
         String[] splitS;
         String blockString;
         String fieldString;
         
         if (spec == null) {
-            return false;
+            return -1;
         }
         
         if (s.matches(".+\\..+")) {
@@ -98,37 +102,60 @@ public class AvatarExpressionAttribute {
             blockString = splitS[0];
             fieldString = splitS[1];
         } else {
-            return false;
+            return -1;
         }
         
         block = spec.getBlockWithName(blockString);
         
         if (block == null) {
-            return false;
+            return -1;
         }
         
         blockIndex = spec.getBlockIndex(block);
         
         int attributeIndex = block.getIndexOfAvatarAttributeWithName(fieldString);
         
+        shift = 0;
+        mask = 0xFFFFFFFF;
+        
         if (attributeIndex == -1) {
-            // state?
-            state = block.getStateMachine().getStateWithName(fieldString);
-            if (state == null) {
-                return false;
+            attributeIndex = block.getIndexOfConstantWithName(fieldString);
+            if (attributeIndex == -1) {
+                // state?
+                state = block.getStateMachine().getStateWithName(fieldString);
+                if (state == null) {
+                    return -1;
+                }
+                isState = true;
+                accessIndex = block.getStateMachine().getIndexOfState((AvatarStateElement) state);
+            } else {
+                accessIndex = attributeIndex;
+                return -2; //constant
             }
-            isState = true;
-            accessIndex = block.getStateMachine().getIndexOfState((AvatarStateElement) state);
         } else {
-            accessIndex = attributeIndex + SpecificationBlock.ATTR_INDEX;
+            int offset = block.getBooleanOffset();
+            int optRatio = block.getAttributeOptRatio();
+            if (offset == -1 || attributeIndex < offset) {
+                accessIndex = attributeIndex / optRatio + SpecificationBlock.ATTR_INDEX;
+                shift = (attributeIndex % optRatio) * (32 / optRatio);
+                if (optRatio == 2) {
+                    mask = 0xFFFF;
+                } else if (optRatio == 4) {
+                    mask = 0xFF;
+                }
+            } else {
+                accessIndex = SpecificationBlock.ATTR_INDEX + (offset + optRatio - 1) / optRatio + ((attributeIndex - offset) / 32);
+                shift = (attributeIndex - offset) % 32;
+                mask = 1;
+            }
         }
-        return true;
+        return 0;
     }
     
-    private boolean initAttributes(AvatarBlock block) {
+    private int initAttributes(AvatarBlock block) {
         //Extract Attribute
         if (block == null) {
-            return false;
+            return -1;
         }
         
         this.block = block;
@@ -136,22 +163,56 @@ public class AvatarExpressionAttribute {
         
         int attributeIndex = block.getIndexOfAvatarAttributeWithName(s);
         
+        shift = 0;
+        mask = 0xFFFFFFFF;
+        
         if (attributeIndex == -1) {
-            // state?
-            state = block.getStateMachine().getStateWithName(s);
-            if (state == null) {
-                return false;
+            attributeIndex = block.getIndexOfConstantWithName(s);
+            if (attributeIndex == -1) {
+                // state?
+                state = block.getStateMachine().getStateWithName(s);
+                if (state == null) {
+                    return -1;
+                }
+                isState = true;
+                accessIndex = block.getStateMachine().getIndexOfState((AvatarStateElement) state);
+            } else {
+                accessIndex = attributeIndex;
+                return -2; //constant
             }
-            isState = true;
-            accessIndex = block.getStateMachine().getIndexOfState((AvatarStateElement) state);
         } else {
-            accessIndex = attributeIndex + SpecificationBlock.ATTR_INDEX;
+            int offset = block.getBooleanOffset();
+            int optRatio = block.getAttributeOptRatio();
+            if (offset == -1 || attributeIndex < offset) {
+                accessIndex = attributeIndex / optRatio + SpecificationBlock.ATTR_INDEX;
+                shift = (attributeIndex % optRatio) * (32 / optRatio);
+                if (optRatio == 2) {
+                    mask = 0xFFFF;
+                } else if (optRatio == 4) {
+                    mask = 0xFF;
+                }
+            } else {
+                accessIndex = SpecificationBlock.ATTR_INDEX + (offset + optRatio - 1) / optRatio + ((attributeIndex - offset) / 32);
+                shift = (attributeIndex - offset) % 32;
+                mask = 1;
+            }
         }
-        return true;
+        return 0;
     }
     
     public boolean hasError() {
-        return error == true;
+        return error == -1;
+    }
+    
+    public boolean isConstant() {
+        return error == -2;
+    }
+    
+    public AvatarAttribute getConstAttribute() {
+        if (error == -2) {
+            return block.getConstantWithIndex(accessIndex);
+        }
+        return null;
     }
  
     public int getValue(SpecificationState ss) {
@@ -168,7 +229,7 @@ public class AvatarExpressionAttribute {
             }
         }
         
-        value = ss.blocks[blockIndex].values[accessIndex];
+        value = (ss.blocks[blockIndex].values[accessIndex] >> shift) & mask;
         
         return value;
     }
@@ -180,7 +241,7 @@ public class AvatarExpressionAttribute {
             return (state == asme) ? 1 : 0;
         }
         
-        value = ss.blocks[blockIndex].values[accessIndex];
+        value = (ss.blocks[blockIndex].values[accessIndex] >> shift) & mask;
         
         return value;
     }
@@ -199,7 +260,7 @@ public class AvatarExpressionAttribute {
             }
         }
         
-        value = sb.values[accessIndex];
+        value = (sb.values[accessIndex] >> shift) & mask;
         
         return value;
     }
@@ -208,37 +269,34 @@ public class AvatarExpressionAttribute {
         int value;
         
         if (isState) {
-                return 0;
+            return 0;
         }
         
         //Cancel offset based on Specification Blocks
-        value = attributesValues[accessIndex - SpecificationBlock.ATTR_INDEX];
+        value = (attributesValues[accessIndex - SpecificationBlock.ATTR_INDEX] >> shift) & mask;
         
         return value;
     }
     
-    public void setValue(SpecificationState ss, int value) {
-        int v;
-        
+    public void setValue(SpecificationState ss, int value) {        
         if (isState) {
             return;
         }
         
-        v = value;
-        
-        ss.blocks[blockIndex].values[accessIndex] = v;
+        ss.blocks[blockIndex].values[accessIndex] = (ss.blocks[blockIndex].values[accessIndex] & (~(mask << shift))) | ((value & mask) << shift);
     }
     
-    public void setValue(SpecificationBlock sb, int value) {
-        int v;
-        
+    public void setValue(SpecificationBlock sb, int value) {      
         if (isState) {
             return;
         }
-        
-        v = value;
-        
-        sb.values[accessIndex] = v;
+                
+//        if (shift == -1) {
+//            sb.values[accessIndex] = value;
+//        } else {
+//            sb.values[accessIndex] ^= ((-(value & 1))^ sb.values[accessIndex]) & (1 << shift);
+//        }
+        sb.values[accessIndex] = (sb.values[accessIndex] & (~(mask << shift))) | ((value & mask) << shift);
     }
     
     //Link state to access index in the state machine
@@ -256,10 +314,18 @@ public class AvatarExpressionAttribute {
     public int getAttributeType() {
         if (isState) {
             return AvatarExpressionSolver.IMMEDIATE_BOOL;
-        } else if (block.getAttribute(accessIndex - SpecificationBlock.ATTR_INDEX).getType() == AvatarType.BOOLEAN) {
-            return AvatarExpressionSolver.IMMEDIATE_BOOL;
+        }
+        int offset = block.getBooleanOffset();
+        int ratio = block.getAttributeOptRatio();
+        int attributeIndex = (accessIndex - SpecificationBlock.ATTR_INDEX) * ratio + shift * ratio / 32;
+        if (offset == -1 || (attributeIndex < offset)) {
+            if (block.getAttribute((accessIndex - SpecificationBlock.ATTR_INDEX)).getType() == AvatarType.BOOLEAN) {
+                return AvatarExpressionSolver.IMMEDIATE_BOOL;
+            } else {
+                return AvatarExpressionSolver.IMMEDIATE_INT;
+            }
         } else {
-            return AvatarExpressionSolver.IMMEDIATE_INT;
+            return AvatarExpressionSolver.IMMEDIATE_BOOL;
         }
     }
     
@@ -270,6 +336,73 @@ public class AvatarExpressionAttribute {
     
     public String toString() {
         return s;
+    }
+    
+    public static AvatarElement getElement(String s, AvatarSpecification spec) {
+        //Extract Block and Attribute
+        String[] splitS;
+        String blockString;
+        String fieldString;
+        AvatarBlock block;
+        int blockIndex;
+        
+        if (spec == null) {
+            return null;
+        }
+        
+        if (s.matches(".+\\..+")) {
+            splitS = s.split("\\.");
+            blockString = splitS[0];
+            fieldString = splitS[1];
+        } else {
+            return null;
+        }
+        
+        block = spec.getBlockWithName(blockString);
+        
+        if (block == null) {
+            return null;
+        }
+        
+        blockIndex = spec.getBlockIndex(block);
+        
+        int attributeIndex = block.getIndexOfAvatarAttributeWithName(fieldString);
+        
+        if (attributeIndex == -1) {
+            attributeIndex = block.getIndexOfConstantWithName(fieldString);
+            if (attributeIndex == -1) {
+                // state?
+                return block.getStateMachine().getStateWithName(fieldString);
+            } else {
+                //not created for constants
+                return null;
+            }
+        } else {
+            return block.getAvatarAttributeWithName(fieldString);
+        }
+    }
+    
+    public static AvatarElement getElement(String s, AvatarBlock block) {
+        //Extract Attribute        
+        if (block == null) {
+            return null;
+        }
+        
+        
+        int attributeIndex = block.getIndexOfAvatarAttributeWithName(s);
+        
+        if (attributeIndex == -1) {
+            attributeIndex = block.getIndexOfConstantWithName(s);
+            if (attributeIndex == -1) {
+                // state?
+                return block.getStateMachine().getStateWithName(s);
+            } else {
+                //not created for constants
+                return null;
+            }
+        } else {
+            return block.getAvatarAttributeWithName(s);
+        }
     }
     
 }

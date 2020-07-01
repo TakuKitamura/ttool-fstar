@@ -65,9 +65,8 @@ public class SpecificationState implements Comparable<SpecificationState>  {
     public LinkedList<SpecificationLink> nexts; // The RG is there
     public boolean property; //trace the property check at this state
     public boolean elaborated; //true only if the elaboration has been completed
-    public ArrayList<SpecificationTransition> transitions;
-//    public long distance; //max #steps to be reached from S0
 
+    
     public SpecificationState() {
         hashComputed = false;
         property = false;
@@ -105,7 +104,7 @@ public class SpecificationState implements Comparable<SpecificationState>  {
 
         for(AvatarBlock block: _spec.getListOfBlocks()) {
             blocks[cpt] = new SpecificationBlock();
-            blocks[cpt].init(block, _ignoreEmptyTransitions);
+            blocks[cpt].init(block, _ignoreEmptyTransitions, true);
             cpt ++;
         }
 
@@ -141,8 +140,8 @@ public class SpecificationState implements Comparable<SpecificationState>  {
             if (!(_st.hasBlockIndex(i))) {
                 sb.values[SpecificationBlock.CLOCKMIN_INDEX] += _st.clockMin;
                 sb.values[SpecificationBlock.CLOCKMAX_INDEX] += _st.clockMax;
-		sb.values[SpecificationBlock.CLOCKMIN_INDEX] = Math.min(sb.values[SpecificationBlock.CLOCKMIN_INDEX], sb.maxClock);
-		sb.values[SpecificationBlock.CLOCKMAX_INDEX] = Math.min(sb.values[SpecificationBlock.CLOCKMAX_INDEX], sb.maxClock);
+        		sb.values[SpecificationBlock.CLOCKMIN_INDEX] = Math.min(sb.values[SpecificationBlock.CLOCKMIN_INDEX], sb.maxClock);
+        		sb.values[SpecificationBlock.CLOCKMAX_INDEX] = Math.min(sb.values[SpecificationBlock.CLOCKMAX_INDEX], sb.maxClock);
             } else {
                 sb.values[SpecificationBlock.CLOCKMIN_INDEX] = 0;
                 sb.values[SpecificationBlock.CLOCKMAX_INDEX] = 0;
@@ -193,14 +192,8 @@ public class SpecificationState implements Comparable<SpecificationState>  {
 	return 0;
     }
 
-    public void finished() {
-        //blocks = null;
-        transitions = null;
-    }
-
     public void freeUselessAllocations() {
         blocks = null;
-        transitions = null;
     }
 
     public int compareTo( SpecificationState _s ) {

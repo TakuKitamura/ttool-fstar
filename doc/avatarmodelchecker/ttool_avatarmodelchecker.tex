@@ -228,7 +228,7 @@ To start the CTL query verification, let's compile again and let's open the mode
 \includegraphics[width=0.7\textwidth]{images/safety_result.png}
 \caption{Safety Result}
 \label{fig:sresult}
-\end{figure}
+\end{figure}\\\\
 
 \newpage
 \section{Verification Guide} \label{sec:vg}
@@ -248,7 +248,7 @@ The next section contains options for basic properties verification:
 	\item \textbf{Reachability}: it checks for states reachability
 	\item \textbf{Liveness}: it checks for states liveness
 \end{itemize}
-The next section allows to execute safety and liveness pragmas written as a CTL formula. Each of them can be selected or not for the verification.
+The next section allows us to execute safety and liveness pragmas written as a CTL formula. Each of them can be selected or not for verification. Also, counterexample traces can be generated for each CTL query and deadlock check. The option \textbf{Generate counterexample traces} generates a trace in a text file for each pragma with a counterexample. The trace contains all the states and transitions that lead to a counterexample step by step. Selecting \textbf{Generate counterexample AUT graphs}, a displayable graph will appear in the reachability graphs section. A detailed example is available in section \ref{sec:tg}.
 \\\\
 Then, \textbf{Reachability Graph Generation} options is used to generate and save the reachability graph. Moreover, it can can be saved also in "dotty" format.
 
@@ -267,6 +267,35 @@ Expression \texttt{p} and \texttt{q} may be on states or variables. The format u
 	\item \textit{A[] MainController.currentPressure < 25}: MainController.currentPressure is always less than 25
 	\item \textit{DoorAndLockButton.IN\_EMERGENCY\_CALL --> DoorAndLockButton.CLOSED\_AND\_LOCKED || DoorAndLockButton.CLOSED\_AND\_UNLOCKED}: whenever DoorAndLockButton.IN\_EMERGENCY\_CALL state is encounted, then or DoorAndLockButton.CLOSED\_AND\_LOCKED or DoorAndLockButton.CLOSED\_AND\_UNLOCKED will be encounted at some subsequent moment.
 \end{itemize}
+
+\subsection{Traces generation} \label{sec:tg}
+For advanced verification queries and deadlock check, there is the possibility of generating counterexample traces that show the path to prove or disprove a property. In particular:
+\begin{itemize}
+\item \textbf{A[] p}: shows the path that disproves the property
+\item \textbf{A<> p}: shows the path that disproves the property
+\item \textbf{E[] p}: shows the path that proves the property
+\item \textbf{E<> p}: shows the path that proves the property
+\item \textbf{p --> q}: shows the path that disproves the property starting from a state with p valid.
+\item \textbf{No deadlocks?}: shows a path to a deadlock
+\end{itemize}
+The \textbf{Generate counterexample traces} option writes, in the file indicated in the text field on the right, all the steps to reach a counterexample. State lines show the current state in the state machine for each block in the system. Transition lines show details of the transition taken to reach the next state.
+\\\\
+The \textbf{Generate counterexample AUT graphs} option allows us to display the trace as a reachability graph, saving it in AUT format. Entry to the graph, with the name of the query, will appear in the \textit{R. Graphs} section in TTool.
+\\\\
+Let's do a guidated example to traces generation. Let's open again the "PressureController.xml" model used in the previous section. Let's execute a verification of the only query \textit{MainController.LowPressure --> AlarmManager.AlarmIsOff} activating both the options \textit{Generate counterexample traces} and \textit{Generate counterexample AUT graphs}. Let's press start to execute the verification. If now we open the file \textit{trace*.txt} in which the trace is saved, we can see the name of the trace in the first line, and then states and transitions alternating until the counterexample state that disprove the property. The first state has the state machine pointed to MainController.LowPressure (or to a direct child like MainController.WaitFirstHighPressure). The last state indicates a loop or a state for which the property is prooved to be never satisfied. The AUT graph is visible with the name of the query in the Reachability graphs section as shown in Figure \ref{fig:aut}
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.7\textwidth]{images/AUTgraphlist.png}
+\caption{Link to the AUT graph generated on query}
+\label{fig:aut}
+\end{figure}
+Doing right click on the graph and pressing show, we are able to see graphically the trace (see Figure \ref{fig:trgraph}).
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.9\textwidth]{images/counterexamplegraph.png}
+\caption{AUT graph generated on query}
+\label{fig:trgraph}
+\end{figure}
 
 \subsection{Concurrency behavior} \label{sec:cb}
 In section \ref{sec:vg}, we discussed about the option \textit{Ignore concurrency between internal actions} and how it could effect the model-checker behavior. In this section, we will show with a guided example the differences between having this option on or off.
