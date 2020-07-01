@@ -137,9 +137,14 @@ public class AvatarExpressionTest {
         specBlock.init(block1, false, false);
         int[] attributes = {2, 3, 7, 0, 1};
         
+        AvatarExpressionSolver.emptyAttributesMap();
+        
         AvatarExpressionSolver e1 = new AvatarExpressionSolver("x + y");
         assertTrue(e1.buildExpression(block1));
         AvatarExpressionSolver e2 = new AvatarExpressionSolver("-x / y - 15 * z + 1 == -31");
+        assertTrue(AvatarExpressionSolver.containsElementAttribute(block1.getAttribute(0)));
+        assertTrue(AvatarExpressionSolver.containsElementAttribute(block1.getAttribute(1)));
+        assertFalse(AvatarExpressionSolver.containsElementAttribute(block1.getAttribute(2)));
         assertTrue(e2.buildExpression(block1));
         AvatarExpressionSolver e3 = new AvatarExpressionSolver("not(-x / z - (x + y) * 2 + 1 >= -(60 - 26))");
         assertTrue(e3.buildExpression(block1));
@@ -184,11 +189,17 @@ public class AvatarExpressionTest {
         as.setAttributeOptRatio(2);
         SpecificationState ss = new SpecificationState();
         ss.setInit(as, false);
+        AvatarExpressionSolver.emptyAttributesMap();
         
         AvatarExpressionSolver e1 = new AvatarExpressionSolver("block1.x + block2.y");
         assertTrue(e1.buildExpression(as));
         AvatarExpressionSolver e2 = new AvatarExpressionSolver("-block1.x / block1.y - 15 * block2.z + 1 == -46");
+        assertTrue(AvatarExpressionSolver.containsElementAttribute(block1.getAttribute(0)));
+        assertTrue(AvatarExpressionSolver.containsElementAttribute(block2.getAttribute(1)));
+        assertFalse(AvatarExpressionSolver.containsElementAttribute(block1.getAttribute(1)));
+        assertFalse(AvatarExpressionSolver.containsElementAttribute(block2.getAttribute(0)));
         assertTrue(e2.buildExpression(as));
+        assertTrue(AvatarExpressionSolver.containsElementAttribute(block2.getAttribute(2)));
         AvatarExpressionSolver e3 = new AvatarExpressionSolver("not(-block2.x / block2.z - not(block1.x + block2.y) * -2 + -(1) <= -(-4 + 7))");
         assertFalse(e3.buildExpression(as));
         assertTrue(e1.getResult(ss) == 17);
@@ -209,9 +220,7 @@ public class AvatarExpressionTest {
         assertFalse(e3.buildExpression(as));
         assertTrue(e1.getResult(ss) == 17);
         assertTrue(e2.getResult(ss) == 1);
-        assertTrue(e3.getResult(ss) == 0);
-        
-      
+        assertTrue(e3.getResult(ss) == 0);      
     }
 
 }
